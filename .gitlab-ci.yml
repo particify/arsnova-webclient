@@ -49,3 +49,22 @@ ngbuild:
   artifacts:
     paths:
       - "$BUILD_DIR"
+
+docker_image:
+  stage: deploy
+  image:
+    name: gcr.io/kaniko-project/executor:debug
+    entrypoint: [""]
+  only:
+    - master
+  variables:
+    KANIKO_CONTEXT: $CI_PROJECT_DIR
+    KANIKO_DOCKERFILE: $CI_PROJECT_DIR/docker/Dockerfile
+    KANIKO_DESTINATION: $CI_REGISTRY/$CI_PROJECT_PATH:$CI_COMMIT_REF_SLUG
+  dependencies:
+    - ngbuild
+  before_script:
+    - date
+  script:
+    - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
+    - /kaniko/executor --context "$KANIKO_CONTEXT" --dockerfile "$KANIKO_DOCKERFILE" --destination "$KANIKO_DESTINATION" --build-arg "ARSNOVA_BUILD_DIR=`echo $BUILD_DIR`"
