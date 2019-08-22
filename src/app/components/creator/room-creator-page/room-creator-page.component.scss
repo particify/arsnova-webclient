@@ -15,7 +15,7 @@ mat-card-content > :first-child {
 }
 
 .mat-icon-button {
-  width: 60%; // 100%
+  width: 60%;
   height: 75%;
   color: var(--primary)!important;
   transition: all 0.3s;
@@ -25,14 +25,16 @@ mat-card-content > :first-child {
 }
 
 .desktop {
-  font-size: 65px;
-  height: 65px;
-  width: 65px;
+  font-size: 80px;
+  height: 80px;
+  width: 80px;
   margin-bottom: 5%;
 }
 
 .corner-icons {
   width: 40px;
+  height: 40px;
+  margin-bottom: 5%;
 }
 
 .corner-icon {
@@ -42,24 +44,10 @@ mat-card-content > :first-child {
   line-height: 100%;
 }
 
-/*.main-icon{
+.main-icon{
   font-size: 60px;
   height: 60px;
   width: 60px;
-  line-height: 100%!important;
-}*/
-
-.main-icon{
-  font-size: 80px;
-  height: 80px;
-  width: 80px;
-  line-height: 100%!important;
-}
-
-.smallerIcon {
-  font-size: 55px;
-  height: 55px;
-  width: 55px;
   line-height: 100%!important;
 }
 
@@ -72,6 +60,7 @@ mat-card-content > :first-child {
 
 mat-grid-list {
   margin-bottom: 5px !important;
+  width: 90%;
 }
 
 .second {
@@ -98,6 +87,7 @@ h4 {
 mat-card-header {
   min-height: 80px;
   height: 10%!important;
+  margin-bottom: 10%!important;
 }
 
 mat-card-title {
