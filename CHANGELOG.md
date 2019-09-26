@@ -1,5 +1,28 @@
 # Changelog
 
+## 1.3
+Changes to the role system:
+* Removes the distinction between participant and lecturer on login
+* Adds a user home where all related sessions are listed
+* Adds a moderator role
+
+Moderated comment board:
+* Creators of sessions can add moderators (via room settings)
+* Creators and moderators have access to the moderator board
+* Two modes of moderating:
+  * Default: new comments are auto-acknowledged and are visible on the normal comment board
+  * Whitelist: new comments are only visible in the moderator board and need acknowledgement
+
+Other Changes:
+* Comments can now be marked as wrong
+* Comments can get banned (to the moderator board, see above)
+* User can delete his account
+* Improve wording
+
+**This version is brought to you by:**  
+Project management: Klaus Quibeldey-Cirkel  
+Lead programming: Tom "tekay" Käsler, Lukas Mauß  
+
 ## 1.2.1
 Bug Fixes:
 * Fix icons in room view for both roles

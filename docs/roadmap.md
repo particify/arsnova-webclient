@@ -1,29 +1,29 @@
-# 1.3
-
-## Improved role system
-
-### Break up role concept by not needing to log into specific roles
-
-### Moderators
-- implement moderators that have the same access rights (without being able to delete the room) as the owner of a room
-- add dialog to room to manage moderators
-- add blacklist/whitelist mode for comments
-- implement moderator view to monitor/manage incoming comments
-
-
 # 1.4
 
 ## Performance improvements
-- Production server performance analysis
+- production server performance analysis
+- improve on handling STOMP subscribtions
 
-## Web Accessibility Initiative
+## Barrier-free
+- adhere to WCAG 2.1 for accessibility
 
+# No version planned
 
-# 1.5
+## Configuration
+- load some configs from the backend
 
-## Bonus
-- mark room as "bonus" on creation
-- bonus rooms save the users id on comment and answer creation
+## Tests
+- add automated testing for use cases
 
-## New feedback view
+## Feedback
 - implement a circle for the feedback
+- add a freeze option to stop the feedback
+
+## Message flow
+- add message channels for domain objects
+- channels provide information on new content, feedback, etc
+
+## Content
+- improve on the UX
+- add a markup language for the text
+- improve on the theme/style
