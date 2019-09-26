@@ -1,11 +1,19 @@
 # 1.4
 
 ## Performance improvements
-- Production server performance analysis
+- production server performance analysis
+- improve on handling STOMP subscribtions
 
-## Web Accessibility Initiative
+## Barrier-free
+- adhere to WCAG 2.1 for accessibility
 
 # No version planned
+
+## Configuration
+- load some configs from the backend
+
+## Tests
+- add automated testing for use cases
 
 ## Feedback
 - implement a circle for the feedback
