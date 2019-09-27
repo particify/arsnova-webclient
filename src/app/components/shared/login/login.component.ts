@@ -10,6 +10,7 @@ import { UserActivationComponent } from '../../home/_dialogs/user-activation/use
 import { PasswordResetComponent } from '../../home/_dialogs/password-reset/password-reset.component';
 import { RegisterComponent } from '../../home/_dialogs/register/register.component';
 import { EventService } from '../../../services/util/event.service';
+import { AuthenticationProviderType } from '../../../models/api-config';
 
 export class LoginErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
@@ -42,6 +43,7 @@ export class LoginComponent implements OnInit, OnChanges {
               public notificationService: NotificationService,
               public dialog: MatDialog,
               public eventService: EventService,
+              private apiConfigService: ApiConfigService,
               @Inject(MAT_DIALOG_DATA) public data: any) {
   }
 
@@ -62,6 +64,16 @@ export class LoginComponent implements OnInit, OnChanges {
       // TODO: this throws an Exception because data and UI are inconsistent
       this.activateUser();
     }
+  }
+
+  get ssoProviders() {
+    return this.providers(AuthenticationProviderType.SSO);
+  }
+
+  providers(type?: AuthenticationProviderType) {
+    return (type != null)
+        ? this.apiConfigService.getAuthProviders().filter((p) => p.type === type)
+        : this.apiConfigService.getAuthProviders();
   }
 
   activateUser(): void {
@@ -95,6 +107,10 @@ export class LoginComponent implements OnInit, OnChanges {
 
   guestLogin(): void {
     this.authenticationService.guestLogin(this.role).subscribe(loginSuccessful => this.checkLogin(loginSuccessful));
+  }
+
+  loginViaSso(providerId: string): void {
+    this.authenticationService.loginViaSso(providerId, this.role).subscribe(loginSuccessful => this.checkLogin(loginSuccessful));
   }
 
   private checkLogin(loginSuccessful: string) {

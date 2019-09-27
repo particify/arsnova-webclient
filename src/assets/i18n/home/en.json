@@ -114,6 +114,7 @@
     "header": "Log in",
     "input-incorrect": "Please check your data.",
     "login": "Log in with account",
+    "login-with": "Log in with",
     "login-data-incorrect": "Username or password incorrect",
     "login-description": "Log in with the entered account data",
     "login-successful": "Login successful",
