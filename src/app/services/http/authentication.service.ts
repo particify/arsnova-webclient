@@ -1,7 +1,7 @@
-import { catchError, map, tap } from 'rxjs/operators';
+import { catchError, map, concatMap, filter, take, tap } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { User } from '../../models/user';
-import { Observable ,  of ,  BehaviorSubject } from 'rxjs';
+import { Observable, of, BehaviorSubject, timer } from 'rxjs';
 import { UserRole } from '../../models/user-roles.enum';
 import { DataStoreService } from '../util/data-store.service';
 import { EventService } from '../util/event.service';
@@ -24,7 +24,8 @@ export class AuthenticationService extends BaseHttpService {
     register: '/register',
     registered: '/registered',
     resetPassword: '/resetpassword',
-    guest: '/guest'
+    guest: '/guest',
+    sso: '/sso'
   };
   private httpOptions = {
     headers: new HttpHeaders({})
@@ -130,6 +131,30 @@ export class AuthenticationService extends BaseHttpService {
     } else {
       return of('true');
     }
+  }
+
+  /**
+   * Open the SSO login page in a popup and check the result.
+   *
+   * @param providerId ID of the SSO provider
+   * @param userRole User role for the UI
+   */
+  loginViaSso(providerId: string, userRole: UserRole): Observable<string> {
+    const ssoUrl = this.apiUrl.base + this.apiUrl.auth + this.apiUrl.sso + '/' + providerId;
+    const loginUrl = this.apiUrl.base + this.apiUrl.auth + this.apiUrl.login + '?refresh=true';
+    const popupW = 500;
+    const popupH = 500;
+    const popupX = window.top.screenX + window.top.outerWidth / 2 - popupW / 2;
+    const popupY = window.top.screenY + window.top.outerHeight / 2 - popupH / 2;
+    const popup = window.open(ssoUrl, 'auth_popup',
+        `left=${popupX},top=${popupY},width=${popupW},height=${popupH},resizable`);
+    const auth = timer(0, 500).pipe(
+        map(() => popup.closed),
+        filter((closed) => closed),
+        concatMap(() => this.http.post<ClientAuthentication>(loginUrl, null, { withCredentials: true })),
+        take(1));
+
+    return this.checkLogin(auth, userRole, false);
   }
 
   register(email: string, password: string): Observable<boolean> {
