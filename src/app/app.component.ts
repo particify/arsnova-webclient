@@ -4,6 +4,9 @@ import { SwUpdate } from '@angular/service-worker';
 import { NotificationService } from './services/util/notification.service';
 import { Rescale } from './models/rescale';
 import { CustomIconService } from './services/util/custom-icon.service';
+import { ApiConfigService } from './services/http/api-config.service';
+import { MatIconRegistry } from '@angular/material/icon';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-root',
@@ -17,7 +20,10 @@ export class AppComponent implements OnInit {
   constructor(private translationService: TranslateService,
               private update: SwUpdate,
               public notification: NotificationService,
-              private customIconService: CustomIconService) {
+              private customIconService: CustomIconService,
+              private matIconRegistry: MatIconRegistry,
+              private domSanitizer: DomSanitizer,
+              private apiConfigService: ApiConfigService) {
     translationService.setDefaultLang(this.translationService.getBrowserLang());
     sessionStorage.setItem('currentLang', this.translationService.getBrowserLang());
     customIconService.init();
@@ -57,11 +63,10 @@ export class AppComponent implements OnInit {
         }
       });
     });
+    this.apiConfigService.load();
   }
 
   public getRescale(): Rescale {
     return AppComponent.rescale;
   }
-
-
 }

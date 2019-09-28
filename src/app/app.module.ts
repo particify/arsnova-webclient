@@ -45,6 +45,7 @@ import { BonusTokenService } from './services/http/bonus-token.service';
 import { CustomIconService } from './services/util/custom-icon.service';
 import { ModeratorModule } from './components/moderator/moderator.module';
 import { ImprintComponent } from './components/home/_dialogs/imprint/imprint.component';
+import { ApiConfigService } from './services/http/api-config.service';
 import { DataProtectionComponent } from './components/home/_dialogs/data-protection/data-protection.component';
 import { HelpPageComponent } from './components/shared/_dialogs/help-page/help-page.component';
 import { CookiesComponent } from './components/home/_dialogs/cookies/cookies.component';
@@ -169,6 +170,7 @@ export function initializeApp(appConfig: AppConfig) {
     BonusTokenService,
     CustomIconService,
     WsConnectorService,
+    ApiConfigService,
     {
       provide: MatDialogRef,
       useValue: {
