@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Renderer2 } from '@angular/core';
 import { AuthenticationService } from '../../../services/http/authentication.service';
 import { NotificationService } from '../../../services/util/notification.service';
 import { Router, NavigationEnd } from '@angular/router';
@@ -10,6 +10,13 @@ import { MatDialog } from '@angular/material';
 import { LoginComponent } from '../login/login.component';
 import { DeleteAccountComponent } from '../_dialogs/delete-account/delete-account.component';
 import { UserService } from '../../../services/http/user.service';
+import { EventService } from '../../../services/util/event.service';
+import { AppComponent } from '../../../app.component';
+import { Rescale } from '../../../models/rescale';
+import { KeyboardUtils } from '../../../utils/keyboard';
+import { KeyboardKey } from '../../../utils/keyboard/keys';
+import { UserBonusTokenComponent } from '../_dialogs/user-bonus-token/user-bonus-token.component';
+import { QrCodeDialogComponent } from '../_dialogs/qr-code-dialog/qr-code-dialog.component';
 
 @Component({
   selector: 'app-header',
@@ -29,11 +36,16 @@ export class HeaderComponent implements OnInit {
               public router: Router,
               private translationService: TranslateService,
               public dialog: MatDialog,
-              private userService: UserService
+              private userService: UserService,
+              public eventService: EventService,
+              private _r: Renderer2
   ) {
   }
 
   ngOnInit() {
+    if (localStorage.getItem('loggedin') !== null && localStorage.getItem('loggedin') === 'true') {
+      this.authenticationService.refreshLogin();
+    }
     // Subscribe to user data (update component's user when user data changes: e.g. login, logout)
     if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
       this.deviceType = 'mobile';
@@ -61,18 +73,34 @@ export class HeaderComponent implements OnInit {
       /* the router will fire multiple events */
       /* we only want to react if it's the final active route */
       if (val instanceof NavigationEnd) {
-       /* segments gets all parts of the url */
-       const segments = this.router.parseUrl(this.router.url).root.children.primary.segments;
-       const roomIdRegExp = new RegExp('^[0-9]{8}$');
-       segments.forEach(element => {
-         /* searches the url segments for a short id */
-         if (roomIdRegExp.test(element.path)) {
-           this.shortId = element.path;
-         }
-       });
+        /* segments gets all parts of the url */
+        const segments = this.router.parseUrl(this.router.url).root.children.primary.segments;
+        const roomIdRegExp = new RegExp('^[0-9]{8}$');
+        segments.forEach(element => {
+          /* searches the url segments for a short id */
+          if (roomIdRegExp.test(element.path)) {
+            this.shortId = element.path;
+          }
+        });
       }
     });
     this.moderationEnabled = (localStorage.getItem('moderationEnabled') === 'true') ? true : false;
+
+    this._r.listen(document, 'keyup', (event) => {
+      if (
+        document.getElementById('back-button') &&
+        KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit0) === true &&
+        this.eventService.focusOnInput === false
+      ) {
+        document.getElementById('back-button').focus();
+      } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit2) === true && this.eventService.focusOnInput === false) {
+        if (this.user) {
+          document.getElementById('session-button').focus();
+        } else {
+          document.getElementById('login-button').focus();
+        }
+      }
+    });
   }
 
   getTime(time: Date) {
@@ -116,8 +144,7 @@ export class HeaderComponent implements OnInit {
 
   openDeleteUserDialog() {
     const dialogRef = this.dialog.open(DeleteAccountComponent, {
-      width: '600px',
-      autoFocus: false
+      width: '600px'
     });
     dialogRef.afterClosed()
       .subscribe(result => {
@@ -127,6 +154,43 @@ export class HeaderComponent implements OnInit {
           this.deleteAccount(this.user.id);
         }
       });
+  }
+
+  openUserBonusTokenDialog() {
+    const dialogRef = this.dialog.open(UserBonusTokenComponent, {
+      width: '600px'
+    });
+    dialogRef.componentInstance.userId = this.user.id;
+  }
+
+  cookiesDisabled(): boolean {
+    return localStorage.getItem('cookieAccepted') === 'false';
+  }
+
+  /*Rescale*/
+
+  /**
+   * Access to static Rescale from AppComponent
+   * returns Rescale from AppComponent
+   */
+  public getRescale(): Rescale {
+    return AppComponent.rescale;
+  }
+
+  /*QR*/
+
+  public getQRCode(): string {
+    return 'frag.jetzt/participant/room/' + this.shortId;
+  }
+
+  public showQRDialog() {
+    const dialogRef = this.dialog.open(QrCodeDialogComponent, {
+      panelClass: 'screenDialog'
+    });
+    const qrDialog: QrCodeDialogComponent = dialogRef.componentInstance;
+    qrDialog.setQRCode(this.getQRCode());
+    dialogRef.afterClosed().subscribe(res => {
+    });
   }
 
 }

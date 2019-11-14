@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { SwUpdate } from '@angular/service-worker';
 import { NotificationService } from './services/util/notification.service';
-import { MatIconRegistry } from '@angular/material';
-import { DomSanitizer } from '@angular/platform-browser';
+import { Rescale } from './models/rescale';
+import { CustomIconService } from './services/util/custom-icon.service';
 
 @Component({
   selector: 'app-root',
@@ -12,20 +12,33 @@ import { DomSanitizer } from '@angular/platform-browser';
 })
 export class AppComponent implements OnInit {
 
+  private static scrollAnimation = true;
+
   constructor(private translationService: TranslateService,
               private update: SwUpdate,
               public notification: NotificationService,
-              private matIconRegistry: MatIconRegistry,
-              private domSanitizer: DomSanitizer) {
+              private customIconService: CustomIconService) {
     translationService.setDefaultLang(this.translationService.getBrowserLang());
     sessionStorage.setItem('currentLang', this.translationService.getBrowserLang());
-    this.matIconRegistry.addSvgIcon(
-      'beamer',
-      this.domSanitizer.bypassSecurityTrustResourceUrl('../assets/icons/beamer-icon.svg')
-    );
+    customIconService.init();
   }
 
+  public static rescale: Rescale = new Rescale();
+
   title = 'frag.jetzt';
+
+  public static scrollTop() {
+    const sc: HTMLElement = document.getElementById('scroll_container');
+    if (AppComponent.scrollAnimation) {
+      sc.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+      sc.scrollTop = 0;
+    }
+  }
+
+  public static isScrolledTop(): boolean {
+    return document.getElementById('scroll_container').scrollTop === 0;
+  }
 
   ngOnInit(): void {
     this.update.available.subscribe(update => {
@@ -34,7 +47,7 @@ export class AppComponent implements OnInit {
         install = msg;
       });
       this.translationService.get('home-page.update-available').subscribe(msg => {
-       this.notification.show(msg, install, {
+        this.notification.show(msg, install, {
           duration: 10000
         });
       });
@@ -45,4 +58,10 @@ export class AppComponent implements OnInit {
       });
     });
   }
+
+  public getRescale(): Rescale {
+    return AppComponent.rescale;
+  }
+
+
 }

@@ -9,7 +9,7 @@
   font-size: 150%;
   font-weight: bold;
   text-align: center;
-  letter-spacing: 10px;
+  letter-spacing: 7px;
   color: var(--secondary);
   animation: moveInLeft 2s ease-out;
   padding-top: 10px;
@@ -22,6 +22,10 @@
   text-align: center;
   color: var(--on-surface);
   animation: moveInRight 1s ease-out;
+}
+
+.home {
+  margin-top: 10%;
 }
 
 @keyframes moveInLeft {

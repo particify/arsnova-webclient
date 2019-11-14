@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, Output, OnInit, EventEmitter } from '@angular/core';
 import { Comment } from '../../../models/comment';
 import { Vote } from '../../../models/vote';
 import { AuthenticationService } from '../../../services/http/authentication.service';
@@ -10,10 +10,14 @@ import { TranslateService } from '@ngx-translate/core';
 import { LanguageService } from '../../../services/util/language.service';
 import { WsCommentServiceService } from '../../../services/websockets/ws-comment-service.service';
 import { PresentCommentComponent } from '../_dialogs/present-comment/present-comment.component';
+import { CommentAnswerTextComponent } from '../_dialogs/comment-answer-text/comment-answer-text.component';
 import { MatDialog } from '@angular/material';
 import { animate, keyframes, state, style, transition, trigger } from '@angular/animations';
 import { DeleteCommentComponent } from '../../creator/_dialogs/delete-comment/delete-comment.component';
+import { CommentAnswerFormComponent } from '../../creator/_dialogs/comment-answer-form/comment-answer-form.component';
 import { CorrectWrong } from '../../../models/correct-wrong.enum';
+import { UserRole } from '../../../models/user-roles.enum';
+import { Rescale } from '../../../models/rescale';
 
 export const rubberBand = [
   style({ transform: 'scale3d(1, 1, 1)', offset: 0 }),
@@ -42,11 +46,16 @@ export const rubberBand = [
 
 export class CommentComponent implements OnInit {
   @Input() comment: Comment;
+  @Input() moderator: boolean;
+  @Input() userRole: UserRole;
+  @Output()
+  clickedOnTag = new EventEmitter<string>();
   isStudent = false;
+  isCreator = false;
+  isModerator = false;
   hasVoted = 0;
   language: string;
   animationState: string;
-  moderationEnabled: boolean;
 
   constructor(protected authenticationService: AuthenticationService,
     private route: ActivatedRoute,
@@ -64,12 +73,18 @@ export class CommentComponent implements OnInit {
   }
 
   ngOnInit() {
-    if (this.authenticationService.getRole() === 0) {
-      this.isStudent = true;
+    switch (this.userRole) {
+      case UserRole.PARTICIPANT.valueOf():
+        this.isStudent = true;
+        break;
+      case UserRole.CREATOR.valueOf():
+        this.isCreator = true;
+        break;
+      case UserRole.EXECUTIVE_MODERATOR.valueOf():
+        this.isModerator = true;
     }
     this.language = localStorage.getItem('currentLang');
     this.translateService.use(this.language);
-    this.moderationEnabled = (localStorage.getItem('moderationEnabled') === 'true');
   }
 
   startAnimation(state_: any): void {
@@ -142,9 +157,31 @@ export class CommentComponent implements OnInit {
       });
   }
 
+  openAnswerDialog(): void {
+    const dialogRef = this.dialog.open(CommentAnswerFormComponent, {
+      width: '400px'
+    });
+    dialogRef.afterClosed()
+      .subscribe(result => {
+        this.wsCommentService.answer(this.comment, result);
+        this.translateService.get('comment-list.comment-answered').subscribe(msg => {
+          this.notification.show(msg);
+        });
+      });
+  }
+
+  openAnswerTextDialog(): void {
+    const dialogRef = this.dialog.open(CommentAnswerTextComponent, {
+      width: '400px'
+    });
+    dialogRef.componentInstance.answer = this.comment.answer;
+  }
+
   delete(): void {
     this.commentService.deleteComment(this.comment.id).subscribe(room => {
-      this.notification.show(`Comment '${this.comment.body}' successfully deleted.`);
+      this.translateService.get('comment-list.comment-deleted').subscribe(msg => {
+        this.notification.show(msg);
+      });
     });
   }
 
@@ -153,20 +190,16 @@ export class CommentComponent implements OnInit {
   }
 
   goToFullScreen(element: Element): void {
-    if (element.requestFullscreen) {
-      element.requestFullscreen();
-    }
+    Rescale.requestFullscreen();
   }
 
   exitFullScreen(): void {
-    if (document.exitFullscreen) {
-      document.exitFullscreen();
-    }
+    Rescale.exitFullscreen();
   }
 
   openPresentDialog(comment: Comment): void {
     this.goToFullScreen(document.documentElement);
-    if (this.isStudent === false) {
+    if (this.isCreator === true) {
       this.wsCommentService.highlight(comment);
       if (!comment.read) {
         this.setRead(comment);

@@ -11,7 +11,7 @@ app-comment {
 #searchBox {
   box-sizing: border-box;
   padding: 0 10px 0 5px;
-  background-color: var(--dialog);
+  background-color: var(--background);
   border: none;
   outline: none;
   min-height: 60px;
@@ -36,13 +36,13 @@ app-comment {
 
 .search-container {
   border-radius: 5px;
-  background-color: var(--dialog);
+  background-color: var(--background);
   margin-bottom: 2%;
 }
 
 .search-container-fixed {
   border-radius: 5px;
-  background-color: var(--dialog);
+  background-color: var(--background);
   margin-bottom: 2%;
   position: fixed;
   top: 10px;
@@ -64,16 +64,28 @@ app-comment {
   color: var(--secondary);
 }
 
-.addButton {
+.actionButton {
   width: 40px;
   height: 40px;
   margin: 0 5% 0 5%;
   background-color: var(--primary);
 }
 
-.addCommentIcon {
+.freezeButton {
+  width: 40px;
+  height: 40px;
+  margin: 0 2% 0 5%;
+  background-color: var(--secondary);
+}
+
+.actionIcon {
   transform: scale(1.5);
-  color: var(--surface)
+  color: var(--background)
+}
+
+.freezeIcon {
+  transform: scale(1.3);
+  color: var(--background);
 }
 
 .close {
@@ -90,10 +102,6 @@ app-comment {
 
 .no-comments {
   margin-top: 10%;
-}
-
-h4  {
-  color: var(--on-surface);
 }
 
 .button-bar {
@@ -163,16 +171,15 @@ h3 {
 
 .scrollTop {
   position: fixed;
-  bottom: 3%;
-  left: -40px;
+  left: 25px;
+  bottom: 65px;
+  transform: scale(0);
   z-index: 1;
   background-color: var(--primary);
-  color: white;
-  transition: 0.5s;
+  color: var(--on-primary);
+  transition: 0.1s;
 }
 
 .visible {
-  left: 5%;
-  transition: 0.5s;
-  background-color: var(--primary);
+  transform: scale(1);
 }

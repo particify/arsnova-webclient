@@ -3,7 +3,7 @@ import { CorrectWrong } from './correct-wrong.enum';
 export class Comment {
   id: string;
   roomId: string;
-  userId: string;
+  creatorId: string;
   revision: string;
   body: string;
   read: boolean;
@@ -14,9 +14,11 @@ export class Comment {
   createdFromLecturer: boolean;
   highlighted: boolean;
   ack: boolean;
+  tag: string;
+  answer: string;
 
   constructor(roomId: string = '',
-              userId: string = '',
+              creatorId: string = '',
               body: string = '',
               read: boolean = false,
               correct: CorrectWrong = CorrectWrong.NULL,
@@ -25,10 +27,12 @@ export class Comment {
               score: number = 0,
               createdFromLecturer = false,
               highlighted: boolean = false,
-              ack: boolean = true) {
+              ack: boolean = true,
+              tag: string = '',
+              answer: string = '') {
     this.id = '';
     this.roomId = roomId;
-    this.userId = userId;
+    this.creatorId = creatorId;
     this.revision = '';
     this.body = body;
     this.read = read;
@@ -39,5 +43,7 @@ export class Comment {
     this.createdFromLecturer = createdFromLecturer;
     this.highlighted = highlighted;
     this.ack = ack;
+    this.tag = tag;
+    this.answer = answer;
   }
 }

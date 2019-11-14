@@ -9,6 +9,13 @@ import { User } from '../../../models/user';
 import { Room } from '../../../models/room';
 import { DemoVideoComponent } from '../../home/_dialogs/demo-video/demo-video.component';
 import { ThemeService } from '../../../../theme/theme.service';
+import { CookiesComponent } from '../../home/_dialogs/cookies/cookies.component';
+import { ImprintComponent } from '../../home/_dialogs/imprint/imprint.component';
+import { HelpPageComponent } from '../_dialogs/help-page/help-page.component';
+import { DataProtectionComponent } from '../../home/_dialogs/data-protection/data-protection.component';
+import { Theme } from '../../../../theme/Theme';
+import { OverlayComponent } from '../../home/_dialogs/overlay/overlay.component';
+import { AppComponent } from '../../../app.component';
 
 @Component({
   selector: 'app-footer',
@@ -17,18 +24,19 @@ import { ThemeService } from '../../../../theme/theme.service';
 })
 export class FooterComponent implements OnInit {
 
-  blogUrl = 'https://arsnova.thm.de/blog/';
-  dsgvoUrl = 'https://arsnova.thm.de/blog/datenschutzerklaerung/';
-  imprUrl = 'https://arsnova.thm.de/blog/impressum/';
-  demoId = '78844652';
+  public demoId = '22424050';
 
-  room: Room;
-  user: User;
+  public room: Room;
+  public user: User;
 
-  open: string;
-  deviceType: string;
+  public open: string;
+  public deviceType: string;
+  public cookieAccepted: boolean;
+  public dataProtectionConsent: boolean;
 
-  themeClass = localStorage.getItem('theme');
+  public themeClass = localStorage.getItem('theme');
+
+  public themes: Theme[];
 
   constructor(public notificationService: NotificationService,
               public router: Router,
@@ -41,68 +49,100 @@ export class FooterComponent implements OnInit {
   }
 
   ngOnInit() {
+    if (!this.themeService.getTheme()['source']['_value']) {
+      this.themeService.activate('dark');
+      this.themeClass = 'dark';
+    }
     this.deviceType = localStorage.getItem('deviceType');
     this.translateService.use(localStorage.getItem('currentLang'));
     this.translateService.get('footer.open').subscribe(message => {
       this.open = message;
     });
-  }
+    this.themes = this.themeService.getThemes();
+    this.updateScale(this.themeService.getThemeByKey(this.themeClass));
+    this.cookieAccepted = localStorage.getItem('cookieAccepted') === 'true';
+    this.dataProtectionConsent = localStorage.getItem('dataProtectionConsent') === 'true';
 
-  navToBlog() {
-    this.translateService.get('footer.will-open').subscribe(message => {
-      this.notificationService.show('Blog' + message, this.open, {
-        duration: 4000
-      });
-    });
-    this.notificationService.snackRef.afterDismissed().subscribe(info => {
-      if (info.dismissedByAction === true) {
-        window.open(this.blogUrl, '_blank');
+    if (!localStorage.getItem('cookieAccepted')) {
+      this.showCookieModal();
+    } else {
+      if (!this.cookieAccepted || !this.dataProtectionConsent) {
+        this.showOverlay();
       }
-    });
-  }
-
-  navToDSGVO() {
-    this.translateService.get('footer.will-open').subscribe(message => {
-      this.translateService.get('footer.dsgvo').subscribe(what => {
-        this.notificationService.show(what + message, this.open, {
-          duration: 4000
-        });
-      });
-    });
-    this.notificationService.snackRef.afterDismissed().subscribe(info => {
-      if (info.dismissedByAction === true) {
-        window.open(this.dsgvoUrl, '_blank');
-      }
-    });
-  }
-
-  navToImprint() {
-    this.translateService.get('footer.will-open').subscribe(message => {
-      this.translateService.get('footer.imprint').subscribe(what => {
-        this.notificationService.show(what + message, this.open, {
-          duration: 4000
-        });
-      });
-    });
-    this.notificationService.snackRef.afterDismissed().subscribe(info => {
-      if (info.dismissedByAction === true) {
-        window.open(this.imprUrl, '_blank');
-      }
-    });
+    }
   }
 
   showDemo() {
     const dialogRef = this.dialog.open(DemoVideoComponent, {
-      position: {
-        left: '10px',
-        right: '10px'
-      },
-      maxWidth: '100vw',
-      maxHeight: '100vh',
-      height: '100%',
-      width: '100%'
+      width: '80%'
     });
     dialogRef.componentInstance.deviceType = this.deviceType;
+    dialogRef.afterOpened().subscribe(e => {
+      document.getElementById('outer_main_container').style.display = 'none';
+    });
+    dialogRef.afterClosed().subscribe(e => {
+      document.getElementById('outer_main_container').style.display = 'block';
+    });
+
+  }
+
+  showCookieModal() {
+    const dialogRef = this.dialog.open(CookiesComponent, {
+      width: '80%',
+      autoFocus: true
+
+    });
+    dialogRef.disableClose = true;
+    dialogRef.componentInstance.deviceType = this.deviceType;
+    dialogRef.afterClosed().subscribe(res => {
+      this.cookieAccepted = res;
+      this.dataProtectionConsent = res;
+      if (!res) {
+        this.showOverlay();
+      }
+    });
+  }
+
+  showImprint() {
+    const dialogRef = this.dialog.open(ImprintComponent, {
+      width: '80%'
+    });
+    dialogRef.componentInstance.deviceType = this.deviceType;
+  }
+
+  showHelp() {
+    const dialogRef = this.dialog.open(HelpPageComponent, {
+      width: '80%'
+    });
+    dialogRef.componentInstance.deviceType = this.deviceType;
+  }
+
+  showDataProtection() {
+    const dialogRef = this.dialog.open(DataProtectionComponent, {
+      width: '80%'
+    });
+    dialogRef.componentInstance.deviceType = this.deviceType;
+    dialogRef.afterClosed().subscribe(res => {
+      this.dataProtectionConsent = res;
+      if (!res) {
+        this.showOverlay();
+      }
+    });
+  }
+
+  showOverlay() {
+    const dialogRef = this.dialog.open(OverlayComponent, {});
+    dialogRef.componentInstance.deviceType = this.deviceType;
+    dialogRef.disableClose = true;
+    dialogRef.afterClosed().subscribe(res => {
+      if (res) {
+        if (!this.cookieAccepted) {
+          this.showCookieModal();
+        } else if (!this.dataProtectionConsent) {
+          this.showDataProtection();
+        }
+      }
+    });
   }
 
   useLanguage(language: string) {
@@ -111,8 +151,18 @@ export class FooterComponent implements OnInit {
     this.langService.langEmitter.emit(language);
   }
 
-  changeTheme(theme) {
-    this.themeClass = theme;
-    this.themeService.activate(theme);
+  changeTheme(theme: Theme) {
+    this.themeClass = theme.key;
+    this.themeService.activate(theme.key);
+    this.updateScale(theme);
+  }
+
+  updateScale(theme: Theme) {
+    AppComponent.rescale.setInitialScale(theme.scale);
+    AppComponent.rescale.setDefaultScale(theme.scale);
+  }
+
+  getLanguage(): string {
+    return localStorage.getItem('currentLang');
   }
 }

@@ -13,6 +13,7 @@ mat-card-content > :first-child {
   width: 35px;
   height: 35px;
   font-size: 35px;
+  font-weight: bold;
   line-height: 100% !important;
   color: var(--on-surface)
 }
@@ -26,7 +27,7 @@ mat-card-content > :first-child {
 }
 
 .not-marked {
-  color: var(--grey);
+  color: slategray;
 }
 
 .correct-icon {
@@ -45,10 +46,17 @@ mat-card-content > :first-child {
   color: var(--on-surface);
 }
 
-h2 {
+.score {
   text-align: center;
   margin: 0;
-  color: var(--on-surface)
+  color: var(--on-surface);
+  font-size: 24px;
+}
+
+.scoreCreator {
+  color: var(--on-surface);
+  margin: 0 10px 0 10px;
+  font-size: 24px;
 }
 
 .body {
@@ -61,12 +69,13 @@ h2 {
   color: var(--on-surface);
   white-space: pre-line;
   hyphens: auto;
+  overflow-wrap: anywhere !important;
 }
 
 .click {
   cursor: pointer;
 }
-
+user.role
 .mat-icon {
   transform: scale(1.2);
 }
@@ -74,12 +83,12 @@ h2 {
 .date-container {
   opacity: 0.7;
   color: var(--on-surface);
-  height: 40px;
+  padding-top: .3rem;
 }
 
-.date {
-  padding-top: 10.5px;
-
+.comment-actions {
+  align-items: center;
+  height: 3.5rem;
 }
 
 .highlighted {
@@ -93,4 +102,18 @@ h2 {
 
 .gavel {
   color: var(--primary);
+}
+
+.moderator {
+  background-color: var(--moderator)!important;
+}
+
+.comment-tags {
+  width: 140px;
+  margin-top: 1rem;
+  cursor: pointer;
+}
+
+.comment-tag {
+  vertical-align: 5px;
 }

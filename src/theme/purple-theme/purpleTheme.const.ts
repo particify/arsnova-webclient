@@ -1,27 +1,48 @@
 export const purple = {
 
-  '--primary' : '#9c27b0',
-  '--primary-variant': '#d05ce3',
+  '--primary' : 'Maroon',
+  '--primary-variant': 'white',
 
-  '--secondary': '#ffca28',
-  '--secondary-variant': '#fffd61',
+  '--secondary': 'black',
+  '--secondary-variant': 'green',
 
-  '--background': '#fafafa',
-  '--surface': '#e0e0e0',
-  '--dialog': '#f2f4f5',
+  '--background': 'beige',
+  '--surface': 'white',
+  '--dialog': 'white',
 
-  '--on-primary': '#FFFFFF',
-  '--on-secondary': '#000000',
-  '--on-background': '#000000',
-  '--on-surface': '#000000',
+  '--on-primary': 'white',
+  '--on-secondary': 'white',
+  '--on-background': 'black',
+  '--on-surface': 'black',
+  '--on-cancel': 'white',
 
-  '--green': '#4caf50',
-  '--red': '#f44336',
-  '--yellow': '#FFD54F',
-  '--blue': '#3f51b5',
-  '--purple': '#9c27b0',
-  '--light-green': '#80ba24',
-  '--grey': '#BDBDBD',
-  '--grey-light': '#EEEEEE',
-  '--black': '#212121'
+  '--green': 'green',
+  '--red': 'red',
+  '--yellow': 'gold',
+  '--blue': 'blue',
+  '--purple': 'purple',
+  '--light-green': 'lightgreen',
+  '--grey': 'grey',
+  '--grey-light': 'lightgrey',
+  '--black': 'black',
+  '--moderator': '#e0f2f1'
+
+};
+
+export const purple_meta = {
+
+  'translation': {
+    'name': {
+      'en': 'Projector',
+      'de': 'Beamer'
+    },
+    'description': {
+      'en': 'Optimized for presentation in lecture halls',
+      'de': 'Für die Präsentation im Hörsaal optimiert'
+    }
+  },
+  'order': 1,
+  'scale': 1.3,
+  'previewColor': 'background'
+
 };

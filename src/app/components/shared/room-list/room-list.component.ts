@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Room } from '../../../models/room';
 import { RoomRoleMixin } from '../../../models/room-role-mixin';
 import { User } from '../../../models/user';
@@ -8,6 +8,7 @@ import { RoomService } from '../../../services/http/room.service';
 import { EventService } from '../../../services/util/event.service';
 import { AuthenticationService } from '../../../services/http/authentication.service';
 import { ModeratorService } from '../../../services/http/moderator.service';
+import { MatTableDataSource } from '@angular/material';
 
 @Component({
   selector: 'app-room-list',
@@ -20,6 +21,9 @@ export class RoomListComponent implements OnInit {
   roomsWithRole: RoomRoleMixin[];
   closedRooms: Room[];
   isLoading = true;
+
+  tableDataSource: MatTableDataSource<Room>;
+  displayedColumns: string[] = ['name', 'shortId', 'role', 'button'];
 
   creatorRole = UserRole.CREATOR;
   participantRole = UserRole.PARTICIPANT;
@@ -36,7 +40,7 @@ export class RoomListComponent implements OnInit {
   ngOnInit() {
     this.getRooms();
     this.eventService.on<any>('RoomDeleted').subscribe(payload => {
-      this.rooms = this.rooms.filter(r => r.id !== payload.id);
+      this.roomsWithRole = this.roomsWithRole.filter(r => r.id !== payload.id);
     });
   }
 
@@ -65,8 +69,10 @@ export class RoomListComponent implements OnInit {
         });
       }
       return roomWithRole;
-    });
+    }).sort((a, b) => 0 - (a.name.toLowerCase() < b.name.toLowerCase() ? 1 : -1));
     this.isLoading = false;
+
+    this.updateTable();
   }
 
   setCurrentRoom(shortId: string) {
@@ -87,5 +93,13 @@ export class RoomListComponent implements OnInit {
       case UserRole.EXECUTIVE_MODERATOR:
         return 'moderator';
     }
+  }
+
+  updateTable(): void {
+    this.tableDataSource = new MatTableDataSource(this.roomsWithRole);
+  }
+
+  applyFilter(filterValue: string): void {
+    this.tableDataSource.filter = filterValue.trim().toLowerCase();
   }
 }

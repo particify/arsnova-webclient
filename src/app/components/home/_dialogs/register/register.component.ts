@@ -4,6 +4,7 @@ import { FormControl, FormGroupDirective, NgForm, Validators } from '@angular/fo
 import { AuthenticationService } from '../../../../services/http/authentication.service';
 import { NotificationService } from '../../../../services/util/notification.service';
 import { TranslateService } from '@ngx-translate/core';
+import { EventService } from '../../../../services/util/event.service';
 
 export class RegisterErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
@@ -12,7 +13,7 @@ export class RegisterErrorStateMatcher implements ErrorStateMatcher {
   }
 }
 
-function validatePassword(password1: FormControl) {
+export function validatePassword(password1: FormControl) {
   return (formControl: FormControl) => {
     const password1Value = password1.value;
     const password2Value = formControl.value;
@@ -64,14 +65,24 @@ export class RegisterComponent implements OnInit {
               public authenticationService: AuthenticationService,
               public notificationService: NotificationService,
               public dialogRef: MatDialogRef<RegisterComponent>,
-              @Inject(MAT_DIALOG_DATA) public data: any) {
+              @Inject(MAT_DIALOG_DATA) public data: any,
+              public eventService: EventService) {
   }
 
-  onNoClick(): void {
-    this.dialogRef.close();
+
+  /**
+   * Closes the register dialog on call.
+   */
+  closeDialog(): void {
+    this.dialogRef.close([]);
   }
 
+
+  /**
+   * @inheritDoc
+   */
   ngOnInit() {
+      // nothing special yet
   }
 
   register(username: string, password: string): void {
@@ -97,5 +108,21 @@ export class RegisterComponent implements OnInit {
         this.notificationService.show(message);
       });
     }
+  }
+
+
+  /**
+   * Returns a lambda which closes the dialog on call.
+   */
+  buildCloseDialogActionCallback(): () => void {
+    return () => this.closeDialog();
+  }
+
+
+  /**
+   * Returns a lambda which executes the dialog dedicated action on call.
+   */
+  buildRegisterActionCallback(userName: HTMLInputElement, password: HTMLInputElement): () => void {
+    return () => this.register(userName.value, password.value);
   }
 }

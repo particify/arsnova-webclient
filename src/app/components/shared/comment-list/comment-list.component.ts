@@ -15,6 +15,11 @@ import { RoomService } from '../../../services/http/room.service';
 import { VoteService } from '../../../services/http/vote.service';
 import { NotificationService } from '../../../services/util/notification.service';
 import { CorrectWrong } from '../../../models/correct-wrong.enum';
+import { LiveAnnouncer } from '@angular/cdk/a11y';
+import { EventService } from '../../../services/util/event.service';
+import { Subscription } from 'rxjs';
+import { AppComponent } from '../../../app.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-comment-list',
@@ -25,6 +30,7 @@ export class CommentListComponent implements OnInit {
   @ViewChild('searchBox') searchField: ElementRef;
   @Input() user: User;
   @Input() roomId: string;
+  AppComponent = AppComponent;
   comments: Comment[] = [];
   room: Room;
   hideCommentsList = false;
@@ -42,6 +48,7 @@ export class CommentListComponent implements OnInit {
   correct = 'correct';
   wrong = 'wrong';
   ack = 'ack';
+  tag = 'tag';
   currentFilter = '';
   commentVoteMap = new Map<string, Vote>();
   scroll = false;
@@ -51,6 +58,9 @@ export class CommentListComponent implements OnInit {
   searchPlaceholder = '';
   moderationEnabled = false;
   thresholdEnabled = false;
+  newestComment: string;
+  freeze = false;
+  commentStream: Subscription;
 
   constructor(private commentService: CommentService,
               private translateService: TranslateService,
@@ -59,7 +69,10 @@ export class CommentListComponent implements OnInit {
               private wsCommentService: WsCommentServiceService,
               protected roomService: RoomService,
               protected voteService: VoteService,
-              private notificationService: NotificationService
+              private notificationService: NotificationService,
+              public eventService: EventService,
+              public liveAnnouncer: LiveAnnouncer,
+              private router: Router
   ) {
     langService.langEmitter.subscribe(lang => translateService.use(lang));
   }
@@ -68,21 +81,25 @@ export class CommentListComponent implements OnInit {
     this.roomId = localStorage.getItem(`roomId`);
     const userId = this.user.id;
     this.userRole = this.user.role;
+    this.currentSort = this.votedesc;
     this.roomService.getRoom(this.roomId).subscribe( room => {
       this.room = room;
       if (this.room && this.room.extensions && this.room.extensions['comments']) {
-        if (this.room.extensions['comments'].commentThreshold !== null) {
-          this.thresholdEnabled = true;
-        }
         if (this.room.extensions['comments'].enableModeration !== null) {
           this.moderationEnabled = this.room.extensions['comments'].enableModeration;
         }
       }
+      this.commentService.getAckComments(this.roomId)
+        .subscribe(comments => {
+          this.comments = comments;
+          this.getComments();
+        });
+      if (this.userRole === UserRole.PARTICIPANT) {
+        this.openCreateDialog();
+      }
     });
     this.hideCommentsList = false;
-    this.wsCommentService.getCommentStream(this.roomId).subscribe((message: Message) => {
-      this.parseIncomingMessage(message);
-    });
+    this.subscribeCommentStream();
     this.translateService.use(localStorage.getItem('currentLang'));
     this.deviceType = localStorage.getItem('deviceType');
     if (this.userRole === 0) {
@@ -92,12 +109,6 @@ export class CommentListComponent implements OnInit {
         }
       });
     }
-    this.currentSort = this.votedesc;
-    this.commentService.getAckComments(this.roomId)
-      .subscribe(comments => {
-        this.comments = comments;
-        this.getComments();
-      });
     this.translateService.get('comment-list.search').subscribe(msg => {
       this.searchPlaceholder = msg;
     });
@@ -105,19 +116,23 @@ export class CommentListComponent implements OnInit {
 
   checkScroll(): void {
     const currentScroll = document.documentElement.scrollTop;
-      this.scroll = currentScroll >= 65;
-      this.scrollExtended = currentScroll >= 300;
+    this.scroll = currentScroll >= 65;
+    this.scrollExtended = currentScroll >= 300;
   }
 
-  scrollToTop(): void {
-    document.documentElement.scrollTo({ top: 0, behavior: 'smooth' });
+  isScrollButtonVisible(): boolean {
+    return !AppComponent.isScrolledTop() && this.comments.length > 5;
   }
 
   searchComments(): void {
-    if (this.searchInput && this.searchInput.length > 2) {
-      this.hideCommentsList = true;
-      this.filteredComments = this.comments.filter(c => c.body.toLowerCase().includes(this.searchInput.toLowerCase()));
-    }
+    if (this.searchInput) {
+      if (this.searchInput.length > 2) {
+        this.hideCommentsList = true;
+        this.filteredComments = this.comments.filter(c => c.body.toLowerCase().includes(this.searchInput.toLowerCase()));
+      }
+    } else if (this.searchInput.length === 0 && this.currentFilter === '') {
+      this.hideCommentsList = false;
+     }
   }
 
   activateSearch() {
@@ -129,8 +144,15 @@ export class CommentListComponent implements OnInit {
   }
 
   getComments(): void {
+    if (this.room && this.room.extensions && this.room.extensions['comments']) {
+      if (this.room.extensions['comments'].enableThreshold) {
+        this.thresholdEnabled = true;
+      } else {
+        this.thresholdEnabled = false;
+      }
+    }
     this.isLoading = false;
-    let commentThreshold = -10;
+    let commentThreshold;
     if (this.thresholdEnabled) {
       commentThreshold = this.room.extensions['comments'].commentThreshold;
       if (this.hideCommentsList) {
@@ -158,6 +180,10 @@ export class CommentListComponent implements OnInit {
         c.body = payload.body;
         c.id = payload.id;
         c.timestamp = payload.timestamp;
+        c.tag = payload.tag;
+
+        this.announceNewComment(c.body);
+
         this.comments = this.comments.concat(c);
         break;
       case 'CommentPatched':
@@ -174,9 +200,15 @@ export class CommentListComponent implements OnInit {
                   break;
                 case this.favorite:
                   this.comments[i].favorite = <boolean>value;
+                  if (this.user.id === this.comments[i].creatorId && <boolean>value) {
+                    this.translateService.get('comment-list.comment-got-favorited').subscribe(ret => {
+                      this.notificationService.show(ret);
+                    });
+                  }
                   break;
                 case 'score':
                   this.comments[i].score = <number>value;
+                  this.getComments();
                   break;
                 case this.ack:
                   const isNowAck = <boolean>value;
@@ -185,6 +217,10 @@ export class CommentListComponent implements OnInit {
                       return el.id !== payload.id;
                     });
                   }
+                  break;
+                case this.tag:
+                  this.comments[i].tag = <string>value;
+                  break;
               }
             }
           }
@@ -217,6 +253,7 @@ export class CommentListComponent implements OnInit {
     });
     dialogRef.componentInstance.user = this.user;
     dialogRef.componentInstance.roomId = this.roomId;
+    dialogRef.componentInstance.tags = this.room.extensions['tags'].tags;
     dialogRef.afterClosed()
       .subscribe(result => {
         if (result) {
@@ -249,10 +286,12 @@ export class CommentListComponent implements OnInit {
     this.notificationService.show(message);
   }
 
-  filterComments(type: string): void {
+  filterComments(type: string, tag?: string): void {
     this.currentFilter = type;
     if (type === '') {
       this.filteredComments = this.comments;
+      this.hideCommentsList = false;
+      this.currentFilter = '';
       return;
     }
     this.filteredComments = this.comments.filter(c => {
@@ -267,20 +306,22 @@ export class CommentListComponent implements OnInit {
           return c.read;
         case this.unread:
           return !c.read;
+        case this.tag:
+          return c.tag === tag;
       }
     });
+    this.hideCommentsList = true;
     this.sortComments(this.currentSort);
   }
 
-  sort(array: any[], type: string): void {
-    array.sort((a, b) => {
+  sort(array: any[], type: string): any[] {
+    return array.sort((a, b) => {
       if (type === this.voteasc) {
         return (a.score > b.score) ? 1 : (b.score > a.score) ? -1 : 0;
       } else if (type === this.votedesc) {
         return (b.score > a.score) ? 1 : (a.score > b.score) ? -1 : 0;
-      }
-      const dateA = new Date(a.timestamp), dateB = new Date(b.timestamp);
-      if (type === this.time) {
+      } else if (type === this.time) {
+        const dateA = new Date(a.timestamp), dateB = new Date(b.timestamp);
         return (+dateB > +dateA) ? 1 : (+dateA > +dateB) ? -1 : 0;
       }
     });
@@ -288,10 +329,64 @@ export class CommentListComponent implements OnInit {
 
   sortComments(type: string): void {
     if (this.hideCommentsList === true) {
-      this.sort(this.filteredComments, type);
+      this.filteredComments = this.sort(this.filteredComments, type);
     } else {
-      this.sort(this.comments, type);
+      this.comments = this.sort(this.comments, type);
     }
     this.currentSort = type;
+  }
+
+  clickedOnTag(tag: string): void {
+    this.filterComments(this.tag, tag);
+  }
+
+  pauseCommentStream() {
+    this.freeze = true;
+    this.commentStream.unsubscribe();
+    this.translateService.get('comment-list.comment-stream-stopped').subscribe(msg => {
+      this.notificationService.show(msg);
+    });
+  }
+
+  playCommentStream() {
+    this.freeze = false;
+    this.commentService.getAckComments(this.roomId)
+      .subscribe(comments => {
+        this.comments = comments;
+        this.getComments();
+      });
+    this.subscribeCommentStream();
+    this.translateService.get('comment-list.comment-stream-started').subscribe(msg => {
+      this.notificationService.show(msg);
+    });
+  }
+
+  subscribeCommentStream() {
+    this.commentStream = this.wsCommentService.getCommentStream(this.roomId).subscribe((message: Message) => {
+      this.parseIncomingMessage(message);
+    });
+  }
+
+  switchToModerationList(): void {
+    this.router.navigate([`/moderator/room/${this.room.shortId}/moderator/comments`]);
+  }
+
+  /**
+   * Announces a new comment receive.
+   */
+  public announceNewComment(comment: string) {
+    // update variable so text will be fetched to DOM
+    this.newestComment = comment;
+
+    // Currently the only possible way to announce the new comment text
+    // @see https://github.com/angular/angular/issues/11405
+    setTimeout(() => {
+      const newCommentText: string = document.getElementById('new-comment').innerText;
+
+      // current live announcer content must be cleared before next read
+      this.liveAnnouncer.clear();
+
+      this.liveAnnouncer.announce(newCommentText).catch(err => { /* TODO error handling */ });
+    }, 450);
   }
 }

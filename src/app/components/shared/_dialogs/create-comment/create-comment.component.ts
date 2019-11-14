@@ -6,7 +6,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { FormControl, Validators } from '@angular/forms';
 import { User } from '../../../../models/user';
 import { CommentListComponent } from '../../comment-list/comment-list.component';
-
+import { EventService } from '../../../../services/util/event.service';
 
 @Component({
   selector: 'app-submit-comment',
@@ -19,6 +19,8 @@ export class CreateCommentComponent implements OnInit {
 
   user: User;
   roomId: string;
+  tags: string[];
+  selectedTag: string;
 
   bodyForm = new FormControl('', [Validators.required]);
 
@@ -28,6 +30,7 @@ export class CreateCommentComponent implements OnInit {
               private translateService: TranslateService,
               public dialog: MatDialog,
               private translationService: TranslateService,
+              public eventService: EventService,
               @Inject(MAT_DIALOG_DATA) public data: any) {
   }
 
@@ -55,9 +58,28 @@ export class CreateCommentComponent implements OnInit {
       const comment = new Comment();
       comment.roomId = localStorage.getItem(`roomId`);
       comment.body = body;
-      comment.userId = this.user.id;
+      comment.creatorId = this.user.id;
       comment.createdFromLecturer = this.user.role === 1;
+      if (this.selectedTag !== null) {
+        comment.tag = this.selectedTag;
+      }
       this.dialogRef.close(comment);
     }
+  }
+
+
+  /**
+   * Returns a lambda which closes the dialog on call.
+   */
+  buildCloseDialogActionCallback(): () => void {
+    return () => this.onNoClick();
+  }
+
+
+  /**
+   * Returns a lambda which executes the dialog dedicated action on call.
+   */
+  buildCreateCommentActionCallback(text: HTMLInputElement): () => void {
+    return () => this.closeDialog(text.value);
   }
 }

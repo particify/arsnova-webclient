@@ -1,8 +1,10 @@
 @import '../../../../styles';
 
 mat-card {
-  width: 800px;
+  width: 100%;
+  max-width: 800px;
   min-height: 350px;
+  max-height: 700px;
   background-color: var(--surface)!important;
 }
 
@@ -10,7 +12,7 @@ mat-card-content > :first-child {
   margin: 3% 0 3% 0;
 }
 
-#description {
+#room-edit-description {
   margin-bottom: 0;
 }
 
@@ -71,28 +73,25 @@ mat-card-content > :first-child {
 }
 
 mat-grid-list {
-  margin-bottom: 5px !important;
+  margin: 0;
 }
 
 .second {
   margin-bottom: 20px !important;
 }
 
-h2 {
+h1 {
    font-size: large;
    color: var(--on-surface)!important;
  }
 
-h3 {
-  font-size: larger;
+p {
   color: var(--on-surface)!important;
-  margin: 5% 5% 0 0;
 }
 
-h4 {
-  font-size: medium;
+h2 {
+  font-size: larger;
   color: var(--on-surface)!important;
-  padding: 0 1% 0 1%;
 }
 
 mat-card-header {
@@ -134,4 +133,12 @@ mat-expansion-panel {
 .gavel {
   margin: 5% 2% 0 0;
   color: var(--on-surface);
+}
+
+.question-button-div {
+  margin: 10% 0 10% 0;
+}
+
+markdown {
+  margin: 0 3% 0 3% !important;
 }

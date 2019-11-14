@@ -1,0 +1,18 @@
+<div mat-dialog-content>
+  <h2 tabindex="0">{{'header.bonus-token' | translate }}</h2>
+  <mat-divider></mat-divider>
+  <div *ngIf="bonusTokens.length >= 1">
+    <div fxLayout="row" *ngFor="let bonusToken of bonusTokens">
+      <h2 tabindex="1">
+        {{bonusToken.token}}
+      </h2>
+    </div>
+  </div>
+  <div *ngIf="bonusTokens.length === 0">
+      <h3 tabindex="0">{{'header.no-bonus' | translate }}</h3>
+  </div>
+  <app-dialog-action-buttons
+    buttonsLabelSection="introduction"
+    [cancelButtonClickAction]="buildDeclineActionCallback()">
+  </app-dialog-action-buttons>
+</div>

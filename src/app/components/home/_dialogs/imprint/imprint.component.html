@@ -1,0 +1,10 @@
+<h2 tabindex="0" class="modal" mat-dialog-title>{{ 'imprint.title' | translate }} </h2>
+<mat-divider></mat-divider>
+<mat-dialog-content tabindex="0">
+  <app-imprint-en *ngIf="currentLang=='en'"></app-imprint-en>
+  <app-imprint-de *ngIf="currentLang=='de'"></app-imprint-de>
+  <app-dialog-action-buttons
+    buttonsLabelSection="imprint"
+    [cancelButtonClickAction]="buildDeclineActionCallback()">
+  </app-dialog-action-buttons>
+</mat-dialog-content>

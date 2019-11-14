@@ -25,7 +25,6 @@ mat-expansion-panel-header {
   background-color: var(--primary-variant) !important;
   padding-left: 3%;
   padding-right: 3%;
-  word-break: break-all;
 }
 
 .matPanel {
@@ -41,7 +40,6 @@ mat-expansion-panel-header {
 
 h2 {
   font-size: larger;
-  color: var(--on-surface);
 }
 
 .actionButton {
@@ -80,9 +78,4 @@ mat-tooltip-component {
 
 mat-progress-spinner {
   margin-top: 10px;
-}
-
-h3 {
-  font-size: larger;
-  color: var(--on-surface);
 }
