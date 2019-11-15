@@ -113,6 +113,7 @@
     "header": "Anmelden",
     "input-incorrect": "Bitte prüfe deine Eingaben.",
     "login": "Anmelden mit Konto",
+    "login-with": "Anmelden mit",
     "login-data-incorrect": "Benutzername oder Passwort falsch",
     "login-description": "Mit den eingegebenen Kontodaten anmelden",
     "login-successful": "Anmeldung erfolgreich",
