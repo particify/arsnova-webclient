@@ -180,16 +180,18 @@ export class HeaderComponent implements OnInit {
   /*QR*/
 
   public getQRCode(): string {
-    return 'frag.jetzt/participant/room/' + this.shortId;
+    return 'https://frag.jetzt/participant/room/' + this.shortId;
   }
 
   public showQRDialog() {
+    Rescale.requestFullscreen();
     const dialogRef = this.dialog.open(QrCodeDialogComponent, {
       panelClass: 'screenDialog'
     });
     const qrDialog: QrCodeDialogComponent = dialogRef.componentInstance;
     qrDialog.setQRCode(this.getQRCode());
     dialogRef.afterClosed().subscribe(res => {
+      Rescale.exitFullscreen();
     });
   }
 
