@@ -5,6 +5,7 @@ import { AnswerOption } from '../../../models/answer-option';
 import { NotificationService } from '../../../services/util/notification.service';
 import { ContentType } from '../../../models/content-type.enum';
 import { ContentService } from '../../../services/http/content.service';
+import { RoomService } from '../../../services/http/room.service';
 import { TranslateService } from '@ngx-translate/core';
 
 @Component({
@@ -43,6 +44,7 @@ export class ContentYesNoCreatorComponent implements OnInit {
   newAnswerOptionPoints = 0;
 
   constructor(private contentService: ContentService,
+              private roomService: RoomService,
               private notificationService: NotificationService,
               private translationService: TranslateService) {
   }
@@ -87,12 +89,6 @@ export class ContentYesNoCreatorComponent implements OnInit {
       this.content.options[1].points = 10;
       this.content.correctOptionIndexes = [1];
     }
-    let contentGroup: string;
-    if (this.contentCol === 'Default') {
-      contentGroup = '';
-    } else {
-      contentGroup = this.contentCol;
-    }
     this.contentService.addContent(new ContentChoice(
       null,
       null,
@@ -100,12 +96,16 @@ export class ContentYesNoCreatorComponent implements OnInit {
       this.contentSub,
       this.contentBod,
       1,
-      [contentGroup],
+      [],
       this.content.options,
       this.content.correctOptionIndexes,
       this.content.multiple,
       ContentType.BINARY
-    )).subscribe();
-    this.resetAfterSubmit();
+    )).subscribe(content => {
+      if (this.contentCol !== 'Default') {
+        this.roomService.addContentToGroup(this.roomId, this.contentCol, content.id).subscribe();
+      }
+      this.resetAfterSubmit();
+    });
   }
 }

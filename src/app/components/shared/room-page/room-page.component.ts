@@ -1,5 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Room } from '../../../models/room';
+import { ContentGroup } from '../../../models/content-group';
+import { RoomStats } from '../../../models/room-stats';
 import { RoomService } from '../../../services/http/room.service';
 import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
@@ -16,6 +18,8 @@ import { Observable, Subscription } from 'rxjs';
 })
 export class RoomPageComponent implements OnInit, OnDestroy {
   room: Room = null;
+  protected roomStats: RoomStats;
+  protected contentGroups: ContentGroup[] = [];
   isLoading = true;
   commentCounter: number;
   protected moderationEnabled = false;
@@ -53,6 +57,17 @@ export class RoomPageComponent implements OnInit, OnDestroy {
   initializeRoom(id: string): void {
     this.roomService.getRoomByShortId(id).subscribe(room => {
       this.room = room;
+      this.roomService.getStats(room.id).subscribe(roomStats => {
+        console.log(roomStats);
+        this.roomStats = roomStats;
+        if (roomStats.groupStats) {
+          for (let groupStats of roomStats.groupStats) {
+            this.roomService.getGroupByRoomIdAndName(room.id, groupStats.groupName).subscribe(group => {
+              this.contentGroups.push(group);
+            });
+          }
+        }
+      });
       this.isLoading = false;
       if (this.room.extensions && this.room.extensions['comments']) {
         if (this.room.extensions['comments'].enableModeration !== null) {

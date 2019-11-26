@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Room } from '../../models/room';
+import { RoomStats } from '../../models/room-stats';
+import { ContentGroup } from '../../models/content-group';
 import { RoomJoined } from '../../models/events/room-joined';
 import { RoomCreated } from '../../models/events/room-created';
 import { UserRole } from '../../models/user-roles.enum';
@@ -21,7 +23,9 @@ export class RoomService extends BaseHttpService {
     base: '/api',
     rooms: '/room',
     user: '/user',
-    findRooms: '/find'
+    findRooms: '/find',
+    stats: '/stats',
+    contentGroup: '/contentgroup'
   };
   private joinDate = new Date(Date.now());
 
@@ -113,6 +117,42 @@ export class RoomService extends BaseHttpService {
       tap(() => ''),
       catchError(this.handleError<Room>('deleteRoom'))
     );
+  }
+
+  getStats(roomId: string): Observable<RoomStats> {
+    const connectionUrl = `${ this.apiUrl.base +  this.apiUrl.rooms }/${ roomId }/${ this.apiUrl.stats }`;
+    return this.http.get<RoomStats>(connectionUrl).pipe(
+      tap(() => ''),
+      catchError(this.handleError<RoomStats>(`getStats id=${ roomId }`))
+    );
+  }
+
+  getGroupByRoomIdAndName(roomId: string, name: string): Observable<ContentGroup> {
+    const connectionUrl = `${ this.apiUrl.base +  this.apiUrl.rooms }/${ roomId + this.apiUrl.contentGroup }/${ name }`;
+    return this.http.get<ContentGroup>(connectionUrl, httpOptions).pipe(
+        tap(_ => ''),
+        catchError(this.handleError<ContentGroup>(`getGroupByRoomIdAndName, ${ roomId }, ${ name }`))
+      );
+  }
+
+  addContentToGroup(roomId: string, name: string, contentId: String): Observable<void> {
+    const connectionUrl =
+       `${ this.apiUrl.base +  this.apiUrl.rooms }/` + 
+       `${ roomId + this.apiUrl.contentGroup }/${ name }/${ contentId }`;
+    return this.http.post<void>(connectionUrl, {}, httpOptions).pipe(
+        tap(_ => ''),
+        catchError(this.handleError<void>(`addContentToGroup, ${ roomId }, ${ name }, ${ contentId }`))
+      );
+  }
+
+  updateGroup(roomId: string, name: string, contentGroup: ContentGroup): Observable<ContentGroup> {
+    const connectionUrl = `${ this.apiUrl.base +  this.apiUrl.rooms }/${ roomId + this.apiUrl.contentGroup }/${ name }`;
+    return this.http.post<ContentGroup>(connectionUrl, {
+      contentGroup
+    }, httpOptions).pipe(
+        tap(_ => ''),
+        catchError(this.handleError<ContentGroup>(`updateGroup, ${ roomId }, ${ name }, ${ ContentGroup }`))
+      );
   }
 
   parseExtensions(room: Room): Room {
