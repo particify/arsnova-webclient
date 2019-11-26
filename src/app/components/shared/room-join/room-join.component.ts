@@ -99,7 +99,7 @@ export class RoomJoinComponent implements OnInit {
 
   addAndNavigate() {
     if (this.user.id === this.room.ownerId) {
-      this.router.navigate([`/creator/room/${this.room.shortId}/comments`]);
+      this.router.navigate([`/creator/room/${this.room.shortId}`]);
     } else {
       this.roomService.addToHistory(this.room.id);
       this.moderatorService.get(this.room.id).subscribe((moderators: Moderator[]) => {
@@ -107,13 +107,13 @@ export class RoomJoinComponent implements OnInit {
         for (const m of moderators) {
           if (m.userId === this.user.id) {
             this.authenticationService.setAccess(this.room.shortId, UserRole.EXECUTIVE_MODERATOR);
-            this.router.navigate([`/moderator/room/${this.room.shortId}/comments`]);
+            this.router.navigate([`/moderator/room/${this.room.shortId}`]);
             isModerator = true;
           }
         }
         if (!isModerator) {
           this.authenticationService.setAccess(this.room.shortId, UserRole.PARTICIPANT);
-          this.router.navigate([`/participant/room/${this.room.shortId}/comments`]);
+          this.router.navigate([`/participant/room/${this.room.shortId}`]);
         }
       });
     }
