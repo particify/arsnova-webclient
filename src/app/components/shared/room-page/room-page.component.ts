@@ -58,12 +58,12 @@ export class RoomPageComponent implements OnInit, OnDestroy {
     this.roomService.getRoomByShortId(id).subscribe(room => {
       this.room = room;
       this.roomService.getStats(room.id).subscribe(roomStats => {
-        console.log(roomStats);
         this.roomStats = roomStats;
         if (roomStats.groupStats) {
           for (let groupStats of roomStats.groupStats) {
             this.roomService.getGroupByRoomIdAndName(room.id, groupStats.groupName).subscribe(group => {
               this.contentGroups.push(group);
+              console.log(this.contentGroups);
             });
           }
         }

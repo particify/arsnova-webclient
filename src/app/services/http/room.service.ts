@@ -137,7 +137,7 @@ export class RoomService extends BaseHttpService {
 
   addContentToGroup(roomId: string, name: string, contentId: String): Observable<void> {
     const connectionUrl =
-       `${ this.apiUrl.base +  this.apiUrl.rooms }/` + 
+       `${ this.apiUrl.base +  this.apiUrl.rooms }/` +
        `${ roomId + this.apiUrl.contentGroup }/${ name }/${ contentId }`;
     return this.http.post<void>(connectionUrl, {}, httpOptions).pipe(
         tap(_ => ''),

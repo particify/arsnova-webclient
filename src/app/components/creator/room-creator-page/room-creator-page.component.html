@@ -58,13 +58,13 @@
       <div fxLayout="column" fxLayoutAlign="center">
         <div fxLayout="row">
         <span class="fill-remaining-space"></span>
-        <mat-grid-list cols="{{viewModuleCount}}" rowHeight="2:1">
+        <mat-grid-list cols="{{viewModuleCount}}" rowHeight="1:1">
           <mat-grid-tile>
             <button id="question_answer-button" mat-icon-button [disableRipple]="true"
                     routerLink="/creator/room/{{ room.shortId }}/comments" aria-labelledby="question_answer">
               <mat-icon matBadge="{{commentCounter}}" class="main-icon"
                         [ngClass]="{'smallerIcon' : deviceType === 'mobile'}">question_answer</mat-icon>
-              <h3>{{ 'room-page.comments' | translate}}</h3>
+              <h3 *ngIf="deviceType === 'desktop'">{{ 'room-page.comments' | translate}}</h3>
             </button>
           </mat-grid-tile>
           <mat-grid-tile *ngIf="moderationEnabled">
@@ -73,7 +73,7 @@
               <mat-icon matBadge="{{moderatorCommentCounter}}" class="main-icon"
                         [ngClass]="{'smallerIcon' : deviceType === 'mobile'}">gavel
               </mat-icon>
-              <h3>{{ 'room-page.moderating-stream' | translate}}</h3>
+              <h3 *ngIf="deviceType === 'desktop'">{{ 'room-page.moderating-stream' | translate}}</h3>
             </button>
           </mat-grid-tile>
         </mat-grid-list>
@@ -81,7 +81,7 @@
             <button id="question_answer-button2" mat-icon-button [disableRipple]="true"
                     routerLink="/creator/room/{{ room.shortId }}/comments" aria-labelledby="question_answer">
               <mat-icon matBadge="{{commentCounter}}" class="main-icon">question_answer</mat-icon>
-              <h3>{{ 'room-page.comments' | translate}}</h3>
+              <h3 *ngIf="deviceType === 'desktop'">{{ 'room-page.comments' | translate}}</h3>
             </button>
           </div>
         <span class="fill-remaining-space"></span>
@@ -107,7 +107,7 @@
       </div>
       </div>
 
-      <app-content-groups *ngIf="room && room.contentGroups" [contentGroups]="room.contentGroups"></app-content-groups>
+      <app-content-groups *ngIf="room && contentGroups" [contentGroups]="contentGroups"></app-content-groups>
 
     </mat-card>
     <div *ngIf="!isLoading && !room">{{ 'room-page.room-not-found' | translate }}</div>

@@ -4,7 +4,6 @@ mat-card {
   width: 100%;
   max-width: 800px;
   min-height: 300px;
-  max-height: 700px;
   background-color: var(--surface)!important;
 }
 
@@ -68,8 +67,6 @@ mat-grid-list {
 .second {
   margin-bottom: 20px !important;
 }
-
-
 
 mat-card-header {
   min-height: 80px;
