@@ -17,7 +17,7 @@ mat-card-content > :first-child {
 
 .mat-icon-button {
   width: 60%;
-  height: 75%;
+  height: 90%;
   color: var(--primary)!important;
   transition: all 0.3s;
   &:hover {
@@ -57,10 +57,11 @@ mat-card-content > :first-child {
   font-weight: bold;
   color: var(--on-surface)!important;
   margin: 5% 5% 0 0;
+  min-width: 130px;
 }
 
 mat-grid-list {
-  margin-bottom: 5px !important;
+  margin-bottom: 5%!important;
   width: 90%;
 }
 
@@ -71,7 +72,7 @@ mat-grid-list {
 mat-card-header {
   min-height: 80px;
   height: 10%!important;
-  margin-bottom: 10%!important;
+  margin-bottom: 5%!important;
 }
 
 mat-card-title {
@@ -84,6 +85,7 @@ mat-card-subtitle {
 }
 
 mat-grid-tile {
+  min-height: 100px;
   height: 100%!important;
   padding-top: 2%!important;
 }
@@ -112,7 +114,7 @@ mat-expansion-panel {
 }
 
 .question-button-div {
-  margin: 10% 0 10% 0;
+  margin: 5% 0;
 }
 
 markdown {
