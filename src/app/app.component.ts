@@ -31,7 +31,7 @@ export class AppComponent implements OnInit {
 
   public static rescale: Rescale = new Rescale();
 
-  title = 'frag.jetzt';
+  title = 'ARSnova';
 
   public static scrollTop() {
     const sc: HTMLElement = document.getElementById('scroll_container');

@@ -49,7 +49,7 @@
     "back": "Abbrechen",
     "delete": "Löschen",
     "delete-account": "Konto löschen",
-    "home-header": "Feedback im Hörsaal",
+    "home-header": "Interaktion im Hörsaal",
     "id": "Code",
     "logged-out": "Abmelden erfolgreich",
     "login": "Anmelden",
@@ -97,7 +97,7 @@
   "introduction": {
     "cancel": "Schließen",
     "cancel-description": "Schließe die Einführung und gehe zurück zur Anmeldung.",
-    "title": "»frag.jetzt«"
+    "title": "ARSnova"
   },
   "login": {
     "activation-key": "Aktivierungsschlüssel",
@@ -127,7 +127,7 @@
     "restart-account-activation-button": "Erneut senden",
     "restart-account-activation-correct": "Der Aktivierungsschlüssel wurde erneut gesendet.",
     "restart-account-activation-tooltip": "Sendet den Aktivierungsschlüssel erneut an die angegebene Adresse",
-    "welcome": "»Haben Sie Fragen?«"
+    "welcome": "Feedback und Interaktion"
   },
   "overlay": {
     "cancel": "Doch akzeptieren?",

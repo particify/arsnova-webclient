@@ -18,8 +18,8 @@ Insert the following code in the `head` section of your pages:
     <link rel="manifest" href="/assets/icons/site.webmanifest?v=00zWdx8zdl">
     <link rel="mask-icon" href="/assets/icons/safari-pinned-tab.svg?v=00zWdx8zdl" color="#5bbad5">
     <link rel="shortcut icon" href="/assets/icons/favicon.ico?v=00zWdx8zdl">
-    <meta name="apple-mobile-web-app-title" content="frag.jetzt">
-    <meta name="application-name" content="frag.jetzt">
+    <meta name="apple-mobile-web-app-title" content="ARSnova">
+    <meta name="application-name" content="ARSnova">
     <meta name="msapplication-TileColor" content="#00aba9">
     <meta name="msapplication-config" content="/assets/icons/browserconfig.xml?v=00zWdx8zdl">
     <meta name="theme-color" content="#03dac6">
