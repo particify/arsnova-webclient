@@ -98,4 +98,15 @@ export class ContentService extends BaseHttpService {
       catchError(this.handleError<AnswerStatistics>(`getRoom shortId=${ contentId }`))
     );
   }
+
+  findContentsWithoutGroup(roomId: string): Observable<Content[]> {
+    const connectionUrl = this.apiUrl.base + this.apiUrl.content + '/' + this.apiUrl.find;
+    return this.http.post<Content[]>(connectionUrl, {
+      properties: {},
+      externalFilters: { notInContentGroupOfRoomId: roomId }
+    }).pipe(
+      tap(() => ''),
+      catchError(this.handleError<Content[]>(`findContentsWithoutGroup roomId=${ roomId }`))
+    )
+  }
 }
