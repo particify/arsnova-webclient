@@ -47,11 +47,11 @@ export class ContentTextCreatorComponent implements OnInit {
   }
 
   submitContent() {
-    let contentGroup: string;
-    if (this.contentCol === 'Default') {
-      contentGroup = '';
-    } else {
-      contentGroup = this.contentCol;
+    if (this.contentBod === '' || this.contentSub === '' || this.contentCol === '') {
+      this.translationService.get('content.no-empty').subscribe(message => {
+        this.notificationService.show(message);
+      });
+      return;
     }
     this.contentService.addContent(new ContentText(
       null,
@@ -60,7 +60,7 @@ export class ContentTextCreatorComponent implements OnInit {
       this.contentSub,
       this.contentBod,
       1,
-      [contentGroup],
+      [],
     )).subscribe(content => {
       if (this.contentCol !== 'Default') {
         this.roomService.addContentToGroup(this.roomId, this.contentCol, content.id).subscribe();

@@ -66,6 +66,7 @@ export class ContentLikertCreatorComponent implements OnInit {
     for (let i = 0; i < this.likertScale.length; i++) {
       this.content.options.push(new AnswerOption(this.likertScale[i], this.newAnswerOptionPoints));
     }
+    this.fillCorrectAnswers();
   }
 
   resetAfterSubmit() {
@@ -78,17 +79,11 @@ export class ContentLikertCreatorComponent implements OnInit {
   }
 
   submitContent(): void {
-    if (this.contentSub === '' || this.contentBod === '') {
+    if (this.contentSub === '' || this.contentBod === '' || this.contentCol === '') {
       this.translationService.get('content.no-empty').subscribe(message => {
         this.notificationService.show(message);
       });
       return;
-    }
-    let contentGroup: string;
-    if (this.contentCol === 'Default') {
-      contentGroup = '';
-    } else {
-      contentGroup = this.contentCol;
     }
     this.contentService.addContent(new ContentChoice(
       null,
@@ -97,7 +92,7 @@ export class ContentLikertCreatorComponent implements OnInit {
       this.contentSub,
       this.contentBod,
       1,
-      [contentGroup],
+      [],
       this.content.options,
       this.content.correctOptionIndexes,
       this.content.multiple,

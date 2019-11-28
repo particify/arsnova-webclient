@@ -4,7 +4,6 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { BaseHttpService } from './base-http.service';
-import { AnswerChoice } from '../../models/answer-choice';
 import { AnswerStatistics } from '../../models/answer-statistics';
 import { ContentChoice } from '../../models/content-choice';
 
@@ -100,13 +99,13 @@ export class ContentService extends BaseHttpService {
   }
 
   findContentsWithoutGroup(roomId: string): Observable<Content[]> {
-    const connectionUrl = this.apiUrl.base + this.apiUrl.content + '/' + this.apiUrl.find;
+    const connectionUrl = this.apiUrl.base + this.apiUrl.content + this.apiUrl.find;
     return this.http.post<Content[]>(connectionUrl, {
       properties: {},
       externalFilters: { notInContentGroupOfRoomId: roomId }
     }).pipe(
       tap(() => ''),
       catchError(this.handleError<Content[]>(`findContentsWithoutGroup roomId=${ roomId }`))
-    )
+    );
   }
 }

@@ -74,7 +74,7 @@ export class ContentYesNoCreatorComponent implements OnInit {
   }
 
   submitContent(): void {
-    if (this.contentSub === '' || this.contentBod === '') {
+    if (this.contentSub === '' || this.contentBod === '' || this.contentCol === '') {
       this.translationService.get('content.no-empty').subscribe(message => {
         this.notificationService.show(message);
       });

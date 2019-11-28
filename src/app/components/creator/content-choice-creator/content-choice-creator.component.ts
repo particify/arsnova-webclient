@@ -223,7 +223,7 @@ export class ContentChoiceCreatorComponent implements OnInit {
   }
 
   submitContent() {
-    if (this.contentBod === '' || this.contentSub === '') {
+    if (this.contentBod === '' || this.contentSub === '' || this.contentCol === '') {
       this.translationService.get('content.no-empty').subscribe(message => {
         this.notificationService.show(message);
       });
@@ -249,12 +249,6 @@ export class ContentChoiceCreatorComponent implements OnInit {
     }
     this.content.multiple = !this.singleChoice;
     this.content.format = ContentType.BINARY;
-    let contentGroup: string;
-    if (this.contentCol === 'Default') {
-      contentGroup = '';
-    } else {
-      contentGroup = this.contentCol;
-    }
     this.contentService.addContent(new ContentChoice(
       null,
       null,
@@ -262,7 +256,7 @@ export class ContentChoiceCreatorComponent implements OnInit {
       this.contentSub,
       this.contentBod,
       1,
-      [contentGroup],
+      [],
       this.content.options,
       this.content.correctOptionIndexes,
       this.content.multiple,

@@ -127,7 +127,7 @@
     "edit-answer": "Antwort bearbeiten",
     "need-answers": "Auswahlfragen brauchen Antworten. Bitte füge Antworten hinzu.",
     "no": "Nein",
-    "no-empty": "Keine leeren Felder erlaubt. Bitte überprüfe Thema und Inhalt.",
+    "no-empty": "Keine leeren Felder erlaubt. Bitte überprüfe Thema, Inhalt und Sammlung.",
     "no-empty2": "Keine leeren Felder erlaubt.",
     "only-one": "Im Single-Choice-Modus ist nur eine Antwort erlaubt.",
     "only-one-true": "Im Single-Modus ist nur eine richtige Antwort erlaubt.",
@@ -139,7 +139,8 @@
     "subject": "Thema",
     "submitted": "Frage erstellt. Bereit für die Erstellung neuer Fragen.",
     "undo": "Rückgängig",
-    "yes": "Ja"
+    "yes": "Ja",
+    "default-group": "Hörsaalfragen"
   },
   "home-page": {
     "create-session": "Neue Sitzung",
