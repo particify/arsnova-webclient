@@ -8,6 +8,7 @@ import { AnswerEditComponent } from '../_dialogs/answer-edit/answer-edit.compone
 import { ContentType } from '../../../models/content-type.enum';
 import { TranslateService } from '@ngx-translate/core';
 import { EventService } from '../../../services/util/event.service';
+import { RoomService } from '../../../services/http/room.service';
 
 export class DisplayAnswer {
   answerOption: AnswerOption;
@@ -63,7 +64,8 @@ export class ContentChoiceCreatorComponent implements OnInit {
               private notificationService: NotificationService,
               public dialog: MatDialog,
               private translationService: TranslateService,
-              public eventService: EventService) {
+              public eventService: EventService,
+              private roomService: RoomService) {
   }
 
   ngOnInit() {
@@ -265,7 +267,11 @@ export class ContentChoiceCreatorComponent implements OnInit {
       this.content.correctOptionIndexes,
       this.content.multiple,
       ContentType.CHOICE
-    )).subscribe();
-    this.resetAfterSubmit();
+    )).subscribe(content => {
+      if (this.contentCol !== 'Default') {
+        this.roomService.addContentToGroup(this.roomId, this.contentCol, content.id).subscribe();
+      }
+      this.resetAfterSubmit();
+    });
   }
 }

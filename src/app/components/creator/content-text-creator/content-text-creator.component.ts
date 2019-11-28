@@ -3,6 +3,7 @@ import { ContentText } from '../../../models/content-text';
 import { ContentService } from '../../../services/http/content.service';
 import { NotificationService } from '../../../services/util/notification.service';
 import { TranslateService } from '@ngx-translate/core';
+import { RoomService } from '../../../services/http/room.service';
 
 @Component({
   selector: 'app-content-text-creator',
@@ -30,7 +31,8 @@ export class ContentTextCreatorComponent implements OnInit {
 
   constructor(private contentService: ContentService,
               private notificationService: NotificationService,
-              private translationService: TranslateService) {
+              private translationService: TranslateService,
+              private roomService: RoomService) {
   }
 
   ngOnInit() {
@@ -59,14 +61,11 @@ export class ContentTextCreatorComponent implements OnInit {
       this.contentBod,
       1,
       [contentGroup],
-    )).subscribe();
-    if (this.contentSub === '' || this.contentBod === '') {
-      this.translationService.get('content.no-empty').subscribe(message => {
-        this.notificationService.show(message);
-      });
-      return;
-    }
-    sessionStorage.setItem('collection', this.contentCol);
-    this.resetAfterSubmit();
+    )).subscribe(content => {
+      if (this.contentCol !== 'Default') {
+        this.roomService.addContentToGroup(this.roomId, this.contentCol, content.id).subscribe();
+      }
+      this.resetAfterSubmit();
+    });
   }
 }

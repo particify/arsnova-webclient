@@ -5,10 +5,8 @@ import { AnswerOption } from '../../../models/answer-option';
 import { ContentType } from '../../../models/content-type.enum';
 import { ContentService } from '../../../services/http/content.service';
 import { NotificationService } from '../../../services/util/notification.service';
-import { FormControl } from '@angular/forms';
-import { Observable } from 'rxjs';
-import { map, startWith } from 'rxjs/operators';
 import { TranslateService } from '@ngx-translate/core';
+import { RoomService } from '../../../services/http/room.service';
 
 @Component({
   selector: 'app-content-likert-creator',
@@ -51,7 +49,8 @@ export class ContentLikertCreatorComponent implements OnInit {
 
   constructor(private contentService: ContentService,
               private notificationService: NotificationService,
-              private translationService: TranslateService) {
+              private translationService: TranslateService,
+              private roomService: RoomService) {
   }
 
   fillCorrectAnswers() {
@@ -103,7 +102,11 @@ export class ContentLikertCreatorComponent implements OnInit {
       this.content.correctOptionIndexes,
       this.content.multiple,
       ContentType.SCALE
-    )).subscribe();
-    this.resetAfterSubmit();
+    )).subscribe(content => {
+      if (this.contentCol !== 'Default') {
+        this.roomService.addContentToGroup(this.roomId, this.contentCol, content.id).subscribe();
+      }
+      this.resetAfterSubmit();
+    });
   }
 }
