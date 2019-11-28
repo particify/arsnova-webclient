@@ -6,7 +6,7 @@ export class RoomStats {
     contentCount: number;
     answerCount: number;
     commentCount: number;
-  
+
     constructor(
         contentGroupStatistics: ContentGroupStatistics[] = [],
         currentParticipants: number,
@@ -21,4 +21,3 @@ export class RoomStats {
         this.commentCount = commentCount;
     }
   }
-  

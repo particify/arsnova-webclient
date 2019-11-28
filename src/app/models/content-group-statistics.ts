@@ -1,7 +1,7 @@
 export class ContentGroupStatistics {
     groupName: string;
     contentCount: number;
-  
+
     constructor(
         groupName: string,
         contentCount: number
@@ -10,4 +10,3 @@ export class ContentGroupStatistics {
         this.contentCount = contentCount;
     }
   }
-  
