@@ -10,6 +10,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { LanguageService } from '../../../services/util/language.service';
 import { WsCommentServiceService } from '../../../services/websockets/ws-comment-service.service';
 import { CommentService } from '../../../services/http/comment.service';
+import { ContentService } from '../../../services/http/content.service';
 import { AuthenticationService } from '../../../services/http/authentication.service';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { EventService } from '../../../services/util/event.service';
@@ -35,11 +36,12 @@ export class RoomParticipantPageComponent extends RoomPageComponent implements O
               protected langService: LanguageService,
               protected wsCommentService: WsCommentServiceService,
               protected commentService: CommentService,
+              protected contentService: ContentService,
               private authenticationService: AuthenticationService,
               private liveAnnouncer: LiveAnnouncer,
               private _r: Renderer2,
               public eventService: EventService) {
-    super(roomService, route, location, wsCommentService, commentService, eventService);
+    super(roomService, route, location, wsCommentService, commentService, eventService, contentService);
     langService.langEmitter.subscribe(lang => translateService.use(lang));
   }
 

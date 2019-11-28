@@ -8,6 +8,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { LanguageService } from '../../../services/util/language.service';
 import { WsCommentServiceService } from '../../../services/websockets/ws-comment-service.service';
 import { CommentService } from '../../../services/http/comment.service';
+import { ContentService } from '../../../services/http/content.service';
 import { Message } from '@stomp/stompjs';
 import { NotificationService } from '../../../services/util/notification.service';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
@@ -35,11 +36,12 @@ export class RoomModeratorPageComponent extends RoomPageComponent implements OnI
               protected langService: LanguageService,
               protected wsCommentService: WsCommentServiceService,
               protected commentService: CommentService,
+              protected contentService: ContentService,
               protected notification: NotificationService,
               public eventService: EventService,
               private liveAnnouncer: LiveAnnouncer,
               private _r: Renderer2) {
-    super(roomService, route, location, wsCommentService, commentService, eventService);
+    super(roomService, route, location, wsCommentService, commentService, eventService, contentService);
     langService.langEmitter.subscribe(lang => translateService.use(lang));
   }
 

@@ -50,8 +50,8 @@ export class RoomCreatorPageComponent extends RoomPageComponent implements OnIni
               private liveAnnouncer: LiveAnnouncer,
               private _r: Renderer2,
               public eventService: EventService,
-              private contentService: ContentService) {
-    super(roomService, route, location, wsCommentService, commentService, eventService);
+              protected contentService: ContentService) {
+    super(roomService, route, location, wsCommentService, commentService, eventService, contentService);
     langService.langEmitter.subscribe(lang => translateService.use(lang));
   }
 
