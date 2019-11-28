@@ -1,6 +1,6 @@
-# frag.jetzt
+# ARSnova
 
-Nomen est omen: The app's name says it all: it stands for both the app's main purpose and the web address https://frag.jetzt
+Interactive Audience Response System
 
 ## Documentation
 
@@ -8,4 +8,4 @@ Nomen est omen: The app's name says it all: it stands for both the app's main pu
 
 ## Credits
 
-frag.jetzt is powered by Technische Hochschule Mittelhessen | University of Applied Sciences.
+ARSnova is powered by Technische Hochschule Mittelhessen | University of Applied Sciences.
