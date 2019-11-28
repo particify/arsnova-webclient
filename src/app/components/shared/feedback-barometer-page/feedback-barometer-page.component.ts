@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { AuthenticationService } from '../../../services/http/authentication.service';
 import { UserRole } from '../../../models/user-roles.enum';
+import { User } from '../../../models/user';
 import { NotificationService } from '../../../services/util/notification.service';
 import { Message } from '@stomp/stompjs';
 import { WsFeedbackService } from '../../../services/websockets/ws-feedback.service';
@@ -22,6 +23,7 @@ export class FeedbackBarometerPageComponent implements OnInit, OnDestroy {
     { state: 3, name: 'sentiment_very_dissatisfied', message: 'Abgehängt.', count: 0, }
   ];
   userRole: UserRole;
+  user: User;
   roomId: string;
   protected sub: Subscription;
 
@@ -35,6 +37,7 @@ export class FeedbackBarometerPageComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.userRole = this.authenticationService.getRole();
+    this.user = this.authenticationService.getUser();
 
     this.sub = this.wsFeedbackService.getFeedbackStream(this.roomId).subscribe((message: Message) => {
       this.parseIncomingMessage(message);
@@ -58,7 +61,7 @@ export class FeedbackBarometerPageComponent implements OnInit, OnDestroy {
   }
 
   submitFeedback(state: number) {
-    this.wsFeedbackService.send(state, this.roomId);
+    this.wsFeedbackService.send(this.user.id, state, this.roomId);
   }
 
   toggle() {

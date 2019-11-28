@@ -11,8 +11,8 @@ import { IMessage } from '@stomp/stompjs';
 export class WsFeedbackService {
   constructor(private wsConnector: WsConnectorService) {}
 
-  send(feedback: number, roomId: string) {
-    const createFeedback = new CreateFeedback(feedback);
+  send(userId: string, feedback: number, roomId: string) {
+    const createFeedback = new CreateFeedback(userId, feedback);
     this.wsConnector.send(`/backend/queue/${roomId}.feedback.command`, JSON.stringify(createFeedback));
   }
 
