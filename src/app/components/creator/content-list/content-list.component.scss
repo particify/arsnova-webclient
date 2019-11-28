@@ -19,18 +19,19 @@ mat-panel-title {
   align-items: center;
   font-size: medium;
   margin-right: 5px;
+  color: var(--on-primary)!important;
 }
 
 mat-expansion-panel-header {
-  background-color: var(--primary-variant) !important;
+  background-color: var(--secondary) !important;
   padding-left: 3%;
   padding-right: 3%;
 }
 
 .matPanel {
-  background-color: var(--primary-variant);
+  background-color: var(--secondary);
   margin-bottom: 5px;
-  color: black!important;
+  color: var(--on-secondary);
 }
 
 .panelTitle {

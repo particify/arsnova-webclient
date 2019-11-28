@@ -3,7 +3,7 @@
   <mat-divider></mat-divider>
   <mat-list *ngIf="content.multiple">
     <mat-list-item *ngFor="let answer of checkedAnswers">
-      <mat-checkbox color="primary" [(ngModel)]="answer.checked" name="answer">
+      <mat-checkbox [(ngModel)]="answer.checked" name="answer">
         {{ answer.answerOption.label }}
       </mat-checkbox>
     </mat-list-item>
