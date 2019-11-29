@@ -1,8 +1,10 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { AuthenticationService } from '../../../services/http/authentication.service';
+import { RoomService } from '../../../services/http/room.service';
 import { UserRole } from '../../../models/user-roles.enum';
 import { User } from '../../../models/user';
+import { Room } from '../../../models/room';
 import { NotificationService } from '../../../services/util/notification.service';
 import { Message } from '@stomp/stompjs';
 import { WsFeedbackService } from '../../../services/websockets/ws-feedback.service';
@@ -22,21 +24,27 @@ export class FeedbackBarometerPageComponent implements OnInit, OnDestroy {
     { state: 2, name: 'sentiment_dissatisfied', message: 'Langsamer, bitte!', count: 0, },
     { state: 3, name: 'sentiment_very_dissatisfied', message: 'Abgehängt.', count: 0, }
   ];
-  userRole: UserRole;
+  isOwner: boolean = false;
   user: User;
   roomId: string;
+  room: Room;
   protected sub: Subscription;
+  isClosed: boolean = false;
 
   constructor(
     private authenticationService: AuthenticationService,
     private notification: NotificationService,
     private wsFeedbackService: WsFeedbackService,
+    private roomService: RoomService,
     private route: ActivatedRoute, ) {
-      this.roomId = localStorage.getItem(`roomId`);
     }
 
   ngOnInit() {
-    this.userRole = this.authenticationService.getRole();
+    this.roomId = localStorage.getItem(`roomId`);
+    this.roomService.getRoom(this.roomId).subscribe(room => {
+      this.room = room;
+      this.isOwner = this.authenticationService.hasAccess(this.room.shortId, UserRole.CREATOR);
+    });
     this.user = this.authenticationService.getUser();
 
     this.sub = this.wsFeedbackService.getFeedbackStream(this.roomId).subscribe((message: Message) => {
@@ -44,6 +52,7 @@ export class FeedbackBarometerPageComponent implements OnInit, OnDestroy {
     });
 
     this.wsFeedbackService.get(this.roomId);
+    this.wsFeedbackService.getStatus(this.roomId);
   }
 
   ngOnDestroy() {
@@ -65,13 +74,30 @@ export class FeedbackBarometerPageComponent implements OnInit, OnDestroy {
   }
 
   toggle() {
-    // api feature is yet not implemented
-    const temp = 'stopped'; // add status variable
-    this.notification.show(`Feedback transmission ${ temp }.`);
+    if (this.isClosed) {
+      this.wsFeedbackService.start(this.roomId);
+    } else {
+      this.wsFeedbackService.stop(this.roomId);
+    }
   }
 
   parseIncomingMessage(message: Message) {
-    const values = JSON.parse(message.body).payload.values;
-    this.updateFeedback(values);
+    console.log(message);
+    const msg = JSON.parse(message.body);
+    const payload = msg.payload;
+    switch (msg.type) {
+      case 'FeedbackChanged':
+        this.updateFeedback(payload.values);
+        break;
+      case 'FeedbackStarted':
+        this.isClosed = false;
+        break;
+      case 'FeedbackStopped':
+        this.isClosed = true;
+        break;
+      case 'FeedbackStatus':
+        this.isClosed = payload.isClosed;
+        break;
+    }
   }
 }
