@@ -1,5 +1,6 @@
 variables:
   BUILD_DIR: dist
+  NODE_VERSION: "12.13"
 
 stages:
   - codestyle
@@ -8,6 +9,16 @@ stages:
   - review
   - deploy
 
+default:
+  image: node:$NODE_VERSION-buster
+  before_script:
+    - export PATH="`pwd`/node_modules/.bin:$PATH"
+    - date
+    - npm i
+    - date
+  after_script:
+    - date
+
 cache:
   key: ${CI_COMMIT_REF_SLUG}
   paths:
@@ -15,35 +26,25 @@ cache:
 
 tslint:
   stage: codestyle
-  tags:
-    - nodejs
   allow_failure: false
   dependencies: []
   script:
-    - npm install
     - node_modules/tslint/bin/tslint -p ./tsconfig.json -c ./tslint.json --project
 
 unit_tests:
   stage: test
-  tags:
-    - nodejs
   allow_failure: false
   dependencies: []
   variables:
     CHROME_BIN: /usr/bin/google-chrome
   script:
-    - npm install
     - npm test
 
 ngbuild:
   stage: build
-  tags:
-    - angular
   allow_failure: false
   dependencies: []
   script:
-    - npm install -g @angular/cli
-    - npm install
     - ng build --prod --aot
   artifacts:
     paths:
