@@ -241,11 +241,15 @@ export class RoomCreatorPageComponent extends RoomPageComponent implements OnIni
       width: '400px'
     });
     dialogRef.afterClosed().subscribe(result => {
-    /*this.roomService.addContentGroup(result, this.room.id).subscribe(newContentGroup => {
-        this.contentGroup.push(newContentGroup);
+    /*  if(result) {
+          this.roomService.addContentGroup(result, this.room.id).subscribe(newContentGroup => {
+          this.contentGroup.push(newContentGroup);
+        }
       });
     */
-    this.contentGroups.push(new ContentGroup(result, [], true));
+    if (result) {
+      this.contentGroups.push(new ContentGroup(result, [], true)); // replace with service call
+    }
     });
   }
 

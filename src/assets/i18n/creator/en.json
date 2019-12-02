@@ -240,7 +240,8 @@
     "content-group-name": "Name of the collection",
     "content-group-name-input": "Enter the name of the collection you want to create here.",
     "create-content-group": "Create",
-    "contents-without-content-group": "Contents without collection"
+    "contents-without-content-group": "Contents without collection",
+    "edit-content-group": "Update"
   },
   "comment-answer-form": {
     "answer": "Give an answer."

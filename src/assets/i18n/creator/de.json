@@ -239,7 +239,8 @@
     "content-group-name": "Name der Sammlung",
     "content-group-name-input": "Gib hier den Namen der Sammlung die du erstellen möchtest ein.",
     "create-content-group": "Anlegen",
-    "contents-without-content-group": "Fagen ohne Sammlung"
+    "contents-without-content-group": "Fagen ohne Sammlung",
+    "edit-content-group": "Speichern"
   },
   "comment-answer-form": {
     "answer": "Gib eine Antwort.",

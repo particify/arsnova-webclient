@@ -1,17 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material';
-import { RoomCreatorPageComponent } from '../../room-creator-page/room-creator-page.component';
+import { ContentListComponent } from '../../content-list/content-list.component';
 
 @Component({
-  selector: 'app-content-group-creation',
-  templateUrl: './content-group-creation.component.html',
-  styleUrls: ['./content-group-creation.component.scss']
+  selector: 'app-content-group-edit',
+  templateUrl: './content-group-edit.component.html',
+  styleUrls: ['./content-group-edit.component.scss']
 })
-export class ContentGroupCreationComponent implements OnInit {
+export class ContentGroupEditComponent implements OnInit {
 
   name: string;
 
-  constructor(public dialogRef: MatDialogRef<RoomCreatorPageComponent>,
+  constructor(public dialogRef: MatDialogRef<ContentListComponent>,
               public dialog: MatDialog) {}
 
   ngOnInit() {

@@ -15,6 +15,8 @@ import { TranslateService } from '@ngx-translate/core';
 import { LanguageService } from '../../../services/util/language.service';
 import { ContentDeleteComponent } from '../_dialogs/content-delete/content-delete.component';
 import { ContentEditComponent } from '../_dialogs/content-edit/content-edit.component';
+import { ContentGroupCreationComponent } from '../_dialogs/content-group-creation/content-group-creation.component';
+import { ContentGroupEditComponent } from '../_dialogs/content-group-edit/content-group-edit.component';
 
 @Component({
   selector: 'app-content-list',
@@ -170,5 +172,18 @@ export class ContentListComponent implements OnInit {
           break;
       }
     }
+  }
+
+  showContentGroupCreationDialog(): void {
+    const dialogRef = this.dialog.open(ContentGroupEditComponent, {
+      width: '400px'
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.roomService.updateGroup(this.roomId, result, this.contentGroup).subscribe(newName => {
+          this.collectionName = newName.name;
+        });
+      }
+    });
   }
 }

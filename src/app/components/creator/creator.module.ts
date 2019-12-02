@@ -33,6 +33,7 @@ import { CommentAnswerFormComponent } from './_dialogs/comment-answer-form/comme
 import { BonusDeleteComponent } from './_dialogs/bonus-delete/bonus-delete.component';
 import { MarkdownModule } from 'ngx-markdown';
 import { ContentGroupCreationComponent } from './_dialogs/content-group-creation/content-group-creation.component';
+import { ContentGroupEditComponent } from './_dialogs/content-group-edit/content-group-edit.component';
 
 @NgModule({
   imports: [
@@ -75,6 +76,7 @@ import { ContentGroupCreationComponent } from './_dialogs/content-group-creation
     BonusDeleteComponent,
     CommentAnswerFormComponent,
     ContentGroupCreationComponent,
+    ContentGroupEditComponent,
   ],
   exports: [],
   entryComponents: [
@@ -97,7 +99,8 @@ import { ContentGroupCreationComponent } from './_dialogs/content-group-creation
     DeleteCommentComponent,
     BonusDeleteComponent,
     CommentAnswerFormComponent,
-    ContentGroupCreationComponent
+    ContentGroupCreationComponent,
+    ContentGroupEditComponent
   ]
 })
 export class CreatorModule {

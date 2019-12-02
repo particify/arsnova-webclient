@@ -4,6 +4,12 @@
       <mat-card-title>
         <h2>{{ collectionName }}</h2>
       </mat-card-title>
+      <span class="fill-remaining-space"></span>
+      <div>
+        <button mat-icon-button id="editGroup" (click)="showContentGroupCreationDialog()">
+          <mat-icon>edit</mat-icon>
+        </button>
+      </div>
     </mat-card-header>
     <mat-divider></mat-divider>
     <mat-grid-list cols="3" rowHeight="1:1">
