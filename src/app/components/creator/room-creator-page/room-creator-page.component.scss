@@ -120,3 +120,14 @@ mat-expansion-panel {
 markdown {
   margin: 0 3% 0 3% !important;
 }
+
+#contentGroupsHeader {
+  display: inline-flex;
+  align-items: center;
+  font-size: 20px;
+}
+
+#addContentGroupButton {
+  width: 40px;
+  height: 40px;
+}

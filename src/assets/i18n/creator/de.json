@@ -234,7 +234,11 @@
     "really-delete-tokens": "Willst du wirklich alle Tokens dieser Sitzung löschen?",
     "delete-all-tokens": "Alle Tokens löschen",
     "token-deleted": "Der Token wurde gelöscht.",
-    "tokens-deleted": "Alle Tokens dieser Sitzung wurden gelöscht."
+    "tokens-deleted": "Alle Tokens dieser Sitzung wurden gelöscht.",
+    "content-groups": "Sammlungen",
+    "content-group-name": "Name der Sammlung",
+    "content-group-name-input": "Gib hier den Namen der Sammlung die du erstellen möchtest ein.",
+    "create-content-group": "Anlegen"
   },
   "comment-answer-form": {
     "answer": "Gib eine Antwort.",

@@ -22,6 +22,8 @@ import { EventService } from '../../../services/util/event.service';
 import { KeyboardUtils } from '../../../utils/keyboard';
 import { KeyboardKey } from '../../../utils/keyboard/keys';
 import { ContentService } from '../../../services/http/content.service';
+import { ContentGroupCreationComponent } from '../_dialogs/content-group-creation/content-group-creation.component';
+import { ContentGroup } from '../../../models/content-group';
 
 @Component({
   selector: 'app-room-creator-page',
@@ -225,6 +227,19 @@ export class RoomCreatorPageComponent extends RoomPageComponent implements OnIni
           this.saveChanges();
         }
       });
+  }
+
+  showContentGroupCreationDialog(): void {
+    const dialogRef = this.dialog.open(ContentGroupCreationComponent, {
+      width: '400px'
+    });
+    dialogRef.afterClosed().subscribe(result => {
+    /*this.roomService.addContentGroup(result, this.room.id).subscribe(newContentGroup => {
+        this.contentGroup.push(newContentGroup);
+      });
+    */
+    this.contentGroups.push(new ContentGroup(result, [], true));
+    });
   }
 
   copyShortId(): void {

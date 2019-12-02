@@ -1,7 +1,7 @@
 @import '../../../../theme/light-theme/_variables.scss';
 
 #contentGroup {
-  background-color: var(--primary);
+  background-color: var(--secondary);
   box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2);
   overflow: hidden;
   position: relative;
@@ -28,5 +28,5 @@ mat-icon {
 
 mat-card-title {
   margin-top: 18px;
-  color: var(--on-primary);
+  color: var(--on-secondary);
 }

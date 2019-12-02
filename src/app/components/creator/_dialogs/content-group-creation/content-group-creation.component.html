@@ -1,0 +1,20 @@
+<form (ngSubmit)="buildRoomCreateActionCallback()">
+  <div fxLayout="column" fxLayoutAlign="center" fxLayoutGap="10px">
+    <mat-form-field>
+      <input matInput #contentGroupName class="input-block" type="text"
+             maxlength="25" [(ngModel)]="name"
+             name="contentGroupName" aria-labelledby="content-group-name-input"/>
+      <mat-placeholder class="placeholder">{{ 'room-page.content-group-name' | translate }}</mat-placeholder>
+    </mat-form-field>
+  </div>
+</form>
+<app-dialog-action-buttons
+  buttonsLabelSection="room-page"
+  confirmButtonLabel="create-content-group"
+  [cancelButtonClickAction]="buildCloseDialogActionCallback()"
+  [confirmButtonClickAction]="buildRoomCreateActionCallback()"
+></app-dialog-action-buttons>
+
+<div class="visually-hidden">
+  <div id="content-group-name-input">{{ 'home-page.room-name-input' | translate }}</div>
+</div>

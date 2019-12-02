@@ -90,23 +90,29 @@
         <span class="fill-remaining-space"></span>
         <mat-grid-list cols="2" rowHeight="2:1" class="second">
           <mat-grid-tile>
+            <button mat-icon-button routerLink="/creator/room/{{ room.shortId }}/create-content">
+              <mat-icon class="main-icon" [ngClass]="{'desktop' : deviceType === 'desktop'}">note_add</mat-icon>
+              <h3 *ngIf="deviceType === 'desktop'">{{ 'room-page.create-content' | translate}}</h3>
+            </button>
+          </mat-grid-tile>
+          <mat-grid-tile>
             <button mat-icon-button routerLink="/creator/room/{{ room.shortId }}/feedback-barometer">
               <mat-icon class="main-icon" [ngClass]="{'desktop' : deviceType === 'desktop'}">thumbs_up_down
               </mat-icon>
               <h3 *ngIf="deviceType === 'desktop'">{{ 'room-page.live-feedback' | translate}}</h3>
             </button>
           </mat-grid-tile>
-          <mat-grid-tile>
-            <button mat-icon-button routerLink="/creator/room/{{ room.shortId }}/create-content">
-              <mat-icon class="main-icon" [ngClass]="{'desktop' : deviceType === 'desktop'}">note_add</mat-icon>
-              <h3 *ngIf="deviceType === 'desktop'">{{ 'room-page.create-content' | translate}}</h3>
-            </button>
-          </mat-grid-tile>
         </mat-grid-list>
         <span class="fill-remaining-space"></span>
       </div>
       </div>
-
+      <div fxLayout="row">
+        <span id="contentGroupsHeader">{{'room-page.content-groups' | translate}}</span>
+        <span class="fill-remaining-space"></span>
+        <button mat-icon-button id="addContentGroupButton" (click)="showContentGroupCreationDialog()">
+          <mat-icon class="corner-icon">add_box</mat-icon>
+        </button>
+      </div>
       <app-content-groups *ngIf="room && contentGroups" [contentGroups]="contentGroups"></app-content-groups>
 
     </mat-card>
