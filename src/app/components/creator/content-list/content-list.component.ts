@@ -180,6 +180,7 @@ export class ContentListComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
+        this.contentGroup.name = result;
         this.roomService.updateGroup(this.room.id, result, this.contentGroup).subscribe(newName => {
           this.collectionName = newName.name;
         });

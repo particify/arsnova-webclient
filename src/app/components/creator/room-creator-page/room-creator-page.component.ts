@@ -110,7 +110,7 @@ export class RoomCreatorPageComponent extends RoomPageComponent implements OnIni
     }
     this.contentService.findContentsWithoutGroup(this.room.id).subscribe(contents => {
         if (contents) {
-          this.defaultContentGroups.push(new ContentGroup('Lose Fragen', [], true));
+          this.defaultContentGroups.push(new ContentGroup('', '', 'Lose Fragen', [], true));
           for (const c of contents) {
             this.defaultContentGroups[0].contentIds.push(c.id);
           }
@@ -248,7 +248,7 @@ export class RoomCreatorPageComponent extends RoomPageComponent implements OnIni
       });
     */
     if (result) {
-      this.contentGroups.push(new ContentGroup(result, [], true)); // replace with service call
+      this.contentGroups.push(new ContentGroup('', '', result, [], true)); // replace with service call
     }
     });
   }
