@@ -25,6 +25,7 @@ export class QrCodeDialogComponent implements OnInit, AfterViewInit {
   @ViewChild('imageWrapper') imgWrp: ElementRef;
   @ViewChild('text') text: ElementRef;
 
+  url: string = window.location.hostname;
   private img: HTMLImageElement;
   qrCode = '';
 
