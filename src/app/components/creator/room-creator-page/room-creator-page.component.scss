@@ -121,7 +121,7 @@ markdown {
   margin: 0 3% 0 3% !important;
 }
 
-#contentGroupsHeader {
+.contentGroupsHeader {
   display: inline-flex;
   align-items: center;
   font-size: 20px;
@@ -130,4 +130,8 @@ markdown {
 #addContentGroupButton {
   width: 40px;
   height: 40px;
+}
+
+#singleContents {
+  margin-top: 10px;
 }

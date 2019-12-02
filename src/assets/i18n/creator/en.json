@@ -239,7 +239,8 @@
     "content-groups": "Collections",
     "content-group-name": "Name of the collection",
     "content-group-name-input": "Enter the name of the collection you want to create here.",
-    "create-content-group": "Create"
+    "create-content-group": "Create",
+    "contents-without-content-group": "Contents without collection"
   },
   "comment-answer-form": {
     "answer": "Give an answer."

@@ -22,7 +22,6 @@ export class RoomPageComponent implements OnInit, OnDestroy {
   room: Room = null;
   protected roomStats: RoomStats;
   protected contentGroups: ContentGroup[] = [];
-  protected defaultContentGroups: ContentGroup[] = [];
   isLoading = true;
   commentCounter: number;
   protected moderationEnabled = false;
@@ -71,14 +70,6 @@ export class RoomPageComponent implements OnInit, OnDestroy {
           }
         }
       });
-      /*this.contentService.findContentsWithoutGroup(this.room.id).subscribe(contents => {
-        if (contents) {
-          this.defaultContentGroups.push(new ContentGroup('Lose Fragen', [], true));
-          for (let c of contents) {
-            this.defaultContentGroups[0].contentIds.push(c.id);
-          }
-        }
-      });*/
       this.isLoading = false;
       if (this.room.extensions && this.room.extensions['comments']) {
         if (this.room.extensions['comments'].enableModeration !== null) {

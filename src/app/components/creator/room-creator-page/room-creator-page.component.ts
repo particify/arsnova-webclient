@@ -34,11 +34,11 @@ export class RoomCreatorPageComponent extends RoomPageComponent implements OnIni
   room: Room;
   updRoom: Room;
   commentThreshold: number;
-  updCommentThreshold: number;
   deviceType = localStorage.getItem('deviceType');
   viewModuleCount = 1;
   moderatorCommentCounter: number;
   urlToCopy = `${window.location.protocol}//${window.location.hostname}/participant/room/`;
+  defaultContentGroups: ContentGroup[] = [];
 
   constructor(protected roomService: RoomService,
               protected notification: NotificationService,
@@ -108,7 +108,14 @@ export class RoomCreatorPageComponent extends RoomPageComponent implements OnIni
         this.moderatorCommentCounter = commentCounter;
       });
     }
-
+    this.contentService.findContentsWithoutGroup(this.room.id).subscribe(contents => {
+        if (contents) {
+          this.defaultContentGroups.push(new ContentGroup('Lose Fragen', [], true));
+          for (const c of contents) {
+            this.defaultContentGroups[0].contentIds.push(c.id);
+          }
+        }
+      });
   }
 
   updateGeneralSettings() {
