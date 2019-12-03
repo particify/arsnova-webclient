@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ContentService } from '../../../services/http/content.service';
 import { Content } from '../../../models/content';
 import { ActivatedRoute } from '@angular/router';
@@ -15,8 +15,6 @@ import { TranslateService } from '@ngx-translate/core';
 import { LanguageService } from '../../../services/util/language.service';
 import { ContentDeleteComponent } from '../_dialogs/content-delete/content-delete.component';
 import { ContentEditComponent } from '../_dialogs/content-edit/content-edit.component';
-import { ContentGroupCreationComponent } from '../_dialogs/content-group-creation/content-group-creation.component';
-import { ContentGroupEditComponent } from '../_dialogs/content-group-edit/content-group-edit.component';
 
 @Component({
   selector: 'app-content-list',
@@ -26,6 +24,8 @@ import { ContentGroupEditComponent } from '../_dialogs/content-group-edit/conten
 
 
 export class ContentListComponent implements OnInit {
+
+  @ViewChild('test') test: ElementRef;
 
   contents: Content[];
   contentBackup: Content;
@@ -38,6 +38,8 @@ export class ContentListComponent implements OnInit {
   labelMaxLength: number;
   labels: string[] = [];
   deviceType = localStorage.getItem('deviceType');
+  isTitleEdit = false;
+  updatedName: string;
 
   constructor(private contentService: ContentService,
               private roomService: RoomService,
@@ -174,17 +176,23 @@ export class ContentListComponent implements OnInit {
     }
   }
 
-  showContentGroupCreationDialog(): void {
-    const dialogRef = this.dialog.open(ContentGroupEditComponent, {
-      width: '400px'
-    });
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.contentGroup.name = result;
-        this.roomService.updateGroup(this.room.id, result, this.contentGroup).subscribe(newName => {
-          this.collectionName = newName.name;
-        });
-      }
-    });
+  goInEditMode(): void {
+    this.updatedName = this.collectionName;
+    this.isTitleEdit = true;
+    this.test.nativeElement.focus();
+  }
+
+  leaveEditMode(): void {
+    this.isTitleEdit = false;
+  }
+
+  saveGroupName(): void {
+    if (this.updatedName !== this.collectionName) {
+      this.roomService.updateGroup(this.room.id, this.updatedName, this.contentGroup).subscribe(updatedContentGroup => {
+        this.collectionName = this.updatedName;
+        this.leaveEditMode();
+        this.contentGroup = updatedContentGroup;
+      });
+    }
   }
 }

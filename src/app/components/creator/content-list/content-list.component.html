@@ -1,16 +1,25 @@
- <div fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="center">
+<div fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="center">
   <mat-card>
-    <mat-card-header>
-      <mat-card-title>
-        <h2>{{ collectionName }}</h2>
-      </mat-card-title>
+    <div fxLayout="row">
+      <div class="cardTitle">
+        <h2 *ngIf="!isTitleEdit">{{ collectionName }}</h2>
+        <mat-form-field class="mat-focused" [ngClass]="{'activeInput': isTitleEdit, 'inactiveInput': !isTitleEdit}">
+          <input #test matInput [(ngModel)]="updatedName" autofocus>
+        </mat-form-field>
+      </div>
       <span class="fill-remaining-space"></span>
       <div>
-        <button mat-icon-button id="editGroup" (click)="showContentGroupCreationDialog()">
+        <button *ngIf="!isTitleEdit" mat-icon-button class="editButtons" (click)="goInEditMode()">
           <mat-icon>edit</mat-icon>
         </button>
+        <button *ngIf="isTitleEdit" mat-icon-button class="editButtons" (click)="leaveEditMode()">
+          <mat-icon>clear</mat-icon>
+        </button>
+        <button *ngIf="isTitleEdit" mat-icon-button class="editButtons" (click)="saveGroupName()">
+          <mat-icon>done</mat-icon>
+        </button>
       </div>
-    </mat-card-header>
+    </div>
     <mat-divider></mat-divider>
     <mat-grid-list cols="3" rowHeight="1:1">
       <mat-grid-tile>
@@ -22,7 +31,7 @@
       </mat-grid-tile>
       <mat-grid-tile>
         <button class="actionButton" mat-icon-button
-                routerLink="/creator/room/{{ roomId }}/{{ contentGroup.name }}/presentation">
+                routerLink="/creator/room/{{ roomId }}//presentation">
           <mat-icon class="actionIcon">school</mat-icon>
           <h3 *ngIf="deviceType === 'desktop'">{{ 'room-page.present' | translate}}</h3>
         </button>
