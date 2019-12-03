@@ -4,6 +4,7 @@ import { LanguageService } from '../../../services/util/language.service';
 import { RoomService } from '../../../services/http/room.service';
 import { ActivatedRoute } from '@angular/router';
 import { ContentGroup } from '../../../models/content-group';
+import { RoomStats } from '../../../models/room-stats';
 
 @Component({
   selector: 'app-content-create-page',
@@ -12,7 +13,8 @@ import { ContentGroup } from '../../../models/content-group';
 })
 export class ContentCreatePageComponent implements OnInit {
 
-  contentGroups: ContentGroup[];
+  roomStats: RoomStats;
+  contentGroups: ContentGroup[] = [];
   lastCollection: string;
 
   constructor(private translateService: TranslateService,
@@ -27,11 +29,23 @@ export class ContentCreatePageComponent implements OnInit {
     this.route.params.subscribe(params => {
       this.getGroups(params['shortId']);
     });
-    this.lastCollection = sessionStorage.getItem('collection');
   }
 
   getGroups(id: string): void {
+    this.contentGroups = JSON.parse(sessionStorage.getItem('emptyGroups'));
     this.roomService.getRoomByShortId(id).subscribe(room => {
+      this.roomService.getStats(room.id).subscribe(roomStats => {
+        this.roomStats = roomStats;
+        if (roomStats.groupStats) {
+          for (const groupStats of roomStats.groupStats) {
+            this.roomService.getGroupByRoomIdAndName(room.id, groupStats.groupName).subscribe(group => {
+              this.contentGroups.push(group);
+            });
+          }
+          console.log(this.contentGroups);
+        }
+      });
     });
+    this.lastCollection = sessionStorage.getItem('collection');
   }
 }
