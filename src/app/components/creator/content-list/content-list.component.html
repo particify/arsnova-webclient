@@ -21,24 +21,24 @@
       </div>
     </div>
     <mat-divider></mat-divider>
-    <mat-grid-list cols="3" rowHeight="1:1">
+    <mat-grid-list cols="3" rowHeight="1:1" *ngIf="!isLoading">
       <mat-grid-tile>
         <button class="actionButton" mat-icon-button
-                routerLink="/creator/room/{{ roomId }}/create-content">
+                routerLink="/creator/room/{{ room.shortId }}/create-content">
           <mat-icon class="actionIcon">note_add</mat-icon>
           <h3 *ngIf="deviceType === 'desktop'">{{ 'room-page.create-content' | translate}}</h3>
         </button>
       </mat-grid-tile>
       <mat-grid-tile>
         <button class="actionButton" mat-icon-button
-                routerLink="/creator/room/{{ roomId }}//presentation">
+                routerLink="/creator/room/{{ room.shortId }}//presentation">
           <mat-icon class="actionIcon">school</mat-icon>
           <h3 *ngIf="deviceType === 'desktop'">{{ 'room-page.present' | translate}}</h3>
         </button>
       </mat-grid-tile>
       <mat-grid-tile>
         <button class="actionButton" mat-icon-button
-                routerLink="/creator/room/{{ roomId }}/statistics">
+                routerLink="/creator/room/{{ room.shortId }}/statistics">
           <mat-icon class="actionIcon">insert_chart</mat-icon>
           <h3 *ngIf="deviceType === 'desktop'">{{ 'room-page.answer-statistics' | translate}}</h3>
         </button>
