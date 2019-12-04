@@ -143,6 +143,11 @@
     "yes": "Yes",
     "default-group": "Audience Questions"
   },
+  "feedback": {
+    "is-stopped": "Voting got stopped",
+    "start": "Start voting",
+    "stop": "Stop voting"
+  },
   "home-page": {
     "create-session": "New Session",
     "created-1": "Session '",

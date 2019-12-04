@@ -91,6 +91,11 @@
     "vote-down": "Vote down",
     "vote-up": "Vote up"
   },
+  "feedback": {
+    "is-stopped": "Voting got stopped",
+    "start": "Start voting",
+    "stop": "Stop voting"
+  },
   "home-page": {
     "exactly-8": "A session key is a combination of exactly 8 digits.",
     "no-room-found": "No session found with this key",

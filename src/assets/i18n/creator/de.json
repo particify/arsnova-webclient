@@ -142,6 +142,11 @@
     "yes": "Ja",
     "default-group": "Hörsaalfragen"
   },
+  "feedback": {
+    "is-stopped": "Feedback ist angehalten.",
+    "start": "Freigeben",
+    "stop": "Anhalten"
+  },
   "home-page": {
     "create-session": "Neue Sitzung",
     "created-1": "Sitzung '",

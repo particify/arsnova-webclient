@@ -91,7 +91,11 @@
     "vote-down": "Frage abwerten",
     "vote-up": "Frage aufwerten"
   },
-
+  "feedback": {
+    "is-stopped": "Feedback ist angehalten.",
+    "start": "Freigeben",
+    "stop": "Anhalten"
+  },
   "home-page": {
     "exactly-8": "Ein Sitzungs-Code hat genau 8 Ziffern.",
     "no-room-found": "Es wurde keine Sitzung mit diesem Sitzungs-Code gefunden.",

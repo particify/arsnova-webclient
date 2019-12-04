@@ -82,7 +82,6 @@ export class FeedbackBarometerPageComponent implements OnInit, OnDestroy {
   }
 
   parseIncomingMessage(message: Message) {
-    console.log(message);
     const msg = JSON.parse(message.body);
     const payload = msg.payload;
     switch (msg.type) {
@@ -96,7 +95,7 @@ export class FeedbackBarometerPageComponent implements OnInit, OnDestroy {
         this.isClosed = true;
         break;
       case 'FeedbackStatus':
-        this.isClosed = payload.isClosed;
+        this.isClosed = payload.closed;
         break;
     }
   }
