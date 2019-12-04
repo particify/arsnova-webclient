@@ -59,21 +59,23 @@ export class ContentListComponent implements OnInit {
       this.room = room;
       this.roomId = room.shortId;
     });
-    this.contentGroup = JSON.parse(sessionStorage.getItem('contentGroup'));
-    this.contentService.getContentsByIds(this.contentGroup.contentIds).subscribe( contents => {
-      this.contents = contents;
-      for (let i = 0; i < this.contents.length; i++) {
-        if (this.contents[i].subject.length > this.labelMaxLength) {
-          this.labels[i] = this.contents[i].subject.substr(0, this.labelMaxLength) + '..';
-        } else {
-          this.labels[i] = this.contents[i].subject;
-        }
-      }
-      this.isLoading = false;
-    });
     this.route.params.subscribe(params => {
       sessionStorage.setItem('collection', params['contentGroup']);
       this.collectionName = params['contentGroup'];
+      this.roomService.getGroupByRoomIdAndName(this.roomId, params['contentGroup']).subscribe(group => {
+        this.contentGroup = group;
+        this.contentService.getContentsByIds(this.contentGroup.contentIds).subscribe( contents => {
+          this.contents = contents;
+          for (let i = 0; i < this.contents.length; i++) {
+            if (this.contents[i].subject.length > this.labelMaxLength) {
+              this.labels[i] = this.contents[i].subject.substr(0, this.labelMaxLength) + '..';
+            } else {
+              this.labels[i] = this.contents[i].subject;
+            }
+          }
+          this.isLoading = false;
+        });
+      });
     });
     this.translateService.use(localStorage.getItem('currentLang'));
   }
@@ -188,6 +190,7 @@ export class ContentListComponent implements OnInit {
 
   saveGroupName(): void {
     if (this.updatedName !== this.collectionName) {
+      this.contentGroup.name = this.updatedName;
       this.roomService.updateGroup(this.room.id, this.updatedName, this.contentGroup).subscribe(updatedContentGroup => {
         this.collectionName = this.updatedName;
         this.leaveEditMode();
