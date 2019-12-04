@@ -4,7 +4,7 @@
       <div class="cardTitle">
         <h2 *ngIf="!isTitleEdit">{{ collectionName }}</h2>
         <mat-form-field class="mat-focused" [ngClass]="{'activeInput': isTitleEdit, 'inactiveInput': !isTitleEdit}">
-          <input #test matInput [(ngModel)]="updatedName" autofocus>
+          <input #nameInput matInput [(ngModel)]="updatedName">
         </mat-form-field>
       </div>
       <span class="fill-remaining-space"></span>

@@ -1,7 +1,7 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ContentService } from '../../../services/http/content.service';
 import { Content } from '../../../models/content';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { ContentChoice } from '../../../models/content-choice';
 import { ContentText } from '../../../models/content-text';
@@ -25,7 +25,7 @@ import { ContentEditComponent } from '../_dialogs/content-edit/content-edit.comp
 
 export class ContentListComponent implements OnInit {
 
-  @ViewChild('test') test: ElementRef;
+  @ViewChild('nameInput') nameInput: ElementRef;
 
   contents: Content[];
   contentBackup: Content;
@@ -40,6 +40,7 @@ export class ContentListComponent implements OnInit {
   deviceType = localStorage.getItem('deviceType');
   isTitleEdit = false;
   updatedName: string;
+  baseURL = 'creator/room/';
 
   constructor(private contentService: ContentService,
               private roomService: RoomService,
@@ -48,21 +49,21 @@ export class ContentListComponent implements OnInit {
               private notificationService: NotificationService,
               public dialog: MatDialog,
               private translateService: TranslateService,
-              protected langService: LanguageService) {
+              protected langService: LanguageService,
+              private router: Router) {
     langService.langEmitter.subscribe(lang => translateService.use(lang));
   }
 
   ngOnInit() {
     this.labelMaxLength = innerWidth / 20;
-    this.roomId = localStorage.getItem(`roomId`);
+    this.roomId = localStorage.getItem('roomId');
     this.roomService.getRoom(this.roomId).subscribe(room => {
       this.room = room;
-      this.roomId = room.shortId;
     });
     this.route.params.subscribe(params => {
       sessionStorage.setItem('collection', params['contentGroup']);
       this.collectionName = params['contentGroup'];
-      this.roomService.getGroupByRoomIdAndName(this.roomId, params['contentGroup']).subscribe(group => {
+      this.roomService.getGroupByRoomIdAndName(this.roomId, this.collectionName).subscribe(group => {
         this.contentGroup = group;
         this.contentService.getContentsByIds(this.contentGroup.contentIds).subscribe( contents => {
           this.contents = contents;
@@ -73,8 +74,8 @@ export class ContentListComponent implements OnInit {
               this.labels[i] = this.contents[i].subject;
             }
           }
-          this.isLoading = false;
         });
+        this.isLoading = false;
       });
     });
     this.translateService.use(localStorage.getItem('currentLang'));
@@ -181,20 +182,24 @@ export class ContentListComponent implements OnInit {
   goInEditMode(): void {
     this.updatedName = this.collectionName;
     this.isTitleEdit = true;
-    this.test.nativeElement.focus();
+    this.nameInput.nativeElement.focus();
   }
 
   leaveEditMode(): void {
     this.isTitleEdit = false;
   }
 
+  updateURL(): void {
+    this.router.navigate([`${this.baseURL}${this.room.shortId}/${this.collectionName}`]);
+  }
+
   saveGroupName(): void {
     if (this.updatedName !== this.collectionName) {
       this.contentGroup.name = this.updatedName;
-      this.roomService.updateGroup(this.room.id, this.updatedName, this.contentGroup).subscribe(updatedContentGroup => {
+      this.roomService.updateGroup(this.room.id, this.updatedName, this.contentGroup).subscribe(() => {
         this.collectionName = this.updatedName;
         this.leaveEditMode();
-        this.contentGroup = updatedContentGroup;
+        this.updateURL();
       });
     }
   }
