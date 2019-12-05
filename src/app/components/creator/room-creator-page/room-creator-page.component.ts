@@ -118,6 +118,8 @@ export class RoomCreatorPageComponent extends RoomPageComponent implements OnIni
           this.defaultContentGroups.push(new ContentGroup('', '', contenWithoutGroupName, [], true));
           for (const c of contents) {
             this.defaultContentGroups[0].contentIds.push(c.id);
+          }
+          if (contents && contents.length > 0) {
             this.emptyDefaultGroups = false;
           }
         }
