@@ -39,6 +39,7 @@ export class RoomCreatorPageComponent extends RoomPageComponent implements OnIni
   moderatorCommentCounter: number;
   urlToCopy = `${window.location.protocol}//${window.location.hostname}/participant/room/`;
   defaultContentGroups: ContentGroup[] = [];
+  emptyDefaultGroups = true;
 
   constructor(protected roomService: RoomService,
               protected notification: NotificationService,
@@ -113,6 +114,7 @@ export class RoomCreatorPageComponent extends RoomPageComponent implements OnIni
           this.defaultContentGroups.push(new ContentGroup('', '', 'Lose Fragen', [], true));
           for (const c of contents) {
             this.defaultContentGroups[0].contentIds.push(c.id);
+            this.emptyDefaultGroups = false;
           }
         }
       });

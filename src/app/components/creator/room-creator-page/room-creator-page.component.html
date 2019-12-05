@@ -114,7 +114,7 @@
         </button>
       </div>
       <app-content-groups *ngIf="room && contentGroups" [contentGroups]="contentGroups"></app-content-groups>
-      <div id="singleContents" fxLayout="column" *ngIf="room && defaultContentGroups">
+      <div id="singleContents" fxLayout="column" *ngIf="room && !emptyDefaultGroups">
         <span class="contentGroupsHeader">{{'room-page.contents-without-content-group' | translate}}</span>
         <app-content-groups [contentGroups]="defaultContentGroups"></app-content-groups>
       </div>

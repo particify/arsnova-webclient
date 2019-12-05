@@ -70,7 +70,6 @@ export class RoomPageComponent implements OnInit, OnDestroy {
           }
         }
       });
-      this.isLoading = false;
       if (this.room.extensions && this.room.extensions['comments']) {
         if (this.room.extensions['comments'].enableModeration !== null) {
           this.moderationEnabled = this.room.extensions['comments'].enableModeration;
@@ -92,6 +91,7 @@ export class RoomPageComponent implements OnInit, OnDestroy {
           this.commentCounter = this.commentCounter - 1;
         }
       });
+      this.isLoading = false;
       this.afterRoomLoadHook();
     });
   }
