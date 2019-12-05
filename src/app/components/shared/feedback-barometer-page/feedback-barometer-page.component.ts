@@ -41,6 +41,7 @@ export class FeedbackBarometerPageComponent implements OnInit, OnDestroy {
     this.roomId = localStorage.getItem(`roomId`);
     this.roomService.getRoom(this.roomId).subscribe(room => {
       this.room = room;
+      this.isClosed = room.settings['feedbackLocked'];
       this.isOwner = this.authenticationService.hasAccess(this.room.shortId, UserRole.CREATOR);
     });
     this.user = this.authenticationService.getUser();
@@ -50,7 +51,6 @@ export class FeedbackBarometerPageComponent implements OnInit, OnDestroy {
     });
 
     this.wsFeedbackService.get(this.roomId);
-    this.wsFeedbackService.getStatus(this.roomId);
   }
 
   ngOnDestroy() {
@@ -73,9 +73,9 @@ export class FeedbackBarometerPageComponent implements OnInit, OnDestroy {
 
   toggle() {
     if (this.isClosed) {
-      this.wsFeedbackService.start(this.roomId);
+      this.roomService.changeFeedbackLock(this.roomId, false);
     } else {
-      this.wsFeedbackService.stop(this.roomId);
+      this.roomService.changeFeedbackLock(this.roomId, true);
     }
   }
 

@@ -9,6 +9,7 @@ export class Room {
   name: string;
   description: string;
   closed: boolean;
+  settings: TSMap<string, any>;
   extensions: TSMap<string, TSMap<string, any>>;
 
   constructor(

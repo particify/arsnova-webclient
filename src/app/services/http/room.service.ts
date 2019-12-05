@@ -110,6 +110,11 @@ export class RoomService extends BaseHttpService {
     );
   }
 
+  patchRoom(roomId: string, changes: TSMap<string, any>): void {
+    const connectionUrl = `${ this.apiUrl.base + this.apiUrl.rooms }/${ roomId }`;
+    this.http.patch(connectionUrl, changes, httpOptions).subscribe();
+  }
+
   deleteRoom(roomId: string): Observable<Room> {
     const connectionUrl = `${this.apiUrl.base + this.apiUrl.rooms}/${roomId}`;
     return this.http.delete<Room>(connectionUrl, httpOptions).pipe(
@@ -148,8 +153,17 @@ export class RoomService extends BaseHttpService {
     const connectionUrl = `${this.apiUrl.base + this.apiUrl.rooms}/${roomId + this.apiUrl.contentGroup}/${name}`;
     return this.http.put<ContentGroup>(connectionUrl, contentGroup, httpOptions).pipe(
       tap(_ => ''),
-      catchError(this.handleError<ContentGroup>(`updateGroup, ${roomId}, ${name}, ${ContentGroup}`))
+      catchError(this.handleError<ContentGroup>(`updateGroup, ${ roomId }, ${ name }, ${ ContentGroup }`))
     );
+  }
+
+  changeFeedbackLock(roomId: string, isFeedbackLocked: boolean) {
+    this.getRoom(roomId).subscribe(room => {
+      const changes = new TSMap<string, any>();
+      room.settings['feedbackLocked'] = isFeedbackLocked;
+      changes.set('settings', room.settings);
+      this.patchRoom(roomId, changes);
+    });
   }
 
   parseExtensions(room: Room): Room {
