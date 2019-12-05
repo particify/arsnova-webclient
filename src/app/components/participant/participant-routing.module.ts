@@ -11,7 +11,7 @@ import { CommentPageComponent } from '../shared/comment-page/comment-page.compon
 
 const routes: Routes = [
   {
-    path: 'room/:roomId',
+    path: 'room/:shortId',
     component: RoomParticipantPageComponent,
     data: { roles: [UserRole.PARTICIPANT] }
   },
@@ -26,7 +26,7 @@ const routes: Routes = [
     data: { roles: [UserRole.PARTICIPANT] }
   },
   {
-    path: 'room/:roomId/comments',
+    path: 'room/:shortId/comments',
     component: CommentPageComponent,
     data: { roles: [UserRole.PARTICIPANT] }
   },
