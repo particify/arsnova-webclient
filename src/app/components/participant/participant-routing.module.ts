@@ -16,12 +16,12 @@ const routes: Routes = [
     data: { roles: [UserRole.PARTICIPANT] }
   },
   {
-    path: 'room/:roomId/statistics',
+    path: 'room/:shortId/statistics',
     component: StatisticsPageComponent,
     data: { roles: [UserRole.PARTICIPANT] }
   },
   {
-    path: 'room/:roomId/statistics/:contentId',
+    path: 'room/:shortId/statistics/:contentId',
     component: StatisticComponent,
     data: { roles: [UserRole.PARTICIPANT] }
   },
@@ -31,12 +31,12 @@ const routes: Routes = [
     data: { roles: [UserRole.PARTICIPANT] }
   },
   {
-    path: 'room/:roomId/feedback-barometer',
+    path: 'room/:shortId/feedback-barometer',
     component: FeedbackBarometerPageComponent,
     data: { roles: [UserRole.PARTICIPANT] }
   },
   {
-    path: 'room/:roomId/:contentGroup',
+    path: 'room/:shortId/:contentGroup',
     component: ParticipantContentCarouselPageComponent,
     data: { roles: [UserRole.PARTICIPANT] }
   }

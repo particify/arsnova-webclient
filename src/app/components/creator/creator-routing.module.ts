@@ -19,19 +19,19 @@ const routes: Routes = [
     data: { roles: [UserRole.CREATOR] }
   },
   {
-    path: 'room/:roomId/create-content',
+    path: 'room/:shortId/create-content',
     component: ContentCreatePageComponent,
     canActivate: [AuthenticationGuard],
     data: { roles: [UserRole.CREATOR] }
   },
   {
-    path: 'room/:roomId/statistics',
+    path: 'room/:shortId/statistics',
     component: StatisticsPageComponent,
     canActivate: [AuthenticationGuard],
     data: { roles: [UserRole.CREATOR] }
   },
   {
-    path: 'room/:roomId/statistics/:contentId',
+    path: 'room/:shortId/statistics/:contentId',
     component: StatisticComponent,
     canActivate: [AuthenticationGuard],
     data: { roles: [UserRole.CREATOR] }
@@ -43,19 +43,19 @@ const routes: Routes = [
     data: { roles: [UserRole.CREATOR] }
   },
   {
-    path: 'room/:roomId/feedback-barometer',
+    path: 'room/:shortId/feedback-barometer',
     component: FeedbackBarometerPageComponent,
     canActivate: [AuthenticationGuard],
     data: { roles: [UserRole.CREATOR] }
   },
   {
-    path: 'room/:roomId/:contentGroup',
+    path: 'room/:shortId/:contentGroup',
     component: ContentListComponent,
     canActivate: [AuthenticationGuard],
     data: { roles: [UserRole.CREATOR] }
   },
   {
-    path: 'room/:roomId/:contentGroup/presentation',
+    path: 'room/:shortId/:contentGroup/presentation',
     component: ContentPresentationComponent,
     canActivate: [AuthenticationGuard],
     data: { roles: [UserRole.CREATOR] }

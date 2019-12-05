@@ -25,7 +25,7 @@ export class ContentCreatePageComponent implements OnInit {
   ngOnInit() {
     this.translateService.use(sessionStorage.getItem('currentLang'));
     this.route.params.subscribe(params => {
-      this.getGroups(params['roomId']);
+      this.getGroups(params['shortId']);
     });
     this.lastCollection = sessionStorage.getItem('collection');
   }
