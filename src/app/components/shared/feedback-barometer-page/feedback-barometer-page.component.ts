@@ -24,12 +24,12 @@ export class FeedbackBarometerPageComponent implements OnInit, OnDestroy {
     { state: 2, name: 'sentiment_dissatisfied', message: 'Langsamer, bitte!', count: 0, },
     { state: 3, name: 'sentiment_very_dissatisfied', message: 'Abgehängt.', count: 0, }
   ];
-  isOwner: boolean = false;
+  isOwner = false;
   user: User;
   roomId: string;
   room: Room;
   protected sub: Subscription;
-  isClosed: boolean = false;
+  isClosed = false;
 
   constructor(
     private authenticationService: AuthenticationService,
