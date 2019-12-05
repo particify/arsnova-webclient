@@ -42,7 +42,6 @@ export class ContentCreatePageComponent implements OnInit {
               this.contentGroups.push(group);
             });
           }
-          console.log(this.contentGroups);
         }
       });
     });

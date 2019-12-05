@@ -161,6 +161,7 @@ export class ContentListComponent implements OnInit {
           });
           this.contentService.deleteContent(this.contents[index].id).subscribe();
           this.contents.splice(index, 1);
+          this.labels.splice(index, 1);
           if (this.contents.length === 0) {
             this.location.back();
           }
