@@ -33,6 +33,7 @@ tslint:
 
 unit_tests:
   stage: test
+  image: registry.gitlab.com/arsnova/devops/docker/nodejs_chrome:201912052125
   allow_failure: false
   dependencies: []
   variables:
