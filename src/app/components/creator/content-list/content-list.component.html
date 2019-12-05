@@ -30,7 +30,7 @@
       </mat-grid-tile>
       <mat-grid-tile>
         <button class="actionButton" mat-icon-button
-                routerLink="/creator/room/{{ room.shortId }}//presentation">
+                routerLink="/creator/room/{{ room.shortId }}/{{ contentGroup.name }}/presentation">
           <mat-icon class="actionIcon">school</mat-icon>
           <h3 *ngIf="deviceType === 'desktop'">{{ 'room-page.present' | translate}}</h3>
         </button>
@@ -57,12 +57,23 @@
           </mat-panel-title>
           <button mat-icon-button color="accent" (click)="editContent(content);$event.stopPropagation();"
                   class="editButton">
-            <mat-icon>create</mat-icon>
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button mat-icon-button color="accent" [matMenuTriggerFor]="chooseGroups" (click)="$event.stopPropagation() "
+                  class="editButton">
+            <mat-icon>library_add</mat-icon>
           </button>
           <button mat-icon-button color="warn" (click)="deleteContent(content);$event.stopPropagation();"
                   class="deleteButton editButton">
             <mat-icon>delete_forever</mat-icon>
           </button>
+
+          <mat-menu #chooseGroups="matMenu" xPosition="before">
+            <button mat-menu-item *ngFor="let cg of contentGroups" (click)="addToContentGroup(content.id, cg.name)">
+              <span>{{ cg.name }}</span>
+            </button>
+          </mat-menu>
+
         </mat-expansion-panel-header>
         <mat-panel-description class="panelTitle">
           {{ content.body }}
