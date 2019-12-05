@@ -140,7 +140,14 @@
     "submitted": "Frage erstellt. Bereit für die Erstellung neuer Fragen.",
     "undo": "Rückgängig",
     "yes": "Ja",
-    "default-group": "Hörsaalfragen"
+    "default-group": "Hörsaalfragen",
+    "edit-content-group": "Name der Sammlung bearbeiten",
+    "save-content-group": "Speichern",
+    "updated-content-group": "Name der Sammlung aktualisiert.",
+    "edit-content": "Frage bearbeiten",
+    "add-content-to-group": "Frage zu weiterer Sammlung hinzufügen",
+    "delete-content": "Frage löschen",
+    "added-to-content-group": "Frage wurde zu Sammlung hinzugefügt."
   },
   "feedback": {
     "is-stopped": "Feedback ist angehalten.",
@@ -236,11 +243,12 @@
     "token-deleted": "Der Token wurde gelöscht.",
     "tokens-deleted": "Alle Tokens dieser Sitzung wurden gelöscht.",
     "content-groups": "Sammlungen",
+    "new-content-group": "Neue Sammlung",
     "content-group-name": "Name der Sammlung",
     "content-group-name-input": "Gib hier den Namen der Sammlung die du erstellen möchtest ein.",
     "create-content-group": "Anlegen",
-    "contents-without-content-group": "Fagen ohne Sammlung",
-    "edit-content-group": "Speichern"
+    "content-group-created": "Sammlung wurde erstellt.",
+    "contents-without-content-group": "Fagen ohne Sammlung"
   },
   "comment-answer-form": {
     "answer": "Gib eine Antwort.",

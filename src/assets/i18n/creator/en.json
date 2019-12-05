@@ -141,7 +141,14 @@
     "submitted": "Content submitted. Ready for creation of new content.",
     "undo": "Undo",
     "yes": "Yes",
-    "default-group": "Audience Questions"
+    "default-group": "Audience Questions",
+    "edit-content-group": "Edit name of the collection",
+    "save-content-group": "Update",
+    "updated-content-group": "Name of collection was updated.",
+    "edit-content": "Edit content",
+    "add-content-to-group": "Add content to another collection",
+    "delete-content": "Delete content",
+    "added-to-content-group": "Content was added to collection."
   },
   "feedback": {
     "is-stopped": "Voting got stopped",
@@ -237,11 +244,12 @@
     "token-deleted": "Token has been deleted.",
     "tokens-deleted": "All tokens of this sessions have been deleted.",
     "content-groups": "Collections",
+    "new-content-group": "New collection",
     "content-group-name": "Name of the collection",
     "content-group-name-input": "Enter the name of the collection you want to create here.",
     "create-content-group": "Create",
-    "contents-without-content-group": "Contents without collection",
-    "edit-content-group": "Update"
+    "content-group-created": "Collection was created.",
+    "contents-without-content-group": "Contents without collection"
   },
   "comment-answer-form": {
     "answer": "Give an answer."

@@ -227,13 +227,20 @@ export class ContentListComponent implements OnInit {
       this.contentGroup.name = this.updatedName;
       this.roomService.updateGroup(this.room.id, this.updatedName, this.contentGroup).subscribe(() => {
         this.collectionName = this.updatedName;
-        this.leaveEditMode();
+        this.translateService.get('content.updated-content-group').subscribe(msg => {
+          this.notificationService.show(msg);
+        });
         this.updateURL();
       });
     }
+    this.leaveEditMode();
   }
 
   addToContentGroup(contentId: string, cgName: string): void {
-    this.roomService.addContentToGroup(this.roomId, cgName, contentId).subscribe();
+    this.roomService.addContentToGroup(this.roomId, cgName, contentId).subscribe(() => {
+      this.translateService.get('content.added-to-content-group').subscribe(msg => {
+        this.notificationService.show(msg);
+      });
+    });
   }
 }

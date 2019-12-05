@@ -247,6 +247,9 @@ export class RoomCreatorPageComponent extends RoomPageComponent implements OnIni
         let emptyGroups: ContentGroup[] = JSON.parse(sessionStorage.getItem('emptyGroups')) || [];
         emptyGroups.push(new ContentGroup('', '', result, [], true));
         sessionStorage.setItem('emptyGroups', JSON.stringify(emptyGroups));
+        this.translateService.get('room-page.content-group-created').subscribe(msg => {
+          this.notification.show(msg);
+        });
       }
     });
   }

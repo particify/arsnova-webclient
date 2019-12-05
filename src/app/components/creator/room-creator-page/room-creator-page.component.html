@@ -109,7 +109,8 @@
       <div fxLayout="row">
         <span class="contentGroupsHeader">{{'room-page.content-groups' | translate}}</span>
         <span class="fill-remaining-space"></span>
-        <button mat-icon-button id="addContentGroupButton" (click)="showContentGroupCreationDialog()">
+        <button mat-icon-button id="addContentGroupButton" (click)="showContentGroupCreationDialog()"
+                matTooltip="{{ 'room-page.new-content-group' | translate}}">
           <mat-icon class="corner-icon">add_box</mat-icon>
         </button>
       </div>

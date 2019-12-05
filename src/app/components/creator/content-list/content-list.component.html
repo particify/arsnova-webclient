@@ -9,13 +9,16 @@
       </div>
       <span class="fill-remaining-space"></span>
       <div *ngIf="allowEditing">
-        <button *ngIf="!isTitleEdit" mat-icon-button class="editButtons" (click)="goInEditMode()">
+        <button *ngIf="!isTitleEdit" mat-icon-button class="editButtons" (click)="goInEditMode()"
+                matTooltip="{{ 'content.edit-content-group' | translate}}">
           <mat-icon>edit</mat-icon>
         </button>
-        <button *ngIf="isTitleEdit" mat-icon-button class="editButtons" (click)="leaveEditMode()">
+        <button *ngIf="isTitleEdit" mat-icon-button class="editButtons" (click)="leaveEditMode()"
+                matTooltip="{{ 'content.abort' | translate}}">
           <mat-icon>clear</mat-icon>
         </button>
-        <button *ngIf="isTitleEdit" mat-icon-button class="editButtons" (click)="saveGroupName()">
+        <button *ngIf="isTitleEdit" mat-icon-button class="editButtons" (click)="saveGroupName()"
+                matTooltip="{{ 'content.save-content-group' | translate}}">
           <mat-icon>done</mat-icon>
         </button>
       </div>
@@ -56,15 +59,15 @@
             {{ labels[i] }}
           </mat-panel-title>
           <button mat-icon-button color="accent" (click)="editContent(content);$event.stopPropagation();"
-                  class="editButton">
+                  class="editButton" matTooltip="{{ 'content.edit-content' | translate}}">
             <mat-icon>edit</mat-icon>
           </button>
           <button mat-icon-button color="accent" [matMenuTriggerFor]="chooseGroups" (click)="$event.stopPropagation() "
-                  class="editButton">
+                  class="editButton" class="editButton" matTooltip="{{ 'content.add-content-to-group' | translate}}">
             <mat-icon>library_add</mat-icon>
           </button>
           <button mat-icon-button color="warn" (click)="deleteContent(content);$event.stopPropagation();"
-                  class="deleteButton editButton">
+                  class="deleteButton editButton" matTooltip="{{ 'content.delete-content' | translate}}">
             <mat-icon>delete_forever</mat-icon>
           </button>
 
