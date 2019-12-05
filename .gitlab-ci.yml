@@ -17,6 +17,7 @@ default:
     - npm i
     - date
   after_script:
+    - chmod -Rf a+rwX node_modules
     - date
 
 cache:
