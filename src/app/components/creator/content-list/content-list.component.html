@@ -2,13 +2,13 @@
   <mat-card>
     <div fxLayout="row">
       <div class="cardTitle">
-        <h2 *ngIf="!isTitleEdit">{{ collectionName }}</h2>
+        <h2 *ngIf="!isTitleEdit" [style.fontSize.px]=10>{{ collectionName }}</h2>
         <mat-form-field class="mat-focused" [ngClass]="{'activeInput': isTitleEdit, 'inactiveInput': !isTitleEdit}">
-          <input #nameInput matInput [(ngModel)]="updatedName">
+          <input #nameInput matInput maxlength="25" [(ngModel)]="updatedName">
         </mat-form-field>
       </div>
       <span class="fill-remaining-space"></span>
-      <div>
+      <div *ngIf="allowEditing">
         <button *ngIf="!isTitleEdit" mat-icon-button class="editButtons" (click)="goInEditMode()">
           <mat-icon>edit</mat-icon>
         </button>
@@ -20,7 +20,6 @@
         </button>
       </div>
     </div>
-    <mat-divider></mat-divider>
     <mat-grid-list cols="3" rowHeight="1:1" *ngIf="!isLoading">
       <mat-grid-tile>
         <button class="actionButton" mat-icon-button

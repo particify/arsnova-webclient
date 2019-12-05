@@ -41,6 +41,7 @@ export class ContentListComponent implements OnInit {
   isTitleEdit = false;
   updatedName: string;
   baseURL = 'creator/room/';
+  allowEditing = false;
 
   constructor(private contentService: ContentService,
               private roomService: RoomService,
@@ -65,6 +66,11 @@ export class ContentListComponent implements OnInit {
       this.collectionName = params['contentGroup'];
       this.roomService.getGroupByRoomIdAndName(this.roomId, this.collectionName).subscribe(group => {
         this.contentGroup = group;
+        if (!this.contentGroup) {
+          this.contentGroup = JSON.parse(sessionStorage.getItem('contentGroup'));
+        } else {
+          this.allowEditing = true;
+        }
         this.contentService.getContentsByIds(this.contentGroup.contentIds).subscribe( contents => {
           this.contents = contents;
           for (let i = 0; i < this.contents.length; i++) {
@@ -74,8 +80,8 @@ export class ContentListComponent implements OnInit {
               this.labels[i] = this.contents[i].subject;
             }
           }
+          this.isLoading = false;
         });
-        this.isLoading = false;
       });
     });
     this.translateService.use(localStorage.getItem('currentLang'));
