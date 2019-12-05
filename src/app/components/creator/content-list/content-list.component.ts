@@ -1,7 +1,7 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ContentService } from '../../../services/http/content.service';
 import { Content } from '../../../models/content';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 import { ContentChoice } from '../../../models/content-choice';
 import { ContentText } from '../../../models/content-text';
@@ -50,8 +50,7 @@ export class ContentListComponent implements OnInit {
               private notificationService: NotificationService,
               public dialog: MatDialog,
               private translateService: TranslateService,
-              protected langService: LanguageService,
-              private router: Router) {
+              protected langService: LanguageService) {
     langService.langEmitter.subscribe(lang => translateService.use(lang));
   }
 
@@ -197,7 +196,7 @@ export class ContentListComponent implements OnInit {
   }
 
   updateURL(): void {
-    this.router.navigate([`${this.baseURL}${this.room.shortId}/${this.collectionName}`]);
+    this.location.replaceState(`${this.baseURL}${this.room.shortId}/${this.collectionName}`);
   }
 
   saveGroupName(): void {
