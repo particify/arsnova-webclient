@@ -22,7 +22,7 @@ export class ContentGroupsComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.roomShortId = this.route.snapshot.paramMap.get('roomId');
+    this.roomShortId = this.route.snapshot.paramMap.get('shortId');
   }
 
   viewContents(contentGroup: ContentGroup) {
