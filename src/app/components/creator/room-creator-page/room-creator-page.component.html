@@ -106,7 +106,7 @@
         <span class="fill-remaining-space"></span>
       </div>
       </div>
-      <div fxLayout="row">
+      <div *ngIf="contentGroups.length > 0" fxLayout="row">
         <span class="contentGroupsHeader">{{'room-page.content-groups' | translate}}</span>
         <span class="fill-remaining-space"></span>
         <button mat-icon-button id="addContentGroupButton" (click)="showContentGroupCreationDialog()"
