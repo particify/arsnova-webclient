@@ -47,7 +47,7 @@ export class ContentTextCreatorComponent implements OnInit {
   }
 
   submitContent() {
-    if (this.contentBod === '' || this.contentSub === '' || this.contentCol === '') {
+    if (this.contentBod === '' || this.contentSub === '') {
       this.translationService.get('content.no-empty').subscribe(message => {
         this.notificationService.show(message);
       });

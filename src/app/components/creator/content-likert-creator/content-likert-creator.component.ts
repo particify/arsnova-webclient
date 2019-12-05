@@ -79,7 +79,7 @@ export class ContentLikertCreatorComponent implements OnInit {
   }
 
   submitContent(): void {
-    if (this.contentSub === '' || this.contentBod === '' || this.contentCol === '') {
+    if (this.contentSub === '' || this.contentBod === '') {
       this.translationService.get('content.no-empty').subscribe(message => {
         this.notificationService.show(message);
       });
