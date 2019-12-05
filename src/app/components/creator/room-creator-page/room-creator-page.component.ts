@@ -111,7 +111,11 @@ export class RoomCreatorPageComponent extends RoomPageComponent implements OnIni
     }
     this.contentService.findContentsWithoutGroup(this.room.id).subscribe(contents => {
         if (contents) {
-          this.defaultContentGroups.push(new ContentGroup('', '', 'Lose Fragen', [], true));
+          let contenWithoutGroupName = 'Content without a collection';
+          if (localStorage.getItem('currentLang') === 'de') {
+            contenWithoutGroupName = 'Nicht einsortierte Fragen';
+          }
+          this.defaultContentGroups.push(new ContentGroup('', '', contenWithoutGroupName, [], true));
           for (const c of contents) {
             this.defaultContentGroups[0].contentIds.push(c.id);
             this.emptyDefaultGroups = false;
