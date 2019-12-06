@@ -142,6 +142,7 @@
     "undo": "Undo",
     "yes": "Yes",
     "default-group": "Audience Questions",
+    "contents-without-collection": "Contents without a collection",
     "edit-content-group": "Edit name of the collection",
     "save-content-group": "Update",
     "updated-content-group": "Name of collection was updated.",
