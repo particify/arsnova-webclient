@@ -120,7 +120,7 @@ export class RoomService extends BaseHttpService {
   }
 
   getStats(roomId: string): Observable<RoomStats> {
-    const connectionUrl = `${ this.apiUrl.base +  this.apiUrl.rooms }/${ roomId }/${ this.apiUrl.stats }`;
+    const connectionUrl = `${ this.apiUrl.base +  this.apiUrl.rooms }/${ roomId }${ this.apiUrl.stats }`;
     return this.http.get<RoomStats>(connectionUrl).pipe(
       tap(() => ''),
       catchError(this.handleError<RoomStats>(`getStats id=${ roomId }`))
