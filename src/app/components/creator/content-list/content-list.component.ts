@@ -214,10 +214,22 @@ export class ContentListComponent implements OnInit {
     this.location.replaceState(`${this.baseURL}${this.room.shortId}/${this.collectionName}`);
   }
 
+  updateGroupInSessionStorage(oldName: string, newName: string) {
+    let groups: string[] = JSON.parse(sessionStorage.getItem('contentGroups'));
+    for (let i = 0; i < groups.length; i++) {
+      if (groups[i] === oldName) {
+        groups[i] = newName;
+        break;
+      }
+    }
+    sessionStorage.setItem('contentGroups', JSON.stringify(groups));
+  }
+
   saveGroupName(): void {
     if (this.updatedName !== this.collectionName) {
       this.contentGroup.name = this.updatedName;
       this.roomService.updateGroup(this.room.id, this.updatedName, this.contentGroup).subscribe(() => {
+        this.updateGroupInSessionStorage(this.collectionName, this.updatedName);
         this.collectionName = this.updatedName;
         this.translateService.get('content.updated-content-group').subscribe(msg => {
           this.notificationService.show(msg);
