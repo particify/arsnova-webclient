@@ -215,7 +215,7 @@ export class ContentListComponent implements OnInit {
   }
 
   updateGroupInSessionStorage(oldName: string, newName: string) {
-    let groups: string[] = JSON.parse(sessionStorage.getItem('contentGroups'));
+    const groups: string[] = JSON.parse(sessionStorage.getItem('contentGroups'));
     for (let i = 0; i < groups.length; i++) {
       if (groups[i] === oldName) {
         groups[i] = newName;
