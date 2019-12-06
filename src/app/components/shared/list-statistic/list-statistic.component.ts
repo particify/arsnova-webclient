@@ -64,7 +64,7 @@ export class ListStatisticComponent implements OnInit {
 
   ngOnInit() {
     this.route.params.subscribe(params => {
-      this.roomId = params['roomId'];
+      this.roomId = params['shortId'];
     });
     this.translateService.use(localStorage.getItem('currentLang'));
     this.contentService.getContentChoiceByIds(this.contentGroup.contentIds).subscribe(contents => {
