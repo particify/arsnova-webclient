@@ -280,8 +280,6 @@ export class AuthenticationService extends BaseHttpService {
 
   hasAccess(shortId: string, role: UserRole): boolean {
     const usersRole = this.roomAccess.get(shortId);
-    console.log('required  ' + role);
-    console.log('got       ' + usersRole);
     return (usersRole && (usersRole >= role));
   }
 
