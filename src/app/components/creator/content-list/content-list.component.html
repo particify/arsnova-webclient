@@ -62,7 +62,8 @@
                   class="editButton" matTooltip="{{ 'content.edit-content' | translate}}">
             <mat-icon>edit</mat-icon>
           </button>
-          <button mat-icon-button color="accent" [matMenuTriggerFor]="chooseGroups" (click)="$event.stopPropagation() "
+          <button mat-icon-button color="accent" *ngIf="!noGroups" [matMenuTriggerFor]="chooseGroups"
+                  (click)="$event.stopPropagation() "
                   class="editButton" class="editButton" matTooltip="{{ 'content.add-content-to-group' | translate}}">
             <mat-icon>library_add</mat-icon>
           </button>
@@ -72,8 +73,9 @@
           </button>
 
           <mat-menu #chooseGroups="matMenu" xPosition="before">
-            <button mat-menu-item *ngFor="let cg of contentGroups" (click)="addToContentGroup(content.id, cg.name)">
-              <span>{{ cg.name }}</span>
+            <button mat-menu-item *ngFor="let cg of contentGroups; index as i" [disabled]="i === currentGroupIndex"
+                    (click)="addToContentGroup(content.id, cg)">
+              <span>{{ cg }}</span>
             </button>
           </mat-menu>
 

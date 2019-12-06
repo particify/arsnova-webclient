@@ -9,6 +9,7 @@ import { ContentType } from '../../../models/content-type.enum';
 import { TranslateService } from '@ngx-translate/core';
 import { EventService } from '../../../services/util/event.service';
 import { RoomService } from '../../../services/http/room.service';
+import { RoomCreatorPageComponent } from '../room-creator-page/room-creator-page.component';
 
 export class DisplayAnswer {
   answerOption: AnswerOption;
@@ -265,6 +266,7 @@ export class ContentChoiceCreatorComponent implements OnInit {
       if (this.contentCol !== 'Default') {
         this.roomService.addContentToGroup(this.roomId, this.contentCol, content.id).subscribe();
       }
+      RoomCreatorPageComponent.saveGroupInSessionStorage(this.contentCol);
       this.resetAfterSubmit();
     });
   }

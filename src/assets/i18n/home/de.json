@@ -195,7 +195,8 @@
     "cancel": "Abbrechen",
     "cancel-description": "Abbrechen",
     "create-room": "Speichern",
-    "create-room-description": "Neue Sitzung erstellen."
+    "create-room-description": "Neue Sitzung erstellen.",
+    "default-group": "Hörsaalfragen"
   },
   "room-list": {
     "creator-role": "Sitzungsersteller",

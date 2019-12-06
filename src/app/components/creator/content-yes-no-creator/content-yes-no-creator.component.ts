@@ -7,6 +7,7 @@ import { ContentType } from '../../../models/content-type.enum';
 import { ContentService } from '../../../services/http/content.service';
 import { RoomService } from '../../../services/http/room.service';
 import { TranslateService } from '@ngx-translate/core';
+import { RoomCreatorPageComponent } from '../room-creator-page/room-creator-page.component';
 
 @Component({
   selector: 'app-content-yes-no-creator',
@@ -105,6 +106,7 @@ export class ContentYesNoCreatorComponent implements OnInit {
       if (this.contentCol !== 'Default') {
         this.roomService.addContentToGroup(this.roomId, this.contentCol, content.id).subscribe();
       }
+      RoomCreatorPageComponent.saveGroupInSessionStorage(this.contentCol);
       this.resetAfterSubmit();
     });
   }

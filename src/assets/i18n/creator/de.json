@@ -140,7 +140,6 @@
     "submitted": "Frage erstellt. Bereit für die Erstellung neuer Fragen.",
     "undo": "Rückgängig",
     "yes": "Ja",
-    "default-group": "Hörsaalfragen",
     "contents-without-collection": "Nicht einsortierte Fragen",
     "edit-content-group": "Name der Sammlung bearbeiten",
     "save-content-group": "Speichern",
@@ -249,6 +248,7 @@
     "content-group-name-input": "Gib hier den Namen der Sammlung die du erstellen möchtest ein.",
     "create-content-group": "Anlegen",
     "content-group-created": "Sammlung wurde erstellt.",
+    "content-group-already-exists": "Diese Sammlung existiert bereits.",
     "contents-without-content-group": "Fagen ohne Sammlung"
   },
   "comment-answer-form": {

@@ -141,7 +141,6 @@
     "submitted": "Content submitted. Ready for creation of new content.",
     "undo": "Undo",
     "yes": "Yes",
-    "default-group": "Audience Questions",
     "contents-without-collection": "Contents without a collection",
     "edit-content-group": "Edit name of the collection",
     "save-content-group": "Update",
@@ -250,6 +249,7 @@
     "content-group-name-input": "Enter the name of the collection you want to create here.",
     "create-content-group": "Create",
     "content-group-created": "Collection was created.",
+    "content-group-already-exists": "This collection already exists.",
     "contents-without-content-group": "Contents without collection"
   },
   "comment-answer-form": {

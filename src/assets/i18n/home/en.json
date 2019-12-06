@@ -196,7 +196,8 @@
     "cancel": "Cancel",
     "cancel-description": "Cancel",
     "create-room": "Create Session",
-    "create-room-description": "Create new session"
+    "create-room-description": "Create new session",
+    "default-group": "Audience Questions"
   },
   "room-list": {
     "creator-role": "Session creator",

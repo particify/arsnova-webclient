@@ -58,6 +58,18 @@ export class RoomCreatorPageComponent extends RoomPageComponent implements OnIni
     langService.langEmitter.subscribe(lang => translateService.use(lang));
   }
 
+  static saveGroupInSessionStorage(name: string): boolean {
+    let groups: string [] = JSON.parse(sessionStorage.getItem('contentGroups'));
+    for (let i = 0; i < groups.length; i++) {
+      if (name === groups[i]) {
+        return false;
+      }
+    }
+    groups.push(name);
+    sessionStorage.setItem('contentGroups', JSON.stringify(groups));
+    return true;
+  }
+
   ngAfterContentInit(): void {
     setTimeout( () => {
       document.getElementById('live_announcer-button').focus();
@@ -250,12 +262,15 @@ export class RoomCreatorPageComponent extends RoomPageComponent implements OnIni
     });
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        let emptyGroups: ContentGroup[] = JSON.parse(sessionStorage.getItem('emptyGroups')) || [];
-        emptyGroups.push(new ContentGroup('', '', result, [], true));
-        sessionStorage.setItem('emptyGroups', JSON.stringify(emptyGroups));
-        this.translateService.get('room-page.content-group-created').subscribe(msg => {
-          this.notification.show(msg);
-        });
+        if (RoomCreatorPageComponent.saveGroupInSessionStorage(result)) {
+          this.translateService.get('room-page.content-group-created').subscribe(msg => {
+            this.notification.show(msg);
+          });
+        } else {
+          this.translateService.get('room-page.content-group-already-exists').subscribe(msg => {
+            this.notification.show(msg);
+          });
+        }
       }
     });
   }

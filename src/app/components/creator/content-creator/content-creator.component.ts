@@ -17,7 +17,6 @@ export class ContentCreatorComponent implements OnInit {
   room: Room;
 
   lastCollection: string;
-  defaultGroup: string;
 
   content: ContentText = new ContentText(
     '1',
@@ -40,11 +39,6 @@ export class ContentCreatorComponent implements OnInit {
   ngOnInit() {
     this.translateService.use(localStorage.getItem('currentLang'));
     this.lastCollection = sessionStorage.getItem('collection');
-    if (!this.lastCollection) {
-      this.translateService.get('content.default-group').subscribe(name => {
-        this.defaultGroup = name;
-      });
-    }
   }
 
   resetInputs() {

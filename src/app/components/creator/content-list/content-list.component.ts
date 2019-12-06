@@ -15,7 +15,6 @@ import { TranslateService } from '@ngx-translate/core';
 import { LanguageService } from '../../../services/util/language.service';
 import { ContentDeleteComponent } from '../_dialogs/content-delete/content-delete.component';
 import { ContentEditComponent } from '../_dialogs/content-edit/content-edit.component';
-import { RoomStats } from '../../../models/room-stats';
 
 @Component({
   selector: 'app-content-list',
@@ -43,8 +42,8 @@ export class ContentListComponent implements OnInit {
   updatedName: string;
   baseURL = 'creator/room/';
   allowEditing = false;
-  contentGroups: ContentGroup[] = [];
-  roomStats: RoomStats;
+  contentGroups: string[] = [];
+  currentGroupIndex: number;
 
   constructor(private contentService: ContentService,
               private roomService: RoomService,
@@ -62,7 +61,6 @@ export class ContentListComponent implements OnInit {
     this.roomId = localStorage.getItem('roomId');
     this.roomService.getRoom(this.roomId).subscribe(room => {
       this.room = room;
-      this.getGroups(room.shortId);
     });
     this.route.params.subscribe(params => {
       sessionStorage.setItem('collection', params['contentGroup']);
@@ -83,6 +81,7 @@ export class ContentListComponent implements OnInit {
               this.labels[i] = this.contents[i].subject;
             }
           }
+          this.getGroups();
           this.isLoading = false;
         });
       });
@@ -90,22 +89,15 @@ export class ContentListComponent implements OnInit {
     this.translateService.use(localStorage.getItem('currentLang'));
   }
 
-  getGroups(shortId: string): void {
-    this.contentGroups = JSON.parse(sessionStorage.getItem('emptyGroups')) || [];
-    this.roomService.getRoomByShortId(shortId).subscribe(room => {
-      this.roomService.getStats(room.id).subscribe(roomStats => {
-        this.roomStats = roomStats;
-        if (roomStats.groupStats) {
-          for (const groupStats of roomStats.groupStats) {
-            this.roomService.getGroupByRoomIdAndName(room.id, groupStats.groupName).subscribe(group => {
-              if (group.name !== this.contentGroup.name) {
-                this.contentGroups.push(group);
-              }
-            });
-          }
+  getGroups(): void {
+    this.contentGroups = JSON.parse(sessionStorage.getItem('contentGroups'));
+    if (this.contentGroups.length > 0) {
+      for (let i = 0; i < this.contentGroups.length; i++) {
+        if (this.contentGroups[i] === this.contentGroup.name) {
+          this.currentGroupIndex = i;
         }
-      });
-    });
+      }
+    }
   }
 
   findIndexOfSubject(subject: string): number {

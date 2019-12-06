@@ -7,6 +7,7 @@ import { ContentService } from '../../../services/http/content.service';
 import { NotificationService } from '../../../services/util/notification.service';
 import { TranslateService } from '@ngx-translate/core';
 import { RoomService } from '../../../services/http/room.service';
+import { RoomCreatorPageComponent } from '../room-creator-page/room-creator-page.component';
 
 @Component({
   selector: 'app-content-likert-creator',
@@ -101,6 +102,7 @@ export class ContentLikertCreatorComponent implements OnInit {
       if (this.contentCol !== 'Default') {
         this.roomService.addContentToGroup(this.roomId, this.contentCol, content.id).subscribe();
       }
+      RoomCreatorPageComponent.saveGroupInSessionStorage(this.contentCol);
       this.resetAfterSubmit();
     });
   }
