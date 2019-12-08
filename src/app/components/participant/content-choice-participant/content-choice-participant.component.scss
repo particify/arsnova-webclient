@@ -1,14 +1,9 @@
-form > div > button {
-  margin: 20px 0;
+h2 {
+  margin: 20px 0 20px 0;
 }
 
-form > div > mat-chip-list {
-  margin: 20px 0;
-}
-
-form > h2 {
-  margin:20px 0;
-  font-size: larger;
+.buttons {
+  margin-top: 20px;
 }
 
 .submit {
@@ -21,23 +16,31 @@ form > h2 {
   color: var(--on-secondary);
 }
 
+.disabled {
+  background-color: var(--surface);
+  color: var(--on-surface);
+  opacity: 0.6;
+  pointer-events: none;
+}
+
 ::ng-deep .mat-radio-outer-circle {
   .mat-radio-checked & {
     border-color: var(--secondary)!important;
   }
-  border-color: var(--on-surface);
+  border-color: var(--on-surface)!important;
 }
 
 ::ng-deep .mat-radio-inner-circle {
   background-color: var(--secondary)!important;
 }
 
-::ng-deep .mat-checkbox-checked.mat-accent .mat-checkbox-background, .mat-checkbox-indeterminate.mat-accent .mat-checkbox-background {
+::ng-deep .mat-checkbox-checked.mat-accent .mat-checkbox-background,
+          .mat-checkbox-indeterminate.mat-accent .mat-checkbox-background {
   background-color: var(--secondary);
 }
 
 .mat-checkbox {
-  color: var(--on-surface);
+  color: var(--on-surface)!important;
 }
 
 ::ng-deep .mat-checkbox-frame {
@@ -46,4 +49,12 @@ form > h2 {
 
 ::ng-deep .mat-radio-ripple .mat-ripple-element {
   background-color: var(--secondary);
+}
+
+::ng-deep .mat-radio-label-content {
+  color: var(--on-surface)!important;
+}
+
+::ng-deep .mat-checkbox-label {
+  color: var(--on-surface)!important;
 }

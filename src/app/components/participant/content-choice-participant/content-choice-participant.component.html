@@ -1,25 +1,31 @@
+<h2 class="mat-headline">{{ content.body }}</h2>
+
 <form (ngSubmit)="submitAnswer()">
-  <h2 class="mat-headline">{{ content.body }}</h2>
   <mat-divider></mat-divider>
-  <mat-list *ngIf="content.multiple">
+  <mat-list *ngIf="content.multiple && !isLoading">
     <mat-list-item *ngFor="let answer of checkedAnswers">
-      <mat-checkbox [(ngModel)]="answer.checked" name="answer">
+      <mat-checkbox *ngIf="alreadySent" [disabled]="true" [checked]="answer.checked" name="answer">
+        {{ answer.answerOption.label }}
+      </mat-checkbox>
+      <mat-checkbox *ngIf="!alreadySent" [(ngModel)]="answer.checked" name="answer">
         {{ answer.answerOption.label }}
       </mat-checkbox>
     </mat-list-item>
   </mat-list>
-  <mat-radio-group *ngIf="!content.multiple" [(ngModel)]="selectedSingleAnswer" name="Radio">
-    <mat-list>
+  <mat-radio-group *ngIf="!content.multiple" [disabled]="alreadySent" [(ngModel)]="selectedSingleAnswer" name="Radio">
+    <mat-list *ngIf="!isLoading">
       <mat-list-item *ngFor="let answer of checkedAnswers">
-        <mat-radio-button color="primary" [value]="answer.answerOption.label" name="answer">
+        <mat-radio-button color="primary" [checked]="answer.checked" [value]="answer.answerOption.label" name="answer">
           {{ answer.answerOption.label }}
         </mat-radio-button>
       </mat-list-item>
     </mat-list>
   </mat-radio-group>
   <mat-divider></mat-divider>
-  <div fxLayoutAlign="center" fxLayoutGap="20px" fxAlign="row">
-    <button mat-raised-button class="abstain" [disabled]="alreadySent" (click)="abstain($event)">{{ 'answer.abstain' | translate }}</button>
-    <button mat-raised-button class="submit" [disabled]="alreadySent" type="submit">{{ 'answer.submit' | translate }}</button>
+  <div fxLayoutAlign="center" fxLayoutGap="20px" class="buttons">
+    <button mat-raised-button [ngClass]="alreadySent ? 'disabled' : 'abstain'" (click)="abstain($event)">
+      {{ 'answer.abstain' | translate }}</button>
+    <button mat-raised-button [ngClass]="alreadySent ? 'disabled' : 'submit'" type="submit">
+      {{ 'answer.submit' | translate }}</button>
   </div>
 </form>

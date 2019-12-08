@@ -1,8 +1,19 @@
 mat-tab-group {
-  width: 100%;
   max-width: 800px;
 }
 
-.tab-container {
-  padding: 20px;
+::ng-deep .mat-tab-label {
+  color: var(--on-surface);
+}
+
+::ng-deep .mat-tab-label-active {
+  color: var(--on-surface);
+}
+
+::ng-deep .mat-ink-bar {
+  background-color: var(--primary) !important;
+}
+
+::ng-deep .mat-tab-header-pagination-chevron {
+  border-color: var(--primary);
 }

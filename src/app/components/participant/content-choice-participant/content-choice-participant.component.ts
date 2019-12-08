@@ -7,6 +7,7 @@ import { AnswerChoice } from '../../../models/answer-choice';
 import { ContentType } from '../../../models/content-type.enum';
 import { TranslateService } from '@ngx-translate/core';
 import { LanguageService } from '../../../services/util/language.service';
+import { AuthenticationService } from '../../../services/http/authentication.service';
 
 class CheckedAnswer {
   answerOption: AnswerOption;
@@ -24,24 +25,39 @@ class CheckedAnswer {
   styleUrls: ['./content-choice-participant.component.scss']
 })
 export class ContentChoiceParticipantComponent implements OnInit {
+
   @Input() content: ContentChoice;
+
   ContentType: typeof ContentType = ContentType;
-
   selectedSingleAnswer: string;
-
   checkedAnswers: CheckedAnswer[] = [];
-
   alreadySent = false;
+  isLoading = true;
 
-  constructor(private answerService: ContentAnswerService,
-              private notificationService: NotificationService,
-              private translateService: TranslateService,
-              protected langService: LanguageService) {
+  constructor(
+    private authenticationService: AuthenticationService,
+    private answerService: ContentAnswerService,
+    private notificationService: NotificationService,
+    private translateService: TranslateService,
+    protected langService: LanguageService
+  ) {
   langService.langEmitter.subscribe(lang => translateService.use(lang));
 }
 
   ngOnInit() {
     this.initAnswers();
+    const userId = this.authenticationService.getUser().id;
+    this.answerService.getChoiceAnswerByContentIdUserIdCurrentRound(this.content.id, userId).subscribe(answer => {
+      if (answer) {
+        if (answer.selectedChoiceIndexes && answer.selectedChoiceIndexes.length > 0) {
+          for (const i of answer.selectedChoiceIndexes) {
+            this.checkedAnswers[i].checked = true;
+          }
+        }
+        this.alreadySent = true;
+      }
+      this.isLoading = false;
+    });
     this.translateService.use(localStorage.getItem('currentLang'));
   }
 
@@ -69,7 +85,7 @@ export class ContentChoiceParticipantComponent implements OnInit {
     }
     if (selectedAnswers.length === 0) {
       if (this.content.multiple) {
-        this.translateService.get('answer.al-least-one').subscribe(message => {
+        this.translateService.get('answer.at-least-one').subscribe(message => {
           this.notificationService.show(message);
         });
       } else {
