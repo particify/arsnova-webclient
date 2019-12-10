@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { AnswerText } from '../../models/answer-text';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { catchError, tap } from 'rxjs/operators';
+import { catchError, tap, map } from 'rxjs/operators';
 import { BaseHttpService } from './base-http.service';
 import { AnswerChoice } from '../../models/answer-choice';
 
@@ -31,6 +31,34 @@ export class ContentAnswerService extends BaseHttpService {
       externalFilters: {}
     }, httpOptions).pipe(
       catchError(this.handleError('getAnswers', []))
+    );
+  }
+
+  getChoiceAnswerByContentIdUserIdCurrentRound(contentId: string, userId: string): Observable<AnswerChoice> {
+    const url = this.apiUrl.base + this.apiUrl.answer + this.apiUrl.find;
+    return this.http.post<AnswerChoice[]>(url, {
+      properties: {
+        contentId: contentId,
+        creatorId: userId
+      },
+      externalFilters: {}
+    }, httpOptions).pipe(
+      map(list => list[0]),
+      catchError(this.handleError<AnswerChoice>('getChoiceAnswerByContentIdUserIdCurrentRound'))
+    );
+  }
+
+  getTextAnswerByContentIdUserIdCurrentRound(contentId: string, userId: string): Observable<AnswerText> {
+    const url = this.apiUrl.base + this.apiUrl.answer + this.apiUrl.find;
+    return this.http.post<AnswerText[]>(url, {
+      properties: {
+        contentId: contentId,
+        creatorId: userId
+      },
+      externalFilters: {}
+    }, httpOptions).pipe(
+      map(list => list[0]),
+      catchError(this.handleError<AnswerText>('getTextAnswerByContentIdUserIdCurrentRound'))
     );
   }
 

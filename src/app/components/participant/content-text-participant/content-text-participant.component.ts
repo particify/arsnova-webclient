@@ -7,6 +7,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { LanguageService } from '../../../services/util/language.service';
 import { ContentType } from '../../../models/content-type.enum';
 import { EventService } from '../../../services/util/event.service';
+import { AuthenticationService } from '../../../services/http/authentication.service';
 
 @Component({
   selector: 'app-content-text-participant',
@@ -16,18 +17,33 @@ import { EventService } from '../../../services/util/event.service';
 export class ContentTextParticipantComponent implements OnInit {
   @Input() content: ContentText;
 
-  textAnswer = '';
+  givenAnswer: AnswerText;
 
-  constructor(private answerService: ContentAnswerService,
-              private notificationService: NotificationService,
-              private translateService: TranslateService,
-              protected langService: LanguageService,
-              public eventService: EventService) {
-              langService.langEmitter.subscribe(lang => translateService.use(lang));
-}
+  textAnswer = '';
+  alreadySent = false;
+  isLoading = true;
+
+  constructor(
+    private authenticationService: AuthenticationService,
+    private answerService: ContentAnswerService,
+    private notificationService: NotificationService,
+    private translateService: TranslateService,
+    protected langService: LanguageService,
+    public eventService: EventService
+  ) {
+    langService.langEmitter.subscribe(lang => translateService.use(lang));
+  }
 
   ngOnInit() {
     this.translateService.use(localStorage.getItem('currentLang'));
+    const userId = this.authenticationService.getUser().id;
+    this.answerService.getTextAnswerByContentIdUserIdCurrentRound(this.content.id, userId).subscribe(answer => {
+      if (answer) {
+        this.givenAnswer = answer;
+        this.alreadySent = true;
+      }
+      this.isLoading = false;
+    });
   }
 
   submitAnswer() {
@@ -52,6 +68,9 @@ export class ContentTextParticipantComponent implements OnInit {
       creationTimestamp: null,
       format: ContentType.TEXT
     } as AnswerText).subscribe();
+    this.givenAnswer = new AnswerText();
+    this.givenAnswer.body = this.textAnswer;
+    this.alreadySent = true;
   }
 
   abstain($event) {
