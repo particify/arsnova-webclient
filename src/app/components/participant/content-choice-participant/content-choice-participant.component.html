@@ -11,6 +11,9 @@
         {{ answer.answerOption.label }}
       </mat-checkbox>
     </mat-list-item>
+    <div *ngIf="alreadySent && isChoice" class="solution">
+      <mat-icon [ngClass]="isCorrect ? 'correct' : 'wrong'">{{isCorrect ? 'check' : 'close'}}</mat-icon>
+    </div>
   </mat-list>
   <mat-radio-group *ngIf="!content.multiple" [(ngModel)]="selectedSingleAnswer" name="Radio">
     <mat-list *ngIf="!isLoading">

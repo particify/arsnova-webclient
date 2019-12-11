@@ -31,13 +31,19 @@ h2 {
 
 mat-icon {
   font-size: 80px;
+  width: 80px;
+  height: 80px;
+}
+
+mat-list {
+  position: relative;
 }
 
 .solution {
   position: absolute;
   left: 50%;
-  top: 35%;
-  margin-left: -40px;
+  top: 50%;
+  margin: -40px 0 0 -40px;
 }
 
 ::ng-deep .mat-radio-outer-circle {
