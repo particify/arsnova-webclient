@@ -39,16 +39,17 @@ mat-list {
   position: relative;
 }
 
-span {
+p {
   font-size: 24px;
   color: var(--primary);
+  margin: 0;
 }
 
 .solution {
   margin: -40px 0 0 -40px;
 }
 
-.abstained {
+.text {
   width: 300px;
   margin: -16px 0 0 -150px;
   text-align: center;

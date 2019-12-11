@@ -8,7 +8,8 @@
     "sent": "Antwort gesendet",
     "submit": "Absenden",
     "your-answer": "Deine Antwort",
-    "has-abstained": "Sie haben sich enthalten!"
+    "has-abstained": "Sie haben sich enthalten!",
+    "has-voted": "Sie haben Abgestimmt!"
   },
   "comment-list": {
     "a11y-access_time": "Sortiert Fragen nach der Uhrzeit",

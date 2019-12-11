@@ -14,8 +14,11 @@
     <div *ngIf="isChoice && !hasAbstained" class="solution invisible" [ngClass]="{'visible' : alreadySent}">
       <mat-icon [ngClass]="isCorrect ? 'correct' : 'wrong'">{{isCorrect ? 'check' : 'close'}}</mat-icon>
     </div>
-    <div *ngIf="hasAbstained" class="abstained invisible" [ngClass]="{'visible' : alreadySent}">
-      <span>{{'answer.has-abstained' | translate}}</span>
+    <div *ngIf="hasAbstained" class="text invisible" [ngClass]="{'visible' : alreadySent}">
+      <p>{{'answer.has-abstained' | translate}}</p>
+    </div>
+    <div *ngIf="!isChoice && !hasAbstained" class="text invisible" [ngClass]="{'visible' : alreadySent}">
+      <p>{{'answer.has-voted' | translate}}</p>
     </div>
   </mat-list>
   <mat-radio-group *ngIf="!content.multiple" [(ngModel)]="selectedSingleAnswer" name="Radio">
@@ -28,8 +31,11 @@
       <div *ngIf="isChoice && !hasAbstained" class="solution invisible" [ngClass]="{'visible' : alreadySent}">
         <mat-icon [ngClass]="isCorrect ? 'correct' : 'wrong'">{{isCorrect ? 'check' : 'close'}}</mat-icon>
       </div>
-      <div *ngIf="hasAbstained" class="abstained invisible" [ngClass]="{'visible' : alreadySent}">
-        <span>{{'answer.has-abstained' | translate}}</span>
+      <div *ngIf="hasAbstained" class="text invisible" [ngClass]="{'visible' : alreadySent}">
+        <p>{{'answer.has-abstained' | translate}}</p>
+      </div>
+      <div *ngIf="!isChoice && !hasAbstained" class="text invisible" [ngClass]="{'visible' : alreadySent}">
+        <p>{{'answer.has-voted' | translate}}</p>
       </div>
     </mat-list>
   </mat-radio-group>
