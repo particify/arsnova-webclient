@@ -28,11 +28,15 @@ export class ContentChoiceParticipantComponent implements OnInit {
 
   @Input() content: ContentChoice;
 
+  isLoading = true;
   ContentType: typeof ContentType = ContentType;
   selectedSingleAnswer: string;
   checkedAnswers: CheckedAnswer[] = [];
   alreadySent = false;
-  isLoading = true;
+  correctOptionIndexes: number[] = [];
+  isCorrect = false;
+  isChoice = true;
+  hasAbstained = false;
 
   constructor(
     private authenticationService: AuthenticationService,
@@ -47,12 +51,16 @@ export class ContentChoiceParticipantComponent implements OnInit {
   ngOnInit() {
     this.initAnswers();
     const userId = this.authenticationService.getUser().id;
+    this.getCorrectAnswer();
     this.answerService.getChoiceAnswerByContentIdUserIdCurrentRound(this.content.id, userId).subscribe(answer => {
       if (answer) {
         if (answer.selectedChoiceIndexes && answer.selectedChoiceIndexes.length > 0) {
           for (const i of answer.selectedChoiceIndexes) {
             this.checkedAnswers[i].checked = true;
           }
+        }
+        if (this.isChoice) {
+          this.checkAnswer(answer.selectedChoiceIndexes);
         }
         this.alreadySent = true;
       }
@@ -64,6 +72,35 @@ export class ContentChoiceParticipantComponent implements OnInit {
   initAnswers(): void {
     for (const answerOption of this.content.options) {
       this.checkedAnswers.push(new CheckedAnswer(answerOption, false));
+    }
+  }
+
+  getCorrectAnswer() {
+    if (!(this.content.format === ContentType.SCALE)) {
+      for (const i in this.content.options) {
+        if (this.content.options[i].points > 0) {
+          this.correctOptionIndexes.push(Number(i));
+        }
+      }
+    } else {
+      this.isChoice = false;
+    }
+  }
+
+  checkAnswer(selectedAnswers: number[]) {
+    if (selectedAnswers) {
+      if (this.correctOptionIndexes.length === selectedAnswers.length &&
+        this.correctOptionIndexes.every((value, index) => value === selectedAnswers[index])) {
+        this.isCorrect = true;
+      }
+    } else {
+      this.hasAbstained = true;
+    }
+  }
+
+  resetCheckedAnswers() {
+    for (const answer of this.checkedAnswers) {
+      answer.checked = false;
     }
   }
 
@@ -106,8 +143,12 @@ export class ContentChoiceParticipantComponent implements OnInit {
       selectedChoiceIndexes: selectedAnswers,
       creationTimestamp: null,
       format: ContentType.CHOICE
-    } as AnswerChoice).subscribe();
-    this.alreadySent = true;
+    } as AnswerChoice).subscribe(() => {
+      if (this.isChoice) {
+        this.checkAnswer(selectedAnswers);
+      }
+      this.alreadySent = true;
+    });
   }
 
   abstain($event) {
@@ -124,6 +165,8 @@ export class ContentChoiceParticipantComponent implements OnInit {
       creationTimestamp: null,
       format: ContentType.CHOICE
     } as AnswerChoice).subscribe();
+    this.resetCheckedAnswers();
+    this.hasAbstained = true;
     this.alreadySent = true;
   }
 }

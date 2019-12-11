@@ -1,5 +1,5 @@
 h2 {
-  margin: 20px 0 20px 0;
+  margin: 20px 0;
 }
 
 .buttons {
@@ -17,11 +17,57 @@ h2 {
 }
 
 .disabled {
-  background-color: var(--surface);
-  color: var(--on-surface);
-  opacity: 0.6;
+  opacity: 0.5;
   pointer-events: none;
 }
+
+.correct {
+  color: var(--green);
+}
+
+.wrong {
+  color: var(--red);
+}
+
+mat-icon {
+  font-size: 80px;
+  width: 80px;
+  height: 80px;
+}
+
+mat-list {
+  position: relative;
+}
+
+p {
+  font-size: 24px;
+  color: var(--primary);
+  margin: 0;
+}
+
+.solution {
+  margin: -40px 0 0 -40px;
+}
+
+.text {
+  width: 300px;
+  margin: -16px 0 0 -150px;
+  text-align: center;
+}
+
+.invisible {
+  position: absolute;
+  left: 50%;
+  top: -200px;
+  transform: scale(0);
+}
+
+.visible {
+  top: 50%;
+  transition: 0.6s;
+  transform: scale(1);
+}
+
 
 ::ng-deep .mat-radio-outer-circle {
   .mat-radio-checked & {

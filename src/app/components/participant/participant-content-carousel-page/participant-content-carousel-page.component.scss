@@ -1,5 +1,10 @@
 mat-tab-group {
   max-width: 800px;
+  width: 100%;
+}
+
+::ng-deep .mat-tab-body.mat-tab-body-active {
+  min-height: 400px;
 }
 
 ::ng-deep .mat-tab-label {

@@ -1,5 +1,5 @@
 h2 {
-  margin: 20px 0 20px 0;
+  margin: 20px 0;
 }
 
 .buttons {
@@ -17,10 +17,34 @@ h2 {
 }
 
 .disabled {
-  background-color: var(--surface);
-  color: var(--on-surface);
-  opacity: 0.6;
+  opacity: 0.5;
   pointer-events: none;
+}
+
+p {
+  font-size: 20px;
+  margin: 10px 0;
+}
+
+.answer {
+  opacity: 0.7;
+}
+
+.text {
+  margin: 20px 0 0 0;
+  color: var(--primary);
+}
+
+.invisible {
+  height: 0;
+  transform: scale(0);
+  text-align: center;
+}
+
+.visible {
+  height: 32px;
+  transition: 0.6s;
+  transform: scale(1);
 }
 
 ::ng-deep .mat-form-field-label {

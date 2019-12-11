@@ -3,29 +3,47 @@
 <form (ngSubmit)="submitAnswer()">
   <mat-divider></mat-divider>
   <mat-list *ngIf="content.multiple && !isLoading">
-    <mat-list-item *ngFor="let answer of checkedAnswers">
-      <mat-checkbox *ngIf="alreadySent" [disabled]="true" [checked]="answer.checked" name="answer">
+    <mat-list-item *ngFor="let answer of checkedAnswers" [ngClass]="{'disabled': alreadySent}">
+      <mat-checkbox *ngIf="alreadySent" [checked]="answer.checked" name="answer">
         {{ answer.answerOption.label }}
       </mat-checkbox>
       <mat-checkbox *ngIf="!alreadySent" [(ngModel)]="answer.checked" name="answer">
         {{ answer.answerOption.label }}
       </mat-checkbox>
     </mat-list-item>
+    <div *ngIf="isChoice && !hasAbstained" class="solution invisible" [ngClass]="{'visible' : alreadySent}">
+      <mat-icon [ngClass]="isCorrect ? 'correct' : 'wrong'">{{isCorrect ? 'check' : 'close'}}</mat-icon>
+    </div>
+    <div *ngIf="hasAbstained" class="text invisible" [ngClass]="{'visible' : alreadySent}">
+      <p>{{'answer.has-abstained' | translate}}</p>
+    </div>
+    <div *ngIf="!isChoice && !hasAbstained" class="text invisible" [ngClass]="{'visible' : alreadySent}">
+      <p>{{'answer.has-voted' | translate}}</p>
+    </div>
   </mat-list>
-  <mat-radio-group *ngIf="!content.multiple" [disabled]="alreadySent" [(ngModel)]="selectedSingleAnswer" name="Radio">
+  <mat-radio-group *ngIf="!content.multiple" [(ngModel)]="selectedSingleAnswer" name="Radio">
     <mat-list *ngIf="!isLoading">
-      <mat-list-item *ngFor="let answer of checkedAnswers">
+      <mat-list-item *ngFor="let answer of checkedAnswers" [ngClass]="{'disabled': alreadySent}">
         <mat-radio-button color="primary" [checked]="answer.checked" [value]="answer.answerOption.label" name="answer">
           {{ answer.answerOption.label }}
         </mat-radio-button>
       </mat-list-item>
+      <div *ngIf="isChoice && !hasAbstained" class="solution invisible" [ngClass]="{'visible' : alreadySent}">
+        <mat-icon [ngClass]="isCorrect ? 'correct' : 'wrong'">{{isCorrect ? 'check' : 'close'}}</mat-icon>
+      </div>
+      <div *ngIf="hasAbstained" class="text invisible" [ngClass]="{'visible' : alreadySent}">
+        <p>{{'answer.has-abstained' | translate}}</p>
+      </div>
+      <div *ngIf="!isChoice && !hasAbstained" class="text invisible" [ngClass]="{'visible' : alreadySent}">
+        <p>{{'answer.has-voted' | translate}}</p>
+      </div>
     </mat-list>
   </mat-radio-group>
   <mat-divider></mat-divider>
   <div fxLayoutAlign="center" fxLayoutGap="20px" class="buttons">
-    <button mat-raised-button [ngClass]="alreadySent ? 'disabled' : 'abstain'" (click)="abstain($event)">
+    <button mat-raised-button class="abstain" [ngClass]="{'disabled' : alreadySent}" (click)="abstain($event)">
       {{ 'answer.abstain' | translate }}</button>
-    <button mat-raised-button [ngClass]="alreadySent ? 'disabled' : 'submit'" type="submit">
+    <button mat-raised-button class="submit" [ngClass]="{'disabled' : alreadySent}" type="submit">
       {{ 'answer.submit' | translate }}</button>
   </div>
 </form>
