@@ -9,7 +9,8 @@
     "submit": "Submit",
     "your-answer": "Your answer",
     "has-abstained": "You have abstained!",
-    "has-voted": "You have voted!"
+    "has-voted": "You have voted!",
+    "has-answered": "You have answered the question!"
   },
   "comment-list": {
     "a11y-access_time": "Sorts questions by time",

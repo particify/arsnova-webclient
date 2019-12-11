@@ -9,7 +9,8 @@
     "submit": "Absenden",
     "your-answer": "Deine Antwort",
     "has-abstained": "Sie haben sich enthalten!",
-    "has-voted": "Sie haben Abgestimmt!"
+    "has-voted": "Sie haben Abgestimmt!",
+    "has-answered": "Sie haben die Frage beantwortet!"
   },
   "comment-list": {
     "a11y-access_time": "Sortiert Fragen nach der Uhrzeit",

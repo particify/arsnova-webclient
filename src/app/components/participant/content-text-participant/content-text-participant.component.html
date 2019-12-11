@@ -1,16 +1,18 @@
 <h2 class="mat-headline">{{ content.subject }}</h2>
-
+<mat-divider></mat-divider>
 <form *ngIf="!givenAnswer">
-  <mat-divider></mat-divider>
   <mat-form-field class="input-block">
-    <textarea (focus)="eventService.makeFocusOnInputTrue()" (blur)="eventService.makeFocusOnInputFalse()" matInput
-              [(ngModel)]="textAnswer" name="answer" placeholder="{{ 'answer.your-answer' | translate }}"></textarea>
+    <textarea matInput (focus)="eventService.makeFocusOnInputTrue()" (blur)="eventService.makeFocusOnInputFalse()"
+              [(ngModel)]="textAnswer" name="answer" placeholder="{{ 'answer.your-answer' | translate }}"
+              matTextareaAutosize matAutosizeMinRows="3" matAutosizeMaxRows="8" maxLength="255"></textarea>
   </mat-form-field>
 </form>
-<mat-divider></mat-divider>
-<div *ngIf="givenAnswer">
-  <p>{{givenAnswer.body}}</p>
+<div *ngIf="givenAnswer && givenAnswer.body">
+  <p class="answer">{{givenAnswer.body}}</p>
   <mat-divider></mat-divider>
+</div>
+<div class="invisible" [ngClass]="{'visible' : givenAnswer}">
+  <p class="text">{{sentMessage}}</p>
 </div>
 <div fxLayoutAlign="center" fxLayoutGap="20px" class="buttons">
   <button mat-raised-button (click)="abstain($event)" class="abstain" [ngClass]="{'disabled' : alreadySent}">

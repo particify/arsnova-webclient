@@ -22,6 +22,7 @@ export class ContentTextParticipantComponent implements OnInit {
   textAnswer = '';
   alreadySent = false;
   isLoading = true;
+  sentMessage: string;
 
   constructor(
     private authenticationService: AuthenticationService,
@@ -42,8 +43,32 @@ export class ContentTextParticipantComponent implements OnInit {
         this.givenAnswer = answer;
         this.alreadySent = true;
       }
+      if (this.givenAnswer.body) {
+        this.getAnsweredMessage();
+      } else {
+        this.getAbstainedMessage();
+      }
       this.isLoading = false;
     });
+  }
+
+  getAnsweredMessage() {
+    this.translateService.get('answer.has-answered').subscribe(msg => {
+      this.sentMessage = msg;
+    });
+  }
+
+  getAbstainedMessage() {
+    this.translateService.get('answer.has-abstained').subscribe(msg => {
+      this.sentMessage = msg;
+    });
+  }
+
+  createAnswer(body?: string) {
+    this.givenAnswer = new AnswerText();
+    if (body) {
+      this.givenAnswer.body = body;
+    }
   }
 
   submitAnswer() {
@@ -68,8 +93,8 @@ export class ContentTextParticipantComponent implements OnInit {
       creationTimestamp: null,
       format: ContentType.TEXT
     } as AnswerText).subscribe();
-    this.givenAnswer = new AnswerText();
-    this.givenAnswer.body = this.textAnswer;
+    this.createAnswer(this.textAnswer);
+    this.getAnsweredMessage();
     this.alreadySent = true;
   }
 
@@ -78,5 +103,17 @@ export class ContentTextParticipantComponent implements OnInit {
     this.translateService.get('answer.abstention-sent').subscribe(message => {
       this.notificationService.show(message);
     });
+    this.answerService.addAnswerText({
+      id: null,
+      revision: null,
+      contentId: this.content.id,
+      round: 1,
+      body: null,
+      creationTimestamp: null,
+      format: ContentType.TEXT
+    } as AnswerText).subscribe();
+    this.createAnswer();
+    this.getAbstainedMessage();
+    this.alreadySent = true;
   }
 }
