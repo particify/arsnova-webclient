@@ -13,8 +13,8 @@
   <mat-divider></mat-divider>
 </div>
 <div fxLayoutAlign="center" fxLayoutGap="20px" class="buttons">
-  <button mat-raised-button (click)="abstain($event)" [ngClass]="alreadySent ? 'disabled' : 'abstain'">
+  <button mat-raised-button (click)="abstain($event)" class="abstain" [ngClass]="{'disabled' : alreadySent}">
     {{ 'answer.abstain' | translate }}</button>
-  <button mat-raised-button (click)="submitAnswer()" [ngClass]="alreadySent ? 'disabled' : 'submit'" type="submit">
+  <button mat-raised-button (click)="submitAnswer()" class="submit" [ngClass]="{'disabled' : alreadySent}" type="submit">
     {{ 'answer.submit' | translate }}</button>
 </div>

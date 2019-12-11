@@ -17,9 +17,7 @@ h2 {
 }
 
 .disabled {
-  background-color: var(--surface);
-  color: var(--on-surface);
-  opacity: 0.6;
+  opacity: 0.5;
   pointer-events: none;
 }
 
