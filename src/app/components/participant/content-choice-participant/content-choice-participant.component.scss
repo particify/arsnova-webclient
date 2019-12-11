@@ -42,15 +42,15 @@ mat-list {
 .solution {
   position: absolute;
   left: 50%;
-  top: -100%;
+  top: -200px;
   margin: -40px 0 0 -40px;
+  transform: scale(0);
 }
 
 .visible {
-  left: 50%;
   top: 50%;
-  margin: -40px 0 0 -40px;
   transition: 0.6s;
+  transform: scale(1);
 }
 
 
