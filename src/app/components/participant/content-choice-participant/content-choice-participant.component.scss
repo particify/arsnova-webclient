@@ -23,6 +23,12 @@ h2 {
   pointer-events: none;
 }
 
+.disabledItem {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+
 ::ng-deep .mat-radio-outer-circle {
   .mat-radio-checked & {
     border-color: var(--secondary)!important;
