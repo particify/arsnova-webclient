@@ -32,6 +32,7 @@ export class ContentChoiceParticipantComponent implements OnInit {
   selectedSingleAnswer: string;
   checkedAnswers: CheckedAnswer[] = [];
   alreadySent = false;
+  correctOptionIndexes: number[] = [];
   isCorrect = false;
   isLoading = true;
 
@@ -48,6 +49,7 @@ export class ContentChoiceParticipantComponent implements OnInit {
   ngOnInit() {
     this.initAnswers();
     const userId = this.authenticationService.getUser().id;
+    this.getCorrectAnswer();
     this.answerService.getChoiceAnswerByContentIdUserIdCurrentRound(this.content.id, userId).subscribe(answer => {
       if (answer) {
         if (answer.selectedChoiceIndexes && answer.selectedChoiceIndexes.length > 0) {
@@ -55,6 +57,7 @@ export class ContentChoiceParticipantComponent implements OnInit {
             this.checkedAnswers[i].checked = true;
           }
         }
+        this.checkAnswer(answer.selectedChoiceIndexes);
         this.alreadySent = true;
       }
       this.isLoading = false;
@@ -65,6 +68,25 @@ export class ContentChoiceParticipantComponent implements OnInit {
   initAnswers(): void {
     for (const answerOption of this.content.options) {
       this.checkedAnswers.push(new CheckedAnswer(answerOption, false));
+    }
+  }
+
+  getCorrectAnswer() {
+    if (!(this.content.format === ContentType.SCALE)) {
+      for (const i in this.content.options) {
+        if (this.content.options[i].points > 0) {
+          this.correctOptionIndexes.push(Number(i));
+        }
+      }
+    }
+  }
+
+  checkAnswer(selectedAnswers: number[]) {
+    if (!(this.content.format === ContentType.SCALE)) {
+      if (this.correctOptionIndexes.length === selectedAnswers.length &&
+        this.correctOptionIndexes.every((value, index) => value === selectedAnswers[index])) {
+        this.isCorrect = true;
+      }
     }
   }
 
@@ -108,18 +130,7 @@ export class ContentChoiceParticipantComponent implements OnInit {
       creationTimestamp: null,
       format: ContentType.CHOICE
     } as AnswerChoice).subscribe(() => {
-      if (!(this.content.format === ContentType.SCALE)) {
-        const correctOptionIndexes = [];
-        for (const i in this.content.options) {
-          if (this.content.options[i].points > 0) {
-            correctOptionIndexes.push(Number(i));
-          }
-        }
-        if (correctOptionIndexes.length === selectedAnswers.length &&
-            correctOptionIndexes.every((value, index) => value === selectedAnswers[index])) {
-          this.isCorrect = true;
-        }
-      }
+      this.checkAnswer(selectedAnswers);
       this.alreadySent = true;
     });
   }

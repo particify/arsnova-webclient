@@ -17,17 +17,28 @@ h2 {
 }
 
 .disabled {
-  background-color: var(--surface);
-  color: var(--on-surface);
-  opacity: 0.6;
-  pointer-events: none;
-}
-
-.disabledItem {
   opacity: 0.5;
   pointer-events: none;
 }
 
+.correct {
+  color: var(--green);
+}
+
+.wrong {
+  color: var(--red);
+}
+
+mat-icon {
+  font-size: 80px;
+}
+
+.solution {
+  position: absolute;
+  left: 50%;
+  top: 35%;
+  margin-left: -40px;
+}
 
 ::ng-deep .mat-radio-outer-circle {
   .mat-radio-checked & {
