@@ -34,6 +34,7 @@ export class ContentChoiceParticipantComponent implements OnInit {
   alreadySent = false;
   correctOptionIndexes: number[] = [];
   isCorrect = false;
+  isChoice = true;
   isLoading = true;
 
   constructor(
@@ -57,7 +58,9 @@ export class ContentChoiceParticipantComponent implements OnInit {
             this.checkedAnswers[i].checked = true;
           }
         }
-        this.checkAnswer(answer.selectedChoiceIndexes);
+        if (this.isChoice) {
+          this.checkAnswer(answer.selectedChoiceIndexes);
+        }
         this.alreadySent = true;
       }
       this.isLoading = false;
@@ -78,15 +81,15 @@ export class ContentChoiceParticipantComponent implements OnInit {
           this.correctOptionIndexes.push(Number(i));
         }
       }
+    } else {
+      this.isChoice = false;
     }
   }
 
   checkAnswer(selectedAnswers: number[]) {
-    if (!(this.content.format === ContentType.SCALE)) {
-      if (this.correctOptionIndexes.length === selectedAnswers.length &&
-        this.correctOptionIndexes.every((value, index) => value === selectedAnswers[index])) {
-        this.isCorrect = true;
-      }
+    if (this.correctOptionIndexes.length === selectedAnswers.length &&
+      this.correctOptionIndexes.every((value, index) => value === selectedAnswers[index])) {
+      this.isCorrect = true;
     }
   }
 
@@ -130,7 +133,9 @@ export class ContentChoiceParticipantComponent implements OnInit {
       creationTimestamp: null,
       format: ContentType.CHOICE
     } as AnswerChoice).subscribe(() => {
-      this.checkAnswer(selectedAnswers);
+      if (this.isChoice) {
+        this.checkAnswer(selectedAnswers);
+      }
       this.alreadySent = true;
     });
   }

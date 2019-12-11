@@ -19,6 +19,9 @@
           {{ answer.answerOption.label }}
         </mat-radio-button>
       </mat-list-item>
+      <div *ngIf="alreadySent && isChoice" class="solution">
+        <mat-icon [ngClass]="isCorrect ? 'correct' : 'wrong'">{{isCorrect ? 'check' : 'close'}}</mat-icon>
+      </div>
     </mat-list>
   </mat-radio-group>
   <mat-divider></mat-divider>
@@ -29,6 +32,3 @@
       {{ 'answer.submit' | translate }}</button>
   </div>
 </form>
-<div *ngIf="alreadySent" class="solution">
-  <mat-icon [ngClass]="isCorrect ? 'correct' : 'wrong'">{{isCorrect ? 'check' : 'close'}}</mat-icon>
-</div>
