@@ -28,6 +28,7 @@ export class ContentChoiceParticipantComponent implements OnInit {
 
   @Input() content: ContentChoice;
 
+  isLoading = true;
   ContentType: typeof ContentType = ContentType;
   selectedSingleAnswer: string;
   checkedAnswers: CheckedAnswer[] = [];
@@ -35,7 +36,7 @@ export class ContentChoiceParticipantComponent implements OnInit {
   correctOptionIndexes: number[] = [];
   isCorrect = false;
   isChoice = true;
-  isLoading = true;
+  hasAbstained = false;
 
   constructor(
     private authenticationService: AuthenticationService,
@@ -87,9 +88,19 @@ export class ContentChoiceParticipantComponent implements OnInit {
   }
 
   checkAnswer(selectedAnswers: number[]) {
-    if (this.correctOptionIndexes.length === selectedAnswers.length &&
-      this.correctOptionIndexes.every((value, index) => value === selectedAnswers[index])) {
-      this.isCorrect = true;
+    if (selectedAnswers) {
+      if (this.correctOptionIndexes.length === selectedAnswers.length &&
+        this.correctOptionIndexes.every((value, index) => value === selectedAnswers[index])) {
+        this.isCorrect = true;
+      }
+    } else {
+      this.hasAbstained = true;
+    }
+  }
+
+  resetCheckedAnswers() {
+    for (const answer of this.checkedAnswers) {
+      answer.checked = false;
     }
   }
 
@@ -154,6 +165,8 @@ export class ContentChoiceParticipantComponent implements OnInit {
       creationTimestamp: null,
       format: ContentType.CHOICE
     } as AnswerChoice).subscribe();
+    this.resetCheckedAnswers();
+    this.hasAbstained = true;
     this.alreadySent = true;
   }
 }

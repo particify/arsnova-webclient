@@ -39,11 +39,25 @@ mat-list {
   position: relative;
 }
 
+span {
+  font-size: 24px;
+  color: var(--primary);
+}
+
 .solution {
+  margin: -40px 0 0 -40px;
+}
+
+.abstained {
+  width: 300px;
+  margin: -16px 0 0 -150px;
+  text-align: center;
+}
+
+.invisible {
   position: absolute;
   left: 50%;
   top: -200px;
-  margin: -40px 0 0 -40px;
   transform: scale(0);
 }
 
