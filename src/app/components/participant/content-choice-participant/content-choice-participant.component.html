@@ -11,7 +11,7 @@
         {{ answer.answerOption.label }}
       </mat-checkbox>
     </mat-list-item>
-    <div *ngIf="alreadySent && isChoice" class="solution">
+    <div *ngIf="isChoice" class="solution" [ngClass]="{'visible' : alreadySent}">
       <mat-icon [ngClass]="isCorrect ? 'correct' : 'wrong'">{{isCorrect ? 'check' : 'close'}}</mat-icon>
     </div>
   </mat-list>
@@ -22,7 +22,7 @@
           {{ answer.answerOption.label }}
         </mat-radio-button>
       </mat-list-item>
-      <div *ngIf="alreadySent && isChoice" class="solution">
+      <div *ngIf="isChoice" class="solution" [ngClass]="{'visible' : alreadySent}">
         <mat-icon [ngClass]="isCorrect ? 'correct' : 'wrong'">{{isCorrect ? 'check' : 'close'}}</mat-icon>
       </div>
     </mat-list>
