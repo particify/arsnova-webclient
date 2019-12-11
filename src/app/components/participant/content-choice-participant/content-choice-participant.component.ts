@@ -32,6 +32,7 @@ export class ContentChoiceParticipantComponent implements OnInit {
   selectedSingleAnswer: string;
   checkedAnswers: CheckedAnswer[] = [];
   alreadySent = false;
+  isCorrect = false;
   isLoading = true;
 
   constructor(
@@ -106,8 +107,21 @@ export class ContentChoiceParticipantComponent implements OnInit {
       selectedChoiceIndexes: selectedAnswers,
       creationTimestamp: null,
       format: ContentType.CHOICE
-    } as AnswerChoice).subscribe();
-    this.alreadySent = true;
+    } as AnswerChoice).subscribe(() => {
+      if (!(this.content.format === ContentType.SCALE)) {
+        const correctOptionIndexes = [];
+        for (const i in this.content.options) {
+          if (this.content.options[i].points > 0) {
+            correctOptionIndexes.push(Number(i));
+          }
+        }
+        if (correctOptionIndexes.length === selectedAnswers.length &&
+            correctOptionIndexes.every((value, index) => value === selectedAnswers[index])) {
+          this.isCorrect = true;
+        }
+      }
+      this.alreadySent = true;
+    });
   }
 
   abstain($event) {
