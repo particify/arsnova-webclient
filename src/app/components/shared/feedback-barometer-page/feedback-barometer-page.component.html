@@ -3,7 +3,7 @@
     <div fxLayout="row" fxLayoutGap="30px" *ngFor="let state of feedback">
       <mat-icon matTooltip="{{ state.message }}"
               (click)="!isOwner && submitFeedback(state.state)">{{ state.name }}</mat-icon>
-      <mat-progress-bar [value]="state.count" color="accent"></mat-progress-bar>
+      <mat-progress-bar class="feedback-progress" [value]="state.count"></mat-progress-bar>
     </div>
     <div *ngIf="isClosed" fxLayout="row" fxLayoutGap="30px" fxLayoutAlign="center">
       <h3>{{ 'feedback.is-stopped' | translate }}</h3>

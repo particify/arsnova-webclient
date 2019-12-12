@@ -25,7 +25,8 @@ export const purple = {
   '--grey': 'grey',
   '--grey-light': 'lightgrey',
   '--black': 'black',
-  '--moderator': '#e0f2f1'
+  '--moderator': '#e0f2f1',
+  '--feedback-buffer' : '#bdbdbd'
 
 };
 
