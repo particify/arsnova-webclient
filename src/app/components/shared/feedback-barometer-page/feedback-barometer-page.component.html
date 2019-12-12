@@ -1,17 +1,18 @@
 <div fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="center">
   <mat-card>
-    <div fxLayout="row" fxLayoutGap="30px" *ngFor="let state of feedback">
-      <mat-icon matTooltip="{{ state.message }}"
-              (click)="!isOwner && submitFeedback(state.state)">{{ state.name }}</mat-icon>
-      <mat-progress-bar class="feedback-progress" [value]="state.count"></mat-progress-bar>
+    <div class="feedback-container" [ngClass]="{'faded' : isClosed}">
+      <div fxLayout="row" fxLayoutGap="30px" *ngFor="let state of feedback">
+        <mat-icon matTooltip="{{ state.message }}"
+                  (click)="!isOwner && submitFeedback(state.state)">{{ state.name }}</mat-icon>
+        <mat-progress-bar class="feedback-progress" [value]="state.count"></mat-progress-bar>
     </div>
-    <div *ngIf="isClosed" fxLayout="row" fxLayoutGap="30px" fxLayoutAlign="center">
+    </div>
+    <div class="text invisible" [ngClass]="{'visible' : isClosed}">
       <h3>{{ 'feedback.is-stopped' | translate }}</h3>
     </div>
     <div fxLayoutAlign="center" *ngIf="isOwner">
       <button mat-raised-button class="toggle-button" fxLayoutAlign="center" (click)="toggle()">
-          <p *ngIf="isClosed">{{ 'feedback.start' | translate }}</p>
-          <p *ngIf="!isClosed">{{ 'feedback.stop' | translate }}</p>
+          <p [translate]="isClosed ? 'feedback.start' : 'feedback.stop'"></p>
       </button>
     </div>
   </mat-card>

@@ -18,5 +18,36 @@ mat-icon {
 
 .toggle-button {
   background-color: var(--primary);
+}
+
+p {
+  margin: 0;
   color: var(--on-primary);
+}
+
+.feedback-container {
+  position: relative;
+}
+
+.faded {
+  opacity: 0.3;
+}
+
+.text {
+  width: 300px;
+  margin: -32px 0 0 -150px;
+  text-align: center;
+}
+
+.invisible {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: scale(0);
+  transition: 0.2s;
+}
+
+.visible {
+  transition: 0.2s;
+  transform: scale(1);
 }
