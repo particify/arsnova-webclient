@@ -26,7 +26,8 @@ export const arsnova = {
   '--grey': '#BDBDBD',
   '--grey-light': '#EEEEEE',
   '--black': 'black',
-  '--moderator': '#fff3e0'
+  '--moderator': '#fff3e0',
+  '--feedback-buffer' : '#ffccbc'
 
 };
 

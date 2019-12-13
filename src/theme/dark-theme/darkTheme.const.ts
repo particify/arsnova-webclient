@@ -26,7 +26,9 @@ export const dark = {
   '--grey': '#BDBDBD',
   '--grey-light': '#9E9E9E',
   '--black': '#212121',
-  '--moderator': '#37474f'
+  '--moderator': '#37474f',
+  '--feedback-buffer' : '#d0fff1'
+
 };
 
 export const dark_meta = {
