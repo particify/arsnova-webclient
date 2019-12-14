@@ -263,7 +263,7 @@ export class ContentChoiceCreatorComponent implements OnInit {
       this.content.multiple,
       ContentType.CHOICE
     )).subscribe(content => {
-      if (this.contentCol !== 'Default') {
+      if (this.contentCol !== '') {
         this.roomService.addContentToGroup(this.roomId, this.contentCol, content.id).subscribe();
       }
       RoomCreatorPageComponent.saveGroupInSessionStorage(this.contentCol);

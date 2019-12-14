@@ -59,15 +59,19 @@ export class RoomCreatorPageComponent extends RoomPageComponent implements OnIni
   }
 
   static saveGroupInSessionStorage(name: string): boolean {
-    const groups: string [] = JSON.parse(sessionStorage.getItem('contentGroups'));
-    for (let i = 0; i < groups.length; i++) {
-      if (name === groups[i]) {
-        return false;
+    if (name !== '') {
+      sessionStorage.setItem('contentGroup',
+        JSON.stringify(new ContentGroup('', '', name, [], true)));
+      const groups: string [] = JSON.parse(sessionStorage.getItem('contentGroups'));
+      for (let i = 0; i < groups.length; i++) {
+        if (name === groups[i]) {
+          return false;
+        }
       }
+      groups.push(name);
+      sessionStorage.setItem('contentGroups', JSON.stringify(groups));
+      return true;
     }
-    groups.push(name);
-    sessionStorage.setItem('contentGroups', JSON.stringify(groups));
-    return true;
   }
 
   ngAfterContentInit(): void {

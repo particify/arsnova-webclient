@@ -63,7 +63,7 @@ export class ContentTextCreatorComponent implements OnInit {
       1,
       [],
     )).subscribe(content => {
-      if (this.contentCol !== 'Default') {
+      if (this.contentCol !== '') {
         this.roomService.addContentToGroup(this.roomId, this.contentCol, content.id).subscribe();
       }
       RoomCreatorPageComponent.saveGroupInSessionStorage(this.contentCol);

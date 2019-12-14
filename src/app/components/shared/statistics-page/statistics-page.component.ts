@@ -17,7 +17,7 @@ export class StatisticsPageComponent implements OnInit {
   room: Room;
   contentGroups: ContentGroup[] = [];
   isLoading = true;
-  currentCG: string;
+  currentCG: ContentGroup;
 
   @ViewChild(MatTabGroup) tabGroup: MatTabGroup;
 
@@ -27,7 +27,7 @@ export class StatisticsPageComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.currentCG = sessionStorage.getItem('collection');
+    this.currentCG = JSON.parse(sessionStorage.getItem('contentGroup'));
     this.getRoom(localStorage.getItem('roomId'));
     this.tabGroup.selectedIndex = 1;
   }
@@ -37,7 +37,7 @@ export class StatisticsPageComponent implements OnInit {
       for (let i = 0; i < roomStats.groupStats.length; i++) {
         this.roomService.getGroupByRoomIdAndName(id, roomStats.groupStats[i].groupName).subscribe(group => {
           this.contentGroups.push(group);
-          if (this.currentCG === group.name) {
+          if (this.currentCG.name === group.name) {
             this.tabGroup.selectedIndex = i;
           }
         });

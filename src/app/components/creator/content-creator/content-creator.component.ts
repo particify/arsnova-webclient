@@ -4,6 +4,7 @@ import { FormControl } from '@angular/forms';
 import { Room } from '../../../models/room';
 import { TranslateService } from '@ngx-translate/core';
 import { EventService } from '../../../services/util/event.service';
+import { ContentGroup } from '../../../models/content-group';
 
 @Component({
   selector: 'app-content-creator',
@@ -16,7 +17,7 @@ export class ContentCreatorComponent implements OnInit {
 
   room: Room;
 
-  lastCollection: string;
+  lastCollection: ContentGroup;
 
   content: ContentText = new ContentText(
     '1',
@@ -30,15 +31,16 @@ export class ContentCreatorComponent implements OnInit {
 
   myControl = new FormControl();
 
-  editDialogMode = false;
-
   constructor(private translateService: TranslateService,
               public eventService: EventService) {
   }
 
   ngOnInit() {
     this.translateService.use(localStorage.getItem('currentLang'));
-    this.lastCollection = sessionStorage.getItem('collection');
+    const group: ContentGroup = JSON.parse(sessionStorage.getItem('contentGroup'));
+    this.translateService.get('content.contents-without-collection').subscribe(emptyGroupName => {
+      this.lastCollection = group.name !== emptyGroupName ? group : null;
+    });
   }
 
   resetInputs() {
