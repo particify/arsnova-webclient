@@ -82,7 +82,7 @@ address {
 }
 
 .overflow_hide {
-  height: 0px;
+  height: 0;
   overflow: hidden;
 }
 
@@ -90,7 +90,7 @@ address {
   width:50%;
   height:50%;
   position: fixed;
-  left:0px;
+  left:0;
   top:25%;
   z-index: 1000;
   background-color: var(--surface);
@@ -138,6 +138,31 @@ address {
 
 .mat-tab-header-pagination-disabled .mat-tab-header-pagination-chevron {
   border-color: var(--feedback-buffer);
+  opacity: 0.5;
+}
+
+.mat-tab-label {
+  color: var(--on-surface);
+}
+
+.mat-tab-label-active {
+  color: var(--on-surface);
+}
+
+.mat-ink-bar {
+  background-color: var(--primary) !important;
+}
+
+.mat-form-field-label {
+  color: var(--on-surface)!important;
+}
+
+.mat-form-field-underline {
+  background-color: var(--on-surface)!important;
+}
+
+.mat-form-field-ripple {
+  background-color: var(--on-surface)!important;
 }
 
 mat-tab-group {
