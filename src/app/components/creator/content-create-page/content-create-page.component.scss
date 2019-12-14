@@ -1,12 +1,3 @@
-mat-tab-group {
-  width: 100%;
-  max-width: 800px;
-}
-
-.tab-container {
-  padding: 5px;
-}
-
 ::ng-deep .mat-tab-label {
   color: var(--on-surface);
 }
@@ -17,4 +8,24 @@ mat-tab-group {
 
 ::ng-deep .mat-ink-bar {
   background-color: var(--primary) !important;
+}
+
+::ng-deep .mat-form-field-label {
+  color: var(--on-surface)!important;
+}
+
+::ng-deep .mat-form-field-underline {
+  background-color: var(--on-surface)!important;
+}
+
+::ng-deep .mat-form-field-ripple {
+  background-color: var(--on-surface)!important;
+}
+
+mat-form-field {
+  color: var(--on-surface);
+}
+
+form {
+  width: 95%;
 }

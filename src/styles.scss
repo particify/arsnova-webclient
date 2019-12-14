@@ -131,3 +131,20 @@ address {
 .feedback-progress .mat-progress-bar-buffer {
   background-color: var(--feedback-buffer);
 }
+
+.mat-tab-header-pagination-chevron {
+  border-color: var(--primary);
+}
+
+.mat-tab-header-pagination-disabled .mat-tab-header-pagination-chevron {
+  border-color: var(--feedback-buffer);
+}
+
+mat-tab-group {
+  width: 90vw;
+  max-width: 800px;
+}
+
+.mat-tab-labels {
+  justify-content: center;
+}
