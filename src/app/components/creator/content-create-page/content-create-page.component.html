@@ -23,7 +23,7 @@
         </mat-autocomplete>
      </mat-form-field>
     </form>
-    <mat-tab-group>
+    <mat-tab-group [dynamicHeight]=true>
       <mat-tab label="Single / Multiple Choice">
           <app-content-choice-creator (resetP)="resetInputs()"
                                       [contentSub] = "subject.value" [contentBod]="body.value" [contentCol]="group.value">
