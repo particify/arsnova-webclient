@@ -139,7 +139,11 @@ export class RoomCreatorPageComponent extends RoomPageComponent implements OnIni
             this.emptyDefaultGroups = false;
           }
         }
-      });
+    });
+  }
+
+  afterGroupsLoadHook() {
+    sessionStorage.setItem('contentGroups', JSON.stringify(this.groupNames));
   }
 
   updateGeneralSettings() {

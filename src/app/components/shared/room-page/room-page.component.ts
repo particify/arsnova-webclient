@@ -22,6 +22,7 @@ export class RoomPageComponent implements OnInit, OnDestroy {
   room: Room = null;
   protected roomStats: RoomStats;
   protected contentGroups: ContentGroup[] = [];
+  protected groupNames: string[] = [];
   isLoading = true;
   commentCounter: number;
   protected moderationEnabled = false;
@@ -57,19 +58,14 @@ export class RoomPageComponent implements OnInit, OnDestroy {
 
   }
 
-  initializeRoom(id: string): void {
-    this.roomService.getRoomByShortId(id).subscribe(room => {
+  protected afterGroupsLoadHook() {
+
+  }
+
+  initializeRoom(shortId: string): void {
+    this.roomService.getRoomByShortId(shortId).subscribe(room => {
       this.room = room;
-      this.roomService.getStats(room.id).subscribe(roomStats => {
-        this.roomStats = roomStats;
-        if (roomStats.groupStats) {
-          for (const groupStats of roomStats.groupStats) {
-            this.roomService.getGroupByRoomIdAndName(room.id, groupStats.groupName).subscribe(group => {
-              this.contentGroups.push(group);
-            });
-          }
-        }
-      });
+      this.initializeStats();
       if (this.room.extensions && this.room.extensions['comments']) {
         if (this.room.extensions['comments'].enableModeration !== null) {
           this.moderationEnabled = this.room.extensions['comments'].enableModeration;
@@ -95,6 +91,29 @@ export class RoomPageComponent implements OnInit, OnDestroy {
       this.afterRoomLoadHook();
     });
   }
+
+  initializeStats() {
+    this.roomService.getStats(this.room.id).subscribe(roomStats => {
+      this.roomStats = roomStats;
+      console.log(this.roomStats.groupStats.length);
+      if (this.roomStats.groupStats) {
+        this.initializeGroups();
+      }
+    });
+  }
+
+  initializeGroups() {
+    for (let i = 0; i < this.roomStats.groupStats.length; i++) {
+      this.roomService.getGroupByRoomIdAndName(this.room.id, this.roomStats.groupStats[i].groupName).subscribe(group => {
+        this.contentGroups.push(group);
+        this.groupNames.push(group.name);
+        if (this.groupNames.length === this.roomStats.groupStats.length) {
+          this.afterGroupsLoadHook();
+        }
+      });
+    }
+  }
+
 
   delete(room: Room): void {
     this.roomService.deleteRoom(room.id).subscribe();
