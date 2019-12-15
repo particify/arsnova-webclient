@@ -211,6 +211,7 @@ export class ContentChoiceCreatorComponent implements OnInit {
     $event.preventDefault();
     this.content.subject = '';
     this.content.body = '';
+    this.newAnswerOptionLabel = '';
     this.content.options = [];
     this.content.correctOptionIndexes = [];
     this.fillCorrectAnswers();
