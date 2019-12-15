@@ -118,11 +118,17 @@ export class ContentChoiceCreatorComponent implements OnInit {
         return;
       }
     }
-    const points = (this.newAnswerOptionChecked) ? 10 : -10;
-    this.content.options.push(new AnswerOption(this.newAnswerOptionLabel, points));
-    this.newAnswerOptionChecked = false;
-    this.newAnswerOptionLabel = '';
-    this.fillCorrectAnswers();
+    if (this.content.options.length < 8) {
+      const points = (this.newAnswerOptionChecked) ? 10 : -10;
+      this.content.options.push(new AnswerOption(this.newAnswerOptionLabel, points));
+      this.newAnswerOptionChecked = false;
+      this.newAnswerOptionLabel = '';
+      this.fillCorrectAnswers();
+    } else {
+      this.translationService.get('content.max-answers').subscribe(msg => {
+        this.notificationService.show(msg);
+      });
+    }
   }
 
   openAnswerModificationDialog($event, label: string, points: number, correct: boolean) {

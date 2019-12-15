@@ -132,6 +132,7 @@
     "no-empty2": "No empty filed allowed.",
     "only-one": "In single choice mode is only 1 true answer allowed.",
     "only-one-true": "In single mode is only 1 true answer allowed.",
+    "max-answers": "There's a maximum of eight answers.",
     "points": "Points",
     "reset": "Reset",
     "reset-all": "Reset all inputs.",

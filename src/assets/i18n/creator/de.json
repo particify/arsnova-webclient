@@ -131,6 +131,7 @@
     "no-empty2": "Keine leeren Felder erlaubt.",
     "only-one": "Im Single-Choice-Modus ist nur eine Antwort erlaubt.",
     "only-one-true": "Im Single-Modus ist nur eine richtige Antwort erlaubt.",
+    "max-answers": "Es sind maximal acht Antworten erlaubt.",
     "points": "Punkte",
     "reset": "Zurücksetzen",
     "reset-all": "Alle Eingaben wurden zurückgesetzt.",
