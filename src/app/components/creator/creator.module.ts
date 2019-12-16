@@ -17,7 +17,6 @@ import { SharedModule } from '../shared/shared.module';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { HttpClient } from '@angular/common/http';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
-import { ContentCreatorComponent } from './content-creator/content-creator.component';
 import { ContentListComponent } from './content-list/content-list.component';
 import { ContentEditComponent } from './_dialogs/content-edit/content-edit.component';
 import { ContentPresentationComponent } from './content-presentation/content-presentation.component';
@@ -60,7 +59,6 @@ import { ContentGroupCreationComponent } from './_dialogs/content-group-creation
     RoomCreatorPageComponent,
     RoomDeleteComponent,
     RoomEditComponent,
-    ContentCreatorComponent,
     ContentListComponent,
     ContentEditComponent,
     ContentPresentationComponent,
@@ -76,7 +74,6 @@ import { ContentGroupCreationComponent } from './_dialogs/content-group-creation
     CommentAnswerFormComponent,
     ContentGroupCreationComponent
   ],
-  exports: [],
   entryComponents: [
     RoomDeleteComponent,
     RoomEditComponent,

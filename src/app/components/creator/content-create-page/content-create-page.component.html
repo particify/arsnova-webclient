@@ -1,26 +1,49 @@
-<div fxLayout="column" fxLayoutAlign="start" fxLayoutGap="5%" fxFill>
-  <div fxLayout="row" fxLayoutAlign="center">
-    <mat-tab-group>
+<div fxLayout="row" fxLayoutAlign="center">
+  <div fxLayout="column" fxLayoutAlign="center center">
+    <form>
+      <mat-form-field class="input-block">
+        <input (focus)="eventService.makeFocusOnInputTrue()" (blur)="eventService.makeFocusOnInputFalse()"
+           matInput #subject [(ngModel)]="content.subject" placeholder="{{'content.subject' | translate}}" name="subject"
+           maxlength="40">
+      </mat-form-field>
+      <mat-form-field class="input-block">
+        <textarea (focus)="eventService.makeFocusOnInputTrue()" (blur)="eventService.makeFocusOnInputFalse()"
+              matInput #body [(ngModel)]="content.body" placeholder="{{'content.body' | translate}}" name="body"
+              matTextareaAutosize matAutosizeMinRows="3" matAutosizeMaxRows="8" maxlength="250"></textarea>
+      </mat-form-field>
+      <mat-form-field>
+        <input (focus)="eventService.makeFocusOnInputTrue()" (blur)="eventService.makeFocusOnInputFalse()"
+           matInput #group [formControl]="myControl" [matAutocomplete]="auto"
+           placeholder="{{'content.collection' | translate}}"
+           [(ngModel)]="lastCollection ? lastCollection.name : contentGroups[0]"/>
+        <mat-autocomplete #auto="matAutocomplete">
+          <mat-option *ngFor="let collection of contentGroups" [value]="collection">
+            {{collection}}
+          </mat-option>
+        </mat-autocomplete>
+     </mat-form-field>
+    </form>
+    <mat-tab-group [dynamicHeight]=true>
       <mat-tab label="Single / Multiple Choice">
-        <div class="tab-container">
-          <app-content-creator [format]="'choice'" [contentGroups]="contentGroups"></app-content-creator>
-        </div>
+          <app-content-choice-creator (resetP)="resetInputs()"
+                                      [contentSub] = "subject.value" [contentBod]="body.value" [contentCol]="group.value">
+          </app-content-choice-creator>
       </mat-tab>
       <mat-tab label="Likert">
-        <div class="tab-container">
-          <app-content-creator [format]="'likert'" [contentGroups]="contentGroups"></app-content-creator>
-        </div>
+          <app-content-likert-creator (reset)="resetInputs()"
+                                      [contentSub] = "subject.value" [contentBod]="body.value" [contentCol]="group.value">
+          </app-content-likert-creator>
       </mat-tab>
       <mat-tab label="{{ 'content.yes' | translate }} / {{ 'content.no' | translate }}">
-        <div class="tab-container">
-          <app-content-creator [format]="'yesno'" [contentGroups]="contentGroups"></app-content-creator>
-        </div>
+          <app-content-yes-no-creator (reset)="resetInputs()"
+                                      [contentSub] = "subject.value" [contentBod]="body.value" [contentCol]="group.value">
+          </app-content-yes-no-creator>
       </mat-tab>
       <mat-tab label="Text">
-      <div class="tab-container">
-        <app-content-creator [format]="'text'" [contentGroups]="contentGroups"></app-content-creator>
-      </div>
-    </mat-tab>
+        <app-content-text-creator (reset)="resetInputs()"
+                                  [contentSub] = "subject.value" [contentBod]="body.value" [contentCol]="group.value">
+        </app-content-text-creator>
+      </mat-tab>
     </mat-tab-group>
   </div>
 </div>

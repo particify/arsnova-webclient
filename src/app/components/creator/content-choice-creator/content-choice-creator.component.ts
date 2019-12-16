@@ -118,11 +118,17 @@ export class ContentChoiceCreatorComponent implements OnInit {
         return;
       }
     }
-    const points = (this.newAnswerOptionChecked) ? 10 : -10;
-    this.content.options.push(new AnswerOption(this.newAnswerOptionLabel, points));
-    this.newAnswerOptionChecked = false;
-    this.newAnswerOptionLabel = '';
-    this.fillCorrectAnswers();
+    if (this.content.options.length < 8) {
+      const points = (this.newAnswerOptionChecked) ? 10 : -10;
+      this.content.options.push(new AnswerOption(this.newAnswerOptionLabel, points));
+      this.newAnswerOptionChecked = false;
+      this.newAnswerOptionLabel = '';
+      this.fillCorrectAnswers();
+    } else {
+      this.translationService.get('content.max-answers').subscribe(msg => {
+        this.notificationService.show(msg);
+      });
+    }
   }
 
   openAnswerModificationDialog($event, label: string, points: number, correct: boolean) {
@@ -205,6 +211,7 @@ export class ContentChoiceCreatorComponent implements OnInit {
     $event.preventDefault();
     this.content.subject = '';
     this.content.body = '';
+    this.newAnswerOptionLabel = '';
     this.content.options = [];
     this.content.correctOptionIndexes = [];
     this.fillCorrectAnswers();
@@ -263,7 +270,7 @@ export class ContentChoiceCreatorComponent implements OnInit {
       this.content.multiple,
       ContentType.CHOICE
     )).subscribe(content => {
-      if (this.contentCol !== 'Default') {
+      if (this.contentCol !== '') {
         this.roomService.addContentToGroup(this.roomId, this.contentCol, content.id).subscribe();
       }
       RoomCreatorPageComponent.saveGroupInSessionStorage(this.contentCol);

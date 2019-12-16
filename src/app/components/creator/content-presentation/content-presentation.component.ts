@@ -1,6 +1,6 @@
-import { ContentChoice } from './../../../models/content-choice';
-import { ContentService } from './../../../services/http/content.service';
-import { ContentGroup } from './../../../models/content-group';
+import { ContentChoice } from '../../../models/content-choice';
+import { ContentService } from '../../../services/http/content.service';
+import { ContentGroup } from '../../../models/content-group';
 import { Component, OnInit } from '@angular/core';
 
 @Component({

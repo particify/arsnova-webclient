@@ -35,7 +35,7 @@ mat-row {
 }
 
 mat-form-field {
-  width: 85%;
+  width: 90%;
 }
 
 .create {
@@ -49,6 +49,7 @@ mat-form-field {
 }
 
 mat-radio-button {
+  margin-top: 20px;
   color: var(--on-surface);
 }
 
@@ -74,6 +75,20 @@ input {
 
 .delete {
   color: var(--red);
+}
+
+mat-cell:first-of-type, mat-header-cell:first-of-type {
+  padding-left: 4%;
+}
+
+mat-cell:last-of-type, mat-header-cell:last-of-type {
+  justify-content: center;
+  max-width: 80px;
+  padding-right: calc(4% - 10px);
+}
+
+.invisible {
+  height: 0;
 }
 
 ::ng-deep .mat-radio-outer-circle {

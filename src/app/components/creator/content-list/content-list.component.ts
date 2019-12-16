@@ -63,7 +63,6 @@ export class ContentListComponent implements OnInit {
       this.room = room;
     });
     this.route.params.subscribe(params => {
-      sessionStorage.setItem('collection', params['contentGroup']);
       this.collectionName = params['contentGroup'];
       this.roomService.getGroupByRoomIdAndName(this.roomId, this.collectionName).subscribe(group => {
         this.contentGroup = group;
@@ -219,6 +218,7 @@ export class ContentListComponent implements OnInit {
     for (let i = 0; i < groups.length; i++) {
       if (groups[i] === oldName) {
         groups[i] = newName;
+        sessionStorage.setItem('contentGroup', JSON.stringify(new ContentGroup('', '', groups[i], [], true)));
         break;
       }
     }

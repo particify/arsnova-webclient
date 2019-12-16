@@ -1,20 +1,7 @@
-mat-tab-group {
-  width: 100%;
-  max-width: 800px;
-}
-
-.tab-container {
-  padding: 5px;
-}
-
-::ng-deep .mat-tab-label {
+mat-form-field {
   color: var(--on-surface);
 }
 
-::ng-deep .mat-tab-label-active {
-  color: var(--on-surface);
-}
-
-::ng-deep .mat-ink-bar {
-  background-color: var(--primary) !important;
+form {
+  width: 95%;
 }
