@@ -49,39 +49,26 @@
       </span>
     </button>
 
-    <mat-menu class="color-menu" #themeMenu="matMenu" [overlapTrigger]="false">
-      <button
-        *ngFor="let theme of themes"
-        (click)="changeTheme(theme);"
-        matRipple [matRippleColor]="'rgba(0,0,0,0.1)'"
-        title="{{theme.toString(getLanguage())}}"
-        aria-label="test">
-        <div class="btnContent">
-          <div class="btnColorIcon" [ngStyle]="{
-                  'background-color':theme.getPreviewColor()}">
-            <div class="checked" [ngClass]="{
-                        'checked_true':theme.key===themeClass,
-                        'checked_false':theme.key!==themeClass}">
-              <mat-icon [ngStyle]="{'color':theme.getOnPreviewColor()}">
-                checked
-              </mat-icon>
-            </div>
-          </div>
-          <div class="btnAppend">
-            <div class="title">
-              <p class="title_bold">{{theme.getName(getLanguage())}}</p>
-            </div>
-            <div class="title">
-              <p>{{theme.getDescription(getLanguage())}}</p>
-            </div>
+    <mat-menu #themeMenu="matMenu" [overlapTrigger]="false">
+      <button mat-menu-item *ngFor="let theme of themes" (click)="changeTheme(theme)"
+              title="{{theme.toString(getLanguage())}}">
+        <div fxLayout="row">
+          <mat-icon class="color" [ngStyle]="{'color':theme.getPreviewColor()}">lens</mat-icon>
+          <mat-icon class="checked" *ngIf="theme.key === themeClass" [ngStyle]="{'color':theme.getOnPreviewColor()}">
+            checked</mat-icon>
+          <div fxLayout="column" fxLayoutAlign="center">
+            <span class="item-title color-title">{{theme.getName(getLanguage())}}</span>
+            <span class="color-description" *ngIf="deviceType === 'desktop'">{{theme.getDescription(getLanguage())}}</span>
           </div>
         </div>
       </button>
     </mat-menu>
 
     <mat-menu #langMenu="matMenu" [overlapTrigger]="false">
-      <button class="focus_item" mat-menu-item (click)="useLanguage('de')">{{ 'footer.german' | translate }}</button>
-      <button class="focus_item" mat-menu-item (click)="useLanguage('en')">{{ 'footer.english' | translate }}</button>
+      <button class="item-title lang-title" mat-menu-item (click)="useLanguage('de')">
+        {{ 'footer.german' | translate }}</button>
+      <button class="item-title lang-title" mat-menu-item (click)="useLanguage('en')">
+        {{ 'footer.english' | translate }}</button>
     </mat-menu>
 
   </mat-toolbar>

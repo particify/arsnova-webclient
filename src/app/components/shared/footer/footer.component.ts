@@ -15,7 +15,6 @@ import { HelpPageComponent } from '../_dialogs/help-page/help-page.component';
 import { DataProtectionComponent } from '../../home/_dialogs/data-protection/data-protection.component';
 import { Theme } from '../../../../theme/Theme';
 import { OverlayComponent } from '../../home/_dialogs/overlay/overlay.component';
-import { AppComponent } from '../../../app.component';
 
 @Component({
   selector: 'app-footer',
@@ -23,8 +22,6 @@ import { AppComponent } from '../../../app.component';
   styleUrls: ['./footer.component.scss']
 })
 export class FooterComponent implements OnInit {
-
-  public demoId = '22424050';
 
   public room: Room;
   public user: User;
