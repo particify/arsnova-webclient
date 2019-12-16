@@ -2,6 +2,7 @@
 @import 'theme/dark-theme/dark-theme';
 @import 'theme/blue-theme/blue-theme';
 @import 'theme/purple-theme/purple-theme';
+@import 'theme/light-theme/theme';
 // Plus imports for other components in your app.
 
 // Include the common styles for Angular Material. We include this here so that you only
@@ -13,13 +14,6 @@
 // Alternatively, you can import and @include the theme mixins for each component
 // that you are using.
 @include angular-material-theme($arsnova-theme);
-
-body{
-  font-family: Roboto, "Helvetica Neue", sans-serif;
-  width:100%;
-  height:100%;
-  overflow:hidden;
-}
 
 .dark {
   @include angular-material-theme($dark-theme);
@@ -33,7 +27,12 @@ body{
   @include angular-material-theme($purple-theme);
 }
 
-@import 'theme/light-theme/theme';
+body {
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  width:100%;
+  height:100%;
+  overflow:hidden;
+}
 
 .visually-hidden {
   position: absolute;
@@ -86,7 +85,7 @@ address {
   overflow: hidden;
 }
 
-.testBox{
+.testBox {
   width:50%;
   height:50%;
   position: fixed;
@@ -100,7 +99,7 @@ address {
   background: var(--background);
 }
 
-.filledDialog{
+.filledDialog {
   width:calc( 100% - 50px);
   min-width:calc( 100% - 50px);
   max-width:calc( 100% - 50px);
@@ -109,7 +108,7 @@ address {
   padding:0;
 }
 
-.screenDialog{
+.screenDialog {
   width:100%;
   min-width:100%;
   max-width:100%;
@@ -118,11 +117,18 @@ address {
   padding:0;
 }
 
-.imgWrp img{
+.imgWrp img {
   width:calc( 100% - 35px );
   height:calc( 100% - 35px );
   image-rendering: crisp-edges;
 }
+
+
+// ---------------------------------
+// Adjustment of material components
+//----------------------------------
+
+// Mat Progress Bars
 
 .feedback-progress .mat-progress-bar-fill::after {
   background-color: var(--secondary);
@@ -130,6 +136,17 @@ address {
 
 .feedback-progress .mat-progress-bar-buffer {
   background-color: var(--feedback-buffer);
+}
+
+// Mat Tabs
+
+mat-tab-group {
+  width: 90vw;
+  max-width: 800px;
+}
+
+.mat-tab-labels {
+  justify-content: center;
 }
 
 .mat-tab-header-pagination-chevron {
@@ -153,6 +170,8 @@ address {
   background-color: var(--primary) !important;
 }
 
+// Mat Form Fields
+
 .mat-form-field-label {
   color: var(--on-surface)!important;
 }
@@ -165,11 +184,30 @@ address {
   background-color: var(--on-surface)!important;
 }
 
-mat-tab-group {
-  width: 90vw;
-  max-width: 800px;
+// Mat Radio Buttons
+
+.mat-radio-outer-circle {
+  .mat-radio-checked & {
+    border-color: var(--secondary)!important;
+  }
+  border-color: var(--on-surface);
 }
 
-.mat-tab-labels {
-  justify-content: center;
+.mat-radio-inner-circle {
+  background-color: var(--secondary);
+}
+
+.mat-radio-ripple .mat-ripple-element {
+  background-color: var(--secondary);
+}
+
+// Mat Checkboxes
+
+.mat-checkbox-checked.mat-accent .mat-checkbox-background,
+.mat-checkbox-indeterminate.mat-accent .mat-checkbox-background {
+  background-color: var(--secondary);
+}
+
+.mat-checkbox-frame {
+  border-color: var(--on-surface);
 }
