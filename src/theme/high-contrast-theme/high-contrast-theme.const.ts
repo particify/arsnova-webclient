@@ -9,11 +9,13 @@ export const highContrast = {
   '--background': '#141414',
   '--surface': '#1e1e1e',
   '--dialog': '#37474f',
+  '--cancel': '#26343c',
 
   '--on-primary': '#141414',
   '--on-secondary': '#141414',
   '--on-background': '#FFFFFF',
   '--on-surface': '#FFFFFF',
+  '--on-cancel': '#FFFFFF',
 
   '--green': 'lightgreen',
   '--red': 'red',
