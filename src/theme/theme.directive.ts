@@ -1,6 +1,6 @@
 import { Directive, ElementRef, Inject, OnDestroy, OnInit, Renderer2 } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
-import { themes } from './arsnova-theme.const';
+import { themes } from './themes.const';
 import { ThemeService } from './theme.service';
 import { Subscription } from 'rxjs';
 

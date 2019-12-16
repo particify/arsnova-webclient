@@ -8,7 +8,7 @@ Create a new directory with the name of the new theme in src/theme.
 
 1. Create a new scss file with the same structure as `_dark-theme.scss` and style it using material palette.
 
-2. Create a new scss file in your working theme directory named {YourThemeName}.const.ts and copy the structure of `darkTheme.const.ts`.
+2. Create a new scss file in your working theme directory named {YourThemeName}.const.ts and copy the structure of `dark-theme.const.ts`.
 
 ## Add new theme to theme manager
 

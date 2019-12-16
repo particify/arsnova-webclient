@@ -1,14 +1,14 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { themes, themes_meta } from './arsnova-theme.const';
-import { Theme, ThemeTranslationList } from './Theme';
+import { themes, themes_meta } from './themes.const';
+import { Theme } from './Theme';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ThemeService {
   themeName = localStorage.getItem('theme');
-  private activeThem = new BehaviorSubject(this.themeName);
+  private activeTheme = new BehaviorSubject(this.themeName);
   private themes: Theme[] = [];
 
   constructor() {
@@ -27,11 +27,11 @@ export class ThemeService {
   }
 
   public getTheme() {
-    return this.activeThem.asObservable();
+    return this.activeTheme.asObservable();
   }
 
   public activate(name) {
-    this.activeThem.next(name);
+    this.activeTheme.next(name);
     localStorage.setItem('theme', name);
   }
 

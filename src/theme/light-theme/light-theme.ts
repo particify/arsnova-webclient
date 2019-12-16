@@ -1,4 +1,4 @@
-export const arsnova = {
+export const light = {
 
   '--primary' : '#263238',
   '--primary-variant': '#FFFFFF',
@@ -31,7 +31,7 @@ export const arsnova = {
 
 };
 
-export const arsnova_meta = {
+export const light_meta = {
 
   'translation': {
     'name': {

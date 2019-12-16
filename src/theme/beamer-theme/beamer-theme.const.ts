@@ -1,4 +1,4 @@
-export const purple = {
+export const beamer = {
 
   '--primary' : 'Maroon',
   '--primary-variant': 'white',
@@ -30,7 +30,7 @@ export const purple = {
 
 };
 
-export const purple_meta = {
+export const beamer_meta = {
 
   'translation': {
     'name': {

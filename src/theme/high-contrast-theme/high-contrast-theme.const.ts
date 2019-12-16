@@ -1,4 +1,4 @@
-export const highcontrast = {
+export const highContrast = {
 
   '--primary' : '#fb9a1c',
   '--primary-variant': '#1e1e1e',
@@ -29,7 +29,7 @@ export const highcontrast = {
 
 };
 
-export const highcontrast_meta = {
+export const highContrast_meta = {
 
   'translation': {
     'name': {
@@ -46,21 +46,3 @@ export const highcontrast_meta = {
   'previewColor': 'secondary'
 
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
