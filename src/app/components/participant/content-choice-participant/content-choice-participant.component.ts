@@ -3,7 +3,7 @@ import { ContentChoice } from '../../../models/content-choice';
 import { AnswerOption } from '../../../models/answer-option';
 import { ContentAnswerService } from '../../../services/http/content-answer.service';
 import { NotificationService } from '../../../services/util/notification.service';
-import { AnswerChoice } from '../../../models/answer-choice';
+import { ChoiceAnswer } from '../../../models/choice-answer';
 import { ContentType } from '../../../models/content-type.enum';
 import { TranslateService } from '@ngx-translate/core';
 import { LanguageService } from '../../../services/util/language.service';
@@ -143,7 +143,7 @@ export class ContentChoiceParticipantComponent implements OnInit {
       selectedChoiceIndexes: selectedAnswers,
       creationTimestamp: null,
       format: ContentType.CHOICE
-    } as AnswerChoice).subscribe(() => {
+    } as ChoiceAnswer).subscribe(() => {
       if (this.isChoice) {
         this.checkAnswer(selectedAnswers);
       }
@@ -164,7 +164,7 @@ export class ContentChoiceParticipantComponent implements OnInit {
       selectedChoiceIndexes: [],
       creationTimestamp: null,
       format: ContentType.CHOICE
-    } as AnswerChoice).subscribe();
+    } as ChoiceAnswer).subscribe();
     this.resetCheckedAnswers();
     this.hasAbstained = true;
     this.alreadySent = true;

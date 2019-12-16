@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ContentText } from '../../../models/content-text';
 import { ContentAnswerService } from '../../../services/http/content-answer.service';
-import { AnswerText } from '../../../models/answer-text';
+import { TextAnswer } from '../../../models/text-answer';
 import { NotificationService } from '../../../services/util/notification.service';
 import { TranslateService } from '@ngx-translate/core';
 import { LanguageService } from '../../../services/util/language.service';
@@ -17,7 +17,7 @@ import { AuthenticationService } from '../../../services/http/authentication.ser
 export class ContentTextParticipantComponent implements OnInit {
   @Input() content: ContentText;
 
-  givenAnswer: AnswerText;
+  givenAnswer: TextAnswer;
 
   textAnswer = '';
   alreadySent = false;
@@ -65,7 +65,7 @@ export class ContentTextParticipantComponent implements OnInit {
   }
 
   createAnswer(body?: string) {
-    this.givenAnswer = new AnswerText();
+    this.givenAnswer = new TextAnswer();
     if (body) {
       this.givenAnswer.body = body;
     }
@@ -92,7 +92,7 @@ export class ContentTextParticipantComponent implements OnInit {
       read: 'false',
       creationTimestamp: null,
       format: ContentType.TEXT
-    } as AnswerText).subscribe();
+    } as TextAnswer).subscribe();
     this.createAnswer(this.textAnswer);
     this.getAnsweredMessage();
     this.alreadySent = true;
@@ -111,7 +111,7 @@ export class ContentTextParticipantComponent implements OnInit {
       body: null,
       creationTimestamp: null,
       format: ContentType.TEXT
-    } as AnswerText).subscribe();
+    } as TextAnswer).subscribe();
     this.createAnswer();
     this.getAbstainedMessage();
     this.alreadySent = true;
