@@ -5,7 +5,7 @@
 </div>
 
 <div fxLayout="column" fxLayoutAlign="start center">
-  <mat-tab-group>
+  <mat-tab-group [dynamicHeight]=true>
     <mat-tab *ngFor="let content of contents" label="{{content.subject}}">
       <app-content-choice-participant [content]="content"
                                       *ngIf="content.format === ContentType.CHOICE"></app-content-choice-participant>

@@ -1,24 +1,4 @@
 mat-tab-group {
+  width: calc(100vw - 30px);
   max-width: 800px;
-  width: 100%;
-}
-
-::ng-deep .mat-tab-body.mat-tab-body-active {
-  min-height: 400px;
-}
-
-::ng-deep .mat-tab-label {
-  color: var(--on-surface);
-}
-
-::ng-deep .mat-tab-label-active {
-  color: var(--on-surface);
-}
-
-::ng-deep .mat-ink-bar {
-  background-color: var(--primary) !important;
-}
-
-::ng-deep .mat-tab-header-pagination-chevron {
-  border-color: var(--primary);
 }
