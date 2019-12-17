@@ -1,0 +1,7 @@
+@import './../../../node_modules/@angular/material/theming';
+
+$beamer-primary: mat-palette($mat-purple,500);
+$beamer-accent: mat-palette($mat-amber, 200);
+$beamer-warn: mat-palette($mat-red, A100);
+
+$beamer-theme: mat-light-theme($beamer-primary, $beamer-accent, $beamer-warn);

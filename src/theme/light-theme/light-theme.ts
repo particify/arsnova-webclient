@@ -1,4 +1,4 @@
-export const arsnova = {
+export const light = {
 
   '--primary' : '#263238',
   '--primary-variant': '#FFFFFF',
@@ -9,13 +9,13 @@ export const arsnova = {
   '--background': '#EEEEEE',
   '--surface': '#FFFFFF',
   '--dialog': '#FFFFFF',
-  '--cancel': '#263238',
+  '--cancel': '#e0e0e0',
 
   '--on-primary': '#ffffff',
   '--on-secondary': '#FFFFFF',
   '--on-background': '#000000',
   '--on-surface': '#000000',
-  '--on-cancel': '#FFFFFF',
+  '--on-cancel': '#000000',
 
   '--green': 'green',
   '--red': 'red',
@@ -31,7 +31,7 @@ export const arsnova = {
 
 };
 
-export const arsnova_meta = {
+export const light_meta = {
 
   'translation': {
     'name': {

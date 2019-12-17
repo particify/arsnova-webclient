@@ -1,4 +1,4 @@
-export const highcontrast = {
+export const highContrast = {
 
   '--primary' : '#fb9a1c',
   '--primary-variant': '#1e1e1e',
@@ -9,11 +9,13 @@ export const highcontrast = {
   '--background': '#141414',
   '--surface': '#1e1e1e',
   '--dialog': '#37474f',
+  '--cancel': '#26343c',
 
   '--on-primary': '#141414',
   '--on-secondary': '#141414',
   '--on-background': '#FFFFFF',
   '--on-surface': '#FFFFFF',
+  '--on-cancel': '#FFFFFF',
 
   '--green': 'lightgreen',
   '--red': 'red',
@@ -29,7 +31,7 @@ export const highcontrast = {
 
 };
 
-export const highcontrast_meta = {
+export const highContrast_meta = {
 
   'translation': {
     'name': {
@@ -46,21 +48,3 @@ export const highcontrast_meta = {
   'previewColor': 'secondary'
 
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

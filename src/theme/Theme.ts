@@ -1,5 +1,3 @@
-
-
 export class ColorElem {
 
   public on: ColorElem;
@@ -177,10 +175,3 @@ export class Theme {
     return this.name.get(language) + ' - ' + this.description.get(language);
   }
 }
-
-
-
-
-
-
-

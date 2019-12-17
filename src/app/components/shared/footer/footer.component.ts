@@ -15,7 +15,6 @@ import { HelpPageComponent } from '../_dialogs/help-page/help-page.component';
 import { DataProtectionComponent } from '../../home/_dialogs/data-protection/data-protection.component';
 import { Theme } from '../../../../theme/Theme';
 import { OverlayComponent } from '../../home/_dialogs/overlay/overlay.component';
-import { AppComponent } from '../../../app.component';
 
 @Component({
   selector: 'app-footer',
@@ -23,8 +22,6 @@ import { AppComponent } from '../../../app.component';
   styleUrls: ['./footer.component.scss']
 })
 export class FooterComponent implements OnInit {
-
-  public demoId = '22424050';
 
   public room: Room;
   public user: User;
@@ -64,7 +61,6 @@ export class FooterComponent implements OnInit {
       this.open = message;
     });
     this.themes = this.themeService.getThemes();
-    this.updateScale(this.themeService.getThemeByKey(this.themeClass));
     this.cookieAccepted = localStorage.getItem('cookieAccepted') === 'true';
     this.dataProtectionConsent = localStorage.getItem('dataProtectionConsent') === 'true';
 
@@ -154,12 +150,6 @@ export class FooterComponent implements OnInit {
   changeTheme(theme: Theme) {
     this.themeClass = theme.key;
     this.themeService.activate(theme.key);
-    this.updateScale(theme);
-  }
-
-  updateScale(theme: Theme) {
-    AppComponent.rescale.setInitialScale(theme.scale);
-    AppComponent.rescale.setDefaultScale(theme.scale);
   }
 
   getLanguage(): string {
