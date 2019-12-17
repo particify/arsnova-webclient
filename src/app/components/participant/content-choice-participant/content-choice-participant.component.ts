@@ -106,7 +106,7 @@ export class ContentChoiceParticipantComponent implements OnInit {
 
   submitAnswer(): void {
     const selectedAnswers: number[] = [];
-    if (this.content.multiple) {
+    if (this.content.format === ContentType.CHOICE) {
       for (let i = 0; i < this.checkedAnswers.length; i++) {
         if (this.checkedAnswers[i].checked) {
           selectedAnswers.push(i);
@@ -121,7 +121,7 @@ export class ContentChoiceParticipantComponent implements OnInit {
       }
     }
     if (selectedAnswers.length === 0) {
-      if (this.content.multiple) {
+      if (this.content.format === ContentType.CHOICE) {
         this.translateService.get('answer.at-least-one').subscribe(message => {
           this.notificationService.show(message);
         });
