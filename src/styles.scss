@@ -117,7 +117,7 @@ address {
 // Adjustment of material components
 //----------------------------------
 
-// Mat Progress Bars
+// Mat Progress Bar
 
 .feedback-progress .mat-progress-bar-fill::after {
   background-color: var(--secondary);
@@ -127,7 +127,7 @@ address {
   background-color: var(--feedback-buffer);
 }
 
-// Mat Tabs
+// Mat Tab
 
 .mat-tab-labels {
   justify-content: center;
@@ -144,6 +144,7 @@ address {
 
 .mat-tab-label {
   color: var(--on-surface);
+  opacity: 1!important;
 }
 
 .mat-tab-label-active {
@@ -154,7 +155,7 @@ address {
   background-color: var(--primary) !important;
 }
 
-// Mat Form Fields
+// Mat Form Field
 
 .mat-form-field-label {
   color: var(--on-surface)!important;
@@ -168,7 +169,7 @@ address {
   background-color: var(--on-surface)!important;
 }
 
-// Mat Radio Buttons
+// Mat Radio Button
 
 .mat-radio-outer-circle {
   .mat-radio-checked & {
@@ -178,14 +179,18 @@ address {
 }
 
 .mat-radio-inner-circle {
-  background-color: var(--secondary);
+  background-color: var(--secondary)!important;
 }
 
 .mat-radio-ripple .mat-ripple-element {
   background-color: var(--secondary);
 }
 
-// Mat Checkboxes
+.mat-list-item-content > mat-radio-button > .mat-radio-label > .mat-radio-label-content {
+  padding-left: 18px!important;
+}
+
+// Mat Checkbox
 
 .mat-checkbox-checked.mat-accent .mat-checkbox-background,
 .mat-checkbox-indeterminate.mat-accent .mat-checkbox-background {
@@ -194,4 +199,20 @@ address {
 
 .mat-checkbox-frame {
   border-color: var(--on-surface);
+}
+
+.mat-checkbox-label {
+  margin-left: 10px;
+}
+
+.mat-checkbox-layout {
+  margin: 10px 0;
+  white-space: normal !important;
+}
+
+// Mat List
+
+.mat-list-base .mat-list-item {
+  min-height: 48px;
+  height: auto!important;
 }
