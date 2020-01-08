@@ -24,12 +24,12 @@ table {
 }
 
 mat-header-cell {
-  color: black!important;
+  color: black;
   background-color: var(--grey);
 }
 
 mat-cell {
-  color: black!important;
+  color: black;
   background-color: var(--grey);
 }
 
@@ -69,4 +69,6 @@ mat-progress-spinner {
 
 mat-progress-bar {
   height: 8px;
+  width: 90%;
+  max-width: 80vw;
 }
