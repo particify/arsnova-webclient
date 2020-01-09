@@ -5,6 +5,12 @@ import { ContentService } from '../../../services/http/content.service';
 import { ContentChoice } from '../../../models/content-choice';
 import { TranslateService } from '@ngx-translate/core';
 import { LanguageService } from '../../../services/util/language.service';
+import { ThemeService } from '../../../../theme/theme.service';
+import { dark } from '../../../../theme/dark-theme/dark-theme.const';
+import { light } from '../../../../theme/light-theme/light-theme';
+import { beamer } from '../../../../theme/beamer-theme/beamer-theme.const';
+import { highContrast } from '../../../../theme/high-contrast-theme/high-contrast-theme.const';
+import { themes } from '../../../../theme/themes.const';
 
 export class AnswerList {
   label: string;
@@ -37,11 +43,13 @@ export class StatisticComponent implements OnInit {
   maxLength: number;
   isLoading = true;
   showsCorrect = false;
+  theme: any;
 
   constructor(protected route: ActivatedRoute,
               private contentService: ContentService,
               private translateService: TranslateService,
-              protected langService: LanguageService) {
+              protected langService: LanguageService,
+              private themeService: ThemeService) {
               langService.langEmitter.subscribe(lang => translateService.use(lang));
   }
 
@@ -60,6 +68,20 @@ export class StatisticComponent implements OnInit {
       this.getData(content);
       this.isLoading = false;
     });
+    switch (this.themeService.themeName) {
+      case 'dark':
+        this.theme = themes.dark;
+        break;
+      case 'light':
+        this.theme = themes.light;
+        break;
+      case 'beamer':
+        this.theme = themes.beamer;
+        break;
+      case 'highContrast':
+        this.theme = themes.highContrast;
+        break;
+    }
   }
 
   createChart(colors: string[]) {
@@ -124,9 +146,9 @@ export class StatisticComponent implements OnInit {
         this.answerList[i].answer = content.options[i].label;
       }
       if (i % 2 === 0) {
-        this.colors[i] = 'rgba(255,224,130, 1.0)';
+        this.colors[i] = this.theme['--primary']; // 'rgba(255,224,130, 1.0)';
       } else {
-        this.colors[i] = 'rgba(128,203,196, 1.0)';
+        this.colors[i] = this.theme['--secondary']; // 'rgba(128,203,196, 1.0)';
       }
       if (content.options[i].points <= 0) {
         this.ccolors[i] = 'rgba(244,67,54, 0.8)';
