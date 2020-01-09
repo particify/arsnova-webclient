@@ -70,5 +70,5 @@ mat-progress-spinner {
 mat-progress-bar {
   height: 8px;
   width: 90%;
-  max-width: 80vw;
+  max-width: calc(100vw - 110px);
 }
