@@ -1,11 +1,14 @@
 <mat-toolbar></mat-toolbar>
-<div fxLayout="row" fxLayoutAlign="center center" *ngIf="!isLoading">
+<div fxLayout="row" fxLayoutAlign="center center" *ngIf="!isLoading && total">
   <mat-progress-bar mode="determinate" value="{{total}}" [ngClass]="{'statistic-status-good': total >= status.good,
                             'statistic-status-okay': total < status.good && total >= status.okay,
                             'statistic-status-bad': total < status.okay && total != status.empty}"></mat-progress-bar>
   <span class="fill-remaining-space"></span>
   <span>{{total.toFixed()}}%</span>
   <span class="fill-remaining-space"></span>
+</div>
+<div fxLayoutAlign="center">
+  <span *ngIf="!isLoading && !total">{{'statistic.no-answers-yet' | translate}}</span>
 </div>
 <mat-toolbar></mat-toolbar>
 

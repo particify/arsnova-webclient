@@ -273,7 +273,7 @@
     "good": "Gut",
     "improvable": "Luft nach oben",
     "no-answers": "Keine Antworten",
-    "no-questions": "Noch keine Antworten",
+    "no-answers-yet": "Es sind noch keine Antworten vorhanden.",
     "percentage": "Prozent"
   }
 }

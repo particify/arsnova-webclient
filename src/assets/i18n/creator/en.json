@@ -272,7 +272,7 @@
     "good": "Good",
     "improvable": "Improvable",
     "no-answers": "No answers",
-    "no-questions": "There are no answers yet.",
+    "no-answers-yet": "There are no answers yet.",
     "percentage": "Percentage"
   }
 }
