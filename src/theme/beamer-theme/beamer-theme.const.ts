@@ -24,11 +24,12 @@ export const beamer = {
   '--yellow': '#fdd835',
   '--yellow-light': '#fff9c4',
   '--blue': '#3f51b5',
-  '--grey': 'grey',
-  '--grey-light': 'lightgrey',
+  '--grey': '#BDBDBD',
   '--black': 'black',
   '--moderator': '#e0f2f1',
-  '--feedback-buffer' : '#bdbdbd'
+  '--feedback-buffer' : '#bdbdbd',
+  '--table-a' : '#e0e0e0',
+  '--table-b' : '#eeeeee'
 
 };
 

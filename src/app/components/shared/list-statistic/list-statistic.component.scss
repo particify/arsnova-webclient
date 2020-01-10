@@ -11,16 +11,19 @@ table {
   display: flex;
   justify-content: center;
   padding-right: 4%;
+  max-width: 120px;
 }
 
 .mat-column-counts {
   display: flex;
   justify-content: center;
+  max-width: 120px;
 }
 
 .mat-column-abstentions {
   display: flex;
   justify-content: center;
+  max-width: 120px;
 }
 
 mat-header-cell {
@@ -29,8 +32,7 @@ mat-header-cell {
 }
 
 mat-cell {
-  color: black;
-  background-color: var(--grey);
+  color: var(--on-surface);
 }
 
 mat-toolbar {
@@ -38,29 +40,18 @@ mat-toolbar {
   background-color: var(--surface);
 }
 
-.positive {
-  background-color: var(--green);
+.cell-a {
+  background-color: var(--table-a);
+  cursor: pointer;
 }
 
-.negative {
-  background-color: var(--red);
-}
-
-.okay {
-  background-color: var(--yellow);
-}
-
-.empty {
-  background: var(--grey);
-  pointer-events: none;
+.cell-b {
+  background-color: var(--table-b);
+  cursor: pointer;
 }
 
 .invisible {
-  color: var(--grey)!important;
-}
-
-#okayP {
-  color: var(--yellow);
+  pointer-events: none;
 }
 
 mat-progress-spinner {
@@ -71,4 +62,8 @@ mat-progress-bar {
   height: 8px;
   width: 90%;
   max-width: calc(100vw - 110px);
+}
+
+mat-row {
+  border-style: none;
 }

@@ -25,10 +25,11 @@ export const light = {
   '--yellow-light': '#fff9c4',
   '--blue': '#3f51b5',
   '--grey': '#BDBDBD',
-  '--grey-light': '#EEEEEE',
   '--black': 'black',
   '--moderator': '#fff3e0',
-  '--feedback-buffer' : '#ffccbc'
+  '--feedback-buffer' : '#ffccbc',
+  '--table-a' : '#e0e0e0',
+  '--table-b' : '#eeeeee'
 
 };
 

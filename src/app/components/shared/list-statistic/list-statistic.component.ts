@@ -45,7 +45,7 @@ export class ListStatisticComponent implements OnInit {
     zero: 0
   };
   dataSource: ContentStatistic[];
-  total: number;
+  total = -1;
   totalP = 0;
   contentCounter = 0;
   roomId: number;

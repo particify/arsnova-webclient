@@ -19,16 +19,17 @@ export const dark = {
 
   '--green': '#43a047',
   '--green-light': '#e8f5e9',
-  '--red': '#ff5722',
+  '--red': '#ff7043',
   '--red-light': '#ffccbc',
-  '--yellow': '#ffeb3b',
-  '--yellow-light': '#fffde7',
+  '--yellow': '#fdd835',
+  '--yellow-light': '#fff9c4',
   '--blue': '#3f51b5',
   '--grey': '#BDBDBD',
-  '--grey-light': '#9E9E9E',
   '--black': '#212121',
   '--moderator': '#37474f',
-  '--feedback-buffer' : '#d0fff1'
+  '--feedback-buffer' : '#d0fff1',
+  '--table-a' : '#424242',
+  '--table-b' : '#505050'
 
 };
 

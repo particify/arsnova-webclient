@@ -1,14 +1,14 @@
 <mat-toolbar></mat-toolbar>
-<div fxLayout="row" fxLayoutAlign="center center" *ngIf="!isLoading && total">
+<div fxLayout="row" fxLayoutAlign="center center" *ngIf="!isLoading && total >= status.zero">
   <mat-progress-bar mode="determinate" value="{{total}}" [ngClass]="{'statistic-status-good': total >= status.good,
                             'statistic-status-okay': total < status.good && total >= status.okay,
                             'statistic-status-bad': total < status.okay && total != status.empty}"></mat-progress-bar>
   <span class="fill-remaining-space"></span>
-  <span>{{total.toFixed()}}%</span>
+  <span>{{total.toFixed() + ' %'}}</span>
   <span class="fill-remaining-space"></span>
 </div>
 <div fxLayoutAlign="center">
-  <span *ngIf="!isLoading && !total">{{'statistic.no-answers-yet' | translate}}</span>
+  <span *ngIf="!isLoading && total < status.zero">{{'statistic.no-answers-yet' | translate}}</span>
 </div>
 <mat-toolbar></mat-toolbar>
 
@@ -16,39 +16,35 @@
 
   <ng-container matColumnDef="content">
     <mat-header-cell *matHeaderCellDef> {{'statistic.content' | translate}} </mat-header-cell>
-    <mat-cell *matCellDef="let cp" [ngClass]="{
-      'empty' : cp.percent < status.zero,
-      'positive' : cp.percent >= status.good,
-      'okay' : cp.percent >= status.okay && cp.percent < status.good,
-      'negative' : cp.percent < status.okay}" (click)="goToStats(cp.contentId)">{{cp.content.subject}}</mat-cell>
+    <mat-cell *matCellDef="let cp; let i = index" [ngClass]="{
+      'cell-a' : i % 2 === 0,
+      'cell-b' : i % 2 != 0,
+      'invisible' : cp.percent < status.zero}" (click)="goToStats(cp.contentId)">{{cp.content.subject}}</mat-cell>
   </ng-container>
 
   <ng-container matColumnDef="percentage">
     <mat-header-cell *matHeaderCellDef> {{'statistic.percentage' | translate }} </mat-header-cell>
-    <mat-cell *matCellDef="let cp" [ngClass]="{
-      'empty invisible' : cp.percent < status.zero ,
-      'positive' : cp.percent >= status.good,
-      'okay' : cp.percent >= status.okay && cp.percent < status.good,
-      'negative' : cp.percent < status.okay}"
-              (click)="goToStats(cp.contentId)">{{cp.percent.toFixed() + ' %'}}</mat-cell>
+    <mat-cell *matCellDef="let cp; let i = index" [ngClass]="{
+      'cell-a' : i % 2 === 0,
+      'cell-b' : i % 2 != 0,
+      'invisible' : cp.percent < status.zero}"
+             (click)="goToStats(cp.contentId)">{{cp.percent >= status.zero ? cp.percent.toFixed() + ' %' : ''}}</mat-cell>
   </ng-container>
 
   <ng-container matColumnDef="abstentions">
     <mat-header-cell *matHeaderCellDef> {{'statistic.abstentions' | translate}} </mat-header-cell>
-    <mat-cell *matCellDef="let cp" [ngClass]="{
-      'empty invisible' : cp.percent < status.zero,
-      'positive' : cp.percent >= status.good,
-      'okay' : cp.percent >= status.okay && cp.percent < status.good,
-      'negative' : cp.percent < status.okay}" (click)="goToStats(cp.contentId)">{{cp.abstentions}}</mat-cell>
+    <mat-cell *matCellDef="let cp; let i = index" [ngClass]="{
+      'cell-a' : i % 2 === 0,
+      'cell-b' : i % 2 != 0,
+      'invisible' : cp.percent < status.zero}" (click)="goToStats(cp.contentId)">{{cp.abstentions}}</mat-cell>
   </ng-container>
 
   <ng-container matColumnDef="counts">
     <mat-header-cell *matHeaderCellDef> {{'statistic.answers' | translate}} </mat-header-cell>
-    <mat-cell *matCellDef="let cp" [ngClass]="{
-    'empty invisible' : cp.percent < status.zero,
-      'positive' : cp.percent >= status.good,
-      'okay' : cp.percent >= status.okay && cp.percent < status.good,
-      'negative' : cp.percent < status.okay}" (click)="goToStats(cp.contentId)">{{cp.counts}}</mat-cell>
+    <mat-cell *matCellDef="let cp; let i = index" [ngClass]="{
+      'cell-a' : i % 2 === 0,
+      'cell-b' : i % 2 != 0,
+      'invisible' : cp.percent < status.zero}" (click)="goToStats(cp.contentId)">{{cp.counts}}</mat-cell>
   </ng-container>
 
   <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
