@@ -88,6 +88,7 @@ export class ListStatisticComponent implements OnInit {
 
   goToStats(id: string) {
     this.router.navigate([`${this.baseUrl}${id}`]);
+    sessionStorage.setItem('contentGroup', JSON.stringify(this.contentGroup));
   }
 
   getData(contents: ContentChoice[]) {
