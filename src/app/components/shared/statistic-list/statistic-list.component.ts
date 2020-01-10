@@ -29,11 +29,11 @@ export class ContentStatistic {
 }
 @Component({
   selector: 'app-list-statistic',
-  templateUrl: './list-statistic.component.html',
-  styleUrls: ['./list-statistic.component.scss']
+  templateUrl: './statistic-list.component.html',
+  styleUrls: ['./statistic-list.component.scss']
 })
 
-export class ListStatisticComponent implements OnInit {
+export class StatisticListComponent implements OnInit {
 
   @Input() contentGroup: ContentGroup;
   contents: Content[] = [];
