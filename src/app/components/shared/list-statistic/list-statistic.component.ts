@@ -100,7 +100,7 @@ export class ListStatisticComponent implements OnInit {
       this.dataSource[i].content = this.contents[i];
       if (contents[i].format === ContentType.CHOICE || contents[i].format === ContentType.BINARY) {
         this.contentService.getAnswer(contents[i].id).subscribe(answer => {
-          if (contents[i].multiple) {
+          if (contents[i].format === ContentType.CHOICE) {
             percent = this.evaluateMultiple(contents[i].options, answer.roundStatistics[0].combinatedCounts);
             this.dataSource[i].counts = this.getMultipleCounts(answer.roundStatistics[0].combinatedCounts);
           } else {
@@ -140,8 +140,6 @@ export class ListStatisticComponent implements OnInit {
       for (let i = 0; i < indLength; i++) {
         total += answers[i].count;
       }
-    } else {
-      total = -1;
     }
     return total;
   }
