@@ -15,5 +15,14 @@ mat-tab-group {
 }
 
 .mat-icon-button {
-  color: var(--secondary);
+  width: 30px;
+  height: 30px;
+  color: var(--on-surface);
+}
+
+mat-icon {
+  font-size: 30px;
+  height: 30px;
+  width: 30px;
+  line-height: 100%!important;
 }

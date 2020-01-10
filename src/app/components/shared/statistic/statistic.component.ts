@@ -5,12 +5,6 @@ import { ContentService } from '../../../services/http/content.service';
 import { ContentChoice } from '../../../models/content-choice';
 import { TranslateService } from '@ngx-translate/core';
 import { LanguageService } from '../../../services/util/language.service';
-import { ThemeService } from '../../../../theme/theme.service';
-import { dark } from '../../../../theme/dark-theme/dark-theme.const';
-import { light } from '../../../../theme/light-theme/light-theme';
-import { beamer } from '../../../../theme/beamer-theme/beamer-theme.const';
-import { highContrast } from '../../../../theme/high-contrast-theme/high-contrast-theme.const';
-import { themes } from '../../../../theme/themes.const';
 
 export class AnswerList {
   label: string;
@@ -30,26 +24,23 @@ export class AnswerList {
 export class StatisticComponent implements OnInit {
 
   chart = Chart;
-  colors: string[] = [];     /* ['rgba(33,150,243, 0.8)', 'rgba(76,175,80, 0.8)', 'rgba(255,235,59, 0.8)', 'rgba(244,67,54, 0.8)',
-                                 'rgba(96,125,139, 0.8)', 'rgba(63,81,181, 0.8)', 'rgba(233,30,99, 0.8)', 'rgba(121,85,72, 0.8)']; */
+  colors: string[] = [];
   ccolors: string[] = [];
   label = 'ABCDEFGH';
-  labels: string[]; // = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
-  answers: string[];
-  answerList: AnswerList[];
-  data: number[];
+  labels: string[] = [];
+  answers: string[] = [];
+  answerList: AnswerList[] = [];
+  data: number[] = [];
   contentId: string;
   subject: string;
   maxLength: number;
   isLoading = true;
   showsCorrect = false;
-  theme: any;
 
   constructor(protected route: ActivatedRoute,
               private contentService: ContentService,
               private translateService: TranslateService,
-              protected langService: LanguageService,
-              private themeService: ThemeService) {
+              protected langService: LanguageService) {
               langService.langEmitter.subscribe(lang => translateService.use(lang));
   }
 
@@ -57,10 +48,6 @@ export class StatisticComponent implements OnInit {
     window.scroll(0, 0); // Maybe not so bad without header..
     this.translateService.use(localStorage.getItem('currentLang'));
     this.maxLength = innerWidth / 12;
-    this.answers = new Array<string>();
-    this.labels = new Array<string>();
-    this.answerList = new Array<AnswerList>();
-    this.data = new Array<number>();
     this.route.params.subscribe(params => {
       this.contentId = params['contentId'];
     });
@@ -68,20 +55,6 @@ export class StatisticComponent implements OnInit {
       this.getData(content);
       this.isLoading = false;
     });
-    switch (this.themeService.themeName) {
-      case 'dark':
-        this.theme = themes.dark;
-        break;
-      case 'light':
-        this.theme = themes.light;
-        break;
-      case 'beamer':
-        this.theme = themes.beamer;
-        break;
-      case 'highContrast':
-        this.theme = themes.highContrast;
-        break;
-    }
   }
 
   createChart(colors: string[]) {
@@ -146,14 +119,14 @@ export class StatisticComponent implements OnInit {
         this.answerList[i].answer = content.options[i].label;
       }
       if (i % 2 === 0) {
-        this.colors[i] = this.theme['--primary']; // 'rgba(255,224,130, 1.0)';
+        this.colors[i] = '#7986cb';
       } else {
-        this.colors[i] = this.theme['--secondary']; // 'rgba(128,203,196, 1.0)';
+        this.colors[i] = '#9575cd';
       }
       if (content.options[i].points <= 0) {
-        this.ccolors[i] = 'rgba(244,67,54, 0.8)';
+        this.ccolors[i] = '#ff7043';
       } else {
-        this.ccolors[i] = 'rgba(76,175,80, 0.8)';
+        this.ccolors[i] = '#66bb6a';
       }
     }
     this.contentService.getAnswer(content.id).subscribe(answer => {
