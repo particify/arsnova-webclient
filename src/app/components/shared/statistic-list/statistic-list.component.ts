@@ -41,11 +41,12 @@ export class StatisticListComponent implements OnInit {
   status = {
     good: 85 ,
     okay: 50 ,
-    empty: -1,
-    zero: 0
+    zero: 0,
+    likert: -1,
+    empty: -2
   };
   dataSource: ContentStatistic[];
-  total = -1;
+  total = -2;
   totalP = 0;
   contentCounter = 0;
   roomId: number;
@@ -99,27 +100,32 @@ export class StatisticListComponent implements OnInit {
     for (let i = 0; i < length; i++) {
       this.dataSource[i] = new ContentStatistic(null, null, 0, 0, 0 );
       this.dataSource[i].content = this.contents[i];
-      if (contents[i].format === ContentType.CHOICE || contents[i].format === ContentType.BINARY) {
+      if (contents[i].format === ContentType.CHOICE || contents[i].format === ContentType.BINARY
+                                                    || contents[i].format === ContentType.SCALE) {
         this.contentService.getAnswer(contents[i].id).subscribe(answer => {
           if (contents[i].format === ContentType.CHOICE) {
             percent = this.evaluateMultiple(contents[i].options, answer.roundStatistics[0].combinatedCounts);
             this.dataSource[i].counts = this.getMultipleCounts(answer.roundStatistics[0].combinatedCounts);
           } else {
-            percent = this.evaluateSingle(contents[i].options, answer.roundStatistics[0].independentCounts);
+            if (contents[i].format === ContentType.BINARY) {
+              percent = this.evaluateSingle(contents[i].options, answer.roundStatistics[0].independentCounts);
+            } else {
+              percent = this.status.likert;
+            }
             this.dataSource[i].counts = this.getSingleCounts(answer.roundStatistics[0].independentCounts);
           }
           this.dataSource[i].abstentions = answer.roundStatistics[0].abstentionCount;
           this.dataSource[i].percent = percent;
           this.dataSource[i].contentId = contents[i].id;
-          if (percent >= 0) {
+          if (percent > this.status.likert) {
             this.totalP += percent;
             this.total = this.totalP / this.contentCounter;
           } else if (this.total < 0) {
-            this.total = -1;
+            this.total = -2;
           }
         });
       } else {
-        this.dataSource[i].percent = -1;
+        this.dataSource[i].percent = this.status.empty;
       }
     }
     this.isLoading = false;
@@ -166,7 +172,7 @@ export class StatisticListComponent implements OnInit {
       res = ((correctCounts / totalCounts) * 100);
       this.contentCounter++;
     } else {
-      res = -1;
+      res = this.status.empty;
     }
     return res;
   }
@@ -176,7 +182,7 @@ export class StatisticListComponent implements OnInit {
     if (combCounts) {
       combLength = combCounts.length;
     } else {
-      return -1;
+      return this.status.empty;
     }
     let correctCounts = 0;
     let totalCounts = 0;
