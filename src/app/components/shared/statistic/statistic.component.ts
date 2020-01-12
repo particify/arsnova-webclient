@@ -5,6 +5,7 @@ import { ContentService } from '../../../services/http/content.service';
 import { ContentChoice } from '../../../models/content-choice';
 import { TranslateService } from '@ngx-translate/core';
 import { LanguageService } from '../../../services/util/language.service';
+import { ContentType } from '../../../models/content-type.enum';
 
 export class AnswerList {
   label: string;
@@ -36,6 +37,7 @@ export class StatisticComponent implements OnInit {
   maxLength: number;
   isLoading = true;
   showsCorrect = false;
+  survey = false;
 
   constructor(protected route: ActivatedRoute,
               private contentService: ContentService,
@@ -123,10 +125,14 @@ export class StatisticComponent implements OnInit {
       } else {
         this.colors[i] = '#9575cd';
       }
-      if (content.options[i].points <= 0) {
-        this.ccolors[i] = '#ff7043';
+      if (content.format === ContentType.SCALE) {
+        this.survey = true;
       } else {
-        this.ccolors[i] = '#66bb6a';
+        if (content.options[i].points <= 0) {
+          this.ccolors[i] = '#ff7043';
+        } else {
+          this.ccolors[i] = '#66bb6a';
+        }
       }
     }
     this.contentService.getAnswer(content.id).subscribe(answer => {
