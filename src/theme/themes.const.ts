@@ -6,13 +6,13 @@ import { highContrast, highContrast_meta } from './high-contrast-theme/high-cont
 export const themes = {
   light: light,
   dark: dark,
-  projector: beamer,
+  beamer: beamer,
   highContrast: highContrast
 };
 
 export const themes_meta = {
   light: light_meta,
   dark: dark_meta,
-  projector: beamer_meta,
+  beamer: beamer_meta,
   highContrast: highContrast_meta
 };

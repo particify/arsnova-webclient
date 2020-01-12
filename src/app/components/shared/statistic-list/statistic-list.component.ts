@@ -29,23 +29,24 @@ export class ContentStatistic {
 }
 @Component({
   selector: 'app-list-statistic',
-  templateUrl: './list-statistic.component.html',
-  styleUrls: ['./list-statistic.component.scss']
+  templateUrl: './statistic-list.component.html',
+  styleUrls: ['./statistic-list.component.scss']
 })
 
-export class ListStatisticComponent implements OnInit {
+export class StatisticListComponent implements OnInit {
 
   @Input() contentGroup: ContentGroup;
-  contents: Content[] = [];
+  contents: ContentChoice[] = [];
   displayedColumns: string[] = [];
   status = {
     good: 85 ,
     okay: 50 ,
-    empty: -1,
-    zero: 0
+    zero: 0,
+    likert: -1,
+    empty: -2
   };
   dataSource: ContentStatistic[];
-  total: number;
+  total = this.status.empty;
   totalP = 0;
   contentCounter = 0;
   roomId: number;
@@ -67,7 +68,7 @@ export class ListStatisticComponent implements OnInit {
       this.roomId = params['shortId'];
     });
     this.translateService.use(localStorage.getItem('currentLang'));
-    this.contentService.getContentChoiceByIds(this.contentGroup.contentIds).subscribe(contents => {
+    this.contentService.getContentsByIds(this.contentGroup.contentIds).subscribe(contents => {
       this.getData(contents);
     });
     this.getBaseUrl();
@@ -88,40 +89,52 @@ export class ListStatisticComponent implements OnInit {
 
   goToStats(id: string) {
     this.router.navigate([`${this.baseUrl}${id}`]);
+    sessionStorage.setItem('contentGroup', JSON.stringify(this.contentGroup));
   }
 
-  getData(contents: ContentChoice[]) {
-    this.contents = contents;
-    const length = contents.length;
+  getData(contents: Content[]) {
+    this.filterContents(contents);
+    const length = this.contents.length;
     let percent;
     this.dataSource = new Array<ContentStatistic>(length);
     for (let i = 0; i < length; i++) {
       this.dataSource[i] = new ContentStatistic(null, null, 0, 0, 0 );
       this.dataSource[i].content = this.contents[i];
-      if (contents[i].format === ContentType.CHOICE || contents[i].format === ContentType.BINARY) {
-        this.contentService.getAnswer(contents[i].id).subscribe(answer => {
-          if (contents[i].multiple) {
-            percent = this.evaluateMultiple(contents[i].options, answer.roundStatistics[0].combinatedCounts);
+      if (this.contents[i].format === ContentType.CHOICE || this.contents[i].format === ContentType.BINARY
+                                                         || this.contents[i].format === ContentType.SCALE) {
+        this.contentService.getAnswer(this.contents[i].id).subscribe(answer => {
+          if (this.contents[i].format === ContentType.CHOICE) {
+            percent = this.evaluateMultiple(this.contents[i].options, answer.roundStatistics[0].combinatedCounts);
             this.dataSource[i].counts = this.getMultipleCounts(answer.roundStatistics[0].combinatedCounts);
           } else {
-            percent = this.evaluateSingle(contents[i].options, answer.roundStatistics[0].independentCounts);
+            if (this.contents[i].format === ContentType.BINARY) {
+              percent = this.evaluateSingle(this.contents[i].options, answer.roundStatistics[0].independentCounts);
+            } else {
+              percent = this.status.likert;
+            }
             this.dataSource[i].counts = this.getSingleCounts(answer.roundStatistics[0].independentCounts);
           }
           this.dataSource[i].abstentions = answer.roundStatistics[0].abstentionCount;
           this.dataSource[i].percent = percent;
-          this.dataSource[i].contentId = contents[i].id;
-          if (percent >= 0) {
+          this.dataSource[i].contentId = this.contents[i].id;
+          if (percent > this.status.likert) {
             this.totalP += percent;
             this.total = this.totalP / this.contentCounter;
           } else if (this.total < 0) {
-            this.total = -1;
+            this.total = -this.status.empty;
           }
         });
       } else {
-        this.dataSource[i].percent = -1;
+        this.dataSource[i].percent = this.status.empty;
       }
     }
     this.isLoading = false;
+  }
+
+  filterContents(contents: Content[]) {
+    this.contents = contents.filter( c => {
+      return c.format !== ContentType.TEXT;
+    }) as ContentChoice[];
   }
 
   getSingleCounts(answers: number[]): number {
@@ -140,8 +153,6 @@ export class ListStatisticComponent implements OnInit {
       for (let i = 0; i < indLength; i++) {
         total += answers[i].count;
       }
-    } else {
-      total = -1;
     }
     return total;
   }
@@ -167,7 +178,7 @@ export class ListStatisticComponent implements OnInit {
       res = ((correctCounts / totalCounts) * 100);
       this.contentCounter++;
     } else {
-      res = -1;
+      res = this.status.empty;
     }
     return res;
   }
@@ -177,7 +188,7 @@ export class ListStatisticComponent implements OnInit {
     if (combCounts) {
       combLength = combCounts.length;
     } else {
-      return -1;
+      return this.status.empty;
     }
     let correctCounts = 0;
     let totalCounts = 0;

@@ -17,17 +17,19 @@ export const highContrast = {
   '--on-surface': '#FFFFFF',
   '--on-cancel': '#FFFFFF',
 
-  '--green': 'lightgreen',
-  '--red': 'red',
-  '--yellow': 'yellow',
-  '--blue': 'blue',
-  '--purple': 'purple',
-  '--light-green': 'lightgreen',
-  '--grey': 'grey',
-  '--grey-light': 'lightgrey',
+  '--green': '#43a047',
+  '--green-light': '#e8f5e9',
+  '--red': '#ff5722',
+  '--red-light': '#ffccbc',
+  '--yellow': '#fdd835',
+  '--yellow-light': '#fff9c4',
+  '--blue': '#3f51b5',
+  '--grey': '#BDBDBD',
   '--black': 'black',
   '--moderator': '#37474f',
-  '--feedback-buffer' : '#ffecb3'
+  '--feedback-buffer' : '#ffecb3',
+  '--table-a' : '#424242',
+  '--table-b' : '#505050'
 
 };
 

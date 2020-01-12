@@ -14,7 +14,7 @@ import { ContentDeleteComponent } from '../creator/_dialogs/content-delete/conte
 import { CommentPageComponent } from './comment-page/comment-page.component';
 import { EssentialsModule } from '../essentials/essentials.module';
 import { SharedRoutingModule } from './shared-routing.module';
-import { ListStatisticComponent } from './list-statistic/list-statistic.component';
+import { StatisticListComponent } from './statistic-list/statistic-list.component';
 import { ChartsModule } from 'ng2-charts';
 import { StatisticComponent } from './statistic/statistic.component';
 import { RoomJoinComponent } from './room-join/room-join.component';
@@ -58,7 +58,7 @@ import { ArsModule } from '../../../../projects/ars/src/lib/ars.module';
     CommentPageComponent,
     CommentListComponent,
     StatisticsPageComponent,
-    ListStatisticComponent,
+    StatisticListComponent,
     StatisticComponent,
     RoomCreateComponent,
     UserBonusTokenComponent,

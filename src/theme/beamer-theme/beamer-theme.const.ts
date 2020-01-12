@@ -17,17 +17,19 @@ export const beamer = {
   '--on-surface': 'black',
   '--on-cancel': 'black',
 
-  '--green': 'green',
-  '--red': 'red',
-  '--yellow': 'gold',
-  '--blue': 'blue',
-  '--purple': 'purple',
-  '--light-green': 'lightgreen',
-  '--grey': 'grey',
-  '--grey-light': 'lightgrey',
+  '--green': '#43a047',
+  '--green-light': '#e8f5e9',
+  '--red': '#ff5722',
+  '--red-light': '#ffccbc',
+  '--yellow': '#fdd835',
+  '--yellow-light': '#fff9c4',
+  '--blue': '#3f51b5',
+  '--grey': '#BDBDBD',
   '--black': 'black',
   '--moderator': '#e0f2f1',
-  '--feedback-buffer' : '#bdbdbd'
+  '--feedback-buffer' : '#bdbdbd',
+  '--table-a' : '#e0e0e0',
+  '--table-b' : '#eeeeee'
 
 };
 

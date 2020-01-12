@@ -127,6 +127,30 @@ address {
   background-color: var(--feedback-buffer);
 }
 
+.statistic-status-good .mat-progress-bar-fill::after {
+  background-color: var(--green);
+}
+
+.statistic-status-good .mat-progress-bar-buffer {
+  background-color: var(--green-light);
+}
+
+.statistic-status-okay .mat-progress-bar-fill::after {
+  background-color: var(--yellow);
+}
+
+.statistic-status-okay .mat-progress-bar-buffer {
+  background-color: var(--yellow-light);
+}
+
+.statistic-status-bad .mat-progress-bar-fill::after {
+  background-color: var(--red);
+}
+
+.statistic-status-bad .mat-progress-bar-buffer {
+  background-color: var(--red-light);
+}
+
 // Mat Tab
 
 .mat-tab-labels {
