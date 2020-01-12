@@ -36,7 +36,7 @@ export class ContentStatistic {
 export class StatisticListComponent implements OnInit {
 
   @Input() contentGroup: ContentGroup;
-  contents: Content[] = [];
+  contents: ContentChoice[] = [];
   displayedColumns: string[] = [];
   status = {
     good: 85 ,
@@ -46,7 +46,7 @@ export class StatisticListComponent implements OnInit {
     empty: -2
   };
   dataSource: ContentStatistic[];
-  total = -2;
+  total = this.status.empty;
   totalP = 0;
   contentCounter = 0;
   roomId: number;
@@ -68,7 +68,7 @@ export class StatisticListComponent implements OnInit {
       this.roomId = params['shortId'];
     });
     this.translateService.use(localStorage.getItem('currentLang'));
-    this.contentService.getContentChoiceByIds(this.contentGroup.contentIds).subscribe(contents => {
+    this.contentService.getContentsByIds(this.contentGroup.contentIds).subscribe(contents => {
       this.getData(contents);
     });
     this.getBaseUrl();
@@ -92,23 +92,23 @@ export class StatisticListComponent implements OnInit {
     sessionStorage.setItem('contentGroup', JSON.stringify(this.contentGroup));
   }
 
-  getData(contents: ContentChoice[]) {
-    this.contents = contents;
-    const length = contents.length;
+  getData(contents: Content[]) {
+    this.filterContents(contents);
+    const length = this.contents.length;
     let percent;
     this.dataSource = new Array<ContentStatistic>(length);
     for (let i = 0; i < length; i++) {
       this.dataSource[i] = new ContentStatistic(null, null, 0, 0, 0 );
       this.dataSource[i].content = this.contents[i];
-      if (contents[i].format === ContentType.CHOICE || contents[i].format === ContentType.BINARY
-                                                    || contents[i].format === ContentType.SCALE) {
-        this.contentService.getAnswer(contents[i].id).subscribe(answer => {
-          if (contents[i].format === ContentType.CHOICE) {
-            percent = this.evaluateMultiple(contents[i].options, answer.roundStatistics[0].combinatedCounts);
+      if (this.contents[i].format === ContentType.CHOICE || this.contents[i].format === ContentType.BINARY
+                                                         || this.contents[i].format === ContentType.SCALE) {
+        this.contentService.getAnswer(this.contents[i].id).subscribe(answer => {
+          if (this.contents[i].format === ContentType.CHOICE) {
+            percent = this.evaluateMultiple(this.contents[i].options, answer.roundStatistics[0].combinatedCounts);
             this.dataSource[i].counts = this.getMultipleCounts(answer.roundStatistics[0].combinatedCounts);
           } else {
-            if (contents[i].format === ContentType.BINARY) {
-              percent = this.evaluateSingle(contents[i].options, answer.roundStatistics[0].independentCounts);
+            if (this.contents[i].format === ContentType.BINARY) {
+              percent = this.evaluateSingle(this.contents[i].options, answer.roundStatistics[0].independentCounts);
             } else {
               percent = this.status.likert;
             }
@@ -116,12 +116,12 @@ export class StatisticListComponent implements OnInit {
           }
           this.dataSource[i].abstentions = answer.roundStatistics[0].abstentionCount;
           this.dataSource[i].percent = percent;
-          this.dataSource[i].contentId = contents[i].id;
+          this.dataSource[i].contentId = this.contents[i].id;
           if (percent > this.status.likert) {
             this.totalP += percent;
             this.total = this.totalP / this.contentCounter;
           } else if (this.total < 0) {
-            this.total = -2;
+            this.total = -this.status.empty;
           }
         });
       } else {
@@ -129,6 +129,12 @@ export class StatisticListComponent implements OnInit {
       }
     }
     this.isLoading = false;
+  }
+
+  filterContents(contents: Content[]) {
+    this.contents = contents.filter( c => {
+      return c.format !== ContentType.TEXT;
+    }) as ContentChoice[];
   }
 
   getSingleCounts(answers: number[]): number {
