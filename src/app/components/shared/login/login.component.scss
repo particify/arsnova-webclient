@@ -1,12 +1,3 @@
-.pwReset {
-  padding-left: 0;
-  color: var(--secondary);
-}
-
-.regButton {
-  color: var(--secondary);
-}
-
 .forgot-password {
   padding-top: 10px;
   margin-bottom: 1.6rem;
@@ -21,28 +12,7 @@
 p {
   font-size: small;
   margin: 13px 10px 0 0;
-  color: var(--on-surface);
   vertical-align: text-bottom;
-}
-
-::ng-deep .mat-form-field-label {
-  color: var(--on-surface)!important;
-}
-
-::ng-deep .mat-form-field-underline {
-  background-color: var(--on-surface)!important;
-}
-
-::ng-deep .mat-form-field-ripple {
-  background-color: var(--on-surface)!important;
-}
-
-mat-form-field {
-  color: var(--on-surface);
-}
-
-input {
-  caret-color: var(--on-surface);
 }
 
 input:-webkit-autofill {

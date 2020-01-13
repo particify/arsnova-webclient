@@ -1,21 +1,20 @@
-
 .qr_header {
   width: 100%;
   height: 64px;
   position: absolute;
-  left: 0px;
-  top: 0px;
+  left: 0;
+  top: 0;
   background-color: #FFFFFF;
 }
 
-.qr_text > h2{
+.qr_text > h2 {
   color:black!important;
 }
 
 .qr_header > button {
   margin-right: 16px;
   margin-top: 12px;
-  position: fixed; /* or position: absolute; */
+  position: fixed;
   top: 0;
   right: 0;
   color: #000000;
@@ -28,7 +27,7 @@
   width: 100%;
   height: calc(100% - 64px);
   position: absolute;
-  left: 0px;
+  left: 0;
   top: 64px;
   image-rendering: pixelated;
   background-color: #FFFFFF;
@@ -42,6 +41,6 @@
   float:left;
   position:fixed;
   left:50%;
-  top:0px;
+  top:0;
   transform:translate(-50%);
 }

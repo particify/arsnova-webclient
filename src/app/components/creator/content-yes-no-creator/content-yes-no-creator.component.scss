@@ -11,18 +11,3 @@ mat-radio-button {
   margin-top: 30px;
   color: var(--on-surface);
 }
-
-::ng-deep .mat-radio-outer-circle {
-  .mat-radio-checked & {
-    border-color: var(--secondary)!important;
-  }
-  border-color: var(--on-surface);
-}
-
-::ng-deep .mat-radio-inner-circle {
-  background-color: var(--secondary)!important;
-}
-
-::ng-deep .mat-radio-ripple .mat-ripple-element {
-  background-color: var(--secondary)!important;
-}

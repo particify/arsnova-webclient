@@ -14,12 +14,6 @@ app-comment-list {
   max-width: 800px;
 }
 
-textarea {
-  line-height: 120%;
-  color: var(--on-surface);
-  caret-color: var(--on-surface);
-}
-
 mat-hint {
   color: var(--on-surface) !important;
 }
@@ -27,18 +21,6 @@ mat-hint {
 .mat-select-value-text {
   color: var(--on-surface);
   caret-color: var(--on-surface);
-}
-
-::ng-deep .mat-form-field-label {
-  color: var(--on-surface)!important;
-}
-
-::ng-deep .mat-form-field-underline {
-  background-color: var(--on-surface)!important;
-}
-
-::ng-deep .mat-form-field-ripple {
-  background-color: var(--on-surface)!important;
 }
 
 ::ng-deep .mat-select-arrow-wrapper .mat-select-arrow {

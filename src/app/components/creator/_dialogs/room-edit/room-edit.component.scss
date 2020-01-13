@@ -13,25 +13,6 @@ mat-icon {
   margin-right: 10px;
 }
 
-mat-divider {
-  margin-bottom: 10px;
-  color: var(--on-surface) !important;
-}
-
-mat-form-field {
-  color: var(--on-surface);
-}
-
 mat-hint {
   color: var(--on-surface)!important;
-}
-
-::ng-deep .mat-tab-label-active,
-::ng-deep .mat-tab-label {
-  color: var(--on-surface);
-  opacity: 1!important;
-}
-
-::ng-deep .mat-ink-bar {
-  background-color: var(--primary) !important;
 }

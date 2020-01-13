@@ -37,7 +37,6 @@ mat-cell:last-of-type, mat-header-cell:last-of-type {
 mat-form-field {
   width: 100%;
   margin: 0!important;
-  color: var(--on-surface);
 }
 
 .add {
@@ -50,7 +49,6 @@ mat-form-field {
 }
 
 .addIcon {
-  line-height: 100%;
   height: 100%;
   width: 100%;
   font-size: 40px;

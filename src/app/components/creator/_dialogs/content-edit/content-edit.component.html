@@ -1,11 +1,12 @@
 <div fxLayout="column" fxLayoutAlign="center" fxLayoutGap="10px">
   <mat-form-field>
-    <input (focus)="eventService.makeFocusOnInputTrue()" (blur)="eventService.makeFocusOnInputFalse()"
-           matInput [(ngModel)]="content.subject" maxlength="40" placeholder="{{'content.subject' | translate}}" name="subject"/>
+    <input (focus)="eventService.makeFocusOnInputTrue()" (blur)="eventService.makeFocusOnInputFalse()" matInput
+           [(ngModel)]="content.subject" maxlength="40" placeholder="{{'content.subject' | translate}}" name="subject"/>
   </mat-form-field>
   <mat-form-field>
-    <textarea (focus)="eventService.makeFocusOnInputTrue()" (blur)="eventService.makeFocusOnInputFalse()"
-              matInput [(ngModel)]="content.body" rows="3" maxlength="250" placeholder="{{'content.body' | translate}}" name="body"></textarea>
+    <textarea (focus)="eventService.makeFocusOnInputTrue()" (blur)="eventService.makeFocusOnInputFalse()" matInput
+              [(ngModel)]="content.body" rows="3" maxlength="250" placeholder="{{'content.body' | translate}}"
+              name="body"></textarea>
   </mat-form-field>
   <h4>{{'content.answers' | translate}}</h4>
   <mat-table [dataSource]="displayAnswers">
@@ -29,7 +30,7 @@
     <button (click)="dialogRef.close('abort')" mat-button>
       {{ 'room-page.abort' | translate }}
     </button>
-    <button (click)="updateContent()" mat-raised-button>
+    <button (click)="updateContent()" mat-raised-button class="button-primary">
       {{ 'room-page.update' | translate }}
     </button>
   </div>
