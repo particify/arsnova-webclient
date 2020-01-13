@@ -27,7 +27,7 @@ export class DeleteAccountComponent implements OnInit {
               @Inject(MAT_DIALOG_DATA) public data: any,
               private roomService: RoomService,
               private liveAnnouncer: LiveAnnouncer,
-              private translationService: TranslateService,) {
+              private translationService: TranslateService) {
   }
 
   ngOnInit() {

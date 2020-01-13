@@ -67,11 +67,6 @@
     "bonus-token": "Tokens für Bonuspunkte",
     "no-bonus": "Noch keine Bonuspunkte erhalten."
   },
-  "help": {
-    "cancel": "Schließen",
-    "cancel-description": "Schließt die Hilfe",
-        "title": "Hilfe"
-  },
   "home-page": {
     "accessibility-create": "Erstellt eine neue Sitzung.",
     "accessibility-join-button": "Betritt die Sitzung, deren Code du eingegeben hast.",

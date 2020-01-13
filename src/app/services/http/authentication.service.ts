@@ -265,7 +265,7 @@ export class AuthenticationService extends BaseHttpService {
         return of('activation');
       }
       return of('false');
-    }),);
+    }));
   }
 
   get watchUser() {
