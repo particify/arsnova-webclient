@@ -4,12 +4,5 @@ app-room-list {
 }
 
 .mat-raised-button {
-  background-color: var(--primary);
-  color: var(--on-primary);
   border-radius: 25px;
-}
-
-.focus_button:focus {
-  background: var(--on-surface);
-  color: var(--background);
 }

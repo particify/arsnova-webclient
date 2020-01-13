@@ -9,7 +9,7 @@
     <mat-error *ngIf="activationKeyFormControl.hasError('required')">{{ 'user-activation.activation-key-required' | translate }}</mat-error>
   </mat-form-field>
 </form><div fxLayout="column" fxLayoutAlign="space-around">
-  <button (click)="resetActivation()" mat-flat-button type="button"
+  <button (click)="resetActivation()" mat-flat-button class="button-primary" type="button"
           matTooltip="{{'login.restart-account-activation-tooltip' | translate}}">
     {{ 'login.restart-account-activation-button' | translate }}
   </button>

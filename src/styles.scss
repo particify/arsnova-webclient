@@ -210,3 +210,15 @@ address {
   min-height: 48px;
   height: auto!important;
 }
+
+// Buttons
+
+.button-primary {
+  background-color: var(--primary);
+  color: var(--on-primary);
+}
+
+.button-secondary {
+  background-color: var(--secondary);
+  color: var(--on-secondary);
+}

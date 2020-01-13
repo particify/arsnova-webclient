@@ -3,7 +3,7 @@
     <app-room-join></app-room-join>
   </div>
   <div fxLayout="row" fxLayoutAlign="center" fxLayoutGap="15px">
-    <button class="focus_button" mat-raised-button (click)="openCreateRoomDialog()" id="create_session-button">
+    <button class="button-primary" mat-raised-button (click)="openCreateRoomDialog()" id="create_session-button">
       <mat-icon>add</mat-icon>
       {{ 'home-page.create-session' | translate }}
     </button>
@@ -11,6 +11,7 @@
   <div fxLayout="row" fxLayoutAlign="center" fxLayoutGap="15px">
     <app-room-list [user]="user"></app-room-list>
   </div>
-  <button id="live_announcer-button" tabIndex="-1" (click)="announce()" class="visually-hidden">{{ 'home-page.live-announcer-user' | translate }}</button>
+  <button id="live_announcer-button" tabIndex="-1" (click)="announce()"
+          class="visually-hidden">{{ 'home-page.live-announcer-user' | translate }}</button>
 </div>
 

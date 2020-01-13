@@ -22,14 +22,14 @@
     <mat-placeholder>{{ 'login.password' | translate }}</mat-placeholder>
     <mat-error *ngIf="passwordFormControl.hasError('required')">{{ 'login.password-required' | translate }}</mat-error>
   </mat-form-field>
-  <button id="focus_button_user" class="login" mat-flat-button type="submit" aria-labelledby="login-description">
+  <button class="button-secondary" mat-flat-button type="submit" aria-labelledby="login-description">
     {{ 'login.login' | translate }}
   </button>
   <button *ngFor="let provider of ssoProviders" (click)="loginViaSso(provider.id)" class="sso" mat-flat-button type="button">
     {{ 'login.login-with' | translate }} {{ provider.title }}
   </button>
-  <button id="focus_button_guest" (click)="guestLogin()" class="guest" mat-flat-button type="button" aria-labelledby="guest-login-description"
-          matTooltip="{{'login.guest-login-tooltip' | translate}}">
+  <button (click)="guestLogin()" class="button-primary" mat-flat-button type="button"
+          aria-labelledby="guest-login-description" matTooltip="{{'login.guest-login-tooltip' | translate}}">
     {{ 'login.guest-login' | translate }}
   </button>
   <div class="forgot-password">
