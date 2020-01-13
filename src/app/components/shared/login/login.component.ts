@@ -73,8 +73,8 @@ export class LoginComponent implements OnInit, OnChanges {
 
   providers(type?: AuthenticationProviderType) {
     return (type != null)
-        ? this.apiConfigService.getAuthProviders().filter((p) => p.type === type)
-        : this.apiConfigService.getAuthProviders();
+      ? this.apiConfigService.getAuthProviders().filter((p) => p.type === type)
+      : this.apiConfigService.getAuthProviders();
   }
 
   activateUser(): void {

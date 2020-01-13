@@ -19,7 +19,8 @@ export class BonusDeleteComponent implements OnInit {
   constructor(public dialogRef: MatDialogRef<BonusTokenComponent>,
               @Inject(MAT_DIALOG_DATA) public data: any,
               private liveAnnouncer: LiveAnnouncer,
-              private translationService: TranslateService )  { }
+              private translationService: TranslateService) {
+  }
 
 
   ngOnInit() {

@@ -27,6 +27,7 @@ export class ContentStatistic {
     this.abstentions = abstentions;
   }
 }
+
 @Component({
   selector: 'app-list-statistic',
   templateUrl: './statistic-list.component.html',
@@ -39,8 +40,8 @@ export class StatisticListComponent implements OnInit {
   contents: ContentChoice[] = [];
   displayedColumns: string[] = [];
   status = {
-    good: 85 ,
-    okay: 50 ,
+    good: 85,
+    okay: 50,
     zero: 0,
     likert: -1,
     empty: -2
@@ -81,9 +82,9 @@ export class StatisticListComponent implements OnInit {
 
   getBaseUrl() {
     if (this.authService.getRole() === UserRole.CREATOR) {
-      this.baseUrl = `/creator/room/${ this.roomId }/statistics/`;
+      this.baseUrl = `/creator/room/${this.roomId}/statistics/`;
     } else {
-      this.baseUrl = `/participant/room/${ this.roomId }/statistics/`;
+      this.baseUrl = `/participant/room/${this.roomId}/statistics/`;
     }
   }
 
@@ -98,10 +99,10 @@ export class StatisticListComponent implements OnInit {
     let percent;
     this.dataSource = new Array<ContentStatistic>(length);
     for (let i = 0; i < length; i++) {
-      this.dataSource[i] = new ContentStatistic(null, null, 0, 0, 0 );
+      this.dataSource[i] = new ContentStatistic(null, null, 0, 0, 0);
       this.dataSource[i].content = this.contents[i];
       if (this.contents[i].format === ContentType.CHOICE || this.contents[i].format === ContentType.BINARY
-                                                         || this.contents[i].format === ContentType.SCALE) {
+        || this.contents[i].format === ContentType.SCALE) {
         this.contentService.getAnswer(this.contents[i].id).subscribe(answer => {
           if (this.contents[i].format === ContentType.CHOICE) {
             percent = this.evaluateMultiple(this.contents[i].options, answer.roundStatistics[0].combinatedCounts);
@@ -132,7 +133,7 @@ export class StatisticListComponent implements OnInit {
   }
 
   filterContents(contents: Content[]) {
-    this.contents = contents.filter( c => {
+    this.contents = contents.filter(c => {
       return c.format !== ContentType.TEXT;
     }) as ContentChoice[];
   }
@@ -163,17 +164,17 @@ export class StatisticListComponent implements OnInit {
     const length = options.length;
     const correctIndex = new Array<number>();
     let res: number;
-      for (let i = 0; i < length; i++) {
-        if (options[i].points > 0) {
-          correctIndex[0] = i;
-        }
+    for (let i = 0; i < length; i++) {
+      if (options[i].points > 0) {
+        correctIndex[0] = i;
       }
-      for (let i = 0; i < length; i++) {
-        if (correctIndex.includes(i)) {
-          correctCounts += indCounts[i];
-        }
-        totalCounts += indCounts[i];
+    }
+    for (let i = 0; i < length; i++) {
+      if (correctIndex.includes(i)) {
+        correctCounts += indCounts[i];
       }
+      totalCounts += indCounts[i];
+    }
     if (totalCounts) {
       res = ((correctCounts / totalCounts) * 100);
       this.contentCounter++;

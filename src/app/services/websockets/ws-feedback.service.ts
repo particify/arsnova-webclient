@@ -12,7 +12,8 @@ import { IMessage } from '@stomp/stompjs';
   providedIn: 'root'
 })
 export class WsFeedbackService {
-  constructor(private wsConnector: WsConnectorService) {}
+  constructor(private wsConnector: WsConnectorService) {
+  }
 
   send(userId: string, feedback: number, roomId: string) {
     const createFeedback = new CreateFeedback(userId, feedback);

@@ -85,7 +85,7 @@ export class ContentService extends BaseHttpService {
   deleteContent(contentId: string): Observable<Content> {
     const connectionUrl = this.apiUrl.base + this.apiUrl.content + '/' + contentId;
     return this.http.delete<Content>(connectionUrl, httpOptions).pipe(
-      tap (_ => ''),
+      tap(_ => ''),
       catchError(this.handleError<Content>('deleteContent'))
     );
   }
@@ -94,7 +94,7 @@ export class ContentService extends BaseHttpService {
     const connectionUrl = this.apiUrl.base + this.apiUrl.content + '/' + contentId + '/stats';
     return this.http.get<AnswerStatistics>(connectionUrl).pipe(
       tap(() => ''),
-      catchError(this.handleError<AnswerStatistics>(`getRoom shortId=${ contentId }`))
+      catchError(this.handleError<AnswerStatistics>(`getRoom shortId=${contentId}`))
     );
   }
 
@@ -105,7 +105,7 @@ export class ContentService extends BaseHttpService {
       externalFilters: { notInContentGroupOfRoomId: roomId }
     }).pipe(
       tap(() => ''),
-      catchError(this.handleError<Content[]>(`findContentsWithoutGroup roomId=${ roomId }`))
+      catchError(this.handleError<Content[]>(`findContentsWithoutGroup roomId=${roomId}`))
     );
   }
 }

@@ -22,7 +22,8 @@ export class RoomDeleteComponent implements OnInit {
   constructor(public dialogRef: MatDialogRef<RoomEditComponent>,
               @Inject(MAT_DIALOG_DATA) public data: any,
               private liveAnnouncer: LiveAnnouncer,
-              private translationService: TranslateService ) { }
+              private translationService: TranslateService) {
+  }
 
 
   ngOnInit() {

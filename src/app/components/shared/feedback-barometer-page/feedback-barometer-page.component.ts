@@ -35,7 +35,7 @@ export class FeedbackBarometerPageComponent implements OnInit, OnDestroy {
     private notification: NotificationService,
     private wsFeedbackService: WsFeedbackService,
     private roomService: RoomService) {
-    }
+  }
 
   ngOnInit() {
     this.roomId = localStorage.getItem(`roomId`);

@@ -1,6 +1,6 @@
 export const highContrast = {
 
-  '--primary' : '#fb9a1c',
+  '--primary': '#fb9a1c',
   '--primary-variant': '#ffe0b2',
 
   '--secondary': '#fb9a1c',
@@ -30,9 +30,9 @@ export const highContrast = {
   '--grey': '#BDBDBD',
   '--black': 'black',
   '--moderator': '#37474f',
-  '--feedback-buffer' : '#ffecb3',
-  '--table-a' : '#424242',
-  '--table-b' : '#505050'
+  '--feedback-buffer': '#ffecb3',
+  '--table-a': '#424242',
+  '--table-b': '#505050'
 
 };
 

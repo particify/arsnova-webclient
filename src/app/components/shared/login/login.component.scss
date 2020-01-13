@@ -16,16 +16,17 @@ p {
 }
 
 input:-webkit-autofill {
-  -webkit-box-shadow:0 0 0 50px var(--dialog) inset;
+  -webkit-box-shadow: 0 0 0 50px var(--dialog) inset;
   -webkit-text-fill-color: var(--on-surface);
 }
+
 input:-webkit-autofill:focus {
   -webkit-box-shadow: 0 0 0 50px var(--dialog) inset;
   -webkit-text-fill-color: var(--on-surface);
 }
 
 h3 {
-  margin: 0 0 10px 0!important;
+  margin: 0 0 10px 0 !important;
 }
 
 .register {
@@ -33,11 +34,11 @@ h3 {
   align-items: baseline;
 }
 
-.registerBtn{
-  text-decoration:underline;
-  color:var(--on-surface);
-  cursor:pointer;
-  font-size:small;
+.registerBtn {
+  text-decoration: underline;
+  color: var(--on-surface);
+  cursor: pointer;
+  font-size: small;
 }
 
 .visually-hidden {

@@ -1,6 +1,6 @@
 export const beamer = {
 
-  '--primary' : 'Maroon',
+  '--primary': 'Maroon',
   '--primary-variant': '#ffccbc',
 
   '--secondary': 'black',
@@ -30,9 +30,9 @@ export const beamer = {
   '--grey': '#BDBDBD',
   '--black': 'black',
   '--moderator': '#e0f2f1',
-  '--feedback-buffer' : '#bdbdbd',
-  '--table-a' : '#e0e0e0',
-  '--table-b' : '#eeeeee'
+  '--feedback-buffer': '#bdbdbd',
+  '--table-a': '#e0e0e0',
+  '--table-b': '#eeeeee'
 
 };
 

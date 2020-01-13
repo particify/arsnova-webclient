@@ -22,7 +22,7 @@ export class HomePageComponent implements OnInit, OnDestroy, AfterContentInit {
   }
 
   ngAfterContentInit(): void {
-    setTimeout( () => {
+    setTimeout(() => {
       document.getElementById('live_announcer-button').focus();
     }, 500);
   }

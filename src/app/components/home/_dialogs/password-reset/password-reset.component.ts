@@ -38,7 +38,7 @@ export class PasswordResetComponent implements OnInit {
               public dialogRef: MatDialogRef<RegisterComponent>,
               @Inject(MAT_DIALOG_DATA) public data: any,
               public eventService: EventService,
-              private liveAnnouncer: LiveAnnouncer, ) {
+              private liveAnnouncer: LiveAnnouncer) {
   }
 
   ngOnInit() {

@@ -15,13 +15,13 @@ export class CommentAnswerTextComponent implements OnInit {
   answer: string;
 
   constructor(
-              private notification: NotificationService,
-              public dialogRef: MatDialogRef<CommentListComponent>,
-              private translateService: TranslateService,
-              public dialog: MatDialog,
-              private translationService: TranslateService,
-              public eventService: EventService,
-              @Inject(MAT_DIALOG_DATA) public data: any) {
+    private notification: NotificationService,
+    public dialogRef: MatDialogRef<CommentListComponent>,
+    private translateService: TranslateService,
+    public dialog: MatDialog,
+    private translationService: TranslateService,
+    public eventService: EventService,
+    @Inject(MAT_DIALOG_DATA) public data: any) {
   }
 
   ngOnInit() {

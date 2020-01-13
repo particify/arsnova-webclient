@@ -42,7 +42,11 @@ export class QrCodeDialogComponent implements OnInit, AfterViewInit {
   private onresize() {
     const width = this.imgWrp.nativeElement.offsetWidth;
     const height = this.imgWrp.nativeElement.offsetHeight;
-    if (width > height) {this.setPosition(height); } else { this.setPosition(width); }
+    if (width > height) {
+      this.setPosition(height);
+    } else {
+      this.setPosition(width);
+    }
   }
 
   private setPosition(offset: number) {

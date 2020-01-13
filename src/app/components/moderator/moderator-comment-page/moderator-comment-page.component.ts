@@ -24,13 +24,15 @@ export class ModeratorCommentPageComponent implements OnInit, OnDestroy, AfterCo
               private authenticationService: AuthenticationService,
               public eventService: EventService,
               private _r: Renderer2,
-              private liveAnnouncer: LiveAnnouncer) { }
+              private liveAnnouncer: LiveAnnouncer) {
+  }
 
   ngAfterContentInit(): void {
-    setTimeout( () => {
+    setTimeout(() => {
       document.getElementById('live_announcer-button').focus();
     }, 500);
   }
+
   ngOnInit(): void {
     this.roomId = localStorage.getItem('roomId');
     this.user = this.authenticationService.getUser();

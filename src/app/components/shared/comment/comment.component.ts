@@ -58,18 +58,18 @@ export class CommentComponent implements OnInit {
   animationState: string;
 
   constructor(protected authenticationService: AuthenticationService,
-    private route: ActivatedRoute,
-    private location: Location,
-    private commentService: CommentService,
-    private notification: NotificationService,
-    private translateService: TranslateService,
-    public dialog: MatDialog,
-    protected langService: LanguageService,
-    private wsCommentService: WsCommentServiceService) {
+              private route: ActivatedRoute,
+              private location: Location,
+              private commentService: CommentService,
+              private notification: NotificationService,
+              private translateService: TranslateService,
+              public dialog: MatDialog,
+              protected langService: LanguageService,
+              private wsCommentService: WsCommentServiceService) {
     langService.langEmitter.subscribe(lang => {
       translateService.use(lang);
       this.language = lang;
-      } );
+    });
   }
 
   ngOnInit() {
@@ -109,11 +109,11 @@ export class CommentComponent implements OnInit {
   }
 
   markCorrect(comment: Comment, type: CorrectWrong): void {
-      if (comment.correct === type) {
-        comment.correct = CorrectWrong.NULL;
-      } else {
-        comment.correct = type;
-      }
+    if (comment.correct === type) {
+      comment.correct = CorrectWrong.NULL;
+    } else {
+      comment.correct = type;
+    }
     this.comment = this.wsCommentService.markCorrect(comment);
   }
 

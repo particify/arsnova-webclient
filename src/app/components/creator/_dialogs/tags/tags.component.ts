@@ -23,13 +23,13 @@ export class TagsComponent implements OnInit {
   @ViewChild('tag') redel: ElementRef;
 
   constructor(public dialogRef: MatDialogRef<RoomCreatorPageComponent>,
-    public dialog: MatDialog,
-    public notificationService: NotificationService,
-    public translationService: TranslateService,
-    protected langService: LanguageService,
-    @Inject(MAT_DIALOG_DATA) public data: any,
-    public eventService: EventService) {
-      langService.langEmitter.subscribe(lang => translationService.use(lang));
+              public dialog: MatDialog,
+              public notificationService: NotificationService,
+              public translationService: TranslateService,
+              protected langService: LanguageService,
+              @Inject(MAT_DIALOG_DATA) public data: any,
+              public eventService: EventService) {
+    langService.langEmitter.subscribe(lang => translationService.use(lang));
   }
 
   ngOnInit() {

@@ -20,10 +20,10 @@ export class ParticipantContentCarouselPageComponent implements OnInit {
   }
 
   ngOnInit() {
-      this.contentGroup = JSON.parse(sessionStorage.getItem('contentGroup'));
-      this.contentService.getContentsByIds(this.contentGroup.contentIds).subscribe( contents => {
-        this.contents = contents;
-        this.isLoading = false;
-      });
+    this.contentGroup = JSON.parse(sessionStorage.getItem('contentGroup'));
+    this.contentService.getContentsByIds(this.contentGroup.contentIds).subscribe(contents => {
+      this.contents = contents;
+      this.isLoading = false;
+    });
   }
 }

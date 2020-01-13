@@ -77,37 +77,37 @@ export class ContentAnswerService extends BaseHttpService {
   }
 
   getAnswerText(id: string): Observable<TextAnswer> {
-    const url = `${ this.apiUrl.base + this.apiUrl.answer + this.apiUrl.text}/${ id }`;
+    const url = `${this.apiUrl.base + this.apiUrl.answer + this.apiUrl.text}/${id}`;
     return this.http.get<TextAnswer>(url).pipe(
-      catchError(this.handleError<TextAnswer>(`getAnswerText id=${ id }`))
+      catchError(this.handleError<TextAnswer>(`getAnswerText id=${id}`))
     );
   }
 
   getAnswerChoice(id: string): Observable<ChoiceAnswer> {
-    const url = `${ this.apiUrl.base + this.apiUrl.answer + this.apiUrl.choice }/${ id }`;
+    const url = `${this.apiUrl.base + this.apiUrl.answer + this.apiUrl.choice}/${id}`;
     return this.http.get<ChoiceAnswer>(url).pipe(
-      catchError(this.handleError<ChoiceAnswer>(`getChoiceAnswer id=${ id }`))
+      catchError(this.handleError<ChoiceAnswer>(`getChoiceAnswer id=${id}`))
     );
   }
 
   updateAnswerText(updatedAnswerText: TextAnswer): Observable<TextAnswer> {
-    const connectionUrl = `${ this.apiUrl.base + this.apiUrl.answer + this.apiUrl.text}/${ updatedAnswerText.id }`;
-    return this.http.put(connectionUrl, updatedAnswerText , httpOptions).pipe(
+    const connectionUrl = `${this.apiUrl.base + this.apiUrl.answer + this.apiUrl.text}/${updatedAnswerText.id}`;
+    return this.http.put(connectionUrl, updatedAnswerText, httpOptions).pipe(
       tap(() => ''),
       catchError(this.handleError<any>('updateTextAnswer'))
     );
   }
 
   updateAnswerChoice(updatedAnswerChoice: ChoiceAnswer): Observable<ChoiceAnswer> {
-    const connectionUrl = `${ this.apiUrl.base + this.apiUrl.answer + this.apiUrl.choice}/${ updatedAnswerChoice.id }`;
-    return this.http.put(connectionUrl, updatedAnswerChoice , httpOptions).pipe(
+    const connectionUrl = `${this.apiUrl.base + this.apiUrl.answer + this.apiUrl.choice}/${updatedAnswerChoice.id}`;
+    return this.http.put(connectionUrl, updatedAnswerChoice, httpOptions).pipe(
       tap(() => ''),
       catchError(this.handleError<any>('updateChoiceAnswer'))
     );
   }
 
   deleteAnswerText(id: string): Observable<TextAnswer> {
-    const url = `${ this.apiUrl.base + this.apiUrl.answer }/${ id }`;
+    const url = `${this.apiUrl.base + this.apiUrl.answer}/${id}`;
     return this.http.delete<TextAnswer>(url, httpOptions).pipe(
       tap(() => ''),
       catchError(this.handleError<TextAnswer>('deleteTextAnswer'))
@@ -115,7 +115,7 @@ export class ContentAnswerService extends BaseHttpService {
   }
 
   deleteAnswerChoice(id: string): Observable<ChoiceAnswer> {
-    const url = `${ this.apiUrl.base + this.apiUrl.answer }/${ id }`;
+    const url = `${this.apiUrl.base + this.apiUrl.answer}/${id}`;
     return this.http.delete<ChoiceAnswer>(url, httpOptions).pipe(
       tap(() => ''),
       catchError(this.handleError<ChoiceAnswer>('deleteChoiceAnswer'))

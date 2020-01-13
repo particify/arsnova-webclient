@@ -9,7 +9,7 @@ button {
 }
 
 .filter {
-  color: var(--on-surface)!important;
+  color: var(--on-surface) !important;
 }
 
 table, tr, td {
@@ -31,29 +31,29 @@ th {
 .sessionName {
   width: 8%;
   min-width: 50px;
-  color: var(--on-surface)!important;
+  color: var(--on-surface) !important;
 }
 
 .sessionId {
   width: 8%;
   min-width: 50px;
-  color: var(--on-surface)!important;
+  color: var(--on-surface) !important;
 }
 
 .roleName {
-  color: var(--on-surface)!important;
+  color: var(--on-surface) !important;
   width: 5%;
 }
 
 .buttonName {
-  color: var(--on-surface)!important;
+  color: var(--on-surface) !important;
   width: 5%;
   display: flex;
   place-content: stretch flex-end;
 }
 
 .noRoomHistory {
-  color: var(--on-surface)!important;
+  color: var(--on-surface) !important;
 }
 
 .visually-hidden {

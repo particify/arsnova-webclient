@@ -11,7 +11,8 @@ export class CommentExportComponent implements OnInit {
 
   exportType = 'comma';
 
-  constructor(public dialogRef: MatDialogRef<RoomEditComponent>) { }
+  constructor(public dialogRef: MatDialogRef<RoomEditComponent>) {
+  }
 
   ngOnInit() {
   }

@@ -1,7 +1,7 @@
 export class StartFeedback {
-    type: string;
+  type: string;
 
-    constructor() {
-      this.type = 'StartFeedback';
-    }
+  constructor() {
+    this.type = 'StartFeedback';
   }
+}

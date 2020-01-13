@@ -15,9 +15,9 @@ export class ContentGroupsComponent implements OnInit {
   @Input() public contentGroups: ContentGroup[];
   roomShortId: string;
 
-  constructor (private route: ActivatedRoute,
-               private router: Router,
-               protected authService: AuthenticationService
+  constructor(private route: ActivatedRoute,
+              private router: Router,
+              protected authService: AuthenticationService
   ) {
   }
 

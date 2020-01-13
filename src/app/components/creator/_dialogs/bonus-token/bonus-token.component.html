@@ -1,4 +1,3 @@
-
 <div mat-dialog-content xmlns="http://www.w3.org/1999/html">
   <h2>{{'room-page.bonus-token-header' | translate }}</h2>
   <h3>{{room.name}} - {{room.shortId.slice(0, 4)}} {{room.shortId.slice(4, 8)}}</h3>
@@ -15,7 +14,8 @@
     </div>
   </div>
   <div *ngIf="bonusTokens.length === 0">
-    <p>{{'room-page.no-bonus' | translate }}<p>
+    <p>{{'room-page.no-bonus' | translate }}
+    <p>
   </div>
   <div fxLayoutAlign="center center" *ngIf="bonusTokens.length > 1">
     <button mat-button class="delete button-warn" (click)="openDeleteAllBonusDialog()">

@@ -104,7 +104,7 @@ export class CommentSettingsComponent implements OnInit {
   export(delimiter: string, date: string): void {
     this.commentService.getAckComments(this.roomId)
       .subscribe(comments => {
-        this.bonusTokenService.getTokensByRoomId(this.roomId).subscribe( list => {
+        this.bonusTokenService.getTokensByRoomId(this.roomId).subscribe(list => {
           this.comments = comments.map(comment => {
             const commentWithToken: CommentBonusTokenMixin = <CommentBonusTokenMixin>comment;
             for (const bt of list) {
@@ -168,7 +168,7 @@ export class CommentSettingsComponent implements OnInit {
     const commentSettings = new CommentSettings();
     commentSettings.roomId = this.roomId;
     commentSettings.directSend = this.directSend;
-    this.commentSettingsService.update(commentSettings).subscribe( x => {
+    this.commentSettingsService.update(commentSettings).subscribe(x => {
       const settingsReturn = new CommentSettingsDialog();
       settingsReturn.enableModeration = this.enableCommentModeration;
       settingsReturn.directSend = this.directSend;

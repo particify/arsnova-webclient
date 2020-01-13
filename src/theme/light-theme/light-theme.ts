@@ -1,6 +1,6 @@
 export const light = {
 
-  '--primary' : '#263238',
+  '--primary': '#263238',
   '--primary-variant': '#cfd8dc',
 
   '--secondary': '#FF6D00',
@@ -30,9 +30,9 @@ export const light = {
   '--grey': '#BDBDBD',
   '--black': 'black',
   '--moderator': '#fff3e0',
-  '--feedback-buffer' : '#ffccbc',
-  '--table-a' : '#e0e0e0',
-  '--table-b' : '#eeeeee'
+  '--feedback-buffer': '#ffccbc',
+  '--table-a': '#e0e0e0',
+  '--table-b': '#eeeeee'
 
 };
 

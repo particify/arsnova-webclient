@@ -46,9 +46,9 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
         provide: TranslateLoader,
         useFactory: HttpLoaderFactory,
         deps: [HttpClient]
-        },
+      },
       isolate: true
-   })
+    })
   ],
   exports: [
     MatAutocompleteModule,
@@ -91,7 +91,8 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
   ],
   declarations: []
 })
-export class EssentialsModule { }
+export class EssentialsModule {
+}
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, '../../assets/i18n/home/', '.json');

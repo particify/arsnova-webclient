@@ -4,7 +4,6 @@ export class Combination {
 }
 
 
-
 export class RoundStatistics {
   round: number;
   independentCounts: number[];

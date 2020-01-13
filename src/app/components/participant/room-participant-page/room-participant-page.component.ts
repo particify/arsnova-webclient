@@ -46,7 +46,7 @@ export class RoomParticipantPageComponent extends RoomPageComponent implements O
   }
 
   ngAfterContentInit(): void {
-    setTimeout( () => {
+    setTimeout(() => {
       document.getElementById('live_announcer-button').focus();
     }, 700);
   }
@@ -83,7 +83,7 @@ export class RoomParticipantPageComponent extends RoomPageComponent implements O
   }
 
   afterRoomLoadHook() {
-    this.authenticationService.watchUser.subscribe( user => this.user = user);
+    this.authenticationService.watchUser.subscribe(user => this.user = user);
     if (!this.user) {
       this.authenticationService.guestLogin(UserRole.PARTICIPANT).subscribe(guestUser => {
         this.roomService.addToHistory(this.room.id);

@@ -1,6 +1,6 @@
 export const dark = {
 
-  '--primary' : '#bb86fc',
+  '--primary': '#bb86fc',
   '--primary-variant': '#d1c4e9',
 
   '--secondary': '#03dac6',
@@ -30,9 +30,9 @@ export const dark = {
   '--grey': '#BDBDBD',
   '--black': '#212121',
   '--moderator': '#37474f',
-  '--feedback-buffer' : '#d0fff1',
-  '--table-a' : '#424242',
-  '--table-b' : '#505050'
+  '--feedback-buffer': '#d0fff1',
+  '--table-a': '#424242',
+  '--table-b': '#505050'
 
 };
 

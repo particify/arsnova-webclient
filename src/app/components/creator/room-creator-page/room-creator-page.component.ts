@@ -75,7 +75,7 @@ export class RoomCreatorPageComponent extends RoomPageComponent implements OnIni
   }
 
   ngAfterContentInit(): void {
-    setTimeout( () => {
+    setTimeout(() => {
       document.getElementById('live_announcer-button').focus();
     }, 700);
   }
@@ -96,7 +96,7 @@ export class RoomCreatorPageComponent extends RoomPageComponent implements OnIni
       } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit8) === true && this.eventService.focusOnInput === false) {
         this.liveAnnouncer.clear();
         this.liveAnnouncer.announce('Aktueller Sitzungs-Name: ' + this.room.name + '. ' +
-                                    'Aktueller Sitzungs-Code: ' + this.room.shortId.slice(0, 8));
+          'Aktueller Sitzungs-Code: ' + this.room.shortId.slice(0, 8));
       } else if (
         KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit9, KeyboardKey.Escape) === true &&
         this.eventService.focusOnInput === false
@@ -126,19 +126,19 @@ export class RoomCreatorPageComponent extends RoomPageComponent implements OnIni
       });
     }
     this.contentService.findContentsWithoutGroup(this.room.id).subscribe(contents => {
-        if (contents) {
-          let contentWithoutGroupName = '';
-          this.translateService.get('content.contents-without-collection').subscribe(msg => {
-            contentWithoutGroupName = msg;
-          });
-          this.defaultContentGroups.push(new ContentGroup('', '', contentWithoutGroupName, [], true));
-          for (const c of contents) {
-            this.defaultContentGroups[0].contentIds.push(c.id);
-          }
-          if (contents && contents.length > 0) {
-            this.emptyDefaultGroups = false;
-          }
+      if (contents) {
+        let contentWithoutGroupName = '';
+        this.translateService.get('content.contents-without-collection').subscribe(msg => {
+          contentWithoutGroupName = msg;
+        });
+        this.defaultContentGroups.push(new ContentGroup('', '', contentWithoutGroupName, [], true));
+        for (const c of contents) {
+          this.defaultContentGroups[0].contentIds.push(c.id);
         }
+        if (contents && contents.length > 0) {
+          this.emptyDefaultGroups = false;
+        }
+      }
     });
   }
 
@@ -201,8 +201,8 @@ export class RoomCreatorPageComponent extends RoomPageComponent implements OnIni
           this.updateGeneralSettings();
         }
       });
-    dialogRef.backdropClick().subscribe( res => {
-        dialogRef.close('abort');
+    dialogRef.backdropClick().subscribe(res => {
+      dialogRef.close('abort');
     });
   }
 
@@ -225,7 +225,7 @@ export class RoomCreatorPageComponent extends RoomPageComponent implements OnIni
           }
         }
       });
-    dialogRef.backdropClick().subscribe( res => {
+    dialogRef.backdropClick().subscribe(res => {
       dialogRef.close('abort');
     });
   }

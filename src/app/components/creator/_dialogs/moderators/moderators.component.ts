@@ -24,14 +24,14 @@ export class ModeratorsComponent implements OnInit {
   usernameFormControl = new FormControl('', [Validators.email]);
 
   constructor(public dialogRef: MatDialogRef<RoomCreatorPageComponent>,
-    public dialog: MatDialog,
-    public notificationService: NotificationService,
-    public translationService: TranslateService,
-    protected moderatorService: ModeratorService,
-    protected langService: LanguageService,
-    @Inject(MAT_DIALOG_DATA) public data: any,
-    public eventService: EventService) {
-      langService.langEmitter.subscribe(lang => translationService.use(lang));
+              public dialog: MatDialog,
+              public notificationService: NotificationService,
+              public translationService: TranslateService,
+              protected moderatorService: ModeratorService,
+              protected langService: LanguageService,
+              @Inject(MAT_DIALOG_DATA) public data: any,
+              public eventService: EventService) {
+    langService.langEmitter.subscribe(lang => translationService.use(lang));
   }
 
   ngOnInit() {
@@ -53,7 +53,7 @@ export class ModeratorsComponent implements OnInit {
   }
 
   addModerator(loginId: string) {
-    this.moderatorService.getUserId(loginId).subscribe( list => {
+    this.moderatorService.getUserId(loginId).subscribe(list => {
       if (list.length === 0) {
         this.translationService.get('room-page.moderator-not-found').subscribe(msg => {
           this.notificationService.show(msg);

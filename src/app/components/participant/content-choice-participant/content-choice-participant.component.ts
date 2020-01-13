@@ -45,8 +45,8 @@ export class ContentChoiceParticipantComponent implements OnInit {
     private translateService: TranslateService,
     protected langService: LanguageService
   ) {
-  langService.langEmitter.subscribe(lang => translateService.use(lang));
-}
+    langService.langEmitter.subscribe(lang => translateService.use(lang));
+  }
 
   ngOnInit() {
     this.initAnswers();

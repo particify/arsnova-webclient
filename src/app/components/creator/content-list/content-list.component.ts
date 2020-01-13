@@ -71,7 +71,7 @@ export class ContentListComponent implements OnInit {
         } else {
           this.allowEditing = true;
         }
-        this.contentService.getContentsByIds(this.contentGroup.contentIds).subscribe( contents => {
+        this.contentService.getContentsByIds(this.contentGroup.contentIds).subscribe(contents => {
           this.contents = contents;
           for (let i = 0; i < this.contents.length; i++) {
             if (this.contents[i].subject.length > this.labelMaxLength) {

@@ -1,7 +1,7 @@
 export class StopFeedback {
-    type: string;
+  type: string;
 
-    constructor() {
-      this.type = 'StopFeedback';
-    }
+  constructor() {
+    this.type = 'StopFeedback';
   }
+}

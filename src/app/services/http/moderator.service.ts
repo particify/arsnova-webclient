@@ -70,7 +70,8 @@ export class ModeratorService extends BaseHttpService {
 
   addToHistory(roomId: string, userId: string): void {
     this.joinDate = new Date(Date.now());
-    const connectionUrl = `${ this.apiUrl.base + this.apiUrl.user }/${ userId }/roomHistory`;
-    this.http.post(connectionUrl, { roomId: roomId, lastVisit: this.joinDate.getTime() }, httpOptions).subscribe(() => {});
+    const connectionUrl = `${this.apiUrl.base + this.apiUrl.user}/${userId}/roomHistory`;
+    this.http.post(connectionUrl, { roomId: roomId, lastVisit: this.joinDate.getTime() }, httpOptions).subscribe(() => {
+    });
   }
 }

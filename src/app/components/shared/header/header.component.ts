@@ -115,7 +115,7 @@ export class HeaderComponent implements OnInit {
   logout() {
     // ToDo: Fix this madness.
     if (this.user.authProvider === 'ARSNOVA_GUEST') {
-      this.bonusTokenService.getTokensByUserId(this.user.id).subscribe( list => {
+      this.bonusTokenService.getTokensByUserId(this.user.id).subscribe(list => {
         if (list && list.length > 0) {
           const dialogRef = this.dialog.open(RemindOfTokensComponent, {
             width: '600px'

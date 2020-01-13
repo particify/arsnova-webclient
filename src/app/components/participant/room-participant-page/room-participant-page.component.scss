@@ -2,7 +2,7 @@ mat-card {
   min-height: 350px;
 }
 
-mat-card-content>:first-child {
+mat-card-content > :first-child {
   margin-top: 5%;
 }
 
@@ -10,7 +10,7 @@ mat-card-content>:first-child {
   width: 60%;
   height: 75%;
   margin-bottom: 3%;
-  color: var(--primary)!important;
+  color: var(--primary) !important;
 }
 
 .main-icon {
@@ -39,8 +39,8 @@ h3 {
 }
 
 mat-card-header {
-  min-height: 80px!important;
-  height: 12%!important;
+  min-height: 80px !important;
+  height: 12% !important;
   margin-bottom: 10%;
 }
 
@@ -55,7 +55,7 @@ mat-card-subtitle {
 }
 
 mat-expansion-panel {
-  background-color: var(--surface)!important;
+  background-color: var(--surface) !important;
   min-width: 200px;
   hyphens: auto;
 }
@@ -65,9 +65,9 @@ mat-grid-list {
 }
 
 mat-grid-tile {
-  height: 100%!important;
+  height: 100% !important;
   width: 45% !important;
-  padding: 2%!important;
+  padding: 2% !important;
 }
 
 .corner-icons {

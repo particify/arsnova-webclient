@@ -27,15 +27,14 @@ export class UserService extends BaseHttpService {
     const connectionUrl: string = this.apiUrl.base + this.apiUrl.user + '/~' + encodeURIComponent(name) +
       this.apiUrl.activate + '?key=' + activationKey;
 
-    return this.http.post<string>(connectionUrl, {
-      }, httpOptions);
+    return this.http.post<string>(connectionUrl, {}, httpOptions);
   }
 
   resetActivation(username: string): Observable<User> {
     const connectionUrl: string = this.apiUrl.base +
-        this.apiUrl.user +
-        '/~' + encodeURIComponent(username) +
-        this.apiUrl.resetActivation;
+      this.apiUrl.user +
+      '/~' + encodeURIComponent(username) +
+      this.apiUrl.resetActivation;
     return this.http.post<any>(connectionUrl, httpOptions).pipe(
       tap(_ => ''),
       catchError(this.handleError<User>('resetActivation'))

@@ -26,7 +26,7 @@ export class OverlayComponent implements OnInit {
    * Returns a lambda which closes the dialog on call.
    */
   buildDeclineActionCallback(): () => void {
-    return () =>  {
+    return () => {
       this.showCookieModal();
     };
   }

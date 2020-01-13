@@ -19,11 +19,11 @@ export class ContentPresentationComponent implements OnInit {
   }
 
   ngOnInit() {
-      this.contentGroup = JSON.parse(sessionStorage.getItem('contentGroup'));
-      this.contentService.getContentChoiceByIds(this.contentGroup.contentIds).subscribe( contents => {
-        this.contents = contents;
-        this.isLoading = false;
-      });
+    this.contentGroup = JSON.parse(sessionStorage.getItem('contentGroup'));
+    this.contentService.getContentChoiceByIds(this.contentGroup.contentIds).subscribe(contents => {
+      this.contents = contents;
+      this.isLoading = false;
+    });
   }
 
 }
