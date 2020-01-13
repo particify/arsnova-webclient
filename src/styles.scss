@@ -235,6 +235,25 @@ markdown {
   white-space: normal !important;
 }
 
+// Mat Select
+
+.mat-select-value-text {
+  color: var(--on-surface);
+  caret-color: var(--on-surface);
+}
+
+.mat-select-arrow-wrapper .mat-select-arrow {
+  color: var(--on-surface);
+}
+
+.mat-select-value-text {
+  color: var(--on-surface);
+}
+
+.mat-primary .mat-option.mat-selected:not(.mat-option-disabled) {
+  color: var(--primary);
+}
+
 // Mat List
 
 .mat-list-base .mat-list-item {
