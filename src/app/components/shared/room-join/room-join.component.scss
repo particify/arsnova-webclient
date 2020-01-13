@@ -22,10 +22,6 @@ input[type="number"]::-webkit-outer-spin-button, input[type="number"]::-webkit-i
   -webkit-appearance: none;
 }
 
-mat-hint {
-  color: var(--on-surface) !important;
-}
-
 input:-webkit-autofill {
   -webkit-box-shadow:0 0 0 50px var(--surface) inset;
   -webkit-text-fill-color: var(--on-surface);
