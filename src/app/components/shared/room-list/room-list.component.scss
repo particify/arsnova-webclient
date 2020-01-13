@@ -12,13 +12,15 @@ button {
   color: var(--on-surface)!important;
 }
 
-table, th, tr, td {
-  background-color: var(--primary-variant) !important;
-  color: var(--on-surface)!important;
+table, tr, td {
+  background-color: var(--table-a);
+  color: var(--on-surface);
 }
 
 th {
   font-size: 1rem;
+  background-color: var(--table-b);
+  color: var(--on-surface);
 }
 
 .tableOverflow {

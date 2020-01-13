@@ -3,7 +3,7 @@ mat-card-content > :first-child {
 }
 
 mat-expansion-panel {
-  background-color: var(--primary-variant);
+  background-color: var(--secondary-variant);
   margin-bottom: 5px;
   hyphens: auto;
 }
@@ -13,24 +13,23 @@ mat-panel-title {
   align-items: center;
   font-size: medium;
   margin-right: 5px;
-  color: var(--on-primary)!important;
 }
 
 mat-expansion-panel-header {
-  background-color: var(--secondary) !important;
+  background-color: var(--table-a);
   padding-left: 3%;
   padding-right: 3%;
 }
 
 .matPanel {
-  background-color: var(--secondary);
+  background-color: var(--table-a);
   margin-bottom: 5px;
-  color: var(--on-secondary);
+  color: var(--on-surface);
 }
 
 .panelTitle {
   width: 8% !important;
-  color: var(--on-primary) !important;
+  color: var(----on-surface);
 }
 
 .actionButton {
@@ -48,7 +47,7 @@ mat-expansion-panel-header {
 .editButton {
   width: 15%;
   max-width: 60px;
-  color: var(--on-primary)
+  color: var(--primary)
 }
 
 .deleteButton {
