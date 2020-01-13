@@ -264,3 +264,11 @@ markdown {
 mat-icon {
   line-height: 100%!important;
 }
+
+// Card
+
+mat-card {
+  width: 100%;
+  max-width: 800px;
+  background: var(--surface)!important;
+}
