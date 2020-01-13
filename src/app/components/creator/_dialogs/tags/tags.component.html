@@ -12,7 +12,7 @@
         <input (focus)="eventService.makeFocusOnInputTrue()" (blur)="eventService.makeFocusOnInputFalse()"
               matInput type="text" #tag aria-labelledby="tag-new"
               [formControl]="tagFormControl" name="taginput"/>
-        <mat-placeholder class="placeholder">{{ 'room-page.tag-new' | translate }}</mat-placeholder>
+        <mat-placeholder>{{ 'room-page.tag-new' | translate }}</mat-placeholder>
         <mat-error *ngIf="!tagFormControl.valid">
           {{ 'room-page.tag-error' | translate }}
         </mat-error>

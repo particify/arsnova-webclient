@@ -6,7 +6,7 @@
       <input (focus)="eventService.makeFocusOnInputTrue()" (blur)="eventService.makeFocusOnInputFalse()"
              [(ngModel)]="editRoom.name" matInput
              name="room-name" maxlength="20" aria-labelledby="room-name"/>
-      <mat-placeholder class="placeholder">{{ 'session.session-name' | translate }}</mat-placeholder>
+      <mat-placeholder>{{ 'session.session-name' | translate }}</mat-placeholder>
       <mat-hint align="end"><span aria-hidden="true">{{ editRoom.name.length }} / 20</span></mat-hint>
     </mat-form-field>
     <mat-tab-group>

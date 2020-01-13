@@ -7,7 +7,7 @@
     <input (focus)="eventService.makeFocusOnInputTrue()" (blur)="eventService.makeFocusOnInputFalse()"
            #userEmail [errorStateMatcher]="matcher" [formControl]="usernameFormControl" matInput
            name="username" aria-labelledby="email-description"/>
-    <mat-placeholder class="placeholder">{{ 'login.email' | translate }}</mat-placeholder>
+    <mat-placeholder>{{ 'login.email' | translate }}</mat-placeholder>
     <mat-error *ngIf="usernameFormControl.hasError('email') && !usernameFormControl.hasError('required')">
       {{ 'login.email-invalid' | translate }}
     </mat-error>
@@ -19,7 +19,7 @@
     <input (focus)="eventService.makeFocusOnInputTrue()" (blur)="eventService.makeFocusOnInputFalse()"
            #userPassword [errorStateMatcher]="matcher" [formControl]="passwordFormControl" matInput
            name="password" type="password" aria-labelledby="password-description"/>
-    <mat-placeholder class="placeholder">{{ 'login.password' | translate }}</mat-placeholder>
+    <mat-placeholder>{{ 'login.password' | translate }}</mat-placeholder>
     <mat-error *ngIf="passwordFormControl.hasError('required')">{{ 'login.password-required' | translate }}</mat-error>
   </mat-form-field>
   <button id="focus_button_user" class="login" mat-flat-button type="submit" aria-labelledby="login-description">

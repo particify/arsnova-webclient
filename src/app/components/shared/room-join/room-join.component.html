@@ -14,7 +14,7 @@
         [errorStateMatcher]="matcher"
         aria-labelledby="join-input-label"
       />
-      <mat-placeholder class="placeholder">{{ 'home-page.session-id' | translate}}</mat-placeholder>
+      <mat-placeholder>{{ 'home-page.session-id' | translate}}</mat-placeholder>
       <mat-hint align="end"><span aria-hidden="true">{{ sessionCode.value.length - (sessionCode.value.split(' ').length -1) }} / 8</span></mat-hint>
       <mat-error *ngIf="sessionCodeFormControl.hasError('required')" aria-hidden="true">{{ 'home-page.please-enter' | translate}}</mat-error>
       <mat-error *ngIf="sessionCodeFormControl.hasError('pattern')">{{ 'home-page.only-numbers' | translate}}</mat-error>

@@ -5,7 +5,7 @@
     <input (focus)="eventService.makeFocusOnInputTrue()" (blur)="eventService.makeFocusOnInputFalse()"
            matInput type="email" #userName [formControl]="usernameFormControl"
            [errorStateMatcher]="matcher" aria-labelledby="register-email-description"/>
-    <mat-placeholder class="placeholder">{{ 'register.email' | translate }}</mat-placeholder>
+    <mat-placeholder>{{ 'register.email' | translate }}</mat-placeholder>
     <mat-error *ngIf="usernameFormControl.hasError('email') && !usernameFormControl.hasError('required')">
       {{ 'register.email-invalid' | translate }}
     </mat-error>
@@ -18,7 +18,7 @@
     <input (focus)="eventService.makeFocusOnInputTrue()" (blur)="eventService.makeFocusOnInputFalse()"
            matInput type="email" #userName2 [formControl]="username2FormControl"
            [errorStateMatcher]="matcher" aria-labelledby="register-email-description-repeat"/>
-    <mat-placeholder class="placeholder">{{ 'register.email-verify' | translate }}</mat-placeholder>
+    <mat-placeholder>{{ 'register.email-verify' | translate }}</mat-placeholder>
     <mat-error *ngIf="username2FormControl.hasError('emailIsEqual') && !username2FormControl.hasError('required')">
       {{ 'register.email-unmatch' | translate }}
     </mat-error>
@@ -29,7 +29,7 @@
            matInput type="password" #userPassword1
            [formControl]="password1FormControl" [errorStateMatcher]="matcher"
            aria-labelledby="register-password-description">
-    <mat-placeholder class="placeholder">{{ 'register.password' | translate }}</mat-placeholder>
+    <mat-placeholder>{{ 'register.password' | translate }}</mat-placeholder>
     <mat-error *ngIf="password1FormControl.hasError('required')">
       {{ 'register.password-required' | translate }}
     </mat-error>
@@ -40,7 +40,7 @@
            matInput type="password" #userPassword2
            [formControl]="password2FormControl" [errorStateMatcher]="matcher"
            aria-labelledby="register-password-description-repeat">
-    <mat-placeholder class="placeholder">{{ 'register.password-verify' | translate}}</mat-placeholder>
+    <mat-placeholder>{{ 'register.password-verify' | translate}}</mat-placeholder>
     <mat-error *ngIf="password2FormControl.hasError('required')">
       {{ 'register.password-required' | translate }}
     </mat-error>
