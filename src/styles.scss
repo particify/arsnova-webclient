@@ -94,6 +94,10 @@ mat-hint {
   color: var(--on-surface)!important;
 }
 
+mat-error {
+  color: var(--warn)!important;
+}
+
 markdown {
   color: var(--on-surface);
 }

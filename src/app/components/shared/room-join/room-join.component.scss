@@ -8,7 +8,7 @@ form {
 
 mat-error {
   font-size: small;
-  color:var(--on-surface);
+  color:var(--on-surface)!important;
 }
 
 .mat-fab {
