@@ -1,4 +1,4 @@
-import { LanguageService } from './../../../services/util/language.service';
+import { LanguageService } from '../../../services/util/language.service';
 import { Component, OnInit } from '@angular/core';
 import { NotificationService } from '../../../services/util/notification.service';
 import { Router } from '@angular/router';
@@ -11,7 +11,6 @@ import { DemoVideoComponent } from '../../home/_dialogs/demo-video/demo-video.co
 import { ThemeService } from '../../../../theme/theme.service';
 import { CookiesComponent } from '../../home/_dialogs/cookies/cookies.component';
 import { ImprintComponent } from '../../home/_dialogs/imprint/imprint.component';
-import { HelpPageComponent } from '../_dialogs/help-page/help-page.component';
 import { DataProtectionComponent } from '../../home/_dialogs/data-protection/data-protection.component';
 import { Theme } from '../../../../theme/Theme';
 import { OverlayComponent } from '../../home/_dialogs/overlay/overlay.component';
@@ -106,13 +105,6 @@ export class FooterComponent implements OnInit {
 
   showImprint() {
     const dialogRef = this.dialog.open(ImprintComponent, {
-      width: '80%'
-    });
-    dialogRef.componentInstance.deviceType = this.deviceType;
-  }
-
-  showHelp() {
-    const dialogRef = this.dialog.open(HelpPageComponent, {
       width: '80%'
     });
     dialogRef.componentInstance.deviceType = this.deviceType;

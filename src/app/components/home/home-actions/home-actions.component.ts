@@ -1,17 +1,19 @@
 import { Component, OnInit } from '@angular/core';
-import { MatDialog } from '@angular/material';
 import { RoomCreateComponent } from '../../shared/_dialogs/room-create/room-create.component';
+import { MatDialog } from '@angular/material';
+import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { LanguageService } from '../../../services/util/language.service';
 
 @Component({
-  selector: 'app-home-creator-page',
-  templateUrl: './home-creator-page.component.html',
-  styleUrls: ['./home-creator-page.component.scss']
+  selector: 'app-home-actions',
+  templateUrl: './home-actions.component.html',
+  styleUrls: ['./home-actions.component.scss']
 })
+export class HomeActionsComponent implements OnInit {
 
-export class HomeCreatorPageComponent implements OnInit {
-  constructor(public dialog: MatDialog,
+  constructor(private router: Router,
+              public dialog: MatDialog,
               private translateService: TranslateService,
               protected langService: LanguageService) {
     langService.langEmitter.subscribe(lang => translateService.use(lang));
@@ -25,5 +27,9 @@ export class HomeCreatorPageComponent implements OnInit {
     this.dialog.open(RoomCreateComponent, {
       width: '350px'
     });
+  }
+
+  cookiesDisabled(): boolean {
+    return localStorage.getItem('cookieAccepted') === 'false';
   }
 }
