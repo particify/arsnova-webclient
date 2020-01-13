@@ -1,13 +1,13 @@
 export const beamer = {
 
   '--primary' : 'Maroon',
-  '--primary-variant': 'white',
+  '--primary-variant': '#ffccbc',
 
   '--secondary': 'black',
-  '--secondary-variant': 'green',
+  '--secondary-variant': '#e0e0e0',
 
   '--warn': '#e53935',
-  '--on-warn': '#000000',
+  '--on-warn': 'black',
 
   '--background': 'beige',
   '--surface': 'white',
