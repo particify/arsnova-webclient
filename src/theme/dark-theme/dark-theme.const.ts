@@ -6,6 +6,9 @@ export const dark = {
   '--secondary': '#03dac6',
   '--secondary-variant': '#6f74dd',
 
+  '--warn': '#f44336',
+  '--on-warn': '#000000',
+
   '--background': '#121212',
   '--surface': '#212121',
   '--dialog': '#37474f',

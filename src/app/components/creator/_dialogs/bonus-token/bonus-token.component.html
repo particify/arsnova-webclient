@@ -18,7 +18,7 @@
     <p>{{'room-page.no-bonus' | translate }}<p>
   </div>
   <div fxLayoutAlign="center center" *ngIf="bonusTokens.length > 1">
-    <button mat-button class="delete" (click)="openDeleteAllBonusDialog()">
+    <button mat-button class="delete button-warn" (click)="openDeleteAllBonusDialog()">
       <mat-icon>delete</mat-icon>
       {{'room-page.delete-all-tokens' | translate}}
     </button>

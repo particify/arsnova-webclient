@@ -13,8 +13,8 @@
 }
 
 .alert-confirm-button {
-  background-color: var(--red);
-  color: #fff;
+  background-color: var(--warn);
+  color: var(--on-warn);
 }
 
 .dialog-action-buttons .cancel-button:focus {

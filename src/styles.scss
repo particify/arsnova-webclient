@@ -246,6 +246,11 @@ markdown {
   color: var(--on-secondary);
 }
 
+.button-warn {
+  background-color: var(--warn);
+  color: var(--on-warn);
+}
+
 // Icons
 
 mat-icon {

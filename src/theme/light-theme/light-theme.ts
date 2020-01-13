@@ -6,6 +6,9 @@ export const light = {
   '--secondary': '#FF6D00',
   '--secondary-variant': '#FFFFFF',
 
+  '--warn': '#e53935',
+  '--on-warn': '#000000',
+
   '--background': '#EEEEEE',
   '--surface': '#FFFFFF',
   '--dialog': '#FFFFFF',

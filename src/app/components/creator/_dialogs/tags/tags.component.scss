@@ -7,6 +7,7 @@ p {
 }
 
 mat-form-field {
+  margin-top: 10px;
   width: 90%;
 }
 
@@ -14,7 +15,7 @@ mat-form-field {
   width: 45px;
   height: 45px;
   text-align: center;
-  margin: 1% 2% 1% 1%;
+  margin: 10px 2% 1% 1%;
   color: var(--primary);
 }
 
@@ -29,5 +30,5 @@ mat-form-field {
 }
 
 .close-icon {
-  color: var(--red);
+  color: var(--warn);
 }

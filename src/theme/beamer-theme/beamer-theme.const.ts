@@ -6,6 +6,9 @@ export const beamer = {
   '--secondary': 'black',
   '--secondary-variant': 'green',
 
+  '--warn': '#e53935',
+  '--on-warn': '#000000',
+
   '--background': 'beige',
   '--surface': 'white',
   '--dialog': 'white',
