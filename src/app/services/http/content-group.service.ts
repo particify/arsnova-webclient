@@ -1,16 +1,11 @@
 import { Injectable } from '@angular/core';
-import { Room } from '../../models/room';
 import { ContentGroup } from '../../models/content-group';
-import { RoomJoined } from '../../models/events/room-joined';
-import { RoomCreated } from '../../models/events/room-created';
-import { UserRole } from '../../models/user-roles.enum';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { catchError, tap, map } from 'rxjs/operators';
+import { catchError, tap } from 'rxjs/operators';
 import { AuthenticationService } from './authentication.service';
 import { BaseHttpService } from './base-http.service';
 import { EventService } from '../util/event.service';
-import { TSMap } from 'typescript-map';
 
 const httpOptions = {
   headers: new HttpHeaders({})

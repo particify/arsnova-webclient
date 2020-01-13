@@ -1,13 +1,6 @@
 import { tap } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
-import {
-  HttpErrorResponse,
-  HttpEvent,
-  HttpHandler,
-  HttpInterceptor,
-  HttpRequest,
-  HttpResponse
-} from '@angular/common/http';
+import { HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest, HttpResponse } from '@angular/common/http';
 
 import { AuthenticationService } from '../services/http/authentication.service';
 import { NotificationService } from '../services/util/notification.service';

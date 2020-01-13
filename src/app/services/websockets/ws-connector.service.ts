@@ -4,7 +4,7 @@ import { AuthenticationService } from '../http/authentication.service';
 import { User } from '../../models/user';
 import { ARSRxStompConfig } from '../../rx-stomp.config';
 import { Observable } from 'rxjs';
-import { IMessage, StompHeaders } from '@stomp/stompjs';
+import { IMessage } from '@stomp/stompjs';
 
 @Injectable({
   providedIn: 'root'

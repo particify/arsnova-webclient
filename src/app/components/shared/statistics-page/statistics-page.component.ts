@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { RoomService } from '../../../services/http/room.service';
 import { ContentGroup } from '../../../models/content-group';
 import { Room } from '../../../models/room';
-import { MatTabGroup, MatDialog } from '@angular/material';
+import { MatDialog, MatTabGroup } from '@angular/material';
 import { StatisticHelpComponent } from '../_dialogs/statistic-help/statistic-help.component';
 
 @Component({

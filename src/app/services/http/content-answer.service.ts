@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { TextAnswer } from '../../models/text-answer';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { catchError, tap, map } from 'rxjs/operators';
+import { catchError, map, tap } from 'rxjs/operators';
 import { BaseHttpService } from './base-http.service';
 import { ChoiceAnswer } from '../../models/choice-answer';
 

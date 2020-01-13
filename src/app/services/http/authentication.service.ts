@@ -1,13 +1,12 @@
-import { catchError, map, concatMap, filter, take, tap } from 'rxjs/operators';
+import { catchError, concatMap, filter, map, take, tap } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { User } from '../../models/user';
-import { Observable, of, BehaviorSubject, timer } from 'rxjs';
+import { BehaviorSubject, Observable, of, timer } from 'rxjs';
 import { UserRole } from '../../models/user-roles.enum';
 import { DataStoreService } from '../util/data-store.service';
 import { EventService } from '../util/event.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { ClientAuthentication } from '../../models/client-authentication';
-import { AuthProvider } from '../../models/auth-provider';
 import { BaseHttpService } from './base-http.service';
 
 @Injectable()

@@ -32,7 +32,9 @@ import {
   MatSortModule,
   MatStepperModule,
   MatTableModule,
-  MatTabsModule, MatToolbarModule, MatTooltipModule
+  MatTabsModule,
+  MatToolbarModule,
+  MatTooltipModule
 } from '@angular/material';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 
 /**
  * Available confirm button types.

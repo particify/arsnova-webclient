@@ -1,6 +1,3 @@
-import { KeyboardUtils } from '../utils/keyboard';
-import { KeyboardKey } from '../utils/keyboard/keys';
-
 export class Rescale {
 
   private static isFullscreen: boolean;

@@ -1,5 +1,3 @@
-import { AuthProvider } from './auth-provider';
-
 export class ClientAuthentication {
   userId: string;
   loginId: string;

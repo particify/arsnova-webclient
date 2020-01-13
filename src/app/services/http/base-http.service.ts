@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { of ,  Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 
 @Injectable()
 export class BaseHttpService {
