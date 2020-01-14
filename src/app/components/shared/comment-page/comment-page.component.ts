@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Renderer2, AfterContentInit } from '@angular/core';
+import { AfterContentInit, Component, OnDestroy, OnInit, Renderer2 } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { User } from '../../../models/user';
 import { NotificationService } from '../../../services/util/notification.service';
@@ -24,13 +24,15 @@ export class CommentPageComponent implements OnInit, OnDestroy, AfterContentInit
               private authenticationService: AuthenticationService,
               private eventService: EventService,
               private liveAnnouncer: LiveAnnouncer,
-              private _r: Renderer2) { }
+              private _r: Renderer2) {
+  }
 
   ngAfterContentInit(): void {
-    setTimeout( () => {
+    setTimeout(() => {
       document.getElementById('live_announcer-button').focus();
     }, 800);
   }
+
   ngOnInit(): void {
     this.roomId = localStorage.getItem('roomId');
     this.user = this.authenticationService.getUser();

@@ -55,10 +55,12 @@
         <div fxLayout="row">
           <mat-icon class="color" [ngStyle]="{'color':theme.getPreviewColor()}">lens</mat-icon>
           <mat-icon class="checked" *ngIf="theme.key === themeClass" [ngStyle]="{'color':theme.getOnPreviewColor()}">
-            checked</mat-icon>
+            checked
+          </mat-icon>
           <div fxLayout="column" fxLayoutAlign="center">
             <span class="item-title color-title">{{theme.getName(getLanguage())}}</span>
-            <span class="color-description" *ngIf="deviceType === 'desktop'">{{theme.getDescription(getLanguage())}}</span>
+            <span class="color-description"
+                  *ngIf="deviceType === 'desktop'">{{theme.getDescription(getLanguage())}}</span>
           </div>
         </div>
       </button>

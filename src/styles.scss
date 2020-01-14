@@ -18,9 +18,9 @@
 
 body {
   font-family: Roboto, "Helvetica Neue", sans-serif;
-  width:100%;
-  height:100%;
-  overflow:hidden;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
 }
 
 .visually-hidden {
@@ -71,6 +71,7 @@ address {
 input, input:focus {
   color: var(--on-surface);
   caret-color: var(--on-surface);
+
   &:focus {
     caret-color: var(--on-surface);
   }
@@ -91,11 +92,11 @@ mat-placeholder {
 }
 
 mat-hint {
-  color: var(--on-surface)!important;
+  color: var(--on-surface) !important;
 }
 
 mat-error {
-  color: var(--warn)!important;
+  color: var(--warn) !important;
 }
 
 markdown {
@@ -105,12 +106,12 @@ markdown {
 // Dialogs
 
 .screenDialog {
-  width:100%;
-  min-width:100%;
-  max-width:100%;
-  height:100%;
-  margin:0;
-  padding:0;
+  width: 100%;
+  min-width: 100%;
+  max-width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
 }
 
 .modal {
@@ -169,7 +170,7 @@ markdown {
 
 .mat-tab-label {
   color: var(--on-surface);
-  opacity: 1!important;
+  opacity: 1 !important;
 }
 
 .mat-tab-label-active {
@@ -183,28 +184,29 @@ markdown {
 // Mat Form Field
 
 .mat-form-field-label {
-  color: var(--on-surface)!important;
+  color: var(--on-surface) !important;
 }
 
 .mat-form-field-underline {
-  background-color: var(--on-surface)!important;
+  background-color: var(--on-surface) !important;
 }
 
 .mat-form-field-ripple {
-  background-color: var(--on-surface)!important;
+  background-color: var(--on-surface) !important;
 }
 
 // Mat Radio Button
 
 .mat-radio-outer-circle {
   .mat-radio-checked & {
-    border-color: var(--secondary)!important;
+    border-color: var(--secondary) !important;
   }
+
   border-color: var(--on-surface);
 }
 
 .mat-radio-inner-circle {
-  background-color: var(--secondary)!important;
+  background-color: var(--secondary) !important;
 }
 
 .mat-radio-ripple .mat-ripple-element {
@@ -212,7 +214,7 @@ markdown {
 }
 
 .mat-list-item-content > mat-radio-button > .mat-radio-label > .mat-radio-label-content {
-  padding-left: 18px!important;
+  padding-left: 18px !important;
 }
 
 // Mat Checkbox
@@ -241,9 +243,11 @@ markdown {
 .mat-accent .mat-slider-thumb {
   background-color: var(--primary);
 }
+
 .mat-accent .mat-slider-thumb-label {
   background-color: var(--primary);
 }
+
 .mat-accent .mat-slider-track-fill {
   background-color: var(--primary);
 }
@@ -281,7 +285,7 @@ markdown {
 
 .mat-list-base .mat-list-item {
   min-height: 48px;
-  height: auto!important;
+  height: auto !important;
 }
 
 // Buttons
@@ -304,7 +308,7 @@ markdown {
 // Icons
 
 mat-icon {
-  line-height: 100%!important;
+  line-height: 100% !important;
 }
 
 // Card
@@ -312,5 +316,5 @@ mat-icon {
 mat-card {
   width: 100%;
   max-width: 800px;
-  background: var(--surface)!important;
+  background: var(--surface) !important;
 }

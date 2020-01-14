@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Room } from '../../../models/room';
 import { ContentGroup } from '../../../models/content-group';
 import { RoomStats } from '../../../models/room-stats';
@@ -8,9 +8,8 @@ import { Location } from '@angular/common';
 import { WsCommentServiceService } from '../../../services/websockets/ws-comment-service.service';
 import { CommentService } from '../../../services/http/comment.service';
 import { EventService } from '../../../services/util/event.service';
-import { Message, IMessage } from '@stomp/stompjs';
+import { IMessage, Message } from '@stomp/stompjs';
 import { Observable, Subscription } from 'rxjs';
-import { Content } from '../../../models/content';
 import { ContentService } from '../../../services/http/content.service';
 
 @Component({

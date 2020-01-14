@@ -42,7 +42,8 @@ export class ContentTextParticipantComponent implements OnInit {
       if (answer) {
         this.givenAnswer = answer;
         this.alreadySent = true;
-      } if (this.givenAnswer && this.givenAnswer.body) {
+      }
+      if (this.givenAnswer && this.givenAnswer.body) {
         this.getAnsweredMessage();
       } else {
         this.getAbstainedMessage();

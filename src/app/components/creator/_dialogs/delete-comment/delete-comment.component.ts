@@ -20,7 +20,8 @@ export class DeleteCommentComponent implements OnInit {
   constructor(public dialogRef: MatDialogRef<RoomEditComponent>,
               @Inject(MAT_DIALOG_DATA) public data: any,
               private liveAnnouncer: LiveAnnouncer,
-              private translationService: TranslateService ) { }
+              private translationService: TranslateService) {
+  }
 
   ngOnInit() {
     this.translationService.get('comment-list.really-delete').subscribe(msg => {

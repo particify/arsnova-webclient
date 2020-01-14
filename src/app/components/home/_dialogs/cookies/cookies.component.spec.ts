@@ -1,9 +1,9 @@
 /**
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { CookiesComponent } from './cookies.component';
+ import { CookiesComponent } from './cookies.component';
 
-describe('CookiesComponent', () => {
+ describe('CookiesComponent', () => {
   let component: CookiesComponent;
   let fixture: ComponentFixture<CookiesComponent>;
 
@@ -24,4 +24,4 @@ describe('CookiesComponent', () => {
     expect(component).toBeTruthy();
   });
 });
-**/
+ **/

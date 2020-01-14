@@ -22,7 +22,8 @@ export class ModeratorDeleteComponent implements OnInit {
   constructor(public dialogRef: MatDialogRef<ModeratorsComponent>,
               @Inject(MAT_DIALOG_DATA) public data: any,
               private liveAnnouncer: LiveAnnouncer,
-              private translationService: TranslateService ) { }
+              private translationService: TranslateService) {
+  }
 
   ngOnInit() {
     this.translationService.get('room-page.really-remove-moderator').subscribe(msg => {

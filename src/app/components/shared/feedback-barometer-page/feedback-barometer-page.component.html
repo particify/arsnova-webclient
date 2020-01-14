@@ -5,14 +5,14 @@
         <mat-icon matTooltip="{{ state.message }}"
                   (click)="!isOwner && submitFeedback(state.state)">{{ state.name }}</mat-icon>
         <mat-progress-bar class="feedback-progress" [value]="state.count"></mat-progress-bar>
-    </div>
+      </div>
     </div>
     <div class="text invisible" [ngClass]="{'visible' : isClosed}">
       <h3>{{ 'feedback.is-stopped' | translate }}</h3>
     </div>
     <div fxLayoutAlign="center" *ngIf="isOwner">
       <button mat-raised-button class="button-primary" fxLayoutAlign="center" (click)="toggle()">
-          <p [translate]="isClosed ? 'feedback.start' : 'feedback.stop'"></p>
+        <p [translate]="isClosed ? 'feedback.start' : 'feedback.stop'"></p>
       </button>
     </div>
   </mat-card>

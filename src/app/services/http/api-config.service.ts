@@ -61,7 +61,7 @@ export class ApiConfigService extends BaseHttpService {
       for (const name of propNames) {
         const value = obj[name];
         obj[name] = value && typeof value === 'object'
-            ? this.freezeRecursively(value) : value;
+          ? this.freezeRecursively(value) : value;
       }
     }
 

@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AuthenticationService } from '../../../services/http/authentication.service';
 import { RoomService } from '../../../services/http/room.service';
 import { UserRole } from '../../../models/user-roles.enum';
@@ -35,7 +35,7 @@ export class FeedbackBarometerPageComponent implements OnInit, OnDestroy {
     private notification: NotificationService,
     private wsFeedbackService: WsFeedbackService,
     private roomService: RoomService) {
-    }
+  }
 
   ngOnInit() {
     this.roomId = localStorage.getItem(`roomId`);

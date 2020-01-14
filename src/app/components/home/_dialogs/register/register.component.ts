@@ -82,7 +82,7 @@ export class RegisterComponent implements OnInit {
    * @inheritDoc
    */
   ngOnInit() {
-      // nothing special yet
+    // nothing special yet
   }
 
   register(username: string, password: string): void {

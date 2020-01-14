@@ -1,7 +1,7 @@
 import { Component, OnInit, Renderer2 } from '@angular/core';
 import { AuthenticationService } from '../../../services/http/authentication.service';
 import { NotificationService } from '../../../services/util/notification.service';
-import { Router, NavigationEnd } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
 import { User } from '../../../models/user';
 import { UserRole } from '../../../models/user-roles.enum';
 import { Location } from '@angular/common';
@@ -19,8 +19,6 @@ import { UserBonusTokenComponent } from '../_dialogs/user-bonus-token/user-bonus
 import { RemindOfTokensComponent } from '../_dialogs/remind-of-tokens/remind-of-tokens.component';
 import { QrCodeDialogComponent } from '../_dialogs/qr-code-dialog/qr-code-dialog.component';
 import { BonusTokenService } from '../../../services/http/bonus-token.service';
-import { BonusToken } from '../../../models/bonus-token';
-import { AuthProvider } from '../../../models/auth-provider';
 
 @Component({
   selector: 'app-header',
@@ -117,7 +115,7 @@ export class HeaderComponent implements OnInit {
   logout() {
     // ToDo: Fix this madness.
     if (this.user.authProvider === 'ARSNOVA_GUEST') {
-      this.bonusTokenService.getTokensByUserId(this.user.id).subscribe( list => {
+      this.bonusTokenService.getTokensByUserId(this.user.id).subscribe(list => {
         if (list && list.length > 0) {
           const dialogRef = this.dialog.open(RemindOfTokensComponent, {
             width: '600px'

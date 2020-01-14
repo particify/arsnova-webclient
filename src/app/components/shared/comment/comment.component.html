@@ -66,17 +66,19 @@
       </button>
     </div>
     <div fxLayout="row">
-      <div class="body click" (click)="openPresentDialog(comment)" tabindex="0" attr.aria-labelledby="comment-{{ comment.id }}">
+      <div class="body click" (click)="openPresentDialog(comment)" tabindex="0"
+           attr.aria-labelledby="comment-{{ comment.id }}">
         <span aria-hidden="true">{{ comment.body.trim() }}</span>
-        <span id="comment-{{ comment.id }}" class="visually-hidden" aria-hidden="true">{{ 'comment-page.comment' | translate: {
-            time: (language === 'de' ? (comment.timestamp | date: ' HH:mm ') : (comment.timestamp | date: 'h:mm a')),
-            votes: comment.score === 1 ? ('comment-page.a11y-text_textForOneVote' | translate) : comment.score + ('comment-page.a11y-text_textForVotes' | translate),
-            comment: comment.body.trim(),
-            correct: comment.correct === 1 ? ('comment-page.a11y-text_correct' | translate) : "",
-            wrong: comment.correct === 2 ? ('comment-page.a11y-text_wrong' | translate) : "",
-            bonus: comment.favorite ? ('comment-page.a11y-text_grade' | translate) : "",
-            beamer: comment.read ? ('comment-page.a11y-text_read' | translate) : ""
-          }
+        <span id="comment-{{ comment.id }}" class="visually-hidden"
+              aria-hidden="true">{{ 'comment-page.comment' | translate: {
+          time: (language === 'de' ? (comment.timestamp | date: ' HH:mm ') : (comment.timestamp | date: 'h:mm a')),
+          votes: comment.score === 1 ? ('comment-page.a11y-text_textForOneVote' | translate) : comment.score + ('comment-page.a11y-text_textForVotes' | translate),
+          comment: comment.body.trim(),
+          correct: comment.correct === 1 ? ('comment-page.a11y-text_correct' | translate) : "",
+          wrong: comment.correct === 2 ? ('comment-page.a11y-text_wrong' | translate) : "",
+          bonus: comment.favorite ? ('comment-page.a11y-text_grade' | translate) : "",
+          beamer: comment.read ? ('comment-page.a11y-text_read' | translate) : ""
+        }
           }}</span>
       </div>
       <span class="fill-remaining-space click" (click)="openPresentDialog(comment)"></span>
@@ -110,17 +112,20 @@
 
 <!--Hidden Div's for a11y-Descriptions-->
 <div class="visually-hidden">
-  <div id="comment_correct{{ comment.id }}">{{comment.correct != 1 ? ('comment-page.a11y-comment_not_marked_correct' | translate)
-                                                              : ('comment-page.a11y-comment_marked_correct' | translate) }}
+  <div
+    id="comment_correct{{ comment.id }}">{{comment.correct != 1 ? ('comment-page.a11y-comment_not_marked_correct' | translate)
+    : ('comment-page.a11y-comment_marked_correct' | translate) }}
   </div>
-  <div id="comment_not_correct{{ comment.id }}">{{comment.correct != 2 ? ('comment-page.a11y-comment_not_marked_wrong' | translate)
-      : ('comment-page.a11y-comment_marked_wrong' | translate) }}
+  <div
+    id="comment_not_correct{{ comment.id }}">{{comment.correct != 2 ? ('comment-page.a11y-comment_not_marked_wrong' | translate)
+    : ('comment-page.a11y-comment_marked_wrong' | translate) }}
   </div>
   <div id="comment_grade{{ comment.id }}">{{ !comment.favorite ? ('comment-page.a11y-comment_grade' | translate)
-      : ('comment-page.a11y-comment_not_grade' | translate) }}
+    : ('comment-page.a11y-comment_not_grade' | translate) }}
   </div>
   <div id="comment_delete{{ comment.id }}">{{'comment-page.a11y-comment_delete' | translate}}</div>
   <div id="comment_moderation{{ comment.id }}">{{'comment-page.a11y-comment_moderation' | translate}}</div>
   <div *ngIf="isStudent" id="comment_vote_up{{ comment.id }}">{{'comment-page.a11y-comment_vote_up' | translate}}</div>
-  <div *ngIf="isStudent" id="comment_vote_down{{ comment.id }}">{{'comment-page.a11y-comment_vote_down' | translate}}</div>
+  <div *ngIf="isStudent"
+       id="comment_vote_down{{ comment.id }}">{{'comment-page.a11y-comment_vote_down' | translate}}</div>
 </div>

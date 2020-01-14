@@ -68,11 +68,6 @@
     "bonus-token": "Tokens for bonus points",
     "no-bonus": "No bonus points earned yet."
   },
-  "help": {
-    "cancel": "Close",
-    "cancel-description": "Closes the help dialog",
-    "title": "Help"
-  },
   "home-page": {
     "accessibility-create": "Create a new session",
     "accessibility-join-button": "Enter the session with the specified session key.",

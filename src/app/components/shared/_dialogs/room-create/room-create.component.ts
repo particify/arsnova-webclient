@@ -74,8 +74,12 @@ export class RoomCreateComponent implements OnInit {
       this.room = room;
       let msg1: string;
       let msg2: string;
-      this.translateService.get('home-page.created-1').subscribe(msg => { msg1 = msg; });
-      this.translateService.get('home-page.created-2').subscribe(msg => { msg2 = msg; });
+      this.translateService.get('home-page.created-1').subscribe(msg => {
+        msg1 = msg;
+      });
+      this.translateService.get('home-page.created-2').subscribe(msg => {
+        msg2 = msg;
+      });
       this.notification.show(msg1 + longRoomName + msg2);
       this.translateService.get('room-create.default-group').subscribe(name => {
         const contentGroups: string[] = [name];

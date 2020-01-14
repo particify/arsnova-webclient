@@ -7,7 +7,8 @@ export class ColorElem {
     public name: string,
     public attr: string,
     public color: string
-  ) {}
+  ) {
+  }
 
 }
 
@@ -25,7 +26,9 @@ export class ThemeTranslationList {
 
   public get(language: string) {
     for (let i = 0; i < this.map.length; i++) {
-      if (this.map[i][0] === language) {return this.map[i][1]; }
+      if (this.map[i][0] === language) {
+        return this.map[i][1];
+      }
     }
     console.error('ThemeTranslationList: Translation Error, Unknown Language: ' + language);
     return 'unknown';
@@ -149,7 +152,9 @@ export class Theme {
 
   public get(name: string): ColorElem {
     for (let i = 0; i < this.colors.length; i++) {
-      if (this.colors[i].name === name) {return this.colors[i]; }
+      if (this.colors[i].name === name) {
+        return this.colors[i];
+      }
     }
     return null;
   }
@@ -171,7 +176,9 @@ export class Theme {
   }
 
   public toString(language: string): string {
-    if (typeof language === 'undefined') {return 'waiting for language (currentLang)'; }
+    if (typeof language === 'undefined') {
+      return 'waiting for language (currentLang)';
+    }
     return this.name.get(language) + ' - ' + this.description.get(language);
   }
 }

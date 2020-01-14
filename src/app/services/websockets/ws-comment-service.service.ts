@@ -17,7 +17,8 @@ import { IMessage } from '@stomp/stompjs';
 })
 export class WsCommentServiceService {
 
-  constructor(private wsConnector: WsConnectorService) { }
+  constructor(private wsConnector: WsConnectorService) {
+  }
 
   add(comment: Comment): void {
     const message = new CreateComment(comment.roomId, comment.creatorId, comment.body, comment.tag);

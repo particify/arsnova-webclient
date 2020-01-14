@@ -25,13 +25,13 @@ export class CreateCommentComponent implements OnInit {
   bodyForm = new FormControl('', [Validators.required]);
 
   constructor(
-              private notification: NotificationService,
-              public dialogRef: MatDialogRef<CommentListComponent>,
-              private translateService: TranslateService,
-              public dialog: MatDialog,
-              private translationService: TranslateService,
-              public eventService: EventService,
-              @Inject(MAT_DIALOG_DATA) public data: any) {
+    private notification: NotificationService,
+    public dialogRef: MatDialogRef<CommentListComponent>,
+    private translateService: TranslateService,
+    public dialog: MatDialog,
+    private translationService: TranslateService,
+    public eventService: EventService,
+    @Inject(MAT_DIALOG_DATA) public data: any) {
   }
 
   ngOnInit() {

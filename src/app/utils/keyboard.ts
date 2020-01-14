@@ -1,4 +1,4 @@
-import { KeyboardKey, KEYBOARD_KEYS, IKeyboardKey } from './keyboard/keys';
+import { IKeyboardKey, KEYBOARD_KEYS, KeyboardKey } from './keyboard/keys';
 
 /**
  * Contains keyboard processing helper functions.
@@ -17,8 +17,8 @@ export class KeyboardUtils {
       const keyDefinition: IKeyboardKey = KEYBOARD_KEYS.get(key);
 
       return (supportsKeyAttribute === true
-        ? (keyDefinition.key.indexOf(event.key) !== -1) // new browser event
-        : (event.keyCode === keyDefinition.keyCode) // old browser event support
+          ? (keyDefinition.key.indexOf(event.key) !== -1) // new browser event
+          : (event.keyCode === keyDefinition.keyCode) // old browser event support
       );
     }).length > 0;
   }

@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, ElementRef, Inject, OnInit, ViewChild } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material';
 import { NotificationService } from '../../../../services/util/notification.service';
 import { TranslateService } from '@ngx-translate/core';
@@ -23,13 +23,13 @@ export class TagsComponent implements OnInit {
   @ViewChild('tag') redel: ElementRef;
 
   constructor(public dialogRef: MatDialogRef<RoomCreatorPageComponent>,
-    public dialog: MatDialog,
-    public notificationService: NotificationService,
-    public translationService: TranslateService,
-    protected langService: LanguageService,
-    @Inject(MAT_DIALOG_DATA) public data: any,
-    public eventService: EventService) {
-      langService.langEmitter.subscribe(lang => translationService.use(lang));
+              public dialog: MatDialog,
+              public notificationService: NotificationService,
+              public translationService: TranslateService,
+              protected langService: LanguageService,
+              @Inject(MAT_DIALOG_DATA) public data: any,
+              public eventService: EventService) {
+    langService.langEmitter.subscribe(lang => translationService.use(lang));
   }
 
   ngOnInit() {

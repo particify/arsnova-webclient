@@ -1,13 +1,12 @@
-import { catchError, map, concatMap, filter, take, tap } from 'rxjs/operators';
+import { catchError, concatMap, filter, map, take, tap } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { User } from '../../models/user';
-import { Observable, of, BehaviorSubject, timer } from 'rxjs';
+import { BehaviorSubject, Observable, of, timer } from 'rxjs';
 import { UserRole } from '../../models/user-roles.enum';
 import { DataStoreService } from '../util/data-store.service';
 import { EventService } from '../util/event.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { ClientAuthentication } from '../../models/client-authentication';
-import { AuthProvider } from '../../models/auth-provider';
 import { BaseHttpService } from './base-http.service';
 
 @Injectable()
@@ -148,12 +147,12 @@ export class AuthenticationService extends BaseHttpService {
     const popupX = window.top.screenX + window.top.outerWidth / 2 - popupW / 2;
     const popupY = window.top.screenY + window.top.outerHeight / 2 - popupH / 2;
     const popup = window.open(ssoUrl, 'auth_popup',
-        `left=${popupX},top=${popupY},width=${popupW},height=${popupH},resizable`);
+      `left=${popupX},top=${popupY},width=${popupW},height=${popupH},resizable`);
     const auth = timer(0, 500).pipe(
-        map(() => popup.closed),
-        filter((closed) => closed),
-        concatMap(() => this.http.post<ClientAuthentication>(loginUrl, null, { withCredentials: true })),
-        take(1));
+      map(() => popup.closed),
+      filter((closed) => closed),
+      concatMap(() => this.http.post<ClientAuthentication>(loginUrl, null, { withCredentials: true })),
+      take(1));
 
     return this.checkLogin(auth, userRole, false);
   }
@@ -171,11 +170,11 @@ export class AuthenticationService extends BaseHttpService {
 
   resetPassword(email: string): Observable<boolean> {
     const connectionUrl: string =
-        this.apiUrl.v2 +
-        this.apiUrl.user +
-        '/' +
-        email +
-        this.apiUrl.resetPassword;
+      this.apiUrl.v2 +
+      this.apiUrl.user +
+      '/' +
+      email +
+      this.apiUrl.resetPassword;
 
     return this.http.post(connectionUrl, {
       key: null,
@@ -191,15 +190,14 @@ export class AuthenticationService extends BaseHttpService {
 
   setNewPassword(email: string, key: string, password: string): Observable<boolean> {
     const connectionUrl: string =
-        this.apiUrl.v2 +
-        this.apiUrl.user +
-        '/' +
-        email +
-        this.apiUrl.resetPassword +
-        `?key=${key}&password=${password}`;
+      this.apiUrl.v2 +
+      this.apiUrl.user +
+      '/' +
+      email +
+      this.apiUrl.resetPassword +
+      `?key=${key}&password=${password}`;
 
-    return this.http.post(connectionUrl, {
-    }, this.httpOptions).pipe(
+    return this.http.post(connectionUrl, {}, this.httpOptions).pipe(
       catchError(err => {
         return of(false);
       }), map((result) => {
@@ -256,7 +254,7 @@ export class AuthenticationService extends BaseHttpService {
           result.token,
           userRole,
           isGuest));
-          this.dataStoreService.set('loggedin', 'true');
+        this.dataStoreService.set('loggedin', 'true');
         return 'true';
       } else {
         return 'false';
@@ -267,7 +265,7 @@ export class AuthenticationService extends BaseHttpService {
         return of('activation');
       }
       return of('false');
-    }), );
+    }));
   }
 
   get watchUser() {
@@ -289,7 +287,7 @@ export class AuthenticationService extends BaseHttpService {
   }
 
   saveAccessToLocalStorage(): void {
-    const arr = new Array();
+    const arr = [];
     this.roomAccess.forEach(function (key, value) {
       arr.push(key + '_' + String(value));
     });

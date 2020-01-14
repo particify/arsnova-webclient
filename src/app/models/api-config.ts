@@ -27,8 +27,8 @@ export interface UiConfig {
 
 export class ApiConfig {
   constructor(
-      public authenticationProviders: AuthenticationProvider[],
-      public features: { [featureName: string]: Feature },
-      public ui: UiConfig) {
+    public authenticationProviders: AuthenticationProvider[],
+    public features: { [featureName: string]: Feature },
+    public ui: UiConfig) {
   }
 }

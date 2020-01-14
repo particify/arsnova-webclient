@@ -43,7 +43,7 @@ export class StatisticComponent implements OnInit {
               private contentService: ContentService,
               private translateService: TranslateService,
               protected langService: LanguageService) {
-              langService.langEmitter.subscribe(lang => translateService.use(lang));
+    langService.langEmitter.subscribe(lang => translateService.use(lang));
   }
 
   ngOnInit() {

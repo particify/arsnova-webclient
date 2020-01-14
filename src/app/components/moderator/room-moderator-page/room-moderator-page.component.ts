@@ -1,4 +1,4 @@
-import { Component, OnInit, Renderer2, OnDestroy, AfterContentInit } from '@angular/core';
+import { AfterContentInit, Component, OnDestroy, OnInit, Renderer2 } from '@angular/core';
 import { Room } from '../../../models/room';
 import { RoomPageComponent } from '../../shared/room-page/room-page.component';
 import { Location } from '@angular/common';
@@ -56,7 +56,7 @@ export class RoomModeratorPageComponent extends RoomPageComponent implements OnI
         }
       }
       this.commentService.countByRoomId(this.room.id, true).subscribe(commentCounter => {
-          this.commentCounter = commentCounter;
+        this.commentCounter = commentCounter;
       });
       if (this.moderationEnabled) {
         this.commentService.countByRoomId(this.room.id, false).subscribe(commentCounter => {
@@ -93,7 +93,7 @@ export class RoomModeratorPageComponent extends RoomPageComponent implements OnI
   }
 
   ngAfterContentInit(): void {
-    setTimeout( () => {
+    setTimeout(() => {
       document.getElementById('live_announcer-button').focus();
     }, 700);
   }

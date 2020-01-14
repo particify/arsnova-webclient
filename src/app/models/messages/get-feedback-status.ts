@@ -1,7 +1,7 @@
 export class GetFeedbackStatus {
-    type: string;
+  type: string;
 
-    constructor() {
-      this.type = 'GetFeedbackStatus';
-    }
+  constructor() {
+    this.type = 'GetFeedbackStatus';
   }
+}

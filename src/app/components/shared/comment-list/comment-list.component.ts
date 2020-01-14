@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Comment } from '../../../models/comment';
 import { CommentService } from '../../../services/http/comment.service';
 import { TranslateService } from '@ngx-translate/core';
@@ -83,7 +83,7 @@ export class CommentListComponent implements OnInit, OnDestroy {
     const userId = this.user.id;
     this.userRole = this.user.role;
     this.currentSort = this.votedesc;
-    this.roomService.getRoom(this.roomId).subscribe( room => {
+    this.roomService.getRoom(this.roomId).subscribe(room => {
       this.room = room;
       if (this.room && this.room.extensions && this.room.extensions['comments']) {
         if (this.room.extensions['comments'].enableModeration !== null) {
@@ -142,7 +142,7 @@ export class CommentListComponent implements OnInit, OnDestroy {
       }
     } else if (this.searchInput.length === 0 && this.currentFilter === '') {
       this.hideCommentsList = false;
-     }
+    }
   }
 
   activateSearch() {
@@ -166,9 +166,9 @@ export class CommentListComponent implements OnInit, OnDestroy {
     if (this.thresholdEnabled) {
       commentThreshold = this.room.extensions['comments'].commentThreshold;
       if (this.hideCommentsList) {
-        this.filteredComments = this.filteredComments.filter( x => x.score >= commentThreshold );
+        this.filteredComments = this.filteredComments.filter(x => x.score >= commentThreshold);
       } else {
-        this.comments = this.comments.filter( x => x.score >= commentThreshold );
+        this.comments = this.comments.filter(x => x.score >= commentThreshold);
       }
     }
     this.sortComments(this.currentSort);
@@ -287,7 +287,7 @@ export class CommentListComponent implements OnInit, OnDestroy {
         });
         comment.ack = true;
       } else {
-        this.translateService.get('comment-list.comment-sent-to-moderator').subscribe( msg => {
+        this.translateService.get('comment-list.comment-sent-to-moderator').subscribe(msg => {
           message = msg;
         });
       }
@@ -400,7 +400,8 @@ export class CommentListComponent implements OnInit, OnDestroy {
       // current live announcer content must be cleared before next read
       this.liveAnnouncer.clear();
 
-      this.liveAnnouncer.announce(newCommentText).catch(err => { /* TODO error handling */ });
+      this.liveAnnouncer.announce(newCommentText).catch(err => { /* TODO error handling */
+      });
     }, 450);
   }
 }

@@ -12,7 +12,8 @@ export class ContentGroupCreationComponent implements OnInit {
   name: string;
 
   constructor(public dialogRef: MatDialogRef<RoomCreatorPageComponent>,
-              public dialog: MatDialog) {}
+              public dialog: MatDialog) {
+  }
 
   ngOnInit() {
   }

@@ -13,8 +13,9 @@ mat-card-content > :first-child {
 .mat-icon-button {
   width: 60%;
   height: 75%;
-  color: var(--primary)!important;
+  color: var(--primary) !important;
   transition: all 0.3s;
+
   &:hover {
     transform: scale(1.2)
   }
@@ -37,7 +38,7 @@ mat-card-content > :first-child {
   width: 40px;
 }
 
-.main-icon{
+.main-icon {
   font-size: 80px;
   height: 80px;
   width: 80px;
@@ -52,7 +53,7 @@ mat-card-content > :first-child {
 .room-short-id {
   font-size: larger;
   font-weight: bold;
-  color: var(--on-surface)!important;
+  color: var(--on-surface) !important;
   margin: 5% 5% 0 0;
 }
 
@@ -70,7 +71,7 @@ h2 {
 
 mat-card-header {
   min-height: 80px;
-  height: 10%!important;
+  height: 10% !important;
 }
 
 mat-card-title {
@@ -83,12 +84,12 @@ mat-card-subtitle {
 }
 
 mat-grid-tile {
-  height: 100%!important;
-  padding-top: 2%!important;
+  height: 100% !important;
+  padding-top: 2% !important;
 }
 
 mat-expansion-panel {
-  background-color: var(--surface)!important;
+  background-color: var(--surface) !important;
   min-width: 200px;
   hyphens: auto;
 }

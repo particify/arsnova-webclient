@@ -3,7 +3,7 @@ import { environment } from './../environments/environment';
 
 export const ARSRxStompConfig: RxStompConfig = {
   // Which server?
-  brokerURL: ((window.location.protocol === 'http:' ) ? 'ws' : 'wss')
+  brokerURL: ((window.location.protocol === 'http:') ? 'ws' : 'wss')
     + `://${window.location.host}/api/ws/websocket`,
 
   connectHeaders: {

@@ -15,7 +15,8 @@ export class CustomIconService {
   constructor(
     private matIconRegistry: MatIconRegistry,
     private domSanitizer: DomSanitizer
-  ) {}
+  ) {
+  }
 
   init() {
     for (const icon of this.icons) {

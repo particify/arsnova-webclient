@@ -20,8 +20,8 @@
         </mat-card-header>
         <span class="fill-remaining-space"></span>
         <button mat-icon-button class="corner-icons" routerLink="/participant/room/{{ room.shortId }}/statistics">
-           <mat-icon id="stat-icon" matTooltip="{{ 'statistic.answer-statistic' | translate}}">insert_chart</mat-icon>
-         </button>
+          <mat-icon id="stat-icon" matTooltip="{{ 'statistic.answer-statistic' | translate}}">insert_chart</mat-icon>
+        </button>
       </div>
       <mat-divider></mat-divider>
       <mat-card-content *ngIf="room.description" fxLayoutAlign="center">
@@ -38,10 +38,10 @@
           </button>
         </mat-grid-tile>
         <mat-grid-tile>
-            <button mat-icon-button routerLink="/participant/room/{{ room.shortId }}/feedback-barometer">
-              <mat-icon class="main-icon" [ngClass]="{'desktop' : deviceType === 'desktop'}">thumbs_up_down</mat-icon>
-              <h3 *ngIf="deviceType === 'desktop'">{{ 'room-page.give-feedback' | translate}}</h3>
-            </button>
+          <button mat-icon-button routerLink="/participant/room/{{ room.shortId }}/feedback-barometer">
+            <mat-icon class="main-icon" [ngClass]="{'desktop' : deviceType === 'desktop'}">thumbs_up_down</mat-icon>
+            <h3 *ngIf="deviceType === 'desktop'">{{ 'room-page.give-feedback' | translate}}</h3>
+          </button>
         </mat-grid-tile>
       </mat-grid-list>
 
@@ -49,7 +49,8 @@
     </mat-card>
 
   </div>
-  <button id="live_announcer-button" tabIndex="-1" (click)="announce()" class="visually-hidden">{{ 'room-page.live-announcer' | translate }}</button>
+  <button id="live_announcer-button" tabIndex="-1" (click)="announce()"
+          class="visually-hidden">{{ 'room-page.live-announcer' | translate }}</button>
 </div>
 
 <!--Hidden Div's for a11y-Descriptions-->

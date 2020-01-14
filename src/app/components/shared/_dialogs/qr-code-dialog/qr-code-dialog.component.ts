@@ -1,14 +1,4 @@
-import {
-  AfterViewInit,
-  Component,
-  ElementRef,
-  OnInit,
-  QueryList,
-  Renderer2,
-  ViewChild,
-  ViewChildren,
-  ViewEncapsulation
-} from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnInit, Renderer2, ViewChild, ViewEncapsulation } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material';
 import { DialogConfirmActionButtonType } from '../../dialog/dialog-action-buttons/dialog-action-buttons.component';
 import { NgxQRCodeComponent } from 'ngx-qrcode2';
@@ -52,7 +42,11 @@ export class QrCodeDialogComponent implements OnInit, AfterViewInit {
   private onresize() {
     const width = this.imgWrp.nativeElement.offsetWidth;
     const height = this.imgWrp.nativeElement.offsetHeight;
-    if (width > height) {this.setPosition(height); } else { this.setPosition(width); }
+    if (width > height) {
+      this.setPosition(height);
+    } else {
+      this.setPosition(width);
+    }
   }
 
   private setPosition(offset: number) {

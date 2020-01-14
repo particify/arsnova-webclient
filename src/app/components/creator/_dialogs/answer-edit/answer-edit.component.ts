@@ -4,7 +4,6 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 import { EventService } from '../../../../services/util/event.service';
 
 
-
 @Component({
   selector: 'app-answer-edit',
   templateUrl: './answer-edit.component.html',

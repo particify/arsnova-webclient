@@ -1,4 +1,3 @@
-import { AuthProvider } from './auth-provider';
 import { UserRole } from './user-roles.enum';
 
 export class User {

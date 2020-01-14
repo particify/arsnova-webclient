@@ -23,11 +23,11 @@ export class UserBonusTokenComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.bonusTokenService.getTokensByUserId(this.userId).subscribe( list => {
+    this.bonusTokenService.getTokensByUserId(this.userId).subscribe(list => {
       this.bonusTokens = list;
       for (const bt of list) {
         this.roomService.getRoom(bt.roomId).subscribe(room => {
-          const btm = <BonusTokenRoomMixin> bt;
+          const btm = <BonusTokenRoomMixin>bt;
           btm.roomShortId = room.shortId;
           btm.roomName = room.name;
           this.bonusTokensMixin.push(btm);
