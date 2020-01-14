@@ -132,9 +132,6 @@ export class ContentChoiceParticipantComponent implements OnInit {
       }
       return;
     }
-    this.translateService.get('answer.sent').subscribe(message => {
-      this.notificationService.show(message);
-    });
     this.answerService.addAnswerChoice({
       id: null,
       revision: null,
@@ -153,9 +150,6 @@ export class ContentChoiceParticipantComponent implements OnInit {
 
   abstain($event) {
     $event.preventDefault();
-    this.translateService.get('answer.abstention-sent').subscribe(message => {
-      this.notificationService.show(message);
-    });
     this.answerService.addAnswerChoice({
       id: null,
       revision: null,

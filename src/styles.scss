@@ -324,6 +324,59 @@ mat-card {
   background: var(--surface) !important;
 }
 
+// Mat Stepper
+
+.mat-stepper-horizontal {
+  background-color: var(--background);
+}
+
+.mat-stepper-horizontal-line, .mat-step-label {
+  min-width: 0 !important;
+  border-style: none !important;
+}
+
+.mat-step-icon {
+  background-color: var(--secondary) !important;
+  margin: 0 !important;
+  width: 30px !important;
+  height: 30px !important;
+}
+
+.mat-step-icon-content {
+  color: var(--on-secondary) !important;
+  font-size: 18px;
+}
+
+.mat-step-icon-selected {
+  background-color: var(--primary) !important;
+}
+
+.mat-horizontal-stepper-header-container {
+  overflow: hidden;
+}
+
+.mat-horizontal-stepper-header {
+  height: 50px !important;
+  margin-right: calc(calc(100% - 220px) / 4) !important;
+  padding: 0 10px !important;
+  min-width: 50px !important;
+  justify-content: center;
+}
+
+.mat-step-header-ripple {
+  left: 10px !important;
+  width: 50px;
+  border-radius: 50%;
+}
+
+.mat-step-header:hover {
+  background-color: var(--background);
+}
+
+.mat-horizontal-content-container {
+  padding: 0 !important;
+}
+
 // Badge
 
 .mat-badge-content {
