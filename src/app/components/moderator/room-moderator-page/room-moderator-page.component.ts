@@ -3,7 +3,7 @@ import { Room } from '../../../models/room';
 import { RoomPageComponent } from '../../shared/room-page/room-page.component';
 import { Location } from '@angular/common';
 import { RoomService } from '../../../services/http/room.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { LanguageService } from '../../../services/util/language.service';
 import { WsCommentServiceService } from '../../../services/websockets/ws-comment-service.service';
@@ -32,7 +32,8 @@ export class RoomModeratorPageComponent extends RoomPageComponent implements OnI
   constructor(protected location: Location,
               protected roomService: RoomService,
               protected route: ActivatedRoute,
-              private translateService: TranslateService,
+              protected router: Router,
+              protected translateService: TranslateService,
               protected langService: LanguageService,
               protected wsCommentService: WsCommentServiceService,
               protected commentService: CommentService,
@@ -41,7 +42,8 @@ export class RoomModeratorPageComponent extends RoomPageComponent implements OnI
               public eventService: EventService,
               private liveAnnouncer: LiveAnnouncer,
               private _r: Renderer2) {
-    super(roomService, route, location, wsCommentService, commentService, eventService, contentService);
+    super(roomService, route, router, location, wsCommentService, commentService, eventService, contentService, translateService,
+      notification);
     langService.langEmitter.subscribe(lang => translateService.use(lang));
   }
 

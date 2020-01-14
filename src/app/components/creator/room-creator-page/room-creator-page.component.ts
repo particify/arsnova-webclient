@@ -1,6 +1,6 @@
 import { AfterContentInit, Component, OnDestroy, OnInit, Renderer2 } from '@angular/core';
 import { RoomService } from '../../../services/http/room.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { RoomPageComponent } from '../../shared/room-page/room-page.component';
 import { Room } from '../../../models/room';
 import { CommentSettingsDialog } from '../../../models/comment-settings-dialog';
@@ -31,7 +31,6 @@ import { ContentGroup } from '../../../models/content-group';
   styleUrls: ['./room-creator-page.component.scss']
 })
 export class RoomCreatorPageComponent extends RoomPageComponent implements OnInit, OnDestroy, AfterContentInit {
-  room: Room;
   updRoom: Room;
   commentThreshold: number;
   deviceType = localStorage.getItem('deviceType');
@@ -44,9 +43,10 @@ export class RoomCreatorPageComponent extends RoomPageComponent implements OnIni
   constructor(protected roomService: RoomService,
               protected notification: NotificationService,
               protected route: ActivatedRoute,
+              protected router: Router,
               protected location: Location,
               public dialog: MatDialog,
-              private translateService: TranslateService,
+              protected translateService: TranslateService,
               protected langService: LanguageService,
               protected wsCommentService: WsCommentServiceService,
               protected commentService: CommentService,
@@ -54,7 +54,8 @@ export class RoomCreatorPageComponent extends RoomPageComponent implements OnIni
               private _r: Renderer2,
               public eventService: EventService,
               protected contentService: ContentService) {
-    super(roomService, route, location, wsCommentService, commentService, eventService, contentService);
+    super(roomService, route, router, location, wsCommentService, commentService, eventService, contentService, translateService,
+      notification);
     langService.langEmitter.subscribe(lang => translateService.use(lang));
   }
 

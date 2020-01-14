@@ -23,6 +23,13 @@ body {
   overflow: hidden;
 }
 
+.overflow_hide {
+  height: 0;
+  overflow: hidden;
+}
+
+// States
+
 .visually-hidden {
   position: absolute;
   width: 1px;
@@ -31,9 +38,8 @@ body {
   left: -10000px;
 }
 
-.overflow_hide {
-  height: 0;
-  overflow: hidden;
+.disabled {
+  opacity: 0.5;
 }
 
 // Headings & Texts

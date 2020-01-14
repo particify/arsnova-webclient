@@ -3,7 +3,7 @@ import { Room } from '../../../models/room';
 import { ContentGroup } from '../../../models/content-group';
 import { RoomStats } from '../../../models/room-stats';
 import { RoomService } from '../../../services/http/room.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { WsCommentServiceService } from '../../../services/websockets/ws-comment-service.service';
 import { CommentService } from '../../../services/http/comment.service';
@@ -11,6 +11,8 @@ import { EventService } from '../../../services/util/event.service';
 import { IMessage, Message } from '@stomp/stompjs';
 import { Observable, Subscription } from 'rxjs';
 import { ContentService } from '../../../services/http/content.service';
+import { TranslateService } from '@ngx-translate/core';
+import { NotificationService } from '../../../services/util/notification.service';
 
 @Component({
   selector: 'app-room-page',
@@ -28,14 +30,18 @@ export class RoomPageComponent implements OnInit, OnDestroy {
   protected sub: Subscription;
   protected commentWatch: Observable<IMessage>;
   protected listenerFn: () => void;
+  protected noGroups = true;
 
   constructor(protected roomService: RoomService,
               protected route: ActivatedRoute,
+              protected router: Router,
               protected location: Location,
               protected wsCommentService: WsCommentServiceService,
               protected commentService: CommentService,
               protected eventService: EventService,
-              protected contentService: ContentService
+              protected contentService: ContentService,
+              protected translateService: TranslateService,
+              protected notificationService: NotificationService
   ) {
   }
 
@@ -95,6 +101,7 @@ export class RoomPageComponent implements OnInit, OnDestroy {
     this.roomService.getStats(this.room.id).subscribe(roomStats => {
       this.roomStats = roomStats;
       if (this.roomStats.groupStats) {
+        this.noGroups = false;
         this.initializeGroups();
       }
     });
@@ -112,6 +119,15 @@ export class RoomPageComponent implements OnInit, OnDestroy {
     }
   }
 
+  navToStats(role: string) {
+    if (this.noGroups) {
+      this.translateService.get('room-page.no-contents').subscribe(msg => {
+        this.notificationService.show(msg);
+      });
+    } else {
+      this.router.navigate([`/${role}/room/${this.room.shortId}/statistics`]);
+    }
+  }
 
   delete(room: Room): void {
     this.roomService.deleteRoom(room.id).subscribe();
