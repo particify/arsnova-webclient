@@ -1,0 +1,22 @@
+.forgot-pw{
+  color: var(--secondary);
+}
+
+.register {
+  padding: 0 10px 0 10px;
+  color: var(--on-surface);
+}
+
+p {
+  font-size: smaller;
+}
+
+input:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0 50px var(--dialog) inset;
+  -webkit-text-fill-color: var(--on-surface);
+}
+
+input:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0 50px var(--dialog) inset;
+  -webkit-text-fill-color: var(--on-surface);
+}

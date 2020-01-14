@@ -21,7 +21,7 @@ import { RoomJoinComponent } from './room-join/room-join.component';
 import { RoomCreateComponent } from './_dialogs/room-create/room-create.component';
 import { UserBonusTokenComponent } from './_dialogs/user-bonus-token/user-bonus-token.component';
 import { RemindOfTokensComponent } from './_dialogs/remind-of-tokens/remind-of-tokens.component';
-import { LoginComponent } from './login/login.component';
+import { LoginComponent } from '../home/_dialogs/login/login.component';
 import { StatisticHelpComponent } from './_dialogs/statistic-help/statistic-help.component';
 import { CommentComponent } from './comment/comment.component';
 import { CreateCommentComponent } from './_dialogs/create-comment/create-comment.component';
@@ -63,7 +63,6 @@ import { ArsModule } from '../../../../projects/ars/src/lib/ars.module';
     RoomCreateComponent,
     UserBonusTokenComponent,
     RemindOfTokensComponent,
-    LoginComponent,
     StatisticHelpComponent,
     CommentComponent,
     CreateCommentComponent,
@@ -95,7 +94,6 @@ import { ArsModule } from '../../../../projects/ars/src/lib/ars.module';
   ],
   entryComponents: [
     RoomCreateComponent,
-    LoginComponent,
     StatisticHelpComponent,
     CreateCommentComponent,
     PresentCommentComponent,

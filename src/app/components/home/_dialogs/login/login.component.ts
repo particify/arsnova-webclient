@@ -1,17 +1,17 @@
 import { Component, Inject, OnChanges, OnInit, SimpleChanges } from '@angular/core';
-import { AuthenticationService } from '../../../services/http/authentication.service';
+import { AuthenticationService } from '../../../../services/http/authentication.service';
 import { Router } from '@angular/router';
-import { NotificationService } from '../../../services/util/notification.service';
+import { NotificationService } from '../../../../services/util/notification.service';
 import { ErrorStateMatcher, MAT_DIALOG_DATA, MatDialog } from '@angular/material';
 import { FormControl, FormGroupDirective, NgForm, Validators } from '@angular/forms';
-import { UserRole } from '../../../models/user-roles.enum';
+import { UserRole } from '../../../../models/user-roles.enum';
 import { TranslateService } from '@ngx-translate/core';
-import { UserActivationComponent } from '../../home/_dialogs/user-activation/user-activation.component';
-import { PasswordResetComponent } from '../../home/_dialogs/password-reset/password-reset.component';
-import { RegisterComponent } from '../../home/_dialogs/register/register.component';
-import { EventService } from '../../../services/util/event.service';
-import { ApiConfigService } from '../../../services/http/api-config.service';
-import { AuthenticationProviderType } from '../../../models/api-config';
+import { UserActivationComponent } from '../user-activation/user-activation.component';
+import { PasswordResetComponent } from '../password-reset/password-reset.component';
+import { RegisterComponent } from '../register/register.component';
+import { EventService } from '../../../../services/util/event.service';
+import { ApiConfigService } from '../../../../services/http/api-config.service';
+import { AuthenticationProviderType } from '../../../../models/api-config';
 
 export class LoginErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {

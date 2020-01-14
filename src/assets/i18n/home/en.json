@@ -122,9 +122,6 @@
     "password-required": "Password required",
     "password-reset": "Forgot your password?",
     "register": "Register",
-    "restart-account-activation-button": "Send again",
-    "restart-account-activation-correct": "Activation key sent again",
-    "restart-account-activation-tooltip": "Sends the activation key again",
     "welcome": "Feedback and Interaction"
   },
   "overlay": {
@@ -221,13 +218,14 @@
   },
   "user-activation": {
     "activate": "Activate",
-    "activate-description": "Activates the account",
     "activation-key": "Activation key",
     "activation-key-incorrect": "Activation key is incorrect.",
-    "activation-key-required": "Activation key required",
+    "activation-key-required": "Please enter an activation key.",
     "activation-key-input-description": "Enter the activation key that you received by e-mail.",
-    "cancel": "Cancel",
-    "cancel-description": "Cancel"
+    "didnt-get": "Didn't get a Code?",
+    "reset-button": "Send again",
+    "activation-key-sent-again": "Activation key sent again",
+    "cancel": "Cancel"
   },
   "user-bonus-token-dialog": {
     "header": "Tokens for bonus points"
