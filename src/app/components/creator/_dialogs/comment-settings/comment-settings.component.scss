@@ -2,18 +2,9 @@
   width: 100%;
 }
 
-.delete {
+.mat-flat-button {
   margin-bottom: 20px;
   min-width: 220px;
-  background-color: var(--red);
-  color: var(--on-secondary);
-}
-
-.export {
-  margin-bottom: 20px;
-  min-width: 220px;
-  background-color: var(--secondary);
-  color: var(--on-secondary);
 }
 
 button {
@@ -22,24 +13,4 @@ button {
 
 mat-icon {
   margin-right: 10px;
-}
-
-
-mat-divider {
-  margin-bottom: 10px;
-  color: var(--on-surface) !important;
-}
-
-.abort {
-  background-color: var(--secondary);
-  color: var(--on-secondary);
-}
-
-.update {
-  background-color: var(--primary);
-  color: var(--on-primary);
-}
-
-.submit {
-  margin-top: 20px;
 }

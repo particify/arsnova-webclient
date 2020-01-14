@@ -6,7 +6,6 @@ p {
   word-break: break-word;
   -ms-hyphens: auto;
   -webkit-hyphens: auto;
-  hyphens: auto;
 }
 
 ol {
@@ -37,6 +36,6 @@ iframe {
 }
 
 #demoContentTranscript {
-  height: 0px;
+  height: 0;
   overflow: hidden;
 }

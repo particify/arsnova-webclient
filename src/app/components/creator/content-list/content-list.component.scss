@@ -1,15 +1,9 @@
-mat-card {
-  width: 100%;
-  max-width: 800px;
-  background-color: var(--surface)!important;
-}
-
 mat-card-content > :first-child {
   margin-top: 15px;
 }
 
 mat-expansion-panel {
-  background-color: var(--primary-variant);
+  background-color: var(--secondary-variant);
   margin-bottom: 5px;
   hyphens: auto;
 }
@@ -19,24 +13,23 @@ mat-panel-title {
   align-items: center;
   font-size: medium;
   margin-right: 5px;
-  color: var(--on-primary)!important;
 }
 
 mat-expansion-panel-header {
-  background-color: var(--secondary) !important;
+  background-color: var(--table-a);
   padding-left: 3%;
   padding-right: 3%;
 }
 
 .matPanel {
-  background-color: var(--secondary);
+  background-color: var(--table-a);
   margin-bottom: 5px;
-  color: var(--on-secondary);
+  color: var(--on-surface);
 }
 
 .panelTitle {
   width: 8% !important;
-  color: var(--on-primary) !important;
+  color: var(----on-surface);
 }
 
 .actionButton {
@@ -54,12 +47,12 @@ mat-expansion-panel-header {
 .editButton {
   width: 15%;
   max-width: 60px;
-  color: var(--on-primary)
+  color: var(--primary)
 }
 
 .deleteButton {
   margin-right: 4%;
-  color: var(--red)
+  color: var(--warn)
 }
 
 mat-tooltip-component {
@@ -70,7 +63,6 @@ mat-tooltip-component {
   font-size: 50px;
   height: 50px;
   width: 50px;
-  line-height: 100%!important;
 }
 
 mat-progress-spinner {

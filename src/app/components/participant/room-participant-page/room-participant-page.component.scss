@@ -1,10 +1,5 @@
-@import '../../../../styles';
-
 mat-card {
-  width: 100%;
-  max-width: 800px;
   min-height: 350px;
-  background-color: var(--surface)!important;
 }
 
 mat-card-content>:first-child {
@@ -22,7 +17,6 @@ mat-card-content>:first-child {
   font-size: 80px;
   height: 80px;
   width: 80px;
-  line-height: 100%!important;
 }
 
 .desktop {

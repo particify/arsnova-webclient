@@ -1,9 +1,3 @@
-mat-card {
-  width: 100%;
-  max-width: 800px;
-  background-color: var(--surface)!important;
-}
-
 mat-toolbar {
   height: 15px;
   background-color: var(--surface)!important;
@@ -19,7 +13,6 @@ mat-icon {
   font-size: 30px;
   height: 30px;
   width: 30px;
-  line-height: 100%!important;
 }
 
 mat-list-item {

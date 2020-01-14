@@ -1,21 +1,24 @@
 export const light = {
 
   '--primary' : '#263238',
-  '--primary-variant': '#FFFFFF',
+  '--primary-variant': '#cfd8dc',
 
   '--secondary': '#FF6D00',
-  '--secondary-variant': '#FFFFFF',
+  '--secondary-variant': '#ffe0b2',
+
+  '--warn': '#e53935',
+  '--on-warn': 'black',
 
   '--background': '#EEEEEE',
-  '--surface': '#FFFFFF',
-  '--dialog': '#FFFFFF',
+  '--surface': 'white',
+  '--dialog': 'white',
   '--cancel': '#e0e0e0',
 
   '--on-primary': '#ffffff',
-  '--on-secondary': '#FFFFFF',
-  '--on-background': '#000000',
-  '--on-surface': '#000000',
-  '--on-cancel': '#000000',
+  '--on-secondary': 'white',
+  '--on-background': 'black',
+  '--on-surface': 'black',
+  '--on-cancel': 'black',
 
   '--green': '#43a047',
   '--green-light': '#e8f5e9',

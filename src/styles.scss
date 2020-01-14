@@ -31,21 +31,18 @@ body {
   left: -10000px;
 }
 
-.modal {
-  outline: none;
-  border-color: transparent;
+.overflow_hide {
+  height: 0;
+  overflow: hidden;
 }
 
-.placeholder {
-  color: var(--on-surface);
-}
+// Headings & Texts
 
-markdown {
+h1 {
   color: var(--on-surface);
 }
 
 h2 {
-
   color: var(--on-surface) !important;
   font-size: 24px !important;
 }
@@ -56,7 +53,7 @@ h3 {
 }
 
 h4 {
-  padding-top: 10%;
+  color: var(--on-surface);
   font-size: 17px !important;
 }
 
@@ -69,33 +66,43 @@ address {
   font-style: normal;
 }
 
-.overflow_hide {
-  height: 0;
-  overflow: hidden;
+// Inputs
+
+input, input:focus {
+  color: var(--on-surface);
+  caret-color: var(--on-surface);
+  &:focus {
+    caret-color: var(--on-surface);
+  }
 }
 
-.testBox {
-  width:50%;
-  height:50%;
-  position: fixed;
-  left:0;
-  top:25%;
-  z-index: 1000;
-  background-color: var(--surface);
+textarea {
+  line-height: 120%;
+  color: var(--on-surface);
+  caret-color: var(--on-surface);
 }
 
-.cdk-overlay-dark-backdrop {
-  background: var(--background);
+mat-form-field {
+  color: var(--on-surface);
 }
 
-.filledDialog {
-  width:calc( 100% - 50px);
-  min-width:calc( 100% - 50px);
-  max-width:calc( 100% - 50px);
-  height:calc( 100% - 50px);
-  margin:25px;
-  padding:0;
+mat-placeholder {
+  color: var(--on-surface);
 }
+
+mat-hint {
+  color: var(--on-surface)!important;
+}
+
+mat-error {
+  color: var(--warn)!important;
+}
+
+markdown {
+  color: var(--on-surface);
+}
+
+// Dialogs
 
 .screenDialog {
   width:100%;
@@ -106,16 +113,10 @@ address {
   padding:0;
 }
 
-.imgWrp img {
-  width:calc( 100% - 35px );
-  height:calc( 100% - 35px );
-  image-rendering: crisp-edges;
+.modal {
+  outline: none;
+  border-color: transparent;
 }
-
-
-// ---------------------------------
-// Adjustment of material components
-//----------------------------------
 
 // Mat Progress Bar
 
@@ -234,9 +235,82 @@ address {
   white-space: normal !important;
 }
 
+// Mat Slider
+
+
+.mat-accent .mat-slider-thumb {
+  background-color: var(--primary);
+}
+.mat-accent .mat-slider-thumb-label {
+  background-color: var(--primary);
+}
+.mat-accent .mat-slider-track-fill {
+  background-color: var(--primary);
+}
+
+// Mat Slide
+
+.mat-slide-toggle.mat-checked .mat-slide-toggle-thumb {
+  background-color: var(--secondary);
+}
+
+.mat-slide-toggle.mat-checked .mat-slide-toggle-bar {
+  background-color: var(--secondary-variant);
+}
+
+// Mat Select
+
+.mat-select-value-text {
+  color: var(--on-surface);
+  caret-color: var(--on-surface);
+}
+
+.mat-select-arrow-wrapper .mat-select-arrow {
+  color: var(--on-surface);
+}
+
+.mat-select-value-text {
+  color: var(--on-surface);
+}
+
+.mat-primary .mat-option.mat-selected:not(.mat-option-disabled) {
+  color: var(--primary);
+}
+
 // Mat List
 
 .mat-list-base .mat-list-item {
   min-height: 48px;
   height: auto!important;
+}
+
+// Buttons
+
+.button-primary {
+  background-color: var(--primary);
+  color: var(--on-primary);
+}
+
+.button-secondary {
+  background-color: var(--secondary);
+  color: var(--on-secondary);
+}
+
+.button-warn {
+  background-color: var(--warn);
+  color: var(--on-warn);
+}
+
+// Icons
+
+mat-icon {
+  line-height: 100%!important;
+}
+
+// Card
+
+mat-card {
+  width: 100%;
+  max-width: 800px;
+  background: var(--surface)!important;
 }

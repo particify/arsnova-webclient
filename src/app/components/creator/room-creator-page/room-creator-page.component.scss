@@ -1,10 +1,5 @@
-@import '../../../../styles';
-
 mat-card {
-  width: 100%;
-  max-width: 800px;
   min-height: 300px;
-  background-color: var(--surface)!important;
 }
 
 mat-card-content > :first-child {
@@ -42,14 +37,12 @@ mat-card-content > :first-child {
   font-size: 40px;
   height: 40px;
   width: 40px;
-  line-height: 100%;
 }
 
 .main-icon{
   font-size: 60px;
   height: 60px;
   width: 60px;
-  line-height: 100%!important;
 }
 
 .room-short-id {
@@ -105,7 +98,6 @@ mat-expansion-panel {
 .copy {
   font-size: 24px;
   color: var(--secondary);
-  line-height: 100%;
 }
 
 .gavel {

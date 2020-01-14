@@ -11,7 +11,7 @@
       <h3>{{ 'feedback.is-stopped' | translate }}</h3>
     </div>
     <div fxLayoutAlign="center" *ngIf="isOwner">
-      <button mat-raised-button class="toggle-button" fxLayoutAlign="center" (click)="toggle()">
+      <button mat-raised-button class="button-primary" fxLayoutAlign="center" (click)="toggle()">
           <p [translate]="isClosed ? 'feedback.start' : 'feedback.stop'"></p>
       </button>
     </div>

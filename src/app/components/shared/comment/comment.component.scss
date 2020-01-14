@@ -1,6 +1,5 @@
 #comment-card {
   margin-bottom: 3%;
-  background-color: var(--surface);
   padding: 1.5% 1.5% 3% 3%;
   transition: background-color 0.5s linear;
 }
@@ -14,7 +13,6 @@ mat-card-content > :first-child {
   height: 35px;
   font-size: 35px;
   font-weight: bold;
-  line-height: 100% !important;
   color: var(--on-surface)
 }
 
@@ -75,7 +73,7 @@ mat-card-content > :first-child {
 .click {
   cursor: pointer;
 }
-user.role
+
 .mat-icon {
   transform: scale(1.2);
 }

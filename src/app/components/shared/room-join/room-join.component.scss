@@ -1,14 +1,5 @@
 mat-form-field {
   font-size: x-large;
-  color: var(--on-surface);
-}
-
-input {
-  caret-color:var(--on-surface);
-}
-
-input:focus{
-  caret-color:var(--on-surface);
 }
 
 form {
@@ -17,6 +8,7 @@ form {
 
 mat-error {
   font-size: small;
+  color:var(--on-surface)!important;
 }
 
 .mat-fab {
@@ -30,36 +22,7 @@ input[type="number"]::-webkit-outer-spin-button, input[type="number"]::-webkit-i
   -webkit-appearance: none;
 }
 
-mat-hint {
-  color: var(--on-surface) !important;
-}
-
-.placeholder {
-  color: var(--on-surface);
-}
-
-::ng-deep .mat-form-field-label {
-  color: var(--on-surface)!important;
-}
-
-::ng-deep .mat-form-field-underline {
-  background-color: var(--on-surface)!important;
-}
-
-::ng-deep .mat-form-field-ripple {
-  background-color: var(--on-surface)!important;
-}
-
 input:-webkit-autofill {
   -webkit-box-shadow:0 0 0 50px var(--surface) inset;
   -webkit-text-fill-color: var(--on-surface);
-}
-
-mat-error{
-  color:var(--on-surface);
-}
-
-#session_enter-button:focus {
-  background: var(--on-surface);
-  color: var(--background);
 }

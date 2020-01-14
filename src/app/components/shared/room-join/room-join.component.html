@@ -14,12 +14,12 @@
         [errorStateMatcher]="matcher"
         aria-labelledby="join-input-label"
       />
-      <mat-placeholder class="placeholder">{{ 'home-page.session-id' | translate}}</mat-placeholder>
+      <mat-placeholder>{{ 'home-page.session-id' | translate}}</mat-placeholder>
       <mat-hint align="end"><span aria-hidden="true">{{ sessionCode.value.length - (sessionCode.value.split(' ').length -1) }} / 8</span></mat-hint>
       <mat-error *ngIf="sessionCodeFormControl.hasError('required')" aria-hidden="true">{{ 'home-page.please-enter' | translate}}</mat-error>
       <mat-error *ngIf="sessionCodeFormControl.hasError('pattern')">{{ 'home-page.only-numbers' | translate}}</mat-error>
     </mat-form-field>
-    <button [disabled]="cookiesDisabled()" id="session_enter-button" mat-fab type="submit" aria-labelledby="join-button-label">
+    <button [disabled]="cookiesDisabled()" mat-fab type="submit" aria-labelledby="join-button-label">
       <mat-icon>input</mat-icon>
     </button>
   </div>

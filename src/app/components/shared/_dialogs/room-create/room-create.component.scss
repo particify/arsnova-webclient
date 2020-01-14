@@ -1,33 +1,9 @@
-input {
-  color: var(--on-surface);
-}
-
-.placeholder {
-  color: var(--on-surface);
-}
-
-.mat-form-field-label {
-  color: var(--on-surface)!important;
-}
-
-.mat-form-field-underline {
-  background-color: var(--on-surface)!important;
-}
-
-.mat-form-field-ripple {
-  background-color: var(--on-surface)!important;
-}
-
-mat-form-field {
-  color: var(--on-surface);
-}
-
 .count {
   color: var(--on-surface)!important;
 }
 
 .error {
-  color: var(--red) !important;
+  color: var(--warn) !important;
 }
 
 .visually-hidden {

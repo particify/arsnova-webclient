@@ -1,24 +1,5 @@
-.pwReset {
-  padding-left: 0;
-  color: var(--secondary);
-}
-
-.regButton {
-  color: var(--secondary);
-}
-
-.guest {
-  background-color: var(--primary);
-  color: var(--on-primary);
-  margin-bottom: 10px;
-}
-
-.login {
-  background-color: var(--secondary);
-  color: var(--on-secondary);
-}
-
 .forgot-password {
+  padding-top: 10px;
   margin-bottom: 1.6rem;
 }
 
@@ -31,28 +12,7 @@
 p {
   font-size: small;
   margin: 13px 10px 0 0;
-  color: var(--on-surface);
   vertical-align: text-bottom;
-}
-
-::ng-deep .mat-form-field-label {
-  color: var(--on-surface)!important;
-}
-
-::ng-deep .mat-form-field-underline {
-  background-color: var(--on-surface)!important;
-}
-
-::ng-deep .mat-form-field-ripple {
-  background-color: var(--on-surface)!important;
-}
-
-mat-form-field {
-  color: var(--on-surface);
-}
-
-input {
-  caret-color: var(--on-surface);
 }
 
 input:-webkit-autofill {
@@ -86,14 +46,4 @@ h3 {
   height: 1px;
   overflow: hidden;
   left: -10000px;
-}
-
-#focus_button_user:focus {
-  background: var(--on-surface);
-  color: var(--background);
-}
-
-#focus_button_guest:focus {
-  background: var(--on-surface);
-  color: var(--background);
 }
