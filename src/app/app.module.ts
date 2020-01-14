@@ -57,6 +57,7 @@ import { DemoEnComponent } from '../assets/i18n/demo/demo-en';
 import { ArsModule } from '../../projects/ars/src/lib/ars.module';
 import { QrCodeDialogComponent } from './components/shared/_dialogs/qr-code-dialog/qr-code-dialog.component';
 import { MatIconModule } from '@angular/material/icon';
+import { LoginComponent } from './components/home/_dialogs/login/login.component';
 
 export function dialogClose(dialogResult: any) {
 }
@@ -68,6 +69,7 @@ export function initializeApp(appConfig: AppConfig) {
 @NgModule({
   declarations: [
     AppComponent,
+    LoginComponent,
     PasswordResetComponent,
     RegisterComponent,
     UserActivationComponent,
@@ -89,6 +91,7 @@ export function initializeApp(appConfig: AppConfig) {
     OverlayComponent
   ],
   entryComponents: [
+    LoginComponent,
     RegisterComponent,
     PasswordResetComponent,
     UserActivationComponent,
