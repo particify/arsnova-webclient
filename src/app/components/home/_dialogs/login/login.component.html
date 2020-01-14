@@ -33,21 +33,19 @@
           aria-labelledby="guest-login-description" matTooltip="{{'login.guest-login-tooltip' | translate}}">
     {{ 'login.guest-login' | translate }}
   </button>
-  <div class="forgot-password">
-    <a
-      href=""
-      (click)="openPasswordDialog(); $event.preventDefault(); $event.stopPropagation();"
-      role="button"
-    >
-      {{ 'login.password-reset' | translate }}
-    </a>
+  <div fxLayout="row">
+    <span class="fill-remaining-space"></span>
+    <button mat-button class="forgot-pw" (click)="openPasswordDialog(); $event.preventDefault();
+     $event.stopPropagation();">
+       {{ 'login.password-reset' | translate }}
+    </button>
   </div>
 </form>
-<mat-divider></mat-divider>
-<div fxLayout="row" class="register">
+<div fxLayout="row">
   <p>{{ 'login.not-registered' | translate }}</p>
-  <a href="" class="registerBtn" (click)="openRegisterDialog(); $event.preventDefault(); $event.stopPropagation();">
-    {{ 'login.register' | translate }}</a>
+  <button mat-button class="register" (click)="openRegisterDialog(); $event.preventDefault();
+    $event.stopPropagation();">
+      {{ 'login.register' | translate }}</button>
 </div>
 <app-dialog-action-buttons
   [spacing]="false"

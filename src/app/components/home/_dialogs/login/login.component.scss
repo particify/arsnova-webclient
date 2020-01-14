@@ -1,18 +1,14 @@
-.forgot-password {
-  padding-top: 10px;
-  margin-bottom: 1.6rem;
+.forgot-pw{
+  color: var(--secondary);
 }
 
-.forgot-password a {
-  text-decoration: underline;
-  color: var(--secondary);
-  font-size: .9rem;
+.register {
+  padding: 0 10px 0 10px;
+  color: var(--on-surface);
 }
 
 p {
-  font-size: small;
-  margin: 13px 10px 0 0;
-  vertical-align: text-bottom;
+  font-size: smaller;
 }
 
 input:-webkit-autofill {
@@ -23,28 +19,4 @@ input:-webkit-autofill {
 input:-webkit-autofill:focus {
   -webkit-box-shadow: 0 0 0 50px var(--dialog) inset;
   -webkit-text-fill-color: var(--on-surface);
-}
-
-h3 {
-  margin: 0 0 10px 0 !important;
-}
-
-.register {
-  padding: .5rem 0;
-  align-items: baseline;
-}
-
-.registerBtn {
-  text-decoration: underline;
-  color: var(--on-surface);
-  cursor: pointer;
-  font-size: small;
-}
-
-.visually-hidden {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  overflow: hidden;
-  left: -10000px;
 }
