@@ -5,7 +5,7 @@ import { UserRole } from '../../../models/user-roles.enum';
 import { RoomPageComponent } from '../../shared/room-page/room-page.component';
 import { Location } from '@angular/common';
 import { RoomService } from '../../../services/http/room.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { LanguageService } from '../../../services/util/language.service';
 import { WsCommentServiceService } from '../../../services/websockets/ws-comment-service.service';
@@ -16,6 +16,7 @@ import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { EventService } from '../../../services/util/event.service';
 import { KeyboardUtils } from '../../../utils/keyboard';
 import { KeyboardKey } from '../../../utils/keyboard/keys';
+import { NotificationService } from '../../../services/util/notification.service';
 
 @Component({
   selector: 'app-room-participant-page',
@@ -32,7 +33,9 @@ export class RoomParticipantPageComponent extends RoomPageComponent implements O
   constructor(protected location: Location,
               protected roomService: RoomService,
               protected route: ActivatedRoute,
-              private translateService: TranslateService,
+              protected router: Router,
+              protected notificationService: NotificationService,
+              protected translateService: TranslateService,
               protected langService: LanguageService,
               protected wsCommentService: WsCommentServiceService,
               protected commentService: CommentService,
@@ -41,7 +44,8 @@ export class RoomParticipantPageComponent extends RoomPageComponent implements O
               private liveAnnouncer: LiveAnnouncer,
               private _r: Renderer2,
               public eventService: EventService) {
-    super(roomService, route, location, wsCommentService, commentService, eventService, contentService);
+    super(roomService, route, router, location, wsCommentService, commentService, eventService, contentService, translateService,
+      notificationService);
     langService.langEmitter.subscribe(lang => translateService.use(lang));
   }
 

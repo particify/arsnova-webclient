@@ -19,7 +19,8 @@
           </mat-card-subtitle>
         </mat-card-header>
         <span class="fill-remaining-space"></span>
-        <button mat-icon-button class="corner-icons" routerLink="/participant/room/{{ room.shortId }}/statistics">
+        <button mat-icon-button class="corner-icons" [ngClass]="{'disabled': noGroups}"
+                (click)="navToStats('participant')">
           <mat-icon id="stat-icon" matTooltip="{{ 'statistic.answer-statistic' | translate}}">insert_chart</mat-icon>
         </button>
       </div>
