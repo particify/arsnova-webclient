@@ -122,7 +122,7 @@ export class StatisticListComponent implements OnInit {
             this.totalP += percent;
             this.total = this.totalP / this.contentCounter;
           } else if (this.total < 0) {
-            this.total = -this.status.empty;
+            this.total = this.status.empty;
           }
         });
       } else {
