@@ -97,7 +97,6 @@
     "title": "ARSnova"
   },
   "login": {
-    "activation-key": "Aktivierungsschlüssel",
     "cancel": "Abbrechen",
     "cancel-description": "Abbrechen",
     "email": "E-Mail Adresse als Benutzername",
@@ -121,9 +120,6 @@
     "password-required": "Passwort erforderlich",
     "password-reset": "Passwort vergessen?",
     "register": "Registrieren",
-    "restart-account-activation-button": "Erneut senden",
-    "restart-account-activation-correct": "Der Aktivierungsschlüssel wurde erneut gesendet.",
-    "restart-account-activation-tooltip": "Sendet den Aktivierungsschlüssel erneut an die angegebene Adresse",
     "welcome": "Feedback und Interaktion"
   },
   "overlay": {
@@ -220,13 +216,14 @@
   },
   "user-activation": {
     "activate": "Aktivieren",
-    "activate-description": "Aktiviert den Account",
     "activation-key": "Aktivierungs-Schlüssel",
-    "activation-key-incorrect": "Aktivierungs-Schlüssel falsch",
-    "activation-key-required": "Aktivierungs-Schlüssel erforderlich",
+    "activation-key-incorrect": "Aktivierungs-Schlüssel nicht korrekt.",
+    "activation-key-required": "Bitte geben Sie einen Schlüssel ein.",
     "activation-key-input-description": "Gib hier den Aktivierungs-Schlüssel ein, den du per E-Mail zugesendet bekommen hast.",
-    "cancel": "Abbrechen",
-    "cancel-description": "Abbrechen"
+    "didnt-get": "Keinen Code erhalten?",
+    "reset-button": "Erneut senden",
+    "activation-key-sent-again": "Der Aktivierungsschlüssel wurde erneut gesendet.",
+    "cancel": "Abbrechen"
   },
   "user-bonus-token": {
     "header": "Tokens für Bonuspunkte"
