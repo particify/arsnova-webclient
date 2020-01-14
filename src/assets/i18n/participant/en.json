@@ -119,7 +119,8 @@
     "live-feedback": "Live feedback",
     "session-id": "Key",
     "bonus-token": "Tokens for bonus points",
-    "bonus-token-header": "Tokens for bonus points"
+    "bonus-token-header": "Tokens for bonus points",
+    "no-contents": "There are no questions yet."
   },
   "statistic": {
     "abstentions": "Abstentions",

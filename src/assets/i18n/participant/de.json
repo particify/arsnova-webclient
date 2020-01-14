@@ -119,7 +119,8 @@
     "live-feedback": "Live Feedback",
     "session-id": "Code",
     "bonus-token": "Tokens für Bonuspunkte",
-    "bonus-token-header": "Tokens für Bonuspunkte"
+    "bonus-token-header": "Tokens für Bonuspunkte",
+    "no-contents": "Es sind noch keine Fragen vorhanden."
   },
   "statistic": {
     "abstentions": "Enthaltungen",
