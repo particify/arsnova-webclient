@@ -7,13 +7,13 @@
         <span class="fill-remaining-space"></span>
         <mat-card-header fxLayoutAlign="center" fxLayout="row">
           <mat-card-title fxLayoutAlign="center">
-            <h2>{{ room.name }}</h2>
+            {{ room.name }}
           </mat-card-title>
           <mat-card-subtitle fxLayoutAlign="center">
             <span class="room-short-id">
               {{ 'room-page.session-id' | translate}}: {{ room.shortId.slice(0, 4) }} {{  room.shortId.slice(4, 8) }}
             </span>
-            <button id="copy" *ngIf="deviceType === 'desktop'" mat-icon-button (click)="copyShortId()"
+            <button mat-icon-button class="copy-btn" *ngIf="deviceType === 'desktop'" (click)="copyShortId()"
                     aria-labelledby="cloud_download">
               <mat-icon class="copy" matTooltip="{{ 'room-page.copy-session-id' | translate}}">save_alt</mat-icon>
             </button>
@@ -43,8 +43,7 @@
           </button>
         </mat-menu>
         <div fxLayout="column">
-          <button id="settings-menu"
-                  mat-icon-button class="corner-icons" [matMenuTriggerFor]="settingsMenu" aria-labelledby="settings">
+          <button mat-icon-button class="corner-icons" [matMenuTriggerFor]="settingsMenu" aria-labelledby="settings">
             <mat-icon class="corner-icon" matTooltip="{{ 'room-page.session-settings' | translate}}">settings</mat-icon>
           </button>
           <button mat-icon-button class="corner-icons" [ngClass]="{'disabled': noGroups}"
@@ -65,7 +64,7 @@
               <button id="question_answer-button" mat-icon-button [disableRipple]="true"
                       routerLink="/creator/room/{{ room.shortId }}/comments" aria-labelledby="question_answer">
                 <mat-icon matBadge="{{commentCounter}}" class="main-icon"
-                          [ngClass]="{'smallerIcon' : deviceType === 'mobile'}">question_answer
+                          [ngClass]="{'desktop' : deviceType === 'desktop'}">question_answer
                 </mat-icon>
                 <h3 *ngIf="deviceType === 'desktop'">{{ 'room-page.comments' | translate}}</h3>
               </button>
@@ -74,7 +73,7 @@
               <button id="gavel-button" mat-icon-button [disableRipple]="true"
                       routerLink="/moderator/room/{{ room.shortId }}/moderator/comments" aria-labelledby="gavel">
                 <mat-icon matBadge="{{moderatorCommentCounter}}" class="main-icon"
-                          [ngClass]="{'smallerIcon' : deviceType === 'mobile'}">gavel
+                          [ngClass]="{'desktop' : deviceType === 'desktop'}">gavel
                 </mat-icon>
                 <h3 *ngIf="deviceType === 'desktop'">{{ 'room-page.moderating-stream' | translate}}</h3>
               </button>

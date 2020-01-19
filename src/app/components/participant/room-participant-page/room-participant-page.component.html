@@ -7,15 +7,15 @@
         <span class="fill-remaining-space"></span>
         <mat-card-header fxLayoutAlign="center">
           <mat-card-title fxLayoutAlign="center">
-            <h2>{{ room.name }}</h2>
+            {{ room.name }}
           </mat-card-title>
           <mat-card-subtitle fxLayoutAlign="center">
             <mat-icon *ngIf="moderationEnabled" class="gavel">
               gavel
             </mat-icon>
-            <h3>
+            <span class="room-short-id">
               {{ 'room-page.session-id' | translate}}: {{ room.shortId.slice(0, 4) }} {{  room.shortId.slice(4, 8) }}
-            </h3>
+            </span>
           </mat-card-subtitle>
         </mat-card-header>
         <span class="fill-remaining-space"></span>

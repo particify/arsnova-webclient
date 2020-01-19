@@ -1,6 +1,6 @@
 mat-card {
   width: 100%;
-  min-height: 350px;
+  min-height: 300px;
 }
 
 mat-card-content > :first-child {
@@ -15,50 +15,44 @@ mat-card-content > :first-child {
 }
 
 .main-icon {
-  font-size: 80px;
-  height: 80px;
-  width: 80px;
-}
-
-.desktop {
   font-size: 70px;
   height: 70px;
   width: 70px;
 }
 
+.desktop {
+  font-size: 80px;
+  height: 80px;
+  width: 80px;
+}
+
 button {
   width: 30%;
-  transition: all 0.3s;
+  transition: all 0.2s;
 
   &:hover {
-    transform: scale(1.2)
+    transform: scale(1.1)
   }
 }
 
-h3 {
-  margin: 5% 0 5% 0;
-}
-
 mat-card-header {
-  min-height: 80px !important;
-  height: 12% !important;
-  margin-bottom: 10%;
+  margin: 5% 0;
 }
 
 mat-card-title {
-  height: 40%;
-  min-height: 100px;
-  min-width: 200px;
+  word-break: break-all;
+  font-size: calc(16px + 1vw) !important;
 }
 
 mat-card-subtitle {
-  height: 20%;
+  margin: 0;
 }
 
-mat-expansion-panel {
-  background-color: var(--surface) !important;
-  min-width: 200px;
-  hyphens: auto;
+.room-short-id {
+  font-size: calc(16px + 0.5vw);
+  color: var(--on-surface);
+  margin-top: 4.5%;
+  white-space: nowrap;
 }
 
 mat-grid-list {
