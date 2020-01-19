@@ -13,53 +13,23 @@ button {
 }
 
 table, tr, td {
-  background-color: var(--table-a);
+  background-color: var(--surface);
   color: var(--on-surface);
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  hyphens: auto;
+}
+
+td.mat-cell:first-of-type, td.mat-footer-cell:first-of-type, th.mat-header-cell:first-of-type {
+  padding-left: 3%;
+}
+
+td.mat-cell:last-of-type, td.mat-footer-cell:last-of-type, th.mat-header-cell:last-of-type {
+  padding-right: 3%;
 }
 
 th {
   font-size: 1rem;
-  background-color: var(--table-b);
+  background-color: var(--surface);
   color: var(--on-surface);
-}
-
-.tableOverflow {
-  height: 20rem;
-  overflow: auto;
-}
-
-.sessionName {
-  width: 8%;
-  min-width: 50px;
-  color: var(--on-surface) !important;
-}
-
-.sessionId {
-  width: 8%;
-  min-width: 50px;
-  color: var(--on-surface) !important;
-}
-
-.roleName {
-  color: var(--on-surface) !important;
-  width: 5%;
-}
-
-.buttonName {
-  color: var(--on-surface) !important;
-  width: 5%;
-  display: flex;
-  place-content: stretch flex-end;
-}
-
-.noRoomHistory {
-  color: var(--on-surface) !important;
-}
-
-.visually-hidden {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  overflow: hidden;
-  left: -10000px;
 }
