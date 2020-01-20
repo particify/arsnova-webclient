@@ -57,24 +57,6 @@ export class ContentListComponent implements OnInit {
     langService.langEmitter.subscribe(lang => translateService.use(lang));
   }
 
-  static saveGroupInSessionStorage(newGroup: string): boolean {
-    if (newGroup !== '') {
-      sessionStorage.setItem('lastGroup',
-        JSON.stringify(new ContentGroup('', '', newGroup, [], true)));
-      const groups: string [] = JSON.parse(sessionStorage.getItem('contentGroups')) || [];
-      if (groups) {
-        for (let i = 0; i < groups.length; i++) {
-          if (newGroup === groups[i]) {
-            return false;
-          }
-        }
-      }
-      groups.push(newGroup);
-      sessionStorage.setItem('contentGroups', JSON.stringify(groups));
-      return true;
-    }
-  }
-
   ngOnInit() {
     this.labelMaxLength = innerWidth / 20;
     this.roomId = localStorage.getItem('roomId');
@@ -259,29 +241,23 @@ export class ContentListComponent implements OnInit {
     this.leaveEditMode();
   }
 
-  addToContentGroup(contentId: string, cgName: string): void {
+  addToContentGroup(contentId: string, cgName: string, newGroup: boolean): void {
     this.roomService.addContentToGroup(this.roomId, cgName, contentId).subscribe(() => {
-      this.translateService.get('content.added-to-content-group').subscribe(msg => {
-        this.notificationService.show(msg);
-      });
+      if (!newGroup) {
+        this.translateService.get('content.added-to-content-group').subscribe(msg => {
+          this.notificationService.show(msg);
+        });
+      }
     });
   }
 
-  showContentGroupCreationDialog(): void {
+  showContentGroupCreationDialog(contentId: string): void {
     const dialogRef = this.dialog.open(ContentGroupCreationComponent, {
       width: '400px'
     });
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        if (ContentListComponent.saveGroupInSessionStorage(result)) {
-          this.translateService.get('room-page.content-group-created').subscribe(msg => {
-            this.notificationService.show(msg);
-          });
-        } else {
-          this.translateService.get('room-page.content-group-already-exists').subscribe(msg => {
-            this.notificationService.show(msg);
-          });
-        }
+        this.addToContentGroup(contentId, result, true);
       }
     });
   }
