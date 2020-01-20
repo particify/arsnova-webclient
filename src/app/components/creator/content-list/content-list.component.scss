@@ -20,7 +20,7 @@ mat-panel-title {
 }
 
 mat-expansion-panel-header {
-  background-color: var(--table-a);
+  background-color: var(--table-a) !important;
   padding-left: 3%;
   padding-right: 3%;
 }
@@ -32,7 +32,6 @@ mat-expansion-panel-header {
 }
 
 .panelTitle {
-  width: 8% !important;
   color: var(----on-surface);
 }
 

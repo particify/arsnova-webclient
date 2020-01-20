@@ -27,7 +27,7 @@ export class StatisticsPageComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.currentCG = JSON.parse(sessionStorage.getItem('contentGroup'));
+    this.currentCG = JSON.parse(sessionStorage.getItem('lastGroup'));
     this.getRoom(localStorage.getItem('roomId'));
     this.tabGroup.selectedIndex = 1;
   }

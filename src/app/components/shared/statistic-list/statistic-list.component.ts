@@ -90,7 +90,7 @@ export class StatisticListComponent implements OnInit {
 
   goToStats(id: string) {
     this.router.navigate([`${this.baseUrl}${id}`]);
-    sessionStorage.setItem('contentGroup', JSON.stringify(this.contentGroup));
+    sessionStorage.setItem('lastGroup', JSON.stringify(this.contentGroup));
   }
 
   getData(contents: Content[]) {

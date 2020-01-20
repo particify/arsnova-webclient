@@ -57,17 +57,19 @@ export class ContentListComponent implements OnInit {
     langService.langEmitter.subscribe(lang => translateService.use(lang));
   }
 
-  static saveGroupInSessionStorage(name: string): boolean {
-    if (name !== '') {
-      sessionStorage.setItem('contentGroup',
-        JSON.stringify(new ContentGroup('', '', name, [], true)));
-      const groups: string [] = JSON.parse(sessionStorage.getItem('contentGroups'));
-      for (let i = 0; i < groups.length; i++) {
-        if (name === groups[i]) {
-          return false;
+  static saveGroupInSessionStorage(newGroup: string): boolean {
+    if (newGroup !== '') {
+      sessionStorage.setItem('lastGroup',
+        JSON.stringify(new ContentGroup('', '', newGroup, [], true)));
+      const groups: string [] = JSON.parse(sessionStorage.getItem('contentGroups')) || [];
+      if (groups) {
+        for (let i = 0; i < groups.length; i++) {
+          if (newGroup === groups[i]) {
+            return false;
+          }
         }
       }
-      groups.push(name);
+      groups.push(newGroup);
       sessionStorage.setItem('contentGroups', JSON.stringify(groups));
       return true;
     }
@@ -84,7 +86,7 @@ export class ContentListComponent implements OnInit {
       this.roomService.getGroupByRoomIdAndName(this.roomId, this.collectionName).subscribe(group => {
         this.contentGroup = group;
         if (!this.contentGroup) {
-          this.contentGroup = JSON.parse(sessionStorage.getItem('contentGroup'));
+          this.contentGroup = JSON.parse(sessionStorage.getItem('lastGroup'));
         } else {
           this.allowEditing = true;
         }
@@ -235,7 +237,7 @@ export class ContentListComponent implements OnInit {
     for (let i = 0; i < groups.length; i++) {
       if (groups[i] === oldName) {
         groups[i] = newName;
-        sessionStorage.setItem('contentGroup', JSON.stringify(new ContentGroup('', '', groups[i], [], true)));
+        sessionStorage.setItem('lastGroup', JSON.stringify(new ContentGroup('', '', groups[i], [], true)));
         break;
       }
     }

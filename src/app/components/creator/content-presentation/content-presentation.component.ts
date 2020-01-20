@@ -19,7 +19,7 @@ export class ContentPresentationComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.contentGroup = JSON.parse(sessionStorage.getItem('contentGroup'));
+    this.contentGroup = JSON.parse(sessionStorage.getItem('lastGroup'));
     this.contentService.getContentChoiceByIds(this.contentGroup.contentIds).subscribe(contents => {
       this.contents = contents;
       this.isLoading = false;

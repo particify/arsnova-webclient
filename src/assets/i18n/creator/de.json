@@ -148,7 +148,8 @@
     "edit-content": "Frage bearbeiten",
     "add-content-to-group": "Frage zu weiterer Sammlung hinzufügen",
     "delete-content": "Frage löschen",
-    "added-to-content-group": "Frage wurde zu Sammlung hinzugefügt."
+    "added-to-content-group": "Frage wurde zu Sammlung hinzugefügt.",
+    "default-group": "Hörsaalfragen"
   },
   "feedback": {
     "is-stopped": "Feedback ist angehalten.",
@@ -243,7 +244,6 @@
     "delete-all-tokens": "Alle Tokens löschen",
     "token-deleted": "Der Token wurde gelöscht.",
     "tokens-deleted": "Alle Tokens dieser Sitzung wurden gelöscht.",
-    "content-groups": "Sammlungen",
     "new-content-group": "Neue Sammlung",
     "content-group-name": "Name der Sammlung",
     "content-group-name-input": "Gib hier den Namen der Sammlung die du erstellen möchtest ein.",

@@ -81,11 +81,6 @@ export class RoomCreateComponent implements OnInit {
         msg2 = msg;
       });
       this.notification.show(msg1 + longRoomName + msg2);
-      this.translateService.get('room-create.default-group').subscribe(name => {
-        const contentGroups: string[] = [name];
-        sessionStorage.removeItem('contentGroup');
-        sessionStorage.setItem('contentGroups', JSON.stringify(contentGroups));
-      });
       this.authenticationService.setAccess(room.shortId, UserRole.CREATOR);
       this.authenticationService.assignRole(UserRole.CREATOR);
       this.router.navigate([`/creator/room/${this.room.shortId}`]);

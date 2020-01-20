@@ -111,7 +111,7 @@ export class RoomCreatorPageComponent extends RoomPageComponent implements OnIni
 
   afterGroupsLoadHook() {
     this.contentService.findContentsWithoutGroup(this.room.id).subscribe(contents => {
-      if (contents) {
+      if (contents.length > 0) {
         let contentWithoutGroupName = '';
         this.translateService.get('content.contents-without-collection').subscribe(msg => {
           contentWithoutGroupName = msg;

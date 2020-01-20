@@ -58,16 +58,16 @@
           <mat-panel-title class="panelTitle">
             {{ labels[i] }}
           </mat-panel-title>
-          <button mat-icon-button color="accent" (click)="editContent(content);$event.stopPropagation();"
+          <button mat-icon-button (click)="editContent(content);$event.stopPropagation();"
                   class="editButton" matTooltip="{{ 'content.edit-content' | translate}}">
             <mat-icon>edit</mat-icon>
           </button>
-          <button mat-icon-button color="accent" *ngIf="!noGroups" [matMenuTriggerFor]="chooseGroups"
+          <button mat-icon-button *ngIf="!noGroups" [matMenuTriggerFor]="chooseGroups"
                   (click)="$event.stopPropagation() "
-                  class="editButton" class="editButton" matTooltip="{{ 'content.add-content-to-group' | translate}}">
+                  class="editButton"matTooltip="{{ 'content.add-content-to-group' | translate}}">
             <mat-icon>library_add</mat-icon>
           </button>
-          <button mat-icon-button color="warn" (click)="deleteContent(content);$event.stopPropagation();"
+          <button mat-icon-button (click)="deleteContent(content);$event.stopPropagation();"
                   class="deleteButton editButton" matTooltip="{{ 'content.delete-content' | translate}}">
             <mat-icon>delete_forever</mat-icon>
           </button>
