@@ -11,7 +11,7 @@ mat-card-content > :first-child {
   width: 60%;
   height: 90%;
   color: var(--primary) !important;
-  transition: all 0.2s;
+  transition: all 150ms;
 
   &:hover {
     transform: scale(1.1)
