@@ -323,3 +323,10 @@ mat-card {
   max-width: 800px;
   background: var(--surface) !important;
 }
+
+// Badge
+
+.mat-badge-content {
+  background: var(--secondary);
+  color: var(--on-secondary);
+}
