@@ -9,7 +9,7 @@ import { ContentType } from '../../../models/content-type.enum';
 import { TranslateService } from '@ngx-translate/core';
 import { EventService } from '../../../services/util/event.service';
 import { RoomService } from '../../../services/http/room.service';
-import { RoomCreatorPageComponent } from '../room-creator-page/room-creator-page.component';
+import { ContentListComponent } from '../content-list/content-list.component';
 
 export class DisplayAnswer {
   answerOption: AnswerOption;
@@ -273,7 +273,7 @@ export class ContentChoiceCreatorComponent implements OnInit {
       if (this.contentCol !== '') {
         this.roomService.addContentToGroup(this.roomId, this.contentCol, content.id).subscribe();
       }
-      RoomCreatorPageComponent.saveGroupInSessionStorage(this.contentCol);
+      ContentListComponent.saveGroupInSessionStorage(this.contentCol);
       this.resetAfterSubmit();
     });
   }

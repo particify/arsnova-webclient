@@ -7,25 +7,27 @@ mat-card-content > :first-child {
   margin: 3% 0 3% 0;
 }
 
-#room-edit-description {
-  margin-bottom: 0;
-}
-
 .mat-icon-button {
   width: 60%;
   height: 90%;
   color: var(--primary) !important;
-  transition: all 0.3s;
+  transition: all 150ms;
 
   &:hover {
-    transform: scale(1.2)
+    transform: scale(1.1)
   }
 }
 
+.main-icon {
+  font-size: 60px;
+  height: 60px;
+  width: 60px;
+}
+
 .desktop {
-  font-size: 80px;
-  height: 80px;
-  width: 80px;
+  font-size: 70px;
+  height: 70px;
+  width: 70px;
   margin-bottom: 5%;
 }
 
@@ -41,18 +43,11 @@ mat-card-content > :first-child {
   width: 40px;
 }
 
-.main-icon {
-  font-size: 60px;
-  height: 60px;
-  width: 60px;
-}
-
 .room-short-id {
-  font-size: larger;
-  font-weight: bold;
-  color: var(--on-surface) !important;
+  font-size: calc(16px + 0.5vw);
+  color: var(--on-surface);
   margin: 5% 5% 0 0;
-  min-width: 130px;
+  white-space: nowrap;
 }
 
 mat-grid-list {
@@ -65,18 +60,12 @@ mat-grid-list {
 }
 
 mat-card-header {
-  min-height: 80px;
-  height: 10% !important;
-  margin-bottom: 5% !important;
+  margin: 5% 0;
 }
 
 mat-card-title {
-  height: 40%;
-  min-width: 150px;
-}
-
-mat-card-subtitle {
-  height: 30%;
+  word-break: break-all;
+  font-size: calc(16px + 1vw) !important;
 }
 
 mat-grid-tile {
@@ -85,14 +74,8 @@ mat-grid-tile {
   padding-top: 2% !important;
 }
 
-mat-expansion-panel {
-  background-color: var(--surface) !important;
-  min-width: 200px;
-  hyphens: auto;
-}
-
-#copy {
-  margin-left: 10px;
+.copy-btn {
+  margin-top: 3%;
   width: 24px;
   height: 24px;
 }
