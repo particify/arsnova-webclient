@@ -20,9 +20,7 @@ mat-panel-title {
 }
 
 mat-expansion-panel-header {
-  background-color: var(--table-a);
-  padding-left: 3%;
-  padding-right: 3%;
+  background-color: var(--table-a) !important;
 }
 
 .matPanel {
@@ -32,7 +30,6 @@ mat-expansion-panel-header {
 }
 
 .panelTitle {
-  width: 8% !important;
   color: var(----on-surface);
 }
 
@@ -54,8 +51,7 @@ mat-expansion-panel-header {
   color: var(--primary)
 }
 
-.deleteButton {
-  margin-right: 4%;
+.delete {
   color: var(--warn)
 }
 

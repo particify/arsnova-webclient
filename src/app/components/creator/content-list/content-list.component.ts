@@ -57,22 +57,6 @@ export class ContentListComponent implements OnInit {
     langService.langEmitter.subscribe(lang => translateService.use(lang));
   }
 
-  static saveGroupInSessionStorage(name: string): boolean {
-    if (name !== '') {
-      sessionStorage.setItem('contentGroup',
-        JSON.stringify(new ContentGroup('', '', name, [], true)));
-      const groups: string [] = JSON.parse(sessionStorage.getItem('contentGroups'));
-      for (let i = 0; i < groups.length; i++) {
-        if (name === groups[i]) {
-          return false;
-        }
-      }
-      groups.push(name);
-      sessionStorage.setItem('contentGroups', JSON.stringify(groups));
-      return true;
-    }
-  }
-
   ngOnInit() {
     this.labelMaxLength = innerWidth / 20;
     this.roomId = localStorage.getItem('roomId');
@@ -84,7 +68,7 @@ export class ContentListComponent implements OnInit {
       this.roomService.getGroupByRoomIdAndName(this.roomId, this.collectionName).subscribe(group => {
         this.contentGroup = group;
         if (!this.contentGroup) {
-          this.contentGroup = JSON.parse(sessionStorage.getItem('contentGroup'));
+          this.contentGroup = JSON.parse(sessionStorage.getItem('lastGroup'));
         } else {
           this.allowEditing = true;
         }
@@ -235,7 +219,7 @@ export class ContentListComponent implements OnInit {
     for (let i = 0; i < groups.length; i++) {
       if (groups[i] === oldName) {
         groups[i] = newName;
-        sessionStorage.setItem('contentGroup', JSON.stringify(new ContentGroup('', '', groups[i], [], true)));
+        sessionStorage.setItem('lastGroup', JSON.stringify(new ContentGroup('', '', groups[i], [], true)));
         break;
       }
     }
@@ -257,29 +241,23 @@ export class ContentListComponent implements OnInit {
     this.leaveEditMode();
   }
 
-  addToContentGroup(contentId: string, cgName: string): void {
+  addToContentGroup(contentId: string, cgName: string, newGroup: boolean): void {
     this.roomService.addContentToGroup(this.roomId, cgName, contentId).subscribe(() => {
-      this.translateService.get('content.added-to-content-group').subscribe(msg => {
-        this.notificationService.show(msg);
-      });
+      if (!newGroup) {
+        this.translateService.get('content.added-to-content-group').subscribe(msg => {
+          this.notificationService.show(msg);
+        });
+      }
     });
   }
 
-  showContentGroupCreationDialog(): void {
+  showContentGroupCreationDialog(contentId: string): void {
     const dialogRef = this.dialog.open(ContentGroupCreationComponent, {
       width: '400px'
     });
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        if (ContentListComponent.saveGroupInSessionStorage(result)) {
-          this.translateService.get('room-page.content-group-created').subscribe(msg => {
-            this.notificationService.show(msg);
-          });
-        } else {
-          this.translateService.get('room-page.content-group-already-exists').subscribe(msg => {
-            this.notificationService.show(msg);
-          });
-        }
+        this.addToContentGroup(contentId, result, true);
       }
     });
   }

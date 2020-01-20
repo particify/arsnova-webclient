@@ -147,9 +147,18 @@
     "save-content-group": "Update",
     "updated-content-group": "Name of collection was updated.",
     "edit-content": "Edit content",
-    "add-content-to-group": "Add content to another collection",
+    "add-content-to-group": "Add to collection",
     "delete-content": "Delete content",
-    "added-to-content-group": "Content was added to collection."
+    "added-to-content-group": "Content was added to collection.",
+    "default-group": "Audience Questions",
+    "more-options": "Show more options",
+    "new-content-group": "New collection",
+    "content-group-name": "Name of the collection",
+    "content-group-name-input": "Enter the name of the collection you want to create here.",
+    "create-content-group": "Create",
+    "content-group-created": "Question was added to new collection.",
+    "content-group-already-exists": "This collection already exists.",
+    "please-enter-name": "Please enter a name."
   },
   "feedback": {
     "is-stopped": "Voting got stopped",
@@ -244,13 +253,6 @@
     "delete-all-tokens": "Delete all tokens",
     "token-deleted": "Token has been deleted.",
     "tokens-deleted": "All tokens of this sessions have been deleted.",
-    "content-groups": "Collections",
-    "new-content-group": "New collection",
-    "content-group-name": "Name of the collection",
-    "content-group-name-input": "Enter the name of the collection you want to create here.",
-    "create-content-group": "Create",
-    "content-group-created": "Collection was created.",
-    "content-group-already-exists": "This collection already exists.",
     "no-contents": "There are no questions yet."
   },
   "comment-answer-form": {

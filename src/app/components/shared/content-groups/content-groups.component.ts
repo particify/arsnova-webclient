@@ -32,6 +32,6 @@ export class ContentGroupsComponent implements OnInit {
     } else {
       this.router.navigate([`participant/room/${this.roomShortId}/${contentGroup.name}`]);
     }
-    sessionStorage.setItem('contentGroup', JSON.stringify(contentGroup));
+    sessionStorage.setItem('lastGroup', JSON.stringify(contentGroup));
   }
 }

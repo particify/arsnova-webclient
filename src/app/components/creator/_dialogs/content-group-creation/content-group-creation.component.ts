@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material';
-import { RoomCreatorPageComponent } from '../../room-creator-page/room-creator-page.component';
+import { ContentListComponent } from '../../content-list/content-list.component';
+import { NotificationService } from '../../../../services/util/notification.service';
+import { TranslateService } from '@ngx-translate/core';
+import { ContentCreatePageComponent } from '../../content-create-page/content-create-page.component';
 
 @Component({
   selector: 'app-content-group-creation',
@@ -10,12 +13,36 @@ import { RoomCreatorPageComponent } from '../../room-creator-page/room-creator-p
 export class ContentGroupCreationComponent implements OnInit {
 
   name: string;
+  empty = false;
 
-  constructor(public dialogRef: MatDialogRef<RoomCreatorPageComponent>,
-              public dialog: MatDialog) {
+  constructor(public dialogRef: MatDialogRef<ContentListComponent>,
+              public dialog: MatDialog,
+              private notificationService: NotificationService,
+              private translateService: TranslateService) {
   }
 
   ngOnInit() {
+  }
+
+  addContentGroup() {
+    if (this.name) {
+      if (ContentCreatePageComponent.saveGroupInSessionStorage(this.name)) {
+        this.translateService.get('content.content-group-created').subscribe(msg => {
+          this.notificationService.show(msg);
+          this.closeDialog(this.name);
+        });
+      } else {
+        this.translateService.get('content.content-group-already-exists').subscribe(msg => {
+          this.notificationService.show(msg);
+        });
+      }
+    } else {
+      this.empty = true;
+    }
+  }
+
+  resetEmpty() {
+    this.empty = false;
   }
 
   /**
@@ -28,8 +55,8 @@ export class ContentGroupCreationComponent implements OnInit {
   /**
    * Returns a lambda which executes the dialog dedicated action on call.
    */
-  buildRoomCreateActionCallback(): () => void {
-    return () => this.closeDialog(this.name);
+  buildGroupCreateActionCallback(): () => void {
+    return () => this.addContentGroup();
   }
 
   /**

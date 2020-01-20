@@ -34,11 +34,29 @@ export class ContentCreatePageComponent implements OnInit {
     langService.langEmitter.subscribe(lang => translateService.use(lang));
   }
 
+  static saveGroupInSessionStorage(newGroup: string): boolean {
+    if (newGroup !== '') {
+      sessionStorage.setItem('lastGroup',
+        JSON.stringify(new ContentGroup('', '', newGroup, [], true)));
+      const groups: string [] = JSON.parse(sessionStorage.getItem('contentGroups')) || [];
+      if (groups) {
+        for (let i = 0; i < groups.length; i++) {
+          if (newGroup === groups[i]) {
+            return false;
+          }
+        }
+      }
+      groups.push(newGroup);
+      sessionStorage.setItem('contentGroups', JSON.stringify(groups));
+      return true;
+    }
+  }
+
   ngOnInit() {
-    this.translateService.use(sessionStorage.getItem('currentLang'));
-    const group: ContentGroup = JSON.parse(sessionStorage.getItem('contentGroup'));
-    this.translateService.get('content.contents-without-collection').subscribe(emptyGroupName => {
-      this.lastCollection = group.name !== emptyGroupName ? group : null;
+    this.translateService.use(localStorage.getItem('currentLang'));
+    const lastGroup: ContentGroup = JSON.parse(sessionStorage.getItem('lastGroup'));
+    this.translateService.get('content.default-group').subscribe(defaultGroup => {
+      this.lastCollection = lastGroup ? lastGroup.name : defaultGroup;
     });
     this.getGroups();
 

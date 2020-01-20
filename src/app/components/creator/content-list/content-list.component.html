@@ -58,24 +58,35 @@
           <mat-panel-title class="panelTitle">
             {{ labels[i] }}
           </mat-panel-title>
-          <button mat-icon-button color="accent" (click)="editContent(content);$event.stopPropagation();"
-                  class="editButton" matTooltip="{{ 'content.edit-content' | translate}}">
-            <mat-icon>edit</mat-icon>
+          <button mat-icon-button [matMenuTriggerFor]="moreActions" (click)="$event.stopPropagation()"
+                  class="editButton" matTooltip="{{ 'content.more-options' | translate}}">
+            <mat-icon>more_vert</mat-icon>
           </button>
-          <button mat-icon-button color="accent" *ngIf="!noGroups" [matMenuTriggerFor]="chooseGroups"
-                  (click)="$event.stopPropagation() "
-                  class="editButton" class="editButton" matTooltip="{{ 'content.add-content-to-group' | translate}}">
-            <mat-icon>library_add</mat-icon>
+
+          <mat-menu #moreActions="matMenu" xPosition="before">
+            <button mat-menu-item (click)="editContent(content)">
+              <mat-icon>edit</mat-icon>
+              <span> {{ 'content.edit-content' | translate}}</span>
           </button>
-          <button mat-icon-button color="warn" (click)="deleteContent(content);$event.stopPropagation();"
-                  class="deleteButton editButton" matTooltip="{{ 'content.delete-content' | translate}}">
-            <mat-icon>delete_forever</mat-icon>
-          </button>
+            <button mat-menu-item [matMenuTriggerFor]="chooseGroups">
+              <mat-icon>library_add</mat-icon>
+              <span>{{ 'content.add-content-to-group' | translate}}</span>
+            </button>
+            <button mat-menu-item (click)="deleteContent(content)">
+              <mat-icon class="delete">delete_forever</mat-icon>
+              <span>{{ 'content.delete-content' | translate}}</span>
+            </button>
+          </mat-menu>
 
           <mat-menu #chooseGroups="matMenu" xPosition="before">
             <button mat-menu-item *ngFor="let cg of contentGroups; index as i" [disabled]="i === currentGroupIndex"
-                    (click)="addToContentGroup(content.id, cg)">
+                    (click)="addToContentGroup(content.id, cg, false)">
               <span>{{ cg }}</span>
+            </button>
+            <mat-divider></mat-divider>
+            <button mat-menu-item (click)="showContentGroupCreationDialog(content.id)">
+              <mat-icon>add</mat-icon>
+              <span>{{ 'content.new-content-group' | translate}}</span>
             </button>
           </mat-menu>
 
