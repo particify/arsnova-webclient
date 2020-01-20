@@ -22,7 +22,6 @@ import { EventService } from '../../../services/util/event.service';
 import { KeyboardUtils } from '../../../utils/keyboard';
 import { KeyboardKey } from '../../../utils/keyboard/keys';
 import { ContentService } from '../../../services/http/content.service';
-import { ContentGroupCreationComponent } from '../_dialogs/content-group-creation/content-group-creation.component';
 import { ContentGroup } from '../../../models/content-group';
 
 @Component({
@@ -37,8 +36,6 @@ export class RoomCreatorPageComponent extends RoomPageComponent implements OnIni
   viewModuleCount = 1;
   moderatorCommentCounter: number;
   urlToCopy = `${window.location.protocol}//${window.location.hostname}/participant/room/`;
-  defaultContentGroups: ContentGroup[] = [];
-  emptyDefaultGroups = true;
 
   constructor(protected roomService: RoomService,
               protected notification: NotificationService,
@@ -57,22 +54,6 @@ export class RoomCreatorPageComponent extends RoomPageComponent implements OnIni
     super(roomService, route, router, location, wsCommentService, commentService, eventService, contentService, translateService,
       notification);
     langService.langEmitter.subscribe(lang => translateService.use(lang));
-  }
-
-  static saveGroupInSessionStorage(name: string): boolean {
-    if (name !== '') {
-      sessionStorage.setItem('contentGroup',
-        JSON.stringify(new ContentGroup('', '', name, [], true)));
-      const groups: string [] = JSON.parse(sessionStorage.getItem('contentGroups'));
-      for (let i = 0; i < groups.length; i++) {
-        if (name === groups[i]) {
-          return false;
-        }
-      }
-      groups.push(name);
-      sessionStorage.setItem('contentGroups', JSON.stringify(groups));
-      return true;
-    }
   }
 
   ngAfterContentInit(): void {
@@ -170,12 +151,6 @@ export class RoomCreatorPageComponent extends RoomPageComponent implements OnIni
     localStorage.setItem('moderationEnabled', String(this.moderationEnabled));
   }
 
-  resetThreshold(): void {
-    if (this.room.extensions && this.room.extensions['comments']) {
-      delete this.room.extensions['comments'];
-    }
-  }
-
   saveChanges() {
     this.roomService.updateRoom(this.room)
       .subscribe((room) => {
@@ -261,25 +236,6 @@ export class RoomCreatorPageComponent extends RoomPageComponent implements OnIni
           this.saveChanges();
         }
       });
-  }
-
-  showContentGroupCreationDialog(): void {
-    const dialogRef = this.dialog.open(ContentGroupCreationComponent, {
-      width: '400px'
-    });
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        if (RoomCreatorPageComponent.saveGroupInSessionStorage(result)) {
-          this.translateService.get('room-page.content-group-created').subscribe(msg => {
-            this.notification.show(msg);
-          });
-        } else {
-          this.translateService.get('room-page.content-group-already-exists').subscribe(msg => {
-            this.notification.show(msg);
-          });
-        }
-      }
-    });
   }
 
   copyShortId(): void {

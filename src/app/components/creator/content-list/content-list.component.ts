@@ -15,6 +15,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { LanguageService } from '../../../services/util/language.service';
 import { ContentDeleteComponent } from '../_dialogs/content-delete/content-delete.component';
 import { ContentEditComponent } from '../_dialogs/content-edit/content-edit.component';
+import { ContentGroupCreationComponent } from '../_dialogs/content-group-creation/content-group-creation.component';
 
 @Component({
   selector: 'app-content-list',
@@ -54,6 +55,22 @@ export class ContentListComponent implements OnInit {
               private translateService: TranslateService,
               protected langService: LanguageService) {
     langService.langEmitter.subscribe(lang => translateService.use(lang));
+  }
+
+  static saveGroupInSessionStorage(name: string): boolean {
+    if (name !== '') {
+      sessionStorage.setItem('contentGroup',
+        JSON.stringify(new ContentGroup('', '', name, [], true)));
+      const groups: string [] = JSON.parse(sessionStorage.getItem('contentGroups'));
+      for (let i = 0; i < groups.length; i++) {
+        if (name === groups[i]) {
+          return false;
+        }
+      }
+      groups.push(name);
+      sessionStorage.setItem('contentGroups', JSON.stringify(groups));
+      return true;
+    }
   }
 
   ngOnInit() {
@@ -245,6 +262,25 @@ export class ContentListComponent implements OnInit {
       this.translateService.get('content.added-to-content-group').subscribe(msg => {
         this.notificationService.show(msg);
       });
+    });
+  }
+
+  showContentGroupCreationDialog(): void {
+    const dialogRef = this.dialog.open(ContentGroupCreationComponent, {
+      width: '400px'
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        if (ContentListComponent.saveGroupInSessionStorage(result)) {
+          this.translateService.get('room-page.content-group-created').subscribe(msg => {
+            this.notificationService.show(msg);
+          });
+        } else {
+          this.translateService.get('room-page.content-group-already-exists').subscribe(msg => {
+            this.notificationService.show(msg);
+          });
+        }
+      }
     });
   }
 }
