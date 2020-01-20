@@ -146,10 +146,18 @@
     "save-content-group": "Speichern",
     "updated-content-group": "Name der Sammlung aktualisiert.",
     "edit-content": "Frage bearbeiten",
-    "add-content-to-group": "Frage zu weiterer Sammlung hinzufügen",
+    "add-content-to-group": "Zu Sammlung hinzufügen",
     "delete-content": "Frage löschen",
     "added-to-content-group": "Frage wurde zu Sammlung hinzugefügt.",
-    "default-group": "Hörsaalfragen"
+    "default-group": "Hörsaalfragen",
+    "more-options": "Zeige mehr Optionen",
+    "new-content-group": "Neue Sammlung",
+    "content-group-name": "Name der Sammlung",
+    "content-group-name-input": "Gib hier den Namen der Sammlung die du erstellen möchtest ein.",
+    "create-content-group": "Anlegen",
+    "content-group-created": "Frage wurde neuer Sammlung hinzugefügt.",
+    "content-group-already-exists": "Diese Sammlung existiert bereits.",
+    "please-enter-name": "Bitte geben Sie einen Namen ein."
   },
   "feedback": {
     "is-stopped": "Feedback ist angehalten.",
@@ -244,12 +252,6 @@
     "delete-all-tokens": "Alle Tokens löschen",
     "token-deleted": "Der Token wurde gelöscht.",
     "tokens-deleted": "Alle Tokens dieser Sitzung wurden gelöscht.",
-    "new-content-group": "Neue Sammlung",
-    "content-group-name": "Name der Sammlung",
-    "content-group-name-input": "Gib hier den Namen der Sammlung die du erstellen möchtest ein.",
-    "create-content-group": "Anlegen",
-    "content-group-created": "Sammlung wurde erstellt.",
-    "content-group-already-exists": "Diese Sammlung existiert bereits.",
     "no-contents": "Es sind noch keine Fragen vorhanden."
   },
   "comment-answer-form": {
