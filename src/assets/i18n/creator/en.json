@@ -251,7 +251,6 @@
     "create-content-group": "Create",
     "content-group-created": "Collection was created.",
     "content-group-already-exists": "This collection already exists.",
-    "contents-without-content-group": "Contents without collection",
     "no-contents": "There are no questions yet."
   },
   "comment-answer-form": {

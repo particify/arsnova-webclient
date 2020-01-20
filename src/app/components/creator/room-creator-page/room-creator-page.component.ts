@@ -126,24 +126,22 @@ export class RoomCreatorPageComponent extends RoomPageComponent implements OnIni
         this.moderatorCommentCounter = commentCounter;
       });
     }
+  }
+
+  afterGroupsLoadHook() {
     this.contentService.findContentsWithoutGroup(this.room.id).subscribe(contents => {
       if (contents) {
         let contentWithoutGroupName = '';
         this.translateService.get('content.contents-without-collection').subscribe(msg => {
           contentWithoutGroupName = msg;
+          this.groupNames.push(contentWithoutGroupName);
         });
-        this.defaultContentGroups.push(new ContentGroup('', '', contentWithoutGroupName, [], true));
+        this.contentGroups.push(new ContentGroup('', '', contentWithoutGroupName, [], true));
         for (const c of contents) {
-          this.defaultContentGroups[0].contentIds.push(c.id);
-        }
-        if (contents && contents.length > 0) {
-          this.emptyDefaultGroups = false;
+          this.contentGroups[this.contentGroups.length - 1].contentIds.push(c.id);
         }
       }
     });
-  }
-
-  afterGroupsLoadHook() {
     sessionStorage.setItem('contentGroups', JSON.stringify(this.groupNames));
   }
 

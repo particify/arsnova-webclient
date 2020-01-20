@@ -250,7 +250,6 @@
     "create-content-group": "Anlegen",
     "content-group-created": "Sammlung wurde erstellt.",
     "content-group-already-exists": "Diese Sammlung existiert bereits.",
-    "contents-without-content-group": "Fagen ohne Sammlung",
     "no-contents": "Es sind noch keine Fragen vorhanden."
   },
   "comment-answer-form": {
