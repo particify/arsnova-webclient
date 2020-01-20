@@ -330,3 +330,9 @@ mat-card {
   background: var(--secondary);
   color: var(--on-secondary);
 }
+
+// Mat expansion panel
+
+.mat-expansion-indicator::after {
+  color: var(--on-surface);
+}
