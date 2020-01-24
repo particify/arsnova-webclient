@@ -1,0 +1,9 @@
+<section class="stepper-container">
+  <div class="stepper-navigation-bar">
+    <button class="step" *ngFor="let step of steps; let i = index;" [ngClass]="{'active': selectedIndex === i}"
+            (click)="onClick(i)">{{i + 1}}</button>
+  </div>
+  <div>
+    <ng-container [ngTemplateOutlet]="selected.content"></ng-container>
+  </div>
+</section>

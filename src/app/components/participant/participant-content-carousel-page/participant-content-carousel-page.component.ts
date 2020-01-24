@@ -3,15 +3,11 @@ import { ContentType } from '../../../models/content-type.enum';
 import { ContentService } from '../../../services/http/content.service';
 import { Content } from '../../../models/content';
 import { ContentGroup } from '../../../models/content-group';
-import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 
 @Component({
   selector: 'app-participant-content-carousel-page',
   templateUrl: './participant-content-carousel-page.component.html',
-  styleUrls: ['./participant-content-carousel-page.component.scss'],
-  providers: [{
-    provide: STEPPER_GLOBAL_OPTIONS, useValue: {displayDefaultIndicatorType: false}
-  }]
+  styleUrls: ['./participant-content-carousel-page.component.scss']
 })
 export class ParticipantContentCarouselPageComponent implements OnInit {
   ContentType: typeof ContentType = ContentType;

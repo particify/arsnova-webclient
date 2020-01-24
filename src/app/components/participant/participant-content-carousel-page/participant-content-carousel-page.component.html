@@ -5,22 +5,14 @@
 </div>
 
 <div fxLayout="column" fxLayoutAlign="start center">
-  <mat-horizontal-stepper>
-    <mat-step *ngFor="let content of contents">
+  <app-stepper>
+    <cdk-step *ngFor="let content of contents">
       <app-content-choice-participant [content]="content"
-        *ngIf="content.format === ContentType.CHOICE || content.format === ContentType.SCALE || ContentType.BINARY">
+        *ngIf="content.format === ContentType.CHOICE || content.format === ContentType.SCALE ||
+               content.format === ContentType.BINARY">
       </app-content-choice-participant>
       <app-content-text-participant [content]="content"
                                     *ngIf="content.format === ContentType.TEXT"></app-content-text-participant>
-    </mat-step>
-    <ng-template matStepperIcon="edit" let-index="index">
-      {{index+1}}
-    </ng-template>
-    <ng-template matStepperIcon="number" let-index="index">
-      {{index+1}}
-    </ng-template>
-    <ng-template matStepperIcon="done" let-index="index">
-      {{index+1}}
-    </ng-template>
-  </mat-horizontal-stepper>
+    </cdk-step>
+  </app-stepper>
 </div>
