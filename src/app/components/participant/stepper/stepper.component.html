@@ -1,9 +1,10 @@
-<section class="stepper-container">
+<div class="stepper-container">
   <div class="stepper-navigation-bar">
-    <button class="step" *ngFor="let step of steps; let i = index;" [ngClass]="{'active': selectedIndex === i}"
-            (click)="onClick(i)">{{i + 1}}</button>
+    <div matRipple class="step-ripple" *ngFor="let step of steps; let i = index;" (click)="onClick(i)">
+      <button class="step" [ngClass]="{'active': selectedIndex === i}">{{i + 1}}</button>
+    </div>
   </div>
-  <div>
+  <div [@slide]="animationState" (@slide.done)="animationDone()">
     <ng-container [ngTemplateOutlet]="selected.content"></ng-container>
   </div>
-</section>
+</div>

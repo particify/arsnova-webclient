@@ -10,20 +10,34 @@
   margin-top: 10px;
 }
 
+.step-ripple {
+  min-width: 50px;
+  height: 50px;
+  background-color: var(--background);
+  cursor: pointer;
+  margin: 0 calc(calc(100% - 250px) / 10);
+  border-radius: 50%;
+}
+
 .step {
   min-width: 30px;
   height: 30px;
   font-size: 18px;
+  background-color: var(--primary);
+  color: var(--on-primary);
   outline: 0;
   border: 0;
   border-radius: 50%;
-  margin: 0 calc(calc(100% - 150px) / 10) !important;
   padding: 5px;
-  background-color: var(--secondary);
-  color: var(--on-secondary);
+  margin: 10px;
+  cursor: pointer;
 }
 
 .step.active {
-  color: var(--on-primary);
-  background-color: var(--primary);
+  color: var(--on-secondary);
+  background-color: var(--secondary);
+}
+
+.position-absolute {
+  position: absolute;
 }
