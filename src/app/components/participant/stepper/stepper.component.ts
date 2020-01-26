@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { CdkStepper } from '@angular/cdk/stepper';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 
@@ -8,49 +8,88 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
   styleUrls: ['./stepper.component.scss'],
   providers: [{ provide: CdkStepper, useExisting: StepperComponent }],
   animations: [
-    trigger('slide', [
-      state('left', style({ opacity: 0, transform: 'translateX(50%)' })),
-      state('left-2', style({ opacity: 0, transform: 'translateX(-50%)' })),
+    trigger('slideContainer', [
+      state('next', style({ opacity: 0, transform: 'translateX(50%)' })),
+      state('next-2', style({ opacity: 0, transform: 'translateX(-50%)' })),
       state('current', style({ opacity: 1, transform: 'translateX(0)' })),
-      state('right', style({ opacity: 0, transform: 'translateX(-50%)' })),
-      state('right-2', style({ opacity: 0, transform: 'translateX(50%)' })),
-      transition('current => left', animate('150ms ease-in')),
-      transition('left => left-2', animate('0s')),
-      transition('current => right', animate('150ms ease-in')),
-      transition('right => right-2', animate('0s')),
+      state('prev', style({ opacity: 0, transform: 'translateX(-50%)' })),
+      state('prev-2', style({ opacity: 0, transform: 'translateX(50%)' })),
+      transition('current => *', animate('150ms ease-in')),
       transition('* => current', animate('150ms ease-out')),
+    ]),
+    trigger('slideHeader', [
+      state('left', style({ transform: `translateX({{position}}%)` }),
+        { params: { position: '0' } }),
+      state('init', style({ transform: `translateX({{position}}%)` }),
+        { params: { position: '0' } }),
+      state('right', style({ transform: `translateX({{position}}%)` }),
+        { params: { position: '0' } }),
+      transition('* => *', animate('400ms ease-out')),
     ])
   ]
 })
 export class StepperComponent extends CdkStepper {
 
-  animationState = 'current';
-  nextIndex: number;
+  @Input() listLength: number;
+  headerPos = 0;
+  containerAnimationState = 'current';
+  headerAnimationState = 'init';
+  nextIndex = 0;
 
   onClick(index: number): void {
     if (index > this.selectedIndex) {
-      this.animationState = 'left';
+      this.containerAnimationState = 'next';
     } else if (index < this.selectedIndex) {
-      this.animationState = 'right';
+      this.containerAnimationState = 'prev';
     } else {
       return;
     }
     this.nextIndex = index;
   }
 
-  animationDone() {
-    switch (this.animationState) {
-      case 'left':
-        this.animationState = 'left-2';
+  headerAnimationDone() {
+    this.headerAnimationState = 'init';
+  }
+
+  moveHeaderRight() {
+    if (this.headerPos > 0 && this.nextIndex < this.listLength - 3) {
+      if (((Math.abs(this.nextIndex - this.selectedIndex) > 1 && (this.selectedIndex < this.listLength - 2)) ||
+        ((this.selectedIndex >= this.listLength - 3) && (this.nextIndex === this.listLength - 5))) && (this.headerPos > 1)) {
+        this.headerPos -= 2;
+      } else {
+        this.headerPos--;
+      }
+      this.headerAnimationState = 'right';
+    }
+  }
+
+  moveHeaderLeft() {
+    if (this.headerPos  < this.listLength - 5 && this.nextIndex > 2) {
+      if (((Math.abs(this.nextIndex - this.selectedIndex) > 1 && (this.selectedIndex > 1)) ||
+        (this.selectedIndex <= 1 && (this.nextIndex === 4))) && (this.headerPos < this.listLength - 6)) {
+        this.headerPos += 2;
+      } else {
+        this.headerPos++;
+      }
+      this.headerAnimationState = 'left';
+    }
+  }
+
+  containerAnimationDone() {
+    switch (this.containerAnimationState) {
+      case 'next':
+        this.containerAnimationState = 'next-2';
         return;
-      case 'left-2':
-        this.animationState = 'current';
+      case 'next-2':
+        this.containerAnimationState = 'current';
+        this.moveHeaderLeft();
         break;
-      case 'right':
-        this.animationState = 'right-2';
+      case 'prev':
+        this.containerAnimationState = 'prev-2';
         return;
-      case 'right-2':
-        this.animationState = 'current';
+      case 'prev-2':
+        this.containerAnimationState = 'current';
+        this.moveHeaderRight();
         break;
     }
     this.selectedIndex = this.nextIndex;

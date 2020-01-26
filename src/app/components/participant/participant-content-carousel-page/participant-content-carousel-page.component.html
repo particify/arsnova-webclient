@@ -4,8 +4,8 @@
   </div>
 </div>
 
-<div fxLayout="column" fxLayoutAlign="start center">
-  <app-stepper>
+<div *ngIf="!isLoading" fxLayout="column" fxLayoutAlign="start center">
+  <app-stepper [listLength]="contents.length">
     <cdk-step *ngFor="let content of contents">
       <app-content-choice-participant [content]="content"
         *ngIf="content.format === ContentType.CHOICE || content.format === ContentType.SCALE ||

@@ -1,3 +1,4 @@
+/*
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { StepperComponent } from './stepper.component';
@@ -23,3 +24,4 @@ describe('StepperComponent', () => {
     expect(component).toBeTruthy();
   });
 });
+*/
