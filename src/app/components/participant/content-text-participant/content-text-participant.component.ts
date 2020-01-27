@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ContentText } from '../../../models/content-text';
 import { ContentAnswerService } from '../../../services/http/content-answer.service';
 import { TextAnswer } from '../../../models/text-answer';
@@ -15,7 +15,9 @@ import { AuthenticationService } from '../../../services/http/authentication.ser
   styleUrls: ['./content-text-participant.component.scss']
 })
 export class ContentTextParticipantComponent implements OnInit {
+
   @Input() content: ContentText;
+  @Output() message = new EventEmitter<boolean>();
 
   givenAnswer: TextAnswer;
 
@@ -43,6 +45,7 @@ export class ContentTextParticipantComponent implements OnInit {
         this.givenAnswer = answer;
         this.alreadySent = true;
       }
+      this.sendStatusToParent();
       if (this.givenAnswer && this.givenAnswer.body) {
         this.getAnsweredMessage();
       } else {
@@ -50,6 +53,10 @@ export class ContentTextParticipantComponent implements OnInit {
       }
       this.isLoading = false;
     });
+  }
+
+  sendStatusToParent() {
+    this.message.emit(this.alreadySent);
   }
 
   getAnsweredMessage() {
@@ -93,6 +100,7 @@ export class ContentTextParticipantComponent implements OnInit {
     this.createAnswer(this.textAnswer);
     this.getAnsweredMessage();
     this.alreadySent = true;
+    this.sendStatusToParent();
   }
 
   abstain($event) {
@@ -109,5 +117,6 @@ export class ContentTextParticipantComponent implements OnInit {
     this.createAnswer();
     this.getAbstainedMessage();
     this.alreadySent = true;
+    this.sendStatusToParent();
   }
 }

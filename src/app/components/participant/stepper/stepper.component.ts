@@ -31,12 +31,13 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
 export class StepperComponent extends CdkStepper {
 
   @Input() listLength: number;
+  @Input() alreadySent: Map<number, boolean>;
   headerPos = 0;
   containerAnimationState = 'current';
   headerAnimationState = 'init';
   nextIndex = 0;
 
-  onClick(index: number): void {
+  onClick(index: number) {
     if (index > this.selectedIndex) {
       this.containerAnimationState = 'next';
     } else if (index < this.selectedIndex) {

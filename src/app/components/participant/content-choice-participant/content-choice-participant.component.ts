@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ContentChoice } from '../../../models/content-choice';
 import { AnswerOption } from '../../../models/answer-option';
 import { ContentAnswerService } from '../../../services/http/content-answer.service';
@@ -27,6 +27,7 @@ class CheckedAnswer {
 export class ContentChoiceParticipantComponent implements OnInit {
 
   @Input() content: ContentChoice;
+  @Output() message = new EventEmitter<boolean>();
 
   isLoading = true;
   ContentType: typeof ContentType = ContentType;
@@ -64,9 +65,14 @@ export class ContentChoiceParticipantComponent implements OnInit {
         }
         this.alreadySent = true;
       }
+      this.sendStatusToParent();
       this.isLoading = false;
     });
     this.translateService.use(localStorage.getItem('currentLang'));
+  }
+
+  sendStatusToParent() {
+    this.message.emit(this.alreadySent);
   }
 
   initAnswers(): void {
@@ -145,6 +151,7 @@ export class ContentChoiceParticipantComponent implements OnInit {
         this.checkAnswer(selectedAnswers);
       }
       this.alreadySent = true;
+      this.sendStatusToParent();
     });
   }
 
@@ -162,5 +169,6 @@ export class ContentChoiceParticipantComponent implements OnInit {
     this.resetCheckedAnswers();
     this.hasAbstained = true;
     this.alreadySent = true;
+    this.sendStatusToParent();
   }
 }

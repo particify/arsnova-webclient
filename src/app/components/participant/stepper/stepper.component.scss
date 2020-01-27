@@ -41,3 +41,9 @@
 .position-absolute {
   position: absolute;
 }
+
+.sent {
+  background-color: var(--surface);
+  color: var(--on-surface);
+  transition: 500ms;
+}

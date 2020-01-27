@@ -3,7 +3,7 @@
    params: { position: headerPos * -20 }}" (@slideHeader.done)="headerAnimationDone()">
     <span class="fill-remaining-space"></span>
     <div matRipple class="step-ripple" *ngFor="let step of steps; let i = index;" (click)="onClick(i)">
-      <button class="step" [ngClass]="{'active': selectedIndex === i}">{{i + 1}}</button>
+      <button class="step" [ngClass]="{'active': selectedIndex === i, 'sent': alreadySent.get(i)}">{{i + 1}}</button>
     </div>
     <span class="fill-remaining-space"></span>
   </div>
