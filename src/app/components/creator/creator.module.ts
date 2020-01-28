@@ -32,6 +32,7 @@ import { BonusDeleteComponent } from './_dialogs/bonus-delete/bonus-delete.compo
 import { MarkdownModule } from 'ngx-markdown';
 import { ContentGroupCreationComponent } from './_dialogs/content-group-creation/content-group-creation.component';
 import { DeleteAnswerComponent } from './_dialogs/delete-answer/delete-answer.component';
+import { SettingsComponent } from './settings/settings.component';
 
 @NgModule({
   imports: [
@@ -72,7 +73,8 @@ import { DeleteAnswerComponent } from './_dialogs/delete-answer/delete-answer.co
     DeleteCommentComponent,
     BonusDeleteComponent,
     ContentGroupCreationComponent,
-    DeleteAnswerComponent
+    DeleteAnswerComponent,
+    SettingsComponent
   ],
   entryComponents: [
     RoomDeleteComponent,

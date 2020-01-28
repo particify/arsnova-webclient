@@ -46,6 +46,9 @@
           <button mat-icon-button class="corner-icons" [matMenuTriggerFor]="settingsMenu" aria-labelledby="settings">
             <mat-icon class="corner-icon" matTooltip="{{ 'room-page.session-settings' | translate}}">settings</mat-icon>
           </button>
+          <button mat-icon-button class="corner-icons" aria-labelledby="settings" routerLink="settings">
+            <mat-icon class="corner-icon" matTooltip="{{ 'room-page.session-settings' | translate}}">settings</mat-icon>
+          </button>
           <button mat-icon-button class="corner-icons" [ngClass]="{'disabled': noGroups}"
                   (click)="navToStats('creator')">
             <mat-icon class="corner-icon" matTooltip="{{ 'room-page.answer-statistics' | translate}}">insert_chart
