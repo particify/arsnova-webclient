@@ -1,7 +1,7 @@
 import { Component, OnInit, Renderer2 } from '@angular/core';
 import { AuthenticationService } from '../../../services/http/authentication.service';
 import { NotificationService } from '../../../services/util/notification.service';
-import { NavigationEnd, NavigationStart, Router, RoutesRecognized } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
 import { User } from '../../../models/user';
 import { UserRole } from '../../../models/user-roles.enum';
 import { Location } from '@angular/common';
@@ -19,7 +19,6 @@ import { UserBonusTokenComponent } from '../_dialogs/user-bonus-token/user-bonus
 import { RemindOfTokensComponent } from '../_dialogs/remind-of-tokens/remind-of-tokens.component';
 import { QrCodeDialogComponent } from '../_dialogs/qr-code-dialog/qr-code-dialog.component';
 import { BonusTokenService } from '../../../services/http/bonus-token.service';
-import 'rxjs/add/operator/filter';
 
 @Component({
   selector: 'app-header',
@@ -161,8 +160,8 @@ export class HeaderComponent implements OnInit {
   }
 
   goBack() {
-    const navId = window.history.state.navigationId;
-    if (navId > 1) {
+    const length = window.history.length;
+    if (length > 2) {
       this.location.back();
     } else {
       this.navToHome();
