@@ -40,19 +40,22 @@
   </div>
 
   <mat-menu #sortMenu="matMenu" xPosition="before">
-    <button mat-icon-button matTooltip="{{ 'comment-list.vote-desc' | translate }}"
-            (click)="sortComments(votedesc)">
-      <mat-icon [ngClass]="{votedesc: 'up'}[currentSort]">keyboard_arrow_up</mat-icon>
-    </button>
-
-    <button mat-icon-button matTooltip="{{ 'comment-list.vote-asc' | translate }}"
-            (click)="sortComments(voteasc)">
-      <mat-icon [ngClass]="{voteasc: 'down'}[currentSort]">keyboard_arrow_down</mat-icon>
-    </button>
-
-    <button mat-icon-button matTooltip="{{ 'comment-list.time' | translate }}"
-            (click)="sortComments(time)">
+    <button mat-menu-item *ngIf="isSafari === 'false'" matTooltip="{{ 'comment-list.time' | translate }}"
+            (click)="sortComments(time)" aria-labelledby="access_time">
       <mat-icon [ngClass]="{time: 'unread-icon'}[currentSort]">access_time</mat-icon>
+      <span>{{ 'comment-list.sort-list-time' | translate }}</span>
+    </button>
+
+    <button mat-menu-item matTooltip="{{ 'comment-list.vote-asc' | translate }}"
+            (click)="sortComments(votedesc)" aria-labelledby="keyboard_arrow_up">
+      <mat-icon [ngClass]="{votedesc: 'up'}[currentSort]">keyboard_arrow_up</mat-icon>
+      <span>{{ 'comment-list.sort-vote-asc' | translate }}</span>
+    </button>
+
+    <button mat-menu-item matTooltip="{{ 'comment-list.vote-desc' | translate }}"
+            (click)="sortComments(voteasc)" aria-labelledby="keyboard_arrow_down">
+      <mat-icon [ngClass]="{voteasc: 'down'}[currentSort]">keyboard_arrow_down</mat-icon>
+      <span>{{ 'comment-list.sort-vote-desc' | translate }}</span>
     </button>
   </mat-menu>
 
@@ -77,4 +80,7 @@
   <div id="search-box-input-description">
     {{ 'comment-page.search-box-input-description' | translate }}
   </div>
+  <div id="keyboard_arrow_up">{{'comment-list.a11y-keyboard_arrow_up' | translate}}</div>
+  <div id="keyboard_arrow_down">{{'comment-list.a11y-keyboard_arrow_down' | translate}}</div>
+  <div id="access_time">{{'comment-list.a11y-access_time' | translate}}</div>
 </div>
