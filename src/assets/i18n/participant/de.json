@@ -1,11 +1,9 @@
 {
   "answer": {
     "abstain": "Enthalten",
-    "abstention-sent": "Enthaltung gesendet",
     "at-least-one": "Bitte wähle mindestens eine Antwort.",
     "please-answer": "Bitte gib eine Antwort ein.",
     "please-one": "Bitte wähle eine Antwort.",
-    "sent": "Antwort gesendet",
     "submit": "Absenden",
     "your-answer": "Deine Antwort",
     "has-abstained": "Sie haben sich enthalten!",

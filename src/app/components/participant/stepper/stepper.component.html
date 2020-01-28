@@ -1,0 +1,13 @@
+<div class="stepper-container">
+  <div class="stepper-navigation-bar" [@slideHeader]="{value: headerAnimationState,
+   params: { position: headerPos * -20 }}" (@slideHeader.done)="headerAnimationDone()">
+    <span class="fill-remaining-space"></span>
+    <div matRipple class="step-ripple" *ngFor="let step of steps; let i = index;" (click)="onClick(i)">
+      <button class="step" [ngClass]="{'active': selectedIndex === i, 'sent': alreadySent.get(i)}">{{i + 1}}</button>
+    </div>
+    <span class="fill-remaining-space"></span>
+  </div>
+  <div [@slideContainer]="containerAnimationState" (@slideContainer.done)="containerAnimationDone()">
+    <ng-container [ngTemplateOutlet]="selected.content"></ng-container>
+  </div>
+</div>

@@ -1,11 +1,9 @@
 {
   "answer": {
     "abstain": "Abstain",
-    "abstention-sent": "Abstention sent",
     "at-least-one": "Please select at least one answer.",
     "please-answer": "Please enter an answer.",
     "please-one": "Please select an answer.",
-    "sent": "Answer sent",
     "submit": "Submit",
     "your-answer": "Your answer",
     "has-abstained": "You have abstained!",

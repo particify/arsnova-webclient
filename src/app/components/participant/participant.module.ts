@@ -11,6 +11,9 @@ import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { HttpClient } from '@angular/common/http';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { MarkdownModule } from 'ngx-markdown';
+import { StepperComponent } from './stepper/stepper.component';
+import { CdkStepperModule } from '@angular/cdk/stepper';
+import { MatRippleModule } from '@angular/material';
 
 @NgModule({
   imports: [
@@ -26,13 +29,16 @@ import { MarkdownModule } from 'ngx-markdown';
       },
       isolate: true
     }),
-    MarkdownModule
+    MarkdownModule,
+    CdkStepperModule,
+    MatRippleModule
   ],
   declarations: [
     ContentChoiceParticipantComponent,
     ContentTextParticipantComponent,
     RoomParticipantPageComponent,
-    ParticipantContentCarouselPageComponent
+    ParticipantContentCarouselPageComponent,
+    StepperComponent
   ]
 })
 export class ParticipantModule {

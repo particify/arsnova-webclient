@@ -15,6 +15,7 @@ export class ParticipantContentCarouselPageComponent implements OnInit {
   contents: Content[];
   contentGroup: ContentGroup;
   isLoading = true;
+  alreadySent = new Map<number, boolean>();
 
   constructor(private contentService: ContentService) {
   }
@@ -25,5 +26,9 @@ export class ParticipantContentCarouselPageComponent implements OnInit {
       this.contents = contents;
       this.isLoading = false;
     });
+  }
+
+  receiveSentStatus($event, index: number) {
+    this.alreadySent.set(index, $event);
   }
 }

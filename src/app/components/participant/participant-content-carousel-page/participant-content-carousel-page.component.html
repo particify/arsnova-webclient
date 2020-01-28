@@ -4,18 +4,15 @@
   </div>
 </div>
 
-<div fxLayout="column" fxLayoutAlign="start center">
-  <mat-tab-group [dynamicHeight]=true>
-    <mat-tab *ngFor="let content of contents" label="{{content.subject}}">
-      <app-content-choice-participant [content]="content"
-                                      *ngIf="content.format === ContentType.CHOICE"></app-content-choice-participant>
-      <app-content-choice-participant [content]="content"
-                                      *ngIf="content.format === ContentType.SCALE"></app-content-choice-participant>
-      <app-content-choice-participant [content]="content"
-                                      *ngIf="content.format === ContentType.BINARY"></app-content-choice-participant>
-      <app-content-text-participant [content]="content"
-                                    *ngIf="content.format === ContentType.TEXT"></app-content-text-participant>
-    </mat-tab>
-  </mat-tab-group>
+<div *ngIf="!isLoading" fxLayout="column" fxLayoutAlign="start center">
+  <app-stepper [listLength]="contents.length" [alreadySent]="alreadySent">
+    <cdk-step *ngFor="let content of contents; let i = index">
+      <app-content-choice-participant (message)="receiveSentStatus($event, i)" [content]="content"
+         *ngIf="content.format === ContentType.CHOICE || content.format === ContentType.SCALE ||
+                content.format === ContentType.BINARY">
+      </app-content-choice-participant>
+      <app-content-text-participant (message)="receiveSentStatus($event, i)" [content]="content"
+         *ngIf="content.format === ContentType.TEXT"></app-content-text-participant>
+    </cdk-step>
+  </app-stepper>
 </div>
-

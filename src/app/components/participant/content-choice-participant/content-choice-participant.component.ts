@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ContentChoice } from '../../../models/content-choice';
 import { AnswerOption } from '../../../models/answer-option';
 import { ContentAnswerService } from '../../../services/http/content-answer.service';
@@ -27,6 +27,7 @@ class CheckedAnswer {
 export class ContentChoiceParticipantComponent implements OnInit {
 
   @Input() content: ContentChoice;
+  @Output() message = new EventEmitter<boolean>();
 
   isLoading = true;
   ContentType: typeof ContentType = ContentType;
@@ -64,9 +65,14 @@ export class ContentChoiceParticipantComponent implements OnInit {
         }
         this.alreadySent = true;
       }
+      this.sendStatusToParent();
       this.isLoading = false;
     });
     this.translateService.use(localStorage.getItem('currentLang'));
+  }
+
+  sendStatusToParent() {
+    this.message.emit(this.alreadySent);
   }
 
   initAnswers(): void {
@@ -132,9 +138,6 @@ export class ContentChoiceParticipantComponent implements OnInit {
       }
       return;
     }
-    this.translateService.get('answer.sent').subscribe(message => {
-      this.notificationService.show(message);
-    });
     this.answerService.addAnswerChoice({
       id: null,
       revision: null,
@@ -148,14 +151,12 @@ export class ContentChoiceParticipantComponent implements OnInit {
         this.checkAnswer(selectedAnswers);
       }
       this.alreadySent = true;
+      this.sendStatusToParent();
     });
   }
 
   abstain($event) {
     $event.preventDefault();
-    this.translateService.get('answer.abstention-sent').subscribe(message => {
-      this.notificationService.show(message);
-    });
     this.answerService.addAnswerChoice({
       id: null,
       revision: null,
@@ -168,5 +169,6 @@ export class ContentChoiceParticipantComponent implements OnInit {
     this.resetCheckedAnswers();
     this.hasAbstained = true;
     this.alreadySent = true;
+    this.sendStatusToParent();
   }
 }
