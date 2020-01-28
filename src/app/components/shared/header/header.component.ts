@@ -31,6 +31,7 @@ export class HeaderComponent implements OnInit {
   cTime: string;
   shortId: string;
   deviceType: string;
+  isSafari: string;
   moderationEnabled: boolean;
 
   constructor(public location: Location,
@@ -50,12 +51,25 @@ export class HeaderComponent implements OnInit {
     if (localStorage.getItem('loggedin') !== null && localStorage.getItem('loggedin') === 'true') {
       this.authenticationService.refreshLogin();
     }
-    // Subscribe to user data (update component's user when user data changes: e.g. login, logout)
-    if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+    const userAgent = navigator.userAgent;
+    // Check if mobile device
+    if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(userAgent)) {
+      // Check if IOS device
+      if (/iPhone|iPad|iPod/.test(userAgent)) {
+        this.isSafari = 'true';
+      }
       this.deviceType = 'mobile';
     } else {
+      // Check if Mac
+      if (/Macintosh|MacIntel|MacPPC|Mac68k/.test(userAgent)) {
+        // Check if Safari browser
+        if (userAgent.indexOf('Safari') !== -1 && userAgent.indexOf('Chrome') === -1) {
+          this.isSafari = 'true';
+        }
+      }
       this.deviceType = 'desktop';
     }
+    localStorage.setItem('isSafari', this.isSafari);
     localStorage.setItem('deviceType', this.deviceType);
     if (!localStorage.getItem('currentLang')) {
       const lang = this.translationService.getBrowserLang();

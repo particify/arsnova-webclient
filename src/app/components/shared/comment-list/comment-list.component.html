@@ -1,10 +1,5 @@
 <div fxLayout="row" [ngClass]="{'search-container' : !scroll, 'search-container-fixed' : scroll}"
      *ngIf="comments.length > 2" (window:scroll)="checkScroll()" fxLayoutAlign="center">
-  <button id="filter-close-button" mat-icon-button class="searchBarButton" *ngIf="currentFilter !== ''"
-          (click)="filterComments('');"
-          aria-labelledby="close_filter">
-    <mat-icon class="searchBarIcon">close</mat-icon>
-  </button>
   <mat-label *ngIf="deviceType === 'desktop'" fxLayoutAlign="center center">
     <mat-icon class="search-icon">search</mat-icon>
   </mat-label>
@@ -69,7 +64,7 @@
 
   <mat-menu #sortMenu="matMenu" xPosition="before">
 
-    <button mat-menu-item matTooltip="{{ 'comment-list.time' | translate }}"
+    <button mat-menu-item *ngIf="isSafari === 'false'" matTooltip="{{ 'comment-list.time' | translate }}"
             (click)="sortComments(time)" aria-labelledby="access_time">
       <mat-icon [ngClass]="{time: 'unread-icon'}[currentSort]">access_time</mat-icon>
       <span>{{ 'comment-list.sort-list-time' | translate }}</span>
