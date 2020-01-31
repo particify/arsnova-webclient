@@ -2,12 +2,17 @@ p {
   margin: 10px 0 10px 0;
 }
 
-.mat-icon-button {
-  margin-top: 5px;
-  color: var(--warn);
+.delete-icon {
+  color: var(--red);
 }
 
 .delete {
   margin: 20px 0 20px 0;
   min-width: 220px;
+}
+
+.tokens {
+  &:nth-child(even) {
+    background-color: var(--alt-dialog);
+  }
 }

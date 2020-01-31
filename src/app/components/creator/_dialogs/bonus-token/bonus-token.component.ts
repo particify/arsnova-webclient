@@ -7,6 +7,7 @@ import { RoomCreatorPageComponent } from '../../room-creator-page/room-creator-p
 import { BonusDeleteComponent } from '../bonus-delete/bonus-delete.component';
 import { NotificationService } from '../../../../services/util/notification.service';
 import { TranslateService } from '@ngx-translate/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-bonus-token',
@@ -16,9 +17,11 @@ import { TranslateService } from '@ngx-translate/core';
 export class BonusTokenComponent implements OnInit {
   room: Room;
   bonusTokens: BonusToken[] = [];
+  lang: string;
 
   constructor(private bonusTokenService: BonusTokenService,
               public dialog: MatDialog,
+              protected router: Router,
               private dialogRef: MatDialogRef<RoomCreatorPageComponent>,
               private translationService: TranslateService,
               private notificationService: NotificationService) {
@@ -26,8 +29,11 @@ export class BonusTokenComponent implements OnInit {
 
   ngOnInit() {
     this.bonusTokenService.getTokensByRoomId(this.room.id).subscribe(list => {
-      this.bonusTokens = list;
+      this.bonusTokens = list.sort((a, b) => {
+        return (a.token > b.token) ? 1 : -1;
+      });
     });
+    this.lang = localStorage.getItem('currentLang');
   }
 
   openDeleteSingleBonusDialog(userId: string, commentId: string, index: number): void {
@@ -57,7 +63,6 @@ export class BonusTokenComponent implements OnInit {
   }
 
   deleteBonus(userId: string, commentId: string, index: number): void {
-    // Delete bonus via bonus-token-service
     const toDelete = this.bonusTokens[index];
     this.bonusTokenService.deleteToken(toDelete.roomId, toDelete.commentId, toDelete.userId).subscribe(_ => {
       this.translationService.get('room-page.token-deleted').subscribe(msg => {
@@ -68,13 +73,18 @@ export class BonusTokenComponent implements OnInit {
   }
 
   deleteAllBonuses(): void {
-    // Delete all bonuses via bonus-token-service with roomId
     this.bonusTokenService.deleteTokensByRoomId(this.room.id).subscribe(_ => {
       this.translationService.get('room-page.tokens-deleted').subscribe(msg => {
         this.dialogRef.close();
         this.notificationService.show(msg);
       });
     });
+  }
+
+  navToComment(commentId: string) {
+    this.dialogRef.close();
+    const commentURL = `creator/room/${this.room.shortId}/comment/${commentId}`;
+    this.router.navigate([commentURL]);
   }
 
   /**
