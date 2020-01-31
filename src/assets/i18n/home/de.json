@@ -197,7 +197,7 @@
     "join-message-template": "An der Sitzung {{session}} mit dem Code {{id}} und in der Rolle {{role}} teilnehmen.",
     "moderator-role": "Moderator",
     "no-room-history": "Du hast bisher an keiner Sitzung teilgenommen.",
-    "panel-remove-button": "Besuchte Sitzung aus der Liste entfernen",
+    "panel-remove-button": "Sitzung aus der Liste entfernen",
     "really-remove": "Willst du die besuchte Sitzung ",
     "really-remove-2": " wirklich aus der Liste entfernen?",
     "room-successfully-removed": "Die Sitzung wurde erfolgreich aus der Liste entfernt.",
