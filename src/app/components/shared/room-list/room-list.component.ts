@@ -88,8 +88,12 @@ export class RoomListComponent implements OnInit, OnDestroy {
       }
       return roomWithRole;
     }).sort((a, b) => 0 - (a.name.toLowerCase() < b.name.toLowerCase() ? 1 : -1));
+    for (const room of this.roomsWithRole) {
+      this.commentService.countByRoomId(room.id, true).subscribe(count => {
+        room.commentCount = count;
+      });
+    }
     this.isLoading = false;
-    
     this.updateTable();
   }
 
