@@ -13,6 +13,8 @@ export const dark = {
   '--surface': '#212121',
   '--dialog': '#37474f',
   '--cancel': '#26343c',
+  '--alt-surface': '#323232',
+  '--alt-dialog': '#455a64',
 
   '--on-primary': 'black',
   '--on-secondary': 'black',

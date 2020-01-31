@@ -7,6 +7,7 @@ import { ParticipantContentCarouselPageComponent } from './participant-content-c
 import { StatisticsPageComponent } from '../shared/statistics-page/statistics-page.component';
 import { StatisticComponent } from '../shared/statistic/statistic.component';
 import { CommentPageComponent } from '../shared/comment-page/comment-page.component';
+import { CommentAnswerComponent } from '../shared/comment-answer/comment-answer.component';
 
 const routes: Routes = [
   {
@@ -27,6 +28,11 @@ const routes: Routes = [
   {
     path: 'room/:shortId/comments',
     component: CommentPageComponent,
+    data: { roles: [UserRole.PARTICIPANT] }
+  },
+  {
+    path: 'room/:shortId/comment/:commentId',
+    component: CommentAnswerComponent,
     data: { roles: [UserRole.PARTICIPANT] }
   },
   {

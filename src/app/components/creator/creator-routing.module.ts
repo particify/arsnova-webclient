@@ -10,6 +10,7 @@ import { ContentListComponent } from './content-list/content-list.component';
 import { StatisticComponent } from '../shared/statistic/statistic.component';
 import { ContentPresentationComponent } from './content-presentation/content-presentation.component';
 import { CommentPageComponent } from '../shared/comment-page/comment-page.component';
+import { CommentAnswerComponent } from '../shared/comment-answer/comment-answer.component';
 
 const routes: Routes = [
   {
@@ -39,6 +40,12 @@ const routes: Routes = [
   {
     path: 'room/:shortId/comments',
     component: CommentPageComponent,
+    canActivate: [AuthenticationGuard],
+    data: { roles: [UserRole.CREATOR] }
+  },
+  {
+    path: 'room/:shortId/comment/:commentId',
+    component: CommentAnswerComponent,
     canActivate: [AuthenticationGuard],
     data: { roles: [UserRole.CREATOR] }
   },

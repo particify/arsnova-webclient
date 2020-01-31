@@ -28,10 +28,10 @@ import { TagsComponent } from './_dialogs/tags/tags.component';
 import { ModeratorDeleteComponent } from './_dialogs/moderator-delete/moderator-delete.component';
 import { DeleteCommentComponent } from './_dialogs/delete-comment/delete-comment.component';
 import { DeleteCommentsComponent } from './_dialogs/delete-comments/delete-comments.component';
-import { CommentAnswerFormComponent } from './_dialogs/comment-answer-form/comment-answer-form.component';
 import { BonusDeleteComponent } from './_dialogs/bonus-delete/bonus-delete.component';
 import { MarkdownModule } from 'ngx-markdown';
 import { ContentGroupCreationComponent } from './_dialogs/content-group-creation/content-group-creation.component';
+import { DeleteAnswerComponent } from './_dialogs/delete-answer/delete-answer.component';
 
 @NgModule({
   imports: [
@@ -71,8 +71,8 @@ import { ContentGroupCreationComponent } from './_dialogs/content-group-creation
     DeleteCommentsComponent,
     DeleteCommentComponent,
     BonusDeleteComponent,
-    CommentAnswerFormComponent,
-    ContentGroupCreationComponent
+    ContentGroupCreationComponent,
+    DeleteAnswerComponent
   ],
   entryComponents: [
     RoomDeleteComponent,
@@ -93,8 +93,8 @@ import { ContentGroupCreationComponent } from './_dialogs/content-group-creation
     DeleteCommentsComponent,
     DeleteCommentComponent,
     BonusDeleteComponent,
-    CommentAnswerFormComponent,
-    ContentGroupCreationComponent
+    ContentGroupCreationComponent,
+    DeleteAnswerComponent
   ]
 })
 export class CreatorModule {

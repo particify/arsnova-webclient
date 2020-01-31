@@ -13,6 +13,8 @@ export const light = {
   '--surface': 'white',
   '--dialog': 'white',
   '--cancel': '#e0e0e0',
+  '--alt-surface': '#eeeeee',
+  '--alt-dialog': '#eeeeee',
 
   '--on-primary': '#ffffff',
   '--on-secondary': 'white',
