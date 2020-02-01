@@ -13,6 +13,8 @@ export const beamer = {
   '--surface': 'white',
   '--dialog': 'white',
   '--cancel': '#e0e0e0',
+  '--alt-surface': '#eeeeee',
+  '--alt-dialog': '#eeeeee',
 
   '--on-primary': 'white',
   '--on-secondary': 'white',

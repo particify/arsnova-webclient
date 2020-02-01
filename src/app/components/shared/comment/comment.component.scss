@@ -28,6 +28,10 @@ mat-card-content > :first-child {
   color: slategray;
 }
 
+.answered-icon {
+  color: var(--blue);
+}
+
 .correct-icon {
   color: var(--green);
 }

@@ -1,0 +1,31 @@
+app-comment, mat-card {
+  width: 100%;
+  max-width: 800px;
+}
+
+.answer {
+  background-color: var(--alt-surface);
+  color: var(--on-surface);
+  padding: 20px;
+  box-sizing: border-box
+}
+
+button {
+  min-width: 95px;
+  margin-top: 3%;
+}
+
+mat-icon {
+  font-size: 18px;
+  height: 18px;
+  width: 18px;
+  margin-right: 5px;
+}
+
+mat-hint {
+  margin-right: 1%;
+}
+
+markdown {
+  word-break: break-all;
+}
