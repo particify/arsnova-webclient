@@ -1,7 +1,14 @@
 button {
-  background-color: var(--secondary);
-  color: var(--on-secondary);
-  transform: scale(0.9);
+  color: var(--secondary);
+}
+
+.delete {
+  color: var(--red);
+  margin-right: 10px;
+}
+
+.delete-text {
+  color: black;
 }
 
 .filterWrapper {
@@ -10,6 +17,10 @@ button {
 
 .filter {
   color: var(--on-surface) !important;
+}
+
+.clickable {
+  cursor: pointer;
 }
 
 table, tr, td {
@@ -21,15 +32,19 @@ table, tr, td {
 }
 
 td.mat-cell:first-of-type, td.mat-footer-cell:first-of-type, th.mat-header-cell:first-of-type {
-  padding-left: 3%;
+  padding-left: 2%;
 }
 
 td.mat-cell:last-of-type, td.mat-footer-cell:last-of-type, th.mat-header-cell:last-of-type {
-  padding-right: 3%;
+  padding-right: 0;
 }
 
 th {
   font-size: 1rem;
   background-color: var(--surface);
   color: var(--on-surface);
+}
+
+.mat-column-role {
+  text-align: center;
 }

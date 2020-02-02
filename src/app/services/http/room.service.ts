@@ -102,6 +102,14 @@ export class RoomService extends BaseHttpService {
     });
   }
 
+  removeFromHistory(roomId: string): Observable<Room> {
+    const connectionUrl = `${ this.apiUrl.base + this.apiUrl.user }/${ this.authService.getUser().id }/roomHistory/${roomId}`;
+    return this.http.delete<Room>(connectionUrl, httpOptions).pipe(
+      tap(() => ''),
+      catchError(this.handleError<Room>('deleteRoom'))
+    );
+  }
+
   updateRoom(updatedRoom: Room): Observable<Room> {
     const connectionUrl = `${this.apiUrl.base + this.apiUrl.rooms}/~${updatedRoom.shortId}`;
     return this.http.put(connectionUrl, updatedRoom, httpOptions).pipe(

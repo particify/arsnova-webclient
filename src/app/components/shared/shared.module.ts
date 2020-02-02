@@ -33,6 +33,7 @@ import { NgxQRCodeModule } from 'ngx-qrcode2';
 import { ArsModule } from '../../../../projects/ars/src/lib/ars.module';
 import { CommentAnswerComponent } from './comment-answer/comment-answer.component';
 import { MarkdownModule } from 'ngx-markdown';
+import { RemoveFromHistoryComponent } from './_dialogs/remove-from-history/remove-from-history.component';
 
 @NgModule({
   imports: [
@@ -71,7 +72,8 @@ import { MarkdownModule } from 'ngx-markdown';
     DeleteAccountComponent,
     DialogActionButtonsComponent,
     QrCodeDialogComponent,
-    CommentAnswerComponent
+    CommentAnswerComponent,
+    RemoveFromHistoryComponent
   ],
   exports: [
     RoomJoinComponent,
@@ -100,7 +102,8 @@ import { MarkdownModule } from 'ngx-markdown';
     PresentCommentComponent,
     DeleteAccountComponent,
     UserBonusTokenComponent,
-    RemindOfTokensComponent
+    RemindOfTokensComponent,
+    RemoveFromHistoryComponent
   ]
 })
 export class SharedModule {
