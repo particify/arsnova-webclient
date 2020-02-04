@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Chart } from 'chart.js';
+import { Chart, LinearTickOptions } from 'chart.js';
 import { ActivatedRoute } from '@angular/router';
 import { ContentService } from '../../../services/http/content.service';
 import { ContentChoice } from '../../../models/content-choice';
@@ -24,7 +24,7 @@ export class AnswerList {
 })
 export class StatisticComponent implements OnInit {
 
-  chart = Chart;
+  chart: Chart;
   colors: string[] = [];
   ccolors: string[] = [];
   label = 'ABCDEFGH';
@@ -60,6 +60,10 @@ export class StatisticComponent implements OnInit {
   }
 
   createChart(colors: string[]) {
+    const tickOptions: LinearTickOptions = {
+      beginAtZero: true,
+      precision: 0
+    };
     this.chart = new Chart('chart', {
       type: 'bar',
       data: {
@@ -80,10 +84,7 @@ export class StatisticComponent implements OnInit {
         maintainAspectRatio: false,
         scales: {
           yAxes: [{
-            ticks: {
-              beginAtZero: true,
-              precision: 0
-            }
+            ticks: tickOptions
           }]
         }
       }
