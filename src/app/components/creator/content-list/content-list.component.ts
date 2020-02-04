@@ -26,7 +26,7 @@ import { ContentGroupCreationComponent } from '../_dialogs/content-group-creatio
 
 export class ContentListComponent implements OnInit {
 
-  @ViewChild('nameInput') nameInput: ElementRef;
+  @ViewChild('nameInput', { static: true }) nameInput: ElementRef;
 
   contents: Content[];
   contentBackup: Content;

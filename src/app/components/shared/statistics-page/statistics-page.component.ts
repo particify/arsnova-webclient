@@ -19,7 +19,7 @@ export class StatisticsPageComponent implements OnInit {
   isLoading = true;
   currentCG: ContentGroup;
 
-  @ViewChild(MatTabGroup) tabGroup: MatTabGroup;
+  @ViewChild(MatTabGroup, { static: true }) tabGroup: MatTabGroup;
 
   constructor(private route: ActivatedRoute,
               private roomService: RoomService,

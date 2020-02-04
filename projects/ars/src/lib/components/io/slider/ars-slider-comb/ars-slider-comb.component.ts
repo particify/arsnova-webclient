@@ -11,7 +11,7 @@ export class ArsSliderCombComponent implements OnInit, AfterViewInit {
   @Input() width: number;
   @Input() leftIcon = 'keyboard_arrow_left';
   @Input() rightIcon = 'keyboard_arrow_right';
-  @ContentChild(ArsSliderDirective) slider: ArsSliderDirective;
+  @ContentChild(ArsSliderDirective, { static: false }) slider: ArsSliderDirective;
 
   constructor(private ref: ElementRef, private render: Renderer2) {
   }
