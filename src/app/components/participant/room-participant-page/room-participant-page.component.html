@@ -39,7 +39,8 @@
           </button>
         </mat-grid-tile>
         <mat-grid-tile>
-          <button mat-icon-button routerLink="/participant/room/{{ room.shortId }}/feedback-barometer">
+          <button mat-icon-button [disableRipple]="true"
+                  routerLink="/participant/room/{{ room.shortId }}/feedback-barometer">
             <mat-icon class="main-icon" [ngClass]="{'desktop' : deviceType === 'desktop'}">thumbs_up_down</mat-icon>
             <h3 *ngIf="deviceType === 'desktop'">{{ 'room-page.give-feedback' | translate}}</h3>
           </button>
