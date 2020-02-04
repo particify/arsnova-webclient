@@ -3,7 +3,7 @@
     <mat-progress-spinner color="primary" mode="indeterminate" diameter="80"></mat-progress-spinner>
   </div>
 </div>
-<mat-card>
+<mat-card *ngIf="!isLoading">
   <div *ngIf="roomsWithRole">
     <div *ngIf="tableDataSource.data.length === 0" aria-labelledby="emptySessionHistoryLabel">
       <h3>{{ 'room-list.no-room-history' | translate }}</h3>

@@ -164,7 +164,6 @@ export class CommentListComponent implements OnInit, OnDestroy {
         this.thresholdEnabled = false;
       }
     }
-    this.isLoading = false;
     let commentThreshold;
     if (this.thresholdEnabled) {
       commentThreshold = this.room.extensions['comments'].commentThreshold;
@@ -175,6 +174,7 @@ export class CommentListComponent implements OnInit, OnDestroy {
       }
     }
     this.sortComments(this.currentSort);
+    this.isLoading = false;
   }
 
   getVote(comment: Comment): Vote {

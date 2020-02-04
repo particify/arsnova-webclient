@@ -29,6 +29,7 @@ export class FeedbackBarometerPageComponent implements OnInit, OnDestroy {
   room: Room;
   protected sub: Subscription;
   isClosed = false;
+  isLoading = true;
 
   constructor(
     private authenticationService: AuthenticationService,
@@ -43,6 +44,7 @@ export class FeedbackBarometerPageComponent implements OnInit, OnDestroy {
       this.room = room;
       this.isClosed = room.settings['feedbackLocked'];
       this.isOwner = this.authenticationService.hasAccess(this.room.shortId, UserRole.CREATOR);
+      this.isLoading = false;
     });
     this.user = this.authenticationService.getUser();
 

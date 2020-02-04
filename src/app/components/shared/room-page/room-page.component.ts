@@ -92,7 +92,6 @@ export class RoomPageComponent implements OnInit, OnDestroy {
           this.commentCounter = this.commentCounter - 1;
         }
       });
-      this.isLoading = false;
       this.afterRoomLoadHook();
     });
   }
@@ -103,6 +102,8 @@ export class RoomPageComponent implements OnInit, OnDestroy {
       if (this.roomStats.groupStats) {
         this.noGroups = false;
         this.initializeGroups();
+      } else {
+        this.isLoading = false;
       }
     });
   }

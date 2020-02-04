@@ -61,6 +61,12 @@
 
 </div>
 
+<div *ngIf="isLoading" fxLayout="column" fxLayoutAlign="center" fxFill>
+  <div fxLayout="row" fxLayoutAlign="center">
+    <mat-progress-spinner color="primary" mode="indeterminate" diameter="80"></mat-progress-spinner>
+  </div>
+</div>
+
 <button mat-icon-button class="scrollTop" [ngClass]="{'visible': isScrollButtonVisible()}"
         (click)="AppComponent.scrollTop()" tabIndex="-1">
   <mat-icon>arrow_upward</mat-icon>
