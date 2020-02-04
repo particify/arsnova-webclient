@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { SwUpdate } from '@angular/service-worker';
 import { NotificationService } from './services/util/notification.service';
-import { Rescale } from './models/rescale';
 import { CustomIconService } from './services/util/custom-icon.service';
 import { ApiConfigService } from './services/http/api-config.service';
 import { MatIconRegistry } from '@angular/material/icon';
@@ -28,8 +27,6 @@ export class AppComponent implements OnInit {
     sessionStorage.setItem('currentLang', this.translationService.getBrowserLang());
     customIconService.init();
   }
-
-  public static rescale: Rescale = new Rescale();
 
   title = 'ARSnova';
 
@@ -64,9 +61,5 @@ export class AppComponent implements OnInit {
       });
     });
     this.apiConfigService.load();
-  }
-
-  public getRescale(): Rescale {
-    return AppComponent.rescale;
   }
 }

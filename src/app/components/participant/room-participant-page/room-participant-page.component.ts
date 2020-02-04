@@ -26,7 +26,6 @@ import { NotificationService } from '../../../services/util/notification.service
 export class RoomParticipantPageComponent extends RoomPageComponent implements OnInit, OnDestroy, AfterContentInit {
 
   room: Room;
-  isLoading = true;
   deviceType = localStorage.getItem('deviceType');
   user: User;
 
@@ -93,5 +92,9 @@ export class RoomParticipantPageComponent extends RoomPageComponent implements O
         this.roomService.addToHistory(this.room.id);
       });
     }
+  }
+
+  protected afterGroupsLoadHook() {
+    this.isLoading = false;
   }
 }

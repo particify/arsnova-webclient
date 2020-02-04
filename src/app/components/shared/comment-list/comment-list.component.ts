@@ -100,16 +100,12 @@ export class CommentListComponent implements OnInit, OnDestroy {
           this.comments = comments;
           this.getComments();
         });
-      if (this.userRole === UserRole.PARTICIPANT) {
-        this.openCreateDialog();
-      }
     });
-    this.hideCommentsList = false;
     this.subscribeCommentStream();
     this.translateService.use(localStorage.getItem('currentLang'));
     this.deviceType = localStorage.getItem('deviceType');
     this.isSafari = localStorage.getItem('isSafari');
-    if (this.userRole === 0) {
+    if (this.userRole === UserRole.PARTICIPANT) {
       this.voteService.getByRoomIdAndUserID(this.roomId, userId).subscribe(votes => {
         for (const v of votes) {
           this.commentVoteMap.set(v.commentId, v);
@@ -164,7 +160,6 @@ export class CommentListComponent implements OnInit, OnDestroy {
         this.thresholdEnabled = false;
       }
     }
-    this.isLoading = false;
     let commentThreshold;
     if (this.thresholdEnabled) {
       commentThreshold = this.room.extensions['comments'].commentThreshold;
@@ -175,6 +170,7 @@ export class CommentListComponent implements OnInit, OnDestroy {
       }
     }
     this.sortComments(this.currentSort);
+    this.isLoading = false;
   }
 
   getVote(comment: Comment): Vote {

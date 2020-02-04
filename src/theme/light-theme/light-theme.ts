@@ -51,7 +51,6 @@ export const light_meta = {
     }
   },
   'order': 2,
-  'scale': 1,
   'previewColor': 'background'
 
 };

@@ -5,30 +5,21 @@
             matTooltip="{{'header.back' | translate}}">
       <mat-icon class="header-icons">arrow_back</mat-icon>
     </button>
-    <button mat-icon-button aria-hidden="true" *ngIf="isSafari === 'false'">
-      <mat-icon class="header-icons" (click)="getRescale().toggleState();">fullscreen</mat-icon>
-
-    </button>
     <span class="fill-remaining-space"></span>
-    <h2 *ngIf="router.url.includes('comments') && user.role === 3 && deviceType === 'desktop'"
-        fxLayoutAlign="center center">
+    <h2 *ngIf="router.url.includes('comments') && user.role === 3 && deviceType === 'desktop'">
       {{cTime}}
     </h2>
     <span class="fill-remaining-space"
           *ngIf="router.url.includes('comments') && user.role === 3 && deviceType === 'desktop'"></span>
-    <span
-      *ngIf="router.url.includes('comments') && moderationEnabled"
-      class="moderation-enabled"
-      fxLayoutAlign="center center">
-    <mat-icon matTooltip="{{ 'header.moderation-enabled' | translate }}">
-      gavel
-    </mat-icon>
-  </span>
-    <h2 id="shortId-header" *ngIf="router.url.includes('comments')"
-        fxLayoutAlign="center center">
+    <button mat-icon-button class="gavel" *ngIf="router.url.includes('comments') && user.role === 0 && moderationEnabled"
+            #tt="matTooltip" matTooltip="{{ 'header.moderation-enabled' | translate }}" (click)="tt.toggle()">
+      <mat-icon class="header-icons">gavel</mat-icon>
+    </button>
+    <h2 id="shortId-header" *ngIf="router.url.includes('comments') && user.role === 3 && deviceType === 'desktop'">
       {{'header.id' | translate}}: {{ shortId.slice(0, 4) }} {{  shortId.slice(4, 8) }}
     </h2>
-    <button *ngIf="router.url.includes('room')" mat-icon-button (click)="showQRDialog();" fxLayoutAlign="center center">
+    <button mat-icon-button class="center" (click)="showQRDialog()"
+    *ngIf="router.url.substring(router.url.length - 13, router.url.length) === ('room/' + shortId)">
       <mat-icon svgIcon="qrcode" class="header-icons qrcode">
       </mat-icon>
 
@@ -39,10 +30,10 @@
       <button mat-menu-item *ngIf="user" routerLink="/user" tabindex="0">
         <mat-icon class="sessions">people</mat-icon>
         <span *ngIf="!user.isGuest">{{'header.my-sessions' | translate}}</span>
-        <span *ngIf="user.isGuest" svgIcon="meeting_room">{{'header.visited-sessions' | translate}}</span>
+        <span *ngIf="user.isGuest">{{'header.visited-sessions' | translate}}</span>
       </button>
       <button mat-menu-item *ngIf="user" (click)="openUserBonusTokenDialog()" tabindex="0">
-        <mat-icon color="warn">grade</mat-icon>
+        <mat-icon class="bonus">grade</mat-icon>
         <span>{{'header.user-bonus-token' | translate}}</span>
       </button>
       <button mat-menu-item *ngIf="user && !user.isGuest" (click)="openDeleteUserDialog()" tabindex="0">
@@ -59,8 +50,7 @@
             [matMenuTriggerFor]="userMenu"
             aria-labelledby="session-label" id="session-button">
       <div class="label-icon">
-        <mat-icon *ngIf="!user.isGuest" class="header-icons">account_circle</mat-icon>
-        <mat-icon *ngIf="user.isGuest" svgIcon="meeting_room" class="header-icons"></mat-icon>
+        <mat-icon class="header-icons">account_circle</mat-icon>
         <h2 *ngIf="!user.isGuest">{{'header.my-account' | translate}}</h2>
         <h2 *ngIf="user.isGuest">{{'header.my-guest-account' | translate}}</h2>
       </div>
@@ -69,8 +59,7 @@
     <button [disabled]="cookiesDisabled()" mat-icon-button *ngIf="user && deviceType === 'mobile'"
             [matMenuTriggerFor]="userMenu"
             aria-labelledby="session-label">
-      <mat-icon *ngIf="!user.isGuest" class="header-icons">account_circle</mat-icon>
-      <mat-icon *ngIf="user.isGuest" svgIcon="meeting_room" class="header-icons"></mat-icon>
+      <mat-icon class="header-icons">account_circle</mat-icon>
     </button>
 
     <button id="login-button" [disabled]="cookiesDisabled()" mat-button *ngIf="!user && deviceType === 'desktop'"
