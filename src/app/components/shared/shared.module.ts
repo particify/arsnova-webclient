@@ -27,7 +27,7 @@ import { CreateCommentComponent } from './_dialogs/create-comment/create-comment
 import { PresentCommentComponent } from './_dialogs/present-comment/present-comment.component';
 import { DeleteAccountComponent } from './_dialogs/delete-account/delete-account.component';
 import { DialogActionButtonsComponent } from './dialog/dialog-action-buttons/dialog-action-buttons.component';
-import { MatRippleModule } from '@angular/material';
+import { MatRippleModule } from '@angular/material/core';
 import { ArsModule } from '../../../../projects/ars/src/lib/ars.module';
 import { CommentAnswerComponent } from './comment-answer/comment-answer.component';
 import { MarkdownModule } from 'ngx-markdown';

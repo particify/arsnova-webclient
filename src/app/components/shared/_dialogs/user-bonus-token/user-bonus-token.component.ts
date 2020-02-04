@@ -3,7 +3,7 @@ import { BonusTokenService } from '../../../../services/http/bonus-token.service
 import { RoomService } from '../../../../services/http/room.service';
 import { BonusToken } from '../../../../models/bonus-token';
 import { BonusTokenRoomMixin } from '../../../../models/bonus-token-room-mixin';
-import { MatDialogRef } from '@angular/material';
+import { MatDialogRef } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 
 @Component({

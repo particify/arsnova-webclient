@@ -7,7 +7,7 @@ import { ContentChoice } from '../../../models/content-choice';
 import { ContentText } from '../../../models/content-text';
 import { ContentType } from '../../../models/content-type.enum';
 import { ContentGroup } from '../../../models/content-group';
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import { NotificationService } from '../../../services/util/notification.service';
 import { Room } from '../../../models/room';
 import { RoomService } from '../../../services/http/room.service';

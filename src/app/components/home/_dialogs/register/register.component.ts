@@ -1,5 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { ErrorStateMatcher, MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
+import { ErrorStateMatcher } from '@angular/material/core';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { FormControl, FormGroupDirective, NgForm, Validators } from '@angular/forms';
 import { AuthenticationService } from '../../../../services/http/authentication.service';
 import { NotificationService } from '../../../../services/util/notification.service';

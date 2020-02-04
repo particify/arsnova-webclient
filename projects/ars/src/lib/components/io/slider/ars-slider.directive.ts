@@ -1,5 +1,5 @@
 import { AfterViewInit, Directive, Input, OnInit, Renderer2 } from '@angular/core';
-import { MatSlider } from '@angular/material';
+import { MatSlider } from '@angular/material/slider';
 
 
 @Directive({

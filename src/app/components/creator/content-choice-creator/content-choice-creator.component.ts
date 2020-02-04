@@ -3,7 +3,7 @@ import { AnswerOption } from '../../../models/answer-option';
 import { ContentChoice } from '../../../models/content-choice';
 import { ContentService } from '../../../services/http/content.service';
 import { NotificationService } from '../../../services/util/notification.service';
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import { AnswerEditComponent } from '../_dialogs/answer-edit/answer-edit.component';
 import { ContentType } from '../../../models/content-type.enum';
 import { TranslateService } from '@ngx-translate/core';
