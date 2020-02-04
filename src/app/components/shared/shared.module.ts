@@ -28,8 +28,6 @@ import { PresentCommentComponent } from './_dialogs/present-comment/present-comm
 import { DeleteAccountComponent } from './_dialogs/delete-account/delete-account.component';
 import { DialogActionButtonsComponent } from './dialog/dialog-action-buttons/dialog-action-buttons.component';
 import { MatRippleModule } from '@angular/material';
-import { QrCodeDialogComponent } from './_dialogs/qr-code-dialog/qr-code-dialog.component';
-import { NgxQRCodeModule } from 'ngx-qrcode2';
 import { ArsModule } from '../../../../projects/ars/src/lib/ars.module';
 import { CommentAnswerComponent } from './comment-answer/comment-answer.component';
 import { MarkdownModule } from 'ngx-markdown';
@@ -42,7 +40,6 @@ import { RemoveFromHistoryComponent } from './_dialogs/remove-from-history/remov
     ChartsModule,
     SharedRoutingModule,
     MatRippleModule,
-    NgxQRCodeModule,
     ArsModule,
     MarkdownModule
   ],
@@ -71,7 +68,6 @@ import { RemoveFromHistoryComponent } from './_dialogs/remove-from-history/remov
     PresentCommentComponent,
     DeleteAccountComponent,
     DialogActionButtonsComponent,
-    QrCodeDialogComponent,
     CommentAnswerComponent,
     RemoveFromHistoryComponent
   ],
