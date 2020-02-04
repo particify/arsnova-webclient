@@ -5,10 +5,6 @@
             matTooltip="{{'header.back' | translate}}">
       <mat-icon class="header-icons">arrow_back</mat-icon>
     </button>
-    <button mat-icon-button aria-hidden="true" *ngIf="isSafari === 'false'">
-      <mat-icon class="header-icons" (click)="getRescale().toggleState();">fullscreen</mat-icon>
-
-    </button>
     <span class="fill-remaining-space"></span>
     <h2 *ngIf="router.url.includes('comments') && user.role === 3 && deviceType === 'desktop'">
       {{cTime}}

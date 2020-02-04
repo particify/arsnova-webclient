@@ -94,13 +94,6 @@ export class Theme {
    */
   public previewColor: ColorElem;
 
-  /**
-   * scale:
-   * Used for Initial Rescale value,
-   * when Theme is loaded
-   */
-  public scale: number;
-
   constructor(
     public key: string,
     public palette: Object,
@@ -119,9 +112,6 @@ export class Theme {
     this.description = new ThemeTranslationList(
       'description', this.meta['translation']['description']
     );
-
-    /*Init scale*/
-    this.scale = this.meta['scale'];
 
     /*Init all ColorElem*/
 

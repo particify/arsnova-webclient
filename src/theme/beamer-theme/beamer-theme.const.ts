@@ -51,7 +51,6 @@ export const beamer_meta = {
     }
   },
   'order': 1,
-  'scale': 1.3,
   'previewColor': 'background'
 
 };

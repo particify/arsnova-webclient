@@ -11,8 +11,6 @@ import { LoginComponent } from '../../home/_dialogs/login/login.component';
 import { DeleteAccountComponent } from '../_dialogs/delete-account/delete-account.component';
 import { UserService } from '../../../services/http/user.service';
 import { EventService } from '../../../services/util/event.service';
-import { AppComponent } from '../../../app.component';
-import { Rescale } from '../../../models/rescale';
 import { KeyboardUtils } from '../../../utils/keyboard';
 import { KeyboardKey } from '../../../utils/keyboard/keys';
 import { UserBonusTokenComponent } from '../_dialogs/user-bonus-token/user-bonus-token.component';
@@ -214,16 +212,6 @@ export class HeaderComponent implements OnInit {
     return localStorage.getItem('cookieAccepted') === 'false';
   }
 
-  /*Rescale*/
-
-  /**
-   * Access to static Rescale from AppComponent
-   * returns Rescale from AppComponent
-   */
-  public getRescale(): Rescale {
-    return AppComponent.rescale;
-  }
-
   /*QR*/
 
   public getQRCode(): string {
@@ -231,14 +219,14 @@ export class HeaderComponent implements OnInit {
   }
 
   public showQRDialog() {
-    Rescale.requestFullscreen();
+    document.body.requestFullscreen();
     const dialogRef = this.dialog.open(QrCodeDialogComponent, {
       panelClass: 'screenDialog'
     });
     const qrDialog: QrCodeDialogComponent = dialogRef.componentInstance;
     qrDialog.setQRCode(this.getQRCode());
     dialogRef.afterClosed().subscribe(res => {
-      Rescale.exitFullscreen();
+      document.exitFullscreen();
     });
   }
 
