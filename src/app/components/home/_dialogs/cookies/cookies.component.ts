@@ -10,7 +10,7 @@ import { DialogConfirmActionButtonType } from '../../../shared/dialog/dialog-act
 })
 export class CookiesComponent implements OnInit, AfterViewInit {
 
-  @ViewChild('header', { static: false })
+  @ViewChild('header')
   dialogTitle: ElementRef;
 
   deviceType: string;

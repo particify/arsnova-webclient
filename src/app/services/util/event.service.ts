@@ -1,11 +1,13 @@
 import { Observable, Subject } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
+import { Injectable } from '@angular/core';
 
 interface BroadcastEvent {
   key: any;
   data?: any;
 }
 
+@Injectable()
 export class EventService {
   private _eventBus: Subject<BroadcastEvent>;
   focusOnInput: boolean;
