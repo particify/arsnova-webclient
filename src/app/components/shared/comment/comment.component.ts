@@ -32,11 +32,12 @@ export const rubberBand = [
   styleUrls: ['./comment.component.scss'],
   animations: [
     trigger('slide', [
-      state('void', style({ opacity: 0, transform: 'translateY(-10px)' })),
-      transition('void <=> *', animate(700)),
+      state('hidden', style({ opacity: 0, transform: 'translateY(-10px)' })),
+      state('visible', style({ opacity: 1, transform: 'translateY(0)' })),
+      transition('hidden <=> visible', animate(700))
     ]),
     trigger('rubberBand', [
-      transition('* => rubberBand', animate(1000, keyframes(rubberBand))),
+      transition('* => rubberBand', animate(1000, keyframes(rubberBand)))
     ])
   ]
 })
@@ -52,7 +53,8 @@ export class CommentComponent implements OnInit {
   isModerator = false;
   hasVoted = 0;
   language: string;
-  animationState: string;
+  rubberAnimationState: string;
+  slideAnimationState = 'hidden';
   deviceType: string;
   inAnswerView = false;
 
@@ -89,10 +91,16 @@ export class CommentComponent implements OnInit {
     this.inAnswerView = !this.router.url.includes('comments');
   }
 
-  startAnimation(state_: any): void {
-    if (!this.animationState) {
-      this.animationState = state_;
-    }
+  startRubberAnimation(): void {
+    this.rubberAnimationState = 'rubberBand';
+  }
+
+  resetRubberState(): void {
+    this.rubberAnimationState = '';
+  }
+
+  changeSlideState(): void {
+    this.slideAnimationState = 'visible';
   }
 
   @Input()
@@ -100,10 +108,6 @@ export class CommentComponent implements OnInit {
     if (vote) {
       this.hasVoted = vote.vote;
     }
-  }
-
-  resetAnimationState(): void {
-    this.animationState = '';
   }
 
   setRead(comment: Comment): void {
@@ -131,8 +135,8 @@ export class CommentComponent implements OnInit {
     } else {
       this.wsCommentService.resetVote(comment, userId);
       this.hasVoted = 0;
-      this.startAnimation(0);
     }
+    this.startRubberAnimation();
   }
 
   voteDown(comment: Comment): void {
@@ -143,8 +147,8 @@ export class CommentComponent implements OnInit {
     } else {
       this.wsCommentService.resetVote(comment, userId);
       this.hasVoted = 0;
-      this.startAnimation(0);
     }
+    this.startRubberAnimation();
   }
 
   openDeleteCommentDialog(): void {
