@@ -1,5 +1,5 @@
 import { Component, ElementRef, Inject, OnInit, ViewChild } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { NotificationService } from '../../../../services/util/notification.service';
 import { TranslateService } from '@ngx-translate/core';
 import { RoomCreatorPageComponent } from '../../room-creator-page/room-creator-page.component';
@@ -20,7 +20,7 @@ export class TagsComponent implements OnInit {
   tagsEnabled: boolean;
 
   tagFormControl = new FormControl('', [Validators.minLength(3), Validators.maxLength(15)]);
-  @ViewChild('tag') redel: ElementRef;
+  @ViewChild('tag', { static: true }) redel: ElementRef;
 
   constructor(public dialogRef: MatDialogRef<RoomCreatorPageComponent>,
               public dialog: MatDialog,

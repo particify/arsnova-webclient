@@ -3,7 +3,7 @@ import { AppComponent } from './app.component';
 import { RegisterComponent } from './components/home/_dialogs/register/register.component';
 import { PasswordResetComponent } from './components/home/_dialogs/password-reset/password-reset.component';
 import { AppRoutingModule } from './app-routing.module';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { HTTP_INTERCEPTORS, HttpClient, HttpClientModule } from '@angular/common/http';
 import { UserService } from './services/http/user.service';
 import { NotificationService } from './services/util/notification.service';
@@ -55,7 +55,6 @@ import { OverlayComponent } from './components/home/_dialogs/overlay/overlay.com
 import { DemoDeComponent } from '../assets/i18n/demo/demo-de';
 import { DemoEnComponent } from '../assets/i18n/demo/demo-en';
 import { ArsModule } from '../../projects/ars/src/lib/ars.module';
-import { QrCodeDialogComponent } from './components/shared/_dialogs/qr-code-dialog/qr-code-dialog.component';
 import { MatIconModule } from '@angular/material/icon';
 import { LoginComponent } from './components/home/_dialogs/login/login.component';
 
@@ -97,8 +96,7 @@ export function initializeApp(appConfig: AppConfig) {
     UserActivationComponent,
     DemoVideoComponent,
     CookiesComponent,
-    OverlayComponent,
-    QrCodeDialogComponent
+    OverlayComponent
   ],
   imports: [
     AppRoutingModule,
@@ -112,9 +110,12 @@ export function initializeApp(appConfig: AppConfig) {
     CreatorModule,
     ModeratorModule,
     MarkdownModule.forRoot({
-      provide: MarkedOptions,
-      useValue: {
-        sanitize: true
+      loader: HttpClient,
+      markedOptions: {
+        provide: MarkedOptions,
+        useValue: {
+          sanitize: true
+        }
       }
     }),
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
