@@ -1,13 +1,15 @@
 export class CreateFeedback {
   type: string;
   payload: {
-    userId: string,
+    roomId: string;
+    userId: string;
     value: number;
   };
 
-  constructor(userId: string, val: number) {
+  constructor(roomId: string, userId: string, val: number) {
     this.type = 'CreateFeedback';
     this.payload = {
+      roomId: roomId,
       userId: userId,
       value: val
     };
