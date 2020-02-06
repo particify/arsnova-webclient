@@ -22,7 +22,7 @@ import { AuthenticationInterceptor } from './interceptors/authentication.interce
 import { EssentialsModule } from './components/essentials/essentials.module';
 import { SharedModule } from './components/shared/shared.module';
 import { CreatorModule } from './components/creator/creator.module';
-import { BrowserModule, HammerModule } from '@angular/platform-browser';
+import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LanguageService } from './services/util/language.service';
 import { MarkdownModule, MarkdownService, MarkedOptions } from 'ngx-markdown';
@@ -127,8 +127,7 @@ export function initializeApp(appConfig: AppConfig) {
       },
       isolate: true
     }),
-    ArsModule,
-    HammerModule
+    ArsModule
   ],
   providers: [
     /*AppConfig,
