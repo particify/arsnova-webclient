@@ -8,8 +8,7 @@
     "build": "ng build --prod",
     "test": "ng test --watch=false --browsers=ChromeHeadlessCustom",
     "lint": "ng lint",
-    "e2e": "ng e2e",
-    "extract": "ngx-translate-extract -m _ --input ./src --output ./src/assets/i18n/de.json ./src/assets/i18n/en.json --clean --sort --format namespaced-json"
+    "e2e": "ng e2e"
   },
   "private": true,
   "dependencies": {
@@ -25,8 +24,8 @@
     "@angular/platform-browser-dynamic": "9.0.0",
     "@angular/router": "9.0.0",
     "@angular/service-worker": "9.0.0",
-    "@ngx-translate/core": "^10.0.2",
-    "@ngx-translate/http-loader": "^3.0.1",
+    "@ngx-translate/core": "^12.0.0",
+    "@ngx-translate/http-loader": "^4.0.0",
     "@stomp/ng2-stompjs": "^7.2.0",
     "chart.js": "^2.9.3",
     "core-js": "^2.5.7",
@@ -45,7 +44,6 @@
     "@angular/cli": "9.0.0",
     "@angular/compiler-cli": "^9.0.0",
     "@angular/language-service": "9.0.0",
-    "@biesbjerg/ngx-translate-extract": "^2.3.4",
     "@types/jasmine": "^2.8.8",
     "@types/jasminewd2": "~2.0.2",
     "@types/node": "^12.11.1",
