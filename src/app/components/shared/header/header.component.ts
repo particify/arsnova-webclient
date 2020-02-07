@@ -27,7 +27,7 @@ export class HeaderComponent implements OnInit {
   cTime: string;
   shortId: string;
   deviceType: string;
-  isSafari: string;
+  isSafari = 'false';
   moderationEnabled: boolean;
 
   constructor(public location: Location,
