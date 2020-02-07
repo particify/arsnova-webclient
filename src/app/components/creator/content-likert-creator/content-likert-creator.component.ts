@@ -20,12 +20,12 @@ export class ContentLikertCreatorComponent implements OnInit {
   @Input() contentCol;
   @Output() reset = new EventEmitter<boolean>();
 
-  likertScale = [
-    'Strongly agree',
-    'Agree',
-    'Neither agree nor disagree',
-    'Disagree',
-    'Strongly disagree'
+  likertScales = [
+    'content.strongly-agree',
+    'content.agree',
+    'content.neither-agree-nor-disagree',
+    'content.disagree',
+    'content.strongly-disagree'
   ];
 
   content: ContentChoice = new ContentChoice(
@@ -45,7 +45,7 @@ export class ContentLikertCreatorComponent implements OnInit {
   displayedColumns = ['label'];
   roomId: string;
 
-  displayAnswers: DisplayAnswer[] = [];
+  displayAnswers: DisplayAnswer[];
   newAnswerOptionPoints = 0;
 
   constructor(private contentService: ContentService,
@@ -54,20 +54,22 @@ export class ContentLikertCreatorComponent implements OnInit {
               private roomService: RoomService) {
   }
 
+  ngOnInit() {
+    this.roomId = localStorage.getItem(`roomId`);
+    this.translationService.get(this.likertScales).subscribe(msgs => {
+      for (let i = 0; i < this.likertScales.length; i++) {
+        this.content.options.push(new AnswerOption(msgs[this.likertScales[i]], this.newAnswerOptionPoints));
+      }
+      this.fillCorrectAnswers();
+    });
+  }
+
   fillCorrectAnswers() {
     this.displayAnswers = [];
     for (let i = 0; i < this.content.options.length; i++) {
       this.content.correctOptionIndexes.push(i);
       this.displayAnswers.push(new DisplayAnswer(this.content.options[i], this.content.correctOptionIndexes.includes(i)));
     }
-  }
-
-  ngOnInit() {
-    this.roomId = localStorage.getItem(`roomId`);
-    for (let i = 0; i < this.likertScale.length; i++) {
-      this.content.options.push(new AnswerOption(this.likertScale[i], this.newAnswerOptionPoints));
-    }
-    this.fillCorrectAnswers();
   }
 
   resetAfterSubmit() {

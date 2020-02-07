@@ -22,8 +22,8 @@ export class ContentYesNoCreatorComponent implements OnInit {
 
   yesno = true;
   answerLabels = [
-    'yes',
-    'no'
+    'content.yes',
+    'content.no'
   ];
   content: ContentChoice = new ContentChoice(
     '0',
@@ -41,7 +41,7 @@ export class ContentYesNoCreatorComponent implements OnInit {
 
   roomId: string;
 
-  displayAnswers: DisplayAnswer[] = [];
+  displayAnswers: DisplayAnswer[];
   newAnswerOptionPoints = 0;
 
   constructor(private contentService: ContentService,
@@ -52,10 +52,12 @@ export class ContentYesNoCreatorComponent implements OnInit {
 
   ngOnInit() {
     this.roomId = localStorage.getItem('roomId');
-    for (let i = 0; i < this.answerLabels.length; i++) {
-      this.content.options.push(new AnswerOption(this.answerLabels[i], this.newAnswerOptionPoints));
-    }
-    this.fillCorrectAnswers();
+    this.translationService.get(this.answerLabels).subscribe(msgs => {
+      for (let i = 0; i < this.answerLabels.length; i++) {
+        this.content.options.push(new AnswerOption(msgs[this.answerLabels[i]], this.newAnswerOptionPoints));
+      }
+      this.fillCorrectAnswers();
+    });
   }
 
   fillCorrectAnswers() {

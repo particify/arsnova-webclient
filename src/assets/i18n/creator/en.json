@@ -165,7 +165,12 @@
     "create-content-group": "Create",
     "content-group-created": "Question was added to new collection.",
     "content-group-already-exists": "This collection already exists.",
-    "please-enter-name": "Please enter a name."
+    "please-enter-name": "Please enter a name.",
+    "strongly-agree": "Strongly agree",
+    "agree": "Agree",
+    "neither-agree-nor-disagree": "Neither agree or disagree",
+    "disagree": "Disagree",
+    "strongly-disagree": "Strongly disagree"
   },
   "feedback": {
     "is-stopped": "Voting got stopped",
