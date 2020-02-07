@@ -54,7 +54,7 @@ export class HomePageComponent implements OnInit, OnDestroy, AfterContentInit {
 
   public announce() {
     this.liveAnnouncer.clear();
-    this.liveAnnouncer.announce('Du befindest dich auf der Startseite von fragpunktjetzt. ' +
+    this.liveAnnouncer.announce('Du befindest dich auf der Startseite von ARSnova. ' +
       'Drücke die Taste 1 um einen Sitzungs-Code einzugeben, die Taste 2 um in die Benutzer-Anmeldung ' +
       'oder das Sitzungs-Menü zu gelangen, die Taste 3 um eine neue Sitzung zu erstellen, ' +
       'die Taste 4 um zur Sprachauswahl zu gelangen, oder die Taste 9 um diese Ansage zu wiederholen.', 'assertive');

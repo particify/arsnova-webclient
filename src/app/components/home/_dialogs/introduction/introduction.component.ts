@@ -5,16 +5,16 @@ import { KeyboardKey } from '../../../../utils/keyboard/keys';
 
 @Component({
   selector: 'app-demo-video',
-  templateUrl: './demo-video.component.html',
-  styleUrls: ['./demo-video.component.scss']
+  templateUrl: './introduction.component.html',
+  styleUrls: ['./introduction.component.scss']
 })
-export class DemoVideoComponent implements OnInit, OnDestroy {
+export class IntroductionComponent implements OnInit, OnDestroy {
 
   deviceType: string;
   currentLang: string;
   keyEvent: any;
 
-  constructor(public dialogRef: MatDialogRef<DemoVideoComponent>,
+  constructor(public dialogRef: MatDialogRef<IntroductionComponent>,
               public dialog: MatDialog) {
   }
 
@@ -22,7 +22,7 @@ export class DemoVideoComponent implements OnInit, OnDestroy {
     this.currentLang = localStorage.getItem('currentLang');
     document.getElementById('setFocus').focus();
     window.addEventListener('keydown', this.keyEvent = e => {
-      if (KeyboardUtils.isKeyEvent(e, KeyboardKey.Digit1)) {
+      /*if (KeyboardUtils.isKeyEvent(e, KeyboardKey.Digit1)) {
         const iframe = <HTMLElement>document.getElementsByClassName('videoWrapper')[0].children[0];
         const player = <HTMLIFrameElement>iframe;
         if (player.src.charAt(player.src.length - 1) === '0') {
@@ -33,9 +33,10 @@ export class DemoVideoComponent implements OnInit, OnDestroy {
         this.focusElement(iframe);
       } else if (KeyboardUtils.isKeyEvent(e, KeyboardKey.Digit2)) {
         this.focusElement(document.getElementById('demoContentTranscript'));
-      } else if (KeyboardUtils.isKeyEvent(e, KeyboardKey.Digit3)) {
+      } else*/
+      if (KeyboardUtils.isKeyEvent(e, KeyboardKey.Digit1)) {
         this.focusElement(document.getElementById('demoContent'));
-      } else if (KeyboardUtils.isKeyEvent(e, KeyboardKey.Digit4)) {
+      } else if (KeyboardUtils.isKeyEvent(e, KeyboardKey.Digit2)) {
         this.focusElement((document.getElementById('selection')));
       }
     });

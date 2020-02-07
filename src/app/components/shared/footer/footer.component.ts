@@ -7,7 +7,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { AuthenticationService } from '../../../services/http/authentication.service';
 import { User } from '../../../models/user';
 import { Room } from '../../../models/room';
-import { DemoVideoComponent } from '../../home/_dialogs/demo-video/demo-video.component';
+import { IntroductionComponent } from '../../home/_dialogs/introduction/introduction.component';
 import { ThemeService } from '../../../../theme/theme.service';
 import { CookiesComponent } from '../../home/_dialogs/cookies/cookies.component';
 import { ImprintComponent } from '../../home/_dialogs/imprint/imprint.component';
@@ -73,17 +73,10 @@ export class FooterComponent implements OnInit {
   }
 
   showDemo() {
-    const dialogRef = this.dialog.open(DemoVideoComponent, {
+    const dialogRef = this.dialog.open(IntroductionComponent, {
       width: '80%'
     });
     dialogRef.componentInstance.deviceType = this.deviceType;
-    dialogRef.afterOpened().subscribe(e => {
-      document.getElementById('outer_main_container').style.display = 'none';
-    });
-    dialogRef.afterClosed().subscribe(e => {
-      document.getElementById('outer_main_container').style.display = 'block';
-    });
-
   }
 
   showCookieModal() {

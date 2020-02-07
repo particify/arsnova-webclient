@@ -36,7 +36,7 @@ import { environment } from '../environments/environment';
 import { ModeratorService } from './services/http/moderator.service';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
-import { DemoVideoComponent } from './components/home/_dialogs/demo-video/demo-video.component';
+import { IntroductionComponent } from './components/home/_dialogs/introduction/introduction.component';
 import { CommentSettingsService } from './services/http/comment-settings.service';
 import { BonusTokenService } from './services/http/bonus-token.service';
 import { CustomIconService } from './services/util/custom-icon.service';
@@ -74,7 +74,7 @@ export function initializeApp(appConfig: AppConfig) {
     UserActivationComponent,
     HomeActionsComponent,
     HomePageComponent,
-    DemoVideoComponent,
+    IntroductionComponent,
     UserHomeComponent,
     ImprintComponent,
     DataProtectionComponent,
@@ -94,7 +94,7 @@ export function initializeApp(appConfig: AppConfig) {
     RegisterComponent,
     PasswordResetComponent,
     UserActivationComponent,
-    DemoVideoComponent,
+    IntroductionComponent,
     CookiesComponent,
     OverlayComponent
   ],
