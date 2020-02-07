@@ -3,7 +3,6 @@
     <mat-card-title *ngIf="!(contentGroup.name === 'Default')">
       {{contentGroup.name}}
     </mat-card-title>
-    <mat-icon color="accent" matBadge="{{contentGroup.contentIds.length}}"
-              matBadgePosition="after"></mat-icon>
+    <span class="badge">{{contentGroup.contentIds.length}}</span>
   </mat-card-header>
 </mat-card>

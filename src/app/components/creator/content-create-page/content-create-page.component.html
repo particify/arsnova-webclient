@@ -13,7 +13,7 @@
       </mat-form-field>
       <mat-form-field>
         <input (focus)="eventService.makeFocusOnInputTrue()" (blur)="eventService.makeFocusOnInputFalse()"
-               matInput #group [formControl]="myControl" [matAutocomplete]="auto"
+               matInput #group [formControl]="myControl" [matAutocomplete]="auto" maxlength="30"
                placeholder="{{'content.collection' | translate}}"
                [(ngModel)]="lastCollection"/>
         <mat-autocomplete #auto="matAutocomplete">
