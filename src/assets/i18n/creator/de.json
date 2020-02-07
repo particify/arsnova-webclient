@@ -165,7 +165,12 @@
     "create-content-group": "Anlegen",
     "content-group-created": "Frage wurde neuer Sammlung hinzugefügt.",
     "content-group-already-exists": "Diese Sammlung existiert bereits.",
-    "please-enter-name": "Bitte geben Sie einen Namen ein."
+    "please-enter-name": "Bitte geben Sie einen Namen ein.",
+    "strongly-agree": "Ich stimme zu",
+    "agree": "Ich stimme eher zu",
+    "neither-agree-nor-disagree": "Weder noch",
+    "disagree": "Ich stimme eher nicht zu",
+    "strongly-disagree": "Ich stimme nicht zu"
   },
   "feedback": {
     "is-stopped": "Feedback ist angehalten.",
