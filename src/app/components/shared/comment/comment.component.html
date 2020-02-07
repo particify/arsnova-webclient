@@ -78,8 +78,7 @@
           }}</span>
       </div>
       <span class="fill-remaining-space click" (click)="openPresentDialog(comment)"></span>
-      <div fxLayout="column" *ngIf="isStudent" [@rubberBand]="rubberAnimationState"
-           (@rubberBand.done)="resetRubberState()">
+      <div fxLayout="column" *ngIf="isStudent" [ngClass]="{ '1': 'voteUp', '-1': 'voteDown', '0': 'reset'}[currentVote]">
         <button mat-icon-button (click)="voteUp(comment)" matTooltip="{{ 'comment-page.vote-up' | translate }}"
                 tabindex="0" attr.aria-labelledby="comment_vote_up{{ comment.id }}">
           <mat-icon class="voting-icon" [ngClass]="{'upVoted' : hasVoted === 1}">keyboard_arrow_up</mat-icon>

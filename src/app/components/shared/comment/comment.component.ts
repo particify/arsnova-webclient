@@ -11,20 +11,10 @@ import { LanguageService } from '../../../services/util/language.service';
 import { WsCommentServiceService } from '../../../services/websockets/ws-comment-service.service';
 import { PresentCommentComponent } from '../_dialogs/present-comment/present-comment.component';
 import { MatDialog } from '@angular/material/dialog';
-import { animate, keyframes, state, style, transition, trigger } from '@angular/animations';
+import { animate, state, style, transition, trigger } from '@angular/animations';
 import { DeleteCommentComponent } from '../../creator/_dialogs/delete-comment/delete-comment.component';
 import { CorrectWrong } from '../../../models/correct-wrong.enum';
 import { UserRole } from '../../../models/user-roles.enum';
-
-export const rubberBand = [
-  style({ transform: 'scale3d(1, 1, 1)', offset: 0 }),
-  style({ transform: 'scale3d(1.05, 0.75, 1)', offset: 0.3 }),
-  style({ transform: 'scale3d(0.75, 1.05, 1)', offset: 0.4 }),
-  style({ transform: 'scale3d(1.05, 0.95, 1)', offset: 0.5 }),
-  style({ transform: 'scale3d(0.95, 1.05, 1)', offset: 0.65 }),
-  style({ transform: 'scale3d(1.05, 0.95, 1)', offset: 0.75 }),
-  style({ transform: 'scale3d(1, 1, 1)', offset: 1 })
-];
 
 @Component({
   selector: 'app-comment',
@@ -35,9 +25,6 @@ export const rubberBand = [
       state('hidden', style({ opacity: 0, transform: 'translateY(-10px)' })),
       state('visible', style({ opacity: 1, transform: 'translateY(0)' })),
       transition('hidden <=> visible', animate(700))
-    ]),
-    trigger('rubberBand', [
-      transition('* => rubberBand', animate(1000, keyframes(rubberBand)))
     ])
   ]
 })
@@ -53,10 +40,10 @@ export class CommentComponent implements OnInit {
   isModerator = false;
   hasVoted = 0;
   language: string;
-  rubberAnimationState: string;
   slideAnimationState = 'hidden';
   deviceType: string;
   inAnswerView = false;
+  currentVote: string;
 
   constructor(protected authenticationService: AuthenticationService,
               private route: ActivatedRoute,
@@ -91,16 +78,15 @@ export class CommentComponent implements OnInit {
     this.inAnswerView = !this.router.url.includes('comments');
   }
 
-  startRubberAnimation(): void {
-    this.rubberAnimationState = 'rubberBand';
-  }
-
-  resetRubberState(): void {
-    this.rubberAnimationState = '';
-  }
-
   changeSlideState(): void {
     this.slideAnimationState = 'visible';
+  }
+
+  resetVotingAnimation() {
+    setTimeout(() => {
+        this.currentVote = '';
+      },
+      1000);
   }
 
   @Input()
@@ -132,11 +118,13 @@ export class CommentComponent implements OnInit {
     if (this.hasVoted !== 1) {
       this.wsCommentService.voteUp(comment, userId);
       this.hasVoted = 1;
+      this.currentVote = '1';
     } else {
       this.wsCommentService.resetVote(comment, userId);
       this.hasVoted = 0;
+      this.currentVote = '0';
     }
-    this.startRubberAnimation();
+    this.resetVotingAnimation();
   }
 
   voteDown(comment: Comment): void {
@@ -144,11 +132,13 @@ export class CommentComponent implements OnInit {
     if (this.hasVoted !== -1) {
       this.wsCommentService.voteDown(comment, userId);
       this.hasVoted = -1;
+      this.currentVote = '-1';
     } else {
       this.wsCommentService.resetVote(comment, userId);
       this.hasVoted = 0;
+      this.currentVote = '0';
     }
-    this.startRubberAnimation();
+    this.resetVotingAnimation();
   }
 
   openDeleteCommentDialog(): void {
