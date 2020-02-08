@@ -1,12 +1,9 @@
 <div>
-  <h2 tabindex="0" mat-dialog-title class="modal">{{ 'data-protection.title' | translate }}</h2>
-
-  <mat-divider></mat-divider>
+  <h2 tabindex="0" mat-dialog-title>{{ 'data-protection.title' | translate }}</h2>
 
   <mat-dialog-content tabindex="0">
-    <app-data-protection-en *ngIf="currentLang=='en'"></app-data-protection-en>
-    <app-data-protection-de *ngIf="currentLang=='de'"></app-data-protection-de>
 
+    <div [innerHTML]="privacyContent"></div>
 
     <app-dialog-action-buttons
       buttonsLabelSection="imprint"
@@ -14,4 +11,3 @@
     </app-dialog-action-buttons>
   </mat-dialog-content>
 </div>
-

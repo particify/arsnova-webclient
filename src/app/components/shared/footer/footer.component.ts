@@ -100,14 +100,12 @@ export class FooterComponent implements OnInit {
     const dialogRef = this.dialog.open(ImprintComponent, {
       width: '80%'
     });
-    dialogRef.componentInstance.deviceType = this.deviceType;
   }
 
   showDataProtection() {
     const dialogRef = this.dialog.open(DataProtectionComponent, {
       width: '80%'
     });
-    dialogRef.componentInstance.deviceType = this.deviceType;
 
   }
 

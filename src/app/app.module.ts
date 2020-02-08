@@ -45,12 +45,8 @@ import { ImprintComponent } from './components/home/_dialogs/imprint/imprint.com
 import { ApiConfigService } from './services/http/api-config.service';
 import { DataProtectionComponent } from './components/home/_dialogs/data-protection/data-protection.component';
 import { CookiesComponent } from './components/home/_dialogs/cookies/cookies.component';
-import { DataProtectionEnComponent } from '../assets/i18n/data-protection/data-protection-en';
-import { DataProtectionDeComponent } from '../assets/i18n/data-protection/data-protection-de';
 import { CookiesEnComponent } from '../assets/i18n/cookies/cookies-en';
 import { CookiesDeComponent } from '../assets/i18n/cookies/cookies-de';
-import { ImprintEnComponent } from '../assets/i18n/imprint/imprint-en';
-import { ImprintDeComponent } from '../assets/i18n/imprint/imprint-de';
 import { OverlayComponent } from './components/home/_dialogs/overlay/overlay.component';
 import { DemoDeComponent } from '../assets/i18n/demo/demo-de';
 import { DemoEnComponent } from '../assets/i18n/demo/demo-en';
@@ -79,12 +75,8 @@ export function initializeApp(appConfig: AppConfig) {
     ImprintComponent,
     DataProtectionComponent,
     CookiesComponent,
-    DataProtectionEnComponent,
-    DataProtectionDeComponent,
     CookiesEnComponent,
     CookiesDeComponent,
-    ImprintEnComponent,
-    ImprintDeComponent,
     DemoDeComponent,
     DemoEnComponent,
     OverlayComponent
