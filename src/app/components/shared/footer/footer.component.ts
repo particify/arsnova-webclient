@@ -97,16 +97,15 @@ export class FooterComponent implements OnInit {
   }
 
   showImprint() {
-    const dialogRef = this.dialog.open(ImprintComponent, {
+    this.dialog.open(ImprintComponent, {
       width: '80%'
     });
   }
 
   showDataProtection() {
-    const dialogRef = this.dialog.open(DataProtectionComponent, {
+    this.dialog.open(DataProtectionComponent, {
       width: '80%'
     });
-
   }
 
   showOverlay() {

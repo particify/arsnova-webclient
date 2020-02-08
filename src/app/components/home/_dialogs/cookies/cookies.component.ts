@@ -51,7 +51,7 @@ export class CookiesComponent implements OnInit, AfterViewInit {
   }
 
   openDataProtection() {
-    const dialogRef = this.dialog.open(DataProtectionComponent, {
+    this.dialog.open(DataProtectionComponent, {
       width: '90%'
     });
   }
