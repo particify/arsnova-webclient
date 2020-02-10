@@ -9,7 +9,6 @@ export class ContentText extends Content {
               roomId: string,
               subject: string,
               body: string,
-              round: number,
               groups: string[],
               state: ContentState) {
     super(id,
@@ -17,7 +16,6 @@ export class ContentText extends Content {
       roomId,
       subject,
       body,
-      round,
       groups,
       ContentType.TEXT,
       new Map(),

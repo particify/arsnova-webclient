@@ -122,7 +122,6 @@ export class ContentListComponent implements OnInit {
       content.roomId,
       content.subject,
       content.body,
-      content.round,
       content.groups,
       content.options,
       content.correctOptionIndexes,
@@ -139,7 +138,6 @@ export class ContentListComponent implements OnInit {
       content.roomId,
       content.subject,
       content.body,
-      content.round,
       [],
       content.state
     );
