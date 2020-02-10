@@ -45,6 +45,7 @@ export class ContentListComponent implements OnInit {
   allowEditing = false;
   contentGroups: string[] = [];
   currentGroupIndex: number;
+  locked = false;
 
   constructor(private contentService: ContentService,
               private roomService: RoomService,
@@ -75,6 +76,9 @@ export class ContentListComponent implements OnInit {
         this.contentService.getContentsByIds(this.contentGroup.contentIds).subscribe(contents => {
           this.contents = contents;
           for (let i = 0; i < this.contents.length; i++) {
+            if (!contents[i].state.visible) {
+              this.locked = true;
+            }
             if (this.contents[i].subject.length > this.labelMaxLength) {
               this.labels[i] = this.contents[i].subject.substr(0, this.labelMaxLength) + '..';
             } else {
@@ -123,7 +127,8 @@ export class ContentListComponent implements OnInit {
       content.options,
       content.correctOptionIndexes,
       content.multiple,
-      content.format
+      content.format,
+      content.state
     );
   }
 
@@ -136,6 +141,7 @@ export class ContentListComponent implements OnInit {
       content.body,
       content.round,
       [],
+      content.state
     );
   }
 
@@ -260,5 +266,20 @@ export class ContentListComponent implements OnInit {
         this.addToContentGroup(contentId, result, true);
       }
     });
+  }
+
+  lockContents() {
+    for (const content of this.contents) {
+      this.lockContent(content, this.locked);
+    }
+  }
+
+  lockContent(content: Content, locked?: boolean) {
+    if (locked !== undefined) {
+      content.state.visible = !locked;
+    } else {
+      content.state.visible = !content.state.visible;
+    }
+    this.contentService.updateContent(content).subscribe(updatedContent => content = updatedContent);
   }
 }

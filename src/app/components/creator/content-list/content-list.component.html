@@ -53,8 +53,8 @@
         </div>
       </div>
       <div fxLayout="row" fxLayoutAlign="end">
-        <p class="lock-text">{{ (locked ? 'content.lock-questions' : 'content.unlock-questions') | translate}}
-          <mat-slide-toggle class="lock" (change)="lockQuestions()" [(ngModel)]="locked"></mat-slide-toggle>
+        <p class="lock-text">{{ (locked ? 'content.unlock-questions' : 'content.lock-questions') | translate}}
+          <mat-slide-toggle class="lock" (change)="lockContents()" [(ngModel)]="locked"></mat-slide-toggle>
         </p>
       </div>
       <mat-expansion-panel *ngFor="let content of contents; index as i" class="matPanel">
@@ -62,6 +62,11 @@
           <mat-panel-title class="panelTitle">
             {{ labels[i] }}
           </mat-panel-title>
+          <button mat-icon-button (click)="$event.stopPropagation();lockContent(content)">
+            <mat-icon class="lock-icon" [ngClass]="{'locked': !content.state.visible, 'unlocked': content.state.visible}">
+              {{!content.state.visible? 'lock' : 'lock_open'}}
+            </mat-icon>
+          </button>
           <button mat-icon-button [matMenuTriggerFor]="moreActions" (click)="$event.stopPropagation()"
                   class="editButton" matTooltip="{{ 'content.more-options' | translate}}">
             <mat-icon>more_vert</mat-icon>

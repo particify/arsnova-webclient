@@ -1,4 +1,5 @@
 import { ContentType } from './content-type.enum';
+import { ContentState } from './content-state';
 
 export class Content {
   id: string;
@@ -10,6 +11,7 @@ export class Content {
   groups: string[];
   format: ContentType;
   formatAttributes: Map<string, string>;
+  state: ContentState;
 
   constructor(id: string,
               revision: string,
@@ -19,7 +21,8 @@ export class Content {
               round: number,
               groups: string[],
               format: ContentType,
-              formatAttributes: Map<string, string>) {
+              formatAttributes: Map<string, string>,
+              state: ContentState) {
     this.id = id;
     this.revision = revision;
     this.roomId = roomId;
@@ -29,5 +32,6 @@ export class Content {
     this.groups = groups;
     this.format = format;
     this.formatAttributes = formatAttributes;
+    this.state = state;
   }
 }
