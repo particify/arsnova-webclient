@@ -152,6 +152,8 @@
     "edit-content-group": "Name der Sammlung bearbeiten",
     "save-content-group": "Speichern",
     "updated-content-group": "Name der Sammlung aktualisiert.",
+    "lock-questions": "Fragen sperren",
+    "unlock-questions": "Fragen freigeben",
     "edit-content": "Frage bearbeiten",
     "add-content-to-group": "Zu Sammlung hinzufügen",
     "delete-content": "Frage löschen",

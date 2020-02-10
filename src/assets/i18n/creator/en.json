@@ -152,6 +152,8 @@
     "edit-content-group": "Edit name of the collection",
     "save-content-group": "Update",
     "updated-content-group": "Name of collection was updated.",
+    "lock-questions": "Lock questions",
+    "unlock-questions": "Unlock questions",
     "edit-content": "Edit content",
     "add-content-to-group": "Add to collection",
     "delete-content": "Delete content",
