@@ -186,6 +186,7 @@ export class ContentListComponent implements OnInit {
           this.contents.splice(index, 1);
           this.labels.splice(index, 1);
           if (this.contents.length === 0) {
+            sessionStorage.setItem('lastGroup', JSON.stringify(this.contentGroups[0]));
             this.location.back();
           }
           break;

@@ -90,7 +90,7 @@ export class ContentTextParticipantComponent implements OnInit {
       id: null,
       revision: null,
       contentId: this.content.id,
-      round: this.content.round,
+      round: this.content.state.round,
       subject: this.content.subject,
       body: this.textAnswer,
       read: 'false',
@@ -109,7 +109,7 @@ export class ContentTextParticipantComponent implements OnInit {
       id: null,
       revision: null,
       contentId: this.content.id,
-      round: 1,
+      round: this.content.state.round,
       body: null,
       creationTimestamp: null,
       format: ContentType.TEXT
