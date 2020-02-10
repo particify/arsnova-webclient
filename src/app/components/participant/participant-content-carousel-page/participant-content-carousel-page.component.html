@@ -5,7 +5,7 @@
 </div>
 
 <div *ngIf="!isLoading" fxLayout="column" fxLayoutAlign="start center">
-  <app-stepper [listLength]="contents.length" [alreadySent]="alreadySent">
+  <app-stepper *ngIf="contents.length > 0" [listLength]="contents.length" [alreadySent]="alreadySent">
     <cdk-step *ngFor="let content of contents; let i = index">
       <app-content-choice-participant (message)="receiveSentStatus($event, i)" [content]="content"
          *ngIf="content.format === ContentType.CHOICE || content.format === ContentType.SCALE ||
@@ -15,4 +15,5 @@
          *ngIf="content.format === ContentType.TEXT"></app-content-text-participant>
     </cdk-step>
   </app-stepper>
+  <h3 *ngIf="contents.length === 0">{{ 'answer.questions-locked' | translate }}</h3>
 </div>

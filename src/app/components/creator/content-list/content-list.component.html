@@ -62,7 +62,8 @@
           <mat-panel-title class="panelTitle">
             {{ labels[i] }}
           </mat-panel-title>
-          <button mat-icon-button (click)="$event.stopPropagation();lockContent(content)">
+          <button mat-icon-button (click)="lockContent(content);$event.stopPropagation()"
+                  matTooltip="{{(content.state.visible ? 'content.lock-question' : 'content.unlock-question') | translate}}">
             <mat-icon class="lock-icon" [ngClass]="{'locked': !content.state.visible, 'unlocked': content.state.visible}">
               {{!content.state.visible? 'lock' : 'lock_open'}}
             </mat-icon>
