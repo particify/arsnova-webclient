@@ -14,8 +14,6 @@ import { DomSanitizer } from '@angular/platform-browser';
 })
 export class AppComponent implements OnInit {
 
-  private static scrollAnimation = true;
-
   constructor(private translationService: TranslateService,
               private update: SwUpdate,
               public notification: NotificationService,
@@ -29,19 +27,6 @@ export class AppComponent implements OnInit {
   }
 
   title = 'ARSnova';
-
-  public static scrollTop() {
-    const sc: HTMLElement = document.getElementById('scroll_container');
-    if (AppComponent.scrollAnimation) {
-      sc.scrollTo({ top: 0, behavior: 'smooth' });
-    } else {
-      sc.scrollTop = 0;
-    }
-  }
-
-  public static isScrolledTop(): boolean {
-    return document.getElementById('scroll_container').scrollTop === 0;
-  }
 
   ngOnInit(): void {
     this.update.available.subscribe(update => {

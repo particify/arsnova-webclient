@@ -18,7 +18,6 @@ import { CorrectWrong } from '../../../models/correct-wrong.enum';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { EventService } from '../../../services/util/event.service';
 import { Subscription } from 'rxjs';
-import { AppComponent } from '../../../app.component';
 import { Router } from '@angular/router';
 
 @Component({
@@ -30,7 +29,6 @@ export class CommentListComponent implements OnInit, OnDestroy {
   @ViewChild('searchBox') searchField: ElementRef;
   @Input() user: User;
   @Input() roomId: string;
-  AppComponent = AppComponent;
   comments: Comment[] = [];
   room: Room;
   hideCommentsList = false;
@@ -129,8 +127,8 @@ export class CommentListComponent implements OnInit, OnDestroy {
     this.scrollExtended = currentScroll >= 300;
   }
 
-  isScrollButtonVisible(): boolean {
-    return !AppComponent.isScrolledTop() && this.comments.length > 5;
+  scrollTop() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   searchComments(): void {

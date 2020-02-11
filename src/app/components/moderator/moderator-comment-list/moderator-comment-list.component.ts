@@ -14,7 +14,6 @@ import { RoomService } from '../../../services/http/room.service';
 import { CorrectWrong } from '../../../models/correct-wrong.enum';
 import { EventService } from '../../../services/util/event.service';
 import { Router } from '@angular/router';
-import { AppComponent } from '../../../app.component';
 
 @Component({
   selector: 'app-moderator-comment-list',
@@ -25,7 +24,6 @@ export class ModeratorCommentListComponent implements OnInit {
   @ViewChild('searchBox') searchField: ElementRef;
   @Input() user: User;
   @Input() roomId: string;
-  AppComponent = AppComponent;
   comments: Comment[] = [];
   room: Room;
   hideCommentsList = false;
@@ -67,7 +65,6 @@ export class ModeratorCommentListComponent implements OnInit {
 
   ngOnInit() {
     this.roomId = localStorage.getItem(`roomId`);
-    const userId = this.user.id;
     this.userRole = this.user.role;
     this.roomService.getRoom(this.roomId).subscribe(room => this.room = room);
     this.hideCommentsList = false;
@@ -98,8 +95,8 @@ export class ModeratorCommentListComponent implements OnInit {
     this.scrollExtended = currentScroll >= 300;
   }
 
-  isScrollButtonVisible(): boolean {
-    return !AppComponent.isScrolledTop() && this.comments.length > 5;
+  scrollTop() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   searchComments(): void {
