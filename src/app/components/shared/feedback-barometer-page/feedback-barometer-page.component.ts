@@ -8,8 +8,8 @@ import { NotificationService } from '../../../services/util/notification.service
 import { Message } from '@stomp/stompjs';
 import { WsFeedbackService } from '../../../services/websockets/ws-feedback.service';
 import { Subscription } from 'rxjs';
-
-/* ToDo: Use TranslateService */
+import { TranslateService } from '@ngx-translate/core';
+import { LanguageService } from '../../../services/util/language.service';
 
 @Component({
   selector: 'app-feedback-barometer-page',
@@ -17,11 +17,12 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./feedback-barometer-page.component.scss']
 })
 export class FeedbackBarometerPageComponent implements OnInit, OnDestroy {
-  feedback: any = [
-    { state: 0, name: 'sentiment_very_satisfied', message: 'Ich kann folgen.', count: 0, },
-    { state: 1, name: 'sentiment_satisfied', message: 'Schneller, bitte!', count: 0, },
-    { state: 2, name: 'sentiment_dissatisfied', message: 'Langsamer, bitte!', count: 0, },
-    { state: 3, name: 'sentiment_very_dissatisfied', message: 'Abgehängt.', count: 0, }
+
+  feedback = [
+    { state: 0, name: 'sentiment_very_satisfied', count: 0 },
+    { state: 1, name: 'sentiment_satisfied', count: 0 },
+    { state: 2, name: 'sentiment_dissatisfied', count: 0 },
+    { state: 3, name: 'sentiment_very_dissatisfied', count: 0 }
   ];
   isOwner = false;
   user: User;
@@ -30,16 +31,21 @@ export class FeedbackBarometerPageComponent implements OnInit, OnDestroy {
   protected sub: Subscription;
   isClosed = false;
   isLoading = true;
+  fieldNames = ['feedback.very-satisfied', 'feedback.satisfied', 'feedback.dissatisfied', 'feedback.very-dissatisfied'];
 
   constructor(
     private authenticationService: AuthenticationService,
     private notification: NotificationService,
     private wsFeedbackService: WsFeedbackService,
-    private roomService: RoomService) {
+    private roomService: RoomService,
+    protected translateService: TranslateService,
+    protected langService: LanguageService) {
+    langService.langEmitter.subscribe(lang => translateService.use(lang));
   }
 
   ngOnInit() {
     this.roomId = localStorage.getItem(`roomId`);
+    this.translateService.use(localStorage.getItem('currentLang'));
     this.roomService.getRoom(this.roomId).subscribe(room => {
       this.room = room;
       this.isClosed = room.settings['feedbackLocked'];

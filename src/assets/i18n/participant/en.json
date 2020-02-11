@@ -94,7 +94,11 @@
   "feedback": {
     "is-stopped": "Voting got stopped",
     "start": "Start voting",
-    "stop": "Stop voting"
+    "stop": "Stop voting",
+    "very-satisfied": "Faster, please!",
+    "satisfied": "I can follow.",
+    "dissatisfied": "Slower, please!",
+    "very-dissatisfied": "I can't keep up."
   },
   "home-page": {
     "exactly-8": "A session key is a combination of exactly 8 digits.",
