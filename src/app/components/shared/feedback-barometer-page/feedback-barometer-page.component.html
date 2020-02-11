@@ -6,8 +6,8 @@
 <div *ngIf="!isLoading" fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="center">
   <mat-card>
     <div class="feedback-container" [ngClass]="{'faded' : isClosed}">
-      <div fxLayout="row" fxLayoutGap="30px" *ngFor="let state of feedback">
-        <mat-icon matTooltip="{{ state.message }}"
+      <div fxLayout="row" fxLayoutGap="30px" *ngFor="let state of feedback; let i = index">
+        <mat-icon matTooltip="{{ fieldNames[i] | translate }}"
                   (click)="!isOwner && submitFeedback(state.state)">{{ state.name }}</mat-icon>
         <mat-progress-bar class="feedback-progress" [value]="state.count"></mat-progress-bar>
       </div>
@@ -17,7 +17,7 @@
     </div>
     <div fxLayoutAlign="center" *ngIf="isOwner">
       <button mat-raised-button class="button-primary" fxLayoutAlign="center" (click)="toggle()">
-        <p [translate]="isClosed ? 'feedback.start' : 'feedback.stop'"></p>
+        {{ (isClosed ? 'feedback.start' : 'feedback.stop') | translate }}
       </button>
     </div>
   </mat-card>

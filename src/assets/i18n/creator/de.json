@@ -175,7 +175,11 @@
   "feedback": {
     "is-stopped": "Feedback ist angehalten.",
     "start": "Freigeben",
-    "stop": "Anhalten"
+    "stop": "Anhalten",
+    "very-satisfied": "Schneller, bitte!",
+    "satisfied": "Ich kann folgen.",
+    "dissatisfied": "Langsamer, bitte!",
+    "very-dissatisfied": "Ich wurde abgehängt."
   },
   "home-page": {
     "create-session": "Neue Sitzung",
