@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
+import { ApiConfigService } from '../../../../services/http/api-config.service';
 
 @Component({
   selector: 'app-imprint',
@@ -7,14 +8,20 @@ import { MatDialogRef } from '@angular/material/dialog';
   styleUrls: ['./imprint.component.scss']
 })
 export class ImprintComponent implements OnInit {
-  deviceType: string;
-  currentLang: string;
 
-  constructor(private dialogRef: MatDialogRef<ImprintComponent>) {
+  imprintContent: string;
+
+  constructor(private dialogRef: MatDialogRef<ImprintComponent>,
+              private apiConfigService: ApiConfigService) {
   }
 
   ngOnInit() {
-    this.currentLang = localStorage.getItem('currentLang');
+    const lang = localStorage.getItem('currentLang');
+    this.imprintContent = this.getLegalInfo(lang);
+  }
+
+  getLegalInfo(lang: string) {
+    return this.apiConfigService.getUiConfig()['legal-info'][lang];
   }
 
   /**

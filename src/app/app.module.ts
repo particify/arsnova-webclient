@@ -36,7 +36,7 @@ import { environment } from '../environments/environment';
 import { ModeratorService } from './services/http/moderator.service';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
-import { DemoVideoComponent } from './components/home/_dialogs/demo-video/demo-video.component';
+import { IntroductionComponent } from './components/home/_dialogs/introduction/introduction.component';
 import { CommentSettingsService } from './services/http/comment-settings.service';
 import { BonusTokenService } from './services/http/bonus-token.service';
 import { CustomIconService } from './services/util/custom-icon.service';
@@ -45,12 +45,8 @@ import { ImprintComponent } from './components/home/_dialogs/imprint/imprint.com
 import { ApiConfigService } from './services/http/api-config.service';
 import { DataProtectionComponent } from './components/home/_dialogs/data-protection/data-protection.component';
 import { CookiesComponent } from './components/home/_dialogs/cookies/cookies.component';
-import { DataProtectionEnComponent } from '../assets/i18n/data-protection/data-protection-en';
-import { DataProtectionDeComponent } from '../assets/i18n/data-protection/data-protection-de';
 import { CookiesEnComponent } from '../assets/i18n/cookies/cookies-en';
 import { CookiesDeComponent } from '../assets/i18n/cookies/cookies-de';
-import { ImprintEnComponent } from '../assets/i18n/imprint/imprint-en';
-import { ImprintDeComponent } from '../assets/i18n/imprint/imprint-de';
 import { OverlayComponent } from './components/home/_dialogs/overlay/overlay.component';
 import { DemoDeComponent } from '../assets/i18n/demo/demo-de';
 import { DemoEnComponent } from '../assets/i18n/demo/demo-en';
@@ -74,17 +70,13 @@ export function initializeApp(appConfig: AppConfig) {
     UserActivationComponent,
     HomeActionsComponent,
     HomePageComponent,
-    DemoVideoComponent,
+    IntroductionComponent,
     UserHomeComponent,
     ImprintComponent,
     DataProtectionComponent,
     CookiesComponent,
-    DataProtectionEnComponent,
-    DataProtectionDeComponent,
     CookiesEnComponent,
     CookiesDeComponent,
-    ImprintEnComponent,
-    ImprintDeComponent,
     DemoDeComponent,
     DemoEnComponent,
     OverlayComponent
@@ -94,7 +86,7 @@ export function initializeApp(appConfig: AppConfig) {
     RegisterComponent,
     PasswordResetComponent,
     UserActivationComponent,
-    DemoVideoComponent,
+    IntroductionComponent,
     CookiesComponent,
     OverlayComponent
   ],

@@ -26,7 +26,7 @@
   },
   "footer": {
     "accessibility-data_protection": "Öffnet die Datenschutzerklärung.",
-    "accessibility-demo": "Öffnet die Einführung zu frag.jetzt.",
+    "accessibility-demo": "Öffnet die Einführung zu ARSnova.",
     "accessibility-help": "Öffnet die Hilfe.",
     "accessibility-imprint": "Öffnet das Impressum.",
     "accessibility-language": "Öffnet die Sprachauswahl.",
@@ -75,7 +75,7 @@
     "created-1": "Die Sitzung '",
     "created-2": "' wurde erstellt.",
     "exactly-8": "Der Sitzungs-Code ist eine Kombination aus genau 8 Ziffern.",
-    "live-announcer": "Willkommen auf der Seite fragpunktjetzt. Um Informationen zu Tastenkombinationen zu erhalten drücke jetzt die Enter-Taste oder rufe die Ansage zu einem späteren Zeitpunkt mit der Escape-Taste auf.",
+    "live-announcer": "Willkommen auf der Seite ARSnova. Um Informationen zu Tastenkombinationen zu erhalten drücke jetzt die Enter-Taste oder rufe die Ansage zu einem späteren Zeitpunkt mit der Escape-Taste auf.",
     "live-announcer-user": "Du befindest dich jetzt auf der Benutzer-Seite. Um Informationen zu Tastenkombinationen zu erhalten drücke jetzt die Enter-Taste oder rufe die Ansage zu einem späteren Zeitpunkt mit der Escape-Taste auf.",
     "install": "Installieren",
     "no-empty-name": "Bitte gib einen Namen ein.",
@@ -123,7 +123,7 @@
   },
   "overlay": {
     "cancel": "Doch akzeptieren?",
-    "cancel-description": "Öffnet den Dialog zur Verwendung der Web-Storage-Technik in frag.jetzt",
+    "cancel-description": "Öffnet den Dialog zur Verwendung der Web-Storage-Technik in ARSnova",
     "message": "Du hast die Verwendung der Web-Storage-Technik abgelehnt. Ohne diese funktioniert die App leider nicht.",
     "title": "Nutzung nicht möglich"
   },

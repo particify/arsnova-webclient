@@ -22,11 +22,6 @@ body {
   height: 100%;
 }
 
-.overflow_hide {
-  height: 0;
-  overflow: hidden;
-}
-
 // States
 
 .visually-hidden {
@@ -43,22 +38,20 @@ body {
 
 // Headings & Texts
 
-h1 {
+h1, h2, h3, h4 {
   color: var(--on-surface);
+  outline: none;
 }
 
 h2 {
-  color: var(--on-surface) !important;
   font-size: 24px !important;
 }
 
 h3 {
-  color: var(--on-surface) !important;
   font-size: 18px !important;
 }
 
 h4 {
-  color: var(--on-surface);
   font-size: 17px !important;
 }
 
@@ -119,9 +112,8 @@ markdown {
   padding: 0;
 }
 
-.modal {
+mat-dialog-content {
   outline: none;
-  border-color: transparent;
 }
 
 // Mat Progress Bar

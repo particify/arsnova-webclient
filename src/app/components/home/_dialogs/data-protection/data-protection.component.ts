@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { DialogConfirmActionButtonType } from '../../../shared/dialog/dialog-action-buttons/dialog-action-buttons.component';
 import { MatDialogRef } from '@angular/material/dialog';
+import { ApiConfigService } from '../../../../services/http/api-config.service';
 
 @Component({
   selector: 'app-data-protection',
@@ -10,17 +11,22 @@ import { MatDialogRef } from '@angular/material/dialog';
 })
 export class DataProtectionComponent implements OnInit {
 
-  deviceType: string;
-  currentLang: string;
+  privacyContent: any;
   confirmButtonType: DialogConfirmActionButtonType;
 
   constructor(private router: Router,
-              private dialogRef: MatDialogRef<DataProtectionComponent>) {
+              private dialogRef: MatDialogRef<DataProtectionComponent>,
+              private apiConfigService: ApiConfigService) {
     this.confirmButtonType = DialogConfirmActionButtonType.Primary;
   }
 
   ngOnInit() {
-    this.currentLang = localStorage.getItem('currentLang');
+    const lang = localStorage.getItem('currentLang');
+    this.privacyContent =  this.getPrivacyInfo(lang);
+  }
+
+  getPrivacyInfo(lang: string) {
+    return this.apiConfigService.getUiConfig()['privacy-info'][lang];
   }
 
   accept() {
