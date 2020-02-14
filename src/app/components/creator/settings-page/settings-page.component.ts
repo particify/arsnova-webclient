@@ -18,6 +18,7 @@ export class SettingsPageComponent implements OnInit {
   ];
 
   room: Room;
+  isLoading = true;
 
   constructor(protected roomService: RoomService) { }
 
@@ -25,6 +26,7 @@ export class SettingsPageComponent implements OnInit {
     const shortId = localStorage.getItem('shortId');
     this.roomService.getRoomByShortId(shortId).subscribe(room => {
       this.room = room;
+      this.isLoading = false;
     });
   }
 

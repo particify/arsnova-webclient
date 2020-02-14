@@ -1,6 +1,11 @@
-<div *ngIf="room">
+<div *ngIf="!isLoading">
   <div *ngFor="let settings of settingsComponents">
     <app-settings [headerName]="settings.headerName" [componentName]="settings.componentName" [room]="room">
     </app-settings>
+  </div>
+</div>
+<div *ngIf="isLoading" fxLayout="column" fxLayoutAlign="center" fxFill>
+  <div fxLayout="row" fxLayoutAlign="center">
+    <mat-progress-spinner color="primary" mode="indeterminate"></mat-progress-spinner>
   </div>
 </div>

@@ -5,7 +5,7 @@
         <mat-slide-toggle [(ngModel)]="enableThreshold" aria-labelledby="threshold"></mat-slide-toggle>
       </p>
     </div>
-    <div fxLayout="row" *ngIf="enableThreshold">
+    <div fxLayout="row" fxLayoutAlign="center center" *ngIf="enableThreshold">
       <mat-slider id="commentSlider" min="-100" max="0" step="5"
                   [(ngModel)]="threshold" (input)="onSliderChange($event)"></mat-slider>
       <h2>&nbsp;{{ threshold | number }}</h2>

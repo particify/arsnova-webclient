@@ -1,9 +1,44 @@
-.closed {
-  height: 40px;
+.card-closed {
+  max-height: 40px;
+}
+
+.card-expanded {
+  max-height: 600px;
 }
 
 mat-card {
-  margin-bottom: 2%;
+  margin-bottom: 1%;
   width: 100%;
   max-width: 800px;
+  transition: 400ms;
+}
+
+.container {
+  overflow: hidden;
+  transition: 400ms;
+}
+
+.container-closed {
+  max-height: 0;
+}
+
+.container-expanded {
+  max-height: 400px;
+}
+
+.expand {
+  align-self: center;
+}
+
+.expand-icon {
+  transition: 500ms;
+}
+
+.expanded {
+  transform: rotateZ(180deg);
+}
+
+h2 {
+  margin: 0;
+  align-self: center;
 }

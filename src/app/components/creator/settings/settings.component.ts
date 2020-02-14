@@ -19,7 +19,7 @@ export class SettingsComponent implements OnInit {
   @Input() headerName: string;
   @Input() room: Room;
 
-  expanded = true;
+  expanded = false;
 
   constructor(public dialog: MatDialog,
               public notificationService: NotificationService,
@@ -33,5 +33,12 @@ export class SettingsComponent implements OnInit {
   }
 
   ngOnInit() {
+    if (this.componentName === 'generalSettings') {
+      this.expanded = true;
+    }
+  }
+
+  expandSettings() {
+    this.expanded = !this.expanded;
   }
 }

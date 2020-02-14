@@ -1,12 +1,13 @@
 <div fxLayout="row" fxLayoutAlign="center">
-  <mat-card [ngClass]="{'closed': !expanded}">
-    <div *ngIf="expanded">
-      <h2>
-        {{ headerName | translate }}
-        <button mat-icon-button class="expand">
-          <mat-icon>expand_less</mat-icon>
-        </button>
-      </h2>
+  <mat-card [ngClass]="{'card-closed': !expanded, 'card-expanded': expanded}">
+    <div fxLayout="row">
+      <h2>{{ headerName | translate }}</h2>
+      <span class="fill-remaining-space"></span>
+      <button mat-icon-button class="expand" (click)="expandSettings()">
+        <mat-icon class="expand-icon" [ngClass]="{'expanded': expanded}">expand_more</mat-icon>
+      </button>
+    </div>
+    <div class="container" [ngClass]="{'container-closed': !expanded, 'container-expanded': expanded}">
       <div [ngSwitch]="componentName">
         <app-room-edit [editRoom]="room" [name]="room.name" [description]="room.description"
                        *ngSwitchCase="'generalSettings'"></app-room-edit>
