@@ -3,7 +3,7 @@ import { BonusTokenService } from '../../../../services/http/bonus-token.service
 import { BonusToken } from '../../../../models/bonus-token';
 import { Room } from '../../../../models/room';
 import { MatDialog } from '@angular/material/dialog';
-import { BonusDeleteComponent } from '../bonus-delete/bonus-delete.component';
+import { BonusDeleteComponent } from '../../_dialogs/bonus-delete/bonus-delete.component';
 import { NotificationService } from '../../../../services/util/notification.service';
 import { TranslateService } from '@ngx-translate/core';
 import { Router } from '@angular/router';

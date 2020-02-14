@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Room } from '../../../../models/room';
 import { MatDialog } from '@angular/material/dialog';
-import { RoomDeleteComponent } from '../room-delete/room-delete.component';
+import { RoomDeleteComponent } from '../../_dialogs/room-delete/room-delete.component';
 import { NotificationService } from '../../../../services/util/notification.service';
 import { TranslateService } from '@ngx-translate/core';
 import { RoomService } from '../../../../services/http/room.service';

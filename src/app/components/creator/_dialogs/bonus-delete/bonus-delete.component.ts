@@ -3,7 +3,7 @@ import { DialogConfirmActionButtonType } from '../../../shared/dialog/dialog-act
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { TranslateService } from '@ngx-translate/core';
-import { BonusTokenComponent } from '../bonus-token/bonus-token.component';
+import { BonusTokenComponent } from '../../settings/bonus-token/bonus-token.component';
 
 @Component({
   selector: 'app-bonus-delete',

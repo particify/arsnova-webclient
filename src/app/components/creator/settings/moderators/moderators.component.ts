@@ -5,7 +5,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { ModeratorService } from '../../../../services/http/moderator.service';
 import { LanguageService } from '../../../../services/util/language.service';
 import { Moderator } from '../../../../models/moderator';
-import { ModeratorDeleteComponent } from '../moderator-delete/moderator-delete.component';
+import { ModeratorDeleteComponent } from '../../_dialogs/moderator-delete/moderator-delete.component';
 import { FormControl, Validators } from '@angular/forms';
 import { EventService } from '../../../../services/util/event.service';
 
