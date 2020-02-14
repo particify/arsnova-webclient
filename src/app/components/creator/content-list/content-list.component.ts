@@ -274,11 +274,12 @@ export class ContentListComponent implements OnInit {
   }
 
   lockContent(content: Content, locked?: boolean) {
+    let lockState: boolean;
     if (locked !== undefined) {
-      content.state.visible = !locked;
+      lockState = !locked;
     } else {
-      content.state.visible = !content.state.visible;
+      lockState = !content.state.visible;
     }
-    this.contentService.updateContent(content).subscribe(updatedContent => content = updatedContent);
+    this.contentService.changeLock(content, lockState).subscribe(updatedContent => content = updatedContent);
   }
 }

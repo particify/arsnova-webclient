@@ -75,7 +75,7 @@ export class ContentService extends BaseHttpService {
     );
   }
 
-  patchContent(content: Content, changes: TSMap<string, any>) {
+  patchContent(content: Content, changes: TSMap<string, any>): Observable<Content> {
     const connectionUrl = this.apiUrl.base + this.apiUrl.content + '/' + content.id;
     return this.http.patch(connectionUrl, changes, httpOptions).pipe(
       tap(_ => ''),
@@ -83,12 +83,12 @@ export class ContentService extends BaseHttpService {
     );
   }
 
-  changeLock(content: Content, setLock: boolean): Content {
+  changeLock(content: Content, setLock: boolean): Observable<Content> {
     content.state.visible = setLock;
     const changes = new TSMap<string, any>();
     changes.set('state', content.state);
-    this.patchContent(content, changes);
-    return content;
+    return this.patchContent(content, changes).pipe();
+    // return content;
   }
 
   updateChoiceContent(updatedContent: ContentChoice): Observable<ContentChoice> {
