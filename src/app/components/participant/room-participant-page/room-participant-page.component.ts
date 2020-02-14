@@ -39,7 +39,7 @@ export class RoomParticipantPageComponent extends RoomPageComponent implements O
               protected wsCommentService: WsCommentServiceService,
               protected commentService: CommentService,
               protected contentService: ContentService,
-              private authenticationService: AuthenticationService,
+              protected authenticationService: AuthenticationService,
               private liveAnnouncer: LiveAnnouncer,
               private _r: Renderer2,
               public eventService: EventService) {
@@ -88,10 +88,14 @@ export class RoomParticipantPageComponent extends RoomPageComponent implements O
   afterRoomLoadHook() {
     this.authenticationService.watchUser.subscribe(user => this.user = user);
     if (!this.user) {
-      this.authenticationService.guestLogin(UserRole.PARTICIPANT).subscribe(guestUser => {
+      this.authenticationService.guestLogin(UserRole.PARTICIPANT).subscribe(() => {
         this.roomService.addToHistory(this.room.id);
       });
+    } else {
+      this.roomService.addToHistory(this.room.id);
     }
+    this.authenticationService.setAccess(this.room.shortId, UserRole.PARTICIPANT);
+    this.authenticationService.checkAccess(this.room.shortId);
   }
 
   protected afterGroupsLoadHook() {
