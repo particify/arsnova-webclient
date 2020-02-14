@@ -3,7 +3,7 @@ import { DialogConfirmActionButtonType } from '../../../shared/dialog/dialog-act
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { TranslateService } from '@ngx-translate/core';
-import { BonusTokenComponent } from '../bonus-token/bonus-token.component';
+import { BonusTokenComponent } from '../../settings/bonus-token/bonus-token.component';
 
 @Component({
   selector: 'app-bonus-delete',
@@ -25,11 +25,11 @@ export class BonusDeleteComponent implements OnInit {
 
   ngOnInit() {
     if (!this.multipleBonuses) {
-      this.translationService.get('room-page.really-delete-token').subscribe(msg => {
+      this.translationService.get('settings.really-delete-token').subscribe(msg => {
         this.reallyDeleteText = msg;
       });
     } else {
-      this.translationService.get('room-page.really-delete-tokens').subscribe(msg => {
+      this.translationService.get('settings.really-delete-tokens').subscribe(msg => {
         this.reallyDeleteText = msg;
       });
     }

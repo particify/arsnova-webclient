@@ -1,0 +1,33 @@
+<div>
+  <mat-form-field class="input-block">
+    <input (focus)="eventService.makeFocusOnInputTrue()" (blur)="eventService.makeFocusOnInputFalse()"
+           matInput type="email" aria-labelledby="moderator-email" [(ngModel)]="loginId"
+           [formControl]="usernameFormControl" name="username"/>
+    <mat-placeholder>{{ 'settings.moderator-email' | translate }}</mat-placeholder>
+    <mat-error *ngIf="usernameFormControl.hasError('email')">
+      {{ 'settings.email-error' | translate }}
+    </mat-error>
+  </mat-form-field>
+  <div fxLayoutAlign="end">
+    <button mat-raised-button class="button-primary" (click)="addModerator()"
+            aria-labelledby="add-moderator">{{ 'settings.add-moderator' | translate }}</button>
+  </div>
+</div>
+<p *ngIf="moderators.length === 0">{{ 'settings.no-moderators' | translate }}</p>
+<div *ngIf="moderators.length > 0">
+  <div fxLayout="row" fxLayoutAlign="center center" *ngFor="let moderator of moderators; index as i">
+    <p>
+      {{i + 1}}. {{moderator.loginId}}
+    </p>
+    <span class="fill-remaining-space"></span>
+    <button mat-icon-button class="close" (click)="openDeleteRoomDialog(moderator)" aria-labelledby="delete-moderator">
+      <mat-icon class="close-icon">close</mat-icon>
+    </button>
+  </div>
+</div>
+
+<div class="visually-hidden">
+  <div id="moderator-email">{{'settings.a11y-moderator-email' | translate}}</div>
+  <div id="add-moderator">{{'settings.a11y-add-moderator' | translate}}</div>
+  <div id="delete-moderator">{{'settings.a11y-delete-moderator' | translate}}</div>
+</div>

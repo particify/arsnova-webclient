@@ -1,6 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { ModeratorsComponent } from '../moderators/moderators.component';
+import { ModeratorsComponent } from '../../settings/moderators/moderators.component';
 import { DialogConfirmActionButtonType } from '../../../shared/dialog/dialog-action-buttons/dialog-action-buttons.component';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { TranslateService } from '@ngx-translate/core';
@@ -26,7 +26,7 @@ export class ModeratorDeleteComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.translationService.get('room-page.really-remove-moderator').subscribe(msg => {
+    this.translationService.get('settings.really-remove-moderator').subscribe(msg => {
       this.liveAnnouncer.announce(msg + this.loginId);
     });
   }

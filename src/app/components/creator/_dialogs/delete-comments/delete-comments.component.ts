@@ -4,7 +4,7 @@ import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { DialogConfirmActionButtonType } from '../../../shared/dialog/dialog-action-buttons/dialog-action-buttons.component';
 import { TranslateService } from '@ngx-translate/core';
 import { BonusTokenService } from '../../../../services/http/bonus-token.service';
-import { CommentSettingsComponent } from '../comment-settings/comment-settings.component';
+import { CommentSettingsComponent } from '../../settings/comment-settings/comment-settings.component';
 
 @Component({
   selector: 'app-delete-comment',
@@ -29,7 +29,7 @@ export class DeleteCommentsComponent implements OnInit {
 
 
   ngOnInit() {
-    this.translationService.get('room-page.really-delete-comments').subscribe(msg => {
+    this.translationService.get('settings.really-delete-comments').subscribe(msg => {
       this.liveAnnouncer.announce(msg);
     });
     this.tokenService.getTokensByRoomId(this.roomId).subscribe(tokens => {

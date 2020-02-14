@@ -1,10 +1,10 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Room } from '../../../../models/room';
-import { RoomEditComponent } from '../room-edit/room-edit.component';
 import { DialogConfirmActionButtonType } from '../../../shared/dialog/dialog-action-buttons/dialog-action-buttons.component';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { TranslateService } from '@ngx-translate/core';
+import { SettingsComponent } from '../../settings/settings.component';
 
 @Component({
   selector: 'app-room-delete',
@@ -19,7 +19,7 @@ export class RoomDeleteComponent implements OnInit {
    */
   confirmButtonType: DialogConfirmActionButtonType = DialogConfirmActionButtonType.Alert;
 
-  constructor(public dialogRef: MatDialogRef<RoomEditComponent>,
+  constructor(public dialogRef: MatDialogRef<SettingsComponent>,
               @Inject(MAT_DIALOG_DATA) public data: any,
               private liveAnnouncer: LiveAnnouncer,
               private translationService: TranslateService) {
@@ -27,8 +27,8 @@ export class RoomDeleteComponent implements OnInit {
 
 
   ngOnInit() {
-    this.translationService.get('room-page.reallySession').subscribe(msg1 => {
-      this.translationService.get('room-page.really2').subscribe(msg2 => {
+    this.translationService.get('settings.reallySession').subscribe(msg1 => {
+      this.translationService.get('settings.really2').subscribe(msg2 => {
         this.liveAnnouncer.announce(msg1 + this.room.name + msg2);
       });
     });

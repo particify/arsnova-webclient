@@ -10,7 +10,7 @@ import { RoomCreatorPageComponent } from './room-creator-page/room-creator-page.
 import { EssentialsModule } from '../essentials/essentials.module';
 import { ModeratorModule } from '../moderator/moderator.module';
 import { RoomDeleteComponent } from './_dialogs/room-delete/room-delete.component';
-import { RoomEditComponent } from './_dialogs/room-edit/room-edit.component';
+import { RoomEditComponent } from './settings/room-edit/room-edit.component';
 import { AnswerEditComponent } from './_dialogs/answer-edit/answer-edit.component';
 import { ContentDeleteComponent } from './_dialogs/content-delete/content-delete.component';
 import { SharedModule } from '../shared/shared.module';
@@ -21,10 +21,10 @@ import { ContentListComponent } from './content-list/content-list.component';
 import { ContentEditComponent } from './_dialogs/content-edit/content-edit.component';
 import { ContentPresentationComponent } from './content-presentation/content-presentation.component';
 import { CommentExportComponent } from './_dialogs/comment-export/comment-export.component';
-import { ModeratorsComponent } from './_dialogs/moderators/moderators.component';
-import { BonusTokenComponent } from './_dialogs/bonus-token/bonus-token.component';
-import { CommentSettingsComponent } from './_dialogs/comment-settings/comment-settings.component';
-import { TagsComponent } from './_dialogs/tags/tags.component';
+import { ModeratorsComponent } from './settings/moderators/moderators.component';
+import { BonusTokenComponent } from './settings/bonus-token/bonus-token.component';
+import { CommentSettingsComponent } from './settings/comment-settings/comment-settings.component';
+import { TagsComponent } from './settings/tags/tags.component';
 import { ModeratorDeleteComponent } from './_dialogs/moderator-delete/moderator-delete.component';
 import { DeleteCommentComponent } from './_dialogs/delete-comment/delete-comment.component';
 import { DeleteCommentsComponent } from './_dialogs/delete-comments/delete-comments.component';
@@ -32,6 +32,8 @@ import { BonusDeleteComponent } from './_dialogs/bonus-delete/bonus-delete.compo
 import { MarkdownModule } from 'ngx-markdown';
 import { ContentGroupCreationComponent } from './_dialogs/content-group-creation/content-group-creation.component';
 import { DeleteAnswerComponent } from './_dialogs/delete-answer/delete-answer.component';
+import { SettingsComponent } from './settings/settings.component';
+import { SettingsPageComponent } from './settings-page/settings-page.component';
 
 @NgModule({
   imports: [
@@ -72,11 +74,12 @@ import { DeleteAnswerComponent } from './_dialogs/delete-answer/delete-answer.co
     DeleteCommentComponent,
     BonusDeleteComponent,
     ContentGroupCreationComponent,
-    DeleteAnswerComponent
+    DeleteAnswerComponent,
+    SettingsComponent,
+    SettingsPageComponent
   ],
   entryComponents: [
     RoomDeleteComponent,
-    RoomEditComponent,
     AnswerEditComponent,
     ContentDeleteComponent,
     ContentChoiceCreatorComponent,
@@ -85,11 +88,7 @@ import { DeleteAnswerComponent } from './_dialogs/delete-answer/delete-answer.co
     ContentYesNoCreatorComponent,
     ContentEditComponent,
     CommentExportComponent,
-    ModeratorsComponent,
-    BonusTokenComponent,
-    CommentSettingsComponent,
     ModeratorDeleteComponent,
-    TagsComponent,
     DeleteCommentsComponent,
     DeleteCommentComponent,
     BonusDeleteComponent,

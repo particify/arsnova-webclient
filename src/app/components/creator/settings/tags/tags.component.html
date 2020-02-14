@@ -1,0 +1,33 @@
+<div>
+  <!-- <div fxLayout="row">
+    <p>{{ 'settings.tags' | translate }}&nbsp;
+      <mat-slide-toggle [(ngModel)]="tagsEnabled" aria-labelledby="tags" ></mat-slide-toggle>
+    </p>
+  </div> -->
+  <div>
+    <mat-form-field class="input-block">
+      <input (focus)="eventService.makeFocusOnInputTrue()" (blur)="eventService.makeFocusOnInputFalse()"
+             matInput type="text" aria-labelledby="tag-new" [(ngModel)]="tagName"
+             [formControl]="tagFormControl" name="taginput"/>
+      <mat-placeholder>{{ 'settings.tag-new' | translate }}</mat-placeholder>
+      <mat-error *ngIf="!tagFormControl.valid">
+        {{ 'settings.tag-error' | translate }}
+      </mat-error>
+    </mat-form-field>
+    <div fxLayoutAlign="end">
+      <button mat-raised-button class="button-primary" (click)="addTag()"
+              aria-labelledby="add-moderator">{{ 'settings.add-tag' | translate }}</button>
+    </div>
+  </div>
+  <div *ngIf="tagsEnabled === true && tags !== undefined && tags.length > 0">
+    <div fxLayout="row" fxLayoutAlign="center center" *ngFor="let tag of tags">
+      <p>
+        {{tag}}
+      </p>
+      <span class="fill-remaining-space"></span>
+      <button mat-icon-button class="close" (click)="deleteTag(tag)" aria-labelledby="delete-tag">
+        <mat-icon class="close-icon">close</mat-icon>
+      </button>
+    </div>
+  </div>
+</div>

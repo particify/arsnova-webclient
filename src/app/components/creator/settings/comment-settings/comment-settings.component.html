@@ -1,0 +1,53 @@
+<div>
+  <div fxLayout="column">
+    <div fxLayout="row">
+      <p>{{ 'settings.threshold' | translate}}&nbsp;
+        <mat-slide-toggle [(ngModel)]="enableThreshold" aria-labelledby="threshold"></mat-slide-toggle>
+      </p>
+    </div>
+    <div fxLayout="row" fxLayoutAlign="center center" *ngIf="enableThreshold">
+      <mat-slider id="commentSlider" min="-100" max="0" step="5"
+                  [(ngModel)]="threshold" (input)="onSliderChange($event)"></mat-slider>
+      <h2>&nbsp;{{ threshold | number }}</h2>
+    </div>
+  </div>
+  <div fxLayout="column">
+    <div fxLayout="row">
+      <p>{{ 'settings.settings-comment-moderation' | translate}}&nbsp;
+        <mat-slide-toggle [(ngModel)]="enableModeration"
+                          aria-labelledby="settings-comment-moderation"></mat-slide-toggle>
+      </p>
+    </div>
+    <div fxLayout="row" *ngIf="enableModeration">
+      <p>{{ 'settings.settings-direct-send' | translate}}&nbsp;
+        <mat-slide-toggle [(ngModel)]="directSend" aria-labelledby="settings-direct-send"></mat-slide-toggle>
+      </p>
+    </div>
+  </div>
+  <div>
+    <button mat-raised-button class="button-secondary action" (click)="openExportDialog()" aria-labelledby="export-comments">
+      <mat-icon>save</mat-icon>
+      {{ 'settings.export-comments' | translate }}</button>
+  </div>
+  <div>
+    <button mat-raised-button class="button-warn action" (click)="openDeleteCommentsDialog()"
+            aria-labelledby="delete-all-comments">
+      <mat-icon>delete</mat-icon>
+      {{ 'settings.delete-all-comments' | translate }}</button>
+  </div>
+  <div fxLayoutAlign="end">
+    <button mat-raised-button [disabled]="enableThreshold === commentExtension.enableThreshold &&
+                                          enableModeration === commentExtension.enableModeration &&
+                                          directSend === directSendDefault &&
+                                          threshold === commentExtension.commentThreshold"
+            class="button-primary update"(click)="updateCommentSettings()">{{ 'settings.update' | translate }}</button>
+  </div>
+</div>
+
+<div class="visually-hidden">
+  <div id="threshold">{{'settings.a11y-threshold' | translate}} </div>
+  <div id="settings-comment-moderation">{{'settings.a11y-settings-comment-moderation' | translate}} </div>
+  <div id="settings-direct-send">{{'settings.a11y-settings-direct-send' | translate}} </div>
+  <div id="export-comments">{{'settings.a11y-export-comments' | translate}} </div>
+  <div id="delete-all-comments">{{'settings.a11y-delete-all-comments' | translate}} </div>
+</div>

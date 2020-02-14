@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
-import { RoomEditComponent } from '../room-edit/room-edit.component';
+import { RoomEditComponent } from '../../settings/room-edit/room-edit.component';
 
 @Component({
   selector: 'app-comment-export',

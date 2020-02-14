@@ -1,0 +1,21 @@
+<div fxLayout="row" fxLayoutAlign="center">
+  <mat-card [ngClass]="{'card-closed': !expanded, 'card-expanded': expanded}">
+    <div fxLayout="row">
+      <h2>{{ headerName | translate }}</h2>
+      <span class="fill-remaining-space"></span>
+      <button mat-icon-button class="expand" (click)="expandSettings()">
+        <mat-icon class="expand-icon" [ngClass]="{'expanded': expanded}">expand_more</mat-icon>
+      </button>
+    </div>
+    <div class="container" [ngClass]="{'container-closed': !expanded, 'container-expanded': expanded}">
+      <div [ngSwitch]="componentName">
+        <app-room-edit [editRoom]="room" [name]="room.name" [description]="room.description"
+                       *ngSwitchCase="'generalSettings'"></app-room-edit>
+        <app-comment-settings [editRoom]="room" [roomId]="room.id" *ngSwitchCase="'commentSettings'"></app-comment-settings>
+        <app-moderators [roomId]="room.id" *ngSwitchCase="'moderatorSettings'"></app-moderators>
+        <app-bonus-token [room]="room" *ngSwitchCase="'tokenSettings'"></app-bonus-token>
+        <app-tags [room]="room" *ngSwitchCase="'tagSettings'"></app-tags>
+      </div>
+    </div>
+  </mat-card>
+</div>

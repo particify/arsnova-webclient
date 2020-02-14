@@ -1,0 +1,51 @@
+<div *ngIf="editRoom">
+  <div fxLayout="column">
+    <mat-form-field class="input-block">
+      <input (focus)="eventService.makeFocusOnInputTrue()" (blur)="eventService.makeFocusOnInputFalse()"
+             [(ngModel)]="name" matInput
+             name="room-name" maxlength="20" aria-labelledby="room-name"/>
+      <mat-placeholder>{{ 'session.session-name' | translate }}</mat-placeholder>
+      <mat-hint align="end"><span aria-hidden="true">{{ name.length }} / 20</span></mat-hint>
+    </mat-form-field>
+    <mat-tab-group>
+      <mat-tab label="{{'settings.description' | translate}}">
+        <mat-form-field class="input-block">
+      <textarea
+        (focus)="eventService.makeFocusOnInputTrue()" (blur)="eventService.makeFocusOnInputFalse()"
+        [(ngModel)]="description"
+        matInput
+        matTextareaAutosize
+        matAutosizeMinRows="2"
+        matAutosizeMaxRows="5"
+        maxlength="250"
+        name="description"
+        aria-labelledby="description"
+      ></textarea>
+          <mat-hint align="end">
+            <span aria-hidden="true">
+              {{ description ? description.length : 0 }} / 250
+            </span>
+          </mat-hint>
+        </mat-form-field>
+      </mat-tab>
+      <mat-tab label="{{'session.preview' | translate}}" [disabled]="!description">
+        <markdown [data]="description"></markdown>
+      </mat-tab>
+    </mat-tab-group>
+    <button mat-raised-button class="delete button-warn" (click)="openDeleteRoomDialog()" aria-labelledby="delete-room">
+      <mat-icon>delete</mat-icon>
+      {{ 'settings.delete-room' | translate }}
+    </button>
+  </div>
+  <div fxLayoutAlign="end">
+    <button mat-raised-button [disabled]="description === editRoom.description && name === editRoom.name"
+            class="button-primary update" (click)="saveChanges()">{{ 'settings.update' | translate }}</button>
+  </div>
+</div>
+
+<div class="visually-hidden">
+  <div id="room-name">{{ 'settings.a11y-room-name' | translate }}</div>
+  <div id="room-edit-description">{{ 'session.a11y-description' | translate }}</div>
+  <div id="delete-room">{{ 'settings.a11y-delete-room' | translate }}</div>
+</div>
+

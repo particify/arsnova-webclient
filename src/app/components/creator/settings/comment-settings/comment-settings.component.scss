@@ -2,9 +2,13 @@
   width: 100%;
 }
 
-.mat-flat-button {
-  margin-bottom: 20px;
+.action {
+  margin: 10px 0;
   min-width: 220px;
+}
+
+.update {
+  transition: 500ms;
 }
 
 button {
