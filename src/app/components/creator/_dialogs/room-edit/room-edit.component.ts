@@ -50,7 +50,7 @@ export class RoomEditComponent implements OnInit {
   }
 
   deleteRoom(room: Room): void {
-    this.translationService.get('room-page.deleted').subscribe(msg => {
+    this.translationService.get('settings.deleted').subscribe(msg => {
       this.notificationService.show(room.name + msg);
     });
     this.roomService.deleteRoom(room.id).subscribe(result => {
@@ -64,7 +64,7 @@ export class RoomEditComponent implements OnInit {
     this.roomService.updateRoom(this.editRoom)
       .subscribe((room) => {
         this.editRoom = room;
-        this.translateService.get('room-page.changes-successful').subscribe(msg => {
+        this.translateService.get('settings.changes-successful').subscribe(msg => {
           this.notificationService.show(msg);
         });
       });

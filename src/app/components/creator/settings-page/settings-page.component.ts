@@ -10,11 +10,11 @@ import { Room } from '../../../models/room';
 export class SettingsPageComponent implements OnInit {
 
   settingsComponents = [
-    { headerName: 'room-page.general', componentName: 'generalSettings' },
-    { headerName: 'room-page.comments', componentName: 'commentSettings' },
-    { headerName: 'room-page.moderators', componentName: 'moderatorSettings' },
-    { headerName: 'room-page.bonus-token-header', componentName: 'tokenSettings' },
-    { headerName: 'room-page.tags', componentName: 'tagSettings' }
+    { headerName: 'settings.general', componentName: 'generalSettings' },
+    { headerName: 'settings.comments', componentName: 'commentSettings' },
+    { headerName: 'settings.moderators', componentName: 'moderatorSettings' },
+    { headerName: 'settings.bonus-token-header', componentName: 'tokenSettings' },
+    { headerName: 'settings.tags', componentName: 'tagSettings' }
   ];
 
   room: Room;

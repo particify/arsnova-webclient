@@ -8,7 +8,7 @@
       <mat-hint align="end"><span aria-hidden="true">{{ name.length }} / 20</span></mat-hint>
     </mat-form-field>
     <mat-tab-group>
-      <mat-tab label="{{'room-page.description' | translate}}">
+      <mat-tab label="{{'settings.description' | translate}}">
         <mat-form-field class="input-block">
       <textarea
         (focus)="eventService.makeFocusOnInputTrue()" (blur)="eventService.makeFocusOnInputFalse()"
@@ -34,18 +34,18 @@
     </mat-tab-group>
     <button mat-raised-button class="delete button-warn" (click)="openDeleteRoomDialog()" aria-labelledby="delete-room">
       <mat-icon>delete</mat-icon>
-      {{ 'room-page.delete-room' | translate }}
+      {{ 'settings.delete-room' | translate }}
     </button>
   </div>
   <div fxLayoutAlign="end">
     <button mat-raised-button [disabled]="description === editRoom.description && name === editRoom.name"
-            class="button-primary update" (click)="saveChanges()">{{ 'room-page.update' | translate }}</button>
+            class="button-primary update" (click)="saveChanges()">{{ 'settings.update' | translate }}</button>
   </div>
 </div>
 
 <div class="visually-hidden">
-  <div id="room-name">{{ 'room-page.a11y-room-name' | translate }}</div>
+  <div id="room-name">{{ 'settings.a11y-room-name' | translate }}</div>
   <div id="room-edit-description">{{ 'session.a11y-description' | translate }}</div>
-  <div id="delete-room">{{ 'room-page.a11y-delete-room' | translate }}</div>
+  <div id="delete-room">{{ 'settings.a11y-delete-room' | translate }}</div>
 </div>
 

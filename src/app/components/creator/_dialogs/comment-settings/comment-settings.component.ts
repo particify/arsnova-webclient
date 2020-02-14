@@ -97,7 +97,7 @@ export class CommentSettingsComponent implements OnInit {
   }
 
   deleteComments(): void {
-    this.translationService.get('room-page.comments-deleted').subscribe(msg => {
+    this.translationService.get('settings.comments-deleted').subscribe(msg => {
       this.notificationService.show(msg);
     });
     this.commentService.deleteCommentsByRoomId(this.roomId).subscribe();
@@ -119,8 +119,8 @@ export class CommentSettingsComponent implements OnInit {
           const exportComments = JSON.parse(JSON.stringify(this.comments));
           let csv: string;
           let valueFields = '';
-          const fieldNames = ['room-page.question', 'room-page.timestamp', 'room-page.presented',
-            'room-page.favorite', 'room-page.correct/wrong', 'room-page.score', 'room-page.token'];
+          const fieldNames = ['settings.question', 'settings.timestamp', 'settings.presented',
+            'settings.favorite', 'settings.correct/wrong', 'settings.score', 'settings.token'];
           let keyFields;
           this.translationService.get(fieldNames).subscribe(msgs => {
             keyFields = [msgs[fieldNames[0]], msgs[fieldNames[1]], msgs[fieldNames[2]], msgs[fieldNames[3]],
@@ -187,7 +187,7 @@ export class CommentSettingsComponent implements OnInit {
     this.roomService.updateRoom(this.editRoom)
       .subscribe((room) => {
         this.editRoom = room;
-        this.translationService.get('room-page.changes-successful').subscribe(msg => {
+        this.translationService.get('settings.changes-successful').subscribe(msg => {
           this.notificationService.show(msg);
         });
       });

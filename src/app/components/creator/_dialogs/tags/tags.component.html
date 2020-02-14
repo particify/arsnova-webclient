@@ -1,6 +1,6 @@
 <div>
   <!-- <div fxLayout="row">
-    <p>{{ 'room-page.tags' | translate }}&nbsp;
+    <p>{{ 'settings.tags' | translate }}&nbsp;
       <mat-slide-toggle [(ngModel)]="tagsEnabled" aria-labelledby="tags" ></mat-slide-toggle>
     </p>
   </div> -->
@@ -9,14 +9,14 @@
       <input (focus)="eventService.makeFocusOnInputTrue()" (blur)="eventService.makeFocusOnInputFalse()"
              matInput type="text" aria-labelledby="tag-new" [(ngModel)]="tagName"
              [formControl]="tagFormControl" name="taginput"/>
-      <mat-placeholder>{{ 'room-page.tag-new' | translate }}</mat-placeholder>
+      <mat-placeholder>{{ 'settings.tag-new' | translate }}</mat-placeholder>
       <mat-error *ngIf="!tagFormControl.valid">
-        {{ 'room-page.tag-error' | translate }}
+        {{ 'settings.tag-error' | translate }}
       </mat-error>
     </mat-form-field>
     <div fxLayoutAlign="end">
       <button mat-raised-button class="button-primary" (click)="addTag()"
-              aria-labelledby="add-moderator">{{ 'room-page.add-moderator' | translate }}</button>
+              aria-labelledby="add-moderator">{{ 'settings.add-tag' | translate }}</button>
     </div>
   </div>
   <div *ngIf="tagsEnabled === true && tags !== undefined && tags.length > 0">

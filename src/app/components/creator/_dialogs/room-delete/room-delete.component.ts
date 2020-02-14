@@ -27,8 +27,8 @@ export class RoomDeleteComponent implements OnInit {
 
 
   ngOnInit() {
-    this.translationService.get('room-page.reallySession').subscribe(msg1 => {
-      this.translationService.get('room-page.really2').subscribe(msg2 => {
+    this.translationService.get('settings.reallySession').subscribe(msg1 => {
+      this.translationService.get('settings.really2').subscribe(msg2 => {
         this.liveAnnouncer.announce(msg1 + this.room.name + msg2);
       });
     });

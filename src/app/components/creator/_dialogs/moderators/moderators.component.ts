@@ -53,18 +53,18 @@ export class ModeratorsComponent implements OnInit {
   addModerator() {
     this.moderatorService.getUserId(this.loginId).subscribe(list => {
       if (list.length === 0) {
-        this.translationService.get('room-page.moderator-not-found').subscribe(msg => {
+        this.translationService.get('settings.moderator-not-found').subscribe(msg => {
           this.notificationService.show(msg);
         });
         return;
       }
-      this.loginId = '';
       this.moderatorService.add(this.roomId, list[0].id).subscribe();
       this.moderatorService.addToHistory(this.roomId, list[0].id);
       this.moderators.push(new Moderator(list[0].id, this.loginId));
-      this.translationService.get('room-page.moderator-added').subscribe(msg => {
+      this.translationService.get('settings.moderator-added').subscribe(msg => {
         this.notificationService.show(msg);
       });
+      this.loginId = '';
     });
   }
 
@@ -83,7 +83,7 @@ export class ModeratorsComponent implements OnInit {
 
   removeModerator(userId: string, index: number) {
     this.moderatorService.delete(this.roomId, userId).subscribe();
-    this.translationService.get('room-page.moderator-removed').subscribe(msg => {
+    this.translationService.get('settings.moderator-removed').subscribe(msg => {
       this.notificationService.show(msg);
     });
     this.moderators.splice(index, 1);

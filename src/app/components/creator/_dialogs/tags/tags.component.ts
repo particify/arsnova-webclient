@@ -71,7 +71,7 @@ export class TagsComponent implements OnInit {
     this.roomService.updateRoom(this.room)
       .subscribe((room) => {
         this.room = room;
-        this.translationService.get('room-page.changes-successful').subscribe(msg => {
+        this.translationService.get('settings.changes-successful').subscribe(msg => {
           this.notificationService.show(msg);
         });
       });

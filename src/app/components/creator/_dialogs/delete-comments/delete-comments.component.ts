@@ -29,7 +29,7 @@ export class DeleteCommentsComponent implements OnInit {
 
 
   ngOnInit() {
-    this.translationService.get('room-page.really-delete-comments').subscribe(msg => {
+    this.translationService.get('settings.really-delete-comments').subscribe(msg => {
       this.liveAnnouncer.announce(msg);
     });
     this.tokenService.getTokensByRoomId(this.roomId).subscribe(tokens => {

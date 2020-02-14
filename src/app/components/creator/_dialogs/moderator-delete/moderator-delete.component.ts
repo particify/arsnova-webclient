@@ -26,7 +26,7 @@ export class ModeratorDeleteComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.translationService.get('room-page.really-remove-moderator').subscribe(msg => {
+    this.translationService.get('settings.really-remove-moderator').subscribe(msg => {
       this.liveAnnouncer.announce(msg + this.loginId);
     });
   }
