@@ -9,8 +9,33 @@
 
   <mat-dialog-content tabindex="-1">
 
-    <app-cookies-de *ngIf="currentLang=='de'"></app-cookies-de>
-    <app-cookies-en *ngIf="currentLang=='en'"></app-cookies-en>
+    <div *ngIf="currentLang=='de'">
+      <p tabindex="0">
+        Deine Fragen und Bewertungen sind anonym.
+        Ein ARSnova-Konto ist nur erforderlich,
+        wenn du als Dozent deine Sitzung für 180 Tage nach dem letzten Besuch speichern willst.
+      </p>
+      <p>
+        Mit Anklicken des Buttons »Akzeptieren« erklärst du dich mit der Verwendung der
+        <a href="https://de.wikipedia.org/wiki/Web_Storage" target="_blank" rel="noreferrer" tabindex="-1">Web-Storage-Technik</a>
+        und unserer Daten&shy;schutz&shy;erklärung einverstanden.
+        Diese kannst du über das Datenschutz-Symbol einsehen.
+      </p>
+    </div>
+    <div *ngIf="currentLang=='en'">
+      <p tabindex="0">
+        Your questions and votes are anonymous.
+        A »frag.&shy;jetzt« account is only required,
+        if you as a lecturer want to save your session for 180 days after the last visit.
+      </p>
+      <p tabindex="0">
+        By clicking the button »Accept« you agree to the use of a
+        <a href="https://en.wikipedia.org/wiki/Web_storage" target="_blank" rel="noreferrer" tabindex="-1">web storage</a>
+        and our privacy policy.
+        You can view our policy by clicking on the data protection symbol above.
+      </p>
+
+    </div>
 
     <app-dialog-action-buttons
       buttonsLabelSection="cookies"
