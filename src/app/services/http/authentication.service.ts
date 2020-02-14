@@ -282,12 +282,22 @@ export class AuthenticationService extends BaseHttpService {
 
   hasAccess(shortId: string, role: UserRole): boolean {
     const usersRole = this.roomAccess.get(shortId);
-    return (usersRole && (usersRole >= role));
+    return (usersRole !== undefined && (usersRole >= role));
   }
 
   setAccess(shortId: string, role: UserRole): void {
     this.roomAccess.set(shortId, role);
     this.saveAccessToLocalStorage();
+  }
+
+  checkAccess(shortId: string): void {
+    if (this.hasAccess(shortId, UserRole.CREATOR)) {
+      this.assignRole(UserRole.CREATOR);
+    } else if (this.hasAccess(shortId, UserRole.EXECUTIVE_MODERATOR)) {
+      this.assignRole(UserRole.EXECUTIVE_MODERATOR);
+    } else if (this.hasAccess(shortId, UserRole.PARTICIPANT)) {
+      this.assignRole(UserRole.PARTICIPANT);
+    }
   }
 
   saveAccessToLocalStorage(): void {
