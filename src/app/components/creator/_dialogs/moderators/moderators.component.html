@@ -1,25 +1,21 @@
-<h2>{{'room-page.moderators' | translate }}</h2>
-<mat-divider></mat-divider>
-<div fxLayout="row">
+<div>
   <mat-form-field class="input-block">
     <input (focus)="eventService.makeFocusOnInputTrue()" (blur)="eventService.makeFocusOnInputFalse()"
-           matInput type="email" #loginId aria-labelledby="moderator-email"
+           matInput type="email" aria-labelledby="moderator-email" [(ngModel)]="loginId"
            [formControl]="usernameFormControl" name="username"/>
     <mat-placeholder>{{ 'room-page.moderator-email' | translate }}</mat-placeholder>
     <mat-error *ngIf="usernameFormControl.hasError('email')">
       {{ 'room-page.email-error' | translate }}
     </mat-error>
   </mat-form-field>
-  <span class="fill-remaining-space"></span>
-  <button mat-icon-button class="add" (click)="addModerator(loginId.value); loginId.value = ''"
-          aria-labelledby="add-moderator">
-    <mat-icon class="add-icon">add_circle</mat-icon>
-  </button>
-  <span class="fill-remaining-space"></span>
+  <div fxLayoutAlign="end">
+    <button mat-raised-button class="button-primary" (click)="addModerator()"
+            aria-labelledby="add-moderator">{{ 'room-page.add-moderator' | translate }}</button>
+  </div>
 </div>
 <p *ngIf="moderators.length === 0">{{ 'room-page.no-moderators' | translate }}</p>
 <div *ngIf="moderators.length > 0">
-  <div fxLayout="row" *ngFor="let moderator of moderators; index as i">
+  <div fxLayout="row" fxLayoutAlign="center center" *ngFor="let moderator of moderators; index as i">
     <p>
       {{i + 1}}. {{moderator.loginId}}
     </p>
@@ -29,10 +25,6 @@
     </button>
   </div>
 </div>
-<app-dialog-action-buttons
-  buttonsLabelSection="content"
-  [cancelButtonClickAction]="buildCloseDialogActionCallback()"
-></app-dialog-action-buttons>
 
 <div class="visually-hidden">
   <div id="moderator-email">{{'room-page.a11y-moderator-email' | translate}}</div>

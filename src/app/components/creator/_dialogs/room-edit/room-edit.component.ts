@@ -1,14 +1,14 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Room } from '../../../../models/room';
-import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { RoomDeleteComponent } from '../room-delete/room-delete.component';
 import { NotificationService } from '../../../../services/util/notification.service';
 import { TranslateService } from '@ngx-translate/core';
 import { RoomService } from '../../../../services/http/room.service';
 import { Router } from '@angular/router';
-import { RoomCreatorPageComponent } from '../../room-creator-page/room-creator-page.component';
 import { EventService } from '../../../../services/util/event.service';
 import { RoomDeleted } from '../../../../models/events/room-deleted';
+import { LanguageService } from '../../../../services/util/language.service';
 
 @Component({
   selector: 'app-room-edit',
@@ -16,19 +16,24 @@ import { RoomDeleted } from '../../../../models/events/room-deleted';
   styleUrls: ['./room-edit.component.scss']
 })
 export class RoomEditComponent implements OnInit {
-  editRoom: Room;
 
-  constructor(public dialogRef: MatDialogRef<RoomCreatorPageComponent>,
-              public dialog: MatDialog,
-              public notificationService: NotificationService,
+  @Input() editRoom: Room;
+  @Input() name: string;
+  @Input() description: string;
+
+  constructor(public notificationService: NotificationService,
               public translationService: TranslateService,
               protected roomService: RoomService,
               public router: Router,
               public eventService: EventService,
-              @Inject(MAT_DIALOG_DATA) public data: any) {
+              private dialog: MatDialog,
+              protected translateService: TranslateService,
+              protected langService: LanguageService) {
+    langService.langEmitter.subscribe(lang => translateService.use(lang));
   }
 
   ngOnInit() {
+    this.translateService.use(localStorage.getItem('currentLang'));
   }
 
   openDeleteRoomDialog(): void {
@@ -51,32 +56,17 @@ export class RoomEditComponent implements OnInit {
     this.roomService.deleteRoom(room.id).subscribe(result => {
       const event = new RoomDeleted(room.id);
       this.eventService.broadcast(event.type, event.payload);
-      this.closeDialog('delete');
       this.router.navigate([`/user`]);
     });
   }
 
-
-  /**
-   * Closes the dialog on call.
-   */
-  closeDialog(type: string): void {
-    this.dialogRef.close(type);
-  }
-
-
-  /**
-   * Returns a lambda which closes the dialog on call.
-   */
-  buildCloseDialogActionCallback(): () => void {
-    return () => this.closeDialog('abort');
-  }
-
-
-  /**
-   * Returns a lambda which executes the dialog dedicated action on call.
-   */
-  buildSaveActionCallback(): () => void {
-    return () => this.closeDialog('update');
+  saveChanges() {
+    this.roomService.updateRoom(this.editRoom)
+      .subscribe((room) => {
+        this.editRoom = room;
+        this.translateService.get('room-page.changes-successful').subscribe(msg => {
+          this.notificationService.show(msg);
+        });
+      });
   }
 }

@@ -10,8 +10,8 @@ import { ContentListComponent } from './content-list/content-list.component';
 import { StatisticComponent } from '../shared/statistic/statistic.component';
 import { ContentPresentationComponent } from './content-presentation/content-presentation.component';
 import { CommentPageComponent } from '../shared/comment-page/comment-page.component';
-import { SettingsComponent } from './settings/settings.component';
 import { CommentAnswerComponent } from '../shared/comment-answer/comment-answer.component';
+import { SettingsPageComponent } from './settings-page/settings-page.component';
 
 const routes: Routes = [
   {
@@ -22,7 +22,7 @@ const routes: Routes = [
   },
   {
     path: 'room/:shortId/settings',
-    component: SettingsComponent,
+    component: SettingsPageComponent,
     canActivate: [AuthenticationGuard],
     data: { roles: [UserRole.CREATOR] }
   },

@@ -1,6 +1,10 @@
 .delete {
   margin: 20px 0 20px 0;
-  min-width: 160px;
+  width: 180px;
+}
+
+.update {
+  transition: 500ms;
 }
 
 mat-form-field {

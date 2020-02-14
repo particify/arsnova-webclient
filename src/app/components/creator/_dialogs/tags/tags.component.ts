@@ -1,11 +1,12 @@
-import { Component, ElementRef, Inject, OnInit, ViewChild } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { Component, Input, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { NotificationService } from '../../../../services/util/notification.service';
 import { TranslateService } from '@ngx-translate/core';
-import { RoomCreatorPageComponent } from '../../room-creator-page/room-creator-page.component';
 import { LanguageService } from '../../../../services/util/language.service';
 import { EventService } from '../../../../services/util/event.service';
 import { FormControl, Validators } from '@angular/forms';
+import { Room } from '../../../../models/room';
+import { RoomService } from '../../../../services/http/room.service';
 
 @Component({
   selector: 'app-tags',
@@ -14,25 +15,28 @@ import { FormControl, Validators } from '@angular/forms';
 })
 export class TagsComponent implements OnInit {
 
-  extension: {};
+  @Input() room: Room;
 
+  extension: {};
   tags: string[];
   tagsEnabled: boolean;
+  tagName: string;
 
   tagFormControl = new FormControl('', [Validators.minLength(3), Validators.maxLength(15)]);
-  @ViewChild('tag', { static: true }) redel: ElementRef;
 
-  constructor(public dialogRef: MatDialogRef<RoomCreatorPageComponent>,
-              public dialog: MatDialog,
+  constructor(public dialog: MatDialog,
               public notificationService: NotificationService,
               public translationService: TranslateService,
               protected langService: LanguageService,
-              @Inject(MAT_DIALOG_DATA) public data: any,
-              public eventService: EventService) {
+              public eventService: EventService,
+              protected roomService: RoomService) {
     langService.langEmitter.subscribe(lang => translationService.use(lang));
   }
 
   ngOnInit() {
+    if (this.room.extensions !== undefined && this.room.extensions['tags'] !== undefined) {
+      this.extension = this.room.extensions['tags'];
+    }
     if (!this.extension) {
       this.extension = {};
       this.extension['enableTags'] = true;
@@ -48,11 +52,13 @@ export class TagsComponent implements OnInit {
     }
   }
 
-  addTag(tag: string) {
+  addTag() {
     if (this.tagFormControl.valid) {
-      this.tags.push(tag);
+      this.tags.push(this.tagName);
       this.extension['tags'] = this.tags;
-      this.redel.nativeElement.value = '';
+      this.tagName = '';
+      this.room.extensions['tags'] = this.extension;
+      this.saveChanges();
     }
   }
 
@@ -61,23 +67,13 @@ export class TagsComponent implements OnInit {
     this.extension['tags'] = this.tags;
   }
 
-  closeDialog(): void {
-    this.dialogRef.close(this.extension);
-  }
-
-
-  /**
-   * Returns a lambda which closes the dialog on call.
-   */
-  buildCloseDialogActionCallback(): () => void {
-    return () => this.dialogRef.close('abort');
-  }
-
-
-  /**
-   * Returns a lambda which executes the dialog dedicated action on call.
-   */
-  buildSaveActionCallback(): () => void {
-    return () => this.closeDialog();
+  saveChanges() {
+    this.roomService.updateRoom(this.room)
+      .subscribe((room) => {
+        this.room = room;
+        this.translationService.get('room-page.changes-successful').subscribe(msg => {
+          this.notificationService.show(msg);
+        });
+      });
   }
 }

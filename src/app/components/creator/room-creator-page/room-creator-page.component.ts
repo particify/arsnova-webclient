@@ -2,21 +2,13 @@ import { AfterContentInit, Component, OnDestroy, OnInit, Renderer2 } from '@angu
 import { RoomService } from '../../../services/http/room.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RoomPageComponent } from '../../shared/room-page/room-page.component';
-import { Room } from '../../../models/room';
-import { CommentSettingsDialog } from '../../../models/comment-settings-dialog';
 import { Location } from '@angular/common';
 import { NotificationService } from '../../../services/util/notification.service';
 import { MatDialog } from '@angular/material/dialog';
-import { RoomEditComponent } from '../_dialogs/room-edit/room-edit.component';
 import { TranslateService } from '@ngx-translate/core';
 import { LanguageService } from '../../../services/util/language.service';
-import { TSMap } from 'typescript-map';
 import { WsCommentServiceService } from '../../../services/websockets/ws-comment-service.service';
 import { CommentService } from '../../../services/http/comment.service';
-import { ModeratorsComponent } from '../_dialogs/moderators/moderators.component';
-import { BonusTokenComponent } from '../_dialogs/bonus-token/bonus-token.component';
-import { CommentSettingsComponent } from '../_dialogs/comment-settings/comment-settings.component';
-import { TagsComponent } from '../_dialogs/tags/tags.component';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { EventService } from '../../../services/util/event.service';
 import { KeyboardUtils } from '../../../utils/keyboard';
@@ -30,8 +22,6 @@ import { ContentGroup } from '../../../models/content-group';
   styleUrls: ['./room-creator-page.component.scss']
 })
 export class RoomCreatorPageComponent extends RoomPageComponent implements OnInit, OnDestroy, AfterContentInit {
-  updRoom: Room;
-  commentThreshold: number;
   deviceType = localStorage.getItem('deviceType');
   viewModuleCount = 1;
   moderatorCommentCounter: number;
@@ -127,118 +117,6 @@ export class RoomCreatorPageComponent extends RoomPageComponent implements OnIni
       }
     });
     sessionStorage.setItem('contentGroups', JSON.stringify(this.groupNames));
-  }
-
-  updateGeneralSettings() {
-    this.room.name = this.updRoom.name;
-    this.room.description = this.updRoom.description;
-    this.saveChanges();
-  }
-
-  updateCommentSettings(settings: CommentSettingsDialog) {
-    const commentExtension: TSMap<string, any> = new TSMap();
-    commentExtension.set('enableThreshold', settings.enableThreshold);
-    commentExtension.set('commentThreshold', settings.threshold);
-    commentExtension.set('enableModeration', settings.enableModeration);
-    commentExtension.set('enableTags', settings.enableTags);
-    commentExtension.set('tags', settings.tags);
-    this.room.extensions['comments'] = commentExtension;
-
-    if (this.moderationEnabled && !settings.enableModeration) {
-      this.viewModuleCount = this.viewModuleCount - 1;
-    } else if (!this.moderationEnabled && settings.enableModeration) {
-      this.viewModuleCount = this.viewModuleCount + 1;
-    }
-
-    this.moderationEnabled = settings.enableModeration;
-    localStorage.setItem('moderationEnabled', String(this.moderationEnabled));
-  }
-
-  saveChanges() {
-    this.roomService.updateRoom(this.room)
-      .subscribe((room) => {
-        this.room = room;
-        this.translateService.get('room-page.changes-successful').subscribe(msg => {
-          this.notification.show(msg);
-        });
-      });
-  }
-
-  showSettingsDialog(): void {
-    this.updRoom = JSON.parse(JSON.stringify(this.room));
-    const dialogRef = this.dialog.open(RoomEditComponent, {
-      width: '400px'
-    });
-    dialogRef.componentInstance.editRoom = this.updRoom;
-    dialogRef.afterClosed()
-      .subscribe(result => {
-        if (result === 'abort') {
-          return;
-        } else if (result !== 'delete') {
-          this.updateGeneralSettings();
-        }
-      });
-    dialogRef.backdropClick().subscribe(res => {
-      dialogRef.close('abort');
-    });
-  }
-
-  showCommentsDialog(): void {
-    this.updRoom = JSON.parse(JSON.stringify(this.room));
-
-    const dialogRef = this.dialog.open(CommentSettingsComponent, {
-      width: '400px'
-    });
-    dialogRef.componentInstance.roomId = this.room.id;
-    dialogRef.componentInstance.editRoom = this.updRoom;
-    dialogRef.afterClosed()
-      .subscribe(result => {
-        if (result === 'abort') {
-          return;
-        } else {
-          if (result instanceof CommentSettingsDialog) {
-            this.updateCommentSettings(result);
-            this.saveChanges();
-          }
-        }
-      });
-    dialogRef.backdropClick().subscribe(res => {
-      dialogRef.close('abort');
-    });
-  }
-
-  showModeratorsDialog(): void {
-    const dialogRef = this.dialog.open(ModeratorsComponent, {
-      width: '400px'
-    });
-    dialogRef.componentInstance.roomId = this.room.id;
-  }
-
-  showBonusTokenDialog(): void {
-    const dialogRef = this.dialog.open(BonusTokenComponent, {
-      width: '400px'
-    });
-    dialogRef.componentInstance.room = this.room;
-  }
-
-  showTagsDialog(): void {
-    const dialogRef = this.dialog.open(TagsComponent, {
-      width: '400px'
-    });
-    let tagExtension;
-    if (this.room.extensions !== undefined && this.room.extensions['tags'] !== undefined) {
-      tagExtension = this.room.extensions['tags'];
-    }
-    dialogRef.componentInstance.extension = tagExtension;
-    dialogRef.afterClosed()
-      .subscribe(result => {
-        if (result === 'abort') {
-          return;
-        } else {
-          this.room.extensions['tags'] = result;
-          this.saveChanges();
-        }
-      });
   }
 
   copyShortId(): void {

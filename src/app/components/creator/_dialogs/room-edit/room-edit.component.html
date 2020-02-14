@@ -1,20 +1,18 @@
-<div mat-dialog-content *ngIf="editRoom">
-  <h2>{{ 'room-page.general' | translate }}</h2>
-  <mat-divider></mat-divider>
+<div *ngIf="editRoom">
   <div fxLayout="column">
     <mat-form-field class="input-block">
       <input (focus)="eventService.makeFocusOnInputTrue()" (blur)="eventService.makeFocusOnInputFalse()"
-             [(ngModel)]="editRoom.name" matInput
+             [(ngModel)]="name" matInput
              name="room-name" maxlength="20" aria-labelledby="room-name"/>
       <mat-placeholder>{{ 'session.session-name' | translate }}</mat-placeholder>
-      <mat-hint align="end"><span aria-hidden="true">{{ editRoom.name.length }} / 20</span></mat-hint>
+      <mat-hint align="end"><span aria-hidden="true">{{ name.length }} / 20</span></mat-hint>
     </mat-form-field>
     <mat-tab-group>
       <mat-tab label="{{'room-page.description' | translate}}">
         <mat-form-field class="input-block">
       <textarea
         (focus)="eventService.makeFocusOnInputTrue()" (blur)="eventService.makeFocusOnInputFalse()"
-        [(ngModel)]="editRoom.description"
+        [(ngModel)]="description"
         matInput
         matTextareaAutosize
         matAutosizeMinRows="2"
@@ -25,28 +23,24 @@
       ></textarea>
           <mat-hint align="end">
             <span aria-hidden="true">
-              {{ editRoom.description ? editRoom.description.length : 0 }} / 250
+              {{ description ? description.length : 0 }} / 250
             </span>
           </mat-hint>
         </mat-form-field>
       </mat-tab>
-      <mat-tab label="{{'session.preview' | translate}}" [disabled]="!editRoom.description">
-        <markdown [data]="editRoom.description"></markdown>
+      <mat-tab label="{{'session.preview' | translate}}" [disabled]="!description">
+        <markdown [data]="description"></markdown>
       </mat-tab>
     </mat-tab-group>
-    <div fxLayoutAlign="center center">
-      <button mat-raised-button class="delete button-warn" (click)="openDeleteRoomDialog()"
-              aria-labelledby="delete-room">
-        <mat-icon>delete</mat-icon>
-        {{ 'room-page.delete-room' | translate }}</button>
-    </div>
+    <button mat-raised-button class="delete button-warn" (click)="openDeleteRoomDialog()" aria-labelledby="delete-room">
+      <mat-icon>delete</mat-icon>
+      {{ 'room-page.delete-room' | translate }}
+    </button>
   </div>
-  <app-dialog-action-buttons
-    buttonsLabelSection="room-page"
-    confirmButtonLabel="update"
-    [cancelButtonClickAction]="buildCloseDialogActionCallback()"
-    [confirmButtonClickAction]="buildSaveActionCallback()"
-  ></app-dialog-action-buttons>
+  <div fxLayoutAlign="end">
+    <button mat-raised-button [disabled]="description === editRoom.description && name === editRoom.name"
+            class="button-primary update" (click)="saveChanges()">{{ 'room-page.update' | translate }}</button>
+  </div>
 </div>
 
 <div class="visually-hidden">

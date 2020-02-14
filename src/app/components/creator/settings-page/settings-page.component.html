@@ -1,0 +1,6 @@
+<div *ngIf="room">
+  <div *ngFor="let settings of settingsComponents">
+    <app-settings [headerName]="settings.headerName" [componentName]="settings.componentName" [room]="room">
+    </app-settings>
+  </div>
+</div>

@@ -20,32 +20,7 @@
           </mat-card-subtitle>
         </mat-card-header>
         <span class="fill-remaining-space"></span>
-        <mat-menu #settingsMenu="matMenu" [overlapTrigger]="false" xPosition="before">
-          <button mat-menu-item (click)="showSettingsDialog()" aria-labelledby="edit">
-            <mat-icon>edit</mat-icon>
-            {{ 'room-page.general' | translate}}
-          </button>
-          <button mat-menu-item (click)="showCommentsDialog()" aria-labelledby="insert_comment">
-            <mat-icon>insert_comment</mat-icon>
-            {{ 'room-page.comments' | translate}}
-          </button>
-          <button mat-menu-item (click)="showModeratorsDialog()" aria-labelledby="person">
-            <mat-icon>gavel</mat-icon>
-            {{ 'room-page.moderators' | translate}}
-          </button>
-          <button mat-menu-item (click)="showBonusTokenDialog()" aria-labelledby="person">
-            <mat-icon>grade</mat-icon>
-            {{ 'room-page.bonus-token' | translate}}
-          </button>
-          <button mat-menu-item (click)="showTagsDialog()" aria-labelledby="person">
-            <mat-icon svgIcon="comment_tag"></mat-icon>
-            {{ 'room-page.tags' | translate}}
-          </button>
-        </mat-menu>
         <div fxLayout="column">
-          <button mat-icon-button class="corner-icons" [matMenuTriggerFor]="settingsMenu" aria-labelledby="settings">
-            <mat-icon class="corner-icon" matTooltip="{{ 'room-page.session-settings' | translate}}">settings</mat-icon>
-          </button>
           <button mat-icon-button class="corner-icons" aria-labelledby="settings" routerLink="settings">
             <mat-icon class="corner-icon" matTooltip="{{ 'room-page.session-settings' | translate}}">settings</mat-icon>
           </button>

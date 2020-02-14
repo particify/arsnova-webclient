@@ -1,14 +1,12 @@
-import { Component, Inject, OnInit } from '@angular/core';
-import { Room } from '../../../models/room';
-import { MatDialog } from '@angular/material';
+import { Component, Input, OnInit } from '@angular/core';
 import { NotificationService } from '../../../services/util/notification.service';
 import { TranslateService } from '@ngx-translate/core';
 import { RoomService } from '../../../services/http/room.service';
 import { Router } from '@angular/router';
 import { EventService } from '../../../services/util/event.service';
-import { RoomDeleteComponent } from '../_dialogs/room-delete/room-delete.component';
-import { RoomDeleted } from '../../../models/events/room-deleted';
 import { LanguageService } from '../../../services/util/language.service';
+import { MatDialog } from '@angular/material/dialog';
+import { Room } from '../../../models/room';
 
 @Component({
   selector: 'app-settings',
@@ -17,7 +15,11 @@ import { LanguageService } from '../../../services/util/language.service';
 })
 export class SettingsComponent implements OnInit {
 
-  editRoom: Room;
+  @Input() componentName: string;
+  @Input() headerName: string;
+  @Input() room: Room;
+
+  expanded = true;
 
   constructor(public dialog: MatDialog,
               public notificationService: NotificationService,
@@ -31,37 +33,5 @@ export class SettingsComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.translateService.use(localStorage.getItem('currentLang'));
-    const shortId = localStorage.getItem('shortId');
-    this.roomService.getRoomByShortId(shortId).subscribe(room => {
-      this.editRoom = room;
-    });
   }
-
-  openDeleteRoomDialog(): void {
-    const dialogRef = this.dialog.open(RoomDeleteComponent, {
-      width: '400px'
-    });
-    dialogRef.componentInstance.room = this.editRoom;
-    dialogRef.afterClosed()
-      .subscribe(result => {
-        if (result === 'delete') {
-          this.deleteRoom(this.editRoom);
-        }
-      });
-  }
-
-  deleteRoom(room: Room): void {
-    this.translationService.get('room-page.deleted').subscribe(msg => {
-      this.notificationService.show(room.name + msg);
-    });
-    this.roomService.deleteRoom(room.id).subscribe(result => {
-      const event = new RoomDeleted(room.id);
-      this.eventService.broadcast(event.type, event.payload);
-      this.router.navigate([`/user`]);
-    });
-  }
-
-
-
 }

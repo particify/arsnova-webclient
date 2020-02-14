@@ -33,6 +33,7 @@ import { MarkdownModule } from 'ngx-markdown';
 import { ContentGroupCreationComponent } from './_dialogs/content-group-creation/content-group-creation.component';
 import { DeleteAnswerComponent } from './_dialogs/delete-answer/delete-answer.component';
 import { SettingsComponent } from './settings/settings.component';
+import { SettingsPageComponent } from './settings-page/settings-page.component';
 
 @NgModule({
   imports: [
@@ -74,11 +75,11 @@ import { SettingsComponent } from './settings/settings.component';
     BonusDeleteComponent,
     ContentGroupCreationComponent,
     DeleteAnswerComponent,
-    SettingsComponent
+    SettingsComponent,
+    SettingsPageComponent
   ],
   entryComponents: [
     RoomDeleteComponent,
-    RoomEditComponent,
     AnswerEditComponent,
     ContentDeleteComponent,
     ContentChoiceCreatorComponent,
@@ -87,11 +88,7 @@ import { SettingsComponent } from './settings/settings.component';
     ContentYesNoCreatorComponent,
     ContentEditComponent,
     CommentExportComponent,
-    ModeratorsComponent,
-    BonusTokenComponent,
-    CommentSettingsComponent,
     ModeratorDeleteComponent,
-    TagsComponent,
     DeleteCommentsComponent,
     DeleteCommentComponent,
     BonusDeleteComponent,
