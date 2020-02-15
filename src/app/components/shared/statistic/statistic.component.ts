@@ -33,8 +33,7 @@ export class StatisticComponent implements OnInit {
   answerList: AnswerList[] = [];
   data: number[] = [];
   contentId: string;
-  subject: string;
-  maxLength: number;
+  body: string;
   isLoading = true;
   showsCorrect = false;
   survey = false;
@@ -47,9 +46,8 @@ export class StatisticComponent implements OnInit {
   }
 
   ngOnInit() {
-    window.scroll(0, 0); // Maybe not so bad without header..
+    window.scroll(0, 0);
     this.translateService.use(localStorage.getItem('currentLang'));
-    this.maxLength = innerWidth / 12;
     this.route.params.subscribe(params => {
       this.contentId = params['contentId'];
     });
@@ -110,17 +108,13 @@ export class StatisticComponent implements OnInit {
   }
 
   getData(content: ContentChoice) {
-    this.subject = content.subject;
+    this.body = content.body;
     const length = content.options.length;
     for (let i = 0; i < length; i++) {
       this.answerList[i] = new AnswerList(null, null);
       this.labels[i] = this.label.charAt(i);
       this.answerList[i].label = this.labels[i];
-      if (content.options[i].label.length > this.maxLength) {
-        this.answerList[i].answer = content.options[i].label.substr(0, this.maxLength) + '..';
-      } else {
-        this.answerList[i].answer = content.options[i].label;
-      }
+      this.answerList[i].answer = content.options[i].label;
       if (i % 2 === 0) {
         this.colors[i] = '#7986cb';
       } else {
