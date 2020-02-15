@@ -24,8 +24,8 @@ export class ContentTextCreatorComponent implements OnInit {
     '0',
     '',
     '',
-    1,
     [],
+    null
   );
 
   editDialogMode = false;
@@ -60,8 +60,8 @@ export class ContentTextCreatorComponent implements OnInit {
       this.roomId,
       this.contentSub,
       this.contentBod,
-      1,
       [],
+      null
     )).subscribe(content => {
       if (this.contentCol !== '') {
         this.roomService.addContentToGroup(this.roomId, this.contentCol, content.id).subscribe();

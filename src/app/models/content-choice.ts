@@ -1,6 +1,7 @@
 import { AnswerOption } from './answer-option';
 import { Content } from './content';
 import { ContentType } from './content-type.enum';
+import { ContentState } from './content-state';
 
 export class ContentChoice extends Content {
   options: AnswerOption[];
@@ -12,21 +13,21 @@ export class ContentChoice extends Content {
               roomId: string,
               subject: string,
               body: string,
-              round: number,
               groups: string[],
               options: AnswerOption[],
               correctOptionIndexes: number[],
               multiple: boolean,
-              format: ContentType) {
+              format: ContentType,
+              state: ContentState) {
     super(id,
       revision,
       roomId,
       subject,
       body,
-      round,
       groups,
       format,
-      new Map());
+      new Map(),
+      state);
     this.options = options;
     this.correctOptionIndexes = correctOptionIndexes;
     this.multiple = multiple;

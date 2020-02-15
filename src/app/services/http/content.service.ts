@@ -6,6 +6,7 @@ import { catchError, tap } from 'rxjs/operators';
 import { BaseHttpService } from './base-http.service';
 import { AnswerStatistics } from '../../models/answer-statistics';
 import { ContentChoice } from '../../models/content-choice';
+import { TSMap } from 'typescript-map';
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -72,6 +73,22 @@ export class ContentService extends BaseHttpService {
       tap(_ => ''),
       catchError(this.handleError<any>('updateContent'))
     );
+  }
+
+  patchContent(content: Content, changes: TSMap<string, any>): Observable<Content> {
+    const connectionUrl = this.apiUrl.base + this.apiUrl.content + '/' + content.id;
+    return this.http.patch(connectionUrl, changes, httpOptions).pipe(
+      tap(_ => ''),
+      catchError(this.handleError<any>('patchContent'))
+    );
+  }
+
+  changeLock(content: Content, setLock: boolean): Observable<Content> {
+    content.state.visible = setLock;
+    const changes = new TSMap<string, any>();
+    changes.set('state', content.state);
+    return this.patchContent(content, changes).pipe();
+    // return content;
   }
 
   updateChoiceContent(updatedContent: ContentChoice): Observable<ContentChoice> {

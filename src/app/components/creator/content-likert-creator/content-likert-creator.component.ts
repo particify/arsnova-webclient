@@ -34,12 +34,12 @@ export class ContentLikertCreatorComponent implements OnInit {
     '',
     '',
     '',
-    1,
     [],
     [],
     [],
     false,
-    ContentType.SCALE
+    ContentType.SCALE,
+    null
   );
 
   displayedColumns = ['label'];
@@ -94,12 +94,12 @@ export class ContentLikertCreatorComponent implements OnInit {
       this.roomId,
       this.contentSub,
       this.contentBod,
-      1,
       [],
       this.content.options,
       this.content.correctOptionIndexes,
       this.content.multiple,
-      ContentType.SCALE
+      ContentType.SCALE,
+      null
     )).subscribe(content => {
       if (this.contentCol !== '') {
         this.roomService.addContentToGroup(this.roomId, this.contentCol, content.id).subscribe();

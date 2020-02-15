@@ -40,12 +40,12 @@ export class ContentChoiceCreatorComponent implements OnInit {
     '',
     '',
     '',
-    1,
     [],
     [],
     [],
     true,
-    ContentType.CHOICE
+    ContentType.CHOICE,
+    null
   );
 
   displayedColumns = ['label', 'actions'];
@@ -263,12 +263,12 @@ export class ContentChoiceCreatorComponent implements OnInit {
       this.roomId,
       this.contentSub,
       this.contentBod,
-      1,
       [],
       this.content.options,
       this.content.correctOptionIndexes,
       this.content.multiple,
-      ContentType.CHOICE
+      ContentType.CHOICE,
+      null
     )).subscribe(content => {
       if (this.contentCol !== '') {
         this.roomService.addContentToGroup(this.roomId, this.contentCol, content.id).subscribe();

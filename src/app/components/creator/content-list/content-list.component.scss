@@ -37,11 +37,11 @@ mat-expansion-panel-header {
   width: 75%;
   height: 75%;
   margin: 5px;
-  transition: all 0.5s;
+  transition: all 150ms;
   color: var(--primary) !important;
 
   &:hover {
-    transform: scale(1.25)
+    transform: scale(1.1)
   }
 }
 
@@ -86,4 +86,25 @@ mat-progress-spinner {
 
 .inactiveInput {
   width: 0;
+}
+
+.lock {
+  margin: 0 10px;
+}
+
+.lock-text {
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.lock-icon {
+  transition: 1s;
+}
+
+.locked {
+  color: var(--primary);
+}
+
+.unlocked {
+  color: var(--on-surface);
 }

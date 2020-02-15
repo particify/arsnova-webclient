@@ -142,7 +142,7 @@ export class ContentChoiceParticipantComponent implements OnInit {
       id: null,
       revision: null,
       contentId: this.content.id,
-      round: 1,
+      round: this.content.state.round,
       selectedChoiceIndexes: selectedAnswers,
       creationTimestamp: null,
       format: ContentType.CHOICE
@@ -161,7 +161,7 @@ export class ContentChoiceParticipantComponent implements OnInit {
       id: null,
       revision: null,
       contentId: this.content.id,
-      round: 1,
+      round: this.content.state.round,
       selectedChoiceIndexes: [],
       creationTimestamp: null,
       format: ContentType.CHOICE

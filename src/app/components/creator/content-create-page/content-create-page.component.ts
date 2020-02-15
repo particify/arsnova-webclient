@@ -22,8 +22,8 @@ export class ContentCreatePageComponent implements OnInit {
     '0',
     '',
     '',
-    1,
     [],
+    null
   );
 
   myControl = new FormControl();

@@ -45,6 +45,7 @@ export class ContentListComponent implements OnInit {
   allowEditing = false;
   contentGroups: string[] = [];
   currentGroupIndex: number;
+  locked = false;
 
   constructor(private contentService: ContentService,
               private roomService: RoomService,
@@ -75,6 +76,9 @@ export class ContentListComponent implements OnInit {
         this.contentService.getContentsByIds(this.contentGroup.contentIds).subscribe(contents => {
           this.contents = contents;
           for (let i = 0; i < this.contents.length; i++) {
+            if (!contents[i].state.visible) {
+              this.locked = true;
+            }
             if (this.contents[i].subject.length > this.labelMaxLength) {
               this.labels[i] = this.contents[i].subject.substr(0, this.labelMaxLength) + '..';
             } else {
@@ -118,12 +122,12 @@ export class ContentListComponent implements OnInit {
       content.roomId,
       content.subject,
       content.body,
-      content.round,
       content.groups,
       content.options,
       content.correctOptionIndexes,
       content.multiple,
-      content.format
+      content.format,
+      content.state
     );
   }
 
@@ -134,8 +138,8 @@ export class ContentListComponent implements OnInit {
       content.roomId,
       content.subject,
       content.body,
-      content.round,
       [],
+      content.state
     );
   }
 
@@ -182,6 +186,7 @@ export class ContentListComponent implements OnInit {
           this.contents.splice(index, 1);
           this.labels.splice(index, 1);
           if (this.contents.length === 0) {
+            sessionStorage.setItem('lastGroup', JSON.stringify(this.contentGroups[0]));
             this.location.back();
           }
           break;
@@ -260,5 +265,21 @@ export class ContentListComponent implements OnInit {
         this.addToContentGroup(contentId, result, true);
       }
     });
+  }
+
+  lockContents() {
+    for (const content of this.contents) {
+      this.lockContent(content, this.locked);
+    }
+  }
+
+  lockContent(content: Content, locked?: boolean) {
+    let lockState: boolean;
+    if (locked !== undefined) {
+      lockState = !locked;
+    } else {
+      lockState = !content.state.visible;
+    }
+    this.contentService.changeLock(content, lockState).subscribe(updatedContent => content = updatedContent);
   }
 }

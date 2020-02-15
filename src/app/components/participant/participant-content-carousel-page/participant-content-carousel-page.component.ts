@@ -3,6 +3,7 @@ import { ContentType } from '../../../models/content-type.enum';
 import { ContentService } from '../../../services/http/content.service';
 import { Content } from '../../../models/content';
 import { ContentGroup } from '../../../models/content-group';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-participant-content-carousel-page',
@@ -12,18 +13,24 @@ import { ContentGroup } from '../../../models/content-group';
 export class ParticipantContentCarouselPageComponent implements OnInit {
   ContentType: typeof ContentType = ContentType;
 
-  contents: Content[];
+  contents: Content[] = [];
   contentGroup: ContentGroup;
   isLoading = true;
   alreadySent = new Map<number, boolean>();
 
-  constructor(private contentService: ContentService) {
+  constructor(private contentService: ContentService,
+              protected translateService: TranslateService) {
   }
 
   ngOnInit() {
+    this.translateService.use(localStorage.getItem('currentLang'));
     this.contentGroup = JSON.parse(sessionStorage.getItem('lastGroup'));
     this.contentService.getContentsByIds(this.contentGroup.contentIds).subscribe(contents => {
-      this.contents = contents;
+      for (const content of contents) {
+        if (content.state.visible) {
+          this.contents.push(content);
+        }
+      }
       this.isLoading = false;
     });
   }
