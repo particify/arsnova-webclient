@@ -52,10 +52,10 @@ export class StepperComponent extends CdkStepper {
     this.headerAnimationState = 'init';
   }
 
-  moveHeaderRight() {
-    if (this.headerPos > 0 && this.nextIndex < this.listLength - 3) {
-      if (((Math.abs(this.nextIndex - this.selectedIndex) > 1 && (this.selectedIndex < this.listLength - 2)) ||
-        ((this.selectedIndex >= this.listLength - 3) && (this.nextIndex === this.listLength - 5))) && (this.headerPos > 1)) {
+  moveHeaderRight(clicked?: boolean) {
+    if (this.headerPos > 0 && ((this.nextIndex < this.listLength - 3) || clicked)) {
+      if (Math.abs(this.nextIndex - this.selectedIndex) > 1 && (Math.abs(this.headerPos - this.nextIndex) < 1)
+        && (this.headerPos > 1)) {
         this.headerPos -= 2;
       } else {
         this.headerPos--;
@@ -64,10 +64,10 @@ export class StepperComponent extends CdkStepper {
     }
   }
 
-  moveHeaderLeft() {
-    if (this.headerPos  < this.listLength - 5 && this.nextIndex > 2) {
-      if (((Math.abs(this.nextIndex - this.selectedIndex) > 1 && (this.selectedIndex > 1)) ||
-        (this.selectedIndex <= 1 && (this.nextIndex === 4))) && (this.headerPos < this.listLength - 6)) {
+  moveHeaderLeft(clicked?: boolean) {
+    if (this.headerPos  < this.listLength - 5 && (this.nextIndex > 2 || clicked)) {
+      if ((Math.abs(this.nextIndex - this.selectedIndex) > 1) && (Math.abs(this.headerPos - this.nextIndex) > 3)
+        && (this.headerPos < this.listLength - 6)) {
         this.headerPos += 2;
       } else {
         this.headerPos++;
@@ -83,14 +83,18 @@ export class StepperComponent extends CdkStepper {
         return;
       case 'next-2':
         this.containerAnimationState = 'current';
-        this.moveHeaderLeft();
+        if (this.nextIndex > this.headerPos + 2) {
+          this.moveHeaderLeft();
+        }
         break;
       case 'prev':
         this.containerAnimationState = 'prev-2';
         return;
       case 'prev-2':
         this.containerAnimationState = 'current';
-        this.moveHeaderRight();
+        if (this.nextIndex < this.headerPos + 2) {
+          this.moveHeaderRight();
+        }
         break;
     }
     this.selectedIndex = this.nextIndex;

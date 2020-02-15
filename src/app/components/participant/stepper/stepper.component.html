@@ -1,11 +1,24 @@
-<div class="stepper-container">
-  <div class="stepper-navigation-bar" [@slideHeader]="{value: headerAnimationState,
-   params: { position: headerPos * -20 }}" (@slideHeader.done)="headerAnimationDone()">
-    <span class="fill-remaining-space"></span>
-    <div matRipple class="step-ripple" *ngFor="let step of steps; let i = index;" (click)="onClick(i)">
-      <button class="step" [ngClass]="{'active': selectedIndex === i, 'sent': alreadySent.get(i)}">{{i + 1}}</button>
+<div class="container">
+  <div fxLayout="row">
+    <button mat-icon-button *ngIf="listLength > 5" disableRipple [disabled]="headerPos < 1"
+            (click)="moveHeaderRight(true)">
+      <mat-icon class="arrow" [ngClass]="{'disabled': headerPos < 1}">keyboard_arrow_left</mat-icon>
+    </button>
+    <div [ngClass]="{'container': listLength <= 5, 'stepper-container': listLength > 5}">
+      <div class="stepper-navigation-bar" [@slideHeader]="{value: headerAnimationState,
+          params: { position: headerPos * -20 }}" (@slideHeader.done)="headerAnimationDone()">
+        <span class="fill-remaining-space"></span>
+        <div class="step-container" *ngFor="let step of steps; let i = index;" (click)="onClick(i)">
+          <button class="step"
+                  [ngClass]="{'active': selectedIndex === i, 'sent': alreadySent.get(i)}">{{i + 1}}</button>
+        </div>
+        <span class="fill-remaining-space"></span>
+      </div>
     </div>
-    <span class="fill-remaining-space"></span>
+    <button mat-icon-button *ngIf="listLength > 5" disableRipple [disabled]="headerPos >= listLength"
+            (click)="moveHeaderLeft(true)">
+      <mat-icon class="arrow" [ngClass]="{'disabled': headerPos >= listLength-5}">keyboard_arrow_right</mat-icon>
+    </button>
   </div>
   <div [@slideContainer]="containerAnimationState" (@slideContainer.done)="containerAnimationDone()">
     <ng-container [ngTemplateOutlet]="selected.content"></ng-container>
