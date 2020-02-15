@@ -38,6 +38,8 @@ export class StepperComponent extends CdkStepper {
   containerAnimationState = 'current';
   headerAnimationState = 'init';
   nextIndex = 0;
+  swipeXLocation?: number;
+  swipeTime?: number;
 
   @HostListener('window:keyup', ['$event'])
   keyEvent(event: KeyboardEvent) {
@@ -45,6 +47,25 @@ export class StepperComponent extends CdkStepper {
       this.previous();
     } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.RIGHT) === true) {
       this.next();
+    }
+  }
+
+  swipe(event: TouchEvent, when: string): void {
+    const xPos = event.changedTouches[0].clientX;
+    const time = new Date().getTime();
+    if (when === 'start') {
+      this.swipeXLocation = xPos;
+      this.swipeTime = time;
+    } else if (when === 'end') {
+      const duration = time - this.swipeTime;
+      if (duration < 1000 && Math.abs(this.swipeXLocation - xPos) > 30) {
+        const direction = this.swipeXLocation > xPos ? 'next' : 'previous';
+        if (direction === 'next') {
+          this.next();
+        } else {
+          this.previous();
+        }
+      }
     }
   }
 

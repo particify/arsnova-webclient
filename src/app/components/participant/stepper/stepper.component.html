@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container" (touchstart)="swipe($event, 'start')" (touchend)="swipe($event, 'end')">
   <div fxLayout="row">
     <button mat-icon-button *ngIf="listLength > 5" disableRipple [disabled]="headerPos < 1"
             (click)="moveHeaderRight(true)">
