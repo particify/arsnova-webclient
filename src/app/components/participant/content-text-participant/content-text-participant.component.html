@@ -9,7 +9,6 @@
 </form>
 <div *ngIf="givenAnswer && givenAnswer.body">
   <p class="answer">{{givenAnswer.body}}</p>
-  <mat-divider></mat-divider>
 </div>
 <div class="invisible" [ngClass]="{'visible' : givenAnswer}">
   <p class="text">{{sentMessage}}</p>
