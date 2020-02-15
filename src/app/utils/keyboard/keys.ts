@@ -37,7 +37,9 @@ export enum KeyboardKey {
   Digit8,
   Digit9,
   Escape,
-  Backspace
+  Backspace,
+  LEFT,
+  RIGHT,
 }
 
 // Setup all application available keyboard keys here
@@ -55,3 +57,5 @@ KEYBOARD_KEYS.set(KeyboardKey.Digit9, { key: ['9'], keyCode: 57 });
 KEYBOARD_KEYS.set(KeyboardKey.Backspace, { key: ['Backspace'], keyCode: 8 });
 // older versions of IE have a slightly different ESCAPE Key definition implemented
 KEYBOARD_KEYS.set(KeyboardKey.Escape, { key: ['Escape', 'Esc'], keyCode: 27 });
+KEYBOARD_KEYS.set(KeyboardKey.LEFT, { key: ['ArrowLeft'], keyCode: 37 });
+KEYBOARD_KEYS.set(KeyboardKey.RIGHT, { key: ['ArrowRight'], keyCode: 39  });

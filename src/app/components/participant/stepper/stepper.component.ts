@@ -1,6 +1,8 @@
-import { Component, Input } from '@angular/core';
+import { Component, HostListener, Input } from '@angular/core';
 import { CdkStepper } from '@angular/cdk/stepper';
 import { animate, state, style, transition, trigger } from '@angular/animations';
+import { KeyboardKey } from '../../../utils/keyboard/keys';
+import { KeyboardUtils } from '../../../utils/keyboard';
 
 @Component({
   selector: 'app-stepper',
@@ -36,6 +38,27 @@ export class StepperComponent extends CdkStepper {
   containerAnimationState = 'current';
   headerAnimationState = 'init';
   nextIndex = 0;
+
+  @HostListener('window:keyup', ['$event'])
+  keyEvent(event: KeyboardEvent) {
+    if (KeyboardUtils.isKeyEvent(event, KeyboardKey.LEFT) === true) {
+      this.previous();
+    } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.RIGHT) === true) {
+      this.next();
+    }
+  }
+
+  next(): void {
+    if (this.selectedIndex < this.listLength - 1) {
+      this.onClick(this.selectedIndex + 1);
+    }
+  }
+
+  previous(): void {
+    if (this.selectedIndex > 0) {
+      this.onClick(this.selectedIndex - 1);
+    }
+  }
 
   onClick(index: number) {
     if (index > this.selectedIndex) {

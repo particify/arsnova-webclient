@@ -67,6 +67,7 @@ export class ContentChoiceParticipantComponent implements OnInit {
       }
       this.sendStatusToParent();
       this.isLoading = false;
+      document.getElementById('answerForm').focus();
     });
     this.translateService.use(localStorage.getItem('currentLang'));
   }

@@ -1,7 +1,6 @@
 <h2 class="mat-headline">{{ content.body }}</h2>
 
-<form (ngSubmit)="submitAnswer()">
-  <mat-divider></mat-divider>
+<form (ngSubmit)="submitAnswer()" id="answerForm">
   <mat-list *ngIf="content.format === ContentType.CHOICE && !isLoading">
     <mat-list-item *ngFor="let answer of checkedAnswers" [ngClass]="{'disabled': alreadySent}">
       <mat-checkbox *ngIf="alreadySent" [checked]="answer.checked" name="answer">
@@ -21,7 +20,7 @@
   <mat-radio-group *ngIf="content.format !== ContentType.CHOICE" [(ngModel)]="selectedSingleAnswer" name="Radio">
     <mat-list *ngIf="!isLoading">
       <mat-list-item *ngFor="let answer of checkedAnswers" [ngClass]="{'disabled': alreadySent}">
-        <mat-radio-button color="primary" [checked]="answer.checked" [value]="answer.answerOption.label" name="answer">
+        <mat-radio-button [checked]="answer.checked" [value]="answer.answerOption.label" name="answer">
           {{ answer.answerOption.label }}
         </mat-radio-button>
       </mat-list-item>
