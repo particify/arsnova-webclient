@@ -9,11 +9,11 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
   providers: [{ provide: CdkStepper, useExisting: StepperComponent }],
   animations: [
     trigger('slideContainer', [
-      state('next', style({ opacity: 0, transform: 'translateX(50%)' })),
-      state('next-2', style({ opacity: 0, transform: 'translateX(-50%)' })),
+      state('next', style({ opacity: 0, transform: 'translateX(-50%)' })),
+      state('next-2', style({ opacity: 0, transform: 'translateX(50%)' })),
       state('current', style({ opacity: 1, transform: 'translateX(0)' })),
-      state('prev', style({ opacity: 0, transform: 'translateX(-50%)' })),
-      state('prev-2', style({ opacity: 0, transform: 'translateX(50%)' })),
+      state('prev', style({ opacity: 0, transform: 'translateX(50%)' })),
+      state('prev-2', style({ opacity: 0, transform: 'translateX(-50%)' })),
       transition('current => *', animate('150ms ease-in')),
       transition('* => current', animate('150ms ease-out')),
     ]),
