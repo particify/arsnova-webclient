@@ -1,5 +1,4 @@
 <h2 class="mat-headline">{{ content.body }}</h2>
-<mat-divider></mat-divider>
 <form *ngIf="!givenAnswer">
   <mat-form-field class="input-block">
     <textarea matInput (focus)="eventService.makeFocusOnInputTrue()" (blur)="eventService.makeFocusOnInputFalse()"
@@ -9,7 +8,6 @@
 </form>
 <div *ngIf="givenAnswer && givenAnswer.body">
   <p class="answer">{{givenAnswer.body}}</p>
-  <mat-divider></mat-divider>
 </div>
 <div class="invisible" [ngClass]="{'visible' : givenAnswer}">
   <p class="text">{{sentMessage}}</p>

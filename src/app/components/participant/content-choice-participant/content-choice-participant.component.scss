@@ -3,7 +3,7 @@ h2 {
 }
 
 .buttons {
-  margin-top: 20px;
+  margin: 20px 0;
 }
 
 .disabled {
@@ -54,6 +54,6 @@ p {
 
 .visible {
   top: 50%;
-  transition: 0.6s;
+  transition: 0.5s;
   transform: scale(1);
 }

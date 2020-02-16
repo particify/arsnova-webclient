@@ -1,6 +1,12 @@
-.stepper-container {
+.container {
   width: calc(100vw - 30px);
   max-width: 800px;
+  overflow: hidden;
+}
+
+.stepper-container {
+  width: calc(100vw - calc(70px + 6%));
+  max-width: calc(760px + 6%);
   overflow: hidden;
 }
 
@@ -10,13 +16,14 @@
   margin-top: 10px;
 }
 
-.step-ripple {
+.step-container {
   min-width: 50px;
   height: 50px;
   background-color: var(--background);
   cursor: pointer;
   margin: 0 calc(calc(100% - 250px) / 10);
   border-radius: 50%;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .step {
@@ -38,12 +45,23 @@
   background-color: var(--secondary);
 }
 
-.position-absolute {
-  position: absolute;
-}
-
 .sent {
   background-color: var(--surface);
   color: var(--on-surface);
+  transition: 1000ms;
+}
+
+.mat-icon-button {
+  margin-top: 10px;
+  align-self: center;
+  width: calc(20px + 3%);
+}
+
+.arrow {
   transition: 500ms;
+  color: var(--primary);
+}
+
+.disabled {
+  opacity: 0.4;
 }
