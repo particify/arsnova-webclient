@@ -29,7 +29,7 @@ export class HomePageComponent implements OnInit, OnDestroy, AfterContentInit {
 
   ngOnInit() {
     this.deviceType = localStorage.getItem('deviceType');
-    this.listenerFn = this._r.listen(document, 'keydown', (event) => {
+    this.listenerFn = this._r.listen(document, 'keyup', (event) => {
       if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit1) === true && this.eventService.focusOnInput === false) {
         document.getElementById('session_id-input').focus();
       } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit3) === true && this.eventService.focusOnInput === false) {
