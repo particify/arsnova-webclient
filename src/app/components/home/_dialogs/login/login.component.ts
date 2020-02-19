@@ -32,6 +32,7 @@ export class LoginComponent implements OnInit, OnChanges {
   password: string;
   isStandard = true;
   allowGuest = false;
+  allowDbLogin = false;
 
   usernameFormControl = new FormControl('', [Validators.required, Validators.email]);
   passwordFormControl = new FormControl('', [Validators.required]);
@@ -53,6 +54,9 @@ export class LoginComponent implements OnInit, OnChanges {
   ngOnInit() {
     if (this.apiConfigService.getAuthProviders().some(provider => provider.type === AuthenticationProviderType.ANONYMOUS)) {
       this.allowGuest = true;
+    }
+    if (this.apiConfigService.getAuthProviders().some(provider => provider.type === AuthenticationProviderType.USERNAME_PASSWORD)) {
+      this.allowDbLogin = true;
     }
   }
 
