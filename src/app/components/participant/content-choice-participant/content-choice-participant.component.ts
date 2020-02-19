@@ -83,7 +83,7 @@ export class ContentChoiceParticipantComponent implements OnInit {
   }
 
   getCorrectAnswer() {
-    if (!(this.content.format === ContentType.SCALE)) {
+    if (this.content.format === ContentType.CHOICE && this.content.multiple) {
       for (const i in this.content.options) {
         if (this.content.options[i].points > 0) {
           this.correctOptionIndexes.push(Number(i));
@@ -113,7 +113,7 @@ export class ContentChoiceParticipantComponent implements OnInit {
 
   submitAnswer(): void {
     const selectedAnswers: number[] = [];
-    if (this.content.format === ContentType.CHOICE) {
+    if (this.content.multiple) {
       for (let i = 0; i < this.checkedAnswers.length; i++) {
         if (this.checkedAnswers[i].checked) {
           selectedAnswers.push(i);
@@ -128,7 +128,7 @@ export class ContentChoiceParticipantComponent implements OnInit {
       }
     }
     if (selectedAnswers.length === 0) {
-      if (this.content.format === ContentType.CHOICE) {
+      if (this.content.multiple) {
         this.translateService.get('answer.at-least-one').subscribe(message => {
           this.notificationService.show(message);
         });
