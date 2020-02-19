@@ -1,7 +1,6 @@
 {
   "index": "/index.html",
-  "dataGroups":
-  [
+  "dataGroups": [
     {
       "name": "api",
       "urls": ["/api/**"],
@@ -11,43 +10,32 @@
         "timeout": "3s",
         "maxAge": "7d"
       }
-    },
-    {
-      "name": "static",
-      "urls": [
-        "!/**/*api*/**"
-      ],
-      "cacheConfig": {
-        "strategy": "performance",
-        "maxSize": 500,
-        "timeout": "3s",
-        "maxAge": "30d"
-      }
     }
   ],
   "assetGroups": [
     {
       "name": "app",
-      "installMode": "lazy",
-      "updateMode": "lazy",
+      "installMode": "prefetch",
+      "updateMode": "prefetch",
       "resources": {
         "files": [
           "/favicon.ico",
           "/*.html",
-          "/*.scss",
-          "/*.ts"
-        ],
-        "urls": [
-          "https://fonts.googleapis.com/**"
+          "/*.css",
+          "/*.js"
         ]
       }
-    }, {
+    },
+    {
       "name": "assets",
       "installMode": "lazy",
       "updateMode": "prefetch",
       "resources": {
         "files": [
           "/assets/**"
+        ],
+        "urls": [
+          "https://fonts.googleapis.com/**"
         ]
       }
     }
