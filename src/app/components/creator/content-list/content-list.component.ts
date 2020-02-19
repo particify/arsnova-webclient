@@ -45,7 +45,8 @@ export class ContentListComponent implements OnInit {
   allowEditing = false;
   contentGroups: string[] = [];
   currentGroupIndex: number;
-  locked = false;
+  unlocked = false;
+  directAnswer = false;
 
   constructor(private contentService: ContentService,
               private roomService: RoomService,
@@ -76,8 +77,11 @@ export class ContentListComponent implements OnInit {
         this.contentService.getContentsByIds(this.contentGroup.contentIds).subscribe(contents => {
           this.contents = contents;
           for (let i = 0; i < this.contents.length; i++) {
-            if (!contents[i].state.visible) {
-              this.locked = true;
+            if (contents[i].state.visible) {
+              this.unlocked = true;
+            }
+            if (contents[i].state.responsesVisible) {
+              this.directAnswer = true;
             }
             if (this.contents[i].subject.length > this.labelMaxLength) {
               this.labels[i] = this.contents[i].subject.substr(0, this.labelMaxLength) + '..';
@@ -269,17 +273,31 @@ export class ContentListComponent implements OnInit {
 
   lockContents() {
     for (const content of this.contents) {
-      this.lockContent(content, this.locked);
+      this.lockContent(content, this.unlocked);
     }
   }
 
-  lockContent(content: Content, locked?: boolean) {
-    let lockState: boolean;
-    if (locked !== undefined) {
-      lockState = !locked;
+  lockContent(content: Content, unlocked?: boolean) {
+    if (unlocked !== undefined) {
+      content.state.visible = unlocked;
     } else {
-      lockState = !content.state.visible;
+      content.state.visible = !content.state.visible;
     }
-    this.contentService.changeLock(content, lockState).subscribe(updatedContent => content = updatedContent);
+    this.contentService.changeState(content).subscribe(updatedContent => content = updatedContent);
+  }
+
+  toggleDirectAnswer(content: Content, directAnswer?: boolean) {
+    if (directAnswer !== undefined) {
+      content.state.responsesVisible = directAnswer;
+    } else {
+      content.state.responsesVisible = !content.state.responsesVisible;
+    }
+    this.contentService.changeState(content).subscribe(updatedContent => content = updatedContent);
+  }
+
+  toggleDirectAnswers() {
+    for (const content of this.contents) {
+      this.toggleDirectAnswer(content, this.directAnswer);
+    }
   }
 }

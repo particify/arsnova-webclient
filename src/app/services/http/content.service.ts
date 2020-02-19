@@ -83,12 +83,10 @@ export class ContentService extends BaseHttpService {
     );
   }
 
-  changeLock(content: Content, setLock: boolean): Observable<Content> {
-    content.state.visible = setLock;
+  changeState(content: Content): Observable<Content> {
     const changes = new TSMap<string, any>();
     changes.set('state', content.state);
     return this.patchContent(content, changes).pipe();
-    // return content;
   }
 
   updateChoiceContent(updatedContent: ContentChoice): Observable<ContentChoice> {
