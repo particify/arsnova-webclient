@@ -1,6 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { RoomCreatorPageComponent } from '../../room-creator-page/room-creator-page.component';
+import { MatDialog } from '@angular/material/dialog';
 import { NotificationService } from '../../../../services/util/notification.service';
 import { TranslateService } from '@ngx-translate/core';
 import { RoomService } from '../../../../services/http/room.service';
@@ -27,7 +26,7 @@ export class CommentSettingsComponent implements OnInit {
 
   comments: CommentBonusTokenMixin[];
   commentExtension: any;
-  threshold = -100;
+  threshold: number;
   enableThreshold = false;
   enableModeration = false;
   directSend = true;
@@ -51,11 +50,8 @@ export class CommentSettingsComponent implements OnInit {
     if (this.editRoom.extensions && this.editRoom.extensions['comments']) {
       this.commentExtension = this.editRoom.extensions['comments'];
       if (this.commentExtension.enableThreshold !== null) {
-        if (this.commentExtension.commentThreshold) {
-          this.threshold = this.commentExtension.commentThreshold;
-        } else {
-          this.threshold = -100;
-        }
+        this.commentExtension.commentThreshold !== undefined ?
+          this.threshold = this.commentExtension.commentThreshold : this.threshold = -100;
         this.enableThreshold = this.commentExtension.enableThreshold;
       }
 

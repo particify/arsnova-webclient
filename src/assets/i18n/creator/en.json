@@ -191,15 +191,13 @@
     "no-empty-name": "Please enter a name."
   },
   "room-page": {
-    "a11y-cloud_download": "Copy link to session to the clipboard",
-    "a11y-edit": "Opens a window with options, rename session, add description and delete session",
+    "a11y-copy-session-id": "Copy link to session to the clipboard",
     "a11y-gavel": "Opens all questions selected by the moderator",
     "a11y-insert_comment": "Opens a window to manage questions",
     "a11y-person": "Opens a window to add moderators",
     "a11y-question_answer": "Opens all questions asked about the session",
-    "a11y-settings": "Opens a window with options to manage sessions, manage questions, and add moderators.",
+    "a11y-settings": "Navigates to a a view with options to manage session, manage questions, and add moderators.",
     "answer-statistics": "Statistics",
-    "copy-session-id": "Copy link to session to the clipboard",
     "create-content": "Create content",
     "default-content-group": "Default",
     "live-announcer": "You're in the session now. To get information about key combinations press the Enter key or call the announcement later with the Escape key.",

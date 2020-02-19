@@ -12,10 +12,10 @@ import { LanguageService } from '../../../../services/util/language.service';
 
 @Component({
   selector: 'app-room-edit',
-  templateUrl: './room-edit.component.html',
-  styleUrls: ['./room-edit.component.scss']
+  templateUrl: './room.component.html',
+  styleUrls: ['./room.component.scss']
 })
-export class RoomEditComponent implements OnInit {
+export class RoomComponent implements OnInit {
 
   @Input() editRoom: Room;
   @Input() name: string;
@@ -61,6 +61,8 @@ export class RoomEditComponent implements OnInit {
   }
 
   saveChanges() {
+    this.editRoom.name = this.name;
+    this.editRoom.description = this.description;
     this.roomService.updateRoom(this.editRoom)
       .subscribe((room) => {
         this.editRoom = room;

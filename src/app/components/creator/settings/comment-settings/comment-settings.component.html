@@ -13,13 +13,13 @@
   </div>
   <div fxLayout="column">
     <div fxLayout="row">
-      <p>{{ 'settings.settings-comment-moderation' | translate}}&nbsp;
+      <p>{{ 'settings.comment-moderation' | translate}}&nbsp;
         <mat-slide-toggle [(ngModel)]="enableModeration"
                           aria-labelledby="settings-comment-moderation"></mat-slide-toggle>
       </p>
     </div>
     <div fxLayout="row" *ngIf="enableModeration">
-      <p>{{ 'settings.settings-direct-send' | translate}}&nbsp;
+      <p>{{ 'settings.direct-send' | translate}}&nbsp;
         <mat-slide-toggle [(ngModel)]="directSend" aria-labelledby="settings-direct-send"></mat-slide-toggle>
       </p>
     </div>
@@ -37,9 +37,8 @@
   </div>
   <div fxLayoutAlign="end">
     <button mat-raised-button [disabled]="enableThreshold === commentExtension.enableThreshold &&
-                                          enableModeration === commentExtension.enableModeration &&
-                                          directSend === directSendDefault &&
-                                          threshold === commentExtension.commentThreshold"
+    enableModeration === commentExtension.enableModeration && directSend === directSendDefault &&
+    (commentExtension.commentThreshold === threshold || commentExtension.commentThreshold === undefined)"
             class="button-primary update"(click)="updateCommentSettings()">{{ 'settings.update' | translate }}</button>
   </div>
 </div>
