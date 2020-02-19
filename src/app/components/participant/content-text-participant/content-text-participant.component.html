@@ -9,7 +9,7 @@
 <div *ngIf="givenAnswer && givenAnswer.body">
   <p class="answer">{{givenAnswer.body}}</p>
 </div>
-<div class="invisible" [ngClass]="{'visible' : givenAnswer}">
+<div *ngIf="content.state.responsesVisible" class="invisible" [ngClass]="{'visible' : givenAnswer}">
   <p class="text">{{sentMessage}}</p>
 </div>
 <div fxLayoutAlign="center" fxLayoutGap="20px" class="buttons">

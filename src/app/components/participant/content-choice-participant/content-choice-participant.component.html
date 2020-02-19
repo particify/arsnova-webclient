@@ -10,7 +10,8 @@
         {{ answer.answerOption.label }}
       </mat-checkbox>
     </mat-list-item>
-    <div *ngIf="!hasAbstained" class="solution invisible" [ngClass]="{'visible' : alreadySent}">
+    <div *ngIf="!hasAbstained && content.state.responsesVisible" class="solution invisible"
+         [ngClass]="{'visible' : alreadySent}">
       <mat-icon [ngClass]="isCorrect ? 'correct' : 'wrong'">{{isCorrect ? 'check' : 'close'}}</mat-icon>
     </div>
     <div *ngIf="hasAbstained" class="text invisible" [ngClass]="{'visible' : alreadySent}">
@@ -24,15 +25,16 @@
           {{ answer.answerOption.label }}
         </mat-radio-button>
       </mat-list-item>
-      <div *ngIf="content.format === ContentType.BINARY && !hasAbstained" class="solution invisible"
-           [ngClass]="{'visible' : alreadySent}">
+      <div *ngIf="content.format === ContentType.BINARY && !hasAbstained && content.state.responsesVisible"
+           class="solution invisible" [ngClass]="{'visible' : alreadySent}">
         <mat-icon [ngClass]="isCorrect ? 'correct' : 'wrong'">{{isCorrect ? 'check' : 'close'}}</mat-icon>
       </div>
-      <div *ngIf="hasAbstained" class="text invisible" [ngClass]="{'visible' : alreadySent}">
+      <div *ngIf="hasAbstained" class="text invisible"
+           [ngClass]="{'visible' : alreadySent}">
         <p>{{'answer.has-abstained' | translate}}</p>
       </div>
-      <div *ngIf="content.format === ContentType.SCALE && !hasAbstained" class="text invisible"
-           [ngClass]="{'visible' : alreadySent}">
+      <div *ngIf="content.format === ContentType.SCALE && !hasAbstained && content.state.responsesVisible"
+           class="text invisible" [ngClass]="{'visible' : alreadySent}">
         <p>{{'answer.has-voted' | translate}}</p>
       </div>
     </mat-list>
