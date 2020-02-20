@@ -16,6 +16,8 @@ import { KeyboardKey } from '../../../utils/keyboard/keys';
 import { UserBonusTokenComponent } from '../_dialogs/user-bonus-token/user-bonus-token.component';
 import { RemindOfTokensComponent } from '../_dialogs/remind-of-tokens/remind-of-tokens.component';
 import { BonusTokenService } from '../../../services/http/bonus-token.service';
+import { QrCodeComponent } from '../_dialogs/qr-code/qr-code.component';
+import { Theme } from '../../../../theme/Theme';
 
 @Component({
   selector: 'app-header',
@@ -213,20 +215,15 @@ export class HeaderComponent implements OnInit {
 
   /*QR*/
 
-  public getQRCode(): string {
+  public getURL(): string {
     return `${window.location.protocol}//${window.location.hostname}/participant/room/${this.shortId}`;
   }
 
   public showQRDialog() {
-    // document.body.requestFullscreen();
-    // const dialogRef = this.dialog.open(QrCodeDialogComponent, {
-    //   panelClass: 'screenDialog'
-    // });
-    // const qrDialog: QrCodeDialogComponent = dialogRef.componentInstance;
-    // qrDialog.setQRCode(this.getQRCode());
-    // dialogRef.afterClosed().subscribe(res => {
-    //   document.exitFullscreen();
-    // });
+    const dialogRef = this.dialog.open(QrCodeComponent, {
+      panelClass: 'screenDialog'
+    });
+    dialogRef.componentInstance.data = this.getURL();
   }
 
 }

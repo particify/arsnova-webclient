@@ -32,6 +32,8 @@ import { ArsModule } from '../../../../projects/ars/src/lib/ars.module';
 import { CommentAnswerComponent } from './comment-answer/comment-answer.component';
 import { MarkdownModule } from 'ngx-markdown';
 import { RemoveFromHistoryComponent } from './_dialogs/remove-from-history/remove-from-history.component';
+import { QrCodeComponent } from './_dialogs/qr-code/qr-code.component';
+import { QRCodeModule } from 'angularx-qrcode';
 
 @NgModule({
   imports: [
@@ -41,7 +43,8 @@ import { RemoveFromHistoryComponent } from './_dialogs/remove-from-history/remov
     SharedRoutingModule,
     MatRippleModule,
     ArsModule,
-    MarkdownModule
+    MarkdownModule,
+    QRCodeModule
   ],
   declarations: [
     RoomJoinComponent,
@@ -69,7 +72,8 @@ import { RemoveFromHistoryComponent } from './_dialogs/remove-from-history/remov
     DeleteAccountComponent,
     DialogActionButtonsComponent,
     CommentAnswerComponent,
-    RemoveFromHistoryComponent
+    RemoveFromHistoryComponent,
+    QrCodeComponent
   ],
   exports: [
     RoomJoinComponent,
@@ -99,7 +103,8 @@ import { RemoveFromHistoryComponent } from './_dialogs/remove-from-history/remov
     DeleteAccountComponent,
     UserBonusTokenComponent,
     RemindOfTokensComponent,
-    RemoveFromHistoryComponent
+    RemoveFromHistoryComponent,
+    QrCodeComponent
   ]
 })
 export class SharedModule {

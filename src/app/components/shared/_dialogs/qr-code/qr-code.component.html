@@ -1,0 +1,6 @@
+<div fxLayoutAlign="center center" class="qr-container">
+  <button class="exitButton" mat-raised-button (click)="onCloseClick()">
+    <mat-icon>close</mat-icon>
+  </button>
+  <qrcode [qrdata]="data" [width]="qrWidth" [errorCorrectionLevel]="'M'"></qrcode>
+</div>
