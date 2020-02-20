@@ -32,6 +32,8 @@ import { ArsModule } from '../../../../projects/ars/src/lib/ars.module';
 import { CommentAnswerComponent } from './comment-answer/comment-answer.component';
 import { MarkdownModule } from 'ngx-markdown';
 import { RemoveFromHistoryComponent } from './_dialogs/remove-from-history/remove-from-history.component';
+import { StatisticTextComponent } from './statistic-text/statistic-text.component';
+import { StatisticChoiceComponent } from './statistic-choice/statistic-choice.component';
 import { QrCodeComponent } from './_dialogs/qr-code/qr-code.component';
 import { QRCodeModule } from 'angularx-qrcode';
 
@@ -73,7 +75,9 @@ import { QRCodeModule } from 'angularx-qrcode';
     DialogActionButtonsComponent,
     CommentAnswerComponent,
     RemoveFromHistoryComponent,
-    QrCodeComponent
+    QrCodeComponent,
+    StatisticChoiceComponent,
+    StatisticTextComponent
   ],
   exports: [
     RoomJoinComponent,

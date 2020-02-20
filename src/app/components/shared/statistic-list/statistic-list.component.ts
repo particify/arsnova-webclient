@@ -139,7 +139,8 @@ export class StatisticListComponent implements OnInit {
           this.dataSource[i].abstentions = count;
           this.dataSource[i].counts = answers.length - count;
           this.dataSource[i].percent = this.status.text;
-        });
+          this.dataSource[i].contentId = this.contents[i].id;
+          });
       }
     }
     this.isLoading = false;

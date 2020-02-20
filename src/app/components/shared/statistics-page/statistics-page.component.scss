@@ -8,13 +8,8 @@ mat-tab-group {
   max-width: 800px;
 }
 
-.mat-icon-button {
-  width: 30px;
-  height: 30px;
-  color: var(--on-surface);
-}
-
 mat-icon {
+  color: var(--on-surface);
   font-size: 30px;
   height: 30px;
   width: 30px;
