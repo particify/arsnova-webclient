@@ -94,15 +94,12 @@ export class LoginComponent implements OnInit, OnChanges {
       }
     }).afterClosed().subscribe(result => {
       if (result && result.success) {
-        this.login(this.username, this.password);
+        this.login();
       }
     });
   }
 
-  login(username: string, password: string): void {
-    this.username = username.trim();
-    this.password = password.trim();
-
+  login(): void {
     if (!this.usernameFormControl.hasError('required') && !this.usernameFormControl.hasError('email') &&
       !this.passwordFormControl.hasError('required')) {
       this.authenticationService.login(this.username, this.password, this.role).subscribe(loginSuccessful => {
@@ -166,13 +163,5 @@ export class LoginComponent implements OnInit, OnChanges {
    */
   buildCloseDialogActionCallback(): () => void {
     return () => this.dialog.closeAll();
-  }
-
-
-  /**
-   * Returns a lambda which executes the dialog dedicated action on call.
-   */
-  buildLoginActionCallback(userEmail: HTMLInputElement, userPassword: HTMLInputElement): () => void {
-    return () => this.login(userEmail.value, userPassword.value);
   }
 }
