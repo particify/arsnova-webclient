@@ -35,6 +35,7 @@
           "/assets/**"
         ],
         "urls": [
+          "/*MaterialIcons*",
           "https://fonts.googleapis.com/**"
         ]
       }
