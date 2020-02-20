@@ -40,8 +40,9 @@
     <mat-cell *matCellDef="let cp; let i = index" [ngClass]="{
       'cell-a' : i % 2 === 0,
       'cell-b' : i % 2 != 0,
-      'invisible' : cp.counts <= 0}"
-              (click)="goToStats(cp.contentId)">{{cp.percent >= status.zero ? cp.percent.toFixed() + ' %' : cp.percent === status.likert ? '-' : ''}}</mat-cell>
+      'invisible' : cp.counts <= 0 && cp.counts !== status.text}"
+              (click)="goToStats(cp.contentId)">{{cp.percent >= status.zero ? cp.percent.toFixed() + ' %' :
+              cp.percent === status.likert ? '-' : cp.percent === status.text ? 'T' : ''}}</mat-cell>
   </ng-container>
 
   <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
