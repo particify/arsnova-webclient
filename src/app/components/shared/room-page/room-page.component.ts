@@ -94,6 +94,7 @@ export class RoomPageComponent implements OnInit, OnDestroy {
       });
       this.afterRoomLoadHook();
     });
+    localStorage.setItem('shortId', shortId);
   }
 
   initializeStats() {

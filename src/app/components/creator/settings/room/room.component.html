@@ -38,7 +38,8 @@
     </button>
   </div>
   <div fxLayoutAlign="end">
-    <button mat-raised-button [disabled]="description === editRoom.description && name === editRoom.name"
+    <button mat-raised-button [disabled]="name === editRoom.name &&
+    (description === editRoom.description || description === '' && editRoom.description === undefined)"
             class="button-primary update" (click)="saveChanges()">{{ 'settings.update' | translate }}</button>
   </div>
 </div>

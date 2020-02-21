@@ -15,7 +15,7 @@
             </span>
             <button mat-icon-button class="copy-btn" *ngIf="deviceType === 'desktop'" (click)="copyShortId()"
                     aria-labelledby="cloud_download">
-              <mat-icon class="copy" matTooltip="{{ 'room-page.copy-session-id' | translate}}">save_alt</mat-icon>
+              <mat-icon class="copy" matTooltip="{{ 'room-page.a11y-copy-session-id' | translate}}">save_alt</mat-icon>
             </button>
           </mat-card-subtitle>
         </mat-card-header>
@@ -97,11 +97,10 @@
 </div>
 
 <div class="visually-hidden">
-  <div id="cloud_download">{{'room-page.a11y-cloud_download' | translate}}</div>
+  <div id="copy_session_id">{{'room-page.a11y-copy-session-id' | translate}}</div>
   <div id="question_answer">{{'room-page.a11y-question_answer' | translate}}</div>
   <div id="gavel">{{'room-page.a11y-gavel' | translate}}</div>
   <div id="settings">{{'room-page.a11y-settings' | translate}}</div>
-  <div id="edit">{{'room-page.a11y-edit' | translate}}</div>
   <div id="insert_comment">{{'room-page.a11y-insert_comment' | translate}}</div>
   <div id="person">{{'room-page.a11y-person' | translate}}</div>
 </div>
