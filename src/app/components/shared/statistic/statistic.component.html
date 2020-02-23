@@ -3,7 +3,7 @@
     <mat-card>
       <mat-card-header *ngIf="!isLoading">
         <mat-card-title>
-          <h4>{{content.body}}</h4>
+          <h3>{{content.body}}</h3>
         </mat-card-title>
         <span class="fill-remaining-space"></span>
         <button mat-icon-button disableRipple *ngIf="correctAnswers" (click)="switchAnswers()">

@@ -38,7 +38,7 @@ export class ContentService extends BaseHttpService {
     const connectionUrl = this.apiUrl.base + this.apiUrl.content + '/' + id;
     return this.http.get<Content>(connectionUrl).pipe(
       tap(() => ''),
-      catchError(this.handleError<Content>('getRoom by id: ' + id))
+      catchError(this.handleError<Content>('getContent by id: ' + id))
     );
   }
 
