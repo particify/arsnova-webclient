@@ -40,7 +40,8 @@
     </mat-list>
   </mat-radio-group>
   <div fxLayoutAlign="center" fxLayoutGap="20px" class="buttons">
-    <button mat-raised-button class="button-secondary" [ngClass]="{'disabled' : alreadySent}" (click)="abstain($event)">
+    <button mat-raised-button *ngIf="content.abstentionsAllowed" class="button-secondary"
+            [ngClass]="{'disabled' : alreadySent}" (click)="abstain($event)">
       {{ 'answer.abstain' | translate }}</button>
     <button mat-raised-button class="button-primary" [ngClass]="{'disabled' : alreadySent}" type="submit">
       {{ 'answer.submit' | translate }}</button>

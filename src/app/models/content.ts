@@ -10,6 +10,7 @@ export class Content {
   groups: string[];
   format: ContentType;
   formatAttributes: Map<string, string>;
+  abstentionsAllowed: boolean;
   state: ContentState;
 
   constructor(id: string,
