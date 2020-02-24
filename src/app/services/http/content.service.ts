@@ -34,6 +34,14 @@ export class ContentService extends BaseHttpService {
     );
   }
 
+  getContent(id: string): Observable<Content> {
+    const connectionUrl = this.apiUrl.base + this.apiUrl.content + '/' + id;
+    return this.http.get<Content>(connectionUrl).pipe(
+      tap(() => ''),
+      catchError(this.handleError<Content>('getContent by id: ' + id))
+    );
+  }
+
   getChoiceContent(id: string): Observable<ContentChoice> {
     const connectionUrl = this.apiUrl.base + this.apiUrl.content + '/' + id;
     return this.http.get<ContentChoice>(connectionUrl).pipe(

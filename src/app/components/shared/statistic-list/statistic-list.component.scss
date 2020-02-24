@@ -40,13 +40,7 @@ mat-toolbar {
   background-color: var(--surface);
 }
 
-.cell-a {
-  background-color: var(--table-a);
-  cursor: pointer;
-}
-
-.cell-b {
-  background-color: var(--table-b);
+.clickable {
   cursor: pointer;
 }
 
@@ -65,5 +59,9 @@ mat-progress-bar {
 }
 
 mat-row {
+  background-color: var(--table-a);
   border-style: none;
+  &:nth-child(even) {
+    background-color: var(--table-b);
+  }
 }

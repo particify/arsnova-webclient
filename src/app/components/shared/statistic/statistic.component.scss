@@ -2,24 +2,9 @@ mat-card {
   width: 100%;
 }
 
-mat-toolbar {
-  height: 15px;
-  background-color: var(--surface);
-}
-
-.mat-icon-button {
-  width: 30px;
-  height: 30px;
-  color: var(--on-surface);
-}
-
 mat-icon {
+  color: var(--on-surface);
   font-size: 30px;
   height: 30px;
   width: 30px;
-}
-
-mat-list-item {
-  color: var(--on-surface);
-  margin-bottom: 10px;
 }

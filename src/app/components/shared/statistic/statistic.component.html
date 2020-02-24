@@ -1,30 +1,18 @@
-<div fxLayout="column" fxLayoutAlign="center" fxLayoutGap="20px" fxFill>
+<div fxLayout="column" fxLayoutAlign="start" fxLayoutGap="20px" fxFill>
   <div fxLayout="row" fxLayoutAlign="center">
     <mat-card>
-      <mat-card-header>
+      <mat-card-header *ngIf="!isLoading">
         <mat-card-title>
-          <h4>{{body}}</h4>
+          <h3>{{content.body}}</h3>
         </mat-card-title>
         <span class="fill-remaining-space"></span>
-        <button mat-icon-button *ngIf="!survey" (click)="switchAnswers()">
+        <button mat-icon-button disableRipple *ngIf="correctAnswers" (click)="switchAnswers()">
           <mat-icon>info</mat-icon>
         </button>
       </mat-card-header>
-      <mat-divider></mat-divider>
-      <mat-toolbar></mat-toolbar>
-      <div>
-        <div style="position: relative; height: 60vh">
-          <div *ngIf="isLoading" fxLayout="column" fxLayoutAlign="center" fxLayoutGap="20px" fxFill>
-            <div fxLayout="row" fxLayoutAlign="center">
-              <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
-            </div>
-          </div>
-          <canvas id="chart"></canvas>
-        </div>
-      </div>
-      <mat-list role="list">
-        <mat-list-item role="listitem" *ngFor="let a of answerList">{{a.label}} : {{a.answer}}</mat-list-item>
-      </mat-list>
+      <app-statistic-choice *ngIf="!isLoading && content.format !== 'TEXT'" [content]="content"
+                            [survey]="!correctAnswers"></app-statistic-choice>
+      <app-statistic-text *ngIf="!isLoading && content.format === 'TEXT'" [content]="content"></app-statistic-text>
     </mat-card>
   </div>
 </div>

@@ -11,6 +11,7 @@ import { LanguageService } from '../../../services/util/language.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthenticationService } from '../../../services/http/authentication.service';
 import { UserRole } from '../../../models/user-roles.enum';
+import { ContentAnswerService } from '../../../services/http/content-answer.service';
 
 export class ContentStatistic {
   content: Content;
@@ -37,14 +38,15 @@ export class ContentStatistic {
 export class StatisticListComponent implements OnInit {
 
   @Input() contentGroup: ContentGroup;
-  contents: ContentChoice[] = [];
+  contents: Content[] = [];
   displayedColumns: string[] = [];
   status = {
     good: 85,
     okay: 50,
     zero: 0,
     likert: -1,
-    empty: -2
+    empty: -2,
+    text: -3
   };
   dataSource: ContentStatistic[];
   total = this.status.empty;
@@ -56,6 +58,7 @@ export class StatisticListComponent implements OnInit {
   isLoading = true;
 
   constructor(private contentService: ContentService,
+              private contentAnswerService: ContentAnswerService,
               private translateService: TranslateService,
               private router: Router,
               protected langService: LanguageService,
@@ -94,7 +97,7 @@ export class StatisticListComponent implements OnInit {
   }
 
   getData(contents: Content[]) {
-    this.filterContents(contents);
+    this.contents = contents;
     const length = this.contents.length;
     let percent;
     this.dataSource = new Array<ContentStatistic>(length);
@@ -105,11 +108,11 @@ export class StatisticListComponent implements OnInit {
         || this.contents[i].format === ContentType.SCALE) {
         this.contentService.getAnswer(this.contents[i].id).subscribe(answer => {
           if (this.contents[i].format === ContentType.CHOICE) {
-            percent = this.evaluateMultiple(this.contents[i].options, answer.roundStatistics[0].combinatedCounts);
+            percent = this.evaluateMultiple((this.contents[i] as ContentChoice).options, answer.roundStatistics[0].combinatedCounts);
             this.dataSource[i].counts = this.getMultipleCounts(answer.roundStatistics[0].combinatedCounts);
           } else {
             if (this.contents[i].format === ContentType.BINARY) {
-              percent = this.evaluateSingle(this.contents[i].options, answer.roundStatistics[0].independentCounts);
+              percent = this.evaluateSingle((this.contents[i] as ContentChoice).options, answer.roundStatistics[0].independentCounts);
             } else {
               percent = this.status.likert;
             }
@@ -126,16 +129,21 @@ export class StatisticListComponent implements OnInit {
           }
         });
       } else {
-        this.dataSource[i].percent = this.status.empty;
+          this.contentAnswerService.getAnswers(this.contents[i].id).subscribe(answers => {
+          let count = 0;
+          for (const answer of answers) {
+            if (answer.body === undefined) {
+              count++;
+            }
+          }
+          this.dataSource[i].abstentions = count;
+          this.dataSource[i].counts = answers.length - count;
+          this.dataSource[i].percent = this.status.text;
+          this.dataSource[i].contentId = this.contents[i].id;
+          });
       }
     }
     this.isLoading = false;
-  }
-
-  filterContents(contents: Content[]) {
-    this.contents = contents.filter(c => {
-      return c.format !== ContentType.TEXT;
-    }) as ContentChoice[];
   }
 
   getSingleCounts(answers: number[]): number {
