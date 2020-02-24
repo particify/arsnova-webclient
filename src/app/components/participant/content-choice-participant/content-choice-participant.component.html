@@ -25,7 +25,7 @@
           {{ answer.answerOption.label }}
         </mat-radio-button>
       </mat-list-item>
-      <div *ngIf="!content.multiple && !hasAbstained && content.state.responsesVisible"
+      <div *ngIf="content.format !== ContentType.SCALE && !hasAbstained && content.state.responsesVisible"
            class="solution invisible" [ngClass]="{'visible' : alreadySent}">
         <mat-icon [ngClass]="isCorrect ? 'correct' : 'wrong'">{{isCorrect ? 'check' : 'close'}}</mat-icon>
       </div>
