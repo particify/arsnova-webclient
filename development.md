@@ -7,7 +7,7 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 Clone the repository and setup git.
 You also need the arsnova-backend running in version 3+ (`master` branch).
 
-Install all dependencies with `npm install`.
+Install all dependencies with `yarn`.
 
 ## CI Pipeline
 
@@ -16,7 +16,7 @@ You can check your code locally with: `node_modules/tslint/bin/tslint -p ./tscon
 
 ## Development server
 
-Run `npm start` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+Run `yarn start` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
 
 ## Code scaffolding
 

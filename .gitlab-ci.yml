@@ -14,7 +14,7 @@ default:
   before_script:
     - export PATH="`pwd`/node_modules/.bin:$PATH"
     - date
-    - npm i
+    - yarn
     - date
   after_script:
     - chmod -Rf a+rwX node_modules
@@ -30,7 +30,7 @@ tslint:
   allow_failure: false
   dependencies: []
   script:
-    - node_modules/tslint/bin/tslint -p ./tsconfig.json -c ./tslint.json --project
+    - tslint -p ./tsconfig.json -c ./tslint.json --project
 
 unit_tests:
   stage: test
@@ -40,14 +40,14 @@ unit_tests:
   variables:
     CHROME_BIN: /usr/bin/google-chrome
   script:
-    - npm test
+    - ng test --watch=false --browsers=ChromeHeadlessCustom
 
 ngbuild:
   stage: build
   allow_failure: false
   dependencies: []
   script:
-    - ng build --prod --aot
+    - ng build --prod
   artifacts:
     paths:
       - "$BUILD_DIR"
