@@ -1,6 +1,6 @@
 variables:
   BUILD_DIR: dist
-  NODE_VERSION: "12.13"
+  NODE_VERSION: "12.16"
   YARN_CACHE_FOLDER: .yarn-cache
 
 stages:
@@ -66,7 +66,7 @@ unit_tests:
   stage: test
   needs:
     - yarn_install
-  image: registry.gitlab.com/arsnova/devops/docker/nodejs_chrome:201912052125
+  image: registry.gitlab.com/arsnova/devops/docker/nodejs_chrome:202003071658
   allow_failure: false
   variables:
     CHROME_BIN: /usr/bin/google-chrome
