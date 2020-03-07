@@ -1,12 +1,12 @@
 variables:
   BUILD_DIR: dist
-  NODE_VERSION: "12.13"
+  NODE_VERSION: "12.16"
+  YARN_CACHE_FOLDER: .yarn-cache
 
 stages:
-  - codestyle
-  - test
+  - prepare
   - build
-  - review
+  - test
   - deploy
 
 default:
@@ -14,46 +14,80 @@ default:
   before_script:
     - export PATH="`pwd`/node_modules/.bin:$PATH"
     - date
-    - npm i
-    - date
   after_script:
-    - chmod -Rf a+rwX node_modules
     - date
 
-cache:
-  key: ${CI_COMMIT_REF_SLUG}
+.yarn_cache: &yarn_cache
+  key: yarn-cache
   paths:
-    - node_modules/
+    - node_modules
+    - $YARN_CACHE_FOLDER
+
+yarn_populate_cache:
+  stage: prepare
+  rules:
+    - if: '$CI_COMMIT_BRANCH != "master" || $CI_MERGE_REQUEST_ID'
+      when: never
+    - changes:
+        - package.json
+        - yarn.lock
+      when: always
+    - when: manual
+  cache:
+    <<: *yarn_cache
+    policy: pull-push
+  script:
+    - echo Populating cache...
+    - umask 0000
+    - yarn --frozen-lockfile
+
+yarn_install:
+  stage: prepare
+  artifacts:
+    expire_in: 12 hours
+    paths:
+      - node_modules
+  cache:
+    <<: *yarn_cache
+    policy: pull
+  script:
+    - umask 0000
+    - yarn --frozen-lockfile
 
 tslint:
-  stage: codestyle
+  stage: test
+  needs:
+    - yarn_install
   allow_failure: false
-  dependencies: []
   script:
-    - node_modules/tslint/bin/tslint -p ./tsconfig.json -c ./tslint.json --project
+    - tslint -p ./tsconfig.json -c ./tslint.json --project
 
 unit_tests:
   stage: test
-  image: registry.gitlab.com/arsnova/devops/docker/nodejs_chrome:201912052125
+  needs:
+    - yarn_install
+  image: registry.gitlab.com/arsnova/devops/docker/nodejs_chrome:202003071658
   allow_failure: false
-  dependencies: []
   variables:
     CHROME_BIN: /usr/bin/google-chrome
   script:
-    - npm test
+    - ng test --watch=false --browsers=ChromeHeadlessCustom
 
 ngbuild:
   stage: build
+  needs:
+    - yarn_install
   allow_failure: false
-  dependencies: []
-  script:
-    - ng build --prod --aot
   artifacts:
     paths:
       - "$BUILD_DIR"
+  script:
+    - ng build --prod
 
 .docker_image: &docker_image
   stage: deploy
+  dependencies:
+    - ngbuild
   image:
     name: gcr.io/kaniko-project/executor:debug
     entrypoint: [""]
@@ -68,8 +102,6 @@ ngbuild:
     KANIKO_CONTEXT: $CI_PROJECT_DIR
     KANIKO_DOCKERFILE: $CI_PROJECT_DIR/docker/Dockerfile
     KANIKO_DESTINATION: $CI_REGISTRY/$CI_PROJECT_PATH:$CI_COMMIT_REF_SLUG
-  dependencies:
-    - ngbuild
   before_script:
     - date
   script:
