@@ -33,6 +33,8 @@ yarn_populate_cache:
         - yarn.lock
       when: always
     - when: manual
+  # allow_failure: Do not block pipeline if job is created but not run.
+  allow_failure: true
   cache:
     <<: *yarn_cache
     policy: pull-push
