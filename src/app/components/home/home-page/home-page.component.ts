@@ -3,6 +3,8 @@ import { EventService } from '../../../services/util/event.service';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { KeyboardUtils } from '../../../utils/keyboard';
 import { KeyboardKey } from '../../../utils/keyboard/keys';
+import { RoomCreateComponent } from '../../shared/_dialogs/room-create/room-create.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-home-page',
@@ -17,7 +19,8 @@ export class HomePageComponent implements OnInit, OnDestroy, AfterContentInit {
   constructor(
     private eventService: EventService,
     private liveAnnouncer: LiveAnnouncer,
-    private _r: Renderer2
+    private _r: Renderer2,
+    public dialog: MatDialog,
   ) {
   }
 
@@ -59,4 +62,15 @@ export class HomePageComponent implements OnInit, OnDestroy, AfterContentInit {
       'oder das Sitzungs-Menü zu gelangen, die Taste 3 um eine neue Sitzung zu erstellen, ' +
       'die Taste 4 um zur Sprachauswahl zu gelangen, oder die Taste 9 um diese Ansage zu wiederholen.', 'assertive');
   }
+
+  openCreateRoomDialog(): void {
+    this.dialog.open(RoomCreateComponent, {
+      width: '350px'
+    });
+  }
+
+  cookiesDisabled(): boolean {
+    return localStorage.getItem('cookieAccepted') === 'false';
+  }
+
 }

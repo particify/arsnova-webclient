@@ -1,7 +1,9 @@
-.outer {
-  width: 90%;
-  max-width: 500px;
-  background-color: var(--surface);
+.container {
+  height: 100%;
+}
+
+.heading {
+  height: 40%;
 }
 
 .main-heading-primary {
@@ -20,7 +22,7 @@
   font-weight: normal;
   font-size: 60%;
   text-align: center;
-  color: var(--on-surface);
+  color: var(--on-background);
   animation: moveInRight 1s ease-out;
 }
 
@@ -56,6 +58,12 @@
   }
 }
 
-mat-card-header {
-  justify-content: center;
+.mat-button {
+  font-size: 16px;
+  margin-top: 20%;
+  color: var(--secondary);
+}
+
+.add {
+  color: var(--secondary);
 }

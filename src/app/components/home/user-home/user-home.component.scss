@@ -4,5 +4,10 @@ app-room-list {
 }
 
 .mat-raised-button {
+  height: 40px;
+  width: 280px;
   border-radius: 25px;
+  margin-top: 1%;
+  margin-bottom: calc(10px + 3%);
+  font-size: 18px;
 }
