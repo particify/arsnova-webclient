@@ -25,9 +25,10 @@ export class RoomJoinComponent implements OnInit {
 
   room: Room;
   user: User;
+  joinHover: boolean;
+  isDesktop = localStorage.getItem('deviceType') === 'desktop';
 
   sessionCodeFormControl = new FormControl('', [Validators.required, Validators.pattern('[0-9 ]*')]);
-
   matcher = new RegisterErrorStateMatcher();
 
   constructor(
@@ -43,6 +44,12 @@ export class RoomJoinComponent implements OnInit {
 
   ngOnInit() {
     this.authenticationService.watchUser.subscribe(newUser => this.user = newUser);
+  }
+
+  toggleArrowAnimation(shortId: string, animation: boolean) {
+    if (shortId.length === 9) {
+      this.joinHover = animation;
+    }
   }
 
   onEnter() {
