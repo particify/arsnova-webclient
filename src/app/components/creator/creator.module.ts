@@ -11,7 +11,6 @@ import { EssentialsModule } from '../essentials/essentials.module';
 import { ModeratorModule } from '../moderator/moderator.module';
 import { RoomDeleteComponent } from './_dialogs/room-delete/room-delete.component';
 import { RoomComponent } from './settings/room/room.component';
-import { AnswerEditComponent } from './_dialogs/answer-edit/answer-edit.component';
 import { ContentDeleteComponent } from './_dialogs/content-delete/content-delete.component';
 import { SharedModule } from '../shared/shared.module';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
@@ -80,7 +79,6 @@ import { SettingsPageComponent } from './settings-page/settings-page.component';
   ],
   entryComponents: [
     RoomDeleteComponent,
-    AnswerEditComponent,
     ContentDeleteComponent,
     ContentChoiceCreatorComponent,
     ContentLikertCreatorComponent,

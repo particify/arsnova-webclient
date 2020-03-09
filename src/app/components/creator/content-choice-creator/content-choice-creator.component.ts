@@ -4,7 +4,6 @@ import { ContentChoice } from '../../../models/content-choice';
 import { ContentService } from '../../../services/http/content.service';
 import { NotificationService } from '../../../services/util/notification.service';
 import { MatDialog } from '@angular/material/dialog';
-import { AnswerEditComponent } from '../_dialogs/answer-edit/answer-edit.component';
 import { ContentType } from '../../../models/content-type.enum';
 import { TranslateService } from '@ngx-translate/core';
 import { EventService } from '../../../services/util/event.service';
@@ -32,7 +31,6 @@ export class ContentChoiceCreatorComponent implements OnInit {
   @Input() contentCol;
   @Output() resetP = new EventEmitter<boolean>();
 
-
   singleChoice = true;
   content: ContentChoice = new ContentChoice(
     '0',
@@ -55,9 +53,8 @@ export class ContentChoiceCreatorComponent implements OnInit {
 
   newAnswerOptionChecked = false;
   newAnswerOptionLabel = '';
-
-  editDisplayAnswer: DisplayAnswer;
-  originalDisplayAnswer: DisplayAnswer;
+  updatedAnswer: string;
+  isAnswerEdit = -1;
 
   roomId: string;
 
@@ -110,13 +107,8 @@ export class ContentChoiceCreatorComponent implements OnInit {
       this.newAnswerOptionLabel = '';
       return;
     }
-    for (let i = 0; i < this.content.options.length; i++) {
-      if (this.content.options[i].label.valueOf() === this.newAnswerOptionLabel.valueOf()) {
-        this.translationService.get('content.same-answer').subscribe(message => {
-          this.notificationService.show(message);
-        });
-        return;
-      }
+    if (this.checkIfAnswerExists(this.newAnswerOptionLabel.valueOf())) {
+      return;
     }
     if (this.content.options.length < 8) {
       const points = (this.newAnswerOptionChecked) ? 10 : -10;
@@ -131,21 +123,31 @@ export class ContentChoiceCreatorComponent implements OnInit {
     }
   }
 
-  openAnswerModificationDialog($event, label: string, points: number, correct: boolean) {
-    $event.preventDefault();
-    const index = this.findAnswerIndexByLabel(label);
-    this.editDisplayAnswer = new DisplayAnswer(new AnswerOption(label, points), correct);
-    this.originalDisplayAnswer = new DisplayAnswer(new AnswerOption(label, points), correct);
-    const dialogRef = this.dialog.open(AnswerEditComponent, {
-      width: '400px'
-    });
-    dialogRef.componentInstance.answer = this.editDisplayAnswer;
-    dialogRef.afterClosed()
-      .subscribe(result => {
-        if (result === 'edit') {
-          this.saveChanges(index, this.editDisplayAnswer, true);
-        }
-      });
+  checkIfAnswerExists(label: string): boolean {
+    for (let i = 0; i < this.content.options.length; i++) {
+      if (this.content.options[i].label === label) {
+        this.translationService.get('content.same-answer').subscribe(message => {
+          this.notificationService.show(message);
+        });
+        return true;
+      }
+    }
+  }
+
+  updateAnswer(index: number, answer: DisplayAnswer) {
+    answer.answerOption.label = this.updatedAnswer;
+    this.saveChanges(index, answer, answer.correct);
+    this.leaveEditMode();
+  }
+
+  goInEditMode(index: number, answer: DisplayAnswer): void {
+    this.updatedAnswer = answer.answerOption.label;
+    this.isAnswerEdit = index;
+    document.getElementsByName('answerEdit').item(index).focus();
+  }
+
+  leaveEditMode(): void {
+    this.isAnswerEdit = -1;
   }
 
   saveChanges(index: number, answer: DisplayAnswer, matDialogOutput: boolean) {
@@ -186,7 +188,7 @@ export class ContentChoiceCreatorComponent implements OnInit {
         this.lastDeletedDisplayAnswer.correct = true;
         this.content.correctOptionIndexes.splice(j, 1);
       }
-      if (this.content.correctOptionIndexes[j] > index) { // [j] > i
+      if (this.content.correctOptionIndexes[j] > index) {
         this.content.correctOptionIndexes[j] = this.content.correctOptionIndexes[j] - 1;
       }
     }
@@ -198,12 +200,12 @@ export class ContentChoiceCreatorComponent implements OnInit {
 
   switchValue(label: string) {
     const index = this.findAnswerIndexByLabel(label);
-    this.editDisplayAnswer = new DisplayAnswer(
+    const answer = new DisplayAnswer(
       new AnswerOption(
         this.displayAnswers[index].answerOption.label,
         this.displayAnswers[index].answerOption.points),
       !this.displayAnswers[index].correct);
-    this.saveChanges(index, this.editDisplayAnswer, false);
+    this.saveChanges(index, answer, false);
   }
 
   reset($event) {
@@ -218,6 +220,7 @@ export class ContentChoiceCreatorComponent implements OnInit {
     this.translationService.get('content.reset-all').subscribe(message => {
       this.notificationService.show(message);
     });
+    this.leaveEditMode();
   }
 
   resetAfterSubmit() {
@@ -228,6 +231,7 @@ export class ContentChoiceCreatorComponent implements OnInit {
     this.translationService.get('content.submitted').subscribe(message => {
       this.notificationService.show(message);
     });
+    this.leaveEditMode();
   }
 
   submitContent() {

@@ -9,7 +9,6 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
 import { RoomListComponent } from './room-list/room-list.component';
 import { RoomPageComponent } from './room-page/room-page.component';
 import { StatisticsPageComponent } from './statistics-page/statistics-page.component';
-import { AnswerEditComponent } from '../creator/_dialogs/answer-edit/answer-edit.component';
 import { ContentDeleteComponent } from '../creator/_dialogs/content-delete/content-delete.component';
 import { CommentPageComponent } from './comment-page/comment-page.component';
 import { EssentialsModule } from '../essentials/essentials.module';
@@ -55,7 +54,6 @@ import { QRCodeModule } from 'angularx-qrcode';
     RoomListComponent,
     ContentGroupsComponent,
     HeaderComponent,
-    AnswerEditComponent,
     ContentDeleteComponent,
     FeedbackBarometerPageComponent,
     FooterComponent,
@@ -86,7 +84,6 @@ import { QRCodeModule } from 'angularx-qrcode';
     RoomListComponent,
     ContentGroupsComponent,
     HeaderComponent,
-    AnswerEditComponent,
     ContentDeleteComponent,
     FeedbackBarometerPageComponent,
     FooterComponent,
