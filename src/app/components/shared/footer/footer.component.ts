@@ -26,7 +26,7 @@ export class FooterComponent implements OnInit {
   public user: User;
 
   public open: string;
-  public deviceType: string;
+  public deviceWidth = innerWidth;
   public cookieAccepted: boolean;
   public dataProtectionConsent: boolean;
 
@@ -45,9 +45,8 @@ export class FooterComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.deviceType = localStorage.getItem('deviceType');
     if (!this.themeService.getTheme()['source']['_value']) {
-      if (this.deviceType === 'mobile') {
+      if (this.deviceWidth < 500) {
         this.themeService.activate('dark');
         this.themeClass = 'dark';
       } else {
@@ -76,7 +75,6 @@ export class FooterComponent implements OnInit {
     const dialogRef = this.dialog.open(IntroductionComponent, {
       width: '80%'
     });
-    dialogRef.componentInstance.deviceType = this.deviceType;
   }
 
   showCookieModal() {
@@ -86,7 +84,6 @@ export class FooterComponent implements OnInit {
 
     });
     dialogRef.disableClose = true;
-    dialogRef.componentInstance.deviceType = this.deviceType;
     dialogRef.afterClosed().subscribe(res => {
       this.cookieAccepted = res;
       this.dataProtectionConsent = res;
@@ -110,7 +107,6 @@ export class FooterComponent implements OnInit {
 
   showOverlay() {
     const dialogRef = this.dialog.open(OverlayComponent, {});
-    dialogRef.componentInstance.deviceType = this.deviceType;
     dialogRef.disableClose = true;
     dialogRef.afterClosed().subscribe(res => {
       if (res) {

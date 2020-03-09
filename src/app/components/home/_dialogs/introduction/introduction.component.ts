@@ -10,7 +10,6 @@ import { KeyboardKey } from '../../../../utils/keyboard/keys';
 })
 export class IntroductionComponent implements OnInit, OnDestroy {
 
-  deviceType: string;
   currentLang: string;
   keyEvent: any;
 

@@ -13,7 +13,7 @@ mat-toolbar {
 }
 
 svg {
-  -webkit-filter: invert(100%); /* safari 6.0 - 9.0 */
+  -webkit-filter: invert(100%);
   filter: invert(100%);
 }
 
@@ -29,16 +29,6 @@ svg {
   color: var(--secondary);
 }
 
-h2 {
-  margin-left: 5px !important;
-  font-size: medium !important;
-}
-
-.label-icon {
-  display: flex;
-  align-items: center;
-}
-
 .mat-button {
-  padding: 0 0 0 10px;
+  padding: 0;
 }
