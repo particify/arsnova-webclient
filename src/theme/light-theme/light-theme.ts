@@ -1,10 +1,10 @@
 export const light = {
 
-  '--primary': '#263238',
-  '--primary-variant': '#cfd8dc',
+  '--primary': '#FF6D00',
+  '--primary-variant': '#ffe0b2',
 
-  '--secondary': '#FF6D00',
-  '--secondary-variant': '#ffe0b2',
+  '--secondary': '#263238',
+  '--secondary-variant': '#cfd8dc',
 
   '--warn': '#e53935',
   '--on-warn': 'black',

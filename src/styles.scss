@@ -22,6 +22,21 @@ body {
   height: 100%;
 }
 
+// Scrollbar
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--background);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--surface);
+  border-radius: 10px;
+}
+
 // States
 
 .visually-hidden {
@@ -151,10 +166,6 @@ mat-dialog-content {
 }
 
 // Mat Tab
-
-.mat-tab-labels {
-  justify-content: center;
-}
 
 .mat-tab-header-pagination-chevron {
   border-color: var(--secondary);
@@ -305,6 +316,12 @@ mat-dialog-content {
 .button-warn {
   background-color: var(--warn);
   color: var(--on-warn);
+}
+
+.button-text {
+  color: var(--on-surface);
+  padding-left: 5px;
+  font-size: 16px;
 }
 
 // Icons
