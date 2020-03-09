@@ -9,12 +9,12 @@ import { EventService } from '../../../services/util/event.service';
 import { AuthenticationService } from '../../../services/http/authentication.service';
 import { ModeratorService } from '../../../services/http/moderator.service';
 import { MatDialog } from '@angular/material/dialog';
-import { MatTableDataSource } from '@angular/material/table';
 import { Subscription } from 'rxjs';
 import { CommentService } from '../../../services/http/comment.service';
 import { NotificationService } from '../../../services/util/notification.service';
 import { TranslateService } from '@ngx-translate/core';
 import { RemoveFromHistoryComponent } from '../_dialogs/remove-from-history/remove-from-history.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-room-list',
@@ -25,13 +25,11 @@ export class RoomListComponent implements OnInit, OnDestroy {
   @Input() user: User;
   rooms: Room[] = [];
   roomsWithRole: RoomRoleMixin[];
+  displayRooms: RoomRoleMixin[];
   closedRooms: Room[];
   isLoading = true;
   sub: Subscription;
   deviceType: string;
-
-  tableDataSource: MatTableDataSource<Room>;
-  displayedColumns: string[] = ['name', 'shortId', 'role', 'button'];
 
   creatorRole = UserRole.CREATOR;
   participantRole = UserRole.PARTICIPANT;
@@ -45,7 +43,8 @@ export class RoomListComponent implements OnInit, OnDestroy {
     private commentService: CommentService,
     public notificationService: NotificationService,
     private translateService: TranslateService,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    protected router: Router
   ) {
   }
 
@@ -64,14 +63,11 @@ export class RoomListComponent implements OnInit, OnDestroy {
   }
 
   getRooms(): void {
-    this.roomService.getParticipantRooms().subscribe(rooms => {
-      if (rooms && rooms.length > 0) {
-        this.updateRoomList(rooms);
-      } else {
-        this.displayedColumns.splice(-1, 1);
-      }
+    this.roomService.getParticipantRooms().subscribe(rooms => this.updateRoomList(rooms));
+    this.roomService.getCreatorRooms().subscribe(rooms => {
+      this.updateRoomList(rooms);
+      this.isLoading = false;
     });
-    this.roomService.getCreatorRooms().subscribe(rooms => this.updateRoomList(rooms));
   }
 
   updateRoomList(rooms: Room[]) {
@@ -100,39 +96,60 @@ export class RoomListComponent implements OnInit, OnDestroy {
         room.commentCount = count;
       });
     }
-    this.isLoading = false;
-    this.updateTable();
+    this.setDisplayedRooms(this.roomsWithRole);
   }
 
-  setCurrentRoom(shortId: string) {
-    for (const r of this.roomsWithRole) {
-      if (r.shortId === shortId) {
-        this.authenticationService.assignRole(r.role);
-      }
-    }
+  setCurrentRoom(shortId: string, role: UserRole) {
+    this.authenticationService.assignRole(role);
+    this.router.navigate([`${this.roleToString(role)}/room/${shortId}`]);
   }
 
-  removeFromHistory(room: Room) {
+  navToSettings(shortId: string) {
+    this.router.navigate([`creator/room/${shortId}/settings`]);
+  }
+
+  openRemoveDialog(room: RoomRoleMixin) {
     const dialogRef = this.dialog.open(RemoveFromHistoryComponent, {
       width: '400px'
     });
     dialogRef.componentInstance.roomName = room.name;
+    dialogRef.componentInstance.role = room.role;
     dialogRef.afterClosed().subscribe(result => {
       if (result === 'remove') {
-        this.roomService.removeFromHistory(room.id).subscribe( x => {
-          this.rooms = this.rooms.filter(r => r.id !== room.id);
-          this.closedRooms = this.closedRooms.filter(r => r.id !== room.id);
-          this.roomsWithRole = this.roomsWithRole.filter(r => r.id !== room.id);
-          this.updateTable();
-          this.translateService.get('room-list.room-successfully-removed').subscribe(msg => {
-            this.notificationService.show(msg);
-          });
-        });
+        if (room.role < 3) {
+          this.removeFromHistory(room);
+        } else {
+          this.deleteRoom(room);
+        }
+        this.rooms = this.rooms.filter(r => r.id !== room.id);
+        this.closedRooms = this.closedRooms.filter(r => r.id !== room.id);
+        this.roomsWithRole = this.roomsWithRole.filter(r => r.id !== room.id);
+        this.setDisplayedRooms(this.roomsWithRole);
       } else {
         this.translateService.get('room-list.canceled-remove').subscribe(msg => {
           this.notificationService.show(msg);
         });
       }
+    });
+  }
+
+  setDisplayedRooms(rooms: RoomRoleMixin[]) {
+    this.displayRooms = rooms;
+  }
+
+  deleteRoom(room: Room) {
+    this.roomService.deleteRoom(room.id).subscribe(() => {
+      this.translateService.get('room-list.room-successfully-deleted').subscribe(msg => {
+        this.notificationService.show(msg);
+      });
+    });
+  }
+
+  removeFromHistory(room: Room) {
+    this.roomService.removeFromHistory(room.id).subscribe(() => {
+      this.translateService.get('room-list.room-successfully-removed').subscribe(msg => {
+        this.notificationService.show(msg);
+      });
     });
   }
 
@@ -147,11 +164,9 @@ export class RoomListComponent implements OnInit, OnDestroy {
     }
   }
 
-  updateTable(): void {
-    this.tableDataSource = new MatTableDataSource(this.roomsWithRole);
-  }
-
-  applyFilter(filterValue: string): void {
-    this.tableDataSource.filter = filterValue.trim().toLowerCase();
+  filterRooms(search: string) {
+    if (search.length > 2) {
+      this.setDisplayedRooms(this.roomsWithRole.filter(room => room.name.includes(search.toLowerCase())));
+    }
   }
 }
