@@ -65,13 +65,11 @@ mat-card-content > :first-child {
   min-width: 200px;
   min-height: 100px;
   text-align: start;
-  font-size: 140%;
-  max-height: 120px;
+  font-size: calc(16px + 0.4vw);
   overflow: auto;
   color: var(--on-surface);
   white-space: pre-line;
   hyphens: auto;
-  overflow-wrap: anywhere !important;
 }
 
 .click {

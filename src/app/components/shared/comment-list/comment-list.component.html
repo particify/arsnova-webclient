@@ -125,19 +125,22 @@
   </mat-menu>
 </div>
 
+<div *ngIf="scroll" class="search-bar-placeholder"></div>
+
 <div *ngIf="isLoading" fxLayout="column" fxLayoutAlign="center" fxFill>
   <div fxLayout="row" fxLayoutAlign="center">
     <mat-progress-spinner color="primary" mode="indeterminate" diameter="80"></mat-progress-spinner>
   </div>
 </div>
 
-<button mat-icon-button class="scrollTop" [ngClass]="{'visible': scrollExtended}"
+<button mat-icon-button class="button-primary scrollTop" [ngClass]="{'visible': scrollExtended}"
         (click)="scrollTop()">
   <mat-icon>arrow_upward</mat-icon>
 </button>
 
 <div fxLayout="row" fxLayoutAlign="center" *ngIf="comments.length < 3 && !isLoading">
-  <button id="add_comment-button" mat-fab class="fab-extended" (click)="openCreateDialog()" aria-labelledby="add">
+  <button id="add_comment-button" mat-raised-button class="button-primary fab-extended" (click)="openCreateDialog()"
+          aria-labelledby="add">
     <mat-icon class="add">add</mat-icon>
     {{'comment-list.add-comment' | translate}}
   </button>
