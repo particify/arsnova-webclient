@@ -193,7 +193,6 @@
     "no-empty-name": "Please enter a name."
   },
   "room-page": {
-    "a11y-copy-session-id": "Copy link to session to the clipboard",
     "a11y-gavel": "Opens all questions selected by the moderator",
     "a11y-insert_comment": "Opens a window to manage questions",
     "a11y-person": "Opens a window to add moderators",
@@ -204,13 +203,11 @@
     "default-content-group": "Default",
     "live-announcer": "You're in the session now. To get information about key combinations press the Enter key or call the announcement later with the Escape key.",
     "live-feedback": "Live feedback",
-    "comments": "Questions",
+    "comments": "Comments",
     "moderating-stream": "Moderation",
     "present": "Present",
     "public-stream": "Questions",
     "room-not-found": "Session not found :(",
-    "session-id": "Key",
-    "session-id-copied": "Session link was copied to the clipboard.",
     "session-settings": "Session administration",
     "settings-comment-moderation": "Moderate questions",
     "no-contents": "There are no questions yet.",

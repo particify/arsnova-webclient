@@ -1,6 +1,6 @@
 mat-card {
   width: 100%;
-  min-height: 300px;
+  min-height: 250px;
 }
 
 mat-card-content > :first-child {
@@ -8,16 +8,15 @@ mat-card-content > :first-child {
 }
 
 .mat-icon-button {
-  width: 60%;
-  height: 75%;
-  margin-bottom: 3%;
-  color: var(--primary) !important;
+  width: 100%;
+  height: 100%;
+  color: var(--primary);
 }
 
 .main-icon {
-  font-size: 70px;
-  height: 70px;
-  width: 70px;
+  font-size: 60px;
+  height: 60px;
+  width: 60px;
 }
 
 .desktop {
@@ -26,13 +25,17 @@ mat-card-content > :first-child {
   width: 80px;
 }
 
-button {
-  width: 30%;
-  transition: all 0.2s;
+.main-button {
+  transition: all 150ms;
 
   &:hover {
     transform: scale(1.1)
   }
+}
+
+.button-text {
+  padding: 0;
+  margin: 3% 0;
 }
 
 mat-card-header {
@@ -49,19 +52,26 @@ mat-card-subtitle {
 }
 
 .room-short-id {
+  opacity: 0.8;
   font-size: calc(16px + 0.5vw);
   color: var(--on-surface);
   margin-top: 4.5%;
-  white-space: nowrap;
+}
+
+.big-container {
+  min-height: 180px;
 }
 
 mat-grid-list {
-  margin-bottom: 5%;
+  width: 100%;
+  min-height: 140px;
+  padding: 0 !important;
+  margin: 4% 0;
 }
 
 mat-grid-tile {
-  height: 100% !important;
-  width: 45% !important;
+  height: 90%;
+  width: calc(50% - 16px) !important;
   padding: 2% !important;
 }
 

@@ -3,46 +3,42 @@
     <mat-progress-spinner *ngIf="isLoading" mode="indeterminate"></mat-progress-spinner>
     <mat-card *ngIf=" !isLoading && room">
       <div fxLayout="row">
-        <span class="corner-icons"></span>
+        <span *ngIf="!noGroups" class="corner-icons"></span>
         <span class="fill-remaining-space"></span>
         <mat-card-header fxLayoutAlign="center">
           <mat-card-title fxLayoutAlign="center">
             {{ room.name }}
           </mat-card-title>
           <mat-card-subtitle fxLayoutAlign="center">
-            <mat-icon *ngIf="moderationEnabled" class="gavel">
-              gavel
-            </mat-icon>
             <span class="room-short-id">
-              {{ 'room-page.session-id' | translate}}: {{ room.shortId.slice(0, 4) }} {{  room.shortId.slice(4, 8) }}
+              {{ room.shortId.slice(0, 4) }} {{  room.shortId.slice(4, 8) }}
             </span>
           </mat-card-subtitle>
         </mat-card-header>
         <span class="fill-remaining-space"></span>
-        <button mat-icon-button class="corner-icons" [ngClass]="{'disabled': noGroups}"
+        <button mat-icon-button *ngIf="!noGroups" class="corner-icons"
                 (click)="navToStats('participant')">
           <mat-icon id="stat-icon" matTooltip="{{ 'statistic.answer-statistic' | translate}}">insert_chart</mat-icon>
         </button>
       </div>
-      <mat-divider></mat-divider>
       <mat-card-content *ngIf="room.description" fxLayoutAlign="center">
         <markdown [data]="room.description.trim()"></markdown>
       </mat-card-content>
-      <mat-grid-list cols="2" rowHeight="1:1">
+      <mat-grid-list cols="2" rowHeight="1:1" [ngClass]="{'big-container': deviceWidth >= 500}">
         <mat-grid-tile>
-          <button id="question_answer-button" mat-icon-button [disableRipple]="true"
+          <button id="question_answer-button" mat-icon-button class="main-button" [disableRipple]="true"
                   routerLink="/participant/room/{{ room.shortId }}/comments" aria-labelledby="question_answer">
             <mat-icon matBadge="{{commentCounter}}" matBadgeColor="primary" class="main-icon"
-                      [ngClass]="{'desktop' : deviceType === 'desktop'}">question_answer
+                      [ngClass]="{'desktop' : deviceWidth > 500}">question_answer
             </mat-icon>
-            <h3 *ngIf="deviceType === 'desktop'">{{ 'room-page.create-comment' | translate}}</h3>
+            <h3 *ngIf="deviceWidth >= 320" class="button-text">{{ 'room-page.comments' | translate}}</h3>
           </button>
         </mat-grid-tile>
         <mat-grid-tile>
-          <button mat-icon-button [disableRipple]="true"
+          <button mat-icon-button class="main-button" [disableRipple]="true"
                   routerLink="/participant/room/{{ room.shortId }}/feedback-barometer">
-            <mat-icon class="main-icon" [ngClass]="{'desktop' : deviceType === 'desktop'}">thumbs_up_down</mat-icon>
-            <h3 *ngIf="deviceType === 'desktop'">{{ 'room-page.give-feedback' | translate}}</h3>
+            <mat-icon class="main-icon" [ngClass]="{'desktop' : deviceWidth > 500}">thumbs_up_down</mat-icon>
+            <h3 *ngIf="deviceWidth >= 320" class="button-text">{{ 'room-page.live-feedback' | translate}}</h3>
           </button>
         </mat-grid-tile>
       </mat-grid-list>
@@ -55,7 +51,6 @@
           class="visually-hidden">{{ 'room-page.live-announcer' | translate }}</button>
 </div>
 
-<!--Hidden Div's for a11y-Descriptions-->
 <div class="visually-hidden">
   <div id="question_answer">{{'room-page.a11y-question_answer' | translate}}</div>
   <!--<div id="announcer_text">{{'room-page.a11y-announcer' | translate}}</div>-->

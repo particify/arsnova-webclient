@@ -26,7 +26,7 @@ import { NotificationService } from '../../../services/util/notification.service
 export class RoomParticipantPageComponent extends RoomPageComponent implements OnInit, OnDestroy, AfterContentInit {
 
   room: Room;
-  deviceType = localStorage.getItem('deviceType');
+  deviceWidth = innerWidth;
   user: User;
 
   constructor(protected location: Location,

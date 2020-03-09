@@ -22,10 +22,10 @@ import { ContentGroup } from '../../../models/content-group';
   styleUrls: ['./room-creator-page.component.scss']
 })
 export class RoomCreatorPageComponent extends RoomPageComponent implements OnInit, OnDestroy, AfterContentInit {
-  deviceType = localStorage.getItem('deviceType');
+
+  deviceWidth = innerWidth;
   viewModuleCount = 1;
   moderatorCommentCounter: number;
-  urlToCopy = `${window.location.protocol}//${window.location.hostname}/participant/room/`;
 
   constructor(protected roomService: RoomService,
               protected notification: NotificationService,
@@ -117,23 +117,6 @@ export class RoomCreatorPageComponent extends RoomPageComponent implements OnIni
       }
     });
     sessionStorage.setItem('contentGroups', JSON.stringify(this.groupNames));
-  }
-
-  copyShortId(): void {
-    const selBox = document.createElement('textarea');
-    selBox.style.position = 'fixed';
-    selBox.style.left = '0';
-    selBox.style.top = '0';
-    selBox.style.opacity = '0';
-    selBox.value = `${this.urlToCopy}${this.room.shortId}`;
-    document.body.appendChild(selBox);
-    selBox.focus();
-    selBox.select();
-    document.execCommand('copy');
-    document.body.removeChild(selBox);
-    this.translateService.get('room-page.session-id-copied').subscribe(msg => {
-      this.notification.show(msg, '', { duration: 2000 });
-    });
   }
 }
 

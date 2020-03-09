@@ -193,7 +193,6 @@
     "no-empty-name": "Bitte gib einen Namen ein."
   },
   "room-page": {
-    "a11y-copy-session-id": "Direktlink zur Sitzung in die Zwischenablage kopieren",
     "a11y-gavel": "Öffnet  das Moderations-Board.",
     "a11y-insert_comment": "Öffnet ein Fenster, um Fragen zu verwalten.",
     "a11y-moderator-email": "Gib die E-Mail Adresse eines Benutzers ein, den du als Moderator hinzufügen möchtest. Der Moderator muss ein ARSnova Konto haben.",
@@ -205,13 +204,11 @@
     "default-content-group": "Standard",
     "live-announcer": "Du befindest dich jetzt in der Sitzung. Um Informationen zu Tastenkombinationen zu erhalten drücke jetzt die Enter-Taste oder rufe die Ansage zu einem späteren Zeitpunkt mit der Escape-Taste auf.",
     "live-feedback": "Live Feedback",
-    "comments": "Fragen",
+    "comments": "Kommentare",
     "moderating-stream": "Moderation",
     "present": "Präsentieren",
     "public-stream": "Fragen",
     "room-not-found": "Sitzung wurde nicht gefunden (",
-    "session-id": "Code",
-    "session-id-copied": "Direktlink wurde in die Zwischenablage kopiert.",
     "session-settings": "Einstellungen",
     "no-contents": "Es sind noch keine Fragen vorhanden.",
     "sure": "Bist du sicher?"

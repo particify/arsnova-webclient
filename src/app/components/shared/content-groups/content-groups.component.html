@@ -1,8 +1,6 @@
-<mat-card id="contentGroup" *ngFor="let contentGroup of contentGroups" (click)="viewContents(contentGroup)">
-  <mat-card-header>
-    <mat-card-title *ngIf="!(contentGroup.name === 'Default')">
+<mat-card id="contentGroup" fxLayoutAlign="start center" *ngFor="let contentGroup of contentGroups" (click)="viewContents(contentGroup)">
+    <h3 matBadge="{{contentGroup.contentIds.length}}" matBadgeOverlap="false"
+                    *ngIf="!(contentGroup.name === 'Default')">
       {{contentGroup.name}}
-    </mat-card-title>
-    <span class="badge">{{contentGroup.contentIds.length}}</span>
-  </mat-card-header>
+    </h3>
 </mat-card>
