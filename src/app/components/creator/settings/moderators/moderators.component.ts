@@ -59,7 +59,6 @@ export class ModeratorsComponent implements OnInit {
         return;
       }
       this.moderatorService.add(this.roomId, list[0].id).subscribe();
-      this.moderatorService.addToHistory(this.roomId, list[0].id);
       this.moderators.push(new Moderator(list[0].id, this.loginId));
       this.translationService.get('settings.moderator-added').subscribe(msg => {
         this.notificationService.show(msg);
