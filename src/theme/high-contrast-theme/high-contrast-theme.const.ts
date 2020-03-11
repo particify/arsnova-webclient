@@ -1,9 +1,9 @@
 export const highContrast = {
 
-  '--primary': '#fb9a1c',
+  '--primary': '#4caf50',
   '--primary-variant': '#ffe0b2',
 
-  '--secondary': '#fb9a1c',
+  '--secondary': '#fdd835',
   '--secondary-variant': '#ffe0b2',
 
   '--warn': '#e53935',
@@ -16,8 +16,8 @@ export const highContrast = {
   '--alt-surface': '#323232',
   '--alt-dialog': '#455a64',
 
-  '--on-primary': '#141414',
-  '--on-secondary': '#141414',
+  '--on-primary': '#000000',
+  '--on-secondary': '#000000',
   '--on-background': 'white',
   '--on-surface': 'white',
   '--on-cancel': 'white',
