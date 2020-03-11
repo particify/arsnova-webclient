@@ -1,9 +1,13 @@
 footer {
   overflow-y: auto;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
 }
 
 #footer-toolbar {
-  background-color: var(--surface);
+  background-color: var(--background);
   height: auto;
 
   &:first-child {
@@ -19,6 +23,7 @@ footer {
   min-height: 28px;
   font-size: 12px;
   color: var(--on-surface);
+  opacity: 0.8;
 }
 
 mat-icon {

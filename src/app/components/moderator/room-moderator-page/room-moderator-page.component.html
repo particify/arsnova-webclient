@@ -6,23 +6,16 @@
         <span class="fill-remaining-space"></span>
         <mat-card-header fxLayoutAlign="center">
           <mat-card-title fxLayoutAlign="center">
-            <h2>{{ room.name }}</h2>
+            {{ room.name }}
           </mat-card-title>
           <mat-card-subtitle fxLayoutAlign="center">
-            <mat-icon *ngIf="moderationEnabled" class="gavel">
-              gavel
-            </mat-icon>
             <span class="room-short-id">
-                {{ 'room-page.session-id' | translate}}: {{ room.shortId.slice(0, 4) }} {{  room.shortId.slice(4, 8) }}
+               {{ room.shortId.slice(0, 4) }} {{  room.shortId.slice(4, 8) }}
               </span>
-            <button class="copy-btn" mat-icon-button (click)="copyShortId()">
-              <mat-icon class="copy" matTooltip="{{ 'room-page.copy-session-id' | translate}}">save</mat-icon>
-            </button>
           </mat-card-subtitle>
         </mat-card-header>
         <span class="fill-remaining-space"></span>
       </div>
-      <mat-divider></mat-divider>
       <mat-card-content *ngIf="room.description" fxLayoutAlign="center">
         <markdown [data]="room.description.trim()"></markdown>
       </mat-card-content>
@@ -33,9 +26,9 @@
                     mat-icon-button [disableRipple]="true"
                     routerLink="/moderator/room/{{ room.shortId }}/comments">
               <mat-icon matBadge="{{commentCounter}}" class="main-icon"
-                        [ngClass]="{'desktop' : deviceType === 'desktop'}">question_answer
+                        [ngClass]="{'desktop' : deviceWidth > 500}">question_answer
               </mat-icon>
-              <h3>{{ 'room-page.public-stream' | translate}}</h3>
+              <h3 class="button-text">{{ 'room-page.public-stream' | translate}}</h3>
             </button>
           </mat-grid-tile>
           <mat-grid-tile *ngIf="moderationEnabled">
@@ -43,19 +36,19 @@
                     mat-icon-button [disableRipple]="true"
                     routerLink="/moderator/room/{{ room.shortId }}/moderator/comments">
               <mat-icon matBadge="{{moderatorCommentCounter}}" class="main-icon"
-                        [ngClass]="{'desktop' : deviceType === 'desktop'}">gavel
+                        [ngClass]="{'desktop' : deviceWidth > 500}">gavel
               </mat-icon>
-              <h3>{{ 'room-page.moderating-stream' | translate}}</h3>
+              <h3 class="button-text">{{ 'room-page.moderating-stream' | translate}}</h3>
             </button>
           </mat-grid-tile>
         </mat-grid-list>
         <div fxLayout="row" fxLayoutAlign="center" *ngIf="!this.moderationEnabled" class="question-button-div">
           <button id="question_answer-button2" mat-icon-button [disableRipple]="true"
-                  routerLink="/creator/room/{{ room.shortId }}/comments" aria-labelledby="question_answer">
+                  routerLink="/moderator/room/{{ room.shortId }}/comments" aria-labelledby="question_answer">
             <mat-icon matBadge="{{commentCounter}}" class="main-icon"
-                      [ngClass]="{'desktop' : deviceType === 'desktop'}">question_answer
+                      [ngClass]="{'desktop' : deviceWidth > 500}">question_answer
             </mat-icon>
-            <h3>{{ 'room-page.comments' | translate}}</h3>
+            <h3 class="button-text">{{ 'room-page.comments' | translate}}</h3>
           </button>
         </div>
       </div>

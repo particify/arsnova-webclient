@@ -1,11 +1,11 @@
 <div>
 
-  <mat-toolbar id="footer-toolbar" class="mat-elevation-z24">
+  <mat-toolbar id="footer-toolbar">
 
     <button class="focus_button" mat-button (click)="showDemo()"
             aria-labelledby="demo-label">
       <mat-icon>flag</mat-icon>
-      <span *ngIf="deviceType === 'desktop'">
+      <span *ngIf="deviceWidth > 600">
         {{ 'footer.demo' | translate }}
       </span>
     </button>
@@ -15,7 +15,7 @@
     <button class="focus_button" mat-button
             aria-labelledby="style-label" [matMenuTriggerFor]="themeMenu">
       <mat-icon>accessibility_new</mat-icon>
-      <span *ngIf="deviceType === 'desktop'">
+      <span *ngIf="deviceWidth > 600">
           {{'footer.style' | translate}}
         </span>
     </button>
@@ -25,7 +25,7 @@
             aria-labelledby="language-label"
             [matMenuTriggerFor]="langMenu">
       <mat-icon>language</mat-icon>
-      <span *ngIf="deviceType === 'desktop'">
+      <span *ngIf="deviceWidth > 600">
           {{'footer.language' | translate}}
         </span>
     </button>
@@ -35,7 +35,7 @@
     <button class="focus_button" (click)="showDataProtection()" mat-button
             aria-labelledby="data-protection-label">
       <mat-icon>security</mat-icon>
-      <span *ngIf="deviceType === 'desktop'">
+      <span *ngIf="deviceWidth > 600">
         {{'footer.dsgvo' | translate}}
       </span>
     </button>
@@ -44,7 +44,7 @@
 
     <button class="focus_button" (click)="showImprint()" mat-button aria-labelledby="imprint-label">
       <mat-icon>info</mat-icon>
-      <span *ngIf="deviceType === 'desktop'">
+      <span *ngIf="deviceWidth > 600">
         {{'footer.imprint' | translate}}
       </span>
     </button>
@@ -60,7 +60,7 @@
           <div fxLayout="column" fxLayoutAlign="center">
             <span class="item-title color-title">{{theme.getName(getLanguage())}}</span>
             <span class="color-description"
-                  *ngIf="deviceType === 'desktop'">{{theme.getDescription(getLanguage())}}</span>
+                  *ngIf="deviceWidth > 600">{{theme.getDescription(getLanguage())}}</span>
           </div>
         </div>
       </button>

@@ -17,7 +17,6 @@ import { UserBonusTokenComponent } from '../_dialogs/user-bonus-token/user-bonus
 import { RemindOfTokensComponent } from '../_dialogs/remind-of-tokens/remind-of-tokens.component';
 import { BonusTokenService } from '../../../services/http/bonus-token.service';
 import { QrCodeComponent } from '../_dialogs/qr-code/qr-code.component';
-import { Theme } from '../../../../theme/Theme';
 
 @Component({
   selector: 'app-header',
@@ -215,15 +214,14 @@ export class HeaderComponent implements OnInit {
 
   /*QR*/
 
-  public getURL(): string {
-    return `${window.location.protocol}//${window.location.hostname}/participant/room/${this.shortId}`;
-  }
-
   public showQRDialog() {
     const dialogRef = this.dialog.open(QrCodeComponent, {
       panelClass: 'screenDialog'
     });
-    dialogRef.componentInstance.data = this.getURL();
+    dialogRef.componentInstance.protocol = window.location.protocol;
+    dialogRef.componentInstance.hostName = window.location.hostname;
+    dialogRef.componentInstance.key = this.shortId;
+    dialogRef.componentInstance.isCreator = this.user.role === 3;
   }
 
 }

@@ -18,11 +18,10 @@
     <h2 id="shortId-header" *ngIf="router.url.includes('comments') && user.role === 3 && deviceType === 'desktop'">
       {{'header.id' | translate}}: {{ shortId.slice(0, 4) }} {{  shortId.slice(4, 8) }}
     </h2>
-    <button mat-icon-button class="center" (click)="showQRDialog()"
+    <button mat-icon-button (click)="showQRDialog()"
     *ngIf="router.url.substring(router.url.length - 13, router.url.length) === ('room/' + shortId)">
       <mat-icon svgIcon="qrcode" class="header-icons qrcode">
       </mat-icon>
-
     </button>
     <span class="fill-remaining-space"></span>
 
@@ -40,6 +39,10 @@
         <mat-icon color="warn">delete</mat-icon>
         <span>{{'header.delete-account' | translate}}</span>
       </button>
+      <button mat-menu-item *ngIf="router.url !== '/home'" routerLink="/home" tabindex="0">
+        <mat-icon>home</mat-icon>
+        <span>{{'header.go-to-home' | translate}}</span>
+      </button>
       <button mat-menu-item (click)="logout()" tabindex="0">
         <mat-icon color="warn">exit_to_app</mat-icon>
         <span>{{ 'header.logout' | translate }}</span>
@@ -49,11 +52,9 @@
     <button [disabled]="cookiesDisabled()" mat-button *ngIf="user && deviceType === 'desktop'"
             [matMenuTriggerFor]="userMenu"
             aria-labelledby="session-label" id="session-button">
-      <div class="label-icon">
         <mat-icon class="header-icons">account_circle</mat-icon>
-        <h2 *ngIf="!user.isGuest">{{'header.my-account' | translate}}</h2>
-        <h2 *ngIf="user.isGuest">{{'header.my-guest-account' | translate}}</h2>
-      </div>
+        <span class="button-text" *ngIf="!user.isGuest">{{'header.my-account' | translate}}</span>
+        <span class="button-text" *ngIf="user.isGuest">{{'header.my-guest-account' | translate}}</span>
     </button>
 
     <button [disabled]="cookiesDisabled()" mat-icon-button *ngIf="user && deviceType === 'mobile'"
@@ -64,10 +65,8 @@
 
     <button id="login-button" [disabled]="cookiesDisabled()" mat-button *ngIf="!user && deviceType === 'desktop'"
             (click)=login(false) aria-labelledby="login-label">
-      <div class="label-icon">
         <mat-icon class="header-icons">account_circle</mat-icon>
-        <h2 *ngIf="deviceType === 'desktop'">{{'header.login' | translate}}</h2>
-      </div>
+        <span class="button-text" *ngIf="deviceType === 'desktop'">{{'header.login' | translate}}</span>
     </button>
 
     <button [disabled]="cookiesDisabled()" mat-icon-button *ngIf="!user && deviceType === 'mobile'" (click)=login(false)

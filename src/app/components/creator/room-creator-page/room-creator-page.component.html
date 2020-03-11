@@ -11,12 +11,8 @@
           </mat-card-title>
           <mat-card-subtitle fxLayoutAlign="center">
             <span class="room-short-id">
-              {{ 'room-page.session-id' | translate}}: {{ room.shortId.slice(0, 4) }} {{  room.shortId.slice(4, 8) }}
+              {{ room.shortId.slice(0, 4) }} {{  room.shortId.slice(4, 8) }}
             </span>
-            <button mat-icon-button class="copy-btn" *ngIf="deviceType === 'desktop'" (click)="copyShortId()"
-                    aria-labelledby="cloud_download">
-              <mat-icon class="copy" matTooltip="{{ 'room-page.a11y-copy-session-id' | translate}}">save_alt</mat-icon>
-            </button>
           </mat-card-subtitle>
         </mat-card-header>
         <span class="fill-remaining-space"></span>
@@ -35,58 +31,58 @@
         <markdown [data]="room.description.trim()"></markdown>
       </mat-card-content>
       <div fxLayout="column" fxLayoutAlign="center">
-        <div fxLayout="row">
-          <span class="fill-remaining-space"></span>
-          <mat-grid-list *ngIf="viewModuleCount > 1" cols="{{viewModuleCount}}" rowHeight="2:1">
+          <mat-grid-list *ngIf="viewModuleCount > 1" cols="2" rowHeight="{{deviceWidth > 500 ? '2:1' : '3:2'}}"
+                         [ngClass]="{'big-container': deviceWidth >= 500}">
             <mat-grid-tile>
-              <button id="question_answer-button" mat-icon-button [disableRipple]="true"
+              <button id="question_answer-button" mat-icon-button class="main-button" [disableRipple]="true"
                       routerLink="/creator/room/{{ room.shortId }}/comments" aria-labelledby="question_answer">
                 <mat-icon matBadge="{{commentCounter}}" class="main-icon"
-                          [ngClass]="{'desktop' : deviceType === 'desktop'}">question_answer
+                          [ngClass]="{'desktop' : deviceWidth > 500}">question_answer
                 </mat-icon>
-                <h3 *ngIf="deviceType === 'desktop'">{{ 'room-page.comments' | translate}}</h3>
+                <p class="button-text" [ngClass]="{'small-text': deviceWidth < 350}">
+                  {{ 'room-page.comments' | translate}}</p>
               </button>
             </mat-grid-tile>
             <mat-grid-tile *ngIf="moderationEnabled">
-              <button id="gavel-button" mat-icon-button [disableRipple]="true"
+              <button id="gavel-button" mat-icon-button class="main-button" [disableRipple]="true"
                       routerLink="/moderator/room/{{ room.shortId }}/moderator/comments" aria-labelledby="gavel">
                 <mat-icon matBadge="{{moderatorCommentCounter}}" class="main-icon"
-                          [ngClass]="{'desktop' : deviceType === 'desktop'}">gavel
+                          [ngClass]="{'desktop' : deviceWidth > 500}">gavel
                 </mat-icon>
-                <h3 *ngIf="deviceType === 'desktop'">{{ 'room-page.moderating-stream' | translate}}</h3>
+                <p class="button-text" [ngClass]="{'small-text': deviceWidth < 350}">
+                  {{ 'room-page.moderating-stream' | translate}}</p>
               </button>
             </mat-grid-tile>
           </mat-grid-list>
           <div fxLayout="row" fxLayoutAlign="center" *ngIf="viewModuleCount <= 1" class="question-button-div">
-            <button id="question_answer-button2" mat-icon-button [disableRipple]="true"
+            <button id="question_answer-button2" mat-icon-button class="main-button" [disableRipple]="true"
                     routerLink="/creator/room/{{ room.shortId }}/comments" aria-labelledby="question_answer">
-              <mat-icon matBadge="{{commentCounter}}" class="main-icon">question_answer</mat-icon>
-              <h3 *ngIf="deviceType === 'desktop'">{{ 'room-page.comments' | translate}}</h3>
+              <mat-icon matBadge="{{commentCounter}}" class="main-icon"
+                        [ngClass]="{'desktop' : deviceWidth > 500}">question_answer</mat-icon>
+              <p class="button-text" [ngClass]="{'small-text': deviceWidth < 350}">
+                {{ 'room-page.comments' | translate}}</p>
             </button>
           </div>
-          <span class="fill-remaining-space"></span>
-        </div>
-        <div fxLayout="row">
-          <span class="fill-remaining-space"></span>
-          <mat-grid-list cols="2" rowHeight="2:1" class="second">
+          <mat-grid-list cols="2" rowHeight="{{deviceWidth > 500 ? '2:1' : '3:2'}}"
+                         [ngClass]="{'big-container': deviceWidth >= 500}">
             <mat-grid-tile>
-              <button mat-icon-button [disableRipple]="true"
+              <button mat-icon-button class="main-button" [disableRipple]="true"
                       routerLink="/creator/room/{{ room.shortId }}/create-content">
-                <mat-icon class="main-icon" [ngClass]="{'desktop' : deviceType === 'desktop'}">note_add</mat-icon>
-                <h3 *ngIf="deviceType === 'desktop'">{{ 'room-page.create-content' | translate}}</h3>
+                <mat-icon class="main-icon" [ngClass]="{'desktop' : deviceWidth > 500}">note_add</mat-icon>
+                <p class="button-text" [ngClass]="{'small-text': deviceWidth < 350}">
+                  {{ 'room-page.create-content' | translate}}</p>
               </button>
             </mat-grid-tile>
             <mat-grid-tile>
-              <button mat-icon-button [disableRipple]="true"
+              <button mat-icon-button class="main-button" [disableRipple]="true"
                       routerLink="/creator/room/{{ room.shortId }}/feedback-barometer">
-                <mat-icon class="main-icon" [ngClass]="{'desktop' : deviceType === 'desktop'}">thumbs_up_down
+                <mat-icon class="main-icon" [ngClass]="{'desktop' : deviceWidth > 500}">thumbs_up_down
                 </mat-icon>
-                <h3 *ngIf="deviceType === 'desktop'">{{ 'room-page.live-feedback' | translate}}</h3>
+                <p class="button-text" [ngClass]="{'small-text': deviceWidth < 350}">
+                  {{ 'room-page.live-feedback' | translate}}</p>
               </button>
             </mat-grid-tile>
           </mat-grid-list>
-          <span class="fill-remaining-space"></span>
-        </div>
       </div>
       <app-content-groups *ngIf="room && contentGroups" [contentGroups]="contentGroups"></app-content-groups>
     </mat-card>
@@ -97,7 +93,6 @@
 </div>
 
 <div class="visually-hidden">
-  <div id="copy_session_id">{{'room-page.a11y-copy-session-id' | translate}}</div>
   <div id="question_answer">{{'room-page.a11y-question_answer' | translate}}</div>
   <div id="gavel">{{'room-page.a11y-gavel' | translate}}</div>
   <div id="settings">{{'room-page.a11y-settings' | translate}}</div>

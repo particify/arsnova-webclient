@@ -1,10 +1,9 @@
-<form (ngSubmit)="addRoom(roomName.value)">
+<form (ngSubmit)="checkLogin(roomName.value)">
   <div fxLayout="column" fxLayoutAlign="center" fxLayoutGap="10px">
     <mat-form-field>
       <input (focus)="eventService.makeFocusOnInputTrue()" (blur)="eventService.makeFocusOnInputFalse()"
-             (keypress)="resetEmptyInputs()" matInput #roomName class="input-block" type="text"
-             maxlength="20" [(ngModel)]="longName"
-             name="roomName" aria-labelledby="room-name-input"/>
+             (keypress)="resetEmptyInputs()" matInput #roomName class="input-block" type="text" autocomplete="off"
+             maxlength="20" [(ngModel)]="longName" name="roomName" aria-labelledby="room-name-input"/>
       <mat-placeholder>{{ 'session.session-name' | translate }}</mat-placeholder>
       <mat-hint align="end" class="count" *ngIf="!emptyInputs"><span aria-hidden="true">{{roomName.value.length}}
         / 20</span></mat-hint>

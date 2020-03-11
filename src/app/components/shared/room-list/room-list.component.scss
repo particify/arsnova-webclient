@@ -1,5 +1,49 @@
-button {
-  color: var(--secondary);
+.mat-icon-button {
+  color: var(--primary);
+}
+
+.filterWrapper {
+  width: 100%;
+}
+
+mat-card {
+  padding: 0 1%;
+}
+
+mat-list {
+  padding: 0;
+  outline: none;
+  background-color: var(--surface);
+}
+
+mat-list-item {
+  height: auto;
+  outline: none;
+}
+
+.container {
+  height: 100%;
+  width: 100%;
+}
+
+.inner {
+  height: 60px;
+  cursor: pointer;
+}
+
+p {
+  margin: 0;
+  font-size: calc(14px + 0.3vw);
+  display: flex;
+  align-items: center;
+}
+
+.mat-badge-medium.mat-badge-after .mat-badge-content {
+  right: -30px;
+}
+
+.short-id {
+  margin-right: 15px;
 }
 
 .delete {
@@ -11,40 +55,6 @@ button {
   color: black;
 }
 
-.filterWrapper {
-  width: 100%;
-}
-
-.filter {
-  color: var(--on-surface) !important;
-}
-
-.clickable {
-  cursor: pointer;
-}
-
-table, tr, td {
-  background-color: var(--surface);
-  color: var(--on-surface);
-  overflow-wrap: break-word;
-  word-wrap: break-word;
-  hyphens: auto;
-}
-
-td.mat-cell:first-of-type, td.mat-footer-cell:first-of-type, th.mat-header-cell:first-of-type {
-  padding-left: 2%;
-}
-
-td.mat-cell:last-of-type, td.mat-footer-cell:last-of-type, th.mat-header-cell:last-of-type {
-  padding-right: 0;
-}
-
-th {
-  font-size: 1rem;
-  background-color: var(--surface);
-  color: var(--on-surface);
-}
-
-.mat-column-role {
+h3 {
   text-align: center;
 }

@@ -26,7 +26,6 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LanguageService } from './services/util/language.service';
 import { MarkdownModule, MarkdownService, MarkedOptions } from 'ngx-markdown';
-import { HomeActionsComponent } from './components/home/home-actions/home-actions.component';
 import { HomePageComponent } from './components/home/home-page/home-page.component';
 import { UserHomeComponent } from './components/home/user-home/user-home.component';
 import { AppConfig } from './app.config';
@@ -66,7 +65,6 @@ export function initializeApp(appConfig: AppConfig) {
     PasswordResetComponent,
     RegisterComponent,
     UserActivationComponent,
-    HomeActionsComponent,
     HomePageComponent,
     IntroductionComponent,
     UserHomeComponent,

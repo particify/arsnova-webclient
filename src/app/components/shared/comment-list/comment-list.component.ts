@@ -52,7 +52,9 @@ export class CommentListComponent implements OnInit, OnDestroy {
   currentFilter = '';
   commentVoteMap = new Map<string, Vote>();
   scroll = false;
+  scrollMax: number;
   scrollExtended = false;
+  scrollExtendedMax = 500;
   searchInput = '';
   search = false;
   searchPlaceholder = '';
@@ -113,6 +115,12 @@ export class CommentListComponent implements OnInit, OnDestroy {
     this.translateService.get('comment-list.search').subscribe(msg => {
       this.searchPlaceholder = msg;
     });
+    const appPadding = document.body.clientWidth * 0.04;
+    if (this.deviceType === 'desktop') {
+      this.scrollMax = 55 + appPadding;
+    } else {
+      this.scrollMax = 46 + appPadding;
+    }
   }
 
   ngOnDestroy() {
@@ -123,8 +131,8 @@ export class CommentListComponent implements OnInit, OnDestroy {
 
   checkScroll(): void {
     const currentScroll = document.documentElement.scrollTop;
-    this.scroll = currentScroll >= 65;
-    this.scrollExtended = currentScroll >= 300;
+    this.scroll = currentScroll >= this.scrollMax;
+    this.scrollExtended = currentScroll >= this.scrollExtendedMax;
   }
 
   scrollTop() {

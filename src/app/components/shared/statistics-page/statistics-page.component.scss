@@ -8,6 +8,10 @@ mat-tab-group {
   max-width: 800px;
 }
 
+::ng-deep .mat-tab-labels {
+  justify-content: center;
+}
+
 mat-icon {
   color: var(--on-surface);
   font-size: 30px;

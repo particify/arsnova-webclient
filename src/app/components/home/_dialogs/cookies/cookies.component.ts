@@ -13,7 +13,6 @@ export class CookiesComponent implements OnInit, AfterViewInit {
   @ViewChild('header')
   dialogTitle: ElementRef;
 
-  deviceType: string;
   currentLang: string;
 
   confirmButtonType: DialogConfirmActionButtonType = DialogConfirmActionButtonType.Primary;

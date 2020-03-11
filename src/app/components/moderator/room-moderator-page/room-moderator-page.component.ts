@@ -25,7 +25,7 @@ export class RoomModeratorPageComponent extends RoomPageComponent implements OnI
 
   room: Room;
   isLoading = true;
-  deviceType = localStorage.getItem('deviceType');
+  deviceWidth = innerWidth;
   moderatorCommentCounter: number;
   viewModuleCount = 1;
 
