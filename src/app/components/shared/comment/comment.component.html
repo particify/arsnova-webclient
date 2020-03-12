@@ -1,5 +1,4 @@
-<mat-card id="comment-card" [ngClass]="{'highlighted': comment.highlighted, '': !comment.highlighted,
-                                         'moderator': moderator}"
+<mat-card id="comment-card" [ngClass]="{'highlighted': comment.highlighted, '': !comment.highlighted}"
           [@slide]="slideAnimationState" (@slide.done)="changeSlideState()">
   <div fxLayout="column">
     <div fxLayout="row" class="comment-actions">

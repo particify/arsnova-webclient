@@ -31,15 +31,15 @@
       <mat-cell *matCellDef="let answer; let i = index">
         <button *ngIf="isAnswerEdit !== i" mat-icon-button (click)="goInEditMode(i, answer)"
                 matTooltip="{{ 'content.edit-answer' | translate }}">
-          <mat-icon>edit</mat-icon>
+          <mat-icon class="editIcon">edit</mat-icon>
         </button>
         <button *ngIf="isAnswerEdit === i" mat-icon-button (click)="updateAnswer(i, answer)"
                 matTooltip="{{ 'content.save-content-group' | translate}}">
-          <mat-icon>done</mat-icon>
+          <mat-icon class="editIcon">done</mat-icon>
         </button>
         <button *ngIf="isAnswerEdit === i" mat-icon-button (click)="leaveEditMode()"
                 matTooltip="{{ 'content.abort' | translate}}">
-          <mat-icon>clear</mat-icon>
+          <mat-icon class="editIcon">clear</mat-icon>
         </button>
         <button mat-icon-button *ngIf="isAnswerEdit !== i" class="delete"
                 (click)="deleteAnswer($event, answer.answerOption.label)"
