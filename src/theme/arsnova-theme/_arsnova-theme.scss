@@ -1,0 +1,7 @@
+@import '~@angular/material/theming';
+
+$arsnova-primary: mat-palette($mat-purple, 500);
+$arsnova-accent: mat-palette($mat-amber, 200);
+$arsnova-warn: mat-palette($mat-red, A100);
+
+$arsnova-theme: mat-light-theme($arsnova-primary, $arsnova-accent, $arsnova-warn);

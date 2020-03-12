@@ -1,7 +1,0 @@
-@import '~@angular/material/theming';
-
-$high-contrast-primary: mat-palette($mat-purple, 500);
-$high-contrast-accent: mat-palette($mat-amber, 200);
-$high-contrast-warn: mat-palette($mat-red, A100);
-
-$high-contrast-theme: mat-light-theme($high-contrast-primary, $high-contrast-accent, $high-contrast-warn);

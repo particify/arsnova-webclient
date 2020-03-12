@@ -1,17 +1,12 @@
-@import 'theme/light-theme/light-theme';
 @import 'theme/dark-theme/dark-theme';
-@import 'theme/beamer-theme/beamer-theme';
+@import 'theme/arsnova-theme/arsnova-theme';
 
 @include mat-core();
 
-@include angular-material-theme($light-theme);
+@include angular-material-theme($arsnova-theme);
 
 .dark {
   @include angular-material-theme($dark-theme);
-}
-
-.beamer {
-  @include angular-material-theme($beamer-theme);
 }
 
 @import 'theme/theme';
@@ -138,7 +133,7 @@ mat-dialog-content {
 }
 
 .feedback-progress .mat-progress-bar-buffer {
-  background-color: var(--feedback-buffer);
+  background-color: var(--secondary-variant);
 }
 
 .statistic-status-good .mat-progress-bar-fill::after {
@@ -172,7 +167,7 @@ mat-dialog-content {
 }
 
 .mat-tab-header-pagination-disabled .mat-tab-header-pagination-chevron {
-  border-color: var(--feedback-buffer);
+  border-color: var(--secondary-variant);
   opacity: 0.5;
 }
 
