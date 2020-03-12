@@ -10,7 +10,7 @@ import { Subscription } from 'rxjs';
 
 export class ThemeDirective implements OnInit, OnDestroy {
 
-  private themeName = 'dark';
+  private themeName = 'arsnova';
   private themServiceSubscription: Subscription;
 
   constructor(private elementRef: ElementRef,
