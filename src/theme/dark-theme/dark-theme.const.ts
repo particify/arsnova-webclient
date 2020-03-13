@@ -1,41 +1,39 @@
 export const dark = {
 
-  '--primary': '#bb86fc',
-  '--primary-variant': '#d1c4e9',
+  '--primary': '#4caf50',
+  '--primary-variant': '#a5d6a7',
 
-  '--secondary': '#03dac6',
-  '--secondary-variant': '#b2dfdb',
+  '--secondary': '#ffca28',
+  '--secondary-variant': '#ffecb3',
 
-  '--warn': '#f44336',
-  '--on-warn': 'black',
+  '--warn': '#b71c1c',
+  '--on-warn': '#ffffff',
 
-  '--background': '#121212',
-  '--surface': '#212121',
-  '--dialog': '#37474f',
-  '--cancel': '#26343c',
+  '--background': '#141414',
+  '--surface': '#1e1e1e',
+  '--dialog': '#2d2d2d',
+  '--cancel': '#3a3a3a',
   '--alt-surface': '#323232',
-  '--alt-dialog': '#455a64',
+  '--alt-dialog': '#2a2a2a',
 
-  '--on-primary': 'black',
-  '--on-secondary': 'black',
-  '--on-background': 'white',
-  '--on-surface': 'white',
-  '--on-cancel': 'white',
+  '--on-primary': '#000000',
+  '--on-secondary': '#000000',
+  '--on-background': '#ffffff',
+  '--on-surface': '#ffffff',
+  '--on-cancel': '#ffffff',
+
+  '--table-a': '#424242',
+  '--table-b': '#505050',
 
   '--green': '#43a047',
   '--green-light': '#e8f5e9',
-  '--red': '#ff7043',
+  '--red': '#ff5722',
   '--red-light': '#ffccbc',
   '--yellow': '#fdd835',
   '--yellow-light': '#fff9c4',
   '--blue': '#3f51b5',
   '--grey': '#BDBDBD',
-  '--black': '#212121',
-  '--moderator': '#37474f',
-  '--feedback-buffer': '#d0fff1',
-  '--table-a': '#424242',
-  '--table-b': '#505050'
-
+  '--black': '#000000'
 };
 
 export const dark_meta = {
