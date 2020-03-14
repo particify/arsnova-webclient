@@ -175,7 +175,8 @@
     "agree": "Ich stimme eher zu",
     "neither-agree-nor-disagree": "Weder noch",
     "disagree": "Ich stimme eher nicht zu",
-    "strongly-disagree": "Ich stimme nicht zu"
+    "strongly-disagree": "Ich stimme nicht zu",
+    "format-info": "Du kannst zwischen den vier verschiedenen Frageformaten 'Choice', 'Likert', 'Ja/Nein' und 'Text' wählen."
   },
   "feedback": {
     "is-stopped": "Feedback ist angehalten.",

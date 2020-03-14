@@ -11,17 +11,24 @@
                   matInput #body [(ngModel)]="content.body" placeholder="{{'content.body' | translate}}" name="body"
                   matTextareaAutosize matAutosizeMinRows="3" matAutosizeMaxRows="8" maxlength="250"></textarea>
       </mat-form-field>
-      <mat-form-field class="group">
-        <input (focus)="eventService.makeFocusOnInputTrue()" (blur)="eventService.makeFocusOnInputFalse()"
-               matInput #group [formControl]="myControl" [matAutocomplete]="auto" maxlength="25"
-               placeholder="{{'content.collection' | translate}}"
-               [(ngModel)]="lastCollection"/>
-        <mat-autocomplete #auto="matAutocomplete">
-          <mat-option *ngFor="let collection of contentGroups" [value]="collection">
-            {{collection}}
-          </mat-option>
-        </mat-autocomplete>
-      </mat-form-field>
+      <div fxLayout="row" fxLayoutAlign="start center">
+        <mat-form-field class="group">
+          <input (focus)="eventService.makeFocusOnInputTrue()" (blur)="eventService.makeFocusOnInputFalse()"
+                 matInput #group [formControl]="myControl" [matAutocomplete]="auto" maxlength="25"
+                 placeholder="{{'content.collection' | translate}}"
+                 [(ngModel)]="lastCollection"/>
+          <mat-autocomplete #auto="matAutocomplete">
+            <mat-option *ngFor="let collection of contentGroups" [value]="collection">
+              {{collection}}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+        <span class="fill-remaining-space"></span>
+        <button mat-icon-button #tt="matTooltip" matTooltip="{{ 'content.format-info' | translate }}"
+                (click)="tt.toggle()">
+          <mat-icon class="info-icon">info</mat-icon>
+        </button>
+      </div>
     </form>
     <mat-tab-group [dynamicHeight]=true [disablePagination]=true>
       <mat-tab label="Choice">

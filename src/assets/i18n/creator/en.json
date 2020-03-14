@@ -175,7 +175,8 @@
     "agree": "Agree",
     "neither-agree-nor-disagree": "Neither agree or disagree",
     "disagree": "Disagree",
-    "strongly-disagree": "Strongly disagree"
+    "strongly-disagree": "Strongly disagree",
+    "format-info": "You can choose between the four different question formats 'Choice', 'Likert', 'Yes/No' and 'Text'."
   },
   "feedback": {
     "is-stopped": "Voting got stopped",
