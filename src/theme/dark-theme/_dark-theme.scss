@@ -1,12 +1,7 @@
 @import '~@angular/material/theming';
 
-$dark-primary: mat-palette($mat-blue-gray, 800);
-$dark-accent: mat-palette($mat-orange, 200);
-$dark-warn: mat-palette($mat-red, A200);
+$dark-primary: mat-palette($mat-green, 500);
+$dark-accent: mat-palette($mat-amber, 400);
+$dark-warn: mat-palette($mat-red, 900);
 
 $dark-theme: mat-dark-theme($dark-primary, $dark-accent, $dark-warn);
-
-a {
-  text-decoration: underline;
-  color: var(--on-surface);
-}
