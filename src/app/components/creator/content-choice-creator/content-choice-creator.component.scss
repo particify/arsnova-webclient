@@ -3,32 +3,26 @@ mat-radio-button {
   color: var(--on-surface);
 }
 
-mat-header-cell {
+mat-card {
+  margin-top: 20px;
+  padding: 0 1%;
+}
+
+mat-list {
+  padding: 0;
   background-color: var(--surface);
-  color: var(--on-surface);
 }
 
-mat-row {
-  height: 70px;
-  background-color: var(--surface);
+::ng-deep .mat-list-item-content {
+  padding: 0 0 0 10px!important;
 }
 
-mat-cell:first-of-type, mat-header-cell:first-of-type {
-  padding-left: 4%;
-}
-
-mat-cell:last-of-type, mat-header-cell:last-of-type {
-  justify-content: center;
-  max-width: 80px;
-  padding-right: calc(4% - 10px);
+.inner {
+  width: 100%;
 }
 
 .delete {
   color: var(--warn);
-}
-
-p {
-  font-size: larger;
 }
 
 .editIcon {
@@ -36,8 +30,14 @@ p {
 }
 
 .editInput {
-  margin-left: 10px;
-  margin-top: 5px;
+  margin-left: 8px;
+  max-width: calc(100% - 120px);
+  height: 60px;
+}
+
+::ng-deep .mat-form-field-infix {
+  margin-top: 10px;
+  border-top: 0;
 }
 
 .activeInput {
@@ -53,6 +53,17 @@ p {
   color: var(--on-surface);
 }
 
+.mat-checkbox-label {
+  height: auto;
+  text-align: center;
+  line-height: 18px;
+}
+
+.answer-label {
+  font-size: larger;
+  word-break: break-all;
+}
+
 .answer-input {
   width: 100%;
   margin: 0 !important;
@@ -64,7 +75,6 @@ p {
   margin: 0 1% 0 3%;
   background-color: var(--primary);
   color: var(--background);
-  font-size: 36px;
   transition: 0.3s;
 }
 
