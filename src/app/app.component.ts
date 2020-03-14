@@ -4,8 +4,6 @@ import { SwUpdate } from '@angular/service-worker';
 import { NotificationService } from './services/util/notification.service';
 import { CustomIconService } from './services/util/custom-icon.service';
 import { ApiConfigService } from './services/http/api-config.service';
-import { MatIconRegistry } from '@angular/material/icon';
-import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-root',
@@ -18,8 +16,6 @@ export class AppComponent implements OnInit {
               private update: SwUpdate,
               public notification: NotificationService,
               private customIconService: CustomIconService,
-              private matIconRegistry: MatIconRegistry,
-              private domSanitizer: DomSanitizer,
               private apiConfigService: ApiConfigService) {
     translationService.setDefaultLang(this.translationService.getBrowserLang());
     sessionStorage.setItem('currentLang', this.translationService.getBrowserLang());
