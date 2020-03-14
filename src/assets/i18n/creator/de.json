@@ -132,7 +132,7 @@
     "delete-answer": "Antwort löschen",
     "delete-description": "Löschen",
     "edit-answer": "Antwort bearbeiten",
-    "need-answers": "Auswahlfragen brauchen Antworten. Bitte füge Antworten hinzu.",
+    "need-answers": "Bitte füge mindestens zwei Antworten hinzu.",
     "no": "Nein",
     "no-empty": "Keine leeren Felder erlaubt. Bitte überprüfe Thema und Inhalt.",
     "no-empty2": "Keine leeren Felder erlaubt.",
