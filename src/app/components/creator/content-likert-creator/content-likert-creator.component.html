@@ -1,16 +1,16 @@
-<form (ngSubmit)="submitContent()" fxLayout="column" fxLayoutGap="20px">
-  <mat-divider></mat-divider>
-  <mat-table [dataSource]="displayAnswers">
-    <ng-container matColumnDef="label">
-      <mat-header-cell *matHeaderCellDef>{{ 'content.answer' | translate }}</mat-header-cell>
-      <mat-cell *matCellDef="let answer">
-        {{ answer.answerOption.label }}
-      </mat-cell>
-    </ng-container>
-    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-  </mat-table>
+<div>
+  <mat-card *ngIf="!isLoading && displayAnswers.length > 0">
+    <mat-list>
+      <mat-list-item fxLayout="column" fxLayoutAlign="center" *ngFor="let answer of displayAnswers; let i = index">
+        <div fxLayout="row">
+          <p>{{ answer.answerOption.label }}</p>
+        </div>
+        <mat-divider *ngIf="i < displayAnswers.length - 1"></mat-divider>
+      </mat-list-item>
+    </mat-list>
+  </mat-card>
   <div fxLayout="row" fxLayoutAlign="center">
-    <button mat-raised-button type="submit" class="button-primary">{{ 'content.create' | translate }}</button>
+    <button mat-raised-button (click)="submitContent()" class="button-primary">
+      {{ 'content.create' | translate }}</button>
   </div>
-</form>
+</div>

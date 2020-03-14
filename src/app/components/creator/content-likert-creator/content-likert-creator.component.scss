@@ -2,14 +2,20 @@ form > button {
   margin: 20px 0;
 }
 
-mat-header-cell {
-  background-color: var(--surface);
-  color: var(--on-surface);
+mat-card {
+  margin-top: 20px;
+  padding: 0 1%;
 }
 
-mat-cell {
-  background-color: var(--secondary);
-  color: var(--on-secondary);
+mat-list {
+  padding: 0;
+  outline: none;
+  background-color: var(--surface);
+}
+
+mat-list-item {
+  height: auto;
+  outline: none;
 }
 
 .mat-raised-button {
