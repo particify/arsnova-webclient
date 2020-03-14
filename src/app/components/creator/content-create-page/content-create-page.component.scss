@@ -10,3 +10,8 @@ mat-tab-group {
 ::ng-deep .mat-tab-labels {
   justify-content: center;
 }
+
+.group {
+  width: 75%;
+  max-width: 300px;
+}

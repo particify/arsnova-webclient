@@ -11,9 +11,9 @@
                   matInput #body [(ngModel)]="content.body" placeholder="{{'content.body' | translate}}" name="body"
                   matTextareaAutosize matAutosizeMinRows="3" matAutosizeMaxRows="8" maxlength="250"></textarea>
       </mat-form-field>
-      <mat-form-field>
+      <mat-form-field class="group">
         <input (focus)="eventService.makeFocusOnInputTrue()" (blur)="eventService.makeFocusOnInputFalse()"
-               matInput #group [formControl]="myControl" [matAutocomplete]="auto" maxlength="30"
+               matInput #group [formControl]="myControl" [matAutocomplete]="auto" maxlength="25"
                placeholder="{{'content.collection' | translate}}"
                [(ngModel)]="lastCollection"/>
         <mat-autocomplete #auto="matAutocomplete">
