@@ -1,11 +1,7 @@
 <div fxLayout="row" [ngClass]="{'search-container' : !scroll, 'search-container-fixed' : scroll}"
      *ngIf="comments.length > 2" (window:scroll)="checkScroll()" fxLayoutAlign="center">
-  <mat-label *ngIf="deviceType === 'desktop'" fxLayoutAlign="center center">
-    <mat-icon class="search-icon">search</mat-icon>
-  </mat-label>
   <input (focus)="eventService.makeFocusOnInputTrue()" (blur)="eventService.makeFocusOnInputFalse()" #searchBox
-         id="searchBox" [ngClass]="{'desktop-input': deviceType === 'desktop',
-   'mobile-input': deviceType === 'mobile' && !search, 'mobile-input-2': deviceType === 'mobile' && search }"
+         id="searchBox" [ngClass]="{'search-input-hidden': !search, 'search-input': search }"
          (input)="searchComments()" [(ngModel)]="searchInput" [placeholder]="searchPlaceholder"
          aria-labelledby="search-box-input-description">
   <button id="search_close-button" mat-icon-button class="searchBarButton close" *ngIf="searchInput !== '' || search"
@@ -21,7 +17,8 @@
     </div>
 
     <button mat-icon-button class="searchBarButton" (click)="activateSearch(); filterComments('')"
-            *ngIf="deviceType === 'mobile' && !search && comments && comments.length > 0">
+            *ngIf="!search && comments && comments.length > 0"
+            matTooltip="{{ 'comment-list.filter-search' | translate }}">
       <mat-icon class="searchBarIcon">search</mat-icon>
     </button>
 

@@ -13,7 +13,11 @@ mat-card-content > :first-child {
   height: 35px;
   font-size: 35px;
   font-weight: bold;
-  color: var(--on-surface)
+  color: var(--on-surface);
+}
+
+.light {
+  opacity: 0.7;
 }
 
 .upVoted {
@@ -22,10 +26,6 @@ mat-card-content > :first-child {
 
 .downVoted {
   color: var(--red);
-}
-
-.not-marked {
-  color: slategray;
 }
 
 .answered-icon {
@@ -46,6 +46,15 @@ mat-card-content > :first-child {
 
 .beamer-icon {
   color: var(--on-surface);
+}
+
+
+.gavel-icon {
+  color: var(--primary);
+}
+
+.delete-icon {
+  color: var(--red);
 }
 
 .score {
@@ -81,7 +90,6 @@ mat-card-content > :first-child {
 }
 
 .date-container {
-  opacity: 0.7;
   color: var(--on-surface);
   padding-top: .3rem;
 }
@@ -100,18 +108,10 @@ mat-card-content > :first-child {
   color: var(--on-secondary) !important;
 }
 
-.gavel {
-  color: var(--primary);
-}
-
 .comment-tags {
   width: 140px;
   margin-top: 1rem;
   cursor: pointer;
-}
-
-.comment-tag {
-  vertical-align: 5px;
 }
 
 .voteUp {

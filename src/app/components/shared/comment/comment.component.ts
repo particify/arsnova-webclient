@@ -39,11 +39,11 @@ export class CommentComponent implements OnInit {
   isCreator = false;
   isModerator = false;
   hasVoted = 0;
+  currentVote: string;
   language: string;
   slideAnimationState = 'hidden';
   deviceType: string;
   inAnswerView = false;
-  currentVote: string;
 
   constructor(protected authenticationService: AuthenticationService,
               private route: ActivatedRoute,
@@ -113,28 +113,19 @@ export class CommentComponent implements OnInit {
     this.comment = this.wsCommentService.toggleFavorite(comment);
   }
 
-  voteUp(comment: Comment): void {
+  vote(vote: number) {
+    const voteString = vote.toString();
     const userId = this.authenticationService.getUser().id;
-    if (this.hasVoted !== 1) {
-      this.wsCommentService.voteUp(comment, userId);
-      this.hasVoted = 1;
-      this.currentVote = '1';
+    if (this.hasVoted !== vote) {
+      if (voteString === '1') {
+        this.wsCommentService.voteUp(this.comment, userId);
+      } else {
+        this.wsCommentService.voteDown(this.comment, userId);
+      }
+      this.currentVote = voteString;
+      this.hasVoted = vote;
     } else {
-      this.wsCommentService.resetVote(comment, userId);
-      this.hasVoted = 0;
-      this.currentVote = '0';
-    }
-    this.resetVotingAnimation();
-  }
-
-  voteDown(comment: Comment): void {
-    const userId = this.authenticationService.getUser().id;
-    if (this.hasVoted !== -1) {
-      this.wsCommentService.voteDown(comment, userId);
-      this.hasVoted = -1;
-      this.currentVote = '-1';
-    } else {
-      this.wsCommentService.resetVote(comment, userId);
+      this.wsCommentService.resetVote(this.comment, userId);
       this.hasVoted = 0;
       this.currentVote = '0';
     }
