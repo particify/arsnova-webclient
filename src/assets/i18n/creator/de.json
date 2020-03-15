@@ -132,7 +132,7 @@
     "delete-answer": "Antwort löschen",
     "delete-description": "Löschen",
     "edit-answer": "Antwort bearbeiten",
-    "need-answers": "Auswahlfragen brauchen Antworten. Bitte füge Antworten hinzu.",
+    "need-answers": "Bitte füge mindestens zwei Antworten hinzu.",
     "no": "Nein",
     "no-empty": "Keine leeren Felder erlaubt. Bitte überprüfe Thema und Inhalt.",
     "no-empty2": "Keine leeren Felder erlaubt.",
@@ -175,7 +175,8 @@
     "agree": "Ich stimme eher zu",
     "neither-agree-nor-disagree": "Weder noch",
     "disagree": "Ich stimme eher nicht zu",
-    "strongly-disagree": "Ich stimme nicht zu"
+    "strongly-disagree": "Ich stimme nicht zu",
+    "format-info": "Du kannst zwischen den vier verschiedenen Frageformaten 'Choice', 'Likert', 'Ja/Nein' und 'Text' wählen."
   },
   "feedback": {
     "is-stopped": "Feedback ist angehalten.",

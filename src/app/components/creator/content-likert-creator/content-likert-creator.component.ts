@@ -42,11 +42,11 @@ export class ContentLikertCreatorComponent implements OnInit {
     null
   );
 
-  displayedColumns = ['label'];
   roomId: string;
 
   displayAnswers: DisplayAnswer[];
   newAnswerOptionPoints = 0;
+  isLoading = true;
 
   constructor(private contentService: ContentService,
               private notificationService: NotificationService,
@@ -61,6 +61,7 @@ export class ContentLikertCreatorComponent implements OnInit {
         this.content.options.push(new AnswerOption(msgs[this.likertScales[i]], this.newAnswerOptionPoints));
       }
       this.fillCorrectAnswers();
+      this.isLoading = false;
     });
   }
 

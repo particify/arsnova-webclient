@@ -10,48 +10,42 @@
     </mat-radio-button>
   </mat-radio-group>
 
-  <mat-table [dataSource]="displayAnswers">
-    <ng-container matColumnDef="label">
-      <mat-header-cell *matHeaderCellDef>{{ 'content.answer' | translate }}</mat-header-cell>
-      <mat-cell *matCellDef="let answer; let i = index">
-        <mat-checkbox (click)="switchValue(answer.answerOption.label)" [(ngModel)]="answer.correct"
-                      [checked]="answer.correct"
-                      name="{{ answer.answerOption.label }}">
-          <p *ngIf="isAnswerEdit !== i">{{ answer.answerOption.label }}</p>
-        </mat-checkbox>
-        <mat-form-field class="editInput" [ngClass]="{'activeInput': isAnswerEdit === i,
+  <mat-card *ngIf="displayAnswers.length > 0">
+    <mat-list>
+      <mat-list-item fxLayout="column" fxLayoutAlign="center" *ngFor="let answer of displayAnswers; let i = index">
+        <div fxLayout="row" fxLayoutAlign="center center" class="inner">
+          <mat-checkbox (click)="switchValue(answer.answerOption.label)" [(ngModel)]="answer.correct"
+                        [checked]="answer.correct"
+                        name="{{ answer.answerOption.label }}">
+            <span class="answer-label" *ngIf="isAnswerEdit !== i">{{ answer.answerOption.label }}</span>
+          </mat-checkbox>
+          <mat-form-field class="editInput" [ngClass]="{'activeInput': isAnswerEdit === i,
         'inactiveInput': isAnswerEdit !== i}">
-          <input name="answerEdit" matInput [(ngModel)]="updatedAnswer">
-        </mat-form-field>
-      </mat-cell>
-    </ng-container>
-
-    <ng-container matColumnDef="actions">
-      <mat-header-cell *matHeaderCellDef>{{ 'content.actions' | translate }}</mat-header-cell>
-      <mat-cell *matCellDef="let answer; let i = index">
-        <button *ngIf="isAnswerEdit !== i" mat-icon-button (click)="goInEditMode(i, answer)"
-                matTooltip="{{ 'content.edit-answer' | translate }}">
-          <mat-icon class="editIcon">edit</mat-icon>
-        </button>
-        <button *ngIf="isAnswerEdit === i" mat-icon-button (click)="updateAnswer(i, answer)"
-                matTooltip="{{ 'content.save-content-group' | translate}}">
-          <mat-icon class="editIcon">done</mat-icon>
-        </button>
-        <button *ngIf="isAnswerEdit === i" mat-icon-button (click)="leaveEditMode()"
-                matTooltip="{{ 'content.abort' | translate}}">
-          <mat-icon class="editIcon">clear</mat-icon>
-        </button>
-        <button mat-icon-button *ngIf="isAnswerEdit !== i" class="delete"
-                (click)="deleteAnswer($event, answer.answerOption.label)"
-                matTooltip="{{ 'content.delete-answer' | translate }}">
-          <mat-icon>delete</mat-icon>
-        </button>
-      </mat-cell>
-    </ng-container>
-
-    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-  </mat-table>
+            <input name="answerEdit" matInput [(ngModel)]="updatedAnswer">
+          </mat-form-field>
+          <span class="fill-remaining-space"></span>
+          <button *ngIf="isAnswerEdit !== i" mat-icon-button (click)="goInEditMode(i, answer)"
+                  matTooltip="{{ 'content.edit-answer' | translate }}">
+            <mat-icon class="editIcon">edit</mat-icon>
+          </button>
+          <button *ngIf="isAnswerEdit === i" mat-icon-button (click)="updateAnswer(i, answer)"
+                  matTooltip="{{ 'content.save-content-group' | translate}}">
+            <mat-icon class="editIcon">done</mat-icon>
+          </button>
+          <button *ngIf="isAnswerEdit === i" mat-icon-button (click)="leaveEditMode()"
+                  matTooltip="{{ 'content.abort' | translate}}">
+            <mat-icon class="editIcon">clear</mat-icon>
+          </button>
+          <button mat-icon-button *ngIf="isAnswerEdit !== i" class="delete"
+                  (click)="deleteAnswer($event, answer.answerOption.label)"
+                  matTooltip="{{ 'content.delete-answer' | translate }}">
+            <mat-icon>delete</mat-icon>
+          </button>
+          <mat-divider *ngIf="i < displayAnswers.length - 1"></mat-divider>
+        </div>
+      </mat-list-item>
+    </mat-list>
+  </mat-card>
 
   <div fxLayout="row" fxLayoutAlign="center" fxLayoutGap="20px">
     <mat-form-field class="answer-input">
@@ -59,7 +53,7 @@
              matInput [(ngModel)]="newAnswerOptionLabel" placeholder="{{ 'content.answer' | translate }}" name="answer">
     </mat-form-field>
     <button mat-fab class="add" [ngClass]="{'multiple': !singleChoice}" (click)="addAnswer($event)">
-      +
+      <mat-icon>add</mat-icon>
     </button>
   </div>
   <div fxLayout="row" fxLayoutAlign="center" fxLayoutGap="20px">

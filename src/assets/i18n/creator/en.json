@@ -132,7 +132,7 @@
     "delete-answer": "Delete answer",
     "delete-description": "Delete",
     "edit-answer": "Edit answer",
-    "need-answers": "Choice content needs answers. Please add some answers.",
+    "need-answers": "Please add at least two answers.",
     "no": "No",
     "no-empty": "No empty fields allowed. Please check subject and body.",
     "no-empty2": "No empty filed allowed.",
@@ -175,7 +175,8 @@
     "agree": "Agree",
     "neither-agree-nor-disagree": "Neither agree or disagree",
     "disagree": "Disagree",
-    "strongly-disagree": "Strongly disagree"
+    "strongly-disagree": "Strongly disagree",
+    "format-info": "You can choose between the four different question formats 'Choice', 'Likert', 'Yes/No' and 'Text'."
   },
   "feedback": {
     "is-stopped": "Voting got stopped",

@@ -241,7 +241,7 @@ export class ContentChoiceCreatorComponent implements OnInit {
       });
       return;
     }
-    if (this.content.options.length === 0) {
+    if (this.content.options.length < 2) {
       this.translationService.get('content.need-answers').subscribe(message => {
         this.notificationService.show(message);
       });
