@@ -76,7 +76,7 @@
     "delete-answer": "Löschen",
     "really-delete-answer": "Willst du die Antwort wirklich löschen?",
     "answer-deleted": "Antwort wurde gelöscht.",
-    "has-answer": "Du hast den Kommentar beantwortet.",
+    "go-to-answer": "Gehe zur Antwort",
     "cancel": "Abbrechen",
     "cancel-description": "Abbrechen",
     "comment": "Der Kommentar {{ comment }} wurde um {{ time }} Uhr verfasst und hat derzeitig {{ votes }}. {{correct}} {{wrong}} {{bonus}} {{beamer}}",
@@ -104,6 +104,7 @@
     "search-box-input-description": "Hier kannst du nach Kommentaren suchen.",
     "send": "Senden",
     "send-description": "Kommentar abschicken",
+    "show-actions": "Zeige weitere Optionen",
     "tag": "Kategorie",
     "vote-down": "Kommentar abwerten",
     "vote-up": "Kommentar aufwerten"

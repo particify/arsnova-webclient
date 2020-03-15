@@ -24,10 +24,6 @@ mat-card-content > :first-child {
   color: var(--red);
 }
 
-.not-marked {
-  color: slategray;
-}
-
 .answered-icon {
   color: var(--blue);
 }
@@ -46,6 +42,15 @@ mat-card-content > :first-child {
 
 .beamer-icon {
   color: var(--on-surface);
+}
+
+
+.gavel-icon {
+  color: var(--primary);
+}
+
+.delete-icon {
+  color: var(--red);
 }
 
 .score {
@@ -98,10 +103,6 @@ mat-card-content > :first-child {
 
 .highlighted * {
   color: var(--on-secondary) !important;
-}
-
-.gavel {
-  color: var(--primary);
 }
 
 .comment-tags {

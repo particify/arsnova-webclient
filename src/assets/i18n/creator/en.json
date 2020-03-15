@@ -75,7 +75,7 @@
     "delete-answer": "Delete",
     "really-delete-answer": "Do you really want to delete this answer?",
     "answer-deleted": "Answer has been deleted.",
-    "has-answer": "You commented on the comment.",
+    "go-to-answer": "See the answer",
     "ask-question-description": "Enter your comment to the audience here!",
     "cancel": "Cancel",
     "cancel-description": "Cancel",
@@ -104,7 +104,8 @@
     "search-box-input-description": "Here you can search for comment.",
     "send": "Send",
     "send-description": "Send comment",
-    "tag": "Tag",
+    "show-actions": "Show more options",
+    "tag": "Category",
     "vote-down": "Vote down",
     "vote-up": "Vote up"
   },
