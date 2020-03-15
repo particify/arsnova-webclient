@@ -20,6 +20,8 @@ import { NotificationService } from '../../../services/util/notification.service
   styleUrls: ['./room-page.component.scss']
 })
 export class RoomPageComponent implements OnInit, OnDestroy {
+
+  deviceWidth = innerWidth;
   room: Room = null;
   protected roomStats: RoomStats;
   protected contentGroups: ContentGroup[] = [];

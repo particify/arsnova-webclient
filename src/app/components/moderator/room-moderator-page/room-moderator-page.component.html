@@ -22,8 +22,8 @@
       <div fxLayout="column" fxLayoutAlign="center" fxLayoutGap="20px">
         <mat-grid-list cols="{{viewModuleCount}}" rowHeight="1:1" *ngIf="viewModuleCount > 1 && this.moderationEnabled">
           <mat-grid-tile>
-            <button id="question_answer-button"
-                    mat-icon-button [disableRipple]="true"
+            <button id="question_answer-button" mat-icon-button
+                    [ngClass]="{'hover': deviceWidth > 500}" [disableRipple]="true"
                     routerLink="/moderator/room/{{ room.shortId }}/comments">
               <mat-icon matBadge="{{commentCounter}}" class="main-icon"
                         [ngClass]="{'desktop' : deviceWidth > 500}">question_answer
@@ -32,8 +32,7 @@
             </button>
           </mat-grid-tile>
           <mat-grid-tile *ngIf="moderationEnabled">
-            <button id="gavel-button"
-                    mat-icon-button [disableRipple]="true"
+            <button id="gavel-button" mat-icon-button [ngClass]="{'hover': deviceWidth > 500}" [disableRipple]="true"
                     routerLink="/moderator/room/{{ room.shortId }}/moderator/comments">
               <mat-icon matBadge="{{moderatorCommentCounter}}" class="main-icon"
                         [ngClass]="{'desktop' : deviceWidth > 500}">gavel
@@ -43,7 +42,8 @@
           </mat-grid-tile>
         </mat-grid-list>
         <div fxLayout="row" fxLayoutAlign="center" *ngIf="!this.moderationEnabled" class="question-button-div">
-          <button id="question_answer-button2" mat-icon-button [disableRipple]="true"
+          <button id="question_answer-button2" mat-icon-button
+                  [ngClass]="{'hover': deviceWidth > 500}" [disableRipple]="true"
                   routerLink="/moderator/room/{{ room.shortId }}/comments" aria-labelledby="question_answer">
             <mat-icon matBadge="{{commentCounter}}" class="main-icon"
                       [ngClass]="{'desktop' : deviceWidth > 500}">question_answer

@@ -23,7 +23,6 @@ import { ContentGroup } from '../../../models/content-group';
 })
 export class RoomCreatorPageComponent extends RoomPageComponent implements OnInit, OnDestroy, AfterContentInit {
 
-  deviceWidth = innerWidth;
   viewModuleCount = 1;
   moderatorCommentCounter: number;
 
