@@ -24,8 +24,6 @@ import { KeyboardKey } from '../../../utils/keyboard/keys';
 export class RoomModeratorPageComponent extends RoomPageComponent implements OnInit, OnDestroy, AfterContentInit {
 
   room: Room;
-  isLoading = true;
-  deviceWidth = innerWidth;
   moderatorCommentCounter: number;
   viewModuleCount = 1;
 

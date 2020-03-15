@@ -5,10 +5,15 @@ mat-card {
 
 .main-button {
   width: 90%;
-  height: 80%;
-  color: var(--primary) !important;
+  height: 100%;
+  color: var(--primary);
   transition: all 150ms;
+  &.mat-focus-indicator {
+    border-radius: 0;
+  }
+}
 
+.hover {
   &:hover {
     transform: scale(1.1)
   }

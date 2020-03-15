@@ -27,7 +27,12 @@ mat-card-content > :first-child {
 
 .main-button {
   transition: all 150ms;
+  &.mat-focus-indicator {
+    border-radius: 0;
+  }
+}
 
+.hover {
   &:hover {
     transform: scale(1.1)
   }

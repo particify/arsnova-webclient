@@ -26,7 +26,8 @@
       </mat-card-content>
       <mat-grid-list cols="2" rowHeight="1:1" [ngClass]="{'big-container': deviceWidth >= 500}">
         <mat-grid-tile>
-          <button id="question_answer-button" mat-icon-button class="main-button" [disableRipple]="true"
+          <button id="question_answer-button" mat-icon-button class="main-button"
+                  [ngClass]="{'hover': deviceWidth > 500}" [disableRipple]="true"
                   routerLink="/participant/room/{{ room.shortId }}/comments" aria-labelledby="question_answer">
             <mat-icon matBadge="{{commentCounter}}" matBadgeColor="primary" class="main-icon"
                       [ngClass]="{'desktop' : deviceWidth > 500}">question_answer
@@ -35,7 +36,8 @@
           </button>
         </mat-grid-tile>
         <mat-grid-tile>
-          <button mat-icon-button class="main-button" [disableRipple]="true"
+          <button mat-icon-button class="main-button"
+                  [ngClass]="{'hover': deviceWidth > 500}" [disableRipple]="true"
                   routerLink="/participant/room/{{ room.shortId }}/feedback-barometer">
             <mat-icon class="main-icon" [ngClass]="{'desktop' : deviceWidth > 500}">thumbs_up_down</mat-icon>
             <h3 *ngIf="deviceWidth >= 320" class="button-text">{{ 'room-page.live-feedback' | translate}}</h3>
