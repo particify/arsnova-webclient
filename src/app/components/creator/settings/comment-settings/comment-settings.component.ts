@@ -33,6 +33,7 @@ export class CommentSettingsComponent implements OnInit {
   directSendDefault = true;
   enableTags = false;
   tags: string[] = [];
+  timestamp = new Date();
 
   constructor(
     public dialog: MatDialog,
@@ -183,9 +184,6 @@ export class CommentSettingsComponent implements OnInit {
     this.roomService.updateRoom(this.editRoom)
       .subscribe((room) => {
         this.editRoom = room;
-        this.translationService.get('settings.changes-successful').subscribe(msg => {
-          this.notificationService.show(msg);
-        });
       });
   }
 }
