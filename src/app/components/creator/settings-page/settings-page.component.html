@@ -1,6 +1,6 @@
 <div *ngIf="!isLoading">
-  <div *ngFor="let settings of settingsComponents">
-    <app-settings [headerName]="settings.headerName" [componentName]="settings.componentName" [room]="room">
+  <div *ngFor="let setting of settings">
+    <app-settings [settings]="setting" [room]="room">
     </app-settings>
   </div>
 </div>

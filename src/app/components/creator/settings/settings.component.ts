@@ -7,6 +7,7 @@ import { EventService } from '../../../services/util/event.service';
 import { LanguageService } from '../../../services/util/language.service';
 import { MatDialog } from '@angular/material/dialog';
 import { Room } from '../../../models/room';
+import { Settings } from '../settings-page/settings-page.component';
 
 @Component({
   selector: 'app-settings',
@@ -15,8 +16,7 @@ import { Room } from '../../../models/room';
 })
 export class SettingsComponent implements OnInit {
 
-  @Input() componentName: string;
-  @Input() headerName: string;
+  @Input() settings: Settings;
   @Input() room: Room;
 
   expanded = false;
@@ -33,7 +33,7 @@ export class SettingsComponent implements OnInit {
   }
 
   ngOnInit() {
-    if (this.componentName === 'generalSettings') {
+    if (this.settings.componentName === 'generalSettings') {
       this.expanded = true;
     }
   }
