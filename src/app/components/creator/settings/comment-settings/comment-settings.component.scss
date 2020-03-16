@@ -4,7 +4,11 @@
 
 .action {
   margin: 10px 0;
-  min-width: 220px;
+  min-width: 200px;
+}
+
+.delete {
+  color: var(--warn);
 }
 
 .update {

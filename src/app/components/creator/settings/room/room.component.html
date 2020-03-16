@@ -32,12 +32,13 @@
         <markdown [data]="description"></markdown>
       </mat-tab>
     </mat-tab-group>
-    <button mat-raised-button class="delete button-warn" (click)="openDeleteRoomDialog()" aria-labelledby="delete-room">
+  </div>
+  <div fxLayout="row">
+    <button mat-button class="delete" (click)="openDeleteRoomDialog()" aria-labelledby="delete-room">
       <mat-icon>delete</mat-icon>
       {{ 'settings.delete-room' | translate }}
     </button>
-  </div>
-  <div fxLayoutAlign="end">
+    <span class="fill-remaining-space"></span>
     <button mat-raised-button [disabled]="name === editRoom.name &&
     (description === editRoom.description || description === '' && editRoom.description === undefined)"
             class="button-primary update" (click)="saveChanges()">{{ 'settings.update' | translate }}</button>

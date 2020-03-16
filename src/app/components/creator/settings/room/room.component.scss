@@ -1,6 +1,5 @@
 .delete {
-  margin: 20px 0 20px 0;
-  width: 180px;
+  color: var(--warn);
 }
 
 .update {
@@ -12,9 +11,6 @@ mat-form-field {
 }
 
 button {
+  margin-top: 20px;
   min-width: 105px;
-}
-
-mat-icon {
-  margin-right: 10px;
 }
