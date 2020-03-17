@@ -17,16 +17,6 @@
   color: var(--on-warn);
 }
 
-.dialog-action-buttons .cancel-button:focus {
-  background: var(--on-surface);
-  color: var(--background);
-}
-
-.dialog-action-buttons .primary-confirm-button:focus {
-  background: var(--on-surface);
-  color: var(--background);
-}
-
 button {
   min-width: 100px;
 }
