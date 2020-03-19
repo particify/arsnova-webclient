@@ -1,4 +1,17 @@
 mat-list-item {
-  color: var(--on-surface);
+  background-color: var(--background);
   margin-bottom: 10px;
+  border-radius: 5px;
+  align-items: center;
+  transition: 500ms;
+  color: var(--on-surface);
 }
+
+.correct {
+  background-color: var(--green);
+  & .label {
+    transition: 500ms;
+    color: var(--black);
+  }
+}
+
