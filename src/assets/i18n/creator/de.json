@@ -305,6 +305,7 @@
     "improvable": "Luft nach oben",
     "no-answers": "Keine Antworten",
     "no-answers-yet": "Es sind noch keine Antworten vorhanden.",
-    "percentage": "Prozent"
+    "percentage": "Prozent",
+    "answer-indicator": "Zeigt die richtigen Antworten"
   }
 }
