@@ -5,6 +5,7 @@ import { ContentService } from '../../../services/http/content.service';
 import { ContentChoice } from '../../../models/content-choice';
 import { TranslateService } from '@ngx-translate/core';
 import { ThemeService } from '../../../../theme/theme.service';
+import { Theme } from '../../../../theme/Theme';
 
 export class AnswerList {
   label: string;
@@ -37,6 +38,7 @@ export class StatisticChoiceComponent implements OnInit {
   contentId: string;
   isLoading = true;
   colorLabel = false;
+  theme: Theme;
 
   constructor(protected route: ActivatedRoute,
               private contentService: ContentService,
@@ -52,7 +54,9 @@ export class StatisticChoiceComponent implements OnInit {
   createChart(colors: string[]) {
     const tickOptions: LinearTickOptions = {
       beginAtZero: true,
-      precision: 0
+      precision: 0,
+      fontColor: this.theme.colors[16].color,
+      fontSize: 16
     };
     this.chart = new Chart('chart', {
       type: 'bar',
@@ -75,6 +79,9 @@ export class StatisticChoiceComponent implements OnInit {
         scales: {
           yAxes: [{
             ticks: tickOptions
+          }],
+          xAxes: [{
+            ticks: tickOptions
           }]
         }
       }
@@ -94,9 +101,10 @@ export class StatisticChoiceComponent implements OnInit {
     const length = content.options.length;
     let green, grey, blue: string;
     this.themeService.getTheme().subscribe(theme => {
-      green = this.themeService.getThemeByKey(theme).colors[19].color;
-      grey = this.themeService.getThemeByKey(theme).colors[26].color;
-      blue = this.themeService.getThemeByKey(theme).colors[25].color;
+      this.theme = this.themeService.getThemeByKey(theme);
+      green = this.theme.colors[19].color;
+      grey = this.theme.colors[26].color;
+      blue = this.theme.colors[25].color;
     });
     for (let i = 0; i < length; i++) {
       this.answerList[i] = new AnswerList(null, null);
