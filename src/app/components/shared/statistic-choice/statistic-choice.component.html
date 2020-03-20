@@ -9,5 +9,8 @@
   </div>
 </div>
 <mat-list role="list">
-  <mat-list-item role="listitem" *ngFor="let a of answerList">{{a.label}} : {{a.answer}}</mat-list-item>
+  <mat-list-item role="listitem" [ngClass]="{'correct': colorLabel && checkIfCorrect(i)}"
+                 *ngFor="let a of answerList; let i = index">
+    <p class="label">{{a.label}} : {{a.answer}}</p>
+  </mat-list-item>
 </mat-list>

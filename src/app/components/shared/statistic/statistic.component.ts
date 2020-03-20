@@ -44,13 +44,8 @@ export class StatisticComponent implements OnInit {
     });
   }
 
-  switchAnswers() {
-    if (this.showsCorrect === false) {
-      this.choice.showCorrect();
-      this.showsCorrect = true;
-    } else {
-      this.choice.showNormal();
-      this.showsCorrect = false;
-    }
+  switchAnswers(showsCorrect: boolean) {
+    this.choice.toggleCorrect(!showsCorrect);
+    this.showsCorrect = !showsCorrect;
   }
 }

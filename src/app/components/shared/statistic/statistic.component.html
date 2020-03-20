@@ -6,7 +6,7 @@
           <h3>{{content.body}}</h3>
         </mat-card-title>
         <span class="fill-remaining-space"></span>
-        <button mat-icon-button disableRipple *ngIf="correctAnswers" (click)="switchAnswers()">
+        <button mat-icon-button disableRipple *ngIf="correctAnswers" (click)="switchAnswers(showsCorrect)">
           <mat-icon>info</mat-icon>
         </button>
       </mat-card-header>
