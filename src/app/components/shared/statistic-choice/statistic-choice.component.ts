@@ -92,26 +92,23 @@ export class StatisticChoiceComponent implements OnInit {
 
   getData(content: ContentChoice) {
     const length = content.options.length;
-    let green, red: string;
+    let green, grey, blue: string;
     this.themeService.getTheme().subscribe(theme => {
       green = this.themeService.getThemeByKey(theme).colors[19].color;
-      red = this.themeService.getThemeByKey(theme).colors[21].color;
+      grey = this.themeService.getThemeByKey(theme).colors[26].color;
+      blue = this.themeService.getThemeByKey(theme).colors[25].color;
     });
     for (let i = 0; i < length; i++) {
       this.answerList[i] = new AnswerList(null, null);
       this.labels[i] = this.label.charAt(i);
       this.answerList[i].label = this.labels[i];
       this.answerList[i].answer = content.options[i].label;
-      if (i % 2 === 0) {
-        this.colors[i] = '#7986cb';
-      } else {
-        this.colors[i] = '#9575cd';
-      }
+      this.colors[i] = blue;
       if (!this.survey) {
         if (this.checkIfCorrect(i)) {
           this.indicationColors[i] = green;
         } else {
-          this.indicationColors[i] = red;
+          this.indicationColors[i] = blue;
         }
       }
     }
@@ -119,8 +116,8 @@ export class StatisticChoiceComponent implements OnInit {
       this.data = answer.roundStatistics[0].independentCounts;
       this.data.push(answer.roundStatistics[0].abstentionCount);
       if (this.data[this.data.length - 1] > 0) {
-        this.indicationColors.push('rgba(189,189,189, 0.8)');
-        this.colors.push('rgba(189,189,189, 0.8)');
+        this.indicationColors.push(grey);
+        this.colors.push(grey);
         this.translateService.get('statistic.abstentions').subscribe(label => {
           this.labels.push(label);
         });
