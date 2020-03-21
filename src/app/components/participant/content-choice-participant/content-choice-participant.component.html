@@ -1,5 +1,6 @@
-<h2 class="mat-headline">{{ content.body }}</h2>
-
+<div class="markdown-container">
+  <markdown [data]="content.body"></markdown>
+</div>
 <form (ngSubmit)="submitAnswer()" id="answerForm">
   <mat-list *ngIf="content.multiple && !isLoading">
     <mat-list-item *ngFor="let answer of checkedAnswers" [ngClass]="{'disabled': alreadySent}">

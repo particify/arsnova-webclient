@@ -1,4 +1,6 @@
-<h2 class="mat-headline">{{ content.body }}</h2>
+<div class="markdown-container">
+  <markdown [data]="content.body"></markdown>
+</div>
 <form *ngIf="!givenAnswer">
   <mat-form-field class="input-block">
     <textarea matInput (focus)="eventService.makeFocusOnInputTrue()" (blur)="eventService.makeFocusOnInputFalse()"
