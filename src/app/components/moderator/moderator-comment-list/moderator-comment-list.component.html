@@ -61,11 +61,7 @@
 
 </div>
 
-<div *ngIf="isLoading" fxLayout="column" fxLayoutAlign="center" fxFill>
-  <div fxLayout="row" fxLayoutAlign="center">
-    <mat-progress-spinner color="primary" mode="indeterminate" diameter="80"></mat-progress-spinner>
-  </div>
-</div>
+<app-loading-indicator *ngIf="isLoading" [size]="80"></app-loading-indicator>
 
 <button mat-icon-button class="scrollTop" [ngClass]="{'visible': scrollExtended}"
         (click)="scrollTop()" tabIndex="-1">
