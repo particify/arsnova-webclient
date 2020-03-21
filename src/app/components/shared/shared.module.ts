@@ -35,6 +35,7 @@ import { StatisticTextComponent } from './statistic-text/statistic-text.componen
 import { StatisticChoiceComponent } from './statistic-choice/statistic-choice.component';
 import { QrCodeComponent } from './_dialogs/qr-code/qr-code.component';
 import { QRCodeModule } from 'angularx-qrcode';
+import { LoadingIndicatorComponent } from './loading-indicator/loading-indicator.component';
 
 @NgModule({
   imports: [
@@ -75,7 +76,8 @@ import { QRCodeModule } from 'angularx-qrcode';
     RemoveFromHistoryComponent,
     QrCodeComponent,
     StatisticChoiceComponent,
-    StatisticTextComponent
+    StatisticTextComponent,
+    LoadingIndicatorComponent
   ],
   exports: [
     RoomJoinComponent,
@@ -94,7 +96,8 @@ import { QRCodeModule } from 'angularx-qrcode';
     PresentCommentComponent,
     CommentComponent,
     DialogActionButtonsComponent,
-    UserBonusTokenComponent
+    UserBonusTokenComponent,
+    LoadingIndicatorComponent
   ],
   entryComponents: [
     RoomCreateComponent,

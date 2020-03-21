@@ -1,8 +1,4 @@
-<div *ngIf="isLoading" fxLayout="column" fxLayoutAlign="center" fxFill>
-  <div fxLayout="row" fxLayoutAlign="center">
-    <mat-progress-spinner color="primary" mode="indeterminate" diameter="80"></mat-progress-spinner>
-  </div>
-</div>
+<app-loading-indicator *ngIf="isLoading" [size]="80"></app-loading-indicator>
 
 <div *ngIf="!isLoading" aria-labelledby="sessionHistoryLabel{{this.rooms.length}}">
   <div *ngIf="!isLoading && roomsWithRole.length === 0" aria-labelledby="emptySessionHistoryLabel">

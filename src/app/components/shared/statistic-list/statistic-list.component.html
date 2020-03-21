@@ -9,7 +9,7 @@
 </div>
 <mat-toolbar *ngIf="!isLoading && total >= status.zero"></mat-toolbar>
 
-<table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+<table mat-table *ngIf="!isLoading" [dataSource]="dataSource" class="mat-elevation-z8">
 
   <ng-container matColumnDef="content">
     <mat-header-cell *matHeaderCellDef> {{'statistic.content' | translate}} </mat-header-cell>
@@ -40,8 +40,4 @@
   <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
 </table>
 
-<div *ngIf="isLoading" fxLayout="column" fxLayoutAlign="center" fxLayoutGap="20px" fxFill>
-  <div fxLayout="row" fxLayoutAlign="center">
-    <mat-progress-spinner mode="indeterminate" diameter="50"></mat-progress-spinner>
-  </div>
-</div>
+<app-loading-indicator *ngIf="isLoading" [size]="50"></app-loading-indicator>
