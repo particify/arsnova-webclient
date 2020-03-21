@@ -7,8 +7,10 @@ mat-tab-group {
   max-width: 800px;
 }
 
-::ng-deep .mat-tab-labels {
-  justify-content: center;
+.formats {
+  & ::ng-deep .mat-tab-labels {
+    justify-content: center;
+  }
 }
 
 .group {
@@ -19,4 +21,8 @@ mat-tab-group {
 .info-icon {
   color: var(--on-background);
   opacity: 0.6;
+}
+
+::ng-deep .mat-tab-body-wrapper {
+  min-height: 100px;
 }
