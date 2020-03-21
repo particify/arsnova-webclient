@@ -178,7 +178,8 @@
     "neither-agree-nor-disagree": "Weder noch",
     "disagree": "Ich stimme eher nicht zu",
     "strongly-disagree": "Ich stimme nicht zu",
-    "format-info": "Du kannst zwischen den vier verschiedenen Frageformaten 'Choice', 'Likert', 'Ja/Nein' und 'Text' wählen."
+    "format-info": "Du kannst zwischen den vier verschiedenen Frageformaten 'Choice', 'Likert', 'Ja/Nein' und 'Text' wählen.",
+    "md-info": "In diesem Eingabefeld wird Textformatierung mit Markdown unterstützt."
   },
   "feedback": {
     "is-stopped": "Feedback ist angehalten.",
