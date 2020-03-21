@@ -6,8 +6,9 @@
           <h3>{{content.body}}</h3>
         </mat-card-title>
         <span class="fill-remaining-space"></span>
-        <button mat-icon-button disableRipple *ngIf="correctAnswers" (click)="switchAnswers(showsCorrect)">
-          <mat-icon>info</mat-icon>
+        <button mat-icon-button disableRipple *ngIf="correctAnswers" (click)="switchAnswers(showsCorrect)"
+                matTooltip="{{ 'statistic.answer-indicator' | translate }}">
+          <mat-icon>playlist_add_check</mat-icon>
         </button>
       </mat-card-header>
       <app-statistic-choice *ngIf="!isLoading && content.format !== 'TEXT'" [content]="content"

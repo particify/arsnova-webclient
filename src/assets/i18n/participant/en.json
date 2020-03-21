@@ -131,6 +131,7 @@
     "improvable": "Improvable",
     "no-answers": "No answers",
     "no-answers-yet": "There are no answers yet.",
-    "percentage": "Percentage"
+    "percentage": "Percentage",
+    "answer-indicator": "Shows the correct answers"
   }
 }
