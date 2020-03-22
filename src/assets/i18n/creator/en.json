@@ -178,7 +178,8 @@
     "neither-agree-nor-disagree": "Neither agree or disagree",
     "disagree": "Disagree",
     "strongly-disagree": "Strongly disagree",
-    "format-info": "You can choose between the four different question formats 'Choice', 'Likert', 'Yes/No' and 'Text'."
+    "format-info": "You can choose between the four different question formats 'Choice', 'Likert', 'Yes/No' and 'Text'.",
+    "md-info": "Text formatting with Markdown is supported in this input field."
   },
   "feedback": {
     "is-stopped": "Voting got stopped",
@@ -283,7 +284,9 @@
     "semicolon": "CSV format",
     "delimiter": "Please choose a format!",
     "comma": "Excel format",
-    "comments": "Comments"
+    "comments": "Comments",
+    "threshold-info": "If a threshold value is set, only comments that have received a higher rating are displayed.",
+    "direct-send-info": "If this setting is deactivated, a moderator or lecturer must unlock new comments before they become publicly visible."
   },
   "comment-answer-form": {
     "answer": "Give an answer."

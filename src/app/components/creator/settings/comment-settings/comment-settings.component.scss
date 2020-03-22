@@ -15,10 +15,14 @@
   transition: 500ms;
 }
 
-button {
+.mat-raised-button, .mat-button {
   min-width: 105px;
 }
 
-mat-icon {
+.export-icon {
   margin-right: 10px;
+}
+
+.mat-icon-button {
+  cursor: inherit;
 }

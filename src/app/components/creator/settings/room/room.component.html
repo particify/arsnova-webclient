@@ -29,7 +29,14 @@
         </mat-form-field>
       </mat-tab>
       <mat-tab label="{{'session.preview' | translate}}" [disabled]="!description">
-        <markdown [data]="description"></markdown>
+        <div fxLayout="row">
+          <markdown [data]="description"></markdown>
+          <span class="fill-remaining-space"></span>
+          <button mat-icon-button #mdtt="matTooltip" matTooltip="{{ 'content.md-info' | translate }}"
+                  (click)="mdtt.toggle()">
+            <mat-icon class="info-icon">info</mat-icon>
+          </button>
+        </div>
       </mat-tab>
     </mat-tab-group>
   </div>

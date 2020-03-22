@@ -4,6 +4,10 @@
       <p>{{ 'settings.threshold' | translate}}&nbsp;
         <mat-slide-toggle [(ngModel)]="enableThreshold" aria-labelledby="threshold"></mat-slide-toggle>
       </p>
+      <button mat-icon-button class="info-button" #ttt="matTooltip" matTooltip="{{ 'settings.threshold-info' | translate }}"
+              (click)="ttt.toggle()">
+        <mat-icon class="info-icon">info</mat-icon>
+      </button>
     </div>
     <div fxLayout="row" fxLayoutAlign="center center" *ngIf="enableThreshold">
       <mat-slider id="commentSlider" min="-100" max="0" step="5" [(ngModel)]="threshold"
@@ -23,12 +27,17 @@
         <mat-slide-toggle [(ngModel)]="directSend" (change)="updateCommentSettings()"
                           aria-labelledby="settings-direct-send"></mat-slide-toggle>
       </p>
+      <button mat-icon-button class="info-button" #dstt="matTooltip"
+              matTooltip="{{ 'settings.direct-send-info' | translate }}"
+              (click)="dstt.toggle()">
+        <mat-icon class="info-icon">info</mat-icon>
+      </button>
     </div>
   </div>
   <div>
     <button mat-raised-button class="button-secondary action" (click)="openExportDialog()"
             aria-labelledby="export-comments">
-      <mat-icon>save</mat-icon>
+      <mat-icon class="export-icon">save</mat-icon>
       {{ 'settings.export-comments' | translate }}</button>
   </div>
   <div>
