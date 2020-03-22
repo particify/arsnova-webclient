@@ -314,6 +314,11 @@ mat-dialog-content {
   color: var(--on-warn);
 }
 
+.button-abort {
+  background-color: var(--cancel);
+  color: var(--on-cancel);
+}
+
 .button-text {
   color: var(--on-surface);
   padding-left: 5px;

@@ -239,5 +239,19 @@
   },
   "qr-dialog": {
     "session": "Session"
+  },
+  "dialog": {
+    "sure": "Are you sure?",
+    "abort": "Cancel",
+    "delete": "Delete",
+    "really-delete-comment": "Do you really want to delete this comment?",
+    "really-delete-comments": "Do you really want to delete all comments of this session? This action cannot be undone.",
+    "really-delete-comments-hint": "There are comments in this session that you marked for a bonus. Remove the markers to delete all comments.",
+    "really-delete-answer": "Do you really want to delete this answer?",
+    "really-delete-content": "Do you really want to delete the following content? This action cannot be undone.",
+    "really-delete-moderator": "Do you really want to remove the following moderator?",
+    "really-delete-session": "Do you really want to delete the following session? This action cannot be undone.",
+    "really-delete-token": "Do you really want to delete this token?",
+    "really-delete-tokens": "Do you really want to delete all tokens of this session?"
   }
 }
