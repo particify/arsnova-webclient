@@ -13,9 +13,9 @@ import { Room } from '../../../models/room';
 import { RoomService } from '../../../services/http/room.service';
 import { TranslateService } from '@ngx-translate/core';
 import { LanguageService } from '../../../services/util/language.service';
-import { ContentDeleteComponent } from '../_dialogs/content-delete/content-delete.component';
 import { ContentEditComponent } from '../_dialogs/content-edit/content-edit.component';
 import { ContentGroupCreationComponent } from '../_dialogs/content-group-creation/content-group-creation.component';
+import { DialogService } from '../../../services/util/dialog.service';
 
 @Component({
   selector: 'app-content-list',
@@ -55,7 +55,8 @@ export class ContentListComponent implements OnInit {
               private notificationService: NotificationService,
               public dialog: MatDialog,
               private translateService: TranslateService,
-              protected langService: LanguageService) {
+              protected langService: LanguageService,
+              private dialogService: DialogService) {
     langService.langEmitter.subscribe(lang => translateService.use(lang));
   }
 
@@ -150,14 +151,10 @@ export class ContentListComponent implements OnInit {
   deleteContent(delContent: Content) {
     const index = this.findIndexOfSubject(delContent.subject);
     this.createChoiceContentBackup(delContent as ContentChoice);
-    const dialogRef = this.dialog.open(ContentDeleteComponent, {
-      width: '400px'
+    const dialogRef = this.dialogService.openDeleteDialog('really-delete-content', delContent.subject);
+    dialogRef.afterClosed().subscribe(result => {
+      this.updateContentChanges(index, result);
     });
-    dialogRef.componentInstance.content = delContent;
-    dialogRef.afterClosed()
-      .subscribe(result => {
-        this.updateContentChanges(index, result);
-      });
   }
 
   editContent(edContent: Content) {

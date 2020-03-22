@@ -2,11 +2,10 @@ import { Component, Input, OnInit } from '@angular/core';
 import { BonusTokenService } from '../../../../services/http/bonus-token.service';
 import { BonusToken } from '../../../../models/bonus-token';
 import { Room } from '../../../../models/room';
-import { MatDialog } from '@angular/material/dialog';
-import { BonusDeleteComponent } from '../../_dialogs/bonus-delete/bonus-delete.component';
 import { NotificationService } from '../../../../services/util/notification.service';
 import { TranslateService } from '@ngx-translate/core';
 import { Router } from '@angular/router';
+import { DialogService } from '../../../../services/util/dialog.service';
 
 @Component({
   selector: 'app-bonus-token',
@@ -19,10 +18,10 @@ export class BonusTokenComponent implements OnInit {
   lang: string;
 
   constructor(private bonusTokenService: BonusTokenService,
-              public dialog: MatDialog,
               protected router: Router,
               private translationService: TranslateService,
-              private notificationService: NotificationService) {
+              private notificationService: NotificationService,
+              private dialogService: DialogService) {
   }
 
   ngOnInit() {
@@ -35,29 +34,21 @@ export class BonusTokenComponent implements OnInit {
   }
 
   openDeleteSingleBonusDialog(userId: string, commentId: string, index: number): void {
-    const dialogRef = this.dialog.open(BonusDeleteComponent, {
-      width: '400px'
+    const dialogRef = this.dialogService.openDeleteDialog('really-delete-token');
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === 'delete') {
+        this.deleteBonus(userId, commentId, index);
+      }
     });
-    dialogRef.componentInstance.multipleBonuses = false;
-    dialogRef.afterClosed()
-      .subscribe(result => {
-        if (result === 'delete') {
-          this.deleteBonus(userId, commentId, index);
-        }
-      });
   }
 
   openDeleteAllBonusDialog(): void {
-    const dialogRef = this.dialog.open(BonusDeleteComponent, {
-      width: '400px'
+    const dialogRef = this.dialogService.openDeleteDialog('really-delete-tokens');
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === 'delete') {
+        this.deleteAllBonuses();
+      }
     });
-    dialogRef.componentInstance.multipleBonuses = true;
-    dialogRef.afterClosed()
-      .subscribe(result => {
-        if (result === 'delete') {
-          this.deleteAllBonuses();
-        }
-      });
   }
 
   deleteBonus(userId: string, commentId: string, index: number): void {
@@ -84,4 +75,3 @@ export class BonusTokenComponent implements OnInit {
     this.router.navigate([commentURL]);
   }
 }
-
