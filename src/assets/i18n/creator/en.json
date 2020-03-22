@@ -284,7 +284,9 @@
     "semicolon": "CSV format",
     "delimiter": "Please choose a format!",
     "comma": "Excel format",
-    "comments": "Comments"
+    "comments": "Comments",
+    "threshold-info": "If a threshold value is set, only comments that have received a higher rating are displayed.",
+    "direct-send-info": "If this setting is deactivated, a moderator or lecturer must unlock new comments before they become publicly visible."
   },
   "comment-answer-form": {
     "answer": "Give an answer."
