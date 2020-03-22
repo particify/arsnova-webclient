@@ -50,6 +50,7 @@ import { DemoEnComponent } from './components/home/_dialogs/demo/demo-en';
 import { ArsModule } from '../../projects/ars/src/lib/ars.module';
 import { MatIconModule } from '@angular/material/icon';
 import { LoginComponent } from './components/home/_dialogs/login/login.component';
+import { DialogService } from './services/util/dialog.service';
 
 export function dialogClose(dialogResult: any) {
 }
@@ -128,6 +129,7 @@ export function initializeApp(appConfig: AppConfig) {
     },
     WsConnectorService,
     NotificationService,
+    DialogService,
     AuthenticationService,
     AuthenticationGuard,
     DataStoreService,
