@@ -1,0 +1,25 @@
+import { Injectable } from '@angular/core';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { YesNoDialogComponent } from '../../components/shared/_dialogs/yes-no-dialog/yes-no-dialog.component';
+
+@Injectable()
+export class DialogService {
+
+  constructor(public dialog: MatDialog) {
+  }
+
+  openDeleteDialog(body: string, bodyElement?: string): MatDialogRef<YesNoDialogComponent> {
+    return this.dialog.open(YesNoDialogComponent, {
+      width: '400px',
+      data: {
+        section: 'dialog',
+        headerLabel: 'sure',
+        body: body,
+        confirmLabel: 'delete',
+        abortLabel: 'abort',
+        type: 'button-warn',
+        bodyElement: bodyElement,
+      }
+    });
+  }
+}
