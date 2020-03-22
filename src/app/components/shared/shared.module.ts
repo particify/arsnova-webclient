@@ -93,15 +93,6 @@ import { YesNoDialogComponent } from './_dialogs/yes-no-dialog/yes-no-dialog.com
     DialogActionButtonsComponent,
     UserBonusTokenComponent,
     LoadingIndicatorComponent
-  ],
-  entryComponents: [
-    RoomCreateComponent,
-    StatisticHelpComponent,
-    CreateCommentComponent,
-    PresentCommentComponent,
-    UserBonusTokenComponent,
-    RemindOfTokensComponent,
-    QrCodeComponent
   ]
 })
 export class SharedModule {
