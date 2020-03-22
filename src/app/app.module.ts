@@ -76,15 +76,6 @@ export function initializeApp(appConfig: AppConfig) {
     DemoEnComponent,
     OverlayComponent
   ],
-  entryComponents: [
-    LoginComponent,
-    RegisterComponent,
-    PasswordResetComponent,
-    UserActivationComponent,
-    IntroductionComponent,
-    CookiesComponent,
-    OverlayComponent
-  ],
   imports: [
     AppRoutingModule,
     BrowserModule,

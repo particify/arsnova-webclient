@@ -63,15 +63,6 @@ import { SettingsPageComponent } from './settings-page/settings-page.component';
     ContentGroupCreationComponent,
     SettingsComponent,
     SettingsPageComponent
-  ],
-  entryComponents: [
-    ContentChoiceCreatorComponent,
-    ContentLikertCreatorComponent,
-    ContentTextCreatorComponent,
-    ContentYesNoCreatorComponent,
-    ContentEditComponent,
-    CommentExportComponent,
-    ContentGroupCreationComponent
   ]
 })
 export class CreatorModule {
