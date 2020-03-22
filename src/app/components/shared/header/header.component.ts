@@ -8,7 +8,6 @@ import { Location } from '@angular/common';
 import { TranslateService } from '@ngx-translate/core';
 import { MatDialog } from '@angular/material/dialog';
 import { LoginComponent } from '../../home/_dialogs/login/login.component';
-import { DeleteAccountComponent } from '../_dialogs/delete-account/delete-account.component';
 import { UserService } from '../../../services/http/user.service';
 import { EventService } from '../../../services/util/event.service';
 import { KeyboardUtils } from '../../../utils/keyboard';
@@ -17,6 +16,7 @@ import { UserBonusTokenComponent } from '../_dialogs/user-bonus-token/user-bonus
 import { RemindOfTokensComponent } from '../_dialogs/remind-of-tokens/remind-of-tokens.component';
 import { BonusTokenService } from '../../../services/http/bonus-token.service';
 import { QrCodeComponent } from '../_dialogs/qr-code/qr-code.component';
+import { DialogService } from '../../../services/util/dialog.service';
 
 @Component({
   selector: 'app-header',
@@ -40,7 +40,8 @@ export class HeaderComponent implements OnInit {
               private userService: UserService,
               public eventService: EventService,
               private bonusTokenService: BonusTokenService,
-              private _r: Renderer2
+              private _r: Renderer2,
+              private dialogService: DialogService
   ) {
   }
 
@@ -188,17 +189,14 @@ export class HeaderComponent implements OnInit {
   }
 
   openDeleteUserDialog() {
-    const dialogRef = this.dialog.open(DeleteAccountComponent, {
-      width: '600px'
+    const dialogRef = this.dialogService.openDeleteDialog('really-delete-account');
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === 'abort') {
+        return;
+      } else if (result === 'delete') {
+        this.deleteAccount(this.user.id);
+      }
     });
-    dialogRef.afterClosed()
-      .subscribe(result => {
-        if (result === 'abort') {
-          return;
-        } else if (result === 'delete') {
-          this.deleteAccount(this.user.id);
-        }
-      });
   }
 
   openUserBonusTokenDialog() {

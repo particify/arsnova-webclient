@@ -1,7 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Room } from '../../../../models/room';
-import { MatDialog } from '@angular/material/dialog';
-import { RoomDeleteComponent } from '../../_dialogs/room-delete/room-delete.component';
 import { NotificationService } from '../../../../services/util/notification.service';
 import { TranslateService } from '@ngx-translate/core';
 import { RoomService } from '../../../../services/http/room.service';
@@ -9,6 +7,7 @@ import { Router } from '@angular/router';
 import { EventService } from '../../../../services/util/event.service';
 import { RoomDeleted } from '../../../../models/events/room-deleted';
 import { LanguageService } from '../../../../services/util/language.service';
+import { DialogService } from '../../../../services/util/dialog.service';
 
 @Component({
   selector: 'app-room-edit',
@@ -26,9 +25,9 @@ export class RoomComponent implements OnInit {
               protected roomService: RoomService,
               public router: Router,
               public eventService: EventService,
-              private dialog: MatDialog,
               protected translateService: TranslateService,
-              protected langService: LanguageService) {
+              protected langService: LanguageService,
+              private dialogService: DialogService) {
     langService.langEmitter.subscribe(lang => translateService.use(lang));
   }
 
@@ -37,12 +36,8 @@ export class RoomComponent implements OnInit {
   }
 
   openDeleteRoomDialog(): void {
-    const dialogRef = this.dialog.open(RoomDeleteComponent, {
-      width: '400px'
-    });
-    dialogRef.componentInstance.room = this.editRoom;
-    dialogRef.afterClosed()
-      .subscribe(result => {
+    const dialogRef = this.dialogService.openDeleteDialog('really-delete-session', this.editRoom.name);
+    dialogRef.afterClosed().subscribe(result => {
         if (result === 'delete') {
           this.deleteRoom(this.editRoom);
         }

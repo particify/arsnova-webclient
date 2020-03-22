@@ -12,9 +12,9 @@ import { WsCommentServiceService } from '../../../services/websockets/ws-comment
 import { PresentCommentComponent } from '../_dialogs/present-comment/present-comment.component';
 import { MatDialog } from '@angular/material/dialog';
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { DeleteCommentComponent } from '../../creator/_dialogs/delete-comment/delete-comment.component';
 import { CorrectWrong } from '../../../models/correct-wrong.enum';
 import { UserRole } from '../../../models/user-roles.enum';
+import { DialogService } from '../../../services/util/dialog.service';
 
 @Component({
   selector: 'app-comment',
@@ -53,6 +53,7 @@ export class CommentComponent implements OnInit {
               private notification: NotificationService,
               private translateService: TranslateService,
               public dialog: MatDialog,
+              private dialogService: DialogService,
               protected langService: LanguageService,
               private wsCommentService: WsCommentServiceService) {
     langService.langEmitter.subscribe(lang => {
@@ -133,15 +134,12 @@ export class CommentComponent implements OnInit {
   }
 
   openDeleteCommentDialog(): void {
-    const dialogRef = this.dialog.open(DeleteCommentComponent, {
-      width: '400px'
+    const dialogRef = this.dialogService.openDeleteDialog('really-delete-comment');
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === 'delete') {
+        this.delete();
+      }
     });
-    dialogRef.afterClosed()
-      .subscribe(result => {
-        if (result === 'delete') {
-          this.delete();
-        }
-      });
   }
 
   answerComment() {
