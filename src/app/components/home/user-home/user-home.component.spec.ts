@@ -1,14 +1,14 @@
+import { Injectable, Renderer2, Component, EventEmitter, Input } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
-import { CommentPageComponent } from './comment-page.component';
-import { Injectable, Renderer2, Component, Input } from '@angular/core';
-import { Observable, of } from 'rxjs';
-import { TranslateService, TranslateModule, TranslateLoader } from '@ngx-translate/core';
-import { ActivatedRoute } from '@angular/router';
-import { NotificationService } from '../../../services/util/notification.service';
-import { AuthenticationService } from '../../../services/http/authentication.service';
-import { EventService } from '../../../services/util/event.service';
+import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
+import { Observable, of, BehaviorSubject } from 'rxjs';
+import { UserHomeComponent } from './user-home.component';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
+import { MatDialog } from '@angular/material/dialog';
+
+import { EventService } from '../../../services/util/event.service';
+import { LanguageService } from '../../../services/util/language.service';
+import { AuthenticationService } from '../../../services/http/authentication.service';
 import { User } from '../../../models/user';
 
 const TRANSLATION_DE = require('../../../../assets/i18n/home/de.json');
@@ -29,28 +29,29 @@ class JsonTranslationLoader implements TranslateLoader {
       return of({});
     }
   }
-
-  public get(key: string): Observable<String> {
-    return of(key);
-  }
 }
 
 @Injectable()
-class MockNotificationService {
+class MockMatDialog {
 
+}
+
+@Injectable()
+class MockLanguageService {
+  public readonly langEmitter = new EventEmitter<string>();
 }
 
 @Injectable()
 class MockAuthenticationService {
-  getUser() {
-    return null;
+  private user = new BehaviorSubject<User>(undefined);
+
+  get watchUser() {
+    return this.user.asObservable();
   }
 }
 
 @Injectable()
 class MockEventService {
-  makeFocusOnInputFalse() {
-  }
 }
 
 @Injectable()
@@ -63,21 +64,29 @@ class MockRenderer2 {
 
 }
 
-@Component({ selector: 'app-comment-list', template: '' })
-class CommentListStubComponent {
+@Component({ selector: 'app-room-join', template: '' })
+class RoomJoinStubComponent { }
+
+@Component({ selector: 'app-room-list', template: '' })
+class RoomListStubComponent {
   @Input() user: User;
-  @Input() roomId: String;
 }
 
-describe('CommentPageComponent', () => {
-  let component: CommentPageComponent;
-  let fixture: ComponentFixture<CommentPageComponent>;
+@Component({ selector: 'mat-icon', template: '' })
+class MatIconStubComponent { }
+
+
+describe('UserHomeComponent', () => {
+  let component: UserHomeComponent;
+  let fixture: ComponentFixture<UserHomeComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [
-        CommentPageComponent,
-        CommentListStubComponent
+        UserHomeComponent,
+        RoomJoinStubComponent,
+        RoomListStubComponent,
+        MatIconStubComponent
       ],
       imports: [
         TranslateModule.forRoot({
@@ -90,22 +99,16 @@ describe('CommentPageComponent', () => {
       ],
       providers: [
         {
-          provide: ActivatedRoute,
-          useValue: {
-            params: of([{ id: 1 }]),
-          },
+          provide: MatDialog,
+          useClass: MockMatDialog
         },
         {
-          provide: NotificationService,
-          useClass: MockNotificationService
+          provide: LanguageService,
+          useClass: MockLanguageService
         },
         {
           provide: AuthenticationService,
           useClass: MockAuthenticationService
-        },
-        {
-          provide: NotificationService,
-          useClass: MockNotificationService
         },
         {
           provide: EventService,
@@ -120,10 +123,9 @@ describe('CommentPageComponent', () => {
           useClass: MockRenderer2
         }
       ]
-    })
-      .compileComponents()
+    }).compileComponents()
       .then(() => {
-        fixture = TestBed.createComponent(CommentPageComponent);
+        fixture = TestBed.createComponent(UserHomeComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
       });
