@@ -1,24 +1,27 @@
-<div class="markdown-container">
-  <markdown [data]="content.body"></markdown>
-</div>
-<form *ngIf="!givenAnswer">
-  <mat-form-field class="input-block">
+<app-loading-indicator *ngIf="isLoading" [size]="80"></app-loading-indicator>
+<div *ngIf="!isLoading">
+  <div class="markdown-container">
+    <markdown [data]="content.body"></markdown>
+  </div>
+  <form *ngIf="!givenAnswer">
+    <mat-form-field class="input-block">
     <textarea matInput (focus)="eventService.makeFocusOnInputTrue()" (blur)="eventService.makeFocusOnInputFalse()"
               [(ngModel)]="textAnswer" name="answer" placeholder="{{ 'answer.your-answer' | translate }}"
               matTextareaAutosize matAutosizeMinRows="3" matAutosizeMaxRows="8" maxLength="255"></textarea>
-  </mat-form-field>
-</form>
-<div *ngIf="givenAnswer && givenAnswer.body">
-  <p class="answer">{{givenAnswer.body}}</p>
-</div>
-<div *ngIf="content.state.responsesVisible" class="invisible" [ngClass]="{'visible' : givenAnswer}">
-  <p class="text">{{sentMessage}}</p>
-</div>
-<div fxLayoutAlign="center" fxLayoutGap="20px" class="buttons">
-  <button mat-raised-button *ngIf="content.abstentionsAllowed" (click)="abstain($event)" class="button-secondary"
-          [ngClass]="{'disabled' : alreadySent}">
-    {{ 'answer.abstain' | translate }}</button>
-  <button mat-raised-button (click)="submitAnswer()" class="button-primary" [ngClass]="{'disabled' : alreadySent}"
-          type="submit">
-    {{ 'answer.submit' | translate }}</button>
+    </mat-form-field>
+  </form>
+  <div *ngIf="givenAnswer && givenAnswer.body">
+    <p class="answer">{{givenAnswer.body}}</p>
+  </div>
+  <div *ngIf="content.state.responsesVisible" class="invisible" [ngClass]="{'visible' : givenAnswer}">
+    <p class="text">{{sentMessage}}</p>
+  </div>
+  <div fxLayoutAlign="center" fxLayoutGap="20px" class="buttons">
+    <button mat-raised-button *ngIf="content.abstentionsAllowed" (click)="abstain($event)" class="button-secondary"
+            [ngClass]="{'disabled' : alreadySent}">
+      {{ 'answer.abstain' | translate }}</button>
+    <button mat-raised-button (click)="submitAnswer()" class="button-primary" [ngClass]="{'disabled' : alreadySent}"
+            type="submit">
+      {{ 'answer.submit' | translate }}</button>
+  </div>
 </div>
