@@ -151,9 +151,7 @@ export class CommentSettingsComponent implements OnInit {
   }
 
   openExportDialog(): void {
-    const dialogRef = this.dialog.open(CommentExportComponent, {
-      width: '400px'
-    });
+    const dialogRef = this.dialogService.openCommentExportDialog();
     dialogRef.afterClosed().subscribe(result => {
       this.onExport(result);
     });
