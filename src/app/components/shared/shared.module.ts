@@ -34,6 +34,7 @@ import { QrCodeComponent } from './_dialogs/qr-code/qr-code.component';
 import { QRCodeModule } from 'angularx-qrcode';
 import { LoadingIndicatorComponent } from './loading-indicator/loading-indicator.component';
 import { YesNoDialogComponent } from './_dialogs/yes-no-dialog/yes-no-dialog.component';
+import { InfoDialogComponent } from './_dialogs/info-dialog/info-dialog.component';
 
 @NgModule({
   imports: [
@@ -73,7 +74,8 @@ import { YesNoDialogComponent } from './_dialogs/yes-no-dialog/yes-no-dialog.com
     StatisticChoiceComponent,
     StatisticTextComponent,
     LoadingIndicatorComponent,
-    YesNoDialogComponent
+    YesNoDialogComponent,
+    InfoDialogComponent
   ],
   exports: [
     RoomJoinComponent,

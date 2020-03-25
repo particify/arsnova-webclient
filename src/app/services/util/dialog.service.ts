@@ -17,7 +17,7 @@ export class DialogService {
         headerLabel: 'sure',
         body: body,
         confirmLabel: 'delete',
-        abortLabel: 'abort',
+        abortLabel: 'cancel',
         type: 'button-warn',
         bodyElement: bodyElement,
       }
