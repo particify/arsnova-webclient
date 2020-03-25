@@ -7,12 +7,15 @@ import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import { FormControl, FormGroupDirective, NgForm, Validators } from '@angular/forms';
 import { UserRole } from '../../../../models/user-roles.enum';
 import { TranslateService } from '@ngx-translate/core';
-import { UserActivationComponent } from '../user-activation/user-activation.component';
-import { PasswordResetComponent } from '../password-reset/password-reset.component';
-import { RegisterComponent } from '../register/register.component';
 import { EventService } from '../../../../services/util/event.service';
 import { ApiConfigService } from '../../../../services/http/api-config.service';
 import { AuthenticationProviderType } from '../../../../models/api-config';
+import { DialogService } from '../../../../services/util/dialog.service';
+
+export interface DialogData {
+  role: UserRole;
+  isStandard: boolean;
+}
 
 export class LoginErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
@@ -27,10 +30,8 @@ export class LoginErrorStateMatcher implements ErrorStateMatcher {
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit, OnChanges {
-  role: UserRole;
   username: string;
   password: string;
-  isStandard = true;
   allowGuest = false;
   allowDbLogin = false;
 
@@ -46,9 +47,10 @@ export class LoginComponent implements OnInit, OnChanges {
               private translationService: TranslateService,
               public notificationService: NotificationService,
               public dialog: MatDialog,
+              private dialogService: DialogService,
               public eventService: EventService,
               private apiConfigService: ApiConfigService,
-              @Inject(MAT_DIALOG_DATA) public data: any) {
+              @Inject(MAT_DIALOG_DATA) public data: DialogData) {
   }
 
   ngOnInit() {
@@ -87,12 +89,8 @@ export class LoginComponent implements OnInit, OnChanges {
   }
 
   activateUser(): void {
-    this.dialog.open(UserActivationComponent, {
-      width: '350px',
-      data: {
-        name: this.username
-      }
-    }).afterClosed().subscribe(result => {
+    const dialogRef = this.dialogService.openUserActivationDialog(this.username);
+    dialogRef.afterClosed().subscribe(result => {
       if (result && result.success) {
         this.login();
       }
@@ -102,7 +100,7 @@ export class LoginComponent implements OnInit, OnChanges {
   login(): void {
     if (!this.usernameFormControl.hasError('required') && !this.usernameFormControl.hasError('email') &&
       !this.passwordFormControl.hasError('required')) {
-      this.authenticationService.login(this.username, this.password, this.role).subscribe(loginSuccessful => {
+      this.authenticationService.login(this.username, this.password, this.data.role).subscribe(loginSuccessful => {
         this.checkLogin(loginSuccessful);
       });
     } else {
@@ -113,11 +111,11 @@ export class LoginComponent implements OnInit, OnChanges {
   }
 
   guestLogin(): void {
-    this.authenticationService.guestLogin(this.role).subscribe(loginSuccessful => this.checkLogin(loginSuccessful));
+    this.authenticationService.guestLogin(this.data.role).subscribe(loginSuccessful => this.checkLogin(loginSuccessful));
   }
 
   loginViaSso(providerId: string): void {
-    this.authenticationService.loginViaSso(providerId, this.role).subscribe(loginSuccessful => this.checkLogin(loginSuccessful));
+    this.authenticationService.loginViaSso(providerId, this.data.role).subscribe(loginSuccessful => this.checkLogin(loginSuccessful));
   }
 
   private checkLogin(loginSuccessful: string) {
@@ -126,7 +124,7 @@ export class LoginComponent implements OnInit, OnChanges {
         this.notificationService.show(message);
       });
       this.dialog.closeAll();
-      if (this.isStandard) {
+      if (this.data.isStandard) {
         this.router.navigate(['user']);
       }
     } else if (loginSuccessful === 'activation') {
@@ -139,15 +137,12 @@ export class LoginComponent implements OnInit, OnChanges {
   }
 
   openPasswordDialog(): void {
-    this.dialog.open(PasswordResetComponent, {
-      width: '350px'
-    });
+    this.dialogService.openPasswordResetDialog();
   }
 
   openRegisterDialog(): void {
-    this.dialog.open(RegisterComponent, {
-      width: '350px'
-    }).afterClosed().subscribe(result => {
+    const dialogRef = this.dialogService.openRegisterDialog();
+    dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.usernameFormControl.setValue(result.username);
         this.passwordFormControl.setValue(result.password);
@@ -156,7 +151,6 @@ export class LoginComponent implements OnInit, OnChanges {
       }
     });
   }
-
 
   /**
    * Returns a lambda which closes the dialog on call.

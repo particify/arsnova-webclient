@@ -6,12 +6,29 @@ import { CommentExportComponent } from '../../components/creator/_dialogs/commen
 import { ContentEditComponent } from '../../components/creator/_dialogs/content-edit/content-edit.component';
 import { ContentChoice } from '../../models/content-choice';
 import { ContentGroupCreationComponent } from '../../components/creator/_dialogs/content-group-creation/content-group-creation.component';
+import { User } from '../../models/user';
+import { CreateCommentComponent } from '../../components/shared/_dialogs/create-comment/create-comment.component';
+import { PresentCommentComponent } from '../../components/shared/_dialogs/present-comment/present-comment.component';
+import { QrCodeComponent } from '../../components/shared/_dialogs/qr-code/qr-code.component';
+import { RemindOfTokensComponent } from '../../components/shared/_dialogs/remind-of-tokens/remind-of-tokens.component';
+import { RoomCreateComponent } from '../../components/shared/_dialogs/room-create/room-create.component';
+import { StatisticHelpComponent } from '../../components/shared/_dialogs/statistic-help/statistic-help.component';
+import { UserBonusTokenComponent } from '../../components/shared/_dialogs/user-bonus-token/user-bonus-token.component';
+import { CookiesComponent } from '../../components/home/_dialogs/cookies/cookies.component';
+import { UserRole } from '../../models/user-roles.enum';
+import { LoginComponent } from '../../components/home/_dialogs/login/login.component';
+import { OverlayComponent } from '../../components/home/_dialogs/overlay/overlay.component';
+import { PasswordResetComponent } from '../../components/home/_dialogs/password-reset/password-reset.component';
+import { RegisterComponent } from '../../components/home/_dialogs/register/register.component';
+import { UserActivationComponent } from '../../components/home/_dialogs/user-activation/user-activation.component';
 
 @Injectable()
 export class DialogService {
 
   private size = {
-    small: '400px'
+    xsmall: '350px',
+    small: '400px',
+    medium: '600px'
   };
 
   constructor(public dialog: MatDialog) {
@@ -50,16 +67,119 @@ export class DialogService {
 
   openContentEditDialog(content: ContentChoice): MatDialogRef<ContentEditComponent> {
     return this.dialog.open(ContentEditComponent, {
-      width: '400px',
-      data: {
-        content: content
-      }
+      width: this.size.small,
+      data: content
     });
   }
 
   openContentGroupCreationDialog(): MatDialogRef<ContentGroupCreationComponent> {
     return this.dialog.open(ContentGroupCreationComponent, {
-      width: '400px'
+      width: this.size.small
+    });
+  }
+
+  // Shared dialogs
+
+  openCreateCommentDialog(user: User, tags: string[]): MatDialogRef<CreateCommentComponent> {
+    return this.dialog.open(CreateCommentComponent, {
+      width: this.size.small,
+      data: {
+        user: user,
+        tags: tags
+      }
+    });
+  }
+
+  openCommentPresentationDialog(commentBody: string): MatDialogRef<PresentCommentComponent> {
+    return this.dialog.open(PresentCommentComponent, {
+      position: {
+        left: '10px',
+        right: '10px'
+      },
+      maxWidth: '100vw',
+      maxHeight: '100vh',
+      height: '100%',
+      width: '100%',
+      data: commentBody
+    });
+  }
+
+  openQRCodeDialog(protocol: string, hostname: string, shortId: string, isCreator: boolean): void {
+    this.dialog.open(QrCodeComponent, {
+      panelClass: 'screenDialog',
+      data: {
+        protocol: protocol,
+        hostname: hostname,
+        shortId: shortId,
+        isCreator: isCreator
+      }
+    });
+  }
+
+  openTokenReminderDialog(): MatDialogRef<RemindOfTokensComponent> {
+    return this.dialog.open(RemindOfTokensComponent, {
+      width: this.size.medium
+    });
+  }
+
+  openRoomCreateDialog(): void {
+    this.dialog.open(RoomCreateComponent, {
+      width: this.size.xsmall
+    });
+  }
+
+  openStatisticHelpDialog(): void {
+    this.dialog.open(StatisticHelpComponent, {
+      width: this.size.xsmall
+    });
+  }
+
+  openBonusTokenDialog(userId: string): void {
+    const dialogRef = this.dialog.open(UserBonusTokenComponent, {
+      width: this.size.medium,
+      data: userId
+    });
+  }
+
+  openCookieDialog(): MatDialogRef<CookiesComponent> {
+    return this.dialog.open(CookiesComponent, {
+      width: '80%',
+      autoFocus: true
+    });
+  }
+
+  openLoginDialog(role: UserRole, isStandard: boolean): void {
+    this.dialog.open(LoginComponent, {
+      width: this.size.xsmall,
+      data: {
+        role: role,
+        isStandard: isStandard
+      }
+    });
+  }
+
+  openOverlayDialog(): MatDialogRef<OverlayComponent> {
+    return this.dialog.open(OverlayComponent);
+  }
+
+  openPasswordResetDialog(): void {
+    this.dialog.open(PasswordResetComponent, {
+      width: this.size.xsmall
+    });
+  }
+
+  openRegisterDialog(): MatDialogRef<RegisterComponent> {
+    return this.dialog.open(RegisterComponent, {
+      width: this.size.xsmall
+    });
+  }
+
+  openUserActivationDialog(username: string): MatDialogRef<UserActivationComponent> {
+    return this.dialog.open(UserActivationComponent, {
+      width: '350px',
+      data: {
+        name: username
+      }
     });
   }
 }

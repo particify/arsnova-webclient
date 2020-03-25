@@ -1,14 +1,13 @@
 import { AfterContentInit, Component, OnDestroy, OnInit, Renderer2 } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
 import { LanguageService } from '../../../services/util/language.service';
-import { RoomCreateComponent } from '../../shared/_dialogs/room-create/room-create.component';
 import { User } from '../../../models/user';
 import { AuthenticationService } from '../../../services/http/authentication.service';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { EventService } from '../../../services/util/event.service';
 import { KeyboardUtils } from '../../../utils/keyboard';
 import { KeyboardKey } from '../../../utils/keyboard/keys';
+import { DialogService } from '../../../services/util/dialog.service';
 
 @Component({
   selector: 'app-user-home',
@@ -21,7 +20,7 @@ export class UserHomeComponent implements OnInit, OnDestroy, AfterContentInit {
   listenerFn: () => void;
 
   constructor(
-    public dialog: MatDialog,
+    private dialogService: DialogService,
     private translateService: TranslateService,
     protected langService: LanguageService,
     private authenticationService: AuthenticationService,
@@ -66,8 +65,6 @@ export class UserHomeComponent implements OnInit, OnDestroy, AfterContentInit {
   }
 
   openCreateRoomDialog(): void {
-    this.dialog.open(RoomCreateComponent, {
-      width: '350px'
-    });
+    this.dialogService.openRoomCreateDialog();
   }
 }

@@ -14,7 +14,7 @@ export interface DialogData {
 export class InfoDialogComponent {
 
   constructor(
-    public dialogRef: MatDialogRef<any>,
+    public dialogRef: MatDialogRef<InfoDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData) {
     data.section = data.section + '.';
   }

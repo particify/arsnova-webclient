@@ -7,10 +7,6 @@ import { TranslateService } from '@ngx-translate/core';
 import { NotificationService } from '../../../../services/util/notification.service';
 import { EventService } from '../../../../services/util/event.service';
 
-export interface DialogData {
-  content: ContentChoice;
-}
-
 @Component({
   selector: 'app-content-edit',
   templateUrl: './content-edit.component.html',
@@ -23,42 +19,42 @@ export class ContentEditComponent implements OnInit {
 
   constructor(private translateService: TranslateService,
               private notificationService: NotificationService,
-              public dialogRef: MatDialogRef<any>,
-              @Inject(MAT_DIALOG_DATA) public data: DialogData,
+              public dialogRef: MatDialogRef<ContentEditComponent>,
+              @Inject(MAT_DIALOG_DATA) public data: ContentChoice,
               public eventService: EventService) {
   }
 
   ngOnInit() {
-    for (let i = 0; i < this.data.content.options.length; i++) {
+    for (let i = 0; i < this.data.options.length; i++) {
       let correct: boolean;
-      correct = this.data.content.options[i].points > 0;
-      this.displayAnswers[i] = new DisplayAnswer(new AnswerOption(this.data.content.options[i].label,
-        this.data.content.options[i].points), correct);
+      correct = this.data.options[i].points > 0;
+      this.displayAnswers[i] = new DisplayAnswer(new AnswerOption(this.data.options[i].label,
+        this.data.options[i].points), correct);
     }
   }
 
   updateAnswer(index: number) {
     if (this.displayAnswers[index].correct === true) {
       this.ansCounter++;
-      if ((!this.data.content.multiple) && this.ansCounter > 1) {
+      if ((!this.data.multiple) && this.ansCounter > 1) {
         for (let i = 0; i < this.displayAnswers.length; i++) {
           if (!(i === index)) {
             this.displayAnswers[i].correct = false;
-            this.data.content.options[i].points = -10;
+            this.data.options[i].points = -10;
           }
         }
         this.ansCounter = 1;
       }
-      this.data.content.options[index].points = 10;
+      this.data.options[index].points = 10;
     } else {
       this.ansCounter--;
-      this.data.content.options[index].points = -10;
+      this.data.options[index].points = -10;
     }
   }
 
   updateContent() {
     let counter = 0;
-    if (this.data.content.subject === '' || this.data.content.body === '') {
+    if (this.data.subject === '' || this.data.body === '') {
       this.translateService.get('content.no-empty').subscribe(message => {
         this.notificationService.show(message);
       });
@@ -70,19 +66,19 @@ export class ContentEditComponent implements OnInit {
       });
       return;
     }
-    for (let i = 0; i < this.data.content.options.length; i++) {
+    for (let i = 0; i < this.data.options.length; i++) {
       if (this.displayAnswers[i].answerOption.label === '') {
         this.translateService.get('content.no-empty2').subscribe(message => {
           this.notificationService.show(message);
         });
         return;
       }
-      if (this.data.content.options[i].points > 0) {
+      if (this.data.options[i].points > 0) {
         counter++;
       }
     }
     if (counter <= 0) {
-      if (this.data.content.multiple) {
+      if (this.data.multiple) {
         this.translateService.get('content.at-least-one').subscribe(message => {
           this.notificationService.show(message);
           return;
@@ -94,7 +90,7 @@ export class ContentEditComponent implements OnInit {
         });
       }
     } else {
-      if ((!this.data.content.multiple) && counter > 1) {
+      if ((!this.data.multiple) && counter > 1) {
         this.translateService.get('content.select-one').subscribe(message => {
           this.notificationService.show(message);
         });

@@ -19,7 +19,7 @@ export interface DialogData {
 export class YesNoDialogComponent {
 
   constructor(
-    public dialogRef: MatDialogRef<any>,
+    public dialogRef: MatDialogRef<YesNoDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData) {
     data.section = data.section + '.';
   }

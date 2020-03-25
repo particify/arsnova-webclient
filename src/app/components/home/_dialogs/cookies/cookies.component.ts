@@ -26,9 +26,7 @@ export class CookiesComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
-
     this.currentLang = localStorage.getItem('currentLang');
-
     // not really the nicest way but should do its job until a better or native solution was found
     setTimeout(() => document.getElementById('cookie-header').focus(), 400);
   }

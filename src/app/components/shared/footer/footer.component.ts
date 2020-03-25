@@ -2,15 +2,12 @@ import { LanguageService } from '../../../services/util/language.service';
 import { Component, OnInit } from '@angular/core';
 import { NotificationService } from '../../../services/util/notification.service';
 import { Router } from '@angular/router';
-import { MatDialog } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
 import { AuthenticationService } from '../../../services/http/authentication.service';
 import { User } from '../../../models/user';
 import { Room } from '../../../models/room';
 import { ThemeService } from '../../../../theme/theme.service';
-import { CookiesComponent } from '../../home/_dialogs/cookies/cookies.component';
 import { Theme } from '../../../../theme/Theme';
-import { OverlayComponent } from '../../home/_dialogs/overlay/overlay.component';
 import { DialogService } from '../../../services/util/dialog.service';
 import { ApiConfigService } from '../../../services/http/api-config.service';
 
@@ -36,7 +33,6 @@ export class FooterComponent implements OnInit {
 
   constructor(public notificationService: NotificationService,
               public router: Router,
-              public dialog: MatDialog,
               private translateService: TranslateService,
               private langService: LanguageService,
               public authenticationService: AuthenticationService,
@@ -93,11 +89,7 @@ export class FooterComponent implements OnInit {
   }
 
   showCookieModal() {
-    const dialogRef = this.dialog.open(CookiesComponent, {
-      width: '80%',
-      autoFocus: true
-
-    });
+    const dialogRef = this.dialogService.openCookieDialog();
     dialogRef.disableClose = true;
     dialogRef.afterClosed().subscribe(res => {
       this.cookieAccepted = res;
@@ -109,7 +101,7 @@ export class FooterComponent implements OnInit {
   }
 
   showOverlay() {
-    const dialogRef = this.dialog.open(OverlayComponent, {});
+    const dialogRef = this.dialogService.openOverlayDialog();
     dialogRef.disableClose = true;
     dialogRef.afterClosed().subscribe(res => {
       if (res) {
