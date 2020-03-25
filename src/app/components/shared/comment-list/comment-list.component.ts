@@ -4,8 +4,6 @@ import { CommentService } from '../../../services/http/comment.service';
 import { TranslateService } from '@ngx-translate/core';
 import { LanguageService } from '../../../services/util/language.service';
 import { Message } from '@stomp/stompjs';
-import { CreateCommentComponent } from '../_dialogs/create-comment/create-comment.component';
-import { MatDialog } from '@angular/material/dialog';
 import { WsCommentServiceService } from '../../../services/websockets/ws-comment-service.service';
 import { User } from '../../../models/user';
 import { Vote } from '../../../models/vote';
@@ -19,6 +17,7 @@ import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { EventService } from '../../../services/util/event.service';
 import { Subscription } from 'rxjs';
 import { Router } from '@angular/router';
+import { DialogService } from '../../../services/util/dialog.service';
 
 @Component({
   selector: 'app-comment-list',
@@ -67,7 +66,7 @@ export class CommentListComponent implements OnInit, OnDestroy {
 
   constructor(private commentService: CommentService,
               private translateService: TranslateService,
-              public dialog: MatDialog,
+              private dialogService: DialogService,
               protected langService: LanguageService,
               private wsCommentService: WsCommentServiceService,
               protected roomService: RoomService,
@@ -266,16 +265,11 @@ export class CommentListComponent implements OnInit, OnDestroy {
   }
 
   openCreateDialog(): void {
-    const dialogRef = this.dialog.open(CreateCommentComponent, {
-      width: '400px'
-    });
-    dialogRef.componentInstance.user = this.user;
-    dialogRef.componentInstance.roomId = this.roomId;
     let tags;
     if (this.room.extensions && this.room.extensions['tags'] && this.room.extensions['tags'].tags) {
       tags = this.room.extensions['tags'].tags;
     }
-    dialogRef.componentInstance.tags = tags;
+    const dialogRef = this.dialogService.openCreateCommentDialog(this.user, tags);
     dialogRef.afterClosed()
       .subscribe(result => {
         if (result) {
