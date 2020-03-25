@@ -11,8 +11,9 @@
   <div *ngIf="bonusTokens.length === 0">
     <h3 tabindex="0">{{'header.no-bonus' | translate }}</h3>
   </div>
-  <app-dialog-action-buttons
-    buttonsLabelSection="introduction"
-    [cancelButtonClickAction]="buildDeclineActionCallback()">
-  </app-dialog-action-buttons>
+  <div fxLayout="row" fxLayoutAlign="end">
+    <button mat-flat-button class="button-abort" (click)="closeDialog()">
+      {{ 'dialog.close' | translate}}
+    </button>
+  </div>
 </div>

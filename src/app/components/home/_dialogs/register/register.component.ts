@@ -1,6 +1,6 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { ErrorStateMatcher } from '@angular/material/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MatDialogRef } from '@angular/material/dialog';
 import { FormControl, FormGroupDirective, NgForm, Validators } from '@angular/forms';
 import { AuthenticationService } from '../../../../services/http/authentication.service';
 import { NotificationService } from '../../../../services/util/notification.service';
@@ -53,7 +53,7 @@ function validateEmail(email1: FormControl) {
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.scss']
 })
-export class RegisterComponent implements OnInit {
+export class RegisterComponent {
 
   usernameFormControl = new FormControl('', [Validators.required, Validators.email]);
   username2FormControl = new FormControl('', [Validators.required, validateEmail(this.usernameFormControl)]);
@@ -66,7 +66,6 @@ export class RegisterComponent implements OnInit {
               public authenticationService: AuthenticationService,
               public notificationService: NotificationService,
               public dialogRef: MatDialogRef<RegisterComponent>,
-              @Inject(MAT_DIALOG_DATA) public data: any,
               public eventService: EventService) {
   }
 
@@ -76,14 +75,6 @@ export class RegisterComponent implements OnInit {
    */
   closeDialog(): void {
     this.dialogRef.close([]);
-  }
-
-
-  /**
-   * @inheritDoc
-   */
-  ngOnInit() {
-    // nothing special yet
   }
 
   register(username: string, password: string): void {
@@ -110,7 +101,6 @@ export class RegisterComponent implements OnInit {
       });
     }
   }
-
 
   /**
    * Returns a lambda which closes the dialog on call.

@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { BonusTokenService } from '../../../../services/http/bonus-token.service';
 import { RoomService } from '../../../../services/http/room.service';
 import { BonusToken } from '../../../../models/bonus-token';
 import { BonusTokenRoomMixin } from '../../../../models/bonus-token-room-mixin';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 
 @Component({
@@ -12,7 +12,6 @@ import { Router } from '@angular/router';
   styleUrls: ['./user-bonus-token.component.scss']
 })
 export class UserBonusTokenComponent implements OnInit {
-  userId: string;
   bonusTokens: BonusToken[] = [];
   bonusTokensMixin: BonusTokenRoomMixin[] = [];
 
@@ -20,12 +19,12 @@ export class UserBonusTokenComponent implements OnInit {
     private bonusTokenService: BonusTokenService,
     private roomService: RoomService,
     private dialogRef: MatDialogRef<UserBonusTokenComponent>,
-    protected router: Router
-  ) {
+    @Inject(MAT_DIALOG_DATA) public data: string,
+    protected router: Router) {
   }
 
   ngOnInit() {
-    this.bonusTokenService.getTokensByUserId(this.userId).subscribe(list => {
+    this.bonusTokenService.getTokensByUserId(this.data).subscribe(list => {
       this.bonusTokens = list.sort((a, b) => {
         return (a.token > b.token) ? 1 : -1;
       });
@@ -46,10 +45,7 @@ export class UserBonusTokenComponent implements OnInit {
     this.router.navigate([commentURL]);
   }
 
-  /**
-   * Returns a lambda which closes the dialog on call.
-   */
-  buildDeclineActionCallback(): () => void {
-    return () => this.dialogRef.close();
+  closeDialog(): void {
+    this.dialogRef.close();
   }
 }

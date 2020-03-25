@@ -43,7 +43,7 @@
                 <mat-icon>more_vert</mat-icon>
               </button>
               <mat-menu #moreActions="matMenu" xPosition="before">
-                <button mat-menu-item (click)="openRemoveDialog(room)">
+                <button mat-menu-item (click)="openDeleteRoomDialog(room)">
                   <mat-icon class="delete">delete_forever</mat-icon>
                   <span class="delete-text"> {{ (room.role < 3 ? 'room-list.panel-remove-room' :
                     'room-list.panel-delete-room') | translate}}</span>

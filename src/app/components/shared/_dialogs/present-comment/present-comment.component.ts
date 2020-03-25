@@ -1,5 +1,5 @@
 import { Component, HostListener, Inject, OnInit } from '@angular/core';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
 import { DOCUMENT } from '@angular/common';
 import { KeyboardUtils } from '../../../../utils/keyboard';
@@ -11,7 +11,6 @@ import { KeyboardKey } from '../../../../utils/keyboard/keys';
   styleUrls: ['./present-comment.component.scss']
 })
 export class PresentCommentComponent implements OnInit {
-  public body: string;
   // flag for fullscreen
   private fs = false;
 
@@ -19,8 +18,8 @@ export class PresentCommentComponent implements OnInit {
     @Inject(DOCUMENT) private document: Document,
     public dialogRef: MatDialogRef<PresentCommentComponent>,
     private translateService: TranslateService,
-    public dialog: MatDialog
-  ) {
+    public dialog: MatDialog,
+    @Inject(MAT_DIALOG_DATA) public data: string) {
   }
 
   ngOnInit() {
