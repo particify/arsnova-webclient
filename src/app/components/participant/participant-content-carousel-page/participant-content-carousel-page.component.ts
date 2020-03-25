@@ -5,6 +5,9 @@ import { Content } from '../../../models/content';
 import { ContentGroup } from '../../../models/content-group';
 import { TranslateService } from '@ngx-translate/core';
 import { StepperComponent } from '../stepper/stepper.component';
+import { ActivatedRoute } from '@angular/router';
+import { ContentGroupService } from '../../../services/http/content-group.service';
+import { RoomService } from '../../../services/http/room.service';
 
 @Component({
   selector: 'app-participant-content-carousel-page',
@@ -19,25 +22,37 @@ export class ParticipantContentCarouselPageComponent implements OnInit {
 
   contents: Content[] = [];
   contentGroup: ContentGroup;
+  contentGroupName: string;
+  shortId: string;
   isLoading = true;
   alreadySent = new Map<number, boolean>();
   startIndex = 0;
   started = false;
 
-  constructor(private contentService: ContentService,
-              protected translateService: TranslateService) {
+  constructor(
+    private contentService: ContentService,
+    protected translateService: TranslateService,
+    protected roomService: RoomService,
+    protected route: ActivatedRoute,
+  ) {
   }
 
   ngOnInit() {
     this.translateService.use(localStorage.getItem('currentLang'));
-    this.contentGroup = JSON.parse(sessionStorage.getItem('lastGroup'));
-    this.contentService.getContentsByIds(this.contentGroup.contentIds).subscribe(contents => {
-      for (const content of contents) {
-        if (content.state.visible) {
-          this.contents.push(content);
-        }
-      }
-      this.isLoading = false;
+    this.route.params.subscribe(params => {
+      this.contentGroupName = params['contentGroup'];
+      this.shortId = params['shortId'];
+      this.roomService.getGroupByRoomIdAndName('~' + this.shortId, this.contentGroupName).subscribe(contentGroup => {
+        this.contentGroup = contentGroup;
+        this.contentService.getContentsByIds(this.contentGroup.contentIds).subscribe(contents => {
+          for (const content of contents) {
+            if (content.state.visible) {
+              this.contents.push(content);
+            }
+          }
+          this.isLoading = false;
+        });
+      });
     });
   }
 
