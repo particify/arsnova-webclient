@@ -8,15 +8,8 @@
     "title": "Data Privacy"
   },
   "data-protection": {
-    "cancel": "Reject",
-    "cancel-description": "Reject the app's privacy policy and close dialog",
-    "consent": "Accept",
-    "consent-description": "Accept the app's privacy policy and close dialog",
+    "a11y": "Below you will find the privacy policy of ARSnova.",
     "title": "Data Privacy"
-  },
-  "demo": {
-    "cancel": "Close",
-    "cancel-description": "Close the introduction dialog"
   },
   "footer": {
     "accessibility-data_protection": "Open the privacy statement.",
@@ -32,7 +25,6 @@
     "help": "Help",
     "imprint": "Imprint",
     "language": "Language",
-    "open": "Open",
     "style": "Display"
   },
   "header": {
@@ -82,13 +74,11 @@
     "update-available": "An update is available."
   },
   "imprint": {
-    "cancel": "Close",
-    "cancel-description": "Close the imprint dialog.",
+    "a11y": "Below you will find the legal info of ARSnova.",
     "title": "Imprint"
   },
   "introduction": {
-    "cancel": "Close",
-    "cancel-description": "Close introduction.",
+    "a11y": "Below you will find an introduction to ARSnova.",
     "title": "»ARSnova«"
   },
   "login": {
@@ -230,6 +220,7 @@
     "sure": "Are you sure?",
     "abort": "Cancel",
     "delete": "Delete",
+    "close": "Close",
     "really-delete-comment": "Do you really want to delete this comment?",
     "really-delete-comments": "Do you really want to delete all comments of this session? This action cannot be undone.",
     "really-delete-comments-hint": "There are comments in this session that you marked for a bonus. Remove the markers to delete all comments.",

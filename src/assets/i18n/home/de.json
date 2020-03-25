@@ -8,15 +8,8 @@
     "title": "Datenschutz"
   },
   "data-protection": {
-    "cancel": "Ablehnen",
-    "cancel-description": "Lehnt die Datenschutzerklärung ab.",
-    "consent": "Akzeptieren",
-    "consent-description": "Akzeptiert die Datenschutzerklärung der Anwendung.",
+    "a11y": "Es folgt die Datenschutzerklärung von ARSnova.",
     "title": "Datenschutz"
-  },
-  "demo": {
-    "cancel": "Schließen",
-    "cancel-description": "Schließt die Einführung"
   },
   "footer": {
     "accessibility-data_protection": "Öffnet die Datenschutzerklärung.",
@@ -82,13 +75,11 @@
     "update-available": "Eine neue Version ist verfügbar."
   },
   "imprint": {
-    "cancel": "Schließen",
-    "cancel-description": "Schließt das Impressum.",
+    "a11y": "Es folgt das Impressum von ARSnova.",
     "title": "Impressum"
   },
   "introduction": {
-    "cancel": "Schließen",
-    "cancel-description": "Schließe die Einführung und gehe zurück zur Anmeldung.",
+    "a11y": "Es folgt eine Einführung in ARSnova.",
     "title": "ARSnova"
   },
   "login": {
@@ -227,8 +218,9 @@
   },
   "dialog": {
     "sure": "Bist du sicher?",
-    "abort": "Abbrechen",
+    "cancel": "Abbrechen",
     "delete": "Löschen",
+    "close": "Schließen",
     "really-delete-comment": "Willst du diesen Kommentar wirklich löschen?",
     "really-delete-comments": "Willst du wirklich alle Kommentare dieser Sitzung löschen? Diese Aktion kann nicht rückgängig gemacht werden.",
     "really-delete-comments-hint": "Es gibt Kommentare in dieser Sitzung, die du für einen Bonus markiert hast. Entferne die Markierungen, um alle Kommentare zu löschen.",

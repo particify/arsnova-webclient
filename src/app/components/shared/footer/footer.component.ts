@@ -7,13 +7,12 @@ import { TranslateService } from '@ngx-translate/core';
 import { AuthenticationService } from '../../../services/http/authentication.service';
 import { User } from '../../../models/user';
 import { Room } from '../../../models/room';
-import { IntroductionComponent } from '../../home/_dialogs/introduction/introduction.component';
 import { ThemeService } from '../../../../theme/theme.service';
 import { CookiesComponent } from '../../home/_dialogs/cookies/cookies.component';
-import { ImprintComponent } from '../../home/_dialogs/imprint/imprint.component';
-import { DataProtectionComponent } from '../../home/_dialogs/data-protection/data-protection.component';
 import { Theme } from '../../../../theme/Theme';
 import { OverlayComponent } from '../../home/_dialogs/overlay/overlay.component';
+import { DialogService } from '../../../services/util/dialog.service';
+import { ApiConfigService } from '../../../services/http/api-config.service';
 
 @Component({
   selector: 'app-footer',
@@ -27,6 +26,7 @@ export class FooterComponent implements OnInit {
 
   public open: string;
   public deviceWidth = innerWidth;
+  public lang = localStorage.getItem('currentLang');
   public cookieAccepted: boolean;
   public dataProtectionConsent: boolean;
 
@@ -40,7 +40,9 @@ export class FooterComponent implements OnInit {
               private translateService: TranslateService,
               private langService: LanguageService,
               public authenticationService: AuthenticationService,
-              private themeService: ThemeService) {
+              private themeService: ThemeService,
+              private dialogService: DialogService,
+              private apiConfigService: ApiConfigService) {
     langService.langEmitter.subscribe(lang => translateService.use(lang));
   }
 
@@ -54,7 +56,7 @@ export class FooterComponent implements OnInit {
         this.themeClass = 'arsnova';
       }
     }
-    this.translateService.use(localStorage.getItem('currentLang'));
+    this.translateService.use(this.lang);
     this.translateService.get('footer.open').subscribe(message => {
       this.open = message;
     });
@@ -71,10 +73,23 @@ export class FooterComponent implements OnInit {
     }
   }
 
-  showDemo() {
-    const dialogRef = this.dialog.open(IntroductionComponent, {
-      width: '80%'
-    });
+  getUIDataFromConfig(type: string): string {
+    return this.apiConfigService.getUiConfig()[type][this.lang];
+  }
+
+  showIntroduction() {
+    const introductionBody = this.getUIDataFromConfig('introduction');
+    this.dialogService.openInfoDialog('introduction', introductionBody);
+  }
+
+  showImprint() {
+    const imprintBody = this.getUIDataFromConfig('legal-info');
+    this.dialogService.openInfoDialog('imprint', imprintBody);
+  }
+
+  showDataProtection() {
+    const dataProtectionBody = this.getUIDataFromConfig('privacy-info');
+    this.dialogService.openInfoDialog('data-protection', dataProtectionBody);
   }
 
   showCookieModal() {
@@ -90,18 +105,6 @@ export class FooterComponent implements OnInit {
       if (!res) {
         this.showOverlay();
       }
-    });
-  }
-
-  showImprint() {
-    this.dialog.open(ImprintComponent, {
-      width: '80%'
-    });
-  }
-
-  showDataProtection() {
-    this.dialog.open(DataProtectionComponent, {
-      width: '80%'
     });
   }
 

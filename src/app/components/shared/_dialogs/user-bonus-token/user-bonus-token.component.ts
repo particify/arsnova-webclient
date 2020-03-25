@@ -46,10 +46,7 @@ export class UserBonusTokenComponent implements OnInit {
     this.router.navigate([commentURL]);
   }
 
-  /**
-   * Returns a lambda which closes the dialog on call.
-   */
-  buildDeclineActionCallback(): () => void {
-    return () => this.dialogRef.close();
+  closeDialog(): void {
+    this.dialogRef.close();
   }
 }
