@@ -8,8 +8,21 @@
     "title": "Datenschutz"
   },
   "data-protection": {
-    "a11y": "Es folgt die Datenschutzerklärung von ARSnova.",
+    "cancel": "Ablehnen",
+    "cancel-description": "Lehnt die Datenschutzerklärung ab.",
+    "consent": "Akzeptieren",
+    "consent-description": "Akzeptiert die Datenschutzerklärung der Anwendung.",
     "title": "Datenschutz"
+  },
+  "demo": {
+    "cancel": "Schließen",
+    "cancel-description": "Schließt die Einführung"
+  },
+  "delete-account": {
+    "cancel": "Abbrechen",
+    "cancel-description": "Löschung des Kontos abbrechen",
+    "delete": "Löschen",
+    "delete-description": "Konto löschen"
   },
   "footer": {
     "accessibility-data_protection": "Öffnet die Datenschutzerklärung.",
@@ -37,6 +50,7 @@
     "back": "Abbrechen",
     "cancel": "Abbrechen",
     "copy-url": "Link kopieren",
+    "delete": "Löschen",
     "delete-account": "Konto löschen",
     "go-to-home": "Startseite",
     "home-header": "Interaktion im Hörsaal",
@@ -48,7 +62,9 @@
     "my-account": "Konto",
     "my-guest-account": "Gastkonto",
     "my-sessions": "Meine Sitzungen",
+    "really-delete-account": "Willst du dein Konto mit allen Sitzungen unwiderruflich löschen? Falls du Boni vergeben hast (gelbe Sterne), exportiere die Fragen, damit du eingereichte Bonus-Tokens überprüfen kannst.",
     "session-id-copied": "Direktlink wurde in die Zwischenablage kopiert.",
+    "sure": "Bist du sicher?",
     "user-bonus-token": "Zu deinen Bonus Tokens",
     "user-got-tokens": "Du hast noch Tokens für Bonuspunkte, die verloren gehen!",
     "visited-sessions": "Besuchte Sitzungen",
@@ -75,11 +91,13 @@
     "update-available": "Eine neue Version ist verfügbar."
   },
   "imprint": {
-    "a11y": "Es folgt das Impressum von ARSnova.",
+    "cancel": "Schließen",
+    "cancel-description": "Schließt das Impressum.",
     "title": "Impressum"
   },
   "introduction": {
-    "a11y": "Es folgt eine Einführung in ARSnova.",
+    "cancel": "Schließen",
+    "cancel-description": "Schließe die Einführung und gehe zurück zur Anmeldung.",
     "title": "ARSnova"
   },
   "login": {
@@ -185,6 +203,10 @@
     "no-room-history": "Du hast bisher an keiner Sitzung teilgenommen.",
     "panel-remove-room": "Sitzung aus der Liste entfernen",
     "panel-delete-room": "Sitzung löschen",
+    "really-remove": "Willst du die besuchte Sitzung ",
+    "really-remove-2": " wirklich aus der Liste entfernen?",
+    "really-delete": "Willst du deine Sitzung ",
+    "really-delete-2": " wirklich unwiderruflich löschen?",
     "room-settings": "Einstellungen",
     "room-successfully-removed": "Die Sitzung wurde erfolgreich aus der Liste entfernt.",
     "canceled-remove": "Vorgang abgebrochen.",
@@ -215,22 +237,5 @@
   },
   "qr-dialog": {
     "session": "Sitzung"
-  },
-  "dialog": {
-    "sure": "Bist du sicher?",
-    "cancel": "Abbrechen",
-    "delete": "Löschen",
-    "close": "Schließen",
-    "really-delete-comment": "Willst du diesen Kommentar wirklich löschen?",
-    "really-delete-comments": "Willst du wirklich alle Kommentare dieser Sitzung löschen? Diese Aktion kann nicht rückgängig gemacht werden.",
-    "really-delete-comments-hint": "Es gibt Kommentare in dieser Sitzung, die du für einen Bonus markiert hast. Entferne die Markierungen, um alle Kommentare zu löschen.",
-    "really-delete-answer": "Willst du die Antwort wirklich löschen?",
-    "really-delete-content": "Willst du die folgende Frage wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden.",
-    "really-delete-moderator": "Willst du den folgenden Moderator wirklich entfernen?",
-    "really-delete-session": "Willst du die folgende Sitzung wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden.",
-    "really-remove-session-from-history": "Willst du die folgende Sitzung wirklich aus deiner Liste entfernen?",
-    "really-delete-token": "Willst du diesen Token wirklich löschen?",
-    "really-delete-tokens": "Willst du wirklich alle Tokens dieser Sitzung löschen?",
-    "really-delete-account": "Willst du dein Konto mit allen Sitzungen unwiderruflich löschen?"
   }
 }

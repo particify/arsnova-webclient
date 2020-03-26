@@ -7,12 +7,15 @@ import { ContentChoice } from '../../../models/content-choice';
 import { ContentText } from '../../../models/content-text';
 import { ContentType } from '../../../models/content-type.enum';
 import { ContentGroup } from '../../../models/content-group';
+import { MatDialog } from '@angular/material/dialog';
 import { NotificationService } from '../../../services/util/notification.service';
 import { Room } from '../../../models/room';
 import { RoomService } from '../../../services/http/room.service';
 import { TranslateService } from '@ngx-translate/core';
 import { LanguageService } from '../../../services/util/language.service';
-import { DialogService } from '../../../services/util/dialog.service';
+import { ContentDeleteComponent } from '../_dialogs/content-delete/content-delete.component';
+import { ContentEditComponent } from '../_dialogs/content-edit/content-edit.component';
+import { ContentGroupCreationComponent } from '../_dialogs/content-group-creation/content-group-creation.component';
 
 @Component({
   selector: 'app-content-list',
@@ -50,9 +53,9 @@ export class ContentListComponent implements OnInit {
               private route: ActivatedRoute,
               private location: Location,
               private notificationService: NotificationService,
+              public dialog: MatDialog,
               private translateService: TranslateService,
-              protected langService: LanguageService,
-              private dialogService: DialogService) {
+              protected langService: LanguageService) {
     langService.langEmitter.subscribe(lang => translateService.use(lang));
   }
 
@@ -147,10 +150,14 @@ export class ContentListComponent implements OnInit {
   deleteContent(delContent: Content) {
     const index = this.findIndexOfSubject(delContent.subject);
     this.createChoiceContentBackup(delContent as ContentChoice);
-    const dialogRef = this.dialogService.openDeleteDialog('really-delete-content', delContent.subject);
-    dialogRef.afterClosed().subscribe(result => {
-      this.updateContentChanges(index, result);
+    const dialogRef = this.dialog.open(ContentDeleteComponent, {
+      width: '400px'
     });
+    dialogRef.componentInstance.content = delContent;
+    dialogRef.afterClosed()
+      .subscribe(result => {
+        this.updateContentChanges(index, result);
+      });
   }
 
   editContent(edContent: Content) {
@@ -160,7 +167,10 @@ export class ContentListComponent implements OnInit {
       this.createChoiceContentBackup(edContent as ContentChoice);
     }
     const index = this.findIndexOfSubject(edContent.subject);
-    const dialogRef = this.dialogService.openContentEditDialog(this.contentCBackup);
+    const dialogRef = this.dialog.open(ContentEditComponent, {
+      width: '400px'
+    });
+    dialogRef.componentInstance.content = this.contentCBackup;
     dialogRef.afterClosed()
       .subscribe(result => {
         this.updateContentChanges(index, result);
@@ -251,7 +261,9 @@ export class ContentListComponent implements OnInit {
   }
 
   showContentGroupCreationDialog(contentId: string): void {
-    const dialogRef = this.dialogService.openContentGroupCreationDialog();
+    const dialogRef = this.dialog.open(ContentGroupCreationComponent, {
+      width: '400px'
+    });
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.addToContentGroup(contentId, result, true);

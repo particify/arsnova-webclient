@@ -3,8 +3,9 @@ import { ActivatedRoute } from '@angular/router';
 import { RoomService } from '../../../services/http/room.service';
 import { ContentGroup } from '../../../models/content-group';
 import { Room } from '../../../models/room';
+import { MatDialog } from '@angular/material/dialog';
 import { MatTabGroup } from '@angular/material/tabs';
-import { DialogService } from '../../../services/util/dialog.service';
+import { StatisticHelpComponent } from '../_dialogs/statistic-help/statistic-help.component';
 
 @Component({
   selector: 'app-statistics',
@@ -23,7 +24,7 @@ export class StatisticsPageComponent implements OnInit {
 
   constructor(private route: ActivatedRoute,
               private roomService: RoomService,
-              private dialogService: DialogService) {
+              public dialog: MatDialog) {
   }
 
   ngOnInit(): void {
@@ -47,6 +48,9 @@ export class StatisticsPageComponent implements OnInit {
   }
 
   showHelp(): void {
-    this.dialogService.openStatisticHelpDialog();
+    this.dialog.open(StatisticHelpComponent, {
+      width: '350px'
+    });
   }
+
 }

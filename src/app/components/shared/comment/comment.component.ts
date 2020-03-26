@@ -9,10 +9,12 @@ import { NotificationService } from '../../../services/util/notification.service
 import { TranslateService } from '@ngx-translate/core';
 import { LanguageService } from '../../../services/util/language.service';
 import { WsCommentServiceService } from '../../../services/websockets/ws-comment-service.service';
+import { PresentCommentComponent } from '../_dialogs/present-comment/present-comment.component';
+import { MatDialog } from '@angular/material/dialog';
 import { animate, state, style, transition, trigger } from '@angular/animations';
+import { DeleteCommentComponent } from '../../creator/_dialogs/delete-comment/delete-comment.component';
 import { CorrectWrong } from '../../../models/correct-wrong.enum';
 import { UserRole } from '../../../models/user-roles.enum';
-import { DialogService } from '../../../services/util/dialog.service';
 
 @Component({
   selector: 'app-comment',
@@ -50,7 +52,7 @@ export class CommentComponent implements OnInit {
               private commentService: CommentService,
               private notification: NotificationService,
               private translateService: TranslateService,
-              private dialogService: DialogService,
+              public dialog: MatDialog,
               protected langService: LanguageService,
               private wsCommentService: WsCommentServiceService) {
     langService.langEmitter.subscribe(lang => {
@@ -131,12 +133,15 @@ export class CommentComponent implements OnInit {
   }
 
   openDeleteCommentDialog(): void {
-    const dialogRef = this.dialogService.openDeleteDialog('really-delete-comment');
-    dialogRef.afterClosed().subscribe(result => {
-      if (result === 'delete') {
-        this.delete();
-      }
+    const dialogRef = this.dialog.open(DeleteCommentComponent, {
+      width: '400px'
     });
+    dialogRef.afterClosed()
+      .subscribe(result => {
+        if (result === 'delete') {
+          this.delete();
+        }
+      });
   }
 
   answerComment() {
@@ -172,7 +177,17 @@ export class CommentComponent implements OnInit {
         this.setRead(comment);
       }
     }
-    const dialogRef = this.dialogService.openCommentPresentationDialog(comment.body);
+    const dialogRef = this.dialog.open(PresentCommentComponent, {
+      position: {
+        left: '10px',
+        right: '10px'
+      },
+      maxWidth: '100vw',
+      maxHeight: '100vh',
+      height: '100%',
+      width: '100%'
+    });
+    dialogRef.componentInstance.body = comment.body;
     dialogRef.afterClosed()
       .subscribe(result => {
         this.wsCommentService.lowlight(comment);

@@ -6,12 +6,17 @@ import { User } from '../../../models/user';
 import { UserRole } from '../../../models/user-roles.enum';
 import { Location } from '@angular/common';
 import { TranslateService } from '@ngx-translate/core';
+import { MatDialog } from '@angular/material/dialog';
+import { LoginComponent } from '../../home/_dialogs/login/login.component';
+import { DeleteAccountComponent } from '../_dialogs/delete-account/delete-account.component';
 import { UserService } from '../../../services/http/user.service';
 import { EventService } from '../../../services/util/event.service';
 import { KeyboardUtils } from '../../../utils/keyboard';
 import { KeyboardKey } from '../../../utils/keyboard/keys';
+import { UserBonusTokenComponent } from '../_dialogs/user-bonus-token/user-bonus-token.component';
+import { RemindOfTokensComponent } from '../_dialogs/remind-of-tokens/remind-of-tokens.component';
 import { BonusTokenService } from '../../../services/http/bonus-token.service';
-import { DialogService } from '../../../services/util/dialog.service';
+import { QrCodeComponent } from '../_dialogs/qr-code/qr-code.component';
 
 @Component({
   selector: 'app-header',
@@ -31,11 +36,11 @@ export class HeaderComponent implements OnInit {
               private notificationService: NotificationService,
               public router: Router,
               private translationService: TranslateService,
+              public dialog: MatDialog,
               private userService: UserService,
               public eventService: EventService,
               private bonusTokenService: BonusTokenService,
-              private _r: Renderer2,
-              private dialogService: DialogService
+              private _r: Renderer2
   ) {
   }
 
@@ -124,14 +129,17 @@ export class HeaderComponent implements OnInit {
     if (this.user.authProvider === 'ARSNOVA_GUEST') {
       this.bonusTokenService.getTokensByUserId(this.user.id).subscribe(list => {
         if (list && list.length > 0) {
-          const dialogRef = this.dialogService.openTokenReminderDialog();
-          dialogRef.afterClosed().subscribe(result => {
-            if (result === 'abort') {
-              this.openUserBonusTokenDialog();
-            } else if (result === 'logout') {
-              this.logoutUser();
-            }
+          const dialogRef = this.dialog.open(RemindOfTokensComponent, {
+            width: '600px'
           });
+          dialogRef.afterClosed()
+            .subscribe(result => {
+              if (result === 'abort') {
+                this.openUserBonusTokenDialog();
+              } else if (result === 'logout') {
+                this.logoutUser();
+              }
+            });
         } else {
           this.logoutUser();
         }
@@ -159,7 +167,11 @@ export class HeaderComponent implements OnInit {
   }
 
   login(isLecturer: boolean) {
-    this.dialogService.openLoginDialog((isLecturer === true) ? UserRole.CREATOR : UserRole.PARTICIPANT, true);
+    const dialogRef = this.dialog.open(LoginComponent, {
+      width: '350px'
+    });
+    dialogRef.componentInstance.role = (isLecturer === true) ? UserRole.CREATOR : UserRole.PARTICIPANT;
+    dialogRef.componentInstance.isStandard = true;
   }
 
   navToHome() {
@@ -176,18 +188,24 @@ export class HeaderComponent implements OnInit {
   }
 
   openDeleteUserDialog() {
-    const dialogRef = this.dialogService.openDeleteDialog('really-delete-account');
-    dialogRef.afterClosed().subscribe(result => {
-      if (result === 'abort') {
-        return;
-      } else if (result === 'delete') {
-        this.deleteAccount(this.user.id);
-      }
+    const dialogRef = this.dialog.open(DeleteAccountComponent, {
+      width: '600px'
     });
+    dialogRef.afterClosed()
+      .subscribe(result => {
+        if (result === 'abort') {
+          return;
+        } else if (result === 'delete') {
+          this.deleteAccount(this.user.id);
+        }
+      });
   }
 
   openUserBonusTokenDialog() {
-    this.dialogService.openBonusTokenDialog(this.user.id);
+    const dialogRef = this.dialog.open(UserBonusTokenComponent, {
+      width: '600px'
+    });
+    dialogRef.componentInstance.userId = this.user.id;
   }
 
   cookiesDisabled(): boolean {
@@ -197,6 +215,13 @@ export class HeaderComponent implements OnInit {
   /*QR*/
 
   public showQRDialog() {
-    this.dialogService.openQRCodeDialog(window.location.protocol, window.location.hostname, this.shortId, this.user.role === 3);
+    const dialogRef = this.dialog.open(QrCodeComponent, {
+      panelClass: 'screenDialog'
+    });
+    dialogRef.componentInstance.protocol = window.location.protocol;
+    dialogRef.componentInstance.hostName = window.location.hostname;
+    dialogRef.componentInstance.key = this.shortId;
+    dialogRef.componentInstance.isCreator = this.user.role === 3;
   }
+
 }

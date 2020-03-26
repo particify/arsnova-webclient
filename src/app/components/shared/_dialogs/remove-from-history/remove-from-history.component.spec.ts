@@ -1,21 +1,21 @@
 /*
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { YesNoDialogComponent } from './yes-no-dialog.component';
+import { RemoveFromHistoryComponent } from './remove-from-history.component';
 
-describe('YesNoDialogComponent', () => {
-  let component: YesNoDialogComponent;
-  let fixture: ComponentFixture<YesNoDialogComponent>;
+describe('RemoveFromHistoryComponent', () => {
+  let component: RemoveFromHistoryComponent;
+  let fixture: ComponentFixture<RemoveFromHistoryComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ YesNoDialogComponent ]
+      declarations: [ RemoveFromHistoryComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(YesNoDialogComponent);
+    fixture = TestBed.createComponent(RemoveFromHistoryComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

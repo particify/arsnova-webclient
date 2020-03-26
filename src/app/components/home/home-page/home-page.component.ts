@@ -3,7 +3,8 @@ import { EventService } from '../../../services/util/event.service';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { KeyboardUtils } from '../../../utils/keyboard';
 import { KeyboardKey } from '../../../utils/keyboard/keys';
-import { DialogService } from '../../../services/util/dialog.service';
+import { RoomCreateComponent } from '../../shared/_dialogs/room-create/room-create.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-home-page',
@@ -19,7 +20,8 @@ export class HomePageComponent implements OnInit, OnDestroy, AfterContentInit {
     private eventService: EventService,
     private liveAnnouncer: LiveAnnouncer,
     private _r: Renderer2,
-    private dialogService: DialogService) {
+    public dialog: MatDialog,
+  ) {
   }
 
   ngAfterContentInit(): void {
@@ -62,7 +64,9 @@ export class HomePageComponent implements OnInit, OnDestroy, AfterContentInit {
   }
 
   openCreateRoomDialog(): void {
-    this.dialogService.openRoomCreateDialog();
+    this.dialog.open(RoomCreateComponent, {
+      width: '350px'
+    });
   }
 
   cookiesDisabled(): boolean {

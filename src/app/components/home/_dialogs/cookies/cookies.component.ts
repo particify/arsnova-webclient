@@ -1,8 +1,7 @@
 import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { DataProtectionComponent } from '../data-protection/data-protection.component';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { DialogConfirmActionButtonType } from '../../../shared/dialog/dialog-action-buttons/dialog-action-buttons.component';
-import { DialogService } from '../../../../services/util/dialog.service';
-import { ApiConfigService } from '../../../../services/http/api-config.service';
 
 @Component({
   selector: 'app-cookies',
@@ -18,15 +17,13 @@ export class CookiesComponent implements OnInit, AfterViewInit {
 
   confirmButtonType: DialogConfirmActionButtonType = DialogConfirmActionButtonType.Primary;
 
-  constructor(private dialog: MatDialog,
-              private dialogRef: MatDialogRef<CookiesComponent>,
-              private ref: ElementRef,
-              private dialogService: DialogService,
-              private apiConfigService: ApiConfigService) {
+  constructor(private dialog: MatDialog, private dialogRef: MatDialogRef<CookiesComponent>, private ref: ElementRef) {
   }
 
   ngOnInit() {
+
     this.currentLang = localStorage.getItem('currentLang');
+
     // not really the nicest way but should do its job until a better or native solution was found
     setTimeout(() => document.getElementById('cookie-header').focus(), 400);
   }
@@ -52,13 +49,10 @@ export class CookiesComponent implements OnInit, AfterViewInit {
     this.dialogRef.close(false);
   }
 
-  getUIDataFromConfig(type: string): string {
-    return this.apiConfigService.getUiConfig()[type][this.currentLang];
-  }
-
-  showDataProtection() {
-    const dataProtectionBody = this.getUIDataFromConfig('privacy-info');
-    this.dialogService.openInfoDialog('data-protection', dataProtectionBody);
+  openDataProtection() {
+    this.dialog.open(DataProtectionComponent, {
+      width: '90%'
+    });
   }
 
   /**
