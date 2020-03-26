@@ -1,6 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { DisplayAnswer } from '../../content-choice-creator/content-choice-creator.component';
+import { DisplayAnswer } from '../../../creator/content-choice-creator/content-choice-creator.component';
 import { ContentChoice } from '../../../../models/content-choice';
 import { AnswerOption } from '../../../../models/answer-option';
 import { TranslateService } from '@ngx-translate/core';

@@ -126,9 +126,7 @@ export class HeaderComponent implements OnInit {
         if (list && list.length > 0) {
           const dialogRef = this.dialogService.openTokenReminderDialog();
           dialogRef.afterClosed().subscribe(result => {
-            if (result === 'abort') {
-              this.openUserBonusTokenDialog();
-            } else if (result === 'logout') {
+            if (result === 'logout') {
               this.logoutUser();
             }
           });

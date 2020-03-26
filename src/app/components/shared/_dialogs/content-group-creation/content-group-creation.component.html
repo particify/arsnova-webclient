@@ -3,19 +3,19 @@
     <mat-form-field>
       <input matInput class="input-block" type="text" (keypress)="resetEmpty()" maxlength="25" [(ngModel)]="name"
              name="contentGroupName" aria-labelledby="content-group-name-input"/>
-      <mat-placeholder>{{ 'content.content-group-name' | translate }}</mat-placeholder>
+      <mat-placeholder>{{ 'dialog.content-group-name' | translate }}</mat-placeholder>
       <mat-hint align="start" class="error" *ngIf="empty">
-        <strong>{{ 'content.please-enter-name' | translate }}</strong></mat-hint>
+        <strong>{{ 'dialog.please-enter-name' | translate }}</strong></mat-hint>
     </mat-form-field>
   </div>
 </form>
 <app-dialog-action-buttons
-  buttonsLabelSection="content"
+  buttonsLabelSection="dialog"
   confirmButtonLabel="create-content-group"
   [cancelButtonClickAction]="buildCloseDialogActionCallback()"
   [confirmButtonClickAction]="buildGroupCreateActionCallback()"
 ></app-dialog-action-buttons>
 
 <div class="visually-hidden">
-  <div id="content-group-name-input">{{ 'content.content-group-name-input' | translate }}</div>
+  <div id="content-group-name-input">{{ 'dialog.content-group-name-input' | translate }}</div>
 </div>

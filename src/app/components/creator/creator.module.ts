@@ -15,15 +15,14 @@ import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { HttpClient } from '@angular/common/http';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { ContentListComponent } from './content-list/content-list.component';
-import { ContentEditComponent } from './_dialogs/content-edit/content-edit.component';
+import { ContentEditComponent } from '../shared/_dialogs/content-edit/content-edit.component';
 import { ContentPresentationComponent } from './content-presentation/content-presentation.component';
-import { CommentExportComponent } from './_dialogs/comment-export/comment-export.component';
 import { ModeratorsComponent } from './settings/moderators/moderators.component';
 import { BonusTokenComponent } from './settings/bonus-token/bonus-token.component';
 import { CommentSettingsComponent } from './settings/comment-settings/comment-settings.component';
 import { TagsComponent } from './settings/tags/tags.component';
 import { MarkdownModule } from 'ngx-markdown';
-import { ContentGroupCreationComponent } from './_dialogs/content-group-creation/content-group-creation.component';
+import { ContentGroupCreationComponent } from '../shared/_dialogs/content-group-creation/content-group-creation.component';
 import { SettingsComponent } from './settings/settings.component';
 import { SettingsPageComponent } from './settings-page/settings-page.component';
 
@@ -55,7 +54,6 @@ import { SettingsPageComponent } from './settings-page/settings-page.component';
     ContentListComponent,
     ContentEditComponent,
     ContentPresentationComponent,
-    CommentExportComponent,
     ModeratorsComponent,
     BonusTokenComponent,
     CommentSettingsComponent,

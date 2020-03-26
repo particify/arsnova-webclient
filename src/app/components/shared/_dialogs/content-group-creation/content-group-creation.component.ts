@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { ContentListComponent } from '../../content-list/content-list.component';
+import { ContentListComponent } from '../../../creator/content-list/content-list.component';
 import { NotificationService } from '../../../../services/util/notification.service';
 import { TranslateService } from '@ngx-translate/core';
-import { ContentCreatePageComponent } from '../../content-create-page/content-create-page.component';
+import { ContentCreatePageComponent } from '../../../creator/content-create-page/content-create-page.component';
 
 @Component({
   selector: 'app-content-group-creation',

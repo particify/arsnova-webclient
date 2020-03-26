@@ -28,7 +28,6 @@
     "style": "Anzeige"
   },
   "header": {
-    "a11y-copy-url": "Direktlink zur Sitzung in die Zwischenablage kopieren",
     "abort": "Abbrechen",
     "accessibility-back": "Führt zur vorherigen Seite",
     "accessibility-login": "Öffnet das Anmeldungs-Fenster.",
@@ -36,7 +35,6 @@
     "account-deleted": "Dein Konto wurde gelöscht.",
     "back": "Abbrechen",
     "cancel": "Abbrechen",
-    "copy-url": "Link kopieren",
     "delete-account": "Konto löschen",
     "go-to-home": "Startseite",
     "home-header": "Interaktion im Hörsaal",
@@ -50,10 +48,7 @@
     "my-sessions": "Meine Sitzungen",
     "session-id-copied": "Direktlink wurde in die Zwischenablage kopiert.",
     "user-bonus-token": "Zu deinen Bonus Tokens",
-    "user-got-tokens": "Du hast noch Tokens für Bonuspunkte, die verloren gehen!",
-    "visited-sessions": "Besuchte Sitzungen",
-    "bonus-token": "Tokens für Bonuspunkte",
-    "no-bonus": "Noch keine Bonuspunkte erhalten."
+    "visited-sessions": "Besuchte Sitzungen"
   },
   "home-page": {
     "accessibility-create": "Erstellt eine neue Sitzung.",
@@ -70,7 +65,6 @@
     "no-room-found": "Es wurde keine Sitzung mit diesem Code gefunden.",
     "only-numbers": "Der Sitzungs-Code besteht ausschließlich aus Ziffern.",
     "please-enter": "Den Code sagt dir dein Dozent",
-    "room-name-input": "Gib hier den Namen der Sitzung die du erstellen möchtest ein.",
     "session-id": "Sitzungs-Code",
     "update-available": "Eine neue Version ist verfügbar."
   },
@@ -163,16 +157,6 @@
     "register-successful": "Erfolgreich registriert. Bitte prüfe dein Postfach.",
     "register-unsuccessful": "Bitte prüfe deine Eingaben."
   },
-  "remind-of-tokens": {
-    "cancel": "Zu meinen Tokens",
-    "logout": "Abmelden"
-  },
-  "room-create": {
-    "cancel": "Abbrechen",
-    "cancel-description": "Abbrechen",
-    "create-room": "Speichern",
-    "create-room-description": "Neue Sitzung erstellen."
-  },
   "room-list": {
     "creator-role": "Sitzungsersteller",
     "entry": "Eintrag ",
@@ -213,9 +197,6 @@
   "user-bonus-token": {
     "header": "Tokens für Bonuspunkte"
   },
-  "qr-dialog": {
-    "session": "Sitzung"
-  },
   "dialog": {
     "sure": "Bist du sicher?",
     "cancel": "Abbrechen",
@@ -231,6 +212,42 @@
     "really-remove-session-from-history": "Willst du die folgende Sitzung wirklich aus deiner Liste entfernen?",
     "really-delete-token": "Willst du diesen Token wirklich löschen?",
     "really-delete-tokens": "Willst du wirklich alle Tokens dieser Sitzung löschen?",
-    "really-delete-account": "Willst du dein Konto mit allen Sitzungen unwiderruflich löschen?"
+    "really-delete-account": "Willst du dein Konto mit allen Sitzungen unwiderruflich löschen?",
+    "export": "Exportieren",
+    "semicolon": "CSV-Format",
+    "delimiter": "Dateiformat",
+    "comma": "Excel-Format",
+    "send": "Senden",
+    "send-description": "Kommentar abschicken",
+    "enter-comment": "Kommentar ans Auditorium",
+    "error-comment": "Bitte gib einen Kommentar ein.",
+    "tag": "Kategorie",
+    "create-comment-description": "Gib hier deinen Kommentar ans Auditorium ein!",
+    "exit-description": "Präsentationsmodus verlassen",
+    "content-body": "Inhalt",
+    "content-subject": "Thema",
+    "content-answers": "Antworten",
+    "update": "Speichern",
+    "content-group-name": "Name der Sammlung",
+    "content-group-name-input": "Gib hier den Namen der Sammlung die du erstellen möchtest ein.",
+    "create-content-group": "Anlegen",
+    "content-group-created": "Frage wurde neuer Sammlung hinzugefügt.",
+    "content-group-already-exists": "Diese Sammlung existiert bereits.",
+    "please-enter-name": "Bitte geben Sie einen Namen ein.",
+    "session": "Sitzung",
+    "a11y-copy-url": "Direktlink zur Sitzung in die Zwischenablage kopieren",
+    "copy-url": "Link kopieren",
+    "user-got-tokens": "Du hast noch Tokens für Bonuspunkte, die verloren gehen!",
+    "logout": "Abmelden",
+    "create": "Erstellen",
+    "create-room-description": "Neue Sitzung erstellen.",
+    "room-name-input": "Gib hier den Namen der Sitzung die du erstellen möchtest ein.",
+    "session-name": "Name der Sitzung",
+    "statistic-good": "Gut",
+    "statistic-okay": "Okay",
+    "statistic-improvable": "Luft nach oben",
+    "statistic-no-answers": "Keine Antworten",
+    "bonus-token": "Tokens für Bonuspunkte",
+    "no-bonus": "Noch keine Bonuspunkte erhalten."
   }
 }

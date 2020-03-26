@@ -2,10 +2,10 @@
   <div>
     <h2 tabindex="0">{{ 'dialog.sure' | translate }}</h2>
     <mat-divider></mat-divider>
-    <p tabindex="0">{{ 'header.user-got-tokens' | translate }}</p>
+    <p tabindex="0">{{ 'dialog.user-got-tokens' | translate }}</p>
   </div>
   <app-dialog-action-buttons
-    buttonsLabelSection="remind-of-tokens"
+    buttonsLabelSection="dialog"
     confirmButtonLabel="logout"
     [cancelButtonClickAction]="buildCloseDialogActionCallback()"
     [confirmButtonClickAction]="buildLogoutActionCallback()"

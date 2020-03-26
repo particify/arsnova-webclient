@@ -7,7 +7,6 @@ import { Router } from '@angular/router';
 import { CommentService } from '../../../../services/http/comment.service';
 import { BonusTokenService } from '../../../../services/http/bonus-token.service';
 import { CommentSettingsService } from '../../../../services/http/comment-settings.service';
-import { CommentExportComponent } from '../../_dialogs/comment-export/comment-export.component';
 import { Room } from '../../../../models/room';
 import { CommentBonusTokenMixin } from '../../../../models/comment-bonus-token-mixin';
 import { CommentSettings } from '../../../../models/comment-settings';

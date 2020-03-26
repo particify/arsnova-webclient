@@ -3,17 +3,21 @@
     <button mat-raised-button *ngIf="data.isCreator" class="button-secondary header copyBtn" (click)="copyShortId()"
             aria-labelledby="copy-url">
       <mat-icon>link</mat-icon>
-      {{ 'header.copy-url' | translate}}
+      {{ 'dialog.copy-url' | translate}}
     </button>
     <button class="button-primary header exitBtn" mat-raised-button (click)="onCloseClick()">
       <mat-icon>close</mat-icon>
     </button>
     <div>
       <h2>{{data.hostName}}</h2>
+<<<<<<< Updated upstream
       <h2>{{'qr-dialog.session' | translate}}: {{data.shortId.slice(0, 4)}} {{data.shortId.slice(4, 8)}}</h2>
+=======
+      <h2>{{'dialog.session' | translate}}: {{data.shortId.slice(0, 4)}} {{data.shortId.slice(4, 8)}}</h2>
+>>>>>>> Stashed changes
     </div>
     <qrcode [qrdata]="data.protocol + data.hostName + path + data.shortId" [width]="qrWidth"
             [errorCorrectionLevel]="'M'"></qrcode>
   </div>
 </ars-screen>
-<div class="visually-hidden" id="copy-url">{{ 'header.a11y-copy-url' | translate}}</div>
+<div class="visually-hidden" id="copy-url">{{ 'dialog.a11y-copy-url' | translate}}</div>

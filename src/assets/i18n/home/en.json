@@ -28,7 +28,6 @@
     "style": "Display"
   },
   "header": {
-    "a11y-copy-url": "Copy link to session to the clipboard",
     "abort": "Cancel",
     "accessibility-back": "Go back to the previous page",
     "accessibility-login": "Open the login window",
@@ -49,10 +48,7 @@
     "my-sessions": "My sessions",
     "session-id-copied": "Session link was copied to the clipboard.",
     "user-bonus-token": "See your bonus tokens",
-    "user-got-tokens": "You have bonus tokens linked to this account that will be lost!",
-    "visited-sessions": "Visited sessions",
-    "bonus-token": "Tokens for bonus points",
-    "no-bonus": "No bonus points earned yet."
+    "visited-sessions": "Visited sessions"
   },
   "home-page": {
     "accessibility-create": "Create a new session",
@@ -69,7 +65,6 @@
     "no-room-found": "No session found with this key",
     "only-numbers": "A session key only contains digits.",
     "please-enter": "Ask the lecturer for the key",
-    "room-name-input": "Enter the name of the session you want to create here.",
     "session-id": "Session key",
     "update-available": "An update is available."
   },
@@ -163,16 +158,6 @@
     "register-successful": "Successfully registered. Please check your mails.",
     "register-unsuccessful": "Please check your data."
   },
-  "remind-of-tokens": {
-    "cancel": "To my tokens",
-    "logout": "Log out"
-  },
-  "room-create": {
-    "cancel": "Cancel",
-    "cancel-description": "Cancel",
-    "create-room": "Create Session",
-    "create-room-description": "Create new session"
-  },
   "room-list": {
     "creator-role": "Session creator",
     "entry": "Entry ",
@@ -213,9 +198,6 @@
   "user-bonus-token-dialog": {
     "header": "Tokens for bonus points"
   },
-  "qr-dialog": {
-    "session": "Session"
-  },
   "dialog": {
     "sure": "Are you sure?",
     "abort": "Cancel",
@@ -231,6 +213,42 @@
     "really-remove-session-from-history": "Do you really want to remove the following session from your history?",
     "really-delete-token": "Do you really want to delete this token?",
     "really-delete-tokens": "Do you really want to delete all tokens of this session?",
-    "really-delete-account": "Do you want to irrevocably delete your account with all sessions?"
+    "really-delete-account": "Do you want to irrevocably delete your account with all sessions?",
+    "export": "Export",
+    "semicolon": "CSV format",
+    "delimiter": "Please choose a format!",
+    "comma": "Excel format",
+    "send": "Send",
+    "send-description": "Send comment",
+    "enter-comment": "Comment to the audience",
+    "error-comment": "Please enter a comment.",
+    "tag": "Category",
+    "create-comment-description": "Enter your comment to the audience here!",
+    "exit-description": "Exit Presentation Mode",
+    "content-body": "Body",
+    "content-subject": "Subject",
+    "content-answers": "Answers",
+    "update": "Update",
+    "content-group-name": "Name of the collection",
+    "content-group-name-input": "Enter the name of the collection you want to create here.",
+    "create-content-group": "Create",
+    "content-group-created": "Question was added to new collection.",
+    "content-group-already-exists": "This collection already exists.",
+    "please-enter-name": "Please enter a name.",
+    "session": "Session",
+    "a11y-copy-url": "Copy link to session to the clipboard",
+    "copy-url": "Copy URL",
+    "user-got-tokens": "You have bonus tokens linked to this account that will be lost!",
+    "logout": "Log out",
+    "create": "Create Session",
+    "create-room-description": "Create new session",
+    "room-name-input": "Enter the name of the session you want to create here.",
+    "session-name": "Session name",
+    "statistic-good": "Good",
+    "statistic-okay": "Okay",
+    "statistic-improvable": "Improvable",
+    "statistic-no-answers": "No answers",
+    "bonus-token": "Tokens for bonus points",
+    "no-bonus": "No bonus points earned yet."
   }
 }

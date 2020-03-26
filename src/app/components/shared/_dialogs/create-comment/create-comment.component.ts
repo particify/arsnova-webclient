@@ -46,7 +46,7 @@ export class CreateCommentComponent implements OnInit {
   checkInputData(body: string): boolean {
     body = body.trim();
     if (!body) {
-      this.translationService.get('comment-page.error-comment').subscribe(message => {
+      this.translationService.get('dialog.error-comment').subscribe(message => {
         this.notification.show(message);
       });
       return false;
