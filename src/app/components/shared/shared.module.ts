@@ -36,6 +36,7 @@ import { LoadingIndicatorComponent } from './loading-indicator/loading-indicator
 import { YesNoDialogComponent } from './_dialogs/yes-no-dialog/yes-no-dialog.component';
 import { InfoDialogComponent } from './_dialogs/info-dialog/info-dialog.component';
 import { CommentExportComponent } from './_dialogs/comment-export/comment-export.component';
+import { RoomNotFoundComponent } from './room-not-found/room-not-found.component';
 
 @NgModule({
   imports: [
@@ -77,7 +78,8 @@ import { CommentExportComponent } from './_dialogs/comment-export/comment-export
     LoadingIndicatorComponent,
     YesNoDialogComponent,
     InfoDialogComponent,
-    CommentExportComponent
+    CommentExportComponent,
+    RoomNotFoundComponent
   ],
   exports: [
     RoomJoinComponent,
@@ -97,7 +99,8 @@ import { CommentExportComponent } from './_dialogs/comment-export/comment-export
     DialogActionButtonsComponent,
     UserBonusTokenComponent,
     LoadingIndicatorComponent,
-    CommentExportComponent
+    CommentExportComponent,
+    RoomNotFoundComponent
   ]
 })
 export class SharedModule {

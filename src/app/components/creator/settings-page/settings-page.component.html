@@ -1,7 +1,8 @@
-<div *ngIf="!isLoading">
+<div *ngIf="!isLoading && !errorOnLoading">
   <div *ngFor="let setting of settings">
     <app-settings [settings]="setting" [room]="room">
     </app-settings>
   </div>
 </div>
 <app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
+<app-room-not-found *ngIf="!isLoading && errorOnLoading"></app-room-not-found>

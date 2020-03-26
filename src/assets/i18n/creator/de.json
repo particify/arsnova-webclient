@@ -188,7 +188,7 @@
     "moderating-stream": "Moderation",
     "present": "Präsentieren",
     "public-stream": "Kommentare",
-    "room-not-found": "Sitzung wurde nicht gefunden (",
+    "room-loading-error": "Die Sitzung konnte nicht geladen werden",
     "session-settings": "Einstellungen",
     "no-contents": "Es sind noch keine Fragen vorhanden."
   },
