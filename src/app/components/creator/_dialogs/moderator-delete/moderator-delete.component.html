@@ -1,0 +1,11 @@
+<h2>{{ 'room-page.sure' | translate }}</h2>
+<mat-divider></mat-divider>
+<p>{{ 'settings.really-remove-moderator' | translate }}</p>
+<p>{{loginId}}</p>
+<app-dialog-action-buttons
+  buttonsLabelSection="content"
+  confirmButtonLabel="delete"
+  [confirmButtonType]=confirmButtonType
+  [cancelButtonClickAction]="buildCloseDialogActionCallback()"
+  [confirmButtonClickAction]="buildModeratorDeleteActionCallback()"
+></app-dialog-action-buttons>

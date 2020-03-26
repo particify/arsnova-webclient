@@ -1,11 +1,11 @@
 <div fxLayout="column" fxLayoutAlign="center" fxLayoutGap="10px">
   <mat-form-field>
     <input (focus)="eventService.makeFocusOnInputTrue()" (blur)="eventService.makeFocusOnInputFalse()" matInput
-           [(ngModel)]="data.subject" maxlength="40" placeholder="{{'content.subject' | translate}}" name="subject"/>
+           [(ngModel)]="content.subject" maxlength="40" placeholder="{{'content.subject' | translate}}" name="subject"/>
   </mat-form-field>
   <mat-form-field>
     <textarea (focus)="eventService.makeFocusOnInputTrue()" (blur)="eventService.makeFocusOnInputFalse()" matInput
-              [(ngModel)]="data.body" rows="3" maxlength="250" placeholder="{{'content.body' | translate}}"
+              [(ngModel)]="content.body" rows="3" maxlength="250" placeholder="{{'content.body' | translate}}"
               name="body"></textarea>
   </mat-form-field>
   <h4>{{'content.answers' | translate}}</h4>

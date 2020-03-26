@@ -9,7 +9,8 @@ import { User } from '../../../models/user';
 import { AuthenticationService } from '../../../services/http/authentication.service';
 import { UserRole } from '../../../models/user-roles.enum';
 import { NotificationService } from '../../../services/util/notification.service';
-import { DialogService } from '../../../services/util/dialog.service';
+import { MatDialog } from '@angular/material/dialog';
+import { DeleteAnswerComponent } from '../../creator/_dialogs/delete-answer/delete-answer.component';
 
 @Component({
   selector: 'app-comment-answer',
@@ -32,7 +33,7 @@ export class CommentAnswerComponent implements OnInit {
               protected wsCommentService: WsCommentServiceService,
               protected commentService: CommentService,
               private authenticationService: AuthenticationService,
-              private dialogService: DialogService) { }
+              public dialog: MatDialog) { }
 
   ngOnInit() {
     this.user = this.authenticationService.getUser();
@@ -57,12 +58,15 @@ export class CommentAnswerComponent implements OnInit {
   }
 
   openDeleteAnswerDialog(): void {
-    const dialogRef = this.dialogService.openDeleteDialog('really-delete-answer');
-    dialogRef.afterClosed().subscribe(result => {
-      if (result === 'delete') {
-        this.deleteAnswer();
-      }
+    const dialogRef = this.dialog.open(DeleteAnswerComponent, {
+      width: '400px'
     });
+    dialogRef.afterClosed()
+      .subscribe(result => {
+        if (result === 'delete') {
+          this.deleteAnswer();
+        }
+      });
   }
 
   deleteAnswer() {

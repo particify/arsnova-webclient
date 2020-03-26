@@ -8,11 +8,6 @@ import { User } from '../../../../models/user';
 import { CommentListComponent } from '../../comment-list/comment-list.component';
 import { EventService } from '../../../../services/util/event.service';
 
-export interface DialogData {
-  user: User;
-  tags: string[];
-}
-
 @Component({
   selector: 'app-submit-comment',
   templateUrl: './create-comment.component.html',
@@ -21,6 +16,10 @@ export interface DialogData {
 export class CreateCommentComponent implements OnInit {
 
   comment: Comment;
+
+  user: User;
+  roomId: string;
+  tags: string[];
   selectedTag: string;
 
   bodyForm = new FormControl('', [Validators.required]);
@@ -32,7 +31,7 @@ export class CreateCommentComponent implements OnInit {
     public dialog: MatDialog,
     private translationService: TranslateService,
     public eventService: EventService,
-    @Inject(MAT_DIALOG_DATA) public data: DialogData) {
+    @Inject(MAT_DIALOG_DATA) public data: any) {
   }
 
   ngOnInit() {
@@ -59,8 +58,8 @@ export class CreateCommentComponent implements OnInit {
       const comment = new Comment();
       comment.roomId = localStorage.getItem(`roomId`);
       comment.body = body;
-      comment.creatorId = this.data.user.id;
-      comment.createdFromLecturer = this.data.user.role === 1;
+      comment.creatorId = this.user.id;
+      comment.createdFromLecturer = this.user.role === 1;
       if (this.selectedTag !== null) {
         comment.tag = this.selectedTag;
       }

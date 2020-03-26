@@ -7,12 +7,12 @@ import { Router } from '@angular/router';
 import { CommentService } from '../../../../services/http/comment.service';
 import { BonusTokenService } from '../../../../services/http/bonus-token.service';
 import { CommentSettingsService } from '../../../../services/http/comment-settings.service';
+import { DeleteCommentsComponent } from '../../_dialogs/delete-comments/delete-comments.component';
 import { CommentExportComponent } from '../../_dialogs/comment-export/comment-export.component';
 import { Room } from '../../../../models/room';
 import { CommentBonusTokenMixin } from '../../../../models/comment-bonus-token-mixin';
 import { CommentSettings } from '../../../../models/comment-settings';
 import { TSMap } from 'typescript-map';
-import { DialogService } from '../../../../services/util/dialog.service';
 
 @Component({
   selector: 'app-comment-settings',
@@ -43,8 +43,7 @@ export class CommentSettingsComponent implements OnInit {
     public router: Router,
     public commentService: CommentService,
     public commentSettingsService: CommentSettingsService,
-    private bonusTokenService: BonusTokenService,
-    private dialogService: DialogService
+    private bonusTokenService: BonusTokenService
   ) {
   }
 
@@ -80,13 +79,18 @@ export class CommentSettingsComponent implements OnInit {
     }
   }
 
+
   openDeleteCommentsDialog(): void {
-    const dialogRef = this.dialogService.openDeleteDialog('really-delete-comments');
-    dialogRef.afterClosed().subscribe(result => {
-      if (result === 'delete') {
-        this.deleteComments();
-      }
+    const dialogRef = this.dialog.open(DeleteCommentsComponent, {
+      width: '400px'
     });
+    dialogRef.componentInstance.roomId = this.roomId;
+    dialogRef.afterClosed()
+      .subscribe(result => {
+        if (result === 'delete') {
+          this.deleteComments();
+        }
+      });
   }
 
   deleteComments(): void {
@@ -151,7 +155,9 @@ export class CommentSettingsComponent implements OnInit {
   }
 
   openExportDialog(): void {
-    const dialogRef = this.dialogService.openCommentExportDialog();
+    const dialogRef = this.dialog.open(CommentExportComponent, {
+      width: '400px'
+    });
     dialogRef.afterClosed().subscribe(result => {
       this.onExport(result);
     });

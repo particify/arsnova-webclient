@@ -1,0 +1,10 @@
+<h3>{{ 'room-page.sure' | translate}}</h3>
+<p>{{'content.really' | translate}}<strong>{{content.subject}}</strong>{{'content.really2' | translate}}</p>
+<div fxLayout="row" fxLayoutAlign="center" fxLayoutGap="10px">
+  <button mat-raised-button class="button-warn" (click)="closeDialog('delete')">
+    {{'content.delete' | translate}}
+  </button>
+  <button mat-raised-button class="button-secondary" (click)="closeDialog('abort')">
+    {{'content.abort' | translate}}
+  </button>
+</div>

@@ -35,17 +35,21 @@ import { environment } from '../environments/environment';
 import { ModeratorService } from './services/http/moderator.service';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { IntroductionComponent } from './components/home/_dialogs/introduction/introduction.component';
 import { CommentSettingsService } from './services/http/comment-settings.service';
 import { BonusTokenService } from './services/http/bonus-token.service';
 import { CustomIconService } from './services/util/custom-icon.service';
 import { ModeratorModule } from './components/moderator/moderator.module';
+import { ImprintComponent } from './components/home/_dialogs/imprint/imprint.component';
 import { ApiConfigService } from './services/http/api-config.service';
+import { DataProtectionComponent } from './components/home/_dialogs/data-protection/data-protection.component';
 import { CookiesComponent } from './components/home/_dialogs/cookies/cookies.component';
 import { OverlayComponent } from './components/home/_dialogs/overlay/overlay.component';
+import { DemoDeComponent } from './components/home/_dialogs/demo/demo-de';
+import { DemoEnComponent } from './components/home/_dialogs/demo/demo-en';
 import { ArsModule } from '../../projects/ars/src/lib/ars.module';
 import { MatIconModule } from '@angular/material/icon';
 import { LoginComponent } from './components/home/_dialogs/login/login.component';
-import { DialogService } from './services/util/dialog.service';
 
 export function dialogClose(dialogResult: any) {
 }
@@ -62,7 +66,21 @@ export function initializeApp(appConfig: AppConfig) {
     RegisterComponent,
     UserActivationComponent,
     HomePageComponent,
+    IntroductionComponent,
     UserHomeComponent,
+    ImprintComponent,
+    DataProtectionComponent,
+    CookiesComponent,
+    DemoDeComponent,
+    DemoEnComponent,
+    OverlayComponent
+  ],
+  entryComponents: [
+    LoginComponent,
+    RegisterComponent,
+    PasswordResetComponent,
+    UserActivationComponent,
+    IntroductionComponent,
     CookiesComponent,
     OverlayComponent
   ],
@@ -110,7 +128,6 @@ export function initializeApp(appConfig: AppConfig) {
     },
     WsConnectorService,
     NotificationService,
-    DialogService,
     AuthenticationService,
     AuthenticationGuard,
     DataStoreService,

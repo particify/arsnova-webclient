@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { NotificationService } from '../../../../services/util/notification.service';
 import { UserService } from '../../../../services/http/user.service';
 import { FormControl, Validators } from '@angular/forms';
@@ -11,17 +11,20 @@ import { EventService } from '../../../../services/util/event.service';
   templateUrl: './user-activation.component.html',
   styleUrls: ['./user-activation.component.scss']
 })
-export class UserActivationComponent {
+export class UserActivationComponent implements OnInit {
 
   activationKeyFormControl = new FormControl('', [Validators.required]);
 
   constructor(
-    @Inject(MAT_DIALOG_DATA) public data: string,
+    @Inject(MAT_DIALOG_DATA) public data: any,
     public userService: UserService,
     public notificationService: NotificationService,
     public dialogRef: MatDialogRef<UserActivationComponent>,
     private translationService: TranslateService,
     public eventService: EventService) {
+  }
+
+  ngOnInit() {
   }
 
   login(activationKey: string): void {
@@ -31,7 +34,7 @@ export class UserActivationComponent {
       });
     } else {
       activationKey = activationKey.trim();
-      this.userService.activate(this.data.trim(), activationKey).subscribe(() => {
+      this.userService.activate(this.data.name.trim(), activationKey).subscribe(() => {
           this.dialogRef.close({ success: true });
         },
         err => {
@@ -44,7 +47,7 @@ export class UserActivationComponent {
   }
 
   resetActivation(): void {
-    this.userService.resetActivation(this.data.trim()).subscribe(() => {
+    this.userService.resetActivation(this.data.name.trim()).subscribe(() => {
         this.translationService.get('user-activation.activation-key-sent-again').subscribe(msg => {
           this.notificationService.show(msg);
         });

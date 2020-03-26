@@ -1,15 +1,8 @@
-import { Component, Inject, OnInit } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { Component, OnInit } from '@angular/core';
+import { MatDialogRef } from '@angular/material/dialog';
+import { HeaderComponent } from '../../header/header.component';
 import { NotificationService } from '../../../../services/util/notification.service';
 import { TranslateService } from '@ngx-translate/core';
-
-export interface DialogData {
-  protocol: string;
-  hostName: string;
-  shortId: string;
-  isCreator: boolean;
-}
-
 
 @Component({
   selector: 'app-qr-code',
@@ -18,12 +11,14 @@ export interface DialogData {
 })
 export class QrCodeComponent implements OnInit {
 
-
+  protocol: string;
+  hostName: string;
+  key: string;
   path = '/participant/room/';
   qrWidth: number;
+  isCreator: boolean;
 
-  constructor(public dialogRef: MatDialogRef<QrCodeComponent>,
-              @Inject(MAT_DIALOG_DATA) public data: DialogData,
+  constructor(public dialogRef: MatDialogRef<HeaderComponent>,
               protected notification: NotificationService,
               protected translateService: TranslateService) {}
 
@@ -42,7 +37,7 @@ export class QrCodeComponent implements OnInit {
     selBox.style.left = '0';
     selBox.style.top = '0';
     selBox.style.opacity = '0';
-    selBox.value = this.data.protocol + this.data.hostName + this.path + this.data.shortId;
+    selBox.value = this.protocol + this.hostName + this.path + this.key;
     document.body.appendChild(selBox);
     selBox.focus();
     selBox.select();

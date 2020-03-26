@@ -1,6 +1,6 @@
 <ars-screen>
   <div fxLayout="column" fxLayoutAlign="center center" class="qr-container">
-    <button mat-raised-button *ngIf="data.isCreator" class="button-secondary header copyBtn" (click)="copyShortId()"
+    <button mat-raised-button *ngIf="isCreator" class="button-secondary header copyBtn" (click)="copyShortId()"
             aria-labelledby="copy-url">
       <mat-icon>link</mat-icon>
       {{ 'header.copy-url' | translate}}
@@ -9,11 +9,10 @@
       <mat-icon>close</mat-icon>
     </button>
     <div>
-      <h2>{{data.hostName}}</h2>
-      <h2>{{'qr-dialog.session' | translate}}: {{data.shortId.slice(0, 4)}} {{data.shortId.slice(4, 8)}}</h2>
+      <h2>{{hostName}}</h2>
+      <h2>{{'qr-dialog.session' | translate}}: {{key.slice(0, 4)}} {{key.slice(4, 8)}}</h2>
     </div>
-    <qrcode [qrdata]="data.protocol + data.hostName + path + data.shortId" [width]="qrWidth"
-            [errorCorrectionLevel]="'M'"></qrcode>
+    <qrcode [qrdata]="protocol + hostName + path + key" [width]="qrWidth" [errorCorrectionLevel]="'M'"></qrcode>
   </div>
 </ars-screen>
 <div class="visually-hidden" id="copy-url">{{ 'header.a11y-copy-url' | translate}}</div>
