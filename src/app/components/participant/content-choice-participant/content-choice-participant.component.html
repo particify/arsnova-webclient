@@ -1,7 +1,14 @@
 <app-loading-indicator *ngIf="isLoading" [size]="80"></app-loading-indicator>
 <div *ngIf="!isLoading">
-  <div class="markdown-container">
+  <div fxLayout="row" class="markdown-container">
     <markdown [data]="content.body"></markdown>
+    <span class="fill-remaining-space"></span>
+    <button *ngIf="alreadySent" mat-icon-button matTooltip="{{'answer.go-to-stats' | translate}}"
+            routerLink="/participant/room/{{shortId}}/statistics/{{content.id}}">
+      <mat-icon class="stat-icon">
+        insert_chart
+      </mat-icon>
+    </button>
   </div>
   <form (ngSubmit)="submitAnswer()" id="answerForm">
     <mat-list *ngIf="content.multiple">
@@ -15,7 +22,8 @@
       </mat-list-item>
       <div *ngIf="!hasAbstained && content.state.responsesVisible" class="solution invisible"
            [ngClass]="{'visible' : alreadySent}">
-        <mat-icon [ngClass]="isCorrect ? 'correct' : 'wrong'">{{isCorrect ? 'check' : 'close'}}</mat-icon>
+        <mat-icon class="icon-indicator" [ngClass]="isCorrect ? 'correct' : 'wrong'">
+          {{isCorrect ? 'check' : 'close'}}</mat-icon>
       </div>
       <div *ngIf="hasAbstained" class="text invisible" [ngClass]="{'visible' : alreadySent}">
         <p>{{'answer.has-abstained' | translate}}</p>
@@ -30,7 +38,8 @@
         </mat-list-item>
         <div *ngIf="content.format !== ContentType.SCALE && !hasAbstained && content.state.responsesVisible"
              class="solution invisible" [ngClass]="{'visible' : alreadySent}">
-          <mat-icon [ngClass]="isCorrect ? 'correct' : 'wrong'">{{isCorrect ? 'check' : 'close'}}</mat-icon>
+          <mat-icon class="icon-indicator" [ngClass]="isCorrect ? 'correct' : 'wrong'">
+            {{isCorrect ? 'check' : 'close'}}</mat-icon>
         </div>
         <div *ngIf="hasAbstained" class="text invisible"
              [ngClass]="{'visible' : alreadySent}">

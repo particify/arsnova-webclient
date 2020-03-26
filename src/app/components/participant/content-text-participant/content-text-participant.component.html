@@ -1,7 +1,14 @@
 <app-loading-indicator *ngIf="isLoading" [size]="80"></app-loading-indicator>
 <div *ngIf="!isLoading">
-  <div class="markdown-container">
+  <div fxLayout="row" class="markdown-container">
     <markdown [data]="content.body"></markdown>
+    <span class="fill-remaining-space"></span>
+    <button *ngIf="alreadySent" mat-icon-button matTooltip="{{'answer.go-to-stats' | translate}}"
+            routerLink="/participant/room/{{shortId}}/statistics/{{content.id}}">
+      <mat-icon class="stat-icon">
+        insert_chart
+      </mat-icon>
+    </button>
   </div>
   <form *ngIf="!givenAnswer">
     <mat-form-field class="input-block">

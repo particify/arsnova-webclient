@@ -8,6 +8,7 @@ import { LanguageService } from '../../../services/util/language.service';
 import { ContentType } from '../../../models/content-type.enum';
 import { EventService } from '../../../services/util/event.service';
 import { AuthenticationService } from '../../../services/http/authentication.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-content-text-participant',
@@ -25,6 +26,7 @@ export class ContentTextParticipantComponent implements OnInit {
   alreadySent = false;
   isLoading = true;
   sentMessage: string;
+  shortId: string;
 
   constructor(
     private authenticationService: AuthenticationService,
@@ -32,7 +34,8 @@ export class ContentTextParticipantComponent implements OnInit {
     private notificationService: NotificationService,
     private translateService: TranslateService,
     protected langService: LanguageService,
-    public eventService: EventService
+    public eventService: EventService,
+    protected route: ActivatedRoute
   ) {
     langService.langEmitter.subscribe(lang => translateService.use(lang));
   }
@@ -52,6 +55,9 @@ export class ContentTextParticipantComponent implements OnInit {
         this.getAbstainedMessage();
       }
       this.isLoading = false;
+    });
+    this.route.params.subscribe(params => {
+      this.shortId = params['shortId'];
     });
   }
 
