@@ -15,7 +15,7 @@
   color: var(--red);
 }
 
-mat-icon {
+.icon-indicator {
   font-size: 80px;
   width: 80px;
   height: 80px;
@@ -56,4 +56,11 @@ p {
 
 .markdown-container {
   margin: 16px 8px;
+}
+
+.stat-icon {
+  font-size: 32px;
+  height: 32px;
+  width: 32px;
+  color: var(--secondary);
 }

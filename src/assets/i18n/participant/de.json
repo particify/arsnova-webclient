@@ -9,7 +9,8 @@
     "has-abstained": "Sie haben sich enthalten!",
     "has-voted": "Sie haben Abgestimmt!",
     "has-answered": "Sie haben den Kommentar beantwortet!",
-    "questions-locked": "Es wurden noch keine Kommentare freigegeben!"
+    "questions-locked": "Es wurden noch keine Kommentare freigegeben!",
+    "go-to-stats": "Gehe zu den Ergebnissen"
   },
   "comment-list": {
     "a11y-access_time": "Sortiert Kommentare nach der Uhrzeit",

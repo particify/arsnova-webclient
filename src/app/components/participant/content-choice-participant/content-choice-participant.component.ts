@@ -8,6 +8,7 @@ import { ContentType } from '../../../models/content-type.enum';
 import { TranslateService } from '@ngx-translate/core';
 import { LanguageService } from '../../../services/util/language.service';
 import { AuthenticationService } from '../../../services/http/authentication.service';
+import { ActivatedRoute } from '@angular/router';
 
 class CheckedAnswer {
   answerOption: AnswerOption;
@@ -38,13 +39,15 @@ export class ContentChoiceParticipantComponent implements OnInit {
   isCorrect = false;
   isChoice = true;
   hasAbstained = false;
+  shortId: string;
 
   constructor(
     private authenticationService: AuthenticationService,
     private answerService: ContentAnswerService,
     private notificationService: NotificationService,
     private translateService: TranslateService,
-    protected langService: LanguageService
+    protected langService: LanguageService,
+    protected route: ActivatedRoute
   ) {
     langService.langEmitter.subscribe(lang => translateService.use(lang));
   }
@@ -70,6 +73,9 @@ export class ContentChoiceParticipantComponent implements OnInit {
       document.getElementById('answerForm').focus();
     });
     this.translateService.use(localStorage.getItem('currentLang'));
+    this.route.params.subscribe(params => {
+      this.shortId = params['shortId'];
+    });
   }
 
   sendStatusToParent() {
