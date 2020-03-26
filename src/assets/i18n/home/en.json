@@ -77,7 +77,6 @@
     "title": "»ARSnova«"
   },
   "login": {
-    "activation-key": "Activation key",
     "cancel": "Cancel",
     "cancel-description": "Cancel",
     "email": "E-mail",
@@ -200,7 +199,7 @@
   },
   "dialog": {
     "sure": "Are you sure?",
-    "abort": "Cancel",
+    "cancel": "Cancel",
     "delete": "Delete",
     "close": "Close",
     "really-delete-comment": "Do you really want to delete this comment?",
