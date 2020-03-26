@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { PageNotFoundComponent } from './components/shared/page-not-found/page-not-found.component';
 import { HomePageComponent } from './components/home/home-page/home-page.component';
 import { UserHomeComponent } from './components/home/user-home/user-home.component';
+import { DirectEntryComponent } from './components/shared/direct-entry/direct-entry.component';
 
 const routes: Routes = [
   {
@@ -17,6 +18,10 @@ const routes: Routes = [
   {
     path: 'user',
     component: UserHomeComponent
+  },
+  {
+    path: 'join/:shortId',
+    component: DirectEntryComponent
   },
   {
     path: 'creator',

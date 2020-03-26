@@ -46,6 +46,7 @@ import { ArsModule } from '../../projects/ars/src/lib/ars.module';
 import { MatIconModule } from '@angular/material/icon';
 import { LoginComponent } from './components/home/_dialogs/login/login.component';
 import { DialogService } from './services/util/dialog.service';
+import { DirectEntryComponent } from './components/shared/direct-entry/direct-entry.component';
 
 export function dialogClose(dialogResult: any) {
 }
@@ -63,6 +64,7 @@ export function initializeApp(appConfig: AppConfig) {
     UserActivationComponent,
     HomePageComponent,
     UserHomeComponent,
+    DirectEntryComponent,
     CookiesComponent,
     OverlayComponent
   ],
