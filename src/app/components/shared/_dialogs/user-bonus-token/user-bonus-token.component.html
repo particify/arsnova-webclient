@@ -1,5 +1,5 @@
 <div mat-dialog-content>
-  <h2 tabindex="0">{{'header.bonus-token' | translate }}</h2>
+  <h2 tabindex="0">{{'dialog.bonus-token' | translate }}</h2>
   <mat-divider></mat-divider>
   <div *ngIf="bonusTokensMixin.length >= 1">
     <div fxLayout="column" class="tokens" *ngFor="let bonusToken of bonusTokensMixin; let i = index"
@@ -9,10 +9,11 @@
     </div>
   </div>
   <div *ngIf="bonusTokens.length === 0">
-    <h3 tabindex="0">{{'header.no-bonus' | translate }}</h3>
+    <h3 tabindex="0">{{'dialog.no-bonus' | translate }}</h3>
   </div>
-  <app-dialog-action-buttons
-    buttonsLabelSection="introduction"
-    [cancelButtonClickAction]="buildDeclineActionCallback()">
-  </app-dialog-action-buttons>
+  <div fxLayout="row" fxLayoutAlign="end">
+    <button mat-flat-button class="button-abort" (click)="closeDialog()">
+      {{ 'dialog.close' | translate}}
+    </button>
+  </div>
 </div>

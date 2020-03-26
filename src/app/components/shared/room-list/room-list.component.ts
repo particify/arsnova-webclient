@@ -8,13 +8,12 @@ import { RoomService } from '../../../services/http/room.service';
 import { EventService } from '../../../services/util/event.service';
 import { AuthenticationService } from '../../../services/http/authentication.service';
 import { ModeratorService } from '../../../services/http/moderator.service';
-import { MatDialog } from '@angular/material/dialog';
 import { Subscription } from 'rxjs';
 import { CommentService } from '../../../services/http/comment.service';
 import { NotificationService } from '../../../services/util/notification.service';
 import { TranslateService } from '@ngx-translate/core';
-import { RemoveFromHistoryComponent } from '../_dialogs/remove-from-history/remove-from-history.component';
 import { Router } from '@angular/router';
+import { DialogService } from '../../../services/util/dialog.service';
 
 @Component({
   selector: 'app-room-list',
@@ -43,8 +42,8 @@ export class RoomListComponent implements OnInit, OnDestroy {
     private commentService: CommentService,
     public notificationService: NotificationService,
     private translateService: TranslateService,
-    public dialog: MatDialog,
-    protected router: Router
+    protected router: Router,
+    private dialogService: DialogService
   ) {
   }
 
@@ -108,29 +107,41 @@ export class RoomListComponent implements OnInit, OnDestroy {
     this.router.navigate([`creator/room/${shortId}/settings`]);
   }
 
-  openRemoveDialog(room: RoomRoleMixin) {
-    const dialogRef = this.dialog.open(RemoveFromHistoryComponent, {
-      width: '400px'
-    });
-    dialogRef.componentInstance.roomName = room.name;
-    dialogRef.componentInstance.role = room.role;
-    dialogRef.afterClosed().subscribe(result => {
-      if (result === 'remove') {
-        if (room.role < 3) {
-          this.removeFromHistory(room);
-        } else {
+  openDeleteRoomDialog(room: RoomRoleMixin) {
+    if (room.role < 3) {
+      const dialogRef = this.dialogService.openDeleteDialog('really-remove-session-from-history', room.name);
+      dialogRef.afterClosed().subscribe(result => {
+        if (result === 'delete') {
           this.deleteRoom(room);
+          this.removeRoomFromList(room);
+        } else {
+          this.roomDeletionCanceled();
         }
-        this.rooms = this.rooms.filter(r => r.id !== room.id);
-        this.closedRooms = this.closedRooms.filter(r => r.id !== room.id);
-        this.roomsWithRole = this.roomsWithRole.filter(r => r.id !== room.id);
-        this.setDisplayedRooms(this.roomsWithRole);
-      } else {
-        this.translateService.get('room-list.canceled-remove').subscribe(msg => {
-          this.notificationService.show(msg);
-        });
+      });
+    } else {
+      const dialogRef = this.dialogService.openDeleteDialog('really-delete-session', room.name);
+      dialogRef.afterClosed().subscribe(result => {
+        if (result === 'delete') {
+          this.removeFromHistory(room);
+          this.removeRoomFromList(room);
+        } else {
+          this.roomDeletionCanceled();
+        }
+      });
       }
+  }
+
+  roomDeletionCanceled() {
+    this.translateService.get('room-list.canceled-remove').subscribe(msg => {
+      this.notificationService.show(msg);
     });
+  }
+
+  removeRoomFromList(room: RoomRoleMixin) {
+    this.rooms = this.rooms.filter(r => r.id !== room.id);
+    this.closedRooms = this.closedRooms.filter(r => r.id !== room.id);
+    this.roomsWithRole = this.roomsWithRole.filter(r => r.id !== room.id);
+    this.setDisplayedRooms(this.roomsWithRole);
   }
 
   setDisplayedRooms(rooms: RoomRoleMixin[]) {

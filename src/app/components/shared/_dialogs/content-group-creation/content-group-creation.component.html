@@ -1,0 +1,21 @@
+<form (ngSubmit)="buildGroupCreateActionCallback()">
+  <div fxLayout="column" fxLayoutAlign="center" fxLayoutGap="10px">
+    <mat-form-field>
+      <input matInput class="input-block" type="text" (keypress)="resetEmpty()" maxlength="25" [(ngModel)]="name"
+             name="contentGroupName" aria-labelledby="content-group-name-input"/>
+      <mat-placeholder>{{ 'dialog.content-group-name' | translate }}</mat-placeholder>
+      <mat-hint align="start" class="error" *ngIf="empty">
+        <strong>{{ 'dialog.please-enter-name' | translate }}</strong></mat-hint>
+    </mat-form-field>
+  </div>
+</form>
+<app-dialog-action-buttons
+  buttonsLabelSection="dialog"
+  confirmButtonLabel="create-content-group"
+  [cancelButtonClickAction]="buildCloseDialogActionCallback()"
+  [confirmButtonClickAction]="buildGroupCreateActionCallback()"
+></app-dialog-action-buttons>
+
+<div class="visually-hidden">
+  <div id="content-group-name-input">{{ 'dialog.content-group-name-input' | translate }}</div>
+</div>

@@ -1,13 +1,12 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
 import { NotificationService } from '../../../../services/util/notification.service';
 import { TranslateService } from '@ngx-translate/core';
 import { ModeratorService } from '../../../../services/http/moderator.service';
 import { LanguageService } from '../../../../services/util/language.service';
 import { Moderator } from '../../../../models/moderator';
-import { ModeratorDeleteComponent } from '../../_dialogs/moderator-delete/moderator-delete.component';
 import { FormControl, Validators } from '@angular/forms';
 import { EventService } from '../../../../services/util/event.service';
+import { DialogService } from '../../../../services/util/dialog.service';
 
 @Component({
   selector: 'app-moderators',
@@ -23,7 +22,7 @@ export class ModeratorsComponent implements OnInit {
 
   usernameFormControl = new FormControl('', [Validators.email]);
 
-  constructor(public dialog: MatDialog,
+  constructor(private dialogService: DialogService,
               public notificationService: NotificationService,
               public translationService: TranslateService,
               protected moderatorService: ModeratorService,
@@ -68,16 +67,12 @@ export class ModeratorsComponent implements OnInit {
   }
 
   openDeleteRoomDialog(moderator: Moderator): void {
-    const dialogRef = this.dialog.open(ModeratorDeleteComponent, {
-      width: '400px'
+    const dialogRef = this.dialogService.openDeleteDialog('really-delete-moderator', moderator.loginId);
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === 'delete') {
+        this.removeModerator(moderator.userId, this.moderators.indexOf(moderator));
+      }
     });
-    dialogRef.componentInstance.loginId = moderator.loginId;
-    dialogRef.afterClosed()
-      .subscribe(result => {
-        if (result === 'delete') {
-          this.removeModerator(moderator.userId, this.moderators.indexOf(moderator));
-        }
-      });
   }
 
   removeModerator(userId: string, index: number) {

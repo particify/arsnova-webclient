@@ -7,6 +7,7 @@ import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { MatDialog } from '@angular/material/dialog';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { Observable, of } from 'rxjs';
+import { DialogService } from '../../../services/util/dialog.service';
 
 const TRANSLATION_DE = require('../../../../assets/i18n/home/de.json');
 const TRANSLATION_EN = require('../../../../assets/i18n/home/en.json');
@@ -29,6 +30,11 @@ class MockEventService {
   public makeFocusOnInputFalse() {
 
   }
+}
+
+@Injectable()
+class MockDialogService {
+
 }
 
 @Injectable()
@@ -88,6 +94,10 @@ describe('HomePageComponent', () => {
         {
           provide: MatDialog,
           useClass: MockMatDialog
+        },
+        {
+          provide: DialogService,
+          useClass: MockDialogService
         }
       ]
     }).compileComponents()

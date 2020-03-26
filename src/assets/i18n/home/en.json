@@ -8,21 +8,8 @@
     "title": "Data Privacy"
   },
   "data-protection": {
-    "cancel": "Reject",
-    "cancel-description": "Reject the app's privacy policy and close dialog",
-    "consent": "Accept",
-    "consent-description": "Accept the app's privacy policy and close dialog",
+    "a11y": "Below you will find the privacy policy of ARSnova.",
     "title": "Data Privacy"
-  },
-  "demo": {
-    "cancel": "Close",
-    "cancel-description": "Close the introduction dialog"
-  },
-  "delete-account": {
-    "cancel": "Cancel",
-    "cancel-description": "Cancel account deletion",
-    "delete": "Delete",
-    "delete-description": "Delete your Account"
   },
   "footer": {
     "accessibility-data_protection": "Open the privacy statement.",
@@ -38,20 +25,16 @@
     "help": "Help",
     "imprint": "Imprint",
     "language": "Language",
-    "open": "Open",
     "style": "Display"
   },
   "header": {
-    "a11y-copy-url": "Copy link to session to the clipboard",
     "abort": "Cancel",
     "accessibility-back": "Go back to the previous page",
     "accessibility-login": "Open the login window",
     "accessibility-session": "Open the session menu. Here you can view the sessions you have attended or log out of your account.",
     "account-deleted": "Your account has been deleted.",
     "back": "Cancel",
-    "cancel": "Cancel",
     "copy-url": "Copy URL",
-    "delete": "Delete",
     "delete-account": "Delete account",
     "go-to-home": "Go to home",
     "home-header": "Interaction in the lecture hall",
@@ -63,14 +46,9 @@
     "my-account": "Account",
     "my-guest-account": "Guest Account",
     "my-sessions": "My sessions",
-    "really-delete-account": "Do you want to irrevocably delete your account with all sessions? If you have given bonuses (yellow stars), export the questions so that you can check submitted bonus tokens.",
     "session-id-copied": "Session link was copied to the clipboard.",
-    "sure": "Are you sure?",
     "user-bonus-token": "See your bonus tokens",
-    "user-got-tokens": "You have bonus tokens linked to this account that will be lost!",
-    "visited-sessions": "Visited sessions",
-    "bonus-token": "Tokens for bonus points",
-    "no-bonus": "No bonus points earned yet."
+    "visited-sessions": "Visited sessions"
   },
   "home-page": {
     "accessibility-create": "Create a new session",
@@ -87,18 +65,15 @@
     "no-room-found": "No session found with this key",
     "only-numbers": "A session key only contains digits.",
     "please-enter": "Ask the lecturer for the key",
-    "room-name-input": "Enter the name of the session you want to create here.",
     "session-id": "Session key",
     "update-available": "An update is available."
   },
   "imprint": {
-    "cancel": "Close",
-    "cancel-description": "Close the imprint dialog.",
+    "a11y": "Below you will find the legal info of ARSnova.",
     "title": "Imprint"
   },
   "introduction": {
-    "cancel": "Close",
-    "cancel-description": "Close introduction.",
+    "a11y": "Below you will find an introduction to ARSnova.",
     "title": "»ARSnova«"
   },
   "login": {
@@ -183,16 +158,6 @@
     "register-successful": "Successfully registered. Please check your mails.",
     "register-unsuccessful": "Please check your data."
   },
-  "remind-of-tokens": {
-    "cancel": "To my tokens",
-    "logout": "Log out"
-  },
-  "room-create": {
-    "cancel": "Cancel",
-    "cancel-description": "Cancel",
-    "create-room": "Create Session",
-    "create-room-description": "Create new session"
-  },
   "room-list": {
     "creator-role": "Session creator",
     "entry": "Entry ",
@@ -205,10 +170,6 @@
     "no-room-history": "You haven't joined any sessions yet.",
     "panel-remove-room": "Remove session from your history",
     "panel-delete-room": "Delete session",
-    "really-remove": "Do you really want to remove the session ",
-    "really-remove-2": " from your history?",
-    "really-delete": "Do you really want to delete your session ",
-    "really-delete-2": " irrevocably?",
     "room-settings": "Settings",
     "room-successfully-removed": "The session was successfully removed from the history.",
     "canceled-remove": "Process cancelled.",
@@ -237,7 +198,57 @@
   "user-bonus-token-dialog": {
     "header": "Tokens for bonus points"
   },
-  "qr-dialog": {
-    "session": "Session"
+  "dialog": {
+    "sure": "Are you sure?",
+    "abort": "Cancel",
+    "delete": "Delete",
+    "close": "Close",
+    "really-delete-comment": "Do you really want to delete this comment?",
+    "really-delete-comments": "Do you really want to delete all comments of this session? This action cannot be undone.",
+    "really-delete-comments-hint": "There are comments in this session that you marked for a bonus. Remove the markers to delete all comments.",
+    "really-delete-answer": "Do you really want to delete this answer?",
+    "really-delete-content": "Do you really want to delete the following content? This action cannot be undone.",
+    "really-delete-moderator": "Do you really want to remove the following moderator?",
+    "really-delete-session": "Do you really want to delete the following session? This action cannot be undone.",
+    "really-remove-session-from-history": "Do you really want to remove the following session from your history?",
+    "really-delete-token": "Do you really want to delete this token?",
+    "really-delete-tokens": "Do you really want to delete all tokens of this session?",
+    "really-delete-account": "Do you want to irrevocably delete your account with all sessions?",
+    "export": "Export",
+    "semicolon": "CSV format",
+    "delimiter": "Please choose a format!",
+    "comma": "Excel format",
+    "send": "Send",
+    "send-description": "Send comment",
+    "enter-comment": "Comment to the audience",
+    "error-comment": "Please enter a comment.",
+    "tag": "Category",
+    "create-comment-description": "Enter your comment to the audience here!",
+    "exit-description": "Exit Presentation Mode",
+    "content-body": "Body",
+    "content-subject": "Subject",
+    "content-answers": "Answers",
+    "update": "Update",
+    "content-group-name": "Name of the collection",
+    "content-group-name-input": "Enter the name of the collection you want to create here.",
+    "create-content-group": "Create",
+    "content-group-created": "Question was added to new collection.",
+    "content-group-already-exists": "This collection already exists.",
+    "please-enter-name": "Please enter a name.",
+    "session": "Session",
+    "a11y-copy-url": "Copy link to session to the clipboard",
+    "copy-url": "Copy URL",
+    "user-got-tokens": "You have bonus tokens linked to this account that will be lost!",
+    "logout": "Log out",
+    "create": "Create Session",
+    "create-room-description": "Create new session",
+    "room-name-input": "Enter the name of the session you want to create here.",
+    "session-name": "Session name",
+    "statistic-good": "Good",
+    "statistic-okay": "Okay",
+    "statistic-improvable": "Improvable",
+    "statistic-no-answers": "No answers",
+    "bonus-token": "Tokens for bonus points",
+    "no-bonus": "No bonus points earned yet."
   }
 }
