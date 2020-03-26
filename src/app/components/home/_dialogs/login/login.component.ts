@@ -10,7 +10,9 @@ import { TranslateService } from '@ngx-translate/core';
 import { EventService } from '../../../../services/util/event.service';
 import { ApiConfigService } from '../../../../services/http/api-config.service';
 import { AuthenticationProviderType } from '../../../../models/api-config';
-import { DialogService } from '../../../../services/util/dialog.service';
+import { UserActivationComponent } from '../user-activation/user-activation.component';
+import { PasswordResetComponent } from '../password-reset/password-reset.component';
+import { RegisterComponent } from '../register/register.component';
 
 export interface DialogData {
   role: UserRole;
@@ -47,7 +49,6 @@ export class LoginComponent implements OnInit, OnChanges {
               private translationService: TranslateService,
               public notificationService: NotificationService,
               public dialog: MatDialog,
-              private dialogService: DialogService,
               public eventService: EventService,
               private apiConfigService: ApiConfigService,
               @Inject(MAT_DIALOG_DATA) public data: DialogData) {
@@ -89,7 +90,13 @@ export class LoginComponent implements OnInit, OnChanges {
   }
 
   activateUser(): void {
-    const dialogRef = this.dialogService.openUserActivationDialog(this.username);
+    const dialogRef = this.dialog.open(UserActivationComponent, {
+      width: '350px',
+      data: {
+        name: this.username
+      }
+    });
+
     dialogRef.afterClosed().subscribe(result => {
       if (result && result.success) {
         this.login();
@@ -137,11 +144,16 @@ export class LoginComponent implements OnInit, OnChanges {
   }
 
   openPasswordDialog(): void {
-    this.dialogService.openPasswordResetDialog();
+    this.dialog.open(PasswordResetComponent, {
+      width: '350px'
+    });
   }
 
   openRegisterDialog(): void {
-    const dialogRef = this.dialogService.openRegisterDialog();
+    const dialogRef = this.dialog.open(RegisterComponent, {
+      width: '350px'
+    });
+
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.usernameFormControl.setValue(result.username);

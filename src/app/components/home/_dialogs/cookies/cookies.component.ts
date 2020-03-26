@@ -1,8 +1,8 @@
 import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { DialogConfirmActionButtonType } from '../../../shared/dialog/dialog-action-buttons/dialog-action-buttons.component';
-import { DialogService } from '../../../../services/util/dialog.service';
 import { ApiConfigService } from '../../../../services/http/api-config.service';
+import { InfoDialogComponent } from '../../../shared/_dialogs/info-dialog/info-dialog.component';
 
 @Component({
   selector: 'app-cookies',
@@ -21,7 +21,6 @@ export class CookiesComponent implements OnInit, AfterViewInit {
   constructor(private dialog: MatDialog,
               private dialogRef: MatDialogRef<CookiesComponent>,
               private ref: ElementRef,
-              private dialogService: DialogService,
               private apiConfigService: ApiConfigService) {
   }
 
@@ -57,8 +56,13 @@ export class CookiesComponent implements OnInit, AfterViewInit {
   }
 
   showDataProtection() {
-    const dataProtectionBody = this.getUIDataFromConfig('privacy-info');
-    this.dialogService.openInfoDialog('data-protection', dataProtectionBody);
+    this.dialog.open(InfoDialogComponent, {
+      'width': '80%',
+      data: {
+        section: 'data-protection',
+        body: this.getUIDataFromConfig('privacy-info')
+      }
+    });
   }
 
   /**

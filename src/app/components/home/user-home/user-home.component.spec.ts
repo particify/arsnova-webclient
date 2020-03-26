@@ -10,6 +10,7 @@ import { EventService } from '../../../services/util/event.service';
 import { LanguageService } from '../../../services/util/language.service';
 import { AuthenticationService } from '../../../services/http/authentication.service';
 import { User } from '../../../models/user';
+import { DialogService } from '../../../services/util/dialog.service';
 
 const TRANSLATION_DE = require('../../../../assets/i18n/home/de.json');
 const TRANSLATION_EN = require('../../../../assets/i18n/home/en.json');
@@ -33,6 +34,11 @@ class JsonTranslationLoader implements TranslateLoader {
 
 @Injectable()
 class MockMatDialog {
+
+}
+
+@Injectable()
+class MockDialogService {
 
 }
 
@@ -98,6 +104,10 @@ describe('UserHomeComponent', () => {
         })
       ],
       providers: [
+        {
+          provide: DialogService,
+          useClass: MockDialogService
+        },
         {
           provide: MatDialog,
           useClass: MockMatDialog
