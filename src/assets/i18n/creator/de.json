@@ -249,7 +249,7 @@
     "delete-comments-alt-header": "Bonus-Tokens vergeben",
     "comments": "Kommentare",
     "threshold-info": "Wird ein Schwellenwert gesetzt, werden nur Kommentare angezeigt welche eine höhere Bewertung erhalten haben.",
-    "direct-send-info": "Wenn diese Einstellung deaktiviert ist, muss ein Moderator bzw. der Dozent neue Kommentare erst freischalten bevor diese öffentlich sichtbar werden"
+    "direct-send-info": "Wenn diese Einstellung deaktiviert ist, muss ein Moderator bzw. der Dozent neue Kommentare erst freischalten bevor diese öffentlich sichtbar werden."
   },
   "comment-answer-form": {
     "answer": "Gib eine Antwort.",
