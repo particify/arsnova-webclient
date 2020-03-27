@@ -112,7 +112,7 @@ export class RoomListComponent implements OnInit, OnDestroy {
       const dialogRef = this.dialogService.openDeleteDialog('really-remove-session-from-history', room.name);
       dialogRef.afterClosed().subscribe(result => {
         if (result === 'delete') {
-          this.deleteRoom(room);
+          this.removeFromHistory(room);
           this.removeRoomFromList(room);
         } else {
           this.roomDeletionCanceled();
@@ -122,7 +122,7 @@ export class RoomListComponent implements OnInit, OnDestroy {
       const dialogRef = this.dialogService.openDeleteDialog('really-delete-session', room.name);
       dialogRef.afterClosed().subscribe(result => {
         if (result === 'delete') {
-          this.removeFromHistory(room);
+          this.deleteRoom(room);
           this.removeRoomFromList(room);
         } else {
           this.roomDeletionCanceled();
