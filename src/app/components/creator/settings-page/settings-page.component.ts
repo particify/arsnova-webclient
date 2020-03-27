@@ -26,17 +26,26 @@ export class SettingsPageComponent implements OnInit {
 
   room: Room;
   isLoading = true;
+  errorOnLoading = false;
 
-  constructor(protected roomService: RoomService,
-              protected route: ActivatedRoute) { }
+  constructor(
+    protected roomService: RoomService,
+    protected route: ActivatedRoute
+  ) {}
 
   ngOnInit(): void {
     this.route.params.subscribe(params => {
       const shortId = params['shortId'];
-      this.roomService.getRoomByShortId(shortId).subscribe(room => {
-        this.room = room;
-        this.isLoading = false;
-      });
+      this.roomService.getRoomByShortId(shortId).subscribe(
+        room => {
+          this.room = room;
+          this.isLoading = false;
+        },
+        error => {
+          this.isLoading = false;
+          this.errorOnLoading = true;
+        }
+      );
     });
   }
 

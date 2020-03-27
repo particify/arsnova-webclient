@@ -91,7 +91,7 @@
       </div>
       <app-content-groups *ngIf="room && contentGroups" [contentGroups]="contentGroups"></app-content-groups>
     </mat-card>
-    <div *ngIf="!isLoading && !room">{{ 'room-page.room-not-found' | translate }}</div>
+    <app-room-not-found *ngIf="!isLoading && errorOnLoading"></app-room-not-found>
   </div>
   <button id="live_announcer-button" tabIndex="-1" (click)="announce()"
           class="visually-hidden">{{ 'room-page.live-announcer' | translate }}</button>

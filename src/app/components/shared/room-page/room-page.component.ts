@@ -27,6 +27,7 @@ export class RoomPageComponent implements OnInit, OnDestroy {
   protected contentGroups: ContentGroup[] = [];
   protected groupNames: string[] = [];
   isLoading = true;
+  errorOnLoading = false;
   commentCounter: number;
   protected moderationEnabled = false;
   protected sub: Subscription;
@@ -71,31 +72,36 @@ export class RoomPageComponent implements OnInit, OnDestroy {
 
   initializeRoom(shortId: string): void {
     this.roomService.getRoomByShortId(shortId).subscribe(room => {
-      this.room = room;
-      this.initializeStats();
-      if (this.room.extensions && this.room.extensions['comments']) {
-        if (this.room.extensions['comments'].enableModeration !== null) {
-          this.moderationEnabled = this.room.extensions['comments'].enableModeration;
-          // ToDo: make room data cache that's available for components that manages data flow and put that there
+        this.room = room;
+        this.initializeStats();
+        if (this.room.extensions && this.room.extensions['comments']) {
+          if (this.room.extensions['comments'].enableModeration !== null) {
+            this.moderationEnabled = this.room.extensions['comments'].enableModeration;
+            // ToDo: make room data cache that's available for components that manages data flow and put that there
+          }
         }
-      }
-      localStorage.setItem('moderationEnabled', String(this.moderationEnabled));
-      this.commentService.countByRoomId(this.room.id, true)
-        .subscribe(commentCounter => {
-          this.commentCounter = commentCounter;
+        localStorage.setItem('moderationEnabled', String(this.moderationEnabled));
+        this.commentService.countByRoomId(this.room.id, true)
+          .subscribe(commentCounter => {
+            this.commentCounter = commentCounter;
+          });
+        this.commentWatch = this.wsCommentService.getCommentStream(this.room.id);
+        this.sub = this.commentWatch.subscribe((message: Message) => {
+          const msg = JSON.parse(message.body);
+          const payload = msg.payload;
+          if (msg.type === 'CommentCreated') {
+            this.commentCounter = this.commentCounter + 1;
+          } else if (msg.type === 'CommentDeleted') {
+            this.commentCounter = this.commentCounter - 1;
+          }
         });
-      this.commentWatch = this.wsCommentService.getCommentStream(this.room.id);
-      this.sub = this.commentWatch.subscribe((message: Message) => {
-        const msg = JSON.parse(message.body);
-        const payload = msg.payload;
-        if (msg.type === 'CommentCreated') {
-          this.commentCounter = this.commentCounter + 1;
-        } else if (msg.type === 'CommentDeleted') {
-          this.commentCounter = this.commentCounter - 1;
-        }
-      });
-      this.afterRoomLoadHook();
-    });
+        this.afterRoomLoadHook();
+      },
+      error => {
+        this.isLoading = false;
+        this.errorOnLoading = true;
+      }
+    );
     localStorage.setItem('shortId', shortId);
   }
 
