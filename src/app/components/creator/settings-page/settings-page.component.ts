@@ -20,7 +20,7 @@ export class SettingsPageComponent implements OnInit {
     { headerName: 'settings.general', iconName: 'settings', componentName: 'generalSettings' },
     { headerName: 'settings.comments', iconName: 'comment', componentName: 'commentSettings' },
     { headerName: 'settings.moderators', iconName: 'gavel', componentName: 'moderatorSettings' },
-    { headerName: 'settings.bonus-token-header', iconName: 'grade', componentName: 'tokenSettings' },
+    { headerName: 'settings.bonus-token', iconName: 'grade', componentName: 'tokenSettings' },
     { headerName: 'settings.tags', iconName: 'bookmark', componentName: 'tagSettings' }
   ];
 
