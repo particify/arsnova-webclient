@@ -1,4 +1,4 @@
-<div *ngIf="!isLoading" fxLayout="column" fxLayoutAlign="center center">
+<div fxLayout="column" fxLayoutAlign="center center" fxFill>
   <form fxLayout="column" fxLayoutGap="10px">
     <mat-form-field *ngIf="allowDbLogin" class="input-block">
       <input (focus)="eventService.makeFocusOnInputTrue()" (blur)="eventService.makeFocusOnInputFalse()"
@@ -20,18 +20,21 @@
       <mat-error
         *ngIf="passwordFormControl.hasError('required')">{{ 'login.password-required' | translate }}</mat-error>
     </mat-form-field>
-    <button *ngIf="allowDbLogin" class="button-secondary" mat-raised-button (click)="login()"
-            aria-labelledby="login-description">
-      {{ 'login.login' | translate }}
-    </button>
-    <button *ngFor="let provider of ssoProviders" (click)="loginViaSso(provider.id)" class="sso" mat-raised-button
-            type="button">
-      {{ 'login.login-with' | translate }} {{ provider.title }}
-    </button>
-    <button *ngIf="allowDbLogin" (click)="guestLogin()" class="button-primary" mat-raised-button type="button"
-            aria-labelledby="guest-login-description" matTooltip="{{'login.guest-login-tooltip' | translate}}">
-      {{ 'login.guest-login' | translate }}
-    </button>
+    <div fxLayout="column" fxLayoutAlign="center center">
+      <button *ngIf="allowDbLogin" class="button-secondary" mat-raised-button (click)="login()"
+              aria-labelledby="login-description">
+        {{ 'login.login' | translate }}
+      </button>
+      <button *ngFor="let provider of ssoProviders" (click)="loginViaSso(provider.id)" class="sso" mat-raised-button
+              type="button">
+        {{ 'login.login-with' | translate }} {{ provider.title }}
+      </button>
+      <p *ngIf="allowDbLogin && allowGuest">{{ 'login.or' | translate }}</p>
+      <button *ngIf="allowDbLogin && allowGuest" (click)="guestLogin()" class="button-primary" mat-raised-button type="button"
+              aria-labelledby="guest-login-description" matTooltip="{{'login.guest-login-tooltip' | translate}}">
+        {{ 'login.guest-login' | translate }}
+      </button>
+    </div>
     <div *ngIf="allowDbLogin" fxLayout="row">
       <span class="fill-remaining-space"></span>
       <button mat-button class="forgot-pw" (click)="openPasswordDialog(); $event.preventDefault();

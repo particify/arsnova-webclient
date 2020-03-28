@@ -79,7 +79,7 @@
     "email-description": "Enter your e-mail address here.",
     "email-invalid": "E-mail is invalid",
     "email-required": "E-mail required",
-    "guest-login": "Log in as a guest",
+    "guest-login": "Continue as a guest",
     "guest-login-description": "Log in as a guest",
     "guest-login-tooltip": "Created sessions will be deleted after logout. Sessions created with an account are saved for 180 days after the last visit.",
     "input-incorrect": "Please check your data.",
@@ -93,7 +93,8 @@
     "password": "Password",
     "password-required": "Password required",
     "password-reset": "Forgot your password?",
-    "register": "Register"
+    "register": "Register",
+    "or": "or"
   },
   "overlay": {
     "cancel": "Accept after all?",
