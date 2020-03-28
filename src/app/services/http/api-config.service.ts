@@ -36,6 +36,10 @@ export class ApiConfigService extends BaseHttpService {
     });
   }
 
+  getApiConfig$(): Observable<ApiConfig> {
+    return this.http.get<ApiConfig>(this.apiUris.config);
+  }
+
   get loaded() {
     return !!this.config;
   }

@@ -9,10 +9,7 @@ import { UserRole } from '../../../models/user-roles.enum';
 import { TranslateService } from '@ngx-translate/core';
 import { EventService } from '../../../services/util/event.service';
 import { ApiConfigService } from '../../../services/http/api-config.service';
-import { AuthenticationProviderType } from '../../../models/api-config';
-import { UserActivationComponent } from '../_dialogs/user-activation/user-activation.component';
-import { PasswordResetComponent } from '../_dialogs/password-reset/password-reset.component';
-import { RegisterComponent } from '../_dialogs/register/register.component';
+import { AuthenticationProvider, AuthenticationProviderType } from '../../../models/api-config';
 import { DialogService } from '../../../services/util/dialog.service';
 
 export class LoginErrorStateMatcher implements ErrorStateMatcher {
@@ -35,6 +32,8 @@ export class LoginComponent implements OnInit, OnChanges {
   password: string;
   allowGuest = false;
   allowDbLogin = false;
+  ssoProviders: AuthenticationProvider[];
+  isLoading = true;
 
   usernameFormControl = new FormControl('', [Validators.required, Validators.email]);
   passwordFormControl = new FormControl('', [Validators.required]);
@@ -55,12 +54,17 @@ export class LoginComponent implements OnInit, OnChanges {
     if (this.authenticationService.isLoggedIn()) {
       this.router.navigate(['home']);
     } else {
-      if (this.apiConfigService.getAuthProviders().some(provider => provider.type === AuthenticationProviderType.ANONYMOUS)) {
-        this.allowGuest = true;
-      }
-      if (this.apiConfigService.getAuthProviders().some(provider => provider.type === AuthenticationProviderType.USERNAME_PASSWORD)) {
-        this.allowDbLogin = true;
-      }
+      this.apiConfigService.getApiConfig$().subscribe(config => {
+        const authProviders = config.authenticationProviders;
+        if (authProviders.some(provider => provider.type === AuthenticationProviderType.ANONYMOUS)) {
+          this.allowGuest = true;
+        }
+        if (authProviders.some(provider => provider.type === AuthenticationProviderType.USERNAME_PASSWORD)) {
+          this.allowDbLogin = true;
+        }
+        this.ssoProviders = authProviders.filter((p) => p.type === AuthenticationProviderType.SSO);
+        this.isLoading = false;
+      });
     }
   }
 
@@ -78,10 +82,6 @@ export class LoginComponent implements OnInit, OnChanges {
       // TODO: this throws an Exception because data and UI are inconsistent
       this.activateUser();
     }
-  }
-
-  get ssoProviders() {
-    return this.providers(AuthenticationProviderType.SSO);
   }
 
   providers(type?: AuthenticationProviderType) {
@@ -110,10 +110,6 @@ export class LoginComponent implements OnInit, OnChanges {
         this.notificationService.show(message);
       });
     }
-  }
-
-  guestLogin(): void {
-    this.authenticationService.guestLogin(this.role).subscribe(loginSuccessful => this.checkLogin(loginSuccessful));
   }
 
   loginViaSso(providerId: string): void {

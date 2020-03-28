@@ -1,5 +1,6 @@
 .forgot-pw {
   color: var(--on-surface);
+  padding: 0;
 }
 
 .register {
@@ -27,6 +28,6 @@ form {
 }
 
 .mat-raised-button {
-  width: 200px;
+  min-width: 200px;
   margin: 5px 0;
 }
