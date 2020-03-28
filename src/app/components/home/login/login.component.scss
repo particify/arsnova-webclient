@@ -1,4 +1,4 @@
-.forgot-pw{
+.forgot-pw {
   color: var(--on-surface);
 }
 
@@ -19,4 +19,14 @@ input:-webkit-autofill {
 input:-webkit-autofill:focus {
   -webkit-box-shadow: 0 0 0 50px var(--dialog) inset;
   -webkit-text-fill-color: var(--on-surface);
+}
+
+form {
+  width: 90%;
+  max-width: 600px;
+}
+
+.mat-raised-button {
+  width: 100%;
+  max-width: 300px;
 }

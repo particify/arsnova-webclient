@@ -15,8 +15,6 @@ import { RoomCreateComponent } from '../../components/shared/_dialogs/room-creat
 import { StatisticHelpComponent } from '../../components/shared/_dialogs/statistic-help/statistic-help.component';
 import { UserBonusTokenComponent } from '../../components/shared/_dialogs/user-bonus-token/user-bonus-token.component';
 import { CookiesComponent } from '../../components/home/_dialogs/cookies/cookies.component';
-import { UserRole } from '../../models/user-roles.enum';
-import { LoginComponent } from '../../components/home/_dialogs/login/login.component';
 import { OverlayComponent } from '../../components/home/_dialogs/overlay/overlay.component';
 import { PasswordResetComponent } from '../../components/home/_dialogs/password-reset/password-reset.component';
 import { RegisterComponent } from '../../components/home/_dialogs/register/register.component';
@@ -145,16 +143,6 @@ export class DialogService {
     return this.dialog.open(CookiesComponent, {
       width: '80%',
       autoFocus: true
-    });
-  }
-
-  openLoginDialog(role: UserRole, isStandard: boolean): void {
-    this.dialog.open(LoginComponent, {
-      width: this.size.xsmall,
-      data: {
-        role: role,
-        isStandard: isStandard
-      }
     });
   }
 

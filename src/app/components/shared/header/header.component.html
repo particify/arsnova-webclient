@@ -64,12 +64,12 @@
     </button>
 
     <button id="login-button" [disabled]="cookiesDisabled()" mat-button *ngIf="!user && deviceType === 'desktop'"
-            (click)=login(false) aria-labelledby="login-label">
+            (click)=navToLogin() aria-labelledby="login-label">
         <mat-icon class="header-icons">account_circle</mat-icon>
         <span class="button-text" *ngIf="deviceType === 'desktop'">{{'header.login' | translate}}</span>
     </button>
 
-    <button [disabled]="cookiesDisabled()" mat-icon-button *ngIf="!user && deviceType === 'mobile'" (click)=login(false)
+    <button [disabled]="cookiesDisabled()" mat-icon-button *ngIf="!user && deviceType === 'mobile'" (click)=navToLogin()
             aria-labelledby="login-label">
       <mat-icon class="header-icons">account_circle</mat-icon>
     </button>
