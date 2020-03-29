@@ -7,7 +7,7 @@
       <mat-placeholder>{{ 'session.session-name' | translate }}</mat-placeholder>
       <mat-hint align="end"><span aria-hidden="true">{{ name.length }} / 20</span></mat-hint>
     </mat-form-field>
-    <mat-tab-group>
+    <mat-tab-group [dynamicHeight]=true>
       <mat-tab label="{{'settings.description' | translate}}">
         <mat-form-field class="input-block">
       <textarea
