@@ -5,6 +5,7 @@
       {{ 'login.login-with' | translate }} {{ provider.title }}
     </button>
     <p *ngIf="allowDbLogin && ssoProviders.length > 0">{{ 'login.or' | translate }}</p>
+    <mat-divider *ngIf="allowDbLogin && ssoProviders.length > 0"></mat-divider>
     <form fxLayout="column" fxLayoutGap="10px">
       <mat-form-field *ngIf="allowDbLogin" class="input-block">
         <input (focus)="eventService.makeFocusOnInputTrue()" (blur)="eventService.makeFocusOnInputFalse()"
