@@ -30,7 +30,6 @@ export class LoginComponent implements OnInit, OnChanges {
   isStandard = true;
   username: string;
   password: string;
-  allowGuest = false;
   allowDbLogin = false;
   ssoProviders: AuthenticationProvider[];
   isLoading = true;
@@ -57,9 +56,6 @@ export class LoginComponent implements OnInit, OnChanges {
     } else {
       this.apiConfigService.getApiConfig$().subscribe(config => {
         const authProviders = config.authenticationProviders;
-        if (authProviders.some(provider => provider.type === AuthenticationProviderType.ANONYMOUS)) {
-          this.allowGuest = true;
-        }
         if (authProviders.some(provider => provider.type === AuthenticationProviderType.USERNAME_PASSWORD)) {
           this.allowDbLogin = true;
         }
