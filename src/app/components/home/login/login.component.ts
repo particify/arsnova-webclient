@@ -34,6 +34,7 @@ export class LoginComponent implements OnInit, OnChanges {
   allowDbLogin = false;
   ssoProviders: AuthenticationProvider[];
   isLoading = true;
+  deviceWidth = innerWidth;
 
   usernameFormControl = new FormControl('', [Validators.required, Validators.email]);
   passwordFormControl = new FormControl('', [Validators.required]);

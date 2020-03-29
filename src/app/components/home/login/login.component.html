@@ -1,50 +1,52 @@
 <div *ngIf="!isLoading" class="container" fxLayout="column" fxLayoutAlign="center center" fxFill>
-  <button *ngFor="let provider of ssoProviders" (click)="loginViaSso(provider.id)" class="button-primary"
-          mat-raised-button type="button">
-    {{ 'login.login-with' | translate }} {{ provider.title }}
-  </button>
-  <p *ngIf="allowDbLogin && ssoProviders.length > 0">{{ 'login.or' | translate }}</p>
-  <form fxLayout="column" fxLayoutGap="10px">
-    <mat-form-field *ngIf="allowDbLogin" class="input-block">
-      <input (focus)="eventService.makeFocusOnInputTrue()" (blur)="eventService.makeFocusOnInputFalse()"
-             [(ngModel)]="username" [errorStateMatcher]="matcher" [formControl]="usernameFormControl" matInput
-             name="username" aria-labelledby="email-description"/>
-      <mat-placeholder>{{ 'login.email' | translate }}</mat-placeholder>
-      <mat-error *ngIf="usernameFormControl.hasError('email') && !usernameFormControl.hasError('required')">
-        {{ 'login.email-invalid' | translate }}
-      </mat-error>
-      <mat-error *ngIf="usernameFormControl.hasError('required')">
-        {{ 'login.email-required' | translate }}
-      </mat-error>
-    </mat-form-field>
-    <mat-form-field *ngIf="allowDbLogin">
-      <input (focus)="eventService.makeFocusOnInputTrue()" (blur)="eventService.makeFocusOnInputFalse()"
-             [(ngModel)]="password" [errorStateMatcher]="matcher" [formControl]="passwordFormControl" matInput
-             name="password" type="password" aria-labelledby="password-description"/>
-      <mat-placeholder>{{ 'login.password' | translate }}</mat-placeholder>
-      <mat-error
-        *ngIf="passwordFormControl.hasError('required')">{{ 'login.password-required' | translate }}</mat-error>
-    </mat-form-field>
-    <div fxLayout="column" fxLayoutAlign="center center">
-      <button *ngIf="allowDbLogin" class="button-primary" mat-raised-button (click)="login()"
-              aria-labelledby="login-description">
-        {{ 'login.login' | translate }}
-      </button>
-    </div>
-    <div *ngIf="allowDbLogin" fxLayout="row">
-      <span class="fill-remaining-space"></span>
-      <button mat-button class="forgot-pw" (click)="openPasswordDialog(); $event.preventDefault();
+  <mat-card fxLayout="column" fxLayoutAlign="center center" [ngClass]="{'mobile': deviceWidth < 500}">
+    <button *ngFor="let provider of ssoProviders" (click)="loginViaSso(provider.id)" class="button-primary"
+            mat-raised-button type="button">
+      {{ 'login.login-with' | translate }} {{ provider.title }}
+    </button>
+    <p *ngIf="allowDbLogin && ssoProviders.length > 0">{{ 'login.or' | translate }}</p>
+    <form fxLayout="column" fxLayoutGap="10px">
+      <mat-form-field *ngIf="allowDbLogin" class="input-block">
+        <input (focus)="eventService.makeFocusOnInputTrue()" (blur)="eventService.makeFocusOnInputFalse()"
+               [(ngModel)]="username" [errorStateMatcher]="matcher" [formControl]="usernameFormControl" matInput
+               name="username" aria-labelledby="email-description"/>
+        <mat-placeholder>{{ 'login.email' | translate }}</mat-placeholder>
+        <mat-error *ngIf="usernameFormControl.hasError('email') && !usernameFormControl.hasError('required')">
+          {{ 'login.email-invalid' | translate }}
+        </mat-error>
+        <mat-error *ngIf="usernameFormControl.hasError('required')">
+          {{ 'login.email-required' | translate }}
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field *ngIf="allowDbLogin">
+        <input (focus)="eventService.makeFocusOnInputTrue()" (blur)="eventService.makeFocusOnInputFalse()"
+               [(ngModel)]="password" [errorStateMatcher]="matcher" [formControl]="passwordFormControl" matInput
+               name="password" type="password" aria-labelledby="password-description"/>
+        <mat-placeholder>{{ 'login.password' | translate }}</mat-placeholder>
+        <mat-error
+          *ngIf="passwordFormControl.hasError('required')">{{ 'login.password-required' | translate }}</mat-error>
+      </mat-form-field>
+      <div fxLayout="column" fxLayoutAlign="center center">
+        <button *ngIf="allowDbLogin" class="button-primary" mat-raised-button (click)="login()"
+                aria-labelledby="login-description">
+          {{ 'login.login' | translate }}
+        </button>
+      </div>
+      <div *ngIf="allowDbLogin" fxLayout="row">
+        <span class="fill-remaining-space"></span>
+        <button mat-button class="forgot-pw" (click)="openPasswordDialog(); $event.preventDefault();
      $event.stopPropagation();">
-        {{ 'login.password-reset' | translate }}
-      </button>
-    </div>
-    <div *ngIf="allowDbLogin" fxLayout="row">
-      <p>{{ 'login.not-registered' | translate }}</p>
-      <button mat-button class="register" (click)="openRegisterDialog(); $event.preventDefault();
+          {{ 'login.password-reset' | translate }}
+        </button>
+      </div>
+      <div *ngIf="allowDbLogin" fxLayout="row">
+        <p>{{ 'login.not-registered' | translate }}</p>
+        <button mat-button class="register" (click)="openRegisterDialog(); $event.preventDefault();
     $event.stopPropagation();">
-        {{ 'login.register' | translate }}</button>
-    </div>
-  </form>
+          {{ 'login.register' | translate }}</button>
+      </div>
+    </form>
+  </mat-card>
 </div>
 
 <app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
