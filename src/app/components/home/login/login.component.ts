@@ -60,6 +60,9 @@ export class LoginComponent implements OnInit, OnChanges {
           this.allowDbLogin = true;
         }
         this.ssoProviders = authProviders.filter((p) => p.type === AuthenticationProviderType.SSO);
+        if (!this.allowDbLogin && this.ssoProviders.length === 1) {
+          this.loginViaSso(this.ssoProviders[0].id);
+        }
         this.isLoading = false;
       });
     }
