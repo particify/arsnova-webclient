@@ -47,6 +47,7 @@ import { LoginComponent } from './components/home/login/login.component';
 import { DialogService } from './services/util/dialog.service';
 import { DirectEntryComponent } from './components/shared/direct-entry/direct-entry.component';
 import { TrackingService } from './services/util/tracking.service';
+import { AdminModule } from './components/admin/admin.module';
 import { ImportComponent } from './components/home/import/import.component';
 import { GlobalStorageService, STORAGE_CONFIG_PROVIDERS } from './services/util/global-storage.service';
 import { ConsentService } from './services/util/consent.service';
@@ -89,6 +90,7 @@ export function initializeApp(appConfig: AppConfig) {
     HttpClientModule,
     CreatorModule,
     ModeratorModule,
+    AdminModule,
     MarkdownModule.forRoot({
       loader: HttpClient,
       markedOptions: {
