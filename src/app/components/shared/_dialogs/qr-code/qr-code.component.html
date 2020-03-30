@@ -10,11 +10,7 @@
     </button>
     <div>
       <h2>{{data.hostName}}</h2>
-<<<<<<< Updated upstream
-      <h2>{{'qr-dialog.session' | translate}}: {{data.shortId.slice(0, 4)}} {{data.shortId.slice(4, 8)}}</h2>
-=======
       <h2>{{'dialog.session' | translate}}: {{data.shortId.slice(0, 4)}} {{data.shortId.slice(4, 8)}}</h2>
->>>>>>> Stashed changes
     </div>
     <qrcode [qrdata]="data.protocol + data.hostName + path + data.shortId" [width]="qrWidth"
             [errorCorrectionLevel]="'M'"></qrcode>
