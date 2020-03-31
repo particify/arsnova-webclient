@@ -47,6 +47,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { LoginComponent } from './components/home/login/login.component';
 import { DialogService } from './services/util/dialog.service';
 import { DirectEntryComponent } from './components/shared/direct-entry/direct-entry.component';
+import { TrackingService } from './services/util/tracking.service';
 
 export function dialogClose(dialogResult: any) {
 }
@@ -132,6 +133,7 @@ export function initializeApp(appConfig: AppConfig) {
     CustomIconService,
     WsConnectorService,
     ApiConfigService,
+    TrackingService,
     {
       provide: MatDialogRef,
       useValue: {

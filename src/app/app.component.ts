@@ -4,6 +4,7 @@ import { SwUpdate } from '@angular/service-worker';
 import { NotificationService } from './services/util/notification.service';
 import { CustomIconService } from './services/util/custom-icon.service';
 import { ApiConfigService } from './services/http/api-config.service';
+import { TrackingService } from './services/util/tracking.service';
 
 @Component({
   selector: 'app-root',
@@ -16,7 +17,8 @@ export class AppComponent implements OnInit {
               private update: SwUpdate,
               public notification: NotificationService,
               private customIconService: CustomIconService,
-              private apiConfigService: ApiConfigService) {
+              private apiConfigService: ApiConfigService,
+              private trackingService: TrackingService) {
     translationService.setDefaultLang(this.translationService.getBrowserLang());
     sessionStorage.setItem('currentLang', this.translationService.getBrowserLang());
     customIconService.init();
@@ -42,5 +44,11 @@ export class AppComponent implements OnInit {
       });
     });
     this.apiConfigService.load();
+    this.apiConfigService.getApiConfig$().subscribe(config => {
+      const tracking = config.ui.tracking;
+      if (tracking.url && tracking.provider === 'matomo') {
+        this.trackingService.init(tracking);
+      }
+    });
   }
 }
