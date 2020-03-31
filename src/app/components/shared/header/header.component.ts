@@ -3,7 +3,6 @@ import { AuthenticationService } from '../../../services/http/authentication.ser
 import { NotificationService } from '../../../services/util/notification.service';
 import { NavigationEnd, Router } from '@angular/router';
 import { User } from '../../../models/user';
-import { UserRole } from '../../../models/user-roles.enum';
 import { Location } from '@angular/common';
 import { TranslateService } from '@ngx-translate/core';
 import { UserService } from '../../../services/http/user.service';
@@ -156,8 +155,8 @@ export class HeaderComponent implements OnInit {
     }
   }
 
-  login(isLecturer: boolean) {
-    this.dialogService.openLoginDialog((isLecturer === true) ? UserRole.CREATOR : UserRole.PARTICIPANT, true);
+  navToLogin() {
+    this.router.navigate(['login']);
   }
 
   navToHome() {
