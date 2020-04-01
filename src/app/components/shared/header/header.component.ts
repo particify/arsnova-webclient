@@ -1,4 +1,4 @@
-import { Component, OnInit, Renderer2 } from '@angular/core';
+import { Component, HostListener, OnInit, Renderer2 } from '@angular/core';
 import { AuthenticationService } from '../../../services/http/authentication.service';
 import { NotificationService } from '../../../services/util/notification.service';
 import { NavigationEnd, Router } from '@angular/router';
@@ -36,6 +36,20 @@ export class HeaderComponent implements OnInit {
               private _r: Renderer2,
               private dialogService: DialogService
   ) {
+  }
+
+  @HostListener('window:keyup', ['$event'])
+  keyEvent(event: KeyboardEvent) {
+    if (document.getElementById('back-button') && KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit0) === true &&
+      this.eventService.focusOnInput === false) {
+      document.getElementById('back-button').focus();
+    } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit2) === true && this.eventService.focusOnInput === false) {
+      if (this.user) {
+        document.getElementById('session-button').focus();
+      } else {
+        document.getElementById('login-button').focus();
+      }
+    }
   }
 
   ngOnInit() {
@@ -94,22 +108,6 @@ export class HeaderComponent implements OnInit {
       }
     });
     this.moderationEnabled = (localStorage.getItem('moderationEnabled') === 'true') ? true : false;
-
-    this._r.listen(document, 'keyup', (event) => {
-      if (
-        document.getElementById('back-button') &&
-        KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit0) === true &&
-        this.eventService.focusOnInput === false
-      ) {
-        document.getElementById('back-button').focus();
-      } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit2) === true && this.eventService.focusOnInput === false) {
-        if (this.user) {
-          document.getElementById('session-button').focus();
-        } else {
-          document.getElementById('login-button').focus();
-        }
-      }
-    });
   }
 
   getTime(time: Date) {

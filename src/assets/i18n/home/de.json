@@ -27,9 +27,9 @@
     "style": "Anzeige"
   },
   "header": {
-    "accessibility-back": "Führt zur vorherigen Seite",
-    "accessibility-login": "Öffnet das Anmeldungs-Fenster.",
-    "accessibility-session": "Öffnet das Sitzungs-Menü. Hier kannst du deine besuchten Sitzungen einsehen oder dich von deinem Konto abmelden.",
+    "a11y-back": "Führt zur vorherigen Seite.",
+    "a11y-login": "Navigiert zur Anmeldung.",
+    "a11y-session": "Öffnet das Sitzungs-Menü. Hier kannst du deine besuchten Sitzungen einsehen oder dich von deinem Konto abmelden.",
     "account-deleted": "Dein Konto wurde gelöscht.",
     "back": "Zurück",
     "delete-account": "Konto löschen",
@@ -74,10 +74,9 @@
     "title": "ARSnova"
   },
   "login": {
-    "cancel": "Abbrechen",
-    "cancel-description": "Abbrechen",
+    "a11y-sso-login": "Hier wirst du zum Anmelden auf {{provider}} weitergeleitet.",
     "email": "E-Mail",
-    "email-description": "Gib hier deine E-Mail Adresse ein.",
+    "email-description": "Gib hier deine E-Mail Adresse ein mit welcher du dich mit deinem arsnova-Konto anmelden möchtest.",
     "email-invalid": "E-Mail Adresse ungültig",
     "email-required": "E-Mail Adresse erforderlich",
     "input-incorrect": "Bitte prüfe deine Eingaben.",
@@ -88,7 +87,7 @@
     "login-successful": "Anmeldung erfolgreich",
     "not-registered": "Noch kein Konto?",
     "password": "Passwort",
-    "password-description": "Gib hier dein Passwort ein.",
+    "password-description": "Gib hier dein Passwort ein mit welchem du dich mit deinem arsnova-Konto anmelden möchtest.",
     "password-required": "Passwort erforderlich",
     "password-reset": "Passwort vergessen?",
     "register": "Registrieren",
