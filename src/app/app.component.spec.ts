@@ -8,6 +8,7 @@ import { ApiConfigService } from './services/http/api-config.service';
 import { RouterTestingModule } from '@angular/router/testing';
 import { Component, Injectable } from '@angular/core';
 import { Observable, of, Subject } from 'rxjs';
+import { TrackingService } from './services/util/tracking.service';
 
 @Injectable()
 class MockTranslateService {
@@ -33,6 +34,44 @@ class MockNotificationService {
   };
 
   public show(msg: string, install: string, config: any) {
+  }
+}
+
+// Mock class for the tracking service
+@Injectable()
+class MockApiConfigService extends ApiConfigService {
+  private mockApiConfig = {
+    ui: {
+      tracking: {
+        url: 'mock-tracker',
+        provider: 'matomo'
+      }
+    }
+  };
+
+  private apiConfig = new Subject<any>();
+  public load = jasmine.createSpy('ApiConfigServiceLoadSpy');
+
+  constructor() {
+    super(
+      jasmine.createSpyObj('HttpClientSpy', ['get'])
+    );
+  }
+
+  public getApiConfig$() {
+    return this.apiConfig.asObservable();
+  }
+
+  public mockApiConfigEvent() {
+    this.apiConfig.next(this.mockApiConfig);
+  }
+}
+
+// Mock class for the tracking service
+@Injectable()
+class MockTrackingService {
+  public init(object: any) {
+
   }
 }
 
@@ -77,7 +116,6 @@ describe('AppComponent', () => {
 
   // create simple spy objects for downstream dependencies
   const mockCustomIconService = jasmine.createSpyObj('CustomIconService', ['init']);
-  const mockApiConfigService = jasmine.createSpyObj('ApiConfigService', ['load']);
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -105,7 +143,11 @@ describe('AppComponent', () => {
         },
         {
           provide: ApiConfigService,
-          useValue: mockApiConfigService
+          useClass: MockApiConfigService
+        },
+        {
+          provide: TrackingService,
+          useClass: MockTrackingService
         }
       ],
       imports: [
@@ -128,6 +170,7 @@ describe('AppComponent', () => {
   });
 
   it('should call the API config', () => {
+    const mockApiConfigService = fixture.debugElement.injector.get(ApiConfigService);
     expect(mockApiConfigService.load).toHaveBeenCalled();
   });
 
@@ -137,6 +180,16 @@ describe('AppComponent', () => {
     const spy = spyOn(mockNotificationService, 'show');
 
     mockSwUpdate.mockUpdateAvailableEvent();
+
+    expect(spy).toHaveBeenCalled();
+  });
+
+  it('should call the tracking service init on getting a tracking config', () => {
+    const mockApiConfigService = <MockApiConfigService> fixture.debugElement.injector.get(ApiConfigService);
+    const mockTrackingService = fixture.debugElement.injector.get(TrackingService);
+    const spy = spyOn(mockTrackingService, 'init');
+
+    mockApiConfigService.mockApiConfigEvent();
 
     expect(spy).toHaveBeenCalled();
   });
