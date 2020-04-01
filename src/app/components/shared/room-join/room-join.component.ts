@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { Room } from '../../../models/room';
 import { RoomService } from '../../../services/http/room.service';
 import { Router } from '@angular/router';
@@ -22,6 +22,7 @@ import { KeyboardKey } from '../../../utils/keyboard/keys';
 })
 export class RoomJoinComponent implements OnInit {
   @ViewChild('sessionCode', { static: true }) sessionCodeElement: ElementRef;
+  @Input() inputA11yString: string;
 
   room: Room;
   user: User;
