@@ -1,7 +1,8 @@
 <div *ngIf="!isLoading" class="container" fxLayout="column" fxLayoutAlign="center center" fxFill>
   <mat-card fxLayout="column" fxLayoutAlign="center center" [ngClass]="{'mobile': deviceWidth < 500}">
     <button *ngFor="let provider of ssoProviders" (click)="loginViaSso(provider.id)" class="button-primary"
-            mat-raised-button type="button">
+            id="{{provider.title}}-button" mat-raised-button type="button"
+            attr.aria-label="{{ 'login.a11y-sso-login' | translate:{provider: provider.title} }}">
       {{ 'login.login-with' | translate }} {{ provider.title }}
     </button>
     <p *ngIf="allowDbLogin && ssoProviders.length > 0">{{ 'login.or' | translate }}</p>
@@ -10,7 +11,7 @@
       <mat-form-field *ngIf="allowDbLogin" class="input-block">
         <input (focus)="eventService.makeFocusOnInputTrue()" (blur)="eventService.makeFocusOnInputFalse()"
                [(ngModel)]="username" [errorStateMatcher]="matcher" [formControl]="usernameFormControl" matInput
-               name="username" aria-labelledby="email-description"/>
+               id="email-input" name="username" aria-labelledby="email-description"/>
         <mat-placeholder>{{ 'login.email' | translate }}</mat-placeholder>
         <mat-error *ngIf="usernameFormControl.hasError('email') && !usernameFormControl.hasError('required')">
           {{ 'login.email-invalid' | translate }}
@@ -22,7 +23,7 @@
       <mat-form-field *ngIf="allowDbLogin">
         <input (focus)="eventService.makeFocusOnInputTrue()" (blur)="eventService.makeFocusOnInputFalse()"
                [(ngModel)]="password" [errorStateMatcher]="matcher" [formControl]="passwordFormControl" matInput
-               name="password" type="password" aria-labelledby="password-description"/>
+               id="password-input" name="password" type="password" aria-labelledby="password-description"/>
         <mat-placeholder>{{ 'login.password' | translate }}</mat-placeholder>
         <mat-error
           *ngIf="passwordFormControl.hasError('required')">{{ 'login.password-required' | translate }}</mat-error>

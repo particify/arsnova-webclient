@@ -27,9 +27,9 @@
     "style": "Display"
   },
   "header": {
-    "accessibility-back": "Go back to the previous page",
-    "accessibility-login": "Open the login window",
-    "accessibility-session": "Open the session menu. Here you can view the sessions you have attended or log out of your account.",
+    "a11y-back": "Go back to the previous page.",
+    "a11y-login": "Navigates to the Login.",
+    "a11y-session": "Open the session menu. Here you can view the sessions you have attended or log out of your account.",
     "account-deleted": "Your account has been deleted.",
     "back": "Back",
     "delete-account": "Delete account",
@@ -73,10 +73,9 @@
     "title": "»ARSnova«"
   },
   "login": {
-    "cancel": "Cancel",
-    "cancel-description": "Cancel",
+    "a11y-sso-login": "You will be forwarded to {{provider}} to log in.",
     "email": "E-mail",
-    "email-description": "Enter your e-mail address here.",
+    "email-description": "Enter your e-mail address with which you want to login with your arsnova account here.",
     "email-invalid": "E-mail is invalid",
     "email-required": "E-mail required",
     "input-incorrect": "Please check your data.",
@@ -88,6 +87,7 @@
     "login-tooltip": "Sessions will be stored for 180 days.",
     "not-registered": "Don't have an account yet?",
     "password": "Password",
+    "password-description": "Enter your password with which you want to login with your arsnova account here.",
     "password-required": "Password required",
     "password-reset": "Forgot your password?",
     "register": "Register",

@@ -1,4 +1,4 @@
-import { Component, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { AfterContentInit, Component, OnChanges, SimpleChanges } from '@angular/core';
 import { AuthenticationService } from '../../../services/http/authentication.service';
 import { Router } from '@angular/router';
 import { NotificationService } from '../../../services/util/notification.service';
@@ -9,7 +9,7 @@ import { UserRole } from '../../../models/user-roles.enum';
 import { TranslateService } from '@ngx-translate/core';
 import { EventService } from '../../../services/util/event.service';
 import { ApiConfigService } from '../../../services/http/api-config.service';
-import { AuthenticationProvider, AuthenticationProviderType } from '../../../models/api-config';
+import { AuthenticationProvider, AuthenticationProviderRole, AuthenticationProviderType } from '../../../models/api-config';
 import { DialogService } from '../../../services/util/dialog.service';
 
 export class LoginErrorStateMatcher implements ErrorStateMatcher {
@@ -24,7 +24,7 @@ export class LoginErrorStateMatcher implements ErrorStateMatcher {
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
-export class LoginComponent implements OnInit, OnChanges {
+export class LoginComponent implements AfterContentInit, OnChanges {
 
   role = UserRole.PARTICIPANT;
   isStandard = true;
@@ -34,6 +34,7 @@ export class LoginComponent implements OnInit, OnChanges {
   ssoProviders: AuthenticationProvider[];
   isLoading = true;
   deviceWidth = innerWidth;
+  providersLength: number;
 
   usernameFormControl = new FormControl('', [Validators.required, Validators.email]);
   passwordFormControl = new FormControl('', [Validators.required]);
@@ -50,7 +51,7 @@ export class LoginComponent implements OnInit, OnChanges {
               private dialogService: DialogService) {
   }
 
-  ngOnInit() {
+  ngAfterContentInit() {
     if (this.authenticationService.isLoggedIn()) {
       this.router.navigate(['home']);
     } else {
@@ -60,10 +61,21 @@ export class LoginComponent implements OnInit, OnChanges {
           this.allowDbLogin = true;
         }
         this.ssoProviders = authProviders.filter((p) => p.type === AuthenticationProviderType.SSO);
-        if (!this.allowDbLogin && this.ssoProviders.length === 1) {
-          this.loginViaSso(this.ssoProviders[0].id);
-        }
         this.isLoading = false;
+        this.providersLength = this.ssoProviders.length;
+        if (!this.allowDbLogin && this.providersLength === 1) {
+          this.loginViaSso(this.ssoProviders[0].id);
+        } else {
+          if (this.providersLength > 0) {
+            setTimeout(() => {
+              document.getElementById(this.ssoProviders[0].title + '-button').focus();
+            }, 100);
+          } else {
+            setTimeout(() => {
+              document.getElementById('email-input').focus();
+            }, 100);
+          }
+        }
       });
     }
   }
