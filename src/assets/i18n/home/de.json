@@ -47,15 +47,16 @@
     "visited-sessions": "Besuchte Sitzungen"
   },
   "home-page": {
-    "a11y-create": "Erstellt eine neue Sitzung.",
+    "a11y-create-session": "Erstellt eine neue Sitzung.",
     "a11y-join-button": "Betritt die Sitzung, deren Code du eingegeben hast.",
     "a11y-join-input": "Hier kannst du den Code der Sitzung eingeben der du beitreten möchtest. Den Code sagt dir dein Dozent.",
+    "a11y-welcome-message": "Willkommen bei ARSnova. Gib einen achtstelligen Sitzungscode ein um einer Sitzung beizutreten oder drücke die Escape-Taste um Informationen zu Tastenkombinationen zu erhalten.",
+    "a11y-home-keys": "Du befindest dich auf der Startseite von ARSnova. Drücke die Taste 1 um einen Sitzungs-Code einzugeben, die Taste 2 um in die Benutzer-Anmeldung oder das Sitzungs-Menü zu gelangen, die Taste 3 um eine neue Sitzung zu erstellen, die Taste 4 um zur Sprachauswahl zu gelangen, oder die Escape-Taste um diese Ansage zu wiederholen.",
+    "a11y-user-message": "Du befindest dich jetzt auf der Benutzer-Seite. Um Informationen zu Tastenkombinationen zu erhalten drücke jetzt die Enter-Taste oder rufe die Ansage zu einem späteren Zeitpunkt mit der Escape-Taste auf.",
     "create-session": "Neue Sitzung erstellen",
     "created-1": "Die Sitzung '",
     "created-2": "' wurde erstellt.",
     "exactly-8": "Der Sitzungs-Code ist eine Kombination aus genau 8 Ziffern.",
-    "live-announcer": "Willkommen auf der Seite ARSnova. Um Informationen zu Tastenkombinationen zu erhalten drücke jetzt die Enter-Taste oder rufe die Ansage zu einem späteren Zeitpunkt mit der Escape-Taste auf.",
-    "live-announcer-user": "Du befindest dich jetzt auf der Benutzer-Seite. Um Informationen zu Tastenkombinationen zu erhalten drücke jetzt die Enter-Taste oder rufe die Ansage zu einem späteren Zeitpunkt mit der Escape-Taste auf.",
     "install": "Installieren",
     "no-room-found": "Es wurde keine Sitzung mit diesem Code gefunden.",
     "only-numbers": "Der Sitzungs-Code besteht ausschließlich aus Ziffern.",
@@ -176,6 +177,7 @@
     "cancel": "Abbrechen"
   },
   "dialog": {
+    "a11y-room-name-input": "Gib hier den Namen der Sitzung die du erstellen möchtest ein und bestätige deine Eingabe mit der Enter-Taste.",
     "sure": "Bist du sicher?",
     "cancel": "Abbrechen",
     "delete": "Löschen",
@@ -219,7 +221,6 @@
     "logout": "Abmelden",
     "create": "Erstellen",
     "create-room-description": "Neue Sitzung erstellen.",
-    "room-name-input": "Gib hier den Namen der Sitzung die du erstellen möchtest ein.",
     "session-name": "Name der Sitzung",
     "statistic-good": "Gut",
     "statistic-okay": "Okay",

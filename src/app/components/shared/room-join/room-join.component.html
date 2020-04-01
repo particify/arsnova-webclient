@@ -1,8 +1,8 @@
 <div fxLayout="column" fxLayoutAlign="center center" fxFill>
-  <form>
+  <form (ngSubmit)="joinRoom(sessionCode.value)">
     <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="10px">
       <mat-form-field (keyup.enter)="onEnter()">
-        <input id="session_id-input" matInput #sessionCode (focus)="eventService.makeFocusOnInputTrue()"
+        <input id="session-id-input" matInput #sessionCode (focus)="eventService.makeFocusOnInputTrue()"
                (blur)="eventService.makeFocusOnInputFalse()"
                type="text" pattern="[0-9 ]*" inputmode="numeric" min="00000000" max="99999999"
                (keydown)="prettifySessionCode($event)" [formControl]="sessionCodeFormControl"
@@ -31,6 +31,6 @@
 </div>
 
 <div class="visually-hidden">
-  <div id="join-input-label">{{ 'home-page.a11y-join-input' | translate }}</div>
+  <div id="join-input-label">{{ inputA11yString | translate }}</div>
   <div id="join-button-label">{{ 'home-page.a11y-join-button' | translate }}</div>
 </div>

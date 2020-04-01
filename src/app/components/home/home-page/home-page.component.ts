@@ -1,64 +1,44 @@
-import { AfterContentInit, Component, OnDestroy, OnInit, Renderer2 } from '@angular/core';
-import { EventService } from '../../../services/util/event.service';
-import { LiveAnnouncer } from '@angular/cdk/a11y';
+import { AfterContentInit, Component, HostListener } from '@angular/core';
 import { KeyboardUtils } from '../../../utils/keyboard';
 import { KeyboardKey } from '../../../utils/keyboard/keys';
 import { DialogService } from '../../../services/util/dialog.service';
+import { EventService } from '../../../services/util/event.service';
 
 @Component({
   selector: 'app-home-page',
   templateUrl: './home-page.component.html',
   styleUrls: ['./home-page.component.scss']
 })
-export class HomePageComponent implements OnInit, OnDestroy, AfterContentInit {
+export class HomePageComponent implements AfterContentInit {
 
-  deviceType: string;
-  listenerFn: () => void;
+  deviceType = localStorage.getItem('deviceType');
 
-  constructor(
-    private eventService: EventService,
-    private liveAnnouncer: LiveAnnouncer,
-    private _r: Renderer2,
-    private dialogService: DialogService) {
+  constructor(private dialogService: DialogService,
+              private eventService: EventService) {
+  }
+
+  @HostListener('window:keyup', ['$event'])
+  keyEvent(event: KeyboardEvent) {
+    if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit1) === true && this.eventService.focusOnInput === false) {
+      document.getElementById('session-id-input').focus();
+      this.eventService.makeFocusOnInputTrue();
+    } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit3) === true && this.eventService.focusOnInput === false) {
+      document.getElementById('new-session-button').focus();
+    } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit4) === true && this.eventService.focusOnInput === false) {
+      document.getElementById('language-menu').focus();
+    } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Escape) === true && this.eventService.focusOnInput === true) {
+      this.eventService.makeFocusOnInputFalse();
+      document.getElementById('key-combinations').focus();
+    }
   }
 
   ngAfterContentInit(): void {
-    setTimeout(() => {
-      document.getElementById('live_announcer-button').focus();
-    }, 500);
-  }
-
-  ngOnInit() {
-    this.deviceType = localStorage.getItem('deviceType');
-    this.listenerFn = this._r.listen(document, 'keyup', (event) => {
-      if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit1) === true && this.eventService.focusOnInput === false) {
-        document.getElementById('session_id-input').focus();
-      } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit3) === true && this.eventService.focusOnInput === false) {
-        document.getElementById('new_session-button').focus();
-      } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit4) === true && this.eventService.focusOnInput === false) {
-        document.getElementById('language-menu').focus();
-      } else if (
-        KeyboardUtils.isKeyEvent(event, KeyboardKey.Escape, KeyboardKey.Digit9) === true && this.eventService.focusOnInput === false
-      ) {
-        this.announce();
-      } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Escape) === true && this.eventService.focusOnInput === true) {
-        document.getElementById('session_enter-button').focus();
-        this.eventService.makeFocusOnInputFalse();
-      }
-    });
-  }
-
-  ngOnDestroy() {
-    this.listenerFn();
-    this.eventService.makeFocusOnInputFalse();
-  }
-
-  public announce() {
-    this.liveAnnouncer.clear();
-    this.liveAnnouncer.announce('Du befindest dich auf der Startseite von ARSnova. ' +
-      'Drücke die Taste 1 um einen Sitzungs-Code einzugeben, die Taste 2 um in die Benutzer-Anmeldung ' +
-      'oder das Sitzungs-Menü zu gelangen, die Taste 3 um eine neue Sitzung zu erstellen, ' +
-      'die Taste 4 um zur Sprachauswahl zu gelangen, oder die Taste 9 um diese Ansage zu wiederholen.', 'assertive');
+    if (this.deviceType === 'desktop') {
+      document.getElementById('session-id-input').focus();
+      this.eventService.makeFocusOnInputTrue();
+    } else {
+      document.getElementById('welcome-message').focus();
+    }
   }
 
   openCreateRoomDialog(): void {
@@ -68,5 +48,4 @@ export class HomePageComponent implements OnInit, OnDestroy, AfterContentInit {
   cookiesDisabled(): boolean {
     return localStorage.getItem('cookieAccepted') === 'false';
   }
-
 }
