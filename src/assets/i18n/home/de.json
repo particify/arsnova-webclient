@@ -29,7 +29,7 @@
   "header": {
     "a11y-back": "Führt zur vorherigen Seite.",
     "a11y-login": "Navigiert zur Anmeldung.",
-    "a11y-session": "Öffnet das Sitzungs-Menü. Hier kannst du deine besuchten Sitzungen einsehen oder dich von deinem Konto abmelden.",
+    "a11y-session": "Öffnet das Nutzer-Menü. Hier kannst du deine besuchten Sitzungen einsehen oder dich von deinem Konto abmelden.",
     "account-deleted": "Dein Konto wurde gelöscht.",
     "back": "Zurück",
     "delete-account": "Konto löschen",
@@ -53,6 +53,8 @@
     "a11y-welcome-message": "Willkommen bei ARSnova. Gib einen achtstelligen Sitzungscode ein um einer Sitzung beizutreten oder drücke die Escape-Taste um Informationen zu Tastenkombinationen zu erhalten.",
     "a11y-home-keys": "Du befindest dich auf der Startseite von ARSnova. Drücke die Taste 1 um einen Sitzungs-Code einzugeben, die Taste 2 um in die Benutzer-Anmeldung oder das Sitzungs-Menü zu gelangen, die Taste 3 um eine neue Sitzung zu erstellen, die Taste 4 um zur Sprachauswahl zu gelangen, oder die Escape-Taste um diese Ansage zu wiederholen.",
     "a11y-user-message": "Du befindest dich jetzt auf der Benutzer-Seite. Um Informationen zu Tastenkombinationen zu erhalten drücke jetzt die Enter-Taste oder rufe die Ansage zu einem späteren Zeitpunkt mit der Escape-Taste auf.",
+    "a11y-user-keys": "Drücke die Taste 1 um eine neue Sitzung zu erstellen, die Taste 2 um zum Nutzer-Menü zu gelangen, die Taste 3 um einer Sitzung beizutreten, die Taste 4 um Ihre besuchten und erstellten Sitzungen zu erhalten, die Taste 0 um zurück zur Startseite zu gelangen, oder die Taste 9 um diese Ansage zu wiederholen.",
+    "a11y-session-join": "Gib jetzt den Sizungscode von der Sitzung welcher du beitreten möchtest ein.",
     "create-session": "Neue Sitzung erstellen",
     "created-1": "Die Sitzung '",
     "created-2": "' wurde erstellt.",
@@ -147,11 +149,13 @@
     "register-unsuccessful": "Bitte prüfe deine Eingaben."
   },
   "room-list": {
+    "a11y-join-session": "Die Sitzung {{session}} mit dem Code {{id}} in der Rolle {{role}} betreten.",
+    "a11y-session-history": "Dein Sitzungsverlauf enthält {{count}} Sitzungen. Navigiere mit Tab durch deine Sitzungen.",
+    "a11y-more-options": "Zeige weitere Optionen für diese Sitzung",
     "creator-role": "Sitzungsersteller",
     "executive-moderator-role": "Moderator",
     "filter": "In diesem Textfeld kannst du die aufgelisteten Sitzungen nach Name filtern.",
     "filter-message": "Sitzungen durchsuchen",
-    "join-message-template": "An der Sitzung {{session}} mit dem Code {{id}} und in der Rolle {{role}} teilnehmen.",
     "more-options": "Mehr Optionen",
     "no-room-history": "Du hast bisher an keiner Sitzung teilgenommen.",
     "panel-remove-room": "Sitzung aus der Liste entfernen",
@@ -160,9 +164,7 @@
     "room-successfully-removed": "Die Sitzung wurde erfolgreich aus der Liste entfernt.",
     "room-successfully-deleted": "Die Sitzung wurde erfolgreich gelöscht.",
     "canceled-remove": "Vorgang abgebrochen.",
-    "participant-role": "Teilnehmer",
-    "session-history": "Dein Sitzungsverlauf enthält {{count}} Sitzungen.",
-    "session-history-label": "Nachfolgend findest du eine Liste deiner Sitzungen."
+    "participant-role": "Teilnehmer"
   },
   "user-activation": {
     "activate": "Aktivieren",
