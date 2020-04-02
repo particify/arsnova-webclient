@@ -20,7 +20,6 @@ export class AppComponent implements OnInit {
               private apiConfigService: ApiConfigService,
               private trackingService: TrackingService) {
     translationService.setDefaultLang(this.translationService.getBrowserLang());
-    sessionStorage.setItem('currentLang', this.translationService.getBrowserLang());
     customIconService.init();
   }
 
