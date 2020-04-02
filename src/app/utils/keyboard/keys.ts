@@ -40,6 +40,7 @@ export enum KeyboardKey {
   Backspace,
   LEFT,
   RIGHT,
+  ENTER
 }
 
 // Setup all application available keyboard keys here
@@ -59,3 +60,4 @@ KEYBOARD_KEYS.set(KeyboardKey.Backspace, { key: ['Backspace'], keyCode: 8 });
 KEYBOARD_KEYS.set(KeyboardKey.Escape, { key: ['Escape', 'Esc'], keyCode: 27 });
 KEYBOARD_KEYS.set(KeyboardKey.LEFT, { key: ['ArrowLeft'], keyCode: 37 });
 KEYBOARD_KEYS.set(KeyboardKey.RIGHT, { key: ['ArrowRight'], keyCode: 39  });
+KEYBOARD_KEYS.set(KeyboardKey.ENTER, { key: ['Enter'], keyCode: 13  });

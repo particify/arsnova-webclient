@@ -1,8 +1,9 @@
 <app-loading-indicator *ngIf="isLoading" [size]="80"></app-loading-indicator>
 
-<div *ngIf="!isLoading" aria-labelledby="sessionHistoryLabel{{this.rooms.length}}">
-  <div *ngIf="!isLoading && roomsWithRole.length === 0" aria-labelledby="emptySessionHistoryLabel">
-    <h3>{{ 'room-list.no-room-history' | translate }}</h3>
+<div *ngIf="!isLoading">
+  <div tabindex="-1" id="room-list" *ngIf="!isLoading" [ngClass]="{'visually-hidden': roomsWithRole.length > 0}">
+    <h3>{{ roomsWithRole.length === 0 ? ('room-list.no-room-history' | translate) :
+      'room-list.a11y-session-history' | translate:{count: rooms.length} }}</h3>
   </div>
   <div *ngIf="roomsWithRole">
     <mat-form-field *ngIf="this.rooms && this.rooms.length > 10" class="filterWrapper">
@@ -12,11 +13,14 @@
     </mat-form-field>
     <mat-card *ngIf="roomsWithRole.length > 0">
       <mat-list>
-        <mat-list-item fxLayout="column" fxLayoutAlign="center" *ngFor="let room of displayRooms; let i = index"
-                       [ngSwitch]="room.role" tabindex="0">
+        <mat-list-item fxLayout="column" fxLayoutAlign="center"
+                       *ngFor="let room of displayRooms; let i = index" [ngSwitch]="room.role">
           <div fxLayout="row" class="container">
-            <div fxLayout="row" fxLayoutAlign="center center" class="container inner"
-                 (click)="setCurrentRoom(room.shortId, room.role)">
+            <div tabindex="0" role="button" fxLayout="row" fxLayoutAlign="center center" class="container inner"
+                 attr.aria-label="{{ 'room-list.a11y-join-session' | translate:
+                        {session: room.name, id: room.shortId, role: roles[room.role]} }}"
+                 (click)="setCurrentRoom(room.shortId, room.role)"
+            (keydown)="joinRoomViaEnter(room.shortId, room.role, $event)">
               <p matBadge="{{room.commentCount > 0 && deviceType === 'desktop' ? room.commentCount : null}}"
                  matBadgeOverlap="false">{{room.name}}</p>
               <span class="fill-remaining-space" (click)="setCurrentRoom(room.shortId, room.role)"></span>
@@ -38,7 +42,7 @@
               </mat-icon>
             </div>
             <div fxLayout="row" fxLayoutAlign="center center">
-              <button mat-icon-button [matMenuTriggerFor]="moreActions"
+              <button mat-icon-button [matMenuTriggerFor]="moreActions" aria-labelledby="more-options"
                       matTooltip="{{ 'room-list.more-options' | translate }}">
                 <mat-icon>more_vert</mat-icon>
               </button>
@@ -63,11 +67,7 @@
 </div>
 
 <div class="visually-hidden">
-  <div id="emptySessionHistoryLabel">{{ 'room-list.no-room-history' | translate }}</div>
-  <div id="sessionHistoryLabel">
-    {{ 'room-list.session-history-label' | translate }}
-    {{ 'room-list.session-history' | translate:{count: this.rooms.length} }}
-    {{ 'room-list.filter' | translate }}
+  <div id="more-options">{{ 'room-list.a11y-more-options' | translate }}</div>
+  <div *ngIf="rooms.length > 10" id="filter-sessions">{{ 'room-list.filter' | translate }}
   </div>
-  <div id="empty"></div>
 </div>

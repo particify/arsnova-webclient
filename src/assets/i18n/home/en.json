@@ -29,7 +29,7 @@
   "header": {
     "a11y-back": "Go back to the previous page.",
     "a11y-login": "Navigates to the Login.",
-    "a11y-session": "Open the session menu. Here you can view the sessions you have attended or log out of your account.",
+    "a11y-session": "Open the user menu. Here you can view the sessions you have attended or log out of your account.",
     "account-deleted": "Your account has been deleted.",
     "back": "Back",
     "delete-account": "Delete account",
@@ -52,6 +52,8 @@
     "a11y-join-input": "Here you can enter the  key of the session you want to join. Your lecturer will tell you the session key.",
     "a11y-welcome-message": "Welcome to ARSnova. Enter an eight-digit session code to join a session or press the escape key to get information about key combinations.",
     "a11y-user-message": "You are now on the user page. To get information about key combinations press the Enter key or call the announcement later with the Escape key.",
+    "a11y-user-keys": "Press button 1 to create a new session, button 2 to go to the user menu, button 3 to join a session, button 4 to get your visited and created sessions, button 0 to go back to the home page, or button 9 to repeat this announcement.",
+    "a11y-session-join": "Now enter the session code of the session you want to join.",
     "create-session": "Create new session",
     "created-1": "Session '",
     "created-2": "' successfully created",
@@ -147,11 +149,13 @@
     "register-unsuccessful": "Please check your data."
   },
   "room-list": {
+    "a11y-join-session": "Enter the session {{session}} with the code {{id}} in the role {{role}}",
+    "a11y-session-history": "Your session history contains {{count}} sessions. Navigate through your sessions with Tab.",
+    "a11y-more-options": "Show more options for this session",
     "creator-role": "Session creator",
     "executive-moderator-role": "Moderator",
     "filter": "Here you can filter the list of sessions.",
     "filter-message": "Search sessions",
-    "join-message-template": "Join the session {{session}} with code {{id}} and in the role {{role}}",
     "more-options": "More options",
     "no-room-history": "You haven't joined any sessions yet.",
     "panel-remove-room": "Remove session from your history",
@@ -160,9 +164,7 @@
     "room-successfully-removed": "The session was successfully removed from the history.",
     "room-successfully-deleted": "The session was successfully deleted.",
     "canceled-remove": "Process cancelled.",
-    "participant-role": "Participant",
-    "session-history": "Your session history contains {count}} sessions.",
-    "session-history-label": "Below you will find a list of your attended sessions."
+    "participant-role": "Participant"
   },
   "user-activation": {
     "activate": "Activate",

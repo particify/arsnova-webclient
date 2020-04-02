@@ -1,7 +1,7 @@
 <div fxLayout="column">
-  <app-room-join></app-room-join>
+  <app-room-join [inputA11yString]="'home-page.a11y-session-join'"></app-room-join>
   <div fxLayout="row" fxLayoutAlign="center">
-    <button class="button-primary" mat-raised-button (click)="openCreateRoomDialog()" id="create_session-button">
+    <button class="button-primary" mat-raised-button (click)="openCreateRoomDialog()" id="create-session-button">
       <mat-icon>add</mat-icon>
       {{ 'home-page.create-session' | translate }}
     </button>
@@ -9,6 +9,7 @@
   <div fxLayout="row" fxLayoutAlign="center" fxLayoutGap="15px">
     <app-room-list [user]="user"></app-room-list>
   </div>
-  <button id="live_announcer-button" tabIndex="-1" (click)="announce()"
-          class="visually-hidden">{{ 'home-page.live-announcer-user' | translate }}</button>
+</div>
+<div class="visually-hidden">
+  <button id="user-message" tabIndex="-1" (click)="announce()">{{ 'home-page.a11y-user-message' | translate }}</button>
 </div>
