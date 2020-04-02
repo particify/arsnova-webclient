@@ -42,6 +42,7 @@ export class CommentComponent implements OnInit {
   slideAnimationState = 'hidden';
   deviceType: string;
   inAnswerView = false;
+  roleString: string;
 
   constructor(protected authenticationService: AuthenticationService,
               private route: ActivatedRoute,
@@ -63,12 +64,15 @@ export class CommentComponent implements OnInit {
     switch (this.userRole) {
       case UserRole.PARTICIPANT.valueOf():
         this.isStudent = true;
+        this.roleString = 'participant';
         break;
       case UserRole.CREATOR.valueOf():
         this.isCreator = true;
+        this.roleString = 'creator';
         break;
       case UserRole.EXECUTIVE_MODERATOR.valueOf():
         this.isModerator = true;
+        this.roleString = 'moderator';
     }
     this.language = localStorage.getItem('currentLang');
     this.translateService.use(this.language);
@@ -140,8 +144,11 @@ export class CommentComponent implements OnInit {
   }
 
   answerComment() {
-    const url = this.location.path().slice(0, -1);
-    this.router.navigate([`${url}/${this.comment.id}`]);
+    let url: string;
+    this.route.params.subscribe(params => {
+      url = `${this.roleString}/room/${params['shortId']}/comment/${this.comment.id}`;
+    });
+    this.router.navigate([url]);
   }
 
   delete(): void {
