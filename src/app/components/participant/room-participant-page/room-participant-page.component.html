@@ -1,5 +1,7 @@
 <div fxLayout="column" fxLayoutAlign="center" fxLayoutGap="20px" fxFill>
   <div fxLayout="row" fxLayoutAlign="center">
+    <button id="live-announcer-button" tabIndex="-1" (click)="announce()"
+            class="visually-hidden">{{ 'room-page.a11y-room-message' | translate }}</button>
     <app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
     <mat-card *ngIf=" !isLoading && room">
       <div fxLayout="row">
@@ -16,8 +18,8 @@
           </mat-card-subtitle>
         </mat-card-header>
         <span class="fill-remaining-space"></span>
-        <button mat-icon-button *ngIf="!noGroups" class="corner-icons"
-                (click)="navToStats('participant')">
+        <button id="statistics-button" mat-icon-button *ngIf="!noGroups" class="corner-icons"
+                aria-labelledby="statistics" (click)="navToStats('participant')">
           <mat-icon id="stat-icon" matTooltip="{{ 'statistic.answer-statistic' | translate}}">insert_chart</mat-icon>
         </button>
       </div>
@@ -26,9 +28,9 @@
       </mat-card-content>
       <mat-grid-list cols="2" rowHeight="1:1" [ngClass]="{'big-container': deviceWidth >= 500}">
         <mat-grid-tile>
-          <button id="question_answer-button" mat-icon-button class="main-button"
+          <button id="comments-button" mat-icon-button class="main-button"
                   [ngClass]="{'hover': deviceWidth > 500}" [disableRipple]="true"
-                  routerLink="/participant/room/{{ room.shortId }}/comments" aria-labelledby="question_answer">
+                  routerLink="/participant/room/{{ room.shortId }}/comments" aria-labelledby="comments">
             <mat-icon matBadge="{{commentCounter}}" matBadgeColor="primary" class="main-icon"
                       [ngClass]="{'desktop' : deviceWidth > 500}">question_answer
             </mat-icon>
@@ -36,7 +38,7 @@
           </button>
         </mat-grid-tile>
         <mat-grid-tile>
-          <button mat-icon-button class="main-button"
+          <button id="live-feedback-button" mat-icon-button class="main-button" aria-labelledby="live-feedback"
                   [ngClass]="{'hover': deviceWidth > 500}" [disableRipple]="true"
                   routerLink="/participant/room/{{ room.shortId }}/feedback-barometer">
             <mat-icon class="main-icon" [ngClass]="{'desktop' : deviceWidth > 500}">thumbs_up_down</mat-icon>
@@ -44,16 +46,15 @@
           </button>
         </mat-grid-tile>
       </mat-grid-list>
-
       <app-content-groups *ngIf="room && contentGroups" [contentGroups]="contentGroups"></app-content-groups>
+      <p tabindex="-1" id="no-content-groups" class="visually-hidden">
+        {{ 'room-page.a11y-no-content-groups' | translate }}</p>
     </mat-card>
-
   </div>
-  <button id="live_announcer-button" tabIndex="-1" (click)="announce()"
-          class="visually-hidden">{{ 'room-page.live-announcer' | translate }}</button>
 </div>
 
 <div class="visually-hidden">
-  <div id="question_answer">{{'room-page.a11y-question-answer' | translate}}</div>
-  <!--<div id="announcer_text">{{'room-page.a11y-announcer' | translate}}</div>-->
+  <div id="comments">{{'room-page.a11y-comments' | translate}}</div>
+  <div id="live-feedback">{{'room-page.a11y-live-feedback' | translate}}</div>
+  <div id="statistics">{{'room-page.a11y-statistics' | translate}}</div>
 </div>

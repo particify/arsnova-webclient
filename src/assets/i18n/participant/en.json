@@ -89,11 +89,16 @@
     "very-dissatisfied": "I can't keep up."
   },
   "room-page": {
-    "a11y-announcer": "You are now in the session with the key you entered.",
-    "a11y-question-answer": "Opens the page where you can ask comments and vote up or down other comments.",
+    "a11y-room-message": "You're in the session now. To get information about key combinations press the Enter key or call the announcement later with the Escape key.",
+    "a11y-keys": "Press key 1 to go to the comments overview, key 2 to open the user menu, key 3 to go to the live feedback, key 4 to navigate through the question collections, key 5 to navigate to the statistics, key 0 to go to the back button, or key 9 to repeat this announcement.",
+    "a11y-comments": "Opens the page where you can create comments and vote up or down other comments.",
+    "a11y-statistics": "Opens the statistics for the question collections.",
+    "a11y-live-feedback": "Opens the live feedback.",
+    "a11y-content-groups": "In this session there are {{count} Question collections. Tab between them and press Enter to answer the questions of the collection.",
+    "a11y-no-content-groups": "There are no questions in this session yet.",
+    "a11y-enter-content-group": "Opens the content group {{name}}.",
     "answer-statistics": "Statistics",
     "comments": "Comments",
-    "live-announcer": "You're in the session now. To get information about key combinations press the Enter key or call the announcement later with the Escape key.",
     "live-feedback": "Live feedback",
     "no-contents": "There are no questions yet."
   },
