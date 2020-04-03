@@ -3,6 +3,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AuthenticationService } from '../../../services/http/authentication.service';
 import { UserRole } from '../../../models/user-roles.enum';
 import { ContentGroup } from '../../../models/content-group';
+import { KeyboardUtils } from '../../../utils/keyboard';
+import { KeyboardKey } from '../../../utils/keyboard/keys';
 
 
 @Component({
@@ -33,5 +35,11 @@ export class ContentGroupsComponent implements OnInit {
       this.router.navigate([`participant/room/${this.roomShortId}/${contentGroup.name}`]);
     }
     sessionStorage.setItem('lastGroup', JSON.stringify(contentGroup));
+  }
+
+  viewContentsViaEnter(contentGroup: ContentGroup, event) {
+    if (KeyboardUtils.isKeyEvent(event, KeyboardKey.ENTER) === true) {
+      this.viewContents(contentGroup);
+    }
   }
 }

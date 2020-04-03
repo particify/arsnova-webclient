@@ -1,4 +1,4 @@
-import { AfterContentInit, Component, OnDestroy, OnInit, Renderer2 } from '@angular/core';
+import { AfterContentInit, Component, HostListener, OnInit } from '@angular/core';
 import { RoomService } from '../../../services/http/room.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RoomPageComponent } from '../../shared/room-page/room-page.component';
@@ -21,7 +21,7 @@ import { ContentGroup } from '../../../models/content-group';
   templateUrl: './room-creator-page.component.html',
   styleUrls: ['./room-creator-page.component.scss']
 })
-export class RoomCreatorPageComponent extends RoomPageComponent implements OnInit, OnDestroy, AfterContentInit {
+export class RoomCreatorPageComponent extends RoomPageComponent implements OnInit, AfterContentInit {
 
   viewModuleCount = 1;
   moderatorCommentCounter: number;
@@ -37,12 +37,46 @@ export class RoomCreatorPageComponent extends RoomPageComponent implements OnIni
               protected wsCommentService: WsCommentServiceService,
               protected commentService: CommentService,
               private liveAnnouncer: LiveAnnouncer,
-              private _r: Renderer2,
               public eventService: EventService,
               protected contentService: ContentService) {
     super(roomService, route, router, location, wsCommentService, commentService, eventService, contentService, translateService,
       notification);
     langService.langEmitter.subscribe(lang => translateService.use(lang));
+  }
+
+  @HostListener('window:keyup', ['$event'])
+  keyEvent(event: KeyboardEvent) {
+    const focusOnInput = this.eventService.focusOnInput;
+    if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit1) === true && focusOnInput === false) {
+      if (this.moderationEnabled) {
+        document.getElementById('comments-button').focus();
+      } else {
+        document.getElementById('comments-button2').focus();
+      }
+    } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit3) === true && focusOnInput === false) {
+      if (this.moderationEnabled) {
+        document.getElementById('moderation-button').focus();
+      } else {
+        document.getElementById('moderation-disabled').focus();
+      }
+    } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit4) === true && focusOnInput === false) {
+      document.getElementById('content-create-button').focus();
+    } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit5) === true && focusOnInput === false) {
+      document.getElementById('live-feedback-button').focus();
+    } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit6) === true && focusOnInput === false) {
+      if (this.contentGroups.length > 0) {
+        document.getElementById('content-groups').focus();
+      } else {
+        document.getElementById('no-content-groups').focus();
+      }
+    } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit7) === true && focusOnInput === false) {
+      document.getElementById('statistics-button').focus();
+    } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit8) === true && focusOnInput === false) {
+      document.getElementById('settings-button').focus();
+    } else if (
+      KeyboardUtils.isKeyEvent(event, KeyboardKey.Escape) === true && focusOnInput === false) {
+      this.announce();
+    }
   }
 
   ngAfterContentInit(): void {
@@ -57,36 +91,13 @@ export class RoomCreatorPageComponent extends RoomPageComponent implements OnIni
     this.route.params.subscribe(params => {
       this.initializeRoom(params['shortId']);
     });
-    this.listenerFn = this._r.listen(document, 'keyup', (event) => {
-      if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit1) === true && this.eventService.focusOnInput === false) {
-        document.getElementById('question_answer-button').focus();
-      } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit3) === true && this.eventService.focusOnInput === false) {
-        document.getElementById('gavel-button').focus();
-      } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit4) === true && this.eventService.focusOnInput === false) {
-        document.getElementById('settings-menu').focus();
-      } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit8) === true && this.eventService.focusOnInput === false) {
-        this.liveAnnouncer.clear();
-        this.liveAnnouncer.announce('Aktueller Sitzungs-Name: ' + this.room.name + '. ' +
-          'Aktueller Sitzungs-Code: ' + this.room.shortId.slice(0, 8));
-      } else if (
-        KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit9, KeyboardKey.Escape) === true &&
-        this.eventService.focusOnInput === false
-      ) {
-        this.announce();
-      } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Escape) === true && this.eventService.focusOnInput === true) {
-        this.eventService.makeFocusOnInputFalse();
-      }
-    });
   }
 
-  public announce() {
+  announce() {
     this.liveAnnouncer.clear();
-    this.liveAnnouncer.announce('Du befindest dich in der von dir erstellten Sitzung. ' +
-      'Drücke die Taste 1 um auf die Fragen-Übersicht zu gelangen, ' +
-      'die Taste 2 um das Sitzungs-Menü zu öffnen, die Taste 3 um in die Moderationsübersicht zu gelangen, ' +
-      'die Taste 4 um Einstellungen an der Sitzung vorzunehmen, ' +
-      'die Taste 8 um den aktuellen Sitzungs-Code zu hören, die Taste 0 um auf den Zurück-Button zu gelangen, ' +
-      'oder die Taste 9 um diese Ansage zu wiederholen.', 'assertive');
+    this.translateService.get('room-page.a11y-keys').subscribe(msg => {
+      this.liveAnnouncer.announce(msg, 'assertive');
+    });
   }
 
   afterRoomLoadHook() {
