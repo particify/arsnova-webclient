@@ -1,7 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { HomePageComponent } from './home-page.component';
-import { Injectable, Renderer2, Component } from '@angular/core';
+import { Injectable, Renderer2, Component, Input } from '@angular/core';
 import { EventService } from '../../../services/util/event.service';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { MatDialog } from '@angular/material/dialog';
@@ -53,7 +53,9 @@ class MockMatDialog {
 }
 
 @Component({ selector: 'app-room-join', template: '' })
-class RoomJoinStubComponent {}
+class RoomJoinStubComponent {
+  @Input() inputA11yString;
+}
 
 @Component({ selector: 'mat-icon', template: '' })
 class MatIconStubComponent {}

@@ -1,7 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { RoomJoinComponent } from './room-join.component';
-import { Injectable, Component } from '@angular/core';
+import { Injectable, Component, Input } from '@angular/core';
 import { TranslateService, TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { RoomService } from '../../../services/http/room.service';
 import { Router } from '@angular/router';
@@ -73,6 +73,12 @@ class MatFormFieldStubComponent { }
 @Component({ selector: 'mat-error', template: '' })
 class MatErrorStubComponent { }
 
+@Component({ selector: 'input', template: '' })
+class InputStubComponent {
+  @Input() formControl;
+  @Input() errorStateMatcher;
+}
+
 describe('RoomJoinComponent', () => {
   let component: RoomJoinComponent;
   let fixture: ComponentFixture<RoomJoinComponent>;
@@ -84,7 +90,8 @@ describe('RoomJoinComponent', () => {
         MatIconStubComponent,
         MatPlaceholderStubComponent,
         MatFormFieldStubComponent,
-        MatErrorStubComponent
+        MatErrorStubComponent,
+        InputStubComponent
       ],
       providers: [
         {

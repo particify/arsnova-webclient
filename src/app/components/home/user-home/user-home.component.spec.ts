@@ -71,7 +71,9 @@ class MockRenderer2 {
 }
 
 @Component({ selector: 'app-room-join', template: '' })
-class RoomJoinStubComponent { }
+class RoomJoinStubComponent {
+  @Input() inputA11yString;
+}
 
 @Component({ selector: 'app-room-list', template: '' })
 class RoomListStubComponent {
