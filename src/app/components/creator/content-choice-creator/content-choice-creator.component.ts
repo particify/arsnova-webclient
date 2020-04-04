@@ -3,12 +3,12 @@ import { AnswerOption } from '../../../models/answer-option';
 import { ContentChoice } from '../../../models/content-choice';
 import { ContentService } from '../../../services/http/content.service';
 import { NotificationService } from '../../../services/util/notification.service';
-import { MatDialog } from '@angular/material/dialog';
 import { ContentType } from '../../../models/content-type.enum';
 import { TranslateService } from '@ngx-translate/core';
 import { EventService } from '../../../services/util/event.service';
 import { RoomService } from '../../../services/http/room.service';
 import { ContentCreatePageComponent } from '../content-create-page/content-create-page.component';
+import { DialogService } from '../../../services/util/dialog.service';
 
 export class DisplayAnswer {
   answerOption: AnswerOption;
@@ -60,7 +60,7 @@ export class ContentChoiceCreatorComponent implements OnInit {
 
   constructor(private contentService: ContentService,
               private notificationService: NotificationService,
-              public dialog: MatDialog,
+              public dialogService: DialogService,
               private translationService: TranslateService,
               public eventService: EventService,
               private roomService: RoomService) {
@@ -116,6 +116,7 @@ export class ContentChoiceCreatorComponent implements OnInit {
       this.newAnswerOptionChecked = false;
       this.newAnswerOptionLabel = '';
       this.fillCorrectAnswers();
+      document.getElementById('answer-input').focus();
     } else {
       this.translationService.get('content.max-answers').subscribe(msg => {
         this.notificationService.show(msg);
@@ -208,6 +209,15 @@ export class ContentChoiceCreatorComponent implements OnInit {
     this.saveChanges(index, answer, false);
   }
 
+  openResetDialog($event) {
+    const dialogRef = this.dialogService.openResetDialog('really-reset-form');
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === 'reset') {
+        this.reset($event);
+      }
+    });
+  }
+
   reset($event) {
     this.resetP.emit(true);
     $event.preventDefault();
@@ -221,6 +231,7 @@ export class ContentChoiceCreatorComponent implements OnInit {
       this.notificationService.show(message);
     });
     this.leaveEditMode();
+    document.getElementById('subject-input').focus();
   }
 
   resetAfterSubmit() {
@@ -279,6 +290,7 @@ export class ContentChoiceCreatorComponent implements OnInit {
       }
       ContentCreatePageComponent.saveGroupInSessionStorage(this.contentCol);
       this.resetAfterSubmit();
+      document.getElementById('subject-input').focus();
     });
   }
 }
