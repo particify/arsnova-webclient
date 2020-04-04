@@ -47,20 +47,6 @@ export class DialogService {
     });
   }
 
-  openResetDialog(body: string): MatDialogRef<YesNoDialogComponent> {
-    return this.dialog.open(YesNoDialogComponent, {
-      width: this.size.small,
-      data: {
-        section: 'dialog',
-        headerLabel: 'sure',
-        body: body,
-        confirmLabel: 'reset',
-        abortLabel: 'cancel',
-        type: 'button-warn'
-      }
-    });
-  }
-
   openInfoDialog(section: string, body: string): void {
     this.dialog.open(InfoDialogComponent, {
       'width': '80%',

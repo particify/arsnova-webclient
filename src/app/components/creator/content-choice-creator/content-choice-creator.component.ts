@@ -8,7 +8,8 @@ import { TranslateService } from '@ngx-translate/core';
 import { EventService } from '../../../services/util/event.service';
 import { RoomService } from '../../../services/http/room.service';
 import { ContentCreatePageComponent } from '../content-create-page/content-create-page.component';
-import { DialogService } from '../../../services/util/dialog.service';
+import { YesNoDialogComponent } from '../../shared/_dialogs/yes-no-dialog/yes-no-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 
 export class DisplayAnswer {
   answerOption: AnswerOption;
@@ -60,7 +61,7 @@ export class ContentChoiceCreatorComponent implements OnInit {
 
   constructor(private contentService: ContentService,
               private notificationService: NotificationService,
-              public dialogService: DialogService,
+              public dialog: MatDialog,
               private translationService: TranslateService,
               public eventService: EventService,
               private roomService: RoomService) {
@@ -210,7 +211,17 @@ export class ContentChoiceCreatorComponent implements OnInit {
   }
 
   openResetDialog($event) {
-    const dialogRef = this.dialogService.openResetDialog('really-reset-form');
+    const dialogRef = this.dialog.open(YesNoDialogComponent, {
+      width: '350px',
+      data: {
+        section: 'dialog',
+        headerLabel: 'sure',
+        body: 'really-reset-form',
+        confirmLabel: 'reset',
+        abortLabel: 'cancel',
+        type: 'button-warn'
+      }
+    });
     dialogRef.afterClosed().subscribe(result => {
       if (result === 'reset') {
         this.reset($event);
