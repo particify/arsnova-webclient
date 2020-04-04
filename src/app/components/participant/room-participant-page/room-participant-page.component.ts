@@ -1,4 +1,4 @@
-import { AfterContentInit, Component, OnDestroy, OnInit, Renderer2 } from '@angular/core';
+import { AfterContentInit, Component, HostListener, OnInit } from '@angular/core';
 import { Room } from '../../../models/room';
 import { User } from '../../../models/user';
 import { UserRole } from '../../../models/user-roles.enum';
@@ -23,7 +23,7 @@ import { NotificationService } from '../../../services/util/notification.service
   templateUrl: './room-participant-page.component.html',
   styleUrls: ['./room-participant-page.component.scss']
 })
-export class RoomParticipantPageComponent extends RoomPageComponent implements OnInit, OnDestroy, AfterContentInit {
+export class RoomParticipantPageComponent extends RoomPageComponent implements OnInit, AfterContentInit {
 
   room: Room;
   user: User;
@@ -40,16 +40,37 @@ export class RoomParticipantPageComponent extends RoomPageComponent implements O
               protected contentService: ContentService,
               protected authenticationService: AuthenticationService,
               private liveAnnouncer: LiveAnnouncer,
-              private _r: Renderer2,
               public eventService: EventService) {
     super(roomService, route, router, location, wsCommentService, commentService, eventService, contentService, translateService,
       notificationService);
     langService.langEmitter.subscribe(lang => translateService.use(lang));
   }
 
+  @HostListener('window:keyup', ['$event'])
+  keyEvent(event: KeyboardEvent) {
+    const focusOnInput = this.eventService.focusOnInput;
+    if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit1) === true && focusOnInput === false) {
+      document.getElementById('comments-button').focus();
+    } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit3) === true && focusOnInput === false) {
+      document.getElementById('live-feedback-button').focus();
+    } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit4) === true && focusOnInput === false) {
+      if (this.contentGroups.length > 0) {
+        document.getElementById('content-groups').focus();
+      } else {
+        document.getElementById('no-content-groups').focus();
+      }
+    } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit5) === true && focusOnInput === false) {
+      document.getElementById('statistics-button').focus();
+    } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit9, KeyboardKey.Escape) === true && focusOnInput === false) {
+      this.announce();
+    } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Escape) === true && focusOnInput === true) {
+      this.eventService.makeFocusOnInputFalse();
+    }
+  }
+
   ngAfterContentInit(): void {
     setTimeout(() => {
-      document.getElementById('live_announcer-button').focus();
+      document.getElementById('live-announcer-button').focus();
     }, 700);
   }
 
@@ -59,29 +80,13 @@ export class RoomParticipantPageComponent extends RoomPageComponent implements O
       this.initializeRoom(params['shortId']);
     });
     this.translateService.use(localStorage.getItem('currentLang'));
-    this.listenerFn = this._r.listen(document, 'keyup', (event) => {
-      if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit1) === true && this.eventService.focusOnInput === false) {
-        document.getElementById('question_answer-button').focus();
-      } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit8) === true && this.eventService.focusOnInput === false) {
-        this.liveAnnouncer.clear();
-        this.liveAnnouncer.announce('Aktueller Sitzungs-Code:' + this.room.shortId.slice(0, 8));
-      } else if (
-        KeyboardUtils.isKeyEvent(event, KeyboardKey.Escape, KeyboardKey.Digit9) === true && this.eventService.focusOnInput === false
-      ) {
-        this.announce();
-      } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Escape) === true && this.eventService.focusOnInput === true) {
-        document.getElementById('question_answer-button').focus();
-        this.eventService.makeFocusOnInputFalse();
-      }
-    });
   }
 
   public announce() {
     this.liveAnnouncer.clear();
-    this.liveAnnouncer.announce('Du befindest dich in der Sitzung mit dem von dir eingegebenen Sitzungs-Code. ' +
-      'Drücke die Taste 1 um eine Frage zu stellen, die Taste 2 für das Sitzungs-Menü, ' +
-      'die Taste 8 um den aktuellen Sitzungs-Code zu hören, die Taste 0 um auf den Zurück-Button zu gelangen, ' +
-      'oder die Taste 9 um diese Ansage zu wiederholen.', 'assertive');
+    this.translateService.get('room-page.a11y-keys').subscribe(msg => {
+      this.liveAnnouncer.announce(msg, 'assertive');
+    });
   }
 
   afterRoomLoadHook() {

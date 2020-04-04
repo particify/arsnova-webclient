@@ -32,7 +32,6 @@ export class RoomPageComponent implements OnInit, OnDestroy {
   protected moderationEnabled = false;
   protected sub: Subscription;
   protected commentWatch: Observable<IMessage>;
-  protected listenerFn: () => void;
   protected noGroups = true;
 
   constructor(protected roomService: RoomService,
@@ -55,7 +54,6 @@ export class RoomPageComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.listenerFn();
     this.eventService.makeFocusOnInputFalse();
     if (this.sub) {
       this.sub.unsubscribe();

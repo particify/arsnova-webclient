@@ -89,11 +89,16 @@
     "very-dissatisfied": "Ich wurde abgehängt."
   },
   "room-page": {
-    "a11y-announcer": "Du befindest dich nun in der Sitzung mit dem von dir eingegebenen Sitzungs-Code.",
-    "a11y-question-answer": "Öffnet die Kommentar-Seite und bietet dir die Möglichkeit, Kommentare zu stellen.",
+    "a11y-room-message": "Du befindest dich jetzt in der Sitzung. Um Informationen zu Tastenkombinationen zu erhalten drücke jetzt die Enter-Taste oder rufe die Ansage zu einem späteren Zeitpunkt mit der Escape-Taste auf.",
+    "a11y-keys": "Drücke die Taste 1 um auf die Kommentar-Übersicht zu gelangen, die Taste 2 um das Nutzer-Menü zu öffnen, die Taste 3 um zum Live Feedback zu gelangen, die Taste 4 um durch die Fragensammlungen zu navigieren, die Taste 5 um zu den Statistiken zu navigieren, die Taste 0 um auf den Zurück-Button zu gelangen, oder die Taste 9 um diese Ansage zu wiederholen.",
+    "a11y-comments": "Öffnet die Kommentar-Seite und bietet dir die Möglichkeit, Kommentare zu erstellen.",
+    "a11y-statistics": "Öffnet die Statistiken zu den Frage-Sammlungen.",
+    "a11y-live-feedback": "Öffnet das Live Feedback.",
+    "a11y-content-groups": "In dieser Sitzung gibt es {{count}} Frage-Sammlungen. Navigiere mit Tab zwischen ihnen und drücke Enter um die Fragen der Sammlung zu beantworten.",
+    "a11y-no-content-groups": "In dieser Sitzung sind noch keine Fragen vorhanden.",
+    "a11y-enter-content-group": "Öffnet die Fragesammlung {{name}}.",
     "answer-statistics": "Statistiken",
     "comments": "Kommentare",
-    "live-announcer": "Du befindest dich jetzt in der Sitzung. Um Informationen zu Tastenkombinationen zu erhalten drücke jetzt die Enter-Taste oder rufe die Ansage zu einem späteren Zeitpunkt mit der Escape-Taste auf.",
     "live-feedback": "Live Feedback",
     "no-contents": "Es sind noch keine Fragen vorhanden."
   },

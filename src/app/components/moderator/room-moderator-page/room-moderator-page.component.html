@@ -1,5 +1,7 @@
 <div fxLayout="column" fxLayoutAlign="center" fxLayoutGap="20px" fxFill>
   <div fxLayout="row" fxLayoutAlign="center">
+    <button id="live_announcer-button" tabIndex="-1" (click)="announce()"
+            class="visually-hidden">{{ 'room-page.a11y-moderator-message' | translate: {session: room.name} }}</button>
     <app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
     <mat-card *ngIf="room">
       <div fxLayout="row">
@@ -22,7 +24,7 @@
       <div fxLayout="column" fxLayoutAlign="center" fxLayoutGap="20px">
         <mat-grid-list cols="{{viewModuleCount}}" rowHeight="1:1" *ngIf="viewModuleCount > 1 && this.moderationEnabled">
           <mat-grid-tile>
-            <button id="question_answer-button" mat-icon-button
+            <button id="comments-button" mat-icon-button aria-labelledby="comments"
                     [ngClass]="{'hover': deviceWidth > 500}" [disableRipple]="true"
                     routerLink="/moderator/room/{{ room.shortId }}/comments">
               <mat-icon matBadge="{{commentCounter}}" class="main-icon"
@@ -32,7 +34,8 @@
             </button>
           </mat-grid-tile>
           <mat-grid-tile *ngIf="moderationEnabled">
-            <button id="gavel-button" mat-icon-button [ngClass]="{'hover': deviceWidth > 500}" [disableRipple]="true"
+            <button id="moderation-button" mat-icon-button aria-labelledby="moderation"
+                    [ngClass]="{'hover': deviceWidth > 500}" [disableRipple]="true"
                     routerLink="/moderator/room/{{ room.shortId }}/moderator/comments">
               <mat-icon matBadge="{{moderatorCommentCounter}}" class="main-icon"
                         [ngClass]="{'desktop' : deviceWidth > 500}">gavel
@@ -41,10 +44,12 @@
             </button>
           </mat-grid-tile>
         </mat-grid-list>
+        <p tabindex="-1" id="moderation-disabled" class="visually-hidden">
+          {{ 'room-page.a11y-moderation-disabled' | translate }}</p>
         <div fxLayout="row" fxLayoutAlign="center" *ngIf="!this.moderationEnabled" class="question-button-div">
-          <button id="question_answer-button2" mat-icon-button
+          <button id="comments-button2" mat-icon-button aria-labelledby="comments"
                   [ngClass]="{'hover': deviceWidth > 500}" [disableRipple]="true"
-                  routerLink="/moderator/room/{{ room.shortId }}/comments" aria-labelledby="question_answer">
+                  routerLink="/moderator/room/{{ room.shortId }}/comments">
             <mat-icon matBadge="{{commentCounter}}" class="main-icon"
                       [ngClass]="{'desktop' : deviceWidth > 500}">question_answer
             </mat-icon>
@@ -55,6 +60,9 @@
     </mat-card>
 
   </div>
-  <button id="live_announcer-button" tabIndex="-1" (click)="announce()"
-          class="visually-hidden">{{ 'room-page.live-announcer' | translate }}</button>
+</div>
+
+<div class="visually-hidden">
+  <div id="comments">{{'room-page.a11y-comments' | translate}}</div>
+  <div id="moderation">{{'room-page.a11y-moderation' | translate}}</div>
 </div>

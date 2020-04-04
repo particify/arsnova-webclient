@@ -1,4 +1,4 @@
-import { AfterContentInit, Component, OnDestroy, OnInit, Renderer2 } from '@angular/core';
+import { AfterContentInit, Component, HostListener, OnInit } from '@angular/core';
 import { Room } from '../../../models/room';
 import { RoomPageComponent } from '../../shared/room-page/room-page.component';
 import { Location } from '@angular/common';
@@ -21,7 +21,7 @@ import { KeyboardKey } from '../../../utils/keyboard/keys';
   templateUrl: './room-moderator-page.component.html',
   styleUrls: ['./room-moderator-page.component.scss']
 })
-export class RoomModeratorPageComponent extends RoomPageComponent implements OnInit, OnDestroy, AfterContentInit {
+export class RoomModeratorPageComponent extends RoomPageComponent implements OnInit, AfterContentInit {
 
   room: Room;
   moderatorCommentCounter: number;
@@ -38,11 +38,50 @@ export class RoomModeratorPageComponent extends RoomPageComponent implements OnI
               protected contentService: ContentService,
               protected notification: NotificationService,
               public eventService: EventService,
-              private liveAnnouncer: LiveAnnouncer,
-              private _r: Renderer2) {
+              private liveAnnouncer: LiveAnnouncer) {
     super(roomService, route, router, location, wsCommentService, commentService, eventService, contentService, translateService,
       notification);
     langService.langEmitter.subscribe(lang => translateService.use(lang));
+  }
+
+  @HostListener('window:keyup', ['$event'])
+  keyEvent(event: KeyboardEvent) {
+    const focusOnInput = this.eventService.focusOnInput;
+    if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit1) === true && focusOnInput === false) {
+      if (this.moderationEnabled) {
+        document.getElementById('comments-button').focus();
+      } else {
+        document.getElementById('comments-button2').focus();
+      }
+    } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit3) === true && focusOnInput === false) {
+      if (this.moderationEnabled) {
+        document.getElementById('moderation-button').focus();
+      } else {
+        document.getElementById('moderation-disabled').focus();
+      }
+    } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Escape) === true && focusOnInput === false) {
+      this.announce();
+    }
+  }
+
+  ngAfterContentInit(): void {
+    setTimeout(() => {
+      document.getElementById('live_announcer-button').focus();
+    }, 700);
+  }
+
+  ngOnInit() {
+    window.scroll(0, 0);
+    this.route.params.subscribe(params => {
+      this.initializeRoom(params['shortId']);
+    });
+    this.translateService.use(localStorage.getItem('currentLang'));
+  }
+
+  public announce() {
+    this.translateService.get('room-page.a11y-moderator-keys').subscribe(msg => {
+      this.liveAnnouncer.announce(msg, 'assertive');
+    });
   }
 
   initializeRoom(id: string): void {
@@ -89,64 +128,6 @@ export class RoomModeratorPageComponent extends RoomPageComponent implements OnI
           }
         }
       });
-    });
-  }
-
-  ngAfterContentInit(): void {
-    setTimeout(() => {
-      document.getElementById('live_announcer-button').focus();
-    }, 700);
-  }
-
-  ngOnInit() {
-    window.scroll(0, 0);
-    this.route.params.subscribe(params => {
-      this.initializeRoom(params['shortId']);
-    });
-    this.translateService.use(localStorage.getItem('currentLang'));
-    this.listenerFn = this._r.listen(document, 'keyup', (event) => {
-      if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit1) === true && this.eventService.focusOnInput === false) {
-        document.getElementById('question_answer-button').focus();
-      } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit3) === true && this.eventService.focusOnInput === false) {
-        document.getElementById('gavel-button').focus();
-      } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit8) === true && this.eventService.focusOnInput === false) {
-        this.liveAnnouncer.clear();
-        this.liveAnnouncer.announce('Aktueller Sitzungs-Name: ' + this.room.name + '. ' +
-          'Aktueller Sitzungs-Code: ' + this.room.shortId.slice(0, 8));
-      } else if (
-        KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit9, KeyboardKey.Escape) === true &&
-        this.eventService.focusOnInput === false) {
-        this.announce();
-      } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Escape) === true && this.eventService.focusOnInput === true) {
-        this.eventService.makeFocusOnInputFalse();
-        document.getElementById('question_answer-button').focus();
-      }
-    });
-  }
-
-  public announce() {
-    this.liveAnnouncer.announce('Du befindest dich in der Sitzung in der du als Moderator gewählt wurdest. ' +
-      'Drücke die Taste 1 um auf die Fragen-Übersicht zu gelangen, ' +
-      'die Taste 2 um das Sitzungs-Menü zu öffnen, die Taste 3 um in die Moderationsübersicht zu gelangen, ' +
-      'die Taste 4 um Einstellungen an der Sitzung vorzunehmen, ' +
-      'die Taste 8 um den aktuellen Sitzungs-Code zu hören, die Taste 0 um auf den Zurück-Button zu gelangen, ' +
-      'oder die Taste 9 um diese Ansage zu wiederholen.', 'assertive');
-  }
-
-  copyShortId(): void {
-    const selBox = document.createElement('textarea');
-    selBox.style.position = 'fixed';
-    selBox.style.left = '0';
-    selBox.style.top = '0';
-    selBox.style.opacity = '0';
-    selBox.value = this.room.shortId;
-    document.body.appendChild(selBox);
-    selBox.focus();
-    selBox.select();
-    document.execCommand('copy');
-    document.body.removeChild(selBox);
-    this.translateService.get('room-page.session-id-copied').subscribe(msg => {
-      this.notification.show(msg, '', { duration: 2000 });
     });
   }
 }
