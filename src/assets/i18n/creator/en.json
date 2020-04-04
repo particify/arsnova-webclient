@@ -90,6 +90,16 @@
     "vote-up": "Vote up"
   },
   "content": {
+    "a11y-content-create-message": "You can now create a new question. Press the Enter key to get information about key combinations or call up the announcement later via the Escape key.",
+    "a11y-content-create-keys": "Press key 1 to enter the topic of your new question, key 2 to enter the user menu, key 3 to change the question format, key 0 to return to the session view or the escape key to repeat this announcement.",
+    "a11y-enter-subject": "Enter the topic of the question here and then press Tab twice to enter the question.",
+    "a11y-enter-body": "Enter the question here and then press Tab to get to the selection of the question collection. Note: This text field supports text formatting with markdown.",
+    "a11y-enter-content-group": "Use the arrow keys to select one of your content groups or crate a new one by entering.",
+    "a11y-format-choice": "Select the format 'Choice'.",
+    "a11y-format-likert": "Select the format 'Likert'.",
+    "a11y-format-yesno": "Select the format 'Yes / No'.",
+    "a11y-format-text": "Select the format 'Text'.",
+    "a11y-format-info": "You can choose between the four different question formats 'Choice', 'Likert', 'Yes/No' and 'Text'. Use the arrow keys to switch between the formats.",
     "abort": "Abort",
     "answer": "Answer",
     "answer-deleted": "Answer deleted.",

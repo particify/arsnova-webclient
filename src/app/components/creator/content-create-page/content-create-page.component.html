@@ -1,20 +1,27 @@
 <div fxLayout="row" fxLayoutAlign="center">
   <div fxLayout="column" fxLayoutAlign="center center">
+    <div class="visually-hidden">
+      <button id="message-announcer-button" tabIndex="-1" (click)="announce()">
+        {{ 'content.a11y-content-create-message' | translate }}</button>
+      <button id="keys-announcer-button" tabIndex="-1" (click)="announce()">
+        {{ 'content.a11y-content-create-keys' | translate }}</button>
+    </div>
     <form>
       <mat-form-field class="input-block">
         <input (focus)="eventService.makeFocusOnInputTrue()" (blur)="eventService.makeFocusOnInputFalse()"
-               matInput #subject [(ngModel)]="content.subject" placeholder="{{'content.subject' | translate}}"
-               name="subject" maxlength="40">
+               matInput #subject [(ngModel)]="content.subject" name="subject" maxlength="40" id="subject-input"
+               aria-labelledby="subject">
+        <mat-placeholder>{{ 'content.subject' | translate }}</mat-placeholder>
       </mat-form-field>
       <mat-tab-group [dynamicHeight]=true>
-        <mat-tab label="{{'content.body' | translate}}">
+        <mat-tab label="{{ 'content.body' | translate }}">
           <mat-form-field class="input-block">
             <textarea (focus)="eventService.makeFocusOnInputTrue()" (blur)="eventService.makeFocusOnInputFalse()"
-                  matInput #body [(ngModel)]="content.body" name="body"
+                  matInput #body [(ngModel)]="content.body" name="body" aria-labelledby="body"
                   matTextareaAutosize matAutosizeMinRows="3" matAutosizeMaxRows="8" maxlength="250"></textarea>
           </mat-form-field>
         </mat-tab>
-        <mat-tab label="{{'session.preview' | translate}}" [disabled]="!body.value">
+        <mat-tab label="{{ 'session.preview' | translate }}" [disabled]="!body.value">
           <div fxLayout="row">
             <markdown [data]="body.value"></markdown>
             <span class="fill-remaining-space"></span>
@@ -29,8 +36,8 @@
         <mat-form-field class="group">
           <input (focus)="eventService.makeFocusOnInputTrue()" (blur)="eventService.makeFocusOnInputFalse()"
                  matInput #group [formControl]="myControl" [matAutocomplete]="auto" maxlength="25"
-                 placeholder="{{'content.collection' | translate}}"
-                 [(ngModel)]="lastCollection"/>
+                 aria-labelledby="content-group" [(ngModel)]="lastCollection"/>
+          <mat-placeholder>{{ 'content.collection' | translate }}</mat-placeholder>
           <mat-autocomplete #auto="matAutocomplete">
             <mat-option *ngFor="let collection of contentGroups" [value]="collection">
               {{collection}}
@@ -38,33 +45,45 @@
           </mat-autocomplete>
         </mat-form-field>
         <span class="fill-remaining-space"></span>
-        <button mat-icon-button #tt="matTooltip" matTooltip="{{ 'content.format-info' | translate }}"
-                (click)="tt.toggle()">
+        <button mat-icon-button #tt="matTooltip" id="format-info-button" matTooltip="{{ 'content.format-info' | translate }}"
+                (click)="tt.toggle()" aria-labelledby="format-info">
           <mat-icon class="info-icon">info</mat-icon>
         </button>
       </div>
     </form>
-    <mat-tab-group class="formats" [dynamicHeight]=true [disablePagination]=true>
-      <mat-tab label="Choice">
-        <app-content-choice-creator (resetP)="resetInputs()"
+    <div>
+      <mat-tab-group class="formats" [dynamicHeight]=true [disablePagination]=true>
+        <mat-tab label="Choice" aria-labelledby="format-choice">
+          <app-content-choice-creator (resetP)="resetInputs()"
+                                      [contentSub]="subject.value" [contentBod]="body.value" [contentCol]="group.value">
+          </app-content-choice-creator>
+        </mat-tab>
+        <mat-tab label="Likert" aria-labelledby="format-likert">
+          <app-content-likert-creator (reset)="resetInputs()"
+                                      [contentSub]="subject.value" [contentBod]="body.value" [contentCol]="group.value">
+          </app-content-likert-creator>
+        </mat-tab>
+        <mat-tab label="{{ 'content.yes' | translate }} / {{ 'content.no' | translate }}" aria-labelledby="format-yesno">
+          <app-content-yes-no-creator (reset)="resetInputs()"
+                                      [contentSub]="subject.value" [contentBod]="body.value" [contentCol]="group.value">
+          </app-content-yes-no-creator>
+        </mat-tab>
+        <mat-tab label="Text" aria-labelledby="format-text">
+          <app-content-text-creator (reset)="resetInputs()"
                                     [contentSub]="subject.value" [contentBod]="body.value" [contentCol]="group.value">
-        </app-content-choice-creator>
-      </mat-tab>
-      <mat-tab label="Likert">
-        <app-content-likert-creator (reset)="resetInputs()"
-                                    [contentSub]="subject.value" [contentBod]="body.value" [contentCol]="group.value">
-        </app-content-likert-creator>
-      </mat-tab>
-      <mat-tab label="{{ 'content.yes' | translate }} / {{ 'content.no' | translate }}">
-        <app-content-yes-no-creator (reset)="resetInputs()"
-                                    [contentSub]="subject.value" [contentBod]="body.value" [contentCol]="group.value">
-        </app-content-yes-no-creator>
-      </mat-tab>
-      <mat-tab label="Text">
-        <app-content-text-creator (reset)="resetInputs()"
-                                  [contentSub]="subject.value" [contentBod]="body.value" [contentCol]="group.value">
-        </app-content-text-creator>
-      </mat-tab>
-    </mat-tab-group>
+          </app-content-text-creator>
+        </mat-tab>
+      </mat-tab-group>
+    </div>
   </div>
+</div>
+
+<div class="visually-hidden">
+  <div id="subject">{{ 'content.a11y-enter-subject' | translate }}</div>
+  <div id="body">{{ 'content.a11y-enter-body' | translate }}</div>
+  <div id="format-choice">{{ 'content.a11y-format-choice' | translate }}</div>
+  <div id="format-likert">{{ 'content.a11y-format-likert' | translate }}</div>
+  <div id="format-yesno">{{ 'content.a11y-format-yesno' | translate }}</div>
+  <div id="format-text">{{ 'content.a11y-format-text' | translate }}</div>
+  <div id="format-info">{{ 'content.a11y-format-info' | translate }}</div>
 </div>

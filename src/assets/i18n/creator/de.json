@@ -90,6 +90,16 @@
     "vote-up": "Kommentar aufwerten"
   },
   "content": {
+    "a11y-content-create-message": "Du kannst jetzt eine neue Frage erstellen. Drücke die Enter Taste um Informationen über Tastenkombinationen zu erhalten oder rufe die Ansage später über die Escape Taste auf.",
+    "a11y-content-create-keys": "Drücke die Taste 1 um das Thema deiner neuen Frage einzugeben, die Taste 2 um ins Nutzer-Menü zu gelangen, die Taste 3 um das Frageformat zu ändern, die Taste 0 um zur Sitzungsübersicht zurückzukehren oder die Escape Taste um diese Ansage zu widerholen.",
+    "a11y-enter-subject": "Gib hier das Thema der Frage ein und drücke danach zwei mal Tab um zur Eingabe der Frage zu gelangen.",
+    "a11y-enter-body": "Gib hier die Frage ein und drücke danach Tab um zur Auswahl der Fragesammlung zu gelangen. Hinweis: In diesem Textfeld wird Textformatierung mit markdown unterstützt.",
+    "a11y-enter-content-group": "Benutze die Pfeiltasten um eine deiner Sammlungen auszuwählen oder gib eine neue Sammlung ein.",
+    "a11y-format-choice": "Wählt das Format 'Choice' aus.",
+    "a11y-format-likert": "Wählt das Format 'Likert' aus.",
+    "a11y-format-yesno": "Wählt das Format 'Ja / Nein' aus.",
+    "a11y-format-text": "Wählt das Format 'Text' aus.",
+    "a11y-format-info": "Du kannst zwischen den vier verschiedenen Frageformaten 'Choice', 'Likert', 'Ja/Nein' und 'Text' wählen. Nutze die Pfeiltasten um zwischen den Formaten zu wechseln.",
     "abort": "Abbrechen",
     "answer": "Antwort",
     "answer-deleted": "Antwort gelöscht.",
