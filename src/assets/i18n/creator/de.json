@@ -107,6 +107,8 @@
     "a11y-format-info": "Du kannst zwischen den vier verschiedenen Frageformaten 'Choice', 'Likert', 'Ja/Nein' und 'Text' wählen. Nutze die Pfeiltasten um zwischen den Formaten zu wechseln.",
     "a11y-single-choice": "Momentan hast du was Format Single-Choice ausgewählt. Wechsle zu Multiple-Choice mit den Pfeiltasten.",
     "a11y-multiple-choice": "Momentan hast du was Format Multiple-Choice ausgewählt. Wechsle zu Single-Choice mit den Pfeiltasten.",
+    "a11y-answer-yes": "Momentan ist die Frage mit 'Ja' beantwortet. Wechsle zu 'Nein' mit den Pfeiltasten.",
+    "a11y-answer-no": "Momentan ist die Frage mit 'Nein' beantwortet. Wechsle zu 'Ja' mit den Pfeiltasten.",
     "a11y-reset": "Setzt alle Eingaben zurück.",
     "a11y-submit": "Erstellt die eingegebene Frage mit des Themas {{subject}}.",
     "abort": "Abbrechen",

@@ -1,14 +1,21 @@
 <form (ngSubmit)="submitContent()">
   <mat-radio-group [(ngModel)]="yesno" [ngModelOptions]="{standalone: true}" fxLayout="row" fxLayoutAlign="center"
                    fxLayoutGap="20px">
-    <mat-radio-button [value]=true [checked]=true>
+    <mat-radio-button [value]=true [checked]=true aria-labelledby="answer-yes">
       {{ 'content.yes' | translate }}
     </mat-radio-button>
-    <mat-radio-button [value]=false [checked]=false>
+    <mat-radio-button [value]=false [checked]=false aria-labelledby="answer-no">
       {{ 'content.no' | translate }}
     </mat-radio-button>
   </mat-radio-group>
   <div fxLayout="row" fxLayoutAlign="center" fxLayoutGap="25px">
-    <button mat-raised-button type="submit" class="button-primary">{{ 'content.create' | translate }}</button>
+    <button mat-raised-button type="submit" class="button-primary"
+            attr.aria-label="{{ 'content.a11y-submit' | translate: {subject: contentSub} }}">
+      {{ 'content.create' | translate }}</button>
   </div>
 </form>
+
+<div class="visually-hidden">
+  <div id="answer-yes">{{ 'content.a11y-answer-yes' | translate }}</div>
+  <div id="answer-no">{{ 'content.a11y-answer-no' | translate }}</div>
+</div>
