@@ -104,7 +104,7 @@
     "a11y-format-likert": "Select the format 'Likert'.",
     "a11y-format-yesno": "Select the format 'Yes / No'.",
     "a11y-format-text": "Select the format 'Text'.",
-    "a11y-format-info": "You can choose between the four different question formats 'Choice', 'Likert', 'Yes/No' and 'Text'. Use the arrow keys to switch between the formats.",
+    "a11y-format-info": "You can choose between the four different question formats, 'Choice', 'Likert', 'Yes/No' and 'Text'. Use the arrow keys to switch between the formats.",
     "a11y-single-choice": "At the moment you have chosen a format Single-Choice. Switch to multiple-choice with the arrow keys.",
     "a11y-multiple-choice": "Right now you've chosen something format multiple choice. Switch to Single-Choice with the arrow keys.",
     "a11y-reset": "Resets all entries.",

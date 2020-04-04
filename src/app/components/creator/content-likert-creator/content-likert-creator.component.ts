@@ -107,6 +107,7 @@ export class ContentLikertCreatorComponent implements OnInit {
       }
       ContentCreatePageComponent.saveGroupInSessionStorage(this.contentCol);
       this.resetAfterSubmit();
+      document.getElementById('subject-input').focus();
     });
   }
 }
