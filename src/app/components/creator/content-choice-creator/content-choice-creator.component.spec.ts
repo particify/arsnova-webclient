@@ -10,6 +10,7 @@ import { EventService } from '../../../services/util/event.service';
 import { RoomService } from '../../../services/http/room.service';
 import { Observable, of } from 'rxjs';
 import { FormsModule } from '@angular/forms';
+import { DialogService } from '../../../services/util/dialog.service';
 
 const TRANSLATION_DE = require('../../../../assets/i18n/home/de.json');
 const TRANSLATION_EN = require('../../../../assets/i18n/home/en.json');
@@ -53,6 +54,11 @@ class MockEventService {
 
 @Injectable()
 class MockRoomService {
+
+}
+
+@Injectable()
+class MockDialogService {
 
 }
 
@@ -110,6 +116,10 @@ describe('ContentChoiceCreatorComponent', () => {
         InputStubComponent
       ],
       providers: [
+        {
+          provide: DialogService,
+          useClass: MockDialogService
+        },
         {
           provide: ContentService,
           useClass: MockContentService
