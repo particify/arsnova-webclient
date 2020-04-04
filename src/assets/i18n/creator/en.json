@@ -268,5 +268,12 @@
     "content": "Content",
     "percentage": "Percentage",
     "answer-indicator": "Shows the correct answers"
+  },
+  "dialog": {
+    "sure": "Are you sure?",
+    "cancel": "Cancel",
+    "cancel-description": "Cancels the current process and closes the dialog.",
+    "reset": "Reset",
+    "really-reset-form": "Do you really want to reset all inputs?"
   }
 }

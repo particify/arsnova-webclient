@@ -268,5 +268,12 @@
     "content": "Frage",
     "percentage": "Prozent",
     "answer-indicator": "Zeigt die richtigen Antworten"
+  },
+  "dialog": {
+    "sure": "Bist du sicher?",
+    "cancel": "Abbrechen",
+    "cancel-description": "Bricht den aktuellen Vorgang ab und schließt den Dialog.",
+    "reset": "Zurücksetzen",
+    "really-reset-form": "Willst du wirklich alle Eingaben zurücksetzen?"
   }
 }
