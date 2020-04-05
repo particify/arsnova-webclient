@@ -80,6 +80,15 @@
     "vote-up": "Vote up"
   },
   "feedback": {
+    "a11y-message": "You are now in Live Feedback. Press the Enter key to get information about key combinations or use the Escape key to call up the announcement later.",
+    "a11y-keys": "Press key 1 to find out the status of the current feedback, key 2 to go to the user menu, key 3 to give feedback that the instructor should proceed faster, key 4 to give feedback that you can follow well, key 4 to give feedback that you can't follow so well, key 5 to give feedback that you got hung up, key 0 to return to the session summary or the escape key to repeat this announcement.",
+    "a11y-status": "Currently the feedback is {{status}}. {{state0}} percent would like to proceed faster, {{state1}} percent can follow well, {{state2}} can't follow that well, {{state3}} percent have been disconnected.",
+    "a11y-stopped": "stopped",
+    "a11y-started": "started",
+    "a11y-very-satisfied": "Indicates you'd like to proceed more quickly.",
+    "a11y-satisfied": "Indicates you can follow easily.",
+    "a11y-dissatisfied": "Indicates you can not follow easily.",
+    "a11y-very-dissatisfied": "Indicates that you've been hanged up.",
     "is-stopped": "Voting got stopped",
     "start": "Start voting",
     "stop": "Stop voting",

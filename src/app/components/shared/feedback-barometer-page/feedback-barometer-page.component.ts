@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { AfterContentInit, Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { AuthenticationService } from '../../../services/http/authentication.service';
 import { RoomService } from '../../../services/http/room.service';
 import { UserRole } from '../../../models/user-roles.enum';
@@ -10,19 +10,23 @@ import { WsFeedbackService } from '../../../services/websockets/ws-feedback.serv
 import { Subscription } from 'rxjs';
 import { TranslateService } from '@ngx-translate/core';
 import { LanguageService } from '../../../services/util/language.service';
+import { LiveAnnouncer } from '@angular/cdk/a11y';
+import { KeyboardUtils } from '../../../utils/keyboard';
+import { KeyboardKey } from '../../../utils/keyboard/keys';
 
 @Component({
   selector: 'app-feedback-barometer-page',
   templateUrl: './feedback-barometer-page.component.html',
   styleUrls: ['./feedback-barometer-page.component.scss']
 })
-export class FeedbackBarometerPageComponent implements OnInit, OnDestroy {
+export class FeedbackBarometerPageComponent implements OnInit, AfterContentInit, OnDestroy {
 
   feedback = [
-    { state: 0, name: 'sentiment_very_satisfied', count: 0 },
-    { state: 1, name: 'sentiment_satisfied', count: 0 },
-    { state: 2, name: 'sentiment_dissatisfied', count: 0 },
-    { state: 3, name: 'sentiment_very_dissatisfied', count: 0 }
+    { state: 0, name: 'sentiment_very_satisfied', label: 'feedback.very-satisfied', a11y: 'feedback.a11y-very-satisfied', count: 0 },
+    { state: 1, name: 'sentiment_satisfied', label: 'feedback.satisfied', a11y: 'feedback.a11y-satisfied', count: 0 },
+    { state: 2, name: 'sentiment_dissatisfied', label: 'feedback.dissatisfied', a11y: 'feedback.a11y-dissatisfied', count: 0 },
+    { state: 3, name: 'sentiment_very_dissatisfied', label: 'feedback.very-dissatisfied', a11y: 'feedback.a11y-very-dissatisfied',
+      count: 0 }
   ];
   isOwner = false;
   user: User;
@@ -31,7 +35,6 @@ export class FeedbackBarometerPageComponent implements OnInit, OnDestroy {
   protected sub: Subscription;
   isClosed = false;
   isLoading = true;
-  fieldNames = ['feedback.very-satisfied', 'feedback.satisfied', 'feedback.dissatisfied', 'feedback.very-dissatisfied'];
 
   constructor(
     private authenticationService: AuthenticationService,
@@ -39,8 +42,39 @@ export class FeedbackBarometerPageComponent implements OnInit, OnDestroy {
     private wsFeedbackService: WsFeedbackService,
     private roomService: RoomService,
     protected translateService: TranslateService,
-    protected langService: LanguageService) {
+    protected langService: LanguageService,
+    private liveAnnouncer: LiveAnnouncer) {
     langService.langEmitter.subscribe(lang => translateService.use(lang));
+  }
+
+  @HostListener('window:keyup', ['$event'])
+  keyEvent(event: KeyboardEvent) {
+    if (this.isOwner) {
+      if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit3) === true) {
+        document.getElementById('toggle-button').focus();
+      }
+    } else {
+      if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit3) === true) {
+        document.getElementById('feedback-button-0').focus();
+      } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit4) === true) {
+        document.getElementById('feedback-button-1').focus();
+      } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit5) === true) {
+        document.getElementById('feedback-button-2').focus();
+      } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit6) === true) {
+        document.getElementById('feedback-button-3').focus();
+      }
+    }
+    if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Escape) === true) {
+      this.announceKeys();
+    } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit1) === true) {
+      this.announceStatus();
+    }
+  }
+
+  ngAfterContentInit() {
+    setTimeout(() => {
+      document.getElementById('message-announcer-button');
+    }, 700);
   }
 
   ngOnInit() {
@@ -57,8 +91,29 @@ export class FeedbackBarometerPageComponent implements OnInit, OnDestroy {
     this.sub = this.wsFeedbackService.getFeedbackStream(this.roomId).subscribe((message: Message) => {
       this.parseIncomingMessage(message);
     });
-
     this.wsFeedbackService.get(this.roomId);
+  }
+
+  announce(key: string) {
+    this.translateService.get(key).subscribe(msg => {
+      this.liveAnnouncer.clear();
+      this.liveAnnouncer.announce(msg, 'assertive');
+    });
+  }
+
+  announceKeys() {
+    this.translateService.get('feedback.a11y-keys').subscribe(msg => {
+      this.announce(msg);
+    });
+  }
+
+  announceStatus() {
+    this.translateService.get(this.isClosed ? 'feedback.a11y-stopped' : 'feedback.a11y-started').subscribe(status => {
+      this.translateService.get('feedback.a11y-status', { status: status, state0: this.feedback[0].count, state1: this.feedback[1].count,
+        state2: this.feedback[2].count, state3: this.feedback[3].count }).subscribe(msg => {
+        this.announce(msg);
+      });
+    });
   }
 
   ngOnDestroy() {
@@ -76,7 +131,9 @@ export class FeedbackBarometerPageComponent implements OnInit, OnDestroy {
   }
 
   submitFeedback(state: number) {
-    this.wsFeedbackService.send(this.user.id, state, this.roomId);
+    if (!this.isOwner) {
+      this.wsFeedbackService.send(this.user.id, state, this.roomId);
+    }
   }
 
   toggle() {
