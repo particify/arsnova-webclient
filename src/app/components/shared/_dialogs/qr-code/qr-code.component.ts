@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { AfterContentInit, Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { NotificationService } from '../../../../services/util/notification.service';
 import { TranslateService } from '@ngx-translate/core';
@@ -30,6 +30,9 @@ export class QrCodeComponent implements OnInit {
   ngOnInit(): void {
     const minSize = Math.min(document.body.clientWidth, document.body.clientHeight);
     this.qrWidth = minSize * 0.8;
+    setTimeout(() => {
+      document.getElementById('qr-message').focus();
+    }, 700);
   }
 
   onCloseClick(): void {
