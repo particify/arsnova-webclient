@@ -197,6 +197,7 @@
     "a11y-room-name-input": "Enter the name of the session you want to create here and confirm your entry with the Enter key.",
     "a11y-qr-code": "The QR code of your session is now displayed in full screen mode. Press the Tab key to copy the url of your session to the clipboard or the Escape key to close the dialog and return to the session overview",
     "a11y-copy-url": "Copy link to session to the clipboard",
+    "a11y-logout": "Logs you off.",
     "sure": "Are you sure?",
     "cancel": "Cancel",
     "delete": "Delete",
