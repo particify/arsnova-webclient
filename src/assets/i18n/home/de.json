@@ -198,6 +198,7 @@
     "a11y-qr-code": "Der QR-Code deiner Sitzung wird jetzt im Fullscreenmodus angezeigt. Drücke die Tab Taste um den Link zu deiner Sitzung zu kopieren oder die Escape Taste um den Dialog zu schließen und zur Sitzungsübersicht zurückzukehren.",
     "a11y-copy-url": "Direktlink zur Sitzung in die Zwischenablage kopieren",
     "a11y-logout": "Meldet dich ab.",
+    "a11y-tokens": "Navigiere mit der Tab Taste durch deine Bonus Token.",
     "sure": "Bist du sicher?",
     "cancel": "Abbrechen",
     "delete": "Löschen",

@@ -1,8 +1,8 @@
 <div mat-dialog-content>
-  <h2 tabindex="0">{{'dialog.bonus-token' | translate }}</h2>
+  <h2 tabindex="0" aria-labelledby="header">{{'dialog.bonus-token' | translate }}</h2>
   <mat-divider></mat-divider>
   <div *ngIf="bonusTokensMixin.length >= 1">
-    <div fxLayout="column" class="tokens" *ngFor="let bonusToken of bonusTokensMixin; let i = index"
+    <div tabindex="0" fxLayout="column" class="tokens" *ngFor="let bonusToken of bonusTokensMixin; let i = index"
          (click)="navToComment(i)">
       <h2 class="token" tabindex="1">{{bonusToken.token}}</h2>
       <h2 class="roomName">{{bonusToken.roomName}}</h2>
@@ -12,8 +12,13 @@
     <h3 tabindex="0">{{'dialog.no-bonus' | translate }}</h3>
   </div>
   <div fxLayout="row" fxLayoutAlign="end">
-    <button mat-flat-button class="button-abort" (click)="closeDialog()">
+    <button mat-flat-button class="button-abort" (click)="closeDialog()" aria-labelledby="close">
       {{ 'dialog.close' | translate}}
     </button>
   </div>
+</div>
+
+<div class="visually-hidden">
+  <div id="close">{{ 'dialog.a11y-close' | translate }}</div>
+  <div id="header">{{ 'dialog.a11y-tokens' | translate }}</div>
 </div>
