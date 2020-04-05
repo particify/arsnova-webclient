@@ -179,10 +179,13 @@
     "cancel": "Abbrechen"
   },
   "dialog": {
+    "a11y-cancel": "Bricht den aktuellen Vorgang ab und schließt den Dialog.",
+    "a11y-delete": "Bestätigt die Aktion und schließt den Dialog.",
+    "a11y-close": "Schließt den Dialog.",
+    "a11y-reset": "Setzt alle Eingaben zurück.",
     "a11y-room-name-input": "Gib hier den Namen der Sitzung die du erstellen möchtest ein und bestätige deine Eingabe mit der Enter-Taste.",
     "sure": "Bist du sicher?",
     "cancel": "Abbrechen",
-    "cancel-description": "Bricht den aktuellen Vorgang ab und schließt den Dialog.",
     "delete": "Löschen",
     "close": "Schließen",
     "reset": "Zurücksetzen",

@@ -1,11 +1,18 @@
-<h3>{{ data.section + data.headerLabel | translate}}</h3>
-<p>{{ data.section + data.body | translate}}</p>
-<p><strong *ngIf="data.bodyElement">{{ data.bodyElement }}</strong></p>
+<div tabindex="0">
+  <h3>{{ data.section + data.headerLabel | translate}}</h3>
+  <p>{{ data.section + data.body | translate}}</p>
+  <p><strong *ngIf="data.bodyElement">{{ data.bodyElement }}</strong></p>
+</div>
 <div fxLayout="row" fxLayoutAlign="end" fxLayoutGap="10px">
-  <button mat-flat-button class="button-abort" (click)="closeDialog(data.abortLabel)">
+  <button mat-flat-button class="button-abort" aria-labelledby="cancel" (click)="closeDialog(data.abortLabel)">
     {{ data.section + data.abortLabel | translate}}
   </button>
-  <button mat-flat-button class="{{data.type}}" (click)="closeDialog(data.confirmLabel)">
+  <button mat-flat-button class="{{data.type}}"  aria-labelledby="submit" (click)="closeDialog(data.confirmLabel)">
     {{ data.section + data.confirmLabel | translate}}
   </button>
+</div>
+
+<div class="visually-hidden">
+  <div id="cancel">{{ data.section + 'a11y-' + data.abortLabel | translate }}</div>
+  <div id="submit">{{ data.section + 'a11y-' + data.confirmLabel | translate }}</div>
 </div>

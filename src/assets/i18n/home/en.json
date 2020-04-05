@@ -180,10 +180,14 @@
     "cancel": "Cancel"
   },
   "dialog": {
+    "a11y-cancel": "Cancels the current process and closes the dialog.",
+    "a11y-delete": "Confirms the action and closes the dialog.",
+    "a11y-close": "Closes the dialog.",
+    "a11y-reset": "Resets all entries.",
     "a11y-room-name-input": "Enter the name of the session you want to create here and confirm your entry with the Enter key.",
     "sure": "Are you sure?",
     "cancel": "Cancel",
-    "cancel-description": "Cancels the current process and closes the dialog.",
+    "cancel-description": "",
     "delete": "Delete",
     "close": "Close",
     "reset": "Reset",
