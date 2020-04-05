@@ -184,6 +184,7 @@
     "a11y-close": "Schließt den Dialog.",
     "a11y-reset": "Setzt alle Eingaben zurück.",
     "a11y-update": "Speichert die Änderungen und schließt den Dialog.",
+    "a11y-create-content-group": "Erstellt die Sammlung {{group}}.",
     "a11y-edit-subject": "Bearbeite hier das Thema der Frage.",
     "a11y-edit-body": "Bearbeite hier den Inhalt der Frage.",
     "a11y-edit-answer": "Bearbeite die Antwort",

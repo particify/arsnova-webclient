@@ -185,6 +185,7 @@
     "a11y-close": "Closes the dialog.",
     "a11y-reset": "Resets all entries.",
     "a11y-update": "Save the changes and close the dialog.",
+    "a11y-create-content-group": "Creates the content group {{group}}.",
     "a11y-edit-subject": "Edit the subject of the question here.",
     "a11y-edit-body": "Edit the body of the question here.",
     "a11y-edit-answer": "Edit the answer",
