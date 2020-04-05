@@ -187,6 +187,7 @@
     "a11y-send": "Schickt deinen Kommentar ab und schließt den Dialog.",
     "a11y-tag": "Wähle hier eine Kategorie aus, wenn du deinen Kommentar kategorisieren möchtest.",
     "a11y-select-tag": "Wähle die Kategorie {{tag}} aus.",
+    "a11y-comment-presentation": "Der Kommentar {{comment}} wird jetzt im Fullscreenmodus dargestellt. Drücke die Escape Taste um den Dialog zu Schließen und zum Kommentarboard zurückzukehren.",
     "a11y-create-content-group": "Erstellt die Sammlung {{group}}.",
     "a11y-edit-subject": "Bearbeite hier das Thema der Frage.",
     "a11y-edit-body": "Bearbeite hier den Inhalt der Frage.",

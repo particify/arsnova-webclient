@@ -188,6 +188,7 @@
     "a11y-send": "Sends your comment and closes the dialog.",
     "a11y-tag": "Select a category here if you want to categorize your comment.",
     "a11y-select-tag": "Selects the category {{tag}}.",
+    "a11y-comment-presentation": "The comment {{comment}} is now displayed in full screen mode. Press the Escape key to close the dialog and return to the comment board.",
     "a11y-create-content-group": "Creates the content group {{group}}.",
     "a11y-edit-subject": "Edit the subject of the question here.",
     "a11y-edit-body": "Edit the body of the question here.",

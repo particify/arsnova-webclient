@@ -2,21 +2,21 @@
   <div fxLayout="column" fxLayoutAlign="center">
     <mat-icon>zoom_out</mat-icon>
   </div>
-  <mat-slider min="1" max="5" step="0.1" tickInterval="auto"
+  <mat-slider tabindex="-1" min="1" max="5" step="0.1" tickInterval="auto"
               (input)="updateFontSize($event)" id="slider"></mat-slider>
   <div fxLayout="column" fxLayoutAlign="center">
     <mat-icon>zoom_in</mat-icon>
   </div>
 </div>
-<button mat-raised-button class="button-primary exitBtn" (click)="onCloseClick()" aria-labelledby="exit-description">
-  <mat-icon>close</mat-icon>
-</button>
-<div id="comment">
-  <p>
+<div tabindex="0" id="comment">
+  <p attr.aria-label="{{ 'dialog.a11y-comment-presentation' | translate: {comment: data} }}">
     {{data}}
   </p>
 </div>
+<button mat-raised-button class="button-primary exitBtn" (click)="onCloseClick()" aria-labelledby="exit">
+  <mat-icon>close</mat-icon>
+</button>
 
 <div class="visually-hidden">
-  <div id="exit-description">{{ 'comment-page.exit-description' | translate}}</div>
+  <div id="exit">{{ 'dialog.a11y-close' | translate}}</div>
 </div>
