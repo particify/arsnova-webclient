@@ -28,13 +28,13 @@
       *ngIf="cancelButtonClickAction !== undefined"
       id="{{ ariaPrefix + 'cancel' | translate }}"
     >
-      {{ buttonsLabelSection + '.cancel-description' | translate }}
+      {{ buttonsLabelSection + '.a11y-cancel' | translate }}
     </div>
     <div
       *ngIf="confirmButtonClickAction !== undefined"
       id="{{ ariaPrefix + 'confirm' | translate }}"
     >
-      {{ buttonsLabelSection + '.' + confirmButtonLabel + '-description' | translate }}
+      {{ buttonsLabelSection + '.a11y-' + confirmButtonLabel | translate }}
     </div>
   </div>
 </div>
