@@ -9,7 +9,9 @@
   </div>
 </mat-dialog-content>
 <div fxLayout="row" fxLayoutAlign="end">
-  <button mat-flat-button class="button-abort" (click)="closeDialog()">
+  <button mat-flat-button class="button-abort" attr.aria-labelledby="close" (click)="closeDialog()">
     {{ 'dialog.close' | translate}}
   </button>
 </div>
+
+<div class="visually-hidden" id="close">{{ 'dialog.a11y-close' | translate }}</div>
