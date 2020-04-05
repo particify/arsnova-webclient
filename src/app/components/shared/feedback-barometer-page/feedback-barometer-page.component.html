@@ -1,10 +1,15 @@
 <app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
 <div *ngIf="!isLoading" fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="center">
+  <button class="visually-hidden" id="message-announcer-button" tabIndex="-1" (click)="announceKeys()">
+    {{ 'feedback.a11y-message' | translate }}</button>
   <mat-card>
     <div class="feedback-container" [ngClass]="{'faded' : isClosed}">
       <div fxLayout="row" fxLayoutGap="30px" *ngFor="let state of feedback; let i = index">
-        <mat-icon matTooltip="{{ fieldNames[i] | translate }}"
-                  (click)="!isOwner && submitFeedback(state.state)">{{ state.name }}</mat-icon>
+        <button id="feedback-button-{{i}}" mat-icon-button [disabled]="isOwner" (click)="submitFeedback(state.state)"
+                attr.aria-label="{{ state.a11y | translate }}">
+          <mat-icon matTooltip="{{ state.label | translate }}">
+            {{ state.name }}</mat-icon>
+        </button>
         <mat-progress-bar class="feedback-progress" [value]="state.count"></mat-progress-bar>
       </div>
     </div>
@@ -12,9 +17,14 @@
       <h3>{{ 'feedback.is-stopped' | translate }}</h3>
     </div>
     <div fxLayoutAlign="center" *ngIf="isOwner">
-      <button mat-raised-button class="button-primary" fxLayoutAlign="center" (click)="toggle()">
+      <button mat-raised-button id="toggle-button" class="button-primary" fxLayoutAlign="center" (click)="toggle()"
+              aria-labelledby="toggle">
         {{ (isClosed ? 'feedback.start' : 'feedback.stop') | translate }}
       </button>
     </div>
   </mat-card>
+</div>
+
+<div class="visually-hidden">
+  <div id="toggle">{{ (isClosed ? 'feedback.a11y-start' : 'feedback.a11y-stop') | translate }}</div>
 </div>
