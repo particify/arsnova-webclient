@@ -1,9 +1,9 @@
 {
   "cookies": {
+    "a11y-accept": "Bestätigt die Verwendung der Web-Storage-Technik und schaltet die Anwendung frei.",
+    "a11y-cancel": "Lehnt die Verwendung der Web-Storage-Technik ab und sperrt die Anwendung.",
     "accept": "Akzeptieren",
-    "accept-description": "Bestätigt die Verwendung der Web-Storage-Technik und schaltet die Anwendung frei.",
     "cancel": "Ablehnen",
-    "cancel-description": "Lehnt die Verwendung der Web-Storage-Technik ab und sperrt die Anwendung.",
     "info-label": "Öffnet ein Dialogfenster mit der Datenschutzerklärung zu frag.jetzt.",
     "title": "Datenschutz"
   },
@@ -97,8 +97,8 @@
     "or": "oder"
   },
   "overlay": {
+    "a11y-cancel": "Öffnet den Dialog zur Verwendung der Web-Storage-Technik in ARSnova",
     "cancel": "Doch akzeptieren?",
-    "cancel-description": "Öffnet den Dialog zur Verwendung der Web-Storage-Technik in ARSnova",
     "message": "Du hast die Verwendung der Web-Storage-Technik abgelehnt. Ohne diese funktioniert die App leider nicht.",
     "title": "Nutzung nicht möglich"
   },
