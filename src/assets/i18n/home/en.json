@@ -78,6 +78,8 @@
   },
   "login": {
     "a11y-sso-login": "You will be forwarded to {{provider}} to log in.",
+    "a11y-reset-pw": "Opens a dialog for resetting your password.",
+    "a11y-register": "Opens a dialog for the registration.",
     "email": "E-mail",
     "email-description": "Enter your e-mail address with which you want to login with your arsnova account here.",
     "email-invalid": "E-mail is invalid",
@@ -104,6 +106,7 @@
     "title": "Use not possible"
   },
   "password-reset": {
+    "a11y-cancel": "Cancels password reset and brings you back to login.",
     "a11y-new-password1": "Enter your new password here",
     "a11y-new-password2": "Enter your new password here again",
     "a11y-reset-button": "Sends a password reset key to the entered e-mail, with which a new password can be set.",
@@ -111,7 +114,6 @@
     "a11y-set-button": "Sets the new password",
     "a11y-enter-email": "Enter your email address here to set a new password",
     "cancel": "Cancel",
-    "cancel-description": "Cancel",
     "email": "E-mail",
     "email-description": "Enter your email address here to reset your password.",
     "email-invalid": "E-mail is invalid.",
@@ -129,10 +131,11 @@
     "set-new-password-button": "Set password"
   },
   "register": {
+    "a11y-cancel": "Cancels the registration and brings you back to login.",
+    "a11y-register": "Register User",
     "cancel": "Cancel",
-    "cancel-description": "Cancel",
     "email": "E-mail",
-    "email-description": "Enter your e-mail address here.",
+    "email-description": "You are now in the registation formular. Enter your e-mail address here.",
     "email-description-repeat": "Please enter your e-mail address again to ensure that you have not mistyped.",
     "email-invalid": "E-mail is invalid.",
     "email-required": "E-mail required",
@@ -145,7 +148,6 @@
     "password-unmatch": "Passwords do not match.",
     "password-verify": "Verify password",
     "register": "Register",
-    "register-description": "Register User",
     "register-request-error": "Something went wrong with the registration. Maybe you already made the account?",
     "register-successful": "Successfully registered. Please check your mails.",
     "register-unsuccessful": "Please check your data."
@@ -169,14 +171,16 @@
     "participant-role": "Participant"
   },
   "user-activation": {
+    "a11y-activate": "Activates your account.",
+    "a11y-key-input": "Enter the activation key that you received by e-mail to login.",
+    "a11y-cancel": "Cancels the activation and brings you back to login.",
     "activate": "Activate",
-    "activation-key": "Activation key",
-    "activation-key-incorrect": "Activation key is incorrect.",
-    "activation-key-required": "Please enter an activation key.",
-    "activation-key-input-description": "Enter the activation key that you received by e-mail.",
+    "key": "Activation key",
+    "key-incorrect": "Activation key is incorrect.",
+    "key-required": "Please enter an activation key.",
     "didnt-get": "Didn't get a Code?",
     "reset-button": "Send again",
-    "activation-key-sent-again": "Activation key sent again",
+    "sent-again": "Activation key sent again",
     "cancel": "Cancel"
   },
   "dialog": {

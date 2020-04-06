@@ -26,16 +26,16 @@ export class UserActivationComponent {
 
   login(activationKey: string): void {
     if (activationKey.length < 1) {
-      this.translationService.get('user-activation.activation-key-required').subscribe(msg => {
+      this.translationService.get('user-activation.key-required').subscribe(msg => {
         this.notificationService.show(msg);
       });
     } else {
       activationKey = activationKey.trim();
-      this.userService.activate(this.data.trim(), activationKey).subscribe(() => {
+      this.userService.activate(this.data, activationKey).subscribe(() => {
           this.dialogRef.close({ success: true });
         },
         err => {
-          this.translationService.get('user-activation.activation-key-incorrect').subscribe(msg => {
+          this.translationService.get('user-activation.key-incorrect').subscribe(msg => {
             this.notificationService.show(msg);
           });
         }
@@ -45,7 +45,7 @@ export class UserActivationComponent {
 
   resetActivation(): void {
     this.userService.resetActivation(this.data.trim()).subscribe(() => {
-        this.translationService.get('user-activation.activation-key-sent-again').subscribe(msg => {
+        this.translationService.get('user-activation.sent-again').subscribe(msg => {
           this.notificationService.show(msg);
         });
       }

@@ -1,7 +1,7 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormControl, FormGroupDirective, NgForm, Validators } from '@angular/forms';
 import { ErrorStateMatcher } from '@angular/material/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MatDialogRef } from '@angular/material/dialog';
 import { validatePassword } from '../register/register.component';
 import { AuthenticationService } from '../../../../services/http/authentication.service';
 import { NotificationService } from '../../../../services/util/notification.service';
@@ -22,7 +22,7 @@ export class PasswordResetErrorStateMatcher implements ErrorStateMatcher {
   templateUrl: './password-reset.component.html',
   styleUrls: ['./password-reset.component.scss']
 })
-export class PasswordResetComponent implements OnInit {
+export class PasswordResetComponent {
 
 
   usernameFormControl = new FormControl('', [Validators.required, Validators.email]);
@@ -37,29 +37,9 @@ export class PasswordResetComponent implements OnInit {
               public authenticationService: AuthenticationService,
               public notificationService: NotificationService,
               public dialogRef: MatDialogRef<PasswordResetComponent>,
-              public eventService: EventService,
-              private liveAnnouncer: LiveAnnouncer) {
+              public eventService: EventService) {
   }
 
-  ngOnInit() {
-    this.announce();
-  }
-
-  public announce() {
-    const lang: string = this.translationService.currentLang;
-
-    // current live announcer content must be cleared before next read
-    this.liveAnnouncer.clear();
-
-    if (lang === 'de') {
-      this.liveAnnouncer.announce('Hier kannst du dein Passwort zurücksetzen, ' +
-        'indem du per E-Mail einen Passwortrücksetz-Schlüssel erhälst und mit diesem ein neues Passwort setzt.', 'assertive');
-    } else {
-      this.liveAnnouncer.announce('Here you can reset your password ' +
-        'by receiving a password reset key via e-mail and setting a new password with it.', 'assertive');
-    }
-
-  }
 
   /**
    * Closes the room create dialog on call.

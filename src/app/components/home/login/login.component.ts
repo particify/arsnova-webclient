@@ -69,11 +69,11 @@ export class LoginComponent implements AfterContentInit, OnChanges {
           if (this.providersLength > 0) {
             setTimeout(() => {
               document.getElementById(this.ssoProviders[0].title + '-button').focus();
-            }, 100);
+            }, 700);
           } else {
             setTimeout(() => {
               document.getElementById('email-input').focus();
-            }, 100);
+            }, 700);
           }
         }
       });
