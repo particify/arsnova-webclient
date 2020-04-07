@@ -14,9 +14,13 @@
       </div>
     </div>
     <div class="text invisible" [ngClass]="{'visible' : isClosed}">
-      <h3>{{ 'feedback.is-stopped' | translate }}</h3>
+      <h3 tabindex="-1" id="stopped-label">{{ 'feedback.is-stopped' | translate }}</h3>
     </div>
-    <div fxLayoutAlign="center" *ngIf="isOwner">
+    <div fxLayoutAlign="center" fxLayoutGap="20px" *ngIf="isOwner">
+      <button mat-raised-button id="reset-button" class="button-secondary" fxLayoutAlign="center" (click)="reset()"
+              aria-labelledby="reset">
+        {{ 'feedback.reset' | translate }}
+      </button>
       <button mat-raised-button id="toggle-button" class="button-primary" fxLayoutAlign="center" (click)="toggle()"
               aria-labelledby="toggle">
         {{ (isClosed ? 'feedback.start' : 'feedback.stop') | translate }}
@@ -27,4 +31,5 @@
 
 <div class="visually-hidden">
   <div id="toggle">{{ (isClosed ? 'feedback.a11y-start' : 'feedback.a11y-stop') | translate }}</div>
+  <div id="reset">{{ 'feedback.a11y-reset' | translate }}</div>
 </div>
