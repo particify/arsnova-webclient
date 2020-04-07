@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { AfterContentInit, Component, HostListener, OnInit, ViewChild } from '@angular/core';
 import { ContentType } from '../../../models/content-type.enum';
 import { ContentService } from '../../../services/http/content.service';
 import { Content } from '../../../models/content';
@@ -6,15 +6,17 @@ import { ContentGroup } from '../../../models/content-group';
 import { TranslateService } from '@ngx-translate/core';
 import { StepperComponent } from '../stepper/stepper.component';
 import { ActivatedRoute } from '@angular/router';
-import { ContentGroupService } from '../../../services/http/content-group.service';
 import { RoomService } from '../../../services/http/room.service';
+import { LiveAnnouncer } from '@angular/cdk/a11y';
+import { KeyboardUtils } from '../../../utils/keyboard';
+import { KeyboardKey } from '../../../utils/keyboard/keys';
 
 @Component({
   selector: 'app-participant-content-carousel-page',
   templateUrl: './participant-content-carousel-page.component.html',
   styleUrls: ['./participant-content-carousel-page.component.scss']
 })
-export class ParticipantContentCarouselPageComponent implements OnInit {
+export class ParticipantContentCarouselPageComponent implements OnInit, AfterContentInit {
 
   @ViewChild(StepperComponent) stepper: StepperComponent;
 
@@ -34,8 +36,27 @@ export class ParticipantContentCarouselPageComponent implements OnInit {
     protected translateService: TranslateService,
     protected roomService: RoomService,
     protected route: ActivatedRoute,
+    private liveAnnouncer: LiveAnnouncer
   ) {
   }
+
+  @HostListener('window:keyup', ['$event'])
+  keyEvent(event: KeyboardEvent) {
+    if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit1) === true) {
+      document.getElementById('step').focus();
+    } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Escape) === true) {
+      this.translateService.get('answer.a11y-keys').subscribe(msg => {
+        this.announce(msg);
+      });
+    }
+  }
+
+  ngAfterContentInit() {
+    setTimeout(() => {
+      document.getElementById('live-announcer-button').focus();
+    }, 700);
+  }
+
 
   ngOnInit() {
     this.translateService.use(localStorage.getItem('currentLang'));
@@ -56,6 +77,11 @@ export class ParticipantContentCarouselPageComponent implements OnInit {
     });
   }
 
+  announce(msg: string) {
+    this.liveAnnouncer.clear();
+    this.liveAnnouncer.announce(msg);
+  }
+
   receiveSentStatus($event, index: number) {
     this.alreadySent.set(index, $event);
     if (!this.started) {
@@ -74,9 +100,18 @@ export class ParticipantContentCarouselPageComponent implements OnInit {
         }
       }
     } else {
-      setTimeout(() => {
-        this.stepper.next();
-      }, 500);
+      if (index < this.contents.length - 1) {
+        setTimeout(() => {
+          this.stepper.next();
+          setTimeout(() => {
+            document.getElementById('step').focus();
+          }, 200);
+        }, 500);
+      } else {
+        this.translateService.get('answer.a11y-last-content').subscribe(msg => {
+          this.announce(msg);
+        });
+      }
     }
   }
 }
