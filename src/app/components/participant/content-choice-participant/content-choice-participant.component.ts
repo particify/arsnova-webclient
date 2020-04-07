@@ -61,6 +61,9 @@ export class ContentChoiceParticipantComponent implements OnInit {
         if (answer.selectedChoiceIndexes && answer.selectedChoiceIndexes.length > 0) {
           for (const i of answer.selectedChoiceIndexes) {
             this.checkedAnswers[i].checked = true;
+            if (!this.content.multiple) {
+              this.selectedSingleAnswer = this.checkedAnswers[i].answerOption.label;
+            }
           }
         }
         if (this.isChoice) {
