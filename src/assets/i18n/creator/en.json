@@ -172,6 +172,7 @@
     "is-stopped": "Voting got stopped",
     "start": "Start voting",
     "stop": "Stop voting",
+    "reset": "Reset voting",
     "very-satisfied": "Faster, please!",
     "satisfied": "I can follow.",
     "dissatisfied": "Slower, please!",

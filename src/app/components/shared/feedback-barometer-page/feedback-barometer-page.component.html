@@ -21,6 +21,10 @@
               aria-labelledby="toggle">
         {{ (isClosed ? 'feedback.start' : 'feedback.stop') | translate }}
       </button>
+      <button mat-raised-button id="toggle-button" class="button-seconday" fxLayoutAlign="center" (click)="reset()"
+              aria-labelledby="reset">
+        {{ 'feedback.reset' | translate }}
+      </button>
     </div>
   </mat-card>
 </div>

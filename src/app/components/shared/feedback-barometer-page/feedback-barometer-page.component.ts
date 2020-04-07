@@ -144,6 +144,10 @@ export class FeedbackBarometerPageComponent implements OnInit, AfterContentInit,
     }
   }
 
+  reset() {
+    this.wsFeedbackService.reset(this.roomId);
+  }
+
   parseIncomingMessage(message: Message) {
     const msg = JSON.parse(message.body);
     const payload = msg.payload;
@@ -160,6 +164,8 @@ export class FeedbackBarometerPageComponent implements OnInit, AfterContentInit,
       case 'FeedbackStatus':
         this.isClosed = payload.closed;
         break;
+      case 'FeedbackReset':
+        this.updateFeedback([0, 0, 0, 0]);
     }
   }
 }
