@@ -4,11 +4,11 @@
     <input (focus)="eventService.makeFocusOnInputTrue()" (blur)="eventService.makeFocusOnInputFalse()"
            matInput #userActivationKey type="text"
            [formControl]="activationKeyFormControl" name="activation-key"
-           aria-labelledby="activation-key-input-description"/>
-    <mat-placeholder>{{ 'user-activation.activation-key' | translate }}</mat-placeholder>
+           aria-labelledby="key-input"/>
+    <mat-placeholder>{{ 'user-activation.key' | translate }}</mat-placeholder>
   </mat-form-field>
 </form>
-<div fxLayout="row" class="register">
+<div fxLayout="row" class="register" tabindex="0">
   <p>{{ 'user-activation.didnt-get' | translate }}</p>
   <button mat-button class="reset" (click)="resetActivation(); $event.preventDefault(); $event.stopPropagation();">
     {{ 'user-activation.reset-button' | translate }}</button>
@@ -21,5 +21,5 @@
 ></app-dialog-action-buttons>
 
 <div class="visually-hidden">
-  <div id="activation-key-input-description">{{ 'user-activation.activation-key-input-description' | translate }}</div>
+  <div id="key-input">{{ 'user-activation.a11y-key-input' | translate }}</div>
 </div>

@@ -12,8 +12,7 @@ import { ContentCreatePageComponent } from '../../../creator/content-create-page
 })
 export class ContentGroupCreationComponent implements OnInit {
 
-  name: string;
-  empty = false;
+  name = '';
 
   constructor(public dialogRef: MatDialogRef<ContentListComponent>,
               public dialog: MatDialog,
@@ -27,41 +26,23 @@ export class ContentGroupCreationComponent implements OnInit {
   addContentGroup() {
     if (this.name) {
       if (ContentCreatePageComponent.saveGroupInSessionStorage(this.name)) {
-        this.translateService.get('content.content-group-created').subscribe(msg => {
+        this.translateService.get('dialog.content-group-created').subscribe(msg => {
           this.notificationService.show(msg);
           this.closeDialog(this.name);
         });
       } else {
-        this.translateService.get('content.content-group-already-exists').subscribe(msg => {
+        this.translateService.get('dialog.content-group-already-exists').subscribe(msg => {
           this.notificationService.show(msg);
         });
       }
     } else {
-      this.empty = true;
+      this.translateService.get('dialog.please-enter-name').subscribe(msg => {
+        this.notificationService.show(msg);
+        document.getElementById('name-input').focus();
+      });
     }
   }
 
-  resetEmpty() {
-    this.empty = false;
-  }
-
-  /**
-   * Returns a lambda which closes the dialog on call.
-   */
-  buildCloseDialogActionCallback(): () => void {
-    return () => this.closeDialog();
-  }
-
-  /**
-   * Returns a lambda which executes the dialog dedicated action on call.
-   */
-  buildGroupCreateActionCallback(): () => void {
-    return () => this.addContentGroup();
-  }
-
-  /**
-   * Closes the room create dialog on call.
-   */
   closeDialog(name?: string): void {
     if (name) {
       this.dialogRef.close(name);

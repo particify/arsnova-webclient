@@ -55,20 +55,14 @@ export class ContentEditComponent implements OnInit {
   updateContent() {
     let counter = 0;
     if (this.data.subject === '' || this.data.body === '') {
-      this.translateService.get('content.no-empty').subscribe(message => {
-        this.notificationService.show(message);
-      });
-      return;
-    }
-    if (this.displayAnswers.length === 0) {
-      this.translateService.get('content.need-answers').subscribe(message => {
+      this.translateService.get('dialog.no-empty').subscribe(message => {
         this.notificationService.show(message);
       });
       return;
     }
     for (let i = 0; i < this.data.options.length; i++) {
       if (this.displayAnswers[i].answerOption.label === '') {
-        this.translateService.get('content.no-empty2').subscribe(message => {
+        this.translateService.get('dialog.no-empty-answers').subscribe(message => {
           this.notificationService.show(message);
         });
         return;
@@ -79,19 +73,19 @@ export class ContentEditComponent implements OnInit {
     }
     if (counter <= 0) {
       if (this.data.multiple) {
-        this.translateService.get('content.at-least-one').subscribe(message => {
+        this.translateService.get('dialog.at-least-one').subscribe(message => {
           this.notificationService.show(message);
           return;
         });
       } else {
-        this.translateService.get('content.select-one').subscribe(message => {
+        this.translateService.get('dialog.select-one').subscribe(message => {
           this.notificationService.show(message);
           return;
         });
       }
     } else {
       if ((!this.data.multiple) && counter > 1) {
-        this.translateService.get('content.select-one').subscribe(message => {
+        this.translateService.get('dialog.select-one').subscribe(message => {
           this.notificationService.show(message);
         });
         return;

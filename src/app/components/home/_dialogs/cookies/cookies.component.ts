@@ -32,7 +32,7 @@ export class CookiesComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit() {
     setTimeout(() => {
-      (<HTMLElement>(<HTMLElement>this.ref.nativeElement).getElementsByClassName('mat-dialog-title')[0]).focus();
+      document.getElementById('cookie-header').focus();
     }, 500);
   }
 
@@ -41,7 +41,7 @@ export class CookiesComponent implements OnInit, AfterViewInit {
     localStorage.setItem('dataProtectionConsent', 'true');
     this.dialogRef.close(true);
     setTimeout(() => {
-      document.getElementById('live_announcer-button').focus();
+      document.getElementById('session-id-input').focus();
     }, 500);
   }
 

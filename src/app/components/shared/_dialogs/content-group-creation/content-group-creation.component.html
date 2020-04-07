@@ -1,21 +1,23 @@
-<form (ngSubmit)="buildGroupCreateActionCallback()">
+<form>
   <div fxLayout="column" fxLayoutAlign="center" fxLayoutGap="10px">
     <mat-form-field>
-      <input matInput class="input-block" type="text" (keypress)="resetEmpty()" maxlength="25" [(ngModel)]="name"
+      <input matInput id="name-input" class="input-block" type="text" maxlength="25" [(ngModel)]="name"
              name="contentGroupName" aria-labelledby="content-group-name-input"/>
       <mat-placeholder>{{ 'dialog.content-group-name' | translate }}</mat-placeholder>
-      <mat-hint align="start" class="error" *ngIf="empty">
-        <strong>{{ 'dialog.please-enter-name' | translate }}</strong></mat-hint>
     </mat-form-field>
   </div>
 </form>
-<app-dialog-action-buttons
-  buttonsLabelSection="dialog"
-  confirmButtonLabel="create-content-group"
-  [cancelButtonClickAction]="buildCloseDialogActionCallback()"
-  [confirmButtonClickAction]="buildGroupCreateActionCallback()"
-></app-dialog-action-buttons>
+<div fxLayout="row" fxLayoutAlign="end" fxLayoutGap="10px">
+  <button (click)="closeDialog('abort')" aria-labelledby="cancel" mat-button>
+    {{ 'dialog.cancel' | translate }}
+  </button>
+  <button (click)="addContentGroup()" mat-raised-button  class="button-primary"
+          attr.aria-label="{{ 'dialog.a11y-create-content-group' | translate: { group: name } }}">
+    {{ 'dialog.create-content-group' | translate }}
+  </button>
+</div>
 
 <div class="visually-hidden">
   <div id="content-group-name-input">{{ 'dialog.content-group-name-input' | translate }}</div>
+  <div id="cancel">{{ 'dialog.a11y-cancel' | translate }}</div>
 </div>

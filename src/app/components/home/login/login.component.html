@@ -37,14 +37,14 @@
       <div *ngIf="allowDbLogin" fxLayout="row">
         <span class="fill-remaining-space"></span>
         <button mat-button class="forgot-pw" (click)="openPasswordDialog(); $event.preventDefault();
-     $event.stopPropagation();">
+     $event.stopPropagation();" aria-labelledby="forgot-pw">
           {{ 'login.password-reset' | translate }}
         </button>
       </div>
       <div *ngIf="allowDbLogin" fxLayout="row">
         <p>{{ 'login.not-registered' | translate }}</p>
         <button mat-button class="register" (click)="openRegisterDialog(); $event.preventDefault();
-    $event.stopPropagation();">
+    $event.stopPropagation();" aria-labelledby="register">
           {{ 'login.register' | translate }}</button>
       </div>
     </form>
@@ -57,4 +57,6 @@
   <div *ngIf="allowDbLogin" id="email-description">{{ 'login.email-description' | translate }}</div>
   <div *ngIf="allowDbLogin" id="password-description">{{ 'login.password-description' | translate }}</div>
   <div *ngIf="allowDbLogin" id="login-description">{{ 'login.login-description' | translate }}</div>
+  <div *ngIf="allowDbLogin" id="forgot-pw">{{ 'login.a11y-reset-pw' | translate }}</div>
+  <div *ngIf="allowDbLogin" id="register">{{ 'login.a11y-register' | translate }}</div>
 </div>
