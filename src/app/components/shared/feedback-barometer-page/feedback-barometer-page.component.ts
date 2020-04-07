@@ -38,7 +38,7 @@ export class FeedbackBarometerPageComponent implements OnInit, AfterContentInit,
 
   constructor(
     private authenticationService: AuthenticationService,
-    private notification: NotificationService,
+    private notificationService: NotificationService,
     private wsFeedbackService: WsFeedbackService,
     private roomService: RoomService,
     protected translateService: TranslateService,
@@ -52,6 +52,8 @@ export class FeedbackBarometerPageComponent implements OnInit, AfterContentInit,
     if (this.isOwner) {
       if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit3) === true) {
         document.getElementById('toggle-button').focus();
+      } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit4) === true) {
+        document.getElementById('reset-button').focus();
       }
     } else {
       if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit3) === true) {
@@ -137,6 +139,12 @@ export class FeedbackBarometerPageComponent implements OnInit, AfterContentInit,
   }
 
   toggle() {
+    this.translateService.get(this.isClosed ? 'feedback.a11y-started' : 'feedback.a11y-stopped').subscribe(status => {
+      this.translateService.get('feedback.a11y-status-changed', { status: status })
+        .subscribe(msg => {
+          this.announce(msg);
+        });
+    });
     if (this.isClosed) {
       this.roomService.changeFeedbackLock(this.roomId, false);
     } else {
@@ -144,8 +152,11 @@ export class FeedbackBarometerPageComponent implements OnInit, AfterContentInit,
     }
   }
 
-  reset() {
+reset() {
     this.wsFeedbackService.reset(this.roomId);
+    this.translateService.get('feedback.has-been-reset').subscribe(msg => {
+      this.notificationService.show(msg);
+    });
   }
 
   parseIncomingMessage(message: Message) {
