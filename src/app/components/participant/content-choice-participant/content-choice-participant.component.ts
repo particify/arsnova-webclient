@@ -40,6 +40,8 @@ export class ContentChoiceParticipantComponent implements OnInit {
   isChoice = true;
   hasAbstained = false;
   shortId: string;
+  multipleAlreadyAnswered = '';
+  allAnswers = '';
 
   constructor(
     private authenticationService: AuthenticationService,
@@ -61,6 +63,10 @@ export class ContentChoiceParticipantComponent implements OnInit {
         if (answer.selectedChoiceIndexes && answer.selectedChoiceIndexes.length > 0) {
           for (const i of answer.selectedChoiceIndexes) {
             this.checkedAnswers[i].checked = true;
+            this.multipleAlreadyAnswered += this.checkedAnswers[i].answerOption.label + '&';
+            if (!this.content.multiple) {
+              this.selectedSingleAnswer = this.checkedAnswers[i].answerOption.label;
+            }
           }
         }
         if (this.isChoice) {
@@ -70,8 +76,7 @@ export class ContentChoiceParticipantComponent implements OnInit {
       }
       this.sendStatusToParent();
       this.isLoading = false;
-      document.getElementById('answerForm').focus();
-    });
+      });
     this.translateService.use(localStorage.getItem('currentLang'));
     this.route.params.subscribe(params => {
       this.shortId = params['shortId'];
@@ -91,8 +96,11 @@ export class ContentChoiceParticipantComponent implements OnInit {
   getCorrectAnswer() {
     if (this.content.format !== ContentType.SCALE) {
       for (const i in this.content.options) {
-        if (this.content.options[i].points > 0) {
-          this.correctOptionIndexes.push(Number(i));
+        if (this.content.options[i]) {
+          this.allAnswers += this.content.options[i].label + '&';
+          if (this.content.options[i].points > 0) {
+            this.correctOptionIndexes.push(Number(i));
+          }
         }
       }
     } else {

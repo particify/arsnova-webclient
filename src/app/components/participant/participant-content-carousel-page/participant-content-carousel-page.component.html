@@ -1,14 +1,17 @@
 <app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
-
 <div *ngIf="!isLoading" fxLayout="column" fxLayoutAlign="start center">
+  <button id="live-announcer-button" class="visually-hidden" tabindex="-1" (click)="announce('answer.a11y-keys')">
+    {{ 'answer.a11y-message' | translate: { group: contentGroup.name } }}</button>
   <app-stepper *ngIf="contents.length > 0" [listLength]="contents.length" [alreadySent]="alreadySent">
     <cdk-step *ngFor="let content of contents; let i = index">
-      <app-content-choice-participant (message)="receiveSentStatus($event, i)" [content]="content"
-         *ngIf="content.format === ContentType.CHOICE || content.format === ContentType.SCALE ||
+      <div tabindex="0" id="step">
+        <app-content-choice-participant (message)="receiveSentStatus($event, i)" [content]="content"
+                                        *ngIf="content.format === ContentType.CHOICE || content.format === ContentType.SCALE ||
                 content.format === ContentType.BINARY">
-      </app-content-choice-participant>
-      <app-content-text-participant (message)="receiveSentStatus($event, i)" [content]="content"
-         *ngIf="content.format === ContentType.TEXT"></app-content-text-participant>
+        </app-content-choice-participant>
+        <app-content-text-participant (message)="receiveSentStatus($event, i)" [content]="content"
+                                      *ngIf="content.format === ContentType.TEXT"></app-content-text-participant>
+      </div>
     </cdk-step>
   </app-stepper>
   <h3 *ngIf="contents.length === 0">{{ 'answer.questions-locked' | translate }}</h3>
