@@ -1,11 +1,14 @@
 <div fxLayout="column" fxLayoutAlign="center" fxLayoutGap="20px" fxFill>
   <div fxLayout="row" fxLayoutAlign="center">
-    <button id="live_announcer-button" tabIndex="-1" class="visually-hidden" (click)="announce()">
+    <button id="live-announcer-button" tabIndex="-1" class="visually-hidden" (click)="announce()">
       {{ 'room-page.a11y-room-message' | translate: {session: room.name, key: room.shortId} }}</button>
     <app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
     <mat-card *ngIf="!isLoading && room">
       <div fxLayout="row">
-        <span class="corner-icons"></span>
+        <button mat-icon-button id="qr-code-button" class="corner-buttons" (click)="showQRDialog(true)" aria-labelledby="qr-code">
+          <mat-icon svgIcon="qrcode" class="qr-icon">
+          </mat-icon>
+        </button>
         <span class="fill-remaining-space"></span>
         <mat-card-header fxLayoutAlign="center" fxLayout="row">
           <mat-card-title fxLayoutAlign="center">
@@ -19,11 +22,11 @@
         </mat-card-header>
         <span class="fill-remaining-space"></span>
         <div fxLayout="column">
-          <button tabindex="0" id="settings-button" mat-icon-button class="corner-icons" aria-labelledby="settings"
+          <button tabindex="0" id="settings-button" mat-icon-button class="corner-buttons" aria-labelledby="settings"
                   routerLink="settings">
             <mat-icon class="corner-icon" matTooltip="{{ 'room-page.session-settings' | translate}}">settings</mat-icon>
           </button>
-          <button mat-icon-button class="corner-icons" [ngClass]="{'disabled': noGroups}" id="statistics-button"
+          <button mat-icon-button class="corner-buttons" [ngClass]="{'disabled': noGroups}" id="statistics-button"
                   (click)="navToStats('creator')" aria-labelledby="statistics">
             <mat-icon class="corner-icon" matTooltip="{{ 'room-page.answer-statistics' | translate}}">insert_chart
             </mat-icon>
@@ -109,4 +112,5 @@
   <div id="create-content">{{'room-page.a11y-create-content' | translate}}</div>
   <div id="live-feedback">{{'room-page.a11y-live-feedback' | translate}}</div>
   <div id="statistics">{{'room-page.a11y-statistics' | translate}}</div>
+  <div id="qr-code">{{'room-page.a11y-qr-code' | translate}}</div>
 </div>

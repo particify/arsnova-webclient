@@ -30,7 +30,6 @@
     "a11y-back": "Go back to the previous page.",
     "a11y-login": "Navigates to the Login.",
     "a11y-session": "Open the user menu. Here you can view the sessions you have attended or log out of your account.",
-    "a11y-qr-code": "Opens a dialog box that displays the session link as QR code.",
     "account-deleted": "Your account has been deleted.",
     "back": "Back",
     "delete-account": "Delete account",

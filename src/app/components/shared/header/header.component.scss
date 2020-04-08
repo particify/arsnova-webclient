@@ -7,16 +7,6 @@ mat-toolbar {
   color: var(--on-surface);
 }
 
-::ng-deep .qrcode svg > path {
-  fill: var(--on-surface);
-  color: var(--on-surface);
-}
-
-svg {
-  -webkit-filter: invert(100%);
-  filter: invert(100%);
-}
-
 .gavel {
   cursor: initial;
 }

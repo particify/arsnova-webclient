@@ -15,6 +15,7 @@ import { KeyboardUtils } from '../../../utils/keyboard';
 import { KeyboardKey } from '../../../utils/keyboard/keys';
 import { ContentService } from '../../../services/http/content.service';
 import { ContentGroup } from '../../../models/content-group';
+import { DialogService } from '../../../services/util/dialog.service';
 
 @Component({
   selector: 'app-room-creator-page',
@@ -38,7 +39,8 @@ export class RoomCreatorPageComponent extends RoomPageComponent implements OnIni
               protected commentService: CommentService,
               private liveAnnouncer: LiveAnnouncer,
               public eventService: EventService,
-              protected contentService: ContentService) {
+              protected contentService: ContentService,
+              private dialogService: DialogService) {
     super(roomService, route, router, location, wsCommentService, commentService, eventService, contentService, translateService,
       notification);
     langService.langEmitter.subscribe(lang => translateService.use(lang));
@@ -73,8 +75,9 @@ export class RoomCreatorPageComponent extends RoomPageComponent implements OnIni
       document.getElementById('statistics-button').focus();
     } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit8) === true && focusOnInput === false) {
       document.getElementById('settings-button').focus();
-    } else if (
-      KeyboardUtils.isKeyEvent(event, KeyboardKey.Escape) === true && focusOnInput === false) {
+    } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit9) === true) {
+      document.getElementById('qr-code-button').focus();
+    } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Escape) === true && focusOnInput === false) {
       this.announce();
     }
   }
@@ -127,6 +130,15 @@ export class RoomCreatorPageComponent extends RoomPageComponent implements OnIni
       }
     });
     sessionStorage.setItem('contentGroups', JSON.stringify(this.groupNames));
+  }
+
+  public showQRDialog() {
+    const dialogRef = this.dialogService.openQRCodeDialog(window.location.protocol, window.location.hostname, this.room.shortId, true);
+    dialogRef.afterClosed().subscribe(() => {
+      setTimeout(() => {
+        document.getElementById('live-announcer-button').focus();
+      }, 300);
+    });
   }
 }
 

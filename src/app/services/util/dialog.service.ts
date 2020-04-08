@@ -102,8 +102,8 @@ export class DialogService {
     });
   }
 
-  openQRCodeDialog(protocol: string, hostname: string, shortId: string, isCreator: boolean): void {
-    this.dialog.open(QrCodeComponent, {
+  openQRCodeDialog(protocol: string, hostname: string, shortId: string, isCreator: boolean): MatDialogRef<QrCodeComponent> {
+    return this.dialog.open(QrCodeComponent, {
       panelClass: 'screenDialog',
       data: {
         protocol: protocol,

@@ -188,10 +188,4 @@ export class HeaderComponent implements OnInit {
   cookiesDisabled(): boolean {
     return localStorage.getItem('cookieAccepted') === 'false';
   }
-
-  /*QR*/
-
-  public showQRDialog() {
-    this.dialogService.openQRCodeDialog(window.location.protocol, window.location.hostname, this.shortId, this.user.role === 3);
-  }
 }
