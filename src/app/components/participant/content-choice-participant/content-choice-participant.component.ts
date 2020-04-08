@@ -96,9 +96,11 @@ export class ContentChoiceParticipantComponent implements OnInit {
   getCorrectAnswer() {
     if (this.content.format !== ContentType.SCALE) {
       for (const i in this.content.options) {
-        this.allAnswers += this.content.options[i].label + '&';
-        if (this.content.options[i].points > 0) {
-          this.correctOptionIndexes.push(Number(i));
+        if (this.content.options[i]) {
+          this.allAnswers += this.content.options[i].label + '&';
+          if (this.content.options[i].points > 0) {
+            this.correctOptionIndexes.push(Number(i));
+          }
         }
       }
     } else {

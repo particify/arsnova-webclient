@@ -45,9 +45,7 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
     if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit1) === true) {
       document.getElementById('step').focus();
     } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Escape) === true) {
-      this.translateService.get('answer.a11y-keys').subscribe(msg => {
-        this.announce(msg);
-      });
+      this.announce('answer.a11y-keys');
     }
   }
 
@@ -77,9 +75,11 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
     });
   }
 
-  announce(msg: string) {
+  announce(key: string) {
     this.liveAnnouncer.clear();
-    this.liveAnnouncer.announce(msg);
+    this.translateService.get(key).subscribe(msg => {
+      this.liveAnnouncer.announce(msg);
+    });
   }
 
   receiveSentStatus($event, index: number) {
@@ -108,9 +108,7 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
           }, 200);
         }, 500);
       } else {
-        this.translateService.get('answer.a11y-last-content').subscribe(msg => {
-          this.announce(msg);
-        });
+        this.announce('answer.a11y-last-content');
       }
     }
   }

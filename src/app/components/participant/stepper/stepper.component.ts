@@ -81,7 +81,9 @@ export class StepperComponent extends CdkStepper {
   previous(): void {
     if (this.selectedIndex > 0) {
       this.onClick(this.selectedIndex - 1);
-      document.getElementById('step').focus();
+      setTimeout(() => {
+        document.getElementById('step').focus();
+      }, 300);
     }
   }
 
