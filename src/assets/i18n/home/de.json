@@ -30,7 +30,6 @@
     "a11y-back": "Führt zur vorherigen Seite.",
     "a11y-login": "Navigiert zur Anmeldung.",
     "a11y-session": "Öffnet das Nutzer-Menü. Hier kannst du deine besuchten Sitzungen einsehen oder dich von deinem Konto abmelden.",
-    "a11y-qr-code": "Öffnet ein Dialogfenster welches den Sitzungslink als QR-Code darstellt.",
     "account-deleted": "Dein Konto wurde gelöscht.",
     "back": "Zurück",
     "delete-account": "Konto löschen",

@@ -18,11 +18,6 @@
     <h2 id="shortId-header" *ngIf="router.url.includes('comments') && user.role === 3 && deviceType === 'desktop'">
       {{'header.id' | translate}}: {{ shortId.slice(0, 4) }} {{  shortId.slice(4, 8) }}
     </h2>
-    <button mat-icon-button (click)="showQRDialog()" aria-labelledby="qr-code"
-    *ngIf="router.url.substring(router.url.length - 13, router.url.length) === ('room/' + shortId)">
-      <mat-icon svgIcon="qrcode" class="header-icons qrcode">
-      </mat-icon>
-    </button>
     <span class="fill-remaining-space"></span>
 
     <mat-menu #userMenu="matMenu" [overlapTrigger]="false">
@@ -82,5 +77,4 @@
   <div id="login-label">{{'header.a11y-login' | translate}}</div>
   <div id="back-label">{{'header.a11y-back' | translate}}</div>
   <div id="session-label">{{'header.a11y-session' | translate}}</div>
-  <div id="qr-code">{{'header.a11y-qr-code' | translate}}</div>
 </div>
