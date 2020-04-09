@@ -26,7 +26,10 @@ export class DialogService {
   private size = {
     xsmall: '350px',
     small: '400px',
-    medium: '600px'
+    medium: '600px',
+    large: '80%',
+    xlarge: '90%',
+    max: '832px',
   };
 
   constructor(public dialog: MatDialog) {
@@ -49,7 +52,8 @@ export class DialogService {
 
   openInfoDialog(section: string, body: string): void {
     this.dialog.open(InfoDialogComponent, {
-      'width': '80%',
+      maxWidth: this.size.max,
+      width: this.size.xlarge,
       data: {
         section: section,
         body: body
@@ -141,7 +145,7 @@ export class DialogService {
 
   openCookieDialog(): MatDialogRef<CookiesComponent> {
     return this.dialog.open(CookiesComponent, {
-      width: '80%',
+      width: this.size.large,
       autoFocus: true
     });
   }
@@ -164,7 +168,7 @@ export class DialogService {
 
   openUserActivationDialog(username: string): MatDialogRef<UserActivationComponent> {
     return this.dialog.open(UserActivationComponent, {
-      width: '350px',
+      width: this.size.xsmall,
       data: {
         name: username
       }
