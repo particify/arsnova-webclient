@@ -4,7 +4,7 @@ mat-card {
 
 mat-progress-bar {
   height: 50px;
-  margin-bottom: 20px;
+  margin: 8px 0;
 }
 
 mat-icon {
@@ -12,6 +12,7 @@ mat-icon {
   height: 50px;
   width: 50px;
   color: var(--primary);
+  margin: 8px 0;
 }
 
 p {
