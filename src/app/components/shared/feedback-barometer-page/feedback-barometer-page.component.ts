@@ -13,6 +13,7 @@ import { LanguageService } from '../../../services/util/language.service';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { KeyboardUtils } from '../../../utils/keyboard';
 import { KeyboardKey } from '../../../utils/keyboard/keys';
+import { Survey } from '../../../models/survey';
 
 @Component({
   selector: 'app-feedback-barometer-page',
@@ -21,13 +22,11 @@ import { KeyboardKey } from '../../../utils/keyboard/keys';
 })
 export class FeedbackBarometerPageComponent implements OnInit, AfterContentInit, OnDestroy {
 
-  feedback = [
-    { state: 0, name: 'sentiment_very_satisfied', label: 'feedback.very-satisfied', a11y: 'feedback.a11y-very-satisfied', count: 0 },
-    { state: 1, name: 'sentiment_satisfied', label: 'feedback.satisfied', a11y: 'feedback.a11y-satisfied', count: 0 },
-    { state: 2, name: 'sentiment_dissatisfied', label: 'feedback.dissatisfied', a11y: 'feedback.a11y-dissatisfied', count: 0 },
-    { state: 3, name: 'sentiment_very_dissatisfied', label: 'feedback.very-dissatisfied', a11y: 'feedback.a11y-very-dissatisfied',
-      count: 0 }
-  ];
+  feedbackLabels = ['sentiment_very_satisfied', 'sentiment_satisfied', 'sentiment_dissatisfied', 'sentiment_very-dissatisfied'];
+  surveyLabels = ['survey-a', 'survey-b', 'survey-c', 'survey-d'];
+
+  survey: Survey[] = [];
+
   isOwner = false;
   user: User;
   roomId: string;
@@ -35,6 +34,7 @@ export class FeedbackBarometerPageComponent implements OnInit, AfterContentInit,
   protected sub: Subscription;
   isClosed = false;
   isLoading = true;
+  type: string;
 
   constructor(
     private authenticationService: AuthenticationService,
@@ -85,6 +85,10 @@ export class FeedbackBarometerPageComponent implements OnInit, AfterContentInit,
     this.roomService.getRoom(this.roomId).subscribe(room => {
       this.room = room;
       this.isClosed = room.settings['feedbackLocked'];
+      if (this.room.extensions && this.room.extensions['feedbackType']) {
+        this.type = this.room.extensions['FeedbackType'];
+        this.getLabels(this.type === 'SURVEY');
+      }
       this.isOwner = this.authenticationService.hasAccess(this.room.shortId, UserRole.CREATOR);
       this.isLoading = false;
     });
@@ -111,11 +115,21 @@ export class FeedbackBarometerPageComponent implements OnInit, AfterContentInit,
 
   announceStatus() {
     this.translateService.get(this.isClosed ? 'feedback.a11y-stopped' : 'feedback.a11y-started').subscribe(status => {
-      this.translateService.get('feedback.a11y-status', { status: status, state0: this.feedback[0].count, state1: this.feedback[1].count,
-        state2: this.feedback[2].count, state3: this.feedback[3].count }).subscribe(msg => {
+      this.translateService.get('feedback.a11y-status', { status: status, state0: this.survey[0].count, state1: this.survey[1].count,
+        state2: this.survey[2].count, state3: this.survey[3].count }).subscribe(msg => {
         this.announce(msg);
       });
     });
+  }
+
+  getLabels(isSurvey: boolean) {
+    const labels = isSurvey ? this.surveyLabels : this.feedbackLabels;
+    for (let i = 0; i < this.surveyLabels.length; i++) {
+      const label = labels[i];
+      const section = 'feedback.';
+      const subsection = 'a11y-';
+      this.survey.push(new Survey(i, label, section + label, section + subsection + label, 0));
+    }
   }
 
   ngOnDestroy() {
@@ -127,8 +141,8 @@ export class FeedbackBarometerPageComponent implements OnInit, AfterContentInit,
   private updateFeedback(data) {
     const reducer = (accumulator, currentValue) => accumulator + currentValue;
     const sum = data.reduce(reducer);
-    for (let i = 0; i < this.feedback.length; i++) {
-      this.feedback[i].count = data[i] / sum * 100;
+    for (let i = 0; i < this.survey.length; i++) {
+      this.survey[i].count = data[i] / sum * 100;
     }
   }
 
