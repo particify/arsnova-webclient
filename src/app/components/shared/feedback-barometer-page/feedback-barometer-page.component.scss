@@ -7,16 +7,17 @@ mat-progress-bar {
   margin: 8px 0;
 }
 
-mat-icon {
-  font-size: 50px;
-  height: 50px;
-  width: 50px;
+.label-icon {
+  font-size: 40px;
+  height: 40px;
+  width: 40px;
   color: var(--primary);
-  margin: 8px 0;
 }
 
-p {
-  margin: 0;
+.mat-raised-button {
+  width: 120px;
+  height: 36px;
+  margin: 18px 0 10px 0;
 }
 
 .feedback-container {
@@ -46,4 +47,12 @@ p {
   transition: 0.2s;
   transform: scale(1);
   opacity: 1;
+}
+
+.answer-label {
+  font-size: 24px;
+  font-weight: bold;
+  margin: 0 20px 0 4px!important;
+  height: 24px;
+  width: 40px;
 }

@@ -14,7 +14,6 @@ import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { KeyboardUtils } from '../../../utils/keyboard';
 import { KeyboardKey } from '../../../utils/keyboard/keys';
 import { Survey } from '../../../models/survey';
-import { TSMap } from 'typescript-map';
 
 @Component({
   selector: 'app-feedback-barometer-page',
@@ -34,8 +33,10 @@ export class FeedbackBarometerPageComponent implements OnInit, AfterContentInit,
   room: Room;
   protected sub: Subscription;
   isClosed = false;
+  labelsAvailable = false;
   isLoading = true;
-  type: string;
+  type = 'SURVEY';
+  noType = false;
 
   constructor(
     private authenticationService: AuthenticationService,
@@ -86,15 +87,17 @@ export class FeedbackBarometerPageComponent implements OnInit, AfterContentInit,
     this.roomService.getRoom(this.roomId).subscribe(room => {
       this.room = room;
       this.isClosed = room.settings['feedbackLocked'];
-      if (this.room.extensions && this.room.extensions['feedback']) {
+      if (this.room.extensions && this.room.extensions['feedback'] && this.room.extensions['feedback'].type) {
         this.type = this.room.extensions['feedback'].type;
-        this.getLabels(this.type);
+        this.getLabels();
+        this.labelsAvailable = true;
+      } else {
+        this.noType = true;
       }
       this.isOwner = this.authenticationService.hasAccess(this.room.shortId, UserRole.CREATOR);
       this.isLoading = false;
     });
     this.user = this.authenticationService.getUser();
-
     this.sub = this.wsFeedbackService.getFeedbackStream(this.roomId).subscribe((message: Message) => {
       this.parseIncomingMessage(message);
     });
@@ -123,8 +126,8 @@ export class FeedbackBarometerPageComponent implements OnInit, AfterContentInit,
     });
   }
 
-  getLabels(type: string) {
-    const labels = type === 'SURVEY' ? this.surveyLabels : this.feedbackLabels;
+  getLabels() {
+    const labels = this.type === 'SURVEY' ? this.surveyLabels : this.feedbackLabels;
     for (let i = 0; i < this.surveyLabels.length; i++) {
       const label = labels[i];
       const section = 'feedback.';
@@ -147,15 +150,12 @@ export class FeedbackBarometerPageComponent implements OnInit, AfterContentInit,
     }
   }
 
-  changeType() {
-    this.type = this.type === 'SURVEY' ? 'SMILEYS' : 'SURVEY';
-    const feedbackExtension: TSMap<string, any> = new TSMap();
-    feedbackExtension.set('type', this.type);
-    this.room.extensions['feedback'] = feedbackExtension;
-    this.getLabels(this.type);
-    this.roomService.updateRoom(this.room).subscribe(room => {
-      this.room = room;
-    });
+  changeType(type?: string) {
+    if (type) {
+      this.type = type;
+    }
+    this.getLabels();
+    this.roomService.changeFeedbackType(this.roomId, this.type);
   }
 
   updateRoom(isClosed: boolean) {
@@ -169,6 +169,10 @@ export class FeedbackBarometerPageComponent implements OnInit, AfterContentInit,
   }
 
   toggle() {
+    if (this.isClosed && this.noType) {
+      this.changeType();
+      this.noType = true;
+    }
     this.updateRoom(!this.isClosed);
     this.translateService.get(this.isClosed ? 'feedback.a11y-started' : 'feedback.a11y-stopped').subscribe(status => {
       this.translateService.get('feedback.a11y-status-changed', { status: status })

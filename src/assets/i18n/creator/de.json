@@ -189,7 +189,11 @@
     "very-satisfied": "Schneller, bitte!",
     "satisfied": "Ich kann folgen.",
     "dissatisfied": "Langsamer, bitte!",
-    "very-dissatisfied": "Ich wurde abgehängt."
+    "very-dissatisfied": "Ich wurde abgehängt.",
+    "survey-a": "A",
+    "survey-b": "B",
+    "survey-c": "C",
+    "survey-d": "D"
   },
   "home-page": {
     "create-session": "Neue Sitzung",

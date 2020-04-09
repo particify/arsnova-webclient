@@ -4,26 +4,35 @@
     <button class="visually-hidden" id="message-announcer-button" tabIndex="-1" (click)="announceKeys()">
       {{ 'feedback.a11y-message' | translate }}</button>
     <mat-card>
+      <div fxLayout="row" fxLayoutAlign="end center">
+        <button *ngIf="isOwner && isClosed" mat-icon-button (click)="changeType(type === 'SURVEY' ? 'FEEDBACK' : 'SURVEY')">
+          <mat-icon>swap_horiz</mat-icon>
+        </button>
+      </div>
       <div class="feedback-container" [ngClass]="{'faded' : isClosed}">
-        <div fxLayout="row" fxLayoutGap="30px" *ngFor="let state of survey; let i = index">
-          <button id="feedback-button-{{i}}" mat-icon-button [disabled]="isOwner" (click)="submitSurvey(state.state)"
-                  attr.aria-label="{{ state.a11y | translate }}">
-            <mat-icon matTooltip="{{ state.label | translate }}">
+        <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="30px" *ngFor="let state of survey; let i = index">
+          <button *ngIf="type === 'FEEDBACK'" id="feedback-button-{{i}}" mat-icon-button
+                  [disabled]="isOwner" (click)="submitSurvey(state.state)"  attr.aria-label="{{ state.a11y | translate }}">
+            <mat-icon class="label-icon" matTooltip="{{ state.label | translate }}">
               {{ state.name }}</mat-icon>
           </button>
+          <p *ngIf="type === 'SURVEY'" class="answer-label">{{ state.label | translate }}</p>
           <mat-progress-bar class="feedback-progress" [value]="state.count"></mat-progress-bar>
         </div>
       </div>
-      <div class="text invisible" [ngClass]="{'visible' : isClosed}">
+      <div *ngIf="!noType" class="text invisible" [ngClass]="{'visible' : isClosed}">
         <h3 tabindex="-1" id="stopped-label">{{ 'feedback.is-stopped' | translate }}</h3>
       </div>
-      <div fxLayoutAlign="center" fxLayoutGap="20px" *ngIf="isOwner">
-        <button mat-raised-button id="change-button" class="button-secondary" fxLayoutAlign="center" (click)="changeType()"
-                aria-labelledby="reset">
-        ChangeType
-        </button>
-        <button mat-raised-button id="reset-button" class="button-secondary" fxLayoutAlign="center" (click)="reset()"
-                aria-labelledby="reset">
+      <div fxLayoutAlign="center center" fxLayoutGap="20px" *ngIf="isOwner">
+        <mat-form-field *ngIf="noType">
+          <mat-label>Select a type</mat-label>
+          <mat-select [(value)]="type">
+            <mat-option value="SURVEY">{{ 'feedback.type-survey' | translate }}</mat-option>
+            <mat-option value="FEEDBACK">{{ 'feedback.type-feedback' | translate }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <button *ngIf="!noType" mat-raised-button id="reset-button" class="button-secondary"
+                fxLayoutAlign="center" (click)="reset()" aria-labelledby="reset">
           {{ 'feedback.reset' | translate }}
         </button>
         <button mat-raised-button id="toggle-button" class="button-primary" fxLayoutAlign="center" (click)="toggle()"

@@ -189,7 +189,11 @@
     "very-satisfied": "Faster, please!",
     "satisfied": "I can follow.",
     "dissatisfied": "Slower, please!",
-    "very-dissatisfied": "I can't keep up."
+    "very-dissatisfied": "I can't keep up.",
+    "survey-a": "A",
+    "survey-b": "B",
+    "survey-c": "C",
+    "survey-d": "D"
   },
   "home-page": {
     "create-session": "New Session",

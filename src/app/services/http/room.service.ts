@@ -174,6 +174,17 @@ export class RoomService extends BaseHttpService {
     });
   }
 
+  changeFeedbackType(roomId: string, feedbackType: string) {
+    this.getRoom(roomId).subscribe(room => {
+      const feedbackExtension: TSMap<string, any> = new TSMap();
+      feedbackExtension.set('type', feedbackType);
+      room.extensions['feedback'] = feedbackExtension;
+      const changes = new TSMap<string, any>();
+      changes.set('extensions', room.extensions);
+      this.patchRoom(roomId, changes);
+    });
+  }
+
   parseExtensions(room: Room): Room {
     if (room.extensions) {
       let extensions: TSMap<string, TSMap<string, any>> = new TSMap();
