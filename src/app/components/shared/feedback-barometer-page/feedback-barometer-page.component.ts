@@ -14,6 +14,7 @@ import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { KeyboardUtils } from '../../../utils/keyboard';
 import { KeyboardKey } from '../../../utils/keyboard/keys';
 import { Survey } from '../../../models/survey';
+import { TSMap } from 'typescript-map';
 
 @Component({
   selector: 'app-feedback-barometer-page',
@@ -22,7 +23,7 @@ import { Survey } from '../../../models/survey';
 })
 export class FeedbackBarometerPageComponent implements OnInit, AfterContentInit, OnDestroy {
 
-  feedbackLabels = ['sentiment_very_satisfied', 'sentiment_satisfied', 'sentiment_dissatisfied', 'sentiment_very-dissatisfied'];
+  feedbackLabels = ['sentiment_very_satisfied', 'sentiment_satisfied', 'sentiment_dissatisfied', 'sentiment_very_dissatisfied'];
   surveyLabels = ['survey-a', 'survey-b', 'survey-c', 'survey-d'];
 
   survey: Survey[] = [];
@@ -85,9 +86,9 @@ export class FeedbackBarometerPageComponent implements OnInit, AfterContentInit,
     this.roomService.getRoom(this.roomId).subscribe(room => {
       this.room = room;
       this.isClosed = room.settings['feedbackLocked'];
-      if (this.room.extensions && this.room.extensions['feedbackType']) {
-        this.type = this.room.extensions['FeedbackType'];
-        this.getLabels(this.type === 'SURVEY');
+      if (this.room.extensions && this.room.extensions['feedback']) {
+        this.type = this.room.extensions['feedback'].type;
+        this.getLabels(this.type);
       }
       this.isOwner = this.authenticationService.hasAccess(this.room.shortId, UserRole.CREATOR);
       this.isLoading = false;
@@ -122,13 +123,13 @@ export class FeedbackBarometerPageComponent implements OnInit, AfterContentInit,
     });
   }
 
-  getLabels(isSurvey: boolean) {
-    const labels = isSurvey ? this.surveyLabels : this.feedbackLabels;
+  getLabels(type: string) {
+    const labels = type === 'SURVEY' ? this.surveyLabels : this.feedbackLabels;
     for (let i = 0; i < this.surveyLabels.length; i++) {
       const label = labels[i];
       const section = 'feedback.';
       const subsection = 'a11y-';
-      this.survey.push(new Survey(i, label, section + label, section + subsection + label, 0));
+      this.survey[i] = new Survey(i, label, section + label, section + subsection + label, 0);
     }
   }
 
@@ -146,27 +147,38 @@ export class FeedbackBarometerPageComponent implements OnInit, AfterContentInit,
     }
   }
 
-  submitFeedback(state: number) {
+  changeType() {
+    this.type = this.type === 'SURVEY' ? 'SMILEYS' : 'SURVEY';
+    const feedbackExtension: TSMap<string, any> = new TSMap();
+    feedbackExtension.set('type', this.type);
+    this.room.extensions['feedback'] = feedbackExtension;
+    this.getLabels(this.type);
+    this.roomService.updateRoom(this.room).subscribe(room => {
+      this.room = room;
+    });
+  }
+
+  updateRoom(isClosed: boolean) {
+    this.roomService.changeFeedbackLock(this.roomId, isClosed);
+  }
+
+  submitSurvey(state: number) {
     if (!this.isOwner) {
       this.wsFeedbackService.send(this.user.id, state, this.roomId);
     }
   }
 
   toggle() {
+    this.updateRoom(!this.isClosed);
     this.translateService.get(this.isClosed ? 'feedback.a11y-started' : 'feedback.a11y-stopped').subscribe(status => {
       this.translateService.get('feedback.a11y-status-changed', { status: status })
         .subscribe(msg => {
           this.announce(msg);
         });
     });
-    if (this.isClosed) {
-      this.roomService.changeFeedbackLock(this.roomId, false);
-    } else {
-      this.roomService.changeFeedbackLock(this.roomId, true);
-    }
   }
 
-reset() {
+  reset() {
     this.wsFeedbackService.reset(this.roomId);
     this.translateService.get('feedback.has-been-reset').subscribe(msg => {
       this.notificationService.show(msg);

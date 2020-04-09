@@ -6,7 +6,7 @@
     <mat-card>
       <div class="feedback-container" [ngClass]="{'faded' : isClosed}">
         <div fxLayout="row" fxLayoutGap="30px" *ngFor="let state of survey; let i = index">
-          <button id="feedback-button-{{i}}" mat-icon-button [disabled]="isOwner" (click)="submitFeedback(state.state)"
+          <button id="feedback-button-{{i}}" mat-icon-button [disabled]="isOwner" (click)="submitSurvey(state.state)"
                   attr.aria-label="{{ state.a11y | translate }}">
             <mat-icon matTooltip="{{ state.label | translate }}">
               {{ state.name }}</mat-icon>
@@ -18,6 +18,10 @@
         <h3 tabindex="-1" id="stopped-label">{{ 'feedback.is-stopped' | translate }}</h3>
       </div>
       <div fxLayoutAlign="center" fxLayoutGap="20px" *ngIf="isOwner">
+        <button mat-raised-button id="change-button" class="button-secondary" fxLayoutAlign="center" (click)="changeType()"
+                aria-labelledby="reset">
+        ChangeType
+        </button>
         <button mat-raised-button id="reset-button" class="button-secondary" fxLayoutAlign="center" (click)="reset()"
                 aria-labelledby="reset">
           {{ 'feedback.reset' | translate }}
