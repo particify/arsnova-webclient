@@ -183,7 +183,7 @@
     "a11y-status-changed": "Das Feedback wurde {{status}}.",
     "is-stopped": "Feedback ist angehalten.",
     "has-been-reset": "Das Feedback wurde zrückgesetzt.",
-    "start": "Freigeben",
+    "start": "Starten",
     "stop": "Anhalten",
     "reset": "Zurücksetzen",
     "very-satisfied": "Schneller, bitte!",
@@ -193,7 +193,10 @@
     "survey-a": "A",
     "survey-b": "B",
     "survey-c": "C",
-    "survey-d": "D"
+    "survey-d": "D",
+    "select-type": "Wähle den Typ",
+    "type-survey": "Umfrage",
+    "type-feedback": "Feedback"
   },
   "home-page": {
     "create-session": "Neue Sitzung",

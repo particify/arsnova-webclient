@@ -106,7 +106,11 @@
     "very-satisfied": "Schneller, bitte!",
     "satisfied": "Ich kann folgen.",
     "dissatisfied": "Langsamer, bitte!",
-    "very-dissatisfied": "Ich wurde abgehängt."
+    "very-dissatisfied": "Ich wurde abgehängt.",
+    "survey-a": "A",
+    "survey-b": "B",
+    "survey-c": "C",
+    "survey-d": "D"
   },
   "room-page": {
     "a11y-room-message": "Du befindest dich jetzt in der Sitzung. Um Informationen zu Tastenkombinationen zu erhalten drücke jetzt die Enter-Taste oder rufe die Ansage zu einem späteren Zeitpunkt mit der Escape-Taste auf.",

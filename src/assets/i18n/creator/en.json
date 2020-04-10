@@ -183,8 +183,8 @@
     "a11y-status-changed": "The feedback has been  {{status}}.",
     "is-stopped": "Voting got stopped",
     "has-been-reset": "The feedback has been reset.",
-    "start": "Start voting",
-    "stop": "Stop voting",
+    "start": "Start survey",
+    "stop": "Stop survey",
     "reset": "Reset voting",
     "very-satisfied": "Faster, please!",
     "satisfied": "I can follow.",
@@ -193,7 +193,10 @@
     "survey-a": "A",
     "survey-b": "B",
     "survey-c": "C",
-    "survey-d": "D"
+    "survey-d": "D",
+    "select-type": "Select a type",
+    "type-survey": "Survey",
+    "type-feedback": "Feedback"
   },
   "home-page": {
     "create-session": "New Session",

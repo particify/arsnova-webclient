@@ -108,7 +108,11 @@
     "very-satisfied": "Faster, please!",
     "satisfied": "I can follow.",
     "dissatisfied": "Slower, please!",
-    "very-dissatisfied": "I can't keep up."
+    "very-dissatisfied": "I can't keep up.",
+    "survey-a": "A",
+    "survey-b": "B",
+    "survey-c": "C",
+    "survey-d": "D"
   },
   "room-page": {
     "a11y-room-message": "You're in the session now. To get information about key combinations press the Enter key or call the announcement later with the Escape key.",

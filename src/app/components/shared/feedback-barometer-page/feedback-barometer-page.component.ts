@@ -151,6 +151,7 @@ export class FeedbackBarometerPageComponent implements OnInit, AfterContentInit,
   }
 
   changeType(type?: string) {
+    this.noType = false;
     if (type) {
       this.type = type;
     }
