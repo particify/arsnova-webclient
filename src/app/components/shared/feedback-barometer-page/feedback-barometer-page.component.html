@@ -11,11 +11,8 @@
       </div>
       <div class="feedback-container" [ngClass]="{'faded' : isClosed}">
         <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="30px" *ngFor="let state of survey; let i = index">
-          <button *ngIf="type === 'FEEDBACK'" id="feedback-button-{{i}}" mat-icon-button
-                  [disabled]="isOwner" (click)="submitSurvey(state.state)"  attr.aria-label="{{ state.a11y | translate }}">
-            <mat-icon class="label-icon" matTooltip="{{ state.label | translate }}">
-              {{ state.name }}</mat-icon>
-          </button>
+          <mat-icon *ngIf="type === 'FEEDBACK'" class="label-icon" matTooltip="{{ state.label | translate }}">
+            {{ state.name }}</mat-icon>
           <p *ngIf="type === 'SURVEY'" class="answer-label">{{ state.label | translate }}</p>
           <mat-progress-bar class="feedback-progress" [value]="state.count"></mat-progress-bar>
         </div>
@@ -41,6 +38,28 @@
         </button>
       </div>
     </mat-card>
+  </div>
+  <div *ngIf="!isOwner" fxLayout="column" fxLayoutAlign="start center" class="answer-container">
+    <div fxLayout="row" fxLayoutGap="16px" class="card-row">
+      <ng-container *ngFor="let state of survey; let i = index">
+        <mat-card *ngIf="i < 2" id="feedback-button-{{i}}" fxLayout="row" fxLayoutAlign="center center" class="answer"
+                  attr.aria-label="{{ state.a11y | translate }}"(click)="submitSurvey(state.state)">
+          <p  *ngIf="type === 'SURVEY'" class="answer-button-label">{{ state.label | translate }}"</p>
+          <mat-icon *ngIf="type === 'FEEDBACK'" class="button-label-icon" matTooltip="{{ state.label | translate }}">
+            {{ state.name }}</mat-icon>
+        </mat-card>
+      </ng-container>
+    </div>
+    <div fxLayout="row" fxLayoutGap="16px" class="card-row">
+      <ng-container *ngFor="let state of survey; let i = index">
+        <mat-card *ngIf="i >= 2" id="feedback-button2-{{i}}" fxLayout="row" fxLayoutAlign="center center" class="answer"
+                  attr.aria-label="{{ state.a11y | translate }}" (click)="submitSurvey(state.state)">
+          <p  *ngIf="type === 'SURVEY'" class="answer-button-label">{{ state.label | translate }}"</p>
+          <mat-icon *ngIf="type === 'FEEDBACK'" class="button-label-icon" matTooltip="{{ state.label | translate }}">
+            {{ state.name }}</mat-icon>
+        </mat-card>
+      </ng-container>
+    </div>
   </div>
 </div>
 

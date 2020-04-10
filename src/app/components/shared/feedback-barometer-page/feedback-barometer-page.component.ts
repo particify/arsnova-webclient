@@ -63,9 +63,9 @@ export class FeedbackBarometerPageComponent implements OnInit, AfterContentInit,
       } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit4) === true) {
         document.getElementById('feedback-button-1').focus();
       } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit5) === true) {
-        document.getElementById('feedback-button-2').focus();
+        document.getElementById('feedback-button2-2').focus();
       } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit6) === true) {
-        document.getElementById('feedback-button-3').focus();
+        document.getElementById('feedback-button2-3').focus();
       }
     }
     if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Escape) === true) {
