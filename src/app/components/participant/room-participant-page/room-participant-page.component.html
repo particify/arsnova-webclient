@@ -46,6 +46,8 @@
           </button>
         </mat-grid-tile>
       </mat-grid-list>
+      <p tabindex="-1" id="live-feedback-disabled" class="visually-hidden">
+        {{ 'room-page.a11y-live-feedback-disabled' | translate }}</p>
       <app-content-groups *ngIf="room && contentGroups" [contentGroups]="contentGroups"></app-content-groups>
       <p tabindex="-1" id="no-content-groups" class="visually-hidden">
         {{ 'room-page.a11y-no-content-groups' | translate }}</p>

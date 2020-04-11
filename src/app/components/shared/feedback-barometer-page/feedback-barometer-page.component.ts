@@ -62,14 +62,18 @@ export class FeedbackBarometerPageComponent implements OnInit, OnDestroy, AfterC
         document.getElementById('reset-button').focus();
       }
     } else {
-      if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit3) === true) {
-        document.getElementById('feedback-button-0').focus();
-      } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit4) === true) {
-        document.getElementById('feedback-button-1').focus();
-      } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit5) === true) {
-        document.getElementById('feedback-button2-2').focus();
-      } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit6) === true) {
-        document.getElementById('feedback-button2-3').focus();
+      if (!this.isClosed) {
+        if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit3) === true) {
+          document.getElementById('feedback-button-0').focus();
+        } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit4) === true) {
+          document.getElementById('feedback-button-1').focus();
+        } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit5) === true) {
+          document.getElementById('feedback-button2-2').focus();
+        } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit6) === true) {
+          document.getElementById('feedback-button2-3').focus();
+        }
+      } else {
+        this.announceStatus();
       }
     }
     if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Escape) === true) {
@@ -124,6 +128,14 @@ export class FeedbackBarometerPageComponent implements OnInit, OnDestroy, AfterC
   announceType() {
     this.translateService.get(this.type === this.typeSurvey ? 'feedback.type-survey' : 'feedback.type-feedback').subscribe(type => {
       this.translateService.get('feedback.a11y-selected-type', { type: type }).subscribe(msg => {
+        this.announce(msg);
+      });
+    });
+  }
+
+  announceAnswer(answerLabelKey: string) {
+    this.translateService.get(answerLabelKey).subscribe(answer => {
+      this.translateService.get('feedback.a11y-selected-answer', { answer: answer }).subscribe(msg => {
         this.announce(msg);
       });
     });
@@ -188,11 +200,19 @@ export class FeedbackBarometerPageComponent implements OnInit, OnDestroy, AfterC
     this.roomService.changeFeedbackLock(this.roomId, isClosed);
   }
 
-  submitSurvey(state: number) {
+  submitAnswer(state: number) {
     if (!this.isOwner) {
       this.wsFeedbackService.send(this.user.id, state, this.roomId);
     }
   }
+
+  submitAnswerViaEnter(state: number, answerLabel: string, event) {
+    if (KeyboardUtils.isKeyEvent(event, KeyboardKey.ENTER) === true) {
+      this.submitAnswer(state);
+    }
+    this.announceAnswer(answerLabel);
+  }
+
 
   toggle() {
     if (this.isClosed && this.noType) {

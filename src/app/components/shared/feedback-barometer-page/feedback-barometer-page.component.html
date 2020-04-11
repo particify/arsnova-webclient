@@ -51,7 +51,8 @@
     <div fxLayout="row" fxLayoutGap="16px" class="card-row">
       <ng-container *ngFor="let state of survey; let i = index">
         <mat-card *ngIf="i < 2" id="feedback-button-{{i}}" fxLayout="row" fxLayoutAlign="center center" class="answer"
-                  attr.aria-label="{{ state.a11y | translate }}" (click)="submitSurvey(state.state)">
+                  attr.aria-label="{{ state.a11y | translate }}" (click)="submitAnswer(state.state)" tabindex="0"
+                  (keydown)="submitAnswerViaEnter(state.state, state.label, $event)" role="button">
           <p *ngIf="type === typeSurvey" class="answer-button-label">{{ state.label | translate }}</p>
           <mat-icon *ngIf="type === typeFeedback" class="button-label-icon" matTooltip="{{ state.label | translate }}">
             {{ state.name }}</mat-icon>
@@ -61,7 +62,8 @@
     <div fxLayout="row" fxLayoutGap="16px" class="card-row">
       <ng-container *ngFor="let state of survey; let i = index">
         <mat-card *ngIf="i >= 2" id="feedback-button2-{{i}}" fxLayout="row" fxLayoutAlign="center center" class="answer"
-                  attr.aria-label="{{ state.a11y | translate }}" (click)="submitSurvey(state.state)">
+                  attr.aria-label="{{ state.a11y | translate }}" (click)="submitAnswer(state.state)" tabindex="0"
+                  (keydown)="submitAnswerViaEnter(state.state, state.label, $event)" role="button">
           <p *ngIf="type === typeSurvey" class="answer-button-label">{{ state.label | translate }}</p>
           <mat-icon *ngIf="type === typeFeedback" class="button-label-icon" matTooltip="{{ state.label | translate }}">
             {{ state.name }}</mat-icon>

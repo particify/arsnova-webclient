@@ -7,8 +7,6 @@ mat-progress-bar {
   margin: 8px 0;
 }
 
-// TODO: Mobile & desktop: different views/sizes
-
 .label-icon {
   font-size: 40px;
   height: 40px;
@@ -68,6 +66,7 @@ mat-progress-bar {
   width: 100%;
   background-color: var(--primary)!important;
   cursor: pointer;
+  outline: none;
 }
 
 .answer-container {
