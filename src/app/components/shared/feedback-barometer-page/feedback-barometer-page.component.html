@@ -3,14 +3,11 @@
   <div *ngIf="!isLoading" fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="center">
     <button class="visually-hidden" id="message-announcer-button" tabIndex="-1" (click)="announceKeys()">
       {{ 'feedback.a11y-message' | translate }}</button>
-    <mat-card>
-      <div fxLayout="row" fxLayoutAlign="end center">
-        <button *ngIf="isOwner && isClosed && !noType" mat-icon-button (click)="changeType(type === 'SURVEY' ? 'FEEDBACK' : 'SURVEY')">
-          <mat-icon>swap_horiz</mat-icon>
-        </button>
-      </div>
-      <div class="feedback-container" [ngClass]="{'faded' : isClosed}">
-        <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="30px" *ngFor="let state of survey; let i = index">
+    <mat-card class="card-container" [ngClass]="{'card-closed': noType, 'card-expanded': !noType}">
+      <div class="feedback-container" [ngClass]="{'faded' : isClosed, 'container-closed': noType,
+      'container-expanded': !noType}">
+        <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="30px"
+             *ngFor="let state of survey; let i = index">
           <mat-icon *ngIf="type === 'FEEDBACK'" class="label-icon" matTooltip="{{ state.label | translate }}">
             {{ state.name }}</mat-icon>
           <p *ngIf="type === 'SURVEY'" class="answer-label">{{ state.label | translate }}</p>
@@ -20,7 +17,7 @@
       <div *ngIf="!noType" class="text invisible" [ngClass]="{'visible' : isClosed}">
         <h3 tabindex="-1" id="stopped-label">{{ 'feedback.is-stopped' | translate }}</h3>
       </div>
-      <div fxLayoutAlign="center center" fxLayoutGap="20px" *ngIf="isOwner">
+      <div fxLayoutAlign="center center" fxLayoutGap="20px" *ngIf="isOwner" class="button-container">
         <mat-form-field *ngIf="noType">
           <mat-label>{{ 'feedback.select-type' | translate }}</mat-label>
           <mat-select (selectionChange)="changeType()">
@@ -28,7 +25,10 @@
             <mat-option [value]="'FEEDBACK'">{{ 'feedback.type-feedback' | translate }}</mat-option>
           </mat-select>
         </mat-form-field>
-        <button *ngIf="!noType" mat-raised-button id="reset-button" class="button-secondary"
+        <button *ngIf="isOwner && isClosed && !noType && isEmpty" mat-icon-button (click)="changeType(type === 'SURVEY' ? 'FEEDBACK' : 'SURVEY')">
+          <mat-icon>swap_horiz</mat-icon>
+        </button>
+        <button *ngIf="!noType && !isEmpty" mat-raised-button id="reset-button" class="button-secondary"
                 fxLayoutAlign="center" (click)="reset()" aria-labelledby="reset">
           {{ 'feedback.reset' | translate }}
         </button>
@@ -39,12 +39,12 @@
       </div>
     </mat-card>
   </div>
-  <div *ngIf="!isOwner" fxLayout="column" fxLayoutAlign="start center" class="answer-container">
+  <div *ngIf="!isOwner" [ngClass]="{'faded' : isClosed}" fxLayout="column" fxLayoutAlign="start center" class="answer-container">
     <div fxLayout="row" fxLayoutGap="16px" class="card-row">
       <ng-container *ngFor="let state of survey; let i = index">
         <mat-card *ngIf="i < 2" id="feedback-button-{{i}}" fxLayout="row" fxLayoutAlign="center center" class="answer"
-                  attr.aria-label="{{ state.a11y | translate }}"(click)="submitSurvey(state.state)">
-          <p  *ngIf="type === 'SURVEY'" class="answer-button-label">{{ state.label | translate }}</p>
+                  attr.aria-label="{{ state.a11y | translate }}" (click)="submitSurvey(state.state)">
+          <p *ngIf="type === 'SURVEY'" class="answer-button-label">{{ state.label | translate }}</p>
           <mat-icon *ngIf="type === 'FEEDBACK'" class="button-label-icon" matTooltip="{{ state.label | translate }}">
             {{ state.name }}</mat-icon>
         </mat-card>
@@ -54,7 +54,7 @@
       <ng-container *ngFor="let state of survey; let i = index">
         <mat-card *ngIf="i >= 2" id="feedback-button2-{{i}}" fxLayout="row" fxLayoutAlign="center center" class="answer"
                   attr.aria-label="{{ state.a11y | translate }}" (click)="submitSurvey(state.state)">
-          <p  *ngIf="type === 'SURVEY'" class="answer-button-label">{{ state.label | translate }}</p>
+          <p *ngIf="type === 'SURVEY'" class="answer-button-label">{{ state.label | translate }}</p>
           <mat-icon *ngIf="type === 'FEEDBACK'" class="button-label-icon" matTooltip="{{ state.label | translate }}">
             {{ state.name }}</mat-icon>
         </mat-card>

@@ -25,6 +25,7 @@ mat-progress-bar {
 
 .feedback-container {
   position: relative;
+  transition: 600ms;
 }
 
 .faded {
@@ -92,4 +93,32 @@ mat-progress-bar {
 
 mat-form-field {
   margin-top: 20px;
+}
+
+.container-closed {
+  max-height: 0;
+}
+
+.container-expanded {
+  max-height: 500px;
+}
+
+.card-container {
+  transition: 600ms;
+}
+
+.card-closed {
+  max-height: 100px;
+}
+
+.card-expanded {
+  max-height: 400px;
+}
+
+.button-container {
+  width: 100%;
+}
+
+.corner-button-container {
+  width: 40px!important;
 }

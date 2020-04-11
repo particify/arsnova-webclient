@@ -37,6 +37,7 @@ export class FeedbackBarometerPageComponent implements OnInit, AfterContentInit,
   isLoading = true;
   type = 'SURVEY';
   noType = false;
+  isEmpty = true;
 
   constructor(
     private authenticationService: AuthenticationService,
@@ -148,6 +149,7 @@ export class FeedbackBarometerPageComponent implements OnInit, AfterContentInit,
     for (let i = 0; i < this.survey.length; i++) {
       this.survey[i].count = data[i] / sum * 100;
     }
+    this.isEmpty = sum === 0;
   }
 
   changeType(type?: string) {
