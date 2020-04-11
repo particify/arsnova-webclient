@@ -85,19 +85,7 @@ export class FeedbackBarometerPageComponent implements OnInit, AfterContentInit,
   ngOnInit() {
     this.roomId = localStorage.getItem(`roomId`);
     this.translateService.use(localStorage.getItem('currentLang'));
-    this.roomService.getRoom(this.roomId).subscribe(room => {
-      this.room = room;
-      this.isClosed = room.settings['feedbackLocked'];
-      if (this.room.extensions && this.room.extensions['feedback'] && this.room.extensions['feedback'].type) {
-        this.type = this.room.extensions['feedback'].type;
-        this.getLabels();
-        this.labelsAvailable = true;
-      } else {
-        this.noType = true;
-      }
-      this.isOwner = this.authenticationService.hasAccess(this.room.shortId, UserRole.CREATOR);
-      this.isLoading = false;
-    });
+    this.loadConfig();
     this.user = this.authenticationService.getUser();
     this.sub = this.wsFeedbackService.getFeedbackStream(this.roomId).subscribe((message: Message) => {
       this.parseIncomingMessage(message);
@@ -124,6 +112,22 @@ export class FeedbackBarometerPageComponent implements OnInit, AfterContentInit,
         state2: this.survey[2].count, state3: this.survey[3].count }).subscribe(msg => {
         this.announce(msg);
       });
+    });
+  }
+
+  loadConfig() {
+    this.roomService.getRoom(this.roomId).subscribe(room => {
+      this.room = room;
+      this.isClosed = room.settings['feedbackLocked'];
+      if (this.room.extensions && this.room.extensions['feedback'] && this.room.extensions['feedback'].type) {
+        this.type = this.room.extensions['feedback'].type;
+        this.getLabels();
+        this.labelsAvailable = true;
+      } else {
+        this.noType = true;
+      }
+      this.isOwner = this.authenticationService.hasAccess(this.room.shortId, UserRole.CREATOR);
+      this.isLoading = false;
     });
   }
 
@@ -200,6 +204,7 @@ export class FeedbackBarometerPageComponent implements OnInit, AfterContentInit,
         this.updateFeedback(payload.values);
         break;
       case 'FeedbackStarted':
+        this.loadConfig();
         this.isClosed = false;
         break;
       case 'FeedbackStopped':
