@@ -25,14 +25,20 @@
             <mat-option [value]="'FEEDBACK'">{{ 'feedback.type-feedback' | translate }}</mat-option>
           </mat-select>
         </mat-form-field>
-        <button *ngIf="isOwner && isClosed && !noType && isEmpty" mat-icon-button class="bottom-button"
+        <div class="invisible-button button-container" [ngClass]="{'visible-button': !noType && isEmpty && isClosed}">
+        <button mat-icon-button class="bottom-button"
                 (click)="changeType(type === 'SURVEY' ? 'FEEDBACK' : 'SURVEY')">
           <mat-icon>swap_horiz</mat-icon>
         </button>
-        <button *ngIf="!noType && !isEmpty" mat-raised-button id="reset-button" class="button-secondary bottom-button"
-                fxLayoutAlign="center" (click)="reset()" aria-labelledby="reset">
-          {{ 'feedback.reset' | translate }}
-        </button>
+        </div>
+        <div class="invisible-button button-container" [ngClass]="{'visible-button': !noType && !isEmpty && isClosed}">
+          <button mat-raised-button id="reset-button"
+                  class="button-secondary bottom-button" fxLayoutAlign="center" (click)="reset()"
+                  aria-labelledby="reset">
+            {{ 'feedback.reset' | translate }}
+          </button>
+        </div>
+
         <button [disabled]="noType" mat-raised-button id="toggle-button" class="button-primary bottom-button"
                 fxLayoutAlign="center" (click)="toggle()" aria-labelledby="toggle">
           {{ (isClosed ? 'feedback.start' : 'feedback.stop') | translate }}
