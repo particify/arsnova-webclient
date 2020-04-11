@@ -76,8 +76,8 @@ mat-grid-list {
 
 mat-grid-tile {
   height: 90%;
-  width: calc(50% - 16px) !important;
   padding: 2% !important;
+  overflow: inherit;
 }
 
 .corner-icons {
@@ -94,4 +94,12 @@ mat-grid-tile {
 .gavel {
   margin: 5% 2% 0 0;
   color: var(--on-surface);
+}
+
+.single-tile {
+  width: calc(100% - 32px) !important;
+}
+
+.double-tile {
+  width: calc(50% - 16px) !important;
 }
