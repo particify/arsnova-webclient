@@ -20,6 +20,9 @@ mat-progress-bar {
 .mat-raised-button {
   width: 120px;
   height: 36px;
+}
+
+.bottom-button {
   margin: 18px 0 10px 0;
 }
 
@@ -69,6 +72,7 @@ mat-progress-bar {
 .answer-container {
   height: calc(100% - 296px);
   max-height: 400px;
+  transition: 600ms;
 }
 
 .answer-button-label {
@@ -113,12 +117,4 @@ mat-form-field {
 
 .card-expanded {
   max-height: 400px;
-}
-
-.button-container {
-  width: 100%;
-}
-
-.corner-button-container {
-  width: 40px!important;
 }
