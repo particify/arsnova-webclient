@@ -1,4 +1,4 @@
-import { AfterContentInit, Component, HostListener, OnDestroy, OnInit } from '@angular/core';
+import { AfterContentInit, Component, HostListener, OnDestroy, OnInit, Renderer2 } from '@angular/core';
 import { AuthenticationService } from '../../../services/http/authentication.service';
 import { RoomService } from '../../../services/http/room.service';
 import { UserRole } from '../../../models/user-roles.enum';
@@ -20,10 +20,12 @@ import { Survey } from '../../../models/survey';
   templateUrl: './feedback-barometer-page.component.html',
   styleUrls: ['./feedback-barometer-page.component.scss']
 })
-export class FeedbackBarometerPageComponent implements OnInit, AfterContentInit, OnDestroy {
+export class FeedbackBarometerPageComponent implements OnInit, OnDestroy, AfterContentInit {
 
   feedbackLabels = ['sentiment_very_satisfied', 'sentiment_satisfied', 'sentiment_dissatisfied', 'sentiment_very_dissatisfied'];
   surveyLabels = ['survey-a', 'survey-b', 'survey-c', 'survey-d'];
+  typeSurvey = 'SURVEY';
+  typeFeedback = 'FEEDBACK';
 
   survey: Survey[] = [];
 
@@ -35,7 +37,7 @@ export class FeedbackBarometerPageComponent implements OnInit, AfterContentInit,
   isClosed = false;
   labelsAvailable = false;
   isLoading = true;
-  type = 'SURVEY';
+  type = this.typeSurvey;
   noType = false;
   isEmpty = true;
 
@@ -46,7 +48,8 @@ export class FeedbackBarometerPageComponent implements OnInit, AfterContentInit,
     private roomService: RoomService,
     protected translateService: TranslateService,
     protected langService: LanguageService,
-    private liveAnnouncer: LiveAnnouncer) {
+    private liveAnnouncer: LiveAnnouncer,
+    private _r: Renderer2) {
     langService.langEmitter.subscribe(lang => translateService.use(lang));
   }
 
@@ -72,14 +75,18 @@ export class FeedbackBarometerPageComponent implements OnInit, AfterContentInit,
     if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Escape) === true) {
       this.announceKeys();
     } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit1) === true) {
-      this.announceStatus();
+      if (this.noType) {
+        document.getElementById('type-input').focus();
+      } else {
+        this.announceStatus();
+      }
     }
   }
 
   ngAfterContentInit() {
     setTimeout(() => {
-      document.getElementById('message-announcer-button');
-    }, 700);
+      document.getElementById('message-announcer-button').focus();
+    }, 200);
   }
 
   ngOnInit() {
@@ -93,15 +100,14 @@ export class FeedbackBarometerPageComponent implements OnInit, AfterContentInit,
     this.wsFeedbackService.get(this.roomId);
   }
 
-  announce(key: string) {
-    this.translateService.get(key).subscribe(msg => {
-      this.liveAnnouncer.clear();
-      this.liveAnnouncer.announce(msg, 'assertive');
-    });
+  announce(msg: string) {
+    this.liveAnnouncer.clear();
+    this.liveAnnouncer.announce(msg, 'assertive');
   }
 
   announceKeys() {
-    this.translateService.get('feedback.a11y-keys').subscribe(msg => {
+    const key = this.noType ? 'feedback.a11y-start-keys' : 'feedback.a11y-keys';
+    this.translateService.get(key).subscribe(msg => {
       this.announce(msg);
     });
   }
@@ -114,6 +120,15 @@ export class FeedbackBarometerPageComponent implements OnInit, AfterContentInit,
       });
     });
   }
+
+  announceType() {
+    this.translateService.get(this.type === this.typeSurvey ? 'feedback.type-survey' : 'feedback.type-feedback').subscribe(type => {
+      this.translateService.get('feedback.a11y-selected-type', { type: type }).subscribe(msg => {
+        this.announce(msg);
+      });
+    });
+  }
+
 
   loadConfig() {
     this.roomService.getRoom(this.roomId).subscribe(room => {
@@ -132,7 +147,7 @@ export class FeedbackBarometerPageComponent implements OnInit, AfterContentInit,
   }
 
   getLabels() {
-    const labels = this.type === 'SURVEY' ? this.surveyLabels : this.feedbackLabels;
+    const labels = this.type === this.typeSurvey ? this.surveyLabels : this.feedbackLabels;
     for (let i = 0; i < this.surveyLabels.length; i++) {
       const label = labels[i];
       const section = 'feedback.';
@@ -157,12 +172,16 @@ export class FeedbackBarometerPageComponent implements OnInit, AfterContentInit,
   }
 
   changeType(type?: string) {
-    this.noType = false;
     if (type) {
       this.type = type;
     }
     this.getLabels();
-    this.roomService.changeFeedbackType(this.roomId, this.type);
+    this.roomService.changeFeedbackType(this.roomId, type ? type : this.type);
+    this.noType = false;
+    this.announceType();
+    setTimeout(() => {
+      document.getElementById('toggle-button').focus();
+    }, 500);
   }
 
   updateRoom(isClosed: boolean) {
@@ -181,8 +200,10 @@ export class FeedbackBarometerPageComponent implements OnInit, AfterContentInit,
       this.noType = true;
     }
     this.updateRoom(!this.isClosed);
-    this.translateService.get(this.isClosed ? 'feedback.a11y-started' : 'feedback.a11y-stopped').subscribe(status => {
-      this.translateService.get('feedback.a11y-status-changed', { status: status })
+    const keys = [this.isClosed ? 'feedback.a11y-started' : 'feedback.a11y-stopped',
+                  this.isClosed ? 'feedback.a11y-stop' : 'feedback.a11y-start'];
+    this.translateService.get(keys).subscribe(status => {
+      this.translateService.get('feedback.a11y-status-changed', { status: status[keys[0]], nextStatus: status[keys[1]] })
         .subscribe(msg => {
           this.announce(msg);
         });
@@ -194,6 +215,9 @@ export class FeedbackBarometerPageComponent implements OnInit, AfterContentInit,
     this.translateService.get('feedback.has-been-reset').subscribe(msg => {
       this.notificationService.show(msg);
     });
+    setTimeout(() => {
+      document.getElementById('toggle-button').focus();
+    }, 500);
   }
 
   parseIncomingMessage(message: Message) {
