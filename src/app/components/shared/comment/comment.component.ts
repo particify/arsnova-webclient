@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, Pipe, PipeTransform } from '@angular/core';
 import { Comment } from '../../../models/comment';
 import { Vote } from '../../../models/vote';
 import { AuthenticationService } from '../../../services/http/authentication.service';
@@ -13,6 +13,15 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
 import { CorrectWrong } from '../../../models/correct-wrong.enum';
 import { UserRole } from '../../../models/user-roles.enum';
 import { DialogService } from '../../../services/util/dialog.service';
+import * as moment from 'moment';
+
+@Pipe({ name: 'dateFromNow' })
+export class DateFromNow implements PipeTransform {
+  transform(date: Date, lang: string): string {
+    moment.locale(lang);
+    return moment(date).fromNow();
+  }
+}
 
 @Component({
   selector: 'app-comment',
@@ -78,6 +87,10 @@ export class CommentComponent implements OnInit {
     this.translateService.use(this.language);
     this.deviceType = localStorage.getItem('deviceType');
     this.inAnswerView = !this.router.url.includes('comments');
+  }
+
+  getDateFromNow(): string {
+    return moment(this.comment.timestamp).fromNow();
   }
 
   changeSlideState(): void {

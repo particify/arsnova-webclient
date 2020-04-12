@@ -3,12 +3,7 @@
   <div fxLayout="column">
     <div fxLayout="row" class="comment-actions">
       <div class="date-container light">
-        <div *ngIf="language === 'de'; else englishDate">
-          {{comment.timestamp | date: ' HH:mm '}}
-        </div>
-        <ng-template class="date" #englishDate>
-          {{comment.timestamp | date: 'h:mm a'}}
-        </ng-template>
+        <div>{{comment.timestamp | dateFromNow : language}}</div>
       </div>
       <button mat-icon-button *ngIf="comment.read" [disabled]="true" (click)="setRead(comment)">
         <mat-icon svgIcon="beamer" class="beamer-icon"

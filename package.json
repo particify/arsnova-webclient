@@ -33,6 +33,7 @@
     "core-js": "^2.5.7",
     "is-docker": "^1.1.0",
     "material-design-icons": "^3.0.1",
+    "moment": "^2.24.0",
     "ng2-charts": "^2.3.0",
     "ngx-markdown": "^8.2.2",
     "rxjs": "^6.5.4",
