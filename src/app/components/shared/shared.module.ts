@@ -20,7 +20,7 @@ import { RoomCreateComponent } from './_dialogs/room-create/room-create.componen
 import { UserBonusTokenComponent } from './_dialogs/user-bonus-token/user-bonus-token.component';
 import { RemindOfTokensComponent } from './_dialogs/remind-of-tokens/remind-of-tokens.component';
 import { StatisticHelpComponent } from './_dialogs/statistic-help/statistic-help.component';
-import { CommentComponent } from './comment/comment.component';
+import { CommentComponent, DateFromNow } from './comment/comment.component';
 import { CreateCommentComponent } from './_dialogs/create-comment/create-comment.component';
 import { PresentCommentComponent } from './_dialogs/present-comment/present-comment.component';
 import { DialogActionButtonsComponent } from './dialog/dialog-action-buttons/dialog-action-buttons.component';
@@ -79,7 +79,8 @@ import { RoomNotFoundComponent } from './room-not-found/room-not-found.component
     YesNoDialogComponent,
     InfoDialogComponent,
     CommentExportComponent,
-    RoomNotFoundComponent
+    RoomNotFoundComponent,
+    DateFromNow
   ],
   exports: [
     RoomJoinComponent,
