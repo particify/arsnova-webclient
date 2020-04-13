@@ -76,7 +76,6 @@ export class CommentPageComponent implements OnInit, OnDestroy, AfterContentInit
       this.liveAnnouncer.clear();
       this.liveAnnouncer.announce(msg, 'assertive');
     });
-
   }
 
 }
