@@ -25,32 +25,31 @@
       <mat-icon class="searchBarIcon">search</mat-icon>
     </button>
 
-    <button id="sort-button"
-            mat-icon-button class="searchBarButton"
+    <button id="sort-button" mat-icon-button class="searchBarButton" aria-labelledby="sort-list"
             *ngIf="!searchBox.value && comments && comments.length > 0 && !search"
             [matMenuTriggerFor]="sortMenu" matTooltip="{{ 'comment-list.sort-comments' | translate }}">
       <mat-icon class="searchBarIcon">swap_vert</mat-icon>
     </button>
 
-    <button mat-icon-button class="searchBarButton" (click)="switchToCommentList()"
-            *ngIf="!searchBox.value && comments && comments.length > 0 && !search"
+    <button id="switch-button" mat-icon-button class="searchBarButton" aria-labelledby="switch-list"
+            (click)="switchToCommentList()" *ngIf="!searchBox.value && comments && comments.length > 0 && !search"
             matTooltip="{{ 'comment-list.switch-to-comment-list' | translate }}">
       <mat-icon class="searchBarIcon">playlist_add_check</mat-icon>
     </button>
   </div>
 
   <mat-menu #sortMenu="matMenu" xPosition="before">
-    <button mat-menu-item *ngIf="isSafari === 'false'" (click)="sortComments(time)" aria-labelledby="access_time">
+    <button mat-menu-item *ngIf="isSafari === 'false'" (click)="sortComments(time)" aria-labelledby="sort-time">
       <mat-icon [ngClass]="{time: 'unread-icon'}[currentSort]">access_time</mat-icon>
       <span>{{ 'comment-list.sort-list-time' | translate }}</span>
     </button>
 
-    <button mat-menu-item (click)="sortComments(votedesc)" aria-labelledby="keyboard_arrow_up">
+    <button mat-menu-item (click)="sortComments(votedesc)" aria-labelledby="sort-up">
       <mat-icon [ngClass]="{votedesc: 'up'}[currentSort]">keyboard_arrow_up</mat-icon>
       <span>{{ 'comment-list.sort-vote-asc' | translate }}</span>
     </button>
 
-    <button mat-menu-item (click)="sortComments(voteasc)" aria-labelledby="keyboard_arrow_down">
+    <button mat-menu-item (click)="sortComments(voteasc)" aria-labelledby="sort-down">
       <mat-icon [ngClass]="{voteasc: 'down'}[currentSort]">keyboard_arrow_down</mat-icon>
       <span>{{ 'comment-list.sort-vote-desc' | translate }}</span>
     </button>
@@ -67,7 +66,7 @@
 
 <div *ngIf="!isLoading">
   <app-comment *ngFor="let current of comments" [comment]="current" [userRole]="user.role"
-               [parseVote]="getVote(current)" [moderator]="true"></app-comment>
+               [parseVote]="getVote(current)"></app-comment>
 </div>
 
 <div *ngIf="comments && comments.length < 1 && !isLoading" fxLayout="row" fxLayoutAlign="center center"
@@ -76,10 +75,10 @@
 </div>
 
 <div class="visually-hidden">
-  <div id="search-box-input-description">
-    {{ 'comment-page.search-box-input-description' | translate }}
-  </div>
-  <div id="keyboard_arrow_up">{{'comment-list.a11y-keyboard_arrow_up' | translate}}</div>
-  <div id="keyboard_arrow_down">{{'comment-list.a11y-keyboard_arrow_down' | translate}}</div>
-  <div id="access_time">{{'comment-list.a11y-access_time' | translate}}</div>
+  <div id="search-box-input-description">{{ 'comment-page.search-box-input-description' | translate }}</div>
+  <div id="sort-list">{{'comment-list.a11y-sort-list' | translate}}</div>
+  <div id="sort-up">{{'comment-list.a11y-sort-up' | translate}}</div>
+  <div id="sort-down">{{'comment-list.a11y-sort-down' | translate}}</div>
+  <div id="sort-time">{{'comment-list.a11y-sort-time' | translate}}</div>
+  <div id="switch-list">{{'comment-list.a11y-switch-to-public-list' | translate}}</div>
 </div>
