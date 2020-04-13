@@ -47,7 +47,7 @@
     "visited-sessions": "Visited sessions"
   },
   "home-page": {
-    "a11y-create": "Create a new session",
+    "a11y-create-session": "Create a new session",
     "a11y-join-button": "Enter the session with the specified session key.",
     "a11y-join-input": "Here you can enter the  key of the session you want to join. Your lecturer will tell you the session key.",
     "a11y-welcome-message": "Welcome to ARSnova. Enter an eight-digit session code to join a session or press the escape key to get information about key combinations.",
