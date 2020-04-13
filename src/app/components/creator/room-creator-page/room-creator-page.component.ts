@@ -84,7 +84,7 @@ export class RoomCreatorPageComponent extends RoomPageComponent implements OnIni
 
   ngAfterContentInit(): void {
     setTimeout(() => {
-      document.getElementById('live_announcer-button').focus();
+      document.getElementById('live-announcer-button').focus();
     }, 700);
   }
 
