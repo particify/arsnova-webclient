@@ -89,10 +89,6 @@ export class CommentComponent implements OnInit {
     this.inAnswerView = !this.router.url.includes('comments');
   }
 
-  getDateFromNow(): string {
-    return moment(this.comment.timestamp).fromNow();
-  }
-
   changeSlideState(): void {
     this.slideAnimationState = 'visible';
   }

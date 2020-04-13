@@ -57,7 +57,11 @@ export class CommentAnswerComponent implements OnInit, AfterContentInit {
 
   ngAfterContentInit() {
     setTimeout(() => {
-      document.getElementById('message-button').focus();
+      if (this.isStudent) {
+        document.getElementById('answer-text').focus();
+      } else {
+        document.getElementById('message-button').focus();
+      }
     }, 700);
   }
 

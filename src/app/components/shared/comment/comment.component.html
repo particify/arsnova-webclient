@@ -135,7 +135,7 @@
   <div id="comment_grade{{ comment.id }}">{{ !comment.favorite ? ('comment-page.a11y-comment-grade' | translate)
     : ('comment-page.a11y-comment-not-grade' | translate) }}
   </div>
-  <div id="comment-answered">{{ 'comment-page.a11y-comment-answered' }}</div>
+  <div id="comment-answered">{{ 'comment-page.a11y-comment-answered' | translate }}</div>
   <div id="comment_delete{{ comment.id }}">{{'comment-page.a11y-comment-delete' | translate}}</div>
   <div id="comment_moderation{{ comment.id }}">{{'comment-page.a11y-comment-moderation' | translate}}</div>
   <div *ngIf="isStudent" id="comment_vote_up{{ comment.id }}">{{'comment-page.a11y-comment-vote-up' | translate}}</div>
