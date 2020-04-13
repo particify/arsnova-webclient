@@ -140,8 +140,7 @@
 
 <div *ngIf="!isLoading">
   <app-comment *ngFor="let current of hideCommentsList ? filteredComments : comments" [comment]="current"
-               [parseVote]="getVote(current)" [userRole]="userRole" [moderator]="false"
-               (clickedOnTag)="clickedOnTag($event)">
+               [parseVote]="getVote(current)" [userRole]="userRole" (clickedOnTag)="clickedOnTag($event)">
   </app-comment>
 </div>
 
