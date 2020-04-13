@@ -145,12 +145,7 @@ export class HeaderComponent implements OnInit {
   }
 
   goBack() {
-    const length = window.history.length;
-    if (length > 2) {
-      this.location.back();
-    } else {
-      this.navToHome();
-    }
+    this.location.back();
   }
 
   navToLogin() {
