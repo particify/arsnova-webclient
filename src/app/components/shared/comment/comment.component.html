@@ -1,5 +1,13 @@
 <mat-card id="comment-card" [ngClass]="{'highlighted': comment.highlighted, '': !comment.highlighted}"
           [@slide]="slideAnimationState" (@slide.done)="changeSlideState()">
+  <div tabindex="0" class="visually-hidden">{{ 'comment-page.comment' | translate: {
+    time: (language === 'de' ? (comment.timestamp | date: ' HH:mm ') : (comment.timestamp | date: 'h:mm a')),
+    votes: comment.score === 1 ? ('comment-page.a11y-text-textForOneVote' | translate) : comment.score + ('comment-page.a11y-text-textForVotes' | translate),
+    comment: comment.body.trim(),
+    correct: comment.correct === 1 ? ('comment-page.a11y-text-correct' | translate) : "",
+    wrong: comment.correct === 2 ? ('comment-page.a11y-text-wrong' | translate) : "",
+    bonus: comment.favorite ? ('comment-page.a11y-text-grade' | translate) : "",
+    beamer: comment.read ? ('comment-page.a11y-text-read' | translate) : ""} }}</div>
   <div fxLayout="column">
     <div fxLayout="row" class="comment-actions">
       <div class="date-container light">
@@ -40,7 +48,7 @@
         </mat-icon>
       </button>
       <button mat-icon-button *ngIf="(isCreator || isModerator) && !inAnswerView" [matMenuTriggerFor]="actionsMenu"
-              tabindex="0">
+              tabindex="0" aria-labelledby="more-options">
         <mat-icon matTooltip="{{ 'comment-page.show-actions' | translate }}">more_horiz
         </mat-icon>
       </button>
@@ -81,20 +89,8 @@
       </mat-menu>
     </div>
     <div fxLayout="row">
-      <div class="body click" (click)="openPresentDialog(comment)" tabindex="0"
-           attr.aria-labelledby="comment-{{ comment.id }}">
+      <div class="body click" (click)="openPresentDialog(comment)">
         <span aria-hidden="true">{{ comment.body.trim() }}</span>
-        <span id="comment-{{ comment.id }}" class="visually-hidden"
-              aria-hidden="true">{{ 'comment-page.comment' | translate: {
-          time: (language === 'de' ? (comment.timestamp | date: ' HH:mm ') : (comment.timestamp | date: 'h:mm a')),
-          votes: comment.score === 1 ? ('comment-page.a11y-text-textForOneVote' | translate) : comment.score + ('comment-page.a11y-text-textForVotes' | translate),
-          comment: comment.body.trim(),
-          correct: comment.correct === 1 ? ('comment-page.a11y-text-correct' | translate) : "",
-          wrong: comment.correct === 2 ? ('comment-page.a11y-text-wrong' | translate) : "",
-          bonus: comment.favorite ? ('comment-page.a11y-text-grade' | translate) : "",
-          beamer: comment.read ? ('comment-page.a11y-text-read' | translate) : ""
-        }
-          }}</span>
       </div>
       <span class="fill-remaining-space click" (click)="openPresentDialog(comment)"></span>
       <div fxLayout="column" *ngIf="isStudent" [ngClass]="{ '1': 'voteUp', '-1': 'voteDown', '0': 'reset'}[currentVote]">
@@ -126,6 +122,7 @@
 
 <!--Hidden Div's for a11y-Descriptions-->
 <div class="visually-hidden">
+  <div id="more-options">{{ 'comment-page.a11y-more-options' | translate }}</div>
   <div
     id="comment_correct{{ comment.id }}">{{comment.correct != 1 ? ('comment-page.a11y-comment-not-marked-correct' | translate)
     : ('comment-page.a11y-comment-marked-correct' | translate) }}
