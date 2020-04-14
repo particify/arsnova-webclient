@@ -14,6 +14,7 @@ import { CorrectWrong } from '../../../models/correct-wrong.enum';
 import { UserRole } from '../../../models/user-roles.enum';
 import { DialogService } from '../../../services/util/dialog.service';
 import * as moment from 'moment';
+import { LiveAnnouncer } from '@angular/cdk/a11y';
 
 @Pipe({ name: 'dateFromNow' })
 export class DateFromNow implements PipeTransform {
@@ -38,7 +39,6 @@ export class DateFromNow implements PipeTransform {
 
 export class CommentComponent implements OnInit {
   @Input() comment: Comment;
-  @Input() moderator: boolean;
   @Input() userRole: UserRole;
   @Output()
   clickedOnTag = new EventEmitter<string>();
@@ -62,7 +62,8 @@ export class CommentComponent implements OnInit {
               private translateService: TranslateService,
               private dialogService: DialogService,
               protected langService: LanguageService,
-              private wsCommentService: WsCommentServiceService) {
+              private wsCommentService: WsCommentServiceService,
+              private liveAnnouncer: LiveAnnouncer) {
     langService.langEmitter.subscribe(lang => {
       translateService.use(lang);
       this.language = lang;
@@ -87,10 +88,6 @@ export class CommentComponent implements OnInit {
     this.translateService.use(this.language);
     this.deviceType = localStorage.getItem('deviceType');
     this.inAnswerView = !this.router.url.includes('comments');
-  }
-
-  getDateFromNow(): string {
-    return moment(this.comment.timestamp).fromNow();
   }
 
   changeSlideState(): void {
@@ -174,6 +171,12 @@ export class CommentComponent implements OnInit {
 
   setAck(comment: Comment): void {
     this.comment = this.wsCommentService.toggleAck(comment);
+    this.translateService.get(comment.ack ? 'comment-page.a11y-rejected' : 'comment-page.a11y-banned').subscribe(status => {
+      this.translateService.get('comment-page.a11y-comment-has-been', { status: status }).subscribe(msg => {
+        this.liveAnnouncer.clear();
+        this.liveAnnouncer.announce(msg);
+      });
+    });
   }
 
   goToFullScreen(element: Element): void {

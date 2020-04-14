@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterContentInit, Component, HostListener, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { LanguageService } from '../../../services/util/language.service';
@@ -10,13 +10,17 @@ import { AuthenticationService } from '../../../services/http/authentication.ser
 import { UserRole } from '../../../models/user-roles.enum';
 import { NotificationService } from '../../../services/util/notification.service';
 import { DialogService } from '../../../services/util/dialog.service';
+import { LiveAnnouncer } from '@angular/cdk/a11y';
+import { KeyboardUtils } from '../../../utils/keyboard';
+import { KeyboardKey } from '../../../utils/keyboard/keys';
+import { EventService } from '../../../services/util/event.service';
 
 @Component({
   selector: 'app-comment-answer',
   templateUrl: './comment-answer.component.html',
   styleUrls: ['./comment-answer.component.scss']
 })
-export class CommentAnswerComponent implements OnInit {
+export class CommentAnswerComponent implements OnInit, AfterContentInit {
 
   comment: Comment;
   answer: string;
@@ -32,7 +36,34 @@ export class CommentAnswerComponent implements OnInit {
               protected wsCommentService: WsCommentServiceService,
               protected commentService: CommentService,
               private authenticationService: AuthenticationService,
-              private dialogService: DialogService) { }
+              private dialogService: DialogService,
+              private liveAnnouncer: LiveAnnouncer,
+              private eventService: EventService) {
+  }
+
+  @HostListener('window:keyup', ['$event'])
+  keyEvent(event: KeyboardEvent) {
+    const focusOnInput = this.eventService.focusOnInput;
+    if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit1) === true && focusOnInput === false) {
+      if (document.getElementById('answer-input')) {
+        document.getElementById('answer-input').focus();
+      } else {
+        document.getElementById('answer-text').focus();
+      }
+    } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Escape) === true) {
+      this.announce();
+    }
+  }
+
+  ngAfterContentInit() {
+    setTimeout(() => {
+      if (this.isStudent) {
+        document.getElementById('answer-text').focus();
+      } else {
+        document.getElementById('message-button').focus();
+      }
+    }, 700);
+  }
 
   ngOnInit() {
     this.user = this.authenticationService.getUser();
@@ -46,6 +77,20 @@ export class CommentAnswerComponent implements OnInit {
         this.isLoading = false;
       });
     });
+  }
+
+  public announce() {
+    this.translateService.get('comment-page.a11y-keys-answer').subscribe(msg => {
+      this.liveAnnouncer.clear();
+      this.liveAnnouncer.announce(msg, 'assertive');
+    });
+  }
+
+  editAnswer() {
+    this.edit = true;
+    setTimeout(() => {
+      document.getElementById('answer-input').focus();
+    }, 500);
   }
 
   saveAnswer() {
