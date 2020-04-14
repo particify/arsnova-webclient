@@ -35,9 +35,8 @@ export class FeedbackBarometerPageComponent implements OnInit, OnDestroy, AfterC
   room: Room;
   protected sub: Subscription;
   isClosed = false;
-  labelsAvailable = false;
   isLoading = true;
-  type = this.typeSurvey;
+  type = this.typeFeedback;
   noType = false;
   isEmpty = true;
 
@@ -148,11 +147,10 @@ export class FeedbackBarometerPageComponent implements OnInit, OnDestroy, AfterC
       this.isClosed = room.settings['feedbackLocked'];
       if (this.room.extensions && this.room.extensions['feedback'] && this.room.extensions['feedback'].type) {
         this.type = this.room.extensions['feedback'].type;
-        this.getLabels();
-        this.labelsAvailable = true;
       } else {
-        this.noType = true;
+        this.roomService.changeFeedbackType(this.roomId, this.type);
       }
+      this.getLabels();
       this.isOwner = this.authenticationService.hasAccess(this.room.shortId, UserRole.CREATOR);
       this.isLoading = false;
     });

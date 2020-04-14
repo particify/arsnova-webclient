@@ -184,7 +184,6 @@
     "a11y-start": "start",
     "a11y-stop": "stop",
     "a11y-status-changed": "The survey has been {{status}}. Press enter to {{nextStatus}} the survey.",
-    "a11y-select-type": "Select type for the survey you want to start here.",
     "a11y-selected-type": "You have selected the type {{type}}. ",
     "is-stopped": "Survey got stopped.",
     "has-been-reset": "The survey has been reset.",
@@ -199,10 +198,7 @@
     "survey-b": "B",
     "survey-c": "C",
     "survey-d": "D",
-    "select-type": "Select a type",
-    "change-type": "Changes type of the survey",
-    "type-survey": "A B C D",
-    "type-feedback": "Feedback"
+    "change-type": "Changes type of the survey"
   },
   "home-page": {
     "create-session": "New Session",

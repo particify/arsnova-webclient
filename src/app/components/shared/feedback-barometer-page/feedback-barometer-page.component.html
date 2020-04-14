@@ -14,17 +14,10 @@
           <mat-progress-bar class="feedback-progress" [value]="state.count"></mat-progress-bar>
         </div>
       </div>
-      <div *ngIf="!noType" class="text invisible" [ngClass]="{'visible' : isClosed}">
+      <div class="text invisible" [ngClass]="{'visible' : isClosed}">
         <h3 tabindex="-1" id="stopped-label">{{ 'feedback.is-stopped' | translate }}</h3>
       </div>
       <div fxLayoutAlign="center center" fxLayoutGap="20px" *ngIf="isOwner">
-        <mat-form-field *ngIf="noType">
-          <mat-label attr.aria-label="{{ 'feedback.a11y-select-type' | translate }}">{{ 'feedback.select-type' | translate }}</mat-label>
-          <mat-select tabindex="0" #type id="type-input" (selectionChange)="changeType(type.value)">
-            <mat-option [value]="typeSurvey">{{ 'feedback.type-survey' | translate }}</mat-option>
-            <mat-option [value]="typeFeedback">{{ 'feedback.type-feedback' | translate }}</mat-option>
-          </mat-select>
-        </mat-form-field>
         <div class="invisible-button button-container" [ngClass]="{'visible-button': !noType && isEmpty && isClosed}">
         <button tabindex="{{!noType && isEmpty && isClosed ? '0' : '-1' }}" mat-icon-button class="bottom-button"
                 (click)="changeType(type === typeSurvey ? typeFeedback : typeSurvey)"
