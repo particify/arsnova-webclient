@@ -1,8 +1,11 @@
-<div fxLayout="row" fxLayoutAlign="center" fxLayoutGap="15px">
-  <input style="display: none" type="file" (change)="onFileChanged($event)" #fileInput>
-<label *ngIf="jsonToUpload">{{jsonToUpload.session.name}}</label>
-  <button mat-raised-button *ngIf="jsonToUpload === undefined" class="button-secondary" (click)="fileInput.click()">
-    {{ 'import.select-file' | translate }}</button>
-  <button mat-raised-button class="button-primary" *ngIf="jsonToUpload"
-          (click)="onUpload()">{{ 'import.create' | translate }}</button>
+<div fxLayout="row" fxLayoutAlign="center">
+  <div fxLayout="column" fxLayoutAlign="center" fxLayoutGap="15px">
+    <input style="display: none" type="file" (change)="onFileChanged($event)" #fileInput>
+    <label *ngIf="jsonToUpload">{{jsonToUpload.session.name}}</label>
+    <button mat-raised-button *ngIf="jsonToUpload === undefined" class="button-secondary" (click)="fileInput.click()">
+      {{ 'import.select-file' | translate }}</button>
+    <button mat-raised-button class="button-primary" *ngIf="jsonToUpload"
+            (click)="onUpload()">{{ 'import.create' | translate }}</button>
+  </div>
 </div>
+
