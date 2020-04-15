@@ -8,7 +8,6 @@ import { EventService } from '../../../services/util/event.service';
 import { KeyboardUtils } from '../../../utils/keyboard';
 import { KeyboardKey } from '../../../utils/keyboard/keys';
 import { DialogService } from '../../../services/util/dialog.service';
-import { RoomService } from '../../../services/http/room.service';
 
 @Component({
   selector: 'app-user-home',
@@ -17,8 +16,6 @@ import { RoomService } from '../../../services/http/room.service';
 })
 export class UserHomeComponent implements OnInit, AfterContentInit {
   user: User;
-  selectedFile: File;
-  jsonToUpload: JSON;
 
     constructor(
     private dialogService: DialogService,
@@ -26,8 +23,7 @@ export class UserHomeComponent implements OnInit, AfterContentInit {
     protected langService: LanguageService,
     private authenticationService: AuthenticationService,
     private eventService: EventService,
-    private liveAnnouncer: LiveAnnouncer,
-    private roomService: RoomService
+    private liveAnnouncer: LiveAnnouncer
   ) {
     langService.langEmitter.subscribe(lang => translateService.use(lang));
   }
@@ -66,29 +62,5 @@ export class UserHomeComponent implements OnInit, AfterContentInit {
 
   openCreateRoomDialog(): void {
     this.dialogService.openRoomCreateDialog();
-  }
-
-  onFileChanged(event) {
-    this.selectedFile = event.target.files[0];
-    const fileReader = new FileReader();
-    fileReader.readAsText(this.selectedFile, "UTF-8");
-    fileReader.onload = () => {
-      if (typeof fileReader.result === 'string') {
-        const parsed = JSON.parse(fileReader.result);
-        this.jsonToUpload = parsed.exportData;
-        console.log(this.jsonToUpload);
-        console.log(parsed);
-      }
-    }
-    fileReader.onerror = (error) => {
-      console.log(error);
-    }
-  }
-
-  onUpload() {
-    this.roomService.importv2Room(this.jsonToUpload).subscribe(result => {
-      console.log(result);
-    });
-  // upload code goes here
   }
 }
