@@ -75,6 +75,10 @@
     "a11y": "Es folgt eine Einführung in ARSnova.",
     "title": "ARSnova"
   },
+  "import": {
+    "select-file": "Datei auswählen",
+    "create": "Erstellen"
+  },
   "login": {
     "a11y-sso-login": "Hier wirst du zum Anmelden auf {{provider}} weitergeleitet.",
     "a11y-reset-pw": "Öffnet einen Dialog zum Zurücksetzen deines Passworts.",

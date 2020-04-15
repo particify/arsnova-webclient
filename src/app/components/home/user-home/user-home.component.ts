@@ -15,9 +15,10 @@ import { DialogService } from '../../../services/util/dialog.service';
   styleUrls: ['./user-home.component.scss']
 })
 export class UserHomeComponent implements OnInit, AfterContentInit {
+
   user: User;
 
-    constructor(
+  constructor(
     private dialogService: DialogService,
     private translateService: TranslateService,
     protected langService: LanguageService,
