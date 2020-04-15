@@ -92,10 +92,6 @@ export class FeedbackBarometerPageComponent implements OnInit, OnDestroy, AfterC
     this.translateService.use(localStorage.getItem('currentLang'));
     this.loadConfig();
     this.user = this.authenticationService.getUser();
-    this.sub = this.wsFeedbackService.getFeedbackStream(this.roomId).subscribe((message: Message) => {
-      this.parseIncomingMessage(message);
-    });
-    this.wsFeedbackService.get(this.roomId);
   }
 
   announce(msg: string) {
@@ -146,6 +142,10 @@ export class FeedbackBarometerPageComponent implements OnInit, OnDestroy, AfterC
       }
       this.getLabels();
       this.isOwner = this.authenticationService.hasAccess(this.room.shortId, UserRole.CREATOR);
+      this.sub = this.wsFeedbackService.getFeedbackStream(this.roomId).subscribe((message: Message) => {
+        this.parseIncomingMessage(message);
+      });
+      this.wsFeedbackService.get(this.roomId);
       this.isLoading = false;
     });
   }
