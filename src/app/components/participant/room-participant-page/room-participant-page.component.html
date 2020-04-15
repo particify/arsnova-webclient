@@ -26,8 +26,8 @@
       <mat-card-content *ngIf="room.description" fxLayoutAlign="center">
         <markdown [data]="room.description.trim()"></markdown>
       </mat-card-content>
-      <mat-grid-list cols="2" rowHeight="1:1" [ngClass]="{'big-container': deviceWidth >= 500}">
-        <mat-grid-tile>
+      <mat-grid-list cols="{{feedbackEnabled ? 2 : 1}}" rowHeight="1:1" [ngClass]="{'big-container': deviceWidth >= 500, 'single-container': !feedbackEnabled}">
+        <mat-grid-tile [ngClass]="{'single-tile': !feedbackEnabled, 'double-tile': feedbackEnabled}">
           <button id="comments-button" mat-icon-button class="main-button"
                   [ngClass]="{'hover': deviceWidth > 500}" [disableRipple]="true"
                   routerLink="/participant/room/{{ room.shortId }}/comments" aria-labelledby="comments">
@@ -37,7 +37,7 @@
             <h3 *ngIf="deviceWidth >= 320" class="button-text">{{ 'room-page.comments' | translate}}</h3>
           </button>
         </mat-grid-tile>
-        <mat-grid-tile>
+        <mat-grid-tile *ngIf="feedbackEnabled" class="double-tile">
           <button id="live-feedback-button" mat-icon-button class="main-button" aria-labelledby="live-feedback"
                   [ngClass]="{'hover': deviceWidth > 500}" [disableRipple]="true"
                   routerLink="/participant/room/{{ room.shortId }}/feedback-barometer">
@@ -46,6 +46,8 @@
           </button>
         </mat-grid-tile>
       </mat-grid-list>
+      <p tabindex="-1" id="live-feedback-disabled" class="visually-hidden">
+        {{ 'room-page.a11y-live-feedback-disabled' | translate }}</p>
       <app-content-groups *ngIf="room && contentGroups" [contentGroups]="contentGroups"></app-content-groups>
       <p tabindex="-1" id="no-content-groups" class="visually-hidden">
         {{ 'room-page.a11y-no-content-groups' | translate }}</p>

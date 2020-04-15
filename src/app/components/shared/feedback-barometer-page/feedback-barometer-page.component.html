@@ -1,35 +1,64 @@
 <app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
-<div *ngIf="!isLoading" fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="center">
-  <button class="visually-hidden" id="message-announcer-button" tabIndex="-1" (click)="announceKeys()">
+<div fxFill>
+<button class="visually-hidden" id="message-announcer-button" tabIndex="-1" (click)="announceKeys()">
     {{ 'feedback.a11y-message' | translate }}</button>
-  <mat-card>
-    <div class="feedback-container" [ngClass]="{'faded' : isClosed}">
-      <div fxLayout="row" fxLayoutGap="30px" *ngFor="let state of feedback; let i = index">
-        <button id="feedback-button-{{i}}" mat-icon-button [disabled]="isOwner" (click)="submitFeedback(state.state)"
-                attr.aria-label="{{ state.a11y | translate }}">
-          <mat-icon matTooltip="{{ state.label | translate }}">
+  <div *ngIf="!isLoading" fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="center">
+    <mat-card class="card-container">
+      <div class="feedback-container" [ngClass]="{ 'faded' : isClosed }">
+        <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="30px"
+             *ngFor="let state of survey; let i = index">
+          <mat-icon *ngIf="type ===typeFeedback" class="label-icon" matTooltip="{{ state.label | translate }}">
             {{ state.name }}</mat-icon>
-        </button>
-        <mat-progress-bar class="feedback-progress" [value]="state.count"></mat-progress-bar>
+          <p *ngIf="type === typeSurvey" class="answer-label">{{ state.label | translate }}</p>
+          <mat-progress-bar class="feedback-progress" [value]="state.count"
+             [ngClass]="{'desktop-bar': deviceWidth >= 700, 'mobile-bar': deviceWidth < 700}" ></mat-progress-bar>
+        </div>
       </div>
+      <div class="text invisible" [ngClass]="{'visible' : isClosed}">
+        <h3 tabindex="-1" id="stopped-label">{{ 'feedback.is-stopped' | translate }}</h3>
+      </div>
+      <div fxLayoutAlign="center center" fxLayoutGap="20px" *ngIf="isOwner">
+        <div class="invisible-button button-container" [ngClass]="{'visible-button': isClosed}">
+        <button id="switch-button" tabindex="{{ isClosed ? '0' : '-1' }}" mat-raised-button
+                class="button-secondary bottom-button" (click)="changeType()" aria-labelledby="change-type">
+          {{ 'feedback.change-type' | translate }}
+        </button>
+        </div>
+        <button tabindex="0" mat-raised-button id="toggle-button" class="button-primary bottom-button"
+                fxLayoutAlign="center" (click)="toggle()" aria-labelledby="toggle">
+          {{ (isClosed ? 'feedback.start' : 'feedback.stop') | translate }}
+        </button>
+      </div>
+    </mat-card>
+  </div>
+  <div *ngIf="!isOwner" [ngClass]="{'faded' : isClosed}" fxLayout="column" fxLayoutAlign="start center" class="answer-container">
+    <div fxLayout="row" fxLayoutGap="16px" class="card-row">
+      <ng-container *ngFor="let state of survey; let i = index">
+        <mat-card *ngIf="i < 2" id="feedback-button-{{i}}" fxLayout="row" fxLayoutAlign="center center" class="answer"
+                  attr.aria-label="{{ state.a11y | translate }}" (click)="submitAnswer(state.state)" tabindex="0"
+                  (keydown)="submitAnswerViaEnter(state.state, state.label, $event)" role="button">
+          <p *ngIf="type === typeSurvey" class="answer-button-label">{{ state.label | translate }}</p>
+          <mat-icon *ngIf="type === typeFeedback" class="button-label-icon" matTooltip="{{ state.label | translate }}">
+            {{ state.name }}</mat-icon>
+        </mat-card>
+      </ng-container>
     </div>
-    <div class="text invisible" [ngClass]="{'visible' : isClosed}">
-      <h3 tabindex="-1" id="stopped-label">{{ 'feedback.is-stopped' | translate }}</h3>
+    <div fxLayout="row" fxLayoutGap="16px" class="card-row">
+      <ng-container *ngFor="let state of survey; let i = index">
+        <mat-card *ngIf="i >= 2" id="feedback-button2-{{i}}" fxLayout="row" fxLayoutAlign="center center" class="answer"
+                  attr.aria-label="{{ state.a11y | translate }}" (click)="submitAnswer(state.state)" tabindex="0"
+                  (keydown)="submitAnswerViaEnter(state.state, state.label, $event)" role="button">
+          <p *ngIf="type === typeSurvey" class="answer-button-label">{{ state.label | translate }}</p>
+          <mat-icon *ngIf="type === typeFeedback" class="button-label-icon" matTooltip="{{ state.label | translate }}">
+            {{ state.name }}</mat-icon>
+        </mat-card>
+      </ng-container>
     </div>
-    <div fxLayoutAlign="center" fxLayoutGap="20px" *ngIf="isOwner">
-      <button mat-raised-button id="reset-button" class="button-secondary" fxLayoutAlign="center" (click)="reset()"
-              aria-labelledby="reset">
-        {{ 'feedback.reset' | translate }}
-      </button>
-      <button mat-raised-button id="toggle-button" class="button-primary" fxLayoutAlign="center" (click)="toggle()"
-              aria-labelledby="toggle">
-        {{ (isClosed ? 'feedback.start' : 'feedback.stop') | translate }}
-      </button>
-    </div>
-  </mat-card>
+  </div>
 </div>
 
 <div class="visually-hidden">
-  <div id="toggle">{{ (isClosed ? 'feedback.a11y-start' : 'feedback.a11y-stop') | translate }}</div>
+  <div id="toggle">{{ (isClosed ? 'feedback.a11y-start-survey' : 'feedback.a11y-stop-survey') | translate }}</div>
   <div id="reset">{{ 'feedback.a11y-reset' | translate }}</div>
+  <div id="change-type">{{ 'feedback.change-type' | translate }}</div>
 </div>

@@ -2,20 +2,32 @@ mat-card {
   width: 100%;
 }
 
-mat-progress-bar {
+.mobile-bar {
+  margin: 8px 0;
   height: 50px;
-  margin-bottom: 20px;
 }
 
-mat-icon {
-  font-size: 50px;
-  height: 50px;
-  width: 50px;
-  color: var(--primary);
+.desktop-bar {
+  height: 65px;
+  margin: 10px 0;
 }
 
-p {
-  margin: 0;
+.label-icon {
+  font-size: 40px;
+  height: 40px;
+  width: 40px;
+  color: var(--on-surface);
+  margin: 0 20px 0 4px!important;
+}
+
+.mat-raised-button {
+  min-width: 120px;
+  height: 36px;
+}
+
+.bottom-button {
+  transition: 300ms;
+  margin: 18px 0 10px 0;
 }
 
 .feedback-container {
@@ -45,4 +57,67 @@ p {
   transition: 0.2s;
   transform: scale(1);
   opacity: 1;
+}
+
+.answer-label {
+  color: var(--on-surface);
+  font-size: calc(24px + 0.5vw);
+  font-weight: bold;
+  margin: 0 30px 0 14px!important;
+}
+
+.answer {
+  width: 100%;
+  background-color: var(--primary)!important;
+  cursor: pointer;
+  outline: none;
+}
+
+.answer-container {
+  height: calc(100% - 296px);
+  max-height: 400px;
+  transition: 600ms;
+}
+
+.answer-button-label {
+  color: var(--on-primary);
+  font-size: 28px;
+}
+
+.button-label-icon {
+  font-size: 40px;
+  height: 40px;
+  width: 40px;
+  color: var(--on-primary);
+}
+
+.card-row {
+  height: 50%;
+  min-height: 80px;
+  width: 100%;
+  max-width: 832px;
+  margin-top: 16px;
+}
+
+.button-container {
+  transition: 300ms;
+}
+
+.invisible-button {
+  position: relative;
+  width: 0;
+  margin: 0!important;
+  left: 100px;
+  opacity: 0;
+  overflow: hidden;
+}
+
+.visible-button {
+  position: relative;
+  left: 0;
+  top: 0;
+  opacity: 1;
+  width: auto;
+  overflow: auto;
+  margin-right: 20px!important;
 }
