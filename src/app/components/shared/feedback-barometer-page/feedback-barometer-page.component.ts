@@ -37,8 +37,6 @@ export class FeedbackBarometerPageComponent implements OnInit, OnDestroy, AfterC
   isClosed = false;
   isLoading = true;
   type = this.typeFeedback;
-  noType = false;
-  isEmpty = true;
 
   constructor(
     private authenticationService: AuthenticationService,
@@ -58,7 +56,7 @@ export class FeedbackBarometerPageComponent implements OnInit, OnDestroy, AfterC
       if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit3) === true) {
         document.getElementById('toggle-button').focus();
       } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit4) === true) {
-        document.getElementById('reset-button').focus();
+        document.getElementById('switch-button').focus();
       }
     } else {
       if (!this.isClosed) {
@@ -78,11 +76,7 @@ export class FeedbackBarometerPageComponent implements OnInit, OnDestroy, AfterC
     if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Escape) === true) {
       this.announceKeys();
     } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit1) === true) {
-      if (this.noType) {
-        document.getElementById('type-input').focus();
-      } else {
-        this.announceStatus();
-      }
+      this.announceStatus();
     }
   }
 
@@ -109,8 +103,7 @@ export class FeedbackBarometerPageComponent implements OnInit, OnDestroy, AfterC
   }
 
   announceKeys() {
-    const key = this.noType ? 'feedback.a11y-start-keys' : 'feedback.a11y-keys';
-    this.translateService.get(key).subscribe(msg => {
+    this.translateService.get('feedback.a11y-keys').subscribe(msg => {
       this.announce(msg);
     });
   }
@@ -178,16 +171,12 @@ export class FeedbackBarometerPageComponent implements OnInit, OnDestroy, AfterC
     for (let i = 0; i < this.survey.length; i++) {
       this.survey[i].count = data[i] / sum * 100;
     }
-    this.isEmpty = sum === 0;
   }
 
-  changeType(type?: string) {
-    if (type) {
-      this.type = type;
-    }
+  changeType() {
+    this.type = this.type === this.typeFeedback ? this.typeSurvey : this.typeFeedback;
     this.getLabels();
-    this.roomService.changeFeedbackType(this.roomId, type ? type : this.type);
-    this.noType = false;
+    this.roomService.changeFeedbackType(this.roomId, this.type);
     this.announceType();
     setTimeout(() => {
       document.getElementById('toggle-button').focus();
@@ -196,6 +185,9 @@ export class FeedbackBarometerPageComponent implements OnInit, OnDestroy, AfterC
 
   updateRoom(isClosed: boolean) {
     this.roomService.changeFeedbackLock(this.roomId, isClosed);
+    if (isClosed) {
+      this.reset();
+    }
   }
 
   submitAnswer(state: number) {
@@ -213,10 +205,6 @@ export class FeedbackBarometerPageComponent implements OnInit, OnDestroy, AfterC
 
 
   toggle() {
-    if (this.isClosed && this.noType) {
-      this.changeType();
-      this.noType = true;
-    }
     this.updateRoom(!this.isClosed);
     const keys = [this.isClosed ? 'feedback.a11y-started' : 'feedback.a11y-stopped',
                   this.isClosed ? 'feedback.a11y-stop' : 'feedback.a11y-start'];
@@ -230,12 +218,6 @@ export class FeedbackBarometerPageComponent implements OnInit, OnDestroy, AfterC
 
   reset() {
     this.wsFeedbackService.reset(this.roomId);
-    this.translateService.get('feedback.has-been-reset').subscribe(msg => {
-      this.notificationService.show(msg);
-    });
-    setTimeout(() => {
-      document.getElementById('toggle-button').focus();
-    }, 500);
   }
 
   parseIncomingMessage(message: Message) {

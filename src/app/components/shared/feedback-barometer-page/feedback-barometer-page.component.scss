@@ -16,7 +16,7 @@ mat-progress-bar {
 }
 
 .mat-raised-button {
-  width: 120px;
+  min-width: 120px;
   height: 36px;
 }
 
@@ -27,7 +27,6 @@ mat-progress-bar {
 
 .feedback-container {
   position: relative;
-  transition: 600ms;
 }
 
 .faded {
@@ -93,30 +92,6 @@ mat-progress-bar {
   width: 100%;
   max-width: 832px;
   margin-top: 16px;
-}
-
-mat-form-field {
-  margin-top: 20px;
-}
-
-.container-closed {
-  max-height: 0;
-}
-
-.container-expanded {
-  max-height: 500px;
-}
-
-.card-container {
-  transition: 600ms;
-}
-
-.card-closed {
-  max-height: 100px;
-}
-
-.card-expanded {
-  max-height: 400px;
 }
 
 .button-container {
