@@ -2,9 +2,14 @@ mat-card {
   width: 100%;
 }
 
-mat-progress-bar {
-  height: 50px;
+.mobile-bar {
   margin: 8px 0;
+  height: 50px;
+}
+
+.desktop-bar {
+  height: 65px;
+  margin: 10px 0;
 }
 
 .label-icon {
@@ -56,7 +61,7 @@ mat-progress-bar {
 
 .answer-label {
   color: var(--on-surface);
-  font-size: 28px;
+  font-size: calc(24px + 0.5vw);
   font-weight: bold;
   margin: 0 30px 0 14px!important;
 }

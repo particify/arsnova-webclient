@@ -37,6 +37,7 @@ export class FeedbackBarometerPageComponent implements OnInit, OnDestroy, AfterC
   isClosed = false;
   isLoading = true;
   type = this.typeFeedback;
+  deviceWidth = innerWidth;
 
   constructor(
     private authenticationService: AuthenticationService,

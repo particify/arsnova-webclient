@@ -10,7 +10,8 @@
           <mat-icon *ngIf="type ===typeFeedback" class="label-icon" matTooltip="{{ state.label | translate }}">
             {{ state.name }}</mat-icon>
           <p *ngIf="type === typeSurvey" class="answer-label">{{ state.label | translate }}</p>
-          <mat-progress-bar class="feedback-progress" [value]="state.count"></mat-progress-bar>
+          <mat-progress-bar class="feedback-progress" [value]="state.count"
+             [ngClass]="{'desktop-bar': deviceWidth >= 700, 'mobile-bar': deviceWidth < 700}" ></mat-progress-bar>
         </div>
       </div>
       <div class="text invisible" [ngClass]="{'visible' : isClosed}">
