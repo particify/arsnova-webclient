@@ -23,7 +23,8 @@ export class RoomService extends BaseHttpService {
     user: '/user',
     findRooms: '/find',
     stats: '/stats',
-    contentGroup: '/contentgroup'
+    contentGroup: '/contentgroup',
+    v2Import: '/import/v2/room'
   };
   private joinDate = new Date(Date.now());
 
@@ -163,6 +164,14 @@ export class RoomService extends BaseHttpService {
       tap(_ => ''),
       catchError(this.handleError<ContentGroup>(`updateGroup, ${ roomId }, ${ name }, ${ ContentGroup }`))
     );
+  }
+
+  importv2Room(json: JSON): Observable<Room> {
+    const connectionUrl = `${this.apiUrl.base + this.apiUrl.v2Import}`
+    return this.http.post<Room>(connectionUrl, json, httpOptions).pipe(
+      tap(_ => ''),
+      catchError(this.handleError<Room>(`importv2Room, json: ${json}`))
+    )
   }
 
   changeFeedbackLock(roomId: string, isFeedbackLocked: boolean) {
