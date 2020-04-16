@@ -135,7 +135,13 @@ export class LoginComponent implements AfterContentInit, OnChanges {
       });
       this.dialog.closeAll();
       if (this.isStandard) {
-        this.router.navigate(['user']);
+        const redirectURL = this.authenticationService.getRedirect();
+        if (redirectURL) {
+          this.router.navigate([redirectURL]);
+          this.authenticationService.resetRedirect();
+        } else {
+          this.router.navigate(['user']);
+        }
       }
     } else if (loginSuccessful === 'activation') {
       this.activateUser();

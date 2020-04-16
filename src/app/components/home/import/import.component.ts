@@ -24,6 +24,7 @@ export class ImportComponent implements OnInit {
   }
 
   navToLogin() {
+    this.authenticationService.setRedirect('import');
     this.router.navigate(['login']);
   }
 

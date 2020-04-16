@@ -31,6 +31,7 @@ export class AuthenticationService extends BaseHttpService {
   };
 
   private roomAccess = new Map();
+  private redirect: string;
 
   constructor(
     private dataStoreService: DataStoreService,
@@ -306,5 +307,17 @@ export class AuthenticationService extends BaseHttpService {
       arr.push(key + '_' + String(value));
     });
     localStorage.setItem(this.ROOM_ACCESS, JSON.stringify(arr));
+  }
+
+  setRedirect(url: string) {
+    this.redirect = url;
+  }
+
+  getRedirect(): string {
+    return this.redirect;
+  }
+
+  resetRedirect() {
+    this.redirect = null;
   }
 }
