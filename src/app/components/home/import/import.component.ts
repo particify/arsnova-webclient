@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { RoomService } from '../../../services/http/room.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-import',
@@ -11,7 +12,8 @@ export class ImportComponent implements OnInit {
   selectedFile: File;
   jsonToUpload: JSON;
 
-  constructor(private roomService: RoomService) {
+  constructor(private roomService: RoomService,
+              private router: Router) {
   }
 
   ngOnInit(): void {
@@ -35,10 +37,9 @@ export class ImportComponent implements OnInit {
   }
 
   onUpload() {
-    this.roomService.importv2Room(this.jsonToUpload).subscribe(result => {
-      console.log(result);
+    this.roomService.importv2Room(this.jsonToUpload).subscribe(room => {
+      this.router.navigate([`creator/room/${room.id}`]);
     });
-    // upload code goes here
   }
 
 }
