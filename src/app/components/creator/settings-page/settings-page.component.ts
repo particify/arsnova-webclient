@@ -34,18 +34,9 @@ export class SettingsPageComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.route.params.subscribe(params => {
-      const shortId = params['shortId'];
-      this.roomService.getRoomByShortId(shortId).subscribe(
-        room => {
-          this.room = room;
-          this.isLoading = false;
-        },
-        error => {
-          this.isLoading = false;
-          this.errorOnLoading = true;
-        }
-      );
+    this.route.data.subscribe(data => {
+      this.room = data.room;
+      this.isLoading = false;
     });
   }
 

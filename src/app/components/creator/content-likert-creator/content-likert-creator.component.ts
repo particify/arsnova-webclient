@@ -7,7 +7,8 @@ import { ContentService } from '../../../services/http/content.service';
 import { NotificationService } from '../../../services/util/notification.service';
 import { TranslateService } from '@ngx-translate/core';
 import { RoomService } from '../../../services/http/room.service';
-import { ContentCreatePageComponent } from '../content-create-page/content-create-page.component';
+import { GlobalStorageService, MemoryStorageKey } from '../../../services/util/global-storage.service';
+import { ContentGroupService } from '../../../services/http/content-group.service';
 
 @Component({
   selector: 'app-content-likert-creator',
@@ -48,14 +49,18 @@ export class ContentLikertCreatorComponent implements OnInit {
   newAnswerOptionPoints = 0;
   isLoading = true;
 
-  constructor(private contentService: ContentService,
-              private notificationService: NotificationService,
-              private translationService: TranslateService,
-              private roomService: RoomService) {
+  constructor(
+    private contentService: ContentService,
+    private notificationService: NotificationService,
+    private translationService: TranslateService,
+    private roomService: RoomService,
+    private globalStorageService: GlobalStorageService,
+    private contentGroupService: ContentGroupService
+  ) {
   }
 
   ngOnInit() {
-    this.roomId = localStorage.getItem(`roomId`);
+    this.roomId = this.globalStorageService.getMemoryItem(MemoryStorageKey.ROOM_ID);
     this.translationService.get(this.likertScales).subscribe(msgs => {
       for (let i = 0; i < this.likertScales.length; i++) {
         this.content.options.push(new AnswerOption(msgs[this.likertScales[i]], this.newAnswerOptionPoints));
@@ -105,7 +110,7 @@ export class ContentLikertCreatorComponent implements OnInit {
       if (this.contentCol !== '') {
         this.roomService.addContentToGroup(this.roomId, this.contentCol, content.id).subscribe();
       }
-      ContentCreatePageComponent.saveGroupInSessionStorage(this.contentCol);
+      this.contentGroupService.saveGroupInMemoryStorage(this.contentCol);
       this.resetAfterSubmit();
       document.getElementById('subject-input').focus();
     });

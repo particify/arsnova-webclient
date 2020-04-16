@@ -7,6 +7,8 @@ import { MatTabGroup } from '@angular/material/tabs';
 import { DialogService } from '../../../services/util/dialog.service';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { TranslateService } from '@ngx-translate/core';
+import { GlobalStorageService, MemoryStorageKey } from '../../../services/util/global-storage.service';
+
 
 @Component({
   selector: 'app-statistics',
@@ -27,15 +29,19 @@ export class StatisticsPageComponent implements OnInit {
               private roomService: RoomService,
               private dialogService: DialogService,
               private liveAnnouncer: LiveAnnouncer,
-              private translateService: TranslateService) {
+              private translateService: TranslateService,
+              private globalStorageService: GlobalStorageService
+  ) {
   }
 
   ngOnInit(): void {
-    this.currentCG = JSON.parse(sessionStorage.getItem('lastGroup'));
-    this.getRoom(localStorage.getItem('roomId'));
+    this.currentCG = this.globalStorageService.getMemoryItem(MemoryStorageKey.LAST_GROUP);
+    this.route.data.subscribe(data => {
+      this.getContentGroups(data.room.id);
+    });
   }
 
-  getRoom(id: string): void {
+  getContentGroups(id: string): void {
     this.roomService.getStats(id).subscribe(roomStats => {
       for (let i = 0; i < roomStats.groupStats.length; i++) {
         this.roomService.getGroupByRoomIdAndName(id, roomStats.groupStats[i].groupName).subscribe(group => {

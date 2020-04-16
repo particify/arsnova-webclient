@@ -9,6 +9,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { LanguageService } from '../../../services/util/language.service';
 import { AuthenticationService } from '../../../services/http/authentication.service';
 import { ActivatedRoute } from '@angular/router';
+import { GlobalStorageService, LocalStorageKey } from '../../../services/util/global-storage.service';
 
 class CheckedAnswer {
   answerOption: AnswerOption;
@@ -49,7 +50,8 @@ export class ContentChoiceParticipantComponent implements OnInit {
     private notificationService: NotificationService,
     private translateService: TranslateService,
     protected langService: LanguageService,
-    protected route: ActivatedRoute
+    protected route: ActivatedRoute,
+    private globalStorageService: GlobalStorageService
   ) {
     langService.langEmitter.subscribe(lang => translateService.use(lang));
   }
@@ -77,7 +79,7 @@ export class ContentChoiceParticipantComponent implements OnInit {
       this.sendStatusToParent();
       this.isLoading = false;
       });
-    this.translateService.use(localStorage.getItem('currentLang'));
+    this.translateService.use(this.globalStorageService.getLocalStorageItem(LocalStorageKey.LANGUAGE));
     this.route.params.subscribe(params => {
       this.shortId = params['shortId'];
     });

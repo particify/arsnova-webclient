@@ -8,6 +8,7 @@ import { EventService } from '../../../services/util/event.service';
 import { KeyboardUtils } from '../../../utils/keyboard';
 import { KeyboardKey } from '../../../utils/keyboard/keys';
 import { DialogService } from '../../../services/util/dialog.service';
+import { GlobalStorageService, LocalStorageKey } from '../../../services/util/global-storage.service';
 
 @Component({
   selector: 'app-user-home',
@@ -24,7 +25,8 @@ export class UserHomeComponent implements OnInit, AfterContentInit {
     protected langService: LanguageService,
     private authenticationService: AuthenticationService,
     private eventService: EventService,
-    private liveAnnouncer: LiveAnnouncer
+    private liveAnnouncer: LiveAnnouncer,
+    private globalStorageService: GlobalStorageService
   ) {
     langService.langEmitter.subscribe(lang => translateService.use(lang));
   }
@@ -50,7 +52,7 @@ export class UserHomeComponent implements OnInit, AfterContentInit {
   }
 
   ngOnInit() {
-    this.translateService.use(localStorage.getItem('currentLang'));
+    this.translateService.use(this.globalStorageService.getLocalStorageItem(LocalStorageKey.LANGUAGE));
     this.authenticationService.watchUser.subscribe(newUser => this.user = newUser);
   }
 

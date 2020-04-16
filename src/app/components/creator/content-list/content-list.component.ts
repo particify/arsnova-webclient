@@ -13,6 +13,7 @@ import { RoomService } from '../../../services/http/room.service';
 import { TranslateService } from '@ngx-translate/core';
 import { LanguageService } from '../../../services/util/language.service';
 import { DialogService } from '../../../services/util/dialog.service';
+import { GlobalStorageService, MemoryStorageKey, LocalStorageKey } from '../../../services/util/global-storage.service';
 
 @Component({
   selector: 'app-content-list',
@@ -35,7 +36,7 @@ export class ContentListComponent implements OnInit {
   collectionName: string;
   labelMaxLength: number;
   labels: string[] = [];
-  deviceType = localStorage.getItem('deviceType');
+  deviceType: string;
   isTitleEdit = false;
   updatedName: string;
   baseURL = 'creator/room/';
@@ -45,58 +46,61 @@ export class ContentListComponent implements OnInit {
   unlocked = false;
   directAnswer = false;
 
-  constructor(private contentService: ContentService,
-              private roomService: RoomService,
-              private route: ActivatedRoute,
-              private location: Location,
-              private notificationService: NotificationService,
-              private translateService: TranslateService,
-              protected langService: LanguageService,
-              private dialogService: DialogService) {
+  constructor(
+    private contentService: ContentService,
+    private roomService: RoomService,
+    private route: ActivatedRoute,
+    private location: Location,
+    private notificationService: NotificationService,
+    private translateService: TranslateService,
+    protected langService: LanguageService,
+    private dialogService: DialogService,
+    private globalStorageService: GlobalStorageService
+  ) {
+    this.deviceType = this.globalStorageService.getMemoryItem(MemoryStorageKey.DEVICE_TYPE);
     langService.langEmitter.subscribe(lang => translateService.use(lang));
   }
 
   ngOnInit() {
-    this.labelMaxLength = innerWidth / 20;
-    this.roomId = localStorage.getItem('roomId');
-    this.roomService.getRoom(this.roomId).subscribe(room => {
-      this.room = room;
-    });
-    this.route.params.subscribe(params => {
-      this.collectionName = params['contentGroup'];
-      this.roomService.getGroupByRoomIdAndName(this.roomId, this.collectionName).subscribe(group => {
-        this.contentGroup = group;
-        if (!this.contentGroup) {
-          this.contentGroup = JSON.parse(sessionStorage.getItem('lastGroup'));
-        } else {
-          this.allowEditing = true;
-        }
-        this.contentService.getContentsByIds(this.contentGroup.contentIds).subscribe(contents => {
-          this.contents = contents;
-          for (let i = 0; i < this.contents.length; i++) {
-            if (contents[i].state.visible) {
-              this.unlocked = true;
-            }
-            if (contents[i].state.responsesVisible) {
-              this.directAnswer = true;
-            }
-            if (this.contents[i].subject.length > this.labelMaxLength) {
-              this.labels[i] = this.contents[i].subject.substr(0, this.labelMaxLength) + '..';
-            } else {
-              this.labels[i] = this.contents[i].subject;
-            }
+    this.route.data.subscribe(data => {
+      this.room = data.room;
+      this.route.params.subscribe(params => {
+        this.collectionName = params['contentGroup'];
+        this.roomService.getGroupByRoomIdAndName(this.roomId, this.collectionName).subscribe(group => {
+          this.contentGroup = group;
+          if (!this.contentGroup) {
+            this.contentGroup = this.globalStorageService.getMemoryItem(MemoryStorageKey.LAST_GROUP);
+          } else {
+            this.allowEditing = true;
           }
-          this.getGroups();
-          this.isLoading = false;
+          this.contentService.getContentsByIds(this.contentGroup.contentIds).subscribe(contents => {
+            this.contents = contents;
+            for (let i = 0; i < this.contents.length; i++) {
+              if (contents[i].state.visible) {
+                this.unlocked = true;
+              }
+              if (contents[i].state.responsesVisible) {
+                this.directAnswer = true;
+              }
+              if (this.contents[i].subject.length > this.labelMaxLength) {
+                this.labels[i] = this.contents[i].subject.substr(0, this.labelMaxLength) + '..';
+              } else {
+                this.labels[i] = this.contents[i].subject;
+              }
+            }
+            this.getGroups();
+            this.isLoading = false;
+          });
         });
       });
     });
-    this.translateService.use(localStorage.getItem('currentLang'));
+    this.labelMaxLength = innerWidth / 20;
+    this.translateService.use(this.globalStorageService.getLocalStorageItem(LocalStorageKey.LANGUAGE));
   }
 
   getGroups(): void {
-    this.contentGroups = JSON.parse(sessionStorage.getItem('contentGroups'));
-    if (this.contentGroups.length > 0) {
+    this.contentGroups = this.globalStorageService.getMemoryItem(MemoryStorageKey.CONTENT_GROUPS);
+    if (this.contentGroups && this.contentGroups.length > 0) {
       for (let i = 0; i < this.contentGroups.length; i++) {
         if (this.contentGroups[i] === this.contentGroup.name) {
           this.currentGroupIndex = i;
@@ -180,7 +184,7 @@ export class ContentListComponent implements OnInit {
           this.contents.splice(index, 1);
           this.labels.splice(index, 1);
           if (this.contents.length === 0) {
-            sessionStorage.setItem('lastGroup', JSON.stringify(this.contentGroups[0]));
+            this.globalStorageService.setMemoryItem(MemoryStorageKey.LAST_GROUP, this.contentGroups[0]);
             this.location.back();
           }
           break;
@@ -213,23 +217,11 @@ export class ContentListComponent implements OnInit {
     this.location.replaceState(`${this.baseURL}${this.room.shortId}/${this.collectionName}`);
   }
 
-  updateGroupInSessionStorage(oldName: string, newName: string) {
-    const groups: string[] = JSON.parse(sessionStorage.getItem('contentGroups'));
-    for (let i = 0; i < groups.length; i++) {
-      if (groups[i] === oldName) {
-        groups[i] = newName;
-        sessionStorage.setItem('lastGroup', JSON.stringify(new ContentGroup('', '', groups[i], [], true)));
-        break;
-      }
-    }
-    sessionStorage.setItem('contentGroups', JSON.stringify(groups));
-  }
-
   saveGroupName(): void {
     if (this.updatedName !== this.collectionName) {
       this.contentGroup.name = this.updatedName;
       this.roomService.updateGroup(this.room.id, this.updatedName, this.contentGroup).subscribe(() => {
-        this.updateGroupInSessionStorage(this.collectionName, this.updatedName);
+        this.contentGroupService.updateGroupInMemoryStorage(this.collectionName, this.updatedName);
         this.collectionName = this.updatedName;
         this.translateService.get('content.updated-content-group').subscribe(msg => {
           this.notificationService.show(msg);

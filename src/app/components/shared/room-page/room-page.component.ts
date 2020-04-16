@@ -13,6 +13,7 @@ import { Observable, Subscription } from 'rxjs';
 import { ContentService } from '../../../services/http/content.service';
 import { TranslateService } from '@ngx-translate/core';
 import { NotificationService } from '../../../services/util/notification.service';
+import { GlobalStorageService, MemoryStorageKey } from '../../../services/util/global-storage.service';
 
 @Component({
   selector: 'app-room-page',
@@ -34,16 +35,18 @@ export class RoomPageComponent implements OnInit, OnDestroy {
   protected commentWatch: Observable<IMessage>;
   protected noGroups = true;
 
-  constructor(protected roomService: RoomService,
-              protected route: ActivatedRoute,
-              protected router: Router,
-              protected location: Location,
-              protected wsCommentService: WsCommentServiceService,
-              protected commentService: CommentService,
-              protected eventService: EventService,
-              protected contentService: ContentService,
-              protected translateService: TranslateService,
-              protected notificationService: NotificationService
+  constructor(
+    protected roomService: RoomService,
+    protected route: ActivatedRoute,
+    protected router: Router,
+    protected location: Location,
+    protected wsCommentService: WsCommentServiceService,
+    protected commentService: CommentService,
+    protected eventService: EventService,
+    protected contentService: ContentService,
+    protected translateService: TranslateService,
+    protected notificationService: NotificationService,
+    protected globalStorageService: GlobalStorageService
   ) {
   }
 
@@ -68,39 +71,32 @@ export class RoomPageComponent implements OnInit, OnDestroy {
 
   }
 
-  initializeRoom(shortId: string): void {
-    this.roomService.getRoomByShortId(shortId).subscribe(room => {
-        this.room = room;
-        this.initializeStats();
-        if (this.room.extensions && this.room.extensions['comments']) {
-          if (this.room.extensions['comments'].enableModeration !== null) {
-            this.moderationEnabled = this.room.extensions['comments'].enableModeration;
-            // ToDo: make room data cache that's available for components that manages data flow and put that there
-          }
-        }
-        localStorage.setItem('moderationEnabled', String(this.moderationEnabled));
-        this.commentService.countByRoomId(this.room.id, true)
-          .subscribe(commentCounter => {
-            this.commentCounter = commentCounter;
-          });
-        this.commentWatch = this.wsCommentService.getCommentStream(this.room.id);
-        this.sub = this.commentWatch.subscribe((message: Message) => {
-          const msg = JSON.parse(message.body);
-          const payload = msg.payload;
-          if (msg.type === 'CommentCreated') {
-            this.commentCounter = this.commentCounter + 1;
-          } else if (msg.type === 'CommentDeleted') {
-            this.commentCounter = this.commentCounter - 1;
-          }
-        });
-        this.afterRoomLoadHook();
-      },
-      error => {
-        this.isLoading = false;
-        this.errorOnLoading = true;
+  initializeRoom(room: Room): void {
+    this.room = room;
+    this.initializeStats();
+    if (this.room.extensions && this.room.extensions['comments']) {
+      if (this.room.extensions['comments'].enableModeration !== null) {
+        this.moderationEnabled = this.room.extensions['comments'].enableModeration;
+        // ToDo: make room data cache that's available for components that manages data flow and put that there
       }
-    );
-    localStorage.setItem('shortId', shortId);
+    }
+    this.globalStorageService.setMemoryItem(MemoryStorageKey.MODERATION_ENABLED, String(this.moderationEnabled));
+    this.commentService.countByRoomId(this.room.id, true)
+      .subscribe(commentCounter => {
+        this.commentCounter = commentCounter;
+      });
+    this.commentWatch = this.wsCommentService.getCommentStream(this.room.id);
+    this.sub = this.commentWatch.subscribe((message: Message) => {
+      const msg = JSON.parse(message.body);
+      const payload = msg.payload;
+      if (msg.type === 'CommentCreated') {
+        this.commentCounter = this.commentCounter + 1;
+      } else if (msg.type === 'CommentDeleted') {
+        this.commentCounter = this.commentCounter - 1;
+      }
+    });
+    this.afterRoomLoadHook();
+    this.globalStorageService.setMemoryItem(MemoryStorageKey.SHORT_ID, room.shortId);
   }
 
   initializeStats() {
@@ -111,6 +107,7 @@ export class RoomPageComponent implements OnInit, OnDestroy {
         this.initializeGroups();
       } else {
         this.isLoading = false;
+        this.afterGroupsLoadHook();
       }
     });
   }

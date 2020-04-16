@@ -7,6 +7,7 @@ import { FormControl, Validators } from '@angular/forms';
 import { User } from '../../../../models/user';
 import { CommentListComponent } from '../../comment-list/comment-list.component';
 import { EventService } from '../../../../services/util/event.service';
+import { GlobalStorageService, LocalStorageKey, MemoryStorageKey } from '../../../../services/util/global-storage.service';
 
 export interface DialogData {
   user: User;
@@ -32,11 +33,13 @@ export class CreateCommentComponent implements OnInit {
     public dialog: MatDialog,
     private translationService: TranslateService,
     public eventService: EventService,
-    @Inject(MAT_DIALOG_DATA) public data: DialogData) {
+    @Inject(MAT_DIALOG_DATA) public data: DialogData,
+    private globalStorageService: GlobalStorageService
+  ) {
   }
 
   ngOnInit() {
-    this.translateService.use(localStorage.getItem('currentLang'));
+    this.translateService.use(this.globalStorageService.getLocalStorageItem(LocalStorageKey.LANGUAGE));
   }
 
   onNoClick(): void {
@@ -57,7 +60,7 @@ export class CreateCommentComponent implements OnInit {
   closeDialog(body: string) {
     if (this.checkInputData(body) === true) {
       const comment = new Comment();
-      comment.roomId = localStorage.getItem(`roomId`);
+      comment.roomId = this.globalStorageService.getMemoryItem(MemoryStorageKey.ROOM_ID);
       comment.body = body;
       comment.creatorId = this.data.user.id;
       comment.createdFromLecturer = this.data.user.role === 1;

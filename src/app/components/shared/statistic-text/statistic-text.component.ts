@@ -6,6 +6,7 @@ import { LanguageService } from '../../../services/util/language.service';
 import { ContentText } from '../../../models/content-text';
 import { ContentAnswerService } from '../../../services/http/content-answer.service';
 import { TextAnswer } from '../../../models/text-answer';
+import { GlobalStorageService, LocalStorageKey } from '../../../services/util/global-storage.service';
 
 export class TextStatistic {
   answer: string;
@@ -28,17 +29,20 @@ export class StatisticTextComponent implements OnInit {
   answers: TextStatistic[] = [];
   isLoading = true;
 
-  constructor(protected route: ActivatedRoute,
-              private contentService: ContentService,
-              private contentAnswerService: ContentAnswerService,
-              private translateService: TranslateService,
-              protected langService: LanguageService) {
+  constructor(
+    protected route: ActivatedRoute,
+    private contentService: ContentService,
+    private contentAnswerService: ContentAnswerService,
+    private translateService: TranslateService,
+    protected langService: LanguageService,
+    private globalStorageService: GlobalStorageService
+  ) {
     langService.langEmitter.subscribe(lang => translateService.use(lang));
   }
 
 
   ngOnInit(): void {
-    this.translateService.use(localStorage.getItem('currentLang'));
+    this.translateService.use(this.globalStorageService.getLocalStorageItem(LocalStorageKey.LANGUAGE));
     this.contentAnswerService.getAnswers(this.content.id).subscribe(answers => {
       this.getData(answers);
       this.isLoading = false;

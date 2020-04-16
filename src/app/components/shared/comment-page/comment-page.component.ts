@@ -18,12 +18,14 @@ export class CommentPageComponent implements OnInit, OnDestroy, AfterContentInit
   roomId: string;
   user: User;
 
-  constructor(private route: ActivatedRoute,
-              private notification: NotificationService,
-              private authenticationService: AuthenticationService,
-              private eventService: EventService,
-              private liveAnnouncer: LiveAnnouncer,
-              private translateService: TranslateService) {
+  constructor(
+    private route: ActivatedRoute,
+    private notification: NotificationService,
+    private authenticationService: AuthenticationService,
+    private eventService: EventService,
+    private liveAnnouncer: LiveAnnouncer,
+    private translateService: TranslateService
+  ) {
   }
 
   @HostListener('window:keyup', ['$event'])
@@ -65,7 +67,9 @@ export class CommentPageComponent implements OnInit, OnDestroy, AfterContentInit
   }
 
   ngOnInit(): void {
-    this.roomId = localStorage.getItem('roomId');
+    this.route.data.subscribe(data => {
+      this.roomId = data.room;
+    });
     this.user = this.authenticationService.getUser();
   }
 

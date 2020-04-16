@@ -10,6 +10,7 @@ import { ThemeService } from '../../../../theme/theme.service';
 import { Theme } from '../../../../theme/Theme';
 import { DialogService } from '../../../services/util/dialog.service';
 import { ApiConfigService } from '../../../services/http/api-config.service';
+import { GlobalStorageService, LocalStorageKey } from '../../../services/util/global-storage.service';
 
 @Component({
   selector: 'app-footer',
@@ -23,44 +24,43 @@ export class FooterComponent implements OnInit {
 
   public open: string;
   public deviceWidth = innerWidth;
-  public lang = localStorage.getItem('currentLang');
+  public lang: string;
   public cookieAccepted: boolean;
   public dataProtectionConsent: boolean;
 
-  public themeClass = localStorage.getItem('theme');
+  public themeClass: String;
 
   public themes: Theme[];
 
-  constructor(public notificationService: NotificationService,
-              public router: Router,
-              private translateService: TranslateService,
-              private langService: LanguageService,
-              public authenticationService: AuthenticationService,
-              private themeService: ThemeService,
-              private dialogService: DialogService,
-              private apiConfigService: ApiConfigService) {
+  constructor(
+    public notificationService: NotificationService,
+    public router: Router,
+    private translateService: TranslateService,
+    private langService: LanguageService,
+    public authenticationService: AuthenticationService,
+    private themeService: ThemeService,
+    private dialogService: DialogService,
+    private apiConfigService: ApiConfigService,
+    private globalStorageService: GlobalStorageService
+  ) {
+    this.themeClass = this.globalStorageService.getLocalStorageItem(LocalStorageKey.THEME);
+    this.lang = this.globalStorageService.getLocalStorageItem(LocalStorageKey.LANGUAGE);
     langService.langEmitter.subscribe(lang => translateService.use(lang));
   }
 
   ngOnInit() {
-    if (!this.themeService.getTheme()['source']['_value']) {
-      if (this.deviceWidth < 500) {
-        this.themeService.activate('dark');
-        this.themeClass = 'dark';
-      } else {
-        this.themeService.activate('arsnova');
-        this.themeClass = 'arsnova';
-      }
-    }
+    this.themeService.getTheme().subscribe(theme => {
+      this.themeClass = theme;
+    });
     this.translateService.use(this.lang);
     this.translateService.get('footer.open').subscribe(message => {
       this.open = message;
     });
     this.themes = this.themeService.getThemes();
-    this.cookieAccepted = localStorage.getItem('cookieAccepted') === 'true';
-    this.dataProtectionConsent = localStorage.getItem('dataProtectionConsent') === 'true';
+    this.cookieAccepted = this.globalStorageService.getLocalStorageItem(LocalStorageKey.COOKIE_CONSENT) === 'true';
+    this.dataProtectionConsent = this.globalStorageService.getLocalStorageItem(LocalStorageKey.DATA_PROTECTION) === 'true';
 
-    if (!localStorage.getItem('cookieAccepted')) {
+    if (!this.globalStorageService.getLocalStorageItem(LocalStorageKey.COOKIE_CONSENT)) {
       this.showCookieModal();
     } else {
       if (!this.cookieAccepted || !this.dataProtectionConsent) {
@@ -116,7 +116,7 @@ export class FooterComponent implements OnInit {
 
   useLanguage(language: string) {
     this.translateService.use(language);
-    localStorage.setItem('currentLang', language);
+    this.globalStorageService.setLocalStorageItem(LocalStorageKey.LANGUAGE, language);
     this.langService.langEmitter.emit(language);
   }
 
@@ -126,6 +126,6 @@ export class FooterComponent implements OnInit {
   }
 
   getLanguage(): string {
-    return localStorage.getItem('currentLang');
+    return this.globalStorageService.getLocalStorageItem(LocalStorageKey.LANGUAGE);
   }
 }

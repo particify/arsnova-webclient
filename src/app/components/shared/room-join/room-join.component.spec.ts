@@ -10,6 +10,7 @@ import { AuthenticationService } from '../../../services/http/authentication.ser
 import { ModeratorService } from '../../../services/http/moderator.service';
 import { EventService } from '../../../services/util/event.service';
 import { Observable, of } from 'rxjs';
+import { GlobalStorageService, LocalStorageKey, MemoryStorageKey } from '../../../services/util/global-storage.service';
 
 const TRANSLATION_DE = require('../../../../assets/i18n/home/de.json');
 const TRANSLATION_EN = require('../../../../assets/i18n/home/en.json');
@@ -59,6 +60,27 @@ class MockModeratorService {
 @Injectable()
 class MockEventService {
 
+}
+
+@Injectable()
+class MockGlobalStorageService {
+
+  getMemoryItem(key: MemoryStorageKey) {
+    return undefined;
+  }
+
+  getLocalStorageItem(key: LocalStorageKey) {
+    return undefined;
+  }
+
+  setMemoryItem(key: MemoryStorageKey, value: any) {
+  }
+
+  setLocalStorageItem(key: LocalStorageKey, value: any) {
+  }
+
+  deleteLocalStorageItem(key: LocalStorageKey) {
+  }
 }
 
 @Component({ selector: 'mat-icon', template: '' })
@@ -117,6 +139,10 @@ describe('RoomJoinComponent', () => {
         {
           provide: EventService,
           useClass: MockEventService
+        },
+        {
+          provide: GlobalStorageService,
+          useClass: MockGlobalStorageService
         },
       ],
       imports: [

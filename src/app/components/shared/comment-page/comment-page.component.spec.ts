@@ -10,6 +10,7 @@ import { AuthenticationService } from '../../../services/http/authentication.ser
 import { EventService } from '../../../services/util/event.service';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { User } from '../../../models/user';
+import { GlobalStorageService, LocalStorageKey, MemoryStorageKey } from '../../../services/util/global-storage.service';
 
 const TRANSLATION_DE = require('../../../../assets/i18n/home/de.json');
 const TRANSLATION_EN = require('../../../../assets/i18n/home/en.json');
@@ -63,6 +64,27 @@ class MockRenderer2 {
 
 }
 
+@Injectable()
+class MockGlobalStorageService {
+
+  getMemoryItem(key: MemoryStorageKey) {
+    return undefined;
+  }
+
+  getLocalStorageItem(key: LocalStorageKey) {
+    return undefined;
+  }
+
+  setMemoryItem(key: MemoryStorageKey, value: any) {
+  }
+
+  setLocalStorageItem(key: LocalStorageKey, value: any) {
+  }
+
+  deleteLocalStorageItem(key: LocalStorageKey) {
+  }
+}
+
 @Component({ selector: 'app-comment-list', template: '' })
 class CommentListStubComponent {
   @Input() user: User;
@@ -93,6 +115,7 @@ describe('CommentPageComponent', () => {
           provide: ActivatedRoute,
           useValue: {
             params: of([{ id: 1 }]),
+            data: of()
           },
         },
         {
@@ -118,7 +141,11 @@ describe('CommentPageComponent', () => {
         {
           provide: Renderer2,
           useClass: MockRenderer2
-        }
+        },
+        {
+          provide: GlobalStorageService,
+          useClass: MockGlobalStorageService
+        },
       ]
     })
       .compileComponents()

@@ -14,6 +14,7 @@ import { RoomService } from '../../../services/http/room.service';
 import { CorrectWrong } from '../../../models/correct-wrong.enum';
 import { EventService } from '../../../services/util/event.service';
 import { Router } from '@angular/router';
+import { GlobalStorageService, LocalStorageKey, MemoryStorageKey } from '../../../services/util/global-storage.service';
 
 @Component({
   selector: 'app-moderator-comment-list',
@@ -58,13 +59,14 @@ export class ModeratorCommentListComponent implements OnInit {
     private wsCommentService: WsCommentServiceService,
     protected roomService: RoomService,
     public eventService: EventService,
-    private router: Router
+    private router: Router,
+    private globalStorageService: GlobalStorageService
   ) {
     langService.langEmitter.subscribe(lang => translateService.use(lang));
   }
 
   ngOnInit() {
-    this.roomId = localStorage.getItem(`roomId`);
+    this.roomId = this.globalStorageService.getMemoryItem(MemoryStorageKey.ROOM_ID);
     this.userRole = this.user.role;
     this.roomService.getRoom(this.roomId).subscribe(room => this.room = room);
     this.hideCommentsList = false;
@@ -74,9 +76,9 @@ export class ModeratorCommentListComponent implements OnInit {
     this.wsCommentService.getCommentStream(this.roomId).subscribe((message: Message) => {
       this.parseIncomingMessage(message);
     });
-    this.translateService.use(localStorage.getItem('currentLang'));
-    this.deviceType = localStorage.getItem('deviceType');
-    this.isSafari = localStorage.getItem('isSafari');
+    this.translateService.use(this.globalStorageService.getLocalStorageItem(LocalStorageKey.LANGUAGE));
+    this.deviceType = this.globalStorageService.getMemoryItem(MemoryStorageKey.DEVICE_TYPE);
+    this.isSafari = this.globalStorageService.getMemoryItem(MemoryStorageKey.IS_SAFARI);
     this.currentSort = this.votedesc;
     this.commentService.getRejectedComments(this.roomId)
       .subscribe(comments => {

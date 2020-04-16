@@ -16,8 +16,9 @@ import { CorrectWrong } from '../../../models/correct-wrong.enum';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { EventService } from '../../../services/util/event.service';
 import { Subscription } from 'rxjs';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { DialogService } from '../../../services/util/dialog.service';
+import { GlobalStorageService, MemoryStorageKey, LocalStorageKey } from '../../../services/util/global-storage.service';
 
 @Component({
   selector: 'app-comment-list',
@@ -28,6 +29,7 @@ export class CommentListComponent implements OnInit, OnDestroy {
   @ViewChild('searchBox') searchField: ElementRef;
   @Input() user: User;
   @Input() roomId: string;
+  shortId: string;
   comments: Comment[] = [];
   room: Room;
   hideCommentsList = false;
@@ -64,46 +66,34 @@ export class CommentListComponent implements OnInit, OnDestroy {
   freeze = false;
   commentStream: Subscription;
 
-  constructor(private commentService: CommentService,
-              private translateService: TranslateService,
-              private dialogService: DialogService,
-              protected langService: LanguageService,
-              private wsCommentService: WsCommentServiceService,
-              protected roomService: RoomService,
-              protected voteService: VoteService,
-              private notificationService: NotificationService,
-              public eventService: EventService,
-              public liveAnnouncer: LiveAnnouncer,
-              private router: Router
+  constructor(
+    private commentService: CommentService,
+    private translateService: TranslateService,
+    private dialogService: DialogService,
+    protected langService: LanguageService,
+    private wsCommentService: WsCommentServiceService,
+    protected roomService: RoomService,
+    protected voteService: VoteService,
+    private notificationService: NotificationService,
+    public eventService: EventService,
+    public liveAnnouncer: LiveAnnouncer,
+    private router: Router,
+    protected route: ActivatedRoute,
+    private globalStorageService: GlobalStorageService
   ) {
     langService.langEmitter.subscribe(lang => translateService.use(lang));
   }
 
   ngOnInit() {
-    this.roomId = localStorage.getItem(`roomId`);
+    this.roomId = this.globalStorageService.getMemoryItem(MemoryStorageKey.ROOM_ID);
+    this.shortId = this.route.snapshot.paramMap.get('shortId');
     const userId = this.user.id;
     this.userRole = this.user.role;
     this.currentSort = this.votedesc;
-    this.roomService.getRoom(this.roomId).subscribe(room => {
-      this.room = room;
-      if (this.room && this.room.extensions && this.room.extensions['comments']) {
-        if (this.room.extensions['comments'].enableModeration !== null) {
-          this.moderationEnabled = this.room.extensions['comments'].enableModeration;
-        }
-        if (this.room.extensions['comments'].directSend !== null) {
-          this.directSend = this.room.extensions['comments'].directSend;
-        }
-      }
-      this.commentService.getAckComments(this.roomId)
-        .subscribe(comments => {
-          this.comments = comments;
-          this.getComments();
-        });
-    });
-    this.subscribeCommentStream();
-    this.translateService.use(localStorage.getItem('currentLang'));
-    this.deviceType = localStorage.getItem('deviceType');
-    this.isSafari = localStorage.getItem('isSafari');
+    this.initRoom();
+    this.translateService.use(this.globalStorageService.getLocalStorageItem(LocalStorageKey.LANGUAGE));
+    this.deviceType = this.globalStorageService.getMemoryItem(MemoryStorageKey.DEVICE_TYPE);
+    this.isSafari = this.globalStorageService.getMemoryItem(MemoryStorageKey.IS_SAFARI);
     if (this.userRole === UserRole.PARTICIPANT) {
       this.voteService.getByRoomIdAndUserID(this.roomId, userId).subscribe(votes => {
         for (const v of votes) {
@@ -126,6 +116,28 @@ export class CommentListComponent implements OnInit, OnDestroy {
     if (!this.freeze && this.commentStream) {
       this.commentStream.unsubscribe();
     }
+  }
+
+  initRoom() {
+    this.roomService.getRoomByShortId(this.shortId).subscribe(room => {
+      this.room = room;
+      if (this.room && this.room.extensions && this.room.extensions['comments']) {
+        if (this.room.extensions['comments'].enableModeration !== null) {
+          this.moderationEnabled = this.room.extensions['comments'].enableModeration;
+          this.globalStorageService.setMemoryItem(MemoryStorageKey.MODERATION_ENABLED,
+            this.room.extensions['comments'].enableModeration);
+        }
+        if (this.room.extensions['comments'].directSend !== null) {
+          this.directSend = this.room.extensions['comments'].directSend;
+        }
+      }
+      this.commentService.getAckComments(this.roomId)
+        .subscribe(comments => {
+          this.comments = comments;
+          this.getComments();
+        });
+    });
+    this.subscribeCommentStream();
   }
 
   checkScroll(): void {

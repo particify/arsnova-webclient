@@ -16,6 +16,7 @@ import { KeyboardKey } from '../../../utils/keyboard/keys';
 import { ContentService } from '../../../services/http/content.service';
 import { ContentGroup } from '../../../models/content-group';
 import { DialogService } from '../../../services/util/dialog.service';
+import { GlobalStorageService, LocalStorageKey, MemoryStorageKey } from '../../../services/util/global-storage.service';
 
 @Component({
   selector: 'app-room-creator-page',
@@ -27,22 +28,25 @@ export class RoomCreatorPageComponent extends RoomPageComponent implements OnIni
   viewModuleCount = 1;
   moderatorCommentCounter: number;
 
-  constructor(protected roomService: RoomService,
-              protected notification: NotificationService,
-              protected route: ActivatedRoute,
-              protected router: Router,
-              protected location: Location,
-              public dialog: MatDialog,
-              protected translateService: TranslateService,
-              protected langService: LanguageService,
-              protected wsCommentService: WsCommentServiceService,
-              protected commentService: CommentService,
-              private liveAnnouncer: LiveAnnouncer,
-              public eventService: EventService,
-              protected contentService: ContentService,
-              private dialogService: DialogService) {
+  constructor(
+    protected roomService: RoomService,
+    protected notification: NotificationService,
+    protected route: ActivatedRoute,
+    protected router: Router,
+    protected location: Location,
+    public dialog: MatDialog,
+    protected translateService: TranslateService,
+    protected langService: LanguageService,
+    protected wsCommentService: WsCommentServiceService,
+    protected commentService: CommentService,
+    private liveAnnouncer: LiveAnnouncer,
+    public eventService: EventService,
+    protected contentService: ContentService,
+    private dialogService: DialogService,
+    protected globalStorageService: GlobalStorageService
+  ) {
     super(roomService, route, router, location, wsCommentService, commentService, eventService, contentService, translateService,
-      notification);
+      notification, globalStorageService);
     langService.langEmitter.subscribe(lang => translateService.use(lang));
   }
 
@@ -90,9 +94,9 @@ export class RoomCreatorPageComponent extends RoomPageComponent implements OnIni
 
   ngOnInit() {
     window.scroll(0, 0);
-    this.translateService.use(localStorage.getItem('currentLang'));
-    this.route.params.subscribe(params => {
-      this.initializeRoom(params['shortId']);
+    this.translateService.use(this.globalStorageService.getLocalStorageItem(LocalStorageKey.LANGUAGE));
+    this.route.data.subscribe(data => {
+      this.initializeRoom(data.room);
     });
   }
 
@@ -129,7 +133,7 @@ export class RoomCreatorPageComponent extends RoomPageComponent implements OnIni
         this.isLoading = false;
       }
     });
-    sessionStorage.setItem('contentGroups', JSON.stringify(this.groupNames));
+    this.globalStorageService.setMemoryItem(MemoryStorageKey.CONTENT_GROUPS, this.groupNames);
   }
 
   public showQRDialog() {

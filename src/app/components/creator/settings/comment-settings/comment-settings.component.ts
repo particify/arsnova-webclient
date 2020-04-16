@@ -12,6 +12,7 @@ import { CommentBonusTokenMixin } from '../../../../models/comment-bonus-token-m
 import { CommentSettings } from '../../../../models/comment-settings';
 import { TSMap } from 'typescript-map';
 import { DialogService } from '../../../../services/util/dialog.service';
+import { GlobalStorageService, MemoryStorageKey } from '../../../../services/util/global-storage.service';
 
 @Component({
   selector: 'app-comment-settings',
@@ -43,7 +44,8 @@ export class CommentSettingsComponent implements OnInit {
     public commentService: CommentService,
     public commentSettingsService: CommentSettingsService,
     private bonusTokenService: BonusTokenService,
-    private dialogService: DialogService
+    private dialogService: DialogService,
+    private globalStorageService: GlobalStorageService
   ) {
   }
 
@@ -164,7 +166,7 @@ export class CommentSettingsComponent implements OnInit {
     commentExtension.set('enableTags', this.enableTags);
     commentExtension.set('tags', this.tags);
     this.editRoom.extensions['comments'] = commentExtension;
-    localStorage.setItem('moderationEnabled', String(this.enableModeration));
+    this.globalStorageService.setMemoryItem(MemoryStorageKey.MODERATION_ENABLED, String(this.enableModeration));
     this.saveChanges();
   }
 

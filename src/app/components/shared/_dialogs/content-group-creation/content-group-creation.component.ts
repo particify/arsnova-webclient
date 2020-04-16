@@ -4,6 +4,8 @@ import { ContentListComponent } from '../../../creator/content-list/content-list
 import { NotificationService } from '../../../../services/util/notification.service';
 import { TranslateService } from '@ngx-translate/core';
 import { ContentCreatePageComponent } from '../../../creator/content-create-page/content-create-page.component';
+import { GlobalStorageService, MemoryStorageKey } from '../../../../services/util/global-storage.service';
+import { ContentGroup } from '../../../../models/content-group';
 
 @Component({
   selector: 'app-content-group-creation',
@@ -14,10 +16,13 @@ export class ContentGroupCreationComponent implements OnInit {
 
   name = '';
 
-  constructor(public dialogRef: MatDialogRef<ContentListComponent>,
-              public dialog: MatDialog,
-              private notificationService: NotificationService,
-              private translateService: TranslateService) {
+  constructor(
+    public dialogRef: MatDialogRef<ContentListComponent>,
+    public dialog: MatDialog,
+    private notificationService: NotificationService,
+    private translateService: TranslateService,
+    private globalStorageService: GlobalStorageService
+  ) {
   }
 
   ngOnInit() {
@@ -25,7 +30,7 @@ export class ContentGroupCreationComponent implements OnInit {
 
   addContentGroup() {
     if (this.name) {
-      if (ContentCreatePageComponent.saveGroupInSessionStorage(this.name)) {
+      if (this.saveGroupInSessionStorage(this.name)) {
         this.translateService.get('dialog.content-group-created').subscribe(msg => {
           this.notificationService.show(msg);
           this.closeDialog(this.name);
@@ -48,6 +53,23 @@ export class ContentGroupCreationComponent implements OnInit {
       this.dialogRef.close(name);
     } else {
       this.dialogRef.close();
+    }
+  }
+
+  saveGroupInSessionStorage(newGroup: string): boolean {
+    if (newGroup !== '') {
+      this.globalStorageService.setMemoryItem(MemoryStorageKey.LAST_GROUP, new ContentGroup('', '', newGroup, [], true));
+      const groups: string [] = this.globalStorageService.getMemoryItem(MemoryStorageKey.CONTENT_GROUPS) || [];
+      if (groups) {
+        for (let i = 0; i < groups.length; i++) {
+          if (newGroup === groups[i]) {
+            return false;
+          }
+        }
+      }
+      groups.push(newGroup);
+      this.globalStorageService.setMemoryItem(MemoryStorageKey.CONTENT_GROUPS, groups);
+      return true;
     }
   }
 }

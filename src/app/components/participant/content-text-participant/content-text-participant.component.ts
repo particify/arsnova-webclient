@@ -9,6 +9,7 @@ import { ContentType } from '../../../models/content-type.enum';
 import { EventService } from '../../../services/util/event.service';
 import { AuthenticationService } from '../../../services/http/authentication.service';
 import { ActivatedRoute } from '@angular/router';
+import { GlobalStorageService, LocalStorageKey } from '../../../services/util/global-storage.service';
 
 @Component({
   selector: 'app-content-text-participant',
@@ -35,13 +36,14 @@ export class ContentTextParticipantComponent implements OnInit {
     private translateService: TranslateService,
     protected langService: LanguageService,
     public eventService: EventService,
-    protected route: ActivatedRoute
+    protected route: ActivatedRoute,
+    private globalStorageService: GlobalStorageService
   ) {
     langService.langEmitter.subscribe(lang => translateService.use(lang));
   }
 
   ngOnInit() {
-    this.translateService.use(localStorage.getItem('currentLang'));
+    this.translateService.use(this.globalStorageService.getLocalStorageItem(LocalStorageKey.LANGUAGE));
     const userId = this.authenticationService.getUser().id;
     this.answerService.getTextAnswerByContentIdUserIdCurrentRound(this.content.id, userId).subscribe(answer => {
       if (answer) {

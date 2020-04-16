@@ -11,6 +11,7 @@ import { LanguageService } from '../../../services/util/language.service';
 import { AuthenticationService } from '../../../services/http/authentication.service';
 import { User } from '../../../models/user';
 import { DialogService } from '../../../services/util/dialog.service';
+import { GlobalStorageService, LocalStorageKey, MemoryStorageKey } from '../../../services/util/global-storage.service';
 
 const TRANSLATION_DE = require('../../../../assets/i18n/home/de.json');
 const TRANSLATION_EN = require('../../../../assets/i18n/home/en.json');
@@ -68,6 +69,27 @@ class MockLiveAnnouncer {
 @Injectable()
 class MockRenderer2 {
 
+}
+
+@Injectable()
+class MockGlobalStorageService {
+
+  getMemoryItem(key: MemoryStorageKey) {
+    return undefined;
+  }
+
+  getLocalStorageItem(key: LocalStorageKey) {
+    return undefined;
+  }
+
+  setMemoryItem(key: MemoryStorageKey, value: any) {
+  }
+
+  setLocalStorageItem(key: LocalStorageKey, value: any) {
+  }
+
+  deleteLocalStorageItem(key: LocalStorageKey) {
+  }
 }
 
 @Component({ selector: 'app-room-join', template: '' })
@@ -133,7 +155,11 @@ describe('UserHomeComponent', () => {
         {
           provide: Renderer2,
           useClass: MockRenderer2
-        }
+        },
+        {
+          provide: GlobalStorageService,
+          useClass: MockGlobalStorageService
+        },
       ]
     }).compileComponents()
       .then(() => {

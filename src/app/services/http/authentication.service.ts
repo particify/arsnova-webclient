@@ -3,11 +3,11 @@ import { Injectable } from '@angular/core';
 import { User } from '../../models/user';
 import { BehaviorSubject, Observable, of, timer } from 'rxjs';
 import { UserRole } from '../../models/user-roles.enum';
-import { DataStoreService } from '../util/data-store.service';
 import { EventService } from '../util/event.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { ClientAuthentication } from '../../models/client-authentication';
 import { BaseHttpService } from './base-http.service';
+import { GlobalStorageService, LocalStorageKey } from '../util/global-storage.service';
 
 @Injectable()
 export class AuthenticationService extends BaseHttpService {
@@ -34,15 +34,14 @@ export class AuthenticationService extends BaseHttpService {
   private redirect: string;
 
   constructor(
-    private dataStoreService: DataStoreService,
+    private globalStorageService: GlobalStorageService,
     public eventService: EventService,
     private http: HttpClient
   ) {
     super();
-    if (localStorage.getItem(this.ROOM_ACCESS)) {
-      // Load user data from local data store if available
-      const creatorAccess = JSON.parse(localStorage.getItem(this.ROOM_ACCESS));
-      for (const cA of creatorAccess) {
+    const storedAccess = this.globalStorageService.getLocalStorageItem(LocalStorageKey.ROOM_ACCESS);
+    if (storedAccess) {
+      for (const cA of storedAccess) {
         let role = UserRole.PARTICIPANT;
         const roleAsNumber: string = cA.substring(0, 1);
         const shortId: string = cA.substring(2);
@@ -84,9 +83,10 @@ export class AuthenticationService extends BaseHttpService {
   }
 
   refreshLogin(): void {
-    if (this.dataStoreService.has(this.STORAGE_KEY)) {
+    const savedUser = this.globalStorageService.getLocalStorageItem(LocalStorageKey.USER);
+    if (savedUser) {
       // Load user data from local data store if available
-      const user: User = JSON.parse(this.dataStoreService.get(this.STORAGE_KEY));
+      const user: User = savedUser;
       // ToDo: Fix this madness.
       const wasGuest = (user.authProvider === 'ARSNOVA_GUEST') ? true : false;
       const connectionUrl: string = this.apiUrl.base + this.apiUrl.auth + this.apiUrl.login + '?refresh=true';
@@ -101,7 +101,7 @@ export class AuthenticationService extends BaseHttpService {
       this.http.post<ClientAuthentication>(connectionUrl, {}, this.httpOptions).pipe(
         tap(_ => ''),
         catchError(_ => {
-          this.dataStoreService.remove(this.STORAGE_KEY);
+          this.globalStorageService.deleteLocalStorageItem(LocalStorageKey.USER);
           return of(null);
         })
       ).subscribe(nu => {
@@ -122,9 +122,9 @@ export class AuthenticationService extends BaseHttpService {
 
   guestLogin(userRole: UserRole): Observable<string> {
     let wasGuest = false;
-    if (this.dataStoreService.has(this.STORAGE_KEY)) {
-      const user: User = JSON.parse(this.dataStoreService.get(this.STORAGE_KEY));
-      wasGuest = user.isGuest;
+    const savedUser = this.globalStorageService.getLocalStorageItem(LocalStorageKey.USER);
+    if (savedUser) {
+      wasGuest = savedUser;
     }
     if (wasGuest) {
       this.refreshLogin();
@@ -215,7 +215,7 @@ export class AuthenticationService extends BaseHttpService {
     // Destroy the persisted user data
     // Actually don't destroy it because we want to preserve guest accounts in local storage
     // this.dataStoreService.remove(this.STORAGE_KEY);
-    this.dataStoreService.set('loggedin', 'false');
+    this.globalStorageService.deleteLocalStorageItem(LocalStorageKey.LOGGED_IN);
     this.user.next(undefined);
   }
 
@@ -224,8 +224,8 @@ export class AuthenticationService extends BaseHttpService {
   }
 
   private setUser(user: User): void {
-    this.dataStoreService.set(this.STORAGE_KEY, JSON.stringify(user));
-    this.dataStoreService.set('loggedin', 'true');
+    this.globalStorageService.setLocalStorageItem(LocalStorageKey.USER, user);
+    this.globalStorageService.setLocalStorageItem(LocalStorageKey.LOGGED_IN, 'true');
     this.user.next(user);
   }
 
@@ -259,7 +259,7 @@ export class AuthenticationService extends BaseHttpService {
           result.token,
           userRole,
           isGuest));
-        this.dataStoreService.set('loggedin', 'true');
+        this.globalStorageService.setLocalStorageItem(LocalStorageKey.LOGGED_IN, 'true');
         return 'true';
       } else {
         return 'false';
@@ -306,7 +306,7 @@ export class AuthenticationService extends BaseHttpService {
     this.roomAccess.forEach(function (key, value) {
       arr.push(key + '_' + String(value));
     });
-    localStorage.setItem(this.ROOM_ACCESS, JSON.stringify(arr));
+    this.globalStorageService.setLocalStorageItem(LocalStorageKey.ROOM_ACCESS, arr);
   }
 
   setRedirect(url: string) {

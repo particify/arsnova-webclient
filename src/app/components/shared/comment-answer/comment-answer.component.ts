@@ -70,12 +70,10 @@ export class CommentAnswerComponent implements OnInit, AfterContentInit {
     if (this.user.role !== UserRole.PARTICIPANT) {
       this.isStudent = false;
     }
-    this.route.params.subscribe(params => {
-      this.commentService.getComment(params['commentId']).subscribe(comment => {
-        this.comment = comment;
-        this.answer = this.comment.answer;
-        this.isLoading = false;
-      });
+    this.route.data.subscribe(data => {
+      this.comment = data.comment;
+      this.answer = this.comment.answer;
+      this.isLoading = false;
     });
   }
 

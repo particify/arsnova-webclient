@@ -20,6 +20,7 @@ import { NotificationService } from '../../../services/util/notification.service
 import { Message } from '@stomp/stompjs';
 import { Subscription } from 'rxjs';
 import { WsFeedbackService } from '../../../services/websockets/ws-feedback.service';
+import { GlobalStorageService, LocalStorageKey } from '../../../services/util/global-storage.service';
 
 @Component({
   selector: 'app-room-participant-page',
@@ -33,22 +34,25 @@ export class RoomParticipantPageComponent extends RoomPageComponent implements O
   protected feedbackSub: Subscription;
   feedbackEnabled = false;
 
-  constructor(protected location: Location,
-              protected roomService: RoomService,
-              protected route: ActivatedRoute,
-              protected router: Router,
-              protected notificationService: NotificationService,
-              protected translateService: TranslateService,
-              protected langService: LanguageService,
-              protected wsCommentService: WsCommentServiceService,
-              protected commentService: CommentService,
-              protected contentService: ContentService,
-              protected authenticationService: AuthenticationService,
-              private liveAnnouncer: LiveAnnouncer,
-              public eventService: EventService,
-              private wsFeedbackService: WsFeedbackService) {
+  constructor(
+    protected location: Location,
+    protected roomService: RoomService,
+    protected route: ActivatedRoute,
+    protected router: Router,
+    protected notificationService: NotificationService,
+    protected translateService: TranslateService,
+    protected langService: LanguageService,
+    protected wsCommentService: WsCommentServiceService,
+    protected commentService: CommentService,
+    protected contentService: ContentService,
+    protected authenticationService: AuthenticationService,
+    private liveAnnouncer: LiveAnnouncer,
+    public eventService: EventService,
+    private wsFeedbackService: WsFeedbackService,
+    protected globalStorageService: GlobalStorageService
+  ) {
     super(roomService, route, router, location, wsCommentService, commentService, eventService, contentService, translateService,
-      notificationService);
+      notificationService, globalStorageService);
     langService.langEmitter.subscribe(lang => translateService.use(lang));
   }
 
@@ -86,10 +90,10 @@ export class RoomParticipantPageComponent extends RoomPageComponent implements O
 
   ngOnInit() {
     window.scroll(0, 0);
-    this.route.params.subscribe(params => {
-      this.initializeRoom(params['shortId']);
+    this.route.data.subscribe(data => {
+      this.initializeRoom(data.room);
     });
-    this.translateService.use(localStorage.getItem('currentLang'));
+    this.translateService.use(this.globalStorageService.getLocalStorageItem(LocalStorageKey.LANGUAGE));
   }
 
   ngOnDestroy() {

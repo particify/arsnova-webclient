@@ -2,16 +2,22 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { themes, themes_meta } from './themes.const';
 import { Theme } from './Theme';
+import { GlobalStorageService, LocalStorageKey } from '../app/services/util/global-storage.service';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
+
 export class ThemeService {
-  themeName = localStorage.getItem('theme');
+  themeName: string;
   private activeTheme = new BehaviorSubject(this.themeName);
   private themes: Theme[] = [];
 
-  constructor() {
+  constructor(private globalStorageService: GlobalStorageService) {
+    let currentTheme = this.globalStorageService.getLocalStorageItem(LocalStorageKey.THEME);
+    if (!currentTheme) {
+      currentTheme = 'arsnova';
+    }
+    this.themeName = currentTheme;
+    this.activate(this.themeName);
     // tslint:disable-next-line:forin
     for (const k in themes) {
       this.themes.push(new Theme(
@@ -36,7 +42,7 @@ export class ThemeService {
 
   public activate(name) {
     this.activeTheme.next(name);
-    localStorage.setItem('theme', name);
+    this.globalStorageService.setLocalStorageItem(LocalStorageKey.THEME, name);
   }
 
   public getThemes(): Theme[] {
