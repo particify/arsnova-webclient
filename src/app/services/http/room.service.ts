@@ -167,11 +167,11 @@ export class RoomService extends BaseHttpService {
   }
 
   importv2Room(json: JSON): Observable<Room> {
-    const connectionUrl = `${this.apiUrl.base + this.apiUrl.v2Import}`
+    const connectionUrl = `${this.apiUrl.base + this.apiUrl.v2Import}`;
     return this.http.post<Room>(connectionUrl, json, httpOptions).pipe(
       tap(_ => ''),
       catchError(this.handleError<Room>(`importv2Room, json: ${json}`))
-    )
+    );
   }
 
   changeFeedbackLock(roomId: string, isFeedbackLocked: boolean) {
