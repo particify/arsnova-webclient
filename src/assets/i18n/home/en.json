@@ -75,6 +75,19 @@
     "a11y": "Below you will find an introduction to ARSnova.",
     "title": "»ARSnova«"
   },
+  "import": {
+    "a11y-select-file": "Select a file to import.",
+    "a11y-create": "Create the imported session {{session}}.",
+    "a11y-login": "Navigate to login.",
+    "header": "Import from ARSnova Version 2",
+    "description": "Here you can import sessions you have created in version 2. Select an exported session and create it!",
+    "hint": "Hint: Currently only questions of the following formats can be displayed: 'Single-/Multiple-Choice', 'Likert', 'Yes|No' and 'Text'.",
+    "please-login": "Please log in first to permanently bind your sessions to your new ARSnova account.",
+    "go-to-login": "Continue to Login",
+    "select-file": "Select file",
+    "create": "Create",
+    "error": "That didn't work. Please check the format."
+  },
   "login": {
     "a11y-sso-login": "You will be forwarded to {{provider}} to log in.",
     "a11y-reset-pw": "Opens a dialog for resetting your password.",

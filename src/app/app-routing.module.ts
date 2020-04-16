@@ -5,6 +5,7 @@ import { HomePageComponent } from './components/home/home-page/home-page.compone
 import { UserHomeComponent } from './components/home/user-home/user-home.component';
 import { DirectEntryComponent } from './components/shared/direct-entry/direct-entry.component';
 import { LoginComponent } from './components/home/login/login.component';
+import { ImportComponent } from './components/home/import/import.component';
 
 const routes: Routes = [
   {
@@ -27,6 +28,10 @@ const routes: Routes = [
   {
     path: 'join/:shortId',
     component: DirectEntryComponent
+  },
+  {
+    path: 'import',
+    component: ImportComponent
   },
   {
     path: 'creator',

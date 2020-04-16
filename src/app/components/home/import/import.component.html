@@ -1,0 +1,28 @@
+<div fxLayout="row" fxLayoutAlign="center">
+  <mat-card>
+    <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="15px">
+      <input style="display: none" type="file" (change)="onFileChanged($event)" #fileInput>
+      <div id="message" tabindex="-1" class="visually-hidden">
+        {{ ((isLoggedIn ? 'import.description' : 'import.please-login') | translate) + ('import.hint' | translate) }}</div>
+      <h3>{{ 'import.header' | translate }}</h3>
+      <p *ngIf="isLoggedIn">{{ 'import.description' | translate }}</p>
+      <i *ngIf="isLoggedIn"> {{ 'import.hint' | translate }}</i>
+      <p *ngIf="!isLoggedIn">{{ 'import.please-login' | translate }}</p>
+      <b *ngIf="jsonToUpload">{{jsonToUpload.session.name}}</b>
+      <button mat-raised-button *ngIf="!isLoggedIn" class="button-primary login" aria-labelledby="login"
+              (click)="navToLogin()">{{ 'import.go-to-login' | translate }}</button>
+      <button mat-raised-button *ngIf="jsonToUpload === undefined && isLoggedIn" aria-labelledby="select"
+              class="button-secondary" (click)="fileInput.click()">
+        {{ 'import.select-file' | translate }}</button>
+      <button mat-raised-button class="button-primary" id="create-button"
+              *ngIf="isLoggedIn && jsonToUpload" (click)="onUpload()"
+              attr.aria-label="{{ 'import.a11y-create' | translate: {session: jsonToUpload.session.name} }}">
+        {{ 'import.create' | translate }}</button>
+    </div>
+  </mat-card>
+</div>
+
+<div class="visually-hidden">
+  <div id="select">{{ 'import.a11y-select-file' | translate }}</div>
+  <div id="login">{{ 'import.a11y-login' | translate }}</div>
+</div>

@@ -48,6 +48,7 @@ import { LoginComponent } from './components/home/login/login.component';
 import { DialogService } from './services/util/dialog.service';
 import { DirectEntryComponent } from './components/shared/direct-entry/direct-entry.component';
 import { TrackingService } from './services/util/tracking.service';
+import { ImportComponent } from './components/home/import/import.component';
 
 export function dialogClose(dialogResult: any) {
 }
@@ -67,7 +68,8 @@ export function initializeApp(appConfig: AppConfig) {
     UserHomeComponent,
     DirectEntryComponent,
     CookiesComponent,
-    OverlayComponent
+    OverlayComponent,
+    ImportComponent
   ],
   imports: [
     AppRoutingModule,
