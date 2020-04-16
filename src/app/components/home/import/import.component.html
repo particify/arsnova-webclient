@@ -3,9 +3,10 @@
     <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="15px">
       <input style="display: none" type="file" (change)="onFileChanged($event)" #fileInput>
       <div id="message" tabindex="-1" class="visually-hidden">
-        {{ (isLoggedIn ? 'import.description' : 'import.please-login') | translate}}</div>
+        {{ ((isLoggedIn ? 'import.description' : 'import.please-login') | translate) + ('import.hint' | translate) }}</div>
       <h3>{{ 'import.header' | translate }}</h3>
       <p *ngIf="isLoggedIn">{{ 'import.description' | translate }}</p>
+      <i *ngIf="isLoggedIn"> {{ 'import.hint' | translate }}</i>
       <p *ngIf="!isLoggedIn">{{ 'import.please-login' | translate }}</p>
       <b *ngIf="jsonToUpload">{{jsonToUpload.session.name}}</b>
       <button mat-raised-button *ngIf="!isLoggedIn" class="button-primary login" aria-labelledby="login"
