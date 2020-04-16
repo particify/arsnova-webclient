@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { AuthenticationService } from '../../../services/http/authentication.service';
 import { TranslateService } from '@ngx-translate/core';
 import { NotificationService } from '../../../services/util/notification.service';
+import { UserRole } from '../../../models/user-roles.enum';
 
 @Component({
   selector: 'app-import',
@@ -58,7 +59,14 @@ export class ImportComponent implements OnInit, AfterContentInit {
 
   onUpload() {
     this.roomService.importv2Room(this.jsonToUpload).subscribe(room => {
-      this.router.navigate([`creator/room/${room.id}`]);
+      this.translateService.get('home-page.created-1').subscribe(msg1 => {
+        this.translateService.get('home-page.created-2').subscribe(msg2 => {
+          this.notificationService.show(msg1 + room.name + msg2);
+        });
+      });
+      this.authenticationService.setAccess(room.shortId, UserRole.CREATOR);
+      this.authenticationService.assignRole(UserRole.CREATOR);
+      this.router.navigate([`creator/room/${room.shortId}`]);
     },
         error => {
       this.translateService.get('import.error').subscribe(msg => {
