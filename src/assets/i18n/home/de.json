@@ -76,6 +76,9 @@
     "title": "ARSnova"
   },
   "import": {
+    "a11y-select-file": "Wähle eine Datei zum importieren aus.",
+    "a11y-create": "Erstelle die importierte Sitzung {{session}}.",
+    "a11y-login": "Navigiere zur Anmeldung.",
     "header": "Import von ARSnova Version 2",
     "description": "Hier kannst du von dir erstellte Sitzungen der Version 2 importieren. Wähle dazu eine exportierte Sitzung aus und erstelle sie!",
     "please-login": "Bitte melde dich zuerst an um deine Sitzungen permanent an dein neues ARSnova-Konto zu binden.",

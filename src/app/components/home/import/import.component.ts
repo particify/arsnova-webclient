@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterContentInit, Component, OnInit } from '@angular/core';
 import { RoomService } from '../../../services/http/room.service';
 import { Router } from '@angular/router';
 import { AuthenticationService } from '../../../services/http/authentication.service';
@@ -10,7 +10,7 @@ import { NotificationService } from '../../../services/util/notification.service
   templateUrl: './import.component.html',
   styleUrls: ['./import.component.scss']
 })
-export class ImportComponent implements OnInit {
+export class ImportComponent implements OnInit, AfterContentInit {
 
   selectedFile: File;
   jsonToUpload: JSON;
@@ -21,6 +21,12 @@ export class ImportComponent implements OnInit {
               private authenticationService: AuthenticationService,
               private translateService: TranslateService,
               private notificationService: NotificationService) {
+  }
+
+  ngAfterContentInit(): void {
+    setTimeout(() => {
+      document.getElementById('message').focus();
+    }, 500);
   }
 
   ngOnInit(): void {
@@ -40,13 +46,14 @@ export class ImportComponent implements OnInit {
       if (typeof fileReader.result === 'string') {
         const parsed = JSON.parse(fileReader.result);
         this.jsonToUpload = parsed.exportData;
-        console.log(this.jsonToUpload);
-        console.log(parsed);
       }
     };
     fileReader.onerror = (error) => {
       console.log(error);
     };
+    setTimeout(() => {
+      document.getElementById('create-button').focus();
+    }, 500);
   }
 
   onUpload() {
