@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { RoomService } from '../../../services/http/room.service';
 import { Router } from '@angular/router';
 import { AuthenticationService } from '../../../services/http/authentication.service';
+import { TranslateService } from '@ngx-translate/core';
+import { NotificationService } from '../../../services/util/notification.service';
 
 @Component({
   selector: 'app-import',
@@ -16,7 +18,9 @@ export class ImportComponent implements OnInit {
 
   constructor(private roomService: RoomService,
               private router: Router,
-              private authenticationService: AuthenticationService) {
+              private authenticationService: AuthenticationService,
+              private translateService: TranslateService,
+              private notificationService: NotificationService) {
   }
 
   ngOnInit(): void {
@@ -48,6 +52,11 @@ export class ImportComponent implements OnInit {
   onUpload() {
     this.roomService.importv2Room(this.jsonToUpload).subscribe(room => {
       this.router.navigate([`creator/room/${room.id}`]);
+    },
+        error => {
+      this.translateService.get('import.error').subscribe(msg => {
+        this.notificationService.show(msg);
+      });
     });
   }
 

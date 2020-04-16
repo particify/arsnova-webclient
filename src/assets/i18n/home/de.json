@@ -81,7 +81,8 @@
     "please-login": "Bitte melde dich zuerst an um deine Sitzungen permanent an dein neues ARSnova-Konto zu binden.",
     "go-to-login": "Weiter zur Anmeldung",
     "select-file": "Datei auswählen",
-    "create": "Erstellen"
+    "create": "Erstellen",
+    "error": "Das hat nicht funktioniert. Bitte beachte das Format."
   },
   "login": {
     "a11y-sso-login": "Hier wirst du zum Anmelden auf {{provider}} weitergeleitet.",
