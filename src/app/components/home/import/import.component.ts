@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { RoomService } from '../../../services/http/room.service';
 import { Router } from '@angular/router';
+import { AuthenticationService } from '../../../services/http/authentication.service';
 
 @Component({
   selector: 'app-import',
@@ -11,12 +12,19 @@ export class ImportComponent implements OnInit {
 
   selectedFile: File;
   jsonToUpload: JSON;
+  isLoggedIn = false;
 
   constructor(private roomService: RoomService,
-              private router: Router) {
+              private router: Router,
+              private authenticationService: AuthenticationService) {
   }
 
   ngOnInit(): void {
+    this.isLoggedIn = this.authenticationService.isLoggedIn();
+  }
+
+  navToLogin() {
+    this.router.navigate(['login']);
   }
 
   onFileChanged(event) {

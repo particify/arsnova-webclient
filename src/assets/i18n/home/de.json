@@ -76,6 +76,10 @@
     "title": "ARSnova"
   },
   "import": {
+    "header": "Import von ARSnova Version 2",
+    "description": "Hier kannst du von dir erstellte Sitzungen der Version 2 importieren. Wähle dazu eine exportierte Sitzung aus und erstelle sie!",
+    "please-login": "Bitte melde dich zuerst an um deine Sitzungen permanent an dein neues ARSnova-Konto zu binden.",
+    "go-to-login": "Weiter zur Anmeldung",
     "select-file": "Datei auswählen",
     "create": "Erstellen"
   },

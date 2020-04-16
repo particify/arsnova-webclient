@@ -1,11 +1,16 @@
 <div fxLayout="row" fxLayoutAlign="center">
-  <div fxLayout="column" fxLayoutAlign="center" fxLayoutGap="15px">
-    <input style="display: none" type="file" (change)="onFileChanged($event)" #fileInput>
-    <label *ngIf="jsonToUpload">{{jsonToUpload.session.name}}</label>
-    <button mat-raised-button *ngIf="jsonToUpload === undefined" class="button-secondary" (click)="fileInput.click()">
-      {{ 'import.select-file' | translate }}</button>
-    <button mat-raised-button class="button-primary" *ngIf="jsonToUpload"
-            (click)="onUpload()">{{ 'import.create' | translate }}</button>
-  </div>
+  <mat-card>
+    <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="15px">
+      <input style="display: none" type="file" (change)="onFileChanged($event)" #fileInput>
+      <h3>{{ 'import.header' | translate }}</h3>
+      <p *ngIf="isLoggedIn">{{ 'import.description' | translate }}</p>
+      <p *ngIf="!isLoggedIn">{{ 'import.please-login' | translate }}</p>
+      <b *ngIf="jsonToUpload">{{jsonToUpload.session.name}}</b>
+      <button mat-raised-button *ngIf="!isLoggedIn" class="button-primary login" (click)="navToLogin()">{{ 'import.go-to-login' | translate }}</button>
+      <button mat-raised-button *ngIf="jsonToUpload === undefined && isLoggedIn" class="button-secondary" (click)="fileInput.click()">
+        {{ 'import.select-file' | translate }}</button>
+      <button mat-raised-button class="button-primary" *ngIf="isLoggedIn" [disabled]="jsonToUpload === undefined"
+              (click)="onUpload()">{{ 'import.create' | translate }}</button>
+    </div>
+  </mat-card>
 </div>
-

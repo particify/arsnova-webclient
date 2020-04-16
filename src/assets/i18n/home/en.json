@@ -76,6 +76,10 @@
     "title": "»ARSnova«"
   },
   "import": {
+    "header": "Import from ARSnova Version 2",
+    "description": "Here you can import sessions you have created in version 2. Select an exported session and create it!",
+    "please-login": "Please log in first to permanently bind your sessions to your new ARSnova account.",
+    "go-to-login": "Continue to Login",
     "select-file": "Select file",
     "create": "Create"
   },
