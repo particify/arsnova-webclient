@@ -30,7 +30,8 @@ export class ContentGroupService extends BaseHttpService {
   }
 
   getByRoomIdAndName(roomId: string, name: string): Observable<ContentGroup> {
-    const connectionUrl = `${this.apiUrl.base + this.apiUrl.rooms}/${roomId}/${name}`;
+    const encodedName = encodeURIComponent(name);
+    const connectionUrl = `${this.apiUrl.base + this.apiUrl.rooms}/${roomId}/${encodedName}`;
     return this.http.get<ContentGroup>(connectionUrl, httpOptions).pipe(
       tap(_ => ''),
       catchError(this.handleError<ContentGroup>(`getByRoomIdAndName, ${roomId}, ${name}`))
