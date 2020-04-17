@@ -32,7 +32,6 @@ export class StatisticChoiceComponent implements OnInit {
   indicationColors: string[] = [];
   label = 'ABCDEFGH';
   labels: string[] = [];
-  answers: string[] = [];
   answerList: AnswerList[] = [];
   data: number[] = [];
   contentId: string;
