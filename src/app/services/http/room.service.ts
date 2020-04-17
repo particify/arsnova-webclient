@@ -141,7 +141,8 @@ export class RoomService extends BaseHttpService {
   }
 
   getGroupByRoomIdAndName(roomId: string, name: string): Observable<ContentGroup> {
-    const connectionUrl = `${this.apiUrl.base + this.apiUrl.rooms}/${roomId + this.apiUrl.contentGroup}/${name}`;
+    const encodedName = encodeURIComponent(name);
+    const connectionUrl = `${this.apiUrl.base + this.apiUrl.rooms}/${roomId + this.apiUrl.contentGroup}/${encodedName}`;
     return this.http.get<ContentGroup>(connectionUrl, httpOptions).pipe(
       tap(_ => ''),
       catchError(this.handleError<ContentGroup>(`getGroupByRoomIdAndName, ${roomId}, ${name}`))
@@ -149,9 +150,10 @@ export class RoomService extends BaseHttpService {
   }
 
   addContentToGroup(roomId: string, name: string, contentId: String): Observable<void> {
+    const encodedName = encodeURIComponent(name);
     const connectionUrl =
       `${this.apiUrl.base + this.apiUrl.rooms}/` +
-      `${roomId + this.apiUrl.contentGroup}/${name}/${contentId}`;
+      `${roomId + this.apiUrl.contentGroup}/${encodedName}/${contentId}`;
     return this.http.post<void>(connectionUrl, {}, httpOptions).pipe(
       tap(_ => ''),
       catchError(this.handleError<void>(`addContentToGroup, ${roomId}, ${name}, ${contentId}`))
@@ -159,7 +161,8 @@ export class RoomService extends BaseHttpService {
   }
 
   updateGroup(roomId: string, name: string, contentGroup: ContentGroup): Observable<ContentGroup> {
-    const connectionUrl = `${this.apiUrl.base + this.apiUrl.rooms}/${roomId + this.apiUrl.contentGroup}/${name}`;
+    const encodedName = encodeURIComponent(name);
+    const connectionUrl = `${this.apiUrl.base + this.apiUrl.rooms}/${roomId + this.apiUrl.contentGroup}/${encodedName}`;
     return this.http.put<ContentGroup>(connectionUrl, contentGroup, httpOptions).pipe(
       tap(_ => ''),
       catchError(this.handleError<ContentGroup>(`updateGroup, ${ roomId }, ${ name }, ${ ContentGroup }`))
