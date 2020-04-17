@@ -41,6 +41,9 @@ export class StatisticComponent implements OnInit {
         this.correctAnswers = false;
       }
       this.isLoading = false;
+      setTimeout(() => {
+        document.getElementById('message-button').focus();
+      }, 700);
     });
   }
 
