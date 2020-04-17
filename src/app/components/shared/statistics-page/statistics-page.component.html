@@ -10,13 +10,18 @@
       </mat-card-header>
       <mat-divider></mat-divider>
       <app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
-      <mat-tab-group>
-        <mat-tab *ngFor="let cg of contentGroups; let i = index" label="{{cg.name}}">
-          <div fxLayout="column" fxLayoutAlign="center">
-            <app-list-statistic [contentGroup]="cg"></app-list-statistic>
-          </div>
-        </mat-tab>
-      </mat-tab-group>
+      <div *ngIf="!isLoading">
+        <button tabindex="-1" class="visually-hidden" id="message-button" (click)="announce()">
+          {{ 'statistic.a11y-message-overview' | translate }}
+        </button>
+        <mat-tab-group>
+          <mat-tab *ngFor="let cg of contentGroups; let i = index" label="{{cg.name}}">
+            <div fxLayout="column" fxLayoutAlign="center">
+              <app-list-statistic [contentGroup]="cg"></app-list-statistic>
+            </div>
+          </mat-tab>
+        </mat-tab-group>
+      </div>
     </mat-card>
   </div>
 </div>

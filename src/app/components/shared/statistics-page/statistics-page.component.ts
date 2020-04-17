@@ -5,6 +5,8 @@ import { ContentGroup } from '../../../models/content-group';
 import { Room } from '../../../models/room';
 import { MatTabGroup } from '@angular/material/tabs';
 import { DialogService } from '../../../services/util/dialog.service';
+import { LiveAnnouncer } from '@angular/cdk/a11y';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-statistics',
@@ -23,13 +25,14 @@ export class StatisticsPageComponent implements OnInit {
 
   constructor(private route: ActivatedRoute,
               private roomService: RoomService,
-              private dialogService: DialogService) {
+              private dialogService: DialogService,
+              private liveAnnouncer: LiveAnnouncer,
+              private translateService: TranslateService) {
   }
 
   ngOnInit(): void {
     this.currentCG = JSON.parse(sessionStorage.getItem('lastGroup'));
     this.getRoom(localStorage.getItem('roomId'));
-    this.tabGroup.selectedIndex = 1;
   }
 
   getRoom(id: string): void {
@@ -43,6 +46,16 @@ export class StatisticsPageComponent implements OnInit {
         });
       }
       this.isLoading = false;
+      setTimeout(() => {
+        document.getElementById('message-button').focus();
+      }, 700);
+    });
+  }
+
+  announce() {
+    this.translateService.get('statistic.a11y-keys-overview').subscribe(msg => {
+      this.liveAnnouncer.clear();
+      this.liveAnnouncer.announce(msg);
     });
   }
 

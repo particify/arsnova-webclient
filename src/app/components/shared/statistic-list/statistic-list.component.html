@@ -1,5 +1,7 @@
 <mat-toolbar></mat-toolbar>
 <div fxLayout="row" fxLayoutAlign="center center" *ngIf="!isLoading && total >= status.zero">
+  <div tabindex="0" class="visually-hidden">{{ 'statistic.a11y-group-progress' | translate:
+    { group: contentGroup.name, percent: total} }}</div>
   <mat-progress-bar mode="determinate" value="{{total}}" [ngClass]="{'statistic-status-good': total >= status.good,
                             'statistic-status-okay': total < status.good && total >= status.okay,
                             'statistic-status-bad': total < status.okay && total != status.empty}"></mat-progress-bar>
@@ -13,8 +15,12 @@
 
   <ng-container matColumnDef="content">
     <mat-header-cell *matHeaderCellDef> {{'statistic.content' | translate}} </mat-header-cell>
-    <mat-cell *matCellDef="let cp" [ngClass]="{'invisible' : cp.counts <= 0, 'clickable': cp.counts > 0}"
-              (click)="goToStats(cp.contentId)">{{cp.content.subject}}</mat-cell>
+    <mat-cell tabindex="0" *matCellDef="let cp" [ngClass]="{'invisible' : cp.counts <= 0, 'clickable': cp.counts > 0}"
+              (click)="goToStats(cp.contentId)" attr.aria-label="{{ ('statistic.a11y-content-result' | translate: {
+              content: cp.content.subject, count: cp.counts, abstentions: cp.abstentions }) +
+              (cp.percent >= status.zero ? ('statistic.a11y-choice-result' | translate: { percent: cp.percent }) : '') +
+              ('statistic.a11y-go-to-statistic' | translate) }}" (keyup.enter)="goToStats(cp.contentId)">
+      {{cp.content.subject}}</mat-cell>
   </ng-container>
 
   <ng-container matColumnDef="counts">
