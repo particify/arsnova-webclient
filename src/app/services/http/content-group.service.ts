@@ -18,6 +18,7 @@ export class ContentGroupService extends BaseHttpService {
     rooms: '/room',
     user: '/user',
     findRooms: '/find',
+    contentGroup: '/contentgroup',
     stats: '/stats'
   };
 
@@ -31,10 +32,21 @@ export class ContentGroupService extends BaseHttpService {
 
   getByRoomIdAndName(roomId: string, name: string): Observable<ContentGroup> {
     const encodedName = encodeURIComponent(name);
-    const connectionUrl = `${this.apiUrl.base + this.apiUrl.rooms}/${roomId}/${encodedName}`;
+    const connectionUrl = `${this.apiUrl.base + this.apiUrl.rooms}/${roomId}${this.apiUrl.contentGroup}/${encodedName}`;
     return this.http.get<ContentGroup>(connectionUrl, httpOptions).pipe(
       tap(_ => ''),
       catchError(this.handleError<ContentGroup>(`getByRoomIdAndName, ${roomId}, ${name}`))
+    );
+  }
+
+  post(roomId: string, name: string, entity: ContentGroup): Observable<ContentGroup> {
+    delete entity.id;
+    delete entity.revision;
+    const encodedName = encodeURIComponent(name);
+    const connectionUrl = `${this.apiUrl.base + this.apiUrl.rooms}/${roomId}${this.apiUrl.contentGroup}/${encodedName}`;
+    return this.http.post<ContentGroup>(connectionUrl, entity, httpOptions).pipe(
+      tap(_ => ''),
+      catchError(this.handleError<ContentGroup>(`post, ${roomId}, ${name}`))
     );
   }
 

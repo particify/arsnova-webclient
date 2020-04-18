@@ -124,7 +124,7 @@ export class RoomCreatorPageComponent extends RoomPageComponent implements OnIni
           contentWithoutGroupName = msg;
           this.groupNames.push(contentWithoutGroupName);
         });
-        this.contentGroups.push(new ContentGroup('', '', contentWithoutGroupName, [], true));
+        this.contentGroups.push(new ContentGroup('', '', '', contentWithoutGroupName, [], true));
         for (const c of contents) {
           this.contentGroups[this.contentGroups.length - 1].contentIds.push(c.id);
         }

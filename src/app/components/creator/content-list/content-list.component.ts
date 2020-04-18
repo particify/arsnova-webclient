@@ -14,6 +14,10 @@ import { TranslateService } from '@ngx-translate/core';
 import { LanguageService } from '../../../services/util/language.service';
 import { DialogService } from '../../../services/util/dialog.service';
 import { GlobalStorageService, MemoryStorageKey, LocalStorageKey } from '../../../services/util/global-storage.service';
+import { AuthenticationService } from '../../../services/http/authentication.service';
+import { User } from '../../../models/user';
+import { UserRole } from '../../../models/user-roles.enum';
+import { ContentGroupService } from '../../../services/http/content-group.service';
 
 @Component({
   selector: 'app-content-list',
@@ -40,11 +44,12 @@ export class ContentListComponent implements OnInit {
   isTitleEdit = false;
   updatedName: string;
   baseURL = 'creator/room/';
-  allowEditing = false;
+  allowEditing = true;
   contentGroups: string[] = [];
   currentGroupIndex: number;
   unlocked = false;
   directAnswer = false;
+  isFakeGroup = false;
 
   constructor(
     private contentService: ContentService,
@@ -55,7 +60,8 @@ export class ContentListComponent implements OnInit {
     private translateService: TranslateService,
     protected langService: LanguageService,
     private dialogService: DialogService,
-    private globalStorageService: GlobalStorageService
+    private globalStorageService: GlobalStorageService,
+    private contentGroupService: ContentGroupService
   ) {
     this.deviceType = this.globalStorageService.getMemoryItem(MemoryStorageKey.DEVICE_TYPE);
     langService.langEmitter.subscribe(lang => translateService.use(lang));
@@ -66,40 +72,58 @@ export class ContentListComponent implements OnInit {
       this.room = data.room;
       this.route.params.subscribe(params => {
         this.collectionName = params['contentGroup'];
-        this.roomService.getGroupByRoomIdAndName(this.roomId, this.collectionName).subscribe(group => {
-          this.contentGroup = group;
-          if (!this.contentGroup) {
-            this.contentGroup = this.globalStorageService.getMemoryItem(MemoryStorageKey.LAST_GROUP);
-          } else {
-            this.allowEditing = true;
-          }
-          this.contentService.getContentsByIds(this.contentGroup.contentIds).subscribe(contents => {
-            this.contents = contents;
-            for (let i = 0; i < this.contents.length; i++) {
-              if (contents[i].state.visible) {
-                this.unlocked = true;
-              }
-              if (contents[i].state.responsesVisible) {
-                this.directAnswer = true;
-              }
-              if (this.contents[i].subject.length > this.labelMaxLength) {
-                this.labels[i] = this.contents[i].subject.substr(0, this.labelMaxLength) + '..';
-              } else {
-                this.labels[i] = this.contents[i].subject;
-              }
-            }
-            this.getGroups();
-            this.isLoading = false;
+        this.globalStorageService.setMemoryItem(MemoryStorageKey.LAST_GROUP, this.collectionName);
+        if (this.collectionName !== 'Contents without a collection') {
+          this.roomService.getGroupByRoomIdAndName(this.room.id, this.collectionName).subscribe(group => {
+            this.contentGroup = group;
+            this.contentService.getContentsByIds(this.contentGroup.contentIds).subscribe(contents => {
+              this.initContentList(contents);
+            });
           });
-        });
+        } else {
+          this.isFakeGroup = true;
+          this.contentGroup = new ContentGroup();
+          this.contentGroup.name = 'Default';
+          this.contentGroup.roomId = this.room.id;
+          this.contentService.findContentsWithoutGroup(this.room.id).subscribe(contents => {
+            this.initContentList(contents);
+          });
+        }
       });
     });
     this.labelMaxLength = innerWidth / 20;
     this.translateService.use(this.globalStorageService.getLocalStorageItem(LocalStorageKey.LANGUAGE));
   }
 
+  initContentList(contentList: Content[]) {
+    console.log(contentList);
+    this.contents = contentList;
+    for (let i = 0; i < this.contents.length; i++) {
+      if (this.contents[i].state.visible) {
+        this.unlocked = true;
+      }
+      if (this.contents[i].state.responsesVisible) {
+        this.directAnswer = true;
+      }
+      if (this.contents[i].subject.length > this.labelMaxLength) {
+        this.labels[i] = this.contents[i].subject.substr(0, this.labelMaxLength) + '..';
+      } else {
+        this.labels[i] = this.contents[i].subject;
+      }
+    }
+    this.getGroups();
+    this.isLoading = false;
+  }
+
   getGroups(): void {
     this.contentGroups = this.globalStorageService.getMemoryItem(MemoryStorageKey.CONTENT_GROUPS);
+    if (!this.contentGroups) {
+      this.roomService.getStats(this.room.id).subscribe(roomStats => {
+        if (roomStats.groupStats) {
+          this.contentGroups = roomStats.groupStats.map(stat => stat.groupName);
+        }
+      });
+    }
     if (this.contentGroups && this.contentGroups.length > 0) {
       for (let i = 0; i < this.contentGroups.length; i++) {
         if (this.contentGroups[i] === this.contentGroup.name) {
@@ -220,14 +244,26 @@ export class ContentListComponent implements OnInit {
   saveGroupName(): void {
     if (this.updatedName !== this.collectionName) {
       this.contentGroup.name = this.updatedName;
-      this.roomService.updateGroup(this.room.id, this.updatedName, this.contentGroup).subscribe(() => {
+      if (!this.isFakeGroup) {
+        this.roomService.updateGroup(this.room.id, this.updatedName, this.contentGroup).subscribe(() => {
         this.contentGroupService.updateGroupInMemoryStorage(this.collectionName, this.updatedName);
-        this.collectionName = this.updatedName;
-        this.translateService.get('content.updated-content-group').subscribe(msg => {
-          this.notificationService.show(msg);
+          this.collectionName = this.updatedName;
+          this.translateService.get('content.updated-content-group').subscribe(msg => {
+            this.notificationService.show(msg);
+          });
+          this.updateURL();
         });
-        this.updateURL();
-      });
+      } else {
+        this.contentGroup.contentIds = this.contents.map(c => c.id);
+        this.contentGroupService.post(this.room.id, this.contentGroup.name, this.contentGroup).subscribe(cg => {
+          this.contentGroup = cg;
+          this.isFakeGroup = false;
+          this.translateService.get('content.updated-content-group').subscribe(msg => {
+            this.notificationService.show(msg);
+          });
+          this.updateURL();
+        })
+      }
     }
     this.leaveEditMode();
   }

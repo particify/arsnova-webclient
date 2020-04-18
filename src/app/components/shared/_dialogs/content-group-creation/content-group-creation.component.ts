@@ -58,7 +58,7 @@ export class ContentGroupCreationComponent implements OnInit {
 
   saveGroupInSessionStorage(newGroup: string): boolean {
     if (newGroup !== '') {
-      this.globalStorageService.setMemoryItem(MemoryStorageKey.LAST_GROUP, new ContentGroup('', '', newGroup, [], true));
+      this.globalStorageService.setMemoryItem(MemoryStorageKey.LAST_GROUP, new ContentGroup('', '', '', newGroup, [], true));
       const groups: string [] = this.globalStorageService.getMemoryItem(MemoryStorageKey.CONTENT_GROUPS) || [];
       if (groups) {
         for (let i = 0; i < groups.length; i++) {
