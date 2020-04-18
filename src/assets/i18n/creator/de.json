@@ -172,6 +172,7 @@
     "format-info": "Du kannst zwischen den vier verschiedenen Frageformaten 'Choice', 'Likert', 'Ja/Nein' und 'Text' wählen.",
     "md-info": "In diesem Eingabefeld wird Textformatierung mit Markdown unterstüzt.",
     "loose-contents": "Lose Fragen",
+    "loose-contents-description": "Hier siehst du Fragen, welche bisher keine Sammlung zugeordnet wurden. Füge einzelne Fragen einer existierenden oder einer neuen Sammlung hinzu oder erstelle eine neue Sammlung, welche alle losen Fragen enthält.",
     "create-group-with-loose-contents": "Sammlung erstellen"
   },
   "feedback": {
