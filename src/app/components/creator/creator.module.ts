@@ -26,6 +26,7 @@ import { ContentGroupCreationComponent } from '../shared/_dialogs/content-group-
 import { SettingsComponent } from './settings/settings.component';
 import { SettingsPageComponent } from './settings-page/settings-page.component';
 import { LooseContentComponent } from './loose-content/loose-content.component';
+import { GroupContentComponent } from './group-content/group-content.component';
 
 @NgModule({
   imports: [
@@ -62,7 +63,8 @@ import { LooseContentComponent } from './loose-content/loose-content.component';
     TagsComponent,
     ContentGroupCreationComponent,
     SettingsComponent,
-    SettingsPageComponent
+    SettingsPageComponent,
+    GroupContentComponent
   ]
 })
 export class CreatorModule {

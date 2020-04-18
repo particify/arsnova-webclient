@@ -16,6 +16,7 @@ import { RoomResolver } from '../../resolver/room.resolver';
 import { ContentResolver } from '../../resolver/content.resolver';
 import { CommentResolver } from '../../resolver/comment.resolver';
 import { LooseContentComponent } from './loose-content/loose-content.component';
+import { GroupContentComponent } from './group-content/group-content.component';
 
 const routes: Routes = [
   {
@@ -92,7 +93,7 @@ const routes: Routes = [
   },
   {
     path: 'room/:shortId/group/:contentGroup',
-    component: ContentListComponent,
+    component: GroupContentComponent,
     canActivate: [AuthenticationGuard],
     data: { roles: [UserRole.CREATOR] },
     resolve : {

@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ContentService } from '../../../services/http/content.service';
 import { Content } from '../../../models/content';
 import { ActivatedRoute } from '@angular/router';
@@ -13,11 +13,10 @@ import { RoomService } from '../../../services/http/room.service';
 import { TranslateService } from '@ngx-translate/core';
 import { LanguageService } from '../../../services/util/language.service';
 import { DialogService } from '../../../services/util/dialog.service';
-import { GlobalStorageService, MemoryStorageKey, LocalStorageKey } from '../../../services/util/global-storage.service';
+import { GlobalStorageService, MemoryStorageKey } from '../../../services/util/global-storage.service';
 import { AuthenticationService } from '../../../services/http/authentication.service';
 import { User } from '../../../models/user';
 import { UserRole } from '../../../models/user-roles.enum';
-import { ContentGroupService } from '../../../services/http/content-group.service';
 import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 
 @Component({
@@ -29,90 +28,36 @@ import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 
 export class ContentListComponent implements OnInit {
 
-  @ViewChild('nameInput', { static: true }) nameInput: ElementRef;
-
   contents: Content[];
-  contentBackup: Content;
-  contentCBackup: ContentChoice;
-  roomId: string;
-  contentGroup: ContentGroup;
   room: Room;
   isLoading = true;
-  collectionName: string;
   labelMaxLength: number;
   labels: string[] = [];
   deviceType: string;
-  isTitleEdit = false;
-  updatedName: string;
-  baseURL = 'creator/room/';
-  allowEditing = true;
+  contentBackup: Content;
+  contentCBackup: ContentChoice;
+  contentGroup: ContentGroup;
   contentGroups: string[] = [];
   currentGroupIndex: number;
-  unlocked = false;
-  directAnswer = false;
-  isFakeGroup = false;
 
   constructor(
-    private contentService: ContentService,
-    private roomService: RoomService,
-    private route: ActivatedRoute,
-    private location: Location,
-    private notificationService: NotificationService,
-    private translateService: TranslateService,
+    protected contentService: ContentService,
+    protected roomService: RoomService,
+    protected route: ActivatedRoute,
+    protected location: Location,
+    protected notificationService: NotificationService,
+    protected translateService: TranslateService,
     protected langService: LanguageService,
-    private dialogService: DialogService,
-    private globalStorageService: GlobalStorageService,
-    private contentGroupService: ContentGroupService
-  ) {
+    protected dialogService: DialogService,
+    protected globalStorageService: GlobalStorageService) {
     this.deviceType = this.globalStorageService.getMemoryItem(MemoryStorageKey.DEVICE_TYPE);
     langService.langEmitter.subscribe(lang => translateService.use(lang));
   }
 
   ngOnInit() {
-    this.route.data.subscribe(data => {
-      this.room = data.room;
-      this.route.params.subscribe(params => {
-        this.collectionName = params['contentGroup'];
-        this.globalStorageService.setMemoryItem(MemoryStorageKey.LAST_GROUP, this.collectionName);
-        if (this.collectionName !== 'Contents without a collection') {
-          this.roomService.getGroupByRoomIdAndName(this.room.id, this.collectionName).subscribe(group => {
-            this.contentGroup = group;
-            this.contentService.getContentsByIds(this.contentGroup.contentIds).subscribe(contents => {
-              this.initContentList(contents);
-            });
-          });
-        } else {
-          this.isFakeGroup = true;
-          this.contentGroup = new ContentGroup();
-          this.contentGroup.name = 'Contents without a collection';
-          this.contentGroup.roomId = this.room.id;
-          this.contentService.findContentsWithoutGroup(this.room.id).subscribe(contents => {
-            this.initContentList(contents);
-          });
-        }
-      });
-    });
-    this.labelMaxLength = innerWidth / 20;
-    this.translateService.use(this.globalStorageService.getLocalStorageItem(LocalStorageKey.LANGUAGE));
   }
 
   initContentList(contentList: Content[]) {
-    this.contents = contentList;
-    for (let i = 0; i < this.contents.length; i++) {
-      if (this.contents[i].state.visible) {
-        this.unlocked = true;
-      }
-      if (this.contents[i].state.responsesVisible) {
-        this.directAnswer = true;
-      }
-      if (this.contents[i].subject.length > this.labelMaxLength) {
-        this.labels[i] = this.contents[i].subject.substr(0, this.labelMaxLength) + '..';
-      } else {
-        this.labels[i] = this.contents[i].subject;
-      }
-    }
-    this.getGroups();
-    this.isLoading = false;
   }
 
   getGroups(): void {
@@ -227,54 +172,6 @@ export class ContentListComponent implements OnInit {
     }
   }
 
-  goInEditMode(): void {
-    this.updatedName = this.collectionName;
-    this.isTitleEdit = true;
-    this.nameInput.nativeElement.focus();
-  }
-
-  leaveEditMode(): void {
-    this.isTitleEdit = false;
-  }
-
-  updateURL(): void {
-    this.location.replaceState(`${this.baseURL}${this.room.shortId}/group/${this.collectionName}`);
-  }
-
-  saveGroupName(): void {
-    if (this.updatedName !== this.collectionName) {
-      this.contentGroup.name = this.updatedName;
-      if (!this.isFakeGroup) {
-        this.roomService.updateGroup(this.room.id, this.updatedName, this.contentGroup).subscribe(() => {
-        this.contentGroupService.updateGroupInMemoryStorage(this.collectionName, this.updatedName);
-          this.collectionName = this.updatedName;
-          this.translateService.get('content.updated-content-group').subscribe(msg => {
-            this.notificationService.show(msg);
-          });
-          this.updateURL();
-        });
-      } else {
-        this.contentGroup.contentIds = this.contents.map(c => c.id);
-        this.contentGroupService.post(this.room.id, this.contentGroup.name, this.contentGroup).subscribe(
-          cg => {
-            this.collectionName = cg.name;
-            this.contentGroup = cg;
-            this.isFakeGroup = false;
-            this.translateService.get('content.updated-content-group').subscribe(msg => {
-              this.notificationService.show(msg);
-            });
-            this.updateURL();
-          }, error => {
-            this.translateService.get('content.content-group-update-failed').subscribe(msg => {
-              this.notificationService.show(msg);
-            });
-          }
-        );
-      }
-    }
-    this.leaveEditMode();
-  }
-
   addToContentGroup(contentId: string, cgName: string, newGroup: boolean): void {
     this.roomService.addContentToGroup(this.room.id, cgName, contentId).subscribe(() => {
       if (!newGroup) {
@@ -292,35 +189,5 @@ export class ContentListComponent implements OnInit {
         this.addToContentGroup(contentId, result, true);
       }
     });
-  }
-
-  lockContents() {
-    for (const content of this.contents) {
-      this.lockContent(content, this.unlocked);
-    }
-  }
-
-  lockContent(content: Content, unlocked?: boolean) {
-    if (unlocked !== undefined) {
-      content.state.visible = unlocked;
-    } else {
-      content.state.visible = !content.state.visible;
-    }
-    this.contentService.changeState(content).subscribe(updatedContent => content = updatedContent);
-  }
-
-  toggleDirectAnswer(content: Content, directAnswer?: boolean) {
-    if (directAnswer !== undefined) {
-      content.state.responsesVisible = directAnswer;
-    } else {
-      content.state.responsesVisible = !content.state.responsesVisible;
-    }
-    this.contentService.changeState(content).subscribe(updatedContent => content = updatedContent);
-  }
-
-  toggleDirectAnswers() {
-    for (const content of this.contents) {
-      this.toggleDirectAnswer(content, this.directAnswer);
-    }
   }
 }

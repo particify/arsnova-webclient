@@ -33,6 +33,18 @@ mat-expansion-panel-header {
   color: var(----on-surface);
 }
 
+.actionButton {
+  width: 75%;
+  height: 75%;
+  margin: 5px;
+  transition: all 150ms;
+  color: var(--primary) !important;
+
+  &:hover {
+    transform: scale(1.1)
+  }
+}
+
 .editButton {
   width: 15%;
   max-width: 60px;
@@ -47,8 +59,50 @@ mat-tooltip-component {
   position: relative;
 }
 
+.actionIcon {
+  font-size: 50px;
+  height: 50px;
+  width: 50px;
+}
+
+.editButtons {
+  margin-top: 15px;
+}
+
 .cardTitle {
   margin-left: 2%;
   width: 70%;
   height: 70px;
+}
+
+.activeInput {
+  width: 100%;
+  font-size: larger;
+}
+
+.inactiveInput {
+  width: 0;
+}
+
+.lock {
+  margin: 0 10px;
+}
+
+.slide-text {
+  font-size: 16px;
+  font-weight: 500;
+  text-align: center;
+  min-width: 145px;
+}
+
+.lock-icon {
+  transition: 1s;
+}
+
+.locked {
+  color: var(--primary);
+}
+
+.unlocked {
+  color: var(--on-surface);
 }
