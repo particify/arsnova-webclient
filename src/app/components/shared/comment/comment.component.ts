@@ -88,7 +88,7 @@ export class CommentComponent implements OnInit {
         this.isModerator = true;
         this.roleString = 'moderator';
     }
-    this.language = this.globalStorageService.getLocalStorageItem(LocalStorageKey.LOGGED_IN);
+    this.language = this.globalStorageService.getLocalStorageItem(LocalStorageKey.LANGUAGE);
     this.translateService.use(this.language);
     this.deviceType = this.globalStorageService.getMemoryItem(MemoryStorageKey.DEVICE_TYPE);
     this.inAnswerView = !this.router.url.includes('comments');
