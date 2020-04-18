@@ -150,6 +150,7 @@
     "edit-content-group": "Edit name of the collection",
     "save-content-group": "Update",
     "updated-content-group": "Name of collection was updated.",
+    "content-group-update-failed": "Something went wrong. Maybe the collection is already present?",
     "lock-question": "Lock question",
     "unlock-questions": "Unlock questions",
     "unlock-question": "Unlock question",

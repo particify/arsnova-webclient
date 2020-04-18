@@ -18,6 +18,7 @@ import { AuthenticationService } from '../../../services/http/authentication.ser
 import { User } from '../../../models/user';
 import { UserRole } from '../../../models/user-roles.enum';
 import { ContentGroupService } from '../../../services/http/content-group.service';
+import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 
 @Component({
   selector: 'app-content-list',
@@ -83,7 +84,7 @@ export class ContentListComponent implements OnInit {
         } else {
           this.isFakeGroup = true;
           this.contentGroup = new ContentGroup();
-          this.contentGroup.name = 'Default';
+          this.contentGroup.name = 'Contents without a collection';
           this.contentGroup.roomId = this.room.id;
           this.contentService.findContentsWithoutGroup(this.room.id).subscribe(contents => {
             this.initContentList(contents);
@@ -96,7 +97,6 @@ export class ContentListComponent implements OnInit {
   }
 
   initContentList(contentList: Content[]) {
-    console.log(contentList);
     this.contents = contentList;
     for (let i = 0; i < this.contents.length; i++) {
       if (this.contents[i].state.visible) {
@@ -255,14 +255,21 @@ export class ContentListComponent implements OnInit {
         });
       } else {
         this.contentGroup.contentIds = this.contents.map(c => c.id);
-        this.contentGroupService.post(this.room.id, this.contentGroup.name, this.contentGroup).subscribe(cg => {
-          this.contentGroup = cg;
-          this.isFakeGroup = false;
-          this.translateService.get('content.updated-content-group').subscribe(msg => {
-            this.notificationService.show(msg);
-          });
-          this.updateURL();
-        })
+        this.contentGroupService.post(this.room.id, this.contentGroup.name, this.contentGroup).subscribe(
+          cg => {
+            this.collectionName = cg.name;
+            this.contentGroup = cg;
+            this.isFakeGroup = false;
+            this.translateService.get('content.updated-content-group').subscribe(msg => {
+              this.notificationService.show(msg);
+            });
+            this.updateURL();
+          }, error => {
+            this.translateService.get('content.content-group-update-failed').subscribe(msg => {
+              this.notificationService.show(msg);
+            });
+          }
+        );
       }
     }
     this.leaveEditMode();

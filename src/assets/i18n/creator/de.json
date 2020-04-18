@@ -150,6 +150,7 @@
     "edit-content-group": "Name der Sammlung bearbeiten",
     "save-content-group": "Speichern",
     "updated-content-group": "Name der Sammlung aktualisiert.",
+    "content-group-update-failed": "Etwas ist schiefgegangen. Existiert die Sammlung vielleicht schon?",
     "lock-question": "Frage sperren",
     "unlock-questions": "Fragen freigeben",
     "unlock-question": "Frage freigeben",
