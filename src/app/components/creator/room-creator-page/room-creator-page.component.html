@@ -102,7 +102,7 @@
           {{ 'room-page.a11y-content-groups' | translate: {count: contentGroups.length} }}</p>
         <app-content-groups *ngFor="let contentGroup of contentGroups" [contentGroupName]="contentGroup.name"
                             [length]="contentGroup.contentIds.length" [isLoose]="false" [role]="3"></app-content-groups>
-        <app-content-groups [contentGroupName]="'content.loose-contents' | translate" [length]="looseContent.length"
+        <app-content-groups *ngIf="looseContent.length > 0" [contentGroupName]="'content.loose-contents' | translate" [length]="looseContent.length"
                             [isLoose]="true" [role]="3"></app-content-groups>
         <p tabindex="-1" id="no-content-groups" class="visually-hidden">
           {{ 'room-page.a11y-no-content-groups' | translate }}</p>

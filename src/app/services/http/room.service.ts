@@ -151,26 +151,6 @@ export class RoomService extends BaseHttpService {
     );
   }
 
-  addContentToGroup(roomId: string, name: string, contentId: String): Observable<void> {
-    const encodedName = encodeURIComponent(name);
-    const connectionUrl =
-      `${this.apiUrl.base + this.apiUrl.rooms}/` +
-      `${roomId + this.apiUrl.contentGroup}/${encodedName}/${contentId}`;
-    return this.http.post<void>(connectionUrl, {}, httpOptions).pipe(
-      tap(_ => ''),
-      catchError(this.handleError<void>(`addContentToGroup, ${roomId}, ${name}, ${contentId}`))
-    );
-  }
-
-  updateGroup(roomId: string, name: string, contentGroup: ContentGroup): Observable<ContentGroup> {
-    const encodedName = encodeURIComponent(name);
-    const connectionUrl = `${this.apiUrl.base + this.apiUrl.rooms}/${roomId + this.apiUrl.contentGroup}/${encodedName}`;
-    return this.http.put<ContentGroup>(connectionUrl, contentGroup, httpOptions).pipe(
-      tap(_ => ''),
-      catchError(this.handleError<ContentGroup>(`updateGroup, ${ roomId }, ${ name }, ${ ContentGroup }`))
-    );
-  }
-
   importv2Room(json: JSON): Observable<Room> {
     const connectionUrl = `${this.apiUrl.base + this.apiUrl.v2Import}`;
     return this.http.post<Room>(connectionUrl, json, httpOptions).pipe(

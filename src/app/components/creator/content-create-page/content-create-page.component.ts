@@ -20,7 +20,7 @@ import { RoomService } from '../../../services/http/room.service';
 export class ContentCreatePageComponent implements OnInit, AfterContentInit {
 
   contentGroups: string[] = [];
-  lastCollection: ContentGroup;
+  lastCollection: string;
 
   content: ContentText = new ContentText(
     '1',
@@ -71,13 +71,14 @@ export class ContentCreatePageComponent implements OnInit, AfterContentInit {
       this.roomService.getStats(data.room.id).subscribe(stats => {
         if (stats.groupStats) {
           this.contentGroups = stats.groupStats.map(stat => stat.groupName);
+          const lastGroup = this.globalStorageService.getMemoryItem(MemoryStorageKey.LAST_GROUP);
+          this.lastCollection = lastGroup ? lastGroup : this.contentGroups[0];
         } else {
           this.contentGroups = [];
+          this.translateService.get('content.default-group').subscribe(defaultGroup => {
+            this.lastCollection = defaultGroup;
+          });
         }
-        const lastGroup = this.globalStorageService.getMemoryItem(MemoryStorageKey.LAST_GROUP);
-        this.translateService.get('content.default-group').subscribe(defaultGroup => {
-          this.lastCollection = lastGroup ? lastGroup : defaultGroup;
-        });
       });
     });
     this.translateService.use(this.globalStorageService.getLocalStorageItem(LocalStorageKey.LANGUAGE));

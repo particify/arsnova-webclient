@@ -173,7 +173,10 @@
     "md-info": "In this input field text formatting with Markdown is supported.",
     "loose-contents": "Loose questions",
     "loose-contents-description": "Here you can see questions which have not been assigned to a collection yet. Add single questions to an existing or a new collection or create a new collection containing all loose questions.",
-    "create-group-with-loose-contents": "Create collection"
+    "new-group-successfully-created": "New group got created.",
+    "create-group-with-loose-contents": "Create collection",
+    "cancel": "Cancel",
+    "content-group-name": "Name of the collection"
   },
   "feedback": {
     "a11y-message": "You are now in live survey mode. Press the Enter key to get information about key combinations or use the Escape key to call up the announcement later.",

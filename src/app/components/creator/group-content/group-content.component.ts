@@ -11,6 +11,7 @@ import { DialogService } from '../../../services/util/dialog.service';
 import { GlobalStorageService, LocalStorageKey, MemoryStorageKey } from '../../../services/util/global-storage.service';
 import { ContentGroupService } from '../../../services/http/content-group.service';
 import { ContentListComponent } from '../content-list/content-list.component';
+import { ContentGroup } from '../../../models/content-group';
 
 @Component({
   selector: 'app-group-content',
@@ -27,7 +28,6 @@ export class GroupContentComponent extends ContentListComponent implements OnIni
   baseURL = 'creator/room/';
   unlocked = false;
   directAnswer = false;
-  isFakeGroup = false;
 
   constructor(
     protected contentService: ContentService,
@@ -40,8 +40,9 @@ export class GroupContentComponent extends ContentListComponent implements OnIni
     protected dialogService: DialogService,
     protected globalStorageService: GlobalStorageService,
     protected contentGroupService: ContentGroupService
-  ) {super(contentService, roomService, route, location, notificationService, translateService, langService, dialogService,
-    globalStorageService);
+  ) {
+    super(contentService, roomService, route, location, notificationService, translateService, langService, dialogService,
+    globalStorageService, contentGroupService);
     this.deviceType = this.globalStorageService.getMemoryItem(MemoryStorageKey.DEVICE_TYPE);
     langService.langEmitter.subscribe(lang => translateService.use(lang));
   }
@@ -99,9 +100,14 @@ export class GroupContentComponent extends ContentListComponent implements OnIni
 
   saveGroupName(): void {
     if (this.updatedName !== this.collectionName) {
-      this.contentGroup.name = this.updatedName;
-      if (!this.isFakeGroup) {
-        this.roomService.updateGroup(this.room.id, this.updatedName, this.contentGroup).subscribe(() => {
+      const oldGroup = new ContentGroup();
+      oldGroup.id = this.contentGroup.id;
+      oldGroup.revision = this.contentGroup.revision;
+      oldGroup.roomId = this.contentGroup.roomId;
+      oldGroup.name = this.contentGroup.name;
+      this.contentGroupService.delete(oldGroup).subscribe(() => {
+        this.contentGroup.name = this.updatedName;
+        this.contentGroupService.post(this.room.id, this.updatedName, this.contentGroup).subscribe(() => {
           this.contentGroupService.updateGroupInMemoryStorage(this.collectionName, this.updatedName);
           this.collectionName = this.updatedName;
           this.translateService.get('content.updated-content-group').subscribe(msg => {
@@ -109,45 +115,9 @@ export class GroupContentComponent extends ContentListComponent implements OnIni
           });
           this.updateURL();
         });
-      } else {
-        this.contentGroup.contentIds = this.contents.map(c => c.id);
-        this.contentGroupService.post(this.room.id, this.contentGroup.name, this.contentGroup).subscribe(
-          cg => {
-            this.collectionName = cg.name;
-            this.contentGroup = cg;
-            this.isFakeGroup = false;
-            this.translateService.get('content.updated-content-group').subscribe(msg => {
-              this.notificationService.show(msg);
-            });
-            this.updateURL();
-          }, error => {
-            this.translateService.get('content.content-group-update-failed').subscribe(msg => {
-              this.notificationService.show(msg);
-            });
-          }
-        );
-      }
+      });
     }
     this.leaveEditMode();
-  }
-
-  addToContentGroup(contentId: string, cgName: string, newGroup: boolean): void {
-    this.roomService.addContentToGroup(this.room.id, cgName, contentId).subscribe(() => {
-      if (!newGroup) {
-        this.translateService.get('content.added-to-content-group').subscribe(msg => {
-          this.notificationService.show(msg);
-        });
-      }
-    });
-  }
-
-  showContentGroupCreationDialog(contentId: string): void {
-    const dialogRef = this.dialogService.openContentGroupCreationDialog();
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.addToContentGroup(contentId, result, true);
-      }
-    });
   }
 
   lockContents() {

@@ -70,7 +70,7 @@ export class ContentTextCreatorComponent implements OnInit {
       null
     )).subscribe(content => {
       if (this.contentCol !== '') {
-        this.roomService.addContentToGroup(this.roomId, this.contentCol, content.id).subscribe();
+        this.contentGroupService.addContentToGroup(this.roomId, this.contentCol, content.id).subscribe();
       }
       this.contentGroupService.saveGroupInMemoryStorage(this.contentCol);
       this.resetAfterSubmit();

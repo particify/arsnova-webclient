@@ -15,6 +15,7 @@ import { LanguageService } from '../../../services/util/language.service';
 import { DialogService } from '../../../services/util/dialog.service';
 import { GlobalStorageService, MemoryStorageKey } from '../../../services/util/global-storage.service';
 import { AuthenticationService } from '../../../services/http/authentication.service';
+import { ContentGroupService } from '../../../services/http/content-group.service';
 import { User } from '../../../models/user';
 import { UserRole } from '../../../models/user-roles.enum';
 import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
@@ -49,7 +50,8 @@ export class ContentListComponent implements OnInit {
     protected translateService: TranslateService,
     protected langService: LanguageService,
     protected dialogService: DialogService,
-    protected globalStorageService: GlobalStorageService) {
+    protected globalStorageService: GlobalStorageService,
+    protected contentGroupService: ContentGroupService) {
     this.deviceType = this.globalStorageService.getMemoryItem(MemoryStorageKey.DEVICE_TYPE);
     langService.langEmitter.subscribe(lang => translateService.use(lang));
   }
@@ -173,7 +175,7 @@ export class ContentListComponent implements OnInit {
   }
 
   addToContentGroup(contentId: string, cgName: string, newGroup: boolean): void {
-    this.roomService.addContentToGroup(this.room.id, cgName, contentId).subscribe(() => {
+    this.contentGroupService.addContentToGroup(this.room.id, cgName, contentId).subscribe(() => {
       if (!newGroup) {
         this.translateService.get('content.added-to-content-group').subscribe(msg => {
           this.notificationService.show(msg);

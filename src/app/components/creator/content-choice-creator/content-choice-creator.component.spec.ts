@@ -12,6 +12,7 @@ import { Observable, of } from 'rxjs';
 import { FormsModule } from '@angular/forms';
 import { DialogService } from '../../../services/util/dialog.service';
 import { GlobalStorageService, LocalStorageKey, MemoryStorageKey } from '../../../services/util/global-storage.service';
+import { ContentGroupService } from '../../../services/http/content-group.service';
 
 const TRANSLATION_DE = require('../../../../assets/i18n/home/de.json');
 const TRANSLATION_EN = require('../../../../assets/i18n/home/en.json');
@@ -60,6 +61,11 @@ class MockRoomService {
 
 @Injectable()
 class MockDialogService {
+
+}
+
+@Injectable()
+class MockContentGroupService {
 
 }
 
@@ -165,6 +171,10 @@ describe('ContentChoiceCreatorComponent', () => {
         {
           provide: GlobalStorageService,
           useClass: MockGlobalStorageService
+        },
+        {
+          provide: ContentGroupService,
+          useClass: MockContentGroupService
         },
       ],
       imports: [

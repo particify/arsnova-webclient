@@ -38,7 +38,7 @@
           <h3 *ngIf="deviceType === 'desktop'">{{ 'room-page.present' | translate}}</h3>
         </button>
       </mat-grid-tile>
-      <mat-grid-tile *ngIf="!isFakeGroup">
+      <mat-grid-tile>
         <button class="actionButton" mat-icon-button
                 routerLink="/creator/room/{{ room.shortId }}/statistics">
           <mat-icon class="actionIcon">insert_chart</mat-icon>

@@ -49,8 +49,22 @@ mat-tooltip-component {
 
 .mat-raised-button {
   height: 40px;
+  min-width: 120px;
 }
 
 p {
   font-size: calc(14px + 0.3vw);
+}
+
+mat-checkbox {
+  margin-left: 10px;
+}
+
+.cardTitle {
+  margin-left: 2%;
+  width: 60%;
+}
+
+mat-form-field {
+  width: 100%;
 }
