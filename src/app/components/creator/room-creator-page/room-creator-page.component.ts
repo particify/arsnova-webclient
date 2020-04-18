@@ -17,6 +17,7 @@ import { ContentService } from '../../../services/http/content.service';
 import { ContentGroup } from '../../../models/content-group';
 import { DialogService } from '../../../services/util/dialog.service';
 import { GlobalStorageService, LocalStorageKey, MemoryStorageKey } from '../../../services/util/global-storage.service';
+import { Content } from '../../../models/content';
 
 @Component({
   selector: 'app-room-creator-page',
@@ -27,6 +28,7 @@ export class RoomCreatorPageComponent extends RoomPageComponent implements OnIni
 
   viewModuleCount = 1;
   moderatorCommentCounter: number;
+  looseContent: Content[] = [];
 
   constructor(
     protected roomService: RoomService,
@@ -118,20 +120,8 @@ export class RoomCreatorPageComponent extends RoomPageComponent implements OnIni
 
   afterGroupsLoadHook() {
     this.contentService.findContentsWithoutGroup(this.room.id).subscribe(contents => {
-      if (contents.length > 0) {
-        let contentWithoutGroupName = '';
-        this.translateService.get('content.contents-without-collection').subscribe(msg => {
-          contentWithoutGroupName = msg;
-          this.groupNames.push(contentWithoutGroupName);
-        });
-        this.contentGroups.push(new ContentGroup('', '', '', contentWithoutGroupName, [], true));
-        for (const c of contents) {
-          this.contentGroups[this.contentGroups.length - 1].contentIds.push(c.id);
-        }
-        this.isLoading = false;
-      } else {
-        this.isLoading = false;
-      }
+      this.looseContent = contents;
+      this.isLoading = false;
     });
     this.globalStorageService.setMemoryItem(MemoryStorageKey.CONTENT_GROUPS, this.groupNames);
   }
