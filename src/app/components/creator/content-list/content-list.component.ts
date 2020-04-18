@@ -238,7 +238,7 @@ export class ContentListComponent implements OnInit {
   }
 
   updateURL(): void {
-    this.location.replaceState(`${this.baseURL}${this.room.shortId}/${this.collectionName}`);
+    this.location.replaceState(`${this.baseURL}${this.room.shortId}/group/${this.collectionName}`);
   }
 
   saveGroupName(): void {
