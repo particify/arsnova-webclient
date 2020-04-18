@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ContentService } from '../../../services/http/content.service';
 import { Content } from '../../../models/content';
 import { ActivatedRoute } from '@angular/router';
@@ -6,7 +6,6 @@ import { Location } from '@angular/common';
 import { ContentChoice } from '../../../models/content-choice';
 import { ContentText } from '../../../models/content-text';
 import { ContentType } from '../../../models/content-type.enum';
-import { ContentGroup } from '../../../models/content-group';
 import { NotificationService } from '../../../services/util/notification.service';
 import { Room } from '../../../models/room';
 import { RoomService } from '../../../services/http/room.service';
@@ -14,11 +13,6 @@ import { TranslateService } from '@ngx-translate/core';
 import { LanguageService } from '../../../services/util/language.service';
 import { DialogService } from '../../../services/util/dialog.service';
 import { GlobalStorageService, MemoryStorageKey, LocalStorageKey } from '../../../services/util/global-storage.service';
-import { AuthenticationService } from '../../../services/http/authentication.service';
-import { User } from '../../../models/user';
-import { UserRole } from '../../../models/user-roles.enum';
-import { ContentGroupService } from '../../../services/http/content-group.service';
-import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 
 @Component({
   selector: 'app-loose-content',
@@ -36,11 +30,8 @@ export class LooseContentComponent implements OnInit {
   labelMaxLength: number;
   labels: string[] = [];
   deviceType: string;
-  baseURL = 'creator/room/';
   contentGroups: string[] = [];
   currentGroupIndex: number;
-  unlocked: boolean;
-  directAnswer: boolean;
   contentBackup: Content;
   contentCBackup: ContentChoice;
   collectionName: string;
@@ -54,8 +45,7 @@ export class LooseContentComponent implements OnInit {
     private translateService: TranslateService,
     protected langService: LanguageService,
     private dialogService: DialogService,
-    private globalStorageService: GlobalStorageService,
-    private contentGroupService: ContentGroupService
+    private globalStorageService: GlobalStorageService
   ) {
     this.deviceType = this.globalStorageService.getMemoryItem(MemoryStorageKey.DEVICE_TYPE);
     langService.langEmitter.subscribe(lang => translateService.use(lang));
@@ -75,12 +65,6 @@ export class LooseContentComponent implements OnInit {
   initContentList(contentList: Content[]) {
     this.contents = contentList;
     for (let i = 0; i < this.contents.length; i++) {
-      if (this.contents[i].state.visible) {
-        this.unlocked = true;
-      }
-      if (this.contents[i].state.responsesVisible) {
-        this.directAnswer = true;
-      }
       if (this.contents[i].subject.length > this.labelMaxLength) {
         this.labels[i] = this.contents[i].subject.substr(0, this.labelMaxLength) + '..';
       } else {
@@ -196,25 +180,9 @@ export class LooseContentComponent implements OnInit {
     }
   }
 
-  updateURL(): void {
-    this.location.replaceState(`${this.baseURL}${this.room.shortId}/${this.collectionName}`);
-  }
-
-  updateGroupInSessionStorage(oldName: string, newName: string) {
-    const groups: string[] = this.globalStorageService.getMemoryItem(MemoryStorageKey.CONTENT_GROUPS);
-    for (let i = 0; i < groups.length; i++) {
-      if (groups[i] === oldName) {
-        groups[i] = newName;
-        this.globalStorageService.setMemoryItem(MemoryStorageKey.LAST_GROUP, new ContentGroup('', '', '', groups[i], [], true));
-        break;
-      }
-    }
-    this.globalStorageService.setMemoryItem(MemoryStorageKey.CONTENT_GROUPS, groups);
-  }
-
   saveGroupName(): void {
    /* Fix this to create a new content group
-   
+
    if (this.updatedName !== this.collectionName) {
       this.contentGroup.name = this.updatedName;
       this.roomService.updateGroup(this.room.id, this.updatedName, this.contentGroup).subscribe(() => {
@@ -226,11 +194,11 @@ export class LooseContentComponent implements OnInit {
         this.updateURL();
       });
     }
-    this.leaveEditMode();*/
+    this.leaveEditMode(); */
   }
 
   addToContentGroup(contentId: string, cgName: string, newGroup: boolean): void {
-    this.roomService.addContentToGroup(this.roomId, cgName, contentId).subscribe(() => {
+    this.roomService.addContentToGroup(this.room.id, cgName, contentId).subscribe(() => {
       if (!newGroup) {
         this.translateService.get('content.added-to-content-group').subscribe(msg => {
           this.notificationService.show(msg);
@@ -239,21 +207,12 @@ export class LooseContentComponent implements OnInit {
     });
   }
 
-  lockContent(content: Content, unlocked?: boolean) {
-    if (unlocked !== undefined) {
-      content.state.visible = unlocked;
-    } else {
-      content.state.visible = !content.state.visible;
-    }
-    this.contentService.changeState(content).subscribe(updatedContent => content = updatedContent);
-  }
-
-  toggleDirectAnswer(content: Content, directAnswer?: boolean) {
-    if (directAnswer !== undefined) {
-      content.state.responsesVisible = directAnswer;
-    } else {
-      content.state.responsesVisible = !content.state.responsesVisible;
-    }
-    this.contentService.changeState(content).subscribe(updatedContent => content = updatedContent);
+  showContentGroupCreationDialog(contentId: string): void {
+    const dialogRef = this.dialogService.openContentGroupCreationDialog();
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.addToContentGroup(contentId, result, true);
+      }
+    });
   }
 }

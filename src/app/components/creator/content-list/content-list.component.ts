@@ -276,7 +276,7 @@ export class ContentListComponent implements OnInit {
   }
 
   addToContentGroup(contentId: string, cgName: string, newGroup: boolean): void {
-    this.roomService.addContentToGroup(this.roomId, cgName, contentId).subscribe(() => {
+    this.roomService.addContentToGroup(this.room.id, cgName, contentId).subscribe(() => {
       if (!newGroup) {
         this.translateService.get('content.added-to-content-group').subscribe(msg => {
           this.notificationService.show(msg);
