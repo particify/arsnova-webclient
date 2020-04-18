@@ -30,7 +30,7 @@ mat-expansion-panel-header {
 }
 
 .panelTitle {
-  color: var(----on-surface);
+  color: var(--on-surface);
 }
 
 .editButton {
@@ -47,8 +47,6 @@ mat-tooltip-component {
   position: relative;
 }
 
-.cardTitle {
-  margin-left: 2%;
-  width: 70%;
-  height: 70px;
+.mat-raised-button {
+  height: 40px;
 }

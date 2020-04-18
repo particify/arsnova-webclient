@@ -1,10 +1,13 @@
 <div fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="center">
   <mat-card>
     <div fxLayout="row">
-      <div class="cardTitle">
+      <div>
         <h2>{{ 'content.loose-contents' | translate }}</h2>
       </div>
       <span class="fill-remaining-space"></span>
+      <button mat-raised-button class="button-secondary" (click)="createContentGroupWithLooseContents()">
+        {{ 'content.create-group-with-loose-contents' | translate }}
+      </button>
     </div>
     <mat-card-content>
       <app-loading-indicator *ngIf="isLoading" [size]="50"></app-loading-indicator>

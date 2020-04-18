@@ -74,20 +74,12 @@ export class LooseContentComponent extends ContentListComponent implements OnIni
     this.isLoading = false;
   }
 
-  saveGroupName(): void {
-   /* Fix this to create a new content group
-
-   if (this.updatedName !== this.collectionName) {
-      this.contentGroup.name = this.updatedName;
-      this.roomService.updateGroup(this.room.id, this.updatedName, this.contentGroup).subscribe(() => {
-        this.updateGroupInSessionStorage(this.collectionName, this.updatedName);
-        this.collectionName = this.updatedName;
-        this.translateService.get('content.updated-content-group').subscribe(msg => {
-          this.notificationService.show(msg);
-        });
-        this.updateURL();
-      });
-    }
-    this.leaveEditMode(); */
+  createContentGroupWithLooseContents() {
+    const dialogRef = this.dialogService.openContentGroupCreationDialog();
+    dialogRef.afterClosed().subscribe(name => {
+      if (name) {
+        // Create CG with 'name' as name and ids of all contents
+      }
+    });
   }
 }
