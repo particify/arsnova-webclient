@@ -70,7 +70,7 @@ export class HeaderComponent implements OnInit {
     if (this.globalStorageService.getLocalStorageItem(LocalStorageKey.LOGGED_IN) === 'true') {
       this.authenticationService.refreshLogin();
     }
-    
+
     this.authenticationService.watchUser.subscribe(newUser => this.user = newUser);
 
     let time = new Date();

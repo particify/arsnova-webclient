@@ -35,7 +35,6 @@ export class StatisticComponent implements OnInit {
   ngOnInit() {
     window.scroll(0, 0);
     this.translateService.use(this.globalStorageService.getLocalStorageItem(LocalStorageKey.LANGUAGE));
-    let contentId: string;
     this.route.data.subscribe(data => {
       this.content = data.content;
       if (this.content.format === ContentType.TEXT || this.content.format === ContentType.SCALE) {

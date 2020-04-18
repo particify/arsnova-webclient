@@ -8,7 +8,7 @@ import { CommentService } from '../services/http/comment.service';
 export class CommentResolver implements Resolve<Comment> {
 
   constructor(
-		private commentService: CommentService
+    private commentService: CommentService
   ) {
   }
 
