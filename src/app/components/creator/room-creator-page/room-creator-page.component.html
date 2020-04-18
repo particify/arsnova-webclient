@@ -97,9 +97,17 @@
             </mat-grid-tile>
           </mat-grid-list>
       </div>
-      <app-content-groups *ngIf="room && contentGroups" [contentGroups]="contentGroups"></app-content-groups>
-      <p tabindex="-1" id="no-content-groups" class="visually-hidden">
-        {{ 'room-page.a11y-no-content-groups' | translate }}</p>
+      <div *ngIf="room && contentGroups">
+        <p tabindex="-1" id="content-groups" class="visually-hidden">
+          {{ 'room-page.a11y-content-groups' | translate: {count: contentGroups.length} }}</p>
+        <app-content-groups *ngFor="let contentGroup of contentGroups" [contentGroupName]="contentGroup.name"
+                            [length]="contentGroup.contentIds.length" [isLoose]="false" [role]="3"></app-content-groups>
+        <app-content-groups [contentGroupName]="'content.loose-contents' | translate" [length]="looseContent.length"
+                            [isLoose]="true" [role]="3"></app-content-groups>
+        <p tabindex="-1" id="no-content-groups" class="visually-hidden">
+          {{ 'room-page.a11y-no-content-groups' | translate }}</p>
+      </div>
+
     </mat-card>
     <app-room-not-found *ngIf="!isLoading && errorOnLoading"></app-room-not-found>
   </div>

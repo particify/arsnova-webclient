@@ -69,7 +69,7 @@ export class ContentListComponent implements OnInit {
         }
       });
     }
-    if (this.contentGroups && this.contentGroups.length > 0) {
+    if (this.contentGroups && this.contentGroup && this.contentGroups.length > 0) {
       for (let i = 0; i < this.contentGroups.length; i++) {
         if (this.contentGroups[i] === this.contentGroup.name) {
           this.currentGroupIndex = i;

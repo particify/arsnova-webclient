@@ -171,7 +171,7 @@
     "strongly-disagree": "Ich stimme nicht zu",
     "format-info": "Du kannst zwischen den vier verschiedenen Frageformaten 'Choice', 'Likert', 'Ja/Nein' und 'Text' wählen.",
     "md-info": "In diesem Eingabefeld wird Textformatierung mit Markdown unterstüzt.",
-    "loose-contents": "Loose Fragen",
+    "loose-contents": "Lose Fragen",
     "create-group-with-loose-contents": "Sammlung erstellen"
   },
   "feedback": {
