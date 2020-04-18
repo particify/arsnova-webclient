@@ -109,7 +109,7 @@ const routes: Routes = [
     }
   },
   {
-    path: 'room/:shortId/:contentGroup/presentation',
+    path: 'room/:shortId/group/:contentGroup/presentation',
     component: ContentPresentationComponent,
     canActivate: [AuthenticationGuard],
     data: { roles: [UserRole.CREATOR] },
