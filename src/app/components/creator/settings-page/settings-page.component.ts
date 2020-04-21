@@ -43,7 +43,11 @@ export class SettingsPageComponent implements OnInit {
     if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit1) === true && focusOnInput === false) {
       document.getElementById('room-settings').focus();
     } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit3) === true && focusOnInput === false) {
-      document.getElementById('format-info-button').focus();
+      document.getElementById('comment-settings').focus();
+    } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit4) === true && focusOnInput === false) {
+      document.getElementById('moderator-settings').focus();
+    } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit5) === true && focusOnInput === false) {
+      document.getElementById('category-settings').focus();
     } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Escape) === true) {
       this.announce();
     }
