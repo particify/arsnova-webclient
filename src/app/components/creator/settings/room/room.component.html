@@ -1,5 +1,6 @@
 <div *ngIf="editRoom">
   <div fxLayout="column">
+    <div tabindex="0" id="room-settings" class="visually-hidden">{{ 'settings.a11y-room' | translate }}</div>
     <mat-form-field class="input-block">
       <input (focus)="eventService.makeFocusOnInputTrue()" (blur)="eventService.makeFocusOnInputFalse()"
              [(ngModel)]="name" matInput
@@ -19,7 +20,7 @@
         matAutosizeMaxRows="5"
         maxlength="250"
         name="description"
-        aria-labelledby="description"
+        aria-labelledby="room-description"
       ></textarea>
           <mat-hint align="end">
             <span aria-hidden="true">
@@ -48,13 +49,15 @@
     <span class="fill-remaining-space"></span>
     <button mat-raised-button [disabled]="name === editRoom.name &&
     (description === editRoom.description || description === '' && editRoom.description === undefined)"
-            class="button-primary update" (click)="saveChanges()">{{ 'settings.update' | translate }}</button>
+            class="button-primary update" (click)="saveChanges()" aria-labelledby="save">
+      {{ 'settings.update' | translate }}</button>
   </div>
 </div>
 
 <div class="visually-hidden">
   <div id="room-name">{{ 'settings.a11y-room-name' | translate }}</div>
-  <div id="room-edit-description">{{ 'settings.a11y-room-description' | translate }}</div>
+  <div id="room-description">{{ 'settings.a11y-room-description' | translate }}</div>
   <div id="delete-room">{{ 'settings.a11y-delete-room' | translate }}</div>
+  <div id="save">{{ 'settings.a11y-save-changes' | translate }}</div>
 </div>
 
