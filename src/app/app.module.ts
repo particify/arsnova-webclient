@@ -54,6 +54,7 @@ import { RoomResolver } from './resolver/room.resolver';
 import { ContentResolver } from './resolver/content.resolver';
 import { CommentResolver } from './resolver/comment.resolver';
 import { ContentGroupService } from './services/http/content-group.service';
+import { AnnounceService } from './services/util/announce.service';
 
 export function dialogClose(dialogResult: any) {
 }
@@ -146,6 +147,7 @@ export function initializeApp(appConfig: AppConfig) {
     RoomResolver,
     ContentResolver,
     CommentResolver,
+    AnnounceService,
     {
       provide: MatDialogRef,
       useValue: {
