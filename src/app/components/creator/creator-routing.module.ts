@@ -112,7 +112,10 @@ const routes: Routes = [
     path: 'room/:shortId/:contentGroup/presentation',
     component: ContentPresentationComponent,
     canActivate: [AuthenticationGuard],
-    data: { roles: [UserRole.CREATOR] }
+    data: { roles: [UserRole.CREATOR] },
+    resolve : {
+      room: RoomResolver
+    }
   }
 ];
 

@@ -6,6 +6,7 @@ import { catchError, tap } from 'rxjs/operators';
 import { AuthenticationService } from './authentication.service';
 import { BaseHttpService } from './base-http.service';
 import { EventService } from '../util/event.service';
+import { GlobalStorageService, MemoryStorageKey } from '../util/global-storage.service';
 
 const httpOptions = {
   headers: new HttpHeaders({})
@@ -25,7 +26,8 @@ export class ContentGroupService extends BaseHttpService {
   constructor(
     private http: HttpClient,
     private eventService: EventService,
-    private authService: AuthenticationService
+    private authService: AuthenticationService,
+    private globalStorageService: GlobalStorageService
   ) {
     super();
   }
@@ -48,6 +50,35 @@ export class ContentGroupService extends BaseHttpService {
       tap(_ => ''),
       catchError(this.handleError<ContentGroup>(`post, ${roomId}, ${name}`))
     );
+  }
+
+  saveGroupInMemoryStorage(newGroup: string): boolean {
+    if (newGroup !== '') {
+      this.globalStorageService.setMemoryItem(MemoryStorageKey.LAST_GROUP, newGroup);
+      const groups: string [] = this.globalStorageService.getMemoryItem(MemoryStorageKey.CONTENT_GROUPS) || [];
+      if (groups) {
+        for (let i = 0; i < groups.length; i++) {
+          if (newGroup === groups[i]) {
+            return false;
+          }
+        }
+      }
+      groups.push(newGroup);
+      this.globalStorageService.setMemoryItem(MemoryStorageKey.CONTENT_GROUPS, groups);
+      return true;
+    }
+  }
+
+  updateGroupInMemoryStorage(oldName: string, newName: string) {
+    const groups: string[] = this.globalStorageService.getMemoryItem(MemoryStorageKey.CONTENT_GROUPS);
+    for (let i = 0; i < groups.length; i++) {
+      if (groups[i] === oldName) {
+        groups[i] = newName;
+        this.globalStorageService.setMemoryItem(MemoryStorageKey.LAST_GROUP, groups[i]);
+        break;
+      }
+    }
+    this.globalStorageService.setMemoryItem(MemoryStorageKey.CONTENT_GROUPS, groups);
   }
 
 }
