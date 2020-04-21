@@ -59,7 +59,7 @@ const routes: Routes = [
     }
   },
   {
-    path: 'room/:shortId/:contentGroup',
+    path: 'room/:shortId/group/:contentGroup',
     component: ParticipantContentCarouselPageComponent,
     data: { roles: [UserRole.PARTICIPANT] }
   }
