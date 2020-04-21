@@ -14,6 +14,8 @@ import { GlobalStorageService, MemoryStorageKey, LocalStorageKey } from '../../.
 import { ContentListComponent } from '../content-list/content-list.component';
 import { ContentGroup } from '../../../models/content-group';
 import { ContentGroupService } from '../../../services/http/content-group.service';
+import { AnnounceService } from '../../../services/util/announce.service';
+import { EventService } from '../../../services/util/event.service';
 
 @Component({
   selector: 'app-loose-content',
@@ -50,10 +52,11 @@ export class LooseContentComponent extends ContentListComponent implements OnIni
     protected dialogService: DialogService,
     protected globalStorageService: GlobalStorageService,
     protected contentGroupService: ContentGroupService,
+    protected announceService: AnnounceService,
     private router: Router
   ) {
     super(contentService, roomService, route, location, notificationService, translateService, langService, dialogService,
-      globalStorageService, contentGroupService);
+      globalStorageService, contentGroupService, announceService);
     this.deviceType = this.globalStorageService.getMemoryItem(MemoryStorageKey.DEVICE_TYPE);
     langService.langEmitter.subscribe(lang => translateService.use(lang));
   }

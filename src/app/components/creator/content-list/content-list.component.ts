@@ -14,11 +14,9 @@ import { TranslateService } from '@ngx-translate/core';
 import { LanguageService } from '../../../services/util/language.service';
 import { DialogService } from '../../../services/util/dialog.service';
 import { GlobalStorageService, MemoryStorageKey } from '../../../services/util/global-storage.service';
-import { AuthenticationService } from '../../../services/http/authentication.service';
 import { ContentGroupService } from '../../../services/http/content-group.service';
-import { User } from '../../../models/user';
-import { UserRole } from '../../../models/user-roles.enum';
-import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
+import { AnnounceService } from '../../../services/util/announce.service';
+import { EventService } from '../../../services/util/event.service';
 
 @Component({
   selector: 'app-content-list',
@@ -51,7 +49,8 @@ export class ContentListComponent implements OnInit {
     protected langService: LanguageService,
     protected dialogService: DialogService,
     protected globalStorageService: GlobalStorageService,
-    protected contentGroupService: ContentGroupService) {
+    protected contentGroupService: ContentGroupService,
+    protected announceService: AnnounceService) {
     this.deviceType = this.globalStorageService.getMemoryItem(MemoryStorageKey.DEVICE_TYPE);
     langService.langEmitter.subscribe(lang => translateService.use(lang));
   }

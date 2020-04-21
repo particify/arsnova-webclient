@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { AfterContentInit, Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 import { Content } from '../../../models/content';
 import { ContentService } from '../../../services/http/content.service';
 import { RoomService } from '../../../services/http/room.service';
@@ -12,6 +12,10 @@ import { GlobalStorageService, LocalStorageKey, MemoryStorageKey } from '../../.
 import { ContentGroupService } from '../../../services/http/content-group.service';
 import { ContentListComponent } from '../content-list/content-list.component';
 import { ContentGroup } from '../../../models/content-group';
+import { AnnounceService } from '../../../services/util/announce.service';
+import { KeyboardUtils } from '../../../utils/keyboard';
+import { KeyboardKey } from '../../../utils/keyboard/keys';
+import { EventService } from '../../../services/util/event.service';
 
 @Component({
   selector: 'app-group-content',
@@ -39,12 +43,36 @@ export class GroupContentComponent extends ContentListComponent implements OnIni
     protected langService: LanguageService,
     protected dialogService: DialogService,
     protected globalStorageService: GlobalStorageService,
-    protected contentGroupService: ContentGroupService
+    protected contentGroupService: ContentGroupService,
+    protected announceService: AnnounceService,
+    public eventService: EventService
   ) {
     super(contentService, roomService, route, location, notificationService, translateService, langService, dialogService,
-    globalStorageService, contentGroupService);
+    globalStorageService, contentGroupService, announceService);
     this.deviceType = this.globalStorageService.getMemoryItem(MemoryStorageKey.DEVICE_TYPE);
     langService.langEmitter.subscribe(lang => translateService.use(lang));
+  }
+
+  @HostListener('window:keyup', ['$event'])
+  keyEvent(event: KeyboardEvent) {
+    const focusOnInput = this.eventService.focusOnInput;
+    if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit1) === true && focusOnInput === false) {
+      document.getElementById('content-create-button').focus();
+    } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit3) === true && focusOnInput === false) {
+      document.getElementById('presentation-button').focus();
+    } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit4) === true && focusOnInput === false) {
+      document.getElementById('statistic-button').focus();
+    } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit5) === true && focusOnInput === false) {
+      document.getElementById('direct-send-slide').focus();
+    } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit6) === true && focusOnInput === false) {
+      document.getElementById('lock-questions-slide').focus();
+    } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit7) === true && focusOnInput === false) {
+      document.getElementById('content-list').focus();
+    } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit8) === true && focusOnInput === false) {
+      document.getElementById('edit-group-name').focus();
+    } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Escape) === true) {
+      document.getElementById('keys-announcer-button').focus();
+    }
   }
 
   ngOnInit() {
@@ -82,6 +110,13 @@ export class GroupContentComponent extends ContentListComponent implements OnIni
     }
     this.getGroups();
     this.isLoading = false;
+    setTimeout(() => {
+      document.getElementById('message-button').focus();
+    }, 500);
+  }
+
+  announce() {
+    this.announceService.announce('content.a11y-content-list-keys');
   }
 
   goInEditMode(): void {
