@@ -20,7 +20,7 @@ export class TagsComponent implements OnInit {
   extension: {};
   tags: string[];
   tagsEnabled: boolean;
-  tagName: string;
+  tagName = '';
 
   tagFormControl = new FormControl('', [Validators.minLength(3), Validators.maxLength(15)]);
 
@@ -58,20 +58,21 @@ export class TagsComponent implements OnInit {
       this.extension['tags'] = this.tags;
       this.tagName = '';
       this.room.extensions['tags'] = this.extension;
-      this.saveChanges();
+      this.saveChanges(true);
     }
   }
 
   deleteTag(tag: string) {
     this.tags = this.tags.filter(o => o !== tag);
     this.extension['tags'] = this.tags;
+    this.saveChanges(false);
   }
 
-  saveChanges() {
+  saveChanges(added: boolean) {
     this.roomService.updateRoom(this.room)
       .subscribe((room) => {
         this.room = room;
-        this.translationService.get('settings.changes-successful').subscribe(msg => {
+        this.translationService.get(added ? 'settings.tag-added' : 'settings.tag-removed').subscribe(msg => {
           this.notificationService.show(msg);
         });
       });
