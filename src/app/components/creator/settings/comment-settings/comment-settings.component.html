@@ -1,4 +1,5 @@
 <div>
+  <div tabindex="0" id="comment-settings" class="visually-hidden">{{ 'settings.a11y-comments' | translate }}</div>
   <div fxLayout="column">
     <div fxLayout="row">
       <p>{{ 'settings.threshold' | translate}}&nbsp;
@@ -11,7 +12,7 @@
     </div>
     <div fxLayout="row" fxLayoutAlign="center center" *ngIf="enableThreshold">
       <mat-slider id="commentSlider" min="-100" max="0" step="5" [(ngModel)]="threshold"
-                  (input)="onSliderChange($event)" (change)="updateCommentSettings()"></mat-slider>
+                  (input)="onSliderChange($event)" (change)="updateCommentSettings(); announceThreshold();"></mat-slider>
       <h2>&nbsp;{{ threshold | number }}</h2>
     </div>
   </div>

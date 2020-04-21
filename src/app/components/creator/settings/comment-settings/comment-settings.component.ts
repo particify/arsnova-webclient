@@ -12,6 +12,7 @@ import { CommentBonusTokenMixin } from '../../../../models/comment-bonus-token-m
 import { CommentSettings } from '../../../../models/comment-settings';
 import { TSMap } from 'typescript-map';
 import { DialogService } from '../../../../services/util/dialog.service';
+import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { GlobalStorageService, MemoryStorageKey } from '../../../../services/util/global-storage.service';
 
 @Component({
@@ -45,7 +46,8 @@ export class CommentSettingsComponent implements OnInit {
     public commentSettingsService: CommentSettingsService,
     private bonusTokenService: BonusTokenService,
     private dialogService: DialogService,
-    private globalStorageService: GlobalStorageService
+    private globalStorageService: GlobalStorageService,
+    private liveAnnouncer: LiveAnnouncer
   ) {
   }
 
@@ -180,5 +182,12 @@ export class CommentSettingsComponent implements OnInit {
       .subscribe((room) => {
         this.editRoom = room;
       });
+  }
+
+  announceThreshold() {
+    this.translationService.get('settings.a11y-threshold-changed', { value: this.threshold }).subscribe(msg => {
+      this.liveAnnouncer.clear();
+      this.liveAnnouncer.announce(msg);
+    });
   }
 }
