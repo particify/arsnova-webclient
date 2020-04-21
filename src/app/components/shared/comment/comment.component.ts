@@ -14,8 +14,8 @@ import { CorrectWrong } from '../../../models/correct-wrong.enum';
 import { UserRole } from '../../../models/user-roles.enum';
 import { DialogService } from '../../../services/util/dialog.service';
 import * as moment from 'moment';
-import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { GlobalStorageService, LocalStorageKey, MemoryStorageKey } from '../../../services/util/global-storage.service';
+import { AnnounceService } from '../../../services/util/announce.service';
 
 @Pipe({ name: 'dateFromNow' })
 export class DateFromNow implements PipeTransform {
@@ -65,7 +65,7 @@ export class CommentComponent implements OnInit {
     private dialogService: DialogService,
     protected langService: LanguageService,
     private wsCommentService: WsCommentServiceService,
-    private liveAnnouncer: LiveAnnouncer,
+    private announceService: AnnounceService,
     private globalStorageService: GlobalStorageService
   ) {
     langService.langEmitter.subscribe(lang => {
@@ -176,10 +176,7 @@ export class CommentComponent implements OnInit {
   setAck(comment: Comment): void {
     this.comment = this.wsCommentService.toggleAck(comment);
     this.translateService.get(comment.ack ? 'comment-page.a11y-rejected' : 'comment-page.a11y-banned').subscribe(status => {
-      this.translateService.get('comment-page.a11y-comment-has-been', { status: status }).subscribe(msg => {
-        this.liveAnnouncer.clear();
-        this.liveAnnouncer.announce(msg);
-      });
+      this.announceService.announce('comment-page.a11y-comment-has-been', { status: status });
     });
   }
 

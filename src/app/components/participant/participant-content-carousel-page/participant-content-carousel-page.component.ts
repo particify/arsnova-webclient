@@ -7,10 +7,10 @@ import { TranslateService } from '@ngx-translate/core';
 import { StepperComponent } from '../stepper/stepper.component';
 import { ActivatedRoute } from '@angular/router';
 import { RoomService } from '../../../services/http/room.service';
-import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { KeyboardUtils } from '../../../utils/keyboard';
 import { KeyboardKey } from '../../../utils/keyboard/keys';
 import { GlobalStorageService, LocalStorageKey } from '../../../services/util/global-storage.service';
+import { AnnounceService } from '../../../services/util/announce.service';
 
 @Component({
   selector: 'app-participant-content-carousel-page',
@@ -37,7 +37,7 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
     protected translateService: TranslateService,
     protected roomService: RoomService,
     protected route: ActivatedRoute,
-    private liveAnnouncer: LiveAnnouncer,
+    private announceService: AnnounceService,
     private globalStorageService: GlobalStorageService
   ) {
   }
@@ -78,10 +78,7 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
   }
 
   announce(key: string) {
-    this.liveAnnouncer.clear();
-    this.translateService.get(key).subscribe(msg => {
-      this.liveAnnouncer.announce(msg);
-    });
+    this.announceService.announce(key);
   }
 
   receiveSentStatus($event, index: number) {

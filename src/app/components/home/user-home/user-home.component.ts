@@ -3,12 +3,12 @@ import { TranslateService } from '@ngx-translate/core';
 import { LanguageService } from '../../../services/util/language.service';
 import { User } from '../../../models/user';
 import { AuthenticationService } from '../../../services/http/authentication.service';
-import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { EventService } from '../../../services/util/event.service';
 import { KeyboardUtils } from '../../../utils/keyboard';
 import { KeyboardKey } from '../../../utils/keyboard/keys';
 import { DialogService } from '../../../services/util/dialog.service';
 import { GlobalStorageService, LocalStorageKey } from '../../../services/util/global-storage.service';
+import { AnnounceService } from '../../../services/util/announce.service';
 
 @Component({
   selector: 'app-user-home',
@@ -25,8 +25,8 @@ export class UserHomeComponent implements OnInit, AfterContentInit {
     protected langService: LanguageService,
     private authenticationService: AuthenticationService,
     private eventService: EventService,
-    private liveAnnouncer: LiveAnnouncer,
-    private globalStorageService: GlobalStorageService
+    private globalStorageService: GlobalStorageService,
+    private announceService: AnnounceService
   ) {
     langService.langEmitter.subscribe(lang => translateService.use(lang));
   }
@@ -56,11 +56,8 @@ export class UserHomeComponent implements OnInit, AfterContentInit {
     this.authenticationService.watchUser.subscribe(newUser => this.user = newUser);
   }
 
-  public announce() {
-    this.liveAnnouncer.clear();
-    this.translateService.get('home-page.a11y-user-keys').subscribe(msg => {
-      this.liveAnnouncer.announce(msg, 'assertive');
-    });
+  announce() {
+    this.announceService.announce('home-page.a11y-user-keys');
   }
 
   openCreateRoomDialog(): void {

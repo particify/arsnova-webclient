@@ -10,10 +10,10 @@ import { AuthenticationService } from '../../../services/http/authentication.ser
 import { UserRole } from '../../../models/user-roles.enum';
 import { NotificationService } from '../../../services/util/notification.service';
 import { DialogService } from '../../../services/util/dialog.service';
-import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { KeyboardUtils } from '../../../utils/keyboard';
 import { KeyboardKey } from '../../../utils/keyboard/keys';
 import { EventService } from '../../../services/util/event.service';
+import { AnnounceService } from '../../../services/util/announce.service';
 
 @Component({
   selector: 'app-comment-answer',
@@ -37,7 +37,7 @@ export class CommentAnswerComponent implements OnInit, AfterContentInit {
               protected commentService: CommentService,
               private authenticationService: AuthenticationService,
               private dialogService: DialogService,
-              private liveAnnouncer: LiveAnnouncer,
+              private announceService: AnnounceService,
               private eventService: EventService) {
   }
 
@@ -78,10 +78,7 @@ export class CommentAnswerComponent implements OnInit, AfterContentInit {
   }
 
   public announce() {
-    this.translateService.get('comment-page.a11y-keys-answer').subscribe(msg => {
-      this.liveAnnouncer.clear();
-      this.liveAnnouncer.announce(msg, 'assertive');
-    });
+    this.announceService.announce('comment-page.a11y-keys-answer');
   }
 
   editAnswer() {

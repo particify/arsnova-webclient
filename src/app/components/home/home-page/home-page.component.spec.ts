@@ -3,12 +3,12 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { HomePageComponent } from './home-page.component';
 import { Injectable, Renderer2, Component, Input } from '@angular/core';
 import { EventService } from '../../../services/util/event.service';
-import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { MatDialog } from '@angular/material/dialog';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { Observable, of } from 'rxjs';
 import { DialogService } from '../../../services/util/dialog.service';
 import { GlobalStorageService, LocalStorageKey, MemoryStorageKey } from '../../../services/util/global-storage.service';
+import { AnnounceService } from '../../../services/util/announce.service';
 
 const TRANSLATION_DE = require('../../../../assets/i18n/home/de.json');
 const TRANSLATION_EN = require('../../../../assets/i18n/home/en.json');
@@ -39,7 +39,7 @@ class MockDialogService {
 }
 
 @Injectable()
-class MockLiveAnnouncer {
+class MockAnnouncer {
 
 }
 
@@ -108,8 +108,8 @@ describe('HomePageComponent', () => {
           useClass: MockEventService
         },
         {
-          provide: LiveAnnouncer,
-          useClass: MockLiveAnnouncer
+          provide: AnnounceService,
+          useClass: MockAnnouncer
         },
         {
           provide: Renderer2,

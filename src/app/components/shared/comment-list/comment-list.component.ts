@@ -13,12 +13,12 @@ import { RoomService } from '../../../services/http/room.service';
 import { VoteService } from '../../../services/http/vote.service';
 import { NotificationService } from '../../../services/util/notification.service';
 import { CorrectWrong } from '../../../models/correct-wrong.enum';
-import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { EventService } from '../../../services/util/event.service';
 import { Subscription } from 'rxjs';
 import { Router, ActivatedRoute } from '@angular/router';
 import { DialogService } from '../../../services/util/dialog.service';
 import { GlobalStorageService, MemoryStorageKey, LocalStorageKey } from '../../../services/util/global-storage.service';
+import { AnnounceService } from '../../../services/util/announce.service';
 
 @Component({
   selector: 'app-comment-list',
@@ -76,7 +76,7 @@ export class CommentListComponent implements OnInit, OnDestroy {
     protected voteService: VoteService,
     private notificationService: NotificationService,
     public eventService: EventService,
-    public liveAnnouncer: LiveAnnouncer,
+    public announceService: AnnounceService,
     private router: Router,
     protected route: ActivatedRoute,
     private globalStorageService: GlobalStorageService
@@ -405,19 +405,10 @@ export class CommentListComponent implements OnInit, OnDestroy {
    * Announces a new comment receive.
    */
   public announceNewComment(comment: string) {
-    // update variable so text will be fetched to DOM
     this.newestComment = comment;
-
-    // Currently the only possible way to announce the new comment text
-    // @see https://github.com/angular/angular/issues/11405
     setTimeout(() => {
       const newCommentText: string = document.getElementById('new-comment').innerText;
-
-      // current live announcer content must be cleared before next read
-      this.liveAnnouncer.clear();
-
-      this.liveAnnouncer.announce(newCommentText).catch(err => { /* TODO error handling */
-      });
+      this.announceService.announce(newCommentText);
     }, 450);
   }
 }

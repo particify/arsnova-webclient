@@ -9,7 +9,6 @@ import { TranslateService } from '@ngx-translate/core';
 import { LanguageService } from '../../../services/util/language.service';
 import { WsCommentServiceService } from '../../../services/websockets/ws-comment-service.service';
 import { CommentService } from '../../../services/http/comment.service';
-import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { EventService } from '../../../services/util/event.service';
 import { KeyboardUtils } from '../../../utils/keyboard';
 import { KeyboardKey } from '../../../utils/keyboard/keys';
@@ -17,6 +16,7 @@ import { ContentService } from '../../../services/http/content.service';
 import { DialogService } from '../../../services/util/dialog.service';
 import { GlobalStorageService, LocalStorageKey, MemoryStorageKey } from '../../../services/util/global-storage.service';
 import { Content } from '../../../models/content';
+import { AnnounceService } from '../../../services/util/announce.service';
 
 @Component({
   selector: 'app-room-creator-page',
@@ -40,7 +40,7 @@ export class RoomCreatorPageComponent extends RoomPageComponent implements OnIni
     protected langService: LanguageService,
     protected wsCommentService: WsCommentServiceService,
     protected commentService: CommentService,
-    private liveAnnouncer: LiveAnnouncer,
+    private announceService: AnnounceService,
     public eventService: EventService,
     protected contentService: ContentService,
     private dialogService: DialogService,
@@ -102,10 +102,7 @@ export class RoomCreatorPageComponent extends RoomPageComponent implements OnIni
   }
 
   announce() {
-    this.liveAnnouncer.clear();
-    this.translateService.get('room-page.a11y-keys').subscribe(msg => {
-      this.liveAnnouncer.announce(msg, 'assertive');
-    });
+    this.announceService.announce('room-page.a11y-keys');
   }
 
   afterRoomLoadHook() {

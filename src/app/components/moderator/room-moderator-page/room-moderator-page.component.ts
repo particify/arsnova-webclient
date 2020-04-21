@@ -11,11 +11,11 @@ import { CommentService } from '../../../services/http/comment.service';
 import { ContentService } from '../../../services/http/content.service';
 import { Message } from '@stomp/stompjs';
 import { NotificationService } from '../../../services/util/notification.service';
-import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { EventService } from '../../../services/util/event.service';
 import { KeyboardUtils } from '../../../utils/keyboard';
 import { KeyboardKey } from '../../../utils/keyboard/keys';
 import { GlobalStorageService, LocalStorageKey } from '../../../services/util/global-storage.service';
+import { AnnounceService } from '../../../services/util/announce.service';
 
 @Component({
   selector: 'app-room-moderator-page',
@@ -40,7 +40,7 @@ export class RoomModeratorPageComponent extends RoomPageComponent implements OnI
     protected contentService: ContentService,
     protected notification: NotificationService,
     public eventService: EventService,
-    private liveAnnouncer: LiveAnnouncer,
+    private announceService: AnnounceService,
     protected globalStorageService: GlobalStorageService
   ) {
     super(roomService, route, router, location, wsCommentService, commentService, eventService, contentService, translateService,
@@ -83,9 +83,7 @@ export class RoomModeratorPageComponent extends RoomPageComponent implements OnI
   }
 
   public announce() {
-    this.translateService.get('room-page.a11y-moderator-keys').subscribe(msg => {
-      this.liveAnnouncer.announce(msg, 'assertive');
-    });
+    this.announceService.announce('room-page.a11y-moderator-keys');
   }
 
   initializeRoom(room: Room): void {

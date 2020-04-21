@@ -36,6 +36,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { AnnounceService } from '../../services/util/announce.service';
 
 @NgModule({
   imports: [
@@ -87,7 +88,10 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
     HttpClientModule,
     ReactiveFormsModule
   ],
-  declarations: []
+  declarations: [],
+  providers: [
+    AnnounceService
+  ]
 })
 export class EssentialsModule {
 }
