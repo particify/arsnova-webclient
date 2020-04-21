@@ -1,10 +1,7 @@
-<p tabindex="-1" id="content-groups" class="visually-hidden">
-  {{ 'room-page.a11y-content-groups' | translate: {count: contentGroups.length} }}</p>
-<mat-card tabindex="0" role=button id="contentGroup" fxLayoutAlign="start center"
-          *ngFor="let contentGroup of contentGroups" (click)="viewContents(contentGroup)"
-          attr.aria-label="{{ 'room-page.a11y-enter-content-group' | translate:{name: contentGroup.name} }}"
-          (keydown)="viewContentsViaEnter(contentGroup, $event)" >
-  <h3 matBadge="{{contentGroup.contentIds.length}}" matBadgeOverlap="false" *ngIf="!(contentGroup.name === 'Default')">
-    {{contentGroup.name}}
+<mat-card tabindex="0" role=button id="contentGroup" fxLayoutAlign="start center" (click)="viewContents()"
+          attr.aria-label="{{ 'room-page.a11y-enter-content-group' | translate:{name: contentGroupName} }}"
+          (keydown)="viewContentsViaEnter($event)" >
+  <h3 matBadge="{{length}}" matBadgeOverlap="false">
+    {{contentGroupName}}
   </h3>
 </mat-card>

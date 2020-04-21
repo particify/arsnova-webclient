@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ContentService } from '../../../services/http/content.service';
 import { Content } from '../../../models/content';
 import { ActivatedRoute } from '@angular/router';
@@ -13,6 +13,12 @@ import { RoomService } from '../../../services/http/room.service';
 import { TranslateService } from '@ngx-translate/core';
 import { LanguageService } from '../../../services/util/language.service';
 import { DialogService } from '../../../services/util/dialog.service';
+import { GlobalStorageService, MemoryStorageKey } from '../../../services/util/global-storage.service';
+import { AuthenticationService } from '../../../services/http/authentication.service';
+import { ContentGroupService } from '../../../services/http/content-group.service';
+import { User } from '../../../models/user';
+import { UserRole } from '../../../models/user-roles.enum';
+import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 
 @Component({
   selector: 'app-content-list',
@@ -23,80 +29,49 @@ import { DialogService } from '../../../services/util/dialog.service';
 
 export class ContentListComponent implements OnInit {
 
-  @ViewChild('nameInput', { static: true }) nameInput: ElementRef;
-
   contents: Content[];
-  contentBackup: Content;
-  contentCBackup: ContentChoice;
-  roomId: string;
-  contentGroup: ContentGroup;
   room: Room;
   isLoading = true;
-  collectionName: string;
   labelMaxLength: number;
   labels: string[] = [];
-  deviceType = localStorage.getItem('deviceType');
-  isTitleEdit = false;
-  updatedName: string;
-  baseURL = 'creator/room/';
-  allowEditing = false;
+  deviceType: string;
+  contentBackup: Content;
+  contentCBackup: ContentChoice;
+  contentGroup: ContentGroup;
   contentGroups: string[] = [];
   currentGroupIndex: number;
-  unlocked = false;
-  directAnswer = false;
 
-  constructor(private contentService: ContentService,
-              private roomService: RoomService,
-              private route: ActivatedRoute,
-              private location: Location,
-              private notificationService: NotificationService,
-              private translateService: TranslateService,
-              protected langService: LanguageService,
-              private dialogService: DialogService) {
+  constructor(
+    protected contentService: ContentService,
+    protected roomService: RoomService,
+    protected route: ActivatedRoute,
+    protected location: Location,
+    protected notificationService: NotificationService,
+    protected translateService: TranslateService,
+    protected langService: LanguageService,
+    protected dialogService: DialogService,
+    protected globalStorageService: GlobalStorageService,
+    protected contentGroupService: ContentGroupService) {
+    this.deviceType = this.globalStorageService.getMemoryItem(MemoryStorageKey.DEVICE_TYPE);
     langService.langEmitter.subscribe(lang => translateService.use(lang));
   }
 
   ngOnInit() {
-    this.labelMaxLength = innerWidth / 20;
-    this.roomId = localStorage.getItem('roomId');
-    this.roomService.getRoom(this.roomId).subscribe(room => {
-      this.room = room;
-    });
-    this.route.params.subscribe(params => {
-      this.collectionName = params['contentGroup'];
-      this.roomService.getGroupByRoomIdAndName(this.roomId, this.collectionName).subscribe(group => {
-        this.contentGroup = group;
-        if (!this.contentGroup) {
-          this.contentGroup = JSON.parse(sessionStorage.getItem('lastGroup'));
-        } else {
-          this.allowEditing = true;
-        }
-        this.contentService.getContentsByIds(this.contentGroup.contentIds).subscribe(contents => {
-          this.contents = contents;
-          for (let i = 0; i < this.contents.length; i++) {
-            if (contents[i].state.visible) {
-              this.unlocked = true;
-            }
-            if (contents[i].state.responsesVisible) {
-              this.directAnswer = true;
-            }
-            if (this.contents[i].subject.length > this.labelMaxLength) {
-              this.labels[i] = this.contents[i].subject.substr(0, this.labelMaxLength) + '..';
-            } else {
-              this.labels[i] = this.contents[i].subject;
-            }
-          }
-          this.getGroups();
-          this.isLoading = false;
-        });
-      });
-    });
-    this.translateService.use(localStorage.getItem('currentLang'));
+  }
+
+  initContentList(contentList: Content[]) {
   }
 
   getGroups(): void {
-    this.contentGroups = JSON.parse(sessionStorage.getItem('contentGroups'));
-    if (this.contentGroups.length > 0) {
+    this.contentGroups = this.globalStorageService.getMemoryItem(MemoryStorageKey.CONTENT_GROUPS);
+    if (!this.contentGroups) {
+      this.roomService.getStats(this.room.id).subscribe(roomStats => {
+        if (roomStats.groupStats) {
+          this.contentGroups = roomStats.groupStats.map(stat => stat.groupName);
+        }
+      });
+    }
+    if (this.contentGroups && this.contentGroup && this.contentGroups.length > 0) {
       for (let i = 0; i < this.contentGroups.length; i++) {
         if (this.contentGroups[i] === this.contentGroup.name) {
           this.currentGroupIndex = i;
@@ -180,7 +155,7 @@ export class ContentListComponent implements OnInit {
           this.contents.splice(index, 1);
           this.labels.splice(index, 1);
           if (this.contents.length === 0) {
-            sessionStorage.setItem('lastGroup', JSON.stringify(this.contentGroups[0]));
+            this.globalStorageService.setMemoryItem(MemoryStorageKey.LAST_GROUP, this.contentGroups[0]);
             this.location.back();
           }
           break;
@@ -199,49 +174,8 @@ export class ContentListComponent implements OnInit {
     }
   }
 
-  goInEditMode(): void {
-    this.updatedName = this.collectionName;
-    this.isTitleEdit = true;
-    this.nameInput.nativeElement.focus();
-  }
-
-  leaveEditMode(): void {
-    this.isTitleEdit = false;
-  }
-
-  updateURL(): void {
-    this.location.replaceState(`${this.baseURL}${this.room.shortId}/${this.collectionName}`);
-  }
-
-  updateGroupInSessionStorage(oldName: string, newName: string) {
-    const groups: string[] = JSON.parse(sessionStorage.getItem('contentGroups'));
-    for (let i = 0; i < groups.length; i++) {
-      if (groups[i] === oldName) {
-        groups[i] = newName;
-        sessionStorage.setItem('lastGroup', JSON.stringify(new ContentGroup('', '', groups[i], [], true)));
-        break;
-      }
-    }
-    sessionStorage.setItem('contentGroups', JSON.stringify(groups));
-  }
-
-  saveGroupName(): void {
-    if (this.updatedName !== this.collectionName) {
-      this.contentGroup.name = this.updatedName;
-      this.roomService.updateGroup(this.room.id, this.updatedName, this.contentGroup).subscribe(() => {
-        this.updateGroupInSessionStorage(this.collectionName, this.updatedName);
-        this.collectionName = this.updatedName;
-        this.translateService.get('content.updated-content-group').subscribe(msg => {
-          this.notificationService.show(msg);
-        });
-        this.updateURL();
-      });
-    }
-    this.leaveEditMode();
-  }
-
   addToContentGroup(contentId: string, cgName: string, newGroup: boolean): void {
-    this.roomService.addContentToGroup(this.roomId, cgName, contentId).subscribe(() => {
+    this.contentGroupService.addContentToGroup(this.room.id, cgName, contentId).subscribe(() => {
       if (!newGroup) {
         this.translateService.get('content.added-to-content-group').subscribe(msg => {
           this.notificationService.show(msg);
@@ -257,35 +191,5 @@ export class ContentListComponent implements OnInit {
         this.addToContentGroup(contentId, result, true);
       }
     });
-  }
-
-  lockContents() {
-    for (const content of this.contents) {
-      this.lockContent(content, this.unlocked);
-    }
-  }
-
-  lockContent(content: Content, unlocked?: boolean) {
-    if (unlocked !== undefined) {
-      content.state.visible = unlocked;
-    } else {
-      content.state.visible = !content.state.visible;
-    }
-    this.contentService.changeState(content).subscribe(updatedContent => content = updatedContent);
-  }
-
-  toggleDirectAnswer(content: Content, directAnswer?: boolean) {
-    if (directAnswer !== undefined) {
-      content.state.responsesVisible = directAnswer;
-    } else {
-      content.state.responsesVisible = !content.state.responsesVisible;
-    }
-    this.contentService.changeState(content).subscribe(updatedContent => content = updatedContent);
-  }
-
-  toggleDirectAnswers() {
-    for (const content of this.contents) {
-      this.toggleDirectAnswer(content, this.directAnswer);
-    }
   }
 }

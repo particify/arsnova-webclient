@@ -4,7 +4,9 @@ import { ContentService } from '../../../services/http/content.service';
 import { NotificationService } from '../../../services/util/notification.service';
 import { TranslateService } from '@ngx-translate/core';
 import { RoomService } from '../../../services/http/room.service';
-import { ContentCreatePageComponent } from '../content-create-page/content-create-page.component';
+import { GlobalStorageService, MemoryStorageKey } from '../../../services/util/global-storage.service';
+import { ContentGroup } from '../../../models/content-group';
+import { ContentGroupService } from '../../../services/http/content-group.service';
 
 @Component({
   selector: 'app-content-text-creator',
@@ -30,14 +32,18 @@ export class ContentTextCreatorComponent implements OnInit {
 
   editDialogMode = false;
 
-  constructor(private contentService: ContentService,
-              private notificationService: NotificationService,
-              private translationService: TranslateService,
-              private roomService: RoomService) {
+  constructor(
+    private contentService: ContentService,
+    private notificationService: NotificationService,
+    private translationService: TranslateService,
+    private roomService: RoomService,
+    private globalStorageService: GlobalStorageService,
+    private contentGroupService: ContentGroupService
+  ) {
   }
 
   ngOnInit() {
-    this.roomId = localStorage.getItem(`roomId`);
+    this.roomId = this.globalStorageService.getMemoryItem(MemoryStorageKey.ROOM_ID);
   }
 
   resetAfterSubmit() {
@@ -64,9 +70,9 @@ export class ContentTextCreatorComponent implements OnInit {
       null
     )).subscribe(content => {
       if (this.contentCol !== '') {
-        this.roomService.addContentToGroup(this.roomId, this.contentCol, content.id).subscribe();
+        this.contentGroupService.addContentToGroup(this.roomId, this.contentCol, content.id).subscribe();
       }
-      ContentCreatePageComponent.saveGroupInSessionStorage(this.contentCol);
+      this.contentGroupService.saveGroupInMemoryStorage(this.contentCol);
       this.resetAfterSubmit();
       document.getElementById('subject-input').focus();
     });

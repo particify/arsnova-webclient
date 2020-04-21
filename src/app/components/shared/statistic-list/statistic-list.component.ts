@@ -12,6 +12,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AuthenticationService } from '../../../services/http/authentication.service';
 import { UserRole } from '../../../models/user-roles.enum';
 import { ContentAnswerService } from '../../../services/http/content-answer.service';
+import { GlobalStorageService, LocalStorageKey, MemoryStorageKey } from '../../../services/util/global-storage.service';
 
 export class ContentStatistic {
   content: Content;
@@ -54,16 +55,21 @@ export class StatisticListComponent implements OnInit {
   contentCounter = 0;
   roomId: number;
   baseUrl: string;
-  deviceType = localStorage.getItem('deviceType');
+  deviceType: string;
   isLoading = true;
 
-  constructor(private contentService: ContentService,
-              private contentAnswerService: ContentAnswerService,
-              private translateService: TranslateService,
-              private router: Router,
-              protected langService: LanguageService,
-              protected route: ActivatedRoute,
-              protected authService: AuthenticationService) {
+  constructor(
+    private contentService: ContentService,
+    private contentAnswerService: ContentAnswerService,
+    private translateService: TranslateService,
+    private router: Router,
+    protected langService: LanguageService,
+    protected route: ActivatedRoute,
+    protected authService: AuthenticationService,
+    private globalStorageService: GlobalStorageService
+
+  ) {
+    this.deviceType = this.globalStorageService.getMemoryItem(MemoryStorageKey.DEVICE_TYPE);
     langService.langEmitter.subscribe(lang => translateService.use(lang));
   }
 
@@ -71,7 +77,7 @@ export class StatisticListComponent implements OnInit {
     this.route.params.subscribe(params => {
       this.roomId = params['shortId'];
     });
-    this.translateService.use(localStorage.getItem('currentLang'));
+    this.translateService.use(this.globalStorageService.getLocalStorageItem(LocalStorageKey.LANGUAGE));
     this.contentService.getContentsByIds(this.contentGroup.contentIds).subscribe(contents => {
       this.getData(contents);
     });
@@ -93,7 +99,7 @@ export class StatisticListComponent implements OnInit {
 
   goToStats(id: string) {
     this.router.navigate([`${this.baseUrl}${id}`]);
-    sessionStorage.setItem('lastGroup', JSON.stringify(this.contentGroup));
+    this.globalStorageService.setMemoryItem(MemoryStorageKey.LAST_GROUP, this.contentGroup);
   }
 
   getData(contents: Content[]) {

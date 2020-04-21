@@ -1,4 +1,4 @@
-import { AfterContentInit, Component, HostListener, OnInit, ViewChild } from '@angular/core';
+import { AfterContentInit, Component, HostListener, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { LanguageService } from '../../../services/util/language.service';
 import { ContentGroup } from '../../../models/content-group';
@@ -8,7 +8,9 @@ import { EventService } from '../../../services/util/event.service';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { KeyboardUtils } from '../../../utils/keyboard';
 import { KeyboardKey } from '../../../utils/keyboard/keys';
-import { MatTabGroup } from '@angular/material/tabs';
+import { GlobalStorageService, MemoryStorageKey, LocalStorageKey } from '../../../services/util/global-storage.service';
+import { ActivatedRoute } from '@angular/router';
+import { RoomService } from '../../../services/http/room.service';
 
 @Component({
   selector: 'app-content-create-page',
@@ -18,7 +20,7 @@ import { MatTabGroup } from '@angular/material/tabs';
 export class ContentCreatePageComponent implements OnInit, AfterContentInit {
 
   contentGroups: string[] = [];
-  lastCollection: ContentGroup;
+  lastCollection: string;
 
   content: ContentText = new ContentText(
     '1',
@@ -32,29 +34,16 @@ export class ContentCreatePageComponent implements OnInit, AfterContentInit {
 
   myControl = new FormControl();
 
-  constructor(private translateService: TranslateService,
-              protected langService: LanguageService,
-              public eventService: EventService,
-              private liveAnnouncer: LiveAnnouncer) {
+  constructor(
+    private translateService: TranslateService,
+    protected langService: LanguageService,
+    public eventService: EventService,
+    private liveAnnouncer: LiveAnnouncer,
+    private globalStorageService: GlobalStorageService,
+    protected route: ActivatedRoute,
+    private roomService: RoomService
+  ) {
     langService.langEmitter.subscribe(lang => translateService.use(lang));
-  }
-
-  static saveGroupInSessionStorage(newGroup: string): boolean {
-    if (newGroup !== '') {
-      sessionStorage.setItem('lastGroup',
-        JSON.stringify(new ContentGroup('', '', newGroup, [], true)));
-      const groups: string [] = JSON.parse(sessionStorage.getItem('contentGroups')) || [];
-      if (groups) {
-        for (let i = 0; i < groups.length; i++) {
-          if (newGroup === groups[i]) {
-            return false;
-          }
-        }
-      }
-      groups.push(newGroup);
-      sessionStorage.setItem('contentGroups', JSON.stringify(groups));
-      return true;
-    }
   }
 
   @HostListener('window:keyup', ['$event'])
@@ -77,12 +66,22 @@ export class ContentCreatePageComponent implements OnInit, AfterContentInit {
   }
 
   ngOnInit() {
-    this.translateService.use(localStorage.getItem('currentLang'));
-    const lastGroup: ContentGroup = JSON.parse(sessionStorage.getItem('lastGroup'));
-    this.translateService.get('content.default-group').subscribe(defaultGroup => {
-      this.lastCollection = lastGroup ? lastGroup.name : defaultGroup;
+    this.route.data.subscribe(data => {
+      // this refreshes memory storage
+      this.roomService.getStats(data.room.id).subscribe(stats => {
+        if (stats.groupStats) {
+          this.contentGroups = stats.groupStats.map(stat => stat.groupName);
+          const lastGroup = this.globalStorageService.getMemoryItem(MemoryStorageKey.LAST_GROUP);
+          this.lastCollection = lastGroup ? lastGroup : this.contentGroups[0];
+        } else {
+          this.contentGroups = [];
+          this.translateService.get('content.default-group').subscribe(defaultGroup => {
+            this.lastCollection = defaultGroup;
+          });
+        }
+      });
     });
-    this.getGroups();
+    this.translateService.use(this.globalStorageService.getLocalStorageItem(LocalStorageKey.LANGUAGE));
   }
 
   announce() {
@@ -90,10 +89,6 @@ export class ContentCreatePageComponent implements OnInit, AfterContentInit {
     this.translateService.get('content.a11y-content-create-keys').subscribe(msg => {
       this.liveAnnouncer.announce(msg, 'assertive');
     });
-  }
-
-  getGroups(): void {
-    this.contentGroups = JSON.parse(sessionStorage.getItem('contentGroups'));
   }
 
   resetInputs() {

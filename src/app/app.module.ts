@@ -11,7 +11,6 @@ import { AuthenticationService } from './services/http/authentication.service';
 import { AuthenticationGuard } from './guards/authentication.guard';
 import { RoomService } from './services/http/room.service';
 import { CommentService } from './services/http/comment.service';
-import { DataStoreService } from './services/util/data-store.service';
 import { EventService } from './services/util/event.service';
 import { ContentService } from './services/http/content.service';
 import { ContentAnswerService } from './services/http/content-answer.service';
@@ -49,6 +48,12 @@ import { DialogService } from './services/util/dialog.service';
 import { DirectEntryComponent } from './components/shared/direct-entry/direct-entry.component';
 import { TrackingService } from './services/util/tracking.service';
 import { ImportComponent } from './components/home/import/import.component';
+import { GlobalStorageService } from './services/util/global-storage.service';
+import { ThemeService } from '../theme/theme.service';
+import { RoomResolver } from './resolver/room.resolver';
+import { ContentResolver } from './resolver/content.resolver';
+import { CommentResolver } from './resolver/comment.resolver';
+import { ContentGroupService } from './services/http/content-group.service';
 
 export function dialogClose(dialogResult: any) {
 }
@@ -118,7 +123,6 @@ export function initializeApp(appConfig: AppConfig) {
     DialogService,
     AuthenticationService,
     AuthenticationGuard,
-    DataStoreService,
     EventService,
     RoomService,
     CommentService,
@@ -132,10 +136,16 @@ export function initializeApp(appConfig: AppConfig) {
     ModeratorService,
     CommentSettingsService,
     BonusTokenService,
+    ContentGroupService,
     CustomIconService,
     WsConnectorService,
     ApiConfigService,
+    GlobalStorageService,
     TrackingService,
+    ThemeService,
+    RoomResolver,
+    ContentResolver,
+    CommentResolver,
     {
       provide: MatDialogRef,
       useValue: {

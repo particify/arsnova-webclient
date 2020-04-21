@@ -8,6 +8,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { Observable, of } from 'rxjs';
 import { DialogService } from '../../../services/util/dialog.service';
+import { GlobalStorageService, LocalStorageKey, MemoryStorageKey } from '../../../services/util/global-storage.service';
 
 const TRANSLATION_DE = require('../../../../assets/i18n/home/de.json');
 const TRANSLATION_EN = require('../../../../assets/i18n/home/en.json');
@@ -50,6 +51,27 @@ class MockRenderer2 {
 @Injectable()
 class MockMatDialog {
 
+}
+
+@Injectable()
+class MockGlobalStorageService {
+
+  getMemoryItem(key: MemoryStorageKey) {
+    return undefined;
+  }
+
+  getLocalStorageItem(key: LocalStorageKey) {
+    return undefined;
+  }
+
+  setMemoryItem(key: MemoryStorageKey, value: any) {
+  }
+
+  setLocalStorageItem(key: LocalStorageKey, value: any) {
+  }
+
+  deleteLocalStorageItem(key: LocalStorageKey) {
+  }
 }
 
 @Component({ selector: 'app-room-join', template: '' })
@@ -100,7 +122,11 @@ describe('HomePageComponent', () => {
         {
           provide: DialogService,
           useClass: MockDialogService
-        }
+        },
+        {
+          provide: GlobalStorageService,
+          useClass: MockGlobalStorageService
+        },
       ]
     }).compileComponents()
       .then(() => {

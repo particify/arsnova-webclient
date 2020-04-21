@@ -8,6 +8,7 @@ import { EventService } from '../../../services/util/event.service';
 import { KeyboardUtils } from '../../../utils/keyboard';
 import { KeyboardKey } from '../../../utils/keyboard/keys';
 import { TranslateService } from '@ngx-translate/core';
+import { GlobalStorageService, LocalStorageKey, MemoryStorageKey } from '../../../services/util/global-storage.service';
 
 @Component({
   selector: 'app-moderator-comment-page',
@@ -18,12 +19,15 @@ export class ModeratorCommentPageComponent implements OnInit, OnDestroy, AfterCo
   roomId: string;
   user: User;
 
-  constructor(private route: ActivatedRoute,
-              private notification: NotificationService,
-              private authenticationService: AuthenticationService,
-              public eventService: EventService,
-              private liveAnnouncer: LiveAnnouncer,
-              private translateService: TranslateService) {
+  constructor(
+    private route: ActivatedRoute,
+    private notification: NotificationService,
+    private authenticationService: AuthenticationService,
+    public eventService: EventService,
+    private liveAnnouncer: LiveAnnouncer,
+    private translateService: TranslateService,
+    private globalStorageService: GlobalStorageService
+  ) {
   }
 
   @HostListener('window:keyup', ['$event'])
@@ -51,7 +55,9 @@ export class ModeratorCommentPageComponent implements OnInit, OnDestroy, AfterCo
   }
 
   ngOnInit(): void {
-    this.roomId = localStorage.getItem('roomId');
+    this.route.data.subscribe(data => {
+      this.roomId = data.room;
+    });
     this.user = this.authenticationService.getUser();
   }
 

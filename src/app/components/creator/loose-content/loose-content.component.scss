@@ -1,0 +1,70 @@
+mat-card {
+  width: 100%;
+}
+
+mat-card-content > :first-child {
+  margin-top: 15px;
+}
+
+mat-expansion-panel {
+  background-color: var(--secondary-variant);
+  margin-bottom: 5px;
+  hyphens: auto;
+}
+
+mat-panel-title {
+  flex-basis: 0;
+  align-items: center;
+  font-size: medium;
+  margin-right: 5px;
+}
+
+mat-expansion-panel-header {
+  background-color: var(--table-a) !important;
+}
+
+.matPanel {
+  background-color: var(--table-a);
+  margin-bottom: 5px;
+  color: var(--on-surface);
+}
+
+.panelTitle {
+  color: var(--on-surface);
+}
+
+.editButton {
+  width: 15%;
+  max-width: 60px;
+  color: var(--primary)
+}
+
+.delete {
+  color: var(--warn)
+}
+
+mat-tooltip-component {
+  position: relative;
+}
+
+.mat-raised-button {
+  height: 40px;
+  min-width: 120px;
+}
+
+p {
+  font-size: calc(14px + 0.3vw);
+}
+
+mat-checkbox {
+  margin-left: 10px;
+}
+
+.cardTitle {
+  margin-left: 2%;
+  width: 60%;
+}
+
+mat-form-field {
+  width: 100%;
+}

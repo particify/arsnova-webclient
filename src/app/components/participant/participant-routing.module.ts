@@ -8,17 +8,26 @@ import { StatisticsPageComponent } from '../shared/statistics-page/statistics-pa
 import { StatisticComponent } from '../shared/statistic/statistic.component';
 import { CommentPageComponent } from '../shared/comment-page/comment-page.component';
 import { CommentAnswerComponent } from '../shared/comment-answer/comment-answer.component';
+import { RoomResolver } from '../../resolver/room.resolver';
+import { ContentResolver } from '../../resolver/content.resolver';
+import { CommentResolver } from '../../resolver/comment.resolver';
 
 const routes: Routes = [
   {
     path: 'room/:shortId',
     component: RoomParticipantPageComponent,
-    data: { roles: [UserRole.PARTICIPANT] }
+    data: { roles: [UserRole.PARTICIPANT] },
+    resolve : {
+      room: RoomResolver
+    }
   },
   {
     path: 'room/:shortId/statistics',
     component: StatisticsPageComponent,
-    data: { roles: [UserRole.PARTICIPANT] }
+    data: { roles: [UserRole.PARTICIPANT] },
+    resolve : {
+      room: RoomResolver
+    }
   },
   {
     path: 'room/:shortId/statistics/:contentId',
@@ -28,17 +37,26 @@ const routes: Routes = [
   {
     path: 'room/:shortId/comments',
     component: CommentPageComponent,
-    data: { roles: [UserRole.PARTICIPANT] }
+    data: { roles: [UserRole.PARTICIPANT] },
+    resolve : {
+      content: ContentResolver
+    }
   },
   {
     path: 'room/:shortId/comment/:commentId',
     component: CommentAnswerComponent,
-    data: { roles: [UserRole.PARTICIPANT] }
+    data: { roles: [UserRole.PARTICIPANT] },
+    resolve : {
+      comment: CommentResolver
+    }
   },
   {
     path: 'room/:shortId/feedback-barometer',
     component: FeedbackBarometerPageComponent,
-    data: { roles: [UserRole.PARTICIPANT] }
+    data: { roles: [UserRole.PARTICIPANT] },
+    resolve : {
+      room: RoomResolver
+    }
   },
   {
     path: 'room/:shortId/:contentGroup',

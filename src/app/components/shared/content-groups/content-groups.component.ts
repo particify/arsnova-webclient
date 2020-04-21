@@ -1,10 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AuthenticationService } from '../../../services/http/authentication.service';
 import { UserRole } from '../../../models/user-roles.enum';
-import { ContentGroup } from '../../../models/content-group';
 import { KeyboardUtils } from '../../../utils/keyboard';
 import { KeyboardKey } from '../../../utils/keyboard/keys';
+import { GlobalStorageService, MemoryStorageKey } from '../../../services/util/global-storage.service';
 
 
 @Component({
@@ -14,12 +13,16 @@ import { KeyboardKey } from '../../../utils/keyboard/keys';
 })
 export class ContentGroupsComponent implements OnInit {
 
-  @Input() public contentGroups: ContentGroup[];
+  @Input() contentGroupName: string;
+  @Input() length: number;
+  @Input() isLoose: boolean;
+  @Input() role: UserRole;
   roomShortId: string;
 
-  constructor(private route: ActivatedRoute,
-              private router: Router,
-              protected authService: AuthenticationService
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router,
+    private globalStorageService: GlobalStorageService
   ) {
   }
 
@@ -27,19 +30,25 @@ export class ContentGroupsComponent implements OnInit {
     this.roomShortId = this.route.snapshot.paramMap.get('shortId');
   }
 
-  viewContents(contentGroup: ContentGroup) {
-    if (this.authService.getRole() === UserRole.CREATOR) {
-      this.router.navigate([`creator/room/${this.roomShortId}/${contentGroup.name}`]);
+  viewContents() {
+    if (!this.isLoose) {
+      if (this.role === UserRole.CREATOR) {
+        this.router.navigate([`creator/room/${this.roomShortId}/group/${this.contentGroupName}`]);
 
+      } else {
+        this.router.navigate([`participant/room/${this.roomShortId}/group/${this.contentGroupName}`]);
+      }
+      this.globalStorageService.setMemoryItem(MemoryStorageKey.LAST_GROUP, this.contentGroupName);
     } else {
-      this.router.navigate([`participant/room/${this.roomShortId}/${contentGroup.name}`]);
+      if (this.role === UserRole.CREATOR) {
+        this.router.navigate([`creator/room/${this.roomShortId}/loosecontent`]);
+      }
     }
-    sessionStorage.setItem('lastGroup', JSON.stringify(contentGroup));
   }
 
-  viewContentsViaEnter(contentGroup: ContentGroup, event) {
+  viewContentsViaEnter(event) {
     if (KeyboardUtils.isKeyEvent(event, KeyboardKey.ENTER) === true) {
-      this.viewContents(contentGroup);
+      this.viewContents();
     }
   }
 }

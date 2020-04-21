@@ -8,6 +8,7 @@ import { EventService } from '../../../../services/util/event.service';
 import { RoomDeleted } from '../../../../models/events/room-deleted';
 import { LanguageService } from '../../../../services/util/language.service';
 import { DialogService } from '../../../../services/util/dialog.service';
+import { GlobalStorageService, LocalStorageKey } from '../../../../services/util/global-storage.service';
 
 @Component({
   selector: 'app-room-edit',
@@ -20,19 +21,22 @@ export class RoomComponent implements OnInit {
   @Input() name: string;
   @Input() description: string;
 
-  constructor(public notificationService: NotificationService,
-              public translationService: TranslateService,
-              protected roomService: RoomService,
-              public router: Router,
-              public eventService: EventService,
-              protected translateService: TranslateService,
-              protected langService: LanguageService,
-              private dialogService: DialogService) {
+  constructor(
+    public notificationService: NotificationService,
+    public translationService: TranslateService,
+    protected roomService: RoomService,
+    public router: Router,
+    public eventService: EventService,
+    protected translateService: TranslateService,
+    protected langService: LanguageService,
+    private dialogService: DialogService,
+    private globalStorageService: GlobalStorageService
+  ) {
     langService.langEmitter.subscribe(lang => translateService.use(lang));
   }
 
   ngOnInit() {
-    this.translateService.use(localStorage.getItem('currentLang'));
+    this.translateService.use(this.globalStorageService.getLocalStorageItem(LocalStorageKey.LANGUAGE));
   }
 
   openDeleteRoomDialog(): void {

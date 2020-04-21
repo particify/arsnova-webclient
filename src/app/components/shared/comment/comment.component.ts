@@ -15,6 +15,7 @@ import { UserRole } from '../../../models/user-roles.enum';
 import { DialogService } from '../../../services/util/dialog.service';
 import * as moment from 'moment';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
+import { GlobalStorageService, LocalStorageKey, MemoryStorageKey } from '../../../services/util/global-storage.service';
 
 @Pipe({ name: 'dateFromNow' })
 export class DateFromNow implements PipeTransform {
@@ -53,17 +54,20 @@ export class CommentComponent implements OnInit {
   inAnswerView = false;
   roleString: string;
 
-  constructor(protected authenticationService: AuthenticationService,
-              private route: ActivatedRoute,
-              protected router: Router,
-              private location: Location,
-              private commentService: CommentService,
-              private notification: NotificationService,
-              private translateService: TranslateService,
-              private dialogService: DialogService,
-              protected langService: LanguageService,
-              private wsCommentService: WsCommentServiceService,
-              private liveAnnouncer: LiveAnnouncer) {
+  constructor(
+    protected authenticationService: AuthenticationService,
+    private route: ActivatedRoute,
+    protected router: Router,
+    private location: Location,
+    private commentService: CommentService,
+    private notification: NotificationService,
+    private translateService: TranslateService,
+    private dialogService: DialogService,
+    protected langService: LanguageService,
+    private wsCommentService: WsCommentServiceService,
+    private liveAnnouncer: LiveAnnouncer,
+    private globalStorageService: GlobalStorageService
+  ) {
     langService.langEmitter.subscribe(lang => {
       translateService.use(lang);
       this.language = lang;
@@ -84,9 +88,9 @@ export class CommentComponent implements OnInit {
         this.isModerator = true;
         this.roleString = 'moderator';
     }
-    this.language = localStorage.getItem('currentLang');
+    this.language = this.globalStorageService.getLocalStorageItem(LocalStorageKey.LANGUAGE);
     this.translateService.use(this.language);
-    this.deviceType = localStorage.getItem('deviceType');
+    this.deviceType = this.globalStorageService.getMemoryItem(MemoryStorageKey.DEVICE_TYPE);
     this.inAnswerView = !this.router.url.includes('comments');
   }
 

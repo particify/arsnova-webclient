@@ -25,6 +25,8 @@ import { MarkdownModule } from 'ngx-markdown';
 import { ContentGroupCreationComponent } from '../shared/_dialogs/content-group-creation/content-group-creation.component';
 import { SettingsComponent } from './settings/settings.component';
 import { SettingsPageComponent } from './settings-page/settings-page.component';
+import { LooseContentComponent } from './loose-content/loose-content.component';
+import { GroupContentComponent } from './group-content/group-content.component';
 
 @NgModule({
   imports: [
@@ -52,6 +54,7 @@ import { SettingsPageComponent } from './settings-page/settings-page.component';
     RoomCreatorPageComponent,
     RoomComponent,
     ContentListComponent,
+    LooseContentComponent,
     ContentEditComponent,
     ContentPresentationComponent,
     ModeratorsComponent,
@@ -60,7 +63,8 @@ import { SettingsPageComponent } from './settings-page/settings-page.component';
     TagsComponent,
     ContentGroupCreationComponent,
     SettingsComponent,
-    SettingsPageComponent
+    SettingsPageComponent,
+    GroupContentComponent
   ]
 })
 export class CreatorModule {

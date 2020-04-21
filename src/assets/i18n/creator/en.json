@@ -150,6 +150,7 @@
     "edit-content-group": "Edit name of the collection",
     "save-content-group": "Update",
     "updated-content-group": "Name of collection was updated.",
+    "content-group-update-failed": "Something went wrong. Maybe the collection is already present?",
     "lock-question": "Lock question",
     "unlock-questions": "Unlock questions",
     "unlock-question": "Unlock question",
@@ -169,7 +170,13 @@
     "disagree": "Disagree",
     "strongly-disagree": "Strongly disagree",
     "format-info": "You can choose between the four different question formats 'Choice', 'Likert', 'Yes/No' and 'Text'.",
-    "md-info": "In this input field text formatting with Markdown is supported."
+    "md-info": "In this input field text formatting with Markdown is supported.",
+    "loose-contents": "Loose questions",
+    "loose-contents-description": "Here you can see questions which have not been assigned to a collection yet. Add single questions to an existing or a new collection or create a new collection containing all loose questions.",
+    "new-group-successfully-created": "New group got created.",
+    "create-group-with-loose-contents": "Create collection",
+    "cancel": "Cancel",
+    "content-group-name": "Name of the collection"
   },
   "feedback": {
     "a11y-message": "You are now in live survey mode. Press the Enter key to get information about key combinations or use the Escape key to call up the announcement later.",

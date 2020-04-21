@@ -6,6 +6,7 @@ import { LanguageService } from '../../../services/util/language.service';
 import { Content } from '../../../models/content';
 import { StatisticChoiceComponent } from '../statistic-choice/statistic-choice.component';
 import { ContentType } from '../../../models/content-type.enum';
+import { GlobalStorageService, LocalStorageKey } from '../../../services/util/global-storage.service';
 
 @Component({
   selector: 'app-statistic',
@@ -21,22 +22,21 @@ export class StatisticComponent implements OnInit {
   showsCorrect = false;
   correctAnswers = true;
 
-  constructor(protected route: ActivatedRoute,
-              private contentService: ContentService,
-              private translateService: TranslateService,
-              protected langService: LanguageService) {
+  constructor(
+    protected route: ActivatedRoute,
+    private contentService: ContentService,
+    private translateService: TranslateService,
+    protected langService: LanguageService,
+    private globalStorageService: GlobalStorageService
+  ) {
     langService.langEmitter.subscribe(lang => translateService.use(lang));
   }
 
   ngOnInit() {
     window.scroll(0, 0);
-    this.translateService.use(localStorage.getItem('currentLang'));
-    let contentId: string;
-    this.route.params.subscribe(params => {
-      contentId = params['contentId'];
-    });
-    this.contentService.getContent(contentId).subscribe(content => {
-      this.content = content;
+    this.translateService.use(this.globalStorageService.getLocalStorageItem(LocalStorageKey.LANGUAGE));
+    this.route.data.subscribe(data => {
+      this.content = data.content;
       if (this.content.format === ContentType.TEXT || this.content.format === ContentType.SCALE) {
         this.correctAnswers = false;
       }

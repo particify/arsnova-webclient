@@ -1,0 +1,108 @@
+mat-card {
+  width: 100%;
+}
+
+mat-card-content > :first-child {
+  margin-top: 15px;
+}
+
+mat-expansion-panel {
+  background-color: var(--secondary-variant);
+  margin-bottom: 5px;
+  hyphens: auto;
+}
+
+mat-panel-title {
+  flex-basis: 0;
+  align-items: center;
+  font-size: medium;
+  margin-right: 5px;
+}
+
+mat-expansion-panel-header {
+  background-color: var(--table-a) !important;
+}
+
+.matPanel {
+  background-color: var(--table-a);
+  margin-bottom: 5px;
+  color: var(--on-surface);
+}
+
+.panelTitle {
+  color: var(----on-surface);
+}
+
+.actionButton {
+  width: 75%;
+  height: 75%;
+  margin: 5px;
+  transition: all 150ms;
+  color: var(--primary) !important;
+
+  &:hover {
+    transform: scale(1.1)
+  }
+}
+
+.editButton {
+  width: 15%;
+  max-width: 60px;
+  color: var(--primary)
+}
+
+.delete {
+  color: var(--warn)
+}
+
+mat-tooltip-component {
+  position: relative;
+}
+
+.actionIcon {
+  font-size: 50px;
+  height: 50px;
+  width: 50px;
+}
+
+.editButtons {
+  margin-top: 15px;
+}
+
+.cardTitle {
+  margin-left: 2%;
+  width: 70%;
+  height: 70px;
+}
+
+.activeInput {
+  width: 100%;
+  font-size: larger;
+}
+
+.inactiveInput {
+  width: 0;
+}
+
+.lock {
+  margin: 0 10px;
+}
+
+.slide-text {
+  font-size: 16px;
+  font-weight: 500;
+  text-align: center;
+  min-width: 145px;
+}
+
+.lock-icon {
+  transition: 1s;
+}
+
+.locked {
+  color: var(--primary);
+}
+
+.unlocked {
+  color: var(--on-surface);
+}

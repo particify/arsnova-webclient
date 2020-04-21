@@ -10,6 +10,7 @@ import { RoomService } from '../../../services/http/room.service';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { KeyboardUtils } from '../../../utils/keyboard';
 import { KeyboardKey } from '../../../utils/keyboard/keys';
+import { GlobalStorageService, LocalStorageKey } from '../../../services/util/global-storage.service';
 
 @Component({
   selector: 'app-participant-content-carousel-page',
@@ -36,7 +37,8 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
     protected translateService: TranslateService,
     protected roomService: RoomService,
     protected route: ActivatedRoute,
-    private liveAnnouncer: LiveAnnouncer
+    private liveAnnouncer: LiveAnnouncer,
+    private globalStorageService: GlobalStorageService
   ) {
   }
 
@@ -57,7 +59,7 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
 
 
   ngOnInit() {
-    this.translateService.use(localStorage.getItem('currentLang'));
+    this.translateService.use(this.globalStorageService.getLocalStorageItem(LocalStorageKey.LANGUAGE));
     this.route.params.subscribe(params => {
       this.contentGroupName = params['contentGroup'];
       this.shortId = params['shortId'];

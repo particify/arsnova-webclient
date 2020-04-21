@@ -14,6 +14,7 @@ import { ModeratorService } from '../../../services/http/moderator.service';
 import { EventService } from '../../../services/util/event.service';
 import { KeyboardUtils } from '../../../utils/keyboard';
 import { KeyboardKey } from '../../../utils/keyboard/keys';
+import { GlobalStorageService, LocalStorageKey, MemoryStorageKey } from '../../../services/util/global-storage.service';
 
 @Component({
   selector: 'app-room-join',
@@ -27,7 +28,7 @@ export class RoomJoinComponent implements OnInit {
   room: Room;
   user: User;
   joinHover: boolean;
-  isDesktop = localStorage.getItem('deviceType') === 'desktop';
+  isDesktop: boolean;
 
   sessionCodeFormControl = new FormControl('', [Validators.required, Validators.pattern('[0-9 ]*')]);
   matcher = new RegisterErrorStateMatcher();
@@ -39,8 +40,10 @@ export class RoomJoinComponent implements OnInit {
     private translateService: TranslateService,
     public authenticationService: AuthenticationService,
     private moderatorService: ModeratorService,
-    public eventService: EventService
+    public eventService: EventService,
+    private globalStorageService: GlobalStorageService
   ) {
+    this.isDesktop = this.globalStorageService.getMemoryItem(MemoryStorageKey.DEVICE_TYPE) === 'desktop';
   }
 
   ngOnInit() {
@@ -127,7 +130,7 @@ export class RoomJoinComponent implements OnInit {
   }
 
   cookiesDisabled(): boolean {
-    return localStorage.getItem('cookieAccepted') === 'false';
+    return !this.globalStorageService.getLocalStorageItem(LocalStorageKey.COOKIE_CONSENT);
   }
 
 

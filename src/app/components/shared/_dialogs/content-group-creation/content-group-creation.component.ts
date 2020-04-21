@@ -3,7 +3,7 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { ContentListComponent } from '../../../creator/content-list/content-list.component';
 import { NotificationService } from '../../../../services/util/notification.service';
 import { TranslateService } from '@ngx-translate/core';
-import { ContentCreatePageComponent } from '../../../creator/content-create-page/content-create-page.component';
+import { ContentGroupService } from '../../../../services/http/content-group.service';
 
 @Component({
   selector: 'app-content-group-creation',
@@ -14,10 +14,13 @@ export class ContentGroupCreationComponent implements OnInit {
 
   name = '';
 
-  constructor(public dialogRef: MatDialogRef<ContentListComponent>,
-              public dialog: MatDialog,
-              private notificationService: NotificationService,
-              private translateService: TranslateService) {
+  constructor(
+    public dialogRef: MatDialogRef<ContentListComponent>,
+    public dialog: MatDialog,
+    private notificationService: NotificationService,
+    private translateService: TranslateService,
+    private contentGroupService: ContentGroupService
+  ) {
   }
 
   ngOnInit() {
@@ -25,7 +28,7 @@ export class ContentGroupCreationComponent implements OnInit {
 
   addContentGroup() {
     if (this.name) {
-      if (ContentCreatePageComponent.saveGroupInSessionStorage(this.name)) {
+      if (this.contentGroupService.saveGroupInMemoryStorage(this.name)) {
         this.translateService.get('dialog.content-group-created').subscribe(msg => {
           this.notificationService.show(msg);
           this.closeDialog(this.name);

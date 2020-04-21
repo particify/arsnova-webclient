@@ -11,6 +11,7 @@ import { KeyboardUtils } from '../../../utils/keyboard';
 import { KeyboardKey } from '../../../utils/keyboard/keys';
 import { BonusTokenService } from '../../../services/http/bonus-token.service';
 import { DialogService } from '../../../services/util/dialog.service';
+import { GlobalStorageService, MemoryStorageKey, LocalStorageKey } from '../../../services/util/global-storage.service';
 
 @Component({
   selector: 'app-header',
@@ -25,17 +26,30 @@ export class HeaderComponent implements OnInit {
   isSafari = 'false';
   moderationEnabled: boolean;
 
-  constructor(public location: Location,
-              private authenticationService: AuthenticationService,
-              private notificationService: NotificationService,
-              public router: Router,
-              private translationService: TranslateService,
-              private userService: UserService,
-              public eventService: EventService,
-              private bonusTokenService: BonusTokenService,
-              private _r: Renderer2,
-              private dialogService: DialogService
+  constructor(
+    public location: Location,
+    private authenticationService: AuthenticationService,
+    private notificationService: NotificationService,
+    public router: Router,
+    private translationService: TranslateService,
+    private userService: UserService,
+    public eventService: EventService,
+    private bonusTokenService: BonusTokenService,
+    private _r: Renderer2,
+    private dialogService: DialogService,
+    private globalStorageService: GlobalStorageService
   ) {
+    this.deviceType = this.globalStorageService.getMemoryItem(MemoryStorageKey.DEVICE_TYPE);
+    this.isSafari = this.globalStorageService.getMemoryItem(MemoryStorageKey.IS_SAFARI);
+
+    // LocalStorage setup
+    if (!this.globalStorageService.getLocalStorageItem(LocalStorageKey.LANGUAGE)) {
+      const lang = this.translationService.getBrowserLang();
+      this.translationService.setDefaultLang(lang);
+      this.globalStorageService.setLocalStorageItem(LocalStorageKey.LANGUAGE, lang);
+    } else {
+      this.translationService.setDefaultLang(this.globalStorageService.getLocalStorageItem(LocalStorageKey.LANGUAGE));
+    }
   }
 
   @HostListener('window:keyup', ['$event'])
@@ -53,36 +67,10 @@ export class HeaderComponent implements OnInit {
   }
 
   ngOnInit() {
-    if (localStorage.getItem('loggedin') !== null && localStorage.getItem('loggedin') === 'true') {
+    if (this.globalStorageService.getLocalStorageItem(LocalStorageKey.LOGGED_IN) === 'true') {
       this.authenticationService.refreshLogin();
     }
-    const userAgent = navigator.userAgent;
-    // Check if mobile device
-    if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(userAgent)) {
-      // Check if IOS device
-      if (/iPhone|iPad|iPod/.test(userAgent)) {
-        this.isSafari = 'true';
-      }
-      this.deviceType = 'mobile';
-    } else {
-      // Check if Mac
-      if (/Macintosh|MacIntel|MacPPC|Mac68k/.test(userAgent)) {
-        // Check if Safari browser
-        if (userAgent.indexOf('Safari') !== -1 && userAgent.indexOf('Chrome') === -1) {
-          this.isSafari = 'true';
-        }
-      }
-      this.deviceType = 'desktop';
-    }
-    localStorage.setItem('isSafari', this.isSafari);
-    localStorage.setItem('deviceType', this.deviceType);
-    if (!localStorage.getItem('currentLang')) {
-      const lang = this.translationService.getBrowserLang();
-      this.translationService.setDefaultLang(lang);
-      localStorage.setItem('currentLang', lang);
-    } else {
-      this.translationService.setDefaultLang(localStorage.getItem('currentLang'));
-    }
+
     this.authenticationService.watchUser.subscribe(newUser => this.user = newUser);
 
     let time = new Date();
@@ -107,7 +95,7 @@ export class HeaderComponent implements OnInit {
         });
       }
     });
-    this.moderationEnabled = (localStorage.getItem('moderationEnabled') === 'true') ? true : false;
+    this.moderationEnabled = (this.globalStorageService.getMemoryItem(MemoryStorageKey.MODERATION_ENABLED) === 'true') ? true : false;
   }
 
   getTime(time: Date) {
@@ -181,6 +169,6 @@ export class HeaderComponent implements OnInit {
   }
 
   cookiesDisabled(): boolean {
-    return localStorage.getItem('cookieAccepted') === 'false';
+    return this.globalStorageService.getLocalStorageItem(LocalStorageKey.COOKIE_CONSENT) === 'false';
   }
 }

@@ -14,6 +14,8 @@ import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { KeyboardUtils } from '../../../utils/keyboard';
 import { KeyboardKey } from '../../../utils/keyboard/keys';
 import { Survey } from '../../../models/survey';
+import { GlobalStorageService, MemoryStorageKey, LocalStorageKey } from '../../../services/util/global-storage.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-feedback-barometer-page',
@@ -32,6 +34,7 @@ export class FeedbackBarometerPageComponent implements OnInit, OnDestroy, AfterC
   isOwner = false;
   user: User;
   roomId: string;
+  shortId: string;
   room: Room;
   protected sub: Subscription;
   isClosed = false;
@@ -47,7 +50,10 @@ export class FeedbackBarometerPageComponent implements OnInit, OnDestroy, AfterC
     protected translateService: TranslateService,
     protected langService: LanguageService,
     private liveAnnouncer: LiveAnnouncer,
-    private _r: Renderer2) {
+    private _r: Renderer2,
+    private globalStorageService: GlobalStorageService,
+    protected route: ActivatedRoute
+  ) {
     langService.langEmitter.subscribe(lang => translateService.use(lang));
   }
 
@@ -88,10 +94,13 @@ export class FeedbackBarometerPageComponent implements OnInit, OnDestroy, AfterC
   }
 
   ngOnInit() {
-    this.roomId = localStorage.getItem(`roomId`);
-    this.translateService.use(localStorage.getItem('currentLang'));
-    this.loadConfig();
+    this.translateService.use(this.globalStorageService.getLocalStorageItem(LocalStorageKey.LANGUAGE));
     this.user = this.authenticationService.getUser();
+    this.route.data.subscribe(data => {
+      this.roomId = data.room.id;
+      this.shortId = data.room.shortId;
+      this.loadConfig(data.room);
+    });
   }
 
   announce(msg: string) {
@@ -131,23 +140,21 @@ export class FeedbackBarometerPageComponent implements OnInit, OnDestroy, AfterC
   }
 
 
-  loadConfig() {
-    this.roomService.getRoom(this.roomId).subscribe(room => {
-      this.room = room;
-      this.isClosed = room.settings['feedbackLocked'];
-      if (this.room.extensions && this.room.extensions['feedback'] && this.room.extensions['feedback'].type) {
-        this.type = this.room.extensions['feedback'].type;
-      } else {
-        this.roomService.changeFeedbackType(this.roomId, this.type);
-      }
-      this.getLabels();
-      this.isOwner = this.authenticationService.hasAccess(this.room.shortId, UserRole.CREATOR);
-      this.sub = this.wsFeedbackService.getFeedbackStream(this.roomId).subscribe((message: Message) => {
-        this.parseIncomingMessage(message);
-      });
-      this.wsFeedbackService.get(this.roomId);
-      this.isLoading = false;
+  loadConfig(room: Room) {
+    this.room = room;
+    this.isClosed = room.settings['feedbackLocked'];
+    if (this.room.extensions && this.room.extensions['feedback'] && this.room.extensions['feedback'].type) {
+      this.type = this.room.extensions['feedback'].type;
+    } else {
+      this.roomService.changeFeedbackType(this.roomId, this.type);
+    }
+    this.getLabels();
+    this.isOwner = this.authenticationService.hasAccess(this.room.shortId, UserRole.CREATOR);
+    this.sub = this.wsFeedbackService.getFeedbackStream(this.roomId).subscribe((message: Message) => {
+      this.parseIncomingMessage(message);
     });
+    this.wsFeedbackService.get(this.roomId);
+    this.isLoading = false;
   }
 
   getLabels() {
@@ -229,7 +236,7 @@ export class FeedbackBarometerPageComponent implements OnInit, OnDestroy, AfterC
         this.updateFeedback(payload.values);
         break;
       case 'FeedbackStarted':
-        this.loadConfig();
+        this.loadConfig(this.room);
         this.isClosed = false;
         break;
       case 'FeedbackStopped':
