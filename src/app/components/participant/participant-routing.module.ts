@@ -9,7 +9,6 @@ import { StatisticComponent } from '../shared/statistic/statistic.component';
 import { CommentPageComponent } from '../shared/comment-page/comment-page.component';
 import { CommentAnswerComponent } from '../shared/comment-answer/comment-answer.component';
 import { RoomResolver } from '../../resolver/room.resolver';
-import { ContentResolver } from '../../resolver/content.resolver';
 import { CommentResolver } from '../../resolver/comment.resolver';
 
 const routes: Routes = [
@@ -39,7 +38,7 @@ const routes: Routes = [
     component: CommentPageComponent,
     data: { roles: [UserRole.PARTICIPANT] },
     resolve : {
-      content: ContentResolver
+      content: CommentResolver
     }
   },
   {
