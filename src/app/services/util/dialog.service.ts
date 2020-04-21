@@ -111,7 +111,7 @@ export class DialogService {
       panelClass: 'screenDialog',
       data: {
         protocol: protocol,
-        hostname: hostname,
+        hostName: hostname,
         shortId: shortId,
         isCreator: isCreator
       }
