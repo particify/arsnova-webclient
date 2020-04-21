@@ -3,12 +3,11 @@ import { ActivatedRoute } from '@angular/router';
 import { User } from '../../../models/user';
 import { NotificationService } from '../../../services/util/notification.service';
 import { AuthenticationService } from '../../../services/http/authentication.service';
-import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { EventService } from '../../../services/util/event.service';
 import { KeyboardUtils } from '../../../utils/keyboard';
 import { KeyboardKey } from '../../../utils/keyboard/keys';
 import { TranslateService } from '@ngx-translate/core';
-import { GlobalStorageService, LocalStorageKey, MemoryStorageKey } from '../../../services/util/global-storage.service';
+import { AnnounceService } from '../../../services/util/announce.service';
 
 @Component({
   selector: 'app-moderator-comment-page',
@@ -24,9 +23,8 @@ export class ModeratorCommentPageComponent implements OnInit, OnDestroy, AfterCo
     private notification: NotificationService,
     private authenticationService: AuthenticationService,
     public eventService: EventService,
-    private liveAnnouncer: LiveAnnouncer,
-    private translateService: TranslateService,
-    private globalStorageService: GlobalStorageService
+    private announceService: AnnounceService,
+    private translateService: TranslateService
   ) {
   }
 
@@ -66,9 +64,6 @@ export class ModeratorCommentPageComponent implements OnInit, OnDestroy, AfterCo
   }
 
   public announce() {
-    this.translateService.get('comment-page.a11y-keys-moderation').subscribe(msg => {
-      this.liveAnnouncer.clear();
-      this.liveAnnouncer.announce(msg, 'assertive');
-    });
+    this.announceService.announce('comment-page.a11y-keys-moderation');
   }
 }

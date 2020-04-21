@@ -10,12 +10,12 @@ import { WsFeedbackService } from '../../../services/websockets/ws-feedback.serv
 import { Subscription } from 'rxjs';
 import { TranslateService } from '@ngx-translate/core';
 import { LanguageService } from '../../../services/util/language.service';
-import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { KeyboardUtils } from '../../../utils/keyboard';
 import { KeyboardKey } from '../../../utils/keyboard/keys';
 import { Survey } from '../../../models/survey';
-import { GlobalStorageService, MemoryStorageKey, LocalStorageKey } from '../../../services/util/global-storage.service';
+import { GlobalStorageService, LocalStorageKey } from '../../../services/util/global-storage.service';
 import { ActivatedRoute } from '@angular/router';
+import { AnnounceService } from '../../../services/util/announce.service';
 
 @Component({
   selector: 'app-feedback-barometer-page',
@@ -49,7 +49,7 @@ export class FeedbackBarometerPageComponent implements OnInit, OnDestroy, AfterC
     private roomService: RoomService,
     protected translateService: TranslateService,
     protected langService: LanguageService,
-    private liveAnnouncer: LiveAnnouncer,
+    private announceService: AnnounceService,
     private _r: Renderer2,
     private globalStorageService: GlobalStorageService,
     protected route: ActivatedRoute
@@ -103,39 +103,26 @@ export class FeedbackBarometerPageComponent implements OnInit, OnDestroy, AfterC
     });
   }
 
-  announce(msg: string) {
-    this.liveAnnouncer.clear();
-    this.liveAnnouncer.announce(msg, 'assertive');
-  }
-
   announceKeys() {
-    this.translateService.get('feedback.a11y-keys').subscribe(msg => {
-      this.announce(msg);
-    });
+    this.announceService.announce('feedback.a11y-keys');
   }
 
   announceStatus() {
     this.translateService.get(this.isClosed ? 'feedback.a11y-stopped' : 'feedback.a11y-started').subscribe(status => {
-      this.translateService.get('feedback.a11y-status', { status: status, state0: this.survey[0].count, state1: this.survey[1].count,
-        state2: this.survey[2].count, state3: this.survey[3].count }).subscribe(msg => {
-        this.announce(msg);
-      });
+      this.announceService.announce('feedback.a11y-status', { status: status, state0: this.survey[0].count, state1: this.survey[1].count,
+        state2: this.survey[2].count, state3: this.survey[3].count });
     });
   }
 
   announceType() {
     this.translateService.get(this.type === this.typeSurvey ? 'feedback.type-survey' : 'feedback.type-feedback').subscribe(type => {
-      this.translateService.get('feedback.a11y-selected-type', { type: type }).subscribe(msg => {
-        this.announce(msg);
-      });
+      this.announceService.announce('feedback.a11y-selected-type', { type: type });
     });
   }
 
   announceAnswer(answerLabelKey: string) {
     this.translateService.get(answerLabelKey).subscribe(answer => {
-      this.translateService.get('feedback.a11y-selected-answer', { answer: answer }).subscribe(msg => {
-        this.announce(msg);
-      });
+      this.announceService.announce('feedback.a11y-selected-answer', { answer: answer });
     });
   }
 
@@ -217,10 +204,8 @@ export class FeedbackBarometerPageComponent implements OnInit, OnDestroy, AfterC
     const keys = [this.isClosed ? 'feedback.a11y-started' : 'feedback.a11y-stopped',
                   this.isClosed ? 'feedback.a11y-stop' : 'feedback.a11y-start'];
     this.translateService.get(keys).subscribe(status => {
-      this.translateService.get('feedback.a11y-status-changed', { status: status[keys[0]], nextStatus: status[keys[1]] })
-        .subscribe(msg => {
-          this.announce(msg);
-        });
+      this.announceService.announce('feedback.a11y-status-changed',
+        { status: status[keys[0]], nextStatus: status[keys[1]] });
     });
   }
 

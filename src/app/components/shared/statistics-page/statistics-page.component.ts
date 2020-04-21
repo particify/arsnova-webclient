@@ -5,9 +5,9 @@ import { ContentGroup } from '../../../models/content-group';
 import { Room } from '../../../models/room';
 import { MatTabGroup } from '@angular/material/tabs';
 import { DialogService } from '../../../services/util/dialog.service';
-import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { TranslateService } from '@ngx-translate/core';
 import { GlobalStorageService, MemoryStorageKey } from '../../../services/util/global-storage.service';
+import { AnnounceService } from '../../../services/util/announce.service';
 
 
 @Component({
@@ -28,7 +28,7 @@ export class StatisticsPageComponent implements OnInit {
   constructor(private route: ActivatedRoute,
               private roomService: RoomService,
               private dialogService: DialogService,
-              private liveAnnouncer: LiveAnnouncer,
+              private announceService: AnnounceService,
               private translateService: TranslateService,
               private globalStorageService: GlobalStorageService
   ) {
@@ -59,10 +59,7 @@ export class StatisticsPageComponent implements OnInit {
   }
 
   announce() {
-    this.translateService.get('statistic.a11y-keys-overview').subscribe(msg => {
-      this.liveAnnouncer.clear();
-      this.liveAnnouncer.announce(msg);
-    });
+    this.announceService.announce('statistic.a11y-keys-overview');
   }
 
   showHelp(): void {

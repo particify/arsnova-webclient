@@ -1,16 +1,15 @@
 import { AfterContentInit, Component, HostListener, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { LanguageService } from '../../../services/util/language.service';
-import { ContentGroup } from '../../../models/content-group';
 import { ContentText } from '../../../models/content-text';
 import { FormControl } from '@angular/forms';
 import { EventService } from '../../../services/util/event.service';
-import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { KeyboardUtils } from '../../../utils/keyboard';
 import { KeyboardKey } from '../../../utils/keyboard/keys';
 import { GlobalStorageService, MemoryStorageKey, LocalStorageKey } from '../../../services/util/global-storage.service';
 import { ActivatedRoute } from '@angular/router';
 import { RoomService } from '../../../services/http/room.service';
+import { AnnounceService } from '../../../services/util/announce.service';
 
 @Component({
   selector: 'app-content-create-page',
@@ -38,7 +37,7 @@ export class ContentCreatePageComponent implements OnInit, AfterContentInit {
     private translateService: TranslateService,
     protected langService: LanguageService,
     public eventService: EventService,
-    private liveAnnouncer: LiveAnnouncer,
+    private announceService: AnnounceService,
     private globalStorageService: GlobalStorageService,
     protected route: ActivatedRoute,
     private roomService: RoomService
@@ -85,10 +84,7 @@ export class ContentCreatePageComponent implements OnInit, AfterContentInit {
   }
 
   announce() {
-    this.liveAnnouncer.clear();
-    this.translateService.get('content.a11y-content-create-keys').subscribe(msg => {
-      this.liveAnnouncer.announce(msg, 'assertive');
-    });
+    this.announceService.announce('content.a11y-content-create-keys');
   }
 
   resetInputs() {

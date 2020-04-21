@@ -12,7 +12,6 @@ import { WsCommentServiceService } from '../../../services/websockets/ws-comment
 import { CommentService } from '../../../services/http/comment.service';
 import { ContentService } from '../../../services/http/content.service';
 import { AuthenticationService } from '../../../services/http/authentication.service';
-import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { EventService } from '../../../services/util/event.service';
 import { KeyboardUtils } from '../../../utils/keyboard';
 import { KeyboardKey } from '../../../utils/keyboard/keys';
@@ -21,6 +20,7 @@ import { Message } from '@stomp/stompjs';
 import { Subscription } from 'rxjs';
 import { WsFeedbackService } from '../../../services/websockets/ws-feedback.service';
 import { GlobalStorageService, LocalStorageKey } from '../../../services/util/global-storage.service';
+import { AnnounceService } from '../../../services/util/announce.service';
 
 @Component({
   selector: 'app-room-participant-page',
@@ -46,7 +46,7 @@ export class RoomParticipantPageComponent extends RoomPageComponent implements O
     protected commentService: CommentService,
     protected contentService: ContentService,
     protected authenticationService: AuthenticationService,
-    private liveAnnouncer: LiveAnnouncer,
+    private announceService: AnnounceService,
     public eventService: EventService,
     private wsFeedbackService: WsFeedbackService,
     protected globalStorageService: GlobalStorageService
@@ -106,10 +106,7 @@ export class RoomParticipantPageComponent extends RoomPageComponent implements O
   }
 
   public announce() {
-    this.liveAnnouncer.clear();
-    this.translateService.get('room-page.a11y-keys').subscribe(msg => {
-      this.liveAnnouncer.announce(msg, 'assertive');
-    });
+    this.announceService.announce('room-page.a11y-keys');
   }
 
   afterRoomLoadHook() {

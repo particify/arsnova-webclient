@@ -7,7 +7,6 @@ import { AuthenticationService } from '../../../../services/http/authentication.
 import { NotificationService } from '../../../../services/util/notification.service';
 import { TranslateService } from '@ngx-translate/core';
 import { EventService } from '../../../../services/util/event.service';
-import { LiveAnnouncer } from '@angular/cdk/a11y';
 
 
 export class PasswordResetErrorStateMatcher implements ErrorStateMatcher {

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { AriaLivePoliteness, LiveAnnouncer } from '@angular/cdk/a11y';
+import { LiveAnnouncer } from '@angular/cdk/a11y';
 
 
 @Injectable()
@@ -11,10 +11,10 @@ export class AnnounceService {
     private liveAnnouncer: LiveAnnouncer
     ) {}
 
-    announce(key: string, args: any, politeness?: AriaLivePoliteness) {
+    announce(key: string, args?: any) {
       this.translateService.get(key, args).subscribe(msg => {
         this.liveAnnouncer.clear();
-        this.liveAnnouncer.announce(msg, politeness);
+        this.liveAnnouncer.announce(msg, 'assertive');
       });
     }
 }
