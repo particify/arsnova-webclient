@@ -18,7 +18,7 @@ export class ModeratorsComponent implements OnInit {
   @Input() roomId: string;
   moderators: Moderator[] = [];
   userIds: string[] = [];
-  loginId: string;
+  loginId = '';
 
   usernameFormControl = new FormControl('', [Validators.email]);
 
