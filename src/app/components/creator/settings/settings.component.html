@@ -4,7 +4,7 @@
       <mat-icon class="header-icon">{{settings.iconName}}</mat-icon>
       <h2>{{ settings.headerName | translate }}</h2>
       <span class="fill-remaining-space"></span>
-      <button mat-icon-button class="expand" (click)="expandSettings()">
+      <button tabindex="-1" mat-icon-button class="expand" (click)="expandSettings()">
         <mat-icon class="expand-icon" [ngClass]="{'expanded': expanded}">expand_more</mat-icon>
       </button>
     </div>
