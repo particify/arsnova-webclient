@@ -4,7 +4,6 @@ import { YesNoDialogComponent } from '../../components/shared/_dialogs/yes-no-di
 import { InfoDialogComponent } from '../../components/shared/_dialogs/info-dialog/info-dialog.component';
 import { CommentExportComponent } from '../../components/shared/_dialogs/comment-export/comment-export.component';
 import { ContentEditComponent } from '../../components/shared/_dialogs/content-edit/content-edit.component';
-import { ContentChoice } from '../../models/content-choice';
 import { ContentGroupCreationComponent } from '../../components/shared/_dialogs/content-group-creation/content-group-creation.component';
 import { User } from '../../models/user';
 import { CreateCommentComponent } from '../../components/shared/_dialogs/create-comment/create-comment.component';
@@ -19,6 +18,7 @@ import { OverlayComponent } from '../../components/home/_dialogs/overlay/overlay
 import { PasswordResetComponent } from '../../components/home/_dialogs/password-reset/password-reset.component';
 import { RegisterComponent } from '../../components/home/_dialogs/register/register.component';
 import { UserActivationComponent } from '../../components/home/_dialogs/user-activation/user-activation.component';
+import { Content } from '../../models/content';
 
 @Injectable()
 export class DialogService {
@@ -67,7 +67,7 @@ export class DialogService {
     });
   }
 
-  openContentEditDialog(content: ContentChoice): MatDialogRef<ContentEditComponent> {
+  openContentEditDialog(content: Content): MatDialogRef<ContentEditComponent> {
     return this.dialog.open(ContentEditComponent, {
       width: this.size.small,
       data: content

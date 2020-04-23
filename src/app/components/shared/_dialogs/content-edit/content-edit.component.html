@@ -9,24 +9,28 @@
               [(ngModel)]="data.body" rows="3" maxlength="250" placeholder="{{'dialog.content-body' | translate}}"
               name="body" aria-labelledby="body"></textarea>
   </mat-form-field>
-  <h4>{{'dialog.content-answers' | translate}}</h4>
-  <mat-table [dataSource]="displayAnswers">
-    <ng-container matColumnDef="label">
-      <mat-cell *matCellDef="let answer">
-        <mat-form-field class="input-block">
-          <input (focus)="eventService.makeFocusOnInputTrue()" (blur)="eventService.makeFocusOnInputFalse()"
-                 matInput [(ngModel)]="answer.answerOption.label" maxlength="50" name="answer" aria-labelledby="answer"/>
-        </mat-form-field>
-      </mat-cell>
-    </ng-container>
-    <ng-container matColumnDef="checked">
-      <mat-cell *matCellDef="let answer; let i = index">
-        <mat-checkbox color="accent" [(ngModel)]="answer.correct" aria-labelledby="checkbox"
-                      [checked]="answer.correct" (ngModelChange)="updateAnswer(i)"></mat-checkbox>
-      </mat-cell>
-    </ng-container>
-    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-  </mat-table>
+  <div *ngIf="data.format !== 'TEXT'">
+    <h4>{{'dialog.content-answers' | translate}}</h4>
+    <mat-table [dataSource]="displayAnswers">
+      <ng-container matColumnDef="label">
+        <mat-cell *matCellDef="let answer">
+          <mat-form-field class="input-block">
+            <input (focus)="eventService.makeFocusOnInputTrue()" (blur)="eventService.makeFocusOnInputFalse()"
+                   matInput [(ngModel)]="answer.answerOption.label" maxlength="50" name="answer"
+                   [disabled]="data.format !== 'CHOICE'" aria-labelledby="answer"/>
+          </mat-form-field>
+        </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="checked">
+        <mat-cell *matCellDef="let answer; let i = index">
+          <mat-checkbox color="accent" [(ngModel)]="answer.correct" aria-labelledby="checkbox"
+                     [checked]="answer.correct" (ngModelChange)="updateAnswer(i)" [disabled]="data.format === 'SCALE'">
+          </mat-checkbox>
+        </mat-cell>
+      </ng-container>
+      <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+    </mat-table>
+  </div>
   <div fxLayout="row" fxLayoutAlign="end" fxLayoutGap="10px">
     <button (click)="dialogRef.close('abort')" aria-labelledby="cancel" mat-button>
       {{ 'dialog.cancel' | translate }}
