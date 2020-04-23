@@ -84,11 +84,17 @@ export class LooseContentComponent extends ContentListComponent implements OnIni
     }
     this.getGroups();
     this.isLoading = false;
+    setTimeout(() => {
+      document.getElementById('message').focus();
+    }, 500);
   }
 
   createNewGroup() {
     if (!this.creationMode) {
       this.creationMode = true;
+      setTimeout(() => {
+        document.getElementById('content-group-input').focus();
+      }, 500);
     } else {
       if (this.newName !== this.translateService.instant('content.loose-contents')) {
         const newGroup = new ContentGroup();
