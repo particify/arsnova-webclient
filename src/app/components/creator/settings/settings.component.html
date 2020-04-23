@@ -14,7 +14,7 @@
                        *ngSwitchCase="'generalSettings'"></app-room-edit>
         <app-comment-settings [editRoom]="room" [roomId]="room.id" *ngSwitchCase="'commentSettings'"></app-comment-settings>
         <app-moderators [roomId]="room.id" *ngSwitchCase="'moderatorSettings'"></app-moderators>
-        <app-bonus-token [room]="room" *ngSwitchCase="'tokenSettings'"></app-bonus-token>
+        <!-- <app-bonus-token [room]="room" *ngSwitchCase="'tokenSettings'"></app-bonus-token> -->
         <app-tags [room]="room" *ngSwitchCase="'tagSettings'"></app-tags>
       </div>
     </div>
