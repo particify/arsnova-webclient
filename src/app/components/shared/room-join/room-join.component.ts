@@ -30,7 +30,7 @@ export class RoomJoinComponent implements OnInit {
   joinHover: boolean;
   isDesktop: boolean;
 
-  sessionCodeFormControl = new FormControl('', [Validators.required, Validators.pattern('[0-9 ]*')]);
+  sessionCodeFormControl = new FormControl('', [Validators.pattern('[0-9 ]*')]);
   matcher = new RegisterErrorStateMatcher();
 
   constructor(
