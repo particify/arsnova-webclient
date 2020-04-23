@@ -116,7 +116,7 @@ export class GroupContentComponent extends ContentListComponent implements OnIni
   }
 
   announce() {
-    this.announceService.announce('content.a11y-content-list-keys');
+    this.announceService.announce('content.a11y-content-list-shortcuts');
   }
 
   goInEditMode(): void {

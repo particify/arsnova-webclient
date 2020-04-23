@@ -104,7 +104,7 @@ export class RoomParticipantPageComponent extends RoomPageComponent implements O
   }
 
   public announce() {
-    this.announceService.announce('room-page.a11y-keys');
+    this.announceService.announce('room-page.a11y-shortcuts');
   }
 
   afterRoomLoadHook() {

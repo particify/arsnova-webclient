@@ -1,6 +1,6 @@
 <app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
 <div *ngIf="!isLoading" fxLayout="column" fxLayoutAlign="start center">
-  <button id="live-announcer-button" class="visually-hidden" tabindex="-1" (click)="announce('answer.a11y-keys')">
+  <button id="live-announcer-button" class="visually-hidden" tabindex="-1" (click)="announce('answer.a11y-shortcuts')">
     {{ 'answer.a11y-message' | translate: { group: contentGroup.name } }}</button>
   <app-stepper *ngIf="contents.length > 0" [listLength]="contents.length" [alreadySent]="alreadySent">
     <cdk-step *ngFor="let content of contents; let i = index">

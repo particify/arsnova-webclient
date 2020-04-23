@@ -47,7 +47,7 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
     if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit1) === true) {
       document.getElementById('step').focus();
     } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Escape) === true) {
-      this.announce('answer.a11y-keys');
+      this.announce('answer.a11y-shortcuts');
     }
   }
 

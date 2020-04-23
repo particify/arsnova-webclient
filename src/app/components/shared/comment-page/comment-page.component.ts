@@ -76,7 +76,7 @@ export class CommentPageComponent implements OnInit, OnDestroy, AfterContentInit
   }
 
   public announce() {
-    this.announceService.announce('comment-page.a11y-keys');
+    this.announceService.announce('comment-page.a11y-shortcuts');
   }
 
 }

@@ -83,7 +83,7 @@ export class RoomModeratorPageComponent extends RoomPageComponent implements OnI
   }
 
   public announce() {
-    this.announceService.announce('room-page.a11y-moderator-keys');
+    this.announceService.announce('room-page.a11y-moderator-shortcuts');
   }
 
   initializeRoom(room: Room): void {

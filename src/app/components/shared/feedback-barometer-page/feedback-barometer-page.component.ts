@@ -104,7 +104,7 @@ export class FeedbackBarometerPageComponent implements OnInit, OnDestroy, AfterC
   }
 
   announceKeys() {
-    this.announceService.announce('feedback.a11y-keys');
+    this.announceService.announce('feedback.a11y-shortcuts');
   }
 
   announceStatus() {

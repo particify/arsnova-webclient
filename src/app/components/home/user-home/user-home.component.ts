@@ -57,7 +57,7 @@ export class UserHomeComponent implements OnInit, AfterContentInit {
   }
 
   announce() {
-    this.announceService.announce('home-page.a11y-user-keys');
+    this.announceService.announce('home-page.a11y-user-shortcuts');
   }
 
   openCreateRoomDialog(): void {

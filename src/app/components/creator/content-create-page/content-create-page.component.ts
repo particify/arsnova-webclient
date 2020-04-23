@@ -84,7 +84,7 @@ export class ContentCreatePageComponent implements OnInit, AfterContentInit {
   }
 
   announce() {
-    this.announceService.announce('content.a11y-content-create-keys');
+    this.announceService.announce('content.a11y-content-create-shortcuts');
   }
 
   resetInputs() {

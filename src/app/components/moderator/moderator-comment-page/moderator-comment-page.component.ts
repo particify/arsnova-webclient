@@ -64,6 +64,6 @@ export class ModeratorCommentPageComponent implements OnInit, OnDestroy, AfterCo
   }
 
   public announce() {
-    this.announceService.announce('comment-page.a11y-keys-moderation');
+    this.announceService.announce('comment-page.a11y-shortcuts-moderation');
   }
 }
