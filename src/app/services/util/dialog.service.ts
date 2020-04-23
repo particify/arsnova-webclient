@@ -10,10 +10,10 @@ import { User } from '../../models/user';
 import { CreateCommentComponent } from '../../components/shared/_dialogs/create-comment/create-comment.component';
 import { PresentCommentComponent } from '../../components/shared/_dialogs/present-comment/present-comment.component';
 import { QrCodeComponent } from '../../components/shared/_dialogs/qr-code/qr-code.component';
-import { RemindOfTokensComponent } from '../../components/shared/_dialogs/remind-of-tokens/remind-of-tokens.component';
+// import { RemindOfTokensComponent } from '../../components/shared/_dialogs/remind-of-tokens/remind-of-tokens.component';
 import { RoomCreateComponent } from '../../components/shared/_dialogs/room-create/room-create.component';
 import { StatisticHelpComponent } from '../../components/shared/_dialogs/statistic-help/statistic-help.component';
-import { UserBonusTokenComponent } from '../../components/shared/_dialogs/user-bonus-token/user-bonus-token.component';
+// import { UserBonusTokenComponent } from '../../components/shared/_dialogs/user-bonus-token/user-bonus-token.component';
 import { CookiesComponent } from '../../components/home/_dialogs/cookies/cookies.component';
 import { OverlayComponent } from '../../components/home/_dialogs/overlay/overlay.component';
 import { PasswordResetComponent } from '../../components/home/_dialogs/password-reset/password-reset.component';
@@ -118,11 +118,13 @@ export class DialogService {
     });
   }
 
+  /*
   openTokenReminderDialog(): MatDialogRef<RemindOfTokensComponent> {
     return this.dialog.open(RemindOfTokensComponent, {
       width: this.size.medium
     });
   }
+  */
 
   openRoomCreateDialog(): void {
     this.dialog.open(RoomCreateComponent, {
@@ -136,12 +138,14 @@ export class DialogService {
     });
   }
 
+  /*
   openBonusTokenDialog(userId: string): void {
     const dialogRef = this.dialog.open(UserBonusTokenComponent, {
       width: this.size.medium,
       data: userId
     });
   }
+  */
 
   openCookieDialog(): MatDialogRef<CookiesComponent> {
     return this.dialog.open(CookiesComponent, {
