@@ -60,20 +60,20 @@ export class FeedbackBarometerPageComponent implements OnInit, OnDestroy, AfterC
   @HostListener('window:keyup', ['$event'])
   keyEvent(event: KeyboardEvent) {
     if (this.isOwner) {
-      if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit3) === true) {
+      if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit1) === true) {
         document.getElementById('toggle-button').focus();
-      } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit4) === true) {
+      } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit2) === true) {
         document.getElementById('switch-button').focus();
       }
     } else {
       if (!this.isClosed) {
-        if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit3) === true) {
+        if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit1) === true) {
           document.getElementById('feedback-button-0').focus();
-        } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit4) === true) {
+        } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit2) === true) {
           document.getElementById('feedback-button-1').focus();
-        } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit5) === true) {
+        } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit3) === true) {
           document.getElementById('feedback-button2-2').focus();
-        } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit6) === true) {
+        } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit4) === true) {
           document.getElementById('feedback-button2-3').focus();
         }
       } else {
@@ -82,7 +82,7 @@ export class FeedbackBarometerPageComponent implements OnInit, OnDestroy, AfterC
     }
     if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Escape) === true) {
       this.announceKeys();
-    } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit1) === true) {
+    } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit5) === true) {
       this.announceStatus();
     }
   }
