@@ -1,6 +1,6 @@
 <mat-card tabindex="0" role=button id="contentGroup" fxLayoutAlign="start center" (click)="viewContents()"
           attr.aria-label="{{ 'room-page.a11y-enter-content-group' | translate:{name: contentGroupName} }}"
-          (keydown)="viewContentsViaEnter($event)" >
+          (keyup.enter)="viewContents()">
   <h3 matBadge="{{length}}" matBadgeOverlap="false">
     {{contentGroupName}}
   </h3>

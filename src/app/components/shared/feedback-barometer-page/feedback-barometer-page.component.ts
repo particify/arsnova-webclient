@@ -104,7 +104,7 @@ export class FeedbackBarometerPageComponent implements OnInit, OnDestroy, AfterC
   }
 
   announceKeys() {
-    this.announceService.announce('feedback.a11y-shortcuts');
+    this.announceService.announce('feedback.a11y-keys');
   }
 
   announceStatus() {
@@ -191,13 +191,10 @@ export class FeedbackBarometerPageComponent implements OnInit, OnDestroy, AfterC
     }
   }
 
-  submitAnswerViaEnter(state: number, answerLabel: string, event) {
-    if (KeyboardUtils.isKeyEvent(event, KeyboardKey.ENTER) === true) {
-      this.submitAnswer(state);
-    }
+  submitAnswerViaEnter(state: number, answerLabel: string) {
+    this.submitAnswer(state);
     this.announceAnswer(answerLabel);
   }
-
 
   toggle() {
     this.updateRoom(!this.isClosed);

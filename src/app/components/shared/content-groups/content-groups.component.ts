@@ -1,8 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UserRole } from '../../../models/user-roles.enum';
-import { KeyboardUtils } from '../../../utils/keyboard';
-import { KeyboardKey } from '../../../utils/keyboard/keys';
 import { GlobalStorageService, MemoryStorageKey } from '../../../services/util/global-storage.service';
 
 
@@ -43,12 +41,6 @@ export class ContentGroupsComponent implements OnInit {
       if (this.role === UserRole.CREATOR) {
         this.router.navigate([`creator/room/${this.roomShortId}/loosecontent`]);
       }
-    }
-  }
-
-  viewContentsViaEnter(event) {
-    if (KeyboardUtils.isKeyEvent(event, KeyboardKey.ENTER) === true) {
-      this.viewContents();
     }
   }
 }
