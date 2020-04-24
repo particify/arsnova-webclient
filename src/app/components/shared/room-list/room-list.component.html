@@ -20,7 +20,7 @@
                  attr.aria-label="{{ 'room-list.a11y-join-session' | translate:
                         {session: room.name, id: room.shortId, role: roles[room.role]} }}"
                  (click)="setCurrentRoom(room.shortId, room.role)"
-            (keydown)="joinRoomViaEnter(room.shortId, room.role, $event)">
+            (keyup.enter)="setCurrentRoom(room.shortId, room.role)">
               <p matBadge="{{room.commentCount > 0 && deviceType === 'desktop' ? room.commentCount : null}}"
                  matBadgeOverlap="false">{{room.name}}</p>
               <span class="fill-remaining-space" (click)="setCurrentRoom(room.shortId, room.role)"></span>

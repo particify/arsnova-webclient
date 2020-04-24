@@ -78,7 +78,7 @@ export class CommentAnswerComponent implements OnInit, AfterContentInit {
   }
 
   public announce() {
-    this.announceService.announce('comment-page.a11y-keys-answer');
+    this.announceService.announce('comment-page.a11y-shortcuts-answer');
   }
 
   editAnswer() {

@@ -35,11 +35,11 @@ export class UserHomeComponent implements OnInit, AfterContentInit {
   keyEvent(event: KeyboardEvent) {
     if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit1) === true && this.eventService.focusOnInput === false) {
       document.getElementById('create-session-button').focus();
-    } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit3) === true && this.eventService.focusOnInput === false) {
+    } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit2) === true && this.eventService.focusOnInput === false) {
       document.getElementById('session-id-input').focus();
-    } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit4) === true && this.eventService.focusOnInput === false) {
+    } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit3) === true && this.eventService.focusOnInput === false) {
       document.getElementById('room-list').focus();
-    } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Escape, KeyboardKey.Digit9) === true &&
+    } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Escape) === true &&
       this.eventService.focusOnInput === false) {
       this.announce();
     }
@@ -57,7 +57,7 @@ export class UserHomeComponent implements OnInit, AfterContentInit {
   }
 
   announce() {
-    this.announceService.announce('home-page.a11y-user-keys');
+    this.announceService.announce('home-page.a11y-user-shortcuts');
   }
 
   openCreateRoomDialog(): void {

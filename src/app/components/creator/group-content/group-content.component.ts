@@ -58,17 +58,17 @@ export class GroupContentComponent extends ContentListComponent implements OnIni
     const focusOnInput = this.eventService.focusOnInput;
     if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit1) === true && focusOnInput === false) {
       document.getElementById('content-create-button').focus();
-    } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit3) === true && focusOnInput === false) {
+    } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit2) === true && focusOnInput === false) {
       document.getElementById('presentation-button').focus();
-    } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit4) === true && focusOnInput === false) {
+    } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit3) === true && focusOnInput === false) {
       document.getElementById('statistic-button').focus();
-    } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit5) === true && focusOnInput === false) {
+    } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit4) === true && focusOnInput === false) {
       document.getElementById('direct-send-slide').focus();
-    } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit6) === true && focusOnInput === false) {
+    } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit5) === true && focusOnInput === false) {
       document.getElementById('lock-questions-slide').focus();
-    } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit7) === true && focusOnInput === false) {
+    } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit6) === true && focusOnInput === false) {
       document.getElementById('content-list').focus();
-    } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit8) === true && focusOnInput === false) {
+    } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit7) === true && focusOnInput === false) {
       document.getElementById('edit-group-name').focus();
     } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Escape) === true) {
       document.getElementById('keys-announcer-button').focus();
@@ -116,7 +116,7 @@ export class GroupContentComponent extends ContentListComponent implements OnIni
   }
 
   announce() {
-    this.announceService.announce('content.a11y-content-list-keys');
+    this.announceService.announce('content.a11y-content-list-shortcuts');
   }
 
   goInEditMode(): void {

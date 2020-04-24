@@ -57,7 +57,7 @@ export class HeaderComponent implements OnInit {
     if (document.getElementById('back-button') && KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit0) === true &&
       this.eventService.focusOnInput === false) {
       document.getElementById('back-button').focus();
-    } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit2) === true && this.eventService.focusOnInput === false) {
+    } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit9) === true && this.eventService.focusOnInput === false) {
       if (this.user) {
         document.getElementById('session-button').focus();
       } else {

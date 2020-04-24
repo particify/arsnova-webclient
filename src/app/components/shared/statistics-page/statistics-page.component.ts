@@ -59,7 +59,7 @@ export class StatisticsPageComponent implements OnInit {
   }
 
   announce() {
-    this.announceService.announce('statistic.a11y-keys-overview');
+    this.announceService.announce('statistic.a11y-shortcuts-overview');
   }
 
   showHelp(): void {

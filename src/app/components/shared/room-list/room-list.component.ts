@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Room } from '../../../models/room';
 import { RoomRoleMixin } from '../../../models/room-role-mixin';
 import { User } from '../../../models/user';
@@ -14,8 +14,6 @@ import { NotificationService } from '../../../services/util/notification.service
 import { TranslateService } from '@ngx-translate/core';
 import { Router } from '@angular/router';
 import { DialogService } from '../../../services/util/dialog.service';
-import { KeyboardUtils } from '../../../utils/keyboard';
-import { KeyboardKey } from '../../../utils/keyboard/keys';
 import { GlobalStorageService, MemoryStorageKey } from '../../../services/util/global-storage.service';
 
 @Component({
@@ -113,12 +111,6 @@ export class RoomListComponent implements OnInit, OnDestroy {
       });
     }
     this.setDisplayedRooms(this.roomsWithRole);
-  }
-
-  joinRoomViaEnter(shortId: string, role: UserRole, event) {
-    if (KeyboardUtils.isKeyEvent(event, KeyboardKey.ENTER) === true && this.eventService.focusOnInput === false) {
-      this.setCurrentRoom(shortId, role);
-    }
   }
 
   setCurrentRoom(shortId: string, role: UserRole) {

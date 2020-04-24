@@ -50,7 +50,7 @@ export class ContentCreatePageComponent implements OnInit, AfterContentInit {
     const focusOnInput = this.eventService.focusOnInput;
     if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit1) === true && focusOnInput === false) {
       document.getElementById('subject-input').focus();
-    } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit3) === true && focusOnInput === false) {
+    } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit2) === true && focusOnInput === false) {
       document.getElementById('format-info-button').focus();
     } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Escape) === true) {
       document.getElementById('keys-announcer-button').focus();
@@ -84,7 +84,7 @@ export class ContentCreatePageComponent implements OnInit, AfterContentInit {
   }
 
   announce() {
-    this.announceService.announce('content.a11y-content-create-keys');
+    this.announceService.announce('content.a11y-content-create-shortcuts');
   }
 
   resetInputs() {

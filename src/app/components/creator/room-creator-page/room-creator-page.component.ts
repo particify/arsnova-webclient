@@ -60,27 +60,27 @@ export class RoomCreatorPageComponent extends RoomPageComponent implements OnIni
       } else {
         document.getElementById('comments-button2').focus();
       }
-    } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit3) === true && focusOnInput === false) {
+    } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit2) === true && focusOnInput === false) {
       if (this.moderationEnabled) {
         document.getElementById('moderation-button').focus();
       } else {
         document.getElementById('moderation-disabled').focus();
       }
-    } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit4) === true && focusOnInput === false) {
+    } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit3) === true && focusOnInput === false) {
       document.getElementById('content-create-button').focus();
-    } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit5) === true && focusOnInput === false) {
+    } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit4) === true && focusOnInput === false) {
       document.getElementById('live-feedback-button').focus();
-    } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit6) === true && focusOnInput === false) {
+    } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit5) === true && focusOnInput === false) {
       if (this.contentGroups.length > 0) {
         document.getElementById('content-groups').focus();
       } else {
         document.getElementById('no-content-groups').focus();
       }
-    } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit7) === true && focusOnInput === false) {
+    } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit6) === true && focusOnInput === false) {
       document.getElementById('statistics-button').focus();
-    } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit8) === true && focusOnInput === false) {
+    } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit7) === true && focusOnInput === false) {
       document.getElementById('settings-button').focus();
-    } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit9) === true) {
+    } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit8) === true) {
       document.getElementById('qr-code-button').focus();
     } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Escape) === true && focusOnInput === false) {
       this.announce();
@@ -102,7 +102,7 @@ export class RoomCreatorPageComponent extends RoomPageComponent implements OnIni
   }
 
   announce() {
-    this.announceService.announce('room-page.a11y-keys');
+    this.announceService.announce('room-page.a11y-shortcuts');
   }
 
   afterRoomLoadHook() {
