@@ -66,7 +66,7 @@ export class CommentPageComponent implements OnInit, OnDestroy, AfterContentInit
 
   ngOnInit(): void {
     this.route.data.subscribe(data => {
-      this.roomId = data.room;
+      this.roomId = data.room.id;
     });
     this.user = this.authenticationService.getUser();
   }

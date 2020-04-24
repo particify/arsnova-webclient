@@ -42,7 +42,7 @@ const routes: Routes = [
     component: CommentPageComponent,
     data: { roles: [UserRole.PARTICIPANT] },
     resolve : {
-      content: CommentResolver
+      room: RoomResolver
     }
   },
   {
