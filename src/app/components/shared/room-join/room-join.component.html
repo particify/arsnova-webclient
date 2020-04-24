@@ -9,8 +9,6 @@
                [errorStateMatcher]="matcher" aria-labelledby="join-input-label" autocomplete="off"
         />
         <mat-placeholder>{{ 'home-page.session-id' | translate}}</mat-placeholder>
-        <mat-error *ngIf="sessionCodeFormControl.hasError('required')"
-                   aria-hidden="true">{{ 'home-page.please-enter' | translate}}</mat-error>
         <mat-error
           *ngIf="sessionCodeFormControl.hasError('pattern')">{{ 'home-page.only-numbers' | translate}}</mat-error>
       </mat-form-field>

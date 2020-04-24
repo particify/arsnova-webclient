@@ -62,7 +62,6 @@
     "install": "Install",
     "no-room-found": "No session found with this key",
     "only-numbers": "A session key only contains digits.",
-    "please-enter": "Ask the lecturer for the key",
     "session-id": "Session key",
     "update-available": "An update is available.",
     "welcome": "Feedback and Interaction"
