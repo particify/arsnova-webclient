@@ -193,6 +193,8 @@ export class RoomListComponent implements OnInit, OnDestroy {
   filterRooms(search: string) {
     if (search.length > 2) {
       this.setDisplayedRooms(this.roomsWithRole.filter(room => room.name.includes(search.toLowerCase())));
+    } else {
+      this.setDisplayedRooms(this.roomsWithRole);
     }
   }
 }
