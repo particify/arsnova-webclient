@@ -34,7 +34,6 @@ export class ContentListComponent implements OnInit {
   labels: string[] = [];
   deviceType: string;
   contentBackup: Content;
-  contentCBackup: ContentChoice;
   contentGroup: ContentGroup;
   contentGroups: string[] = [];
   currentGroupIndex: number;
@@ -90,8 +89,8 @@ export class ContentListComponent implements OnInit {
     return index;
   }
 
-  createChoiceContentBackup(content: ContentChoice) {
-    this.contentCBackup = new ContentChoice(
+  createChoiceContentBackup(content: ContentChoice): Content {
+   return new ContentChoice(
       content.id,
       content.revision,
       content.roomId,
@@ -106,8 +105,8 @@ export class ContentListComponent implements OnInit {
     );
   }
 
-  createTextContentBackup(content: ContentText) {
-    this.contentBackup = new ContentText(
+  createTextContentBackup(content: ContentText): Content {
+    return new ContentText(
       content.id,
       content.revision,
       content.roomId,
@@ -129,12 +128,12 @@ export class ContentListComponent implements OnInit {
 
   editContent(edContent: Content) {
     if (edContent.format === ContentType.TEXT) {
-      this.createTextContentBackup(edContent as ContentText);
+      this.contentBackup = this.createTextContentBackup(edContent as ContentText);
     } else {
-      this.createChoiceContentBackup(edContent as ContentChoice);
+      this.contentBackup = this.createChoiceContentBackup(edContent as ContentChoice);
     }
     const index = this.findIndexOfSubject(edContent.subject);
-    const dialogRef = this.dialogService.openContentEditDialog(this.contentCBackup);
+    const dialogRef = this.dialogService.openContentEditDialog(this.contentBackup);
     dialogRef.afterClosed()
       .subscribe(result => {
         this.updateContentChanges(index, result);
@@ -143,7 +142,7 @@ export class ContentListComponent implements OnInit {
 
   updateContentChanges(index: number, action: string) {
     if (!action) {
-      this.contents[index] = this.contentCBackup;
+      this.contents[index] = this.contentBackup;
     } else {
       switch (action.valueOf()) {
         case 'delete':
@@ -159,15 +158,15 @@ export class ContentListComponent implements OnInit {
           }
           break;
         case 'update':
-          this.contents[index] = this.contentCBackup;
-          this.labels[index] = this.contentCBackup.subject;
+          this.contents[index] = this.contentBackup;
+          this.labels[index] = this.contentBackup.subject;
           this.contentService.updateContent(this.contents[index]).subscribe();
           this.translateService.get('content.content-updated').subscribe(message => {
             this.notificationService.show(message);
           });
           break;
         case 'abort':
-          this.contents[index] = this.contentCBackup;
+          this.contents[index] = this.contentBackup;
           break;
       }
     }
