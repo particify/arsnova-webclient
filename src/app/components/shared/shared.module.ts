@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CommentListComponent } from './comment-list/comment-list.component';
 import { ContentGroupsComponent } from './content-groups/content-groups.component';
-import { FeedbackBarometerPageComponent } from './feedback-barometer-page/feedback-barometer-page.component';
+import { SurveyPageComponent } from './survey-page/survey-page.component';
 import { FooterComponent } from './footer/footer.component';
 import { HeaderComponent } from './header/header.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
@@ -56,7 +56,7 @@ import { RoomNotFoundComponent } from './room-not-found/room-not-found.component
     RoomListComponent,
     ContentGroupsComponent,
     HeaderComponent,
-    FeedbackBarometerPageComponent,
+    SurveyPageComponent,
     FooterComponent,
     CommentPageComponent,
     CommentListComponent,
@@ -89,7 +89,7 @@ import { RoomNotFoundComponent } from './room-not-found/room-not-found.component
     RoomListComponent,
     ContentGroupsComponent,
     HeaderComponent,
-    FeedbackBarometerPageComponent,
+    SurveyPageComponent,
     FooterComponent,
     CommentPageComponent,
     CommentListComponent,

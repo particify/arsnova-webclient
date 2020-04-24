@@ -5,7 +5,7 @@ import { UserRole } from '../../models/user-roles.enum';
 import { RoomCreatorPageComponent } from './room-creator-page/room-creator-page.component';
 import { ContentCreatePageComponent } from './content-create-page/content-create-page.component';
 import { StatisticsPageComponent } from '../shared/statistics-page/statistics-page.component';
-import { FeedbackBarometerPageComponent } from '../shared/feedback-barometer-page/feedback-barometer-page.component';
+import { SurveyPageComponent } from '../shared/survey-page/survey-page.component';
 import { ContentListComponent } from './content-list/content-list.component';
 import { StatisticComponent } from '../shared/statistic/statistic.component';
 import { ContentPresentationComponent } from './content-presentation/content-presentation.component';
@@ -83,8 +83,8 @@ const routes: Routes = [
     }
   },
   {
-    path: 'room/:shortId/feedback-barometer',
-    component: FeedbackBarometerPageComponent,
+    path: 'room/:shortId/survey',
+    component: SurveyPageComponent,
     canActivate: [AuthenticationGuard],
     data: { roles: [UserRole.CREATOR] },
     resolve : {

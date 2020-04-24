@@ -92,7 +92,7 @@
     "vote-down": "Vote down",
     "vote-up": "Vote up"
   },
-  "feedback": {
+  "survey": {
     "a11y-message": "You are now in live survey mode. Press the Enter key to get information about key combinations or use the Escape key to call up the announcement later.",
     "a11y-shortcuts": "Press key 1 to find out the status of the current survey, key 2 to answer with option 1, key 2 to answer with option 2, key 3 to answer with option 3, key 4 to answer with option 4, key 9 to open the user menu, key 0 to return to the room summary or the escape key to repeat this announcement.",
     "a11y-status": "Currently the survey is {{status}}. {{state0}} percent have selected answer 1, {{state1}} percent have selected answer 2, {{state2}} have selected answer 3, {{state3}} percent have selected answer 4.",
@@ -119,17 +119,17 @@
   },
   "room-page": {
     "a11y-room-message": "You're in the room now. To get information about key combinations press the Enter key or call the announcement later with the Escape key.",
-    "a11y-shortcuts": "Press key 1 to go to the comments overview, key 2 to go to the live feedback, key 3 to navigate through the question collections, key 4 to navigate to the statistics, key 9 to open the user menu, key 0 to go to the back button, or key 9 to repeat this announcement.",
+    "a11y-shortcuts": "Press key 1 to go to the comments overview, key 2 to go to the live survey, key 3 to navigate through the question collections, key 4 to navigate to the statistics, key 9 to open the user menu, key 0 to go to the back button, or key 9 to repeat this announcement.",
     "a11y-comments": "Opens the page where you can create comments and vote up or down other comments.",
     "a11y-statistics": "Opens the statistics for the question collections.",
-    "a11y-live-feedback": "Opens the live feedback.",
+    "a11y-live-survey": "Opens the live survey.",
     "a11y-content-groups": "In this room there are {{count}} Question collections. Tab between them and press Enter to answer the questions of the collection.",
     "a11y-no-content-groups": "There are no questions in this room yet.",
     "a11y-enter-content-group": "Opens the content group {{name}}.",
-    "a11y-live-feedback-disabled": "The live survey is currently not active.",
+    "a11y-live-survey-disabled": "The live survey is currently not active.",
     "answer-statistics": "Statistics",
     "comments": "Comments",
-    "live-feedback": "Live feedback",
+    "live-survey": "Live Survey",
     "no-contents": "There are no questions yet."
   },
   "statistic": {

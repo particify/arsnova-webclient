@@ -8,7 +8,7 @@
       <p *ngIf="isLoggedIn">{{ 'import.description' | translate }}</p>
       <i *ngIf="isLoggedIn"> {{ 'import.hint' | translate }}</i>
       <p *ngIf="!isLoggedIn">{{ 'import.please-login' | translate }}</p>
-      <b *ngIf="jsonToUpload">{{jsonToUpload.room.name}}</b>
+      <b *ngIf="jsonToUpload">{{jsonToUpload.session.name}}</b>
       <button mat-raised-button *ngIf="!isLoggedIn" class="button-primary login" aria-labelledby="login"
               (click)="navToLogin()">{{ 'import.go-to-login' | translate }}</button>
       <button mat-raised-button *ngIf="jsonToUpload === undefined && isLoggedIn" aria-labelledby="select"
@@ -16,7 +16,7 @@
         {{ 'import.select-file' | translate }}</button>
       <button mat-raised-button class="button-primary" id="create-button"
               *ngIf="isLoggedIn && jsonToUpload" (click)="onUpload()"
-              attr.aria-label="{{ 'import.a11y-create' | translate: {room: jsonToUpload.room.name} }}">
+              attr.aria-label="{{ 'import.a11y-create' | translate: {room: jsonToUpload.session.name} }}">
         {{ 'import.create' | translate }}</button>
     </div>
   </mat-card>

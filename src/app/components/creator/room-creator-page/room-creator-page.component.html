@@ -86,13 +86,13 @@
               </button>
             </mat-grid-tile>
             <mat-grid-tile>
-              <button mat-icon-button class="main-button" id="live-feedback-button" aria-labelledby="live-feedback"
+              <button mat-icon-button class="main-button" id="live-survey-button" aria-labelledby="live-survey"
                       [ngClass]="{'hover': deviceWidth > 500}" [disableRipple]="true"
-                      routerLink="/creator/room/{{ room.shortId }}/feedback-barometer">
+                      routerLink="/creator/room/{{ room.shortId }}/survey">
                 <mat-icon class="main-icon" [ngClass]="{'desktop' : deviceWidth > 500}">thumbs_up_down
                 </mat-icon>
                 <p class="button-text" [ngClass]="{'small-text': deviceWidth < 350}">
-                  {{ 'room-page.live-feedback' | translate}}</p>
+                  {{ 'room-page.live-survey' | translate}}</p>
               </button>
             </mat-grid-tile>
           </mat-grid-list>
@@ -118,7 +118,7 @@
   <div id="moderation">{{'room-page.a11y-moderation' | translate}}</div>
   <div id="settings">{{'room-page.a11y-settings' | translate}}</div>
   <div id="create-content">{{'room-page.a11y-create-content' | translate}}</div>
-  <div id="live-feedback">{{'room-page.a11y-live-feedback' | translate}}</div>
+  <div id="live-survey">{{'room-page.a11y-live-survey' | translate}}</div>
   <div id="statistics">{{'room-page.a11y-statistics' | translate}}</div>
   <div id="qr-code">{{'room-page.a11y-qr-code' | translate}}</div>
 </div>
