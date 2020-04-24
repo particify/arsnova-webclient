@@ -51,7 +51,7 @@ export class QrCodeComponent implements OnInit {
     selBox.select();
     document.execCommand('copy');
     document.body.removeChild(selBox);
-    this.translateService.get('header.session-id-copied').subscribe(msg => {
+    this.translateService.get('header.room-id-copied').subscribe(msg => {
       this.notification.show(msg, '', { duration: 2000 });
     });
   }

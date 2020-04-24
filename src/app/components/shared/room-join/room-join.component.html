@@ -1,22 +1,22 @@
 <div fxLayout="column" fxLayoutAlign="center center" fxFill>
-  <form (ngSubmit)="joinRoom(sessionCode.value)">
+  <form (ngSubmit)="joinRoom(roomCode.value)">
     <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="10px">
       <mat-form-field (keyup.enter)="onEnter()">
-        <input id="session-id-input" matInput #sessionCode (focus)="eventService.makeFocusOnInputTrue()"
+        <input id="room-id-input" matInput #roomCode (focus)="eventService.makeFocusOnInputTrue()"
                (blur)="eventService.makeFocusOnInputFalse()"
                type="text" pattern="[0-9 ]*" inputmode="numeric" min="00000000" max="99999999"
-               (keydown)="prettifySessionCode($event)" [formControl]="sessionCodeFormControl"
+               (keydown)="prettifyRoomCode($event)" [formControl]="roomCodeFormControl"
                [errorStateMatcher]="matcher" aria-labelledby="join-input-label" autocomplete="off"
         />
-        <mat-placeholder>{{ 'home-page.session-id' | translate}}</mat-placeholder>
+        <mat-placeholder>{{ 'home-page.room-id' | translate}}</mat-placeholder>
         <mat-error
-          *ngIf="sessionCodeFormControl.hasError('pattern')">{{ 'home-page.only-numbers' | translate}}</mat-error>
+          *ngIf="roomCodeFormControl.hasError('pattern')">{{ 'home-page.only-numbers' | translate}}</mat-error>
       </mat-form-field>
-      <button [disabled]="cookiesDisabled()" mat-raised-button class="button-primary" (click)="joinRoom(sessionCode.value)"
+      <button [disabled]="cookiesDisabled()" mat-raised-button class="button-primary" (click)="joinRoom(roomCode.value)"
               aria-labelledby="join-button-label">
         <div fxLayoutAlign="center center" class="arrow-container"
-             (mouseenter)="toggleArrowAnimation(sessionCode.value, true)"
-             (mouseleave)="toggleArrowAnimation(sessionCode.value, false)"
+             (mouseenter)="toggleArrowAnimation(roomCode.value, true)"
+             (mouseleave)="toggleArrowAnimation(roomCode.value, false)"
              [ngClass]="{'arrow-hover-in': joinHover === true && isDesktop,
                          'arrow-hover-out': joinHover === false && isDesktop}">
           <mat-icon class="arrow-icon">keyboard_arrow_right</mat-icon>

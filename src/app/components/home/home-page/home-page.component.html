@@ -9,10 +9,10 @@
         <div fxLayout="row" fxLayoutAlign="center">
           <div fxLayout="column" fxLayoutAlign="center center" fxFill>
             <app-room-join [inputA11yString]="'home-page.a11y-welcome-message'"></app-room-join>
-            <button [disabled]="cookiesDisabled()" id="new-session-button" mat-button (click)="openCreateRoomDialog()"
+            <button [disabled]="cookiesDisabled()" id="new-room-button" mat-button (click)="openCreateRoomDialog()"
                     aria-labelledby="create-label">
               <mat-icon class="add">add</mat-icon>
-              {{'home-page.create-session' | translate}}
+              {{'home-page.create-room' | translate}}
             </button>
           </div>
         </div>
@@ -21,5 +21,5 @@
 <div class="visually-hidden">
   <button tabindex="-1" id="welcome-message">{{ 'home-page.a11y-welcome-message' | translate }}</button>
   <button tabindex="-1" id="key-combinations">{{ 'home-page.a11y-home-shortcuts' | translate }}</button>
-  <div id="create-label">{{ 'home-page.a11y-create-session' | translate}}</div>
+  <div id="create-label">{{ 'home-page.a11y-create-room' | translate}}</div>
 </div>

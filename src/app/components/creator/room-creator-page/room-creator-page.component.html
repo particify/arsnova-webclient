@@ -1,7 +1,7 @@
 <div fxLayout="column" fxLayoutAlign="center" fxLayoutGap="20px" fxFill>
   <div fxLayout="row" fxLayoutAlign="center">
     <button id="live-announcer-button" tabIndex="-1" class="visually-hidden" (click)="announce()">
-      {{ 'room-page.a11y-room-message' | translate: {session: room.name, key: room.shortId} }}</button>
+      {{ 'room-page.a11y-room-message' | translate: {room: room.name, key: room.shortId} }}</button>
     <app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
     <mat-card *ngIf="!isLoading && room">
       <div fxLayout="row">
@@ -24,7 +24,7 @@
         <div fxLayout="column">
           <button tabindex="0" id="settings-button" mat-icon-button class="corner-buttons" aria-labelledby="settings"
                   routerLink="settings">
-            <mat-icon class="corner-icon" matTooltip="{{ 'room-page.session-settings' | translate}}">settings</mat-icon>
+            <mat-icon class="corner-icon" matTooltip="{{ 'room-page.room-settings' | translate}}">settings</mat-icon>
           </button>
           <button mat-icon-button class="corner-buttons" [ngClass]="{'disabled': noGroups}" id="statistics-button"
                   (click)="navToStats('creator')" aria-labelledby="statistics">

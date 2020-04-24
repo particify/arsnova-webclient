@@ -22,9 +22,9 @@
 
     <mat-menu #userMenu="matMenu" [overlapTrigger]="false">
       <button mat-menu-item *ngIf="user" routerLink="/user" tabindex="0">
-        <mat-icon class="sessions">people</mat-icon>
-        <span *ngIf="!user.isGuest">{{'header.my-sessions' | translate}}</span>
-        <span *ngIf="user.isGuest">{{'header.visited-sessions' | translate}}</span>
+        <mat-icon class="rooms">people</mat-icon>
+        <span *ngIf="!user.isGuest">{{'header.my-rooms' | translate}}</span>
+        <span *ngIf="user.isGuest">{{'header.visited-rooms' | translate}}</span>
       </button>
       <!-- <button mat-menu-item *ngIf="user" (click)="openUserBonusTokenDialog()" tabindex="0">
         <mat-icon class="bonus">grade</mat-icon>
@@ -46,7 +46,7 @@
 
     <button [disabled]="cookiesDisabled()" mat-button *ngIf="user && deviceType === 'desktop'"
             [matMenuTriggerFor]="userMenu"
-            aria-labelledby="session-label" id="session-button">
+            aria-labelledby="room-label" id="room-button">
         <mat-icon class="header-icons">account_circle</mat-icon>
         <span class="button-text" *ngIf="!user.isGuest">{{'header.my-account' | translate}}</span>
         <span class="button-text" *ngIf="user.isGuest">{{'header.my-guest-account' | translate}}</span>
@@ -54,7 +54,7 @@
 
     <button [disabled]="cookiesDisabled()" mat-icon-button *ngIf="user && deviceType === 'mobile'"
             [matMenuTriggerFor]="userMenu"
-            aria-labelledby="session-label">
+            aria-labelledby="room-label">
       <mat-icon class="header-icons">account_circle</mat-icon>
     </button>
     <div *ngIf="router.url !== '/login'">
@@ -76,5 +76,5 @@
 <div class="visually-hidden">
   <div id="login-label">{{'header.a11y-login' | translate}}</div>
   <div id="back-label">{{'header.a11y-back' | translate}}</div>
-  <div id="session-label">{{'header.a11y-session' | translate}}</div>
+  <div id="room-label">{{'header.a11y-room' | translate}}</div>
 </div>

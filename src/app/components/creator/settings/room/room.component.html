@@ -5,7 +5,7 @@
       <input (focus)="eventService.makeFocusOnInputTrue()" (blur)="eventService.makeFocusOnInputFalse()"
              [(ngModel)]="name" matInput
              name="room-name" maxlength="20" aria-labelledby="room-name"/>
-      <mat-placeholder>{{ 'session.session-name' | translate }}</mat-placeholder>
+      <mat-placeholder>{{ 'room.room-name' | translate }}</mat-placeholder>
       <mat-hint align="end"><span aria-hidden="true">{{ name.length }} / 20</span></mat-hint>
     </mat-form-field>
     <mat-tab-group [dynamicHeight]=true>
@@ -29,7 +29,7 @@
           </mat-hint>
         </mat-form-field>
       </mat-tab>
-      <mat-tab label="{{'session.preview' | translate}}" [disabled]="!description">
+      <mat-tab label="{{'room.preview' | translate}}" [disabled]="!description">
         <div fxLayout="row">
           <markdown [data]="description"></markdown>
           <span class="fill-remaining-space"></span>
