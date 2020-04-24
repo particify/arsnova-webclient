@@ -26,10 +26,10 @@
         <span *ngIf="!user.isGuest">{{'header.my-sessions' | translate}}</span>
         <span *ngIf="user.isGuest">{{'header.visited-sessions' | translate}}</span>
       </button>
-      <button mat-menu-item *ngIf="user" (click)="openUserBonusTokenDialog()" tabindex="0">
+      <!-- <button mat-menu-item *ngIf="user" (click)="openUserBonusTokenDialog()" tabindex="0">
         <mat-icon class="bonus">grade</mat-icon>
         <span>{{'header.user-bonus-token' | translate}}</span>
-      </button>
+      </button> -->
       <button mat-menu-item *ngIf="user && !user.isGuest" (click)="openDeleteUserDialog()" tabindex="0">
         <mat-icon color="warn">delete</mat-icon>
         <span>{{'header.delete-account' | translate}}</span>

@@ -105,7 +105,7 @@ export class HeaderComponent implements OnInit {
   }
 
   logout() {
-    // ToDo: Fix this madness.
+    /*
     if (this.user.authProvider === 'ARSNOVA_GUEST') {
       this.bonusTokenService.getTokensByUserId(this.user.id).subscribe(list => {
         if (list && list.length > 0) {
@@ -122,6 +122,8 @@ export class HeaderComponent implements OnInit {
     } else {
       this.logoutUser();
     }
+    */
+    this.logoutUser();
   }
 
   logoutUser() {
@@ -164,9 +166,11 @@ export class HeaderComponent implements OnInit {
     });
   }
 
+  /*
   openUserBonusTokenDialog() {
     this.dialogService.openBonusTokenDialog(this.user.id);
   }
+  */
 
   cookiesDisabled(): boolean {
     return this.globalStorageService.getLocalStorageItem(LocalStorageKey.COOKIE_CONSENT) === 'false';
