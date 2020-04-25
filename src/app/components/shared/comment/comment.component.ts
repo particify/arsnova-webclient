@@ -180,16 +180,7 @@ export class CommentComponent implements OnInit {
     });
   }
 
-  goToFullScreen(element: Element): void {
-    document.body.requestFullscreen();
-  }
-
-  exitFullScreen(): void {
-    document.exitFullscreen();
-  }
-
   openPresentDialog(comment: Comment): void {
-    this.goToFullScreen(document.documentElement);
     if (this.isCreator === true) {
       this.wsCommentService.highlight(comment);
       if (!comment.read) {
@@ -200,8 +191,6 @@ export class CommentComponent implements OnInit {
     dialogRef.afterClosed()
       .subscribe(result => {
         this.wsCommentService.lowlight(comment);
-        this.exitFullScreen();
-
       });
   }
 }
