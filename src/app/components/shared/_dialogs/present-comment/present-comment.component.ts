@@ -12,8 +12,6 @@ import { GlobalStorageService, LocalStorageKey } from '../../../../services/util
   styleUrls: ['./present-comment.component.scss']
 })
 export class PresentCommentComponent implements OnInit {
-  // flag for fullscreen
-  private fs = false;
 
   constructor(
     @Inject(DOCUMENT) private document: Document,
@@ -27,14 +25,6 @@ export class PresentCommentComponent implements OnInit {
 
   ngOnInit() {
     this.translateService.use(this.globalStorageService.getLocalStorageItem(LocalStorageKey.LANGUAGE));
-    /*  if document is in fullscreen and user presses ESC, it doesn't trigger a keyup event */
-    this.document.addEventListener('fullscreenchange', () => {
-      if (this.fs && this.document.exitFullscreen) {
-        this.onCloseClick();
-      } else {
-        this.fs = true;
-      }
-    });
   }
 
   @HostListener('document:keyup', ['$event'])
