@@ -22,7 +22,7 @@ import { GlobalStorageService, LocalStorageKey, MemoryStorageKey } from '../../.
   styleUrls: ['./room-join.component.scss']
 })
 export class RoomJoinComponent implements OnInit {
-  @ViewChild('sessionCode', { static: true }) sessionCodeElement: ElementRef;
+  @ViewChild('roomCode', { static: true }) roomCodeElement: ElementRef;
   @Input() inputA11yString: string;
 
   room: Room;
@@ -30,7 +30,7 @@ export class RoomJoinComponent implements OnInit {
   joinHover: boolean;
   isDesktop: boolean;
 
-  sessionCodeFormControl = new FormControl('', [Validators.pattern('[0-9 ]*')]);
+  roomCodeFormControl = new FormControl('', [Validators.pattern('[0-9 ]*')]);
   matcher = new RegisterErrorStateMatcher();
 
   constructor(
@@ -57,7 +57,7 @@ export class RoomJoinComponent implements OnInit {
   }
 
   onEnter() {
-    this.getRoom(this.sessionCodeElement.nativeElement.value);
+    this.getRoom(this.roomCodeElement.nativeElement.value);
   }
 
   getRoom(id: string): void {
@@ -65,7 +65,7 @@ export class RoomJoinComponent implements OnInit {
       this.translateService.get('home-page.exactly-8').subscribe(message => {
         this.notificationService.show(message);
       });
-    } else if (this.sessionCodeFormControl.hasError('pattern')) {
+    } else if (this.roomCodeFormControl.hasError('pattern')) {
       this.translateService.get('home-page.only-numbers').subscribe(message => {
         this.notificationService.show(message);
       });
@@ -94,7 +94,7 @@ export class RoomJoinComponent implements OnInit {
   }
 
   joinRoom(id: string): void {
-    if (!this.sessionCodeFormControl.hasError('required') && !this.sessionCodeFormControl.hasError('minlength')) {
+    if (!this.roomCodeFormControl.hasError('required') && !this.roomCodeFormControl.hasError('minlength')) {
       this.getRoom(id);
     }
   }
@@ -135,23 +135,23 @@ export class RoomJoinComponent implements OnInit {
 
 
   /**
-   * Prettifies the session code input element which:
+   * Prettifies the room code input element which:
    *
    * - casts a 'xxxx xxxx' layout to the input field
    */
-  prettifySessionCode(keyboardEvent: KeyboardEvent): void {
-    const sessionCode: string = this.sessionCodeElement.nativeElement.value;
+  prettifyRoomCode(keyboardEvent: KeyboardEvent): void {
+    const roomCode: string = this.roomCodeElement.nativeElement.value;
     const isBackspaceKeyboardEvent: boolean = KeyboardUtils.isKeyEvent(keyboardEvent, KeyboardKey.Backspace);
 
     // allow only backspace key press after all 8 digits were entered by the user
     if (
-      sessionCode.length - (sessionCode.split(' ').length - 1) === 8 &&
+      roomCode.length - (roomCode.split(' ').length - 1) === 8 &&
       isBackspaceKeyboardEvent === false
     ) {
       keyboardEvent.preventDefault();
       keyboardEvent.stopPropagation();
-    } else if (sessionCode.length === 4 && isBackspaceKeyboardEvent === false) { // add a space between each 4 digit group
-      this.sessionCodeElement.nativeElement.value += ' ';
+    } else if (roomCode.length === 4 && isBackspaceKeyboardEvent === false) { // add a space between each 4 digit group
+      this.roomCodeElement.nativeElement.value += ' ';
     }
   }
 }

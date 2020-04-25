@@ -124,7 +124,7 @@ export class RoomListComponent implements OnInit, OnDestroy {
 
   openDeleteRoomDialog(room: RoomRoleMixin) {
     if (room.role < 3) {
-      const dialogRef = this.dialogService.openDeleteDialog('really-remove-session-from-history', room.name);
+      const dialogRef = this.dialogService.openDeleteDialog('really-remove-room-from-history', room.name);
       dialogRef.afterClosed().subscribe(result => {
         if (result === 'delete') {
           this.removeFromHistory(room);
@@ -134,7 +134,7 @@ export class RoomListComponent implements OnInit, OnDestroy {
         }
       });
     } else {
-      const dialogRef = this.dialogService.openDeleteDialog('really-delete-session', room.name);
+      const dialogRef = this.dialogService.openDeleteDialog('really-delete-room', room.name);
       dialogRef.afterClosed().subscribe(result => {
         if (result === 'delete') {
           this.deleteRoom(room);

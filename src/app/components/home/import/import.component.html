@@ -16,7 +16,7 @@
         {{ 'import.select-file' | translate }}</button>
       <button mat-raised-button class="button-primary" id="create-button"
               *ngIf="isLoggedIn && jsonToUpload" (click)="onUpload()"
-              attr.aria-label="{{ 'import.a11y-create' | translate: {session: jsonToUpload.session.name} }}">
+              attr.aria-label="{{ 'import.a11y-create' | translate: {room: jsonToUpload.session.name} }}">
         {{ 'import.create' | translate }}</button>
     </div>
   </mat-card>

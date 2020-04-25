@@ -26,8 +26,8 @@
       <mat-card-content *ngIf="room.description" fxLayoutAlign="center">
         <markdown [data]="room.description.trim()"></markdown>
       </mat-card-content>
-      <mat-grid-list cols="{{feedbackEnabled ? 2 : 1}}" rowHeight="1:1" [ngClass]="{'big-container': deviceWidth >= 500, 'single-container': !feedbackEnabled}">
-        <mat-grid-tile [ngClass]="{'single-tile': !feedbackEnabled, 'double-tile': feedbackEnabled}">
+      <mat-grid-list cols="{{surveyEnabled ? 2 : 1}}" rowHeight="1:1" [ngClass]="{'big-container': deviceWidth >= 500, 'single-container': !surveyEnabled}">
+        <mat-grid-tile [ngClass]="{'single-tile': !surveyEnabled, 'double-tile': surveyEnabled}">
           <button id="comments-button" mat-icon-button class="main-button"
                   [ngClass]="{'hover': deviceWidth > 500}" [disableRipple]="true"
                   routerLink="/participant/room/{{ room.shortId }}/comments" aria-labelledby="comments">
@@ -37,17 +37,17 @@
             <h3 *ngIf="deviceWidth >= 320" class="button-text">{{ 'room-page.comments' | translate}}</h3>
           </button>
         </mat-grid-tile>
-        <mat-grid-tile *ngIf="feedbackEnabled" class="double-tile">
-          <button id="live-feedback-button" mat-icon-button class="main-button" aria-labelledby="live-feedback"
+        <mat-grid-tile *ngIf="surveyEnabled" class="double-tile">
+          <button id="live-survey-button" mat-icon-button class="main-button" aria-labelledby="live-survey"
                   [ngClass]="{'hover': deviceWidth > 500}" [disableRipple]="true"
-                  routerLink="/participant/room/{{ room.shortId }}/feedback-barometer">
+                  routerLink="/participant/room/{{ room.shortId }}/survey">
             <mat-icon class="main-icon" [ngClass]="{'desktop' : deviceWidth > 500}">thumbs_up_down</mat-icon>
-            <h3 *ngIf="deviceWidth >= 320" class="button-text">{{ 'room-page.live-feedback' | translate}}</h3>
+            <h3 *ngIf="deviceWidth >= 320" class="button-text">{{ 'room-page.live-survey' | translate}}</h3>
           </button>
         </mat-grid-tile>
       </mat-grid-list>
-      <p tabindex="-1" id="live-feedback-disabled" class="visually-hidden">
-        {{ 'room-page.a11y-live-feedback-disabled' | translate }}</p>
+      <p tabindex="-1" id="live-survey-disabled" class="visually-hidden">
+        {{ 'room-page.a11y-live-survey-disabled' | translate }}</p>
       <div *ngIf="room && contentGroups">
         <p tabindex="-1" id="content-groups" class="visually-hidden">
           {{ 'room-page.a11y-content-groups' | translate: {count: contentGroups.length} }}</p>
@@ -62,6 +62,6 @@
 
 <div class="visually-hidden">
   <div id="comments">{{'room-page.a11y-comments' | translate}}</div>
-  <div id="live-feedback">{{'room-page.a11y-live-feedback' | translate}}</div>
+  <div id="live-survey">{{'room-page.a11y-live-survey' | translate}}</div>
   <div id="statistics">{{'room-page.a11y-statistics' | translate}}</div>
 </div>

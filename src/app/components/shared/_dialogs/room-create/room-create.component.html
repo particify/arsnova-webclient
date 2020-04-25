@@ -4,7 +4,7 @@
       <input (focus)="eventService.makeFocusOnInputTrue()" (blur)="eventService.makeFocusOnInputFalse()"
              (keypress)="resetEmptyInputs()" matInput #roomName class="input-block" type="text" autocomplete="off"
              maxlength="20" [(ngModel)]="longName" name="roomName" aria-labelledby="room-name-input"/>
-      <mat-placeholder>{{ 'dialog.session-name' | translate }}</mat-placeholder>
+      <mat-placeholder>{{ 'dialog.room-name' | translate }}</mat-placeholder>
       <mat-hint align="end" class="count" *ngIf="!emptyInputs"><span aria-hidden="true">{{roomName.value.length}}
         / 20</span></mat-hint>
       <mat-hint align="start" class="error" *ngIf="emptyInputs">
@@ -14,7 +14,7 @@
 </form>
 <app-dialog-action-buttons
   buttonsLabelSection="dialog"
-  confirmButtonLabel="create-session"
+  confirmButtonLabel="create-room"
   [cancelButtonClickAction]="buildCloseDialogActionCallback()"
   [confirmButtonClickAction]="buildRoomCreateActionCallback(roomName)"
 ></app-dialog-action-buttons>

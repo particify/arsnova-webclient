@@ -31,8 +31,8 @@ export class RoomParticipantPageComponent extends RoomPageComponent implements O
 
   room: Room;
   user: User;
-  protected feedbackSub: Subscription;
-  feedbackEnabled = false;
+  protected surveySub: Subscription;
+  surveyEnabled = false;
 
   constructor(
     protected location: Location,
@@ -62,10 +62,10 @@ export class RoomParticipantPageComponent extends RoomPageComponent implements O
     if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit1) === true && focusOnInput === false) {
       document.getElementById('comments-button').focus();
     } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit2) === true && focusOnInput === false) {
-      if (this.feedbackEnabled) {
-        document.getElementById('live-feedback-button').focus();
+      if (this.surveyEnabled) {
+        document.getElementById('live-survey-button').focus();
       } else {
-        document.getElementById('live-feedback-disabled').focus();
+        document.getElementById('live-survey-disabled').focus();
       }
     } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit3) === true && focusOnInput === false) {
       if (this.contentGroups.length > 0) {
@@ -98,8 +98,8 @@ export class RoomParticipantPageComponent extends RoomPageComponent implements O
     if (this.sub) {
       this.sub.unsubscribe();
     }
-    if (this.feedbackSub) {
-      this.feedbackSub.unsubscribe();
+    if (this.surveySub) {
+      this.surveySub.unsubscribe();
     }
   }
 
@@ -118,8 +118,8 @@ export class RoomParticipantPageComponent extends RoomPageComponent implements O
     }
     this.authenticationService.setAccess(this.room.shortId, UserRole.PARTICIPANT);
     this.authenticationService.checkAccess(this.room.shortId);
-    this.feedbackEnabled = !this.room.settings['feedbackLocked'];
-    this.feedbackSub = this.wsFeedbackService.getFeedbackStream(this.room.id).subscribe((message: Message) => {
+    this.surveyEnabled = !this.room.settings['feedbackLocked'];
+    this.surveySub = this.wsFeedbackService.getFeedbackStream(this.room.id).subscribe((message: Message) => {
       this.parseFeedbackMessage(message);
     });
   }
@@ -131,9 +131,9 @@ export class RoomParticipantPageComponent extends RoomPageComponent implements O
   parseFeedbackMessage(message: Message) {
     const msg = JSON.parse(message.body);
     if (msg.type === 'FeedbackStarted') {
-      this.feedbackEnabled = true;
+      this.surveyEnabled = true;
     } else if (msg.type === 'FeedbackStopped') {
-      this.feedbackEnabled = false;
+      this.surveyEnabled = false;
     }
   }
 }

@@ -25,10 +25,10 @@ export class HomePageComponent implements AfterContentInit {
   @HostListener('window:keyup', ['$event'])
   keyEvent(event: KeyboardEvent) {
     if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit1) === true && this.eventService.focusOnInput === false) {
-      document.getElementById('session-id-input').focus();
+      document.getElementById('room-id-input').focus();
       this.eventService.makeFocusOnInputTrue();
     } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit2) === true && this.eventService.focusOnInput === false) {
-      document.getElementById('new-session-button').focus();
+      document.getElementById('new-room-button').focus();
     } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit3) === true && this.eventService.focusOnInput === false) {
       document.getElementById('language-menu').focus();
     } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Escape) === true && this.eventService.focusOnInput === true) {
@@ -39,7 +39,7 @@ export class HomePageComponent implements AfterContentInit {
 
   ngAfterContentInit(): void {
     if (this.deviceType === 'desktop') {
-      document.getElementById('session-id-input').focus();
+      document.getElementById('room-id-input').focus();
       this.eventService.makeFocusOnInputTrue();
     } else {
       document.getElementById('welcome-message').focus();

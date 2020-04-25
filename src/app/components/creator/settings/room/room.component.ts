@@ -40,7 +40,7 @@ export class RoomComponent implements OnInit {
   }
 
   openDeleteRoomDialog(): void {
-    const dialogRef = this.dialogService.openDeleteDialog('really-delete-session', this.editRoom.name);
+    const dialogRef = this.dialogService.openDeleteDialog('really-delete-room', this.editRoom.name);
     dialogRef.afterClosed().subscribe(result => {
         if (result === 'delete') {
           this.deleteRoom(this.editRoom);

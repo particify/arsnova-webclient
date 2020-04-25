@@ -3,7 +3,7 @@
 <div *ngIf="!isLoading">
   <div tabindex="-1" id="room-list" *ngIf="!isLoading" [ngClass]="{'visually-hidden': roomsWithRole.length > 0}">
     <h3>{{ roomsWithRole.length === 0 ? ('room-list.no-room-history' | translate) :
-      'room-list.a11y-session-history' | translate:{count: rooms.length} }}</h3>
+      'room-list.a11y-room-history' | translate:{count: rooms.length} }}</h3>
   </div>
   <div *ngIf="roomsWithRole">
     <mat-form-field *ngIf="this.rooms && this.rooms.length > 10" class="filterWrapper">
@@ -17,8 +17,8 @@
                        *ngFor="let room of displayRooms; let i = index" [ngSwitch]="room.role">
           <div fxLayout="row" class="container">
             <div tabindex="0" role="button" fxLayout="row" fxLayoutAlign="center center" class="container inner"
-                 attr.aria-label="{{ 'room-list.a11y-join-session' | translate:
-                        {session: room.name, id: room.shortId, role: roles[room.role]} }}"
+                 attr.aria-label="{{ 'room-list.a11y-join-room' | translate:
+                        {room: room.name, id: room.shortId, role: roles[room.role]} }}"
                  (click)="setCurrentRoom(room.shortId, room.role)"
             (keyup.enter)="setCurrentRoom(room.shortId, room.role)">
               <p matBadge="{{room.commentCount > 0 && deviceType === 'desktop' ? room.commentCount : null}}"
@@ -68,6 +68,6 @@
 
 <div class="visually-hidden">
   <div id="more-options">{{ 'room-list.a11y-more-options' | translate }}</div>
-  <div *ngIf="rooms.length > 10" id="filter-sessions">{{ 'room-list.filter' | translate }}
+  <div *ngIf="rooms.length > 10" id="filter-rooms">{{ 'room-list.filter' | translate }}
   </div>
 </div>

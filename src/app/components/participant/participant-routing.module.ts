@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { UserRole } from '../../models/user-roles.enum';
 import { RoomParticipantPageComponent } from './room-participant-page/room-participant-page.component';
-import { FeedbackBarometerPageComponent } from '../shared/feedback-barometer-page/feedback-barometer-page.component';
+import { SurveyPageComponent } from '../shared/survey-page/survey-page.component';
 import { ParticipantContentCarouselPageComponent } from './participant-content-carousel-page/participant-content-carousel-page.component';
 import { StatisticsPageComponent } from '../shared/statistics-page/statistics-page.component';
 import { StatisticComponent } from '../shared/statistic/statistic.component';
@@ -54,8 +54,8 @@ const routes: Routes = [
     }
   },
   {
-    path: 'room/:shortId/feedback-barometer',
-    component: FeedbackBarometerPageComponent,
+    path: 'room/:shortId/survey',
+    component: SurveyPageComponent,
     data: { roles: [UserRole.PARTICIPANT] },
     resolve : {
       room: RoomResolver

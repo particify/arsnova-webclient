@@ -21,7 +21,7 @@
                   matTextareaAutosize matAutosizeMinRows="3" matAutosizeMaxRows="8" maxlength="250"></textarea>
           </mat-form-field>
         </mat-tab>
-        <mat-tab label="{{ 'session.preview' | translate }}" [disabled]="!body.value">
+        <mat-tab label="{{ 'room.preview' | translate }}" [disabled]="!body.value">
           <div fxLayout="row">
             <markdown [data]="body.value"></markdown>
             <span class="fill-remaining-space"></span>

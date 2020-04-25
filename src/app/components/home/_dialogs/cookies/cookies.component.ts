@@ -45,7 +45,7 @@ export class CookiesComponent implements OnInit, AfterViewInit {
     this.globalStorageService.setLocalStorageItem(LocalStorageKey.DATA_PROTECTION, 'true');
     this.dialogRef.close(true);
     setTimeout(() => {
-      document.getElementById('session-id-input').focus();
+      document.getElementById('room-id-input').focus();
     }, 500);
   }
 

@@ -1,7 +1,7 @@
 {
   "answer": {
     "a11y-message": "You can now answer the answers of the collection {{group}}. Press enter to get information about key combinations or call the announcement later with the escape key.",
-    "a11y-shortcuts": "Press key 1 to go to the first unanswered question, the left- and right-arrow keys to switch between the questions, key 9 to open the user menu, key 0 to go back to the session overview or the escape key to repeat this announcement.",
+    "a11y-shortcuts": "Press key 1 to go to the first unanswered question, the left- and right-arrow keys to switch between the questions, key 9 to open the user menu, key 0 to go back to the room overview or the escape key to repeat this announcement.",
     "a11y-current-multiple": "This is a multiple choice question. Navigate with tab to the question and the answers. Later press the space button to select answers",
     "a11y-current-single": "This is a single choice question. Navigate with tab to the question and then use the up and down-arrow keys to select an answer.",
     "a11y-current-text": "This is a text question. Navigate with tab to the question and press tab again to go to the answer input.",
@@ -10,7 +10,7 @@
     "a11y-already-answered-multiple": "The possible answers were {{allAnswers}}. You have answered this question with the answers {{answers}}.",
     "a11y-already-answered-text": "You have answered this question with {{answer}}.",
     "a11y-has-abstained": "You abstained on that question. Press the tab key to hear the question again.",
-    "a11y-last-content": "This was the last question of this collection. Press the key 0 to return to session overview.",
+    "a11y-last-content": "This was the last question of this collection. Press the key 0 to return to room overview.",
     "a11y-select-answer": "Selects the answer {{answer}}.",
     "a11y-enter-answer": "Enter your answer here.",
     "a11y-submit": "Sends the answer and go to the next one.",
@@ -67,7 +67,7 @@
     "sort-list-time": "Latest comment first"
   },
   "comment-page": {
-    "a11y-shortcuts": "Press key 1 to create a comment. As soon as several comments are available you can search and filter comments. Press key 2 to search in the comments list, key 3 to sort comments, key 4 to filter comments, key 5 to start or continue the comment stream, key 6 to go to the first comment, key 9 to open the user menu, key 0 to return to the session overview or press the escape key to repeat this announcement.",
+    "a11y-shortcuts": "Press key 1 to create a comment. As soon as several comments are available you can search and filter comments. Press key 2 to search in the comments list, key 3 to sort comments, key 4 to filter comments, key 5 to start or continue the comment stream, key 6 to go to the first comment, key 9 to open the user menu, key 0 to return to the room overview or press the escape key to repeat this announcement.",
     "a11y-message": "You are now on the comment page. To get information about key combinations press the Enter key or call the announcement later with the Escape key.",
     "a11y-comment-vote-down": "Votes down this comment",
     "a11y-comment-vote-up": "Votes up this comment",
@@ -92,9 +92,9 @@
     "vote-down": "Vote down",
     "vote-up": "Vote up"
   },
-  "feedback": {
+  "survey": {
     "a11y-message": "You are now in live survey mode. Press the Enter key to get information about key combinations or use the Escape key to call up the announcement later.",
-    "a11y-shortcuts": "Press key 1 to find out the status of the current survey, key 2 to answer with option 1, key 2 to answer with option 2, key 3 to answer with option 3, key 4 to answer with option 4, key 9 to open the user menu, key 0 to return to the session summary or the escape key to repeat this announcement.",
+    "a11y-shortcuts": "Press key 1 to find out the status of the current survey, key 2 to answer with option 1, key 2 to answer with option 2, key 3 to answer with option 3, key 4 to answer with option 4, key 9 to open the user menu, key 0 to return to the room summary or the escape key to repeat this announcement.",
     "a11y-status": "Currently the survey is {{status}}. {{state0}} percent have selected answer 1, {{state1}} percent have selected answer 2, {{state2}} have selected answer 3, {{state3}} percent have selected answer 4.",
     "a11y-stopped": "stopped",
     "a11y-started": "started",
@@ -118,24 +118,24 @@
     "survey-d": "D"
   },
   "room-page": {
-    "a11y-room-message": "You're in the session now. To get information about key combinations press the Enter key or call the announcement later with the Escape key.",
-    "a11y-shortcuts": "Press key 1 to go to the comments overview, key 2 to go to the live feedback, key 3 to navigate through the question collections, key 4 to navigate to the statistics, key 9 to open the user menu, key 0 to go to the back button, or key 9 to repeat this announcement.",
+    "a11y-room-message": "You're in the room now. To get information about key combinations press the Enter key or call the announcement later with the Escape key.",
+    "a11y-shortcuts": "Press key 1 to go to the comments overview, key 2 to go to the live survey, key 3 to navigate through the question collections, key 4 to navigate to the statistics, key 9 to open the user menu, key 0 to go to the back button, or key 9 to repeat this announcement.",
     "a11y-comments": "Opens the page where you can create comments and vote up or down other comments.",
     "a11y-statistics": "Opens the statistics for the question collections.",
-    "a11y-live-feedback": "Opens the live feedback.",
-    "a11y-content-groups": "In this session there are {{count}} Question collections. Tab between them and press Enter to answer the questions of the collection.",
-    "a11y-no-content-groups": "There are no questions in this session yet.",
+    "a11y-live-survey": "Opens the live survey.",
+    "a11y-content-groups": "In this room there are {{count}} Question collections. Tab between them and press Enter to answer the questions of the collection.",
+    "a11y-no-content-groups": "There are no questions in this room yet.",
     "a11y-enter-content-group": "Opens the content group {{name}}.",
-    "a11y-live-feedback-disabled": "The live survey is currently not active.",
+    "a11y-live-survey-disabled": "The live survey is currently not active.",
     "answer-statistics": "Statistics",
     "comments": "Comments",
-    "live-feedback": "Live feedback",
+    "live-survey": "Live Survey",
     "no-contents": "There are no questions yet."
   },
   "statistic": {
     "a11y-message-overview": "You are now on the statistics overview. Press the Enter key to get information about key combinations or call the announcement later with the Escape key.",
     "a11y-message-evaluation": "You are now in the evaluation of the question {{content}}. Navigate trough the answers with the tab key or the press key 0 to return to the statistics overview.",
-    "a11y-shortcuts-overview": "Press the Tab key to select the question collection. Then navigate through the results of the collection. Press key 9 to go to the user menu, key 0 to go back to the session overview or the Escape key to repeat this announcement.",
+    "a11y-shortcuts-overview": "Press the Tab key to select the question collection. Then navigate through the results of the collection. Press key 9 to go to the user menu, key 0 to go back to the room overview or the Escape key to repeat this announcement.",
     "a11y-group-progress": "{{percent}} percent of the questions in the collection {{group}} were answered correctly.",
     "a11y-content-result": "The question {{content}} has been answered by {{count}} persons so far, {{abstentions}} persons have abstained.",
     "a11y-choice-result": "The question was answered correctly by {{percent}} percent.",

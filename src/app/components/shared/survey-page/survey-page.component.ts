@@ -18,11 +18,11 @@ import { ActivatedRoute } from '@angular/router';
 import { AnnounceService } from '../../../services/util/announce.service';
 
 @Component({
-  selector: 'app-feedback-barometer-page',
-  templateUrl: './feedback-barometer-page.component.html',
-  styleUrls: ['./feedback-barometer-page.component.scss']
+  selector: 'app-survey-page',
+  templateUrl: './survey-page.component.html',
+  styleUrls: ['./survey-page.component.scss']
 })
-export class FeedbackBarometerPageComponent implements OnInit, OnDestroy, AfterContentInit {
+export class SurveyPageComponent implements OnInit, OnDestroy, AfterContentInit {
 
   feedbackLabels = ['sentiment_very_satisfied', 'sentiment_satisfied', 'sentiment_dissatisfied', 'sentiment_very_dissatisfied'];
   surveyLabels = ['survey-a', 'survey-b', 'survey-c', 'survey-d'];
@@ -68,13 +68,13 @@ export class FeedbackBarometerPageComponent implements OnInit, OnDestroy, AfterC
     } else {
       if (!this.isClosed) {
         if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit1) === true) {
-          document.getElementById('feedback-button-0').focus();
+          document.getElementById('survey-button-0').focus();
         } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit2) === true) {
-          document.getElementById('feedback-button-1').focus();
+          document.getElementById('survey-button-1').focus();
         } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit3) === true) {
-          document.getElementById('feedback-button2-2').focus();
+          document.getElementById('survey-button2-2').focus();
         } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit4) === true) {
-          document.getElementById('feedback-button2-3').focus();
+          document.getElementById('survey-button2-3').focus();
         }
       } else {
         this.announceStatus();
@@ -104,25 +104,25 @@ export class FeedbackBarometerPageComponent implements OnInit, OnDestroy, AfterC
   }
 
   announceKeys() {
-    this.announceService.announce('feedback.a11y-keys');
+    this.announceService.announce('survey.a11y-keys');
   }
 
   announceStatus() {
-    this.translateService.get(this.isClosed ? 'feedback.a11y-stopped' : 'feedback.a11y-started').subscribe(status => {
-      this.announceService.announce('feedback.a11y-status', { status: status, state0: this.survey[0].count, state1: this.survey[1].count,
+    this.translateService.get(this.isClosed ? 'survey.a11y-stopped' : 'survey.a11y-started').subscribe(status => {
+      this.announceService.announce('survey.a11y-status', { status: status, state0: this.survey[0].count, state1: this.survey[1].count,
         state2: this.survey[2].count, state3: this.survey[3].count });
     });
   }
 
   announceType() {
-    this.translateService.get(this.type === this.typeSurvey ? 'feedback.type-survey' : 'feedback.type-feedback').subscribe(type => {
-      this.announceService.announce('feedback.a11y-selected-type', { type: type });
+    this.translateService.get(this.type === this.typeSurvey ? 'survey.a11y-type-survey' : 'survey.a11y-type-feedback').subscribe(type => {
+      this.announceService.announce('survey.a11y-selected-type', { type: type });
     });
   }
 
   announceAnswer(answerLabelKey: string) {
     this.translateService.get(answerLabelKey).subscribe(answer => {
-      this.announceService.announce('feedback.a11y-selected-answer', { answer: answer });
+      this.announceService.announce('survey.a11y-selected-answer', { answer: answer });
     });
   }
 
@@ -148,7 +148,7 @@ export class FeedbackBarometerPageComponent implements OnInit, OnDestroy, AfterC
     const labels = this.type === this.typeSurvey ? this.surveyLabels : this.feedbackLabels;
     for (let i = 0; i < this.surveyLabels.length; i++) {
       const label = labels[i];
-      const section = 'feedback.';
+      const section = 'survey.';
       const subsection = 'a11y-';
       this.survey[i] = new Survey(i, label, section + label, section + subsection + label, 0);
     }
@@ -198,10 +198,10 @@ export class FeedbackBarometerPageComponent implements OnInit, OnDestroy, AfterC
 
   toggle() {
     this.updateRoom(!this.isClosed);
-    const keys = [this.isClosed ? 'feedback.a11y-started' : 'feedback.a11y-stopped',
-                  this.isClosed ? 'feedback.a11y-stop' : 'feedback.a11y-start'];
+    const keys = [this.isClosed ? 'survey.a11y-started' : 'survey.a11y-stopped',
+                  this.isClosed ? 'survey.a11y-stop' : 'survey.a11y-start'];
     this.translateService.get(keys).subscribe(status => {
-      this.announceService.announce('feedback.a11y-status-changed',
+      this.announceService.announce('survey.a11y-status-changed',
         { status: status[keys[0]], nextStatus: status[keys[1]] });
     });
   }

@@ -1,9 +1,9 @@
 <div fxLayout="column">
-  <app-room-join [inputA11yString]="'home-page.a11y-session-join'"></app-room-join>
+  <app-room-join [inputA11yString]="'home-page.a11y-room-join'"></app-room-join>
   <div fxLayout="row" fxLayoutAlign="center">
-    <button class="button-primary" mat-raised-button (click)="openCreateRoomDialog()" id="create-session-button">
+    <button class="button-primary" mat-raised-button (click)="openCreateRoomDialog()" id="create-room-button">
       <mat-icon>add</mat-icon>
-      {{ 'home-page.create-session' | translate }}
+      {{ 'home-page.create-room' | translate }}
     </button>
   </div>
   <div fxLayout="row" fxLayoutAlign="center" fxLayoutGap="15px">
