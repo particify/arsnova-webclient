@@ -23,8 +23,8 @@
     "your-answer": "Your answer",
     "has-abstained": "You have abstained!",
     "has-voted": "You have voted!",
-    "has-answered": "You have answered the comment!",
-    "questions-locked": "No comments have been released yet!",
+    "has-answered": "You have answered the question!",
+    "questions-locked": "No questions have been released yet!",
     "go-to-stats": "Go to the results"
   },
   "comment-list": {
