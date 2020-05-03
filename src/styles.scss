@@ -210,8 +210,7 @@ div {
   .mat-radio-checked & {
     border-color: var(--secondary) !important;
   }
-
-  border-color: var(--on-surface);
+  border-color: var(--on-surface)!important;
 }
 
 .mat-radio-inner-circle {
@@ -224,6 +223,10 @@ div {
 
 .mat-list-item-content > mat-radio-button > .mat-radio-label > .mat-radio-label-content {
   padding-left: 18px !important;
+}
+
+.mat-radio-label-content {
+  color: var(--on-surface)!important;
 }
 
 // Mat Checkbox
@@ -239,6 +242,7 @@ div {
 
 .mat-checkbox-label {
   margin-left: 10px;
+  color: var(--on-surface)!important;
 }
 
 .mat-checkbox-layout {
