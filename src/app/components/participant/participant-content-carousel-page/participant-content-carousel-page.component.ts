@@ -101,12 +101,16 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
       }
     } else {
       if (index < this.contents.length - 1) {
+        let wait = 200;
+        if (this.contents[index].state.responsesVisible) {
+          wait += 600;
+        }
         setTimeout(() => {
           this.stepper.next();
           setTimeout(() => {
             document.getElementById('step').focus();
           }, 200);
-        }, 500);
+        }, wait);
       } else {
         this.announce('answer.a11y-last-content');
       }
