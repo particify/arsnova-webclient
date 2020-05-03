@@ -27,6 +27,7 @@ import { SettingsComponent } from './settings/settings.component';
 import { SettingsPageComponent } from './settings-page/settings-page.component';
 import { LooseContentComponent } from './loose-content/loose-content.component';
 import { GroupContentComponent } from './group-content/group-content.component';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 @NgModule({
   imports: [
@@ -35,6 +36,7 @@ import { GroupContentComponent } from './group-content/group-content.component';
     EssentialsModule,
     SharedModule,
     ModeratorModule,
+    DragDropModule,
     TranslateModule.forChild({
       loader: {
         provide: TranslateLoader,

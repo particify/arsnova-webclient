@@ -16,6 +16,7 @@ import { AnnounceService } from '../../../services/util/announce.service';
 import { KeyboardUtils } from '../../../utils/keyboard';
 import { KeyboardKey } from '../../../utils/keyboard/keys';
 import { EventService } from '../../../services/util/event.service';
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'app-group-content',
@@ -27,7 +28,7 @@ export class GroupContentComponent extends ContentListComponent implements OnIni
   @ViewChild('nameInput', { static: true }) nameInput: ElementRef;
 
   collectionName: string;
-  isTitleEdit = false;
+  isInEditMode = false;
   updatedName: string;
   baseURL = 'creator/room/';
   unlocked = false;
@@ -121,12 +122,12 @@ export class GroupContentComponent extends ContentListComponent implements OnIni
 
   goInEditMode(): void {
     this.updatedName = this.collectionName;
-    this.isTitleEdit = true;
+    this.isInEditMode = true;
     this.nameInput.nativeElement.focus();
   }
 
   leaveEditMode(): void {
-    this.isTitleEdit = false;
+    this.isInEditMode = false;
   }
 
   updateURL(): void {
@@ -134,14 +135,20 @@ export class GroupContentComponent extends ContentListComponent implements OnIni
   }
 
   saveGroupName(): void {
-    if (this.updatedName !== this.collectionName) {
+    const newContentIdOrder = this.contents.map(c => c.id);
+    if (this.updatedName !== this.collectionName || this.contentGroup.contentIds !== newContentIdOrder) {
       const oldGroup = new ContentGroup();
       oldGroup.id = this.contentGroup.id;
       oldGroup.revision = this.contentGroup.revision;
       oldGroup.roomId = this.contentGroup.roomId;
       oldGroup.name = this.contentGroup.name;
       this.contentGroupService.delete(oldGroup).subscribe(() => {
+        console.log(`oldGroup to delete:`);
+        console.log(oldGroup);
         this.contentGroup.name = this.updatedName;
+        this.contentGroup.contentIds = newContentIdOrder;
+        console.log(`newGroup to delete:`);
+        console.log(this.contentGroup);
         this.contentGroupService.post(this.room.id, this.updatedName, this.contentGroup).subscribe(() => {
           this.contentGroupService.updateGroupInMemoryStorage(this.collectionName, this.updatedName);
           this.collectionName = this.updatedName;
@@ -184,4 +191,9 @@ export class GroupContentComponent extends ContentListComponent implements OnIni
       this.toggleDirectAnswer(content, this.directAnswer);
     }
   }
+
+  drop(event: CdkDragDrop<Content[]>) {
+    moveItemInArray(this.contents, event.previousIndex, event.currentIndex);
+  }
+
 }
