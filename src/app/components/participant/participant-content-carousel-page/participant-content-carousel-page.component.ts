@@ -90,7 +90,8 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
             this.startIndex = i;
             this.stepper.onClick(this.startIndex);
             if (this.startIndex > 2) {
-              this.stepper.headerPos = this.startIndex - (this.startIndex < this.contents.length - 2 ? 2 : 4);
+              const diff = this.startIndex < (this.contents.length - 3) ? 2 : 5 - ((this.contents.length - 1) - this.startIndex);
+              this.stepper.headerPos = this.startIndex - diff;
               this.stepper.moveHeaderRight();
             }
             this.started = true;
