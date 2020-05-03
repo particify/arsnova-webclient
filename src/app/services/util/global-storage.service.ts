@@ -1,6 +1,4 @@
 import { Injectable } from '@angular/core';
-import { TranslateService } from '@ngx-translate/core';
-import { ActivatedRoute } from '@angular/router';
 
 export enum LocalStorageKey {
   ROOM_ACCESS = 'ROOM_ACCESS',
@@ -19,7 +17,8 @@ export enum MemoryStorageKey {
   IS_SAFARI = 'IS_SAFARI',
   MODERATION_ENABLED = 'MODERATION_ENABLED',
   CONTENT_GROUPS = 'CONTENT_GROUPS',
-  LAST_GROUP = 'LAST_GROUP'
+  LAST_GROUP = 'LAST_GROUP',
+  LAST_CONTENT = 'LAST_CONTENT'
 }
 
 const APP_PREFIX = 'ARS_';
@@ -76,5 +75,9 @@ export class GlobalStorageService {
 
   deleteLocalStorageItem(key: LocalStorageKey) {
     localStorage.removeItem(key);
+  }
+
+  deleteMemoryStorageItem(key: MemoryStorageKey) {
+    this.memory.delete(key);
   }
 }

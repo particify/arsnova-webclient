@@ -3,8 +3,8 @@ import { NotificationService } from '../../../services/util/notification.service
 import { TranslateService } from '@ngx-translate/core';
 import { LanguageService } from '../../../services/util/language.service';
 import { AuthenticationService } from '../../../services/http/authentication.service';
-import { ActivatedRoute } from '@angular/router';
-import { GlobalStorageService, LocalStorageKey } from '../../../services/util/global-storage.service';
+import { ActivatedRoute, Router } from '@angular/router';
+import { GlobalStorageService, LocalStorageKey, MemoryStorageKey } from '../../../services/util/global-storage.service';
 
 @Component({
   selector: 'app-content-participant',
@@ -24,7 +24,8 @@ export class ContentParticipantComponent implements OnInit {
     protected translateService: TranslateService,
     protected langService: LanguageService,
     protected route: ActivatedRoute,
-    protected globalStorageService: GlobalStorageService
+    protected globalStorageService: GlobalStorageService,
+    protected router: Router
   ) {
     langService.langEmitter.subscribe(lang => translateService.use(lang));
   }
@@ -43,6 +44,11 @@ export class ContentParticipantComponent implements OnInit {
 
   sendStatusToParent() {
     this.message.emit(this.alreadySent);
+  }
+
+  goToStats(contentId: string) {
+    this.globalStorageService.setMemoryItem(MemoryStorageKey.LAST_CONTENT, contentId);
+    this.router.navigate([`/participant/room/${this.shortId}/statistics/${contentId}`]);
   }
 
   submitAnswer() {

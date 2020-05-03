@@ -16,7 +16,7 @@
         })) }}</div>
       <span class="fill-remaining-space"></span>
       <button *ngIf="alreadySent" mat-icon-button matTooltip="{{'answer.go-to-stats' | translate}}"
-              routerLink="/participant/room/{{shortId}}/statistics/{{content.id}}">
+              (click)="goToStats(content.id)">
         <mat-icon class="stat-icon">
           insert_chart
         </mat-icon>

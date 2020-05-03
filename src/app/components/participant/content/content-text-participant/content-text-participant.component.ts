@@ -8,7 +8,7 @@ import { LanguageService } from '../../../../services/util/language.service';
 import { ContentType } from '../../../../models/content-type.enum';
 import { EventService } from '../../../../services/util/event.service';
 import { AuthenticationService } from '../../../../services/http/authentication.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { GlobalStorageService } from '../../../../services/util/global-storage.service';
 import { ContentParticipantComponent } from '../content-participant.component';
 
@@ -35,9 +35,10 @@ export class ContentTextParticipantComponent extends ContentParticipantComponent
     protected langService: LanguageService,
     protected eventService: EventService,
     protected route: ActivatedRoute,
-    protected globalStorageService: GlobalStorageService
+    protected globalStorageService: GlobalStorageService,
+    protected router: Router
   ) {
-    super(authenticationService, notificationService, translateService, langService, route, globalStorageService);
+    super(authenticationService, notificationService, translateService, langService, route, globalStorageService, router);
   }
 
   initAnswer(userId: string) {

@@ -9,7 +9,7 @@ import { ActivatedRoute } from '@angular/router';
 import { RoomService } from '../../../services/http/room.service';
 import { KeyboardUtils } from '../../../utils/keyboard';
 import { KeyboardKey } from '../../../utils/keyboard/keys';
-import { GlobalStorageService, LocalStorageKey } from '../../../services/util/global-storage.service';
+import { GlobalStorageService, LocalStorageKey, MemoryStorageKey } from '../../../services/util/global-storage.service';
 import { AnnounceService } from '../../../services/util/announce.service';
 
 @Component({
@@ -29,8 +29,11 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
   shortId: string;
   isLoading = true;
   alreadySent = new Map<number, boolean>();
-  startIndex = 0;
-  started = false;
+  status = {
+    LAST_CONTENT: 'LAST_CONTENT',
+    FIRST_UNANSWERED: 'FIRST_UNANSWERED'
+  };
+  started: string;
 
   constructor(
     private contentService: ContentService,
@@ -71,6 +74,7 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
               this.contents.push(content);
             }
           }
+          this.checkIfLastContentExists();
           this.isLoading = false;
         });
       });
@@ -81,25 +85,43 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
     this.announceService.announce(key);
   }
 
+  checkIfLastContentExists(): boolean {
+    const lastContentId = this.globalStorageService.getMemoryItem(MemoryStorageKey.LAST_CONTENT);
+    if (lastContentId) {
+      this.started = this.status.LAST_CONTENT;
+      this.globalStorageService.deleteMemoryStorageItem(MemoryStorageKey.LAST_CONTENT);
+      const contentIndex = this.contents.map(function (content) { return content.id; } ).indexOf(lastContentId);
+      setTimeout(() => {
+        this.initStepper(contentIndex);
+      }, 100);
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  initStepper(index: number) {
+    this.stepper.onClick(index);
+    if (index > 2) {
+      const diff = index < (this.contents.length - 3) ? 2 : 5 - ((this.contents.length - 1) - index);
+      this.stepper.headerPos = index - diff;
+      this.stepper.moveHeaderRight();
+    }
+  }
+
   receiveSentStatus($event, index: number) {
     this.alreadySent.set(index, $event);
-    if (!this.started) {
+    if (this.started !== this.status.LAST_CONTENT) {
       if (this.alreadySent.size === this.contents.length) {
         for (let i = 0; i < this.alreadySent.size; i++) {
           if (this.alreadySent.get(i) === false) {
-            this.startIndex = i;
-            this.stepper.onClick(this.startIndex);
-            if (this.startIndex > 2) {
-              const diff = this.startIndex < (this.contents.length - 3) ? 2 : 5 - ((this.contents.length - 1) - this.startIndex);
-              this.stepper.headerPos = this.startIndex - diff;
-              this.stepper.moveHeaderRight();
-            }
-            this.started = true;
+            this.initStepper(i);
+            this.started = this.status.FIRST_UNANSWERED;
             break;
           }
         }
       }
-    } else {
+    } else if (!this.started) {
       if (index < this.contents.length - 1) {
         let wait = 200;
         if (this.contents[index].state.responsesVisible) {
