@@ -127,6 +127,10 @@ export class ContentChoiceParticipantComponent implements OnInit {
     }
   }
 
+  selectSingleAnswer(answerLabel: string) {
+    this.selectedSingleAnswer = answerLabel;
+  }
+
   submitAnswer(): void {
     const selectedAnswers: number[] = [];
     if (this.content.multiple) {

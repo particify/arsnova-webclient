@@ -24,7 +24,7 @@
     </div>
     <form (ngSubmit)="submitAnswer()" id="answerForm">
       <mat-list *ngIf="content.multiple">
-        <mat-list-item *ngFor="let answer of checkedAnswers" [ngClass]="{'disabled': alreadySent}">
+        <mat-list-item *ngFor="let answer of checkedAnswers">
           <mat-checkbox [disabled]="true" *ngIf="alreadySent" [checked]="answer.checked" name="answer">
             {{ answer.answerOption.label }}
           </mat-checkbox>
@@ -42,11 +42,10 @@
           <p>{{'answer.has-abstained' | translate}}</p>
         </div>
       </mat-list>
-      <mat-radio-group [disabled]="alreadySent" *ngIf="!content.multiple" [(ngModel)]="selectedSingleAnswer"
-                       name="Radio">
+      <mat-radio-group [disabled]="alreadySent" *ngIf="!content.multiple" name="Radio">
         <mat-list>
-          <mat-list-item *ngFor="let answer of checkedAnswers" [ngClass]="{'disabled': alreadySent}">
-            <mat-radio-button
+          <mat-list-item *ngFor="let answer of checkedAnswers">
+            <mat-radio-button (change)="selectSingleAnswer(answer.answerOption.label)"
               aria-label="{{ 'answer.a11y-select-answer' | translate: {answer: answer.answerOption.label} }}"
               [checked]="answer.checked" [value]="answer.answerOption.label" name="answer">
               {{ answer.answerOption.label }}
@@ -67,7 +66,7 @@
           </div>
         </mat-list>
       </mat-radio-group>
-      <div fxLayoutAlign="center" fxLayoutGap="20px" class="buttons">
+      <div fxLayoutAlign="center" fxLayoutGap="20px" class="buttons" [ngClass]="{'disabled': alreadySent}">
         <button tabindex="{{alreadySent ? '-1' : '0'}}" mat-raised-button *ngIf="content.abstentionsAllowed"
                 class="button-secondary"
                 [ngClass]="{'disabled' : alreadySent}" (click)="abstain($event)" aria-labelledby="abstain">
