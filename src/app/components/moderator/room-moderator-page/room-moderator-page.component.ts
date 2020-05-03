@@ -9,13 +9,14 @@ import { LanguageService } from '../../../services/util/language.service';
 import { WsCommentServiceService } from '../../../services/websockets/ws-comment-service.service';
 import { CommentService } from '../../../services/http/comment.service';
 import { ContentService } from '../../../services/http/content.service';
-import { Message } from '@stomp/stompjs';
+import { Message, IMessage } from '@stomp/stompjs';
 import { NotificationService } from '../../../services/util/notification.service';
 import { EventService } from '../../../services/util/event.service';
 import { KeyboardUtils } from '../../../utils/keyboard';
 import { KeyboardKey } from '../../../utils/keyboard/keys';
 import { GlobalStorageService, LocalStorageKey } from '../../../services/util/global-storage.service';
 import { AnnounceService } from '../../../services/util/announce.service';
+import { Observable, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-room-moderator-page',
@@ -27,6 +28,8 @@ export class RoomModeratorPageComponent extends RoomPageComponent implements OnI
   room: Room;
   moderatorCommentCounter: number;
   viewModuleCount = 1;
+  moderationCommentWatch: Observable<IMessage>;
+  moderationSub: Subscription;
 
   constructor(
     protected location: Location,
@@ -105,6 +108,10 @@ export class RoomModeratorPageComponent extends RoomPageComponent implements OnI
     }
 
     this.commentWatch = this.wsCommentService.getCommentStream(this.room.id);
+    this.moderationCommentWatch = this.wsCommentService.getModeratorCommentStream(this.room.id);
+
+    this.sub.unsubscribe();
+
     this.sub = this.commentWatch.subscribe((message: Message) => {
       const msg = JSON.parse(message.body);
       const payload = msg.payload;
@@ -118,15 +125,22 @@ export class RoomModeratorPageComponent extends RoomPageComponent implements OnI
             case 'ack':
               const isNowAck = <boolean>value;
               if (isNowAck) {
-                this.commentCounter = this.commentCounter + 1;
                 this.moderatorCommentCounter = this.moderatorCommentCounter - 1;
               } else {
                 this.commentCounter = this.commentCounter - 1;
-                this.moderatorCommentCounter = this.moderatorCommentCounter + 1;
               }
               break;
           }
         }
+      }
+    });
+    this.moderationSub = this.moderationCommentWatch.subscribe((message: Message) => {
+      const msg = JSON.parse(message.body);
+      const payload = msg.payload;
+      if (msg.type === 'CommentCreated') {
+        this.moderatorCommentCounter = this.moderatorCommentCounter + 1;
+      } else if (msg.type === 'CommentDeleted') {
+        this.moderatorCommentCounter = this.moderatorCommentCounter - 1;
       }
     });
   }
