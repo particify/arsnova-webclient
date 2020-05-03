@@ -1,22 +1,23 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { ContentText } from '../../../models/content-text';
-import { ContentAnswerService } from '../../../services/http/content-answer.service';
-import { TextAnswer } from '../../../models/text-answer';
-import { NotificationService } from '../../../services/util/notification.service';
+import { ContentText } from '../../../../models/content-text';
+import { ContentAnswerService } from '../../../../services/http/content-answer.service';
+import { TextAnswer } from '../../../../models/text-answer';
+import { NotificationService } from '../../../../services/util/notification.service';
 import { TranslateService } from '@ngx-translate/core';
-import { LanguageService } from '../../../services/util/language.service';
-import { ContentType } from '../../../models/content-type.enum';
-import { EventService } from '../../../services/util/event.service';
-import { AuthenticationService } from '../../../services/http/authentication.service';
-import { ActivatedRoute } from '@angular/router';
-import { GlobalStorageService, LocalStorageKey } from '../../../services/util/global-storage.service';
+import { LanguageService } from '../../../../services/util/language.service';
+import { ContentType } from '../../../../models/content-type.enum';
+import { EventService } from '../../../../services/util/event.service';
+import { AuthenticationService } from '../../../../services/http/authentication.service';
+import { ActivatedRoute, Router } from '@angular/router';
+import { GlobalStorageService } from '../../../../services/util/global-storage.service';
+import { ContentParticipantComponent } from '../content-participant.component';
 
 @Component({
   selector: 'app-content-text-participant',
   templateUrl: './content-text-participant.component.html',
   styleUrls: ['./content-text-participant.component.scss']
 })
-export class ContentTextParticipantComponent implements OnInit {
+export class ContentTextParticipantComponent extends ContentParticipantComponent implements OnInit {
 
   @Input() content: ContentText;
   @Output() message = new EventEmitter<boolean>();
@@ -24,27 +25,23 @@ export class ContentTextParticipantComponent implements OnInit {
   givenAnswer: TextAnswer;
 
   textAnswer = '';
-  alreadySent = false;
-  isLoading = true;
   sentMessage: string;
-  shortId: string;
 
   constructor(
-    private authenticationService: AuthenticationService,
-    private answerService: ContentAnswerService,
-    private notificationService: NotificationService,
-    private translateService: TranslateService,
+    protected authenticationService: AuthenticationService,
+    protected answerService: ContentAnswerService,
+    protected notificationService: NotificationService,
+    protected translateService: TranslateService,
     protected langService: LanguageService,
-    public eventService: EventService,
+    protected eventService: EventService,
     protected route: ActivatedRoute,
-    private globalStorageService: GlobalStorageService
+    protected globalStorageService: GlobalStorageService,
+    protected router: Router
   ) {
-    langService.langEmitter.subscribe(lang => translateService.use(lang));
+    super(authenticationService, notificationService, translateService, langService, route, globalStorageService, router);
   }
 
-  ngOnInit() {
-    this.translateService.use(this.globalStorageService.getLocalStorageItem(LocalStorageKey.LANGUAGE));
-    const userId = this.authenticationService.getUser().id;
+  initAnswer(userId: string) {
     this.answerService.getTextAnswerByContentIdUserIdCurrentRound(this.content.id, userId).subscribe(answer => {
       if (answer) {
         this.givenAnswer = answer;
@@ -57,9 +54,6 @@ export class ContentTextParticipantComponent implements OnInit {
         this.getAbstainedMessage();
       }
       this.isLoading = false;
-    });
-    this.route.params.subscribe(params => {
-      this.shortId = params['shortId'];
     });
   }
 
