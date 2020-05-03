@@ -2,8 +2,8 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ParticipantRoutingModule } from './participant-routing.module';
 import { EssentialsModule } from '../essentials/essentials.module';
-import { ContentChoiceParticipantComponent } from './content-choice-participant/content-choice-participant.component';
-import { ContentTextParticipantComponent } from './content-text-participant/content-text-participant.component';
+import { ContentChoiceParticipantComponent } from './content/content-choice-participant/content-choice-participant.component';
+import { ContentTextParticipantComponent } from './content/content-text-participant/content-text-participant.component';
 import { RoomParticipantPageComponent } from './room-participant-page/room-participant-page.component';
 import { SharedModule } from '../shared/shared.module';
 import { ParticipantContentCarouselPageComponent } from './participant-content-carousel-page/participant-content-carousel-page.component';
@@ -14,6 +14,7 @@ import { MarkdownModule } from 'ngx-markdown';
 import { StepperComponent } from './stepper/stepper.component';
 import { CdkStepperModule } from '@angular/cdk/stepper';
 import { MatRippleModule } from '@angular/material/core';
+import { ContentParticipantComponent } from './content/content-participant.component';
 
 @NgModule({
   imports: [
@@ -34,6 +35,7 @@ import { MatRippleModule } from '@angular/material/core';
     MatRippleModule
   ],
   declarations: [
+    ContentParticipantComponent,
     ContentChoiceParticipantComponent,
     ContentTextParticipantComponent,
     RoomParticipantPageComponent,

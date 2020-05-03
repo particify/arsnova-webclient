@@ -1,15 +1,16 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { ContentChoice } from '../../../models/content-choice';
-import { AnswerOption } from '../../../models/answer-option';
-import { ContentAnswerService } from '../../../services/http/content-answer.service';
-import { NotificationService } from '../../../services/util/notification.service';
-import { ChoiceAnswer } from '../../../models/choice-answer';
-import { ContentType } from '../../../models/content-type.enum';
+import { ContentChoice } from '../../../../models/content-choice';
+import { AnswerOption } from '../../../../models/answer-option';
+import { ContentAnswerService } from '../../../../services/http/content-answer.service';
+import { NotificationService } from '../../../../services/util/notification.service';
+import { ChoiceAnswer } from '../../../../models/choice-answer';
+import { ContentType } from '../../../../models/content-type.enum';
 import { TranslateService } from '@ngx-translate/core';
-import { LanguageService } from '../../../services/util/language.service';
-import { AuthenticationService } from '../../../services/http/authentication.service';
+import { LanguageService } from '../../../../services/util/language.service';
+import { AuthenticationService } from '../../../../services/http/authentication.service';
 import { ActivatedRoute } from '@angular/router';
-import { GlobalStorageService, LocalStorageKey } from '../../../services/util/global-storage.service';
+import { GlobalStorageService } from '../../../../services/util/global-storage.service';
+import { ContentParticipantComponent } from '../content-participant.component';
 
 class CheckedAnswer {
   answerOption: AnswerOption;
@@ -26,7 +27,7 @@ class CheckedAnswer {
   templateUrl: './content-choice-participant.component.html',
   styleUrls: ['./content-choice-participant.component.scss']
 })
-export class ContentChoiceParticipantComponent implements OnInit {
+export class ContentChoiceParticipantComponent extends ContentParticipantComponent implements OnInit {
 
   @Input() content: ContentChoice;
   @Output() message = new EventEmitter<boolean>();
@@ -45,22 +46,23 @@ export class ContentChoiceParticipantComponent implements OnInit {
   allAnswers = '';
 
   constructor(
-    private authenticationService: AuthenticationService,
-    private answerService: ContentAnswerService,
-    private notificationService: NotificationService,
-    private translateService: TranslateService,
+    protected authenticationService: AuthenticationService,
+    protected answerService: ContentAnswerService,
+    protected notificationService: NotificationService,
+    protected translateService: TranslateService,
     protected langService: LanguageService,
     protected route: ActivatedRoute,
-    private globalStorageService: GlobalStorageService
+    protected globalStorageService: GlobalStorageService
   ) {
-    langService.langEmitter.subscribe(lang => translateService.use(lang));
+    super(authenticationService, notificationService, translateService, langService, route, globalStorageService);
   }
 
-  ngOnInit() {
-    this.initAnswers();
-    const userId = this.authenticationService.getUser().id;
-    this.getCorrectAnswer();
+  initAnswer(userId: string) {
     this.answerService.getChoiceAnswerByContentIdUserIdCurrentRound(this.content.id, userId).subscribe(answer => {
+      for (const answerOption of this.content.options) {
+        this.checkedAnswers.push(new CheckedAnswer(answerOption, false));
+      }
+      this.getCorrectAnswer();
       if (answer) {
         if (answer.selectedChoiceIndexes && answer.selectedChoiceIndexes.length > 0) {
           for (const i of answer.selectedChoiceIndexes) {
@@ -78,21 +80,7 @@ export class ContentChoiceParticipantComponent implements OnInit {
       }
       this.sendStatusToParent();
       this.isLoading = false;
-      });
-    this.translateService.use(this.globalStorageService.getLocalStorageItem(LocalStorageKey.LANGUAGE));
-    this.route.params.subscribe(params => {
-      this.shortId = params['shortId'];
     });
-  }
-
-  sendStatusToParent() {
-    this.message.emit(this.alreadySent);
-  }
-
-  initAnswers(): void {
-    for (const answerOption of this.content.options) {
-      this.checkedAnswers.push(new CheckedAnswer(answerOption, false));
-    }
   }
 
   getCorrectAnswer() {
