@@ -31,7 +31,8 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
   alreadySent = new Map<number, boolean>();
   status = {
     LAST_CONTENT: 'LAST_CONTENT',
-    FIRST_UNANSWERED: 'FIRST_UNANSWERED'
+    FIRST_UNANSWERED: 'FIRST_UNANSWERED',
+    NORMAL: 'NORMAL'
   };
   started: string;
 
@@ -93,6 +94,7 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
       const contentIndex = this.contents.map(function (content) { return content.id; } ).indexOf(lastContentId);
       setTimeout(() => {
         this.initStepper(contentIndex);
+        this.started = this.status.NORMAL;
       }, 100);
       return true;
     } else {
@@ -111,7 +113,7 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
 
   receiveSentStatus($event, index: number) {
     this.alreadySent.set(index, $event);
-    if (this.started !== this.status.LAST_CONTENT) {
+    if (!this.started) {
       if (this.alreadySent.size === this.contents.length) {
         for (let i = 0; i < this.alreadySent.size; i++) {
           if (this.alreadySent.get(i) === false) {
@@ -121,7 +123,7 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
           }
         }
       }
-    } else if (!this.started) {
+    } else if (this.started !== this.status.LAST_CONTENT) {
       if (index < this.contents.length - 1) {
         let wait = 200;
         if (this.contents[index].state.responsesVisible) {
