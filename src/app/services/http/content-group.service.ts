@@ -45,7 +45,7 @@ export class ContentGroupService extends BaseHttpService {
     delete entity.id;
     delete entity.revision;
     const encodedName = encodeURIComponent(name);
-    console.log("coming into the service");
+    console.log('coming into the service');
     console.log(entity);
     const connectionUrl = `${this.apiUrl.base + this.apiUrl.rooms}/${roomId}${this.apiUrl.contentGroup}/${encodedName}`;
     return this.http.post<ContentGroup>(connectionUrl, entity, httpOptions).pipe(
@@ -103,12 +103,16 @@ export class ContentGroupService extends BaseHttpService {
 
   updateGroupInMemoryStorage(oldName: string, newName: string) {
     const groups: string[] = this.globalStorageService.getMemoryItem(MemoryStorageKey.CONTENT_GROUPS);
-    for (let i = 0; i < groups.length; i++) {
-      if (groups[i] === oldName) {
-        groups[i] = newName;
-        this.globalStorageService.setMemoryItem(MemoryStorageKey.LAST_GROUP, groups[i]);
-        break;
+    if (groups) {
+      for (let i = 0; i < groups.length; i++) {
+        if (groups[i] === oldName) {
+          groups[i] = newName;
+          this.globalStorageService.setMemoryItem(MemoryStorageKey.LAST_GROUP, groups[i]);
+          break;
+        }
       }
+    } else {
+      this.globalStorageService.setMemoryItem(MemoryStorageKey.LAST_GROUP, newName);
     }
     this.globalStorageService.setMemoryItem(MemoryStorageKey.CONTENT_GROUPS, groups);
   }
