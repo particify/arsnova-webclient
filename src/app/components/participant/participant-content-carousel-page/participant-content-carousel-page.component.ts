@@ -86,7 +86,7 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
     this.announceService.announce(key);
   }
 
-  checkIfLastContentExists(): boolean {
+  checkIfLastContentExists() {
     const lastContentId = this.globalStorageService.getMemoryItem(MemoryStorageKey.LAST_CONTENT);
     if (lastContentId) {
       this.started = this.status.LAST_CONTENT;
@@ -95,10 +95,7 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
       setTimeout(() => {
         this.initStepper(contentIndex);
         this.started = this.status.NORMAL;
-      }, 100);
-      return true;
-    } else {
-      return false;
+      }, 200);
     }
   }
 
@@ -123,7 +120,7 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
           }
         }
       }
-    } else if (this.started !== this.status.LAST_CONTENT) {
+    } else if (this.started === this.status.NORMAL) {
       if (index < this.contents.length - 1) {
         let wait = 200;
         if (this.contents[index].state.responsesVisible) {
