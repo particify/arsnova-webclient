@@ -10,7 +10,7 @@
     <div fxLayout="row">
       <div class="cardTitle">
         <h2 *ngIf="!isInTitleEditMode" [style.fontSize.px]=10>{{ collectionName }}</h2>
-        <mat-form-field class="mat-focused" [ngClass]="{'activeInput': isTitleEdit, 'inactiveInput': !isInTitleEditMode}">
+        <mat-form-field class="mat-focused" [ngClass]="{'activeInput': isInTitleEditMode, 'inactiveInput': !isInTitleEditMode}">
           <input #nameInput (focus)="eventService.makeFocusOnInputTrue()" (blur)="eventService.makeFocusOnInputFalse()"
                  matInput maxlength="25" [(ngModel)]="updatedName" aria-labelledby="enter-content-group-name">
         </mat-form-field>
@@ -56,18 +56,18 @@
     </mat-grid-list>
     <mat-card-content>
       <app-loading-indicator *ngIf="isLoading" [size]="50"></app-loading-indicator>
-      <div *ngIf="!isLoading" fxLayout="row" fxLayoutAlign="end">
+      <div *ngIf="!isLoading" fxLayout="row" fxLayoutAlign="end center">
         <button *ngIf="!isInSortingMode" mat-icon-button class="editButtons sort-buttons" (click)="goInSortingMode()" id="edit-group-sort"
                 matTooltip="{{ 'content.sort-content-group' | translate}}" aria-labelledby="edit-content-group-sort">
-          <mat-icon>sort</mat-icon>
+          <mat-icon>list</mat-icon>
         </button>
-        <button *ngIf="isInSortingMode" mat-icon-button class="editButtons sort-buttons" (click)="leaveSortingMode()"
-                matTooltip="{{ 'content.abort' | translate}}" (keyup.enter)="leaveTitleEditMode()" aria-labelledby="discard-changes">
-          <mat-icon>clear</mat-icon>
+        <button *ngIf="isInSortingMode" mat-raised-button class="abort button-abort"
+                (click)="leaveSortingMode()" (keyup.enter)="leaveTitleEditMode()" aria-labelledby="discard-changes">
+          {{ 'content.abort' | translate }}
         </button>
-        <button *ngIf="isInSortingMode" mat-icon-button class="editButtons sort-buttons" (keyup.enter)="saveSorting()" (click)="saveSorting()"
-                matTooltip="{{ 'content.save-sort-content-group' | translate}}" aria-labelledby="save-changes">
-          <mat-icon>done</mat-icon>
+        <button *ngIf="isInSortingMode" mat-raised-button class="button-primary"
+                (keyup.enter)="saveSorting()" (click)="saveSorting()" aria-labelledby="save-sort-changes">
+          {{ 'content.save-sort-content-group' | translate }}
         </button>
         <span class="fill-remaining-space"></span>
         <p *ngIf="!isInSortingMode" class="slide-text">{{ 'content.answers-direct' | translate}}
@@ -147,7 +147,7 @@
           </mat-expansion-panel>
         </div>
         <div *ngIf="isInSortingMode">
-          <div cdkDropList class="content-list" [cdkDropListData]="contents" (cdkDropListDropped)="drop($event)">
+          <div cdkDropList class="content-list" [cdkDropListData]="copiedContents" (cdkDropListDropped)="drop($event)">
             <div class="content-box" *ngFor="let content of copiedContents" cdkDrag>
               {{content.subject}}
             </div>
@@ -169,4 +169,5 @@
   <div id="direct-show-answers">{{ (directAnswer ? 'content.a11y-dont-direct-show-answers' : 'content.a11y-direct-show-answers') | translate }}</div>
   <div id="lock-questions">{{ (unlocked ? 'content.a11y-lock-questions' : 'content.a11y-unlock-questions') | translate }}</div>
   <div id="more">{{ 'content.a11y-more-options' | translate }}</div>
+  <div id="save-sort-changes">{{ 'content.a11y-save-sort-changes' | translate }}</div>
 </div>
