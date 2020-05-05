@@ -45,6 +45,8 @@ export class ContentGroupService extends BaseHttpService {
     delete entity.id;
     delete entity.revision;
     const encodedName = encodeURIComponent(name);
+    console.log("coming into the service");
+    console.log(entity);
     const connectionUrl = `${this.apiUrl.base + this.apiUrl.rooms}/${roomId}${this.apiUrl.contentGroup}/${encodedName}`;
     return this.http.post<ContentGroup>(connectionUrl, entity, httpOptions).pipe(
       tap(_ => ''),

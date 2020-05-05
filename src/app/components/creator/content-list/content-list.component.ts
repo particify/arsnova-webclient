@@ -27,14 +27,14 @@ import { EventService } from '../../../services/util/event.service';
 
 export class ContentListComponent implements OnInit {
 
-  contents: Content[];
+  protected contents: Content[];
   room: Room;
   isLoading = true;
   labelMaxLength: number;
   labels: string[] = [];
   deviceType: string;
   contentBackup: Content;
-  contentGroup: ContentGroup;
+  protected contentGroup: ContentGroup;
   contentGroups: string[] = [];
   currentGroupIndex: number;
 

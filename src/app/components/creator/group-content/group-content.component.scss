@@ -95,6 +95,10 @@ mat-tooltip-component {
   min-width: 145px;
 }
 
+.sort-buttons {
+  margin-bottom: 16px;
+}
+
 .lock-icon {
   transition: 1s;
 }
@@ -119,7 +123,7 @@ mat-tooltip-component {
 }
 
 .content-box {
-  padding: 10px;
+  padding: 20px;
   border-bottom: solid 1px #ccc;
   color: rgba(0, 0, 0, 0.87);
   display: flex;

@@ -9,23 +9,23 @@
   <mat-card>
     <div fxLayout="row">
       <div class="cardTitle">
-        <h2 *ngIf="!isInEditMode" [style.fontSize.px]=10>{{ collectionName }}</h2>
-        <mat-form-field class="mat-focused" [ngClass]="{'activeInput': isTitleEdit, 'inactiveInput': !isInEditMode}">
+        <h2 *ngIf="!isInTitleEditMode" [style.fontSize.px]=10>{{ collectionName }}</h2>
+        <mat-form-field class="mat-focused" [ngClass]="{'activeInput': isTitleEdit, 'inactiveInput': !isInTitleEditMode}">
           <input #nameInput (focus)="eventService.makeFocusOnInputTrue()" (blur)="eventService.makeFocusOnInputFalse()"
                  matInput maxlength="25" [(ngModel)]="updatedName" aria-labelledby="enter-content-group-name">
         </mat-form-field>
       </div>
       <span class="fill-remaining-space"></span>
       <div>
-        <button *ngIf="!isInEditMode" mat-icon-button class="editButtons" (click)="goInEditMode()" id="edit-group-name"
+        <button *ngIf="!isInTitleEditMode" mat-icon-button class="editButtons" (click)="goInTitleEditMode()" id="edit-group-name"
                 matTooltip="{{ 'content.edit-content-group' | translate}}" aria-labelledby="edit-content-group-name">
-          <mat-icon>build</mat-icon>
+          <mat-icon>edit</mat-icon>
         </button>
-        <button *ngIf="isInEditMode" mat-icon-button class="editButtons" (click)="leaveEditMode()"
-                matTooltip="{{ 'content.abort' | translate}}" (keyup.enter)="leaveEditMode()" aria-labelledby="discard-changes">
+        <button *ngIf="isInTitleEditMode" mat-icon-button class="editButtons" (click)="leaveTitleEditMode()"
+                matTooltip="{{ 'content.abort' | translate}}" (keyup.enter)="leaveTitleEditMode()" aria-labelledby="discard-changes">
           <mat-icon>clear</mat-icon>
         </button>
-        <button *ngIf="isInEditMode" mat-icon-button class="editButtons" (keyup.enter)="saveGroupName()" (click)="saveGroupName()"
+        <button *ngIf="isInTitleEditMode" mat-icon-button class="editButtons" (keyup.enter)="saveGroupName()" (click)="saveGroupName()"
                 matTooltip="{{ 'content.save-content-group' | translate}}" aria-labelledby="save-changes">
           <mat-icon>done</mat-icon>
         </button>
@@ -57,12 +57,25 @@
     <mat-card-content>
       <app-loading-indicator *ngIf="isLoading" [size]="50"></app-loading-indicator>
       <div *ngIf="!isLoading" fxLayout="row" fxLayoutAlign="end">
-        <p class="slide-text">{{ 'content.answers-direct' | translate}}
+        <button *ngIf="!isInSortingMode" mat-icon-button class="editButtons sort-buttons" (click)="goInSortingMode()" id="edit-group-sort"
+                matTooltip="{{ 'content.sort-content-group' | translate}}" aria-labelledby="edit-content-group-sort">
+          <mat-icon>sort</mat-icon>
+        </button>
+        <button *ngIf="isInSortingMode" mat-icon-button class="editButtons sort-buttons" (click)="leaveSortingMode()"
+                matTooltip="{{ 'content.abort' | translate}}" (keyup.enter)="leaveTitleEditMode()" aria-labelledby="discard-changes">
+          <mat-icon>clear</mat-icon>
+        </button>
+        <button *ngIf="isInSortingMode" mat-icon-button class="editButtons sort-buttons" (keyup.enter)="saveSorting()" (click)="saveSorting()"
+                matTooltip="{{ 'content.save-sort-content-group' | translate}}" aria-labelledby="save-changes">
+          <mat-icon>done</mat-icon>
+        </button>
+        <span class="fill-remaining-space"></span>
+        <p *ngIf="!isInSortingMode" class="slide-text">{{ 'content.answers-direct' | translate}}
           <mat-slide-toggle id="direct-show-slide" class="lock" (change)="toggleDirectAnswers()"
                             [(ngModel)]="directAnswer" aria-labelledby="direct-show-answer">
           </mat-slide-toggle>
         </p>
-        <p class="slide-text">{{ 'content.unlock-questions' | translate}}
+        <p *ngIf="!isInSortingMode" class="slide-text">{{ 'content.unlock-questions' | translate}}
           <mat-slide-toggle id="lock-questions-slide" class="lock" (change)="lockContents()" [(ngModel)]="unlocked"
                             aria-labelledby="lock-questions">
           </mat-slide-toggle>
@@ -71,7 +84,7 @@
       <div>
         <div tabindex="-1" id="content-list" class="visually-hidden">
           {{ 'content.a11y-content-list-contents' | translate: { count: contents.length } }}</div>
-        <div *ngIf="!isInEditMode">
+        <div *ngIf="!isInSortingMode">
           <mat-expansion-panel *ngFor="let content of contents; index as i" class="matPanel">
             <mat-expansion-panel-header class="matPanelListHeader" attr.aria-label="{{ 'content.a11y-selected-content' | translate: { name: labels[i] } }}">
               <mat-panel-title class="panelTitle">
@@ -133,9 +146,9 @@
             </mat-panel-description>
           </mat-expansion-panel>
         </div>
-        <div *ngIf="isInEditMode">
+        <div *ngIf="isInSortingMode">
           <div cdkDropList class="content-list" [cdkDropListData]="contents" (cdkDropListDropped)="drop($event)">
-            <div class="content-box" *ngFor="let content of contents" cdkDrag>
+            <div class="content-box" *ngFor="let content of copiedContents" cdkDrag>
               {{content.subject}}
             </div>
           </div>

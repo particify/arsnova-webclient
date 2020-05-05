@@ -1,4 +1,4 @@
-import { AfterContentInit, Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
+import { AfterContentInit, Component, ElementRef, HostListener, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { Content } from '../../../models/content';
 import { ContentService } from '../../../services/http/content.service';
 import { RoomService } from '../../../services/http/room.service';
@@ -28,11 +28,13 @@ export class GroupContentComponent extends ContentListComponent implements OnIni
   @ViewChild('nameInput', { static: true }) nameInput: ElementRef;
 
   collectionName: string;
-  isInEditMode = false;
+  isInTitleEditMode = false;
+  isInSortingMode = false;
   updatedName: string;
   baseURL = 'creator/room/';
   unlocked = false;
   directAnswer = false;
+  copiedContents = [];
 
   constructor(
     protected contentService: ContentService,
@@ -46,7 +48,8 @@ export class GroupContentComponent extends ContentListComponent implements OnIni
     protected globalStorageService: GlobalStorageService,
     protected contentGroupService: ContentGroupService,
     protected announceService: AnnounceService,
-    public eventService: EventService
+    public eventService: EventService,
+    private cd: ChangeDetectorRef
   ) {
     super(contentService, roomService, route, location, notificationService, translateService, langService, dialogService,
     globalStorageService, contentGroupService, announceService);
@@ -120,14 +123,14 @@ export class GroupContentComponent extends ContentListComponent implements OnIni
     this.announceService.announce('content.a11y-content-list-shortcuts');
   }
 
-  goInEditMode(): void {
+  goInTitleEditMode(): void {
     this.updatedName = this.collectionName;
-    this.isInEditMode = true;
+    this.isInTitleEditMode = true;
     this.nameInput.nativeElement.focus();
   }
 
-  leaveEditMode(): void {
-    this.isInEditMode = false;
+  leaveTitleEditMode(): void {
+    this.isInTitleEditMode = false;
   }
 
   updateURL(): void {
@@ -135,23 +138,16 @@ export class GroupContentComponent extends ContentListComponent implements OnIni
   }
 
   saveGroupName(): void {
-    const newContentIdOrder = this.contents.map(c => c.id);
-    if (this.updatedName !== this.collectionName || this.contentGroup.contentIds !== newContentIdOrder) {
-      const oldGroup = new ContentGroup();
-      oldGroup.id = this.contentGroup.id;
-      oldGroup.revision = this.contentGroup.revision;
-      oldGroup.roomId = this.contentGroup.roomId;
-      oldGroup.name = this.contentGroup.name;
-      this.contentGroupService.delete(oldGroup).subscribe(() => {
-        console.log(`oldGroup to delete:`);
-        console.log(oldGroup);
-        this.contentGroup.name = this.updatedName;
-        this.contentGroup.contentIds = newContentIdOrder;
-        console.log(`newGroup to delete:`);
-        console.log(this.contentGroup);
-        this.contentGroupService.post(this.room.id, this.updatedName, this.contentGroup).subscribe(() => {
+    if (this.updatedName !== this.collectionName) {
+      const newGroup = new ContentGroup();
+      newGroup.roomId = this.contentGroup.roomId;
+      newGroup.contentIds = this.contentGroup.contentIds;
+      this.contentGroupService.delete(this.contentGroup).subscribe(() => {
+        newGroup.name = this.updatedName;
+        this.contentGroupService.post(this.room.id, this.updatedName, newGroup).subscribe(postedContentGroup => {
+          this.contentGroup = postedContentGroup;
           this.contentGroupService.updateGroupInMemoryStorage(this.collectionName, this.updatedName);
-          this.collectionName = this.updatedName;
+          this.collectionName = postedContentGroup.name;
           this.translateService.get('content.updated-content-group').subscribe(msg => {
             this.notificationService.show(msg);
           });
@@ -159,7 +155,33 @@ export class GroupContentComponent extends ContentListComponent implements OnIni
         });
       });
     }
-    this.leaveEditMode();
+    this.leaveTitleEditMode();
+  }
+
+  goInSortingMode(): void {
+    this.copiedContents = this.contents;
+    this.isInSortingMode = true;
+  }
+
+  leaveSortingMode(): void {
+    this.isInSortingMode = false;
+  }
+
+  saveSorting(): void {
+    const newContentIdOrder = this.copiedContents.map(c => c.id);
+    if (this.contentGroup.contentIds !== newContentIdOrder) {
+      this.contentGroup.contentIds = newContentIdOrder;
+      this.contentGroup.autoSort = false;
+      this.contentGroupService.updateGroup(this.contentGroup.roomId, this.contentGroup.name, this.contentGroup).subscribe(postedContentGroup => {
+        this.contentGroup = postedContentGroup;
+        this.contents = this.copiedContents;
+        this.initContentList(this.contents);
+        this.translateService.get('content.updated-content-group').subscribe(msg => {
+          this.notificationService.show(msg);
+        });
+      });
+    }
+    this.leaveSortingMode();
   }
 
   lockContents() {
@@ -193,7 +215,8 @@ export class GroupContentComponent extends ContentListComponent implements OnIni
   }
 
   drop(event: CdkDragDrop<Content[]>) {
-    moveItemInArray(this.contents, event.previousIndex, event.currentIndex);
+    this.copiedContents = this.contents
+    moveItemInArray(this.copiedContents, event.previousIndex, event.currentIndex);
   }
 
 }
