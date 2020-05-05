@@ -21,7 +21,7 @@ export class ContentYesNoCreatorComponent implements OnInit {
   @Input() contentCol;
   @Output() reset = new EventEmitter<boolean>();
 
-  yesno = true;
+  yesno = null;
   answerLabels = [
     'content.yes',
     'content.no'
@@ -88,14 +88,11 @@ export class ContentYesNoCreatorComponent implements OnInit {
       });
       return;
     }
-    if (this.yesno) {
-      this.content.options[0].points = 10;
-      this.content.options[1].points = -10;
-      this.content.correctOptionIndexes = [0];
-    } else {
-      this.content.options[0].points = -10;
-      this.content.options[1].points = 10;
-      this.content.correctOptionIndexes = [1];
+    if (this.yesno !== null) {
+      const index = this.yesno ? 0 : 1;
+      this.content.options[0].points = this.yesno ? 10 : -10;
+      this.content.options[1].points = this.yesno ? -10 : 10;
+      this.content.correctOptionIndexes = [index];
     }
     this.contentService.addContent(new ContentChoice(
       null,

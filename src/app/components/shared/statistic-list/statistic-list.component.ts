@@ -173,29 +173,34 @@ export class StatisticListComponent implements OnInit {
   }
 
   evaluateSingle(options: AnswerOption[], indCounts: number[]): number {
-    let correctCounts = 0;
-    let totalCounts = 0;
-    const length = options.length;
-    const correctIndex = new Array<number>();
-    let res: number;
-    for (let i = 0; i < length; i++) {
-      if (options[i].points > 0) {
-        correctIndex[0] = i;
+    const maxPoints = Math.max.apply(Math, options.map(function(option) { return option.points; }));
+    if (maxPoints > 0) {
+      let correctCounts = 0;
+      let totalCounts = 0;
+      const length = options.length;
+      const correctIndex = new Array<number>();
+      let res: number;
+      for (let i = 0; i < length; i++) {
+        if (options[i].points > 0) {
+          correctIndex[0] = i;
+        }
       }
-    }
-    for (let i = 0; i < length; i++) {
-      if (correctIndex.includes(i)) {
-        correctCounts += indCounts[i];
+      for (let i = 0; i < length; i++) {
+        if (correctIndex.includes(i)) {
+          correctCounts += indCounts[i];
+        }
+        totalCounts += indCounts[i];
       }
-      totalCounts += indCounts[i];
-    }
-    if (totalCounts) {
-      res = ((correctCounts / totalCounts) * 100);
-      this.contentCounter++;
+      if (totalCounts) {
+        res = ((correctCounts / totalCounts) * 100);
+        this.contentCounter++;
+      } else {
+        res = this.status.empty;
+      }
+      return res;
     } else {
-      res = this.status.empty;
+      return this.status.likert;
     }
-    return res;
   }
 
   evaluateMultiple(options: AnswerOption[], combCounts: Combination[]): number {

@@ -7,6 +7,7 @@ import { Content } from '../../../models/content';
 import { StatisticChoiceComponent } from '../statistic-choice/statistic-choice.component';
 import { ContentType } from '../../../models/content-type.enum';
 import { GlobalStorageService, LocalStorageKey } from '../../../services/util/global-storage.service';
+import { ContentChoice } from '../../../models/content-choice';
 
 @Component({
   selector: 'app-statistic',
@@ -37,7 +38,11 @@ export class StatisticComponent implements OnInit {
     this.translateService.use(this.globalStorageService.getLocalStorageItem(LocalStorageKey.LANGUAGE));
     this.route.data.subscribe(data => {
       this.content = data.content;
-      if (this.content.format === ContentType.TEXT || this.content.format === ContentType.SCALE) {
+      let maxPoints;
+      if (this.content.format === ContentType.BINARY) {
+        maxPoints = Math.max.apply(Math, (this.content as ContentChoice).options.map(function(option) { return option.points; }));
+      }
+      if (this.content.format === ContentType.TEXT || this.content.format === ContentType.SCALE || maxPoints === 0) {
         this.correctAnswers = false;
       }
       this.isLoading = false;

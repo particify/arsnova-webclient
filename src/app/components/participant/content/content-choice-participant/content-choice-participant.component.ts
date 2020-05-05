@@ -85,7 +85,10 @@ export class ContentChoiceParticipantComponent extends ContentParticipantCompone
   }
 
   getCorrectAnswer() {
-    if (this.content.format !== ContentType.SCALE) {
+    const maxPoints = Math.max.apply(Math, this.content.options.map(function(option) { return option.points; }));
+    if (this.content.format === ContentType.SCALE || maxPoints <= 0) {
+      this.isChoice = false;
+    } else {
       for (const i in this.content.options) {
         if (this.content.options[i]) {
           this.allAnswers += this.content.options[i].label + '&';
@@ -94,8 +97,6 @@ export class ContentChoiceParticipantComponent extends ContentParticipantCompone
           }
         }
       }
-    } else {
-      this.isChoice = false;
     }
   }
 

@@ -51,7 +51,7 @@
               {{ answer.answerOption.label }}
             </mat-radio-button>
           </mat-list-item>
-          <div *ngIf="content.format !== ContentType.SCALE && !hasAbstained && content.state.responsesVisible"
+          <div *ngIf="isChoice && !hasAbstained && content.state.responsesVisible"
                class="solution invisible" [ngClass]="{'visible' : alreadySent}">
             <mat-icon class="icon-indicator" [ngClass]="isCorrect ? 'correct' : 'wrong'">
               {{isCorrect ? 'check' : 'close'}}</mat-icon>
@@ -60,7 +60,7 @@
                [ngClass]="{'visible' : alreadySent}">
             <p>{{'answer.has-abstained' | translate}}</p>
           </div>
-          <div *ngIf="content.format === ContentType.SCALE && !hasAbstained && content.state.responsesVisible"
+          <div *ngIf="!isChoice && !hasAbstained && content.state.responsesVisible"
                class="text invisible" [ngClass]="{'visible' : alreadySent}">
             <p>{{'answer.has-voted' | translate}}</p>
           </div>
