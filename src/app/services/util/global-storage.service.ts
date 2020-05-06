@@ -74,7 +74,7 @@ export class GlobalStorageService {
   }
 
   deleteLocalStorageItem(key: LocalStorageKey) {
-    localStorage.removeItem(key);
+    localStorage.removeItem(`${APP_PREFIX}${key}`);
   }
 
   deleteMemoryStorageItem(key: MemoryStorageKey) {
