@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { YesNoDialogComponent } from '../../components/shared/_dialogs/yes-no-dialog/yes-no-dialog.component';
 import { InfoDialogComponent } from '../../components/shared/_dialogs/info-dialog/info-dialog.component';
-import { CommentExportComponent } from '../../components/shared/_dialogs/comment-export/comment-export.component';
 import { ContentEditComponent } from '../../components/shared/_dialogs/content-edit/content-edit.component';
 import { ContentGroupCreationComponent } from '../../components/shared/_dialogs/content-group-creation/content-group-creation.component';
 import { User } from '../../models/user';
@@ -58,12 +57,6 @@ export class DialogService {
         section: section,
         body: body
       }
-    });
-  }
-
-  openCommentExportDialog(): MatDialogRef<CommentExportComponent> {
-    return this.dialog.open(CommentExportComponent, {
-      width: this.size.small
     });
   }
 

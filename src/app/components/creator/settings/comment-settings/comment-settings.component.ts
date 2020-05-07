@@ -99,7 +99,7 @@ export class CommentSettingsComponent implements OnInit {
     this.commentService.deleteCommentsByRoomId(this.roomId).subscribe();
   }
 
-  export(delimiter: string, date: string): void {
+  export(delimiter: string): void {
     this.commentService.getAckComments(this.roomId)
       .subscribe(comments => {
         this.bonusTokenService.getTokensByRoomId(this.roomId).subscribe(list => {
@@ -116,25 +116,28 @@ export class CommentSettingsComponent implements OnInit {
           let csv: string;
           let valueFields = '';
           const fieldNames = ['settings.question', 'settings.timestamp', 'settings.presented',
-            'settings.favorite', 'settings.correct/wrong', 'settings.score', 'settings.token'];
+            'settings.favorite', 'settings.correct/wrong', 'settings.score'];
           let keyFields;
           this.translationService.get(fieldNames).subscribe(msgs => {
             keyFields = [msgs[fieldNames[0]], msgs[fieldNames[1]], msgs[fieldNames[2]], msgs[fieldNames[3]],
-              msgs[fieldNames[4]], msgs[fieldNames[5]], msgs[fieldNames[6]], '\r\n'];
-
+              msgs[fieldNames[4]], msgs[fieldNames[5]], '\r\n'];
             exportComments.forEach(element => {
               element.body = '"' + element.body.replace(/[\r\n]/g, ' ').replace(/ +/g, ' ').replace(/"/g, '""') + '"';
               valueFields += Object.values(element).slice(3, 4) + delimiter;
               let time;
               time = Object.values(element).slice(4, 5);
               valueFields += time[0].slice(0, 10) + '-' + time[0].slice(11, 16) + delimiter;
-              valueFields += Object.values(element).slice(5, 8) + delimiter;
-              valueFields += Object.values(element).slice(9, 11).join(delimiter) + '\r\n';
+              valueFields += Object.values(element).slice(5, 6) + delimiter;
+              valueFields += Object.values(element).slice(6, 7) + delimiter;
+              valueFields += Object.values(element).slice(7, 8) + delimiter;
+              valueFields += Object.values(element).slice(9, 10) + '\r\n';
             });
+            const date = new Date();
+            const dateString = date.toLocaleDateString();
             csv = keyFields + valueFields;
             const myBlob = new Blob([csv], { type: 'text/csv' });
             const link = document.createElement('a');
-            const fileName = this.editRoom.name + '_' + this.editRoom.shortId + '_' + date + '.csv';
+            const fileName = this.editRoom.name + '_' + this.editRoom.shortId + '_' + dateString + '.csv';
             link.setAttribute('download', fileName);
             link.href = window.URL.createObjectURL(myBlob);
             link.click();
@@ -143,21 +146,8 @@ export class CommentSettingsComponent implements OnInit {
       });
   }
 
-  onExport(exportType: string): void {
-    const date = new Date();
-    const dateString = date.toLocaleDateString();
-    if (exportType === 'comma') {
-      this.export(',', dateString);
-    } else if (exportType === 'semicolon') {
-      this.export(';', dateString);
-    }
-  }
-
-  openExportDialog(): void {
-    const dialogRef = this.dialogService.openCommentExportDialog();
-    dialogRef.afterClosed().subscribe(result => {
-      this.onExport(result);
-    });
+  onExport(): void {
+    this.export(',');
   }
 
   updateCommentSettings() {
