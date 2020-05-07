@@ -20,7 +20,7 @@
       <div fxLayoutAlign="center center" fxLayoutGap="20px" *ngIf="isOwner">
         <div class="invisible-button button-container" [ngClass]="{'visible-button': isClosed}">
         <button id="switch-button" tabindex="{{ isClosed ? '0' : '-1' }}" mat-raised-button
-                class="button-secondary bottom-button" (click)="changeType()" aria-labelledby="change-type">
+                class="button-abort bottom-button" (click)="changeType()" aria-labelledby="change-type">
           {{ 'survey.change-type' | translate }}
         </button>
         </div>
