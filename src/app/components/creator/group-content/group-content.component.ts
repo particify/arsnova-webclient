@@ -1,4 +1,4 @@
-import { AfterContentInit, Component, ElementRef, HostListener, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
+import { Component, ElementRef, HostListener, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { Content } from '../../../models/content';
 import { ContentService } from '../../../services/http/content.service';
 import { RoomService } from '../../../services/http/room.service';
@@ -158,8 +158,12 @@ export class GroupContentComponent extends ContentListComponent implements OnIni
     this.leaveTitleEditMode();
   }
 
+  createCopy() {
+    this.copiedContents = this.contents.map(content => ({ ...content }));
+  }
+
   goInSortingMode(): void {
-    this.copiedContents = this.contents;
+    this.createCopy();
     this.isInSortingMode = true;
   }
 
@@ -172,7 +176,8 @@ export class GroupContentComponent extends ContentListComponent implements OnIni
     if (this.contentGroup.contentIds !== newContentIdOrder) {
       this.contentGroup.contentIds = newContentIdOrder;
       this.contentGroup.autoSort = false;
-      this.contentGroupService.updateGroup(this.contentGroup.roomId, this.contentGroup.name, this.contentGroup).subscribe(postedContentGroup => {
+      this.contentGroupService.updateGroup(this.contentGroup.roomId, this.contentGroup.name, this.contentGroup).
+      subscribe(postedContentGroup => {
         this.contentGroup = postedContentGroup;
         this.contents = this.copiedContents;
         this.initContentList(this.contents);
@@ -215,7 +220,6 @@ export class GroupContentComponent extends ContentListComponent implements OnIni
   }
 
   drop(event: CdkDragDrop<Content[]>) {
-    this.copiedContents = this.contents
     moveItemInArray(this.copiedContents, event.previousIndex, event.currentIndex);
   }
 
