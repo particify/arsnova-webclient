@@ -63,7 +63,7 @@
     </form>
   </div>
   <div fxLayout="row" fxLayoutAlign="center" fxLayoutGap="20px">
-    <button mat-raised-button class="button-secondary" aria-labelledby="reset"
+    <button mat-raised-button class="button-abort" aria-labelledby="reset"
             (click)="openResetDialog($event)">{{ 'content.reset' | translate }}</button>
     <button mat-raised-button class="button-primary" (click)="submitContent()"
             attr.aria-label="{{ 'content.a11y-submit' | translate: {subject: contentSub} }}">
