@@ -32,7 +32,8 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
   status = {
     LAST_CONTENT: 'LAST_CONTENT',
     FIRST_UNANSWERED: 'FIRST_UNANSWERED',
-    NORMAL: 'NORMAL'
+    NORMAL: 'NORMAL',
+    PRE_START: 'PRE_START'
   };
   started: string;
 
@@ -94,8 +95,9 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
       const contentIndex = this.contents.map(function (content) { return content.id; } ).indexOf(lastContentId);
       setTimeout(() => {
         this.initStepper(contentIndex);
-        this.started = this.status.NORMAL;
-      }, 200);
+      }, 100);
+    } else {
+      this.started = this.status.PRE_START;
     }
   }
 
@@ -108,14 +110,18 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
     }
   }
 
+  allStatusChecked(): boolean {
+    return this.alreadySent.size === this.contents.length;
+  }
+
   receiveSentStatus($event, index: number) {
     this.alreadySent.set(index, $event);
-    if (!this.started) {
-      if (this.alreadySent.size === this.contents.length) {
+    if (this.started === this.status.PRE_START) {
+      if (this.allStatusChecked()) {
         for (let i = 0; i < this.alreadySent.size; i++) {
           if (this.alreadySent.get(i) === false) {
             this.initStepper(i);
-            this.started = this.status.FIRST_UNANSWERED;
+            this.started = this.status.NORMAL;
             break;
           }
         }
@@ -134,6 +140,10 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
         }, wait);
       } else {
         this.announce('answer.a11y-last-content');
+      }
+    } else {
+      if (this.allStatusChecked()) {
+        this.started = this.status.NORMAL;
       }
     }
   }
