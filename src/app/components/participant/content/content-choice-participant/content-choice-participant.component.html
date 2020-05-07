@@ -68,7 +68,7 @@
       </mat-radio-group>
       <div fxLayoutAlign="center" fxLayoutGap="20px" class="buttons" [ngClass]="{'disabled': alreadySent}">
         <button tabindex="{{alreadySent ? '-1' : '0'}}" mat-raised-button *ngIf="content.abstentionsAllowed"
-                class="button-secondary"
+                class="button-abort"
                 [ngClass]="{'disabled' : alreadySent}" (click)="abstain($event)" aria-labelledby="abstain">
           {{ 'answer.abstain' | translate }}</button>
         <button tabindex="{{alreadySent ? '-1' : '0'}}" mat-raised-button class="button-primary"
