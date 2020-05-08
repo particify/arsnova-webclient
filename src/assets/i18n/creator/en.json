@@ -212,7 +212,8 @@
     "cancel": "Cancel",
     "content-group-name": "Name of the collection",
     "sort-content-group": "Sort the collection",
-    "save-sort-content-group": "Save sorting"
+    "save-sort-content-group": "Save sorting",
+    "updated-sorting": "The sorting has been saved."
   },
   "survey": {
     "a11y-message": "You are now in live survey mode. Press the Enter key to get information about key combinations or use the Escape key to call up the announcement later.",

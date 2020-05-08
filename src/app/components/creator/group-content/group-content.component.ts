@@ -181,7 +181,7 @@ export class GroupContentComponent extends ContentListComponent implements OnIni
         this.contentGroup = postedContentGroup;
         this.contents = this.copiedContents;
         this.initContentList(this.contents);
-        this.translateService.get('content.updated-content-group').subscribe(msg => {
+        this.translateService.get('content.updated-sorting').subscribe(msg => {
           this.notificationService.show(msg);
         });
       });
