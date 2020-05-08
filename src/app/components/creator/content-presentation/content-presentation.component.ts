@@ -12,6 +12,7 @@ import { RoomService } from '../../../services/http/room.service';
 export class ContentPresentationComponent implements OnInit {
 
   contents: ContentChoice[];
+
   labels = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
   isLoading = true;
 

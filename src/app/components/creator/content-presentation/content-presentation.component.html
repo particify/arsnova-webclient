@@ -1,16 +1,18 @@
 <app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
-<div fxLayout="column" fxLayoutAlign="start center">
-  <mat-tab-group>
-    <mat-tab fxLayoutAlign="center" *ngFor="let content of contents" label="{{content.subject}}">
-      <mat-card>
-        <mat-card-content>
-          <h3>{{content.body}}</h3>
-          <mat-divider></mat-divider>
-          <div class="answers" *ngFor="let answer of content.options; let i = index">
-            <h4>{{labels[i]}} : {{answer.label}}</h4>
-          </div>
-        </mat-card-content>
-      </mat-card>
-    </mat-tab>
-  </mat-tab-group>
+<div *ngIf="!isLoading" fxLayout="column" fxLayoutAlign="start center">
+  <app-stepper *ngIf="contents.length > 0" [listLength]="contents.length" [completed]="">
+    <cdk-step *ngFor="let content of contents; let i = index">
+      <div tabindex="0" id="step">
+        <mat-card>
+          <mat-card-content>
+            <h3>{{content.body}}</h3>
+            <mat-divider></mat-divider>
+            <div class="answers" *ngFor="let answer of content.options; let i = index">
+              <h4>{{labels[i]}} : {{answer.label}}</h4>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </cdk-step>
+  </app-stepper>
 </div>

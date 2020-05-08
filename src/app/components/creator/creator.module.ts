@@ -28,6 +28,7 @@ import { SettingsPageComponent } from './settings-page/settings-page.component';
 import { LooseContentComponent } from './loose-content/loose-content.component';
 import { GroupContentComponent } from './group-content/group-content.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
+import { CdkStepperModule } from '@angular/cdk/stepper';
 
 @NgModule({
   imports: [
@@ -45,7 +46,8 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
       },
       isolate: true
     }),
-    MarkdownModule
+    MarkdownModule,
+    CdkStepperModule
   ],
   declarations: [
     ContentChoiceCreatorComponent,
