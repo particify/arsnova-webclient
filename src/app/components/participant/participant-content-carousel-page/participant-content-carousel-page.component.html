@@ -2,7 +2,7 @@
 <div *ngIf="!isLoading" fxLayout="column" fxLayoutAlign="start center">
   <button id="live-announcer-button" class="visually-hidden" tabindex="-1" (click)="announce('answer.a11y-shortcuts')">
     {{ 'answer.a11y-message' | translate: { group: contentGroup.name } }}</button>
-  <app-stepper *ngIf="contents.length > 0" [listLength]="contents.length" [alreadySent]="alreadySent">
+  <app-stepper *ngIf="contents.length > 0" [listLength]="contents.length" [completed]="alreadySent">
     <cdk-step *ngFor="let content of contents; let i = index">
       <div tabindex="0" id="step">
         <app-content-choice-participant (message)="receiveSentStatus($event, i)" [content]="content"

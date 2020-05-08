@@ -11,7 +11,6 @@ import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { HttpClient } from '@angular/common/http';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { MarkdownModule } from 'ngx-markdown';
-import { StepperComponent } from './stepper/stepper.component';
 import { CdkStepperModule } from '@angular/cdk/stepper';
 import { MatRippleModule } from '@angular/material/core';
 import { ContentParticipantComponent } from './content/content-participant.component';
@@ -39,8 +38,7 @@ import { ContentParticipantComponent } from './content/content-participant.compo
     ContentChoiceParticipantComponent,
     ContentTextParticipantComponent,
     RoomParticipantPageComponent,
-    ParticipantContentCarouselPageComponent,
-    StepperComponent
+    ParticipantContentCarouselPageComponent
   ]
 })
 export class ParticipantModule {

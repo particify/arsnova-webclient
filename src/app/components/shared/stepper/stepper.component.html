@@ -10,7 +10,7 @@
         <span class="fill-remaining-space"></span>
         <div class="step-container" *ngFor="let step of steps; let i = index;" (click)="onClick(i)">
           <button class="step" tabindex="-1"
-                  [ngClass]="{'active': selectedIndex === i, 'sent': alreadySent.get(i)}">{{i + 1}}</button>
+                  [ngClass]="{'active': selectedIndex === i, 'sent': completed.get(i)}">{{i + 1}}</button>
         </div>
         <span class="fill-remaining-space"></span>
       </div>
