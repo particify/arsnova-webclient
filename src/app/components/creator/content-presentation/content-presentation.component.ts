@@ -1,8 +1,10 @@
 import { ContentChoice } from '../../../models/content-choice';
 import { ContentService } from '../../../services/http/content.service';
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { RoomService } from '../../../services/http/room.service';
+import { GlobalStorageService, MemoryStorageKey } from '../../../services/util/global-storage.service';
+import { StepperComponent } from '../../shared/stepper/stepper.component';
 
 @Component({
   selector: 'app-content-presentation',
@@ -11,15 +13,21 @@ import { RoomService } from '../../../services/http/room.service';
 })
 export class ContentPresentationComponent implements OnInit {
 
+
+  @ViewChild(StepperComponent) stepper: StepperComponent;
+
   contents: ContentChoice[];
 
   labels = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
   isLoading = true;
+  shortId: string;
 
   constructor(
     private contentService: ContentService,
     private route: ActivatedRoute,
-    private roomService: RoomService
+    private roomService: RoomService,
+    private globalStorageService: GlobalStorageService,
+    private router: Router
   ) {
   }
 
@@ -27,14 +35,44 @@ export class ContentPresentationComponent implements OnInit {
     let groupName;
     this.route.params.subscribe(params => {
       groupName = params['contentGroup'];
+      this.shortId = params['shortId'];
     });
     this.route.data.subscribe(data => {
       this.roomService.getGroupByRoomIdAndName(data.room.id, groupName).subscribe(group => {
         this.contentService.getContentChoiceByIds(group.contentIds).subscribe(contents => {
           this.contents = contents;
+          this.checkIfLastContentExists();
           this.isLoading = false;
         });
       });
     });
   }
+
+  goToStats(contentId: string) {
+    this.globalStorageService.setMemoryItem(MemoryStorageKey.LAST_CONTENT, contentId);
+    this.router.navigate([`/creator/room/${this.shortId}/statistics/${contentId}`]);
+  }
+
+  checkIfLastContentExists() {
+    const lastContentId = this.globalStorageService.getMemoryItem(MemoryStorageKey.LAST_CONTENT);
+    if (lastContentId) {
+      this.globalStorageService.deleteMemoryStorageItem(MemoryStorageKey.LAST_CONTENT);
+      const contentIndex = this.contents.map(function (content) {
+        return content.id;
+      }).indexOf(lastContentId);
+      setTimeout(() => {
+        this.initStepper(contentIndex);
+      }, 100);
+    }
+  }
+
+  initStepper(index: number) {
+    this.stepper.onClick(index);
+    if (index > 2) {
+      const diff = index < (this.contents.length - 3) ? 2 : 5 - ((this.contents.length - 1) - index);
+      this.stepper.headerPos = index - diff;
+      this.stepper.moveHeaderRight();
+    }
+  }
+
 }

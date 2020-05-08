@@ -4,12 +4,18 @@
     <cdk-step *ngFor="let content of contents; let i = index">
       <div tabindex="0" id="step">
         <mat-card>
-          <mat-card-header>
+          <div fxLayout="row">
             <markdown [data]="content.body"></markdown>
-          </mat-card-header>
+            <span class="fill-remaining-space"></span>
+            <button mat-icon-button (click)="goToStats(content.id)">
+              <mat-icon>
+                insert_chart
+              </mat-icon>
+            </button>
+          </div>
           <mat-card-content>
             <div class="answers" *ngFor="let answer of content.options; let i = index">
-              <h4>{{labels[i]}} : {{answer.label}}</h4>
+              <h4>{{labels[i]}}: {{answer.label}}</h4>
             </div>
           </mat-card-content>
         </mat-card>
