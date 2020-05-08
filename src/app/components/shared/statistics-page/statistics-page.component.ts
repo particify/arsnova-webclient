@@ -21,9 +21,9 @@ export class StatisticsPageComponent implements OnInit {
   room: Room;
   contentGroups: ContentGroup[] = [];
   isLoading = true;
-  currentCG: ContentGroup;
+  lastGroup: string;
 
-  @ViewChild(MatTabGroup, { static: true }) tabGroup: MatTabGroup;
+  @ViewChild(MatTabGroup) tabGroup: MatTabGroup;
 
   constructor(private route: ActivatedRoute,
               private roomService: RoomService,
@@ -35,7 +35,7 @@ export class StatisticsPageComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.currentCG = this.globalStorageService.getMemoryItem(MemoryStorageKey.LAST_GROUP);
+    this.lastGroup = this.globalStorageService.getMemoryItem(MemoryStorageKey.LAST_GROUP);
     this.route.data.subscribe(data => {
       this.getContentGroups(data.room.id);
     });
@@ -43,15 +43,22 @@ export class StatisticsPageComponent implements OnInit {
 
   getContentGroups(id: string): void {
     this.roomService.getStats(id).subscribe(roomStats => {
-      for (let i = 0; i < roomStats.groupStats.length; i++) {
+      let lastGroupIndex = 0;
+      const contentGroupsLength = roomStats.groupStats.length;
+      for (let i = 0; i < contentGroupsLength; i++) {
         this.roomService.getGroupByRoomIdAndName(id, roomStats.groupStats[i].groupName).subscribe(group => {
           this.contentGroups.push(group);
-          if (this.currentCG && this.currentCG.name === group.name) {
-            this.tabGroup.selectedIndex = i;
+          if (this.lastGroup && this.lastGroup === group.name) {
+            lastGroupIndex = i;
+          }
+          if (i === contentGroupsLength - 1) {
+            this.isLoading = false;
+            setTimeout(() => {
+              this.tabGroup.selectedIndex = lastGroupIndex;
+            }, 100);
           }
         });
       }
-      this.isLoading = false;
       setTimeout(() => {
         document.getElementById('message-button').focus();
       }, 700);

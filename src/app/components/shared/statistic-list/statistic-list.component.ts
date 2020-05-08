@@ -99,7 +99,7 @@ export class StatisticListComponent implements OnInit {
 
   goToStats(id: string) {
     this.router.navigate([`${this.baseUrl}${id}`]);
-    this.globalStorageService.setMemoryItem(MemoryStorageKey.LAST_GROUP, this.contentGroup);
+    this.globalStorageService.setMemoryItem(MemoryStorageKey.LAST_GROUP, this.contentGroup.name);
   }
 
   getData(contents: Content[]) {
