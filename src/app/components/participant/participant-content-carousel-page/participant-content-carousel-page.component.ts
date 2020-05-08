@@ -4,7 +4,7 @@ import { ContentService } from '../../../services/http/content.service';
 import { Content } from '../../../models/content';
 import { ContentGroup } from '../../../models/content-group';
 import { TranslateService } from '@ngx-translate/core';
-import { StepperComponent } from '../stepper/stepper.component';
+import { StepperComponent } from '../../shared/stepper/stepper.component';
 import { ActivatedRoute } from '@angular/router';
 import { RoomService } from '../../../services/http/room.service';
 import { KeyboardUtils } from '../../../utils/keyboard';

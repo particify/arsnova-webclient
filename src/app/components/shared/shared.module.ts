@@ -37,6 +37,7 @@ import { YesNoDialogComponent } from './_dialogs/yes-no-dialog/yes-no-dialog.com
 import { InfoDialogComponent } from './_dialogs/info-dialog/info-dialog.component';
 import { CommentExportComponent } from './_dialogs/comment-export/comment-export.component';
 import { RoomNotFoundComponent } from './room-not-found/room-not-found.component';
+import { StepperComponent } from './stepper/stepper.component';
 
 @NgModule({
   imports: [
@@ -80,7 +81,8 @@ import { RoomNotFoundComponent } from './room-not-found/room-not-found.component
     InfoDialogComponent,
     CommentExportComponent,
     RoomNotFoundComponent,
-    DateFromNow
+    DateFromNow,
+    StepperComponent
   ],
   exports: [
     RoomJoinComponent,
@@ -101,7 +103,8 @@ import { RoomNotFoundComponent } from './room-not-found/room-not-found.component
     UserBonusTokenComponent,
     LoadingIndicatorComponent,
     CommentExportComponent,
-    RoomNotFoundComponent
+    RoomNotFoundComponent,
+    StepperComponent
   ]
 })
 export class SharedModule {

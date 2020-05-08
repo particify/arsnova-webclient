@@ -33,7 +33,7 @@ import { KeyboardUtils } from '../../../utils/keyboard';
 export class StepperComponent extends CdkStepper {
 
   @Input() listLength: number;
-  @Input() alreadySent: Map<number, boolean>;
+  @Input() completed: Map<number, boolean> = new Map<number, boolean>();
   headerPos = 0;
   containerAnimationState = 'current';
   headerAnimationState = 'init';
