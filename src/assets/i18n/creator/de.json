@@ -150,6 +150,7 @@
     "a11y-loose-cancel": "Bricht das erstellen der neuen Sammlung ab",
     "a11y-loose-create-with": "Erstellt eine neue Sammlung welche alle losen Fragen enthält.",
     "a11y-loose-create-with-name": "Erstellt eine neue Sammlung mit dem Namen {{name}}, welche alle losen Fragen enthält.",
+    "a11y-edit-content-group-sort": "Startet die Sortierung der Sammlung",
     "abort": "Abbrechen",
     "answer": "Antwort",
     "answer-deleted": "Antwort gelöscht.",
@@ -209,7 +210,10 @@
     "new-group-successfully-created": "Neue Fragenliste wurde angelegt",
     "create-group-with-loose-contents": "Sammlung erstellen",
     "cancel": "Abbrechen",
-    "content-group-name": "Name der Sammlung"
+    "content-group-name": "Name der Sammlung",
+    "sort-content-group": "Sortieren",
+    "save-sort-content-group": "Sortierung speichern",
+    "updated-sorting": "Die Sortierung wurde gespeichert."
   },
   "survey": {
     "a11y-message": "Du befindest dich jetzt bei der Live Umfrage. Drücke die Enter Taste um Informationen zu Tastenkombinationen zu erhalten oder rufe die Ansage später mit der Escape Taste auf.",

@@ -150,6 +150,7 @@
     "a11y-loose-cancel": "Cancels the content group creation",
     "a11y-loose-create": "Creates a collection which contains all loose questions.",
     "a11y-loose-create-with-name": "Creates a collection with the name {{name}} which contains all loose questions.",
+    "a11y-edit-content-group-sort": "Start the sorting of the collection",
     "abort": "Abort",
     "answer": "Answer",
     "answer-deleted": "Answer deleted.",
@@ -209,7 +210,10 @@
     "new-group-successfully-created": "New group got created.",
     "create-group-with-loose-contents": "Create collection",
     "cancel": "Cancel",
-    "content-group-name": "Name of the collection"
+    "content-group-name": "Name of the collection",
+    "sort-content-group": "Sort the collection",
+    "save-sort-content-group": "Save sorting",
+    "updated-sorting": "The sorting has been saved."
   },
   "survey": {
     "a11y-message": "You are now in live survey mode. Press the Enter key to get information about key combinations or use the Escape key to call up the announcement later.",
