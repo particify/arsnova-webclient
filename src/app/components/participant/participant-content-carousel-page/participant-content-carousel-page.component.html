@@ -5,11 +5,11 @@
   <app-stepper *ngIf="contents.length > 0" [listLength]="contents.length" [completed]="alreadySent">
     <cdk-step *ngFor="let content of contents; let i = index">
       <div tabindex="0" id="step">
-        <app-content-choice-participant (message)="receiveSentStatus($event, i)" [content]="content"
+        <app-content-choice-participant (message)="receiveSentStatus($event, i)" [content]="content" [index]="i"
                                         *ngIf="content.format === ContentType.CHOICE || content.format === ContentType.SCALE ||
                 content.format === ContentType.BINARY">
         </app-content-choice-participant>
-        <app-content-text-participant (message)="receiveSentStatus($event, i)" [content]="content"
+        <app-content-text-participant (message)="receiveSentStatus($event, i)" [content]="content" [index]="i"
                                       *ngIf="content.format === ContentType.TEXT"></app-content-text-participant>
       </div>
     </cdk-step>

@@ -27,6 +27,7 @@ export class AnswerList {
 export class StatisticChoiceComponent implements OnInit {
 
   @Input() content: ContentChoice;
+  @Input() directShow: boolean;
 
   chart: Chart;
   colors: string[] = [];
@@ -52,6 +53,11 @@ export class StatisticChoiceComponent implements OnInit {
     this.checkIfSurvey(this.content);
     this.getData(this.content);
     this.isLoading = false;
+    if (this.directShow) {
+      setTimeout(() => {
+        this.toggleChart();
+      }, 100);
+    }
   }
 
   createChart(colors: string[]) {

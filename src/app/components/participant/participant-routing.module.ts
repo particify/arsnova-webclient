@@ -10,7 +10,7 @@ import { CommentPageComponent } from '../shared/comment-page/comment-page.compon
 import { CommentAnswerComponent } from '../shared/comment-answer/comment-answer.component';
 import { RoomResolver } from '../../resolver/room.resolver';
 import { CommentResolver } from '../../resolver/comment.resolver';
-import { ContentResolver } from '../../resolver/content.resolver';
+import { AuthenticationGuard } from '../../guards/authentication.guard';
 
 const routes: Routes = [
   {
@@ -30,11 +30,21 @@ const routes: Routes = [
     }
   },
   {
-    path: 'room/:shortId/statistics/:contentId',
+    path: 'room/:shortId/group/:contentGroup/statistics',
     component: StatisticComponent,
+    canActivate: [AuthenticationGuard],
     data: { roles: [UserRole.PARTICIPANT] },
     resolve : {
-      content: ContentResolver
+      room: RoomResolver
+    }
+  },
+  {
+    path: 'room/:shortId/group/:contentGroup/statistics/:index',
+    component: StatisticComponent,
+    canActivate: [AuthenticationGuard],
+    data: { roles: [UserRole.PARTICIPANT] },
+    resolve : {
+      room: RoomResolver
     }
   },
   {

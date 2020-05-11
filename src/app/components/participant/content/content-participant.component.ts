@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { NotificationService } from '../../../services/util/notification.service';
 import { TranslateService } from '@ngx-translate/core';
 import { LanguageService } from '../../../services/util/language.service';
@@ -12,11 +12,14 @@ import { GlobalStorageService, LocalStorageKey, MemoryStorageKey } from '../../.
 })
 export class ContentParticipantComponent implements OnInit {
 
+
+  @Input() index = 0;
   @Output() message = new EventEmitter<boolean>();
 
   alreadySent = false;
   isLoading = true;
   shortId: string;
+  contentGroupName: string;
 
   constructor(
     protected authenticationService: AuthenticationService,
@@ -36,6 +39,7 @@ export class ContentParticipantComponent implements OnInit {
     this.initAnswer(userId);
     this.route.params.subscribe(params => {
       this.shortId = params['shortId'];
+      this.contentGroupName = params['contentGroup'];
     });
   }
 
@@ -48,7 +52,7 @@ export class ContentParticipantComponent implements OnInit {
 
   goToStats(contentId: string) {
     this.globalStorageService.setMemoryItem(MemoryStorageKey.LAST_CONTENT, contentId);
-    this.router.navigate([`/participant/room/${this.shortId}/statistics/${contentId}`]);
+    this.router.navigate([`/participant/room/${this.shortId}/group/${this.contentGroupName}/statistics/${this.index + 1}`]);
   }
 
   submitAnswer() {

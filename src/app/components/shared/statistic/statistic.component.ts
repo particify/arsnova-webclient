@@ -19,6 +19,7 @@ export class StatisticComponent implements OnInit {
 
   contents: Content[];
   isLoading = true;
+  contentIndex = 0;
 
   constructor(
     protected route: ActivatedRoute,
@@ -34,9 +35,8 @@ export class StatisticComponent implements OnInit {
   ngOnInit() {
     window.scroll(0, 0);
     this.translateService.use(this.globalStorageService.getLocalStorageItem(LocalStorageKey.LANGUAGE));
-    let contentIndex: number;
     this.route.params.subscribe(params => {
-      contentIndex = params['index'] - 1;
+      this.contentIndex = params['index'] - 1;
     });
     this.route.data.subscribe(data => {
       const room = data.room;
@@ -47,10 +47,10 @@ export class StatisticComponent implements OnInit {
           this.contentService.getContentsByIds(group.contentIds).subscribe(contents => {
             this.contents = contents;
             this.isLoading = false;
-            if (contentIndex) {
+            if (this.contentIndex) {
               setTimeout(() => {
-               this.stepper.init(contentIndex, this.contents.length);
-              }, 400);
+               this.stepper.init(this.contentIndex, this.contents.length);
+              }, 100);
             }
             setTimeout(() => {
               document.getElementById('message-button').focus();

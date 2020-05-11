@@ -26,6 +26,8 @@ export class TextStatistic {
 export class StatisticTextComponent implements OnInit {
 
   @Input() content: ContentText;
+  @Input() directShow: boolean;
+
   answers: TextStatistic[] = [];
   isLoading = true;
   answersVisible = false;
@@ -47,6 +49,11 @@ export class StatisticTextComponent implements OnInit {
     this.contentAnswerService.getAnswers(this.content.id).subscribe(answers => {
       this.getData(answers);
       this.isLoading = false;
+      if (this.directShow) {
+        setTimeout(() => {
+          this.toggleAnswers();
+        }, 100);
+      }
     });
   }
 

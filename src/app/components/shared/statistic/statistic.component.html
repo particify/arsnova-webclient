@@ -13,9 +13,10 @@
               {{ 'statistic.a11y-message-evaluation' | translate: { content: content.body } }}
             </div>
           </mat-card-header>
-          <app-statistic-choice *ngIf="content.format !== 'TEXT'" [content]="content"
+          <app-statistic-choice *ngIf="content.format !== 'TEXT'" [content]="content" [directShow]="contentIndex === i"
                                 ></app-statistic-choice>
-          <app-statistic-text *ngIf="content.format === 'TEXT'" [content]="content"></app-statistic-text>
+          <app-statistic-text *ngIf="content.format === 'TEXT'" [content]="content" [directShow]="contentIndex === i">
+          </app-statistic-text>
         </mat-card>
       </div>
       <div tabindex="0" class="visually-hidden">{{ 'statistic.a11y-no-more-answers' | translate }}</div>
