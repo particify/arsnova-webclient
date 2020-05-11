@@ -91,14 +91,15 @@ export class StatisticListComponent implements OnInit {
 
   getBaseUrl() {
     if (this.authService.getRole() === UserRole.CREATOR) {
-      this.baseUrl = `/creator/room/${this.roomId}/statistics/`;
+      this.baseUrl = `/creator/room/${this.roomId}/group/${this.contentGroup.name}/statistics/`;
     } else {
-      this.baseUrl = `/participant/room/${this.roomId}/statistics/`;
+      this.baseUrl = `/participant/room/${this.roomId}/group/${this.contentGroup.name}/statistics/`;
     }
   }
 
   goToStats(id: string) {
-    this.router.navigate([`${this.baseUrl}${id}`]);
+    const contentIndex = this.contents.map(function (content) { return content.id; } ).indexOf(id);
+    this.router.navigate([`${this.baseUrl}${contentIndex + 1}`]);
     this.globalStorageService.setMemoryItem(MemoryStorageKey.LAST_GROUP, this.contentGroup.name);
   }
 
