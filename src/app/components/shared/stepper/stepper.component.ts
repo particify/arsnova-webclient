@@ -50,6 +50,16 @@ export class StepperComponent extends CdkStepper {
     }
   }
 
+
+  init(index: number, length: number) {
+    this.onClick(index);
+    if (index > 2) {
+      const diff = index < (length - 3) ? 2 : 5 - ((length - 1) - index);
+      this.headerPos = index - diff;
+      this.moveHeaderRight();
+    }
+  }
+
   swipe(event: TouchEvent, when: string): void {
     const xPos = event.changedTouches[0].clientX;
     const time = new Date().getTime();

@@ -61,18 +61,8 @@ export class ContentPresentationComponent implements OnInit {
         return content.id;
       }).indexOf(lastContentId);
       setTimeout(() => {
-        this.initStepper(contentIndex);
+        this.stepper.init(contentIndex, this.contents.length);
       }, 100);
     }
   }
-
-  initStepper(index: number) {
-    this.stepper.onClick(index);
-    if (index > 2) {
-      const diff = index < (this.contents.length - 3) ? 2 : 5 - ((this.contents.length - 1) - index);
-      this.stepper.headerPos = index - diff;
-      this.stepper.moveHeaderRight();
-    }
-  }
-
 }

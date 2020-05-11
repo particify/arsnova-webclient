@@ -49,7 +49,7 @@ export class StatisticComponent implements OnInit {
             this.isLoading = false;
             if (contentIndex) {
               setTimeout(() => {
-               this.initStepper(contentIndex);
+               this.stepper.init(contentIndex, this.contents.length);
               }, 400);
             }
             setTimeout(() => {
@@ -59,14 +59,5 @@ export class StatisticComponent implements OnInit {
         });
       });
     });
-  }
-
-  initStepper(index: number) {
-    this.stepper.onClick(index);
-    if (index > 2) {
-      const diff = index < (this.contents.length - 3) ? 2 : 5 - ((this.contents.length - 1) - index);
-      this.stepper.headerPos = index - diff;
-      this.stepper.moveHeaderRight();
-    }
   }
 }
