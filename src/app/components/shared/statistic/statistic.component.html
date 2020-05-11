@@ -9,10 +9,6 @@
               <markdown [data]="content.body"></markdown>
             </mat-card-title>
             <span class="fill-remaining-space"></span>
-            <button mat-icon-button disableRipple
-                    matTooltip="{{ 'statistic.show-answers' | translate }}" aria-labelledby="show-correct">
-              <mat-icon>insert_chart</mat-icon>
-            </button>
             <div tabindex="-1" id="message-button" class="visually-hidden">
               {{ 'statistic.a11y-message-evaluation' | translate: { content: content.body } }}
             </div>

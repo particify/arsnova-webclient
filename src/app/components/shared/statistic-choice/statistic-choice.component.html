@@ -1,13 +1,19 @@
+<div fxLayout="row" fxLayoutAlign="end" class="button-container">
+  <button mat-icon-button *ngIf="chartVisible && !survey" disableRipple (click)="toggleCorrect()"
+          matTooltip="{{ 'statistic.answer-indicator' | translate }}" aria-labelledby="show-correct">
+    <mat-icon>playlist_add_check</mat-icon>
+  </button>
+  <button mat-icon-button disableRipple (click)="toggleChart()"
+          matTooltip="{{ 'statistic.show-chart' | translate }}" aria-labelledby="show-correct">
+    <mat-icon>insert_chart</mat-icon>
+  </button>
+</div>
 <div>
-  <div class="chart-container">
-    <app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
+  <app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
+  <div class="chart-container" [ngClass]="{ 'invisible': !chartVisible }">
     <canvas id="chart"></canvas>
   </div>
 </div>
-<button mat-icon-button disableRipple (click)="toggleCorrect()"
-        matTooltip="{{ 'statistic.answer-indicator' | translate }}" aria-labelledby="show-correct">
-  <mat-icon>playlist_add_check</mat-icon>
-</button>
 <mat-list *ngIf="!isLoading" role="list">
   <mat-list-item role="listitem" [ngClass]="{'correct': colorLabel && checkIfCorrect(i)}" tabindex="0"
                  attr.aria-label="{{ ('statistic.a11y-choice-evaluation' | translate: { count: data[i], answer: a.answer }) +

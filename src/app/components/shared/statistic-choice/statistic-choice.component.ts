@@ -40,6 +40,7 @@ export class StatisticChoiceComponent implements OnInit {
   colorLabel = false;
   theme: Theme;
   survey = false;
+  chartVisible = false;
 
   constructor(protected route: ActivatedRoute,
               private contentService: ContentService,
@@ -88,6 +89,15 @@ export class StatisticChoiceComponent implements OnInit {
         }
       }
     });
+  }
+
+  toggleChart() {
+    if (!this.chartVisible) {
+      this.createChart(this.colors);
+    } else {
+      this.colorLabel = false;
+    }
+    this.chartVisible = !this.chartVisible;
   }
 
   toggleCorrect() {
@@ -142,7 +152,6 @@ export class StatisticChoiceComponent implements OnInit {
           this.labels.push(label);
         });
       }
-      this.createChart(this.colors);
     });
   }
 }
