@@ -1,25 +1,30 @@
-<div fxLayout="column" fxLayoutAlign="start" fxLayoutGap="20px" fxFill>
-  <div fxLayout="row" fxLayoutAlign="center">
-    <mat-card>
-      <mat-card-header *ngIf="!isLoading">
-        <mat-card-title>
-          <markdown [data]="content.body"></markdown>
-        </mat-card-title>
-        <span class="fill-remaining-space"></span>
-        <button mat-icon-button disableRipple *ngIf="correctAnswers" (click)="switchAnswers(showsCorrect)"
-                matTooltip="{{ 'statistic.answer-indicator' | translate }}" aria-labelledby="show-correct">
-          <mat-icon>playlist_add_check</mat-icon>
-        </button>
-        <div tabindex="-1" id="message-button" class="visually-hidden">
-          {{ 'statistic.a11y-message-evaluation' | translate: { content: content.body } }}
-        </div>
-      </mat-card-header>
-      <app-statistic-choice *ngIf="!isLoading && content.format !== 'TEXT'" [content]="content"
-                            [survey]="!correctAnswers"></app-statistic-choice>
-      <app-statistic-text *ngIf="!isLoading && content.format === 'TEXT'" [content]="content"></app-statistic-text>
-    </mat-card>
-    <div tabindex="0" class="visually-hidden">{{ 'statistic.a11y-no-more-answers' | translate }}</div>
-  </div>
+<app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
+<div *ngIf="!isLoading" fxLayout="column" fxLayoutAlign="start center">
+  <app-stepper *ngIf="contents.length > 0" [listLength]="contents.length" [completed]="">
+    <cdk-step *ngFor="let content of contents; let i = index">
+      <div tabindex="0" id="step">
+        <mat-card>
+          <mat-card-header>
+            <mat-card-title>
+              <markdown [data]="content.body"></markdown>
+            </mat-card-title>
+            <span class="fill-remaining-space"></span>
+            <button mat-icon-button disableRipple
+                    matTooltip="{{ 'statistic.show-answers' | translate }}" aria-labelledby="show-correct">
+              <mat-icon>insert_chart</mat-icon>
+            </button>
+            <div tabindex="-1" id="message-button" class="visually-hidden">
+              {{ 'statistic.a11y-message-evaluation' | translate: { content: content.body } }}
+            </div>
+          </mat-card-header>
+          <app-statistic-choice *ngIf="content.format !== 'TEXT'" [content]="content"
+                                ></app-statistic-choice>
+          <app-statistic-text *ngIf="content.format === 'TEXT'" [content]="content"></app-statistic-text>
+        </mat-card>
+      </div>
+      <div tabindex="0" class="visually-hidden">{{ 'statistic.a11y-no-more-answers' | translate }}</div>
+    </cdk-step>
+  </app-stepper>
 </div>
 
 <div class="visually-hidden">

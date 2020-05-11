@@ -38,18 +38,20 @@ import { InfoDialogComponent } from './_dialogs/info-dialog/info-dialog.componen
 import { CommentExportComponent } from './_dialogs/comment-export/comment-export.component';
 import { RoomNotFoundComponent } from './room-not-found/room-not-found.component';
 import { StepperComponent } from './stepper/stepper.component';
+import { CdkStepperModule } from '@angular/cdk/stepper';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    EssentialsModule,
-    ChartsModule,
-    SharedRoutingModule,
-    MatRippleModule,
-    ArsModule,
-    MarkdownModule,
-    QRCodeModule
-  ],
+    imports: [
+        CommonModule,
+        EssentialsModule,
+        ChartsModule,
+        SharedRoutingModule,
+        MatRippleModule,
+        ArsModule,
+        MarkdownModule,
+        QRCodeModule,
+        CdkStepperModule
+    ],
   declarations: [
     RoomJoinComponent,
     PageNotFoundComponent,

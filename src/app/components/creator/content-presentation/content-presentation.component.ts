@@ -21,6 +21,7 @@ export class ContentPresentationComponent implements OnInit {
   labels = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
   isLoading = true;
   shortId: string;
+  groupName: string;
 
   constructor(
     private contentService: ContentService,
@@ -32,13 +33,12 @@ export class ContentPresentationComponent implements OnInit {
   }
 
   ngOnInit() {
-    let groupName;
     this.route.params.subscribe(params => {
-      groupName = params['contentGroup'];
+      this.groupName = params['contentGroup'];
       this.shortId = params['shortId'];
     });
     this.route.data.subscribe(data => {
-      this.roomService.getGroupByRoomIdAndName(data.room.id, groupName).subscribe(group => {
+      this.roomService.getGroupByRoomIdAndName(data.room.id, this.groupName).subscribe(group => {
         this.contentService.getContentChoiceByIds(group.contentIds).subscribe(contents => {
           this.contents = contents;
           this.checkIfLastContentExists();
@@ -50,7 +50,7 @@ export class ContentPresentationComponent implements OnInit {
 
   goToStats(contentId: string) {
     this.globalStorageService.setMemoryItem(MemoryStorageKey.LAST_CONTENT, contentId);
-    this.router.navigate([`/creator/room/${this.shortId}/statistics/${contentId}`]);
+    this.router.navigate([`/creator/room/${this.shortId}/group/${this.groupName}/statistics/${contentId}`]);
   }
 
   checkIfLastContentExists() {

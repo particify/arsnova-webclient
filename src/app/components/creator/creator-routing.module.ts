@@ -6,14 +6,12 @@ import { RoomCreatorPageComponent } from './room-creator-page/room-creator-page.
 import { ContentCreatePageComponent } from './content-create-page/content-create-page.component';
 import { StatisticsPageComponent } from '../shared/statistics-page/statistics-page.component';
 import { SurveyPageComponent } from '../shared/survey-page/survey-page.component';
-import { ContentListComponent } from './content-list/content-list.component';
 import { StatisticComponent } from '../shared/statistic/statistic.component';
 import { ContentPresentationComponent } from './content-presentation/content-presentation.component';
 import { CommentPageComponent } from '../shared/comment-page/comment-page.component';
 import { CommentAnswerComponent } from '../shared/comment-answer/comment-answer.component';
 import { SettingsPageComponent } from './settings-page/settings-page.component';
 import { RoomResolver } from '../../resolver/room.resolver';
-import { ContentResolver } from '../../resolver/content.resolver';
 import { CommentResolver } from '../../resolver/comment.resolver';
 import { LooseContentComponent } from './loose-content/loose-content.component';
 import { GroupContentComponent } from './group-content/group-content.component';
@@ -56,13 +54,19 @@ const routes: Routes = [
     }
   },
   {
-    path: 'room/:shortId/statistics/:contentId',
+    path: 'room/:shortId/group/:contentGroup/statistics',
     component: StatisticComponent,
     canActivate: [AuthenticationGuard],
     data: { roles: [UserRole.CREATOR] },
     resolve : {
-      content: ContentResolver
+      room: RoomResolver
     }
+  },
+  {
+    path: 'room/:shortId/group/:contentGroup/statistics/:contendId',
+    component: StatisticComponent,
+    canActivate: [AuthenticationGuard],
+    data: { roles: [UserRole.CREATOR] }
   },
   {
     path: 'room/:shortId/comments',

@@ -4,7 +4,11 @@
     <canvas id="chart"></canvas>
   </div>
 </div>
-<mat-list role="list">
+<button mat-icon-button disableRipple (click)="toggleCorrect()"
+        matTooltip="{{ 'statistic.answer-indicator' | translate }}" aria-labelledby="show-correct">
+  <mat-icon>playlist_add_check</mat-icon>
+</button>
+<mat-list *ngIf="!isLoading" role="list">
   <mat-list-item role="listitem" [ngClass]="{'correct': colorLabel && checkIfCorrect(i)}" tabindex="0"
                  attr.aria-label="{{ ('statistic.a11y-choice-evaluation' | translate: { count: data[i], answer: a.answer }) +
                  (content.format !== 'LIKERT' ? ((checkIfCorrect(i) ?
