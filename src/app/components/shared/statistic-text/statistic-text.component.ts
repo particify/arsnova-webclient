@@ -28,6 +28,7 @@ export class StatisticTextComponent implements OnInit {
   @Input() content: ContentText;
   answers: TextStatistic[] = [];
   isLoading = true;
+  answersVisible = false;
 
   constructor(
     protected route: ActivatedRoute,
@@ -65,5 +66,9 @@ export class StatisticTextComponent implements OnInit {
     this.answers.sort((a, b) => {
       return a.count > b.count ? -1 : 1;
     });
+  }
+
+  toggleAnswers() {
+    this.answersVisible = !this.answersVisible;
   }
 }

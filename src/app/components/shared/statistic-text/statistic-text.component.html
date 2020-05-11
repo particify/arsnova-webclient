@@ -1,9 +1,17 @@
 <div>
-  <mat-list>
-    <mat-list-item *ngFor="let answer of answers" tabindex="0" attr.aria-label="
+  <div fxLayout="row" fxLayoutAlign="end" class="button-container">
+    <button mat-icon-button disableRipple (click)="toggleAnswers()"
+            matTooltip="{{ 'statistic.show-chart' | translate }}" aria-labelledby="show-correct">
+      <mat-icon>insert_chart</mat-icon>
+    </button>
+  </div>
+  <div class="answer-list" [ngClass]="{'invisible': !answersVisible}">
+    <mat-list class="answer-list">
+      <mat-list-item *ngFor="let answer of answers" tabindex="0" attr.aria-label="
               {{ 'statistic.a11y-text-evaluation' | translate:{ count: answer.count, answer: answer.answer } }}">
-      <span class="answer">{{answer.answer}}</span>
-      <span class="count">x {{answer.count}}</span>
-    </mat-list-item>
-  </mat-list>
+        <span class="answer">{{answer.answer}}</span>
+        <span class="count">x {{answer.count}}</span>
+      </mat-list-item>
+    </mat-list>
+  </div>
 </div>
