@@ -20,6 +20,7 @@ export class ContentParticipantComponent implements OnInit {
   isLoading = true;
   shortId: string;
   contentGroupName: string;
+  flipped: boolean;
 
   constructor(
     protected authenticationService: AuthenticationService,
@@ -51,8 +52,9 @@ export class ContentParticipantComponent implements OnInit {
   }
 
   goToStats(contentId: string) {
-    this.globalStorageService.setMemoryItem(MemoryStorageKey.LAST_CONTENT, contentId);
-    this.router.navigate([`/participant/room/${this.shortId}/group/${this.contentGroupName}/statistics/${this.index + 1}`]);
+    this.flipped = !this.flipped;
+    /*this.globalStorageService.setMemoryItem(MemoryStorageKey.LAST_CONTENT, contentId);
+    this.router.navigate([`/participant/room/${this.shortId}/group/${this.contentGroupName}/statistics/${this.index + 1}`]);*/
   }
 
   submitAnswer() {

@@ -54,13 +54,21 @@ p {
   transform: scale(1);
 }
 
-.markdown-container {
-  margin: 16px 8px;
-}
-
 .stat-icon {
   font-size: 32px;
   height: 32px;
   width: 32px;
   color: var(--secondary);
+}
+
+mat-card {
+  margin: 3% 1%;
+}
+
+.toggleSide {
+  background-color: var(--surface);
+  z-index: 1;
+  position: absolute;
+  top: 0;
+  right: 0;
 }

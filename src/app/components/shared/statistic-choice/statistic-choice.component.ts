@@ -54,9 +54,7 @@ export class StatisticChoiceComponent implements OnInit {
     this.getData(this.content);
     this.isLoading = false;
     if (this.directShow) {
-      setTimeout(() => {
-        this.toggleChart();
-      }, 100);
+      this.toggleChart();
     }
   }
 
@@ -99,11 +97,14 @@ export class StatisticChoiceComponent implements OnInit {
 
   toggleChart() {
     if (!this.chartVisible) {
-      this.createChart(this.colors);
+      this.chartVisible = true;
+      setTimeout(() => {
+        this.createChart(this.colors);
+      }, 300);
     } else {
       this.colorLabel = false;
+      this.chartVisible = false;
     }
-    this.chartVisible = !this.chartVisible;
   }
 
   toggleCorrect() {

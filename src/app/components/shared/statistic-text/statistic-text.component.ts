@@ -50,9 +50,7 @@ export class StatisticTextComponent implements OnInit {
       this.getData(answers);
       this.isLoading = false;
       if (this.directShow) {
-        setTimeout(() => {
-          this.toggleAnswers();
-        }, 100);
+        this.toggleAnswers();
       }
     });
   }

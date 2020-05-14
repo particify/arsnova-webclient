@@ -106,7 +106,9 @@ import { CdkStepperModule } from '@angular/cdk/stepper';
     LoadingIndicatorComponent,
     CommentExportComponent,
     RoomNotFoundComponent,
-    StepperComponent
+    StepperComponent,
+    StatisticChoiceComponent,
+    StatisticTextComponent
   ]
 })
 export class SharedModule {

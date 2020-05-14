@@ -4,15 +4,6 @@
     <cdk-step *ngFor="let content of contents; let i = index">
       <div tabindex="0" id="step">
         <mat-card>
-          <mat-card-header>
-            <mat-card-title>
-              <markdown [data]="content.body"></markdown>
-            </mat-card-title>
-            <span class="fill-remaining-space"></span>
-            <div tabindex="-1" id="message-button" class="visually-hidden">
-              {{ 'statistic.a11y-message-evaluation' | translate: { content: content.body } }}
-            </div>
-          </mat-card-header>
           <app-statistic-choice *ngIf="content.format !== 'TEXT'" [content]="content" [directShow]="contentIndex === i"
                                 ></app-statistic-choice>
           <app-statistic-text *ngIf="content.format === 'TEXT'" [content]="content" [directShow]="contentIndex === i">
