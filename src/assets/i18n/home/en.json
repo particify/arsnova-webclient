@@ -267,6 +267,8 @@
     "statistic-improvable": "Improvable",
     "statistic-no-answers": "No answers",
     "bonus-token": "Tokens for bonus points",
-    "no-bonus": "No bonus points earned yet."
+    "no-bonus": "No bonus points earned yet.",
+    "really-delete-answers": "Do you really want to delete the answers to this question?",
+    "really-delete-all-answers": "Do you really want to delete all answers of this collection?"
   }
 }

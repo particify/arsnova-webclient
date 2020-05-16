@@ -11,6 +11,11 @@
 </div>
 <mat-toolbar *ngIf="!isLoading && total >= status.zero"></mat-toolbar>
 
+<button mat-raised-button class="button-primary" *ngIf="total > status.empty" (click)="showDeleteAnswerDialog()"
+        aria-labelledby="delete-answers">
+  {{ 'content.delete-answers' | translate }}
+</button>
+
 <table mat-table *ngIf="!isLoading" [dataSource]="dataSource" class="mat-elevation-z8">
 
   <ng-container matColumnDef="content">
@@ -47,3 +52,7 @@
 </table>
 
 <app-loading-indicator *ngIf="isLoading" [size]="50"></app-loading-indicator>
+
+<div class="visually-hidden">
+  <div id="delete-answers">{{ 'content.a11y-delete-all-answers' | translate }}</div>
+</div>

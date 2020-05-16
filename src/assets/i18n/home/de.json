@@ -266,6 +266,8 @@
     "statistic-improvable": "Luft nach oben",
     "statistic-no-answers": "Keine Antworten",
     "bonus-token": "Tokens für Bonuspunkte",
-    "no-bonus": "Noch keine Bonuspunkte erhalten."
+    "no-bonus": "Noch keine Bonuspunkte erhalten.",
+    "really-delete-answers": "Willst du wirklich die Antworten auf diese Frage löschen?",
+    "really-delete-all-answers": "Willst du wirklich alle Antworten dieser Sammlung löschen?"
   }
 }

@@ -121,6 +121,10 @@
                   <mat-icon>library_add</mat-icon>
                   <span>{{ 'content.add-content-to-group' | translate}}</span>
                 </button>
+                <button mat-menu-item (click)="showDeleteAnswerDialog(content)" attr.aria-label="{{ 'content.a11y-delete-answers' | translate }}">
+                  <mat-icon>clear_all</mat-icon>
+                  <span>{{ 'content.delete-answers' | translate}}</span>
+                </button>
                 <button mat-menu-item (click)="deleteContent(content)" attr.aria-label="{{ 'content.a11y-delete-content' | translate }}">
                   <mat-icon class="delete">delete_forever</mat-icon>
                   <span>{{ 'content.delete-content' | translate}}</span>
