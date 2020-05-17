@@ -6,7 +6,6 @@ import { RoomCreatorPageComponent } from './room-creator-page/room-creator-page.
 import { ContentCreatePageComponent } from './content-create-page/content-create-page.component';
 import { StatisticsPageComponent } from '../shared/statistics-page/statistics-page.component';
 import { SurveyPageComponent } from '../shared/survey-page/survey-page.component';
-import { StatisticComponent } from '../shared/statistic/statistic.component';
 import { ContentPresentationComponent } from './content-presentation/content-presentation.component';
 import { CommentPageComponent } from '../shared/comment-page/comment-page.component';
 import { CommentAnswerComponent } from '../shared/comment-answer/comment-answer.component';
@@ -45,6 +44,15 @@ const routes: Routes = [
     }
   },
   {
+    path: 'room/:shortId/group/:contentGroup/statistics/:contentIndex',
+    component: ContentPresentationComponent,
+    canActivate: [AuthenticationGuard],
+    data: { roles: [UserRole.CREATOR] },
+    resolve : {
+      room: RoomResolver
+    }
+  },
+  {
     path: 'room/:shortId/statistics',
     component: StatisticsPageComponent,
     canActivate: [AuthenticationGuard],
@@ -55,16 +63,7 @@ const routes: Routes = [
   },
   {
     path: 'room/:shortId/group/:contentGroup/statistics',
-    component: StatisticComponent,
-    canActivate: [AuthenticationGuard],
-    data: { roles: [UserRole.CREATOR] },
-    resolve : {
-      room: RoomResolver
-    }
-  },
-  {
-    path: 'room/:shortId/group/:contentGroup/statistics/:contentIndex',
-    component: StatisticComponent,
+    component: ContentPresentationComponent,
     canActivate: [AuthenticationGuard],
     data: { roles: [UserRole.CREATOR] },
     resolve : {
