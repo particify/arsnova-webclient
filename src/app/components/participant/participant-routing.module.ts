@@ -4,7 +4,6 @@ import { UserRole } from '../../models/user-roles.enum';
 import { RoomParticipantPageComponent } from './room-participant-page/room-participant-page.component';
 import { SurveyPageComponent } from '../shared/survey-page/survey-page.component';
 import { ParticipantContentCarouselPageComponent } from './participant-content-carousel-page/participant-content-carousel-page.component';
-import { StatisticsPageComponent } from '../shared/statistics-page/statistics-page.component';
 import { StatisticComponent } from '../shared/statistic/statistic.component';
 import { CommentPageComponent } from '../shared/comment-page/comment-page.component';
 import { CommentAnswerComponent } from '../shared/comment-answer/comment-answer.component';
@@ -16,14 +15,6 @@ const routes: Routes = [
   {
     path: 'room/:shortId',
     component: RoomParticipantPageComponent,
-    data: { roles: [UserRole.PARTICIPANT] },
-    resolve : {
-      room: RoomResolver
-    }
-  },
-  {
-    path: 'room/:shortId/statistics',
-    component: StatisticsPageComponent,
     data: { roles: [UserRole.PARTICIPANT] },
     resolve : {
       room: RoomResolver

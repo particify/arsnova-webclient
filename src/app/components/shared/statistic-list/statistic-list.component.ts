@@ -9,8 +9,6 @@ import { Combination } from '../../../models/round-statistics';
 import { TranslateService } from '@ngx-translate/core';
 import { LanguageService } from '../../../services/util/language.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AuthenticationService } from '../../../services/http/authentication.service';
-import { UserRole } from '../../../models/user-roles.enum';
 import { ContentAnswerService } from '../../../services/http/content-answer.service';
 import { GlobalStorageService, LocalStorageKey, MemoryStorageKey } from '../../../services/util/global-storage.service';
 
@@ -54,7 +52,6 @@ export class StatisticListComponent implements OnInit {
   totalP = 0;
   contentCounter = 0;
   roomId: number;
-  baseUrl: string;
   deviceType: string;
   isLoading = true;
 
@@ -65,7 +62,6 @@ export class StatisticListComponent implements OnInit {
     private router: Router,
     protected langService: LanguageService,
     protected route: ActivatedRoute,
-    protected authService: AuthenticationService,
     private globalStorageService: GlobalStorageService
 
   ) {
@@ -81,7 +77,6 @@ export class StatisticListComponent implements OnInit {
     this.contentService.getContentsByIds(this.contentGroup.contentIds).subscribe(contents => {
       this.getData(contents);
     });
-    this.getBaseUrl();
     if (this.deviceType === 'desktop') {
       this.displayedColumns = ['content', 'counts', 'abstentions', 'percentage'];
     } else {
@@ -89,17 +84,9 @@ export class StatisticListComponent implements OnInit {
     }
   }
 
-  getBaseUrl() {
-    if (this.authService.getRole() === UserRole.CREATOR) {
-      this.baseUrl = `/creator/room/${this.roomId}/group/${this.contentGroup.name}/statistics/`;
-    } else {
-      this.baseUrl = `/participant/room/${this.roomId}/group/${this.contentGroup.name}/statistics/`;
-    }
-  }
-
   goToStats(id: string) {
     const contentIndex = this.contents.map(function (content) { return content.id; } ).indexOf(id);
-    this.router.navigate([`${this.baseUrl}${contentIndex + 1}`]);
+    this.router.navigate([`/creator/room/${this.roomId}/group/${this.contentGroup.name}/statistics/${contentIndex + 1}`]);
     this.globalStorageService.setMemoryItem(MemoryStorageKey.LAST_GROUP, this.contentGroup.name);
   }
 
