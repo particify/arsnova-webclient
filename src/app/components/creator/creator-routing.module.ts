@@ -63,7 +63,7 @@ const routes: Routes = [
     }
   },
   {
-    path: 'room/:shortId/group/:contentGroup/statistics/:index',
+    path: 'room/:shortId/group/:contentGroup/statistics/:contentIndex',
     component: StatisticComponent,
     canActivate: [AuthenticationGuard],
     data: { roles: [UserRole.CREATOR] },

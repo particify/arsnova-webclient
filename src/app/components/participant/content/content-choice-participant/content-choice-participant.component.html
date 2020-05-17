@@ -19,7 +19,7 @@
                 })) }}</div>
             <span class="fill-remaining-space"></span>
             <button *ngIf="alreadySent" mat-icon-button matTooltip="{{'answer.go-to-stats' | translate}}"
-                    (click)="goToStats(content.id)">
+                    (click)="goToStats()">
               <mat-icon class="stat-icon">
                 insert_chart
               </mat-icon>
@@ -83,7 +83,7 @@
         </div>
         <div class="back side" [ngClass]="{'invisible-card-content': !flipped}">
           <button *ngIf="flipped" class="toggleSide" mat-icon-button
-                  matTooltip="{{'answer.go-to-content' | translate}}" (click)="goToStats(content.id)">
+                  matTooltip="{{'answer.go-to-content' | translate}}" (click)="goToStats()">
             <mat-icon class="stat-icon">
               cached
             </mat-icon>

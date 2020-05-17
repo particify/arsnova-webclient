@@ -7,6 +7,7 @@ import { Content } from '../../../models/content';
 import { GlobalStorageService, LocalStorageKey, MemoryStorageKey } from '../../../services/util/global-storage.service';
 import { RoomService } from '../../../services/http/room.service';
 import { StepperComponent } from '../stepper/stepper.component';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-statistic',
@@ -20,6 +21,8 @@ export class StatisticComponent implements OnInit {
   contents: Content[];
   isLoading = true;
   contentIndex = 0;
+  shortId: number;
+  contentGroupName: string;
 
   constructor(
     protected route: ActivatedRoute,
@@ -27,7 +30,8 @@ export class StatisticComponent implements OnInit {
     private contentService: ContentService,
     private translateService: TranslateService,
     protected langService: LanguageService,
-    private globalStorageService: GlobalStorageService
+    private globalStorageService: GlobalStorageService,
+    private location: Location
   ) {
     langService.langEmitter.subscribe(lang => translateService.use(lang));
   }
@@ -36,14 +40,15 @@ export class StatisticComponent implements OnInit {
     window.scroll(0, 0);
     this.translateService.use(this.globalStorageService.getLocalStorageItem(LocalStorageKey.LANGUAGE));
     this.route.params.subscribe(params => {
-      this.contentIndex = params['index'] - 1;
+      this.contentIndex = params['contentIndex'] - 1;
     });
     this.route.data.subscribe(data => {
       const room = data.room;
+      this.shortId = room.shortId;
       this.route.params.subscribe(params => {
-        const collectionName = params['contentGroup'];
-        this.globalStorageService.setMemoryItem(MemoryStorageKey.LAST_GROUP, collectionName);
-        this.roomService.getGroupByRoomIdAndName(room.id, collectionName).subscribe(group => {
+        this.contentGroupName = params['contentGroup'];
+        this.globalStorageService.setMemoryItem(MemoryStorageKey.LAST_GROUP, this.contentGroupName);
+        this.roomService.getGroupByRoomIdAndName(room.id, this.contentGroupName).subscribe(group => {
           this.contentService.getContentsByIds(group.contentIds).subscribe(contents => {
             this.contents = contents;
             this.isLoading = false;
@@ -59,5 +64,9 @@ export class StatisticComponent implements OnInit {
         });
       });
     });
+  }
+
+  updateURL(index: number) {
+    this.location.replaceState(`participant/room/${this.shortId}/group/${this.contentGroupName}/${index + 1}`);
   }
 }

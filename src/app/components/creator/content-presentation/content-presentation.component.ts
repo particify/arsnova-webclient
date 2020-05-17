@@ -3,7 +3,7 @@ import { ContentService } from '../../../services/http/content.service';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RoomService } from '../../../services/http/room.service';
-import { GlobalStorageService, MemoryStorageKey } from '../../../services/util/global-storage.service';
+import { GlobalStorageService } from '../../../services/util/global-storage.service';
 import { StepperComponent } from '../../shared/stepper/stepper.component';
 
 @Component({
@@ -41,7 +41,6 @@ export class ContentPresentationComponent implements OnInit {
       this.roomService.getGroupByRoomIdAndName(data.room.id, this.groupName).subscribe(group => {
         this.contentService.getContentChoiceByIds(group.contentIds).subscribe(contents => {
           this.contents = contents;
-          this.checkIfLastContentExists();
           this.isLoading = false;
         });
       });
@@ -49,20 +48,6 @@ export class ContentPresentationComponent implements OnInit {
   }
 
   goToStats(contentId: string) {
-    this.globalStorageService.setMemoryItem(MemoryStorageKey.LAST_CONTENT, contentId);
     this.router.navigate([`/creator/room/${this.shortId}/group/${this.groupName}/statistics/${contentId}`]);
-  }
-
-  checkIfLastContentExists() {
-    const lastContentId = this.globalStorageService.getMemoryItem(MemoryStorageKey.LAST_CONTENT);
-    if (lastContentId) {
-      this.globalStorageService.deleteMemoryStorageItem(MemoryStorageKey.LAST_CONTENT);
-      const contentIndex = this.contents.map(function (content) {
-        return content.id;
-      }).indexOf(lastContentId);
-      setTimeout(() => {
-        this.stepper.init(contentIndex, this.contents.length);
-      }, 100);
-    }
   }
 }

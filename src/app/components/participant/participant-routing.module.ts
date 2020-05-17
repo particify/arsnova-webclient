@@ -39,7 +39,7 @@ const routes: Routes = [
     }
   },
   {
-    path: 'room/:shortId/group/:contentGroup/statistics/:index',
+    path: 'room/:shortId/group/:contentGroup/statistics/:contentIndex',
     component: StatisticComponent,
     canActivate: [AuthenticationGuard],
     data: { roles: [UserRole.PARTICIPANT] },
@@ -73,6 +73,11 @@ const routes: Routes = [
   },
   {
     path: 'room/:shortId/group/:contentGroup',
+    component: ParticipantContentCarouselPageComponent,
+    data: { roles: [UserRole.PARTICIPANT] }
+  },
+  {
+    path: 'room/:shortId/group/:contentGroup/:contentIndex',
     component: ParticipantContentCarouselPageComponent,
     data: { roles: [UserRole.PARTICIPANT] }
   }

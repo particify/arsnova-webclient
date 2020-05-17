@@ -4,7 +4,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { LanguageService } from '../../../services/util/language.service';
 import { AuthenticationService } from '../../../services/http/authentication.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { GlobalStorageService, LocalStorageKey, MemoryStorageKey } from '../../../services/util/global-storage.service';
+import { GlobalStorageService, LocalStorageKey } from '../../../services/util/global-storage.service';
 
 @Component({
   selector: 'app-content-participant',
@@ -51,10 +51,8 @@ export class ContentParticipantComponent implements OnInit {
     this.message.emit(this.alreadySent);
   }
 
-  goToStats(contentId: string) {
+  goToStats() {
     this.flipped = !this.flipped;
-    /*this.globalStorageService.setMemoryItem(MemoryStorageKey.LAST_CONTENT, contentId);
-    this.router.navigate([`/participant/room/${this.shortId}/group/${this.contentGroupName}/statistics/${this.index + 1}`]);*/
   }
 
   submitAnswer() {
