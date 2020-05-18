@@ -53,6 +53,9 @@ export class ContentParticipantComponent implements OnInit {
 
   goToStats() {
     this.flipped = !this.flipped;
+    setTimeout(() => {
+      document.getElementById('go-to-' + (this.flipped ? 'content' : 'stats')).focus();
+    }, 300);
   }
 
   submitAnswer() {

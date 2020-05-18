@@ -93,7 +93,6 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
 
   checkIfLastContentExists(contentIndex: number) {
     if (contentIndex) {
-      console.log(contentIndex);
       this.started = this.status.LAST_CONTENT;
       setTimeout(() => {
         this.initStepper(contentIndex);

@@ -8,7 +8,8 @@
     <mat-icon>playlist_add_check</mat-icon>
   </button>
   <button mat-icon-button disableRipple (click)="toggleChart()"
-          matTooltip="{{ 'statistic.show-chart' | translate }}" aria-labelledby="show-correct">
+          matTooltip="{{ (chartVisible ? 'statistic.hide-chart' : 'statistic.show-chart') | translate }}"
+          aria-labelledby="show-chart">
     <mat-icon>insert_chart</mat-icon>
   </button>
   <div tabindex="-1" id="message-button" class="visually-hidden">
@@ -30,3 +31,9 @@
     <p class="label">{{a.label}}: {{a.answer}}</p>
   </mat-list-item>
 </mat-list>
+
+
+<div class="visually-hidden">
+  <div id="show-correct">{{ 'statistic.a11y-answer-indicator' | translate }}</div>
+  <div id="show-chart">{{ 'statistic.a11y-show-chart' | translate }}</div>
+</div>

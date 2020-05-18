@@ -10,8 +10,8 @@
             <div tabindex="0" class="visually-hidden"
                  *ngIf="alreadySent">{{ 'answer.a11y-already-answered-text' | translate: {answer: givenAnswer.body} }}</div>
             <span class="fill-remaining-space"></span>
-            <button *ngIf="alreadySent" mat-icon-button matTooltip="{{'answer.go-to-stats' | translate}}"
-                    (click)="goToStats()">
+            <button id="go-to-stats" *ngIf="alreadySent" (click)="goToStats()" aria-labelledby="flip-to-stats"
+                    mat-icon-button matTooltip="{{'answer.go-to-stats' | translate}}">
               <mat-icon class="stat-icon">
                 insert_chart
               </mat-icon>
@@ -43,8 +43,8 @@
           </div>
         </div>
         <div class="back side" [ngClass]="{'invisible-card-content': !flipped}">
-          <button *ngIf="flipped" class="toggleSide" mat-icon-button
-                  matTooltip="{{'answer.go-to-content' | translate}}" (click)="goToStats()">
+          <button id="go-to-content" tabindex="0" *ngIf="flipped" class="toggleSide" mat-icon-button
+                  matTooltip="{{'answer.go-to-content' | translate}}" (click)="goToStats()" aria-labelledby="flip-back">
             <mat-icon class="stat-icon">
               cached
             </mat-icon>
@@ -58,5 +58,7 @@
     <div id="submit">{{ 'answer.a11y-submit' | translate }}</div>
     <div id="abstain">{{ 'answer.a11y-abstain' | translate }}</div>
     <div id="answer-input">{{ 'answer.a11y-enter-answer' | translate }}</div>
+    <div id="flip-to-stats">{{ 'answer.a11y-go-to-stats' | translate }}</div>
+    <div id="flip-back">{{ 'answer.a11y-go-to-content' | translate }}</div>
   </div>
 </div>
