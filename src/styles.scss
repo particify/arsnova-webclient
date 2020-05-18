@@ -352,6 +352,57 @@ mat-card {
   background: var(--surface) !important;
 }
 
+.card-container {
+  position: relative;
+  -webkit-perspective: 3000px;
+  -moz-perspective: 3000px;
+  perspective: 3000px;
+}
+
+.card {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  -webkit-transition: -webkit-transform 600ms;
+  -moz-transition: -moz-transform 600ms;
+  -o-transition: -o-transform 600ms;
+  transition: transform 600ms;
+  -webkit-transform-style: preserve-3d;
+  transform-style: preserve-3d;
+  -webkit-transform-origin: 50% 50%;
+}
+
+.side {
+  position: relative;
+  transition: 300ms;
+  -webkit-backface-visibility: hidden;
+  -moz-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+
+.card .front {
+}
+
+.card .back {
+  background-color: var(--surface);
+  -webkit-transform: rotateY( 180deg );
+  -moz-transform: rotateY( 180deg );
+  -o-transform: rotateY( 180deg );
+  transform: rotateY( 180deg );
+}
+
+.card.flipped {
+  -webkit-transform: rotateY( 180deg );
+  -moz-transform: rotateY( 180deg );
+  -o-transform: rotateY( 180deg );
+  transform: rotateY( 180deg );
+}
+
+.invisible-card-content {
+  height: 0;
+  opacity: 0;
+}
+
 // Badge
 
 .mat-badge-content {

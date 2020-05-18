@@ -1,45 +1,64 @@
-<div tabindex="-1" attr.aria-label="{{ (alreadySent ? 'answer.a11y-already-answered' : 'answer.a11y-current-text') | translate }}">
+<div tabindex="-1"
+     attr.aria-label="{{ (alreadySent ? 'answer.a11y-already-answered' : 'answer.a11y-current-text') | translate }}">
   <app-loading-indicator *ngIf="isLoading" [size]="80"></app-loading-indicator>
-  <div *ngIf="!isLoading">
-    <div fxLayout="row" class="markdown-container">
-      <markdown tabindex="0" [data]="content.body"></markdown>
-      <div tabindex="0" class="visually-hidden"
-           *ngIf="alreadySent">{{ 'answer.a11y-already-answered-text' | translate: {answer: givenAnswer.body} }}</div>
-      <span class="fill-remaining-space"></span>
-      <button *ngIf="alreadySent" mat-icon-button matTooltip="{{'answer.go-to-stats' | translate}}"
-              (click)="goToStats(content.id)">
-        <mat-icon class="stat-icon">
-          insert_chart
-        </mat-icon>
-      </button>
-    </div>
-    <form *ngIf="!givenAnswer">
-      <mat-form-field class="input-block">
+  <section class="card-container" *ngIf="!isLoading">
+    <div class="card" [ngClass]="{'flipped': flipped}">
+      <mat-card>
+        <div class="front side" [ngClass]="{'invisible-card-content': flipped}">
+          <div fxLayout="row">
+            <markdown tabindex="0" [data]="content.body"></markdown>
+            <div tabindex="0" class="visually-hidden"
+                 *ngIf="alreadySent">{{ 'answer.a11y-already-answered-text' | translate: {answer: givenAnswer.body} }}</div>
+            <span class="fill-remaining-space"></span>
+            <button id="go-to-stats" *ngIf="alreadySent" (click)="goToStats()" aria-labelledby="flip-to-stats"
+                    mat-icon-button matTooltip="{{'answer.go-to-stats' | translate}}">
+              <mat-icon class="stat-icon">
+                insert_chart
+              </mat-icon>
+            </button>
+          </div>
+          <form *ngIf="!givenAnswer">
+            <mat-form-field class="input-block">
     <textarea matInput (focus)="eventService.makeFocusOnInputTrue()" (blur)="eventService.makeFocusOnInputFalse()"
               [(ngModel)]="textAnswer" name="answer" placeholder="{{ 'answer.your-answer' | translate }}"
               matTextareaAutosize matAutosizeMinRows="3" matAutosizeMaxRows="8" maxLength="255"
               aria-labelledby="answer-input"></textarea>
-      </mat-form-field>
-    </form>
-    <div *ngIf="givenAnswer && givenAnswer.body">
-      <p class="answer">{{givenAnswer.body}}</p>
+            </mat-form-field>
+          </form>
+          <div *ngIf="givenAnswer && givenAnswer.body">
+            <p class="answer">{{givenAnswer.body}}</p>
+          </div>
+          <div *ngIf="content.state.responsesVisible" class="invisible" [ngClass]="{'visible' : givenAnswer}">
+            <p class="text">{{sentMessage}}</p>
+          </div>
+          <div fxLayoutAlign="center" fxLayoutGap="20px" class="buttons">
+            <button tabindex="{{alreadySent ? '-1' : '0'}}" mat-raised-button *ngIf="content.abstentionsAllowed"
+                    (click)="abstain($event)" class="button-abort" [ngClass]="{'disabled' : alreadySent}"
+                    aria-labelledby="abstain">
+              {{ 'answer.abstain' | translate }}</button>
+            <button tabindex="{{alreadySent ? '-1' : '0'}}" mat-raised-button (click)="submitAnswer()"
+                    class="button-primary"
+                    [ngClass]="{'disabled' : alreadySent}" type="submit" aria-labelledby="submit">
+              {{ 'answer.submit' | translate }}</button>
+          </div>
+        </div>
+        <div class="back side" [ngClass]="{'invisible-card-content': !flipped}">
+          <button id="go-to-content" tabindex="0" *ngIf="flipped" class="toggleSide" mat-icon-button
+                  matTooltip="{{'answer.go-to-content' | translate}}" (click)="goToStats()" aria-labelledby="flip-back">
+            <mat-icon class="stat-icon">
+              cached
+            </mat-icon>
+          </button>
+          <app-statistic-text *ngIf="flipped" [content]="content" [directShow]="true"></app-statistic-text>
+        </div>
+      </mat-card>
     </div>
-    <div *ngIf="content.state.responsesVisible" class="invisible" [ngClass]="{'visible' : givenAnswer}">
-      <p class="text">{{sentMessage}}</p>
-    </div>
-    <div fxLayoutAlign="center" fxLayoutGap="20px" class="buttons">
-      <button tabindex="{{alreadySent ? '-1' : '0'}}" mat-raised-button *ngIf="content.abstentionsAllowed"
-              (click)="abstain($event)" class="button-abort" [ngClass]="{'disabled' : alreadySent}"
-              aria-labelledby="abstain">
-        {{ 'answer.abstain' | translate }}</button>
-      <button tabindex="{{alreadySent ? '-1' : '0'}}" mat-raised-button (click)="submitAnswer()" class="button-primary"
-              [ngClass]="{'disabled' : alreadySent}" type="submit" aria-labelledby="submit">
-        {{ 'answer.submit' | translate }}</button>
-    </div>
-  </div>
+  </section>
   <div tabindex="-1" class="visually-hidden">
     <div id="submit">{{ 'answer.a11y-submit' | translate }}</div>
     <div id="abstain">{{ 'answer.a11y-abstain' | translate }}</div>
     <div id="answer-input">{{ 'answer.a11y-enter-answer' | translate }}</div>
+    <div id="flip-to-stats">{{ 'answer.a11y-go-to-stats' | translate }}</div>
+    <div id="flip-back">{{ 'answer.a11y-go-to-content' | translate }}</div>
   </div>
 </div>

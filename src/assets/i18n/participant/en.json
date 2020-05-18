@@ -15,6 +15,8 @@
     "a11y-enter-answer": "Enter your answer here.",
     "a11y-submit": "Sends the answer and go to the next one.",
     "a11y-abstain": "Abstain on this question and go to the next one.",
+    "a11y-go-to-stats": "Flips the card and shows the statistic of this question.",
+    "a11y-go-to-content": "Flips the card back and shows the question.",
     "abstain": "Abstain",
     "at-least-one": "Please select at least one answer.",
     "please-answer": "Please enter an answer.",
@@ -25,7 +27,8 @@
     "has-voted": "You have voted!",
     "has-answered": "You have answered the question!",
     "questions-locked": "No questions have been released yet!",
-    "go-to-stats": "Go to the results"
+    "go-to-stats": "Go to the results",
+    "go-to-content": "Go back to the question"
   },
   "comment-list": {
     "a11y-search-list": "Option to search for comments",
@@ -148,11 +151,15 @@
     "a11y-no-more-answers": "There are no more answers.",
     "a11y-correct": "The answer is correct.",
     "a11y-wrong": "The answer is wrong.",
+    "a11y-answer-indicator": "Indicates with the color green which answers are correct.",
+    "a11y-show-chart": "Shows a bar chart which displays the evaluation of this question.",
     "abstentions": "Abstentions",
     "answer-statistic": "Answer statistics",
     "answers": "Answers",
     "content": "Content",
     "percentage": "Percentage",
-    "answer-indicator": "Shows the correct answers"
+    "answer-indicator": "Shows the correct answers",
+    "show-chart": "Shows statistics with a chart",
+    "hide-chart": "Hide chart"
   }
 }

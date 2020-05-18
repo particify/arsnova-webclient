@@ -6,6 +6,8 @@ import { ContentChoice } from '../../../models/content-choice';
 import { TranslateService } from '@ngx-translate/core';
 import { ThemeService } from '../../../../theme/theme.service';
 import { Theme } from '../../../../theme/Theme';
+import { Content } from '../../../models/content';
+import { ContentType } from '../../../models/content-type.enum';
 
 export class AnswerList {
   label: string;
@@ -25,7 +27,7 @@ export class AnswerList {
 export class StatisticChoiceComponent implements OnInit {
 
   @Input() content: ContentChoice;
-  @Input() survey: boolean;
+  @Input() directShow: boolean;
 
   chart: Chart;
   colors: string[] = [];
@@ -38,6 +40,8 @@ export class StatisticChoiceComponent implements OnInit {
   isLoading = true;
   colorLabel = false;
   theme: Theme;
+  survey = false;
+  chartVisible: boolean;
 
   constructor(protected route: ActivatedRoute,
               private contentService: ContentService,
@@ -45,9 +49,13 @@ export class StatisticChoiceComponent implements OnInit {
               private themeService: ThemeService) {
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
+    this.checkIfSurvey(this.content);
     this.getData(this.content);
     this.isLoading = false;
+    if (this.directShow) {
+      this.toggleChart();
+    }
   }
 
   createChart(colors: string[]) {
@@ -87,13 +95,35 @@ export class StatisticChoiceComponent implements OnInit {
     });
   }
 
-  toggleCorrect(showsCorrect: boolean) {
-    showsCorrect ? this.createChart(this.indicationColors) : this.createChart(this.colors);
-    this.colorLabel = showsCorrect;
+  toggleChart() {
+    if (this.chartVisible === undefined) {
+      this.chartVisible = true;
+      setTimeout(() => {
+        this.createChart(this.colors);
+      }, 300);
+    } else {
+      this.colorLabel = false;
+      this.chartVisible = !this.chartVisible;
+    }
+  }
+
+  toggleCorrect() {
+    this.colorLabel ? this.createChart(this.colors) : this.createChart(this.indicationColors);
+    this.colorLabel = !this.colorLabel;
   }
 
   checkIfCorrect(index: number): boolean {
     return (this.content.options[index].points >= 0);
+  }
+
+  checkIfSurvey(content: Content) {
+    let maxPoints;
+    if (content.format === ContentType.BINARY) {
+      maxPoints = Math.max.apply(Math, (content as ContentChoice).options.map(function(option) { return option.points; }));
+    }
+    if (content.format === ContentType.TEXT || content.format === ContentType.SCALE || maxPoints === 0) {
+      this.survey = true;
+    }
   }
 
   getData(content: ContentChoice) {
@@ -129,7 +159,6 @@ export class StatisticChoiceComponent implements OnInit {
           this.labels.push(label);
         });
       }
-      this.createChart(this.colors);
     });
   }
 }

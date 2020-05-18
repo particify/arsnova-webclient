@@ -4,9 +4,7 @@
             class="visually-hidden">{{ 'room-page.a11y-room-message' | translate }}</button>
     <app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
     <mat-card *ngIf=" !isLoading && room">
-      <div fxLayout="row">
-        <span *ngIf="!noGroups" class="corner-icons"></span>
-        <span class="fill-remaining-space"></span>
+      <div fxLayout="row" fxLayoutAlign="center">
         <mat-card-header fxLayoutAlign="center">
           <mat-card-title fxLayoutAlign="center">
             {{ room.name }}
@@ -17,11 +15,6 @@
             </span>
           </mat-card-subtitle>
         </mat-card-header>
-        <span class="fill-remaining-space"></span>
-        <button id="statistics-button" mat-icon-button *ngIf="!noGroups" class="corner-icons"
-                aria-labelledby="statistics" (click)="navToStats('participant')">
-          <mat-icon id="stat-icon" matTooltip="{{ 'statistic.answer-statistic' | translate}}">insert_chart</mat-icon>
-        </button>
       </div>
       <mat-card-content *ngIf="room.description" fxLayoutAlign="center">
         <markdown [data]="room.description.trim()"></markdown>

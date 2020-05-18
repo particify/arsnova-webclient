@@ -1,10 +1,28 @@
+<mat-card-header>
+  <mat-card-title>
+    <markdown [data]="content.body"></markdown>
+  </mat-card-title>
+  <span class="fill-remaining-space"></span>
+  <button mat-icon-button *ngIf="chartVisible && !survey" disableRipple (click)="toggleCorrect()"
+          matTooltip="{{ 'statistic.answer-indicator' | translate }}" aria-labelledby="show-correct">
+    <mat-icon>playlist_add_check</mat-icon>
+  </button>
+  <button mat-icon-button disableRipple (click)="toggleChart()"
+          matTooltip="{{ (chartVisible ? 'statistic.hide-chart' : 'statistic.show-chart') | translate }}"
+          aria-labelledby="show-chart">
+    <mat-icon>insert_chart</mat-icon>
+  </button>
+  <div tabindex="-1" id="message-button" class="visually-hidden">
+    {{ 'statistic.a11y-message-evaluation' | translate: {content: content.body} }}
+  </div>
+</mat-card-header>
 <div>
-  <div class="chart-container">
-    <app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
+  <app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
+  <div class="chart-container" [ngClass]="{ 'invisible': !chartVisible }">
     <canvas id="chart"></canvas>
   </div>
 </div>
-<mat-list role="list">
+<mat-list *ngIf="!isLoading" role="list">
   <mat-list-item role="listitem" [ngClass]="{'correct': colorLabel && checkIfCorrect(i)}" tabindex="0"
                  attr.aria-label="{{ ('statistic.a11y-choice-evaluation' | translate: { count: data[i], answer: a.answer }) +
                  (content.format !== 'LIKERT' ? ((checkIfCorrect(i) ?
@@ -13,3 +31,9 @@
     <p class="label">{{a.label}}: {{a.answer}}</p>
   </mat-list-item>
 </mat-list>
+
+
+<div class="visually-hidden">
+  <div id="show-correct">{{ 'statistic.a11y-answer-indicator' | translate }}</div>
+  <div id="show-chart">{{ 'statistic.a11y-show-chart' | translate }}</div>
+</div>

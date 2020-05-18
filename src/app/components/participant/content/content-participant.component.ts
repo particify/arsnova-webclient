@@ -1,10 +1,10 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { NotificationService } from '../../../services/util/notification.service';
 import { TranslateService } from '@ngx-translate/core';
 import { LanguageService } from '../../../services/util/language.service';
 import { AuthenticationService } from '../../../services/http/authentication.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { GlobalStorageService, LocalStorageKey, MemoryStorageKey } from '../../../services/util/global-storage.service';
+import { GlobalStorageService, LocalStorageKey } from '../../../services/util/global-storage.service';
 
 @Component({
   selector: 'app-content-participant',
@@ -12,11 +12,15 @@ import { GlobalStorageService, LocalStorageKey, MemoryStorageKey } from '../../.
 })
 export class ContentParticipantComponent implements OnInit {
 
+
+  @Input() index = 0;
   @Output() message = new EventEmitter<boolean>();
 
   alreadySent = false;
   isLoading = true;
   shortId: string;
+  contentGroupName: string;
+  flipped: boolean;
 
   constructor(
     protected authenticationService: AuthenticationService,
@@ -36,6 +40,7 @@ export class ContentParticipantComponent implements OnInit {
     this.initAnswer(userId);
     this.route.params.subscribe(params => {
       this.shortId = params['shortId'];
+      this.contentGroupName = params['contentGroup'];
     });
   }
 
@@ -46,9 +51,11 @@ export class ContentParticipantComponent implements OnInit {
     this.message.emit(this.alreadySent);
   }
 
-  goToStats(contentId: string) {
-    this.globalStorageService.setMemoryItem(MemoryStorageKey.LAST_CONTENT, contentId);
-    this.router.navigate([`/participant/room/${this.shortId}/statistics/${contentId}`]);
+  goToStats() {
+    this.flipped = !this.flipped;
+    setTimeout(() => {
+      document.getElementById('go-to-' + (this.flipped ? 'content' : 'stats')).focus();
+    }, 300);
   }
 
   submitAnswer() {

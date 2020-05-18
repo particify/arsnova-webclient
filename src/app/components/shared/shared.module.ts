@@ -14,7 +14,6 @@ import { EssentialsModule } from '../essentials/essentials.module';
 import { SharedRoutingModule } from './shared-routing.module';
 import { StatisticListComponent } from './statistic-list/statistic-list.component';
 import { ChartsModule } from 'ng2-charts';
-import { StatisticComponent } from './statistic/statistic.component';
 import { RoomJoinComponent } from './room-join/room-join.component';
 import { RoomCreateComponent } from './_dialogs/room-create/room-create.component';
 import { UserBonusTokenComponent } from './_dialogs/user-bonus-token/user-bonus-token.component';
@@ -38,18 +37,20 @@ import { InfoDialogComponent } from './_dialogs/info-dialog/info-dialog.componen
 import { CommentExportComponent } from './_dialogs/comment-export/comment-export.component';
 import { RoomNotFoundComponent } from './room-not-found/room-not-found.component';
 import { StepperComponent } from './stepper/stepper.component';
+import { CdkStepperModule } from '@angular/cdk/stepper';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    EssentialsModule,
-    ChartsModule,
-    SharedRoutingModule,
-    MatRippleModule,
-    ArsModule,
-    MarkdownModule,
-    QRCodeModule
-  ],
+    imports: [
+        CommonModule,
+        EssentialsModule,
+        ChartsModule,
+        SharedRoutingModule,
+        MatRippleModule,
+        ArsModule,
+        MarkdownModule,
+        QRCodeModule,
+        CdkStepperModule
+    ],
   declarations: [
     RoomJoinComponent,
     PageNotFoundComponent,
@@ -63,7 +64,6 @@ import { StepperComponent } from './stepper/stepper.component';
     CommentListComponent,
     StatisticsPageComponent,
     StatisticListComponent,
-    StatisticComponent,
     RoomCreateComponent,
     UserBonusTokenComponent,
     RemindOfTokensComponent,
@@ -104,7 +104,9 @@ import { StepperComponent } from './stepper/stepper.component';
     LoadingIndicatorComponent,
     CommentExportComponent,
     RoomNotFoundComponent,
-    StepperComponent
+    StepperComponent,
+    StatisticChoiceComponent,
+    StatisticTextComponent
   ]
 })
 export class SharedModule {

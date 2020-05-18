@@ -1,10 +1,13 @@
-import { ContentChoice } from '../../../models/content-choice';
-import { ContentService } from '../../../services/http/content.service';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
+import { ContentService } from '../../../services/http/content.service';
+import { TranslateService } from '@ngx-translate/core';
+import { LanguageService } from '../../../services/util/language.service';
+import { Content } from '../../../models/content';
+import { GlobalStorageService, LocalStorageKey, MemoryStorageKey } from '../../../services/util/global-storage.service';
 import { RoomService } from '../../../services/http/room.service';
-import { GlobalStorageService, MemoryStorageKey } from '../../../services/util/global-storage.service';
 import { StepperComponent } from '../../shared/stepper/stepper.component';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-content-presentation',
@@ -13,66 +16,57 @@ import { StepperComponent } from '../../shared/stepper/stepper.component';
 })
 export class ContentPresentationComponent implements OnInit {
 
-
   @ViewChild(StepperComponent) stepper: StepperComponent;
 
-  contents: ContentChoice[];
-
-  labels = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
+  contents: Content[];
   isLoading = true;
-  shortId: string;
+  contentIndex = 0;
+  shortId: number;
+  contentGroupName: string;
 
   constructor(
-    private contentService: ContentService,
-    private route: ActivatedRoute,
+    protected route: ActivatedRoute,
     private roomService: RoomService,
+    private contentService: ContentService,
+    private translateService: TranslateService,
+    protected langService: LanguageService,
     private globalStorageService: GlobalStorageService,
-    private router: Router
+    private location: Location
   ) {
+    langService.langEmitter.subscribe(lang => translateService.use(lang));
   }
 
   ngOnInit() {
-    let groupName;
+    window.scroll(0, 0);
+    this.translateService.use(this.globalStorageService.getLocalStorageItem(LocalStorageKey.LANGUAGE));
     this.route.params.subscribe(params => {
-      groupName = params['contentGroup'];
-      this.shortId = params['shortId'];
+      this.contentIndex = params['contentIndex'] - 1;
     });
     this.route.data.subscribe(data => {
-      this.roomService.getGroupByRoomIdAndName(data.room.id, groupName).subscribe(group => {
-        this.contentService.getContentChoiceByIds(group.contentIds).subscribe(contents => {
-          this.contents = contents;
-          this.checkIfLastContentExists();
-          this.isLoading = false;
+      const room = data.room;
+      this.shortId = room.shortId;
+      this.route.params.subscribe(params => {
+        this.contentGroupName = params['contentGroup'];
+        this.globalStorageService.setMemoryItem(MemoryStorageKey.LAST_GROUP, this.contentGroupName);
+        this.roomService.getGroupByRoomIdAndName(room.id, this.contentGroupName).subscribe(group => {
+          this.contentService.getContentsByIds(group.contentIds).subscribe(contents => {
+            this.contents = contents;
+            this.isLoading = false;
+            if (this.contentIndex) {
+              setTimeout(() => {
+               this.stepper.init(this.contentIndex, this.contents.length);
+              }, 100);
+            }
+            setTimeout(() => {
+              document.getElementById('message-button').focus();
+            }, 700);
+          });
         });
       });
     });
   }
 
-  goToStats(contentId: string) {
-    this.globalStorageService.setMemoryItem(MemoryStorageKey.LAST_CONTENT, contentId);
-    this.router.navigate([`/creator/room/${this.shortId}/statistics/${contentId}`]);
+  updateURL(index: number) {
+    this.location.replaceState(`creator/room/${this.shortId}/group/${this.contentGroupName}/statistics/${index + 1}`);
   }
-
-  checkIfLastContentExists() {
-    const lastContentId = this.globalStorageService.getMemoryItem(MemoryStorageKey.LAST_CONTENT);
-    if (lastContentId) {
-      this.globalStorageService.deleteMemoryStorageItem(MemoryStorageKey.LAST_CONTENT);
-      const contentIndex = this.contents.map(function (content) {
-        return content.id;
-      }).indexOf(lastContentId);
-      setTimeout(() => {
-        this.initStepper(contentIndex);
-      }, 100);
-    }
-  }
-
-  initStepper(index: number) {
-    this.stepper.onClick(index);
-    if (index > 2) {
-      const diff = index < (this.contents.length - 3) ? 2 : 5 - ((this.contents.length - 1) - index);
-      this.stepper.headerPos = index - diff;
-      this.stepper.moveHeaderRight();
-    }
-  }
-
 }

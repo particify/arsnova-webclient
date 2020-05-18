@@ -9,8 +9,9 @@ import { ActivatedRoute } from '@angular/router';
 import { RoomService } from '../../../services/http/room.service';
 import { KeyboardUtils } from '../../../utils/keyboard';
 import { KeyboardKey } from '../../../utils/keyboard/keys';
-import { GlobalStorageService, LocalStorageKey, MemoryStorageKey } from '../../../services/util/global-storage.service';
+import { GlobalStorageService, LocalStorageKey } from '../../../services/util/global-storage.service';
 import { AnnounceService } from '../../../services/util/announce.service';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-participant-content-carousel-page',
@@ -43,7 +44,8 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
     protected roomService: RoomService,
     protected route: ActivatedRoute,
     private announceService: AnnounceService,
-    private globalStorageService: GlobalStorageService
+    private globalStorageService: GlobalStorageService,
+    private location: Location
   ) {
   }
 
@@ -65,9 +67,11 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
 
   ngOnInit() {
     this.translateService.use(this.globalStorageService.getLocalStorageItem(LocalStorageKey.LANGUAGE));
+    let lastContentIndex: number;
     this.route.params.subscribe(params => {
       this.contentGroupName = params['contentGroup'];
       this.shortId = params['shortId'];
+      lastContentIndex = params['contentIndex'] - 1;
       this.roomService.getGroupByRoomIdAndName('~' + this.shortId, this.contentGroupName).subscribe(contentGroup => {
         this.contentGroup = contentGroup;
         this.contentService.getContentsByIds(this.contentGroup.contentIds).subscribe(contents => {
@@ -76,7 +80,7 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
               this.contents.push(content);
             }
           }
-          this.checkIfLastContentExists();
+          this.checkIfLastContentExists(lastContentIndex);
           this.isLoading = false;
         });
       });
@@ -87,12 +91,9 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
     this.announceService.announce(key);
   }
 
-  checkIfLastContentExists() {
-    const lastContentId = this.globalStorageService.getMemoryItem(MemoryStorageKey.LAST_CONTENT);
-    if (lastContentId) {
+  checkIfLastContentExists(contentIndex: number) {
+    if (contentIndex) {
       this.started = this.status.LAST_CONTENT;
-      this.globalStorageService.deleteMemoryStorageItem(MemoryStorageKey.LAST_CONTENT);
-      const contentIndex = this.contents.map(function (content) { return content.id; } ).indexOf(lastContentId);
       setTimeout(() => {
         this.initStepper(contentIndex);
       }, 100);
@@ -102,16 +103,15 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
   }
 
   initStepper(index: number) {
-    this.stepper.onClick(index);
-    if (index > 2) {
-      const diff = index < (this.contents.length - 3) ? 2 : 5 - ((this.contents.length - 1) - index);
-      this.stepper.headerPos = index - diff;
-      this.stepper.moveHeaderRight();
-    }
+    this.stepper.init(index, this.contents.length);
   }
 
   allStatusChecked(): boolean {
     return this.alreadySent.size === this.contents.length;
+  }
+
+  updateURL(index: number) {
+    this.location.replaceState(`participant/room/${this.shortId}/group/${this.contentGroup.name}/${index + 1}`);
   }
 
   receiveSentStatus($event, index: number) {

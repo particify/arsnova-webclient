@@ -1,4 +1,4 @@
-import { Component, HostListener, Input } from '@angular/core';
+import { Component, EventEmitter, HostListener, Input, Output } from '@angular/core';
 import { CdkStepper } from '@angular/cdk/stepper';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { KeyboardKey } from '../../../utils/keyboard/keys';
@@ -32,6 +32,7 @@ import { KeyboardUtils } from '../../../utils/keyboard';
 })
 export class StepperComponent extends CdkStepper {
 
+  @Output() newIndex = new EventEmitter<number>();
   @Input() listLength: number;
   @Input() completed: Map<number, boolean> = new Map<number, boolean>();
   headerPos = 0;
@@ -47,6 +48,16 @@ export class StepperComponent extends CdkStepper {
       this.previous();
     } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.RIGHT) === true) {
       this.next();
+    }
+  }
+
+
+  init(index: number, length: number) {
+    this.onClick(index);
+    if (index > 2) {
+      const diff = index < (length - 3) ? 2 : 5 - ((length - 1) - index);
+      this.headerPos = index - diff;
+      this.moveHeaderRight();
     }
   }
 
@@ -96,6 +107,11 @@ export class StepperComponent extends CdkStepper {
       return;
     }
     this.nextIndex = index;
+    this.sendNewIndex(this.nextIndex);
+  }
+
+  sendNewIndex(index: number) {
+    this.newIndex.emit(index);
   }
 
   headerAnimationDone() {

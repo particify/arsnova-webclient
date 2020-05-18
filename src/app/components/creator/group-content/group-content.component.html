@@ -41,7 +41,7 @@
       </mat-grid-tile>
       <mat-grid-tile>
         <button class="actionButton" mat-icon-button id="presentation-button" aria-labelledby="present-contents"
-                routerLink="/creator/room/{{ room.shortId }}/group/{{ contentGroup.name }}/presentation">
+                routerLink="/creator/room/{{ room.shortId }}/group/{{ contentGroup.name }}/statistics">
           <mat-icon class="actionIcon">school</mat-icon>
           <h3 *ngIf="deviceType === 'desktop'">{{ 'room-page.present' | translate}}</h3>
         </button>

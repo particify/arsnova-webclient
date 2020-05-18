@@ -26,8 +26,11 @@ export class TextStatistic {
 export class StatisticTextComponent implements OnInit {
 
   @Input() content: ContentText;
+  @Input() directShow: boolean;
+
   answers: TextStatistic[] = [];
   isLoading = true;
+  answersVisible = false;
 
   constructor(
     protected route: ActivatedRoute,
@@ -46,6 +49,9 @@ export class StatisticTextComponent implements OnInit {
     this.contentAnswerService.getAnswers(this.content.id).subscribe(answers => {
       this.getData(answers);
       this.isLoading = false;
+      if (this.directShow) {
+        this.toggleAnswers();
+      }
     });
   }
 
@@ -65,5 +71,9 @@ export class StatisticTextComponent implements OnInit {
     this.answers.sort((a, b) => {
       return a.count > b.count ? -1 : 1;
     });
+  }
+
+  toggleAnswers() {
+    this.answersVisible = !this.answersVisible;
   }
 }
