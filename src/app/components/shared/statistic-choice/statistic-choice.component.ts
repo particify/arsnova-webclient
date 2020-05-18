@@ -41,7 +41,7 @@ export class StatisticChoiceComponent implements OnInit {
   colorLabel = false;
   theme: Theme;
   survey = false;
-  chartVisible = false;
+  chartVisible: boolean;
 
   constructor(protected route: ActivatedRoute,
               private contentService: ContentService,
@@ -96,14 +96,14 @@ export class StatisticChoiceComponent implements OnInit {
   }
 
   toggleChart() {
-    if (!this.chartVisible) {
+    if (this.chartVisible === undefined) {
       this.chartVisible = true;
       setTimeout(() => {
         this.createChart(this.colors);
       }, 300);
     } else {
       this.colorLabel = false;
-      this.chartVisible = false;
+      this.chartVisible = !this.chartVisible;
     }
   }
 
