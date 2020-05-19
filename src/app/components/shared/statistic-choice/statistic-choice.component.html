@@ -1,7 +1,5 @@
-<mat-card-header>
-  <mat-card-title>
-    <markdown [data]="content.body"></markdown>
-  </mat-card-title>
+<div fxLayout="row">
+  <markdown [data]="content.body"></markdown>
   <span class="fill-remaining-space"></span>
   <button mat-icon-button *ngIf="chartVisible && !survey" disableRipple (click)="toggleCorrect()"
           matTooltip="{{ 'statistic.answer-indicator' | translate }}" aria-labelledby="show-correct">
@@ -15,7 +13,7 @@
   <div tabindex="-1" id="message-button" class="visually-hidden">
     {{ 'statistic.a11y-message-evaluation' | translate: {content: content.body} }}
   </div>
-</mat-card-header>
+</div>
 <div>
   <app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
   <div class="chart-container" [ngClass]="{ 'invisible': !chartVisible }">
