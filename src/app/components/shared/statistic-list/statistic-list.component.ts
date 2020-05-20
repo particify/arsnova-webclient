@@ -11,6 +11,9 @@ import { LanguageService } from '../../../services/util/language.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ContentAnswerService } from '../../../services/http/content-answer.service';
 import { GlobalStorageService, LocalStorageKey, MemoryStorageKey } from '../../../services/util/global-storage.service';
+import { forkJoin } from 'rxjs';
+import { NotificationService } from '../../../services/util/notification.service';
+import { DialogService } from '../../../services/util/dialog.service';
 
 export class ContentStatistic {
   content: Content;
@@ -62,7 +65,9 @@ export class StatisticListComponent implements OnInit {
     private router: Router,
     protected langService: LanguageService,
     protected route: ActivatedRoute,
-    private globalStorageService: GlobalStorageService
+    private globalStorageService: GlobalStorageService,
+    private notificationService: NotificationService,
+    private dialogService: DialogService
 
   ) {
     this.deviceType = this.globalStorageService.getMemoryItem(MemoryStorageKey.DEVICE_TYPE);
@@ -221,5 +226,36 @@ export class StatisticListComponent implements OnInit {
     res = ((correctCounts / totalCounts) * 100);
     this.contentCounter++;
     return res;
+  }
+
+  showDeleteAnswerDialog(): void {
+    const dialogRef = this.dialogService.openDeleteDialog('really-delete-all-answers');
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === 'delete') {
+        this.deleteAllAnswers();
+      }
+    });
+  }
+
+  resetAllAnswers() {
+    for (const content of this.dataSource) {
+      content.abstentions = 0;
+      content.counts = 0;
+      content.percent = this.status.empty;
+    }
+    this.total = this.status.empty;
+  }
+
+  deleteAllAnswers() {
+    const observableBatch = [];
+    for (const c of this.contents) {
+      observableBatch.push(this.contentService.deleteAnswers(c.id));
+    }
+    this.resetAllAnswers();
+    forkJoin(observableBatch).subscribe(() => {
+      this.translateService.get('content.all-answers-deleted').subscribe(msg => {
+        this.notificationService.show(msg);
+      });
+    });
   }
 }

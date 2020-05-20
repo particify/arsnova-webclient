@@ -17,7 +17,8 @@ export class ContentService extends BaseHttpService {
   private apiUrl = {
     base: '/api',
     content: '/content',
-    find: '/find'
+    find: '/find',
+    answer: '/answer'
   };
 
   constructor(private http: HttpClient) {
@@ -110,6 +111,14 @@ export class ContentService extends BaseHttpService {
     return this.http.delete<Content>(connectionUrl, httpOptions).pipe(
       tap(_ => ''),
       catchError(this.handleError<Content>('deleteContent'))
+    );
+  }
+
+  deleteAnswers(contentId: string): Observable<Content> {
+    const connectionUrl = this.apiUrl.base + this.apiUrl.content + '/' + contentId + this.apiUrl.answer;
+    return this.http.delete<Content>(connectionUrl, httpOptions).pipe(
+      tap(_ => ''),
+      catchError(this.handleError<Content>('deleteAnswers'))
     );
   }
 

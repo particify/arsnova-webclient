@@ -17,6 +17,7 @@ import { KeyboardUtils } from '../../../utils/keyboard';
 import { KeyboardKey } from '../../../utils/keyboard/keys';
 import { EventService } from '../../../services/util/event.service';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-group-content',
@@ -202,6 +203,23 @@ export class GroupContentComponent extends ContentListComponent implements OnIni
       content.state.visible = !content.state.visible;
     }
     this.contentService.changeState(content).subscribe(updatedContent => content = updatedContent);
+  }
+
+  showDeleteAnswerDialog(content: Content): void {
+    const dialogRef = this.dialogService.openDeleteDialog('really-delete-answers');
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === 'delete') {
+        this.deleteAnswers(content.id);
+      }
+    });
+  }
+
+  deleteAnswers(contentId: string) {
+    this.contentService.deleteAnswers(contentId).subscribe(() => {
+      this.translateService.get('content.answers-deleted').subscribe(msg => {
+        this.notificationService.show(msg);
+      });
+    });
   }
 
   toggleDirectAnswer(content: Content, directAnswer?: boolean) {
