@@ -79,7 +79,7 @@
           <span>{{ 'comment-page.delete' | translate }}</span>
         </button>
         <button mat-menu-item (click)="setAck(comment)" aria-labelledby="comment-moderation">
-          <mat-icon class="gavel-icon">gavel</mat-icon>
+          <mat-icon class="gavel-icon">{{ comment.ack ? 'gavel' : 'lock_open' }}</mat-icon>
           <span>{{ (comment.ack ? 'comment-page.banish' : 'comment-page.reject') | translate }}</span>
         </button>
 
