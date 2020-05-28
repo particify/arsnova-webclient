@@ -367,20 +367,12 @@ mat-card {
   -moz-transition: -moz-transform 600ms;
   -o-transition: -o-transform 600ms;
   transition: transform 600ms;
-  -webkit-transform-style: preserve-3d;
-  transform-style: preserve-3d;
   -webkit-transform-origin: 50% 50%;
 }
 
 .side {
   position: relative;
-  transition: 300ms;
-  -webkit-backface-visibility: hidden;
-  -moz-backface-visibility: hidden;
-  backface-visibility: hidden;
-}
-
-.card .front {
+  transition: 400ms;
 }
 
 .card .back {
