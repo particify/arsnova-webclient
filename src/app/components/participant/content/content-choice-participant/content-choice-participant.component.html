@@ -4,7 +4,7 @@
   <section class="card-container" *ngIf="!isLoading">
     <div class="card" [ngClass]="{'flipped': flipped}">
       <mat-card>
-        <div class="front side" [ngClass]="{'invisible-card-content': flipped}">
+        <div class="side" [ngClass]="{'invisible-card-content': flipped}">
           <div fxLayout="row">
             <markdown tabindex="0" [data]="content.body"></markdown>
             <div tabindex="0" class="visually-hidden"
