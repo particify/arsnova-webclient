@@ -17,7 +17,6 @@ import { KeyboardUtils } from '../../../utils/keyboard';
 import { KeyboardKey } from '../../../utils/keyboard/keys';
 import { EventService } from '../../../services/util/event.service';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-group-content',
@@ -54,7 +53,6 @@ export class GroupContentComponent extends ContentListComponent implements OnIni
   ) {
     super(contentService, roomService, route, location, notificationService, translateService, langService, dialogService,
     globalStorageService, contentGroupService, announceService);
-    this.deviceType = this.globalStorageService.getMemoryItem(MemoryStorageKey.DEVICE_TYPE);
     langService.langEmitter.subscribe(lang => translateService.use(lang));
   }
 
