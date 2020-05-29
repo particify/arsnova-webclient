@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { Comment } from '../../models/comment';
 import { catchError, tap } from 'rxjs/operators';
 import { BaseHttpService } from './base-http.service';
+import { TSMap } from 'typescript-map';
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -32,11 +33,7 @@ export class CommentService extends BaseHttpService {
 
   addComment(comment: Comment): Observable<Comment> {
     const connectionUrl = this.apiUrl.base + this.apiUrl.comment + '/';
-    return this.http.post<Comment>(connectionUrl,
-      {
-        roomId: comment.roomId, body: comment.body,
-        read: comment.read, creationTimestamp: comment.timestamp
-      }, httpOptions).pipe(
+    return this.http.post<Comment>(connectionUrl, comment, httpOptions).pipe(
       tap(_ => ''),
       catchError(this.handleError<Comment>('addComment'))
     );
@@ -109,4 +106,49 @@ export class CommentService extends BaseHttpService {
       catchError(this.handleError<number>('countByRoomId', 0))
     );
   }
+
+  answer(comment: Comment, answer: string): Comment {
+    comment.answer = answer;
+    const changes = new TSMap<string, any>();
+    changes.set('answer', comment.answer);
+    this.patchComment(comment, changes);
+    return comment;
+  }
+
+  toggleRead(comment: Comment): Comment {
+    comment.read = !comment.read;
+    const changes = new TSMap<string, any>();
+    changes.set('read', comment.read);
+    this.patchComment(comment, changes);
+    return comment;
+  }
+
+  toggleFavorite(comment: Comment): Comment {
+    comment.favorite = !comment.favorite;
+    const changes = new TSMap<string, any>();
+    changes.set('favorite', comment.favorite);
+    this.patchComment(comment, changes);
+    return comment;
+  }
+
+  markCorrect(comment: Comment): Comment {
+    const changes = new TSMap<string, any>();
+    changes.set('correct', comment.correct);
+    this.patchComment(comment, changes);
+    return comment;
+  }
+
+  toggleAck(comment: Comment): Comment {
+    comment.ack = !comment.ack;
+    const changes = new TSMap<string, any>();
+    changes.set('ack', comment.ack);
+    this.patchComment(comment, changes);
+    return comment;
+  }
+
+  private patchComment(comment: Comment, changes: TSMap<string, any>): void {
+    const connectionUrl = this.apiUrl.base + this.apiUrl.comment + '/' + comment.id;
+    this.http.patch(connectionUrl, changes, httpOptions).subscribe();
+  }
+
 }

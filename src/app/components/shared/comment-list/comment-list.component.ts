@@ -294,24 +294,25 @@ export class CommentListComponent implements OnInit, OnDestroy {
 
   send(comment: Comment): void {
     let message;
-    if (this.directSend) {
-      if (this.userRole === 1 || this.userRole === 3) {
+    this.commentService.addComment(comment).subscribe(returned => {
+      if (this.directSend) {
+        if (this.userRole === 1 || this.userRole === 3) {
+          this.translateService.get('comment-list.comment-sent').subscribe(msg => {
+            message = msg;
+          });
+          comment.ack = true;
+        } else {
+          this.translateService.get('comment-list.comment-sent-to-moderator').subscribe(msg => {
+            message = msg;
+          });
+        }
+      } else {
         this.translateService.get('comment-list.comment-sent').subscribe(msg => {
           message = msg;
         });
-        comment.ack = true;
-      } else {
-        this.translateService.get('comment-list.comment-sent-to-moderator').subscribe(msg => {
-          message = msg;
-        });
       }
-    } else {
-      this.translateService.get('comment-list.comment-sent').subscribe(msg => {
-        message = msg;
-      });
-    }
-    this.wsCommentService.add(comment);
-    this.notificationService.show(message);
+      this.notificationService.show(message);
+    });
   }
 
   filterComments(type: string, tag?: string): void {

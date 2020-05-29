@@ -16,6 +16,7 @@ import { DialogService } from '../../../services/util/dialog.service';
 import * as moment from 'moment';
 import { GlobalStorageService, LocalStorageKey, MemoryStorageKey } from '../../../services/util/global-storage.service';
 import { AnnounceService } from '../../../services/util/announce.service';
+import { VoteService } from '../../../services/http/vote.service';
 
 @Pipe({ name: 'dateFromNow' })
 export class DateFromNow implements PipeTransform {
@@ -60,6 +61,7 @@ export class CommentComponent implements OnInit {
     protected router: Router,
     private location: Location,
     private commentService: CommentService,
+    private voteService: VoteService,
     private notification: NotificationService,
     private translateService: TranslateService,
     private dialogService: DialogService,
@@ -113,7 +115,7 @@ export class CommentComponent implements OnInit {
   }
 
   setRead(comment: Comment): void {
-    this.comment = this.wsCommentService.toggleRead(comment);
+    this.comment = this.commentService.toggleRead(comment);
   }
 
   markCorrect(comment: Comment, type: CorrectWrong): void {
@@ -122,30 +124,33 @@ export class CommentComponent implements OnInit {
     } else {
       comment.correct = type;
     }
-    this.comment = this.wsCommentService.markCorrect(comment);
+    this.comment = this.commentService.markCorrect(comment);
   }
 
   setFavorite(comment: Comment): void {
-    this.comment = this.wsCommentService.toggleFavorite(comment);
+    this.comment = this.commentService.toggleFavorite(comment);
   }
 
   vote(vote: number) {
     const voteString = vote.toString();
     const userId = this.authenticationService.getUser().id;
+    let subscription;
     if (this.hasVoted !== vote) {
       if (voteString === '1') {
-        this.wsCommentService.voteUp(this.comment, userId);
+        subscription = this.voteService.voteUp(this.comment.id, userId);
       } else {
-        this.wsCommentService.voteDown(this.comment, userId);
+        subscription = this.voteService.voteDown(this.comment.id, userId);
       }
       this.currentVote = voteString;
       this.hasVoted = vote;
     } else {
-      this.wsCommentService.resetVote(this.comment, userId);
+      subscription = this.voteService.deleteVote(this.comment.id, userId);
       this.hasVoted = 0;
       this.currentVote = '0';
     }
-    this.resetVotingAnimation();
+    subscription.subscribe(() => {
+      this.resetVotingAnimation();
+    });
   }
 
   openDeleteCommentDialog(): void {
@@ -174,7 +179,7 @@ export class CommentComponent implements OnInit {
   }
 
   setAck(comment: Comment): void {
-    this.comment = this.wsCommentService.toggleAck(comment);
+    this.comment = this.commentService.toggleAck(comment);
     this.translateService.get(comment.ack ? 'comment-page.a11y-rejected' : 'comment-page.a11y-banned').subscribe(status => {
       this.announceService.announce('comment-page.a11y-comment-has-been', { status: status });
     });
