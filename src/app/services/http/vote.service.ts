@@ -23,6 +23,32 @@ export class VoteService extends BaseHttpService {
     super();
   }
 
+  add(vote: Vote): Observable<Vote> {
+    const connectionUrl = this.apiUrl.base + this.apiUrl.vote + '/';
+    return this.http.post<Vote>(connectionUrl, vote, httpOptions).pipe(
+      tap(_ => ''),
+      catchError(this.handleError<Vote>('add vote'))
+    );
+  }
+
+  voteUp(commentId: string, userId: string) {
+    const v: Vote = new Vote(userId, commentId, 1);
+    return this.add(v);
+  }
+
+  voteDown(commentId: string, userId: string) {
+    const v: Vote = new Vote(userId, commentId, 0);
+    return this.add(v);
+  }
+
+  deleteVote(commentId: string, userId: string): Observable<Vote> {
+    const connectionUrl = `${this.apiUrl.base + this.apiUrl.vote}/${commentId}/${userId}`;
+    return this.http.delete<Vote>(connectionUrl, httpOptions).pipe(
+      tap(() => ''),
+      catchError(this.handleError<Vote>('delete Vote'))
+    );
+  }
+
   getByRoomIdAndUserID(roomId: string, userId: string): Observable<Vote[]> {
     const connectionUrl = `${this.apiUrl.base + this.apiUrl.vote + this.apiUrl.find}`;
     return this.http.post<Vote[]>(connectionUrl, {
