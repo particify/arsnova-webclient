@@ -16,7 +16,6 @@ import { DialogService } from '../../../services/util/dialog.service';
 import { GlobalStorageService, MemoryStorageKey } from '../../../services/util/global-storage.service';
 import { ContentGroupService } from '../../../services/http/content-group.service';
 import { AnnounceService } from '../../../services/util/announce.service';
-import { EventService } from '../../../services/util/event.service';
 
 @Component({
   selector: 'app-content-list',
@@ -32,7 +31,7 @@ export class ContentListComponent implements OnInit {
   isLoading = true;
   labelMaxLength: number;
   labels: string[] = [];
-  deviceType: string;
+  deviceWidth = innerWidth;
   contentBackup: Content;
   protected contentGroup: ContentGroup;
   contentGroups: string[] = [];
@@ -50,7 +49,6 @@ export class ContentListComponent implements OnInit {
     protected globalStorageService: GlobalStorageService,
     protected contentGroupService: ContentGroupService,
     protected announceService: AnnounceService) {
-    this.deviceType = this.globalStorageService.getMemoryItem(MemoryStorageKey.DEVICE_TYPE);
     langService.langEmitter.subscribe(lang => translateService.use(lang));
   }
 

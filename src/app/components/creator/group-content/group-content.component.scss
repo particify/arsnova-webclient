@@ -35,8 +35,33 @@ mat-expansion-panel-header {
   color: var(--primary) !important;
 
   &:hover {
-    transform: scale(1.1)
+    transform: scale(1.1);
   }
+}
+
+.actionIcon {
+  font-size: 50px;
+  height: 50px;
+  width: 50px;
+}
+
+
+.desktop {
+  font-size: 60px;
+  height: 60px;
+  width: 60px;
+  margin-bottom: 5%;
+}
+
+.button-text {
+  font-size: 18px;
+  font-weight: bold;
+  padding: 0;
+  margin: 3% 0;
+}
+
+.small-text {
+  font-size: 16px;
 }
 
 .editButton {
@@ -51,12 +76,6 @@ mat-expansion-panel-header {
 
 mat-tooltip-component {
   position: relative;
-}
-
-.actionIcon {
-  font-size: 50px;
-  height: 50px;
-  width: 50px;
 }
 
 .editButtons {
