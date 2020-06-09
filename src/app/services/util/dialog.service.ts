@@ -166,9 +166,7 @@ export class DialogService {
   openUserActivationDialog(username: string): MatDialogRef<UserActivationComponent> {
     return this.dialog.open(UserActivationComponent, {
       width: this.size.xsmall,
-      data: {
-        name: username
-      }
+      data: username
     });
   }
 }
