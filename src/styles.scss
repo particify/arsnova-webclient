@@ -407,3 +407,34 @@ mat-card {
 .mat-expansion-indicator::after {
   color: var(--on-surface);
 }
+
+
+// Menu
+
+.mat-menu-panel {
+  background-color: var(--dialog);
+}
+
+.mat-menu-content {
+  background-color: var(--dialog);
+}
+
+.mat-menu-item {
+  color: var(--on-dialog);
+}
+
+.mat-menu-item .mat-icon-no-color {
+  color: var(--on-dialog);
+}
+
+.mat-menu-item-submenu-trigger::after {
+  color: var(--on-dialog);
+}
+
+button.mat-menu-item {
+  background-color: var(--dialog);
+}
+
+button.mat-menu-item:hover {
+  background-color: var(--dialog);
+}
