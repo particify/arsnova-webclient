@@ -60,7 +60,7 @@ mat-icon {
 .color-title {
   height: 16px;
   font-size: 16px;
-  color: black;
+  color: var(--on-dialog);
 }
 
 .color-description {
@@ -68,7 +68,7 @@ mat-icon {
   font-size: 14px;
   line-height: 14px;
   margin-top: 5px;
-  color: black;
+  color: var(--on-dialog);
 }
 
 ::ng-deep .mat-menu-panel {
