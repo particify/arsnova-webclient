@@ -269,5 +269,8 @@
     "no-bonus": "Noch keine Bonuspunkte erhalten.",
     "really-delete-answers": "Willst du wirklich die Antworten auf diese Frage löschen?",
     "really-delete-all-answers": "Willst du wirklich alle Antworten dieser Sammlung löschen?"
+  },
+  "errors": {
+    "not-authorized": "Du bist nicht autorisiert diese Seite zu sehen."
   }
 }

@@ -5,11 +5,13 @@ import { AuthenticationService } from '../services/http/authentication.service';
 
 import { NotificationService } from '../services/util/notification.service';
 import { UserRole } from '../models/user-roles.enum';
+import { TranslateService } from '@ngx-translate/core';
 
 @Injectable()
 export class AuthenticationGuard implements CanActivate {
   constructor(private authenticationService: AuthenticationService,
               private notificationService: NotificationService,
+              private translateService: TranslateService,
               private router: Router) {
   }
 
@@ -27,7 +29,9 @@ export class AuthenticationGuard implements CanActivate {
       return true;
     }
 
-    this.notificationService.show(`You're not authorized to view this page.`);
+    this.translateService.get('errors.not-authorized').subscribe(msg => {
+      this.notificationService.show(msg);
+    });
     // TODO: redirect to error page
     this.router.navigate(['/']);
     return false;
