@@ -107,24 +107,29 @@ export class RoomParticipantPageComponent extends RoomPageComponent implements O
     this.announceService.announce('room-page.a11y-shortcuts');
   }
 
+  setRoomAccess() {
+    this.authenticationService.setAccess(this.room.shortId, UserRole.PARTICIPANT);
+    this.authenticationService.checkAccess(this.room.shortId);
+  }
+
   afterRoomLoadHook() {
     this.authenticationService.watchUser.subscribe(user => this.user = user);
     if (!this.user) {
       this.authenticationService.guestLogin(UserRole.PARTICIPANT).subscribe(() => {
+        this.setRoomAccess();
         this.roomService.addToHistory(this.room.id);
       });
     } else {
       this.roomService.addToHistory(this.room.id);
+      this.setRoomAccess();
     }
-    this.authenticationService.setAccess(this.room.shortId, UserRole.PARTICIPANT);
-    this.authenticationService.checkAccess(this.room.shortId);
     this.surveyEnabled = !this.room.settings['feedbackLocked'];
     this.surveySub = this.wsFeedbackService.getFeedbackStream(this.room.id).subscribe((message: Message) => {
       this.parseFeedbackMessage(message);
     });
   }
 
-  protected afterGroupsLoadHook() {
+  afterGroupsLoadHook() {
     this.isLoading = false;
   }
 
