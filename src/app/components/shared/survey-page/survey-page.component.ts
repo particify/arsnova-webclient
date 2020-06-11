@@ -100,6 +100,12 @@ export class SurveyPageComponent implements OnInit, OnDestroy, AfterContentInit 
       this.roomId = data.room.id;
       this.shortId = data.room.shortId;
       this.loadConfig(data.room);
+      this.isOwner = this.authenticationService.hasAccess(this.room.shortId, UserRole.CREATOR);
+      this.sub = this.wsFeedbackService.getFeedbackStream(this.roomId).subscribe((message: Message) => {
+        this.parseIncomingMessage(message);
+      });
+      this.wsFeedbackService.get(this.roomId);
+      this.isLoading = false;
     });
   }
 
@@ -136,12 +142,6 @@ export class SurveyPageComponent implements OnInit, OnDestroy, AfterContentInit 
       this.roomService.changeFeedbackType(this.roomId, this.type);
     }
     this.getLabels();
-    this.isOwner = this.authenticationService.hasAccess(this.room.shortId, UserRole.CREATOR);
-    this.sub = this.wsFeedbackService.getFeedbackStream(this.roomId).subscribe((message: Message) => {
-      this.parseIncomingMessage(message);
-    });
-    this.wsFeedbackService.get(this.roomId);
-    this.isLoading = false;
   }
 
   getLabels() {
@@ -218,8 +218,10 @@ export class SurveyPageComponent implements OnInit, OnDestroy, AfterContentInit 
         this.updateFeedback(payload.values);
         break;
       case 'FeedbackStarted':
-        this.loadConfig(this.room);
-        this.isClosed = false;
+        this.roomService.getRoom(this.roomId).subscribe(room => {
+          this.loadConfig(room);
+          this.isClosed = false;
+        });
         break;
       case 'FeedbackStopped':
         this.isClosed = true;
