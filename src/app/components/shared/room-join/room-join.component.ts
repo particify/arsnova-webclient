@@ -70,25 +70,24 @@ export class RoomJoinComponent implements OnInit {
         this.notificationService.show(message);
       });
     } else {
-      this.roomService.getRoomByShortId(id.replace(/\s/g, ''))
-        .subscribe(room => {
+      const roomId = id.replace(/\s/g, '');
+      this.roomService.getRoomByShortId(roomId).subscribe(room => {
           this.room = room;
-          if (!room) {
-            this.translateService.get('home-page.no-room-found').subscribe(message => {
-              this.notificationService.show(message);
-            });
+          if (!this.user) {
+            this.guestLogin();
           } else {
-            if (!this.user) {
+            if (this.user.role === UserRole.CREATOR) {
+              this.authenticationService.logout();
               this.guestLogin();
             } else {
-              if (this.user.role === UserRole.CREATOR) {
-                this.authenticationService.logout();
-                this.guestLogin();
-              } else {
-                this.addAndNavigate();
-              }
+              this.addAndNavigate();
             }
           }
+        },
+        error => {
+          this.translateService.get('home-page.no-room-found').subscribe(message => {
+            this.notificationService.show(message);
+          });
         });
     }
   }
