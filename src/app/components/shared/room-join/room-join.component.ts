@@ -141,16 +141,17 @@ export class RoomJoinComponent implements OnInit {
   prettifyRoomCode(keyboardEvent: KeyboardEvent): void {
     const roomCode: string = this.roomCodeElement.nativeElement.value;
     const isBackspaceKeyboardEvent: boolean = KeyboardUtils.isKeyEvent(keyboardEvent, KeyboardKey.Backspace);
+    const selectedText = window.getSelection();
+    const isSelected: boolean = roomCode === selectedText.toString();
 
-    // allow only backspace key press after all 8 digits were entered by the user
-    if (
-      roomCode.length - (roomCode.split(' ').length - 1) === 8 &&
-      isBackspaceKeyboardEvent === false
-    ) {
-      keyboardEvent.preventDefault();
-      keyboardEvent.stopPropagation();
-    } else if (roomCode.length === 4 && isBackspaceKeyboardEvent === false) { // add a space between each 4 digit group
-      this.roomCodeElement.nativeElement.value += ' ';
+    if (!isSelected) {
+      // allow only backspace key press after all 8 digits were entered by the user
+      if (roomCode.length - (roomCode.split(' ').length - 1) === 8 && isBackspaceKeyboardEvent === false) {
+        keyboardEvent.preventDefault();
+        keyboardEvent.stopPropagation();
+      } else if (roomCode.length === 4 && isBackspaceKeyboardEvent === false) { // add a space between each 4 digit group
+        this.roomCodeElement.nativeElement.value += ' ';
+      }
     }
   }
 }
