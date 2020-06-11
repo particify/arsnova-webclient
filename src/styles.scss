@@ -75,6 +75,10 @@ address {
   font-style: normal;
 }
 
+a {
+  color: var(--secondary);
+}
+
 // Inputs
 
 input, input:focus {
