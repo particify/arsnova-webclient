@@ -6,6 +6,7 @@ import { UserHomeComponent } from './components/home/user-home/user-home.compone
 import { DirectEntryComponent } from './components/shared/direct-entry/direct-entry.component';
 import { LoginComponent } from './components/home/login/login.component';
 import { ImportComponent } from './components/home/import/import.component';
+import { AuthenticationGuard } from './guards/authentication.guard';
 
 const routes: Routes = [
   {
@@ -23,6 +24,7 @@ const routes: Routes = [
   },
   {
     path: 'user',
+    canActivate: [AuthenticationGuard],
     component: UserHomeComponent
   },
   {
@@ -31,6 +33,7 @@ const routes: Routes = [
   },
   {
     path: 'import',
+    canActivate: [AuthenticationGuard],
     component: ImportComponent
   },
   {
