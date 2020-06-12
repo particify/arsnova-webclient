@@ -37,7 +37,7 @@ export class VoteService extends BaseHttpService {
   }
 
   voteDown(commentId: string, userId: string) {
-    const v: Vote = new Vote(userId, commentId, 0);
+    const v: Vote = new Vote(userId, commentId, -1);
     return this.add(v);
   }
 
