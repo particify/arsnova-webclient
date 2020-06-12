@@ -272,6 +272,7 @@
     "really-delete-all-answers": "Do you really want to delete all answers of this collection?"
   },
   "errors": {
-    "not-authorized": "You're not authorized to view this page."
+    "not-authorized": "You're not authorized to view this page.",
+    "room-not-found": "There was no room found with this number."
   }
 }

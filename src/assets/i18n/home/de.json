@@ -271,6 +271,7 @@
     "really-delete-all-answers": "Willst du wirklich alle Antworten dieser Sammlung löschen?"
   },
   "errors": {
-    "not-authorized": "Du bist nicht autorisiert diese Seite zu sehen."
+    "not-authorized": "Du bist nicht autorisiert diese Seite zu sehen.",
+    "room-not-found": "Es wurde kein Raum mit dieser Nummer gefunden."
   }
 }
