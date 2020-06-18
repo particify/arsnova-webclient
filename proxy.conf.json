@@ -1,4 +1,12 @@
 {
+  "/gw": {
+    "target": "http://localhost:9090",
+    "secure": false,
+    "pathRewrite": {
+      "^/gw": ""
+    },
+		"logLevel": "debug"
+  },
   "/api/comment": {
     "target": "http://localhost:8088",
     "secure": false,
