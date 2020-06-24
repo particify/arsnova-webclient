@@ -131,6 +131,46 @@
           }
         }
       }
+    },
+    "extension-point": {
+      "projectType": "library",
+      "root": "projects/extension-point",
+      "sourceRoot": "projects/extension-point/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "projects/extension-point/tsconfig.lib.json",
+            "project": "projects/extension-point/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/extension-point/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/extension-point/src/test.ts",
+            "tsConfig": "projects/extension-point/tsconfig.spec.json",
+            "karmaConfig": "projects/extension-point/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/extension-point/tsconfig.lib.json",
+              "projects/extension-point/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
     }
   },
   "defaultProject": "arsnova-angular-frontend",
