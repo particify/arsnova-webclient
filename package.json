@@ -30,7 +30,6 @@
     "@stomp/ng2-stompjs": "^7.2.0",
     "angularx-qrcode": "^10.0.3",
     "chart.js": "^2.9.3",
-    "core-js": "^2.5.7",
     "is-docker": "^1.1.0",
     "material-design-icons": "^3.0.1",
     "moment": "^2.24.0",
