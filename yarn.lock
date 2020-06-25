@@ -127,10 +127,12 @@
   dependencies:
     tslib "^2.0.0"
 
-"@angular/cdk@^9.1.0":
-  version "9.1.0"
-  resolved "https://registry.yarnpkg.com/@angular/cdk/-/cdk-9.1.0.tgz#da88568aed9efc39b160a0ac18cfca25f4961441"
-  integrity sha512-qKpAudJx9z0MD+ADptS0OZViJBTA49+JCKym0hPQUkcB9Po4Al6gu6oZ1VSXV5Ln3T84z9aAw/AhUGP/YCFNSQ==
+"@angular/cdk@^10.0.1":
+  version "10.0.1"
+  resolved "https://registry.yarnpkg.com/@angular/cdk/-/cdk-10.0.1.tgz#8e10317cd6fee4d9f8a3794998629496fb60e68b"
+  integrity sha512-tEgaTDQplptbOf4cHHdVScH0h5QNvkWDhabAWpWaT4/dVXEsp+p2E9Pzkemesi/gNmUIetVjGaicX5VqsijZSQ==
+  dependencies:
+    tslib "^2.0.0"
   optionalDependencies:
     parse5 "^5.0.0"
 
@@ -205,10 +207,12 @@
   dependencies:
     tslib "^2.0.0"
 
-"@angular/flex-layout@^9.0.0-beta.29":
-  version "9.0.0-beta.29"
-  resolved "https://registry.yarnpkg.com/@angular/flex-layout/-/flex-layout-9.0.0-beta.29.tgz#a334ffd15c272e2d48cdaef3879625aadcc13a54"
-  integrity sha512-93sxR+kYfYMOdnlWL0Q77FZ428gg8XnBu0YZm6GsCdkw/vLggIT/G1ZAqHlCPIODt6pxmCJ5KXh4ShvniIYDsA==
+"@angular/flex-layout@^10.0.0-beta.32":
+  version "10.0.0-beta.32"
+  resolved "https://registry.yarnpkg.com/@angular/flex-layout/-/flex-layout-10.0.0-beta.32.tgz#a797ebd6f3689c71a63e99aa62f2b9cb933f5e2d"
+  integrity sha512-JvuY4dUoy5jyCTIrFiq7n30Znakh1pD3nbg0h0hs2r3t1OiDQb0ZSI1wcumosG/vYHsuJQTuNhbfaIZzA1x8nA==
+  dependencies:
+    tslib "^2.0.0"
 
 "@angular/forms@10.0.2":
   version "10.0.2"
@@ -222,10 +226,12 @@
   resolved "https://registry.yarnpkg.com/@angular/language-service/-/language-service-10.0.2.tgz#31f22020be96ab2cf77283e0627f8a6fffedfe36"
   integrity sha512-kEMJ3DkprpoGJvEjvH/PZrBKtgCbLtFYtrXHRDy2+92vgCT0Xz6TwzZ2qlwlQSijffOgsV5LwdjI4oxpgVKReQ==
 
-"@angular/material@^9.1.0":
-  version "9.1.0"
-  resolved "https://registry.yarnpkg.com/@angular/material/-/material-9.1.0.tgz#550cbf7f6a9ce679b77435278faebfc4f2a3b2ed"
-  integrity sha512-KjA1ARoZ1vBg4jUH1y39muynxAFvkD8QZFGKH8Nh4zXW5pOP/7NyjokxXsNx5qSBCq/6ac2xBxCrCYJN7HmoDw==
+"@angular/material@^10.0.1":
+  version "10.0.1"
+  resolved "https://registry.yarnpkg.com/@angular/material/-/material-10.0.1.tgz#f59988499d20ee4ab93292d7e9a9d16ce24839f0"
+  integrity sha512-4xGIupOiPbyYG/tTbVhgjATRZSRf+Xj2FGkX3csSlIOvhrFtN1B9gTlcbOjzWHPpWTFChZALzMXA/841KA9QqA==
+  dependencies:
+    tslib "^2.0.0"
 
 "@angular/platform-browser-dynamic@10.0.2":
   version "10.0.2"
