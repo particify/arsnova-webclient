@@ -7,11 +7,12 @@ import { ExtensionFactory } from './extension-factory';
 })
 export class ExtensionPointComponent implements OnInit {
   @Input() extensionId: string;
+  extensionUnavailable = false;
 
   constructor(private viewContainerRef: ViewContainerRef, private factory: ExtensionFactory) {
   }
 
   ngOnInit() {
-    this.factory.createExtension(this.extensionId, this.viewContainerRef);
+    this.extensionUnavailable = !this.factory.createExtension(this.extensionId, this.viewContainerRef);
   }
 }
