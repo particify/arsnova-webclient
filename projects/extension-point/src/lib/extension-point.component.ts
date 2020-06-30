@@ -7,6 +7,7 @@ import { ExtensionFactory } from './extension-factory';
 })
 export class ExtensionPointComponent implements OnInit {
   @Input() extensionId: string;
+  @Input() test: string;
   @Input() extensionData: object;
   @Output() extensionEvent = new EventEmitter();
   componentRef: ComponentRef<any> | null;

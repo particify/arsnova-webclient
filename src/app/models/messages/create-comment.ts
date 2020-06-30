@@ -5,15 +5,17 @@ export class CreateComment {
     creatorId: string;
     body: string;
     tag: string;
+    imageLinks: String[];
   };
 
-  constructor(roomId: string, creatorId: string, body: string, tag: string = '') {
+  constructor(roomId: string, creatorId: string, body: string, tag: string = '', imageLinks: String[]) {
     this.type = 'CreateComment';
     this.payload = {
       roomId: roomId,
       creatorId: creatorId,
       body: body,
-      tag: tag
+      tag: tag,
+      imageLinks: imageLinks
     };
   }
 }

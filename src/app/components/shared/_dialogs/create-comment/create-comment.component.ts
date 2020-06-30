@@ -23,6 +23,7 @@ export class CreateCommentComponent implements OnInit {
 
   comment: Comment;
   selectedTag: string;
+  imageLinks: string[] = [];
 
   bodyForm = new FormControl('', [Validators.required]);
 
@@ -63,11 +64,17 @@ export class CreateCommentComponent implements OnInit {
       comment.roomId = this.globalStorageService.getItem(STORAGE_KEYS.ROOM_ID);
       comment.body = body;
       comment.creatorId = this.data.auth.userId;
+      comment.imageLinks = this.imageLinks;
       if (this.selectedTag !== null) {
         comment.tag = this.selectedTag;
       }
       this.dialogRef.close(comment);
     }
+  }
+
+  receiveImage($event) {
+    console.log('DAWDAWDAW');
+    this.imageLinks.push($event);
   }
 
 
