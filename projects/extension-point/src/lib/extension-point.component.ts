@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewContainerRef, Input } from '@angular/core';
+import { Component, ComponentRef, EventEmitter, OnInit, ViewContainerRef, Input, Output } from '@angular/core';
 import { ExtensionFactory } from './extension-factory';
 
 @Component({
@@ -8,12 +8,15 @@ import { ExtensionFactory } from './extension-factory';
 export class ExtensionPointComponent implements OnInit {
   @Input() extensionId: string;
   @Input() extensionData: object;
+  @Output() extensionEvent = new EventEmitter();
+  componentRef: ComponentRef<any> | null;
   extensionUnavailable = false;
 
   constructor(private viewContainerRef: ViewContainerRef, private factory: ExtensionFactory) {
   }
 
   ngOnInit() {
-    this.extensionUnavailable = !this.factory.createExtension(this.extensionId, this.extensionData, this.viewContainerRef);
+    this.componentRef = this.factory.createExtension(this.extensionId, this.extensionData, this.extensionEvent, this.viewContainerRef);
+    this.extensionUnavailable = !this.componentRef;
   }
 }

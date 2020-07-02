@@ -1,4 +1,4 @@
-import { ComponentFactoryResolver, Inject, Injectable, Optional, ViewContainerRef } from '@angular/core';
+import { ComponentFactoryResolver, Inject, Injectable, Optional, ViewContainerRef, ComponentRef, EventEmitter } from '@angular/core';
 import { Extension } from './extension';
 
 @Injectable()
@@ -18,7 +18,7 @@ export class ExtensionFactory {
     return this.extensions[id];
   }
 
-  createExtension(id: string, data: object, ref: ViewContainerRef): any {
+  createExtension(id: string, data: object, eventEmitter: EventEmitter<any>, ref: ViewContainerRef): ComponentRef<any> | null {
     const extension = this.getExtension(id);
     if (!extension) {
       console.log(`No extension found for "${id}".`);
@@ -32,6 +32,7 @@ export class ExtensionFactory {
     }
     for (const key of Object.keys(data)) {
       componentRef.instance[key] = data[key];
+      componentRef.instance.event = eventEmitter;
     }
 
     return componentRef;
