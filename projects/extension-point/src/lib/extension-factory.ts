@@ -18,7 +18,7 @@ export class ExtensionFactory {
     return this.extensions[id];
   }
 
-  createExtension(id: string, ref: ViewContainerRef): any {
+  createExtension(id: string, data: object, ref: ViewContainerRef): any {
     const extension = this.getExtension(id);
     if (!extension) {
       console.log(`No extension found for "${id}".`);
@@ -27,6 +27,12 @@ export class ExtensionFactory {
     ref.clear();
     const factory = this.resolver.resolveComponentFactory(extension.getType());
     const componentRef = ref.createComponent(factory);
+    if (typeof data === 'string') {
+      data = JSON.parse(data);
+    }
+    for (const key of Object.keys(data)) {
+      componentRef.instance[key] = data[key];
+    }
 
     return componentRef;
   }
