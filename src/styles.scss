@@ -226,7 +226,8 @@ div {
 }
 
 .mat-list-item-content > mat-radio-button > .mat-radio-label > .mat-radio-label-content {
-  padding-left: 18px !important;
+  padding-left: 18px;
+  white-space: normal;
 }
 
 .mat-radio-label-content {

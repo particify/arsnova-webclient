@@ -25,6 +25,10 @@ mat-list {
   position: relative;
 }
 
+mat-list-item {
+  margin-bottom: 20px;
+}
+
 p {
   font-size: 24px;
   color: var(--primary);
