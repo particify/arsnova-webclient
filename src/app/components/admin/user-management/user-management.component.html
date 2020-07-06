@@ -1,0 +1,18 @@
+<mat-card>
+  <mat-card-title>
+    {{ 'admin-area.user-management' | translate }}
+  </mat-card-title>
+  <mat-card-content>
+    <mat-form-field appearance="outline">
+      <mat-label>{{ 'admin-area.user-id' | translate }}</mat-label>
+      <input matInput #idField>
+      <button mat-button matSuffix color="accent" (click)="loadEntity(idField.value)">
+        <mat-icon aria-hidden="false" attr.aria-label="{{ 'admin-area.find' | translate }}">search</mat-icon>
+      </button>
+    </mat-form-field>
+    <div *ngIf="user">
+      <header>{{ 'admin-area.properties' | translate }}</header>
+      <app-entity-properties [entity]="user | async"></app-entity-properties>
+    </div>
+  </mat-card-content>
+</mat-card>

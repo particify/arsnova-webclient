@@ -1,5 +1,11 @@
 {
   "admin-area": {
-    "title": "Administration"
+    "title": "Administration",
+    "search": "Search",
+    "properties": "Properties",
+    "user-management": "User Management",
+    "user-id": "User ID",
+    "room-management": "Room Management",
+    "room-id": "Room ID"
   }
 }

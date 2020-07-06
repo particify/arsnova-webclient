@@ -7,6 +7,9 @@ import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { HttpClient } from '@angular/common/http';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { AdminHomeComponent } from './admin-home/admin-home.component';
+import { EntityPropertiesComponent } from './entity-properties/entity-properties.component';
+import { RoomManagementComponent } from './room-management/room-management.component';
+import { UserManagementComponent } from './user-management/user-management.component';
 
 @NgModule({
   imports: [
@@ -24,7 +27,10 @@ import { AdminHomeComponent } from './admin-home/admin-home.component';
     })
   ],
   declarations: [
-    AdminHomeComponent
+    AdminHomeComponent,
+    EntityPropertiesComponent,
+    RoomManagementComponent,
+    UserManagementComponent,
   ]
 })
 export class AdminModule {
