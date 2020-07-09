@@ -8,6 +8,7 @@ import { ClientAuthentication } from '../../../../models/client-authentication';
 import { CommentListComponent } from '../../comment-list/comment-list.component';
 import { EventService } from '../../../../services/util/event.service';
 import { GlobalStorageService, STORAGE_KEYS } from '../../../../services/util/global-storage.service';
+import {Subject} from "rxjs";
 
 export interface DialogData {
   auth: ClientAuthentication;
@@ -19,11 +20,15 @@ export interface DialogData {
   templateUrl: './create-comment.component.html',
   styleUrls: ['./create-comment.component.scss']
 })
+
 export class CreateCommentComponent implements OnInit {
 
   comment: Comment;
   selectedTag: string;
   imageLinks: string[] = [];
+  eventsSubject: Subject<void> = new Subject<void>();
+  eventsWrapper: any;
+
 
   bodyForm = new FormControl('', [Validators.required]);
 
@@ -41,9 +46,13 @@ export class CreateCommentComponent implements OnInit {
 
   ngOnInit() {
     this.translateService.use(this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE));
+    this.eventsWrapper = {
+      "eventsSubject": this.eventsSubject
+    };
   }
 
   onNoClick(): void {
+    this.eventsSubject.next();
     this.dialogRef.close();
   }
 
@@ -73,7 +82,6 @@ export class CreateCommentComponent implements OnInit {
   }
 
   receiveImage($event) {
-    console.log('DAWDAWDAW');
     this.imageLinks.push($event);
   }
 

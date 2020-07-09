@@ -17,7 +17,7 @@
   </mat-form-field>
 </div>
 <div>
-  <app-extension-point (message)="receiveImage($event)" [test]="'TEST'" extensionId="file-upload"></app-extension-point>
+  <app-extension-point extensionId="file-upload" [extensionData]="eventsWrapper" (extensionEvent)="receiveImage($event)"></app-extension-point>
   <app-dialog-action-buttons
     buttonsLabelSection="dialog"
     confirmButtonLabel="send"
