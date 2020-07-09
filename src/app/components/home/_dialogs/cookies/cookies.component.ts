@@ -5,6 +5,12 @@ import { ApiConfigService } from '../../../../services/http/api-config.service';
 import { InfoDialogComponent } from '../../../shared/_dialogs/info-dialog/info-dialog.component';
 import { GlobalStorageService, STORAGE_KEYS } from '../../../../services/util/global-storage.service';
 
+interface CookieCategory {
+  id: string,
+  required: boolean
+  consent: boolean
+}
+
 @Component({
   selector: 'app-cookies',
   templateUrl: './cookies.component.html',
@@ -19,10 +25,15 @@ export class CookiesComponent implements OnInit, AfterViewInit {
 
   confirmButtonType: DialogConfirmActionButtonType = DialogConfirmActionButtonType.Primary;
 
+  categories: CookieCategory[] = [
+    {id: 'essential', consent: true, required: true},
+    {id: 'functional', consent: false, required: false},
+    {id: 'statistics', consent: false, required: false}
+  ]
+
   constructor(
     private dialog: MatDialog,
     private dialogRef: MatDialogRef<CookiesComponent>,
-    private ref: ElementRef,
     private apiConfigService: ApiConfigService,
     private globalStorageService: GlobalStorageService
   ) {
@@ -40,18 +51,29 @@ export class CookiesComponent implements OnInit, AfterViewInit {
     }, 500);
   }
 
-  acceptCookies() {
-    this.globalStorageService.setItem(STORAGE_KEYS.COOKIE_CONSENT, true);
+  acceptAllCookies() {
+    console.debug('Accepted cookie categories: ', this.categories);
+    this.categories.forEach((item) => {
+      item.consent = true;
+    });
+    this.updateConsentSettings();
     this.dialogRef.close(true);
     setTimeout(() => {
       document.getElementById('room-id-input').focus();
     }, 500);
   }
 
-  exitApp() {
-    this.globalStorageService.setItem(STORAGE_KEYS.COOKIE_CONSENT, false);
-    // TODO somehow exit the app, since the user didn't accept cookie usage
-    this.dialogRef.close(false);
+  acceptSelectedCookies() {
+    console.debug('Accepted cookie categories: ', this.categories);
+    this.updateConsentSettings();
+    this.dialogRef.close(true);
+    setTimeout(() => {
+      document.getElementById('room-id-input').focus();
+    }, 500);
+  }
+
+  updateConsentSettings() {
+    this.globalStorageService.setItem(STORAGE_KEYS.COOKIE_CONSENT, true);
   }
 
   getUIDataFromConfig(type: string): string {
@@ -72,13 +94,13 @@ export class CookiesComponent implements OnInit, AfterViewInit {
    * Returns a lambda which closes the dialog on call.
    */
   buildConfirmActionCallback(): () => void {
-    return () => this.acceptCookies();
+    return () => this.acceptAllCookies();
   }
 
   /**
    * Returns a lambda which closes the dialog on call.
    */
-  buildDeclineActionCallback(): () => void {
-    return () => this.exitApp();
+  buildCancelActionCallback(): () => void {
+    return () => this.acceptSelectedCookies();
   }
 }

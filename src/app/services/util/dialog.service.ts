@@ -142,7 +142,7 @@ export class DialogService {
 
   openCookieDialog(): MatDialogRef<CookiesComponent> {
     return this.dialog.open(CookiesComponent, {
-      width: this.size.large,
+      width: this.size.medium,
       autoFocus: true
     });
   }

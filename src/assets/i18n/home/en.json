@@ -1,11 +1,21 @@
 {
   "cookies": {
-    "a11y-accept": "Accept the use of a web storage and proceed to the app.",
-    "a11y-cancel": "Reject usage of a web storage and exit the app.",
-    "accept": "Accept",
-    "cancel": "Reject",
+    "a11y-accept": "Accept the use of all cookies and proceed to the app.",
+    "a11y-cancel": "Reject the use of non-essential cookies and proceed the app.",
+    "accept": "Accept all",
+    "cancel": "Accept selected",
     "info-label": "Opens a dialog with the ARSnova data protection policy.",
-    "title": "Data Privacy"
+    "title": "Cookie Settings",
+    "intro": "We use cookies and similar technologies to recognize you when you return to our website and to allow you to access your data and settings. We also use these technologies for statistical purposes.",
+    "intro-privacy1": "You will find more information in our ",
+    "intro-privacy2": ".",
+    "privacy-policy": "privacy policy",
+    "category-essential": "Essential",
+    "category-essential-desc": "Some cookies are required by the application to work correctly. These are, for example, authentication data after signing in.",
+    "category-functional": "Functional",
+    "category-functional-desc": "Functional cookies make the application more user-friendly by allowing settings (e.g. the selected theme) to be saved locally.",
+    "category-statistics": "Statistics",
+    "category-statistics-desc": "Statistical cookies help us to improve the application by giving us insight into how our application is used."
   },
   "data-protection": {
     "a11y": "Below you will find the privacy policy of ARSnova.",
