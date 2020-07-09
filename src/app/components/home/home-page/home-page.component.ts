@@ -49,8 +49,4 @@ export class HomePageComponent implements AfterContentInit {
   openCreateRoomDialog(): void {
     this.dialogService.openRoomCreateDialog();
   }
-
-  cookiesDisabled(): boolean {
-    return this.globalStorageService.getItem(STORAGE_KEYS.COOKIE_CONSENT) === false;
-  }
 }

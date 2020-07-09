@@ -171,8 +171,4 @@ export class HeaderComponent implements OnInit {
     this.dialogService.openBonusTokenDialog(this.user.id);
   }
   */
-
-  cookiesDisabled(): boolean {
-    return this.globalStorageService.getItem(STORAGE_KEYS.COOKIE_CONSENT) === false;
-  }
 }

@@ -123,10 +123,6 @@ export class RoomJoinComponent implements OnInit {
     }
   }
 
-  cookiesDisabled(): boolean {
-    return !this.globalStorageService.getItem(STORAGE_KEYS.COOKIE_CONSENT);
-  }
-
 
   /**
    * Prettifies the room code input element which:

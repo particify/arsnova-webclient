@@ -12,7 +12,7 @@
         <mat-error
           *ngIf="roomCodeFormControl.hasError('pattern')">{{ 'home-page.only-numbers' | translate}}</mat-error>
       </mat-form-field>
-      <button [disabled]="cookiesDisabled()" mat-raised-button class="button-primary" (click)="joinRoom(roomCode.value)"
+      <button mat-raised-button class="button-primary" (click)="joinRoom(roomCode.value)"
               aria-labelledby="join-button-label">
         <div fxLayoutAlign="center center" class="arrow-container"
              (mouseenter)="toggleArrowAnimation(roomCode.value, true)"
