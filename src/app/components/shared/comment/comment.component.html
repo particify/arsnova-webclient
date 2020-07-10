@@ -110,6 +110,9 @@
       </div>
 
     </div>
+    <app-extension-point extensionId="image-list" [extensionData]="imageLinks"></app-extension-point>
+    <div (click)="this.clickedOnTag.emit(comment.tag)" *ngIf="comment.tag && comment.tag !== ''"
+         class="comment-tags light">
     <div *ngIf="comment.tag && comment.tag !== ''" class="comment-tags light">
       <mat-chip-list>
         <mat-chip (click)="this.clickedOnTag.emit(comment.tag)" >

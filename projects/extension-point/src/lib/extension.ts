@@ -1,4 +1,4 @@
-import {InjectionToken, Input, Type} from '@angular/core';
+import {InjectionToken, Type} from '@angular/core';
 
 export abstract class Extension {
   abstract getId(): string;
