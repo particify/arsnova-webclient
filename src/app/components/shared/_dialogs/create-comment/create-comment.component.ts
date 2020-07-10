@@ -8,7 +8,7 @@ import { ClientAuthentication } from '../../../../models/client-authentication';
 import { CommentListComponent } from '../../comment-list/comment-list.component';
 import { EventService } from '../../../../services/util/event.service';
 import { GlobalStorageService, STORAGE_KEYS } from '../../../../services/util/global-storage.service';
-import {Subject} from "rxjs";
+import { Subject } from 'rxjs';
 
 export interface DialogData {
   auth: ClientAuthentication;
@@ -81,8 +81,8 @@ export class CreateCommentComponent implements OnInit {
     }
   }
 
-  receiveImage($event) {
-    this.imageLinks.push($event);
+  receiveImageLinks($event) {
+    this.imageLinks = $event;
   }
 
 
