@@ -1,26 +1,5 @@
 import { Injectable, InjectionToken, Inject, Provider } from '@angular/core';
 
-/* TODO: Remove enums for storage keys */
-export enum LocalStorageKey {
-  ROOM_ACCESS = 'ROOM_ACCESS',
-  USER = 'USER',
-  THEME = 'THEME',
-  LANGUAGE = 'LANGUAGE',
-  COOKIE_CONSENT = 'COOKIE_CONSENT',
-  DATA_PROTECTION = 'DATA_PROTECTION',
-  LOGGED_IN = 'LOGGED_IN'
-}
-
-export enum MemoryStorageKey {
-  ROOM_ID = 'ROOM_ID',
-  SHORT_ID = 'SHORT_ID',
-  DEVICE_TYPE = 'DEVICE_TYPE',
-  IS_SAFARI = 'IS_SAFARI',
-  MODERATION_ENABLED = 'MODERATION_ENABLED',
-  CONTENT_GROUPS = 'CONTENT_GROUPS',
-  LAST_GROUP = 'LAST_GROUP'
-}
-
 export enum StorageKey {
   ROOM_ACCESS = 'ROOM_ACCESS',
   USER = 'USER',
@@ -54,7 +33,8 @@ export enum StorageBackend {
 }
 
 export interface StorageItem {
-  key: string,
+  key: symbol,
+  name: string,
   prefix?: string,
   category: StorageItemCategory,
   backend: StorageBackend
@@ -63,71 +43,106 @@ export interface StorageItem {
 export const STORAGECONFIG_PROVIDER_TOKEN : InjectionToken<StorageItem> = new InjectionToken('STORAGECONFIG_PROVIDER_TOKEN');
 
 /**
+ * Provides {@link Symbol}s for referencing {@link StorageItem} configurations.
+ *
+ * Because Symbols are unique, they cannot be recreated, so their use ensures
+ * that only predefined item configurations can be used.
+ */
+export const STORAGE_KEYS: { [key: string]: symbol } = {
+  ROOM_ACCESS: Symbol(),
+  USER: Symbol(),
+  COOKIE_CONSENT: Symbol(),
+  LOGGED_IN: Symbol(),
+  ROOM_ID: Symbol(),
+  SHORT_ID: Symbol(),
+  DEVICE_TYPE: Symbol(),
+  IS_SAFARI: Symbol(),
+  MODERATION_ENABLED: Symbol(),
+  CONTENT_GROUPS: Symbol(),
+  LAST_GROUP: Symbol(),
+  THEME: Symbol(),
+  LANGUAGE: Symbol()
+};
+
+/**
  * Define configurations for globally accessible variables.
  */
 export const STORAGE_CONFIG: StorageItem[] = [
   {
-    key: 'ROOM_ACCESS',
+    key: STORAGE_KEYS.ROOM_ACCESS,
+    name: 'ROOM_ACCESS',
     category: StorageItemCategory.REQUIRED,
     backend: StorageBackend.LOCALSTORAGE
   },
   {
-    key: 'USER',
+    key: STORAGE_KEYS.USER,
+    name: 'USER',
     category: StorageItemCategory.REQUIRED,
     backend: StorageBackend.LOCALSTORAGE
   },
   {
-    key: 'COOKIE_CONSENT',
+    key: STORAGE_KEYS.COOKIE_CONSENT,
+    name: 'COOKIE_CONSENT',
     category: StorageItemCategory.REQUIRED,
     backend: StorageBackend.LOCALSTORAGE
   },
   {
-    key: 'LOGGED_IN',
+    key: STORAGE_KEYS.LOGGED_IN,
+    name: 'LOGGED_IN',
     category: StorageItemCategory.REQUIRED,
     backend: StorageBackend.LOCALSTORAGE
   },
   {
-    key: 'ROOM_ID',
+    key: STORAGE_KEYS.ROOM_ID,
+    name: 'ROOM_ID',
     category: StorageItemCategory.REQUIRED,
     backend: StorageBackend.MEMORY
   },
   {
-    key: 'SHORT_ID',
+    key: STORAGE_KEYS.SHORT_ID,
+    name: 'SHORT_ID',
     category: StorageItemCategory.REQUIRED,
     backend: StorageBackend.MEMORY
   },
   {
-    key: 'DEVICE_TYPE',
+    key: STORAGE_KEYS.DEVICE_TYPE,
+    name: 'DEVICE_TYPE',
     category: StorageItemCategory.REQUIRED,
     backend: StorageBackend.MEMORY
   },
   {
-    key: 'IS_SAFARI',
+    key: STORAGE_KEYS.IS_SAFARI,
+    name: 'IS_SAFARI',
     category: StorageItemCategory.REQUIRED,
     backend: StorageBackend.MEMORY
   },
   {
-    key: 'MODERATION_ENABLED',
+    key: STORAGE_KEYS.MODERATION_ENABLED,
+    name: 'MODERATION_ENABLED',
     category: StorageItemCategory.REQUIRED,
     backend: StorageBackend.MEMORY
   },
   {
-    key: 'CONTENT_GROUPS',
+    key: STORAGE_KEYS.CONTENT_GROUPS,
+    name: 'CONTENT_GROUPS',
     category: StorageItemCategory.REQUIRED,
     backend: StorageBackend.MEMORY
   },
   {
-    key: 'LAST_GROUP',
+    key: STORAGE_KEYS.LAST_GROUP,
+    name: 'LAST_GROUP',
     category: StorageItemCategory.REQUIRED,
     backend: StorageBackend.MEMORY
   },
   {
-    key: 'THEME',
+    key: STORAGE_KEYS.THEME,
+    name: 'THEME',
     category: StorageItemCategory.FUNCTIONAL,
     backend: StorageBackend.LOCALSTORAGE
   },
   {
-    key: 'LANGUAGE',
+    key: STORAGE_KEYS.LANGUAGE,
+    name: 'LANGUAGE',
     category: StorageItemCategory.FUNCTIONAL,
     backend: StorageBackend.LOCALSTORAGE
   }
@@ -152,9 +167,9 @@ const APP_PREFIX = 'ARS';
  */
 @Injectable()
 export class GlobalStorageService {
-  memory: Map<string, any> = new Map();
+  memory: Map<symbol, any> = new Map();
   shortId: string;
-  readonly storageConfig: Map<string, StorageItem> = new Map();
+  readonly storageConfig: Map<symbol, StorageItem> = new Map();
 
   constructor(
     @Inject(STORAGECONFIG_PROVIDER_TOKEN) storageConfigItems: StorageItem[]
@@ -186,91 +201,66 @@ export class GlobalStorageService {
     this.memory.set(MemoryStorageKey.DEVICE_TYPE, deviceType);
   }
 
-  getItem(key: string): any {
+  getItem(key: symbol): any {
     let config = this.storageConfig.get(key);
     if (!config) {
-      throw new Error(`No specification found for storage key '${key}'.`);
+      throw new Error(`No specification found for storage key.`);
     }
     let prefix = config.prefix ?? APP_PREFIX;
-    key = `${prefix}_${key}`;
+    let name = `${prefix}_${config.name}`;
     switch (config.backend) {
       case StorageBackend.MEMORY:
         return this.memory.get(key);
       case StorageBackend.SESSIONSTORAGE:
-        return JSON.parse(sessionStorage.getItem(key));
+        return JSON.parse(sessionStorage.getItem(name));
       case StorageBackend.LOCALSTORAGE:
-        return JSON.parse(localStorage.getItem(key));
+        return JSON.parse(localStorage.getItem(name));
       case StorageBackend.COOKIE:
         throw Error('Not implemented.');
     }
   }
 
-  setItem(key: string, value: any) {
+  setItem(key: symbol, value: any) {
     let config = this.storageConfig.get(key);
     if (!config) {
-      throw new Error(`No specification found for storage key '${key}'.`);
+      throw new Error(`No specification found for storage key.`);
     }
     let prefix = config.prefix ?? APP_PREFIX;
-    key = `${prefix}_${key}`;
+    let name = `${prefix}_${config.name}`;
     switch (config.backend) {
       case StorageBackend.MEMORY:
         this.memory.set(key, value);
         break;
       case StorageBackend.SESSIONSTORAGE:
-        sessionStorage.setItem(key, JSON.stringify(value));
+        sessionStorage.setItem(name, JSON.stringify(value));
         break;
       case StorageBackend.LOCALSTORAGE:
-        localStorage.setItem(key, JSON.stringify(value));
+        localStorage.setItem(name, JSON.stringify(value));
         break;
       case StorageBackend.COOKIE:
         throw Error('Not implemented.');
     }
   }
 
-  removeItem(key: string) {
+  removeItem(key: symbol) {
     let config = this.storageConfig.get(key);
     if (!config) {
-      throw new Error(`No specification found for storage key '${key}'.`);
+      throw new Error(`No specification found for storage key.`);
     }
     let prefix = config.prefix ?? APP_PREFIX;
-    key = `${prefix}_${key}`;
+    let name = `${prefix}_${config.name}`;
     switch (config.backend) {
       case StorageBackend.MEMORY:
         this.memory.delete(key);
         break;
       case StorageBackend.SESSIONSTORAGE:
-        sessionStorage.removeItem(key);
+        sessionStorage.removeItem(name);
         break;
       case StorageBackend.LOCALSTORAGE:
-        localStorage.removeItem(key);
+        localStorage.removeItem(name);
         break;
       case StorageBackend.COOKIE:
         throw Error('Not implemented.');
     }
-  }
-
-  /* TODO: Remove compatibility wrappers, migrate to new functions */
-  getMemoryItem(key: MemoryStorageKey) {
-    return this.getItem(key);
-  }
-
-  getLocalStorageItem(key: LocalStorageKey) {
-    return this.getItem(key);
-  }
-
-  setMemoryItem(key: MemoryStorageKey, value: any) {
-    this.setItem(key, value);
-  }
-
-  setLocalStorageItem(key: LocalStorageKey, value: any) {
-    this.setItem(key, value);
-  }
-
-  deleteLocalStorageItem(key: LocalStorageKey) {
-    this.removeItem(`${APP_PREFIX}${key}`);
-  }
-
-  deleteMemoryStorageItem(key: MemoryStorageKey) {
-    this.removeItem(key);
   }
 }
