@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UserRole } from '../../../models/user-roles.enum';
-import { GlobalStorageService, MemoryStorageKey } from '../../../services/util/global-storage.service';
+import { GlobalStorageService, STORAGE_KEYS } from '../../../services/util/global-storage.service';
 
 
 @Component({
@@ -36,7 +36,7 @@ export class ContentGroupsComponent implements OnInit {
       } else {
         this.router.navigate([`participant/room/${this.roomShortId}/group/${this.contentGroupName}`]);
       }
-      this.globalStorageService.setMemoryItem(MemoryStorageKey.LAST_GROUP, this.contentGroupName);
+      this.globalStorageService.setItem(STORAGE_KEYS.LAST_GROUP, this.contentGroupName);
     } else {
       if (this.role === UserRole.CREATOR) {
         this.router.navigate([`creator/room/${this.roomShortId}/loosecontent`]);

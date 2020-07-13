@@ -6,7 +6,7 @@ import { NotificationService } from '../../../../services/util/notification.serv
 import { TranslateService } from '@ngx-translate/core';
 import { Router } from '@angular/router';
 import { DialogService } from '../../../../services/util/dialog.service';
-import { GlobalStorageService, LocalStorageKey } from '../../../../services/util/global-storage.service';
+import { GlobalStorageService, STORAGE_KEYS } from '../../../../services/util/global-storage.service';
 
 @Component({
   selector: 'app-bonus-token',
@@ -34,7 +34,7 @@ export class BonusTokenComponent implements OnInit {
         return (a.token > b.token) ? 1 : -1;
       });
     });
-    this.lang = this.globalStorageService.getLocalStorageItem(LocalStorageKey.LANGUAGE);
+    this.lang = this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE);
   }
 
   openDeleteSingleBonusDialog(userId: string, commentId: string, index: number): void {

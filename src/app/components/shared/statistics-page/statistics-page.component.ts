@@ -6,7 +6,7 @@ import { Room } from '../../../models/room';
 import { MatTabGroup } from '@angular/material/tabs';
 import { DialogService } from '../../../services/util/dialog.service';
 import { TranslateService } from '@ngx-translate/core';
-import { GlobalStorageService, MemoryStorageKey } from '../../../services/util/global-storage.service';
+import { GlobalStorageService, STORAGE_KEYS } from '../../../services/util/global-storage.service';
 import { AnnounceService } from '../../../services/util/announce.service';
 
 
@@ -35,7 +35,7 @@ export class StatisticsPageComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.lastGroup = this.globalStorageService.getMemoryItem(MemoryStorageKey.LAST_GROUP);
+    this.lastGroup = this.globalStorageService.getItem(STORAGE_KEYS.LAST_GROUP);
     this.route.data.subscribe(data => {
       this.getContentGroups(data.room.id);
     });

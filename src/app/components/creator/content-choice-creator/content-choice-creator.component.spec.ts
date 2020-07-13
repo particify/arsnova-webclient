@@ -11,7 +11,7 @@ import { RoomService } from '../../../services/http/room.service';
 import { Observable, of } from 'rxjs';
 import { FormsModule } from '@angular/forms';
 import { DialogService } from '../../../services/util/dialog.service';
-import { GlobalStorageService, LocalStorageKey, MemoryStorageKey } from '../../../services/util/global-storage.service';
+import { GlobalStorageService } from '../../../services/util/global-storage.service';
 import { ContentGroupService } from '../../../services/http/content-group.service';
 
 const TRANSLATION_DE = require('../../../../assets/i18n/home/de.json');
@@ -71,22 +71,11 @@ class MockContentGroupService {
 
 @Injectable()
 class MockGlobalStorageService {
-
-  getMemoryItem(key: MemoryStorageKey) {
+  getItem(key: string) {
     return undefined;
   }
 
-  getLocalStorageItem(key: LocalStorageKey) {
-    return undefined;
-  }
-
-  setMemoryItem(key: MemoryStorageKey, value: any) {
-  }
-
-  setLocalStorageItem(key: LocalStorageKey, value: any) {
-  }
-
-  deleteLocalStorageItem(key: LocalStorageKey) {
+  setItem(key: string, value: any) {
   }
 }
 

@@ -4,7 +4,7 @@ import { ContentService } from '../../../services/http/content.service';
 import { TranslateService } from '@ngx-translate/core';
 import { LanguageService } from '../../../services/util/language.service';
 import { Content } from '../../../models/content';
-import { GlobalStorageService, LocalStorageKey, MemoryStorageKey } from '../../../services/util/global-storage.service';
+import { GlobalStorageService, STORAGE_KEYS } from '../../../services/util/global-storage.service';
 import { RoomService } from '../../../services/http/room.service';
 import { StepperComponent } from '../../shared/stepper/stepper.component';
 import { Location } from '@angular/common';
@@ -38,7 +38,7 @@ export class ContentPresentationComponent implements OnInit {
 
   ngOnInit() {
     window.scroll(0, 0);
-    this.translateService.use(this.globalStorageService.getLocalStorageItem(LocalStorageKey.LANGUAGE));
+    this.translateService.use(this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE));
     this.route.params.subscribe(params => {
       this.contentIndex = params['contentIndex'] - 1;
     });
@@ -47,7 +47,7 @@ export class ContentPresentationComponent implements OnInit {
       this.shortId = room.shortId;
       this.route.params.subscribe(params => {
         this.contentGroupName = params['contentGroup'];
-        this.globalStorageService.setMemoryItem(MemoryStorageKey.LAST_GROUP, this.contentGroupName);
+        this.globalStorageService.setItem(STORAGE_KEYS.LAST_GROUP, this.contentGroupName);
         this.roomService.getGroupByRoomIdAndName(room.id, this.contentGroupName).subscribe(group => {
           this.contentService.getContentsByIds(group.contentIds).subscribe(contents => {
             this.contents = contents;

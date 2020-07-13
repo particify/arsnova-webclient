@@ -8,7 +8,7 @@ import { EventService } from '../../../../services/util/event.service';
 import { RoomDeleted } from '../../../../models/events/room-deleted';
 import { LanguageService } from '../../../../services/util/language.service';
 import { DialogService } from '../../../../services/util/dialog.service';
-import { GlobalStorageService, LocalStorageKey } from '../../../../services/util/global-storage.service';
+import { GlobalStorageService, STORAGE_KEYS } from '../../../../services/util/global-storage.service';
 
 @Component({
   selector: 'app-room-edit',
@@ -36,7 +36,7 @@ export class RoomComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.translateService.use(this.globalStorageService.getLocalStorageItem(LocalStorageKey.LANGUAGE));
+    this.translateService.use(this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE));
   }
 
   openDeleteRoomDialog(): void {

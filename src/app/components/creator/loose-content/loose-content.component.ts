@@ -10,7 +10,7 @@ import { RoomService } from '../../../services/http/room.service';
 import { TranslateService } from '@ngx-translate/core';
 import { LanguageService } from '../../../services/util/language.service';
 import { DialogService } from '../../../services/util/dialog.service';
-import { GlobalStorageService, MemoryStorageKey, LocalStorageKey } from '../../../services/util/global-storage.service';
+import { GlobalStorageService, STORAGE_KEYS } from '../../../services/util/global-storage.service';
 import { ContentListComponent } from '../content-list/content-list.component';
 import { ContentGroup } from '../../../models/content-group';
 import { ContentGroupService } from '../../../services/http/content-group.service';
@@ -57,7 +57,7 @@ export class LooseContentComponent extends ContentListComponent implements OnIni
   ) {
     super(contentService, roomService, route, location, notificationService, translateService, langService, dialogService,
       globalStorageService, contentGroupService, announceService);
-    this.deviceType = this.globalStorageService.getMemoryItem(MemoryStorageKey.DEVICE_TYPE);
+    this.deviceType = this.globalStorageService.getItem(STORAGE_KEYS.DEVICE_TYPE);
     langService.langEmitter.subscribe(lang => translateService.use(lang));
   }
 
@@ -68,7 +68,7 @@ export class LooseContentComponent extends ContentListComponent implements OnIni
         this.initContentList(contents);
       });
       this.labelMaxLength = innerWidth / 20;
-      this.translateService.use(this.globalStorageService.getLocalStorageItem(LocalStorageKey.LANGUAGE));
+      this.translateService.use(this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE));
     });
   }
 

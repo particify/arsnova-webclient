@@ -9,7 +9,7 @@ import { EventService } from '../../../services/util/event.service';
 import { RoomService } from '../../../services/http/room.service';
 import { YesNoDialogComponent } from '../../shared/_dialogs/yes-no-dialog/yes-no-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
-import { GlobalStorageService, MemoryStorageKey } from '../../../services/util/global-storage.service';
+import { GlobalStorageService, STORAGE_KEYS } from '../../../services/util/global-storage.service';
 import { ContentGroupService } from '../../../services/http/content-group.service';
 
 export class DisplayAnswer {
@@ -73,7 +73,7 @@ export class ContentChoiceCreatorComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.roomId = this.globalStorageService.getMemoryItem(MemoryStorageKey.ROOM_ID);
+    this.roomId = this.globalStorageService.getItem(STORAGE_KEYS.ROOM_ID);
     this.fillCorrectAnswers();
   }
 

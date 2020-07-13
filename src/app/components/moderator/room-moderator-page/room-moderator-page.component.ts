@@ -14,7 +14,7 @@ import { NotificationService } from '../../../services/util/notification.service
 import { EventService } from '../../../services/util/event.service';
 import { KeyboardUtils } from '../../../utils/keyboard';
 import { KeyboardKey } from '../../../utils/keyboard/keys';
-import { GlobalStorageService, LocalStorageKey } from '../../../services/util/global-storage.service';
+import { GlobalStorageService, STORAGE_KEYS } from '../../../services/util/global-storage.service';
 import { AnnounceService } from '../../../services/util/announce.service';
 import { Observable, Subscription } from 'rxjs';
 
@@ -82,7 +82,7 @@ export class RoomModeratorPageComponent extends RoomPageComponent implements OnI
     this.route.data.subscribe(data => {
       this.initializeRoom(data.room);
     });
-    this.translateService.use(this.globalStorageService.getLocalStorageItem(LocalStorageKey.LANGUAGE));
+    this.translateService.use(this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE));
   }
 
   public announce() {

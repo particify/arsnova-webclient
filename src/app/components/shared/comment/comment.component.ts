@@ -14,7 +14,7 @@ import { CorrectWrong } from '../../../models/correct-wrong.enum';
 import { UserRole } from '../../../models/user-roles.enum';
 import { DialogService } from '../../../services/util/dialog.service';
 import * as moment from 'moment';
-import { GlobalStorageService, LocalStorageKey, MemoryStorageKey } from '../../../services/util/global-storage.service';
+import { GlobalStorageService, STORAGE_KEYS } from '../../../services/util/global-storage.service';
 import { AnnounceService } from '../../../services/util/announce.service';
 import { VoteService } from '../../../services/http/vote.service';
 
@@ -90,9 +90,9 @@ export class CommentComponent implements OnInit {
         this.isModerator = true;
         this.roleString = 'moderator';
     }
-    this.language = this.globalStorageService.getLocalStorageItem(LocalStorageKey.LANGUAGE);
+    this.language = this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE);
     this.translateService.use(this.language);
-    this.deviceType = this.globalStorageService.getMemoryItem(MemoryStorageKey.DEVICE_TYPE);
+    this.deviceType = this.globalStorageService.getItem(STORAGE_KEYS.DEVICE_TYPE);
     this.inAnswerView = !this.router.url.includes('comments');
   }
 

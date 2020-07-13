@@ -6,7 +6,7 @@ import { catchError, tap } from 'rxjs/operators';
 import { AuthenticationService } from './authentication.service';
 import { BaseHttpService } from './base-http.service';
 import { EventService } from '../util/event.service';
-import { GlobalStorageService, MemoryStorageKey } from '../util/global-storage.service';
+import { GlobalStorageService, STORAGE_KEYS } from '../util/global-storage.service';
 
 const httpOptions = {
   headers: new HttpHeaders({})
@@ -86,8 +86,8 @@ export class ContentGroupService extends BaseHttpService {
 
   saveGroupInMemoryStorage(newGroup: string): boolean {
     if (newGroup !== '') {
-      this.globalStorageService.setMemoryItem(MemoryStorageKey.LAST_GROUP, newGroup);
-      const groups: string [] = this.globalStorageService.getMemoryItem(MemoryStorageKey.CONTENT_GROUPS) || [];
+      this.globalStorageService.setItem(STORAGE_KEYS.LAST_GROUP, newGroup);
+      const groups: string [] = this.globalStorageService.getItem(STORAGE_KEYS.CONTENT_GROUPS) || [];
       if (groups) {
         for (let i = 0; i < groups.length; i++) {
           if (newGroup === groups[i]) {
@@ -96,25 +96,25 @@ export class ContentGroupService extends BaseHttpService {
         }
       }
       groups.push(newGroup);
-      this.globalStorageService.setMemoryItem(MemoryStorageKey.CONTENT_GROUPS, groups);
+      this.globalStorageService.setItem(STORAGE_KEYS.CONTENT_GROUPS, groups);
       return true;
     }
   }
 
   updateGroupInMemoryStorage(oldName: string, newName: string) {
-    const groups: string[] = this.globalStorageService.getMemoryItem(MemoryStorageKey.CONTENT_GROUPS);
+    const groups: string[] = this.globalStorageService.getItem(STORAGE_KEYS.CONTENT_GROUPS);
     if (groups) {
       for (let i = 0; i < groups.length; i++) {
         if (groups[i] === oldName) {
           groups[i] = newName;
-          this.globalStorageService.setMemoryItem(MemoryStorageKey.LAST_GROUP, groups[i]);
+          this.globalStorageService.setItem(STORAGE_KEYS.LAST_GROUP, groups[i]);
           break;
         }
       }
     } else {
-      this.globalStorageService.setMemoryItem(MemoryStorageKey.LAST_GROUP, newName);
+      this.globalStorageService.setItem(STORAGE_KEYS.LAST_GROUP, newName);
     }
-    this.globalStorageService.setMemoryItem(MemoryStorageKey.CONTENT_GROUPS, groups);
+    this.globalStorageService.setItem(STORAGE_KEYS.CONTENT_GROUPS, groups);
   }
 
 }

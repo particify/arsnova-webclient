@@ -11,7 +11,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { TSMap } from 'typescript-map';
 import { EventService } from '../../../../services/util/event.service';
 import { User } from '../../../../models/user';
-import { GlobalStorageService, LocalStorageKey } from '../../../../services/util/global-storage.service';
+import { GlobalStorageService, STORAGE_KEYS } from '../../../../services/util/global-storage.service';
 
 @Component({
   selector: 'app-room-create',
@@ -39,7 +39,7 @@ export class RoomCreateComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.translateService.use(this.globalStorageService.getLocalStorageItem(LocalStorageKey.LANGUAGE));
+    this.translateService.use(this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE));
     this.authenticationService.watchUser.subscribe(newUser => this.user = newUser);
   }
 

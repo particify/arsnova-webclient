@@ -10,7 +10,7 @@ import { AuthenticationService } from '../../../services/http/authentication.ser
 import { ModeratorService } from '../../../services/http/moderator.service';
 import { EventService } from '../../../services/util/event.service';
 import { Observable, of } from 'rxjs';
-import { GlobalStorageService, LocalStorageKey, MemoryStorageKey } from '../../../services/util/global-storage.service';
+import { GlobalStorageService } from '../../../services/util/global-storage.service';
 
 const TRANSLATION_DE = require('../../../../assets/i18n/home/de.json');
 const TRANSLATION_EN = require('../../../../assets/i18n/home/en.json');
@@ -64,22 +64,14 @@ class MockEventService {
 
 @Injectable()
 class MockGlobalStorageService {
-
-  getMemoryItem(key: MemoryStorageKey) {
+  getItem(key: symbol) {
     return undefined;
   }
 
-  getLocalStorageItem(key: LocalStorageKey) {
-    return undefined;
+  setItem(key: symbol, value: any) {
   }
 
-  setMemoryItem(key: MemoryStorageKey, value: any) {
-  }
-
-  setLocalStorageItem(key: LocalStorageKey, value: any) {
-  }
-
-  deleteLocalStorageItem(key: LocalStorageKey) {
+  removeItem(key: symbol) {
   }
 }
 

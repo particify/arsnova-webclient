@@ -4,7 +4,6 @@ import { GroupContentComponent } from './group-content.component';
 import { TranslateLoader } from '@ngx-translate/core';
 import { Observable, of } from 'rxjs';
 import { Injectable } from '@angular/core';
-import { MemoryStorageKey, LocalStorageKey } from '../../../services/util/global-storage.service';
 
 const TRANSLATION_DE = require('../../../../assets/i18n/home/de.json');
 const TRANSLATION_EN = require('../../../../assets/i18n/home/en.json');
@@ -28,22 +27,14 @@ class JsonTranslationLoader implements TranslateLoader {
 
 @Injectable()
 class MockGlobalStorageService {
-
-  getMemoryItem(key: MemoryStorageKey) {
+  getItem(key: symbol) {
     return undefined;
   }
 
-  getLocalStorageItem(key: LocalStorageKey) {
-    return undefined;
+  setItem(key: symbol, value: any) {
   }
 
-  setMemoryItem(key: MemoryStorageKey, value: any) {
-  }
-
-  setLocalStorageItem(key: LocalStorageKey, value: any) {
-  }
-
-  deleteLocalStorageItem(key: LocalStorageKey) {
+  removeItem(key: symbol) {
   }
 }
 

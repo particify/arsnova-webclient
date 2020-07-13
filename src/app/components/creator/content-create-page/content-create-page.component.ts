@@ -6,7 +6,7 @@ import { FormControl } from '@angular/forms';
 import { EventService } from '../../../services/util/event.service';
 import { KeyboardUtils } from '../../../utils/keyboard';
 import { KeyboardKey } from '../../../utils/keyboard/keys';
-import { GlobalStorageService, MemoryStorageKey, LocalStorageKey } from '../../../services/util/global-storage.service';
+import { GlobalStorageService, STORAGE_KEYS } from '../../../services/util/global-storage.service';
 import { ActivatedRoute } from '@angular/router';
 import { RoomService } from '../../../services/http/room.service';
 import { AnnounceService } from '../../../services/util/announce.service';
@@ -70,7 +70,7 @@ export class ContentCreatePageComponent implements OnInit, AfterContentInit {
       this.roomService.getStats(data.room.id).subscribe(stats => {
         if (stats.groupStats) {
           this.contentGroups = stats.groupStats.map(stat => stat.groupName);
-          const lastGroup = this.globalStorageService.getMemoryItem(MemoryStorageKey.LAST_GROUP);
+          const lastGroup = this.globalStorageService.getItem(STORAGE_KEYS.LAST_GROUP);
           this.lastCollection = lastGroup ? lastGroup : this.contentGroups[0];
         } else {
           this.contentGroups = [];
@@ -80,7 +80,7 @@ export class ContentCreatePageComponent implements OnInit, AfterContentInit {
         }
       });
     });
-    this.translateService.use(this.globalStorageService.getLocalStorageItem(LocalStorageKey.LANGUAGE));
+    this.translateService.use(this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE));
   }
 
   announce() {

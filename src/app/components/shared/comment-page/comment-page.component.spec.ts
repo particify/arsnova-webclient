@@ -9,7 +9,7 @@ import { NotificationService } from '../../../services/util/notification.service
 import { AuthenticationService } from '../../../services/http/authentication.service';
 import { EventService } from '../../../services/util/event.service';
 import { User } from '../../../models/user';
-import { GlobalStorageService, LocalStorageKey, MemoryStorageKey } from '../../../services/util/global-storage.service';
+import { GlobalStorageService } from '../../../services/util/global-storage.service';
 import { AnnounceService } from '../../../services/util/announce.service';
 
 const TRANSLATION_DE = require('../../../../assets/i18n/home/de.json');
@@ -66,22 +66,14 @@ class MockRenderer2 {
 
 @Injectable()
 class MockGlobalStorageService {
-
-  getMemoryItem(key: MemoryStorageKey) {
+  getItem(key: symbol) {
     return undefined;
   }
 
-  getLocalStorageItem(key: LocalStorageKey) {
-    return undefined;
+  setItem(key: symbol, value: any) {
   }
 
-  setMemoryItem(key: MemoryStorageKey, value: any) {
-  }
-
-  setLocalStorageItem(key: LocalStorageKey, value: any) {
-  }
-
-  deleteLocalStorageItem(key: LocalStorageKey) {
+  removeItem(key: symbol) {
   }
 }
 

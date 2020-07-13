@@ -10,7 +10,7 @@ import { AuthenticationService } from './authentication.service';
 import { BaseHttpService } from './base-http.service';
 import { EventService } from '../util/event.service';
 import { TSMap } from 'typescript-map';
-import { GlobalStorageService, MemoryStorageKey } from '../util/global-storage.service';
+import { GlobalStorageService, STORAGE_KEYS } from '../util/global-storage.service';
 
 const httpOptions = {
   headers: new HttpHeaders({})
@@ -189,7 +189,7 @@ export class RoomService extends BaseHttpService {
   }
 
   setRoomId(room: Room): void {
-    this.globalStorageService.setMemoryItem(MemoryStorageKey.ROOM_ID, room.id);
-    this.globalStorageService.setMemoryItem(MemoryStorageKey.SHORT_ID, room.shortId);
+    this.globalStorageService.setItem(STORAGE_KEYS.ROOM_ID, room.id);
+    this.globalStorageService.setItem(STORAGE_KEYS.SHORT_ID, room.shortId);
   }
 }

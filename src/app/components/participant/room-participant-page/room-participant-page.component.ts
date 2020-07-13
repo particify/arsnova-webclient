@@ -19,7 +19,7 @@ import { NotificationService } from '../../../services/util/notification.service
 import { Message } from '@stomp/stompjs';
 import { Subscription } from 'rxjs';
 import { WsFeedbackService } from '../../../services/websockets/ws-feedback.service';
-import { GlobalStorageService, LocalStorageKey } from '../../../services/util/global-storage.service';
+import { GlobalStorageService, STORAGE_KEYS } from '../../../services/util/global-storage.service';
 import { AnnounceService } from '../../../services/util/announce.service';
 
 @Component({
@@ -91,7 +91,7 @@ export class RoomParticipantPageComponent extends RoomPageComponent implements O
     this.route.data.subscribe(data => {
       this.initializeRoom(data.room);
     });
-    this.translateService.use(this.globalStorageService.getLocalStorageItem(LocalStorageKey.LANGUAGE));
+    this.translateService.use(this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE));
   }
 
   ngOnDestroy() {

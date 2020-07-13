@@ -13,7 +13,7 @@ import { RoomService } from '../../../services/http/room.service';
 import { TranslateService } from '@ngx-translate/core';
 import { LanguageService } from '../../../services/util/language.service';
 import { DialogService } from '../../../services/util/dialog.service';
-import { GlobalStorageService, MemoryStorageKey } from '../../../services/util/global-storage.service';
+import { GlobalStorageService, STORAGE_KEYS } from '../../../services/util/global-storage.service';
 import { ContentGroupService } from '../../../services/http/content-group.service';
 import { AnnounceService } from '../../../services/util/announce.service';
 
@@ -59,7 +59,7 @@ export class ContentListComponent implements OnInit {
   }
 
   getGroups(): void {
-    this.contentGroups = this.globalStorageService.getMemoryItem(MemoryStorageKey.CONTENT_GROUPS);
+    this.contentGroups = this.globalStorageService.getItem(STORAGE_KEYS.CONTENT_GROUPS);
     if (!this.contentGroups) {
       this.roomService.getStats(this.room.id).subscribe(roomStats => {
         if (roomStats.groupStats) {
@@ -151,7 +151,7 @@ export class ContentListComponent implements OnInit {
           this.contents.splice(index, 1);
           this.labels.splice(index, 1);
           if (this.contents.length === 0) {
-            this.globalStorageService.setMemoryItem(MemoryStorageKey.LAST_GROUP, this.contentGroups[0]);
+            this.globalStorageService.setItem(STORAGE_KEYS.LAST_GROUP, this.contentGroups[0]);
             this.location.back();
           }
           break;

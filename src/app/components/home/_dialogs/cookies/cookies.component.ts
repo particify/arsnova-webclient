@@ -3,7 +3,7 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { DialogConfirmActionButtonType } from '../../../shared/dialog/dialog-action-buttons/dialog-action-buttons.component';
 import { ApiConfigService } from '../../../../services/http/api-config.service';
 import { InfoDialogComponent } from '../../../shared/_dialogs/info-dialog/info-dialog.component';
-import { GlobalStorageService, LocalStorageKey } from '../../../../services/util/global-storage.service';
+import { GlobalStorageService, STORAGE_KEYS } from '../../../../services/util/global-storage.service';
 
 @Component({
   selector: 'app-cookies',
@@ -29,7 +29,7 @@ export class CookiesComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
-    this.currentLang = this.globalStorageService.getLocalStorageItem(LocalStorageKey.LANGUAGE);
+    this.currentLang = this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE);
     // not really the nicest way but should do its job until a better or native solution was found
     setTimeout(() => document.getElementById('cookie-header').focus(), 400);
   }
@@ -41,8 +41,7 @@ export class CookiesComponent implements OnInit, AfterViewInit {
   }
 
   acceptCookies() {
-    this.globalStorageService.setLocalStorageItem(LocalStorageKey.COOKIE_CONSENT, 'true');
-    this.globalStorageService.setLocalStorageItem(LocalStorageKey.DATA_PROTECTION, 'true');
+    this.globalStorageService.setItem(STORAGE_KEYS.COOKIE_CONSENT, true);
     this.dialogRef.close(true);
     setTimeout(() => {
       document.getElementById('room-id-input').focus();
@@ -50,7 +49,7 @@ export class CookiesComponent implements OnInit, AfterViewInit {
   }
 
   exitApp() {
-    this.globalStorageService.setLocalStorageItem(LocalStorageKey.COOKIE_CONSENT, 'false');
+    this.globalStorageService.setItem(STORAGE_KEYS.COOKIE_CONSENT, false);
     // TODO somehow exit the app, since the user didn't accept cookie usage
     this.dialogRef.close(false);
   }

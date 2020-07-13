@@ -4,7 +4,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { DOCUMENT } from '@angular/common';
 import { KeyboardUtils } from '../../../../utils/keyboard';
 import { KeyboardKey } from '../../../../utils/keyboard/keys';
-import { GlobalStorageService, LocalStorageKey } from '../../../../services/util/global-storage.service';
+import { GlobalStorageService, STORAGE_KEYS } from '../../../../services/util/global-storage.service';
 
 @Component({
   selector: 'app-present-comment',
@@ -24,7 +24,7 @@ export class PresentCommentComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.translateService.use(this.globalStorageService.getLocalStorageItem(LocalStorageKey.LANGUAGE));
+    this.translateService.use(this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE));
   }
 
   @HostListener('document:keyup', ['$event'])

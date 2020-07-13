@@ -7,7 +7,7 @@ import { ContentType } from '../../../models/content-type.enum';
 import { ContentService } from '../../../services/http/content.service';
 import { RoomService } from '../../../services/http/room.service';
 import { TranslateService } from '@ngx-translate/core';
-import { GlobalStorageService, MemoryStorageKey } from '../../../services/util/global-storage.service';
+import { GlobalStorageService, STORAGE_KEYS } from '../../../services/util/global-storage.service';
 import { ContentGroupService } from '../../../services/http/content-group.service';
 
 @Component({
@@ -56,7 +56,7 @@ export class ContentYesNoCreatorComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.roomId = this.globalStorageService.getMemoryItem(MemoryStorageKey.ROOM_ID);
+    this.roomId = this.globalStorageService.getItem(STORAGE_KEYS.ROOM_ID);
     this.translationService.get(this.answerLabels).subscribe(msgs => {
       for (let i = 0; i < this.answerLabels.length; i++) {
         this.content.options.push(new AnswerOption(msgs[this.answerLabels[i]], this.newAnswerOptionPoints));

@@ -61,7 +61,7 @@
 
   <mat-menu #sortMenu="matMenu" xPosition="before">
 
-    <button mat-menu-item *ngIf="isSafari === 'false'"
+    <button mat-menu-item *ngIf="isSafari === false"
             (click)="sortComments(time)" aria-labelledby="sort-time">
       <mat-icon [ngClass]="{time: 'unread-icon'}[currentSort]">access_time</mat-icon>
       <span>{{ 'comment-list.sort-list-time' | translate }}</span>

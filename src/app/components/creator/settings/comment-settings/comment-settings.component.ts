@@ -13,7 +13,7 @@ import { CommentSettings } from '../../../../models/comment-settings';
 import { TSMap } from 'typescript-map';
 import { DialogService } from '../../../../services/util/dialog.service';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
-import { GlobalStorageService, MemoryStorageKey } from '../../../../services/util/global-storage.service';
+import { GlobalStorageService, STORAGE_KEYS } from '../../../../services/util/global-storage.service';
 
 @Component({
   selector: 'app-comment-settings',
@@ -158,7 +158,7 @@ export class CommentSettingsComponent implements OnInit {
     commentExtension.set('enableTags', this.enableTags);
     commentExtension.set('tags', this.tags);
     this.editRoom.extensions['comments'] = commentExtension;
-    this.globalStorageService.setMemoryItem(MemoryStorageKey.MODERATION_ENABLED, String(this.enableModeration));
+    this.globalStorageService.setItem(STORAGE_KEYS.MODERATION_ENABLED, String(this.enableModeration));
     this.saveChanges();
   }
 

@@ -10,7 +10,7 @@ import { ThemeService } from '../../../../theme/theme.service';
 import { Theme } from '../../../../theme/Theme';
 import { DialogService } from '../../../services/util/dialog.service';
 import { ApiConfigService } from '../../../services/http/api-config.service';
-import { GlobalStorageService, LocalStorageKey } from '../../../services/util/global-storage.service';
+import { GlobalStorageService, STORAGE_KEYS } from '../../../services/util/global-storage.service';
 
 @Component({
   selector: 'app-footer',
@@ -26,7 +26,6 @@ export class FooterComponent implements OnInit {
   public deviceWidth = innerWidth;
   public lang: string;
   public cookieAccepted: boolean;
-  public dataProtectionConsent: boolean;
 
   public themeClass: String;
 
@@ -43,8 +42,8 @@ export class FooterComponent implements OnInit {
     private apiConfigService: ApiConfigService,
     private globalStorageService: GlobalStorageService
   ) {
-    this.themeClass = this.globalStorageService.getLocalStorageItem(LocalStorageKey.THEME);
-    this.lang = this.globalStorageService.getLocalStorageItem(LocalStorageKey.LANGUAGE);
+    this.themeClass = this.globalStorageService.getItem(STORAGE_KEYS.THEME);
+    this.lang = this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE);
     langService.langEmitter.subscribe(lang => translateService.use(lang));
   }
 
@@ -57,14 +56,13 @@ export class FooterComponent implements OnInit {
       this.open = message;
     });
     this.themes = this.themeService.getThemes();
-    this.cookieAccepted = this.globalStorageService.getLocalStorageItem(LocalStorageKey.COOKIE_CONSENT) === 'true';
-    this.dataProtectionConsent = this.globalStorageService.getLocalStorageItem(LocalStorageKey.DATA_PROTECTION) === 'true';
+    this.cookieAccepted = this.globalStorageService.getItem(STORAGE_KEYS.COOKIE_CONSENT);
 
-    if (!this.globalStorageService.getLocalStorageItem(LocalStorageKey.COOKIE_CONSENT)) {
-      this.showCookieModal();
-    } else {
-      if (!this.cookieAccepted || !this.dataProtectionConsent) {
+    if (!this.cookieAccepted) {
+      if (this.cookieAccepted === false) {
         this.showOverlay();
+      } else {
+        this.showCookieModal();
       }
     }
   }
@@ -93,7 +91,6 @@ export class FooterComponent implements OnInit {
     dialogRef.disableClose = true;
     dialogRef.afterClosed().subscribe(res => {
       this.cookieAccepted = res;
-      this.dataProtectionConsent = res;
       if (!res) {
         this.showOverlay();
       }
@@ -105,18 +102,14 @@ export class FooterComponent implements OnInit {
     dialogRef.disableClose = true;
     dialogRef.afterClosed().subscribe(res => {
       if (res) {
-        if (!this.cookieAccepted) {
-          this.showCookieModal();
-        } else if (!this.dataProtectionConsent) {
-          this.showDataProtection();
-        }
+        this.showCookieModal();
       }
     });
   }
 
   useLanguage(language: string) {
     this.translateService.use(language);
-    this.globalStorageService.setLocalStorageItem(LocalStorageKey.LANGUAGE, language);
+    this.globalStorageService.setItem(STORAGE_KEYS.LANGUAGE, language);
     this.langService.langEmitter.emit(language);
   }
 
@@ -126,6 +119,6 @@ export class FooterComponent implements OnInit {
   }
 
   getLanguage(): string {
-    return this.globalStorageService.getLocalStorageItem(LocalStorageKey.LANGUAGE);
+    return this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE);
   }
 }

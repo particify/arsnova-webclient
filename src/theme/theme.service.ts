@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { themes, themes_meta } from './themes.const';
 import { Theme } from './Theme';
-import { GlobalStorageService, LocalStorageKey } from '../app/services/util/global-storage.service';
+import { GlobalStorageService, STORAGE_KEYS } from '../app/services/util/global-storage.service';
 
 @Injectable()
 
@@ -12,7 +12,7 @@ export class ThemeService {
   private themes: Theme[] = [];
 
   constructor(private globalStorageService: GlobalStorageService) {
-    let currentTheme = this.globalStorageService.getLocalStorageItem(LocalStorageKey.THEME);
+    let currentTheme = this.globalStorageService.getItem(STORAGE_KEYS.THEME);
     if (!currentTheme) {
       currentTheme = 'arsnova';
     }
@@ -42,7 +42,7 @@ export class ThemeService {
 
   public activate(name) {
     this.activeTheme.next(name);
-    this.globalStorageService.setLocalStorageItem(LocalStorageKey.THEME, name);
+    this.globalStorageService.setItem(STORAGE_KEYS.THEME, name);
   }
 
   public getThemes(): Theme[] {

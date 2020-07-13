@@ -3,7 +3,7 @@ import { KeyboardUtils } from '../../../utils/keyboard';
 import { KeyboardKey } from '../../../utils/keyboard/keys';
 import { DialogService } from '../../../services/util/dialog.service';
 import { EventService } from '../../../services/util/event.service';
-import { GlobalStorageService, MemoryStorageKey, LocalStorageKey } from '../../../services/util/global-storage.service';
+import { GlobalStorageService, STORAGE_KEYS } from '../../../services/util/global-storage.service';
 
 @Component({
   selector: 'app-home-page',
@@ -19,7 +19,7 @@ export class HomePageComponent implements AfterContentInit {
     private eventService: EventService,
     private globalStorageService: GlobalStorageService
   ) {
-    this.deviceType = this.globalStorageService.getMemoryItem(MemoryStorageKey.DEVICE_TYPE);
+    this.deviceType = this.globalStorageService.getItem(STORAGE_KEYS.DEVICE_TYPE);
   }
 
   @HostListener('window:keyup', ['$event'])
@@ -51,6 +51,6 @@ export class HomePageComponent implements AfterContentInit {
   }
 
   cookiesDisabled(): boolean {
-    return this.globalStorageService.getLocalStorageItem(LocalStorageKey.COOKIE_CONSENT) === 'false';
+    return this.globalStorageService.getItem(STORAGE_KEYS.COOKIE_CONSENT) === false;
   }
 }
