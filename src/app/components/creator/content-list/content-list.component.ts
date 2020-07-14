@@ -76,10 +76,10 @@ export class ContentListComponent implements OnInit {
     }
   }
 
-  findIndexOfSubject(subject: string): number {
+  findIndexOfId(id: string): number {
     let index = -1;
     for (let i = 0; i < this.contents.length; i++) {
-      if (this.contents[i].subject.valueOf() === subject.valueOf()) {
+      if (this.contents[i].id.valueOf() === id.valueOf()) {
         index = i;
         break;
       }
@@ -116,7 +116,7 @@ export class ContentListComponent implements OnInit {
   }
 
   deleteContent(delContent: Content) {
-    const index = this.findIndexOfSubject(delContent.subject);
+    const index = this.findIndexOfId(delContent.id);
     this.createChoiceContentBackup(delContent as ContentChoice);
     const dialogRef = this.dialogService.openDeleteDialog('really-delete-content', delContent.subject);
     dialogRef.afterClosed().subscribe(result => {
@@ -130,7 +130,7 @@ export class ContentListComponent implements OnInit {
     } else {
       this.contentBackup = this.createChoiceContentBackup(edContent as ContentChoice);
     }
-    const index = this.findIndexOfSubject(edContent.subject);
+    const index = this.findIndexOfId(edContent.id);
     const dialogRef = this.dialogService.openContentEditDialog(this.contentBackup);
     dialogRef.afterClosed()
       .subscribe(result => {
@@ -157,7 +157,7 @@ export class ContentListComponent implements OnInit {
           break;
         case 'update':
           this.contents[index] = this.contentBackup;
-          this.labels[index] = this.contentBackup.subject;
+          this.labels[index] = this.contentBackup.body;
           this.contentService.updateContent(this.contents[index]).subscribe();
           this.translateService.get('content.content-updated').subscribe(message => {
             this.notificationService.show(message);

@@ -1,0 +1,86 @@
+mat-card {
+  margin-top: 16px;
+  padding: 0 12px 0 0;
+  background-color: var(--background)!important;
+}
+
+mat-list {
+  padding: 0;
+  background-color: var(--background);
+}
+
+::ng-deep .mat-list-item-content {
+  padding: 0 0 0 0!important;
+}
+
+.inner {
+  width: 100%;
+}
+
+.delete {
+  color: var(--warn);
+}
+
+.editIcon {
+  color: var(--secondary);
+}
+
+.confirmIcon {
+  color: var(--on-surface);
+}
+
+.editInput {
+  margin-left: 8px;
+  max-width: calc(100% - 120px);
+  height: 60px;
+}
+
+::ng-deep .mat-form-field-infix {
+  margin-top: 10px;
+  border-top: 0;
+}
+
+.activeInput {
+  width: 100%;
+  font-size: medium;
+}
+
+.inactiveInput {
+  width: 0;
+}
+
+.mat-checkbox {
+  color: var(--on-surface);
+}
+
+.mat-checkbox-label {
+  height: auto;
+  text-align: center;
+  line-height: 18px;
+}
+
+.answer-label {
+  font-size: medium;
+  word-break: break-all;
+}
+
+.answer-without-check {
+  padding: 0 16px;
+}
+
+.answer-form {
+  width: 100%;
+  margin-top: 16px;
+}
+
+.answer-input {
+  width: 100%;
+}
+
+.add-icon {
+  color: var(--primary);
+  line-height: 28px;
+  font-size: 28px;
+  height: 28px!important;
+  width: 28px;
+}

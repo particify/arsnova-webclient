@@ -1,25 +1,22 @@
-<form fxLayout="column" fxLayoutGap="20px">
+<form fxLayout="column" fxLayoutGap="10px">
 
-  <mat-radio-group [(ngModel)]="singleChoice" [ngModelOptions]="{standalone: true}" fxLayout="row"
-                   fxLayoutAlign="center" fxLayoutGap="20px">
-    <mat-radio-button [value]=true [checked]=true aria-labelledby="single-choice">
-      Single Choice
-    </mat-radio-button>
-    <mat-radio-button [value]=false [checked]=false aria-labelledby="multiple-choice">
-      Multiple Choice
-    </mat-radio-button>
-  </mat-radio-group>
-
+  <mat-checkbox [checked]="multipleCorrectAnswers" [(ngModel)]="multipleCorrectAnswers" name="Mehrere richtige Antworten">
+    <span>{{ 'content.multiple-answers-allowed' | translate }}</span>
+  </mat-checkbox>
+  <mat-checkbox [checked]="noCorrectAnswers" [(ngModel)]="noCorrectAnswers" (ngModelChange)="removeCorrectAnswers()" name="Mehrere richtige Antworten">
+    <span>{{ 'content.no-correct-answer' | translate }}</span>
+  </mat-checkbox>
   <mat-card *ngIf="displayAnswers.length > 0">
     <mat-list>
       <mat-list-item fxLayout="column" fxLayoutAlign="center" *ngFor="let answer of displayAnswers; let i = index">
         <div fxLayout="row" fxLayoutAlign="center center" class="inner">
-          <mat-checkbox (ngModelChange)="switchValue(answer.answerOption.label)" [(ngModel)]="answer.correct"
+          <mat-checkbox *ngIf="!noCorrectAnswers" (ngModelChange)="switchValue(answer.answerOption.label)" [(ngModel)]="answer.correct"
                         [checked]="answer.correct" name="{{ answer.answerOption.label }}"
                         aria-label="{{ 'content.a11y-answer-checkbox' | translate:
                         {answer: answer.answerOption.label} }}">
             <span class="answer-label" *ngIf="isAnswerEdit !== i">{{ answer.answerOption.label }}</span>
           </mat-checkbox>
+          <p class="answer-without-check answer-label" *ngIf="isAnswerEdit !== i && noCorrectAnswers">{{ answer.answerOption.label }}</p>
           <mat-form-field class="editInput" [ngClass]="{'activeInput': isAnswerEdit === i,
         'inactiveInput': isAnswerEdit !== i}">
             <input tabindex="-1" name="answerEdit" matInput [(ngModel)]="updatedAnswer">
@@ -31,11 +28,11 @@
           </button>
           <button tabindex="-1" *ngIf="isAnswerEdit === i" mat-icon-button (click)="updateAnswer(i, answer)"
                   matTooltip="{{ 'content.save-content-group' | translate}}">
-            <mat-icon class="editIcon">done</mat-icon>
+            <mat-icon class="confirmIcon">done</mat-icon>
           </button>
           <button tabindex="-1" *ngIf="isAnswerEdit === i" mat-icon-button (click)="leaveEditMode()"
                   matTooltip="{{ 'content.abort' | translate}}">
-            <mat-icon class="editIcon">clear</mat-icon>
+            <mat-icon class="confirmIcon">clear</mat-icon>
           </button>
           <button mat-icon-button *ngIf="isAnswerEdit !== i" class="delete"
                   attr.aria-label="{{ 'content.a11y-delete-answer' | translate: {answer: answer.answerOption.label} }}"
@@ -51,31 +48,24 @@
 
   <div fxLayout="row" fxLayoutAlign="center" fxLayoutGap="20px">
     <form class="answer-form" fxLayout="row">
-      <mat-form-field class="answer-input">
+      <mat-form-field class="answer-input" appearance="fill">
+        <mat-label>{{ 'content.add-answer' | translate }}</mat-label>
         <input (focus)="eventService.makeFocusOnInputTrue()" (blur)="eventService.makeFocusOnInputFalse()"
                matInput [(ngModel)]="newAnswerOptionLabel" name="answer" id="answer-input" aria-labelledby="answer">
+        <button mat-icon-button matSuffix (click)="addAnswer($event)">
+          <mat-icon class="add-icon">add_circle</mat-icon>
+        </button>
         <mat-placeholder>{{ 'content.answer' | translate }}</mat-placeholder>
       </mat-form-field>
-      <button id="add-answer-button" aria-labelledby="add-answer" mat-fab class="add"
-              [ngClass]="{'multiple': !singleChoice}" (click)="addAnswer($event)">
-        <mat-icon>add</mat-icon>
-      </button>
     </form>
   </div>
-  <div fxLayout="row" fxLayoutAlign="center" fxLayoutGap="20px">
-    <button mat-raised-button class="button-abort" aria-labelledby="reset"
-            (click)="openResetDialog($event)">{{ 'content.reset' | translate }}</button>
-    <button mat-raised-button class="button-primary" (click)="submitContent()"
-            attr.aria-label="{{ 'content.a11y-submit' | translate: {subject: contentSub} }}">
-      {{ 'content.create' | translate }}</button>
-  </div>
+
 </form>
 
 <div class="visually-hidden">
   <div id="single-choice">{{ 'content.a11y-single-choice' | translate }}</div>
   <div id="multiple-choice">{{ 'content.a11y-multiple-choice' | translate }}</div>
-  <div id="answer">{{ (content.options.length === 0 ? 'content.a11y-enter-answer' :
-    'content.a11y-enter-another-answer') | translate }}</div>
+  <div id="answer">{{ 'content.a11y-enter-answer' | translate }}</div>
   <div id="add-answer">{{ 'content.a11y-add-answer' | translate }}</div>
   <div id="delete-answer">{{ 'content.a11y-delete-answer' | translate }}</div>
   <div id="reset">{{ 'content.a11y-reset' | translate }}</div>

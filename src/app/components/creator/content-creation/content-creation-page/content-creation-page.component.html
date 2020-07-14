@@ -1,0 +1,91 @@
+<div fxLayout="row" fxLayoutAlign="center">
+
+  <mat-card>
+    <div class="visually-hidden">
+      <button id="message-announcer-button" tabIndex="-1" (click)="announce()">
+        {{ 'content.a11y-content-create-message' | translate }}</button>
+      <button id="keys-announcer-button" tabIndex="-1" (click)="announce()">
+        {{ 'content.a11y-content-create-shortcuts' | translate }}</button>
+    </div>
+    <form>
+      <div fxLayoutAlign="start" fxLayout="row wrap">
+        <button class="format-button" id="format-button" mat-stroked-button
+                aria-labelledby="choose-format" [matMenuTriggerFor]="formatMenu">
+          <mat-icon>{{ selectedFormat.icon }}</mat-icon>
+          <span>
+          {{ 'content.format-' + selectedFormat.name | translate}}
+        </span>
+        </button>
+        <mat-menu #formatMenu="matMenu">
+          <button mat-menu-item *ngFor="let format of formats" [value]="format" (click)="changeFormat(format)">
+            <div fxLayout="row">
+              <mat-icon class="format-icon">{{ format.icon }}</mat-icon>
+              <div fxLayout="column" fxLayoutAlign="center">
+                <span class="format-name" attr.aria-labelledby="{{'format-' + format.name}}">
+                  {{ 'content.format-' + format.name | translate }}</span>
+                <span class="format-description">{{ 'content.format-' + format.name +
+                '-description' | translate }}</span>
+              </div>
+            </div>
+          </button>
+        </mat-menu>
+        <span class="fill-remaining-space"></span>
+        <mat-form-field class="group" appearance="outline">
+          <mat-label>{{ 'content.collection' | translate }}</mat-label>
+          <input (focus)="eventService.makeFocusOnInputTrue()" (blur)="eventService.makeFocusOnInputFalse()"
+                 matInput #group id="group-input" [formControl]="myControl" maxlength="25" [matAutocomplete]="auto"
+                 aria-labelledby="content-group" [(ngModel)]="lastContentGroup"
+                 placeholder="{{ 'content.choose-collection' | translate }}"/>
+          <mat-autocomplete #auto="matAutocomplete">
+            <mat-option *ngFor="let collection of contentGroups" [value]="collection">
+              {{collection}}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+      </div>
+      <mat-form-field class="input-block" appearance="outline">
+        <mat-label>{{ 'content.body' | translate }}</mat-label>
+        <textarea (focus)="eventService.makeFocusOnInputTrue()" (blur)="eventService.makeFocusOnInputFalse()"
+                  matInput #questionInput id="body-input" [(ngModel)]="question" name="questionInput"
+                  aria-labelledby="body" placeholder="{{ 'content.enter-body' | translate }}"
+                  matTextareaAutosize matAutosizeMinRows="3" matAutosizeMaxRows="8" maxlength="250"></textarea>
+      </mat-form-field>
+    </form>
+    <div class="content-action-container">
+      <app-content-choice-creator (reset)="resetInputs()" *ngIf="selectedFormat.name === 'choice'"
+                                  [createEvent]="createEventSubject.asObservable()"
+                                  [contentBody]="questionInput.value" [contentGroup]="group.value">
+      </app-content-choice-creator>
+      <app-content-likert-creator (reset)="resetInputs()" *ngIf="selectedFormat.name === 'likert'"
+                                  [createEvent]="createEventSubject.asObservable()"
+                                  [contentBody]="questionInput.value" [contentGroup]="group.value">
+      </app-content-likert-creator>
+      <app-content-yes-no-creator (reset)="resetInputs()" *ngIf="selectedFormat.name === 'binary'"
+                                  [createEvent]="createEventSubject.asObservable()"
+                                  [contentBody]="questionInput.value" [contentGroup]="group.value">
+      </app-content-yes-no-creator>
+      <app-content-text-creator (reset)="resetInputs()" *ngIf="selectedFormat.name === 'text'"
+                                [createEvent]="createEventSubject.asObservable()"
+                                [contentBody]="questionInput.value" [contentGroup]="group.value">
+      </app-content-text-creator>
+      <div fxLayout="row" fxLayoutAlign="center">
+        <button mat-raised-button (click)="emitCreateEvent()" class="button-primary create-btn"
+                attr.aria-label="{{ 'content.a11y-submit' | translate: {body: question, group: group.value} }}">
+          {{ 'content.create' | translate }}</button>
+      </div>
+
+    </div>
+  </mat-card>
+</div>
+
+<div class="visually-hidden">
+  <div id="subject">{{ 'content.a11y-enter-subject' | translate }}</div>
+  <div id="body">{{ 'content.a11y-enter-body' | translate }}</div>
+  <div id="content-group">{{ 'content.a11y-enter-content-group' | translate }}</div>
+  <div id="format-choice">{{ 'content.a11y-format-choice' | translate }}</div>
+  <div id="format-likert">{{ 'content.a11y-format-likert' | translate }}</div>
+  <div id="format-binary">{{ 'content.a11y-format-binary' | translate }}</div>
+  <div id="format-text">{{ 'content.a11y-format-text' | translate }}</div>
+  <div id="choose-format">{{ 'content.a11y-choose-format' | translate:
+    { format: 'content.format-' + selectedFormat.name | translate } }}</div>
+</div>

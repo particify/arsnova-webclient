@@ -1,0 +1,53 @@
+form {
+  width: 100%;
+}
+
+.group {
+  max-width: 80%;
+}
+
+.mat-menu-item {
+  height: auto!important;
+}
+
+::ng-deep .mat-menu-panel {
+  max-width: 500px!important;
+}
+
+.format-name {
+  line-height: 100%;
+  font-weight: bold;
+  height: 16px;
+  font-size: 14px;
+  text-align: start;
+  margin-top: 8px;
+  color: var(--on-dialog);
+}
+
+.format-description {
+  white-space: normal;
+  line-height: 16px;
+  font-size: 14px;
+  margin: 4px 0 8px 0;
+  color: var(--on-dialog);
+}
+
+.format-icon {
+  align-self: center;
+}
+
+.format-button {
+  color: var(--secondary);
+  border-color: var(--secondary);
+  margin: 3px 20px 20px 0;
+  height: 60px;
+}
+
+mat-card {
+  width: 100%;
+  max-width: 800px;
+}
+
+.create-btn {
+  min-width: 120px;
+}

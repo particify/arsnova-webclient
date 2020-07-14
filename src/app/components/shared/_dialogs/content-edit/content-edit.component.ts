@@ -1,6 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { DisplayAnswer } from '../../../creator/content-choice-creator/content-choice-creator.component';
+import { DisplayAnswer } from '../../../creator/content-creation/content-creation/content-creation.component';
 import { AnswerOption } from '../../../../models/answer-option';
 import { TranslateService } from '@ngx-translate/core';
 import { NotificationService } from '../../../../services/util/notification.service';
@@ -58,7 +58,7 @@ export class ContentEditComponent implements OnInit {
 
   updateContent() {
     let counter = 0;
-    if (this.data.subject === '' || this.data.body === '') {
+    if (this.data.body === '') {
       this.translateService.get('dialog.no-empty').subscribe(message => {
         this.notificationService.show(message);
       });

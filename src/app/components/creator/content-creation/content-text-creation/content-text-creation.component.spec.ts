@@ -1,20 +1,20 @@
 /* import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ContentCreatePageComponent } from './content-create-page.component';
+import { ContentTextCreationComponent } from './content-text-creation.component';
 
-describe('ContentCreatePageComponent', () => {
-  let component: ContentCreatePageComponent;
-  let fixture: ComponentFixture<ContentCreatePageComponent>;
+describe('ContentTextCreationComponent', () => {
+  let component: ContentTextCreationComponent;
+  let fixture: ComponentFixture<ContentTextCreationComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ContentCreatePageComponent ]
+      declarations: [ ContentTextCreationComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ContentCreatePageComponent);
+    fixture = TestBed.createComponent(ContentTextCreationComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

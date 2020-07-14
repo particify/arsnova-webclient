@@ -116,6 +116,7 @@ export class RoomListComponent implements OnInit, OnDestroy {
   setCurrentRoom(shortId: string, role: UserRole) {
     this.authenticationService.assignRole(role);
     this.router.navigate([`${this.roleToString(role)}/room/${shortId}`]);
+    this.globalStorageService.removeItem(STORAGE_KEYS.LAST_GROUP);
   }
 
   navToSettings(shortId: string) {

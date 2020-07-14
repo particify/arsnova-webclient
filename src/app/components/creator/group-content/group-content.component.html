@@ -155,7 +155,7 @@
         <div *ngIf="isInSortingMode">
           <div cdkDropList class="content-list" [cdkDropListData]="copiedContents" (cdkDropListDropped)="drop($event)">
             <div class="content-box" *ngFor="let content of copiedContents" cdkDrag>
-              {{content.subject}}
+              {{content.body.length > 80 ? content.body.substr(0, 80) + '..' : content.body}}
             </div>
           </div>
         </div>
