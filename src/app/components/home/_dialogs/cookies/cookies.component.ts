@@ -1,15 +1,10 @@
-import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { AfterViewInit, Component, ElementRef, OnInit, ViewChild, Inject } from '@angular/core';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { DialogConfirmActionButtonType } from '../../../shared/dialog/dialog-action-buttons/dialog-action-buttons.component';
 import { ApiConfigService } from '../../../../services/http/api-config.service';
 import { InfoDialogComponent } from '../../../shared/_dialogs/info-dialog/info-dialog.component';
 import { GlobalStorageService, STORAGE_KEYS } from '../../../../services/util/global-storage.service';
-
-interface CookieCategory {
-  id: string,
-  required: boolean
-  consent: boolean
-}
+import { ConsentGiven, CookieCategory } from 'app/services/util/consent.service';
 
 @Component({
   selector: 'app-cookies',
@@ -25,13 +20,8 @@ export class CookiesComponent implements OnInit, AfterViewInit {
 
   confirmButtonType: DialogConfirmActionButtonType = DialogConfirmActionButtonType.Primary;
 
-  categories: CookieCategory[] = [
-    {id: 'essential', consent: true, required: true},
-    {id: 'functional', consent: false, required: false},
-    {id: 'statistics', consent: false, required: false}
-  ]
-
   constructor(
+    @Inject(MAT_DIALOG_DATA) public categories: CookieCategory[],
     private dialog: MatDialog,
     private dialogRef: MatDialogRef<CookiesComponent>,
     private apiConfigService: ApiConfigService,
@@ -52,28 +42,26 @@ export class CookiesComponent implements OnInit, AfterViewInit {
   }
 
   acceptAllCookies() {
-    console.debug('Accepted cookie categories: ', this.categories);
     this.categories.forEach((item) => {
       item.consent = true;
     });
-    this.updateConsentSettings();
-    this.dialogRef.close(true);
-    setTimeout(() => {
-      document.getElementById('room-id-input').focus();
-    }, 500);
+    this.handleCookieSelection();
   }
 
   acceptSelectedCookies() {
+    this.handleCookieSelection();
+  }
+
+  handleCookieSelection() {
     console.debug('Accepted cookie categories: ', this.categories);
-    this.updateConsentSettings();
-    this.dialogRef.close(true);
+    const consentGiven: ConsentGiven = this.categories.reduce((map, item) => {
+        map[item.id] = item.consent
+        return map;
+      }, {});
+    this.dialogRef.close(consentGiven);
     setTimeout(() => {
       document.getElementById('room-id-input').focus();
     }, 500);
-  }
-
-  updateConsentSettings() {
-    this.globalStorageService.setItem(STORAGE_KEYS.COOKIE_CONSENT, true);
   }
 
   getUIDataFromConfig(type: string): string {

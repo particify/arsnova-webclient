@@ -11,6 +11,7 @@ import { Theme } from '../../../../theme/Theme';
 import { DialogService } from '../../../services/util/dialog.service';
 import { ApiConfigService } from '../../../services/http/api-config.service';
 import { GlobalStorageService, STORAGE_KEYS } from '../../../services/util/global-storage.service';
+import { ConsentService } from 'app/services/util/consent.service';
 
 @Component({
   selector: 'app-footer',
@@ -25,7 +26,6 @@ export class FooterComponent implements OnInit {
   public open: string;
   public deviceWidth = innerWidth;
   public lang: string;
-  public cookieAccepted: boolean;
 
   public themeClass: String;
 
@@ -40,7 +40,8 @@ export class FooterComponent implements OnInit {
     private themeService: ThemeService,
     private dialogService: DialogService,
     private apiConfigService: ApiConfigService,
-    private globalStorageService: GlobalStorageService
+    private globalStorageService: GlobalStorageService,
+    private consentService: ConsentService
   ) {
     this.themeClass = this.globalStorageService.getItem(STORAGE_KEYS.THEME);
     this.lang = this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE);
@@ -56,14 +57,9 @@ export class FooterComponent implements OnInit {
       this.open = message;
     });
     this.themes = this.themeService.getThemes();
-    this.cookieAccepted = this.globalStorageService.getItem(STORAGE_KEYS.COOKIE_CONSENT);
 
-    if (!this.cookieAccepted) {
-      if (this.cookieAccepted === false) {
-        this.showOverlay();
-      } else {
-        this.showCookieModal();
-      }
+    if (this.consentService.consentRequired()) {
+      this.consentService.openDialog();
     }
   }
 
@@ -87,24 +83,6 @@ export class FooterComponent implements OnInit {
   }
 
   showCookieModal() {
-    const dialogRef = this.dialogService.openCookieDialog();
-    dialogRef.disableClose = true;
-    dialogRef.afterClosed().subscribe(res => {
-      this.cookieAccepted = res;
-      if (!res) {
-        this.showOverlay();
-      }
-    });
-  }
-
-  showOverlay() {
-    const dialogRef = this.dialogService.openOverlayDialog();
-    dialogRef.disableClose = true;
-    dialogRef.afterClosed().subscribe(res => {
-      if (res) {
-        this.showCookieModal();
-      }
-    });
   }
 
   useLanguage(language: string) {
