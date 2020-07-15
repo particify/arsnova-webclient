@@ -1,5 +1,5 @@
-import { Injectable } from '@angular/core';
-import { GlobalStorageService, STORAGE_KEYS } from './global-storage.service';
+import { Injectable, EventEmitter } from '@angular/core';
+import { GlobalStorageService, STORAGE_KEYS, StorageItemCategory } from './global-storage.service';
 import { DialogService } from './dialog.service';
 import { BaseHttpService } from '../http/base-http.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
@@ -13,6 +13,7 @@ export interface ConsentGiven {
 }
 
 export interface CookieCategory {
+  key: StorageItemCategory,
   id: string,
   required: boolean
   consent: boolean
@@ -32,15 +33,21 @@ const httpOptions = {
 @Injectable()
 export class ConsentService extends BaseHttpService {
   private readonly categories: CookieCategory[] = [
-    {id: 'essential', consent: true, required: true},
-    {id: 'functional', consent: false, required: false},
-    {id: 'statistics', consent: false, required: false}
+    {key: StorageItemCategory.REQUIRED, id: 'essential', consent: true, required: true},
+    {key: StorageItemCategory.FUNCTIONAL, id: 'functional', consent: false, required: false},
+    {key: StorageItemCategory.STATISTICS, id: 'statistics', consent: false, required: false}
   ];
+  private readonly categoryMap: Map<StorageItemCategory, CookieCategory> = this.categories.reduce((map, category) => {
+    map.set(category.key, category);
+    return map;
+  }, new Map());
 
   private apiUrl = {
     base: '/api',
     consent: '/consent'
   };
+
+  private settingsChanged = new EventEmitter();
 
   constructor(
     private globalStorageService: GlobalStorageService,
@@ -49,6 +56,17 @@ export class ConsentService extends BaseHttpService {
     private config: ApiConfigService
   ) {
     super();
+    this.loadLocalSettings();
+  }
+
+  /**
+   * Loads consent settings from local storage.
+   */
+  loadLocalSettings() {
+    const consentGiven = this.getConsentSettings().consentGiven;
+    this.categories.forEach(item => {
+      item.consent = consentGiven[item.id] ?? item.consent;
+    })
   }
 
   /**
@@ -59,13 +77,25 @@ export class ConsentService extends BaseHttpService {
   }
 
   /**
+   * Checks consent for a cookie category.
+   *
+   * @param categoryKey Key of the cookie category
+   */
+  consentGiven(categoryKey: StorageItemCategory) {
+    return this.categoryMap.get(categoryKey)?.consent ?? false;
+  }
+
+  /**
+   * Subscribes to changes in consent settings.
+   */
+  subscribeToChanges(callback: (settings: ConsentSettings) => void) {
+    return this.settingsChanged.subscribe(callback);
+  }
+
+  /**
    * Opens the cookie settings dialog.
    */
   openDialog() {
-    const consentGiven = this.getConsentSettings().consentGiven;
-    this.categories.forEach(item => {
-      item.consent = consentGiven[item.id] ?? item.consent;
-    })
     const dialogRef = this.dialogService.openCookieDialog(this.categories);
     dialogRef.disableClose = true;
     dialogRef.afterClosed().subscribe((res: ConsentGiven) => {
@@ -103,6 +133,7 @@ export class ConsentService extends BaseHttpService {
     } else {
       this.globalStorageService.setItem(STORAGE_KEYS.COOKIE_CONSENT, consentSettings);
     }
+    this.settingsChanged.emit(consentSettings);
   }
 
   /**
