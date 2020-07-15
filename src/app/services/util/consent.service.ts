@@ -62,6 +62,10 @@ export class ConsentService extends BaseHttpService {
    * Opens the cookie settings dialog.
    */
   openDialog() {
+    const consentGiven = this.getConsentSettings().consentGiven;
+    this.categories.forEach(item => {
+      item.consent = consentGiven[item.id] ?? item.consent;
+    })
     const dialogRef = this.dialogService.openCookieDialog(this.categories);
     dialogRef.disableClose = true;
     dialogRef.afterClosed().subscribe((res: ConsentGiven) => {

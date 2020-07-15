@@ -82,7 +82,8 @@ export class FooterComponent implements OnInit {
     this.dialogService.openInfoDialog('data-protection', dataProtectionBody);
   }
 
-  showCookieModal() {
+  showCookieSettings() {
+    this.consentService.openDialog();
   }
 
   useLanguage(language: string) {

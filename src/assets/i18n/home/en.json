@@ -9,6 +9,7 @@
     "intro": "We use cookies and similar technologies to recognize you when you return to our website and to allow you to access your data and settings. We also use these technologies for statistical purposes.",
     "intro-privacy1": "You will find more information in our ",
     "intro-privacy2": ".",
+    "update-later": "You can review and change these settings at any time via the data protection menu.",
     "privacy-policy": "privacy policy",
     "category-essential": "Essential",
     "category-essential-desc": "Some cookies are required by the application to work correctly. These are, for example, authentication data after signing in.",
@@ -28,12 +29,14 @@
     "a11y-imprint": "Open the imprint.",
     "a11y-language": "Open the language selector.",
     "a11y-style": "Open the display selector.",
+    "cookie-settings": "Cookie settings",
     "demo": "Introduction",
     "dsgvo": "Data Protection",
     "english": "English",
     "german": "German",
     "imprint": "Imprint",
     "language": "Language",
+    "privacy-policy": "Privacy policy",
     "style": "Display"
   },
   "header": {

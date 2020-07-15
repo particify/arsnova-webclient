@@ -14,6 +14,9 @@
         <div class="cookie-cat" *ngFor="let category of categories"><mat-slide-toggle labelPosition="before" [(ngModel)]="category.consent" [disabled]="category.required"><div>{{ 'cookies.category-' + category.id | translate }}</div></mat-slide-toggle><div class="cookie-cat-desc">{{ 'cookies.category-' + category.id + '-desc' | translate }}</div></div>
       </div>
     </div>
+    <p>
+      {{ 'cookies.update-later' | translate }}
+    </p>
 
     <app-dialog-action-buttons
       buttonsLabelSection="cookies"
