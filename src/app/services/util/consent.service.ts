@@ -1,10 +1,11 @@
 import { Injectable, EventEmitter } from '@angular/core';
-import { GlobalStorageService, STORAGE_KEYS, StorageItemCategory } from './global-storage.service';
-import { DialogService } from './dialog.service';
 import { BaseHttpService } from '../http/base-http.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError } from 'rxjs/operators';
 import { ApiConfigService } from '../http/api-config.service';
+import { MatDialog } from '@angular/material/dialog';
+import { CookiesComponent } from 'app/components/home/_dialogs/cookies/cookies.component';
+import { StorageItemCategory } from 'app/models/storage';
 
 export const CONSENT_VERSION = 1;
 
@@ -26,6 +27,11 @@ export interface ConsentSettings {
   consentGiven: { [key: string]: boolean }
 }
 
+export interface ConsentChangeEvent {
+  categoriesSettings: CookieCategory[],
+  consentSettings?: ConsentSettings
+}
+
 const httpOptions = {
   headers: new HttpHeaders({})
 };
@@ -41,21 +47,25 @@ export class ConsentService extends BaseHttpService {
     map.set(category.key, category);
     return map;
   }, new Map());
+  private consentSettings: ConsentSettings;
 
   private apiUrl = {
     base: '/api',
     consent: '/consent'
   };
 
-  private settingsChanged = new EventEmitter();
+  private settingsChanged: EventEmitter<ConsentChangeEvent> = new EventEmitter();
 
   constructor(
-    private globalStorageService: GlobalStorageService,
-    private dialogService: DialogService,
+    public dialog: MatDialog,
     private http: HttpClient,
     private config: ApiConfigService
   ) {
     super();
+  }
+
+  init(consentSettings: ConsentSettings) {
+    this.consentSettings = consentSettings;
     this.loadLocalSettings();
   }
 
@@ -73,7 +83,7 @@ export class ConsentService extends BaseHttpService {
    * Tells if the user still needs to give their consent.
    */
   consentRequired() {
-    return !this.globalStorageService.getItem(STORAGE_KEYS.COOKIE_CONSENT);
+    return !this.consentSettings;
   }
 
   /**
@@ -88,7 +98,7 @@ export class ConsentService extends BaseHttpService {
   /**
    * Subscribes to changes in consent settings.
    */
-  subscribeToChanges(callback: (settings: ConsentSettings) => void) {
+  subscribeToChanges(callback: (event: ConsentChangeEvent) => void) {
     return this.settingsChanged.subscribe(callback);
   }
 
@@ -96,7 +106,11 @@ export class ConsentService extends BaseHttpService {
    * Opens the cookie settings dialog.
    */
   openDialog() {
-    const dialogRef = this.dialogService.openCookieDialog(this.categories);
+    const dialogRef = this.dialog.open(CookiesComponent, {
+      width: '600px',
+      autoFocus: true,
+      data: this.categories
+    });
     dialogRef.disableClose = true;
     dialogRef.afterClosed().subscribe((res: ConsentGiven) => {
       this.updateConsentSettings(res);
@@ -107,12 +121,15 @@ export class ConsentService extends BaseHttpService {
    * Returns the current consent settings.
    */
   getConsentSettings(): ConsentSettings {
-    const consentSettings = this.globalStorageService.getItem(STORAGE_KEYS.COOKIE_CONSENT);
-    return consentSettings || {
+    return this.consentSettings || {
       version: CONSENT_VERSION,
       timestamp: new Date(),
       consentGiven: {}
     };
+  }
+
+  getInternalSettings(): CookieCategory[] {
+    return this.categories;
   }
 
   /**
@@ -122,18 +139,17 @@ export class ConsentService extends BaseHttpService {
    * @param consentGiven Consent values for each category
    */
   updateConsentSettings(consentGiven: ConsentGiven) {
-    const consentSettings: ConsentSettings = this.getConsentSettings();
-    consentSettings.timestamp = new Date();
-    consentSettings.consentGiven = consentGiven;
+    this.consentSettings = this.getConsentSettings();
+    this.consentSettings.timestamp = new Date();
+    this.consentSettings.consentGiven = consentGiven;
     const consentRecording = this.config.getFeatureConfig('consentRecording');
     if (consentRecording?.enabled) {
-      this.recordConsentSettings(consentSettings).subscribe((persistedConsentSettings) => {
-        this.globalStorageService.setItem(STORAGE_KEYS.COOKIE_CONSENT, persistedConsentSettings);
+      this.recordConsentSettings(this.consentSettings).subscribe((persistedConsentSettings) => {
+        this.settingsChanged.emit({categoriesSettings: this.categories, consentSettings: this.consentSettings});
       });
     } else {
-      this.globalStorageService.setItem(STORAGE_KEYS.COOKIE_CONSENT, consentSettings);
+      this.settingsChanged.emit({categoriesSettings: this.categories, consentSettings: this.consentSettings});
     }
-    this.settingsChanged.emit(consentSettings);
   }
 
   /**

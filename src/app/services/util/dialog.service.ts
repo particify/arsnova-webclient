@@ -141,14 +141,6 @@ export class DialogService {
   }
   */
 
-  openCookieDialog(categories: CookieCategory[]): MatDialogRef<CookiesComponent> {
-    return this.dialog.open(CookiesComponent, {
-      width: this.size.medium,
-      autoFocus: true,
-      data: categories
-    });
-  }
-
   openOverlayDialog(): MatDialogRef<OverlayComponent> {
     return this.dialog.open(OverlayComponent);
   }

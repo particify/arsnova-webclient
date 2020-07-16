@@ -1,27 +1,6 @@
 import { Injectable, InjectionToken, Inject, Provider } from '@angular/core';
-
-export enum StorageItemCategory {
-  UNSPECIFIED,
-  REQUIRED,
-  FUNCTIONAL,
-  STATISTICS,
-  MARKETING
-}
-
-export enum StorageBackend {
-  MEMORY,
-  SESSIONSTORAGE,
-  LOCALSTORAGE,
-  COOKIE
-}
-
-export interface StorageItem {
-  key: symbol,
-  name: string,
-  prefix?: string,
-  category: StorageItemCategory,
-  backend: StorageBackend
-}
+import { ConsentService, ConsentChangeEvent } from './consent.service';
+import { StorageBackend, StorageItem, StorageItemCategory } from 'app/models/storage';
 
 export const STORAGECONFIG_PROVIDER_TOKEN : InjectionToken<StorageItem> = new InjectionToken('STORAGECONFIG_PROVIDER_TOKEN');
 
@@ -153,13 +132,19 @@ export class GlobalStorageService {
   memory: Map<symbol, any> = new Map();
   shortId: string;
   readonly storageConfig: Map<symbol, StorageItem> = new Map();
+  readonly backendOverrides: Map<StorageItemCategory, StorageBackend> = new Map();
 
   constructor(
-    @Inject(STORAGECONFIG_PROVIDER_TOKEN) storageConfigItems: StorageItem[]
+    @Inject(STORAGECONFIG_PROVIDER_TOKEN) storageConfigItems: StorageItem[],
+    private consentService: ConsentService
   ) {
     storageConfigItems.forEach((item) => {
       this.storageConfig.set(item.key, item);
     });
+    this.consentService.init(this.getItem(STORAGE_KEYS.COOKIE_CONSENT));
+    this.consentService.subscribeToChanges(settings => this.handleConsentChange(settings));
+    this.handleConsentChange({categoriesSettings: this.consentService.getInternalSettings()});
+
     // Memory setup
     const userAgent = navigator.userAgent;
     let isSafari = false;
@@ -184,6 +169,73 @@ export class GlobalStorageService {
     this.setItem(STORAGE_KEYS.DEVICE_TYPE, deviceType);
   }
 
+  /**
+   * Override the storage backend setting for a category so that session storage
+   * is used.
+   *
+   * @param category Category for which the storage backend is overriden
+   */
+  forceSessionStorageFor(category: StorageItemCategory) {
+    if (this.backendOverrides.has(category)) {
+      return;
+    }
+
+    /* Backup and remove items from old backend */
+    const map: Map<symbol, any> = new Map();
+    STORAGE_CONFIG.filter(i => i.category === category).forEach(config => {
+      const value = this.getItem(config.key);
+      if (value !== null) {
+        map.set(config.key, value);
+      }
+      this.removeItem(config.key);
+    });
+
+    /* Create backend override */
+    this.backendOverrides.set(category, StorageBackend.SESSIONSTORAGE);
+
+    /* Restore items to new backend */
+    map.forEach((v, k) => {
+      this.setItem(k, v);
+    });
+  }
+
+  /**
+   * Reset the storage backend setting for a category to the default.
+   *
+   * @param category Category for which the storage backend is reset
+   */
+  resetBackendFor(category: StorageItemCategory) {
+    if (!this.backendOverrides.has(category)) {
+      return;
+    }
+
+    /* Backup and remove items from old backend */
+    const map: Map<symbol, any> = new Map();
+    STORAGE_CONFIG.filter(i => i.category === category).forEach(config => {
+      const value = this.getItem(config.key);
+      if (value !== null) {
+        map.set(config.key, value);
+      }
+      this.removeItem(config.key);
+    });
+
+    /* Remove backend override */
+    this.backendOverrides.delete(category);
+
+    /* Restore items to new backend */
+    map.forEach((v, k) => {
+      this.setItem(k, v);
+    });
+  }
+
+  getBackendFor(storage: StorageItem) {
+    if (storage.backend === StorageBackend.MEMORY) {
+      return storage.backend;
+    }
+
+    return this.backendOverrides.get(storage.category) ?? storage.backend;
+  }
+
   getItem(key: symbol): any {
     let config = this.storageConfig.get(key);
     if (!config) {
@@ -191,7 +243,7 @@ export class GlobalStorageService {
     }
     let prefix = config.prefix ?? APP_PREFIX;
     let name = `${prefix}_${config.name}`;
-    switch (config.backend) {
+    switch (this.getBackendFor(config)) {
       case StorageBackend.MEMORY:
         return this.memory.get(key);
       case StorageBackend.SESSIONSTORAGE:
@@ -210,7 +262,8 @@ export class GlobalStorageService {
     }
     let prefix = config.prefix ?? APP_PREFIX;
     let name = `${prefix}_${config.name}`;
-    switch (config.backend) {
+    let backend = this.backendOverrides.get(config.category) ?? config.backend;
+    switch (this.getBackendFor(config)) {
       case StorageBackend.MEMORY:
         this.memory.set(key, value);
         break;
@@ -232,7 +285,7 @@ export class GlobalStorageService {
     }
     let prefix = config.prefix ?? APP_PREFIX;
     let name = `${prefix}_${config.name}`;
-    switch (config.backend) {
+    switch (this.getBackendFor(config)) {
       case StorageBackend.MEMORY:
         this.memory.delete(key);
         break;
@@ -245,5 +298,21 @@ export class GlobalStorageService {
       case StorageBackend.COOKIE:
         throw Error('Not implemented.');
     }
+  }
+
+  /**
+   * Override storage backend config based on changes to user consent settings.
+   */
+  handleConsentChange(event: ConsentChangeEvent) {
+    if (event.consentSettings) {
+      this.setItem(STORAGE_KEYS.COOKIE_CONSENT, event.consentSettings);
+    }
+    event.categoriesSettings.forEach(c => {
+      if (c.consent) {
+        this.resetBackendFor(c.key);
+      } else {
+        this.forceSessionStorageFor(c.key);
+      }
+    })
   }
 }

@@ -2,8 +2,6 @@ import { AfterViewInit, Component, ElementRef, OnInit, ViewChild, Inject } from 
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { DialogConfirmActionButtonType } from '../../../shared/dialog/dialog-action-buttons/dialog-action-buttons.component';
 import { ApiConfigService } from '../../../../services/http/api-config.service';
-import { InfoDialogComponent } from '../../../shared/_dialogs/info-dialog/info-dialog.component';
-import { GlobalStorageService, STORAGE_KEYS } from '../../../../services/util/global-storage.service';
 import { ConsentGiven, CookieCategory } from 'app/services/util/consent.service';
 
 @Component({
@@ -16,21 +14,17 @@ export class CookiesComponent implements OnInit, AfterViewInit {
   @ViewChild('header')
   dialogTitle: ElementRef;
 
-  currentLang: string;
-
   confirmButtonType: DialogConfirmActionButtonType = DialogConfirmActionButtonType.Primary;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public categories: CookieCategory[],
     private dialog: MatDialog,
     private dialogRef: MatDialogRef<CookiesComponent>,
-    private apiConfigService: ApiConfigService,
-    private globalStorageService: GlobalStorageService
+    private apiConfigService: ApiConfigService
   ) {
   }
 
   ngOnInit() {
-    this.currentLang = this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE);
     // not really the nicest way but should do its job until a better or native solution was found
     setTimeout(() => document.getElementById('cookie-header').focus(), 400);
   }
@@ -64,18 +58,8 @@ export class CookiesComponent implements OnInit, AfterViewInit {
     }, 500);
   }
 
-  getUIDataFromConfig(type: string): string {
-    return this.apiConfigService.getUiConfig()[type][this.currentLang];
-  }
-
   showDataProtection() {
-    this.dialog.open(InfoDialogComponent, {
-      'width': '80%',
-      data: {
-        section: 'data-protection',
-        body: this.getUIDataFromConfig('privacy-info')
-      }
-    });
+    console.debug('Not implemented.');
   }
 
   /**
