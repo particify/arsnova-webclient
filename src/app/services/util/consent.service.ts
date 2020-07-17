@@ -65,7 +65,9 @@ export class ConsentService extends BaseHttpService {
   }
 
   init(consentSettings: ConsentSettings) {
-    this.consentSettings = consentSettings;
+    if (this.validateSettings(consentSettings)) {
+      this.consentSettings = consentSettings;
+    }
     this.loadLocalSettings();
   }
 
@@ -83,7 +85,16 @@ export class ConsentService extends BaseHttpService {
    * Tells if the user still needs to give their consent.
    */
   consentRequired() {
-    return !this.consentSettings;
+    return !this.consentSettings || this.consentSettings.version !== CONSENT_VERSION ;
+  }
+
+  /**
+   * Checks if the basic structure of the settings is valid.
+   *
+   * @param consentSettings
+   */
+  validateSettings(consentSettings: ConsentSettings) {
+    return !!consentSettings?.consentGiven;
   }
 
   /**
@@ -140,6 +151,7 @@ export class ConsentService extends BaseHttpService {
    */
   updateConsentSettings(consentGiven: ConsentGiven) {
     this.consentSettings = this.getConsentSettings();
+    this.consentSettings.version = CONSENT_VERSION;
     this.consentSettings.timestamp = new Date();
     this.consentSettings.consentGiven = consentGiven;
     const consentRecording = this.config.getFeatureConfig('consentRecording');

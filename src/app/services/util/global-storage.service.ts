@@ -247,9 +247,19 @@ export class GlobalStorageService {
       case StorageBackend.MEMORY:
         return this.memory.get(key);
       case StorageBackend.SESSIONSTORAGE:
-        return JSON.parse(sessionStorage.getItem(name));
+        try {
+          return JSON.parse(sessionStorage.getItem(name));
+        } catch (error) {
+          console.error(error);
+          return null;
+        }
       case StorageBackend.LOCALSTORAGE:
-        return JSON.parse(localStorage.getItem(name));
+        try {
+          return JSON.parse(localStorage.getItem(name));
+        } catch (error) {
+          console.error(error);
+          return null;
+        }
       case StorageBackend.COOKIE:
         throw Error('Not implemented.');
     }
