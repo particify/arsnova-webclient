@@ -13,7 +13,7 @@ const httpOptions = {
 @Injectable()
 export class CommentService extends BaseHttpService {
   private apiUrl = {
-    base: '/gw',
+    base: '/api',
     comment: '/comment',
     find: '/find',
     count: '/count'
