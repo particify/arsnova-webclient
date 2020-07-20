@@ -1,36 +1,4 @@
 {
-  "/api/comment": {
-    "target": "http://localhost:8088",
-    "secure": false,
-    "pathRewrite": {
-      "^/api": ""
-    },
-		"logLevel": "debug"
-  },
-  "/api/vote": {
-    "target": "http://localhost:8088",
-    "secure": false,
-    "pathRewrite": {
-      "^/api": ""
-    },
-		"logLevel": "debug"
-  },
-  "/api/bonustoken": {
-    "target": "http://localhost:8088",
-    "secure": false,
-    "pathRewrite": {
-      "^/api": ""
-    },
-		"logLevel": "debug"
-  },
-  "/api/settings": {
-    "target": "http://localhost:8088",
-    "secure": false,
-    "pathRewrite": {
-      "^/api": ""
-    },
-		"logLevel": "debug"
-  },
   "/api/ws": {
     "target": "ws://localhost:8099",
     "secure": false,
@@ -41,7 +9,7 @@
     "logLevel": "debug"
   },
   "/api": {
-    "target": "http://localhost:8080",
+    "target": "http://localhost:9090",
     "secure": false,
     "pathRewrite": {
       "^/api": ""
