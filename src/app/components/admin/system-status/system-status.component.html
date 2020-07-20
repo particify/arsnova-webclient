@@ -1,0 +1,18 @@
+<mat-card>
+  <mat-card-title>
+    {{ 'admin-area.system-health' | translate }}
+  </mat-card-title>
+  <mat-card-content>
+    <table>
+      <tr>
+        <td><b>{{ 'admin-area.status-summary' | translate }}</b></td>
+        <td class="system-health system-health-{{ (healthInfo | async)?.status | lowercase }}">{{ (healthInfo | async)?.status }}</td>
+      </tr>
+      <tr *ngFor="let component of (healthInfo | async)?.details | keyvalue">
+        <td>{{ 'admin-area.status-' + (component.key | lowercase) | translate }}</td>
+        <td class="system-health system-health-{{ component.value.status | lowercase }}">{{ component.value.status }}</td>
+        <td><mat-icon *ngIf="component.value.details" matTooltip="{{ component.value.details | json }}" class="system-health-details">info</mat-icon></td>
+      </tr>
+    </table>
+  </mat-card-content>
+</mat-card>

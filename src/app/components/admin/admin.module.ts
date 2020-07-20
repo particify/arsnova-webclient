@@ -7,6 +7,8 @@ import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { HttpClient } from '@angular/common/http';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { AdminHomeComponent } from './admin-home/admin-home.component';
+import { SystemStatusComponent } from './system-status/system-status.component';
+import { SystemStatisticsComponent } from './system-statistics/system-statistics.component';
 import { EntityPropertiesComponent } from './entity-properties/entity-properties.component';
 import { RoomManagementComponent } from './room-management/room-management.component';
 import { UserManagementComponent } from './user-management/user-management.component';
@@ -30,6 +32,8 @@ import { MatTreeModule } from '@angular/material/tree';
   ],
   declarations: [
     AdminHomeComponent,
+    SystemStatusComponent,
+    SystemStatisticsComponent,
     EntityPropertiesComponent,
     RoomManagementComponent,
     UserManagementComponent,
