@@ -5,7 +5,16 @@
     "properties": "Eigenschaften",
     "user-management": "Benutzerverwaltung",
     "user-id": "Benutzer-ID",
+    "delete-user": "Benutzeraccount löschen",
+    "user-deleted": "Der Benutzeraccount wurde erfolgreich gelöscht.",
+    "activate-user": "Benutzeraccount aktivieren",
+    "user-activated": "Der Benutzeraccount wurde erfolgreich aktiviert.",
     "room-management": "Raumverwaltung",
-    "room-id": "Raum-ID"
+    "room-id": "Raum-ID",
+    "room-new-owner-id": "ID des neuen Raumbesitzers",
+    "delete-room": "Raum löschen",
+    "room-deleted": "Der Raum wurde erfolgreich gelöscht.",
+    "transfer-room": "Raum übertragen",
+    "room-transferred": "Der Raum wurde erfolgreich übertragen."
   }
 }

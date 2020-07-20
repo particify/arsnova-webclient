@@ -10,9 +10,17 @@
         <mat-icon aria-hidden="false" attr.aria-label="{{ 'admin-area.find' | translate }}">search</mat-icon>
       </button>
     </mat-form-field>
+    <button mat-button (click)="activateUser()">
+      <mat-icon aria-hidden="false">lock_open</mat-icon>
+      {{ 'admin-area.activate-user' | translate }}
+    </button>
+    <button mat-button (click)="deleteEntity()">
+      <mat-icon aria-hidden="false">delete</mat-icon>
+      {{ 'admin-area.delete-user' | translate }}
+    </button>
     <div *ngIf="user">
       <header>{{ 'admin-area.properties' | translate }}</header>
-      <app-entity-properties [entity]="user | async"></app-entity-properties>
+      <app-entity-properties [entity]="user"></app-entity-properties>
     </div>
   </mat-card-content>
 </mat-card>

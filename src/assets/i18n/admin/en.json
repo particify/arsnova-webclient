@@ -5,7 +5,16 @@
     "properties": "Properties",
     "user-management": "User Management",
     "user-id": "User ID",
+    "delete-user": "Delete user account",
+    "user-deleted": "The user account was sucessfully deleted.",
+    "activate-user": "Activate user",
+    "user-activated": "The user account was successfully activated.",
     "room-management": "Room Management",
-    "room-id": "Room ID"
+    "room-id": "Room ID",
+    "room-new-owner-id": "ID of new room owner",
+    "delete-room": "Delete room",
+    "room-deleted": "The room was sucessfully deleted.",
+    "transfer-room": "Transfer room",
+    "room-transferred": "The room was sucessfully transferred."
   }
 }

@@ -10,9 +10,21 @@
         <mat-icon aria-hidden="false" attr.aria-label="{{ 'admin-area.find' | translate }}">search</mat-icon>
       </button>
     </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>{{ 'admin-area.room-new-owner-id' | translate }}</mat-label>
+      <input matInput #newOwnerIdField>
+    </mat-form-field>
+    <button mat-button (click)="transferRoom(newOwnerIdField.value)">
+      <mat-icon aria-hidden="false">forward</mat-icon>
+      {{ 'admin-area.transfer-room' | translate }}
+    </button>
+    <button mat-button (click)="deleteEntity()">
+      <mat-icon aria-hidden="false">delete</mat-icon>
+      {{ 'admin-area.delete-room' | translate }}
+    </button>
     <div *ngIf="room">
       <header>{{ 'admin-area.properties' | translate }}</header>
-      <app-entity-properties [entity]="room | async"></app-entity-properties>
+      <app-entity-properties [entity]="room"></app-entity-properties>
     </div>
   </mat-card-content>
 </mat-card>

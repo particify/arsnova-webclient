@@ -57,6 +57,7 @@ import { ContentResolver } from './resolver/content.resolver';
 import { CommentResolver } from './resolver/comment.resolver';
 import { ContentGroupService } from './services/http/content-group.service';
 import { AnnounceService } from './services/util/announce.service';
+import { AdminService } from './services/http/admin.service';
 
 export function dialogClose(dialogResult: any) {
 }
@@ -152,6 +153,7 @@ export function initializeApp(appConfig: AppConfig) {
     ContentResolver,
     CommentResolver,
     AnnounceService,
+    AdminService,
     STORAGE_CONFIG_PROVIDERS,
     {
       provide: MatDialogRef,

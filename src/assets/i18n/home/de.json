@@ -237,6 +237,7 @@
     "really-delete-token": "Willst du diesen Token wirklich löschen?",
     "really-delete-tokens": "Willst du wirklich alle Tokens dieses Raums löschen?",
     "really-delete-account": "Willst du dein Konto mit allen Räumen unwiderruflich löschen?",
+    "really-delete-account-admin": "Willst du das Konto mit allen Räumen unwiderruflich löschen?",
     "really-reset-form": "Willst du wirklich alle Eingaben zurücksetzen?",
     "export": "Exportieren",
     "semicolon": "CSV-Format",
