@@ -1,21 +1,19 @@
-table {
-  border-spacing: 0;
-}
-
-td {
-  vertical-align: top;
-  border-top: 1px solid var(--grey);
-  border-bottom: 1px solid var(--grey);
-
-  &:first-child {
-    padding-right: 10px;
+.entity-property-tree {
+  ul, li {
+    margin-top: 0;
+    margin-bottom: 0;
+    list-style-type: none;
   }
-}
 
-tr:first-child > td {
-  border-top: 0;
-}
+  .entity-property-tree-invisible {
+    display: none;
+  }
 
-tr:last-child > td {
-  border-top: 0;
+  .key {
+    font-weight: bold;
+  }
+
+  .value-nested {
+    color: var(--grey);
+  }
 }

@@ -10,6 +10,7 @@ import { AdminHomeComponent } from './admin-home/admin-home.component';
 import { EntityPropertiesComponent } from './entity-properties/entity-properties.component';
 import { RoomManagementComponent } from './room-management/room-management.component';
 import { UserManagementComponent } from './user-management/user-management.component';
+import { MatTreeModule } from '@angular/material/tree';
 
 @NgModule({
   imports: [
@@ -17,6 +18,7 @@ import { UserManagementComponent } from './user-management/user-management.compo
     AdminRoutingModule,
     EssentialsModule,
     SharedModule,
+    MatTreeModule,
     TranslateModule.forChild({
       loader: {
         provide: TranslateLoader,
