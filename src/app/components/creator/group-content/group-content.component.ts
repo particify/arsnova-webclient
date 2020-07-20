@@ -8,7 +8,7 @@ import { NotificationService } from '../../../services/util/notification.service
 import { TranslateService } from '@ngx-translate/core';
 import { LanguageService } from '../../../services/util/language.service';
 import { DialogService } from '../../../services/util/dialog.service';
-import { GlobalStorageService, LocalStorageKey, MemoryStorageKey } from '../../../services/util/global-storage.service';
+import { GlobalStorageService, STORAGE_KEYS } from '../../../services/util/global-storage.service';
 import { ContentGroupService } from '../../../services/http/content-group.service';
 import { ContentListComponent } from '../content-list/content-list.component';
 import { ContentGroup } from '../../../models/content-group';
@@ -83,7 +83,7 @@ export class GroupContentComponent extends ContentListComponent implements OnIni
       this.room = data.room;
       this.route.params.subscribe(params => {
         this.collectionName = params['contentGroup'];
-        this.globalStorageService.setMemoryItem(MemoryStorageKey.LAST_GROUP, this.collectionName);
+        this.globalStorageService.setItem(STORAGE_KEYS.LAST_GROUP, this.collectionName);
         this.roomService.getGroupByRoomIdAndName(this.room.id, this.collectionName).subscribe(group => {
           this.contentGroup = group;
           this.contentService.getContentsByIds(this.contentGroup.contentIds).subscribe(contents => {
@@ -93,7 +93,7 @@ export class GroupContentComponent extends ContentListComponent implements OnIni
       });
     });
     this.labelMaxLength = innerWidth / 20;
-    this.translateService.use(this.globalStorageService.getLocalStorageItem(LocalStorageKey.LANGUAGE));
+    this.translateService.use(this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE));
   }
 
   initContentList(contentList: Content[]) {

@@ -1,11 +1,22 @@
 {
   "cookies": {
-    "a11y-accept": "Bestätigt die Verwendung der Web-Storage-Technik und schaltet die Anwendung frei.",
-    "a11y-cancel": "Lehnt die Verwendung der Web-Storage-Technik ab und sperrt die Anwendung.",
-    "accept": "Akzeptieren",
-    "cancel": "Ablehnen",
+    "a11y-accept": "Stimmt der Verwendung aller Cookies zu.",
+    "a11y-cancel": "Lehnt die Verwendung von Cookies ab.",
+    "accept": "Alle akzeptieren",
+    "cancel": "Ausgewählte akzeptieren",
     "info-label": "Öffnet ein Dialogfenster mit der Datenschutzerklärung zu frag.jetzt.",
-    "title": "Datenschutz"
+    "title": "Cookie-Einstellungen",
+    "intro": "Wir verwenden Cookies und ähnliche Technologien, um dich bei erneuten Besuchen unserer Website wiedererkennen zu können und dir den Zugriff auf deine Daten und Einstellungen zu ermöglichen. Weiterhin nutzen wir diese Technologien zu statistischen Zwecken.",
+    "intro-privacy1": "Detaillierte Informationen findest du in unserer ",
+    "intro-privacy2": ".",
+    "update-later": "Du kannst diese Einstellungen jederzeit über das Datenschutz-Menü einsehen und ändern.",
+    "privacy-policy": "Datenschutzerklärung",
+    "category-essential": "Unbedingt notwendig",
+    "category-essential-desc": "Einige Cookies werden benötigt, damit die Anwendung richtig funktionieren kann. Hierbei handelt es sich z. B. um Authentifizierungsdaten nach der Anmeldung.",
+    "category-functional": "Funktional",
+    "category-functional-desc": "Funktionale Cookies ermöglichen eine verbesserte Benutzerfreundlichkeit der Anwendung, in dem Einstellungen (z. B. das gewählte Theme) lokal gespeichert werden können.",
+    "category-statistics": "Statistik",
+    "category-statistics-desc": "Statistische Cookies helfen uns bei der Verbesserung der Anwendung, indem sie uns Einblicke darüber geben, wie unsere Anwendung verwendet wird."
   },
   "data-protection": {
     "a11y": "Es folgt die Datenschutzerklärung von ARSnova.",
@@ -18,12 +29,14 @@
     "a11y-imprint": "Öffnet das Impressum.",
     "a11y-language": "Öffnet die Sprachauswahl.",
     "a11y-style": "Öffnet die Anzeigeoptionen für hohen Kontrast, Hörsaal-Projektion, heller und dunkler Hintergrund.",
+    "cookie-settings": "Cookie-Einstellungen",
     "demo": "Einführung",
     "dsgvo": "Datenschutz",
     "english": "Englisch",
     "german": "Deutsch",
     "imprint": "Impressum",
     "language": "Sprache",
+    "privacy-policy": "Datenschutzerklärung",
     "style": "Anzeige"
   },
   "header": {
@@ -108,12 +121,6 @@
     "password-reset": "Passwort vergessen?",
     "register": "Registrieren",
     "or": "oder"
-  },
-  "overlay": {
-    "a11y-cancel": "Öffnet den Dialog zur Verwendung der Web-Storage-Technik in ARSnova",
-    "cancel": "Doch akzeptieren?",
-    "message": "Du hast die Verwendung der Web-Storage-Technik abgelehnt. Ohne diese funktioniert die App leider nicht.",
-    "title": "Nutzung nicht möglich"
   },
   "password-reset": {
     "a11y-cancel": "Bricht das Passwort zurücksetzen ab und bringt dich zurück zur Anmeldeseite.",

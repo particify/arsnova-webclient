@@ -14,7 +14,7 @@ import { NotificationService } from '../../../services/util/notification.service
 import { TranslateService } from '@ngx-translate/core';
 import { Router } from '@angular/router';
 import { DialogService } from '../../../services/util/dialog.service';
-import { GlobalStorageService, MemoryStorageKey } from '../../../services/util/global-storage.service';
+import { GlobalStorageService, STORAGE_KEYS } from '../../../services/util/global-storage.service';
 
 @Component({
   selector: 'app-room-list',
@@ -55,7 +55,7 @@ export class RoomListComponent implements OnInit, OnDestroy {
     this.sub = this.eventService.on<any>('RoomDeleted').subscribe(payload => {
       this.roomsWithRole = this.roomsWithRole.filter(r => r.id !== payload.id);
     });
-    this.deviceType = this.globalStorageService.getMemoryItem(MemoryStorageKey.DEVICE_TYPE);
+    this.deviceType = this.globalStorageService.getItem(STORAGE_KEYS.DEVICE_TYPE);
     const roleKeys = [
       'room-list.participant-role',
       'room-list.editing-moderator-role',

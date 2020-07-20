@@ -7,7 +7,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { Observable, of } from 'rxjs';
 import { DialogService } from '../../../services/util/dialog.service';
-import { GlobalStorageService, LocalStorageKey, MemoryStorageKey } from '../../../services/util/global-storage.service';
+import { GlobalStorageService } from '../../../services/util/global-storage.service';
 import { AnnounceService } from '../../../services/util/announce.service';
 
 const TRANSLATION_DE = require('../../../../assets/i18n/home/de.json');
@@ -55,22 +55,14 @@ class MockMatDialog {
 
 @Injectable()
 class MockGlobalStorageService {
-
-  getMemoryItem(key: MemoryStorageKey) {
+  getItem(key: symbol) {
     return undefined;
   }
 
-  getLocalStorageItem(key: LocalStorageKey) {
-    return undefined;
+  setItem(key: symbol, value: any) {
   }
 
-  setMemoryItem(key: MemoryStorageKey, value: any) {
-  }
-
-  setLocalStorageItem(key: LocalStorageKey, value: any) {
-  }
-
-  deleteLocalStorageItem(key: LocalStorageKey) {
+  removeItem(key: symbol) {
   }
 }
 

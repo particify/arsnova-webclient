@@ -1,9 +1,8 @@
-import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { AfterViewInit, Component, ElementRef, OnInit, ViewChild, Inject } from '@angular/core';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { DialogConfirmActionButtonType } from '../../../shared/dialog/dialog-action-buttons/dialog-action-buttons.component';
 import { ApiConfigService } from '../../../../services/http/api-config.service';
-import { InfoDialogComponent } from '../../../shared/_dialogs/info-dialog/info-dialog.component';
-import { GlobalStorageService, LocalStorageKey } from '../../../../services/util/global-storage.service';
+import { ConsentGiven, CookieCategory } from 'app/services/util/consent.service';
 
 @Component({
   selector: 'app-cookies',
@@ -15,21 +14,17 @@ export class CookiesComponent implements OnInit, AfterViewInit {
   @ViewChild('header')
   dialogTitle: ElementRef;
 
-  currentLang: string;
-
   confirmButtonType: DialogConfirmActionButtonType = DialogConfirmActionButtonType.Primary;
 
   constructor(
+    @Inject(MAT_DIALOG_DATA) public categories: CookieCategory[],
     private dialog: MatDialog,
     private dialogRef: MatDialogRef<CookiesComponent>,
-    private ref: ElementRef,
-    private apiConfigService: ApiConfigService,
-    private globalStorageService: GlobalStorageService
+    private apiConfigService: ApiConfigService
   ) {
   }
 
   ngOnInit() {
-    this.currentLang = this.globalStorageService.getLocalStorageItem(LocalStorageKey.LANGUAGE);
     // not really the nicest way but should do its job until a better or native solution was found
     setTimeout(() => document.getElementById('cookie-header').focus(), 400);
   }
@@ -40,46 +35,44 @@ export class CookiesComponent implements OnInit, AfterViewInit {
     }, 500);
   }
 
-  acceptCookies() {
-    this.globalStorageService.setLocalStorageItem(LocalStorageKey.COOKIE_CONSENT, 'true');
-    this.globalStorageService.setLocalStorageItem(LocalStorageKey.DATA_PROTECTION, 'true');
-    this.dialogRef.close(true);
+  acceptAllCookies() {
+    this.categories.forEach((item) => {
+      item.consent = true;
+    });
+    this.handleCookieSelection();
+  }
+
+  acceptSelectedCookies() {
+    this.handleCookieSelection();
+  }
+
+  handleCookieSelection() {
+    console.debug('Accepted cookie categories: ', this.categories);
+    const consentGiven: ConsentGiven = this.categories.reduce((map, item) => {
+        map[item.id] = item.consent
+        return map;
+      }, {});
+    this.dialogRef.close(consentGiven);
     setTimeout(() => {
       document.getElementById('room-id-input').focus();
     }, 500);
   }
 
-  exitApp() {
-    this.globalStorageService.setLocalStorageItem(LocalStorageKey.COOKIE_CONSENT, 'false');
-    // TODO somehow exit the app, since the user didn't accept cookie usage
-    this.dialogRef.close(false);
-  }
-
-  getUIDataFromConfig(type: string): string {
-    return this.apiConfigService.getUiConfig()[type][this.currentLang];
-  }
-
   showDataProtection() {
-    this.dialog.open(InfoDialogComponent, {
-      'width': '80%',
-      data: {
-        section: 'data-protection',
-        body: this.getUIDataFromConfig('privacy-info')
-      }
-    });
+    console.debug('Not implemented.');
   }
 
   /**
    * Returns a lambda which closes the dialog on call.
    */
   buildConfirmActionCallback(): () => void {
-    return () => this.acceptCookies();
+    return () => this.acceptAllCookies();
   }
 
   /**
    * Returns a lambda which closes the dialog on call.
    */
-  buildDeclineActionCallback(): () => void {
-    return () => this.exitApp();
+  buildCancelActionCallback(): () => void {
+    return () => this.acceptSelectedCookies();
   }
 }

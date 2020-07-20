@@ -13,7 +13,7 @@ import { Observable, Subscription } from 'rxjs';
 import { ContentService } from '../../../services/http/content.service';
 import { TranslateService } from '@ngx-translate/core';
 import { NotificationService } from '../../../services/util/notification.service';
-import { GlobalStorageService, MemoryStorageKey } from '../../../services/util/global-storage.service';
+import { GlobalStorageService, STORAGE_KEYS } from '../../../services/util/global-storage.service';
 
 @Component({
   selector: 'app-room-page',
@@ -80,7 +80,7 @@ export class RoomPageComponent implements OnInit, OnDestroy {
         // ToDo: make room data cache that's available for components that manages data flow and put that there
       }
     }
-    this.globalStorageService.setMemoryItem(MemoryStorageKey.MODERATION_ENABLED, String(this.moderationEnabled));
+    this.globalStorageService.setItem(STORAGE_KEYS.MODERATION_ENABLED, String(this.moderationEnabled));
     this.commentService.countByRoomId(this.room.id, true)
       .subscribe(commentCounter => {
         this.commentCounter = commentCounter;
@@ -96,7 +96,7 @@ export class RoomPageComponent implements OnInit, OnDestroy {
       }
     });
     this.afterRoomLoadHook();
-    this.globalStorageService.setMemoryItem(MemoryStorageKey.SHORT_ID, room.shortId);
+    this.globalStorageService.setItem(STORAGE_KEYS.SHORT_ID, room.shortId);
   }
 
   initializeStats() {

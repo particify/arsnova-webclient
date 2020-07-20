@@ -2,49 +2,29 @@
 
   <div class="header-container">
     <h2 mat-dialog-title tabindex="0" id="cookie-header">{{ 'cookies.title' | translate }}</h2>
-    <button mat-icon-button aria-labelledby="info-label" class="info" (click)="showDataProtection()">
-      <mat-icon class="info-icon">security</mat-icon>
-    </button>
   </div>
 
   <mat-dialog-content tabindex="-1">
-
-    <div *ngIf="currentLang=='de'">
-      <p tabindex="0">
-        Deine Fragen und Bewertungen sind anonym.
-        Ein ARSnova-Konto ist nur erforderlich,
-        wenn du als Dozent deinen Raum für 180 Tage nach dem letzten Besuch speichern willst.
-      </p>
+    <div>
       <p>
-        Mit Anklicken des Buttons »Akzeptieren« erklärst du dich mit der Verwendung der
-        <a href="https://de.wikipedia.org/wiki/Web_Storage" target="_blank" rel="noreferrer" tabindex="-1">Web-Storage-Technik</a>
-        und unserer Daten&shy;schutz&shy;erklärung einverstanden.
-        Diese kannst du über das Datenschutz-Symbol einsehen.
+        {{ 'cookies.intro' | translate }}
+        {{ 'cookies.intro-privacy1' | translate }}<a [routerLink]="" (click)="showDataProtection()">{{ 'cookies.privacy-policy' | translate }}</a>{{ 'cookies.intro-privacy2' | translate }}
       </p>
+      <div>
+        <div class="cookie-cat" *ngFor="let category of categories"><mat-slide-toggle labelPosition="before" [(ngModel)]="category.consent" [disabled]="category.required"><div>{{ 'cookies.category-' + category.id | translate }}</div></mat-slide-toggle><div class="cookie-cat-desc">{{ 'cookies.category-' + category.id + '-desc' | translate }}</div></div>
+      </div>
     </div>
-    <div *ngIf="currentLang=='en'">
-      <p tabindex="0">
-        Your questions and votes are anonymous.
-        A »ARSnova« account is only required,
-        if you as a lecturer want to save your room for 180 days after the last visit.
-      </p>
-      <p tabindex="0">
-        By clicking the button »Accept« you agree to the use of a
-        <a href="https://en.wikipedia.org/wiki/Web_storage" target="_blank" rel="noreferrer" tabindex="-1">web storage</a>
-        and our privacy policy.
-        You can view our policy by clicking on the data protection symbol above.
-      </p>
-
-    </div>
+    <p>
+      {{ 'cookies.update-later' | translate }}
+    </p>
 
     <app-dialog-action-buttons
       buttonsLabelSection="cookies"
       confirmButtonLabel="accept"
       [confirmButtonType]=confirmButtonType
-      [cancelButtonClickAction]="buildDeclineActionCallback()"
+      [cancelButtonClickAction]="buildCancelActionCallback()"
       [confirmButtonClickAction]="buildConfirmActionCallback()">
     </app-dialog-action-buttons>
-
   </mat-dialog-content>
 
   <div class="visually-hidden">

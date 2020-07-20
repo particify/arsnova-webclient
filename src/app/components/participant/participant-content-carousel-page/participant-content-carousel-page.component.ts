@@ -9,7 +9,7 @@ import { ActivatedRoute } from '@angular/router';
 import { RoomService } from '../../../services/http/room.service';
 import { KeyboardUtils } from '../../../utils/keyboard';
 import { KeyboardKey } from '../../../utils/keyboard/keys';
-import { GlobalStorageService, LocalStorageKey } from '../../../services/util/global-storage.service';
+import { GlobalStorageService, STORAGE_KEYS } from '../../../services/util/global-storage.service';
 import { AnnounceService } from '../../../services/util/announce.service';
 import { Location } from '@angular/common';
 
@@ -66,7 +66,7 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
 
 
   ngOnInit() {
-    this.translateService.use(this.globalStorageService.getLocalStorageItem(LocalStorageKey.LANGUAGE));
+    this.translateService.use(this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE));
     let lastContentIndex: number;
     this.route.params.subscribe(params => {
       this.contentGroupName = params['contentGroup'];

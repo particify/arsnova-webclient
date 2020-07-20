@@ -14,7 +14,7 @@ import { KeyboardUtils } from '../../../utils/keyboard';
 import { KeyboardKey } from '../../../utils/keyboard/keys';
 import { ContentService } from '../../../services/http/content.service';
 import { DialogService } from '../../../services/util/dialog.service';
-import { GlobalStorageService, LocalStorageKey, MemoryStorageKey } from '../../../services/util/global-storage.service';
+import { GlobalStorageService, STORAGE_KEYS } from '../../../services/util/global-storage.service';
 import { Content } from '../../../models/content';
 import { AnnounceService } from '../../../services/util/announce.service';
 import { Observable, Subscription } from 'rxjs';
@@ -99,7 +99,7 @@ export class RoomCreatorPageComponent extends RoomPageComponent implements OnIni
 
   ngOnInit() {
     window.scroll(0, 0);
-    this.translateService.use(this.globalStorageService.getLocalStorageItem(LocalStorageKey.LANGUAGE));
+    this.translateService.use(this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE));
     this.route.data.subscribe(data => {
       this.initializeRoom(data.room);
     });
@@ -160,7 +160,7 @@ export class RoomCreatorPageComponent extends RoomPageComponent implements OnIni
       this.looseContent = contents;
       this.isLoading = false;
     });
-    this.globalStorageService.setMemoryItem(MemoryStorageKey.CONTENT_GROUPS, this.groupNames);
+    this.globalStorageService.setItem(STORAGE_KEYS.CONTENT_GROUPS, this.groupNames);
   }
 
   public showQRDialog() {

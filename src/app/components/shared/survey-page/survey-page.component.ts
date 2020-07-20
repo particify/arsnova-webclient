@@ -13,7 +13,7 @@ import { LanguageService } from '../../../services/util/language.service';
 import { KeyboardUtils } from '../../../utils/keyboard';
 import { KeyboardKey } from '../../../utils/keyboard/keys';
 import { Survey } from '../../../models/survey';
-import { GlobalStorageService, LocalStorageKey } from '../../../services/util/global-storage.service';
+import { GlobalStorageService, STORAGE_KEYS } from '../../../services/util/global-storage.service';
 import { ActivatedRoute } from '@angular/router';
 import { AnnounceService } from '../../../services/util/announce.service';
 
@@ -94,7 +94,7 @@ export class SurveyPageComponent implements OnInit, OnDestroy, AfterContentInit 
   }
 
   ngOnInit() {
-    this.translateService.use(this.globalStorageService.getLocalStorageItem(LocalStorageKey.LANGUAGE));
+    this.translateService.use(this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE));
     this.user = this.authenticationService.getUser();
     this.route.data.subscribe(data => {
       this.roomId = data.room.id;

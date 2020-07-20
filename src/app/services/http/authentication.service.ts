@@ -7,7 +7,7 @@ import { EventService } from '../util/event.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { ClientAuthentication } from '../../models/client-authentication';
 import { BaseHttpService } from './base-http.service';
-import { GlobalStorageService, LocalStorageKey } from '../util/global-storage.service';
+import { GlobalStorageService, STORAGE_KEYS } from '../util/global-storage.service';
 
 @Injectable()
 export class AuthenticationService extends BaseHttpService {
@@ -39,7 +39,7 @@ export class AuthenticationService extends BaseHttpService {
     private http: HttpClient
   ) {
     super();
-    const storedAccess = this.globalStorageService.getLocalStorageItem(LocalStorageKey.ROOM_ACCESS);
+    const storedAccess = this.globalStorageService.getItem(STORAGE_KEYS.ROOM_ACCESS);
     if (storedAccess) {
       for (const cA of storedAccess) {
         let role = UserRole.PARTICIPANT;
@@ -83,7 +83,7 @@ export class AuthenticationService extends BaseHttpService {
   }
 
   refreshLogin(): void {
-    const savedUser = this.globalStorageService.getLocalStorageItem(LocalStorageKey.USER);
+    const savedUser = this.globalStorageService.getItem(STORAGE_KEYS.USER);
     if (savedUser) {
       // Load user data from local data store if available
       const user: User = savedUser;
@@ -101,7 +101,7 @@ export class AuthenticationService extends BaseHttpService {
       this.http.post<ClientAuthentication>(connectionUrl, {}, this.httpOptions).pipe(
         tap(_ => ''),
         catchError(_ => {
-          this.globalStorageService.deleteLocalStorageItem(LocalStorageKey.USER);
+          this.globalStorageService.removeItem(STORAGE_KEYS.USER);
           return of(null);
         })
       ).subscribe(nu => {
@@ -122,7 +122,7 @@ export class AuthenticationService extends BaseHttpService {
 
   guestLogin(userRole: UserRole): Observable<string> {
     let wasGuest = false;
-    const savedUser = this.globalStorageService.getLocalStorageItem(LocalStorageKey.USER);
+    const savedUser = this.globalStorageService.getItem(STORAGE_KEYS.USER);
     if (savedUser) {
       wasGuest = savedUser;
     }
@@ -215,7 +215,7 @@ export class AuthenticationService extends BaseHttpService {
     // Destroy the persisted user data
     // Actually don't destroy it because we want to preserve guest accounts in local storage
     // this.dataStoreService.remove(this.STORAGE_KEY);
-    this.globalStorageService.deleteLocalStorageItem(LocalStorageKey.LOGGED_IN);
+    this.globalStorageService.removeItem(STORAGE_KEYS.LOGGED_IN);
     this.user.next(undefined);
   }
 
@@ -224,8 +224,8 @@ export class AuthenticationService extends BaseHttpService {
   }
 
   private setUser(user: User): void {
-    this.globalStorageService.setLocalStorageItem(LocalStorageKey.USER, user);
-    this.globalStorageService.setLocalStorageItem(LocalStorageKey.LOGGED_IN, 'true');
+    this.globalStorageService.setItem(STORAGE_KEYS.USER, user);
+    this.globalStorageService.setItem(STORAGE_KEYS.LOGGED_IN, true);
     this.user.next(user);
   }
 
@@ -259,7 +259,7 @@ export class AuthenticationService extends BaseHttpService {
           result.token,
           userRole,
           isGuest));
-        this.globalStorageService.setLocalStorageItem(LocalStorageKey.LOGGED_IN, 'true');
+        this.globalStorageService.setItem(STORAGE_KEYS.LOGGED_IN, true);
         return 'true';
       } else {
         return 'false';
@@ -306,7 +306,7 @@ export class AuthenticationService extends BaseHttpService {
     this.roomAccess.forEach(function (key, value) {
       arr.push(key + '_' + String(value));
     });
-    this.globalStorageService.setLocalStorageItem(LocalStorageKey.ROOM_ACCESS, arr);
+    this.globalStorageService.setItem(STORAGE_KEYS.ROOM_ACCESS, arr);
   }
 
   setRedirect(url: string) {

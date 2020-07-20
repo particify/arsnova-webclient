@@ -14,7 +14,7 @@ import { RoomService } from '../../../services/http/room.service';
 import { CorrectWrong } from '../../../models/correct-wrong.enum';
 import { EventService } from '../../../services/util/event.service';
 import { Router } from '@angular/router';
-import { GlobalStorageService, LocalStorageKey, MemoryStorageKey } from '../../../services/util/global-storage.service';
+import { GlobalStorageService, STORAGE_KEYS } from '../../../services/util/global-storage.service';
 
 @Component({
   selector: 'app-moderator-comment-list',
@@ -31,7 +31,7 @@ export class ModeratorCommentListComponent implements OnInit {
   filteredComments: Comment[];
   userRole: UserRole;
   deviceType: string;
-  isSafari: string;
+  isSafari: boolean;
   isLoading = true;
   voteasc = 'voteasc';
   votedesc = 'votedesc';
@@ -66,7 +66,7 @@ export class ModeratorCommentListComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.roomId = this.globalStorageService.getMemoryItem(MemoryStorageKey.ROOM_ID);
+    this.roomId = this.globalStorageService.getItem(STORAGE_KEYS.ROOM_ID);
     this.userRole = this.user.role;
     this.roomService.getRoom(this.roomId).subscribe(room => this.room = room);
     this.hideCommentsList = false;
@@ -76,9 +76,9 @@ export class ModeratorCommentListComponent implements OnInit {
     this.wsCommentService.getCommentStream(this.roomId).subscribe((message: Message) => {
       this.parseIncomingMessage(message);
     });
-    this.translateService.use(this.globalStorageService.getLocalStorageItem(LocalStorageKey.LANGUAGE));
-    this.deviceType = this.globalStorageService.getMemoryItem(MemoryStorageKey.DEVICE_TYPE);
-    this.isSafari = this.globalStorageService.getMemoryItem(MemoryStorageKey.IS_SAFARI);
+    this.translateService.use(this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE));
+    this.deviceType = this.globalStorageService.getItem(STORAGE_KEYS.DEVICE_TYPE);
+    this.isSafari = this.globalStorageService.getItem(STORAGE_KEYS.IS_SAFARI);
     this.currentSort = this.votedesc;
     this.commentService.getRejectedComments(this.roomId)
       .subscribe(comments => {

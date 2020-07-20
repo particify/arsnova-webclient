@@ -6,7 +6,7 @@ import { LanguageService } from '../../../services/util/language.service';
 import { ContentText } from '../../../models/content-text';
 import { ContentAnswerService } from '../../../services/http/content-answer.service';
 import { TextAnswer } from '../../../models/text-answer';
-import { GlobalStorageService, LocalStorageKey } from '../../../services/util/global-storage.service';
+import { GlobalStorageService, STORAGE_KEYS } from '../../../services/util/global-storage.service';
 
 export class TextStatistic {
   answer: string;
@@ -45,7 +45,7 @@ export class StatisticTextComponent implements OnInit {
 
 
   ngOnInit(): void {
-    this.translateService.use(this.globalStorageService.getLocalStorageItem(LocalStorageKey.LANGUAGE));
+    this.translateService.use(this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE));
     this.contentAnswerService.getAnswers(this.content.id).subscribe(answers => {
       this.getData(answers);
       this.isLoading = false;

@@ -7,7 +7,7 @@ import { ContentService } from '../../../services/http/content.service';
 import { NotificationService } from '../../../services/util/notification.service';
 import { TranslateService } from '@ngx-translate/core';
 import { RoomService } from '../../../services/http/room.service';
-import { GlobalStorageService, MemoryStorageKey } from '../../../services/util/global-storage.service';
+import { GlobalStorageService, STORAGE_KEYS } from '../../../services/util/global-storage.service';
 import { ContentGroupService } from '../../../services/http/content-group.service';
 
 @Component({
@@ -60,7 +60,7 @@ export class ContentLikertCreatorComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.roomId = this.globalStorageService.getMemoryItem(MemoryStorageKey.ROOM_ID);
+    this.roomId = this.globalStorageService.getItem(STORAGE_KEYS.ROOM_ID);
     this.translationService.get(this.likertScales).subscribe(msgs => {
       for (let i = 0; i < this.likertScales.length; i++) {
         this.content.options.push(new AnswerOption(msgs[this.likertScales[i]], this.newAnswerOptionPoints));

@@ -9,7 +9,7 @@
         <div fxLayout="row" fxLayoutAlign="center">
           <div fxLayout="column" fxLayoutAlign="center center" fxFill>
             <app-room-join [inputA11yString]="'home-page.a11y-welcome-message'"></app-room-join>
-            <button [disabled]="cookiesDisabled()" id="new-room-button" mat-button (click)="openCreateRoomDialog()"
+            <button id="new-room-button" mat-button (click)="openCreateRoomDialog()"
                     aria-labelledby="create-label">
               <mat-icon class="add">add</mat-icon>
               {{'home-page.create-room' | translate}}

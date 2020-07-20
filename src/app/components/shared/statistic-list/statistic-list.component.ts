@@ -10,7 +10,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { LanguageService } from '../../../services/util/language.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ContentAnswerService } from '../../../services/http/content-answer.service';
-import { GlobalStorageService, LocalStorageKey, MemoryStorageKey } from '../../../services/util/global-storage.service';
+import { GlobalStorageService, STORAGE_KEYS } from '../../../services/util/global-storage.service';
 import { forkJoin } from 'rxjs';
 import { NotificationService } from '../../../services/util/notification.service';
 import { DialogService } from '../../../services/util/dialog.service';
@@ -70,7 +70,7 @@ export class StatisticListComponent implements OnInit {
     private dialogService: DialogService
 
   ) {
-    this.deviceType = this.globalStorageService.getMemoryItem(MemoryStorageKey.DEVICE_TYPE);
+    this.deviceType = this.globalStorageService.getItem(STORAGE_KEYS.DEVICE_TYPE);
     langService.langEmitter.subscribe(lang => translateService.use(lang));
   }
 
@@ -78,7 +78,7 @@ export class StatisticListComponent implements OnInit {
     this.route.params.subscribe(params => {
       this.roomId = params['shortId'];
     });
-    this.translateService.use(this.globalStorageService.getLocalStorageItem(LocalStorageKey.LANGUAGE));
+    this.translateService.use(this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE));
     this.contentService.getContentsByIds(this.contentGroup.contentIds).subscribe(contents => {
       this.getData(contents);
     });
@@ -92,7 +92,7 @@ export class StatisticListComponent implements OnInit {
   goToStats(id: string) {
     const contentIndex = this.contents.map(function (content) { return content.id; } ).indexOf(id);
     this.router.navigate([`/creator/room/${this.roomId}/group/${this.contentGroup.name}/statistics/${contentIndex + 1}`]);
-    this.globalStorageService.setMemoryItem(MemoryStorageKey.LAST_GROUP, this.contentGroup.name);
+    this.globalStorageService.setItem(STORAGE_KEYS.LAST_GROUP, this.contentGroup.name);
   }
 
   getData(contents: Content[]) {

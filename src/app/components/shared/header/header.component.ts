@@ -11,7 +11,7 @@ import { KeyboardUtils } from '../../../utils/keyboard';
 import { KeyboardKey } from '../../../utils/keyboard/keys';
 import { BonusTokenService } from '../../../services/http/bonus-token.service';
 import { DialogService } from '../../../services/util/dialog.service';
-import { GlobalStorageService, MemoryStorageKey, LocalStorageKey } from '../../../services/util/global-storage.service';
+import { GlobalStorageService, STORAGE_KEYS } from '../../../services/util/global-storage.service';
 
 @Component({
   selector: 'app-header',
@@ -39,16 +39,16 @@ export class HeaderComponent implements OnInit {
     private dialogService: DialogService,
     private globalStorageService: GlobalStorageService
   ) {
-    this.deviceType = this.globalStorageService.getMemoryItem(MemoryStorageKey.DEVICE_TYPE);
-    this.isSafari = this.globalStorageService.getMemoryItem(MemoryStorageKey.IS_SAFARI);
+    this.deviceType = this.globalStorageService.getItem(STORAGE_KEYS.DEVICE_TYPE);
+    this.isSafari = this.globalStorageService.getItem(STORAGE_KEYS.IS_SAFARI);
 
     // LocalStorage setup
-    if (!this.globalStorageService.getLocalStorageItem(LocalStorageKey.LANGUAGE)) {
+    if (!this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE)) {
       const lang = this.translationService.getBrowserLang();
       this.translationService.setDefaultLang(lang);
-      this.globalStorageService.setLocalStorageItem(LocalStorageKey.LANGUAGE, lang);
+      this.globalStorageService.setItem(STORAGE_KEYS.LANGUAGE, lang);
     } else {
-      this.translationService.setDefaultLang(this.globalStorageService.getLocalStorageItem(LocalStorageKey.LANGUAGE));
+      this.translationService.setDefaultLang(this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE));
     }
   }
 
@@ -67,7 +67,7 @@ export class HeaderComponent implements OnInit {
   }
 
   ngOnInit() {
-    if (this.globalStorageService.getLocalStorageItem(LocalStorageKey.LOGGED_IN) === 'true') {
+    if (this.globalStorageService.getItem(STORAGE_KEYS.LOGGED_IN)) {
       this.authenticationService.refreshLogin();
     }
 
@@ -95,7 +95,7 @@ export class HeaderComponent implements OnInit {
         });
       }
     });
-    this.moderationEnabled = (this.globalStorageService.getMemoryItem(MemoryStorageKey.MODERATION_ENABLED) === 'true') ? true : false;
+    this.moderationEnabled = !!this.globalStorageService.getItem(STORAGE_KEYS.MODERATION_ENABLED);
   }
 
   getTime(time: Date) {
@@ -171,8 +171,4 @@ export class HeaderComponent implements OnInit {
     this.dialogService.openBonusTokenDialog(this.user.id);
   }
   */
-
-  cookiesDisabled(): boolean {
-    return this.globalStorageService.getLocalStorageItem(LocalStorageKey.COOKIE_CONSENT) === 'false';
-  }
 }

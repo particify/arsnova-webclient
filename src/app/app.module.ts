@@ -48,7 +48,8 @@ import { DialogService } from './services/util/dialog.service';
 import { DirectEntryComponent } from './components/shared/direct-entry/direct-entry.component';
 import { TrackingService } from './services/util/tracking.service';
 import { ImportComponent } from './components/home/import/import.component';
-import { GlobalStorageService } from './services/util/global-storage.service';
+import { GlobalStorageService, STORAGE_CONFIG_PROVIDERS } from './services/util/global-storage.service';
+import { ConsentService } from './services/util/consent.service';
 import { ThemeService } from '../theme/theme.service';
 import { RoomResolver } from './resolver/room.resolver';
 import { ContentResolver } from './resolver/content.resolver';
@@ -142,12 +143,14 @@ export function initializeApp(appConfig: AppConfig) {
     WsConnectorService,
     ApiConfigService,
     GlobalStorageService,
+    ConsentService,
     TrackingService,
     ThemeService,
     RoomResolver,
     ContentResolver,
     CommentResolver,
     AnnounceService,
+    STORAGE_CONFIG_PROVIDERS,
     {
       provide: MatDialogRef,
       useValue: {

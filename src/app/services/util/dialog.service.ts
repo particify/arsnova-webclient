@@ -18,6 +18,7 @@ import { PasswordResetComponent } from '../../components/home/_dialogs/password-
 import { RegisterComponent } from '../../components/home/_dialogs/register/register.component';
 import { UserActivationComponent } from '../../components/home/_dialogs/user-activation/user-activation.component';
 import { Content } from '../../models/content';
+import { CookieCategory } from './consent.service';
 
 @Injectable()
 export class DialogService {
@@ -139,13 +140,6 @@ export class DialogService {
     });
   }
   */
-
-  openCookieDialog(): MatDialogRef<CookiesComponent> {
-    return this.dialog.open(CookiesComponent, {
-      width: this.size.large,
-      autoFocus: true
-    });
-  }
 
   openOverlayDialog(): MatDialogRef<OverlayComponent> {
     return this.dialog.open(OverlayComponent);

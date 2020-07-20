@@ -44,7 +44,7 @@
       </button>
     </mat-menu>
 
-    <button [disabled]="cookiesDisabled()" mat-button *ngIf="user && deviceType === 'desktop'"
+    <button mat-button *ngIf="user && deviceType === 'desktop'"
             [matMenuTriggerFor]="userMenu"
             aria-labelledby="room-label" id="room-button">
         <mat-icon class="header-icons">account_circle</mat-icon>
@@ -52,19 +52,19 @@
         <span class="button-text" *ngIf="user.isGuest">{{'header.my-guest-account' | translate}}</span>
     </button>
 
-    <button [disabled]="cookiesDisabled()" mat-icon-button *ngIf="user && deviceType === 'mobile'"
+    <button mat-icon-button *ngIf="user && deviceType === 'mobile'"
             [matMenuTriggerFor]="userMenu"
             aria-labelledby="room-label">
       <mat-icon class="header-icons">account_circle</mat-icon>
     </button>
     <div *ngIf="router.url !== '/login'">
-      <button id="login-button" [disabled]="cookiesDisabled()" mat-button *ngIf="!user && deviceType === 'desktop'"
+      <button id="login-button" mat-button *ngIf="!user && deviceType === 'desktop'"
               (click)=navToLogin() aria-labelledby="login-label">
         <mat-icon class="header-icons">account_circle</mat-icon>
         <span class="button-text" *ngIf="deviceType === 'desktop'">{{'header.login' | translate}}</span>
       </button>
 
-      <button [disabled]="cookiesDisabled()" mat-icon-button *ngIf="!user && deviceType === 'mobile'" (click)=navToLogin()
+      <button mat-icon-button *ngIf="!user && deviceType === 'mobile'" (click)=navToLogin()
               aria-labelledby="login-label">
         <mat-icon class="header-icons">account_circle</mat-icon>
       </button>

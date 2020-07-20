@@ -4,7 +4,7 @@ import { ContentService } from '../../../services/http/content.service';
 import { NotificationService } from '../../../services/util/notification.service';
 import { TranslateService } from '@ngx-translate/core';
 import { RoomService } from '../../../services/http/room.service';
-import { GlobalStorageService, MemoryStorageKey } from '../../../services/util/global-storage.service';
+import { GlobalStorageService, STORAGE_KEYS } from '../../../services/util/global-storage.service';
 import { ContentGroup } from '../../../models/content-group';
 import { ContentGroupService } from '../../../services/http/content-group.service';
 
@@ -43,7 +43,7 @@ export class ContentTextCreatorComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.roomId = this.globalStorageService.getMemoryItem(MemoryStorageKey.ROOM_ID);
+    this.roomId = this.globalStorageService.getItem(STORAGE_KEYS.ROOM_ID);
   }
 
   resetAfterSubmit() {
