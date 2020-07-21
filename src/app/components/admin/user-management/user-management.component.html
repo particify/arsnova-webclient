@@ -2,14 +2,8 @@
   <mat-card-title>
     {{ 'admin-area.user-management' | translate }}
   </mat-card-title>
+  <app-user-search-field label="{{ 'admin-area.user-id' | translate }}" (submit)="loadEntity($event)"></app-user-search-field>
   <mat-card-content>
-    <mat-form-field appearance="outline">
-      <mat-label>{{ 'admin-area.user-id' | translate }}</mat-label>
-      <input matInput #idField>
-      <button mat-button matSuffix color="accent" (click)="loadEntity(idField.value)">
-        <mat-icon aria-hidden="false" attr.aria-label="{{ 'admin-area.find' | translate }}">search</mat-icon>
-      </button>
-    </mat-form-field>
     <button mat-button (click)="activateUser()">
       <mat-icon aria-hidden="false">lock_open</mat-icon>
       {{ 'admin-area.activate-user' | translate }}

@@ -56,7 +56,7 @@ export class UserService extends BaseHttpService {
     );
   }
 
-  getIdByLoginId(loginId: string): Observable<User[]> {
+  getUserByLoginId(loginId: string): Observable<User[]> {
     const url = `${this.apiUrl.base + this.apiUrl.user + this.apiUrl.find}`;
     return this.http.post<User[]>(url, {
       properties: { loginId: loginId },

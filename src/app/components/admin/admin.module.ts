@@ -9,6 +9,7 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { AdminHomeComponent } from './admin-home/admin-home.component';
 import { SystemStatusComponent } from './system-status/system-status.component';
 import { SystemStatisticsComponent } from './system-statistics/system-statistics.component';
+import { UserSearchFieldComponent } from './user-search-field/user-search-field.component';
 import { EntityPropertiesComponent } from './entity-properties/entity-properties.component';
 import { RoomManagementComponent } from './room-management/room-management.component';
 import { UserManagementComponent } from './user-management/user-management.component';
@@ -34,6 +35,7 @@ import { MatTreeModule } from '@angular/material/tree';
     AdminHomeComponent,
     SystemStatusComponent,
     SystemStatisticsComponent,
+    UserSearchFieldComponent,
     EntityPropertiesComponent,
     RoomManagementComponent,
     UserManagementComponent,
