@@ -105,10 +105,10 @@ export class GroupContentComponent extends ContentListComponent implements OnIni
       if (this.contents[i].state.responsesVisible) {
         this.directAnswer = true;
       }
-      if (this.contents[i].subject.length > this.labelMaxLength) {
-        this.labels[i] = this.contents[i].subject.substr(0, this.labelMaxLength) + '..';
+      if (this.contents[i].body.length > this.labelMaxLength) {
+        this.labels[i] = this.contents[i].body.substr(0, this.labelMaxLength) + '..';
       } else {
-        this.labels[i] = this.contents[i].subject;
+        this.labels[i] = this.contents[i].body;
       }
     }
     this.getGroups();

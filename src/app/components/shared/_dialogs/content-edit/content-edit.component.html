@@ -1,10 +1,5 @@
 <div fxLayout="column" fxLayoutAlign="center" fxLayoutGap="10px">
   <mat-form-field>
-    <input (focus)="eventService.makeFocusOnInputTrue()" (blur)="eventService.makeFocusOnInputFalse()" matInput
-           [(ngModel)]="data.subject" maxlength="40" placeholder="{{'dialog.content-subject' | translate}}"
-           name="subject" aria-labelledby="subject"/>
-  </mat-form-field>
-  <mat-form-field>
     <textarea (focus)="eventService.makeFocusOnInputTrue()" (blur)="eventService.makeFocusOnInputFalse()" matInput
               [(ngModel)]="data.body" rows="3" maxlength="250" placeholder="{{'dialog.content-body' | translate}}"
               name="body" aria-labelledby="body"></textarea>
@@ -42,7 +37,6 @@
 </div>
 
 <div class="visually-hidden">
-  <div id="subject">{{ 'dialog.a11y-edit-subject' | translate }}</div>
   <div id="body">{{ 'dialog.a11y-edit-body' | translate }}</div>
   <div id="answer">{{ 'dialog.a11y-edit-answer' | translate }}</div>
   <div id="checkbox">{{ 'dialog.a11y-edit-checkbox' | translate }}</div>

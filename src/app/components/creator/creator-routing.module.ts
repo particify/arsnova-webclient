@@ -3,7 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { AuthenticationGuard } from '../../guards/authentication.guard';
 import { UserRole } from '../../models/user-roles.enum';
 import { RoomCreatorPageComponent } from './room-creator-page/room-creator-page.component';
-import { ContentCreatePageComponent } from './content-create-page/content-create-page.component';
+import { ContentCreationPageComponent } from './content-creation/content-creation-page/content-creation-page.component';
 import { StatisticsPageComponent } from '../shared/statistics-page/statistics-page.component';
 import { SurveyPageComponent } from '../shared/survey-page/survey-page.component';
 import { ContentPresentationComponent } from './content-presentation/content-presentation.component';
@@ -36,7 +36,7 @@ const routes: Routes = [
   },
   {
     path: 'room/:shortId/create-content',
-    component: ContentCreatePageComponent,
+    component: ContentCreationPageComponent,
     canActivate: [AuthenticationGuard],
     data: { roles: [UserRole.CREATOR] },
     resolve : {

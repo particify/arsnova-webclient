@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CreatorRoutingModule } from './creator-routing.module';
-import { ContentChoiceCreatorComponent } from './content-choice-creator/content-choice-creator.component';
-import { ContentCreatePageComponent } from './content-create-page/content-create-page.component';
-import { ContentLikertCreatorComponent } from './content-likert-creator/content-likert-creator.component';
-import { ContentTextCreatorComponent } from './content-text-creator/content-text-creator.component';
-import { ContentYesNoCreatorComponent } from './content-yes-no-creator/content-yes-no-creator.component';
+import { ContentChoiceCreationComponent } from './content-creation/content-choice-creation/content-choice-creation.component';
+import { ContentCreationPageComponent } from './content-creation/content-creation-page/content-creation-page.component';
+import { ContentLikertCreationComponent } from './content-creation/content-likert-creation/content-likert-creation.component';
+import { ContentTextCreationComponent } from './content-creation/content-text-creation/content-text-creation.component';
+import { ContentYesNoCreationComponent } from './content-creation/content-yes-no-creation/content-yes-no-creation.component';
 import { RoomCreatorPageComponent } from './room-creator-page/room-creator-page.component';
 import { EssentialsModule } from '../essentials/essentials.module';
 import { ModeratorModule } from '../moderator/moderator.module';
@@ -29,6 +29,7 @@ import { LooseContentComponent } from './loose-content/loose-content.component';
 import { GroupContentComponent } from './group-content/group-content.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { CdkStepperModule } from '@angular/cdk/stepper';
+import { ContentCreationComponent } from './content-creation/content-creation/content-creation.component';
 
 @NgModule({
   imports: [
@@ -50,11 +51,11 @@ import { CdkStepperModule } from '@angular/cdk/stepper';
     CdkStepperModule
   ],
   declarations: [
-    ContentChoiceCreatorComponent,
-    ContentCreatePageComponent,
-    ContentLikertCreatorComponent,
-    ContentTextCreatorComponent,
-    ContentYesNoCreatorComponent,
+    ContentChoiceCreationComponent,
+    ContentCreationPageComponent,
+    ContentLikertCreationComponent,
+    ContentTextCreationComponent,
+    ContentYesNoCreationComponent,
     RoomCreatorPageComponent,
     RoomComponent,
     ContentListComponent,
@@ -68,7 +69,8 @@ import { CdkStepperModule } from '@angular/cdk/stepper';
     ContentGroupCreationComponent,
     SettingsComponent,
     SettingsPageComponent,
-    GroupContentComponent
+    GroupContentComponent,
+    ContentCreationComponent
   ]
 })
 export class CreatorModule {

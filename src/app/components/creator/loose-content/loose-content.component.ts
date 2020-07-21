@@ -75,10 +75,10 @@ export class LooseContentComponent extends ContentListComponent implements OnIni
   initContentList(contentList: Content[]) {
     this.contents = contentList;
     for (let i = 0; i < this.contents.length; i++) {
-      if (this.contents[i].subject.length > this.labelMaxLength) {
-        this.labels[i] = this.contents[i].subject.substr(0, this.labelMaxLength) + '..';
+      if (this.contents[i].body.length > this.labelMaxLength) {
+        this.labels[i] = this.contents[i].body.substr(0, this.labelMaxLength) + '..';
       } else {
-        this.labels[i] = this.contents[i].subject;
+        this.labels[i] = this.contents[i].body;
       }
       this.creationSelection[i] = true;
     }

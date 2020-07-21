@@ -1,35 +1,40 @@
 import { AfterContentInit, Component, HostListener, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { LanguageService } from '../../../services/util/language.service';
-import { ContentText } from '../../../models/content-text';
+import { LanguageService } from '../../../../services/util/language.service';
 import { FormControl } from '@angular/forms';
-import { EventService } from '../../../services/util/event.service';
-import { KeyboardUtils } from '../../../utils/keyboard';
-import { KeyboardKey } from '../../../utils/keyboard/keys';
-import { GlobalStorageService, STORAGE_KEYS } from '../../../services/util/global-storage.service';
+import { EventService } from '../../../../services/util/event.service';
+import { KeyboardUtils } from '../../../../utils/keyboard';
+import { KeyboardKey } from '../../../../utils/keyboard/keys';
+import { GlobalStorageService, STORAGE_KEYS } from '../../../../services/util/global-storage.service';
 import { ActivatedRoute } from '@angular/router';
-import { RoomService } from '../../../services/http/room.service';
-import { AnnounceService } from '../../../services/util/announce.service';
+import { RoomService } from '../../../../services/http/room.service';
+import { AnnounceService } from '../../../../services/util/announce.service';
+import { Subject } from 'rxjs';
+
+class ContentFormat {
+  name: string;
+  icon: string;
+}
 
 @Component({
   selector: 'app-content-create-page',
-  templateUrl: './content-create-page.component.html',
-  styleUrls: ['./content-create-page.component.scss']
+  templateUrl: './content-creation-page.component.html',
+  styleUrls: ['./content-creation-page.component.scss']
 })
-export class ContentCreatePageComponent implements OnInit, AfterContentInit {
 
+export class ContentCreationPageComponent implements OnInit, AfterContentInit {
+
+  createEventSubject: Subject<void> = new Subject<void>();
+  question: string;
   contentGroups: string[] = [];
-  lastCollection: string;
-
-  content: ContentText = new ContentText(
-    '1',
-    '1',
-    '0',
-    '',
-    '',
-    [],
-    null
-  );
+  lastContentGroup: string;
+  formats: ContentFormat[] = [
+    { name: 'choice', icon: 'format_list_bulleted' },
+    { name: 'likert', icon: 'mood' },
+    { name: 'binary', icon: 'dns' },
+    { name: 'text', icon: 'description' }
+  ];
+  selectedFormat: ContentFormat = this.formats[0];
 
   myControl = new FormControl();
 
@@ -49,9 +54,11 @@ export class ContentCreatePageComponent implements OnInit, AfterContentInit {
   keyEvent(event: KeyboardEvent) {
     const focusOnInput = this.eventService.focusOnInput;
     if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit1) === true && focusOnInput === false) {
-      document.getElementById('subject-input').focus();
+      document.getElementById('body-input').focus();
     } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit2) === true && focusOnInput === false) {
-      document.getElementById('format-info-button').focus();
+      document.getElementById('format-button').focus();
+    } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit3) === true && focusOnInput === false) {
+      document.getElementById('group-input').focus();
     } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Escape) === true) {
       document.getElementById('keys-announcer-button').focus();
     }
@@ -71,11 +78,11 @@ export class ContentCreatePageComponent implements OnInit, AfterContentInit {
         if (stats.groupStats) {
           this.contentGroups = stats.groupStats.map(stat => stat.groupName);
           const lastGroup = this.globalStorageService.getItem(STORAGE_KEYS.LAST_GROUP);
-          this.lastCollection = lastGroup ? lastGroup : this.contentGroups[0];
+          this.lastContentGroup = lastGroup ? lastGroup : this.contentGroups[0];
         } else {
           this.contentGroups = [];
           this.translateService.get('content.default-group').subscribe(defaultGroup => {
-            this.lastCollection = defaultGroup;
+            this.lastContentGroup = defaultGroup;
           });
         }
       });
@@ -88,7 +95,14 @@ export class ContentCreatePageComponent implements OnInit, AfterContentInit {
   }
 
   resetInputs() {
-    this.content.subject = '';
-    this.content.body = '';
+    this.question = '';
+  }
+
+  changeFormat(format: ContentFormat) {
+    this.selectedFormat = format;
+  }
+
+  emitCreateEvent() {
+    this.createEventSubject.next();
   }
 }

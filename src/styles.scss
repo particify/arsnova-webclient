@@ -236,6 +236,10 @@ div {
 
 // Mat Checkbox
 
+mat-checkbox {
+  margin: 0 0 0 16px!important;
+}
+
 .mat-checkbox-checked.mat-accent .mat-checkbox-background,
 .mat-checkbox-indeterminate.mat-accent .mat-checkbox-background {
   background-color: var(--secondary);
@@ -340,8 +344,7 @@ div {
 }
 
 .info-icon {
-  color: var(--on-background);
-  opacity: 0.6;
+  color: var(--secondary);
 }
 
 // Icons

@@ -1,21 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ContentChoiceCreatorComponent } from './content-choice-creator.component';
+import { ContentChoiceCreationComponent } from './content-choice-creation.component';
 import { Component, Injectable, Input } from '@angular/core';
-import { ContentService } from '../../../services/http/content.service';
-import { NotificationService } from '../../../services/util/notification.service';
+import { ContentService } from '../../../../services/http/content.service';
+import { NotificationService } from '../../../../services/util/notification.service';
 import { MatDialog } from '@angular/material/dialog';
-import { TranslateService, TranslateLoader, TranslateModule } from '@ngx-translate/core';
-import { EventService } from '../../../services/util/event.service';
-import { RoomService } from '../../../services/http/room.service';
-import { Observable, of } from 'rxjs';
-import { FormsModule } from '@angular/forms';
-import { DialogService } from '../../../services/util/dialog.service';
-import { GlobalStorageService } from '../../../services/util/global-storage.service';
-import { ContentGroupService } from '../../../services/http/content-group.service';
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { EventService } from '../../../../services/util/event.service';
+import { RoomService } from '../../../../services/http/room.service';
+import { Observable, of, Subject } from 'rxjs';
+import { DialogService } from '../../../../services/util/dialog.service';
+import { GlobalStorageService } from '../../../../services/util/global-storage.service';
+import { ContentGroupService } from '../../../../services/http/content-group.service';
 
-const TRANSLATION_DE = require('../../../../assets/i18n/home/de.json');
-const TRANSLATION_EN = require('../../../../assets/i18n/home/en.json');
+const TRANSLATION_DE = require('../../../../../assets/i18n/home/de.json');
+const TRANSLATION_EN = require('../../../../../assets/i18n/home/en.json');
 
 const TRANSLATIONS = {
   DE: TRANSLATION_DE,
@@ -33,6 +32,8 @@ class JsonTranslationLoader implements TranslateLoader {
     }
   }
 }
+
+const mockCreateEvent = new Subject<any>();
 
 @Injectable()
 class MockContentService {
@@ -109,19 +110,28 @@ class MatRadioButtonStubComponent {
 @Component({ selector: 'mat-divider', template: '' })
 class MatDividerStubComponent { }
 
+@Component({ selector: 'mat-label', template: '' })
+class MatLabelStubComponent { }
+
+@Component({ selector: 'mat-card', template: '' })
+class MatCardStubComponent { }
+
+@Component({ selector: 'mat-placeholder', template: '' })
+class MatPlaceholderStubComponent { }
+
 @Component({ selector: 'input', template: '' })
 class InputStubComponent {
   @Input() ngModel;
 }
 
-describe('ContentChoiceCreatorComponent', () => {
-  let component: ContentChoiceCreatorComponent;
-  let fixture: ComponentFixture<ContentChoiceCreatorComponent>;
+describe('ContentChoiceCreationComponent', () => {
+  let component: ContentChoiceCreationComponent;
+  let fixture: ComponentFixture<ContentChoiceCreationComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [
-        ContentChoiceCreatorComponent,
+        ContentChoiceCreationComponent,
         MatIconStubComponent,
         MatFormFieldStubComponent,
         MatCheckboxStubComponent,
@@ -130,6 +140,9 @@ describe('ContentChoiceCreatorComponent', () => {
         MatRadioGroupStubComponent,
         MatRadioButtonStubComponent,
         MatDividerStubComponent,
+        MatLabelStubComponent,
+        MatCardStubComponent,
+        MatPlaceholderStubComponent,
         InputStubComponent
       ],
       providers: [
@@ -178,8 +191,9 @@ describe('ContentChoiceCreatorComponent', () => {
     })
     .compileComponents()
     .then(() => {
-      fixture = TestBed.createComponent(ContentChoiceCreatorComponent);
+      fixture = TestBed.createComponent(ContentChoiceCreationComponent);
       component = fixture.componentInstance;
+      component.createEvent = mockCreateEvent;
       fixture.detectChanges();
     });
   }));
