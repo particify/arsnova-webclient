@@ -100,8 +100,10 @@ export class AuthenticationService extends BaseHttpService {
       ));
       this.http.post<ClientAuthentication>(connectionUrl, {}, this.httpOptions).pipe(
         tap(_ => ''),
-        catchError(_ => {
-          this.globalStorageService.removeItem(STORAGE_KEYS.USER);
+        catchError(e => {
+          if (e.status === 401 || e.status === 403) {
+            this.globalStorageService.removeItem(STORAGE_KEYS.USER);
+          }
           return of(null);
         })
       ).subscribe(nu => {
