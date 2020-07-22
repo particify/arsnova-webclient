@@ -9,3 +9,10 @@
 .user-id {
   color: var(--grey);
 }
+
+:host-context([fxflex]) .mat-form-field, :host-context([fxflexfill]) .mat-form-field {
+  width: 100%;
+  min-width: 100%;
+  height: 100%;
+  min-height: 100%;
+}

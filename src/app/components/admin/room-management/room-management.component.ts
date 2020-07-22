@@ -26,6 +26,10 @@ export class RoomManagementComponent {
     this.room = await this.roomService.getRoom(id).toPromise();
   }
 
+  clear() {
+    this.room = null;
+  }
+
   deleteEntity() {
     const dialogRef = this.dialogService.openDeleteDialog('really-delete-room');
     dialogRef.afterClosed().subscribe(result => {

@@ -2,19 +2,31 @@
   <mat-card-title>
     {{ 'admin-area.user-management' | translate }}
   </mat-card-title>
-  <app-user-search-field label="{{ 'admin-area.user-id' | translate }}" (submit)="loadEntity($event)"></app-user-search-field>
-  <mat-card-content>
-    <button mat-button (click)="activateUser()">
-      <mat-icon aria-hidden="false">lock_open</mat-icon>
-      {{ 'admin-area.activate-user' | translate }}
-    </button>
-    <button mat-button (click)="deleteEntity()">
-      <mat-icon aria-hidden="false">delete</mat-icon>
-      {{ 'admin-area.delete-user' | translate }}
-    </button>
-    <div *ngIf="user">
-      <header>{{ 'admin-area.properties' | translate }}</header>
+  <mat-card-content fxLayout="column" fxLayoutGap="10px">
+    <div fxLayout="row" fxLayoutGap="10px">
+      <app-user-search-field label="{{ 'admin-area.user-id' | translate }}" (submit)="loadEntity($event)" fxFlex="auto" class="no-field-hint"></app-user-search-field>
+      <mat-form-field appearance="outline" floatLabel="always" fxFlex="auto" class="no-field-hint">
+        <mat-label>{{ 'admin-area.user-login-id' | translate }}</mat-label>
+        <input matNativeControl disabled="disabled" [value]="user?.loginId" placeholder="{{ 'admin-area.no-user-selected' | translate }}">
+        <mat-icon matPrefix>assignment_ind</mat-icon>
+      </mat-form-field>
+      <button mat-button (click)="clear()" fxFlex="64px">
+        <mat-icon>clear</mat-icon>
+      </button>
+    </div>
+    <mat-expansion-panel *ngIf="user">
+      <mat-expansion-panel-header>{{ 'admin-area.properties' | translate }}</mat-expansion-panel-header>
       <app-entity-properties [entity]="user"></app-entity-properties>
+    </mat-expansion-panel>
+    <div *ngIf="user">
+      <button mat-button (click)="activateUser()">
+        <mat-icon aria-hidden="false">lock_open</mat-icon>
+        {{ 'admin-area.activate-user' | translate }}
+      </button>
+      <button mat-button (click)="deleteEntity()">
+        <mat-icon aria-hidden="false">delete</mat-icon>
+        {{ 'admin-area.delete-user' | translate }}
+      </button>
     </div>
   </mat-card-content>
 </mat-card>

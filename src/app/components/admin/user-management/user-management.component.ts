@@ -26,6 +26,10 @@ export class UserManagementComponent {
     this.userService.getUser(id).subscribe(user => this.user = user);
   }
 
+  clear() {
+    this.user = null;
+  }
+
   deleteEntity() {
     const dialogRef = this.dialogService.openDeleteDialog('really-delete-account-admin');
     dialogRef.afterClosed().subscribe(result => {
