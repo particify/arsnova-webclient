@@ -7,6 +7,7 @@ import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { HttpClient } from '@angular/common/http';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { AdminHomeComponent } from './admin-home/admin-home.component';
+import { SummaryBarComponent } from './summary-bar/summary-bar.component';
 import { SystemStatusComponent } from './system-status/system-status.component';
 import { SystemStatisticsComponent } from './system-statistics/system-statistics.component';
 import { UserSearchFieldComponent } from './user-search-field/user-search-field.component';
@@ -33,6 +34,7 @@ import { MatTreeModule } from '@angular/material/tree';
   ],
   declarations: [
     AdminHomeComponent,
+    SummaryBarComponent,
     SystemStatusComponent,
     SystemStatisticsComponent,
     UserSearchFieldComponent,

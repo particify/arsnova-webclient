@@ -6,6 +6,26 @@ const routes: Routes = [
   {
     path: '',
     component: AdminHomeComponent
+  },
+  {
+    path: 'status',
+    component: AdminHomeComponent,
+    data: { page: 'status' }
+  },
+  {
+    path: 'stats',
+    component: AdminHomeComponent,
+    data: { page: 'stats' }
+  },
+  {
+    path: 'users',
+    component: AdminHomeComponent,
+    data: { page: 'users' }
+  },
+  {
+    path: 'rooms',
+    component: AdminHomeComponent,
+    data: { page: 'rooms' }
   }
 ];
 

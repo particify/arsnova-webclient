@@ -1,0 +1,16 @@
+:host {
+  text-align: center;
+}
+
+.mat-card-content, .mat-card-content .mat-icon {
+  font-size: 20px;
+  vertical-align: middle;
+}
+
+.system-health-up {
+  color: green;
+}
+
+.system-health-down {
+  color: red;
+}

@@ -1,11 +1,14 @@
-<div fxLayout="row" fxLayoutAlign="center">
-<h1>{{ 'admin-area.title' | translate }}</h1>
+<div fxLayout="column" fxLayoutGap="10px">
+  <h1 fxLayout="row" fxLayoutAlign="center">{{ 'admin-area.title' | translate }}</h1>
+
+  <app-admin-summary-bar></app-admin-summary-bar>
+
+  <div fxLayout="row" fxLayoutAlign="center">
+    <div [ngSwitch]="page">
+      <app-system-status *ngSwitchCase="'status'"></app-system-status>
+      <app-system-statistics *ngSwitchCase="'stats'"></app-system-statistics>
+      <app-user-management *ngSwitchCase="'users'"></app-user-management>
+      <app-room-management *ngSwitchCase="'rooms'"></app-room-management>
+    </div>
+  </div>
 </div>
-
-<app-system-status></app-system-status>
-
-<app-system-statistics></app-system-statistics>
-
-<app-user-management></app-user-management>
-
-<app-room-management></app-room-management>
