@@ -23,6 +23,9 @@ export class RoomManagementComponent {
 
   async loadEntity(id: string) {
     id = id.replace(' ', '');
+    if (id.match(/^[0-9]{8}$/)) {
+      id = '~' + id;
+    }
     this.room = await this.roomService.getRoom(id).toPromise();
   }
 
