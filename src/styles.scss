@@ -358,9 +358,10 @@ mat-icon {
 
 // Card
 
-mat-card {
+.mat-card {
   max-width: 800px;
-  background: var(--surface) !important;
+  color: var(--on-surface);
+  background: var(--surface);
 }
 
 .card-container {
