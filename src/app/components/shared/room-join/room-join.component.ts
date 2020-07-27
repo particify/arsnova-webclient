@@ -111,6 +111,7 @@ export class RoomJoinComponent implements OnInit {
         for (const m of moderators) {
           if (m.userId === this.user.id) {
             this.authenticationService.setAccess(this.room.shortId, UserRole.EXECUTIVE_MODERATOR);
+            this.authenticationService.checkAccess(this.room.shortId);
             this.router.navigate([`/moderator/room/${this.room.shortId}`]);
             isModerator = true;
           }

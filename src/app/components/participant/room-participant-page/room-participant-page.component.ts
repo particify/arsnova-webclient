@@ -30,7 +30,6 @@ import { AnnounceService } from '../../../services/util/announce.service';
 export class RoomParticipantPageComponent extends RoomPageComponent implements OnInit, AfterContentInit, OnDestroy {
 
   room: Room;
-  user: User;
   protected surveySub: Subscription;
   surveyEnabled = false;
 
@@ -94,10 +93,7 @@ export class RoomParticipantPageComponent extends RoomPageComponent implements O
     this.translateService.use(this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE));
   }
 
-  ngOnDestroy() {
-    if (this.sub) {
-      this.sub.unsubscribe();
-    }
+  unsubscribe() {
     if (this.surveySub) {
       this.surveySub.unsubscribe();
     }
@@ -112,21 +108,31 @@ export class RoomParticipantPageComponent extends RoomPageComponent implements O
     this.authenticationService.checkAccess(this.room.shortId);
   }
 
-  afterRoomLoadHook() {
-    this.authenticationService.watchUser.subscribe(user => this.user = user);
-    if (!this.user) {
-      this.authenticationService.guestLogin(UserRole.PARTICIPANT).subscribe(() => {
-        this.setRoomAccess();
-        this.roomService.addToHistory(this.room.id);
-      });
-    } else {
-      this.roomService.addToHistory(this.room.id);
-      this.setRoomAccess();
-    }
+  getFeedback() {
     this.surveyEnabled = !this.room.settings['feedbackLocked'];
     this.surveySub = this.wsFeedbackService.getFeedbackStream(this.room.id).subscribe((message: Message) => {
       this.parseFeedbackMessage(message);
     });
+  }
+
+  afterRoomLoadHook() {
+    this.getFeedback();
+    const user = this.authenticationService.getUserAsSubject().value;
+    if (!user) {
+      this.authenticationService.guestLogin(UserRole.PARTICIPANT).subscribe(loggedIn => {
+        if (loggedIn === 'true') {
+          this.initRoomData();
+        }
+      });
+    } else {
+      this.initRoomData();
+    }
+  }
+
+  initRoomData() {
+    this.subscribeCommentStream();
+    this.roomService.addToHistory(this.room.id);
+    this.setRoomAccess();
   }
 
   afterGroupsLoadHook() {

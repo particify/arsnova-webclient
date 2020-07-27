@@ -34,6 +34,9 @@ export class RoomPageComponent implements OnInit, OnDestroy {
   protected sub: Subscription;
   protected commentWatch: Observable<IMessage>;
   protected noGroups = true;
+  moderationCommentWatch: Observable<IMessage>;
+  moderationSub: Subscription;
+  moderatorCommentCounter: number;
 
   constructor(
     protected roomService: RoomService,
@@ -61,6 +64,11 @@ export class RoomPageComponent implements OnInit, OnDestroy {
     if (this.sub) {
       this.sub.unsubscribe();
     }
+    this.unsubscribe();
+  }
+
+  protected unsubscribe() {
+
   }
 
   protected afterRoomLoadHook() {
@@ -69,6 +77,57 @@ export class RoomPageComponent implements OnInit, OnDestroy {
 
   protected afterGroupsLoadHook() {
 
+  }
+
+  subscribeCommentStream() {
+    this.commentService.countByRoomId(this.room.id, true).subscribe(commentCounter => {
+      this.commentCounter = commentCounter;
+      this.commentWatch = this.wsCommentService.getCommentStream(this.room.id);
+      if (this.sub) {
+        this.sub.unsubscribe();
+      }
+      this.sub = this.commentWatch.subscribe((message: Message) => {
+        const msg = JSON.parse(message.body);
+        const payload = msg.payload;
+        if (msg.type === 'CommentCreated') {
+          this.commentCounter = this.commentCounter + 1;
+        } else if (msg.type === 'CommentDeleted') {
+          this.commentCounter = this.commentCounter - 1;
+        } else if (msg.type === 'CommentPatched') {
+          for (const [key, value] of Object.entries(payload.changes)) {
+            switch (key) {
+              case 'ack':
+                const isNowAck = <boolean>value;
+                if (isNowAck) {
+                  this.moderatorCommentCounter = this.moderatorCommentCounter - 1;
+                } else {
+                  this.commentCounter = this.commentCounter - 1;
+                }
+                break;
+            }
+          }
+        }
+      });
+    });
+  }
+
+  subscribeCommentModeratorStream() {
+    this.commentService.countByRoomId(this.room.id, false).subscribe(commentCounter => {
+      this.moderatorCommentCounter = commentCounter;
+    });
+    this.moderationCommentWatch = this.wsCommentService.getModeratorCommentStream(this.room.id);
+    if (this.moderationSub) {
+      this.moderationSub.unsubscribe();
+    }
+    this.moderationSub = this.moderationCommentWatch.subscribe((message: Message) => {
+      const msg = JSON.parse(message.body);
+      const payload = msg.payload;
+      if (msg.type === 'CommentCreated') {
+        this.moderatorCommentCounter = this.moderatorCommentCounter + 1;
+      } else if (msg.type === 'CommentDeleted') {
+        this.moderatorCommentCounter = this.moderatorCommentCounter - 1;
+      }
+    });
   }
 
   initializeRoom(room: Room): void {
@@ -81,20 +140,6 @@ export class RoomPageComponent implements OnInit, OnDestroy {
       }
     }
     this.globalStorageService.setItem(STORAGE_KEYS.MODERATION_ENABLED, String(this.moderationEnabled));
-    this.commentService.countByRoomId(this.room.id, true)
-      .subscribe(commentCounter => {
-        this.commentCounter = commentCounter;
-      });
-    this.commentWatch = this.wsCommentService.getCommentStream(this.room.id);
-    this.sub = this.commentWatch.subscribe((message: Message) => {
-      const msg = JSON.parse(message.body);
-      const payload = msg.payload;
-      if (msg.type === 'CommentCreated') {
-        this.commentCounter = this.commentCounter + 1;
-      } else if (msg.type === 'CommentDeleted') {
-        this.commentCounter = this.commentCounter - 1;
-      }
-    });
     this.afterRoomLoadHook();
     this.globalStorageService.setItem(STORAGE_KEYS.SHORT_ID, room.shortId);
   }
