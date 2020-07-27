@@ -19,7 +19,7 @@
       <app-entity-properties [entity]="user"></app-entity-properties>
     </mat-expansion-panel>
     <div *ngIf="user">
-      <button mat-button (click)="activateUser()">
+      <button mat-button (click)="activateUser()" [disabled]="user.account?.activated">
         <mat-icon aria-hidden="false">lock_open</mat-icon>
         {{ 'admin-area.activate-user' | translate }}
       </button>

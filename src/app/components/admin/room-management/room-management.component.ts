@@ -26,7 +26,7 @@ export class RoomManagementComponent {
     if (id.match(/^[0-9]{8}$/)) {
       id = '~' + id;
     }
-    this.room = await this.roomService.getRoom(id).toPromise();
+    this.room = await this.adminService.getRoom(id).toPromise();
   }
 
   clear() {

@@ -23,7 +23,7 @@ export class UserManagementComponent {
 
   loadEntity(id: string) {
     id = id.replace(' ', '');
-    this.userService.getUser(id).subscribe(user => this.user = user);
+    this.adminService.getUser(id).subscribe(user => this.user = user);
   }
 
   clear() {
