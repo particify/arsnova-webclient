@@ -21,9 +21,7 @@ export class AuthenticationService extends BaseHttpService {
     auth: '/auth',
     login: '/login',
     user: '/user',
-    register: '/register',
     registered: '/registered',
-    resetPassword: '/resetpassword',
     guest: '/guest',
     sso: '/sso'
   };
@@ -163,36 +161,6 @@ export class AuthenticationService extends BaseHttpService {
       take(1));
 
     return this.checkLogin(auth, userRole, false);
-  }
-
-  register(email: string, password: string): Observable<boolean> {
-    const connectionUrl: string = this.apiUrl.base + this.apiUrl.user + this.apiUrl.register;
-
-    return this.http.post<boolean>(connectionUrl, {
-      loginId: email,
-      password: password
-    }, this.httpOptions).pipe(map(() => {
-      return true;
-    }));
-  }
-
-  setNewPassword(email: string, key?: string, password?: string): Observable<boolean> {
-    const connectionUrl: string =
-      this.apiUrl.base +
-      this.apiUrl.user +
-      '/~' +
-      email +
-      this.apiUrl.resetPassword;
-    let body = {};
-    if (key && password) {
-      body = {
-        key: key,
-        password: password
-      };
-    }
-    return this.http.post(connectionUrl, body, this.httpOptions).pipe(map(() => {
-        return true;
-    }));
   }
 
   logout() {

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroupDirective, NgForm, Validators } from '@angular/forms';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { validatePassword } from '../register/register.component';
-import { AuthenticationService } from '../../../services/http/authentication.service';
+import { UserService } from '../../../services/http/user.service';
 import { NotificationService } from '../../../services/util/notification.service';
 import { TranslateService } from '@ngx-translate/core';
 import { EventService } from '../../../services/util/event.service';
@@ -34,7 +34,7 @@ export class PasswordResetComponent implements OnInit {
   isLoading = true;
 
   constructor(private translationService: TranslateService,
-              private authenticationService: AuthenticationService,
+              private userService: UserService,
               private notificationService: NotificationService,
               public eventService: EventService,
               private route: ActivatedRoute,
@@ -52,7 +52,7 @@ export class PasswordResetComponent implements OnInit {
   setNewPassword(password: string, key: string) {
     if (!this.passwordFormControl2.hasError('passwordIsEqual')) {
       if (this.email !== '' && key !== '' && password !== '') {
-        this.authenticationService.setNewPassword(this.email, password, key).subscribe(() => {
+        this.userService.setNewPassword(this.email, password, key).subscribe(() => {
           this.translationService.get('password-reset.new-password-successful').subscribe(message => {
             this.notificationService.show(message);
           });

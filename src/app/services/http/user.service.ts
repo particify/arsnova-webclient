@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BaseHttpService } from './base-http.service';
 import { User } from '../../models/user';
-import { catchError, tap } from 'rxjs/operators';
+import { catchError, map, tap } from 'rxjs/operators';
 
 const httpOptions = {
   headers: new HttpHeaders({})
@@ -13,9 +13,12 @@ const httpOptions = {
 export class UserService extends BaseHttpService {
   private apiUrl = {
     base: '/api',
+    v2: '/api/v2',
     user: '/user',
+    register: '/register',
     activate: '/activate',
     resetActivation: '/resetactivation',
+    resetPassword: '/resetpassword',
     find: '/find'
   };
 
@@ -28,6 +31,17 @@ export class UserService extends BaseHttpService {
     return this.http.get<User>(connectionUrl).pipe(
       catchError(this.handleError<User>(`getUser`))
     );
+  }
+
+  register(email: string, password: string): Observable<boolean> {
+    const connectionUrl: string = this.apiUrl.base + this.apiUrl.user + this.apiUrl.register;
+
+    return this.http.post<boolean>(connectionUrl, {
+      loginId: email,
+      password: password
+    }, httpOptions).pipe(map(() => {
+      return true;
+    }));
   }
 
   activate(name: string, activationKey: string): Observable<string> {
@@ -46,6 +60,45 @@ export class UserService extends BaseHttpService {
       tap(_ => ''),
       catchError(this.handleError<User>('resetActivation'))
     );
+  }
+
+  resetPassword(email: string): Observable<boolean> {
+    const connectionUrl: string =
+      this.apiUrl.v2 +
+      this.apiUrl.user +
+      '/' +
+      email +
+      this.apiUrl.resetPassword;
+
+    return this.http.post(connectionUrl, {
+      key: null,
+      password: null
+    }, httpOptions).pipe(
+      catchError(err => {
+        return of(false);
+      }), map((result) => {
+        return true;
+      })
+    );
+  }
+
+  setNewPassword(email: string, key?: string, password?: string): Observable<boolean> {
+    const connectionUrl: string =
+      this.apiUrl.base +
+      this.apiUrl.user +
+      '/~' +
+      email +
+      this.apiUrl.resetPassword;
+    let body = {};
+    if (key && password) {
+      body = {
+        key: key,
+        password: password
+      };
+    }
+    return this.http.post(connectionUrl, body, httpOptions).pipe(map(() => {
+        return true;
+    }));
   }
 
   delete(id: string): Observable<User> {
