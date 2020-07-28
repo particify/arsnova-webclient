@@ -47,7 +47,7 @@
             </mat-list>
             <mat-radio-group [disabled]="alreadySent" *ngIf="!content.multiple" name="Radio">
               <mat-list>
-                <mat-list-item *ngFor="let answer of checkedAnswers">
+                <mat-list-item *ngFor="let answer of checkedAnswers" fxLayout="column" fxLayoutAlign="center">
                   <mat-radio-button (change)="selectSingleAnswer(answer.answerOption.label)"
                                     aria-label="{{ 'answer.a11y-select-answer' | translate: {answer: answer.answerOption.label} }}"
                                     [checked]="answer.checked" [value]="answer.answerOption.label" name="answer">

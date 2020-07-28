@@ -234,7 +234,7 @@ div {
 }
 
 .mat-list-item-content > mat-radio-button > .mat-radio-label > .mat-radio-label-content {
-  padding-left: 18px;
+  padding-left: 16px;
   white-space: normal;
 }
 
@@ -243,10 +243,6 @@ div {
 }
 
 // Mat Checkbox
-
-mat-checkbox {
-  margin: 0 0 0 16px!important;
-}
 
 .mat-checkbox-checked.mat-accent .mat-checkbox-background,
 .mat-checkbox-indeterminate.mat-accent .mat-checkbox-background {
@@ -263,7 +259,6 @@ mat-checkbox {
 }
 
 .mat-checkbox-layout {
-  margin: 10px 0;
   white-space: normal !important;
 }
 
