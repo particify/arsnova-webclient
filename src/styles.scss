@@ -208,6 +208,10 @@ div {
   background-color: var(--on-surface) !important;
 }
 
+.mat-form-field-disabled .mat-form-field-outline:not(.mat-form-field-outline-thick) {
+  opacity: 0.2 !important;
+}
+
 .no-field-hint .mat-form-field-wrapper {
   padding-bottom: 0;
 }
