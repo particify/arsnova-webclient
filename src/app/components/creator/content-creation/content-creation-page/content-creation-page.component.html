@@ -11,7 +11,7 @@
       <div fxLayoutAlign="start" fxLayout="row wrap">
         <button class="format-button" id="format-button" mat-stroked-button
                 aria-labelledby="choose-format" [matMenuTriggerFor]="formatMenu">
-          <mat-icon>{{ selectedFormat.icon }}</mat-icon>
+          <mat-icon class="format-button-icon">{{ selectedFormat.icon }}</mat-icon>
           <span>
           {{ 'content.format-' + selectedFormat.name | translate}}
         </span>
@@ -44,10 +44,10 @@
         </mat-form-field>
       </div>
       <mat-form-field class="input-block" appearance="outline">
-        <mat-label>{{ 'content.body' | translate }}</mat-label>
+        <mat-label>{{ (selectedFormat.name !== 'slide' ? 'content.body' : 'content.body-neutral') | translate }}</mat-label>
         <textarea (focus)="eventService.makeFocusOnInputTrue()" (blur)="eventService.makeFocusOnInputFalse()"
                   matInput #questionInput id="body-input" [(ngModel)]="question" name="questionInput"
-                  aria-labelledby="body" placeholder="{{ 'content.enter-body' | translate }}"
+                  aria-labelledby="body" [placeholder]="(selectedFormat.name !== 'slide' ? 'content.enter-body' : 'content.enter-body-neutral') | translate"
                   matTextareaAutosize matAutosizeMinRows="3" matAutosizeMaxRows="8" maxlength="250"></textarea>
       </mat-form-field>
     </form>
@@ -68,6 +68,11 @@
                                 [createEvent]="createEventSubject.asObservable()"
                                 [contentBody]="questionInput.value" [contentGroup]="group.value">
       </app-content-text-creator>
+      <app-content-slide-creation (reset)="resetInputs()" *ngIf="selectedFormat.name === 'slide'"
+                                  [createEvent]="createEventSubject.asObservable()"
+                                  [contentBody]="questionInput.value" [contentGroup]="group.value">
+
+      </app-content-slide-creation>
       <div fxLayout="row" fxLayoutAlign="center">
         <button mat-raised-button (click)="emitCreateEvent()" class="button-primary create-btn"
                 attr.aria-label="{{ 'content.a11y-submit' | translate: {body: question, group: group.value} }}">

@@ -73,7 +73,7 @@ export class ContentCreationComponent implements OnInit, OnDestroy {
 
   resetAfterSubmit() {
     this.reset.emit(true);
-    if (this.content.format !== ContentType.TEXT) {
+    if (this.content.format !== ContentType.TEXT && this.content.format !== ContentType.SLIDE) {
       if (this.content.format === ContentType.CHOICE) {
         (this.content as ContentChoice).options = [];
       }

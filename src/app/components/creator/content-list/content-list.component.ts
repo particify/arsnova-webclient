@@ -111,6 +111,7 @@ export class ContentListComponent implements OnInit {
       content.subject,
       content.body,
       [],
+      content.format,
       content.state
     );
   }
