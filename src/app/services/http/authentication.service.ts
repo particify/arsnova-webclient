@@ -8,11 +8,13 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { ClientAuthentication } from '../../models/client-authentication';
 import { BaseHttpService } from './base-http.service';
 import { GlobalStorageService, STORAGE_KEYS } from '../util/global-storage.service';
+import * as JwtDecode from 'jwt-decode';
 
 @Injectable()
 export class AuthenticationService extends BaseHttpService {
   private readonly STORAGE_KEY: string = 'USER';
   private readonly ROOM_ACCESS: string = 'ROOM_ACCESS';
+  private readonly ADMIN_ROLE: string = 'ADMIN';
   private user = new BehaviorSubject<User>(undefined);
   private apiUrl = {
     base: '/api',
@@ -229,6 +231,18 @@ export class AuthenticationService extends BaseHttpService {
     this.globalStorageService.setItem(STORAGE_KEYS.USER, user);
     this.globalStorageService.setItem(STORAGE_KEYS.LOGGED_IN, true);
     this.user.next(user);
+  }
+
+  isAdmin(): boolean {
+    const currentUser = this.user.getValue();
+    if (currentUser) {
+      const decodedToken = JwtDecode(currentUser.token);
+      if (decodedToken.roles.some(role => role === this.ADMIN_ROLE)) {
+        return true;
+      }
+    }
+
+    return false;
   }
 
   isLoggedIn(): boolean {

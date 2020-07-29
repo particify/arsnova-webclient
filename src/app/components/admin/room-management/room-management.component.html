@@ -1,0 +1,41 @@
+<mat-card>
+  <mat-card-title>
+    {{ 'admin-area.room-management' | translate }}
+  </mat-card-title>
+  <mat-card-content fxLayout="column" fxLayoutGap="10px">
+    <div fxLayout="row" fxLayoutGap="10px">
+      <mat-form-field appearance="outline" fxFlex="auto" class="no-field-hint">
+        <mat-label>{{ 'admin-area.room-id' | translate }}</mat-label>
+        <input matInput #idField>
+        <button mat-button matSuffix color="accent" (click)="loadEntity(idField.value)">
+          <mat-icon aria-hidden="false" attr.aria-label="{{ 'admin-area.find' | translate }}">search</mat-icon>
+        </button>
+      </mat-form-field>
+      <mat-form-field appearance="outline" floatLabel="always" fxFlex="auto" class="no-field-hint">
+        <mat-label>{{ 'admin-area.room-name' | translate }}</mat-label>
+        <input matNativeControl disabled="disabled" [value]="room?.name" placeholder="{{ 'admin-area.no-room-selected' | translate }}">
+        <mat-icon matPrefix>info</mat-icon>
+      </mat-form-field>
+      <button mat-button (click)="clear()" fxFlex="64px">
+        <mat-icon>clear</mat-icon>
+      </button>
+    </div>
+    <mat-expansion-panel *ngIf="room">
+      <mat-expansion-panel-header>{{ 'admin-area.properties' | translate }}</mat-expansion-panel-header>
+      <app-entity-properties [entity]="room"></app-entity-properties>
+    </mat-expansion-panel>
+    <div *ngIf="room">
+      <div fxLayout="row">
+        <app-user-search-field label="{{ 'admin-area.room-new-owner-id' | translate }}" #newOwnerIdField fxFlex="auto" class="no-field-hint"></app-user-search-field>
+        <button mat-button (click)="transferRoom(newOwnerIdField.value)" [disabled]="!newOwnerIdField.value">
+          <mat-icon aria-hidden="false">forward</mat-icon>
+          {{ 'admin-area.transfer-room' | translate }}
+        </button>
+      </div>
+      <button mat-button (click)="deleteEntity()">
+        <mat-icon aria-hidden="false">delete</mat-icon>
+        {{ 'admin-area.delete-room' | translate }}
+      </button>
+    </div>
+  </mat-card-content>
+</mat-card>

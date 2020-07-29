@@ -23,6 +23,13 @@ export class UserService extends BaseHttpService {
     super();
   }
 
+  getUser(id: string) {
+    const connectionUrl = `${this.apiUrl.base + this.apiUrl.user}/${id}`;
+    return this.http.get<User>(connectionUrl).pipe(
+      catchError(this.handleError<User>(`getUser`))
+    );
+  }
+
   activate(name: string, activationKey: string): Observable<string> {
     const connectionUrl: string = this.apiUrl.base + this.apiUrl.user + '/~' + encodeURIComponent(name) +
       this.apiUrl.activate + '?key=' + activationKey;
@@ -49,7 +56,7 @@ export class UserService extends BaseHttpService {
     );
   }
 
-  getIdByLoginId(loginId: string): Observable<User[]> {
+  getUserByLoginId(loginId: string): Observable<User[]> {
     const url = `${this.apiUrl.base + this.apiUrl.user + this.apiUrl.find}`;
     return this.http.post<User[]>(url, {
       properties: { loginId: loginId },

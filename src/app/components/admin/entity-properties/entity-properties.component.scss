@@ -1,0 +1,19 @@
+.entity-property-tree {
+  ul, li {
+    margin-top: 0;
+    margin-bottom: 0;
+    list-style-type: none;
+  }
+
+  .entity-property-tree-invisible {
+    display: none;
+  }
+
+  .key {
+    font-weight: bold;
+  }
+
+  .value-nested {
+    color: var(--grey);
+  }
+}

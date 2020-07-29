@@ -47,6 +47,7 @@ import { LoginComponent } from './components/home/login/login.component';
 import { DialogService } from './services/util/dialog.service';
 import { DirectEntryComponent } from './components/shared/direct-entry/direct-entry.component';
 import { TrackingService } from './services/util/tracking.service';
+import { AdminModule } from './components/admin/admin.module';
 import { ImportComponent } from './components/home/import/import.component';
 import { GlobalStorageService, STORAGE_CONFIG_PROVIDERS } from './services/util/global-storage.service';
 import { ConsentService } from './services/util/consent.service';
@@ -56,6 +57,8 @@ import { ContentResolver } from './resolver/content.resolver';
 import { CommentResolver } from './resolver/comment.resolver';
 import { ContentGroupService } from './services/http/content-group.service';
 import { AnnounceService } from './services/util/announce.service';
+import { AdminService } from './services/http/admin.service';
+import { SystemInfoService } from './services/http/system-info.service';
 
 export function dialogClose(dialogResult: any) {
 }
@@ -89,6 +92,7 @@ export function initializeApp(appConfig: AppConfig) {
     HttpClientModule,
     CreatorModule,
     ModeratorModule,
+    AdminModule,
     MarkdownModule.forRoot({
       loader: HttpClient,
       markedOptions: {
@@ -150,6 +154,8 @@ export function initializeApp(appConfig: AppConfig) {
     ContentResolver,
     CommentResolver,
     AnnounceService,
+    AdminService,
+    SystemInfoService,
     STORAGE_CONFIG_PROVIDERS,
     {
       provide: MatDialogRef,

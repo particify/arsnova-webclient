@@ -25,6 +25,7 @@ export class HeaderComponent implements OnInit {
   deviceType: string;
   isSafari = 'false';
   moderationEnabled: boolean;
+  isAdmin = false;
 
   constructor(
     public location: Location,
@@ -71,7 +72,10 @@ export class HeaderComponent implements OnInit {
       this.authenticationService.refreshLogin();
     }
 
-    this.authenticationService.watchUser.subscribe(newUser => this.user = newUser);
+    this.authenticationService.watchUser.subscribe(newUser => {
+      this.user = newUser;
+      this.isAdmin = this.authenticationService.isAdmin();
+    });
 
     let time = new Date();
     this.getTime(time);

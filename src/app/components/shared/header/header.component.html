@@ -38,6 +38,10 @@
         <mat-icon>home</mat-icon>
         <span>{{'header.go-to-home' | translate}}</span>
       </button>
+      <button mat-menu-item *ngIf="isAdmin" routerLink="/admin" tabindex="0">
+        <mat-icon>build</mat-icon>
+        <span>{{'header.admin-area' | translate}}</span>
+      </button>
       <button mat-menu-item (click)="logout()" tabindex="0">
         <mat-icon color="warn">exit_to_app</mat-icon>
         <span>{{ 'header.logout' | translate }}</span>

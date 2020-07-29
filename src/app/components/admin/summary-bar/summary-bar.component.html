@@ -1,0 +1,58 @@
+<div fxLayout="row" fxLayoutAlign="center" fxLayoutGap="10px">
+  <mat-card fxFlex="250px">
+    <mat-card-title>
+      {{ 'admin-area.system-health' | translate }}
+    </mat-card-title>
+    <mat-card-content fxLayout="column" fxLayoutAlign="center">
+      <div class="system-health system-health-{{ (healthInfo | async)?.status | lowercase }}" ngSwitch="{{ (healthInfo | async)?.status }}">
+        <mat-icon *ngSwitchCase="STATUS_UP">check</mat-icon>
+        <mat-icon *ngSwitchCase="STATUS_DOWN">warning</mat-icon>
+        <b *ngSwitchDefault>?</b>
+      </div>
+    </mat-card-content>
+    <mat-card-actions>
+      <button mat-button [routerLink]="'/admin/status'">
+        {{ 'admin-area.status-details' | translate }}
+      </button>
+    </mat-card-actions>
+  </mat-card>
+  <mat-card fxFlex="250px">
+    <mat-card-title>
+      {{ 'admin-area.active-users' | translate }}
+    </mat-card-title>
+    <mat-card-content fxLayout="column" fxLayoutAlign="center">
+      <div class="system-stats user-count"><mat-icon>record_voice_over</mat-icon>&nbsp;{{ (stats | async)?.activeUsers }}</div>
+    </mat-card-content>
+    <mat-card-actions>
+      <button mat-button [routerLink]="'/admin/stats'">
+        {{ 'admin-area.system-stats' | translate }}
+      </button>
+    </mat-card-actions>
+  </mat-card>
+  <mat-card fxFlex="250px">
+    <mat-card-title>
+      {{ 'admin-area.user-accounts' | translate }}
+    </mat-card-title>
+    <mat-card-content fxLayout="column" fxLayoutAlign="center">
+      <div class="system-stats user-count"><mat-icon>people</mat-icon>&nbsp;{{ (stats | async)?.sessions }}</div>
+    </mat-card-content>
+    <mat-card-actions>
+      <button mat-button [routerLink]="'/admin/users'">
+        {{ 'admin-area.manage-accounts' | translate }}
+      </button>
+    </mat-card-actions>
+  </mat-card>
+  <mat-card fxFlex="250px">
+    <mat-card-title>
+      {{ 'admin-area.rooms' | translate }}
+    </mat-card-title>
+    <mat-card-content fxLayout="column" fxLayoutAlign="center">
+      <div class="system-stats room-count"><mat-icon>work</mat-icon>&nbsp;{{ (stats | async)?.activeStudents }}</div>
+    </mat-card-content>
+    <mat-card-actions>
+      <button mat-button [routerLink]="'/admin/rooms'">
+        {{ 'admin-area.manage-rooms' | translate }}
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</div>
