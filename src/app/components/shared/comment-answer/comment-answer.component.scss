@@ -1,4 +1,4 @@
-app-comment, mat-card {
+app-comment, .mat-card {
   width: 100%;
   max-width: 800px;
 }
@@ -15,14 +15,14 @@ app-comment, mat-card {
   margin-top: 3%;
 }
 
-mat-icon {
+.mat-icon {
   font-size: 18px;
   height: 18px;
   width: 18px;
   margin-right: 5px;
 }
 
-mat-hint {
+.mat-hint {
   margin-right: 1%;
 }
 

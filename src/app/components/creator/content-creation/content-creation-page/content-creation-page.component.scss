@@ -7,7 +7,7 @@ form {
 }
 
 .mat-menu-item {
-  height: auto!important;
+  height: auto;
 }
 
 ::ng-deep .mat-menu-panel {
@@ -43,7 +43,7 @@ form {
   height: 60px;
 }
 
-mat-card {
+.mat-card {
   width: 100%;
   max-width: 800px;
 }

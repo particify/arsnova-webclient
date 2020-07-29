@@ -1,20 +1,20 @@
-mat-card {
+.mat-card {
   width: 100%;
 }
 
-mat-card-content > :first-child {
+.mat-card-content > :first-child {
   height: 72px;
 }
 
-mat-panel-title {
+.mat-expansion-panel-header-title {
   flex-basis: 0;
   align-items: center;
   font-size: medium;
   margin-right: 5px;
 }
 
-mat-expansion-panel-header {
-  background-color: var(--table-a) !important;
+.mat-expansion-panel-header {
+  background-color: var(--table-a);
 }
 
 .matPanel {
@@ -77,7 +77,7 @@ mat-expansion-panel-header {
   color: var(--warn)
 }
 
-mat-tooltip-component {
+.mat-tooltip-component {
   position: relative;
 }
 

@@ -27,7 +27,7 @@
           </div>
           <form (ngSubmit)="submitAnswer()" id="answerForm">
             <mat-list *ngIf="content.multiple">
-              <mat-list-item *ngFor="let answer of checkedAnswers">
+              <mat-list-item *ngFor="let answer of checkedAnswers" fxLayout="column" fxLayoutAlign="center">
                 <mat-checkbox [disabled]="true" *ngIf="alreadySent" [checked]="answer.checked" name="answer">
                   {{ answer.answerOption.label }}
                 </mat-checkbox>

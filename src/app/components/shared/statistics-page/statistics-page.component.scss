@@ -1,9 +1,9 @@
-mat-card {
+.mat-card {
   width: 100%;
   min-height: 300px;
 }
 
-mat-tab-group {
+.mat-tab-group {
   width: calc(92vw - 32px);
   max-width: 800px;
 }
@@ -12,7 +12,7 @@ mat-tab-group {
   justify-content: center;
 }
 
-mat-icon {
+.mat-icon {
   color: var(--on-surface);
   font-size: 30px;
   height: 30px;

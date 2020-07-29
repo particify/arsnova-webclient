@@ -1,4 +1,4 @@
-mat-list-item {
+.mat-list-item {
   background-color: var(--background);
   margin-bottom: 10px;
   border-radius: 5px;
@@ -32,7 +32,7 @@ mat-list-item {
   right: 16px;
 }
 
-mat-icon {
+.mat-icon {
   color: var(--primary);
   height: 32px;
   width: 32px;

@@ -1,9 +1,9 @@
-mat-card {
+.mat-card {
   width: 100%;
   min-height: 250px;
 }
 
-mat-card-content > :first-child {
+.mat-card-content > :first-child {
   margin-top: 5%;
 }
 
@@ -43,16 +43,16 @@ mat-card-content > :first-child {
   margin: 3% 0;
 }
 
-mat-card-header {
+.mat-card-header {
   margin: 5% 0;
 }
 
-mat-card-title {
+.mat-card-title {
   word-break: break-all;
   font-size: calc(16px + 1vw) !important;
 }
 
-mat-card-subtitle {
+.mat-card-subtitle {
   margin: 0;
 }
 
@@ -67,14 +67,14 @@ mat-card-subtitle {
   min-height: 180px;
 }
 
-mat-grid-list {
+.mat-grid-list {
   width: 100%;
   min-height: 140px;
   padding: 0 !important;
   margin: 4% 0;
 }
 
-mat-grid-tile {
+.mat-grid-tile {
   height: 90%;
   padding: 2% !important;
   overflow: inherit;

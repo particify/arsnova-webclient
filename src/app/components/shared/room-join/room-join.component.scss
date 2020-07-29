@@ -1,13 +1,13 @@
-mat-form-field {
+.mat-form-field {
   font-size: 28px;
   width: 135px;
 }
 
-mat-placeholder {
+.mat-placeholder {
   font-size: 20px;
 }
 
-mat-error {
+.mat-error {
   font-size: small;
   color: var(--on-surface) !important;
 }
@@ -65,7 +65,7 @@ mat-error {
   }
 }
 
-.arrow-hover-in > mat-icon {
+.arrow-hover-in > .mat-icon {
   &:first-of-type {
     transition: 0.2s;
     margin-left: 20px;
@@ -73,7 +73,7 @@ mat-error {
   animation: minimizeIcon 0.3s linear forwards;
 }
 
-.arrow-hover-out > mat-icon {
+.arrow-hover-out > .mat-icon {
   animation: maximizeIcon 0.3s linear forwards;
   &:first-of-type {
     transition: 0.2s;

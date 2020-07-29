@@ -96,19 +96,19 @@ textarea {
   caret-color: var(--on-surface);
 }
 
-mat-form-field {
+.mat-form-field {
   color: var(--on-surface);
 }
 
-mat-placeholder {
+.mat-placeholder {
   color: var(--on-surface);
 }
 
-mat-hint {
+.mat-hint {
   color: var(--on-surface) !important;
 }
 
-mat-error {
+.mat-error {
   color: var(--warn) !important;
 }
 
@@ -127,7 +127,7 @@ markdown {
   padding: 0;
 }
 
-mat-dialog-content {
+.mat-dialog-content {
   outline: none;
 }
 
@@ -233,7 +233,7 @@ div {
   background-color: var(--secondary);
 }
 
-.mat-list-item-content > mat-radio-button > .mat-radio-label > .mat-radio-label-content {
+.mat-list-item-content > .mat-radio-button > .mat-radio-label > .mat-radio-label-content {
   padding-left: 16px;
   white-space: normal;
 }
@@ -352,15 +352,16 @@ div {
 
 // Icons
 
-mat-icon {
-  line-height: 100% !important;
+.mat-icon {
+  line-height: 100%!important;
 }
 
 // Card
 
-mat-card {
+.mat-card {
   max-width: 800px;
-  background: var(--surface) !important;
+  color: var(--on-surface);
+  background: var(--surface);
 }
 
 .card-container {

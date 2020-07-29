@@ -1,4 +1,4 @@
-mat-card {
+.mat-card {
   width: 100%;
   min-height: 380px;
 }
@@ -15,7 +15,7 @@ mat-card {
 
 .hover {
   &:hover {
-    transform: scale(1.1)
+    transform: scale(1.1);
   }
 }
 
@@ -76,9 +76,8 @@ mat-card {
   min-height: 160px;
 }
 
-mat-grid-list {
+.mat-grid-list {
   width: 100%;
-  min-height: 120px;
   padding: 0 !important;
   margin: 2% 0;
   &:last-of-type {
@@ -86,16 +85,16 @@ mat-grid-list {
   }
 }
 
-mat-card-header {
+.mat-card-header {
   margin: 5% 0;
 }
 
-mat-card-title {
+.mat-card-title {
   word-break: break-all;
   font-size: calc(16px + 1vw) !important;
 }
 
-mat-grid-tile {
+.mat-grid-tile {
   width: calc(50% - 16px) !important;
   height: 100% !important;
   padding: 2% !important;

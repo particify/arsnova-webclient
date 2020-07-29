@@ -2,19 +2,19 @@ form > button {
   margin: 20px 0;
 }
 
-mat-card {
+.mat-card {
   margin: 20px 0;
-  padding: 0 1%;
+  padding: 0 16px;
   background-color: var(--background) !important;
 }
 
-mat-list {
+.mat-list {
   padding: 0;
   outline: none;
   background-color: var(--background);
 }
 
-mat-list-item {
+.mat-list-item {
   height: auto;
   outline: none;
 }
