@@ -14,12 +14,12 @@
   background-color: var(--grey);
 }
 
-mat-chip {
+.mat-chip {
   width: 130px !important;
   display: flex;
   justify-content: center;
 }
 
-mat-icon {
+.mat-icon {
   color: var(--on-surface);
 }

@@ -1,4 +1,4 @@
-mat-card {
+.mat-card {
   width: 100%;
   min-height: 270px;
 }
@@ -43,20 +43,20 @@ mat-card {
   margin-top: 10%;
 }
 
-mat-card-header {
+.mat-card-header {
   margin: 5% 0;
 }
 
-mat-card-title {
+.mat-card-title {
   word-break: break-all;
   font-size: calc(16px + 1vw) !important;
 }
 
-mat-card-subtitle {
+.mat-card-subtitle {
   height: 30%;
 }
 
-mat-grid-tile {
+.mat-grid-tile {
   height: 90%;
   min-height: 150px;
   padding-top: 2% !important;

@@ -4,12 +4,15 @@
   max-width: 30px;
 }
 
-mat-row {
+.mat-row {
   background-color: var(--dialog);
   border-color: var(--dialog);
 }
 
-mat-cell {
-  padding-left: 0 !important;
-  padding-right: 10px !important;
+.mat-cell {
+  padding: 0 8px 0 0;
+}
+
+.mat-form-field {
+  width: 100%;
 }
