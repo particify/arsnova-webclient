@@ -14,6 +14,7 @@ import { MarkdownModule } from 'ngx-markdown';
 import { CdkStepperModule } from '@angular/cdk/stepper';
 import { MatRippleModule } from '@angular/material/core';
 import { ContentParticipantComponent } from './content/content-participant.component';
+import { ContentSlideParticipantComponent } from './content/content-slide-participant/content-slide-participant.component';
 
 @NgModule({
   imports: [
@@ -38,7 +39,8 @@ import { ContentParticipantComponent } from './content/content-participant.compo
     ContentChoiceParticipantComponent,
     ContentTextParticipantComponent,
     RoomParticipantPageComponent,
-    ParticipantContentCarouselPageComponent
+    ParticipantContentCarouselPageComponent,
+    ContentSlideParticipantComponent
   ]
 })
 export class ParticipantModule {

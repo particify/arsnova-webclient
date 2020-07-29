@@ -1,0 +1,10 @@
+<div tabindex="-1" attr.aria-label="{{ 'answer.a11y-current-slide' | translate }}">
+  <app-loading-indicator *ngIf="isLoading" [size]="80"></app-loading-indicator>
+  <mat-card>
+    <div fxLayout="row">
+      <markdown tabindex="0" [data]="content.body"></markdown>
+    </div>
+  </mat-card>
+  <div tabindex="-1" class="visually-hidden">
+  </div>
+</div>

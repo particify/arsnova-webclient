@@ -5,6 +5,7 @@
     "a11y-current-multiple": "This is a multiple choice question. Navigate with tab to the question and the answers. Later press the space button to select answers",
     "a11y-current-single": "This is a single choice question. Navigate with tab to the question and then use the up and down-arrow keys to select an answer.",
     "a11y-current-text": "This is a text question. Navigate with tab to the question and press tab again to go to the answer input.",
+    "a11y-current-slide": "This is a slide. Navigate with tab to the content.",
     "a11y-already-answered": "You have already answered this question. Navigate with tab to the question and get your answer or answers.",
     "a11y-already-answered-single": "The possible answers were {{allAnswers}}. You have answered this question with the answer {{answer}}.",
     "a11y-already-answered-multiple": "The possible answers were {{allAnswers}}. You have answered this question with the answers {{answers}}.",
