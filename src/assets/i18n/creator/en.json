@@ -393,7 +393,8 @@
     "percentage": "Percentage",
     "answer-indicator": "Shows the correct answers",
     "show-chart": "Shows statistics with a chart",
-    "hide-chart": "Hide chart"
+    "hide-chart": "Hide chart",
+    "no-contents": "There are no questions."
   },
   "dialog": {
     "sure": "Are you sure?",
