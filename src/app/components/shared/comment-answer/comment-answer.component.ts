@@ -5,7 +5,6 @@ import { LanguageService } from '../../../services/util/language.service';
 import { WsCommentServiceService } from '../../../services/websockets/ws-comment-service.service';
 import { CommentService } from '../../../services/http/comment.service';
 import { Comment } from '../../../models/comment';
-import { User } from '../../../models/user';
 import { AuthenticationService } from '../../../services/http/authentication.service';
 import { UserRole } from '../../../models/user-roles.enum';
 import { NotificationService } from '../../../services/util/notification.service';
@@ -25,7 +24,7 @@ export class CommentAnswerComponent implements OnInit, AfterContentInit {
   comment: Comment;
   answer: string;
   isLoading = true;
-  user: User;
+  viewRole: UserRole;
   isStudent = true;
   edit = false;
 
@@ -57,7 +56,7 @@ export class CommentAnswerComponent implements OnInit, AfterContentInit {
 
   ngAfterContentInit() {
     setTimeout(() => {
-      if (this.isStudent) {
+      if (this.viewRole === UserRole.PARTICIPANT) {
         document.getElementById('answer-text').focus();
       } else {
         document.getElementById('message-button').focus();
@@ -66,14 +65,12 @@ export class CommentAnswerComponent implements OnInit, AfterContentInit {
   }
 
   ngOnInit() {
-    this.user = this.authenticationService.getUser();
-    if (this.user.role !== UserRole.PARTICIPANT) {
-      this.isStudent = false;
-    }
     this.route.data.subscribe(data => {
       this.comment = data.comment;
       this.answer = this.comment.answer;
       this.isLoading = false;
+      this.viewRole = data.viewRole;
+      this.isStudent = this.viewRole === UserRole.PARTICIPANT;
     });
   }
 

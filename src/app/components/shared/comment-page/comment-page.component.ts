@@ -1,6 +1,7 @@
 import { AfterContentInit, Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { User } from '../../../models/user';
+import { UserRole } from '../../../models/user-roles.enum';
 import { NotificationService } from '../../../services/util/notification.service';
 import { AuthenticationService } from '../../../services/http/authentication.service';
 import { EventService } from '../../../services/util/event.service';
@@ -16,6 +17,7 @@ import { AnnounceService } from '../../../services/util/announce.service';
 export class CommentPageComponent implements OnInit, OnDestroy, AfterContentInit {
   roomId: string;
   user: User;
+  viewRole: UserRole;
 
   constructor(
     private route: ActivatedRoute,
@@ -67,6 +69,7 @@ export class CommentPageComponent implements OnInit, OnDestroy, AfterContentInit
   ngOnInit(): void {
     this.route.data.subscribe(data => {
       this.roomId = data.room.id;
+      this.viewRole = data.viewRole;
     });
     this.user = this.authenticationService.getUser();
   }

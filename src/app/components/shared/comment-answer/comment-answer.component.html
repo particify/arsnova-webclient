@@ -1,6 +1,6 @@
 <div fxLayout="column" fxLayoutAlign="center" *ngIf="!isLoading">
   <div fxLayout="row" fxLayoutAlign="center">
-    <app-comment [comment]="comment" [userRole]="user.role"></app-comment>
+    <app-comment [comment]="comment"></app-comment>
   </div>
   <button id="message-button" tabIndex="-1" (click)="announce()"
           class="visually-hidden">{{ 'comment-page.a11y-message-answer' | translate }}</button>

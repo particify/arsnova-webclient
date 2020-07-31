@@ -1,19 +1,17 @@
-import { catchError, concatMap, filter, map, take, tap } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
-import { User } from '../../models/user';
-import { BehaviorSubject, Observable, of, timer } from 'rxjs';
-import { UserRole } from '../../models/user-roles.enum';
-import { EventService } from '../util/event.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { ClientAuthentication } from '../../models/client-authentication';
+import { BehaviorSubject, Observable, of, timer } from 'rxjs';
+import { catchError, concatMap, filter, map, take, tap } from 'rxjs/operators';
 import { BaseHttpService } from './base-http.service';
 import { GlobalStorageService, STORAGE_KEYS } from '../util/global-storage.service';
+import { User } from '../../models/user';
+import { UserRole } from '../../models/user-roles.enum';
+import { EventService } from '../util/event.service';
+import { ClientAuthentication } from '../../models/client-authentication';
 import * as JwtDecode from 'jwt-decode';
 
 @Injectable()
 export class AuthenticationService extends BaseHttpService {
-  private readonly STORAGE_KEY: string = 'USER';
-  private readonly ROOM_ACCESS: string = 'ROOM_ACCESS';
   private readonly ADMIN_ROLE: string = 'ADMIN';
   private user = new BehaviorSubject<User>(undefined);
   private apiUrl = {
@@ -23,13 +21,13 @@ export class AuthenticationService extends BaseHttpService {
     user: '/user',
     registered: '/registered',
     guest: '/guest',
-    sso: '/sso'
+    sso: '/sso',
+    membership: '/_view/membership'
   };
   private httpOptions = {
     headers: new HttpHeaders({})
   };
 
-  private roomAccess = new Map();
   private redirect: string;
 
   constructor(
@@ -38,32 +36,6 @@ export class AuthenticationService extends BaseHttpService {
     private http: HttpClient
   ) {
     super();
-    const storedAccess = this.globalStorageService.getItem(STORAGE_KEYS.ROOM_ACCESS);
-    if (storedAccess) {
-      for (const cA of storedAccess) {
-        let role = UserRole.PARTICIPANT;
-        const roleAsNumber: string = cA.substring(0, 1);
-        const shortId: string = cA.substring(2);
-        if (roleAsNumber === '3') {
-          role = UserRole.CREATOR;
-        } else if (roleAsNumber === '2') {
-          role = UserRole.EXECUTIVE_MODERATOR;
-        }
-        this.roomAccess.set(shortId, role);
-      }
-    }
-    this.eventService.on<any>('RoomJoined').subscribe(payload => {
-      this.roomAccess.set(payload.id, UserRole.PARTICIPANT);
-      this.saveAccessToLocalStorage();
-    });
-    this.eventService.on<any>('RoomDeleted').subscribe(payload => {
-      this.roomAccess.delete(payload.id);
-      this.saveAccessToLocalStorage();
-    });
-    this.eventService.on<any>('RoomCreated').subscribe(payload => {
-      this.roomAccess.set(payload.id, UserRole.CREATOR);
-      this.saveAccessToLocalStorage();
-    });
   }
 
   /*
@@ -197,16 +169,6 @@ export class AuthenticationService extends BaseHttpService {
     return this.user.getValue() !== undefined;
   }
 
-  assignRole(role: UserRole): void {
-    const u = this.user.getValue();
-    u.role = role;
-    this.setUser(u);
-  }
-
-  getRole(): UserRole {
-    return this.isLoggedIn() ? this.user.getValue().role : undefined;
-  }
-
   getToken(): string {
     return this.isLoggedIn() ? this.user.getValue().token : undefined;
   }
@@ -243,34 +205,6 @@ export class AuthenticationService extends BaseHttpService {
 
   getUserAsSubject(): BehaviorSubject<User> {
     return this.user;
-  }
-
-  hasAccess(shortId: string, role: UserRole): boolean {
-    const usersRole = this.roomAccess.get(shortId);
-    return (usersRole !== undefined && (usersRole >= role));
-  }
-
-  setAccess(shortId: string, role: UserRole): void {
-    this.roomAccess.set(shortId, role);
-    this.saveAccessToLocalStorage();
-  }
-
-  checkAccess(shortId: string): void {
-    if (this.hasAccess(shortId, UserRole.CREATOR)) {
-      this.assignRole(UserRole.CREATOR);
-    } else if (this.hasAccess(shortId, UserRole.EXECUTIVE_MODERATOR)) {
-      this.assignRole(UserRole.EXECUTIVE_MODERATOR);
-    } else if (this.hasAccess(shortId, UserRole.PARTICIPANT)) {
-      this.assignRole(UserRole.PARTICIPANT);
-    }
-  }
-
-  saveAccessToLocalStorage(): void {
-    const arr = [];
-    this.roomAccess.forEach(function (key, value) {
-      arr.push(key + '_' + String(value));
-    });
-    this.globalStorageService.setItem(STORAGE_KEYS.ROOM_ACCESS, arr);
   }
 
   setRedirect(url: string) {

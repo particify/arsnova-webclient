@@ -1,39 +1,52 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot } from '@angular/router';
+import { Observable, of } from 'rxjs';
+import { tap } from 'rxjs/operators';
 import { AuthenticationService } from '../services/http/authentication.service';
-
-
 import { NotificationService } from '../services/util/notification.service';
 import { UserRole } from '../models/user-roles.enum';
 import { TranslateService } from '@ngx-translate/core';
+import { RoomMembershipService } from '../services/room-membership.service';
 
 @Injectable()
 export class AuthenticationGuard implements CanActivate {
   constructor(private authenticationService: AuthenticationService,
+              private roomMembershipService: RoomMembershipService,
               private notificationService: NotificationService,
               private translateService: TranslateService,
               private router: Router) {
   }
 
   canActivate(route: ActivatedRouteSnapshot,
-              state: RouterStateSnapshot): boolean {
+              state: RouterStateSnapshot): Observable<boolean> {
     // Get roles having access to this route
     // undefined if every logged in user should have access regardless of its role
-    const requiredRoles = route.data['roles'] as Array<UserRole>;
+    const viewRole = route.data['requiredRole'] as UserRole;
     // Allow access when user is logged in AND
     // the route doesn't require a specific role OR
     // the user's role is one of the required roles
-    if (requiredRoles && this.authenticationService.hasAccess(route.params.shortId, requiredRoles[0])) {
-      return true;
-    } else if (this.authenticationService.isLoggedIn() && !requiredRoles) {
-      return true;
+    if (this.authenticationService.isLoggedIn()) {
+      if (!viewRole) {
+        return of(true);
+      } else {
+        return this.roomMembershipService.hasAccessForRoom(route.params.shortId, viewRole).pipe(
+            tap(hasAccess => {
+              if (!hasAccess) {
+                this.handleAccessDenied();
+              }
+            }));
+      }
+    } else {
+      this.handleAccessDenied();
+      return of(false);
     }
+  }
 
+  handleAccessDenied() {
     this.translateService.get('errors.not-authorized').subscribe(msg => {
       this.notificationService.show(msg);
     });
     // TODO: redirect to error page
     this.router.navigate(['/']);
-    return false;
   }
 }

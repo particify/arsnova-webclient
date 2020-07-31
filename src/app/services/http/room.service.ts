@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Room } from '../../models/room';
 import { RoomStats } from '../../models/room-stats';
 import { ContentGroup } from '../../models/content-group';
-import { UserRole } from '../../models/user-roles.enum';
+import { RoomSummary } from '../../models/room-summary';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
@@ -25,7 +25,8 @@ export class RoomService extends BaseHttpService {
     findRooms: '/find',
     stats: '/stats',
     contentGroup: '/contentgroup',
-    v2Import: '/import/v2/room'
+    v2Import: '/import/v2/room',
+    summary: '/_view/room/summary',
   };
   private joinDate = new Date(Date.now());
 
@@ -44,11 +45,6 @@ export class RoomService extends BaseHttpService {
       properties: { ownerId: this.authService.getUser().id },
       externalFilters: {}
     }).pipe(
-      tap((rooms) => {
-        for (const r of rooms) {
-          this.authService.setAccess(r.shortId, UserRole.CREATOR);
-        }
-      }),
       catchError(this.handleError('getCreatorRooms', []))
     );
   }
@@ -59,11 +55,6 @@ export class RoomService extends BaseHttpService {
       properties: {},
       externalFilters: { inHistoryOfUserId: this.authService.getUser().id }
     }).pipe(
-      tap((rooms) => {
-        for (const r of rooms) {
-          this.authService.setAccess(r.shortId, UserRole.PARTICIPANT);
-        }
-      }),
       catchError(this.handleError('getParticipantRooms', []))
     );
   }
@@ -74,9 +65,6 @@ export class RoomService extends BaseHttpService {
     const connectionUrl = this.apiUrl.base + this.apiUrl.rooms + '/';
     room.ownerId = this.authService.getUser().id;
     return this.http.post<Room>(connectionUrl, room, httpOptions).pipe(
-      tap(returnedRoom => {
-        this.authService.setAccess(returnedRoom.shortId, UserRole.PARTICIPANT);
-      }),
       catchError(this.handleError<Room>(`add Room ${room}`))
     );
   }
@@ -87,6 +75,13 @@ export class RoomService extends BaseHttpService {
       map(room => this.parseExtensions(room)),
       tap(room => this.setRoomId(room)),
       catchError(this.handleError<Room>(`getRoom keyword=${id}`))
+    );
+  }
+
+  getRoomSummaries(ids: string[]): Observable<RoomSummary[]> {
+    const connectionUrl = `${this.apiUrl.base + this.apiUrl.summary}?ids=${ids.join(',')}`;
+    return this.http.get<RoomSummary[]>(connectionUrl).pipe(
+      catchError(this.handleError<RoomSummary[]>(`getRoomSummaries`))
     );
   }
 

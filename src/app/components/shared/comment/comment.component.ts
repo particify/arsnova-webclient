@@ -41,8 +41,8 @@ export class DateFromNow implements PipeTransform {
 
 export class CommentComponent implements OnInit {
   @Input() comment: Comment;
-  @Input() userRole: UserRole;
   @Output()
+  viewRole: UserRole;
   clickedOnTag = new EventEmitter<string>();
   isStudent = false;
   isCreator = false;
@@ -77,19 +77,22 @@ export class CommentComponent implements OnInit {
   }
 
   ngOnInit() {
-    switch (this.userRole) {
-      case UserRole.PARTICIPANT.valueOf():
-        this.isStudent = true;
-        this.roleString = 'participant';
-        break;
-      case UserRole.CREATOR.valueOf():
-        this.isCreator = true;
-        this.roleString = 'creator';
-        break;
-      case UserRole.EXECUTIVE_MODERATOR.valueOf():
-        this.isModerator = true;
-        this.roleString = 'moderator';
-    }
+    this.route.data.subscribe(data => {
+      this.viewRole = data.viewRole;
+      switch (this.viewRole) {
+        case UserRole.PARTICIPANT:
+          this.isStudent = true;
+          this.roleString = 'participant';
+          break;
+        case UserRole.CREATOR:
+          this.isCreator = true;
+          this.roleString = 'creator';
+          break;
+        case UserRole.EXECUTIVE_MODERATOR:
+          this.isModerator = true;
+          this.roleString = 'moderator';
+      }
+    });
     this.language = this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE);
     this.translateService.use(this.language);
     this.deviceType = this.globalStorageService.getItem(STORAGE_KEYS.DEVICE_TYPE);

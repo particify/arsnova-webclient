@@ -14,7 +14,7 @@ export class ContentGroupsComponent implements OnInit {
   @Input() contentGroupName: string;
   @Input() length: number;
   @Input() isLoose: boolean;
-  @Input() role: UserRole;
+  role: UserRole;
   roomShortId: string;
 
   constructor(
@@ -26,6 +26,7 @@ export class ContentGroupsComponent implements OnInit {
 
   ngOnInit() {
     this.roomShortId = this.route.snapshot.paramMap.get('shortId');
+    this.route.data.subscribe(data => this.role = data.viewRole);
   }
 
   viewContents() {

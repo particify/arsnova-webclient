@@ -63,7 +63,6 @@ export class CreateCommentComponent implements OnInit {
       comment.roomId = this.globalStorageService.getItem(STORAGE_KEYS.ROOM_ID);
       comment.body = body;
       comment.creatorId = this.data.user.id;
-      comment.createdFromLecturer = this.data.user.role === 1;
       if (this.selectedTag !== null) {
         comment.tag = this.selectedTag;
       }

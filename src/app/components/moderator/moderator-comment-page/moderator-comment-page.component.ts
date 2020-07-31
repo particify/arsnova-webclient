@@ -1,6 +1,5 @@
 import { AfterContentInit, Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { User } from '../../../models/user';
 import { NotificationService } from '../../../services/util/notification.service';
 import { AuthenticationService } from '../../../services/http/authentication.service';
 import { EventService } from '../../../services/util/event.service';
@@ -16,7 +15,6 @@ import { AnnounceService } from '../../../services/util/announce.service';
 })
 export class ModeratorCommentPageComponent implements OnInit, OnDestroy, AfterContentInit {
   roomId: string;
-  user: User;
 
   constructor(
     private route: ActivatedRoute,
@@ -56,7 +54,6 @@ export class ModeratorCommentPageComponent implements OnInit, OnDestroy, AfterCo
     this.route.data.subscribe(data => {
       this.roomId = data.room;
     });
-    this.user = this.authenticationService.getUser();
   }
 
   ngOnDestroy() {

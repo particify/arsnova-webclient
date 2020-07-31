@@ -31,7 +31,7 @@ export class SurveyPageComponent implements OnInit, OnDestroy, AfterContentInit 
 
   survey: Survey[] = [];
 
-  isOwner = false;
+  isCreator = false;
   user: User;
   roomId: string;
   shortId: string;
@@ -59,7 +59,7 @@ export class SurveyPageComponent implements OnInit, OnDestroy, AfterContentInit 
 
   @HostListener('window:keyup', ['$event'])
   keyEvent(event: KeyboardEvent) {
-    if (this.isOwner) {
+    if (this.isCreator) {
       if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit1) === true) {
         document.getElementById('toggle-button').focus();
       } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit2) === true) {
@@ -100,7 +100,7 @@ export class SurveyPageComponent implements OnInit, OnDestroy, AfterContentInit 
       this.roomId = data.room.id;
       this.shortId = data.room.shortId;
       this.loadConfig(data.room);
-      this.isOwner = this.authenticationService.hasAccess(this.room.shortId, UserRole.CREATOR);
+      this.isCreator = data.viewRole === UserRole.CREATOR;
       this.sub = this.wsFeedbackService.getFeedbackStream(this.roomId).subscribe((message: Message) => {
         this.parseIncomingMessage(message);
       });
@@ -186,7 +186,7 @@ export class SurveyPageComponent implements OnInit, OnDestroy, AfterContentInit 
   }
 
   submitAnswer(state: number) {
-    if (!this.isOwner) {
+    if (!this.isCreator) {
       this.wsFeedbackService.send(this.user.id, state, this.roomId);
     }
   }

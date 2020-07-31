@@ -47,7 +47,7 @@
     </button>
 
     <button mat-fab class="freezeButton" aria-labelledby="switch-to-list"
-            *ngIf="!searchBox.value && !search && userRole === 2 && deviceType === 'desktop'"
+            *ngIf="!searchBox.value && !search && ['EDITING_MODERATOR', 'EXECITIVE_MODERATOR'].indexOf(viewRole) !== -1 && deviceType === 'desktop'"
             (click)="switchToModerationList()" matTooltip="{{ 'comment-list.switch-to-moderation-list' | translate }}">
       <mat-icon class="freezeIcon">thumb_down_alt</mat-icon>
     </button>
@@ -140,7 +140,7 @@
 
 <div *ngIf="!isLoading">
   <app-comment *ngFor="let current of hideCommentsList ? filteredComments : comments" [comment]="current"
-               [parseVote]="getVote(current)" [userRole]="userRole" (clickedOnTag)="clickedOnTag($event)">
+               [parseVote]="getVote(current)" (clickedOnTag)="clickedOnTag($event)">
   </app-comment>
 </div>
 

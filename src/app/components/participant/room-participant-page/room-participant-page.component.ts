@@ -103,11 +103,6 @@ export class RoomParticipantPageComponent extends RoomPageComponent implements O
     this.announceService.announce('room-page.a11y-shortcuts');
   }
 
-  setRoomAccess() {
-    this.authenticationService.setAccess(this.room.shortId, UserRole.PARTICIPANT);
-    this.authenticationService.checkAccess(this.room.shortId);
-  }
-
   getFeedback() {
     this.surveyEnabled = !this.room.settings['feedbackLocked'];
     this.surveySub = this.wsFeedbackService.getFeedbackStream(this.room.id).subscribe((message: Message) => {
@@ -132,7 +127,6 @@ export class RoomParticipantPageComponent extends RoomPageComponent implements O
   initRoomData() {
     this.subscribeCommentStream();
     this.roomService.addToHistory(this.room.id);
-    this.setRoomAccess();
   }
 
   afterGroupsLoadHook() {

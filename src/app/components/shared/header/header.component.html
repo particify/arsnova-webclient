@@ -6,16 +6,16 @@
       <mat-icon class="header-icons">arrow_back</mat-icon>
     </button>
     <span class="fill-remaining-space"></span>
-    <h2 *ngIf="router.url.includes('comments') && user.role === 3 && deviceType === 'desktop'">
+    <h2 *ngIf="router.url.includes('comments') && user.role === 'CREATOR' && deviceType === 'desktop'">
       {{cTime}}
     </h2>
     <span class="fill-remaining-space"
-          *ngIf="router.url.includes('comments') && user.role === 3 && deviceType === 'desktop'"></span>
-    <button mat-icon-button class="gavel" *ngIf="router.url.includes('comments') && user.role === 0 && moderationEnabled"
+          *ngIf="router.url.includes('comments') && user.role === 'CREATOR' && deviceType === 'desktop'"></span>
+    <button mat-icon-button class="gavel" *ngIf="router.url.includes('comments') && user.role === 'PARTICIPANT' && moderationEnabled"
             #tt="matTooltip" matTooltip="{{ 'header.moderation-enabled' | translate }}" (click)="tt.toggle()">
       <mat-icon class="header-icons">gavel</mat-icon>
     </button>
-    <h2 id="shortId-header" *ngIf="router.url.includes('comments') && user.role === 3 && deviceType === 'desktop'">
+    <h2 id="shortId-header" *ngIf="router.url.includes('comments') && user.role === 'CREATOR' && deviceType === 'desktop'">
       {{'header.id' | translate}}: {{ shortId.slice(0, 4) }} {{  shortId.slice(4, 8) }}
     </h2>
     <span class="fill-remaining-space"></span>

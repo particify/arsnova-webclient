@@ -29,12 +29,12 @@ export class CommentListComponent implements OnInit, OnDestroy {
   @ViewChild('searchBox') searchField: ElementRef;
   @Input() user: User;
   @Input() roomId: string;
+  viewRole: UserRole;
   shortId: string;
   comments: Comment[] = [];
   room: Room;
   hideCommentsList = false;
   filteredComments: Comment[];
-  userRole: UserRole;
   deviceType: string;
   isSafari: boolean;
   isLoading = true;
@@ -88,19 +88,21 @@ export class CommentListComponent implements OnInit, OnDestroy {
     this.roomId = this.globalStorageService.getItem(STORAGE_KEYS.ROOM_ID);
     this.shortId = this.route.snapshot.paramMap.get('shortId');
     const userId = this.user.id;
-    this.userRole = this.user.role;
     this.currentSort = this.votedesc;
     this.initRoom();
     this.translateService.use(this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE));
     this.deviceType = this.globalStorageService.getItem(STORAGE_KEYS.DEVICE_TYPE);
     this.isSafari = this.globalStorageService.getItem(STORAGE_KEYS.IS_SAFARI);
-    if (this.userRole === UserRole.PARTICIPANT) {
-      this.voteService.getByRoomIdAndUserID(this.roomId, userId).subscribe(votes => {
-        for (const v of votes) {
-          this.commentVoteMap.set(v.commentId, v);
-        }
-      });
-    }
+    this.route.data.subscribe(data => {
+      this.viewRole = data.viewRole;
+      if (this.viewRole === UserRole.PARTICIPANT) {
+        this.voteService.getByRoomIdAndUserID(this.roomId, userId).subscribe(votes => {
+          for (const v of votes) {
+            this.commentVoteMap.set(v.commentId, v);
+          }
+        });
+      }
+    });
     this.translateService.get('comment-list.search').subscribe(msg => {
       this.searchPlaceholder = msg;
     });
@@ -191,7 +193,7 @@ export class CommentListComponent implements OnInit, OnDestroy {
   }
 
   getVote(comment: Comment): Vote {
-    if (this.userRole === 0) {
+    if (this.viewRole === UserRole.PARTICIPANT) {
       return this.commentVoteMap.get(comment.id);
     }
   }
@@ -296,7 +298,7 @@ export class CommentListComponent implements OnInit, OnDestroy {
     let message;
     this.commentService.addComment(comment).subscribe(returned => {
       if (this.directSend) {
-        if (this.userRole === 1 || this.userRole === 3) {
+        if ([UserRole.CREATOR, UserRole.EDITING_MODERATOR, UserRole.EXECUTIVE_MODERATOR].indexOf(this.viewRole) !== -1) {
           this.translateService.get('comment-list.comment-sent').subscribe(msg => {
             message = msg;
           });

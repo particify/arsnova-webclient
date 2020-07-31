@@ -64,8 +64,6 @@ export class ImportComponent implements OnInit, AfterContentInit {
           this.notificationService.show(msg1 + room.name + msg2);
         });
       });
-      this.authenticationService.setAccess(room.shortId, UserRole.CREATOR);
-      this.authenticationService.assignRole(UserRole.CREATOR);
       this.router.navigate([`creator/room/${room.shortId}`]);
     },
         error => {
