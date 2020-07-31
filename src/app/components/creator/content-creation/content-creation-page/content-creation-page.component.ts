@@ -10,6 +10,7 @@ import { ActivatedRoute } from '@angular/router';
 import { RoomService } from '../../../../services/http/room.service';
 import { AnnounceService } from '../../../../services/util/announce.service';
 import { Subject } from 'rxjs';
+import { Content } from '../../../../models/content';
 
 class ContentFormat {
   name: string;
@@ -24,7 +25,7 @@ class ContentFormat {
 
 export class ContentCreationPageComponent implements OnInit, AfterContentInit {
 
-  createEventSubject: Subject<void> = new Subject<void>();
+  createEventSubject: Subject<boolean> = new Subject<boolean>();
   question: string;
   contentGroups: string[] = [];
   lastContentGroup: string;
@@ -38,6 +39,10 @@ export class ContentCreationPageComponent implements OnInit, AfterContentInit {
   selectedFormat: ContentFormat = this.formats[0];
 
   myControl = new FormControl();
+
+  flipped = false;
+
+  content: Content;
 
   constructor(
     private translateService: TranslateService,
@@ -95,15 +100,39 @@ export class ContentCreationPageComponent implements OnInit, AfterContentInit {
     this.announceService.announce('content.a11y-content-create-shortcuts');
   }
 
-  resetInputs() {
+  reset() {
     this.question = '';
+    this.content = null;
+  }
+
+  flipBack($event) {
+    this.flipped = false;
+    if ($event) {
+      this.emitCreateEvent(true);
+    }
+    this.content = null;
+  }
+
+  saveContent($event) {
+    this.content = $event;
   }
 
   changeFormat(format: ContentFormat) {
     this.selectedFormat = format;
   }
 
-  emitCreateEvent() {
-    this.createEventSubject.next();
+  showPreview() {
+    this.emitCreateEvent(false);
+    if (this.content) {
+      this.flipped = true;
+      setTimeout(() => {
+        document.getElementById('preview-header').focus();
+      }, 300);
+    }
   }
+
+  emitCreateEvent(submit: boolean) {
+    this.createEventSubject.next(submit);
+  }
+
 }

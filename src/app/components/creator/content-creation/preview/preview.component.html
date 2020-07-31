@@ -1,0 +1,31 @@
+<h3 tabindex="0" id="preview-header" aria-labelledby="header">{{ 'content.preview' | translate }}</h3>
+<mat-card class="mat-elevation-z2">
+  <p *ngIf="content.subject !== 'Subject'">{{ content.subject }}</p>
+  <markdown tabindex="0" [data]="content.body"></markdown>
+  <mat-list *ngIf="content.format === 'CHOICE' || content.format === 'SCALE' || content.format === 'BINARY'">
+    <mat-list-item fxLayout="column" fxLayoutAlign="center" *ngFor="let answer of answerLabels">
+      <mat-checkbox *ngIf="multipleAnswers">
+        <span>{{ answer }}</span>
+      </mat-checkbox>
+      <mat-radio-button *ngIf="!multipleAnswers">
+        <span>{{ answer }}</span>
+      </mat-radio-button>
+    </mat-list-item>
+  </mat-list>
+</mat-card>
+<div fxLayout="row" fxLayoutAlign="center" fxLayoutGap="1em">
+  <button (click)="emitFlipEvent(false)" attr.aria-label="{{ 'content.a11y-leave-preview' | translate }}"
+          class="button-abort button-md"
+          mat-raised-button>
+    {{ 'content.back' | translate }}
+  </button>
+  <button (click)="emitFlipEvent(true)"
+          attr.aria-label="{{ 'content.a11y-preview-submit' | translate }}"
+          class="button-primary button-md"
+          mat-raised-button>
+    {{ 'content.create' | translate }}</button>
+</div>
+
+<div class="visually-hidden">
+  <div id="header">{{ 'content.a11y-preview-header' | translate }}</div>
+</div>

@@ -59,8 +59,4 @@ export class ContentLikertCreationComponent extends ContentCreationComponent imp
       this.isLoading = false;
     });
   }
-
-  createContent() {
-    this.submitContent(this.content);
-  }
 }

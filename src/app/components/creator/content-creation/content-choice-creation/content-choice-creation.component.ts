@@ -190,7 +190,7 @@ export class ContentChoiceCreationComponent extends ContentCreationComponent imp
     }
   }
 
-  createContent() {
+  createContent(): boolean {
     if ((this.content as ContentChoice).options.length < 2) {
       this.translationService.get('content.need-answers').subscribe(message => {
         this.notificationService.show(message);
@@ -210,6 +210,6 @@ export class ContentChoiceCreationComponent extends ContentCreationComponent imp
       return;
     }
     (this.content as ContentChoice).multiple = this.multipleCorrectAnswers;
-    this.submitContent(this.content);
+    return true;
   }
 }

@@ -346,6 +346,10 @@ div {
   font-size: 16px;
 }
 
+.button-md {
+  min-width: 120px!important;
+}
+
 .info-icon {
   color: var(--secondary);
 }
@@ -365,6 +369,8 @@ div {
 }
 
 .card-container {
+  width: 100%;
+  max-width: 832px;
   position: relative;
   -webkit-perspective: 3000px;
   -moz-perspective: 3000px;
@@ -375,10 +381,10 @@ div {
   width: 100%;
   height: 100%;
   position: relative;
-  -webkit-transition: -webkit-transform 600ms;
-  -moz-transition: -moz-transform 600ms;
-  -o-transition: -o-transform 600ms;
-  transition: transform 600ms;
+  -webkit-transition: -webkit-transform 500ms;
+  -moz-transition: -moz-transform 500ms;
+  -o-transition: -o-transform 500ms;
+  transition: all 500ms;
   -webkit-transform-origin: 50% 50%;
 }
 
@@ -405,6 +411,8 @@ div {
 .invisible-card-content {
   height: 0;
   opacity: 0;
+  pointer-events: none;
+  tab-index: -1;
 }
 
 // Badge

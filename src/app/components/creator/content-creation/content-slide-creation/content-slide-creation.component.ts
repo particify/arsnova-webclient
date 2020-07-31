@@ -39,8 +39,4 @@ export class ContentSlideCreationComponent extends ContentCreationComponent impl
       null
     );
   }
-
-  createContent() {
-    this.submitContent(this.content);
-  }
 }

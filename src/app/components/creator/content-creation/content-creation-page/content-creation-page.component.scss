@@ -48,10 +48,5 @@ form {
 }
 
 .mat-card {
-  width: 100%;
-  max-width: 800px;
-}
-
-.create-btn {
-  min-width: 120px;
+  overflow: hidden;
 }
