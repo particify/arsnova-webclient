@@ -114,6 +114,7 @@ export class RoomParticipantPageComponent extends RoomPageComponent implements O
   }
 
   initRoomData() {
+    this.prepareAttachmentData();
     this.subscribeCommentStream();
   }
 

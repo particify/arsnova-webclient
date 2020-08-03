@@ -123,6 +123,7 @@ export class RoomCreatorPageComponent extends RoomPageComponent implements OnIni
   }
 
   afterGroupsLoadHook() {
+    this.prepareAttachmentData();
     this.contentService.findContentsWithoutGroup(this.room.id).subscribe(contents => {
       this.looseContent = contents;
       this.isLoading = false;

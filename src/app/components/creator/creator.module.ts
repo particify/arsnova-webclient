@@ -31,6 +31,7 @@ import { ContentSlideCreationComponent } from './content-creation/content-slide-
 import { PreviewComponent } from './content-creation/preview/preview.component';
 import { TRANSLATION_MODULE_NAME } from '../../translate-module-name-token';
 import { TranslateHttpLoaderFactory } from '../../translate-http-loader-factory';
+import { ExtensionPointModule } from "../../../../projects/extension-point/src/lib/extension-point.module";
 
 @NgModule({
   imports: [
@@ -50,7 +51,8 @@ import { TranslateHttpLoaderFactory } from '../../translate-http-loader-factory'
       },
       isolate: true
     }),
-    CdkStepperModule
+    CdkStepperModule,
+    ExtensionPointModule
   ],
   declarations: [
     ContentChoiceCreationComponent,
