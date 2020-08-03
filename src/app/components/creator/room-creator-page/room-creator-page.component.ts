@@ -17,8 +17,6 @@ import { DialogService } from '../../../services/util/dialog.service';
 import { GlobalStorageService, STORAGE_KEYS } from '../../../services/util/global-storage.service';
 import { Content } from '../../../models/content';
 import { AnnounceService } from '../../../services/util/announce.service';
-import { Observable, Subscription } from 'rxjs';
-import { Message, IMessage } from '@stomp/stompjs';
 
 @Component({
   selector: 'app-room-creator-page',
@@ -28,10 +26,7 @@ import { Message, IMessage } from '@stomp/stompjs';
 export class RoomCreatorPageComponent extends RoomPageComponent implements OnInit, AfterContentInit {
 
   viewModuleCount = 1;
-  moderatorCommentCounter: number;
   looseContent: Content[] = [];
-  moderationCommentWatch: Observable<IMessage>;
-  moderationSub: Subscription;
 
   constructor(
     protected roomService: RoomService,
@@ -105,53 +100,21 @@ export class RoomCreatorPageComponent extends RoomPageComponent implements OnIni
     });
   }
 
+  protected unsubscribe() {
+    if (this.moderationSub) {
+      this.moderationSub.unsubscribe();
+    }
+  }
+
   announce() {
     this.announceService.announce('room-page.a11y-shortcuts');
   }
 
   afterRoomLoadHook() {
+    this.subscribeCommentStream();
     if (this.moderationEnabled) {
       this.viewModuleCount = this.viewModuleCount + 1;
-      this.commentService.countByRoomId(this.room.id, false).subscribe(commentCounter => {
-        this.moderatorCommentCounter = commentCounter;
-      });
-
-      this.commentWatch = this.wsCommentService.getCommentStream(this.room.id);
-      this.moderationCommentWatch = this.wsCommentService.getModeratorCommentStream(this.room.id);
-
-      this.sub.unsubscribe();
-
-      this.sub = this.commentWatch.subscribe((message: Message) => {
-        const msg = JSON.parse(message.body);
-        const payload = msg.payload;
-        if (msg.type === 'CommentCreated') {
-          this.commentCounter = this.commentCounter + 1;
-        } else if (msg.type === 'CommentDeleted') {
-          this.commentCounter = this.commentCounter - 1;
-        } else if (msg.type === 'CommentPatched') {
-          for (const [key, value] of Object.entries(payload.changes)) {
-            switch (key) {
-              case 'ack':
-                const isNowAck = <boolean>value;
-                if (isNowAck) {
-                  this.moderatorCommentCounter = this.moderatorCommentCounter - 1;
-                } else {
-                  this.commentCounter = this.commentCounter - 1;
-                }
-                break;
-            }
-          }
-        }
-      });
-      this.moderationSub = this.moderationCommentWatch.subscribe((message: Message) => {
-        const msg = JSON.parse(message.body);
-        const payload = msg.payload;
-        if (msg.type === 'CommentCreated') {
-          this.moderatorCommentCounter = this.moderatorCommentCounter + 1;
-        } else if (msg.type === 'CommentDeleted') {
-          this.moderatorCommentCounter = this.moderatorCommentCounter - 1;
-        }
-      });
+      this.subscribeCommentModeratorStream();
     }
   }
 
