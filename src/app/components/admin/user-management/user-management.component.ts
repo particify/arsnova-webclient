@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
-import { User } from 'app/models/user';
-import { UserService } from 'app/services/http/user.service';
-import { DialogService } from 'app/services/util/dialog.service';
-import { AdminService } from 'app/services/http/admin.service';
-import { NotificationService } from 'app/services/util/notification.service';
+import { User } from '../../../models/user';
+import { UserService } from '../../../services/http/user.service';
+import { DialogService } from '../../../services/util/dialog.service';
+import { AdminService } from '../../../services/http/admin.service';
+import { NotificationService } from '../../../services/util/notification.service';
 import { TranslateService } from '@ngx-translate/core';
 
 @Component({
