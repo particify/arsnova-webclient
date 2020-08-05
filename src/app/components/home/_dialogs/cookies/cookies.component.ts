@@ -2,7 +2,7 @@ import { AfterViewInit, Component, ElementRef, OnInit, ViewChild, Inject } from 
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { DialogConfirmActionButtonType } from '../../../shared/dialog/dialog-action-buttons/dialog-action-buttons.component';
 import { ApiConfigService } from '../../../../services/http/api-config.service';
-import { ConsentGiven, CookieCategory } from 'app/services/util/consent.service';
+import { ConsentGiven, CookieCategory } from '../../../../services/util/consent.service';
 
 @Component({
   selector: 'app-cookies',

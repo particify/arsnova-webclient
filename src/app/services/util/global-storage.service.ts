@@ -1,6 +1,6 @@
 import { Injectable, InjectionToken, Inject, Provider } from '@angular/core';
 import { ConsentService, ConsentChangeEvent } from './consent.service';
-import { StorageBackend, StorageItem, StorageItemCategory } from 'app/models/storage';
+import { StorageBackend, StorageItem, StorageItemCategory } from '../../models/storage';
 
 export const STORAGECONFIG_PROVIDER_TOKEN : InjectionToken<StorageItem> = new InjectionToken('STORAGECONFIG_PROVIDER_TOKEN');
 

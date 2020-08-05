@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
-import { Room } from 'app/models/room';
-import { RoomService } from 'app/services/http/room.service';
-import { DialogService } from 'app/services/util/dialog.service';
-import { AdminService } from 'app/services/http/admin.service';
-import { NotificationService } from 'app/services/util/notification.service';
+import { Room } from '../../../models/room';
+import { RoomService } from '../../../services/http/room.service';
+import { DialogService } from '../../../services/util/dialog.service';
+import { AdminService } from '../../../services/http/admin.service';
+import { NotificationService } from '../../../services/util/notification.service';
 import { TranslateService } from '@ngx-translate/core';
 
 @Component({

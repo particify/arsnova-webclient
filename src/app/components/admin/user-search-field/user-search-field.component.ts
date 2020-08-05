@@ -1,8 +1,8 @@
 import { Component, OnInit, Output, EventEmitter, OnDestroy, Input } from '@angular/core';
-import { UserService } from 'app/services/http/user.service';
+import { UserService } from '../../../services/http/user.service';
 import { debounceTime, takeUntil, map } from 'rxjs/operators';
 import { FormControl } from '@angular/forms';
-import { User } from 'app/models/user';
+import { User } from '../../../models/user';
 import { Subject } from 'rxjs';
 
 @Component({

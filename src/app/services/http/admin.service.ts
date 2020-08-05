@@ -3,8 +3,8 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError } from 'rxjs/operators';
 import { BaseHttpService } from './base-http.service';
 import { Observable } from 'rxjs';
-import { Room } from 'app/models/room';
-import { User } from 'app/models/user';
+import { Room } from '../../models/room';
+import { User } from '../../models/user';
 
 const httpOptions = {
   headers: new HttpHeaders({})

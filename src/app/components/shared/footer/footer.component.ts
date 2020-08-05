@@ -11,7 +11,7 @@ import { Theme } from '../../../../theme/Theme';
 import { DialogService } from '../../../services/util/dialog.service';
 import { ApiConfigService } from '../../../services/http/api-config.service';
 import { GlobalStorageService, STORAGE_KEYS } from '../../../services/util/global-storage.service';
-import { ConsentService } from 'app/services/util/consent.service';
+import { ConsentService } from '../../../services/util/consent.service';
 
 @Component({
   selector: 'app-footer',

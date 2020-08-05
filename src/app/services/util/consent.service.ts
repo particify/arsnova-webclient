@@ -4,8 +4,8 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError } from 'rxjs/operators';
 import { ApiConfigService } from '../http/api-config.service';
 import { MatDialog } from '@angular/material/dialog';
-import { CookiesComponent } from 'app/components/home/_dialogs/cookies/cookies.component';
-import { StorageItemCategory } from 'app/models/storage';
+import { CookiesComponent } from '../../components/home/_dialogs/cookies/cookies.component';
+import { StorageItemCategory } from '../../models/storage';
 
 export const CONSENT_VERSION = 1;
 

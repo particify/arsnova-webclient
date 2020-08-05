@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ConsentService } from './consent.service';
-import { StorageItemCategory } from 'app/models/storage';
+import { StorageItemCategory } from '../../models/storage';
 
 
 @Injectable()
