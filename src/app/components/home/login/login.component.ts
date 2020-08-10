@@ -1,6 +1,6 @@
 import { AfterContentInit, Component, OnChanges, SimpleChanges } from '@angular/core';
 import { AuthenticationService } from '../../../services/http/authentication.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { NotificationService } from '../../../services/util/notification.service';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { MatDialog } from '@angular/material/dialog';
@@ -48,7 +48,8 @@ export class LoginComponent implements AfterContentInit, OnChanges {
               public dialog: MatDialog,
               public eventService: EventService,
               private apiConfigService: ApiConfigService,
-              private dialogService: DialogService) {
+              private dialogService: DialogService,
+              private route: ActivatedRoute) {
   }
 
   ngAfterContentInit() {
@@ -78,6 +79,13 @@ export class LoginComponent implements AfterContentInit, OnChanges {
         }
       });
     }
+    const registeredUserData = history.state.data;
+      if (registeredUserData && registeredUserData.username && registeredUserData.password) {
+        this.usernameFormControl.setValue(registeredUserData.username);
+        this.passwordFormControl.setValue(registeredUserData.password);
+        this.username = registeredUserData.username;
+        this.password = registeredUserData.password;
+      }
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -157,14 +165,6 @@ export class LoginComponent implements AfterContentInit, OnChanges {
   }
 
   openRegisterDialog(): void {
-    const dialogRef = this.dialogService.openRegisterDialog();
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.usernameFormControl.setValue(result.username);
-        this.passwordFormControl.setValue(result.password);
-        this.username = result.username;
-        this.password = result.password;
-      }
-    });
+    this.router.navigate(['register']);
   }
 }

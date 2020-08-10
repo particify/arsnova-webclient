@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
-import { RegisterComponent } from './components/home/_dialogs/register/register.component';
+import { RegisterComponent } from './components/home/register/register.component';
 import { PasswordResetComponent } from './components/home/_dialogs/password-reset/password-reset.component';
 import { AppRoutingModule } from './app-routing.module';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';

@@ -2,7 +2,7 @@ import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { Room } from '../../../models/room';
 import { RoomService } from '../../../services/http/room.service';
 import { Router } from '@angular/router';
-import { RegisterErrorStateMatcher } from '../../home/_dialogs/register/register.component';
+import { RegisterErrorStateMatcher } from '../../home/register/register.component';
 import { FormControl, Validators } from '@angular/forms';
 import { NotificationService } from '../../../services/util/notification.service';
 import { TranslateService } from '@ngx-translate/core';

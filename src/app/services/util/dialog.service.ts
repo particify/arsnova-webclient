@@ -15,7 +15,6 @@ import { StatisticHelpComponent } from '../../components/shared/_dialogs/statist
 import { CookiesComponent } from '../../components/home/_dialogs/cookies/cookies.component';
 import { OverlayComponent } from '../../components/home/_dialogs/overlay/overlay.component';
 import { PasswordResetComponent } from '../../components/home/_dialogs/password-reset/password-reset.component';
-import { RegisterComponent } from '../../components/home/_dialogs/register/register.component';
 import { UserActivationComponent } from '../../components/home/_dialogs/user-activation/user-activation.component';
 import { Content } from '../../models/content';
 import { CookieCategory } from './consent.service';
@@ -147,12 +146,6 @@ export class DialogService {
 
   openPasswordResetDialog(): void {
     this.dialog.open(PasswordResetComponent, {
-      width: this.size.xsmall
-    });
-  }
-
-  openRegisterDialog(): MatDialogRef<RegisterComponent> {
-    return this.dialog.open(RegisterComponent, {
       width: this.size.xsmall
     });
   }

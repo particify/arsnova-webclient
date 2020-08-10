@@ -7,6 +7,7 @@ import { DirectEntryComponent } from './components/shared/direct-entry/direct-en
 import { LoginComponent } from './components/home/login/login.component';
 import { ImportComponent } from './components/home/import/import.component';
 import { AuthenticationGuard } from './guards/authentication.guard';
+import { RegisterComponent } from './components/home/register/register.component';
 
 const routes: Routes = [
   {
@@ -21,6 +22,10 @@ const routes: Routes = [
   {
     path: 'login',
     component: LoginComponent
+  },
+  {
+    path: 'register',
+    component: RegisterComponent
   },
   {
     path: 'user',

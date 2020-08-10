@@ -350,6 +350,11 @@ div {
   color: var(--secondary);
 }
 
+.login-button {
+  min-width: 200px!important;
+  margin: 5px 0;
+}
+
 // Icons
 
 .mat-icon {
@@ -405,6 +410,11 @@ div {
 .invisible-card-content {
   height: 0;
   opacity: 0;
+}
+
+.invisible-card {
+  box-shadow: none!important;
+  background-color: var(--background)!important;
 }
 
 // Badge
