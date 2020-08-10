@@ -42,6 +42,9 @@ export class ContentCreationPageComponent implements OnInit, AfterContentInit {
 
   myControl = new FormControl();
 
+  attachmentData: any;
+  linkAttachmentsSubject: Subject<string> = new Subject<string>();
+
   flipped = false;
 
   content: Content;
@@ -97,6 +100,7 @@ export class ContentCreationPageComponent implements OnInit, AfterContentInit {
           });
         }
       });
+      this.prepareAttachmentData(data.room.id);
     });
     this.translateService.use(this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE));
   }
@@ -142,5 +146,18 @@ export class ContentCreationPageComponent implements OnInit, AfterContentInit {
 
   updateTextContainsImage(text: string) {
     this.textContainsImage = this.formattingService.containsTextAnImage(text);
+  }
+
+  linkAttachments($event) {
+    this.linkAttachmentsSubject.next($event);
+  }
+
+  prepareAttachmentData(roomId: string) {
+    this.attachmentData = {
+      'eventsSubject': this.linkAttachmentsSubject,
+      'refType': 'content',
+      'roomId': roomId,
+      'detailedView': false
+    };
   }
 }

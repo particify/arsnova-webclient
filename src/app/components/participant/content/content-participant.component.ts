@@ -21,6 +21,7 @@ export class ContentParticipantComponent implements OnInit {
   shortId: string;
   contentGroupName: string;
   flipped: boolean;
+  extensionData: any;
 
   constructor(
     protected authenticationService: AuthenticationService,
