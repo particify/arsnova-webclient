@@ -9,6 +9,8 @@ import { CommentListComponent } from '../../comment-list/comment-list.component'
 import { EventService } from '../../../../services/util/event.service';
 import { GlobalStorageService, STORAGE_KEYS } from '../../../../services/util/global-storage.service';
 import { Subject } from 'rxjs';
+import { CommentService } from "../../../../services/http/comment.service";
+import { LanguageService } from "../../../../services/util/language.service";
 
 export interface DialogData {
   auth: ClientAuthentication;
@@ -25,8 +27,7 @@ export class CreateCommentComponent implements OnInit {
 
   comment: Comment;
   selectedTag: string;
-  imageLinks: string[] = [];
-  eventsSubject: Subject<void> = new Subject<void>();
+  eventsSubject: Subject<string> = new Subject<string>();
   eventsWrapper: any;
 
 
@@ -40,14 +41,20 @@ export class CreateCommentComponent implements OnInit {
     private translationService: TranslateService,
     public eventService: EventService,
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
-    private globalStorageService: GlobalStorageService
+    private globalStorageService: GlobalStorageService,
+    private commentService: CommentService,
+    private notificationService: NotificationService,
+    private langService: LanguageService
   ) {
+    langService.langEmitter.subscribe(lang => translateService.use(lang));
   }
 
   ngOnInit() {
     this.translateService.use(this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE));
     this.eventsWrapper = {
-      "eventsSubject": this.eventsSubject
+      'eventsSubject': this.eventsSubject,
+      'roomId': this.data.roomId,
+      'userId': this.data.user.id
     };
   }
 
@@ -67,24 +74,43 @@ export class CreateCommentComponent implements OnInit {
     return true;
   }
 
+  send(comment: Comment): void {
+    let message;
+    this.commentService.addComment(comment).subscribe(comment => {
+      this.eventsSubject.next(comment.id);
+      if (this.data.directSend) {
+        if (this.data.user.role === 1 || this.data.user.role === 3) {
+          this.translateService.get('dialog.comment-sent').subscribe(msg => {
+            message = msg;
+          });
+          comment.ack = true;
+        } else {
+          this.translateService.get('dialog.comment-sent-to-moderator').subscribe(msg => {
+            message = msg;
+          });
+        }
+      } else {
+        this.translateService.get('dialog.comment-sent').subscribe(msg => {
+          message = msg;
+        });
+      }
+      this.notificationService.show(message);
+    });
+  }
+
   closeDialog(body: string) {
     if (this.checkInputData(body) === true) {
       const comment = new Comment();
       comment.roomId = this.globalStorageService.getItem(STORAGE_KEYS.ROOM_ID);
       comment.body = body;
       comment.creatorId = this.data.auth.userId;
-      comment.imageLinks = this.imageLinks;
       if (this.selectedTag !== null) {
         comment.tag = this.selectedTag;
       }
-      this.dialogRef.close(comment);
+      this.send(comment);
+      this.dialogRef.close();
     }
   }
-
-  receiveImageLinks($event) {
-    this.imageLinks = $event;
-  }
-
 
   /**
    * Returns a lambda which closes the dialog on call.

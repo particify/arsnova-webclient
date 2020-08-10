@@ -60,6 +60,7 @@ export class CommentComponent implements OnInit {
   roleString: string;
   userId: string;
   imageLinks: any;
+  extensionData: any;
 
   constructor(
     protected authenticationService: AuthenticationService,
@@ -110,8 +111,10 @@ export class CommentComponent implements OnInit {
     this.translateService.use(this.language);
     this.deviceType = this.globalStorageService.getItem(STORAGE_KEYS.DEVICE_TYPE);
     this.inAnswerView = !this.router.url.includes('comments');
-    this.imageLinks = {
-      "imageLinks": this.comment.imageLinks
+    this.extensionData = {
+      'refId': this.comment.id,
+      'detailedView': false,
+      'pureImageView': true
     }
   }
 

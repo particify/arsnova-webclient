@@ -16,7 +16,6 @@ export class Comment {
   ack: boolean;
   tag: string;
   answer: string;
-  imageLinks: string[];
 
   constructor(roomId: string = '',
               creatorId: string = '',
@@ -30,8 +29,7 @@ export class Comment {
               highlighted: boolean = false,
               ack: boolean = true,
               tag: string = '',
-              answer: string = '',
-              imageLinks: string[] = []) {
+              answer: string = '') {
     this.id = '';
     this.roomId = roomId;
     this.creatorId = creatorId;
@@ -47,6 +45,5 @@ export class Comment {
     this.ack = ack;
     this.tag = tag;
     this.answer = answer;
-    this.imageLinks = imageLinks;
   }
 }
