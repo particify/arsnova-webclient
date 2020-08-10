@@ -17,16 +17,6 @@
 
     <mat-form-field class="input-block">
       <input (focus)="eventService.makeFocusOnInputTrue()" (blur)="eventService.makeFocusOnInputFalse()"
-             matInput type="email" #userName2 [formControl]="username2FormControl"
-             [errorStateMatcher]="matcher" aria-labelledby="register-email-description-repeat"/>
-      <mat-placeholder>{{ 'register.email-verify' | translate }}</mat-placeholder>
-      <mat-error *ngIf="username2FormControl.hasError('emailIsEqual') && !username2FormControl.hasError('required')">
-        {{ 'register.email-unmatch' | translate }}
-      </mat-error>
-    </mat-form-field>
-
-    <mat-form-field class="input-block">
-      <input (focus)="eventService.makeFocusOnInputTrue()" (blur)="eventService.makeFocusOnInputFalse()"
              matInput type="password" #userPassword1
              [formControl]="password1FormControl" [errorStateMatcher]="matcher"
              aria-labelledby="register-password-description">
@@ -50,7 +40,7 @@
       </mat-error>
     </mat-form-field>
       <div fxLayout="column" fxLayoutAlign="center center">
-        <button class="button-primary login-button" mat-raised-button (click)="register(userName.value, userPassword1.value)"
+        <button class="button-primary login-button" mat-raised-button type="submit"
                 aria-labelledby="login-description">
           {{ 'register.register' | translate }}
         </button>
@@ -61,7 +51,6 @@
 
 <div class="visually-hidden">
   <div id="register-email-description">{{ 'register.email-description' | translate }}</div>
-  <div id="register-email-description-repeat">{{ 'register.email-description-repeat' | translate }}</div>
   <div id="register-password-description">{{ 'register.password-description' | translate }}</div>
   <div id="register-password-description-repeat">{{ 'register.password-description-repeat' | translate }}</div>
 </div>
