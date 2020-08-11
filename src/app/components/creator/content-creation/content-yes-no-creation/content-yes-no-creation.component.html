@@ -1,15 +1,14 @@
-<form (ngSubmit)="createContent()" fxLayout="column" fxLayoutAlign="start center">
-  <h4>{{ 'content.correct-answer' | translate }}</h4>
-  <mat-radio-group [(ngModel)]="yesno" [ngModelOptions]="{standalone: true}" fxLayout="column"
+<form (ngSubmit)="createContent()" fxLayout="column" fxLayoutAlign="start">
+  <mat-radio-group [(ngModel)]="yesno" [ngModelOptions]="{ standalone: true }" fxLayout="column"
                    fxLayoutAlign="center" fxLayoutGap="20px">
+    <mat-radio-button [value]=null [checked]=false aria-labelledby="answer-neither">
+      {{ 'content.answer-neither' | translate }}
+    </mat-radio-button>
     <mat-radio-button [value]=true [checked]=true aria-labelledby="answer-yes">
       {{ 'content.answer-yes' | translate }}
     </mat-radio-button>
     <mat-radio-button [value]=false [checked]=false aria-labelledby="answer-no">
       {{ 'content.answer-no' | translate }}
-    </mat-radio-button>
-    <mat-radio-button [value]=null [checked]=false aria-labelledby="answer-neither">
-      {{ 'content.answer-neither' | translate }}
     </mat-radio-button>
   </mat-radio-group>
 </form>
