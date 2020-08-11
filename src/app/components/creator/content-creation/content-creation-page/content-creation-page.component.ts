@@ -32,7 +32,8 @@ export class ContentCreationPageComponent implements OnInit, AfterContentInit {
     { name: 'choice', icon: 'format_list_bulleted' },
     { name: 'likert', icon: 'mood' },
     { name: 'binary', icon: 'dns' },
-    { name: 'text', icon: 'description' }
+    { name: 'text', icon: 'description' },
+    { name: 'slide', icon: 'info' }
   ];
   selectedFormat: ContentFormat = this.formats[0];
 

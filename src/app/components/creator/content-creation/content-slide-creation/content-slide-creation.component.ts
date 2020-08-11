@@ -1,20 +1,20 @@
 import { Component, OnInit } from '@angular/core';
-import { ContentText } from '../../../../models/content-text';
+import { ContentCreationComponent } from '../content-creation/content-creation.component';
 import { ContentService } from '../../../../services/http/content.service';
 import { NotificationService } from '../../../../services/util/notification.service';
 import { TranslateService } from '@ngx-translate/core';
 import { RoomService } from '../../../../services/http/room.service';
 import { GlobalStorageService } from '../../../../services/util/global-storage.service';
 import { ContentGroupService } from '../../../../services/http/content-group.service';
-import { ContentCreationComponent } from '../content-creation/content-creation.component';
+import { ContentText } from '../../../../models/content-text';
 import { ContentType } from '../../../../models/content-type.enum';
 
 @Component({
-  selector: 'app-content-text-creator',
-  templateUrl: './content-text-creation.component.html',
-  styleUrls: ['./content-text-creation.component.scss']
+  selector: 'app-content-slide-creation',
+  templateUrl: './content-slide-creation.component.html',
+  styleUrls: ['./content-slide-creation.component.scss']
 })
-export class ContentTextCreationComponent extends ContentCreationComponent implements OnInit {
+export class ContentSlideCreationComponent extends ContentCreationComponent implements OnInit {
 
   constructor(
     protected contentService: ContentService,
@@ -35,7 +35,7 @@ export class ContentTextCreationComponent extends ContentCreationComponent imple
       '',
       '',
       [],
-      ContentType.TEXT,
+      ContentType.SLIDE,
       null
     );
   }

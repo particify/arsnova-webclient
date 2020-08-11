@@ -114,6 +114,7 @@
     "a11y-format-likert": "Select the format 'Likert'.",
     "a11y-format-binary": "Select the format 'Yes / No'.",
     "a11y-format-text": "Select the format 'Text'.",
+    "a11y-format-slide": "Select the format 'Slide'.",
     "a11y-single-choice": "Currently you've chosen the format Single-Choice. Switch to multiple-choice with the arrow keys.",
     "a11y-multiple-choice": "Currently you've chosen the format multiple choice. Switch to Single-Choice with the arrow keys.",
     "a11y-answer-yes": "Currently the answer to this question is 'Yes'. Change to 'No' with the arrow keys.",
@@ -160,7 +161,9 @@
     "all-answers-deleted": "Answers of this collection got deleted.",
     "at-least-one": "In multiple choice mode you have to select at least 1 true answer.",
     "body": "Question",
+    "body-neutral": "Content",
     "enter-body": "Enter your question here",
+    "enter-body-neutral": "Enter your content here",
     "changes-made": "Changes are made.",
     "collection": "Collection",
     "choose-collection": "Select a collection",
@@ -223,10 +226,12 @@
     "format-likert": "Likert",
     "format-binary": "Yes / No",
     "format-text": "Text",
+    "format-slide": "Slide",
     "format-choice-description": "Participants can choose from several answer options. There can be one or more correct answers.",
     "format-likert-description": "One of the predefined answers can be selected.",
     "format-binary-description": "It can be answered with \"Yes\" or \"No\". None of the options must be correct.",
-    "format-text-description": "The participants can answer the question with a text input.",
+    "format-text-description": "Participants can answer the question with a text entry.",
+    "format-slide-description": "Slides are used to present information.",
     "multiple-answers-allowed": "Allow to select multiple answers",
     "no-correct-answer": "Do not set correct answers"
   },
@@ -388,7 +393,8 @@
     "percentage": "Percentage",
     "answer-indicator": "Shows the correct answers",
     "show-chart": "Shows statistics with a chart",
-    "hide-chart": "Hide chart"
+    "hide-chart": "Hide chart",
+    "no-contents": "There are no questions."
   },
   "dialog": {
     "sure": "Are you sure?",

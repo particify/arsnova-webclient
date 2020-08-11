@@ -4,5 +4,6 @@ export enum ContentType {
   SCALE = 'SCALE',
   NUMBER = 'NUMBER',
   TEXT = 'TEXT',
-  GRID = 'GRID'
+  GRID = 'GRID',
+  SLIDE = 'SLIDE'
 }

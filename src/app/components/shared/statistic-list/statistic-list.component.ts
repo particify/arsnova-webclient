@@ -68,7 +68,6 @@ export class StatisticListComponent implements OnInit {
     private globalStorageService: GlobalStorageService,
     private notificationService: NotificationService,
     private dialogService: DialogService
-
   ) {
     this.deviceType = this.globalStorageService.getItem(STORAGE_KEYS.DEVICE_TYPE);
     langService.langEmitter.subscribe(lang => translateService.use(lang));
@@ -90,13 +89,17 @@ export class StatisticListComponent implements OnInit {
   }
 
   goToStats(id: string) {
-    const contentIndex = this.contents.map(function (content) { return content.id; } ).indexOf(id);
+    const contentIndex = this.contents.map(function (content) {
+      return content.id;
+    }).indexOf(id);
     this.router.navigate([`/creator/room/${this.roomId}/group/${this.contentGroup.name}/statistics/${contentIndex + 1}`]);
     this.globalStorageService.setItem(STORAGE_KEYS.LAST_GROUP, this.contentGroup.name);
   }
 
   getData(contents: Content[]) {
-    this.contents = contents;
+    this.contents = contents.filter(content => {
+      return content.format !== ContentType.SLIDE;
+    });
     const length = this.contents.length;
     let percent;
     this.dataSource = new Array<ContentStatistic>(length);
@@ -127,8 +130,8 @@ export class StatisticListComponent implements OnInit {
             this.total = this.status.empty;
           }
         });
-      } else {
-          this.contentAnswerService.getAnswers(this.contents[i].id).subscribe(answers => {
+      } else if (this.contents[i].format === ContentType.TEXT) {
+        this.contentAnswerService.getAnswers(this.contents[i].id).subscribe(answers => {
           let count = 0;
           for (const answer of answers) {
             if (answer.body === undefined) {
@@ -139,7 +142,7 @@ export class StatisticListComponent implements OnInit {
           this.dataSource[i].counts = answers.length - count;
           this.dataSource[i].percent = this.status.text;
           this.dataSource[i].contentId = this.contents[i].id;
-          });
+        });
       }
     }
     this.isLoading = false;
@@ -166,7 +169,9 @@ export class StatisticListComponent implements OnInit {
   }
 
   evaluateSingle(options: AnswerOption[], indCounts: number[]): number {
-    const maxPoints = Math.max.apply(Math, options.map(function(option) { return option.points; }));
+    const maxPoints = Math.max.apply(Math, options.map(function (option) {
+      return option.points;
+    }));
     if (maxPoints > 0) {
       let correctCounts = 0;
       let totalCounts = 0;

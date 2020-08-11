@@ -10,7 +10,11 @@
                 content.format === ContentType.BINARY">
         </app-content-choice-participant>
         <app-content-text-participant (message)="receiveSentStatus($event, i)" [content]="content" [index]="i"
-                                      *ngIf="content.format === ContentType.TEXT"></app-content-text-participant>
+                                      *ngIf="content.format === ContentType.TEXT">
+        </app-content-text-participant>
+        <app-content-slide-participant [content]="content" [index]="i"
+                                      *ngIf="content.format === ContentType.SLIDE">
+        </app-content-slide-participant>
       </div>
     </cdk-step>
   </app-stepper>

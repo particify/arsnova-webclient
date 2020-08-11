@@ -30,6 +30,7 @@ import { GroupContentComponent } from './group-content/group-content.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { CdkStepperModule } from '@angular/cdk/stepper';
 import { ContentCreationComponent } from './content-creation/content-creation/content-creation.component';
+import { ContentSlideCreationComponent } from './content-creation/content-slide-creation/content-slide-creation.component';
 
 @NgModule({
   imports: [
@@ -70,7 +71,8 @@ import { ContentCreationComponent } from './content-creation/content-creation/co
     SettingsComponent,
     SettingsPageComponent,
     GroupContentComponent,
-    ContentCreationComponent
+    ContentCreationComponent,
+    ContentSlideCreationComponent
   ]
 })
 export class CreatorModule {

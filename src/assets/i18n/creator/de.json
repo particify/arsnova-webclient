@@ -114,6 +114,7 @@
     "a11y-format-likert": "Wählt das Format 'Likert' aus.",
     "a11y-format-binary": "Wählt das Format 'Ja / Nein' aus.",
     "a11y-format-text": "Wählt das Format 'Text' aus.",
+    "a11y-format-slide": "Wählt das Format 'Folie' aus.",
     "a11y-single-choice": "Momentan hast du was Format Single-Choice ausgewählt. Wechsle zu Multiple-Choice mit den Pfeiltasten.",
     "a11y-multiple-choice": "Momentan hast du was Format Multiple-Choice ausgewählt. Wechsle zu Single-Choice mit den Pfeiltasten.",
     "a11y-answer-yes": "Momentan ist die Frage mit 'Ja' beantwortet.",
@@ -160,7 +161,9 @@
     "all-answers-deleted": "Antworten dieser Sammlung wurden gelöscht.",
     "at-least-one": "Im Multiple-Choice-Modus muss es mindestens eine richtige Antwort geben.",
     "body": "Frage",
+    "body-neutral": "Inhalt",
     "enter-body": "Gib hier deine Frage ein",
+    "enter-body-neutral": "Gib hier deinen Inhalt ein",
     "changes-made": "Änderungen gespeichert.",
     "collection": "Sammlung",
     "choose-collection": "Wähle eine Sammlung",
@@ -223,10 +226,12 @@
     "format-likert": "Likert",
     "format-binary": "Ja / Nein",
     "format-text": "Freitext",
+    "format-slide": "Folie",
     "format-choice-description": "Die Teilnehmer können aus mehreren Antwortoptionen auswählen. Es kann eine oder mehrere richtige Antworten geben.",
     "format-likert-description": "Es kann eine der vordefinierten Antworten ausgewählt werden.",
     "format-binary-description": "Es kann mit \"Ja\" oder \"Nein\" geantwortet werden. Dabei muss keine der Möglichkeiten korrekt sein.",
     "format-text-description": "Die Teilnehmer können mit einer Texteingabe auf die Frage antworten.",
+    "format-slide-description": "Folien dienen zur Darstellung von Informationen.",
     "multiple-answers-allowed": "Mehrfachauswahl für Antworten erlauben",
     "no-correct-answer": "Keine richtigen Antworten festlegen"
   },
@@ -388,7 +393,8 @@
     "percentage": "Prozent",
     "answer-indicator": "Zeigt die richtigen Antworten",
     "show-chart": "Zeige die Statistiken in einem Diagramm",
-    "hide-chart": "Verstecke das Diagramm"
+    "hide-chart": "Verstecke das Diagramm",
+    "no-contents": "Es sind keine Fragen vorhanden."
   },
   "dialog": {
     "sure": "Bist du sicher?",

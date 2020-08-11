@@ -10,6 +10,7 @@ export class ContentText extends Content {
               subject: string,
               body: string,
               groups: string[],
+              format: ContentType,
               state: ContentState) {
     super(id,
       revision,
@@ -17,7 +18,7 @@ export class ContentText extends Content {
       subject,
       body,
       groups,
-      ContentType.TEXT,
+      format,
       new Map(),
       state);
   }
