@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
 import { ErrorStateMatcher } from '@angular/material/core';
-import { MatDialogRef } from '@angular/material/dialog';
 import { FormControl, FormGroupDirective, NgForm, Validators } from '@angular/forms';
-import { AuthenticationService } from '../../../../services/http/authentication.service';
-import { NotificationService } from '../../../../services/util/notification.service';
+import { AuthenticationService } from '../../../services/http/authentication.service';
+import { NotificationService } from '../../../services/util/notification.service';
 import { TranslateService } from '@ngx-translate/core';
-import { EventService } from '../../../../services/util/event.service';
+import { EventService } from '../../../services/util/event.service';
+import { Router } from '@angular/router';
 
 export class RegisterErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
@@ -61,20 +61,13 @@ export class RegisterComponent {
   password2FormControl = new FormControl('', [Validators.required, validatePassword(this.password1FormControl)]);
 
   matcher = new RegisterErrorStateMatcher();
+  deviceWidth = innerWidth;
 
   constructor(private translationService: TranslateService,
               public authenticationService: AuthenticationService,
               public notificationService: NotificationService,
-              public dialogRef: MatDialogRef<RegisterComponent>,
-              public eventService: EventService) {
-  }
-
-
-  /**
-   * Closes the register dialog on call.
-   */
-  closeDialog(): void {
-    this.dialogRef.close([]);
+              public eventService: EventService,
+              private router: Router) {
   }
 
   register(username: string, password: string): void {
@@ -82,12 +75,11 @@ export class RegisterComponent {
       !this.username2FormControl.hasError('required') && !this.username2FormControl.hasError('emailIsEqual') &&
       !this.password1FormControl.hasError('required') &&
       !this.password2FormControl.hasError('required') && !this.password2FormControl.hasError('passwordIsEqual')) {
-      this.authenticationService.register(username, password).subscribe(
-        (result) => {
-          this.translationService.get('register.register-successful').subscribe(message => {
-            this.notificationService.show(message);
-          });
-          this.dialogRef.close({ username: username, password: password });
+      this.authenticationService.register(username, password).subscribe(result => {
+        this.router.navigate(['login'], { state: { data: { username: username, password: password } } });
+        this.translationService.get('register.register-successful').subscribe(message => {
+          this.notificationService.show(message);
+        });
         },
         err => {
           this.translationService.get('register.register-request-error').subscribe(message => {
@@ -100,20 +92,5 @@ export class RegisterComponent {
         this.notificationService.show(message);
       });
     }
-  }
-
-  /**
-   * Returns a lambda which closes the dialog on call.
-   */
-  buildCloseDialogActionCallback(): () => void {
-    return () => this.closeDialog();
-  }
-
-
-  /**
-   * Returns a lambda which executes the dialog dedicated action on call.
-   */
-  buildRegisterActionCallback(userName: HTMLInputElement, password: HTMLInputElement): () => void {
-    return () => this.register(userName.value, password.value);
   }
 }

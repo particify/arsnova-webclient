@@ -1,5 +1,5 @@
-<div *ngIf="!isLoading" class="container" fxLayout="column" fxLayoutAlign="center center" fxFill>
-  <mat-card fxLayout="column" fxLayoutAlign="center center" [ngClass]="{'mobile': deviceWidth < 500}">
+<div *ngIf="!isLoading"  class="container login-card" fxLayout="column" fxLayoutAlign="center center" fxFill>
+  <mat-card fxLayout="column" fxLayoutAlign="center center" [ngClass]="{'invisible-card': deviceWidth < 500}">
     <button *ngFor="let provider of ssoProviders" (click)="loginViaSso(provider.id)" class="button-primary"
             id="{{provider.title}}-button" mat-raised-button type="button"
             attr.aria-label="{{ 'login.a11y-sso-login' | translate:{provider: provider.title} }}">
@@ -29,7 +29,7 @@
           *ngIf="passwordFormControl.hasError('required')">{{ 'login.password-required' | translate }}</mat-error>
       </mat-form-field>
       <div fxLayout="column" fxLayoutAlign="center center">
-        <button *ngIf="allowDbLogin" class="button-primary" mat-raised-button (click)="login()"
+        <button *ngIf="allowDbLogin" class="button-primary login-button" mat-raised-button (click)="login()"
                 aria-labelledby="login-description">
           {{ 'login.login' | translate }}
         </button>
