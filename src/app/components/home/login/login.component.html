@@ -36,7 +36,7 @@
       </div>
       <div *ngIf="allowDbLogin" fxLayout="row">
         <span class="fill-remaining-space"></span>
-        <button mat-button class="forgot-pw" (click)="openPasswordDialog(); $event.preventDefault();
+        <button mat-button class="forgot-pw" (click)="navToPasswordReset(); $event.preventDefault();
      $event.stopPropagation();" aria-labelledby="forgot-pw">
           {{ 'login.password-reset' | translate }}
         </button>

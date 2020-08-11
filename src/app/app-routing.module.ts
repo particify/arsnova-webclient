@@ -8,6 +8,8 @@ import { LoginComponent } from './components/home/login/login.component';
 import { ImportComponent } from './components/home/import/import.component';
 import { AuthenticationGuard } from './guards/authentication.guard';
 import { RegisterComponent } from './components/home/register/register.component';
+import { PasswordResetComponent } from './components/home/password-reset/password-reset.component';
+import { RequestPasswordResetComponent } from './components/home/request-password-reset/request-password-reset.component';
 
 const routes: Routes = [
   {
@@ -26,6 +28,14 @@ const routes: Routes = [
   {
     path: 'register',
     component: RegisterComponent
+  },
+  {
+    path: 'password-reset/:email',
+    component: PasswordResetComponent
+  },
+  {
+    path: 'request-password-reset',
+    component: RequestPasswordResetComponent
   },
   {
     path: 'user',
