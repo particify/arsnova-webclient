@@ -31,23 +31,6 @@ export function validatePassword(password1: FormControl) {
   };
 }
 
-function validateEmail(email1: FormControl) {
-  return (formControl: FormControl) => {
-    const email1Value = email1.value;
-    const email2Value = formControl.value;
-
-    if (email1Value !== email2Value) {
-      return {
-        emailIsEqual: {
-          isEqual: false
-        }
-      };
-    } else {
-      return null;
-    }
-  };
-}
-
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
@@ -56,7 +39,6 @@ function validateEmail(email1: FormControl) {
 export class RegisterComponent {
 
   usernameFormControl = new FormControl('', [Validators.required, Validators.email]);
-  username2FormControl = new FormControl('', [Validators.required, validateEmail(this.usernameFormControl)]);
   password1FormControl = new FormControl('', [Validators.required]);
   password2FormControl = new FormControl('', [Validators.required, validatePassword(this.password1FormControl)]);
 
@@ -72,7 +54,6 @@ export class RegisterComponent {
 
   register(username: string, password: string): void {
     if (!this.usernameFormControl.hasError('required') && !this.usernameFormControl.hasError('email') &&
-      !this.username2FormControl.hasError('required') && !this.username2FormControl.hasError('emailIsEqual') &&
       !this.password1FormControl.hasError('required') &&
       !this.password2FormControl.hasError('required') && !this.password2FormControl.hasError('passwordIsEqual')) {
       this.authenticationService.register(username, password).subscribe(result => {
