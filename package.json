@@ -39,6 +39,7 @@
     "rxjs": "^6.5.5",
     "tslib": "^2.0.0",
     "tslint-eslint-rules": "^5.4.0",
+    "typeface-roboto": "^0.0.75",
     "typescript-map": "0.0.7",
     "zone.js": "~0.10.3"
   },
