@@ -1,3 +1,5 @@
+@import 'src/styles';
+
 .mat-card {
   width: 100%;
 }
@@ -62,7 +64,7 @@
 .answer-label {
   color: var(--on-surface);
   font-size: calc(24px + 0.5vw);
-  font-weight: bold;
+  font-weight: $font-weight-bold;
   margin: 0 30px 0 14px!important;
 }
 

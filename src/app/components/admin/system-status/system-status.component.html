@@ -5,7 +5,7 @@
   <mat-card-content>
     <table>
       <tr>
-        <td><b>{{ 'admin-area.status-summary' | translate }}</b></td>
+        <td><strong>{{ 'admin-area.status-summary' | translate }}</strong></td>
         <td class="system-health system-health-{{ (healthInfo | async)?.status | lowercase }}">{{ (healthInfo | async)?.status }}</td>
       </tr>
       <tr *ngFor="let component of (healthInfo | async)?.details | keyvalue">

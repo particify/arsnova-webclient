@@ -1,7 +1,7 @@
 <div tabindex="0">
   <h3>{{ data.section + data.headerLabel | translate}}</h3>
   <p>{{ data.section + data.body | translate}}</p>
-  <p><strong *ngIf="data.bodyElement">{{ data.bodyElement }}</strong></p>
+  <p *ngIf="data.bodyElement"><strong>{{ data.bodyElement }}</strong></p>
 </div>
 <div fxLayout="row" fxLayoutAlign="end" fxLayoutGap="10px">
   <button mat-flat-button class="button-abort" aria-labelledby="cancel" (click)="closeDialog(data.abortLabel)">
