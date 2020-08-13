@@ -41,10 +41,9 @@ export class DateFromNow implements PipeTransform {
 
 export class CommentComponent implements OnInit {
   @Input() comment: Comment;
-  @Output()
+  @Output() clickedOnTag = new EventEmitter<string>();
   viewRole: UserRole;
-  clickedOnTag = new EventEmitter<string>();
-  isStudent = false;
+  isParticipant = false;
   isCreator = false;
   isModerator = false;
   hasVoted = 0;
@@ -81,7 +80,7 @@ export class CommentComponent implements OnInit {
       this.viewRole = data.viewRole;
       switch (this.viewRole) {
         case UserRole.PARTICIPANT:
-          this.isStudent = true;
+          this.isParticipant = true;
           this.roleString = 'participant';
           break;
         case UserRole.CREATOR:
@@ -89,6 +88,8 @@ export class CommentComponent implements OnInit {
           this.roleString = 'creator';
           break;
         case UserRole.EXECUTIVE_MODERATOR:
+        /* fall through */
+        case UserRole.EDITING_MODERATOR:
           this.isModerator = true;
           this.roleString = 'moderator';
       }
@@ -189,7 +190,7 @@ export class CommentComponent implements OnInit {
   }
 
   openPresentDialog(comment: Comment): void {
-    if (this.isCreator === true) {
+    if (this.isCreator) {
       this.wsCommentService.highlight(comment);
       if (!comment.read) {
         this.setRead(comment);

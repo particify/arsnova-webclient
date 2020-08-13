@@ -25,7 +25,7 @@ export class CommentAnswerComponent implements OnInit, AfterContentInit {
   answer: string;
   isLoading = true;
   viewRole: UserRole;
-  isStudent = true;
+  isParticipant = true;
   edit = false;
 
   constructor(protected route: ActivatedRoute,
@@ -70,7 +70,7 @@ export class CommentAnswerComponent implements OnInit, AfterContentInit {
       this.answer = this.comment.answer;
       this.isLoading = false;
       this.viewRole = data.viewRole;
-      this.isStudent = this.viewRole === UserRole.PARTICIPANT;
+      this.isParticipant = this.viewRole === UserRole.PARTICIPANT;
     });
   }
 

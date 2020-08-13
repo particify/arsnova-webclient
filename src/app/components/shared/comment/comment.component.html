@@ -27,19 +27,19 @@
         </mat-icon>
       </button>
 
-      <button mat-icon-button *ngIf="comment.correct === 1" [disabled]="isStudent"
+      <button mat-icon-button *ngIf="comment.correct === 1" [disabled]="isParticipant"
               (click)="markCorrect(comment, 1)" tabindex="0"
               aria-labelledby="comment-correct">
         <mat-icon class="correct-icon" [matTooltip]="'comment-page.mark-not-correct' | translate">check_circle
         </mat-icon>
       </button>
-      <button mat-icon-button *ngIf="comment.correct === 2" [disabled]="isStudent"
+      <button mat-icon-button *ngIf="comment.correct === 2" [disabled]="isParticipant"
               (click)="markCorrect(comment, 2)" tabindex="0"
               aria-labelledby="comment-not-correct">
         <mat-icon class="wrong-icon" [matTooltip]="'comment-page.mark-not-wrong' | translate">cancel
         </mat-icon>
       </button>
-      <button mat-icon-button *ngIf="comment.favorite" [disabled]="isStudent"
+      <button mat-icon-button *ngIf="comment.favorite" [disabled]="isParticipant"
               (click)="setFavorite(comment)" tabindex="0" aria-labelledby="comment-grade">
         <mat-icon class="favorite-icon" [matTooltip]="'comment-page.mark-not-favorite' | translate">grade
         </mat-icon>
@@ -90,7 +90,7 @@
         <span aria-hidden="true">{{ comment.body.trim() }}</span>
       </div>
       <span class="fill-remaining-space click" (click)="openPresentDialog(comment)"></span>
-      <div fxLayout="column" *ngIf="isStudent" [ngClass]="{ '1': 'voteUp', '-1': 'voteDown', '0': 'reset'}[currentVote]">
+      <div fxLayout="column" *ngIf="isParticipant" [ngClass]="{ '1': 'voteUp', '-1': 'voteDown', '0': 'reset'}[currentVote]">
         <button mat-icon-button (click)="vote(1)" matTooltip="{{ 'comment-page.vote-up' | translate }}"
                 tabindex="0" aria-labelledby="comment-vote-up">
           <mat-icon class="voting-icon light" [ngClass]="{'upVoted' : hasVoted === 1}">keyboard_arrow_up</mat-icon>
@@ -101,7 +101,7 @@
           <mat-icon class="voting-icon light" [ngClass]="{'downVoted' : hasVoted === -1}">keyboard_arrow_down</mat-icon>
         </button>
       </div>
-      <div *ngIf="!isStudent" fxLayout="column" fxLayoutAlign="center">
+      <div *ngIf="!isParticipant" fxLayout="column" fxLayoutAlign="center">
         <span class="scoreCreator">{{comment.score}}</span>
       </div>
 
@@ -132,7 +132,7 @@
   <div id="comment-delete">{{'comment-page.a11y-comment-delete' | translate }}</div>
   <div id="comment-moderation">{{ (comment.ack ? 'comment-page.a11y-comment-banish' :
     'comment-page.a11y-comment-reject') | translate }}</div>
-  <div *ngIf="isStudent" id="comment-vote-up">{{'comment-page.a11y-comment-vote-up' | translate}}</div>
-  <div *ngIf="isStudent"
+  <div *ngIf="isParticipant" id="comment-vote-up">{{'comment-page.a11y-comment-vote-up' | translate}}</div>
+  <div *ngIf="isParticipant"
        id="comment-vote-down{{ comment.id }}">{{'comment-page.a11y-comment-vote-down' | translate}}</div>
 </div>
