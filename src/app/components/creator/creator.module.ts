@@ -31,6 +31,7 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 import { CdkStepperModule } from '@angular/cdk/stepper';
 import { ContentCreationComponent } from './content-creation/content-creation/content-creation.component';
 import { ContentSlideCreationComponent } from './content-creation/content-slide-creation/content-slide-creation.component';
+import { PreviewComponent } from './content-creation/preview/preview.component';
 
 @NgModule({
   imports: [
@@ -72,7 +73,8 @@ import { ContentSlideCreationComponent } from './content-creation/content-slide-
     SettingsPageComponent,
     GroupContentComponent,
     ContentCreationComponent,
-    ContentSlideCreationComponent
+    ContentSlideCreationComponent,
+    PreviewComponent
   ]
 })
 export class CreatorModule {

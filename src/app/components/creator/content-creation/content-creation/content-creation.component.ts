@@ -30,10 +30,11 @@ export class ContentCreationComponent implements OnInit, OnDestroy {
 
   private createEventSubscription: Subscription;
 
-  @Input() createEvent: Observable<void>;
+  @Input() createEvent: Observable<boolean>;
   @Input() contentBody;
   @Input() contentGroup;
   @Output() reset = new EventEmitter<boolean>();
+  @Output() contentSent = new EventEmitter<Content>();
 
   roomId: string;
   isLoading = true;
@@ -50,8 +51,16 @@ export class ContentCreationComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.roomId = this.globalStorageService.getItem(STORAGE_KEYS.ROOM_ID);
     this.initContentCreation();
-    this.createEventSubscription = this.createEvent.subscribe(() => {
-      this.createContent();
+    this.createEventSubscription = this.createEvent.subscribe(submit => {
+      if (this.prepareContent()) {
+        if (this.createContent()) {
+          if (submit) {
+            this.submitContent();
+          } else {
+            this.contentSent.emit(this.content);
+          }
+        }
+      }
     });
   }
 
@@ -61,7 +70,22 @@ export class ContentCreationComponent implements OnInit, OnDestroy {
 
   initContentCreation() {}
 
-  createContent() {}
+  createContent(): boolean {
+    return true;
+  }
+
+  prepareContent() {
+    this.content.roomId = this.roomId;
+    this.content.body = this.contentBody;
+    this.content.subject = 'Subject';
+    if (this.contentBody === '') {
+      this.translationService.get('content.no-empty').subscribe(message => {
+        this.notificationService.show(message);
+      });
+      return false;
+    }
+    return true;
+  }
 
   fillCorrectAnswers() {
     this.displayAnswers = [];
@@ -85,17 +109,8 @@ export class ContentCreationComponent implements OnInit, OnDestroy {
     });
   }
 
-  submitContent(newContent: Content): void {
-    if (this.contentBody === '') {
-      this.translationService.get('content.no-empty').subscribe(message => {
-        this.notificationService.show(message);
-      });
-      return;
-    }
-    newContent.roomId = this.roomId;
-    newContent.body = this.contentBody;
-    newContent.subject = 'Subject';
-    this.contentService.addContent(newContent).subscribe(createdContent => {
+  submitContent(): void {
+    this.contentService.addContent(this.content).subscribe(createdContent => {
       if (this.contentGroup !== '') {
         this.contentGroupService.addContentToGroup(this.roomId, this.contentGroup, createdContent.id).subscribe();
       }

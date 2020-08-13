@@ -58,13 +58,13 @@ export class ContentYesNoCreationComponent extends ContentCreationComponent impl
     });
   }
 
-  createContent(): void {
+  createContent(): boolean {
     if (this.yesno !== null) {
       const index = this.yesno ? 0 : 1;
       (this.content as ContentChoice).options[0].points = this.yesno ? 10 : -10;
       (this.content as ContentChoice).options[1].points = this.yesno ? -10 : 10;
       (this.content as ContentChoice).correctOptionIndexes = [index];
     }
-    this.submitContent(this.content);
+    return true;
   }
 }

@@ -39,8 +39,4 @@ export class ContentTextCreationComponent extends ContentCreationComponent imple
       null
     );
   }
-
-  createContent() {
-    this.submitContent(this.content);
-  }
 }
