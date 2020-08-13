@@ -18,7 +18,6 @@ export class AuthenticationService extends BaseHttpService {
   private user = new BehaviorSubject<User>(undefined);
   private apiUrl = {
     base: '/api',
-    v2: '/api/v2',
     auth: '/auth',
     login: '/login',
     user: '/user',
@@ -177,42 +176,23 @@ export class AuthenticationService extends BaseHttpService {
     }));
   }
 
-  resetPassword(email: string): Observable<boolean> {
+  setNewPassword(email: string, key?: string, password?: string): Observable<boolean> {
     const connectionUrl: string =
-      this.apiUrl.v2 +
+      this.apiUrl.base +
       this.apiUrl.user +
-      '/' +
+      '/~' +
       email +
       this.apiUrl.resetPassword;
-
-    return this.http.post(connectionUrl, {
-      key: null,
-      password: null
-    }, this.httpOptions).pipe(
-      catchError(err => {
-        return of(false);
-      }), map((result) => {
+    let body = {};
+    if (key && password) {
+      body = {
+        key: key,
+        password: password
+      };
+    }
+    return this.http.post(connectionUrl, body, this.httpOptions).pipe(map(() => {
         return true;
-      })
-    );
-  }
-
-  setNewPassword(email: string, key: string, password: string): Observable<boolean> {
-    const connectionUrl: string =
-      this.apiUrl.v2 +
-      this.apiUrl.user +
-      '/' +
-      email +
-      this.apiUrl.resetPassword +
-      `?key=${key}&password=${password}`;
-
-    return this.http.post(connectionUrl, {}, this.httpOptions).pipe(
-      catchError(err => {
-        return of(false);
-      }), map((result) => {
-        return true;
-      })
-    );
+    }));
   }
 
   logout() {

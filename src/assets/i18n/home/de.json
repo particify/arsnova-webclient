@@ -109,7 +109,8 @@
     "email-description": "Gib hier deine E-Mail Adresse ein mit welcher du dich mit deinem arsnova-Konto anmelden möchtest.",
     "email-invalid": "E-Mail Adresse ungültig",
     "email-required": "E-Mail Adresse erforderlich",
-    "input-incorrect": "Bitte prüfe deine Eingaben.",
+    "inputs-incorrect": "Bitte prüfe deine Eingaben.",
+    "input-incorrect": "Bitte prüfe deine Eingabe.",
     "login": "Anmelden",
     "login-with": "Anmelden mit",
     "login-data-incorrect": "Benutzername oder Passwort falsch",
@@ -136,7 +137,6 @@
     "email-description": "Gib hier deine E-Mail Adresse ein, um dein Passwort zurückzusetzen.",
     "email-invalid": "E-Mail Adresse ungültig",
     "forgot-password": "Passwort vergessen?",
-    "input-incorrect": "Bitte prüfe deine Eingaben.",
     "key": "Passwortrücksetz-Schlüssel",
     "key-required": "Passwortrücksetz-Schlüssel erforderlich",
     "new-password-successful": "Dein neues Passwort wurde erfolgreich gesetzt.",
@@ -145,8 +145,9 @@
     "reset-password-description": "Hier kannst du dein Passwort zurücksetzen.",
     "reset-successful": "Dein Passwort wurde zurückgesetzt. Bitte prüfe dein Postfach.",
     "set-button-description": "Setzt für den Account das neue Passwort",
-    "set-new-password": "Setze ein neues Passwort mit dem Schlüssel-Code, der dir zugesandt wurde:",
-    "set-new-password-button": "Setze Passwort"
+    "set-new-password": "Dir wurde ein Code zugesandt, mit welchem du dein neues Passwort setzen kannst",
+    "set-new-password-button": "Setze Passwort",
+    "request-failed": "Es ist etwas schief gegangen, bitte überprüfe deine Eingabe."
   },
   "register": {
     "a11y-cancel": "Bricht die Registrierung ab und bringt dich zurück zur Anmeldeseite.",

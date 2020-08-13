@@ -160,8 +160,18 @@ export class LoginComponent implements AfterContentInit, OnChanges {
     }
   }
 
-  openPasswordDialog(): void {
-    this.dialogService.openPasswordResetDialog();
+  navToPasswordReset() {
+    let state;
+    if (this.username) {
+      state = {
+        state: {
+          data: {
+            username: this.username
+          }
+        }
+      };
+    }
+    this.router.navigate(['request-password-reset'], state);
   }
 
   openRegisterDialog(): void {

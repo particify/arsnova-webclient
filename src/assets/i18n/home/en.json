@@ -109,7 +109,8 @@
     "email-description": "Enter your e-mail address with which you want to login with your arsnova account here.",
     "email-invalid": "E-mail is invalid",
     "email-required": "E-mail required",
-    "input-incorrect": "Please check your data.",
+    "inputs-incorrect": "Please check your inputs.",
+    "input-incorrect": "Please check your input.",
     "login": "Log in",
     "login-with": "Log in with",
     "login-data-incorrect": "Username or password incorrect",
@@ -136,7 +137,6 @@
     "email-description": "Enter your email address here to reset your password.",
     "email-invalid": "E-mail is invalid.",
     "forgot-password": "Forgot the password?",
-    "input-incorrect": "Please check your data.",
     "key": "Password reset key",
     "key-required": "Password reset key required",
     "new-password-successful": "The new password has been set.",
@@ -145,8 +145,9 @@
     "reset-password-description": "Reset password",
     "reset-successful": "Password was reset. Please check your mails.",
     "set-button-description": "Set the new password for the account",
-    "set-new-password": "Set a new password with the key code that was sent to you:",
-    "set-new-password-button": "Set password"
+    "set-new-password": "You have been sent a code with which you can set your new password",
+    "set-new-password-button": "Set password",
+    "request-failed": "Something has gone wrong, please check your input."
   },
   "register": {
     "a11y-cancel": "Cancels the registration and brings you back to login.",

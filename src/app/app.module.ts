@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
 import { RegisterComponent } from './components/home/register/register.component';
-import { PasswordResetComponent } from './components/home/_dialogs/password-reset/password-reset.component';
+import { PasswordResetComponent } from './components/home/password-reset/password-reset.component';
 import { AppRoutingModule } from './app-routing.module';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { HTTP_INTERCEPTORS, HttpClient, HttpClientModule } from '@angular/common/http';
@@ -59,6 +59,7 @@ import { ContentGroupService } from './services/http/content-group.service';
 import { AnnounceService } from './services/util/announce.service';
 import { AdminService } from './services/http/admin.service';
 import { SystemInfoService } from './services/http/system-info.service';
+import { RequestPasswordResetComponent } from './components/home/request-password-reset/request-password-reset.component';
 
 export function dialogClose(dialogResult: any) {
 }
@@ -79,7 +80,8 @@ export function initializeApp(appConfig: AppConfig) {
     DirectEntryComponent,
     CookiesComponent,
     OverlayComponent,
-    ImportComponent
+    ImportComponent,
+    RequestPasswordResetComponent
   ],
   imports: [
     AppRoutingModule,
