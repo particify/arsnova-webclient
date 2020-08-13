@@ -20,7 +20,8 @@
       <mat-label>{{ 'login.password' | translate }}</mat-label>
       <input (focus)="eventService.makeFocusOnInputTrue()" (blur)="eventService.makeFocusOnInputFalse()"
              matInput type="password" #userPassword1 [formControl]="password1FormControl" [errorStateMatcher]="matcher"
-             placeholder="{{ 'login.enter-password' | translate }}" aria-labelledby="register-password-description"/>
+             placeholder="{{ 'login.enter-password' | translate }}" aria-labelledby="register-password-description"
+             autocomplete="new-password"/>
       <mat-error *ngIf="password1FormControl.hasError('required')">
         {{ 'register.password-required' | translate }}
       </mat-error>
@@ -31,7 +32,8 @@
       <input (focus)="eventService.makeFocusOnInputTrue()" (blur)="eventService.makeFocusOnInputFalse()"
              matInput type="password" #userPassword2 [formControl]="password2FormControl" [errorStateMatcher]="matcher"
              placeholder="{{ 'register.enter-password-again' | translate }}"
-             aria-labelledby="register-password-description-repeat">
+             aria-labelledby="register-password-description-repeat"
+             autocomplete="new-password"/>
       <mat-error *ngIf="password2FormControl.hasError('required')">
         {{ 'register.password-required' | translate }}
       </mat-error>
