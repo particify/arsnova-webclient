@@ -130,6 +130,13 @@ markdown {
   width: 100%;
 }
 
+.mat-form-field {
+  ::placeholder {
+    color: var(--on-surface);
+    opacity: 0.5;
+  }
+}
+
 // Dialogs
 
 .screenDialog {
@@ -371,6 +378,14 @@ div {
 .login-button {
   min-width: 200px!important;
   margin: 5px 0;
+}
+
+// Links
+
+.action-link {
+  font-size: smaller;
+  text-decoration: none;
+  font-weight: $font-weight-bold;
 }
 
 // Icons
