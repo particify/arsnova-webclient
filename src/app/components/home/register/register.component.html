@@ -1,37 +1,37 @@
 <div fxLayout="column" fxLayoutAlign="center center" fxFill>
   <mat-card fxLayout="column" fxLayoutAlign="center center" [ngClass]="{'invisible-card': deviceWidth < 500}">
-    <form (ngSubmit)="register(userName.value, userPassword1.value)" fxLayout="column"
+    <form class="full-width" (ngSubmit)="register(userName.value, userPassword1.value)" fxLayout="column"
         fxLayoutAlign="space-around" fxLayoutGap="10px">
-    <mat-form-field class="input-block">
+    <mat-form-field class="input-block" appearance="outline">
+      <mat-label>{{ 'login.email' | translate }}</mat-label>
       <input (focus)="eventService.makeFocusOnInputTrue()" (blur)="eventService.makeFocusOnInputFalse()"
              matInput type="email" #userName [formControl]="usernameFormControl"
+             placeholder="{{ 'login.enter-email' | translate }}"
              [errorStateMatcher]="matcher" aria-labelledby="register-email-description"/>
-      <mat-placeholder>{{ 'register.email' | translate }}</mat-placeholder>
       <mat-error *ngIf="usernameFormControl.hasError('email') && !usernameFormControl.hasError('required')">
-        {{ 'register.email-invalid' | translate }}
+        {{ 'login.email-invalid' | translate }}
       </mat-error>
       <mat-error *ngIf="usernameFormControl.hasError('required')">
-        {{ 'register.email-required' |translate }}
+        {{ 'login.email-required' |translate }}
       </mat-error>
     </mat-form-field>
 
-    <mat-form-field class="input-block">
+    <mat-form-field class="input-block" appearance="outline">
+      <mat-label>{{ 'login.password' | translate }}</mat-label>
       <input (focus)="eventService.makeFocusOnInputTrue()" (blur)="eventService.makeFocusOnInputFalse()"
-             matInput type="password" #userPassword1
-             [formControl]="password1FormControl" [errorStateMatcher]="matcher"
-             aria-labelledby="register-password-description">
-      <mat-placeholder>{{ 'register.password' | translate }}</mat-placeholder>
+             matInput type="password" #userPassword1 [formControl]="password1FormControl" [errorStateMatcher]="matcher"
+             placeholder="{{ 'login.enter-password' | translate }}" aria-labelledby="register-password-description"/>
       <mat-error *ngIf="password1FormControl.hasError('required')">
         {{ 'register.password-required' | translate }}
       </mat-error>
     </mat-form-field>
 
-    <mat-form-field class="input-block">
+    <mat-form-field class="input-block" appearance="outline">
+      <mat-label>{{ 'register.password-verify' | translate }}</mat-label>
       <input (focus)="eventService.makeFocusOnInputTrue()" (blur)="eventService.makeFocusOnInputFalse()"
-             matInput type="password" #userPassword2
-             [formControl]="password2FormControl" [errorStateMatcher]="matcher"
+             matInput type="password" #userPassword2 [formControl]="password2FormControl" [errorStateMatcher]="matcher"
+             placeholder="{{ 'register.enter-password-again' | translate }}"
              aria-labelledby="register-password-description-repeat">
-      <mat-placeholder>{{ 'register.password-verify' | translate}}</mat-placeholder>
       <mat-error *ngIf="password2FormControl.hasError('required')">
         {{ 'register.password-required' | translate }}
       </mat-error>
@@ -44,6 +44,11 @@
                 aria-labelledby="login-description">
           {{ 'register.register' | translate }}
         </button>
+      </div>
+      <div fxLayout="row" fxLayoutAlign="center">
+        <p>{{ 'register.already-registered' | translate }}</p>
+        <a class="action-link login" [routerLink]="'/login'" aria-labelledby="register">
+          {{ 'login.login' | translate }}</a>
       </div>
   </form>
   </mat-card>

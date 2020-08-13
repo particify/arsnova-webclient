@@ -1,9 +1,15 @@
 .mat-card {
   width: 400px;
-  padding: 40px 0;
+  padding: 2em;
 }
 
-form {
-  width: 90%!important;
-  max-width: 300px;
+.login {
+  padding-left: 10px;
+  margin-top: 1em;
+  color: var(--secondary);
+}
+
+p {
+  font-size: smaller;
+  margin-bottom: 0;
 }

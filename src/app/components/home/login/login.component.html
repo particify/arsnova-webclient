@@ -1,4 +1,4 @@
-<div *ngIf="!isLoading"  class="container login-card" fxLayout="column" fxLayoutAlign="center center" fxFill>
+<div *ngIf="!isLoading" fxLayout="column" fxLayoutAlign="center center" fxFill>
   <mat-card fxLayout="column" fxLayoutAlign="center center" [ngClass]="{'invisible-card': deviceWidth < 500}">
     <button *ngFor="let provider of ssoProviders" (click)="loginViaSso(provider.id)" class="button-primary"
             id="{{provider.title}}-button" mat-raised-button type="button"
@@ -7,45 +7,36 @@
     </button>
     <p *ngIf="allowDbLogin && ssoProviders.length > 0">{{ 'login.or' | translate }}</p>
     <mat-divider *ngIf="allowDbLogin && ssoProviders.length > 0"></mat-divider>
-    <form fxLayout="column" fxLayoutGap="10px">
-      <mat-form-field *ngIf="allowDbLogin" class="input-block">
+    <form class="full-width" fxLayout="column" fxLayoutGap="10px">
+      <mat-form-field *ngIf="allowDbLogin" class="input-block" appearance="outline">
+        <mat-label>{{ 'login.email' | translate }}</mat-label>
         <input (focus)="eventService.makeFocusOnInputTrue()" (blur)="eventService.makeFocusOnInputFalse()"
                [(ngModel)]="username" [errorStateMatcher]="matcher" [formControl]="usernameFormControl" matInput
-               id="email-input" name="username" aria-labelledby="email-description"/>
-        <mat-placeholder>{{ 'login.email' | translate }}</mat-placeholder>
-        <mat-error *ngIf="usernameFormControl.hasError('email') && !usernameFormControl.hasError('required')">
-          {{ 'login.email-invalid' | translate }}
-        </mat-error>
-        <mat-error *ngIf="usernameFormControl.hasError('required')">
-          {{ 'login.email-required' | translate }}
-        </mat-error>
+               id="email-input" name="username" aria-labelledby="email-description" placeholder="{{ 'login.enter-email' | translate }}"/>
       </mat-form-field>
-      <mat-form-field *ngIf="allowDbLogin">
+      <mat-form-field *ngIf="allowDbLogin" appearance="outline" class="no-field-hint">
+        <mat-label>{{ 'login.password' | translate }}</mat-label>
         <input (focus)="eventService.makeFocusOnInputTrue()" (blur)="eventService.makeFocusOnInputFalse()"
                [(ngModel)]="password" [errorStateMatcher]="matcher" [formControl]="passwordFormControl" matInput
-               id="password-input" name="password" type="password" aria-labelledby="password-description"/>
-        <mat-placeholder>{{ 'login.password' | translate }}</mat-placeholder>
-        <mat-error
-          *ngIf="passwordFormControl.hasError('required')">{{ 'login.password-required' | translate }}</mat-error>
+               id="password-input" name="password" type="password" aria-labelledby="password-description"
+               placeholder="{{ 'login.enter-password' | translate }}"/>
       </mat-form-field>
+      <div *ngIf="allowDbLogin" fxLayout="row">
+        <a class="action-link forgot-pw" [routerLink]="" (click)="navToPasswordReset(); $event.preventDefault();
+     $event.stopPropagation();" aria-labelledby="forgot-pw">
+          {{ 'login.password-reset' | translate }}
+        </a>
+      </div>
       <div fxLayout="column" fxLayoutAlign="center center">
         <button *ngIf="allowDbLogin" class="button-primary login-button" mat-raised-button (click)="login()"
                 aria-labelledby="login-description">
           {{ 'login.login' | translate }}
         </button>
       </div>
-      <div *ngIf="allowDbLogin" fxLayout="row">
-        <span class="fill-remaining-space"></span>
-        <button mat-button class="forgot-pw" (click)="navToPasswordReset(); $event.preventDefault();
-     $event.stopPropagation();" aria-labelledby="forgot-pw">
-          {{ 'login.password-reset' | translate }}
-        </button>
-      </div>
-      <div *ngIf="allowDbLogin" fxLayout="row">
+      <div *ngIf="allowDbLogin" fxLayout="row" fxLayoutAlign="center">
         <p>{{ 'login.not-registered' | translate }}</p>
-        <button mat-button class="register" (click)="openRegisterDialog(); $event.preventDefault();
-    $event.stopPropagation();" aria-labelledby="register">
-          {{ 'login.register' | translate }}</button>
+        <a class="action-link register" [routerLink]="'/register'" aria-labelledby="register">
+          {{ 'login.register' | translate }}</a>
       </div>
     </form>
   </mat-card>

@@ -1,25 +1,22 @@
 .forgot-pw {
   color: var(--on-surface);
-  padding: 0 10px;
+  margin-bottom: 1em;
 }
 
 .register {
-  padding: 0 10px;
+  padding-left: 10px;
+  margin-top: 1em;
   color: var(--secondary);
 }
 
 p {
   font-size: smaller;
-}
-
-form {
-  width: 90%!important;
-  max-width: 300px;
+  margin-bottom: 0;
 }
 
 .mat-card {
   width: 400px;
-  padding: 40px 0;
+  padding: 2em;
 }
 
 .mat-divider {
@@ -27,4 +24,9 @@ form {
   max-width: 350px!important;
   position: static!important;
   margin: 10px 0 20px 0;
+}
+
+input:-webkit-autofill  {
+  -webkit-box-shadow: 0 0 0 30px var(--surface) inset;
+  -webkit-text-fill-color: var(--on-surface);
 }
