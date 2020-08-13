@@ -265,6 +265,7 @@
     "logout": "Abmelden",
     "create-room": "Erstellen",
     "room-name": "Name des Raums",
+    "no-empty-name": "Bitte gib einen Namen ein.",
     "statistic-good": "Gut",
     "statistic-okay": "Okay",
     "statistic-improvable": "Luft nach oben",

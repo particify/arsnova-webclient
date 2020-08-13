@@ -115,7 +115,6 @@
     "login-data-incorrect": "Username or password incorrect",
     "login-description": "Log in with the entered account data",
     "login-successful": "Login successful",
-    "login-tooltip": "Rooms will be stored for 180 days.",
     "not-registered": "Don't have an account yet?",
     "password": "Password",
     "password-description": "Enter your password with which you want to login with your arsnova account here.",
@@ -123,12 +122,6 @@
     "password-reset": "Forgot your password?",
     "register": "Register",
     "or": "or"
-  },
-  "overlay": {
-    "a11y-cancel": "Opens the web storage setting dialog",
-    "cancel": "Accept after all?",
-    "message": "You have rejected the use of a web storage. Without it the app will not work.",
-    "title": "Use not possible"
   },
   "password-reset": {
     "a11y-cancel": "Cancels password reset and brings you back to login.",
@@ -272,6 +265,7 @@
     "logout": "Log out",
     "create-room": "Create Room",
     "room-name": "Room name",
+    "no-empty-name": "Please enter a name.",
     "statistic-good": "Good",
     "statistic-okay": "Okay",
     "statistic-improvable": "Improvable",
