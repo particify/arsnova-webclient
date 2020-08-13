@@ -49,7 +49,8 @@
 
 .mat-card-title {
   word-break: break-all;
-  font-size: calc(16px + 1vw) !important;
+  font-size: calc(18px + 0.8vw) !important;
+  font-weight: normal;
 }
 
 .mat-card-subtitle {
@@ -58,7 +59,7 @@
 
 .room-short-id {
   opacity: 0.8;
-  font-size: calc(16px + 0.5vw);
+  font-size: calc(14px + 0.6vw);
   color: var(--on-surface);
   margin-top: 4.5%;
 }

@@ -11,6 +11,12 @@
 
 @import 'theme/theme';
 
+// ***** Variables *****
+
+$font-weight-bold: 500;
+
+// ***** STYLING *****
+
 body {
   font-family: Roboto, "Helvetica Neue", sans-serif;
   width: 100%;
@@ -51,6 +57,7 @@ body {
 h1, h2, h3, h4 {
   color: var(--on-surface);
   outline: none;
+  font-weight: $font-weight-bold;
 }
 
 h2 {
@@ -76,6 +83,10 @@ address {
 
 a {
   color: var(--secondary);
+}
+
+strong, b {
+  font-weight: $font-weight-bold;
 }
 
 // Inputs

@@ -8,7 +8,7 @@
       <mat-hint align="end" class="count" *ngIf="!emptyInputs"><span aria-hidden="true">{{roomName.value.length}}
         / 20</span></mat-hint>
       <mat-hint align="start" class="error" *ngIf="emptyInputs">
-        <strong>{{ 'dialog.no-empty-name' | translate }}</strong></mat-hint>
+        {{ 'dialog.no-empty-name' | translate }}</mat-hint>
     </mat-form-field>
   </div>
 </form>

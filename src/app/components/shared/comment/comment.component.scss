@@ -1,3 +1,5 @@
+@import 'src/styles';
+
 #comment-card {
   margin-bottom: 3%;
   padding: 1.5% 1.5% 3% 3%;
@@ -12,7 +14,7 @@
   width: 35px;
   height: 35px;
   font-size: 35px;
-  font-weight: bold;
+  font-weight: $font-weight-bold;
   color: var(--on-surface);
 }
 
