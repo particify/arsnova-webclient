@@ -10,12 +10,7 @@
 }
 
 @import 'theme/theme';
-
-// ***** Variables *****
-
-$font-weight-bold: 500;
-
-// ***** STYLING *****
+@import '_variables.scss';
 
 body {
   font-family: Roboto, "Helvetica Neue", sans-serif;
