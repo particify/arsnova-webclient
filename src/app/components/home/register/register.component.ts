@@ -65,11 +65,11 @@ export class RegisterComponent implements OnInit {
 
   register(username: string, password: string): void {
     if (!this.usernameFormControl.hasError('required') && !this.usernameFormControl.hasError('email') &&
-       !this.password1FormControl.hasError('required') &&  !this.password2FormControl.hasError('required') &&
-       !this.password2FormControl.hasError('passwordIsEqual')) {
-      if ( this.acceptToS) {
+      !this.password1FormControl.hasError('required') && !this.password2FormControl.hasError('required') &&
+      !this.password2FormControl.hasError('passwordIsEqual')) {
+      if (this.acceptToS) {
         this.authenticationService.register(username, password).subscribe(result => {
-            this.router.navigate(['login'], { state: { data: { username: username, password: password } } });
+            this.router.navigate(['login'], {state: {data: {username: username, password: password}}});
             this.translationService.get('register.register-successful').subscribe(message => {
               this.notificationService.show(message);
             });
