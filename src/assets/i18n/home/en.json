@@ -164,7 +164,11 @@
     "register-request-error": "Something went wrong with the registration. Maybe you already made the account?",
     "register-successful": "Successfully registered. Please check your mails.",
     "register-unsuccessful": "Please check your data.",
-    "already-registered": "Already have an account?"
+    "already-registered": "Already have an account?",
+    "accept": "I agree to the ",
+    "accept-2": ".",
+    "terms": "terms of use",
+    "please-accept": "Du musst den Nutzungsbedingungen zustimmen um dich zu registieren."
   },
   "room-list": {
     "a11y-join-room": "Enter the room {{room}} with the number {{id}} in the role {{role}}",

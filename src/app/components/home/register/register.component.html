@@ -41,6 +41,9 @@
         {{ 'register.password-unmatch' | translate }}
       </mat-error>
     </mat-form-field>
+      <mat-checkbox [(ngModel)]="acceptToS" name="accept">
+        {{ 'register.accept' | translate }}<a href="{{linkOfToS}}" target="_blank">{{ 'register.terms' | translate }}</a>{{ 'register.accept-2' | translate }}
+      </mat-checkbox>
       <div fxLayout="column" fxLayoutAlign="center center">
         <button class="button-primary login-button" mat-raised-button type="submit"
                 aria-labelledby="login-description">
