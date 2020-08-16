@@ -1,5 +1,5 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { User } from '../../../models/user';
+import { ClientAuthentication } from 'app/models/client-authentication';
 import { UserRole } from '../../../models/user-roles.enum';
 import { RoomService } from '../../../services/http/room.service';
 import { EventService } from '../../../services/util/event.service';
@@ -26,7 +26,7 @@ interface RoomDataView {
   styleUrls: ['./room-list.component.scss']
 })
 export class RoomListComponent implements OnInit, OnDestroy {
-  @Input() user: User;
+  @Input() auth: ClientAuthentication;
   rooms: RoomDataView[] = [];
   displayRooms: RoomDataView[];
   isLoading = true;
@@ -164,7 +164,7 @@ export class RoomListComponent implements OnInit, OnDestroy {
   }
 
   removeFromHistory(room: RoomDataView) {
-    this.roomService.removeFromHistory(room.summary.id).subscribe(() => {
+    this.roomService.removeFromHistory(this.auth.userId, room.summary.id).subscribe(() => {
       this.translateService.get('room-list.room-successfully-removed').subscribe(msg => {
         this.notificationService.show(msg);
       });

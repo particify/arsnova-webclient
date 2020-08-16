@@ -1,4 +1,6 @@
-import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, ViewChild, OnDestroy } from '@angular/core';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { Room } from '../../../models/room';
 import { RoomService } from '../../../services/http/room.service';
 import { Router } from '@angular/router';
@@ -7,31 +9,32 @@ import { FormControl, Validators } from '@angular/forms';
 import { NotificationService } from '../../../services/util/notification.service';
 import { TranslateService } from '@ngx-translate/core';
 import { AuthenticationService } from '../../../services/http/authentication.service';
-import { UserRole } from '../../../models/user-roles.enum';
-import { User } from '../../../models/user';
+import { ClientAuthentication } from 'app/models/client-authentication';
 import { Moderator } from '../../../models/moderator';
 import { ModeratorService } from '../../../services/http/moderator.service';
 import { EventService } from '../../../services/util/event.service';
 import { KeyboardUtils } from '../../../utils/keyboard';
 import { KeyboardKey } from '../../../utils/keyboard/keys';
 import { GlobalStorageService, STORAGE_KEYS } from '../../../services/util/global-storage.service';
+import { AuthenticationStatus } from '../../../models/client-authentication-result';
 
 @Component({
   selector: 'app-room-join',
   templateUrl: './room-join.component.html',
   styleUrls: ['./room-join.component.scss']
 })
-export class RoomJoinComponent implements OnInit {
+export class RoomJoinComponent implements OnInit, OnDestroy {
   @ViewChild('roomCode', { static: true }) roomCodeElement: ElementRef;
   @Input() inputA11yString: string;
 
   room: Room;
-  user: User;
+  auth: ClientAuthentication;
   joinHover: boolean;
   isDesktop: boolean;
 
   roomCodeFormControl = new FormControl('', [Validators.pattern('[0-9 ]*')]);
   matcher = new RegisterErrorStateMatcher();
+  destroy$ = new Subject();
 
   constructor(
     private roomService: RoomService,
@@ -47,7 +50,13 @@ export class RoomJoinComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.authenticationService.watchUser.subscribe(newUser => this.user = newUser);
+    this.authenticationService.getAuthenticationChanges().pipe(takeUntil(this.destroy$))
+        .subscribe(auth => this.auth = auth);
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   toggleArrowAnimation(shortId: string, animation: boolean) {
@@ -73,8 +82,8 @@ export class RoomJoinComponent implements OnInit {
       const roomId = id.replace(/\s/g, '');
       this.roomService.getRoomByShortId(roomId).subscribe(room => {
           this.room = room;
-          if (!this.user) {
-            this.guestLogin();
+          if (!this.auth) {
+            this.loginGuest();
           } else {
             this.addAndNavigate();
           }
@@ -93,23 +102,24 @@ export class RoomJoinComponent implements OnInit {
     }
   }
 
-  guestLogin() {
-    this.authenticationService.guestLogin(UserRole.PARTICIPANT).subscribe(loggedIn => {
-      if (loggedIn === 'true') {
+  loginGuest() {
+    this.authenticationService.loginGuest().subscribe(result => {
+      if (result.status === AuthenticationStatus.SUCCESS) {
+        this.auth = result.authentication;
         this.addAndNavigate();
       }
     });
   }
 
   addAndNavigate() {
-    if (this.user.id === this.room.ownerId) {
+    if (this.auth.userId === this.room.ownerId) {
       this.router.navigate([`/creator/room/${this.room.shortId}`]);
     } else {
-      this.roomService.addToHistory(this.room.id);
+      this.roomService.addToHistory(this.auth.userId, this.room.id);
       this.moderatorService.get(this.room.id).subscribe((moderators: Moderator[]) => {
         let isModerator = false;
         for (const m of moderators) {
-          if (m.userId === this.user.id) {
+          if (m.userId === this.auth.userId) {
             this.router.navigate([`/moderator/room/${this.room.shortId}`]);
             isModerator = true;
           }

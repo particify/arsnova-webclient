@@ -2,7 +2,6 @@ import { AfterContentInit, Component, HostListener, OnDestroy, OnInit, Renderer2
 import { AuthenticationService } from '../../../services/http/authentication.service';
 import { RoomService } from '../../../services/http/room.service';
 import { UserRole } from '../../../models/user-roles.enum';
-import { User } from '../../../models/user';
 import { Room } from '../../../models/room';
 import { NotificationService } from '../../../services/util/notification.service';
 import { Message } from '@stomp/stompjs';
@@ -16,6 +15,7 @@ import { Survey } from '../../../models/survey';
 import { GlobalStorageService, STORAGE_KEYS } from '../../../services/util/global-storage.service';
 import { ActivatedRoute } from '@angular/router';
 import { AnnounceService } from '../../../services/util/announce.service';
+import { first } from 'rxjs/operators';
 
 @Component({
   selector: 'app-survey-page',
@@ -32,7 +32,7 @@ export class SurveyPageComponent implements OnInit, OnDestroy, AfterContentInit 
   survey: Survey[] = [];
 
   isCreator = false;
-  user: User;
+  userId: string;
   roomId: string;
   shortId: string;
   room: Room;
@@ -95,7 +95,8 @@ export class SurveyPageComponent implements OnInit, OnDestroy, AfterContentInit 
 
   ngOnInit() {
     this.translateService.use(this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE));
-    this.user = this.authenticationService.getUser();
+    this.authenticationService.getAuthenticationChanges().pipe(first())
+        .subscribe(auth => this.userId = auth.userId);
     this.route.data.subscribe(data => {
       this.roomId = data.room.id;
       this.shortId = data.room.shortId;
@@ -187,7 +188,7 @@ export class SurveyPageComponent implements OnInit, OnDestroy, AfterContentInit 
 
   submitAnswer(state: number) {
     if (!this.isCreator) {
-      this.wsFeedbackService.send(this.user.id, state, this.roomId);
+      this.wsFeedbackService.send(this.userId, state, this.roomId);
     }
   }
 

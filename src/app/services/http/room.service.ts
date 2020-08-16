@@ -39,21 +39,21 @@ export class RoomService extends BaseHttpService {
     super();
   }
 
-  getCreatorRooms(): Observable<Room[]> {
+  getCreatorRooms(userId: string): Observable<Room[]> {
     const connectionUrl = this.apiUrl.base + this.apiUrl.rooms + this.apiUrl.findRooms;
     return this.http.post<Room[]>(connectionUrl, {
-      properties: { ownerId: this.authService.getUser().id },
+      properties: { ownerId: userId },
       externalFilters: {}
     }).pipe(
       catchError(this.handleError('getCreatorRooms', []))
     );
   }
 
-  getParticipantRooms(): Observable<Room[]> {
+  getParticipantRooms(userId: string): Observable<Room[]> {
     const connectionUrl = this.apiUrl.base + this.apiUrl.rooms + this.apiUrl.findRooms;
     return this.http.post<Room[]>(connectionUrl, {
       properties: {},
-      externalFilters: { inHistoryOfUserId: this.authService.getUser().id }
+      externalFilters: { inHistoryOfUserId: userId }
     }).pipe(
       catchError(this.handleError('getParticipantRooms', []))
     );
@@ -63,7 +63,6 @@ export class RoomService extends BaseHttpService {
     delete room.id;
     delete room.revision;
     const connectionUrl = this.apiUrl.base + this.apiUrl.rooms + '/';
-    room.ownerId = this.authService.getUser().id;
     return this.http.post<Room>(connectionUrl, room, httpOptions).pipe(
       catchError(this.handleError<Room>(`add Room ${room}`))
     );
@@ -94,14 +93,14 @@ export class RoomService extends BaseHttpService {
     );
   }
 
-  addToHistory(roomId: string): void {
-    const connectionUrl = `${this.apiUrl.base + this.apiUrl.user}/${this.authService.getUser().id}/roomHistory`;
+  addToHistory(userId: string, roomId: string): void {
+    const connectionUrl = `${this.apiUrl.base + this.apiUrl.user}/${userId}/roomHistory`;
     this.http.post(connectionUrl, { roomId: roomId, lastVisit: this.joinDate.getTime() }, httpOptions).subscribe(() => {
     });
   }
 
-  removeFromHistory(roomId: string): Observable<Room> {
-    const connectionUrl = `${ this.apiUrl.base + this.apiUrl.user }/${ this.authService.getUser().id }/roomHistory/${roomId}`;
+  removeFromHistory(userId: string, roomId: string): Observable<Room> {
+    const connectionUrl = `${this.apiUrl.base + this.apiUrl.user}/${userId}/roomHistory/${roomId}`;
     return this.http.delete<Room>(connectionUrl, httpOptions).pipe(
       tap(() => ''),
       catchError(this.handleError<Room>('deleteRoom'))

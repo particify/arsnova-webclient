@@ -5,7 +5,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { LanguageService } from '../../../services/util/language.service';
 import { Message } from '@stomp/stompjs';
 import { WsCommentServiceService } from '../../../services/websockets/ws-comment-service.service';
-import { User } from '../../../models/user';
+import { ClientAuthentication } from 'app/models/client-authentication';
 import { Vote } from '../../../models/vote';
 import { UserRole } from '../../../models/user-roles.enum';
 import { Room } from '../../../models/room';
@@ -27,7 +27,7 @@ import { AnnounceService } from '../../../services/util/announce.service';
 })
 export class CommentListComponent implements OnInit, OnDestroy {
   @ViewChild('searchBox') searchField: ElementRef;
-  @Input() user: User;
+  @Input() auth: ClientAuthentication;
   @Input() roomId: string;
   viewRole: UserRole;
   shortId: string;
@@ -87,7 +87,7 @@ export class CommentListComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.roomId = this.globalStorageService.getItem(STORAGE_KEYS.ROOM_ID);
     this.shortId = this.route.snapshot.paramMap.get('shortId');
-    const userId = this.user.id;
+    const userId = this.auth.userId;
     this.currentSort = this.votedesc;
     this.initRoom();
     this.translateService.use(this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE));
@@ -228,7 +228,7 @@ export class CommentListComponent implements OnInit, OnDestroy {
                   break;
                 case this.favorite:
                   this.comments[i].favorite = <boolean>value;
-                  if (this.user.id === this.comments[i].creatorId && <boolean>value) {
+                  if (this.auth.userId === this.comments[i].creatorId && <boolean>value) {
                     this.translateService.get('comment-list.comment-got-favorited').subscribe(ret => {
                       this.notificationService.show(ret);
                     });
@@ -283,7 +283,7 @@ export class CommentListComponent implements OnInit, OnDestroy {
     if (this.room.extensions && this.room.extensions['tags'] && this.room.extensions['tags'].tags) {
       tags = this.room.extensions['tags'].tags;
     }
-    const dialogRef = this.dialogService.openCreateCommentDialog(this.user, tags);
+    const dialogRef = this.dialogService.openCreateCommentDialog(this.auth, tags);
     dialogRef.afterClosed()
       .subscribe(result => {
         if (result) {

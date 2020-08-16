@@ -2,7 +2,8 @@ import { Component, HostListener, OnInit, Renderer2 } from '@angular/core';
 import { AuthenticationService } from '../../../services/http/authentication.service';
 import { NotificationService } from '../../../services/util/notification.service';
 import { NavigationEnd, Router } from '@angular/router';
-import { User } from '../../../models/user';
+import { ClientAuthentication } from 'app/models/client-authentication';
+import { AuthProvider } from 'app/models/auth-provider';
 import { Location } from '@angular/common';
 import { TranslateService } from '@ngx-translate/core';
 import { UserService } from '../../../services/http/user.service';
@@ -19,13 +20,18 @@ import { GlobalStorageService, STORAGE_KEYS } from '../../../services/util/globa
   styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent implements OnInit {
-  user: User;
+  auth: ClientAuthentication;
   cTime: string;
   shortId: string;
   deviceType: string;
   isSafari = 'false';
   moderationEnabled: boolean;
+  isGuest = true;
   isAdmin = false;
+
+  /* FIXME: Those role values are not updated to the real role. */
+  isParticipant = true;
+  isCreator = false;
 
   constructor(
     public location: Location,
@@ -59,7 +65,7 @@ export class HeaderComponent implements OnInit {
       this.eventService.focusOnInput === false) {
       document.getElementById('back-button').focus();
     } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit9) === true && this.eventService.focusOnInput === false) {
-      if (this.user) {
+      if (this.auth) {
         document.getElementById('room-button').focus();
       } else {
         document.getElementById('login-button').focus();
@@ -72,9 +78,10 @@ export class HeaderComponent implements OnInit {
       this.authenticationService.refreshLogin();
     }
 
-    this.authenticationService.watchUser.subscribe(newUser => {
-      this.user = newUser;
-      this.isAdmin = this.authenticationService.isAdmin();
+    this.authenticationService.getAuthenticationChanges().subscribe(auth => {
+      this.auth = auth;
+      this.isGuest = !auth || auth.authProvider === AuthProvider.ARSNOVA_GUEST;
+      this.isAdmin = !!auth && this.authenticationService.hasAdminRole(auth);
     });
 
     let time = new Date();
@@ -165,7 +172,7 @@ export class HeaderComponent implements OnInit {
       if (result === 'abort') {
         return;
       } else if (result === 'delete') {
-        this.deleteAccount(this.user.id);
+        this.deleteAccount(this.auth.userId);
       }
     });
   }

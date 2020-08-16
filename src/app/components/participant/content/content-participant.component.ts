@@ -5,6 +5,7 @@ import { LanguageService } from '../../../services/util/language.service';
 import { AuthenticationService } from '../../../services/http/authentication.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GlobalStorageService, STORAGE_KEYS } from '../../../services/util/global-storage.service';
+import { first } from 'rxjs/operators';
 
 @Component({
   selector: 'app-content-participant',
@@ -36,8 +37,8 @@ export class ContentParticipantComponent implements OnInit {
 
   ngOnInit() {
     this.translateService.use(this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE));
-    const userId = this.authenticationService.getUser().id;
-    this.initAnswer(userId);
+    this.authenticationService.getAuthenticationChanges().pipe(first())
+        .subscribe(auth => this.initAnswer(auth.userId));
     this.route.params.subscribe(params => {
       this.shortId = params['shortId'];
       this.contentGroupName = params['contentGroup'];

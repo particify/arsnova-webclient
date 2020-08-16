@@ -17,6 +17,7 @@ import * as moment from 'moment';
 import { GlobalStorageService, STORAGE_KEYS } from '../../../services/util/global-storage.service';
 import { AnnounceService } from '../../../services/util/announce.service';
 import { VoteService } from '../../../services/http/vote.service';
+import { first } from 'rxjs/operators';
 
 @Pipe({ name: 'dateFromNow' })
 export class DateFromNow implements PipeTransform {
@@ -53,6 +54,7 @@ export class CommentComponent implements OnInit {
   deviceType: string;
   inAnswerView = false;
   roleString: string;
+  userId: string;
 
   constructor(
     protected authenticationService: AuthenticationService,
@@ -94,6 +96,8 @@ export class CommentComponent implements OnInit {
           this.roleString = 'moderator';
       }
     });
+    this.authenticationService.getAuthenticationChanges().pipe(first())
+        .subscribe(auth => this.userId = auth.userId);
     this.language = this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE);
     this.translateService.use(this.language);
     this.deviceType = this.globalStorageService.getItem(STORAGE_KEYS.DEVICE_TYPE);
@@ -137,18 +141,17 @@ export class CommentComponent implements OnInit {
 
   vote(vote: number) {
     const voteString = vote.toString();
-    const userId = this.authenticationService.getUser().id;
     let subscription;
     if (this.hasVoted !== vote) {
       if (voteString === '1') {
-        subscription = this.voteService.voteUp(this.comment.id, userId);
+        subscription = this.voteService.voteUp(this.comment.id, this.userId);
       } else {
-        subscription = this.voteService.voteDown(this.comment.id, userId);
+        subscription = this.voteService.voteDown(this.comment.id, this.userId);
       }
       this.currentVote = voteString;
       this.hasVoted = vote;
     } else {
-      subscription = this.voteService.deleteVote(this.comment.id, userId);
+      subscription = this.voteService.deleteVote(this.comment.id, this.userId);
       this.hasVoted = 0;
       this.currentVote = '0';
     }

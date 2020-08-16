@@ -6,31 +6,31 @@
       <mat-icon class="header-icons">arrow_back</mat-icon>
     </button>
     <span class="fill-remaining-space"></span>
-    <h2 *ngIf="router.url.includes('comments') && user.role === 'CREATOR' && deviceType === 'desktop'">
+    <h2 *ngIf="router.url.includes('comments') && isCreator && deviceType === 'desktop'">
       {{cTime}}
     </h2>
     <span class="fill-remaining-space"
-          *ngIf="router.url.includes('comments') && user.role === 'CREATOR' && deviceType === 'desktop'"></span>
-    <button mat-icon-button class="gavel" *ngIf="router.url.includes('comments') && user.role === 'PARTICIPANT' && moderationEnabled"
+          *ngIf="router.url.includes('comments') && isCreator && deviceType === 'desktop'"></span>
+    <button mat-icon-button class="gavel" *ngIf="router.url.includes('comments') && isParticipant && moderationEnabled"
             #tt="matTooltip" matTooltip="{{ 'header.moderation-enabled' | translate }}" (click)="tt.toggle()">
       <mat-icon class="header-icons">gavel</mat-icon>
     </button>
-    <h2 id="shortId-header" *ngIf="router.url.includes('comments') && user.role === 'CREATOR' && deviceType === 'desktop'">
+    <h2 id="shortId-header" *ngIf="router.url.includes('comments') && isCreator && deviceType === 'desktop'">
       {{'header.id' | translate}}: {{ shortId.slice(0, 4) }} {{  shortId.slice(4, 8) }}
     </h2>
     <span class="fill-remaining-space"></span>
 
     <mat-menu #userMenu="matMenu" [overlapTrigger]="false">
-      <button mat-menu-item *ngIf="user" routerLink="/user" tabindex="0">
+      <button mat-menu-item *ngIf="auth" routerLink="/user" tabindex="0">
         <mat-icon class="rooms">people</mat-icon>
-        <span *ngIf="!user.isGuest">{{'header.my-rooms' | translate}}</span>
-        <span *ngIf="user.isGuest">{{'header.visited-rooms' | translate}}</span>
+        <span *ngIf="!auth.isGuest">{{'header.my-rooms' | translate}}</span>
+        <span *ngIf="auth.isGuest">{{'header.visited-rooms' | translate}}</span>
       </button>
-      <!-- <button mat-menu-item *ngIf="user" (click)="openUserBonusTokenDialog()" tabindex="0">
+      <!-- <button mat-menu-item *ngIf="auth" (click)="openUserBonusTokenDialog()" tabindex="0">
         <mat-icon class="bonus">grade</mat-icon>
         <span>{{'header.user-bonus-token' | translate}}</span>
       </button> -->
-      <button mat-menu-item *ngIf="user && !user.isGuest" (click)="openDeleteUserDialog()" tabindex="0">
+      <button mat-menu-item *ngIf="auth && !auth.isGuest" (click)="openDeleteUserDialog()" tabindex="0">
         <mat-icon color="warn">delete</mat-icon>
         <span>{{'header.delete-account' | translate}}</span>
       </button>
@@ -48,27 +48,27 @@
       </button>
     </mat-menu>
 
-    <button mat-button *ngIf="user && deviceType === 'desktop'"
+    <button mat-button *ngIf="auth && deviceType === 'desktop'"
             [matMenuTriggerFor]="userMenu"
             aria-labelledby="room-label" id="room-button">
         <mat-icon class="header-icons">account_circle</mat-icon>
-        <span class="button-text" *ngIf="!user.isGuest">{{'header.my-account' | translate}}</span>
-        <span class="button-text" *ngIf="user.isGuest">{{'header.my-guest-account' | translate}}</span>
+        <span class="button-text" *ngIf="!auth.isGuest">{{'header.my-account' | translate}}</span>
+        <span class="button-text" *ngIf="auth.isGuest">{{'header.my-guest-account' | translate}}</span>
     </button>
 
-    <button mat-icon-button *ngIf="user && deviceType === 'mobile'"
+    <button mat-icon-button *ngIf="auth && deviceType === 'mobile'"
             [matMenuTriggerFor]="userMenu"
             aria-labelledby="room-label">
       <mat-icon class="header-icons">account_circle</mat-icon>
     </button>
     <div *ngIf="router.url !== '/login'">
-      <button id="login-button" mat-button *ngIf="!user && deviceType === 'desktop'"
+      <button id="login-button" mat-button *ngIf="!auth && deviceType === 'desktop'"
               (click)=navToLogin() aria-labelledby="login-label">
         <mat-icon class="header-icons">account_circle</mat-icon>
         <span class="button-text" *ngIf="deviceType === 'desktop'">{{'header.login' | translate}}</span>
       </button>
 
-      <button mat-icon-button *ngIf="!user && deviceType === 'mobile'" (click)=navToLogin()
+      <button mat-icon-button *ngIf="!auth && deviceType === 'mobile'" (click)=navToLogin()
               aria-labelledby="login-label">
         <mat-icon class="header-icons">account_circle</mat-icon>
       </button>

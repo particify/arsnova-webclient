@@ -41,7 +41,7 @@ class MockRoomService {
 @Injectable()
 class MockAuthenticationService {
   isLoggedIn() {
-    return true;
+    return of(true);
   }
 }
 

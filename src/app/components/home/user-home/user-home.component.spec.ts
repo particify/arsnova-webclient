@@ -8,7 +8,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { EventService } from '../../../services/util/event.service';
 import { LanguageService } from '../../../services/util/language.service';
 import { AuthenticationService } from '../../../services/http/authentication.service';
-import { User } from '../../../models/user';
+import { ClientAuthentication } from 'app/models/client-authentication';
 import { DialogService } from '../../../services/util/dialog.service';
 import { GlobalStorageService } from '../../../services/util/global-storage.service';
 import { AnnounceService } from '../../../services/util/announce.service';
@@ -50,10 +50,10 @@ class MockLanguageService {
 
 @Injectable()
 class MockAuthenticationService {
-  private user = new BehaviorSubject<User>(undefined);
+  private auth$$ = new BehaviorSubject(new BehaviorSubject(null));
 
-  get watchUser() {
-    return this.user.asObservable();
+  getAuthenticationChanges() {
+    return this.auth$$.asObservable();
   }
 }
 
@@ -91,7 +91,7 @@ class RoomJoinStubComponent {
 
 @Component({ selector: 'app-room-list', template: '' })
 class RoomListStubComponent {
-  @Input() user: User;
+  @Input() auth: ClientAuthentication;
 }
 
 @Component({ selector: 'mat-icon', template: '' })

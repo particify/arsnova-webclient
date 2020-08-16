@@ -9,7 +9,7 @@ import { NotificationService } from '../../../services/util/notification.service
 import { AuthenticationService } from '../../../services/http/authentication.service';
 import { ModeratorService } from '../../../services/http/moderator.service';
 import { EventService } from '../../../services/util/event.service';
-import { Observable, of } from 'rxjs';
+import { BehaviorSubject, Observable, of } from 'rxjs';
 import { GlobalStorageService } from '../../../services/util/global-storage.service';
 
 const TRANSLATION_DE = require('../../../../assets/i18n/home/de.json');
@@ -49,7 +49,11 @@ class MockNotificationService {
 
 @Injectable()
 class MockAuthenticationService {
-  public watchUser = jasmine.createSpyObj('MockAuthenticationServiceWatchUserSpy', ['subscribe']);
+  private auth$$ = new BehaviorSubject(new BehaviorSubject(null));
+
+  getAuthenticationChanges() {
+    return this.auth$$.asObservable();
+  }
 }
 
 @Injectable()

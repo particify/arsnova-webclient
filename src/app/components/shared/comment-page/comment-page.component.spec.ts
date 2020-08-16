@@ -2,13 +2,13 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { CommentPageComponent } from './comment-page.component';
 import { Injectable, Renderer2, Component, Input } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { BehaviorSubject, Observable, of } from 'rxjs';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { ActivatedRoute } from '@angular/router';
 import { NotificationService } from '../../../services/util/notification.service';
 import { AuthenticationService } from '../../../services/http/authentication.service';
 import { EventService } from '../../../services/util/event.service';
-import { User } from '../../../models/user';
+import { ClientAuthentication } from 'app/models/client-authentication';
 import { GlobalStorageService } from '../../../services/util/global-storage.service';
 import { AnnounceService } from '../../../services/util/announce.service';
 
@@ -43,8 +43,10 @@ class MockNotificationService {
 
 @Injectable()
 class MockAuthenticationService {
-  getUser() {
-    return null;
+  private auth$$ = new BehaviorSubject(new BehaviorSubject(null));
+
+  getAuthenticationChanges() {
+    return this.auth$$.asObservable();
   }
 }
 
@@ -79,7 +81,7 @@ class MockGlobalStorageService {
 
 @Component({ selector: 'app-comment-list', template: '' })
 class CommentListStubComponent {
-  @Input() user: User;
+  @Input() auth: ClientAuthentication;
   @Input() roomId: String;
 }
 

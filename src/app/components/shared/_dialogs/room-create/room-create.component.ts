@@ -11,8 +11,9 @@ import { AuthenticationService } from '../../../../services/http/authentication.
 import { TranslateService } from '@ngx-translate/core';
 import { TSMap } from 'typescript-map';
 import { EventService } from '../../../../services/util/event.service';
-import { User } from '../../../../models/user';
 import { GlobalStorageService, STORAGE_KEYS } from '../../../../services/util/global-storage.service';
+import { first, filter } from 'rxjs/operators';
+import { ClientAuthentication } from 'app/models/client-authentication';
 
 @Component({
   selector: 'app-room-create',
@@ -24,7 +25,7 @@ export class RoomCreateComponent implements OnInit {
   emptyInputs = false;
   room: Room;
   roomId: string;
-  user: User;
+  auth: ClientAuthentication;
 
   constructor(
     private roomService: RoomService,
@@ -41,7 +42,10 @@ export class RoomCreateComponent implements OnInit {
 
   ngOnInit() {
     this.translateService.use(this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE));
-    this.authenticationService.watchUser.subscribe(newUser => this.user = newUser);
+    this.authenticationService.getAuthenticationChanges().pipe(
+        filter(auth => !!auth),
+        first()
+    ).subscribe(auth => this.auth = auth);
   }
 
   resetEmptyInputs(): void {
@@ -49,8 +53,9 @@ export class RoomCreateComponent implements OnInit {
   }
 
   checkLogin(longRoomName: string) {
-    if (!this.user) {
-      this.authenticationService.guestLogin(UserRole.CREATOR).subscribe(() => {
+    if (!this.auth) {
+      this.authenticationService.loginGuest().subscribe(result => {
+        this.auth = result.authentication;
         this.addRoom(longRoomName);
       });
     } else {
@@ -72,6 +77,7 @@ export class RoomCreateComponent implements OnInit {
     newRoom.name = longRoomName;
     newRoom.abbreviation = '00000000';
     newRoom.description = '';
+    newRoom.ownerId = this.auth.userId;
     this.roomService.addRoom(newRoom).subscribe(room => {
       this.room = room;
       let msg1: string;

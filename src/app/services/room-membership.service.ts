@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
-import { map, filter } from 'rxjs/operators';
+import { map, filter, first, flatMap } from 'rxjs/operators';
 import { IMessage } from '@stomp/stompjs';
 import { BaseHttpService } from './http/base-http.service';
 import { WsConnectorService } from './websockets/ws-connector.service';
@@ -22,27 +22,24 @@ export class RoomMembershipService extends BaseHttpService {
     membershipByUserAndRoom: '/_view/membership/by-user-and-room'
   };
   private memberships$ = new BehaviorSubject<Membership[]>(null);
-  private userId: string;
   private changeSubscription: Subscription;
 
   constructor(
     private http: HttpClient,
     private wsConnector: WsConnectorService,
     public eventService: EventService,
-    authenticationService: AuthenticationService) {
+    private authenticationService: AuthenticationService) {
       super();
-      authenticationService.watchUser.subscribe(user => {
+      authenticationService.getAuthenticationChanges().subscribe(auth => {
         if (this.changeSubscription) {
           this.changeSubscription.unsubscribe();
         }
         this.memberships$.next(null);
-        if (!user) {
-          this.userId = null;
+        if (!auth) {
           return;
         }
-        this.userId = user.id;
         /* Reset cached membership data based on server-side events. */
-        this.changeSubscription = this.getMembershipChangesStream(user.id)
+        this.changeSubscription = this.getMembershipChangesStream(auth.userId)
             .subscribe(() => this.memberships$.next(null));
       });
       /* Reset cached membership data based on client-side events. */
@@ -56,8 +53,8 @@ export class RoomMembershipService extends BaseHttpService {
    * Loads the user's membership data from the backend and passes them to
    * subscribers.
    */
-  loadMemberships() {
-    this.http.get<Membership[]>(this.apiUrl.base + this.apiUrl.membershipByUser + '/' + this.userId)
+  loadMemberships(userId: string) {
+    this.http.get<Membership[]>(this.apiUrl.base + this.apiUrl.membershipByUser + '/' + userId)
         .subscribe(memberships => this.memberships$.next(memberships));
   }
 
@@ -67,13 +64,19 @@ export class RoomMembershipService extends BaseHttpService {
    * Data might be fetched from local in-memory cache if available.
    */
   getMembershipChanges(): Observable<Membership[]> {
-    if (this.userId && !this.memberships$.getValue()) {
-      this.loadMemberships();
-    }
+    return this.authenticationService.getAuthenticationChanges().pipe(
+      first(),
+      flatMap(auth => {
+        if (!this.memberships$.getValue()) {
+          this.loadMemberships(auth.userId);
+        }
 
-    /* Do not expose Subject interface. Subject#next() should not be callable
-     * outside of this service. */
-    return this.memberships$.asObservable();
+        /* Do not expose Subject interface. Subject#next() should not be callable
+        * outside of this service. */
+        return this.memberships$.asObservable();
+      })
+    );
+
   }
 
   /**
