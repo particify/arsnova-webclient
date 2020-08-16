@@ -4,7 +4,7 @@ import { UserRole } from '../../../models/user-roles.enum';
 import { RoomService } from '../../../services/http/room.service';
 import { EventService } from '../../../services/util/event.service';
 import { RoomMembershipService } from '../../../services/room-membership.service';
-import { Subscription, Observable, combineLatest, Subject } from 'rxjs';
+import { Subscription, Observable, combineLatest, Subject, of } from 'rxjs';
 import { NotificationService } from '../../../services/util/notification.service';
 import { TranslateService } from '@ngx-translate/core';
 import { Router } from '@angular/router';
@@ -82,9 +82,11 @@ export class RoomListComponent implements OnInit, OnDestroy {
   getRoomDataViews(): Observable<RoomDataView[]> {
     const memberships$ = this.roomMembershipService.getMembershipChanges().pipe(filter(m => m !== null));
     const roomIds$ = memberships$.pipe(
-      map(memberships => memberships.map(membership => membership.roomId))
+        map(memberships => memberships.map(membership => membership.roomId))
     );
-    const roomSummaries$ = roomIds$.pipe(switchMap(ids => this.roomService.getRoomSummaries(ids)));
+    const roomSummaries$ = roomIds$.pipe(
+        switchMap(ids => ids.length > 0 ? this.roomService.getRoomSummaries(ids) : of([]))
+    );
 
     return combineLatest(memberships$, roomSummaries$).pipe(
         map((result) => {
