@@ -57,16 +57,32 @@
   height: 30%;
 }
 
-.mat-grid-tile {
-  height: 90%;
-  min-height: 150px;
-  padding-top: 2% !important;
+.mat-grid-list {
+  width: 100%;
+  min-height: 140px;
+  padding: 0 !important;
+  margin: 4% 0;
 }
 
-.question-button-div {
-  margin: 10% 0 10% 0;
+.mat-grid-tile {
+  height: 90%;
+  padding: 2% !important;
+  overflow: inherit;
 }
 
 markdown {
   margin: 0 3% 0 3% !important;
+}
+
+
+.single-tile {
+  width: calc(100% - 32px) !important;
+}
+
+.double-tile {
+  width: calc(50% - 16px) !important;
+}
+
+.big-container {
+  min-height: 180px;
 }

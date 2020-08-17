@@ -22,8 +22,8 @@
         <markdown [data]="room.description.trim()"></markdown>
       </mat-card-content>
       <div fxLayout="column" fxLayoutAlign="center" fxLayoutGap="20px">
-        <mat-grid-list cols="{{viewModuleCount}}" rowHeight="1:1" *ngIf="viewModuleCount > 1 && this.moderationEnabled">
-          <mat-grid-tile>
+        <mat-grid-list cols="{{viewModuleCount}}" rowHeight="1:1" [ngClass]="{'big-container': deviceWidth >= 500, 'single-container': !moderationEnabled}">
+          <mat-grid-tile [ngClass]="{'single-tile': !moderationEnabled, 'double-tile': moderationEnabled}">
             <button id="comments-button" mat-icon-button aria-labelledby="comments"
                     [ngClass]="{'hover': deviceWidth > 500}" [disableRipple]="true"
                     routerLink="/moderator/room/{{ room.shortId }}/comments">
@@ -46,16 +46,6 @@
         </mat-grid-list>
         <p tabindex="-1" id="moderation-disabled" class="visually-hidden">
           {{ 'room-page.a11y-moderation-disabled' | translate }}</p>
-        <div fxLayout="row" fxLayoutAlign="center" *ngIf="!this.moderationEnabled" class="question-button-div">
-          <button id="comments-button2" mat-icon-button aria-labelledby="comments"
-                  [ngClass]="{'hover': deviceWidth > 500}" [disableRipple]="true"
-                  routerLink="/moderator/room/{{ room.shortId }}/comments">
-            <mat-icon matBadge="{{commentCounter}}" class="main-icon"
-                      [ngClass]="{'desktop' : deviceWidth > 500}">question_answer
-            </mat-icon>
-            <h3 class="button-text">{{ 'room-page.comments' | translate}}</h3>
-          </button>
-        </div>
       </div>
     </mat-card>
 
