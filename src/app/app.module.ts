@@ -60,6 +60,7 @@ import { AnnounceService } from './services/util/announce.service';
 import { AdminService } from './services/http/admin.service';
 import { SystemInfoService } from './services/http/system-info.service';
 import { RequestPasswordResetComponent } from './components/home/request-password-reset/request-password-reset.component';
+import { FormattingService } from './services/http/formatting.service';
 
 export function dialogClose(dialogResult: any) {
 }
@@ -158,6 +159,7 @@ export function initializeApp(appConfig: AppConfig) {
     AnnounceService,
     AdminService,
     SystemInfoService,
+    FormattingService,
     STORAGE_CONFIG_PROVIDERS,
     {
       provide: MatDialogRef,
