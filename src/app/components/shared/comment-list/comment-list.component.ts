@@ -316,8 +316,7 @@ export class CommentListComponent implements OnInit, OnDestroy {
   }
 
   filterComments(type: string, tag?: string): void {
-    this.currentFilter = type;
-    if (type === '') {
+    if (type === '' || (this.currentFilter === this.tag && type === this.tag)) {
       this.filteredComments = this.comments;
       this.hideCommentsList = false;
       this.currentFilter = '';
@@ -341,6 +340,7 @@ export class CommentListComponent implements OnInit, OnDestroy {
           return c.answer;
       }
     });
+    this.currentFilter = type;
     this.hideCommentsList = true;
     this.sortComments(this.currentSort);
   }
