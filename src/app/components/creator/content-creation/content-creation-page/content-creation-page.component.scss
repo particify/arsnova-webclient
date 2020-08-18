@@ -12,10 +12,6 @@ form {
   height: auto;
 }
 
-::ng-deep .mat-menu-panel {
-  max-width: 500px!important;
-}
-
 .format-name {
   line-height: 100%;
   font-weight: $font-weight-bold;

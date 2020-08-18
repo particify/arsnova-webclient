@@ -49,7 +49,7 @@
       </span>
     </button>
 
-    <mat-menu #themeMenu="matMenu" [overlapTrigger]="false">
+    <mat-menu class="wider-panel" #themeMenu="matMenu" [overlapTrigger]="false">
       <button mat-menu-item *ngFor="let theme of themes" (click)="changeTheme(theme)"
               title="{{theme.toString(getLanguage())}}">
         <div fxLayout="row">

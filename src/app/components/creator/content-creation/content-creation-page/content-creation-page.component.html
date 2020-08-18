@@ -19,7 +19,7 @@
           {{ 'content.format-' + selectedFormat.name | translate}}
         </span>
                 </button>
-                <mat-menu #formatMenu="matMenu">
+                <mat-menu class="wider-panel" #formatMenu="matMenu">
                   <button (click)="changeFormat(format)" *ngFor="let format of formats" [value]="format" mat-menu-item>
                     <div fxLayout="row">
                       <mat-icon class="format-icon">{{ format.icon }}</mat-icon>

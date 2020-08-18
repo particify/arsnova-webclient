@@ -1,9 +1,9 @@
 <form fxLayout="column" fxLayoutGap="10px">
 
-  <mat-checkbox [checked]="multipleCorrectAnswers" [(ngModel)]="multipleCorrectAnswers" name="Mehrere richtige Antworten">
+  <mat-checkbox class="loose-checkbox" [checked]="multipleCorrectAnswers" [(ngModel)]="multipleCorrectAnswers" name="Mehrere richtige Antworten">
     <span>{{ 'content.multiple-answers-allowed' | translate }}</span>
   </mat-checkbox>
-  <mat-checkbox [checked]="noCorrectAnswers" [(ngModel)]="noCorrectAnswers" (ngModelChange)="removeCorrectAnswers()" name="Mehrere richtige Antworten">
+  <mat-checkbox class="loose-checkbox" [checked]="noCorrectAnswers" [(ngModel)]="noCorrectAnswers" (ngModelChange)="removeCorrectAnswers()" name="Mehrere richtige Antworten">
     <span>{{ 'content.no-correct-answer' | translate }}</span>
   </mat-checkbox>
   <mat-card *ngIf="displayAnswers.length > 0">
@@ -52,7 +52,7 @@
         <mat-label>{{ 'content.add-answer' | translate }}</mat-label>
         <input (focus)="eventService.makeFocusOnInputTrue()" (blur)="eventService.makeFocusOnInputFalse()"
                matInput [(ngModel)]="newAnswerOptionLabel" name="answer" id="answer-input" aria-labelledby="answer">
-        <button mat-icon-button matSuffix (click)="addAnswer($event)">
+        <button class="add-button" mat-icon-button matSuffix (click)="addAnswer($event)">
           <mat-icon class="add-icon">add_circle</mat-icon>
         </button>
         <mat-placeholder>{{ 'content.answer' | translate }}</mat-placeholder>
