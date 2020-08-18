@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable, Subscription } from 'rxjs';
-import { map, filter, first, flatMap } from 'rxjs/operators';
+import { BehaviorSubject, Observable, of } from 'rxjs';
+import { map, shareReplay, skip, switchAll, takeUntil } from 'rxjs/operators';
 import { IMessage } from '@stomp/stompjs';
 import { BaseHttpService } from './http/base-http.service';
 import { WsConnectorService } from './websockets/ws-connector.service';
@@ -21,8 +21,7 @@ export class RoomMembershipService extends BaseHttpService {
     membershipByUser: '/_view/membership/by-user',
     membershipByUserAndRoom: '/_view/membership/by-user-and-room'
   };
-  private memberships$ = new BehaviorSubject<Membership[]>(null);
-  private changeSubscription: Subscription;
+  private memberships$$ = new BehaviorSubject<Observable<Membership[]>>(of([]));
 
   constructor(
     private http: HttpClient,
@@ -30,32 +29,36 @@ export class RoomMembershipService extends BaseHttpService {
     public eventService: EventService,
     private authenticationService: AuthenticationService) {
       super();
+      const authChanged$ = authenticationService.getAuthenticationChanges().pipe(skip(1));
       authenticationService.getAuthenticationChanges().subscribe(auth => {
-        if (this.changeSubscription) {
-          this.changeSubscription.unsubscribe();
-        }
-        this.memberships$.next(null);
         if (!auth) {
           return;
         }
+        this.loadMemberships(auth.userId);
         /* Reset cached membership data based on server-side events. */
-        this.changeSubscription = this.getMembershipChangesStream(auth.userId)
-            .subscribe(() => this.memberships$.next(null));
+        this.getMembershipChangesStream(auth.userId).pipe(
+            takeUntil(authChanged$)
+        ).subscribe(() => this.loadMemberships(auth.userId));
+        /* Reset cached membership data based on client-side events. */
+        this.eventService.on<any>('RoomDeleted').pipe(
+            takeUntil(authChanged$),
+        ).subscribe(() => this.loadMemberships(auth.userId));
+        this.eventService.on<any>('RoomCreated').pipe(
+            takeUntil(authChanged$),
+        ).subscribe(() => this.loadMemberships(auth.userId));
       });
-      /* Reset cached membership data based on client-side events. */
-      this.eventService.on<any>('RoomDeleted')
-          .subscribe(() => this.memberships$.next(null));
-      this.eventService.on<any>('RoomCreated')
-          .subscribe(() => this.memberships$.next(null));
   }
 
   /**
-   * Loads the user's membership data from the backend and passes them to
-   * subscribers.
+   * Creates an replayable, multicastable Observable for loading the user's
+   * membership data from the backend and emits it them to subscribers.
    */
-  loadMemberships(userId: string) {
-    this.http.get<Membership[]>(this.apiUrl.base + this.apiUrl.membershipByUser + '/' + userId)
-        .subscribe(memberships => this.memberships$.next(memberships));
+  private loadMemberships(userId: string) {
+    const memberships$ = this.http.get<Membership[]>(this.apiUrl.base + this.apiUrl.membershipByUser + '/' + userId)
+        .pipe(shareReplay());
+    this.memberships$$.next(memberships$);
+
+    return memberships$;
   }
 
   /**
@@ -64,19 +67,7 @@ export class RoomMembershipService extends BaseHttpService {
    * Data might be fetched from local in-memory cache if available.
    */
   getMembershipChanges(): Observable<Membership[]> {
-    return this.authenticationService.getAuthenticationChanges().pipe(
-      first(),
-      flatMap(auth => {
-        if (!this.memberships$.getValue()) {
-          this.loadMemberships(auth.userId);
-        }
-
-        /* Do not expose Subject interface. Subject#next() should not be callable
-        * outside of this service. */
-        return this.memberships$.asObservable();
-      })
-    );
-
+    return this.memberships$$.pipe(switchAll());
   }
 
   /**
@@ -84,9 +75,8 @@ export class RoomMembershipService extends BaseHttpService {
    */
   getMembershipByRoom(roomShortId: string): Observable<Membership> {
     return this.getMembershipChanges().pipe(
-        filter(memberships => !!memberships), // membership can be null
         map(memberships => memberships.filter(m => m.roomShortId === roomShortId)),
-        map(memberships => memberships[0])
+        map(memberships => memberships.length > 0 ? memberships[0] : new Membership())
     );
   }
 

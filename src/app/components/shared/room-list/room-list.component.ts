@@ -4,7 +4,7 @@ import { UserRole } from '../../../models/user-roles.enum';
 import { RoomService } from '../../../services/http/room.service';
 import { EventService } from '../../../services/util/event.service';
 import { RoomMembershipService } from '../../../services/room-membership.service';
-import { Subscription, Observable, combineLatest, Subject, of } from 'rxjs';
+import { Observable, of, Subject, Subscription, zip } from 'rxjs';
 import { NotificationService } from '../../../services/util/notification.service';
 import { TranslateService } from '@ngx-translate/core';
 import { Router } from '@angular/router';
@@ -88,7 +88,7 @@ export class RoomListComponent implements OnInit, OnDestroy {
         switchMap(ids => ids.length > 0 ? this.roomService.getRoomSummaries(ids) : of([]))
     );
 
-    return combineLatest(memberships$, roomSummaries$).pipe(
+    return zip(memberships$, roomSummaries$).pipe(
         map((result) => {
           return result[0].map(membership => {
             return {
@@ -150,7 +150,15 @@ export class RoomListComponent implements OnInit, OnDestroy {
   }
 
   setDisplayedRooms(rooms: RoomDataView[]) {
-    this.displayRooms = rooms;
+    this.displayRooms = rooms.sort((a, b) => {
+      if (a.membership.lastVisit > b.membership.lastVisit) {
+        return 1;
+      } else if (a.membership.lastVisit < b.membership.lastVisit) {
+        return -1;
+      } else {
+        return a.summary.name.localeCompare(b.summary.name);
+      }
+    });
   }
 
   deleteRoom(room: RoomDataView) {
