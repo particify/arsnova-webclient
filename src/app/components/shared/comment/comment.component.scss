@@ -111,8 +111,11 @@
 }
 
 .comment-tags {
-  width: 140px;
+  max-width: 140px;
   margin-top: 1rem;
+}
+
+.mat-chip {
   cursor: pointer;
 }
 

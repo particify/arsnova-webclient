@@ -106,10 +106,9 @@
       </div>
 
     </div>
-    <div (click)="this.clickedOnTag.emit(comment.tag)" *ngIf="comment.tag && comment.tag !== ''"
-         class="comment-tags light">
+    <div *ngIf="comment.tag && comment.tag !== ''" class="comment-tags light">
       <mat-chip-list>
-        <mat-chip>
+        <mat-chip (click)="this.clickedOnTag.emit(comment.tag)" >
           {{comment.tag}}
         </mat-chip>
       </mat-chip-list>
