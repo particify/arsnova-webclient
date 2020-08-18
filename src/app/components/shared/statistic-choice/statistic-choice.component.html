@@ -5,9 +5,9 @@
           matTooltip="{{ 'statistic.answer-indicator' | translate }}" aria-labelledby="show-correct">
     <mat-icon>playlist_add_check</mat-icon>
   </button>
-  <button mat-icon-button disableRipple (click)="toggleChart()"
+  <button mat-icon-button disableRipple [disabled]="data.every(noAnswers)" (click)="toggleChart()"
           matTooltip="{{ (chartVisible ? 'statistic.hide-chart' : 'statistic.show-chart') | translate }}"
-          aria-labelledby="show-chart">
+          aria-labelledby="show-chart" [ngClass]="{'disabled' : data.every(noAnswers)}">
     <mat-icon>insert_chart</mat-icon>
   </button>
   <div tabindex="-1" id="message-button" class="visually-hidden">
@@ -16,7 +16,7 @@
 </div>
 <div>
   <app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
-  <div class="chart-container" [ngClass]="{ 'invisible': !chartVisible }">
+  <div class="chart-container" *ngIf="!data.every(noAnswers)" [ngClass]="{ 'invisible': !chartVisible }">
     <canvas id="chart"></canvas>
   </div>
 </div>
