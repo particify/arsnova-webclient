@@ -1,3 +1,5 @@
+@import '../../../../_variables';
+
 footer {
   overflow-y: auto;
   position: absolute;
@@ -57,9 +59,10 @@ footer {
 }
 
 .color-title {
-  height: 16px;
-  font-size: 16px;
+  height: 14px;
+  font-size: 14px;
   color: var(--on-dialog);
+  font-weight: $font-weight-bold;
 }
 
 .color-description {
@@ -71,7 +74,5 @@ footer {
 }
 
 .lang-title {
-  height: 50px;
-  font-size: 16px;
   text-align: center;
 }
