@@ -11,7 +11,7 @@
 </div>
 <mat-toolbar *ngIf="!isLoading && total >= status.zero"></mat-toolbar>
 
-<button mat-raised-button class="button-primary" *ngIf="total > status.empty" (click)="showDeleteAnswerDialog()"
+<button mat-raised-button class="button-primary" (click)="showDeleteAnswerDialog()"
         aria-labelledby="delete-answers">
   {{ 'content.delete-answers' | translate }}
 </button>
@@ -31,20 +31,20 @@
   <ng-container matColumnDef="counts">
     <mat-header-cell *matHeaderCellDef> {{'statistic.answers' | translate}} </mat-header-cell>
     <mat-cell *matCellDef="let cp" [ngClass]="{'invisible' : cp.counts <= 0, 'clickable': cp.counts > 0}"
-              (click)="goToStats(cp.contentId)">{{cp.counts}}</mat-cell>
+              (click)="goToStats(cp.contentId)">{{cp.percent === status.slide ? '-' : cp.counts}}</mat-cell>
   </ng-container>
 
   <ng-container matColumnDef="abstentions">
     <mat-header-cell *matHeaderCellDef> {{'statistic.abstentions' | translate}} </mat-header-cell>
     <mat-cell *matCellDef="let cp" [ngClass]="{'invisible' : cp.counts <= 0, 'clickable': cp.counts > 0}"
-              (click)="goToStats(cp.contentId)">{{cp.abstentions}}</mat-cell>
+              (click)="goToStats(cp.contentId)">{{cp.percent === status.slide ? '-' : cp.abstentions}}</mat-cell>
   </ng-container>
 
   <ng-container matColumnDef="percentage">
     <mat-header-cell *matHeaderCellDef> {{'statistic.percentage' | translate }} </mat-header-cell>
     <mat-cell *matCellDef="let cp" [ngClass]="{'invisible' : cp.counts <= 0 && cp.counts !== status.text,
      'clickable': cp.counts > 0}" (click)="goToStats(cp.contentId)">{{cp.percent >= status.zero ? cp.percent.toFixed() +
-      ' %' : cp.percent === status.likert ? '-' : cp.percent === status.text ? 'T' : ''}}</mat-cell>
+      ' %' : cp.percent === status.likert ? '-' : cp.percent === status.text ? 'T' : cp.percent === status.slide ? 'S' : ''}}</mat-cell>
   </ng-container>
 
   <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
