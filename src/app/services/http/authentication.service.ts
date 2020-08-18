@@ -49,8 +49,17 @@ export class AuthenticationService extends BaseHttpService {
   ) {
     super();
     const savedAuth: ClientAuthentication = this.globalStorageService.getItem(STORAGE_KEYS.USER);
-    this.loggedIn = !!this.globalStorageService.getItem(STORAGE_KEYS.LOGGED_IN);
+    this.loggedIn = !!this.globalStorageService.getItem(STORAGE_KEYS.LOGGED_IN) && !!savedAuth;
     this.auth$$ = new BehaviorSubject(new BehaviorSubject(this.loggedIn ? savedAuth : null));
+  }
+
+  /**
+   * Initialize authentication at startup.
+   */
+  init() {
+    if (this.loggedIn) {
+      this.refreshLogin().subscribe();
+    }
 
     this.getAuthenticationChanges().subscribe(auth => {
       console.log('Authentication changed', auth);
@@ -115,9 +124,6 @@ export class AuthenticationService extends BaseHttpService {
             this.globalStorageService.removeItem(STORAGE_KEYS.USER);
             this.logout();
           }
-        }),
-        catchError(e => {
-          return of(new ClientAuthenticationResult(null, null))
         })
     );
   }

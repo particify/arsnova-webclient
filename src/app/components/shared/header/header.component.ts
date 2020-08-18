@@ -74,10 +74,6 @@ export class HeaderComponent implements OnInit {
   }
 
   ngOnInit() {
-    if (this.globalStorageService.getItem(STORAGE_KEYS.LOGGED_IN)) {
-      this.authenticationService.refreshLogin().subscribe();
-    }
-
     this.authenticationService.getAuthenticationChanges().subscribe(auth => {
       this.auth = auth;
       this.isGuest = !auth || auth.authProvider === AuthProvider.ARSNOVA_GUEST;

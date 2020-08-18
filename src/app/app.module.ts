@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, APP_INITIALIZER } from '@angular/core';
 import { AppComponent } from './app.component';
 import { RegisterComponent } from './components/home/register/register.component';
 import { PasswordResetComponent } from './components/home/password-reset/password-reset.component';
@@ -125,6 +125,12 @@ export function initializeApp(appConfig: AppConfig) {
       deps: [AppConfig], multi: true
     },*/
     {
+      provide: APP_INITIALIZER,
+      useFactory: initAuthenticationService,
+      deps: [AuthenticationService],
+      multi: true
+    },
+    {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthenticationInterceptor,
       multi: true
@@ -183,4 +189,8 @@ export class AppModule {
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, '../../assets/i18n/home/', '.json');
+}
+
+export function initAuthenticationService(authenticationService: AuthenticationService) {
+  return () => authenticationService.init();
 }
