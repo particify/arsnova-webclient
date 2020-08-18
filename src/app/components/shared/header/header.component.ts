@@ -75,7 +75,7 @@ export class HeaderComponent implements OnInit {
 
   ngOnInit() {
     if (this.globalStorageService.getItem(STORAGE_KEYS.LOGGED_IN)) {
-      this.authenticationService.refreshLogin();
+      this.authenticationService.refreshLogin().subscribe();
     }
 
     this.authenticationService.getAuthenticationChanges().subscribe(auth => {

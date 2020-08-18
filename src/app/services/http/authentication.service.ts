@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject, Observable, of, timer } from 'rxjs';
-import { catchError, concatMap, filter, first, map, take, switchAll, shareReplay } from 'rxjs/operators';
+import { catchError, concatMap, filter, map, switchAll, switchMap, shareReplay, take, tap } from 'rxjs/operators';
 import { BaseHttpService } from './base-http.service';
 import { GlobalStorageService, STORAGE_KEYS } from '../util/global-storage.service';
 import { ClientAuthentication } from '../../models/client-authentication';
@@ -97,26 +97,29 @@ export class AuthenticationService extends BaseHttpService {
    * Sends a refresh request using current authentication to extend the
    * validity.
    */
-  refreshLogin(): void {
+  refreshLogin(): Observable<ClientAuthenticationResult | null> {
     // Load user authentication from local data store if available
     const savedAuth = this.globalStorageService.getItem(STORAGE_KEYS.USER);
-    if (savedAuth) {
-      const token: string = savedAuth.token;
-      const connectionUrl: string = this.apiUrl.base + this.apiUrl.auth + this.apiUrl.login + '?refresh=true';
-      const loginHttpHeaders = this.httpOptions.headers.set(AUTH_HEADER_KEY, `${AUTH_SCHEME} ${token}`);
-      const auth$ = this.emitAuthentication(
-          this.http.post<ClientAuthentication>(connectionUrl, {}, { headers: loginHttpHeaders }));
-      auth$.pipe(
-          catchError(e => {
-            if (e.status === 401 || e.status === 403) {
-              this.globalStorageService.removeItem(STORAGE_KEYS.USER);
-            }
-            this.logout();
-
-            return of(null);
-          })
-      );
+    if (!savedAuth) {
+      return of(null);
     }
+
+    const token: string = savedAuth.token;
+    const connectionUrl: string = this.apiUrl.base + this.apiUrl.auth + this.apiUrl.login + '?refresh=true';
+    const loginHttpHeaders = this.httpOptions.headers.set(AUTH_HEADER_KEY, `${AUTH_SCHEME} ${token}`);
+    const auth$ = this.http.post<ClientAuthentication>(connectionUrl, {}, { headers: loginHttpHeaders });
+    return this.handleLoginResponse(auth$).pipe(
+        tap(result => {
+          if (result.status === AuthenticationStatus.INVALID_CREDENTIALS) {
+            console.error('Could not refresh authentication.');
+            this.globalStorageService.removeItem(STORAGE_KEYS.USER);
+            this.logout();
+          }
+        }),
+        catchError(e => {
+          return of(new ClientAuthenticationResult(null, null))
+        })
+    );
   }
 
   /**
@@ -124,21 +127,17 @@ export class AuthenticationService extends BaseHttpService {
    * guest account.
    */
   loginGuest(): Observable<ClientAuthenticationResult> {
-    const savedUser = this.globalStorageService.getItem(STORAGE_KEYS.USER);
-    if (savedUser) {
-      this.loggedIn = true;
-      this.refreshLogin();
-    }
-    if (!this.isLoggedIn()) {
-      const connectionUrl: string = this.apiUrl.base + this.apiUrl.auth + this.apiUrl.login + this.apiUrl.guest;
+    return this.refreshLogin().pipe(switchMap(result => {
+      if (!result) {
+        /* Create new guest account */
+        const connectionUrl: string = this.apiUrl.base + this.apiUrl.auth + this.apiUrl.login + this.apiUrl.guest;
 
-      return this.handleLoginResponse(this.http.post<ClientAuthentication>(connectionUrl, null, this.httpOptions));
-    } else {
-      return this.getAuthenticationChanges().pipe(
-          first(),
-          map(auth => new ClientAuthenticationResult(auth))
-      );
-    }
+        return this.handleLoginResponse(this.http.post<ClientAuthentication>(connectionUrl, null, this.httpOptions));
+      }
+
+      /* Return existing account */
+      return of(result);
+    }));
   }
 
   /**
@@ -205,8 +204,10 @@ export class AuthenticationService extends BaseHttpService {
       }
     }), catchError((e) => {
       // check if user needs activation
-      if (e.error.errorType === 'DisabledException') {
+      if (e.error?.errorType === 'DisabledException') {
         return of(new ClientAuthenticationResult(null, AuthenticationStatus.ACTIVATION_PENDING));
+      } else if (e.status === 401 || e.status === 403) {
+        return of(new ClientAuthenticationResult(null, AuthenticationStatus.INVALID_CREDENTIALS));
       }
       return of(new ClientAuthenticationResult(null, AuthenticationStatus.UNKNOWN_ERROR));
     }));
