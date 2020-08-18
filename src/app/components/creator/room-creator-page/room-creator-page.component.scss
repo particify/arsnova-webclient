@@ -61,6 +61,10 @@
   margin-top: 3%;
 }
 
+.mat-card-subtitle {
+  margin: 0;
+}
+
 .button-text {
   font-size: 18px;
   padding: 0;
@@ -86,7 +90,7 @@
 }
 
 .mat-card-header {
-  margin: 5% 0;
+  margin: 4% 0 1% 0;
 }
 
 .mat-card-title {
