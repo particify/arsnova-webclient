@@ -18,7 +18,7 @@
       <span class="fill-remaining-space"></span>
       <div fxLayout="column">
         <div>
-          <button *ngIf="!isInTitleEditMode" mat-icon-button class="editButtons" (click)="goInTitleEditMode()" id="edit-group-name"
+          <button *ngIf="!isInTitleEditMode" mat-icon-button (click)="goInTitleEditMode()" id="edit-group-name"
                   matTooltip="{{ 'content.edit-content-group' | translate}}" aria-labelledby="edit-content-group-name">
             <mat-icon>edit</mat-icon>
           </button>
