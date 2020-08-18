@@ -1,17 +1,13 @@
 @import 'src/_variables';
 
+$bar-height: 65px;
+$mobile-bar-height: 50px;
+$bar-margin: 10px;
+$mobile-bar-margin: 8px;
+$card-padding: 16px;
+
 .mat-card {
   width: 100%;
-}
-
-.mobile-bar {
-  margin: 8px 0;
-  height: 50px;
-}
-
-.desktop-bar {
-  height: 65px;
-  margin: 10px 0;
 }
 
 .label-icon {
@@ -75,8 +71,30 @@
   outline: none;
 }
 
+
+@media (min-width: 700px) {
+  .answer-container {
+    height: calc(100% - ((#{$card-padding} * 2) + (#{$bar-height} * 4) + (#{$bar-margin} * 8)));
+  }
+
+  .bar {
+    height: $bar-height;
+    margin: $bar-margin 0;
+  }
+}
+
+@media (max-width: 700px) {
+  .answer-container {
+    height: calc(100% - ((#{$card-padding} * 2) + (#{$mobile-bar-height} * 4) + (#{$mobile-bar-margin} * 8)));
+  }
+
+  .bar {
+    height: $mobile-bar-height;
+    margin: $mobile-bar-margin 0;
+  }
+}
+
 .answer-container {
-  height: calc(100% - 296px);
   max-height: 400px;
   transition: 600ms;
 }

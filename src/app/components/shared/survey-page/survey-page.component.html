@@ -3,15 +3,14 @@
 <button class="visually-hidden" id="message-announcer-button" tabIndex="-1" (click)="announceKeys()">
     {{ 'survey.a11y-message' | translate }}</button>
   <div *ngIf="!isLoading" fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="center">
-    <mat-card class="card-container">
+    <mat-card>
       <div class="survey-container" [ngClass]="{ 'faded' : isClosed }">
         <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="30px"
              *ngFor="let state of survey; let i = index">
           <mat-icon *ngIf="type ===typeFeedback" class="label-icon" matTooltip="{{ state.label | translate }}">
             {{ state.name }}</mat-icon>
           <p *ngIf="type === typeSurvey" class="answer-label">{{ state.label | translate }}</p>
-          <mat-progress-bar class="survey-progress" [value]="state.count"
-             [ngClass]="{'desktop-bar': deviceWidth >= 700, 'mobile-bar': deviceWidth < 700}" ></mat-progress-bar>
+          <mat-progress-bar class="survey-progress bar" [value]="state.count"></mat-progress-bar>
         </div>
       </div>
       <div class="text invisible" [ngClass]="{'visible' : isClosed}">
