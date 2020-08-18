@@ -48,7 +48,8 @@ export class StatisticListComponent implements OnInit {
     zero: 0,
     likert: -1,
     empty: -2,
-    text: -3
+    text: -3,
+    slide: -4
   };
   dataSource: ContentStatistic[];
   total = this.status.empty;
@@ -97,9 +98,7 @@ export class StatisticListComponent implements OnInit {
   }
 
   getData(contents: Content[]) {
-    this.contents = contents.filter(content => {
-      return content.format !== ContentType.SLIDE;
-    });
+    this.contents = contents;
     const length = this.contents.length;
     let percent;
     this.dataSource = new Array<ContentStatistic>(length);
@@ -143,6 +142,11 @@ export class StatisticListComponent implements OnInit {
           this.dataSource[i].percent = this.status.text;
           this.dataSource[i].contentId = this.contents[i].id;
         });
+      } else if (this.contents[i].format === ContentType.SLIDE) {
+        this.dataSource[i].abstentions = this.status.slide;
+        this.dataSource[i].counts = this.status.slide;
+        this.dataSource[i].percent = this.status.slide;
+        this.dataSource[i].contentId = this.contents[i].id;
       }
     }
     this.isLoading = false;

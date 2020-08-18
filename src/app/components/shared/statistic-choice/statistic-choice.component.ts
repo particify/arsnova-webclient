@@ -42,6 +42,8 @@ export class StatisticChoiceComponent implements OnInit {
   theme: Theme;
   survey = false;
   chartVisible: boolean;
+  noAnswers = (currentValue) => currentValue === 0;
+
 
   constructor(protected route: ActivatedRoute,
               private contentService: ContentService,
