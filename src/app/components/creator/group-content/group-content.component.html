@@ -1,167 +1,169 @@
 <app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
-<div *ngIf="!isLoading" fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="center">
-  <div class="visually-hidden">
-    <button id="message-button" tabIndex="-1" (click)="announce()">
-      {{ 'content.a11y-content-list-message' | translate: { name: contentGroup.name } }}</button>
-    <button id="keys-button" tabIndex="-1" (click)="announce()">
-      {{ 'content.a11y-content-list-shortcuts' | translate }}</button>
-  </div>
-  <mat-card>
-    <div fxLayout="row">
-      <div class="cardTitle">
-        <h2 *ngIf="!isInTitleEditMode" [style.fontSize.px]=10>{{ collectionName }}</h2>
-        <mat-form-field class="mat-focused" [ngClass]="{'activeInput': isInTitleEditMode, 'inactiveInput': !isInTitleEditMode}">
-          <input #nameInput (focus)="eventService.makeFocusOnInputTrue()" (blur)="eventService.makeFocusOnInputFalse()"
-                 matInput maxlength="25" [(ngModel)]="updatedName" aria-labelledby="enter-content-group-name">
-        </mat-form-field>
-      </div>
-      <span class="fill-remaining-space"></span>
-      <div fxLayout="column">
-        <div>
-          <button *ngIf="!isInTitleEditMode" mat-icon-button (click)="goInTitleEditMode()" id="edit-group-name"
-                  matTooltip="{{ 'content.edit-content-group' | translate}}" aria-labelledby="edit-content-group-name">
-            <mat-icon>edit</mat-icon>
-          </button>
-          <button *ngIf="isInTitleEditMode" mat-icon-button class="editButtons" (click)="leaveTitleEditMode()"
-                  matTooltip="{{ 'content.abort' | translate}}" (keyup.enter)="leaveTitleEditMode()" aria-labelledby="discard-changes">
-            <mat-icon>clear</mat-icon>
-          </button>
-          <button *ngIf="isInTitleEditMode" mat-icon-button class="editButtons" (keyup.enter)="saveGroupName()" (click)="saveGroupName()"
-                  matTooltip="{{ 'content.save-content-group' | translate}}" aria-labelledby="save-changes">
-            <mat-icon>done</mat-icon>
-          </button>
-        </div>
-        <button *ngIf="!isInTitleEditMode" mat-icon-button id="statistic-button" aria-labelledby="statistics"
-                matTooltip="{{ 'room-page.answer-statistics' | translate}}"
-                routerLink="/creator/room/{{ room.shortId }}/statistics">
-          <mat-icon>insert_chart</mat-icon>
-        </button>
-      </div>
+<div fxFill fxLayout="column" fxLayoutAlign="center">
+  <div *ngIf="!isLoading" fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="center">
+    <div class="visually-hidden">
+      <button id="message-button" tabIndex="-1" (click)="announce()">
+        {{ 'content.a11y-content-list-message' | translate: { name: contentGroup.name } }}</button>
+      <button id="keys-button" tabIndex="-1" (click)="announce()">
+        {{ 'content.a11y-content-list-shortcuts' | translate }}</button>
     </div>
-    <mat-grid-list cols="2" rowHeight="{{deviceWidth > 500 ? '2:1' : '3:2'}}" *ngIf="!isLoading">
-      <mat-grid-tile>
-        <button class="actionButton" mat-icon-button id="content-create-button"
-                routerLink="/creator/room/{{ room.shortId }}/create-content" aria-labelledby="create-content">
-          <mat-icon class="actionIcon" [ngClass]="{'desktop' : deviceWidth > 500}">note_add</mat-icon>
-          <p class="button-text" [ngClass]="{'small-text': deviceWidth < 350}">
-            {{ 'room-page.create-content' | translate}}</p>
-        </button>
-      </mat-grid-tile>
-      <mat-grid-tile>
-        <button class="actionButton" mat-icon-button id="presentation-button" aria-labelledby="present-contents"
-                routerLink="/creator/room/{{ room.shortId }}/group/{{ contentGroup.name }}/statistics">
-          <mat-icon class="actionIcon" [ngClass]="{'desktop' : deviceWidth > 500}">school</mat-icon>
-          <p class="button-text" [ngClass]="{'small-text': deviceWidth < 350}">
-            {{ 'room-page.present' | translate}}</p>
-        </button>
-      </mat-grid-tile>
-    </mat-grid-list>
-    <mat-card-content>
-      <app-loading-indicator *ngIf="isLoading" [size]="50"></app-loading-indicator>
-      <div *ngIf="!isLoading" fxLayout="row" fxLayoutAlign="end center">
-        <button *ngIf="!isInSortingMode" mat-icon-button class="editButtons sort-buttons" (click)="goInSortingMode()" id="edit-group-sort"
-                matTooltip="{{ 'content.sort-content-group' | translate}}" aria-labelledby="edit-content-group-sort">
-          <mat-icon>list</mat-icon>
-        </button>
-        <button *ngIf="isInSortingMode" mat-raised-button class="abort button-abort"
-                (click)="leaveSortingMode()" (keyup.enter)="leaveTitleEditMode()" aria-labelledby="discard-changes">
-          {{ 'content.abort' | translate }}
-        </button>
-        <button *ngIf="isInSortingMode" mat-raised-button class="button-primary"
-                (keyup.enter)="saveSorting()" (click)="saveSorting()" aria-labelledby="save-sort-changes">
-          {{ 'content.save-sort-content-group' | translate }}
-        </button>
-        <span class="fill-remaining-space"></span>
-        <p *ngIf="!isInSortingMode" class="slide-text">{{ 'content.answers-direct' | translate}}
-          <mat-slide-toggle id="direct-show-slide" class="lock" (change)="toggleDirectAnswers()"
-                            [(ngModel)]="directAnswer" aria-labelledby="direct-show-answer">
-          </mat-slide-toggle>
-        </p>
-        <p *ngIf="!isInSortingMode" class="slide-text">{{ 'content.unlock-questions' | translate}}
-          <mat-slide-toggle id="lock-questions-slide" class="lock" (change)="lockContents()" [(ngModel)]="unlocked"
-                            aria-labelledby="lock-questions">
-          </mat-slide-toggle>
-        </p>
-      </div>
-      <div>
-        <div tabindex="-1" id="content-list" class="visually-hidden">
-          {{ 'content.a11y-content-list-contents' | translate: { count: contents.length } }}</div>
-        <div *ngIf="!isInSortingMode">
-          <mat-expansion-panel *ngFor="let content of contents; index as i" class="matPanel">
-            <mat-expansion-panel-header class="matPanelListHeader" attr.aria-label="{{ 'content.a11y-selected-content' | translate: { name: labels[i] } }}">
-              <mat-panel-title class="panelTitle">
-                {{ labels[i] }}
-              </mat-panel-title>
-              <button mat-icon-button (keyup.enter)="toggleDirectAnswer(content)"
-                      attr.aria-label="{{ (content.state.responsesVisible ? 'content.a11y-dont-direct-show-answer' : 'content.a11y-direct-show-answer') | translate }}"
-                      (click)="toggleDirectAnswer(content);$event.stopPropagation()"
-                      matTooltip="{{(content.state.responsesVisible ? 'content.answer-hide' : 'content.answer-direct') | translate}}">
-                <mat-icon class="lock-icon" [ngClass]="{'locked': !content.state.responsesVisible,
-              'unlocked': content.state.responsesVisible}">{{content.state.responsesVisible? 'flash_on' : 'flash_off'}}
-                </mat-icon>
-              </button>
-              <button mat-icon-button (keyup.enter)="lockContent(content)"
-                      attr.aria-label="{{ (content.state.visible ? 'content.a11y-lock-question' : 'content.a11y-unlock-question') | translate }}"
-                      (click)="lockContent(content);$event.stopPropagation()"
-                      matTooltip="{{(content.state.visible ? 'content.lock-question' : 'content.unlock-question') | translate}}">
-                <mat-icon class="lock-icon" [ngClass]="{'locked': !content.state.visible, 'unlocked': content.state.visible}">
-                  {{!content.state.visible? 'lock' : 'lock_open'}}
-                </mat-icon>
-              </button>
-              <button mat-icon-button (keyup.enter)="menuTrigger.openMenu()" #menuTrigger="matMenuTrigger"
-                      [matMenuTriggerFor]="moreActions" (click)="$event.stopPropagation()" aria-labelledby="more"
-                      class="editButton" matTooltip="{{ 'content.more-options' | translate}}">
-                <mat-icon>more_vert</mat-icon>
-              </button>
-
-              <mat-menu #moreActions="matMenu" xPosition="before">
-                <button mat-menu-item (click)="editContent(content)" attr.aria-label="{{ 'content.a11y-edit-content' | translate }}">
-                  <mat-icon>edit</mat-icon>
-                  <span> {{ 'content.edit-content' | translate}}</span>
-                </button>
-                <button mat-menu-item [matMenuTriggerFor]="chooseGroups" attr.aria-label="{{ 'content.a11y-add-to-content-group' | translate }}">
-                  <mat-icon>library_add</mat-icon>
-                  <span>{{ 'content.add-content-to-group' | translate}}</span>
-                </button>
-                <button mat-menu-item (click)="showDeleteAnswerDialog(content)" attr.aria-label="{{ 'content.a11y-delete-answers' | translate }}">
-                  <mat-icon>clear_all</mat-icon>
-                  <span>{{ 'content.delete-answers' | translate}}</span>
-                </button>
-                <button mat-menu-item (click)="deleteContent(content)" attr.aria-label="{{ 'content.a11y-delete-content' | translate }}">
-                  <mat-icon class="delete">delete_forever</mat-icon>
-                  <span>{{ 'content.delete-content' | translate}}</span>
-                </button>
-              </mat-menu>
-
-              <mat-menu #chooseGroups="matMenu" xPosition="before">
-                <button mat-menu-item *ngFor="let cg of contentGroups; index as i" [disabled]="i === currentGroupIndex"
-                        (click)="addToContentGroup(content.id, cg, false)"
-                        attr.aria-label="{{ 'content.a11y-add-to-this-content-group' | translate: { name: cg } }}">
-                  <span>{{ cg }}</span>
-                </button>
-                <mat-divider></mat-divider>
-                <button mat-menu-item (click)="showContentGroupCreationDialog(content.id)" attr.aria-label="{{ 'content.a11y-new-content-group' | translate }}">
-                  <mat-icon>add</mat-icon>
-                  <span>{{ 'content.new-content-group' | translate}}</span>
-                </button>
-              </mat-menu>
-
-            </mat-expansion-panel-header>
-            <mat-panel-description class="panelTitle">
-              {{ content.body }}
-            </mat-panel-description>
-          </mat-expansion-panel>
+    <mat-card>
+      <div fxLayout="row">
+        <div class="cardTitle">
+          <h2 *ngIf="!isInTitleEditMode" [style.fontSize.px]=10>{{ collectionName }}</h2>
+          <mat-form-field class="mat-focused" [ngClass]="{'activeInput': isInTitleEditMode, 'inactiveInput': !isInTitleEditMode}">
+            <input #nameInput (focus)="eventService.makeFocusOnInputTrue()" (blur)="eventService.makeFocusOnInputFalse()"
+                   matInput maxlength="25" [(ngModel)]="updatedName" aria-labelledby="enter-content-group-name">
+          </mat-form-field>
         </div>
-        <div *ngIf="isInSortingMode">
-          <div cdkDropList class="content-list" [cdkDropListData]="copiedContents" (cdkDropListDropped)="drop($event)">
-            <div class="content-box" *ngFor="let content of copiedContents" cdkDrag>
-              {{content.body.length > 80 ? content.body.substr(0, 80) + '..' : content.body}}
+        <span class="fill-remaining-space"></span>
+        <div fxLayout="column">
+          <div>
+            <button *ngIf="!isInTitleEditMode" mat-icon-button (click)="goInTitleEditMode()" id="edit-group-name"
+                    matTooltip="{{ 'content.edit-content-group' | translate}}" aria-labelledby="edit-content-group-name">
+              <mat-icon>edit</mat-icon>
+            </button>
+            <button *ngIf="isInTitleEditMode" mat-icon-button class="editButtons" (click)="leaveTitleEditMode()"
+                    matTooltip="{{ 'content.abort' | translate}}" (keyup.enter)="leaveTitleEditMode()" aria-labelledby="discard-changes">
+              <mat-icon>clear</mat-icon>
+            </button>
+            <button *ngIf="isInTitleEditMode" mat-icon-button class="editButtons" (keyup.enter)="saveGroupName()" (click)="saveGroupName()"
+                    matTooltip="{{ 'content.save-content-group' | translate}}" aria-labelledby="save-changes">
+              <mat-icon>done</mat-icon>
+            </button>
+          </div>
+          <button *ngIf="!isInTitleEditMode" mat-icon-button id="statistic-button" aria-labelledby="statistics"
+                  matTooltip="{{ 'room-page.answer-statistics' | translate}}"
+                  routerLink="/creator/room/{{ room.shortId }}/statistics">
+            <mat-icon>insert_chart</mat-icon>
+          </button>
+        </div>
+      </div>
+      <mat-grid-list cols="2" rowHeight="{{deviceWidth > 500 ? '2:1' : '3:2'}}" *ngIf="!isLoading">
+        <mat-grid-tile>
+          <button class="actionButton" mat-icon-button id="content-create-button"
+                  routerLink="/creator/room/{{ room.shortId }}/create-content" aria-labelledby="create-content">
+            <mat-icon class="actionIcon" [ngClass]="{'desktop' : deviceWidth > 500}">note_add</mat-icon>
+            <p class="button-text" [ngClass]="{'small-text': deviceWidth < 350}">
+              {{ 'room-page.create-content' | translate}}</p>
+          </button>
+        </mat-grid-tile>
+        <mat-grid-tile>
+          <button class="actionButton" mat-icon-button id="presentation-button" aria-labelledby="present-contents"
+                  routerLink="/creator/room/{{ room.shortId }}/group/{{ contentGroup.name }}/statistics">
+            <mat-icon class="actionIcon" [ngClass]="{'desktop' : deviceWidth > 500}">school</mat-icon>
+            <p class="button-text" [ngClass]="{'small-text': deviceWidth < 350}">
+              {{ 'room-page.present' | translate}}</p>
+          </button>
+        </mat-grid-tile>
+      </mat-grid-list>
+      <mat-card-content>
+        <app-loading-indicator *ngIf="isLoading" [size]="50"></app-loading-indicator>
+        <div *ngIf="!isLoading" fxLayout="row" fxLayoutAlign="end center">
+          <button *ngIf="!isInSortingMode" mat-icon-button class="editButtons sort-buttons" (click)="goInSortingMode()" id="edit-group-sort"
+                  matTooltip="{{ 'content.sort-content-group' | translate}}" aria-labelledby="edit-content-group-sort">
+            <mat-icon>list</mat-icon>
+          </button>
+          <button *ngIf="isInSortingMode" mat-raised-button class="abort button-abort"
+                  (click)="leaveSortingMode()" (keyup.enter)="leaveTitleEditMode()" aria-labelledby="discard-changes">
+            {{ 'content.abort' | translate }}
+          </button>
+          <button *ngIf="isInSortingMode" mat-raised-button class="button-primary"
+                  (keyup.enter)="saveSorting()" (click)="saveSorting()" aria-labelledby="save-sort-changes">
+            {{ 'content.save-sort-content-group' | translate }}
+          </button>
+          <span class="fill-remaining-space"></span>
+          <p *ngIf="!isInSortingMode" class="slide-text">{{ 'content.answers-direct' | translate}}
+            <mat-slide-toggle id="direct-show-slide" class="lock" (change)="toggleDirectAnswers()"
+                              [(ngModel)]="directAnswer" aria-labelledby="direct-show-answer">
+            </mat-slide-toggle>
+          </p>
+          <p *ngIf="!isInSortingMode" class="slide-text">{{ 'content.unlock-questions' | translate}}
+            <mat-slide-toggle id="lock-questions-slide" class="lock" (change)="lockContents()" [(ngModel)]="unlocked"
+                              aria-labelledby="lock-questions">
+            </mat-slide-toggle>
+          </p>
+        </div>
+        <div>
+          <div tabindex="-1" id="content-list" class="visually-hidden">
+            {{ 'content.a11y-content-list-contents' | translate: { count: contents.length } }}</div>
+          <div *ngIf="!isInSortingMode">
+            <mat-expansion-panel *ngFor="let content of contents; index as i" class="matPanel">
+              <mat-expansion-panel-header class="matPanelListHeader" attr.aria-label="{{ 'content.a11y-selected-content' | translate: { name: labels[i] } }}">
+                <mat-panel-title class="panelTitle">
+                  {{ labels[i] }}
+                </mat-panel-title>
+                <button mat-icon-button (keyup.enter)="toggleDirectAnswer(content)"
+                        attr.aria-label="{{ (content.state.responsesVisible ? 'content.a11y-dont-direct-show-answer' : 'content.a11y-direct-show-answer') | translate }}"
+                        (click)="toggleDirectAnswer(content);$event.stopPropagation()"
+                        matTooltip="{{(content.state.responsesVisible ? 'content.answer-hide' : 'content.answer-direct') | translate}}">
+                  <mat-icon class="lock-icon" [ngClass]="{'locked': !content.state.responsesVisible,
+              'unlocked': content.state.responsesVisible}">{{content.state.responsesVisible? 'flash_on' : 'flash_off'}}
+                  </mat-icon>
+                </button>
+                <button mat-icon-button (keyup.enter)="lockContent(content)"
+                        attr.aria-label="{{ (content.state.visible ? 'content.a11y-lock-question' : 'content.a11y-unlock-question') | translate }}"
+                        (click)="lockContent(content);$event.stopPropagation()"
+                        matTooltip="{{(content.state.visible ? 'content.lock-question' : 'content.unlock-question') | translate}}">
+                  <mat-icon class="lock-icon" [ngClass]="{'locked': !content.state.visible, 'unlocked': content.state.visible}">
+                    {{!content.state.visible? 'lock' : 'lock_open'}}
+                  </mat-icon>
+                </button>
+                <button mat-icon-button (keyup.enter)="menuTrigger.openMenu()" #menuTrigger="matMenuTrigger"
+                        [matMenuTriggerFor]="moreActions" (click)="$event.stopPropagation()" aria-labelledby="more"
+                        class="editButton" matTooltip="{{ 'content.more-options' | translate}}">
+                  <mat-icon>more_vert</mat-icon>
+                </button>
+
+                <mat-menu #moreActions="matMenu" xPosition="before">
+                  <button mat-menu-item (click)="editContent(content)" attr.aria-label="{{ 'content.a11y-edit-content' | translate }}">
+                    <mat-icon>edit</mat-icon>
+                    <span> {{ 'content.edit-content' | translate}}</span>
+                  </button>
+                  <button mat-menu-item [matMenuTriggerFor]="chooseGroups" attr.aria-label="{{ 'content.a11y-add-to-content-group' | translate }}">
+                    <mat-icon>library_add</mat-icon>
+                    <span>{{ 'content.add-content-to-group' | translate}}</span>
+                  </button>
+                  <button mat-menu-item (click)="showDeleteAnswerDialog(content)" attr.aria-label="{{ 'content.a11y-delete-answers' | translate }}">
+                    <mat-icon>clear_all</mat-icon>
+                    <span>{{ 'content.delete-answers' | translate}}</span>
+                  </button>
+                  <button mat-menu-item (click)="deleteContent(content)" attr.aria-label="{{ 'content.a11y-delete-content' | translate }}">
+                    <mat-icon class="delete">delete_forever</mat-icon>
+                    <span>{{ 'content.delete-content' | translate}}</span>
+                  </button>
+                </mat-menu>
+
+                <mat-menu #chooseGroups="matMenu" xPosition="before">
+                  <button mat-menu-item *ngFor="let cg of contentGroups; index as i" [disabled]="i === currentGroupIndex"
+                          (click)="addToContentGroup(content.id, cg, false)"
+                          attr.aria-label="{{ 'content.a11y-add-to-this-content-group' | translate: { name: cg } }}">
+                    <span>{{ cg }}</span>
+                  </button>
+                  <mat-divider></mat-divider>
+                  <button mat-menu-item (click)="showContentGroupCreationDialog(content.id)" attr.aria-label="{{ 'content.a11y-new-content-group' | translate }}">
+                    <mat-icon>add</mat-icon>
+                    <span>{{ 'content.new-content-group' | translate}}</span>
+                  </button>
+                </mat-menu>
+
+              </mat-expansion-panel-header>
+              <mat-panel-description class="panelTitle">
+                {{ content.body }}
+              </mat-panel-description>
+            </mat-expansion-panel>
+          </div>
+          <div *ngIf="isInSortingMode">
+            <div cdkDropList class="content-list" [cdkDropListData]="copiedContents" (cdkDropListDropped)="drop($event)">
+              <div class="content-box" *ngFor="let content of copiedContents" cdkDrag>
+                {{content.body.length > 80 ? content.body.substr(0, 80) + '..' : content.body}}
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </mat-card-content>
-  </mat-card>
+      </mat-card-content>
+    </mat-card>
+  </div>
 </div>
 
 <div class="visually-hidden">

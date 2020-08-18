@@ -1,5 +1,5 @@
 <app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
-<div fxFill>
+<div fxFill fxLayout="column" fxLayoutAlign="center">
 <button class="visually-hidden" id="message-announcer-button" tabIndex="-1" (click)="announceKeys()">
     {{ 'survey.a11y-message' | translate }}</button>
   <div *ngIf="!isLoading" fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="center">
