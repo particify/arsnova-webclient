@@ -3,7 +3,8 @@
   <div fxLayout="column">
     <div fxLayout="row">
       <p>{{ 'settings.threshold' | translate}}&nbsp;
-        <mat-slide-toggle [(ngModel)]="enableThreshold" aria-labelledby="threshold"></mat-slide-toggle>
+        <mat-slide-toggle [(ngModel)]="enableThreshold" (change)="updateCommentSettings()"
+                          aria-labelledby="threshold"></mat-slide-toggle>
       </p>
       <button mat-icon-button class="info-button" #ttt="matTooltip" matTooltip="{{ 'settings.threshold-info' | translate }}"
               (click)="ttt.toggle()">
