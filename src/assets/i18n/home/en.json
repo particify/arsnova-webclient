@@ -78,7 +78,8 @@
     "only-numbers": "A room number only contains digits.",
     "room-id": "Room-No.",
     "update-available": "An update is available.",
-    "welcome": "Feedback and Interaction"
+    "welcome": "Feedback and Interaction",
+    "example": "e.g. "
   },
   "imprint": {
     "a11y": "Below you will find the legal info of ARSnova.",
