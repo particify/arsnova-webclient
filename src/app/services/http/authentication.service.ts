@@ -63,11 +63,6 @@ export class AuthenticationService extends BaseHttpService {
 
     this.getAuthenticationChanges().subscribe(auth => {
       console.log('Authentication changed', auth);
-      if (auth) {
-        this.globalStorageService.setItem(STORAGE_KEYS.USER, auth);
-      }
-      this.loggedIn = this.loggedIn && !!auth;
-      this.globalStorageService.setItem(STORAGE_KEYS.LOGGED_IN, this.loggedIn);
     });
   }
 
@@ -75,19 +70,7 @@ export class AuthenticationService extends BaseHttpService {
    * Returns a stream of changes to the authentication.
    */
   getAuthenticationChanges(): Observable<ClientAuthentication> {
-    return this.auth$$.pipe(
-      switchAll()
-    );
-  }
-
-  /**
-   * Create a replayable, multicastable authentication Observable and emit it.
-   */
-  private emitAuthentication(auth$: Observable<ClientAuthentication>): Observable<ClientAuthentication> {
-    const sharableAuth$ = auth$.pipe(shareReplay());
-    this.auth$$.next(sharableAuth$);
-
-    return sharableAuth$;
+    return this.auth$$.pipe(switchAll());
   }
 
   /**
@@ -177,7 +160,7 @@ export class AuthenticationService extends BaseHttpService {
 
     this.loggedIn = false;
     this.globalStorageService.removeItem(STORAGE_KEYS.LOGGED_IN);
-    this.emitAuthentication(of(null));
+    this.auth$$.next(of(null));
   }
 
   /**
@@ -196,27 +179,36 @@ export class AuthenticationService extends BaseHttpService {
    * Updates the local authentication state based on the server response.
    */
   private handleLoginResponse(clientAuthentication$: Observable<ClientAuthentication>): Observable<ClientAuthenticationResult> {
-    const auth$ = this.emitAuthentication(clientAuthentication$);
+    const auth$ = clientAuthentication$.pipe(
+        map(auth => {
+          if (auth) {
+            this.globalStorageService.setItem(STORAGE_KEYS.USER, auth);
+            this.globalStorageService.setItem(STORAGE_KEYS.LOGGED_IN, true);
+            this.loggedIn = true;
 
-    return auth$.pipe(map(auth => {
-      if (auth) {
-        this.globalStorageService.setItem(STORAGE_KEYS.USER, auth);
-        this.globalStorageService.setItem(STORAGE_KEYS.LOGGED_IN, true);
-        this.loggedIn = true;
+            return new ClientAuthenticationResult(auth);
+          } else {
+            return new ClientAuthenticationResult(null, AuthenticationStatus.UNKNOWN_ERROR);
+          }
+        }),
+        shareReplay(),
+        catchError((e) => {
+          this.globalStorageService.removeItem(STORAGE_KEYS.LOGGED_IN);
+          this.loggedIn = false;
 
-        return new ClientAuthenticationResult(auth);
-      } else {
-        return new ClientAuthenticationResult(null, AuthenticationStatus.UNKNOWN_ERROR);
-      }
-    }), catchError((e) => {
-      // check if user needs activation
-      if (e.error?.errorType === 'DisabledException') {
-        return of(new ClientAuthenticationResult(null, AuthenticationStatus.ACTIVATION_PENDING));
-      } else if (e.status === 401 || e.status === 403) {
-        return of(new ClientAuthenticationResult(null, AuthenticationStatus.INVALID_CREDENTIALS));
-      }
-      return of(new ClientAuthenticationResult(null, AuthenticationStatus.UNKNOWN_ERROR));
-    }));
+          // check if user needs activation
+          if (e.error?.errorType === 'DisabledException') {
+            return of(new ClientAuthenticationResult(null, AuthenticationStatus.ACTIVATION_PENDING));
+          } else if (e.status === 401 || e.status === 403) {
+            return of(new ClientAuthenticationResult(null, AuthenticationStatus.INVALID_CREDENTIALS));
+          }
+          return of(new ClientAuthenticationResult(null, AuthenticationStatus.UNKNOWN_ERROR));
+        })
+    );
+    /* Publish authentication (w/o result meta data) */
+    this.auth$$.next(auth$.pipe(map(result => result.authentication)));
+
+    return auth$;
   }
 
   setRedirect(url: string) {
