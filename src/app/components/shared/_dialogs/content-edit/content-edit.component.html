@@ -1,8 +1,8 @@
 <div fxLayout="column" fxLayoutAlign="center" fxLayoutGap="10px">
-  <mat-form-field>
+  <mat-form-field appearance="outline">
+    <mat-label>{{'dialog.content-body' | translate}}</mat-label>
     <textarea (focus)="eventService.makeFocusOnInputTrue()" (blur)="eventService.makeFocusOnInputFalse()" matInput
-              [(ngModel)]="data.body" rows="3" maxlength="250" placeholder="{{'dialog.content-body' | translate}}"
-              name="body" aria-labelledby="body"></textarea>
+              [(ngModel)]="data.body" rows="3" maxlength="250" name="body" aria-labelledby="body"></textarea>
   </mat-form-field>
   <div *ngIf="data.format !== 'TEXT'">
     <h4>{{'dialog.content-answers' | translate}}</h4>
@@ -27,10 +27,10 @@
     </mat-table>
   </div>
   <div fxLayout="row" fxLayoutAlign="end" fxLayoutGap="10px">
-    <button (click)="dialogRef.close('abort')" aria-labelledby="cancel" mat-button>
+    <button (click)="dialogRef.close('abort')" aria-labelledby="cancel" mat-flat-button class="button-abort">
       {{ 'dialog.cancel' | translate }}
     </button>
-    <button (click)="updateContent()" mat-raised-button aria-labelledby="update" class="button-primary">
+    <button (click)="updateContent()" mat-flat-button aria-labelledby="update" class="button-primary">
       {{ 'dialog.update' | translate }}
     </button>
   </div>

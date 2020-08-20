@@ -1,17 +1,17 @@
 <form>
   <div fxLayout="column" fxLayoutAlign="center" fxLayoutGap="10px">
-    <mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>{{ 'dialog.content-group-name' | translate }}</mat-label>
       <input matInput id="name-input" class="input-block" type="text" maxlength="25" [(ngModel)]="name"
              name="contentGroupName" aria-labelledby="content-group-name-input"/>
-      <mat-placeholder>{{ 'dialog.content-group-name' | translate }}</mat-placeholder>
     </mat-form-field>
   </div>
 </form>
 <div fxLayout="row" fxLayoutAlign="end" fxLayoutGap="10px">
-  <button (click)="closeDialog('abort')" aria-labelledby="cancel" mat-button>
+  <button (click)="closeDialog('abort')" aria-labelledby="cancel" mat-flat-button class="button-abort">
     {{ 'dialog.cancel' | translate }}
   </button>
-  <button (click)="addContentGroup()" mat-raised-button  class="button-primary"
+  <button (click)="addContentGroup()" mat-flat-button  class="button-primary"
           attr.aria-label="{{ 'dialog.a11y-create-content-group' | translate: { group: name } }}">
     {{ 'dialog.create-content-group' | translate }}
   </button>

@@ -20,7 +20,7 @@
       </div>
       <mat-tab-group *ngIf="!isParticipant && (edit || !answer)" [dynamicHeight]="true">
         <mat-tab label="{{'comment-page.your-answer' | translate}}">
-          <mat-form-field class="input-block">
+          <mat-form-field class="input-block" appearance="outline">
             <textarea id="answer-input" [(ngModel)]="answer" (input)="edit = true"
                       matInput
                       matTextareaAutosize
