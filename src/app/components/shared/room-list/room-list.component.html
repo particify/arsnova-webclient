@@ -14,16 +14,16 @@
     <mat-card *ngIf="rooms.length > 0">
       <mat-list>
         <mat-list-item fxLayout="column" fxLayoutAlign="center"
-                       *ngFor="let room of displayRooms; let i = index" [ngSwitch]="room.membership.roles[0]">
+                       *ngFor="let room of displayRooms; let i = index" [ngSwitch]="room.membership.primaryRole">
           <div fxLayout="row" class="container">
             <div tabindex="0" role="button" fxLayout="row" fxLayoutAlign="center center" class="container inner"
                  attr.aria-label="{{ 'room-list.a11y-join-room' | translate:
-                        {room: room.summary.name, id: room.summary.shortId, role: roles[room.membership.roles[0]]} }}"
-                 (click)="setCurrentRoom(room.summary.shortId, room.membership.roles[0])"
-            (keyup.enter)="setCurrentRoom(room.summary.shortId, room.membership.roles[0])">
+                        {room: room.summary.name, id: room.summary.shortId, role: roles[room.membership.primaryRole]} }}"
+                 (click)="setCurrentRoom(room.summary.shortId, room.membership.primaryRole)"
+            (keyup.enter)="setCurrentRoom(room.summary.shortId, room.membership.primaryRole)">
               <p matBadge="{{ room.summary.stats.ackCommentCount > 0 && deviceType === 'desktop' ? room.summary.stats.ackCommentCount : null }}"
                  matBadgeOverlap="false">{{room.summary.name}}</p>
-              <span class="fill-remaining-space" (click)="setCurrentRoom(room.summary.shortId, room.membership.roles[0])"></span>
+              <span class="fill-remaining-space" (click)="setCurrentRoom(room.summary.shortId, room.membership.primaryRole)"></span>
               <p class="short-id">{{room.summary.shortId}}</p>
               <mat-icon mat-list-icon *ngSwitchCase="creatorRole"
                         matTooltip="{{ 'room-list.creator-role' | translate }}"
@@ -49,10 +49,10 @@
               <mat-menu #moreActions="matMenu" xPosition="before">
                 <button mat-menu-item (click)="openDeleteRoomDialog(room)">
                   <mat-icon class="delete">delete_forever</mat-icon>
-                  <span class="delete-text"> {{ (room.membership.roles[0] !== creatorRole ? 'room-list.panel-remove-room' :
+                  <span class="delete-text"> {{ (room.membership.primaryRole !== creatorRole ? 'room-list.panel-remove-room' :
                     'room-list.panel-delete-room') | translate}}</span>
                 </button>
-                <button mat-menu-item *ngIf="room.membership.roles[0] === creatorRole" (click)="navToSettings(room.summary.shortId)">
+                <button mat-menu-item *ngIf="room.membership.primaryRole === creatorRole" (click)="navToSettings(room.summary.shortId)">
                   <mat-icon>settings</mat-icon>
                   <span class="delete-text"> {{ 'room-list.room-settings' | translate }}</span>
                 </button>
