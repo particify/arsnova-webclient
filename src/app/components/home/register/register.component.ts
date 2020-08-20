@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { FormControl, FormGroupDirective, NgForm, Validators } from '@angular/forms';
-import { AuthenticationService } from '../../../services/http/authentication.service';
+import { UserService } from '../../../services/http/user.service';
 import { NotificationService } from '../../../services/util/notification.service';
 import { TranslateService } from '@ngx-translate/core';
 import { EventService } from '../../../services/util/event.service';
@@ -50,7 +50,7 @@ export class RegisterComponent implements OnInit {
   linkOfToS: string;
 
   constructor(private translationService: TranslateService,
-              public authenticationService: AuthenticationService,
+              public userService: UserService,
               public notificationService: NotificationService,
               public eventService: EventService,
               private router: Router,
@@ -68,7 +68,7 @@ export class RegisterComponent implements OnInit {
       !this.password1FormControl.hasError('required') && !this.password2FormControl.hasError('required') &&
       !this.password2FormControl.hasError('passwordIsEqual')) {
       if (this.acceptToS) {
-        this.authenticationService.register(username, password).subscribe(result => {
+        this.userService.register(username, password).subscribe(result => {
             this.router.navigate(['login'], {state: {data: {username: username, password: password}}});
             this.translationService.get('register.register-successful').subscribe(message => {
               this.notificationService.show(message);

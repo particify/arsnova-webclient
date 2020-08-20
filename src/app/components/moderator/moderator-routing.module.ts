@@ -8,42 +8,47 @@ import { ModeratorCommentPageComponent } from './moderator-comment-page/moderato
 import { CommentAnswerComponent } from '../shared/comment-answer/comment-answer.component';
 import { RoomResolver } from '../../resolver/room.resolver';
 import { CommentResolver } from '../../resolver/comment.resolver';
+import { RoomViewUserRoleResolver } from '../../resolver/room-view-user-role.resolver';
 
 const routes: Routes = [
   {
     path: 'room/:shortId',
     component: RoomModeratorPageComponent,
     canActivate: [AuthenticationGuard],
-    data: { roles: [UserRole.EXECUTIVE_MODERATOR] },
+    data: { requiredRole: UserRole.EXECUTIVE_MODERATOR },
     resolve : {
-      room: RoomResolver
+      room: RoomResolver,
+      viewRole: RoomViewUserRoleResolver
     }
   },
   {
     path: 'room/:shortId/comments',
     component: CommentPageComponent,
     canActivate: [AuthenticationGuard],
-    data: { roles: [UserRole.EXECUTIVE_MODERATOR] },
+    data: { requiredRole: UserRole.EXECUTIVE_MODERATOR },
     resolve : {
-      room: RoomResolver
+      room: RoomResolver,
+      viewRole: RoomViewUserRoleResolver
     }
   },
   {
     path: 'room/:shortId/moderator/comments',
     component: ModeratorCommentPageComponent,
     canActivate: [AuthenticationGuard],
-    data: { roles: [UserRole.EXECUTIVE_MODERATOR] },
+    data: { requiredRole: UserRole.EXECUTIVE_MODERATOR },
     resolve : {
-      room: RoomResolver
+      room: RoomResolver,
+      viewRole: RoomViewUserRoleResolver
     }
   },
   {
     path: 'room/:shortId/comment/:commentId',
     component: CommentAnswerComponent,
     canActivate: [AuthenticationGuard],
-    data: { roles: [UserRole.EXECUTIVE_MODERATOR] },
+    data: { requiredRole: UserRole.EXECUTIVE_MODERATOR },
     resolve : {
-      comment: CommentResolver
+      comment: CommentResolver,
+      viewRole: RoomViewUserRoleResolver
     }
   },
 ];

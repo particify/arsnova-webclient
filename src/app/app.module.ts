@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, APP_INITIALIZER } from '@angular/core';
 import { AppComponent } from './app.component';
 import { RegisterComponent } from './components/home/register/register.component';
 import { PasswordResetComponent } from './components/home/password-reset/password-reset.component';
@@ -9,6 +9,7 @@ import { UserService } from './services/http/user.service';
 import { NotificationService } from './services/util/notification.service';
 import { AuthenticationService } from './services/http/authentication.service';
 import { AuthenticationGuard } from './guards/authentication.guard';
+import { RoomMembershipService } from './services/room-membership.service';
 import { RoomService } from './services/http/room.service';
 import { CommentService } from './services/http/comment.service';
 import { EventService } from './services/util/event.service';
@@ -55,6 +56,7 @@ import { ThemeService } from '../theme/theme.service';
 import { RoomResolver } from './resolver/room.resolver';
 import { ContentResolver } from './resolver/content.resolver';
 import { CommentResolver } from './resolver/comment.resolver';
+import { RoomViewUserRoleResolver } from './resolver/room-view-user-role.resolver';
 import { ContentGroupService } from './services/http/content-group.service';
 import { AnnounceService } from './services/util/announce.service';
 import { AdminService } from './services/http/admin.service';
@@ -123,6 +125,12 @@ export function initializeApp(appConfig: AppConfig) {
       deps: [AppConfig], multi: true
     },*/
     {
+      provide: APP_INITIALIZER,
+      useFactory: initAuthenticationService,
+      deps: [AuthenticationService],
+      multi: true
+    },
+    {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthenticationInterceptor,
       multi: true
@@ -132,6 +140,7 @@ export function initializeApp(appConfig: AppConfig) {
     DialogService,
     AuthenticationService,
     AuthenticationGuard,
+    RoomMembershipService,
     EventService,
     RoomService,
     CommentService,
@@ -156,6 +165,7 @@ export function initializeApp(appConfig: AppConfig) {
     RoomResolver,
     ContentResolver,
     CommentResolver,
+    RoomViewUserRoleResolver,
     AnnounceService,
     AdminService,
     SystemInfoService,
@@ -179,4 +189,8 @@ export class AppModule {
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, '../../assets/i18n/home/', '.json');
+}
+
+export function initAuthenticationService(authenticationService: AuthenticationService) {
+  return () => authenticationService.init();
 }

@@ -4,13 +4,13 @@ import { NotificationService } from '../../../../services/util/notification.serv
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
 import { FormControl, Validators } from '@angular/forms';
-import { User } from '../../../../models/user';
+import { ClientAuthentication } from 'app/models/client-authentication';
 import { CommentListComponent } from '../../comment-list/comment-list.component';
 import { EventService } from '../../../../services/util/event.service';
 import { GlobalStorageService, STORAGE_KEYS } from '../../../../services/util/global-storage.service';
 
 export interface DialogData {
-  user: User;
+  auth: ClientAuthentication;
   tags: string[];
 }
 
@@ -62,8 +62,7 @@ export class CreateCommentComponent implements OnInit {
       const comment = new Comment();
       comment.roomId = this.globalStorageService.getItem(STORAGE_KEYS.ROOM_ID);
       comment.body = body;
-      comment.creatorId = this.data.user.id;
-      comment.createdFromLecturer = this.data.user.role === 1;
+      comment.creatorId = this.data.auth.userId;
       if (this.selectedTag !== null) {
         comment.tag = this.selectedTag;
       }

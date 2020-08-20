@@ -1,38 +1,46 @@
-import { catchError, concatMap, filter, map, take, tap } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
-import { User } from '../../models/user';
-import { BehaviorSubject, Observable, of, timer } from 'rxjs';
-import { UserRole } from '../../models/user-roles.enum';
-import { EventService } from '../util/event.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { ClientAuthentication } from '../../models/client-authentication';
+import { BehaviorSubject, Observable, of, timer } from 'rxjs';
+import { catchError, concatMap, filter, map, switchAll, switchMap, shareReplay, take, tap } from 'rxjs/operators';
 import { BaseHttpService } from './base-http.service';
 import { GlobalStorageService, STORAGE_KEYS } from '../util/global-storage.service';
+import { ClientAuthentication } from '../../models/client-authentication';
+import { AuthenticationStatus, ClientAuthenticationResult } from '../../models/client-authentication-result';
+import { EventService } from '../util/event.service';
 import * as JwtDecode from 'jwt-decode';
 
+export const AUTH_HEADER_KEY = 'Authorization';
+export const AUTH_SCHEME = 'Bearer';
+
+/**
+ * Handles app-wide user authentication.
+ */
 @Injectable()
 export class AuthenticationService extends BaseHttpService {
-  private readonly STORAGE_KEY: string = 'USER';
-  private readonly ROOM_ACCESS: string = 'ROOM_ACCESS';
   private readonly ADMIN_ROLE: string = 'ADMIN';
-  private user = new BehaviorSubject<User>(undefined);
+
+  /**
+   * Higher-order Observable which provides a stream of changes to
+   * authentication including those which have pending requests.
+   */
+  private auth$$: BehaviorSubject<Observable<ClientAuthentication>>;
+
   private apiUrl = {
     base: '/api',
     auth: '/auth',
     login: '/login',
     user: '/user',
-    register: '/register',
     registered: '/registered',
-    resetPassword: '/resetpassword',
     guest: '/guest',
-    sso: '/sso'
+    sso: '/sso',
+    membership: '/_view/membership'
   };
   private httpOptions = {
     headers: new HttpHeaders({})
   };
 
-  private roomAccess = new Map();
   private redirect: string;
+  private loggedIn: boolean;
 
   constructor(
     private globalStorageService: GlobalStorageService,
@@ -40,105 +48,85 @@ export class AuthenticationService extends BaseHttpService {
     private http: HttpClient
   ) {
     super();
-    const storedAccess = this.globalStorageService.getItem(STORAGE_KEYS.ROOM_ACCESS);
-    if (storedAccess) {
-      for (const cA of storedAccess) {
-        let role = UserRole.PARTICIPANT;
-        const roleAsNumber: string = cA.substring(0, 1);
-        const shortId: string = cA.substring(2);
-        if (roleAsNumber === '3') {
-          role = UserRole.CREATOR;
-        } else if (roleAsNumber === '2') {
-          role = UserRole.EXECUTIVE_MODERATOR;
-        }
-        this.roomAccess.set(shortId, role);
-      }
+    const savedAuth: ClientAuthentication = this.globalStorageService.getItem(STORAGE_KEYS.USER);
+    this.loggedIn = !!this.globalStorageService.getItem(STORAGE_KEYS.LOGGED_IN) && !!savedAuth;
+    this.auth$$ = new BehaviorSubject(new BehaviorSubject(this.loggedIn ? savedAuth : null));
+  }
+
+  /**
+   * Initialize authentication at startup.
+   */
+  init() {
+    if (this.loggedIn) {
+      this.refreshLogin().subscribe();
     }
-    this.eventService.on<any>('RoomJoined').subscribe(payload => {
-      this.roomAccess.set(payload.id, UserRole.PARTICIPANT);
-      this.saveAccessToLocalStorage();
-    });
-    this.eventService.on<any>('RoomDeleted').subscribe(payload => {
-      this.roomAccess.delete(payload.id);
-      this.saveAccessToLocalStorage();
-    });
-    this.eventService.on<any>('RoomCreated').subscribe(payload => {
-      this.roomAccess.set(payload.id, UserRole.CREATOR);
-      this.saveAccessToLocalStorage();
+
+    this.getAuthenticationChanges().subscribe(auth => {
+      console.log('Authentication changed', auth);
     });
   }
 
-  /*
-   * Three possible return values:
-   * - "true": login successful
-   * - "false": login failed
-   * - "activation": account exists but needs activation with key
+  /**
+   * Returns a stream of changes to the authentication.
    */
-  login(email: string, password: string, userRole: UserRole): Observable<string> {
+  getAuthenticationChanges(): Observable<ClientAuthentication> {
+    return this.auth$$.pipe(switchAll());
+  }
+
+  /**
+   * Authenticates a user using loginId (username or email) and password.
+   */
+  login(loginId: string, password: string): Observable<ClientAuthenticationResult> {
     const connectionUrl: string = this.apiUrl.base + this.apiUrl.auth + this.apiUrl.login + this.apiUrl.registered;
 
-    return this.checkLogin(this.http.post<ClientAuthentication>(connectionUrl, {
-      loginId: email,
+    return this.handleLoginResponse(this.http.post<ClientAuthentication>(connectionUrl, {
+      loginId: loginId,
       password: password
-    }, this.httpOptions), userRole, false);
+    }, this.httpOptions));
   }
 
-  refreshLogin(): void {
-    const savedUser = this.globalStorageService.getItem(STORAGE_KEYS.USER);
-    if (savedUser) {
-      // Load user data from local data store if available
-      const user: User = savedUser;
-      // ToDo: Fix this madness.
-      const wasGuest = (user.authProvider === 'ARSNOVA_GUEST') ? true : false;
-      const connectionUrl: string = this.apiUrl.base + this.apiUrl.auth + this.apiUrl.login + '?refresh=true';
-      this.setUser(new User(
-        user.id,
-        user.loginId,
-        user.authProvider,
-        user.token,
-        user.role,
-        wasGuest
-      ));
-      this.http.post<ClientAuthentication>(connectionUrl, {}, this.httpOptions).pipe(
-        tap(_ => ''),
-        catchError(e => {
-          if (e.status === 401 || e.status === 403) {
+  /**
+   * Sends a refresh request using current authentication to extend the
+   * validity.
+   */
+  refreshLogin(): Observable<ClientAuthenticationResult | null> {
+    // Load user authentication from local data store if available
+    const savedAuth = this.globalStorageService.getItem(STORAGE_KEYS.USER);
+    if (!savedAuth) {
+      return of(null);
+    }
+
+    const token: string = savedAuth.token;
+    const connectionUrl: string = this.apiUrl.base + this.apiUrl.auth + this.apiUrl.login + '?refresh=true';
+    const loginHttpHeaders = this.httpOptions.headers.set(AUTH_HEADER_KEY, `${AUTH_SCHEME} ${token}`);
+    const auth$ = this.http.post<ClientAuthentication>(connectionUrl, {}, { headers: loginHttpHeaders });
+    return this.handleLoginResponse(auth$).pipe(
+        tap(result => {
+          if (result.status === AuthenticationStatus.INVALID_CREDENTIALS) {
+            console.error('Could not refresh authentication.');
             this.globalStorageService.removeItem(STORAGE_KEYS.USER);
+            this.logout();
           }
-          return of(null);
         })
-      ).subscribe(nu => {
-        if (nu) {
-          this.setUser(new User(
-            nu.userId,
-            nu.loginId,
-            nu.authProvider,
-            nu.token,
-            user.role,
-            wasGuest));
-        } else {
-          this.logout();
-        }
-      });
-    }
+    );
   }
 
-  guestLogin(userRole: UserRole): Observable<string> {
-    let wasGuest = false;
-    const savedUser = this.globalStorageService.getItem(STORAGE_KEYS.USER);
-    if (savedUser) {
-      wasGuest = savedUser;
-    }
-    if (wasGuest) {
-      this.refreshLogin();
-    }
-    if (!this.isLoggedIn()) {
-      const connectionUrl: string = this.apiUrl.base + this.apiUrl.auth + this.apiUrl.login + this.apiUrl.guest;
+  /**
+   * Authenticates a guest user using existing credentials or creates a new
+   * guest account.
+   */
+  loginGuest(): Observable<ClientAuthenticationResult> {
+    return this.refreshLogin().pipe(switchMap(result => {
+      if (!result) {
+        /* Create new guest account */
+        const connectionUrl: string = this.apiUrl.base + this.apiUrl.auth + this.apiUrl.login + this.apiUrl.guest;
 
-      return this.checkLogin(this.http.post<ClientAuthentication>(connectionUrl, null, this.httpOptions), userRole, true);
-    } else {
-      return of('true');
-    }
+        return this.handleLoginResponse(this.http.post<ClientAuthentication>(connectionUrl, null, this.httpOptions));
+      }
+
+      /* Return existing account */
+      return of(result);
+    }));
   }
 
   /**
@@ -147,7 +135,7 @@ export class AuthenticationService extends BaseHttpService {
    * @param providerId ID of the SSO provider
    * @param userRole User role for the UI
    */
-  loginViaSso(providerId: string, userRole: UserRole): Observable<string> {
+  loginViaSso(providerId: string): Observable<ClientAuthenticationResult> {
     const ssoUrl = this.apiUrl.base + this.apiUrl.auth + this.apiUrl.sso + '/' + providerId;
     const loginUrl = this.apiUrl.base + this.apiUrl.auth + this.apiUrl.login + '?refresh=true';
     const popupW = 500;
@@ -156,153 +144,71 @@ export class AuthenticationService extends BaseHttpService {
     const popupY = window.top.screenY + window.top.outerHeight / 2 - popupH / 2;
     const popup = window.open(ssoUrl, 'auth_popup',
       `left=${popupX},top=${popupY},width=${popupW},height=${popupH},resizable`);
-    const auth = timer(0, 500).pipe(
+    const auth$ = timer(0, 500).pipe(
       map(() => popup.closed),
       filter((closed) => closed),
       concatMap(() => this.http.post<ClientAuthentication>(loginUrl, null, { withCredentials: true })),
       take(1));
 
-    return this.checkLogin(auth, userRole, false);
-  }
-
-  register(email: string, password: string): Observable<boolean> {
-    const connectionUrl: string = this.apiUrl.base + this.apiUrl.user + this.apiUrl.register;
-
-    return this.http.post<boolean>(connectionUrl, {
-      loginId: email,
-      password: password
-    }, this.httpOptions).pipe(map(() => {
-      return true;
-    }));
-  }
-
-  setNewPassword(email: string, key?: string, password?: string): Observable<boolean> {
-    const connectionUrl: string =
-      this.apiUrl.base +
-      this.apiUrl.user +
-      '/~' +
-      email +
-      this.apiUrl.resetPassword;
-    let body = {};
-    if (key && password) {
-      body = {
-        key: key,
-        password: password
-      };
-    }
-    return this.http.post(connectionUrl, body, this.httpOptions).pipe(map(() => {
-        return true;
-    }));
+    return this.handleLoginResponse(auth$);
   }
 
   logout() {
     // Destroy the persisted user data
     // Actually don't destroy it because we want to preserve guest accounts in local storage
     // this.dataStoreService.remove(this.STORAGE_KEY);
+
+    this.loggedIn = false;
     this.globalStorageService.removeItem(STORAGE_KEYS.LOGGED_IN);
-    this.user.next(undefined);
+    this.auth$$.next(of(null));
   }
 
-  getUser(): User {
-    return this.user.getValue();
-  }
-
-  private setUser(user: User): void {
-    this.globalStorageService.setItem(STORAGE_KEYS.USER, user);
-    this.globalStorageService.setItem(STORAGE_KEYS.LOGGED_IN, true);
-    this.user.next(user);
-  }
-
-  isAdmin(): boolean {
-    const currentUser = this.user.getValue();
-    if (currentUser) {
-      const decodedToken = JwtDecode(currentUser.token);
-      if (decodedToken.roles.some(role => role === this.ADMIN_ROLE)) {
-        return true;
-      }
-    }
-
-    return false;
-  }
-
+  /**
+   * Returns the current login state ignoring pending authentication requests.
+   */
   isLoggedIn(): boolean {
-    return this.user.getValue() !== undefined;
+    return this.loggedIn;
   }
 
-  assignRole(role: UserRole): void {
-    const u = this.user.getValue();
-    u.role = role;
-    this.setUser(u);
+  hasAdminRole(auth: ClientAuthentication) {
+    const decodedToken = JwtDecode(auth.token);
+    return decodedToken.roles.some(role => role === this.ADMIN_ROLE);
   }
 
-  getRole(): UserRole {
-    return this.isLoggedIn() ? this.user.getValue().role : undefined;
-  }
+  /**
+   * Updates the local authentication state based on the server response.
+   */
+  private handleLoginResponse(clientAuthentication$: Observable<ClientAuthentication>): Observable<ClientAuthenticationResult> {
+    const auth$ = clientAuthentication$.pipe(
+        map(auth => {
+          if (auth) {
+            this.globalStorageService.setItem(STORAGE_KEYS.USER, auth);
+            this.globalStorageService.setItem(STORAGE_KEYS.LOGGED_IN, true);
+            this.loggedIn = true;
 
-  getToken(): string {
-    return this.isLoggedIn() ? this.user.getValue().token : undefined;
-  }
+            return new ClientAuthenticationResult(auth);
+          } else {
+            return new ClientAuthenticationResult(null, AuthenticationStatus.UNKNOWN_ERROR);
+          }
+        }),
+        shareReplay(),
+        catchError((e) => {
+          this.globalStorageService.removeItem(STORAGE_KEYS.LOGGED_IN);
+          this.loggedIn = false;
 
-  private checkLogin(clientAuthentication: Observable<ClientAuthentication>, userRole: UserRole, isGuest: boolean): Observable<string> {
-    return clientAuthentication.pipe(map(result => {
-      if (result) {
-        // ToDo: Fix this madness.
-        isGuest = result.authProvider === 'ARSNOVA_GUEST' ? true : false;
-        this.setUser(new User(
-          result.userId,
-          result.loginId,
-          result.authProvider,
-          result.token,
-          userRole,
-          isGuest));
-        this.globalStorageService.setItem(STORAGE_KEYS.LOGGED_IN, true);
-        return 'true';
-      } else {
-        return 'false';
-      }
-    }), catchError((e) => {
-      // check if user needs activation
-      if (e.error.errorType === 'DisabledException') {
-        return of('activation');
-      }
-      return of('false');
-    }));
-  }
+          // check if user needs activation
+          if (e.error?.errorType === 'DisabledException') {
+            return of(new ClientAuthenticationResult(null, AuthenticationStatus.ACTIVATION_PENDING));
+          } else if (e.status === 401 || e.status === 403) {
+            return of(new ClientAuthenticationResult(null, AuthenticationStatus.INVALID_CREDENTIALS));
+          }
+          return of(new ClientAuthenticationResult(null, AuthenticationStatus.UNKNOWN_ERROR));
+        })
+    );
+    /* Publish authentication (w/o result meta data) */
+    this.auth$$.next(auth$.pipe(map(result => result.authentication)));
 
-  get watchUser() {
-    return this.user.asObservable();
-  }
-
-  getUserAsSubject(): BehaviorSubject<User> {
-    return this.user;
-  }
-
-  hasAccess(shortId: string, role: UserRole): boolean {
-    const usersRole = this.roomAccess.get(shortId);
-    return (usersRole !== undefined && (usersRole >= role));
-  }
-
-  setAccess(shortId: string, role: UserRole): void {
-    this.roomAccess.set(shortId, role);
-    this.saveAccessToLocalStorage();
-  }
-
-  checkAccess(shortId: string): void {
-    if (this.hasAccess(shortId, UserRole.CREATOR)) {
-      this.assignRole(UserRole.CREATOR);
-    } else if (this.hasAccess(shortId, UserRole.EXECUTIVE_MODERATOR)) {
-      this.assignRole(UserRole.EXECUTIVE_MODERATOR);
-    } else if (this.hasAccess(shortId, UserRole.PARTICIPANT)) {
-      this.assignRole(UserRole.PARTICIPANT);
-    }
-  }
-
-  saveAccessToLocalStorage(): void {
-    const arr = [];
-    this.roomAccess.forEach(function (key, value) {
-      arr.push(key + '_' + String(value));
-    });
-    this.globalStorageService.setItem(STORAGE_KEYS.ROOM_ACCESS, arr);
+    return auth$;
   }
 
   setRedirect(url: string) {

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Room } from '../../models/room';
 import { RoomStats } from '../../models/room-stats';
 import { ContentGroup } from '../../models/content-group';
-import { UserRole } from '../../models/user-roles.enum';
+import { RoomSummary } from '../../models/room-summary';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
@@ -25,7 +25,8 @@ export class RoomService extends BaseHttpService {
     findRooms: '/find',
     stats: '/stats',
     contentGroup: '/contentgroup',
-    v2Import: '/import/v2/room'
+    v2Import: '/import/v2/room',
+    summary: '/_view/room/summary',
   };
   private joinDate = new Date(Date.now());
 
@@ -38,32 +39,22 @@ export class RoomService extends BaseHttpService {
     super();
   }
 
-  getCreatorRooms(): Observable<Room[]> {
+  getCreatorRooms(userId: string): Observable<Room[]> {
     const connectionUrl = this.apiUrl.base + this.apiUrl.rooms + this.apiUrl.findRooms;
     return this.http.post<Room[]>(connectionUrl, {
-      properties: { ownerId: this.authService.getUser().id },
+      properties: { ownerId: userId },
       externalFilters: {}
     }).pipe(
-      tap((rooms) => {
-        for (const r of rooms) {
-          this.authService.setAccess(r.shortId, UserRole.CREATOR);
-        }
-      }),
       catchError(this.handleError('getCreatorRooms', []))
     );
   }
 
-  getParticipantRooms(): Observable<Room[]> {
+  getParticipantRooms(userId: string): Observable<Room[]> {
     const connectionUrl = this.apiUrl.base + this.apiUrl.rooms + this.apiUrl.findRooms;
     return this.http.post<Room[]>(connectionUrl, {
       properties: {},
-      externalFilters: { inHistoryOfUserId: this.authService.getUser().id }
+      externalFilters: { inHistoryOfUserId: userId }
     }).pipe(
-      tap((rooms) => {
-        for (const r of rooms) {
-          this.authService.setAccess(r.shortId, UserRole.PARTICIPANT);
-        }
-      }),
       catchError(this.handleError('getParticipantRooms', []))
     );
   }
@@ -72,11 +63,7 @@ export class RoomService extends BaseHttpService {
     delete room.id;
     delete room.revision;
     const connectionUrl = this.apiUrl.base + this.apiUrl.rooms + '/';
-    room.ownerId = this.authService.getUser().id;
     return this.http.post<Room>(connectionUrl, room, httpOptions).pipe(
-      tap(returnedRoom => {
-        this.authService.setAccess(returnedRoom.shortId, UserRole.PARTICIPANT);
-      }),
       catchError(this.handleError<Room>(`add Room ${room}`))
     );
   }
@@ -90,6 +77,13 @@ export class RoomService extends BaseHttpService {
     );
   }
 
+  getRoomSummaries(ids: string[]): Observable<RoomSummary[]> {
+    const connectionUrl = `${this.apiUrl.base + this.apiUrl.summary}?ids=${ids.join(',')}`;
+    return this.http.get<RoomSummary[]>(connectionUrl).pipe(
+      catchError(this.handleError<RoomSummary[]>(`getRoomSummaries`))
+    );
+  }
+
   getRoomByShortId(shortId: string): Observable<Room> {
     const connectionUrl = `${this.apiUrl.base + this.apiUrl.rooms}/~${shortId}`;
     return this.http.get<Room>(connectionUrl).pipe(
@@ -99,14 +93,14 @@ export class RoomService extends BaseHttpService {
     );
   }
 
-  addToHistory(roomId: string): void {
-    const connectionUrl = `${this.apiUrl.base + this.apiUrl.user}/${this.authService.getUser().id}/roomHistory`;
+  addToHistory(userId: string, roomId: string): void {
+    const connectionUrl = `${this.apiUrl.base + this.apiUrl.user}/${userId}/roomHistory`;
     this.http.post(connectionUrl, { roomId: roomId, lastVisit: this.joinDate.getTime() }, httpOptions).subscribe(() => {
     });
   }
 
-  removeFromHistory(roomId: string): Observable<Room> {
-    const connectionUrl = `${ this.apiUrl.base + this.apiUrl.user }/${ this.authService.getUser().id }/roomHistory/${roomId}`;
+  removeFromHistory(userId: string, roomId: string): Observable<Room> {
+    const connectionUrl = `${this.apiUrl.base + this.apiUrl.user}/${userId}/roomHistory/${roomId}`;
     return this.http.delete<Room>(connectionUrl, httpOptions).pipe(
       tap(() => ''),
       catchError(this.handleError<Room>('deleteRoom'))

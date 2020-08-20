@@ -1,7 +1,8 @@
 import { AfterContentInit, Component, HostListener, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
+import { first } from 'rxjs/operators';
 import { LanguageService } from '../../../services/util/language.service';
-import { User } from '../../../models/user';
+import { ClientAuthentication } from 'app/models/client-authentication';
 import { AuthenticationService } from '../../../services/http/authentication.service';
 import { EventService } from '../../../services/util/event.service';
 import { KeyboardUtils } from '../../../utils/keyboard';
@@ -17,7 +18,7 @@ import { AnnounceService } from '../../../services/util/announce.service';
 })
 export class UserHomeComponent implements OnInit, AfterContentInit {
 
-  user: User;
+  auth: ClientAuthentication;
 
   constructor(
     private dialogService: DialogService,
@@ -53,7 +54,8 @@ export class UserHomeComponent implements OnInit, AfterContentInit {
 
   ngOnInit() {
     this.translateService.use(this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE));
-    this.authenticationService.watchUser.subscribe(newUser => this.user = newUser);
+    this.authenticationService.getAuthenticationChanges().pipe(first())
+        .subscribe(auth => this.auth = auth);
   }
 
   announce() {

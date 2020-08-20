@@ -1,24 +1,24 @@
 <div fxLayout="column" fxLayoutAlign="center" *ngIf="!isLoading">
   <div fxLayout="row" fxLayoutAlign="center">
-    <app-comment [comment]="comment" [userRole]="user.role"></app-comment>
+    <app-comment [comment]="comment"></app-comment>
   </div>
   <button id="message-button" tabIndex="-1" (click)="announce()"
           class="visually-hidden">{{ 'comment-page.a11y-message-answer' | translate }}</button>
   <div fxLayout="row" fxLayoutAlign="center">
-    <mat-card class="answer" *ngIf="!isStudent || answer">
+    <mat-card class="answer" *ngIf="!isParticipant || answer">
       <div tabindex="-1" id="answer-text" class="visually-hidden">{{ 'comment-page.a11y-entered-answer' | translate:
         {answer: answer} }}</div>
-      <div *ngIf="(isStudent || !edit) && answer">
+      <div *ngIf="(isParticipant || !edit) && answer">
         <markdown [data]="answer"></markdown>
         <div fxLayout="row" fxLayoutAlign="end">
-          <button mat-raised-button *ngIf="!isStudent && !edit" class="button-primary" (click)="editAnswer()"
+          <button mat-raised-button *ngIf="!isParticipant && !edit" class="button-primary" (click)="editAnswer()"
           aria-labelledby="edit">
             <mat-icon>edit</mat-icon>
             {{'comment-page.edit-answer' | translate}}
           </button>
         </div>
       </div>
-      <mat-tab-group *ngIf="!isStudent && (edit || !answer)" [dynamicHeight]="true">
+      <mat-tab-group *ngIf="!isParticipant && (edit || !answer)" [dynamicHeight]="true">
         <mat-tab label="{{'comment-page.your-answer' | translate}}">
           <mat-form-field class="input-block">
             <textarea id="answer-input" [(ngModel)]="answer" (input)="edit = true"
@@ -49,10 +49,10 @@
         </mat-tab>
       </mat-tab-group>
       <div fxLayout="row" fxLayoutAlign="end" fxLayoutGap="20px">
-        <button mat-raised-button *ngIf="!isStudent && answer && edit" class="button-warn"
+        <button mat-raised-button *ngIf="!isParticipant && answer && edit" class="button-warn"
                 aria-labelledby="delete" (click)="openDeleteAnswerDialog()">
           {{'comment-page.delete-answer' | translate}}</button>
-        <button mat-raised-button *ngIf="!isStudent && (edit || !answer)" class="button-primary"
+        <button mat-raised-button *ngIf="!isParticipant && (edit || !answer)" class="button-primary"
                 aria-labelledby="submit" (click)="saveAnswer()">
           {{'comment-page.save-answer' | translate}}</button>
       </div>

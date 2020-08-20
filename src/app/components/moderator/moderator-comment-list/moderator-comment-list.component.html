@@ -65,7 +65,7 @@
 </button>
 
 <div *ngIf="!isLoading">
-  <app-comment *ngFor="let current of comments" [comment]="current" [userRole]="user.role"
+  <app-comment *ngFor="let current of comments" [comment]="current"
                [parseVote]="getVote(current)"></app-comment>
 </div>
 

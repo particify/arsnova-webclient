@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { RxStomp } from '@stomp/rx-stomp';
 import { AuthenticationService } from '../http/authentication.service';
-import { User } from '../../models/user';
 import { ARSRxStompConfig } from '../../rx-stomp.config';
 import { Observable } from 'rxjs';
 import { IMessage } from '@stomp/stompjs';
+import { ClientAuthentication } from 'app/models/client-authentication';
 
 @Injectable({
   providedIn: 'root'
@@ -21,18 +21,17 @@ export class WsConnectorService {
     private authService: AuthenticationService
   ) {
     this.client = new RxStomp();
-    const userSubject = authService.getUserAsSubject();
-    userSubject.subscribe((user: User) => {
+    authService.getAuthenticationChanges().subscribe((auth: ClientAuthentication) => {
       if (this.client.connected) {
         this.client.deactivate();
       }
 
-      if (user && user.id) {
+      if (auth && auth.userId) {
         const copiedConf = ARSRxStompConfig;
-        copiedConf.connectHeaders.token = user.token;
+        copiedConf.connectHeaders.token = auth.token;
         this.headers = {
           'content-type': 'application/json',
-          'ars-user-id': '' + user.id
+          'ars-user-id': '' + auth.userId
         };
         this.client.configure(copiedConf);
         this.client.activate();

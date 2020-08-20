@@ -1,30 +1,30 @@
 <app-loading-indicator *ngIf="isLoading" [size]="80"></app-loading-indicator>
 
 <div *ngIf="!isLoading">
-  <div tabindex="-1" id="room-list" *ngIf="!isLoading" [ngClass]="{'visually-hidden': roomsWithRole.length > 0}">
-    <h3>{{ roomsWithRole.length === 0 ? ('room-list.no-room-history' | translate) :
+  <div tabindex="-1" id="room-list" *ngIf="!isLoading" [ngClass]="{'visually-hidden': rooms.length > 0}">
+    <h3>{{ rooms.length === 0 ? ('room-list.no-room-history' | translate) :
       'room-list.a11y-room-history' | translate:{count: rooms.length} }}</h3>
   </div>
-  <div *ngIf="roomsWithRole">
+  <div *ngIf="rooms">
     <mat-form-field *ngIf="this.rooms && this.rooms.length > 10" class="filterWrapper">
       <input (focus)="eventService.makeFocusOnInputTrue()" (blur)="eventService.makeFocusOnInputFalse()" matInput
              #search (keyup)="filterRooms(search.value)"/>
       <mat-placeholder>{{ 'room-list.filter-message' | translate }}</mat-placeholder>
     </mat-form-field>
-    <mat-card *ngIf="roomsWithRole.length > 0">
+    <mat-card *ngIf="rooms.length > 0">
       <mat-list>
         <mat-list-item fxLayout="column" fxLayoutAlign="center"
-                       *ngFor="let room of displayRooms; let i = index" [ngSwitch]="room.role">
+                       *ngFor="let room of displayRooms; let i = index" [ngSwitch]="room.membership.roles[0]">
           <div fxLayout="row" class="container">
             <div tabindex="0" role="button" fxLayout="row" fxLayoutAlign="center center" class="container inner"
                  attr.aria-label="{{ 'room-list.a11y-join-room' | translate:
-                        {room: room.name, id: room.shortId, role: roles[room.role]} }}"
-                 (click)="setCurrentRoom(room.shortId, room.role)"
-            (keyup.enter)="setCurrentRoom(room.shortId, room.role)">
-              <p matBadge="{{room.commentCount > 0 && deviceType === 'desktop' ? room.commentCount : null}}"
-                 matBadgeOverlap="false">{{room.name}}</p>
-              <span class="fill-remaining-space" (click)="setCurrentRoom(room.shortId, room.role)"></span>
-              <p class="short-id">{{room.shortId}}</p>
+                        {room: room.summary.name, id: room.summary.shortId, role: roles[room.membership.roles[0]]} }}"
+                 (click)="setCurrentRoom(room.summary.shortId, room.membership.roles[0])"
+            (keyup.enter)="setCurrentRoom(room.summary.shortId, room.membership.roles[0])">
+              <p matBadge="{{ room.summary.stats.ackCommentCount > 0 && deviceType === 'desktop' ? room.summary.stats.ackCommentCount : null }}"
+                 matBadgeOverlap="false">{{room.summary.name}}</p>
+              <span class="fill-remaining-space" (click)="setCurrentRoom(room.summary.shortId, room.membership.roles[0])"></span>
+              <p class="short-id">{{room.summary.shortId}}</p>
               <mat-icon mat-list-icon *ngSwitchCase="creatorRole"
                         matTooltip="{{ 'room-list.creator-role' | translate }}"
                         title="{{ 'room-list.creator-role' | translate }}">
@@ -49,10 +49,10 @@
               <mat-menu #moreActions="matMenu" xPosition="before">
                 <button mat-menu-item (click)="openDeleteRoomDialog(room)">
                   <mat-icon class="delete">delete_forever</mat-icon>
-                  <span class="delete-text"> {{ (room.role < 3 ? 'room-list.panel-remove-room' :
+                  <span class="delete-text"> {{ (room.membership.roles[0] !== creatorRole ? 'room-list.panel-remove-room' :
                     'room-list.panel-delete-room') | translate}}</span>
                 </button>
-                <button mat-menu-item *ngIf="room.role === 3" (click)="navToSettings(room.shortId)">
+                <button mat-menu-item *ngIf="room.membership.roles[0] === creatorRole" (click)="navToSettings(room.summary.shortId)">
                   <mat-icon>settings</mat-icon>
                   <span class="delete-text"> {{ 'room-list.room-settings' | translate }}</span>
                 </button>

@@ -2,30 +2,28 @@ import { tap } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest, HttpResponse } from '@angular/common/http';
 
-import { AuthenticationService } from '../services/http/authentication.service';
+import { AuthenticationService, AUTH_HEADER_KEY, AUTH_SCHEME } from '../services/http/authentication.service';
 import { NotificationService } from '../services/util/notification.service';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 
-const AUTH_HEADER_KEY = 'Authorization';
-const AUTH_SCHEME = 'Bearer';
-
 @Injectable()
 export class AuthenticationInterceptor implements HttpInterceptor {
+  private token: string;
 
   constructor(private authenticationService: AuthenticationService,
               private notificationService: NotificationService,
               private router: Router) {
+    authenticationService.getAuthenticationChanges().subscribe(auth => this.token = auth?.token);
   }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    if (this.authenticationService.isLoggedIn()) {
-      const token = this.authenticationService.getToken();
-      const cloned = req.clone({
-        headers: req.headers.set(AUTH_HEADER_KEY, `${AUTH_SCHEME} ${token}`)
+    if (this.token || req.headers.has(AUTH_HEADER_KEY)) {
+      const authReq = req.headers.has(AUTH_HEADER_KEY) ? req : req.clone({
+        headers: req.headers.set(AUTH_HEADER_KEY, `${AUTH_SCHEME} ${this.token}`)
       });
 
-      return next.handle(cloned).pipe(tap((event: HttpEvent<any>) => {
+      return next.handle(authReq).pipe(tap((event: HttpEvent<any>) => {
         if (event instanceof HttpResponse) {
           // Possible to do something with the response here
         }

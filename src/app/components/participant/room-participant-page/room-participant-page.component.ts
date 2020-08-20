@@ -1,6 +1,6 @@
 import { AfterContentInit, Component, HostListener, OnDestroy, OnInit } from '@angular/core';
+import { first } from 'rxjs/operators';
 import { Room } from '../../../models/room';
-import { User } from '../../../models/user';
 import { UserRole } from '../../../models/user-roles.enum';
 import { RoomPageComponent } from '../../shared/room-page/room-page.component';
 import { Location } from '@angular/common';
@@ -21,6 +21,7 @@ import { Subscription } from 'rxjs';
 import { WsFeedbackService } from '../../../services/websockets/ws-feedback.service';
 import { GlobalStorageService, STORAGE_KEYS } from '../../../services/util/global-storage.service';
 import { AnnounceService } from '../../../services/util/announce.service';
+import { AuthenticationStatus } from '../../../models/client-authentication-result';
 
 @Component({
   selector: 'app-room-participant-page',
@@ -103,11 +104,6 @@ export class RoomParticipantPageComponent extends RoomPageComponent implements O
     this.announceService.announce('room-page.a11y-shortcuts');
   }
 
-  setRoomAccess() {
-    this.authenticationService.setAccess(this.room.shortId, UserRole.PARTICIPANT);
-    this.authenticationService.checkAccess(this.room.shortId);
-  }
-
   getFeedback() {
     this.surveyEnabled = !this.room.settings['feedbackLocked'];
     this.surveySub = this.wsFeedbackService.getFeedbackStream(this.room.id).subscribe((message: Message) => {
@@ -117,22 +113,22 @@ export class RoomParticipantPageComponent extends RoomPageComponent implements O
 
   afterRoomLoadHook() {
     this.getFeedback();
-    const user = this.authenticationService.getUserAsSubject().value;
-    if (!user) {
-      this.authenticationService.guestLogin(UserRole.PARTICIPANT).subscribe(loggedIn => {
-        if (loggedIn === 'true') {
-          this.initRoomData();
-        }
-      });
-    } else {
-      this.initRoomData();
-    }
+    this.authenticationService.getAuthenticationChanges().subscribe(auth => {
+      if (auth) {
+        this.initRoomData(auth.userId);
+      } else {
+        this.authenticationService.loginGuest().subscribe(result => {
+          if (result.status === AuthenticationStatus.SUCCESS) {
+            this.initRoomData(result.authentication.userId);
+          }
+        });
+      }
+    });
   }
 
-  initRoomData() {
+  initRoomData(userId: string) {
     this.subscribeCommentStream();
-    this.roomService.addToHistory(this.room.id);
-    this.setRoomAccess();
+    this.roomService.addToHistory(userId, this.room.id);
   }
 
   afterGroupsLoadHook() {

@@ -5,12 +5,12 @@ import { NotificationService } from '../../../services/util/notification.service
 import { ErrorStateMatcher } from '@angular/material/core';
 import { MatDialog } from '@angular/material/dialog';
 import { FormControl, FormGroupDirective, NgForm, Validators } from '@angular/forms';
-import { UserRole } from '../../../models/user-roles.enum';
 import { TranslateService } from '@ngx-translate/core';
 import { EventService } from '../../../services/util/event.service';
 import { ApiConfigService } from '../../../services/http/api-config.service';
 import { AuthenticationProvider, AuthenticationProviderRole, AuthenticationProviderType } from '../../../models/api-config';
 import { DialogService } from '../../../services/util/dialog.service';
+import { ClientAuthenticationResult, AuthenticationStatus } from '../../../models/client-authentication-result';
 
 export class LoginErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
@@ -26,7 +26,6 @@ export class LoginErrorStateMatcher implements ErrorStateMatcher {
 })
 export class LoginComponent implements AfterContentInit, OnChanges {
 
-  role = UserRole.PARTICIPANT;
   isStandard = true;
   username: string;
   password: string;
@@ -122,7 +121,7 @@ export class LoginComponent implements AfterContentInit, OnChanges {
   login(): void {
     if (!this.usernameFormControl.hasError('required') && !this.usernameFormControl.hasError('email') &&
       !this.passwordFormControl.hasError('required')) {
-      this.authenticationService.login(this.username, this.password, this.role).subscribe(loginSuccessful => {
+      this.authenticationService.login(this.username, this.password).subscribe(loginSuccessful => {
         this.checkLogin(loginSuccessful);
       });
     } else {
@@ -133,11 +132,11 @@ export class LoginComponent implements AfterContentInit, OnChanges {
   }
 
   loginViaSso(providerId: string): void {
-    this.authenticationService.loginViaSso(providerId, this.role).subscribe(loginSuccessful => this.checkLogin(loginSuccessful));
+    this.authenticationService.loginViaSso(providerId).subscribe(loginSuccessful => this.checkLogin(loginSuccessful));
   }
 
-  private checkLogin(loginSuccessful: string) {
-    if (loginSuccessful === 'true') {
+  private checkLogin(result: ClientAuthenticationResult) {
+    if (result.status === AuthenticationStatus.SUCCESS) {
       this.translationService.get('login.login-successful').subscribe(message => {
         this.notificationService.show(message);
       });
@@ -151,7 +150,7 @@ export class LoginComponent implements AfterContentInit, OnChanges {
           this.router.navigate(['user']);
         }
       }
-    } else if (loginSuccessful === 'activation') {
+    } else if (result.status === AuthenticationStatus.ACTIVATION_PENDING) {
       this.activateUser();
     } else {
       this.translationService.get('login.login-data-incorrect').subscribe(message => {

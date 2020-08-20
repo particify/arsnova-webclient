@@ -4,7 +4,6 @@ import { NotificationService } from '../../../services/util/notification.service
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { AuthenticationService } from '../../../services/http/authentication.service';
-import { User } from '../../../models/user';
 import { Room } from '../../../models/room';
 import { ThemeService } from '../../../../theme/theme.service';
 import { Theme } from '../../../../theme/Theme';
@@ -21,7 +20,6 @@ import { ConsentService } from '../../../services/util/consent.service';
 export class FooterComponent implements OnInit {
 
   public room: Room;
-  public user: User;
 
   public open: string;
   public deviceWidth = innerWidth;

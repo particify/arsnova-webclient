@@ -6,14 +6,13 @@ import { LanguageService } from '../../../services/util/language.service';
 import { Message } from '@stomp/stompjs';
 import { MatDialog } from '@angular/material/dialog';
 import { WsCommentServiceService } from '../../../services/websockets/ws-comment-service.service';
-import { User } from '../../../models/user';
 import { Vote } from '../../../models/vote';
 import { UserRole } from '../../../models/user-roles.enum';
 import { Room } from '../../../models/room';
 import { RoomService } from '../../../services/http/room.service';
 import { CorrectWrong } from '../../../models/correct-wrong.enum';
 import { EventService } from '../../../services/util/event.service';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { GlobalStorageService, STORAGE_KEYS } from '../../../services/util/global-storage.service';
 
 @Component({
@@ -23,13 +22,12 @@ import { GlobalStorageService, STORAGE_KEYS } from '../../../services/util/globa
 })
 export class ModeratorCommentListComponent implements OnInit {
   @ViewChild('searchBox') searchField: ElementRef;
-  @Input() user: User;
   @Input() roomId: string;
   comments: Comment[] = [];
   room: Room;
   hideCommentsList = false;
   filteredComments: Comment[];
-  userRole: UserRole;
+  viewRole: UserRole;
   deviceType: string;
   isSafari: boolean;
   isLoading = true;
@@ -52,6 +50,7 @@ export class ModeratorCommentListComponent implements OnInit {
   searchPlaceholder = '';
 
   constructor(
+    private route: ActivatedRoute,
     private commentService: CommentService,
     private translateService: TranslateService,
     public dialog: MatDialog,
@@ -66,8 +65,8 @@ export class ModeratorCommentListComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.route.data.subscribe(data => this.viewRole = data.viewRole);
     this.roomId = this.globalStorageService.getItem(STORAGE_KEYS.ROOM_ID);
-    this.userRole = this.user.role;
     this.roomService.getRoom(this.roomId).subscribe(room => this.room = room);
     this.hideCommentsList = false;
     this.wsCommentService.getModeratorCommentStream(this.roomId).subscribe((message: Message) => {
@@ -131,7 +130,7 @@ export class ModeratorCommentListComponent implements OnInit {
   }
 
   getVote(comment: Comment): Vote {
-    if (this.userRole === 0) {
+    if (this.viewRole === UserRole.PARTICIPANT) {
       return this.commentVoteMap.get(comment.id);
     }
   }
@@ -259,9 +258,9 @@ export class ModeratorCommentListComponent implements OnInit {
 
   switchToCommentList(): void {
     let role;
-    if (this.userRole === UserRole.CREATOR.valueOf()) {
+    if (this.viewRole === UserRole.CREATOR) {
       role = 'creator';
-    } else if (this.userRole === UserRole.EXECUTIVE_MODERATOR) {
+    } else if (this.viewRole === UserRole.EXECUTIVE_MODERATOR) {
       role = 'moderator';
     }
     this.router.navigate([`/${role}/room/${this.room.shortId}/comments`]);

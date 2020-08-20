@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
-import { AuthenticationService } from '../../../services/http/authentication.service';
+import { UserService } from '../../../services/http/user.service';
 import { NotificationService } from '../../../services/util/notification.service';
 import { EventService } from '../../../services/util/event.service';
 import { PasswordResetErrorStateMatcher } from '../password-reset/password-reset.component';
@@ -20,7 +20,7 @@ export class RequestPasswordResetComponent implements OnInit {
   username: string;
 
   constructor(private translationService: TranslateService,
-              private authenticationService: AuthenticationService,
+              private userService: UserService,
               private notificationService: NotificationService,
               public eventService: EventService,
               private router: Router) { }
@@ -35,7 +35,7 @@ export class RequestPasswordResetComponent implements OnInit {
   resetPassword(): void {
     if (this.username && !this.usernameFormControl.hasError('required') && !this.usernameFormControl.hasError('email')) {
       this.username = this.username.trim();
-      this.authenticationService.setNewPassword(this.username).subscribe(() => {
+      this.userService.setNewPassword(this.username).subscribe(() => {
           this.translationService.get('password-reset.reset-successful').subscribe(msg => {
             this.notificationService.show(msg);
           });

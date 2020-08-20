@@ -7,6 +7,8 @@ import { DirectEntryComponent } from './components/shared/direct-entry/direct-en
 import { LoginComponent } from './components/home/login/login.component';
 import { ImportComponent } from './components/home/import/import.component';
 import { AuthenticationGuard } from './guards/authentication.guard';
+import { RoomViewUserRoleResolver } from './resolver/room-view-user-role.resolver';
+import { RoomViewRole } from './models/room-view-role';
 import { RegisterComponent } from './components/home/register/register.component';
 import { PasswordResetComponent } from './components/home/password-reset/password-reset.component';
 import { RequestPasswordResetComponent } from './components/home/request-password-reset/request-password-reset.component';
