@@ -187,7 +187,16 @@
     "room-successfully-removed": "Der Raum wurde erfolgreich aus der Liste entfernt.",
     "room-successfully-deleted": "Der Raum wurde erfolgreich gelöscht.",
     "canceled-remove": "Vorgang abgebrochen.",
-    "participant-role": "Teilnehmer/in"
+    "participant-role": "Teilnehmer/in",
+    "transfer": "Transferieren",
+    "transferred-successfully": "Dein Raum wurde transferiert.",
+    "add": "Hinzufügen",
+    "added-successfully": "Der Raum wurde deiner Liste hinzugefügt.",
+    "rooms-from-guest": "Räume von Gastkonto",
+    "transfer-rooms-from-guest": "Übertrage Räume, die du erstellt oder besucht hast, ohne eingeloggt zu sein.",
+    "visited-rooms": "Besuchte Räume",
+    "load-rooms": "Räume laden",
+    "transfer-no-rooms": "Es wurden keine Räume zum Transferieren gefunden."
   },
   "user-activation": {
     "a11y-activate": "Aktiviert deinen Account.",

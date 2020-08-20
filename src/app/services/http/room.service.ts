@@ -5,8 +5,8 @@ import { ContentGroup } from '../../models/content-group';
 import { RoomSummary } from '../../models/room-summary';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, Subscription } from 'rxjs';
-import { catchError, map, tap } from 'rxjs/operators';
-import { AuthenticationService } from './authentication.service';
+import { catchError, map, tap, switchMap } from 'rxjs/operators';
+import { AuthenticationService, AUTH_HEADER_KEY, AUTH_SCHEME } from './authentication.service';
 import { BaseHttpService } from './base-http.service';
 import { EventService } from '../util/event.service';
 import { TSMap } from 'typescript-map';
@@ -31,6 +31,7 @@ export class RoomService extends BaseHttpService {
     contentGroup: '/contentgroup',
     v2Import: '/import/v2/room',
     summary: '/_view/room/summary',
+    transfer: '/transfer'
   };
   private joinDate = new Date(Date.now());
   private currentRoom: Room;
@@ -194,6 +195,19 @@ export class RoomService extends BaseHttpService {
       tap(_ => ''),
       catchError(this.handleError<Room>(`importv2Room, json: ${json}`))
     );
+  }
+
+  transferRoomThroughToken(id: string, authToken: string): Observable<Room> {
+    const auth$ = this.authService.getCurrentAuthentication();
+    const httpHeaders = new HttpHeaders().set(AUTH_HEADER_KEY, `${AUTH_SCHEME} ${authToken}`);
+    return auth$.pipe(
+        switchMap(auth => {
+          const connectionUrl = `${this.apiUrl.base + this.apiUrl.rooms}/${id}${this.apiUrl.transfer}?newOwnerToken=${auth.token}`;
+          return this.http.post<Room>(connectionUrl, {}, {headers: httpHeaders}).pipe(
+             catchError(this.handleError<Room>(`transferRoomFromGuest ${id}`))
+          );
+        })
+    )
   }
 
   changeFeedbackLock(roomId: string, isFeedbackLocked: boolean) {
