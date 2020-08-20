@@ -13,7 +13,7 @@ export const STORAGECONFIG_PROVIDER_TOKEN : InjectionToken<StorageItem> = new In
 export const STORAGE_KEYS: { [key: string]: symbol } = {
   USER: Symbol(),
   COOKIE_CONSENT: Symbol(),
-  LOGGED_IN: Symbol(),
+  GUEST_TOKEN: Symbol(),
   ROOM_ID: Symbol(),
   SHORT_ID: Symbol(),
   DEVICE_TYPE: Symbol(),
@@ -42,8 +42,8 @@ export const STORAGE_CONFIG: StorageItem[] = [
     backend: StorageBackend.LOCALSTORAGE
   },
   {
-    key: STORAGE_KEYS.LOGGED_IN,
-    name: 'LOGGED_IN',
+    key: STORAGE_KEYS.GUEST_TOKEN,
+    name: 'GUEST_TOKEN',
     category: StorageItemCategory.REQUIRED,
     backend: StorageBackend.LOCALSTORAGE
   },

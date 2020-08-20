@@ -40,7 +40,6 @@ export class AuthenticationService extends BaseHttpService {
   };
 
   private redirect: string;
-  private loggedIn: boolean;
 
   constructor(
     private globalStorageService: GlobalStorageService,
@@ -49,15 +48,14 @@ export class AuthenticationService extends BaseHttpService {
   ) {
     super();
     const savedAuth: ClientAuthentication = this.globalStorageService.getItem(STORAGE_KEYS.USER);
-    this.loggedIn = !!this.globalStorageService.getItem(STORAGE_KEYS.LOGGED_IN) && !!savedAuth;
-    this.auth$$ = new BehaviorSubject(new BehaviorSubject(this.loggedIn ? savedAuth : null));
+    this.auth$$ = new BehaviorSubject(new BehaviorSubject(savedAuth));
   }
 
   /**
    * Initialize authentication at startup.
    */
   init() {
-    if (this.loggedIn) {
+    if (this.isLoggedIn()) {
       this.refreshLogin().subscribe();
     }
 
@@ -92,11 +90,11 @@ export class AuthenticationService extends BaseHttpService {
   refreshLogin(): Observable<ClientAuthenticationResult | null> {
     // Load user authentication from local data store if available
     const savedAuth = this.globalStorageService.getItem(STORAGE_KEYS.USER);
-    if (!savedAuth) {
+    const token: string = savedAuth?.token || this.globalStorageService.getItem(STORAGE_KEYS.GUEST_TOKEN);
+    if (!token) {
       return of(null);
     }
 
-    const token: string = savedAuth.token;
     const connectionUrl: string = this.apiUrl.base + this.apiUrl.auth + this.apiUrl.login + '?refresh=true';
     const loginHttpHeaders = this.httpOptions.headers.set(AUTH_HEADER_KEY, `${AUTH_SCHEME} ${token}`);
     const auth$ = this.http.post<ClientAuthentication>(connectionUrl, {}, { headers: loginHttpHeaders });
@@ -117,11 +115,18 @@ export class AuthenticationService extends BaseHttpService {
    */
   loginGuest(): Observable<ClientAuthenticationResult> {
     return this.refreshLogin().pipe(switchMap(result => {
-      if (!result) {
+      if (!result || result.status === AuthenticationStatus.INVALID_CREDENTIALS) {
         /* Create new guest account */
         const connectionUrl: string = this.apiUrl.base + this.apiUrl.auth + this.apiUrl.login + this.apiUrl.guest;
+        const loginResult$ = this.handleLoginResponse(
+            this.http.post<ClientAuthentication>(connectionUrl, null, this.httpOptions)).pipe(tap(loginResult => {
+              if (loginResult.status === AuthenticationStatus.SUCCESS) {
+                this.globalStorageService.setItem(STORAGE_KEYS.GUEST_TOKEN, loginResult.authentication.token);
+              }
+            })
+        );
 
-        return this.handleLoginResponse(this.http.post<ClientAuthentication>(connectionUrl, null, this.httpOptions));
+        return loginResult$;
       }
 
       /* Return existing account */
@@ -153,13 +158,11 @@ export class AuthenticationService extends BaseHttpService {
     return this.handleLoginResponse(auth$);
   }
 
+  /**
+   * Resets the local authentication state.
+   */
   logout() {
-    // Destroy the persisted user data
-    // Actually don't destroy it because we want to preserve guest accounts in local storage
-    // this.dataStoreService.remove(this.STORAGE_KEY);
-
-    this.loggedIn = false;
-    this.globalStorageService.removeItem(STORAGE_KEYS.LOGGED_IN);
+    this.globalStorageService.removeItem(STORAGE_KEYS.USER);
     this.auth$$.next(of(null));
   }
 
@@ -167,7 +170,7 @@ export class AuthenticationService extends BaseHttpService {
    * Returns the current login state ignoring pending authentication requests.
    */
   isLoggedIn(): boolean {
-    return this.loggedIn;
+    return !!this.globalStorageService.getItem(STORAGE_KEYS.USER);
   }
 
   hasAdminRole(auth: ClientAuthentication) {
@@ -183,8 +186,6 @@ export class AuthenticationService extends BaseHttpService {
         map(auth => {
           if (auth) {
             this.globalStorageService.setItem(STORAGE_KEYS.USER, auth);
-            this.globalStorageService.setItem(STORAGE_KEYS.LOGGED_IN, true);
-            this.loggedIn = true;
 
             return new ClientAuthenticationResult(auth);
           } else {
@@ -193,8 +194,7 @@ export class AuthenticationService extends BaseHttpService {
         }),
         shareReplay(),
         catchError((e) => {
-          this.globalStorageService.removeItem(STORAGE_KEYS.LOGGED_IN);
-          this.loggedIn = false;
+          this.globalStorageService.removeItem(STORAGE_KEYS.USER);
 
           // check if user needs activation
           if (e.error?.errorType === 'DisabledException') {
