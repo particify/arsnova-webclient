@@ -1,6 +1,5 @@
 import { AfterViewInit, Component, ElementRef, OnInit, ViewChild, Inject } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { DialogConfirmActionButtonType } from '../../../shared/dialog/dialog-action-buttons/dialog-action-buttons.component';
 import { ApiConfigService } from '../../../../services/http/api-config.service';
 import { ConsentGiven, CookieCategory } from '../../../../services/util/consent.service';
 
@@ -13,8 +12,6 @@ export class CookiesComponent implements OnInit, AfterViewInit {
 
   @ViewChild('header')
   dialogTitle: ElementRef;
-
-  confirmButtonType: DialogConfirmActionButtonType = DialogConfirmActionButtonType.Primary;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public categories: CookieCategory[],
@@ -49,7 +46,7 @@ export class CookiesComponent implements OnInit, AfterViewInit {
   handleCookieSelection() {
     console.debug('Accepted cookie categories: ', this.categories);
     const consentGiven: ConsentGiven = this.categories.reduce((map, item) => {
-        map[item.id] = item.consent
+        map[item.id] = item.consent;
         return map;
       }, {});
     this.dialogRef.close(consentGiven);
@@ -60,19 +57,5 @@ export class CookiesComponent implements OnInit, AfterViewInit {
 
   showDataProtection() {
     console.debug('Not implemented.');
-  }
-
-  /**
-   * Returns a lambda which closes the dialog on call.
-   */
-  buildConfirmActionCallback(): () => void {
-    return () => this.acceptAllCookies();
-  }
-
-  /**
-   * Returns a lambda which closes the dialog on call.
-   */
-  buildCancelActionCallback(): () => void {
-    return () => this.acceptSelectedCookies();
   }
 }

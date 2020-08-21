@@ -118,7 +118,8 @@ export class ConsentService extends BaseHttpService {
    */
   openDialog() {
     const dialogRef = this.dialog.open(CookiesComponent, {
-      width: '600px',
+      width: '90%',
+      maxWidth: '600px',
       autoFocus: true,
       data: this.categories
     });
