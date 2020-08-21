@@ -55,10 +55,10 @@ export class CommentListComponent implements OnInit, OnDestroy {
   deviceType: string;
   isSafari: boolean;
   isLoading = true;
-  currentSort = '';
+  currentSort: string;
   sorting = Sort;
+  currentFilter: string;
   filtering = Filter;
-  currentFilter = '';
   commentVoteMap = new Map<string, Vote>();
   scroll = false;
   scrollMax: number;
@@ -96,7 +96,8 @@ export class CommentListComponent implements OnInit, OnDestroy {
     this.roomId = this.globalStorageService.getItem(STORAGE_KEYS.ROOM_ID);
     this.shortId = this.route.snapshot.paramMap.get('shortId');
     const userId = this.auth.userId;
-    this.currentSort = Sort.VOTEDESC;
+    this.currentSort = this.globalStorageService.getItem(STORAGE_KEYS.COMMENT_SORT) || this.sorting.VOTEDESC;
+    this.currentFilter = '';
     this.initRoom();
     this.translateService.use(this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE));
     this.deviceType = this.globalStorageService.getItem(STORAGE_KEYS.DEVICE_TYPE);
@@ -196,6 +197,7 @@ export class CommentListComponent implements OnInit, OnDestroy {
         this.comments = this.comments.filter(x => x.score >= commentThreshold);
       }
     }
+    this.filterComments(this.currentFilter);
     this.sortComments(this.currentSort);
     this.isLoading = false;
   }
@@ -375,6 +377,7 @@ export class CommentListComponent implements OnInit, OnDestroy {
       this.comments = this.sort(this.comments, type);
     }
     this.currentSort = type;
+    this.globalStorageService.setItem(STORAGE_KEYS.COMMENT_SORT, this.currentSort);
   }
 
   clickedOnTag(tag: string): void {

@@ -1,5 +1,5 @@
-import { Injectable, InjectionToken, Inject, Provider } from '@angular/core';
-import { ConsentService, ConsentChangeEvent } from './consent.service';
+import { Inject, Injectable, InjectionToken, Provider } from '@angular/core';
+import { ConsentChangeEvent, ConsentService } from './consent.service';
 import { StorageBackend, StorageItem, StorageItemCategory } from '../../models/storage';
 
 export const STORAGECONFIG_PROVIDER_TOKEN : InjectionToken<StorageItem> = new InjectionToken('STORAGECONFIG_PROVIDER_TOKEN');
@@ -22,7 +22,8 @@ export const STORAGE_KEYS: { [key: string]: symbol } = {
   CONTENT_GROUPS: Symbol(),
   LAST_GROUP: Symbol(),
   THEME: Symbol(),
-  LANGUAGE: Symbol()
+  LANGUAGE: Symbol(),
+  COMMENT_SORT: Symbol()
 };
 
 /**
@@ -100,6 +101,12 @@ export const STORAGE_CONFIG: StorageItem[] = [
     name: 'LANGUAGE',
     category: StorageItemCategory.FUNCTIONAL,
     backend: StorageBackend.LOCALSTORAGE
+  },
+  {
+    key: STORAGE_KEYS.COMMENT_SORT,
+    name: 'COMMENT_SORT',
+    category: StorageItemCategory.FUNCTIONAL,
+    backend: StorageBackend.MEMORY
   }
 ];
 
