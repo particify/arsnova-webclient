@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { NotificationService } from '../../../../services/util/notification.service';
 import { TranslateService } from '@ngx-translate/core';
@@ -21,6 +21,8 @@ import { GlobalStorageService, STORAGE_KEYS } from '../../../../services/util/gl
   styleUrls: ['./comment-settings.component.scss']
 })
 export class CommentSettingsComponent implements OnInit {
+
+  @Output() saveEvent: EventEmitter<Room> = new EventEmitter<Room>();
 
   @Input() editRoom: Room;
   @Input() roomId: string;
@@ -167,11 +169,7 @@ export class CommentSettingsComponent implements OnInit {
     commentSettings.roomId = this.roomId;
     commentSettings.directSend = this.directSend;
     this.commentSettingsService.update(commentSettings).subscribe();
-
-    this.roomService.updateRoom(this.editRoom)
-      .subscribe((room) => {
-        this.editRoom = room;
-      });
+    this.saveEvent.emit(this.editRoom);
   }
 
   announceThreshold() {

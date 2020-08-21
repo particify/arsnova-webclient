@@ -68,4 +68,8 @@ export class SettingsPageComponent implements OnInit {
     document.getElementById('keys-button').focus();
   }
 
+  updateRoom(room: Room) {
+    this.room = room;
+  }
+
 }

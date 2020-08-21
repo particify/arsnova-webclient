@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { NotificationService } from '../../../services/util/notification.service';
 import { TranslateService } from '@ngx-translate/core';
 import { RoomService } from '../../../services/http/room.service';
@@ -15,6 +15,8 @@ import { Settings } from '../settings-page/settings-page.component';
   styleUrls: ['./settings.component.scss']
 })
 export class SettingsComponent implements OnInit {
+
+  @Output() updateEvent: EventEmitter<Room> = new EventEmitter<Room>();
 
   @Input() settings: Settings;
   @Input() room: Room;
@@ -40,5 +42,15 @@ export class SettingsComponent implements OnInit {
 
   expandSettings() {
     this.expanded = !this.expanded;
+  }
+
+  saveRoom(editedRoom: Room) {
+    this.roomService.updateRoom(editedRoom)
+      .subscribe((room) => {
+        this.updateEvent.emit(room);
+        this.translateService.get('settings.changes-successful').subscribe(msg => {
+          this.notificationService.show(msg);
+        });
+      });
   }
 }

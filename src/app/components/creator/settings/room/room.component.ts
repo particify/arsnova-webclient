@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Room } from '../../../../models/room';
 import { NotificationService } from '../../../../services/util/notification.service';
 import { TranslateService } from '@ngx-translate/core';
@@ -16,6 +16,8 @@ import { GlobalStorageService, STORAGE_KEYS } from '../../../../services/util/gl
   styleUrls: ['./room.component.scss']
 })
 export class RoomComponent implements OnInit {
+
+  @Output() saveEvent: EventEmitter<Room> = new EventEmitter<Room>();
 
   @Input() editRoom: Room;
   @Input() name: string;
@@ -62,12 +64,6 @@ export class RoomComponent implements OnInit {
   saveChanges() {
     this.editRoom.name = this.name;
     this.editRoom.description = this.description;
-    this.roomService.updateRoom(this.editRoom)
-      .subscribe((room) => {
-        this.editRoom = room;
-        this.translateService.get('settings.changes-successful').subscribe(msg => {
-          this.notificationService.show(msg);
-        });
-      });
+    this.saveEvent.emit(this.editRoom);
   }
 }
