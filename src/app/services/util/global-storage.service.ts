@@ -2,7 +2,7 @@ import { Inject, Injectable, InjectionToken, Provider } from '@angular/core';
 import { ConsentChangeEvent, ConsentService } from './consent.service';
 import { StorageBackend, StorageItem, StorageItemCategory } from '../../models/storage';
 
-export const STORAGECONFIG_PROVIDER_TOKEN : InjectionToken<StorageItem> = new InjectionToken('STORAGECONFIG_PROVIDER_TOKEN');
+export const STORAGECONFIG_PROVIDER_TOKEN: InjectionToken<StorageItem> = new InjectionToken('STORAGECONFIG_PROVIDER_TOKEN');
 
 /**
  * Provides {@link Symbol}s for referencing {@link StorageItem} configurations.
@@ -119,7 +119,7 @@ export const STORAGE_CONFIG_PROVIDERS: Provider[] = STORAGE_CONFIG.map((config) 
     provide: STORAGECONFIG_PROVIDER_TOKEN,
     useValue: config,
     multi: true
-  }
+  };
 });
 
 const APP_PREFIX = 'ARS';
@@ -143,7 +143,7 @@ export class GlobalStorageService {
     });
     this.consentService.init(this.getItem(STORAGE_KEYS.COOKIE_CONSENT));
     this.consentService.subscribeToChanges(settings => this.handleConsentChange(settings));
-    this.handleConsentChange({categoriesSettings: this.consentService.getInternalSettings()});
+    this.handleConsentChange({ categoriesSettings: this.consentService.getInternalSettings() });
 
     // Memory setup
     const userAgent = navigator.userAgent;
@@ -237,12 +237,12 @@ export class GlobalStorageService {
   }
 
   getItem(key: symbol): any {
-    let config = this.storageConfig.get(key);
+    const config = this.storageConfig.get(key);
     if (!config) {
       throw new Error(`No specification found for storage key.`);
     }
-    let prefix = config.prefix ?? APP_PREFIX;
-    let name = `${prefix}_${config.name}`;
+    const prefix = config.prefix ?? APP_PREFIX;
+    const name = `${prefix}_${config.name}`;
     switch (this.getBackendFor(config)) {
       case StorageBackend.MEMORY:
         return this.memory.get(key);
@@ -266,13 +266,13 @@ export class GlobalStorageService {
   }
 
   setItem(key: symbol, value: any) {
-    let config = this.storageConfig.get(key);
+    const config = this.storageConfig.get(key);
     if (!config) {
       throw new Error(`No specification found for storage key.`);
     }
-    let prefix = config.prefix ?? APP_PREFIX;
-    let name = `${prefix}_${config.name}`;
-    let backend = this.backendOverrides.get(config.category) ?? config.backend;
+    const prefix = config.prefix ?? APP_PREFIX;
+    const name = `${prefix}_${config.name}`;
+    const backend = this.backendOverrides.get(config.category) ?? config.backend;
     switch (this.getBackendFor(config)) {
       case StorageBackend.MEMORY:
         this.memory.set(key, value);
@@ -289,12 +289,12 @@ export class GlobalStorageService {
   }
 
   removeItem(key: symbol) {
-    let config = this.storageConfig.get(key);
+    const config = this.storageConfig.get(key);
     if (!config) {
       throw new Error(`No specification found for storage key.`);
     }
-    let prefix = config.prefix ?? APP_PREFIX;
-    let name = `${prefix}_${config.name}`;
+    const prefix = config.prefix ?? APP_PREFIX;
+    const name = `${prefix}_${config.name}`;
     switch (this.getBackendFor(config)) {
       case StorageBackend.MEMORY:
         this.memory.delete(key);
@@ -323,6 +323,6 @@ export class GlobalStorageService {
       } else {
         this.forceSessionStorageFor(c.key);
       }
-    })
+    });
   }
 }
