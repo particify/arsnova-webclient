@@ -20,6 +20,23 @@ import { DialogService } from '../../../services/util/dialog.service';
 import { GlobalStorageService, STORAGE_KEYS } from '../../../services/util/global-storage.service';
 import { AnnounceService } from '../../../services/util/announce.service';
 
+enum Sort {
+  VOTEASC = 'VOTEASC',
+  VOTEDESC = 'VOTEDESC',
+  TIME = 'TIME'
+}
+
+enum Filter {
+  READ = 'READ',
+  UNREAD = 'UNREAD',
+  FAVORITE = 'FAVORITE',
+  CORRECT = 'CORRECT',
+  WRONG = 'WRONG',
+  ACK = 'ACK',
+  TAG = 'TAG',
+  ANSWER = 'ANSWER'
+}
+
 @Component({
   selector: 'app-comment-list',
   templateUrl: './comment-list.component.html',
@@ -38,18 +55,9 @@ export class CommentListComponent implements OnInit, OnDestroy {
   deviceType: string;
   isSafari: boolean;
   isLoading = true;
-  voteasc = 'voteasc';
-  votedesc = 'votedesc';
-  time = 'time';
-  currentSort: string;
-  read = 'read';
-  unread = 'unread';
-  favorite = 'favorite';
-  correct = 'correct';
-  wrong = 'wrong';
-  ack = 'ack';
-  tag = 'tag';
-  answer = 'answer';
+  currentSort = '';
+  sorting = Sort;
+  filtering = Filter;
   currentFilter = '';
   commentVoteMap = new Map<string, Vote>();
   scroll = false;
@@ -88,7 +96,7 @@ export class CommentListComponent implements OnInit, OnDestroy {
     this.roomId = this.globalStorageService.getItem(STORAGE_KEYS.ROOM_ID);
     this.shortId = this.route.snapshot.paramMap.get('shortId');
     const userId = this.auth.userId;
-    this.currentSort = this.votedesc;
+    this.currentSort = Sort.VOTEDESC;
     this.initRoom();
     this.translateService.use(this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE));
     this.deviceType = this.globalStorageService.getItem(STORAGE_KEYS.DEVICE_TYPE);
@@ -220,13 +228,13 @@ export class CommentListComponent implements OnInit, OnDestroy {
           if (payload.id === this.comments[i].id) {
             for (const [key, value] of Object.entries(payload.changes)) {
               switch (key) {
-                case this.read:
+                case this.filtering.READ:
                   this.comments[i].read = <boolean>value;
                   break;
-                case this.correct:
+                case this.filtering.CORRECT:
                   this.comments[i].correct = <CorrectWrong>value;
                   break;
-                case this.favorite:
+                case this.filtering.FAVORITE:
                   this.comments[i].favorite = <boolean>value;
                   if (this.auth.userId === this.comments[i].creatorId && <boolean>value) {
                     this.translateService.get('comment-list.comment-got-favorited').subscribe(ret => {
@@ -238,7 +246,7 @@ export class CommentListComponent implements OnInit, OnDestroy {
                   this.comments[i].score = <number>value;
                   this.getComments();
                   break;
-                case this.ack:
+                case this.filtering.ACK:
                   const isNowAck = <boolean>value;
                   if (!isNowAck) {
                     this.comments = this.comments.filter(function (el) {
@@ -246,10 +254,10 @@ export class CommentListComponent implements OnInit, OnDestroy {
                     });
                   }
                   break;
-                case this.tag:
+                case this.filtering.TAG:
                   this.comments[i].tag = <string>value;
                   break;
-                case this.answer:
+                case this.filtering.ANSWER:
                   this.comments[i].answer = <string>value;
                   break;
               }
@@ -318,7 +326,7 @@ export class CommentListComponent implements OnInit, OnDestroy {
   }
 
   filterComments(type: string, tag?: string): void {
-    if (type === '' || (this.currentFilter === this.tag && type === this.tag)) {
+    if (type === '' || (this.currentFilter === this.filtering.TAG && type === this.filtering.TAG)) {
       this.filteredComments = this.comments;
       this.hideCommentsList = false;
       this.currentFilter = '';
@@ -326,19 +334,19 @@ export class CommentListComponent implements OnInit, OnDestroy {
     }
     this.filteredComments = this.comments.filter(c => {
       switch (type) {
-        case this.correct:
+        case this.filtering.CORRECT:
           return c.correct === CorrectWrong.CORRECT ? 1 : 0;
-        case this.wrong:
+        case this.filtering.WRONG:
           return c.correct === CorrectWrong.WRONG ? 1 : 0;
-        case this.favorite:
+        case this.filtering.FAVORITE:
           return c.favorite;
-        case this.read:
+        case this.filtering.READ:
           return c.read;
-        case this.unread:
+        case this.filtering.UNREAD:
           return !c.read;
-        case this.tag:
+        case this.filtering.TAG:
           return c.tag === tag;
-        case this.answer:
+        case this.filtering.ANSWER:
           return c.answer;
       }
     });
@@ -349,11 +357,11 @@ export class CommentListComponent implements OnInit, OnDestroy {
 
   sort(array: any[], type: string): any[] {
     return array.sort((a, b) => {
-      if (type === this.voteasc) {
+      if (type === this.sorting.VOTEASC) {
         return (a.score > b.score) ? 1 : (b.score > a.score) ? -1 : 0;
-      } else if (type === this.votedesc) {
+      } else if (type === this.sorting.VOTEDESC) {
         return (b.score > a.score) ? 1 : (a.score > b.score) ? -1 : 0;
-      } else if (type === this.time) {
+      } else if (type === this.sorting.TIME) {
         const dateA = new Date(a.timestamp), dateB = new Date(b.timestamp);
         return (+dateB > +dateA) ? 1 : (+dateA > +dateB) ? -1 : 0;
       }
@@ -370,7 +378,7 @@ export class CommentListComponent implements OnInit, OnDestroy {
   }
 
   clickedOnTag(tag: string): void {
-    this.filterComments(this.tag, tag);
+    this.filterComments(this.filtering.TAG, tag);
   }
 
   pauseCommentStream() {
