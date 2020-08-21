@@ -28,6 +28,9 @@ export class FooterComponent implements OnInit {
   public themeClass: String;
 
   public themes: Theme[];
+  privacyUrl: string;
+  imprintUrl: string;
+  manualUrl: string;
 
   constructor(
     public notificationService: NotificationService,
@@ -59,25 +62,28 @@ export class FooterComponent implements OnInit {
     if (this.consentService.consentRequired()) {
       this.consentService.openDialog();
     }
+
+    this.apiConfigService.getApiConfig$().subscribe(config => {
+      this.manualUrl = config.ui.links.manual.url;
+      this.privacyUrl = config.ui.links.privacy.url;
+      this.imprintUrl = config.ui.links.tos.imprint;
+    });
   }
 
-  getUIDataFromConfig(type: string): string {
-    return this.apiConfigService.getUiConfig()[type][this.lang];
+  openUrlInNewTab(url: string) {
+    window.open(url, '_blank');
   }
 
-  showIntroduction() {
-    const introductionBody = this.getUIDataFromConfig('introduction');
-    this.dialogService.openInfoDialog('introduction', introductionBody);
+  showManual() {
+   this.openUrlInNewTab(this.manualUrl);
   }
 
   showImprint() {
-    const imprintBody = this.getUIDataFromConfig('legal-info');
-    this.dialogService.openInfoDialog('imprint', imprintBody);
+    this.openUrlInNewTab(this.imprintUrl);
   }
 
   showDataProtection() {
-    const dataProtectionBody = this.getUIDataFromConfig('privacy-info');
-    this.dialogService.openInfoDialog('data-protection', dataProtectionBody);
+    this.openUrlInNewTab(this.privacyUrl);
   }
 
   showCookieSettings() {
