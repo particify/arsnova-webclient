@@ -1,7 +1,5 @@
 import { AfterContentInit, Component, HostListener, OnDestroy, OnInit } from '@angular/core';
-import { first } from 'rxjs/operators';
 import { Room } from '../../../models/room';
-import { UserRole } from '../../../models/user-roles.enum';
 import { RoomPageComponent } from '../../shared/room-page/room-page.component';
 import { Location } from '@angular/common';
 import { RoomService } from '../../../services/http/room.service';
@@ -21,7 +19,6 @@ import { Subscription } from 'rxjs';
 import { WsFeedbackService } from '../../../services/websockets/ws-feedback.service';
 import { GlobalStorageService, STORAGE_KEYS } from '../../../services/util/global-storage.service';
 import { AnnounceService } from '../../../services/util/announce.service';
-import { AuthenticationStatus } from '../../../models/client-authentication-result';
 
 @Component({
   selector: 'app-room-participant-page',
@@ -113,22 +110,11 @@ export class RoomParticipantPageComponent extends RoomPageComponent implements O
 
   afterRoomLoadHook() {
     this.getFeedback();
-    this.authenticationService.getAuthenticationChanges().pipe(first()).subscribe(auth => {
-      if (auth) {
-        this.initRoomData(auth.userId);
-      } else {
-        this.authenticationService.loginGuest().subscribe(result => {
-          if (result.status === AuthenticationStatus.SUCCESS) {
-            this.initRoomData(result.authentication.userId);
-          }
-        });
-      }
-    });
+    this.initRoomData();
   }
 
-  initRoomData(userId: string) {
+  initRoomData() {
     this.subscribeCommentStream();
-    this.roomService.addToHistory(userId, this.room.id);
   }
 
   afterGroupsLoadHook() {

@@ -2,7 +2,6 @@ import { Component, ElementRef, Input, OnInit, ViewChild, OnDestroy } from '@ang
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { Room } from '../../../models/room';
-import { RoomService } from '../../../services/http/room.service';
 import { Router } from '@angular/router';
 import { RegisterErrorStateMatcher } from '../../home/register/register.component';
 import { FormControl, Validators } from '@angular/forms';
@@ -10,14 +9,11 @@ import { NotificationService } from '../../../services/util/notification.service
 import { TranslateService } from '@ngx-translate/core';
 import { AuthenticationService } from '../../../services/http/authentication.service';
 import { ClientAuthentication } from 'app/models/client-authentication';
-import { Moderator } from '../../../models/moderator';
-import { ModeratorService } from '../../../services/http/moderator.service';
 import { EventService } from '../../../services/util/event.service';
 import { KeyboardUtils } from '../../../utils/keyboard';
 import { KeyboardKey } from '../../../utils/keyboard/keys';
 import { GlobalStorageService, STORAGE_KEYS } from '../../../services/util/global-storage.service';
 import { ApiConfigService } from '../../../services/http/api-config.service';
-import { AuthenticationStatus } from '../../../models/client-authentication-result';
 
 @Component({
   selector: 'app-room-join',
@@ -38,12 +34,10 @@ export class RoomJoinComponent implements OnInit, OnDestroy {
   destroy$ = new Subject();
 
   constructor(
-    private roomService: RoomService,
     private router: Router,
     public notificationService: NotificationService,
     private translateService: TranslateService,
     public authenticationService: AuthenticationService,
-    private moderatorService: ModeratorService,
     public eventService: EventService,
     private globalStorageService: GlobalStorageService,
     private apiConfigService: ApiConfigService
@@ -67,61 +61,35 @@ export class RoomJoinComponent implements OnInit, OnDestroy {
   }
 
   onEnter(shortId: string) {
-    this.checkRoomId(shortId);
+    this.joinRoom(shortId);
   }
 
-  checkRoomId(id: string): void {
-    if (!id && this.demoId) {
-      this.getRoom(this.demoId);
-    } else {
-      if (id.length - (id.split(' ').length - 1) < 8) {
-        this.translateService.get('home-page.exactly-8').subscribe(message => {
-          this.notificationService.show(message);
-        });
-      } else if (this.roomCodeFormControl.hasError('pattern')) {
-        this.translateService.get('home-page.only-numbers').subscribe(message => {
-          this.notificationService.show(message);
-        });
-      } else {
-        const roomId = id.replace(/\s/g, '');
-        this.getRoom(roomId);
-      }
+  joinRoom(shortId: string): void {
+    if (!shortId && this.demoId) {
+      shortId = this.demoId;
     }
-  }
-
-  getRoom(roomId: string) {
-    this.roomService.getRoomByShortId(roomId).subscribe(room => {
-        this.room = room;
-        if (!this.auth) {
-          this.loginGuest();
-        } else {
-          this.navigate();
-        }
-      },
-      error => {
-        this.translateService.get('home-page.no-room-found').subscribe(message => {
-          this.notificationService.show(message);
-        });
+    shortId = shortId.replace(/[\s]/g, '');
+    if (this.roomCodeFormControl.hasError('required') || this.roomCodeFormControl.hasError('minlength')) {
+      return;
+    }
+    if (shortId.length !== 8) {
+      this.translateService.get('home-page.exactly-8').subscribe(message => {
+        this.notificationService.show(message);
       });
-  }
-
-  joinRoom(id: string): void {
-    if (!this.roomCodeFormControl.hasError('required') && !this.roomCodeFormControl.hasError('minlength')) {
-      this.checkRoomId(id);
+      return;
     }
+    if (this.roomCodeFormControl.hasError('pattern')) {
+      this.translateService.get('home-page.only-numbers').subscribe(message => {
+        this.notificationService.show(message);
+      });
+      return;
+    }
+
+    this.navigate(shortId);
   }
 
-  loginGuest() {
-    this.authenticationService.loginGuest().subscribe(result => {
-      if (result.status === AuthenticationStatus.SUCCESS) {
-        this.auth = result.authentication;
-        this.navigate();
-      }
-    });
-  }
-
-  navigate() {
-    this.router.navigate([`/participant/room/${this.room.shortId}`]);
+  navigate(shortId: string) {
+    this.router.navigate([`/participant/room/${shortId}`]);
   }
 
   /**

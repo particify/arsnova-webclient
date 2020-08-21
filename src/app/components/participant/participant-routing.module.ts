@@ -9,11 +9,13 @@ import { CommentAnswerComponent } from '../shared/comment-answer/comment-answer.
 import { RoomResolver } from '../../resolver/room.resolver';
 import { CommentResolver } from '../../resolver/comment.resolver';
 import { RoomViewUserRoleResolver } from '../../resolver/room-view-user-role.resolver';
+import { AuthenticationGuard } from '../../guards/authentication.guard';
 
 const routes: Routes = [
   {
     path: 'room/:shortId',
     component: RoomParticipantPageComponent,
+    canActivate: [AuthenticationGuard],
     data: { requiredRole: UserRole.PARTICIPANT },
     resolve : {
       room: RoomResolver,
@@ -23,6 +25,7 @@ const routes: Routes = [
   {
     path: 'room/:shortId/comments',
     component: CommentPageComponent,
+    canActivate: [AuthenticationGuard],
     data: { requiredRole: UserRole.PARTICIPANT },
     resolve : {
       room: RoomResolver,
@@ -32,6 +35,7 @@ const routes: Routes = [
   {
     path: 'room/:shortId/comment/:commentId',
     component: CommentAnswerComponent,
+    canActivate: [AuthenticationGuard],
     data: { requiredRole: UserRole.PARTICIPANT },
     resolve : {
       comment: CommentResolver,
@@ -41,6 +45,7 @@ const routes: Routes = [
   {
     path: 'room/:shortId/survey',
     component: SurveyPageComponent,
+    canActivate: [AuthenticationGuard],
     data: { requiredRole: UserRole.PARTICIPANT },
     resolve : {
       room: RoomResolver,
@@ -50,6 +55,7 @@ const routes: Routes = [
   {
     path: 'room/:shortId/group/:contentGroup',
     component: ParticipantContentCarouselPageComponent,
+    canActivate: [AuthenticationGuard],
     data: { requiredRole: UserRole.PARTICIPANT },
     resolve : {
       viewRole: RoomViewUserRoleResolver
@@ -58,6 +64,7 @@ const routes: Routes = [
   {
     path: 'room/:shortId/group/:contentGroup/:contentIndex',
     component: ParticipantContentCarouselPageComponent,
+    canActivate: [AuthenticationGuard],
     data: { requiredRole: UserRole.PARTICIPANT },
     resolve : {
       viewRole: RoomViewUserRoleResolver
