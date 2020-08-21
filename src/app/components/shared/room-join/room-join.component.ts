@@ -85,7 +85,7 @@ export class RoomJoinComponent implements OnInit, OnDestroy {
           if (!this.auth) {
             this.loginGuest();
           } else {
-            this.addAndNavigate();
+            this.navigate();
           }
         },
         error => {
@@ -106,31 +106,14 @@ export class RoomJoinComponent implements OnInit, OnDestroy {
     this.authenticationService.loginGuest().subscribe(result => {
       if (result.status === AuthenticationStatus.SUCCESS) {
         this.auth = result.authentication;
-        this.addAndNavigate();
+        this.navigate();
       }
     });
   }
 
-  addAndNavigate() {
-    if (this.auth.userId === this.room.ownerId) {
-      this.router.navigate([`/creator/room/${this.room.shortId}`]);
-    } else {
-      this.roomService.addToHistory(this.auth.userId, this.room.id);
-      this.moderatorService.get(this.room.id).subscribe((moderators: Moderator[]) => {
-        let isModerator = false;
-        for (const m of moderators) {
-          if (m.userId === this.auth.userId) {
-            this.router.navigate([`/moderator/room/${this.room.shortId}`]);
-            isModerator = true;
-          }
-        }
-        if (!isModerator) {
-          this.router.navigate([`/participant/room/${this.room.shortId}`]);
-        }
-      });
-    }
+  navigate() {
+    this.router.navigate([`/participant/room/${this.room.shortId}`]);
   }
-
 
   /**
    * Prettifies the room code input element which:
