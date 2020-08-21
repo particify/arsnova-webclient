@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, of } from 'rxjs';
-import { map, shareReplay, skip, switchAll, takeUntil } from 'rxjs/operators';
+import { map, shareReplay, skip, switchAll, takeUntil, tap } from 'rxjs/operators';
 import { IMessage } from '@stomp/stompjs';
 import { BaseHttpService } from './http/base-http.service';
 import { WsConnectorService } from './websockets/ws-connector.service';
@@ -54,8 +54,10 @@ export class RoomMembershipService extends BaseHttpService {
    * membership data from the backend and emits it them to subscribers.
    */
   private loadMemberships(userId: string) {
-    const memberships$ = this.http.get<Membership[]>(this.apiUrl.base + this.apiUrl.membershipByUser + '/' + userId)
-        .pipe(shareReplay());
+    const memberships$ = this.http.get<Membership[]>(this.apiUrl.base + this.apiUrl.membershipByUser + '/' + userId).pipe(
+        tap(memberships => memberships.forEach(m => m.primaryRole = this.selectPrimaryRole(m.roles))),
+        shareReplay()
+    );
     this.memberships$$.next(memberships$);
 
     return memberships$;
@@ -85,10 +87,17 @@ export class RoomMembershipService extends BaseHttpService {
    */
   getPrimaryRoleByRoom(roomShortId: string): Observable<UserRole> {
     return this.getMembershipByRoom(roomShortId).pipe(
-        map(m => m.roles.reduce(
-            (acc, value) => this.isRoleSubstitutable(value, acc) ? value : acc,
-            UserRole.PARTICIPANT)),
+        map(m => this.selectPrimaryRole(m.roles)),
     );
+  }
+
+  /**
+   * Select the user's primary (most powerful) role from an array of roles.
+   */
+  selectPrimaryRole(roles: UserRole[]) {
+    return roles.reduce(
+        (acc, value) => this.isRoleSubstitutable(value, acc) ? value : acc,
+        UserRole.PARTICIPANT);
   }
 
   /**
