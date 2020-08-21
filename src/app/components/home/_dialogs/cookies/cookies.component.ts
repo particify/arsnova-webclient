@@ -1,6 +1,5 @@
 import { AfterViewInit, Component, ElementRef, OnInit, ViewChild, Inject } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { DialogConfirmActionButtonType } from '../../../shared/dialog/dialog-action-buttons/dialog-action-buttons.component';
 import { ApiConfigService } from '../../../../services/http/api-config.service';
 import { ConsentGiven, CookieCategory } from '../../../../services/util/consent.service';
 
@@ -11,10 +10,9 @@ import { ConsentGiven, CookieCategory } from '../../../../services/util/consent.
 })
 export class CookiesComponent implements OnInit, AfterViewInit {
 
-  @ViewChild('header')
-  dialogTitle: ElementRef;
+  @ViewChild('header') dialogTitle: ElementRef;
 
-  confirmButtonType: DialogConfirmActionButtonType = DialogConfirmActionButtonType.Primary;
+  privacyUrl: string;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public categories: CookieCategory[],
@@ -27,6 +25,9 @@ export class CookiesComponent implements OnInit, AfterViewInit {
   ngOnInit() {
     // not really the nicest way but should do its job until a better or native solution was found
     setTimeout(() => document.getElementById('cookie-header').focus(), 400);
+    this.apiConfigService.getApiConfig$().subscribe(config => {
+      this.privacyUrl = config.ui.privacy;
+    });
   }
 
   ngAfterViewInit() {
@@ -49,30 +50,12 @@ export class CookiesComponent implements OnInit, AfterViewInit {
   handleCookieSelection() {
     console.debug('Accepted cookie categories: ', this.categories);
     const consentGiven: ConsentGiven = this.categories.reduce((map, item) => {
-        map[item.id] = item.consent
+        map[item.id] = item.consent;
         return map;
       }, {});
     this.dialogRef.close(consentGiven);
     setTimeout(() => {
       document.getElementById('room-id-input').focus();
     }, 500);
-  }
-
-  showDataProtection() {
-    console.debug('Not implemented.');
-  }
-
-  /**
-   * Returns a lambda which closes the dialog on call.
-   */
-  buildConfirmActionCallback(): () => void {
-    return () => this.acceptAllCookies();
-  }
-
-  /**
-   * Returns a lambda which closes the dialog on call.
-   */
-  buildCancelActionCallback(): () => void {
-    return () => this.acceptSelectedCookies();
   }
 }
