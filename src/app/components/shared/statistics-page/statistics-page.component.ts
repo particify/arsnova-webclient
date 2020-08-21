@@ -4,7 +4,6 @@ import { RoomService } from '../../../services/http/room.service';
 import { ContentGroup } from '../../../models/content-group';
 import { Room } from '../../../models/room';
 import { MatTabGroup } from '@angular/material/tabs';
-import { DialogService } from '../../../services/util/dialog.service';
 import { TranslateService } from '@ngx-translate/core';
 import { GlobalStorageService, STORAGE_KEYS } from '../../../services/util/global-storage.service';
 import { AnnounceService } from '../../../services/util/announce.service';
@@ -27,7 +26,6 @@ export class StatisticsPageComponent implements OnInit {
 
   constructor(private route: ActivatedRoute,
               private roomService: RoomService,
-              private dialogService: DialogService,
               private announceService: AnnounceService,
               private translateService: TranslateService,
               private globalStorageService: GlobalStorageService
@@ -67,9 +65,5 @@ export class StatisticsPageComponent implements OnInit {
 
   announce() {
     this.announceService.announce('statistic.a11y-shortcuts-overview');
-  }
-
-  showHelp(): void {
-    this.dialogService.openStatisticHelpDialog();
   }
 }

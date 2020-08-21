@@ -20,19 +20,19 @@
       </div>
       <mat-tab-group *ngIf="!isParticipant && (edit || !answer)" [dynamicHeight]="true">
         <mat-tab label="{{'comment-page.your-answer' | translate}}">
-          <mat-form-field class="input-block">
+          <mat-form-field class="input-block" appearance="outline">
             <textarea id="answer-input" [(ngModel)]="answer" (input)="edit = true"
                       matInput
                       matTextareaAutosize
                       matAutosizeMinRows="3"
                       matAutosizeMaxRows="8"
-                      maxlength="2000"
+                      maxlength="255"
                       name="answer"
                       aria-labelledby="answer">
             </textarea>
             <mat-hint align="end">
             <span aria-hidden="true">
-              {{ answer ? answer.length : 0 }} / 2000
+              {{ answer ? answer.length : 0 }} / 255
             </span>
             </mat-hint>
           </mat-form-field>

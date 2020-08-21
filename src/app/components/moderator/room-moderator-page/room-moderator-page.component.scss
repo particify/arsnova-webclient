@@ -44,7 +44,7 @@
 }
 
 .mat-card-header {
-  margin: 5% 0;
+  margin: 4% 0 1% 0;
 }
 
 .mat-card-title {
@@ -54,19 +54,35 @@
 }
 
 .mat-card-subtitle {
-  height: 30%;
+  margin: 0;
+}
+
+.mat-grid-list {
+  width: 100%;
+  min-height: 140px;
+  padding: 0 !important;
+  margin: 4% 0;
 }
 
 .mat-grid-tile {
   height: 90%;
-  min-height: 150px;
-  padding-top: 2% !important;
-}
-
-.question-button-div {
-  margin: 10% 0 10% 0;
+  padding: 2% !important;
+  overflow: inherit;
 }
 
 markdown {
   margin: 0 3% 0 3% !important;
+}
+
+
+.single-tile {
+  width: calc(100% - 32px) !important;
+}
+
+.double-tile {
+  width: calc(50% - 16px) !important;
+}
+
+.big-container {
+  min-height: 180px;
 }

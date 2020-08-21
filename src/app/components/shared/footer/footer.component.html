@@ -1,86 +1,78 @@
 <div>
 
-  <mat-toolbar id="footer-toolbar">
+  <mat-toolbar id="footer-toolbar" fxLayoutAlign="space-between">
 
-    <button class="focus_button" mat-button (click)="showIntroduction()"
-            aria-labelledby="demo-label">
+    <button mat-button (click)="showIntroduction()" aria-labelledby="demo-label">
       <mat-icon>flag</mat-icon>
       <span *ngIf="deviceWidth > 600">
         {{ 'footer.demo' | translate }}
       </span>
     </button>
 
-    <span class="fill-remaining-space"></span>
 
-    <button class="focus_button" mat-button
-            aria-labelledby="style-label" [matMenuTriggerFor]="themeMenu">
+    <button mat-button aria-labelledby="style-label" [matMenuTriggerFor]="themeMenu">
       <mat-icon>palette</mat-icon>
       <span *ngIf="deviceWidth > 600">
           {{'footer.style' | translate}}
         </span>
     </button>
 
-    <span class="fill-remaining-space"></span>
-    <button class="focus_button" id="language-menu" mat-button
-            aria-labelledby="language-label"
-            [matMenuTriggerFor]="langMenu">
+    <button id="language-menu" mat-button aria-labelledby="language-label" [matMenuTriggerFor]="langMenu">
       <mat-icon>language</mat-icon>
       <span *ngIf="deviceWidth > 600">
           {{'footer.language' | translate}}
         </span>
     </button>
 
-    <span class="fill-remaining-space"></span>
 
-    <button class="focus_button" mat-button
-            aria-labelledby="data-protection-label" [matMenuTriggerFor]="privacyMenu">
+    <button mat-button aria-labelledby="data-protection-label" [matMenuTriggerFor]="privacyMenu">
       <mat-icon>security</mat-icon>
       <span *ngIf="deviceWidth > 600">
         {{'footer.dsgvo' | translate}}
       </span>
     </button>
 
-    <span class="fill-remaining-space"></span>
 
-    <button class="focus_button" (click)="showImprint()" mat-button aria-labelledby="imprint-label">
+    <button (click)="showImprint()" mat-button aria-labelledby="imprint-label">
       <mat-icon>info</mat-icon>
       <span *ngIf="deviceWidth > 600">
         {{'footer.imprint' | translate}}
       </span>
     </button>
 
-    <mat-menu class="wider-panel" #themeMenu="matMenu" [overlapTrigger]="false">
-      <button mat-menu-item *ngFor="let theme of themes" (click)="changeTheme(theme)"
-              title="{{theme.toString(getLanguage())}}">
-        <div fxLayout="row">
-          <mat-icon class="color" [ngStyle]="{'color':theme.getPreviewColor()}">lens</mat-icon>
-          <mat-icon class="checked" *ngIf="theme.key === themeClass" [ngStyle]="{'color':theme.getOnPreviewColor()}">
-            checked
-          </mat-icon>
-          <div fxLayout="column" fxLayoutAlign="center">
-            <span class="item-title color-title">{{theme.getName(getLanguage())}}</span>
-            <span class="color-description"
-                  *ngIf="deviceWidth > 600">{{theme.getDescription(getLanguage())}}</span>
-          </div>
-        </div>
-      </button>
-    </mat-menu>
-
-    <mat-menu #langMenu="matMenu" [overlapTrigger]="false">
-      <button class="item-title lang-title" mat-menu-item (click)="useLanguage('de')">
-        {{ 'footer.german' | translate }}</button>
-      <button class="item-title lang-title" mat-menu-item (click)="useLanguage('en')">
-        {{ 'footer.english' | translate }}</button>
-    </mat-menu>
-
-    <mat-menu #privacyMenu="matMenu" [overlapTrigger]="false">
-      <button class="item-title" mat-menu-item (click)="showDataProtection()">
-        {{ 'footer.privacy-policy' | translate }}</button>
-      <button class="item-title" mat-menu-item (click)="showCookieSettings()">
-        {{ 'footer.cookie-settings' | translate }}</button>
-    </mat-menu>
-
   </mat-toolbar>
+
+  <mat-menu class="wider-panel" #themeMenu="matMenu" [overlapTrigger]="false">
+    <button mat-menu-item *ngFor="let theme of themes" (click)="changeTheme(theme)"
+            title="{{theme.toString(getLanguage())}}">
+      <div fxLayout="row">
+        <mat-icon class="color" [ngStyle]="{'color':theme.getPreviewColor()}">lens</mat-icon>
+        <mat-icon class="checked" *ngIf="theme.key === themeClass" [ngStyle]="{'color':theme.getOnPreviewColor()}">
+          checked
+        </mat-icon>
+        <div fxLayout="column" fxLayoutAlign="center">
+          <span class="item-title color-title">{{theme.getName(getLanguage())}}</span>
+          <span class="color-description"
+                *ngIf="deviceWidth > 600">{{theme.getDescription(getLanguage())}}</span>
+        </div>
+      </div>
+    </button>
+  </mat-menu>
+
+  <mat-menu #langMenu="matMenu" [overlapTrigger]="false">
+    <button class="item-title lang-title" mat-menu-item (click)="useLanguage('de')">
+      {{ 'footer.german' | translate }}</button>
+    <button class="item-title lang-title" mat-menu-item (click)="useLanguage('en')">
+      {{ 'footer.english' | translate }}</button>
+  </mat-menu>
+
+  <mat-menu #privacyMenu="matMenu" [overlapTrigger]="false">
+    <button class="item-title" mat-menu-item (click)="showDataProtection()">
+      {{ 'footer.privacy-policy' | translate }}</button>
+    <button class="item-title" mat-menu-item (click)="showCookieSettings()">
+      {{ 'footer.cookie-settings' | translate }}</button>
+  </mat-menu>
+
 </div>
 
 <div class="visually-hidden">

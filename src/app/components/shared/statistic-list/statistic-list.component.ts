@@ -267,4 +267,8 @@ export class StatisticListComponent implements OnInit {
       });
     });
   }
+
+  showHelp(): void {
+    this.dialogService.openStatisticHelpDialog();
+  }
 }

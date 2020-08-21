@@ -1,12 +1,14 @@
 <div fxLayout="column" fxLayoutAlign="center" fxLayoutGap="20px">
-  <mat-form-field>
+  <mat-form-field appearance="outline">
+    <mat-label>{{ 'dialog.comment' | translate }}</mat-label>
     <textarea (focus)="eventService.makeFocusOnInputTrue()" (blur)="eventService.makeFocusOnInputFalse()" matInput
               #commentBody matTextareaAutosize matAutosizeMinRows=5 matAutosizeMaxRows=10 maxlength="250"
-              [formControl]="bodyForm" aria-labelledby="ask-question-description"></textarea>
-    <mat-placeholder>{{ 'dialog.enter-comment' | translate }}</mat-placeholder>
+              [formControl]="bodyForm" aria-labelledby="ask-question-description"
+              [placeholder]="'dialog.enter-comment' | translate"></textarea>
     <mat-hint align="end"><span aria-hidden="true">{{commentBody.value.length}} / 250</span></mat-hint>
   </mat-form-field>
-  <mat-form-field *ngIf="data.tags !== null && data.tags !== undefined && data.tags.length > 0">
+  <mat-form-field *ngIf="data.tags !== null && data.tags !== undefined && data.tags.length > 0" appearance="outline"
+    class="no-field-hint">
     <mat-label aria-labelledby="category">{{ 'dialog.tag' | translate }}</mat-label>
     <mat-select [(ngModel)]="selectedTag" class="comment-tag">
       <mat-option *ngFor="let tag of data.tags" value="{{tag}}"

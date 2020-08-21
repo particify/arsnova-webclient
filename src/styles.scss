@@ -95,6 +95,11 @@ input, input:focus {
   }
 }
 
+input:disabled {
+  color: var(--on-surface)!important;
+  opacity: 0.7;
+}
+
 textarea {
   line-height: 120%;
   color: var(--on-surface);
@@ -336,6 +341,10 @@ div {
   opacity: 0.6;
 }
 
+.mat-flat-button {
+  min-width: 100px!important;
+}
+
 .button-primary {
   background-color: var(--primary);
   color: var(--on-primary);
@@ -462,6 +471,9 @@ div {
   color: var(--on-surface);
 }
 
+.mat-expansion-panel:not(.mat-expanded) {
+  background-color: var(--table-a);
+}
 
 // Menu
 

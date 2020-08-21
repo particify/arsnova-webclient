@@ -28,8 +28,8 @@ table {
 }
 
 .mat-header-cell {
-  color: black;
-  background-color: var(--grey);
+  color: var(--on-surface);
+  background-color: var(--table-b);
 }
 
 .mat-cell {
@@ -73,4 +73,10 @@ table {
 h3 {
   margin-top: 3em;
   text-align: center;
+}
+
+.percent {
+  line-break: strict;
+  margin-left: 8px;
+  white-space: nowrap;
 }

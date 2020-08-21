@@ -11,7 +11,7 @@ app-comment, .mat-card {
 }
 
 .mat-raised-button {
-  min-width: 95px;
+  min-width: 100px;
   margin-top: 3%;
 }
 
@@ -22,10 +22,10 @@ app-comment, .mat-card {
   margin-right: 5px;
 }
 
-.mat-hint {
-  margin-right: 1%;
-}
-
 markdown {
   word-break: break-all;
+}
+
+.mat-form-field {
+  margin-top: 1em;
 }

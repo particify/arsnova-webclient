@@ -77,6 +77,7 @@ export class RoomModeratorPageComponent extends RoomPageComponent implements OnI
       this.initializeRoom(data.room);
     });
     this.translateService.use(this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE));
+    console.log(this.viewModuleCount);
   }
 
 
