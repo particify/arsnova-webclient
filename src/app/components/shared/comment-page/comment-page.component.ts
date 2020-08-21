@@ -8,7 +8,6 @@ import { EventService } from '../../../services/util/event.service';
 import { KeyboardUtils } from '../../../utils/keyboard';
 import { KeyboardKey } from '../../../utils/keyboard/keys';
 import { AnnounceService } from '../../../services/util/announce.service';
-import { first } from 'rxjs/operators';
 
 @Component({
   selector: 'app-comment-page',
@@ -72,7 +71,7 @@ export class CommentPageComponent implements OnInit, OnDestroy, AfterContentInit
       this.roomId = data.room.id;
       this.viewRole = data.viewRole;
     });
-    this.authenticationService.getAuthenticationChanges().pipe(first())
+    this.authenticationService.getCurrentAuthentication()
         .subscribe(auth => this.auth = auth);
   }
 

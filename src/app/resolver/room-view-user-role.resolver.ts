@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/router';
 import { Observable, of } from 'rxjs';
-import { first } from 'rxjs/operators';
 import { UserRole } from '../models/user-roles.enum';
 import { RoomMembershipService } from '../services/room-membership.service';
 
@@ -25,9 +24,7 @@ export class RoomViewUserRoleResolver implements Resolve<UserRole> {
     }
     /* Use the user's real role for moderation. */
     if (this.roomMembershipService.isRoleSubstitutable(viewRole, UserRole.EXECUTIVE_MODERATOR)) {
-      return this.roomMembershipService.getPrimaryRoleByRoom(route.params['shortId']).pipe(
-        first()
-      );
+      return this.roomMembershipService.getPrimaryRoleByRoom(route.params['shortId']);
     }
 
     throw Error(`No room view found for '${route.data['requiredRole']}'.`);

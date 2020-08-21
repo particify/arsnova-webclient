@@ -17,7 +17,6 @@ import * as moment from 'moment';
 import { GlobalStorageService, STORAGE_KEYS } from '../../../services/util/global-storage.service';
 import { AnnounceService } from '../../../services/util/announce.service';
 import { VoteService } from '../../../services/http/vote.service';
-import { first } from 'rxjs/operators';
 
 @Pipe({ name: 'dateFromNow' })
 export class DateFromNow implements PipeTransform {
@@ -96,7 +95,7 @@ export class CommentComponent implements OnInit {
           this.roleString = 'moderator';
       }
     });
-    this.authenticationService.getAuthenticationChanges().pipe(first())
+    this.authenticationService.getCurrentAuthentication()
         .subscribe(auth => this.userId = auth.userId);
     this.language = this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE);
     this.translateService.use(this.language);

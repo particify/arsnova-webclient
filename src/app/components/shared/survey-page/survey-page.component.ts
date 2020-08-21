@@ -15,7 +15,6 @@ import { Survey } from '../../../models/survey';
 import { GlobalStorageService, STORAGE_KEYS } from '../../../services/util/global-storage.service';
 import { ActivatedRoute } from '@angular/router';
 import { AnnounceService } from '../../../services/util/announce.service';
-import { first } from 'rxjs/operators';
 
 @Component({
   selector: 'app-survey-page',
@@ -95,7 +94,7 @@ export class SurveyPageComponent implements OnInit, OnDestroy, AfterContentInit 
 
   ngOnInit() {
     this.translateService.use(this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE));
-    this.authenticationService.getAuthenticationChanges().pipe(first())
+    this.authenticationService.getCurrentAuthentication()
         .subscribe(auth => this.userId = auth.userId);
     this.route.data.subscribe(data => {
       this.roomId = data.room.id;

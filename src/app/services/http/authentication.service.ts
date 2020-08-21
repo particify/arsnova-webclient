@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject, Observable, of, timer } from 'rxjs';
-import { catchError, concatMap, filter, map, switchAll, switchMap, shareReplay, take, tap } from 'rxjs/operators';
+import { catchError, concatMap, filter, first, map, switchAll, switchMap, shareReplay, take, tap } from 'rxjs/operators';
 import { BaseHttpService } from './base-http.service';
 import { GlobalStorageService, STORAGE_KEYS } from '../util/global-storage.service';
 import { ClientAuthentication } from '../../models/client-authentication';
@@ -65,10 +65,31 @@ export class AuthenticationService extends BaseHttpService {
   }
 
   /**
-   * Returns a stream of changes to the authentication.
+   * Returns the changes to authentication as a stream.
    */
   getAuthenticationChanges(): Observable<ClientAuthentication> {
     return this.auth$$.pipe(switchAll());
+  }
+
+  /**
+   * Returns the current authentication.
+   */
+  getCurrentAuthentication(): Observable<ClientAuthentication> {
+    return this.auth$$.pipe(switchAll(), first());
+  }
+
+  /**
+   * Returns the current authentication. If no authentication is available, a
+   * login as guest is performed.
+   */
+  requireAuthentication(): Observable<ClientAuthentication> {
+    return this.auth$$.pipe(switchAll(), first(), switchMap(auth => {
+      if (auth) {
+        return of(auth);
+      }
+
+      return this.loginGuest().pipe(map(result => result.authentication));
+    }));
   }
 
   /**

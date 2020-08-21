@@ -50,10 +50,8 @@ class MockLanguageService {
 
 @Injectable()
 class MockAuthenticationService {
-  private auth$$ = new BehaviorSubject(new BehaviorSubject(null));
-
-  getAuthenticationChanges() {
-    return this.auth$$.asObservable();
+  getCurrentAuthentication() {
+    return of(null);
   }
 }
 

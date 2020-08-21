@@ -1,6 +1,5 @@
 import { AfterContentInit, Component, HostListener, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { first } from 'rxjs/operators';
 import { LanguageService } from '../../../services/util/language.service';
 import { ClientAuthentication } from 'app/models/client-authentication';
 import { AuthenticationService } from '../../../services/http/authentication.service';
@@ -54,7 +53,7 @@ export class UserHomeComponent implements OnInit, AfterContentInit {
 
   ngOnInit() {
     this.translateService.use(this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE));
-    this.authenticationService.getAuthenticationChanges().pipe(first())
+    this.authenticationService.getCurrentAuthentication()
         .subscribe(auth => this.auth = auth);
   }
 
