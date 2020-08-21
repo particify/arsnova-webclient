@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, of } from 'rxjs';
-import { map, shareReplay, skip, switchAll, takeUntil, tap } from 'rxjs/operators';
+import { first, map, shareReplay, skip, switchAll, takeUntil, tap } from 'rxjs/operators';
 import { IMessage } from '@stomp/stompjs';
 import { BaseHttpService } from './http/base-http.service';
 import { WsConnectorService } from './websockets/ws-connector.service';
@@ -64,7 +64,7 @@ export class RoomMembershipService extends BaseHttpService {
   }
 
   /**
-   * Get the user's membership data as an Observable.
+   * Returns the changes to user's memberships as a stream.
    *
    * Data might be fetched from local in-memory cache if available.
    */
@@ -73,17 +73,24 @@ export class RoomMembershipService extends BaseHttpService {
   }
 
   /**
-   * Get the user's membership for a room.
+   * Returns the user's current memberships.
+   */
+  getCurrentMemberships(): Observable<Membership[]> {
+    return this.memberships$$.pipe(switchAll(), first());
+  }
+
+  /**
+   * Returns the user's membership for a room.
    */
   getMembershipByRoom(roomShortId: string): Observable<Membership> {
-    return this.getMembershipChanges().pipe(
+    return this.getCurrentMemberships().pipe(
         map(memberships => memberships.filter(m => m.roomShortId === roomShortId)),
         map(memberships => memberships.length > 0 ? memberships[0] : new Membership())
     );
   }
 
   /**
-   * Get the user's primary (most powerful) role for a room.
+   * Returns the user's primary (most powerful) role for a room.
    */
   getPrimaryRoleByRoom(roomShortId: string): Observable<UserRole> {
     return this.getMembershipByRoom(roomShortId).pipe(
@@ -140,7 +147,7 @@ export class RoomMembershipService extends BaseHttpService {
   }
 
   /**
-   * Returns an Observable which informs about server-side membership changes.
+   * Returns messages about server-side membership changes as a stream.
    */
   getMembershipChangesStream(userId: string): Observable<IMessage> {
     return this.wsConnector.getWatcher(`/topic/${userId}.room-membership.changes.stream`);
