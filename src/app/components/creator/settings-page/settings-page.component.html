@@ -4,7 +4,7 @@
     <button tabindex="-1" id="keys-button"> {{ 'settings.a11y-shortcuts' | translate}}</button>
   </div>
   <div *ngFor="let setting of settings">
-    <app-settings [settings]="setting" [room]="room"></app-settings>
+    <app-settings [settings]="setting" [room]="room" (updateEvent)="updateRoom($event)"></app-settings>
   </div>
 </div>
 <app-loading-indicator *ngIf="isLoading"></app-loading-indicator>

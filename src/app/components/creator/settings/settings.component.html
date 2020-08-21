@@ -11,8 +11,9 @@
     <div class="container" [ngClass]="{'container-closed': !expanded, 'container-expanded': expanded}">
       <div [ngSwitch]="settings.componentName">
         <app-room-edit [editRoom]="room" [name]="room.name" [description]="room.description"
-                       *ngSwitchCase="'generalSettings'"></app-room-edit>
-        <app-comment-settings [editRoom]="room" [roomId]="room.id" *ngSwitchCase="'commentSettings'"></app-comment-settings>
+                       *ngSwitchCase="'generalSettings'" (saveEvent)="saveRoom($event)"></app-room-edit>
+        <app-comment-settings [editRoom]="room" [roomId]="room.id" *ngSwitchCase="'commentSettings'"
+                              (saveEvent)="saveRoom($event)"></app-comment-settings>
         <app-moderators [roomId]="room.id" *ngSwitchCase="'moderatorSettings'"></app-moderators>
         <!-- <app-bonus-token [room]="room" *ngSwitchCase="'tokenSettings'"></app-bonus-token> -->
         <app-tags [room]="room" *ngSwitchCase="'tagSettings'"></app-tags>
