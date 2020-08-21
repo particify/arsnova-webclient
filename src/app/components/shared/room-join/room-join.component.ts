@@ -16,6 +16,7 @@ import { EventService } from '../../../services/util/event.service';
 import { KeyboardUtils } from '../../../utils/keyboard';
 import { KeyboardKey } from '../../../utils/keyboard/keys';
 import { GlobalStorageService, STORAGE_KEYS } from '../../../services/util/global-storage.service';
+import { ApiConfigService } from '../../../services/http/api-config.service';
 import { AuthenticationStatus } from '../../../models/client-authentication-result';
 
 @Component({
@@ -29,8 +30,8 @@ export class RoomJoinComponent implements OnInit, OnDestroy {
 
   room: Room;
   auth: ClientAuthentication;
-  joinHover: boolean;
   isDesktop: boolean;
+  demoId: string;
 
   roomCodeFormControl = new FormControl('', [Validators.pattern('[0-9 ]*')]);
   matcher = new RegisterErrorStateMatcher();
@@ -44,7 +45,8 @@ export class RoomJoinComponent implements OnInit, OnDestroy {
     public authenticationService: AuthenticationService,
     private moderatorService: ModeratorService,
     public eventService: EventService,
-    private globalStorageService: GlobalStorageService
+    private globalStorageService: GlobalStorageService,
+    private apiConfigService: ApiConfigService
   ) {
     this.isDesktop = this.globalStorageService.getItem(STORAGE_KEYS.DEVICE_TYPE) === 'desktop';
   }
@@ -52,6 +54,11 @@ export class RoomJoinComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.authenticationService.getAuthenticationChanges().pipe(takeUntil(this.destroy$))
         .subscribe(auth => this.auth = auth);
+    this.apiConfigService.getApiConfig$().subscribe(config => {
+      if (config.ui.demo) {
+        this.demoId = config.ui.demo;
+      }
+    });
   }
 
   ngOnDestroy() {
@@ -59,46 +66,48 @@ export class RoomJoinComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
-  toggleArrowAnimation(shortId: string, animation: boolean) {
-    if (shortId.length === 9) {
-      this.joinHover = animation;
-    }
+  onEnter(shortId: string) {
+    this.checkRoomId(shortId);
   }
 
-  onEnter() {
-    this.getRoom(this.roomCodeElement.nativeElement.value);
-  }
-
-  getRoom(id: string): void {
-    if (id.length - (id.split(' ').length - 1) < 8) {
-      this.translateService.get('home-page.exactly-8').subscribe(message => {
-        this.notificationService.show(message);
-      });
-    } else if (this.roomCodeFormControl.hasError('pattern')) {
-      this.translateService.get('home-page.only-numbers').subscribe(message => {
-        this.notificationService.show(message);
-      });
+  checkRoomId(id: string): void {
+    if (!id && this.demoId) {
+      this.getRoom(this.demoId);
     } else {
-      const roomId = id.replace(/\s/g, '');
-      this.roomService.getRoomByShortId(roomId).subscribe(room => {
-          this.room = room;
-          if (!this.auth) {
-            this.loginGuest();
-          } else {
-            this.navigate();
-          }
-        },
-        error => {
-          this.translateService.get('home-page.no-room-found').subscribe(message => {
-            this.notificationService.show(message);
-          });
+      if (id.length - (id.split(' ').length - 1) < 8) {
+        this.translateService.get('home-page.exactly-8').subscribe(message => {
+          this.notificationService.show(message);
         });
+      } else if (this.roomCodeFormControl.hasError('pattern')) {
+        this.translateService.get('home-page.only-numbers').subscribe(message => {
+          this.notificationService.show(message);
+        });
+      } else {
+        const roomId = id.replace(/\s/g, '');
+        this.getRoom(roomId);
+      }
     }
+  }
+
+  getRoom(roomId: string) {
+    this.roomService.getRoomByShortId(roomId).subscribe(room => {
+        this.room = room;
+        if (!this.auth) {
+          this.loginGuest();
+        } else {
+          this.navigate();
+        }
+      },
+      error => {
+        this.translateService.get('home-page.no-room-found').subscribe(message => {
+          this.notificationService.show(message);
+        });
+      });
   }
 
   joinRoom(id: string): void {
     if (!this.roomCodeFormControl.hasError('required') && !this.roomCodeFormControl.hasError('minlength')) {
-      this.getRoom(id);
+      this.checkRoomId(id);
     }
   }
 

@@ -78,7 +78,8 @@
     "only-numbers": "Die Raumnummer besteht ausschließlich aus Ziffern.",
     "room-id": "Raum-Nr.",
     "update-available": "Eine neue Version ist verfügbar.",
-    "welcome": "Feedback und Interaktion"
+    "welcome": "Feedback und Interaktion",
+    "example": "z. B. "
   },
   "imprint": {
     "a11y": "Es folgt das Impressum von ARSnova.",

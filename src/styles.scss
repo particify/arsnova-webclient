@@ -237,6 +237,37 @@ div {
   padding-bottom: 0;
 }
 
+.big-input {
+  .mat-form-field-infix {
+    padding: .4em 0 .8em 0;
+  }
+
+  .mat-form-field-suffix .mat-icon-button .mat-icon {
+    height: 50px;
+    width: 50px;
+    font-size: 50px;
+    border-radius: 50%;
+  }
+
+  .mat-form-field-suffix {
+    .mat-icon-button {
+      height: 50px!important;
+      width: 50px!important;
+      margin-left: 0.75em;
+      margin-right: 0.15em;
+    }
+  }
+
+  input {
+    height: 50px;
+
+    &::placeholder {
+      opacity: 0.3;
+      font-size: 95%;
+    }
+  }
+}
+
 // Mat Radio Button
 
 .mat-radio-outer-circle {
