@@ -10,8 +10,9 @@ import { ConsentGiven, CookieCategory } from '../../../../services/util/consent.
 })
 export class CookiesComponent implements OnInit, AfterViewInit {
 
-  @ViewChild('header')
-  dialogTitle: ElementRef;
+  @ViewChild('header') dialogTitle: ElementRef;
+
+  privacyUrl: string;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public categories: CookieCategory[],
@@ -24,6 +25,9 @@ export class CookiesComponent implements OnInit, AfterViewInit {
   ngOnInit() {
     // not really the nicest way but should do its job until a better or native solution was found
     setTimeout(() => document.getElementById('cookie-header').focus(), 400);
+    this.apiConfigService.getApiConfig$().subscribe(config => {
+      this.privacyUrl = config.ui.privacy;
+    });
   }
 
   ngAfterViewInit() {
@@ -53,9 +57,5 @@ export class CookiesComponent implements OnInit, AfterViewInit {
     setTimeout(() => {
       document.getElementById('room-id-input').focus();
     }, 500);
-  }
-
-  showDataProtection() {
-    console.debug('Not implemented.');
   }
 }
