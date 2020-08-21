@@ -62,17 +62,17 @@
   <mat-menu #sortMenu="matMenu" xPosition="before">
 
     <button mat-menu-item *ngIf="isSafari === false"
-            (click)="sortComments(time)" aria-labelledby="sort-time">
+            (click)="sortComments(sorting.TIME)" aria-labelledby="sort-time">
       <mat-icon [ngClass]="{time: 'unread-icon'}[currentSort]">access_time</mat-icon>
       <span>{{ 'comment-list.sort-list-time' | translate }}</span>
     </button>
 
-    <button mat-menu-item (click)="sortComments(votedesc)" aria-labelledby="sort-up">
+    <button mat-menu-item (click)="sortComments(sorting.VOTEDESC)" aria-labelledby="sort-up">
       <mat-icon [ngClass]="{votedesc: 'up'}[currentSort]">keyboard_arrow_up</mat-icon>
       <span>{{ 'comment-list.sort-vote-asc' | translate }}</span>
     </button>
 
-    <button mat-menu-item (click)="sortComments(voteasc)" aria-labelledby="sort-down">
+    <button mat-menu-item (click)="sortComments(sorting.VOTEASC)" aria-labelledby="sort-down">
       <mat-icon [ngClass]="{voteasc: 'down'}[currentSort]">keyboard_arrow_down</mat-icon>
       <span>{{ 'comment-list.sort-vote-desc' | translate }}</span>
     </button>
@@ -81,28 +81,28 @@
 
   <mat-menu #filterMenu="matMenu" xPosition="before">
     <div>
-      <button mat-menu-item (click)="filterComments(read)" aria-labelledby="beamer_icon">
+      <button mat-menu-item (click)="filterComments(filtering.READ)" aria-labelledby="beamer_icon">
         <mat-icon svgIcon="beamer" [ngClass]="{read: 'beamer-icon'}[currentFilter]"></mat-icon>
         <span>{{ 'comment-list.filter-read' | translate }}</span>
       </button>
 
-      <button mat-menu-item (click)="filterComments(favorite)" aria-labelledby="grade">
+      <button mat-menu-item (click)="filterComments(filtering.FAVORITE)" aria-labelledby="grade">
         <mat-icon [ngClass]="{favorite: 'favorite-icon'}[currentFilter]">grade</mat-icon>
         <span>{{ 'comment-list.filter-favorite' | translate }}</span>
       </button>
 
-      <button mat-menu-item (click)="filterComments(correct)" aria-labelledby="check_circle">
+      <button mat-menu-item (click)="filterComments(filtering.CORRECT)" aria-labelledby="check_circle">
         <mat-icon [ngClass]="{correct: 'correct-icon'}[currentFilter]">check_circle</mat-icon>
         <span>{{ 'comment-list.filter-correct' | translate }}</span>
       </button>
 
-      <button mat-menu-item (focus)="hideCommentsList=true" (click)="filterComments(wrong)"
+      <button mat-menu-item (focus)="hideCommentsList=true" (click)="filterComments(filtering.WRONG)"
               aria-labelledby="not_interested">
         <mat-icon [ngClass]="{wrong: 'wrong-icon'}[currentFilter]">not_interested</mat-icon>
         <span>{{ 'comment-list.filter-wrong' | translate }}</span>
       </button>
 
-      <button mat-menu-item (focus)="hideCommentsList=true" (click)="filterComments(answer)"
+      <button mat-menu-item (focus)="hideCommentsList=true" (click)="filterComments(filtering.ANSWER)"
               aria-labelledby="comment">
         <mat-icon [ngClass]="{answer: 'answered-icon'}[currentFilter]">comment</mat-icon>
         <span>{{ 'comment-list.filter-answered' | translate }}</span>
