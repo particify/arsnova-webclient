@@ -113,7 +113,7 @@ export class RoomParticipantPageComponent extends RoomPageComponent implements O
 
   afterRoomLoadHook() {
     this.getFeedback();
-    this.authenticationService.getAuthenticationChanges().subscribe(auth => {
+    this.authenticationService.getAuthenticationChanges().pipe(first()).subscribe(auth => {
       if (auth) {
         this.initRoomData(auth.userId);
       } else {
