@@ -4,7 +4,7 @@ import { Content } from '../../../models/content';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { ContentChoice } from '../../../models/content-choice';
-import { NotificationService } from '../../../services/util/notification.service';
+import { AdvancedSnackBarTypes, NotificationService } from '../../../services/util/notification.service';
 import { Room } from '../../../models/room';
 import { RoomService } from '../../../services/http/room.service';
 import { TranslateService } from '@ngx-translate/core';
@@ -112,19 +112,19 @@ export class LooseContentComponent extends ContentListComponent implements OnIni
             group => {
               this.contentGroups.push(group.name);
               this.translateService.get('content.content-group-update-failed').subscribe(string => {
-                this.notificationService.show(string);
+                this.notificationService.showAdvanced(string, AdvancedSnackBarTypes.SUCCESS);
               });
               this.updateURL(group.name);
             }, error => {
               this.translateService.get('content.content-group-update-failed').subscribe(string => {
-                this.notificationService.show(string);
+                this.notificationService.showAdvanced(string, AdvancedSnackBarTypes.FAILED);
               });
             }
           );
         }
       } else {
         this.translateService.get('content.new-group-name-restriction').subscribe(string => {
-          this.notificationService.show(string);
+          this.notificationService.showAdvanced(string, AdvancedSnackBarTypes.WARNING);
         });
       }
     }

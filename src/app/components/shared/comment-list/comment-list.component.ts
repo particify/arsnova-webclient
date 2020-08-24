@@ -11,7 +11,7 @@ import { UserRole } from '../../../models/user-roles.enum';
 import { Room } from '../../../models/room';
 import { RoomService } from '../../../services/http/room.service';
 import { VoteService } from '../../../services/http/vote.service';
-import { NotificationService } from '../../../services/util/notification.service';
+import { AdvancedSnackBarTypes, NotificationService } from '../../../services/util/notification.service';
 import { CorrectWrong } from '../../../models/correct-wrong.enum';
 import { EventService } from '../../../services/util/event.service';
 import { Subscription } from 'rxjs';
@@ -325,7 +325,7 @@ export class CommentListComponent implements OnInit, OnDestroy {
           message = msg;
         });
       }
-      this.notificationService.show(message);
+      this.notificationService.showAdvanced(message, AdvancedSnackBarTypes.SUCCESS);
     });
   }
 
@@ -390,7 +390,7 @@ export class CommentListComponent implements OnInit, OnDestroy {
     this.freeze = true;
     this.commentStream.unsubscribe();
     this.translateService.get('comment-list.comment-stream-stopped').subscribe(msg => {
-      this.notificationService.show(msg);
+      this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
     });
   }
 
@@ -403,7 +403,7 @@ export class CommentListComponent implements OnInit, OnDestroy {
       });
     this.subscribeCommentStream();
     this.translateService.get('comment-list.comment-stream-started').subscribe(msg => {
-      this.notificationService.show(msg);
+      this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
     });
   }
 

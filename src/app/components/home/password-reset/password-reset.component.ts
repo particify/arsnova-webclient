@@ -3,7 +3,7 @@ import { FormControl, FormGroupDirective, NgForm, Validators } from '@angular/fo
 import { ErrorStateMatcher } from '@angular/material/core';
 import { validatePassword } from '../register/register.component';
 import { UserService } from '../../../services/http/user.service';
-import { NotificationService } from '../../../services/util/notification.service';
+import { AdvancedSnackBarTypes, NotificationService } from '../../../services/util/notification.service';
 import { TranslateService } from '@ngx-translate/core';
 import { EventService } from '../../../services/util/event.service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -54,18 +54,18 @@ export class PasswordResetComponent implements OnInit {
       if (this.email !== '' && key !== '' && password !== '') {
         this.userService.setNewPassword(this.email, password, key).subscribe(() => {
           this.translationService.get('password-reset.new-password-successful').subscribe(message => {
-            this.notificationService.show(message);
+            this.notificationService.showAdvanced(message, AdvancedSnackBarTypes.SUCCESS);
           });
           this.router.navigate(['login'], { state: { data: { username: this.email, password: password } } });
         });
       } else {
         this.translationService.get('login.inputs-incorrect').subscribe(message => {
-          this.notificationService.show(message);
+          this.notificationService.showAdvanced(message, AdvancedSnackBarTypes.WARNING);
         });
       }
     } else {
       this.translationService.get('login.inputs-incorrect').subscribe(message => {
-        this.notificationService.show(message);
+        this.notificationService.showAdvanced(message, AdvancedSnackBarTypes.WARNING);
       });
     }
   }

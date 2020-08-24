@@ -1,7 +1,7 @@
 import { AfterContentInit, Component, OnChanges, SimpleChanges } from '@angular/core';
 import { AuthenticationService } from '../../../services/http/authentication.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { NotificationService } from '../../../services/util/notification.service';
+import { AdvancedSnackBarTypes, NotificationService } from '../../../services/util/notification.service';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { MatDialog } from '@angular/material/dialog';
 import { FormControl, FormGroupDirective, NgForm, Validators } from '@angular/forms';
@@ -126,7 +126,7 @@ export class LoginComponent implements AfterContentInit, OnChanges {
       });
     } else {
       this.translationService.get('login.input-incorrect').subscribe(message => {
-        this.notificationService.show(message);
+        this.notificationService.showAdvanced(message, AdvancedSnackBarTypes.WARNING);
       });
     }
   }
@@ -138,7 +138,7 @@ export class LoginComponent implements AfterContentInit, OnChanges {
   private checkLogin(result: ClientAuthenticationResult) {
     if (result.status === AuthenticationStatus.SUCCESS) {
       this.translationService.get('login.login-successful').subscribe(message => {
-        this.notificationService.show(message);
+        this.notificationService.showAdvanced(message, AdvancedSnackBarTypes.SUCCESS);
       });
       this.dialog.closeAll();
       if (this.isStandard) {
@@ -154,7 +154,7 @@ export class LoginComponent implements AfterContentInit, OnChanges {
       this.activateUser();
     } else {
       this.translationService.get('login.login-data-incorrect').subscribe(message => {
-        this.notificationService.show(message);
+        this.notificationService.showAdvanced(message, AdvancedSnackBarTypes.FAILED);
       });
     }
   }

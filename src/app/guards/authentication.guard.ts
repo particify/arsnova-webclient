@@ -4,7 +4,7 @@ import { Observable, of } from 'rxjs';
 import { catchError, map, switchMap, tap } from 'rxjs/operators';
 import { AuthenticationService } from '../services/http/authentication.service';
 import { EventService } from 'app/services/util/event.service';
-import { NotificationService } from '../services/util/notification.service';
+import { AdvancedSnackBarTypes, NotificationService } from '../services/util/notification.service';
 import { UserRole } from '../models/user-roles.enum';
 import { MembershipsChanged } from '../models/events/memberships-changed';
 import { TranslateService } from '@ngx-translate/core';
@@ -73,14 +73,14 @@ export class AuthenticationGuard implements CanActivate {
 
   handleAccessDenied() {
     this.translateService.get('errors.not-authorized').subscribe(msg => {
-      this.notificationService.show(msg);
+      this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
     });
     this.router.navigate(['/']);
   }
 
   handleRoomNotFound() {
     this.translateService.get('errors.room-not-found').subscribe(msg => {
-      this.notificationService.show(msg);
+      this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.FAILED);
     });
     this.router.navigate(['/']);
   }

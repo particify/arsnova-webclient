@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ContentText } from '../../../../models/content-text';
 import { ContentAnswerService } from '../../../../services/http/content-answer.service';
 import { TextAnswer } from '../../../../models/text-answer';
-import { NotificationService } from '../../../../services/util/notification.service';
+import { AdvancedSnackBarTypes, NotificationService } from '../../../../services/util/notification.service';
 import { TranslateService } from '@ngx-translate/core';
 import { LanguageService } from '../../../../services/util/language.service';
 import { ContentType } from '../../../../models/content-type.enum';
@@ -83,7 +83,7 @@ export class ContentTextParticipantComponent extends ContentParticipantComponent
   submitAnswer() {
     if (this.textAnswer.trim().valueOf() === '') {
       this.translateService.get('answer.please-answer').subscribe(message => {
-        this.notificationService.show(message);
+        this.notificationService.showAdvanced(message, AdvancedSnackBarTypes.WARNING);
       });
       this.textAnswer = '';
       return;

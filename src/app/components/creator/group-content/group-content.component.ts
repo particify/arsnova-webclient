@@ -4,7 +4,7 @@ import { ContentService } from '../../../services/http/content.service';
 import { RoomService } from '../../../services/http/room.service';
 import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
-import { NotificationService } from '../../../services/util/notification.service';
+import { AdvancedSnackBarTypes, NotificationService } from '../../../services/util/notification.service';
 import { TranslateService } from '@ngx-translate/core';
 import { LanguageService } from '../../../services/util/language.service';
 import { DialogService } from '../../../services/util/dialog.service';
@@ -148,7 +148,7 @@ export class GroupContentComponent extends ContentListComponent implements OnIni
           this.contentGroupService.updateGroupInMemoryStorage(this.collectionName, this.updatedName);
           this.collectionName = postedContentGroup.name;
           this.translateService.get('content.updated-content-group').subscribe(msg => {
-            this.notificationService.show(msg);
+            this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.SUCCESS);
           });
           this.updateURL();
         });
@@ -181,7 +181,7 @@ export class GroupContentComponent extends ContentListComponent implements OnIni
         this.contents = this.copiedContents;
         this.initContentList(this.contents);
         this.translateService.get('content.updated-sorting').subscribe(msg => {
-          this.notificationService.show(msg);
+          this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.SUCCESS);
         });
       });
     }
@@ -215,7 +215,7 @@ export class GroupContentComponent extends ContentListComponent implements OnIni
   deleteAnswers(contentId: string) {
     this.contentService.deleteAnswers(contentId).subscribe(() => {
       this.translateService.get('content.answers-deleted').subscribe(msg => {
-        this.notificationService.show(msg);
+        this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
       });
     });
   }

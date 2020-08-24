@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest, HttpResponse } from '@angular/common/http';
 
 import { AuthenticationService, AUTH_HEADER_KEY, AUTH_SCHEME } from '../services/http/authentication.service';
-import { NotificationService } from '../services/util/notification.service';
+import { AdvancedSnackBarTypes, NotificationService } from '../services/util/notification.service';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 
@@ -31,7 +31,7 @@ export class AuthenticationInterceptor implements HttpInterceptor {
         if (err instanceof HttpErrorResponse) {
           // Catch 401 errors
           if (err.status === 401) {
-            this.notificationService.show('You are not logged in');
+            this.notificationService.showAdvanced('You are not logged in', AdvancedSnackBarTypes.WARNING);
             this.router.navigate(['home']);
           }
         }

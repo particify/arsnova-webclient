@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { RoomService } from '../../../services/http/room.service';
 import { TranslateService } from '@ngx-translate/core';
-import { NotificationService } from '../../../services/util/notification.service';
+import { AdvancedSnackBarTypes, NotificationService } from '../../../services/util/notification.service';
 
 @Component({
   templateUrl: './direct-entry.component.html'
@@ -25,7 +25,7 @@ export class DirectEntryComponent {
         },
         error => {
           this.translateService.get('errors.room-not-found').subscribe(msg => {
-            this.notificationService.show(msg);
+            this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
           });
           this.router.navigate(['/home']);
         });

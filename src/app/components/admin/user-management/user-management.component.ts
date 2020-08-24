@@ -3,7 +3,7 @@ import { User } from '../../../models/user';
 import { UserService } from '../../../services/http/user.service';
 import { DialogService } from '../../../services/util/dialog.service';
 import { AdminService } from '../../../services/http/admin.service';
-import { NotificationService } from '../../../services/util/notification.service';
+import { AdvancedSnackBarTypes, NotificationService } from '../../../services/util/notification.service';
 import { TranslateService } from '@ngx-translate/core';
 
 @Component({
@@ -37,7 +37,7 @@ export class UserManagementComponent {
         this.userService.delete(this.user.id)
             .subscribe(result => {
               this.translateService.get('admin-area.user-deleted').subscribe(message =>
-                  this.notificationService.show(message));
+                  this.notificationService.showAdvanced(message, AdvancedSnackBarTypes.WARNING));
               this.user = null;
             });
       }
@@ -48,6 +48,6 @@ export class UserManagementComponent {
     this.adminService.activateUser(this.user.id)
         .subscribe(result =>
             this.translateService.get('admin-area.user-activated').subscribe(message =>
-                this.notificationService.show(message)));
+                this.notificationService.showAdvanced(message, AdvancedSnackBarTypes.SUCCESS)));
   }
 }

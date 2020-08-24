@@ -5,7 +5,7 @@ import { Room } from '../../../models/room';
 import { Router } from '@angular/router';
 import { RegisterErrorStateMatcher } from '../../home/register/register.component';
 import { FormControl, Validators } from '@angular/forms';
-import { NotificationService } from '../../../services/util/notification.service';
+import { AdvancedSnackBarTypes, NotificationService } from '../../../services/util/notification.service';
 import { TranslateService } from '@ngx-translate/core';
 import { AuthenticationService } from '../../../services/http/authentication.service';
 import { ClientAuthentication } from 'app/models/client-authentication';
@@ -74,13 +74,13 @@ export class RoomJoinComponent implements OnInit, OnDestroy {
     }
     if (shortId.length !== 8) {
       this.translateService.get('home-page.exactly-8').subscribe(message => {
-        this.notificationService.show(message);
+        this.notificationService.showAdvanced(message, AdvancedSnackBarTypes.WARNING);
       });
       return;
     }
     if (this.roomCodeFormControl.hasError('pattern')) {
       this.translateService.get('home-page.only-numbers').subscribe(message => {
-        this.notificationService.show(message);
+        this.notificationService.showAdvanced(message, AdvancedSnackBarTypes.WARNING);
       });
       return;
     }

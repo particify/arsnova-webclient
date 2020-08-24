@@ -4,7 +4,7 @@ import { Room } from '../../../../models/room';
 import { UserRole } from '../../../../models/user-roles.enum';
 import { RoomCreated } from '../../../../models/events/room-created';
 import { Router } from '@angular/router';
-import { NotificationService } from '../../../../services/util/notification.service';
+import { AdvancedSnackBarTypes, NotificationService } from '../../../../services/util/notification.service';
 import { MatDialogRef } from '@angular/material/dialog';
 import { ContentService } from '../../../../services/http/content.service';
 import { AuthenticationService } from '../../../../services/http/authentication.service';
@@ -88,7 +88,7 @@ export class RoomCreateComponent implements OnInit {
       this.translateService.get('home-page.created-2').subscribe(msg => {
         msg2 = msg;
       });
-      this.notification.show(msg1 + longRoomName + msg2);
+      this.notification.showAdvanced(msg1 + longRoomName + msg2, AdvancedSnackBarTypes.SUCCESS);
       const event = new RoomCreated(room.id);
       this.eventService.broadcast(event.type, event.payload);
       this.router.navigate([`/creator/room/${this.room.shortId}`]);

@@ -1,5 +1,5 @@
 import { Component, Inject } from '@angular/core';
-import { NotificationService } from '../../../../services/util/notification.service';
+import { AdvancedSnackBarTypes, NotificationService } from '../../../../services/util/notification.service';
 import { UserService } from '../../../../services/http/user.service';
 import { FormControl, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
@@ -27,7 +27,7 @@ export class UserActivationComponent {
   login(activationKey: string): void {
     if (activationKey.length < 1) {
       this.translationService.get('user-activation.key-required').subscribe(msg => {
-        this.notificationService.show(msg);
+        this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
       });
     } else {
       activationKey = activationKey.trim();
@@ -36,7 +36,7 @@ export class UserActivationComponent {
         },
         err => {
           this.translationService.get('user-activation.key-incorrect').subscribe(msg => {
-            this.notificationService.show(msg);
+            this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.FAILED);
           });
         }
       );
@@ -46,7 +46,7 @@ export class UserActivationComponent {
   resetActivation(): void {
     this.userService.resetActivation(this.data.trim()).subscribe(() => {
         this.translationService.get('user-activation.sent-again').subscribe(msg => {
-          this.notificationService.show(msg);
+          this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
         });
       }
     );

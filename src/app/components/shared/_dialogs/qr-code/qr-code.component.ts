@@ -1,6 +1,6 @@
 import { AfterContentInit, Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { NotificationService } from '../../../../services/util/notification.service';
+import { AdvancedSnackBarTypes, NotificationService } from '../../../../services/util/notification.service';
 import { TranslateService } from '@ngx-translate/core';
 
 export interface DialogData {
@@ -52,7 +52,7 @@ export class QrCodeComponent implements OnInit {
     document.execCommand('copy');
     document.body.removeChild(selBox);
     this.translateService.get('header.room-id-copied').subscribe(msg => {
-      this.notification.show(msg, '', { duration: 2000 });
+      this.notification.showAdvanced(msg, AdvancedSnackBarTypes.SUCCESS);
     });
   }
 }

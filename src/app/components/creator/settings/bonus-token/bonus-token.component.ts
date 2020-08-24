@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { BonusTokenService } from '../../../../services/http/bonus-token.service';
 import { BonusToken } from '../../../../models/bonus-token';
 import { Room } from '../../../../models/room';
-import { NotificationService } from '../../../../services/util/notification.service';
+import { AdvancedSnackBarTypes, NotificationService } from '../../../../services/util/notification.service';
 import { TranslateService } from '@ngx-translate/core';
 import { Router } from '@angular/router';
 import { DialogService } from '../../../../services/util/dialog.service';
@@ -60,7 +60,7 @@ export class BonusTokenComponent implements OnInit {
     this.bonusTokenService.deleteToken(toDelete.roomId, toDelete.commentId, toDelete.userId).subscribe(_ => {
       this.translationService.get('settings.token-deleted').subscribe(msg => {
         this.bonusTokens.splice(index, 1);
-        this.notificationService.show(msg);
+        this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
       });
     });
   }
@@ -69,7 +69,7 @@ export class BonusTokenComponent implements OnInit {
     this.bonusTokenService.deleteTokensByRoomId(this.room.id).subscribe(() => {
       this.bonusTokens = [];
       this.translationService.get('settings.tokens-deleted').subscribe(msg => {
-        this.notificationService.show(msg);
+        this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
       });
     });
   }

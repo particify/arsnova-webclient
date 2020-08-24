@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { NotificationService } from '../../../services/util/notification.service';
+import { AdvancedSnackBarTypes, NotificationService } from '../../../services/util/notification.service';
 import { TranslateService } from '@ngx-translate/core';
 import { RoomService } from '../../../services/http/room.service';
 import { Router } from '@angular/router';
@@ -49,7 +49,7 @@ export class SettingsComponent implements OnInit {
       .subscribe((room) => {
         this.updateEvent.emit(room);
         this.translateService.get('settings.changes-successful').subscribe(msg => {
-          this.notificationService.show(msg);
+          this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.SUCCESS);
         });
       });
   }

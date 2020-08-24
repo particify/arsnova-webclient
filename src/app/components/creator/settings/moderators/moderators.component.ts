@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { NotificationService } from '../../../../services/util/notification.service';
+import { AdvancedSnackBarTypes, NotificationService } from '../../../../services/util/notification.service';
 import { TranslateService } from '@ngx-translate/core';
 import { ModeratorService } from '../../../../services/http/moderator.service';
 import { LanguageService } from '../../../../services/util/language.service';
@@ -7,6 +7,7 @@ import { Moderator } from '../../../../models/moderator';
 import { FormControl, Validators } from '@angular/forms';
 import { EventService } from '../../../../services/util/event.service';
 import { DialogService } from '../../../../services/util/dialog.service';
+import { AbstractVote } from '../../../../models/messages/abstract-vote';
 
 @Component({
   selector: 'app-moderators',
@@ -53,14 +54,14 @@ export class ModeratorsComponent implements OnInit {
     this.moderatorService.getUserId(this.loginId).subscribe(list => {
       if (list.length === 0) {
         this.translationService.get('settings.moderator-not-found').subscribe(msg => {
-          this.notificationService.show(msg);
+          this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.FAILED);
         });
         return;
       }
       this.moderatorService.add(this.roomId, list[0].id).subscribe();
       this.moderators.push(new Moderator(list[0].id, this.loginId));
       this.translationService.get('settings.moderator-added').subscribe(msg => {
-        this.notificationService.show(msg);
+        this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.SUCCESS);
       });
       this.loginId = '';
     });
@@ -78,7 +79,7 @@ export class ModeratorsComponent implements OnInit {
   removeModerator(userId: string, index: number) {
     this.moderatorService.delete(this.roomId, userId).subscribe();
     this.translationService.get('settings.moderator-removed').subscribe(msg => {
-      this.notificationService.show(msg);
+      this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
     });
     this.moderators.splice(index, 1);
   }

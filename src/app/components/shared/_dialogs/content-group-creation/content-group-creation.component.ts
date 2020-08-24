@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { ContentListComponent } from '../../../creator/content-list/content-list.component';
-import { NotificationService } from '../../../../services/util/notification.service';
+import { AdvancedSnackBarTypes, NotificationService } from '../../../../services/util/notification.service';
 import { TranslateService } from '@ngx-translate/core';
 import { ContentGroupService } from '../../../../services/http/content-group.service';
 
@@ -30,17 +30,17 @@ export class ContentGroupCreationComponent implements OnInit {
     if (this.name) {
       if (this.contentGroupService.saveGroupInMemoryStorage(this.name)) {
         this.translateService.get('dialog.content-group-created').subscribe(msg => {
-          this.notificationService.show(msg);
+          this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.SUCCESS);
           this.closeDialog(this.name);
         });
       } else {
         this.translateService.get('dialog.content-group-already-exists').subscribe(msg => {
-          this.notificationService.show(msg);
+          this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.FAILED);
         });
       }
     } else {
       this.translateService.get('dialog.please-enter-name').subscribe(msg => {
-        this.notificationService.show(msg);
+        this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
         document.getElementById('name-input').focus();
       });
     }
