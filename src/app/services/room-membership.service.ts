@@ -46,6 +46,9 @@ export class RoomMembershipService extends BaseHttpService {
         this.eventService.on<any>('RoomCreated').pipe(
             takeUntil(authChanged$),
         ).subscribe(() => this.loadMemberships(auth.userId));
+        this.eventService.on<any>('MembershipsChanged').pipe(
+            takeUntil(authChanged$),
+        ).subscribe(() => this.loadMemberships(auth.userId));
       });
   }
 
@@ -104,7 +107,7 @@ export class RoomMembershipService extends BaseHttpService {
   selectPrimaryRole(roles: UserRole[]) {
     return roles.reduce(
         (acc, value) => this.isRoleSubstitutable(value, acc) ? value : acc,
-        UserRole.PARTICIPANT);
+        UserRole.NONE);
   }
 
   /**
@@ -131,7 +134,7 @@ export class RoomMembershipService extends BaseHttpService {
    * substitution role's.
    */
   isRoleSubstitutable(checkedRole: UserRole, substitution: UserRole) {
-    if (checkedRole === substitution) {
+    if (checkedRole === substitution || substitution === UserRole.NONE) {
       return true;
     }
     switch (checkedRole) {

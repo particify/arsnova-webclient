@@ -1,19 +1,24 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot } from '@angular/router';
 import { Observable, of } from 'rxjs';
-import { switchMap, tap } from 'rxjs/operators';
+import { catchError, map, switchMap, tap } from 'rxjs/operators';
 import { AuthenticationService } from '../services/http/authentication.service';
+import { EventService } from 'app/services/util/event.service';
 import { NotificationService } from '../services/util/notification.service';
 import { UserRole } from '../models/user-roles.enum';
+import { MembershipsChanged } from '../models/events/memberships-changed';
 import { TranslateService } from '@ngx-translate/core';
+import { RoomService } from '../services/http/room.service';
 import { RoomMembershipService } from '../services/room-membership.service';
 
 @Injectable()
 export class AuthenticationGuard implements CanActivate {
   constructor(private authenticationService: AuthenticationService,
               private roomMembershipService: RoomMembershipService,
+              private roomService: RoomService,
               private notificationService: NotificationService,
               private translateService: TranslateService,
+              private eventService: EventService,
               private router: Router) {
   }
 
@@ -25,21 +30,43 @@ export class AuthenticationGuard implements CanActivate {
     // Allow access when user is logged in AND
     // the route doesn't require a specific role OR
     // the user's role is one of the required roles
-    return this.authenticationService.getAuthenticationChanges().pipe(switchMap(auth => {
+    return this.authenticationService.requireAuthentication().pipe(switchMap(auth => {
       if (!auth) {
+        /* User is still not logged in (shouldn't usually happen) */
         this.handleAccessDenied();
         return of(false);
       }
 
       if (!viewRole) {
+        /* Route doesn't require a specific role */
         return of(true);
       } else {
+        /* Route requires a specific role */
         return this.roomMembershipService.hasAccessForRoom(route.params.shortId, viewRole).pipe(
-            tap(hasAccess => {
-              if (!hasAccess) {
-                this.handleAccessDenied();
+            switchMap(hasAccess => {
+              if (hasAccess) {
+                return of(true);
               }
-            }));
+
+              if (viewRole === UserRole.PARTICIPANT) {
+                /* First time room member -> add history entry */
+                return this.roomService.getRoomByShortId(route.params.shortId).pipe(
+                    tap(room => this.roomService.addToHistory(auth.userId, room.id).subscribe(() => {
+                      const event = new MembershipsChanged();
+                      this.eventService.broadcast(event.type, event.payload);
+                    })),
+                    map(room => true),
+                    catchError(e => {
+                      this.handleRoomNotFound();
+                      return of(false);
+                    })
+                );
+              } else {
+                this.handleAccessDenied();
+                return of(false);
+              }
+            })
+        );
       }
     }));
   }
@@ -48,7 +75,13 @@ export class AuthenticationGuard implements CanActivate {
     this.translateService.get('errors.not-authorized').subscribe(msg => {
       this.notificationService.show(msg);
     });
-    // TODO: redirect to error page
+    this.router.navigate(['/']);
+  }
+
+  handleRoomNotFound() {
+    this.translateService.get('errors.room-not-found').subscribe(msg => {
+      this.notificationService.show(msg);
+    });
     this.router.navigate(['/']);
   }
 }

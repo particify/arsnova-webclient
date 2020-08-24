@@ -93,10 +93,9 @@ export class RoomService extends BaseHttpService {
     );
   }
 
-  addToHistory(userId: string, roomId: string): void {
+  addToHistory(userId: string, roomId: string): Observable<void> {
     const connectionUrl = `${this.apiUrl.base + this.apiUrl.user}/${userId}/roomHistory`;
-    this.http.post(connectionUrl, { roomId: roomId, lastVisit: this.joinDate.getTime() }, httpOptions).subscribe(() => {
-    });
+    return this.http.post<void>(connectionUrl, { roomId: roomId, lastVisit: this.joinDate.getTime() }, httpOptions);
   }
 
   removeFromHistory(userId: string, roomId: string): Observable<Room> {
