@@ -111,7 +111,7 @@ export class LooseContentComponent extends ContentListComponent implements OnIni
           this.contentGroupService.post(this.room.id, this.newName, newGroup).subscribe(
             group => {
               this.contentGroups.push(group.name);
-              this.translateService.get('content.content-group-update-failed').subscribe(string => {
+              this.translateService.get('content.content-group-created').subscribe(string => {
                 this.notificationService.showAdvanced(string, AdvancedSnackBarTypes.SUCCESS);
               });
               this.updateURL(group.name);
@@ -123,7 +123,7 @@ export class LooseContentComponent extends ContentListComponent implements OnIni
           );
         }
       } else {
-        this.translateService.get('content.new-group-name-restriction').subscribe(string => {
+        this.translateService.get('content.content-group-name-restriction').subscribe(string => {
           this.notificationService.showAdvanced(string, AdvancedSnackBarTypes.WARNING);
         });
       }
