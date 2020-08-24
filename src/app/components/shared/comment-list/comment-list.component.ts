@@ -20,21 +20,23 @@ import { DialogService } from '../../../services/util/dialog.service';
 import { GlobalStorageService, STORAGE_KEYS } from '../../../services/util/global-storage.service';
 import { AnnounceService } from '../../../services/util/announce.service';
 
+// Using lowercase letters in enums because they we're also used for parsing incoming WS-messages
+
 enum Sort {
-  VOTEASC = 'VOTEASC',
-  VOTEDESC = 'VOTEDESC',
-  TIME = 'TIME'
+  VOTEASC = 'voteasc',
+  VOTEDESC = 'votedesc',
+  TIME = 'time'
 }
 
 enum Filter {
-  READ = 'READ',
-  UNREAD = 'UNREAD',
-  FAVORITE = 'FAVORITE',
-  CORRECT = 'CORRECT',
-  WRONG = 'WRONG',
-  ACK = 'ACK',
-  TAG = 'TAG',
-  ANSWER = 'ANSWER'
+  READ = 'read',
+  UNREAD = 'unread',
+  FAVORITE = 'favorite',
+  CORRECT = 'correct',
+  WRONG = 'wrong',
+  ACK = 'ack',
+  TAG = 'tag',
+  ANSWER = 'answer'
 }
 
 @Component({
