@@ -7,7 +7,7 @@ import { ContentChoice } from '../../../models/content-choice';
 import { ContentText } from '../../../models/content-text';
 import { ContentType } from '../../../models/content-type.enum';
 import { ContentGroup } from '../../../models/content-group';
-import { NotificationService } from '../../../services/util/notification.service';
+import { AdvancedSnackBarTypes, NotificationService } from '../../../services/util/notification.service';
 import { Room } from '../../../models/room';
 import { RoomService } from '../../../services/http/room.service';
 import { TranslateService } from '@ngx-translate/core';
@@ -146,7 +146,7 @@ export class ContentListComponent implements OnInit {
       switch (action.valueOf()) {
         case 'delete':
           this.translateService.get('content.content-deleted').subscribe(message => {
-            this.notificationService.show(message);
+            this.notificationService.showAdvanced(message, AdvancedSnackBarTypes.WARNING);
           });
           this.contentService.deleteContent(this.contents[index].id).subscribe();
           this.contents.splice(index, 1);
@@ -161,7 +161,7 @@ export class ContentListComponent implements OnInit {
           this.labels[index] = this.contentBackup.body;
           this.contentService.updateContent(this.contents[index]).subscribe();
           this.translateService.get('content.content-updated').subscribe(message => {
-            this.notificationService.show(message);
+            this.notificationService.showAdvanced(message, AdvancedSnackBarTypes.SUCCESS);
           });
           break;
         case 'abort':
@@ -175,7 +175,7 @@ export class ContentListComponent implements OnInit {
     this.contentGroupService.addContentToGroup(this.room.id, cgName, contentId).subscribe(() => {
       if (!newGroup) {
         this.translateService.get('content.added-to-content-group').subscribe(msg => {
-          this.notificationService.show(msg);
+          this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.SUCCESS);
         });
       }
     });

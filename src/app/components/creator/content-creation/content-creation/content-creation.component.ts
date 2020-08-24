@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { ContentService } from '../../../../services/http/content.service';
-import { NotificationService } from '../../../../services/util/notification.service';
+import { AdvancedSnackBarTypes, NotificationService } from '../../../../services/util/notification.service';
 import { TranslateService } from '@ngx-translate/core';
 import { RoomService } from '../../../../services/http/room.service';
 import { GlobalStorageService, STORAGE_KEYS } from '../../../../services/util/global-storage.service';
@@ -80,7 +80,7 @@ export class ContentCreationComponent implements OnInit, OnDestroy {
     this.content.subject = 'Subject';
     if (this.contentBody === '') {
       this.translationService.get('content.no-empty').subscribe(message => {
-        this.notificationService.show(message);
+        this.notificationService.showAdvanced(message, AdvancedSnackBarTypes.WARNING);
       });
       return false;
     }
@@ -105,7 +105,7 @@ export class ContentCreationComponent implements OnInit, OnDestroy {
       this.fillCorrectAnswers();
     }
     this.translationService.get('content.submitted').subscribe(message => {
-      this.notificationService.show(message);
+      this.notificationService.showAdvanced(message, AdvancedSnackBarTypes.SUCCESS);
     });
   }
 

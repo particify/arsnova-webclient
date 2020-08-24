@@ -7,7 +7,7 @@ import { CommentService } from '../../../services/http/comment.service';
 import { Comment } from '../../../models/comment';
 import { AuthenticationService } from '../../../services/http/authentication.service';
 import { UserRole } from '../../../models/user-roles.enum';
-import { NotificationService } from '../../../services/util/notification.service';
+import { AdvancedSnackBarTypes, NotificationService } from '../../../services/util/notification.service';
 import { DialogService } from '../../../services/util/dialog.service';
 import { KeyboardUtils } from '../../../utils/keyboard';
 import { KeyboardKey } from '../../../utils/keyboard/keys';
@@ -89,7 +89,7 @@ export class CommentAnswerComponent implements OnInit, AfterContentInit {
     this.edit = false;
     this.wsCommentService.answer(this.comment, this.answer);
     this.translateService.get('comment-page.comment-answered').subscribe(msg => {
-      this.notificationService.show(msg);
+      this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.SUCCESS);
     });
   }
 
@@ -106,7 +106,7 @@ export class CommentAnswerComponent implements OnInit, AfterContentInit {
     this.answer = null;
     this.wsCommentService.answer(this.comment, this.answer);
     this.translateService.get('comment-page.answer-deleted').subscribe(msg => {
-      this.notificationService.show(msg);
+      this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
     });
   }
 }

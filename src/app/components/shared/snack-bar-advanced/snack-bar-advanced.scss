@@ -1,0 +1,19 @@
+@import '../../../../variables';
+
+span {
+  font-size: 14px;
+}
+
+.done {
+  color: var(--green);
+  font-weight: $font-weight-extra-bold;
+}
+
+.close {
+  color: var(--warn);
+  font-weight: $font-weight-extra-bold;
+}
+
+.warning {
+  color: var(--warn-soft);
+}

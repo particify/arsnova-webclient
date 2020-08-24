@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { NotificationService } from '../../../../services/util/notification.service';
+import { AdvancedSnackBarTypes, NotificationService } from '../../../../services/util/notification.service';
 import { TranslateService } from '@ngx-translate/core';
 import { LanguageService } from '../../../../services/util/language.service';
 import { EventService } from '../../../../services/util/event.service';
@@ -73,7 +73,7 @@ export class TagsComponent implements OnInit {
       .subscribe((room) => {
         this.room = room;
         this.translationService.get(added ? 'settings.tag-added' : 'settings.tag-removed').subscribe(msg => {
-          this.notificationService.show(msg);
+          this.notificationService.showAdvanced(msg, added ? AdvancedSnackBarTypes.SUCCESS : AdvancedSnackBarTypes.WARNING);
         });
       });
   }

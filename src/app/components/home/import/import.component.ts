@@ -3,7 +3,7 @@ import { RoomService } from '../../../services/http/room.service';
 import { Router } from '@angular/router';
 import { AuthenticationService } from '../../../services/http/authentication.service';
 import { TranslateService } from '@ngx-translate/core';
-import { NotificationService } from '../../../services/util/notification.service';
+import { AdvancedSnackBarTypes, NotificationService } from '../../../services/util/notification.service';
 import { UserRole } from '../../../models/user-roles.enum';
 
 @Component({
@@ -61,14 +61,14 @@ export class ImportComponent implements OnInit, AfterContentInit {
     this.roomService.importv2Room(this.jsonToUpload).subscribe(room => {
       this.translateService.get('home-page.created-1').subscribe(msg1 => {
         this.translateService.get('home-page.created-2').subscribe(msg2 => {
-          this.notificationService.show(msg1 + room.name + msg2);
+          this.notificationService.showAdvanced(msg1 + room.name + msg2, AdvancedSnackBarTypes.SUCCESS);
         });
       });
       this.router.navigate([`creator/room/${room.shortId}`]);
     },
         error => {
       this.translateService.get('import.error').subscribe(msg => {
-        this.notificationService.show(msg);
+        this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.FAILED);
       });
     });
   }

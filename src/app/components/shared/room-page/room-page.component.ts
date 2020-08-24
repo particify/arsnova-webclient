@@ -12,7 +12,7 @@ import { IMessage, Message } from '@stomp/stompjs';
 import { Observable, Subscription } from 'rxjs';
 import { ContentService } from '../../../services/http/content.service';
 import { TranslateService } from '@ngx-translate/core';
-import { NotificationService } from '../../../services/util/notification.service';
+import { AdvancedSnackBarTypes, NotificationService } from '../../../services/util/notification.service';
 import { GlobalStorageService, STORAGE_KEYS } from '../../../services/util/global-storage.service';
 
 @Component({
@@ -172,7 +172,7 @@ export class RoomPageComponent implements OnInit, OnDestroy {
   navToStats(role: string) {
     if (this.noGroups) {
       this.translateService.get('room-page.no-contents').subscribe(msg => {
-        this.notificationService.show(msg);
+        this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
       });
     } else {
       this.router.navigate([`/${role}/room/${this.room.shortId}/statistics`]);

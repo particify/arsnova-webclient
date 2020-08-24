@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { FormControl, FormGroupDirective, NgForm, Validators } from '@angular/forms';
 import { UserService } from '../../../services/http/user.service';
-import { NotificationService } from '../../../services/util/notification.service';
+import { AdvancedSnackBarTypes, NotificationService } from '../../../services/util/notification.service';
 import { TranslateService } from '@ngx-translate/core';
 import { EventService } from '../../../services/util/event.service';
 import { Router } from '@angular/router';
@@ -71,23 +71,23 @@ export class RegisterComponent implements OnInit {
         this.userService.register(username, password).subscribe(result => {
             this.router.navigate(['login'], {state: {data: {username: username, password: password}}});
             this.translationService.get('register.register-successful').subscribe(message => {
-              this.notificationService.show(message);
+              this.notificationService.showAdvanced(message, AdvancedSnackBarTypes.SUCCESS);
             });
           },
           err => {
             this.translationService.get('register.register-request-error').subscribe(message => {
-              this.notificationService.show(message);
+              this.notificationService.showAdvanced(message, AdvancedSnackBarTypes.FAILED);
             });
           }
         );
       } else {
         this.translationService.get('register.please-accept').subscribe(message => {
-          this.notificationService.show(message);
+          this.notificationService.showAdvanced(message, AdvancedSnackBarTypes.WARNING);
         });
       }
     } else {
       this.translationService.get('register.register-unsuccessful').subscribe(message => {
-        this.notificationService.show(message);
+        this.notificationService.showAdvanced(message, AdvancedSnackBarTypes.WARNING);
       });
     }
   }

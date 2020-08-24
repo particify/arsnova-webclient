@@ -1,6 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { Comment } from '../../../../models/comment';
-import { NotificationService } from '../../../../services/util/notification.service';
+import { AdvancedSnackBarTypes, NotificationService } from '../../../../services/util/notification.service';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
 import { FormControl, Validators } from '@angular/forms';
@@ -50,7 +50,7 @@ export class CreateCommentComponent implements OnInit {
     body = body.trim();
     if (!body) {
       this.translationService.get('dialog.error-comment').subscribe(message => {
-        this.notification.show(message);
+        this.notification.showAdvanced(message, AdvancedSnackBarTypes.WARNING);
       });
       return false;
     }

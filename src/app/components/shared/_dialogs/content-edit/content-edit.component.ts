@@ -3,7 +3,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { DisplayAnswer } from '../../../creator/content-creation/content-creation/content-creation.component';
 import { AnswerOption } from '../../../../models/answer-option';
 import { TranslateService } from '@ngx-translate/core';
-import { NotificationService } from '../../../../services/util/notification.service';
+import { AdvancedSnackBarTypes, NotificationService } from '../../../../services/util/notification.service';
 import { EventService } from '../../../../services/util/event.service';
 import { Content } from '../../../../models/content';
 import { ContentType } from '../../../../models/content-type.enum';
@@ -60,7 +60,7 @@ export class ContentEditComponent implements OnInit {
     let counter = 0;
     if (this.data.body === '') {
       this.translateService.get('dialog.no-empty').subscribe(message => {
-        this.notificationService.show(message);
+        this.notificationService.showAdvanced(message, AdvancedSnackBarTypes.WARNING);
       });
       return;
     }
@@ -68,7 +68,7 @@ export class ContentEditComponent implements OnInit {
       for (let i = 0; i < (this.data as ContentChoice).options.length; i++) {
         if (this.displayAnswers[i].answerOption.label === '') {
           this.translateService.get('dialog.no-empty-answers').subscribe(message => {
-            this.notificationService.show(message);
+            this.notificationService.showAdvanced(message, AdvancedSnackBarTypes.WARNING);
           });
           return;
         }
@@ -79,19 +79,19 @@ export class ContentEditComponent implements OnInit {
       if (counter <= 0) {
         if ((this.data as ContentChoice).multiple) {
           this.translateService.get('dialog.at-least-one').subscribe(message => {
-            this.notificationService.show(message);
+            this.notificationService.showAdvanced(message, AdvancedSnackBarTypes.WARNING);
             return;
           });
         } else {
           this.translateService.get('dialog.select-one').subscribe(message => {
-            this.notificationService.show(message);
+            this.notificationService.showAdvanced(message, AdvancedSnackBarTypes.WARNING);
             return;
           });
         }
       } else {
         if ((!(this.data as ContentChoice).multiple) && counter > 1) {
           this.translateService.get('dialog.select-one').subscribe(message => {
-            this.notificationService.show(message);
+            this.notificationService.showAdvanced(message, AdvancedSnackBarTypes.WARNING);
           });
           return;
         }

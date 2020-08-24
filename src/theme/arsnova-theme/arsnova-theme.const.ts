@@ -7,6 +7,7 @@ export const arsnova = {
   '--secondary-variant': '#e8f5e9',
 
   '--warn': '#e53935',
+  '--warn-soft': '#ffa726',
   '--on-warn': '#000000',
 
   '--background': '#f5f5f5',

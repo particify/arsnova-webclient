@@ -5,7 +5,7 @@ import { AuthenticationService } from '../../../services/http/authentication.ser
 import { ActivatedRoute, Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { CommentService } from '../../../services/http/comment.service';
-import { NotificationService } from '../../../services/util/notification.service';
+import { AdvancedSnackBarTypes, NotificationService } from '../../../services/util/notification.service';
 import { TranslateService } from '@ngx-translate/core';
 import { LanguageService } from '../../../services/util/language.service';
 import { WsCommentServiceService } from '../../../services/websockets/ws-comment-service.service';
@@ -179,7 +179,7 @@ export class CommentComponent implements OnInit {
   delete(): void {
     this.commentService.deleteComment(this.comment).subscribe(room => {
       this.translateService.get('comment-list.comment-deleted').subscribe(msg => {
-        this.notification.show(msg);
+        this.notification.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
       });
     });
   }

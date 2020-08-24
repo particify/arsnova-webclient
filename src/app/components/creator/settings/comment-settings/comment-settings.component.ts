@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { NotificationService } from '../../../../services/util/notification.service';
+import { AdvancedSnackBarTypes, NotificationService } from '../../../../services/util/notification.service';
 import { TranslateService } from '@ngx-translate/core';
 import { RoomService } from '../../../../services/http/room.service';
 import { Router } from '@angular/router';
@@ -96,7 +96,7 @@ export class CommentSettingsComponent implements OnInit {
 
   deleteComments(): void {
     this.translationService.get('settings.comments-deleted').subscribe(msg => {
-      this.notificationService.show(msg);
+      this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
     });
     this.commentService.deleteCommentsByRoomId(this.roomId).subscribe();
   }

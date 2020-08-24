@@ -1,6 +1,6 @@
 import { Component, HostListener, OnInit, Renderer2 } from '@angular/core';
 import { AuthenticationService } from '../../../services/http/authentication.service';
-import { NotificationService } from '../../../services/util/notification.service';
+import { AdvancedSnackBarTypes, NotificationService } from '../../../services/util/notification.service';
 import { NavigationEnd, Router } from '@angular/router';
 import { ClientAuthentication } from 'app/models/client-authentication';
 import { AuthProvider } from 'app/models/auth-provider';
@@ -136,7 +136,7 @@ export class HeaderComponent implements OnInit {
   logoutUser() {
     this.authenticationService.logout();
     this.translationService.get('header.logged-out').subscribe(message => {
-      this.notificationService.show(message);
+      this.notificationService.showAdvanced(message, AdvancedSnackBarTypes.SUCCESS);
     });
     this.navToHome();
   }
@@ -157,7 +157,7 @@ export class HeaderComponent implements OnInit {
     this.userService.delete(id).subscribe();
     this.authenticationService.logout();
     this.translationService.get('header.account-deleted').subscribe(msg => {
-      this.notificationService.show(msg);
+      this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
     });
     this.navToHome();
   }

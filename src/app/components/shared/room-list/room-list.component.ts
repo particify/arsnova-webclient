@@ -5,7 +5,7 @@ import { RoomService } from '../../../services/http/room.service';
 import { EventService } from '../../../services/util/event.service';
 import { RoomMembershipService } from '../../../services/room-membership.service';
 import { Observable, of, Subject, Subscription, zip } from 'rxjs';
-import { NotificationService } from '../../../services/util/notification.service';
+import { AdvancedSnackBarTypes, NotificationService } from '../../../services/util/notification.service';
 import { TranslateService } from '@ngx-translate/core';
 import { Router } from '@angular/router';
 import { DialogService } from '../../../services/util/dialog.service';
@@ -164,7 +164,7 @@ export class RoomListComponent implements OnInit, OnDestroy {
   deleteRoom(room: RoomDataView) {
     this.roomService.deleteRoom(room.summary.id).subscribe(() => {
       this.translateService.get('room-list.room-successfully-deleted').subscribe(msg => {
-        this.notificationService.show(msg);
+        this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
       });
       const event = new RoomDeleted(room.summary.id);
       this.eventService.broadcast(event.type, event.payload);
@@ -174,7 +174,7 @@ export class RoomListComponent implements OnInit, OnDestroy {
   removeFromHistory(room: RoomDataView) {
     this.roomService.removeFromHistory(this.auth.userId, room.summary.id).subscribe(() => {
       this.translateService.get('room-list.room-successfully-removed').subscribe(msg => {
-        this.notificationService.show(msg);
+        this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
       });
     });
   }

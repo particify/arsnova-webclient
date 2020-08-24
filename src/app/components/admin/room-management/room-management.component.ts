@@ -3,7 +3,7 @@ import { Room } from '../../../models/room';
 import { RoomService } from '../../../services/http/room.service';
 import { DialogService } from '../../../services/util/dialog.service';
 import { AdminService } from '../../../services/http/admin.service';
-import { NotificationService } from '../../../services/util/notification.service';
+import { AdvancedSnackBarTypes, NotificationService } from '../../../services/util/notification.service';
 import { TranslateService } from '@ngx-translate/core';
 
 @Component({
@@ -40,7 +40,7 @@ export class RoomManagementComponent {
         this.roomService.deleteRoom(this.room.id)
             .subscribe(result => {
               this.translateService.get('admin-area.room-deleted').subscribe(message =>
-                  this.notificationService.show(message));
+                  this.notificationService.showAdvanced(message, AdvancedSnackBarTypes.WARNING));
               this.room = null;
             });
       }
@@ -51,6 +51,6 @@ export class RoomManagementComponent {
     this.adminService.transferRoom(this.room.id, newOwnerId)
         .subscribe(result =>
             this.translateService.get('admin-area.room-transferred').subscribe(message =>
-                this.notificationService.show(message)));
+                this.notificationService.showAdvanced(message, AdvancedSnackBarTypes.SUCCESS)));
   }
 }

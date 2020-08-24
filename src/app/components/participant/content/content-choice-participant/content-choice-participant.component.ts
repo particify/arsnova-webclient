@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ContentChoice } from '../../../../models/content-choice';
 import { AnswerOption } from '../../../../models/answer-option';
 import { ContentAnswerService } from '../../../../services/http/content-answer.service';
-import { NotificationService } from '../../../../services/util/notification.service';
+import { AdvancedSnackBarTypes, NotificationService } from '../../../../services/util/notification.service';
 import { ChoiceAnswer } from '../../../../models/choice-answer';
 import { ContentType } from '../../../../models/content-type.enum';
 import { TranslateService } from '@ngx-translate/core';
@@ -140,11 +140,11 @@ export class ContentChoiceParticipantComponent extends ContentParticipantCompone
     if (selectedAnswers.length === 0) {
       if (this.content.multiple) {
         this.translateService.get('answer.at-least-one').subscribe(message => {
-          this.notificationService.show(message);
+          this.notificationService.showAdvanced(message, AdvancedSnackBarTypes.WARNING);
         });
       } else {
         this.translateService.get('answer.please-one').subscribe(message => {
-          this.notificationService.show(message);
+          this.notificationService.showAdvanced(message, AdvancedSnackBarTypes.WARNING);
         });
       }
       return;

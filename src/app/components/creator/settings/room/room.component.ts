@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Room } from '../../../../models/room';
-import { NotificationService } from '../../../../services/util/notification.service';
+import { AdvancedSnackBarTypes, NotificationService } from '../../../../services/util/notification.service';
 import { TranslateService } from '@ngx-translate/core';
 import { RoomService } from '../../../../services/http/room.service';
 import { Router } from '@angular/router';
@@ -52,7 +52,7 @@ export class RoomComponent implements OnInit {
 
   deleteRoom(room: Room): void {
     this.translationService.get('settings.deleted').subscribe(msg => {
-      this.notificationService.show(room.name + msg);
+      this.notificationService.showAdvanced(room.name + msg, AdvancedSnackBarTypes.WARNING);
     });
     this.roomService.deleteRoom(room.id).subscribe(result => {
       const event = new RoomDeleted(room.id);

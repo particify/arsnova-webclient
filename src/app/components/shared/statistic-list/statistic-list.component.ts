@@ -12,7 +12,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ContentAnswerService } from '../../../services/http/content-answer.service';
 import { GlobalStorageService, STORAGE_KEYS } from '../../../services/util/global-storage.service';
 import { forkJoin } from 'rxjs';
-import { NotificationService } from '../../../services/util/notification.service';
+import { AdvancedSnackBarTypes, NotificationService } from '../../../services/util/notification.service';
 import { DialogService } from '../../../services/util/dialog.service';
 
 export class ContentStatistic {
@@ -263,7 +263,7 @@ export class StatisticListComponent implements OnInit {
     this.resetAllAnswers();
     forkJoin(observableBatch).subscribe(() => {
       this.translateService.get('content.all-answers-deleted').subscribe(msg => {
-        this.notificationService.show(msg);
+        this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
       });
     });
   }

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AnswerOption } from '../../../../models/answer-option';
 import { ContentChoice } from '../../../../models/content-choice';
 import { ContentService } from '../../../../services/http/content.service';
-import { NotificationService } from '../../../../services/util/notification.service';
+import { AdvancedSnackBarTypes, NotificationService } from '../../../../services/util/notification.service';
 import { ContentType } from '../../../../models/content-type.enum';
 import { TranslateService } from '@ngx-translate/core';
 import { EventService } from '../../../../services/util/event.service';
@@ -72,7 +72,7 @@ export class ContentChoiceCreationComponent extends ContentCreationComponent imp
     $event.preventDefault();
     if (this.newAnswerOptionLabel === '') {
       this.translationService.get('content.no-empty2').subscribe(message => {
-        this.notificationService.show(message);
+        this.notificationService.showAdvanced(message, AdvancedSnackBarTypes.FAILED);
       });
       this.newAnswerOptionChecked = false;
       this.newAnswerOptionLabel = '';
@@ -80,7 +80,7 @@ export class ContentChoiceCreationComponent extends ContentCreationComponent imp
     }
     if ((!this.multipleCorrectAnswers) && (this.content as ContentChoice).correctOptionIndexes.length > 0 && this.newAnswerOptionChecked) {
       this.translationService.get('content.only-one').subscribe(message => {
-        this.notificationService.show(message);
+        this.notificationService.showAdvanced(message, AdvancedSnackBarTypes.FAILED);
       });
       this.newAnswerOptionChecked = false;
       this.newAnswerOptionLabel = '';
@@ -98,7 +98,7 @@ export class ContentChoiceCreationComponent extends ContentCreationComponent imp
       document.getElementById('answer-input').focus();
     } else {
       this.translationService.get('content.max-answers').subscribe(msg => {
-        this.notificationService.show(msg);
+        this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.FAILED);
       });
     }
   }
@@ -107,7 +107,7 @@ export class ContentChoiceCreationComponent extends ContentCreationComponent imp
     for (let i = 0; i < (this.content as ContentChoice).options.length; i++) {
       if ((this.content as ContentChoice).options[i].label === label) {
         this.translationService.get('content.same-answer').subscribe(message => {
-          this.notificationService.show(message);
+          this.notificationService.showAdvanced(message, AdvancedSnackBarTypes.WARNING);
         });
         return true;
       }
@@ -169,7 +169,7 @@ export class ContentChoiceCreationComponent extends ContentCreationComponent imp
     }
     this.fillCorrectAnswers();
     this.translationService.get('content.answer-deleted').subscribe(message => {
-      this.notificationService.show(message);
+      this.notificationService.showAdvanced(message, AdvancedSnackBarTypes.WARNING);
     });
   }
 
@@ -193,19 +193,19 @@ export class ContentChoiceCreationComponent extends ContentCreationComponent imp
   createContent(): boolean {
     if ((this.content as ContentChoice).options.length < 2) {
       this.translationService.get('content.need-answers').subscribe(message => {
-        this.notificationService.show(message);
+        this.notificationService.showAdvanced(message, AdvancedSnackBarTypes.WARNING);
       });
       return;
     }
     if ((!this.multipleCorrectAnswers) && (!this.noCorrectAnswers) && (this.content as ContentChoice).correctOptionIndexes.length !== 1) {
       this.translationService.get('content.select-one').subscribe(message => {
-        this.notificationService.show(message);
+        this.notificationService.showAdvanced(message, AdvancedSnackBarTypes.WARNING);
       });
       return;
     }
     if (this.multipleCorrectAnswers && (!this.noCorrectAnswers) && (this.content as ContentChoice).correctOptionIndexes.length < 1) {
       this.translationService.get('content.at-least-one').subscribe(message => {
-        this.notificationService.show(message);
+        this.notificationService.showAdvanced(message, AdvancedSnackBarTypes.WARNING);
       });
       return;
     }

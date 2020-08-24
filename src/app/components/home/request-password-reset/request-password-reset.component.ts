@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
 import { UserService } from '../../../services/http/user.service';
-import { NotificationService } from '../../../services/util/notification.service';
+import { AdvancedSnackBarTypes, NotificationService } from '../../../services/util/notification.service';
 import { EventService } from '../../../services/util/event.service';
 import { PasswordResetErrorStateMatcher } from '../password-reset/password-reset.component';
 import { Router } from '@angular/router';
@@ -37,18 +37,18 @@ export class RequestPasswordResetComponent implements OnInit {
       this.username = this.username.trim();
       this.userService.setNewPassword(this.username).subscribe(() => {
           this.translationService.get('password-reset.reset-successful').subscribe(msg => {
-            this.notificationService.show(msg);
+            this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.SUCCESS);
           });
           this.router.navigate([`password-reset/${this.username}`]);
         },
         err => {
           this.translationService.get('password-reset.request-failed').subscribe(msg => {
-            this.notificationService.show(msg);
+            this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.FAILED);
           });
         });
     } else {
       this.translationService.get('login.input-incorrect').subscribe(message => {
-        this.notificationService.show(message);
+        this.notificationService.showAdvanced(message, AdvancedSnackBarTypes.WARNING);
       });
     }
   }
