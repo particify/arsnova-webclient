@@ -437,6 +437,10 @@ div {
   background: var(--surface);
 }
 
+.mat-card-header .mat-card-header-text {
+  margin: 0;
+}
+
 .card-container {
   width: 100%;
   max-width: 832px;
