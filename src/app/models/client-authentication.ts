@@ -12,8 +12,4 @@ export class ClientAuthentication {
     this.authProvider = authProvider;
     this.token = token;
   }
-
-  isGuest() {
-    return this.authProvider === AuthProvider.ARSNOVA_GUEST;
-  }
 }

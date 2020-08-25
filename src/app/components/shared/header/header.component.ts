@@ -113,7 +113,7 @@ export class HeaderComponent implements OnInit {
 
   logout() {
     /*
-    if (this.user.authProvider === 'ARSNOVA_GUEST') {
+    if (this.user.authProvider === AuthProvider.ARSNOVA_GUEST) {
       this.bonusTokenService.getTokensByUserId(this.user.id).subscribe(list => {
         if (list && list.length > 0) {
           const dialogRef = this.dialogService.openTokenReminderDialog();
