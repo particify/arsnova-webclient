@@ -1,9 +1,9 @@
 export enum AuthProvider {
-  ARSNOVA,
-  ARSNOVA_GUEST,
-  LDAP,
-  CAS,
-  GOOGLE,
-  FACEBOOK,
-  TWITTER
+  ARSNOVA = 'ARSNOVA',
+  ARSNOVA_GUEST = 'ARSNOVA_GUEST',
+  LDAP = 'LDAP',
+  CAS = 'CAS',
+  GOOGLE = 'GOOGLE',
+  FACEBOOK = 'FACEBOOK',
+  TWITTER = 'TWITTER'
 }

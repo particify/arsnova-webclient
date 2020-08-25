@@ -23,14 +23,14 @@
     <mat-menu #userMenu="matMenu" [overlapTrigger]="false">
       <button mat-menu-item *ngIf="auth" routerLink="/user" tabindex="0">
         <mat-icon class="rooms">people</mat-icon>
-        <span *ngIf="!auth.isGuest">{{'header.my-rooms' | translate}}</span>
-        <span *ngIf="auth.isGuest">{{'header.visited-rooms' | translate}}</span>
+        <span *ngIf="!isGuest">{{'header.my-rooms' | translate}}</span>
+        <span *ngIf="isGuest">{{'header.visited-rooms' | translate}}</span>
       </button>
       <!-- <button mat-menu-item *ngIf="auth" (click)="openUserBonusTokenDialog()" tabindex="0">
         <mat-icon class="bonus">grade</mat-icon>
         <span>{{'header.user-bonus-token' | translate}}</span>
       </button> -->
-      <button mat-menu-item *ngIf="auth && !auth.isGuest" (click)="openDeleteUserDialog()" tabindex="0">
+      <button mat-menu-item *ngIf="auth && !isGuest" (click)="openDeleteUserDialog()" tabindex="0">
         <mat-icon color="warn">delete</mat-icon>
         <span>{{'header.delete-account' | translate}}</span>
       </button>
@@ -52,8 +52,8 @@
             [matMenuTriggerFor]="userMenu"
             aria-labelledby="room-label" id="room-button">
         <mat-icon class="header-icons">account_circle</mat-icon>
-        <span class="button-text" *ngIf="!auth.isGuest">{{'header.my-account' | translate}}</span>
-        <span class="button-text" *ngIf="auth.isGuest">{{'header.my-guest-account' | translate}}</span>
+        <span class="button-text" *ngIf="!isGuest">{{'header.my-account' | translate}}</span>
+        <span class="button-text" *ngIf="isGuest">{{'header.my-guest-account' | translate}}</span>
     </button>
 
     <button mat-icon-button *ngIf="auth && deviceType === 'mobile'"
