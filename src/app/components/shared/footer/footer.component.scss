@@ -11,14 +11,7 @@ footer {
 #footer-toolbar {
   background-color: var(--background);
   height: auto;
-
-  &:first-child {
-    padding-left: 0;
-  }
-
-  &:last-child {
-    padding-right: 0;
-  }
+  padding: 0;
 }
 
 .mat-button {
