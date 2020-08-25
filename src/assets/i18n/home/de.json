@@ -190,15 +190,15 @@
   },
   "user-activation": {
     "a11y-activate": "Aktiviert deinen Account.",
-    "a11y-key-input": "Gib hier den Aktivierungs-Schlüssel ein, den du per E-Mail zugesendet bekommen hast um dich anzumelden.",
+    "a11y-key-input": "Gib hier den Aktivierungs-Code ein, den du per E-Mail zugesendet bekommen hast um dich anzumelden.",
     "a11y-cancel": "Bricht die Aktivierung ab und bringt dich zurück zur Anmeldeseite.",
     "activate": "Aktivieren",
-    "key": "Aktivierungs-Schlüssel",
-    "key-incorrect": "Aktivierungs-Schlüssel nicht korrekt.",
-    "key-required": "Bitte gib einen Schlüssel ein.",
+    "key": "Aktivierungs-Code",
+    "key-incorrect": "Aktivierungs-Code nicht korrekt.",
+    "key-required": "Bitte gib einen Code ein.",
     "didnt-get": "Keinen Code erhalten?",
     "reset-button": "Erneut senden",
-    "sent-again": "Der Aktivierungsschlüssel wurde erneut gesendet.",
+    "sent-again": "Der Aktivierungs-Code wurde erneut gesendet.",
     "cancel": "Abbrechen"
   },
   "dialog": {
