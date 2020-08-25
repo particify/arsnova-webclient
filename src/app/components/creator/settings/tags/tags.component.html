@@ -1,11 +1,11 @@
 <div>
   <div tabindex="0" id="category-settings" class="visually-hidden">{{ 'settings.a11y-categories' | translate }}</div>
   <div>
-    <mat-form-field class="input-block">
+    <mat-form-field class="input-block" appearance="outline">
+      <mat-label>{{ 'settings.tag-new' | translate }}</mat-label>
       <input (focus)="eventService.makeFocusOnInputTrue()" (blur)="eventService.makeFocusOnInputFalse()"
              matInput type="text" [(ngModel)]="tagName" [formControl]="tagFormControl" name="taginput"
-             aria-labelledby="category"/>
-      <mat-placeholder>{{ 'settings.tag-new' | translate }}</mat-placeholder>
+             aria-labelledby="category" placeholder="{{ 'settings.enter-tag' | translate }}"/>
       <mat-error *ngIf="!tagFormControl.valid">
         {{ 'settings.tag-error' | translate }}
       </mat-error>

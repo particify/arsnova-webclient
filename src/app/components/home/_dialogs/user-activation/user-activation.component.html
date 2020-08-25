@@ -1,11 +1,11 @@
 <form (ngSubmit)="login(userActivationKey.value)" fxLayout="column" fxLayoutAlign="space-around"
       fxLayoutGap="10px">
-  <mat-form-field class="input-block">
+  <mat-form-field class="input-block" appearance="outline">
+    <mat-label>{{ 'user-activation.key' | translate }}</mat-label>
     <input (focus)="eventService.makeFocusOnInputTrue()" (blur)="eventService.makeFocusOnInputFalse()"
            matInput #userActivationKey type="text"
            [formControl]="activationKeyFormControl" name="activation-key"
            aria-labelledby="key-input"/>
-    <mat-placeholder>{{ 'user-activation.key' | translate }}</mat-placeholder>
   </mat-form-field>
 </form>
 <div fxLayout="row" class="register" tabindex="0">
