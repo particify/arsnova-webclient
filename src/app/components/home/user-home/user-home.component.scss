@@ -6,7 +6,12 @@ app-room-list {
 .mat-raised-button {
   height: 50px;
   border-radius: 25px;
-  margin: calc(1.35em + 1% - 7px) 0 calc(1.35em + 1%) 0;
+  // ' - 0.25em' because of margin bottom from form field above to make space around button consistent
+  margin: calc(1em + 2% - 0.25em) 0 calc(1em + 2%) 0;
   font-size: 18px;
   width: 250px;
+}
+
+.add-icon {
+  margin-right: 0.1em;
 }
