@@ -18,7 +18,7 @@
       </ng-container>
       <ng-container matColumnDef="checked">
         <mat-cell *matCellDef="let answer; let i = index">
-          <mat-checkbox color="accent" [(ngModel)]="answer.correct" aria-labelledby="checkbox"
+          <mat-checkbox [(ngModel)]="answer.correct" aria-labelledby="checkbox"
                      [checked]="answer.correct" (ngModelChange)="updateAnswer(i)" [disabled]="data.format === 'SCALE'">
           </mat-checkbox>
         </mat-cell>

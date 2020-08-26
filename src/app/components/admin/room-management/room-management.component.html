@@ -7,8 +7,8 @@
       <mat-form-field appearance="outline" fxFlex="auto" class="no-field-hint">
         <mat-label>{{ 'admin-area.room-id' | translate }}</mat-label>
         <input matInput #idField>
-        <button mat-button matSuffix color="accent" (click)="loadEntity(idField.value)">
-          <mat-icon aria-hidden="false" attr.aria-label="{{ 'admin-area.find' | translate }}">search</mat-icon>
+        <button mat-button matSuffix (click)="loadEntity(idField.value)">
+          <mat-icon class="info-icon" aria-hidden="false" attr.aria-label="{{ 'admin-area.find' | translate }}">search</mat-icon>
         </button>
       </mat-form-field>
       <mat-form-field appearance="outline" floatLabel="always" fxFlex="auto" class="no-field-hint">
