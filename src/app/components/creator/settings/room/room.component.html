@@ -1,27 +1,20 @@
 <div *ngIf="editRoom">
   <div fxLayout="column">
     <div tabindex="0" id="room-settings" class="visually-hidden">{{ 'settings.a11y-room' | translate }}</div>
-    <mat-form-field class="input-block">
+    <mat-form-field class="input-block" appearance="outline">
+      <mat-label>{{ 'room.room-name' | translate }}</mat-label>
       <input (focus)="eventService.makeFocusOnInputTrue()" (blur)="eventService.makeFocusOnInputFalse()"
-             [(ngModel)]="name" matInput
+             [(ngModel)]="name" matInput placeholder="{{ 'settings.enter-room-name' | translate }}"
              name="room-name" maxlength="20" aria-labelledby="room-name"/>
-      <mat-placeholder>{{ 'room.room-name' | translate }}</mat-placeholder>
       <mat-hint align="end"><span aria-hidden="true">{{ name.length }} / 20</span></mat-hint>
     </mat-form-field>
     <mat-tab-group [dynamicHeight]=true>
       <mat-tab label="{{'settings.description' | translate}}">
-        <mat-form-field class="input-block">
-      <textarea
-        (focus)="eventService.makeFocusOnInputTrue()" (blur)="eventService.makeFocusOnInputFalse()"
-        [(ngModel)]="description"
-        matInput
-        matTextareaAutosize
-        matAutosizeMinRows="2"
-        matAutosizeMaxRows="5"
-        maxlength="250"
-        name="description"
-        aria-labelledby="room-description"
-      ></textarea>
+        <mat-form-field class="input-block" appearance="outline">
+      <textarea (focus)="eventService.makeFocusOnInputTrue()" (blur)="eventService.makeFocusOnInputFalse()"
+        [(ngModel)]="description" matInput matTextareaAutosize matAutosizeMinRows="3" matAutosizeMaxRows="5"
+        maxlength="250" name="description" aria-labelledby="room-description"
+        placeholder="{{ 'settings.enter-room-description' | translate }}"></textarea>
           <mat-hint align="end">
             <span aria-hidden="true">
               {{ description ? description.length : 0 }} / 250
