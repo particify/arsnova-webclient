@@ -31,7 +31,7 @@
         <span>{{'header.user-bonus-token' | translate}}</span>
       </button> -->
       <button mat-menu-item *ngIf="auth && !isGuest" (click)="openDeleteUserDialog()" tabindex="0">
-        <mat-icon color="warn">delete</mat-icon>
+        <mat-icon class="delete">delete</mat-icon>
         <span>{{'header.delete-account' | translate}}</span>
       </button>
       <button mat-menu-item *ngIf="router.url !== '/home'" routerLink="/home" tabindex="0">
@@ -43,7 +43,7 @@
         <span>{{'header.admin-area' | translate}}</span>
       </button>
       <button mat-menu-item (click)="logout()" tabindex="0">
-        <mat-icon color="warn">exit_to_app</mat-icon>
+        <mat-icon class="delete">exit_to_app</mat-icon>
         <span>{{ 'header.logout' | translate }}</span>
       </button>
     </mat-menu>
