@@ -42,9 +42,13 @@
         <mat-icon>build</mat-icon>
         <span>{{'header.admin-area' | translate}}</span>
       </button>
-      <button mat-menu-item (click)="logout()" tabindex="0">
+      <button *ngIf="auth && !isGuest" mat-menu-item (click)="logout()" tabindex="0">
         <mat-icon class="delete">exit_to_app</mat-icon>
         <span>{{ 'header.logout' | translate }}</span>
+      </button>
+      <button *ngIf="auth && isGuest" mat-menu-item [routerLink]="'login'" tabindex="0">
+        <mat-icon class="login">exit_to_app</mat-icon>
+        <span>{{ 'header.login' | translate }}</span>
       </button>
     </mat-menu>
 

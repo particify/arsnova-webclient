@@ -8,9 +8,10 @@ import { FormControl, FormGroupDirective, NgForm, Validators } from '@angular/fo
 import { TranslateService } from '@ngx-translate/core';
 import { EventService } from '../../../services/util/event.service';
 import { ApiConfigService } from '../../../services/http/api-config.service';
-import { AuthenticationProvider, AuthenticationProviderRole, AuthenticationProviderType } from '../../../models/api-config';
+import { AuthenticationProvider, AuthenticationProviderType } from '../../../models/api-config';
 import { DialogService } from '../../../services/util/dialog.service';
-import { ClientAuthenticationResult, AuthenticationStatus } from '../../../models/client-authentication-result';
+import { AuthenticationStatus, ClientAuthenticationResult } from '../../../models/client-authentication-result';
+import { AuthProvider } from '../../../models/auth-provider';
 
 export class LoginErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
@@ -52,32 +53,34 @@ export class LoginComponent implements AfterContentInit, OnChanges {
   }
 
   ngAfterContentInit() {
-    if (this.authenticationService.isLoggedIn()) {
-      this.router.navigate(['home']);
-    } else {
-      this.apiConfigService.getApiConfig$().subscribe(config => {
-        const authProviders = config.authenticationProviders;
-        if (authProviders.some(provider => provider.type === AuthenticationProviderType.USERNAME_PASSWORD)) {
-          this.allowDbLogin = true;
-        }
-        this.ssoProviders = authProviders.filter((p) => p.type === AuthenticationProviderType.SSO);
-        this.isLoading = false;
-        this.providersLength = this.ssoProviders.length;
-        if (!this.allowDbLogin && this.providersLength === 1) {
-          this.loginViaSso(this.ssoProviders[0].id);
-        } else {
-          if (this.providersLength > 0) {
-            setTimeout(() => {
-              document.getElementById(this.ssoProviders[0].title + '-button').focus();
-            }, 700);
-          } else {
-            setTimeout(() => {
-              document.getElementById('email-input').focus();
-            }, 700);
+    this.authenticationService.getCurrentAuthentication().subscribe(auth => {
+      if (this.authenticationService.isLoggedIn() && auth.authProvider !== AuthProvider.ARSNOVA_GUEST) {
+        this.router.navigate(['user']);
+      } else {
+        this.apiConfigService.getApiConfig$().subscribe(config => {
+          const authProviders = config.authenticationProviders;
+          if (authProviders.some(provider => provider.type === AuthenticationProviderType.USERNAME_PASSWORD)) {
+            this.allowDbLogin = true;
           }
-        }
-      });
-    }
+          this.ssoProviders = authProviders.filter((p) => p.type === AuthenticationProviderType.SSO);
+          this.isLoading = false;
+          this.providersLength = this.ssoProviders.length;
+          if (!this.allowDbLogin && this.providersLength === 1) {
+            this.loginViaSso(this.ssoProviders[0].id);
+          } else {
+            if (this.providersLength > 0) {
+              setTimeout(() => {
+                document.getElementById(this.ssoProviders[0].title + '-button').focus();
+              }, 700);
+            } else {
+              setTimeout(() => {
+                document.getElementById('email-input').focus();
+              }, 700);
+            }
+          }
+        });
+      }
+    });
     const registeredUserData = history.state.data;
       if (registeredUserData && registeredUserData.username && registeredUserData.password) {
         this.usernameFormControl.setValue(registeredUserData.username);
