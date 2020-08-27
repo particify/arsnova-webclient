@@ -53,10 +53,6 @@ export class StatisticChoiceComponent implements OnInit {
   ngOnInit(): void {
     this.checkIfSurvey(this.content);
     this.getData(this.content);
-    this.isLoading = false;
-    if (this.directShow) {
-      this.toggleChart();
-    }
   }
 
   createChart(colors: string[]) {
@@ -167,6 +163,10 @@ export class StatisticChoiceComponent implements OnInit {
         this.translateService.get('statistic.abstentions').subscribe(label => {
           this.labels.push(label);
         });
+      }
+      this.isLoading = false;
+      if (this.directShow) {
+        this.toggleChart();
       }
     });
   }
