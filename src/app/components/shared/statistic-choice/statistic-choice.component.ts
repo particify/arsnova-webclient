@@ -5,7 +5,6 @@ import { ContentService } from '../../../services/http/content.service';
 import { ContentChoice } from '../../../models/content-choice';
 import { TranslateService } from '@ngx-translate/core';
 import { ThemeService } from '../../../../theme/theme.service';
-import { Theme } from '../../../../theme/Theme';
 import { Content } from '../../../models/content';
 import { ContentType } from '../../../models/content-type.enum';
 
@@ -39,11 +38,11 @@ export class StatisticChoiceComponent implements OnInit {
   contentId: string;
   isLoading = true;
   colorLabel = false;
-  theme: Theme;
   survey = false;
   chartVisible: boolean;
+  onSurface: string;
+  surface: string;
   noAnswers = (currentValue) => currentValue === 0;
-
 
   constructor(protected route: ActivatedRoute,
               private contentService: ContentService,
@@ -64,7 +63,7 @@ export class StatisticChoiceComponent implements OnInit {
     const tickOptions: LinearTickOptions = {
       beginAtZero: true,
       precision: 0,
-      fontColor: this.theme.colors[16].color,
+      fontColor: this.onSurface,
       fontSize: 16
     };
     this.chart = new Chart('chart', {
@@ -87,10 +86,16 @@ export class StatisticChoiceComponent implements OnInit {
         maintainAspectRatio: false,
         scales: {
           yAxes: [{
-            ticks: tickOptions
+            ticks: tickOptions,
+            gridLines: {
+              zeroLineColor: this.onSurface
+            },
           }],
           xAxes: [{
-            ticks: tickOptions
+            ticks: tickOptions,
+            gridLines: {
+              zeroLineColor: this.onSurface
+            }
           }]
         }
       }
@@ -130,12 +135,14 @@ export class StatisticChoiceComponent implements OnInit {
 
   getData(content: ContentChoice) {
     const length = content.options.length;
-    let green, grey, blue: string;
+    let green, grey, blue;
     this.themeService.getTheme().subscribe(theme => {
-      this.theme = this.themeService.getThemeByKey(theme);
-      green = this.theme.colors[19].color;
-      grey = this.theme.colors[26].color;
-      blue = this.theme.colors[25].color;
+      const currentTheme = this.themeService.getThemeByKey(theme);
+      this.onSurface = currentTheme.get('on-surface').color;
+      this.surface = currentTheme.get('surface').color;
+      green = currentTheme.get('green').color;
+      grey = currentTheme.get('grey').color;
+      blue = currentTheme.get('blue').color;
     });
     for (let i = 0; i < length; i++) {
       this.answerList[i] = new AnswerList(null, null);
