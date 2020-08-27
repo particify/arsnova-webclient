@@ -231,6 +231,10 @@ div {
   background-color: var(--on-surface) !important;
 }
 
+.mat-form-field-appearance-fill .mat-form-field-underline::before {
+  background-color: var(--on-surface);
+}
+
 .mat-form-field-ripple {
   background-color: var(--on-surface) !important;
 }
