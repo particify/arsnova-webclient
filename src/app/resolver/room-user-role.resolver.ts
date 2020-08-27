@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { UserRole } from '../models/user-roles.enum';
 import { RoomMembershipService } from '../services/room-membership.service';
+import { environment } from '../../environments/environment.prod';
 
 @Injectable()
 export class RoomUserRoleResolver implements Resolve<UserRole> {
@@ -12,6 +13,9 @@ export class RoomUserRoleResolver implements Resolve<UserRole> {
   }
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<UserRole> {
-    return this.roomMembershipService.getPrimaryRoleByRoom(route.params['shortId']);
+    return environment.debugOverrideRoomRole
+      /* DEBUG: Override role handling */
+      ? of(UserRole.CREATOR)
+      : this.roomMembershipService.getPrimaryRoleByRoom(route.params['shortId']);
   }
 }
