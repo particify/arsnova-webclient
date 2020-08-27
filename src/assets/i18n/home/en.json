@@ -266,7 +266,7 @@
     "please-enter-name": "Please enter a name.",
     "room": "Room",
     "copy-url": "Copy URL",
-    "user-got-tokens": "You have bonus tokens linked to this account that will be lost!",
+    "user-got-tokens": "You have bonus tokens linked to this account that will be lost.",
     "logout": "Log out",
     "create-room": "Create Room",
     "room-name": "Room name",
