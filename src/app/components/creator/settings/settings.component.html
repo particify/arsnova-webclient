@@ -1,10 +1,10 @@
 <div fxLayout="row" fxLayoutAlign="center">
   <mat-card [ngClass]="{'card-closed': !expanded, 'card-expanded': expanded}">
-    <div fxLayout="row" fxLayoutAlign="start center">
+    <div class="card-header" fxLayout="row" fxLayoutAlign="start center" (click)="expandSettings()">
       <mat-icon class="header-icon">{{settings.iconName}}</mat-icon>
       <h2>{{ settings.headerName | translate }}</h2>
       <span class="fill-remaining-space"></span>
-      <button tabindex="-1" mat-icon-button class="expand" (click)="expandSettings()">
+      <button tabindex="-1" mat-icon-button class="expand">
         <mat-icon class="expand-icon" [ngClass]="{'expanded': expanded}">expand_more</mat-icon>
       </button>
     </div>
