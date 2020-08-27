@@ -111,7 +111,7 @@
                 </button>
                 <button mat-icon-button (keyup.enter)="menuTrigger.openMenu()" #menuTrigger="matMenuTrigger"
                         [matMenuTriggerFor]="moreActions" (click)="$event.stopPropagation()" aria-labelledby="more"
-                        class="editButton" matTooltip="{{ 'content.more-options' | translate}}">
+                        class="moreButton" matTooltip="{{ 'content.more-options' | translate}}">
                   <mat-icon>more_vert</mat-icon>
                 </button>
 
