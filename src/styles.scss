@@ -190,6 +190,12 @@ div {
   background-color: var(--red-light);
 }
 
+// Mat progress spinner
+
+.mat-progress-spinner circle, .mat-spinner circle {
+  stroke: var(--primary);
+}
+
 // Mat Tab
 
 .mat-tab-header-pagination-chevron {
