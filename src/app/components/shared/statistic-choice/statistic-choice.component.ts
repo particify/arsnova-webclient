@@ -9,7 +9,7 @@ import { Content } from '../../../models/content';
 import { ContentType } from '../../../models/content-type.enum';
 import { AnswerStatistics } from '../../../models/answer-statistics';
 import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { startWith, takeUntil } from 'rxjs/operators';
 
 export class AnswerList {
   label: string;
@@ -62,12 +62,18 @@ export class StatisticChoiceComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.chartId = 'chart-' + this.content.id;
     this.checkIfSurvey(this.content);
-    this.loadData().subscribe(stats => {
-      this.updateData(stats);
-      if (this.directShow) {
-        this.toggleChart(true);
-      }
-      this.isLoading = false;
+    this.contentService.getAnswersChangedStream(this.content.roomId, this.content.id).pipe(
+        /* startWith: Execute once even when no event has been received */
+        startWith(null),
+        takeUntil(this.destroyed$)
+    ).subscribe(() => {
+      this.loadData().subscribe(stats => {
+        this.updateData(stats);
+        if (this.directShow) {
+          this.toggleChart(true);
+        }
+        this.isLoading = false;
+      });
     });
   }
 
