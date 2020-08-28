@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, OnDestroy } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Chart, LinearTickOptions } from 'chart.js';
 import { ActivatedRoute } from '@angular/router';
 import { ContentService } from '../../../services/http/content.service';
@@ -8,6 +8,8 @@ import { ThemeService } from '../../../../theme/theme.service';
 import { Content } from '../../../models/content';
 import { ContentType } from '../../../models/content-type.enum';
 import { AnswerStatistics } from '../../../models/answer-statistics';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 export class AnswerList {
   label: string;
@@ -29,6 +31,7 @@ export class StatisticChoiceComponent implements OnInit, OnDestroy {
   @Input() content: ContentChoice;
   @Input() directShow: boolean;
 
+  destroyed$ = new Subject();
   chart: Chart;
   chartId: string;
   colors: string[] = [];
@@ -62,6 +65,11 @@ export class StatisticChoiceComponent implements OnInit, OnDestroy {
     this.loadData().subscribe(stats => {
       this.updateChart(stats);
     });
+  }
+
+  ngOnDestroy() {
+    this.destroyed$.next();
+    this.destroyed$.complete();
   }
 
   createChart(colors: string[]) {
@@ -133,7 +141,7 @@ export class StatisticChoiceComponent implements OnInit, OnDestroy {
 
   initChart() {
     const length = this.content.options.length;
-    this.themeService.getTheme().subscribe(theme => {
+    this.themeService.getTheme().pipe(takeUntil(this.destroyed$)).subscribe(theme => {
       const currentTheme = this.themeService.getThemeByKey(theme);
       this.onSurface = currentTheme.get('on-surface').color;
       this.surface = currentTheme.get('surface').color;
