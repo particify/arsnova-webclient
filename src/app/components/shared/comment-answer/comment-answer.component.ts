@@ -2,7 +2,6 @@ import { AfterContentInit, Component, HostListener, OnInit } from '@angular/core
 import { ActivatedRoute } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { LanguageService } from '../../../services/util/language.service';
-import { WsCommentServiceService } from '../../../services/websockets/ws-comment-service.service';
 import { CommentService } from '../../../services/http/comment.service';
 import { Comment } from '../../../models/comment';
 import { AuthenticationService } from '../../../services/http/authentication.service';
@@ -32,7 +31,6 @@ export class CommentAnswerComponent implements OnInit, AfterContentInit {
               private notificationService: NotificationService,
               private translateService: TranslateService,
               protected langService: LanguageService,
-              protected wsCommentService: WsCommentServiceService,
               protected commentService: CommentService,
               private authenticationService: AuthenticationService,
               private dialogService: DialogService,
@@ -87,7 +85,7 @@ export class CommentAnswerComponent implements OnInit, AfterContentInit {
 
   saveAnswer() {
     this.edit = false;
-    this.wsCommentService.answer(this.comment, this.answer);
+    this.commentService.answer(this.comment, this.answer);
     this.translateService.get('comment-page.comment-answered').subscribe(msg => {
       this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.SUCCESS);
     });
@@ -104,7 +102,7 @@ export class CommentAnswerComponent implements OnInit, AfterContentInit {
 
   deleteAnswer() {
     this.answer = null;
-    this.wsCommentService.answer(this.comment, this.answer);
+    this.commentService.answer(this.comment, this.answer);
     this.translateService.get('comment-page.answer-deleted').subscribe(msg => {
       this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
     });
