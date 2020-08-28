@@ -175,8 +175,8 @@
     "a11y-join-room": "Den Raum {{room}} mit der Nummer {{id}} in der Rolle {{role}} betreten.",
     "a11y-room-history": "Dein Raumverlauf enthält {{count}} Räume. Navigiere mit Tab durch deine Räume.",
     "a11y-more-options": "Zeige weitere Optionen für diesen Raum",
-    "creator-role": "Raumersteller",
-    "executive-moderator-role": "moderierende Person",
+    "creator-role": "Raumersteller/in",
+    "executive-moderator-role": "Moderator/in",
     "filter": "In diesem Textfeld kannst du die aufgelisteten Räume nach Name filtern.",
     "filter-message": "Räume durchsuchen",
     "more-options": "Mehr Optionen",
@@ -187,7 +187,7 @@
     "room-successfully-removed": "Der Raum wurde erfolgreich aus der Liste entfernt.",
     "room-successfully-deleted": "Der Raum wurde erfolgreich gelöscht.",
     "canceled-remove": "Vorgang abgebrochen.",
-    "participant-role": "Teilnehmer"
+    "participant-role": "Teilnehmer/in"
   },
   "user-activation": {
     "a11y-activate": "Aktiviert deinen Account.",
