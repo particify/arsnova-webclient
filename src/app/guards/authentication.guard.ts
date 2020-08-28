@@ -10,6 +10,7 @@ import { MembershipsChanged } from '../models/events/memberships-changed';
 import { TranslateService } from '@ngx-translate/core';
 import { RoomService } from '../services/http/room.service';
 import { RoomMembershipService } from '../services/room-membership.service';
+import { environment } from '../../environments/environment';
 
 @Injectable()
 export class AuthenticationGuard implements CanActivate {
@@ -62,6 +63,11 @@ export class AuthenticationGuard implements CanActivate {
                     })
                 );
               } else {
+                if (environment.debugOverrideRoomRole) {
+                  /* DEBUG: Override role handling */
+                  return of(true);
+                }
+
                 this.handleAccessDenied();
                 return of(false);
               }
