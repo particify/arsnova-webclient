@@ -163,6 +163,13 @@ export class StatisticChoiceComponent implements OnInit, OnDestroy {
           }
         }
       }
+      if (this.content.abstentionsAllowed) {
+        this.translateService.get('statistic.abstentions').subscribe(label => {
+          this.labels.push(label);
+          this.colors.push(this.grey);
+          this.indicationColors.push(this.grey);
+        });
+      }
     });
   }
 
@@ -172,13 +179,8 @@ export class StatisticChoiceComponent implements OnInit, OnDestroy {
 
   updateChart(stats: AnswerStatistics) {
     this.data = stats.roundStatistics[0].independentCounts;
-    this.data.push(stats.roundStatistics[0].abstentionCount);
-    if (this.data[this.data.length - 1] > 0) {
-      this.indicationColors.push(this.grey);
-      this.colors.push(this.grey);
-      this.translateService.get('statistic.abstentions').subscribe(label => {
-        this.labels.push(label);
-      });
+    if (this.content.abstentionsAllowed) {
+      this.data.push(stats.roundStatistics[0].abstentionCount);
     }
     if (this.chart) {
       this.chart.data.datasets[0].data = this.data;
