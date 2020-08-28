@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { Chart, LinearTickOptions } from 'chart.js';
 import { ActivatedRoute } from '@angular/router';
 import { ContentService } from '../../../services/http/content.service';
@@ -7,6 +7,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { ThemeService } from '../../../../theme/theme.service';
 import { Content } from '../../../models/content';
 import { ContentType } from '../../../models/content-type.enum';
+import { AnswerStatistics } from '../../../models/answer-statistics';
 
 export class AnswerList {
   label: string;
@@ -23,12 +24,13 @@ export class AnswerList {
   templateUrl: './statistic-choice.component.html',
   styleUrls: ['./statistic-choice.component.scss']
 })
-export class StatisticChoiceComponent implements OnInit {
+export class StatisticChoiceComponent implements OnInit, OnDestroy {
 
   @Input() content: ContentChoice;
   @Input() directShow: boolean;
 
   chart: Chart;
+  chartId: string;
   colors: string[] = [];
   indicationColors: string[] = [];
   label = 'ABCDEFGH';
@@ -42,6 +44,9 @@ export class StatisticChoiceComponent implements OnInit {
   chartVisible: boolean;
   onSurface: string;
   surface: string;
+  green: string;
+  grey: string;
+  blue: string;
   noAnswers = (currentValue) => currentValue === 0;
 
   constructor(protected route: ActivatedRoute,
@@ -51,8 +56,12 @@ export class StatisticChoiceComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.chartId = 'chart-' + this.content.id;
     this.checkIfSurvey(this.content);
-    this.getData(this.content);
+    this.initChart();
+    this.loadData().subscribe(stats => {
+      this.updateChart(stats);
+    });
   }
 
   createChart(colors: string[]) {
@@ -62,7 +71,7 @@ export class StatisticChoiceComponent implements OnInit {
       fontColor: this.onSurface,
       fontSize: 16
     };
-    this.chart = new Chart('chart', {
+    this.chart = new Chart(this.chartId, {
       type: 'bar',
       data: {
         labels: this.labels,
@@ -98,16 +107,9 @@ export class StatisticChoiceComponent implements OnInit {
     });
   }
 
-  toggleChart() {
-    if (this.chartVisible === undefined) {
-      this.chartVisible = true;
-      setTimeout(() => {
-        this.createChart(this.colors);
-      }, 300);
-    } else {
-      this.colorLabel = false;
-      this.chartVisible = !this.chartVisible;
-    }
+  toggleChart(visible?: boolean) {
+    this.colorLabel = false;
+    this.chartVisible = visible ?? !this.chartVisible;
   }
 
   toggleCorrect() {
@@ -129,45 +131,59 @@ export class StatisticChoiceComponent implements OnInit {
     }
   }
 
-  getData(content: ContentChoice) {
-    const length = content.options.length;
-    let green, grey, blue;
+  initChart() {
+    const length = this.content.options.length;
     this.themeService.getTheme().subscribe(theme => {
       const currentTheme = this.themeService.getThemeByKey(theme);
       this.onSurface = currentTheme.get('on-surface').color;
       this.surface = currentTheme.get('surface').color;
-      green = currentTheme.get('green').color;
-      grey = currentTheme.get('grey').color;
-      blue = currentTheme.get('blue').color;
-    });
-    for (let i = 0; i < length; i++) {
-      this.answerList[i] = new AnswerList(null, null);
-      this.labels[i] = this.label.charAt(i);
-      this.answerList[i].label = this.labels[i];
-      this.answerList[i].answer = content.options[i].label;
-      this.colors[i] = blue;
-      if (!this.survey) {
-        if (this.checkIfCorrect(i)) {
-          this.indicationColors[i] = green;
-        } else {
-          this.indicationColors[i] = blue;
+      this.green = currentTheme.get('green').color;
+      this.grey = currentTheme.get('grey').color;
+      this.blue = currentTheme.get('blue').color;
+
+      for (let i = 0; i < length; i++) {
+        this.answerList[i] = new AnswerList(null, null);
+        this.labels[i] = this.label.charAt(i);
+        this.answerList[i].label = this.labels[i];
+        this.answerList[i].answer = this.content.options[i].label;
+        this.colors[i] = this.blue;
+        if (!this.survey) {
+          if (this.checkIfCorrect(i)) {
+            this.indicationColors[i] = this.green;
+          } else {
+            this.indicationColors[i] = this.blue;
+          }
         }
       }
-    }
-    this.contentService.getAnswer(content.id).subscribe(answer => {
-      this.data = answer.roundStatistics[0].independentCounts;
-      this.data.push(answer.roundStatistics[0].abstentionCount);
-      if (this.data[this.data.length - 1] > 0) {
-        this.indicationColors.push(grey);
-        this.colors.push(grey);
-        this.translateService.get('statistic.abstentions').subscribe(label => {
-          this.labels.push(label);
-        });
-      }
-      this.isLoading = false;
-      if (this.directShow) {
-        this.toggleChart();
-      }
     });
+  }
+
+  loadData() {
+    return this.contentService.getAnswer(this.content.id);
+  }
+
+  updateChart(stats: AnswerStatistics) {
+    this.data = stats.roundStatistics[0].independentCounts;
+    this.data.push(stats.roundStatistics[0].abstentionCount);
+    if (this.data[this.data.length - 1] > 0) {
+      this.indicationColors.push(this.grey);
+      this.colors.push(this.grey);
+      this.translateService.get('statistic.abstentions').subscribe(label => {
+        this.labels.push(label);
+      });
+    }
+    if (this.chart) {
+      this.chart.data.datasets[0].data = this.data;
+      this.chart.update();
+    } else {
+      /* Wait for flip animation */
+      setTimeout(() => {
+        this.createChart(this.colors);
+      }, 300);
+    }
+    this.isLoading = false;
+    if (this.directShow) {
+      this.toggleChart(true);
+    }
   }
 }
