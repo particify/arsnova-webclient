@@ -20,16 +20,6 @@ export class WsCommentServiceService {
   constructor(private wsConnector: WsConnectorService) {
   }
 
-  highlight(comment: Comment) {
-    const message = new HighlightComment(comment.id, true);
-    this.wsConnector.send(`/queue/comment.command.highlight`, JSON.stringify(message));
-  }
-
-  lowlight(comment: Comment) {
-    const message = new HighlightComment(comment.id, false);
-    this.wsConnector.send(`/queue/comment.command.highlight`, JSON.stringify(message));
-  }
-
   getCommentStream(roomId: string): Observable<IMessage> {
     return this.wsConnector.getWatcher(`/topic/${roomId}.comment.stream`);
   }

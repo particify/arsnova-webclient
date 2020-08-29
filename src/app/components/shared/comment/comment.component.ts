@@ -193,7 +193,7 @@ export class CommentComponent implements OnInit {
 
   openPresentDialog(comment: Comment): void {
     if (this.isCreator) {
-      this.wsCommentService.highlight(comment);
+      this.commentService.highlight(comment).subscribe();
       if (!comment.read) {
         this.setRead(comment);
       }
@@ -201,7 +201,7 @@ export class CommentComponent implements OnInit {
     const dialogRef = this.dialogService.openCommentPresentationDialog(comment.body);
     dialogRef.afterClosed()
       .subscribe(result => {
-        this.wsCommentService.lowlight(comment);
+        this.commentService.lowlight(comment).subscribe();
       });
   }
 }
