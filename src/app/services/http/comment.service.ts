@@ -16,7 +16,10 @@ export class CommentService extends BaseHttpService {
     base: '/api',
     comment: '/comment',
     find: '/find',
-    count: '/count'
+    count: '/count',
+    command: '/_command',
+    highlight: '/highlight',
+    lowlight: '/lowlight'
   };
 
   constructor(private http: HttpClient) {
@@ -150,6 +153,18 @@ export class CommentService extends BaseHttpService {
   private patchComment(comment: Comment, changes: TSMap<string, any>): void {
     const connectionUrl = this.apiUrl.base + '/' + comment.roomId + this.apiUrl.comment + '/' + comment.id;
     this.http.patch(connectionUrl, changes, httpOptions).subscribe();
+  }
+
+  highlight(comment: Comment): Observable<void> {
+    const connectionUrl = this.apiUrl.base + '/' + comment.roomId + this.apiUrl.comment + '/' + comment.id +
+        this.apiUrl.command + this.apiUrl.highlight;
+    return this.http.post<void>(connectionUrl, {}, httpOptions);
+  }
+
+  lowlight(comment: Comment): Observable<void> {
+    const connectionUrl = this.apiUrl.base + '/' + comment.roomId + this.apiUrl.comment + '/' + comment.id +
+        this.apiUrl.command + this.apiUrl.lowlight;
+    return this.http.post<void>(connectionUrl, {}, httpOptions);
   }
 
 }
