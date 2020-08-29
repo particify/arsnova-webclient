@@ -3,6 +3,7 @@ import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/r
 import { Observable } from 'rxjs';
 import { Room } from '../models/room';
 import { RoomService } from '../services/http/room.service';
+import { tap } from 'rxjs/operators';
 
 @Injectable()
 export class RoomResolver implements Resolve<Room> {
@@ -13,6 +14,8 @@ export class RoomResolver implements Resolve<Room> {
   }
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<Room> {
-    return this.roomService.getRoomByShortId(route.params['shortId']);
+    return this.roomService.getRoomByShortId(route.params['shortId']).pipe(
+        tap(room => this.roomService.joinRoom(room))
+    );
   }
 }

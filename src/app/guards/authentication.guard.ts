@@ -25,6 +25,9 @@ export class AuthenticationGuard implements CanActivate {
 
   canActivate(route: ActivatedRouteSnapshot,
               state: RouterStateSnapshot): Observable<boolean> {
+    if (!route.params.shortId) {
+      this.roomService.leaveCurrentRoom();
+    }
     // Get roles having access to this route
     // undefined if every logged in user should have access regardless of its role
     const viewRole = route.data['requiredRole'] as UserRole;
