@@ -7,6 +7,8 @@ import { BaseHttpService } from './base-http.service';
 import { AnswerStatistics } from '../../models/answer-statistics';
 import { ContentChoice } from '../../models/content-choice';
 import { TSMap } from 'typescript-map';
+import { WsConnectorService } from '../websockets/ws-connector.service';
+import { IMessage } from '@stomp/stompjs';
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -21,8 +23,12 @@ export class ContentService extends BaseHttpService {
     answer: '/answer'
   };
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private ws: WsConnectorService) {
     super();
+  }
+
+  getAnswersChangedStream(roomId: string, contentId: string): Observable<IMessage> {
+    return this.ws.getWatcher(`/topic/${roomId}.content-${contentId}.answers-changed.stream`);
   }
 
   getContents(roomId: string): Observable<Content[]> {
