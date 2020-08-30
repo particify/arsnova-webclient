@@ -136,7 +136,8 @@ export class StatisticChoiceComponent implements OnInit, OnDestroy {
   }
 
   toggleCorrect() {
-    this.colorLabel ? this.createChart(this.colors) : this.createChart(this.indicationColors);
+    this.chart.config.data.datasets[0].backgroundColor = this.colorLabel ? this.colors : this.indicationColors;
+    this.chart.update();
     this.colorLabel = !this.colorLabel;
   }
 
