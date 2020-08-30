@@ -17,7 +17,7 @@
 <div>
   <app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
   <div class="chart-container" *ngIf="!data.every(noAnswers)" [ngClass]="{ 'invisible': !chartVisible }">
-    <canvas id="chart"></canvas>
+    <canvas id="{{ chartId }}"></canvas>
   </div>
 </div>
 <mat-list *ngIf="!isLoading" role="list">
