@@ -34,6 +34,7 @@ export class StatisticChoiceComponent implements OnInit, OnDestroy {
   destroyed$ = new Subject();
   chart: Chart;
   chartId: string;
+  chartInitialized = false;
   colors: string[] = [];
   indicationColors: string[] = [];
   label = 'ABCDEFGH';
@@ -61,9 +62,12 @@ export class StatisticChoiceComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.chartId = 'chart-' + this.content.id;
     this.checkIfSurvey(this.content);
-    this.initChart();
     this.loadData().subscribe(stats => {
-      this.updateChart(stats);
+      this.updateData(stats);
+      if (this.directShow) {
+        this.toggleChart(true);
+      }
+      this.isLoading = false;
     });
   }
 
@@ -118,6 +122,10 @@ export class StatisticChoiceComponent implements OnInit, OnDestroy {
   toggleChart(visible?: boolean) {
     this.colorLabel = false;
     this.chartVisible = visible ?? !this.chartVisible;
+    if (this.chartVisible && !this.chartInitialized) {
+      this.initChart();
+      this.updateChart();
+    }
   }
 
   toggleCorrect() {
@@ -171,17 +179,21 @@ export class StatisticChoiceComponent implements OnInit, OnDestroy {
         });
       }
     });
+    this.chartInitialized = true;
   }
 
   loadData() {
     return this.contentService.getAnswer(this.content.id);
   }
 
-  updateChart(stats: AnswerStatistics) {
+  updateData(stats: AnswerStatistics) {
     this.data = stats.roundStatistics[0].independentCounts;
     if (this.content.abstentionsAllowed) {
       this.data.push(stats.roundStatistics[0].abstentionCount);
     }
+  }
+
+  updateChart() {
     if (this.chart) {
       this.chart.data.datasets[0].data = this.data;
       this.chart.update();
@@ -190,10 +202,6 @@ export class StatisticChoiceComponent implements OnInit, OnDestroy {
       setTimeout(() => {
         this.createChart(this.colors);
       }, 300);
-    }
-    this.isLoading = false;
-    if (this.directShow) {
-      this.toggleChart(true);
     }
   }
 }
