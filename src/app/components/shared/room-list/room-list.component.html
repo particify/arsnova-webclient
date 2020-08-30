@@ -21,8 +21,9 @@
                         {room: room.summary.name, id: room.summary.shortId, role: roles[room.membership.primaryRole]} }}"
                  (click)="setCurrentRoom(room.summary.shortId, room.membership.primaryRole)"
             (keyup.enter)="setCurrentRoom(room.summary.shortId, room.membership.primaryRole)">
-              <p matBadge="{{ room.summary.stats.ackCommentCount > 0 && deviceType === 'desktop' ? room.summary.stats.ackCommentCount : null }}"
-                 matBadgeOverlap="false">{{room.summary.name}}</p>
+              <p class="room-name" matBadgeOverlap="false"
+                 matBadge="{{ room.summary.stats.ackCommentCount > 0 ? room.summary.stats.ackCommentCount : null }}">
+                {{room.summary.name}}</p>
               <span class="fill-remaining-space" (click)="setCurrentRoom(room.summary.shortId, room.membership.primaryRole)"></span>
               <p class="short-id">{{room.summary.shortId}}</p>
               <mat-icon mat-list-icon *ngSwitchCase="creatorRole"

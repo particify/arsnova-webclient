@@ -39,12 +39,12 @@ p {
   align-items: center;
 }
 
-.mat-badge-medium.mat-badge-after .mat-badge-content {
-  right: -30px;
+.room-name {
+  word-break: break-all;
 }
 
 .short-id {
-  margin-right: 15px;
+  margin: 0 1em;
 }
 
 .delete {
