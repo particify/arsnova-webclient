@@ -377,7 +377,8 @@
   },
   "room": {
     "room-name": "Name des Raums",
-    "preview": "Vorschau"
+    "preview": "Vorschau",
+    "sidebar-user-counter": "Anzahl der teilnehmenden Personen"
   },
   "statistic": {
     "a11y-message-overview": "Du befindest dich jetzt auf der Statistikübersicht. Drücke jetzt die Enter-Taste um Informationen über Tastenkombinationen zu erhalten oder rufe die Ansage zu einem späteren Zeitpunkt mit der Escape-Taste auf.",

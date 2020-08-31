@@ -38,6 +38,7 @@ import { CommentExportComponent } from './_dialogs/comment-export/comment-export
 import { RoomNotFoundComponent } from './room-not-found/room-not-found.component';
 import { StepperComponent } from './stepper/stepper.component';
 import { CdkStepperModule } from '@angular/cdk/stepper';
+import { SidebarComponent } from './sidebar/sidebar.component';
 
 @NgModule({
     imports: [
@@ -82,7 +83,8 @@ import { CdkStepperModule } from '@angular/cdk/stepper';
     CommentExportComponent,
     RoomNotFoundComponent,
     DateFromNow,
-    StepperComponent
+    StepperComponent,
+    SidebarComponent
   ],
   exports: [
     RoomJoinComponent,
@@ -106,7 +108,8 @@ import { CdkStepperModule } from '@angular/cdk/stepper';
     RoomNotFoundComponent,
     StepperComponent,
     StatisticChoiceComponent,
-    StatisticTextComponent
+    StatisticTextComponent,
+    SidebarComponent
   ]
 })
 export class SharedModule {

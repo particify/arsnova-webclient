@@ -8,12 +8,14 @@ import { TranslateService } from '@ngx-translate/core';
 import { LanguageService } from '../../../services/util/language.service';
 import { WsCommentServiceService } from '../../../services/websockets/ws-comment-service.service';
 import { CommentService } from '../../../services/http/comment.service';
-import { ContentService } from '../../../services/http/content.service';import { NotificationService } from '../../../services/util/notification.service';
+import { ContentService } from '../../../services/http/content.service';
+import { NotificationService } from '../../../services/util/notification.service';
 import { EventService } from '../../../services/util/event.service';
 import { KeyboardUtils } from '../../../utils/keyboard';
 import { KeyboardKey } from '../../../utils/keyboard/keys';
 import { GlobalStorageService, STORAGE_KEYS } from '../../../services/util/global-storage.service';
 import { AnnounceService } from '../../../services/util/announce.service';
+import { SidebarInfo } from '../../shared/sidebar/sidebar.component';
 
 @Component({
   selector: 'app-room-moderator-page',
@@ -93,13 +95,16 @@ export class RoomModeratorPageComponent extends RoomPageComponent implements OnI
 
   initializeRoom(room: Room): void {
     this.room = room;
-    this.isLoading = false;
     if (this.room.extensions && this.room.extensions['comments']) {
       if (this.room.extensions['comments'].enableModeration !== null) {
         this.moderationEnabled = this.room.extensions['comments'].enableModeration;
         this.viewModuleCount = this.viewModuleCount + 1;
       }
     }
+    this.roomService.getRoomSummaries([room.id]).subscribe(summary => {
+      this.sidebarInfos.push(new SidebarInfo(summary[0].stats.roomUserCount, 'people', 'user-counter'));
+      this.isLoading = false;
+    });
     this.subscribeCommentStream();
     if (this.moderationEnabled) {
       this.subscribeCommentModeratorStream();

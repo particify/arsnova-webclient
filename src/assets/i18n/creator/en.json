@@ -377,7 +377,8 @@
   },
   "room": {
     "room-name": "Room name",
-    "preview": "Preview"
+    "preview": "Preview",
+    "sidebar-user-counter": "Number of active participants"
   },
   "statistic": {
     "a11y-message-overview": "You are now on the statistics overview. Press the Enter key to get information about key combinations or call the announcement later with the Escape key.",

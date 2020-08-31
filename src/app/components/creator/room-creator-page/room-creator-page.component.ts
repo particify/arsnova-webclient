@@ -17,6 +17,7 @@ import { DialogService } from '../../../services/util/dialog.service';
 import { GlobalStorageService, STORAGE_KEYS } from '../../../services/util/global-storage.service';
 import { Content } from '../../../models/content';
 import { AnnounceService } from '../../../services/util/announce.service';
+import { SidebarInfo } from '../../shared/sidebar/sidebar.component';
 
 @Component({
   selector: 'app-room-creator-page',
@@ -97,7 +98,12 @@ export class RoomCreatorPageComponent extends RoomPageComponent implements OnIni
     this.translateService.use(this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE));
     this.route.data.subscribe(data => {
       this.initializeRoom(data.room);
+      this.roomService.getRoomSummaries([data.room.id]).subscribe(summary => {
+        this.sidebarInfos.push(new SidebarInfo(summary[0].stats.roomUserCount, 'people', 'user-counter'));
+      });
     });
+    this.roomWatch = this.roomService.getCurrentRoomsMessageStream();
+    this.roomSub = this.roomWatch.subscribe(msg => this.parseUserCount(msg.body));
   }
 
   protected unsubscribe() {
