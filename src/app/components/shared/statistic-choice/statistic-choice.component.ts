@@ -34,7 +34,6 @@ export class StatisticChoiceComponent implements OnInit, OnDestroy {
   destroyed$ = new Subject();
   chart: Chart;
   chartId: string;
-  chartInitialized = false;
   colors: string[] = [];
   indicationColors: string[] = [];
   label = 'ABCDEFGH';
@@ -62,6 +61,7 @@ export class StatisticChoiceComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.chartId = 'chart-' + this.content.id;
     this.checkIfSurvey(this.content);
+    this.initChart();
     this.loadData().subscribe(stats => {
       this.updateData(stats);
       if (this.directShow) {
@@ -129,8 +129,7 @@ export class StatisticChoiceComponent implements OnInit, OnDestroy {
   toggleChart(visible?: boolean) {
     this.colorLabel = false;
     this.chartVisible = visible ?? !this.chartVisible;
-    if (this.chartVisible && !this.chartInitialized) {
-      this.initChart();
+    if (this.chartVisible) {
       this.updateChart();
     }
   }
@@ -187,7 +186,6 @@ export class StatisticChoiceComponent implements OnInit, OnDestroy {
         });
       }
     });
-    this.chartInitialized = true;
   }
 
   loadData() {
