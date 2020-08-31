@@ -17,6 +17,10 @@
   background-color: var(--table-a);
 }
 
+.mat-expansion-panel:not(.mat-expanded) .mat-expansion-panel-header:hover {
+  background: var(--table-a);
+}
+
 .matPanel {
   background-color: var(--table-a);
   margin-bottom: 5px;
@@ -24,7 +28,7 @@
 }
 
 .panelTitle {
-  color: var(----on-surface);
+  color: var(--on-surface);
 }
 
 .actionButton {
