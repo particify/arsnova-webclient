@@ -18,24 +18,24 @@
         </div>
         <span class="fill-remaining-space"></span>
         <div fxLayout="column">
-          <div>
+          <div fxLayout="column">
             <button *ngIf="!isInTitleEditMode" mat-icon-button (click)="goInTitleEditMode()" id="edit-group-name"
                     matTooltip="{{ 'content.edit-content-group' | translate}}" aria-labelledby="edit-content-group-name">
-              <mat-icon>edit</mat-icon>
+              <mat-icon class="corner-icon icon-secondary">edit</mat-icon>
             </button>
-            <button *ngIf="isInTitleEditMode" mat-icon-button class="editButtons" (click)="leaveTitleEditMode()"
-                    matTooltip="{{ 'content.abort' | translate}}" (keyup.enter)="leaveTitleEditMode()" aria-labelledby="discard-changes">
-              <mat-icon>clear</mat-icon>
-            </button>
-            <button *ngIf="isInTitleEditMode" mat-icon-button class="editButtons" (keyup.enter)="saveGroupName()" (click)="saveGroupName()"
+            <button *ngIf="isInTitleEditMode" mat-icon-button (keyup.enter)="saveGroupName()" (click)="saveGroupName()"
                     matTooltip="{{ 'content.save-content-group' | translate}}" aria-labelledby="save-changes">
-              <mat-icon>done</mat-icon>
+              <mat-icon class="corner-icon">done</mat-icon>
+            </button>
+            <button *ngIf="isInTitleEditMode" mat-icon-button (click)="leaveTitleEditMode()"
+                      matTooltip="{{ 'content.abort' | translate}}" (keyup.enter)="leaveTitleEditMode()" aria-labelledby="discard-changes">
+              <mat-icon class="corner-icon">clear</mat-icon>
             </button>
           </div>
           <button *ngIf="!isInTitleEditMode" mat-icon-button id="statistic-button" aria-labelledby="statistics"
                   matTooltip="{{ 'room-page.answer-statistics' | translate}}"
                   routerLink="/creator/room/{{ room.shortId }}/statistics">
-            <mat-icon>insert_chart</mat-icon>
+            <mat-icon class="corner-icon icon-secondary">insert_chart</mat-icon>
           </button>
         </div>
       </div>
