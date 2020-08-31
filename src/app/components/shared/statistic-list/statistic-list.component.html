@@ -1,5 +1,4 @@
-<mat-toolbar></mat-toolbar>
-<div fxLayout="row" fxLayoutAlign="center center" *ngIf="!isLoading && total >= status.zero">
+<div fxLayout="row" fxLayoutAlign="center center" *ngIf="!isLoading && total >= status.zero" class="progress-container">
   <div tabindex="0" class="visually-hidden">{{ 'statistic.a11y-group-progress' | translate:
     { group: contentGroup.name, percent: total} }}</div>
   <mat-progress-bar mode="determinate" value="{{total}}" [ngClass]="{'statistic-status-good': total >= status.good,
@@ -12,12 +11,7 @@
   </button>
   <span class="fill-remaining-space"></span>
 </div>
-<mat-toolbar *ngIf="!isLoading && total >= status.zero"></mat-toolbar>
-
-<button mat-raised-button class="button-primary" (click)="showDeleteAnswerDialog()"
-        aria-labelledby="delete-answers">
-  {{ 'content.delete-answers' | translate }}
-</button>
+<mat-toolbar *ngIf="!isLoading && total < status.zero"></mat-toolbar>
 
 <table mat-table *ngIf="!isLoading  && dataSource.length > 0" [dataSource]="dataSource" class="mat-elevation-z8">
 
@@ -57,7 +51,3 @@
 <h3 *ngIf="!isLoading && this.dataSource.length === 0">{{ 'statistic.no-contents' | translate }}</h3>
 
 <app-loading-indicator *ngIf="isLoading" [size]="50"></app-loading-indicator>
-
-<div class="visually-hidden">
-  <div id="delete-answers">{{ 'content.a11y-delete-all-answers' | translate }}</div>
-</div>
