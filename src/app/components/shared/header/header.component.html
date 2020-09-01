@@ -22,25 +22,33 @@
 
     <mat-menu #userMenu="matMenu" [overlapTrigger]="false">
       <button mat-menu-item *ngIf="auth" routerLink="/user" tabindex="0">
-        <mat-icon class="rooms">people</mat-icon>
+        <mat-icon class="rooms">home</mat-icon>
         <span *ngIf="!isGuest">{{'header.my-rooms' | translate}}</span>
         <span *ngIf="isGuest">{{'header.visited-rooms' | translate}}</span>
+      </button>
+      <button mat-menu-item (click)="navToHelp()" tabindex="0">
+        <mat-icon class="less-important">help</mat-icon>
+        <span>{{'header.help' | translate}}</span>
+      </button>
+      <button mat-menu-item aria-labelledby="style-label" [matMenuTriggerFor]="themeMenu">
+        <mat-icon class="less-important">palette</mat-icon>
+        <span>{{'header.style' | translate}}</span>
+      </button>
+      <button id="language-menu" mat-menu-item aria-labelledby="language-label" [matMenuTriggerFor]="langMenu">
+        <mat-icon class="less-important">language</mat-icon>
+        <span>{{'header.language' | translate}}</span>
       </button>
       <!-- <button mat-menu-item *ngIf="auth" (click)="openUserBonusTokenDialog()" tabindex="0">
         <mat-icon class="bonus">grade</mat-icon>
         <span>{{'header.user-bonus-token' | translate}}</span>
       </button> -->
-      <button mat-menu-item *ngIf="auth && !isGuest" (click)="openDeleteUserDialog()" tabindex="0">
-        <mat-icon class="delete">delete</mat-icon>
-        <span>{{'header.delete-account' | translate}}</span>
-      </button>
-      <button mat-menu-item *ngIf="router.url !== '/home'" routerLink="/home" tabindex="0">
-        <mat-icon>home</mat-icon>
-        <span>{{'header.go-to-home' | translate}}</span>
-      </button>
       <button mat-menu-item *ngIf="isAdmin" routerLink="/admin" tabindex="0">
         <mat-icon>build</mat-icon>
         <span>{{'header.admin-area' | translate}}</span>
+      </button>
+      <button mat-menu-item *ngIf="auth && !isGuest" (click)="openDeleteUserDialog()" tabindex="0">
+        <mat-icon class="delete">delete</mat-icon>
+        <span>{{'header.delete-account' | translate}}</span>
       </button>
       <button *ngIf="auth && !isGuest" mat-menu-item (click)="logout()" tabindex="0">
         <mat-icon class="delete">exit_to_app</mat-icon>
@@ -50,6 +58,30 @@
         <mat-icon class="login">exit_to_app</mat-icon>
         <span>{{ 'header.login' | translate }}</span>
       </button>
+    </mat-menu>
+
+    <mat-menu class="wider-panel" #themeMenu="matMenu" xPosition="before" [overlapTrigger]="false">
+      <button mat-menu-item *ngFor="let theme of themes" (click)="changeTheme(theme)"
+              title="{{theme.toString(getLanguage())}}">
+        <div fxLayout="row">
+          <mat-icon class="color" [ngStyle]="{'color':theme.getPreviewColor()}">lens</mat-icon>
+          <mat-icon class="checked" *ngIf="theme.key === themeClass" [ngStyle]="{'color':theme.getOnPreviewColor()}">
+            checked
+          </mat-icon>
+          <div fxLayout="column" fxLayoutAlign="center">
+            <span class="item-title color-title">{{theme.getName(getLanguage())}}</span>
+            <span class="color-description"
+                  *ngIf="deviceWidth > 600">{{theme.getDescription(getLanguage())}}</span>
+          </div>
+        </div>
+      </button>
+    </mat-menu>
+
+    <mat-menu #langMenu="matMenu" [dir]="" xPosition="before" [overlapTrigger]="false">
+      <button class="item-title lang-title" mat-menu-item (click)="useLanguage('de')">
+        {{ 'header.german' | translate }}</button>
+      <button class="item-title lang-title" mat-menu-item (click)="useLanguage('en')">
+        {{ 'header.english' | translate }}</button>
     </mat-menu>
 
     <button mat-button *ngIf="auth" [matMenuTriggerFor]="userMenu" aria-labelledby="room-label" id="room-button">
@@ -71,4 +103,8 @@
   <div id="login-label">{{'header.a11y-login' | translate}}</div>
   <div id="back-label">{{'header.a11y-back' | translate}}</div>
   <div id="room-label">{{'header.a11y-room' | translate}}</div>
+  <div id="help-label">{{'header.a11y-help' | translate}}</div>
+  <div id="demo-label">{{'header.a11y-demo' | translate}}</div>
+  <div id="style-label">{{'header.a11y-style' | translate}}</div>
+  <div id="language-label">{{'header.a11y-language' | translate}}</div>
 </div>
