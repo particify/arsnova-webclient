@@ -5,7 +5,7 @@ export class RoomSummaryState {
 }
 
 export class RoomSummaryStats {
-  currentlyOnlineCount: number;
+  roomUserCount: number;
   contentCount: number;
   ackCommentCount: number;
 }

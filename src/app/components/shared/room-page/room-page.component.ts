@@ -14,6 +14,7 @@ import { ContentService } from '../../../services/http/content.service';
 import { TranslateService } from '@ngx-translate/core';
 import { AdvancedSnackBarTypes, NotificationService } from '../../../services/util/notification.service';
 import { GlobalStorageService, STORAGE_KEYS } from '../../../services/util/global-storage.service';
+import { SidebarInfo } from '../sidebar/sidebar.component';
 
 @Component({
   selector: 'app-room-page',
@@ -32,11 +33,14 @@ export class RoomPageComponent implements OnInit, OnDestroy {
   commentCounter: number;
   protected moderationEnabled = false;
   protected sub: Subscription;
+  protected roomSub: Subscription;
+  protected roomWatch: Observable<IMessage>;
   protected commentWatch: Observable<IMessage>;
   protected noGroups = true;
   moderationCommentWatch: Observable<IMessage>;
   moderationSub: Subscription;
   moderatorCommentCounter: number;
+  sidebarInfos: SidebarInfo[] = [];
 
   constructor(
     protected roomService: RoomService,
@@ -64,6 +68,9 @@ export class RoomPageComponent implements OnInit, OnDestroy {
     if (this.sub) {
       this.sub.unsubscribe();
     }
+    if (this.roomSub) {
+      this.roomSub.unsubscribe();
+    }
     this.unsubscribe();
   }
 
@@ -77,6 +84,10 @@ export class RoomPageComponent implements OnInit, OnDestroy {
 
   protected afterGroupsLoadHook() {
 
+  }
+
+  parseUserCount(body: string) {
+    this.sidebarInfos[0].count = JSON.parse(body).UserCountChanged.userCount;
   }
 
   subscribeCommentStream() {

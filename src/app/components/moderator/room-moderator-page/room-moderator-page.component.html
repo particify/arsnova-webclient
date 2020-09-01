@@ -1,9 +1,10 @@
+<app-sidebar *ngIf="!isLoading" [sidebarInfos]="sidebarInfos"></app-sidebar>
 <div fxLayout="column" fxLayoutAlign="center" fxLayoutGap="20px" fxFill>
   <div fxLayout="row" fxLayoutAlign="center">
     <button id="live_announcer-button" tabIndex="-1" (click)="announce()"
             class="visually-hidden">{{ 'room-page.a11y-moderator-message' | translate: {room: room.name} }}</button>
     <app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
-    <mat-card *ngIf="room">
+    <mat-card *ngIf="!isLoading && room">
       <div fxLayout="row">
         <span class="fill-remaining-space"></span>
         <mat-card-header fxLayoutAlign="center">

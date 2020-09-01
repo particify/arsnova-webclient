@@ -8,7 +8,6 @@ import { ContentTextCreationComponent } from './content-creation/content-text-cr
 import { ContentYesNoCreationComponent } from './content-creation/content-yes-no-creation/content-yes-no-creation.component';
 import { RoomCreatorPageComponent } from './room-creator-page/room-creator-page.component';
 import { EssentialsModule } from '../essentials/essentials.module';
-import { ModeratorModule } from '../moderator/moderator.module';
 import { RoomComponent } from './settings/room/room.component';
 import { SharedModule } from '../shared/shared.module';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
@@ -39,7 +38,6 @@ import { PreviewComponent } from './content-creation/preview/preview.component';
     CreatorRoutingModule,
     EssentialsModule,
     SharedModule,
-    ModeratorModule,
     DragDropModule,
     TranslateModule.forChild({
       loader: {

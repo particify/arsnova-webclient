@@ -4,13 +4,15 @@ import { RoomStats } from '../../models/room-stats';
 import { ContentGroup } from '../../models/content-group';
 import { RoomSummary } from '../../models/room-summary';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 import { AuthenticationService } from './authentication.service';
 import { BaseHttpService } from './base-http.service';
 import { EventService } from '../util/event.service';
 import { TSMap } from 'typescript-map';
 import { GlobalStorageService, STORAGE_KEYS } from '../util/global-storage.service';
+import { WsConnectorService } from '../websockets/ws-connector.service';
+import { IMessage } from '@stomp/stompjs';
 
 const httpOptions = {
   headers: new HttpHeaders({})
@@ -29,14 +31,53 @@ export class RoomService extends BaseHttpService {
     summary: '/_view/room/summary',
   };
   private joinDate = new Date(Date.now());
+  private currentRoom: Room;
+  private messageStream$: Observable<IMessage>;
+  private messageStreamSubscription: Subscription;
 
   constructor(
     private http: HttpClient,
+    private ws: WsConnectorService,
     private eventService: EventService,
     private authService: AuthenticationService,
     private globalStorageService: GlobalStorageService
   ) {
     super();
+  }
+
+  /**
+   * Joins a room or leave the current one. This sets up the subscription to
+   * room events.
+   *
+   * @param room The room to join or null to leave the current room.
+   */
+  joinRoom(room?: Room) {
+    if (room && room?.id === this.currentRoom?.id) {
+      return;
+    }
+    this.currentRoom = room;
+    if (this.messageStreamSubscription) {
+      this.messageStreamSubscription.unsubscribe();
+      this.messageStream$ = null;
+    }
+    if (!room) {
+      return;
+    }
+    this.messageStream$ = this.ws.getWatcher(`/topic/${room.id}.stream`);
+    /* Make sure that at least one subscription is active even if we don't care
+     * for event messages here. */
+    this.messageStreamSubscription = this.messageStream$.subscribe();
+  }
+
+  /**
+   * Leaves the current room and unsubscribes from room events.
+   */
+  leaveCurrentRoom() {
+    this.joinRoom();
+  }
+
+  getCurrentRoomsMessageStream(): Observable<IMessage> {
+    return this.messageStream$;
   }
 
   getCreatorRooms(userId: string): Observable<Room[]> {

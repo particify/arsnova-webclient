@@ -10,23 +10,25 @@ import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { HttpClient } from '@angular/common/http';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { MarkdownModule } from 'ngx-markdown';
+import { CreatorModule } from '../creator/creator.module';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    ModeratorRoutingModule,
-    EssentialsModule,
-    SharedModule,
-    TranslateModule.forChild({
-      loader: {
-        provide: TranslateLoader,
-        useFactory: (HttpLoaderFactory),
-        deps: [HttpClient]
-      },
-      isolate: true
-    }),
-    MarkdownModule
-  ],
+    imports: [
+        CommonModule,
+        ModeratorRoutingModule,
+        EssentialsModule,
+        SharedModule,
+        TranslateModule.forChild({
+            loader: {
+                provide: TranslateLoader,
+                useFactory: (HttpLoaderFactory),
+                deps: [HttpClient]
+            },
+            isolate: true
+        }),
+        MarkdownModule,
+        CreatorModule
+    ],
   declarations: [
     RoomModeratorPageComponent,
     ModeratorCommentListComponent,
