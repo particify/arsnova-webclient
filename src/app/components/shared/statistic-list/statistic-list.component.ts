@@ -79,14 +79,19 @@ export class StatisticListComponent implements OnInit {
       this.roomId = params['shortId'];
     });
     this.translateService.use(this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE));
-    this.contentService.getContentsByIds(this.contentGroup.contentIds).subscribe(contents => {
-      this.getData(contents);
-    });
+    this.getContents();
     if (this.deviceType === 'desktop') {
       this.displayedColumns = ['content', 'counts', 'abstentions', 'percentage'];
     } else {
       this.displayedColumns = ['content', 'counts', 'percentage'];
     }
+  }
+
+  public getContents() {
+    this.isLoading = true;
+    this.contentService.getContentsByIds(this.contentGroup.contentIds).subscribe(contents => {
+      this.getData(contents);
+    });
   }
 
   goToStats(id: string) {
@@ -237,7 +242,7 @@ export class StatisticListComponent implements OnInit {
     return res;
   }
 
-  showDeleteAnswerDialog(): void {
+  public showDeleteAnswerDialog(): void {
     const dialogRef = this.dialogService.openDeleteDialog('really-delete-all-answers');
     dialogRef.afterClosed().subscribe(result => {
       if (result === 'delete') {

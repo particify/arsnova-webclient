@@ -404,7 +404,8 @@
     "answer-indicator": "Shows the correct answers",
     "show-chart": "Shows statistics with a chart",
     "hide-chart": "Hide chart",
-    "no-contents": "There are no questions."
+    "no-contents": "There are no questions.",
+    "select-content-group": "Select collection"
   },
   "dialog": {
     "sure": "Are you sure?",

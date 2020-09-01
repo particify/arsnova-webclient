@@ -3,10 +3,10 @@ import { ActivatedRoute } from '@angular/router';
 import { RoomService } from '../../../services/http/room.service';
 import { ContentGroup } from '../../../models/content-group';
 import { Room } from '../../../models/room';
-import { MatTabGroup } from '@angular/material/tabs';
 import { TranslateService } from '@ngx-translate/core';
 import { GlobalStorageService, STORAGE_KEYS } from '../../../services/util/global-storage.service';
 import { AnnounceService } from '../../../services/util/announce.service';
+import { StatisticListComponent } from '../statistic-list/statistic-list.component';
 
 
 @Component({
@@ -20,9 +20,9 @@ export class StatisticsPageComponent implements OnInit {
   room: Room;
   contentGroups: ContentGroup[] = [];
   isLoading = true;
-  lastGroup: string;
+  currentGroup: ContentGroup;
 
-  @ViewChild(MatTabGroup) tabGroup: MatTabGroup;
+  @ViewChild(StatisticListComponent) statisticList: StatisticListComponent;
 
   constructor(private route: ActivatedRoute,
               private roomService: RoomService,
@@ -33,7 +33,6 @@ export class StatisticsPageComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.lastGroup = this.globalStorageService.getItem(STORAGE_KEYS.LAST_GROUP);
     this.route.data.subscribe(data => {
       this.getContentGroups(data.room.id);
     });
@@ -41,19 +40,13 @@ export class StatisticsPageComponent implements OnInit {
 
   getContentGroups(id: string): void {
     this.roomService.getStats(id).subscribe(roomStats => {
-      let lastGroupIndex = 0;
       const contentGroupsLength = roomStats.groupStats.length;
       for (let i = 0; i < contentGroupsLength; i++) {
         this.roomService.getGroupByRoomIdAndName(id, roomStats.groupStats[i].groupName).subscribe(group => {
           this.contentGroups.push(group);
-          if (this.lastGroup && this.lastGroup === group.name) {
-            lastGroupIndex = i;
-          }
           if (i === contentGroupsLength - 1) {
+            this.initCurrentGroup();
             this.isLoading = false;
-            setTimeout(() => {
-              this.tabGroup.selectedIndex = lastGroupIndex;
-            }, 100);
           }
         });
       }
@@ -61,6 +54,31 @@ export class StatisticsPageComponent implements OnInit {
         document.getElementById('message-button').focus();
       }, 700);
     });
+  }
+
+  initCurrentGroup() {
+    const lastGroup = this.globalStorageService.getItem(STORAGE_KEYS.LAST_GROUP);
+    if (lastGroup) {
+      this.setCurrentGroupByName(lastGroup);
+    } else {
+      this.currentGroup = this.contentGroups[0];
+    }
+  }
+
+  setCurrentGroupByName(name: string) {
+    this.currentGroup = this.contentGroups.find(cg => cg.name === name);
+  }
+
+  updateCollection() {
+    if (this.statisticList.contentGroup !== this.currentGroup) {
+      this.statisticList.contentGroup = this.currentGroup;
+      this.statisticList.total = this.statisticList.status.empty;
+      this.statisticList.getContents();
+    }
+  }
+
+  showDeleteDialog() {
+    this.statisticList.showDeleteAnswerDialog();
   }
 
   announce() {

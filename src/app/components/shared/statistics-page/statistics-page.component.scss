@@ -2,7 +2,15 @@
   width: 100%;
 }
 
-.mat-tab-group {
-  width: calc(92vw - 32px);
-  max-width: 800px;
+.mat-stroked-button {
+  width: 150px;
+  // height of form field ..
+  height: 59px;
+  color: var(--warn);
+}
+
+@media(max-width: 420px) {
+  .mat-stroked-button {
+    margin-top: 1em;
+  }
 }
