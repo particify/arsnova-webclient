@@ -64,10 +64,10 @@ export class StatisticChoiceComponent implements OnInit, OnDestroy {
     this.initChart();
     this.loadData().subscribe(stats => {
       this.updateData(stats);
+      this.isLoading = false;
       if (this.directShow) {
         this.toggleChart(true);
       }
-      this.isLoading = false;
     });
     this.contentService.getAnswersChangedStream(this.content.roomId, this.content.id).pipe(
         takeUntil(this.destroyed$)
