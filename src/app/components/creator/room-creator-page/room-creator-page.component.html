@@ -25,11 +25,11 @@
         <div fxLayout="column">
           <button tabindex="0" id="settings-button" mat-icon-button class="corner-buttons" aria-labelledby="settings"
                   routerLink="settings">
-            <mat-icon class="corner-icon" matTooltip="{{ 'room-page.room-settings' | translate}}">settings</mat-icon>
+            <mat-icon class="corner-icon icon-secondary" matTooltip="{{ 'room-page.room-settings' | translate}}">settings</mat-icon>
           </button>
           <button mat-icon-button class="corner-buttons" [ngClass]="{'disabled': noGroups}" id="statistics-button"
                   (click)="navToStats('creator')" aria-labelledby="statistics">
-            <mat-icon class="corner-icon" matTooltip="{{ 'room-page.answer-statistics' | translate}}">insert_chart
+            <mat-icon class="corner-icon icon-secondary" matTooltip="{{ 'room-page.answer-statistics' | translate}}">insert_chart
             </mat-icon>
           </button>
         </div>
