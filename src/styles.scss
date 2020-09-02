@@ -18,6 +18,10 @@ body {
   height: 100%;
 }
 
+[tabindex] {
+  outline: none;
+}
+
 // Scrollbar
 
 ::-webkit-scrollbar {
