@@ -14,58 +14,13 @@ footer {
   padding: 0;
 }
 
-.mat-button {
-  min-height: 28px;
+a {
   font-size: 12px;
-  color: var(--on-surface);
-  opacity: 0.8;
-}
-
-.mat-icon {
-  margin-right: 2%;
-}
-
-.color {
-  font-size: 45px;
-  width: 45px;
-  height: 45px;
-  position: relative;
-  margin-right: 12px;
-}
-
-.checked {
-  position: absolute;
-  left: 22px;
-  top: 15px;
-  font-size: 25px;
-  width: 25px;
-  height: 25px;
-}
-
-.mat-menu-item {
-  height: 50px;
-  padding: 5px 12px;
-}
-
-.item-title {
-  line-height: 100%;
-}
-
-.color-title {
-  height: 14px;
-  font-size: 14px;
-  color: var(--on-dialog);
   font-weight: $font-weight-bold;
-}
-
-.color-description {
-  height: 14px;
-  font-size: 14px;
-  line-height: 14px;
-  margin-top: 5px;
-  color: var(--on-dialog);
-}
-
-.lang-title {
-  text-align: center;
+  text-decoration: none;
+  color: var(--on-surface);
+  opacity: 0.6;
+  padding: 0.8em 0;
+  margin-right: 1em;
+  cursor: pointer;
 }

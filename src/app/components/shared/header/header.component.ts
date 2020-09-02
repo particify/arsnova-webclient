@@ -13,6 +13,10 @@ import { KeyboardKey } from '../../../utils/keyboard/keys';
 import { BonusTokenService } from '../../../services/http/bonus-token.service';
 import { DialogService } from '../../../services/util/dialog.service';
 import { GlobalStorageService, STORAGE_KEYS } from '../../../services/util/global-storage.service';
+import { Theme } from '../../../../theme/Theme';
+import { ThemeService } from '../../../../theme/theme.service';
+import { LanguageService } from '../../../services/util/language.service';
+import { ApiConfigService } from '../../../services/http/api-config.service';
 
 @Component({
   selector: 'app-header',
@@ -33,22 +37,30 @@ export class HeaderComponent implements OnInit {
   isParticipant = true;
   isCreator = false;
 
+  lang: string;
+  themeClass: String;
+  themes: Theme[];
+  deviceWidth = innerWidth;
+  helpUrl: string;
+
   constructor(
     public location: Location,
     private authenticationService: AuthenticationService,
     private notificationService: NotificationService,
     public router: Router,
     private translationService: TranslateService,
+    private langService: LanguageService,
     private userService: UserService,
     public eventService: EventService,
     private bonusTokenService: BonusTokenService,
     private _r: Renderer2,
     private dialogService: DialogService,
-    private globalStorageService: GlobalStorageService
+    private globalStorageService: GlobalStorageService,
+    private themeService: ThemeService,
+    private apiConfigService: ApiConfigService
   ) {
     this.deviceType = this.globalStorageService.getItem(STORAGE_KEYS.DEVICE_TYPE);
     this.isSafari = this.globalStorageService.getItem(STORAGE_KEYS.IS_SAFARI);
-
     // LocalStorage setup
     if (!this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE)) {
       const lang = this.translationService.getBrowserLang();
@@ -103,6 +115,14 @@ export class HeaderComponent implements OnInit {
       }
     });
     this.moderationEnabled = !!this.globalStorageService.getItem(STORAGE_KEYS.MODERATION_ENABLED);
+    this.themeService.getTheme().subscribe(theme => {
+      this.themeClass = theme;
+    });
+    this.themes = this.themeService.getThemes();
+    this.translationService.use(this.lang);
+    this.apiConfigService.getApiConfig$().subscribe(config => {
+      this.helpUrl = config.ui.links.help.url;
+    });
   }
 
   getTime(time: Date) {
@@ -153,6 +173,10 @@ export class HeaderComponent implements OnInit {
     this.router.navigate(['/']);
   }
 
+  navToHelp() {
+    window.open(this.helpUrl, '_blank');
+  }
+
   deleteAccount(id: string) {
     this.userService.delete(id).subscribe();
     this.authenticationService.logout();
@@ -171,6 +195,21 @@ export class HeaderComponent implements OnInit {
         this.deleteAccount(this.auth.userId);
       }
     });
+  }
+
+  useLanguage(language: string) {
+    this.translationService.use(language);
+    this.globalStorageService.setItem(STORAGE_KEYS.LANGUAGE, language);
+    this.langService.langEmitter.emit(language);
+  }
+
+  changeTheme(theme: Theme) {
+    this.themeClass = theme.key;
+    this.themeService.activate(theme.key);
+  }
+
+  getLanguage(): string {
+    return this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE);
   }
 
   /*
