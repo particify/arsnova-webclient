@@ -13,7 +13,7 @@
 </div>
 <mat-toolbar *ngIf="!isLoading && total < status.zero"></mat-toolbar>
 
-<table mat-table *ngIf="!isLoading  && dataSource.length > 0" [dataSource]="dataSource" class="mat-elevation-z8">
+<table mat-table *ngIf="!isLoading  && dataSource.length > 0" [dataSource]="dataSource">
 
   <ng-container matColumnDef="content">
     <mat-header-cell *matHeaderCellDef> {{'statistic.content' | translate}} </mat-header-cell>
