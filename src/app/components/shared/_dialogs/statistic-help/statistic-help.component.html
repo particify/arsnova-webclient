@@ -1,29 +1,11 @@
-<div fxLayout="column" fxLayoutAlign="center" fxLayoutGap="20px" fxFill>
+<div fxLayout="column" fxLayoutAlign="center">
   <div fxLayout="row" fxLayoutAlign="center">
     <mat-chip-list class="mat-chip-list-stacked">
-      <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="20px">
-        <mat-chip class="positiveC">
-          {{'dialog.statistic-good' | translate}}
+      <div *ngFor="let chip of chips" fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="20px">
+        <mat-chip class="{{chip.name}}">
+          {{'dialog.statistic-' + chip.name | translate}}
         </mat-chip>
-        <h3> > 85 % </h3>
-      </div>
-      <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="20px">
-        <mat-chip class="okayC">
-          {{'dialog.statistic-okay' | translate}}
-        </mat-chip>
-        <h3> >= 50 % </h3>
-      </div>
-      <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="20px">
-        <mat-chip class="negativeC">
-          {{'dialog.statistic-improvable' | translate}}
-        </mat-chip>
-        <h3> < 50 % </h3>
-      </div>
-      <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="20px">
-        <mat-chip class="emptyC">
-          {{'dialog.statistic-no-answers' | translate}}
-        </mat-chip>
-        <mat-icon>not_interested</mat-icon>
+        <p>{{ chip.value }}</p>
       </div>
     </mat-chip-list>
   </div>
