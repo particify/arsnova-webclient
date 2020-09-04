@@ -12,11 +12,9 @@ import { QrCodeComponent } from '../../components/shared/_dialogs/qr-code/qr-cod
 import { RoomCreateComponent } from '../../components/shared/_dialogs/room-create/room-create.component';
 import { StatisticHelpComponent } from '../../components/shared/_dialogs/statistic-help/statistic-help.component';
 // import { UserBonusTokenComponent } from '../../components/shared/_dialogs/user-bonus-token/user-bonus-token.component';
-import { CookiesComponent } from '../../components/home/_dialogs/cookies/cookies.component';
 import { OverlayComponent } from '../../components/home/_dialogs/overlay/overlay.component';
 import { UserActivationComponent } from '../../components/home/_dialogs/user-activation/user-activation.component';
 import { Content } from '../../models/content';
-import { CookieCategory } from './consent.service';
 
 @Injectable()
 export class DialogService {
@@ -98,15 +96,10 @@ export class DialogService {
     });
   }
 
-  openQRCodeDialog(protocol: string, hostname: string, shortId: string, isCreator: boolean): MatDialogRef<QrCodeComponent> {
+  openQRCodeDialog(url: string): MatDialogRef<QrCodeComponent> {
     return this.dialog.open(QrCodeComponent, {
       panelClass: 'screenDialog',
-      data: {
-        protocol: protocol,
-        hostName: hostname,
-        shortId: shortId,
-        isCreator: isCreator
-      }
+      data: url
     });
   }
 

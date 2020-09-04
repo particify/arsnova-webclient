@@ -1,38 +1,45 @@
-import { AfterContentInit, Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { AdvancedSnackBarTypes, NotificationService } from '../../../../services/util/notification.service';
 import { TranslateService } from '@ngx-translate/core';
-
-export interface DialogData {
-  protocol: string;
-  hostName: string;
-  shortId: string;
-  isCreator: boolean;
-}
-
+import { ThemeService } from '../../../../../theme/theme.service';
+import { takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-qr-code',
   templateUrl: './qr-code.component.html',
   styleUrls: ['./qr-code.component.scss']
 })
-export class QrCodeComponent implements OnInit {
+export class QrCodeComponent implements OnInit, OnDestroy {
 
-
-  path = '/participant/room/';
   qrWidth: number;
+  bgColor: string;
+  fgColor: string;
+  destroyed$ = new Subject();
 
   constructor(public dialogRef: MatDialogRef<QrCodeComponent>,
-              @Inject(MAT_DIALOG_DATA) public data: DialogData,
+              @Inject(MAT_DIALOG_DATA) public data: string,
               protected notification: NotificationService,
-              protected translateService: TranslateService) {}
+              protected translateService: TranslateService,
+              private themeService: ThemeService) {}
 
   ngOnInit(): void {
     const minSize = Math.min(document.body.clientWidth, document.body.clientHeight);
     this.qrWidth = minSize * 0.8;
+    this.themeService.getTheme().pipe(takeUntil(this.destroyed$)).subscribe(theme => {
+      const currentTheme = this.themeService.getThemeByKey(theme);
+      this.bgColor = currentTheme.get('surface').color;
+      this.fgColor = currentTheme.get('on-surface').color;
+    });
     setTimeout(() => {
       document.getElementById('qr-message').focus();
     }, 700);
+  }
+
+  ngOnDestroy() {
+    this.destroyed$.next();
+    this.destroyed$.complete();
   }
 
   onCloseClick(): void {
@@ -45,7 +52,7 @@ export class QrCodeComponent implements OnInit {
     selBox.style.left = '0';
     selBox.style.top = '0';
     selBox.style.opacity = '0';
-    selBox.value = this.data.protocol + this.data.hostName + this.path + this.data.shortId;
+    selBox.value = this.data;
     document.body.appendChild(selBox);
     selBox.focus();
     selBox.select();

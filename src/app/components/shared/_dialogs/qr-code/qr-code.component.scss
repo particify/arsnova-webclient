@@ -1,5 +1,5 @@
 ars-screen {
-  background-color: white;
+  background-color: var(--surface);
 }
 
 .qr-container {
@@ -23,5 +23,5 @@ ars-screen {
 h2 {
   text-align: center;
   margin-bottom: 0;
-  color: black;
+  color: var(--on-surface);
 }
