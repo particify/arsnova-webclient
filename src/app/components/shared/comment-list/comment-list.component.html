@@ -1,61 +1,60 @@
 <div fxLayout="row" [ngClass]="{'search-container' : !scroll, 'search-container-fixed' : scroll}"
-     *ngIf="comments.length > 2" (window:scroll)="checkScroll()" fxLayoutAlign="center">
+     *ngIf="comments.length > 2" (window:scroll)="checkScroll()" fxLayoutAlign="center center">
   <input tabindex="-1" (focus)="eventService.makeFocusOnInputTrue()" (blur)="eventService.makeFocusOnInputFalse()" #searchBox
          id="searchBox" [ngClass]="{'search-input-hidden': !search, 'search-input': search }"
          (input)="searchComments()" [(ngModel)]="searchInput" [placeholder]="searchPlaceholder"
          aria-labelledby="search-box-input-description">
-  <button id="search-close-button" mat-icon-button class="searchBarButton close" *ngIf="searchInput !== '' || search"
+  <button id="search-close-button" mat-icon-button *ngIf="searchInput !== '' || search" class="close-btn"
           (click)="hideCommentsList=false; searchInput = ''; search = false; searchPlaceholder = '';"
           aria-labelledby="close_search">
     <mat-icon>close</mat-icon>
   </button>
 
-  <div class="button-bar" fxLayoutAlign="center center">
-    <div *ngIf="comments && comments.length > 0">
-      <h3 class="counter" *ngIf="!hideCommentsList">{{comments.length}}</h3>
-      <h3 class="counter-filtered" *ngIf="filteredComments && hideCommentsList">{{filteredComments.length}}</h3>
+  <div class="button-bar" fxLayoutAlign="center center" fxLayoutGap="1em">
+    <div class="counter-container" *ngIf="comments && comments.length > 0 && !search">
+      <h3 class="counter">{{ filteredComments && hideCommentsList ? filteredComments.length : comments.length }}</h3>
     </div>
 
-    <button id="search-button" mat-icon-button class="searchBarButton" (click)="activateSearch(); filterComments('')"
+    <button id="search-button" mat-mini-fab (click)="activateSearch(); filterComments('')" class="bar-icon"
             *ngIf="!search && comments && comments.length > 0" aria-labelledby="search-list"
             matTooltip="{{ 'comment-list.filter-search' | translate }}">
-      <mat-icon class="searchBarIcon">search</mat-icon>
+      <mat-icon>search</mat-icon>
     </button>
 
-    <button id="sort-button" mat-icon-button class="searchBarButton" aria-labelledby="sort-list"
+    <button id="sort-button" mat-mini-fab aria-labelledby="sort-list" class="bar-icon"
             *ngIf="!searchBox.value && comments && comments.length > 0 && !search"
             [matMenuTriggerFor]="sortMenu" matTooltip="{{ 'comment-list.sort-comments' | translate }}">
-      <mat-icon class="searchBarIcon">swap_vert</mat-icon>
+      <mat-icon>swap_vert</mat-icon>
     </button>
 
-    <button id="filter-button" mat-icon-button class="searchBarButton" aria-labelledby="filter-list"
+    <button id="filter-button" mat-mini-fab aria-labelledby="filter-list" class="bar-icon"
             *ngIf="!searchBox.value && comments && comments.length > 0 && !search"
             [matMenuTriggerFor]="filterMenu" matTooltip="{{ 'comment-list.filter-comments' | translate }}">
-      <mat-icon class="searchBarIcon">filter_list</mat-icon>
+      <mat-icon>filter_list</mat-icon>
     </button>
 
-    <button id="pause-button" mat-fab aria-labelledby="pause" class="freezeButton"
+    <button id="pause-button" mat-mini-fab aria-labelledby="pause" class="bar-icon"
             *ngIf="!searchBox.value && !search && !freeze" (click)="pauseCommentStream()"
             matTooltip="{{ 'comment-list.pause-comments' | translate }}">
-      <mat-icon class="freezeIcon">pause</mat-icon>
+      <mat-icon>pause</mat-icon>
     </button>
 
-    <button id="start-button" mat-fab aria-labelledby="play" class="freezeButton"
+    <button id="start-button" mat-mini-fab aria-labelledby="play" class="bar-icon"
             *ngIf="!searchBox.value && !search && freeze" (click)="playCommentStream()"
             matTooltip="{{ 'comment-list.play-comments' | translate }}">
-      <mat-icon class="freezeIcon">play_arrow</mat-icon>
+      <mat-icon>play_arrow</mat-icon>
     </button>
 
-    <button mat-fab class="freezeButton" aria-labelledby="switch-to-list"
+    <button mat-mini-fab aria-labelledby="switch-to-list" class="bar-icon"
             *ngIf="!searchBox.value && !search && ['EDITING_MODERATOR', 'EXECITIVE_MODERATOR'].indexOf(viewRole) !== -1 && deviceType === 'desktop'"
             (click)="switchToModerationList()" matTooltip="{{ 'comment-list.switch-to-moderation-list' | translate }}">
-      <mat-icon class="freezeIcon">thumb_down_alt</mat-icon>
+      <mat-icon>thumb_down_alt</mat-icon>
     </button>
 
-    <button id="add-comment-small-button" mat-fab aria-labelledby="add" class="actionButton"
+    <button id="add-comment-small-button" class="add-btn" mat-mini-fab aria-labelledby="add"
             *ngIf="!searchBox.value && !search" (click)="openCreateDialog()"
             matTooltip="{{ 'comment-list.add-comment' | translate }}">
-      <mat-icon class="actionIcon">add</mat-icon>
+      <mat-icon class="add-icon">add</mat-icon>
     </button>
   </div>
 
@@ -138,7 +137,7 @@
   </button>
 </div>
 
-<div *ngIf="!isLoading">
+<div class="comments-container" *ngIf="!isLoading">
   <app-comment *ngFor="let current of hideCommentsList ? filteredComments : comments" [comment]="current"
                [parseVote]="getVote(current)" (clickedOnTag)="clickedOnTag($event)">
   </app-comment>
