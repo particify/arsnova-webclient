@@ -88,6 +88,11 @@ strong, b {
   font-weight: $font-weight-bold;
 }
 
+.smaller-text {
+  font-size: smaller;
+  margin-bottom: 0;
+}
+
 // Inputs
 
 input, input:focus {
@@ -425,7 +430,8 @@ div {
 }
 
 .login-button {
-  min-width: 200px!important;
+  width: 200px;
+  max-width: 100%;
   margin: 5px 0;
 }
 
@@ -435,6 +441,12 @@ div {
   font-size: smaller;
   text-decoration: none;
   font-weight: $font-weight-bold;
+}
+
+.after-text-link {
+  padding-left: 10px;
+  margin-top: 1em;
+  color: var(--secondary);
 }
 
 // Icons
@@ -521,6 +533,15 @@ button {
 .invisible-card {
   box-shadow: none!important;
   background-color: var(--background)!important;
+}
+
+.login-card {
+  width: 400px;
+  max-width: 100%;
+  padding: 2em!important;
+  @media(max-width: 500px) {
+    padding: 1.5em!important;
+  }
 }
 
 // Badge

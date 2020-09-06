@@ -1,5 +1,5 @@
 <div *ngIf="!isLoading" fxLayout="column" fxLayoutAlign="center center" fxFill>
-  <mat-card fxLayout="column" fxLayoutAlign="center center" [ngClass]="{'invisible-card': deviceWidth < 500}">
+  <mat-card class="login-card" fxLayout="column" fxLayoutAlign="center center">
     <button *ngFor="let provider of ssoProviders" (click)="loginViaSso(provider.id)" class="button-primary"
             id="{{provider.title}}-button" mat-raised-button type="button"
             attr.aria-label="{{ 'login.a11y-sso-login' | translate:{provider: provider.title} }}">
@@ -34,8 +34,8 @@
         </button>
       </div>
       <div *ngIf="allowDbLogin" fxLayout="row" fxLayoutAlign="center">
-        <p>{{ 'login.not-registered' | translate }}</p>
-        <a class="action-link register" [routerLink]="'/register'" aria-labelledby="register">
+        <p class="smaller-text">{{ 'login.not-registered' | translate }}</p>
+        <a class="action-link after-text-link" [routerLink]="'/register'" aria-labelledby="register">
           {{ 'login.register' | translate }}</a>
       </div>
     </form>

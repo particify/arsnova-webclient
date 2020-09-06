@@ -1,5 +1,5 @@
 <div fxLayout="column" fxLayoutAlign="center center" fxFill>
-  <mat-card fxLayout="column" fxLayoutAlign="center center" [ngClass]="{'invisible-card': deviceWidth < 500}">
+  <mat-card class="login-card" fxLayout="column" fxLayoutAlign="center center">
     <form class="full-width" (ngSubmit)="register(userName.value, userPassword1.value)" fxLayout="column"
           fxLayoutAlign="space-around" fxLayoutGap="10px">
       <mat-form-field class="input-block" appearance="outline">
@@ -54,8 +54,8 @@
         </button>
       </div>
       <div fxLayout="row" fxLayoutAlign="center">
-        <p>{{ 'register.already-registered' | translate }}</p>
-        <a class="action-link login" [routerLink]="'/login'" aria-labelledby="register">
+        <p class="smaller-text">{{ 'register.already-registered' | translate }}</p>
+        <a class="action-link after-text-link" [routerLink]="'/login'" aria-labelledby="register">
           {{ 'login.login' | translate }}</a>
       </div>
     </form>
