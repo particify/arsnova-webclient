@@ -1,4 +1,5 @@
-FROM nginx
+ARG IMAGE_BASETAG=stable
+FROM nginx:$IMAGE_BASETAG
 LABEL maintainer "Daniel Gerhardt <code@dgerhardt.net>"
 
 ARG ARSNOVA_BUILD_DIR
