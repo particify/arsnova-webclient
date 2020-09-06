@@ -1,4 +1,4 @@
-ARG IMAGE_BASETAG=stable
+ARG IMAGE_BASETAG=stable-alpine
 FROM nginx:$IMAGE_BASETAG
 LABEL maintainer "Daniel Gerhardt <code@dgerhardt.net>"
 

@@ -1,8 +1,8 @@
 variables:
   BUILD_DIR: dist
-  NODE_VERSION: "12.16"
+  NODE_VERSION: "12.18"
   NGINX_VERSION: stable
-  IMAGE_VARIANT: buster
+  IMAGE_VARIANT: alpine
   YARN_CACHE_FOLDER: .yarn-cache
 
 stages:
