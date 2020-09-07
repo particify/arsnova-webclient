@@ -1,3 +1,5 @@
+@import "src/variables";
+
 .mat-form-field {
   float: left;
   padding-left: 10px;
@@ -9,91 +11,71 @@
   background-color: var(--background);
   border: none;
   outline: none;
-  min-height: 60px;
+  min-height: 70px;
   font-size: large;
-  border-radius: 5px;
+  border-radius: 35px;
   color: var(--on-surface);
   transition: width 300ms linear;
 }
 
 .search-bar-placeholder {
-  height: 60px;
+  height: 70px;
 }
 
 .search-input-hidden {
   width: 0;
+  padding: 0 !important;
 }
 
 .search-input {
   width: 100%;
-  margin-left: 3%;
+  margin-left: 2em;
 }
 
 .search-container {
-  border-radius: 5px;
+  border-radius: 35px;
   background-color: var(--background);
-  margin-bottom: 2%;
 }
 
 .search-container-fixed {
-  border-radius: 5px;
+  border-radius: 35px;
   background-color: var(--background);
   position: fixed;
-  top: 10px;
-  width: 92%;
-  max-width: 800px;
+  top: 4vw;
+  left: calc(50% - 175px);
+  width: 100%;
+  max-width: 350px;
   z-index: 1;
+  @media(max-width: 400px) {
+    left: calc(50% - 150px);
+    max-width: 300px;
+  }
 }
 
-.searchBarButton {
-  width: 45px;
-  height: 45px;
-  text-align: center;
-  margin: 1% 2% 1% 1%;
-  color: var(--secondary);
+.close-btn {
+  margin-right: 2em;
 }
 
-.actionButton {
-  width: 40px;
-  height: 40px;
-  margin: 0 5% 0 5%;
-  background-color: var(--primary);
-}
-
-.freezeButton {
-  width: 40px;
-  height: 40px;
-  margin: 0 2% 0 5%;
+.bar-icon {
   background-color: var(--secondary);
+  color: var(--on-secondary);
+  opacity: 0.7;
 }
 
-.actionIcon {
-  transform: scale(1.5);
-  color: var(--background)
+.add-icon {
+  height: 28px;
+  width: 28px;
+  font-size: 28px;
+  margin-top: -2px;
 }
 
-.freezeIcon {
-  transform: scale(1.3);
-  color: var(--background);
-}
-
-.close {
-  margin: 5px 0 5px 0;
-}
-
-.searchBarIcon {
-  font-size: 45px;
-  height: 45px;
-  width: 45px;
-  color: var(--secondary);
+.add-btn {
+  background-color: var(--primary);
+  color: var(--on-primary);
 }
 
 .no-comments {
   margin-top: 10%;
-}
-
-.button-bar {
-  margin-right: 2%;
 }
 
 .correct-icon {
@@ -112,17 +94,18 @@
   color: var(--yellow);
 }
 
+.counter-container {
+  @media(max-width: 400px) {
+    display: none;
+  }
+}
+
 .counter {
   color: var(--on-background);
-}
-
-.counter-filtered {
-  color: var(--red);
-}
-
-h3 {
-  font-size: 18pt !important;
-  margin: 10px;
+  width: 28px;
+  text-align: center;
+  font-size: 1.5em!important;
+  margin: 0;
 }
 
 .up {
@@ -146,11 +129,6 @@ h3 {
   width: 250px;
 }
 
-.add {
-  margin-right: 0.1em;
-  color: var(--on-primary);
-}
-
 .scrollTop {
   position: fixed;
   left: 5%;
@@ -162,4 +140,8 @@ h3 {
 
 .visible {
   transform: scale(1);
+}
+
+.comments-container {
+  margin-top: min(1em, 4vw);
 }

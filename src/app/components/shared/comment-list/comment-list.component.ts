@@ -117,11 +117,11 @@ export class CommentListComponent implements OnInit, OnDestroy {
     this.translateService.get('comment-list.search').subscribe(msg => {
       this.searchPlaceholder = msg;
     });
-    const appPadding = document.body.clientWidth * 0.04;
-    if (this.deviceType === 'desktop') {
-      this.scrollMax = 55 + appPadding;
+    // Header height is 56 if smaller than 600px
+    if (innerWidth >= 600) {
+      this.scrollMax = 64;
     } else {
-      this.scrollMax = 46 + appPadding;
+      this.scrollMax = 56;
     }
   }
 
