@@ -91,6 +91,5 @@ export class AuthenticationGuard implements CanActivate {
     this.translateService.get('errors.room-not-found').subscribe(msg => {
       this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.FAILED);
     });
-    this.router.navigate(['/']);
   }
 }
