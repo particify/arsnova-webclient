@@ -41,7 +41,7 @@ export class CommentSettingsService extends BaseHttpService {
   }
 
   update(settings: CommentSettings): Observable<CommentSettings> {
-    const connectionUrl = this.apiUrl.base + this.apiUrl.settings + '/' + settings.roomId;
+    const connectionUrl = this.apiUrl.base + '/' + settings.roomId + this.apiUrl.settings + '/' + settings.roomId;
     return this.http.put(connectionUrl, settings, httpOptions).pipe(
       tap(_ => ''),
       catchError(this.handleError<any>('updateCommentSettings'))
