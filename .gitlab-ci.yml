@@ -1,6 +1,8 @@
 variables:
   BUILD_DIR: dist
-  NODE_VERSION: "12.16"
+  NODE_VERSION: "12.18"
+  NGINX_VERSION: stable
+  IMAGE_VARIANT: alpine
   YARN_CACHE_FOLDER: .yarn-cache
 
 stages:
@@ -10,7 +12,7 @@ stages:
   - deploy
 
 default:
-  image: node:$NODE_VERSION-buster
+  image: node:$NODE_VERSION-$IMAGE_VARIANT
   before_script:
     - export PATH="`pwd`/node_modules/.bin:$PATH"
     - date
@@ -109,7 +111,7 @@ ngbuild:
   script:
     - mkdir -p /kaniko/.docker
     - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
-    - /kaniko/executor --context "$KANIKO_CONTEXT" --dockerfile "$KANIKO_DOCKERFILE" --destination "$KANIKO_DESTINATION" --build-arg "ARSNOVA_BUILD_DIR=`echo $BUILD_DIR`"
+    - /kaniko/executor --context "$KANIKO_CONTEXT" --dockerfile "$KANIKO_DOCKERFILE" --destination "$KANIKO_DESTINATION" --build-arg "ARSNOVA_BUILD_DIR=`echo $BUILD_DIR`" --build-arg "IMAGE_BASETAG=`echo $NGINX_VERSION-$IMAGE_VARIANT`"
 
 # Temporary workaround until GitLab bug is fixed
 docker_image:
