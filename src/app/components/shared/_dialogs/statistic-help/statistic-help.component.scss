@@ -1,25 +1,17 @@
-.positiveC {
+.good {
   background-color: var(--green);
 }
 
-.negativeC {
+.negative {
   background-color: var(--red);
 }
 
-.okayC {
+.okay {
   background-color: var(--yellow);
 }
 
-.emptyC {
-  background-color: var(--grey);
-}
-
 .mat-chip {
-  width: 130px !important;
+  width: 140px!important;
   display: flex;
   justify-content: center;
-}
-
-.mat-icon {
-  color: var(--on-surface);
 }
