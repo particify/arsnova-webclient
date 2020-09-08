@@ -67,6 +67,9 @@ export class RoomCreateComponent implements OnInit {
     longRoomName = longRoomName.trim();
     if (!longRoomName) {
       this.emptyInputs = true;
+      this.translateService.get('dialog.no-empty-name').subscribe(msg => {
+        this.notification.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
+      });
       return;
     }
     const newRoom = new Room();

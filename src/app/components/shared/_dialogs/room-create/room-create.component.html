@@ -5,11 +5,13 @@
       <input (focus)="eventService.makeFocusOnInputTrue()" (blur)="eventService.makeFocusOnInputFalse()"
              (keypress)="resetEmptyInputs()" matInput #roomName class="input-block" type="text" autocomplete="off"
              maxlength="20" [(ngModel)]="longName" name="roomName" aria-labelledby="room-name-input"/>
-      <mat-hint align="end" class="count" *ngIf="!emptyInputs"><span aria-hidden="true">{{roomName.value.length}}
+      <mat-hint align="end" *ngIf="!emptyInputs"><span aria-hidden="true">{{roomName.value.length}}
         / 20</span></mat-hint>
-      <mat-hint align="start" class="error" *ngIf="emptyInputs">
-        {{ 'dialog.no-empty-name' | translate }}</mat-hint>
     </mat-form-field>
+    <div *ngIf="!auth || auth.authProvider === 'ARSNOVA_GUEST'" fxLayout="row" fxLayoutAlign="start center">
+      <mat-icon>warning</mat-icon>
+      <p class="smaller-text">{{ 'dialog.not-logged-in' | translate }}</p>
+    </div>
   </div>
 </form>
 <app-dialog-action-buttons

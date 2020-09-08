@@ -271,6 +271,7 @@
     "logout": "Log out",
     "create-room": "Create Room",
     "room-name": "Room name",
+    "not-logged-in": "You are not logged in. The room will be created with a guest account.",
     "no-empty-name": "Please enter a name.",
     "statistic-good": "Good",
     "statistic-okay": "Okay",
