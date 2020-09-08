@@ -51,10 +51,10 @@ export class RoomComponent implements OnInit {
   }
 
   deleteRoom(room: Room): void {
-    this.translationService.get('settings.deleted').subscribe(msg => {
-      this.notificationService.showAdvanced(room.name + msg, AdvancedSnackBarTypes.WARNING);
-    });
-    this.roomService.deleteRoom(room.id).subscribe(result => {
+    this.roomService.deleteRoom(room.id).subscribe(() => {
+      this.translationService.get('settings.deleted').subscribe(msg => {
+        this.notificationService.showAdvanced(room.name + msg, AdvancedSnackBarTypes.WARNING);
+      });
       const event = new RoomDeleted(room.id);
       this.eventService.broadcast(event.type, event.payload);
       this.router.navigate([`/user`]);

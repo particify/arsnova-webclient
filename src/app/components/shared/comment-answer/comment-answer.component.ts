@@ -84,10 +84,12 @@ export class CommentAnswerComponent implements OnInit, AfterContentInit {
   }
 
   saveAnswer() {
-    this.edit = false;
-    this.commentService.answer(this.comment, this.answer);
-    this.translateService.get('comment-page.comment-answered').subscribe(msg => {
-      this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.SUCCESS);
+    this.commentService.answer(this.comment, this.answer).subscribe(() => {
+      this.translateService.get('comment-page.comment-answered').subscribe(msg => {
+          this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.SUCCESS);
+        }
+      );
+      this.edit = false;
     });
   }
 

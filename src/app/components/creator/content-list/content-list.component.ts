@@ -145,23 +145,25 @@ export class ContentListComponent implements OnInit {
     } else {
       switch (action.valueOf()) {
         case 'delete':
-          this.translateService.get('content.content-deleted').subscribe(message => {
-            this.notificationService.showAdvanced(message, AdvancedSnackBarTypes.WARNING);
+          this.contentService.deleteContent(this.contents[index].id).subscribe(() => {
+            this.translateService.get('content.content-deleted').subscribe(message => {
+              this.notificationService.showAdvanced(message, AdvancedSnackBarTypes.WARNING);
+            });
+            this.contents.splice(index, 1);
+            this.labels.splice(index, 1);
+            if (this.contents.length === 0) {
+              this.globalStorageService.setItem(STORAGE_KEYS.LAST_GROUP, this.contentGroups[0]);
+              this.location.back();
+            }
           });
-          this.contentService.deleteContent(this.contents[index].id).subscribe();
-          this.contents.splice(index, 1);
-          this.labels.splice(index, 1);
-          if (this.contents.length === 0) {
-            this.globalStorageService.setItem(STORAGE_KEYS.LAST_GROUP, this.contentGroups[0]);
-            this.location.back();
-          }
           break;
         case 'update':
-          this.contents[index] = this.contentBackup;
-          this.labels[index] = this.contentBackup.body;
-          this.contentService.updateContent(this.contents[index]).subscribe();
-          this.translateService.get('content.content-updated').subscribe(message => {
-            this.notificationService.showAdvanced(message, AdvancedSnackBarTypes.SUCCESS);
+          this.contentService.updateContent(this.contents[index]).subscribe(() => {
+            this.translateService.get('content.content-updated').subscribe(message => {
+              this.notificationService.showAdvanced(message, AdvancedSnackBarTypes.SUCCESS);
+            });
+            this.contents[index] = this.contentBackup;
+            this.labels[index] = this.contentBackup.body;
           });
           break;
         case 'abort':

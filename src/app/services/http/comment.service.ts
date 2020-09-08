@@ -111,48 +111,45 @@ export class CommentService extends BaseHttpService {
     );
   }
 
-  answer(comment: Comment, answer: string): Comment {
+  answer(comment: Comment, answer: string): Observable<Comment> {
     comment.answer = answer;
     const changes = new TSMap<string, any>();
     changes.set('answer', comment.answer);
-    this.patchComment(comment, changes);
-    return comment;
+    return this.patchComment(comment, changes);
   }
 
-  toggleRead(comment: Comment): Comment {
+  toggleRead(comment: Comment): Observable<Comment> {
     comment.read = !comment.read;
     const changes = new TSMap<string, any>();
     changes.set('read', comment.read);
-    this.patchComment(comment, changes);
-    return comment;
+    return this.patchComment(comment, changes);
   }
 
-  toggleFavorite(comment: Comment): Comment {
+  toggleFavorite(comment: Comment): Observable<Comment> {
     comment.favorite = !comment.favorite;
     const changes = new TSMap<string, any>();
     changes.set('favorite', comment.favorite);
-    this.patchComment(comment, changes);
-    return comment;
+    return this.patchComment(comment, changes);
   }
 
-  markCorrect(comment: Comment): Comment {
+  markCorrect(comment: Comment): Observable<Comment> {
     const changes = new TSMap<string, any>();
     changes.set('correct', comment.correct);
-    this.patchComment(comment, changes);
-    return comment;
+    return this.patchComment(comment, changes);
   }
 
-  toggleAck(comment: Comment): Comment {
+  toggleAck(comment: Comment): Observable<Comment> {
     comment.ack = !comment.ack;
     const changes = new TSMap<string, any>();
     changes.set('ack', comment.ack);
-    this.patchComment(comment, changes);
-    return comment;
+    return this.patchComment(comment, changes);
   }
 
-  private patchComment(comment: Comment, changes: TSMap<string, any>): void {
+  private patchComment(comment: Comment, changes: TSMap<string, any>): Observable<Comment> {
     const connectionUrl = this.apiUrl.base + '/' + comment.roomId + this.apiUrl.comment + '/' + comment.id;
-    this.http.patch(connectionUrl, changes, httpOptions).subscribe();
+    return this.http.patch(connectionUrl, changes, httpOptions).pipe(
+      catchError(this.handleError<any>('patchComment'))
+    );
   }
 
   highlight(comment: Comment): Observable<void> {

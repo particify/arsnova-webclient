@@ -26,7 +26,7 @@
     </div>
     <div fxLayout="row" *ngIf="enableModeration">
       <p>{{ 'settings.direct-send' | translate}}&nbsp;
-        <mat-slide-toggle [(ngModel)]="directSend" (change)="updateCommentSettings()"
+        <mat-slide-toggle [(ngModel)]="directSend" (change)="updateDirectSend()"
                           aria-labelledby="settings-direct-send"></mat-slide-toggle>
       </p>
       <button mat-icon-button class="info-button" #dstt="matTooltip"

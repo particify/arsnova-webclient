@@ -95,10 +95,11 @@ export class CommentSettingsComponent implements OnInit {
   }
 
   deleteComments(): void {
-    this.translationService.get('settings.comments-deleted').subscribe(msg => {
-      this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
+    this.commentService.deleteCommentsByRoomId(this.roomId).subscribe(() => {
+      this.translationService.get('settings.comments-deleted').subscribe(msg => {
+        this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
+      });
     });
-    this.commentService.deleteCommentsByRoomId(this.roomId).subscribe();
   }
 
   export(delimiter: string): void {
@@ -164,11 +165,18 @@ export class CommentSettingsComponent implements OnInit {
     this.saveChanges();
   }
 
-  saveChanges() {
+  updateDirectSend() {
     const commentSettings = new CommentSettings();
     commentSettings.roomId = this.roomId;
     commentSettings.directSend = this.directSend;
-    this.commentSettingsService.update(commentSettings).subscribe();
+    this.commentSettingsService.update(commentSettings).subscribe(() => {
+      this.translationService.get('settings.changes-successful').subscribe(msg => {
+        this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.SUCCESS);
+      });
+    });
+  }
+
+  saveChanges() {
     this.saveEvent.emit(this.editRoom);
   }
 
