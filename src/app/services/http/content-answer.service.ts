@@ -5,6 +5,8 @@ import { Observable } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 import { BaseHttpService } from './base-http.service';
 import { ChoiceAnswer } from '../../models/choice-answer';
+import { TranslateService } from '@ngx-translate/core';
+import { NotificationService } from '../util/notification.service';
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -20,8 +22,10 @@ export class ContentAnswerService extends BaseHttpService {
     find: '/find'
   };
 
-  constructor(private http: HttpClient) {
-    super();
+  constructor(private http: HttpClient,
+              protected translateService: TranslateService,
+              protected notificationService: NotificationService) {
+    super(translateService, notificationService);
   }
 
   getAnswers(contentId: string): Observable<TextAnswer[]> {

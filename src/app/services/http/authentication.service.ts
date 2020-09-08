@@ -8,6 +8,8 @@ import { ClientAuthentication } from '../../models/client-authentication';
 import { AuthenticationStatus, ClientAuthenticationResult } from '../../models/client-authentication-result';
 import { EventService } from '../util/event.service';
 import * as JwtDecode from 'jwt-decode';
+import { TranslateService } from '@ngx-translate/core';
+import { NotificationService } from '../util/notification.service';
 
 export const AUTH_HEADER_KEY = 'Authorization';
 export const AUTH_SCHEME = 'Bearer';
@@ -44,9 +46,10 @@ export class AuthenticationService extends BaseHttpService {
   constructor(
     private globalStorageService: GlobalStorageService,
     public eventService: EventService,
-    private http: HttpClient
-  ) {
-    super();
+    private http: HttpClient,
+    protected translateService: TranslateService,
+    protected notificationService: NotificationService) {
+    super(translateService, notificationService);
     const savedAuth: ClientAuthentication = this.globalStorageService.getItem(STORAGE_KEYS.USER);
     this.auth$$ = new BehaviorSubject(new BehaviorSubject(savedAuth));
   }

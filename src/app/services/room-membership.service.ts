@@ -9,6 +9,9 @@ import { AuthenticationService } from './http/authentication.service';
 import { EventService } from './util/event.service';
 import { Membership } from '../models/membership';
 import { UserRole } from '../models/user-roles.enum';
+import { ApiConfigService } from './http/api-config.service';
+import { TranslateService } from '@ngx-translate/core';
+import { NotificationService } from './util/notification.service';
 
 /**
  * This service provides utility methods which handle or provide information
@@ -27,8 +30,10 @@ export class RoomMembershipService extends BaseHttpService {
     private http: HttpClient,
     private wsConnector: WsConnectorService,
     public eventService: EventService,
-    private authenticationService: AuthenticationService) {
-      super();
+    private authenticationService: AuthenticationService,
+    protected translateService: TranslateService,
+    protected notificationService: NotificationService) {
+    super(translateService, notificationService);
       const authChanged$ = authenticationService.getAuthenticationChanges().pipe(skip(1));
       authenticationService.getAuthenticationChanges().subscribe(auth => {
         if (!auth) {

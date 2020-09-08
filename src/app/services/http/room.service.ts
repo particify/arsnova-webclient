@@ -13,6 +13,8 @@ import { TSMap } from 'typescript-map';
 import { GlobalStorageService, STORAGE_KEYS } from '../util/global-storage.service';
 import { WsConnectorService } from '../websockets/ws-connector.service';
 import { IMessage } from '@stomp/stompjs';
+import { TranslateService } from '@ngx-translate/core';
+import { NotificationService } from '../util/notification.service';
 
 const httpOptions = {
   headers: new HttpHeaders({})
@@ -40,9 +42,10 @@ export class RoomService extends BaseHttpService {
     private ws: WsConnectorService,
     private eventService: EventService,
     private authService: AuthenticationService,
-    private globalStorageService: GlobalStorageService
-  ) {
-    super();
+    private globalStorageService: GlobalStorageService,
+    protected translateService: TranslateService,
+    protected notificationService: NotificationService) {
+    super(translateService, notificationService);
   }
 
   /**

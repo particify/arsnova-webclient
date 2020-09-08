@@ -7,6 +7,8 @@ import { AuthenticationService } from './authentication.service';
 import { BaseHttpService } from './base-http.service';
 import { EventService } from '../util/event.service';
 import { GlobalStorageService, STORAGE_KEYS } from '../util/global-storage.service';
+import { TranslateService } from '@ngx-translate/core';
+import { NotificationService } from '../util/notification.service';
 
 const httpOptions = {
   headers: new HttpHeaders({})
@@ -27,9 +29,10 @@ export class ContentGroupService extends BaseHttpService {
     private http: HttpClient,
     private eventService: EventService,
     private authService: AuthenticationService,
-    private globalStorageService: GlobalStorageService
-  ) {
-    super();
+    private globalStorageService: GlobalStorageService,
+    protected translateService: TranslateService,
+    protected notificationService: NotificationService) {
+    super(translateService, notificationService);
   }
 
   getByRoomIdAndName(roomId: string, name: string): Observable<ContentGroup> {

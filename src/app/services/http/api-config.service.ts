@@ -3,6 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { BaseHttpService } from './base-http.service';
 import { ApiConfig, AuthenticationProvider, Feature, UiConfig } from '../../models/api-config';
+import { TranslateService } from '@ngx-translate/core';
+import { NotificationService } from '../util/notification.service';
 
 @Injectable()
 export class ApiConfigService extends BaseHttpService {
@@ -17,8 +19,10 @@ export class ApiConfigService extends BaseHttpService {
   private config$: Observable<ApiConfig>;
   private config: ApiConfig;
 
-  constructor(private http: HttpClient) {
-    super();
+  constructor(private http: HttpClient,
+              protected translateService: TranslateService,
+              protected notificationService: NotificationService) {
+    super(translateService, notificationService);
     this.config$ = this.http.get<ApiConfig>(this.apiUris.config);
     this.config = new ApiConfig([], {}, {});
     this.freezeRecursively(this.config);

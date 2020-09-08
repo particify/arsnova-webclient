@@ -6,6 +6,8 @@ import { ApiConfigService } from '../http/api-config.service';
 import { MatDialog } from '@angular/material/dialog';
 import { CookiesComponent } from '../../components/home/_dialogs/cookies/cookies.component';
 import { StorageItemCategory } from '../../models/storage';
+import { TranslateService } from '@ngx-translate/core';
+import { NotificationService } from './notification.service';
 
 export const CONSENT_VERSION = 1;
 
@@ -59,9 +61,10 @@ export class ConsentService extends BaseHttpService {
   constructor(
     public dialog: MatDialog,
     private http: HttpClient,
-    private config: ApiConfigService
-  ) {
-    super();
+    private config: ApiConfigService,
+    protected translateService: TranslateService,
+    protected notificationService: NotificationService) {
+    super(translateService, notificationService);
   }
 
   init(consentSettings: ConsentSettings) {
