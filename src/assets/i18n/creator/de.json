@@ -88,7 +88,7 @@
     "mark-not-correct": "Markierung zurücknehmen",
     "mark-not-favorite": "Favorisierung zurücknehmen",
     "mark-not-wrong": "Markierung zurücknehmen",
-    "mark-read": "Der Dozent hat den Kommentar am Beamer besprochen",
+    "mark-read": "Die vortragende Person hat den Kommentar am Beamer besprochen",
     "mark-wrong": "Kommentar verneinen",
     "new-comment": "Ein neuer Kommentar mit dem Inhalt, {{ comment }}, wurde soeben erstellt.",
     "no-comments": "Keine Kommentare vorhanden",
@@ -234,10 +234,10 @@
     "format-binary": "Ja / Nein",
     "format-text": "Freitext",
     "format-slide": "Folie",
-    "format-choice-description": "Die Teilnehmer können aus mehreren Antwortoptionen auswählen. Es kann eine oder mehrere richtige Antworten geben.",
+    "format-choice-description": "Die Teilnehmenden können aus mehreren Antwortoptionen auswählen. Es kann eine oder mehrere richtige Antworten geben.",
     "format-likert-description": "Es kann eine der vordefinierten Antworten ausgewählt werden.",
     "format-binary-description": "Es kann mit \"Ja\" oder \"Nein\" geantwortet werden. Dabei muss keine der Möglichkeiten korrekt sein.",
-    "format-text-description": "Die Teilnehmer können mit einer Texteingabe auf die Frage antworten.",
+    "format-text-description": "Die Teilnehmenden können mit einer Texteingabe auf die Frage antworten.",
     "format-slide-description": "Folien dienen zur Darstellung von Informationen.",
     "multiple-answers-allowed": "Mehrfachauswahl für Antworten erlauben",
     "no-correct-answer": "Keine richtigen Antworten festlegen"
@@ -373,7 +373,7 @@
     "changes-successful": "Deine Änderungen wurden gespeichert.",
     "comments": "Kommentare",
     "threshold-info": "Wird ein Schwellenwert gesetzt, werden nur Kommentare angezeigt welche eine höhere Bewertung erhalten haben.",
-    "direct-send-info": "Wenn diese Einstellung deaktiviert ist, muss eine moderierende Person bzw. der Dozent neue Kommentare erst freischalten bevor diese öffentlich sichtbar werden."
+    "direct-send-info": "Wenn diese Einstellung deaktiviert ist, muss eine moderierende Person bzw. die vortragende Person neue Kommentare erst freischalten bevor diese öffentlich sichtbar werden."
   },
   "room": {
     "room-name": "Name des Raums",
