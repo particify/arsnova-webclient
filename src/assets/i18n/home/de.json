@@ -270,6 +270,7 @@
     "logout": "Abmelden",
     "create-room": "Erstellen",
     "room-name": "Name des Raums",
+    "not-logged-in": "Du bist nicht angemeldet. Der Raum wird mit einem Gastkonto erstellt.",
     "no-empty-name": "Bitte gib einen Namen ein.",
     "statistic-good": "Gut",
     "statistic-okay": "Okay",
