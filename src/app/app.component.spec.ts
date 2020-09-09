@@ -11,6 +11,8 @@ import { Observable, of, Subject } from 'rxjs';
 import { TrackingService } from './services/util/tracking.service';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { HttpClient } from '@angular/common/http';
+import { DialogService } from './services/util/dialog.service';
+import { GlobalStorageService } from './services/util/global-storage.service';
 
 @Injectable()
 class MockTranslateService {
@@ -36,6 +38,31 @@ class MockNotificationService {
   };
 
   public show(msg: string, install: string, config: any) {
+  }
+}
+
+@Injectable()
+class MockDialogService {
+  public dialogRef = {
+    afterClosed: () => {
+      return of(true);
+    }
+  };
+
+  public openUpdateInfoDialog() {
+  }
+}
+
+@Injectable()
+class MockGlobalStorageService {
+  public getItem(key: string): string {
+    return '';
+  }
+
+  public setItem(key: string, value: any) {
+  }
+
+  public removeItem(key: string) {
   }
 }
 
@@ -152,6 +179,14 @@ describe('AppComponent', () => {
         {
           provide: TrackingService,
           useClass: MockTrackingService
+        },
+        {
+          provide: DialogService,
+          useClass: MockDialogService
+        },
+        {
+          provide: GlobalStorageService,
+          useClass: MockGlobalStorageService
         }
       ],
       imports: [
@@ -179,10 +214,10 @@ describe('AppComponent', () => {
     expect(mockApiConfigService.load).toHaveBeenCalled();
   });
 
-  it('should show a notification on sw update', () => {
+  it('should show a dialog on sw update', () => {
     const mockSwUpdate = <MockSwUpdate> fixture.debugElement.injector.get(SwUpdate);
-    const mockNotificationService = fixture.debugElement.injector.get(NotificationService);
-    const spy = spyOn(mockNotificationService, 'show');
+    const mockDialogService = fixture.debugElement.injector.get(DialogService);
+    const spy = spyOn(mockDialogService, 'openUpdateInfoDialog');
 
     mockSwUpdate.mockUpdateAvailableEvent();
 
