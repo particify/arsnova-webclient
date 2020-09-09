@@ -7,6 +7,7 @@ export class Content {
   roomId: string;
   subject: string;
   body: string;
+  renderedBody: string;
   groups: string[];
   format: ContentType;
   formatAttributes: Map<string, string>;

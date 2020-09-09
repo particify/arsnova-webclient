@@ -1,5 +1,6 @@
 export class AnswerOption {
   label: string;
+  renderedLabel: string;
   points: number;
 
   constructor(label: string, points: number) {
