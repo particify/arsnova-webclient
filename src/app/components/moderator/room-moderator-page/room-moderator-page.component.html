@@ -20,7 +20,7 @@
         <span class="fill-remaining-space"></span>
       </div>
       <mat-card-content *ngIf="room.description" fxLayoutAlign="center">
-        <markdown [data]="room.description.trim()"></markdown>
+        <app-rendered-text [rawText]="room.description.trim()" [renderedText]="room.renderedDescription"></app-rendered-text>
       </mat-card-content>
       <div fxLayout="column" fxLayoutAlign="center" fxLayoutGap="20px">
         <mat-grid-list cols="{{viewModuleCount}}" rowHeight="1:1" [ngClass]="{'big-container': deviceWidth >= 500, 'single-container': !moderationEnabled}">

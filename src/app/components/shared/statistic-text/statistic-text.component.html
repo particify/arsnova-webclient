@@ -1,6 +1,6 @@
 <div>
   <div fxLayout="row">
-    <markdown [data]="content.body"></markdown>
+    <app-rendered-text [rawText]="content.body" [renderedText]="content.renderedBody"></app-rendered-text>
     <span class="fill-remaining-space"></span>
     <button *ngIf="content.format === 'TEXT'" mat-icon-button disableRipple (click)="toggleAnswers()"
             matTooltip="{{ 'statistic.show-chart' | translate }}">

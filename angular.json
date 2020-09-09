@@ -27,9 +27,7 @@
               "./node_modules/material-design-icons/iconfont/material-icons.css",
               "./node_modules/typeface-roboto/index.css"
             ],
-            "scripts": [
-              "node_modules/marked/lib/marked.js"
-            ]
+            "scripts": []
           },
           "configurations": {
             "production": {
@@ -83,9 +81,7 @@
             "karmaConfig": "./karma.conf.js",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "src/tsconfig.spec.json",
-            "scripts": [
-              "node_modules/marked/lib/marked.js"
-            ],
+            "scripts": [],
             "styles": [
               "src/styles.scss"
             ],

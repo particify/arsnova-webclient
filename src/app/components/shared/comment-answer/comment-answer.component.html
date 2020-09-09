@@ -9,7 +9,8 @@
       <div tabindex="-1" id="answer-text" class="visually-hidden">{{ 'comment-page.a11y-entered-answer' | translate:
         {answer: answer} }}</div>
       <div *ngIf="(isParticipant || !edit) && answer">
-        <markdown [data]="answer"></markdown>
+        <app-rendered-text [rawText]="answer" [dynamic]="true" [markdownFeatureset]="MarkdownFeatureset.SIMPLE">
+        </app-rendered-text>
         <div fxLayout="row" fxLayoutAlign="end">
           <button mat-raised-button *ngIf="!isParticipant && !edit" class="button-primary" (click)="editAnswer()"
           aria-labelledby="edit">
@@ -18,7 +19,7 @@
           </button>
         </div>
       </div>
-      <mat-tab-group *ngIf="!isParticipant && (edit || !answer)" [dynamicHeight]="true">
+      <mat-tab-group *ngIf="!isParticipant && (edit || !answer)" [dynamicHeight]="true" (selectedTabChange)="tabChanged($event)">
         <mat-tab label="{{'comment-page.your-answer' | translate}}">
           <mat-form-field class="input-block" appearance="outline">
             <textarea id="answer-input" [(ngModel)]="answer" (input)="edit = true"
@@ -39,7 +40,8 @@
         </mat-tab>
         <mat-tab label="{{'room.preview' | translate}}" [disabled]="!answer">
           <div fxLayout="row">
-            <markdown [data]="answer"></markdown>
+            <app-rendered-text [rawText]="answer" [dynamic]="renderPreview" [markdownFeatureset]="MarkdownFeatureset.SIMPLE">
+            </app-rendered-text>
             <span class="fill-remaining-space"></span>
             <button mat-icon-button #mdtt="matTooltip" matTooltip="{{ 'content.md-info' | translate }}"
                     (click)="mdtt.toggle()">

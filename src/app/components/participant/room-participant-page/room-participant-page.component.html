@@ -17,7 +17,7 @@
         </mat-card-header>
       </div>
       <mat-card-content *ngIf="room.description" fxLayoutAlign="center">
-        <markdown [data]="room.description.trim()"></markdown>
+        <app-rendered-text [rawText]="room.description.trim()" [renderedText]="room.renderedDescription"></app-rendered-text>
       </mat-card-content>
       <mat-grid-list cols="{{surveyEnabled ? 2 : 1}}" rowHeight="1:1" [ngClass]="{'big-container': deviceWidth >= 500, 'single-container': !surveyEnabled}">
         <mat-grid-tile [ngClass]="{'single-tile': !surveyEnabled, 'double-tile': surveyEnabled}">

@@ -12,6 +12,7 @@ import { KeyboardUtils } from '../../../utils/keyboard';
 import { KeyboardKey } from '../../../utils/keyboard/keys';
 import { EventService } from '../../../services/util/event.service';
 import { AnnounceService } from '../../../services/util/announce.service';
+import { MarkdownFeatureset } from '../../../services/http/formatting.service';
 
 @Component({
   selector: 'app-comment-answer',
@@ -26,6 +27,8 @@ export class CommentAnswerComponent implements OnInit, AfterContentInit {
   viewRole: UserRole;
   isParticipant = true;
   edit = false;
+  MarkdownFeatureset = MarkdownFeatureset;
+  renderPreview = false;
 
   constructor(protected route: ActivatedRoute,
               private notificationService: NotificationService,
@@ -108,5 +111,9 @@ export class CommentAnswerComponent implements OnInit, AfterContentInit {
     this.translateService.get('comment-page.answer-deleted').subscribe(msg => {
       this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
     });
+  }
+
+  tabChanged($event) {
+    this.renderPreview = $event.index === 1;
   }
 }

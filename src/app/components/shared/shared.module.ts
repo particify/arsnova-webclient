@@ -26,7 +26,6 @@ import { DialogActionButtonsComponent } from './dialog/dialog-action-buttons/dia
 import { MatRippleModule } from '@angular/material/core';
 import { ArsModule } from '../../../../projects/ars/src/lib/ars.module';
 import { CommentAnswerComponent } from './comment-answer/comment-answer.component';
-import { MarkdownModule } from 'ngx-markdown';
 import { StatisticTextComponent } from './statistic-text/statistic-text.component';
 import { StatisticChoiceComponent } from './statistic-choice/statistic-choice.component';
 import { QrCodeComponent } from './_dialogs/qr-code/qr-code.component';
@@ -49,7 +48,6 @@ import { RenderedTextComponent } from './rendered-text/rendered-text.component';
         SharedRoutingModule,
         MatRippleModule,
         ArsModule,
-        MarkdownModule,
         QRCodeModule,
         CdkStepperModule
     ],

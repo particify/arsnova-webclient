@@ -2,7 +2,8 @@
 <mat-card class="mat-elevation-z2">
   <p *ngIf="content.subject !== 'Subject'">{{ content.subject }}</p>
   <app-loading-indicator [size]="80" *ngIf="isLoading"></app-loading-indicator>
-  <div *ngIf="!isLoading" tabindex="0" [innerHTML]="body"></div>
+  <app-rendered-text [rawText]="content.body" [dynamic]="true" [markdownFeatureset]="markdownFeatureset" (rendered)="renderingFinished()">
+  </app-rendered-text>
   <mat-list *ngIf="content.format === 'CHOICE' || content.format === 'SCALE' || content.format === 'BINARY'">
     <mat-list-item fxLayout="column" fxLayoutAlign="center" *ngFor="let answer of answerLabels">
       <mat-checkbox *ngIf="multipleAnswers">

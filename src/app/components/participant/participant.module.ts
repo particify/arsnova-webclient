@@ -10,7 +10,6 @@ import { ParticipantContentCarouselPageComponent } from './participant-content-c
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { HttpClient } from '@angular/common/http';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
-import { MarkdownModule } from 'ngx-markdown';
 import { CdkStepperModule } from '@angular/cdk/stepper';
 import { MatRippleModule } from '@angular/material/core';
 import { ContentParticipantComponent } from './content/content-participant.component';
@@ -30,7 +29,6 @@ import { ContentSlideParticipantComponent } from './content/content-slide-partic
       },
       isolate: true
     }),
-    MarkdownModule,
     CdkStepperModule,
     MatRippleModule
   ],
