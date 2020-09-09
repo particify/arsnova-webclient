@@ -9,6 +9,8 @@ import { ContentChoice } from '../../models/content-choice';
 import { TSMap } from 'typescript-map';
 import { WsConnectorService } from '../websockets/ws-connector.service';
 import { IMessage } from '@stomp/stompjs';
+import { TranslateService } from '@ngx-translate/core';
+import { NotificationService } from '../util/notification.service';
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -23,8 +25,11 @@ export class ContentService extends BaseHttpService {
     answer: '/answer'
   };
 
-  constructor(private http: HttpClient, private ws: WsConnectorService) {
-    super();
+  constructor(private http: HttpClient,
+              private ws: WsConnectorService,
+              protected translateService: TranslateService,
+              protected notificationService: NotificationService) {
+    super(translateService, notificationService);
   }
 
   getAnswersChangedStream(roomId: string, contentId: string): Observable<IMessage> {

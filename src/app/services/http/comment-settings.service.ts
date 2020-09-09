@@ -4,6 +4,8 @@ import { Observable } from 'rxjs';
 import { CommentSettings } from '../../models/comment-settings';
 import { catchError, tap } from 'rxjs/operators';
 import { BaseHttpService } from './base-http.service';
+import { TranslateService } from '@ngx-translate/core';
+import { NotificationService } from '../util/notification.service';
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -16,8 +18,10 @@ export class CommentSettingsService extends BaseHttpService {
     settings: '/settings',
   };
 
-  constructor(private http: HttpClient) {
-    super();
+  constructor(private http: HttpClient,
+              protected translateService: TranslateService,
+              protected notificationService: NotificationService) {
+    super(translateService, notificationService);
   }
 
   get(id: string): Observable<CommentSettings> {

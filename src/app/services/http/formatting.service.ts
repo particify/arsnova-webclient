@@ -3,6 +3,8 @@ import { BaseHttpService } from './base-http.service';
 import { HttpClient } from '@angular/common/http';
 import { catchError } from 'rxjs/operators';
 import { Observable } from 'rxjs';
+import { TranslateService } from '@ngx-translate/core';
+import { NotificationService } from '../util/notification.service';
 
 @Injectable()
 export class FormattingService extends BaseHttpService {
@@ -14,8 +16,10 @@ export class FormattingService extends BaseHttpService {
     render: '/render'
   };
 
-  constructor(private http: HttpClient) {
-    super();
+  constructor(private http: HttpClient,
+              protected translateService: TranslateService,
+              protected notificationService: NotificationService) {
+    super(translateService, notificationService);
   }
 
   postString(text: string): Observable<any> {

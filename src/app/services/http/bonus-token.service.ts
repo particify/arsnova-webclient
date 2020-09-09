@@ -4,6 +4,8 @@ import { Observable } from 'rxjs';
 import { BonusToken } from '../../models/bonus-token';
 import { catchError, tap } from 'rxjs/operators';
 import { BaseHttpService } from './base-http.service';
+import { TranslateService } from '@ngx-translate/core';
+import { NotificationService } from '../util/notification.service';
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -18,8 +20,10 @@ export class BonusTokenService extends BaseHttpService {
     find: '/find'
   };
 
-  constructor(private http: HttpClient) {
-    super();
+  constructor(private http: HttpClient,
+              protected translateService: TranslateService,
+              protected notificationService: NotificationService) {
+    super(translateService, notificationService);
   }
 
   getTokensByRoomId(roomId: string): Observable<BonusToken[]> {

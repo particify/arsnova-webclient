@@ -4,6 +4,8 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BaseHttpService } from './base-http.service';
 import { User } from '../../models/user';
 import { catchError, map, tap } from 'rxjs/operators';
+import { TranslateService } from '@ngx-translate/core';
+import { NotificationService } from '../util/notification.service';
 
 const httpOptions = {
   headers: new HttpHeaders({})
@@ -22,8 +24,10 @@ export class UserService extends BaseHttpService {
     find: '/find'
   };
 
-  constructor(private http: HttpClient) {
-    super();
+  constructor(private http: HttpClient,
+              protected translateService: TranslateService,
+              protected notificationService: NotificationService) {
+    super(translateService, notificationService);
   }
 
   getUser(id: string) {

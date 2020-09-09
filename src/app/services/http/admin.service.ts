@@ -5,6 +5,8 @@ import { BaseHttpService } from './base-http.service';
 import { Observable } from 'rxjs';
 import { Room } from '../../models/room';
 import { User } from '../../models/user';
+import { TranslateService } from '@ngx-translate/core';
+import { NotificationService } from '../util/notification.service';
 
 const httpOptions = {
   headers: new HttpHeaders({})
@@ -22,9 +24,10 @@ export class AdminService extends BaseHttpService {
   };
 
   constructor(
-    private http: HttpClient
-  ) {
-    super();
+    private http: HttpClient,
+    protected translateService: TranslateService,
+    protected notificationService: NotificationService) {
+    super(translateService, notificationService);
   }
 
   getUser(id: string) {

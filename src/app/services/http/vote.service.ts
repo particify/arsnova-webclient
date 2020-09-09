@@ -5,6 +5,8 @@ import { Observable } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { AuthenticationService } from './authentication.service';
 import { BaseHttpService } from './base-http.service';
+import { TranslateService } from '@ngx-translate/core';
+import { NotificationService } from '../util/notification.service';
 
 const httpOptions = {
   headers: new HttpHeaders({})
@@ -19,8 +21,10 @@ export class VoteService extends BaseHttpService {
   };
 
   constructor(private http: HttpClient,
-              private authService: AuthenticationService) {
-    super();
+              private authService: AuthenticationService,
+              protected translateService: TranslateService,
+              protected notificationService: NotificationService) {
+    super(translateService, notificationService);
   }
 
   add(vote: Vote): Observable<Vote> {

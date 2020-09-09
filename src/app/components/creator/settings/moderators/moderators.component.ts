@@ -58,12 +58,13 @@ export class ModeratorsComponent implements OnInit {
         });
         return;
       }
-      this.moderatorService.add(this.roomId, list[0].id).subscribe();
-      this.moderators.push(new Moderator(list[0].id, this.loginId));
-      this.translationService.get('settings.moderator-added').subscribe(msg => {
-        this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.SUCCESS);
+      this.moderatorService.add(this.roomId, list[0].id).subscribe(() => {
+        this.moderators.push(new Moderator(list[0].id, this.loginId));
+        this.translationService.get('settings.moderator-added').subscribe(msg => {
+          this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.SUCCESS);
+        });
+        this.loginId = '';
       });
-      this.loginId = '';
     });
   }
 
@@ -77,10 +78,11 @@ export class ModeratorsComponent implements OnInit {
   }
 
   removeModerator(userId: string, index: number) {
-    this.moderatorService.delete(this.roomId, userId).subscribe();
-    this.translationService.get('settings.moderator-removed').subscribe(msg => {
-      this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
+    this.moderatorService.delete(this.roomId, userId).subscribe(() => {
+      this.translationService.get('settings.moderator-removed').subscribe(msg => {
+        this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
+      });
+      this.moderators.splice(index, 1);
     });
-    this.moderators.splice(index, 1);
   }
 }

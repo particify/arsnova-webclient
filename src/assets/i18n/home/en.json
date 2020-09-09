@@ -282,6 +282,7 @@
   },
   "errors": {
     "not-authorized": "You're not authorized to view this page.",
-    "room-not-found": "There was no room found with this number."
+    "room-not-found": "There was no room found with this number.",
+    "something-went-wrong": "Something went wrong."
   }
 }

@@ -281,6 +281,7 @@
   },
   "errors": {
     "not-authorized": "Du bist nicht autorisiert diese Seite zu sehen.",
-    "room-not-found": "Es wurde kein Raum mit dieser Nummer gefunden."
+    "room-not-found": "Es wurde kein Raum mit dieser Nummer gefunden.",
+    "something-went-wrong": "Es ist etwas schief gegangen."
   }
 }

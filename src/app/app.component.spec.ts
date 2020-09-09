@@ -54,7 +54,9 @@ class MockApiConfigService extends ApiConfigService {
 
   constructor() {
     super(
-      jasmine.createSpyObj('HttpClientSpy', ['get'])
+      jasmine.createSpyObj('HttpClientSpy', ['get']),
+      jasmine.createSpyObj('TranslateServiceSpy', ['get']),
+      jasmine.createSpyObj('NotificationServiceSpy', ['showAdvanced'])
     );
   }
 

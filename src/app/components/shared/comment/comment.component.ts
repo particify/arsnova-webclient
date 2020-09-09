@@ -122,7 +122,7 @@ export class CommentComponent implements OnInit {
   }
 
   setRead(comment: Comment): void {
-    this.comment = this.commentService.toggleRead(comment);
+    this.commentService.toggleRead(comment).subscribe(updatedComment => this.comment = updatedComment);
   }
 
   markCorrect(comment: Comment, type: CorrectWrong): void {
@@ -131,11 +131,11 @@ export class CommentComponent implements OnInit {
     } else {
       comment.correct = type;
     }
-    this.comment = this.commentService.markCorrect(comment);
+    this.commentService.markCorrect(comment).subscribe(updatedComment => this.comment = updatedComment);
   }
 
   setFavorite(comment: Comment): void {
-    this.comment = this.commentService.toggleFavorite(comment);
+    this.commentService.toggleFavorite(comment).subscribe(updatedComment => this.comment = updatedComment);
   }
 
   vote(vote: number) {
@@ -185,7 +185,7 @@ export class CommentComponent implements OnInit {
   }
 
   setAck(comment: Comment): void {
-    this.comment = this.commentService.toggleAck(comment);
+    this.commentService.toggleAck(comment).subscribe(updatedComment => this.comment = updatedComment);
     this.translateService.get(comment.ack ? 'comment-page.a11y-rejected' : 'comment-page.a11y-banned').subscribe(status => {
       this.announceService.announce('comment-page.a11y-comment-has-been', { status: status });
     });
