@@ -188,7 +188,16 @@
     "room-successfully-removed": "The room was successfully removed from the history.",
     "room-successfully-deleted": "The room was successfully deleted.",
     "canceled-remove": "Process cancelled.",
-    "participant-role": "Participant"
+    "participant-role": "Participant",
+    "transfer": "Transfer",
+    "transferred-successfully": "Your room has been transferred.",
+    "add": "Add",
+    "added-successfully": "The room was added to your list.",
+    "rooms-from-guest": "Rooms from guest account",
+    "transfer-rooms-from-guest": "Transfer rooms you created or visited without being logged in.",
+    "visited-rooms": "Visited rooms",
+    "load-rooms": "Load rooms",
+    "transfer-no-rooms": "No rooms were found for transfer."
   },
   "user-activation": {
     "a11y-activate": "Activates your account.",

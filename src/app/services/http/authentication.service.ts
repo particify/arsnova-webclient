@@ -134,6 +134,21 @@ export class AuthenticationService extends BaseHttpService {
   }
 
   /**
+   * Fetches guest authentication data withouth changing the local
+   * authentication state.
+   */
+  fetchGuestAuthentication(): Observable<ClientAuthentication> {
+    const token = this.getGuestToken();
+    const httpHeaders = this.httpOptions.headers.set(AUTH_HEADER_KEY, `${AUTH_SCHEME} ${token}`);
+    const connectionUrl: string = this.apiUrl.base + this.apiUrl.auth + this.apiUrl.login + this.apiUrl.guest;
+    return this.http.post<ClientAuthentication>(connectionUrl, null, {headers: httpHeaders});
+  }
+
+  getGuestToken(): string {
+    return this.globalStorageService.getItem(STORAGE_KEYS.GUEST_TOKEN);
+  }
+
+  /**
    * Authenticates a guest user using existing credentials or creates a new
    * guest account.
    */
