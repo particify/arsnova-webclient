@@ -163,7 +163,6 @@ export class RoomListComponent implements OnInit, OnDestroy {
       dialogRef.afterClosed().subscribe(result => {
         if (result === 'delete') {
           this.removeFromHistory(room);
-          this.removeRoomFromList(room);
         } else {
           this.roomDeletionCanceled();
         }
@@ -173,7 +172,6 @@ export class RoomListComponent implements OnInit, OnDestroy {
       dialogRef.afterClosed().subscribe(result => {
         if (result === 'delete') {
           this.deleteRoom(room);
-          this.removeRoomFromList(room);
         } else {
           this.roomDeletionCanceled();
         }
@@ -215,6 +213,7 @@ export class RoomListComponent implements OnInit, OnDestroy {
       });
       const event = new RoomDeleted(room.summary.id);
       this.eventService.broadcast(event.type, event.payload);
+      this.removeRoomFromList(room);
     });
   }
 
@@ -223,6 +222,7 @@ export class RoomListComponent implements OnInit, OnDestroy {
       this.translateService.get('room-list.room-successfully-removed').subscribe(msg => {
         this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
       });
+      this.removeRoomFromList(room);
     });
   }
 
