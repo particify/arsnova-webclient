@@ -12,6 +12,8 @@ import { EventService } from '../../../services/util/event.service';
 import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
 import { GlobalStorageService } from '../../../services/util/global-storage.service';
 import { ApiConfigService } from '../../../services/http/api-config.service';
+import { HttpClient } from '@angular/common/http';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 const TRANSLATION_DE = require('../../../../assets/i18n/home/de.json');
 const TRANSLATION_EN = require('../../../../assets/i18n/home/en.json');
@@ -48,9 +50,9 @@ class MockApiConfigService extends ApiConfigService {
 
   private apiConfig = new Subject<any>();
 
-  constructor() {
+  constructor(httpClient: HttpClient) {
     super(
-      jasmine.createSpyObj('HttpClientSpy', ['get']),
+      httpClient,
       jasmine.createSpyObj('TranslateServiceSpy', ['get']),
       jasmine.createSpyObj('NotificationServiceSpy', ['showAdvanced'])
     );
@@ -188,7 +190,8 @@ describe('RoomJoinComponent', () => {
             useClass: JsonTranslationLoader
           },
           isolate: true
-        })
+        }),
+        HttpClientTestingModule
       ],
     })
     .compileComponents()
