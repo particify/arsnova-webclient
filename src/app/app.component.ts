@@ -22,7 +22,8 @@ export class AppComponent implements OnInit {
               private apiConfigService: ApiConfigService,
               private trackingService: TrackingService,
               private dialogService: DialogService,
-              private globalStorageService: GlobalStorageService) {
+              private globalStorageService: GlobalStorageService,
+              private window: Window) {
     translationService.setDefaultLang(this.translationService.getBrowserLang());
     customIconService.init();
   }
@@ -47,7 +48,7 @@ export class AppComponent implements OnInit {
       const dialogRef = this.dialogService.openUpdateInfoDialog();
       dialogRef.afterClosed().subscribe(() => {
         this.globalStorageService.setItem(STORAGE_KEYS.UPDATED, true);
-        window.location.reload();
+        this.window.location.reload();
       });
     });
   }
