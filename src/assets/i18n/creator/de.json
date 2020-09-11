@@ -260,6 +260,8 @@
     "is-stopped": "Umfrage ist noch nicht gestartet.",
     "start": "Starten",
     "stop": "Anhalten",
+    "started": "Deine Umfrage wurde gestartet.",
+    "stopped": "Deine Umfrage wurde gestoppt.",
     "sentiment_very_satisfied": "Super",
     "sentiment_satisfied": "Gut",
     "sentiment_dissatisfied": "Nicht so gut",

@@ -3,7 +3,7 @@ import { AuthenticationService } from '../../../services/http/authentication.ser
 import { RoomService } from '../../../services/http/room.service';
 import { UserRole } from '../../../models/user-roles.enum';
 import { Room } from '../../../models/room';
-import { NotificationService } from '../../../services/util/notification.service';
+import { AdvancedSnackBarTypes, NotificationService } from '../../../services/util/notification.service';
 import { Message } from '@stomp/stompjs';
 import { WsFeedbackService } from '../../../services/websockets/ws-feedback.service';
 import { Subscription } from 'rxjs';
@@ -198,11 +198,17 @@ export class SurveyPageComponent implements OnInit, OnDestroy, AfterContentInit 
 
   toggle() {
     this.updateRoom(!this.isClosed);
-    const keys = [this.isClosed ? 'survey.a11y-started' : 'survey.a11y-stopped',
-                  this.isClosed ? 'survey.a11y-stop' : 'survey.a11y-start'];
+    const a11yPrefix = 'survey.a11y-';
+    const currentState = this.isClosed ? 'started' : 'stopped';
+    const nextState = this.isClosed ? 'start' : 'stop';
+    const keys = [a11yPrefix + currentState,
+                  a11yPrefix + nextState];
     this.translateService.get(keys).subscribe(status => {
-      this.announceService.announce('survey.a11y-status-changed',
+      this.announceService.announce(a11yPrefix + 'status-changed',
         { status: status[keys[0]], nextStatus: status[keys[1]] });
+    });
+    this.translateService.get('survey.' + currentState).subscribe(msg => {
+      this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.SUCCESS);
     });
   }
 
