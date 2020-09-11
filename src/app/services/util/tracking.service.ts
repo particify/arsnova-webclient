@@ -50,4 +50,12 @@ export class TrackingService {
 
     this.loaded = true;
   }
+
+  addRoute(route: string, title: string) {
+    if (this.consentGiven) {
+      this._paq.push(['setCustomUrl', route]);
+      this._paq.push(['setDocumentTitle', title]);
+      this._paq.push(['trackPageView']);
+    }
+  }
 }
