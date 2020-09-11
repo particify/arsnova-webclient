@@ -9,6 +9,8 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { Component, Injectable } from '@angular/core';
 import { Observable, of, Subject } from 'rxjs';
 import { TrackingService } from './services/util/tracking.service';
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable()
 class MockTranslateService {
@@ -52,9 +54,9 @@ class MockApiConfigService extends ApiConfigService {
   private apiConfig = new Subject<any>();
   public load = jasmine.createSpy('ApiConfigServiceLoadSpy');
 
-  constructor() {
+  constructor(private httpClient: HttpClient) {
     super(
-      jasmine.createSpyObj('HttpClientSpy', ['get']),
+      httpClient,
       jasmine.createSpyObj('TranslateServiceSpy', ['get']),
       jasmine.createSpyObj('NotificationServiceSpy', ['showAdvanced'])
     );
@@ -153,7 +155,8 @@ describe('AppComponent', () => {
         }
       ],
       imports: [
-        RouterTestingModule
+        RouterTestingModule,
+        HttpClientTestingModule
       ]
     }).compileComponents()
     .then(() => {

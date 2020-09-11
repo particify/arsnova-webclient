@@ -2,9 +2,10 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { BaseHttpService } from './base-http.service';
-import { ApiConfig, AuthenticationProvider, Feature, UiConfig } from '../../models/api-config';
+import { ApiConfig, AuthenticationProvider, Feature } from '../../models/api-config';
 import { TranslateService } from '@ngx-translate/core';
 import { NotificationService } from '../util/notification.service';
+import { shareReplay } from 'rxjs/operators';
 
 @Injectable()
 export class ApiConfigService extends BaseHttpService {
@@ -16,14 +17,14 @@ export class ApiConfigService extends BaseHttpService {
       return this.base + this.configPart;
     }
   };
-  private config$: Observable<ApiConfig>;
+  private readonly config$: Observable<ApiConfig>;
   private config: ApiConfig;
 
   constructor(private http: HttpClient,
               protected translateService: TranslateService,
               protected notificationService: NotificationService) {
     super(translateService, notificationService);
-    this.config$ = this.http.get<ApiConfig>(this.apiUris.config);
+    this.config$ = this.http.get<ApiConfig>(this.apiUris.config).pipe(shareReplay(1));
     this.config = new ApiConfig([], {}, {});
     this.freezeRecursively(this.config);
   }
@@ -41,11 +42,7 @@ export class ApiConfigService extends BaseHttpService {
   }
 
   getApiConfig$(): Observable<ApiConfig> {
-    return this.http.get<ApiConfig>(this.apiUris.config);
-  }
-
-  get loaded() {
-    return !!this.config;
+    return this.config$;
   }
 
   getAuthProviders(): AuthenticationProvider[] {
@@ -54,10 +51,6 @@ export class ApiConfigService extends BaseHttpService {
 
   getFeatureConfig(feature: string): Feature {
     return this.config.features[feature];
-  }
-
-  getUiConfig(): UiConfig {
-    return this.config.ui;
   }
 
   private freezeRecursively(obj: object) {
