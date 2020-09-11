@@ -25,7 +25,6 @@ import { CreatorModule } from './components/creator/creator.module';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LanguageService } from './services/util/language.service';
-import { MarkdownModule, MarkdownService, MarkedOptions } from 'ngx-markdown';
 import { HomePageComponent } from './components/home/home-page/home-page.component';
 import { UserHomeComponent } from './components/home/user-home/user-home.component';
 import { AppConfig } from './app.config';
@@ -100,15 +99,6 @@ export function initializeApp(appConfig: AppConfig) {
     CreatorModule,
     ModeratorModule,
     AdminModule,
-    MarkdownModule.forRoot({
-      loader: HttpClient,
-      markedOptions: {
-        provide: MarkedOptions,
-        useValue: {
-          sanitize: true
-        }
-      }
-    }),
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
     TranslateModule.forChild({
       loader: {
@@ -149,8 +139,6 @@ export function initializeApp(appConfig: AppConfig) {
     ContentService,
     ContentAnswerService,
     LanguageService,
-    MarkdownService,
-    MarkedOptions,
     UserService,
     VoteService,
     ModeratorService,

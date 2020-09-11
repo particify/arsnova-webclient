@@ -6,6 +6,19 @@ import { Observable } from 'rxjs';
 import { TranslateService } from '@ngx-translate/core';
 import { NotificationService } from '../util/notification.service';
 
+export enum MarkdownFeatureset {
+  MINIMUM = 'MINIMUM',
+  SIMPLE = 'SIMPLE',
+  EXTENDED = 'EXTENDED'
+}
+
+export interface FormattingOptions {
+  markdown: boolean,
+  latex: boolean,
+  markdownFeatureset: MarkdownFeatureset,
+  linebreaks: boolean
+}
+
 @Injectable()
 export class FormattingService extends BaseHttpService {
 
@@ -22,15 +35,17 @@ export class FormattingService extends BaseHttpService {
     super(translateService, notificationService);
   }
 
-  postString(text: string): Observable<any> {
+  postString(text: string, options?: FormattingOptions): Observable<any> {
+    options = options ?? {
+      markdown: true,
+      latex: false,
+      markdownFeatureset: MarkdownFeatureset.EXTENDED,
+      linebreaks: true
+    };
     const url = this.apiUrl.base + this.apiUrl.util + this.apiUrl.formatting + this.apiUrl.render;
     const body = {
       text: text,
-      options: {
-        markdown: true,
-        latex: false,
-        markdownFeatureset: 'extended'
-      }
+      options: options
     };
     return this.http.post<any>(url, body).pipe(
       catchError(this.handleError('postString', body))

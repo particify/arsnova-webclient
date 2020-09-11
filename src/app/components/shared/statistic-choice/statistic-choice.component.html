@@ -1,5 +1,5 @@
 <div fxLayout="row">
-  <markdown [data]="content.body"></markdown>
+  <app-rendered-text [rawText]="content.body" [renderedText]="content.renderedBody"></app-rendered-text>
   <span class="fill-remaining-space"></span>
   <button mat-icon-button *ngIf="chartVisible && !survey" disableRipple (click)="toggleCorrect()"
           matTooltip="{{ 'statistic.answer-indicator' | translate }}" aria-labelledby="show-correct">

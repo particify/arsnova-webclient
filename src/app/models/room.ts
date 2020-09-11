@@ -8,6 +8,7 @@ export class Room {
   abbreviation: string;
   name: string;
   description: string;
+  renderedDescription: string;
   closed: boolean;
   settings: TSMap<string, any>;
   extensions: TSMap<string, TSMap<string, any>>;

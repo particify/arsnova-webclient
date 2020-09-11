@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Content } from '../../../../models/content';
 import { ContentType } from '../../../../models/content-type.enum';
 import { ContentChoice } from '../../../../models/content-choice';
-import { FormattingService } from '../../../../services/http/formatting.service';
+import { FormattingService, MarkdownFeatureset } from '../../../../services/http/formatting.service';
 
 @Component({
   selector: 'app-preview',
@@ -18,14 +18,11 @@ export class PreviewComponent implements OnInit {
   answerLabels: string[];
   multipleAnswers: boolean;
   isLoading = true;
+  markdownFeatureset: MarkdownFeatureset;
 
   constructor(private formattingService: FormattingService) { }
 
   ngOnInit(): void {
-    this.formattingService.postString(this.content.body).subscribe(renderedBody => {
-      this.body = renderedBody.html;
-      this.isLoading = false;
-    });
     const format = this.content.format;
     if (format === ContentType.CHOICE || format === ContentType.SCALE || format === ContentType.BINARY) {
       this.answerLabels = (this.content as ContentChoice).options.map(option => {
@@ -33,10 +30,15 @@ export class PreviewComponent implements OnInit {
       });
       this.multipleAnswers = (this.content as ContentChoice).multiple;
     }
+    this.markdownFeatureset = format === ContentType.SLIDE ? MarkdownFeatureset.EXTENDED : MarkdownFeatureset.SIMPLE;
   }
 
   emitFlipEvent(submit: boolean) {
     this.flipEvent.emit(submit);
+  }
+
+  renderingFinished() {
+    this.isLoading = false;
   }
 
 }

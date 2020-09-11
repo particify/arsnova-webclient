@@ -9,7 +9,6 @@ import { SharedModule } from '../shared/shared.module';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { HttpClient } from '@angular/common/http';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
-import { MarkdownModule } from 'ngx-markdown';
 import { CreatorModule } from '../creator/creator.module';
 
 @NgModule({
@@ -26,7 +25,6 @@ import { CreatorModule } from '../creator/creator.module';
             },
             isolate: true
         }),
-        MarkdownModule,
         CreatorModule
     ],
   declarations: [

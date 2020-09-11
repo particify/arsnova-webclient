@@ -6,7 +6,7 @@
       <mat-card>
         <div class="side" [ngClass]="{'invisible-card-content': flipped}">
           <div fxLayout="row">
-            <markdown tabindex="0" [data]="content.body"></markdown>
+            <app-rendered-text tabindex="0" [rawText]="content.body" [renderedText]="content.renderedBody"></app-rendered-text>
             <div tabindex="0" class="visually-hidden"
                  *ngIf="alreadySent">{{ hasAbstained ? ('answer.a11y-has-abstained' | translate) :
               (content.multiple ? ('answer.a11y-already-answered-multiple' | translate: {

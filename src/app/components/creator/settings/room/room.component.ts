@@ -9,6 +9,7 @@ import { RoomDeleted } from '../../../../models/events/room-deleted';
 import { LanguageService } from '../../../../services/util/language.service';
 import { DialogService } from '../../../../services/util/dialog.service';
 import { GlobalStorageService, STORAGE_KEYS } from '../../../../services/util/global-storage.service';
+import { MarkdownFeatureset } from '../../../../services/http/formatting.service';
 
 @Component({
   selector: 'app-room-edit',
@@ -22,6 +23,8 @@ export class RoomComponent implements OnInit {
   @Input() editRoom: Room;
   @Input() name: string;
   @Input() description: string;
+  markdownFeatureset = MarkdownFeatureset.EXTENDED;
+  renderPreview = false;
 
   constructor(
     public notificationService: NotificationService,
@@ -65,5 +68,9 @@ export class RoomComponent implements OnInit {
     this.editRoom.name = this.name;
     this.editRoom.description = this.description;
     this.saveEvent.emit(this.editRoom);
+  }
+
+  descriptionTabChanged($event) {
+    this.renderPreview = $event.index === 1;
   }
 }
