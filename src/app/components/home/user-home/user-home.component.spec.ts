@@ -8,7 +8,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { EventService } from '../../../services/util/event.service';
 import { LanguageService } from '../../../services/util/language.service';
 import { AuthenticationService } from '../../../services/http/authentication.service';
-import { ClientAuthentication } from 'app/models/client-authentication';
+import { ClientAuthentication } from '../../../models/client-authentication';
 import { DialogService } from '../../../services/util/dialog.service';
 import { GlobalStorageService } from '../../../services/util/global-storage.service';
 import { AnnounceService } from '../../../services/util/announce.service';

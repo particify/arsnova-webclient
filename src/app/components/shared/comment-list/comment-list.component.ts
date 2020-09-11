@@ -5,7 +5,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { LanguageService } from '../../../services/util/language.service';
 import { Message } from '@stomp/stompjs';
 import { WsCommentServiceService } from '../../../services/websockets/ws-comment-service.service';
-import { ClientAuthentication } from 'app/models/client-authentication';
+import { ClientAuthentication } from '../../../models/client-authentication';
 import { Vote } from '../../../models/vote';
 import { UserRole } from '../../../models/user-roles.enum';
 import { Room } from '../../../models/room';

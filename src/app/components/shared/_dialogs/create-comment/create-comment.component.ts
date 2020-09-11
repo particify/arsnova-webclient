@@ -4,7 +4,7 @@ import { AdvancedSnackBarTypes, NotificationService } from '../../../../services
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
 import { FormControl, Validators } from '@angular/forms';
-import { ClientAuthentication } from 'app/models/client-authentication';
+import { ClientAuthentication } from '../../../../models/client-authentication';
 import { CommentListComponent } from '../../comment-list/comment-list.component';
 import { EventService } from '../../../../services/util/event.service';
 import { GlobalStorageService, STORAGE_KEYS } from '../../../../services/util/global-storage.service';

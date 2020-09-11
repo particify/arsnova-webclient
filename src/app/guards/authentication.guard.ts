@@ -3,7 +3,7 @@ import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot } from
 import { Observable, of } from 'rxjs';
 import { catchError, map, switchMap, tap } from 'rxjs/operators';
 import { AuthenticationService } from '../services/http/authentication.service';
-import { EventService } from 'app/services/util/event.service';
+import { EventService } from '../services/util/event.service';
 import { AdvancedSnackBarTypes, NotificationService } from '../services/util/notification.service';
 import { UserRole } from '../models/user-roles.enum';
 import { MembershipsChanged } from '../models/events/memberships-changed';

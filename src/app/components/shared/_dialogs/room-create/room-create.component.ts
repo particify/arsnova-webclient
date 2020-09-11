@@ -13,7 +13,7 @@ import { TSMap } from 'typescript-map';
 import { EventService } from '../../../../services/util/event.service';
 import { GlobalStorageService, STORAGE_KEYS } from '../../../../services/util/global-storage.service';
 import { first, filter } from 'rxjs/operators';
-import { ClientAuthentication } from 'app/models/client-authentication';
+import { ClientAuthentication } from '../../../../models/client-authentication';
 
 @Component({
   selector: 'app-room-create',

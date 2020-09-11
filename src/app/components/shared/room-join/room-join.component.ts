@@ -8,7 +8,7 @@ import { FormControl, Validators } from '@angular/forms';
 import { AdvancedSnackBarTypes, NotificationService } from '../../../services/util/notification.service';
 import { TranslateService } from '@ngx-translate/core';
 import { AuthenticationService } from '../../../services/http/authentication.service';
-import { ClientAuthentication } from 'app/models/client-authentication';
+import { ClientAuthentication } from '../../../models/client-authentication';
 import { EventService } from '../../../services/util/event.service';
 import { KeyboardUtils } from '../../../utils/keyboard';
 import { KeyboardKey } from '../../../utils/keyboard/keys';
