@@ -8,6 +8,7 @@ import { Component, Input, OnInit } from '@angular/core';
 export class LoadingIndicatorComponent implements OnInit {
 
   @Input() size = 100;
+  @Input() smaller = false;
 
   constructor() { }
 
