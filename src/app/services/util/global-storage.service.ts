@@ -23,7 +23,9 @@ export const STORAGE_KEYS: { [key: string]: symbol } = {
   LAST_GROUP: Symbol(),
   THEME: Symbol(),
   LANGUAGE: Symbol(),
-  COMMENT_SORT: Symbol()
+  COMMENT_SORT: Symbol(),
+  UPDATED: Symbol(),
+  VERSION: Symbol()
 };
 
 /**
@@ -107,6 +109,18 @@ export const STORAGE_CONFIG: StorageItem[] = [
     name: 'COMMENT_SORT',
     category: StorageItemCategory.FUNCTIONAL,
     backend: StorageBackend.MEMORY
+  },
+  {
+    key: STORAGE_KEYS.UPDATED,
+    name: 'UPDATED',
+    category: StorageItemCategory.FUNCTIONAL,
+    backend: StorageBackend.LOCALSTORAGE
+  },
+  {
+    key: STORAGE_KEYS.VERSION,
+    name: 'VERSION',
+    category: StorageItemCategory.REQUIRED,
+    backend: StorageBackend.LOCALSTORAGE
   }
 ];
 

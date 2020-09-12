@@ -160,6 +160,7 @@ export function initializeApp(appConfig: AppConfig) {
     AdminService,
     SystemInfoService,
     FormattingService,
+    { provide: Window,  useValue: window },
     STORAGE_CONFIG_PROVIDERS,
     {
       provide: MatDialogRef,

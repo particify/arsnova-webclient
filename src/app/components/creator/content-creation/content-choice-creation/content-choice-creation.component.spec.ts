@@ -47,7 +47,7 @@ class MockNotificationService {
 
 @Injectable()
 class MockMatDialiog {
-
+  afterClosed() {}
 }
 
 @Injectable()

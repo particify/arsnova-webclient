@@ -88,6 +88,10 @@ strong, b {
   font-weight: $font-weight-bold;
 }
 
+ul {
+  color: var(--on-surface);
+}
+
 .smaller-text {
   font-size: smaller;
   margin-bottom: 0;

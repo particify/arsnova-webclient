@@ -39,6 +39,7 @@ import { StepperComponent } from './stepper/stepper.component';
 import { CdkStepperModule } from '@angular/cdk/stepper';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { RenderedTextComponent } from './rendered-text/rendered-text.component';
+import { UpdateInfoComponent } from './_dialogs/update-info/update-info.component';
 
 @NgModule({
     imports: [
@@ -84,7 +85,8 @@ import { RenderedTextComponent } from './rendered-text/rendered-text.component';
     DateFromNow,
     StepperComponent,
     SidebarComponent,
-    RenderedTextComponent
+    RenderedTextComponent,
+    UpdateInfoComponent
   ],
   exports: [
     RoomJoinComponent,

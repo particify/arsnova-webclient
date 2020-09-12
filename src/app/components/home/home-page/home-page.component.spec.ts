@@ -50,7 +50,7 @@ class MockRenderer2 {
 
 @Injectable()
 class MockMatDialog {
-
+  afterClosed() {}
 }
 
 @Injectable()

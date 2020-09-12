@@ -1,5 +1,5 @@
 import { TranslateService } from '@ngx-translate/core';
-import { TestBed, async, ComponentFixture } from '@angular/core/testing';
+import { TestBed, async, ComponentFixture, tick } from '@angular/core/testing';
 import { AppComponent } from './app.component';
 import { NotificationService } from './services/util/notification.service';
 import { SwUpdate, UpdateAvailableEvent } from '@angular/service-worker';
@@ -11,6 +11,8 @@ import { Observable, of, Subject } from 'rxjs';
 import { TrackingService } from './services/util/tracking.service';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { HttpClient } from '@angular/common/http';
+import { DialogService } from './services/util/dialog.service';
+import { GlobalStorageService, STORAGE_KEYS } from './services/util/global-storage.service';
 
 @Injectable()
 class MockTranslateService {
@@ -36,6 +38,30 @@ class MockNotificationService {
   };
 
   public show(msg: string, install: string, config: any) {
+  }
+}
+
+@Injectable()
+class MockDialogService {
+  public openUpdateInfoDialog() {
+    return {
+      afterClosed(): Observable<string> {
+        return of("any")
+      }
+    }
+  }
+}
+
+@Injectable()
+class MockGlobalStorageService {
+  public getItem(key: string): string {
+    return '';
+  }
+
+  public setItem(key: string, value: any) {
+  }
+
+  public removeItem(key: string) {
   }
 }
 
@@ -76,6 +102,14 @@ class MockApiConfigService extends ApiConfigService {
 class MockTrackingService {
   public init(object: any) {
 
+  }
+}
+
+// Mock class for the Window
+@Injectable()
+class MockWindow {
+  public location = class {
+    public reload = jasmine.createSpy('WindowReloadSpy')
   }
 }
 
@@ -152,6 +186,18 @@ describe('AppComponent', () => {
         {
           provide: TrackingService,
           useClass: MockTrackingService
+        },
+        {
+          provide: DialogService,
+          useClass: MockDialogService
+        },
+        {
+          provide: GlobalStorageService,
+          useClass: MockGlobalStorageService
+        },
+        {
+          provide: Window,
+          useClass: MockWindow
         }
       ],
       imports: [
@@ -179,14 +225,20 @@ describe('AppComponent', () => {
     expect(mockApiConfigService.load).toHaveBeenCalled();
   });
 
-  it('should show a notification on sw update', () => {
+  it('should show a dialog on sw update', () => {
     const mockSwUpdate = <MockSwUpdate> fixture.debugElement.injector.get(SwUpdate);
-    const mockNotificationService = fixture.debugElement.injector.get(NotificationService);
-    const spy = spyOn(mockNotificationService, 'show');
+    const mockGlobalStorageService = fixture.debugElement.injector.get(GlobalStorageService);
+    const $window = fixture.debugElement.injector.get(Window);
+    const spy = spyOn(mockGlobalStorageService, 'setItem');
+    delete $window.location;
+    $window.location = Object();
+    $window.location.reload = () => {};
+    const reloadSpy = spyOn($window.location, 'reload');
 
     mockSwUpdate.mockUpdateAvailableEvent();
 
     expect(spy).toHaveBeenCalled();
+    expect(reloadSpy).toHaveBeenCalled();
   });
 
   it('should call the tracking service init on getting a tracking config', () => {

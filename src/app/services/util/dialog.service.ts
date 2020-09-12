@@ -15,6 +15,7 @@ import { StatisticHelpComponent } from '../../components/shared/_dialogs/statist
 import { OverlayComponent } from '../../components/home/_dialogs/overlay/overlay.component';
 import { UserActivationComponent } from '../../components/home/_dialogs/user-activation/user-activation.component';
 import { Content } from '../../models/content';
+import { UpdateInfoComponent } from '../../components/shared/_dialogs/update-info/update-info.component';
 
 @Injectable()
 export class DialogService {
@@ -140,6 +141,14 @@ export class DialogService {
     return this.dialog.open(UserActivationComponent, {
       width: this.size.xsmall,
       data: username
+    });
+  }
+
+  openUpdateInfoDialog(afterUpdate: boolean): MatDialogRef<UpdateInfoComponent> {
+    return this.dialog.open(UpdateInfoComponent, {
+      width: this.size.medium,
+      disableClose: !afterUpdate,
+      data: afterUpdate
     });
   }
 }
