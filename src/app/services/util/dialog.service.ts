@@ -144,10 +144,11 @@ export class DialogService {
     });
   }
 
-  openUpdateInfoDialog(): MatDialogRef<UpdateInfoComponent> {
+  openUpdateInfoDialog(afterUpdate: boolean): MatDialogRef<UpdateInfoComponent> {
     return this.dialog.open(UpdateInfoComponent, {
       width: this.size.medium,
-      disableClose: true
+      disableClose: !afterUpdate,
+      data: afterUpdate
     });
   }
 }

@@ -38,6 +38,7 @@
     "a11y-login": "Navigates to the Login.",
     "a11y-room": "Open the user menu. Here you can view the rooms you have attended or log out of your account.",
     "a11y-style": "Open the display selector.",
+    "a11y-news": "Opens a dialog that shows you the latest changes and links you to our news page.",
     "account-deleted": "Your account has been deleted.",
     "back": "Back",
     "admin-area": "Administration",
@@ -59,7 +60,8 @@
     "room-id-copied": "Room link was copied to the clipboard.",
     "style": "Display",
     "user-bonus-token": "See your bonus tokens",
-    "visited-rooms": "Visited rooms"
+    "visited-rooms": "Visited rooms",
+    "news": "There are news"
   },
   "home-page": {
     "a11y-create-room": "Create a new room",
@@ -78,6 +80,7 @@
     "only-numbers": "A room number only contains digits.",
     "room-id": "Room-No.",
     "update-available": "Update available!",
+    "update-made": "New Version!",
     "see-news": "A detailed list of the changes can be found in our ",
     "news": "news",
     "important-changes": "The major changes are",

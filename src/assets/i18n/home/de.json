@@ -38,6 +38,7 @@
     "a11y-login": "Navigiert zur Anmeldung.",
     "a11y-room": "Öffnet das Nutzer-Menü. Hier kannst du deine besuchten Räume einsehen oder dich von deinem Konto abmelden.",
     "a11y-style": "Öffnet die Anzeigeoptionen für hohen Kontrast, Hörsaal-Projektion, heller und dunkler Hintergrund.",
+    "a11y-news": "Öffnet einen Dialog, welcher dir die neusten Änderungen zeigt und dich auf unsere News-Seite verweist.",
     "account-deleted": "Dein Konto wurde gelöscht.",
     "back": "Zurück",
     "admin-area": "Administration",
@@ -59,7 +60,8 @@
     "room-id-copied": "Direktlink wurde in die Zwischenablage kopiert.",
     "style": "Anzeige",
     "user-bonus-token": "Zu deinen Bonus Tokens",
-    "visited-rooms": "Besuchte Räume"
+    "visited-rooms": "Besuchte Räume",
+    "news": "Es gibt Neuigkeiten"
   },
   "home-page": {
     "a11y-create-room": "Erstellt einen neuen Raum.",
@@ -78,6 +80,7 @@
     "only-numbers": "Die Raumnummer besteht ausschließlich aus Ziffern.",
     "room-id": "Raum-Nr.",
     "update-available": "Update verfügbar!",
+    "update-made": "Neue Version!",
     "see-news": "Eine ausführliche Auflistung der Änderungen findest du in unseren ",
     "news": "News",
     "important-changes": "Die wichtigsten Änderungen sind",

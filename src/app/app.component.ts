@@ -45,7 +45,7 @@ export class AppComponent implements OnInit {
       });
     }
     this.update.available.subscribe(() => {
-      const dialogRef = this.dialogService.openUpdateInfoDialog();
+      const dialogRef = this.dialogService.openUpdateInfoDialog(false);
       dialogRef.afterClosed().subscribe(() => {
         this.globalStorageService.setItem(STORAGE_KEYS.UPDATED, true);
         this.window.location.reload();

@@ -42,6 +42,7 @@ export class HeaderComponent implements OnInit {
   themes: Theme[];
   deviceWidth = innerWidth;
   helpUrl: string;
+  showNews: boolean;
 
   constructor(
     public location: Location,
@@ -123,6 +124,7 @@ export class HeaderComponent implements OnInit {
     this.apiConfigService.getApiConfig$().subscribe(config => {
       this.helpUrl = config.ui.links.help.url;
     });
+    this.showNews = !this.globalStorageService.getItem(STORAGE_KEYS.VERSION);
   }
 
   getTime(time: Date) {
@@ -210,6 +212,13 @@ export class HeaderComponent implements OnInit {
 
   getLanguage(): string {
     return this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE);
+  }
+
+  openUpdateInfoDialog() {
+    const dialogRef = this.dialogService.openUpdateInfoDialog(true);
+    dialogRef.afterClosed().subscribe(() => {
+      this.showNews = false;
+    });
   }
 
   /*

@@ -1,5 +1,5 @@
 <div mat-dialog-content>
-  <h3 tabindex="0">{{ 'home-page.update-available' | translate }}</h3>
+  <h3 tabindex="0">{{ (data ? 'home-page.update-made' : 'home-page.update-available') | translate }}</h3>
   <app-loading-indicator *ngIf="isLoading" [size]="30" [smaller]="true"></app-loading-indicator>
   <div *ngIf="!isLoading">
     <div *ngIf="showReleaseNotes">
@@ -13,5 +13,6 @@
   </div>
 </div>
 <div fxLayoutAlign="end">
-  <button mat-flat-button class="button-primary" (click)="close()">{{ 'home-page.update' | translate }}</button>
+  <button mat-flat-button class="{{ data ? 'button-abort' : 'button-primary'}}" (click)="close()">
+    {{ (data ? 'dialog.close' : 'home-page.update') | translate }}</button>
 </div>

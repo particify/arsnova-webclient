@@ -83,6 +83,12 @@
       <button class="item-title lang-title" mat-menu-item (click)="useLanguage('en')">
         {{ 'header.english' | translate }}</button>
     </mat-menu>
+    <button *ngIf="showNews" mat-icon-button class="news-btn" (click)="openUpdateInfoDialog()" aria-labelledby="news"
+            matTooltip="{{ 'header.news' | translate }}">
+      <mat-icon matBadge="1">
+        notifications
+      </mat-icon>
+    </button>
 
     <button mat-button *ngIf="auth" [matMenuTriggerFor]="userMenu" aria-labelledby="room-label" id="room-button">
         <mat-icon class="header-icons">account_circle</mat-icon>
@@ -107,4 +113,5 @@
   <div id="demo-label">{{'header.a11y-demo' | translate}}</div>
   <div id="style-label">{{'header.a11y-style' | translate}}</div>
   <div id="language-label">{{'header.a11y-language' | translate}}</div>
+  <div id="news">{{'header.a11y-news' | translate}}</div>
 </div>
