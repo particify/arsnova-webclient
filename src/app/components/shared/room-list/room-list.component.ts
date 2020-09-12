@@ -1,5 +1,5 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { ClientAuthentication } from 'app/models/client-authentication';
+import { ClientAuthentication } from '../../../models/client-authentication';
 import { UserRole } from '../../../models/user-roles.enum';
 import { RoomService } from '../../../services/http/room.service';
 import { EventService } from '../../../services/util/event.service';
@@ -14,7 +14,7 @@ import { GlobalStorageService, STORAGE_KEYS } from '../../../services/util/globa
 import { Membership } from '../../../models/membership';
 import { filter, map, shareReplay, switchMap, takeUntil, tap } from 'rxjs/operators';
 import { RoomSummary } from '../../../models/room-summary';
-import { RoomDeleted } from 'app/models/events/room-deleted';
+import { RoomDeleted } from '../../../models/events/room-deleted';
 import { AuthProvider } from '../../../models/auth-provider';
 import { MembershipsChanged } from '../../../models/events/memberships-changed';
 

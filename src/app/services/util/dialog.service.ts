@@ -4,7 +4,7 @@ import { YesNoDialogComponent } from '../../components/shared/_dialogs/yes-no-di
 import { InfoDialogComponent } from '../../components/shared/_dialogs/info-dialog/info-dialog.component';
 import { ContentEditComponent } from '../../components/shared/_dialogs/content-edit/content-edit.component';
 import { ContentGroupCreationComponent } from '../../components/shared/_dialogs/content-group-creation/content-group-creation.component';
-import { ClientAuthentication } from 'app/models/client-authentication';
+import { ClientAuthentication } from '../../models/client-authentication';
 import { CreateCommentComponent } from '../../components/shared/_dialogs/create-comment/create-comment.component';
 import { PresentCommentComponent } from '../../components/shared/_dialogs/present-comment/present-comment.component';
 import { QrCodeComponent } from '../../components/shared/_dialogs/qr-code/qr-code.component';
