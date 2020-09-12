@@ -45,7 +45,7 @@ export class FooterComponent implements OnInit {
 
     this.apiConfigService.getApiConfig$().subscribe(config => {
       this.privacyUrl = config.ui.links.privacy.url;
-      this.imprintUrl = config.ui.links.imrpint.url ;
+      this.imprintUrl = config.ui.links.imprint.url ;
     });
   }
 
