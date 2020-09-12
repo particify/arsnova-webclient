@@ -26,7 +26,7 @@ export class CookiesComponent implements OnInit, AfterViewInit {
     // not really the nicest way but should do its job until a better or native solution was found
     setTimeout(() => document.getElementById('cookie-header').focus(), 400);
     this.apiConfigService.getApiConfig$().subscribe(config => {
-      this.privacyUrl = config.ui.privacy;
+      this.privacyUrl = config.ui.links.privacy.url;
     });
   }
 
