@@ -101,6 +101,9 @@ export class ContentTextParticipantComponent extends ContentParticipantComponent
     } as TextAnswer).subscribe();
     this.createAnswer(this.textAnswer);
     this.getAnsweredMessage();
+    this.translateService.get('answer.sent').subscribe(msg => {
+      this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.SUCCESS);
+    });
     this.alreadySent = true;
     this.sendStatusToParent();
   }
