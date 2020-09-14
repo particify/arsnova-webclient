@@ -46,8 +46,26 @@ export class TrackingService {
     trackerScript.src = this.config.url + 'matomo.js';
     trackerScript.async = true;
     trackerScript.defer = true;
+    trackerScript.onload = () => this._paq = window['_paq'];
     document.body.appendChild(trackerScript);
 
     this.loaded = true;
+  }
+
+  addRoute(route: string, title: string) {
+    if (this.consentGiven) {
+      this._paq.push(['setCustomUrl', this.stripIdsFromUri(route)]);
+      this._paq.push(['setDocumentTitle', title]);
+      this._paq.push(['trackPageView']);
+    }
+  }
+
+  /**
+   * Replaces IDs in a URI to protect the user's privacy.
+   */
+  stripIdsFromUri(uri: string) {
+    let strippedUri = uri.replace(/\/room\/[0-9]+/, '/room/__ROOM_SHORT_ID__');
+    strippedUri = strippedUri.replace(/[0-9a-f]{32}/, '__ID__');
+    return strippedUri;
   }
 }
