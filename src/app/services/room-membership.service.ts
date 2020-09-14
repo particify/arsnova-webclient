@@ -26,6 +26,7 @@ export class RoomMembershipService extends BaseHttpService {
     membershipByUserAndRoom: '/_view/membership/by-user-and-room'
   };
   private memberships$$ = new BehaviorSubject<Observable<Membership[]>>(of([]));
+  private newOwnerships: Membership[] = [];
 
   constructor(
     private http: HttpClient,
@@ -51,7 +52,7 @@ export class RoomMembershipService extends BaseHttpService {
         ).subscribe(() => this.loadMemberships(auth.userId));
         this.eventService.on<any>('RoomCreated').pipe(
             takeUntil(authChanged$),
-        ).subscribe(() => this.loadMemberships(auth.userId));
+        ).subscribe(e => this.addOwnership(e.id, e.shortId));
         this.eventService.on<any>('MembershipsChanged').pipe(
             takeUntil(authChanged$),
         ).subscribe(() => this.loadMemberships(auth.userId));
@@ -64,8 +65,10 @@ export class RoomMembershipService extends BaseHttpService {
    */
   private loadMemberships(userId: string) {
     const memberships$ = this.fetchMemberships(userId).pipe(
+        tap(() => this.newOwnerships = []),
         tap(memberships => memberships.forEach(m => m.primaryRole = this.selectPrimaryRole(m.roles))),
-        shareReplay()
+        shareReplay(),
+        map(memberships => memberships.concat(this.newOwnerships))
     );
     this.memberships$$.next(memberships$);
 
@@ -81,6 +84,20 @@ export class RoomMembershipService extends BaseHttpService {
     return this.http.get<Membership[]>(url, {headers: httpHeaders}).pipe(
         tap(memberships => memberships.forEach(m => m.primaryRole = this.selectPrimaryRole(m.roles)))
     );
+  }
+
+  /**
+   * Adds a membership with owner role for a newly created room.
+   *
+   * @param roomId the owned room
+   */
+  private addOwnership(roomId: string, roomShortId: string) {
+    const membership = new Membership();
+    membership.roomId = roomId;
+    membership.roomShortId = roomShortId;
+    membership.roles = [UserRole.CREATOR];
+    membership.primaryRole = UserRole.CREATOR;
+    this.newOwnerships.push(membership);
   }
 
   /**
