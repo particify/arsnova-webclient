@@ -146,10 +146,10 @@ export class StatisticChoiceComponent implements OnInit, OnDestroy {
 
   checkIfSurvey(content: Content) {
     let maxPoints;
-    if (content.format === ContentType.BINARY) {
+    if (content.format === ContentType.BINARY || content.format === ContentType.CHOICE) {
       maxPoints = Math.max.apply(Math, (content as ContentChoice).options.map(function(option) { return option.points; }));
     }
-    if (content.format === ContentType.TEXT || content.format === ContentType.SCALE || maxPoints === 0) {
+    if (content.format === ContentType.TEXT || content.format === ContentType.SCALE || maxPoints <= 0) {
       this.survey = true;
     }
   }
