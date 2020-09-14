@@ -92,7 +92,7 @@ export class RoomCreateComponent implements OnInit {
         msg2 = msg;
       });
       this.notification.showAdvanced(msg1 + longRoomName + msg2, AdvancedSnackBarTypes.SUCCESS);
-      const event = new RoomCreated(room.id);
+      const event = new RoomCreated(room.id, room.shortId);
       this.eventService.broadcast(event.type, event.payload);
       this.router.navigate([`/creator/room/${this.room.shortId}`]);
       this.closeDialog();
