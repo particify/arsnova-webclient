@@ -1,7 +1,3 @@
-.buttons {
-  margin: 20px 0;
-}
-
 .disabled {
   opacity: 0.8;
   pointer-events: none;
@@ -30,7 +26,8 @@
 }
 
 p {
-  font-size: 24px;
+  font-size: 14px;
+  text-align: center;
   color: var(--primary);
   margin: 0;
 }
@@ -40,9 +37,7 @@ p {
 }
 
 .text {
-  width: 300px;
-  margin: -16px 0 0 -150px;
-  text-align: center;
+  margin: 20px 0;
 }
 
 .invisible {
@@ -72,4 +67,8 @@ p {
 
 markdown {
   margin-left: 0.5em;
+}
+
+.mat-raised-button {
+  min-width: 100px;
 }

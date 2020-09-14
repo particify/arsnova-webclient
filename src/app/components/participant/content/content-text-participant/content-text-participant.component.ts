@@ -98,11 +98,15 @@ export class ContentTextParticipantComponent extends ContentParticipantComponent
       read: 'false',
       creationTimestamp: null,
       format: ContentType.TEXT
-    } as TextAnswer).subscribe();
-    this.createAnswer(this.textAnswer);
-    this.getAnsweredMessage();
-    this.alreadySent = true;
-    this.sendStatusToParent();
+    } as TextAnswer).subscribe(() => {
+      this.createAnswer(this.textAnswer);
+      this.getAnsweredMessage();
+      this.translateService.get('answer.sent').subscribe(msg => {
+        this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.SUCCESS);
+      });
+      this.alreadySent = true;
+      this.sendStatusToParent();
+    });
   }
 
   abstain($event) {

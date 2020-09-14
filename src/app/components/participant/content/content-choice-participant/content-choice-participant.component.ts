@@ -161,6 +161,9 @@ export class ContentChoiceParticipantComponent extends ContentParticipantCompone
       if (this.isChoice) {
         this.checkAnswer(selectedAnswers);
       }
+      this.translateService.get('answer.sent').subscribe(msg => {
+        this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.SUCCESS);
+      });
       this.alreadySent = true;
       this.sendStatusToParent();
     });
