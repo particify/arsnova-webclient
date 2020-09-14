@@ -22,7 +22,7 @@
               content: cp.content.body, count: cp.counts, abstentions: cp.abstentions }) +
               (cp.percent >= status.zero ? ('statistic.a11y-choice-result' | translate: { percent: cp.percent }) : '') +
               ('statistic.a11y-go-to-statistic' | translate) }}" (keyup.enter)="goToStats(cp.contentId)">
-      {{cp.content.body.length > 80 ? cp.content.body.substr(0, 80) + '..' : cp.content.body}}</mat-cell>
+      {{cp.content.body.length > 80 ? cp.content.body.substr(0, 80) + '…' : cp.content.body}}</mat-cell>
   </ng-container>
 
   <ng-container matColumnDef="counts">
