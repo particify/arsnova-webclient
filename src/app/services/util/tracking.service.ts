@@ -46,6 +46,7 @@ export class TrackingService {
     trackerScript.src = this.config.url + 'matomo.js';
     trackerScript.async = true;
     trackerScript.defer = true;
+    trackerScript.onload = () => this._paq = window['_paq'];
     document.body.appendChild(trackerScript);
 
     this.loaded = true;
