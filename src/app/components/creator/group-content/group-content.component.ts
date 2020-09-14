@@ -106,7 +106,7 @@ export class GroupContentComponent extends ContentListComponent implements OnIni
         this.directAnswer = true;
       }
       if (this.contents[i].body.length > this.labelMaxLength) {
-        this.labels[i] = this.contents[i].body.substr(0, this.labelMaxLength) + '..';
+        this.labels[i] = this.contents[i].body.substr(0, this.labelMaxLength) + '…';
       } else {
         this.labels[i] = this.contents[i].body;
       }

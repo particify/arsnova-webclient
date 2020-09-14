@@ -76,7 +76,7 @@ export class LooseContentComponent extends ContentListComponent implements OnIni
     this.contents = contentList;
     for (let i = 0; i < this.contents.length; i++) {
       if (this.contents[i].body.length > this.labelMaxLength) {
-        this.labels[i] = this.contents[i].body.substr(0, this.labelMaxLength) + '..';
+        this.labels[i] = this.contents[i].body.substr(0, this.labelMaxLength) + '…';
       } else {
         this.labels[i] = this.contents[i].body;
       }
