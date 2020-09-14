@@ -41,8 +41,9 @@
                 <mat-icon class="icon-indicator" [ngClass]="isCorrect ? 'correct' : 'wrong'">
                   {{isCorrect ? 'check' : 'close'}}</mat-icon>
               </div>
-              <div *ngIf="hasAbstained" class="text invisible" [ngClass]="{'visible' : alreadySent}">
-                <p>{{'answer.has-abstained' | translate}}</p>
+              <div *ngIf="alreadySent" class="text">
+                <p *ngIf="hasAbstained">{{'answer.has-abstained' | translate}}</p>
+                <p *ngIf="!hasAbstained && !isChoice">{{'answer.has-voted' | translate}}</p>
               </div>
             </mat-list>
             <mat-radio-group [disabled]="alreadySent" *ngIf="!content.multiple" name="Radio">
@@ -59,17 +60,13 @@
                   <mat-icon class="icon-indicator" [ngClass]="isCorrect ? 'correct' : 'wrong'">
                     {{isCorrect ? 'check' : 'close'}}</mat-icon>
                 </div>
-                <div *ngIf="hasAbstained" class="text invisible"
-                     [ngClass]="{'visible' : alreadySent}">
-                  <p>{{'answer.has-abstained' | translate}}</p>
-                </div>
-                <div *ngIf="!isChoice && !hasAbstained && content.state.responsesVisible"
-                     class="text invisible" [ngClass]="{'visible' : alreadySent}">
-                  <p>{{'answer.has-voted' | translate}}</p>
+                <div *ngIf="!isChoice && alreadySent" fxLayout="column" fxLayoutAlign="center" class="text">
+                  <p *ngIf="!hasAbstained">{{'answer.has-voted' | translate}}</p>
+                  <p *ngIf="hasAbstained">{{'answer.has-abstained' | translate}}</p>
                 </div>
               </mat-list>
             </mat-radio-group>
-            <div fxLayoutAlign="center" fxLayoutGap="20px" class="buttons" [ngClass]="{'disabled': alreadySent}">
+            <div fxLayoutAlign="center" fxLayoutGap="20px" [ngClass]="{'disabled': alreadySent}">
               <button tabindex="{{alreadySent ? '-1' : '0'}}" mat-raised-button *ngIf="content.abstentionsAllowed"
                       class="button-abort"
                       [ngClass]="{'disabled' : alreadySent}" (click)="abstain($event)" aria-labelledby="abstain">

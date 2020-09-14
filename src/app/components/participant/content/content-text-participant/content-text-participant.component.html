@@ -30,11 +30,12 @@
             <div *ngIf="givenAnswer && givenAnswer.body">
               <p class="answer">{{givenAnswer.body}}</p>
             </div>
-            <div *ngIf="content.state.responsesVisible" class="invisible" [ngClass]="{'visible' : givenAnswer}">
+            <span class="fill-remaining-space"></span>
+            <div fxLayout="column" fxLayoutAlign="center" class="invisible" [ngClass]="{'visible' : givenAnswer}">
               <p class="text">{{sentMessage}}</p>
             </div>
           </div>
-          <div fxLayoutAlign="center" fxLayoutGap="20px" class="buttons">
+          <div fxLayoutAlign="center" fxLayoutGap="20px">
             <button tabindex="{{alreadySent ? '-1' : '0'}}" mat-raised-button *ngIf="content.abstentionsAllowed"
                     (click)="abstain($event)" class="button-abort" [ngClass]="{'disabled' : alreadySent}"
                     aria-labelledby="abstain">
