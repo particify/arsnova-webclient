@@ -36,7 +36,8 @@
         ],
         "urls": [
           "/*MaterialIcons*",
-          "/*roboto*"
+          "/*roboto*",
+	  "/*KaTeX_*"
         ]
       }
     }

@@ -1,7 +1,2 @@
 <app-loading-indicator [size]="80" *ngIf="isLoading"></app-loading-indicator>
-<ng-container *ngIf="!isLoading">
-  <div *ngIf="renderedText" [innerHTML]="renderedText"></div>
-
-  <!-- Fallback -->
-  <div *ngIf="!renderedText">{{ rawText }}</div>
-</ng-container>
+<div *ngIf="!isLoading" [innerHTML]="displayedText"></div>
