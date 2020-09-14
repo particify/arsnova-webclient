@@ -62,7 +62,7 @@
 </button>
 
 <div class="comments-container" *ngIf="!isLoading">
-  <app-comment *ngFor="let current of comments" [comment]="current"
+  <app-comment *ngFor="let current of hideCommentsList ? filteredComments : comments" [comment]="current"
                [parseVote]="getVote(current)"></app-comment>
 </div>
 
