@@ -4,7 +4,8 @@ import { FormattingService, MarkdownFeatureset } from '../../../services/http/fo
 
 @Component({
   selector: 'app-rendered-text',
-  templateUrl: './rendered-text.component.html'
+  templateUrl: './rendered-text.component.html',
+  styleUrls: ['./rendered-text.component.scss']
 })
 export class RenderedTextComponent implements OnChanges {
 
