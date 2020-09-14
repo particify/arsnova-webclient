@@ -1,7 +1,4 @@
-app-comment {
-  overflow: auto;
-  overflow-wrap: break-word;
-}
+@import "../../../../variables";
 
 .mat-form-field {
   float: left;
@@ -14,94 +11,79 @@ app-comment {
   background-color: var(--background);
   border: none;
   outline: none;
-  min-height: 60px;
+  min-height: 70px;
   font-size: large;
-  border-radius: 5px;
+  border-radius: 35px;
   color: var(--on-surface);
   transition: width 300ms linear;
 }
 
-.desktop-input {
-  width: 100%;
+.search-bar-placeholder {
+  height: 70px;
 }
 
-.mobile-input {
+.search-input-hidden {
   width: 0;
+  padding: 0 !important;
 }
 
-.mobile-input-2 {
+.search-input {
   width: 100%;
-  margin-left: 3%;
+  margin-left: 2em;
 }
 
 .search-container {
-  border-radius: 5px;
+  border-radius: 35px;
   background-color: var(--background);
-  margin-bottom: 2%;
 }
 
 .search-container-fixed {
-  border-radius: 5px;
+  border-radius: 35px;
   background-color: var(--background);
-  margin-bottom: 2%;
   position: fixed;
-  top: 10px;
-  width: 92%;
-  max-width: 800px;
+  top: 4vw;
+  left: calc(50% - 125px);
+  width: 100%;
+  max-width: 250px;
   z-index: 1;
 }
 
-.search-icon {
-  padding: 10px;
-  color: var(--on-surface);
+.close-btn {
+  margin-right: 2em;
 }
 
-.searchBarButton {
-  width: 45px !important;
-  height: 45px !important;
-  text-align: center;
-  margin: 1% 2% 1% 1%;
-  color: var(--secondary);
-}
-
-.close {
-  margin: 5px 0 5px 0;
-}
-
-.searchBarIcon {
-  font-size: 45px;
-  height: 45px;
-  width: 45px;
-  color: var(--secondary);
+.bar-icon {
+  background-color: var(--secondary);
+  color: var(--on-secondary);
+  opacity: 0.7;
 }
 
 .no-comments {
   margin-top: 10%;
 }
 
-.button-bar {
-  margin-right: 2%;
+.correct-icon {
+  color: var(--green);
+}
+
+.wrong-icon {
+  color: var(--red);
+}
+
+.beamer-icon {
+  color: var(--blue);
+}
+
+.favorite-icon {
+  color: var(--yellow);
 }
 
 .counter {
   color: var(--on-background);
-}
-
-.counter-filtered {
-  color: var(--red);
-}
-
-h3 {
-  font-size: 18pt !important;
-  margin: 10px;
-}
-
-.up {
-  color: var(--green);
-}
-
-.down {
-  color: var(--red);
+  width: 28px;
+  text-align: center;
+  font-size: 1.5em!important;
+  margin: 0;
 }
 
 ::placeholder {
@@ -111,15 +93,17 @@ h3 {
 
 .scrollTop {
   position: fixed;
-  left: 25px;
-  bottom: 65px;
+  left: 5%;
+  bottom: 5%;
   transform: scale(0);
   z-index: 1;
-  background-color: var(--primary);
-  color: var(--on-primary);
   transition: 0.1s;
 }
 
 .visible {
   transform: scale(1);
+}
+
+.comments-container {
+  margin-top: min(1em, 4vw);
 }

@@ -44,7 +44,9 @@ export class ModeratorCommentListComponent implements OnInit {
   currentFilter = '';
   commentVoteMap = new Map<string, Vote>();
   scroll = false;
+  scrollMax: number;
   scrollExtended = false;
+  scrollExtendedMax = 500;
   searchInput = '';
   search = false;
   searchPlaceholder = '';
@@ -88,12 +90,18 @@ export class ModeratorCommentListComponent implements OnInit {
     this.translateService.get('comment-list.search').subscribe(msg => {
       this.searchPlaceholder = msg;
     });
+    // Header height is 56 if smaller than 600px
+    if (innerWidth >= 600) {
+      this.scrollMax = 64;
+    } else {
+      this.scrollMax = 56;
+    }
   }
 
   checkScroll(): void {
     const currentScroll = document.documentElement.scrollTop;
-    this.scroll = currentScroll >= 65;
-    this.scrollExtended = currentScroll >= 300;
+    this.scroll = currentScroll >= this.scrollMax;
+    this.scrollExtended = currentScroll >= this.scrollExtendedMax;
   }
 
   scrollTop() {
