@@ -119,9 +119,11 @@ export class ContentListComponent implements OnInit {
   deleteContent(delContent: Content) {
     const index = this.findIndexOfId(delContent.id);
     this.createChoiceContentBackup(delContent as ContentChoice);
-    const dialogRef = this.dialogService.openDeleteDialog('really-delete-content', delContent.subject);
+    const dialogRef = this.dialogService.openDeleteDialog('really-delete-content', this.labels[index]);
     dialogRef.afterClosed().subscribe(result => {
-      this.updateContentChanges(index, result);
+      if (result) {
+        this.updateContentChanges(index, result);
+      }
     });
   }
 
