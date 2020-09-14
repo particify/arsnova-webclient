@@ -110,15 +110,15 @@
     "a11y-answer-checkbox": "Use the space bar to determine whether the answer {{answer}} is right or wrong.",
     "a11y-delete-answer": "Delete answer {{answer}}.",
     "a11y-choose-format": "Change the format of your question. THe current format is {{format}}",
-    "a11y-format-choice": "Select the format 'Choice'.",
-    "a11y-format-likert": "Select the format 'Likert'.",
-    "a11y-format-binary": "Select the format 'Yes / No'.",
-    "a11y-format-text": "Select the format 'Text'.",
-    "a11y-format-slide": "Select the format 'Slide'.",
+    "a11y-format-choice": "Select the format “Choice”.",
+    "a11y-format-likert": "Select the format “Likert”.",
+    "a11y-format-binary": "Select the format “Yes / No”.",
+    "a11y-format-text": "Select the format “Text”.",
+    "a11y-format-slide": "Select the format “Slide”.",
     "a11y-single-choice": "Currently you've chosen the format Single-Choice. Switch to multiple-choice with the arrow keys.",
     "a11y-multiple-choice": "Currently you've chosen the format multiple choice. Switch to Single-Choice with the arrow keys.",
-    "a11y-answer-yes": "Currently the answer to this question is 'Yes'. Change to 'No' with the arrow keys.",
-    "a11y-answer-no": "Currently the answer to this question is 'No'. Change to 'Yes' with the arrow keys.",
+    "a11y-answer-yes": "Currently the answer to this question is “Yes”. Change to “No” with the arrow keys.",
+    "a11y-answer-no": "Currently the answer to this question is “No”. Change to “Yes” with the arrow keys.",
     "a11y-answer-neither": "Currently there is no correct answer selected for this question.",
     "a11y-reset": "Resets all entries.",
     "a11y-submit": "Creates the entered question {{body}} in your collection {{group}}.",
@@ -274,8 +274,8 @@
   },
   "home-page": {
     "create-room": "New Room",
-    "created-1": "Room '",
-    "created-2": "' successfully created."
+    "created-1": "Room “",
+    "created-2": "” successfully created."
   },
   "room-page": {
     "a11y-moderation": "Opens all comments selected by the moderator",
