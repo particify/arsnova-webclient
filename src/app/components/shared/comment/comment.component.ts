@@ -1,4 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output, Pipe, PipeTransform } from '@angular/core';
+import * as dayjs from 'dayjs';
+import * as relativeTime from 'dayjs/plugin/relativeTime';
+import 'dayjs/locale/de';
 import { Comment } from '../../../models/comment';
 import { Vote } from '../../../models/vote';
 import { AuthenticationService } from '../../../services/http/authentication.service';
@@ -13,7 +16,6 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
 import { CorrectWrong } from '../../../models/correct-wrong.enum';
 import { UserRole } from '../../../models/user-roles.enum';
 import { DialogService } from '../../../services/util/dialog.service';
-import * as moment from 'moment';
 import { GlobalStorageService, STORAGE_KEYS } from '../../../services/util/global-storage.service';
 import { AnnounceService } from '../../../services/util/announce.service';
 import { VoteService } from '../../../services/http/vote.service';
@@ -21,8 +23,9 @@ import { VoteService } from '../../../services/http/vote.service';
 @Pipe({ name: 'dateFromNow' })
 export class DateFromNow implements PipeTransform {
   transform(date: Date, lang: string): string {
-    moment.locale(lang);
-    return moment(date).fromNow();
+    dayjs.extend(relativeTime);
+    dayjs.locale(lang);
+    return dayjs(date).fromNow();
   }
 }
 
