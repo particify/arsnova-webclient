@@ -13,7 +13,6 @@ import { CommentPageComponent } from './comment-page/comment-page.component';
 import { EssentialsModule } from '../essentials/essentials.module';
 import { SharedRoutingModule } from './shared-routing.module';
 import { StatisticListComponent } from './statistic-list/statistic-list.component';
-import { ChartsModule } from 'ng2-charts';
 import { RoomJoinComponent } from './room-join/room-join.component';
 import { RoomCreateComponent } from './_dialogs/room-create/room-create.component';
 import { UserBonusTokenComponent } from './_dialogs/user-bonus-token/user-bonus-token.component';
@@ -45,7 +44,6 @@ import { UpdateInfoComponent } from './_dialogs/update-info/update-info.componen
     imports: [
         CommonModule,
         EssentialsModule,
-        ChartsModule,
         SharedRoutingModule,
         MatRippleModule,
         ArsModule,

@@ -1194,13 +1194,6 @@
   resolved "https://registry.yarnpkg.com/@stomp/stompjs/-/stompjs-5.4.4.tgz#f51d2edf9a00fac645dde3a494738d96ca17e5aa"
   integrity sha512-RIzQ7MLRSJLUpTHcje1ZclnHH982amJSKC9bDxGO0wyu5OF9ROuuiLf7TxKxo1zUu7lGEYNedg9SEi87uMWDqg==
 
-"@types/chart.js@^2.7.48":
-  version "2.9.22"
-  resolved "https://registry.yarnpkg.com/@types/chart.js/-/chart.js-2.9.22.tgz#e52fd922aced217867445c2913b68ce98b1c2b5f"
-  integrity sha512-CneMxwh2T5fyMpXE5fuprTTmFtlLyZUFq1A3laUrCgOblDzupgiohrFg3jjsTIrqRI5K4qLZdrLN4zT9/MY5Dw==
-  dependencies:
-    moment "^2.10.2"
-
 "@types/color-name@^1.1.1":
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/@types/color-name/-/color-name-1.1.1.tgz#1c1261bbeaa10a8055bbc5d8ab84b7b2afc846a0"
@@ -5372,11 +5365,6 @@ locate-path@^5.0.0:
   dependencies:
     p-locate "^4.1.0"
 
-lodash-es@^4.17.11:
-  version "4.17.15"
-  resolved "https://registry.yarnpkg.com/lodash-es/-/lodash-es-4.17.15.tgz#21bd96839354412f23d7a10340e5eac6ee455d78"
-  integrity sha512-rlrc3yU3+JNOpZ9zj5pQtxnx2THmvRykwL4Xlxoa8I9lHBlVbbyPhgyPMioxVZ4NqyxaVVtaJnzsyOidQIhyyQ==
-
 lodash.clonedeep@^4.5.0:
   version "4.5.0"
   resolved "https://registry.yarnpkg.com/lodash.clonedeep/-/lodash.clonedeep-4.5.0.tgz#e23f3f9c4f8fbdde872529c1071857a086e5ccef"
@@ -5841,15 +5829,6 @@ next-tick@~1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/next-tick/-/next-tick-1.0.0.tgz#ca86d1fe8828169b0120208e3dc8424b9db8342c"
   integrity sha1-yobR/ogoFpsBICCOPchCS524NCw=
-
-ng2-charts@^2.3.2:
-  version "2.3.2"
-  resolved "https://registry.yarnpkg.com/ng2-charts/-/ng2-charts-2.3.2.tgz#206de368e58f9655e167b6791c9d2a804191ef99"
-  integrity sha512-T0rPivwZITKtEtFRVodRCO+kIczWIP6V4YLZvf6Kg1jqc8jYGZ37H5ywT0Q7N0Rt5dJGhC5z1/38nWFBVFx5iw==
-  dependencies:
-    "@types/chart.js" "^2.7.48"
-    lodash-es "^4.17.11"
-    tslib "^1.9.0"
 
 nice-try@^1.0.4:
   version "1.0.5"
