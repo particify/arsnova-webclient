@@ -69,7 +69,7 @@ export class RegisterComponent implements OnInit {
       !this.password2FormControl.hasError('passwordIsEqual')) {
       if (this.acceptToS) {
         this.userService.register(username, password).subscribe(result => {
-            this.router.navigate(['login'], {state: {data: {username: username, password: password}}});
+            this.router.navigate(['login'], { state: { data: { username: username, password: password } } });
             this.translationService.get('register.register-successful').subscribe(message => {
               this.notificationService.showAdvanced(message, AdvancedSnackBarTypes.SUCCESS);
             });

@@ -12,26 +12,26 @@ import { NotificationService } from './notification.service';
 export const CONSENT_VERSION = 1;
 
 export interface ConsentGiven {
-  [key: string]: boolean
+  [key: string]: boolean;
 }
 
 export interface CookieCategory {
-  key: StorageItemCategory,
-  id: string,
-  required: boolean
-  consent: boolean
+  key: StorageItemCategory;
+  id: string;
+  required: boolean;
+  consent: boolean;
 }
 
 export interface ConsentSettings {
-  id?: string,
-  version: number
-  timestamp: Date
-  consentGiven: { [key: string]: boolean }
+  id?: string;
+  version: number;
+  timestamp: Date;
+  consentGiven: { [key: string]: boolean };
 }
 
 export interface ConsentChangeEvent {
-  categoriesSettings: CookieCategory[],
-  consentSettings?: ConsentSettings
+  categoriesSettings: CookieCategory[];
+  consentSettings?: ConsentSettings;
 }
 
 const httpOptions = {
@@ -41,9 +41,9 @@ const httpOptions = {
 @Injectable()
 export class ConsentService extends BaseHttpService {
   private readonly categories: CookieCategory[] = [
-    {key: StorageItemCategory.REQUIRED, id: 'essential', consent: true, required: true},
-    {key: StorageItemCategory.FUNCTIONAL, id: 'functional', consent: false, required: false},
-    {key: StorageItemCategory.STATISTICS, id: 'statistics', consent: false, required: false}
+    { key: StorageItemCategory.REQUIRED, id: 'essential', consent: true, required: true },
+    { key: StorageItemCategory.FUNCTIONAL, id: 'functional', consent: false, required: false },
+    { key: StorageItemCategory.STATISTICS, id: 'statistics', consent: false, required: false }
   ];
   private readonly categoryMap: Map<StorageItemCategory, CookieCategory> = this.categories.reduce((map, category) => {
     map.set(category.key, category);
@@ -81,7 +81,7 @@ export class ConsentService extends BaseHttpService {
     const consentGiven = this.getConsentSettings().consentGiven;
     this.categories.forEach(item => {
       item.consent = consentGiven[item.id] ?? item.consent;
-    })
+    });
   }
 
   /**
@@ -161,10 +161,10 @@ export class ConsentService extends BaseHttpService {
     const consentRecording = this.config.getFeatureConfig('consentRecording');
     if (consentRecording?.enabled) {
       this.recordConsentSettings(this.consentSettings).subscribe((persistedConsentSettings) => {
-        this.settingsChanged.emit({categoriesSettings: this.categories, consentSettings: this.consentSettings});
+        this.settingsChanged.emit({ categoriesSettings: this.categories, consentSettings: this.consentSettings });
       });
     } else {
-      this.settingsChanged.emit({categoriesSettings: this.categories, consentSettings: this.consentSettings});
+      this.settingsChanged.emit({ categoriesSettings: this.categories, consentSettings: this.consentSettings });
     }
   }
 

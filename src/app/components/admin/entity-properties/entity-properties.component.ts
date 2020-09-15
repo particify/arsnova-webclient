@@ -21,7 +21,7 @@ export class EntityPropertiesComponent implements OnChanges {
   toNode(object: object) {
     if (typeof object === 'object') {
       return object ? Object.entries(object).map(item => {
-        return {key: item[0], value: this.toNode(item[1])};
+        return { key: item[0], value: this.toNode(item[1]) };
       }) : null;
     }
 

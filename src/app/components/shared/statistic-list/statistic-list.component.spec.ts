@@ -1,4 +1,4 @@
-/* import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+/* import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { StatisticListComponent } from './statistic-list.component';
 
@@ -6,7 +6,7 @@ describe('StatisticListComponent', () => {
   let component: StatisticListComponent;
   let fixture: ComponentFixture<StatisticListComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ StatisticListComponent ]
     })

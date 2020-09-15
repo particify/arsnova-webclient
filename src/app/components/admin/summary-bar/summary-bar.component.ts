@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { SystemInfoService } from '../../../services/http/system-info.service';
 import { catchError } from 'rxjs/operators';
 import { of } from 'rxjs';
@@ -8,7 +8,7 @@ import { of } from 'rxjs';
   templateUrl: './summary-bar.component.html',
   styleUrls: ['./summary-bar.component.scss']
 })
-export class SummaryBarComponent {
+export class SummaryBarComponent implements OnInit {
   readonly STATUS_UP = 'UP';
   readonly STATUS_DOWN = 'DOWN';
   healthInfo: any;

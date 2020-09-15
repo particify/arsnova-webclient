@@ -14,9 +14,9 @@ export enum StorageBackend {
 }
 
 export interface StorageItem {
-  key: symbol,
-  name: string,
-  prefix?: string,
-  category: StorageItemCategory,
-  backend: StorageBackend
+  key: symbol;
+  name: string;
+  prefix?: string;
+  category: StorageItemCategory;
+  backend: StorageBackend;
 }

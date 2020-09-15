@@ -48,7 +48,7 @@ export class CookiesComponent implements OnInit, AfterViewInit {
   }
 
   handleCookieSelection() {
-    console.debug('Accepted cookie categories: ', this.categories);
+    console.log('Accepted cookie categories: ', this.categories);
     const consentGiven: ConsentGiven = this.categories.reduce((map, item) => {
         map[item.id] = item.consent;
         return map;

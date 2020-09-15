@@ -1,5 +1,5 @@
 /*
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { StatisticTextComponent } from './statistic-text.component';
 
@@ -7,7 +7,7 @@ describe('StatisticTextComponent', () => {
   let component: StatisticTextComponent;
   let fixture: ComponentFixture<StatisticTextComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ StatisticTextComponent ]
     })

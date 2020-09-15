@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { LanguageService } from '../../../services/util/language.service';
 import { GlobalStorageService, STORAGE_KEYS } from '../../../services/util/global-storage.service';
@@ -9,7 +9,7 @@ import { ActivatedRoute } from '@angular/router';
   templateUrl: './admin-home.component.html',
   styleUrls: ['./admin-home.component.scss']
 })
-export class AdminHomeComponent {
+export class AdminHomeComponent implements OnInit {
   page: string;
 
   constructor(

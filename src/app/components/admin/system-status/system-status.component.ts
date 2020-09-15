@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { SystemInfoService } from '../../../services/http/system-info.service';
 import { catchError } from 'rxjs/operators';
 import { of } from 'rxjs';
@@ -8,7 +8,7 @@ import { of } from 'rxjs';
   templateUrl: './system-status.component.html',
   styleUrls: ['./system-status.component.scss']
 })
-export class SystemStatusComponent {
+export class SystemStatusComponent implements OnInit {
   healthInfo: any;
 
   constructor(
