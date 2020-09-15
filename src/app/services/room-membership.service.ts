@@ -81,7 +81,7 @@ export class RoomMembershipService extends BaseHttpService {
   private fetchMemberships(userId: string, token?: string): Observable<Membership[]> {
     const url = this.apiUrl.base + this.apiUrl.membershipByUser + '/' + userId;
     const httpHeaders = token ? new HttpHeaders().set(AUTH_HEADER_KEY, `${AUTH_SCHEME} ${token}`) : null;
-    return this.http.get<Membership[]>(url, {headers: httpHeaders}).pipe(
+    return this.http.get<Membership[]>(url, { headers: httpHeaders }).pipe(
         tap(memberships => memberships.forEach(m => m.primaryRole = this.selectPrimaryRole(m.roles)))
     );
   }

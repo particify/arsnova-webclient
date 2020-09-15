@@ -47,7 +47,6 @@ export class UserSearchFieldComponent implements OnInit, OnDestroy {
   }
 
   submitUserId(id: string) {
-    console.debug('submitUserId', id)
     this.submit.emit(id);
   }
 }

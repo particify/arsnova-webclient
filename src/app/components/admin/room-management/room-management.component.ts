@@ -35,10 +35,10 @@ export class RoomManagementComponent {
 
   deleteEntity() {
     const dialogRef = this.dialogService.openDeleteDialog('really-delete-room');
-    dialogRef.afterClosed().subscribe(result => {
-      if (result === 'delete')  {
+    dialogRef.afterClosed().subscribe(closeAction => {
+      if (closeAction === 'delete')  {
         this.roomService.deleteRoom(this.room.id)
-            .subscribe(result => {
+            .subscribe(() => {
               this.translateService.get('admin-area.room-deleted').subscribe(message =>
                   this.notificationService.showAdvanced(message, AdvancedSnackBarTypes.WARNING));
               this.room = null;

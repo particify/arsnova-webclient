@@ -1,4 +1,4 @@
-/*import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+/*import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { GroupContentComponent } from './group-content.component';
 import { TranslateLoader } from '@ngx-translate/core';
@@ -42,7 +42,7 @@ describe('GroupContentComponent', () => {
   let component: GroupContentComponent;
   let fixture: ComponentFixture<GroupContentComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ GroupContentComponent ]
     })

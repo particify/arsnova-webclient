@@ -13,10 +13,10 @@ export enum MarkdownFeatureset {
 }
 
 export interface FormattingOptions {
-  markdown: boolean,
-  latex: boolean,
-  markdownFeatureset: MarkdownFeatureset,
-  linebreaks: boolean
+  markdown: boolean;
+  latex: boolean;
+  markdownFeatureset: MarkdownFeatureset;
+  linebreaks: boolean;
 }
 
 @Injectable()

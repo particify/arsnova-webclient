@@ -1,5 +1,5 @@
 import { Injectable, Renderer2, Component, EventEmitter, Input } from '@angular/core';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { Observable, of, BehaviorSubject } from 'rxjs';
 import { UserHomeComponent } from './user-home.component';
@@ -100,7 +100,7 @@ describe('UserHomeComponent', () => {
   let component: UserHomeComponent;
   let fixture: ComponentFixture<UserHomeComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [
         UserHomeComponent,

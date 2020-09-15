@@ -1,4 +1,4 @@
-/* import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+/* import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { ContentTextCreationComponent } from './content-text-creation.component';
 
@@ -6,7 +6,7 @@ describe('ContentTextCreationComponent', () => {
   let component: ContentTextCreationComponent;
   let fixture: ComponentFixture<ContentTextCreationComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ ContentTextCreationComponent ]
     })

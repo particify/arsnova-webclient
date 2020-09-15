@@ -1,5 +1,5 @@
 import { TranslateService } from '@ngx-translate/core';
-import { TestBed, async, ComponentFixture, tick } from '@angular/core/testing';
+import { TestBed, ComponentFixture, tick, waitForAsync } from '@angular/core/testing';
 import { AppComponent } from './app.component';
 import { NotificationService } from './services/util/notification.service';
 import { SwUpdate, UpdateAvailableEvent } from '@angular/service-worker';
@@ -46,9 +46,9 @@ class MockDialogService {
   public openUpdateInfoDialog() {
     return {
       afterClosed(): Observable<string> {
-        return of("any")
+        return of('any');
       }
-    }
+    };
   }
 }
 
@@ -109,8 +109,8 @@ class MockTrackingService {
 @Injectable()
 class MockWindow {
   public location = class {
-    public reload = jasmine.createSpy('WindowReloadSpy')
-  }
+    public reload = jasmine.createSpy('WindowReloadSpy');
+  };
 }
 
 // Mock class for the service worker update
@@ -155,7 +155,7 @@ describe('AppComponent', () => {
   // create simple spy objects for downstream dependencies
   const mockCustomIconService = jasmine.createSpyObj('CustomIconService', ['init']);
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [
         AppComponent,

@@ -1,4 +1,4 @@
-/*import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+/*import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { FullScreenOverlayComponent } from './full-screen-overlay.component';
 
@@ -6,7 +6,7 @@ describe('FullScreenOverlayComponent', () => {
   let component: FullScreenOverlayComponent;
   let fixture: ComponentFixture<FullScreenOverlayComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ FullScreenOverlayComponent ]
     })

@@ -203,11 +203,11 @@ export class RoomService extends BaseHttpService {
     return auth$.pipe(
         switchMap(auth => {
           const connectionUrl = `${this.apiUrl.base + this.apiUrl.rooms}/${id}${this.apiUrl.transfer}?newOwnerToken=${auth.token}`;
-          return this.http.post<Room>(connectionUrl, {}, {headers: httpHeaders}).pipe(
+          return this.http.post<Room>(connectionUrl, {}, { headers: httpHeaders }).pipe(
              catchError(this.handleError<Room>(`transferRoomFromGuest ${id}`))
           );
         })
-    )
+    );
   }
 
   changeFeedbackLock(roomId: string, isFeedbackLocked: boolean) {

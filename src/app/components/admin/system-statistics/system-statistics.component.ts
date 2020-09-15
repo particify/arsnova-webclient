@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { SystemInfoService } from '../../../services/http/system-info.service';
 
 @Component({
@@ -6,7 +6,7 @@ import { SystemInfoService } from '../../../services/http/system-info.service';
   templateUrl: './system-statistics.component.html',
   styleUrls: ['./system-statistics.component.scss']
 })
-export class SystemStatisticsComponent {
+export class SystemStatisticsComponent implements OnInit {
   stats: any;
 
   constructor(

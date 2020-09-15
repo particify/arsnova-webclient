@@ -1,4 +1,4 @@
-/* import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+/* import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { ContentYesNoCreationComponent } from './content-yes-no-creation.component';
 
@@ -6,7 +6,7 @@ describe('ContentYesNoCreationComponent', () => {
   let component: ContentYesNoCreationComponent;
   let fixture: ComponentFixture<ContentYesNoCreationComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ ContentYesNoCreationComponent ]
     })

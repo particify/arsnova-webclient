@@ -141,7 +141,7 @@ export class AuthenticationService extends BaseHttpService {
     const token = this.getGuestToken();
     const httpHeaders = this.httpOptions.headers.set(AUTH_HEADER_KEY, `${AUTH_SCHEME} ${token}`);
     const connectionUrl: string = this.apiUrl.base + this.apiUrl.auth + this.apiUrl.login + this.apiUrl.guest;
-    return this.http.post<ClientAuthentication>(connectionUrl, null, {headers: httpHeaders});
+    return this.http.post<ClientAuthentication>(connectionUrl, null, { headers: httpHeaders });
   }
 
   getGuestToken(): string {

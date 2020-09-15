@@ -41,7 +41,7 @@ export class AdminService extends BaseHttpService {
   }
 
   activateUser(userId: string) {
-    const connectionUrl: string = `${this.apiUrl.base + this.apiUrl.user}/${userId}${this.apiUrl.activate}`;
+    const connectionUrl = `${this.apiUrl.base + this.apiUrl.user}/${userId}${this.apiUrl.activate}`;
     return this.http.post<string>(connectionUrl, {}, httpOptions);
   }
 

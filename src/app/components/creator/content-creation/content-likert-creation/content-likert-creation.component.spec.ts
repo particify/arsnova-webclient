@@ -1,4 +1,4 @@
-/* import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+/* import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { ContentLikertCreationComponent } from './content-likert-creation.component';
 
@@ -6,7 +6,7 @@ describe('ContentLikertCreationComponent', () => {
   let component: ContentLikertCreationComponent;
   let fixture: ComponentFixture<ContentLikertCreationComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ ContentLikertCreationComponent ]
     })

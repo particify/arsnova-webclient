@@ -32,10 +32,10 @@ export class UserManagementComponent {
 
   deleteEntity() {
     const dialogRef = this.dialogService.openDeleteDialog('really-delete-account-admin');
-    dialogRef.afterClosed().subscribe(result => {
-      if (result === 'delete')  {
+    dialogRef.afterClosed().subscribe(closeAction => {
+      if (closeAction === 'delete')  {
         this.userService.delete(this.user.id)
-            .subscribe(result => {
+            .subscribe(() => {
               this.translateService.get('admin-area.user-deleted').subscribe(message =>
                   this.notificationService.showAdvanced(message, AdvancedSnackBarTypes.WARNING));
               this.user = null;

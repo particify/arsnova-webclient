@@ -1,5 +1,5 @@
 /*
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { ContentGroupCreationComponent } from './content-group-creation.component';
 
@@ -7,7 +7,7 @@ describe('ContentGroupCreationComponent', () => {
   let component: ContentGroupCreationComponent;
   let fixture: ComponentFixture<ContentGroupCreationComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ ContentGroupCreationComponent ]
     })

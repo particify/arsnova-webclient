@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { ContentChoiceCreationComponent } from './content-choice-creation.component';
 import { Component, Injectable, Input } from '@angular/core';
@@ -128,7 +128,7 @@ describe('ContentChoiceCreationComponent', () => {
   let component: ContentChoiceCreationComponent;
   let fixture: ComponentFixture<ContentChoiceCreationComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [
         ContentChoiceCreationComponent,
