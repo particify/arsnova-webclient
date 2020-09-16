@@ -1,5 +1,5 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { Chart, LinearTickOptions } from 'chart.js';
+import { BarController, CategoryScale, Chart, IBarControllerDataset, LinearScale, Rectangle, Tooltip } from 'chart.js';
 import { ActivatedRoute } from '@angular/router';
 import { ContentService } from '../../../services/http/content.service';
 import { ContentChoice } from '../../../models/content-choice';
@@ -84,12 +84,7 @@ export class StatisticChoiceComponent implements OnInit, OnDestroy {
   }
 
   createChart(colors: string[]) {
-    const tickOptions: LinearTickOptions = {
-      beginAtZero: true,
-      precision: 0,
-      fontColor: this.onSurface,
-      fontSize: 16
-    };
+    Chart.register(BarController, CategoryScale, LinearScale, Rectangle, Tooltip);
     this.chart = new Chart(this.chartId, {
       type: 'bar',
       data: {
@@ -100,6 +95,10 @@ export class StatisticChoiceComponent implements OnInit, OnDestroy {
         }]
       },
       options: {
+        font: {
+          color: this.onSurface,
+          size: 16
+        },
         legend: {
           display: false
         },
@@ -109,18 +108,21 @@ export class StatisticChoiceComponent implements OnInit, OnDestroy {
         responsive: true,
         maintainAspectRatio: false,
         scales: {
-          yAxes: [{
-            ticks: tickOptions,
-            gridLines: {
-              zeroLineColor: this.onSurface
+          y: {
+            type: 'linear',
+            ticks: {
+              precision: 0
             },
-          }],
-          xAxes: [{
-            ticks: tickOptions,
             gridLines: {
-              zeroLineColor: this.onSurface
+              borderColor: this.onSurface
+            },
+          },
+          x: {
+            type: 'category',
+            gridLines: {
+              borderColor: this.onSurface
             }
-          }]
+          }
         }
       }
     });
@@ -135,7 +137,8 @@ export class StatisticChoiceComponent implements OnInit, OnDestroy {
   }
 
   toggleCorrect() {
-    this.chart.config.data.datasets[0].backgroundColor = this.colorLabel ? this.colors : this.indicationColors;
+    const dataset = this.chart.config.data.datasets[0] as IBarControllerDataset<number>;
+    dataset.backgroundColor = this.colorLabel ? this.colors : this.indicationColors;
     this.chart.update();
     this.colorLabel = !this.colorLabel;
   }
