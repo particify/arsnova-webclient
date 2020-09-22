@@ -1,0 +1,3 @@
+= Extension Point
+
+link:../../docs/development/extensions.adoc[Documentation for extensions]

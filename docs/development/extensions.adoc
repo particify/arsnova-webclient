@@ -1,0 +1,119 @@
+= Extensions
+:source-highlighter: pygments
+
+With extensions it is possible to develop optional components for the web client.
+Instead of directly referencing the optional component in a template, an extension point is used.
+The extension point checks if the component is available an can use fallback templating otherwise.
+
+== Example: Proof of Concept component
+
+This examples shows the creation of a simple proof of concept component which demonstrates:
+
+* how an extension is created and embedded;
+* how data is passed from a template of the app to the extension component;
+* how an `EventEmitter` of the extension can be bound from a template of the app.
+
+=== Extension template
+
+.proof-of-concept.component.html
+[source,html]
+....
+<h1 (click)="click()">
+{{ icon }} Proof of Concept {{ icon }}
+</h1>
+....
+
+=== Extension component
+
+.proof-of-concept.component.ts
+[source,typescript]
+....
+import { Component, ComponentFactoryResolver, EventEmitter, Injectable, Input, OnInit, Output, Type, ViewChild, ViewContainerRef } from '@angular/core';
+import { Extension } from '@arsnova-ext-point/extension';
+
+@Component({
+  selector: 'app-poc-extension',
+  templateUrl: './proof-of-concept.component.html'
+})
+@Injectable()
+export class ProofOfConceptComponent extends Extension implements OnInit {
+  @ViewChild('messagecontainer', { read: ViewContainerRef }) entry: ViewContainerRef;
+  @Input() icon: string;
+  @Output() event: EventEmitter<any>;
+
+  constructor(private resolver: ComponentFactoryResolver) {
+    super();
+  }
+
+  ngOnInit() {
+  }
+
+  getId(): string {
+    return 'proof-of-concept';
+  }
+
+  getType(): Type<ProofOfConceptComponent> {
+    return ProofOfConceptComponent;
+  }
+
+  click() {
+    console.log('PoC extension was clicked.');
+    this.event.emit('Event message from PoC extension: PoC was clicked.');
+  }
+}
+....
+
+=== Extension module
+
+.proof-of-concept.module.ts
+[source,typescript]
+....
+import { NgModule } from '@angular/core';
+import { ProofOfConceptComponent } from './proof-of-concept.component';
+import { Extension } from '@arsnova-ext-point/extension';
+
+@NgModule({
+  declarations: [
+    ProofOfConceptComponent
+  ],
+  exports: [
+    ProofOfConceptComponent
+  ],
+  entryComponents: [
+    ProofOfConceptComponent
+  ],
+  providers: [
+    { provide: Extension, useClass: ProofOfConceptComponent, multi: true }
+  ]
+})
+export class ProofOfConceptModule {
+}
+....
+
+=== Extension Point
+
+The following template code adds the PoC extension to the home page.
+Extension points can have the following attributes:
+
+* `extensionId` (required): Tells the extension system which extension component should be bound.
+An extension component whose `getId` method returns a matching value is looked up.
+* `extensionData` (optional): An object whose properties are used for the extension component's `@Input` parameters.
+* `extensionEvent` (optional): If the extension component declares an `EventEmitter` as `@Output event` parameter,
+this attribute can be used to subscribe to its events.
+
+.home-page.component.html
+[source,html]
+
+
+....
+<div fxLayout="column" class="container">
+  <!-- ... -->
+
+  <!-- Added code to include the PoC extensions -->
+  <div fxLayout="row" fxLayoutAlign="center">
+    <lib-extension-point extensionId="proof-of-concept" extensionData='{"icon": "✨"}' (extensionEvent)="openCreateRoomDialog()"></lib-extension-point>
+  </div>
+
+  <!-- ... -->
+</div>
+....

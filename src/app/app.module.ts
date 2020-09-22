@@ -46,6 +46,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { LoginComponent } from './components/home/login/login.component';
 import { DialogService } from './services/util/dialog.service';
 import { DirectEntryComponent } from './components/shared/direct-entry/direct-entry.component';
+import { ExtensionPointModule } from '../../projects/extension-point/src/lib/extension-point.module';
 import { TrackingService } from './services/util/tracking.service';
 import { AdminModule } from './components/admin/admin.module';
 import { ImportComponent } from './components/home/import/import.component';
@@ -88,6 +89,8 @@ export function initializeApp(appConfig: AppConfig) {
     SnackBarAdvancedComponent
   ],
   imports: [
+    environment.extensions,
+    ExtensionPointModule,
     AppRoutingModule,
     BrowserModule,
     BrowserAnimationsModule,

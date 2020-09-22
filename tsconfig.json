@@ -18,6 +18,15 @@
       "dom"
     ],
     "module": "esnext",
-    "baseUrl": "./"
+    "baseUrl": "./",
+    "paths": {
+      "@arsnova/*": [
+        "./*"
+      ],
+      "extension-point": [
+        "dist/extension-point/extension-point",
+        "dist/extension-point"
+      ]
+    }
   }
 }

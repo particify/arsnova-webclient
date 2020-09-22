@@ -1,9 +1,11 @@
 <div fxLayout="column" class="container">
   <div class="heading" fxLayoutAlign="center center">
-    <h1>
-      <span class="main-heading-secondary" aria-hidden="true">{{ 'home-page.welcome' | translate }}</span>
-      <span class="main-heading-primary">ARSnova</span>
-    </h1>
+    <lib-extension-point extensionId="app-logo">
+      <h1>
+        <span class="main-heading-secondary" aria-hidden="true">{{ 'home-page.welcome' | translate }}</span>
+        <span class="main-heading-primary">ARSnova</span>
+      </h1>
+    </lib-extension-point>
   </div>
   <div fxLayout="row" fxLayoutAlign="center">
         <div fxLayout="row" fxLayoutAlign="center">
