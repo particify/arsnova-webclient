@@ -59,7 +59,6 @@ export class CommentComponent implements OnInit {
   inAnswerView = false;
   roleString: string;
   userId: string;
-  imageLinks: any;
   extensionData: any;
 
   constructor(
@@ -113,6 +112,7 @@ export class CommentComponent implements OnInit {
     this.inAnswerView = !this.router.url.includes('comments');
     this.extensionData = {
       'refId': this.comment.id,
+      'refType': 'comment',
       'detailedView': false,
       'pureImageView': true
     }

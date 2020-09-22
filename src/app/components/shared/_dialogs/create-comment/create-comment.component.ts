@@ -11,10 +11,14 @@ import { GlobalStorageService, STORAGE_KEYS } from '../../../../services/util/gl
 import { Subject } from 'rxjs';
 import { CommentService } from "../../../../services/http/comment.service";
 import { LanguageService } from "../../../../services/util/language.service";
+import { UserRole } from '../../../../models/user-roles.enum';
 
 export interface DialogData {
   auth: ClientAuthentication;
   tags: string[];
+  roomId: string;
+  directSend: boolean;
+  role: UserRole;
 }
 
 @Component({
@@ -54,7 +58,7 @@ export class CreateCommentComponent implements OnInit {
     this.eventsWrapper = {
       'eventsSubject': this.eventsSubject,
       'roomId': this.data.roomId,
-      'userId': this.data.user.id
+      'userId': this.data.auth.userId
     };
   }
 
@@ -79,7 +83,7 @@ export class CreateCommentComponent implements OnInit {
     this.commentService.addComment(comment).subscribe(comment => {
       this.eventsSubject.next(comment.id);
       if (this.data.directSend) {
-        if (this.data.user.role === 1 || this.data.user.role === 3) {
+        if ([UserRole.CREATOR, UserRole.EDITING_MODERATOR, UserRole.EXECUTIVE_MODERATOR].indexOf(this.data.role) !== -1) {
           this.translateService.get('dialog.comment-sent').subscribe(msg => {
             message = msg;
           });

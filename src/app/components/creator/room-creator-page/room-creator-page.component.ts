@@ -18,6 +18,8 @@ import { GlobalStorageService, STORAGE_KEYS } from '../../../services/util/globa
 import { Content } from '../../../models/content';
 import { AnnounceService } from '../../../services/util/announce.service';
 import { SidebarInfo } from '../../shared/sidebar/sidebar.component';
+import { ApiConfigService } from '../../../services/http/api-config.service';
+import { UserRole } from '@arsnova/app/models/user-roles.enum';
 
 @Component({
   selector: 'app-room-creator-page',
@@ -123,7 +125,7 @@ export class RoomCreatorPageComponent extends RoomPageComponent implements OnIni
   }
 
   afterGroupsLoadHook() {
-    this.prepareAttachmentData();
+    this.prepareAttachmentData(UserRole.CREATOR);
     this.contentService.findContentsWithoutGroup(this.room.id).subscribe(contents => {
       this.looseContent = contents;
       this.isLoading = false;

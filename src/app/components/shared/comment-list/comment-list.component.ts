@@ -311,38 +311,7 @@ export class CommentListComponent implements OnInit, OnDestroy {
     if (this.room.extensions && this.room.extensions['tags'] && this.room.extensions['tags'].tags) {
       tags = this.room.extensions['tags'].tags;
     }
-    const dialogRef = this.dialogService.openCreateCommentDialog(this.auth, tags);
-    dialogRef.afterClosed()
-      .subscribe(result => {
-        if (result) {
-          this.send(result);
-        } else {
-          return;
-        }
-      });
-  }
-
-  send(comment: Comment): void {
-    let message;
-    this.commentService.addComment(comment).subscribe(returned => {
-      if (this.directSend) {
-        if ([UserRole.CREATOR, UserRole.EDITING_MODERATOR, UserRole.EXECUTIVE_MODERATOR].indexOf(this.viewRole) !== -1) {
-          this.translateService.get('comment-list.comment-sent').subscribe(msg => {
-            message = msg;
-          });
-          comment.ack = true;
-        } else {
-          this.translateService.get('comment-list.comment-sent-to-moderator').subscribe(msg => {
-            message = msg;
-          });
-        }
-      } else {
-        this.translateService.get('comment-list.comment-sent').subscribe(msg => {
-          message = msg;
-        });
-      }
-      this.notificationService.showAdvanced(message, AdvancedSnackBarTypes.SUCCESS);
-    });
+    this.dialogService.openCreateCommentDialog(this.auth, tags, this.roomId, this.directSend, this.viewRole);
   }
 
   filterComments(type: string, tag?: string): void {

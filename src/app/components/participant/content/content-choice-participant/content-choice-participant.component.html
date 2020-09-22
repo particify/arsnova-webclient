@@ -25,7 +25,7 @@
               </mat-icon>
             </button>
           </div>
-          <app-extension-point extensionId="attachment-list" [extensionData]="extensionData"></app-extension-point>
+          <lib-extension-point extensionId="attachment-list" [extensionData]="extensionData"></lib-extension-point>
           <form (ngSubmit)="submitAnswer()" id="answerForm">
             <mat-list *ngIf="content.multiple">
               <mat-list-item *ngFor="let answer of checkedAnswers" fxLayout="column" fxLayoutAlign="center">

@@ -118,7 +118,7 @@
           {{ 'room-page.a11y-no-content-groups' | translate }}</p>
       </div>
 
-      <app-extension-point extensionId="attachment-list" [extensionData]="attachmentData"></app-extension-point>
+      <lib-extension-point extensionId="attachment-list" [extensionData]="attachmentData"></lib-extension-point>
 
     </mat-card>
     <app-room-not-found *ngIf="!isLoading && errorOnLoading"></app-room-not-found>

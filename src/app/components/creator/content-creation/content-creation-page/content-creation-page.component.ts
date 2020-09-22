@@ -13,6 +13,7 @@ import { Subject } from 'rxjs';
 import { Content } from '../../../../models/content';
 import { FormattingService } from '../../../../services/http/formatting.service';
 import { HINT_TYPES } from '@arsnova/app/components/shared/hint/hint.component';
+import { UserRole } from '@arsnova/app/models/user-roles.enum';
 
 class ContentFormat {
   name: string;
@@ -148,8 +149,8 @@ export class ContentCreationPageComponent implements OnInit, AfterContentInit {
     this.textContainsImage = this.formattingService.containsTextAnImage(text);
   }
 
-  linkAttachments($event) {
-    this.linkAttachmentsSubject.next($event);
+  linkAttachments(id: string) {
+    this.linkAttachmentsSubject.next(id);
   }
 
   prepareAttachmentData(roomId: string) {
@@ -157,7 +158,8 @@ export class ContentCreationPageComponent implements OnInit, AfterContentInit {
       'eventsSubject': this.linkAttachmentsSubject,
       'refType': 'content',
       'roomId': roomId,
-      'detailedView': false
+      'detailedView': false,
+      'role': UserRole.CREATOR
     };
   }
 }

@@ -215,12 +215,14 @@ export class RoomPageComponent implements OnInit, OnDestroy {
     this.location.back();
   }
 
-  prepareAttachmentData() {
+  prepareAttachmentData(role: UserRole) {
     this.attachmentData = {
       'refId': this.room.id,
       'refType': 'room',
       'roomId': this.room.id,
-      'detailedView': true
+      'role': role,
+      'detailedView': true,
+      'pureImageView': false
     };
   }
 
