@@ -6,6 +6,10 @@ export const arsnova = {
   '--secondary': '#2e7d32',
   '--secondary-variant': '#e8f5e9',
 
+  '--primary-logo': '#5e35b1',
+  '--secondary-logo': '#2e7d32',
+  '--logo-font': '#474747',
+
   '--warn': '#c62828',
   '--warn-soft': '#ffa726',
   '--on-warn': '#FFFFFF',

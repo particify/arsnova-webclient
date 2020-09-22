@@ -6,6 +6,10 @@ export const dark = {
   '--secondary': '#ffca28',
   '--secondary-variant': '#ffecb3',
 
+  '--primary-logo': '#825DF6',
+  '--secondary-logo': '#4caf50',
+  '--logo-font': '#dddddd',
+
   '--warn': '#E57373',
   '--warn-soft': '#ffa726',
   '--on-warn': '#000000',
