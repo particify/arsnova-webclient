@@ -126,7 +126,6 @@ export class AuthenticationService extends BaseHttpService {
         tap(result => {
           if (result.status === AuthenticationStatus.INVALID_CREDENTIALS) {
             console.error('Could not refresh authentication.');
-            this.globalStorageService.removeItem(STORAGE_KEYS.USER);
             this.logout();
           }
         })
@@ -233,8 +232,6 @@ export class AuthenticationService extends BaseHttpService {
         }),
         shareReplay(),
         catchError((e) => {
-          this.globalStorageService.removeItem(STORAGE_KEYS.USER);
-
           // check if user needs activation
           if (e.error?.errorType === 'DisabledException') {
             return of(new ClientAuthenticationResult(null, AuthenticationStatus.ACTIVATION_PENDING));
