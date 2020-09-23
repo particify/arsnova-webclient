@@ -13,6 +13,8 @@ import { NotificationService } from '../util/notification.service';
 
 export const AUTH_HEADER_KEY = 'Authorization';
 export const AUTH_SCHEME = 'Bearer';
+const REFRESH_INTERVAL_MINUTES = 30;
+const REFRESH_INTERVAL_MAX_OFFSET_MINUTES = 2;
 
 /**
  * Handles app-wide user authentication.
@@ -65,6 +67,13 @@ export class AuthenticationService extends BaseHttpService {
     this.getAuthenticationChanges().subscribe(auth => {
       console.log('Authentication changed', auth);
     });
+    const interval = REFRESH_INTERVAL_MINUTES * 60 * 1000
+        + REFRESH_INTERVAL_MAX_OFFSET_MINUTES * Math.random() * 60 * 1000;
+    setInterval(() => {
+      if (this.getCurrentAuthentication() != null) {
+        this.refreshLogin();
+      }
+    }, interval);
   }
 
   /**
