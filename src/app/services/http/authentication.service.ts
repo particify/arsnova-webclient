@@ -104,7 +104,7 @@ export class AuthenticationService extends BaseHttpService {
     return this.handleLoginResponse(this.http.post<ClientAuthentication>(connectionUrl, {
       loginId: loginId,
       password: password
-    }, this.httpOptions));
+    }, this.httpOptions), this.isLoggedIn());
   }
 
   /**
@@ -193,7 +193,7 @@ export class AuthenticationService extends BaseHttpService {
       concatMap(() => this.http.post<ClientAuthentication>(loginUrl, null, { withCredentials: true })),
       take(1));
 
-    return this.handleLoginResponse(auth$);
+    return this.handleLoginResponse(auth$, this.isLoggedIn());
   }
 
   /**
@@ -219,7 +219,10 @@ export class AuthenticationService extends BaseHttpService {
   /**
    * Updates the local authentication state based on the server response.
    */
-  private handleLoginResponse(clientAuthentication$: Observable<ClientAuthentication>): Observable<ClientAuthenticationResult> {
+  private handleLoginResponse(
+      clientAuthentication$: Observable<ClientAuthentication>,
+      restoreGuestOnFailure?: boolean
+  ): Observable<ClientAuthenticationResult> {
     const auth$ = clientAuthentication$.pipe(
         map(auth => {
           if (auth) {
@@ -242,7 +245,10 @@ export class AuthenticationService extends BaseHttpService {
         })
     );
     /* Publish authentication (w/o result meta data) */
-    this.auth$$.next(auth$.pipe(map(result => result.authentication)));
+    this.auth$$.next(auth$.pipe(
+        map(result => result.authentication),
+        tap(auth => restoreGuestOnFailure && !auth && this.loginGuest())
+    ));
 
     return auth$;
   }
