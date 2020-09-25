@@ -14,9 +14,11 @@ export class BaseHttpService {
   public handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
       console.error(error);
-      this.translateService.get('errors.something-went-wrong').subscribe(msg => {
-        this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.FAILED);
-      });
+      if (error?.status !== 401) {
+        this.translateService.get('errors.something-went-wrong').subscribe(msg => {
+          this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.FAILED);
+        });
+      }
       return throwError(error);
     };
   }

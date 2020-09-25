@@ -4,22 +4,29 @@ import { HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest
 
 import { AuthenticationService, AUTH_HEADER_KEY, AUTH_SCHEME } from '../services/http/authentication.service';
 import { AdvancedSnackBarTypes, NotificationService } from '../services/util/notification.service';
+import { TranslateService } from '@ngx-translate/core';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
+
+const API_LOGIN_URI = '/api/auth/login/registered';
 
 @Injectable()
 export class AuthenticationInterceptor implements HttpInterceptor {
   private token: string;
 
-  constructor(private authenticationService: AuthenticationService,
-              private notificationService: NotificationService,
-              private router: Router) {
+  constructor(
+      private authenticationService: AuthenticationService,
+      private router: Router,
+      private notificationService: NotificationService,
+      private translateService: TranslateService
+  ) {
     authenticationService.getAuthenticationChanges().subscribe(auth => this.token = auth?.token);
   }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    if (this.token || req.headers.has(AUTH_HEADER_KEY)) {
-      const authReq = req.headers.has(AUTH_HEADER_KEY) ? req : req.clone({
+    const tokenOverride = req.headers.has(AUTH_HEADER_KEY);
+    if ((this.token || tokenOverride) && req.url !== API_LOGIN_URI) {
+      const authReq = tokenOverride ? req : req.clone({
         headers: req.headers.set(AUTH_HEADER_KEY, `${AUTH_SCHEME} ${this.token}`)
       });
 
@@ -28,12 +35,12 @@ export class AuthenticationInterceptor implements HttpInterceptor {
           // Possible to do something with the response here
         }
       }, (err: any) => {
-        if (err instanceof HttpErrorResponse) {
-          // Catch 401 errors
-          if (err.status === 401) {
-            this.notificationService.showAdvanced('You are not logged in', AdvancedSnackBarTypes.WARNING);
-            this.router.navigate(['home']);
-          }
+        if (err instanceof HttpErrorResponse && err.status === 401 && !tokenOverride) {
+          this.authenticationService.logout();
+          this.router.navigate(['login']);
+          this.translateService.get('login.authentication-expired').subscribe(msg => {
+            this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
+          });
         }
       }));
     } else {

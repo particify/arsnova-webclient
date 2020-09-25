@@ -134,7 +134,8 @@
     "password-required": "Passwort erforderlich",
     "password-reset": "Passwort vergessen?",
     "register": "Registrieren",
-    "or": "oder"
+    "or": "oder",
+    "authentication-expired": "Bitte melde dich erneut an."
   },
   "password-reset": {
     "a11y-cancel": "Bricht das Passwort zurücksetzen ab und bringt dich zurück zur Anmeldeseite.",
