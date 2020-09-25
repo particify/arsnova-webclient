@@ -19,6 +19,7 @@ export class PreviewComponent implements OnInit {
   multipleAnswers: boolean;
   isLoading = true;
   markdownFeatureset: MarkdownFeatureset;
+  attachmentData: any;
 
   constructor(private formattingService: FormattingService) { }
 
@@ -31,6 +32,7 @@ export class PreviewComponent implements OnInit {
       this.multipleAnswers = (this.content as ContentChoice).multiple;
     }
     this.markdownFeatureset = format === ContentType.SLIDE ? MarkdownFeatureset.EXTENDED : MarkdownFeatureset.SIMPLE;
+    this.prepareAttachmentData()
   }
 
   emitFlipEvent(submit: boolean) {
@@ -39,6 +41,14 @@ export class PreviewComponent implements OnInit {
 
   renderingFinished() {
     this.isLoading = false;
+  }
+
+  prepareAttachmentData() {
+    this.attachmentData = {
+      'refType': 'content',
+      'detailedView': false,
+      'useTempAttachments': true
+    };
   }
 
 }
