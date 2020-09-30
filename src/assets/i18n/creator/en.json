@@ -279,10 +279,10 @@
   },
   "room-page": {
     "a11y-moderation": "Opens all comments selected by the moderator",
-    "a11y-comments": "Opens all questions asked about the room",
+    "a11y-comments": "Opens all questions asked about the room.",
     "a11y-settings": "Navigates to the settings where you can manage the room and its comments and add moderators or categories.",
     "a11y-statistics": "Opens the statistics for your question collections.",
-    "a11y-shortcuts": "Press key 1 to go to the comments overview, key 2 to go to the moderation overview, key 3 to create a new question, key 4 to go to the live survey, key 5 to navigate through your question collections, key 6 to navigate to the statistics, key 7 to make settings to the room, key 8 to show a qr-code for the current room, key 9 to go to the user menu, key 0 to go to the back button, or key 9 to repeat this announcement.",
+    "a11y-shortcuts": "Press key 1 to go to the comments overview, key 2 to go to the moderation overview, key 3 to create a new question, key 4 to go to the live survey, key 5 to navigate through your question collections, key 6 to navigate to the statistics, key 7 to show more options for this room, key 9 to go to the user menu, key 0 to go to the back button, or key 9 to repeat this announcement.",
     "a11y-room-message": "You're now in your room {{room}} with the key {{key}}. To get information about key combinations press the Enter key or call the announcement later with the Escape key.",
     "a11y-create-content": "Opens a form to create new questions.",
     "a11y-live-survey": "Opens the live survey.",
@@ -292,8 +292,9 @@
     "a11y-moderator-message": "You are now in the room {{room}}, which you are moderating. To get information about key combinations, press the Enter key now or call the announcement later with the Escape key.",
     "a11y-moderator-shortcuts": "Press key 1 to go to the comments overview, key 2 to go to the moderation overview, key 9 to go to the user menu, key 0 to go to the back button or key 9 to repeat this announcement.",
     "a11y-moderation-disabled": "This room is currently not moderated.",
-    "a11y-qr-code": "Opens a dialog box that displays the room link as QR code.",
+    "a11y-share": "Opens a dialog box that displays the room link and a QR code. Also you can copy the room adress.",
     "a11y-switch-role": "Switch role to see participants view.",
+    "a11y-more-options": "Shows more options for this room in a menu.",
     "answer-statistics": "Statistics",
     "create-content": "Create content",
     "live-survey": "Live Survey",
@@ -304,7 +305,9 @@
     "room-loading-error": "The room could not be loaded",
     "room-settings": "Room administration",
     "no-contents": "There are no questions yet.",
-    "switch-role": "Switch role"
+    "switch-role": "Switch role",
+    "share-room": "Share room",
+    "more-options": "More options"
   },
   "settings": {
     "a11y-message": "You are now in the room settings. Press the Enter key to get information about key combinations or call the announcement later with the Escape key.",
