@@ -15,6 +15,7 @@ import { CommentResolver } from '../../resolver/comment.resolver';
 import { RoomViewUserRoleResolver } from '../../resolver/room-view-user-role.resolver';
 import { LooseContentComponent } from './loose-content/loose-content.component';
 import { GroupContentComponent } from './group-content/group-content.component';
+import { RoomUserRoleResolver } from '../../resolver/room-user-role.resolver';
 
 const routes: Routes = [
   {
@@ -24,7 +25,8 @@ const routes: Routes = [
     data: { requiredRole: UserRole.CREATOR },
     resolve : {
       room: RoomResolver,
-      viewRole: RoomViewUserRoleResolver
+      viewRole: RoomViewUserRoleResolver,
+      userRole: RoomUserRoleResolver
     }
   },
   {

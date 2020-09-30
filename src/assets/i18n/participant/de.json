@@ -133,10 +133,12 @@
     "a11y-no-content-groups": "In diesem Raum sind noch keine Fragen vorhanden.",
     "a11y-enter-content-group": "Öffnet die Fragesammlung {{name}}.",
     "a11y-live-survey-disabled": "Die Live-Umfrage ist derzeit nicht aktiv.",
+    "a11y-switch-role": "Wechsel zurück zu deiner Rolle.",
     "answer-statistics": "Statistiken",
     "comments": "Kommentare",
     "live-survey": "Live-Umfrage",
-    "no-contents": "Es sind noch keine Fragen vorhanden."
+    "no-contents": "Es sind noch keine Fragen vorhanden.",
+    "switch-role": "Rolle wechseln"
   },
   "statistic": {
     "a11y-message-overview": "Du befindest dich jetzt auf der Statistikübersicht. Drücke jetzt die Enter-Taste, um Informationen über Tastenkombinationen zu erhalten oder rufe die Ansage zu einem späteren Zeitpunkt mit der Escape-Taste auf.",

@@ -293,6 +293,7 @@
     "a11y-moderator-shortcuts": "Drücke die Taste 1, um auf die Kommentar-Übersicht zu gelangen, die Taste 2, um in die Moderationsübersicht zu gelangen, die Taste 9, um auf das Nutzer-Menü zu gelangen, die Taste 0, um auf den Zurück-Button zu gelangen oder die Escape-Taste, um diese Ansage zu wiederholen.",
     "a11y-moderation-disabled": "Dieser Raum wird zurzeit nicht moderiert.",
     "a11y-qr-code": "Öffnet ein Dialogfenster welches den Link zu diesem Raum als QR-Code darstellt.",
+    "a11y-switch-role": "Wechsel die Rolle um die Ansicht der Teilnehmer zu sehen.",
     "answer-statistics": "Statistiken",
     "create-content": "Frage erstellen",
     "live-survey": "Live-Umfrage",
@@ -302,7 +303,8 @@
     "public-stream": "Kommentare",
     "room-loading-error": "Der Raum konnte nicht geladen werden",
     "room-settings": "Einstellungen",
-    "no-contents": "Es sind noch keine Fragen vorhanden."
+    "no-contents": "Es sind noch keine Fragen vorhanden.",
+    "switch-role": "Rolle wechseln"
   },
   "settings": {
     "a11y-message": "Du befindest dich jetzt in den Raum-Einstellungen. Drücke die Enter-Taste, um Informationen über Tastenkombinationen zu erfahren oder rufe die Ansafe zu einem späteren Zeitpunkt mit der Escape-Taste auf.",

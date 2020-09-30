@@ -10,6 +10,7 @@ import { RoomResolver } from '../../resolver/room.resolver';
 import { CommentResolver } from '../../resolver/comment.resolver';
 import { RoomViewUserRoleResolver } from '../../resolver/room-view-user-role.resolver';
 import { AuthenticationGuard } from '../../guards/authentication.guard';
+import { RoomUserRoleResolver } from '../../resolver/room-user-role.resolver';
 
 const routes: Routes = [
   {
@@ -19,7 +20,8 @@ const routes: Routes = [
     data: { requiredRole: UserRole.PARTICIPANT },
     resolve : {
       room: RoomResolver,
-      viewRole: RoomViewUserRoleResolver
+      viewRole: RoomViewUserRoleResolver,
+      userRole: RoomUserRoleResolver
     }
   },
   {

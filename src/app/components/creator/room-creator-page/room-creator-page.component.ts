@@ -100,7 +100,7 @@ export class RoomCreatorPageComponent extends RoomPageComponent implements OnIni
     window.scroll(0, 0);
     this.translateService.use(this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE));
     this.route.data.subscribe(data => {
-      this.initializeRoom(data.room);
+      this.initializeRoom(data.room, data.userRole, data.viewRole);
       this.roomService.getRoomSummaries([data.room.id]).subscribe(summary => {
         this.sidebarInfos.push(new SidebarInfo(summary[0].stats.roomUserCount, 'people', 'user-counter'));
       });

@@ -293,6 +293,7 @@
     "a11y-moderator-shortcuts": "Press key 1 to go to the comments overview, key 2 to go to the moderation overview, key 9 to go to the user menu, key 0 to go to the back button or key 9 to repeat this announcement.",
     "a11y-moderation-disabled": "This room is currently not moderated.",
     "a11y-qr-code": "Opens a dialog box that displays the room link as QR code.",
+    "a11y-switch-role": "Switch role to see participants view.",
     "answer-statistics": "Statistics",
     "create-content": "Create content",
     "live-survey": "Live Survey",
@@ -302,7 +303,8 @@
     "public-stream": "Comments",
     "room-loading-error": "The room could not be loaded",
     "room-settings": "Room administration",
-    "no-contents": "There are no questions yet."
+    "no-contents": "There are no questions yet.",
+    "switch-role": "Switch role"
   },
   "settings": {
     "a11y-message": "You are now in the room settings. Press the Enter key to get information about key combinations or call the announcement later with the Escape key.",

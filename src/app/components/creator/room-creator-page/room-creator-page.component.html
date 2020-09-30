@@ -32,6 +32,11 @@
             <mat-icon class="corner-icon icon-secondary" matTooltip="{{ 'room-page.answer-statistics' | translate}}">insert_chart
             </mat-icon>
           </button>
+          <button mat-icon-button class="corner-buttons" (click)="switchRole('participant')"
+                  aria-labelledby="switch-role">
+            <mat-icon class="corner-icon icon-secondary" matTooltip="{{ 'room-page.switch-role' | translate}}">{{roleIconString}}
+            </mat-icon>
+          </button>
         </div>
       </div>
       <mat-card-content *ngIf="room.description" fxLayoutAlign="center">
@@ -122,4 +127,5 @@
   <div id="live-survey">{{'room-page.a11y-live-survey' | translate}}</div>
   <div id="statistics">{{'room-page.a11y-statistics' | translate}}</div>
   <div id="qr-code">{{'room-page.a11y-qr-code' | translate}}</div>
+  <div id="switch-role">{{'room-page.a11y-switch-role' | translate}}</div>
 </div>

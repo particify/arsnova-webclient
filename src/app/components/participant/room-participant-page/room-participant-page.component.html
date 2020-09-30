@@ -4,7 +4,8 @@
             class="visually-hidden">{{ 'room-page.a11y-room-message' | translate }}</button>
     <app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
     <mat-card *ngIf=" !isLoading && room">
-      <div fxLayout="row" fxLayoutAlign="center">
+      <div fxLayout="row" fxLayoutAlign="space-between">
+        <span [ngClass]="{'corner-buttons': role !== ''}"></span>
         <mat-card-header fxLayoutAlign="center">
           <mat-card-title fxLayoutAlign="center">
             {{ room.name }}
@@ -15,6 +16,12 @@
             </span>
           </mat-card-subtitle>
         </mat-card-header>
+        <button mat-icon-button class="corner-buttons" *ngIf="role !== ''" (click)="switchRole()"
+                aria-labelledby="switch-role">
+          <mat-icon class="corner-icon icon-secondary" matTooltip="{{ 'room-page.switch-role' | translate}}">{{roleIconString}}
+          </mat-icon>
+        </button>
+        <span *ngIf="role === ''"></span>
       </div>
       <mat-card-content *ngIf="room.description" fxLayoutAlign="center">
         <app-rendered-text [rawText]="room.description.trim()" [renderedText]="room.renderedDescription"></app-rendered-text>
@@ -57,4 +64,5 @@
   <div id="comments">{{'room-page.a11y-comments' | translate}}</div>
   <div id="live-survey">{{'room-page.a11y-live-survey' | translate}}</div>
   <div id="statistics">{{'room-page.a11y-statistics' | translate}}</div>
+  <div id="switch-role">{{'room-page.a11y-switch-role' | translate}}</div>
 </div>

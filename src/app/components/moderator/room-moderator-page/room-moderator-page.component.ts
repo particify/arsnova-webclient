@@ -16,6 +16,7 @@ import { KeyboardKey } from '../../../utils/keyboard/keys';
 import { GlobalStorageService, STORAGE_KEYS } from '../../../services/util/global-storage.service';
 import { AnnounceService } from '../../../services/util/announce.service';
 import { SidebarInfo } from '../../shared/sidebar/sidebar.component';
+import { UserRole } from '../../../models/user-roles.enum';
 
 @Component({
   selector: 'app-room-moderator-page',
@@ -76,7 +77,7 @@ export class RoomModeratorPageComponent extends RoomPageComponent implements OnI
   ngOnInit() {
     window.scroll(0, 0);
     this.route.data.subscribe(data => {
-      this.initializeRoom(data.room);
+      this.initializeRoom(data.room, data.userRole, data.viewRole);
     });
     this.translateService.use(this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE));
     console.log(this.viewModuleCount);
@@ -93,7 +94,7 @@ export class RoomModeratorPageComponent extends RoomPageComponent implements OnI
     this.announceService.announce('room-page.a11y-moderator-shortcuts');
   }
 
-  initializeRoom(room: Room): void {
+  initializeRoom(room: Room, role: UserRole, viewRole: UserRole): void {
     this.room = room;
     if (this.room.extensions && this.room.extensions['comments']) {
       if (this.room.extensions['comments'].enableModeration !== null) {
@@ -109,5 +110,7 @@ export class RoomModeratorPageComponent extends RoomPageComponent implements OnI
     if (this.moderationEnabled) {
       this.subscribeCommentModeratorStream();
     }
+    this.role = role === viewRole ? UserRole.NONE : role;
+    this.getRoleIcon();
   }
 }
