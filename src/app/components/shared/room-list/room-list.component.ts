@@ -99,6 +99,9 @@ export class RoomListComponent implements OnInit, OnDestroy {
       if (guestRooms && guestRooms.length > 0) {
         this.roomsFromGuest = guestRooms;
         this.showRoomsFromGuest = true;
+        setTimeout(() => {
+          document.getElementById('guest-rooms').scrollIntoView({ behavior: 'smooth' });
+        }, 50);
       } else {
         this.translateService.get('room-list.transfer-no-rooms').subscribe(msg => {
           this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
