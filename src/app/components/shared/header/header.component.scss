@@ -34,25 +34,19 @@
 }
 
 .color {
-  font-size: 45px;
-  width: 45px;
-  height: 45px;
+  font-size: 44px;
+  width: 44px;
+  height: 44px;
   position: relative;
-  margin-right: 12px;
 }
 
 .checked {
   position: absolute;
-  left: 22px;
-  top: 15px;
-  font-size: 25px;
-  width: 25px;
-  height: 25px;
-}
-
-.mat-menu-item {
-  height: 50px;
-  padding: 5px 12px;
+  left: 26px;
+  top: 12px;
+  font-size: 24px;
+  width: 24px;
+  height: 24px;
 }
 
 .item-title {
@@ -85,4 +79,8 @@
 .news-btn {
   color: var(--on-surface);
   margin-right: 0.5em;
+}
+
+.color-text-container {
+  padding-right: 16px;
 }

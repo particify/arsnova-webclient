@@ -20,7 +20,7 @@
     </h2>
     <span class="fill-remaining-space"></span>
 
-    <mat-menu #userMenu="matMenu" [overlapTrigger]="false">
+    <mat-menu #userMenu="matMenu" [overlapTrigger]="false" xPosition="before">
       <button mat-menu-item *ngIf="auth" routerLink="/user" tabindex="0">
         <mat-icon class="rooms">home</mat-icon>
         <span>{{'header.my-rooms' | translate}}</span>
@@ -67,7 +67,7 @@
           <mat-icon class="checked" *ngIf="theme.key === themeClass" [ngStyle]="{'color':theme.getOnPreviewColor()}">
             checked
           </mat-icon>
-          <div fxLayout="column" fxLayoutAlign="center">
+          <div fxLayout="column" fxLayoutAlign="center" class="color-text-container">
             <span class="item-title color-title">{{theme.getName(getLanguage())}}</span>
             <span class="color-description"
                   *ngIf="deviceWidth > 600">{{theme.getDescription(getLanguage())}}</span>
