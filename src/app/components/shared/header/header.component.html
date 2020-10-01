@@ -23,8 +23,7 @@
     <mat-menu #userMenu="matMenu" [overlapTrigger]="false">
       <button mat-menu-item *ngIf="auth" routerLink="/user" tabindex="0">
         <mat-icon class="rooms">home</mat-icon>
-        <span *ngIf="!isGuest">{{'header.my-rooms' | translate}}</span>
-        <span *ngIf="isGuest">{{'header.visited-rooms' | translate}}</span>
+        <span>{{'header.my-rooms' | translate}}</span>
       </button>
       <button mat-menu-item (click)="navToHelp()" tabindex="0">
         <mat-icon class="less-important">help</mat-icon>
