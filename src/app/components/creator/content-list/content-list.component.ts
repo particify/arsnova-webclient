@@ -142,9 +142,7 @@ export class ContentListComponent implements OnInit {
   }
 
   updateContentChanges(index: number, action: string) {
-    if (!action) {
-      this.contents[index] = this.contentBackup;
-    } else {
+    if (action) {
       switch (action.valueOf()) {
         case 'delete':
           this.contentService.deleteContent(this.contents[index].id).subscribe(() => {
@@ -160,16 +158,13 @@ export class ContentListComponent implements OnInit {
           });
           break;
         case 'update':
+          this.contents[index] = this.contentBackup;
           this.contentService.updateContent(this.contents[index]).subscribe(() => {
             this.translateService.get('content.content-updated').subscribe(message => {
               this.notificationService.showAdvanced(message, AdvancedSnackBarTypes.SUCCESS);
             });
-            this.contents[index] = this.contentBackup;
             this.labels[index] = this.contentBackup.body;
           });
-          break;
-        case 'abort':
-          this.contents[index] = this.contentBackup;
           break;
       }
     }
