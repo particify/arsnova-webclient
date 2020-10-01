@@ -6,8 +6,9 @@
     <app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
     <mat-card *ngIf="!isLoading && room">
       <div fxLayout="row">
-        <button mat-icon-button id="qr-code-button" class="corner-buttons" (click)="showQRDialog(true)" aria-labelledby="qr-code">
-          <mat-icon svgIcon="qrcode" class="qr-icon">
+        <button mat-icon-button class="corner-buttons" [ngClass]="{'disabled': noGroups}" id="statistics-button"
+                (click)="navToStats('creator')" aria-labelledby="statistics">
+          <mat-icon class="corner-icon icon-secondary" matTooltip="{{ 'room-page.answer-statistics' | translate}}">insert_chart
           </mat-icon>
         </button>
         <span class="fill-remaining-space"></span>
@@ -22,17 +23,25 @@
           </mat-card-subtitle>
         </mat-card-header>
         <span class="fill-remaining-space"></span>
-        <div fxLayout="column">
-          <button tabindex="0" id="settings-button" mat-icon-button class="corner-buttons" aria-labelledby="settings"
-                  routerLink="settings">
-            <mat-icon class="corner-icon icon-secondary" matTooltip="{{ 'room-page.room-settings' | translate}}">settings</mat-icon>
+        <button mat-icon-button [matMenuTriggerFor]="moreMenu" matTooltip="{{ 'room-page.more-options' | translate }}"
+                aria-labelledby="more-options">
+          <mat-icon class="corner-icon icon-secondary">more_vert</mat-icon>
+        </button>
+        <mat-menu #moreMenu="matMenu">
+          <button mat-menu-item tabindex="0" (click)="switchRole('participant')"
+                  aria-labelledby="switch-role">
+            <mat-icon class="menu-icon icon-secondary">{{roleIconString}}</mat-icon>
+            <span>{{ 'room-page.switch-role' | translate }}</span>
           </button>
-          <button mat-icon-button class="corner-buttons" [ngClass]="{'disabled': noGroups}" id="statistics-button"
-                  (click)="navToStats('creator')" aria-labelledby="statistics">
-            <mat-icon class="corner-icon icon-secondary" matTooltip="{{ 'room-page.answer-statistics' | translate}}">insert_chart
-            </mat-icon>
+          <button mat-menu-item (click)="showQRDialog()" aria-labelledby="share">
+            <mat-icon class="menu-icon">share</mat-icon>
+            <span>{{ 'room-page.share-room' | translate }}</span>
           </button>
-        </div>
+          <button mat-menu-item aria-labelledby="settings" routerLink="settings">
+            <mat-icon class="menu-icon icon-secondary">settings</mat-icon>
+            <span>{{ 'room-page.room-settings' | translate}}</span>
+          </button>
+        </mat-menu>
       </div>
       <mat-card-content *ngIf="room.description" fxLayoutAlign="center">
         <app-rendered-text [rawText]="room.description.trim()" [renderedText]="room.renderedDescription"></app-rendered-text>
@@ -121,5 +130,7 @@
   <div id="create-content">{{'room-page.a11y-create-content' | translate}}</div>
   <div id="live-survey">{{'room-page.a11y-live-survey' | translate}}</div>
   <div id="statistics">{{'room-page.a11y-statistics' | translate}}</div>
-  <div id="qr-code">{{'room-page.a11y-qr-code' | translate}}</div>
+  <div id="share">{{'room-page.a11y-share' | translate}}</div>
+  <div id="switch-role">{{'room-page.a11y-switch-role' | translate}}</div>
+  <div id="more-options">{{'room-page.a11y-switch-role' | translate}}</div>
 </div>

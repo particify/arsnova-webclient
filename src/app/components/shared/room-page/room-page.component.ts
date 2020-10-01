@@ -15,6 +15,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { AdvancedSnackBarTypes, NotificationService } from '../../../services/util/notification.service';
 import { GlobalStorageService, STORAGE_KEYS } from '../../../services/util/global-storage.service';
 import { SidebarInfo } from '../sidebar/sidebar.component';
+import { UserRole } from '../../../models/user-roles.enum';
 
 @Component({
   selector: 'app-room-page',
@@ -41,6 +42,8 @@ export class RoomPageComponent implements OnInit, OnDestroy {
   moderationSub: Subscription;
   moderatorCommentCounter: number;
   sidebarInfos: SidebarInfo[] = [];
+  role: UserRole;
+  roleIconString;
 
   constructor(
     protected roomService: RoomService,
@@ -58,9 +61,6 @@ export class RoomPageComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.route.params.subscribe(params => {
-      this.initializeRoom(params['shortId']);
-    });
   }
 
   ngOnDestroy() {
@@ -141,7 +141,7 @@ export class RoomPageComponent implements OnInit, OnDestroy {
     });
   }
 
-  initializeRoom(room: Room): void {
+  initializeRoom(room: Room, role: UserRole, viewRole: UserRole): void {
     this.room = room;
     this.initializeStats();
     if (this.room.extensions && this.room.extensions['comments']) {
@@ -153,6 +153,26 @@ export class RoomPageComponent implements OnInit, OnDestroy {
     this.globalStorageService.setItem(STORAGE_KEYS.MODERATION_ENABLED, String(this.moderationEnabled));
     this.afterRoomLoadHook();
     this.globalStorageService.setItem(STORAGE_KEYS.SHORT_ID, room.shortId);
+    this.role = role === viewRole ? UserRole.NONE : role;
+    console.log(this.role);
+    this.getRoleIcon();
+
+  }
+
+  getRoleIcon() {
+    if (this.role === UserRole.NONE) {
+      this.roleIconString = 'people';
+    } else {
+      this.getUserRoleIcon();
+    }
+  }
+
+  getUserRoleIcon() {
+    if (this.role === UserRole.CREATOR) {
+      this.roleIconString = 'record_voice_over';
+    } else if (['EDITING_MODERATOR', 'EXECUTIVE_MODERATOR'].indexOf(this.role) !== -1) {
+      this.roleIconString = 'gavel';
+    }
   }
 
   initializeStats() {
@@ -193,5 +213,26 @@ export class RoomPageComponent implements OnInit, OnDestroy {
   delete(room: Room): void {
     this.roomService.deleteRoom(room.id).subscribe();
     this.location.back();
+  }
+
+
+  switchRole(role?: string) {
+    let roleRoute;
+    if (role) {
+      roleRoute = role;
+    } else {
+      switch (this.role) {
+        case UserRole.CREATOR:
+          roleRoute = 'creator';
+          break;
+        case UserRole.EXECUTIVE_MODERATOR || UserRole.EDITING_MODERATOR:
+          roleRoute = 'moderator';
+          break;
+        case UserRole.PARTICIPANT:
+          roleRoute = 'participant';
+          break;
+      }
+    }
+    this.router.navigate([`/${roleRoute}/room/${this.room.shortId}`]);
   }
 }

@@ -282,7 +282,7 @@
     "a11y-comments": "Öffnet das Kommentar-Board.",
     "a11y-settings": "Navigiert zu den Einstellungen in welchen du den Raum und dessen Kommentare verwalten und moderierende Personen oder Kategorien hinzufügen kannst.",
     "a11y-statistics": "Öffnet die Statistiken zu deinen Frage-Sammlungen.",
-    "a11y-shortcuts": "Drücke die Taste 1, um auf die Kommentar-Übersicht zu gelangen, die Taste 2, um in die Moderationsübersicht zu gelangen, die Taste 3, um eine neue Frage zu erstellen, die Taste 4, um zur Live-Umfrage zu gelangen, die Taste 5, um durch deine Fragensammlungen zu navigieren, die Taste 6, um zu den Statistiken zu navigieren, die Taste 7, um Einstellungen an der Raumübersicht vorzunehmen, die Taste 8, um einen QR-Code für den aktuellen Raum anzuzeigen, die Taste 9, um auf das Nutzer-Menü zu gelangen, die Taste 0, um auf den Zurück-Button zu gelangen, oder die Escape-Taste, um diese Ansage zu wiederholen.",
+    "a11y-shortcuts": "Drücke die Taste 1, um auf die Kommentar-Übersicht zu gelangen, die Taste 2, um in die Moderationsübersicht zu gelangen, die Taste 3, um eine neue Frage zu erstellen, die Taste 4, um zur Live-Umfrage zu gelangen, die Taste 5, um durch deine Fragensammlungen zu navigieren, die Taste 6, um zu den Statistiken zu navigieren, die Taste 7, um weitere Optionen für den Raum anzuzeigen, die Taste 9, um auf das Nutzer-Menü zu gelangen, die Taste 0, um auf den Zurück-Button zu gelangen, oder die Escape-Taste, um diese Ansage zu wiederholen.",
     "a11y-room-message": "Du befindest dich jetzt in deinem Raum {{room}} mit der Nummer {{key}}. Um Informationen zu Tastenkombinationen zu erhalten drücke jetzt die Enter-Taste, oder rufe die Ansage zu einem späteren Zeitpunkt mit der Escape-Taste auf.",
     "a11y-create-content": "Öffnet ein Formular zum erstellen neuer Fragen.",
     "a11y-live-survey": "Öffnet die Live-Umfrage.",
@@ -292,7 +292,9 @@
     "a11y-moderator-message": "Du befindest dich jetzt in dem Raum {{room}} welchen du moderierst. Um Informationen zu Tastenkombinationen zu erhalten, drücke jetzt die Enter-Taste oder rufe die Ansage zu einem späteren Zeitpunkt mit der Escape-Taste auf.",
     "a11y-moderator-shortcuts": "Drücke die Taste 1, um auf die Kommentar-Übersicht zu gelangen, die Taste 2, um in die Moderationsübersicht zu gelangen, die Taste 9, um auf das Nutzer-Menü zu gelangen, die Taste 0, um auf den Zurück-Button zu gelangen oder die Escape-Taste, um diese Ansage zu wiederholen.",
     "a11y-moderation-disabled": "Dieser Raum wird zurzeit nicht moderiert.",
-    "a11y-qr-code": "Öffnet ein Dialogfenster welches den Link zu diesem Raum als QR-Code darstellt.",
+    "a11y-share": "Öffnet ein Dialogfenster welches den Link zu diesem Raum und einen QR-Code anzeigt. Außerdem kannst du die Adresse des Raums kopieren",
+    "a11y-switch-role": "Wechsel die Rolle um die Ansicht der Teilnehmer zu sehen.",
+    "a11y-more-options": "Zeigt mehr Optionen für diesen Raum in einem Menü.",
     "answer-statistics": "Statistiken",
     "create-content": "Frage erstellen",
     "live-survey": "Live-Umfrage",
@@ -302,7 +304,10 @@
     "public-stream": "Kommentare",
     "room-loading-error": "Der Raum konnte nicht geladen werden",
     "room-settings": "Einstellungen",
-    "no-contents": "Es sind noch keine Fragen vorhanden."
+    "no-contents": "Es sind noch keine Fragen vorhanden.",
+    "switch-role": "Rolle wechseln",
+    "share-room": "Raum teilen",
+    "more-options": "Mehr Optionen"
   },
   "settings": {
     "a11y-message": "Du befindest dich jetzt in den Raum-Einstellungen. Drücke die Enter-Taste, um Informationen über Tastenkombinationen zu erfahren oder rufe die Ansafe zu einem späteren Zeitpunkt mit der Escape-Taste auf.",

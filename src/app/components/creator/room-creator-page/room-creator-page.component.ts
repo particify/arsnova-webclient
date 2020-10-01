@@ -82,9 +82,7 @@ export class RoomCreatorPageComponent extends RoomPageComponent implements OnIni
     } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit6) === true && focusOnInput === false) {
       document.getElementById('statistics-button').focus();
     } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit7) === true && focusOnInput === false) {
-      document.getElementById('settings-button').focus();
-    } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit8) === true) {
-      document.getElementById('qr-code-button').focus();
+      document.getElementById('share-button').focus();
     } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Escape) === true && focusOnInput === false) {
       this.announce();
     }
@@ -100,7 +98,7 @@ export class RoomCreatorPageComponent extends RoomPageComponent implements OnIni
     window.scroll(0, 0);
     this.translateService.use(this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE));
     this.route.data.subscribe(data => {
-      this.initializeRoom(data.room);
+      this.initializeRoom(data.room, data.userRole, data.viewRole);
       this.roomService.getRoomSummaries([data.room.id]).subscribe(summary => {
         this.sidebarInfos.push(new SidebarInfo(summary[0].stats.roomUserCount, 'people', 'user-counter'));
       });

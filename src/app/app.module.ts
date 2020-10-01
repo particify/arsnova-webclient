@@ -64,6 +64,7 @@ import { SystemInfoService } from './services/http/system-info.service';
 import { RequestPasswordResetComponent } from './components/home/request-password-reset/request-password-reset.component';
 import { FormattingService } from './services/http/formatting.service';
 import { SnackBarAdvancedComponent } from './components/shared/snack-bar-advanced/snack-bar-advanced.component';
+import { RoomUserRoleResolver } from './resolver/room-user-role.resolver';
 
 export function dialogClose(dialogResult: any) {
 }
@@ -159,6 +160,7 @@ export function initializeApp(appConfig: AppConfig) {
     ContentResolver,
     CommentResolver,
     RoomViewUserRoleResolver,
+    RoomUserRoleResolver,
     AnnounceService,
     AdminService,
     SystemInfoService,

@@ -86,7 +86,7 @@ export class RoomParticipantPageComponent extends RoomPageComponent implements O
   ngOnInit() {
     window.scroll(0, 0);
     this.route.data.subscribe(data => {
-      this.initializeRoom(data.room);
+      this.initializeRoom(data.room, data.userRole, data.viewRole);
     });
     this.translateService.use(this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE));
   }

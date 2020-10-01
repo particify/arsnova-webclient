@@ -9,6 +9,7 @@ import { CommentAnswerComponent } from '../shared/comment-answer/comment-answer.
 import { RoomResolver } from '../../resolver/room.resolver';
 import { CommentResolver } from '../../resolver/comment.resolver';
 import { RoomViewUserRoleResolver } from '../../resolver/room-view-user-role.resolver';
+import { RoomUserRoleResolver } from '../../resolver/room-user-role.resolver';
 
 const routes: Routes = [
   {
@@ -18,7 +19,8 @@ const routes: Routes = [
     data: { requiredRole: UserRole.EXECUTIVE_MODERATOR },
     resolve : {
       room: RoomResolver,
-      viewRole: RoomViewUserRoleResolver
+      viewRole: RoomViewUserRoleResolver,
+      userRole: RoomUserRoleResolver
     }
   },
   {

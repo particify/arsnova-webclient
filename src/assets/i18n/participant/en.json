@@ -133,10 +133,12 @@
     "a11y-no-content-groups": "There are no questions in this room yet.",
     "a11y-enter-content-group": "Opens the content group {{name}}.",
     "a11y-live-survey-disabled": "The live survey is currently not active.",
+    "a11y-switch-role": "Switch back your role.",
     "answer-statistics": "Statistics",
     "comments": "Comments",
     "live-survey": "Live Survey",
-    "no-contents": "There are no questions yet."
+    "no-contents": "There are no questions yet.",
+    "switch-role": "Switch role"
   },
   "statistic": {
     "a11y-message-overview": "You are now on the statistics overview. Press the Enter key to get information about key combinations or call the announcement later with the Escape key.",
