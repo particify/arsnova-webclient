@@ -1,0 +1,17 @@
+<div fxLayout="row">
+    <app-rendered-text [rawText]="content.body" [renderedText]="content.renderedBody"></app-rendered-text>
+    <span class="fill-remaining-space"></span>
+    <button mat-icon-button *ngIf="chartVisible && !isSurvey" disableRipple (click)="toggleCorrect()"
+            matTooltip="{{ 'statistic.answer-indicator' | translate }}" aria-labelledby="show-correct">
+        <mat-icon class="corner-icon icon-primary">playlist_add_check</mat-icon>
+    </button>
+    <button mat-icon-button disableRipple [disabled]="data.every(noAnswers)" (click)="toggleChart()"
+            matTooltip="{{ (chartVisible ? 'statistic.hide-chart' : 'statistic.show-chart') | translate }}"
+            aria-labelledby="show-chart" [ngClass]="{'disabled' : data.every(noAnswers)}">
+        <mat-icon class="corner-icon icon-primary">insert_chart</mat-icon>
+    </button>
+</div>
+<app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
+<div class="chart-container" *ngIf="!isLoading" [ngClass]="{ 'invisible': !chartVisible }">
+    <canvas id="{{ chartId }}"></canvas>
+</div>

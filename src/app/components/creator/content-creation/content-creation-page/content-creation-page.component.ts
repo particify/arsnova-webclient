@@ -38,7 +38,8 @@ export class ContentCreationPageComponent implements OnInit, AfterContentInit {
     { name: 'scale', icon: 'mood' },
     { name: 'binary', icon: 'rule' },
     { name: 'text', icon: 'description' },
-    { name: 'slide', icon: 'info' }
+    { name: 'slide', icon: 'info' },
+    { name: 'sort', icon: 'sort' }
   ];
   selectedFormat: ContentFormat = this.formats[0];
 

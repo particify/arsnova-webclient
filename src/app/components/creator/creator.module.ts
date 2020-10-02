@@ -30,6 +30,7 @@ import { PreviewComponent } from './content-creation/preview/preview.component';
 import { TRANSLATION_MODULE_NAME } from '../../translate-module-name-token';
 import { TranslateHttpLoaderFactory } from '../../translate-http-loader-factory';
 import { ExtensionPointModule } from '../../../../projects/extension-point/src/lib/extension-point.module';
+import { ContentSortCreationComponent } from './content-creation/content-sort-creation/content-sort-creation.component';
 
 @NgModule({
   imports: [
@@ -72,7 +73,8 @@ import { ExtensionPointModule } from '../../../../projects/extension-point/src/l
     GroupContentComponent,
     ContentCreationComponent,
     ContentSlideCreationComponent,
-    PreviewComponent
+    PreviewComponent,
+    ContentSortCreationComponent
   ],
   providers: [
     { provide: TRANSLATION_MODULE_NAME, useValue: 'creator' }

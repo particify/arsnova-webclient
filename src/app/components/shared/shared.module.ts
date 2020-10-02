@@ -42,6 +42,9 @@ import { HintComponent } from './hint/hint.component';
 import { ExtensionPointModule } from '../../../../projects/extension-point/src/lib/extension-point.module';
 import { AnswerCountComponent } from './answer-count/answer-count.component';
 import { StatisticContentComponent } from './statistic-content/statistic-content/statistic-content.component';
+import { ContentSortAnswerComponent } from '@arsnova/app/components/shared/content-sort-answer/content-sort-answer.component';
+import { DragDropModule } from '@angular/cdk/drag-drop';
+import { ContentSortStatisticComponent } from '@arsnova/app/components/shared/statistic-sort/content-sort-statistic.component';
 
 @NgModule({
   imports: [
@@ -52,7 +55,8 @@ import { StatisticContentComponent } from './statistic-content/statistic-content
     ArsModule,
     QRCodeModule,
     CdkStepperModule,
-    ExtensionPointModule
+    ExtensionPointModule,
+    DragDropModule
   ],
   declarations: [
     RoomJoinComponent,
@@ -90,7 +94,9 @@ import { StatisticContentComponent } from './statistic-content/statistic-content
     UpdateInfoComponent,
     HintComponent,
     AnswerCountComponent,
-    StatisticContentComponent
+    StatisticContentComponent,
+    ContentSortAnswerComponent,
+    ContentSortStatisticComponent
   ],
   exports: [
     RoomJoinComponent,
@@ -117,7 +123,10 @@ import { StatisticContentComponent } from './statistic-content/statistic-content
     SidebarComponent,
     RenderedTextComponent,
     HintComponent,
-    StatisticContentComponent
+    StatisticContentComponent,
+    HintComponent,
+    ContentSortAnswerComponent,
+    ContentSortStatisticComponent
   ]
 })
 export class SharedModule {

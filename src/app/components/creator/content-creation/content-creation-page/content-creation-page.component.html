@@ -110,6 +110,13 @@
                                           [editContent]="content">
 
               </app-content-slide-creation>
+              <app-content-sort-creation (reset)="reset()" (contentSent)="saveContent($event)" (refId)="linkAttachments($event)"
+                                         *ngIf="selectedFormat.name === 'sort'"
+                                         [contentBody]="questionInput.value"
+                                         [contentGroup]="group.value"
+                                         [abstentionsAllowed]="abstentionsAllowed"
+                                         [createEvent]="createEventSubject.asObservable()" [editContent]="content">
+              </app-content-sort-creation>
               <div fxLayout="row" fxLayoutAlign="center" fxLayoutGap="1em" [ngClass]="{'top-space': isEditMode}">
                 <button (click)="showPreview()" attr.aria-label="{{ 'content.a11y-preview' | translate }}"
                         class="button-abort button-md" mat-raised-button>

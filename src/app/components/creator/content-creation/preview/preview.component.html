@@ -5,15 +5,16 @@
   </app-rendered-text>
   <lib-extension-point extensionId="attachment-list" [extensionData]="attachmentData"></lib-extension-point>
   <mat-list *ngIf="content.format === 'CHOICE' || content.format === 'SCALE' || content.format === 'BINARY'">
-    <mat-list-item fxLayout="column" fxLayoutAlign="center" *ngFor="let answer of answerLabels">
+    <mat-list-item fxLayout="column" fxLayoutAlign="center" *ngFor="let answer of answerOptions">
       <mat-checkbox *ngIf="multipleAnswers">
-        <span>{{ answer }}</span>
+        <span>{{ answer.label }}</span>
       </mat-checkbox>
       <mat-radio-button *ngIf="!multipleAnswers">
-        <span>{{ answer }}</span>
+        <span>{{ answer.label }}</span>
       </mat-radio-button>
     </mat-list-item>
   </mat-list>
+  <app-content-sort-answer *ngIf="content.format === 'SORT'" [answerOptions]="answerOptions"></app-content-sort-answer>
 </mat-card>
 <div fxLayout="row" fxLayoutAlign="center" fxLayoutGap="1em">
   <button (click)="emitFlipEvent(false)" attr.aria-label="{{ 'content.a11y-leave-preview' | translate }}"

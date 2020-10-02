@@ -1,0 +1,8 @@
+<div cdkDropList (cdkDropListDropped)="drop($event)" [cdkDropListDisabled]="disabled">
+    <mat-card *ngFor="let answer of answerOptions" cdkDrag [cdkDragStartDelay]="25">
+        <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="15px">
+            <mat-icon>drag_handle</mat-icon>
+            <span>{{ answer.label }}</span>
+        </div>
+    </mat-card>
+</div>
