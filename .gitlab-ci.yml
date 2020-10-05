@@ -70,7 +70,7 @@ unit_tests:
   stage: test
   needs:
     - yarn_install
-  image: registry.gitlab.com/arsnova/devops/docker/nodejs_chrome:202003071658
+  image: registry.gitlab.com/arsnova/devops/docker/nodejs_chrome:202010051202
   allow_failure: false
   variables:
     CHROME_BIN: /usr/bin/google-chrome
