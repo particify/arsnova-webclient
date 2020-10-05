@@ -205,7 +205,8 @@
     "transfer-rooms-from-guest": "Transfer rooms you created or visited without being logged in.",
     "visited-rooms": "Visited rooms",
     "load-rooms": "Load rooms",
-    "transfer-no-rooms": "No rooms were found for transfer."
+    "transfer-no-rooms": "No rooms were found for transfer.",
+    "hide-guest-rooms": "Hide"
   },
   "user-activation": {
     "a11y-activate": "Activates your account.",

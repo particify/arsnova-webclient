@@ -204,7 +204,8 @@
     "transfer-rooms-from-guest": "Übertrage Räume, die du erstellt oder besucht hast, ohne eingeloggt zu sein.",
     "visited-rooms": "Besuchte Räume",
     "load-rooms": "Räume laden",
-    "transfer-no-rooms": "Es wurden keine Räume zum Transferieren gefunden."
+    "transfer-no-rooms": "Es wurden keine Räume zum Transferieren gefunden.",
+    "hide-guest-rooms": "Ausblenden"
   },
   "user-activation": {
     "a11y-activate": "Aktiviert deinen Account.",

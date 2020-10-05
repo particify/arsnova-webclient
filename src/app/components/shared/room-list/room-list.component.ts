@@ -102,7 +102,7 @@ export class RoomListComponent implements OnInit, OnDestroy {
         setTimeout(() => {
           document.getElementById('guest-rooms').scrollIntoView({ behavior: 'smooth' });
         }, 50);
-      } else {
+      } else if (this.isLoading) {
         this.translateService.get('room-list.transfer-no-rooms').subscribe(msg => {
           this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
         });
@@ -148,7 +148,16 @@ export class RoomListComponent implements OnInit, OnDestroy {
   updateRoomList(rooms: RoomDataView[]) {
     this.rooms = rooms;
     this.setDisplayedRooms(this.rooms);
+    this.showGuestRooms();
     this.isLoading = false;
+  }
+
+  showGuestRooms() {
+    if (this.displayRooms.length > 0) {
+      return;
+    } else if (this.isLoading) {
+      this.getGuestRooms();
+    }
   }
 
   setCurrentRoom(shortId: string, role: UserRole) {

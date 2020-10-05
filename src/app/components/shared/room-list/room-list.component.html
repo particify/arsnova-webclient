@@ -1,7 +1,7 @@
 <app-loading-indicator *ngIf="isLoading" [size]="80"></app-loading-indicator>
 
 <div *ngIf="!isLoading" fxLayout="column" fxLayoutGap="10px">
-  <div tabindex="-1" id="room-list" *ngIf="!isLoading" [ngClass]="{'visually-hidden': rooms.length > 0}">
+  <div tabindex="-1" id="room-list" *ngIf="!isLoading" [ngClass]="{'visually-hidden': rooms.length > 0 || showRoomsFromGuest}">
     <h3 class="no-rooms">{{ rooms.length === 0 ? ('room-list.no-room-history' | translate) :
       'room-list.a11y-room-history' | translate:{count: rooms.length} }}</h3>
   </div>
@@ -76,7 +76,12 @@
   </div>
 
   <mat-card *ngIf="showRoomsFromGuest" id="guest-rooms">
-    <h3>{{ 'room-list.rooms-from-guest' | translate }}</h3>
+    <div fxLayout="row" fxLayoutAlign="space-between">
+      <h3>{{ 'room-list.rooms-from-guest' | translate }}</h3>
+      <button mat-stroked-button class="icon-secondary" (click)="showRoomsFromGuest = false">
+        {{ 'room-list.hide-guest-rooms' | translate }}
+      </button>
+    </div>
     <p>{{ 'room-list.transfer-rooms-from-guest' | translate }}</p>
     <mat-card-content>
       <mat-list class="rooms-from-guest" *ngIf="roomsFromGuest">
