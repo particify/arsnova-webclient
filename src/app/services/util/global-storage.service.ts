@@ -25,7 +25,8 @@ export const STORAGE_KEYS: { [key: string]: symbol } = {
   LANGUAGE: Symbol(),
   COMMENT_SORT: Symbol(),
   UPDATED: Symbol(),
-  VERSION: Symbol()
+  VERSION: Symbol(),
+  IMPORT_TOKEN: Symbol()
 };
 
 /**
@@ -121,6 +122,13 @@ export const STORAGE_CONFIG: StorageItem[] = [
     name: 'VERSION',
     category: StorageItemCategory.REQUIRED,
     backend: StorageBackend.LOCALSTORAGE
+  },
+  // Used by extensions
+  {
+    key: STORAGE_KEYS.IMPORT_TOKEN,
+    name: 'IMPORT_TOKEN',
+    category: StorageItemCategory.REQUIRED,
+    backend: StorageBackend.SESSIONSTORAGE
   }
 ];
 
