@@ -12,6 +12,7 @@ import { Observable, of, Subject } from 'rxjs';
 import { DialogService } from '../../../../services/util/dialog.service';
 import { GlobalStorageService } from '../../../../services/util/global-storage.service';
 import { ContentGroupService } from '../../../../services/http/content-group.service';
+import { MatButtonModule } from '@angular/material/button';
 
 const TRANSLATION_DE = require('../../../../../assets/i18n/home/de.json');
 const TRANSLATION_EN = require('../../../../../assets/i18n/home/en.json');
@@ -87,7 +88,12 @@ class MatIconStubComponent { }
 class MatFormFieldStubComponent { }
 
 @Component({ selector: 'mat-checkbox', template: '' })
-class MatCheckboxStubComponent { }
+class MatCheckboxStubComponent {
+  @Input() checked: boolean;
+  @Input() ngModel: any;
+  @Input() name: string;
+  @Input('aria-label') ariaLabel: any;
+}
 
 @Component({ selector: 'mat-list', template: '' })
 class MatListStubComponent { }
@@ -186,7 +192,8 @@ describe('ContentChoiceCreationComponent', () => {
             useClass: JsonTranslationLoader
           },
           isolate: true
-        })
+        }),
+        MatButtonModule
       ],
     })
     .compileComponents()
