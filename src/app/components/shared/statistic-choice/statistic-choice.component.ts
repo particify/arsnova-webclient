@@ -191,7 +191,7 @@ export class StatisticChoiceComponent implements OnInit, OnDestroy {
   }
 
   loadData() {
-    return this.contentService.getAnswer(this.content.id);
+    return this.contentService.getAnswer(this.content.roomId, this.content.id);
   }
 
   updateData(stats: AnswerStatistics) {

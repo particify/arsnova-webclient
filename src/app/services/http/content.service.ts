@@ -19,10 +19,9 @@ const httpOptions = {
 
 @Injectable()
 export class ContentService extends BaseHttpService {
-  private apiUrl = {
-    base: '/api',
+
+  serviceApiUrl = {
     content: '/content',
-    find: '/find',
     answer: '/answer'
   };
 
@@ -38,7 +37,7 @@ export class ContentService extends BaseHttpService {
   }
 
   getContents(roomId: string): Observable<Content[]> {
-    const connectionUrl = this.apiUrl.base + this.apiUrl.content + this.apiUrl.find;
+    const connectionUrl = this.getBaseUrl(roomId) + this.serviceApiUrl.content + this.apiUrl.find;
     return this.http.post<Content[]>(connectionUrl, {
       properties: { roomId: roomId },
       externalFilters: {}
@@ -47,32 +46,32 @@ export class ContentService extends BaseHttpService {
     );
   }
 
-  getContent(id: string): Observable<Content> {
-    const connectionUrl = this.apiUrl.base + this.apiUrl.content + '/' + id;
+  getContent(roomId: string, contentId: string): Observable<Content> {
+    const connectionUrl = this.getBaseUrl(roomId) + this.serviceApiUrl.content + '/' + contentId;
     return this.http.get<Content>(connectionUrl).pipe(
       tap(() => ''),
-      catchError(this.handleError<Content>('getContent by id: ' + id))
+      catchError(this.handleError<Content>('getContent by id: ' + contentId))
     );
   }
 
-  getChoiceContent(id: string): Observable<ContentChoice> {
-    const connectionUrl = this.apiUrl.base + this.apiUrl.content + '/' + id;
+  getChoiceContent(roomId: string, contentId: string): Observable<ContentChoice> {
+    const connectionUrl = this.getBaseUrl(roomId) + this.serviceApiUrl.content + '/' + contentId;
     return this.http.get<ContentChoice>(connectionUrl).pipe(
       tap(() => ''),
-      catchError(this.handleError<ContentChoice>('getRoom by id: ' + id))
+      catchError(this.handleError<ContentChoice>('getRoom by id: ' + contentId))
     );
   }
 
-  getContentsByIds(ids: string[]): Observable<Content[]> {
-    const connectionUrl = this.apiUrl.base + this.apiUrl.content + '/?ids=' + ids;
+  getContentsByIds(roomId: string, contentIds: string[]): Observable<Content[]> {
+    const connectionUrl = this.getBaseUrl(roomId) + this.serviceApiUrl.content + '/?ids=' + contentIds;
     return this.http.get<Content[]>(connectionUrl).pipe(
       tap(() => ''),
       catchError(this.handleError('getContentsByIds', []))
     );
   }
 
-  getContentChoiceByIds(ids: string[]): Observable<ContentChoice[]> {
-    const connectionUrl = this.apiUrl.base + this.apiUrl.content + '/?ids=' + ids;
+  getContentChoiceByIds(roomId: string, contentIds: string[]): Observable<ContentChoice[]> {
+    const connectionUrl = this.getBaseUrl(roomId) + this.serviceApiUrl.content + '/?ids=' + contentIds;
     return this.http.get<ContentChoice[]>(connectionUrl).pipe(
       tap(() => ''),
       catchError(this.handleError('getContentsByIds', []))
@@ -80,7 +79,7 @@ export class ContentService extends BaseHttpService {
   }
 
   addContent(content: Content): Observable<Content> {
-    const connectionUrl = this.apiUrl.base + this.apiUrl.content + '/';
+    const connectionUrl = this.getBaseUrl(content.roomId) + this.serviceApiUrl.content + '/';
     return this.http.post<Content>(connectionUrl,
       content,
       httpOptions).pipe(
@@ -89,7 +88,7 @@ export class ContentService extends BaseHttpService {
   }
 
   updateContent(updatedContent: Content): Observable<Content> {
-    const connectionUrl = this.apiUrl.base + this.apiUrl.content + '/' + updatedContent.id;
+    const connectionUrl = this.getBaseUrl(updatedContent.roomId) + this.serviceApiUrl.content + '/' + updatedContent.id;
     return this.http.put(connectionUrl, updatedContent, httpOptions).pipe(
       tap(_ => ''),
       catchError(this.handleError<any>('updateContent'))
@@ -97,7 +96,7 @@ export class ContentService extends BaseHttpService {
   }
 
   patchContent(content: Content, changes: TSMap<string, any>): Observable<Content> {
-    const connectionUrl = this.apiUrl.base + this.apiUrl.content + '/' + content.id;
+    const connectionUrl = this.getBaseUrl(content.roomId) + this.serviceApiUrl.content + '/' + content.id;
     return this.http.patch(connectionUrl, changes, httpOptions).pipe(
       tap(_ => ''),
       catchError(this.handleError<any>('patchContent'))
@@ -111,31 +110,31 @@ export class ContentService extends BaseHttpService {
   }
 
   updateChoiceContent(updatedContent: ContentChoice): Observable<ContentChoice> {
-    const connectionUrl = this.apiUrl.base + this.apiUrl.content + '/' + updatedContent.id;
+    const connectionUrl = this.getBaseUrl(updatedContent.roomId) + this.serviceApiUrl.content + '/' + updatedContent.id;
     return this.http.put(connectionUrl, updatedContent, httpOptions).pipe(
       tap(_ => ''),
       catchError(this.handleError<any>('updateContentChoice'))
     );
   }
 
-  deleteContent(contentId: string): Observable<Content> {
-    const connectionUrl = this.apiUrl.base + this.apiUrl.content + '/' + contentId;
+  deleteContent(roomId: string, contentId: string): Observable<Content> {
+    const connectionUrl = this.getBaseUrl(roomId) + this.serviceApiUrl.content + '/' + contentId;
     return this.http.delete<Content>(connectionUrl, httpOptions).pipe(
       tap(_ => ''),
       catchError(this.handleError<Content>('deleteContent'))
     );
   }
 
-  deleteAnswers(contentId: string): Observable<Content> {
-    const connectionUrl = this.apiUrl.base + this.apiUrl.content + '/' + contentId + this.apiUrl.answer;
+  deleteAnswers(roomId: string, contentId: string): Observable<Content> {
+    const connectionUrl = this.getBaseUrl(roomId) + this.serviceApiUrl.content + '/' + contentId + this.serviceApiUrl.answer;
     return this.http.delete<Content>(connectionUrl, httpOptions).pipe(
       tap(_ => ''),
       catchError(this.handleError<Content>('deleteAnswers'))
     );
   }
 
-  getAnswer(contentId: string): Observable<AnswerStatistics> {
-    const connectionUrl = this.apiUrl.base + this.apiUrl.content + '/' + contentId + '/stats';
+  getAnswer(roomId: string, contentId: string): Observable<AnswerStatistics> {
+    const connectionUrl = this.getBaseUrl(roomId) + this.serviceApiUrl.content + '/' + contentId + '/stats';
     return this.http.get<AnswerStatistics>(connectionUrl).pipe(
       tap(() => ''),
       catchError(this.handleError<AnswerStatistics>(`getRoom shortId=${contentId}`))
@@ -143,7 +142,7 @@ export class ContentService extends BaseHttpService {
   }
 
   findContentsWithoutGroup(roomId: string): Observable<Content[]> {
-    const connectionUrl = this.apiUrl.base + this.apiUrl.content + this.apiUrl.find;
+    const connectionUrl = this.getBaseUrl(roomId) + this.serviceApiUrl.content + this.apiUrl.find;
     return this.http.post<Content[]>(connectionUrl, {
       properties: {},
       externalFilters: { notInContentGroupOfRoomId: roomId }

@@ -9,7 +9,6 @@ import { AuthenticationService, AUTH_HEADER_KEY, AUTH_SCHEME } from './http/auth
 import { EventService } from './util/event.service';
 import { Membership } from '../models/membership';
 import { UserRole } from '../models/user-roles.enum';
-import { ApiConfigService } from './http/api-config.service';
 import { TranslateService } from '@ngx-translate/core';
 import { NotificationService } from './util/notification.service';
 import { ClientAuthentication } from '../models/client-authentication';
@@ -20,11 +19,12 @@ import { ClientAuthentication } from '../models/client-authentication';
  */
 @Injectable()
 export class RoomMembershipService extends BaseHttpService {
-  private apiUrl = {
-    base: '/api',
-    membershipByUser: '/_view/membership/by-user',
-    membershipByUserAndRoom: '/_view/membership/by-user-and-room'
+
+  serviceApiUrl = {
+    membership: '/_view/membership',
+    byUser: '/by-user'
   };
+
   private memberships$$ = new BehaviorSubject<Observable<Membership[]>>(of([]));
   private newOwnerships: Membership[] = [];
 
@@ -79,7 +79,7 @@ export class RoomMembershipService extends BaseHttpService {
    * Creates an Observable for requesting room memberships of a user.
    */
   private fetchMemberships(userId: string, token?: string): Observable<Membership[]> {
-    const url = this.apiUrl.base + this.apiUrl.membershipByUser + '/' + userId;
+    const url = this.apiUrl.base + this.serviceApiUrl.membership + this.serviceApiUrl.byUser + '/' + userId;
     const httpHeaders = token ? new HttpHeaders().set(AUTH_HEADER_KEY, `${AUTH_SCHEME} ${token}`) : null;
     return this.http.get<Membership[]>(url, { headers: httpHeaders }).pipe(
         tap(memberships => memberships.forEach(m => m.primaryRole = this.selectPrimaryRole(m.roles)))

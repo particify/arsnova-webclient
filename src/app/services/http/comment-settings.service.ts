@@ -13,9 +13,9 @@ const httpOptions = {
 
 @Injectable()
 export class CommentSettingsService extends BaseHttpService {
-  private apiUrl = {
-    base: '/api',
-    settings: '/settings',
+
+  serviceApiUrl = {
+    settings: '/settings'
   };
 
   constructor(private http: HttpClient,
@@ -25,7 +25,7 @@ export class CommentSettingsService extends BaseHttpService {
   }
 
   get(id: string): Observable<CommentSettings> {
-    const connectionUrl = `${this.apiUrl.base}${this.apiUrl.settings}/${id}`;
+    const connectionUrl = `${this.getBaseUrl(id)}${this.serviceApiUrl.settings}/${id}`;
     return this.http.get<CommentSettings>(connectionUrl, httpOptions).pipe(
       tap(_ => ''),
       catchError(this.handleError<CommentSettings>('addComment'))
@@ -33,7 +33,7 @@ export class CommentSettingsService extends BaseHttpService {
   }
 
   add(settings: CommentSettings): Observable<CommentSettings> {
-    const connectionUrl = this.apiUrl.base + this.apiUrl.settings + '/';
+    const connectionUrl = `${this.getBaseUrl(settings.roomId) + this.serviceApiUrl.settings}/`;
     return this.http.post<CommentSettings>(
       connectionUrl,
       settings,
@@ -45,7 +45,7 @@ export class CommentSettingsService extends BaseHttpService {
   }
 
   update(settings: CommentSettings): Observable<CommentSettings> {
-    const connectionUrl = this.apiUrl.base + '/' + settings.roomId + this.apiUrl.settings + '/' + settings.roomId;
+    const connectionUrl = `${this.getBaseUrl(settings.roomId) + this.serviceApiUrl.settings}/${settings.roomId}`;
     return this.http.put(connectionUrl, settings, httpOptions).pipe(
       tap(_ => ''),
       catchError(this.handleError<any>('updateCommentSettings'))

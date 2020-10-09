@@ -74,7 +74,7 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
       lastContentIndex = params['contentIndex'] - 1;
       this.roomService.getGroupByRoomIdAndName('~' + this.shortId, this.contentGroupName).subscribe(contentGroup => {
         this.contentGroup = contentGroup;
-        this.contentService.getContentsByIds(this.contentGroup.contentIds).subscribe(contents => {
+        this.contentService.getContentsByIds(this.contentGroup.roomId, this.contentGroup.contentIds).subscribe(contents => {
           this.contents = this.contentService.getSupportedContents(contents).filter(content => content.state.visible);
           this.checkIfLastContentExists(lastContentIndex);
           this.isLoading = false;

@@ -127,10 +127,13 @@ export class DialogService {
   }
 
   /*
-  openBonusTokenDialog(userId: string): void {
+  openBonusTokenDialog(userId: string, roomId: string): void {
     const dialogRef = this.dialog.open(UserBonusTokenComponent, {
       width: this.size.medium,
-      data: userId
+      data: {
+        userId: userId,
+        roomId: roomId
+      }
     });
   }
   */

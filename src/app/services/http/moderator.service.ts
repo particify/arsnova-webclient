@@ -14,12 +14,9 @@ const httpOptions = {
 
 @Injectable()
 export class ModeratorService extends BaseHttpService {
-  private apiUrl = {
-    base: '/api',
-    room: '/room',
-    moderator: '/moderator',
-    user: '/user',
-    find: '/find'
+
+  serviceApiUrl = {
+    moderator: 'moderator'
   };
 
   constructor(private http: HttpClient,
@@ -29,7 +26,7 @@ export class ModeratorService extends BaseHttpService {
   }
 
   get(roomId: string): Observable<Moderator[]> {
-    const url = `${this.apiUrl.base + this.apiUrl.room}/${roomId + this.apiUrl.moderator}`;
+    const url = `${this.getBaseUrl(roomId) + this.serviceApiUrl.moderator}`;
     return this.http.get(url, httpOptions).pipe(
       tap(_ => ''),
       catchError(this.handleError<any>('getModerator'))
@@ -37,7 +34,7 @@ export class ModeratorService extends BaseHttpService {
   }
 
   add(roomId: string, userId: string) {
-    const url = `${this.apiUrl.base + this.apiUrl.room}/${roomId + this.apiUrl.moderator}/${userId}`;
+    const url = `${this.getBaseUrl(roomId) + this.serviceApiUrl.moderator}/${userId}`;
     return this.http.put(url, httpOptions).pipe(
       tap(_ => ''),
       catchError(this.handleError<any>('addModerator'))
@@ -45,7 +42,7 @@ export class ModeratorService extends BaseHttpService {
   }
 
   delete(roomId: string, userId: string) {
-    const url = `${this.apiUrl.base + this.apiUrl.room}/${roomId + this.apiUrl.moderator}/${userId}`;
+    const url = `${this.getBaseUrl(roomId) + this.serviceApiUrl.moderator}/${userId}`;
     return this.http.delete(url, httpOptions).pipe(
       tap(_ => ''),
       catchError(this.handleError<any>('deleteModerator'))

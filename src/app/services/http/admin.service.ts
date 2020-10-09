@@ -14,13 +14,11 @@ const httpOptions = {
 
 @Injectable()
 export class AdminService extends BaseHttpService {
-  private apiUrl = {
-    base: '/api',
+
+  serviceApiUrl = {
     adminView: 'view=admin',
-    room: '/room',
-    user: '/user',
-    activate: '/activate',
-    transfer: '/transfer'
+    transfer: '/transfer',
+    activate: '/activate'
   };
 
   constructor(
@@ -31,22 +29,22 @@ export class AdminService extends BaseHttpService {
   }
 
   getUser(id: string) {
-    const connectionUrl = `${this.apiUrl.base + this.apiUrl.user}/${id}?${this.apiUrl.adminView}`;
+    const connectionUrl = `${this.apiUrl.base + this.apiUrl.user}/${id}?${this.serviceApiUrl.adminView}`;
     return this.http.get<User>(connectionUrl);
   }
 
   getRoom(id: string): Observable<Room> {
-    const connectionUrl = `${this.apiUrl.base + this.apiUrl.room}/${id}?${this.apiUrl.adminView}`;
+    const connectionUrl = `${this.getBaseUrl(id)}?${this.serviceApiUrl.adminView}`;
     return this.http.get<Room>(connectionUrl);
   }
 
   activateUser(userId: string) {
-    const connectionUrl = `${this.apiUrl.base + this.apiUrl.user}/${userId}${this.apiUrl.activate}`;
+    const connectionUrl = `${this.apiUrl.base + this.apiUrl.user}/${userId}${this.serviceApiUrl.activate}`;
     return this.http.post<string>(connectionUrl, {}, httpOptions);
   }
 
   transferRoom(roomId: string, newOwnerId: string) {
-    const connectionUrl = `${this.apiUrl.base + this.apiUrl.room}/${roomId}/${this.apiUrl.transfer}?newOwnerId=${newOwnerId}`;
+    const connectionUrl = `${this.getBaseUrl(roomId)}/${this.serviceApiUrl.transfer}?newOwnerId=${newOwnerId}`;
     return this.http.post(connectionUrl, {}, httpOptions).pipe(
       catchError(this.handleError<any>('transferRoom'))
     );

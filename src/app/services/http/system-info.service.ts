@@ -22,9 +22,10 @@ export interface SummarizedStats {
 
 @Injectable()
 export class SystemInfoService extends BaseHttpService {
-  private apiUrl = {
-    base: '/api',
-    health: '/management/health',
+
+  serviceApiUrl = {
+    health: '/health',
+    management: '/management',
     summarizedStats: '/_system/summarizedstats',
     serviceStats: '/_system/servicestats'
   };
@@ -36,20 +37,20 @@ export class SystemInfoService extends BaseHttpService {
   }
 
   getHealthInfo(): Observable<any> {
-    const connectionUrl = this.apiUrl.base + this.apiUrl.health;
+    const connectionUrl = this.apiUrl.base + this.serviceApiUrl.management + this.serviceApiUrl.health;
     /* Do not use default error handling here - 503 is expected if system health is not OK. */
     return this.http.get<any>(connectionUrl, httpOptions);
   }
 
   getSummarizedStats(): Observable<SummarizedStats> {
-    const connectionUrl = this.apiUrl.base + this.apiUrl.summarizedStats;
+    const connectionUrl = this.apiUrl.base + this.serviceApiUrl.summarizedStats;
     return this.http.get<SummarizedStats>(connectionUrl, httpOptions).pipe(
       catchError(this.handleError<SummarizedStats>('getSummarizedStats'))
     );
   }
 
   getServiceStats(): Observable<Map<String, any>> {
-    const connectionUrl = this.apiUrl.base + this.apiUrl.serviceStats;
+    const connectionUrl = this.apiUrl.base + this.serviceApiUrl.serviceStats;
     return this.http.get<Map<String, any>>(connectionUrl, httpOptions).pipe(
       catchError(this.handleError<Map<String, any>>('getServiceStats'))
     );

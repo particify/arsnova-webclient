@@ -42,7 +42,7 @@ export class ContentTextParticipantComponent extends ContentParticipantComponent
   }
 
   initAnswer(userId: string) {
-    this.answerService.getTextAnswerByContentIdUserIdCurrentRound(this.content.id, userId).subscribe(answer => {
+    this.answerService.getTextAnswerByContentIdUserIdCurrentRound(this.content.roomId, this.content.id, userId).subscribe(answer => {
       if (answer) {
         this.givenAnswer = answer;
         this.alreadySent = true;
@@ -88,7 +88,7 @@ export class ContentTextParticipantComponent extends ContentParticipantComponent
       this.textAnswer = '';
       return;
     }
-    this.answerService.addAnswerText({
+    this.answerService.addAnswerText(this.content.roomId, {
       id: null,
       revision: null,
       contentId: this.content.id,
@@ -111,7 +111,7 @@ export class ContentTextParticipantComponent extends ContentParticipantComponent
 
   abstain($event) {
     $event.preventDefault();
-    this.answerService.addAnswerText({
+    this.answerService.addAnswerText(this.content.roomId, {
       id: null,
       revision: null,
       contentId: this.content.id,

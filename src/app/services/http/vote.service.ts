@@ -3,7 +3,6 @@ import { Vote } from '../../models/vote';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
-import { AuthenticationService } from './authentication.service';
 import { BaseHttpService } from './base-http.service';
 import { TranslateService } from '@ngx-translate/core';
 import { NotificationService } from '../util/notification.service';
@@ -14,39 +13,37 @@ const httpOptions = {
 
 @Injectable()
 export class VoteService extends BaseHttpService {
-  private apiUrl = {
-    base: '/api',
-    vote: '/vote',
-    find: '/find'
+
+  serviceApiUrl = {
+    vote: '/vote'
   };
 
   constructor(private http: HttpClient,
-              private authService: AuthenticationService,
               protected translateService: TranslateService,
               protected notificationService: NotificationService) {
     super(translateService, notificationService);
   }
 
-  add(vote: Vote): Observable<Vote> {
-    const connectionUrl = this.apiUrl.base + this.apiUrl.vote + '/';
+  add(roomId: string, vote: Vote): Observable<Vote> {
+    const connectionUrl = this.getBaseUrl(roomId) + this.serviceApiUrl.vote + '/';
     return this.http.post<Vote>(connectionUrl, vote, httpOptions).pipe(
       tap(_ => ''),
       catchError(this.handleError<Vote>('add vote'))
     );
   }
 
-  voteUp(commentId: string, userId: string) {
+  voteUp(roomId: string, commentId: string, userId: string) {
     const v: Vote = new Vote(userId, commentId, 1);
-    return this.add(v);
+    return this.add(roomId, v);
   }
 
-  voteDown(commentId: string, userId: string) {
+  voteDown(roomId: string, commentId: string, userId: string) {
     const v: Vote = new Vote(userId, commentId, -1);
-    return this.add(v);
+    return this.add(roomId, v);
   }
 
-  deleteVote(commentId: string, userId: string): Observable<Vote> {
-    const connectionUrl = `${this.apiUrl.base + this.apiUrl.vote}/${commentId}/${userId}`;
+  deleteVote(roomId: string, commentId: string, userId: string): Observable<Vote> {
+    const connectionUrl = `${this.getBaseUrl(roomId) + this.serviceApiUrl.vote}/${commentId}/${userId}`;
     return this.http.delete<Vote>(connectionUrl, httpOptions).pipe(
       tap(() => ''),
       catchError(this.handleError<Vote>('delete Vote'))
@@ -54,7 +51,7 @@ export class VoteService extends BaseHttpService {
   }
 
   getByRoomIdAndUserID(roomId: string, userId: string): Observable<Vote[]> {
-    const connectionUrl = `${this.apiUrl.base + this.apiUrl.vote + this.apiUrl.find}`;
+    const connectionUrl = `${this.getBaseUrl(roomId) + this.serviceApiUrl.vote + this.apiUrl.find}`;
     return this.http.post<Vote[]>(connectionUrl, {
       properties: {
         userId: userId

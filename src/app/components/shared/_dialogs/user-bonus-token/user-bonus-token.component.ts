@@ -19,12 +19,12 @@ export class UserBonusTokenComponent implements OnInit {
     private bonusTokenService: BonusTokenService,
     private roomService: RoomService,
     private dialogRef: MatDialogRef<UserBonusTokenComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: string,
+    @Inject(MAT_DIALOG_DATA) public data: any,
     protected router: Router) {
   }
 
   ngOnInit() {
-    this.bonusTokenService.getTokensByUserId(this.data).subscribe(list => {
+    this.bonusTokenService.getTokensByUserId(this.data.userId, this.data.roomId).subscribe(list => {
       this.bonusTokens = list.sort((a, b) => {
         return (a.token > b.token) ? 1 : -1;
       });

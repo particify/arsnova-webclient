@@ -46,7 +46,7 @@ export class StatisticTextComponent implements OnInit {
 
   ngOnInit(): void {
     this.translateService.use(this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE));
-    this.contentAnswerService.getAnswers(this.content.id).subscribe(answers => {
+    this.contentAnswerService.getAnswers(this.content.roomId, this.content.id).subscribe(answers => {
       this.getData(answers);
       this.isLoading = false;
       if (this.directShow) {

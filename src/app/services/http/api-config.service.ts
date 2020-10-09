@@ -9,13 +9,8 @@ import { shareReplay } from 'rxjs/operators';
 
 @Injectable()
 export class ApiConfigService extends BaseHttpService {
-  private readonly apiUris = {
-    /* TODO: API base URI should be injected. */
-    base: '/api',
-    configPart: '/configuration',
-    get config() {
-      return this.base + this.configPart;
-    }
+  private readonly serviceApiUrl = {
+    config: '/configuration'
   };
   private readonly config$: Observable<ApiConfig>;
   private config: ApiConfig;
@@ -24,7 +19,7 @@ export class ApiConfigService extends BaseHttpService {
               protected translateService: TranslateService,
               protected notificationService: NotificationService) {
     super(translateService, notificationService);
-    this.config$ = this.http.get<ApiConfig>(this.apiUris.config).pipe(shareReplay(1));
+    this.config$ = this.http.get<ApiConfig>(this.getBaseUrl() + this.serviceApiUrl.config).pipe(shareReplay(1));
     this.config = new ApiConfig([], {}, {});
     this.freezeRecursively(this.config);
   }
