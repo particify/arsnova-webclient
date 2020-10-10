@@ -74,6 +74,11 @@ class RoomJoinStubComponent {
 @Component({ selector: 'mat-icon', template: '' })
 class MatIconStubComponent {}
 
+@Component({ selector: 'lib-extension-point', template: '' })
+class LibExtensionPointStubComponent {
+  @Input() extensionId: string;
+}
+
 describe('HomePageComponent', () => {
   let component: HomePageComponent;
   let fixture: ComponentFixture<HomePageComponent>;
@@ -83,7 +88,8 @@ describe('HomePageComponent', () => {
       declarations: [
         HomePageComponent,
         RoomJoinStubComponent,
-        MatIconStubComponent
+        MatIconStubComponent,
+        LibExtensionPointStubComponent
       ],
       imports: [
         TranslateModule.forRoot({

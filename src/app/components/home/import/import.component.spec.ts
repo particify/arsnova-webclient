@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Component } from '@angular/core';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { Observable, of } from 'rxjs';
@@ -50,6 +50,9 @@ class MockNotificationService {
 
 }
 
+@Component({ selector: 'mat-card', template: '<ng-content></ng-content>' })
+class MatCardStubComponent {}
+
 describe('ImportComponent', () => {
   let component: ImportComponent;
   let fixture: ComponentFixture<ImportComponent>;
@@ -58,6 +61,7 @@ describe('ImportComponent', () => {
     TestBed.configureTestingModule({
       declarations: [
         ImportComponent,
+        MatCardStubComponent
       ],
       imports: [
         TranslateModule.forRoot({
