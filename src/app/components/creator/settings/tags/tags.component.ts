@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { AdvancedSnackBarTypes, NotificationService } from '../../../../services/util/notification.service';
 import { TranslateService } from '@ngx-translate/core';
@@ -7,6 +7,7 @@ import { EventService } from '../../../../services/util/event.service';
 import { FormControl, Validators } from '@angular/forms';
 import { Room } from '../../../../models/room';
 import { RoomService } from '../../../../services/http/room.service';
+import { UpdateEvent } from '@arsnova/app/components/creator/settings/settings.component';
 
 @Component({
   selector: 'app-tags',
@@ -14,6 +15,8 @@ import { RoomService } from '../../../../services/http/room.service';
   styleUrls: ['./tags.component.scss']
 })
 export class TagsComponent implements OnInit {
+
+  @Output() saveEvent: EventEmitter<UpdateEvent> = new EventEmitter<UpdateEvent>();
 
   @Input() room: Room;
 
@@ -72,6 +75,7 @@ export class TagsComponent implements OnInit {
     this.roomService.updateRoom(this.room)
       .subscribe((room) => {
         this.room = room;
+        this.saveEvent.emit(new UpdateEvent(this.room, false));
         this.translationService.get(added ? 'settings.tag-added' : 'settings.tag-removed').subscribe(msg => {
           this.notificationService.showAdvanced(msg, added ? AdvancedSnackBarTypes.SUCCESS : AdvancedSnackBarTypes.WARNING);
         });

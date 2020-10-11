@@ -9,6 +9,18 @@ import { MatDialog } from '@angular/material/dialog';
 import { Room } from '../../../models/room';
 import { Settings } from '../settings-page/settings-page.component';
 
+export class UpdateEvent {
+  room: Room;
+  showSuccessInfo: boolean;
+  loadRoom = false;
+
+  constructor(room: Room, showSuccessInfo: boolean, loadRoom?: boolean) {
+    this.room = room;
+    this.showSuccessInfo = showSuccessInfo;
+    this.loadRoom = loadRoom;
+  }
+}
+
 @Component({
   selector: 'app-settings',
   templateUrl: './settings.component.html',
@@ -44,13 +56,21 @@ export class SettingsComponent implements OnInit {
     this.expanded = !this.expanded;
   }
 
-  saveRoom(editedRoom: Room) {
-    this.roomService.updateRoom(editedRoom)
-      .subscribe((room) => {
-        this.updateEvent.emit(room);
-        this.translateService.get('settings.changes-successful').subscribe(msg => {
-          this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.SUCCESS);
+  saveRoom(updateEvent: UpdateEvent) {
+    if (!updateEvent.loadRoom) {
+      this.roomService.updateRoom(updateEvent.room)
+        .subscribe((room) => {
+          this.updateEvent.emit(room);
+          if (updateEvent.showSuccessInfo) {
+            this.translateService.get('settings.changes-successful').subscribe(msg => {
+              this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.SUCCESS);
+            });
+          }
         });
-      });
+    } else {
+     this.roomService.getRoom(this.room.id).subscribe(room => {
+       this.updateEvent.emit(room);
+     });
+    }
   }
 }

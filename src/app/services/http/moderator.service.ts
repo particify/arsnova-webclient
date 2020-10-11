@@ -21,7 +21,6 @@ export class ModeratorService extends BaseHttpService {
     user: '/user',
     find: '/find'
   };
-  private joinDate: Date;
 
   constructor(private http: HttpClient,
               protected translateService: TranslateService,

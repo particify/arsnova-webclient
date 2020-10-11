@@ -14,9 +14,10 @@
                        *ngSwitchCase="'generalSettings'" (saveEvent)="saveRoom($event)"></app-room-edit>
         <app-comment-settings [editRoom]="room" [roomId]="room.id" *ngSwitchCase="'commentSettings'"
                               (saveEvent)="saveRoom($event)"></app-comment-settings>
-        <app-moderators [roomId]="room.id" *ngSwitchCase="'moderatorSettings'"></app-moderators>
+        <app-moderators [roomId]="room.id" *ngSwitchCase="'moderatorSettings'"
+                        (saveEvent)="saveRoom($event)"></app-moderators>
         <!-- <app-bonus-token [room]="room" *ngSwitchCase="'tokenSettings'"></app-bonus-token> -->
-        <app-tags [room]="room" *ngSwitchCase="'tagSettings'"></app-tags>
+        <app-tags [room]="room" *ngSwitchCase="'tagSettings'" (saveEvent)="saveRoom($event)"></app-tags>
       </div>
     </div>
   </mat-card>
