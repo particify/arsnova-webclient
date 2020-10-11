@@ -4,7 +4,7 @@
     <textarea (focus)="eventService.makeFocusOnInputTrue()" (blur)="eventService.makeFocusOnInputFalse()" matInput
               [(ngModel)]="data.body" rows="3" maxlength="250" name="body" aria-labelledby="body"></textarea>
   </mat-form-field>
-  <div *ngIf="data.format !== 'TEXT'">
+  <div *ngIf="data.format !== 'TEXT' && data.format !== 'SLIDE'">
     <h4>{{'dialog.content-answers' | translate}}</h4>
     <mat-table [dataSource]="displayAnswers">
       <ng-container matColumnDef="label">
@@ -27,7 +27,7 @@
     </mat-table>
   </div>
   <div fxLayout="row" fxLayoutAlign="end" fxLayoutGap="10px">
-    <button (click)="dialogRef.close('abort')" aria-labelledby="cancel" mat-flat-button class="button-abort">
+    <button (click)="dialogRef.close()" aria-labelledby="cancel" mat-flat-button class="button-abort">
       {{ 'dialog.cancel' | translate }}
     </button>
     <button (click)="updateContent()" mat-flat-button aria-labelledby="update" class="button-primary">

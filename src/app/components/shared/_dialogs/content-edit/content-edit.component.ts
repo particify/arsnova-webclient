@@ -57,14 +57,13 @@ export class ContentEditComponent implements OnInit {
   }
 
   updateContent() {
-    let counter = 0;
     if (this.data.body === '') {
       this.translateService.get('dialog.no-empty').subscribe(message => {
         this.notificationService.showAdvanced(message, AdvancedSnackBarTypes.WARNING);
       });
       return;
     }
-    if (this.data.format !== ContentType.TEXT) {
+    if (this.data.format !== ContentType.TEXT && this.data.format !== ContentType.SLIDE) {
       for (let i = 0; i < (this.data as ContentChoice).options.length; i++) {
         if (this.displayAnswers[i].answerOption.label === '') {
           this.translateService.get('dialog.no-empty-answers').subscribe(message => {
@@ -72,28 +71,10 @@ export class ContentEditComponent implements OnInit {
           });
           return;
         }
-        if ((this.data as ContentChoice).options[i].points > 0) {
-          counter++;
-        }
       }
-      if (counter <= 0) {
-        if ((this.data as ContentChoice).multiple) {
-          this.translateService.get('dialog.at-least-one').subscribe(message => {
-            this.notificationService.showAdvanced(message, AdvancedSnackBarTypes.WARNING);
-            return;
-          });
-        } else {
-          this.translateService.get('dialog.select-one').subscribe(message => {
-            this.notificationService.showAdvanced(message, AdvancedSnackBarTypes.WARNING);
-            return;
-          });
-        }
-      } else {
-        if ((!(this.data as ContentChoice).multiple) && counter > 1) {
-          this.translateService.get('dialog.select-one').subscribe(message => {
-            this.notificationService.showAdvanced(message, AdvancedSnackBarTypes.WARNING);
-          });
-          return;
+      if (this.data.format === ContentType.CHOICE) {
+        for (let i = 0; i < (this.data as ContentChoice).options.length; i++) {
+          (this.data as ContentChoice).options[i].label = this.displayAnswers[i].answerOption.label;
         }
       }
     }
