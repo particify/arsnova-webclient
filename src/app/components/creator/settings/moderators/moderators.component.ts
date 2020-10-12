@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { AdvancedSnackBarTypes, NotificationService } from '../../../../services/util/notification.service';
 import { TranslateService } from '@ngx-translate/core';
 import { ModeratorService } from '../../../../services/http/moderator.service';
@@ -7,7 +7,7 @@ import { Moderator } from '../../../../models/moderator';
 import { FormControl, Validators } from '@angular/forms';
 import { EventService } from '../../../../services/util/event.service';
 import { DialogService } from '../../../../services/util/dialog.service';
-import { AbstractVote } from '../../../../models/messages/abstract-vote';
+import { UpdateEvent } from '@arsnova/app/components/creator/settings/settings.component';
 
 @Component({
   selector: 'app-moderators',
@@ -15,6 +15,8 @@ import { AbstractVote } from '../../../../models/messages/abstract-vote';
   styleUrls: ['./moderators.component.scss']
 })
 export class ModeratorsComponent implements OnInit {
+
+  @Output() saveEvent: EventEmitter<UpdateEvent> = new EventEmitter<UpdateEvent>();
 
   @Input() roomId: string;
   moderators: Moderator[] = [];
@@ -59,6 +61,7 @@ export class ModeratorsComponent implements OnInit {
         return;
       }
       this.moderatorService.add(this.roomId, list[0].id).subscribe(() => {
+        this.saveEvent.emit(new UpdateEvent(null, false, true));
         this.moderators.push(new Moderator(list[0].id, this.loginId));
         this.translationService.get('settings.moderator-added').subscribe(msg => {
           this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.SUCCESS);
@@ -79,6 +82,7 @@ export class ModeratorsComponent implements OnInit {
 
   removeModerator(userId: string, index: number) {
     this.moderatorService.delete(this.roomId, userId).subscribe(() => {
+      this.saveEvent.emit(new UpdateEvent(null, false, true));
       this.translationService.get('settings.moderator-removed').subscribe(msg => {
         this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
       });

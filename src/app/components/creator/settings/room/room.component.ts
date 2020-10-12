@@ -10,6 +10,7 @@ import { LanguageService } from '../../../../services/util/language.service';
 import { DialogService } from '../../../../services/util/dialog.service';
 import { GlobalStorageService, STORAGE_KEYS } from '../../../../services/util/global-storage.service';
 import { MarkdownFeatureset } from '../../../../services/http/formatting.service';
+import { UpdateEvent } from '@arsnova/app/components/creator/settings/settings.component';
 
 @Component({
   selector: 'app-room-edit',
@@ -18,7 +19,7 @@ import { MarkdownFeatureset } from '../../../../services/http/formatting.service
 })
 export class RoomComponent implements OnInit {
 
-  @Output() saveEvent: EventEmitter<Room> = new EventEmitter<Room>();
+  @Output() saveEvent: EventEmitter<UpdateEvent> = new EventEmitter<UpdateEvent>();
 
   @Input() editRoom: Room;
   @Input() name: string;
@@ -67,7 +68,7 @@ export class RoomComponent implements OnInit {
   saveChanges() {
     this.editRoom.name = this.name;
     this.editRoom.description = this.description;
-    this.saveEvent.emit(this.editRoom);
+    this.saveEvent.emit(new UpdateEvent(this.editRoom, true));
   }
 
   descriptionTabChanged($event) {

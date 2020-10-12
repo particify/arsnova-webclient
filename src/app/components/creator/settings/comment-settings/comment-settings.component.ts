@@ -14,6 +14,7 @@ import { TSMap } from 'typescript-map';
 import { DialogService } from '../../../../services/util/dialog.service';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { GlobalStorageService, STORAGE_KEYS } from '../../../../services/util/global-storage.service';
+import { UpdateEvent } from '@arsnova/app/components/creator/settings/settings.component';
 
 @Component({
   selector: 'app-comment-settings',
@@ -22,7 +23,7 @@ import { GlobalStorageService, STORAGE_KEYS } from '../../../../services/util/gl
 })
 export class CommentSettingsComponent implements OnInit {
 
-  @Output() saveEvent: EventEmitter<Room> = new EventEmitter<Room>();
+  @Output() saveEvent: EventEmitter<UpdateEvent> = new EventEmitter<UpdateEvent>();
 
   @Input() editRoom: Room;
   @Input() roomId: string;
@@ -169,15 +170,11 @@ export class CommentSettingsComponent implements OnInit {
     const commentSettings = new CommentSettings();
     commentSettings.roomId = this.roomId;
     commentSettings.directSend = this.directSend;
-    this.commentSettingsService.update(commentSettings).subscribe(() => {
-      this.translationService.get('settings.changes-successful').subscribe(msg => {
-        this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.SUCCESS);
-      });
-    });
+    this.commentSettingsService.update(commentSettings).subscribe();
   }
 
   saveChanges() {
-    this.saveEvent.emit(this.editRoom);
+    this.saveEvent.emit(new UpdateEvent(this.editRoom, false));
   }
 
   announceThreshold() {
