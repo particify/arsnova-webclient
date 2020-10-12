@@ -111,6 +111,7 @@ export class CommentComponent implements OnInit {
     this.deviceType = this.globalStorageService.getItem(STORAGE_KEYS.DEVICE_TYPE);
     this.inAnswerView = !this.router.url.includes('comments');
     this.extensionData = {
+      'roomId': this.comment.roomId,
       'refId': this.comment.id,
       'refType': 'comment',
       'detailedView': false,
