@@ -12,7 +12,7 @@
     "status-rabbit": "Message queue (RabbitMQ)",
     "system-stats": "Statistics",
     "user-accounts": "User accounts",
-    "active-users": "Active users",
+    "connected-users": "Connected users",
     "manage-accounts": "Manage accounts",
     "user-management": "User Management",
     "user-id": "User ID",

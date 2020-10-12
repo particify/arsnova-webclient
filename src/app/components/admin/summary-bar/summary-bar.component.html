@@ -18,10 +18,10 @@
   </mat-card>
   <mat-card fxFlex="250px">
     <mat-card-title>
-      {{ 'admin-area.active-users' | translate }}
+      {{ 'admin-area.connected-users' | translate }}
     </mat-card-title>
     <mat-card-content fxLayout="column" fxLayoutAlign="center">
-      <div class="system-stats user-count"><mat-icon>record_voice_over</mat-icon>&nbsp;{{ (stats | async)?.activeUsers }}</div>
+      <div class="system-stats user-count"><mat-icon>record_voice_over</mat-icon>&nbsp;{{ (stats | async)?.connectedUsers }}</div>
     </mat-card-content>
     <mat-card-actions>
       <button mat-button [routerLink]="'/admin/stats'">
@@ -34,7 +34,7 @@
       {{ 'admin-area.user-accounts' | translate }}
     </mat-card-title>
     <mat-card-content fxLayout="column" fxLayoutAlign="center">
-      <div class="system-stats user-count"><mat-icon>people</mat-icon>&nbsp;{{ (stats | async)?.sessions }}</div>
+      <div class="system-stats user-count"><mat-icon>people</mat-icon>&nbsp;{{ (stats | async)?.users }}</div>
     </mat-card-content>
     <mat-card-actions>
       <button mat-button [routerLink]="'/admin/users'">
@@ -47,7 +47,7 @@
       {{ 'admin-area.rooms' | translate }}
     </mat-card-title>
     <mat-card-content fxLayout="column" fxLayoutAlign="center">
-      <div class="system-stats room-count"><mat-icon>work</mat-icon>&nbsp;{{ (stats | async)?.activeStudents }}</div>
+      <div class="system-stats room-count"><mat-icon>work</mat-icon>&nbsp;{{ (stats | async)?.rooms }}</div>
     </mat-card-content>
     <mat-card-actions>
       <button mat-button [routerLink]="'/admin/rooms'">

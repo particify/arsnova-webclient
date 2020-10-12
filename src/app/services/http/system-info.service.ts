@@ -12,12 +12,21 @@ const httpOptions = {
   })
 };
 
+export interface SummarizedStats {
+  connectedUsers: number;
+  users: number;
+  rooms: number;
+  answers: number;
+  comments: number;
+}
+
 @Injectable()
 export class SystemInfoService extends BaseHttpService {
   private apiUrl = {
-    base: '/api/management',
-    health: '/health',
-    stats: '/stats'
+    base: '/api',
+    health: '/management/health',
+    summarizedStats: '/_system/summarizedstats',
+    serviceStats: '/_system/servicestats'
   };
 
   constructor(private http: HttpClient,
@@ -33,10 +42,17 @@ export class SystemInfoService extends BaseHttpService {
     );
   }
 
-  getStats(): Observable<any> {
-    const connectionUrl = this.apiUrl.base + this.apiUrl.stats;
-    return this.http.get<any>(connectionUrl, httpOptions).pipe(
-      catchError(this.handleError<any>('getHealth'))
+  getSummarizedStats(): Observable<SummarizedStats> {
+    const connectionUrl = this.apiUrl.base + this.apiUrl.summarizedStats;
+    return this.http.get<SummarizedStats>(connectionUrl, httpOptions).pipe(
+      catchError(this.handleError<SummarizedStats>('getSummarizedStats'))
+    );
+  }
+
+  getServiceStats(): Observable<Map<String, any>> {
+    const connectionUrl = this.apiUrl.base + this.apiUrl.serviceStats;
+    return this.http.get<Map<String, any>>(connectionUrl, httpOptions).pipe(
+      catchError(this.handleError<Map<String, any>>('getServiceStats'))
     );
   }
 }

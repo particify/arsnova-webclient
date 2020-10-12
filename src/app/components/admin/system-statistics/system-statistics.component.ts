@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
 import { SystemInfoService } from '../../../services/http/system-info.service';
 
 @Component({
@@ -7,7 +8,7 @@ import { SystemInfoService } from '../../../services/http/system-info.service';
   styleUrls: ['./system-statistics.component.scss']
 })
 export class SystemStatisticsComponent implements OnInit {
-  stats: any;
+  stats: Observable<any>;
 
   constructor(
     protected systemInfoService: SystemInfoService
@@ -19,6 +20,6 @@ export class SystemStatisticsComponent implements OnInit {
   }
 
   getStats() {
-    return this.systemInfoService.getStats();
+    return this.systemInfoService.getServiceStats();
   }
 }
