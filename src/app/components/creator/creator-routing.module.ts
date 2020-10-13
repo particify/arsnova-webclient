@@ -20,124 +20,69 @@ import { RoomUserRoleResolver } from '../../resolver/room-user-role.resolver';
 const routes: Routes = [
   {
     path: 'room/:shortId',
-    component: RoomCreatorPageComponent,
-    canActivate: [AuthenticationGuard],
-    data: { requiredRole: UserRole.CREATOR },
-    resolve : {
-      room: RoomResolver,
-      viewRole: RoomViewUserRoleResolver,
-      userRole: RoomUserRoleResolver
-    }
-  },
-  {
-    path: 'room/:shortId/settings',
-    component: SettingsPageComponent,
     canActivate: [AuthenticationGuard],
     data: { requiredRole: UserRole.CREATOR },
     resolve : {
       room: RoomResolver,
       viewRole: RoomViewUserRoleResolver
-    }
-  },
-  {
-    path: 'room/:shortId/create-content',
-    component: ContentCreationPageComponent,
-    canActivate: [AuthenticationGuard],
-    data: { requiredRole: UserRole.CREATOR },
-    resolve : {
-      room: RoomResolver,
-      viewRole: RoomViewUserRoleResolver
-    }
-  },
-  {
-    path: 'room/:shortId/group/:contentGroup/statistics/:contentIndex',
-    component: ContentPresentationComponent,
-    canActivate: [AuthenticationGuard],
-    data: { requiredRole: UserRole.CREATOR },
-    resolve : {
-      room: RoomResolver,
-      viewRole: RoomViewUserRoleResolver
-    }
-  },
-  {
-    path: 'room/:shortId/statistics',
-    component: StatisticsPageComponent,
-    canActivate: [AuthenticationGuard],
-    data: { requiredRole: UserRole.CREATOR },
-    resolve : {
-      room: RoomResolver,
-      viewRole: RoomViewUserRoleResolver
-    }
-  },
-  {
-    path: 'room/:shortId/group/:contentGroup/statistics',
-    component: ContentPresentationComponent,
-    canActivate: [AuthenticationGuard],
-    data: { requiredRole: UserRole.CREATOR },
-    resolve : {
-      room: RoomResolver,
-      viewRole: RoomViewUserRoleResolver
-    }
-  },
-  {
-    path: 'room/:shortId/comments',
-    component: CommentPageComponent,
-    canActivate: [AuthenticationGuard],
-    data: { requiredRole: UserRole.CREATOR },
-    resolve : {
-      room: RoomResolver,
-      viewRole: RoomViewUserRoleResolver
-    }
-  },
-  {
-    path: 'room/:shortId/comment/:commentId',
-    component: CommentAnswerComponent,
-    canActivate: [AuthenticationGuard],
-    data: { requiredRole: UserRole.CREATOR },
-    resolve : {
-      comment: CommentResolver,
-      viewRole: RoomViewUserRoleResolver
-    }
-  },
-  {
-    path: 'room/:shortId/survey',
-    component: SurveyPageComponent,
-    canActivate: [AuthenticationGuard],
-    data: { requiredRole: UserRole.CREATOR },
-    resolve : {
-      room: RoomResolver,
-      viewRole: RoomViewUserRoleResolver
-    }
-  },
-  {
-    path: 'room/:shortId/group/:contentGroup',
-    component: GroupContentComponent,
-    canActivate: [AuthenticationGuard],
-    data: { requiredRole: UserRole.CREATOR },
-    resolve : {
-      room: RoomResolver,
-      viewRole: RoomViewUserRoleResolver
-    }
-  },
-  {
-    path: 'room/:shortId/loosecontent',
-    component: LooseContentComponent,
-    canActivate: [AuthenticationGuard],
-    data: { requiredRole: UserRole.CREATOR },
-    resolve : {
-      room: RoomResolver,
-      viewRole: RoomViewUserRoleResolver
-    }
-  },
-  {
-    path: 'room/:shortId/group/:contentGroup/presentation',
-    component: ContentPresentationComponent,
-    canActivate: [AuthenticationGuard],
-    data: { requiredRole: UserRole.CREATOR },
-    resolve : {
-      room: RoomResolver,
-      viewRole: RoomViewUserRoleResolver
-    }
+    },
+    children: [
+      {
+        path: '',
+        component: RoomCreatorPageComponent,
+        resolve: {
+          room: RoomResolver,
+          userRole: RoomUserRoleResolver
+        }
+      },
+      {
+        path: 'settings',
+        component: SettingsPageComponent
+      },
+      {
+        path: 'create-content',
+        component: ContentCreationPageComponent
+      },
+      {
+        path: 'group/:contentGroup/statistics/:contentIndex',
+        component: ContentPresentationComponent
+      },
+      {
+        path: 'statistics',
+        component: StatisticsPageComponent
+      },
+      {
+        path: 'group/:contentGroup/statistics',
+        component: ContentPresentationComponent
+      },
+      {
+        path: 'comments',
+        component: CommentPageComponent
+      },
+      {
+        path: 'comment/:commentId',
+        component: CommentAnswerComponent,
+        resolve: {
+          comment: CommentResolver
+        }
+      },
+      {
+        path: 'survey',
+        component: SurveyPageComponent
+      },
+      {
+        path: 'group/:contentGroup',
+        component: GroupContentComponent
+      },
+      {
+        path: 'loosecontent',
+        component: LooseContentComponent
+      },
+      {
+        path: 'group/:contentGroup/presentation',
+        component: ContentPresentationComponent
+      }
+    ]
   }
 ];
 
