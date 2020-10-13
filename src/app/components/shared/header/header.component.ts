@@ -17,6 +17,7 @@ import { Theme } from '../../../../theme/Theme';
 import { ThemeService } from '../../../../theme/theme.service';
 import { LanguageService } from '../../../services/util/language.service';
 import { ApiConfigService } from '../../../services/http/api-config.service';
+import { RoutingService } from '../../../services/util/routing.service';
 
 @Component({
   selector: 'app-header',
@@ -58,7 +59,8 @@ export class HeaderComponent implements OnInit {
     private dialogService: DialogService,
     private globalStorageService: GlobalStorageService,
     private themeService: ThemeService,
-    private apiConfigService: ApiConfigService
+    private apiConfigService: ApiConfigService,
+    private routingService: RoutingService
   ) {
     this.deviceType = this.globalStorageService.getItem(STORAGE_KEYS.DEVICE_TYPE);
     this.isSafari = this.globalStorageService.getItem(STORAGE_KEYS.IS_SAFARI);
@@ -125,6 +127,7 @@ export class HeaderComponent implements OnInit {
       this.helpUrl = config.ui.links.help.url;
     });
     this.showNews = !this.globalStorageService.getItem(STORAGE_KEYS.VERSION);
+    this.routingService.subscribeActivatedRoute();
   }
 
   getTime(time: Date) {
@@ -164,7 +167,7 @@ export class HeaderComponent implements OnInit {
   }
 
   goBack() {
-    this.location.back();
+    this.routingService.goBack();
   }
 
   navToLogin() {
