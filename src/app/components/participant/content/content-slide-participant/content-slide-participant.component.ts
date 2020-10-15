@@ -32,6 +32,7 @@ export class ContentSlideParticipantComponent extends ContentParticipantComponen
   }
 
   initAnswer() {
+    this.setExtensionData(this.content.roomId, this.content.id);
     this.isLoading = false;
   }
 }

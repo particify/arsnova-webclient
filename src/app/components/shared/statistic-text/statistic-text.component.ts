@@ -31,6 +31,7 @@ export class StatisticTextComponent implements OnInit {
   answers: TextStatistic[] = [];
   isLoading = true;
   answersVisible = false;
+  extensionData: any;
 
   constructor(
     protected route: ActivatedRoute,
@@ -45,6 +46,12 @@ export class StatisticTextComponent implements OnInit {
 
 
   ngOnInit(): void {
+    this.extensionData = {
+      'roomId': this.content.roomId,
+      'refType': 'content',
+      'refId': this.content.id,
+      'detailedView': false
+    };
     this.translateService.use(this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE));
     this.contentAnswerService.getAnswers(this.content.roomId, this.content.id).subscribe(answers => {
       this.getData(answers);

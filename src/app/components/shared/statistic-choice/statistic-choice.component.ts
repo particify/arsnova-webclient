@@ -50,6 +50,7 @@ export class StatisticChoiceComponent implements OnInit, OnDestroy {
   green: string;
   grey: string;
   blue: string;
+  extensionData: any;
 
   constructor(protected route: ActivatedRoute,
               private contentService: ContentService,
@@ -58,6 +59,12 @@ export class StatisticChoiceComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.extensionData = {
+      'roomId': this.content.roomId,
+      'refType': 'content',
+      'refId': this.content.id,
+      'detailedView': false
+    };
     this.chartId = 'chart-' + this.content.id;
     this.checkIfSurvey(this.content);
     this.initChart();

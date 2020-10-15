@@ -7,6 +7,7 @@
       <mat-icon class="corner-icon icon-primary">insert_chart</mat-icon>
     </button>
   </div>
+  <lib-extension-point extensionId="attachment-list" [extensionData]="extensionData"></lib-extension-point>
   <div tabindex="-1" id="message-button" class="visually-hidden">
     {{ 'statistic.a11y-message-evaluation' | translate: {content: content.body} }}
   </div>

@@ -64,4 +64,13 @@ export class ContentParticipantComponent implements OnInit {
 
   abstain($event) {
   }
+
+  setExtensionData(roomId: string, refId: string) {
+    this.extensionData = {
+      'roomId': roomId,
+      'refType': 'content',
+      'refId': refId,
+      'detailedView': false
+    };
+  }
 }

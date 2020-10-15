@@ -4,6 +4,7 @@
     <div fxLayout="row">
       <app-rendered-text tabindex="0" [rawText]="content.body" [renderedText]="content.renderedBody"></app-rendered-text>
     </div>
+    <lib-extension-point extensionId="attachment-list" [extensionData]="extensionData"></lib-extension-point>
   </mat-card>
   <div tabindex="-1" class="visually-hidden">
   </div>
