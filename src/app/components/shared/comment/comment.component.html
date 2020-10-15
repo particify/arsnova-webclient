@@ -110,7 +110,7 @@
       </div>
 
     </div>
-    <lib-extension-point extensionId="attachment-list" [extensionData]="extensionData"></lib-extension-point>
+    <lib-extension-point  extensionId="attachment-list" [extensionData]="extensionData"></lib-extension-point>
     <div (click)="this.clickedOnTag.emit(comment.tag)" *ngIf="comment.tag && comment.tag !== ''"
          class="comment-tags light">
     <div *ngIf="comment.tag && comment.tag !== ''" class="comment-tags light">

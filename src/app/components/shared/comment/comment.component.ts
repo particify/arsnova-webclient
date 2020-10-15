@@ -19,6 +19,7 @@ import { DialogService } from '../../../services/util/dialog.service';
 import { GlobalStorageService, STORAGE_KEYS } from '../../../services/util/global-storage.service';
 import { AnnounceService } from '../../../services/util/announce.service';
 import { VoteService } from '../../../services/http/vote.service';
+import { Observable, Subject } from 'rxjs';
 
 @Pipe({ name: 'dateFromNow' })
 export class DateFromNow implements PipeTransform {
@@ -45,6 +46,7 @@ export class DateFromNow implements PipeTransform {
 export class CommentComponent implements OnInit {
   @Input() comment: Comment;
   @Input() isNew: boolean;
+  @Input() referenceEvent: Observable<string>;
   @Output() clickedOnTag = new EventEmitter<string>();
   viewRole: UserRole;
   isParticipant = false;
@@ -60,6 +62,7 @@ export class CommentComponent implements OnInit {
   roleString: string;
   userId: string;
   extensionData: any;
+  extensionEvent: Subject<string> = new Subject<string>();
 
   constructor(
     protected authenticationService: AuthenticationService,
@@ -115,8 +118,14 @@ export class CommentComponent implements OnInit {
       'refId': this.comment.id,
       'refType': 'comment',
       'detailedView': false,
-      'pureImageView': true
-    }
+      'pureImageView': true,
+      'retryEvent': this.extensionEvent
+    };
+    this.referenceEvent.subscribe(id => {
+      if (this.comment.id === id) {
+        this.extensionEvent.next(this.comment.id);
+      }
+    })
   }
 
   changeSlideState(): void {

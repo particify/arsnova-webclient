@@ -138,7 +138,8 @@
 
 <div class="comments-container" *ngIf="!isLoading">
   <app-comment *ngFor="let current of displayComments" [comment]="current"
-               [parseVote]="getVote(current)" (clickedOnTag)="clickedOnTag($event)" [isNew]="current.id === newestComment.id">
+               [parseVote]="getVote(current)" (clickedOnTag)="clickedOnTag($event)"
+               [referenceEvent]="referenceEvent.asObservable()" [isNew]="current.id === newestComment.id">
   </app-comment>
 </div>
 

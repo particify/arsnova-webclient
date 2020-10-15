@@ -14,7 +14,7 @@ import { VoteService } from '../../../services/http/vote.service';
 import { AdvancedSnackBarTypes, NotificationService } from '../../../services/util/notification.service';
 import { CorrectWrong } from '../../../models/correct-wrong.enum';
 import { EventService } from '../../../services/util/event.service';
-import { Subscription } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
 import { Router, ActivatedRoute } from '@angular/router';
 import { DialogService } from '../../../services/util/dialog.service';
 import { GlobalStorageService, STORAGE_KEYS } from '../../../services/util/global-storage.service';
@@ -78,6 +78,7 @@ export class CommentListComponent implements OnInit, OnDestroy {
   commentStream: Subscription;
   displayComments: Comment[] = [];
   commentCounter = itemRenderNumber;
+  referenceEvent: Subject<string> = new Subject<string>();
 
   constructor(
     private commentService: CommentService,
@@ -300,6 +301,8 @@ export class CommentListComponent implements OnInit, OnDestroy {
           });
         }
         break;
+      default:
+        this.referenceEvent.next(payload.id);
     }
     this.filterComments(this.currentFilter);
     this.sortComments(this.currentSort);
