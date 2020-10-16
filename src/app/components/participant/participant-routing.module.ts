@@ -15,62 +15,44 @@ import { RoomUserRoleResolver } from '../../resolver/room-user-role.resolver';
 const routes: Routes = [
   {
     path: 'room/:shortId',
-    component: RoomParticipantPageComponent,
     canActivate: [AuthenticationGuard],
     data: { requiredRole: UserRole.PARTICIPANT },
-    resolve : {
-      room: RoomResolver,
-      viewRole: RoomViewUserRoleResolver,
-      userRole: RoomUserRoleResolver
-    }
-  },
-  {
-    path: 'room/:shortId/comments',
-    component: CommentPageComponent,
-    canActivate: [AuthenticationGuard],
-    data: { requiredRole: UserRole.PARTICIPANT },
-    resolve : {
+    resolve: {
       room: RoomResolver,
       viewRole: RoomViewUserRoleResolver
-    }
-  },
-  {
-    path: 'room/:shortId/comment/:commentId',
-    component: CommentAnswerComponent,
-    canActivate: [AuthenticationGuard],
-    data: { requiredRole: UserRole.PARTICIPANT },
-    resolve : {
-      comment: CommentResolver,
-      viewRole: RoomViewUserRoleResolver
-    }
-  },
-  {
-    path: 'room/:shortId/survey',
-    component: SurveyPageComponent,
-    canActivate: [AuthenticationGuard],
-    data: { requiredRole: UserRole.PARTICIPANT },
-    resolve : {
-      room: RoomResolver,
-      viewRole: RoomViewUserRoleResolver
-    }
-  },
-  {
-    path: 'room/:shortId/group/:contentGroup',
-    component: ParticipantContentCarouselPageComponent,
-    canActivate: [AuthenticationGuard],
-    data: { requiredRole: UserRole.PARTICIPANT },
-    resolve : {
-      viewRole: RoomViewUserRoleResolver
-    }
-  },
-  {
-    path: 'room/:shortId/group/:contentGroup/:contentIndex',
-    component: ParticipantContentCarouselPageComponent,
-    canActivate: [AuthenticationGuard],
-    data: { requiredRole: UserRole.PARTICIPANT },
-    resolve : {
-      viewRole: RoomViewUserRoleResolver
-    }
+    },
+    children: [
+      {
+        path: '',
+        component: RoomParticipantPageComponent,
+        resolve: {
+          userRole: RoomUserRoleResolver
+        }
+      },
+      {
+        path: 'comments',
+        component: CommentPageComponent
+      },
+      {
+        path: 'comment/:commentId',
+        component: CommentAnswerComponent,
+        resolve: {
+          comment: CommentResolver
+        }
+      },
+      {
+        path: 'survey',
+        component: SurveyPageComponent
+      },
+      {
+        path: 'group/:contentGroup',
+        component: ParticipantContentCarouselPageComponent
+      },
+      {
+        path: 'group/:contentGroup/:contentIndex',
+        component: ParticipantContentCarouselPageComponent
+      }
+    ]
   }
 ];
 

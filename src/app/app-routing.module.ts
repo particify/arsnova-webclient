@@ -7,8 +7,6 @@ import { DirectEntryComponent } from './components/shared/direct-entry/direct-en
 import { LoginComponent } from './components/home/login/login.component';
 import { ImportComponent } from './components/home/import/import.component';
 import { AuthenticationGuard } from './guards/authentication.guard';
-import { RoomViewUserRoleResolver } from './resolver/room-view-user-role.resolver';
-import { RoomViewRole } from './models/room-view-role';
 import { RegisterComponent } from './components/home/register/register.component';
 import { PasswordResetComponent } from './components/home/password-reset/password-reset.component';
 import { RequestPasswordResetComponent } from './components/home/request-password-reset/request-password-reset.component';
@@ -16,61 +14,66 @@ import { RequestPasswordResetComponent } from './components/home/request-passwor
 const routes: Routes = [
   {
     path: '',
-    redirectTo: '/home',
-    pathMatch: 'full'
-  },
-  {
-    path: 'home',
-    component: HomePageComponent
-  },
-  {
-    path: 'login',
-    component: LoginComponent
-  },
-  {
-    path: 'register',
-    component: RegisterComponent
-  },
-  {
-    path: 'password-reset/:email',
-    component: PasswordResetComponent
-  },
-  {
-    path: 'request-password-reset',
-    component: RequestPasswordResetComponent
-  },
-  {
-    path: 'user',
-    canActivate: [AuthenticationGuard],
-    component: UserHomeComponent
-  },
-  {
-    path: 'join/:shortId',
-    component: DirectEntryComponent
-  },
-  {
-    path: 'import',
-    component: ImportComponent
-  },
-  {
-    path: 'admin',
-    loadChildren: () => import('./components/admin/admin.module').then(m => m.AdminModule)
-  },
-  {
-    path: 'creator',
-    loadChildren: () => import('./components/creator/creator.module').then(m => m.CreatorModule)
-  },
-  {
-    path: 'participant',
-    loadChildren: () => import('./components/participant/participant.module').then(m => m.ParticipantModule)
-  },
-  {
-    path: 'moderator',
-    loadChildren: () => import('./components/moderator/moderator.module').then(m => m.ModeratorModule)
-  },
-  {
-    path: '**',
-    component: PageNotFoundComponent
+    children: [
+      {
+        path: '',
+        redirectTo: '/home',
+        pathMatch: 'full'
+      },
+      {
+        path: 'home',
+        component: HomePageComponent
+      },
+      {
+        path: 'login',
+        component: LoginComponent
+      },
+      {
+        path: 'register',
+        component: RegisterComponent
+      },
+      {
+        path: 'password-reset/:email',
+        component: PasswordResetComponent
+      },
+      {
+        path: 'request-password-reset',
+        component: RequestPasswordResetComponent
+      },
+      {
+        path: 'user',
+        canActivate: [AuthenticationGuard],
+        component: UserHomeComponent
+      },
+      {
+        path: 'join/:shortId',
+        component: DirectEntryComponent
+      },
+      {
+        path: 'import',
+        component: ImportComponent
+      },
+      {
+        path: 'admin',
+        loadChildren: () => import('./components/admin/admin.module').then(m => m.AdminModule)
+      },
+      {
+        path: 'creator',
+        loadChildren: () => import('./components/creator/creator.module').then(m => m.CreatorModule)
+      },
+      {
+        path: 'participant',
+        loadChildren: () => import('./components/participant/participant.module').then(m => m.ParticipantModule)
+      },
+      {
+        path: 'moderator',
+        loadChildren: () => import('./components/moderator/moderator.module').then(m => m.ModeratorModule)
+      },
+      {
+        path: '**',
+        component: PageNotFoundComponent
+      }
+    ]
   }
 ];
 

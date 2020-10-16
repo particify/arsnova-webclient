@@ -14,45 +14,37 @@ import { RoomUserRoleResolver } from '../../resolver/room-user-role.resolver';
 const routes: Routes = [
   {
     path: 'room/:shortId',
-    component: RoomModeratorPageComponent,
     canActivate: [AuthenticationGuard],
     data: { requiredRole: UserRole.EXECUTIVE_MODERATOR },
-    resolve : {
-      room: RoomResolver,
-      viewRole: RoomViewUserRoleResolver,
-      userRole: RoomUserRoleResolver
-    }
-  },
-  {
-    path: 'room/:shortId/comments',
-    component: CommentPageComponent,
-    canActivate: [AuthenticationGuard],
-    data: { requiredRole: UserRole.EXECUTIVE_MODERATOR },
-    resolve : {
+    resolve: {
       room: RoomResolver,
       viewRole: RoomViewUserRoleResolver
-    }
-  },
-  {
-    path: 'room/:shortId/moderator/comments',
-    component: ModeratorCommentPageComponent,
-    canActivate: [AuthenticationGuard],
-    data: { requiredRole: UserRole.EXECUTIVE_MODERATOR },
-    resolve : {
-      room: RoomResolver,
-      viewRole: RoomViewUserRoleResolver
-    }
-  },
-  {
-    path: 'room/:shortId/comment/:commentId',
-    component: CommentAnswerComponent,
-    canActivate: [AuthenticationGuard],
-    data: { requiredRole: UserRole.EXECUTIVE_MODERATOR },
-    resolve : {
-      comment: CommentResolver,
-      viewRole: RoomViewUserRoleResolver
-    }
-  },
+    },
+    children: [
+      {
+        path: '',
+        component: RoomModeratorPageComponent,
+        resolve: {
+          userRole: RoomUserRoleResolver
+        }
+      },
+      {
+        path: 'comments',
+        component: CommentPageComponent
+      },
+      {
+        path: 'moderator/comments',
+        component: ModeratorCommentPageComponent
+      },
+      {
+        path: 'comment/:commentId',
+        component: CommentAnswerComponent,
+        resolve: {
+          comment: CommentResolver
+        }
+      },
+    ]
+  }
 ];
 
 @NgModule({
