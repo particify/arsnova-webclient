@@ -65,6 +65,7 @@ import { RequestPasswordResetComponent } from './components/home/request-passwor
 import { FormattingService } from './services/http/formatting.service';
 import { SnackBarAdvancedComponent } from './components/shared/snack-bar-advanced/snack-bar-advanced.component';
 import { RoomUserRoleResolver } from './resolver/room-user-role.resolver';
+import { RoutingService } from './services/util/routing.service';
 
 export function dialogClose(dialogResult: any) {
 }
@@ -165,6 +166,7 @@ export function initializeApp(appConfig: AppConfig) {
     AdminService,
     SystemInfoService,
     FormattingService,
+    RoutingService,
     { provide: Window,  useValue: window },
     STORAGE_CONFIG_PROVIDERS,
     {
