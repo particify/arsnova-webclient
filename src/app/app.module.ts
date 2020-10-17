@@ -33,7 +33,6 @@ import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 import { ModeratorService } from './services/http/moderator.service';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
-import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { CommentSettingsService } from './services/http/comment-settings.service';
 import { BonusTokenService } from './services/http/bonus-token.service';
 import { CustomIconService } from './services/util/custom-icon.service';
@@ -66,6 +65,7 @@ import { FormattingService } from './services/http/formatting.service';
 import { SnackBarAdvancedComponent } from './components/shared/snack-bar-advanced/snack-bar-advanced.component';
 import { RoomUserRoleResolver } from './resolver/room-user-role.resolver';
 import { RoutingService } from './services/util/routing.service';
+import { TranslateHttpLoaderFactory } from './translate-http-loader-factory';
 
 export function dialogClose(dialogResult: any) {
 }
@@ -108,7 +108,7 @@ export function initializeApp(appConfig: AppConfig) {
     TranslateModule.forChild({
       loader: {
         provide: TranslateLoader,
-        useFactory: (HttpLoaderFactory),
+        useFactory: (TranslateHttpLoaderFactory),
         deps: [HttpClient]
       },
       isolate: true
@@ -183,10 +183,6 @@ export function initializeApp(appConfig: AppConfig) {
   bootstrap: [AppComponent]
 })
 export class AppModule {
-}
-
-export function HttpLoaderFactory(http: HttpClient) {
-  return new TranslateHttpLoader(http, '../../assets/i18n/home/', '.json');
 }
 
 export function initAuthenticationService(authenticationService: AuthenticationService) {
