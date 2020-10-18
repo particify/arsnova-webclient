@@ -3,13 +3,6 @@
     {{ 'admin-area.system-stats' | translate }}
   </mat-card-title>
   <mat-card-content>
-    <table>
-      <tr *ngFor="let component of (stats | async) | keyvalue">
-        <!-- No i18n provided for now because property keys for stats will change. -->
-        <!--<td>{{ 'admin-area.statistics-' + (component.key | lowercase) | translate }}</td>-->
-        <td>{{ component.key }}</td>
-        <td>{{ component.value }}</td>
-      </tr>
-    </table>
+    <app-entity-properties [entity]="stats | async"></app-entity-properties>
   </mat-card-content>
 </mat-card>

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { SystemInfoService } from '../../../services/http/system-info.service';
+import { SummarizedStats, SystemInfoService } from '../../../services/http/system-info.service';
 import { catchError } from 'rxjs/operators';
-import { of } from 'rxjs';
+import { Observable, of } from 'rxjs';
 
 @Component({
   selector: 'app-admin-summary-bar',
@@ -11,8 +11,8 @@ import { of } from 'rxjs';
 export class SummaryBarComponent implements OnInit {
   readonly STATUS_UP = 'UP';
   readonly STATUS_DOWN = 'DOWN';
-  healthInfo: any;
-  stats: any;
+  healthInfo: Observable<any>;
+  stats: Observable<SummarizedStats>;
 
   constructor(
     protected systemInfoService: SystemInfoService
@@ -31,6 +31,6 @@ export class SummaryBarComponent implements OnInit {
   }
 
   getStats() {
-    return this.systemInfoService.getStats();
+    return this.systemInfoService.getSummarizedStats();
   }
 }
