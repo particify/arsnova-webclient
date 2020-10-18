@@ -37,9 +37,8 @@ export class SystemInfoService extends BaseHttpService {
 
   getHealthInfo(): Observable<any> {
     const connectionUrl = this.apiUrl.base + this.apiUrl.health;
-    return this.http.get<any>(connectionUrl, httpOptions).pipe(
-      catchError(this.handleError<any>('getHealth'))
-    );
+    /* Do not use default error handling here - 503 is expected if system health is not OK. */
+    return this.http.get<any>(connectionUrl, httpOptions);
   }
 
   getSummarizedStats(): Observable<SummarizedStats> {

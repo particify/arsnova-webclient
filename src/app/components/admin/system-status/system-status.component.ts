@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { SystemInfoService } from '../../../services/http/system-info.service';
-import { catchError } from 'rxjs/operators';
+import { catchError, share } from 'rxjs/operators';
 import { of } from 'rxjs';
 
 @Component({
@@ -22,7 +22,8 @@ export class SystemStatusComponent implements OnInit {
 
   getHealthInfo() {
     return this.systemInfoService.getHealthInfo().pipe(
-      catchError((response) => of(response.error)
-    ));
+      catchError((response) => of(response.error)),
+      share()
+    );
   }
 }

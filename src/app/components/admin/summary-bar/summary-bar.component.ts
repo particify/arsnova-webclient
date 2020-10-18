@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { SummarizedStats, SystemInfoService } from '../../../services/http/system-info.service';
-import { catchError } from 'rxjs/operators';
+import { catchError, share } from 'rxjs/operators';
 import { Observable, of } from 'rxjs';
 
 @Component({
@@ -26,11 +26,14 @@ export class SummaryBarComponent implements OnInit {
 
   getHealthInfo() {
     return this.systemInfoService.getHealthInfo().pipe(
-      catchError((response) => of(response.error)
-    ));
+      catchError((response) => of(response.error)),
+      share()
+    );
   }
 
   getStats() {
-    return this.systemInfoService.getSummarizedStats();
+    return this.systemInfoService.getSummarizedStats().pipe(
+      share()
+    );
   }
 }
