@@ -61,16 +61,16 @@
 
     <mat-menu class="wider-panel" #themeMenu="matMenu" xPosition="before" [overlapTrigger]="false">
       <button mat-menu-item *ngFor="let theme of themes" (click)="changeTheme(theme)"
-              title="{{theme.toString(getLanguage())}}">
+              title="{{theme.toString(lang)}}">
         <div fxLayout="row">
           <mat-icon class="color" [ngStyle]="{'color':theme.getPreviewColor()}">lens</mat-icon>
           <mat-icon class="checked" *ngIf="theme.key === themeClass" [ngStyle]="{'color':theme.getOnPreviewColor()}">
             checked
           </mat-icon>
           <div fxLayout="column" fxLayoutAlign="center" class="color-text-container">
-            <span class="item-title color-title">{{theme.getName(getLanguage())}}</span>
+            <span class="item-title color-title">{{theme.getName(lang)}}</span>
             <span class="color-description"
-                  *ngIf="deviceWidth > 600">{{theme.getDescription(getLanguage())}}</span>
+                  *ngIf="deviceWidth > 600">{{theme.getDescription(lang)}}</span>
           </div>
         </div>
       </button>
