@@ -39,6 +39,7 @@ import { CdkStepperModule } from '@angular/cdk/stepper';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { RenderedTextComponent } from './rendered-text/rendered-text.component';
 import { UpdateInfoComponent } from './_dialogs/update-info/update-info.component';
+import { HintComponent } from './hint/hint.component';
 
 @NgModule({
     imports: [
@@ -84,7 +85,8 @@ import { UpdateInfoComponent } from './_dialogs/update-info/update-info.componen
     StepperComponent,
     SidebarComponent,
     RenderedTextComponent,
-    UpdateInfoComponent
+    UpdateInfoComponent,
+    HintComponent
   ],
   exports: [
     RoomJoinComponent,
@@ -110,7 +112,8 @@ import { UpdateInfoComponent } from './_dialogs/update-info/update-info.componen
     StatisticChoiceComponent,
     StatisticTextComponent,
     SidebarComponent,
-    RenderedTextComponent
+    RenderedTextComponent,
+    HintComponent
   ]
 })
 export class SharedModule {

@@ -8,10 +8,8 @@
       <mat-hint align="end" *ngIf="!emptyInputs"><span aria-hidden="true">{{roomName.value.length}}
         / 20</span></mat-hint>
     </mat-form-field>
-    <div *ngIf="!auth || auth.authProvider === 'ARSNOVA_GUEST'" fxLayout="row" fxLayoutAlign="start center">
-      <mat-icon>warning</mat-icon>
-      <p class="smaller-text">{{ 'dialog.not-logged-in' | translate }}</p>
-    </div>
+    <app-hint *ngIf="!auth || auth.authProvider === 'ARSNOVA_GUEST'"
+              [type]="'WARNING'" [text]="'dialog.not-logged-in'"></app-hint>
   </div>
 </form>
 <app-dialog-action-buttons
