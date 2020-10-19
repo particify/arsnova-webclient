@@ -4,9 +4,9 @@
       <mat-label>{{ 'dialog.room-name' | translate }}</mat-label>
       <input (focus)="eventService.makeFocusOnInputTrue()" (blur)="eventService.makeFocusOnInputFalse()"
              (keypress)="resetEmptyInputs()" matInput #roomName class="input-block" type="text" autocomplete="off"
-             maxlength="20" [(ngModel)]="longName" name="roomName" aria-labelledby="room-name-input"/>
+             maxlength="30" [(ngModel)]="longName" name="roomName" aria-labelledby="room-name-input"/>
       <mat-hint align="end" *ngIf="!emptyInputs"><span aria-hidden="true">{{roomName.value.length}}
-        / 20</span></mat-hint>
+        / 30</span></mat-hint>
     </mat-form-field>
     <app-hint *ngIf="!auth || auth.authProvider === 'ARSNOVA_GUEST'"
               [type]="'WARNING'" [text]="'dialog.not-logged-in'"></app-hint>
