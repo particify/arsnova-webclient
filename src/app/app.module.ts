@@ -31,6 +31,7 @@ import { AppConfig } from './app.config';
 import { ThemeModule } from '../theme/theme.module';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
+import { extensions } from '../environments/extensions';
 import { ModeratorService } from './services/http/moderator.service';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { CommentSettingsService } from './services/http/comment-settings.service';
@@ -91,7 +92,7 @@ export function initializeApp(appConfig: AppConfig) {
     SnackBarAdvancedComponent
   ],
   imports: [
-    environment.extensions,
+    extensions,
     ExtensionPointModule,
     AppRoutingModule,
     BrowserModule,
