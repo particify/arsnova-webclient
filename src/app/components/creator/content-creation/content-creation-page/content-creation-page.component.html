@@ -48,16 +48,20 @@
                   </mat-autocomplete>
                 </mat-form-field>
               </div>
-              <mat-form-field appearance="outline" class="input-block">
+              <mat-form-field appearance="outline" class="input-block no-field-hint">
                 <mat-label>{{ (selectedFormat.name !== 'slide' ? 'content.body' : 'content.body-neutral') | translate }}</mat-label>
                 <textarea #questionInput (blur)="eventService.makeFocusOnInputFalse()"
-                          (focus)="eventService.makeFocusOnInputTrue()" [(ngModel)]="question"
+                          (focus)="eventService.makeFocusOnInputTrue()"
+                          (input)="updateTextContainsImage(questionInput.value)"
+                          [(ngModel)]="question"
                           [placeholder]="(selectedFormat.name !== 'slide' ? 'content.enter-body' : 'content.enter-body-neutral') | translate"
                           aria-labelledby="body" id="body-input"
                           matAutosizeMaxRows="8"
                           matAutosizeMinRows="3"
                           matInput matTextareaAutosize maxlength="500" name="questionInput"></textarea>
               </mat-form-field>
+              <app-hint *ngIf="textContainsImage" [text]="'utils.formatting-image-hint' | translate" type="WARNING"></app-hint>
+              <div class="form-spacer"></div>
             </form>
             <div class="content-action-container">
               <app-content-choice-creator (reset)="reset()" (contentSent)="saveContent($event)"

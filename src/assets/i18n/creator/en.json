@@ -421,5 +421,8 @@
     "cancel-description": "Cancels the current process and closes the dialog.",
     "reset": "Reset",
     "really-reset-form": "Do you really want to reset all inputs?"
+  },
+  "utils": {
+    "formatting-image-hint": "Please note that images with a large file size can affect loading times."
   }
 }

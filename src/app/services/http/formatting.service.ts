@@ -51,4 +51,8 @@ export class FormattingService extends BaseHttpService {
       catchError(this.handleError('postString', body))
     );
   }
+
+  containsTextAnImage(text: string): boolean {
+    return /!\[.*?\]\(.*?\)/.test(text);
+  }
 }

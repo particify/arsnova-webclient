@@ -421,5 +421,8 @@
     "cancel-description": "Bricht den aktuellen Vorgang ab und schließt den Dialog.",
     "reset": "Zurücksetzen",
     "really-reset-form": "Willst du wirklich alle Eingaben zurücksetzen?"
+  },
+  "utils": {
+    "formatting-image-hint": "Bitte beachte, dass Bilder mit hoher Dateigröße die Ladezeiten beeinträchtigen können."
   }
 }
