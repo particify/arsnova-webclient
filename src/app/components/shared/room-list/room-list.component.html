@@ -1,6 +1,9 @@
 <app-loading-indicator *ngIf="isLoading" [size]="80"></app-loading-indicator>
 
 <div *ngIf="!isLoading" fxLayout="column" fxLayoutGap="10px">
+  <div *ngIf="rooms.length === 0" fxLayout="row" fxLayoutAlign="center">
+    <lib-extension-point extensionId="import-token" [extensionData]="{inMenu: false}"></lib-extension-point>
+  </div>
   <div tabindex="-1" id="room-list" *ngIf="!isLoading" [ngClass]="{'visually-hidden': rooms.length > 0 || showRoomsFromGuest}">
     <h3 class="no-rooms">{{ rooms.length === 0 ? ('room-list.no-room-history' | translate) :
       'room-list.a11y-room-history' | translate:{count: rooms.length} }}</h3>
@@ -20,7 +23,7 @@
           <mat-icon class="import">swap_horiz</mat-icon>
           <span>{{ 'room-list.rooms-from-guest' | translate }}</span>
         </button>
-        <lib-extension-point extensionId="import-token"></lib-extension-point>
+        <lib-extension-point extensionId="import-token" [extensionData]="{inMenu: true}"></lib-extension-point>
       </mat-menu>
       <mat-list>
         <mat-list-item fxLayout="column" fxLayoutAlign="center"
