@@ -607,3 +607,12 @@ button.mat-menu-item:hover {
   background-color: var(--surface);
   color: var(--on-surface);
 }
+
+// RenderedTextComponent
+// This cannot be handled in the component itself because of custom rendering of the text-container's content.
+.rendered-text.text-container {
+  img {
+    max-width: 100%;
+    max-height: 80vh;
+  }
+}
