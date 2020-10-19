@@ -1,19 +1,24 @@
 <ars-screen>
-  <div fxLayout="column" fxLayoutAlign="center center" class="qr-container">
-    <p tabindex="-1" id="qr-message" class="visually-hidden">{{ 'dialog.a11y-qr-code' | translate }}</p>
-    <button mat-raised-button class="button-secondary header copyBtn" (click)="copyShortId()"
-            aria-labelledby="copy-url">
-      <mat-icon>link</mat-icon>
-      {{ 'dialog.copy-url' | translate}}
-    </button>
-    <button class="button-primary header exitBtn" mat-raised-button (click)="onCloseClick()" aria-labelledby="exit">
-      <mat-icon>close</mat-icon>
-    </button>
-    <div>
-      <h2>{{data}}</h2>
+  <div fxLayout="row" fxLayoutAlign="center center" fxFill>
+    <div class="qr-container">
+      <h1 class="text" fxLayout="column" fxLayoutAlign="center center">
+        <mat-icon class="web-icon disabled">language</mat-icon>
+        <span *ngIf="hostUrl" class="url">{{ hostUrl }}</span>
+        <span class="url">{{ hostUrl ? data.shortId : joinUrl.slice(8, joinUrl.length) }}</span>
+      </h1>
+      <p tabindex="-1" id="qr-message" class="visually-hidden">{{ 'dialog.a11y-qr-code' | translate }}</p>
+      <button class="header exitBtn" mat-icon-button (click)="onCloseClick()" aria-labelledby="exit">
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+      <button mat-button class="icon-secondary header copyBtn" (click)="copyShortId()"
+              aria-labelledby="copy-url">
+        <mat-icon>link</mat-icon>
+        {{ 'dialog.copy-url' | translate}}
+      </button>
+      <qrcode fxLayout="column" fxLayoutAlign="center center" [qrdata]="joinUrl"
+              [width]="qrWidth" [colorDark]="fgColor" [colorLight]="bgColor" [errorCorrectionLevel]="'M'"
+              [margin]="3"></qrcode>
     </div>
-    <qrcode [qrdata]="data" [width]="qrWidth" [colorDark]="fgColor" [colorLight]="bgColor"
-            [errorCorrectionLevel]="'M'"></qrcode>
   </div>
 </ars-screen>
 <div class="visually-hidden">

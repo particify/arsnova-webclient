@@ -97,10 +97,12 @@ export class DialogService {
     });
   }
 
-  openQRCodeDialog(url: string): MatDialogRef<QrCodeComponent> {
+  openQRCodeDialog(shortId: string): MatDialogRef<QrCodeComponent> {
     return this.dialog.open(QrCodeComponent, {
       panelClass: 'screenDialog',
-      data: url
+      data: {
+        shortId: shortId
+      }
     });
   }
 

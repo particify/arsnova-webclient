@@ -2,8 +2,18 @@ ars-screen {
   background-color: var(--surface);
 }
 
-.qr-container {
-  height: 100%;
+@media(max-width: 1200px){
+  .qr-container {
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+@media(min-width: 1200px){
+  .qr-container {
+    display: flex;
+    flex-direction: row;
+  }
 }
 
 .header {
@@ -13,15 +23,32 @@ ars-screen {
 }
 
 .exitBtn {
-  right: 2em;
-}
-
-.copyBtn {
   left: 2em;
 }
 
-h2 {
-  text-align: center;
+.copyBtn {
+  right: 2em;
+}
+
+.text {
   margin-bottom: 0;
   color: var(--on-surface);
+}
+
+$font-size: calc(32px + 1.5vw);
+$icon-size: calc(32px + 6vw);
+
+.web-icon {
+  width: $icon-size;
+  height: $icon-size;
+  font-size: $icon-size;
+  margin: 16px;
+  opacity: 0.5;
+  color: var(--primary);
+
+}
+
+.url {
+  font-size: $font-size;
+  margin: 10% 0;
 }

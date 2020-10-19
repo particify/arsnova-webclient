@@ -18,7 +18,6 @@ import { GlobalStorageService, STORAGE_KEYS } from '../../../services/util/globa
 import { Content } from '../../../models/content';
 import { AnnounceService } from '../../../services/util/announce.service';
 import { SidebarInfo } from '../../shared/sidebar/sidebar.component';
-import { ApiConfigService } from '../../../services/http/api-config.service';
 
 @Component({
   selector: 'app-room-creator-page',
@@ -29,7 +28,6 @@ export class RoomCreatorPageComponent extends RoomPageComponent implements OnIni
 
   viewModuleCount = 1;
   looseContent: Content[] = [];
-  joinUrl: string;
 
   constructor(
     protected roomService: RoomService,
@@ -46,8 +44,7 @@ export class RoomCreatorPageComponent extends RoomPageComponent implements OnIni
     public eventService: EventService,
     protected contentService: ContentService,
     private dialogService: DialogService,
-    protected globalStorageService: GlobalStorageService,
-    private apiConfigService: ApiConfigService
+    protected globalStorageService: GlobalStorageService
   ) {
     super(roomService, route, router, location, wsCommentService, commentService, eventService, contentService, translateService,
       notification, globalStorageService);
@@ -105,7 +102,6 @@ export class RoomCreatorPageComponent extends RoomPageComponent implements OnIni
     });
     this.roomWatch = this.roomService.getCurrentRoomsMessageStream();
     this.roomSub = this.roomWatch.subscribe(msg => this.parseUserCount(msg.body));
-    this.apiConfigService.getApiConfig$().subscribe(config => this.joinUrl = config.ui.links.join.url);
   }
 
   protected unsubscribe() {
@@ -135,7 +131,7 @@ export class RoomCreatorPageComponent extends RoomPageComponent implements OnIni
   }
 
   public showQRDialog() {
-    const dialogRef = this.dialogService.openQRCodeDialog(this.joinUrl + this.room.shortId);
+    const dialogRef = this.dialogService.openQRCodeDialog(this.room.shortId);
     dialogRef.afterClosed().subscribe(() => {
       setTimeout(() => {
         document.getElementById('live-announcer-button').focus();
@@ -143,4 +139,3 @@ export class RoomCreatorPageComponent extends RoomPageComponent implements OnIni
     });
   }
 }
-
