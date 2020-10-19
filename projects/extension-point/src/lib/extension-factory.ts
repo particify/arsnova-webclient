@@ -30,10 +30,12 @@ export class ExtensionFactory {
     if (typeof data === 'string') {
       data = JSON.parse(data);
     }
-    for (const key of Object.keys(data)) {
-      componentRef.instance[key] = data[key];
-      componentRef.instance.event = eventEmitter;
+    if (data) {
+      for (const key of Object.keys(data)) {
+        componentRef.instance[key] = data[key];
+      }
     }
+    componentRef.instance.event = eventEmitter;
 
     return componentRef;
   }
