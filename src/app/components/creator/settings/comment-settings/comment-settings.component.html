@@ -36,14 +36,12 @@
       </button>
     </div>
   </div>
-  <div>
-    <button mat-raised-button class="button-primary action" (click)="onExport()"
+  <div fxLayout="column" fxLayoutAlign="center start" fxLayoutGap="10px">
+    <button mat-raised-button class="button-primary" (click)="onExport()"
             aria-labelledby="export-comments">
       <mat-icon class="export-icon">save</mat-icon>
       {{ 'settings.export-comments' | translate }}</button>
-  </div>
-  <div>
-    <button mat-button class="delete" (click)="openDeleteCommentsDialog()"
+    <button mat-stroked-button class="delete" (click)="openDeleteCommentsDialog()"
             aria-labelledby="delete-all-comments">
       <mat-icon>delete</mat-icon>
       {{ 'settings.delete-all-comments' | translate }}</button>
