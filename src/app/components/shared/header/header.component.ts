@@ -38,12 +38,12 @@ export class HeaderComponent implements OnInit {
   isParticipant = true;
   isCreator = false;
 
-  lang: string;
   themeClass: String;
   themes: Theme[];
   deviceWidth = innerWidth;
   helpUrl: string;
   showNews: boolean;
+  lang: string;
 
   constructor(
     public location: Location,
@@ -65,13 +65,14 @@ export class HeaderComponent implements OnInit {
     this.deviceType = this.globalStorageService.getItem(STORAGE_KEYS.DEVICE_TYPE);
     this.isSafari = this.globalStorageService.getItem(STORAGE_KEYS.IS_SAFARI);
     // LocalStorage setup
+    this.translationService.setDefaultLang('en');
     if (!this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE)) {
       const lang = this.translationService.getBrowserLang();
-      this.translationService.setDefaultLang(lang);
-      this.globalStorageService.setItem(STORAGE_KEYS.LANGUAGE, lang);
+      this.setLang(lang);
     } else {
-      this.translationService.setDefaultLang(this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE));
+      this.setLang(this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE));
     }
+    this.translationService.use(this.lang);
   }
 
   @HostListener('window:keyup', ['$event'])
@@ -122,12 +123,19 @@ export class HeaderComponent implements OnInit {
       this.themeClass = theme;
     });
     this.themes = this.themeService.getThemes();
-    this.translationService.use(this.lang);
     this.apiConfigService.getApiConfig$().subscribe(config => {
       this.helpUrl = config.ui.links.help.url;
     });
     this.showNews = !this.globalStorageService.getItem(STORAGE_KEYS.VERSION);
     this.routingService.subscribeActivatedRoute();
+  }
+
+  setLang(lang: string) {
+    if (['de', 'en'].indexOf(lang) === -1) {
+      lang = 'en';
+    }
+    this.lang = lang;
+    this.globalStorageService.setItem(STORAGE_KEYS.LANGUAGE, lang);
   }
 
   getTime(time: Date) {
@@ -204,6 +212,7 @@ export class HeaderComponent implements OnInit {
 
   useLanguage(language: string) {
     this.translationService.use(language);
+    this.lang = language;
     this.globalStorageService.setItem(STORAGE_KEYS.LANGUAGE, language);
     this.langService.langEmitter.emit(language);
   }
@@ -211,10 +220,6 @@ export class HeaderComponent implements OnInit {
   changeTheme(theme: Theme) {
     this.themeClass = theme.key;
     this.themeService.activate(theme.key);
-  }
-
-  getLanguage(): string {
-    return this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE);
   }
 
   openUpdateInfoDialog() {
