@@ -5,19 +5,19 @@
       <mat-label>{{ 'room.room-name' | translate }}</mat-label>
       <input (focus)="eventService.makeFocusOnInputTrue()" (blur)="eventService.makeFocusOnInputFalse()"
              [(ngModel)]="name" matInput placeholder="{{ 'settings.enter-room-name' | translate }}"
-             name="room-name" maxlength="20" aria-labelledby="room-name"/>
-      <mat-hint align="end"><span aria-hidden="true">{{ name.length }} / 20</span></mat-hint>
+             name="room-name" maxlength="30" aria-labelledby="room-name"/>
+      <mat-hint align="end"><span aria-hidden="true">{{ name.length }} / 30</span></mat-hint>
     </mat-form-field>
     <mat-tab-group [dynamicHeight]=true (selectedTabChange)="descriptionTabChanged($event)">
       <mat-tab label="{{'settings.description' | translate}}">
         <mat-form-field class="input-block" appearance="outline">
       <textarea (focus)="eventService.makeFocusOnInputTrue()" (blur)="eventService.makeFocusOnInputFalse()"
         [(ngModel)]="description" matInput matTextareaAutosize matAutosizeMinRows="3" matAutosizeMaxRows="5"
-        maxlength="250" name="description" aria-labelledby="room-description"
+        maxlength="500" name="description" aria-labelledby="room-description"
         placeholder="{{ 'settings.enter-room-description' | translate }}"></textarea>
           <mat-hint align="end">
             <span aria-hidden="true">
-              {{ description ? description.length : 0 }} / 250
+              {{ description ? description.length : 0 }} / 500
             </span>
           </mat-hint>
         </mat-form-field>
