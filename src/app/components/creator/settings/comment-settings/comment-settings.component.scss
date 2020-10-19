@@ -2,11 +2,6 @@
   width: 100%;
 }
 
-.action {
-  margin: 10px 0;
-  min-width: 200px;
-}
-
 .delete {
   color: var(--warn);
 }
@@ -15,14 +10,6 @@
   transition: 500ms;
 }
 
-.mat-raised-button, .mat-button {
-  min-width: 105px;
-}
-
 .export-icon {
-  margin-right: 10px;
-}
-
-.mat-icon-button {
-  cursor: inherit;
+  margin-right: 2px;
 }
