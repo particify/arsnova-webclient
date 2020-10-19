@@ -18,8 +18,9 @@
       <mat-menu #more="matMenu" xPosition="before">
         <button mat-menu-item (click)="getGuestRooms()">
           <mat-icon class="import">swap_horiz</mat-icon>
-          <span class="delete-text">{{ 'room-list.rooms-from-guest' | translate }}</span>
+          <span>{{ 'room-list.rooms-from-guest' | translate }}</span>
         </button>
+        <lib-extension-point extensionId="import-token"></lib-extension-point>
       </mat-menu>
       <mat-list>
         <mat-list-item fxLayout="column" fxLayoutAlign="center"

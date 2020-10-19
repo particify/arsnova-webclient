@@ -39,18 +39,20 @@ import { CdkStepperModule } from '@angular/cdk/stepper';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { RenderedTextComponent } from './rendered-text/rendered-text.component';
 import { UpdateInfoComponent } from './_dialogs/update-info/update-info.component';
+import { ExtensionPointModule } from '../../../../projects/extension-point/src/lib/extension-point.module';
 import { HintComponent } from './hint/hint.component';
 
 @NgModule({
-    imports: [
-        CommonModule,
-        EssentialsModule,
-        SharedRoutingModule,
-        MatRippleModule,
-        ArsModule,
-        QRCodeModule,
-        CdkStepperModule
-    ],
+  imports: [
+    CommonModule,
+    EssentialsModule,
+    SharedRoutingModule,
+    MatRippleModule,
+    ArsModule,
+    QRCodeModule,
+    CdkStepperModule,
+    ExtensionPointModule
+  ],
   declarations: [
     RoomJoinComponent,
     PageNotFoundComponent,
