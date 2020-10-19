@@ -11,7 +11,10 @@
     <mat-tab-group [dynamicHeight]=true (selectedTabChange)="descriptionTabChanged($event)">
       <mat-tab label="{{'settings.description' | translate}}">
         <mat-form-field class="input-block" appearance="outline">
-      <textarea (focus)="eventService.makeFocusOnInputTrue()" (blur)="eventService.makeFocusOnInputFalse()"
+      <textarea #descriptionInput
+        (focus)="eventService.makeFocusOnInputTrue()"
+        (blur)="eventService.makeFocusOnInputFalse()"
+        (input)="updateTextContainsImage(descriptionInput.value)"
         [(ngModel)]="description" matInput matTextareaAutosize matAutosizeMinRows="3" matAutosizeMaxRows="5"
         maxlength="250" name="description" aria-labelledby="room-description"
         placeholder="{{ 'settings.enter-room-description' | translate }}"></textarea>
@@ -21,6 +24,7 @@
             </span>
           </mat-hint>
         </mat-form-field>
+        <app-hint *ngIf="textContainsImage" [text]="'utils.formatting-image-hint' | translate" type="WARNING"></app-hint>
       </mat-tab>
       <mat-tab label="{{'room.preview' | translate}}" [disabled]="!description">
         <div fxLayout="row">

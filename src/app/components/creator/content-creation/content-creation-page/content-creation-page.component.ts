@@ -11,6 +11,7 @@ import { RoomService } from '../../../../services/http/room.service';
 import { AnnounceService } from '../../../../services/util/announce.service';
 import { Subject } from 'rxjs';
 import { Content } from '../../../../models/content';
+import { FormattingService } from '../../../../services/http/formatting.service';
 
 class ContentFormat {
   name: string;
@@ -43,6 +44,7 @@ export class ContentCreationPageComponent implements OnInit, AfterContentInit {
   flipped = false;
 
   content: Content;
+  textContainsImage = false;
 
   constructor(
     private translateService: TranslateService,
@@ -51,7 +53,8 @@ export class ContentCreationPageComponent implements OnInit, AfterContentInit {
     private announceService: AnnounceService,
     private globalStorageService: GlobalStorageService,
     protected route: ActivatedRoute,
-    private roomService: RoomService
+    private roomService: RoomService,
+    private formattingService: FormattingService
   ) {
     langService.langEmitter.subscribe(lang => translateService.use(lang));
   }
@@ -135,4 +138,7 @@ export class ContentCreationPageComponent implements OnInit, AfterContentInit {
     this.createEventSubject.next(submit);
   }
 
+  updateTextContainsImage(text: string) {
+    this.textContainsImage = this.formattingService.containsTextAnImage(text);
+  }
 }
