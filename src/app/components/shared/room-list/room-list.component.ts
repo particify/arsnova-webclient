@@ -31,7 +31,6 @@ interface RoomDataView {
 })
 export class RoomListComponent implements OnInit, OnDestroy {
   @Input() auth: ClientAuthentication;
-  showGuestAccountControls = false;
   rooms: RoomDataView[] = [];
   displayRooms: RoomDataView[];
   roomsFromGuest: RoomDataView[];
@@ -63,7 +62,6 @@ export class RoomListComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.getRoomDataViews().pipe(takeUntil(this.unsubscribe$)).subscribe(roomDataViews => this.updateRoomList(roomDataViews));
     this.guestAuth$ = this.authenticationService.fetchGuestAuthentication().pipe(shareReplay());
-    this.showGuestAccountControls = this.auth.authProvider !== AuthProvider.ARSNOVA_GUEST && !!this.authenticationService.getGuestToken();
     this.sub = this.eventService.on<any>('RoomDeleted').subscribe(payload => {
       this.rooms = this.rooms.filter(r => r.summary.id !== payload.id);
     });

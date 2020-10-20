@@ -51,6 +51,7 @@ const routes: Routes = [
       },
       {
         path: 'import',
+        canActivate: [AuthenticationGuard],
         component: ImportComponent
       },
       {
