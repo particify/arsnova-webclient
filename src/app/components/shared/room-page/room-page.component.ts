@@ -154,7 +154,6 @@ export class RoomPageComponent implements OnInit, OnDestroy {
     this.afterRoomLoadHook();
     this.globalStorageService.setItem(STORAGE_KEYS.SHORT_ID, room.shortId);
     this.role = role === viewRole ? UserRole.NONE : role;
-    console.log(this.role);
     this.getRoleIcon();
 
   }
