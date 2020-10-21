@@ -161,7 +161,12 @@ export class CommentSettingsComponent implements OnInit {
     commentExtension.set('enableModeration', this.enableModeration);
     commentExtension.set('enableTags', this.enableTags);
     commentExtension.set('tags', this.tags);
-    this.editRoom.extensions['comments'] = commentExtension;
+    if (!this.editRoom.extensions) {
+      this.editRoom.extensions = new TSMap<string, TSMap<string, any>>();
+      this.editRoom.extensions.set('comments', commentExtension);
+    } else {
+      this.editRoom.extensions['comments'] = commentExtension;
+    }
     this.globalStorageService.setItem(STORAGE_KEYS.MODERATION_ENABLED, String(this.enableModeration));
     this.saveChanges();
   }

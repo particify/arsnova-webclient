@@ -16,7 +16,7 @@
         {{ 'settings.add-tag' | translate }}</button>
     </div>
   </div>
-  <div *ngIf="tagsEnabled === true && tags !== undefined && tags.length > 0">
+  <div *ngIf="tags !== undefined && tags.length > 0">
     <div fxLayout="row" fxLayoutAlign="center center" *ngFor="let tag of tags">
       <p>
         {{tag}}
