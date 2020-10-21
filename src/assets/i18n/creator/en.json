@@ -353,6 +353,8 @@
     "threshold": "Threshold",
     "update": "Save",
     "update-description": "Save changes",
+    "answer": "Answer",
+    "tag": "Category",
     "question": "Question",
     "favorite": "Favorite",
     "presented": "Presented",

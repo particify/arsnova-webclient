@@ -8,13 +8,13 @@ import { CommentService } from '../../../../services/http/comment.service';
 import { BonusTokenService } from '../../../../services/http/bonus-token.service';
 import { CommentSettingsService } from '../../../../services/http/comment-settings.service';
 import { Room } from '../../../../models/room';
-import { CommentBonusTokenMixin } from '../../../../models/comment-bonus-token-mixin';
 import { CommentSettings } from '../../../../models/comment-settings';
 import { TSMap } from 'typescript-map';
 import { DialogService } from '../../../../services/util/dialog.service';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { GlobalStorageService, STORAGE_KEYS } from '../../../../services/util/global-storage.service';
 import { UpdateEvent } from '@arsnova/app/components/creator/settings/settings.component';
+import { Comment } from '@arsnova/app/models/comment';
 
 @Component({
   selector: 'app-comment-settings',
@@ -28,7 +28,6 @@ export class CommentSettingsComponent implements OnInit {
   @Input() editRoom: Room;
   @Input() roomId: string;
 
-  comments: CommentBonusTokenMixin[];
   commentExtension: any;
   threshold: number;
   enableThreshold = false;
@@ -103,55 +102,56 @@ export class CommentSettingsComponent implements OnInit {
     });
   }
 
-  export(delimiter: string): void {
+  getExportData(comments: Comment[], delimiter: string): string {
+    const exportComments = JSON.parse(JSON.stringify(comments));
+    let valueFields = '';
+    exportComments.forEach(element => {
+      console.log(element);
+      valueFields += this.filterNotSupportedCharacters(element['body']) + delimiter;
+      let time;
+      time = element['timestamp'];
+      valueFields += time.slice(0, 10) + '-' + time.slice(11, 16) + delimiter;
+      const answer = element['answer'];
+      valueFields += (answer ? this.filterNotSupportedCharacters(answer) : '') + delimiter;
+      valueFields += element['read'] + delimiter;
+      valueFields += element['favorite'] + delimiter;
+      valueFields += element['correct'] + delimiter;
+      valueFields += element['score'] + delimiter;
+      const tag = element['tag'];
+      valueFields += (tag ? this.filterNotSupportedCharacters(tag) : '')  + '\r\n';
+    });
+    return valueFields;
+  }
+
+  filterNotSupportedCharacters(text: string): string {
+    return '"' + text.replace(/[\r\n]/g, ' ').replace(/ +/g, ' ').replace(/"/g, '""') + '"';
+  }
+
+  export(): void {
     this.commentService.getAckComments(this.roomId)
       .subscribe(comments => {
-        this.bonusTokenService.getTokensByRoomId(this.roomId).subscribe(list => {
-          this.comments = comments.map(comment => {
-            const commentWithToken: CommentBonusTokenMixin = <CommentBonusTokenMixin>comment;
-            for (const bt of list) {
-              if (commentWithToken.creatorId === bt.userId && comment.id === bt.commentId) {
-                commentWithToken.bonusToken = bt.token;
-              }
-            }
-            return commentWithToken;
-          });
-          const exportComments = JSON.parse(JSON.stringify(this.comments));
           let csv: string;
-          let valueFields = '';
-          const fieldNames = ['settings.question', 'settings.timestamp', 'settings.presented',
-            'settings.favorite', 'settings.correct/wrong', 'settings.score'];
+          const fieldNames = ['settings.question', 'settings.timestamp', 'settings.answer', 'settings.presented',
+            'settings.favorite', 'settings.correct/wrong', 'settings.score', 'settings.tag'];
           let keyFields;
           this.translationService.get(fieldNames).subscribe(msgs => {
             keyFields = [msgs[fieldNames[0]], msgs[fieldNames[1]], msgs[fieldNames[2]], msgs[fieldNames[3]],
-              msgs[fieldNames[4]], msgs[fieldNames[5]], '\r\n'];
-            exportComments.forEach(element => {
-              element.body = '"' + element.body.replace(/[\r\n]/g, ' ').replace(/ +/g, ' ').replace(/"/g, '""') + '"';
-              valueFields += Object.values(element).slice(3, 4) + delimiter;
-              let time;
-              time = Object.values(element).slice(4, 5);
-              valueFields += time[0].slice(0, 10) + '-' + time[0].slice(11, 16) + delimiter;
-              valueFields += Object.values(element).slice(5, 6) + delimiter;
-              valueFields += Object.values(element).slice(6, 7) + delimiter;
-              valueFields += Object.values(element).slice(7, 8) + delimiter;
-              valueFields += Object.values(element).slice(9, 10) + '\r\n';
-            });
+              msgs[fieldNames[4]], msgs[fieldNames[5]], msgs[fieldNames[6]], msgs[fieldNames[7]], '\r\n'];
             const date = new Date();
             const dateString = date.toLocaleDateString();
-            csv = keyFields + valueFields;
+            csv = keyFields + this.getExportData(comments, ',');
             const myBlob = new Blob([csv], { type: 'text/csv' });
             const link = document.createElement('a');
             const fileName = this.editRoom.name + '_' + this.editRoom.shortId + '_' + dateString + '.csv';
             link.setAttribute('download', fileName);
             link.href = window.URL.createObjectURL(myBlob);
             link.click();
-          });
         });
       });
   }
 
   onExport(): void {
-    this.export(',');
+    this.export();
   }
 
   updateCommentSettings() {
