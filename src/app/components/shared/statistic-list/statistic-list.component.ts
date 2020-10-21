@@ -90,7 +90,7 @@ export class StatisticListComponent implements OnInit {
   public getContents() {
     this.isLoading = true;
     this.contentService.getContentsByIds(this.contentGroup.contentIds).subscribe(contents => {
-      this.getData(contents);
+      this.getData(this.contentService.getSupportedContents(contents));
     });
   }
 

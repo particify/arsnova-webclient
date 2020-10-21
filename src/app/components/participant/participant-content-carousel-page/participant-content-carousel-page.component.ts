@@ -75,11 +75,7 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
       this.roomService.getGroupByRoomIdAndName('~' + this.shortId, this.contentGroupName).subscribe(contentGroup => {
         this.contentGroup = contentGroup;
         this.contentService.getContentsByIds(this.contentGroup.contentIds).subscribe(contents => {
-          for (const content of contents) {
-            if (content.state.visible) {
-              this.contents.push(content);
-            }
-          }
+          this.contents = this.contentService.getSupportedContents(contents).filter(content => content.state.visible);
           this.checkIfLastContentExists(lastContentIndex);
           this.isLoading = false;
         });

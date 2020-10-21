@@ -93,28 +93,34 @@
                 <mat-panel-title class="panelTitle">
                   {{ labels[i] }}
                 </mat-panel-title>
-                <button mat-icon-button (keyup.enter)="toggleDirectAnswer(content)"
-                        attr.aria-label="{{ (content.state.responsesVisible ? 'content.a11y-dont-direct-show-answer' : 'content.a11y-direct-show-answer') | translate }}"
-                        (click)="toggleDirectAnswer(content);$event.stopPropagation()"
-                        matTooltip="{{(content.state.responsesVisible ? 'content.answer-hide' : 'content.answer-direct') | translate}}">
-                  <mat-icon class="lock-icon" [ngClass]="{'locked': !content.state.responsesVisible,
+                <div *ngIf="contentTypes.indexOf(content.format) > -1">
+                  <button mat-icon-button (keyup.enter)="toggleDirectAnswer(content)"
+                          attr.aria-label="{{ (content.state.responsesVisible ? 'content.a11y-dont-direct-show-answer' : 'content.a11y-direct-show-answer') | translate }}"
+                          (click)="toggleDirectAnswer(content);$event.stopPropagation()"
+                          matTooltip="{{(content.state.responsesVisible ? 'content.answer-hide' : 'content.answer-direct') | translate}}">
+                    <mat-icon class="lock-icon" [ngClass]="{'locked': !content.state.responsesVisible,
               'unlocked': content.state.responsesVisible}">{{content.state.responsesVisible? 'flash_on' : 'flash_off'}}
-                  </mat-icon>
+                    </mat-icon>
+                  </button>
+                  <button mat-icon-button (keyup.enter)="lockContent(content)"
+                          attr.aria-label="{{ (content.state.visible ? 'content.a11y-lock-question' : 'content.a11y-unlock-question') | translate }}"
+                          (click)="lockContent(content);$event.stopPropagation()"
+                          matTooltip="{{(content.state.visible ? 'content.lock-question' : 'content.unlock-question') | translate}}">
+                    <mat-icon class="lock-icon" [ngClass]="{'locked': !content.state.visible, 'unlocked': content.state.visible}">
+                      {{!content.state.visible? 'lock' : 'lock_open'}}
+                    </mat-icon>
+                  </button>
+                  <button mat-icon-button (keyup.enter)="menuTrigger.openMenu()" #menuTrigger="matMenuTrigger"
+                          [matMenuTriggerFor]="moreActions" (click)="$event.stopPropagation()" aria-labelledby="more"
+                          class="moreButton" matTooltip="{{ 'content.more-options' | translate}}">
+                    <mat-icon>more_vert</mat-icon>
+                  </button>
+                </div>
+                <button *ngIf="contentTypes.indexOf(content.format) === -1" class="not-supported" mat-icon-button
+                        #warning="matTooltip" matTooltip="{{ 'content.format-not-supported' | translate }}"
+                        (click)="warning.toggle();$event.stopPropagation()">
+                  <mat-icon class="warn-icon">warning</mat-icon>
                 </button>
-                <button mat-icon-button (keyup.enter)="lockContent(content)"
-                        attr.aria-label="{{ (content.state.visible ? 'content.a11y-lock-question' : 'content.a11y-unlock-question') | translate }}"
-                        (click)="lockContent(content);$event.stopPropagation()"
-                        matTooltip="{{(content.state.visible ? 'content.lock-question' : 'content.unlock-question') | translate}}">
-                  <mat-icon class="lock-icon" [ngClass]="{'locked': !content.state.visible, 'unlocked': content.state.visible}">
-                    {{!content.state.visible? 'lock' : 'lock_open'}}
-                  </mat-icon>
-                </button>
-                <button mat-icon-button (keyup.enter)="menuTrigger.openMenu()" #menuTrigger="matMenuTrigger"
-                        [matMenuTriggerFor]="moreActions" (click)="$event.stopPropagation()" aria-labelledby="more"
-                        class="moreButton" matTooltip="{{ 'content.more-options' | translate}}">
-                  <mat-icon>more_vert</mat-icon>
-                </button>
-
                 <mat-menu #moreActions="matMenu" xPosition="before">
                   <button mat-menu-item (click)="editContent(content)" attr.aria-label="{{ 'content.a11y-edit-content' | translate }}">
                     <mat-icon>edit</mat-icon>

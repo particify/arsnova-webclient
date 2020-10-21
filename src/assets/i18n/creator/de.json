@@ -240,7 +240,8 @@
     "format-text-description": "Die Teilnehmenden können mit einer Texteingabe auf die Frage antworten.",
     "format-slide-description": "Folien dienen zur Darstellung von Informationen.",
     "multiple-answers-allowed": "Mehrfachauswahl für Antworten erlauben",
-    "no-correct-answer": "Keine richtigen Antworten festlegen"
+    "no-correct-answer": "Keine richtigen Antworten festlegen",
+    "format-not-supported": "Dieses Format wird derzeit nicht unterstützt."
   },
   "survey": {
     "a11y-message": "Du befindest dich jetzt bei der Live-Umfrage. Drücke die Enter-Taste, um Informationen zu Tastenkombinationen zu erhalten oder rufe die Ansage später mit der Escape-Taste auf.",

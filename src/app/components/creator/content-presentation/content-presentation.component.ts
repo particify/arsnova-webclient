@@ -50,7 +50,7 @@ export class ContentPresentationComponent implements OnInit {
         this.globalStorageService.setItem(STORAGE_KEYS.LAST_GROUP, this.contentGroupName);
         this.roomService.getGroupByRoomIdAndName(room.id, this.contentGroupName).subscribe(group => {
           this.contentService.getContentsByIds(group.contentIds).subscribe(contents => {
-            this.contents = contents;
+            this.contents = this.contentService.getSupportedContents(contents);
             this.isLoading = false;
             if (this.contentIndex) {
               setTimeout(() => {
