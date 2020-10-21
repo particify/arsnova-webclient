@@ -7,8 +7,6 @@ import { ApiConfigService } from './services/http/api-config.service';
 import { TrackingService } from './services/util/tracking.service';
 import { DialogService } from './services/util/dialog.service';
 import { GlobalStorageService, STORAGE_KEYS } from './services/util/global-storage.service';
-import { NavigationEnd, Router } from '@angular/router';
-import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-root',
@@ -25,8 +23,7 @@ export class AppComponent implements OnInit {
               private trackingService: TrackingService,
               private dialogService: DialogService,
               private globalStorageService: GlobalStorageService,
-              private window: Window,
-              private router: Router) {
+              private window: Window) {
     translationService.setDefaultLang(this.translationService.getBrowserLang());
     customIconService.init();
   }
@@ -36,9 +33,8 @@ export class AppComponent implements OnInit {
   ngOnInit(): void {
     this.apiConfigService.load();
     this.apiConfigService.getApiConfig$().subscribe(config => {
-      const tracking = config.ui.tracking;
-      if (tracking.url && tracking.provider === 'matomo') {
-        this.trackingService.init(tracking);
+      if (config.ui.tracking.url && config.ui.tracking.provider === 'matomo') {
+        this.trackingService.init(config.ui);
       }
     });
     if (this.globalStorageService.getItem(STORAGE_KEYS.UPDATED)) {
@@ -53,9 +49,6 @@ export class AppComponent implements OnInit {
         this.globalStorageService.setItem(STORAGE_KEYS.UPDATED, true);
         this.window.location.reload();
       });
-    });
-    this.router.events.pipe(filter(event => (event instanceof NavigationEnd))).subscribe((routingData: NavigationEnd) => {
-      this.trackingService.addRoute(routingData.url, routingData.id.toString());
     });
   }
 }
