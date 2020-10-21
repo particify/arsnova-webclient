@@ -8,6 +8,7 @@ import { FormControl, Validators } from '@angular/forms';
 import { Room } from '../../../../models/room';
 import { RoomService } from '../../../../services/http/room.service';
 import { UpdateEvent } from '@arsnova/app/components/creator/settings/settings.component';
+import { TSMap } from 'typescript-map';
 
 @Component({
   selector: 'app-tags',
@@ -20,9 +21,8 @@ export class TagsComponent implements OnInit {
 
   @Input() room: Room;
 
-  extension: {};
-  tags: string[];
-  tagsEnabled: boolean;
+  extension: TSMap<string, any>;
+  tags: string[] = [];
   tagName = '';
 
   tagFormControl = new FormControl('', [Validators.minLength(3), Validators.maxLength(15)]);
@@ -41,26 +41,25 @@ export class TagsComponent implements OnInit {
       this.extension = this.room.extensions['tags'];
     }
     if (!this.extension) {
-      this.extension = {};
-      this.extension['enableTags'] = true;
-      this.tags = [];
-      this.tagsEnabled = true;
+      this.extension = new TSMap<string, any>();
+      this.extension.set('enableTags', true);
+      this.room.extensions = new TSMap<string, TSMap<string, any>>();
+      this.room.extensions.set('tags', this.extension);
     } else {
       if (this.extension['tags']) {
         this.tags = this.extension['tags'];
-      } else {
-        this.tags = [];
       }
-      this.tagsEnabled = this.extension['enableTags'];
     }
   }
 
   addTag() {
     if (this.tagFormControl.valid) {
       this.tags.push(this.tagName);
-      this.extension['tags'] = this.tags;
       this.tagName = '';
-      this.room.extensions['tags'] = this.extension;
+      const tagExtension = new TSMap<string, any>();
+      tagExtension.set('enableTags', true);
+      tagExtension.set('tags', this.tags);
+      this.room.extensions['tags'] = tagExtension;
       this.saveChanges(true);
     }
   }
@@ -72,13 +71,9 @@ export class TagsComponent implements OnInit {
   }
 
   saveChanges(added: boolean) {
-    this.roomService.updateRoom(this.room)
-      .subscribe((room) => {
-        this.room = room;
-        this.saveEvent.emit(new UpdateEvent(this.room, false));
-        this.translationService.get(added ? 'settings.tag-added' : 'settings.tag-removed').subscribe(msg => {
-          this.notificationService.showAdvanced(msg, added ? AdvancedSnackBarTypes.SUCCESS : AdvancedSnackBarTypes.WARNING);
-        });
-      });
+    this.saveEvent.emit(new UpdateEvent(this.room, false));
+    this.translationService.get(added ? 'settings.tag-added' : 'settings.tag-removed').subscribe(msg => {
+      this.notificationService.showAdvanced(msg, added ? AdvancedSnackBarTypes.SUCCESS : AdvancedSnackBarTypes.WARNING);
+    });
   }
 }
