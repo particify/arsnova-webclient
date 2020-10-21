@@ -32,7 +32,6 @@ import { QRCodeModule } from 'angularx-qrcode';
 import { LoadingIndicatorComponent } from './loading-indicator/loading-indicator.component';
 import { YesNoDialogComponent } from './_dialogs/yes-no-dialog/yes-no-dialog.component';
 import { InfoDialogComponent } from './_dialogs/info-dialog/info-dialog.component';
-import { CommentExportComponent } from './_dialogs/comment-export/comment-export.component';
 import { RoomNotFoundComponent } from './room-not-found/room-not-found.component';
 import { StepperComponent } from './stepper/stepper.component';
 import { CdkStepperModule } from '@angular/cdk/stepper';
@@ -81,7 +80,6 @@ import { HintComponent } from './hint/hint.component';
     LoadingIndicatorComponent,
     YesNoDialogComponent,
     InfoDialogComponent,
-    CommentExportComponent,
     RoomNotFoundComponent,
     DateFromNow,
     StepperComponent,
@@ -108,7 +106,6 @@ import { HintComponent } from './hint/hint.component';
     DialogActionButtonsComponent,
     UserBonusTokenComponent,
     LoadingIndicatorComponent,
-    CommentExportComponent,
     RoomNotFoundComponent,
     StepperComponent,
     StatisticChoiceComponent,
