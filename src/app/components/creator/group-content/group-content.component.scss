@@ -176,3 +176,9 @@
 .content-list.cdk-drop-list-dragging .content-box:not(.cdk-drag-placeholder) {
   transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
 }
+
+.not-supported {
+  // 47px = additional padding of 'more'-button
+  margin-right: 7px;
+  cursor: initial;
+}

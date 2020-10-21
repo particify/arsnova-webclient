@@ -11,6 +11,7 @@ import { WsConnectorService } from '../websockets/ws-connector.service';
 import { IMessage } from '@stomp/stompjs';
 import { TranslateService } from '@ngx-translate/core';
 import { NotificationService } from '../util/notification.service';
+import { ContentType } from '@arsnova/app/models/content-type.enum';
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -150,5 +151,9 @@ export class ContentService extends BaseHttpService {
       tap(() => ''),
       catchError(this.handleError<Content[]>(`findContentsWithoutGroup roomId=${roomId}`))
     );
+  }
+
+  getSupportedContents(contents: Content[]) {
+    return contents.filter(content => Object.values(ContentType).indexOf(content.format) > -1);
   }
 }

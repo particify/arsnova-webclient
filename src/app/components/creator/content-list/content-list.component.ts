@@ -27,6 +27,7 @@ import { AnnounceService } from '../../../services/util/announce.service';
 export class ContentListComponent implements OnInit {
 
   protected contents: Content[];
+  contentTypes: string[] = Object.values(ContentType);
   room: Room;
   isLoading = true;
   labelMaxLength: number;
