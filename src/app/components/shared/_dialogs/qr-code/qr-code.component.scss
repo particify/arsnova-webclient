@@ -7,12 +7,24 @@ ars-screen {
     display: flex;
     flex-direction: column;
   }
+
+  .url {
+    margin-bottom: 5%;
+  }
+
+  .text {
+    margin-bottom: 0;
+  }
 }
 
 @media(min-width: 1200px){
   .qr-container {
     display: flex;
     flex-direction: row;
+  }
+
+  .url {
+    margin: 10% 0;
   }
 }
 
@@ -31,7 +43,6 @@ ars-screen {
 }
 
 .text {
-  margin-bottom: 0;
   color: var(--on-surface);
 }
 
@@ -50,5 +61,4 @@ $icon-size: calc(32px + 6vw);
 
 .url {
   font-size: $font-size;
-  margin: 10% 0;
 }
