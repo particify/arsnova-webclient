@@ -28,6 +28,7 @@ export class RoutingService {
     user: '/user',
     room: '/room/'
   };
+  moderator = 'moderator';
   currentRoute: string;
   backRoute: string;
 
@@ -60,6 +61,9 @@ export class RoutingService {
     } else if (this.routeExistsInArray(this.loginChildRoutes)) {
       backRoute = this.parentRoute.login;
     } else if (this.routeExistsInArray(this.roomChildRoutes)) {
+      if (role.includes(this.moderator)) {
+        role = this.moderator;
+      }
       backRoute = role + this.parentRoute.room + shortId;
     }
     this.backRoute = backRoute;
