@@ -414,6 +414,7 @@
     "percentage": "Percentage",
     "answer-indicator": "Shows the correct answers",
     "show-chart": "Shows statistics with a chart",
+    "show-answers": "Show answers",
     "hide-chart": "Hide chart",
     "no-contents": "There are no questions.",
     "select-content-group": "Select collection"

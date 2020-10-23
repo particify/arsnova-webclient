@@ -165,6 +165,7 @@
     "percentage": "Percentage",
     "answer-indicator": "Shows the correct answers",
     "show-chart": "Shows statistics with a chart",
+    "show-answers": "Show answers",
     "hide-chart": "Hide chart"
   }
 }
