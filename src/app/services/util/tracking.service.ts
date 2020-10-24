@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
-import { NavigationEnd, Router } from '@angular/router';
+import { ActivatedRouteSnapshot, ActivationEnd, NavigationEnd, Router } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { ConsentService } from './consent.service';
 import { StorageItemCategory } from '../../models/storage';
 import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
 import { ThemeService } from '../../../theme/theme.service';
+import { UserRole } from '../../models/user-roles.enum';
 
 const HEARTBEAT_INVERVAL = 60;
 
@@ -63,9 +64,8 @@ export class TrackingService {
         this.loadTrackerScript();
       }
     });
-    this.router.events.pipe(filter(event => (event instanceof NavigationEnd))).subscribe((event: NavigationEnd) => {
-      this.addRoute(event.url);
-    });
+    this.router.events.pipe(filter(event => (event instanceof ActivationEnd && !!event.snapshot.component)))
+        .subscribe((event: ActivationEnd) => this.addRoute(this.router.url, event.snapshot));
     this.translateService.onLangChange
         .subscribe((event: LangChangeEvent) => this.setVisitDimension(VisitDimension.UI_LANGUAGE, event.lang));
     this.themeService.getTheme().subscribe((themeName) => this.setVisitDimension(VisitDimension.THEME, themeName));
@@ -91,17 +91,18 @@ export class TrackingService {
     this._paq.push(['setCustomDimension', dimension, value]);
   }
 
-  addRoute(uri: string) {
+  addRoute(uri: string, route?: ActivatedRouteSnapshot) {
     const titleMatches = document.title.match(/^(.+?)( [|–•].*)?$/);
     const title = titleMatches ? titleMatches[1] : '';
     const dimensions = {};
-    const paramMatches = uri.match(/\/([a-z]+)\/room\/([0-9]+)/);
-    if (paramMatches) {
-      const shortId = paramMatches[2];
-      const role = paramMatches[1];
-      dimensions['dimension' + ActionDimension.ROOM_ROLE] = role;
-      if (shortId === this.uiConfig.demo) {
-        dimensions['dimension' + ActionDimension.SPECIAL_ROOM] = 'Demo';
+    if (route) {
+      const shortId = route.paramMap.get('shortId');
+      const role: UserRole = route.data.viewRole;
+      if (role) {
+        dimensions['dimension' + ActionDimension.ROOM_ROLE] = role.toString().toLowerCase();
+        if (shortId === this.uiConfig.demo) {
+          dimensions['dimension' + ActionDimension.SPECIAL_ROOM] = 'Demo';
+        }
       }
     }
     this._paq.push(['setCustomUrl', this.stripIdsFromUri(uri)]);
