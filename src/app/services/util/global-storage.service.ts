@@ -17,7 +17,6 @@ export const STORAGE_KEYS: { [key: string]: symbol } = {
   ROOM_ID: Symbol(),
   SHORT_ID: Symbol(),
   DEVICE_TYPE: Symbol(),
-  IS_SAFARI: Symbol(),
   MODERATION_ENABLED: Symbol(),
   CONTENT_GROUPS: Symbol(),
   LAST_GROUP: Symbol(),
@@ -66,12 +65,6 @@ export const STORAGE_CONFIG: StorageItem[] = [
   {
     key: STORAGE_KEYS.DEVICE_TYPE,
     name: 'DEVICE_TYPE',
-    category: StorageItemCategory.REQUIRED,
-    backend: StorageBackend.MEMORY
-  },
-  {
-    key: STORAGE_KEYS.IS_SAFARI,
-    name: 'IS_SAFARI',
     category: StorageItemCategory.REQUIRED,
     backend: StorageBackend.MEMORY
   },
@@ -169,25 +162,11 @@ export class GlobalStorageService {
 
     // Memory setup
     const userAgent = navigator.userAgent;
-    let isSafari = false;
     let deviceType = 'desktop';
     // Check if mobile device
     if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(userAgent)) {
-      // Check if IOS device
-      if (/iPhone|iPad|iPod/.test(userAgent)) {
-        isSafari = true;
-      }
       deviceType = 'mobile';
-    } else {
-      // Check if Mac
-      if (/Macintosh|MacIntel|MacPPC|Mac68k/.test(userAgent)) {
-        // Check if Safari browser
-        if (userAgent.indexOf('Safari') !== -1 && userAgent.indexOf('Chrome') === -1) {
-          isSafari = true;
-        }
-      }
     }
-    this.setItem(STORAGE_KEYS.IS_SAFARI, isSafari);
     this.setItem(STORAGE_KEYS.DEVICE_TYPE, deviceType);
   }
 
