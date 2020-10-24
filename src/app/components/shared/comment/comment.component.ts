@@ -48,6 +48,7 @@ export class CommentComponent implements OnInit {
   viewRole: UserRole;
   isParticipant = false;
   isCreator = false;
+  isModeratorView = false;
   isModerator = false;
   hasVoted = 0;
   currentVote: string;
@@ -81,6 +82,9 @@ export class CommentComponent implements OnInit {
 
   ngOnInit() {
     this.route.data.subscribe(data => {
+      if (this.router.url.includes('/moderator/comments')) {
+        this.isModeratorView = true;
+      }
       this.viewRole = data.viewRole;
       switch (this.viewRole) {
         case UserRole.PARTICIPANT:
