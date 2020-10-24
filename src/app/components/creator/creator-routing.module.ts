@@ -68,7 +68,10 @@ const routes: Routes = [
       },
       {
         path: 'survey',
-        component: SurveyPageComponent
+        component: SurveyPageComponent,
+        resolve: {
+          room: RoomResolver
+        }
       },
       {
         path: 'group/:contentGroup',
