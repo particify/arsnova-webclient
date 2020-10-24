@@ -50,7 +50,6 @@ export class StatisticChoiceComponent implements OnInit, OnDestroy {
   green: string;
   grey: string;
   blue: string;
-  noAnswers = (currentValue) => currentValue === 0;
 
   constructor(protected route: ActivatedRoute,
               private contentService: ContentService,
