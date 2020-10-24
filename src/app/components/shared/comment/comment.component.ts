@@ -44,6 +44,7 @@ export class DateFromNow implements PipeTransform {
 
 export class CommentComponent implements OnInit {
   @Input() comment: Comment;
+  @Input() isNew: boolean;
   @Output() clickedOnTag = new EventEmitter<string>();
   viewRole: UserRole;
   isParticipant = false;

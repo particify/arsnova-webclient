@@ -5,7 +5,7 @@
          (input)="searchComments()" [(ngModel)]="searchInput" [placeholder]="searchPlaceholder"
          aria-labelledby="search-box-input-description">
   <button id="search-close-button" mat-icon-button *ngIf="searchInput !== '' || search" class="close-btn"
-          (click)="hideCommentsList=false; searchInput = ''; search = false; searchPlaceholder = '';"
+          (click)="hideCommentsList=false; searchInput = ''; search = false; searchPlaceholder = ''; getDisplayComments()"
           aria-labelledby="close_search">
     <mat-icon>close</mat-icon>
   </button>
@@ -137,8 +137,8 @@
 </div>
 
 <div class="comments-container" *ngIf="!isLoading">
-  <app-comment *ngFor="let current of hideCommentsList ? filteredComments : comments" [comment]="current"
-               [parseVote]="getVote(current)" (clickedOnTag)="clickedOnTag($event)">
+  <app-comment *ngFor="let current of displayComments" [comment]="current"
+               [parseVote]="getVote(current)" (clickedOnTag)="clickedOnTag($event)" [isNew]="current.id === newestComment.id">
   </app-comment>
 </div>
 
@@ -164,5 +164,5 @@
   <div id="pause">{{'comment-list.a11y-pause' | translate}}</div>
   <div id="play">{{'comment-list.a11y-play' | translate}}</div>
   <div id="close_search">{{'comment-list.a11y-close-search' | translate}}</div>
-  <div id="new-comment">{{ 'comment-page.new-comment' | translate:{comment: newestComment} }}</div>
+  <div id="new-comment">{{ 'comment-page.new-comment' | translate:{comment: newestComment.body} }}</div>
 </div>
