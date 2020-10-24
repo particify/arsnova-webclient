@@ -139,7 +139,7 @@
 
 <div class="comments-container" *ngIf="!isLoading">
   <app-comment *ngFor="let current of displayComments" [comment]="current"
-               [parseVote]="getVote(current)" (clickedOnTag)="clickedOnTag($event)">
+               [parseVote]="getVote(current)" (clickedOnTag)="clickedOnTag($event)" [isNew]="current.id === newestComment.id">
   </app-comment>
 </div>
 
@@ -165,5 +165,5 @@
   <div id="pause">{{'comment-list.a11y-pause' | translate}}</div>
   <div id="play">{{'comment-list.a11y-play' | translate}}</div>
   <div id="close_search">{{'comment-list.a11y-close-search' | translate}}</div>
-  <div id="new-comment">{{ 'comment-page.new-comment' | translate:{comment: newestComment} }}</div>
+  <div id="new-comment">{{ 'comment-page.new-comment' | translate:{comment: newestComment.body} }}</div>
 </div>

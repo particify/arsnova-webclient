@@ -74,7 +74,7 @@ export class CommentListComponent implements OnInit, OnDestroy {
   moderationEnabled = false;
   directSend = true;
   thresholdEnabled = false;
-  newestComment: string;
+  newestComment: Comment = new Comment();
   freeze = false;
   commentStream: Subscription;
   displayComments: Comment[] = [];
@@ -240,7 +240,7 @@ export class CommentListComponent implements OnInit, OnDestroy {
         c.timestamp = payload.timestamp;
         c.tag = payload.tag;
 
-        this.announceNewComment(c.body);
+        this.announceNewComment(c);
 
         this.comments = this.comments.concat(c);
         break;
@@ -441,7 +441,7 @@ export class CommentListComponent implements OnInit, OnDestroy {
   /**
    * Announces a new comment receive.
    */
-  public announceNewComment(comment: string) {
+  public announceNewComment(comment: Comment) {
     this.newestComment = comment;
     setTimeout(() => {
       const newCommentText: string = document.getElementById('new-comment').innerText;

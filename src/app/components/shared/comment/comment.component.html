@@ -1,5 +1,5 @@
 <mat-card id="comment-card" [ngClass]="{'highlighted': comment.highlighted, '': !comment.highlighted}"
-          [@slide]="slideAnimationState" (@slide.done)="changeSlideState()">
+          [@slide]="isNew ? slideAnimationState : null" (@slide.done)="changeSlideState()">
   <div id="comment-describer" tabindex="0" class="visually-hidden">{{ 'comment-page.comment' | translate: {
     time: (language === 'de' ? (comment.timestamp | date: ' HH:mm ') : (comment.timestamp | date: 'h:mm a')),
     votes: comment.score === 1 ? ('comment-page.a11y-text-textForOneVote' | translate) : comment.score + ('comment-page.a11y-text-textForVotes' | translate),
