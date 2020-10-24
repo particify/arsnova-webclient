@@ -6,6 +6,6 @@
 export const environment = {
   name: 'dev',
   production: false,
-  stomp_debug: true,
+  stomp_debug: false,
   debugOverrideRoomRole: false
 };
