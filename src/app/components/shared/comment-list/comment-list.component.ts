@@ -39,6 +39,8 @@ enum Filter {
   ANSWER = 'answer'
 }
 
+export const itemRenderNumber = 20;
+
 @Component({
   selector: 'app-comment-list',
   templateUrl: './comment-list.component.html',
@@ -75,6 +77,8 @@ export class CommentListComponent implements OnInit, OnDestroy {
   newestComment: string;
   freeze = false;
   commentStream: Subscription;
+  displayComments: Comment[] = [];
+  commentCounter = itemRenderNumber;
 
   constructor(
     private commentService: CommentService,
@@ -157,6 +161,13 @@ export class CommentListComponent implements OnInit, OnDestroy {
     const currentScroll = document.documentElement.scrollTop;
     this.scroll = currentScroll >= this.scrollMax;
     this.scrollExtended = currentScroll >= this.scrollExtendedMax;
+    const length = this.hideCommentsList ? this.filteredComments.length : this.comments.length;
+    if (this.displayComments.length !== length) {
+      if (((window.innerHeight * 2) + window.scrollY) >= document.body.scrollHeight) {
+        this.commentCounter += itemRenderNumber / 2;
+        this.getDisplayComments();
+      }
+    }
   }
 
   scrollTop() {
@@ -172,6 +183,7 @@ export class CommentListComponent implements OnInit, OnDestroy {
     } else if (this.searchInput.length === 0 && this.currentFilter === '') {
       this.hideCommentsList = false;
     }
+    this.getDisplayComments();
   }
 
   activateSearch() {
@@ -201,7 +213,13 @@ export class CommentListComponent implements OnInit, OnDestroy {
     }
     this.filterComments(this.currentFilter);
     this.sortComments(this.currentSort);
+    this.getDisplayComments();
     this.isLoading = false;
+  }
+
+  getDisplayComments() {
+    const commentList = this.hideCommentsList ? this.filteredComments : this.comments;
+    this.displayComments = commentList.slice(0, Math.min(this.commentCounter, this.comments.length));
   }
 
   getVote(comment: Comment): Vote {
@@ -380,6 +398,9 @@ export class CommentListComponent implements OnInit, OnDestroy {
     }
     this.currentSort = type;
     this.globalStorageService.setItem(STORAGE_KEYS.COMMENT_SORT, this.currentSort);
+    this.commentCounter = itemRenderNumber;
+    this.getDisplayComments();
+    this.scrollTop();
   }
 
   clickedOnTag(tag: string): void {

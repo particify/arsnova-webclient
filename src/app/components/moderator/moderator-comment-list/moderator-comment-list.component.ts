@@ -15,6 +15,8 @@ import { EventService } from '../../../services/util/event.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { GlobalStorageService, STORAGE_KEYS } from '../../../services/util/global-storage.service';
 
+export const itemRenderNumber = 20;
+
 @Component({
   selector: 'app-moderator-comment-list',
   templateUrl: './moderator-comment-list.component.html',
@@ -50,6 +52,8 @@ export class ModeratorCommentListComponent implements OnInit {
   searchInput = '';
   search = false;
   searchPlaceholder = '';
+  displayComments: Comment[] = [];
+  commentCounter = itemRenderNumber;
 
   constructor(
     private route: ActivatedRoute,
@@ -84,8 +88,8 @@ export class ModeratorCommentListComponent implements OnInit {
     this.commentService.getRejectedComments(this.roomId)
       .subscribe(comments => {
         this.comments = comments;
-        this.isLoading = false;
         this.sortComments(this.currentSort);
+        this.isLoading = false;
       });
     this.translateService.get('comment-list.search').subscribe(msg => {
       this.searchPlaceholder = msg;
@@ -102,6 +106,13 @@ export class ModeratorCommentListComponent implements OnInit {
     const currentScroll = document.documentElement.scrollTop;
     this.scroll = currentScroll >= this.scrollMax;
     this.scrollExtended = currentScroll >= this.scrollExtendedMax;
+    const length = this.hideCommentsList ? this.filteredComments.length : this.comments.length;
+    if (this.displayComments.length !== length) {
+      if (((window.innerHeight * 2) + window.scrollY) >= document.body.scrollHeight) {
+        this.commentCounter += itemRenderNumber / 2;
+        this.getDisplayComments();
+      }
+    }
   }
 
   scrollTop() {
@@ -135,6 +146,11 @@ export class ModeratorCommentListComponent implements OnInit {
       }
     }
     this.sortComments(this.currentSort);
+  }
+
+  getDisplayComments() {
+    const commentList = this.hideCommentsList ? this.filteredComments : this.comments;
+    this.displayComments = commentList.slice(0, Math.min(this.commentCounter, this.comments.length));
   }
 
   getVote(comment: Comment): Vote {
@@ -262,6 +278,7 @@ export class ModeratorCommentListComponent implements OnInit {
       this.sort(this.comments, type);
     }
     this.currentSort = type;
+    this.getDisplayComments();
   }
 
   switchToCommentList(): void {
