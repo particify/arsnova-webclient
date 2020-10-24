@@ -1,6 +1,5 @@
 <h3 tabindex="0" id="preview-header" aria-labelledby="header">{{ 'content.preview' | translate }}</h3>
 <mat-card class="mat-elevation-z2">
-  <p *ngIf="content.subject !== 'Subject'">{{ content.subject }}</p>
   <app-loading-indicator [size]="80" *ngIf="isLoading"></app-loading-indicator>
   <app-rendered-text [rawText]="content.body" [dynamic]="true" [markdownFeatureset]="markdownFeatureset" (rendered)="renderingFinished()">
   </app-rendered-text>
