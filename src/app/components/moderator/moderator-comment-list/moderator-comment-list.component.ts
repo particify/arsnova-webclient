@@ -29,7 +29,6 @@ export class ModeratorCommentListComponent implements OnInit {
   filteredComments: Comment[];
   viewRole: UserRole;
   deviceType: string;
-  isSafari: boolean;
   isLoading = true;
   voteasc = 'voteasc';
   votedesc = 'votedesc';
@@ -79,7 +78,6 @@ export class ModeratorCommentListComponent implements OnInit {
     });
     this.translateService.use(this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE));
     this.deviceType = this.globalStorageService.getItem(STORAGE_KEYS.DEVICE_TYPE);
-    this.isSafari = this.globalStorageService.getItem(STORAGE_KEYS.IS_SAFARI);
     this.currentSort = this.votedesc;
     this.commentService.getRejectedComments(this.roomId)
       .subscribe(comments => {

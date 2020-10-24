@@ -29,7 +29,6 @@ export class HeaderComponent implements OnInit {
   cTime: string;
   shortId: string;
   deviceType: string;
-  isSafari = 'false';
   moderationEnabled: boolean;
   isGuest = true;
   isAdmin = false;
@@ -63,7 +62,6 @@ export class HeaderComponent implements OnInit {
     private routingService: RoutingService
   ) {
     this.deviceType = this.globalStorageService.getItem(STORAGE_KEYS.DEVICE_TYPE);
-    this.isSafari = this.globalStorageService.getItem(STORAGE_KEYS.IS_SAFARI);
     // LocalStorage setup
     this.translationService.setDefaultLang('en');
     if (!this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE)) {
