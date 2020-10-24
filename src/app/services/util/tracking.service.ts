@@ -4,6 +4,7 @@ import { filter } from 'rxjs/operators';
 import { ConsentService } from './consent.service';
 import { StorageItemCategory } from '../../models/storage';
 import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
+import { EventService } from './event.service';
 import { ThemeService } from '../../../theme/theme.service';
 import { UserRole } from '../../models/user-roles.enum';
 
@@ -21,6 +22,12 @@ enum ActionDimension {
   SPECIAL_ROOM = 4
 }
 
+enum EventCategory {
+  ACCOUNT = 'Account',
+  USER_DATA_ROOM = 'User data - Room',
+  FEATURE_USAGE_SURVEY = 'Feature usage - Survey'
+}
+
 @Injectable()
 export class TrackingService {
 
@@ -32,6 +39,7 @@ export class TrackingService {
   constructor(
     private consentService: ConsentService,
     private router: Router,
+    private eventService: EventService,
     private translateService: TranslateService,
     private themeService: ThemeService
   ) {
@@ -70,6 +78,7 @@ export class TrackingService {
         .subscribe((event: LangChangeEvent) => this.setVisitDimension(VisitDimension.UI_LANGUAGE, event.lang));
     this.themeService.getTheme().subscribe((themeName) => this.setVisitDimension(VisitDimension.THEME, themeName));
     this.setVisitDimension(VisitDimension.UI_LANGUAGE, this.translateService.currentLang);
+    this.setupTrackingSubscriptions();
   }
 
   loadTrackerScript() {
@@ -85,6 +94,15 @@ export class TrackingService {
     document.body.appendChild(trackerScript);
 
     this.loaded = true;
+  }
+
+  setupTrackingSubscriptions() {
+    this.eventService.on<any>('AccountCreated')
+        .subscribe(e => this.addEvent(EventCategory.ACCOUNT, 'Account created'));
+    this.eventService.on<any>('RoomCreated')
+        .subscribe(e => this.addEvent(EventCategory.USER_DATA_ROOM, 'Room created'));
+    this.eventService.on<any>('SurveyStarted')
+        .subscribe(e => this.addEvent(EventCategory.FEATURE_USAGE_SURVEY, 'Survey started'));
   }
 
   setVisitDimension(dimension: VisitDimension, value: string) {
@@ -107,6 +125,10 @@ export class TrackingService {
     }
     this._paq.push(['setCustomUrl', this.stripIdsFromUri(uri)]);
     this._paq.push(['trackPageView', title, dimensions]);
+  }
+
+  addEvent(category: EventCategory, action: string) {
+    this._paq.push(['trackEvent', category, action]);
   }
 
   /**
