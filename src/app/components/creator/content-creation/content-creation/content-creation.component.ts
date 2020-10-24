@@ -77,7 +77,6 @@ export class ContentCreationComponent implements OnInit, OnDestroy {
   prepareContent() {
     this.content.roomId = this.roomId;
     this.content.body = this.contentBody;
-    this.content.subject = 'Subject';
     if (this.contentBody === '') {
       this.translationService.get('content.no-empty').subscribe(message => {
         this.notificationService.showAdvanced(message, AdvancedSnackBarTypes.WARNING);
