@@ -26,7 +26,7 @@
             [matMenuTriggerFor]="sortMenu" matTooltip="{{ 'comment-list.sort-comments' | translate }}">
       <mat-icon>swap_vert</mat-icon>
     </button>
-    <button id="switch-button" mat-icon-button class="bar-icon" aria-labelledby="switch-list"
+    <button id="switch-button" mat-mini-fab class="bar-icon" aria-labelledby="switch-list"
             (click)="switchToCommentList()" *ngIf="!searchBox.value && comments && comments.length > 0 && !search"
             matTooltip="{{ 'comment-list.switch-to-comment-list' | translate }}">
       <mat-icon>playlist_add_check</mat-icon>
