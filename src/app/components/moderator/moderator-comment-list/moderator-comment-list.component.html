@@ -5,7 +5,7 @@
          (input)="searchComments()" [(ngModel)]="searchInput" [placeholder]="searchPlaceholder"
          aria-labelledby="search-box-input-description">
   <button id="search-close-button" mat-icon-button *ngIf="searchInput !== '' || search" class="close-btn"
-          (click)="hideCommentsList=false; searchInput = ''; search = false; searchPlaceholder = '';"
+          (click)="hideCommentsList=false; searchInput = ''; search = false; searchPlaceholder = ''; getDisplayComments()"
           aria-labelledby="close_search">
     <mat-icon>close</mat-icon>
   </button>
