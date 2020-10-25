@@ -60,17 +60,17 @@
 
   <mat-menu #sortMenu="matMenu" xPosition="before">
 
-    <button mat-menu-item (click)="sortComments(sorting.TIME)" aria-labelledby="sort-time">
+    <button mat-menu-item (click)="sortComments(sorting.TIME, true)" aria-labelledby="sort-time">
       <mat-icon [ngClass]="{time: 'unread-icon'}[currentSort]">access_time</mat-icon>
       <span>{{ 'comment-list.sort-list-time' | translate }}</span>
     </button>
 
-    <button mat-menu-item (click)="sortComments(sorting.VOTEDESC)" aria-labelledby="sort-up">
+    <button mat-menu-item (click)="sortComments(sorting.VOTEDESC, true)" aria-labelledby="sort-up">
       <mat-icon [ngClass]="{votedesc: 'up'}[currentSort]">keyboard_arrow_up</mat-icon>
       <span>{{ 'comment-list.sort-vote-asc' | translate }}</span>
     </button>
 
-    <button mat-menu-item (click)="sortComments(sorting.VOTEASC)" aria-labelledby="sort-down">
+    <button mat-menu-item (click)="sortComments(sorting.VOTEASC, true)" aria-labelledby="sort-down">
       <mat-icon [ngClass]="{voteasc: 'down'}[currentSort]">keyboard_arrow_down</mat-icon>
       <span>{{ 'comment-list.sort-vote-desc' | translate }}</span>
     </button>
@@ -106,7 +106,7 @@
         <span>{{ 'comment-list.filter-answered' | translate }}</span>
       </button>
 
-      <button mat-menu-item (focus)="hideCommentsList=false" (click)="sortComments(currentSort); filterComments('')"
+      <button mat-menu-item (focus)="hideCommentsList=false;filterComments('')"
               aria-labelledby="close">
         <mat-icon>close</mat-icon>
         <span>{{ 'comment-list.filter-reset' | translate }}</span>
