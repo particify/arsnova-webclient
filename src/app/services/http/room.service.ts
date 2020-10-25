@@ -3,6 +3,7 @@ import { Room } from '../../models/room';
 import { RoomStats } from '../../models/room-stats';
 import { ContentGroup } from '../../models/content-group';
 import { RoomSummary } from '../../models/room-summary';
+import { SurveyStarted } from '../../models/events/survey-started';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, Subscription } from 'rxjs';
 import { catchError, map, tap, switchMap } from 'rxjs/operators';
@@ -216,6 +217,10 @@ export class RoomService extends BaseHttpService {
       room.settings['feedbackLocked'] = isFeedbackLocked;
       changes.set('settings', room.settings);
       this.patchRoom(roomId, changes);
+      if (!isFeedbackLocked) {
+        const event = new SurveyStarted();
+        this.eventService.broadcast(event.type);
+      }
     });
   }
 

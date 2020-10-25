@@ -3,7 +3,9 @@ import { Observable, of } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BaseHttpService } from './base-http.service';
 import { User } from '../../models/user';
+import { AccountCreated } from '../../models/events/account-created';
 import { catchError, map, tap } from 'rxjs/operators';
+import { EventService } from '../util/event.service';
 import { TranslateService } from '@ngx-translate/core';
 import { NotificationService } from '../util/notification.service';
 
@@ -25,6 +27,7 @@ export class UserService extends BaseHttpService {
   };
 
   constructor(private http: HttpClient,
+              private eventService: EventService,
               protected translateService: TranslateService,
               protected notificationService: NotificationService) {
     super(translateService, notificationService);
@@ -44,6 +47,8 @@ export class UserService extends BaseHttpService {
       loginId: email,
       password: password
     }, httpOptions).pipe(map(() => {
+      const event = new AccountCreated();
+      this.eventService.broadcast(event.type);
       return true;
     }));
   }
