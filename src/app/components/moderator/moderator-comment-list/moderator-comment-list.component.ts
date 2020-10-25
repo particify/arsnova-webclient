@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, HostListener, Input, OnInit, ViewChild } from '@angular/core';
 import { Comment } from '../../../models/comment';
 import { CommentService } from '../../../services/http/comment.service';
 import { TranslateService } from '@ngx-translate/core';
@@ -14,6 +14,8 @@ import { EventService } from '../../../services/util/event.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { GlobalStorageService, STORAGE_KEYS } from '../../../services/util/global-storage.service';
 import { AnnounceService } from '@arsnova/app/services/util/announce.service';
+import { KeyboardUtils } from '@arsnova/app/utils/keyboard';
+import { KeyboardKey } from '@arsnova/app/utils/keyboard/keys';
 
 export const itemRenderNumber = 20;
 
@@ -62,6 +64,14 @@ export class ModeratorCommentListComponent implements OnInit {
     private announceService: AnnounceService
   ) {
     langService.langEmitter.subscribe(lang => translateService.use(lang));
+  }
+
+  @HostListener('window:keyup', ['$event'])
+  keyEvent(event: KeyboardEvent) {
+    if (document.getElementById('search-close-button') && KeyboardUtils.isKeyEvent(event, KeyboardKey.Escape) === true) {
+      document.getElementById('search-close-button').click();
+      document.getElementById('live-announcer-button').focus();
+    }
   }
 
   ngOnInit() {
@@ -115,8 +125,10 @@ export class ModeratorCommentListComponent implements OnInit {
     if (this.searchInput && this.searchInput.length > 2) {
       this.hideCommentsList = true;
       this.filteredComments = this.comments.filter(c => c.body.toLowerCase().includes(this.searchInput.toLowerCase()));
-      this.getDisplayComments();
+    } else if (this.searchInput.length === 0) {
+      this.hideCommentsList = false;
     }
+    this.getDisplayComments();
   }
 
   activateSearch() {
