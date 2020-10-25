@@ -15,7 +15,7 @@
       <h3 class="counter">{{ filteredComments && hideCommentsList ? filteredComments.length : comments.length }}</h3>
     </div>
 
-    <button id="search-button" mat-mini-fab (click)="activateSearch(); filterComments('')" class="bar-icon"
+    <button id="search-button" mat-mini-fab (click)="activateSearch()" class="bar-icon"
             *ngIf="!search && comments && comments.length > 0" aria-labelledby="search-list"
             matTooltip="{{ 'comment-list.filter-search' | translate }}">
       <mat-icon>search</mat-icon>
@@ -34,17 +34,17 @@
   </div>
 
   <mat-menu #sortMenu="matMenu" xPosition="before">
-    <button mat-menu-item (click)="sortComments(time)" aria-labelledby="sort-time">
+    <button mat-menu-item (click)="sortComments(time, true)" aria-labelledby="sort-time">
       <mat-icon [ngClass]="{time: 'unread-icon'}[currentSort]">access_time</mat-icon>
       <span>{{ 'comment-list.sort-list-time' | translate }}</span>
     </button>
 
-    <button mat-menu-item (click)="sortComments(votedesc)" aria-labelledby="sort-up">
+    <button mat-menu-item (click)="sortComments(votedesc, true)" aria-labelledby="sort-up">
       <mat-icon [ngClass]="{votedesc: 'up'}[currentSort]">keyboard_arrow_up</mat-icon>
       <span>{{ 'comment-list.sort-vote-asc' | translate }}</span>
     </button>
 
-    <button mat-menu-item (click)="sortComments(voteasc)" aria-labelledby="sort-down">
+    <button mat-menu-item (click)="sortComments(voteasc, true)" aria-labelledby="sort-down">
       <mat-icon [ngClass]="{voteasc: 'down'}[currentSort]">keyboard_arrow_down</mat-icon>
       <span>{{ 'comment-list.sort-vote-desc' | translate }}</span>
     </button>
@@ -62,7 +62,7 @@
 </button>
 
 <div class="comments-container" *ngIf="!isLoading">
-  <app-comment *ngFor="let current of hideCommentsList ? filteredComments : comments" [comment]="current"
+  <app-comment *ngFor="let current of displayComments" [comment]="current" [isNew]="current.id === newestComment.id"
                [parseVote]="getVote(current)"></app-comment>
 </div>
 
@@ -78,4 +78,5 @@
   <div id="sort-down">{{'comment-list.a11y-sort-down' | translate}}</div>
   <div id="sort-time">{{'comment-list.a11y-sort-time' | translate}}</div>
   <div id="switch-list">{{'comment-list.a11y-switch-to-public-list' | translate}}</div>
+  <div id="new-comment">{{ 'comment-page.new-comment' | translate:{comment: newestComment.body} }}</div>
 </div>

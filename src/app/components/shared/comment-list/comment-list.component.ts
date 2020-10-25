@@ -192,7 +192,7 @@ export class CommentListComponent implements OnInit, OnDestroy {
     this.searchField.nativeElement.focus();
   }
 
-  getComments(): void {
+  getComments(sorting?: boolean): void {
     if (this.room && this.room.extensions && this.room.extensions['comments']) {
       if (this.room.extensions['comments'].enableThreshold) {
         this.thresholdEnabled = true;
@@ -210,7 +210,7 @@ export class CommentListComponent implements OnInit, OnDestroy {
       }
     }
     this.filterComments(this.currentFilter);
-    this.sortComments(this.currentSort);
+    this.sortComments(this.currentSort, sorting);
     this.getDisplayComments();
     this.isLoading = false;
   }
@@ -372,7 +372,7 @@ export class CommentListComponent implements OnInit, OnDestroy {
     });
     this.currentFilter = type;
     this.hideCommentsList = true;
-    this.sortComments(this.currentSort);
+    this.sortComments(this.currentSort, true);
   }
 
   sort(array: any[], type: string): any[] {
@@ -388,7 +388,7 @@ export class CommentListComponent implements OnInit, OnDestroy {
     });
   }
 
-  sortComments(type: string): void {
+  sortComments(type: string, manually?: boolean): void {
     if (this.hideCommentsList === true) {
       this.filteredComments = this.sort(this.filteredComments, type);
     } else {
@@ -398,7 +398,9 @@ export class CommentListComponent implements OnInit, OnDestroy {
     this.globalStorageService.setItem(STORAGE_KEYS.COMMENT_SORT, this.currentSort);
     this.commentCounter = itemRenderNumber;
     this.getDisplayComments();
-    this.scrollTop();
+    if (manually) {
+      this.scrollTop();
+    }
   }
 
   clickedOnTag(tag: string): void {
@@ -418,7 +420,7 @@ export class CommentListComponent implements OnInit, OnDestroy {
     this.commentService.getAckComments(this.roomId)
       .subscribe(comments => {
         this.comments = comments;
-        this.getComments();
+        this.getComments(true);
       });
     this.subscribeCommentStream();
     this.translateService.get('comment-list.comment-stream-started').subscribe(msg => {
