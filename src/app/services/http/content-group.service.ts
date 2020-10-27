@@ -18,7 +18,7 @@ const httpOptions = {
 export class ContentGroupService extends BaseHttpService {
 
   serviceApiUrl = {
-    contentGroup: '/contentGroup'
+    contentGroup: '/contentgroup'
   };
 
   constructor(

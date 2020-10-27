@@ -26,7 +26,7 @@ export class RoomService extends BaseHttpService {
 
   serviceApiUrl = {
     transfer: 'transfer',
-    contentGroup: '/contentGroup',
+    contentGroup: '/contentgroup',
     v2Import: '/import/v2/room',
     summary: '/_view/room/summary'
   };
