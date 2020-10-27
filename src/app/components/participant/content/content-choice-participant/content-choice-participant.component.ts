@@ -59,7 +59,7 @@ export class ContentChoiceParticipantComponent extends ContentParticipantCompone
   }
 
   initAnswer(userId: string) {
-    this.answerService.getChoiceAnswerByContentIdUserIdCurrentRound(this.content.id, userId).subscribe(answer => {
+    this.answerService.getChoiceAnswerByContentIdUserIdCurrentRound(this.content.roomId, this.content.id, userId).subscribe(answer => {
       for (const answerOption of this.content.options) {
         this.checkedAnswers.push(new CheckedAnswer(answerOption, false));
       }
@@ -149,7 +149,7 @@ export class ContentChoiceParticipantComponent extends ContentParticipantCompone
       }
       return;
     }
-    this.answerService.addAnswerChoice({
+    this.answerService.addAnswerChoice(this.content.roomId, {
       id: null,
       revision: null,
       contentId: this.content.id,
@@ -171,7 +171,7 @@ export class ContentChoiceParticipantComponent extends ContentParticipantCompone
 
   abstain($event) {
     $event.preventDefault();
-    this.answerService.addAnswerChoice({
+    this.answerService.addAnswerChoice(this.content.roomId, {
       id: null,
       revision: null,
       contentId: this.content.id,

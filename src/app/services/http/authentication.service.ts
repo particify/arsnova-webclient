@@ -29,21 +29,19 @@ export class AuthenticationService extends BaseHttpService {
    */
   private auth$$: BehaviorSubject<Observable<ClientAuthentication>>;
 
-  private apiUrl = {
-    base: '/api',
-    auth: '/auth',
-    login: '/login',
-    user: '/user',
-    registered: '/registered',
-    guest: '/guest',
-    sso: '/sso',
-    membership: '/_view/membership'
-  };
   private httpOptions = {
     headers: new HttpHeaders({})
   };
 
   private redirect: string;
+
+  serviceApiUrl = {
+    auth: '/auth',
+    guest: '/guest',
+    login: '/login',
+    registered: '/registered',
+    sso: '/sso'
+  };
 
   constructor(
     private globalStorageService: GlobalStorageService,
@@ -108,7 +106,7 @@ export class AuthenticationService extends BaseHttpService {
    * Authenticates a user using loginId (username or email) and password.
    */
   login(loginId: string, password: string): Observable<ClientAuthenticationResult> {
-    const connectionUrl: string = this.apiUrl.base + this.apiUrl.auth + this.apiUrl.login + this.apiUrl.registered;
+    const connectionUrl: string = this.getBaseUrl() + this.serviceApiUrl.auth + this.serviceApiUrl.login + this.serviceApiUrl.registered;
 
     return this.handleLoginResponse(this.http.post<ClientAuthentication>(connectionUrl, {
       loginId: loginId,
@@ -128,7 +126,7 @@ export class AuthenticationService extends BaseHttpService {
       return of(null);
     }
 
-    const connectionUrl: string = this.apiUrl.base + this.apiUrl.auth + this.apiUrl.login + '?refresh=true';
+    const connectionUrl: string = this.getBaseUrl() + this.serviceApiUrl.auth + this.serviceApiUrl.login + '?refresh=true';
     const loginHttpHeaders = this.httpOptions.headers.set(AUTH_HEADER_KEY, `${AUTH_SCHEME} ${token}`);
     const auth$ = this.http.post<ClientAuthentication>(connectionUrl, {}, { headers: loginHttpHeaders });
     return this.handleLoginResponse(auth$).pipe(
@@ -148,7 +146,7 @@ export class AuthenticationService extends BaseHttpService {
   fetchGuestAuthentication(): Observable<ClientAuthentication> {
     const token = this.getGuestToken();
     const httpHeaders = this.httpOptions.headers.set(AUTH_HEADER_KEY, `${AUTH_SCHEME} ${token}`);
-    const connectionUrl: string = this.apiUrl.base + this.apiUrl.auth + this.apiUrl.login + this.apiUrl.guest;
+    const connectionUrl: string = this.getBaseUrl() + this.serviceApiUrl.auth + this.serviceApiUrl.login + this.serviceApiUrl.guest;
     return this.http.post<ClientAuthentication>(connectionUrl, null, { headers: httpHeaders });
   }
 
@@ -164,7 +162,7 @@ export class AuthenticationService extends BaseHttpService {
     return this.refreshLogin().pipe(switchMap(result => {
       if (!result || result.status === AuthenticationStatus.INVALID_CREDENTIALS) {
         /* Create new guest account */
-        const connectionUrl: string = this.apiUrl.base + this.apiUrl.auth + this.apiUrl.login + this.apiUrl.guest;
+        const connectionUrl: string = this.getBaseUrl() + this.serviceApiUrl.auth + this.serviceApiUrl.login + this.serviceApiUrl.guest;
         const loginResult$ = this.handleLoginResponse(
             this.http.post<ClientAuthentication>(connectionUrl, null, this.httpOptions)).pipe(tap(loginResult => {
               if (loginResult.status === AuthenticationStatus.SUCCESS) {
@@ -188,8 +186,8 @@ export class AuthenticationService extends BaseHttpService {
    * @param userRole User role for the UI
    */
   loginViaSso(providerId: string): Observable<ClientAuthenticationResult> {
-    const ssoUrl = this.apiUrl.base + this.apiUrl.auth + this.apiUrl.sso + '/' + providerId;
-    const loginUrl = this.apiUrl.base + this.apiUrl.auth + this.apiUrl.login + '?refresh=true';
+    const ssoUrl = this.getBaseUrl() + this.serviceApiUrl.auth + this.serviceApiUrl.sso + '/' + providerId;
+    const loginUrl = this.getBaseUrl() + this.serviceApiUrl.auth + this.serviceApiUrl.login + '?refresh=true';
     const popupW = 500;
     const popupH = 500;
     const popupX = window.top.screenX + window.top.outerWidth / 2 - popupW / 2;

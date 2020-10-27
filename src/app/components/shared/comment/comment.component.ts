@@ -151,14 +151,14 @@ export class CommentComponent implements OnInit {
     let subscription;
     if (this.hasVoted !== vote) {
       if (voteString === '1') {
-        subscription = this.voteService.voteUp(this.comment.id, this.userId);
+        subscription = this.voteService.voteUp(this.comment.roomId, this.comment.id, this.userId);
       } else {
-        subscription = this.voteService.voteDown(this.comment.id, this.userId);
+        subscription = this.voteService.voteDown(this.comment.roomId, this.comment.id, this.userId);
       }
       this.currentVote = voteString;
       this.hasVoted = vote;
     } else {
-      subscription = this.voteService.deleteVote(this.comment.id, this.userId);
+      subscription = this.voteService.deleteVote(this.comment.roomId, this.comment.id, this.userId);
       this.hasVoted = 0;
       this.currentVote = '0';
     }

@@ -146,7 +146,7 @@ export class ContentListComponent implements OnInit {
     if (action) {
       switch (action.valueOf()) {
         case 'delete':
-          this.contentService.deleteContent(this.contents[index].id).subscribe(() => {
+          this.contentService.deleteContent(this.room.id, this.contents[index].id).subscribe(() => {
             this.translateService.get('content.content-deleted').subscribe(message => {
               this.notificationService.showAdvanced(message, AdvancedSnackBarTypes.WARNING);
             });

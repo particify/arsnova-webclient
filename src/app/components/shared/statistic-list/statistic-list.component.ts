@@ -55,7 +55,7 @@ export class StatisticListComponent implements OnInit {
   total = this.status.empty;
   totalP = 0;
   contentCounter = 0;
-  roomId: number;
+  shortId: number;
   deviceType: string;
   isLoading = true;
 
@@ -76,7 +76,7 @@ export class StatisticListComponent implements OnInit {
 
   ngOnInit() {
     this.route.params.subscribe(params => {
-      this.roomId = params['shortId'];
+      this.shortId = params['shortId'];
     });
     this.translateService.use(this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE));
     this.getContents();
@@ -89,7 +89,7 @@ export class StatisticListComponent implements OnInit {
 
   public getContents() {
     this.isLoading = true;
-    this.contentService.getContentsByIds(this.contentGroup.contentIds).subscribe(contents => {
+    this.contentService.getContentsByIds(this.contentGroup.roomId, this.contentGroup.contentIds).subscribe(contents => {
       this.getData(this.contentService.getSupportedContents(contents));
     });
   }
@@ -98,7 +98,7 @@ export class StatisticListComponent implements OnInit {
     const contentIndex = this.contents.map(function (content) {
       return content.id;
     }).indexOf(id);
-    this.router.navigate([`/creator/room/${this.roomId}/group/${this.contentGroup.name}/statistics/${contentIndex + 1}`]);
+    this.router.navigate([`/creator/room/${this.shortId}/group/${this.contentGroup.name}/statistics/${contentIndex + 1}`]);
     this.globalStorageService.setItem(STORAGE_KEYS.LAST_GROUP, this.contentGroup.name);
   }
 
@@ -112,7 +112,7 @@ export class StatisticListComponent implements OnInit {
       this.dataSource[i].content = this.contents[i];
       if (this.contents[i].format === ContentType.CHOICE || this.contents[i].format === ContentType.BINARY
         || this.contents[i].format === ContentType.SCALE) {
-        this.contentService.getAnswer(this.contents[i].id).subscribe(answer => {
+        this.contentService.getAnswer(this.contentGroup.roomId, this.contents[i].id).subscribe(answer => {
           if (this.contents[i].format === ContentType.CHOICE) {
             percent = this.evaluateMultiple((this.contents[i] as ContentChoice).options, answer.roundStatistics[0].combinatedCounts);
             this.dataSource[i].counts = this.getMultipleCounts(answer.roundStatistics[0].combinatedCounts);
@@ -135,7 +135,7 @@ export class StatisticListComponent implements OnInit {
           }
         });
       } else if (this.contents[i].format === ContentType.TEXT) {
-        this.contentAnswerService.getAnswers(this.contents[i].id).subscribe(answers => {
+        this.contentAnswerService.getAnswers(this.contentGroup.roomId, this.contents[i].id).subscribe(answers => {
           let count = 0;
           for (const answer of answers) {
             if (answer.body === undefined) {
@@ -263,7 +263,7 @@ export class StatisticListComponent implements OnInit {
   deleteAllAnswers() {
     const observableBatch = [];
     for (const c of this.contents) {
-      observableBatch.push(this.contentService.deleteAnswers(c.id));
+      observableBatch.push(this.contentService.deleteAnswers(this.contentGroup.roomId, c.id));
     }
     this.resetAllAnswers();
     forkJoin(observableBatch).subscribe(() => {

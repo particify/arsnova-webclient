@@ -23,17 +23,14 @@ const httpOptions = {
 
 @Injectable()
 export class RoomService extends BaseHttpService {
-  private apiUrl = {
-    base: '/api',
-    rooms: '/room',
-    user: '/user',
-    findRooms: '/find',
-    stats: '/stats',
-    contentGroup: '/contentgroup',
+
+  serviceApiUrl = {
+    transfer: 'transfer',
+    contentGroup: '/contentGroup',
     v2Import: '/import/v2/room',
-    summary: '/_view/room/summary',
-    transfer: '/transfer'
+    summary: '/_view/room/summary'
   };
+
   private joinDate = new Date(Date.now());
   private currentRoom: Room;
   private messageStream$: Observable<IMessage>;
@@ -86,7 +83,7 @@ export class RoomService extends BaseHttpService {
   }
 
   getCreatorRooms(userId: string): Observable<Room[]> {
-    const connectionUrl = this.apiUrl.base + this.apiUrl.rooms + this.apiUrl.findRooms;
+    const connectionUrl = this.apiUrl.base + this.apiUrl.room + this.apiUrl.find;
     return this.http.post<Room[]>(connectionUrl, {
       properties: { ownerId: userId },
       externalFilters: {}
@@ -96,7 +93,7 @@ export class RoomService extends BaseHttpService {
   }
 
   getParticipantRooms(userId: string): Observable<Room[]> {
-    const connectionUrl = this.apiUrl.base + this.apiUrl.rooms + this.apiUrl.findRooms;
+    const connectionUrl = this.apiUrl.base + this.apiUrl.room + this.apiUrl.find;
     return this.http.post<Room[]>(connectionUrl, {
       properties: {},
       externalFilters: { inHistoryOfUserId: userId }
@@ -108,14 +105,14 @@ export class RoomService extends BaseHttpService {
   addRoom(room: Room): Observable<Room> {
     delete room.id;
     delete room.revision;
-    const connectionUrl = this.apiUrl.base + this.apiUrl.rooms + '/';
+    const connectionUrl = this.apiUrl.base + this.apiUrl.room + '/';
     return this.http.post<Room>(connectionUrl, room, httpOptions).pipe(
       catchError(this.handleError<Room>(`add Room ${room}`))
     );
   }
 
   getRoom(id: string): Observable<Room> {
-    const connectionUrl = `${this.apiUrl.base + this.apiUrl.rooms}/${id}`;
+    const connectionUrl = this.getBaseUrl(id);
     return this.http.get<Room>(connectionUrl).pipe(
       map(room => this.parseExtensions(room)),
       tap(room => this.setRoomId(room)),
@@ -124,14 +121,14 @@ export class RoomService extends BaseHttpService {
   }
 
   getRoomSummaries(ids: string[]): Observable<RoomSummary[]> {
-    const connectionUrl = `${this.apiUrl.base + this.apiUrl.summary}?ids=${ids.join(',')}`;
+    const connectionUrl = `${this.apiUrl.base + this.serviceApiUrl.summary}?ids=${ids.join(',')}`;
     return this.http.get<RoomSummary[]>(connectionUrl).pipe(
       catchError(this.handleError<RoomSummary[]>(`getRoomSummaries`))
     );
   }
 
   getRoomByShortId(shortId: string): Observable<Room> {
-    const connectionUrl = `${this.apiUrl.base + this.apiUrl.rooms}/~${shortId}`;
+    const connectionUrl = this.getBaseUrl(`~${shortId}`);
     return this.http.get<Room>(connectionUrl).pipe(
       map(room => this.parseExtensions(room)),
       tap(room => this.setRoomId(room)),
@@ -153,7 +150,7 @@ export class RoomService extends BaseHttpService {
   }
 
   updateRoom(updatedRoom: Room): Observable<Room> {
-    const connectionUrl = `${this.apiUrl.base + this.apiUrl.rooms}/~${updatedRoom.shortId}`;
+    const connectionUrl = this.getBaseUrl(`~${updatedRoom.shortId}`);
     return this.http.put(connectionUrl, updatedRoom, httpOptions).pipe(
       tap(() => ''),
       catchError(this.handleError<any>('updateRoom'))
@@ -161,12 +158,12 @@ export class RoomService extends BaseHttpService {
   }
 
   patchRoom(roomId: string, changes: TSMap<string, any>): void {
-    const connectionUrl = `${ this.apiUrl.base + this.apiUrl.rooms }/${ roomId }`;
+    const connectionUrl = this.getBaseUrl(roomId);
     this.http.patch(connectionUrl, changes, httpOptions).subscribe();
   }
 
   deleteRoom(roomId: string): Observable<Room> {
-    const connectionUrl = `${this.apiUrl.base + this.apiUrl.rooms}/${roomId}`;
+    const connectionUrl = this.getBaseUrl(roomId);
     return this.http.delete<Room>(connectionUrl, httpOptions).pipe(
       tap(() => ''),
       catchError(this.handleError<Room>('deleteRoom'))
@@ -174,7 +171,7 @@ export class RoomService extends BaseHttpService {
   }
 
   getStats(roomId: string): Observable<RoomStats> {
-    const connectionUrl = `${this.apiUrl.base + this.apiUrl.rooms}/${roomId}${this.apiUrl.stats}`;
+    const connectionUrl = this.getBaseUrl(roomId) + this.apiUrl.stats;
     return this.http.get<RoomStats>(connectionUrl).pipe(
       tap(() => ''),
       catchError(this.handleError<RoomStats>(`getStats id=${roomId}`))
@@ -183,7 +180,7 @@ export class RoomService extends BaseHttpService {
 
   getGroupByRoomIdAndName(roomId: string, name: string): Observable<ContentGroup> {
     const encodedName = encodeURIComponent(name);
-    const connectionUrl = `${this.apiUrl.base + this.apiUrl.rooms}/${roomId + this.apiUrl.contentGroup}/${encodedName}`;
+    const connectionUrl = `${this.getBaseUrl(roomId) + this.serviceApiUrl.contentGroup}/${encodedName}`;
     return this.http.get<ContentGroup>(connectionUrl, httpOptions).pipe(
       tap(_ => ''),
       catchError(this.handleError<ContentGroup>(`getGroupByRoomIdAndName, ${roomId}, ${name}`))
@@ -191,7 +188,7 @@ export class RoomService extends BaseHttpService {
   }
 
   importv2Room(json: JSON): Observable<Room> {
-    const connectionUrl = `${this.apiUrl.base + this.apiUrl.v2Import}`;
+    const connectionUrl = `${this.apiUrl.base + this.serviceApiUrl.v2Import}`;
     return this.http.post<Room>(connectionUrl, json, httpOptions).pipe(
       tap(_ => ''),
       catchError(this.handleError<Room>(`importv2Room, json: ${json}`))
@@ -203,7 +200,7 @@ export class RoomService extends BaseHttpService {
     const httpHeaders = new HttpHeaders().set(AUTH_HEADER_KEY, `${AUTH_SCHEME} ${authToken}`);
     return auth$.pipe(
         switchMap(auth => {
-          const connectionUrl = `${this.apiUrl.base + this.apiUrl.rooms}/${id}${this.apiUrl.transfer}?newOwnerToken=${auth.token}`;
+          const connectionUrl = `${this.getBaseUrl(id)}${this.serviceApiUrl.transfer}?newOwnerToken=${auth.token}`;
           return this.http.post<Room>(connectionUrl, {}, { headers: httpHeaders }).pipe(
              catchError(this.handleError<Room>(`transferRoomFromGuest ${id}`))
           );

@@ -40,6 +40,11 @@ const httpOptions = {
 
 @Injectable()
 export class ConsentService extends BaseHttpService {
+
+  serviceApiUrl = {
+    consent: '/consent'
+  };
+
   private readonly categories: CookieCategory[] = [
     { key: StorageItemCategory.REQUIRED, id: 'essential', consent: true, required: true },
     { key: StorageItemCategory.FUNCTIONAL, id: 'functional', consent: false, required: false },
@@ -50,11 +55,6 @@ export class ConsentService extends BaseHttpService {
     return map;
   }, new Map());
   private consentSettings: ConsentSettings;
-
-  private apiUrl = {
-    base: '/api',
-    consent: '/consent'
-  };
 
   private settingsChanged: EventEmitter<ConsentChangeEvent> = new EventEmitter();
 
@@ -174,7 +174,7 @@ export class ConsentService extends BaseHttpService {
    * @param consentSettings Settings to report
    */
   recordConsentSettings(consentSettings: ConsentSettings) {
-    const connectionUrl = this.apiUrl.base + this.apiUrl.consent;
+    const connectionUrl = this.apiUrl.base + this.serviceApiUrl.consent;
     return this.http.post<ConsentSettings>(connectionUrl, consentSettings, httpOptions).pipe(
       catchError(this.handleError<ConsentSettings>('recordConsentSettings'))
     );

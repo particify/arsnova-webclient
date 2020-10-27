@@ -86,7 +86,7 @@ export class GroupContentComponent extends ContentListComponent implements OnIni
         this.globalStorageService.setItem(STORAGE_KEYS.LAST_GROUP, this.collectionName);
         this.roomService.getGroupByRoomIdAndName(this.room.id, this.collectionName).subscribe(group => {
           this.contentGroup = group;
-          this.contentService.getContentsByIds(this.contentGroup.contentIds).subscribe(contents => {
+          this.contentService.getContentsByIds(this.contentGroup.roomId, this.contentGroup.contentIds).subscribe(contents => {
             this.initContentList(contents);
           });
         });
@@ -213,7 +213,7 @@ export class GroupContentComponent extends ContentListComponent implements OnIni
   }
 
   deleteAnswers(contentId: string) {
-    this.contentService.deleteAnswers(contentId).subscribe(() => {
+    this.contentService.deleteAnswers(this.contentGroup.roomId, contentId).subscribe(() => {
       this.translateService.get('content.answers-deleted').subscribe(msg => {
         this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
       });

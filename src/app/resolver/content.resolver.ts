@@ -13,6 +13,6 @@ export class ContentResolver implements Resolve<Content> {
   }
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<Content> {
-    return this.contentService.getContent(route.params['contentId']);
+    return this.contentService.getContent(route.data.room.id, route.params['contentId']);
   }
 }

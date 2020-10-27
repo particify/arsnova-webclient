@@ -15,15 +15,13 @@ const httpOptions = {
 
 @Injectable()
 export class UserService extends BaseHttpService {
-  private apiUrl = {
-    base: '/api',
-    v2: '/api/v2',
-    user: '/user',
+
+  serviceApiUrl = {
     register: '/register',
     activate: '/activate',
     resetActivation: '/resetactivation',
     resetPassword: '/resetpassword',
-    find: '/find'
+    v2: '/api/v2'
   };
 
   constructor(private http: HttpClient,
@@ -41,7 +39,7 @@ export class UserService extends BaseHttpService {
   }
 
   register(email: string, password: string): Observable<boolean> {
-    const connectionUrl: string = this.apiUrl.base + this.apiUrl.user + this.apiUrl.register;
+    const connectionUrl: string = this.apiUrl.base + this.apiUrl.user + this.serviceApiUrl.register;
 
     return this.http.post<boolean>(connectionUrl, {
       loginId: email,
@@ -55,7 +53,7 @@ export class UserService extends BaseHttpService {
 
   activate(name: string, activationKey: string): Observable<string> {
     const connectionUrl: string = this.apiUrl.base + this.apiUrl.user + '/~' + encodeURIComponent(name) +
-      this.apiUrl.activate + '?key=' + activationKey;
+      this.serviceApiUrl.activate + '?key=' + activationKey;
 
     return this.http.post<string>(connectionUrl, {}, httpOptions);
   }
@@ -64,7 +62,7 @@ export class UserService extends BaseHttpService {
     const connectionUrl: string = this.apiUrl.base +
       this.apiUrl.user +
       '/~' + encodeURIComponent(username) +
-      this.apiUrl.resetActivation;
+      this.serviceApiUrl.resetActivation;
     return this.http.post<any>(connectionUrl, httpOptions).pipe(
       tap(_ => ''),
       catchError(this.handleError<User>('resetActivation'))
@@ -73,11 +71,11 @@ export class UserService extends BaseHttpService {
 
   resetPassword(email: string): Observable<boolean> {
     const connectionUrl: string =
-      this.apiUrl.v2 +
+      this.serviceApiUrl.v2 +
       this.apiUrl.user +
       '/' +
       email +
-      this.apiUrl.resetPassword;
+      this.serviceApiUrl.resetPassword;
 
     return this.http.post(connectionUrl, {
       key: null,
@@ -97,7 +95,7 @@ export class UserService extends BaseHttpService {
       this.apiUrl.user +
       '/~' +
       email +
-      this.apiUrl.resetPassword;
+      this.serviceApiUrl.resetPassword;
     let body = {};
     if (key && password) {
       body = {

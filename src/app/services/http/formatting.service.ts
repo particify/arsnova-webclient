@@ -22,8 +22,7 @@ export interface FormattingOptions {
 @Injectable()
 export class FormattingService extends BaseHttpService {
 
-  private apiUrl = {
-    base: '/api',
+  serviceApiUrl = {
     util: '/_util',
     formatting: '/formatting',
     render: '/render'
@@ -42,7 +41,7 @@ export class FormattingService extends BaseHttpService {
       markdownFeatureset: MarkdownFeatureset.EXTENDED,
       linebreaks: true
     };
-    const url = this.apiUrl.base + this.apiUrl.util + this.apiUrl.formatting + this.apiUrl.render;
+    const url = this.apiUrl.base + this.serviceApiUrl.util + this.serviceApiUrl.formatting + this.serviceApiUrl.render;
     const body = {
       text: text,
       options: options

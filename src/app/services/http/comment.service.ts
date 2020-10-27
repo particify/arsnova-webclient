@@ -14,14 +14,13 @@ const httpOptions = {
 
 @Injectable()
 export class CommentService extends BaseHttpService {
-  private apiUrl = {
-    base: '/api',
+
+  serviceApiUrl = {
     comment: '/comment',
-    find: '/find',
-    count: '/count',
-    command: '/_command',
     highlight: '/highlight',
-    lowlight: '/lowlight'
+    lowlight: '/lowlight',
+    command: '/_command',
+    count: '/count'
   };
 
   constructor(private http: HttpClient,
@@ -31,7 +30,7 @@ export class CommentService extends BaseHttpService {
   }
 
   getComment(commentId: string, roomId: string): Observable<Comment> {
-    const connectionUrl = `${this.apiUrl.base}/${roomId}${this.apiUrl.comment}/${commentId}`;
+    const connectionUrl = `${this.getBaseUrl(roomId) + this.serviceApiUrl.comment}/${commentId}`;
     return this.http.get<Comment>(connectionUrl, httpOptions).pipe(
       tap(_ => ''),
       catchError(this.handleError<Comment>('getComment'))
@@ -39,7 +38,7 @@ export class CommentService extends BaseHttpService {
   }
 
   addComment(comment: Comment): Observable<Comment> {
-    const connectionUrl = this.apiUrl.base + '/' + comment.roomId + this.apiUrl.comment + '/';
+    const connectionUrl = `${this.getBaseUrl(comment.roomId) + this.serviceApiUrl.comment}/`;
     return this.http.post<Comment>(connectionUrl, comment, httpOptions).pipe(
       tap(_ => ''),
       catchError(this.handleError<Comment>('addComment'))
@@ -47,7 +46,7 @@ export class CommentService extends BaseHttpService {
   }
 
   deleteComment(comment: Comment): Observable<Comment> {
-    const connectionUrl = `${this.apiUrl.base + '/' + comment.roomId + this.apiUrl.comment}/${comment.id}`;
+    const connectionUrl = `${this.getBaseUrl(comment.roomId) + this.serviceApiUrl.comment}/${comment.id}`;
     return this.http.delete<Comment>(connectionUrl, httpOptions).pipe(
       tap(_ => ''),
       catchError(this.handleError<Comment>('deleteComment'))
@@ -55,7 +54,7 @@ export class CommentService extends BaseHttpService {
   }
 
   getAckComments(roomId: string): Observable<Comment[]> {
-    const connectionUrl = this.apiUrl.base + '/' + roomId + this.apiUrl.comment + this.apiUrl.find;
+    const connectionUrl = `${this.getBaseUrl(roomId) + this.serviceApiUrl.comment + this.apiUrl.find}`;
     return this.http.post<Comment[]>(connectionUrl, {
       properties: { roomId: roomId, ack: true },
       externalFilters: {}
@@ -66,7 +65,7 @@ export class CommentService extends BaseHttpService {
   }
 
   getRejectedComments(roomId: string): Observable<Comment[]> {
-    const connectionUrl = this.apiUrl.base + '/' + roomId + this.apiUrl.comment + this.apiUrl.find;
+    const connectionUrl = `${this.getBaseUrl(roomId) + this.serviceApiUrl.comment + this.apiUrl.find}`;
     return this.http.post<Comment[]>(connectionUrl, {
       properties: { roomId: roomId, ack: false },
       externalFilters: {}
@@ -77,7 +76,7 @@ export class CommentService extends BaseHttpService {
   }
 
   getComments(roomId: string): Observable<Comment[]> {
-    const connectionUrl = this.apiUrl.base + '/' + roomId + this.apiUrl.comment + this.apiUrl.find;
+    const connectionUrl = this.getBaseUrl(roomId) + this.serviceApiUrl.comment + this.apiUrl.find;
     return this.http.post<Comment[]>(connectionUrl, {
       properties: { roomId: roomId },
       externalFilters: {}
@@ -88,7 +87,7 @@ export class CommentService extends BaseHttpService {
   }
 
   updateComment(comment: Comment): Observable<any> {
-    const connectionUrl = this.apiUrl.base + '/' + comment.roomId + this.apiUrl.comment + '/' + comment.id;
+    const connectionUrl = `${this.getBaseUrl(comment.roomId) + this.serviceApiUrl.comment + '/' + comment.id}`;
     return this.http.put(connectionUrl, comment, httpOptions).pipe(
       tap(_ => ''),
       catchError(this.handleError<any>('updateComment'))
@@ -96,7 +95,7 @@ export class CommentService extends BaseHttpService {
   }
 
   deleteCommentsByRoomId(roomId: string): Observable<Comment> {
-    const connectionUrl = `${this.apiUrl.base + '/' + roomId + this.apiUrl.comment}/byRoom?roomId=${roomId}`;
+    const connectionUrl = `${this.getBaseUrl(roomId) + this.serviceApiUrl.comment}/byRoom?roomId=${roomId}`;
     return this.http.delete<Comment>(connectionUrl, httpOptions).pipe(
       tap(_ => ''),
       catchError(this.handleError<Comment>('deleteComment'))
@@ -104,7 +103,7 @@ export class CommentService extends BaseHttpService {
   }
 
   countByRoomId(roomId: string, ack: boolean): Observable<number> {
-    const connectionUrl = this.apiUrl.base + '/' + roomId + this.apiUrl.comment + this.apiUrl.find + this.apiUrl.count;
+    const connectionUrl = `${this.getBaseUrl(roomId) + this.serviceApiUrl.comment + this.apiUrl.find + this.serviceApiUrl.count}`;
     return this.http.post<number>(connectionUrl, {
       properties: { roomId: roomId, ack: ack },
       externalFilters: {}
@@ -149,21 +148,21 @@ export class CommentService extends BaseHttpService {
   }
 
   private patchComment(comment: Comment, changes: TSMap<string, any>): Observable<Comment> {
-    const connectionUrl = this.apiUrl.base + '/' + comment.roomId + this.apiUrl.comment + '/' + comment.id;
+    const connectionUrl = `${this.getBaseUrl(comment.roomId) + this.serviceApiUrl.comment + '/' + comment.id}`;
     return this.http.patch(connectionUrl, changes, httpOptions).pipe(
       catchError(this.handleError<any>('patchComment'))
     );
   }
 
   highlight(comment: Comment): Observable<void> {
-    const connectionUrl = this.apiUrl.base + '/' + comment.roomId + this.apiUrl.comment + '/' + comment.id +
-        this.apiUrl.command + this.apiUrl.highlight;
+    const connectionUrl = `${this.getBaseUrl(comment.roomId) + this.serviceApiUrl.comment + '/' + comment.id +
+        this.serviceApiUrl.command + this.serviceApiUrl.highlight}`;
     return this.http.post<void>(connectionUrl, {}, httpOptions);
   }
 
   lowlight(comment: Comment): Observable<void> {
-    const connectionUrl = this.apiUrl.base + '/' + comment.roomId + this.apiUrl.comment + '/' + comment.id +
-        this.apiUrl.command + this.apiUrl.lowlight;
+    const connectionUrl = `${this.getBaseUrl(comment.roomId) + this.serviceApiUrl.comment + '/' + comment.id +
+        this.serviceApiUrl.command + this.serviceApiUrl.lowlight}`;
     return this.http.post<void>(connectionUrl, {}, httpOptions);
   }
 
