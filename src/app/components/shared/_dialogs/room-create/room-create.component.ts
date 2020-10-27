@@ -1,7 +1,6 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { RoomService } from '../../../../services/http/room.service';
 import { Room } from '../../../../models/room';
-import { UserRole } from '../../../../models/user-roles.enum';
 import { RoomCreated } from '../../../../models/events/room-created';
 import { Router } from '@angular/router';
 import { AdvancedSnackBarTypes, NotificationService } from '../../../../services/util/notification.service';
@@ -14,6 +13,7 @@ import { EventService } from '../../../../services/util/event.service';
 import { GlobalStorageService, STORAGE_KEYS } from '../../../../services/util/global-storage.service';
 import { first, filter } from 'rxjs/operators';
 import { ClientAuthentication } from '../../../../models/client-authentication';
+import { HINT_TYPES } from '@arsnova/app/components/shared/hint/hint.component';
 
 @Component({
   selector: 'app-room-create',
@@ -26,6 +26,7 @@ export class RoomCreateComponent implements OnInit {
   room: Room;
   roomId: string;
   auth: ClientAuthentication;
+  warningType = HINT_TYPES.WARNING;
 
   constructor(
     private roomService: RoomService,
