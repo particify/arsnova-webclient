@@ -11,6 +11,7 @@ import { DialogService } from '../../../../services/util/dialog.service';
 import { GlobalStorageService, STORAGE_KEYS } from '../../../../services/util/global-storage.service';
 import { FormattingService, MarkdownFeatureset } from '../../../../services/http/formatting.service';
 import { UpdateEvent } from '@arsnova/app/components/creator/settings/settings.component';
+import { HINT_TYPES } from '@arsnova/app/components/shared/hint/hint.component';
 
 @Component({
   selector: 'app-room-edit',
@@ -27,6 +28,7 @@ export class RoomComponent implements OnInit {
   markdownFeatureset = MarkdownFeatureset.EXTENDED;
   renderPreview = false;
   textContainsImage = false;
+  warningType = HINT_TYPES.WARNING;
 
   constructor(
     public notificationService: NotificationService,

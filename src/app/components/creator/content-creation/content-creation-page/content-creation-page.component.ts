@@ -12,6 +12,7 @@ import { AnnounceService } from '../../../../services/util/announce.service';
 import { Subject } from 'rxjs';
 import { Content } from '../../../../models/content';
 import { FormattingService } from '../../../../services/http/formatting.service';
+import { HINT_TYPES } from '@arsnova/app/components/shared/hint/hint.component';
 
 class ContentFormat {
   name: string;
@@ -45,6 +46,7 @@ export class ContentCreationPageComponent implements OnInit, AfterContentInit {
 
   content: Content;
   textContainsImage = false;
+  warningType = HINT_TYPES.WARNING;
 
   constructor(
     private translateService: TranslateService,

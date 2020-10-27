@@ -9,7 +9,7 @@
         / 30</span></mat-hint>
     </mat-form-field>
     <app-hint *ngIf="!auth || auth.authProvider === 'ARSNOVA_GUEST'"
-              [type]="'WARNING'" [text]="'dialog.not-logged-in'"></app-hint>
+              [type]="warningType" text="dialog.not-logged-in"></app-hint>
   </div>
 </form>
 <app-dialog-action-buttons

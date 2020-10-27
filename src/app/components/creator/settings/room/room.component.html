@@ -24,7 +24,7 @@
             </span>
           </mat-hint>
         </mat-form-field>
-        <app-hint *ngIf="textContainsImage" [text]="'utils.formatting-image-hint' | translate" type="WARNING"></app-hint>
+        <app-hint *ngIf="textContainsImage" text="utils.formatting-image-hint" [type]="warningType"></app-hint>
       </mat-tab>
       <mat-tab label="{{'room.preview' | translate}}" [disabled]="!description">
         <div fxLayout="row">
