@@ -125,7 +125,7 @@ export class CommentComponent implements OnInit {
       if (this.comment.id === id) {
         this.extensionEvent.next(this.comment.id);
       }
-    })
+    });
   }
 
   changeSlideState(): void {

@@ -9,8 +9,8 @@ import { CommentListComponent } from '../../comment-list/comment-list.component'
 import { EventService } from '../../../../services/util/event.service';
 import { GlobalStorageService, STORAGE_KEYS } from '../../../../services/util/global-storage.service';
 import { Subject } from 'rxjs';
-import { CommentService } from "../../../../services/http/comment.service";
-import { LanguageService } from "../../../../services/util/language.service";
+import { CommentService } from '../../../../services/http/comment.service';
+import { LanguageService } from '../../../../services/util/language.service';
 import { UserRole } from '../../../../models/user-roles.enum';
 
 export interface DialogData {
@@ -80,8 +80,8 @@ export class CreateCommentComponent implements OnInit {
 
   send(comment: Comment): void {
     let message;
-    this.commentService.addComment(comment).subscribe(comment => {
-      this.eventsSubject.next(comment.id);
+    this.commentService.addComment(comment).subscribe(newComment => {
+      this.eventsSubject.next(newComment.id);
       if (this.data.directSend) {
         if ([UserRole.CREATOR, UserRole.EDITING_MODERATOR, UserRole.EXECUTIVE_MODERATOR].indexOf(this.data.role) !== -1) {
           this.translateService.get('dialog.comment-sent').subscribe(msg => {

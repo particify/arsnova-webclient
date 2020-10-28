@@ -32,7 +32,7 @@ export class PreviewComponent implements OnInit {
       this.multipleAnswers = (this.content as ContentChoice).multiple;
     }
     this.markdownFeatureset = format === ContentType.SLIDE ? MarkdownFeatureset.EXTENDED : MarkdownFeatureset.SIMPLE;
-    this.prepareAttachmentData()
+    this.prepareAttachmentData();
   }
 
   emitFlipEvent(submit: boolean) {

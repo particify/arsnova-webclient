@@ -16,7 +16,7 @@ import { OverlayComponent } from '../../components/home/_dialogs/overlay/overlay
 import { UserActivationComponent } from '../../components/home/_dialogs/user-activation/user-activation.component';
 import { Content } from '../../models/content';
 import { UpdateInfoComponent } from '../../components/shared/_dialogs/update-info/update-info.component';
-import { UserRole } from "@arsnova/app/models/user-roles.enum";
+import { UserRole } from '../../models/user-roles.enum';
 
 @Injectable()
 export class DialogService {
@@ -74,7 +74,8 @@ export class DialogService {
 
   // Shared dialogs
 
-  openCreateCommentDialog(auth: ClientAuthentication, tags: string[], roomId: string, directSend: boolean, role: UserRole): MatDialogRef<CreateCommentComponent> {
+  openCreateCommentDialog(auth: ClientAuthentication, tags: string[], roomId: string, directSend: boolean,
+                          role: UserRole): MatDialogRef<CreateCommentComponent> {
     return this.dialog.open(CreateCommentComponent, {
       width: this.size.small,
       data: {
