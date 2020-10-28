@@ -25,7 +25,7 @@ const httpOptions = {
 export class RoomService extends BaseHttpService {
 
   serviceApiUrl = {
-    transfer: 'transfer',
+    transfer: '/transfer',
     contentGroup: '/contentgroup',
     v2Import: '/import/v2/room',
     summary: '/_view/room/summary'
