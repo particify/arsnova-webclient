@@ -106,7 +106,7 @@ export function initializeApp(appConfig: AppConfig) {
     ModeratorModule,
     AdminModule,
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
-    TranslateModule.forChild({
+    TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
         useFactory: (TranslateHttpLoaderFactory),
