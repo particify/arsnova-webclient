@@ -12,7 +12,6 @@ import { RoomComponent } from './settings/room/room.component';
 import { SharedModule } from '../shared/shared.module';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { HttpClient } from '@angular/common/http';
-import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { ContentListComponent } from './content-list/content-list.component';
 import { ContentEditComponent } from '../shared/_dialogs/content-edit/content-edit.component';
 import { ContentPresentationComponent } from './content-presentation/content-presentation.component';
@@ -30,6 +29,8 @@ import { CdkStepperModule } from '@angular/cdk/stepper';
 import { ContentCreationComponent } from './content-creation/content-creation/content-creation.component';
 import { ContentSlideCreationComponent } from './content-creation/content-slide-creation/content-slide-creation.component';
 import { PreviewComponent } from './content-creation/preview/preview.component';
+import { TRANSLATION_MODULE_NAME } from '../../translate-module-name-token';
+import { TranslateHttpLoaderFactory } from '../../translate-http-loader-factory';
 
 @NgModule({
   imports: [
@@ -41,8 +42,11 @@ import { PreviewComponent } from './content-creation/preview/preview.component';
     TranslateModule.forChild({
       loader: {
         provide: TranslateLoader,
-        useFactory: (HttpLoaderFactory),
-        deps: [HttpClient]
+        useFactory: (TranslateHttpLoaderFactory),
+        deps: [
+          HttpClient,
+          TRANSLATION_MODULE_NAME
+        ]
       },
       isolate: true
     }),
@@ -71,11 +75,10 @@ import { PreviewComponent } from './content-creation/preview/preview.component';
     ContentCreationComponent,
     ContentSlideCreationComponent,
     PreviewComponent
+  ],
+  providers: [
+    { provide: TRANSLATION_MODULE_NAME, useValue: 'creator' }
   ]
 })
 export class CreatorModule {
-}
-
-export function HttpLoaderFactory(http: HttpClient) {
-  return new TranslateHttpLoader(http, '../../assets/i18n/creator/', '.json');
 }
