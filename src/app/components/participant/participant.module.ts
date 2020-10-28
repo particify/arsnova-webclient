@@ -9,11 +9,12 @@ import { SharedModule } from '../shared/shared.module';
 import { ParticipantContentCarouselPageComponent } from './participant-content-carousel-page/participant-content-carousel-page.component';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { HttpClient } from '@angular/common/http';
-import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { CdkStepperModule } from '@angular/cdk/stepper';
 import { MatRippleModule } from '@angular/material/core';
 import { ContentParticipantComponent } from './content/content-participant.component';
 import { ContentSlideParticipantComponent } from './content/content-slide-participant/content-slide-participant.component';
+import { TRANSLATION_MODULE_NAME } from '../../translate-module-name-token';
+import { TranslateHttpLoaderFactory } from '../../translate-http-loader-factory';
 
 @NgModule({
   imports: [
@@ -24,8 +25,11 @@ import { ContentSlideParticipantComponent } from './content/content-slide-partic
     TranslateModule.forChild({
       loader: {
         provide: TranslateLoader,
-        useFactory: (HttpLoaderFactory),
-        deps: [HttpClient]
+        useFactory: (TranslateHttpLoaderFactory),
+        deps: [
+          HttpClient,
+          TRANSLATION_MODULE_NAME
+        ]
       },
       isolate: true
     }),
@@ -39,11 +43,10 @@ import { ContentSlideParticipantComponent } from './content/content-slide-partic
     RoomParticipantPageComponent,
     ParticipantContentCarouselPageComponent,
     ContentSlideParticipantComponent
+  ],
+  providers: [
+    { provide: TRANSLATION_MODULE_NAME, useValue: 'participant' }
   ]
 })
 export class ParticipantModule {
-}
-
-export function HttpLoaderFactory(http: HttpClient) {
-  return new TranslateHttpLoader(http, '../../assets/i18n/participant/', '.json');
 }

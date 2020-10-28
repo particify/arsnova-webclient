@@ -28,21 +28,10 @@ import { MatTableModule } from '@angular/material/table';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
-import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { TranslateModule } from '@ngx-translate/core';
 import { AnnounceService } from '../../services/util/announce.service';
 
 @NgModule({
-  imports: [
-    TranslateModule.forRoot({
-      loader: {
-        provide: TranslateLoader,
-        useFactory: HttpLoaderFactory,
-        deps: [HttpClient]
-      },
-      isolate: true
-    })
-  ],
   exports: [
     MatAutocompleteModule,
     MatBadgeModule,
@@ -82,8 +71,4 @@ import { AnnounceService } from '../../services/util/announce.service';
   ]
 })
 export class EssentialsModule {
-}
-
-export function HttpLoaderFactory(http: HttpClient) {
-  return new TranslateHttpLoader(http, '../../assets/i18n/home/', '.json');
 }
