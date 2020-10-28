@@ -16,7 +16,7 @@ const httpOptions = {
 export class ModeratorService extends BaseHttpService {
 
   serviceApiUrl = {
-    moderator: 'moderator'
+    moderator: '/moderator'
   };
 
   constructor(private http: HttpClient,
