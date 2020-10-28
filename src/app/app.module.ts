@@ -1,4 +1,4 @@
-import { NgModule, APP_INITIALIZER } from '@angular/core';
+import { NgModule, APP_INITIALIZER, InjectionToken } from '@angular/core';
 import { AppComponent } from './app.component';
 import { RegisterComponent } from './components/home/register/register.component';
 import { PasswordResetComponent } from './components/home/password-reset/password-reset.component';
@@ -67,6 +67,7 @@ import { SnackBarAdvancedComponent } from './components/shared/snack-bar-advance
 import { RoomUserRoleResolver } from './resolver/room-user-role.resolver';
 import { RoutingService } from './services/util/routing.service';
 import { TranslateHttpLoaderFactory } from './translate-http-loader-factory';
+import { TRANSLATION_MODULE_NAME } from './translate-module-name-token';
 
 export function dialogClose(dialogResult: any) {
 }
@@ -110,7 +111,10 @@ export function initializeApp(appConfig: AppConfig) {
       loader: {
         provide: TranslateLoader,
         useFactory: (TranslateHttpLoaderFactory),
-        deps: [HttpClient]
+        deps: [
+          HttpClient,
+          TRANSLATION_MODULE_NAME
+        ]
       },
       isolate: true
     }),
@@ -132,6 +136,9 @@ export function initializeApp(appConfig: AppConfig) {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthenticationInterceptor,
       multi: true
+    },
+    {
+      provide: TRANSLATION_MODULE_NAME, useValue: 'home'
     },
     WsConnectorService,
     NotificationService,

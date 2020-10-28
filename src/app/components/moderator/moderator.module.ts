@@ -7,8 +7,9 @@ import { ModeratorCommentPageComponent } from './moderator-comment-page/moderato
 import { EssentialsModule } from '../essentials/essentials.module';
 import { SharedModule } from '../shared/shared.module';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { TRANSLATION_MODULE_NAME } from '../../translate-module-name-token';
+import { TranslateHttpLoaderFactory } from '../../translate-http-loader-factory';
 import { HttpClient } from '@angular/common/http';
-import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { CreatorModule } from '../creator/creator.module';
 
 @NgModule({
@@ -20,8 +21,11 @@ import { CreatorModule } from '../creator/creator.module';
         TranslateModule.forChild({
             loader: {
                 provide: TranslateLoader,
-                useFactory: (HttpLoaderFactory),
-                deps: [HttpClient]
+                useFactory: (TranslateHttpLoaderFactory),
+                deps: [
+                  HttpClient,
+                  TRANSLATION_MODULE_NAME
+                ]
             },
             isolate: true
         }),
@@ -31,11 +35,10 @@ import { CreatorModule } from '../creator/creator.module';
     RoomModeratorPageComponent,
     ModeratorCommentListComponent,
     ModeratorCommentPageComponent
+  ],
+  providers: [
+    { provide: TRANSLATION_MODULE_NAME, useValue: 'creator' }
   ]
 })
 export class ModeratorModule {
-}
-
-export function HttpLoaderFactory(http: HttpClient) {
-  return new TranslateHttpLoader(http, '../../assets/i18n/creator/', '.json');
 }
