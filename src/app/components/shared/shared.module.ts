@@ -38,8 +38,8 @@ import { CdkStepperModule } from '@angular/cdk/stepper';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { RenderedTextComponent } from './rendered-text/rendered-text.component';
 import { UpdateInfoComponent } from './_dialogs/update-info/update-info.component';
-import { ExtensionPointModule } from '../../../../projects/extension-point/src/lib/extension-point.module';
 import { HintComponent } from './hint/hint.component';
+import { ExtensionPointModule } from '../../../../projects/extension-point/src/lib/extension-point.module';
 
 @NgModule({
   imports: [

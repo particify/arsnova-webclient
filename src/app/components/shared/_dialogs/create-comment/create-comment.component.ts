@@ -8,10 +8,17 @@ import { ClientAuthentication } from '../../../../models/client-authentication';
 import { CommentListComponent } from '../../comment-list/comment-list.component';
 import { EventService } from '../../../../services/util/event.service';
 import { GlobalStorageService, STORAGE_KEYS } from '../../../../services/util/global-storage.service';
+import { Subject } from 'rxjs';
+import { CommentService } from '../../../../services/http/comment.service';
+import { LanguageService } from '../../../../services/util/language.service';
+import { UserRole } from '../../../../models/user-roles.enum';
 
 export interface DialogData {
   auth: ClientAuthentication;
   tags: string[];
+  roomId: string;
+  directSend: boolean;
+  role: UserRole;
 }
 
 @Component({
@@ -19,10 +26,14 @@ export interface DialogData {
   templateUrl: './create-comment.component.html',
   styleUrls: ['./create-comment.component.scss']
 })
+
 export class CreateCommentComponent implements OnInit {
 
   comment: Comment;
   selectedTag: string;
+  eventsSubject: Subject<string> = new Subject<string>();
+  eventsWrapper: any;
+
 
   bodyForm = new FormControl('', [Validators.required]);
 
@@ -34,15 +45,25 @@ export class CreateCommentComponent implements OnInit {
     private translationService: TranslateService,
     public eventService: EventService,
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
-    private globalStorageService: GlobalStorageService
+    private globalStorageService: GlobalStorageService,
+    private commentService: CommentService,
+    private notificationService: NotificationService,
+    private langService: LanguageService
   ) {
+    langService.langEmitter.subscribe(lang => translateService.use(lang));
   }
 
   ngOnInit() {
     this.translateService.use(this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE));
+    this.eventsWrapper = {
+      'eventsSubject': this.eventsSubject,
+      'roomId': this.data.roomId,
+      'userId': this.data.auth.userId
+    };
   }
 
   onNoClick(): void {
+    this.eventsSubject.next();
     this.dialogRef.close();
   }
 
@@ -57,6 +78,30 @@ export class CreateCommentComponent implements OnInit {
     return true;
   }
 
+  send(comment: Comment): void {
+    let message;
+    this.commentService.addComment(comment).subscribe(newComment => {
+      this.eventsSubject.next(newComment.id);
+      if (this.data.directSend) {
+        if ([UserRole.CREATOR, UserRole.EDITING_MODERATOR, UserRole.EXECUTIVE_MODERATOR].indexOf(this.data.role) !== -1) {
+          this.translateService.get('dialog.comment-sent').subscribe(msg => {
+            message = msg;
+          });
+          comment.ack = true;
+        } else {
+          this.translateService.get('dialog.comment-sent-to-moderator').subscribe(msg => {
+            message = msg;
+          });
+        }
+      } else {
+        this.translateService.get('dialog.comment-sent').subscribe(msg => {
+          message = msg;
+        });
+      }
+      this.notificationService.show(message);
+    });
+  }
+
   closeDialog(body: string) {
     if (this.checkInputData(body) === true) {
       const comment = new Comment();
@@ -66,10 +111,10 @@ export class CreateCommentComponent implements OnInit {
       if (this.selectedTag !== null) {
         comment.tag = this.selectedTag;
       }
-      this.dialogRef.close(comment);
+      this.send(comment);
+      this.dialogRef.close();
     }
   }
-
 
   /**
    * Returns a lambda which closes the dialog on call.

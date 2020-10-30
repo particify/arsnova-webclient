@@ -59,6 +59,7 @@ export class ContentChoiceParticipantComponent extends ContentParticipantCompone
   }
 
   initAnswer(userId: string) {
+    this.setExtensionData(this.content.roomId, this.content.id);
     this.answerService.getChoiceAnswerByContentIdUserIdCurrentRound(this.content.roomId, this.content.id, userId).subscribe(answer => {
       for (const answerOption of this.content.options) {
         this.checkedAnswers.push(new CheckedAnswer(answerOption, false));

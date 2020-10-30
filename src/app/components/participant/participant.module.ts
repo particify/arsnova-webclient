@@ -15,6 +15,7 @@ import { ContentParticipantComponent } from './content/content-participant.compo
 import { ContentSlideParticipantComponent } from './content/content-slide-participant/content-slide-participant.component';
 import { TRANSLATION_MODULE_NAME } from '../../translate-module-name-token';
 import { TranslateHttpLoaderFactory } from '../../translate-http-loader-factory';
+import { ExtensionPointModule } from '../../../../projects/extension-point/src/lib/extension-point.module';
 
 @NgModule({
   imports: [
@@ -34,7 +35,8 @@ import { TranslateHttpLoaderFactory } from '../../translate-http-loader-factory'
       isolate: true
     }),
     CdkStepperModule,
-    MatRippleModule
+    MatRippleModule,
+    ExtensionPointModule
   ],
   declarations: [
     ContentParticipantComponent,

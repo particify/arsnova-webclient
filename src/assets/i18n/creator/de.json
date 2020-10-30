@@ -22,7 +22,6 @@
     "play-comments": "Starte den Kommentar-Stream",
     "comment-stream-stopped": "Der Kommentar-Stream wurde gestoppt.",
     "comment-stream-started": "Der Kommentar-Stream wurde gestartet.",
-    "comment-sent": "Der Kommentar wurde veröffentlicht.",
     "comment-deleted": "Der Kommentar wurde gelöscht.",
     "filter-comments": "Kommentare filtern",
     "filter-read": "Besprochene Kommentare",

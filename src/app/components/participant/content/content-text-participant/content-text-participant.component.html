@@ -17,6 +17,7 @@
               </mat-icon>
             </button>
           </div>
+          <lib-extension-point extensionId="attachment-list" [extensionData]="extensionData"></lib-extension-point>
           <div class="answer-container">
             <form *ngIf="!givenAnswer">
               <mat-form-field class="input-block" appearance="outline">

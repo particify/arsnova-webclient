@@ -22,7 +22,6 @@
     "play-comments": "Start the comment stream",
     "comment-stream-stopped": "The comment stream has been stopped.",
     "comment-stream-started": "The comment stream has been started.",
-    "comment-sent": "The comment has been published.",
     "comment-deleted": "The comment has been deleted.",
     "filter-comments": "Filter comments",
     "filter-read": "Comments discussed",

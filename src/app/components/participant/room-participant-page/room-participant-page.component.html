@@ -56,6 +56,10 @@
         <p tabindex="-1" id="no-content-groups" class="visually-hidden">
           {{ 'room-page.a11y-no-content-groups' | translate }}</p>
       </div>
+
+      <lib-extension-point extensionId="attachment-list" [extensionData]="attachmentData">
+      </lib-extension-point>
+
     </mat-card>
   </div>
 </div>

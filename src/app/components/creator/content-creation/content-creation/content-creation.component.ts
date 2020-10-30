@@ -35,6 +35,7 @@ export class ContentCreationComponent implements OnInit, OnDestroy {
   @Input() contentGroup;
   @Output() reset = new EventEmitter<boolean>();
   @Output() contentSent = new EventEmitter<Content>();
+  @Output() refId = new EventEmitter<string>();
 
   roomId: string;
   isLoading = true;
@@ -110,6 +111,7 @@ export class ContentCreationComponent implements OnInit, OnDestroy {
 
   submitContent(): void {
     this.contentService.addContent(this.content).subscribe(createdContent => {
+      this.refId.emit(createdContent.id);
       if (this.contentGroup !== '') {
         this.contentGroupService.addContentToGroup(this.roomId, this.contentGroup, createdContent.id).subscribe();
       }
