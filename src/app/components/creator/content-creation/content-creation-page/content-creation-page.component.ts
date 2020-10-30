@@ -13,6 +13,7 @@ import { Subject } from 'rxjs';
 import { Content } from '../../../../models/content';
 import { FormattingService } from '../../../../services/http/formatting.service';
 import { HINT_TYPES } from '@arsnova/app/components/shared/hint/hint.component';
+import { UserRole } from '@arsnova/app/models/user-roles.enum';
 
 class ContentFormat {
   name: string;
@@ -41,6 +42,9 @@ export class ContentCreationPageComponent implements OnInit, AfterContentInit {
   selectedFormat: ContentFormat = this.formats[0];
 
   myControl = new FormControl();
+
+  attachmentData: any;
+  linkAttachmentsSubject: Subject<string> = new Subject<string>();
 
   flipped = false;
 
@@ -97,6 +101,7 @@ export class ContentCreationPageComponent implements OnInit, AfterContentInit {
           });
         }
       });
+      this.prepareAttachmentData(data.room.id);
     });
     this.translateService.use(this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE));
   }
@@ -142,5 +147,19 @@ export class ContentCreationPageComponent implements OnInit, AfterContentInit {
 
   updateTextContainsImage(text: string) {
     this.textContainsImage = this.formattingService.containsTextAnImage(text);
+  }
+
+  linkAttachments(id: string) {
+    this.linkAttachmentsSubject.next(id);
+  }
+
+  prepareAttachmentData(roomId: string) {
+    this.attachmentData = {
+      'eventsSubject': this.linkAttachmentsSubject,
+      'refType': 'content',
+      'roomId': roomId,
+      'detailedView': false,
+      'role': UserRole.CREATOR
+    };
   }
 }

@@ -38,6 +38,7 @@ export class RoomPageComponent implements OnInit, OnDestroy {
   protected roomWatch: Observable<IMessage>;
   protected commentWatch: Observable<IMessage>;
   protected noGroups = true;
+  protected attachmentData: any;
   moderationCommentWatch: Observable<IMessage>;
   moderationSub: Subscription;
   moderatorCommentCounter: number;
@@ -214,6 +215,16 @@ export class RoomPageComponent implements OnInit, OnDestroy {
     this.location.back();
   }
 
+  prepareAttachmentData(role: UserRole) {
+    this.attachmentData = {
+      'refId': this.room.id,
+      'refType': 'room',
+      'roomId': this.room.id,
+      'role': role,
+      'detailedView': true,
+      'pureImageView': false
+    };
+  }
 
   switchRole(role?: string) {
     let roleRoute;

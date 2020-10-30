@@ -19,6 +19,7 @@ import { Subscription } from 'rxjs';
 import { WsFeedbackService } from '../../../services/websockets/ws-feedback.service';
 import { GlobalStorageService, STORAGE_KEYS } from '../../../services/util/global-storage.service';
 import { AnnounceService } from '../../../services/util/announce.service';
+import { UserRole } from '../../../models/user-roles.enum';
 
 @Component({
   selector: 'app-room-participant-page',
@@ -114,6 +115,7 @@ export class RoomParticipantPageComponent extends RoomPageComponent implements O
   }
 
   initRoomData() {
+    this.prepareAttachmentData(UserRole.PARTICIPANT);
     this.subscribeCommentStream();
   }
 

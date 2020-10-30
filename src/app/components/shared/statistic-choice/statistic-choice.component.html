@@ -13,6 +13,7 @@
     {{ 'statistic.a11y-message-evaluation' | translate: {content: content.body} }}
   </div>
 </div>
+<lib-extension-point extensionId="attachment-list" [extensionData]="extensionData"></lib-extension-point>
 <div>
   <app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
   <div class="chart-container" *ngIf="!isLoading" [ngClass]="{ 'invisible': !chartVisible }">

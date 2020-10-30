@@ -21,6 +21,7 @@ export class ContentParticipantComponent implements OnInit {
   shortId: string;
   contentGroupName: string;
   flipped: boolean;
+  extensionData: any;
 
   constructor(
     protected authenticationService: AuthenticationService,
@@ -62,5 +63,14 @@ export class ContentParticipantComponent implements OnInit {
   }
 
   abstain($event) {
+  }
+
+  setExtensionData(roomId: string, refId: string) {
+    this.extensionData = {
+      'roomId': roomId,
+      'refType': 'content',
+      'refId': refId,
+      'detailedView': false
+    };
   }
 }

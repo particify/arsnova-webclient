@@ -42,6 +42,7 @@ export class ContentTextParticipantComponent extends ContentParticipantComponent
   }
 
   initAnswer(userId: string) {
+    this.setExtensionData(this.content.roomId, this.content.id);
     this.answerService.getTextAnswerByContentIdUserIdCurrentRound(this.content.id, userId).subscribe(answer => {
       if (answer) {
         this.givenAnswer = answer;
