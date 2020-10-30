@@ -1,5 +1,5 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { BarController, CategoryScale, Chart, IBarControllerDataset, LinearScale, Rectangle, Tooltip } from 'chart.js';
+import { BarController, CategoryScale, Chart, IBarControllerDatasetOptions, LinearScale, Rectangle, Tooltip } from 'chart.js';
 import { ActivatedRoute } from '@angular/router';
 import { ContentService } from '../../../services/http/content.service';
 import { ContentChoice } from '../../../models/content-choice';
@@ -136,7 +136,7 @@ export class StatisticChoiceComponent implements OnInit, OnDestroy {
   }
 
   toggleCorrect() {
-    const dataset = this.chart.config.data.datasets[0] as IBarControllerDataset<number>;
+    const dataset = this.chart.config.data.datasets[0] as IBarControllerDatasetOptions;
     dataset.backgroundColor = this.colorLabel ? this.colors : this.indicationColors;
     this.chart.update();
     this.colorLabel = !this.colorLabel;
