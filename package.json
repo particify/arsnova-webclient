@@ -29,7 +29,7 @@
     "@ngx-translate/http-loader": "^6.0.0",
     "@stomp/ng2-stompjs": "^7.2.0",
     "angularx-qrcode": "^10.0.3",
-    "chart.js": "^3.0.0-beta",
+    "chart.js": "^3.0.0-beta.4",
     "dayjs": "^1.8.35",
     "is-docker": "^2.0.0",
     "jwt-decode": "^2.2.0",
