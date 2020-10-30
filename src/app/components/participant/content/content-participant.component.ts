@@ -5,6 +5,7 @@ import { LanguageService } from '../../../services/util/language.service';
 import { AuthenticationService } from '../../../services/http/authentication.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GlobalStorageService, STORAGE_KEYS } from '../../../services/util/global-storage.service';
+import { Answer } from '@arsnova/src/app/models/answer';
 
 @Component({
   selector: 'app-content-participant',
@@ -12,9 +13,8 @@ import { GlobalStorageService, STORAGE_KEYS } from '../../../services/util/globa
 })
 export class ContentParticipantComponent implements OnInit {
 
-
   @Input() index = 0;
-  @Output() message = new EventEmitter<boolean>();
+  @Output() message = new EventEmitter<Answer>();
 
   alreadySent = false;
   isLoading = true;
@@ -48,8 +48,8 @@ export class ContentParticipantComponent implements OnInit {
   initAnswer(userId: string) {
   }
 
-  sendStatusToParent() {
-    this.message.emit(this.alreadySent);
+  sendStatusToParent(answer: Answer) {
+    this.message.emit(answer);
   }
 
   goToStats() {
