@@ -30,13 +30,13 @@ class CheckedAnswer {
 export class ContentChoiceParticipantComponent extends ContentParticipantComponent implements OnInit {
 
   @Input() content: ContentChoice;
-  @Output() message = new EventEmitter<boolean>();
+  @Input() answer: ChoiceAnswer;
+  @Output() message = new EventEmitter<ChoiceAnswer>();
 
   isLoading = true;
   ContentType: typeof ContentType = ContentType;
   selectedSingleAnswer: string;
   checkedAnswers: CheckedAnswer[] = [];
-  alreadySent = false;
   correctOptionIndexes: number[] = [];
   isCorrect = false;
   isChoice = true;
@@ -60,14 +60,13 @@ export class ContentChoiceParticipantComponent extends ContentParticipantCompone
 
   initAnswer(userId: string) {
     this.setExtensionData(this.content.roomId, this.content.id);
-    this.answerService.getChoiceAnswerByContentIdUserIdCurrentRound(this.content.id, userId).subscribe(answer => {
-      for (const answerOption of this.content.options) {
-        this.checkedAnswers.push(new CheckedAnswer(answerOption, false));
-      }
-      this.getCorrectAnswer();
-      if (answer) {
-        if (answer.selectedChoiceIndexes && answer.selectedChoiceIndexes.length > 0) {
-          for (const i of answer.selectedChoiceIndexes) {
+    for (const answerOption of this.content.options) {
+      this.checkedAnswers.push(new CheckedAnswer(answerOption, false));
+    }
+    this.getCorrectAnswer();
+      if (this.answer) {
+        if (this.answer.selectedChoiceIndexes && this.answer.selectedChoiceIndexes.length > 0) {
+          for (const i of this.answer.selectedChoiceIndexes) {
             this.checkedAnswers[i].checked = true;
             this.multipleAlreadyAnswered += this.checkedAnswers[i].answerOption.label + '&';
             if (!this.content.multiple) {
@@ -76,13 +75,11 @@ export class ContentChoiceParticipantComponent extends ContentParticipantCompone
           }
         }
         if (this.isChoice) {
-          this.checkAnswer(answer.selectedChoiceIndexes);
+          this.checkAnswer(this.answer.selectedChoiceIndexes);
         }
         this.alreadySent = true;
       }
-      this.sendStatusToParent();
       this.isLoading = false;
-    });
   }
 
   getCorrectAnswer() {
@@ -158,7 +155,7 @@ export class ContentChoiceParticipantComponent extends ContentParticipantCompone
       selectedChoiceIndexes: selectedAnswers,
       creationTimestamp: null,
       format: ContentType.CHOICE
-    } as ChoiceAnswer).subscribe(() => {
+    } as ChoiceAnswer).subscribe(answer => {
       if (this.isChoice) {
         this.checkAnswer(selectedAnswers);
       }
@@ -166,7 +163,7 @@ export class ContentChoiceParticipantComponent extends ContentParticipantCompone
         this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.SUCCESS);
       });
       this.alreadySent = true;
-      this.sendStatusToParent();
+      this.sendStatusToParent(answer);
     });
   }
 
@@ -180,10 +177,11 @@ export class ContentChoiceParticipantComponent extends ContentParticipantCompone
       selectedChoiceIndexes: [],
       creationTimestamp: null,
       format: ContentType.CHOICE
-    } as ChoiceAnswer).subscribe();
-    this.resetCheckedAnswers();
-    this.hasAbstained = true;
-    this.alreadySent = true;
-    this.sendStatusToParent();
+    } as ChoiceAnswer).subscribe(answer => {
+      this.resetCheckedAnswers();
+      this.hasAbstained = true;
+      this.alreadySent = true;
+      this.sendStatusToParent(answer);
+    });
   }
 }

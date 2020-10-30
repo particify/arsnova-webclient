@@ -20,7 +20,8 @@ import { ContentParticipantComponent } from '../content-participant.component';
 export class ContentTextParticipantComponent extends ContentParticipantComponent implements OnInit {
 
   @Input() content: ContentText;
-  @Output() message = new EventEmitter<boolean>();
+  @Input() answer: TextAnswer;
+  @Output() message = new EventEmitter<TextAnswer>();
 
   givenAnswer: TextAnswer;
 
@@ -43,23 +44,16 @@ export class ContentTextParticipantComponent extends ContentParticipantComponent
 
   initAnswer(userId: string) {
     this.setExtensionData(this.content.roomId, this.content.id);
-    this.answerService.getTextAnswerByContentIdUserIdCurrentRound(this.content.id, userId).subscribe(answer => {
-      if (answer) {
-        this.givenAnswer = answer;
-        this.alreadySent = true;
-      }
-      this.sendStatusToParent();
-      if (this.givenAnswer && this.givenAnswer.body) {
-        this.getAnsweredMessage();
-      } else {
-        this.getAbstainedMessage();
-      }
-      this.isLoading = false;
-    });
-  }
-
-  sendStatusToParent() {
-    this.message.emit(this.alreadySent);
+    if (this.answer) {
+      this.givenAnswer = this.answer;
+      this.alreadySent = true;
+    }
+    if (this.givenAnswer && this.givenAnswer.body) {
+      this.getAnsweredMessage();
+    } else {
+      this.getAbstainedMessage();
+    }
+    this.isLoading = false;
   }
 
   getAnsweredMessage() {
@@ -99,14 +93,14 @@ export class ContentTextParticipantComponent extends ContentParticipantComponent
       read: 'false',
       creationTimestamp: null,
       format: ContentType.TEXT
-    } as TextAnswer).subscribe(() => {
+    } as TextAnswer).subscribe(answer => {
       this.createAnswer(this.textAnswer);
       this.getAnsweredMessage();
       this.translateService.get('answer.sent').subscribe(msg => {
         this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.SUCCESS);
       });
       this.alreadySent = true;
-      this.sendStatusToParent();
+      this.sendStatusToParent(answer);
     });
   }
 
@@ -120,10 +114,11 @@ export class ContentTextParticipantComponent extends ContentParticipantComponent
       body: null,
       creationTimestamp: null,
       format: ContentType.TEXT
-    } as TextAnswer).subscribe();
-    this.createAnswer();
-    this.getAbstainedMessage();
-    this.alreadySent = true;
-    this.sendStatusToParent();
+    } as TextAnswer).subscribe(answer => {
+      this.createAnswer();
+      this.getAbstainedMessage();
+      this.alreadySent = true;
+      this.sendStatusToParent(answer);
+    });
   }
 }
