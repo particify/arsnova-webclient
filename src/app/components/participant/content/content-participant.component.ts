@@ -5,7 +5,7 @@ import { LanguageService } from '../../../services/util/language.service';
 import { AuthenticationService } from '../../../services/http/authentication.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GlobalStorageService, STORAGE_KEYS } from '../../../services/util/global-storage.service';
-import { Answer } from '@arsnova/src/app/models/answer';
+import { Answer } from '../../../models/answer';
 
 @Component({
   selector: 'app-content-participant',

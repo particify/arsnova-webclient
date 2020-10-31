@@ -86,17 +86,23 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
         this.contentGroup = contentGroup;
         this.contentService.getContentsByIds(this.contentGroup.roomId, this.contentGroup.contentIds).subscribe(contents => {
           this.contents = this.contentService.getSupportedContents(contents).filter(content => content.state.visible);
-          for (let [index, content] of this.contents.entries()) {
-            this.answerService.getChoiceAnswerByContentIdUserIdCurrentRound(content.roomId, content.id, userId).subscribe(answer => {
-              this.answers[this.contents.map(c => c.id).indexOf(content.id)] = answer;
-              this.alreadySent.set(index, !!answer);
-              if (this.answers.length === this.contents.length) {
-                this.isLoading = false;
-                this.checkIfLastContentExists(lastContentIndex);
-                this.getFirstUnansweredContent();
+          this.answerService.getAnswersByUserIdContentIds(contentGroup.roomId, userId, this.contents.map(c => c.id)).subscribe(answers => {
+            let answersAdded = 0;
+            for (const [index, content] of this.contents.entries()) {
+              if (answersAdded < answers.length) {
+                for (const answer of answers) {
+                  if (content.id === answer.contentId) {
+                    this.answers[index] = answer;
+                    answersAdded++;
+                  }
+                }
               }
-            });
-          }
+              this.alreadySent.set(index, !!this.answers[index]);
+            }
+            this.isLoading = false;
+            this.checkIfLastContentExists(lastContentIndex);
+            this.getFirstUnansweredContent();
+          });
         });
       });
     });
@@ -108,7 +114,6 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
 
   checkIfLastContentExists(contentIndex: number) {
     if (contentIndex) {
-      this.started = this.status.LAST_CONTENT;
       this.initStepper(contentIndex);
     } else {
       this.started = this.status.PRE_START;
@@ -120,10 +125,7 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
       this.currentStep = index;
       this.stepper.init(index, this.contents.length);
     }, 200);
-  }
-
-  allStatusChecked(): boolean {
-    return this.alreadySent.size === this.contents.length;
+    this.started = this.status.NORMAL;
   }
 
   updateURL(index: number) {
@@ -132,11 +134,12 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
   }
 
   getFirstUnansweredContent() {
-    for (let i = 0; i < this.alreadySent.size; i++) {
-      if (this.alreadySent.get(i) === false) {
-        this.initStepper(i);
-        this.started = this.status.NORMAL;
-        break;
+    if (this.started !== this.status.NORMAL) {
+      for (let i = 0; i < this.alreadySent.size; i++) {
+        if (this.alreadySent.get(i) === false) {
+          this.initStepper(i);
+          break;
+        }
       }
     }
   }
@@ -158,10 +161,6 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
         }, wait);
       } else {
         this.announce('answer.a11y-last-content');
-      }
-    } else {
-      if (this.allStatusChecked()) {
-        this.started = this.status.NORMAL;
       }
     }
   }
