@@ -322,6 +322,7 @@ export class CommentListComponent implements OnInit, OnDestroy {
       this.filteredComments = this.comments;
       this.hideCommentsList = false;
       this.currentFilter = '';
+      this.sortComments(this.currentSort);
       return;
     }
     this.filteredComments = this.comments.filter(c => {
