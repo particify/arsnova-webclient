@@ -12,6 +12,7 @@ import { IMessage } from '@stomp/stompjs';
 import { TranslateService } from '@ngx-translate/core';
 import { NotificationService } from '../util/notification.service';
 import { ContentType } from '@arsnova/app/models/content-type.enum';
+import { EventService } from '../util/event.service';
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -27,9 +28,10 @@ export class ContentService extends BaseHttpService {
 
   constructor(private http: HttpClient,
               private ws: WsConnectorService,
+              protected eventService: EventService,
               protected translateService: TranslateService,
               protected notificationService: NotificationService) {
-    super(translateService, notificationService);
+    super(eventService, translateService, notificationService);
   }
 
   getAnswersChangedStream(roomId: string, contentId: string): Observable<IMessage> {

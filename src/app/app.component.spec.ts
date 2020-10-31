@@ -13,6 +13,7 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 import { HttpClient } from '@angular/common/http';
 import { DialogService } from './services/util/dialog.service';
 import { GlobalStorageService, STORAGE_KEYS } from './services/util/global-storage.service';
+import { EventService } from './services/util/event.service';
 
 @Injectable()
 class MockTranslateService {
@@ -53,6 +54,10 @@ class MockDialogService {
 }
 
 @Injectable()
+class MockEventService {
+}
+
+@Injectable()
 class MockGlobalStorageService {
   public getItem(key: string): string {
     return '';
@@ -80,9 +85,10 @@ class MockApiConfigService extends ApiConfigService {
   private apiConfig = new Subject<any>();
   public load = jasmine.createSpy('ApiConfigServiceLoadSpy');
 
-  constructor(private httpClient: HttpClient) {
+  constructor(private httpClient: HttpClient, protected eventService: EventService) {
     super(
       httpClient,
+      eventService,
       jasmine.createSpyObj('TranslateServiceSpy', ['get']),
       jasmine.createSpyObj('NotificationServiceSpy', ['showAdvanced'])
     );
@@ -194,6 +200,10 @@ describe('AppComponent', () => {
         {
           provide: GlobalStorageService,
           useClass: MockGlobalStorageService
+        },
+        {
+          provide: EventService,
+          useClass: MockEventService
         },
         {
           provide: Window,

@@ -26,10 +26,10 @@ export class UserService extends BaseHttpService {
   };
 
   constructor(private http: HttpClient,
-              private eventService: EventService,
+              protected eventService: EventService,
               protected translateService: TranslateService,
               protected notificationService: NotificationService) {
-    super(translateService, notificationService);
+    super(eventService, translateService, notificationService);
   }
 
   getUser(id: string) {

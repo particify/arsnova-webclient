@@ -7,6 +7,7 @@ import { BaseHttpService } from './base-http.service';
 import { TSMap } from 'typescript-map';
 import { TranslateService } from '@ngx-translate/core';
 import { NotificationService } from '../util/notification.service';
+import { EventService } from '../util/event.service';
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -24,9 +25,10 @@ export class CommentService extends BaseHttpService {
   };
 
   constructor(private http: HttpClient,
+              protected eventService: EventService,
               protected translateService: TranslateService,
               protected notificationService: NotificationService) {
-    super(translateService, notificationService);
+    super(eventService, translateService, notificationService);
   }
 
   getComment(commentId: string, roomId: string): Observable<Comment> {

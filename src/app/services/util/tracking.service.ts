@@ -25,6 +25,7 @@ enum ActionDimension {
 }
 
 enum EventCategory {
+  ERROR = 'Error',
   ACCOUNT = 'Account',
   USER_DATA_ROOM = 'User data - Room',
   FEATURE_USAGE_SURVEY = 'Feature usage - Survey'
@@ -108,6 +109,8 @@ export class TrackingService {
         this.addEvent(EventCategory.ACCOUNT, 'User logged out');
       }
     });
+    this.eventService.on<any>('HttpRequestFailed')
+        .subscribe(e => this.addEvent(EventCategory.ERROR, 'HTTP request failed', e.statusText, e.status));
     this.eventService.on<any>('AccountCreated')
         .subscribe(e => this.addEvent(EventCategory.ACCOUNT, 'Account created'));
     this.eventService.on<any>('AccountDeleted')
