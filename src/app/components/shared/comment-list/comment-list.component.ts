@@ -257,11 +257,6 @@ export class CommentListComponent implements OnInit, OnDestroy {
                   break;
                 case this.filtering.FAVORITE:
                   this.comments[i].favorite = <boolean>value;
-                  if (this.auth.userId === this.comments[i].creatorId && <boolean>value) {
-                    this.translateService.get('comment-list.comment-got-favorited').subscribe(ret => {
-                      this.notificationService.show(ret);
-                    });
-                  }
                   break;
                 case 'score':
                   this.comments[i].score = <number>value;
