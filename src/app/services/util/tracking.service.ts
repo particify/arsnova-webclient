@@ -4,6 +4,7 @@ import { filter } from 'rxjs/operators';
 import { ConsentService } from './consent.service';
 import { StorageItemCategory } from '../../models/storage';
 import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
+import { AuthenticationService } from '../http/authentication.service';
 import { EventService } from './event.service';
 import { ThemeService } from '../../../theme/theme.service';
 import { UserRole } from '../../models/user-roles.enum';
@@ -13,7 +14,8 @@ const HEARTBEAT_INVERVAL = 60;
 /* This enum maps to Matomo dimension IDs for visits. */
 enum VisitDimension {
   UI_LANGUAGE = 1,
-  THEME = 2
+  THEME = 2,
+  AUTH_PROVIDER = 5,
 }
 
 /* This enum maps to Matomo dimension IDs for actions. */
@@ -40,6 +42,7 @@ export class TrackingService {
     private consentService: ConsentService,
     private router: Router,
     private eventService: EventService,
+    private authenticationService: AuthenticationService,
     private translateService: TranslateService,
     private themeService: ThemeService
   ) {
@@ -97,8 +100,18 @@ export class TrackingService {
   }
 
   setupTrackingSubscriptions() {
+    this.authenticationService.getAuthenticationChanges().subscribe(auth => {
+      if (auth) {
+        this.setVisitDimension(VisitDimension.AUTH_PROVIDER, auth.authProvider.toString().toLowerCase());
+        this.addEvent(EventCategory.ACCOUNT, 'User logged in', auth.authProvider.toString().toLowerCase());
+      } else {
+        this.addEvent(EventCategory.ACCOUNT, 'User logged out');
+      }
+    });
     this.eventService.on<any>('AccountCreated')
         .subscribe(e => this.addEvent(EventCategory.ACCOUNT, 'Account created'));
+    this.eventService.on<any>('AccountDeleted')
+        .subscribe(e => this.addEvent(EventCategory.ACCOUNT, 'Account deleted'));
     this.eventService.on<any>('RoomCreated')
         .subscribe(e => this.addEvent(EventCategory.USER_DATA_ROOM, 'Room created'));
     this.eventService.on<any>('SurveyStarted')
@@ -127,8 +140,9 @@ export class TrackingService {
     this._paq.push(['trackPageView', title, dimensions]);
   }
 
-  addEvent(category: EventCategory, action: string) {
-    this._paq.push(['trackEvent', category, action]);
+  addEvent(category: EventCategory, action: string, name?: string, value?: number) {
+    const event = ['trackEvent', category, action];
+    this._paq.push(['trackEvent', category, action, name, value]);
   }
 
   /**

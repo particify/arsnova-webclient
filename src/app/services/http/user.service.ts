@@ -4,6 +4,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BaseHttpService } from './base-http.service';
 import { User } from '../../models/user';
 import { AccountCreated } from '../../models/events/account-created';
+import { AccountDeleted } from '../../models/events/account-deleted';
 import { catchError, map, tap } from 'rxjs/operators';
 import { EventService } from '../util/event.service';
 import { TranslateService } from '@ngx-translate/core';
@@ -111,7 +112,10 @@ export class UserService extends BaseHttpService {
   delete(id: string): Observable<User> {
     const connectionUrl: string = this.apiUrl.base + this.apiUrl.user + '/' + id;
     return this.http.delete<User>(connectionUrl, httpOptions).pipe(
-      tap(_ => ''),
+      tap(() => {
+        const event = new AccountDeleted();
+        this.eventService.broadcast(event.type);
+      }),
       catchError(this.handleError<User>('deleteUser'))
     );
   }
