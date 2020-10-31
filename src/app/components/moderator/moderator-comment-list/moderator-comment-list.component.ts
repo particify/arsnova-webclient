@@ -194,6 +194,10 @@ export class ModeratorCommentListComponent implements OnInit {
         c.body = payload.body;
         c.id = payload.id;
         c.timestamp = payload.timestamp;
+        c.tag = payload.tag;
+        c.answer = payload.answer;
+        c.favorite = payload.favorite;
+        c.correct = payload.correct;
         this.comments = this.comments.concat(c);
         this.announceNewComment(c);
         break;
