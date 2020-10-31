@@ -109,6 +109,13 @@ export class CommentComponent implements OnInit {
     this.translateService.use(this.language);
     this.deviceType = this.globalStorageService.getItem(STORAGE_KEYS.DEVICE_TYPE);
     this.inAnswerView = !this.router.url.includes('comments');
+    if (this.referenceEvent) {
+      this.referenceEvent.subscribe(id => {
+        if (this.comment.id === id) {
+          this.extensionEvent.next(this.comment.id);
+        }
+      });
+    }
   }
 
   changeSlideState(): void {
