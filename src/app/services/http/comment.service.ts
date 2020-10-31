@@ -8,6 +8,7 @@ import { TSMap } from 'typescript-map';
 import { TranslateService } from '@ngx-translate/core';
 import { NotificationService } from '../util/notification.service';
 import { EventService } from '../util/event.service';
+import { CommentCreated } from '../../models/events/comment-created';
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -42,7 +43,10 @@ export class CommentService extends BaseHttpService {
   addComment(comment: Comment): Observable<Comment> {
     const connectionUrl = `${this.getBaseUrl(comment.roomId) + this.serviceApiUrl.comment}/`;
     return this.http.post<Comment>(connectionUrl, comment, httpOptions).pipe(
-      tap(_ => ''),
+      tap(() => {
+        const event = new CommentCreated();
+        this.eventService.broadcast(event.type);
+      }),
       catchError(this.handleError<Comment>('addComment'))
     );
   }
