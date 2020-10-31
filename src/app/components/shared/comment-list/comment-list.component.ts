@@ -237,6 +237,9 @@ export class CommentListComponent implements OnInit, OnDestroy {
         c.id = payload.id;
         c.timestamp = payload.timestamp;
         c.tag = payload.tag;
+        c.answer = payload.answer;
+        c.favorite = payload.favorite;
+        c.correct = payload.correct;
 
         this.announceNewComment(c);
 
