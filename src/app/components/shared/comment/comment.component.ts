@@ -121,11 +121,13 @@ export class CommentComponent implements OnInit {
       'pureImageView': true,
       'retryEvent': this.extensionEvent
     };
-    this.referenceEvent.subscribe(id => {
-      if (this.comment.id === id) {
-        this.extensionEvent.next(this.comment.id);
-      }
-    });
+    if (this.referenceEvent) {
+      this.referenceEvent.subscribe(id => {
+        if (this.comment.id === id) {
+          this.extensionEvent.next(this.comment.id);
+        }
+      });
+    }
   }
 
   changeSlideState(): void {
