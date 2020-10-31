@@ -8,6 +8,7 @@ import { CookiesComponent } from '../../components/home/_dialogs/cookies/cookies
 import { StorageItemCategory } from '../../models/storage';
 import { TranslateService } from '@ngx-translate/core';
 import { NotificationService } from './notification.service';
+import { EventService } from './event.service';
 
 export const CONSENT_VERSION = 1;
 
@@ -62,9 +63,10 @@ export class ConsentService extends BaseHttpService {
     public dialog: MatDialog,
     private http: HttpClient,
     private config: ApiConfigService,
+    protected eventService: EventService,
     protected translateService: TranslateService,
     protected notificationService: NotificationService) {
-    super(translateService, notificationService);
+    super(eventService, translateService, notificationService);
   }
 
   init(consentSettings: ConsentSettings) {

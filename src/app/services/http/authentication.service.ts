@@ -51,7 +51,7 @@ export class AuthenticationService extends BaseHttpService {
     private http: HttpClient,
     protected translateService: TranslateService,
     protected notificationService: NotificationService) {
-    super(translateService, notificationService);
+    super(eventService, translateService, notificationService);
     const savedAuth: ClientAuthentication = this.globalStorageService.getItem(STORAGE_KEYS.USER);
     this.auth$$ = new BehaviorSubject(new BehaviorSubject(savedAuth));
   }

@@ -7,6 +7,7 @@ import { BaseHttpService } from './base-http.service';
 import { ChoiceAnswer } from '../../models/choice-answer';
 import { TranslateService } from '@ngx-translate/core';
 import { NotificationService } from '../util/notification.service';
+import { EventService } from '../util/event.service';
 import { Answer } from '@arsnova/app/models/answer';
 
 const httpOptions = {
@@ -24,9 +25,10 @@ export class ContentAnswerService extends BaseHttpService {
   };
 
   constructor(private http: HttpClient,
+              protected eventService: EventService,
               protected translateService: TranslateService,
               protected notificationService: NotificationService) {
-    super(translateService, notificationService);
+    super(eventService, translateService, notificationService);
   }
 
   getAnswers(contentId: string): Observable<TextAnswer[]> {

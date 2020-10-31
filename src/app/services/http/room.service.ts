@@ -42,12 +42,12 @@ export class RoomService extends BaseHttpService {
   constructor(
     private http: HttpClient,
     private ws: WsConnectorService,
-    private eventService: EventService,
     private authService: AuthenticationService,
     private globalStorageService: GlobalStorageService,
+    protected eventService: EventService,
     protected translateService: TranslateService,
     protected notificationService: NotificationService) {
-    super(translateService, notificationService);
+    super(eventService, translateService, notificationService);
   }
 
   /**
