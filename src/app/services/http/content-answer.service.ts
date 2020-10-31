@@ -7,6 +7,7 @@ import { BaseHttpService } from './base-http.service';
 import { ChoiceAnswer } from '../../models/choice-answer';
 import { TranslateService } from '@ngx-translate/core';
 import { NotificationService } from '../util/notification.service';
+import { Answer } from '@arsnova/app/models/answer';
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -35,6 +36,18 @@ export class ContentAnswerService extends BaseHttpService {
       externalFilters: {}
     }, httpOptions).pipe(
       catchError(this.handleError('getAnswers', []))
+    );
+  }
+
+  getAnswersByUserIdContentIds(roomId: string, userId: string, contentIds: string[]): Observable<Answer[]> {
+    const url = this.apiUrl.base + this.apiUrl.answer + this.apiUrl.find;
+    return this.http.post<Answer[]>(url, {
+      properties: { creatorId: userId },
+      externalFilters: {
+        contentIds: contentIds
+      }
+    }, httpOptions).pipe(
+      catchError(this.handleError<Answer[]>('getAnswersByUserIdContentIds'))
     );
   }
 
