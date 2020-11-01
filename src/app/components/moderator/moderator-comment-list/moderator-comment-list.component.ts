@@ -16,6 +16,7 @@ import { GlobalStorageService, STORAGE_KEYS } from '../../../services/util/globa
 import { AnnounceService } from '@arsnova/app/services/util/announce.service';
 import { KeyboardUtils } from '@arsnova/app/utils/keyboard';
 import { KeyboardKey } from '@arsnova/app/utils/keyboard/keys';
+import { Subject } from 'rxjs';
 
 export const itemRenderNumber = 20;
 
@@ -49,6 +50,7 @@ export class ModeratorCommentListComponent implements OnInit {
   displayComments: Comment[] = [];
   commentCounter = itemRenderNumber;
   newestComment: Comment = new Comment();
+  referenceEvent: Subject<string> = new Subject<string>();
 
   constructor(
     private route: ActivatedRoute,
@@ -178,6 +180,8 @@ export class ModeratorCommentListComponent implements OnInit {
           });
         }
         break;
+      default:
+        this.referenceEvent.next(payload.id);
     }
     this.sortComments(this.currentSort);
     this.searchComments();

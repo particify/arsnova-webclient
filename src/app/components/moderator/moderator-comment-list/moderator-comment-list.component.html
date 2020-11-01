@@ -63,7 +63,7 @@
 
 <div class="comments-container" *ngIf="!isLoading">
   <app-comment *ngFor="let current of displayComments" [comment]="current" [isNew]="current.id === newestComment.id"
-               [parseVote]="getVote(current)"></app-comment>
+               [parseVote]="getVote(current)" [referenceEvent]="referenceEvent.asObservable()"></app-comment>
 </div>
 
 <div *ngIf="comments && comments.length < 1 && !isLoading" fxLayout="row" fxLayoutAlign="center center"
