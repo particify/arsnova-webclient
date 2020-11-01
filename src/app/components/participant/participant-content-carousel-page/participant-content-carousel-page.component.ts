@@ -12,6 +12,9 @@ import { KeyboardKey } from '../../../utils/keyboard/keys';
 import { GlobalStorageService, STORAGE_KEYS } from '../../../services/util/global-storage.service';
 import { AnnounceService } from '../../../services/util/announce.service';
 import { Location } from '@angular/common';
+import { ContentAnswerService } from '../../../services/http/content-answer.service';
+import { AuthenticationService } from '../../../services/http/authentication.service';
+import { Answer } from '../../../models/answer';
 
 @Component({
   selector: 'app-participant-content-carousel-page',
@@ -37,6 +40,8 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
     PRE_START: 'PRE_START'
   };
   started: string;
+  answers: Answer[] = [];
+  currentStep = 0;
 
   constructor(
     private contentService: ContentService,
@@ -45,7 +50,9 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
     protected route: ActivatedRoute,
     private announceService: AnnounceService,
     private globalStorageService: GlobalStorageService,
-    private location: Location
+    private location: Location,
+    private answerService: ContentAnswerService,
+    private authenticationService: AuthenticationService
   ) {
   }
 
@@ -72,12 +79,30 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
       this.contentGroupName = params['contentGroup'];
       this.shortId = params['shortId'];
       lastContentIndex = params['contentIndex'] - 1;
+      let userId;
+      this.authenticationService.getCurrentAuthentication()
+        .subscribe(auth => userId = auth.userId);
       this.roomService.getGroupByRoomIdAndName('~' + this.shortId, this.contentGroupName).subscribe(contentGroup => {
         this.contentGroup = contentGroup;
         this.contentService.getContentsByIds(this.contentGroup.roomId, this.contentGroup.contentIds).subscribe(contents => {
           this.contents = this.contentService.getSupportedContents(contents).filter(content => content.state.visible);
-          this.checkIfLastContentExists(lastContentIndex);
-          this.isLoading = false;
+          this.answerService.getAnswersByUserIdContentIds(contentGroup.roomId, userId, this.contents.map(c => c.id)).subscribe(answers => {
+            let answersAdded = 0;
+            for (const [index, content] of this.contents.entries()) {
+              if (answersAdded < answers.length) {
+                for (const answer of answers) {
+                  if (content.id === answer.contentId) {
+                    this.answers[index] = answer;
+                    answersAdded++;
+                  }
+                }
+              }
+              this.alreadySent.set(index, !!this.answers[index]);
+            }
+            this.isLoading = false;
+            this.checkIfLastContentExists(lastContentIndex);
+            this.getFirstUnansweredContent();
+          });
         });
       });
     });
@@ -89,40 +114,40 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
 
   checkIfLastContentExists(contentIndex: number) {
     if (contentIndex) {
-      this.started = this.status.LAST_CONTENT;
-      setTimeout(() => {
-        this.initStepper(contentIndex);
-      }, 100);
+      this.initStepper(contentIndex);
     } else {
       this.started = this.status.PRE_START;
     }
   }
 
   initStepper(index: number) {
-    this.stepper.init(index, this.contents.length);
-  }
-
-  allStatusChecked(): boolean {
-    return this.alreadySent.size === this.contents.length;
+    setTimeout(() => {
+      this.currentStep = index;
+      this.stepper.init(index, this.contents.length);
+    }, 200);
+    this.started = this.status.NORMAL;
   }
 
   updateURL(index: number) {
+    this.currentStep = index;
     this.location.replaceState(`participant/room/${this.shortId}/group/${this.contentGroup.name}/${index + 1}`);
   }
 
-  receiveSentStatus($event, index: number) {
-    this.alreadySent.set(index, $event);
-    if (this.started === this.status.PRE_START) {
-      if (this.allStatusChecked()) {
-        for (let i = 0; i < this.alreadySent.size; i++) {
-          if (this.alreadySent.get(i) === false) {
-            this.initStepper(i);
-            this.started = this.status.NORMAL;
-            break;
-          }
+  getFirstUnansweredContent() {
+    if (this.started !== this.status.NORMAL) {
+      for (let i = 0; i < this.alreadySent.size; i++) {
+        if (this.alreadySent.get(i) === false) {
+          this.initStepper(i);
+          break;
         }
       }
-    } else if (this.started === this.status.NORMAL) {
+    }
+  }
+
+  receiveSentStatus(answer: Answer, index: number) {
+    this.alreadySent.set(index, !!answer);
+    this.answers[this.contents.map(c => c.id).indexOf(answer.contentId)] = answer;
+    if (this.started === this.status.NORMAL) {
       if (index < this.contents.length - 1) {
         let wait = 200;
         if (this.contents[index].state.responsesVisible) {
@@ -136,10 +161,6 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
         }, wait);
       } else {
         this.announce('answer.a11y-last-content');
-      }
-    } else {
-      if (this.allStatusChecked()) {
-        this.started = this.status.NORMAL;
       }
     }
   }
