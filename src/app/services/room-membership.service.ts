@@ -35,7 +35,7 @@ export class RoomMembershipService extends BaseHttpService {
     private authenticationService: AuthenticationService,
     protected translateService: TranslateService,
     protected notificationService: NotificationService) {
-    super(translateService, notificationService);
+    super(eventService, translateService, notificationService);
       const authChanged$ = authenticationService.getAuthenticationChanges().pipe(skip(1));
       authenticationService.getAuthenticationChanges().subscribe(auth => {
         if (!auth) {

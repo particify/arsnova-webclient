@@ -6,6 +6,7 @@ import { ApiConfig, AuthenticationProvider, Feature } from '../../models/api-con
 import { TranslateService } from '@ngx-translate/core';
 import { NotificationService } from '../util/notification.service';
 import { shareReplay } from 'rxjs/operators';
+import { EventService } from '../util/event.service';
 
 @Injectable()
 export class ApiConfigService extends BaseHttpService {
@@ -16,9 +17,10 @@ export class ApiConfigService extends BaseHttpService {
   private config: ApiConfig;
 
   constructor(private http: HttpClient,
+              protected eventService: EventService,
               protected translateService: TranslateService,
               protected notificationService: NotificationService) {
-    super(translateService, notificationService);
+    super(eventService, translateService, notificationService);
     this.config$ = this.http.get<ApiConfig>(this.getBaseUrl() + this.serviceApiUrl.config).pipe(shareReplay(1));
     this.config = new ApiConfig([], {}, {});
     this.freezeRecursively(this.config);

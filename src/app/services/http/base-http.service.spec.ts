@@ -3,8 +3,14 @@ import { inject, TestBed } from '@angular/core/testing';
 import { BaseHttpService } from './base-http.service';
 import { TranslateService } from '@ngx-translate/core';
 import { NotificationService } from '../util/notification.service';
+import { EventService } from '../util/event.service';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
+
+@Injectable()
+class MockEventService {
+
+}
 
 @Injectable()
 class MockNotificationService {
@@ -23,6 +29,10 @@ describe('BaseHttpService', () => {
     TestBed.configureTestingModule({
       providers: [
         BaseHttpService,
+        {
+          provide: EventService,
+          useClass: MockEventService
+        },
         {
           provide: NotificationService,
           useClass: MockNotificationService

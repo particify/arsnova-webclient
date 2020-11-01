@@ -12,6 +12,8 @@ import { IMessage } from '@stomp/stompjs';
 import { TranslateService } from '@ngx-translate/core';
 import { NotificationService } from '../util/notification.service';
 import { ContentType } from '@arsnova/app/models/content-type.enum';
+import { EventService } from '../util/event.service';
+import { ContentCreated } from '../../models/events/content-created';
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -27,9 +29,10 @@ export class ContentService extends BaseHttpService {
 
   constructor(private http: HttpClient,
               private ws: WsConnectorService,
+              protected eventService: EventService,
               protected translateService: TranslateService,
               protected notificationService: NotificationService) {
-    super(translateService, notificationService);
+    super(eventService, translateService, notificationService);
   }
 
   getAnswersChangedStream(roomId: string, contentId: string): Observable<IMessage> {
@@ -80,9 +83,11 @@ export class ContentService extends BaseHttpService {
 
   addContent(content: Content): Observable<Content> {
     const connectionUrl = this.getBaseUrl(content.roomId) + this.serviceApiUrl.content + '/';
-    return this.http.post<Content>(connectionUrl,
-      content,
-      httpOptions).pipe(
+    return this.http.post<Content>(connectionUrl, content, httpOptions).pipe(
+      tap(() => {
+        const event = new ContentCreated(content.format);
+        this.eventService.broadcast(event.type, event.payload);
+      }),
       catchError(this.handleError<Content>('addContent'))
     );
   }

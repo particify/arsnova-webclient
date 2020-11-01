@@ -5,6 +5,7 @@ import { catchError } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { TranslateService } from '@ngx-translate/core';
 import { NotificationService } from '../util/notification.service';
+import { EventService } from '../util/event.service';
 
 export enum MarkdownFeatureset {
   MINIMUM = 'MINIMUM',
@@ -29,9 +30,10 @@ export class FormattingService extends BaseHttpService {
   };
 
   constructor(private http: HttpClient,
+              protected eventService: EventService,
               protected translateService: TranslateService,
               protected notificationService: NotificationService) {
-    super(translateService, notificationService);
+    super(eventService, translateService, notificationService);
   }
 
   postString(text: string, options?: FormattingOptions): Observable<any> {

@@ -23,12 +23,12 @@ export class ContentGroupService extends BaseHttpService {
 
   constructor(
     private http: HttpClient,
-    private eventService: EventService,
     private authService: AuthenticationService,
     private globalStorageService: GlobalStorageService,
+    protected eventService: EventService,
     protected translateService: TranslateService,
     protected notificationService: NotificationService) {
-    super(translateService, notificationService);
+    super(eventService, translateService, notificationService);
   }
 
   getByRoomIdAndName(roomId: string, name: string): Observable<ContentGroup> {
