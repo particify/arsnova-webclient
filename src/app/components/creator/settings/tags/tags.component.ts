@@ -40,14 +40,14 @@ export class TagsComponent implements OnInit {
     if (this.room.extensions !== undefined && this.room.extensions['tags'] !== undefined) {
       this.extension = this.room.extensions['tags'];
     }
-    if (!this.extension) {
+    if (!this.room.extensions) {
       this.extension = new TSMap<string, any>();
       this.extension.set('enableTags', true);
       this.room.extensions = new TSMap<string, TSMap<string, any>>();
       this.room.extensions.set('tags', this.extension);
     } else {
-      if (this.extension['tags']) {
-        this.tags = this.extension['tags'];
+      if (this.room.extensions['tags']) {
+        this.tags = this.room.extensions['tags']['tags'];
       }
     }
   }
