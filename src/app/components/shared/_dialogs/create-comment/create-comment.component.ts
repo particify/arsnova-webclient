@@ -98,7 +98,7 @@ export class CreateCommentComponent implements OnInit {
           message = msg;
         });
       }
-      this.notificationService.show(message);
+      this.notificationService.showAdvanced(message, AdvancedSnackBarTypes.SUCCESS);
     });
   }
 
