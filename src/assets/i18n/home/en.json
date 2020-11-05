@@ -250,7 +250,7 @@
     "really-delete-comments": "Do you really want to delete all comments of this room? This action cannot be undone.",
     "really-delete-comments-hint": "There are comments in this room that you marked for a bonus. Remove the markers to delete all comments.",
     "really-delete-answer": "Do you really want to delete this answer?",
-    "really-delete-content": "Do you really want to delete the following content? This action cannot be undone.",
+    "really-delete-content": "Do you really want to delete the following content? The content will be irrevocably deleted in all collections.",
     "really-delete-moderator": "Do you really want to remove the following moderator?",
     "really-delete-room": "Do you really want to delete the following room? This action cannot be undone.",
     "really-remove-room-from-history": "Do you really want to remove the following room from your history?",
