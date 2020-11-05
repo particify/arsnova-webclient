@@ -54,12 +54,12 @@
 
               <mat-menu #chooseGroups="matMenu" xPosition="before">
                 <button mat-menu-item *ngFor="let cg of contentGroups; index as i" [disabled]="i === currentGroupIndex"
-                        (click)="addToContentGroup(content.id, cg, false)"
+                        (click)="addToContentGroup(content.id, cg, false, true)"
                         attr.aria-label="{{ 'content.a11y-add-to-this-content-group' | translate: { name: cg } }}">
                   <span>{{ cg }}</span>
                 </button>
                 <mat-divider></mat-divider>
-                <button mat-menu-item (click)="showContentGroupCreationDialog(content.id)" attr.aria-label="{{ 'content.a11y-new-content-group' | translate }}">
+                <button mat-menu-item (click)="showContentGroupCreationDialog(content.id, true)" attr.aria-label="{{ 'content.a11y-new-content-group' | translate }}">
                   <mat-icon>add</mat-icon>
                   <span>{{ 'content.new-content-group' | translate}}</span>
                 </button>
