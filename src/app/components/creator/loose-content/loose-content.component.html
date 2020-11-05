@@ -1,10 +1,10 @@
 <div fxLayout="column" fxLayoutAlign="center" fxFill>
   <div fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="center">
     <mat-card>
-      <div tabindex="-1" id="message" class="visually-hidden">{{ 'content.a11y-loose-contents' | translate }}</div>
+      <div tabindex="-1" id="message" class="visually-hidden">{{ 'content.a11y-archived-contents' | translate }}</div>
       <div fxLayout="row" fxLayoutAlign="start center">
         <div class="cardTitle">
-          <h2 *ngIf="!creationMode">{{ 'content.loose-contents' | translate }}</h2>
+          <h2 *ngIf="!creationMode">{{ 'content.archived-contents' | translate }}</h2>
           <mat-form-field *ngIf="creationMode">
             <input id="content-group-input" matInput maxlength="25" [(ngModel)]="newName" aria-labelledby="enter-content-group-name">
             <mat-placeholder>{{ 'content.content-group-name' | translate }}</mat-placeholder>
@@ -16,12 +16,12 @@
             {{ 'content.cancel' | translate }}
           </button>
           <button mat-raised-button class="button-primary" (click)="createNewGroup()" aria-labelledby="create">
-            {{ ( creationMode ? 'content.create' : 'content.create-group-with-loose-contents') | translate }}
+            {{ ( creationMode ? 'content.create' : 'content.create-group-with-archived-contents') | translate }}
           </button>
         </div>
       </div>
       <mat-card-content>
-        <p>{{ 'content.loose-contents-description' | translate }}</p>
+        <p>{{ 'content.archived-contents-description' | translate }}</p>
         <app-loading-indicator *ngIf="isLoading" [size]="50"></app-loading-indicator>
         <div *ngIf="!isLoading">
           <mat-expansion-panel *ngFor="let content of contents; index as i" class="matPanel">
@@ -82,6 +82,6 @@
   <div id="discard-changes">{{ 'content.a11y-discard-changes' | translate }}</div>
   <div id="save-changes">{{ 'content.a11y-save-changes' | translate }}</div>
   <div id="more">{{ 'content.a11y-more-options' | translate }}</div>
-  <div id="cancel">{{ 'content.a11y-loose-cancel' | translate }}</div>
-  <div id="create">{{ (creationMode ? 'content.a11y-loose-create-with-name' : 'content.a11y-loose-create') | translate: { name: newName } }}</div>
+  <div id="cancel">{{ 'content.a11y-archived-cancel' | translate }}</div>
+  <div id="create">{{ (creationMode ? 'content.a11y-archived-create-with-name' : 'content.a11y-archived-create') | translate: { name: newName } }}</div>
 </div>
