@@ -1,7 +1,13 @@
 <mat-card tabindex="0" role=button id="contentGroup" fxLayoutAlign="start center" (click)="viewContents()"
           attr.aria-label="{{ 'room-page.a11y-enter-content-group' | translate:{name: contentGroupName} }}"
           (keyup.enter)="viewContents()">
-  <h3 matBadge="{{length}}" matBadgeOverlap="false">
-    {{contentGroupName}}
-  </h3>
+  <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="10px" class="container">
+    <mat-icon *ngIf="isLoose" class="icon-primary">
+      inbox
+    </mat-icon>
+    <h3 matBadge="{{length}}" matBadgeOverlap="false">
+      {{contentGroupName}}
+    </h3>
+  </div>
+
 </mat-card>
