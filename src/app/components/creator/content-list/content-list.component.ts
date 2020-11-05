@@ -147,15 +147,10 @@ export class ContentListComponent implements OnInit {
       switch (action.valueOf()) {
         case 'delete':
           this.contentService.deleteContent(this.contents[index].id).subscribe(() => {
+            this.removeContentFromList(index);
             this.translateService.get('content.content-deleted').subscribe(message => {
               this.notificationService.showAdvanced(message, AdvancedSnackBarTypes.WARNING);
             });
-            this.contents.splice(index, 1);
-            this.labels.splice(index, 1);
-            if (this.contents.length === 0) {
-              this.globalStorageService.setItem(STORAGE_KEYS.LAST_GROUP, this.contentGroups[0]);
-              this.location.back();
-            }
           });
           break;
         case 'update':
@@ -167,25 +162,43 @@ export class ContentListComponent implements OnInit {
             this.labels[index] = this.contentBackup.body;
           });
           break;
+        case 'remove':
+          this.contentGroupService.removeContentFromGroup(this.room.id, this.contentGroup.id, this.contents[index].id)
+            .subscribe(() => {
+            this.removeContentFromList(index);
+          });
+
       }
     }
   }
 
-  addToContentGroup(contentId: string, cgName: string, newGroup: boolean): void {
+  removeContentFromList(index: number) {
+    this.contents.splice(index, 1);
+    this.labels.splice(index, 1);
+    if (this.contents.length === 0) {
+      this.globalStorageService.setItem(STORAGE_KEYS.LAST_GROUP, this.contentGroups[0]);
+      this.location.back();
+    }
+  }
+
+  addToContentGroup(contentId: string, cgName: string, newGroup: boolean, wasArchived?: boolean): void {
     this.contentGroupService.addContentToGroup(this.room.id, cgName, contentId).subscribe(() => {
       if (!newGroup) {
         this.translateService.get('content.added-to-content-group').subscribe(msg => {
           this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.SUCCESS);
         });
       }
+      if (wasArchived) {
+        this.removeContentFromList(this.findIndexOfId(contentId));
+      }
     });
   }
 
-  showContentGroupCreationDialog(contentId: string): void {
+  showContentGroupCreationDialog(contentId: string, wasArchived: boolean): void {
     const dialogRef = this.dialogService.openContentGroupCreationDialog();
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.addToContentGroup(contentId, result, true);
+        this.addToContentGroup(contentId, result, true, wasArchived);
       }
     });
   }

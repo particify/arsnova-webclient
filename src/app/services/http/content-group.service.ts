@@ -118,4 +118,12 @@ export class ContentGroupService extends BaseHttpService {
     this.globalStorageService.setItem(STORAGE_KEYS.CONTENT_GROUPS, groups);
   }
 
+  removeContentFromGroup(roomId: string, groupId: string, contentId: String): Observable<void> {
+    const connectionUrl = `${this.getBaseUrl(roomId) + this.serviceApiUrl.contentGroup}/${groupId}/${contentId}`;
+    return this.http.delete<void>(connectionUrl, httpOptions).pipe(
+      tap(_ => ''),
+      catchError(this.handleError<void>(`deleteContentFromGroup, ${roomId}, ${name}, ${contentId}`))
+    );
+  }
+
 }

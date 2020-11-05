@@ -17,6 +17,7 @@ import { KeyboardUtils } from '../../../utils/keyboard';
 import { KeyboardKey } from '../../../utils/keyboard/keys';
 import { EventService } from '../../../services/util/event.service';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { ContentChoice } from '@arsnova/app/models/content-choice';
 
 @Component({
   selector: 'app-group-content',
@@ -237,6 +238,17 @@ export class GroupContentComponent extends ContentListComponent implements OnIni
 
   drop(event: CdkDragDrop<Content[]>) {
     moveItemInArray(this.copiedContents, event.previousIndex, event.currentIndex);
+  }
+
+
+  removeContent(delContent: Content) {
+    const index = this.findIndexOfId(delContent.id);
+    const dialogRef = this.dialogService.openDeleteDialog('really-remove-content', this.labels[index], 'remove');
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.updateContentChanges(index, result);
+      }
+    });
   }
 
 }
