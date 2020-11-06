@@ -78,14 +78,7 @@ export class ContentListComponent implements OnInit {
   }
 
   findIndexOfId(id: string): number {
-    let index = -1;
-    for (let i = 0; i < this.contents.length; i++) {
-      if (this.contents[i].id.valueOf() === id.valueOf()) {
-        index = i;
-        break;
-      }
-    }
-    return index;
+    return this.contents.map(c => c.id).indexOf(id);
   }
 
   createChoiceContentBackup(content: ContentChoice): Content {
@@ -119,7 +112,6 @@ export class ContentListComponent implements OnInit {
 
   deleteContent(delContent: Content) {
     const index = this.findIndexOfId(delContent.id);
-    this.createChoiceContentBackup(delContent as ContentChoice);
     const dialogRef = this.dialogService.openDeleteDialog('really-delete-content', this.labels[index]);
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
