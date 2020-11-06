@@ -2,7 +2,7 @@
   <mat-form-field appearance="outline">
     <mat-label>{{'dialog.content-body' | translate}}</mat-label>
     <textarea (focus)="eventService.makeFocusOnInputTrue()" (blur)="eventService.makeFocusOnInputFalse()" matInput
-              [(ngModel)]="data.body" rows="3" maxlength="250" name="body" aria-labelledby="body"></textarea>
+              [(ngModel)]="data.body" rows="3" maxlength="{{ data.format !== 'SLIDE' ? 1000 : 2000 }}" name="body" aria-labelledby="body"></textarea>
   </mat-form-field>
   <div *ngIf="data.format !== 'TEXT' && data.format !== 'SLIDE'">
     <h4>{{'dialog.content-answers' | translate}}</h4>
