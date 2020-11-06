@@ -33,14 +33,14 @@ export class DialogService {
   constructor(public dialog: MatDialog) {
   }
 
-  openDeleteDialog(body: string, bodyElement?: string): MatDialogRef<YesNoDialogComponent> {
+  openDeleteDialog(body: string, bodyElement?: string, confirmLabel?: string): MatDialogRef<YesNoDialogComponent> {
     return this.dialog.open(YesNoDialogComponent, {
       width: this.size.small,
       data: {
         section: 'dialog',
         headerLabel: 'sure',
         body: body,
-        confirmLabel: 'delete',
+        confirmLabel: confirmLabel ? confirmLabel : 'delete',
         abortLabel: 'cancel',
         type: 'button-warn',
         bodyElement: bodyElement,
