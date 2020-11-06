@@ -9,8 +9,9 @@ import { EventService } from './event.service';
 import { ThemeService } from '../../../theme/theme.service';
 import { UserRole } from '../../models/user-roles.enum';
 import { ClientAuthentication } from '../../models/client-authentication';
+import { Subscription, timer } from 'rxjs';
 
-const HEARTBEAT_INVERVAL = 60;
+const HEARTBEAT_INVERVAL = 150;
 
 /* This enum maps to Matomo dimension IDs for visits. */
 enum VisitDimension {
@@ -43,6 +44,7 @@ export class TrackingService {
   uiConfig: any;
   previousAuth: ClientAuthentication;
   firstAuth: boolean;
+  pingSubscription: Subscription;
 
   constructor(
     private consentService: ConsentService,
@@ -61,7 +63,7 @@ export class TrackingService {
     this.uiConfig = uiConfig;
 
     if (uiConfig.tracking.heartbeat) {
-      this._paq.push(['enableHeartBeatTimer', HEARTBEAT_INVERVAL]);
+      this._paq.push(['enableHeartBeatTimer']);
     }
     this._paq.push(['enableLinkTracking']);
     this._paq.push(['setTrackerUrl', uiConfig.tracking.url + 'matomo.php']);
@@ -103,6 +105,11 @@ export class TrackingService {
     document.body.appendChild(trackerScript);
 
     this.loaded = true;
+  }
+
+  setupPingSubscription() {
+    this.pingSubscription?.unsubscribe();
+    this.pingSubscription = timer((45 + 45 * Math.random()) * 1000, HEARTBEAT_INVERVAL * 1000).subscribe(() => this.sendPing());
   }
 
   setupTrackingSubscriptions() {
@@ -158,11 +165,18 @@ export class TrackingService {
     }
     this._paq.push(['setCustomUrl', this.stripIdsFromUri(uri)]);
     this._paq.push(['trackPageView', title, dimensions]);
+    this.setupPingSubscription();
   }
 
   addEvent(category: EventCategory, action: string, name?: string, value?: number) {
     const event = ['trackEvent', category, action];
     this._paq.push(['trackEvent', category, action, name, value]);
+  }
+
+  sendPing() {
+    if (!document.visibilityState || document.visibilityState === 'visible') {
+      this._paq.push(['ping']);
+    }
   }
 
   /**
