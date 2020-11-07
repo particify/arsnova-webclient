@@ -25,7 +25,8 @@ export const STORAGE_KEYS: { [key: string]: symbol } = {
   COMMENT_SORT: Symbol(),
   UPDATED: Symbol(),
   VERSION: Symbol(),
-  IMPORT_TOKEN: Symbol()
+  IMPORT_TOKEN: Symbol(),
+  COMMENT_TIME_FILTER: Symbol()
 };
 
 /**
@@ -121,6 +122,12 @@ export const STORAGE_CONFIG: StorageItem[] = [
     key: STORAGE_KEYS.IMPORT_TOKEN,
     name: 'IMPORT_TOKEN',
     category: StorageItemCategory.REQUIRED,
+    backend: StorageBackend.SESSIONSTORAGE
+  },
+  {
+    key: STORAGE_KEYS.COMMENT_TIME_FILTER,
+    name: 'COMMENT_TIME_FILTER',
+    category: StorageItemCategory.FUNCTIONAL,
     backend: StorageBackend.SESSIONSTORAGE
   }
 ];
