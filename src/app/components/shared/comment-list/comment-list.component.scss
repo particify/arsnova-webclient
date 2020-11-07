@@ -62,10 +62,10 @@
   opacity: 0.7;
 }
 
-.add-icon {
-  height: 28px;
-  width: 28px;
-  font-size: 28px;
+.bigger-icon {
+  height: 24px;
+  width: 24px;
+  font-size: 24px;
   margin-top: -2px;
 }
 
@@ -92,6 +92,10 @@
 
 .favorite-icon {
   color: var(--yellow);
+}
+
+.currentPeriod {
+  color: var(--primary);
 }
 
 .counter-container {

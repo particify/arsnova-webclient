@@ -12,7 +12,9 @@
 
   <div class="button-bar" fxLayoutAlign="center center" fxLayoutGap="1em">
     <div *ngIf="!search">
-      <h3 class="counter">{{ filteredComments && hideCommentsList ? filteredComments.length : comments.length }}</h3>
+      <h3 class="counter">
+        {{ filteredComments && hideCommentsList ? filteredComments.length : commentsFilteredByTime.length }}
+      </h3>
     </div>
 
     <button id="search-button" mat-mini-fab (click)="activateSearch()" class="bar-icon"
@@ -25,6 +27,11 @@
             *ngIf="!searchBox.value && comments && comments.length > 0 && !search"
             [matMenuTriggerFor]="sortMenu" matTooltip="{{ 'comment-list.sort-comments' | translate }}">
       <mat-icon>swap_vert</mat-icon>
+    </button>
+    <button id="select-time-button" mat-mini-fab aria-labelledby="select-time" class="bar-icon"
+            *ngIf="!searchBox.value && !search"
+            [matMenuTriggerFor]="timeMenu" matTooltip="{{ 'comment-list.select-time' | translate }}">
+      <mat-icon class="bigger-icon">access_time</mat-icon>
     </button>
     <button id="switch-button" mat-mini-fab class="bar-icon" aria-labelledby="switch-list"
             (click)="switchToCommentList()" *ngIf="!searchBox.value && comments && comments.length > 0 && !search"
@@ -50,6 +57,15 @@
     </button>
   </mat-menu>
 
+  <mat-menu #timeMenu="matMenu" xPosition="before">
+    <div *ngFor="let periodItem of periodsList">
+      <button mat-menu-item (click)="setTimePeriod(periodItem)"  [ngClass]="{'currentPeriod': periodItem === period}"
+              aria-labelledby="{{periodItem}}">
+        <span>{{ ('comment-list.select-' + periodItem) | translate }}</span>
+      </button>
+    </div>
+  </mat-menu>
+
 </div>
 
 <div *ngIf="scroll" class="search-bar-placeholder"></div>
@@ -66,7 +82,7 @@
                [parseVote]="getVote(current)" [referenceEvent]="referenceEvent.asObservable()"></app-comment>
 </div>
 
-<div *ngIf="comments && comments.length < 1 && !isLoading" fxLayout="row" fxLayoutAlign="center center"
+<div *ngIf="comments && commentsFilteredByTime.length < 1 && !isLoading" fxLayout="row" fxLayoutAlign="center center"
      class="no-comments">
   <p>{{ 'comment-page.no-comments' | translate }}</p>
 </div>
