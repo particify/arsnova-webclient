@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output, Pipe, PipeTransform } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, Pipe, PipeTransform } from '@angular/core';
 import * as dayjs from 'dayjs';
 import * as relativeTime from 'dayjs/plugin/relativeTime';
 import 'dayjs/locale/de';
@@ -19,11 +19,15 @@ import { DialogService } from '../../../services/util/dialog.service';
 import { GlobalStorageService, STORAGE_KEYS } from '../../../services/util/global-storage.service';
 import { AnnounceService } from '../../../services/util/announce.service';
 import { VoteService } from '../../../services/http/vote.service';
-import { Observable, Subject } from 'rxjs';
+import { Observable, Subject, timer } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+
+const TIME_UPDATE_INTERVAL = 60000;
 
 @Pipe({ name: 'dateFromNow' })
 export class DateFromNow implements PipeTransform {
-  transform(date: Date, lang: string): string {
+  /* The refresh parameter is not used but forces rerendering when changed. */
+  transform(date: Date, lang: string, refresh?: number): string {
     dayjs.extend(relativeTime);
     dayjs.locale(lang);
     return dayjs(date).fromNow();
@@ -43,7 +47,7 @@ export class DateFromNow implements PipeTransform {
   ]
 })
 
-export class CommentComponent implements OnInit {
+export class CommentComponent implements OnInit, OnDestroy {
   @Input() comment: Comment;
   @Input() isNew: boolean;
   @Input() referenceEvent: Observable<string>;
@@ -63,6 +67,8 @@ export class CommentComponent implements OnInit {
   userId: string;
   extensionData: any;
   extensionEvent: Subject<string> = new Subject<string>();
+  refreshCounter = 0;
+  destroyed$: Subject<void> = new Subject();
 
   constructor(
     protected authenticationService: AuthenticationService,
@@ -126,6 +132,14 @@ export class CommentComponent implements OnInit {
         this.extensionEvent.next(this.comment.id);
       }
     });
+    timer(TIME_UPDATE_INTERVAL, TIME_UPDATE_INTERVAL)
+        .pipe(takeUntil(this.destroyed$))
+        .subscribe(() => this.refreshCounter++);
+  }
+
+  ngOnDestroy() {
+    this.destroyed$.next();
+    this.destroyed$.complete();
   }
 
   changeSlideState(): void {
