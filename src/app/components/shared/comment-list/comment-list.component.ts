@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, OnDestroy, OnInit, Pipe, PipeTransform, ViewChild } from '@angular/core';
 import { Comment } from '../../../models/comment';
 import { CommentService } from '../../../services/http/comment.service';
 import { TranslateService } from '@ngx-translate/core';
@@ -39,6 +39,14 @@ enum Filter {
   ANSWER = 'answer'
 }
 
+enum Period {
+  ONEHOUR = 'time-1h',
+  THREEHOURS = 'time-3h',
+  ONEDAY = 'time-1d',
+  ONEWEEK = 'time-1w',
+  ALL = 'time-all'
+}
+
 export const itemRenderNumber = 20;
 
 @Component({
@@ -76,9 +84,12 @@ export class CommentListComponent implements OnInit, OnDestroy {
   newestComment: Comment = new Comment();
   freeze = false;
   commentStream: Subscription;
+  commentsFilteredByTime: Comment[] = [];
   displayComments: Comment[] = [];
   commentCounter = itemRenderNumber;
   referenceEvent: Subject<string> = new Subject<string>();
+  periodsList = Object.values(Period);
+  period: Period;
 
   constructor(
     private commentService: CommentService,
@@ -103,6 +114,7 @@ export class CommentListComponent implements OnInit, OnDestroy {
     this.shortId = this.route.snapshot.paramMap.get('shortId');
     const userId = this.auth.userId;
     this.currentSort = this.globalStorageService.getItem(STORAGE_KEYS.COMMENT_SORT) || this.sorting.VOTEDESC;
+    this.period = this.globalStorageService.getItem(STORAGE_KEYS.COMMENT_TIME_FILTER) || Period.ALL;
     this.currentFilter = '';
     this.initRoom();
     this.translateService.use(this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE));
@@ -160,7 +172,7 @@ export class CommentListComponent implements OnInit, OnDestroy {
     const currentScroll = document.documentElement.scrollTop;
     this.scroll = currentScroll >= this.scrollMax;
     this.scrollExtended = currentScroll >= this.scrollExtendedMax;
-    const length = this.hideCommentsList ? this.filteredComments.length : this.comments.length;
+    const length = this.hideCommentsList ? this.filteredComments.length : this.commentsFilteredByTime.length;
     if (this.displayComments.length !== length) {
       if (((window.innerHeight * 2) + window.scrollY) >= document.body.scrollHeight) {
         this.commentCounter += itemRenderNumber / 2;
@@ -177,7 +189,8 @@ export class CommentListComponent implements OnInit, OnDestroy {
     if (this.searchInput) {
       if (this.searchInput.length > 2) {
         this.hideCommentsList = true;
-        this.filteredComments = this.comments.filter(c => c.body.toLowerCase().includes(this.searchInput.toLowerCase()));
+        this.filteredComments = this.commentsFilteredByTime
+          .filter(c => c.body.toLowerCase().includes(this.searchInput.toLowerCase()));
       }
     } else if (this.searchInput.length === 0 && this.currentFilter === '') {
       this.hideCommentsList = false;
@@ -210,6 +223,7 @@ export class CommentListComponent implements OnInit, OnDestroy {
         this.comments = this.comments.filter(x => x.score >= commentThreshold);
       }
     }
+    this.setTimePeriod(this.period);
     this.filterComments(this.currentFilter);
     this.sortComments(this.currentSort, sorting);
     this.getDisplayComments();
@@ -217,8 +231,8 @@ export class CommentListComponent implements OnInit, OnDestroy {
   }
 
   getDisplayComments() {
-    const commentList = this.hideCommentsList ? this.filteredComments : this.comments;
-    this.displayComments = commentList.slice(0, Math.min(this.commentCounter, this.comments.length));
+    const commentList = this.hideCommentsList ? this.filteredComments : this.commentsFilteredByTime;
+    this.displayComments = commentList.slice(0, Math.min(this.commentCounter, this.commentsFilteredByTime.length));
   }
 
   getVote(comment: Comment): Vote {
@@ -302,6 +316,7 @@ export class CommentListComponent implements OnInit, OnDestroy {
       default:
         this.referenceEvent.next(payload.id);
     }
+    this.setTimePeriod(this.period);
     this.filterComments(this.currentFilter);
     this.sortComments(this.currentSort);
     this.searchComments();
@@ -317,13 +332,13 @@ export class CommentListComponent implements OnInit, OnDestroy {
 
   filterComments(type: string, tag?: string): void {
     if (type === '' || (this.currentFilter === this.filtering.TAG && type === this.filtering.TAG)) {
-      this.filteredComments = this.comments;
+      this.filteredComments = this.commentsFilteredByTime;
       this.hideCommentsList = false;
       this.currentFilter = '';
       this.sortComments(this.currentSort);
       return;
     }
-    this.filteredComments = this.comments.filter(c => {
+    this.filteredComments = this.commentsFilteredByTime.filter(c => {
       switch (type) {
         case this.filtering.CORRECT:
           return c.correct === CorrectWrong.CORRECT ? 1 : 0;
@@ -363,7 +378,7 @@ export class CommentListComponent implements OnInit, OnDestroy {
     if (this.hideCommentsList === true) {
       this.filteredComments = this.sort(this.filteredComments, type);
     } else {
-      this.comments = this.sort(this.comments, type);
+      this.commentsFilteredByTime = this.sort(this.commentsFilteredByTime, type);
     }
     this.currentSort = type;
     this.globalStorageService.setItem(STORAGE_KEYS.COMMENT_SORT, this.currentSort);
@@ -418,5 +433,33 @@ export class CommentListComponent implements OnInit, OnDestroy {
       const newCommentText: string = document.getElementById('new-comment').innerText;
       this.announceService.announce(newCommentText);
     }, 450);
+  }
+
+  setTimePeriod(period: Period) {
+    this.period = period;
+    const currentTime = new Date();
+    const hourInSeconds = 3600000;
+    let periodInSeconds;
+    if (period !== Period.ALL) {
+      switch (period) {
+        case Period.ONEHOUR:
+          periodInSeconds = hourInSeconds;
+          break;
+        case Period.THREEHOURS:
+          periodInSeconds = hourInSeconds * 3;
+          break;
+        case Period.ONEDAY:
+          periodInSeconds = hourInSeconds * 24;
+          break;
+        case Period.ONEWEEK:
+          periodInSeconds = hourInSeconds * 168;
+      }
+      this.commentsFilteredByTime = this.comments
+        .filter(c => new Date(c.timestamp).getTime() >= (currentTime.getTime() - periodInSeconds));
+    } else {
+      this.commentsFilteredByTime = this.comments;
+    }
+    this.filterComments(this.currentFilter);
+    this.globalStorageService.setItem(STORAGE_KEYS.COMMENT_TIME_FILTER, this.period);
   }
 }
