@@ -8,6 +8,7 @@ import { AuthenticationService } from '../http/authentication.service';
 import { EventService } from './event.service';
 import { ThemeService } from '../../../theme/theme.service';
 import { UserRole } from '../../models/user-roles.enum';
+import { ClientAuthentication } from '../../models/client-authentication';
 
 const HEARTBEAT_INVERVAL = 60;
 
@@ -40,6 +41,8 @@ export class TrackingService {
   loaded: boolean;
   consentGiven: boolean;
   uiConfig: any;
+  previousAuth: ClientAuthentication;
+  firstAuth: boolean;
 
   constructor(
     private consentService: ConsentService,
@@ -105,11 +108,19 @@ export class TrackingService {
   setupTrackingSubscriptions() {
     this.authenticationService.getAuthenticationChanges().subscribe(auth => {
       if (auth) {
-        this.setVisitDimension(VisitDimension.AUTH_PROVIDER, auth.authProvider.toString().toLowerCase());
-        this.addEvent(EventCategory.ACCOUNT, 'User logged in', auth.authProvider.toString().toLowerCase());
+        if (!this.previousAuth || auth.userId !== this.previousAuth.userId) {
+          if (!this.firstAuth) {
+            this.setVisitDimension(VisitDimension.AUTH_PROVIDER, auth.authProvider.toString().toLowerCase());
+          }
+          this.addEvent(EventCategory.ACCOUNT, 'User logged in', auth.authProvider.toString().toLowerCase());
+        }
       } else {
-        this.addEvent(EventCategory.ACCOUNT, 'User logged out');
+        if (this.previousAuth) {
+          this.addEvent(EventCategory.ACCOUNT, 'User logged out');
+        }
       }
+      this.previousAuth = auth;
+      this.firstAuth = false;
     });
     this.eventService.on<any>('HttpRequestFailed')
         .subscribe(e => this.addEvent(EventCategory.ERROR, 'HTTP request failed', e.statusText, e.status));
