@@ -134,6 +134,10 @@
                     <mat-icon>clear_all</mat-icon>
                     <span>{{ 'content.delete-answers' | translate}}</span>
                   </button>
+                  <button mat-menu-item (click)="removeContent(content)" attr.aria-label="{{ 'content.a11y-remove-content-from-group' | translate }}">
+                    <mat-icon>clear</mat-icon>
+                    <span>{{ 'content.remove-content-from-group' | translate}}</span>
+                  </button>
                   <button mat-menu-item (click)="deleteContent(content)" attr.aria-label="{{ 'content.a11y-delete-content' | translate }}">
                     <mat-icon class="delete">delete_forever</mat-icon>
                     <span>{{ 'content.delete-content' | translate}}</span>
@@ -147,7 +151,7 @@
                     <span>{{ cg }}</span>
                   </button>
                   <mat-divider></mat-divider>
-                  <button mat-menu-item (click)="showContentGroupCreationDialog(content.id)" attr.aria-label="{{ 'content.a11y-new-content-group' | translate }}">
+                  <button mat-menu-item (click)="showContentGroupCreationDialog(content.id, false)" attr.aria-label="{{ 'content.a11y-new-content-group' | translate }}">
                     <mat-icon>add</mat-icon>
                     <span>{{ 'content.new-content-group' | translate}}</span>
                   </button>
