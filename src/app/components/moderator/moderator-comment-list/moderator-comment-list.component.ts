@@ -88,7 +88,7 @@ export class ModeratorCommentListComponent implements OnInit {
       this.parseIncomingMessage(message);
     });
     this.translateService.use(this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE));
-    this.currentSort = this.time;
+    this.currentSort = this.globalStorageService.getItem(STORAGE_KEYS.COMMENT_SORT) || this.time;
     this.commentService.getRejectedComments(this.roomId)
       .subscribe(comments => {
         this.comments = comments;
@@ -231,6 +231,7 @@ export class ModeratorCommentListComponent implements OnInit {
       this.sort(this.comments, type);
     }
     this.currentSort = type;
+    this.globalStorageService.setItem(STORAGE_KEYS.COMMENT_SORT, this.currentSort);
     this.getDisplayComments();
     if (manually) {
       this.scrollTop();

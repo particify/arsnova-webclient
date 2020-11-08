@@ -102,7 +102,7 @@ export const STORAGE_CONFIG: StorageItem[] = [
     key: STORAGE_KEYS.COMMENT_SORT,
     name: 'COMMENT_SORT',
     category: StorageItemCategory.FUNCTIONAL,
-    backend: StorageBackend.MEMORY
+    backend: StorageBackend.SESSIONSTORAGE
   },
   {
     key: STORAGE_KEYS.UPDATED,
