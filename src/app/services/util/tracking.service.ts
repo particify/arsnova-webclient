@@ -43,7 +43,7 @@ export class TrackingService {
   consentGiven: boolean;
   uiConfig: any;
   previousAuth: ClientAuthentication;
-  firstAuth: boolean;
+  firstAuth = true;
   pingSubscription: Subscription;
 
   constructor(
@@ -116,10 +116,10 @@ export class TrackingService {
     this.authenticationService.getAuthenticationChanges().subscribe(auth => {
       if (auth) {
         if (!this.previousAuth || auth.userId !== this.previousAuth.userId) {
+          this.setVisitDimension(VisitDimension.AUTH_PROVIDER, auth.authProvider.toString().toLowerCase());
           if (!this.firstAuth) {
-            this.setVisitDimension(VisitDimension.AUTH_PROVIDER, auth.authProvider.toString().toLowerCase());
+            this.addEvent(EventCategory.ACCOUNT, 'User logged in', auth.authProvider.toString().toLowerCase());
           }
-          this.addEvent(EventCategory.ACCOUNT, 'User logged in', auth.authProvider.toString().toLowerCase());
         }
       } else {
         if (this.previousAuth) {
