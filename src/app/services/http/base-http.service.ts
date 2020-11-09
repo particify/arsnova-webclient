@@ -25,8 +25,20 @@ export class BaseHttpService {
   public handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
       console.error(error);
-      if (error?.status !== 401) {
-        this.translateService.get('errors.something-went-wrong').subscribe(msg => {
+      let message = null;
+      switch (error?.status) {
+        case 401:
+          // NOOP
+          break;
+        case 429:
+          message = 'errors.http-too-many-requests';
+          break;
+        default:
+          message = 'errors.something-went-wrong';
+          break;
+      }
+      if (message) {
+        this.translateService.get(message).subscribe(msg => {
           this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.FAILED);
         });
       }
