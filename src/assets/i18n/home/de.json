@@ -210,16 +210,17 @@
   },
   "user-activation": {
     "a11y-activate": "Aktiviert deinen Account.",
-    "a11y-key-input": "Gib hier den Aktivierungs-Code ein, den du per E-Mail zugesendet bekommen hast, um dich anzumelden.",
+    "a11y-key-input": "Gib hier den Verifizierungscode ein, den du per E-Mail zugesendet bekommen hast, um dich anzumelden.",
     "a11y-cancel": "Bricht die Aktivierung ab und bringt dich zurück zur Anmeldeseite.",
     "activate": "Aktivieren",
-    "key": "Aktivierungs-Code",
-    "key-incorrect": "Aktivierungs-Code nicht korrekt.",
+    "key": "Verifizierungscode",
+    "key-incorrect": "Verifizierungscode nicht korrekt.",
     "key-required": "Bitte gib einen Code ein.",
     "didnt-get": "Keinen Code erhalten?",
     "reset-button": "Erneut senden",
-    "sent-again": "Der Aktivierungs-Code wurde erneut gesendet.",
-    "cancel": "Abbrechen"
+    "sent-again": "Der Verifizierungscode wurde erneut gesendet.",
+    "cancel": "Abbrechen",
+    "verification-info": "Solltest du noch keinen Verifizierungscode erhalten haben, prüfe bitte in wenigen Minuten noch einmal deine E-Mails und stelle sicher, dass dieser nicht im Spam-Ordner gelandet ist."
   },
   "dialog": {
     "a11y-cancel": "Bricht den aktuellen Vorgang ab und schließt den Dialog.",
