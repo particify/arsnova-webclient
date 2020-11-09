@@ -1,5 +1,8 @@
 <div fxLayout="column" fxLayoutAlign="center center" fxFill>
   <mat-card class="login-card" fxLayout="column" fxLayoutAlign="center center">
+    <p>
+      {{ 'register.info' | translate : { accountService: accountServiceTitle } }}
+    </p>
     <form class="full-width" (ngSubmit)="register(userName.value, userPassword1.value)" fxLayout="column"
           fxLayoutAlign="space-around" fxLayoutGap="10px">
       <mat-form-field class="input-block" appearance="outline">
