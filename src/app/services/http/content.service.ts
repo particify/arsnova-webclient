@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Content } from '../../models/content';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { catchError, tap } from 'rxjs/operators';
+import { forkJoin, Observable } from 'rxjs';
+import { catchError, map, tap } from 'rxjs/operators';
 import { BaseHttpService } from './base-http.service';
 import { AnswerStatistics } from '../../models/answer-statistics';
 import { ContentChoice } from '../../models/content-choice';
@@ -14,6 +14,8 @@ import { NotificationService } from '../util/notification.service';
 import { ContentType } from '@arsnova/app/models/content-type.enum';
 import { EventService } from '../util/event.service';
 import { ContentCreated } from '../../models/events/content-created';
+
+const PARTITION_SIZE = 50;
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -66,10 +68,18 @@ export class ContentService extends BaseHttpService {
   }
 
   getContentsByIds(roomId: string, contentIds: string[]): Observable<Content[]> {
-    const connectionUrl = this.getBaseUrl(roomId) + this.serviceApiUrl.content + '/?ids=' + contentIds;
-    return this.http.get<Content[]>(connectionUrl).pipe(
-      tap(() => ''),
-      catchError(this.handleError('getContentsByIds', []))
+    const partitionedIds: string[][] = [];
+    for (let i = 0; i < contentIds.length; i += PARTITION_SIZE) {
+      partitionedIds.push(contentIds.slice(i, i + PARTITION_SIZE));
+    }
+    const partitionedContents$: Observable<Content[]>[] = partitionedIds.map(ids => {
+      const connectionUrl = this.getBaseUrl(roomId) + this.serviceApiUrl.content + '/?ids=' + ids;
+      return this.http.get<Content[]>(connectionUrl).pipe(
+        catchError(this.handleError('getContentsByIds', []))
+      );
+    });
+    return forkJoin(partitionedContents$).pipe(
+        map(results => results.reduce((acc: Content[], value: Content[]) => acc.concat(value), []))
     );
   }
 
