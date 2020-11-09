@@ -48,6 +48,7 @@ export class RegisterComponent implements OnInit {
   deviceWidth = innerWidth;
   acceptToS = false;
   linkOfToS: string;
+  accountServiceTitle: string;
 
   constructor(private translationService: TranslateService,
               public userService: UserService,
@@ -59,6 +60,7 @@ export class RegisterComponent implements OnInit {
 
   ngOnInit(): void {
     this.apiConfigService.getApiConfig$().subscribe(config => {
+      this.accountServiceTitle = config.ui.registration?.service || 'ARSnova';
       this.linkOfToS = config.ui.links.tos.url;
     });
   }
