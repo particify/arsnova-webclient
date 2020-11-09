@@ -28,7 +28,8 @@
     "cookie-settings": "Cookie-Einstellungen",
     "dsgvo": "Datenschutz",
     "imprint": "Impressum",
-    "privacy-policy": "Datenschutzerklärung"
+    "privacy-policy": "Datenschutzerklärung",
+    "feedback": "Feedback"
   },
   "header": {
     "a11y-back": "Führt zur vorherigen Seite.",
