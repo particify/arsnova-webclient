@@ -4,7 +4,7 @@
     {{ 'answer.a11y-message' | translate: { group: contentGroup.name } }}</button>
   <app-stepper *ngIf="contents.length > 0" (newIndex)="updateURL($event)" [listLength]="contents.length" [completed]="alreadySent">
     <cdk-step *ngFor="let content of contents; let i = index">
-      <div tabindex="0" id="step" *ngIf="currentStep >= i - 1 || currentStep <= i + 1">
+      <div tabindex="0" id="step" *ngIf="currentStep >= i - 1 && currentStep <= i + 1">
         <app-content-choice-participant (message)="receiveSentStatus($event, i)" [content]="content" [index]="i"
                                         *ngIf="content.format === ContentType.CHOICE || content.format === ContentType.SCALE ||
                 content.format === ContentType.BINARY" [answer]="answers[i]">
