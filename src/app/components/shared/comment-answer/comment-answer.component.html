@@ -1,70 +1,79 @@
-<div fxLayout="column" fxLayoutAlign="center" *ngIf="!isLoading">
-  <div fxLayout="row" fxLayoutAlign="center">
-    <app-comment [comment]="comment"></app-comment>
-  </div>
-  <button id="message-button" tabIndex="-1" (click)="announce()"
-          class="visually-hidden">{{ 'comment-page.a11y-message-answer' | translate }}</button>
-  <div fxLayout="row" fxLayoutAlign="center">
-    <mat-card class="answer" *ngIf="!isParticipant || answer">
-      <div tabindex="-1" id="answer-text" class="visually-hidden">{{ 'comment-page.a11y-entered-answer' | translate:
-        {answer: answer} }}</div>
-      <div *ngIf="(isParticipant || !edit) && answer">
-        <app-rendered-text [rawText]="answer" [dynamic]="true" [markdownFeatureset]="MarkdownFeatureset.SIMPLE">
-        </app-rendered-text>
-        <div fxLayout="row" fxLayoutAlign="end">
-          <button mat-raised-button *ngIf="!isParticipant && !edit" class="button-primary" (click)="editAnswer()"
-          aria-labelledby="edit">
-            <mat-icon>edit</mat-icon>
-            {{'comment-page.edit-answer' | translate}}
-          </button>
+<div fxLayout="column" fxLayoutAlign="center" fxLayoutGap="16px">
+  <button class="exitBtn" mat-icon-button (click)="close()" aria-labelledby="exit">
+    <mat-icon class="exit-icon">arrow_back</mat-icon>
+  </button>
+  <div fxFill>
+    <div fxLayout="row" fxLayoutAlign="center">
+      <app-comment [comment]="comment" [inAnswerView]="true" [viewRoleInput]="data.role"></app-comment>
+    </div>
+    <button id="message-button" tabIndex="-1" (click)="announce()"
+            class="visually-hidden">{{ 'comment-page.a11y-message-answer' | translate }}</button>
+    <div fxLayout="row" fxLayoutAlign="center">
+      <mat-card class="answer mat-elevation-z2" *ngIf="!isParticipant || answer">
+        <div tabindex="-1" id="answer-text" class="visually-hidden">{{ 'comment-page.a11y-entered-answer' | translate:
+          {answer: answer} }}</div>
+        <div *ngIf="(isParticipant || !edit) && answer">
+          <app-rendered-text [rawText]="answer" [dynamic]="true" [markdownFeatureset]="MarkdownFeatureset.SIMPLE">
+          </app-rendered-text>
+          <div fxLayout="row" fxLayoutAlign="end">
+            <button mat-raised-button *ngIf="!isParticipant && !edit" class="button-primary" (click)="editAnswer()"
+                    aria-labelledby="edit">
+              <mat-icon>edit</mat-icon>
+              {{ 'comment-page.edit-answer' | translate}}
+            </button>
+          </div>
         </div>
-      </div>
-      <mat-tab-group *ngIf="!isParticipant && (edit || !answer)" [dynamicHeight]="true" (selectedTabChange)="tabChanged($event)">
-        <mat-tab label="{{'comment-page.your-answer' | translate}}">
-          <mat-form-field class="input-block" appearance="outline">
-            <textarea id="answer-input" [(ngModel)]="answer" (input)="edit = true"
+        <mat-tab-group *ngIf="!isParticipant && (edit || !answer)" [dynamicHeight]="true" (selectedTabChange)="tabChanged($event)">
+          <mat-tab label="{{'comment-page.your-answer' | translate}}">
+            <mat-form-field class="input-block" appearance="outline">
+              <textarea id="answer-input" [(ngModel)]="answer" (input)="edit = true"
+                      (blur)="eventService.makeFocusOnInputFalse()"
+                      (focus)="eventService.makeFocusOnInputTrue()"
                       matInput
                       matTextareaAutosize
                       matAutosizeMinRows="3"
                       matAutosizeMaxRows="8"
                       maxlength="500"
                       name="answer"
-                      aria-labelledby="answer">
-            </textarea>
-            <mat-hint align="end">
-            <span aria-hidden="true">
-              {{ answer ? answer.length : 0 }} / 500
-            </span>
-            </mat-hint>
-          </mat-form-field>
-        </mat-tab>
-        <mat-tab label="{{'room.preview' | translate}}" [disabled]="!answer">
-          <div fxLayout="row">
-            <app-rendered-text [rawText]="answer" [dynamic]="renderPreview" [markdownFeatureset]="MarkdownFeatureset.SIMPLE">
-            </app-rendered-text>
-            <span class="fill-remaining-space"></span>
-            <button mat-icon-button #mdtt="matTooltip" matTooltip="{{ 'content.md-info' | translate }}"
-                    (click)="mdtt.toggle()">
-              <mat-icon class="info-icon">info</mat-icon>
-            </button>
-          </div>
-        </mat-tab>
-      </mat-tab-group>
-      <div fxLayout="row" fxLayoutAlign="end" fxLayoutGap="20px">
-        <button mat-raised-button *ngIf="!isParticipant && answer && edit" class="button-warn"
-                aria-labelledby="delete" (click)="openDeleteAnswerDialog()">
-          {{'comment-page.delete-answer' | translate}}</button>
-        <button mat-raised-button *ngIf="!isParticipant && (edit || !answer)" class="button-primary"
-                aria-labelledby="submit" (click)="saveAnswer()">
-          {{'comment-page.save-answer' | translate}}</button>
-      </div>
-    </mat-card>
+                      aria-labelledby="answer"
+                      [placeholder]="'comment-page.enter-answer' | translate">
+              </textarea>
+              <mat-hint align="end">
+                <span aria-hidden="true">
+                {{ answer ? answer.length : 0 }} / 500
+                </span>
+              </mat-hint>
+            </mat-form-field>
+          </mat-tab>
+          <mat-tab label="{{'room.preview' | translate}}" [disabled]="!answer">
+            <div>
+              <app-rendered-text [rawText]="answer" [dynamic]="renderPreview" [markdownFeatureset]="MarkdownFeatureset.SIMPLE">
+              </app-rendered-text>
+              <span class="fill-remaining-space"></span>
+              <button mat-icon-button #mdtt="matTooltip" matTooltip="{{ 'content.md-info' | translate }}"
+                      (click)="mdtt.toggle()">
+                <mat-icon class="info-icon">info</mat-icon>
+              </button>
+            </div>
+          </mat-tab>
+        </mat-tab-group>
+        <div fxLayout="row" fxLayoutAlign="end" fxLayoutGap="20px">
+          <button mat-stroked-button *ngIf="!isParticipant && answer && edit" class="delete"
+                  aria-labelledby="delete" (click)="openDeleteAnswerDialog()">
+            {{'comment-page.delete-answer' | translate}}</button>
+          <button mat-raised-button *ngIf="!isParticipant && (edit || !answer)" class="button-primary"
+                  aria-labelledby="submit" (click)="saveAnswer()">
+            {{'comment-page.save-answer' | translate}}</button>
+        </div>
+      </mat-card>
+    </div>
   </div>
-</div>
+<div>
 
 <div class="visually-hidden">
   <div id="answer">{{ 'comment-page.a11y-enter-answer' | translate }}</div>
   <div id="delete">{{ 'comment-page.a11y-delete-answer' | translate }}</div>
   <div id="submit">{{ 'comment-page.a11y-save-answer' | translate }}</div>
   <div id="edit">{{ 'comment-page.a11y-edit-answer' | translate }}</div>
+  <div id="exit">{{ 'comment-page.a11y-close' | translate }}</div>
 </div>

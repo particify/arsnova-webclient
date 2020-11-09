@@ -1,6 +1,6 @@
-<mat-card id="comment-card" [ngClass]="{'highlighted': comment.highlighted, '': !comment.highlighted}"
+<mat-card id="comment-card" [ngClass]="{'highlighted': comment.highlighted, '': !comment.highlighted, 'mat-elevation-z2': inAnswerView}"
           [@slide]="isNew ? slideAnimationState : null" (@slide.done)="changeSlideState()">
-  <div id="comment-describer" tabindex="0" class="visually-hidden">{{ 'comment-page.comment' | translate: {
+  <div *ngIf="!inAnswerView" id="comment-describer" tabindex="0" class="visually-hidden">{{ 'comment-page.comment' | translate: {
     time: (language === 'de' ? (comment.timestamp | date: ' HH:mm ') : (comment.timestamp | date: 'h:mm a')),
     votes: comment.score === 1 ? ('comment-page.a11y-text-textForOneVote' | translate) : comment.score + ('comment-page.a11y-text-textForVotes' | translate),
     comment: comment.body.trim(),
@@ -95,12 +95,12 @@
       </div>
       <span class="fill-remaining-space click" (click)="openPresentDialog(comment)"></span>
       <div fxLayout="column" *ngIf="isParticipant" [ngClass]="{ '1': 'voteUp', '-1': 'voteDown', '0': 'reset'}[currentVote]">
-        <button mat-icon-button (click)="vote(1)" matTooltip="{{ 'comment-page.vote-up' | translate }}"
+        <button mat-icon-button (click)="vote(1)" [matTooltip]="'comment-page.vote-up' | translate"
                 tabindex="0" aria-labelledby="comment-vote-up">
           <mat-icon class="voting-icon light" [ngClass]="{'upVoted' : hasVoted === 1}">keyboard_arrow_up</mat-icon>
         </button>
         <span class="score">{{comment.score}}</span>
-        <button mat-icon-button (click)="vote(-1)" matTooltip="{{ 'comment-page.vote-down' | translate }}"
+        <button mat-icon-button (click)="vote(-1)" [matTooltip]="'comment-page.vote-down' | translate"
                 tabindex="0" aria-labelledby="comment-vote-down">
           <mat-icon class="voting-icon light" [ngClass]="{'downVoted' : hasVoted === -1}">keyboard_arrow_down</mat-icon>
         </button>
