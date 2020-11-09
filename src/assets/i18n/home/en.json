@@ -211,16 +211,17 @@
   },
   "user-activation": {
     "a11y-activate": "Activates your account.",
-    "a11y-key-input": "Enter the activation key that you received by e-mail to login.",
+    "a11y-key-input": "Enter the verification code that you received by e-mail to login.",
     "a11y-cancel": "Cancels the activation and brings you back to login.",
     "activate": "Activate",
-    "key": "Activation key",
-    "key-incorrect": "Activation key is incorrect.",
-    "key-required": "Please enter an activation key.",
-    "didnt-get": "Didn't get a key?",
+    "key": "Verification code",
+    "key-incorrect": "Verification code is incorrect.",
+    "key-required": "Please enter the verification code.",
+    "didnt-get": "Didn't get a code?",
     "reset-button": "Send again",
-    "sent-again": "Activation key sent again",
-    "cancel": "Cancel"
+    "sent-again": "Verification code sent again",
+    "cancel": "Cancel",
+    "verification-info": "If you have not yet received a verification code, please check your e-mails again in a few minutes and make sure that it has not been filtered out as spam."
   },
   "dialog": {
     "a11y-cancel": "Cancels the current process and closes the dialog.",
