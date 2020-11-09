@@ -22,6 +22,7 @@ export class FooterComponent implements OnInit {
 
   privacyUrl: string;
   imprintUrl: string;
+  feedbackUrl: string;
 
   constructor(
     public notificationService: NotificationService,
@@ -46,6 +47,7 @@ export class FooterComponent implements OnInit {
     this.apiConfigService.getApiConfig$().subscribe(config => {
       this.privacyUrl = config.ui.links.privacy.url;
       this.imprintUrl = config.ui.links.imprint.url ;
+      this.feedbackUrl = config.ui.links.feedback.url;
     });
   }
 
