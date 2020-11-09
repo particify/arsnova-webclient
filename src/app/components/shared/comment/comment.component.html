@@ -12,7 +12,7 @@
   <div fxLayout="column">
     <div fxLayout="row" class="comment-actions">
       <div class="date-container light">
-        <div>{{comment.timestamp | dateFromNow : language}}</div>
+        <div>{{comment.timestamp | dateFromNow : language : refreshCounter }}</div>
       </div>
       <button mat-icon-button *ngIf="comment.read && viewRole === 'CREATOR'" [disabled]="true" (click)="setRead(comment)">
         <mat-icon svgIcon="beamer" class="beamer-icon"
