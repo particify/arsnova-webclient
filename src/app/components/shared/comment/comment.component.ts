@@ -21,6 +21,8 @@ import { AnnounceService } from '../../../services/util/announce.service';
 import { VoteService } from '../../../services/http/vote.service';
 import { Observable, Subject, timer } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { MatDialog } from '@angular/material/dialog';
+import { CommentAnswerComponent } from '@arsnova/app/components/shared/comment-answer/comment-answer.component';
 
 const TIME_UPDATE_INTERVAL = 60000;
 
@@ -51,6 +53,8 @@ export class CommentComponent implements OnInit, OnDestroy {
   @Input() comment: Comment;
   @Input() isNew: boolean;
   @Input() referenceEvent: Observable<string>;
+  @Input() inAnswerView = false;
+  @Input() viewRoleInput: UserRole;
   @Output() clickedOnTag = new EventEmitter<string>();
   viewRole: UserRole;
   isParticipant = false;
@@ -62,7 +66,6 @@ export class CommentComponent implements OnInit, OnDestroy {
   language: string;
   slideAnimationState = 'hidden';
   deviceType: string;
-  inAnswerView = false;
   roleString: string;
   userId: string;
   extensionData: any;
@@ -83,7 +86,8 @@ export class CommentComponent implements OnInit, OnDestroy {
     protected langService: LanguageService,
     private wsCommentService: WsCommentServiceService,
     private announceService: AnnounceService,
-    private globalStorageService: GlobalStorageService
+    private globalStorageService: GlobalStorageService,
+    public dialog: MatDialog
   ) {
     langService.langEmitter.subscribe(lang => {
       translateService.use(lang);
@@ -92,33 +96,23 @@ export class CommentComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.route.data.subscribe(data => {
-      if (this.router.url.includes('/moderator/comments')) {
-        this.isModeratorView = true;
-      }
-      this.viewRole = data.viewRole;
-      switch (this.viewRole) {
-        case UserRole.PARTICIPANT:
-          this.isParticipant = true;
-          this.roleString = 'participant';
-          break;
-        case UserRole.CREATOR:
-          this.isCreator = true;
-          this.roleString = 'creator';
-          break;
-        case UserRole.EXECUTIVE_MODERATOR:
-        /* fall through */
-        case UserRole.EDITING_MODERATOR:
-          this.isModerator = true;
-          this.roleString = 'moderator';
-      }
-    });
+    if (this.viewRoleInput) {
+      this.viewRole = this.viewRoleInput;
+      this.getRole();
+    } else {
+      this.route.data.subscribe(data => {
+        if (this.router.url.includes('/moderator/comments')) {
+          this.isModeratorView = true;
+        }
+        this.viewRole = data.viewRole;
+        this.getRole();
+      });
+    }
     this.authenticationService.getCurrentAuthentication()
         .subscribe(auth => this.userId = auth.userId);
     this.language = this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE);
     this.translateService.use(this.language);
     this.deviceType = this.globalStorageService.getItem(STORAGE_KEYS.DEVICE_TYPE);
-    this.inAnswerView = !this.router.url.includes('comments');
     this.extensionData = {
       'roomId': this.comment.roomId,
       'refId': this.comment.id,
@@ -142,6 +136,24 @@ export class CommentComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.destroyed$.next();
     this.destroyed$.complete();
+  }
+
+  getRole() {
+    switch (this.viewRole) {
+      case UserRole.PARTICIPANT:
+        this.isParticipant = true;
+        this.roleString = 'participant';
+        break;
+      case UserRole.CREATOR:
+        this.isCreator = true;
+        this.roleString = 'creator';
+        break;
+      case UserRole.EXECUTIVE_MODERATOR:
+      /* fall through */
+      case UserRole.EDITING_MODERATOR:
+        this.isModerator = true;
+        this.roleString = 'moderator';
+    }
   }
 
   changeSlideState(): void {
@@ -210,11 +222,16 @@ export class CommentComponent implements OnInit, OnDestroy {
   }
 
   answerComment() {
-    let url: string;
-    this.route.params.subscribe(params => {
-      url = `${this.roleString}/room/${params['shortId']}/comment/${this.comment.id}`;
+    this.dialog.open(CommentAnswerComponent, {
+      maxWidth: '100vw',
+      maxHeight: '100vh',
+      height: '100%',
+      width: '100%',
+      data: {
+        comment: this.comment,
+        role: this.viewRole
+      }
     });
-    this.router.navigate([url]);
   }
 
   delete(): void {

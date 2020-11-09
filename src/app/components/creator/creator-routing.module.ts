@@ -8,10 +8,8 @@ import { StatisticsPageComponent } from '../shared/statistics-page/statistics-pa
 import { SurveyPageComponent } from '../shared/survey-page/survey-page.component';
 import { ContentPresentationComponent } from './content-presentation/content-presentation.component';
 import { CommentPageComponent } from '../shared/comment-page/comment-page.component';
-import { CommentAnswerComponent } from '../shared/comment-answer/comment-answer.component';
 import { SettingsPageComponent } from './settings-page/settings-page.component';
 import { RoomResolver } from '../../resolver/room.resolver';
-import { CommentResolver } from '../../resolver/comment.resolver';
 import { RoomViewUserRoleResolver } from '../../resolver/room-view-user-role.resolver';
 import { LooseContentComponent } from './loose-content/loose-content.component';
 import { GroupContentComponent } from './group-content/group-content.component';
@@ -58,13 +56,6 @@ const routes: Routes = [
       {
         path: 'comments',
         component: CommentPageComponent
-      },
-      {
-        path: 'comment/:commentId',
-        component: CommentAnswerComponent,
-        resolve: {
-          comment: CommentResolver
-        }
       },
       {
         path: 'survey',

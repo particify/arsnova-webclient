@@ -10,9 +10,13 @@ app-comment, .mat-card {
   box-sizing: border-box
 }
 
-.mat-raised-button {
+.mat-raised-button, .mat-stroked-button {
   min-width: 100px;
   margin-top: 3%;
+}
+
+.delete {
+  color: var(--warn);
 }
 
 .mat-icon {
@@ -24,4 +28,10 @@ app-comment, .mat-card {
 
 .mat-form-field {
   margin-top: 1em;
+}
+
+.exit-icon {
+  font-size: 24px;
+  height: 24px;
+  width: 24px;
 }
