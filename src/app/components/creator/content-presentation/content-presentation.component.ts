@@ -23,6 +23,7 @@ export class ContentPresentationComponent implements OnInit {
   contentIndex = 0;
   shortId: number;
   contentGroupName: string;
+  currentStep = 0;
 
   constructor(
     protected route: ActivatedRoute,
@@ -53,8 +54,9 @@ export class ContentPresentationComponent implements OnInit {
             this.contents = this.contentService.getSupportedContents(contents);
             this.isLoading = false;
             if (this.contentIndex) {
+              this.currentStep = this.contentIndex;
               setTimeout(() => {
-               this.stepper.init(this.contentIndex, this.contents.length);
+                this.stepper.init(this.contentIndex, this.contents.length);
               }, 100);
             }
             setTimeout(() => {
@@ -67,6 +69,7 @@ export class ContentPresentationComponent implements OnInit {
   }
 
   updateURL(index: number) {
+    this.currentStep = index;
     this.location.replaceState(`creator/room/${this.shortId}/group/${this.contentGroupName}/statistics/${index + 1}`);
   }
 }
