@@ -5,9 +5,7 @@ import { RoomParticipantPageComponent } from './room-participant-page/room-parti
 import { SurveyPageComponent } from '../shared/survey-page/survey-page.component';
 import { ParticipantContentCarouselPageComponent } from './participant-content-carousel-page/participant-content-carousel-page.component';
 import { CommentPageComponent } from '../shared/comment-page/comment-page.component';
-import { CommentAnswerComponent } from '../shared/comment-answer/comment-answer.component';
 import { RoomResolver } from '../../resolver/room.resolver';
-import { CommentResolver } from '../../resolver/comment.resolver';
 import { RoomViewUserRoleResolver } from '../../resolver/room-view-user-role.resolver';
 import { AuthenticationGuard } from '../../guards/authentication.guard';
 import { RoomUserRoleResolver } from '../../resolver/room-user-role.resolver';
@@ -32,13 +30,6 @@ const routes: Routes = [
       {
         path: 'comments',
         component: CommentPageComponent
-      },
-      {
-        path: 'comment/:commentId',
-        component: CommentAnswerComponent,
-        resolve: {
-          comment: CommentResolver
-        }
       },
       {
         path: 'survey',

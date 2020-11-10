@@ -1,4 +1,4 @@
-import { AfterContentInit, Component, HostListener, OnInit } from '@angular/core';
+import { AfterContentInit, Component, HostListener, Inject, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { LanguageService } from '../../../services/util/language.service';
@@ -13,6 +13,7 @@ import { KeyboardKey } from '../../../utils/keyboard/keys';
 import { EventService } from '../../../services/util/event.service';
 import { AnnounceService } from '../../../services/util/announce.service';
 import { MarkdownFeatureset } from '../../../services/http/formatting.service';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-comment-answer',
@@ -24,7 +25,6 @@ export class CommentAnswerComponent implements OnInit, AfterContentInit {
   comment: Comment;
   answer: string;
   isLoading = true;
-  viewRole: UserRole;
   isParticipant = true;
   edit = false;
   MarkdownFeatureset = MarkdownFeatureset;
@@ -38,7 +38,9 @@ export class CommentAnswerComponent implements OnInit, AfterContentInit {
               private authenticationService: AuthenticationService,
               private dialogService: DialogService,
               private announceService: AnnounceService,
-              private eventService: EventService) {
+              private eventService: EventService,
+              public dialogRef: MatDialogRef<CommentAnswerComponent>,
+              @Inject(MAT_DIALOG_DATA) public data: any) {
   }
 
   @HostListener('window:keyup', ['$event'])
@@ -50,14 +52,14 @@ export class CommentAnswerComponent implements OnInit, AfterContentInit {
       } else {
         document.getElementById('answer-text').focus();
       }
-    } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Escape) === true) {
+    } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit2) === true && focusOnInput === false) {
       this.announce();
     }
   }
 
   ngAfterContentInit() {
     setTimeout(() => {
-      if (this.viewRole === UserRole.PARTICIPANT) {
+      if (this.isParticipant) {
         document.getElementById('answer-text').focus();
       } else {
         document.getElementById('message-button').focus();
@@ -66,13 +68,9 @@ export class CommentAnswerComponent implements OnInit, AfterContentInit {
   }
 
   ngOnInit() {
-    this.route.data.subscribe(data => {
-      this.comment = data.comment;
-      this.answer = this.comment.answer;
-      this.isLoading = false;
-      this.viewRole = data.viewRole;
-      this.isParticipant = this.viewRole === UserRole.PARTICIPANT;
-    });
+    this.comment = this.data.comment;
+    this.answer = this.comment.answer;
+    this.isParticipant = this.data.role === UserRole.PARTICIPANT;
   }
 
   public announce() {
@@ -115,5 +113,9 @@ export class CommentAnswerComponent implements OnInit, AfterContentInit {
 
   tabChanged($event) {
     this.renderPreview = $event.index === 1;
+  }
+
+  close() {
+    this.dialogRef.close();
   }
 }
