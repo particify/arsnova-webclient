@@ -18,6 +18,14 @@ import { KeyboardUtils } from '@arsnova/app/utils/keyboard';
 import { KeyboardKey } from '@arsnova/app/utils/keyboard/keys';
 import { Subject } from 'rxjs';
 
+enum Period {
+  ONEHOUR = 'time-1h',
+  THREEHOURS = 'time-3h',
+  ONEDAY = 'time-1d',
+  ONEWEEK = 'time-1w',
+  ALL = 'time-all'
+}
+
 export const itemRenderNumber = 20;
 
 @Component({
@@ -47,10 +55,13 @@ export class ModeratorCommentListComponent implements OnInit {
   searchInput = '';
   search = false;
   searchPlaceholder = '';
+  commentsFilteredByTime: Comment[] = [];
   displayComments: Comment[] = [];
   commentCounter = itemRenderNumber;
   newestComment: Comment = new Comment();
   referenceEvent: Subject<string> = new Subject<string>();
+  periodsList = Object.values(Period);
+  period: Period;
 
   constructor(
     private route: ActivatedRoute,
@@ -80,6 +91,7 @@ export class ModeratorCommentListComponent implements OnInit {
     this.route.data.subscribe(data => this.viewRole = data.viewRole);
     this.roomId = this.globalStorageService.getItem(STORAGE_KEYS.ROOM_ID);
     this.roomService.getRoom(this.roomId).subscribe(room => this.room = room);
+    this.period = this.globalStorageService.getItem(STORAGE_KEYS.COMMENT_TIME_FILTER) || Period.ALL;
     this.hideCommentsList = false;
     this.wsCommentService.getModeratorCommentStream(this.roomId).subscribe((message: Message) => {
       this.parseIncomingModeratorMessage(message);
@@ -92,7 +104,7 @@ export class ModeratorCommentListComponent implements OnInit {
     this.commentService.getRejectedComments(this.roomId)
       .subscribe(comments => {
         this.comments = comments;
-        this.sortComments(this.currentSort);
+        this.setTimePeriod(this.period);
         this.isLoading = false;
       });
     this.translateService.get('comment-list.search').subscribe(msg => {
@@ -110,7 +122,7 @@ export class ModeratorCommentListComponent implements OnInit {
     const currentScroll = document.documentElement.scrollTop;
     this.scroll = currentScroll >= this.scrollMax;
     this.scrollExtended = currentScroll >= this.scrollExtendedMax;
-    const length = this.hideCommentsList ? this.filteredComments.length : this.comments.length;
+    const length = this.hideCommentsList ? this.filteredComments.length : this.commentsFilteredByTime.length;
     if (this.displayComments.length !== length) {
       if (((window.innerHeight * 2) + window.scrollY) >= document.body.scrollHeight) {
         this.commentCounter += itemRenderNumber / 2;
@@ -126,7 +138,8 @@ export class ModeratorCommentListComponent implements OnInit {
   searchComments(): void {
     if (this.searchInput && this.searchInput.length > 2) {
       this.hideCommentsList = true;
-      this.filteredComments = this.comments.filter(c => c.body.toLowerCase().includes(this.searchInput.toLowerCase()));
+      this.filteredComments = this.commentsFilteredByTime
+        .filter(c => c.body.toLowerCase().includes(this.searchInput.toLowerCase()));
     } else if (this.searchInput.length === 0) {
       this.hideCommentsList = false;
     }
@@ -142,8 +155,8 @@ export class ModeratorCommentListComponent implements OnInit {
   }
 
   getDisplayComments() {
-    const commentList = this.hideCommentsList ? this.filteredComments : this.comments;
-    this.displayComments = commentList.slice(0, Math.min(this.commentCounter, this.comments.length));
+    const commentList = this.hideCommentsList ? this.filteredComments : this.commentsFilteredByTime;
+    this.displayComments = commentList.slice(0, Math.min(this.commentCounter, this.commentsFilteredByTime.length));
   }
 
   getVote(comment: Comment): Vote {
@@ -183,6 +196,7 @@ export class ModeratorCommentListComponent implements OnInit {
       default:
         this.referenceEvent.next(payload.id);
     }
+    this.setTimePeriod(this.period);
     this.sortComments(this.currentSort);
     this.searchComments();
   }
@@ -206,6 +220,7 @@ export class ModeratorCommentListComponent implements OnInit {
         this.announceNewComment(c);
         break;
     }
+    this.setTimePeriod(this.period);
     this.sortComments(this.currentSort);
     this.searchComments();
   }
@@ -228,7 +243,7 @@ export class ModeratorCommentListComponent implements OnInit {
     if (this.hideCommentsList === true) {
       this.sort(this.filteredComments, type);
     } else {
-      this.sort(this.comments, type);
+      this.sort(this.commentsFilteredByTime, type);
     }
     this.currentSort = type;
     this.getDisplayComments();
@@ -256,5 +271,33 @@ export class ModeratorCommentListComponent implements OnInit {
       const newCommentText: string = document.getElementById('new-comment').innerText;
       this.announceService.announce(newCommentText);
     }, 450);
+  }
+
+  setTimePeriod(period: Period) {
+    this.period = period;
+    const currentTime = new Date();
+    const hourInSeconds = 3600000;
+    let periodInSeconds;
+    if (period !== Period.ALL) {
+      switch (period) {
+        case Period.ONEHOUR:
+          periodInSeconds = hourInSeconds;
+          break;
+        case Period.THREEHOURS:
+          periodInSeconds = hourInSeconds * 3;
+          break;
+        case Period.ONEDAY:
+          periodInSeconds = hourInSeconds * 24;
+          break;
+        case Period.ONEWEEK:
+          periodInSeconds = hourInSeconds * 168;
+      }
+      this.commentsFilteredByTime = this.comments
+        .filter(c => new Date(c.timestamp).getTime() >= (currentTime.getTime() - periodInSeconds));
+    } else {
+      this.commentsFilteredByTime = this.comments;
+    }
+    this.sortComments(this.currentSort);
+    this.globalStorageService.setItem(STORAGE_KEYS.COMMENT_TIME_FILTER, this.period);
   }
 }
