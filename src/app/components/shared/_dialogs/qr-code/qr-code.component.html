@@ -3,8 +3,8 @@
     <div class="qr-container">
       <h1 class="text" fxLayout="column" fxLayoutAlign="center center">
         <mat-icon class="web-icon disabled">language</mat-icon>
-        <span *ngIf="hostUrl" class="url">{{ hostUrl }}</span>
-        <span class="url">{{ hostUrl ? data.shortId : joinUrl.slice(8, joinUrl.length) }}</span>
+        <span *ngIf="!useJoinUrl" class="url">{{ displayUrl }}</span>
+        <span class="url">{{ useJoinUrl ? displayUrl : data.shortId }}</span>
       </h1>
       <p tabindex="-1" id="qr-message" class="visually-hidden">{{ 'dialog.a11y-qr-code' | translate }}</p>
       <button class="header exitBtn" mat-icon-button (click)="onCloseClick()" aria-labelledby="exit">
@@ -15,7 +15,7 @@
         <mat-icon>link</mat-icon>
         {{ 'dialog.copy-url' | translate}}
       </button>
-      <qrcode fxLayout="column" fxLayoutAlign="center center" [qrdata]="joinUrl"
+      <qrcode fxLayout="column" fxLayoutAlign="center center" [qrdata]="qrUrl"
               [width]="qrWidth" [colorDark]="fgColor" [colorLight]="bgColor" [errorCorrectionLevel]="'M'"
               [margin]="3"></qrcode>
     </div>

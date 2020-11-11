@@ -18,8 +18,9 @@ export class QrCodeComponent implements OnInit, OnDestroy {
   bgColor: string;
   fgColor: string;
   destroyed$ = new Subject();
-  joinUrl: string;
-  hostUrl: string;
+  qrUrl: string;
+  displayUrl: string;
+  useJoinUrl = false;
 
   constructor(public dialogRef: MatDialogRef<QrCodeComponent>,
               @Inject(MAT_DIALOG_DATA) public data: any,
@@ -39,14 +40,15 @@ export class QrCodeComponent implements OnInit, OnDestroy {
     });
     this.apiConfigService.getApiConfig$().pipe(takeUntil(this.destroyed$)).subscribe(config => {
       let url;
-      if (config && config.ui && config.ui.links.join) {
+      if (config.ui.links?.join) {
         url = config.ui.links.join.url;
+        this.displayUrl = url.replace(/^https?:\/\//, '') + this.data.shortId;
+        this.useJoinUrl = true;
       } else {
-        const host = window.location.host;
-        this.hostUrl = host;
-        url = window.location.protocol + '//' + host + '/join/';
+        url = document.baseURI + 'join/';
+        this.displayUrl = document.baseURI.replace(/^https?:\/\//, '');
       }
-      this.joinUrl = url + this.data.shortId;
+      this.qrUrl = url + this.data.shortId;
     });
     setTimeout(() => {
       document.getElementById('qr-message').focus();
@@ -68,7 +70,7 @@ export class QrCodeComponent implements OnInit, OnDestroy {
     selBox.style.left = '0';
     selBox.style.top = '0';
     selBox.style.opacity = '0';
-    selBox.value = this.joinUrl;
+    selBox.value = this.qrUrl;
     document.body.appendChild(selBox);
     selBox.focus();
     selBox.select();
