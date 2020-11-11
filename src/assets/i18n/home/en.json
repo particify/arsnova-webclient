@@ -179,7 +179,8 @@
     "accept": "I agree to the ",
     "accept-2": ".",
     "terms": "terms of use",
-    "please-accept": "Du musst den Nutzungsbedingungen zustimmen um dich zu registieren."
+    "please-accept": "Du musst den Nutzungsbedingungen zustimmen um dich zu registieren.",
+    "info": "Create your {{accountService}} account to save rooms permanently and manage them on multiple devices."
   },
   "room-list": {
     "a11y-join-room": "Enter the room {{room}} with the number {{id}} in the role {{role}}",

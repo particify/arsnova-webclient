@@ -178,7 +178,8 @@
     "accept": "Hiermit stimme ich den ",
     "accept-2": " zu.",
     "terms": "Nutzungsbedingungen",
-    "please-accept": "Du musst die Nutzungsbedingungen akzeptieren, um dich zu registieren."
+    "please-accept": "Du musst die Nutzungsbedingungen akzeptieren, um dich zu registieren.",
+    "info": "Erstelle ein {{accountService}}-Konto, um Räume dauerhaft zu speichern und auf mehreren Geräten zu verwalten."
   },
   "room-list": {
     "a11y-join-room": "Den Raum {{room}} mit der Nummer {{id}} in der Rolle {{role}} betreten.",
