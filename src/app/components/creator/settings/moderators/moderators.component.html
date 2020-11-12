@@ -1,13 +1,10 @@
 <div>
   <div tabindex="0" id="moderator-settings" class="visually-hidden">{{ 'settings.a11y-moderators' | translate }}</div>
   <mat-form-field class="input-block" appearance="outline">
-    <mat-label>{{ 'settings.moderator-email' | translate }}</mat-label>
+    <mat-label>{{ 'settings.moderator-username' | translate }}</mat-label>
     <input (focus)="eventService.makeFocusOnInputTrue()" (blur)="eventService.makeFocusOnInputFalse()"
            matInput type="email" [(ngModel)]="loginId" [formControl]="usernameFormControl" name="username"
-           aria-labelledby="moderator-email" placeholder="{{ 'settings.enter-moderator-email' | translate }}"/>
-    <mat-error *ngIf="usernameFormControl.hasError('email')">
-      {{ 'settings.email-error' | translate }}
-    </mat-error>
+           aria-labelledby="moderator-username" placeholder="{{ 'settings.enter-moderator-username' | translate }}"/>
   </mat-form-field>
   <div fxLayoutAlign="end">
     <button mat-raised-button class="button-primary" (click)="addModerator()" [disabled]="loginId.length === 0"
@@ -29,6 +26,6 @@
 </div>
 
 <div class="visually-hidden">
-  <div id="moderator-email">{{'settings.a11y-moderator-email' | translate}}</div>
+  <div id="moderator-email">{{'settings.a11y-moderator-username' | translate}}</div>
   <div id="add-moderator">{{'settings.a11y-add-moderator' | translate}}</div>
 </div>
