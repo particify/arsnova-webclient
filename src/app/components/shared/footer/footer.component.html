@@ -1,6 +1,6 @@
 <div>
   <div fxLayout="row wrap" id="footer-toolbar" fxLayoutAlign="end">
-    <a [routerLink]="feedbackUrl">{{'footer.feedback' | translate}}</a>
+    <a *ngIf="feedbackUrl" [routerLink]="feedbackUrl">{{'footer.feedback' | translate}}</a>
     <a [routerLink]="" [matMenuTriggerFor]="privacyMenu">{{'footer.dsgvo' | translate}}</a>
     <a [routerLink]="" (click)="showImprint()">{{'footer.imprint' | translate}}</a>
   </div>
