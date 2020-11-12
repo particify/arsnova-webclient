@@ -5,6 +5,7 @@
             matTooltip="{{'header.back' | translate}}">
       <mat-icon class="header-icons">arrow_back</mat-icon>
     </button>
+    <lib-extension-point extensionId="header-logo" *ngIf="router.url === '/home'"></lib-extension-point>
     <span class="fill-remaining-space"></span>
     <h2 *ngIf="router.url.includes('comments') && isCreator && deviceType === 'desktop'">
       {{cTime}}
