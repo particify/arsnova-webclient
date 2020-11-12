@@ -42,13 +42,17 @@
   background-color: var(--background);
   position: fixed;
   top: 4vw;
-  left: calc(50% - 175px);
+  left: calc(50% - 205px);
   width: 100%;
-  max-width: 350px;
+  max-width: 410px;
   z-index: 1;
-  @media(max-width: 400px) {
-    left: calc(50% - 150px);
-    max-width: 300px;
+  @media(max-width: 420px) {
+    left: calc(50% - 170px);
+    max-width: 340px;
+  }
+  @media(max-width: 340px) {
+    left: 0;
+    max-width: 100vw;
   }
 }
 
@@ -106,7 +110,6 @@
 
 .counter {
   color: var(--on-background);
-  width: 28px;
   text-align: center;
   font-size: 1.5em!important;
   margin: 0;
