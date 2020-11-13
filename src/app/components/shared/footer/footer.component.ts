@@ -23,6 +23,7 @@ export class FooterComponent implements OnInit {
   privacyUrl: string;
   imprintUrl: string;
   feedbackUrl: string;
+  referenceUrl = 'https://particify.de';
 
   constructor(
     public notificationService: NotificationService,

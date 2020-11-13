@@ -29,7 +29,9 @@
     "dsgvo": "Data Protection",
     "imprint": "Imprint",
     "privacy-policy": "Privacy policy",
-    "feedback": "Feedback"
+    "feedback": "Feedback",
+    "powered-by": "Audience Response System by ",
+    "by": "powered by "
   },
   "header": {
     "a11y-back": "Go back to the previous page.",

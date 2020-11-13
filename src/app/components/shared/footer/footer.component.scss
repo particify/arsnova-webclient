@@ -16,11 +16,39 @@ footer {
 
 a {
   font-size: 12px;
-  font-weight: $font-weight-bold;
-  text-decoration: none;
-  color: var(--on-surface);
-  opacity: 0.6;
   padding: 0.8em 0;
-  margin-right: 1em;
+  text-decoration: none;
   cursor: pointer;
+}
+
+.link {
+  font-weight: $font-weight-bold;
+  margin-right: 1em;
+}
+
+.slogan {
+  margin: 0 1em;
+}
+
+.text {
+  color: var(--on-background);
+  opacity: 0.6;
+}
+
+.by {
+  display: none;
+}
+
+@media(max-width: 539px) {
+  .powered-by {
+    display: none;
+  }
+
+  .by {
+    display: initial;
+  }
+}
+
+.name {
+  color: var(--primary-logo);
 }
