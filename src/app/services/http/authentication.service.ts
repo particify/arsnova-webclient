@@ -10,6 +10,7 @@ import { EventService } from '../util/event.service';
 import * as JwtDecode from 'jwt-decode';
 import { TranslateService } from '@ngx-translate/core';
 import { NotificationService } from '../util/notification.service';
+import { ApiConfigService } from './api-config.service';
 
 export const AUTH_HEADER_KEY = 'Authorization';
 export const AUTH_SCHEME = 'Bearer';
@@ -22,6 +23,7 @@ const REFRESH_INTERVAL_MAX_OFFSET_MINUTES = 2;
 @Injectable()
 export class AuthenticationService extends BaseHttpService {
   private readonly ADMIN_ROLE: string = 'ADMIN';
+  private popupDimensions = [500, 500];
 
   /**
    * Higher-order Observable which provides a stream of changes to
@@ -48,7 +50,8 @@ export class AuthenticationService extends BaseHttpService {
     public eventService: EventService,
     private http: HttpClient,
     protected translateService: TranslateService,
-    protected notificationService: NotificationService) {
+    protected notificationService: NotificationService,
+    private apiConfigService: ApiConfigService) {
     super(eventService, translateService, notificationService);
     const savedAuth: ClientAuthentication = this.globalStorageService.getItem(STORAGE_KEYS.USER);
     this.auth$$ = new BehaviorSubject(new BehaviorSubject(savedAuth));
@@ -64,6 +67,12 @@ export class AuthenticationService extends BaseHttpService {
 
     this.getAuthenticationChanges().subscribe(auth => {
       console.log('Authentication changed', auth);
+    });
+    this.apiConfigService.getApiConfig$().subscribe(config => {
+      const popupDimensions = /^([0-9]+)x([0-9]+)$/.exec(config.ui.sso?.popup?.dimensions || '');
+      if (popupDimensions) {
+        this.popupDimensions = [+popupDimensions[1], +popupDimensions[2]];
+      }
     });
     const interval = REFRESH_INTERVAL_MINUTES * 60 * 1000
         + REFRESH_INTERVAL_MAX_OFFSET_MINUTES * Math.random() * 60 * 1000;
@@ -188,8 +197,7 @@ export class AuthenticationService extends BaseHttpService {
   loginViaSso(providerId: string): Observable<ClientAuthenticationResult> {
     const ssoUrl = this.getBaseUrl() + this.serviceApiUrl.auth + this.serviceApiUrl.sso + '/' + providerId;
     const loginUrl = this.getBaseUrl() + this.serviceApiUrl.auth + this.serviceApiUrl.login + '?refresh=true';
-    const popupW = 500;
-    const popupH = 500;
+    const [popupW, popupH] = this.popupDimensions;
     const popupX = window.top.screenX + window.top.outerWidth / 2 - popupW / 2;
     const popupY = window.top.screenY + window.top.outerHeight / 2 - popupH / 2;
     const popup = window.open(ssoUrl, 'auth_popup',
