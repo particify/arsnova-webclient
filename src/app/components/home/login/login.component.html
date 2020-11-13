@@ -1,10 +1,12 @@
 <div *ngIf="!isLoading" fxLayout="column" fxLayoutAlign="center center" fxFill>
   <mat-card class="login-card" fxLayout="column" fxLayoutAlign="center center">
-    <button *ngFor="let provider of ssoProviders" (click)="loginViaSso(provider.id)" class="button-primary"
-            id="{{provider.title}}-button" mat-raised-button type="button"
-            attr.aria-label="{{ 'login.a11y-sso-login' | translate:{provider: provider.title} }}">
-      {{ 'login.login-with' | translate }} {{ provider.title }}
-    </button>
+    <div *ngIf="ssoProviders.length > 0" fxLayout="column" fxLayoutGap="10px">
+      <button *ngFor="let provider of ssoProviders" (click)="loginViaSso(provider.id)" class="button-primary"
+              id="{{provider.title}}-button" mat-raised-button type="button"
+              attr.aria-label="{{ 'login.a11y-sso-login' | translate:{provider: provider.title} }}">
+        {{ 'login.login-with' | translate }} {{ provider.title }}
+      </button>
+    </div>
     <p *ngIf="allowDbLogin && ssoProviders.length > 0">{{ 'login.or' | translate }}</p>
     <mat-divider *ngIf="allowDbLogin && ssoProviders.length > 0"></mat-divider>
     <form class="full-width" fxLayout="column" fxLayoutGap="10px">
