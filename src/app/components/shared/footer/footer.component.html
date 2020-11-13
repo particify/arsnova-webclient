@@ -1,5 +1,7 @@
-<div>
-  <div fxLayout="row wrap" id="footer-toolbar" fxLayoutAlign="end">
+<div id="footer-toolbar" fxLayout="row">
+  <lib-extension-point extensionId="footer-reference"></lib-extension-point>
+  <span class="fill-remaining-space"></span>
+  <div fxLayout="row wrap" fxLayoutAlign="end">
     <a *ngIf="feedbackUrl" [routerLink]="feedbackUrl">{{'footer.feedback' | translate}}</a>
     <a [routerLink]="" [matMenuTriggerFor]="privacyMenu">{{'footer.dsgvo' | translate}}</a>
     <a [routerLink]="" (click)="showImprint()">{{'footer.imprint' | translate}}</a>
