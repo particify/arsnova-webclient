@@ -1,5 +1,5 @@
 <div fxLayout="row" [ngClass]="{'search-container' : !scroll, 'search-container-fixed' : scroll}"
-     *ngIf="comments.length > 2" (window:scroll)="checkScroll()" fxLayoutAlign="center center">
+     (window:scroll)="checkScroll()" fxLayoutAlign="center center">
   <input tabindex="-1" (focus)="eventService.makeFocusOnInputTrue()" (blur)="eventService.makeFocusOnInputFalse()" #searchBox
          id="searchBox" [ngClass]="{'search-input-hidden': !search, 'search-input': search }"
          (input)="searchComments()" [(ngModel)]="searchInput" [placeholder]="searchPlaceholder"
@@ -18,23 +18,23 @@
     </div>
 
     <button id="search-button" mat-mini-fab (click)="activateSearch()" class="bar-icon"
-            *ngIf="!search && comments && comments.length > 0" aria-labelledby="search-list"
+            *ngIf="!search" aria-labelledby="search-list"
             matTooltip="{{ 'comment-list.filter-search' | translate }}">
       <mat-icon>search</mat-icon>
     </button>
 
     <button id="sort-button" mat-mini-fab aria-labelledby="sort-list" class="bar-icon"
-            *ngIf="!searchBox.value && comments && comments.length > 0 && !search"
+            *ngIf="!search"
             [matMenuTriggerFor]="sortMenu" matTooltip="{{ 'comment-list.sort-comments' | translate }}">
       <mat-icon>swap_vert</mat-icon>
     </button>
     <button id="select-time-button" mat-mini-fab aria-labelledby="select-time" class="bar-icon"
-            *ngIf="!searchBox.value && !search"
+            *ngIf="!search"
             [matMenuTriggerFor]="timeMenu" matTooltip="{{ 'comment-list.select-time' | translate }}">
       <mat-icon class="bigger-icon">access_time</mat-icon>
     </button>
     <button id="switch-button" mat-mini-fab class="bar-icon" aria-labelledby="switch-list"
-            (click)="switchToCommentList()" *ngIf="!searchBox.value && comments && comments.length > 0 && !search"
+            (click)="switchToCommentList()" *ngIf="!search"
             matTooltip="{{ 'comment-list.switch-to-comment-list' | translate }}">
       <mat-icon>playlist_add_check</mat-icon>
     </button>
@@ -82,9 +82,12 @@
                [parseVote]="getVote(current)" [referenceEvent]="referenceEvent.asObservable()"></app-comment>
 </div>
 
-<div *ngIf="comments && commentsFilteredByTime.length < 1 && !isLoading" fxLayout="row" fxLayoutAlign="center center"
-     class="no-comments">
-  <p>{{ 'comment-page.no-comments' | translate }}</p>
+<div fxLayout="row" fxLayoutAlign="center center" class="no-comments">
+  <p *ngIf="comments.length < 1">{{ 'comment-page.no-comments' | translate }}</p>
+  <p *ngIf="((hideCommentsList && filteredComments.length < 1) ||
+            (!hideCommentsList && commentsFilteredByTime.length < 1)) && comments.length >= 1">
+    {{ 'comment-page.no-comments-found' | translate }}
+  </p>
 </div>
 
 <div class="visually-hidden">

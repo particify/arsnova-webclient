@@ -106,6 +106,7 @@
     "mark-read": "Already discussed by the professor",
     "new-comment": "A new comment with the content, {{ comment }}, has been asked.",
     "no-comments": "No comments present.",
+    "no-comments-found": "No comments found.",
     "search-box-input-description": "Here you can search for comments.",
     "vote-down": "Vote down",
     "vote-up": "Vote up"
