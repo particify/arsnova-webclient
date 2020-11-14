@@ -14,19 +14,17 @@ p {
 
 .text {
   font-size: 14px;
-  margin: 0;
   color: var(--primary);
   text-align: center;
+  margin: 20px 0;
 }
 
 .invisible {
-  margin: 20px 0;
   height: 0;
   transform: scale(0);
 }
 
 .visible {
-  height: 32px;
   transition: 0.5s;
   transform: scale(1);
 }
