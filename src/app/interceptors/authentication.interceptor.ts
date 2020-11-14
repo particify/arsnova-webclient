@@ -8,7 +8,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 
-const API_LOGIN_URI = '/api/auth/login/registered';
+const API_LOGIN_URI_PATTERN = /^\/api\/auth\/login\/[^?].*/;
 
 @Injectable()
 export class AuthenticationInterceptor implements HttpInterceptor {
@@ -25,7 +25,7 @@ export class AuthenticationInterceptor implements HttpInterceptor {
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     const tokenOverride = req.headers.has(AUTH_HEADER_KEY);
-    if ((this.token || tokenOverride) && req.url !== API_LOGIN_URI) {
+    if ((this.token || tokenOverride) && !req.withCredentials && !API_LOGIN_URI_PATTERN.test(req.url)) {
       const authReq = tokenOverride ? req : req.clone({
         headers: req.headers.set(AUTH_HEADER_KEY, `${AUTH_SCHEME} ${this.token}`)
       });
