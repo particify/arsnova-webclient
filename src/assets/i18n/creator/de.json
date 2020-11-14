@@ -343,7 +343,7 @@
     "a11y-export-comments": "Exportiert alle Kommentare dieses Raums.",
     "a11y-moderator-email": "Gib die E-Mail-Adresse des Nutzers ein, welchen du als moderierende Person hinzufügen möchtest",
     "a11y-room-name": "Vergebe dem Raum hier einen neuen Namen.",
-    "a11y-comment-moderation": "Schieberegler für moderierte Kommentare",
+    "a11y-moderation": "Schieberegler für moderierte Kommentare",
     "a11y-direct-send": "Schieberegler, um Kommentare sofort sichtbar zu machen.",
     "a11y-threshold": "Schieberegler zum Einstellen des Schwellenwerts für sichtbare Kommentare",
     "a11y-room-description": "Gib eine Beschreibung für den Raum ein.",

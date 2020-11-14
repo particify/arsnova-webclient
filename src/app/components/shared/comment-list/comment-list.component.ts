@@ -19,6 +19,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { DialogService } from '../../../services/util/dialog.service';
 import { GlobalStorageService, STORAGE_KEYS } from '../../../services/util/global-storage.service';
 import { AnnounceService } from '../../../services/util/announce.service';
+import { CommentSettingsService } from '@arsnova/app/services/http/comment-settings.service';
 
 // Using lowercase letters in enums because they we're also used for parsing incoming WS-messages
 
@@ -105,7 +106,8 @@ export class CommentListComponent implements OnInit, OnDestroy {
     public announceService: AnnounceService,
     private router: Router,
     protected route: ActivatedRoute,
-    private globalStorageService: GlobalStorageService
+    private globalStorageService: GlobalStorageService,
+    private commentSettingsService: CommentSettingsService
   ) {
     langService.langEmitter.subscribe(lang => translateService.use(lang));
   }
@@ -156,9 +158,9 @@ export class CommentListComponent implements OnInit, OnDestroy {
           this.globalStorageService.setItem(STORAGE_KEYS.MODERATION_ENABLED,
             this.room.extensions['comments'].enableModeration);
         }
-        if (this.room.extensions['comments'].directSend !== null) {
-          this.directSend = this.room.extensions['comments'].directSend;
-        }
+        this.commentSettingsService.get(this.room.id).subscribe(commentSettings => {
+          this.directSend = commentSettings.directSend;
+        });
       }
       this.commentService.getAckComments(this.roomId)
         .subscribe(comments => {
