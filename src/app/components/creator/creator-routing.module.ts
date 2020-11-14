@@ -35,7 +35,10 @@ const routes: Routes = [
       },
       {
         path: 'settings',
-        component: SettingsPageComponent
+        component: SettingsPageComponent,
+        resolve: {
+          room: RoomResolver
+        }
       },
       {
         path: 'create-content',
