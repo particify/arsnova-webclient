@@ -1,6 +1,5 @@
 .mat-card {
   width: 100%;
-  min-height: 250px;
 }
 
 .mat-icon-button {
@@ -68,7 +67,7 @@
   width: 100%;
   min-height: 140px;
   padding: 0 !important;
-  margin: 4% 0;
+  margin: 8% 0 4%;
 }
 
 .mat-grid-tile {
@@ -83,14 +82,18 @@
 }
 
 .single-tile {
-  width: calc(100% - 32px) !important;
+  width: 96%!important;
 }
 
 .double-tile {
-  width: calc(50% - 16px) !important;
+  width: 48% !important;
 }
 
 .corner-buttons {
   width: 40px;
   height: 40px;
+}
+
+.mat-grid-tile .mat-figure {
+  width: 100%;
 }

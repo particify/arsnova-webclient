@@ -5,46 +5,48 @@
       {{ 'room-page.a11y-room-message' | translate: {room: room.name, key: room.shortId} }}</button>
     <app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
     <mat-card *ngIf="!isLoading && room">
-      <div fxLayout="row">
-        <button mat-icon-button class="corner-buttons" [ngClass]="{'disabled': noGroups}" id="statistics-button"
-                (click)="navToStats('creator')" aria-labelledby="statistics">
-          <mat-icon class="corner-icon icon-secondary" matTooltip="{{ 'room-page.answer-statistics' | translate}}">insert_chart
-          </mat-icon>
-        </button>
-        <span class="fill-remaining-space"></span>
-        <mat-card-header fxLayoutAlign="center" fxLayout="row">
-          <mat-card-title fxLayoutAlign="center">
-            {{ room.name }}
-          </mat-card-title>
-          <mat-card-subtitle fxLayoutAlign="center">
+      <mat-card-content>
+        <div fxLayout="row">
+          <button mat-icon-button class="corner-buttons" [ngClass]="{'disabled': noGroups}" id="statistics-button"
+                  (click)="navToStats('creator')" aria-labelledby="statistics">
+            <mat-icon class="corner-icon icon-secondary" matTooltip="{{ 'room-page.answer-statistics' | translate}}">insert_chart
+            </mat-icon>
+          </button>
+          <span class="fill-remaining-space"></span>
+          <mat-card-header fxLayoutAlign="center" fxLayout="row">
+            <mat-card-title fxLayoutAlign="center">
+              {{ room.name }}
+            </mat-card-title>
+            <mat-card-subtitle fxLayoutAlign="center">
             <span class="room-short-id">
               {{ room.shortId.slice(0, 4) }} {{  room.shortId.slice(4, 8) }}
             </span>
-          </mat-card-subtitle>
-        </mat-card-header>
-        <span class="fill-remaining-space"></span>
-        <button mat-icon-button [matMenuTriggerFor]="moreMenu" matTooltip="{{ 'room-page.more-options' | translate }}"
-                aria-labelledby="more-options">
-          <mat-icon class="corner-icon icon-secondary">more_vert</mat-icon>
-        </button>
-        <mat-menu #moreMenu="matMenu">
-          <button mat-menu-item tabindex="0" (click)="switchRole('participant')"
-                  aria-labelledby="switch-role">
-            <mat-icon class="menu-icon icon-secondary">{{roleIconString}}</mat-icon>
-            <span>{{ 'room-page.switch-role' | translate }}</span>
+            </mat-card-subtitle>
+          </mat-card-header>
+          <span class="fill-remaining-space"></span>
+          <button mat-icon-button [matMenuTriggerFor]="moreMenu" matTooltip="{{ 'room-page.more-options' | translate }}"
+                  aria-labelledby="more-options">
+            <mat-icon class="corner-icon icon-secondary">more_vert</mat-icon>
           </button>
-          <button mat-menu-item (click)="showQRDialog()" aria-labelledby="share">
-            <mat-icon class="menu-icon">share</mat-icon>
-            <span>{{ 'room-page.share-room' | translate }}</span>
-          </button>
-          <button mat-menu-item aria-labelledby="settings" routerLink="settings">
-            <mat-icon class="menu-icon icon-secondary">settings</mat-icon>
-            <span>{{ 'room-page.room-settings' | translate}}</span>
-          </button>
-        </mat-menu>
-      </div>
-      <mat-card-content *ngIf="room.description" fxLayoutAlign="center">
-        <app-rendered-text [rawText]="room.description.trim()" [renderedText]="room.renderedDescription"></app-rendered-text>
+          <mat-menu #moreMenu="matMenu">
+            <button mat-menu-item tabindex="0" (click)="switchRole('participant')"
+                    aria-labelledby="switch-role">
+              <mat-icon class="menu-icon icon-secondary">{{roleIconString}}</mat-icon>
+              <span>{{ 'room-page.switch-role' | translate }}</span>
+            </button>
+            <button mat-menu-item (click)="showQRDialog()" aria-labelledby="share">
+              <mat-icon class="menu-icon">share</mat-icon>
+              <span>{{ 'room-page.share-room' | translate }}</span>
+            </button>
+            <button mat-menu-item aria-labelledby="settings" routerLink="settings">
+              <mat-icon class="menu-icon icon-secondary">settings</mat-icon>
+              <span>{{ 'room-page.room-settings' | translate}}</span>
+            </button>
+          </mat-menu>
+        </div>
+        <div *ngIf="room.description" fxLayoutAlign="center">
+          <app-rendered-text [rawText]="room.description.trim()" [renderedText]="room.renderedDescription"></app-rendered-text>
+        </div>
       </mat-card-content>
       <div fxLayout="column" fxLayoutAlign="center">
           <mat-grid-list *ngIf="viewModuleCount > 1" cols="2" rowHeight="{{deviceWidth > 500 ? '2:1' : '3:2'}}"
