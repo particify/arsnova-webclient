@@ -303,8 +303,8 @@
     "no-bonus": "Noch keine Bonuspunkte erhalten.",
     "really-delete-answers": "Willst du wirklich die Antworten auf diese Frage löschen?",
     "really-delete-all-answers": "Willst du wirklich alle Antworten dieser Sammlung löschen?",
-    "comment-sent": "Der Kommentar wurde veröffentlicht.",
-    "comment-sent-to-moderator": "Der Kommentar wird nun von einer moderierenden Person überprüft."
+    "comment-sent": "Dein Kommentar wurde veröffentlicht.",
+    "comment-sent-to-moderator": "Dein Kommentar wird nun überprüft."
   },
   "errors": {
     "not-authorized": "Du bist nicht autorisiert diese Seite zu sehen.",

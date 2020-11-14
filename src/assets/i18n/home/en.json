@@ -304,8 +304,8 @@
     "no-bonus": "No bonus points earned yet.",
     "really-delete-answers": "Do you really want to delete the answers to this question?",
     "really-delete-all-answers": "Do you really want to delete all answers of this collection?",
-    "comment-sent": "The comment has been published.",
-    "comment-sent-to-moderator": "The comment will be reviewed by a moderator."
+    "comment-sent": "Your comment has been published.",
+    "comment-sent-to-moderator": "Your comment will be reviewed by a moderator."
   },
   "errors": {
     "not-authorized": "You're not authorized to view this page.",
