@@ -33,6 +33,7 @@ export class ContentCreationComponent implements OnInit, OnDestroy {
   @Input() createEvent: Observable<boolean>;
   @Input() contentBody;
   @Input() contentGroup;
+  @Input() abstentionsAllowed: boolean;
   @Output() reset = new EventEmitter<boolean>();
   @Output() contentSent = new EventEmitter<Content>();
   @Output() refId = new EventEmitter<string>();
@@ -78,6 +79,7 @@ export class ContentCreationComponent implements OnInit, OnDestroy {
   prepareContent() {
     this.content.roomId = this.roomId;
     this.content.body = this.contentBody;
+    this.content.abstentionsAllowed = this.abstentionsAllowed;
     if (this.contentBody === '') {
       this.translationService.get('content.no-empty').subscribe(message => {
         this.notificationService.showAdvanced(message, AdvancedSnackBarTypes.WARNING);
