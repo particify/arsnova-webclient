@@ -74,8 +74,12 @@ export class ContentChoiceParticipantComponent extends ContentParticipantCompone
             }
           }
         }
-        if (this.isChoice) {
-          this.checkAnswer(this.answer.selectedChoiceIndexes);
+        if (this.answer.selectedChoiceIndexes) {
+          if (this.isChoice) {
+            this.checkAnswer(this.answer.selectedChoiceIndexes);
+          }
+        } else {
+          this.hasAbstained = true;
         }
         this.alreadySent = true;
       }
@@ -99,13 +103,9 @@ export class ContentChoiceParticipantComponent extends ContentParticipantCompone
   }
 
   checkAnswer(selectedAnswers: number[]) {
-    if (selectedAnswers) {
-      if (this.correctOptionIndexes.length === selectedAnswers.length &&
-        this.correctOptionIndexes.every((value, index) => value === selectedAnswers[index])) {
-        this.isCorrect = true;
-      }
-    } else {
-      this.hasAbstained = true;
+    if (this.correctOptionIndexes.length === selectedAnswers.length &&
+      this.correctOptionIndexes.every((value, index) => value === selectedAnswers[index])) {
+      this.isCorrect = true;
     }
   }
 

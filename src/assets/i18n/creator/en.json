@@ -257,7 +257,8 @@
     "format-slide-description": "Slides are used to present information.",
     "multiple-answers-allowed": "Allow to select multiple answers",
     "no-correct-answer": "Do not set correct answers",
-    "format-not-supported": "This format is currently not supported."
+    "format-not-supported": "This format is currently not supported.",
+    "abstentions-allowed": "Allow abstentions"
   },
   "survey": {
     "a11y-message": "You are now in live survey mode. Press the Enter key to get information about key combinations or use the Escape key to call up the announcement later.",

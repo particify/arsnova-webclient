@@ -51,6 +51,7 @@ export class ContentCreationPageComponent implements OnInit, AfterContentInit {
   content: Content;
   textContainsImage = false;
   warningType = HINT_TYPES.WARNING;
+  abstentionsAllowed = true;
 
   constructor(
     private translateService: TranslateService,
