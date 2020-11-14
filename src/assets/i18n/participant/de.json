@@ -106,6 +106,7 @@
     "mark-read": "Die vortragende Person hat den Kommentar im Hörsaal besprochen.",
     "new-comment": "Eine neuer Kommentar mit dem Inhalt, {{ comment }}, wurde soeben gestellt.",
     "no-comments": "Keine Kommentare vorhanden.",
+    "no-comments-found": "Keine Kommentare gefunden.",
     "search-box-input-description": "Hier kannst du nach Kommentaren suchen.",
     "vote-down": "Kommentar abwerten",
     "vote-up": "Kommentar aufwerten"
