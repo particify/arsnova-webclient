@@ -83,18 +83,12 @@ export class CreateCommentComponent implements OnInit {
     this.commentService.addComment(comment).subscribe(newComment => {
       this.eventsSubject.next(newComment.id);
       if (this.data.directSend) {
-        if ([UserRole.CREATOR, UserRole.EDITING_MODERATOR, UserRole.EXECUTIVE_MODERATOR].indexOf(this.data.role) !== -1) {
-          this.translateService.get('dialog.comment-sent').subscribe(msg => {
-            message = msg;
-          });
-          comment.ack = true;
-        } else {
-          this.translateService.get('dialog.comment-sent-to-moderator').subscribe(msg => {
-            message = msg;
-          });
-        }
-      } else {
         this.translateService.get('dialog.comment-sent').subscribe(msg => {
+          message = msg;
+        });
+        comment.ack = true;
+      } else {
+        this.translateService.get('dialog.comment-sent-to-moderator').subscribe(msg => {
           message = msg;
         });
       }
