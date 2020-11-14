@@ -4,29 +4,31 @@
             class="visually-hidden">{{ 'room-page.a11y-room-message' | translate }}</button>
     <app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
     <mat-card *ngIf=" !isLoading && room">
-      <div fxLayout="row" fxLayoutAlign="space-between">
-        <span [ngClass]="{'corner-buttons': role !== ''}"></span>
-        <mat-card-header fxLayoutAlign="center">
-          <mat-card-title fxLayoutAlign="center">
-            {{ room.name }}
-          </mat-card-title>
-          <mat-card-subtitle fxLayoutAlign="center">
+      <mat-card-content>
+        <div fxLayout="row" fxLayoutAlign="space-between">
+          <span [ngClass]="{'corner-buttons': role !== ''}"></span>
+          <mat-card-header fxLayoutAlign="center">
+            <mat-card-title fxLayoutAlign="center">
+              {{ room.name }}
+            </mat-card-title>
+            <mat-card-subtitle fxLayoutAlign="center">
             <span class="room-short-id">
               {{ room.shortId.slice(0, 4) }} {{  room.shortId.slice(4, 8) }}
             </span>
-          </mat-card-subtitle>
-        </mat-card-header>
-        <button mat-icon-button class="corner-buttons" *ngIf="role !== ''" (click)="switchRole()"
-                aria-labelledby="switch-role">
-          <mat-icon class="corner-icon icon-secondary" matTooltip="{{ 'room-page.switch-role' | translate}}">{{roleIconString}}
-          </mat-icon>
-        </button>
-        <span *ngIf="role === ''"></span>
-      </div>
-      <mat-card-content *ngIf="room.description" fxLayoutAlign="center">
-        <app-rendered-text [rawText]="room.description.trim()" [renderedText]="room.renderedDescription"></app-rendered-text>
+            </mat-card-subtitle>
+          </mat-card-header>
+          <button mat-icon-button class="corner-buttons" *ngIf="role !== ''" (click)="switchRole()"
+                  aria-labelledby="switch-role">
+            <mat-icon class="corner-icon icon-secondary" matTooltip="{{ 'room-page.switch-role' | translate}}">{{roleIconString}}
+            </mat-icon>
+          </button>
+          <span *ngIf="role === ''"></span>
+        </div>
+        <div *ngIf="room.description" fxLayoutAlign="center">
+          <app-rendered-text [rawText]="room.description.trim()" [renderedText]="room.renderedDescription"></app-rendered-text>
+        </div>
       </mat-card-content>
-      <mat-grid-list cols="{{surveyEnabled ? 2 : 1}}" rowHeight="1:1" [ngClass]="{'big-container': deviceWidth >= 500, 'single-container': !surveyEnabled}">
+      <mat-grid-list cols="{{surveyEnabled ? 2 : 1}}" rowHeight="1:1" [ngClass]="{'big-container': deviceWidth >= 500}">
         <mat-grid-tile [ngClass]="{'single-tile': !surveyEnabled, 'double-tile': surveyEnabled}">
           <button id="comments-button" mat-icon-button class="main-button"
                   [ngClass]="{'hover': deviceWidth > 500}" [disableRipple]="true"
