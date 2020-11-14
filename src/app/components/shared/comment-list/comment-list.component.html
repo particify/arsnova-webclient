@@ -104,7 +104,7 @@
 
       <button mat-menu-item (focus)="hideCommentsList=true" (click)="filterComments(filtering.WRONG)"
               aria-labelledby="not_interested">
-        <mat-icon [ngClass]="{wrong: 'wrong-icon'}[currentFilter]">not_interested</mat-icon>
+        <mat-icon [ngClass]="{wrong: 'wrong-icon'}[currentFilter]">cancel</mat-icon>
         <span>{{ 'comment-list.filter-wrong' | translate }}</span>
       </button>
 
