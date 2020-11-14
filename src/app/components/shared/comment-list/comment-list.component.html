@@ -68,17 +68,17 @@
 
   <mat-menu #sortMenu="matMenu" xPosition="before">
 
-    <button mat-menu-item (click)="sortComments(sorting.TIME, true)" aria-labelledby="sort-time">
+    <button mat-menu-item (click)="sortCommentsManually(sorting.TIME)" aria-labelledby="sort-time">
       <mat-icon [ngClass]="{time: 'unread-icon'}[currentSort]">access_time</mat-icon>
       <span>{{ 'comment-list.sort-list-time' | translate }}</span>
     </button>
 
-    <button mat-menu-item (click)="sortComments(sorting.VOTEDESC, true)" aria-labelledby="sort-up">
+    <button mat-menu-item (click)="sortCommentsManually(sorting.VOTEDESC)" aria-labelledby="sort-up">
       <mat-icon [ngClass]="{votedesc: 'up'}[currentSort]">keyboard_arrow_up</mat-icon>
       <span>{{ 'comment-list.sort-vote-asc' | translate }}</span>
     </button>
 
-    <button mat-menu-item (click)="sortComments(sorting.VOTEASC, true)" aria-labelledby="sort-down">
+    <button mat-menu-item (click)="sortCommentsManually(sorting.VOTEASC)" aria-labelledby="sort-down">
       <mat-icon [ngClass]="{voteasc: 'down'}[currentSort]">keyboard_arrow_down</mat-icon>
       <span>{{ 'comment-list.sort-vote-desc' | translate }}</span>
     </button>
@@ -141,7 +141,7 @@
 </div>
 
 <button mat-icon-button class="button-primary scrollTop" [ngClass]="{'visible': scrollExtended}" tabindex="-1"
-        (click)="scrollTop()">
+        (click)="scrollTop(true)">
   <mat-icon>arrow_upward</mat-icon>
 </button>
 
