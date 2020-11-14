@@ -42,9 +42,9 @@
                 <mat-icon class="icon-indicator" [ngClass]="isCorrect ? 'correct' : 'wrong'">
                   {{isCorrect ? 'check' : 'close'}}</mat-icon>
               </div>
-              <div *ngIf="alreadySent" class="text">
+              <div [ngClass]="{'visible' : alreadySent, 'invisible': !alreadySent}" class="text">
                 <p *ngIf="hasAbstained">{{'answer.has-abstained' | translate}}</p>
-                <p *ngIf="!hasAbstained && !isChoice">{{'answer.has-voted' | translate}}</p>
+                <p *ngIf="!hasAbstained">{{'answer.has-voted' | translate}}</p>
               </div>
             </mat-list>
             <mat-radio-group [disabled]="alreadySent" *ngIf="!content.multiple" name="Radio">
@@ -61,21 +61,23 @@
                   <mat-icon class="icon-indicator" [ngClass]="isCorrect ? 'correct' : 'wrong'">
                     {{isCorrect ? 'check' : 'close'}}</mat-icon>
                 </div>
-                <div *ngIf="!isChoice && alreadySent" fxLayout="column" fxLayoutAlign="center" class="text">
+                <div [ngClass]="{'visible' : alreadySent, 'invisible': !alreadySent}" class="text">
                   <p *ngIf="!hasAbstained">{{'answer.has-voted' | translate}}</p>
                   <p *ngIf="hasAbstained">{{'answer.has-abstained' | translate}}</p>
                 </div>
               </mat-list>
             </mat-radio-group>
-            <div fxLayoutAlign="center" fxLayoutGap="20px" [ngClass]="{'disabled': alreadySent}">
-              <button tabindex="{{alreadySent ? '-1' : '0'}}" mat-raised-button *ngIf="content.abstentionsAllowed"
-                      class="button-abort"
-                      [ngClass]="{'disabled' : alreadySent}" (click)="abstain($event)" aria-labelledby="abstain">
-                {{ 'answer.abstain' | translate }}</button>
-              <button tabindex="{{alreadySent ? '-1' : '0'}}" mat-raised-button class="button-primary"
-                      [ngClass]="{'disabled' : alreadySent}" type="submit"
-                      aria-labelledby="submit">
-                {{ 'answer.submit' | translate }}</button>
+            <div [ngClass]="{'invisible' : alreadySent}">
+              <div fxLayoutAlign="center" fxLayoutGap="10px">
+                <button tabindex="{{alreadySent ? '-1' : '0'}}" mat-raised-button *ngIf="content.abstentionsAllowed"
+                        class="button-abort"
+                        [ngClass]="{'disabled' : alreadySent}" (click)="abstain($event)" aria-labelledby="abstain">
+                  {{ 'answer.abstain' | translate }}</button>
+                <button tabindex="{{alreadySent ? '-1' : '0'}}" mat-raised-button class="button-primary"
+                        [ngClass]="{'disabled' : alreadySent}" type="submit"
+                        aria-labelledby="submit">
+                  {{ 'answer.submit' | translate }}</button>
+              </div>
             </div>
           </form>
         </div>

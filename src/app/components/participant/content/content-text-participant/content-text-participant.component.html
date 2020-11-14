@@ -18,7 +18,7 @@
             </button>
           </div>
           <lib-extension-point extensionId="attachment-list" [extensionData]="extensionData"></lib-extension-point>
-          <div class="answer-container">
+          <div fxLayout="column" fxLayoutAlign="space-between" class="answer-container">
             <form *ngIf="!givenAnswer">
               <mat-form-field class="input-block" appearance="outline">
                 <mat-label>{{ 'answer.your-answer' | translate }}</mat-label>
@@ -31,20 +31,21 @@
             <div *ngIf="givenAnswer && givenAnswer.body">
               <p class="answer">{{givenAnswer.body}}</p>
             </div>
-            <span class="fill-remaining-space"></span>
-            <div fxLayout="column" fxLayoutAlign="center" class="invisible" [ngClass]="{'visible' : givenAnswer}">
+            <div fxLayout="column" fxLayoutAlign="center" [ngClass]="{'visible' : givenAnswer, 'invisible': !givenAnswer}">
               <p class="text">{{sentMessage}}</p>
             </div>
           </div>
-          <div fxLayoutAlign="center" fxLayoutGap="20px">
-            <button tabindex="{{alreadySent ? '-1' : '0'}}" mat-raised-button *ngIf="content.abstentionsAllowed"
-                    (click)="abstain($event)" class="button-abort" [ngClass]="{'disabled' : alreadySent}"
-                    aria-labelledby="abstain">
-              {{ 'answer.abstain' | translate }}</button>
-            <button tabindex="{{alreadySent ? '-1' : '0'}}" mat-raised-button (click)="submitAnswer()"
-                    class="button-primary"
-                    [ngClass]="{'disabled' : alreadySent}" type="submit" aria-labelledby="submit">
-              {{ 'answer.submit' | translate }}</button>
+          <div [ngClass]="{'invisible' : alreadySent}">
+            <div fxLayoutAlign="center" fxLayoutGap="10px">
+              <button tabindex="{{alreadySent ? '-1' : '0'}}" mat-raised-button *ngIf="content.abstentionsAllowed"
+                      (click)="abstain($event)" class="button-abort" [ngClass]="{'disabled' : alreadySent}"
+                      aria-labelledby="abstain">
+                {{ 'answer.abstain' | translate }}</button>
+              <button tabindex="{{alreadySent ? '-1' : '0'}}" mat-raised-button (click)="submitAnswer()"
+                      class="button-primary"
+                      [ngClass]="{'disabled' : alreadySent}" type="submit" aria-labelledby="submit">
+                {{ 'answer.submit' | translate }}</button>
+            </div>
           </div>
         </div>
         <div class="back side" [ngClass]="{'invisible-card-content': !flipped}">

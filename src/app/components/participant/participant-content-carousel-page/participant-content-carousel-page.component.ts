@@ -149,7 +149,7 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
     this.answers[this.contents.map(c => c.id).indexOf(answer.contentId)] = answer;
     if (this.started === this.status.NORMAL) {
       if (index < this.contents.length - 1) {
-        let wait = 200;
+        let wait = 400;
         if (this.contents[index].state.responsesVisible) {
           wait += 600;
         }
