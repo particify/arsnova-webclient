@@ -1,4 +1,4 @@
-<div fxLayout="row">
+<div fxLayout="row" fxLayoutAlign="end">
   <div fxLayout="column" fxLayoutAlign="center">
     <mat-icon>zoom_out</mat-icon>
   </div>
@@ -13,8 +13,9 @@
     {{data}}
   </p>
 </div>
-<button mat-raised-button class="button-primary exitBtn" (click)="onCloseClick()" aria-labelledby="exit">
-  <mat-icon>close</mat-icon>
+
+<button class="header exitBtn" mat-icon-button (click)="onCloseClick()" aria-labelledby="exit">
+  <mat-icon>arrow_back</mat-icon>
 </button>
 
 <div class="visually-hidden">
