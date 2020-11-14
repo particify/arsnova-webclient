@@ -18,7 +18,7 @@
           <div fxLayout="row" fxLayoutAlign="end">
             <button mat-raised-button *ngIf="!isParticipant && !edit" class="button-primary" (click)="editAnswer()"
                     aria-labelledby="edit">
-              <mat-icon>edit</mat-icon>
+              <mat-icon class="edit-icon">edit</mat-icon>
               {{ 'comment-page.edit-answer' | translate}}
             </button>
           </div>
@@ -57,7 +57,7 @@
             </div>
           </mat-tab>
         </mat-tab-group>
-        <div fxLayout="row" fxLayoutAlign="end" fxLayoutGap="20px">
+        <div fxLayout="row" fxLayoutAlign="end" fxLayoutGap="10px">
           <button mat-stroked-button *ngIf="!isParticipant && answer && edit" class="delete"
                   aria-labelledby="delete" (click)="openDeleteAnswerDialog()">
             {{'comment-page.delete-answer' | translate}}</button>
