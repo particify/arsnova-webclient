@@ -90,6 +90,7 @@ export class CommentListComponent implements OnInit, OnDestroy {
   referenceEvent: Subject<string> = new Subject<string>();
   periodsList = Object.values(Period);
   period: Period;
+  scrollToTop = false;
 
   constructor(
     private commentService: CommentService,
@@ -181,8 +182,9 @@ export class CommentListComponent implements OnInit, OnDestroy {
     }
   }
 
-  scrollTop() {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+  scrollTop(smooth?: boolean) {
+    const behavior = this.displayComments.length <= itemRenderNumber || smooth ? 'smooth' : 'auto';
+    window.scrollTo({ top: 0, behavior: behavior });
   }
 
   searchComments(): void {
@@ -191,11 +193,12 @@ export class CommentListComponent implements OnInit, OnDestroy {
         this.hideCommentsList = true;
         this.filteredComments = this.commentsFilteredByTime
           .filter(c => c.body.toLowerCase().includes(this.searchInput.toLowerCase()));
+        this.getDisplayComments();
       }
     } else if (this.searchInput.length === 0 && this.currentFilter === '') {
       this.hideCommentsList = false;
+      this.getDisplayComments();
     }
-    this.getDisplayComments();
   }
 
   activateSearch() {
@@ -206,7 +209,8 @@ export class CommentListComponent implements OnInit, OnDestroy {
     this.searchField.nativeElement.focus();
   }
 
-  getComments(sorting?: boolean): void {
+  getComments(scrollToTop?: boolean): void {
+    this.scrollToTop = scrollToTop;
     if (this.room && this.room.extensions && this.room.extensions['comments']) {
       if (this.room.extensions['comments'].enableThreshold) {
         this.thresholdEnabled = true;
@@ -224,9 +228,6 @@ export class CommentListComponent implements OnInit, OnDestroy {
       }
     }
     this.setTimePeriod(this.period);
-    this.filterComments(this.currentFilter);
-    this.sortComments(this.currentSort, sorting);
-    this.getDisplayComments();
     this.isLoading = false;
   }
 
@@ -255,10 +256,9 @@ export class CommentListComponent implements OnInit, OnDestroy {
         c.answer = payload.answer;
         c.favorite = payload.favorite;
         c.correct = payload.correct;
-
         this.announceNewComment(c);
-
         this.comments = this.comments.concat(c);
+        this.commentCounter++;
         break;
       case 'CommentPatched':
         // ToDo: Use a map for comments w/ key = commentId
@@ -285,6 +285,7 @@ export class CommentListComponent implements OnInit, OnDestroy {
                     this.comments = this.comments.filter(function (el) {
                       return el.id !== payload.id;
                     });
+                    this.commentCounter--;
                   }
                   break;
                 case this.filtering.TAG:
@@ -312,14 +313,15 @@ export class CommentListComponent implements OnInit, OnDestroy {
             return el.id !== payload.id;
           });
         }
+        this.commentCounter--;
         break;
       default:
         this.referenceEvent.next(payload.id);
     }
     this.setTimePeriod(this.period);
-    this.filterComments(this.currentFilter);
-    this.sortComments(this.currentSort);
-    this.searchComments();
+    if (this.hideCommentsList) {
+      this.searchComments();
+    }
   }
 
   openCreateDialog(): void {
@@ -358,7 +360,7 @@ export class CommentListComponent implements OnInit, OnDestroy {
     });
     this.currentFilter = type;
     this.hideCommentsList = true;
-    this.sortComments(this.currentSort, true);
+    this.sortComments(this.currentSort);
   }
 
   sort(array: any[], type: string): any[] {
@@ -374,7 +376,12 @@ export class CommentListComponent implements OnInit, OnDestroy {
     });
   }
 
-  sortComments(type: string, manually?: boolean): void {
+  sortCommentsManually(type: string) {
+    this.scrollToTop = true;
+    this.sortComments(type);
+  }
+
+  sortComments(type: string): void {
     if (this.hideCommentsList === true) {
       this.filteredComments = this.sort(this.filteredComments, type);
     } else {
@@ -382,11 +389,12 @@ export class CommentListComponent implements OnInit, OnDestroy {
     }
     this.currentSort = type;
     this.globalStorageService.setItem(STORAGE_KEYS.COMMENT_SORT, this.currentSort);
-    this.commentCounter = itemRenderNumber;
-    this.getDisplayComments();
-    if (manually) {
+    if (this.scrollToTop) {
+      this.commentCounter = itemRenderNumber;
       this.scrollTop();
+      this.scrollToTop = false;
     }
+    this.getDisplayComments();
   }
 
   clickedOnTag(tag: string): void {

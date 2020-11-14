@@ -42,9 +42,9 @@
   background-color: var(--background);
   position: fixed;
   top: 4vw;
-  left: calc(50% - 125px);
+  left: calc(50% - 150px);
   width: 100%;
-  max-width: 250px;
+  max-width: 300px;
   z-index: 1;
 }
 
@@ -75,7 +75,6 @@
 
 .counter {
   color: var(--on-background);
-  width: 28px;
   text-align: center;
   font-size: 1.5em!important;
   margin: 0;
