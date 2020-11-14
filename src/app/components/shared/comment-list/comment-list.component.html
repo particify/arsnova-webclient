@@ -68,17 +68,17 @@
 
   <mat-menu #sortMenu="matMenu" xPosition="before">
 
-    <button mat-menu-item (click)="sortCommentsManually(sorting.TIME)" aria-labelledby="sort-time">
+    <button mat-menu-item (click)="sortCommentsManually(sorting.TIME)" [ngClass]="{time: 'selected'}[currentSort]" aria-labelledby="sort-time">
       <mat-icon [ngClass]="{time: 'blue-icon'}[currentSort]">access_time</mat-icon>
       <span>{{ 'comment-list.sort-list-time' | translate }}</span>
     </button>
 
-    <button mat-menu-item (click)="sortCommentsManually(sorting.VOTEDESC)" aria-labelledby="sort-up">
+    <button mat-menu-item (click)="sortCommentsManually(sorting.VOTEDESC)" [ngClass]="{votedesc: 'selected'}[currentSort]" aria-labelledby="sort-up">
       <mat-icon [ngClass]="{votedesc: 'up'}[currentSort]">keyboard_arrow_up</mat-icon>
       <span>{{ 'comment-list.sort-vote-asc' | translate }}</span>
     </button>
 
-    <button mat-menu-item (click)="sortCommentsManually(sorting.VOTEASC)" aria-labelledby="sort-down">
+    <button mat-menu-item (click)="sortCommentsManually(sorting.VOTEASC)" [ngClass]="{voteasc: 'selected'}[currentSort]" aria-labelledby="sort-down">
       <mat-icon [ngClass]="{voteasc: 'down'}[currentSort]">keyboard_arrow_down</mat-icon>
       <span>{{ 'comment-list.sort-vote-desc' | translate }}</span>
     </button>
@@ -87,28 +87,28 @@
 
   <mat-menu #filterMenu="matMenu" xPosition="before">
     <div>
-      <button *ngIf="viewRole === 'CREATOR'" mat-menu-item (click)="filterComments(filtering.READ)" aria-labelledby="beamer_icon">
+      <button *ngIf="viewRole === 'CREATOR'" mat-menu-item (click)="filterComments(filtering.READ)" [ngClass]="{read: 'selected'}[currentFilter]" aria-labelledby="beamer_icon">
         <mat-icon svgIcon="beamer" [ngClass]="{read: 'blue-icon'}[currentFilter]"></mat-icon>
         <span>{{ 'comment-list.filter-read' | translate }}</span>
       </button>
 
-      <button mat-menu-item (click)="filterComments(filtering.FAVORITE)" aria-labelledby="grade">
+      <button mat-menu-item (click)="filterComments(filtering.FAVORITE)" [ngClass]="{favorite: 'selected'}[currentFilter]" aria-labelledby="grade">
         <mat-icon [ngClass]="{favorite: 'favorite-icon'}[currentFilter]">grade</mat-icon>
         <span>{{ 'comment-list.filter-favorite' | translate }}</span>
       </button>
 
-      <button mat-menu-item (click)="filterComments(filtering.CORRECT)" aria-labelledby="check_circle">
+      <button mat-menu-item (click)="filterComments(filtering.CORRECT)" [ngClass]="{correct: 'selected'}[currentFilter]" aria-labelledby="check_circle">
         <mat-icon [ngClass]="{correct: 'correct-icon'}[currentFilter]">check_circle</mat-icon>
         <span>{{ 'comment-list.filter-correct' | translate }}</span>
       </button>
 
-      <button mat-menu-item (focus)="hideCommentsList=true" (click)="filterComments(filtering.WRONG)"
+      <button mat-menu-item (focus)="hideCommentsList=true" (click)="filterComments(filtering.WRONG)" [ngClass]="{wrong: 'selected'}[currentFilter]"
               aria-labelledby="not_interested">
         <mat-icon [ngClass]="{wrong: 'wrong-icon'}[currentFilter]">cancel</mat-icon>
         <span>{{ 'comment-list.filter-wrong' | translate }}</span>
       </button>
 
-      <button mat-menu-item (focus)="hideCommentsList=true" (click)="filterComments(filtering.ANSWER)"
+      <button mat-menu-item (focus)="hideCommentsList=true" (click)="filterComments(filtering.ANSWER)" [ngClass]="{answer: 'selected'}[currentFilter]"
               aria-labelledby="comment">
         <mat-icon [ngClass]="{answer: 'blue-icon'}[currentFilter]">comment</mat-icon>
         <span>{{ 'comment-list.filter-answered' | translate }}</span>
@@ -124,7 +124,7 @@
 
   <mat-menu #timeMenu="matMenu" xPosition="before">
     <div *ngFor="let periodItem of periodsList">
-      <button mat-menu-item (click)="setTimePeriod(periodItem)" [ngClass]="{'currentPeriod': periodItem === period}"
+      <button mat-menu-item (click)="setTimePeriod(periodItem)" class="period" [ngClass]="{'selected': periodItem === period}"
               aria-labelledby="{{periodItem}}">
         <span>{{ ('comment-list.select-' + periodItem) | translate }}</span>
       </button>
