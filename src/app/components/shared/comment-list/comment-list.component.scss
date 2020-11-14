@@ -78,6 +78,14 @@
   color: var(--on-primary);
 }
 
+button.selected {
+  font-weight: $font-weight-bold;
+
+  &.period {
+    color: var(--secondary);
+  }
+}
+
 .correct-icon {
   color: var(--green);
 }
@@ -92,10 +100,6 @@
 
 .favorite-icon {
   color: var(--yellow);
-}
-
-.currentPeriod {
-  color: var(--primary);
 }
 
 .counter-container {
