@@ -25,7 +25,7 @@ export interface SummarizedStats {
 export class SystemInfoService extends BaseHttpService {
   private apiUrl = {
     base: '/api',
-    health: '/management/health',
+    health: '/management/core/health',
     summarizedStats: '/_system/summarizedstats',
     serviceStats: '/_system/servicestats'
   };
