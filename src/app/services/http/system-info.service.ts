@@ -26,7 +26,7 @@ export class SystemInfoService extends BaseHttpService {
 
   serviceApiUrl = {
     health: '/health',
-    management: '/management',
+    management: '/management/core',
     summarizedStats: '/_system/summarizedstats',
     serviceStats: '/_system/servicestats'
   };
