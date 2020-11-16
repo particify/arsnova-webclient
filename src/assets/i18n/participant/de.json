@@ -180,6 +180,7 @@
     "answer-indicator": "Zeigt die richtigen Antworten",
     "show-chart": "Zeige die Statistiken in einem Diagramm",
     "show-answers": "Zeige die Antworten",
-    "hide-chart": "Verstecke das Diagramm"
+    "hide-chart": "Verstecke das Diagramm",
+    "answer": "Antwort"
   }
 }
