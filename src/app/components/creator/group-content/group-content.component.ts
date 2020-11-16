@@ -17,7 +17,6 @@ import { KeyboardUtils } from '../../../utils/keyboard';
 import { KeyboardKey } from '../../../utils/keyboard/keys';
 import { EventService } from '../../../services/util/event.service';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-import { ContentChoice } from '@arsnova/app/models/content-choice';
 
 @Component({
   selector: 'app-group-content',
@@ -49,8 +48,7 @@ export class GroupContentComponent extends ContentListComponent implements OnIni
     protected globalStorageService: GlobalStorageService,
     protected contentGroupService: ContentGroupService,
     protected announceService: AnnounceService,
-    public eventService: EventService,
-    private cd: ChangeDetectorRef
+    public eventService: EventService
   ) {
     super(contentService, roomService, route, location, notificationService, translateService, langService, dialogService,
     globalStorageService, contentGroupService, announceService);

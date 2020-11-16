@@ -3,7 +3,6 @@ import { ContentService } from '../../../services/http/content.service';
 import { Content } from '../../../models/content';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Location } from '@angular/common';
-import { ContentChoice } from '../../../models/content-choice';
 import { AdvancedSnackBarTypes, NotificationService } from '../../../services/util/notification.service';
 import { Room } from '../../../models/room';
 import { RoomService } from '../../../services/http/room.service';
@@ -15,7 +14,6 @@ import { ContentListComponent } from '../content-list/content-list.component';
 import { ContentGroup } from '../../../models/content-group';
 import { ContentGroupService } from '../../../services/http/content-group.service';
 import { AnnounceService } from '../../../services/util/announce.service';
-import { EventService } from '../../../services/util/event.service';
 
 @Component({
   selector: 'app-loose-content',
@@ -35,7 +33,6 @@ export class LooseContentComponent extends ContentListComponent implements OnIni
   contentGroups: string[] = [];
   currentGroupIndex: number;
   contentBackup: Content;
-  contentCBackup: ContentChoice;
   creationMode = false;
   newName: string;
   creationSelection: boolean[] = [];
