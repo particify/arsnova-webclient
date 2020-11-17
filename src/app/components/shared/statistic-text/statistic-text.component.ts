@@ -32,6 +32,7 @@ export class StatisticTextComponent implements OnInit {
   isLoading = true;
   answersVisible = false;
   extensionData: any;
+  abstentionCount = 0;
 
   constructor(
     protected route: ActivatedRoute,
@@ -72,6 +73,8 @@ export class StatisticTextComponent implements OnInit {
         } else {
           answersMap.set(answer.body.toLowerCase(), new TextStatistic(answer.body, 1));
         }
+      } else {
+        this.abstentionCount++;
       }
     }
     answersMap.forEach((value: TextStatistic) => {
@@ -80,6 +83,10 @@ export class StatisticTextComponent implements OnInit {
     this.answers.sort((a, b) => {
       return a.count > b.count ? -1 : 1;
     });
+    if (this.abstentionCount > 0) {
+      const abstentionString = this.translateService.instant(this.abstentionCount === 1 ? 'statistic.abstention' : 'statistic.abstentions');
+      this.answers.push(new TextStatistic(abstentionString, this.abstentionCount));
+    }
   }
 
   toggleAnswers() {
