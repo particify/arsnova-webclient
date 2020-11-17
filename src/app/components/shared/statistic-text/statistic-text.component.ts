@@ -65,11 +65,13 @@ export class StatisticTextComponent implements OnInit {
   getData(answers: TextAnswer[]) {
     const answersMap = new Map<string, TextStatistic>();
     for (const answer of answers) {
-      if (answersMap.has(answer.body.toLowerCase())) {
-        const count = answersMap.get(answer.body.toLowerCase()).count + 1;
-        answersMap.set(answer.body.toLowerCase(), new TextStatistic(answersMap.get(answer.body.toLowerCase()).answer, count));
-      } else {
-        answersMap.set(answer.body.toLowerCase(), new TextStatistic(answer.body, 1));
+      if (answer.body) {
+        if (answersMap.has(answer.body.toLowerCase())) {
+          const count = answersMap.get(answer.body.toLowerCase()).count + 1;
+          answersMap.set(answer.body.toLowerCase(), new TextStatistic(answersMap.get(answer.body.toLowerCase()).answer, count));
+        } else {
+          answersMap.set(answer.body.toLowerCase(), new TextStatistic(answer.body, 1));
+        }
       }
     }
     answersMap.forEach((value: TextStatistic) => {
