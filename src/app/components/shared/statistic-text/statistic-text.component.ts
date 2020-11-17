@@ -32,6 +32,7 @@ export class StatisticTextComponent implements OnInit {
   isLoading = true;
   answersVisible = false;
   extensionData: any;
+  abstentionCount = 0;
 
   constructor(
     protected route: ActivatedRoute,
@@ -65,11 +66,15 @@ export class StatisticTextComponent implements OnInit {
   getData(answers: TextAnswer[]) {
     const answersMap = new Map<string, TextStatistic>();
     for (const answer of answers) {
-      if (answersMap.has(answer.body.toLowerCase())) {
-        const count = answersMap.get(answer.body.toLowerCase()).count + 1;
-        answersMap.set(answer.body.toLowerCase(), new TextStatistic(answersMap.get(answer.body.toLowerCase()).answer, count));
+      if (answer.body) {
+        if (answersMap.has(answer.body.toLowerCase())) {
+          const count = answersMap.get(answer.body.toLowerCase()).count + 1;
+          answersMap.set(answer.body.toLowerCase(), new TextStatistic(answersMap.get(answer.body.toLowerCase()).answer, count));
+        } else {
+          answersMap.set(answer.body.toLowerCase(), new TextStatistic(answer.body, 1));
+        }
       } else {
-        answersMap.set(answer.body.toLowerCase(), new TextStatistic(answer.body, 1));
+        this.abstentionCount++;
       }
     }
     answersMap.forEach((value: TextStatistic) => {
@@ -78,6 +83,10 @@ export class StatisticTextComponent implements OnInit {
     this.answers.sort((a, b) => {
       return a.count > b.count ? -1 : 1;
     });
+    if (this.abstentionCount > 0) {
+      const abstentionString = this.translateService.instant(this.abstentionCount === 1 ? 'statistic.abstention' : 'statistic.abstentions');
+      this.answers.push(new TextStatistic(abstentionString, this.abstentionCount));
+    }
   }
 
   toggleAnswers() {
