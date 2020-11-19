@@ -1,14 +1,23 @@
 .counter-container {
-  width: 80px;
-  margin: 8px 0;
+  margin: 16px 0;
   text-align: center;
 }
 
+.medium {
+  margin: 8px 0 0;
+  padding: 0 8px;
+}
+
+.small {
+  margin: 8px 0 0;
+}
+
 .counter {
-  margin: 10px;
+  margin: 0;
   color: var(--secondary);
 }
 
 .counter-text {
+  line-height: 28px;
   margin: 0;
 }

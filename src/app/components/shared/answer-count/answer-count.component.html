@@ -1,4 +1,5 @@
-<div class="counter-container">
+<div fxLayout="{{size === 'small' ? 'row' : 'column' }}" fxLayoutGap="{{ size !== 'medium' ? '8px' : null }}"
+     class="counter-container {{size}}">
   <h2 class="counter">{{count}}</h2>
   <p class="counter-text">{{ (count === 1 ? 'statistic.answer' : 'statistic.answers') | translate }}</p>
 </div>

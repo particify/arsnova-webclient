@@ -8,6 +8,8 @@ import { Component, Input, OnInit } from '@angular/core';
 export class AnswerCountComponent implements OnInit {
 
   @Input() count: number;
+  @Input() size: string;
+  @Input() horizontal: boolean;
 
   constructor() { }
 
