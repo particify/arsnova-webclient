@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { WsConnectorService } from '../../services/websockets/ws-connector.service';
 import { CreateFeedback } from '../../models/messages/create-feedback';
-import { GetFeedback } from '../../models/messages/get-feedback';
 import { ResetFeedback } from '../../models/messages/reset-feedback';
 import { Observable } from 'rxjs';
 import { IMessage } from '@stomp/stompjs';
@@ -22,12 +21,6 @@ export class WsFeedbackService {
     const getFeedback = new ResetFeedback(roomId);
 
     this.wsConnector.send(`/queue/feedback.command.reset`, JSON.stringify(getFeedback));
-  }
-
-  get(roomId: string) {
-    const getFeedback = new GetFeedback(roomId);
-
-    this.wsConnector.send(`/queue/feedback.query`, JSON.stringify(getFeedback));
   }
 
   getFeedbackStream(roomId: string): Observable<IMessage> {

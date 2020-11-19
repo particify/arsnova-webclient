@@ -68,6 +68,7 @@ import { RoomUserRoleResolver } from './resolver/room-user-role.resolver';
 import { RoutingService } from './services/util/routing.service';
 import { TranslateHttpLoaderFactory } from './translate-http-loader-factory';
 import { TRANSLATION_MODULE_NAME } from './translate-module-name-token';
+import { FeedbackService } from './services/http/feedback.service';
 
 export function dialogClose(dialogResult: any) {
 }
@@ -175,6 +176,7 @@ export function initializeApp(appConfig: AppConfig) {
     SystemInfoService,
     FormattingService,
     RoutingService,
+    FeedbackService,
     { provide: Window,  useValue: window },
     STORAGE_CONFIG_PROVIDERS,
     {
