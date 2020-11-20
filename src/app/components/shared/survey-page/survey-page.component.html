@@ -23,10 +23,17 @@
           {{ 'survey.change-type' | translate }}
         </button>
         </div>
+        <div class="invisible-button button-container" [ngClass]="{'visible-button': !isClosed}">
+          <app-answer-count id="answer-count" tabindex="{{ !isClosed ? '0' : '-1' }}"
+                            [count]="answerCount" [size]="'medium'"></app-answer-count>
+        </div>
         <button tabindex="0" mat-raised-button id="toggle-button" class="button-primary bottom-button"
                 fxLayoutAlign="center" (click)="toggle()" aria-labelledby="toggle">
           {{ (isClosed ? 'survey.start' : 'survey.stop') | translate }}
         </button>
+      </div>
+      <div fxLayout="row" fxLayoutAlign="center">
+        <app-answer-count *ngIf="!isCreator" [count]="answerCount" [size]="'small'"></app-answer-count>
       </div>
     </mat-card>
   </div>

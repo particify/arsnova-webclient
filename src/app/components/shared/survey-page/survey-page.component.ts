@@ -40,6 +40,7 @@ export class SurveyPageComponent implements OnInit, OnDestroy, AfterContentInit 
   isLoading = true;
   type = this.typeFeedback;
   deviceWidth = innerWidth;
+  answerCount = 0;
 
   constructor(
     private authenticationService: AuthenticationService,
@@ -163,6 +164,7 @@ export class SurveyPageComponent implements OnInit, OnDestroy, AfterContentInit 
   private updateFeedback(data) {
     const reducer = (accumulator, currentValue) => accumulator + currentValue;
     const sum = data.reduce(reducer);
+    this.answerCount = sum;
     for (let i = 0; i < this.survey.length; i++) {
       this.survey[i].count = data[i] / sum * 100;
     }
