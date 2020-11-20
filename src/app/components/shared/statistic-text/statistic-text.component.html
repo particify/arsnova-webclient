@@ -1,17 +1,14 @@
 <div>
-  <div fxLayout="row">
-    <app-rendered-text [rawText]="content.body" [renderedText]="content.renderedBody"></app-rendered-text>
-    <span class="fill-remaining-space"></span>
-    <div fxLayout="column" fxLayoutAlign="start end">
-      <button *ngIf="content.format === 'TEXT'" mat-icon-button disableRipple (click)="toggleAnswers()"
+  <div fxLayout="column">
+    <div *ngIf="content.format === 'TEXT'" fxLayout="row" fxLayoutAlign="space-between">
+      <app-answer-count *ngIf="!isLoading" [count]="answerCount"></app-answer-count>
+      <button mat-icon-button disableRipple (click)="toggleAnswers()"
               matTooltip="{{ 'statistic.show-answers' | translate }}">
         <mat-icon class="corner-icon icon-primary">insert_chart</mat-icon>
       </button>
-      <span class="fill-remaining-space"></span>
-      <app-answer-count *ngIf="!isLoading" [count]="answerCount"></app-answer-count>
-      <span class="fill-remaining-space"></span>
     </div>
   </div>
+  <app-rendered-text [rawText]="content.body" [renderedText]="content.renderedBody"></app-rendered-text>
   <lib-extension-point extensionId="attachment-list" [extensionData]="extensionData"></lib-extension-point>
   <div tabindex="-1" id="message-button" class="visually-hidden">
     {{ 'statistic.a11y-message-evaluation' | translate: {content: content.body} }}
