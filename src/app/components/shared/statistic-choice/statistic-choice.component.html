@@ -1,21 +1,18 @@
-<div fxLayout="row">
-  <app-rendered-text [rawText]="content.body" [renderedText]="content.renderedBody"></app-rendered-text>
-  <span class="fill-remaining-space"></span>
-  <div fxLayout="column" fxLayoutAlign="space-around {{ !survey ? 'center' : 'end' }}">
+<div fxLayout="column">
+  <div fxLayout="row" fxLayoutAlign="space-between">
+    <app-answer-count *ngIf="!isLoading" [count]="answerCount"></app-answer-count>
     <div fxLayout="row" fxLayoutAlign="end" [ngClass]="{'fix-width': !survey}">
       <button mat-icon-button *ngIf="chartVisible && !survey" disableRipple (click)="toggleCorrect()"
               matTooltip="{{ 'statistic.answer-indicator' | translate }}" aria-labelledby="show-correct">
         <mat-icon class="corner-icon icon-primary">playlist_add_check</mat-icon>
       </button>
-      <button mat-icon-button disableRipple (click)="toggleChart()" aria-labelledby="show-chart"
+      <button id="show-chart-btn" mat-icon-button disableRipple (click)="toggleChart()" aria-labelledby="show-chart"
               matTooltip="{{ (chartVisible ? 'statistic.hide-chart' : 'statistic.show-chart') | translate }}">
         <mat-icon class="corner-icon icon-primary">insert_chart</mat-icon>
       </button>
     </div>
-    <span class="fill-remaining-space"></span>
-    <app-answer-count *ngIf="!isLoading" [count]="answerCount"></app-answer-count>
-    <span class="fill-remaining-space"></span>
   </div>
+  <app-rendered-text [rawText]="content.body" [renderedText]="content.renderedBody"></app-rendered-text>
   <div tabindex="-1" id="message-button" class="visually-hidden">
     {{ 'statistic.a11y-message-evaluation' | translate: {content: content.body} }}
   </div>
