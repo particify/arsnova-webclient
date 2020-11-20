@@ -15,6 +15,7 @@ import { Survey } from '../../../models/survey';
 import { GlobalStorageService, STORAGE_KEYS } from '../../../services/util/global-storage.service';
 import { ActivatedRoute } from '@angular/router';
 import { AnnounceService } from '../../../services/util/announce.service';
+import { FeedbackService } from '../../../services/http/feedback.service';
 
 @Component({
   selector: 'app-survey-page',
@@ -45,6 +46,7 @@ export class SurveyPageComponent implements OnInit, OnDestroy, AfterContentInit 
     private authenticationService: AuthenticationService,
     private notificationService: NotificationService,
     private wsFeedbackService: WsFeedbackService,
+    private feedbackService: FeedbackService,
     private roomService: RoomService,
     protected translateService: TranslateService,
     protected langService: LanguageService,
@@ -104,7 +106,9 @@ export class SurveyPageComponent implements OnInit, OnDestroy, AfterContentInit 
       this.sub = this.wsFeedbackService.getFeedbackStream(this.roomId).subscribe((message: Message) => {
         this.parseIncomingMessage(message);
       });
-      this.wsFeedbackService.get(this.roomId);
+      this.feedbackService.get(this.roomId).subscribe((values: number[]) => {
+        this.updateFeedback(values);
+      });
       this.isLoading = false;
     });
   }
