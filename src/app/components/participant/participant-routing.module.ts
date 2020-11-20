@@ -24,6 +24,7 @@ const routes: Routes = [
         path: '',
         component: RoomParticipantPageComponent,
         resolve: {
+          room: RoomResolver,
           userRole: RoomUserRoleResolver
         }
       },
