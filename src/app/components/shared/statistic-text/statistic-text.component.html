@@ -2,10 +2,15 @@
   <div fxLayout="row">
     <app-rendered-text [rawText]="content.body" [renderedText]="content.renderedBody"></app-rendered-text>
     <span class="fill-remaining-space"></span>
-    <button *ngIf="content.format === 'TEXT'" mat-icon-button disableRipple (click)="toggleAnswers()"
-            matTooltip="{{ 'statistic.show-answers' | translate }}">
-      <mat-icon class="corner-icon icon-primary">insert_chart</mat-icon>
-    </button>
+    <div fxLayout="column" fxLayoutAlign="start end">
+      <button *ngIf="content.format === 'TEXT'" mat-icon-button disableRipple (click)="toggleAnswers()"
+              matTooltip="{{ 'statistic.show-answers' | translate }}">
+        <mat-icon class="corner-icon icon-primary">insert_chart</mat-icon>
+      </button>
+      <span class="fill-remaining-space"></span>
+      <app-answer-count *ngIf="!isLoading" [count]="answerCount"></app-answer-count>
+      <span class="fill-remaining-space"></span>
+    </div>
   </div>
   <lib-extension-point extensionId="attachment-list" [extensionData]="extensionData"></lib-extension-point>
   <div tabindex="-1" id="message-button" class="visually-hidden">

@@ -435,7 +435,8 @@
     "show-answers": "Show answers",
     "hide-chart": "Hide chart",
     "no-contents": "There are no questions.",
-    "select-content-group": "Select collection"
+    "select-content-group": "Select collection",
+    "answer": "Answer"
   },
   "dialog": {
     "sure": "Are you sure?",

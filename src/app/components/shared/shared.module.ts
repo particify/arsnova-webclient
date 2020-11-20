@@ -40,6 +40,7 @@ import { RenderedTextComponent } from './rendered-text/rendered-text.component';
 import { UpdateInfoComponent } from './_dialogs/update-info/update-info.component';
 import { HintComponent } from './hint/hint.component';
 import { ExtensionPointModule } from '../../../../projects/extension-point/src/lib/extension-point.module';
+import { AnswerCountComponent } from './answer-count/answer-count.component';
 
 @NgModule({
   imports: [
@@ -86,7 +87,8 @@ import { ExtensionPointModule } from '../../../../projects/extension-point/src/l
     SidebarComponent,
     RenderedTextComponent,
     UpdateInfoComponent,
-    HintComponent
+    HintComponent,
+    AnswerCountComponent
   ],
   exports: [
     RoomJoinComponent,

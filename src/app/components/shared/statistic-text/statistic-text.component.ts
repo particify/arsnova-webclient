@@ -33,6 +33,7 @@ export class StatisticTextComponent implements OnInit {
   answersVisible = false;
   extensionData: any;
   abstentionCount = 0;
+  answerCount = 0;
 
   constructor(
     protected route: ActivatedRoute,
@@ -87,9 +88,14 @@ export class StatisticTextComponent implements OnInit {
       const abstentionString = this.translateService.instant(this.abstentionCount === 1 ? 'statistic.abstention' : 'statistic.abstentions');
       this.answers.push(new TextStatistic(abstentionString, this.abstentionCount));
     }
+    this.updateCounter(this.answers.map(a => a.count));
   }
 
   toggleAnswers() {
     this.answersVisible = !this.answersVisible;
+  }
+
+  updateCounter(list: number[]) {
+    this.answerCount = list.reduce((a, b) => a + b);
   }
 }

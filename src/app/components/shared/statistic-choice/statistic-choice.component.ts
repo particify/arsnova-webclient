@@ -51,6 +51,7 @@ export class StatisticChoiceComponent implements OnInit, OnDestroy {
   grey: string;
   blue: string;
   extensionData: any;
+  answerCount = 0;
 
   constructor(protected route: ActivatedRoute,
               private contentService: ContentService,
@@ -203,9 +204,19 @@ export class StatisticChoiceComponent implements OnInit, OnDestroy {
 
   updateData(stats: AnswerStatistics) {
     this.data = stats.roundStatistics[0].independentCounts;
+    let abstentionCount;
     if (this.content.abstentionsAllowed) {
-      this.data.push(stats.roundStatistics[0].abstentionCount);
+      abstentionCount = stats.roundStatistics[0].abstentionCount;
+      this.data.push(abstentionCount);
     }
+    let listToCount: number[];
+    const combinedCount = stats.roundStatistics[0].combinatedCounts?.map(a => a.count);
+    if (combinedCount) {
+      listToCount = combinedCount;
+    } else {
+      listToCount = this.data;
+    }
+    this.updateCounter(listToCount, abstentionCount);
   }
 
   updateChart() {
@@ -217,6 +228,13 @@ export class StatisticChoiceComponent implements OnInit, OnDestroy {
       setTimeout(() => {
         this.createChart(this.colors);
       }, 300);
+    }
+  }
+
+  updateCounter(list: number[], abstentions: number) {
+    this.answerCount = list.reduce((a, b) => a + b);
+    if (abstentions) {
+      this.answerCount += abstentions;
     }
   }
 }
