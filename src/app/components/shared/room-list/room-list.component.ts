@@ -17,6 +17,7 @@ import { RoomSummary } from '../../../models/room-summary';
 import { RoomDeleted } from '../../../models/events/room-deleted';
 import { AuthProvider } from '../../../models/auth-provider';
 import { MembershipsChanged } from '../../../models/events/memberships-changed';
+import { ExtensionFactory } from '../../../../../projects/extension-point/src/lib/extension-factory';
 
 interface RoomDataView {
   summary: RoomSummary;
@@ -43,6 +44,7 @@ export class RoomListComponent implements OnInit, OnDestroy {
   unsubscribe$: Subject<void> = new Subject();
   deviceType: string;
   roles: string[] = [];
+  showMenu = false;
 
   creatorRole = UserRole.CREATOR;
   participantRole = UserRole.PARTICIPANT;
@@ -57,7 +59,8 @@ export class RoomListComponent implements OnInit, OnDestroy {
     private translateService: TranslateService,
     protected router: Router,
     private dialogService: DialogService,
-    private globalStorageService: GlobalStorageService
+    private globalStorageService: GlobalStorageService,
+    private extensionFactory: ExtensionFactory
   ) {
   }
 
@@ -69,6 +72,7 @@ export class RoomListComponent implements OnInit, OnDestroy {
     } else {
       this.showGuestAccountControls = !!this.authenticationService.getGuestToken();
     }
+    this.showMenu = this.showGuestAccountControls || !!this.extensionFactory.getExtension('import-token');
     this.sub = this.eventService.on<any>('RoomDeleted').subscribe(payload => {
       this.rooms = this.rooms.filter(r => r.summary.id !== payload.id);
     });

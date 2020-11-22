@@ -14,7 +14,7 @@
         <mat-label>{{ 'room-list.filter-message' | translate }}</mat-label>
         <input (focus)="eventService.makeFocusOnInputTrue()" (blur)="eventService.makeFocusOnInputFalse()" matInput
                #search (keyup)="filterRooms(search.value)"/>
-        <button *ngIf="!isGuest" mat-icon-button matSuffix [matMenuTriggerFor]="more">
+        <button *ngIf="showMenu" mat-icon-button matSuffix [matMenuTriggerFor]="more">
           <mat-icon id="more" class="more">more_horiz</mat-icon>
         </button>
       </mat-form-field>
