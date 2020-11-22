@@ -12,10 +12,10 @@
   <div fxLayout="row wrap" fxLayoutAlign="end">
     <a *ngIf="feedbackUrl" [routerLink]="feedbackUrl" class="link text">{{'footer.feedback' | translate}}</a>
     <a [routerLink]="" [matMenuTriggerFor]="privacyMenu" class="link text">{{'footer.dsgvo' | translate}}</a>
-    <a [routerLink]="" (click)="showImprint()" class="link text">{{'footer.imprint' | translate}}</a>
+    <a *ngIf="imprintUrl" [routerLink]="" (click)="showImprint()" class="link text">{{'footer.imprint' | translate}}</a>
   </div>
   <mat-menu #privacyMenu="matMenu" [overlapTrigger]="false">
-    <button class="item-title" mat-menu-item (click)="showDataProtection()">
+    <button *ngIf="privacyUrl" class="item-title" mat-menu-item (click)="showDataProtection()">
       {{ 'footer.privacy-policy' | translate }}</button>
     <button class="item-title" mat-menu-item (click)="showCookieSettings()">
       {{ 'footer.cookie-settings' | translate }}</button>
