@@ -31,7 +31,7 @@ export class UpdateInfoComponent implements OnInit {
         for (let i = 0; i < changes.length; i++) {
           this.keywords.push(changes[i]);
         }
-        this.newsUrl = config.ui.links.news.url;
+        this.newsUrl = config.ui.links?.news?.url;
         this.globalStorageService.setItem(STORAGE_KEYS.VERSION, latestVersion);
       }
       this.isLoading = false;

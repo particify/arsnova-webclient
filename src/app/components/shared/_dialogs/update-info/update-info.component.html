@@ -3,7 +3,7 @@
   <app-loading-indicator *ngIf="isLoading" [size]="30" [smaller]="true"></app-loading-indicator>
   <div *ngIf="!isLoading">
     <div *ngIf="showReleaseNotes">
-      <p tabindex="0">{{ 'home-page.see-news' | translate }}<a href="{{newsUrl}}">{{ 'home-page.news' | translate }}</a>.</p>
+      <p *ngIf="newsUrl" tabindex="0">{{ 'home-page.see-news' | translate }}<a href="{{newsUrl}}">{{ 'home-page.news' | translate }}</a>.</p>
       <p>{{ 'home-page.important-changes' | translate }}</p>
       <ul tabindex="0">
         <li *ngFor="let keyword of keywords">{{keyword}}</li>
