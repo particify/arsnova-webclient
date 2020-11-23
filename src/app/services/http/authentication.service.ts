@@ -168,12 +168,16 @@ export class AuthenticationService extends BaseHttpService {
    * guest account.
    */
   loginGuest(): Observable<ClientAuthenticationResult> {
+    const connectionUrl: string = this.getBaseUrl() + this.serviceApiUrl.auth + this.serviceApiUrl.login + this.serviceApiUrl.guest;
+    /* The global storage service is not used for guestToken because it is a legacy item. */
+    const guestLoginId = localStorage.getItem('guestToken');
+    const payload = guestLoginId ? { loginId: guestLoginId } : null;
     return this.refreshLogin().pipe(switchMap(result => {
+      localStorage.removeItem('guestToken');
       if (!result || result.status === AuthenticationStatus.INVALID_CREDENTIALS) {
         /* Create new guest account */
-        const connectionUrl: string = this.getBaseUrl() + this.serviceApiUrl.auth + this.serviceApiUrl.login + this.serviceApiUrl.guest;
         const loginResult$ = this.handleLoginResponse(
-            this.http.post<ClientAuthentication>(connectionUrl, null, this.httpOptions)).pipe(tap(loginResult => {
+            this.http.post<ClientAuthentication>(connectionUrl, payload, this.httpOptions)).pipe(tap(loginResult => {
               if (loginResult.status === AuthenticationStatus.SUCCESS) {
                 this.globalStorageService.setItem(STORAGE_KEYS.GUEST_TOKEN, loginResult.authentication.token);
               }
