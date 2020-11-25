@@ -4,6 +4,10 @@
   cursor: grabbing;
 }
 
+.no-grab {
+  cursor: initial;
+}
+
 .cdk-drop-list-dragging {
   cursor: grabbing;
 }

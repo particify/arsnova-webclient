@@ -4,6 +4,7 @@ import { StatisticChoiceComponent } from '@arsnova/app/components/shared/statist
 import { StatisticTextComponent } from '@arsnova/app/components/shared/statistic-content/statistic-text/statistic-text.component';
 import { ContentType } from '@arsnova/app/models/content-type.enum';
 import { ContentChoice } from '@arsnova/app/models/content-choice';
+import { StatisticSortComponent } from '@arsnova/app/components/shared/statistic-content/statistic-sort/statistic-sort.component';
 
 @Component({
   selector: 'app-statistic-content',
@@ -14,6 +15,7 @@ export class StatisticContentComponent implements OnInit {
 
   @ViewChild(StatisticChoiceComponent) choiceStatistic: StatisticChoiceComponent;
   @ViewChild(StatisticTextComponent) textStatistic: StatisticTextComponent;
+  @ViewChild(StatisticSortComponent) sortStatistic: StatisticSortComponent;
 
   @Input() content: ContentText;
   @Input() directShow: boolean;
@@ -48,13 +50,20 @@ export class StatisticContentComponent implements OnInit {
       case ContentType.TEXT:
         this.answersVisible = this.textStatistic.toggleAnswers();
         break;
+      case ContentType.SORT:
+        this.answersVisible = this.sortStatistic.toggleAnswers();
+        break;
       default:
         this.answersVisible = this.choiceStatistic.toggleAnswers();
     }
   }
 
   toggleCorrect() {
-    this.choiceStatistic.toggleCorrect();
+    if (this.format === ContentType.SORT) {
+      this.sortStatistic.toggleCorrect();
+    } else {
+      this.choiceStatistic.toggleCorrect();
+    }
   }
 
   checkIfSurvey() {

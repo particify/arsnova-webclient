@@ -1,0 +1,6 @@
+<div>
+  <app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
+  <div class="chart-container" *ngIf="!isLoading" [ngClass]="{ 'invisible': !answersVisible }">
+    <canvas id="{{ chartId }}"></canvas>
+  </div>
+</div>

@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ContentSortStatisticComponent } from './content-sort-statistic.component';
+import { StatisticSortComponent } from '@arsnova/app/components/shared/statistic-content/statistic-sort/statistic-sort.component';
 
 describe('ContentSortStatisticComponent', () => {
-  let component: ContentSortStatisticComponent;
-  let fixture: ComponentFixture<ContentSortStatisticComponent>;
+  let component: StatisticSortComponent;
+  let fixture: ComponentFixture<StatisticSortComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ContentSortStatisticComponent ]
+      declarations: [ StatisticSortComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ContentSortStatisticComponent);
+    fixture = TestBed.createComponent(StatisticSortComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

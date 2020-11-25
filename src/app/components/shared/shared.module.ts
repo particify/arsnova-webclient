@@ -42,9 +42,9 @@ import { HintComponent } from './hint/hint.component';
 import { ExtensionPointModule } from '../../../../projects/extension-point/src/lib/extension-point.module';
 import { AnswerCountComponent } from './answer-count/answer-count.component';
 import { StatisticContentComponent } from './statistic-content/statistic-content/statistic-content.component';
-import { ContentSortAnswerComponent } from '@arsnova/app/components/shared/content-sort-answer/content-sort-answer.component';
+import { ContentSortAnswerComponent } from './content-sort-answer/content-sort-answer.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
-import { ContentSortStatisticComponent } from '@arsnova/app/components/shared/statistic-sort/content-sort-statistic.component';
+import { StatisticSortComponent } from './statistic-content/statistic-sort/statistic-sort.component';
 
 @NgModule({
   imports: [
@@ -96,7 +96,7 @@ import { ContentSortStatisticComponent } from '@arsnova/app/components/shared/st
     AnswerCountComponent,
     StatisticContentComponent,
     ContentSortAnswerComponent,
-    ContentSortStatisticComponent
+    StatisticSortComponent
   ],
   exports: [
     RoomJoinComponent,
@@ -126,7 +126,7 @@ import { ContentSortStatisticComponent } from '@arsnova/app/components/shared/st
     StatisticContentComponent,
     HintComponent,
     ContentSortAnswerComponent,
-    ContentSortStatisticComponent
+    StatisticSortComponent
   ]
 })
 export class SharedModule {
