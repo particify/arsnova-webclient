@@ -93,6 +93,7 @@ export class CreateCommentComponent implements OnInit {
         });
       }
       this.notificationService.showAdvanced(message, AdvancedSnackBarTypes.SUCCESS);
+      this.dialogRef.close();
     });
   }
 
@@ -106,7 +107,6 @@ export class CreateCommentComponent implements OnInit {
         comment.tag = this.selectedTag;
       }
       this.send(comment);
-      this.dialogRef.close();
     }
   }
 
