@@ -25,8 +25,8 @@ import { DialogActionButtonsComponent } from './dialog/dialog-action-buttons/dia
 import { MatRippleModule } from '@angular/material/core';
 import { ArsModule } from '../../../../projects/ars/src/lib/ars.module';
 import { CommentAnswerComponent } from './comment-answer/comment-answer.component';
-import { StatisticTextComponent } from './statistic-text/statistic-text.component';
-import { StatisticChoiceComponent } from './statistic-choice/statistic-choice.component';
+import { StatisticTextComponent } from './statistic-content/statistic-text/statistic-text.component';
+import { StatisticChoiceComponent } from './statistic-content/statistic-choice/statistic-choice.component';
 import { QrCodeComponent } from './_dialogs/qr-code/qr-code.component';
 import { QRCodeModule } from 'angularx-qrcode';
 import { LoadingIndicatorComponent } from './loading-indicator/loading-indicator.component';
@@ -41,6 +41,7 @@ import { UpdateInfoComponent } from './_dialogs/update-info/update-info.componen
 import { HintComponent } from './hint/hint.component';
 import { ExtensionPointModule } from '../../../../projects/extension-point/src/lib/extension-point.module';
 import { AnswerCountComponent } from './answer-count/answer-count.component';
+import { StatisticContentComponent } from './statistic-content/statistic-content/statistic-content.component';
 
 @NgModule({
   imports: [
@@ -88,7 +89,8 @@ import { AnswerCountComponent } from './answer-count/answer-count.component';
     RenderedTextComponent,
     UpdateInfoComponent,
     HintComponent,
-    AnswerCountComponent
+    AnswerCountComponent,
+    StatisticContentComponent
   ],
   exports: [
     RoomJoinComponent,
@@ -114,7 +116,8 @@ import { AnswerCountComponent } from './answer-count/answer-count.component';
     StatisticTextComponent,
     SidebarComponent,
     RenderedTextComponent,
-    HintComponent
+    HintComponent,
+    StatisticContentComponent
   ]
 })
 export class SharedModule {

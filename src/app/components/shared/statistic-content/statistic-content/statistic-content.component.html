@@ -1,0 +1,28 @@
+<div fxLayout="column">
+  <div *ngIf="format !== ContentType.SLIDE" fxLayout="row" fxLayoutAlign="space-between">
+    <app-answer-count *ngIf="!isLoading" [count]="answerCount"></app-answer-count>
+    <div fxLayout="row" fxLayoutAlign="end" [ngClass]="{'fix-width': !survey}">
+      <button mat-icon-button *ngIf="answersVisible && !survey" disableRipple (click)="toggleCorrect()"
+              matTooltip="{{ 'statistic.answer-indicator' | translate }}" aria-labelledby="show-correct">
+        <mat-icon class="corner-icon icon-primary">playlist_add_check</mat-icon>
+      </button>
+      <button id="show-chart-btn" mat-icon-button disableRipple (click)="toggleAnswers()" aria-labelledby="show-chart"
+              matTooltip="{{ (answersVisible ? 'statistic.hide-chart' : 'statistic.show-chart') | translate }}">
+        <mat-icon class="corner-icon icon-primary">insert_chart</mat-icon>
+      </button>
+    </div>
+  </div>
+  <app-rendered-text [rawText]="content.body" [renderedText]="content.renderedBody"></app-rendered-text>
+  <div tabindex="-1" id="message-button" class="visually-hidden">
+    {{ 'statistic.a11y-message-evaluation' | translate: {content: content.body} }}
+  </div>
+</div>
+<lib-extension-point extensionId="attachment-list" [extensionData]="attachmentData"></lib-extension-point>
+<app-statistic-choice *ngIf="[ContentType.CHOICE, ContentType.SCALE, ContentType.BINARY].indexOf(format) !== -1" [content]="content"
+                      [directShow]="directShow" (updateCounterEvent)="updateCounter($event)"></app-statistic-choice>
+<app-statistic-text *ngIf="format === ContentType.TEXT" [content]="content"
+                    [directShow]="directShow" (updateCounterEvent)="updateCounter($event)"></app-statistic-text>
+<div class="visually-hidden">
+  <div id="show-correct">{{ 'statistic.a11y-answer-indicator' | translate }}</div>
+  <div id="show-chart">{{ 'statistic.a11y-show-chart' | translate }}</div>
+</div>
