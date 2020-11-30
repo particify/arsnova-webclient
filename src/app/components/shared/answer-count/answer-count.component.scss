@@ -3,6 +3,10 @@
   text-align: center;
 }
 
+.container:not(.medium-container) > :first-child {
+  margin-right: 8px;
+}
+
 .medium-container {
   width: 120px;
   margin: 8px 0 0;
