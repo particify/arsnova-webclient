@@ -109,6 +109,10 @@ export class ContentCreationComponent implements OnInit, OnDestroy {
     this.translationService.get('content.submitted').subscribe(message => {
       this.notificationService.showAdvanced(message, AdvancedSnackBarTypes.SUCCESS);
     });
+    this.resetAnswers();
+  }
+
+  resetAnswers() {
   }
 
   submitContent(): void {
