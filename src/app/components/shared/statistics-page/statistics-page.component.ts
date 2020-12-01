@@ -44,7 +44,7 @@ export class StatisticsPageComponent implements OnInit {
       for (let i = 0; i < contentGroupsLength; i++) {
         this.roomService.getGroupByRoomIdAndName(id, roomStats.groupStats[i].groupName).subscribe(group => {
           this.contentGroups.push(group);
-          if (i === contentGroupsLength - 1) {
+          if (this.contentGroups.length === contentGroupsLength) {
             this.initCurrentGroup();
             this.isLoading = false;
           }
