@@ -1,0 +1,10 @@
+<div class="answer-list" [ngClass]="{'invisible': !answersVisible}">
+  <mat-list class="answer-list">
+    <mat-list-item *ngFor="let answer of answers; let i = index" tabindex="0" attr.aria-label="
+              {{ 'statistic.a11y-text-evaluation' | translate:{ count: answer.count, answer: answer.answer } }}">
+      <span class="answer">{{answer.answer}}</span>
+      <span *ngIf="answer.count > 1" class="count">x {{answer.count}}</span>
+      <mat-divider *ngIf="i < answers.length -  1"></mat-divider>
+    </mat-list-item>
+  </mat-list>
+</div>

@@ -1,15 +1,14 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { BarController, CategoryScale, Chart, IBarControllerDatasetOptions, LinearScale, Rectangle, Tooltip } from 'chart.js';
 import { ActivatedRoute } from '@angular/router';
-import { ContentService } from '../../../services/http/content.service';
-import { ContentChoice } from '../../../models/content-choice';
+import { ContentService } from '../../../../services/http/content.service';
+import { ContentChoice } from '../../../../models/content-choice';
 import { TranslateService } from '@ngx-translate/core';
-import { ThemeService } from '../../../../theme/theme.service';
-import { Content } from '../../../models/content';
-import { ContentType } from '../../../models/content-type.enum';
-import { AnswerStatistics } from '../../../models/answer-statistics';
-import { Subject } from 'rxjs';
+import { ThemeService } from '../../../../../theme/theme.service';
+import { AnswerStatistics } from '../../../../models/answer-statistics';
 import { takeUntil } from 'rxjs/operators';
+import { StatisticContentBaseComponent } from '../statistic-content-base';
+import { Subject } from 'rxjs';
 
 export class AnswerList {
   label: string;
@@ -26,58 +25,52 @@ export class AnswerList {
   templateUrl: './statistic-choice.component.html',
   styleUrls: ['./statistic-choice.component.scss']
 })
-export class StatisticChoiceComponent implements OnInit, OnDestroy {
+export class StatisticChoiceComponent extends StatisticContentBaseComponent implements OnInit, OnDestroy {
 
   @Input() content: ContentChoice;
   @Input() directShow: boolean;
 
   destroyed$ = new Subject();
+  answerList: AnswerList[] = [];
   chart: Chart;
   chartId: string;
   colors: string[] = [];
   indicationColors: string[] = [];
   label = 'ABCDEFGH';
   labels: string[] = [];
-  answerList: AnswerList[] = [];
   data: number[] = [];
-  contentId: string;
-  isLoading = true;
   colorLabel = false;
   survey = false;
-  chartVisible: boolean;
   onSurface: string;
   surface: string;
   green: string;
   grey: string;
   blue: string;
-  extensionData: any;
-  answerCount = 0;
 
   constructor(protected route: ActivatedRoute,
-              private contentService: ContentService,
+              protected contentService: ContentService,
               private translateService: TranslateService,
               private themeService: ThemeService) {
+    super(route, contentService);
   }
 
-  ngOnInit(): void {
-    this.extensionData = {
-      'roomId': this.content.roomId,
-      'refType': 'content',
-      'refId': this.content.id,
-      'detailedView': false
-    };
+  ngOnDestroy() {
+    this.destroyed$.next();
+    this.destroyed$.complete();
+  }
+
+  init() {
     this.chartId = 'chart-' + this.content.id;
-    this.checkIfSurvey(this.content);
     this.initChart();
-    this.loadData().subscribe(stats => {
-      this.updateData(stats);
-      this.isLoading = false;
-      if (this.directShow) {
-        this.toggleChart(true);
-      }
-    });
+  }
+
+  initData(stats: AnswerStatistics) {
+    this.updateData(stats);
+  }
+
+  afterInit() {
     this.contentService.getAnswersChangedStream(this.content.roomId, this.content.id).pipe(
-        takeUntil(this.destroyed$)
+      takeUntil(this.destroyed$)
     ).subscribe(msg => {
       const stats = JSON.parse(msg.body).payload.stats;
       this.updateData(stats);
@@ -85,10 +78,15 @@ export class StatisticChoiceComponent implements OnInit, OnDestroy {
     });
   }
 
-  ngOnDestroy() {
-    this.destroyed$.next();
-    this.destroyed$.complete();
+  toggleAnswers(visible?: boolean): boolean {
+    this.colorLabel = false;
+    this.answersVisible = visible ?? !this.answersVisible;
+    if (this.answersVisible) {
+      this.updateChart();
+    }
+    return this.answersVisible;
   }
+
 
   createChart(colors: string[]) {
     Chart.register(BarController, CategoryScale, LinearScale, Rectangle, Tooltip);
@@ -135,14 +133,6 @@ export class StatisticChoiceComponent implements OnInit, OnDestroy {
     });
   }
 
-  toggleChart(visible?: boolean) {
-    this.colorLabel = false;
-    this.chartVisible = visible ?? !this.chartVisible;
-    if (this.chartVisible) {
-      this.updateChart();
-    }
-  }
-
   toggleCorrect() {
     const dataset = this.chart.config.data.datasets[0] as IBarControllerDatasetOptions;
     dataset.backgroundColor = this.colorLabel ? this.colors : this.indicationColors;
@@ -152,16 +142,6 @@ export class StatisticChoiceComponent implements OnInit, OnDestroy {
 
   checkIfCorrect(index: number): boolean {
     return (this.content.options[index].points >= 0);
-  }
-
-  checkIfSurvey(content: Content) {
-    let maxPoints;
-    if (content.format === ContentType.BINARY || content.format === ContentType.CHOICE) {
-      maxPoints = Math.max.apply(Math, (content as ContentChoice).options.map(function(option) { return option.points; }));
-    }
-    if (content.format === ContentType.TEXT || content.format === ContentType.SCALE || maxPoints <= 0) {
-      this.survey = true;
-    }
   }
 
   initChart() {
@@ -198,10 +178,6 @@ export class StatisticChoiceComponent implements OnInit, OnDestroy {
     });
   }
 
-  loadData() {
-    return this.contentService.getAnswer(this.content.roomId, this.content.id);
-  }
-
   updateData(stats: AnswerStatistics) {
     this.data = stats.roundStatistics[0].independentCounts;
     let abstentionCount;
@@ -228,13 +204,6 @@ export class StatisticChoiceComponent implements OnInit, OnDestroy {
       setTimeout(() => {
         this.createChart(this.colors);
       }, 300);
-    }
-  }
-
-  updateCounter(list: number[], abstentions: number) {
-    this.answerCount = list.reduce((a, b) => a + b);
-    if (abstentions) {
-      this.answerCount += abstentions;
     }
   }
 }
