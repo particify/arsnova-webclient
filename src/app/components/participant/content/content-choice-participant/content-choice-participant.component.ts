@@ -10,7 +10,7 @@ import { LanguageService } from '../../../../services/util/language.service';
 import { AuthenticationService } from '../../../../services/http/authentication.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GlobalStorageService } from '../../../../services/util/global-storage.service';
-import { ContentParticipantComponent } from '../content-participant.component';
+import { ContentParticipantBaseComponent } from '../content-participant-base.component';
 
 class CheckedAnswer {
   answerOption: AnswerOption;
@@ -27,10 +27,12 @@ class CheckedAnswer {
   templateUrl: './content-choice-participant.component.html',
   styleUrls: ['./content-choice-participant.component.scss']
 })
-export class ContentChoiceParticipantComponent extends ContentParticipantComponent implements OnInit {
+export class ContentChoiceParticipantComponent extends ContentParticipantBaseComponent implements OnInit {
 
   @Input() content: ContentChoice;
   @Input() answer: ChoiceAnswer;
+  @Input() alreadySent: boolean;
+  @Input() sendEvent: EventEmitter<string>;
   @Output() message = new EventEmitter<ChoiceAnswer>();
 
   isLoading = true;
@@ -59,7 +61,6 @@ export class ContentChoiceParticipantComponent extends ContentParticipantCompone
   }
 
   initAnswer(userId: string) {
-    this.setExtensionData(this.content.roomId, this.content.id);
     for (const answerOption of this.content.options) {
       this.checkedAnswers.push(new CheckedAnswer(answerOption, false));
     }
@@ -81,7 +82,6 @@ export class ContentChoiceParticipantComponent extends ContentParticipantCompone
         } else {
           this.hasAbstained = true;
         }
-        this.alreadySent = true;
       }
       this.isLoading = false;
   }
@@ -162,13 +162,11 @@ export class ContentChoiceParticipantComponent extends ContentParticipantCompone
       this.translateService.get('answer.sent').subscribe(msg => {
         this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.SUCCESS);
       });
-      this.alreadySent = true;
       this.sendStatusToParent(answer);
     });
   }
 
-  abstain($event) {
-    $event.preventDefault();
+  abstain() {
     this.answerService.addAnswerChoice(this.content.roomId, {
       id: null,
       revision: null,
@@ -180,7 +178,6 @@ export class ContentChoiceParticipantComponent extends ContentParticipantCompone
     } as ChoiceAnswer).subscribe(answer => {
       this.resetCheckedAnswers();
       this.hasAbstained = true;
-      this.alreadySent = true;
       this.sendStatusToParent(answer);
     });
   }

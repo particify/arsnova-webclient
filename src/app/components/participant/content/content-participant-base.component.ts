@@ -8,22 +8,19 @@ import { GlobalStorageService, STORAGE_KEYS } from '../../../services/util/globa
 import { Answer } from '../../../models/answer';
 
 @Component({
-  selector: 'app-content-participant',
-  templateUrl: './content-participant.component.html'
+  template: ''
 })
-export class ContentParticipantComponent implements OnInit {
+export abstract class ContentParticipantBaseComponent implements OnInit {
 
-  @Input() index = 0;
   @Output() message = new EventEmitter<Answer>();
+  @Input() alreadySent: boolean;
+  @Input() sendEvent: EventEmitter<string>;
 
-  alreadySent = false;
   isLoading = true;
   shortId: string;
   contentGroupName: string;
-  flipped: boolean;
-  extensionData: any;
 
-  constructor(
+  protected constructor(
     protected authenticationService: AuthenticationService,
     protected notificationService: NotificationService,
     protected translateService: TranslateService,
@@ -43,6 +40,13 @@ export class ContentParticipantComponent implements OnInit {
       this.shortId = params['shortId'];
       this.contentGroupName = params['contentGroup'];
     });
+    this.sendEvent.subscribe(send => {
+      if (send === 'answer') {
+        this.submitAnswer();
+      } else {
+        this.abstain();
+      }
+    });
   }
 
   initAnswer(userId: string) {
@@ -52,25 +56,9 @@ export class ContentParticipantComponent implements OnInit {
     this.message.emit(answer);
   }
 
-  goToStats() {
-    this.flipped = !this.flipped;
-    setTimeout(() => {
-      document.getElementById('go-to-' + (this.flipped ? 'content' : 'stats')).focus();
-    }, 300);
-  }
-
   submitAnswer() {
   }
 
-  abstain($event) {
-  }
-
-  setExtensionData(roomId: string, refId: string) {
-    this.extensionData = {
-      'roomId': roomId,
-      'refType': 'content',
-      'refId': refId,
-      'detailedView': false
-    };
+  abstain() {
   }
 }

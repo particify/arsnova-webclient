@@ -10,23 +10,24 @@ import { EventService } from '../../../../services/util/event.service';
 import { AuthenticationService } from '../../../../services/http/authentication.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GlobalStorageService } from '../../../../services/util/global-storage.service';
-import { ContentParticipantComponent } from '../content-participant.component';
+import { ContentParticipantBaseComponent } from '../content-participant-base.component';
 
 @Component({
   selector: 'app-content-text-participant',
   templateUrl: './content-text-participant.component.html',
   styleUrls: ['./content-text-participant.component.scss']
 })
-export class ContentTextParticipantComponent extends ContentParticipantComponent implements OnInit {
+export class ContentTextParticipantComponent extends ContentParticipantBaseComponent implements OnInit {
 
   @Input() content: ContentText;
   @Input() answer: TextAnswer;
+  @Input() alreadySent: boolean;
+  @Input() sendEvent: EventEmitter<string>;
   @Output() message = new EventEmitter<TextAnswer>();
 
   givenAnswer: TextAnswer;
 
   textAnswer = '';
-  sentMessage: string;
 
   constructor(
     protected authenticationService: AuthenticationService,
@@ -43,29 +44,10 @@ export class ContentTextParticipantComponent extends ContentParticipantComponent
   }
 
   initAnswer(userId: string) {
-    this.setExtensionData(this.content.roomId, this.content.id);
     if (this.answer) {
       this.givenAnswer = this.answer;
-      this.alreadySent = true;
-    }
-    if (this.givenAnswer && this.givenAnswer.body) {
-      this.getAnsweredMessage();
-    } else {
-      this.getAbstainedMessage();
     }
     this.isLoading = false;
-  }
-
-  getAnsweredMessage() {
-    this.translateService.get('answer.has-answered').subscribe(msg => {
-      this.sentMessage = msg;
-    });
-  }
-
-  getAbstainedMessage() {
-    this.translateService.get('answer.has-abstained').subscribe(msg => {
-      this.sentMessage = msg;
-    });
   }
 
   createAnswer(body?: string) {
@@ -95,17 +77,14 @@ export class ContentTextParticipantComponent extends ContentParticipantComponent
       format: ContentType.TEXT
     } as TextAnswer).subscribe(answer => {
       this.createAnswer(this.textAnswer);
-      this.getAnsweredMessage();
       this.translateService.get('answer.sent').subscribe(msg => {
         this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.SUCCESS);
       });
-      this.alreadySent = true;
       this.sendStatusToParent(answer);
     });
   }
 
-  abstain($event) {
-    $event.preventDefault();
+  abstain() {
     this.answerService.addAnswerText(this.content.roomId, {
       id: null,
       revision: null,
@@ -116,8 +95,6 @@ export class ContentTextParticipantComponent extends ContentParticipantComponent
       format: ContentType.TEXT
     } as TextAnswer).subscribe(answer => {
       this.createAnswer();
-      this.getAbstainedMessage();
-      this.alreadySent = true;
       this.sendStatusToParent(answer);
     });
   }
