@@ -64,7 +64,14 @@ export class ContentYesNoCreationComponent extends ContentCreationComponent impl
       (this.content as ContentChoice).options[0].points = this.yesno ? 10 : -10;
       (this.content as ContentChoice).options[1].points = this.yesno ? -10 : 10;
       (this.content as ContentChoice).correctOptionIndexes = [index];
+    } else {
+      (this.content as ContentChoice).options[0].points = this.newAnswerOptionPoints;
+      (this.content as ContentChoice).options[1].points = this.newAnswerOptionPoints;
     }
     return true;
+  }
+
+  resetAnswers() {
+    this.yesno = null;
   }
 }
