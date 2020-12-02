@@ -24,13 +24,13 @@
         <p>{{ 'content.archived-contents-description' | translate }}</p>
         <app-loading-indicator *ngIf="isLoading" [size]="50"></app-loading-indicator>
         <div *ngIf="!isLoading">
-          <mat-expansion-panel *ngFor="let content of contents; index as i" class="matPanel">
-            <mat-expansion-panel-header class="matPanelListHeader" attr.aria-label="{{ 'content.a11y-selected-content' | translate: { name: labels[i] } }}">
-              <mat-panel-title class="panelTitle">
+          <mat-list *ngFor="let content of contents; index as i" class="matPanel">
+            <mat-list-item class="matPanelListHeader" attr.aria-label="{{ 'content.a11y-selected-content' | translate: { name: labels[i] } }}">
+              <div>
                 <mat-checkbox *ngIf="creationMode" (click)="$event.stopPropagation()" [(ngModel)]="creationSelection[i]">
                 </mat-checkbox>
                 {{ labels[i] }}
-              </mat-panel-title>
+              </div>
               <button mat-icon-button (keyup.enter)="menuTrigger.openMenu()" #menuTrigger="matMenuTrigger"
                       [matMenuTriggerFor]="moreActions" (click)="$event.stopPropagation()"
                       class="moreButton" matTooltip="{{ 'content.more-options' | translate}}">
@@ -65,11 +65,11 @@
                 </button>
               </mat-menu>
 
-            </mat-expansion-panel-header>
+            </mat-list-item>
             <mat-panel-description class="panelTitle">
               {{ content.body }}
             </mat-panel-description>
-          </mat-expansion-panel>
+          </mat-list>
         </div>
       </mat-card-content>
     </mat-card>

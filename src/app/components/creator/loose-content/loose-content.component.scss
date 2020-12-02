@@ -6,31 +6,28 @@
   margin-top: 15px;
 }
 
-.mat-expansion-panel {
-  background-color: var(--secondary-variant);
-  margin-bottom: 5px;
-  hyphens: auto;
+.mat-list {
+  padding: 0;
+  margin: -16px;
+  outline: none;
+  background-color: var(--surface);
+  border-radius: 4px;
 }
 
-.mat-expansion-panel-header-title {
-  flex-basis: 0;
-  align-items: center;
-  font-size: medium;
-  margin-right: 5px;
+.mat-list-item {
+  height: auto;
+  outline: none;
+  cursor: pointer;
 }
 
-.mat-expansion-panel-header {
-  background-color: var(--table-a);
+.list-item-container {
+  border-bottom: solid 1px #ccc;
 }
 
-.matPanel {
-  background-color: var(--table-a);
-  margin-bottom: 5px;
-  color: var(--on-surface);
-}
-
-.panelTitle {
-  color: var(--on-surface);
+.mat-list-item:last-of-type {
+  .list-item-container {
+    border: none;
+  }
 }
 
 .moreButton {
