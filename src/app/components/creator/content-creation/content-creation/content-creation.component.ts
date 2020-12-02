@@ -10,6 +10,7 @@ import { ContentChoice } from '../../../../models/content-choice';
 import { ContentType } from '../../../../models/content-type.enum';
 import { AnswerOption } from '../../../../models/answer-option';
 import { Observable, Subscription } from 'rxjs';
+import { ContentText } from '@arsnova/app/models/content-text';
 
 export class DisplayAnswer {
   answerOption: AnswerOption;
@@ -34,6 +35,7 @@ export class ContentCreationComponent implements OnInit, OnDestroy {
   @Input() contentBody;
   @Input() contentGroup;
   @Input() abstentionsAllowed: boolean;
+  @Input() editContent: Content;
   @Output() reset = new EventEmitter<boolean>();
   @Output() contentSent = new EventEmitter<Content>();
   @Output() refId = new EventEmitter<string>();
@@ -42,6 +44,9 @@ export class ContentCreationComponent implements OnInit, OnDestroy {
   isLoading = true;
   content: Content;
   displayAnswers: DisplayAnswer[] = [];
+  newAnswerOptionPoints = 0;
+  answerLabels: string[];
+  isEditMode = false;
 
   constructor(protected contentService: ContentService,
               protected notificationService: NotificationService,
@@ -52,7 +57,12 @@ export class ContentCreationComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.roomId = this.globalStorageService.getItem(STORAGE_KEYS.ROOM_ID);
-    this.initContentCreation();
+    if (this.editContent) {
+      this.isEditMode = true;
+      this.initContentForEditing();
+    } else {
+      this.initContentCreation();
+    }
     this.createEventSubscription = this.createEvent.subscribe(submit => {
       if (this.prepareContent()) {
         if (this.createContent()) {
@@ -71,6 +81,30 @@ export class ContentCreationComponent implements OnInit, OnDestroy {
   }
 
   initContentCreation() {}
+
+  initTemplateAnswers() {
+    this.translationService.get(this.answerLabels).subscribe(msgs => {
+      for (let i = 0; i < this.answerLabels.length; i++) {
+        (this.content as ContentChoice).options.push(new AnswerOption(msgs[this.answerLabels[i]], this.newAnswerOptionPoints));
+      }
+      this.fillCorrectAnswers();
+      this.isLoading = false;
+    });
+  }
+
+  initContentForEditing() {}
+
+  initContentChoiceEditBase(): AnswerOption[] {
+    this.content = (this.editContent as ContentChoice);
+    this.contentBody = this.content.body;
+    const options = (this.content as ContentChoice).options;
+    (this.content as ContentChoice).correctOptionIndexes = [];
+    return options;
+  }
+
+  initContentTextEditBase() {
+    this.content = (this.editContent as ContentText);
+  }
 
   createContent(): boolean {
     return true;
@@ -116,15 +150,25 @@ export class ContentCreationComponent implements OnInit, OnDestroy {
   }
 
   submitContent(): void {
-    this.contentService.addContent(this.content).subscribe(createdContent => {
-      this.refId.emit(createdContent.id);
-      if (this.contentGroup !== '') {
-        this.contentGroupService.addContentToGroup(this.roomId, this.contentGroup, createdContent.id).subscribe();
-      }
-      this.contentGroupService.saveGroupInMemoryStorage(this.contentGroup);
-      this.resetAfterSubmit();
-      document.getElementById('body-input').focus();
-    });
+    if (!this.isEditMode) {
+      this.contentService.addContent(this.content).subscribe(createdContent => {
+        this.refId.emit(createdContent.id);
+        if (this.contentGroup !== '') {
+          this.contentGroupService.addContentToGroup(this.roomId, this.contentGroup, createdContent.id).subscribe();
+        }
+        this.contentGroupService.saveGroupInMemoryStorage(this.contentGroup);
+        this.resetAfterSubmit();
+        document.getElementById('body-input').focus();
+      });
+    } else {
+      this.contentService.updateContent(this.content).subscribe(updateContent => {
+        this.content = updateContent;
+        window.history.back();
+        this.translationService.get('content.changes-made').subscribe(message => {
+          this.notificationService.showAdvanced(message, AdvancedSnackBarTypes.SUCCESS);
+        });
+      });
+    }
   }
 
 }

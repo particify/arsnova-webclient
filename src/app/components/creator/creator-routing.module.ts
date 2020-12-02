@@ -45,6 +45,13 @@ const routes: Routes = [
         component: ContentCreationPageComponent
       },
       {
+        path: 'group/:contentGroup/edit/:contentId',
+        component: ContentCreationPageComponent,
+        data: {
+          isEditMode: true
+        }
+      },
+      {
         path: 'group/:contentGroup/statistics/:contentIndex',
         component: ContentPresentationComponent
       },

@@ -43,6 +43,10 @@ form {
   border-color: var(--secondary);
   margin: 3px 20px 20px 0;
   height: 60px;
+  &:disabled {
+    opacity: 0.7;
+    color: var(--secondary);
+  }
 }
 
 .mat-card {
@@ -52,4 +56,13 @@ form {
 .abstentions {
   margin-left: 16px;
   margin-bottom: 10px;
+}
+
+.invisible {
+  height: 0;
+  opacity: 0;
+}
+
+.top-space {
+  margin-top: 16px;
 }

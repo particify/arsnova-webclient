@@ -25,7 +25,7 @@
           attr.aria-label="{{ 'content.a11y-preview-submit' | translate }}"
           class="button-primary button-md"
           mat-raised-button>
-    {{ 'content.create' | translate }}</button>
+    {{ (isEditMode ? 'content.save' : 'content.create') | translate }}</button>
 </div>
 
 <div class="visually-hidden">

@@ -7,7 +7,6 @@ import { ContentType } from '../../../../models/content-type.enum';
 import { TranslateService } from '@ngx-translate/core';
 import { EventService } from '../../../../services/util/event.service';
 import { RoomService } from '../../../../services/http/room.service';
-import { MatDialog } from '@angular/material/dialog';
 import { GlobalStorageService } from '../../../../services/util/global-storage.service';
 import { ContentGroupService } from '../../../../services/http/content-group.service';
 import { ContentCreationComponent, DisplayAnswer } from '../content-creation/content-creation.component';
@@ -34,8 +33,7 @@ export class ContentChoiceCreationComponent extends ContentCreationComponent imp
     protected roomService: RoomService,
     protected globalStorageService: GlobalStorageService,
     protected contentGroupService: ContentGroupService,
-    public eventService: EventService,
-    public dialog: MatDialog
+    public eventService: EventService
   ) {
     super(contentService, notificationService, translationService, roomService, globalStorageService, contentGroupService);
   }
@@ -55,6 +53,21 @@ export class ContentChoiceCreationComponent extends ContentCreationComponent imp
       null
     );
     this.fillCorrectAnswers();
+    this.isLoading = false;
+  }
+
+  initContentForEditing() {
+    const options = this.initContentChoiceEditBase();
+    for (let i = 0; i < options.length; i++) {
+      const correct = options[i].points > 0;
+      this.displayAnswers.push(new DisplayAnswer(new AnswerOption(options[i].label, options[i].points), correct));
+      if (correct) {
+        (this.content as ContentChoice).correctOptionIndexes.push(i);
+      }
+    }
+    this.multipleCorrectAnswers = (this.content as ContentChoice).multiple;
+    this.noCorrectAnswers = (this.content as ContentChoice).correctOptionIndexes.length === 0;
+    this.isLoading = false;
   }
 
   findAnswerIndexByLabel(label: string): number {

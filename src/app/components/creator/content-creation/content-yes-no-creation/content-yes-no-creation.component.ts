@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { ContentChoice } from '../../../../models/content-choice';
-import { AnswerOption } from '../../../../models/answer-option';
 import { NotificationService } from '../../../../services/util/notification.service';
 import { ContentType } from '../../../../models/content-type.enum';
 import { ContentService } from '../../../../services/http/content.service';
@@ -17,13 +16,11 @@ import { ContentCreationComponent } from '../content-creation/content-creation.c
 })
 export class ContentYesNoCreationComponent extends ContentCreationComponent implements OnInit {
 
-  yesno = null;
+  yesno = -1;
   answerLabels = [
     'content.yes',
     'content.no'
   ];
-
-  newAnswerOptionPoints = 0;
 
   constructor(
     protected contentService: ContentService,
@@ -50,19 +47,25 @@ export class ContentYesNoCreationComponent extends ContentCreationComponent impl
       ContentType.BINARY,
       null
     );
-    this.translationService.get(this.answerLabels).subscribe(msgs => {
-      for (let i = 0; i < this.answerLabels.length; i++) {
-        (this.content as ContentChoice).options.push(new AnswerOption(msgs[this.answerLabels[i]], this.newAnswerOptionPoints));
+    this.initTemplateAnswers();
+  }
+
+  initContentForEditing() {
+    const options = this.initContentChoiceEditBase();
+    for (let i = 0; i < options.length; i++) {
+      if (options[i].points > 0) {
+        this.yesno = i;
+        (this.content as ContentChoice).correctOptionIndexes.push(i);
       }
-      this.fillCorrectAnswers();
-    });
+    }
+    this.isLoading = false;
   }
 
   createContent(): boolean {
-    if (this.yesno !== null) {
-      const index = this.yesno ? 0 : 1;
-      (this.content as ContentChoice).options[0].points = this.yesno ? 10 : -10;
-      (this.content as ContentChoice).options[1].points = this.yesno ? -10 : 10;
+    if (this.yesno > -1) {
+      const index = this.yesno;
+      (this.content as ContentChoice).options[0].points = index === 0 ? 10 : -10;
+      (this.content as ContentChoice).options[1].points = index === 0 ? -10 : 10;
       (this.content as ContentChoice).correctOptionIndexes = [index];
     } else {
       (this.content as ContentChoice).options[0].points = this.newAnswerOptionPoints;
@@ -72,6 +75,6 @@ export class ContentYesNoCreationComponent extends ContentCreationComponent impl
   }
 
   resetAnswers() {
-    this.yesno = null;
+    this.yesno = -1;
   }
 }

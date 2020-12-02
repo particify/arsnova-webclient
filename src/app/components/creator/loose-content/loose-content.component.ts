@@ -32,7 +32,6 @@ export class LooseContentComponent extends ContentListComponent implements OnIni
   deviceType: string;
   contentGroups: string[] = [];
   currentGroupIndex: number;
-  contentBackup: Content;
   creationMode = false;
   newName: string;
   creationSelection: boolean[] = [];
@@ -50,10 +49,10 @@ export class LooseContentComponent extends ContentListComponent implements OnIni
     protected globalStorageService: GlobalStorageService,
     protected contentGroupService: ContentGroupService,
     protected announceService: AnnounceService,
-    private router: Router
+    protected router: Router
   ) {
     super(contentService, roomService, route, location, notificationService, translateService, langService, dialogService,
-      globalStorageService, contentGroupService, announceService);
+      globalStorageService, contentGroupService, announceService, router);
     this.deviceType = this.globalStorageService.getItem(STORAGE_KEYS.DEVICE_TYPE);
     langService.langEmitter.subscribe(lang => translateService.use(lang));
   }
@@ -84,6 +83,11 @@ export class LooseContentComponent extends ContentListComponent implements OnIni
     setTimeout(() => {
       document.getElementById('message').focus();
     }, 500);
+  }
+
+  goToEdit(content: Content) {
+    const url = `creator/room/${this.room.shortId}/group/${this.contentGroup.name}/edit/${content.id}`;
+    this.router.navigate([url]);
   }
 
   createNewGroup() {

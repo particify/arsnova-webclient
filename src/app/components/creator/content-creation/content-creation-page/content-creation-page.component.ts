@@ -12,8 +12,9 @@ import { AnnounceService } from '../../../../services/util/announce.service';
 import { Subject } from 'rxjs';
 import { Content } from '../../../../models/content';
 import { FormattingService } from '../../../../services/http/formatting.service';
-import { HINT_TYPES } from '@arsnova/app/components/shared/hint/hint.component';
-import { UserRole } from '@arsnova/app/models/user-roles.enum';
+import { HINT_TYPES } from '../../../shared/hint/hint.component';
+import { UserRole } from '../../../../models/user-roles.enum';
+import { ContentService } from '../../../../services/http/content.service';
 
 class ContentFormat {
   name: string;
@@ -34,7 +35,7 @@ export class ContentCreationPageComponent implements OnInit, AfterContentInit {
   lastContentGroup: string;
   formats: ContentFormat[] = [
     { name: 'choice', icon: 'format_list_bulleted' },
-    { name: 'likert', icon: 'mood' },
+    { name: 'scale', icon: 'mood' },
     { name: 'binary', icon: 'dns' },
     { name: 'text', icon: 'description' },
     { name: 'slide', icon: 'info' }
@@ -52,6 +53,8 @@ export class ContentCreationPageComponent implements OnInit, AfterContentInit {
   textContainsImage = false;
   warningType = HINT_TYPES.WARNING;
   abstentionsAllowed = true;
+  isEditMode = false;
+  isLoading = true;
 
   constructor(
     private translateService: TranslateService,
@@ -61,8 +64,8 @@ export class ContentCreationPageComponent implements OnInit, AfterContentInit {
     private globalStorageService: GlobalStorageService,
     protected route: ActivatedRoute,
     private roomService: RoomService,
-    private formattingService: FormattingService
-  ) {
+    private formattingService: FormattingService,
+    private contentService: ContentService) {
     langService.langEmitter.subscribe(lang => translateService.use(lang));
   }
 
@@ -89,8 +92,21 @@ export class ContentCreationPageComponent implements OnInit, AfterContentInit {
 
   ngOnInit() {
     this.route.data.subscribe(data => {
+      const roomId = data.room.id;
+      if (data.isEditMode) {
+        this.contentService.getContent(roomId, this.route.snapshot.params['contentId']).subscribe(content => {
+          this.content = content;
+          this.question = this.content.body;
+          this.abstentionsAllowed = this.content.abstentionsAllowed;
+          this.isEditMode = true;
+          this.selectedFormat = this.formats.find(c => c.name === this.content.format.toLowerCase());
+          this.isLoading = false;
+        });
+      } else {
+        this.isLoading = false;
+      }
       // this refreshes memory storage
-      this.roomService.getStats(data.room.id).subscribe(stats => {
+      this.roomService.getStats(roomId).subscribe(stats => {
         if (stats.groupStats) {
           this.contentGroups = stats.groupStats.map(stat => stat.groupName);
           const lastGroup = this.globalStorageService.getItem(STORAGE_KEYS.LAST_GROUP);
@@ -102,7 +118,7 @@ export class ContentCreationPageComponent implements OnInit, AfterContentInit {
           });
         }
       });
-      this.prepareAttachmentData(data.room.id);
+      this.prepareAttachmentData(roomId);
     });
     this.translateService.use(this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE));
   }

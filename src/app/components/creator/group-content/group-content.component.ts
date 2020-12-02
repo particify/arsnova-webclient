@@ -2,7 +2,7 @@ import { Component, ElementRef, HostListener, OnInit, ViewChild, ChangeDetectorR
 import { Content } from '../../../models/content';
 import { ContentService } from '../../../services/http/content.service';
 import { RoomService } from '../../../services/http/room.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { AdvancedSnackBarTypes, NotificationService } from '../../../services/util/notification.service';
 import { TranslateService } from '@ngx-translate/core';
@@ -48,10 +48,11 @@ export class GroupContentComponent extends ContentListComponent implements OnIni
     protected globalStorageService: GlobalStorageService,
     protected contentGroupService: ContentGroupService,
     protected announceService: AnnounceService,
-    public eventService: EventService
+    public eventService: EventService,
+    protected router: Router
   ) {
     super(contentService, roomService, route, location, notificationService, translateService, langService, dialogService,
-    globalStorageService, contentGroupService, announceService);
+    globalStorageService, contentGroupService, announceService, router);
     langService.langEmitter.subscribe(lang => translateService.use(lang));
   }
 
@@ -115,6 +116,11 @@ export class GroupContentComponent extends ContentListComponent implements OnIni
     setTimeout(() => {
       document.getElementById('message-button').focus();
     }, 500);
+  }
+
+  goToEdit(content: Content) {
+    const url = `creator/room/${this.room.shortId}/group/${this.contentGroup.name}/edit/${content.id}`;
+    this.router.navigate([url]);
   }
 
   announce() {
