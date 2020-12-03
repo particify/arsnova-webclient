@@ -21,21 +21,22 @@
         </div>
       </div>
       <mat-card-content>
-        <p>{{ 'content.archived-contents-description' | translate }}</p>
+        <p class="info-text">{{ 'content.archived-contents-description' | translate }}</p>
         <app-loading-indicator *ngIf="isLoading" [size]="50"></app-loading-indicator>
         <div *ngIf="!isLoading">
-          <mat-list *ngFor="let content of contents; index as i" class="matPanel">
-            <mat-list-item class="matPanelListHeader" attr.aria-label="{{ 'content.a11y-selected-content' | translate: { name: labels[i] } }}">
-              <div>
+          <mat-list>
+            <mat-list-item *ngFor="let content of contents; index as i"
+                           attr.aria-label="{{ 'content.a11y-selected-content' | translate: { name: labels[i] } }}">
+              <div class="bottom-border" fxLayout="row" fxLayoutAlign="space-between center" fxFill>
                 <mat-checkbox *ngIf="creationMode" (click)="$event.stopPropagation()" [(ngModel)]="creationSelection[i]">
                 </mat-checkbox>
-                {{ labels[i] }}
+                <p>{{ labels[i] }}</p>
+                <button mat-icon-button (keyup.enter)="menuTrigger.openMenu()" #menuTrigger="matMenuTrigger"
+                        [matMenuTriggerFor]="moreActions" (click)="$event.stopPropagation()"
+                        class="moreButton" matTooltip="{{ 'content.more-options' | translate}}">
+                  <mat-icon>more_vert</mat-icon>
+                </button>
               </div>
-              <button mat-icon-button (keyup.enter)="menuTrigger.openMenu()" #menuTrigger="matMenuTrigger"
-                      [matMenuTriggerFor]="moreActions" (click)="$event.stopPropagation()"
-                      class="moreButton" matTooltip="{{ 'content.more-options' | translate}}">
-                <mat-icon>more_vert</mat-icon>
-              </button>
 
               <mat-menu #moreActions="matMenu" xPosition="before">
                 <button mat-menu-item (click)="editContent(content)" attr.aria-label="{{ 'content.a11y-edit-content' | translate }}">
@@ -58,7 +59,6 @@
                         attr.aria-label="{{ 'content.a11y-add-to-this-content-group' | translate: { name: cg } }}">
                   <span>{{ cg }}</span>
                 </button>
-                <mat-divider></mat-divider>
                 <button mat-menu-item (click)="showContentGroupCreationDialog(content.id, true)" attr.aria-label="{{ 'content.a11y-new-content-group' | translate }}">
                   <mat-icon>add</mat-icon>
                   <span>{{ 'content.new-content-group' | translate}}</span>
@@ -66,9 +66,6 @@
               </mat-menu>
 
             </mat-list-item>
-            <mat-panel-description class="panelTitle">
-              {{ content.body }}
-            </mat-panel-description>
           </mat-list>
         </div>
       </mat-card-content>

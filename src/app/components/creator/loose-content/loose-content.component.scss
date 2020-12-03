@@ -7,27 +7,8 @@
 }
 
 .mat-list {
-  padding: 0;
   margin: -16px;
-  outline: none;
   background-color: var(--surface);
-  border-radius: 4px;
-}
-
-.mat-list-item {
-  height: auto;
-  outline: none;
-  cursor: pointer;
-}
-
-.list-item-container {
-  border-bottom: solid 1px #ccc;
-}
-
-.mat-list-item:last-of-type {
-  .list-item-container {
-    border: none;
-  }
 }
 
 .moreButton {
@@ -48,7 +29,7 @@
   min-width: 120px;
 }
 
-p {
+.info-text {
   font-size: calc(14px + 0.3vw);
 }
 
