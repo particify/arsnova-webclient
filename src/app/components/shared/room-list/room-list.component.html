@@ -28,8 +28,8 @@
       <mat-list>
         <mat-list-item fxLayout="column" fxLayoutAlign="center"
                        *ngFor="let room of displayRooms; let i = index" [ngSwitch]="room.membership.primaryRole">
-          <div fxLayout="row" class="container">
-            <div tabindex="0" role="button" fxLayout="row" fxLayoutAlign="center center" class="container inner"
+          <div fxLayout="row" fxFill class="bottom-border">
+            <div tabindex="0" role="button" fxLayout="row" fxLayoutAlign="center center" class="inner container"
                  attr.aria-label="{{ 'room-list.a11y-join-room' | translate:
                         {room: room.summary.name, id: room.summary.shortId, role: roles[room.membership.primaryRole]} }}"
                  (click)="setCurrentRoom(room.summary.shortId, room.membership.primaryRole)"
@@ -73,13 +73,12 @@
               </mat-menu>
             </div>
           </div>
-          <mat-divider *ngIf="i < displayRooms.length - 1"></mat-divider>
         </mat-list-item>
       </mat-list>
     </mat-card>
   </div>
 
-  <mat-card *ngIf="showRoomsFromGuest" id="guest-rooms">
+  <mat-card *ngIf="showRoomsFromGuest" id="guest-rooms" class="account-memberships">
     <div fxLayout="row" fxLayoutAlign="space-between">
       <h3>{{ 'room-list.rooms-from-guest' | translate }}</h3>
       <button mat-stroked-button class="icon-secondary" (click)="showRoomsFromGuest = false">
@@ -92,7 +91,7 @@
         <ng-container *ngFor="let room of roomsFromGuest; let i = index"
             [ngSwitch]="room.membership.primaryRole">
           <mat-list-item fxLayout="column" fxLayoutAlign="center" *ngIf="!room.transferred">
-            <div fxLayout="row" class="container">
+            <div fxLayout="row" fxFill class="bottom-border">
               <div tabindex="0" role="button" fxLayout="row" fxLayoutAlign="center center" class="container inner"
                   attr.aria-label="{{ 'room-list.a11y-join-room' | translate:
                           {room: room.summary.name, id: room.summary.shortId, role: roles[room.membership.primaryRole]} }}">
@@ -127,7 +126,6 @@
                 </button>
               </div>
             </div>
-            <mat-divider *ngIf="i < roomsFromGuest.length - 1"></mat-divider>
           </mat-list-item>
         </ng-container>
       </mat-list>

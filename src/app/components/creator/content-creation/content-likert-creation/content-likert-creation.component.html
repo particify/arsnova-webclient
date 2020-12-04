@@ -1,11 +1,11 @@
 <div>
   <mat-card *ngIf="!isLoading && displayAnswers.length > 0">
     <mat-list>
-      <mat-list-item fxLayout="column" fxLayoutAlign="center" *ngFor="let answer of displayAnswers; let i = index">
+      <mat-list-item fxLayout="column" fxLayoutAlign="center" class="bottom-border"
+                     *ngFor="let answer of displayAnswers; let i = index">
         <div fxLayout="row">
           <p>{{ answer.answerOption.label }}</p>
         </div>
-        <mat-divider *ngIf="i < displayAnswers.length - 1"></mat-divider>
       </mat-list-item>
     </mat-list>
   </mat-card>

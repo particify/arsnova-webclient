@@ -29,6 +29,7 @@ export const dark = {
 
   '--table-a': '#424242',
   '--table-b': '#505050',
+  '--border': '#595959',
 
   '--green': '#43a047',
   '--green-light': '#e8f5e9',
