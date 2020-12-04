@@ -43,7 +43,7 @@ export class RoomListComponent implements OnInit, OnDestroy {
   sub: Subscription;
   unsubscribe$: Subject<void> = new Subject();
   deviceType: string;
-  roles: string[] = [];
+  roles: Map<UserRole, string> = new Map<UserRole, string>();
   showMenu = false;
 
   creatorRole = UserRole.CREATOR;
@@ -79,13 +79,19 @@ export class RoomListComponent implements OnInit, OnDestroy {
     this.deviceType = this.globalStorageService.getItem(STORAGE_KEYS.DEVICE_TYPE);
     const roleKeys = [
       'room-list.participant-role',
-      'room-list.editing-moderator-role',
       'room-list.executive-moderator-role',
+      'room-list.editing-moderator-role',
       'room-list.creator-role',
     ];
+    const roles = [
+      UserRole.PARTICIPANT,
+      UserRole.EXECUTIVE_MODERATOR,
+      UserRole.EDITING_MODERATOR,
+      UserRole.CREATOR
+    ];
     this.translateService.get(roleKeys).subscribe(msgs => {
-      for (const role of roleKeys) {
-        this.roles.push(msgs[role]);
+      for (let i = 0; i < roleKeys.length; i++) {
+        this.roles.set(roles[i], msgs[roleKeys[i]]);
       }
     });
   }

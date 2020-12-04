@@ -1,4 +1,7 @@
 <div fxLayout="column">
+  <button class="visually-hidden" id="user-message" tabIndex="-1" (click)="announce()">
+    {{ 'home-page.a11y-user-message' | translate }}
+  </button>
   <app-room-join [inputA11yString]="'home-page.a11y-room-join'"></app-room-join>
   <div fxLayout="row" fxLayoutAlign="center">
     <button class="button-primary" mat-raised-button (click)="openCreateRoomDialog()" id="create-room-button">
@@ -10,6 +13,4 @@
     <app-room-list [auth]="auth"></app-room-list>
   </div>
 </div>
-<div class="visually-hidden">
-  <button id="user-message" tabIndex="-1" (click)="announce()">{{ 'home-page.a11y-user-message' | translate }}</button>
-</div>
+

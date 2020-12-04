@@ -7,7 +7,7 @@ import { EventService } from '../../../services/util/event.service';
 import { KeyboardUtils } from '../../../utils/keyboard';
 import { KeyboardKey } from '../../../utils/keyboard/keys';
 import { DialogService } from '../../../services/util/dialog.service';
-import { GlobalStorageService, STORAGE_KEYS } from '../../../services/util/global-storage.service';
+import { GlobalStorageService } from '../../../services/util/global-storage.service';
 import { AnnounceService } from '../../../services/util/announce.service';
 
 @Component({
@@ -52,7 +52,6 @@ export class UserHomeComponent implements OnInit, AfterContentInit {
   }
 
   ngOnInit() {
-    this.translateService.use(this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE));
     this.authenticationService.getCurrentAuthentication()
         .subscribe(auth => this.auth = auth);
   }
