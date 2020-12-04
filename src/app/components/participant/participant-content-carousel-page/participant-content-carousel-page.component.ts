@@ -113,7 +113,7 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
   }
 
   checkIfLastContentExists(contentIndex: number) {
-    if (contentIndex) {
+    if (contentIndex >= 0) {
       this.initStepper(contentIndex);
     } else {
       this.started = this.status.PRE_START;
@@ -134,7 +134,7 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
   }
 
   getFirstUnansweredContent() {
-    if (this.started !== this.status.NORMAL) {
+    if (this.started === this.status.PRE_START) {
       for (let i = 0; i < this.alreadySent.size; i++) {
         if (this.alreadySent.get(i) === false) {
           this.initStepper(i);
