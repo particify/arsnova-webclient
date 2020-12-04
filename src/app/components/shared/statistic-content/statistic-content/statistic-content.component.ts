@@ -37,6 +37,9 @@ export class StatisticContentComponent implements OnInit {
     };
     this.format = this.content.format;
     this.checkIfSurvey();
+    if (this.directShow) {
+      this.answersVisible = true;
+    }
     this.isLoading = false;
   }
 
