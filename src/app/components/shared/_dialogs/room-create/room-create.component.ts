@@ -11,9 +11,11 @@ import { TranslateService } from '@ngx-translate/core';
 import { TSMap } from 'typescript-map';
 import { EventService } from '../../../../services/util/event.service';
 import { GlobalStorageService, STORAGE_KEYS } from '../../../../services/util/global-storage.service';
-import { first, filter } from 'rxjs/operators';
 import { ClientAuthentication } from '../../../../models/client-authentication';
 import { HINT_TYPES } from '@arsnova/app/components/shared/hint/hint.component';
+import { AuthProvider } from '../../../../models/auth-provider';
+import { ApiConfigService } from '../../../../services/http/api-config.service';
+import { AuthenticationProviderRole, AuthenticationProviderType } from '../../../../models/api-config';
 
 @Component({
   selector: 'app-room-create',
@@ -37,20 +39,33 @@ export class RoomCreateComponent implements OnInit {
     private translateService: TranslateService,
     private authenticationService: AuthenticationService,
     public eventService: EventService,
-    private globalStorageService: GlobalStorageService
+    private globalStorageService: GlobalStorageService,
+    private apiConfigService: ApiConfigService
   ) {
   }
 
   ngOnInit() {
     this.translateService.use(this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE));
-    this.authenticationService.getAuthenticationChanges().pipe(
-        filter(auth => !!auth),
-        first()
-    ).subscribe(auth => this.auth = auth);
+    this.authenticationService.getCurrentAuthentication().subscribe(auth => this.handleAuth(auth));
   }
 
   resetEmptyInputs(): void {
     this.emptyInputs = false;
+  }
+
+  handleAuth(auth: ClientAuthentication) {
+    this.auth = auth;
+    if (!this.canCreateRoom(auth)) {
+      this.dialogRef.close();
+      this.router.navigate(['login']);
+    }
+  }
+
+  canCreateRoom(auth: ClientAuthentication): boolean {
+    const anonymousProvider = this.apiConfigService.getAuthProviders()
+        .filter((p) => p.type === AuthenticationProviderType.ANONYMOUS)[0];
+    return (anonymousProvider && anonymousProvider.allowedRoles.includes(AuthenticationProviderRole.MODERATOR))
+        || (auth && auth.authProvider !== AuthProvider.ARSNOVA_GUEST);
   }
 
   checkLogin(longRoomName: string) {
