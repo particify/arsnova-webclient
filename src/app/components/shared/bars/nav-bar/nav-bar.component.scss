@@ -1,0 +1,28 @@
+@import '../bar-base';
+
+.badge {
+  position: absolute;
+  top: 0;
+  right: -6px;
+  height: 12px;
+  width: 12px;
+  border-radius: 6px;
+  background-color: var(--warn);
+}
+
+.clickable {
+  color: var(--secondary);
+  margin: 0 20px;
+  cursor: pointer;
+  font-size: 32px;
+  width: 32px;
+  height: 32px;
+  position: relative;
+  opacity: 0.8;
+}
+
+.current-url {
+  cursor: default;
+  color: var(--primary);
+  opacity: 1;
+}

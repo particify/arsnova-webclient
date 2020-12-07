@@ -1,0 +1,9 @@
+<div class="list info" fxLayout="column" fxLayoutAlign="center center" (window:scroll)="checkScroll()"
+     [ngClass]="{'fixed': scrollExtended}">
+  <div class="icon-container" fxLayout="column" fxLayoutGap="16px">
+    <mat-icon *ngFor="let barItem of barItems; let i = index" class="icon"
+              matBadge="{{barItem.count > 0 ? barItem.count : null}}" matBadgeOverlap="false"
+              matTooltip="{{ 'sidebar.' + barItem.name | translate}}">
+      {{barItem.icon}}
+    </mat-icon>
+  </div>

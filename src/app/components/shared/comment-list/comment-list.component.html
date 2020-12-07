@@ -1,3 +1,4 @@
+<app-nav-bar></app-nav-bar>
 <div fxLayout="row" [ngClass]="{'search-container' : !scroll, 'search-container-fixed' : scroll}"
     (window:scroll)="checkScroll()" fxLayoutAlign="center center">
   <input tabindex="-1" (focus)="eventService.makeFocusOnInputTrue()" (blur)="eventService.makeFocusOnInputFalse()" #searchBox

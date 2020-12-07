@@ -65,7 +65,10 @@ const routes: Routes = [
       },
       {
         path: 'comments',
-        component: CommentPageComponent
+        component: CommentPageComponent,
+        resolve: {
+          room: RoomResolver
+        }
       },
       {
         path: 'survey',

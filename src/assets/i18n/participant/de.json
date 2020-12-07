@@ -183,5 +183,11 @@
     "hide-chart": "Verstecke das Diagramm",
     "answer": "Antwort",
     "other-combinations": "Andere"
+  },
+  "sidebar": {
+    "user-counter": "Anzahl der teilnehmenden Personen",
+    "comments": "Kommentare",
+    "group": "Fragen",
+    "survey": "Live-Umfrage"
   }
 }

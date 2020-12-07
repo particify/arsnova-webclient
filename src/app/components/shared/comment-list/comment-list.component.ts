@@ -20,6 +20,7 @@ import { DialogService } from '../../../services/util/dialog.service';
 import { GlobalStorageService, STORAGE_KEYS } from '../../../services/util/global-storage.service';
 import { AnnounceService } from '../../../services/util/announce.service';
 import { CommentSettingsService } from '@arsnova/app/services/http/comment-settings.service';
+import { RoutingService } from '@arsnova/app/services/util/routing.service';
 
 // Using lowercase letters in enums because they we're also used for parsing incoming WS-messages
 

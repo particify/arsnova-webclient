@@ -35,7 +35,6 @@ import { InfoDialogComponent } from './_dialogs/info-dialog/info-dialog.componen
 import { RoomNotFoundComponent } from './room-not-found/room-not-found.component';
 import { StepperComponent } from './stepper/stepper.component';
 import { CdkStepperModule } from '@angular/cdk/stepper';
-import { SidebarComponent } from './sidebar/sidebar.component';
 import { RenderedTextComponent } from './rendered-text/rendered-text.component';
 import { UpdateInfoComponent } from './_dialogs/update-info/update-info.component';
 import { HintComponent } from './hint/hint.component';
@@ -45,6 +44,8 @@ import { StatisticContentComponent } from './statistic-content/statistic-content
 import { ContentSortAnswerComponent } from './content-sort-answer/content-sort-answer.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { StatisticSortComponent } from './statistic-content/statistic-sort/statistic-sort.component';
+import { NavBarComponent } from './bars/nav-bar/nav-bar.component';
+import { InfoBarComponent } from './bars/info-bar/info-bar.component';
 
 @NgModule({
   imports: [
@@ -89,14 +90,15 @@ import { StatisticSortComponent } from './statistic-content/statistic-sort/stati
     RoomNotFoundComponent,
     DateFromNow,
     StepperComponent,
-    SidebarComponent,
     RenderedTextComponent,
     UpdateInfoComponent,
     HintComponent,
     AnswerCountComponent,
     StatisticContentComponent,
     ContentSortAnswerComponent,
-    StatisticSortComponent
+    StatisticSortComponent,
+    NavBarComponent,
+    InfoBarComponent
   ],
   exports: [
     RoomJoinComponent,
@@ -120,13 +122,14 @@ import { StatisticSortComponent } from './statistic-content/statistic-sort/stati
     StepperComponent,
     StatisticChoiceComponent,
     StatisticTextComponent,
-    SidebarComponent,
     RenderedTextComponent,
     HintComponent,
     StatisticContentComponent,
     HintComponent,
     ContentSortAnswerComponent,
-    StatisticSortComponent
+    StatisticSortComponent,
+    NavBarComponent,
+    InfoBarComponent
   ]
 })
 export class SharedModule {

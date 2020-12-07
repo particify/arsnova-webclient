@@ -407,8 +407,7 @@
   },
   "room": {
     "room-name": "Room name",
-    "preview": "Preview",
-    "sidebar-user-counter": "Number of active participants"
+    "preview": "Preview"
   },
   "statistic": {
     "a11y-message-overview": "You are now on the statistics overview. Press the Enter key to get information about key combinations or call the announcement later with the Escape key.",
@@ -451,5 +450,11 @@
   },
   "utils": {
     "formatting-image-hint": "Please note that images with a large file size can affect loading times."
+  },
+  "sidebar": {
+    "user-counter": "Number of active participants",
+    "comments": "Comments",
+    "group": "Questions",
+    "survey": "Live-Survey"
   }
 }

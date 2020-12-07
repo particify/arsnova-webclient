@@ -15,8 +15,8 @@ import { KeyboardUtils } from '../../../utils/keyboard';
 import { KeyboardKey } from '../../../utils/keyboard/keys';
 import { GlobalStorageService, STORAGE_KEYS } from '../../../services/util/global-storage.service';
 import { AnnounceService } from '../../../services/util/announce.service';
-import { SidebarInfo } from '../../shared/sidebar/sidebar.component';
 import { UserRole } from '../../../models/user-roles.enum';
+import { InfoBarItem } from '../../shared/bars/info-bar/info-bar.component';
 
 @Component({
   selector: 'app-room-moderator-page',
@@ -102,7 +102,7 @@ export class RoomModeratorPageComponent extends RoomPageComponent implements OnI
       }
     }
     this.roomService.getRoomSummaries([room.id]).subscribe(summary => {
-      this.sidebarInfos.push(new SidebarInfo(summary[0].stats.roomUserCount, 'people', 'user-counter'));
+      this.infoBarItems.push(new InfoBarItem('user-counter', 'people', summary[0].stats.roomUserCount));
       this.isLoading = false;
     });
     this.subscribeCommentStream();

@@ -1,6 +1,0 @@
-<div class="sidebar-list" [ngClass]="{'invisible': isLoading}" fxLayout="column">
-  <div *ngFor="let sidebarInfo of sidebarInfos">
-    <mat-icon matBadge="{{sidebarInfo.count}}" matBadgeOverlap="false"
-              matTooltip="{{ 'room.sidebar-' + sidebarInfo.name | translate}}">{{sidebarInfo.icon}}</mat-icon>
-  </div>
-</div>

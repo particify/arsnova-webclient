@@ -1,0 +1,12 @@
+<div class="list nav" fxLayout="column" fxLayoutAlign="center center" (window:scroll)="checkScroll()"
+     [ngClass]="{'notActive': !isActive, 'fixed': scrollExtended}"
+     (mouseenter)="toggleVisibility(true)" (mouseleave)="toggleVisibility(false)">
+  <div class="icon-container">
+    <mat-icon *ngFor="let barItem of barItems; let i = index" (click)="navToUrl(i)" class="clickable"
+              [ngClass]="{'current-url': i === currentRouteIndex}"
+              matTooltip="{{ 'sidebar.' + barItem.name | translate}}">
+      {{barItem.icon}}
+      <div [ngClass]="{'hidden': !barItem.news }" class="badge"></div>
+    </mat-icon>
+  </div>
+</div>
