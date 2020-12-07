@@ -55,7 +55,7 @@ export class RoutingService {
     const role = route.data.requiredRole || '';
     this.fullCurrentRoute = this.location.path();
     this.currentRoute = route.routeConfig.path;
-    this.getBackRoute(this.currentRoute, shortId, role.toString().toLowerCase());
+    this.getBackRoute(this.currentRoute, shortId, role);
   }
 
   getBackRoute(route: string, shortId: string, role: string) {
@@ -67,10 +67,7 @@ export class RoutingService {
     } else if (this.routeExistsInArray(this.loginChildRoutes)) {
       backRoute = this.parentRoute.login;
     } else if (this.routeExistsInArray(this.roomChildRoutes)) {
-      if (role.includes(this.moderator)) {
-        role = this.moderator;
-      }
-      backRoute = role + this.parentRoute.room + shortId;
+      backRoute = this.getRoleString(role) + this.parentRoute.room + shortId;
     }
     this.backRoute = backRoute;
   }
@@ -102,6 +99,15 @@ export class RoutingService {
       return true;
     } else {
       return false;
+    }
+  }
+
+  getRoleString(role: string): string {
+    const lowerCaseRole = role.toLowerCase();
+    if (lowerCaseRole.includes(this.moderator)) {
+      return this.moderator;
+    } else {
+      return lowerCaseRole;
     }
   }
 }
