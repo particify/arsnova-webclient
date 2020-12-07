@@ -11,11 +11,10 @@ import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { HttpClient } from '@angular/common/http';
 import { CdkStepperModule } from '@angular/cdk/stepper';
 import { MatRippleModule } from '@angular/material/core';
-import { ContentParticipantComponent } from './content/content-participant.component';
-import { ContentSlideParticipantComponent } from './content/content-slide-participant/content-slide-participant.component';
 import { TRANSLATION_MODULE_NAME } from '../../translate-module-name-token';
 import { TranslateHttpLoaderFactory } from '../../translate-http-loader-factory';
 import { ExtensionPointModule } from '../../../../projects/extension-point/src/lib/extension-point.module';
+import { ContentParticipantComponent } from './content/content-participant/content-participant.component';
 
 @NgModule({
   imports: [
@@ -39,12 +38,11 @@ import { ExtensionPointModule } from '../../../../projects/extension-point/src/l
     ExtensionPointModule
   ],
   declarations: [
-    ContentParticipantComponent,
     ContentChoiceParticipantComponent,
     ContentTextParticipantComponent,
     RoomParticipantPageComponent,
     ParticipantContentCarouselPageComponent,
-    ContentSlideParticipantComponent
+    ContentParticipantComponent
   ],
   providers: [
     { provide: TRANSLATION_MODULE_NAME, useValue: 'participant' }

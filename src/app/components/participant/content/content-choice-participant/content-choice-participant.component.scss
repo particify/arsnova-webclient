@@ -25,19 +25,8 @@
   margin-bottom: 16px;
 }
 
-p {
-  font-size: 14px;
-  text-align: center;
-  color: var(--primary);
-  margin: 0;
-}
-
 .solution {
   margin: -40px 0 0 -40px;
-}
-
-.text {
-  margin: 20px 0;
 }
 
 .invisible {
@@ -51,20 +40,4 @@ p {
   top: 50%;
   transition: 0.5s;
   transform: scale(1);
-}
-
-.mat-card {
-  margin: 3% 1%;
-}
-
-.toggleSide {
-  background-color: var(--surface);
-  z-index: 1;
-  position: absolute;
-  top: 0;
-  right: 0;
-}
-
-.mat-raised-button {
-  min-width: 100px;
 }

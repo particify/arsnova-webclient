@@ -1,0 +1,44 @@
+.mat-card {
+  margin: 3% 1%;
+}
+
+.disabled {
+  opacity: 0.8;
+  pointer-events: none;
+}
+
+p {
+  font-size: 14px;
+  text-align: center;
+  color: var(--primary);
+  margin: 0;
+}
+
+.text {
+  margin: 20px 0;
+}
+
+.toggleSide {
+  background-color: var(--surface);
+  z-index: 1;
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+.mat-raised-button {
+  min-width: 100px;
+}
+
+.invisible {
+  position: absolute;
+  left: 50%;
+  top: -200px;
+  transform: scale(0);
+}
+
+.visible {
+  top: 50%;
+  transition: 0.5s;
+  transform: scale(1);
+}
