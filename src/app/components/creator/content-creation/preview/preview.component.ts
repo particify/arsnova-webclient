@@ -12,6 +12,7 @@ import { FormattingService, MarkdownFeatureset } from '../../../../services/http
 export class PreviewComponent implements OnInit {
 
   @Input() content: Content;
+  @Input() isEditMode: boolean;
   @Output() flipEvent = new EventEmitter<boolean>();
 
   body: string;

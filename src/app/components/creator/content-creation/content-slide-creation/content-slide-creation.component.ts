@@ -39,4 +39,8 @@ export class ContentSlideCreationComponent extends ContentCreationComponent impl
       null
     );
   }
+
+  initContentForEditing() {
+    this.initContentTextEditBase();
+  }
 }

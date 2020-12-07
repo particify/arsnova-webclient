@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { YesNoDialogComponent } from '../../components/shared/_dialogs/yes-no-dialog/yes-no-dialog.component';
 import { InfoDialogComponent } from '../../components/shared/_dialogs/info-dialog/info-dialog.component';
-import { ContentEditComponent } from '../../components/shared/_dialogs/content-edit/content-edit.component';
 import { ContentGroupCreationComponent } from '../../components/shared/_dialogs/content-group-creation/content-group-creation.component';
 import { ClientAuthentication } from '../../models/client-authentication';
 import { CreateCommentComponent } from '../../components/shared/_dialogs/create-comment/create-comment.component';
@@ -14,7 +13,6 @@ import { StatisticHelpComponent } from '../../components/shared/_dialogs/statist
 // import { UserBonusTokenComponent } from '../../components/shared/_dialogs/user-bonus-token/user-bonus-token.component';
 import { OverlayComponent } from '../../components/home/_dialogs/overlay/overlay.component';
 import { UserActivationComponent } from '../../components/home/_dialogs/user-activation/user-activation.component';
-import { Content } from '../../models/content';
 import { UpdateInfoComponent } from '../../components/shared/_dialogs/update-info/update-info.component';
 import { UserRole } from '../../models/user-roles.enum';
 
@@ -56,13 +54,6 @@ export class DialogService {
         section: section,
         body: body
       }
-    });
-  }
-
-  openContentEditDialog(content: Content): MatDialogRef<ContentEditComponent> {
-    return this.dialog.open(ContentEditComponent, {
-      width: this.size.small,
-      data: content
     });
   }
 

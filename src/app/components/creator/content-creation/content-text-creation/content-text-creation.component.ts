@@ -39,4 +39,8 @@ export class ContentTextCreationComponent extends ContentCreationComponent imple
       null
     );
   }
+
+  initContentForEditing() {
+    this.initContentTextEditBase();
+  }
 }

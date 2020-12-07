@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { ContentChoice } from '../../../../models/content-choice';
-import { AnswerOption } from '../../../../models/answer-option';
 import { ContentType } from '../../../../models/content-type.enum';
 import { ContentService } from '../../../../services/http/content.service';
 import { NotificationService } from '../../../../services/util/notification.service';
@@ -8,7 +7,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { RoomService } from '../../../../services/http/room.service';
 import { GlobalStorageService } from '../../../../services/util/global-storage.service';
 import { ContentGroupService } from '../../../../services/http/content-group.service';
-import { ContentCreationComponent } from '../content-creation/content-creation.component';
+import { ContentCreationComponent, DisplayAnswer } from '../content-creation/content-creation.component';
 
 @Component({
   selector: 'app-content-likert-creator',
@@ -17,7 +16,7 @@ import { ContentCreationComponent } from '../content-creation/content-creation.c
 })
 export class ContentLikertCreationComponent extends ContentCreationComponent implements OnInit {
 
-  likertScales = [
+  answerLabels = [
     'content.strongly-agree',
     'content.agree',
     'content.neither-agree-nor-disagree',
@@ -51,12 +50,14 @@ export class ContentLikertCreationComponent extends ContentCreationComponent imp
       ContentType.SCALE,
       null
     );
-    this.translationService.get(this.likertScales).subscribe(msgs => {
-      for (let i = 0; i < this.likertScales.length; i++) {
-        (this.content as ContentChoice).options.push(new AnswerOption(msgs[this.likertScales[i]], this.newAnswerOptionPoints));
-      }
-      this.fillCorrectAnswers();
-      this.isLoading = false;
-    });
+    this.initTemplateAnswers();
+  }
+
+  initContentForEditing() {
+    const options = this.initContentChoiceEditBase();
+    for (const option of options) {
+      this.displayAnswers.push(new DisplayAnswer(option, option.points > 0));
+    }
+    this.isLoading = false;
   }
 }

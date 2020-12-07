@@ -13,7 +13,6 @@ import { SharedModule } from '../shared/shared.module';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { HttpClient } from '@angular/common/http';
 import { ContentListComponent } from './content-list/content-list.component';
-import { ContentEditComponent } from '../shared/_dialogs/content-edit/content-edit.component';
 import { ContentPresentationComponent } from './content-presentation/content-presentation.component';
 import { ModeratorsComponent } from './settings/moderators/moderators.component';
 import { BonusTokenComponent } from './settings/bonus-token/bonus-token.component';
@@ -64,7 +63,6 @@ import { ExtensionPointModule } from '../../../../projects/extension-point/src/l
     RoomComponent,
     ContentListComponent,
     LooseContentComponent,
-    ContentEditComponent,
     ContentPresentationComponent,
     ModeratorsComponent,
     BonusTokenComponent,
