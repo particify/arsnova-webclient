@@ -393,6 +393,31 @@ div {
   height: auto !important;
 }
 
+.mat-list-base {
+  padding: 0!important;
+}
+
+.mat-list {
+  padding: 0;
+  outline: none;
+  border-radius: 4px;
+}
+
+.mat-list-item {
+  height: auto;
+  outline: none;
+}
+
+.bottom-border {
+  border-bottom: solid 1px var(--border);
+}
+
+.mat-list-item:last-child {
+  .bottom-border {
+    border: none;
+  }
+}
+
 // Buttons
 
 .mat-raised-button[disabled] {

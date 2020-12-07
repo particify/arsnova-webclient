@@ -5,7 +5,6 @@
 }
 
 .mat-list {
-  padding: 0;
   background-color: var(--background);
 }
 
@@ -57,10 +56,6 @@
 .answer-label {
   font-size: medium;
   word-break: break-all;
-}
-
-.answer-without-check {
-  padding: 0 16px;
 }
 
 .answer-form {

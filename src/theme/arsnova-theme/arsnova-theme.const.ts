@@ -29,6 +29,7 @@ export const arsnova = {
 
   '--table-a': '#e0e0e0',
   '--table-b': '#eeeeee',
+  '--border': '#e0e0e0',
 
   '--green': '#43a047',
   '--green-light': '#e8f5e9',
