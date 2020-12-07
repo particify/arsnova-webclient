@@ -36,19 +36,12 @@ table {
   color: var(--on-surface);
   padding-top: 8px;
   padding-bottom: 8px;
+  cursor: pointer;
 }
 
 .mat-toolbar {
   height: 20px;
   background-color: var(--surface);
-}
-
-.clickable {
-  cursor: pointer;
-}
-
-.invisible {
-  pointer-events: none;
 }
 
 .mat-progress-bar {
@@ -63,11 +56,6 @@ table {
   &:nth-child(even) {
     background-color: var(--table-b);
   }
-}
-
-.mat-raised-button {
-  margin-bottom: 20px;
-  margin-left: 5px;
 }
 
 h3 {

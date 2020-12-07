@@ -15,16 +15,23 @@ import { forkJoin } from 'rxjs';
 import { AdvancedSnackBarTypes, NotificationService } from '../../../services/util/notification.service';
 import { DialogService } from '../../../services/util/dialog.service';
 
+export enum StatisticType {
+  CHOICE = 'C',
+  SURVEY = 'S',
+  TEXT = 'T',
+  SLIDE = 'I'
+}
+
 export class ContentStatistic {
   content: Content;
-  contentId: string;
+  type: StatisticType;
   percent: number;
   counts: number;
   abstentions: number;
 
-  constructor(content: Content, contentId: string, percent: number, counts: number, abstentions: number) {
+  constructor(content: Content, type: StatisticType, percent: number, counts: number, abstentions: number) {
     this.content = content;
-    this.contentId = contentId;
+    this.type = type;
     this.percent = percent;
     this.counts = counts;
     this.abstentions = abstentions;
@@ -40,17 +47,14 @@ export class ContentStatistic {
 export class StatisticListComponent implements OnInit {
 
   @Input() contentGroup: ContentGroup;
-  contents: Content[] = [];
   displayedColumns: string[] = [];
   status = {
     good: 85,
     okay: 50,
     zero: 0,
-    likert: -1,
-    empty: -2,
-    text: -3,
-    slide: -4
+    empty: -1
   };
+  types: typeof StatisticType = StatisticType;
   dataSource: ContentStatistic[];
   total = this.status.empty;
   totalP = 0;
@@ -58,6 +62,8 @@ export class StatisticListComponent implements OnInit {
   shortId: number;
   deviceType: string;
   isLoading = true;
+  statisticsAdded;
+  statsLength: number;
 
   constructor(
     private contentService: ContentService,
@@ -95,66 +101,71 @@ export class StatisticListComponent implements OnInit {
   }
 
   goToStats(id: string) {
-    const contentIndex = this.contents.map(function (content) {
-      return content.id;
-    }).indexOf(id);
+    const contentIndex = this.dataSource.map(d => d.content.id).indexOf(id);
     this.router.navigate([`/creator/room/${this.shortId}/group/${this.contentGroup.name}/statistics/${contentIndex + 1}`]);
     this.globalStorageService.setItem(STORAGE_KEYS.LAST_GROUP, this.contentGroup.name);
   }
 
   getData(contents: Content[]) {
-    this.contents = contents;
-    const length = this.contents.length;
-    let percent;
-    this.dataSource = new Array<ContentStatistic>(length);
-    for (let i = 0; i < length; i++) {
-      this.dataSource[i] = new ContentStatistic(null, null, 0, 0, 0);
-      this.dataSource[i].content = this.contents[i];
-      if (this.contents[i].format === ContentType.CHOICE || this.contents[i].format === ContentType.BINARY
-        || this.contents[i].format === ContentType.SCALE) {
-        this.contentService.getAnswer(this.contentGroup.roomId, this.contents[i].id).subscribe(answer => {
-          if (this.contents[i].format === ContentType.CHOICE) {
-            percent = this.evaluateMultiple((this.contents[i] as ContentChoice).options, answer.roundStatistics[0].combinatedCounts);
-            this.dataSource[i].counts = this.getMultipleCounts(answer.roundStatistics[0].combinatedCounts);
-          } else {
-            if (this.contents[i].format === ContentType.BINARY) {
-              percent = this.evaluateSingle((this.contents[i] as ContentChoice).options, answer.roundStatistics[0].independentCounts);
+    this.statisticsAdded = 0;
+    this.statsLength = contents.length;
+    this.dataSource = new Array<ContentStatistic>(this.statsLength);
+    for (let i = 0; i < this.statsLength; i++) {
+      const content = contents[i];
+      let percent = this.status.empty;
+      let count = 0;
+      let abstentions = 0;
+      let type: StatisticType;
+      switch (content.format) {
+        case ContentType.TEXT:
+          this.contentAnswerService.getAnswers(this.contentGroup.roomId, content.id).subscribe(answers => {
+            abstentions = answers.filter(a => a.body === undefined).length;
+            count = answers.length - abstentions;
+            type = StatisticType.TEXT;
+            this.addNewStatistic(i, new ContentStatistic(content, type, percent, count, abstentions));
+          });
+          break;
+        case ContentType.SLIDE:
+          abstentions = this.status.empty;
+          count = this.status.empty;
+          type = StatisticType.SLIDE;
+          this.addNewStatistic(i, new ContentStatistic(content, type, percent, count, abstentions));
+          break;
+        default:
+          this.contentService.getAnswer(this.contentGroup.roomId, content.id).subscribe(answer => {
+            if (content.format === ContentType.CHOICE) {
+              percent = this.evaluateMultiple((content as ContentChoice).options, answer.roundStatistics[0].combinatedCounts);
+              count = this.getMultipleCounts(answer.roundStatistics[0].combinatedCounts);
             } else {
-              percent = this.status.likert;
+              if (content.format === ContentType.BINARY) {
+                percent = this.evaluateSingle((content as ContentChoice).options, answer.roundStatistics[0].independentCounts);
+              }
+              count = this.getSingleCounts(answer.roundStatistics[0].independentCounts);
             }
-            this.dataSource[i].counts = this.getSingleCounts(answer.roundStatistics[0].independentCounts);
-          }
-          this.dataSource[i].abstentions = answer.roundStatistics[0].abstentionCount;
-          this.dataSource[i].percent = percent;
-          this.dataSource[i].contentId = this.contents[i].id;
-          if (percent > this.status.likert) {
-            this.totalP += percent;
-            this.total = this.totalP / this.contentCounter;
-          } else if (this.total < 0) {
-            this.total = this.status.empty;
-          }
-        });
-      } else if (this.contents[i].format === ContentType.TEXT) {
-        this.contentAnswerService.getAnswers(this.contentGroup.roomId, this.contents[i].id).subscribe(answers => {
-          let count = 0;
-          for (const answer of answers) {
-            if (answer.body === undefined) {
-              count++;
+            abstentions = answer.roundStatistics[0].abstentionCount;
+            if (percent > this.status.empty) {
+              type = StatisticType.CHOICE;
+              this.totalP += percent;
+              this.total = this.totalP / this.contentCounter;
+            } else {
+              type = StatisticType.SURVEY;
             }
-          }
-          this.dataSource[i].abstentions = count;
-          this.dataSource[i].counts = answers.length - count;
-          this.dataSource[i].percent = this.status.text;
-          this.dataSource[i].contentId = this.contents[i].id;
-        });
-      } else if (this.contents[i].format === ContentType.SLIDE) {
-        this.dataSource[i].abstentions = this.status.slide;
-        this.dataSource[i].counts = this.status.slide;
-        this.dataSource[i].percent = this.status.slide;
-        this.dataSource[i].contentId = this.contents[i].id;
+            this.addNewStatistic(i, new ContentStatistic(content, type, percent, count, abstentions));
+          });
       }
     }
-    this.isLoading = false;
+  }
+
+  addNewStatistic(index: number, stats: ContentStatistic) {
+    this.dataSource[index] = stats;
+    this.checkIfLoadingFinished();
+  }
+
+  checkIfLoadingFinished() {
+    this.statisticsAdded++;
+    if (this.statisticsAdded === this.statsLength) {
+      this.isLoading = false;
+    }
   }
 
   getSingleCounts(answers: number[]): number {
@@ -177,11 +188,13 @@ export class StatisticListComponent implements OnInit {
     return total;
   }
 
+  checkIfSurvey(options: AnswerOption[]): boolean {
+    return Math.max.apply(Math, options.map(o => o.points)) > 0;
+  }
+
   evaluateSingle(options: AnswerOption[], indCounts: number[]): number {
-    const maxPoints = Math.max.apply(Math, options.map(function (option) {
-      return option.points;
-    }));
-    if (maxPoints > 0) {
+
+    if (this.checkIfSurvey(options)) {
       let correctCounts = 0;
       let totalCounts = 0;
       const length = options.length;
@@ -206,40 +219,39 @@ export class StatisticListComponent implements OnInit {
       }
       return res;
     } else {
-      return this.status.likert;
+      return this.status.empty;
     }
   }
 
   evaluateMultiple(options: AnswerOption[], combCounts: Combination[]): number {
-    let combLength;
-    if (combCounts) {
-      combLength = combCounts.length;
+    if (this.checkIfSurvey(options)) {
+      const combLength = combCounts.length;
+      let correctCounts = 0;
+      let totalCounts = 0;
+      const optionsLength = options.length;
+      const correctIndexes = new Array<number>();
+      let res: number;
+      let cic = 0;
+      for (let i = 0; i < optionsLength; i++) {
+        if (options[i].points > 0) {
+          correctIndexes[cic] = i;
+          cic++;
+        }
+      }
+      for (let i = 0; i < combLength; i++) {
+        if (combCounts[i].selectedChoiceIndexes.length === correctIndexes.length) {
+          if (combCounts[i].selectedChoiceIndexes.toString() === correctIndexes.toString()) {
+            correctCounts += combCounts[i].count;
+          }
+        }
+        totalCounts += combCounts[i].count;
+      }
+      res = ((correctCounts / totalCounts) * 100);
+      this.contentCounter++;
+      return res;
     } else {
       return this.status.empty;
     }
-    let correctCounts = 0;
-    let totalCounts = 0;
-    const optionsLength = options.length;
-    const correctIndexes = new Array<number>();
-    let res: number;
-    let cic = 0;
-    for (let i = 0; i < optionsLength; i++) {
-      if (options[i].points > 0) {
-        correctIndexes[cic] = i;
-        cic++;
-      }
-    }
-    for (let i = 0; i < combLength; i++) {
-      if (combCounts[i].selectedChoiceIndexes.length === correctIndexes.length) {
-        if (combCounts[i].selectedChoiceIndexes.toString() === correctIndexes.toString()) {
-          correctCounts += combCounts[i].count;
-        }
-      }
-      totalCounts += combCounts[i].count;
-    }
-    res = ((correctCounts / totalCounts) * 100);
-    this.contentCounter++;
-    return res;
   }
 
   public showDeleteAnswerDialog(): void {
@@ -262,8 +274,8 @@ export class StatisticListComponent implements OnInit {
 
   deleteAllAnswers() {
     const observableBatch = [];
-    for (const c of this.contents) {
-      observableBatch.push(this.contentService.deleteAnswers(this.contentGroup.roomId, c.id));
+    for (const data of this.dataSource) {
+      observableBatch.push(this.contentService.deleteAnswers(this.contentGroup.roomId, data.content.id));
     }
     this.resetAllAnswers();
     forkJoin(observableBatch).subscribe(() => {
