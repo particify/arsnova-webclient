@@ -1,4 +1,4 @@
-import { Component, ElementRef, HostListener, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
+import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 import { Content } from '../../../models/content';
 import { ContentService } from '../../../services/http/content.service';
 import { RoomService } from '../../../services/http/room.service';
@@ -188,9 +188,9 @@ export class GroupContentComponent extends ContentListComponent implements OnIni
         this.translateService.get('content.updated-sorting').subscribe(msg => {
           this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.SUCCESS);
         });
+        this.leaveSortingMode();
       });
     }
-    this.leaveSortingMode();
   }
 
   lockContents() {
@@ -255,4 +255,11 @@ export class GroupContentComponent extends ContentListComponent implements OnIni
     });
   }
 
+  navigateToContentStats(content: Content) {
+    const index = this.contents.filter(c => this.contentTypes.indexOf(c.format) > -1).
+    map(co => co.id).indexOf(content.id);
+    if (index > -1) {
+      this.router.navigate([`/creator/room/${this.room.shortId}/group/${this.contentGroup.name}/statistics/${index + 1}`]);
+    }
+  }
 }
