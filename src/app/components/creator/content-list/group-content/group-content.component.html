@@ -54,10 +54,15 @@
       <mat-card-content fxLayout="column" fxLayoutGap="16px">
         <app-loading-indicator *ngIf="isLoading" [size]="50"></app-loading-indicator>
         <div *ngIf="!isLoading" fxLayout="row" fxLayoutAlign="end center">
-          <button *ngIf="!isInSortingMode" mat-icon-button class="editButtons"
+          <button *ngIf="!isInSortingMode && deviceWidth <= 500" mat-icon-button class="editButtons"
                   (click)="goInSortingMode()" id="edit-group-sort"
                   matTooltip="{{ 'content.sort-content-group' | translate}}" aria-labelledby="edit-content-group-sort">
-            <mat-icon>list</mat-icon>
+            <mat-icon>swap_vert</mat-icon>
+          </button>
+          <button mat-button *ngIf="!isInSortingMode && deviceWidth > 500" (click)="goInSortingMode()"
+                  aria-labelledby="edit-content-group-sort">
+            <mat-icon>swap_vert</mat-icon>
+            {{ 'content.sort-content-group' | translate}}
           </button>
           <button *ngIf="isInSortingMode" mat-raised-button class="abort button-abort"
                   (click)="leaveSortingMode()" (keyup.enter)="leaveTitleEditMode()" aria-labelledby="discard-changes">
@@ -86,8 +91,9 @@
             {{ 'content.a11y-content-list-contents' | translate: { count: contents.length } }}</div>
           <mat-list *ngIf="!isInSortingMode">
               <mat-list-item *ngFor="let content of contents; index as i" fxLayout="column" fxLayoutAlign="center"
-                             (click)="navigateToContentStats(content)" [ngClass]="{'not-supported': contentTypes.indexOf(content.format) === -1}">
-              <div class="bottom-border" fxLayout="row" fxLayoutAlign="space-between" fxFill
+                             class="bottom-border" (click)="navigateToContentStats(content)"
+                             [ngClass]="{'not-supported': contentTypes.indexOf(content.format) === -1}">
+              <div fxLayout="row" fxLayoutAlign="space-between" fxFill
                     attr.aria-label="{{ 'content.a11y-selected-content' | translate: { name: content.body } }}">
                 <p class="ellipsis">
                   {{ content.body }}
@@ -162,11 +168,11 @@
           </mat-list>
           <div *ngIf="isInSortingMode">
             <mat-list cdkDropList [cdkDropListData]="copiedContents" (cdkDropListDropped)="drop($event)">
-              <mat-list-item class="content-box" fxLayout="column" fxLayoutAlign="center"
+              <mat-list-item class="content-box bottom-border" fxLayout="column" fxLayoutAlign="center"
                              *ngFor="let content of copiedContents" cdkDrag>
-                <div class="bottom-border" fxLayout="row" fxLayoutAlign="space-between center" fxFill>
-                  <p>{{content.body.length > 80 ? content.body.substr(0, 80) + '…' : content.body}}</p>
-                  <mat-icon>dehaze</mat-icon>
+                <div fxLayout="row" fxLayoutAlign="space-between center" fxFill>
+                  <p class="ellipsis">{{content.body}}</p>
+                  <mat-icon>drag_handle</mat-icon>
                 </div>
               </mat-list-item>
             </mat-list>

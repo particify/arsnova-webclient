@@ -7,13 +7,12 @@
 }
 
 .mat-list {
-  margin: -16px;
   background-color: var(--surface);
 }
 
 .container {
   height: 100%;
-  width: 100%;
+  width: calc(100% - 40px);
 }
 
 .inner {
@@ -34,10 +33,6 @@
   }
 }
 
-.room-name {
-  word-break: break-all;
-}
-
 .short-id {
   margin: 0 1em;
 }
@@ -53,7 +48,7 @@
 
 @media (max-width: 500px) {
   .rooms-from-guest {
-    .role, .short-id {
+    .role, .short-id{
       display: none;
     }
   }
