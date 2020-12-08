@@ -16,26 +16,21 @@ import { ContentGroupService } from '../../../services/http/content-group.servic
 import { AnnounceService } from '../../../services/util/announce.service';
 
 @Component({
-  selector: 'app-content-list',
-  templateUrl: './content-list.component.html',
-  styleUrls: ['./content-list.component.scss']
+  template: ''
 })
 
-
-export class ContentListComponent implements OnInit {
+export abstract class ContentListBaseComponent implements OnInit {
 
   protected contents: Content[];
   contentTypes: string[] = Object.values(ContentType);
   room: Room;
   isLoading = true;
-  labelMaxLength: number;
-  labels: string[] = [];
   deviceWidth = innerWidth;
   protected contentGroup: ContentGroup;
   contentGroups: string[] = [];
   currentGroupIndex: number;
 
-  constructor(
+  protected constructor(
     protected contentService: ContentService,
     protected roomService: RoomService,
     protected route: ActivatedRoute,
@@ -55,7 +50,16 @@ export class ContentListComponent implements OnInit {
   }
 
   initContentList(contentList: Content[]) {
+    this.contents = contentList;
+    this.setSettings();
+    this.getGroups();
+    this.isLoading = false;
+    setTimeout(() => {
+      document.getElementById('message-button').focus();
+    }, 500);
   }
+
+  setSettings() {}
 
   getGroups(): void {
     this.contentGroups = this.globalStorageService.getItem(STORAGE_KEYS.CONTENT_GROUPS);
@@ -81,7 +85,7 @@ export class ContentListComponent implements OnInit {
 
   deleteContent(delContent: Content) {
     const index = this.findIndexOfId(delContent.id);
-    const dialogRef = this.dialogService.openDeleteDialog('really-delete-content', this.labels[index]);
+    const dialogRef = this.dialogService.openDeleteDialog('really-delete-content', this.contents[index].body);
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.updateContentChanges(index, result);
@@ -119,7 +123,6 @@ export class ContentListComponent implements OnInit {
 
   removeContentFromList(index: number) {
     this.contents.splice(index, 1);
-    this.labels.splice(index, 1);
     if (this.contents.length === 0) {
       this.globalStorageService.setItem(STORAGE_KEYS.LAST_GROUP, this.contentGroups[0]);
       this.location.back();

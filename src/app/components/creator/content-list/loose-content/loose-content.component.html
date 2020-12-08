@@ -26,11 +26,13 @@
         <div *ngIf="!isLoading">
           <mat-list>
             <mat-list-item *ngFor="let content of contents; index as i"
-                           attr.aria-label="{{ 'content.a11y-selected-content' | translate: { name: labels[i] } }}">
+                           attr.aria-label="{{ 'content.a11y-selected-content' | translate: { name: content.body } }}">
               <div class="bottom-border" fxLayout="row" fxLayoutAlign="space-between center" fxFill>
                 <mat-checkbox *ngIf="creationMode" (click)="$event.stopPropagation()" [(ngModel)]="creationSelection[i]">
                 </mat-checkbox>
-                <p>{{ labels[i] }}</p>
+                <p class="ellipsis">
+                  {{ content.body }}
+                </p>
                 <button mat-icon-button (keyup.enter)="menuTrigger.openMenu()" #menuTrigger="matMenuTrigger"
                         [matMenuTriggerFor]="moreActions" (click)="$event.stopPropagation()"
                         class="moreButton" matTooltip="{{ 'content.more-options' | translate}}">

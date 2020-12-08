@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { ContentListComponent } from '../../../creator/content-list/content-list.component';
+import { ContentListBaseComponent } from '../../../creator/content-list/content-list-base.component';
 import { AdvancedSnackBarTypes, NotificationService } from '../../../../services/util/notification.service';
 import { TranslateService } from '@ngx-translate/core';
 import { ContentGroupService } from '../../../../services/http/content-group.service';
@@ -15,7 +15,7 @@ export class ContentGroupCreationComponent implements OnInit {
   name = '';
 
   constructor(
-    public dialogRef: MatDialogRef<ContentListComponent>,
+    public dialogRef: MatDialogRef<ContentListBaseComponent>,
     public dialog: MatDialog,
     private notificationService: NotificationService,
     private translateService: TranslateService,
