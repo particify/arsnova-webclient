@@ -261,7 +261,6 @@
     "format-sort-description": "Die Teilnehmenden könnnen die Reihenfolge der Antworten wählen.",
     "multiple-answers-allowed": "Mehrfachauswahl für Antworten erlauben",
     "no-correct-answer": "Keine richtigen Antworten festlegen",
-    "no-correct-sort": "Keine richtige Sortierung festlegen",
     "format-not-supported": "Dieses Format wird derzeit nicht unterstützt.",
     "abstentions-allowed": "Enthaltungen erlauben"
   },
@@ -440,7 +439,8 @@
     "hide-chart": "Verstecke das Diagramm",
     "no-contents": "Es sind keine Fragen vorhanden.",
     "select-content-group": "Sammlung auswählen",
-    "answer": "Antwort"
+    "answer": "Antwort",
+    "other-combinations": "Andere"
   },
   "dialog": {
     "sure": "Bist du sicher?",

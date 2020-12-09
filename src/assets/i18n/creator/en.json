@@ -261,7 +261,6 @@
     "format-sort-description": "Participants can answer the question by ordering the answers.",
     "multiple-answers-allowed": "Allow to select multiple answers",
     "no-correct-answer": "Do not set correct answers",
-    "no-correct-sort": "Do not set correct sorting",
     "format-not-supported": "This format is currently not supported.",
     "abstentions-allowed": "Allow abstentions"
   },
@@ -440,7 +439,8 @@
     "hide-chart": "Hide chart",
     "no-contents": "There are no questions.",
     "select-content-group": "Select collection",
-    "answer": "Answer"
+    "answer": "Answer",
+    "other-combinations": "Other"
   },
   "dialog": {
     "sure": "Are you sure?",

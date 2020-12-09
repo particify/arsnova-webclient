@@ -71,7 +71,7 @@ export class StatisticContentComponent implements OnInit {
     if (this.format === ContentType.BINARY || this.format === ContentType.CHOICE) {
       maxPoints = Math.max.apply(Math, (this.content as ContentChoice).options.map(function(option) { return option.points; }));
     }
-    if (this.format === ContentType.TEXT || this.format === ContentType.SCALE || maxPoints <= 0) {
+    if ((this.format === ContentType.TEXT || this.format === ContentType.SCALE || maxPoints <= 0) && this.format !== ContentType.SORT) {
       this.survey = true;
     }
   }

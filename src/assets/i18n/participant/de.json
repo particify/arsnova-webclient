@@ -181,6 +181,7 @@
     "show-chart": "Zeige die Statistiken in einem Diagramm",
     "show-answers": "Zeige die Antworten",
     "hide-chart": "Verstecke das Diagramm",
-    "answer": "Antwort"
+    "answer": "Antwort",
+    "other-combinations": "Andere"
   }
 }

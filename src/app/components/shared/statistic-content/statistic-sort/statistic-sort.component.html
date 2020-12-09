@@ -3,4 +3,9 @@
   <div class="chart-container" *ngIf="!isLoading" [ngClass]="{ 'invisible': !answersVisible }">
     <canvas id="{{ chartId }}"></canvas>
   </div>
+  <mat-list *ngIf="!isLoading">
+    <mat-list-item *ngFor="let answer of answers; let i = index" [ngClass]="{ 'correct': showCorrect }">
+      <p>{{i + 1}}: {{answer}}</p>
+    </mat-list-item>
+  </mat-list>
 </div>

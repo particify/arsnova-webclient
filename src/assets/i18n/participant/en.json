@@ -181,6 +181,7 @@
     "show-chart": "Shows statistics with a chart",
     "show-answers": "Show answers",
     "hide-chart": "Hide chart",
-    "answer": "Answer"
+    "answer": "Answer",
+    "other-combinations": "Other"
   }
 }
