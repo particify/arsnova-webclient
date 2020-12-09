@@ -34,10 +34,12 @@
                         {room: room.summary.name, id: room.summary.shortId, role: roles.get(room.membership.primaryRole)} }}"
                  (click)="setCurrentRoom(room.summary.shortId, room.membership.primaryRole)"
             (keyup.enter)="setCurrentRoom(room.summary.shortId, room.membership.primaryRole)">
-              <p class="ellipsis" matBadgeOverlap="false"
-                 matBadge="{{ room.summary.stats.ackCommentCount > 0 ? room.summary.stats.ackCommentCount : null }}">
+              <p class="ellipsis">
                 {{room.summary.name}}</p>
               <div fxLayout="row" fxLayoutAlign="center center">
+                <div class="badge" fxLayoutAlign="center center" *ngIf="room.summary.stats.ackCommentCount > 0">
+                  <span>{{ room.summary.stats.ackCommentCount }}</span>
+                </div>
                 <p class="short-id">{{room.summary.shortId}}</p>
                 <mat-icon mat-list-icon *ngSwitchCase="creatorRole"
                           matTooltip="{{ 'room-list.creator-role' | translate }}"
