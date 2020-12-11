@@ -136,6 +136,9 @@ export class StatisticListComponent implements OnInit {
             if (content.format === ContentType.CHOICE) {
               percent = this.evaluateMultiple((content as ContentChoice).options, answer.roundStatistics[0].combinatedCounts);
               count = this.getMultipleCounts(answer.roundStatistics[0].combinatedCounts);
+            } else if (content.format === ContentType.SORT) {
+              count = this.getMultipleCounts(answer.roundStatistics[0].combinatedCounts);
+              percent = this.evaluateSort((content as ContentChoice).options, answer.roundStatistics[0].combinatedCounts, count);
             } else {
               if (content.format === ContentType.BINARY) {
                 percent = this.evaluateSingle((content as ContentChoice).options, answer.roundStatistics[0].independentCounts);
@@ -249,6 +252,25 @@ export class StatisticListComponent implements OnInit {
       res = ((correctCounts / totalCounts) * 100);
       this.contentCounter++;
       return res;
+    } else {
+      return this.status.empty;
+    }
+  }
+
+  evaluateSort(options: AnswerOption[], combCounts: Combination[], total: number): number {
+    if (combCounts) {
+      const correctIndexes = options.map(o => o.label).map(l => options.map(o => o.label).indexOf(l));
+      const answeredCorrect = combCounts.filter(c => c.selectedChoiceIndexes.toString() === correctIndexes.toString());
+      let correctCount = 0;
+      if (answeredCorrect.length > 0) {
+        correctCount = answeredCorrect[0].count;
+      }
+      this.contentCounter++;
+      if (correctCount) {
+        return (correctCount / total) * 100;
+      } else {
+        return correctCount;
+      }
     } else {
       return this.status.empty;
     }
