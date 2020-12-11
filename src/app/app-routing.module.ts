@@ -10,8 +10,20 @@ import { AuthenticationGuard } from './guards/authentication.guard';
 import { RegisterComponent } from './components/home/register/register.component';
 import { PasswordResetComponent } from './components/home/password-reset/password-reset.component';
 import { RequestPasswordResetComponent } from './components/home/request-password-reset/request-password-reset.component';
+import { HeaderComponent } from './components/shared/header/header.component';
+import { FooterComponent } from './components/shared/footer/footer.component';
 
 const routes: Routes = [
+  {
+    path: '',
+    outlet: 'header',
+    component: HeaderComponent
+  },
+  {
+    path: '',
+    outlet: 'footer',
+    component: FooterComponent
+  },
   {
     path: '',
     children: [
