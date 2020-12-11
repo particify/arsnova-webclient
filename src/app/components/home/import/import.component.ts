@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { AuthenticationService } from '../../../services/http/authentication.service';
 import { TranslateService } from '@ngx-translate/core';
 import { AdvancedSnackBarTypes, NotificationService } from '../../../services/util/notification.service';
-import { UserRole } from '../../../models/user-roles.enum';
+import { RoutingService } from '../../../services/util/routing.service';
 
 @Component({
   selector: 'app-import',
@@ -21,7 +21,8 @@ export class ImportComponent implements OnInit, AfterContentInit {
               private router: Router,
               private authenticationService: AuthenticationService,
               private translateService: TranslateService,
-              private notificationService: NotificationService) {
+              private notificationService: NotificationService,
+              private routingService: RoutingService) {
   }
 
   ngAfterContentInit(): void {
@@ -35,7 +36,7 @@ export class ImportComponent implements OnInit, AfterContentInit {
   }
 
   navToLogin() {
-    this.authenticationService.setRedirect('import');
+    this.routingService.setRedirect();
     this.router.navigate(['login']);
   }
 

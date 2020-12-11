@@ -31,6 +31,8 @@ export class RoutingService {
   moderator = 'moderator';
   currentRoute: string;
   backRoute: string;
+  fullCurrentRoute: string;
+  redirectRoute: string;
 
   constructor(
     private router: Router,
@@ -40,14 +42,15 @@ export class RoutingService {
   subscribeActivatedRoute() {
     this.router.events.pipe(filter(event => (event instanceof ActivationEnd))).subscribe((activationEndEvent: ActivationEnd) => {
       if (activationEndEvent.snapshot.component) {
-        this.createBackRoute(activationEndEvent.snapshot);
+        this.getRoutes(activationEndEvent.snapshot);
       }
     });
   }
 
-  createBackRoute(route: ActivatedRouteSnapshot) {
+  getRoutes(route: ActivatedRouteSnapshot) {
     const shortId = route.paramMap.get('shortId') || '';
     const role = route.data.requiredRole || '';
+    this.fullCurrentRoute = this.location.path();
     this.currentRoute = route.routeConfig.path;
     this.getBackRoute(this.currentRoute, shortId, role.toString().toLowerCase());
   }
@@ -78,6 +81,24 @@ export class RoutingService {
       this.router.navigate([this.backRoute]);
     } else {
       this.location.back();
+    }
+  }
+
+  navigate(route: string) {
+    this.router.navigate([route]);
+  }
+
+  setRedirect() {
+    this.redirectRoute = this.fullCurrentRoute;
+  }
+
+  redirect(): boolean {
+    if (this.redirectRoute) {
+      this.navigate(this.redirectRoute);
+      this.redirectRoute = null;
+      return true;
+    } else {
+      return false;
     }
   }
 }
