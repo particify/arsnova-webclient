@@ -7,6 +7,7 @@ import { AdvancedSnackBarTypes, NotificationService } from '../services/util/not
 import { TranslateService } from '@ngx-translate/core';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
+import { RoutingService } from '../services/util/routing.service';
 
 const API_LOGIN_URI_PATTERN = /^\/api\/auth\/login\/[^?].*/;
 
@@ -18,7 +19,8 @@ export class AuthenticationInterceptor implements HttpInterceptor {
       private authenticationService: AuthenticationService,
       private router: Router,
       private notificationService: NotificationService,
-      private translateService: TranslateService
+      private translateService: TranslateService,
+      private routingService: RoutingService
   ) {
     authenticationService.getAuthenticationChanges().subscribe(auth => this.token = auth?.token);
   }
@@ -37,6 +39,7 @@ export class AuthenticationInterceptor implements HttpInterceptor {
       }, (err: any) => {
         if (err instanceof HttpErrorResponse && err.status === 401 && !tokenOverride) {
           this.authenticationService.logout();
+          this.routingService.setRedirect();
           this.router.navigate(['login']);
           this.translateService.get('login.authentication-expired').subscribe(msg => {
             this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
