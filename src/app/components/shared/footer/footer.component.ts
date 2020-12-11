@@ -1,13 +1,12 @@
 import { LanguageService } from '../../../services/util/language.service';
 import { Component, OnInit } from '@angular/core';
 import { NotificationService } from '../../../services/util/notification.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { AuthenticationService } from '../../../services/http/authentication.service';
 import { Room } from '../../../models/room';
 import { ThemeService } from '../../../../theme/theme.service';
 import { DialogService } from '../../../services/util/dialog.service';
-import { ApiConfigService } from '../../../services/http/api-config.service';
 import { GlobalStorageService } from '../../../services/util/global-storage.service';
 import { ConsentService } from '../../../services/util/consent.service';
 
@@ -33,9 +32,9 @@ export class FooterComponent implements OnInit {
     public authenticationService: AuthenticationService,
     private themeService: ThemeService,
     private dialogService: DialogService,
-    private apiConfigService: ApiConfigService,
     private globalStorageService: GlobalStorageService,
-    private consentService: ConsentService
+    private consentService: ConsentService,
+    private route: ActivatedRoute
   ) {
     langService.langEmitter.subscribe(lang => translateService.use(lang));
   }
@@ -45,10 +44,10 @@ export class FooterComponent implements OnInit {
       this.consentService.openDialog();
     }
 
-    this.apiConfigService.getApiConfig$().subscribe(config => {
-      this.privacyUrl = config.ui.links?.privacy?.url;
-      this.imprintUrl = config.ui.links?.imprint?.url ;
-      this.feedbackUrl = config.ui.links?.feedback?.url;
+    this.route.data.subscribe(data => {
+      this.privacyUrl = data.apiConfig.ui.links?.privacy?.url;
+      this.imprintUrl = data.apiConfig.ui.links?.imprint?.url ;
+      this.feedbackUrl = data.apiConfig.ui.links?.feedback?.url;
     });
   }
 

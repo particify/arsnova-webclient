@@ -15,7 +15,7 @@ import { ClientAuthentication } from '../../../../models/client-authentication';
 import { HINT_TYPES } from '@arsnova/app/components/shared/hint/hint.component';
 import { AuthProvider } from '../../../../models/auth-provider';
 import { ApiConfigService } from '../../../../services/http/api-config.service';
-import { AuthenticationProviderRole, AuthenticationProviderType } from '../../../../models/api-config';
+import { AuthenticationProvider, AuthenticationProviderRole, AuthenticationProviderType } from '../../../../models/api-config';
 
 @Component({
   selector: 'app-room-create',
@@ -29,6 +29,7 @@ export class RoomCreateComponent implements OnInit {
   roomId: string;
   auth: ClientAuthentication;
   warningType = HINT_TYPES.WARNING;
+  anonymousProvider: AuthenticationProvider;
 
   constructor(
     private roomService: RoomService,
@@ -47,6 +48,9 @@ export class RoomCreateComponent implements OnInit {
   ngOnInit() {
     this.translateService.use(this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE));
     this.authenticationService.getCurrentAuthentication().subscribe(auth => this.handleAuth(auth));
+    this.apiConfigService.getApiConfig$().subscribe(config =>
+        this.anonymousProvider = config.authenticationProviders
+            .filter((p) => p.type === AuthenticationProviderType.ANONYMOUS)[0]);
   }
 
   resetEmptyInputs(): void {
@@ -62,9 +66,7 @@ export class RoomCreateComponent implements OnInit {
   }
 
   canCreateRoom(auth: ClientAuthentication): boolean {
-    const anonymousProvider = this.apiConfigService.getAuthProviders()
-        .filter((p) => p.type === AuthenticationProviderType.ANONYMOUS)[0];
-    return (anonymousProvider && anonymousProvider.allowedRoles.includes(AuthenticationProviderRole.MODERATOR))
+    return (this.anonymousProvider && this.anonymousProvider.allowedRoles.includes(AuthenticationProviderRole.MODERATOR))
         || (auth && auth.authProvider !== AuthProvider.ARSNOVA_GUEST);
   }
 

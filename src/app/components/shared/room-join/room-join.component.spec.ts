@@ -4,15 +4,13 @@ import { RoomJoinComponent } from './room-join.component';
 import { Injectable, Component, Input } from '@angular/core';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { RoomService } from '../../../services/http/room.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { NotificationService } from '../../../services/util/notification.service';
 import { AuthenticationService } from '../../../services/http/authentication.service';
 import { ModeratorService } from '../../../services/http/moderator.service';
 import { EventService } from '../../../services/util/event.service';
-import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
+import { BehaviorSubject, Observable, of } from 'rxjs';
 import { GlobalStorageService } from '../../../services/util/global-storage.service';
-import { ApiConfigService } from '../../../services/http/api-config.service';
-import { HttpClient } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 const TRANSLATION_DE = require('../../../../assets/i18n/home/de.json');
@@ -21,6 +19,16 @@ const TRANSLATION_EN = require('../../../../assets/i18n/home/en.json');
 const TRANSLATIONS = {
   DE: TRANSLATION_DE,
   EN: TRANSLATION_EN
+};
+
+const ROUTE_STUB = {
+  data: of({
+    apiConfig: {
+      ui: {
+        demo: '11223344'
+      }
+    }
+  })
 };
 
 class JsonTranslationLoader implements TranslateLoader {
@@ -38,34 +46,6 @@ class JsonTranslationLoader implements TranslateLoader {
 @Injectable()
 class MockRoomService {
 
-}
-
-@Injectable()
-class MockApiConfigService extends ApiConfigService {
-  private mockApiConfig = {
-    ui: {
-      demo: '11223344'
-    }
-  };
-
-  private apiConfig = new Subject<any>();
-
-  constructor(httpClient: HttpClient, protected eventService: EventService) {
-    super(
-      httpClient,
-      eventService,
-      jasmine.createSpyObj('TranslateServiceSpy', ['get']),
-      jasmine.createSpyObj('NotificationServiceSpy', ['showAdvanced'])
-    );
-  }
-
-  public getApiConfig$() {
-    return this.apiConfig.asObservable();
-  }
-
-  public mockApiConfigEvent() {
-    this.apiConfig.next(this.mockApiConfig);
-  }
 }
 
 @Injectable()
@@ -180,8 +160,8 @@ describe('RoomJoinComponent', () => {
           useClass: MockGlobalStorageService
         },
         {
-          provide: ApiConfigService,
-          useClass: MockApiConfigService
+          provide: ActivatedRoute,
+          useValue: ROUTE_STUB
         }
       ],
       imports: [

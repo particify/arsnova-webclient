@@ -7,6 +7,7 @@ import { ApiConfigService } from './services/http/api-config.service';
 import { TrackingService } from './services/util/tracking.service';
 import { DialogService } from './services/util/dialog.service';
 import { GlobalStorageService, STORAGE_KEYS } from './services/util/global-storage.service';
+import { ConsentService } from './services/util/consent.service';
 
 @Component({
   selector: 'app-root',
@@ -23,6 +24,7 @@ export class AppComponent implements OnInit {
               private trackingService: TrackingService,
               private dialogService: DialogService,
               private globalStorageService: GlobalStorageService,
+              private consentService: ConsentService,
               private window: Window) {
     translationService.setDefaultLang(this.translationService.getBrowserLang());
     customIconService.init();
@@ -31,10 +33,10 @@ export class AppComponent implements OnInit {
   title = 'ARSnova';
 
   ngOnInit(): void {
-    this.apiConfigService.load();
     this.apiConfigService.getApiConfig$().subscribe(config => {
-      if (config.ui.tracking.url && config.ui.tracking.provider === 'matomo') {
+      if (config.ui.tracking?.url && config.ui.tracking?.provider === 'matomo') {
         this.trackingService.init(config.ui);
+        this.consentService.setConfig(config);
       }
     });
     if (this.globalStorageService.getItem(STORAGE_KEYS.UPDATED)) {

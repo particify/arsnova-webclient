@@ -53,6 +53,7 @@ import { ImportComponent } from './components/home/import/import.component';
 import { GlobalStorageService, STORAGE_CONFIG_PROVIDERS } from './services/util/global-storage.service';
 import { ConsentService } from './services/util/consent.service';
 import { ThemeService } from '../theme/theme.service';
+import { ApiConfigResolver } from './resolver/api-config.resolver';
 import { RoomResolver } from './resolver/room.resolver';
 import { ContentResolver } from './resolver/content.resolver';
 import { CommentResolver } from './resolver/comment.resolver';
@@ -166,6 +167,7 @@ export function initializeApp(appConfig: AppConfig) {
     ConsentService,
     TrackingService,
     ThemeService,
+    ApiConfigResolver,
     RoomResolver,
     ContentResolver,
     CommentResolver,
