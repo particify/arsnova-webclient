@@ -38,7 +38,10 @@ export class RoutingService {
   }
 
   subscribeActivatedRoute() {
-    this.router.events.pipe(filter(event => (event instanceof ActivationEnd))).subscribe((activationEndEvent: ActivationEnd) => {
+    this.router.events.pipe(
+        filter(event => (event instanceof ActivationEnd)),
+        filter(event => (event as ActivationEnd).snapshot.outlet === 'primary')
+    ).subscribe((activationEndEvent: ActivationEnd) => {
       if (activationEndEvent.snapshot.component) {
         this.createBackRoute(activationEndEvent.snapshot);
       }
