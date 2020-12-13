@@ -1,7 +1,17 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { UpdateAvailableEvent } from '@angular/service-worker';
+import { Observable } from 'rxjs';
+import { VersionInfo } from '../../../../models/version-info';
 import { ApiConfigService } from '../../../../services/http/api-config.service';
 import { GlobalStorageService, STORAGE_KEYS } from '../../../../services/util/global-storage.service';
+
+interface DialogData {
+  afterUpdate: boolean;
+  latestVersion?: VersionInfo;
+  versions?: VersionInfo[];
+  updateAvailable?: Observable<UpdateAvailableEvent>;
+}
 
 @Component({
   selector: 'app-update-info',
@@ -11,26 +21,32 @@ import { GlobalStorageService, STORAGE_KEYS } from '../../../../services/util/gl
 export class UpdateInfoComponent implements OnInit {
 
   isLoading = true;
-  keywords: string[] = [];
+  changes: string[];
   newsUrl: string;
-  showReleaseNotes = false;
+  afterUpdate = false;
+  versions: VersionInfo[];
+  updateReady = false;
 
   constructor(public dialogRef: MatDialogRef<UpdateInfoComponent>,
-              @Inject(MAT_DIALOG_DATA) public data: boolean,
+              @Inject(MAT_DIALOG_DATA) private data: DialogData,
               private apiConfigService: ApiConfigService,
-              private globalStorageService: GlobalStorageService) { }
+              private globalStorageService: GlobalStorageService) {
+    this.afterUpdate = data.afterUpdate;
+    this.versions = data.versions;
+  }
 
   ngOnInit(): void {
     const lang = this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE);
-    const version = this.globalStorageService.getItem(STORAGE_KEYS.VERSION);
+    this.changes = this.versions.filter(v => v.changes?.[lang]?.length > 0)
+        .reduce((acc, cur) => cur.id > (acc?.id ?? 0) ? cur : acc, null)
+        ?.changes[lang];
+    if (this.data.updateAvailable) {
+      this.data.updateAvailable.subscribe(() => this.updateReady = true);
+    } else {
+      this.updateReady = true;
+    }
     this.apiConfigService.getApiConfig$().subscribe(config => {
-      const latestVersion = config.ui.version.id;
-      if (!version || version < latestVersion) {
-        this.showReleaseNotes = true;
-        this.keywords = config.ui.version.changes[lang];
-        this.newsUrl = config.ui.links?.news?.url;
-        this.globalStorageService.setItem(STORAGE_KEYS.VERSION, latestVersion);
-      }
+      this.newsUrl = config.ui.links?.news?.url;
       this.isLoading = false;
     });
   }

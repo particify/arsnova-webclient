@@ -16,6 +16,7 @@ import { GlobalStorageService, STORAGE_KEYS } from './services/util/global-stora
 import { EventService } from './services/util/event.service';
 import { ApiConfig } from './models/api-config';
 import { ConsentService } from './services/util/consent.service';
+import { UpdateService } from './services/util/update-service';
 
 @Injectable()
 class MockTranslateService {
@@ -69,6 +70,12 @@ class MockGlobalStorageService {
   }
 
   public removeItem(key: string) {
+  }
+}
+
+@Injectable()
+class MockUpdateService {
+  public handleUpdate() {
   }
 }
 
@@ -208,6 +215,10 @@ describe('AppComponent', () => {
         {
           provide: ConsentService,
           useClass: MockConsentService
+        },
+        {
+          provide: UpdateService,
+          useClass: MockUpdateService
         },
         {
           provide: Window,
