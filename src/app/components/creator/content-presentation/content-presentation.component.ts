@@ -20,6 +20,7 @@ export class ContentPresentationComponent implements OnInit {
 
   contents: Content[];
   isLoading = true;
+  entryIndex = 0;
   contentIndex = 0;
   shortId: number;
   contentGroupName: string;
@@ -41,7 +42,7 @@ export class ContentPresentationComponent implements OnInit {
     window.scroll(0, 0);
     this.translateService.use(this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE));
     this.route.params.subscribe(params => {
-      this.contentIndex = params['contentIndex'] - 1;
+      this.entryIndex = params['contentIndex'] - 1;
     });
     this.route.data.subscribe(data => {
       const room = data.room;
@@ -53,7 +54,8 @@ export class ContentPresentationComponent implements OnInit {
           this.contentService.getContentsByIds(group.roomId, group.contentIds).subscribe(contents => {
             this.contents = this.contentService.getSupportedContents(contents);
             this.isLoading = false;
-            if (this.contentIndex) {
+            if (this.entryIndex) {
+              this.contentIndex = this.entryIndex;
               this.currentStep = this.contentIndex;
               setTimeout(() => {
                 this.stepper.init(this.contentIndex, this.contents.length);
@@ -71,5 +73,8 @@ export class ContentPresentationComponent implements OnInit {
   updateURL(index: number) {
     this.currentStep = index;
     this.location.replaceState(`creator/room/${this.shortId}/group/${this.contentGroupName}/statistics/${index + 1}`);
+    if (this.contentIndex !== this.entryIndex) {
+      this.contentIndex = null;
+    }
   }
 }
