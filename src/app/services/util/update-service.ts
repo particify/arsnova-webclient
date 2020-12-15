@@ -1,10 +1,17 @@
 import { Injectable } from '@angular/core';
-import { SwUpdate } from '@angular/service-worker';
+import { SwUpdate, UpdateAvailableEvent } from '@angular/service-worker';
 import { TranslateService } from '@ngx-translate/core';
+import { tap } from 'rxjs/operators';
 import { UpdateImportance, VersionInfo } from '../../models/version-info';
 import { DialogService } from './dialog.service';
 import { GlobalStorageService, STORAGE_KEYS } from './global-storage.service';
 import { AdvancedSnackBarTypes, NotificationService } from './notification.service';
+
+interface LocalVersionInfo {
+  installed: string;
+  latest: string;
+  hash: string;
+}
 
 @Injectable()
 export class UpdateService {
@@ -23,45 +30,50 @@ export class UpdateService {
     const latestVersion = this.determineLatestVersion(versionInfos);
     const relevantVersions = this.determineRelevantVersions(versionInfos);
     const importance = this.determineUpdateImportance(versionInfos);
-    console.log(`Version info - current version, latest version, relevant versions, update importance:`,
+    console.log(`Version info - local version info, latest version info, relevant versions, update importance:`,
         version, latestVersion, relevantVersions, importance);
+
+    const updateReady$ = this.update.available.pipe(tap(event => {
+      this.handleUpdateReady(event, latestVersion);
+    }));
 
     switch (importance) {
       case UpdateImportance.OPTIONAL: {
         /* Handle the update silently */
-        this.update.available.subscribe(() => {
-          this.handleUpdateReady(latestVersion);
-        });
+        updateReady$.subscribe();
         return;
       }
       case UpdateImportance.MANDATORY: {
-        /* Set the new version early just in case so the dialog is not shown
-         * again forever after reloads if something goes wrong. */
-        this.handleUpdateReady(latestVersion);
         /* Show the update dialog immediately */
         const dialogRef = this.dialogService.openUpdateInfoDialog(
-            false, relevantVersions, this.update.available);
-        dialogRef.afterClosed().subscribe(() => this.handleUpdateReady(latestVersion, true));
+            false, relevantVersions, updateReady$);
+        dialogRef.afterClosed().subscribe(() => this.handleUpdateConfirmed());
         break;
       }
       default: {
         /* Show the update dialog when the update is ready */
-        this.update.available.subscribe(() => {
+        updateReady$.subscribe(() => {
           const dialogRef = this.dialogService.openUpdateInfoDialog(
               false, relevantVersions);
-          dialogRef.afterClosed().subscribe(() => this.handleUpdateReady(latestVersion, true));
+          dialogRef.afterClosed().subscribe(() => this.handleUpdateConfirmed());
         });
         break;
       }
     }
   }
 
-  private handleUpdateReady(latestVersion: VersionInfo, activate?: boolean) {
-    this.globalStorageService.setItem(STORAGE_KEYS.VERSION, latestVersion.id);
-    if (activate) {
-      this.globalStorageService.setItem(STORAGE_KEYS.UPDATED, true);
-      this.window.location.reload();
-    }
+  private handleUpdateReady(event: UpdateAvailableEvent, latestVersion: VersionInfo) {
+    const localVersion: LocalVersionInfo = {
+      installed: latestVersion.id,
+      latest: latestVersion.id,
+      hash: event.available.hash
+    };
+    this.globalStorageService.setItem(STORAGE_KEYS.VERSION, localVersion);
+    this.globalStorageService.setItem(STORAGE_KEYS.UPDATED, true);
+  }
+
+  public handleUpdateConfirmed() {
+    this.window.location.reload();
   }
 
   private handleUpdateCompleted() {
@@ -80,24 +92,36 @@ export class UpdateService {
   }
 
   private determineRelevantVersions(versionInfos: VersionInfo[]) {
-    const version = this.globalStorageService.getItem(STORAGE_KEYS.VERSION);
-    return versionInfos.filter(vi => vi.id > version);
+    const version = this.globalStorageService.getItem(STORAGE_KEYS.VERSION) as LocalVersionInfo;
+    const installed = version?.installed ?? null;
+    return versionInfos.filter(vi => vi.id > installed);
   }
 
   private determineUpdateImportance(versionInfos: VersionInfo[]) {
-    const version = this.globalStorageService.getItem(STORAGE_KEYS.VERSION);
+    const version = this.globalStorageService.getItem(STORAGE_KEYS.VERSION) as LocalVersionInfo;
     if (!version || versionInfos.length === 0) {
       /* The local version is unknown. The app is loaded for the first time or the localStorage item was removed.
        * - or -
        * There are no version infos available. */
       return UpdateImportance.RECOMMENDED;
     }
+    const latest = version?.latest ?? null;
     const relevantVersions = this.determineRelevantVersions(versionInfos);
     if (relevantVersions.length === versionInfos.length) {
       /* The client has not been updated for some time and older, mandatory
        * versions might have been purged from the server-side list. */
       return UpdateImportance.MANDATORY;
     }
+    /* Reduce importance of versions to RECOMMENDED if the client already about
+     * their existence. This is the case if the app is reloaded after the local
+     * info about the latest version has been updated locally. This is done as
+     * a precaution so the forced update dialog can be bypassed if something
+     * went wrong. */
+    relevantVersions.forEach(v => {
+      if (v.importance === UpdateImportance.MANDATORY && v.id <= latest) {
+        v.importance = UpdateImportance.RECOMMENDED;
+      }
+    });
     const importance = [UpdateImportance.OPTIONAL, UpdateImportance.RECOMMENDED, UpdateImportance.MANDATORY];
     return relevantVersions.reduce((acc, cur) => {
       return importance.indexOf(cur.importance) > importance.indexOf(acc) ? cur.importance : acc;
