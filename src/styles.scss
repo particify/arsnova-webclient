@@ -418,9 +418,14 @@ div {
   border-bottom: solid 1px var(--border);
 }
 
-.mat-list-item:last-child {
-  .bottom-border {
-    border: none;
+.mat-list-item.bottom-border:last-of-type {
+  border: none;
+}
+
+
+.full-width-list-item {
+  .mat-list-item-content {
+    padding: 0!important;
   }
 }
 

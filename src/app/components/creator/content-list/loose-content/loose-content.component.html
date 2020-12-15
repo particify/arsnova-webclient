@@ -25,9 +25,9 @@
         <app-loading-indicator *ngIf="isLoading" [size]="50"></app-loading-indicator>
         <div *ngIf="!isLoading">
           <mat-list>
-            <mat-list-item *ngFor="let content of contents; index as i"
+            <mat-list-item *ngFor="let content of contents; index as i" class="bottom-border"
                            attr.aria-label="{{ 'content.a11y-selected-content' | translate: { name: content.body } }}">
-              <div class="bottom-border" fxLayout="row" fxLayoutAlign="space-between center" fxFill>
+              <div fxLayout="row" fxLayoutAlign="space-between center" fxFill>
                 <mat-checkbox *ngIf="creationMode" (click)="$event.stopPropagation()" [(ngModel)]="creationSelection[i]">
                 </mat-checkbox>
                 <p class="ellipsis">

@@ -1,3 +1,5 @@
+@import '../../../../variables';
+
 .mat-icon-button {
   color: var(--secondary);
 }
@@ -7,13 +9,12 @@
 }
 
 .mat-list {
-  margin: -16px;
   background-color: var(--surface);
 }
 
 .container {
   height: 100%;
-  width: 100%;
+  width: calc(100% - 40px);
 }
 
 .inner {
@@ -34,8 +35,16 @@
   }
 }
 
-.room-name {
-  word-break: break-all;
+.badge {
+  background-color: var(--secondary);
+  width: 22px;
+  height: 22px;
+  border-radius: 11px;
+  &:first-child {
+    color: var(--on-secondary);
+    font-size: 12px;
+    font-weight: $font-weight-extra-bold;
+  }
 }
 
 .short-id {
@@ -53,7 +62,7 @@
 
 @media (max-width: 500px) {
   .rooms-from-guest {
-    .role, .short-id {
+    .role, .short-id{
       display: none;
     }
   }

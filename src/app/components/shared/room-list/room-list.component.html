@@ -26,34 +26,37 @@
         <lib-extension-point extensionId="import-token" [extensionData]="{inMenu: true}"></lib-extension-point>
       </mat-menu>
       <mat-list>
-        <mat-list-item fxLayout="column" fxLayoutAlign="center"
+        <mat-list-item fxLayout="column" fxLayoutAlign="center" class="bottom-border full-width-list-item"
                        *ngFor="let room of displayRooms; let i = index" [ngSwitch]="room.membership.primaryRole">
-          <div fxLayout="row" fxFill class="bottom-border">
-            <div tabindex="0" role="button" fxLayout="row" fxLayoutAlign="center center" class="inner container"
+          <div fxLayout="row" fxFill>
+            <div tabindex="0" role="button" fxLayout="row" fxLayoutAlign="space-between center" class="inner container"
                  attr.aria-label="{{ 'room-list.a11y-join-room' | translate:
                         {room: room.summary.name, id: room.summary.shortId, role: roles.get(room.membership.primaryRole)} }}"
                  (click)="setCurrentRoom(room.summary.shortId, room.membership.primaryRole)"
             (keyup.enter)="setCurrentRoom(room.summary.shortId, room.membership.primaryRole)">
-              <p class="room-name" matBadgeOverlap="false"
-                 matBadge="{{ room.summary.stats.ackCommentCount > 0 ? room.summary.stats.ackCommentCount : null }}">
+              <p class="ellipsis">
                 {{room.summary.name}}</p>
-              <span class="fill-remaining-space" (click)="setCurrentRoom(room.summary.shortId, room.membership.primaryRole)"></span>
-              <p class="short-id">{{room.summary.shortId}}</p>
-              <mat-icon mat-list-icon *ngSwitchCase="creatorRole"
-                        matTooltip="{{ 'room-list.creator-role' | translate }}"
-                        title="{{ 'room-list.creator-role' | translate }}">
-                record_voice_over
-              </mat-icon>
-              <mat-icon mat-list-icon *ngSwitchCase="participantRole"
-                        matTooltip="{{ 'room-list.participant-role' | translate }}"
-                        title="{{ 'room-list.participant-role' | translate }}">
-                people
-              </mat-icon>
-              <mat-icon mat-list-icon *ngSwitchCase="executiveModeratorRole"
-                        matTooltip="{{ 'room-list.executive-moderator-role' | translate }}"
-                        title="{{ 'room-list.executive-moderator-role' | translate }}">
-                gavel
-              </mat-icon>
+              <div fxLayout="row" fxLayoutAlign="center center">
+                <div class="badge" fxLayoutAlign="center center" *ngIf="room.summary.stats.ackCommentCount > 0">
+                  <span>{{ room.summary.stats.ackCommentCount }}</span>
+                </div>
+                <p class="short-id">{{room.summary.shortId}}</p>
+                <mat-icon mat-list-icon *ngSwitchCase="creatorRole"
+                          matTooltip="{{ 'room-list.creator-role' | translate }}"
+                          title="{{ 'room-list.creator-role' | translate }}">
+                  record_voice_over
+                </mat-icon>
+                <mat-icon mat-list-icon *ngSwitchCase="participantRole"
+                          matTooltip="{{ 'room-list.participant-role' | translate }}"
+                          title="{{ 'room-list.participant-role' | translate }}">
+                  people
+                </mat-icon>
+                <mat-icon mat-list-icon *ngSwitchCase="executiveModeratorRole"
+                          matTooltip="{{ 'room-list.executive-moderator-role' | translate }}"
+                          title="{{ 'room-list.executive-moderator-role' | translate }}">
+                  gavel
+                </mat-icon>
+              </div>
             </div>
             <div fxLayout="row" fxLayoutAlign="center center">
               <button mat-icon-button [matMenuTriggerFor]="moreActions" aria-labelledby="more-options"
@@ -90,8 +93,9 @@
       <mat-list class="rooms-from-guest" *ngIf="roomsFromGuest">
         <ng-container *ngFor="let room of roomsFromGuest; let i = index"
             [ngSwitch]="room.membership.primaryRole">
-          <mat-list-item fxLayout="column" fxLayoutAlign="center" *ngIf="!room.transferred">
-            <div fxLayout="row" fxFill class="bottom-border">
+          <mat-list-item fxLayout="column" fxLayoutAlign="center" *ngIf="!room.transferred"
+                         class="bottom-border full-width-list-item">
+            <div fxLayout="row" fxFill>
               <div tabindex="0" role="button" fxLayout="row" fxLayoutAlign="center center" class="container inner"
                   attr.aria-label="{{ 'room-list.a11y-join-room' | translate:
                           {room: room.summary.name, id: room.summary.shortId, role: roles.get(room.membership.primaryRole)} }}">
