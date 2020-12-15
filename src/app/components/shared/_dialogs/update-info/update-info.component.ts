@@ -27,10 +27,7 @@ export class UpdateInfoComponent implements OnInit {
       const latestVersion = config.ui.version.id;
       if (!version || version < latestVersion) {
         this.showReleaseNotes = true;
-        const changes: string[] = Object.values(config.ui.version.changes[lang]);
-        for (let i = 0; i < changes.length; i++) {
-          this.keywords.push(changes[i]);
-        }
+        this.keywords = config.ui.version.changes[lang];
         this.newsUrl = config.ui.links?.news?.url;
         this.globalStorageService.setItem(STORAGE_KEYS.VERSION, latestVersion);
       }
