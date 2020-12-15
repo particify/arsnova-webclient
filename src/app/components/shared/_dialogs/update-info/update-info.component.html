@@ -1,6 +1,6 @@
 <div mat-dialog-content>
   <h3 tabindex="0">{{ (data ? 'home-page.update-made' : 'home-page.update-available') | translate }}</h3>
-  <app-loading-indicator *ngIf="isLoading" [size]="30" [smaller]="true"></app-loading-indicator>
+  <app-loading-indicator *ngIf="isLoading" [size]="30"></app-loading-indicator>
   <div *ngIf="!isLoading">
     <div *ngIf="showReleaseNotes">
       <p *ngIf="newsUrl" tabindex="0">{{ 'home-page.see-news' | translate }}<a href="{{newsUrl}}">{{ 'home-page.news' | translate }}</a>.</p>
