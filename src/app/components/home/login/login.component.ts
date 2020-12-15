@@ -1,6 +1,6 @@
 import { AfterContentInit, Component, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { AuthenticationService } from '../../../services/http/authentication.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AdvancedSnackBarTypes, NotificationService } from '../../../services/util/notification.service';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { MatDialog } from '@angular/material/dialog';
@@ -49,6 +49,7 @@ export class LoginComponent implements AfterContentInit, OnChanges, OnInit {
               public dialog: MatDialog,
               public eventService: EventService,
               private dialogService: DialogService,
+              private route: ActivatedRoute,
               private routingService: RoutingService) {
   }
 
