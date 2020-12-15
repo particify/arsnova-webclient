@@ -2,52 +2,49 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { BaseHttpService } from './base-http.service';
-import { ApiConfig, AuthenticationProvider, Feature } from '../../models/api-config';
+import { ApiConfig } from '../../models/api-config';
 import { TranslateService } from '@ngx-translate/core';
 import { NotificationService } from '../util/notification.service';
-import { shareReplay } from 'rxjs/operators';
+import { map, shareReplay, tap } from 'rxjs/operators';
 import { EventService } from '../util/event.service';
+import * as dayjs from 'dayjs';
 
 @Injectable()
 export class ApiConfigService extends BaseHttpService {
   private readonly serviceApiUrl = {
     config: '/configuration'
   };
-  private readonly config$: Observable<ApiConfig>;
-  private config: ApiConfig;
+  private config$: Observable<ApiConfig>;
+  private cacheExpiry: dayjs.Dayjs = dayjs();
 
   constructor(private http: HttpClient,
               protected eventService: EventService,
               protected translateService: TranslateService,
               protected notificationService: NotificationService) {
     super(eventService, translateService, notificationService);
-    this.config$ = this.http.get<ApiConfig>(this.getBaseUrl() + this.serviceApiUrl.config).pipe(shareReplay(1));
-    this.config = new ApiConfig([], {}, {});
-    this.freezeRecursively(this.config);
-  }
-
-  load() {
-    console.log('Loading API configuration...');
-    this.config$.subscribe((config) => {
-      config.authenticationProviders.sort((p1, p2) => {
-        return p1.order < p2.order ? -1 : p1.order > p2.order ? 1 : 0;
-      });
-      this.freezeRecursively(config);
-      this.config = config;
-      console.log('API configuration loaded.');
-    });
   }
 
   getApiConfig$(): Observable<ApiConfig> {
+    if (this.cacheExpiry.isBefore(dayjs())) {
+      this.cacheExpiry = dayjs().add(1, 'h');
+      this.config$ = this.load$();
+    }
     return this.config$;
   }
 
-  getAuthProviders(): AuthenticationProvider[] {
-    return this.config.authenticationProviders;
-  }
-
-  getFeatureConfig(feature: string): Feature {
-    return this.config.features[feature];
+  private load$() {
+    console.log('Loading API configuration...');
+    return this.http.get<ApiConfig>(this.getBaseUrl() + this.serviceApiUrl.config).pipe(
+        tap(() => console.log('API configuration loaded.')),
+        map((config) => {
+          config.authenticationProviders.sort((p1, p2) => {
+            return p1.order < p2.order ? -1 : p1.order > p2.order ? 1 : 0;
+          });
+          this.freezeRecursively(config);
+          return config;
+        }),
+        shareReplay()
+    );
   }
 
   private freezeRecursively(obj: object) {

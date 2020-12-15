@@ -2,7 +2,7 @@ import { Component, ElementRef, Input, OnInit, ViewChild, OnDestroy } from '@ang
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { Room } from '../../../models/room';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { RegisterErrorStateMatcher } from '../../home/register/register.component';
 import { FormControl, Validators } from '@angular/forms';
 import { AdvancedSnackBarTypes, NotificationService } from '../../../services/util/notification.service';
@@ -13,7 +13,6 @@ import { EventService } from '../../../services/util/event.service';
 import { KeyboardUtils } from '../../../utils/keyboard';
 import { KeyboardKey } from '../../../utils/keyboard/keys';
 import { GlobalStorageService, STORAGE_KEYS } from '../../../services/util/global-storage.service';
-import { ApiConfigService } from '../../../services/http/api-config.service';
 
 @Component({
   selector: 'app-room-join',
@@ -40,7 +39,7 @@ export class RoomJoinComponent implements OnInit, OnDestroy {
     public authenticationService: AuthenticationService,
     public eventService: EventService,
     private globalStorageService: GlobalStorageService,
-    private apiConfigService: ApiConfigService
+    private route: ActivatedRoute
   ) {
     this.isDesktop = this.globalStorageService.getItem(STORAGE_KEYS.DEVICE_TYPE) === 'desktop';
   }
@@ -48,9 +47,9 @@ export class RoomJoinComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.authenticationService.getAuthenticationChanges().pipe(takeUntil(this.destroy$))
         .subscribe(auth => this.auth = auth);
-    this.apiConfigService.getApiConfig$().subscribe(config => {
-      if (config.ui.demo) {
-        this.demoId = config.ui.demo;
+    this.route.data.subscribe(data => {
+      if (data.apiConfig.ui.demo) {
+        this.demoId = data.apiConfig.ui.demo;
       }
     });
   }

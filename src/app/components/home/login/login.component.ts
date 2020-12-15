@@ -1,4 +1,4 @@
-import { AfterContentInit, Component, OnChanges, SimpleChanges } from '@angular/core';
+import { AfterContentInit, Component, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { AuthenticationService } from '../../../services/http/authentication.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AdvancedSnackBarTypes, NotificationService } from '../../../services/util/notification.service';
@@ -7,7 +7,6 @@ import { MatDialog } from '@angular/material/dialog';
 import { FormControl, FormGroupDirective, NgForm, Validators } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
 import { EventService } from '../../../services/util/event.service';
-import { ApiConfigService } from '../../../services/http/api-config.service';
 import { AuthenticationProvider, AuthenticationProviderType } from '../../../models/api-config';
 import { DialogService } from '../../../services/util/dialog.service';
 import { AuthenticationStatus, ClientAuthenticationResult } from '../../../models/client-authentication-result';
@@ -25,7 +24,7 @@ export class LoginErrorStateMatcher implements ErrorStateMatcher {
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
-export class LoginComponent implements AfterContentInit, OnChanges {
+export class LoginComponent implements AfterContentInit, OnChanges, OnInit {
 
   isStandard = true;
   username: string;
@@ -35,6 +34,7 @@ export class LoginComponent implements AfterContentInit, OnChanges {
   isLoading = true;
   deviceWidth = innerWidth;
   providersLength: number;
+  authProviders: AuthenticationProvider[];
 
   usernameFormControl = new FormControl('', [Validators.required, Validators.email]);
   passwordFormControl = new FormControl('', [Validators.required]);
@@ -47,9 +47,12 @@ export class LoginComponent implements AfterContentInit, OnChanges {
               public notificationService: NotificationService,
               public dialog: MatDialog,
               public eventService: EventService,
-              private apiConfigService: ApiConfigService,
               private dialogService: DialogService,
               private route: ActivatedRoute) {
+  }
+
+  ngOnInit() {
+    this.route.data.subscribe(data => this.authProviders = data.apiConfig.authenticationProviders);
   }
 
   ngAfterContentInit() {
@@ -57,12 +60,10 @@ export class LoginComponent implements AfterContentInit, OnChanges {
       if (this.authenticationService.isLoggedIn() && auth.authProvider !== AuthProvider.ARSNOVA_GUEST) {
         this.router.navigate(['user']);
       } else {
-        this.apiConfigService.getApiConfig$().subscribe(config => {
-          const authProviders = config.authenticationProviders;
-          if (authProviders.some(provider => provider.type === AuthenticationProviderType.USERNAME_PASSWORD)) {
+          if (this.authProviders.some(provider => provider.type === AuthenticationProviderType.USERNAME_PASSWORD)) {
             this.allowDbLogin = true;
           }
-          this.ssoProviders = authProviders.filter((p) => p.type === AuthenticationProviderType.SSO);
+          this.ssoProviders = this.authProviders.filter((p) => p.type === AuthenticationProviderType.SSO);
           this.isLoading = false;
           this.providersLength = this.ssoProviders.length;
           if (!this.allowDbLogin && this.providersLength === 1) {
@@ -78,7 +79,6 @@ export class LoginComponent implements AfterContentInit, OnChanges {
               }, 700);
             }
           }
-        });
       }
     });
     const registeredUserData = history.state.data;
@@ -108,8 +108,8 @@ export class LoginComponent implements AfterContentInit, OnChanges {
 
   providers(type?: AuthenticationProviderType) {
     return (type != null)
-      ? this.apiConfigService.getAuthProviders().filter((p) => p.type === type)
-      : this.apiConfigService.getAuthProviders();
+      ? this.authProviders.filter((p) => p.type === type)
+      : this.authProviders;
   }
 
   activateUser(): void {

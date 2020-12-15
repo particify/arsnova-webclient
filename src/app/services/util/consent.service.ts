@@ -9,6 +9,7 @@ import { StorageItemCategory } from '../../models/storage';
 import { TranslateService } from '@ngx-translate/core';
 import { NotificationService } from './notification.service';
 import { EventService } from './event.service';
+import { ApiConfig } from '../../models/api-config';
 
 export const CONSENT_VERSION = 1;
 
@@ -56,6 +57,8 @@ export class ConsentService extends BaseHttpService {
     return map;
   }, new Map());
   private consentSettings: ConsentSettings;
+  private privacyUrl: string;
+  private consentRecording;
 
   private settingsChanged: EventEmitter<ConsentChangeEvent> = new EventEmitter();
 
@@ -74,6 +77,11 @@ export class ConsentService extends BaseHttpService {
       this.consentSettings = consentSettings;
     }
     this.loadLocalSettings();
+  }
+
+  setConfig(apiConfig: ApiConfig) {
+    this.privacyUrl = apiConfig.ui.links?.privacy?.url;
+    this.consentRecording = apiConfig.features.consentRecording;
   }
 
   /**
@@ -126,7 +134,7 @@ export class ConsentService extends BaseHttpService {
       width: '90%',
       maxWidth: '600px',
       autoFocus: true,
-      data: this.categories
+      data: { categories: this.categories, privacyUrl: this.privacyUrl }
     });
     dialogRef.disableClose = true;
     dialogRef.afterClosed().subscribe((res: ConsentGiven) => {
@@ -160,8 +168,7 @@ export class ConsentService extends BaseHttpService {
     this.consentSettings.version = CONSENT_VERSION;
     this.consentSettings.timestamp = new Date();
     this.consentSettings.consentGiven = consentGiven;
-    const consentRecording = this.config.getFeatureConfig('consentRecording');
-    if (consentRecording?.enabled) {
+    if (this.consentRecording?.enabled) {
       this.recordConsentSettings(this.consentSettings).subscribe((persistedConsentSettings) => {
         this.settingsChanged.emit({ categoriesSettings: this.categories, consentSettings: this.consentSettings });
       });

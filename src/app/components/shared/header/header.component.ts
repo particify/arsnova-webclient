@@ -1,7 +1,7 @@
 import { Component, HostListener, OnInit, Renderer2 } from '@angular/core';
 import { AuthenticationService } from '../../../services/http/authentication.service';
 import { AdvancedSnackBarTypes, NotificationService } from '../../../services/util/notification.service';
-import { NavigationEnd, Router } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { ClientAuthentication } from '../../../models/client-authentication';
 import { AuthProvider } from '../../../models/auth-provider';
 import { Location } from '@angular/common';
@@ -16,7 +16,6 @@ import { GlobalStorageService, STORAGE_KEYS } from '../../../services/util/globa
 import { Theme } from '../../../../theme/Theme';
 import { ThemeService } from '../../../../theme/theme.service';
 import { LanguageService } from '../../../services/util/language.service';
-import { ApiConfigService } from '../../../services/http/api-config.service';
 import { RoutingService } from '../../../services/util/routing.service';
 
 @Component({
@@ -58,8 +57,8 @@ export class HeaderComponent implements OnInit {
     private dialogService: DialogService,
     private globalStorageService: GlobalStorageService,
     private themeService: ThemeService,
-    private apiConfigService: ApiConfigService,
-    private routingService: RoutingService
+    private routingService: RoutingService,
+    private route: ActivatedRoute
   ) {
     this.deviceType = this.globalStorageService.getItem(STORAGE_KEYS.DEVICE_TYPE);
     // LocalStorage setup
@@ -121,8 +120,8 @@ export class HeaderComponent implements OnInit {
       this.themeClass = theme;
     });
     this.themes = this.themeService.getThemes();
-    this.apiConfigService.getApiConfig$().subscribe(config => {
-      this.helpUrl = config.ui.links.help.url;
+    this.route.data.subscribe(data => {
+      this.helpUrl = data.apiConfig.ui.links?.help?.url;
     });
     this.showNews = !this.globalStorageService.getItem(STORAGE_KEYS.VERSION);
     this.routingService.subscribeActivatedRoute();

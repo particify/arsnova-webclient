@@ -10,22 +10,32 @@ import { AuthenticationGuard } from './guards/authentication.guard';
 import { RegisterComponent } from './components/home/register/register.component';
 import { PasswordResetComponent } from './components/home/password-reset/password-reset.component';
 import { RequestPasswordResetComponent } from './components/home/request-password-reset/request-password-reset.component';
+import { ApiConfigResolver } from './resolver/api-config.resolver';
 import { HeaderComponent } from './components/shared/header/header.component';
 import { FooterComponent } from './components/shared/footer/footer.component';
 
 const routes: Routes = [
   {
     path: '',
+    resolve: {
+      apiConfig: ApiConfigResolver
+    },
     outlet: 'header',
     component: HeaderComponent
   },
   {
     path: '',
+    resolve: {
+      apiConfig: ApiConfigResolver
+    },
     outlet: 'footer',
     component: FooterComponent
   },
   {
     path: '',
+    resolve: {
+      apiConfig: ApiConfigResolver
+    },
     children: [
       {
         path: '',

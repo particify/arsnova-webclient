@@ -5,7 +5,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { ThemeService } from '../../../../../theme/theme.service';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
-import { ApiConfigService } from '@arsnova/app/services/http/api-config.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-qr-code',
@@ -27,7 +27,7 @@ export class QrCodeComponent implements OnInit, OnDestroy {
               protected notification: NotificationService,
               protected translateService: TranslateService,
               private themeService: ThemeService,
-              private apiConfigService: ApiConfigService
+              private route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
@@ -38,10 +38,10 @@ export class QrCodeComponent implements OnInit, OnDestroy {
       this.bgColor = currentTheme.get('surface').color;
       this.fgColor = currentTheme.get('on-surface').color;
     });
-    this.apiConfigService.getApiConfig$().pipe(takeUntil(this.destroyed$)).subscribe(config => {
+    this.route.data.subscribe(data => {
       let url;
-      if (config.ui.links?.join) {
-        url = config.ui.links.join.url;
+      if (data.apiConfig.ui.links?.join) {
+        url = data.apiConfig.ui.links.join.url;
         this.displayUrl = url.replace(/^https?:\/\//, '') + this.data.shortId;
         this.useJoinUrl = true;
       } else {

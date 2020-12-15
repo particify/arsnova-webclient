@@ -5,8 +5,7 @@ import { UserService } from '../../../services/http/user.service';
 import { AdvancedSnackBarTypes, NotificationService } from '../../../services/util/notification.service';
 import { TranslateService } from '@ngx-translate/core';
 import { EventService } from '../../../services/util/event.service';
-import { Router } from '@angular/router';
-import { ApiConfigService } from '../../../services/http/api-config.service';
+import { ActivatedRoute, Router } from '@angular/router';
 import { first } from 'rxjs/operators';
 
 export class RegisterErrorStateMatcher implements ErrorStateMatcher {
@@ -55,13 +54,13 @@ export class RegisterComponent implements OnInit {
               public notificationService: NotificationService,
               public eventService: EventService,
               private router: Router,
-              private apiConfigService: ApiConfigService) {
+              private route: ActivatedRoute) {
   }
 
   ngOnInit(): void {
-    this.apiConfigService.getApiConfig$().subscribe(config => {
-      this.accountServiceTitle = config.ui.registration?.service || 'ARSnova';
-      this.linkOfToS = config.ui.links.tos.url;
+    this.route.data.subscribe(data => {
+      this.accountServiceTitle = data.apiConfig.ui.registration?.service || 'ARSnova';
+      this.linkOfToS = data.apiConfig.ui.links.tos.url;
     });
   }
 
