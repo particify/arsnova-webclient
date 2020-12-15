@@ -8,11 +8,14 @@ import { Component, Input, OnInit } from '@angular/core';
 export class LoadingIndicatorComponent implements OnInit {
 
   @Input() size = 100;
-  @Input() smaller = false;
+  @Input() height;
 
   constructor() { }
 
   ngOnInit(): void {
+    if (!this.height) {
+      this.height = (this.size * 2).toString() + 'px';
+    }
   }
 
 }
