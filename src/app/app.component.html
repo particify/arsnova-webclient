@@ -1,7 +1,7 @@
 <div fxLayout="column" fxFill appTheme>
-  <app-header></app-header>
+  <router-outlet name="header"></router-outlet>
   <div fxFlex class="app-component" id="scroll_container">
     <router-outlet></router-outlet>
   </div>
-  <app-footer></app-footer>
+  <router-outlet name="footer"></router-outlet>
 </div>
