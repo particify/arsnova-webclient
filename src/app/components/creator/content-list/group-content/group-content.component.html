@@ -88,12 +88,12 @@
               <mat-list-item *ngFor="let content of contents; index as i" fxLayout="column" fxLayoutAlign="center"
                              (click)="navigateToContentStats(content)" [ngClass]="{'not-supported': contentTypes.indexOf(content.format) === -1}">
               <div class="bottom-border" fxLayout="row" fxLayoutAlign="space-between" fxFill
-                    attr.aria-label="{{ 'content.a11y-selected-content' | translate: { name: labels[i] } }}">
-                <p>
-                  {{ labels[i] }}
+                    attr.aria-label="{{ 'content.a11y-selected-content' | translate: { name: content.body } }}">
+                <p class="ellipsis">
+                  {{ content.body }}
                 </p>
                 <div fxLayout="row" fxLayoutAlign="center center">
-                  <div *ngIf="contentTypes.indexOf(content.format) > -1">
+                  <div fxLayout="row" *ngIf="contentTypes.indexOf(content.format) > -1">
                     <button mat-icon-button (keyup.enter)="toggleDirectAnswer(content)"
                             attr.aria-label="{{ (content.state.responsesVisible ? 'content.a11y-dont-direct-show-answer' : 'content.a11y-direct-show-answer') | translate }}"
                             (click)="toggleDirectAnswer(content);$event.stopPropagation()"

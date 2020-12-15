@@ -1,19 +1,19 @@
 import { Component, OnInit } from '@angular/core';
-import { ContentService } from '../../../services/http/content.service';
-import { Content } from '../../../models/content';
+import { ContentService } from '../../../../services/http/content.service';
+import { Content } from '../../../../models/content';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Location } from '@angular/common';
-import { AdvancedSnackBarTypes, NotificationService } from '../../../services/util/notification.service';
-import { Room } from '../../../models/room';
-import { RoomService } from '../../../services/http/room.service';
+import { AdvancedSnackBarTypes, NotificationService } from '../../../../services/util/notification.service';
+import { Room } from '../../../../models/room';
+import { RoomService } from '../../../../services/http/room.service';
 import { TranslateService } from '@ngx-translate/core';
-import { LanguageService } from '../../../services/util/language.service';
-import { DialogService } from '../../../services/util/dialog.service';
-import { GlobalStorageService, STORAGE_KEYS } from '../../../services/util/global-storage.service';
-import { ContentListComponent } from '../content-list/content-list.component';
-import { ContentGroup } from '../../../models/content-group';
-import { ContentGroupService } from '../../../services/http/content-group.service';
-import { AnnounceService } from '../../../services/util/announce.service';
+import { LanguageService } from '../../../../services/util/language.service';
+import { DialogService } from '../../../../services/util/dialog.service';
+import { GlobalStorageService, STORAGE_KEYS } from '../../../../services/util/global-storage.service';
+import { ContentListBaseComponent } from '../content-list-base.component';
+import { ContentGroup } from '../../../../models/content-group';
+import { ContentGroupService } from '../../../../services/http/content-group.service';
+import { AnnounceService } from '../../../../services/util/announce.service';
 
 @Component({
   selector: 'app-loose-content',
@@ -21,14 +21,11 @@ import { AnnounceService } from '../../../services/util/announce.service';
   styleUrls: ['./loose-content.component.scss']
 })
 
-
-export class LooseContentComponent extends ContentListComponent implements OnInit {
+export class LooseContentComponent extends ContentListBaseComponent implements OnInit {
 
   contents: Content[];
   room: Room;
   isLoading = true;
-  labelMaxLength: number;
-  labels: string[] = [];
   deviceType: string;
   contentGroups: string[] = [];
   currentGroupIndex: number;
@@ -63,26 +60,13 @@ export class LooseContentComponent extends ContentListComponent implements OnIni
       this.contentService.findContentsWithoutGroup(this.room.id).subscribe(contents => {
         this.initContentList(contents);
       });
-      this.labelMaxLength = innerWidth / 20;
       this.translateService.use(this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE));
     });
   }
 
-  initContentList(contentList: Content[]) {
-    this.contents = contentList;
-    for (let i = 0; i < this.contents.length; i++) {
-      if (this.contents[i].body.length > this.labelMaxLength) {
-        this.labels[i] = this.contents[i].body.substr(0, this.labelMaxLength) + '…';
-      } else {
-        this.labels[i] = this.contents[i].body;
-      }
-      this.creationSelection[i] = true;
-    }
-    this.getGroups();
-    this.isLoading = false;
-    setTimeout(() => {
-      document.getElementById('message').focus();
-    }, 500);
+  setSettings() {
+    this.creationSelection = new Array<boolean>(this.contents.length);
+    this.creationSelection.fill(true);
   }
 
   goToEdit(content: Content) {

@@ -1,21 +1,21 @@
 import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
-import { Content } from '../../../models/content';
-import { ContentService } from '../../../services/http/content.service';
-import { RoomService } from '../../../services/http/room.service';
+import { Content } from '../../../../models/content';
+import { ContentService } from '../../../../services/http/content.service';
+import { RoomService } from '../../../../services/http/room.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Location } from '@angular/common';
-import { AdvancedSnackBarTypes, NotificationService } from '../../../services/util/notification.service';
+import { AdvancedSnackBarTypes, NotificationService } from '../../../../services/util/notification.service';
 import { TranslateService } from '@ngx-translate/core';
-import { LanguageService } from '../../../services/util/language.service';
-import { DialogService } from '../../../services/util/dialog.service';
-import { GlobalStorageService, STORAGE_KEYS } from '../../../services/util/global-storage.service';
-import { ContentGroupService } from '../../../services/http/content-group.service';
-import { ContentListComponent } from '../content-list/content-list.component';
-import { ContentGroup } from '../../../models/content-group';
-import { AnnounceService } from '../../../services/util/announce.service';
-import { KeyboardUtils } from '../../../utils/keyboard';
-import { KeyboardKey } from '../../../utils/keyboard/keys';
-import { EventService } from '../../../services/util/event.service';
+import { LanguageService } from '../../../../services/util/language.service';
+import { DialogService } from '../../../../services/util/dialog.service';
+import { GlobalStorageService, STORAGE_KEYS } from '../../../../services/util/global-storage.service';
+import { ContentGroupService } from '../../../../services/http/content-group.service';
+import { ContentListBaseComponent } from '../content-list-base.component';
+import { ContentGroup } from '../../../../models/content-group';
+import { AnnounceService } from '../../../../services/util/announce.service';
+import { KeyboardUtils } from '../../../../utils/keyboard';
+import { KeyboardKey } from '../../../../utils/keyboard/keys';
+import { EventService } from '../../../../services/util/event.service';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 
 @Component({
@@ -23,7 +23,7 @@ import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
   templateUrl: './group-content.component.html',
   styleUrls: ['./group-content.component.scss']
 })
-export class GroupContentComponent extends ContentListComponent implements OnInit {
+export class GroupContentComponent extends ContentListBaseComponent implements OnInit {
 
   @ViewChild('nameInput', { static: true }) nameInput: ElementRef;
 
@@ -92,30 +92,16 @@ export class GroupContentComponent extends ContentListComponent implements OnIni
         });
       });
     });
-    this.labelMaxLength = innerWidth / 20;
     this.translateService.use(this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE));
   }
 
-  initContentList(contentList: Content[]) {
-    this.contents = contentList;
-    for (let i = 0; i < this.contents.length; i++) {
-      if (this.contents[i].state.visible) {
-        this.unlocked = true;
-      }
-      if (this.contents[i].state.responsesVisible) {
-        this.directAnswer = true;
-      }
-      if (this.contents[i].body.length > this.labelMaxLength) {
-        this.labels[i] = this.contents[i].body.substr(0, this.labelMaxLength) + '…';
-      } else {
-        this.labels[i] = this.contents[i].body;
-      }
+  setSettings() {
+    if (this.contents.filter(c => c.state.visible).length) {
+      this.unlocked = true;
     }
-    this.getGroups();
-    this.isLoading = false;
-    setTimeout(() => {
-      document.getElementById('message-button').focus();
-    }, 500);
+    if (this.contents.filter(c => c.state.responsesVisible).length) {
+      this.directAnswer = true;
+    }
   }
 
   goToEdit(content: Content) {
@@ -247,7 +233,7 @@ export class GroupContentComponent extends ContentListComponent implements OnIni
 
   removeContent(delContent: Content) {
     const index = this.findIndexOfId(delContent.id);
-    const dialogRef = this.dialogService.openDeleteDialog('really-remove-content', this.labels[index], 'remove');
+    const dialogRef = this.dialogService.openDeleteDialog('really-remove-content', this.contents[index].body, 'remove');
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.updateContentChanges(index, result);
