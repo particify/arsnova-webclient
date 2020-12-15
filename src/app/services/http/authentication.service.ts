@@ -271,16 +271,4 @@ export class AuthenticationService extends BaseHttpService {
 
     return auth$;
   }
-
-  setRedirect(url: string) {
-    this.redirect = url;
-  }
-
-  getRedirect(): string {
-    return this.redirect;
-  }
-
-  resetRedirect() {
-    this.redirect = null;
-  }
 }

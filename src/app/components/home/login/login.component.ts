@@ -1,6 +1,6 @@
 import { AfterContentInit, Component, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { AuthenticationService } from '../../../services/http/authentication.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { AdvancedSnackBarTypes, NotificationService } from '../../../services/util/notification.service';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { MatDialog } from '@angular/material/dialog';
@@ -11,6 +11,7 @@ import { AuthenticationProvider, AuthenticationProviderType } from '../../../mod
 import { DialogService } from '../../../services/util/dialog.service';
 import { AuthenticationStatus, ClientAuthenticationResult } from '../../../models/client-authentication-result';
 import { AuthProvider } from '../../../models/auth-provider';
+import { RoutingService } from '../../../services/util/routing.service';
 
 export class LoginErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
@@ -48,7 +49,7 @@ export class LoginComponent implements AfterContentInit, OnChanges, OnInit {
               public dialog: MatDialog,
               public eventService: EventService,
               private dialogService: DialogService,
-              private route: ActivatedRoute) {
+              private routingService: RoutingService) {
   }
 
   ngOnInit() {
@@ -145,11 +146,7 @@ export class LoginComponent implements AfterContentInit, OnChanges, OnInit {
       });
       this.dialog.closeAll();
       if (this.isStandard) {
-        const redirectURL = this.authenticationService.getRedirect();
-        if (redirectURL) {
-          this.router.navigate([redirectURL]);
-          this.authenticationService.resetRedirect();
-        } else {
+        if (!this.routingService.redirect()) {
           this.router.navigate(['user']);
         }
       }
