@@ -17,6 +17,7 @@ $material-design-icons-class-icons-generate-codepoints: false;
 @import 'variables';
 
 body {
+  background-color: var(--background);
   font-family: Roboto, "Helvetica Neue", sans-serif;
   width: 100%;
   height: 100%;

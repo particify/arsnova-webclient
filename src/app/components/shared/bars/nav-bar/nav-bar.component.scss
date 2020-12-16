@@ -11,18 +11,45 @@
 }
 
 .clickable {
-  color: var(--secondary);
+  opacity: 0.6;
   margin: 0 20px;
   cursor: pointer;
   font-size: 32px;
   width: 32px;
   height: 32px;
   position: relative;
-  opacity: 0.8;
 }
 
-.current-url {
-  cursor: default;
-  color: var(--primary);
+.current > * {
   opacity: 1;
+  cursor: default;
+  color: var(--secondary);
+}
+
+.text {
+  opacity: 0.6;
+  font-size: 12px;
+  margin: 4px 0 0;
+}
+
+@media(max-width: 1000px) {
+  .nav {
+    bottom: 0;
+    width: 100vw;
+    box-shadow: 0 0 2px 1px rgba(0, 0, 0, 0.1);
+  }
+
+  .icon-container {
+    width: 100%;
+    flex-direction: row;
+    justify-content: space-around;
+    //margin: 16px 0;
+    margin: 10px 0;
+  }
+
+  .clickable {
+    font-size: 24px;
+    width: 24px;
+    height: 24px;
+  }
 }

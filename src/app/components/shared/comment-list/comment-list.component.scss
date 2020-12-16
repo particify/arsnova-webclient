@@ -152,3 +152,8 @@ button.selected {
 .comments-container {
   margin-top: min(1em, 4vw);
 }
+
+.outer {
+  margin-bottom: calc(-98px - 4vw);
+  padding-bottom: calc(98px + 4vw);
+}

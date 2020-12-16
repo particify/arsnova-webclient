@@ -2,11 +2,13 @@
      [ngClass]="{'notActive': !isActive, 'fixed': scrollExtended}"
      (mouseenter)="toggleVisibility(true)" (mouseleave)="toggleVisibility(false)">
   <div class="icon-container">
-    <mat-icon *ngFor="let barItem of barItems; let i = index" (click)="navToUrl(i)" class="clickable"
-              [ngClass]="{'current-url': i === currentRouteIndex}"
-              matTooltip="{{ 'sidebar.' + barItem.name | translate}}">
-      {{barItem.icon}}
-      <div [ngClass]="{'hidden': !barItem.news }" class="badge"></div>
-    </mat-icon>
+    <div *ngFor="let barItem of barItems; let i = index" fxLayout="column" fxLayoutAlign="center center"
+         [ngClass]="{'current': i === currentRouteIndex}">
+      <mat-icon (click)="navToUrl(i)" class="clickable" matTooltip="{{ 'sidebar.' + barItem.name | translate}}">
+        {{barItem.icon}}
+        <div [ngClass]="{'hidden': !barItem.news }" class="badge"></div>
+      </mat-icon>
+      <p class="text">{{ 'sidebar.' + barItem.name | translate}}</p>
+    </div>
   </div>
 </div>
