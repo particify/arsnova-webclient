@@ -223,8 +223,8 @@ export class StatisticListComponent implements OnInit {
     }
   }
 
-  evaluateMultiple(options: AnswerOption[], combCounts: Combination[]): number {
-    if (this.checkIfSurvey(options)) {
+  evaluateMultiple(options: AnswerOption[], combCounts?: Combination[]): number {
+    if (combCounts && this.checkIfSurvey(options)) {
       const combLength = combCounts.length;
       let correctCounts = 0;
       let totalCounts = 0;
