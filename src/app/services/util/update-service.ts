@@ -2,8 +2,10 @@ import { Injectable } from '@angular/core';
 import { SwUpdate, UpdateAvailableEvent } from '@angular/service-worker';
 import { TranslateService } from '@ngx-translate/core';
 import { tap } from 'rxjs/operators';
+import { UpdateInstalled } from '../../models/events/update-installed';
 import { UpdateImportance, VersionInfo } from '../../models/version-info';
 import { DialogService } from './dialog.service';
+import { EventService } from './event.service';
 import { GlobalStorageService, STORAGE_KEYS } from './global-storage.service';
 import { AdvancedSnackBarTypes, NotificationService } from './notification.service';
 
@@ -18,6 +20,7 @@ export class UpdateService {
   constructor(
       private update: SwUpdate,
       private globalStorageService: GlobalStorageService,
+      private eventService: EventService,
       private dialogService: DialogService,
       private notificationService: NotificationService,
       private translationService: TranslateService,
@@ -34,7 +37,7 @@ export class UpdateService {
         version, latestVersion, relevantVersions, importance);
 
     const updateReady$ = this.update.available.pipe(tap(event => {
-      this.handleUpdateReady(event, latestVersion);
+      this.handleUpdateReady(event, latestVersion, importance);
     }));
 
     switch (importance) {
@@ -62,7 +65,8 @@ export class UpdateService {
     }
   }
 
-  private handleUpdateReady(event: UpdateAvailableEvent, latestVersion: VersionInfo) {
+  private handleUpdateReady(event: UpdateAvailableEvent, latestVersion: VersionInfo, importance: UpdateImportance) {
+    const previousLocalVersion = this.globalStorageService.getItem(STORAGE_KEYS.VERSION) as LocalVersionInfo;
     const localVersion: LocalVersionInfo = {
       installed: latestVersion.id,
       latest: latestVersion.id,
@@ -70,6 +74,13 @@ export class UpdateService {
     };
     this.globalStorageService.setItem(STORAGE_KEYS.VERSION, localVersion);
     this.globalStorageService.setItem(STORAGE_KEYS.UPDATED, true);
+    const updateEvent = new UpdateInstalled(
+        localVersion.installed,
+        localVersion.hash,
+        previousLocalVersion.installed,
+        previousLocalVersion.hash,
+        importance);
+    this.eventService.broadcast(updateEvent);
   }
 
   public handleUpdateConfirmed() {
