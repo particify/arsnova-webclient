@@ -17,6 +17,7 @@ import { EventService } from './services/util/event.service';
 import { ApiConfig } from './models/api-config';
 import { ConsentService } from './services/util/consent.service';
 import { UpdateService } from './services/util/update-service';
+import { UpdateImportance } from './models/version-info';
 
 @Injectable()
 class MockTranslateService {
@@ -43,39 +44,42 @@ class MockNotificationService {
 
   public show(msg: string, install: string, config: any) {
   }
+
+  public showAdvanced() {
+  }
 }
 
 @Injectable()
 class MockDialogService {
-  public openUpdateInfoDialog() {
-    return {
-      afterClosed(): Observable<string> {
-        return of('any');
-      }
-    };
-  }
+  public openUpdateInfoDialog = jasmine.createSpy('OpenUpdateInfoDialogSpy').and.returnValue({
+    afterClosed: () => new Subject()
+  });
 }
 
 @Injectable()
 class MockEventService {
+  public broadcast() {
+  }
 }
 
 @Injectable()
 class MockGlobalStorageService {
-  public getItem(key: string): string {
-    return '';
+  private memory: Map<symbol, any> = new Map();
+
+  constructor(initialState: [[symbol, any]]) {
+    initialState.forEach(item => this.setItem(item[0], item[1]));
   }
 
-  public setItem(key: string, value: any) {
+  public getItem(key: symbol): any {
+    return this.memory.get(key);
   }
 
-  public removeItem(key: string) {
+  public setItem(key: symbol, value: any) {
+    this.memory.set(key, value);
   }
-}
 
-@Injectable()
-class MockUpdateService {
-  public handleUpdate() {
+  public removeItem(key: symbol) {
+    this.memory.delete(key);
   }
 }
 
@@ -87,7 +91,27 @@ class MockApiConfigService extends ApiConfigService {
       tracking: {
         url: 'mock-tracker',
         provider: 'matomo'
-      }
+      },
+      versions: [
+        {
+          id: 100001,
+          importance: UpdateImportance.RECOMMENDED,
+          changes: {
+            en: [
+              'a change entry'
+            ]
+          }
+        },
+        {
+          id: 100000,
+          importance: UpdateImportance.RECOMMENDED,
+          changes: {
+            en: [
+              'a change entry'
+            ]
+          }
+        }
+      ]
     },
     authenticationProviders: [],
     features: { }
@@ -206,7 +230,17 @@ describe('AppComponent', () => {
         },
         {
           provide: GlobalStorageService,
-          useClass: MockGlobalStorageService
+          useFactory: () => new MockGlobalStorageService(
+              [
+                [
+                  STORAGE_KEYS.VERSION,
+                  {
+                    installed: '100000',
+                    latest: '100000',
+                    hash: 'hash'
+                  }
+                ]
+              ])
         },
         {
           provide: EventService,
@@ -218,7 +252,7 @@ describe('AppComponent', () => {
         },
         {
           provide: UpdateService,
-          useClass: MockUpdateService
+          useClass: UpdateService
         },
         {
           provide: Window,
@@ -252,18 +286,9 @@ describe('AppComponent', () => {
 
   it('should show a dialog on sw update', () => {
     const mockSwUpdate = <MockSwUpdate> fixture.debugElement.injector.get(SwUpdate);
-    const mockGlobalStorageService = fixture.debugElement.injector.get(GlobalStorageService);
-    const $window = fixture.debugElement.injector.get(Window);
-    const spy = spyOn(mockGlobalStorageService, 'setItem');
-    delete $window.location;
-    $window.location = Object();
-    $window.location.reload = () => {};
-    const reloadSpy = spyOn($window.location, 'reload');
-
+    const mockDialogService = fixture.debugElement.injector.get(DialogService);
     mockSwUpdate.mockUpdateAvailableEvent();
-
-    expect(spy).toHaveBeenCalled();
-    expect(reloadSpy).toHaveBeenCalled();
+    expect(mockDialogService.openUpdateInfoDialog).toHaveBeenCalled();
   });
 
   it('should call the tracking service init on getting a tracking config', () => {

@@ -98,7 +98,7 @@ export class UpdateService {
 
   private determineLatestVersion(versionInfos: VersionInfo[]) {
     return versionInfos.reduce((acc, cur) => {
-      return cur.id > acc?.id ? cur : acc;
+      return cur.id > (acc?.id ?? 0) ? cur : acc;
     }, null);
   }
 
