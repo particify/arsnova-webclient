@@ -1,4 +1,5 @@
 @import '../bar-base';
+@import '../../../../../variables';
 
 .badge {
   position: absolute;
@@ -24,13 +25,36 @@
   opacity: 1;
   cursor: default;
   color: var(--secondary);
+  font-weight: $font-weight-bold;
+  animation: active 300ms;
 }
 
-.text {
-  opacity: 0.6;
-  font-size: 12px;
-  margin: 4px 0 0;
+@keyframes active {
+  0% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(0.92);
+  }
+
+  70% {
+    transform: scale(1.02);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+
 }
+
+
+@media(min-width: 1001px) {
+  .text {
+    display: none;
+  }
+}
+
 
 @media(max-width: 1000px) {
   .nav {
@@ -43,7 +67,6 @@
     width: 100%;
     flex-direction: row;
     justify-content: space-around;
-    //margin: 16px 0;
     margin: 10px 0;
   }
 
@@ -51,5 +74,11 @@
     font-size: 24px;
     width: 24px;
     height: 24px;
+  }
+
+  .text {
+    opacity: 0.6;
+    font-size: 12px;
+    margin: 4px 0 0;
   }
 }
