@@ -1,68 +1,71 @@
 <app-nav-bar></app-nav-bar>
 <app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
-<div fxFill fxLayout="column" fxLayoutAlign="center">
-<button class="visually-hidden" id="message-announcer-button" tabIndex="-1" (click)="announceKeys()">
-    {{ 'survey.a11y-message' | translate }}</button>
-  <div *ngIf="!isLoading" fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="center">
-    <mat-card>
-      <div class="survey-container" [ngClass]="{ 'faded' : isClosed }">
-        <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="30px"
-             *ngFor="let state of survey; let i = index">
-          <mat-icon *ngIf="type ===typeFeedback" class="label-icon" matTooltip="{{ state.label | translate }}">
-            {{ feedbackIcons[i] }}</mat-icon>
-          <p *ngIf="type === typeSurvey" class="answer-label">{{ state.label | translate }}</p>
-          <mat-progress-bar class="survey-progress bar" [value]="state.count"></mat-progress-bar>
+<div class="nav-bar-container">
+  <div fxLayout="column" fxLayoutAlign="center">
+    <button class="visually-hidden" id="message-announcer-button" tabIndex="-1" (click)="announceKeys()">
+      {{ 'survey.a11y-message' | translate }}</button>
+    <div *ngIf="!isLoading" fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="center">
+      <mat-card>
+        <div class="survey-container" [ngClass]="{ 'faded' : isClosed }">
+          <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="30px"
+               *ngFor="let state of survey; let i = index">
+            <mat-icon *ngIf="type ===typeFeedback" class="label-icon" matTooltip="{{ state.label | translate }}">
+              {{ feedbackIcons[i] }}</mat-icon>
+            <p *ngIf="type === typeSurvey" class="answer-label">{{ state.label | translate }}</p>
+            <mat-progress-bar class="survey-progress bar" [value]="state.count"></mat-progress-bar>
+          </div>
         </div>
-      </div>
-      <div class="text invisible" [ngClass]="{'visible' : isClosed}">
-        <h3 tabindex="-1" id="stopped-label">{{ 'survey.is-stopped' | translate }}</h3>
-      </div>
-      <div fxLayoutAlign="center center" fxLayoutGap="20px" *ngIf="isCreator">
-        <div class="invisible-button button-container" [ngClass]="{'visible-button': isClosed}">
-        <button id="switch-button" tabindex="{{ isClosed ? '0' : '-1' }}" mat-raised-button
-                class="button-abort bottom-button" (click)="changeType()" aria-labelledby="change-type">
-          {{ 'survey.change-type' | translate }}
-        </button>
+        <div class="text invisible" [ngClass]="{'visible' : isClosed}">
+          <h3 tabindex="-1" id="stopped-label">{{ 'survey.is-stopped' | translate }}</h3>
         </div>
-        <div class="invisible-button button-container" [ngClass]="{'visible-button': !isClosed}">
-          <app-answer-count id="answer-count" tabindex="{{ !isClosed ? '0' : '-1' }}"
-                            [count]="answerCount" [size]="'medium'"></app-answer-count>
+        <div fxLayoutAlign="center center" fxLayoutGap="20px" *ngIf="isCreator">
+          <div class="invisible-button button-container" [ngClass]="{'visible-button': isClosed}">
+            <button id="switch-button" tabindex="{{ isClosed ? '0' : '-1' }}" mat-raised-button
+                    class="button-abort bottom-button" (click)="changeType()" aria-labelledby="change-type">
+              {{ 'survey.change-type' | translate }}
+            </button>
+          </div>
+          <div class="invisible-button button-container" [ngClass]="{'visible-button': !isClosed}">
+            <app-answer-count id="answer-count" tabindex="{{ !isClosed ? '0' : '-1' }}"
+                              [count]="answerCount" [size]="'medium'"></app-answer-count>
+          </div>
+          <button tabindex="0" mat-raised-button id="toggle-button" class="button-primary bottom-button"
+                  fxLayoutAlign="center" (click)="toggle()" aria-labelledby="toggle">
+            {{ (isClosed ? 'survey.start' : 'survey.stop') | translate }}
+          </button>
         </div>
-        <button tabindex="0" mat-raised-button id="toggle-button" class="button-primary bottom-button"
-                fxLayoutAlign="center" (click)="toggle()" aria-labelledby="toggle">
-          {{ (isClosed ? 'survey.start' : 'survey.stop') | translate }}
-        </button>
-      </div>
-      <div fxLayout="row" fxLayoutAlign="center">
-        <app-answer-count *ngIf="!isCreator" [count]="answerCount" [size]="'small'"></app-answer-count>
-      </div>
-    </mat-card>
-  </div>
-  <div *ngIf="!isCreator" [ngClass]="{'faded' : isClosed}" fxLayout="column" fxLayoutAlign="start center" class="answer-container">
-    <div fxLayout="row" fxLayoutGap="16px" class="card-row">
-      <ng-container *ngFor="let state of survey; let i = index">
-        <mat-card *ngIf="i < 2" id="survey-button-{{i}}" fxLayout="row" fxLayoutAlign="center center" class="answer"
-                  attr.aria-label="{{ state.a11y | translate }}" (click)="submitAnswer(state.state)" tabindex="0"
-                  (keyup.enter)="submitAnswerViaEnter(state.state, state.label)" role="button">
-          <p *ngIf="type === typeSurvey" class="answer-button-label">{{ state.label | translate }}</p>
-          <mat-icon *ngIf="type === typeFeedback" class="button-label-icon" matTooltip="{{ state.label | translate }}">
-            {{ feedbackIcons[i] }}</mat-icon>
-        </mat-card>
-      </ng-container>
+        <div fxLayout="row" fxLayoutAlign="center">
+          <app-answer-count *ngIf="!isCreator" [count]="answerCount" [size]="'small'"></app-answer-count>
+        </div>
+      </mat-card>
     </div>
-    <div fxLayout="row" fxLayoutGap="16px" class="card-row">
-      <ng-container *ngFor="let state of survey; let i = index">
-        <mat-card *ngIf="i >= 2" id="survey-button2-{{i}}" fxLayout="row" fxLayoutAlign="center center" class="answer"
-                  attr.aria-label="{{ state.a11y | translate }}" (click)="submitAnswer(state.state)" tabindex="0"
-                  (keyup.enter)="submitAnswerViaEnter(state.state, state.label)" role="button">
-          <p *ngIf="type === typeSurvey" class="answer-button-label">{{ state.label | translate }}</p>
-          <mat-icon *ngIf="type === typeFeedback" class="button-label-icon" matTooltip="{{ state.label | translate }}">
-            {{ feedbackIcons[i] }}</mat-icon>
-        </mat-card>
-      </ng-container>
+    <div *ngIf="!isCreator" [ngClass]="{'faded' : isClosed}" fxLayout="column" fxLayoutAlign="start center" class="answer-container">
+      <div fxLayout="row" fxLayoutGap="16px" class="card-row">
+        <ng-container *ngFor="let state of survey; let i = index">
+          <mat-card *ngIf="i < 2" id="survey-button-{{i}}" fxLayout="row" fxLayoutAlign="center center" class="answer"
+                    attr.aria-label="{{ state.a11y | translate }}" (click)="submitAnswer(state.state)" tabindex="0"
+                    (keyup.enter)="submitAnswerViaEnter(state.state, state.label)" role="button">
+            <p *ngIf="type === typeSurvey" class="answer-button-label">{{ state.label | translate }}</p>
+            <mat-icon *ngIf="type === typeFeedback" class="button-label-icon" matTooltip="{{ state.label | translate }}">
+              {{ feedbackIcons[i] }}</mat-icon>
+          </mat-card>
+        </ng-container>
+      </div>
+      <div fxLayout="row" fxLayoutGap="16px" class="card-row">
+        <ng-container *ngFor="let state of survey; let i = index">
+          <mat-card *ngIf="i >= 2" id="survey-button2-{{i}}" fxLayout="row" fxLayoutAlign="center center" class="answer"
+                    attr.aria-label="{{ state.a11y | translate }}" (click)="submitAnswer(state.state)" tabindex="0"
+                    (keyup.enter)="submitAnswerViaEnter(state.state, state.label)" role="button">
+            <p *ngIf="type === typeSurvey" class="answer-button-label">{{ state.label | translate }}</p>
+            <mat-icon *ngIf="type === typeFeedback" class="button-label-icon" matTooltip="{{ state.label | translate }}">
+              {{ feedbackIcons[i] }}</mat-icon>
+          </mat-card>
+        </ng-container>
+      </div>
     </div>
   </div>
 </div>
+
 
 <div class="visually-hidden">
   <div id="toggle">{{ (isClosed ? 'survey.a11y-start-survey' : 'survey.a11y-stop-survey') | translate }}</div>

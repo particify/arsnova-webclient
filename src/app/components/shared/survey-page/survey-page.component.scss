@@ -5,6 +5,7 @@ $mobile-bar-height: 50px;
 $bar-margin: 10px;
 $mobile-bar-margin: 8px;
 $card-padding: 16px;
+$bottom-bar-height: 62px;
 
 .mat-card {
   width: 100%;
@@ -74,7 +75,7 @@ $card-padding: 16px;
 
 @media (min-width: 700px) {
   .answer-container {
-    height: calc(100% - ((#{$card-padding} * 2) + (#{$bar-height} * 4) + (#{$bar-margin} * 8)));
+    height: calc(100vh - ((#{$card-padding} * 2) + (#{$bar-height} * 4) + (#{$bar-margin} * 8)));
   }
 
   .bar {
@@ -85,7 +86,7 @@ $card-padding: 16px;
 
 @media (max-width: 700px) {
   .answer-container {
-    height: calc(100% - ((#{$card-padding} * 2) + (#{$mobile-bar-height} * 4) + (#{$mobile-bar-margin} * 8)));
+    height: calc(100vh - calc(((#{$card-padding} * 2) + (#{$mobile-bar-height} * 4) + (#{$mobile-bar-margin} * 8) + #{$bottom-bar-height}) + calc(56px + 8vw) + 34px));
   }
 
   .bar {
