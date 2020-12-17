@@ -47,10 +47,10 @@ export class RoomCreateComponent implements OnInit {
 
   ngOnInit() {
     this.translateService.use(this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE));
-    this.authenticationService.getCurrentAuthentication().subscribe(auth => this.handleAuth(auth));
-    this.apiConfigService.getApiConfig$().subscribe(config =>
-        this.anonymousProvider = config.authenticationProviders
-            .filter((p) => p.type === AuthenticationProviderType.ANONYMOUS)[0]);
+    this.apiConfigService.getApiConfig$().subscribe(config => {
+      this.anonymousProvider = config.authenticationProviders.filter((p) => p.type === AuthenticationProviderType.ANONYMOUS)[0];
+      this.authenticationService.getCurrentAuthentication().subscribe(auth => this.handleAuth(auth));
+    });
   }
 
   resetEmptyInputs(): void {
