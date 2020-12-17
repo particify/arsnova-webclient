@@ -83,7 +83,9 @@ export class TrackingService {
         this.loadTrackerScript();
       }
     });
-    this.router.events.pipe(filter(event => (event instanceof ActivationEnd && !!event.snapshot.component)))
+    this.router.events.pipe(
+        filter(event => (event instanceof ActivationEnd && !!event.snapshot.component)),
+        filter(event => (event as ActivationEnd).snapshot.outlet === 'primary'))
         .subscribe((event: ActivationEnd) => this.addRoute(this.router.url, event.snapshot));
     this.translateService.onLangChange
         .subscribe((event: LangChangeEvent) => this.setVisitDimension(VisitDimension.UI_LANGUAGE, event.lang));
