@@ -37,6 +37,9 @@ export class ApiConfigService extends BaseHttpService {
       config.authenticationProviders.sort((p1, p2) => {
         return p1.order < p2.order ? -1 : p1.order > p2.order ? 1 : 0;
       });
+      /* Lists in the UI config are currently serialized as objects instead of arrays,
+       * so they are converted here for easier handling. */
+      this.convertNestedListObjectsToArrays(config.ui);
       this.freezeRecursively(config);
       this.config = config;
       console.log('API configuration loaded.');
@@ -53,6 +56,32 @@ export class ApiConfigService extends BaseHttpService {
 
   getFeatureConfig(feature: string): Feature {
     return this.config.features[feature];
+  }
+
+  /**
+   * Converts array-like objects to real arrays so array methods can be used.
+   * Example: {"0": "val0", "1": "val1", "2": {"0": "nestedVal"}} => ["val0", "val1", ["nestedVal"]]
+   */
+  private convertNestedListObjectsToArrays(value: any): any {
+    if (Array.isArray(value)) {
+      const arr = value as any[];
+      return arr.map(item => this.convertNestedListObjectsToArrays(item));
+    } else if (typeof value === 'object') {
+      const obj = value as object;
+      for (const [name, objValue] of Object.entries(obj)) {
+        obj[name] = objValue && this.convertNestedListObjectsToArrays(objValue);
+      }
+
+      return this.convertListObjectToArray(obj);
+    }
+
+    return value;
+  }
+
+  private convertListObjectToArray(obj: object): object|any[] {
+    return Object.keys(obj).some(k => parseInt(k, 10).toString() !== k)
+        ? obj
+        : Object.values(obj);
   }
 
   private freezeRecursively(obj: object) {
