@@ -24,7 +24,8 @@ import { FeedbackService } from '../../../services/http/feedback.service';
 })
 export class SurveyPageComponent implements OnInit, OnDestroy, AfterContentInit {
 
-  feedbackLabels = ['sentiment_very_satisfied', 'sentiment_satisfied_alt', 'sentiment_very_dissatisfied', 'mood_bad'];
+  feedbackIcons = ['sentiment_very_satisfied', 'sentiment_satisfied_alt', 'sentiment_very_dissatisfied', 'mood_bad'];
+  feedbackLabels = ['feeling-very-good', 'feeling-good', 'feeling-not-so-good', 'feeling-bad'];
   surveyLabels = ['survey-a', 'survey-b', 'survey-c', 'survey-d'];
   typeSurvey = 'SURVEY';
   typeFeedback = 'FEEDBACK';
