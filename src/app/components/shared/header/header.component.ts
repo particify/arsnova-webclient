@@ -123,7 +123,7 @@ export class HeaderComponent implements OnInit {
     this.route.data.subscribe(data => {
       this.helpUrl = data.apiConfig.ui.links?.help?.url;
     });
-    this.showNews = !this.globalStorageService.getItem(STORAGE_KEYS.VERSION);
+    this.showNews = false;
     this.routingService.subscribeActivatedRoute();
   }
 

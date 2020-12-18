@@ -1,5 +1,6 @@
 export interface VersionInfo {
   id: string;
+  commitHash: string;
   changes: { [lang: string]: string[] };
   importance: UpdateImportance;
 }

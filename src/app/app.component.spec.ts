@@ -95,6 +95,7 @@ class MockApiConfigService extends ApiConfigService {
       versions: [
         {
           id: 100001,
+          commitHash: '1111111111111111111111111111111111111111',
           importance: UpdateImportance.RECOMMENDED,
           changes: {
             en: [
@@ -104,6 +105,7 @@ class MockApiConfigService extends ApiConfigService {
         },
         {
           id: 100000,
+          commitHash: '0000000000000000000000000000000000000000',
           importance: UpdateImportance.RECOMMENDED,
           changes: {
             en: [
@@ -233,12 +235,8 @@ describe('AppComponent', () => {
           useFactory: () => new MockGlobalStorageService(
               [
                 [
-                  STORAGE_KEYS.VERSION,
-                  {
-                    installed: '100000',
-                    latest: '100000',
-                    hash: 'hash'
-                  }
+                  STORAGE_KEYS.LATEST_ANNOUNCED_VERSION,
+                  '0000000000000000000000000000000000000000'
                 ]
               ])
         },

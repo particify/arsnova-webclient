@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { SwUpdate, UpdateAvailableEvent } from '@angular/service-worker';
+import { SwUpdate } from '@angular/service-worker';
 import { TranslateService } from '@ngx-translate/core';
 import { tap } from 'rxjs/operators';
 import { UpdateInstalled } from '../../models/events/update-installed';
@@ -8,12 +8,7 @@ import { DialogService } from './dialog.service';
 import { EventService } from './event.service';
 import { GlobalStorageService, STORAGE_KEYS } from './global-storage.service';
 import { AdvancedSnackBarTypes, NotificationService } from './notification.service';
-
-interface LocalVersionInfo {
-  installed: string;
-  latest: string;
-  hash: string;
-}
+import { environment } from '../../../environments/environment';
 
 @Injectable()
 export class UpdateService {
@@ -25,19 +20,25 @@ export class UpdateService {
       private notificationService: NotificationService,
       private translationService: TranslateService,
       private window: Window) {
+    console.log('Version:', environment.version.commitHash, environment.version.commitDate);
   }
 
   public handleUpdate(versionInfos: VersionInfo[] = []) {
     this.handleUpdateCompleted();
-    const version = this.globalStorageService.getItem(STORAGE_KEYS.VERSION);
+    const currentVersion = this.selectVersionByHash(versionInfos, environment.version.commitHash);
     const latestVersion = this.determineLatestVersion(versionInfos);
-    const relevantVersions = this.determineRelevantVersions(versionInfos);
-    const importance = this.determineUpdateImportance(versionInfos);
-    console.log(`Version info - local version info, latest version info, relevant versions, update importance:`,
-        version, latestVersion, relevantVersions, importance);
+    const relevantVersions = this.determineRelevantVersions(versionInfos, currentVersion);
+    const importance = this.determineUpdateImportance(versionInfos, currentVersion);
+    if (relevantVersions.length > 0) {
+      console.log('Update announced:', latestVersion.commitHash, latestVersion.importance);
+      console.log('Skipped updates:', relevantVersions.length - 1, importance);
+      this.globalStorageService.setItem(STORAGE_KEYS.LATEST_ANNOUNCED_VERSION, latestVersion.commitHash);
+    } else {
+      console.log('No updates announced.');
+    }
 
-    const updateReady$ = this.update.available.pipe(tap(event => {
-      this.handleUpdateReady(event, latestVersion, importance);
+    const updateReady$ = this.update.available.pipe(tap(() => {
+      this.handleUpdateReady(currentVersion, latestVersion, importance);
     }));
 
     switch (importance) {
@@ -65,20 +66,13 @@ export class UpdateService {
     }
   }
 
-  private handleUpdateReady(event: UpdateAvailableEvent, latestVersion: VersionInfo, importance: UpdateImportance) {
-    const previousLocalVersion = this.globalStorageService.getItem(STORAGE_KEYS.VERSION) as LocalVersionInfo;
-    const localVersion: LocalVersionInfo = {
-      installed: latestVersion.id,
-      latest: latestVersion.id,
-      hash: event.available.hash
-    };
-    this.globalStorageService.setItem(STORAGE_KEYS.VERSION, localVersion);
+  private handleUpdateReady(currentVersion: VersionInfo, latestVersion: VersionInfo, importance: UpdateImportance) {
     this.globalStorageService.setItem(STORAGE_KEYS.UPDATED, true);
     const updateEvent = new UpdateInstalled(
-        localVersion.installed,
-        localVersion.hash,
-        previousLocalVersion.installed,
-        previousLocalVersion.hash,
+        latestVersion?.id ?? '',
+        latestVersion?.commitHash ?? '',
+        currentVersion?.id ?? '',
+        environment.version.commitHash,
         importance);
     this.eventService.broadcast(updateEvent);
   }
@@ -96,29 +90,30 @@ export class UpdateService {
     }
   }
 
+  private selectVersionByHash(versionInfos: VersionInfo[], hash: string) {
+    return versionInfos.find(vi => vi.commitHash === hash);
+  }
+
   private determineLatestVersion(versionInfos: VersionInfo[]) {
     return versionInfos.reduce((acc, cur) => {
       return cur.id > (acc?.id ?? 0) ? cur : acc;
     }, null);
   }
 
-  private determineRelevantVersions(versionInfos: VersionInfo[]) {
-    const version = this.globalStorageService.getItem(STORAGE_KEYS.VERSION) as LocalVersionInfo;
-    const installed = version?.installed ?? null;
-    return versionInfos.filter(vi => vi.id > installed);
+  private determineRelevantVersions(versionInfos: VersionInfo[], currentVersion: VersionInfo) {
+    return versionInfos.filter(vi => vi.id > (currentVersion?.id ?? 0));
   }
 
-  private determineUpdateImportance(versionInfos: VersionInfo[]) {
-    const version = this.globalStorageService.getItem(STORAGE_KEYS.VERSION) as LocalVersionInfo;
-    if (!version || versionInfos.length === 0) {
-      /* The local version is unknown. The app is loaded for the first time or the localStorage item was removed.
-       * - or -
-       * There are no version infos available. */
+  private determineUpdateImportance(versionInfos: VersionInfo[], currentVersion: VersionInfo) {
+    if (versionInfos.length === 0) {
+      /* There are no version infos available. */
       return UpdateImportance.RECOMMENDED;
     }
-    const latest = version?.latest ?? null;
-    const relevantVersions = this.determineRelevantVersions(versionInfos);
-    if (relevantVersions.length === versionInfos.length) {
+    const latestAnnouncedVersionHash = this.globalStorageService.getItem(STORAGE_KEYS.LATEST_ANNOUNCED_VERSION);
+    const latestAnnouncedVersionId = this.selectVersionByHash(versionInfos, latestAnnouncedVersionHash)?.id ?? 0;
+    const latestVersion = this.determineLatestVersion(versionInfos);
+    const relevantVersions = this.determineRelevantVersions(versionInfos, currentVersion);
+    if (relevantVersions.length === versionInfos.length && latestVersion?.commitHash !== latestAnnouncedVersionHash) {
       /* The client has not been updated for some time and older, mandatory
        * versions might have been purged from the server-side list. */
       return UpdateImportance.MANDATORY;
@@ -127,15 +122,15 @@ export class UpdateService {
      * their existence. This is the case if the app is reloaded after the local
      * info about the latest version has been updated locally. This is done as
      * a precaution so the forced update dialog can be bypassed if something
-     * went wrong. */
-    relevantVersions.forEach(v => {
-      if (v.importance === UpdateImportance.MANDATORY && v.id <= latest) {
-        v.importance = UpdateImportance.RECOMMENDED;
-      }
-    });
+     * went wrong.
+     * Then return the highest importance in from the list. */
     const importance = [UpdateImportance.OPTIONAL, UpdateImportance.RECOMMENDED, UpdateImportance.MANDATORY];
-    return relevantVersions.reduce((acc, cur) => {
-      return importance.indexOf(cur.importance) > importance.indexOf(acc) ? cur.importance : acc;
-    }, UpdateImportance.OPTIONAL);
+    return relevantVersions
+        .map(v => v.importance === UpdateImportance.MANDATORY && v.id <= latestAnnouncedVersionId
+            ? UpdateImportance.RECOMMENDED
+            : v.importance)
+        .reduce((acc, cur) => {
+          return importance.indexOf(cur) > importance.indexOf(acc) ? cur : acc;
+        }, UpdateImportance.OPTIONAL);
   }
 }
