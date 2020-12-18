@@ -7,5 +7,9 @@ export const environment = {
   name: 'dev',
   production: false,
   stomp_debug: false,
-  debugOverrideRoomRole: false
+  debugOverrideRoomRole: false,
+  version: {
+    commitHash: '0000000000000000000000000000000000000000',
+    commitDate: ''
+  }
 };
