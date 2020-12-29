@@ -8,7 +8,7 @@
         <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="30px"
              *ngFor="let state of survey; let i = index">
           <mat-icon *ngIf="type ===typeFeedback" class="label-icon" matTooltip="{{ state.label | translate }}">
-            {{ state.name }}</mat-icon>
+            {{ feedbackIcons[i] }}</mat-icon>
           <p *ngIf="type === typeSurvey" class="answer-label">{{ state.label | translate }}</p>
           <mat-progress-bar class="survey-progress bar" [value]="state.count"></mat-progress-bar>
         </div>
@@ -45,7 +45,7 @@
                   (keyup.enter)="submitAnswerViaEnter(state.state, state.label)" role="button">
           <p *ngIf="type === typeSurvey" class="answer-button-label">{{ state.label | translate }}</p>
           <mat-icon *ngIf="type === typeFeedback" class="button-label-icon" matTooltip="{{ state.label | translate }}">
-            {{ state.name }}</mat-icon>
+            {{ feedbackIcons[i] }}</mat-icon>
         </mat-card>
       </ng-container>
     </div>
@@ -56,7 +56,7 @@
                   (keyup.enter)="submitAnswerViaEnter(state.state, state.label)" role="button">
           <p *ngIf="type === typeSurvey" class="answer-button-label">{{ state.label | translate }}</p>
           <mat-icon *ngIf="type === typeFeedback" class="button-label-icon" matTooltip="{{ state.label | translate }}">
-            {{ state.name }}</mat-icon>
+            {{ feedbackIcons[i] }}</mat-icon>
         </mat-card>
       </ng-container>
     </div>

@@ -34,9 +34,9 @@ export class ContentCreationPageComponent implements OnInit, AfterContentInit {
   contentGroups: string[] = [];
   lastContentGroup: string;
   formats: ContentFormat[] = [
-    { name: 'choice', icon: 'format_list_bulleted' },
+    { name: 'choice', icon: 'list' },
     { name: 'scale', icon: 'mood' },
-    { name: 'binary', icon: 'dns' },
+    { name: 'binary', icon: 'rule' },
     { name: 'text', icon: 'description' },
     { name: 'slide', icon: 'info' }
   ];
