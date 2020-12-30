@@ -58,13 +58,13 @@ yarn_install:
     - umask 0000
     - yarn --frozen-lockfile
 
-tslint:
+lint:
   stage: test
   needs:
     - yarn_install
   allow_failure: false
   script:
-    - tslint -p ./tsconfig.json -c ./tslint.json --project
+    - ng lint
 
 unit_tests:
   stage: test
