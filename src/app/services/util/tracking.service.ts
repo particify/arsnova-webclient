@@ -130,7 +130,7 @@ export class TrackingService {
       this.firstAuth = false;
     });
     this.eventService.on<any>('HttpRequestFailed')
-        .subscribe(e => this.addEvent(EventCategory.ERROR, 'HTTP request failed', e.statusText, e.status));
+        .subscribe(e => this.addEvent(EventCategory.ERROR, 'HTTP request failed', `Status code ${e.status}`, undefined, e.url));
     this.eventService.on<any>('AccountCreated')
         .subscribe(e => this.addEvent(EventCategory.ACCOUNT, 'Account created'));
     this.eventService.on<any>('AccountDeleted')
@@ -168,9 +168,17 @@ export class TrackingService {
     this.setupPingSubscription();
   }
 
-  addEvent(category: EventCategory, action: string, name?: string, value?: number) {
-    const event = ['trackEvent', category, action];
-    this._paq.push(['trackEvent', category, action, name, value]);
+  addEvent(category: EventCategory, action: string, name?: string, value?: number, url?: string) {
+    this._paq.push(['setCustomUrl', this.stripIdsFromUri(url ?? this.router.url)]);
+    const event: (string|number)[] = ['trackEvent', category, action];
+    /* Check for undefined explicitly because 0 is a valid value */
+    if (name || typeof value !== 'undefined') {
+      event.push(name);
+      if (typeof value !== 'undefined') {
+        event.push(value);
+      }
+    }
+    this._paq.push(event);
   }
 
   sendPing() {
@@ -183,8 +191,10 @@ export class TrackingService {
    * Replaces IDs in a URI to protect the user's privacy.
    */
   stripIdsFromUri(uri: string) {
-    let strippedUri = uri.replace(/\/room\/[0-9]+/, '/room/__ROOM_SHORT_ID__');
-    strippedUri = strippedUri.replace(/[0-9a-f]{32}/, '__ID__');
-    return strippedUri;
+    return uri.replace(/\/room\/[0-9]+(\/|$)/, '/room/__ROOM_SHORT_ID__$1')
+        .replace(/\/~.*?(\/|$)/, '/__ALIAS__$1')
+        .replace(/\/[0-9a-f]{32}(\/|$)/, '/__ID__$1')
+        .replace(/\/[0-9]{1,4}(\/|$)/, '/__INDEX__$1')
+        .replace(/\/group\/[^\/]+/, '/group/__GROUP__');
   }
 }
