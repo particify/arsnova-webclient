@@ -30,16 +30,16 @@
             <div *ngIf="!flipped">
               <app-content-choice-participant *ngIf="content.format === ContentType.CHOICE ||
             content.format === ContentType.SCALE || content.format === ContentType.BINARY" [answer]="answer"
-                                              [content]="content" [alreadySent]="alreadySent" (message)="forwardAnswerMessage($event)"
+                                              [content]="content" [alreadySent]="alreadySent" (answerChanged)="forwardAnswerMessage($event)"
                                               [sendEvent]="sendEvent">
               </app-content-choice-participant>
               <app-content-text-participant *ngIf="content.format === ContentType.TEXT" [answer]="answer"
                                             [content]="content" [alreadySent]="alreadySent" [sendEvent]="sendEvent"
-                                            (message)="forwardAnswerMessage($event)"
+                                            (answerChanged)="forwardAnswerMessage($event)"
               ></app-content-text-participant>
               <app-content-sort-participant *ngIf="content.format === ContentType.SORT" [answer]="answer"
                                             [content]="content" [alreadySent]="alreadySent" [sendEvent]="sendEvent"
-                                            (message)="forwardAnswerMessage($event)">
+                                            (answerChanged)="forwardAnswerMessage($event)">
               </app-content-sort-participant>
             </div>
             <div *ngIf="content.format !== ContentType.SLIDE">

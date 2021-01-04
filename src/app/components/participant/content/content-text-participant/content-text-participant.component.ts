@@ -23,7 +23,7 @@ export class ContentTextParticipantComponent extends ContentParticipantBaseCompo
   @Input() answer: TextAnswer;
   @Input() alreadySent: boolean;
   @Input() sendEvent: EventEmitter<string>;
-  @Output() message = new EventEmitter<TextAnswer>();
+  @Output() answerChanged = new EventEmitter<TextAnswer>();
 
   givenAnswer: TextAnswer;
 

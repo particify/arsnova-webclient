@@ -15,7 +15,7 @@ export class ContentParticipantComponent implements OnInit {
 
   @Input() content: Content;
   @Input() answer: Answer;
-  @Output() message = new EventEmitter<Answer>();
+  @Output() answerChanged = new EventEmitter<Answer>();
 
   sendEvent = new EventEmitter<string>();
   isLoading = true;
@@ -43,10 +43,10 @@ export class ContentParticipantComponent implements OnInit {
 
   setExtensionData(roomId: string, refId: string) {
     this.extensionData = {
-      'roomId': roomId,
-      'refType': 'content',
-      'refId': refId,
-      'detailedView': false
+      roomId: roomId,
+      refType: 'content',
+      refId: refId,
+      detailedView: false
     };
   }
 
@@ -63,7 +63,7 @@ export class ContentParticipantComponent implements OnInit {
   }
 
   forwardAnswerMessage($event: Answer) {
-    this.message.emit($event);
+    this.answerChanged.emit($event);
     this.alreadySent = true;
     this.checkIfAbstention($event);
   }

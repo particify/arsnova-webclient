@@ -33,7 +33,7 @@ export class ContentChoiceParticipantComponent extends ContentParticipantBaseCom
   @Input() answer: ChoiceAnswer;
   @Input() alreadySent: boolean;
   @Input() sendEvent: EventEmitter<string>;
-  @Output() message = new EventEmitter<ChoiceAnswer>();
+  @Output() answerChanged = new EventEmitter<ChoiceAnswer>();
 
   isLoading = true;
   ContentType: typeof ContentType = ContentType;
@@ -87,7 +87,7 @@ export class ContentChoiceParticipantComponent extends ContentParticipantBaseCom
   }
 
   getCorrectAnswer() {
-    const maxPoints = Math.max.apply(Math, this.content.options.map(function(option) { return option.points; }));
+    const maxPoints = Math.max.apply(Math, this.content.options.map((option) => option.points));
     if (this.content.format === ContentType.SCALE || maxPoints <= 0) {
       this.isChoice = false;
     } else {

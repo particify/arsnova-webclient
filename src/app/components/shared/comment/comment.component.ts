@@ -114,12 +114,12 @@ export class CommentComponent implements OnInit, OnDestroy {
     this.translateService.use(this.language);
     this.deviceType = this.globalStorageService.getItem(STORAGE_KEYS.DEVICE_TYPE);
     this.extensionData = {
-      'roomId': this.comment.roomId,
-      'refId': this.comment.id,
-      'refType': 'comment',
-      'detailedView': false,
-      'pureImageView': true,
-      'retryEvent': this.extensionEvent
+      roomId: this.comment.roomId,
+      refId: this.comment.id,
+      refType: 'comment',
+      detailedView: false,
+      pureImageView: true,
+      retryEvent: this.extensionEvent
     };
     if (this.referenceEvent) {
       this.referenceEvent.subscribe(id => {

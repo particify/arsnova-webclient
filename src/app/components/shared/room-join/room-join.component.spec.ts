@@ -90,6 +90,7 @@ class MockGlobalStorageService {
   }
 }
 
+/* eslint-disable @angular-eslint/component-selector */
 @Component({ selector: 'mat-icon', template: '' })
 class MatIconStubComponent { }
 
@@ -113,6 +114,7 @@ class InputStubComponent {
   @Input() formControl;
   @Input() errorStateMatcher;
 }
+/* eslint-enable @angular-eslint/component-selector */
 
 describe('RoomJoinComponent', () => {
   let component: RoomJoinComponent;

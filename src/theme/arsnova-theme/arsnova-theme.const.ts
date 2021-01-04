@@ -44,17 +44,17 @@ export const arsnova = {
 
 export const arsnova_meta = {
 
-  'translation': {
-    'name': {
-      'en': 'ARSnova',
-      'de': 'ARSnova'
+  translation: {
+    name: {
+      en: 'ARSnova',
+      de: 'ARSnova'
     },
-    'description': {
-      'en': 'Optimized for presentation in lecture halls',
-      'de': 'Für die Präsentation im Hörsaal optimiert'
+    description: {
+      en: 'Optimized for presentation in lecture halls',
+      de: 'Für die Präsentation im Hörsaal optimiert'
     }
   },
-  'order': 1,
-  'previewColor': 'background'
+  order: 1,
+  previewColor: 'background'
 
 };

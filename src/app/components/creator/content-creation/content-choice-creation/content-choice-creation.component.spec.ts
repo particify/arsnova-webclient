@@ -81,6 +81,7 @@ class MockGlobalStorageService {
   }
 }
 
+/* eslint-disable @angular-eslint/component-selector */
 @Component({ selector: 'mat-icon', template: '' })
 class MatIconStubComponent { }
 
@@ -129,6 +130,7 @@ class MatPlaceholderStubComponent { }
 class InputStubComponent {
   @Input() ngModel;
 }
+/* eslint-enable @angular-eslint/component-selector */
 
 describe('ContentChoiceCreationComponent', () => {
   let component: ContentChoiceCreationComponent;

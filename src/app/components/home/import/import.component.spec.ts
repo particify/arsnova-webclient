@@ -50,8 +50,10 @@ class MockNotificationService {
 
 }
 
+/* eslint-disable @angular-eslint/component-selector */
 @Component({ selector: 'mat-card', template: '<ng-content></ng-content>' })
 class MatCardStubComponent {}
+/* eslint-enable @angular-eslint/component-selector */
 
 describe('ImportComponent', () => {
   let component: ImportComponent;

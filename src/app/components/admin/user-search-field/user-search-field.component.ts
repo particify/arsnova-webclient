@@ -16,14 +16,14 @@ export class UserSearchFieldComponent implements OnInit, OnDestroy {
   value: string;
   submittable: boolean;
   @Input() label: string;
-  @Output() submit: EventEmitter<string> = new EventEmitter();
+  @Output() submitted: EventEmitter<string> = new EventEmitter();
   ngUnsubscribe = new Subject();
 
   constructor(protected userService: UserService) {
   }
 
   ngOnInit() {
-    this.submittable = this.submit.observers.length > 0;
+    this.submittable = this.submitted.observers.length > 0;
     const mapFunc = (value: string|User) => typeof value === 'string' ? value : value.id;
     /* Set value for use by parent components */
     this.formControl.valueChanges.pipe(map(mapFunc), takeUntil(this.ngUnsubscribe)).subscribe(value =>
@@ -47,6 +47,6 @@ export class UserSearchFieldComponent implements OnInit, OnDestroy {
   }
 
   submitUserId(id: string) {
-    this.submit.emit(id);
+    this.submitted.emit(id);
   }
 }

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 /**
  * Available confirm button types.
@@ -14,7 +14,7 @@ export enum DialogConfirmActionButtonType {
   templateUrl: './dialog-action-buttons.component.html',
   styleUrls: ['./dialog-action-buttons.component.scss']
 })
-export class DialogActionButtonsComponent implements OnInit {
+export class DialogActionButtonsComponent {
 
   /**
    * The button labels section.
@@ -56,15 +56,6 @@ export class DialogActionButtonsComponent implements OnInit {
    * The ARIA identifier prefix.
    */
   private ariaPrefix: string = (new Date().getTime().toString());
-
-
-  /**
-   * @inheritDoc
-   */
-  ngOnInit() {
-    // nothing special yet
-  }
-
 
   /**
    * Performs the confirm button click action.

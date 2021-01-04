@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { ChoiceAnswer } from '../../../../models/choice-answer';
 import { AdvancedSnackBarTypes, NotificationService } from '../../../../services/util/notification.service';
 import { ContentAnswerService } from '../../../../services/http/content-answer.service';
@@ -18,13 +18,13 @@ import { GlobalStorageService } from '@arsnova/app/services/util/global-storage.
   templateUrl: './content-sort-participant.component.html',
   styleUrls: ['./content-sort-participant.component.scss']
 })
-export class ContentSortParticipantComponent extends ContentParticipantBaseComponent implements OnInit {
+export class ContentSortParticipantComponent extends ContentParticipantBaseComponent {
 
   @Input() content: ContentChoice;
   @Input() answer: ChoiceAnswer;
   @Input() alreadySent: boolean;
   @Input() sendEvent: EventEmitter<string>;
-  @Output() message = new EventEmitter<ChoiceAnswer>();
+  @Output() answerChanged = new EventEmitter<ChoiceAnswer>();
 
   isLoading = true;
   hasAbstained = false;

@@ -45,9 +45,9 @@ export class PreviewComponent implements OnInit {
 
   prepareAttachmentData() {
     this.attachmentData = {
-      'refType': 'content',
-      'detailedView': false,
-      'useTempAttachments': true
+      refType: 'content',
+      detailedView: false,
+      useTempAttachments: true
     };
   }
 

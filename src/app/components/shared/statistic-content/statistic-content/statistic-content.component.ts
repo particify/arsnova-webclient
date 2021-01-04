@@ -32,10 +32,10 @@ export class StatisticContentComponent implements OnInit {
 
   ngOnInit(): void {
     this.attachmentData = {
-      'roomId': this.content.roomId,
-      'refType': 'content',
-      'refId': this.content.id,
-      'detailedView': false
+      roomId: this.content.roomId,
+      refType: 'content',
+      refId: this.content.id,
+      detailedView: false
     };
     this.format = this.content.format;
     this.checkIfSurvey();
@@ -69,7 +69,7 @@ export class StatisticContentComponent implements OnInit {
   checkIfSurvey() {
     let maxPoints;
     if (this.format === ContentType.BINARY || this.format === ContentType.CHOICE) {
-      maxPoints = Math.max.apply(Math, (this.content as ContentChoice).options.map(function(option) { return option.points; }));
+      maxPoints = Math.max.apply(Math, (this.content as ContentChoice).options.map((option) => option.points));
     }
     if ((this.format === ContentType.TEXT || this.format === ContentType.SCALE || maxPoints <= 0) && this.format !== ContentType.SORT) {
       this.survey = true;

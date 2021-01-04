@@ -56,9 +56,9 @@ export class CreateCommentComponent implements OnInit {
   ngOnInit() {
     this.translateService.use(this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE));
     this.eventsWrapper = {
-      'eventsSubject': this.eventsSubject,
-      'roomId': this.data.roomId,
-      'userId': this.data.auth.userId
+      eventsSubject: this.eventsSubject,
+      roomId: this.data.roomId,
+      userId: this.data.auth.userId
     };
   }
 

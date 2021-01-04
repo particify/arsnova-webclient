@@ -92,9 +92,10 @@ class RoomListStubComponent {
   @Input() auth: ClientAuthentication;
 }
 
+/* eslint-disable @angular-eslint/component-selector */
 @Component({ selector: 'mat-icon', template: '' })
 class MatIconStubComponent { }
-
+/* eslint-enable @angular-eslint/component-selector */
 
 describe('UserHomeComponent', () => {
   let component: UserHomeComponent;

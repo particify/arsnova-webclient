@@ -71,6 +71,7 @@ class RoomJoinStubComponent {
   @Input() inputA11yString;
 }
 
+/* eslint-disable @angular-eslint/component-selector */
 @Component({ selector: 'mat-icon', template: '' })
 class MatIconStubComponent {}
 
@@ -78,6 +79,7 @@ class MatIconStubComponent {}
 class LibExtensionPointStubComponent {
   @Input() extensionId: string;
 }
+/* eslint-enable @angular-eslint/component-selector */
 
 describe('HomePageComponent', () => {
   let component: HomePageComponent;
