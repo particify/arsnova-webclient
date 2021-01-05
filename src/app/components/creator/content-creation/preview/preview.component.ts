@@ -3,6 +3,7 @@ import { Content } from '../../../../models/content';
 import { ContentType } from '../../../../models/content-type.enum';
 import { ContentChoice } from '../../../../models/content-choice';
 import { FormattingService, MarkdownFeatureset } from '../../../../services/http/formatting.service';
+import { AnswerOption } from '@arsnova/app/models/answer-option';
 
 @Component({
   selector: 'app-preview',
@@ -16,7 +17,7 @@ export class PreviewComponent implements OnInit {
   @Output() flipEvent = new EventEmitter<boolean>();
 
   body: string;
-  answerLabels: string[];
+  answerOptions: AnswerOption[];
   multipleAnswers: boolean;
   isLoading = true;
   markdownFeatureset: MarkdownFeatureset;
@@ -27,9 +28,7 @@ export class PreviewComponent implements OnInit {
   ngOnInit(): void {
     const format = this.content.format;
     if (format === ContentType.CHOICE || format === ContentType.SCALE || format === ContentType.BINARY) {
-      this.answerLabels = (this.content as ContentChoice).options.map(option => {
-        return option.label;
-      });
+      this.answerOptions = (this.content as ContentChoice).options;
       this.multipleAnswers = (this.content as ContentChoice).multiple;
     }
     this.markdownFeatureset = format === ContentType.SLIDE ? MarkdownFeatureset.EXTENDED : MarkdownFeatureset.SIMPLE;

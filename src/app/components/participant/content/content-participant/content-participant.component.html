@@ -37,6 +37,10 @@
                                             [content]="content" [alreadySent]="alreadySent" [sendEvent]="sendEvent"
                                             (message)="forwardAnswerMessage($event)"
               ></app-content-text-participant>
+              <app-content-sort-participant *ngIf="content.format === ContentType.SORT" [answer]="answer"
+                                            [content]="content" [alreadySent]="alreadySent" [sendEvent]="sendEvent"
+                                            (message)="forwardAnswerMessage($event)">
+              </app-content-sort-participant>
             </div>
             <div *ngIf="content.format !== ContentType.SLIDE">
               <div [ngClass]="{'visible' : alreadySent, 'invisible': !alreadySent}" class="text">

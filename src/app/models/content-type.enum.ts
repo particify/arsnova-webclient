@@ -3,5 +3,6 @@ export enum ContentType {
   BINARY = 'BINARY',
   SCALE = 'SCALE',
   TEXT = 'TEXT',
-  SLIDE = 'SLIDE'
+  SLIDE = 'SLIDE',
+  SORT = 'SORT'
 }

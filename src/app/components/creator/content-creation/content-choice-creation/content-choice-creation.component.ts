@@ -52,7 +52,6 @@ export class ContentChoiceCreationComponent extends ContentCreationComponent imp
       ContentType.CHOICE,
       null
     );
-    this.fillCorrectAnswers();
     this.isLoading = false;
   }
 

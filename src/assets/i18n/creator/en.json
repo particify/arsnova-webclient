@@ -252,11 +252,13 @@
     "format-binary": "Yes / No",
     "format-text": "Text",
     "format-slide": "Slide",
+    "format-sort": "Sort",
     "format-choice-description": "Participants can choose from several answer options. There can be one or more correct answers.",
     "format-scale-description": "One of the predefined answers can be selected.",
     "format-binary-description": "It can be answered with \"Yes\" or \"No\". None of the options must be correct.",
     "format-text-description": "Participants can answer the question with a text entry.",
     "format-slide-description": "Slides are used to present information.",
+    "format-sort-description": "Participants can answer the question by ordering the answers.",
     "multiple-answers-allowed": "Allow to select multiple answers",
     "no-correct-answer": "Do not set correct answers",
     "format-not-supported": "This format is currently not supported.",
@@ -437,7 +439,8 @@
     "hide-chart": "Hide chart",
     "no-contents": "There are no questions.",
     "select-content-group": "Select collection",
-    "answer": "Answer"
+    "answer": "Answer",
+    "other-combinations": "Other"
   },
   "dialog": {
     "sure": "Are you sure?",

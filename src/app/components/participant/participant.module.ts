@@ -15,6 +15,7 @@ import { TRANSLATION_MODULE_NAME } from '../../translate-module-name-token';
 import { TranslateHttpLoaderFactory } from '../../translate-http-loader-factory';
 import { ExtensionPointModule } from '../../../../projects/extension-point/src/lib/extension-point.module';
 import { ContentParticipantComponent } from './content/content-participant/content-participant.component';
+import { ContentSortParticipantComponent } from './content/content-sort-participant/content-sort-participant.component';
 
 @NgModule({
   imports: [
@@ -42,7 +43,8 @@ import { ContentParticipantComponent } from './content/content-participant/conte
     ContentTextParticipantComponent,
     RoomParticipantPageComponent,
     ParticipantContentCarouselPageComponent,
-    ContentParticipantComponent
+    ContentParticipantComponent,
+    ContentSortParticipantComponent
   ],
   providers: [
     { provide: TRANSLATION_MODULE_NAME, useValue: 'participant' }
