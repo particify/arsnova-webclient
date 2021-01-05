@@ -11,7 +11,7 @@
                 {{ 'content.a11y-content-create-shortcuts' | translate }}</button>
             </div>
             <form>
-              <div [ngClass]="{'invisible': isEditMode}" fxLayout="row wrap" fxLayoutAlign="start">
+              <div [ngClass]="{'disabled': isEditMode}" fxLayout="row wrap" fxLayoutAlign="start">
                 <button [matMenuTriggerFor]="formatMenu" aria-labelledby="choose-format" class="format-button"
                         id="format-button" mat-stroked-button>
                   <mat-icon class="format-button-icon">{{ selectedFormat.icon }}</mat-icon>

@@ -58,9 +58,13 @@ form {
   margin-bottom: 10px;
 }
 
-.invisible {
-  height: 0;
-  opacity: 0;
+.disabled {
+  pointer-events: none;
+
+  button {
+    color: var(--on-surface);
+    border-color: var(--on-surface);
+  }
 }
 
 .top-space {
