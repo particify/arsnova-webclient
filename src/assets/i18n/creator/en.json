@@ -452,6 +452,7 @@
     "formatting-image-hint": "Please note that images with a large file size can affect loading times."
   },
   "sidebar": {
+    "a11y-switch-to-feature": "Switch to {{feature}}.",
     "user-counter": "Number of active participants",
     "comments": "Comments",
     "group": "Questions",

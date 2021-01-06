@@ -452,6 +452,7 @@
     "formatting-image-hint": "Bitte beachte, dass Bilder mit hoher Dateigröße die Ladezeiten beeinträchtigen können."
   },
   "sidebar": {
+    "a11y-switch-to-feature": "Zu {{feature}} wechseln.",
     "user-counter": "Anzahl der teilnehmenden Personen",
     "comments": "Kommentare",
     "group": "Fragen",
