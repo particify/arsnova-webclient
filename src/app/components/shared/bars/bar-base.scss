@@ -1,9 +1,8 @@
 .list {
   left: 0;
   position: fixed;
-  // 64px (Header height) + 4vw (app-padding)
   background: var(--surface);
-  transition-property: opacity, box-shadow;
+  transition-property: opacity, box-shadow, top;
   transition-duration: 300ms;
   opacity: 1;
   box-shadow: 0 2px 1px -1px rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.14), 0 1px 3px 0 rgba(0, 0, 0, 0.12);
@@ -27,6 +26,7 @@
   }
 
   .list {
+    // 64px (Header height) + 4vw (app-padding)
     top: calc(64px + 4vw);
     border-bottom-right-radius: 10px;
     border-top-right-radius: 10px;

@@ -61,7 +61,10 @@ const routes: Routes = [
       },
       {
         path: 'group/:contentGroup/statistics',
-        component: ContentPresentationComponent
+        component: ContentPresentationComponent,
+        resolve: {
+          room: RoomResolver
+        }
       },
       {
         path: 'comments',

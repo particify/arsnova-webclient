@@ -1,4 +1,4 @@
-<div class="list nav" fxLayout="column" fxLayoutAlign="center center" (window:scroll)="checkScroll()"
+<div *ngIf="!tooFewFeatures" class="list nav" fxLayout="column" fxLayoutAlign="center center" (window:scroll)="checkScroll()"
      [ngClass]="{'notActive': !isActive, 'fixed': scrollExtended}"
      (mouseenter)="toggleVisibility(true)" (mouseleave)="toggleVisibility(false)">
   <div class="icon-container">

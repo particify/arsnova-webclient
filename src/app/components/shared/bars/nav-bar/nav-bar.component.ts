@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { RoutingService } from '../../../../services/util/routing.service';
 import { GlobalStorageService, STORAGE_KEYS } from '../../../../services/util/global-storage.service';
 import { UserRole } from '../../../../models/user-roles.enum';
+import { RoomService } from '../../../../services/http/room.service';
 
 export class NavBarItem extends BarItem {
 
@@ -17,6 +18,12 @@ export class NavBarItem extends BarItem {
   }
 }
 
+export enum FEATURES {
+  COMMENTS = 'comments',
+  GROUP = 'group',
+  SURVEY = 'survey'
+}
+
 @Component({
   selector: 'app-nav-bar',
   templateUrl: './nav-bar.component.html',
@@ -26,27 +33,53 @@ export class NavBarComponent extends BarBaseComponent implements OnInit {
 
   barItems: NavBarItem[] = [];
   features: BarItem[] = [
-    new BarItem('comments', 'question_answer'),
-    new BarItem('group', 'equalizer'),
-    new BarItem('survey', 'thumbs_up_down')
+    new BarItem(FEATURES.COMMENTS, 'question_answer'),
+    new BarItem(FEATURES.GROUP, 'equalizer'),
+    new BarItem(FEATURES.SURVEY, 'thumbs_up_down')
   ];
   currentRouteIndex: number;
   isActive = true;
+  activeFeatures: string[] = [FEATURES.COMMENTS];
+  tooFewFeatures = false;
 
   constructor(private router: Router,
               private routingService: RoutingService,
               private route: ActivatedRoute,
-              private globalStorageService: GlobalStorageService) {
+              private globalStorageService: GlobalStorageService,
+              private roomService: RoomService) {
     super();
   }
 
   initItems() {
     this.route.data.subscribe(data => {
-      for (const feature of this.features) {
-        let url = `/${this.routingService.getRoleString(data.viewRole)}/room/${data.room.shortId}/${feature.name}`;
-        if (feature.name === 'group') {
-          url += this.getQuestionUrl(data.viewRole);
-        }
+      if (!data.room.settings['feedbackLocked']) {
+        this.activeFeatures.push(FEATURES.SURVEY);
+      }
+      let group = this.globalStorageService.getItem(STORAGE_KEYS.LAST_GROUP);
+      if (!group) {
+        this.roomService.getStats(data.room.id).subscribe(stats => {
+          const groupStats = stats.groupStats;
+          if (groupStats?.length > 0) {
+            group = groupStats[0].groupName;
+            this.activeFeatures.push(FEATURES.GROUP);
+          }
+          this.getItems(group, data.viewRole, data.room.shortId);
+        })
+      } else {
+        this.activeFeatures.push(FEATURES.GROUP);
+        this.getItems(group, data.viewRole, data.room.shortId);
+      }
+
+    });
+  }
+
+  getItems(group: string, role: UserRole, shortId: string) {
+    for (const feature of this.features) {
+      let url = `/${this.routingService.getRoleString(role)}/room/${shortId}/${feature.name}`;
+      if (feature.name === FEATURES.GROUP) {
+        url += this.getQuestionUrl(role, group);
+      }
+      if (this.activeFeatures.indexOf(feature.name) > -1 || (feature.name === FEATURES.SURVEY && role === UserRole.CREATOR)) {
         this.barItems.push(
           new NavBarItem(
             feature.name,
@@ -54,15 +87,19 @@ export class NavBarComponent extends BarBaseComponent implements OnInit {
             url,
             false));
       }
+    }
+    if (this.barItems.length > 1) {
       this.currentRouteIndex = this.barItems.map(s => s.url).indexOf(this.barItems.filter(s => this.router.url.includes(s.url))[0].url);
       setTimeout(() => {
         this.toggleVisibility(false);
       }, 500);
-    });
+    } else {
+      this.tooFewFeatures = true;
+    }
   }
 
-  getQuestionUrl(role: UserRole): string {
-    let url =  '/' + this.globalStorageService.getItem(STORAGE_KEYS.LAST_GROUP);
+  getQuestionUrl(role: UserRole, group: string): string {
+    let url =  '/' + group;
     if (role === UserRole.CREATOR) {
       url += '/statistics';
     }
