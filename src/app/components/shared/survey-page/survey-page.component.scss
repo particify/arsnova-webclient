@@ -2,16 +2,19 @@
 
 $bar-height: 65px;
 $mobile-bar-height: 50px;
+$smaller-mobile-bar-height: 40px;
+$small-mobile-bar-height: 35px;
 $bar-margin: 10px;
 $mobile-bar-margin: 8px;
-$card-padding: 16px;
+$small-mobile-bar-margin: 5px;
+$card-padding: min(4vw, 16px);
 $bottom-bar-height: 62px;
 
 .mat-card {
   width: 100%;
 }
 
-.label-icon {
+.label-icon, .icon-fixed-size {
   font-size: 40px;
   height: 40px;
   width: 40px;
@@ -72,6 +75,10 @@ $bottom-bar-height: 62px;
   outline: none;
 }
 
+.bar-fixed-size {
+  height: $bar-height;
+  margin: $bar-margin 0;
+}
 
 @media (min-width: 700px) {
   .answer-container {
@@ -84,14 +91,70 @@ $bottom-bar-height: 62px;
   }
 }
 
+@media (max-width: 1000px) {
+  .answer-container {
+    height: calc(100vh - calc(((#{$card-padding} * 2) + (#{$bar-height} * 4) + (#{$bar-margin} * 8) + #{$bottom-bar-height}) + calc(64px + 8vw) + 36px));
+  }
+}
+
 @media (max-width: 700px) {
   .answer-container {
-    height: calc(100vh - calc(((#{$card-padding} * 2) + (#{$mobile-bar-height} * 4) + (#{$mobile-bar-margin} * 8) + #{$bottom-bar-height}) + calc(56px + 8vw) + 34px));
+    height: calc(100vh - calc(((#{$card-padding} * 2) + (#{$mobile-bar-height} * 4) + (#{$mobile-bar-margin} * 8) + #{$bottom-bar-height}) + calc(56px + 8vw) + 36px));
+  }
+
+  .bar, .bar-fixed-size {
+    height: $mobile-bar-height;
+    margin: $mobile-bar-margin 0;
+  }
+}
+
+@media (max-height: 680px) {
+  .answer-container {
+    height: calc(100vh - calc(((#{$card-padding} * 2) + (#{$smaller-mobile-bar-height} * 4) + (#{$small-mobile-bar-margin} * 8) + #{$bottom-bar-height}) + calc(56px + 8vw) + 36px));
   }
 
   .bar {
-    height: $mobile-bar-height;
-    margin: $mobile-bar-margin 0;
+    height: $smaller-mobile-bar-height;
+    margin: $small-mobile-bar-margin 0;
+  }
+
+  .label-icon {
+    font-size: $smaller-mobile-bar-height;
+    height: $smaller-mobile-bar-height;
+    width: $smaller-mobile-bar-height;
+  }
+
+  .button-label-icon {
+    font-size: $smaller-mobile-bar-height!important;
+    height: $smaller-mobile-bar-height!important;
+    width: $smaller-mobile-bar-height!important;
+  }
+}
+
+@media (max-height: 600px) {
+  .answer-container {
+    height: calc(100vh - calc(((#{$card-padding} * 2) + (#{$small-mobile-bar-height} * 4) + (#{$small-mobile-bar-margin} * 8) + #{$bottom-bar-height}) + calc(56px + 8vw) + 36px));
+  }
+
+  .bar {
+    height: $small-mobile-bar-height;
+    margin: $small-mobile-bar-margin 0;
+  }
+
+  .label-icon {
+    font-size: $small-mobile-bar-height;
+    height: $small-mobile-bar-height;
+    width: $small-mobile-bar-height;
+  }
+
+  .button-label-icon {
+    font-size: $small-mobile-bar-height!important;
+    height: $small-mobile-bar-height!important;
+    width: $small-mobile-bar-height!important;
+  }
+
+  .card-row {
+    min-height: 50px!important;
   }
 }
 
@@ -117,7 +180,10 @@ $bottom-bar-height: 62px;
   min-height: 80px;
   width: 100%;
   max-width: 832px;
-  margin-top: 16px;
+  margin-top: $card-padding;
+  .mat-card:first-child {
+    margin-right: $card-padding;
+  }
 }
 
 .button-container {

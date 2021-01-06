@@ -1,7 +1,7 @@
 <app-nav-bar></app-nav-bar>
 <app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
 <div class="nav-bar-container">
-  <div fxLayout="column" fxLayoutAlign="center">
+  <div fxFill fxLayout="column" fxLayoutAlign="center">
     <button class="visually-hidden" id="message-announcer-button" tabIndex="-1" (click)="announceKeys()">
       {{ 'survey.a11y-message' | translate }}</button>
     <div *ngIf="!isLoading" fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="center">
@@ -9,10 +9,12 @@
         <div class="survey-container" [ngClass]="{ 'faded' : isClosed }">
           <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="30px"
                *ngFor="let state of survey; let i = index">
-            <mat-icon *ngIf="type ===typeFeedback" class="label-icon" matTooltip="{{ state.label | translate }}">
+            <mat-icon *ngIf="type ===typeFeedback" [ngClass]="{'label-icon': !isCreator, 'icon-fixed-size': isCreator}"
+                      matTooltip="{{ state.label | translate }}">
               {{ feedbackIcons[i] }}</mat-icon>
             <p *ngIf="type === typeSurvey" class="answer-label">{{ state.label | translate }}</p>
-            <mat-progress-bar class="survey-progress bar" [value]="state.count"></mat-progress-bar>
+            <mat-progress-bar class="survey-progress" [ngClass]="{'bar': !isCreator, 'bar-fixed-size': isCreator}"
+                              [value]="state.count"></mat-progress-bar>
           </div>
         </div>
         <div class="text invisible" [ngClass]="{'visible' : isClosed}">
@@ -39,8 +41,9 @@
         </div>
       </mat-card>
     </div>
-    <div *ngIf="!isCreator" [ngClass]="{'faded' : isClosed}" fxLayout="column" fxLayoutAlign="start center" class="answer-container">
-      <div fxLayout="row" fxLayoutGap="16px" class="card-row">
+    <div *ngIf="!isCreator" [ngClass]="{'faded' : isClosed}" fxLayout="column" fxLayoutAlign="start center"
+         class="answer-container">
+      <div fxLayout="row" class="card-row">
         <ng-container *ngFor="let state of survey; let i = index">
           <mat-card *ngIf="i < 2" id="survey-button-{{i}}" fxLayout="row" fxLayoutAlign="center center" class="answer"
                     attr.aria-label="{{ state.a11y | translate }}" (click)="submitAnswer(state.state)" tabindex="0"
@@ -51,7 +54,7 @@
           </mat-card>
         </ng-container>
       </div>
-      <div fxLayout="row" fxLayoutGap="16px" class="card-row">
+      <div fxLayout="row" class="card-row">
         <ng-container *ngFor="let state of survey; let i = index">
           <mat-card *ngIf="i >= 2" id="survey-button2-{{i}}" fxLayout="row" fxLayoutAlign="center center" class="answer"
                     attr.aria-label="{{ state.a11y | translate }}" (click)="submitAnswer(state.state)" tabindex="0"
