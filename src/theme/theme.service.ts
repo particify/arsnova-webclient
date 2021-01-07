@@ -5,10 +5,9 @@ import { Theme } from './Theme';
 import { GlobalStorageService, STORAGE_KEYS } from '../app/services/util/global-storage.service';
 
 @Injectable()
-
 export class ThemeService {
-  themeName: string;
-  private activeTheme = new BehaviorSubject(this.themeName);
+  private themeName: string;
+  private activeTheme = new BehaviorSubject(null);
   private themes: Theme[] = [];
 
   constructor(private globalStorageService: GlobalStorageService) {
