@@ -44,17 +44,17 @@ export const dark = {
 
 export const dark_meta = {
 
-  'translation': {
-    'name': {
-      'en': 'Dark Mode',
-      'de': 'Dark Mode'
+  translation: {
+    name: {
+      en: 'Dark Mode',
+      de: 'Dark Mode'
     },
-    'description': {
-      'en': 'Dark, battery-saving background',
-      'de': 'Dunkler akkuschonender Hintergrund'
+    description: {
+      en: 'Dark, battery-saving background',
+      de: 'Dunkler akkuschonender Hintergrund'
     }
   },
-  'order': 3,
-  'previewColor': 'background'
+  order: 3,
+  previewColor: 'background'
 
 };

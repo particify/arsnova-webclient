@@ -173,11 +173,11 @@ export class ContentCreationPageComponent implements OnInit, AfterContentInit {
 
   prepareAttachmentData(roomId: string) {
     this.attachmentData = {
-      'eventsSubject': this.linkAttachmentsSubject,
-      'refType': 'content',
-      'roomId': roomId,
-      'detailedView': false,
-      'role': UserRole.CREATOR
+      eventsSubject: this.linkAttachmentsSubject,
+      refType: 'content',
+      roomId: roomId,
+      detailedView: false,
+      role: UserRole.CREATOR
     };
   }
 }

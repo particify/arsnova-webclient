@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { ContentService } from '../../../services/http/content.service';
 import { Content } from '../../../models/content';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -19,7 +19,7 @@ import { AnnounceService } from '../../../services/util/announce.service';
   template: ''
 })
 
-export abstract class ContentListBaseComponent implements OnInit {
+export abstract class ContentListBaseComponent {
 
   protected contents: Content[];
   contentTypes: string[] = Object.values(ContentType);
@@ -44,9 +44,6 @@ export abstract class ContentListBaseComponent implements OnInit {
     protected announceService: AnnounceService,
     protected router: Router) {
     langService.langEmitter.subscribe(lang => translateService.use(lang));
-  }
-
-  ngOnInit() {
   }
 
   initContentList(contentList: Content[]) {

@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { Room } from '../../../models/room';
 import { ContentGroup } from '../../../models/content-group';
 import { RoomStats } from '../../../models/room-stats';
@@ -22,7 +22,7 @@ import { UserRole } from '../../../models/user-roles.enum';
   templateUrl: './room-page.component.html',
   styleUrls: ['./room-page.component.scss']
 })
-export class RoomPageComponent implements OnInit, OnDestroy {
+export class RoomPageComponent implements OnDestroy {
 
   deviceWidth = innerWidth;
   room: Room = null;
@@ -59,9 +59,6 @@ export class RoomPageComponent implements OnInit, OnDestroy {
     protected notificationService: NotificationService,
     protected globalStorageService: GlobalStorageService
   ) {
-  }
-
-  ngOnInit() {
   }
 
   ngOnDestroy() {
@@ -217,12 +214,12 @@ export class RoomPageComponent implements OnInit, OnDestroy {
 
   prepareAttachmentData(role: UserRole) {
     this.attachmentData = {
-      'refId': this.room.id,
-      'refType': 'room',
-      'roomId': this.room.id,
-      'role': role,
-      'detailedView': true,
-      'pureImageView': false
+      refId: this.room.id,
+      refType: 'room',
+      roomId: this.room.id,
+      role: role,
+      detailedView: true,
+      pureImageView: false
     };
   }
 

@@ -4,7 +4,7 @@
   </mat-card-title>
   <mat-card-content fxLayout="column" fxLayoutGap="10px">
     <div fxLayout="row" fxLayoutGap="10px">
-      <app-user-search-field label="{{ 'admin-area.user-id' | translate }}" (submit)="loadEntity($event)" fxFlex="auto" class="no-field-hint"></app-user-search-field>
+      <app-user-search-field label="{{ 'admin-area.user-id' | translate }}" (submitted)="loadEntity($event)" fxFlex="auto" class="no-field-hint"></app-user-search-field>
       <mat-form-field appearance="outline" floatLabel="always" fxFlex="auto" class="no-field-hint">
         <mat-label>{{ 'admin-area.user-login-id' | translate }}</mat-label>
         <input matNativeControl disabled="disabled" [value]="user?.loginId" placeholder="{{ 'admin-area.no-user-selected' | translate }}">

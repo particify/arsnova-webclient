@@ -12,7 +12,7 @@ import { Answer } from '../../../models/answer';
 })
 export abstract class ContentParticipantBaseComponent implements OnInit {
 
-  @Output() message = new EventEmitter<Answer>();
+  @Output() answerChanged = new EventEmitter<Answer>();
   @Input() alreadySent: boolean;
   @Input() sendEvent: EventEmitter<string>;
 
@@ -53,7 +53,7 @@ export abstract class ContentParticipantBaseComponent implements OnInit {
   }
 
   sendStatusToParent(answer: Answer) {
-    this.message.emit(answer);
+    this.answerChanged.emit(answer);
   }
 
   submitAnswer() {

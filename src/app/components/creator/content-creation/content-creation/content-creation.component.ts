@@ -36,7 +36,7 @@ export class ContentCreationComponent implements OnInit, OnDestroy {
   @Input() contentGroup;
   @Input() abstentionsAllowed: boolean;
   @Input() editContent: Content;
-  @Output() reset = new EventEmitter<boolean>();
+  @Output() contentReset = new EventEmitter<boolean>();
   @Output() contentSent = new EventEmitter<Content>();
   @Output() refId = new EventEmitter<string>();
 
@@ -132,7 +132,7 @@ export class ContentCreationComponent implements OnInit, OnDestroy {
   }
 
   resetAfterSubmit() {
-    this.reset.emit(true);
+    this.contentReset.emit(true);
     if (this.content.format !== ContentType.TEXT && this.content.format !== ContentType.SLIDE) {
       if ([ContentType.CHOICE, ContentType.SORT].indexOf(this.content.format) > -1) {
         (this.content as ContentChoice).options = [];

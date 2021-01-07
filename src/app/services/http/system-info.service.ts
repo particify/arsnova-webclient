@@ -9,7 +9,7 @@ import { EventService } from '../util/event.service';
 
 const httpOptions = {
   headers: new HttpHeaders({
-    'Accept': 'application/vnd.spring-boot.actuator.v2+json,application/json'
+    Accept: 'application/vnd.spring-boot.actuator.v2+json,application/json'
   })
 };
 
