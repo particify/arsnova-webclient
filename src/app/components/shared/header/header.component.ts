@@ -124,7 +124,7 @@ export class HeaderComponent implements OnInit {
     this.apiConfigService.getApiConfig$().subscribe(config => {
       this.helpUrl = config.ui.links.help.url;
     });
-    this.showNews = !this.globalStorageService.getItem(STORAGE_KEYS.VERSION);
+    this.showNews = false;
     this.routingService.subscribeActivatedRoute();
   }
 

@@ -1,18 +1,19 @@
 <div mat-dialog-content>
-  <h3 tabindex="0">{{ (data ? 'home-page.update-made' : 'home-page.update-available') | translate }}</h3>
+  <h3 tabindex="0">{{ (afterUpdate ? 'home-page.update-made' : 'home-page.update-available') | translate }}</h3>
   <app-loading-indicator *ngIf="isLoading" [size]="30"></app-loading-indicator>
   <div *ngIf="!isLoading">
-    <div *ngIf="showReleaseNotes">
+    <div *ngIf="changes">
       <p tabindex="0">{{ 'home-page.see-news' | translate }}<a href="{{newsUrl}}">{{ 'home-page.news' | translate }}</a>.</p>
       <p>{{ 'home-page.important-changes' | translate }}</p>
       <ul tabindex="0">
-        <li *ngFor="let keyword of keywords">{{keyword}}</li>
+        <li *ngFor="let change of changes">{{ change }}</li>
       </ul>
     </div>
-    <p class="hot-fix" *ngIf="!showReleaseNotes">{{ 'home-page.hot-fix-update' | translate }}</p>
+    <p class="hot-fix" *ngIf="!changes">{{ 'home-page.hot-fix-update' | translate }}</p>
   </div>
 </div>
-<div fxLayoutAlign="end">
-  <button mat-flat-button class="{{ data ? 'button-abort' : 'button-primary'}}" (click)="close()">
-    {{ (data ? 'dialog.close' : 'home-page.update') | translate }}</button>
+<div class="dialog-footer" fxLayoutAlign="end center" fxLayoutGap="10px">
+  <app-loading-indicator *ngIf="!afterUpdate && !updateReady" size="24" height="auto"></app-loading-indicator>
+  <button mat-flat-button class="{{ afterUpdate ? 'button-abort' : 'button-primary'}}" [disabled]="!afterUpdate && !updateReady" (click)="close()">
+    {{ (afterUpdate ? 'dialog.close' : 'home-page.update') | translate }}</button>
 </div>

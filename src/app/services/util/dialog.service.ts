@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { UpdateAvailableEvent } from '@angular/service-worker';
+import { Observable } from 'rxjs';
 import { YesNoDialogComponent } from '../../components/shared/_dialogs/yes-no-dialog/yes-no-dialog.component';
 import { InfoDialogComponent } from '../../components/shared/_dialogs/info-dialog/info-dialog.component';
 import { ContentEditComponent } from '../../components/shared/_dialogs/content-edit/content-edit.component';
@@ -17,6 +19,7 @@ import { UserActivationComponent } from '../../components/home/_dialogs/user-act
 import { Content } from '../../models/content';
 import { UpdateInfoComponent } from '../../components/shared/_dialogs/update-info/update-info.component';
 import { UserRole } from '../../models/user-roles.enum';
+import { VersionInfo } from '../../models/version-info';
 
 @Injectable()
 export class DialogService {
@@ -151,11 +154,19 @@ export class DialogService {
     });
   }
 
-  openUpdateInfoDialog(afterUpdate: boolean): MatDialogRef<UpdateInfoComponent> {
+  openUpdateInfoDialog(
+      afterUpdate: boolean,
+      versions?: VersionInfo[],
+      updateAvailable?: Observable<UpdateAvailableEvent>
+  ): MatDialogRef<UpdateInfoComponent> {
     return this.dialog.open(UpdateInfoComponent, {
       width: this.size.medium,
       disableClose: !afterUpdate,
-      data: afterUpdate
+      data: {
+        afterUpdate: afterUpdate,
+        versions: versions,
+        updateAvailable: updateAvailable
+      }
     });
   }
 }
