@@ -10,6 +10,7 @@ import { ThemeService } from '../../../theme/theme.service';
 import { UserRole } from '../../models/user-roles.enum';
 import { ClientAuthentication } from '../../models/client-authentication';
 import { Subscription, timer } from 'rxjs';
+import { UpdateInstalled } from '../../models/events/update-installed';
 
 const HEARTBEAT_INVERVAL = 150;
 
@@ -18,6 +19,7 @@ enum VisitDimension {
   UI_LANGUAGE = 1,
   THEME = 2,
   AUTH_PROVIDER = 5,
+  APP_VERSION = 6
 }
 
 /* This enum maps to Matomo dimension IDs for actions. */
@@ -27,6 +29,7 @@ enum ActionDimension {
 }
 
 enum EventCategory {
+  APP_UPDATE = 'App Update',
   ERROR = 'Error',
   ACCOUNT = 'Account',
   USER_DATA_ROOM = 'User data - Room',
@@ -131,6 +134,9 @@ export class TrackingService {
       this.previousAuth = auth;
       this.firstAuth = false;
     });
+    this.eventService.on<UpdateInstalled>('UpdateInstalled')
+        .subscribe(e => this.addEvent(EventCategory.APP_UPDATE, `Update from ${e.payload.oldId}-${e.payload.oldHash} to`
+            + ` ${e.payload.newId}-${e.payload.newHash} (${e.payload.importance.toString().toLowerCase()})`));
     this.eventService.on<any>('HttpRequestFailed')
         .subscribe(e => this.addEvent(EventCategory.ERROR, 'HTTP request failed', `Status code ${e.status}`, undefined, e.url));
     this.eventService.on<any>('AccountCreated')

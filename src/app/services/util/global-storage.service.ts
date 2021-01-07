@@ -24,7 +24,7 @@ export const STORAGE_KEYS: { [key: string]: symbol } = {
   LANGUAGE: Symbol(),
   COMMENT_SORT: Symbol(),
   UPDATED: Symbol(),
-  VERSION: Symbol(),
+  LATEST_ANNOUNCED_VERSION: Symbol(),
   IMPORT_TOKEN: Symbol(),
   COMMENT_TIME_FILTER: Symbol()
 };
@@ -112,10 +112,10 @@ export const STORAGE_CONFIG: StorageItem[] = [
     backend: StorageBackend.LOCALSTORAGE
   },
   {
-    key: STORAGE_KEYS.VERSION,
-    name: 'VERSION',
+    key: STORAGE_KEYS.LATEST_ANNOUNCED_VERSION,
+    name: 'LATEST_ANNOUNCED_VERSION',
     category: StorageItemCategory.REQUIRED,
-    backend: StorageBackend.LOCALSTORAGE
+    backend: StorageBackend.SESSIONSTORAGE
   },
   // Used by extensions
   {

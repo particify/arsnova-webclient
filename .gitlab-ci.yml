@@ -86,6 +86,8 @@ ngbuild:
     paths:
       - "$BUILD_DIR"
   script:
+    - sed -i "s/\$VERSION_COMMIT_HASH/$CI_COMMIT_SHA/" src/environments/environment.prod.ts
+    - sed -i "s/\$VERSION_COMMIT_DATE/$CI_COMMIT_TIMESTAMP/" src/environments/environment.prod.ts
     - ng build --prod
 
 .docker_image: &docker_image
