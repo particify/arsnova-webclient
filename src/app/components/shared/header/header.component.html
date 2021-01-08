@@ -26,6 +26,10 @@
         <mat-icon class="rooms">home</mat-icon>
         <span>{{'header.my-rooms' | translate}}</span>
       </button>
+      <button *ngIf="auth && isGuest" mat-menu-item [routerLink]="'login'" tabindex="0">
+        <mat-icon class="login">exit_to_app</mat-icon>
+        <span>{{ 'header.login' | translate }}</span>
+      </button>
       <button mat-menu-item (click)="navToHelp()" tabindex="0">
         <mat-icon class="less-important">help</mat-icon>
         <span>{{'header.help' | translate}}</span>
@@ -38,6 +42,16 @@
         <mat-icon class="less-important">language</mat-icon>
         <span>{{'header.language' | translate}}</span>
       </button>
+      <div *ngIf="deviceWidth < 1000">
+        <button mat-menu-item aria-labelledby="privacy-label" [matMenuTriggerFor]="privacyMenu">
+          <mat-icon class="less-important">security</mat-icon>
+          <span>{{'footer.dsgvo' | translate}}</span>
+        </button>
+        <button [routerLink]="" mat-menu-item aria-labelledby="imprint-label">
+          <mat-icon class="less-important">contact_mail</mat-icon>
+          <span>{{'footer.imprint' | translate}}</span>
+        </button>
+      </div>
       <!-- <button mat-menu-item *ngIf="auth" (click)="openUserBonusTokenDialog()" tabindex="0">
         <mat-icon class="bonus">grade</mat-icon>
         <span>{{'header.user-bonus-token' | translate}}</span>
@@ -53,10 +67,6 @@
       <button *ngIf="auth && !isGuest" mat-menu-item (click)="logout()" tabindex="0">
         <mat-icon class="delete">exit_to_app</mat-icon>
         <span>{{ 'header.logout' | translate }}</span>
-      </button>
-      <button *ngIf="auth && isGuest" mat-menu-item [routerLink]="'login'" tabindex="0">
-        <mat-icon class="login">exit_to_app</mat-icon>
-        <span>{{ 'header.login' | translate }}</span>
       </button>
     </mat-menu>
 
@@ -83,6 +93,14 @@
       <button class="item-title lang-title" mat-menu-item (click)="useLanguage('en')">
         {{ 'header.english' | translate }}</button>
     </mat-menu>
+
+    <mat-menu #privacyMenu="matMenu" [overlapTrigger]="false">
+      <button *ngIf="privacyUrl" class="item-title" mat-menu-item (click)="showDataProtection()">
+        {{ 'footer.privacy-policy' | translate }}</button>
+      <button class="item-title" mat-menu-item (click)="showCookieSettings()">
+        {{ 'footer.cookie-settings' | translate }}</button>
+    </mat-menu>
+
     <button *ngIf="showNews" mat-icon-button class="news-btn" (click)="openUpdateInfoDialog()" aria-labelledby="news"
             matTooltip="{{ 'header.news' | translate }}">
       <mat-icon matBadge="1">
@@ -110,8 +128,9 @@
   <div id="back-label">{{'header.a11y-back' | translate}}</div>
   <div id="room-label">{{'header.a11y-room' | translate}}</div>
   <div id="help-label">{{'header.a11y-help' | translate}}</div>
-  <div id="demo-label">{{'header.a11y-demo' | translate}}</div>
   <div id="style-label">{{'header.a11y-style' | translate}}</div>
   <div id="language-label">{{'header.a11y-language' | translate}}</div>
   <div id="news">{{'header.a11y-news' | translate}}</div>
+  <div id="data-protection-label">{{'footer.a11y-data-protection' | translate}}</div>
+  <div id="imprint-label">{{'footer.a11y-imprint' | translate}}</div>
 </div>
