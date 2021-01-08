@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { RoutingService } from '../../../../services/util/routing.service';
 import { GlobalStorageService, STORAGE_KEYS } from '../../../../services/util/global-storage.service';
 import { UserRole } from '../../../../models/user-roles.enum';
+import { RoomService } from '../../../../services/http/room.service';
 
 export class NavBarItem extends BarItem {
 
@@ -46,7 +47,8 @@ export class NavBarComponent extends BarBaseComponent implements OnInit {
   constructor(private router: Router,
               private routingService: RoutingService,
               private route: ActivatedRoute,
-              private globalStorageService: GlobalStorageService) {
+              private globalStorageService: GlobalStorageService,
+              private roomService: RoomService) {
     super();
   }
 
@@ -56,11 +58,31 @@ export class NavBarComponent extends BarBaseComponent implements OnInit {
         this.activeFeatures.push(FEATURES.SURVEY);
       }
       let group = this.globalStorageService.getItem(STORAGE_KEYS.LAST_GROUP);
-      if (group) {
-        this.activeFeatures.push(FEATURES.GROUP);
+      // Checking if storage item is initialized yet
+      if (group === undefined) {
+        this.roomService.getStats(data.room.id).subscribe(stats => {
+          if (stats.groupStats) {
+            group = stats.groupStats[0].groupName;
+            this.setGroupInSessionStorage(group);
+            this.activeFeatures.push(FEATURES.GROUP);
+          } else {
+            // Initialize storage item with empty string if there are no groups yet
+            this.setGroupInSessionStorage('');
+          }
+          this.getItems(group, data.viewRole, data.room.shortId);
+        });
+      } else {
+        // Checking if storage item is initialized with data
+        if (group !== '') {
+          this.activeFeatures.push(FEATURES.GROUP);
+          this.getItems(group, data.viewRole, data.room.shortId);
+        }
       }
-      this.getItems(group, data.viewRole, data.room.shortId);
     });
+  }
+
+  setGroupInSessionStorage(group: string) {
+    this.globalStorageService.setItem(STORAGE_KEYS.LAST_GROUP, group);
   }
 
   getItems(group: string, role: UserRole, shortId: string) {
