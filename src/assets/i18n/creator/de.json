@@ -456,7 +456,8 @@
     "user-counter": "Anzahl der teilnehmenden Personen",
     "comments": "Kommentare",
     "group": "Fragen",
-    "survey": "Live-Umfrage"
+    "survey": "Live-Umfrage",
+    "moderation": "Moderation"
   }
 
 }

@@ -4,7 +4,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { RoutingService } from '../../../../services/util/routing.service';
 import { GlobalStorageService, STORAGE_KEYS } from '../../../../services/util/global-storage.service';
 import { UserRole } from '../../../../models/user-roles.enum';
-import { RoomService } from '../../../../services/http/room.service';
 
 export class NavBarItem extends BarItem {
 
@@ -21,7 +20,8 @@ export class NavBarItem extends BarItem {
 export enum FEATURES {
   COMMENTS = 'comments',
   GROUP = 'group',
-  SURVEY = 'survey'
+  SURVEY = 'survey',
+  MODERATION = 'moderation'
 }
 
 @Component({
@@ -35,7 +35,8 @@ export class NavBarComponent extends BarBaseComponent implements OnInit {
   features: BarItem[] = [
     new BarItem(FEATURES.COMMENTS, 'question_answer'),
     new BarItem(FEATURES.GROUP, 'equalizer'),
-    new BarItem(FEATURES.SURVEY, 'thumbs_up_down')
+    new BarItem(FEATURES.SURVEY, 'thumbs_up_down'),
+    new BarItem(FEATURES.MODERATION, 'gavel')
   ];
   currentRouteIndex: number;
   isActive = true;
@@ -45,8 +46,7 @@ export class NavBarComponent extends BarBaseComponent implements OnInit {
   constructor(private router: Router,
               private routingService: RoutingService,
               private route: ActivatedRoute,
-              private globalStorageService: GlobalStorageService,
-              private roomService: RoomService) {
+              private globalStorageService: GlobalStorageService) {
     super();
   }
 
@@ -56,30 +56,27 @@ export class NavBarComponent extends BarBaseComponent implements OnInit {
         this.activeFeatures.push(FEATURES.SURVEY);
       }
       let group = this.globalStorageService.getItem(STORAGE_KEYS.LAST_GROUP);
-      if (!group) {
-        this.roomService.getStats(data.room.id).subscribe(stats => {
-          const groupStats = stats.groupStats;
-          if (groupStats?.length > 0) {
-            group = groupStats[0].groupName;
-            this.activeFeatures.push(FEATURES.GROUP);
-          }
-          this.getItems(group, data.viewRole, data.room.shortId);
-        })
-      } else {
+      if (group) {
         this.activeFeatures.push(FEATURES.GROUP);
-        this.getItems(group, data.viewRole, data.room.shortId);
       }
-
+      this.getItems(group, data.viewRole, data.room.shortId);
     });
   }
 
   getItems(group: string, role: UserRole, shortId: string) {
     for (const feature of this.features) {
-      let url = `/${this.routingService.getRoleString(role)}/room/${shortId}/${feature.name}`;
-      if (feature.name === FEATURES.GROUP) {
-        url += this.getQuestionUrl(role, group);
+      let url = `/${this.routingService.getRoleString(role)}/room/${shortId}/`;
+      if (feature.name !== FEATURES.MODERATION) {
+        url += feature.name;
+        if (group && feature.name === FEATURES.GROUP) {
+          url += this.getQuestionUrl(role, group);
+        }
+      } else {
+        url += 'moderator/comments';
       }
-      if (this.activeFeatures.indexOf(feature.name) > -1 || (feature.name === FEATURES.SURVEY && role === UserRole.CREATOR)) {
+      if ((this.activeFeatures.indexOf(feature.name) > -1 || (feature.name === FEATURES.SURVEY && role === UserRole.CREATOR))
+          && role !== UserRole.EXECUTIVE_MODERATOR || (role === UserRole.EXECUTIVE_MODERATOR
+          && (feature.name === FEATURES.MODERATION || feature.name === FEATURES.COMMENTS))) {
         this.barItems.push(
           new NavBarItem(
             feature.name,
