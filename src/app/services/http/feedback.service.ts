@@ -16,6 +16,7 @@ export class FeedbackService extends BaseHttpService {
 
   apiUrl = {
     base: '/api',
+    room: '/room',
     survey: '/survey'
   };
 
@@ -29,7 +30,7 @@ export class FeedbackService extends BaseHttpService {
   }
 
   get(roomId: string): Observable<number[]> {
-    const connectionUrl = `${this.apiUrl.base + this.apiUrl.survey}`;
+    const connectionUrl = this.apiUrl.base + this.apiUrl.room + '/' + roomId + this.apiUrl.survey;
     return this.http.get<number[]>(connectionUrl, httpOptions).pipe(
       tap(_ => ''),
       catchError(this.handleError<number[]>('get survey'))
