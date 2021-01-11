@@ -11,6 +11,7 @@ import { UserRole } from '../../models/user-roles.enum';
 import { ClientAuthentication } from '../../models/client-authentication';
 import { Subscription, timer } from 'rxjs';
 import { UpdateInstalled } from '../../models/events/update-installed';
+import { environment } from '../../../environments/environment';
 
 const HEARTBEAT_INVERVAL = 150;
 
@@ -94,6 +95,7 @@ export class TrackingService {
         .subscribe((event: LangChangeEvent) => this.setVisitDimension(VisitDimension.UI_LANGUAGE, event.lang));
     this.themeService.getTheme().subscribe((themeName) => this.setVisitDimension(VisitDimension.THEME, themeName));
     this.setVisitDimension(VisitDimension.UI_LANGUAGE, this.translateService.currentLang);
+    this.setVisitDimension(VisitDimension.APP_VERSION, environment.version.commitHash);
     this.setupTrackingSubscriptions();
   }
 
