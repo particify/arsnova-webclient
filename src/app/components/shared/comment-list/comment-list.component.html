@@ -1,6 +1,13 @@
 <app-nav-bar (isVisible)="checkIfNavBarExists($event)"></app-nav-bar>
+<button class="add-btn mobile-add" mat-mini-fab aria-labelledby="add"
+        *ngIf="!search && deviceType !== 'desktop'" (click)="openCreateDialog()"
+        [ngClass]="{'above-nav': navBarExists}"
+        matTooltip="{{ 'comment-list.add-comment' | translate }}">
+  <mat-icon class="bigger-icon">add</mat-icon>
+</button>
 <div class="nav-bar-container">
-  <div fxLayout="row" [ngClass]="{'search-container' : !scroll, 'search-container-fixed' : scroll}"
+  <div fxLayout="row" class="search-container" [ngClass]="{'search-container-fixed-invisible': scroll && !scrollActive && deviceType !== 'desktop', 'search-container-fixed': scroll,
+        'search-container-fixed-visible' : scroll && (deviceType === 'desktop' || scrollActive) }"
        (window:scroll)="checkScroll()" fxLayoutAlign="center center">
     <input tabindex="-1" (focus)="eventService.makeFocusOnInputTrue()" (blur)="eventService.makeFocusOnInputFalse()"
            #searchBox
@@ -64,7 +71,7 @@
       </button>
 
       <button id="add-comment-small-button" class="add-btn" mat-mini-fab aria-labelledby="add"
-              *ngIf="!search && comments.length > 2" (click)="openCreateDialog()"
+              *ngIf="!search && deviceType === 'desktop'" (click)="openCreateDialog()"
               matTooltip="{{ 'comment-list.add-comment' | translate }}">
         <mat-icon class="bigger-icon">add</mat-icon>
       </button>
@@ -145,7 +152,7 @@
     </mat-menu>
   </div>
 
-  <div *ngIf="scroll" class="search-bar-placeholder"></div>
+  <div *ngIf="scroll && (deviceType === 'desktop' || scrollActive)" class="search-bar-placeholder"></div>
 
   <div *ngIf="isLoading" class="loading" fxLayout="column" fxLayoutAlign="center">
     <div fxLayout="row" fxLayoutAlign="center">
@@ -154,7 +161,8 @@
   </div>
 
   <button mat-icon-button class="button-abort scrollTop" tabindex="-1" (click)="scrollTop(true)"
-          [ngClass]="{'visible': scrollExtended, 'above-nav': navBarExists && deviceType === 'mobile'}">
+          [ngClass]="{'visible': scrollExtended && scrollActive, 'above-add': navBarExists && deviceType === 'mobile',
+          'mobile-scroll-position': deviceType === 'mobile'}">
     <mat-icon>arrow_upward</mat-icon>
   </button>
 

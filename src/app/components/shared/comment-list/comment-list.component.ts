@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnDestroy, OnInit, Pipe, PipeTransform, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Comment } from '../../../models/comment';
 import { CommentService } from '../../../services/http/comment.service';
 import { TranslateService } from '@ngx-translate/core';
@@ -19,8 +19,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { DialogService } from '../../../services/util/dialog.service';
 import { GlobalStorageService, STORAGE_KEYS } from '../../../services/util/global-storage.service';
 import { AnnounceService } from '../../../services/util/announce.service';
-import { CommentSettingsService } from '@arsnova/app/services/http/comment-settings.service';
-import { RoutingService } from '@arsnova/app/services/util/routing.service';
+import { CommentSettingsService } from '../../../services/http/comment-settings.service';
 
 // Using lowercase letters in enums because they we're also used for parsing incoming WS-messages
 
@@ -94,6 +93,8 @@ export class CommentListComponent implements OnInit, OnDestroy {
   period: Period;
   scrollToTop = false;
   navBarExists = false;
+  lastScroll = 0;
+  scrollActive = false;
 
   constructor(
     private commentService: CommentService,
@@ -123,7 +124,6 @@ export class CommentListComponent implements OnInit, OnDestroy {
     this.currentFilter = '';
     this.initRoom();
     this.translateService.use(this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE));
-    this.deviceType = this.globalStorageService.getItem(STORAGE_KEYS.DEVICE_TYPE);
     this.route.data.subscribe(data => {
       this.viewRole = data.viewRole;
       if (this.viewRole === UserRole.PARTICIPANT) {
@@ -137,6 +137,7 @@ export class CommentListComponent implements OnInit, OnDestroy {
     this.translateService.get('comment-list.search').subscribe(msg => {
       this.searchPlaceholder = msg;
     });
+    this.deviceType = innerWidth > 1000 ? 'desktop' : 'mobile';
     // Header height is 56 if smaller than 600px
     if (innerWidth >= 600) {
       this.scrollMax = 64;
@@ -180,6 +181,7 @@ export class CommentListComponent implements OnInit, OnDestroy {
   checkScroll(): void {
     const currentScroll = document.documentElement.scrollTop;
     this.scroll = currentScroll >= this.scrollMax;
+    this.scrollActive = this.scroll && currentScroll < this.lastScroll;
     this.scrollExtended = currentScroll >= this.scrollExtendedMax;
     const length = this.hideCommentsList ? this.filteredComments.length : this.commentsFilteredByTime.length;
     if (this.displayComments.length !== length) {
@@ -188,6 +190,7 @@ export class CommentListComponent implements OnInit, OnDestroy {
         this.getDisplayComments();
       }
     }
+    this.lastScroll = currentScroll;
   }
 
   scrollTop(smooth?: boolean) {
