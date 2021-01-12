@@ -78,6 +78,10 @@
   color: var(--on-primary);
 }
 
+.above-nav {
+  bottom: calc(4vw + 56px)!important;
+}
+
 button.selected {
   font-weight: $font-weight-bold;
 
@@ -138,8 +142,8 @@ button.selected {
 
 .scrollTop {
   position: fixed;
-  left: 5%;
-  bottom: 5%;
+  left: 4vw;
+  bottom: 4vw;
   transform: scale(0);
   z-index: 1;
   transition: 0.1s;

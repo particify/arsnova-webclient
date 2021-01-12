@@ -93,6 +93,7 @@ export class CommentListComponent implements OnInit, OnDestroy {
   periodsList = Object.values(Period);
   period: Period;
   scrollToTop = false;
+  navBarExists = false;
 
   constructor(
     private commentService: CommentService,
@@ -170,6 +171,10 @@ export class CommentListComponent implements OnInit, OnDestroy {
         });
     });
     this.subscribeCommentStream();
+  }
+
+  checkIfNavBarExists(navBarExists: boolean) {
+    this.navBarExists = navBarExists;
   }
 
   checkScroll(): void {

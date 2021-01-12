@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { BarBaseComponent, BarItem } from '../bar-base';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RoutingService } from '../../../../services/util/routing.service';
@@ -31,6 +31,8 @@ export enum FEATURES {
   styleUrls: ['./nav-bar.component.scss']
 })
 export class NavBarComponent extends BarBaseComponent implements OnInit {
+
+  @Output() isVisible = new EventEmitter<boolean>();
 
   barItems: NavBarItem[] = [];
   features: BarItem[] = [
@@ -112,9 +114,11 @@ export class NavBarComponent extends BarBaseComponent implements OnInit {
       setTimeout(() => {
         this.toggleVisibility(false);
       }, 500);
+      this.tooFewFeatures = false;
     } else {
       this.tooFewFeatures = true;
     }
+    this.isVisible.emit(!this.tooFewFeatures);
   }
 
   getQuestionUrl(role: UserRole, group: string): string {

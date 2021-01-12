@@ -1,4 +1,4 @@
-<app-nav-bar></app-nav-bar>
+<app-nav-bar (isVisible)="checkIfNavBarExists($event)"></app-nav-bar>
 <div class="nav-bar-container">
   <div fxLayout="row" [ngClass]="{'search-container' : !scroll, 'search-container-fixed' : scroll}"
        (window:scroll)="checkScroll()" fxLayoutAlign="center center">
@@ -153,8 +153,8 @@
     </div>
   </div>
 
-  <button mat-icon-button class="button-primary scrollTop" [ngClass]="{'visible': scrollExtended}" tabindex="-1"
-          (click)="scrollTop(true)">
+  <button mat-icon-button class="button-abort scrollTop" tabindex="-1" (click)="scrollTop(true)"
+          [ngClass]="{'visible': scrollExtended, 'above-nav': navBarExists && deviceType === 'mobile'}">
     <mat-icon>arrow_upward</mat-icon>
   </button>
 
