@@ -5,6 +5,8 @@ import { RoutingService } from '../../../../services/util/routing.service';
 import { GlobalStorageService, STORAGE_KEYS } from '../../../../services/util/global-storage.service';
 import { UserRole } from '../../../../models/user-roles.enum';
 import { RoomService } from '../../../../services/http/room.service';
+import { FeedbackService } from '../../../../services/http/feedback.service';
+import { FeedbackMessageType } from '../../../../models/messages/feedback-message-type';
 
 export class NavBarItem extends BarItem {
 
@@ -45,12 +47,16 @@ export class NavBarComponent extends BarBaseComponent implements OnInit {
   isActive = true;
   activeFeatures: string[] = [FEATURES.COMMENTS];
   tooFewFeatures = false;
+  group: string;
+  role: UserRole;
+  shortId: string;
 
   constructor(private router: Router,
               private routingService: RoutingService,
               private route: ActivatedRoute,
               private globalStorageService: GlobalStorageService,
-              private roomService: RoomService) {
+              private roomService: RoomService,
+              private feedbackService: FeedbackService) {
     super();
   }
 
@@ -59,47 +65,69 @@ export class NavBarComponent extends BarBaseComponent implements OnInit {
       if (!data.room.settings['feedbackLocked']) {
         this.activeFeatures.push(FEATURES.SURVEY);
       }
-      let group = this.globalStorageService.getItem(STORAGE_KEYS.LAST_GROUP);
+      this.role = data.viewRole;
+      this.shortId = data.room.shortId;
+      this.feedbackService.startSub(data.room.id);
+      const group = this.globalStorageService.getItem(STORAGE_KEYS.LAST_GROUP);
       // Checking if storage item is initialized yet
       if (group === undefined) {
         this.roomService.getStats(data.room.id).subscribe(stats => {
           if (stats.groupStats) {
-            group = stats.groupStats[0].groupName;
+            this.group = stats.groupStats[0].groupName;
             this.setGroupInSessionStorage(group);
             this.activeFeatures.push(FEATURES.GROUP);
           } else {
             // Initialize storage item with empty string if there are no groups yet
             this.setGroupInSessionStorage('');
           }
-          this.getItems(group, data.viewRole, data.room.shortId);
+          this.getItems();
         });
       } else {
         // Checking if storage item is initialized with data
         if (group !== '') {
+          this.group = group;
           this.activeFeatures.push(FEATURES.GROUP);
-          this.getItems(group, data.viewRole, data.room.shortId);
         }
+        this.getItems();
       }
     });
+    this.checkForFeedback();
   }
 
   setGroupInSessionStorage(group: string) {
     this.globalStorageService.setItem(STORAGE_KEYS.LAST_GROUP, group);
   }
 
-  getItems(group: string, role: UserRole, shortId: string) {
+  checkForFeedback() {
+    this.feedbackService.messageEvent.subscribe(message => {
+      const type = JSON.parse(message.body).type;
+      if (type === FeedbackMessageType.STARTED) {
+        this.activeFeatures.push(FEATURES.SURVEY);
+        this.getItems();
+      } else if (type === FeedbackMessageType.STOPPED) {
+        const index = this.activeFeatures.indexOf(FEATURES.SURVEY);
+        if (this.currentRouteIndex !== index) {
+          this.activeFeatures.splice(index, 1);
+          this.getItems();
+        }
+      }
+    });
+  }
+
+  getItems() {
+    this.barItems = [];
     for (const feature of this.features) {
-      let url = `/${this.routingService.getRoleString(role)}/room/${shortId}/`;
+      let url = `/${this.routingService.getRoleString(this.role)}/room/${this.shortId}/`;
       if (feature.name !== FEATURES.MODERATION) {
         url += feature.name;
-        if (group && feature.name === FEATURES.GROUP) {
-          url += this.getQuestionUrl(role, group);
+        if (this.group && feature.name === FEATURES.GROUP) {
+          url += this.getQuestionUrl(this.role, this.group);
         }
       } else {
         url += 'moderator/comments';
       }
-      if ((this.activeFeatures.indexOf(feature.name) > -1 || (feature.name === FEATURES.SURVEY && role === UserRole.CREATOR))
-          && role !== UserRole.EXECUTIVE_MODERATOR || (role === UserRole.EXECUTIVE_MODERATOR
+      if ((this.activeFeatures.indexOf(feature.name) > -1 || (feature.name === FEATURES.SURVEY && this.role === UserRole.CREATOR))
+          && this.role !== UserRole.EXECUTIVE_MODERATOR || (this.role === UserRole.EXECUTIVE_MODERATOR
           && (feature.name === FEATURES.MODERATION || feature.name === FEATURES.COMMENTS))) {
         this.barItems.push(
           new NavBarItem(
@@ -110,7 +138,10 @@ export class NavBarComponent extends BarBaseComponent implements OnInit {
       }
     }
     if (this.barItems.length > 1) {
-      this.currentRouteIndex = this.barItems.map(s => s.url).indexOf(this.barItems.filter(s => this.router.url.includes(s.url))[0].url);
+      const matchingRoutes = this.barItems.filter(s => this.router.url.includes(s.url));
+      if (matchingRoutes.length > 0) {
+        this.currentRouteIndex = this.barItems.map(s => s.url).indexOf(matchingRoutes[0].url);
+      }
       setTimeout(() => {
         this.toggleVisibility(false);
       }, 500);

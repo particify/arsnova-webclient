@@ -16,6 +16,7 @@ import { GlobalStorageService, STORAGE_KEYS } from '../../../services/util/globa
 import { ActivatedRoute } from '@angular/router';
 import { AnnounceService } from '../../../services/util/announce.service';
 import { FeedbackService } from '../../../services/http/feedback.service';
+import { FeedbackMessageType } from '@arsnova/app/models/messages/feedback-message-type';
 
 @Component({
   selector: 'app-survey-page',
@@ -105,7 +106,8 @@ export class SurveyPageComponent implements OnInit, OnDestroy, AfterContentInit 
       this.shortId = data.room.shortId;
       this.loadConfig(data.room);
       this.isCreator = data.viewRole === UserRole.CREATOR;
-      this.sub = this.wsFeedbackService.getFeedbackStream(this.roomId).subscribe((message: Message) => {
+      this.feedbackService.startSub(data.room.id);
+      this.sub = this.feedbackService.messageEvent.subscribe(message => {
         this.parseIncomingMessage(message);
       });
       this.feedbackService.get(this.roomId).subscribe((values: number[]) => {
@@ -164,6 +166,7 @@ export class SurveyPageComponent implements OnInit, OnDestroy, AfterContentInit 
     if (this.sub) {
       this.sub.unsubscribe();
     }
+    this.feedbackService.unsubscribe();
   }
 
   private updateFeedback(data) {
@@ -227,22 +230,22 @@ export class SurveyPageComponent implements OnInit, OnDestroy, AfterContentInit 
     const msg = JSON.parse(message.body);
     const payload = msg.payload;
     switch (msg.type) {
-      case 'FeedbackChanged':
+      case FeedbackMessageType.CHANGED:
         this.updateFeedback(payload.values);
         break;
-      case 'FeedbackStarted':
+      case FeedbackMessageType.STARTED:
         this.roomService.getRoom(this.roomId).subscribe(room => {
           this.loadConfig(room);
           this.isClosed = false;
         });
         break;
-      case 'FeedbackStopped':
+      case FeedbackMessageType.STOPPED:
         this.isClosed = true;
         break;
-      case 'FeedbackStatus':
+      case FeedbackMessageType.STATUS:
         this.isClosed = payload.closed;
         break;
-      case 'FeedbackReset':
+      case FeedbackMessageType.RESET:
         this.updateFeedback([0, 0, 0, 0]);
     }
   }

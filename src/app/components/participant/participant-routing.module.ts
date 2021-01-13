@@ -30,7 +30,10 @@ const routes: Routes = [
       },
       {
         path: 'comments',
-        component: CommentPageComponent
+        component: CommentPageComponent,
+        resolve: {
+          room: RoomResolver
+        }
       },
       {
         path: 'survey',
@@ -41,11 +44,17 @@ const routes: Routes = [
       },
       {
         path: 'group/:contentGroup',
-        component: ParticipantContentCarouselPageComponent
+        component: ParticipantContentCarouselPageComponent,
+        resolve: {
+          room: RoomResolver
+        }
       },
       {
         path: 'group/:contentGroup/:contentIndex',
-        component: ParticipantContentCarouselPageComponent
+        component: ParticipantContentCarouselPageComponent,
+        resolve: {
+          room: RoomResolver
+        }
       }
     ]
   }
