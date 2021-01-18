@@ -124,7 +124,6 @@ export class HeaderComponent implements OnInit {
       this.helpUrl = data.apiConfig.ui.links?.help?.url;
     });
     this.showNews = false;
-    this.routingService.subscribeActivatedRoute();
   }
 
   setLang(lang: string) {

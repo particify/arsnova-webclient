@@ -5,6 +5,7 @@ import { ApiConfigService } from './services/http/api-config.service';
 import { TrackingService } from './services/util/tracking.service';
 import { ConsentService } from './services/util/consent.service';
 import { UpdateService } from './services/util/update-service';
+import { RoutingService } from './services/util/routing.service';
 
 @Component({
   selector: 'app-root',
@@ -18,7 +19,8 @@ export class AppComponent implements OnInit {
               private apiConfigService: ApiConfigService,
               private trackingService: TrackingService,
               private consentService: ConsentService,
-              private updateService: UpdateService) {
+              private updateService: UpdateService,
+              private routingService: RoutingService) {
     translationService.setDefaultLang(this.translationService.getBrowserLang());
     customIconService.init();
   }
@@ -26,6 +28,7 @@ export class AppComponent implements OnInit {
   title = 'ARSnova';
 
   ngOnInit(): void {
+    this.routingService.subscribeActivatedRoute();
     this.apiConfigService.getApiConfig$().subscribe(config => {
       if (config.ui.tracking?.url && config.ui.tracking?.provider === 'matomo') {
         this.trackingService.init(config.ui);
