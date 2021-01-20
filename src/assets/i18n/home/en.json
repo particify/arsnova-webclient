@@ -78,7 +78,6 @@
     "created-1": "The room “",
     "created-2": "” has been created",
     "exactly-8": "A room number has exactly 8 digits.",
-    "no-room-found": "No room found with this number.",
     "only-numbers": "A room number only contains digits.",
     "room-id": "Room-No.",
     "update-available": "Update available!",
