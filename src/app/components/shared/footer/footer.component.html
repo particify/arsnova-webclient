@@ -1,4 +1,4 @@
-<div id="footer-toolbar" fxLayout="row">
+<div *ngIf="checkToolbarCondition(router.url)" id="footer-toolbar" fxLayout="row">
   <lib-extension-point extensionId="footer-reference">
       <div fxLayout="row" fxLayoutAlign="center center" fxFill>
         <a [attr.href]="referenceUrl" target="_blank" class="slogan">
