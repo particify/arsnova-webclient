@@ -17,6 +17,7 @@ import { Theme } from '../../../../theme/Theme';
 import { ThemeService } from '../../../../theme/theme.service';
 import { LanguageService } from '../../../services/util/language.service';
 import { RoutingService } from '../../../services/util/routing.service';
+import { ConsentService } from '../../../services/util/consent.service';
 
 @Component({
   selector: 'app-header',
@@ -40,6 +41,8 @@ export class HeaderComponent implements OnInit {
   themes: Theme[];
   deviceWidth = innerWidth;
   helpUrl: string;
+  privacyUrl: string;
+  imprintUrl: string;
   showNews: boolean;
   lang: string;
 
@@ -58,7 +61,8 @@ export class HeaderComponent implements OnInit {
     private globalStorageService: GlobalStorageService,
     private themeService: ThemeService,
     private routingService: RoutingService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private consentService: ConsentService,
   ) {
     this.deviceType = this.globalStorageService.getItem(STORAGE_KEYS.DEVICE_TYPE);
     // LocalStorage setup
@@ -122,6 +126,8 @@ export class HeaderComponent implements OnInit {
     this.themes = this.themeService.getThemes();
     this.route.data.subscribe(data => {
       this.helpUrl = data.apiConfig.ui.links?.help?.url;
+      this.privacyUrl = data.apiConfig.ui.links?.privacy?.url;
+      this.imprintUrl = data.apiConfig.ui.links?.imprint?.url ;
     });
     this.showNews = false;
   }
@@ -182,10 +188,6 @@ export class HeaderComponent implements OnInit {
     this.router.navigate(['/']);
   }
 
-  navToHelp() {
-    window.open(this.helpUrl, '_blank');
-  }
-
   deleteAccount(id: string) {
     this.userService.delete(id).subscribe();
     this.authenticationService.logout();
@@ -223,6 +225,10 @@ export class HeaderComponent implements OnInit {
     dialogRef.afterClosed().subscribe(() => {
       this.showNews = false;
     });
+  }
+
+  showCookieSettings() {
+    this.consentService.openDialog();
   }
 
   /*
