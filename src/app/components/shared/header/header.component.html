@@ -30,10 +30,10 @@
         <mat-icon class="login">exit_to_app</mat-icon>
         <span>{{ 'header.login' | translate }}</span>
       </button>
-      <button mat-menu-item (click)="navToHelp()" tabindex="0">
+      <a *ngIf="helpUrl" [attr.href]="helpUrl" target="_blank" mat-menu-item  tabindex="0">
         <mat-icon class="less-important">help</mat-icon>
         <span>{{'header.help' | translate}}</span>
-      </button>
+      </a>
       <button mat-menu-item aria-labelledby="style-label" [matMenuTriggerFor]="themeMenu">
         <mat-icon class="less-important">palette</mat-icon>
         <span>{{'header.style' | translate}}</span>
@@ -47,10 +47,10 @@
           <mat-icon class="less-important">security</mat-icon>
           <span>{{'footer.dsgvo' | translate}}</span>
         </button>
-        <button [routerLink]="" mat-menu-item aria-labelledby="imprint-label">
+        <a *ngIf="imprintUrl" [attr.href]="imprintUrl" target="_blank" mat-menu-item aria-labelledby="imprint-label">
           <mat-icon class="less-important">contact_mail</mat-icon>
           <span>{{'footer.imprint' | translate}}</span>
-        </button>
+        </a>
       </div>
       <!-- <button mat-menu-item *ngIf="auth" (click)="openUserBonusTokenDialog()" tabindex="0">
         <mat-icon class="bonus">grade</mat-icon>
@@ -95,8 +95,8 @@
     </mat-menu>
 
     <mat-menu #privacyMenu="matMenu" [overlapTrigger]="false">
-      <button *ngIf="privacyUrl" class="item-title" mat-menu-item (click)="showDataProtection()">
-        {{ 'footer.privacy-policy' | translate }}</button>
+      <a *ngIf="privacyUrl" [attr.href]="privacyUrl" target="_blank" mat-menu-item>
+        {{ 'footer.privacy-policy' | translate }}</a>
       <button class="item-title" mat-menu-item (click)="showCookieSettings()">
         {{ 'footer.cookie-settings' | translate }}</button>
     </mat-menu>
