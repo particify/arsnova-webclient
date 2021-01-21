@@ -62,7 +62,6 @@
               </mat-form-field>
               <app-hint *ngIf="textContainsImage" text="utils.formatting-image-hint" [type]="warningType"></app-hint>
               <lib-extension-point extensionId="attachment-list" [extensionData]="attachmentData"></lib-extension-point>
-              <app-hint *ngIf="textContainsImage" [text]="'utils.formatting-image-hint' | translate" type="WARNING"></app-hint>
               <div class="form-spacer"></div>
             </form>
             <div class="abstentions">
