@@ -43,6 +43,7 @@ export class FeedbackService extends BaseHttpService {
 
   unsubscribe() {
     if (this.sub) {
+      this.sub.unsubscribe();
       this.sub = null;
     }
   }

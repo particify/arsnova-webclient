@@ -166,7 +166,6 @@ export class SurveyPageComponent implements OnInit, OnDestroy, AfterContentInit 
     if (this.sub) {
       this.sub.unsubscribe();
     }
-    this.feedbackService.unsubscribe();
   }
 
   private updateFeedback(data) {

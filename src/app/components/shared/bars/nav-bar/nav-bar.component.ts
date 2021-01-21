@@ -74,7 +74,7 @@ export class NavBarComponent extends BarBaseComponent implements OnInit {
         this.roomService.getStats(data.room.id).subscribe(stats => {
           if (stats.groupStats) {
             this.group = stats.groupStats[0].groupName;
-            this.setGroupInSessionStorage(group);
+            this.setGroupInSessionStorage(this.group);
             this.activeFeatures.push(FEATURES.GROUP);
           } else {
             // Initialize storage item with empty string if there are no groups yet

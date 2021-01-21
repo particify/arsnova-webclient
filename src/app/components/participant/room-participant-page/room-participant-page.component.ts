@@ -98,7 +98,6 @@ export class RoomParticipantPageComponent extends RoomPageComponent implements O
   unsubscribe() {
     if (this.surveySub) {
       this.surveySub.unsubscribe();
-      this.feedbackService.unsubscribe();
     }
   }
 

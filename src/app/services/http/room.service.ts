@@ -16,6 +16,7 @@ import { WsConnectorService } from '../websockets/ws-connector.service';
 import { IMessage } from '@stomp/stompjs';
 import { TranslateService } from '@ngx-translate/core';
 import { NotificationService } from '../util/notification.service';
+import { FeedbackService } from '@arsnova/app/services/http/feedback.service';
 
 const httpOptions = {
   headers: new HttpHeaders({})
@@ -43,7 +44,8 @@ export class RoomService extends BaseHttpService {
     private globalStorageService: GlobalStorageService,
     protected eventService: EventService,
     protected translateService: TranslateService,
-    protected notificationService: NotificationService) {
+    protected notificationService: NotificationService,
+    private feedbackService: FeedbackService) {
     super(eventService, translateService, notificationService);
   }
 
@@ -63,6 +65,8 @@ export class RoomService extends BaseHttpService {
       this.messageStream$ = null;
     }
     if (!room) {
+      this.feedbackService.unsubscribe();
+      this.globalStorageService.removeItem(STORAGE_KEYS.LAST_GROUP);
       return;
     }
     this.messageStream$ = this.ws.getWatcher(`/topic/${room.id}.stream`);
