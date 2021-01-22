@@ -72,7 +72,8 @@
 
   <button mat-icon-button class="button-abort scrollTop" tabindex="-1" (click)="scrollTop()"
           [ngClass]="{'visible': scrollExtended && scrollActive,
-          'mobile-scroll-position': deviceType === 'mobile' && navBarExists}">
+                      'mobile-scroll-position': deviceType === 'mobile' && navBarExists,
+                      'desktop-scroll-position': deviceType === 'desktop'}">
     <mat-icon>arrow_upward</mat-icon>
   </button>
 
