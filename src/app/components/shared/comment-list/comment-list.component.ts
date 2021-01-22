@@ -439,10 +439,6 @@ export class CommentListComponent implements OnInit, OnDestroy {
     });
   }
 
-  switchToModerationList(): void {
-    this.router.navigate([`/moderator/room/${this.room.shortId}/moderator/comments`]);
-  }
-
   /**
    * Announces a new comment receive.
    */

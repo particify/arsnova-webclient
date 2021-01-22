@@ -154,8 +154,10 @@
   </div>
 
   <button mat-icon-button class="button-abort scrollTop" tabindex="-1" (click)="scrollTop(true)"
-          [ngClass]="{'visible': scrollExtended && scrollActive, 'above-add': navBarExists && deviceType === 'mobile',
-          'mobile-scroll-position': deviceType === 'mobile'}">
+          [ngClass]="{'visible': scrollExtended && scrollActive,
+                      'above-add': navBarExists && deviceType === 'mobile',
+                      'mobile-scroll-position': !navBarExists && deviceType === 'mobile',
+                      'desktop-scroll-position': deviceType === 'desktop'}">
     <mat-icon>arrow_upward</mat-icon>
   </button>
 

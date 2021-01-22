@@ -158,23 +158,26 @@ button.selected {
 }
 
 .above-add {
-  bottom: calc(8vw + 96px)!important;
+  bottom: calc(8vw + 96px);
 }
 
 .mobile-scroll-position {
   bottom: calc(8vw + 40px);
 }
 
+.desktop-scroll-position {
+  bottom: 4vw;
+}
+
 .scrollTop {
   position: fixed;
-  right: calc(-4vw - 40px);
-  bottom: 4vw;
+  right: -40px;
   z-index: 1;
   transition: right 400ms;
 }
 
 .visible {
-  right: calc(4vw);
+  right: 4vw;
 }
 
 .comments-container {

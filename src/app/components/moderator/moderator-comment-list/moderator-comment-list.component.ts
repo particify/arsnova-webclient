@@ -264,16 +264,6 @@ export class ModeratorCommentListComponent implements OnInit {
     }
   }
 
-  switchToCommentList(): void {
-    let role;
-    if (this.viewRole === UserRole.CREATOR) {
-      role = 'creator';
-    } else if (this.viewRole === UserRole.EXECUTIVE_MODERATOR) {
-      role = 'moderator';
-    }
-    this.router.navigate([`/${role}/room/${this.room.shortId}/comments`]);
-  }
-
   /**
    * Announces a new comment receive.
    */
