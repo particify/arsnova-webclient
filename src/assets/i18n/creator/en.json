@@ -21,8 +21,6 @@
     "a11y-select-time-1d": "Show all comments of the last day",
     "a11y-select-time-1w": "Show all comments of the last week",
     "a11y-select-time-all": "Show all comments",
-    "a11y-switch-to-public-list": "Switches to public comment list",
-    "a11y-switch-to-moderator-list": "Switches to moderation comment list",
     "add-comment": "Leave a comment",
     "pause-comments": "Pause the comment stream",
     "play-comments": "Start the comment stream",
@@ -47,9 +45,7 @@
     "sort-comments": "Sort comments",
     "sort-vote-asc": "Best rating first",
     "sort-vote-desc": "Worst rating first",
-    "sort-list-time": "Latest comment first",
-    "switch-to-comment-list": "Switch to public comment board",
-    "switch-to-moderation-list": "Switch to moderation board"
+    "sort-list-time": "Latest comment first"
   },
   "comment-page": {
     "a11y-shortcuts": "Press key 1 to create a comment. As soon as several comments are available you can search and filter comments. Press key 2 to search in the comments list, key 3 to sort comments, key 4 to filter comments, key 5 to start or continue the comment stream, key 6 to go to the first comment, key 9 to go to the user menu, 0 to return to the room overview or press the escape key to repeat this announcement.",

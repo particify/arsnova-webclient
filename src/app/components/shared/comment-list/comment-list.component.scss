@@ -33,27 +33,34 @@
 }
 
 .search-container {
+  transition: top 400ms;
   border-radius: 35px;
   background-color: var(--background);
+  z-index: 1;
 }
 
 .search-container-fixed {
-  border-radius: 35px;
-  background-color: var(--background);
   position: fixed;
-  top: 4vw;
   left: calc(50% - 205px);
   width: 100%;
   max-width: 410px;
-  z-index: 1;
+  @media(max-width: 1000px) {
+    left: calc(50% - 175px);
+    max-width: 350px;
+  }
   @media(max-width: 420px) {
-    left: calc(50% - 170px);
-    max-width: 340px;
+    left: calc(50% - 143px);
+    max-width: 286px;
   }
-  @media(max-width: 340px) {
-    left: 0;
-    max-width: 100vw;
-  }
+}
+
+.search-container-fixed-visible {
+  top: 4vw;
+}
+
+.search-container-fixed-invisible {
+  position: sticky;
+  top: calc(-4vw - 70px);
 }
 
 .close-btn {
@@ -64,6 +71,9 @@
   background-color: var(--secondary);
   color: var(--on-secondary);
   opacity: 0.7;
+  &:last-of-type {
+    margin: 0;
+  }
 }
 
 .bigger-icon {
@@ -76,6 +86,13 @@
 .add-btn {
   background-color: var(--primary);
   color: var(--on-primary);
+}
+
+.mobile-add {
+  position: fixed;
+  right: 4vw;
+  bottom: 4vw;
+  z-index: 3
 }
 
 .above-nav {
@@ -140,19 +157,27 @@ button.selected {
   width: 250px;
 }
 
+.above-add {
+  bottom: calc(8vw + 96px)!important;
+}
+
+.mobile-scroll-position {
+  bottom: calc(8vw + 40px);
+}
+
 .scrollTop {
   position: fixed;
-  left: 4vw;
+  right: calc(-4vw - 40px);
   bottom: 4vw;
-  transform: scale(0);
   z-index: 1;
-  transition: 0.1s;
+  transition: right 400ms;
 }
 
 .visible {
-  transform: scale(1);
+  right: calc(4vw);
 }
 
 .comments-container {
   margin-top: min(1em, 4vw);
+  margin-bottom: 20px;
 }

@@ -1,9 +1,10 @@
-<app-nav-bar></app-nav-bar>
+<app-nav-bar (isVisible)="checkIfNavBarExists($event)"></app-nav-bar>
 <div class="nav-bar-container">
-  <div fxLayout="row" [ngClass]="{'search-container' : !scroll, 'search-container-fixed' : scroll}"
+  <div fxLayout="row" class="search-container" [ngClass]="{'search-container-fixed-invisible': scroll && !scrollActive && deviceType !== 'desktop', 'search-container-fixed': scroll,
+        'search-container-fixed-visible' : scroll && (deviceType === 'desktop' || scrollActive)}"
        (window:scroll)="checkScroll()" fxLayoutAlign="center center">
     <input tabindex="-1" (focus)="eventService.makeFocusOnInputTrue()" (blur)="eventService.makeFocusOnInputFalse()" #searchBox
-           id="searchBox" [ngClass]="{'search-input-hidden': !search, 'search-input': search }"
+           id="searchBox" [ngClass]="{'search-input-hidden': !search, 'search-input': search}"
            (input)="searchComments()" [(ngModel)]="searchInput" [placeholder]="searchPlaceholder"
            aria-labelledby="search-box-input-description">
     <button id="search-close-button" mat-icon-button *ngIf="searchInput !== '' || search" class="close-btn"
@@ -35,11 +36,6 @@
               [matMenuTriggerFor]="timeMenu" matTooltip="{{ 'comment-list.select-time' | translate }}">
         <mat-icon class="bigger-icon">access_time</mat-icon>
       </button>
-      <button id="switch-button" mat-mini-fab class="bar-icon" aria-labelledby="switch-list"
-              (click)="switchToCommentList()" *ngIf="!search"
-              matTooltip="{{ 'comment-list.switch-to-comment-list' | translate }}">
-        <mat-icon>playlist_add_check</mat-icon>
-      </button>
     </div>
 
     <mat-menu #sortMenu="matMenu" xPosition="before">
@@ -70,12 +66,13 @@
 
   </div>
 
-  <div *ngIf="scroll" class="search-bar-placeholder"></div>
+  <div *ngIf="scroll && (deviceType === 'desktop' || scrollActive)" class="search-bar-placeholder"></div>
 
   <app-loading-indicator *ngIf="isLoading" [size]="80"></app-loading-indicator>
 
-  <button mat-icon-button class="button-primary scrollTop" [ngClass]="{'visible': scrollExtended}"
-          (click)="scrollTop()" tabIndex="-1">
+  <button mat-icon-button class="button-abort scrollTop" tabindex="-1" (click)="scrollTop()"
+          [ngClass]="{'visible': scrollExtended && scrollActive,
+          'mobile-scroll-position': deviceType === 'mobile' && navBarExists}">
     <mat-icon>arrow_upward</mat-icon>
   </button>
 
@@ -84,7 +81,7 @@
                  [parseVote]="getVote(current)" [referenceEvent]="referenceEvent.asObservable()"></app-comment>
   </div>
 
-  <div fxLayout="row" fxLayoutAlign="center center">
+  <div *ngIf="!isLoading" fxLayout="row" fxLayoutAlign="center center">
     <p *ngIf="comments.length < 1" class="no-comments">{{ 'comment-page.no-comments' | translate }}</p>
     <p *ngIf="((hideCommentsList && filteredComments.length < 1) ||
             (!hideCommentsList && commentsFilteredByTime.length < 1)) && comments.length >= 1" class="no-comments">
@@ -98,7 +95,6 @@
     <div id="sort-up">{{'comment-list.a11y-sort-up' | translate}}</div>
     <div id="sort-down">{{'comment-list.a11y-sort-down' | translate}}</div>
     <div id="sort-time">{{'comment-list.a11y-sort-time' | translate}}</div>
-    <div id="switch-list">{{'comment-list.a11y-switch-to-public-list' | translate}}</div>
     <div id="new-comment">{{ 'comment-page.new-comment' | translate:{comment: newestComment.body} }}</div>
   </div>
 </div>

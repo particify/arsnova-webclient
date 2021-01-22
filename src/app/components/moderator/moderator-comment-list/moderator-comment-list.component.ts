@@ -40,6 +40,7 @@ export class ModeratorCommentListComponent implements OnInit {
   room: Room;
   hideCommentsList = false;
   filteredComments: Comment[];
+  deviceType: string;
   viewRole: UserRole;
   isLoading = true;
   voteasc = 'voteasc';
@@ -62,6 +63,9 @@ export class ModeratorCommentListComponent implements OnInit {
   referenceEvent: Subject<string> = new Subject<string>();
   periodsList = Object.values(Period);
   period: Period;
+  navBarExists = false;
+  lastScroll = 0;
+  scrollActive = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -110,6 +114,7 @@ export class ModeratorCommentListComponent implements OnInit {
     this.translateService.get('comment-list.search').subscribe(msg => {
       this.searchPlaceholder = msg;
     });
+    this.deviceType = innerWidth > 1000 ? 'desktop' : 'mobile';
     // Header height is 56 if smaller than 600px
     if (innerWidth >= 600) {
       this.scrollMax = 64;
@@ -118,9 +123,14 @@ export class ModeratorCommentListComponent implements OnInit {
     }
   }
 
+  checkIfNavBarExists(navBarExists: boolean) {
+    this.navBarExists = navBarExists;
+  }
+
   checkScroll(): void {
     const currentScroll = document.documentElement.scrollTop;
     this.scroll = currentScroll >= this.scrollMax;
+    this.scrollActive = this.scroll && currentScroll < this.lastScroll;
     this.scrollExtended = currentScroll >= this.scrollExtendedMax;
     const length = this.hideCommentsList ? this.filteredComments.length : this.commentsFilteredByTime.length;
     if (this.displayComments.length !== length) {
@@ -129,6 +139,7 @@ export class ModeratorCommentListComponent implements OnInit {
         this.getDisplayComments();
       }
     }
+    this.lastScroll = currentScroll;
   }
 
   scrollTop() {
