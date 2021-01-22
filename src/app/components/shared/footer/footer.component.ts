@@ -66,4 +66,8 @@ export class FooterComponent implements OnInit {
   showCookieSettings() {
     this.consentService.openDialog();
   }
+
+  checkToolbarCondition(url: string): boolean {
+    return innerWidth > 1000 || !url.match(/\/room\/[0-9]+\/[^\/]+/);
+  }
 }
