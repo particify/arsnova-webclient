@@ -36,11 +36,6 @@
               [matMenuTriggerFor]="timeMenu" matTooltip="{{ 'comment-list.select-time' | translate }}">
         <mat-icon class="bigger-icon">access_time</mat-icon>
       </button>
-      <button id="switch-button" mat-mini-fab class="bar-icon" aria-labelledby="switch-list"
-              (click)="switchToCommentList()" *ngIf="!search"
-              matTooltip="{{ 'comment-list.switch-to-comment-list' | translate }}">
-        <mat-icon>playlist_add_check</mat-icon>
-      </button>
     </div>
 
     <mat-menu #sortMenu="matMenu" xPosition="before">
@@ -100,7 +95,6 @@
     <div id="sort-up">{{'comment-list.a11y-sort-up' | translate}}</div>
     <div id="sort-down">{{'comment-list.a11y-sort-down' | translate}}</div>
     <div id="sort-time">{{'comment-list.a11y-sort-time' | translate}}</div>
-    <div id="switch-list">{{'comment-list.a11y-switch-to-public-list' | translate}}</div>
     <div id="new-comment">{{ 'comment-page.new-comment' | translate:{comment: newestComment.body} }}</div>
   </div>
 </div>

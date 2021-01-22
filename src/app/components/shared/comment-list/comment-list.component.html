@@ -63,13 +63,6 @@
         <mat-icon>play_arrow</mat-icon>
       </button>
 
-      <button mat-mini-fab aria-labelledby="switch-to-list" class="bar-icon"
-              *ngIf="!search && ['EDITING_MODERATOR', 'EXECITIVE_MODERATOR'].indexOf(viewRole) !== -1 && deviceType === 'desktop'"
-              (click)="switchToModerationList()"
-              matTooltip="{{ 'comment-list.switch-to-moderation-list' | translate }}">
-        <mat-icon>thumb_down_alt</mat-icon>
-      </button>
-
       <button id="add-comment-small-button" class="add-btn" mat-mini-fab aria-labelledby="add"
               *ngIf="!search && deviceType === 'desktop'" (click)="openCreateDialog()"
               matTooltip="{{ 'comment-list.add-comment' | translate }}">

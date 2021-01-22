@@ -21,8 +21,6 @@
     "a11y-select-time-1d": "Zeige alle Kommentare der letzten 24 Stunden an",
     "a11y-select-time-1w": "Zeige alle kommentare der letzten 7 Tage an",
     "a11y-select-time-all": "Zeige alle Kommentare an",
-    "a11y-switch-to-public-list": "Wechselt zur öffentlichen Kommentarliste",
-    "a11y-switch-to-moderator-list": "Wechselt zur Moderations-Kommentarliste",
     "add-comment": "Kommentar verfassen",
     "pause-comments": "Pausiere den Kommentar-Stream",
     "play-comments": "Starte den Kommentar-Stream",
@@ -47,9 +45,7 @@
     "sort-comments": "Kommentare sortieren",
     "sort-vote-asc": "Positivste Bewertung zuerst",
     "sort-vote-desc": "Negativste Bewertung zuerst",
-    "sort-list-time": "Neuester Kommentar zuerst",
-    "switch-to-comment-list": "Zur öffentlichen Kommentarliste wechseln",
-    "switch-to-moderation-list": "Zur Moderationsliste wechseln"
+    "sort-list-time": "Neuester Kommentar zuerst"
   },
   "comment-page": {
     "a11y-shortcuts": "Drücke die Taste 1, um einen Kommentar zu erstellen. Sobald mehrere Kommentare vorhanden sind kannst du Kommentare suchen und filtern. Drücke die Taste 2, um die Kommentare zu durchsuchen, die Taste 3, um Kommentare zu sortieren, die Taste 4, um Kommentare zu filtern, die Taste 5, um den Kommentarstream zu pausieren oder fortzusetzen, die Taste 6, um zu dem ersten Kommentar zu gelangen, die Taste 9, um auf das Nutzer-Menü zu gelangen, die Taste 0, um zurück zur Raumübersicht zu gelangen oder die Escape-Taste, um diese Ansage zu wiederholen.",
