@@ -14,8 +14,8 @@ import { ContentService } from '../../../services/http/content.service';
 import { TranslateService } from '@ngx-translate/core';
 import { AdvancedSnackBarTypes, NotificationService } from '../../../services/util/notification.service';
 import { GlobalStorageService, STORAGE_KEYS } from '../../../services/util/global-storage.service';
-import { SidebarInfo } from '../sidebar/sidebar.component';
 import { UserRole } from '../../../models/user-roles.enum';
+import { InfoBarItem } from '../bars/info-bar/info-bar.component';
 
 @Component({
   selector: 'app-room-page',
@@ -42,7 +42,7 @@ export class RoomPageComponent implements OnDestroy {
   moderationCommentWatch: Observable<IMessage>;
   moderationSub: Subscription;
   moderatorCommentCounter: number;
-  sidebarInfos: SidebarInfo[] = [];
+  infoBarItems: InfoBarItem[] = [];
   role: UserRole;
   roleIconString;
 
@@ -85,7 +85,7 @@ export class RoomPageComponent implements OnDestroy {
   }
 
   parseUserCount(body: string) {
-    this.sidebarInfos[0].count = JSON.parse(body).UserCountChanged.userCount;
+    this.infoBarItems[0].count = JSON.parse(body).UserCountChanged.userCount;
   }
 
   subscribeCommentStream() {

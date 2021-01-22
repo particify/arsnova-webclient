@@ -1,4 +1,4 @@
-<app-sidebar *ngIf="!isLoading" [sidebarInfos]="sidebarInfos"></app-sidebar>
+<app-info-bar [barItems]="infoBarItems"></app-info-bar>
 <div fxLayout="column" fxLayoutAlign="center" fxLayoutGap="20px" fxFill>
   <div fxLayout="row" fxLayoutAlign="center">
     <button id="live-announcer-button" tabIndex="-1" class="visually-hidden" (click)="announce()">

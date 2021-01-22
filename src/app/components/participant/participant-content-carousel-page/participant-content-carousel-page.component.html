@@ -1,14 +1,17 @@
+<app-nav-bar></app-nav-bar>
 <app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
-<div *ngIf="!isLoading" fxLayout="column" fxLayoutAlign="start center">
-  <button id="live-announcer-button" class="visually-hidden" tabindex="-1" (click)="announce('answer.a11y-shortcuts')">
-    {{ 'answer.a11y-message' | translate: { group: contentGroup.name } }}</button>
-  <app-stepper *ngIf="contents.length > 0" (newIndex)="updateURL($event)" [listLength]="contents.length" [completed]="alreadySent">
-    <cdk-step *ngFor="let content of contents; let i = index">
-      <div tabindex="0" id="step" *ngIf="currentStep >= i - 1 && currentStep <= i + 1">
-        <app-content-participant (answerChanged)="receiveSentStatus($event, i)" [content]="content" [answer]="answers[i]">
-        </app-content-participant>
-      </div>
-    </cdk-step>
-  </app-stepper>
-  <h3 *ngIf="contents.length === 0">{{ 'answer.questions-locked' | translate }}</h3>
+<div class="nav-bar-container">
+  <div *ngIf="!isLoading" fxLayout="column" fxLayoutAlign="start center">
+    <button id="live-announcer-button" class="visually-hidden" tabindex="-1" (click)="announce('answer.a11y-shortcuts')">
+      {{ 'answer.a11y-message' | translate: { group: contentGroup.name } }}</button>
+    <app-stepper *ngIf="contents.length > 0" (newIndex)="updateURL($event)" [listLength]="contents.length" [completed]="alreadySent">
+      <cdk-step *ngFor="let content of contents; let i = index">
+        <div tabindex="0" id="step" *ngIf="currentStep >= i - 1 && currentStep <= i + 1">
+          <app-content-participant (answerChanged)="receiveSentStatus($event, i)" [content]="content" [answer]="answers[i]">
+          </app-content-participant>
+        </div>
+      </cdk-step>
+    </app-stepper>
+    <h3 *ngIf="contents.length === 0">{{ 'answer.questions-locked' | translate }}</h3>
+  </div>
 </div>

@@ -183,5 +183,12 @@
     "hide-chart": "Hide chart",
     "answer": "Answer",
     "other-combinations": "Other"
+  },
+  "sidebar": {
+  "a11y-switch-to-feature": "Switch to {{feature}}.",
+  "user-counter": "Number of active participants",
+    "comments": "Comments",
+    "group": "Questions",
+    "survey": "Live-Survey"
   }
 }

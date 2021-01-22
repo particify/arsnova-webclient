@@ -1,0 +1,44 @@
+.list {
+  left: 0;
+  position: fixed;
+  background: var(--surface);
+  transition-property: opacity, box-shadow;
+  transition-duration: 300ms;
+  opacity: 1;
+  z-index: 1;
+}
+
+.hidden {
+  height: 0;
+  opacity: 0;
+}
+
+.icon-container {
+  display: flex;
+}
+
+@media(min-width: 1000px) {
+  .icon-container {
+    margin: 16px 0;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .list {
+    // 64px (Header height) + 4vw (app-padding)
+    top: calc(64px + 4vw);
+    border-bottom-right-radius: 10px;
+    border-top-right-radius: 10px;
+    position: absolute;
+  }
+
+  .fixed {
+    position: fixed;
+    top: 4vw;
+  }
+
+  .notActive {
+    box-shadow: none;
+    opacity: 0.8;
+  }
+}

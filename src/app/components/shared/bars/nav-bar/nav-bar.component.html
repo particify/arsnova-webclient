@@ -1,0 +1,15 @@
+<div *ngIf="!tooFewFeatures" class="list nav" fxLayout="column" fxLayoutAlign="center center" (window:scroll)="checkScroll()"
+     [ngClass]="{'notActive': !isActive, 'fixed': scrollExtended}"
+     (mouseenter)="toggleVisibility(true)" (mouseleave)="toggleVisibility(false)">
+  <div class="icon-container">
+    <div *ngFor="let barItem of barItems; let i = index" fxLayoutAlign="center center" class="item"
+         [ngClass]="{'current': i === currentRouteIndex}" (click)="navToUrl(i)"
+         [attr.aria-label]="'sidebar.a11y-switch-to-feature' | translate : {feature: (('sidebar.' + barItem.name) | translate)}">
+      <mat-icon class="clickable" matTooltip="{{ 'sidebar.' + barItem.name | translate}}">
+        {{barItem.icon}}
+        <div [ngClass]="{'hidden': !barItem.news }" class="badge"></div>
+      </mat-icon>
+      <p class="text">{{ 'sidebar.' + barItem.name | translate}}</p>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,16 @@
+@import '../bar-base';
+
+.icon {
+  opacity: 0.8;
+  margin: 8px 32px 0 16px;
+}
+
+
+@media(max-width: 1000px) {
+
+  .info {
+    height: 0;
+    opacity: 0;
+    pointer-events: none;
+  }
+}
