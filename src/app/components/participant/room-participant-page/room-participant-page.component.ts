@@ -20,6 +20,8 @@ import { WsFeedbackService } from '../../../services/websockets/ws-feedback.serv
 import { GlobalStorageService, STORAGE_KEYS } from '../../../services/util/global-storage.service';
 import { AnnounceService } from '../../../services/util/announce.service';
 import { UserRole } from '../../../models/user-roles.enum';
+import { FeedbackMessageType } from '../../../models/messages/feedback-message-type';
+import { FeedbackService } from '../../../services/http/feedback.service';
 
 @Component({
   selector: 'app-room-participant-page',
@@ -47,7 +49,8 @@ export class RoomParticipantPageComponent extends RoomPageComponent implements O
     private announceService: AnnounceService,
     public eventService: EventService,
     private wsFeedbackService: WsFeedbackService,
-    protected globalStorageService: GlobalStorageService
+    protected globalStorageService: GlobalStorageService,
+    private feedbackService: FeedbackService
   ) {
     super(roomService, route, router, location, wsCommentService, commentService, eventService, contentService, translateService,
       notificationService, globalStorageService);
@@ -104,7 +107,8 @@ export class RoomParticipantPageComponent extends RoomPageComponent implements O
 
   getFeedback() {
     this.surveyEnabled = !this.room.settings['feedbackLocked'];
-    this.surveySub = this.wsFeedbackService.getFeedbackStream(this.room.id).subscribe((message: Message) => {
+    this.feedbackService.startSub(this.room.id);
+    this.surveySub = this.feedbackService.messageEvent.subscribe((message: Message) => {
       this.parseFeedbackMessage(message);
     });
   }
@@ -125,9 +129,9 @@ export class RoomParticipantPageComponent extends RoomPageComponent implements O
 
   parseFeedbackMessage(message: Message) {
     const msg = JSON.parse(message.body);
-    if (msg.type === 'FeedbackStarted') {
+    if (msg.type === FeedbackMessageType.STARTED) {
       this.surveyEnabled = true;
-    } else if (msg.type === 'FeedbackStopped') {
+    } else if (msg.type === FeedbackMessageType.STOPPED) {
       this.surveyEnabled = false;
     }
   }
