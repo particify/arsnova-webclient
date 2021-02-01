@@ -7,7 +7,7 @@
     correct: comment.correct === 1 ? ('comment-page.a11y-text-correct' | translate) : "",
     wrong: comment.correct === 2 ? ('comment-page.a11y-text-wrong' | translate) : "",
     bonus: comment.favorite ? ('comment-page.a11y-text-grade' | translate) : "",
-    beamer: comment.read ? ('comment-page.a11y-text-read' | translate) : "",
+    read: comment.read ? ('comment-page.a11y-text-read' | translate) : "",
     answer: comment.answer ? ('comment-page.a11y-text-answer' | translate) : ""} }}</div>
   <div fxLayout="column">
     <div fxLayout="row" class="comment-actions">
@@ -15,8 +15,8 @@
         <div>{{comment.timestamp | dateFromNow : language : refreshCounter }}</div>
       </div>
       <button mat-icon-button *ngIf="comment.read && viewRole === 'CREATOR'" [disabled]="true" (click)="setRead(comment)">
-        <mat-icon svgIcon="beamer" class="beamer-icon"
-                  matTooltip="{{ 'comment-page.mark-read' | translate }}">
+        <mat-icon class="read-icon" matTooltip="{{ 'comment-page.mark-read' | translate }}">
+          visibility
         </mat-icon>
       </button>
       <span class="fill-remaining-space"></span>

@@ -36,7 +36,6 @@ import { ModeratorService } from './services/http/moderator.service';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { CommentSettingsService } from './services/http/comment-settings.service';
 import { BonusTokenService } from './services/http/bonus-token.service';
-import { CustomIconService } from './services/util/custom-icon.service';
 import { ModeratorModule } from './components/moderator/moderator.module';
 import { ApiConfigService } from './services/http/api-config.service';
 import { CookiesComponent } from './components/home/_dialogs/cookies/cookies.component';
@@ -162,7 +161,6 @@ export function initializeApp(appConfig: AppConfig) {
     CommentSettingsService,
     BonusTokenService,
     ContentGroupService,
-    CustomIconService,
     WsConnectorService,
     ApiConfigService,
     GlobalStorageService,
