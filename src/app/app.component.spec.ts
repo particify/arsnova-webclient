@@ -1,206 +1,90 @@
 import { TranslateService } from '@ngx-translate/core';
-import { TestBed, ComponentFixture, tick, waitForAsync } from '@angular/core/testing';
+import { TestBed, ComponentFixture, waitForAsync, fakeAsync } from '@angular/core/testing';
 import { AppComponent } from './app.component';
-import { NotificationService } from './services/util/notification.service';
-import { SwUpdate, UpdateAvailableEvent } from '@angular/service-worker';
 import { CustomIconService } from './services/util/custom-icon.service';
 import { ApiConfigService } from './services/http/api-config.service';
 import { RouterTestingModule } from '@angular/router/testing';
 import { Component, Injectable, EventEmitter } from '@angular/core';
-import { defer, Observable, of, Subject } from 'rxjs';
+import { of } from 'rxjs';
 import { TrackingService } from './services/util/tracking.service';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-import { HttpClient } from '@angular/common/http';
-import { DialogService } from './services/util/dialog.service';
-import { GlobalStorageService, STORAGE_KEYS } from './services/util/global-storage.service';
-import { EventService } from './services/util/event.service';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ApiConfig } from './models/api-config';
 import { ConsentService } from './services/util/consent.service';
-import { UpdateService } from './services/util/update-service';
+import { UpdateService } from './services/util/update.service';
 import { UpdateImportance } from './models/version-info';
 import { LanguageService } from '@arsnova/app/services/util/language.service';
+import { RoutingService } from '@arsnova/app/services/util/routing.service';
+import { MockTranslateService } from '@arsnova/testing/test-helpers';
 
-@Injectable()
-class MockTranslateService {
-  public get(key: string): Observable<String> {
-    return of (key);
-  }
-
-  public setDefaultLang(lang: string) {
-  }
-
-  public getBrowserLang() {
-    return '';
-  }
-}
-
-// Mock class for the notification service
-@Injectable()
-class MockNotificationService {
-  public snackRef = {
-    afterDismissed: () => {
-      return of();
-    }
-  };
-
-  public show(msg: string, install: string, config: any) {
-  }
-
-  public showAdvanced() {
-  }
-}
-
-@Injectable()
-class MockDialogService {
-  public openUpdateInfoDialog = jasmine.createSpy('OpenUpdateInfoDialogSpy').and.returnValue({
-    afterClosed: () => new Subject()
-  });
-}
-
-@Injectable()
-class MockEventService {
-  public broadcast() {
-  }
-}
-
-@Injectable()
-class MockGlobalStorageService {
-  private memory: Map<symbol, any> = new Map();
-
-  constructor(initialState: [[symbol, any]]) {
-    initialState.forEach(item => this.setItem(item[0], item[1]));
-  }
-
-  public getItem(key: symbol): any {
-    return this.memory.get(key);
-  }
-
-  public setItem(key: symbol, value: any) {
-    this.memory.set(key, value);
-  }
-
-  public removeItem(key: symbol) {
-    this.memory.delete(key);
-  }
-}
-
-// Mock class for the tracking service
-@Injectable()
-class MockApiConfigService extends ApiConfigService {
-  private mockApiConfig: ApiConfig = {
-    ui: {
-      tracking: {
-        url: 'mock-tracker',
-        provider: 'matomo'
-      },
-      versions: [
-        {
-          id: 100001,
-          commitHash: '1111111111111111111111111111111111111111',
-          importance: UpdateImportance.RECOMMENDED,
-          changes: {
-            en: [
-              'a change entry'
-            ]
-          }
-        },
-        {
-          id: 100000,
-          commitHash: '0000000000000000000000000000000000000000',
-          importance: UpdateImportance.RECOMMENDED,
-          changes: {
-            en: [
-              'a change entry'
-            ]
-          }
-        }
-      ]
-    },
-    authenticationProviders: [],
-    features: { }
-  };
-
-  constructor(httpClient: HttpClient, protected eventService: EventService) {
-    super(
-      httpClient,
-      eventService,
-      jasmine.createSpyObj('TranslateServiceSpy', ['get']),
-      jasmine.createSpyObj('NotificationServiceSpy', ['showAdvanced'])
-    );
-  }
-
-  public getApiConfig$ = jasmine.createSpy('GetApiConfigSpy').and.returnValue(
-      defer(() => of(this.mockApiConfig)));
-}
-
-// Mock class for the tracking service
-@Injectable()
-class MockTrackingService {
-  public init = jasmine.createSpy('TrackingServiceInitSpy');
-}
-
-// Mock class for the consent service
-@Injectable()
-class MockConsentService {
-  public setConfig() { }
-}
-
-// Mock class for the Window
-@Injectable()
-class MockWindow {
-  public location = class {
-    public reload = jasmine.createSpy('WindowReloadSpy');
-  };
-}
-
-// Mock class for the service worker update
-@Injectable()
-class MockSwUpdate extends SwUpdate {
-  private availableSubject = new Subject<UpdateAvailableEvent>();
-
-  public available: Observable<UpdateAvailableEvent> = this.availableSubject.asObservable();
-
-  constructor() {
-    super(jasmine.createSpyObj('NgswCommChannel', ['eventsOfType']));
-  }
-
-  public mockUpdateAvailableEvent() {
-    this.availableSubject.next(
-      {
-        type: 'UPDATE_AVAILABLE',
-        current: {
-          hash: '1'
-        },
-        available: {
-          hash: '2'
-        }
-      }
-    );
-  }
-}
-
-@Injectable()
-class MockLanguageService {
-  public readonly langEmitter = new EventEmitter<string>();
+// Stub for downstream template
+@Component({selector: 'app-header', template: ''})
+class HeaderStubComponent {
 }
 
 // Stub for downstream template
-@Component({ selector: 'app-header', template: '' })
-class HeaderStubComponent {}
-
-// Stub for downstream template
-@Component({ selector: 'app-footer', template: '' })
-class FooterStubComponent {}
+@Component({selector: 'app-footer', template: ''})
+class FooterStubComponent {
+}
 
 describe('AppComponent', () => {
   let appComponent: AppComponent;
   // let's you access the debug elements to gain control over injected services etc.
   let fixture: ComponentFixture<AppComponent>;
 
-  // create simple spy objects for downstream dependencies
-  const mockCustomIconService = jasmine.createSpyObj('CustomIconService', ['init']);
+  const customIconService = jasmine.createSpyObj('CustomIconService', ['init']);
+  const updateService = jasmine.createSpyObj('UpdateService', ['handleUpdate']);
+  const trackingService = jasmine.createSpyObj('TrackingService', ['init']);
+  const apiConfigService = jasmine.createSpyObj('ApiConfigService', ['getApiConfig$']);
+  const consentService = jasmine.createSpyObj('ConsentService', ['setConfig']);
+  const routingService = jasmine.createSpyObj('RoutingService', ['subscribeActivatedRoute']);
+
+  let translateService: TranslateService;
+
+  let getApiConfig$Spy: jasmine.Spy;
+  let testApiConfig: ApiConfig;
 
   beforeEach(waitForAsync(() => {
+
+    testApiConfig = {
+      ui: {
+        tracking: {
+          url: 'mock-tracker',
+          provider: 'matomo'
+        },
+        versions: [
+          {
+            id: 100001,
+            commitHash: '1111111111111111111111111111111111111111',
+            importance: UpdateImportance.RECOMMENDED,
+            changes: {
+              en: [
+                'a change entry'
+              ]
+            }
+          },
+          {
+            id: 100000,
+            commitHash: '0000000000000000000000000000000000000000',
+            importance: UpdateImportance.RECOMMENDED,
+            changes: {
+              en: [
+                'a change entry'
+              ]
+            }
+          }
+        ]
+      },
+      authenticationProviders: [],
+      features: {}
+    };
+
+    getApiConfig$Spy = apiConfigService.getApiConfig$.and.returnValue(of(testApiConfig));
+@Injectable()
+class MockLanguageService {
+  public readonly langEmitter = new EventEmitter<string>();
+}
+
+
     TestBed.configureTestingModule({
       declarations: [
         AppComponent,
@@ -208,59 +92,35 @@ describe('AppComponent', () => {
         FooterStubComponent
       ],
       providers: [
+        AppComponent,
         {
           provide: TranslateService,
           useClass: MockTranslateService
         },
         {
-          provide: SwUpdate,
-          useClass: MockSwUpdate
-        },
-        {
-          provide: NotificationService,
-          useClass: MockNotificationService
-        },
-        {
           provide: CustomIconService,
-          useValue: mockCustomIconService
+          useValue: customIconService
         },
+
         {
           provide: ApiConfigService,
-          useClass: MockApiConfigService
+          useValue: apiConfigService
         },
         {
           provide: TrackingService,
-          useClass: MockTrackingService
-        },
-        {
-          provide: DialogService,
-          useClass: MockDialogService
-        },
-        {
-          provide: GlobalStorageService,
-          useFactory: () => new MockGlobalStorageService(
-              [
-                [
-                  STORAGE_KEYS.LATEST_ANNOUNCED_VERSION,
-                  '0000000000000000000000000000000000000000'
-                ]
-              ])
-        },
-        {
-          provide: EventService,
-          useClass: MockEventService
+          useValue: trackingService
         },
         {
           provide: ConsentService,
-          useClass: MockConsentService
+          useValue: consentService
         },
         {
           provide: UpdateService,
-          useClass: UpdateService
+          useValue: updateService
         },
         {
-          provide: Window,
-          useClass: MockWindow
+          provide: RoutingService,
+          useValue: routingService
         },
         {
           provide: LanguageService,
@@ -271,36 +131,50 @@ describe('AppComponent', () => {
         RouterTestingModule,
         HttpClientTestingModule
       ]
-    }).compileComponents()
-    .then(() => {
-      fixture = TestBed.createComponent(AppComponent);
-      appComponent = fixture.componentInstance;
-      fixture.detectChanges();
     });
+    fixture = TestBed.createComponent(AppComponent);
+    appComponent = fixture.componentInstance;
+    translateService = TestBed.inject(TranslateService);
   }));
 
   it('should create the app', () => {
+    fixture.detectChanges();
     expect(appComponent).toBeTruthy();
   });
 
   it('should have a title', () => {
+    fixture.detectChanges();
     expect(appComponent.title).toEqual('ARSnova');
   });
 
-  it('should call the API config', () => {
-    const mockApiConfigService = fixture.debugElement.injector.get(ApiConfigService);
-    expect(mockApiConfigService.getApiConfig$).toHaveBeenCalled();
-  });
-
-  it('should show a dialog on sw update', () => {
-    const mockSwUpdate = <MockSwUpdate> fixture.debugElement.injector.get(SwUpdate);
-    const mockDialogService = fixture.debugElement.injector.get(DialogService);
-    mockSwUpdate.mockUpdateAvailableEvent();
-    expect(mockDialogService.openUpdateInfoDialog).toHaveBeenCalled();
-  });
+  it('should call the API config', fakeAsync(() => {
+    fixture.detectChanges();
+    expect(apiConfigService.getApiConfig$).toHaveBeenCalled();
+  }));
 
   it('should call the tracking service init on getting a tracking config', () => {
-    const mockTrackingService = fixture.debugElement.injector.get(TrackingService);
-    expect(mockTrackingService.init).toHaveBeenCalled();
+    fixture.detectChanges();
+    expect(trackingService.init).toHaveBeenCalled();
+  });
+
+  it('should call the update service to handle update', () => {
+    fixture.detectChanges();
+    expect(updateService.handleUpdate).toHaveBeenCalled();
+  });
+
+  it('should call the consent service to set settings', () => {
+    fixture.detectChanges();
+    expect(consentService.setConfig).toHaveBeenCalled();
+  });
+
+  it('default lang should has been set after init', () => {
+    expect(translateService.defaultLang).toBeUndefined('lang should be undefined before init');
+    fixture.detectChanges();
+    expect(translateService.defaultLang).toContain('de', 'lang should be "de" after init');
+  });
+
+  it('should call the routing service to start route subscription', () => {
+    fixture.detectChanges();
+    expect(routingService.subscribeActivatedRoute).toHaveBeenCalled();
   });
 });
