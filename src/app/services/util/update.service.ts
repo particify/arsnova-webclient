@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { SwUpdate } from '@angular/service-worker';
+import { SwUpdate, UpdateAvailableEvent } from '@angular/service-worker';
 import { TranslateService } from '@ngx-translate/core';
 import { tap } from 'rxjs/operators';
 import { UpdateInstalled } from '../../models/events/update-installed';
@@ -9,6 +9,7 @@ import { EventService } from './event.service';
 import { GlobalStorageService, STORAGE_KEYS } from './global-storage.service';
 import { AdvancedSnackBarTypes, NotificationService } from './notification.service';
 import { environment } from '../../../environments/environment';
+import { Observable } from 'rxjs';
 
 @Injectable()
 export class UpdateService {
@@ -23,40 +24,43 @@ export class UpdateService {
     console.log('Version:', environment.version.commitHash, environment.version.commitDate);
   }
 
+  importance: UpdateImportance;
+  updateReady$: Observable<UpdateAvailableEvent>;
+
   public handleUpdate(versionInfos: VersionInfo[] = []) {
     const currentVersion = this.selectVersionByHash(versionInfos, environment.version.commitHash);
     this.handleUpdateCompleted(currentVersion);
     const latestVersion = this.determineLatestVersion(versionInfos);
     const relevantVersions = this.determineRelevantVersions(versionInfos, currentVersion);
-    const importance = this.determineUpdateImportance(versionInfos, currentVersion);
+    this.importance = this.determineUpdateImportance(versionInfos, currentVersion);
     if (relevantVersions.length > 0) {
       console.log('Update announced:', latestVersion.commitHash, latestVersion.importance);
-      console.log('Skipped updates:', relevantVersions.length - 1, importance);
+      console.log('Skipped updates:', relevantVersions.length - 1, this.importance);
       this.globalStorageService.setItem(STORAGE_KEYS.LATEST_ANNOUNCED_VERSION, latestVersion.commitHash);
     } else {
       console.log('No updates announced.');
     }
 
-    const updateReady$ = this.update.available.pipe(tap(() => {
-      this.handleUpdateReady(currentVersion, latestVersion, importance);
+    this.updateReady$ = this.update.available.pipe(tap(() => {
+      this.handleUpdateReady(currentVersion, latestVersion, this.importance);
     }));
 
-    switch (importance) {
+    switch (this.importance) {
       case UpdateImportance.OPTIONAL: {
         /* Handle the update silently */
-        updateReady$.subscribe();
+        this.updateReady$.subscribe();
         return;
       }
       case UpdateImportance.MANDATORY: {
         /* Show the update dialog immediately */
         const dialogRef = this.dialogService.openUpdateInfoDialog(
-            false, relevantVersions, updateReady$);
+            false, relevantVersions, this.updateReady$);
         dialogRef.afterClosed().subscribe(() => this.handleUpdateConfirmed());
         break;
       }
       default: {
         /* Show the update dialog when the update is ready */
-        updateReady$.subscribe(() => {
+        this.updateReady$.subscribe(() => {
           const dialogRef = this.dialogService.openUpdateInfoDialog(
               false, relevantVersions);
           dialogRef.afterClosed().subscribe(() => this.handleUpdateConfirmed());
