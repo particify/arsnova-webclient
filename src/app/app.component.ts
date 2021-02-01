@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { CustomIconService } from './services/util/custom-icon.service';
 import { ApiConfigService } from './services/http/api-config.service';
 import { TrackingService } from './services/util/tracking.service';
 import { ConsentService } from './services/util/consent.service';
@@ -15,14 +14,12 @@ import { RoutingService } from './services/util/routing.service';
 export class AppComponent implements OnInit {
 
   constructor(private translationService: TranslateService,
-              private customIconService: CustomIconService,
               private apiConfigService: ApiConfigService,
               private trackingService: TrackingService,
               private consentService: ConsentService,
               private updateService: UpdateService,
               private routingService: RoutingService) {
     translationService.setDefaultLang(this.translationService.getBrowserLang());
-    customIconService.init();
   }
 
   title = 'ARSnova';
