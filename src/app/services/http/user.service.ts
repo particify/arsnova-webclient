@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BaseHttpService } from './base-http.service';
 import { User } from '../../models/user';
@@ -21,8 +21,7 @@ export class UserService extends BaseHttpService {
     register: '/register',
     activate: '/activate',
     resetActivation: '/resetactivation',
-    resetPassword: '/resetpassword',
-    v2: '/api/v2'
+    resetPassword: '/resetpassword'
   };
 
   constructor(private http: HttpClient,
@@ -30,13 +29,6 @@ export class UserService extends BaseHttpService {
               protected translateService: TranslateService,
               protected notificationService: NotificationService) {
     super(eventService, translateService, notificationService);
-  }
-
-  getUser(id: string) {
-    const connectionUrl = `${this.apiUrl.base + this.apiUrl.user}/${id}`;
-    return this.http.get<User>(connectionUrl).pipe(
-      catchError(this.handleError<User>(`getUser`))
-    );
   }
 
   register(email: string, password: string): Observable<boolean> {
@@ -67,26 +59,6 @@ export class UserService extends BaseHttpService {
     return this.http.post<any>(connectionUrl, httpOptions).pipe(
       tap(_ => ''),
       catchError(this.handleError<User>('resetActivation'))
-    );
-  }
-
-  resetPassword(email: string): Observable<boolean> {
-    const connectionUrl: string =
-      this.serviceApiUrl.v2 +
-      this.apiUrl.user +
-      '/' +
-      email +
-      this.serviceApiUrl.resetPassword;
-
-    return this.http.post(connectionUrl, {
-      key: null,
-      password: null
-    }, httpOptions).pipe(
-      catchError(err => {
-        return of(false);
-      }), map((result) => {
-        return true;
-      })
     );
   }
 
