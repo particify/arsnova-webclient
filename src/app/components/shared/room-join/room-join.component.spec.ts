@@ -1,157 +1,82 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RoomJoinComponent } from './room-join.component';
-import { Injectable, Component, Input } from '@angular/core';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
-import { RoomService } from '../../../services/http/room.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NotificationService } from '../../../services/util/notification.service';
 import { AuthenticationService } from '../../../services/http/authentication.service';
-import { ModeratorService } from '../../../services/http/moderator.service';
 import { EventService } from '../../../services/util/event.service';
-import { BehaviorSubject, Observable, of } from 'rxjs';
 import { GlobalStorageService } from '../../../services/util/global-storage.service';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
+import {
+  ActivatedRouteStub,
+  JsonTranslationLoader,
+  MockEventService, MockGlobalStorageService
+} from '@arsnova/testing/test-helpers';
+import { HarnessLoader } from '@angular/cdk/testing';
+import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
+import { MatButtonHarness } from '@angular/material/button/testing';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatButtonModule } from '@angular/material/button';
+import { MatInputModule } from '@angular/material/input';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputHarness } from '@angular/material/input/testing';
+import { ReactiveFormsModule } from '@angular/forms';
+import { BehaviorSubject } from 'rxjs';
+import { FormsModule } from '@angular/forms';
 
-const TRANSLATION_DE = require('../../../../assets/i18n/home/de.json');
-const TRANSLATION_EN = require('../../../../assets/i18n/home/en.json');
-
-const TRANSLATIONS = {
-  DE: TRANSLATION_DE,
-  EN: TRANSLATION_EN
-};
-
-const ROUTE_STUB = {
-  data: of({
-    apiConfig: {
-      ui: {
-        demo: '11223344'
-      }
-    }
-  })
-};
-
-class JsonTranslationLoader implements TranslateLoader {
-  getTranslation(code: string = ''): Observable<object> {
-    if (code !== null) {
-      const uppercased = code.toUpperCase();
-
-      return of(TRANSLATIONS[uppercased]);
-    } else {
-      return of({});
-    }
-  }
-}
-
-@Injectable()
-class MockRoomService {
-
-}
-
-@Injectable()
-class MockRouter {
-
-}
-
-@Injectable()
-class MockNotificationService {
-
-}
-
-@Injectable()
-class MockAuthenticationService {
-  private auth$$ = new BehaviorSubject(new BehaviorSubject(null));
+export class MockAuthenticationService {
+  private auth$$ = new BehaviorSubject<any>({});
 
   getAuthenticationChanges() {
     return this.auth$$.asObservable();
   }
 }
 
-@Injectable()
-class MockModeratorService {
-
-}
-
-@Injectable()
-class MockEventService {
-
-}
-
-@Injectable()
-class MockGlobalStorageService {
-  getItem(key: symbol) {
-    return undefined;
-  }
-
-  setItem(key: symbol, value: any) {
-  }
-
-  removeItem(key: symbol) {
-  }
-}
-
-/* eslint-disable @angular-eslint/component-selector */
-@Component({ selector: 'mat-icon', template: '' })
-class MatIconStubComponent { }
-
-@Component({ selector: 'mat-placeholder', template: '' })
-class MatPlaceholderStubComponent { }
-
-@Component({ selector: 'mat-form-field', template: '' })
-class MatFormFieldStubComponent { }
-
-@Component({ selector: 'mat-error', template: '' })
-class MatErrorStubComponent { }
-
-@Component({ selector: 'mat-card', template: '' })
-class MatCardStubComponent { }
-
-@Component({ selector: 'mat-label', template: '' })
-class MatLabelStubComponent { }
-
-@Component({ selector: 'input', template: '' })
-class InputStubComponent {
-  @Input() formControl;
-  @Input() errorStateMatcher;
-}
-/* eslint-enable @angular-eslint/component-selector */
-
 describe('RoomJoinComponent', () => {
   let component: RoomJoinComponent;
   let fixture: ComponentFixture<RoomJoinComponent>;
+  const activatedRoute = new ActivatedRouteStub(null, { apiConfig: { ui: { demo: '27273589' } } });
+  let notificationService = jasmine.createSpyObj('NotificationService', ['showAdvanced']);
+  let router = jasmine.createSpyObj('Router', ['navigate']);
+  let loader: HarnessLoader;
+  let joinButton: MatButtonHarness;
+  let inputField: MatInputHarness;
 
-  beforeEach(waitForAsync(() => {
+  beforeEach(async () => {
+
+    router.navigate.calls.reset();
+    notificationService.showAdvanced.calls.reset();
+
     TestBed.configureTestingModule({
       declarations: [
-        RoomJoinComponent,
-        MatIconStubComponent,
-        MatPlaceholderStubComponent,
-        MatFormFieldStubComponent,
-        MatErrorStubComponent,
-        InputStubComponent,
-        MatCardStubComponent,
-        MatLabelStubComponent
+        RoomJoinComponent
+      ],
+      imports: [
+        BrowserAnimationsModule,
+        ReactiveFormsModule,
+        MatFormFieldModule,
+        MatButtonModule,
+        MatInputModule,
+        MatIconModule,
+        FormsModule,
+        TranslateModule.forRoot({
+          loader: {
+            provide: TranslateLoader,
+            useClass: JsonTranslationLoader
+          },
+          isolate: true
+        }),
+        HttpClientTestingModule
       ],
       providers: [
         {
-          provide: RoomService,
-          useClass: MockRoomService
-        },
-        {
           provide: Router,
-          useClass: MockRouter
+          useValue: router
         },
         {
           provide: NotificationService,
-          useClass: MockNotificationService
-        },
-        {
-          provide: AuthenticationService,
-          useClass: MockAuthenticationService
-        },
-        {
-          provide: ModeratorService,
-          useClass: MockModeratorService
+          useValue: notificationService
         },
         {
           provide: EventService,
@@ -162,33 +87,69 @@ describe('RoomJoinComponent', () => {
           useClass: MockGlobalStorageService
         },
         {
+          provide: AuthenticationService,
+          useClass: MockAuthenticationService
+        },
+        {
           provide: ActivatedRoute,
-          useValue: ROUTE_STUB
+          useValue: activatedRoute
         }
-      ],
-      imports: [
-        TranslateModule.forRoot({
-          loader: {
-            provide: TranslateLoader,
-            useClass: JsonTranslationLoader
-          },
-          isolate: true
-        }),
-        HttpClientTestingModule
-      ],
-    })
-    .compileComponents()
-    .then(() => {
+      ]
+    }).compileComponents();
+
       fixture = TestBed.createComponent(RoomJoinComponent);
       component = fixture.componentInstance;
       fixture.detectChanges();
-    });
-  }));
-
-  beforeEach(() => {
+      loader = TestbedHarnessEnvironment.loader(fixture);
+      inputField = await loader.getHarness(MatInputHarness.with({selector: '#room-id-input'}));
+      joinButton = await loader.getHarness(MatButtonHarness.with({selector: '#join-button'}));
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should be able to load join button', async () => {
+    expect(joinButton).not.toBeNull();
+  });
+
+  it('should be able to load input field', async () => {
+    expect(inputField).not.toBeNull();
+  });
+
+  it('should navigate to demo session if there is no input', async () => {
+    expect(component.demoId).not.toBeNull();
+    const joinButton = await loader.getHarness(MatButtonHarness.with({selector: '#join-button'}));
+    await joinButton.click();
+    expect(router.navigate).toHaveBeenCalledWith([`/participant/room/${component.demoId}`]);
+  });
+
+  it('should be display warning notification if the entered room code is shorter than 8 digits', async () => {
+    await inputField.setValue('1');
+    await joinButton.click();
+    expect(notificationService.showAdvanced).toHaveBeenCalledWith('home-page.exactly-8', 'WARNING');
+    expect(router.navigate).not.toHaveBeenCalled();
+  });
+
+  it('should be display warning notification if the entered room code is longer than 8 digits', async () => {
+    await inputField.setValue('1111111111');
+    await joinButton.click();
+    expect(notificationService.showAdvanced).toHaveBeenCalledWith('home-page.exactly-8', 'WARNING');
+    expect(router.navigate).not.toHaveBeenCalled();
+  });
+
+  it('should be display warning notification if the entered input not only contains numbers', async () => {
+    await inputField.setValue('ABCDEFGH');
+    await joinButton.click();
+    expect(notificationService.showAdvanced).toHaveBeenCalledWith('home-page.only-numbers', 'WARNING');
+    expect(router.navigate).not.toHaveBeenCalled();
+  });
+
+  it('should be route to room view if entered a 8 digit room number', async () => {
+    const roomIdToEnter = '12345678';
+    await inputField.setValue(roomIdToEnter);
+    await joinButton.click();
+    expect(notificationService.showAdvanced).not.toHaveBeenCalled();
+    expect(router.navigate).toHaveBeenCalledWith([`/participant/room/${roomIdToEnter}`]);
   });
 });

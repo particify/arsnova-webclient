@@ -1,7 +1,10 @@
 import { TranslateLoader } from '@ngx-translate/core';
-import { Observable, of, Subject } from 'rxjs';
+import { BehaviorSubject, Observable, of, ReplaySubject, Subject } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 import { BroadcastEvent } from '@arsnova/app/services/util/event.service';
+import { convertToParamMap, ParamMap, Params } from '@angular/router';
+
+// SERVICES - UTIL
 
 // TranslateModule
 
@@ -71,4 +74,54 @@ export class MockGlobalStorageService {
 // Renderer
 
 export class MockRenderer2 {
+}
+
+// ActivatedRoute
+
+export class ActivatedRouteStub {
+  private subject = new ReplaySubject<ParamMap>();
+  data: Observable<any>;
+
+  constructor(initialParams?: Params, data?: any) {
+    this.setParamMap(initialParams);
+    this.setData(data);
+  }
+
+  readonly paramMap = this.subject.asObservable();
+
+  setParamMap(params?: Params) {
+    this.subject.next(convertToParamMap(params));
+  }
+
+  setData(data: any) {
+    this.data = of(data);
+  }
+}
+
+// Router
+
+export class MockRouter {
+}
+
+// NotificationService
+
+export class MockNotificationService {
+}
+
+// SERVICES - HTTP
+
+
+export class MockRoomService {
+}
+
+
+export class MockAuthenticationService {
+  private auth$$ = new BehaviorSubject(new BehaviorSubject(null));
+
+  getAuthenticationChanges() {
+    return this.auth$$.asObservable();
+  }
+}
+
+export class MockModeratorService {
 }

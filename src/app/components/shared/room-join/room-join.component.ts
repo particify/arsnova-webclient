@@ -23,7 +23,6 @@ export class RoomJoinComponent implements OnInit, OnDestroy {
   @ViewChild('roomCode', { static: true }) roomCodeElement: ElementRef;
   @Input() inputA11yString: string;
 
-  room: Room;
   auth: ClientAuthentication;
   isDesktop: boolean;
   demoId: string;
@@ -72,15 +71,13 @@ export class RoomJoinComponent implements OnInit, OnDestroy {
       return;
     }
     if (shortId.length !== 8) {
-      this.translateService.get('home-page.exactly-8').subscribe(message => {
-        this.notificationService.showAdvanced(message, AdvancedSnackBarTypes.WARNING);
-      });
+      const msg = this.translateService.instant('home-page.exactly-8');
+      this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
       return;
     }
     if (this.roomCodeFormControl.hasError('pattern')) {
-      this.translateService.get('home-page.only-numbers').subscribe(message => {
-        this.notificationService.showAdvanced(message, AdvancedSnackBarTypes.WARNING);
-      });
+      const msg = this.translateService.instant('home-page.only-numbers');
+      this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
       return;
     }
 
