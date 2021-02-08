@@ -3,6 +3,8 @@ import { BehaviorSubject, Observable, of, ReplaySubject, Subject } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 import { BroadcastEvent } from '@arsnova/app/services/util/event.service';
 import { convertToParamMap, ParamMap, Params } from '@angular/router';
+import { Theme } from '@arsnova/theme/Theme';
+import { ClientAuthentication } from '@arsnova/app/models/client-authentication';
 
 // SERVICES - UTIL
 
@@ -101,11 +103,40 @@ export class ActivatedRouteStub {
 // Router
 
 export class MockRouter {
+  get url(): string {
+    return '/home'
+  }
+
+  navigate = jasmine.createSpy('navigate');
 }
 
 // NotificationService
 
 export class MockNotificationService {
+}
+
+// LangService
+
+export class MockLangService {
+}
+
+// ThemeService
+
+export class MockThemeService {
+  private activeTheme = new BehaviorSubject(null);
+  private themes: Theme[];
+
+  getTheme(): Observable<any> {
+    return this.activeTheme.asObservable();
+  }
+
+  public getThemes(): Theme[] {
+    return this.themes;
+  }
+
+  public activate(name) {
+    this.activeTheme.next(name);
+  }
 }
 
 // SERVICES - HTTP
@@ -116,10 +147,16 @@ export class MockRoomService {
 
 
 export class MockAuthenticationService {
-  private auth$$ = new BehaviorSubject(new BehaviorSubject(null));
+  private auth$$ = new BehaviorSubject<any>({});
 
   getAuthenticationChanges() {
     return this.auth$$.asObservable();
+  }
+
+  hasAdminRole(){
+  }
+
+  logout() {
   }
 }
 

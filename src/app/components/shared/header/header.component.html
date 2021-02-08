@@ -8,20 +8,20 @@
     <lib-extension-point extensionId="header-logo" *ngIf="router.url === '/home'"></lib-extension-point>
     <span class="fill-remaining-space"></span>
 
-    <mat-menu #userMenu="matMenu" [overlapTrigger]="false" xPosition="before">
-      <button mat-menu-item *ngIf="auth" routerLink="/user" tabindex="0">
+    <mat-menu id="user-menu" #userMenu="matMenu" [overlapTrigger]="false" xPosition="before">
+      <button id="my-rooms-button" mat-menu-item *ngIf="auth" (click)="navToUserHome()" tabindex="0">
         <mat-icon class="rooms">home</mat-icon>
         <span>{{'header.my-rooms' | translate}}</span>
       </button>
-      <button *ngIf="auth && isGuest" mat-menu-item [routerLink]="'login'" tabindex="0">
+      <button id="menu-login-button" *ngIf="auth && isGuest" mat-menu-item [routerLink]="'login'" tabindex="0">
         <mat-icon class="login">exit_to_app</mat-icon>
         <span>{{ 'header.login' | translate }}</span>
       </button>
-      <a *ngIf="helpUrl" [attr.href]="helpUrl" target="_blank" mat-menu-item  tabindex="0">
+      <a id="help-button" *ngIf="helpUrl" [attr.href]="helpUrl" target="_blank" mat-menu-item  tabindex="0">
         <mat-icon class="less-important">help</mat-icon>
         <span>{{'header.help' | translate}}</span>
       </a>
-      <button mat-menu-item aria-labelledby="style-label" [matMenuTriggerFor]="themeMenu">
+      <button id="theme-menu" mat-menu-item aria-labelledby="style-label" [matMenuTriggerFor]="themeMenu">
         <mat-icon class="less-important">palette</mat-icon>
         <span>{{'header.style' | translate}}</span>
       </button>
@@ -30,11 +30,11 @@
         <span>{{'header.language' | translate}}</span>
       </button>
       <div *ngIf="deviceWidth < 1000">
-        <button mat-menu-item aria-labelledby="privacy-label" [matMenuTriggerFor]="privacyMenu">
+        <button id="privacy-button" mat-menu-item aria-labelledby="privacy-label" [matMenuTriggerFor]="privacyMenu">
           <mat-icon class="less-important">security</mat-icon>
           <span>{{'footer.dsgvo' | translate}}</span>
         </button>
-        <a *ngIf="imprintUrl" [attr.href]="imprintUrl" target="_blank" mat-menu-item aria-labelledby="imprint-label">
+        <a id="imprint-button" *ngIf="imprintUrl" [attr.href]="imprintUrl" target="_blank" mat-menu-item aria-labelledby="imprint-label">
           <mat-icon class="less-important">contact_mail</mat-icon>
           <span>{{'footer.imprint' | translate}}</span>
         </a>
@@ -43,15 +43,15 @@
         <mat-icon class="bonus">grade</mat-icon>
         <span>{{'header.user-bonus-token' | translate}}</span>
       </button> -->
-      <button mat-menu-item *ngIf="isAdmin" routerLink="/admin" tabindex="0">
+      <button id="admin-button" mat-menu-item *ngIf="isAdmin" routerLink="/admin" tabindex="0">
         <mat-icon>build</mat-icon>
         <span>{{'header.admin-area' | translate}}</span>
       </button>
-      <button mat-menu-item *ngIf="auth && !isGuest" (click)="openDeleteUserDialog()" tabindex="0">
+      <button id="delete-account-button" mat-menu-item *ngIf="auth && !isGuest" (click)="openDeleteUserDialog()" tabindex="0">
         <mat-icon class="delete">delete</mat-icon>
         <span>{{'header.delete-account' | translate}}</span>
       </button>
-      <button *ngIf="auth && !isGuest" mat-menu-item (click)="logout()" tabindex="0">
+      <button id="logout-button" *ngIf="auth && !isGuest" mat-menu-item (click)="logoutUser()" tabindex="0">
         <mat-icon class="delete">exit_to_app</mat-icon>
         <span>{{ 'header.logout' | translate }}</span>
       </button>
@@ -95,7 +95,7 @@
       </mat-icon>
     </button>
 
-    <button mat-button *ngIf="auth" [matMenuTriggerFor]="userMenu" aria-labelledby="room-label" id="room-button">
+    <button mat-button *ngIf="auth" [matMenuTriggerFor]="userMenu" aria-labelledby="room-label" id="menu-button">
         <mat-icon class="header-icons">account_circle</mat-icon>
         <span class="button-text" *ngIf="!isGuest">{{'header.my-account' | translate}}</span>
         <span class="button-text" *ngIf="isGuest">{{'header.my-guest-account' | translate}}</span>
