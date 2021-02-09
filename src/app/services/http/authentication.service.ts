@@ -114,8 +114,9 @@ export class AuthenticationService extends BaseHttpService {
   /**
    * Authenticates a user using loginId (username or email) and password.
    */
-  login(loginId: string, password: string): Observable<ClientAuthenticationResult> {
-    const connectionUrl: string = this.getBaseUrl() + this.serviceApiUrl.auth + this.serviceApiUrl.login + this.serviceApiUrl.registered;
+  login(loginId: string, password: string, providerId: string = 'user-db'): Observable<ClientAuthenticationResult> {
+    const providerPath = providerId === 'user-db' ? this.serviceApiUrl.registered : '/' + providerId;
+    const connectionUrl: string = this.getBaseUrl() + this.serviceApiUrl.auth + this.serviceApiUrl.login + providerPath;
 
     return this.handleLoginResponse(this.http.post<ClientAuthentication>(connectionUrl, {
       loginId: loginId,
