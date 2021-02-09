@@ -30,7 +30,9 @@ export class LoginComponent implements AfterContentInit, OnChanges, OnInit {
   isStandard = true;
   username: string;
   password: string;
-  allowDbLogin = false;
+  passwordLoginEnabled = false;
+  dbLoginEnabled = false;
+  usernamePasswordProviders: AuthenticationProvider[];
   ssoProviders: AuthenticationProvider[];
   isLoading = true;
   deviceWidth = innerWidth;
@@ -62,25 +64,31 @@ export class LoginComponent implements AfterContentInit, OnChanges, OnInit {
       if (this.authenticationService.isLoggedIn() && auth.authProvider !== AuthProvider.ARSNOVA_GUEST) {
         this.router.navigate(['user']);
       } else {
-          if (this.authProviders.some(provider => provider.type === AuthenticationProviderType.USERNAME_PASSWORD)) {
-            this.allowDbLogin = true;
+        this.usernamePasswordProviders = this.authProviders.filter((p) => p.type === AuthenticationProviderType.USERNAME_PASSWORD);
+        if (this.usernamePasswordProviders.length > 0) {
+          this.passwordLoginEnabled = true;
+          if (this.usernamePasswordProviders.some(p => p.id === 'user-db')) {
+            this.dbLoginEnabled = true;
           }
-          this.ssoProviders = this.authProviders.filter((p) => p.type === AuthenticationProviderType.SSO);
-          this.isLoading = false;
-          this.providersLength = this.ssoProviders.length;
-          if (!this.allowDbLogin && this.providersLength === 1) {
-            this.loginViaSso(this.ssoProviders[0].id);
+        }
+        this.ssoProviders = this.authProviders.filter((p) => p.type === AuthenticationProviderType.SSO);
+        this.isLoading = false;
+
+        // Automatically initiate SSO login if there are no other providers
+        const loginProviders = this.authProviders.filter((p) => p.type !== AuthenticationProviderType.ANONYMOUS);
+        if (loginProviders.length === 1 && this.ssoProviders.length === 1) {
+          this.loginViaSso(this.ssoProviders[0].id);
+        } else {
+          if (this.ssoProviders.length > 0) {
+            setTimeout(() => {
+              document.getElementById(this.ssoProviders[0].title + '-button').focus();
+            }, 700);
           } else {
-            if (this.providersLength > 0) {
-              setTimeout(() => {
-                document.getElementById(this.ssoProviders[0].title + '-button').focus();
-              }, 700);
-            } else {
-              setTimeout(() => {
-                document.getElementById('email-input').focus();
-              }, 700);
-            }
+            setTimeout(() => {
+              document.getElementById('email-input').focus();
+            }, 700);
           }
+        }
       }
     });
     const registeredUserData = history.state.data;
@@ -118,15 +126,15 @@ export class LoginComponent implements AfterContentInit, OnChanges, OnInit {
     const dialogRef = this.dialogService.openUserActivationDialog(this.username);
     dialogRef.afterClosed().subscribe(result => {
       if (result && result.success) {
-        this.login();
+        this.loginWithUsernamePassword();
       }
     });
   }
 
-  login(): void {
+  loginWithUsernamePassword(providerId: string = 'user-db'): void {
     if (!this.usernameFormControl.hasError('required') && !this.usernameFormControl.hasError('email') &&
       !this.passwordFormControl.hasError('required')) {
-      this.authenticationService.login(this.username, this.password).subscribe(loginSuccessful => {
+      this.authenticationService.login(this.username, this.password, providerId).subscribe(loginSuccessful => {
         this.checkLogin(loginSuccessful);
       });
     } else {
