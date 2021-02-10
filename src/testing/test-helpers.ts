@@ -2,9 +2,9 @@ import { TranslateLoader } from '@ngx-translate/core';
 import { BehaviorSubject, Observable, of, ReplaySubject, Subject } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 import { BroadcastEvent } from '@arsnova/app/services/util/event.service';
-import { convertToParamMap, ParamMap, Params } from '@angular/router';
+import { convertToParamMap, Event, ParamMap, Params } from '@angular/router';
 import { Theme } from '@arsnova/theme/Theme';
-import { ClientAuthentication } from '@arsnova/app/models/client-authentication';
+import { EventEmitter } from '@angular/core';
 
 // SERVICES - UTIL
 
@@ -23,6 +23,30 @@ export class JsonTranslationLoader implements TranslateLoader {
     const uppercased = code.toUpperCase();
 
     return of(TRANSLATIONS[uppercased]);
+  }
+}
+
+export class MockTranslateService {
+  currentLang: string;
+  defaultLang: string;
+
+  getBrowserLang(): string {
+    return 'de';
+  }
+
+  setDefaultLang(lang: string): void {
+    this.defaultLang = lang;
+  }
+
+  getDefaultLang(): string {
+    return this.defaultLang;
+  }
+  get(): string {
+    return this.currentLang;
+  }
+
+  use(lang: string) {
+    this.currentLang = lang;
   }
 }
 
@@ -103,11 +127,19 @@ export class ActivatedRouteStub {
 // Router
 
 export class MockRouter {
-  get url(): string {
-    return '/home'
-  }
+  currentUrl = '/home';
+  events: Observable<Event> = new Observable<Event>();
 
   navigate = jasmine.createSpy('navigate');
+
+  get url(): string {
+    return this.currentUrl;
+  }
+
+  setUrl(url: string) {
+    this.currentUrl = url;
+  }
+
 }
 
 // NotificationService
@@ -118,6 +150,7 @@ export class MockNotificationService {
 // LangService
 
 export class MockLangService {
+  langEmitter = new EventEmitter<string>();
 }
 
 // ThemeService
