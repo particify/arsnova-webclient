@@ -38,8 +38,9 @@ export class LoginComponent implements AfterContentInit, OnChanges, OnInit {
   deviceWidth = innerWidth;
   providersLength: number;
   authProviders: AuthenticationProvider[];
+  loginIdIsEmail = false;
 
-  usernameFormControl = new FormControl('', [Validators.required, Validators.email]);
+  loginIdFormControl = new FormControl('', [Validators.required]);
   passwordFormControl = new FormControl('', [Validators.required]);
 
   matcher = new LoginErrorStateMatcher();
@@ -69,6 +70,12 @@ export class LoginComponent implements AfterContentInit, OnChanges, OnInit {
           this.passwordLoginEnabled = true;
           if (this.usernamePasswordProviders.some(p => p.id === 'user-db')) {
             this.dbLoginEnabled = true;
+            if (this.usernamePasswordProviders.length === 1) {
+              this.loginIdIsEmail = true;
+              this.loginIdFormControl.setValidators([Validators.required, Validators.email]);
+            } else {
+              this.loginIdFormControl.setValidators([Validators.required]);
+            }
           }
         }
         this.ssoProviders = this.authProviders.filter((p) => p.type === AuthenticationProviderType.SSO);
@@ -85,7 +92,7 @@ export class LoginComponent implements AfterContentInit, OnChanges, OnInit {
             }, 700);
           } else {
             setTimeout(() => {
-              document.getElementById('email-input').focus();
+              document.getElementById('loginid-input').focus();
             }, 700);
           }
         }
@@ -93,7 +100,7 @@ export class LoginComponent implements AfterContentInit, OnChanges, OnInit {
     });
     const registeredUserData = history.state.data;
       if (registeredUserData && registeredUserData.username && registeredUserData.password) {
-        this.usernameFormControl.setValue(registeredUserData.username);
+        this.loginIdFormControl.setValue(registeredUserData.username);
         this.passwordFormControl.setValue(registeredUserData.password);
         this.username = registeredUserData.username;
         this.password = registeredUserData.password;
@@ -102,15 +109,15 @@ export class LoginComponent implements AfterContentInit, OnChanges, OnInit {
 
   ngOnChanges(changes: SimpleChanges) {
     let u, p = false;
-    if (changes.username) {
-      this.usernameFormControl.setValue(changes.username.currentValue);
+    if (changes.loginid) {
+      this.loginIdFormControl.setValue(changes.loginid.currentValue);
       u = true;
     }
     if (changes.password) {
       this.passwordFormControl.setValue(changes.password.currentValue);
       p = true;
     }
-    if (u && p && !changes.username.isFirstChange() && !changes.username.isFirstChange()) {
+    if (u && p && !changes.loginid.isFirstChange() && !changes.loginid.isFirstChange()) {
       // TODO: this throws an Exception because data and UI are inconsistent
       this.activateUser();
     }
@@ -132,8 +139,7 @@ export class LoginComponent implements AfterContentInit, OnChanges, OnInit {
   }
 
   loginWithUsernamePassword(providerId: string = 'user-db'): void {
-    if (!this.usernameFormControl.hasError('required') && !this.usernameFormControl.hasError('email') &&
-      !this.passwordFormControl.hasError('required')) {
+    if (this.loginIdFormControl.valid && this.passwordFormControl.valid) {
       this.authenticationService.login(this.username, this.password, providerId).subscribe(loginSuccessful => {
         this.checkLogin(loginSuccessful);
       });

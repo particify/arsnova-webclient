@@ -13,12 +13,20 @@
         <mat-divider></mat-divider>
       </ng-container>
       <form class="full-width" fxLayout="column" fxLayoutGap="10px">
-        <mat-form-field class="input-block" appearance="outline">
+        <mat-form-field *ngIf="loginIdIsEmail; else loginIdIsUsername" class="input-block" appearance="outline">
           <mat-label>{{ 'login.email' | translate }}</mat-label>
           <input (focus)="eventService.makeFocusOnInputTrue()" (blur)="eventService.makeFocusOnInputFalse()"
-                [(ngModel)]="username" [errorStateMatcher]="matcher" [formControl]="usernameFormControl" matInput
-                id="email-input" name="username" aria-labelledby="email-description" placeholder="{{ 'login.enter-email' | translate }}"/>
+                [(ngModel)]="username" [errorStateMatcher]="matcher" [formControl]="loginIdFormControl" matInput
+                id="loginid-input" name="loginid" aria-labelledby="email-description" placeholder="{{ 'login.enter-email' | translate }}"/>
         </mat-form-field>
+        <ng-template #loginIdIsUsername>
+          <mat-form-field class="input-block" appearance="outline">
+          <mat-label>{{ 'login.username' | translate }}</mat-label>
+          <input (focus)="eventService.makeFocusOnInputTrue()" (blur)="eventService.makeFocusOnInputFalse()"
+                [(ngModel)]="username" [errorStateMatcher]="matcher" [formControl]="loginIdFormControl" matInput
+                id="loginid-input" name="loginid" aria-labelledby="username-description" placeholder="{{ 'login.enter-username' | translate }}"/>
+          </mat-form-field>
+        </ng-template>
         <mat-form-field appearance="outline" class="no-field-hint">
           <mat-label>{{ 'login.password' | translate }}</mat-label>
           <input (focus)="eventService.makeFocusOnInputTrue()" (blur)="eventService.makeFocusOnInputFalse()"
