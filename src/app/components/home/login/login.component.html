@@ -7,50 +7,56 @@
         {{ 'login.login-with' | translate }} {{ provider.title }}
       </button>
     </div>
-    <p *ngIf="passwordLoginEnabled && ssoProviders.length > 0">{{ 'login.or' | translate }}</p>
-    <mat-divider *ngIf="passwordLoginEnabled && ssoProviders.length > 0"></mat-divider>
-    <form class="full-width" fxLayout="column" fxLayoutGap="10px">
-      <mat-form-field *ngIf="passwordLoginEnabled" class="input-block" appearance="outline">
-        <mat-label>{{ 'login.email' | translate }}</mat-label>
-        <input (focus)="eventService.makeFocusOnInputTrue()" (blur)="eventService.makeFocusOnInputFalse()"
-               [(ngModel)]="username" [errorStateMatcher]="matcher" [formControl]="usernameFormControl" matInput
-               id="email-input" name="username" aria-labelledby="email-description" placeholder="{{ 'login.enter-email' | translate }}"/>
-      </mat-form-field>
-      <mat-form-field *ngIf="passwordLoginEnabled" appearance="outline" class="no-field-hint">
-        <mat-label>{{ 'login.password' | translate }}</mat-label>
-        <input (focus)="eventService.makeFocusOnInputTrue()" (blur)="eventService.makeFocusOnInputFalse()"
-               [(ngModel)]="password" [errorStateMatcher]="matcher" [formControl]="passwordFormControl" matInput
-               id="password-input" name="password" type="password" aria-labelledby="password-description"
-               placeholder="{{ 'login.enter-password' | translate }}"/>
-      </mat-form-field>
-      <div *ngIf="dbLoginEnabled" fxLayout="row">
-        <a class="action-link forgot-pw" [routerLink]="" (click)="navToPasswordReset(); $event.preventDefault();
-     $event.stopPropagation();" aria-labelledby="forgot-pw">
-          {{ 'login.password-reset' | translate }}
-        </a>
-      </div>
-      <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="5px">
-        <button *ngFor="let provider of usernamePasswordProviders" class="button-primary login-button" mat-raised-button (click)="loginWithUsernamePassword(provider.id)"
-                aria-labelledby="login-description">
-          <ng-container *ngIf="usernamePasswordProviders.length === 1; else multipleUsernamePasswordLogins">{{ 'login.login' | translate }}</ng-container>
-          <ng-template #multipleUsernamePasswordLogins>{{ 'login.login-with' | translate }} {{ provider.title }}</ng-template>
-        </button>
-      </div>
-      <div *ngIf="dbLoginEnabled" fxLayout="row" fxLayoutAlign="center">
-        <p class="smaller-text">{{ 'login.not-registered' | translate }}</p>
-        <a class="action-link after-text-link" [routerLink]="'/register'" aria-labelledby="register">
-          {{ 'login.register' | translate }}</a>
-      </div>
-    </form>
+    <ng-container *ngIf="passwordLoginEnabled">
+      <ng-container *ngIf="ssoProviders.length > 0">
+        <p>{{ 'login.or' | translate }}</p>
+        <mat-divider></mat-divider>
+      </ng-container>
+      <form class="full-width" fxLayout="column" fxLayoutGap="10px">
+        <mat-form-field class="input-block" appearance="outline">
+          <mat-label>{{ 'login.email' | translate }}</mat-label>
+          <input (focus)="eventService.makeFocusOnInputTrue()" (blur)="eventService.makeFocusOnInputFalse()"
+                [(ngModel)]="username" [errorStateMatcher]="matcher" [formControl]="usernameFormControl" matInput
+                id="email-input" name="username" aria-labelledby="email-description" placeholder="{{ 'login.enter-email' | translate }}"/>
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="no-field-hint">
+          <mat-label>{{ 'login.password' | translate }}</mat-label>
+          <input (focus)="eventService.makeFocusOnInputTrue()" (blur)="eventService.makeFocusOnInputFalse()"
+                [(ngModel)]="password" [errorStateMatcher]="matcher" [formControl]="passwordFormControl" matInput
+                id="password-input" name="password" type="password" aria-labelledby="password-description"
+                placeholder="{{ 'login.enter-password' | translate }}"/>
+        </mat-form-field>
+        <div *ngIf="dbLoginEnabled" fxLayout="row">
+          <a class="action-link forgot-pw" [routerLink]="" (click)="navToPasswordReset(); $event.preventDefault();
+      $event.stopPropagation();" aria-labelledby="forgot-pw">
+            {{ 'login.password-reset' | translate }}
+          </a>
+        </div>
+        <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="5px">
+          <button *ngFor="let provider of usernamePasswordProviders" class="button-primary login-button" mat-raised-button (click)="loginWithUsernamePassword(provider.id)"
+                  aria-labelledby="login-description">
+            <ng-container *ngIf="usernamePasswordProviders.length === 1; else multipleUsernamePasswordLogins">{{ 'login.login' | translate }}</ng-container>
+            <ng-template #multipleUsernamePasswordLogins>{{ 'login.login-with' | translate }} {{ provider.title }}</ng-template>
+          </button>
+        </div>
+        <div *ngIf="dbLoginEnabled" fxLayout="row" fxLayoutAlign="center">
+          <p class="smaller-text">{{ 'login.not-registered' | translate }}</p>
+          <a class="action-link after-text-link" [routerLink]="'/register'" aria-labelledby="register">
+            {{ 'login.register' | translate }}</a>
+        </div>
+      </form>
+    </ng-container>
   </mat-card>
 </div>
 
 <app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
 
 <div class="visually-hidden">
-  <div *ngIf="passwordLoginEnabled" id="email-description">{{ 'login.email-description' | translate }}</div>
-  <div *ngIf="passwordLoginEnabled" id="password-description">{{ 'login.password-description' | translate }}</div>
-  <div *ngIf="passwordLoginEnabled" id="login-description">{{ 'login.login-description' | translate }}</div>
-  <div *ngIf="passwordLoginEnabled" id="forgot-pw">{{ 'login.a11y-reset-pw' | translate }}</div>
-  <div *ngIf="passwordLoginEnabled" id="register">{{ 'login.a11y-register' | translate }}</div>
+  <ng-container *ngIf="passwordLoginEnabled">
+    <div id="email-description">{{ 'login.email-description' | translate }}</div>
+    <div id="password-description">{{ 'login.password-description' | translate }}</div>
+    <div id="login-description">{{ 'login.login-description' | translate }}</div>
+    <div id="forgot-pw">{{ 'login.a11y-reset-pw' | translate }}</div>
+    <div id="register">{{ 'login.a11y-register' | translate }}</div>
+  </ng-container>
 </div>
