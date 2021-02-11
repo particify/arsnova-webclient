@@ -10,7 +10,7 @@ import { ContentGroupService } from '../../../../services/http/content-group.ser
 import { ContentCreationComponent } from '../content-creation/content-creation.component';
 
 @Component({
-  selector: 'app-content-yes-no-creator',
+  selector: 'app-content-yes-no-creation',
   templateUrl: './content-yes-no-creation.component.html',
   styleUrls: ['./content-yes-no-creation.component.scss']
 })

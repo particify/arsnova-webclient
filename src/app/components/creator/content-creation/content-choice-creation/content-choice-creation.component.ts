@@ -12,7 +12,7 @@ import { ContentGroupService } from '../../../../services/http/content-group.ser
 import { ContentCreationComponent, DisplayAnswer } from '../content-creation/content-creation.component';
 
 @Component({
-  selector: 'app-content-choice-creator',
+  selector: 'app-content-choice-creation',
   templateUrl: './content-choice-creation.component.html',
   styleUrls: ['./content-choice-creation.component.scss']
 })

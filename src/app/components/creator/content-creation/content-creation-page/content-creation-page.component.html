@@ -70,39 +70,39 @@
               </mat-checkbox>
             </div>
             <div *ngIf="!isLoading" class="content-action-container">
-              <app-content-choice-creator (contentReset)="reset()" (contentSent)="saveContent($event)" (refId)="linkAttachments($event)"
+              <app-content-choice-creation (contentReset)="reset()" (contentSent)="saveContent($event)" (refId)="linkAttachments($event)"
                                           *ngIf="selectedFormat.name === 'choice'"
                                           [contentBody]="questionInput.value"
                                           [contentGroup]="group.value"
                                           [abstentionsAllowed]="abstentionsAllowed"
                                           [createEvent]="createEventSubject.asObservable()"
                                           [editContent]="content">
-              </app-content-choice-creator>
-              <app-content-likert-creator (contentReset)="reset()" (contentSent)="saveContent($event)" (refId)="linkAttachments($event)"
+              </app-content-choice-creation>
+              <app-content-likert-creation (contentReset)="reset()" (contentSent)="saveContent($event)" (refId)="linkAttachments($event)"
                                           *ngIf="selectedFormat.name === 'scale'"
                                           [contentBody]="questionInput.value"
                                           [contentGroup]="group.value"
                                           [abstentionsAllowed]="abstentionsAllowed"
                                           [createEvent]="createEventSubject.asObservable()"
                                           [editContent]="content">
-              </app-content-likert-creator>
-              <app-content-yes-no-creator (contentReset)="reset()" (contentSent)="saveContent($event)" (refId)="linkAttachments($event)"
+              </app-content-likert-creation>
+              <app-content-yes-no-creation (contentReset)="reset()" (contentSent)="saveContent($event)" (refId)="linkAttachments($event)"
                                           *ngIf="selectedFormat.name === 'binary'"
                                           [contentBody]="questionInput.value"
                                           [contentGroup]="group.value"
                                           [abstentionsAllowed]="abstentionsAllowed"
                                           [createEvent]="createEventSubject.asObservable()"
                                           [editContent]="content">
-              </app-content-yes-no-creator>
-              <app-content-text-creator (contentReset)="reset()" (contentSent)="saveContent($event)" (refId)="linkAttachments($event)"
+              </app-content-yes-no-creation>
+              <app-content-text-creation (contentReset)="reset()" (contentSent)="saveContent($event)" (refId)="linkAttachments($event)"
                                         *ngIf="selectedFormat.name === 'text'"
                                         [contentBody]="questionInput.value"
                                         [abstentionsAllowed]="abstentionsAllowed"
                                         [contentGroup]="group.value" [createEvent]="createEventSubject.asObservable()"
                                         [editContent]="content"
                                         [format]="selectedFormat.name.toLocaleUpperCase()">
-              </app-content-text-creator>
-              <app-content-text-creator (contentReset)="reset()" (contentSent)="saveContent($event)" (refId)="linkAttachments($event)"
+              </app-content-text-creation>
+              <app-content-text-creation (contentReset)="reset()" (contentSent)="saveContent($event)" (refId)="linkAttachments($event)"
                                           *ngIf="selectedFormat.name === 'slide'"
                                           [contentBody]="questionInput.value"
                                           [contentGroup]="group.value"
@@ -110,7 +110,7 @@
                                           [editContent]="content"
                                           [format]="selectedFormat.name.toLocaleUpperCase()">
 
-              </app-content-text-creator>
+              </app-content-text-creation>
               <app-content-sort-creation (contentReset)="reset()" (contentSent)="saveContent($event)" (refId)="linkAttachments($event)"
                                          *ngIf="selectedFormat.name === 'sort'"
                                          [contentBody]="questionInput.value"

@@ -10,7 +10,7 @@ import { ContentCreationComponent } from '../content-creation/content-creation.c
 import { ContentType } from '../../../../models/content-type.enum';
 
 @Component({
-  selector: 'app-content-text-creator',
+  selector: 'app-content-text-creation',
   templateUrl: './content-text-creation.component.html',
   styleUrls: ['./content-text-creation.component.scss']
 })
