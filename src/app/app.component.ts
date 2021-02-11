@@ -29,8 +29,8 @@ export class AppComponent implements OnInit {
     this.apiConfigService.getApiConfig$().subscribe(config => {
       if (config.ui.tracking?.url && config.ui.tracking?.provider === 'matomo') {
         this.trackingService.init(config.ui);
-        this.consentService.setConfig(config);
       }
+      this.consentService.setConfig(config);
       this.updateService.handleUpdate(config.ui.versions);
     });
   }
