@@ -25,7 +25,6 @@ import { GroupContentComponent } from './content-list/group-content/group-conten
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { CdkStepperModule } from '@angular/cdk/stepper';
 import { ContentCreationComponent } from './content-creation/content-creation/content-creation.component';
-import { ContentSlideCreationComponent } from './content-creation/content-slide-creation/content-slide-creation.component';
 import { PreviewComponent } from './content-creation/preview/preview.component';
 import { TRANSLATION_MODULE_NAME } from '../../translate-module-name-token';
 import { TranslateHttpLoaderFactory } from '../../translate-http-loader-factory';
@@ -72,7 +71,6 @@ import { ContentSortCreationComponent } from './content-creation/content-sort-cr
     SettingsPageComponent,
     GroupContentComponent,
     ContentCreationComponent,
-    ContentSlideCreationComponent,
     PreviewComponent,
     ContentSortCreationComponent
   ],

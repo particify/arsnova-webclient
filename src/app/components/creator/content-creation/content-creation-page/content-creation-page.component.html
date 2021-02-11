@@ -99,16 +99,18 @@
                                         [contentBody]="questionInput.value"
                                         [abstentionsAllowed]="abstentionsAllowed"
                                         [contentGroup]="group.value" [createEvent]="createEventSubject.asObservable()"
-                                        [editContent]="content">
+                                        [editContent]="content"
+                                        [format]="selectedFormat.name.toLocaleUpperCase()">
               </app-content-text-creator>
-              <app-content-slide-creation (contentReset)="reset()" (contentSent)="saveContent($event)" (refId)="linkAttachments($event)"
+              <app-content-text-creator (contentReset)="reset()" (contentSent)="saveContent($event)" (refId)="linkAttachments($event)"
                                           *ngIf="selectedFormat.name === 'slide'"
                                           [contentBody]="questionInput.value"
                                           [contentGroup]="group.value"
                                           [createEvent]="createEventSubject.asObservable()"
-                                          [editContent]="content">
+                                          [editContent]="content"
+                                          [format]="selectedFormat.name.toLocaleUpperCase()">
 
-              </app-content-slide-creation>
+              </app-content-text-creator>
               <app-content-sort-creation (contentReset)="reset()" (contentSent)="saveContent($event)" (refId)="linkAttachments($event)"
                                          *ngIf="selectedFormat.name === 'sort'"
                                          [contentBody]="questionInput.value"

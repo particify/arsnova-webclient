@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { ContentText } from '../../../../models/content-text';
 import { ContentService } from '../../../../services/http/content.service';
 import { NotificationService } from '../../../../services/util/notification.service';
@@ -15,6 +15,8 @@ import { ContentType } from '../../../../models/content-type.enum';
   styleUrls: ['./content-text-creation.component.scss']
 })
 export class ContentTextCreationComponent extends ContentCreationComponent implements OnInit {
+
+  @Input() format: ContentType;
 
   constructor(
     protected contentService: ContentService,
@@ -35,7 +37,7 @@ export class ContentTextCreationComponent extends ContentCreationComponent imple
       '',
       '',
       [],
-      ContentType.TEXT,
+      this.format,
       null
     );
   }
