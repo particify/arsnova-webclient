@@ -65,7 +65,7 @@
               <div class="form-spacer"></div>
             </form>
             <div class="abstentions">
-              <mat-checkbox *ngIf="selectedFormat.name !== 'slide'" [(ngModel)]="abstentionsAllowed">
+              <mat-checkbox *ngIf="['slide', 'flashcard'].indexOf(selectedFormat.name) === -1" [(ngModel)]="abstentionsAllowed">
                 {{ 'content.abstentions-allowed' | translate }}
               </mat-checkbox>
             </div>
@@ -111,6 +111,14 @@
                                           [format]="selectedFormat.name.toLocaleUpperCase()">
 
               </app-content-text-creation>
+              <app-content-flashcard-creation (contentReset)="reset()" (contentSent)="saveContent($event)" (refId)="linkAttachments($event)"
+                                         *ngIf="selectedFormat.name === 'flashcard'"
+                                         [contentBody]="questionInput.value"
+                                         [contentGroup]="group.value"
+                                         [createEvent]="createEventSubject.asObservable()"
+                                         [editContent]="content">
+
+              </app-content-flashcard-creation>
               <app-content-sort-creation (contentReset)="reset()" (contentSent)="saveContent($event)" (refId)="linkAttachments($event)"
                                          *ngIf="selectedFormat.name === 'sort'"
                                          [contentBody]="questionInput.value"

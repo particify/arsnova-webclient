@@ -1,0 +1,20 @@
+<form>
+  <mat-form-field appearance="outline" class="input-block no-field-hint">
+    <mat-label>{{ 'content.answer' | translate }}</mat-label>
+    <textarea #answerInput (blur)="eventService.makeFocusOnInputFalse()"
+              (focus)="eventService.makeFocusOnInputTrue()"
+              (input)="updateTextContainsImage(answerInput.value)"
+              [(ngModel)]="answer"
+              [placeholder]="'content.enter-answer' | translate"
+              aria-labelledby="answer" id="body-input"
+              matAutosizeMaxRows="8"
+              matAutosizeMinRows="3"
+              matInput matTextareaAutosize maxlength="2000" name="questionInput"></textarea>
+  </mat-form-field>
+  <app-hint *ngIf="textContainsImage" text="utils.formatting-image-hint" [type]="warningType"></app-hint>
+  <div class="form-spacer"></div>
+</form>
+
+<div class="visually-hidden">
+  <div id="answer">{{ 'content.a11y-enter-flashcard-answer' | translate }}</div>
+</div>
