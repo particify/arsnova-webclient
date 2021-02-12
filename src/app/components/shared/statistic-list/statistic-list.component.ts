@@ -19,7 +19,8 @@ export enum StatisticType {
   CHOICE = 'C',
   SURVEY = 'S',
   TEXT = 'T',
-  SLIDE = 'I'
+  SLIDE = 'I',
+  FLASHCARD = 'F'
 }
 
 export class ContentStatistic {
@@ -86,11 +87,6 @@ export class StatisticListComponent implements OnInit {
     });
     this.translateService.use(this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE));
     this.getContents();
-    if (this.deviceType === 'desktop') {
-      this.displayedColumns = ['content', 'counts', 'abstentions', 'percentage'];
-    } else {
-      this.displayedColumns = ['content', 'counts', 'percentage'];
-    }
   }
 
   public getContents() {
@@ -131,6 +127,12 @@ export class StatisticListComponent implements OnInit {
           type = StatisticType.SLIDE;
           this.addNewStatistic(i, new ContentStatistic(content, type, percent, count, abstentions));
           break;
+        case ContentType.FLASHCARD:
+          abstentions = this.status.empty;
+          count = this.status.empty;
+          type = StatisticType.FLASHCARD;
+          this.addNewStatistic(i, new ContentStatistic(content, type, percent, count, abstentions));
+          break;
         default:
           this.contentService.getAnswer(this.contentGroup.roomId, content.id).subscribe(answer => {
             if (content.format === ContentType.CHOICE) {
@@ -167,6 +169,14 @@ export class StatisticListComponent implements OnInit {
   checkIfLoadingFinished() {
     this.statisticsAdded++;
     if (this.statisticsAdded === this.statsLength) {
+      if (this.deviceType === 'desktop') {
+        this.displayedColumns = ['content', 'counts', 'abstentions', 'percentage'];
+      } else {
+        this.displayedColumns = ['content', 'counts', 'percentage'];
+      }
+      if (this.total < this.status.zero) {
+        this.displayedColumns.pop();
+      }
       this.isLoading = false;
     }
   }
