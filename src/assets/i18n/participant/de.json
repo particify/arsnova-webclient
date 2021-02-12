@@ -18,6 +18,9 @@
     "a11y-abstain": "Enthalte dich bei dieser Frage und bringt dich zur nächsten.",
     "a11y-go-to-stats": "Dreht die Karte um und zeigt die Statistik zu dieser Frage.",
     "a11y-go-to-content": "Dreht die Karte wieder um und zeigt die Frage.",
+    "a11y-back": "Zeige die Vorderseite der Lernkarte.",
+    "a11y-show-back": "Zeige die Rückseite der Lernkarte.",
+    "a11y-next-content": "Navigiere zur nächsten Frage.",
     "abstain": "Enthalten",
     "at-least-one": "Bitte wähle mindestens eine Antwort.",
     "please-answer": "Bitte gib eine Antwort ein.",
@@ -31,7 +34,11 @@
     "has-answered": "Du hast die Frage beantwortet.",
     "questions-locked": "Es wurden noch keine Fragen freigegeben.",
     "go-to-stats": "Gehe zu den Ergebnissen",
-    "go-to-content": "Gehe zurück zur Frage"
+    "go-to-content": "Gehe zurück zur Frage",
+    "show-front": "Umdrehen",
+    "show-back": "Umdrehen",
+    "next-content": "Weiter",
+    "first-content": "Zum Anfang"
   },
   "comment-list": {
     "a11y-search-list": "Option die Kommentare zu durchsuchen",

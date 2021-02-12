@@ -444,7 +444,9 @@
     "no-contents": "There are no questions.",
     "select-content-group": "Select collection",
     "answer": "Answer",
-    "other-combinations": "Other"
+    "other-combinations": "Other",
+    "show-flashcard-back": "Show the back of the flashcard",
+    "hide-flashcard-back": "Hide the back of the flashcard"
   },
   "dialog": {
     "sure": "Are you sure?",

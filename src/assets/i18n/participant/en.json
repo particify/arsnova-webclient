@@ -18,6 +18,9 @@
     "a11y-abstain": "Abstain on this question and go to the next one.",
     "a11y-go-to-stats": "Flips the card and shows the statistic of this question.",
     "a11y-go-to-content": "Flips the card back and shows the question.",
+    "a11y-back": "Shows the front of the flashcard.",
+    "a11y-show-back": "Show the back of the flashcard.",
+    "a11y-next-content": "Navigate to the next content.",
     "abstain": "Abstain",
     "at-least-one": "Please select at least one answer.",
     "please-answer": "Please enter an answer.",
@@ -31,7 +34,11 @@
     "has-answered": "You have answered the question.",
     "questions-locked": "No questions have been released yet.",
     "go-to-stats": "Go to the results",
-    "go-to-content": "Go back to the question"
+    "go-to-content": "Go back to the question",
+    "show-front": "Flip",
+    "show-back": "Flip",
+    "next-content": "Next",
+    "first-content": "To the beginning"
   },
   "comment-list": {
     "a11y-search-list": "Option to search for comments",

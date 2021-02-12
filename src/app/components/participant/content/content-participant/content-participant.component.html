@@ -18,10 +18,10 @@
                   answer: selectedSingleAnswer
                 })) }}</div>
             <span class="fill-remaining-space"></span>
-            <button id="go-to-stats" *ngIf="alreadySent && content.format !== ContentType.SLIDE" mat-icon-button
+            <button id="go-to-stats" *ngIf="alreadySent && [ContentType.SLIDE, ContentType.FLASHCARD].indexOf(content.format) === -1" mat-icon-button
                     (click)="goToStats()" matTooltip="{{'answer.go-to-stats' | translate}}" aria-labelledby="flip-to-stats">
               <mat-icon class="corner-icon icon-secondary">
-                insert_chart
+                {{content.format === ContentType.FLASHCARD ? 'cached' : 'insert_chart' }}
               </mat-icon>
             </button>
           </div>
@@ -42,7 +42,7 @@
                                             (answerChanged)="forwardAnswerMessage($event)">
               </app-content-sort-participant>
             </div>
-            <div *ngIf="content.format !== ContentType.SLIDE">
+            <div *ngIf="[ContentType.SLIDE, ContentType.FLASHCARD].indexOf(content.format) === -1">
               <div [ngClass]="{'visible' : alreadySent, 'invisible': !alreadySent}" class="text">
                 <p *ngIf="!hasAbstained">{{'answer.has-voted' | translate}}</p>
                 <p *ngIf="hasAbstained">{{'answer.has-abstained' | translate}}</p>
@@ -60,16 +60,36 @@
                 </div>
               </div>
             </div>
+            <div *ngIf="content.format === ContentType.FLASHCARD" fxLayoutAlign="center">
+              <button mat-raised-button class="button-primary" (click)="goToStats()" aria-labelledby="show-front">
+                {{ 'answer.show-back' | translate }}
+              </button>
+            </div>
           </form>
         </div>
         <div class="back side" [ngClass]="{'invisible-card-content': !flipped}">
-          <button id="go-to-content" tabindex="0" *ngIf="flipped" class="toggleSide" mat-icon-button
-                  matTooltip="{{'answer.go-to-content' | translate}}" (click)="goToStats()" aria-labelledby="flip-back">
-            <mat-icon class="corner-icon icon-secondary">
-              cached
-            </mat-icon>
-          </button>
-          <app-statistic-content *ngIf="flipped" [content]="content" [directShow]="true"></app-statistic-content>
+          <div *ngIf="flipped" class="back-container">
+            <button id="go-to-content" *ngIf="content.format !== ContentType.FLASHCARD" tabindex="0" class="toggleSide" mat-icon-button
+                    matTooltip="{{'answer.go-to-content' | translate}}" (click)="goToStats()" aria-labelledby="flip-back">
+              <mat-icon class="corner-icon icon-secondary">
+                cached
+              </mat-icon>
+            </button>
+            <app-statistic-content *ngIf="content.format !== ContentType.FLASHCARD" [content]="content" [directShow]="true"></app-statistic-content>
+            <div *ngIf="content.format === ContentType.FLASHCARD">
+              <app-rendered-text [rawText]="content.additionalText" [renderedText]="content.renderedAdditionalText"
+                                 [markdownFeatureset]="flashcardMarkdownFeatures" (rendered)="isLoading = false;"></app-rendered-text>
+              <div fxLayoutAlign="center" fxLayoutGap="10px">
+                <button mat-raised-button class="button-abort" (click)="goToStats()" aria-labelledby="show-front">
+                  {{ 'answer.show-front' | translate }}
+                </button>
+                <button mat-raised-button [ngClass]="{'button-secondary': lastContent, 'button-primary': !lastContent}"
+                        (click)="goToNextContent(lastContent)" aria-labelledby="next-content">
+                  {{ (lastContent ? 'answer.first-content' : 'answer.next-content') | translate }}
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
       </mat-card>
     </div>
@@ -80,5 +100,8 @@
     <div id="abstain">{{ 'answer.a11y-abstain' | translate }}</div>
     <div id="flip-to-stats">{{ 'answer.a11y-go-to-stats' | translate }}</div>
     <div id="flip-back">{{ 'answer.a11y-go-to-content' | translate }}</div>
+    <div id="show-back">{{ 'answer.a11y-show-back' | translate }}</div>
+    <div id="show-front">{{ 'answer.a11y-show-front' | translate }}</div>
+    <div id="next-content">{{ 'answer.a11y-next-content' | translate }}</div>
   </div>
 </div>

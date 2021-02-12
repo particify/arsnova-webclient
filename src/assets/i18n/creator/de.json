@@ -444,7 +444,9 @@
     "no-contents": "Es sind keine Fragen vorhanden.",
     "select-content-group": "Sammlung auswählen",
     "answer": "Antwort",
-    "other-combinations": "Andere"
+    "other-combinations": "Andere",
+    "show-flashcard-back": "Zeige die Rückseite",
+    "hide-flashcard-back": "Verstecke die Rückseite"
   },
   "dialog": {
     "sure": "Bist du sicher?",

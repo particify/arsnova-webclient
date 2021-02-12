@@ -5,6 +5,7 @@ import { Content } from '../../../../models/content';
 import { ContentChoice } from '../../../../models/content-choice';
 import { TextAnswer } from '../../../../models/text-answer';
 import { ChoiceAnswer } from '../../../../models/choice-answer';
+import { MarkdownFeatureset } from '../../../../services/http/formatting.service';
 
 @Component({
   selector: 'app-content-participant',
@@ -15,7 +16,9 @@ export class ContentParticipantComponent implements OnInit {
 
   @Input() content: Content;
   @Input() answer: Answer;
+  @Input() lastContent: boolean;
   @Output() answerChanged = new EventEmitter<Answer>();
+  @Output() next = new EventEmitter<boolean>();
 
   sendEvent = new EventEmitter<string>();
   isLoading = true;
@@ -28,6 +31,7 @@ export class ContentParticipantComponent implements OnInit {
   alreadySent = false;
   flipped: boolean;
   isMultiple: boolean;
+  flashcardMarkdownFeatures = MarkdownFeatureset.EXTENDED;
 
   constructor() { }
 
@@ -73,6 +77,10 @@ export class ContentParticipantComponent implements OnInit {
     setTimeout(() => {
       document.getElementById('go-to-' + (this.flipped ? 'content' : 'stats')).focus();
     }, 300);
+  }
+
+  goToNextContent(last: boolean) {
+    this.next.emit(last);
   }
 
 }
