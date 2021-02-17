@@ -2,6 +2,8 @@ import { AfterViewInit, Component, ElementRef, OnInit, ViewChild, Inject, Input 
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 import { ConsentGiven, CookieCategory } from '../../../../services/util/consent.service';
+import { TranslateService } from '@ngx-translate/core';
+import { AdvancedSnackBarTypes, NotificationService } from '@arsnova/app/services/util/notification.service';
 
 @Component({
   selector: 'app-cookies',
@@ -19,7 +21,9 @@ export class CookiesComponent implements OnInit, AfterViewInit {
     @Inject(MAT_DIALOG_DATA) data: { categories: CookieCategory[], privacyUrl: string },
     private dialog: MatDialog,
     private dialogRef: MatDialogRef<CookiesComponent>,
-    protected route: ActivatedRoute
+    protected route: ActivatedRoute,
+    private translateService: TranslateService,
+    private notificationService: NotificationService
   ) {
     this.categories = data.categories;
     this.privacyUrl = data.privacyUrl;
@@ -54,6 +58,8 @@ export class CookiesComponent implements OnInit, AfterViewInit {
         return map;
       }, {});
     this.dialogRef.close(consentGiven);
+    const msg = this.translateService.instant('cookies.settings-saved');
+    this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.SUCCESS);
     setTimeout(() => {
       document.getElementById('room-id-input').focus();
     }, 500);

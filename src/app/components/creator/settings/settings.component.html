@@ -1,23 +1,27 @@
 <div fxLayout="row" fxLayoutAlign="center">
   <mat-card [ngClass]="{'card-closed': !expanded, 'card-expanded': expanded}">
-    <div class="card-header" fxLayout="row" fxLayoutAlign="start center" (click)="expandSettings()">
+    <div class="card-header" id="{{settings.componentName}}" tabindex="0" role="button" fxLayout="row" fxLayoutAlign="start center"
+         (keyup.enter)="expandSettings()" (click)="expandSettings()" attr.aria-label="{{ ('settings.a11y-'
+         + (expanded ? 'collapse-' : 'expand-') + 'settings') | translate: {name: ('settings.' + settings.componentName) | translate } }}">
       <mat-icon class="header-icon">{{settings.iconName}}</mat-icon>
-      <h2>{{ settings.headerName | translate }}</h2>
+      <h2>{{ ('settings.' + settings.headerName) | translate }}</h2>
       <span class="fill-remaining-space"></span>
       <button tabindex="-1" mat-icon-button class="expand">
         <mat-icon class="expand-icon" [ngClass]="{'expanded': expanded}">expand_more</mat-icon>
       </button>
     </div>
     <div class="container" [ngClass]="{'container-closed': !expanded, 'container-expanded': expanded}">
-      <div [ngSwitch]="settings.componentName">
-        <app-room-edit [editRoom]="room" [name]="room.name" [description]="room.description"
-                       *ngSwitchCase="'generalSettings'" (saveEvent)="saveRoom($event)"></app-room-edit>
-        <app-comment-settings [editRoom]="room" [roomId]="room.id" *ngSwitchCase="'commentSettings'"
-                              (saveEvent)="saveRoom($event)"></app-comment-settings>
-        <app-moderators [roomId]="room.id" *ngSwitchCase="'moderatorSettings'"
-                        (saveEvent)="saveRoom($event)"></app-moderators>
-        <!-- <app-bonus-token [room]="room" *ngSwitchCase="'tokenSettings'"></app-bonus-token> -->
-        <app-tags [room]="room" *ngSwitchCase="'tagSettings'" (saveEvent)="saveRoom($event)"></app-tags>
+      <div *ngIf="contentExpanded">
+        <div [ngSwitch]="settings.componentName">
+          <app-room-edit [editRoom]="room" [name]="room.name" [description]="room.description"
+                         *ngSwitchCase="'general'" (saveEvent)="saveRoom($event)"></app-room-edit>
+          <app-comment-settings [editRoom]="room" [roomId]="room.id" *ngSwitchCase="'comments'"
+                                (saveEvent)="saveRoom($event)"></app-comment-settings>
+          <app-moderators [roomId]="room.id" *ngSwitchCase="'moderators'"
+                          (saveEvent)="saveRoom($event)"></app-moderators>
+          <!-- <app-bonus-token [room]="room" *ngSwitchCase="'tokenSettings'"></app-bonus-token> -->
+          <app-tags [room]="room" *ngSwitchCase="'tags'" (saveEvent)="saveRoom($event)"></app-tags>
+        </div>
       </div>
     </div>
   </mat-card>

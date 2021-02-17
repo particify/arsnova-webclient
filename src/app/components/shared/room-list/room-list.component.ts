@@ -78,10 +78,10 @@ export class RoomListComponent implements OnInit, OnDestroy {
     });
     this.deviceType = this.globalStorageService.getItem(STORAGE_KEYS.DEVICE_TYPE);
     const roleKeys = [
-      'room-list.participant-role',
-      'room-list.executive-moderator-role',
-      'room-list.editing-moderator-role',
-      'room-list.creator-role',
+      'room-list.a11y-participant-role',
+      'room-list.a11y-executive-moderator-role',
+      'room-list.a11y-editing-moderator-role',
+      'room-list.a11y-creator-role',
     ];
     const roles = [
       UserRole.PARTICIPANT,
@@ -89,9 +89,9 @@ export class RoomListComponent implements OnInit, OnDestroy {
       UserRole.EDITING_MODERATOR,
       UserRole.CREATOR
     ];
-    this.translateService.get(roleKeys).subscribe(msgs => {
+    this.translateService.get(roleKeys).subscribe(() => {
       for (let i = 0; i < roleKeys.length; i++) {
-        this.roles.set(roles[i], msgs[roleKeys[i]]);
+        this.roles.set(roles[i], this.translateService.instant(roleKeys[i]));
       }
     });
   }

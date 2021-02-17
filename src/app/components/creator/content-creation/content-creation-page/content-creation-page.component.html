@@ -6,13 +6,13 @@
           <div class="side" [ngClass]="{'invisible-card-content': flipped}">
             <div class="visually-hidden">
               <button (click)="announce()" id="message-announcer-button" tabIndex="-1">
-                {{ 'content.a11y-content-create-message' | translate }}</button>
+                {{ (isEditMode ? 'content.a11y-content-edit-message' : 'content.a11y-content-create-message') | translate }}</button>
               <button (click)="announce()" id="keys-announcer-button" tabIndex="-1">
                 {{ 'content.a11y-content-create-shortcuts' | translate }}</button>
             </div>
             <form>
               <div [ngClass]="{'disabled': isEditMode}" fxLayout="row wrap" fxLayoutAlign="start">
-                <button [matMenuTriggerFor]="formatMenu" aria-labelledby="choose-format" class="format-button"
+                <button tabindex="{{isEditMode ? '-1' : '0'}}" [matMenuTriggerFor]="formatMenu" aria-labelledby="choose-format" class="format-button"
                         id="format-button" mat-stroked-button>
                   <mat-icon class="format-button-icon">{{ selectedFormat.icon }}</mat-icon>
                   <span>
@@ -24,7 +24,7 @@
                     <div fxLayout="row">
                       <mat-icon class="format-icon">{{ format.icon }}</mat-icon>
                       <div fxLayout="column" fxLayoutAlign="center">
-                <span attr.aria-labelledby="{{'format-' + format.name}}" class="format-name">
+                <span attr.aria-label="{{('content.a11y-format-' + format.name) | translate}}" class="format-name">
                   {{ 'content.format-' + format.name | translate }}</span>
                         <span class="format-description">{{ 'content.format-' + format.name +
                         '-description' | translate }}</span>
@@ -35,7 +35,7 @@
                 <span class="fill-remaining-space"></span>
                 <mat-form-field appearance="outline" class="group">
                   <mat-label>{{ 'content.collection' | translate }}</mat-label>
-                  <input #group (blur)="eventService.makeFocusOnInputFalse()"
+                  <input tabindex="{{isEditMode ? '-1' : '0'}}" #group (blur)="eventService.makeFocusOnInputFalse()"
                          (focus)="eventService.makeFocusOnInputTrue()" [(ngModel)]="lastContentGroup"
                          [formControl]="myControl" [matAutocomplete]="auto" aria-labelledby="content-group"
                          id="group-input"
@@ -157,6 +157,8 @@
   <div id="format-scale">{{ 'content.a11y-format-likert' | translate }}</div>
   <div id="format-binary">{{ 'content.a11y-format-binary' | translate }}</div>
   <div id="format-text">{{ 'content.a11y-format-text' | translate }}</div>
+  <div id="format-slide">{{ 'content.a11y-format-slide' | translate }}</div>
+  <div id="format-sort">{{ 'content.a11y-format-sort' | translate }}</div>
   <div id="choose-format">{{ 'content.a11y-choose-format' | translate:
     { format: 'content.format-' + selectedFormat.name | translate } }}</div>
 </div>

@@ -62,12 +62,12 @@ export class ContentPresentationComponent implements OnInit {
               }, 100);
             }
             setTimeout(() => {
-              document.getElementById('message-button').focus();
+              document.getElementById('presentation-message').focus();
             }, 700);
           });
         });
       });
-    });
+});
   }
 
   updateURL(index: number) {
@@ -76,5 +76,8 @@ export class ContentPresentationComponent implements OnInit {
     if (this.contentIndex !== this.entryIndex) {
       this.contentIndex = null;
     }
+    setTimeout(() => {
+      document.getElementById('message-button').focus();
+    }, 300);
   }
 }

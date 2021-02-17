@@ -25,8 +25,6 @@ import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 })
 export class GroupContentComponent extends ContentListBaseComponent implements OnInit {
 
-  @ViewChild('nameInput', { static: true }) nameInput: ElementRef;
-
   collectionName: string;
   isInTitleEditMode = false;
   isInSortingMode = false;
@@ -62,19 +60,22 @@ export class GroupContentComponent extends ContentListBaseComponent implements O
     if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit1) === true && focusOnInput === false) {
       document.getElementById('content-create-button').focus();
     } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit2) === true && focusOnInput === false) {
-      document.getElementById('presentation-button').focus();
-    } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit3) === true && focusOnInput === false) {
       document.getElementById('statistic-button').focus();
-    } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit4) === true && focusOnInput === false) {
+    } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit3) === true && focusOnInput === false) {
       document.getElementById('direct-send-slide').focus();
-    } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit5) === true && focusOnInput === false) {
+    } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit4) === true && focusOnInput === false) {
       document.getElementById('lock-questions-slide').focus();
-    } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit6) === true && focusOnInput === false) {
+    } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit5) === true && focusOnInput === false) {
       document.getElementById('content-list').focus();
-    } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit7) === true && focusOnInput === false) {
+    } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit6) === true && focusOnInput === false) {
       document.getElementById('edit-group-name').focus();
     } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Escape) === true) {
-      document.getElementById('keys-announcer-button').focus();
+      if (focusOnInput) {
+        this.leaveTitleEditMode();
+      }
+      setTimeout(() => {
+        document.getElementById('keys-button').focus();
+      }, 200);
     }
   }
 
@@ -116,11 +117,19 @@ export class GroupContentComponent extends ContentListBaseComponent implements O
   goInTitleEditMode(): void {
     this.updatedName = this.collectionName;
     this.isInTitleEditMode = true;
-    this.nameInput.nativeElement.focus();
+    setTimeout(() => {
+      document.getElementById('nameInput').focus();
+    }, 100);
+
   }
 
-  leaveTitleEditMode(): void {
+  leaveTitleEditMode(saved?: boolean): void {
     this.isInTitleEditMode = false;
+    this.eventService.focusOnInput = false;
+    if (!saved) {
+      const msg = this.translateService.instant('content.not-updated-content-group');
+      this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
+    }
   }
 
   updateURL(): void {
@@ -145,7 +154,7 @@ export class GroupContentComponent extends ContentListBaseComponent implements O
         });
       });
     }
-    this.leaveTitleEditMode();
+    this.leaveTitleEditMode(true);
   }
 
   createCopy() {

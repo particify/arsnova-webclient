@@ -7,7 +7,7 @@
 <mat-list *ngIf="!isLoading" role="list">
   <mat-list-item role="listitem" [ngClass]="{'correct': colorLabel && checkIfCorrect(i)}" tabindex="0"
                  attr.aria-label="{{ ('statistic.a11y-choice-evaluation' | translate: { count: data[i], answer: a.answer }) +
-                 (content.format !== 'LIKERT' ? ((checkIfCorrect(i) ?
+                 (content.format !== 'SCALE' ? ((checkIfCorrect(i) ?
                  'statistic.a11y-correct' : 'statistic.a11y-wrong') | translate) : '') }}"
                  *ngFor="let a of answerList; let i = index">
     <p class="label">{{a.label}}: {{a.answer}}</p>

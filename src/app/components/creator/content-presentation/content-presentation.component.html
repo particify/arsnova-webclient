@@ -1,15 +1,17 @@
 <app-nav-bar></app-nav-bar>
 <app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
 <div class="nav-bar-container">
+  <div tabindex="-1" id="presentation-message" class="visually-hidden">{{ 'statistic.a11y-message-presentation' | translate }}</div>
   <div *ngIf="!isLoading" fxLayout="column" fxLayoutAlign="start center">
     <app-stepper *ngIf="contents.length > 0" (newIndex)="updateURL($event)" [listLength]="contents.length" [completed]="">
       <cdk-step *ngFor="let content of contents; let i = index">
-        <div tabindex="0" id="step" *ngIf="currentStep >= i - 1 && currentStep <= i + 1">
+        <div id="step" *ngIf="currentStep >= i - 1 && currentStep <= i + 1">
           <mat-card>
-            <app-statistic-content [content]="content" [directShow]="contentIndex === i"></app-statistic-content>
+            <app-statistic-content [content]="content" [directShow]="contentIndex === i" [active]="currentStep === i" [index]="i">
+            </app-statistic-content>
           </mat-card>
         </div>
-        <div tabindex="0" class="visually-hidden">{{ 'statistics.a11y-no-more-answers' | translate }}</div>
+        <div tabindex="0" class="visually-hidden">{{ 'statistic.a11y-no-more-answers' | translate }}</div>
       </cdk-step>
     </app-stepper>
   </div>

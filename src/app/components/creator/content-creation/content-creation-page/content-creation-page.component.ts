@@ -35,7 +35,7 @@ export class ContentCreationPageComponent implements OnInit, AfterContentInit {
   lastContentGroup: string;
   formats: ContentFormat[] = [
     { name: 'choice', icon: 'list' },
-    { name: 'scale', icon: 'mood' },
+    { name: 'likert', icon: 'mood' },
     { name: 'binary', icon: 'rule' },
     { name: 'text', icon: 'description' },
     { name: 'slide', icon: 'info' },
@@ -81,7 +81,9 @@ export class ContentCreationPageComponent implements OnInit, AfterContentInit {
     } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit3) === true && focusOnInput === false) {
       document.getElementById('group-input').focus();
     } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Escape) === true) {
-      document.getElementById('keys-announcer-button').focus();
+      if (!this.isEditMode) {
+        document.getElementById('keys-announcer-button').focus();
+      }
     }
   }
 
@@ -126,7 +128,9 @@ export class ContentCreationPageComponent implements OnInit, AfterContentInit {
   }
 
   announce() {
-    this.announceService.announce('content.a11y-content-create-shortcuts');
+    if (!this.isEditMode) {
+      this.announceService.announce('content.a11y-content-create-shortcuts');
+    }
   }
 
   reset() {

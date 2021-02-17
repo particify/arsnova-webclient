@@ -10,12 +10,15 @@
   </lib-extension-point>
   <span class="fill-remaining-space"></span>
   <div fxLayout="row wrap" fxLayoutAlign="end">
-    <a *ngIf="feedbackUrl" [routerLink]="feedbackUrl" class="link text">{{'footer.feedback' | translate}}</a>
-    <a [routerLink]="" [matMenuTriggerFor]="privacyMenu" class="link text">{{'footer.dsgvo' | translate}}</a>
-    <a *ngIf="imprintUrl" [routerLink]="" (click)="showImprint()" class="link text">{{'footer.imprint' | translate}}</a>
+    <a *ngIf="feedbackUrl" [routerLink]="feedbackUrl" aria-labelledby="feedback-label" class="link text">
+      {{'footer.feedback' | translate}}</a>
+    <a [routerLink]="" [matMenuTriggerFor]="privacyMenu" aria-labelledby="data-protection-menu" class="link text">
+      {{'footer.dsgvo' | translate}}</a>
+    <a *ngIf="imprintUrl" [routerLink]="" (click)="showImprint()" aria-labelledby="imprint-label" class="link text">
+      {{'footer.imprint' | translate}}</a>
   </div>
   <mat-menu #privacyMenu="matMenu" [overlapTrigger]="false">
-    <button *ngIf="privacyUrl" class="item-title" mat-menu-item (click)="showDataProtection()">
+    <button *ngIf="privacyUrl" class="item-title" mat-menu-item (click)="showDataProtection()" aria-labelledby="data-protection-label">
       {{ 'footer.privacy-policy' | translate }}</button>
     <button class="item-title" mat-menu-item (click)="showCookieSettings()">
       {{ 'footer.cookie-settings' | translate }}</button>
@@ -24,5 +27,7 @@
 
 <div class="visually-hidden">
   <div id="data-protection-label">{{'footer.a11y-data-protection' | translate}}</div>
+  <div id="data-protection-menu">{{'footer.a11y-data-protection-menu' | translate}}</div>
   <div id="imprint-label">{{'footer.a11y-imprint' | translate}}</div>
+  <div id="feedback-label">{{'footer.a11y-feedback' | translate}}</div>
 </div>

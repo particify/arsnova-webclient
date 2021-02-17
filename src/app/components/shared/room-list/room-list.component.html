@@ -4,7 +4,7 @@
   <div *ngIf="rooms.length === 0 && !isGuest" fxLayout="row" fxLayoutAlign="center">
     <lib-extension-point extensionId="import-token" [extensionData]="{inMenu: false}"></lib-extension-point>
   </div>
-  <div tabindex="-1" id="room-list" *ngIf="!isLoading" [ngClass]="{'visually-hidden': rooms.length > 0 || showRoomsFromGuest}">
+  <div tabindex="0" id="room-list" *ngIf="!isLoading" [ngClass]="{'visually-hidden': rooms.length > 0 || showRoomsFromGuest}">
     <h3 class="no-rooms">{{ rooms.length === 0 ? ('room-list.no-room-history' | translate) :
       'room-list.a11y-room-history' | translate:{count: rooms.length} }}</h3>
   </div>
@@ -13,8 +13,8 @@
       <mat-form-field class="filterWrapper" appearance="fill">
         <mat-label>{{ 'room-list.filter-message' | translate }}</mat-label>
         <input (focus)="eventService.makeFocusOnInputTrue()" (blur)="eventService.makeFocusOnInputFalse()" matInput
-               #search (keyup)="filterRooms(search.value)"/>
-        <button *ngIf="showMenu" mat-icon-button matSuffix [matMenuTriggerFor]="more">
+               #search (keyup)="filterRooms(search.value)" aria-labelledby="filter-rooms"/>
+        <button *ngIf="showMenu" mat-icon-button matSuffix [matMenuTriggerFor]="more" aria-labelledby="import-options">
           <mat-icon id="more" class="more">more_horiz</mat-icon>
         </button>
       </mat-form-field>
@@ -96,9 +96,7 @@
           <mat-list-item fxLayout="column" fxLayoutAlign="center" *ngIf="!room.transferred"
                          class="bottom-border full-width-list-item">
             <div fxLayout="row" fxFill>
-              <div tabindex="0" role="button" fxLayout="row" fxLayoutAlign="center center" class="container inner"
-                  attr.aria-label="{{ 'room-list.a11y-join-room' | translate:
-                          {room: room.summary.name, id: room.summary.shortId, role: roles.get(room.membership.primaryRole)} }}">
+              <div tabindex="0" role="button" fxLayout="row" fxLayoutAlign="center center" class="container inner">
                 <p matBadge="{{ room.summary.stats.ackCommentCount > 0 && deviceType === 'desktop' ? room.summary.stats.ackCommentCount : null }}"
                   matBadgeOverlap="false">{{room.summary.name}}</p>
                 <span class="fill-remaining-space"></span>
@@ -138,7 +136,7 @@
 </div>
 
 <div class="visually-hidden">
+  <div id="filter-rooms">{{ 'room-list.filter' | translate }}</div>
+  <div id="import-options">{{ 'room-list.a11y-import-options' | translate }}</div>
   <div id="more-options">{{ 'room-list.a11y-more-options' | translate }}</div>
-  <div *ngIf="rooms.length > 10" id="filter-rooms">{{ 'room-list.filter' | translate }}
-  </div>
 </div>

@@ -1,15 +1,14 @@
 <mat-card id="comment-card" [ngClass]="{'highlighted': comment.highlighted, '': !comment.highlighted, 'mat-elevation-z2': inAnswerView}"
           [@slide]="isNew ? slideAnimationState : null" (@slide.done)="changeSlideState()">
-  <div *ngIf="!inAnswerView" id="comment-describer" tabindex="0" class="visually-hidden">{{ 'comment-page.comment' | translate: {
-    time: (language === 'de' ? (comment.timestamp | date: ' HH:mm ') : (comment.timestamp | date: 'h:mm a')),
-    votes: comment.score === 1 ? ('comment-page.a11y-text-textForOneVote' | translate) : comment.score + ('comment-page.a11y-text-textForVotes' | translate),
-    comment: comment.body.trim(),
-    correct: comment.correct === 1 ? ('comment-page.a11y-text-correct' | translate) : "",
-    wrong: comment.correct === 2 ? ('comment-page.a11y-text-wrong' | translate) : "",
-    bonus: comment.favorite ? ('comment-page.a11y-text-grade' | translate) : "",
-    read: comment.read ? ('comment-page.a11y-text-read' | translate) : "",
-    answer: comment.answer ? ('comment-page.a11y-text-answer' | translate) : ""} }}</div>
-  <div fxLayout="column">
+  <div fxLayout="column" id="comment-entry" tabindex="0" role="button" (keyup.enter)="openPresentDialog(comment)" attr.aria-label="{{ 'comment-page.comment' | translate: {
+      time: (language === 'de' ? (comment.timestamp | date: ' HH:mm ') : (comment.timestamp | date: 'h:mm a')),
+      votes: comment.score === 1 ? ('comment-page.a11y-text-textForOneVote' | translate) : comment.score + ('comment-page.a11y-text-textForVotes' | translate),
+      comment: comment.body.trim(),
+      correct: comment.correct === 1 ? ('comment-page.a11y-text-correct' | translate) : '',
+  wrong: comment.correct === 2 ? ('comment-page.a11y-text-wrong' | translate) : '',
+  bonus: comment.favorite ? ('comment-page.a11y-text-grade' | translate) : '',
+  read: comment.read ? ('comment-page.a11y-text-read' | translate) : '',
+  answer: comment.answer ? ('comment-page.a11y-text-answer' | translate) : ''} }}">
     <div fxLayout="row" class="comment-actions">
       <div class="date-container light">
         <div>{{comment.timestamp | dateFromNow : language : refreshCounter }}</div>

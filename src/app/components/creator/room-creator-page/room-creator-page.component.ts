@@ -80,7 +80,7 @@ export class RoomCreatorPageComponent extends RoomPageComponent implements OnIni
     } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit6) === true && focusOnInput === false) {
       document.getElementById('statistics-button').focus();
     } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit7) === true && focusOnInput === false) {
-      document.getElementById('share-button').focus();
+      document.getElementById('more-button').focus();
     } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Escape) === true && focusOnInput === false) {
       this.announce();
     }

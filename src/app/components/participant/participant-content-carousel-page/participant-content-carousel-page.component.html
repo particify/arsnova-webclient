@@ -8,7 +8,8 @@
       <cdk-step *ngFor="let content of contents; let i = index">
         <div tabindex="0" id="step" *ngIf="currentStep >= i - 1 && currentStep <= i + 1">
           <app-content-participant (answerChanged)="receiveSentStatus($event, i)" (next)="nextContent($event)"
-                                   [content]="content" [answer]="answers[i]" [lastContent]="i === contents.length - 1">
+                                   [content]="content" [answer]="answers[i]" [lastContent]="i === contents.length - 1"
+                                   [active]="currentStep === i" [index]="i">
           </app-content-participant>
         </div>
       </cdk-step>

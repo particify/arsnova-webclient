@@ -20,10 +20,10 @@ export interface Settings {
 export class SettingsPageComponent implements OnInit {
 
   settings: Settings[] = [
-    { headerName: 'settings.general', iconName: 'settings', componentName: 'generalSettings' },
-    { headerName: 'settings.comments', iconName: 'comment', componentName: 'commentSettings' },
-    { headerName: 'settings.moderators', iconName: 'gavel', componentName: 'moderatorSettings' },
-    { headerName: 'settings.tags', iconName: 'bookmark', componentName: 'tagSettings' }
+    { headerName: 'general', iconName: 'settings', componentName: 'general' },
+    { headerName: 'comments', iconName: 'comment', componentName: 'comments' },
+    { headerName: 'moderators', iconName: 'gavel', componentName: 'moderators' },
+    { headerName: 'tags', iconName: 'bookmark', componentName: 'tags' }
   ];
 
   // { headerName: 'settings.bonus-token', iconName: 'grade', componentName: 'tokenSettings' },
@@ -42,13 +42,13 @@ export class SettingsPageComponent implements OnInit {
   keyEvent(event: KeyboardEvent) {
     const focusOnInput = this.eventService.focusOnInput;
     if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit1) === true && focusOnInput === false) {
-      document.getElementById('room-settings').focus();
+      document.getElementById('general').focus();
     } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit2) === true && focusOnInput === false) {
-      document.getElementById('comment-settings').focus();
+      document.getElementById('comments').focus();
     } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit3) === true && focusOnInput === false) {
-      document.getElementById('moderator-settings').focus();
+      document.getElementById('moderators').focus();
     } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit4) === true && focusOnInput === false) {
-      document.getElementById('category-settings').focus();
+      document.getElementById('tags').focus();
     } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Escape) === true) {
       this.announce();
     }
