@@ -1,10 +1,10 @@
-import { Component, HostListener, OnInit, Renderer2 } from '@angular/core';
+import { Component, HostListener, Inject, OnInit, Renderer2 } from '@angular/core';
 import { AuthenticationService } from '../../../services/http/authentication.service';
 import { AdvancedSnackBarTypes, NotificationService } from '../../../services/util/notification.service';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { ClientAuthentication } from '../../../models/client-authentication';
 import { AuthProvider } from '../../../models/auth-provider';
-import { Location } from '@angular/common';
+import { DOCUMENT, Location } from '@angular/common';
 import { TranslateService } from '@ngx-translate/core';
 import { UserService } from '../../../services/http/user.service';
 import { EventService } from '../../../services/util/event.service';
@@ -63,6 +63,7 @@ export class HeaderComponent implements OnInit {
     private routingService: RoutingService,
     private route: ActivatedRoute,
     private consentService: ConsentService,
+    @Inject(DOCUMENT) private document: Document
   ) {
     this.deviceType = this.globalStorageService.getItem(STORAGE_KEYS.DEVICE_TYPE);
     // LocalStorage setup
@@ -73,7 +74,6 @@ export class HeaderComponent implements OnInit {
     } else {
       this.setLang(this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE));
     }
-    this.translationService.use(this.lang);
   }
 
   @HostListener('window:keyup', ['$event'])
@@ -136,8 +136,7 @@ export class HeaderComponent implements OnInit {
     if (['de', 'en'].indexOf(lang) === -1) {
       lang = 'en';
     }
-    this.lang = lang;
-    this.globalStorageService.setItem(STORAGE_KEYS.LANGUAGE, lang);
+    this.useLanguage(lang);
   }
 
   getTime(time: Date) {
@@ -212,6 +211,7 @@ export class HeaderComponent implements OnInit {
     this.translationService.use(language);
     this.lang = language;
     this.globalStorageService.setItem(STORAGE_KEYS.LANGUAGE, language);
+    this.document.documentElement.lang = language;
     this.langService.langEmitter.emit(language);
   }
 
