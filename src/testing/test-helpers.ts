@@ -171,27 +171,3 @@ export class MockThemeService {
     this.activeTheme.next(name);
   }
 }
-
-// SERVICES - HTTP
-
-
-export class MockRoomService {
-}
-
-
-export class MockAuthenticationService {
-  private auth$$ = new BehaviorSubject<any>({});
-
-  getAuthenticationChanges() {
-    return this.auth$$.asObservable();
-  }
-
-  hasAdminRole(){
-  }
-
-  logout() {
-  }
-}
-
-export class MockModeratorService {
-}

@@ -5,18 +5,15 @@ import { AuthenticationService } from '@arsnova/app/services/http/authentication
 import {
   ActivatedRouteStub,
   JsonTranslationLoader,
-  MockAuthenticationService,
   MockEventService,
   MockGlobalStorageService,
   MockLangService,
-  MockModeratorService,
   MockRenderer2,
   MockRouter,
   MockThemeService
 } from '@arsnova/testing/test-helpers';
 import { AdvancedSnackBarTypes, NotificationService } from '@arsnova/app/services/util/notification.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ModeratorService } from '@arsnova/app/services/http/moderator.service';
 import { EventService } from '@arsnova/app/services/util/event.service';
 import { GlobalStorageService } from '@arsnova/app/services/util/global-storage.service';
 import { HarnessLoader } from '@angular/cdk/testing';
@@ -38,12 +35,28 @@ import { MatButtonHarness } from '@angular/material/button/testing';
 import { ClientAuthentication } from '@arsnova/app/models/client-authentication';
 import { AuthProvider } from '@arsnova/app/models/auth-provider';
 import { MatSelectModule } from '@angular/material/select';
+import { BehaviorSubject } from 'rxjs';
+
+export class MockAuthenticationService {
+  private auth$$ = new BehaviorSubject<any>({});
+
+  getAuthenticationChanges() {
+    return this.auth$$.asObservable();
+  }
+
+  hasAdminRole(){
+  }
+
+  logout() {
+  }
+}
 
 describe('HeaderComponent', () => {
   let component: HeaderComponent;
   let fixture: ComponentFixture<HeaderComponent>;
   const activatedRoute = new ActivatedRouteStub(null, { apiConfig: { ui: { demo: '27273589' } } });
   let notificationService = jasmine.createSpyObj('NotificationService', ['showAdvanced']);
+
   let routerSpy = jasmine.createSpyObj('MockRouter', ['navigate']);
   let userService = jasmine.createSpyObj('UserService', ['delete']);
   let dialogService = jasmine.createSpyObj('DialogService', ['openUpdateInfoDialog', 'openDeleteDialog']);
@@ -74,16 +87,8 @@ describe('HeaderComponent', () => {
       ],
       providers: [
         {
-          provide: AuthenticationService,
-          useClass: MockAuthenticationService
-        },
-        {
           provide: Router,
           useClass: MockRouter
-        },
-        {
-          provide: ModeratorService,
-          useClass: MockModeratorService
         },
         {
           provide: GlobalStorageService,
@@ -104,6 +109,10 @@ describe('HeaderComponent', () => {
         {
           provide: ThemeService,
           useClass: MockThemeService
+        },
+        {
+          provide: AuthenticationService,
+          useClass: MockAuthenticationService
         },
         {
           provide: NotificationService,
