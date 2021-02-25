@@ -11,6 +11,7 @@ import { ContentType } from '../../../../models/content-type.enum';
 import { AnswerOption } from '../../../../models/answer-option';
 import { Observable, Subscription } from 'rxjs';
 import { ContentText } from '@arsnova/app/models/content-text';
+import { ContentFlashcard } from '@arsnova/app/models/content-flashcard';
 
 export class DisplayAnswer {
   answerOption: AnswerOption;
@@ -106,6 +107,10 @@ export class ContentCreationComponent implements OnInit, OnDestroy {
     this.content = (this.editContent as ContentText);
   }
 
+  initContentFlashcardEditBase() {
+    this.content = (this.editContent as ContentFlashcard);
+  }
+
   createContent(): boolean {
     return true;
   }
@@ -133,7 +138,7 @@ export class ContentCreationComponent implements OnInit, OnDestroy {
 
   resetAfterSubmit() {
     this.contentReset.emit(true);
-    if (this.content.format !== ContentType.TEXT && this.content.format !== ContentType.SLIDE) {
+    if ([ContentType.TEXT, ContentType.SLIDE, ContentType.FLASHCARD].indexOf(this.content.format) === -1) {
       if ([ContentType.CHOICE, ContentType.SORT].indexOf(this.content.format) > -1) {
         (this.content as ContentChoice).options = [];
       }

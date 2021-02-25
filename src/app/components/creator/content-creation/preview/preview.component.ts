@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Content } from '../../../../models/content';
 import { ContentType } from '../../../../models/content-type.enum';
 import { ContentChoice } from '../../../../models/content-choice';
-import { FormattingService, MarkdownFeatureset } from '../../../../services/http/formatting.service';
+import { MarkdownFeatureset } from '../../../../services/http/formatting.service';
 import { AnswerOption } from '@arsnova/app/models/answer-option';
 
 @Component({
@@ -23,7 +23,7 @@ export class PreviewComponent implements OnInit {
   markdownFeatureset: MarkdownFeatureset;
   attachmentData: any;
 
-  constructor(private formattingService: FormattingService) { }
+  constructor() { }
 
   ngOnInit(): void {
     const format = this.content.format;
@@ -31,7 +31,8 @@ export class PreviewComponent implements OnInit {
       this.answerOptions = (this.content as ContentChoice).options;
       this.multipleAnswers = (this.content as ContentChoice).multiple;
     }
-    this.markdownFeatureset = format === ContentType.SLIDE ? MarkdownFeatureset.EXTENDED : MarkdownFeatureset.SIMPLE;
+    this.markdownFeatureset = [ContentType.SLIDE, ContentType.FLASHCARD].indexOf(format) > -1 ? MarkdownFeatureset.EXTENDED
+      : MarkdownFeatureset.SIMPLE;
     this.prepareAttachmentData();
   }
 

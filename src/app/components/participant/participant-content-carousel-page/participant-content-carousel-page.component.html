@@ -7,7 +7,8 @@
     <app-stepper *ngIf="contents.length > 0" (newIndex)="updateURL($event)" [listLength]="contents.length" [completed]="alreadySent">
       <cdk-step *ngFor="let content of contents; let i = index">
         <div tabindex="0" id="step" *ngIf="currentStep >= i - 1 && currentStep <= i + 1">
-          <app-content-participant (answerChanged)="receiveSentStatus($event, i)" [content]="content" [answer]="answers[i]">
+          <app-content-participant (answerChanged)="receiveSentStatus($event, i)" (next)="nextContent($event)"
+                                   [content]="content" [answer]="answers[i]" [lastContent]="i === contents.length - 1">
           </app-content-participant>
         </div>
       </cdk-step>

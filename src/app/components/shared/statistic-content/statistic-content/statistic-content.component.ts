@@ -5,6 +5,7 @@ import { StatisticTextComponent } from '@arsnova/app/components/shared/statistic
 import { ContentType } from '@arsnova/app/models/content-type.enum';
 import { ContentChoice } from '@arsnova/app/models/content-choice';
 import { StatisticSortComponent } from '@arsnova/app/components/shared/statistic-content/statistic-sort/statistic-sort.component';
+import { MarkdownFeatureset } from '@arsnova/app/services/http/formatting.service';
 
 @Component({
   selector: 'app-statistic-content',
@@ -27,6 +28,7 @@ export class StatisticContentComponent implements OnInit {
   isLoading = true;
   format: ContentType;
   ContentType: typeof ContentType = ContentType;
+  flashcardMarkdownFeatures = MarkdownFeatureset.EXTENDED;
 
   constructor() { }
 
@@ -39,7 +41,7 @@ export class StatisticContentComponent implements OnInit {
     };
     this.format = this.content.format;
     this.checkIfSurvey();
-    if (this.directShow) {
+    if (this.directShow && this.format !== ContentType.FLASHCARD) {
       this.answersVisible = true;
     }
     this.isLoading = false;
@@ -52,6 +54,9 @@ export class StatisticContentComponent implements OnInit {
         break;
       case ContentType.SORT:
         this.answersVisible = this.sortStatistic.toggleAnswers();
+        break;
+      case ContentType.FLASHCARD:
+        this.answersVisible = !this.answersVisible;
         break;
       default:
         this.answersVisible = this.choiceStatistic.toggleAnswers();

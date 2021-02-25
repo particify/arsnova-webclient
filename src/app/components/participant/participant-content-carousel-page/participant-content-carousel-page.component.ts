@@ -144,6 +144,15 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
     }
   }
 
+  nextContent(finish?: boolean) {
+    if (!finish) {
+      this.stepper.next();
+    } else {
+      this.stepper.headerPos = 0;
+      this.stepper.onClick(0);
+    }
+  }
+
   receiveSentStatus(answer: Answer, index: number) {
     this.alreadySent.set(index, !!answer);
     this.answers[this.contents.map(c => c.id).indexOf(answer.contentId)] = answer;
@@ -154,7 +163,7 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
           wait += 600;
         }
         setTimeout(() => {
-          this.stepper.next();
+          this.nextContent();
           setTimeout(() => {
             document.getElementById('step').focus();
           }, 200);

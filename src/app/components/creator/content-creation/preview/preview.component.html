@@ -1,4 +1,6 @@
-<h3 tabindex="0" id="preview-header" aria-labelledby="header">{{ 'content.preview' | translate }}</h3>
+<h3 tabindex="0" id="preview-header" aria-labelledby="header">
+  {{ (content.format !== 'FLASHCARD' ? 'content.preview' : 'content.flashcard-front') | translate }}
+</h3>
 <mat-card class="mat-elevation-z2">
   <app-loading-indicator [size]="80" *ngIf="isLoading"></app-loading-indicator>
   <app-rendered-text [rawText]="content.body" [dynamic]="true" [markdownFeatureset]="markdownFeatureset" (rendered)="renderingFinished()">
@@ -16,6 +18,16 @@
   </mat-list>
   <app-content-sort-answer *ngIf="content.format === 'SORT'" [answerOptions]="answerOptions"></app-content-sort-answer>
 </mat-card>
+<div *ngIf="content.format === 'FLASHCARD'">
+  <h3 aria-labelledby="back">{{ 'content.flashcard-back' | translate }}
+  </h3>
+  <mat-card class="mat-elevation-z2">
+    <app-loading-indicator [size]="80" *ngIf="isLoading"></app-loading-indicator>
+    <app-rendered-text [rawText]="content.additionalText" [dynamic]="true" [markdownFeatureset]="markdownFeatureset"
+                       (rendered)="renderingFinished()">
+    </app-rendered-text>
+  </mat-card>
+</div>
 <div fxLayout="row" fxLayoutAlign="center" fxLayoutGap="1em">
   <button (click)="emitFlipEvent(false)" attr.aria-label="{{ 'content.a11y-leave-preview' | translate }}"
           class="button-abort button-md"

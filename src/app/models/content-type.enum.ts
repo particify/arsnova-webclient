@@ -4,5 +4,6 @@ export enum ContentType {
   SCALE = 'SCALE',
   TEXT = 'TEXT',
   SLIDE = 'SLIDE',
-  SORT = 'SORT'
+  SORT = 'SORT',
+  FLASHCARD = 'FLASHCARD'
 }

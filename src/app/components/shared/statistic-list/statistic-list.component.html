@@ -29,21 +29,21 @@
   <ng-container matColumnDef="counts">
     <mat-header-cell *matHeaderCellDef> {{'statistic.answers' | translate}} </mat-header-cell>
     <mat-cell *matCellDef="let cp" (click)="goToStats(cp.content.id)">
-      {{cp.type === types.SLIDE ? '-' : cp.counts}}
+      {{[types.SLIDE, types.FLASHCARD].indexOf(cp.type) > -1 ? '-' : cp.counts}}
     </mat-cell>
   </ng-container>
 
   <ng-container matColumnDef="abstentions">
     <mat-header-cell *matHeaderCellDef> {{'statistic.abstentions' | translate}} </mat-header-cell>
     <mat-cell *matCellDef="let cp" (click)="goToStats(cp.content.id)">
-      {{cp.type === types.SLIDE ? '-' : cp.abstentions}}
+      {{[types.SLIDE, types.FLASHCARD].indexOf(cp.type) > -1 ? '-' : cp.abstentions}}
     </mat-cell>
   </ng-container>
 
   <ng-container matColumnDef="percentage">
     <mat-header-cell *matHeaderCellDef> {{'statistic.percentage' | translate }} </mat-header-cell>
     <mat-cell *matCellDef="let cp" (click)="goToStats(cp.content.id)">
-      {{cp.type === types.CHOICE ? (cp.percent.toFixed() +' %') : cp.type === types.SURVEY ? '-' : cp.type}}
+      {{cp.type === types.CHOICE ? (cp.percent.toFixed() +' %') : '-' }}
     </mat-cell>
   </ng-container>
 

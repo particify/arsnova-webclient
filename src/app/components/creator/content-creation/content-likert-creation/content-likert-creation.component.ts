@@ -10,7 +10,7 @@ import { ContentGroupService } from '../../../../services/http/content-group.ser
 import { ContentCreationComponent, DisplayAnswer } from '../content-creation/content-creation.component';
 
 @Component({
-  selector: 'app-content-likert-creator',
+  selector: 'app-content-likert-creation',
   templateUrl: './content-likert-creation.component.html',
   styleUrls: ['./content-likert-creation.component.scss']
 })
