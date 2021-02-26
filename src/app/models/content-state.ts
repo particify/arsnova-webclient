@@ -1,19 +1,13 @@
 export class ContentState {
   round: number;
-  additionalTextVisible: boolean;
-  responsesEnabled: boolean;
-  responsesVisible: boolean;
-  visible: boolean;
+  answeringEndTime: Date;
+  answersPublished: boolean;
 
   constructor(round: number,
-              additionalTextVisible: boolean,
-              responsesEnabled: boolean,
-              responsesVisible: boolean,
-              visible: boolean) {
+              answeringEndTime: Date,
+              answersPublished: boolean) {
     this.round = round;
-    this.additionalTextVisible = additionalTextVisible;
-    this.responsesEnabled = responsesEnabled;
-    this.responsesVisible = responsesVisible;
-    this.visible = visible;
+    this.answeringEndTime = answeringEndTime;
+    this.answersPublished = answersPublished;
   }
 }

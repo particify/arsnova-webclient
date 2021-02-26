@@ -4,7 +4,11 @@ export class ContentGroup {
   roomId: string;
   name: string;
   contentIds: string[];
-  autoSort: boolean;
+  published: boolean;
+  firstPublishedIndex: number;
+  lastPublishedIndex: number;
+  statisticsPublished: boolean;
+  correctOptionsPublished: boolean;
 
   constructor(
     id: string = '',
@@ -12,13 +16,21 @@ export class ContentGroup {
     roomId: string = '',
     name: string = '',
     contentIds: string[] = [],
-    autoSort: boolean = false
+    published: boolean = false,
+    firstPublishedIndex: number = -1,
+    lastPublishedIndex: number = -1,
+    statisticsPublished: boolean = false,
+    correctOptionsPublished: boolean = false,
   ) {
     this.id = id;
     this.revision = revision;
     this.roomId = roomId;
     this.name = name;
     this.contentIds = contentIds;
-    this.autoSort = autoSort;
+    this.published = published;
+    this.firstPublishedIndex = firstPublishedIndex;
+    this.lastPublishedIndex = lastPublishedIndex;
+    this.statisticsPublished = statisticsPublished;
+    this.correctOptionsPublished = correctOptionsPublished;
   }
 }
