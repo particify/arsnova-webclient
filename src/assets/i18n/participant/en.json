@@ -38,7 +38,8 @@
     "show-front": "Flip",
     "show-back": "Flip",
     "next-content": "Next",
-    "first-content": "To the beginning"
+    "first-content": "To the beginning",
+    "group-not-available": "This collection is not available"
   },
   "comment-list": {
     "a11y-search-list": "Search for comments",
