@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { VersionInfo } from '../../../../models/version-info';
 import { ApiConfigService } from '../../../../services/http/api-config.service';
 import { GlobalStorageService, STORAGE_KEYS } from '../../../../services/util/global-storage.service';
+import { EventService } from '../../../../services/util/event.service';
 
 interface DialogData {
   afterUpdate: boolean;
@@ -26,11 +27,13 @@ export class UpdateInfoComponent implements OnInit {
   afterUpdate = false;
   versions: VersionInfo[];
   updateReady = false;
+  inputFocus: boolean;
 
   constructor(public dialogRef: MatDialogRef<UpdateInfoComponent>,
               @Inject(MAT_DIALOG_DATA) private data: DialogData,
               private apiConfigService: ApiConfigService,
-              private globalStorageService: GlobalStorageService) {
+              private globalStorageService: GlobalStorageService,
+              private eventService: EventService) {
     this.afterUpdate = data.afterUpdate;
     this.versions = data.versions;
   }
@@ -49,9 +52,12 @@ export class UpdateInfoComponent implements OnInit {
       this.newsUrl = config.ui.links?.news?.url;
       this.isLoading = false;
     });
+    this.inputFocus = this.eventService.focusOnInput;
+    this.eventService.focusOnInput = true;
   }
 
   close() {
+    this.eventService.focusOnInput = this.inputFocus;
     this.dialogRef.close();
   }
 
