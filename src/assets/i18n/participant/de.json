@@ -1,7 +1,7 @@
 {
   "answer": {
     "a11y-message": "Du kannst jetzt die Antworten der Sammlung {{group}} beantworten. Drücke Enter, um Informationen über Tastenkobinationen zu erhalten oder rufe die Ansage später mit der Escape-Taste auf.",
-    "a11y-shortcuts": "Drücken Sie Taste 1, um zur aktuellen Frage zu gelangen, die Pfeiltasten rechts und links, um zwischen den Fragen zu wechseln, Taste 9 um das Benutzermenü zu öffnen, Taste 0, um zur Raumübersicht zu gelangen, oder die Escape-Taste um diese Ansage zu wiederholen.",
+    "a11y-shortcuts": "Um zur aktuellen Frage zu gelangen drücke die Taste 1, um zwischen den Fragen zu wechseln die Pfeiltasten rechts und links, um das Benutzermenü zu öffnen die Taste 9, um zur Raumübersicht zu gelangen die Taste 0 oder die Escape-Taste um diese Ansage zu wiederholen.",
     "a11y-current-multiple": "Frage {{index}}, {{question}}. Dies ist eine Multiple-Choice-Frage. Navigiere mit der Tab-Taste zu der Frage und den Antworten. Drücke danach die Leertaste, um Antworten zu markieren.",
     "a11y-current-single": "Frage {{index}}, {{question}}. Dies ist eine Single-Choice-Frage. Navigiere mit der Tab-Taste zu der Frage und verwenden Sie dann die Pfeil-nach-oben- und Pfeil-nach-unten-Tasten, um eine Antwort auszuwählen.",
     "a11y-current-text": "Frage {{index}}, {{question}}. Das ist eine Text-Frage. Navigiere mit der Tab-Taste zu der Frage und drücke dann ein weiteres mal Tab, um zur Eingabe der Antwort zu gelangen.",
@@ -91,7 +91,7 @@
     "sort-list-time": "Neueste Kommentare zuerst"
   },
   "comment-page": {
-    "a11y-shortcuts": "Drücke die Taste 1 um einen Kommentar zu erstellen. Sobald mehrere Kommentare vorhanden sind kannst du Kommentare suchen und filtern. Drücke die Taste 2 um die Kommentare zu durchsuchen, die Taste 3 um Kommentare zu sortieren, die Taste 4 um Kommentare zu filtern, die Taste 5 um den Zeitraum auszuwählen, die Taste 6 um den Kommentarstream zu pausieren oder fortzusetzen, die Taste 7 um zu dem ersten Kommentar zu gelangen, die Taste 9 um auf das Nutzer-Menü zu gelangen, die Taste 0 um zurück zur Raumübersicht zu gelangen oder die Escape-Taste um diese Ansage zu wiederholen.",
+    "a11y-shortcuts": "Um einen Kommentar zu erstellen drücke die Taste 1. Sobald mehrere Kommentare vorhanden sind kannst du Kommentare suchen und filtern. Um die Kommentare zu durchsuchen drücke die Taste 2, um Kommentare zu sortieren die Taste 3, um Kommentare zu filtern die Taste 4, um den Zeitraum auszuwählen die Taste 5, um den Kommentarstream zu pausieren oder fortzusetzen die Taste 6, um zu dem ersten Kommentar zu gelangen die Taste 7, um auf das Nutzer-Menü zu gelangen die Taste 9, um zurück zur Raumübersicht zu gelangen die Taste 0 oder die Escape-Taste um diese Ansage zu wiederholen.",
     "a11y-message": "Du befindest dich jetzt auf der Kommentar-Seite. Um Informationen zu Tastenkombinationen zu erhalten, drücke jetzt die Enter-Taste oder rufe die Ansage zu einem späteren Zeitpunkt mit der Escape-Taste auf.",
     "a11y-comment-vote-down": "Diesen Kommentar abwerten",
     "a11y-comment-vote-up": "Diesen Kommentar aufwerten",
@@ -117,7 +117,7 @@
   },
   "survey": {
     "a11y-message": "Du befindest dich jetzt in der Live-Umfrage. Drücke die Enter-Taste, um Informationen zu Tastenkombinationen zu erhalten oder rufe die Ansage später mit der Escape-Taste auf.",
-    "a11y-shortcuts": "Drücke die Taste 5, um den Status der aktuellen Umfrage zu erfahren, die Taste 1, um die erste Antwort auszuwählen, die Taste 2, um die zweite Antwort auszuwählen, die Taste 3, um die dritte Antwort auszuwählen, die Taste 4, um die vierte Antwort auszuwählen, die Taste 9, um auf das Nutzer-Menü zu gelangen, die Taste 0, um zur Raumübersicht zurückzukehren oder die Escape-Taste, um diese Ansage zu widerholen.",
+    "a11y-shortcuts": "Um den Status der aktuellen Umfrage zu erfahren drpcke die Taste 5, um die erste Antwort auszuwählen die Taste 1, um die zweite Antwort auszuwählen die Taste 2, um die dritte Antwort auszuwählen die Taste 3, um die vierte Antwort auszuwählen die Taste 4, um auf das Nutzer-Menü zu gelangen die Taste 9, um zur Raumübersicht zurückzukehren die Taste 0 oder die Escape-Taste um diese Ansage zu wiederholen.",
     "a11y-status": "Aktuell ist die Umfrage {{status}}. {{answers}} Teilnehmende haben bisher geantwortet. {{state0}} Prozent haben Antwort 1 gewählt, {{state1}} Prozent haben Antwort 1 gewählt, {{state2}} Prozent haben Antwort 1 gewählt, {{state3}} Prozent haben Antwort 1 gewählt.",
     "a11y-stopped": "getoppt",
     "a11y-started": "gestartet",
@@ -142,7 +142,7 @@
   },
   "room-page": {
     "a11y-room-message": "Du befindest dich jetzt in dem Raum. Um Informationen zu Tastenkombinationen zu erhalten, drücke jetzt die Enter-Taste oder rufe die Ansage zu einem späteren Zeitpunkt mit der Escape-Taste auf.",
-    "a11y-shortcuts": "Drücke die Taste 1, um auf die Kommentar-Übersicht zu gelangen, die Taste 2, um zur Live-Umfrage zu gelangen, die Taste 3, um durch die Fragensammlungen zu navigieren, die Taste 9, um auf das Nutzer-Menü zu gelangen, die Taste 0, um auf den Zurück-Button zu gelangen, oder die Taste 9, um diese Ansage zu wiederholen.",
+    "a11y-shortcuts": "Um auf die Kommentar-Übersicht zu gelangen drücke die Taste 1, um zur Live-Umfrage zu gelangen die Taste 2, um durch die Fragensammlungen zu navigieren die Taste 3, um auf das Nutzer-Menü zu gelangen die Taste 9, um auf den Zurück-Button zu gelangen die Taste 0 oder die Escape-Taste um diese Ansage zu wiederholen.",
     "a11y-comments": "Öffnet die Kommentar-Seite und bietet dir die Möglichkeit, Kommentare zu erstellen.",
     "a11y-statistics": "Öffnet die Statistiken zu den Frage-Sammlungen.",
     "a11y-live-survey": "Öffnet die Live-Umfrage.",
@@ -160,7 +160,7 @@
   "statistic": {
     "a11y-message-overview": "Du befindest dich jetzt auf der Statistikübersicht. Drücke jetzt die Enter-Taste, um Informationen über Tastenkombinationen zu erhalten oder rufe die Ansage zu einem späteren Zeitpunkt mit der Escape-Taste auf.",
     "a11y-message-evaluation-answers": "Du befindest dich jetzt bei den Ergebnissen. {{answers}} Teilnehmende haben die Frage beantwortet. Navigiere mit der Tab-Taste durch die Antworten oder drücke die Leertaste um zu deiner Antwort zurückzukehren.",
-    "a11y-shortcuts-overview": "Drücke die Tab-Taste, um zur Auswahl der Fragesammlung zu gelangen. Navigiere anschließend durch die Ergebnisse der Sammlung. Drücke die Taste 9, um zum Nutzer-Menü zu gelangen, die Taste 0, um zurück zur Raumübersicht zu gelangen oder die Escape-Taste, um diese Ansage zu wiederholen.",
+    "a11y-shortcuts-overview": "Um zur Auswahl der Fragesammlung zu gelangen drücke die Tab-Taste. Navigiere anschließend durch die Ergebnisse der Sammlung. Um zum Nutzer-Menü zu gelangen drücke die Taste 9, um zurück zur Raumübersicht zu gelangen die Taste 0 oder die Escape-Taste um diese Ansage zu wiederholen.",
     "a11y-group-progress": "{{percent}} Prozent der Fragen in der Sammlung {{group}} wurden richtig beantwortet.",
     "a11y-content-result": "Die Frage {{content}} wurde bisher von {{count}} Personen beantwortet, {{abstentions}} Personen haben sich enthalten.",
     "a11y-choice-result": "Die Frage wurde von {{percent}} Prozent richtig beantwortet.",
