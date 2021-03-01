@@ -2,7 +2,7 @@
   <div *ngIf="[ContentType.SLIDE, ContentType.FLASHCARD].indexOf(format) === -1" fxLayout="row" fxLayoutAlign="space-between">
     <div tabindex="0" id="message-button" class="visually-hidden">
       {{ (answerCount === 0 ? 'statistic.a11y-message-evaluation' : 'statistic.a11y-message-evaluation-answers')
-      | translate: {index: index+1, content: content.body, answers: (answerCount)} }}
+      | translate: {index: index+1, content: content.body, answers: answerCount} }}
     </div>
     <app-answer-count tabindex="-1" *ngIf="!isLoading" [count]="answerCount"></app-answer-count>
     <div fxLayout="row" fxLayoutAlign="end" [ngClass]="{'fix-width': !survey}">
@@ -26,7 +26,7 @@
 </div>
 <lib-extension-point extensionId="attachment-list" [extensionData]="attachmentData"></lib-extension-point>
 <app-statistic-choice *ngIf="[ContentType.CHOICE, ContentType.SCALE, ContentType.BINARY].indexOf(format) !== -1" [content]="content"
-                      [directShow]="directShow" (updateCounterEvent)="updateCounter($event)"></app-statistic-choice>
+                      [directShow]="directShow" (updateCounterEvent)="updateCounter($event)" [isSurvey]="survey"></app-statistic-choice>
 <app-statistic-text *ngIf="format === ContentType.TEXT" [content]="content"
                     [directShow]="directShow" (updateCounterEvent)="updateCounter($event)"></app-statistic-text>
 <app-statistic-sort *ngIf="format === ContentType.SORT" [content]="content"

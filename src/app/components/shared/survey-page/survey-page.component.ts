@@ -127,10 +127,15 @@ export class SurveyPageComponent implements OnInit, OnDestroy, AfterContentInit 
   }
 
   announceStatus() {
-    this.translateService.get(this.isClosed ? 'survey.a11y-stopped' : 'survey.a11y-started').subscribe(status => {
-      this.announceService.announce('survey.a11y-status', { status: status, answers: this.answerCount,
-        state0: this.survey[0].count, state1: this.survey[1].count, state2: this.survey[2].count, state3: this.survey[3].count });
-    });
+    this.translateService.get(this.survey.map(s => s.label)).subscribe(labels => {
+      const answerLabels: string[] = labels;
+      this.translateService.get(this.isClosed ? 'survey.a11y-stopped' : 'survey.a11y-started').subscribe(status => {
+        this.announceService.announce('survey.a11y-status', { status: status, answers: this.answerCount,
+          state0: this.survey[0].count, state1: this.survey[1].count, state2: this.survey[2].count, state3: this.survey[3].count,
+          answer0: answerLabels[this.survey[0].label], answer1: answerLabels[this.survey[1].label],
+          answer2: answerLabels[this.survey[2].label], answer3: answerLabels[this.survey[3].label]});
+      });
+    })
   }
 
   announceType() {

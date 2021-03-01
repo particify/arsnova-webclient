@@ -6,7 +6,7 @@ import { AdvancedSnackBarTypes, NotificationService } from '../../../services/ut
 import { TranslateService } from '@ngx-translate/core';
 import { EventService } from '../../../services/util/event.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { first } from 'rxjs/operators';
+
 
 export class RegisterErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
@@ -62,6 +62,7 @@ export class RegisterComponent implements OnInit {
       this.accountServiceTitle = data.apiConfig.ui.registration?.service || 'ARSnova';
       this.linkOfToS = data.apiConfig.ui.links.tos.url;
     });
+    document.getElementById('email-input').focus();
   }
 
   register(username: string, password: string): void {

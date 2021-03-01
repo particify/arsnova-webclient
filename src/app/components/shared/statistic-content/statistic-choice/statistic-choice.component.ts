@@ -29,6 +29,7 @@ export class StatisticChoiceComponent extends StatisticContentBaseComponent impl
 
   @Input() content: ContentChoice;
   @Input() directShow: boolean;
+  @Input() isSurvey: boolean;
 
   destroyed$ = new Subject();
   answerList: AnswerList[] = [];

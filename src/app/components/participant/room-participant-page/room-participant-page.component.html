@@ -1,7 +1,7 @@
 <div fxLayout="column" fxLayoutAlign="center" fxLayoutGap="20px" fxFill>
   <div fxLayout="row" fxLayoutAlign="center">
     <button id="live-announcer-button" tabIndex="-1" (click)="announce()"
-            class="visually-hidden">{{ 'room-page.a11y-room-message' | translate }}</button>
+            class="visually-hidden">{{ 'room-page.a11y-room-message' | translate: {name: room.name} }}</button>
     <app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
     <mat-card *ngIf=" !isLoading && room">
       <mat-card-content>

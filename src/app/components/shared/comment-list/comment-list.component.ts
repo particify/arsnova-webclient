@@ -415,9 +415,9 @@ export class CommentListComponent implements OnInit, OnDestroy {
   pauseCommentStream() {
     this.freeze = true;
     this.commentStream.unsubscribe();
-    this.translateService.get('comment-list.comment-stream-stopped').subscribe(msg => {
-      this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
-    });
+    const msg = this.translateService.instant('comment-list.comment-stream-stopped');
+    this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
+    document.getElementById('start-button').focus();
   }
 
   playCommentStream() {
@@ -428,9 +428,9 @@ export class CommentListComponent implements OnInit, OnDestroy {
         this.getComments(true);
       });
     this.subscribeCommentStream();
-    this.translateService.get('comment-list.comment-stream-started').subscribe(msg => {
-      this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
-    });
+    const msg = this.translateService.instant('comment-list.comment-stream-started');
+    this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
+    document.getElementById('pause-button').focus();
   }
 
   subscribeCommentStream() {

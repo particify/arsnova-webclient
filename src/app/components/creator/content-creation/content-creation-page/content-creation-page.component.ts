@@ -57,6 +57,7 @@ export class ContentCreationPageComponent implements OnInit, AfterContentInit {
   abstentionsAllowed = true;
   isEditMode = false;
   isLoading = true;
+  created = false;
 
   constructor(
     private translateService: TranslateService,
@@ -136,10 +137,15 @@ export class ContentCreationPageComponent implements OnInit, AfterContentInit {
   reset() {
     this.question = '';
     this.content = null;
+    this.created = true;
+    setTimeout(() => {
+      this.created = false;
+    }, 300);
   }
 
   flipBack($event) {
     this.flipped = false;
+    this.announceService.announce('content.a11y-back-in-creation');
     if ($event) {
       this.emitCreateEvent(true);
     }

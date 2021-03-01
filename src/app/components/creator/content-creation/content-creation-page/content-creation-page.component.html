@@ -79,7 +79,7 @@
                                           [editContent]="content">
               </app-content-choice-creation>
               <app-content-likert-creation (contentReset)="reset()" (contentSent)="saveContent($event)" (refId)="linkAttachments($event)"
-                                          *ngIf="selectedFormat.name === 'scale'"
+                                          *ngIf="selectedFormat.name === 'likert'"
                                           [contentBody]="questionInput.value"
                                           [contentGroup]="group.value"
                                           [abstentionsAllowed]="abstentionsAllowed"
@@ -131,7 +131,7 @@
                         class="button-abort button-md" mat-raised-button>
                   {{ 'content.preview' | translate }}</button>
                 <button (click)="emitCreateEvent(true)"
-                        attr.aria-label="{{ 'content.a11y-submit' | translate: { body: question, group: group.value } }}"
+                        attr.aria-label="{{ 'content.a11y-submit' | translate: { group: group.value } }}"
                         class="button-primary button-md" mat-raised-button>
                   {{ (isEditMode ? 'content.save' : 'content.create') | translate }}</button>
               </div>
@@ -151,7 +151,7 @@
 
 <div class="visually-hidden">
   <div id="subject">{{ 'content.a11y-enter-subject' | translate }}</div>
-  <div id="body">{{ 'content.a11y-enter-body' | translate }}</div>
+  <div id="body">{{ (created ? 'content.a11y-content-created' : 'content.a11y-enter-body') | translate }}</div>
   <div id="content-group">{{ 'content.a11y-enter-content-group' | translate }}</div>
   <div id="format-choice">{{ 'content.a11y-format-choice' | translate }}</div>
   <div id="format-scale">{{ 'content.a11y-format-likert' | translate }}</div>

@@ -3,8 +3,8 @@
 </h3>
 <mat-card class="mat-elevation-z2">
   <app-loading-indicator [size]="80" *ngIf="isLoading"></app-loading-indicator>
-  <app-rendered-text [rawText]="content.body" [dynamic]="true" [markdownFeatureset]="markdownFeatureset" (rendered)="renderingFinished()">
-  </app-rendered-text>
+  <app-rendered-text tabindex="0" [rawText]="content.body" [dynamic]="true" [markdownFeatureset]="markdownFeatureset"
+                     (rendered)="renderingFinished()"></app-rendered-text>
   <lib-extension-point extensionId="attachment-list" [extensionData]="attachmentData"></lib-extension-point>
   <mat-list *ngIf="content.format === 'CHOICE' || content.format === 'SCALE' || content.format === 'BINARY'">
     <mat-list-item fxLayout="column" fxLayoutAlign="center" *ngFor="let answer of answerOptions">

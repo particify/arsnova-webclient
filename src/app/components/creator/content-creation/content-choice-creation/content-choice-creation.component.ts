@@ -10,6 +10,7 @@ import { RoomService } from '../../../../services/http/room.service';
 import { GlobalStorageService } from '../../../../services/util/global-storage.service';
 import { ContentGroupService } from '../../../../services/http/content-group.service';
 import { ContentCreationComponent, DisplayAnswer } from '../content-creation/content-creation.component';
+import { AnnounceService  } from '../../../../services/util/announce.service';
 
 @Component({
   selector: 'app-content-choice-creation',
@@ -33,7 +34,8 @@ export class ContentChoiceCreationComponent extends ContentCreationComponent imp
     protected roomService: RoomService,
     protected globalStorageService: GlobalStorageService,
     protected contentGroupService: ContentGroupService,
-    public eventService: EventService
+    public eventService: EventService,
+    private announceService: AnnounceService
   ) {
     super(contentService, notificationService, translationService, roomService, globalStorageService, contentGroupService);
   }
@@ -108,19 +110,18 @@ export class ContentChoiceCreationComponent extends ContentCreationComponent imp
       this.newAnswerOptionLabel = '';
       this.fillCorrectAnswers();
       document.getElementById('answer-input').focus();
+      this.announceService.announce('content.a11y-answer-added');
     } else {
-      this.translationService.get('content.max-answers').subscribe(msg => {
-        this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.FAILED);
-      });
+      const msg = this.translationService.instant('content.max-answers');
+      this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.FAILED);
     }
   }
 
   checkIfAnswerExists(label: string): boolean {
     for (let i = 0; i < (this.content as ContentChoice).options.length; i++) {
       if ((this.content as ContentChoice).options[i].label === label) {
-        this.translationService.get('content.same-answer').subscribe(message => {
-          this.notificationService.showAdvanced(message, AdvancedSnackBarTypes.WARNING);
-        });
+        const msg = this.translationService.instant('content.same-answer');
+        this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
         return true;
       }
     }
@@ -130,16 +131,22 @@ export class ContentChoiceCreationComponent extends ContentCreationComponent imp
     answer.answerOption.label = this.updatedAnswer;
     this.saveChanges(index, answer);
     this.leaveEditMode();
+    this.announceService.announce('content.a11y-updated');
   }
 
   goInEditMode(index: number, answer: DisplayAnswer): void {
     this.updatedAnswer = answer.answerOption.label;
     this.isAnswerEdit = index;
-    document.getElementsByName('answerEdit').item(index).focus();
+    setTimeout(() => {
+      document.getElementById('answerEdit-' + index).focus();
+    }, 100);
   }
 
-  leaveEditMode(): void {
+  leaveEditMode(aborted?: boolean): void {
     this.isAnswerEdit = -1;
+    if (aborted) {
+      this.announceService.announce('content.a11y-aborted');
+    }
   }
 
   saveChanges(index: number, answer: DisplayAnswer) {
@@ -180,12 +187,13 @@ export class ContentChoiceCreationComponent extends ContentCreationComponent imp
       }
     }
     this.fillCorrectAnswers();
+    this.announceService.announce('content.a11y-answer-deleted');
     this.translationService.get('content.answer-deleted').subscribe(message => {
       this.notificationService.showAdvanced(message, AdvancedSnackBarTypes.WARNING);
     });
   }
 
-  switchValue(label: string) {
+  switchValue(label: string, i: number) {
     const index = this.findAnswerIndexByLabel(label);
     const answer = new DisplayAnswer(
       new AnswerOption(
@@ -193,6 +201,11 @@ export class ContentChoiceCreationComponent extends ContentCreationComponent imp
         this.displayAnswers[index].answerOption.points),
       !this.displayAnswers[index].correct);
     this.saveChanges(index, answer);
+    const state = answer.correct ? 'correct' : 'wrong';
+    this.announceService.announce('content.a11y-answer-marked-' + state);
+    setTimeout(() => {
+      document.getElementsByName(label).item(0).focus();
+    }, 1000);
   }
 
   removeCorrectAnswers() {

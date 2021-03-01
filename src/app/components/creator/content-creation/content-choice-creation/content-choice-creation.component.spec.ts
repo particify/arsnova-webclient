@@ -13,6 +13,7 @@ import { DialogService } from '../../../../services/util/dialog.service';
 import { GlobalStorageService } from '../../../../services/util/global-storage.service';
 import { ContentGroupService } from '../../../../services/http/content-group.service';
 import { MatButtonModule } from '@angular/material/button';
+import { AnnounceService } from '@arsnova/app/services/util/announce.service';
 
 const TRANSLATION_DE = require('../../../../../assets/i18n/home/de.json');
 const TRANSLATION_EN = require('../../../../../assets/i18n/home/en.json');
@@ -79,6 +80,11 @@ class MockGlobalStorageService {
 
   setItem(key: string, value: any) {
   }
+}
+
+@Injectable()
+class MockAnnouncer {
+
 }
 
 /* eslint-disable @angular-eslint/component-selector */
@@ -186,6 +192,10 @@ describe('ContentChoiceCreationComponent', () => {
           provide: ContentGroupService,
           useClass: MockContentGroupService
         },
+        {
+          provide: AnnounceService,
+          useClass: MockAnnouncer
+        }
       ],
       imports: [
         TranslateModule.forRoot({
