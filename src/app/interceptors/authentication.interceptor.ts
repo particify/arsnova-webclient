@@ -27,7 +27,10 @@ export class AuthenticationInterceptor implements HttpInterceptor {
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     const tokenOverride = req.headers.has(AUTH_HEADER_KEY);
-    if ((this.token || tokenOverride) && !req.withCredentials && !API_LOGIN_URI_PATTERN.test(req.url)) {
+    if (new URL(req.url, location.origin).origin === location.origin
+        && (this.token || tokenOverride)
+        && !req.withCredentials
+        && !API_LOGIN_URI_PATTERN.test(req.url)) {
       const authReq = tokenOverride ? req : req.clone({
         headers: req.headers.set(AUTH_HEADER_KEY, `${AUTH_SCHEME} ${this.token}`)
       });
