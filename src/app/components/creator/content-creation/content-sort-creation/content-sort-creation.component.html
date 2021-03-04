@@ -12,16 +12,17 @@
                     <input tabindex="-1" name="answerEdit" matInput [(ngModel)]="updatedAnswer">
                 </mat-form-field>
                 <span class="fill-remaining-space"></span>
-                <button tabindex="-1" *ngIf="isAnswerEdit !== i" mat-icon-button (click)="goInEditMode(i, answer.answerOption.label)"
+                <button *ngIf="isAnswerEdit !== i" mat-icon-button (click)="goInEditMode(i, answer.answerOption.label)"
+                        attr.aria-label="{{ 'content.a11y-edit-answer' | translate: {answer: answer.answerOption.label} }}"
                         matTooltip="{{ 'content.edit-answer' | translate }}">
                     <mat-icon class="editIcon">edit</mat-icon>
                 </button>
-                <button tabindex="-1" *ngIf="isAnswerEdit === i" mat-icon-button (click)="updateAnswer(i)"
-                        matTooltip="{{ 'content.save-content-group' | translate}}">
+                <button *ngIf="isAnswerEdit === i" mat-icon-button (click)="updateAnswer(i)"
+                        matTooltip="{{ 'content.save-content-group' | translate}}" aria-labelledby="save">
                     <mat-icon class="confirmIcon">done</mat-icon>
                 </button>
-                <button tabindex="-1" *ngIf="isAnswerEdit === i" mat-icon-button (click)="leaveEditMode()"
-                        matTooltip="{{ 'content.abort' | translate}}">
+                <button *ngIf="isAnswerEdit === i" mat-icon-button (click)="leaveEditMode(true)"
+                        matTooltip="{{ 'content.abort' | translate}}" aria-labelledby="discard">
                     <mat-icon class="confirmIcon">clear</mat-icon>
                 </button>
                 <button mat-icon-button *ngIf="isAnswerEdit !== i && !isEditMode" class="delete" (click)="deleteAnswer(i)"
@@ -44,4 +45,9 @@
             </mat-form-field>
         </form>
     </div>
+</div>
+
+<div class="visually-hidden">
+  <div id="save">{{ 'content.a11y-save-changes' | translate }}</div>
+  <div id="discard">{{ 'content.a11y-discard-changes' | translate }}</div>
 </div>

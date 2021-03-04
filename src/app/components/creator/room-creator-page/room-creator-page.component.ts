@@ -29,6 +29,7 @@ export class RoomCreatorPageComponent extends RoomPageComponent implements OnIni
 
   viewModuleCount = 1;
   looseContent: Content[] = [];
+  userCount: number;
 
   constructor(
     protected roomService: RoomService,
@@ -80,7 +81,11 @@ export class RoomCreatorPageComponent extends RoomPageComponent implements OnIni
     } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit6) === true && focusOnInput === false) {
       document.getElementById('statistics-button').focus();
     } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit7) === true && focusOnInput === false) {
-      document.getElementById('share-button').focus();
+      document.getElementById('more-button').focus();
+    } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit8) === true && focusOnInput === false) {
+      const adKey = this.userCount === 1 ? '-only-one' : '';
+      const msg = this.translateService.instant('room-page.a11y-user-count' + adKey, {count: this.userCount})
+      this.announceService.announce(msg);
     } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Escape) === true && focusOnInput === false) {
       this.announce();
     }
@@ -129,7 +134,8 @@ export class RoomCreatorPageComponent extends RoomPageComponent implements OnIni
     this.globalStorageService.setItem(STORAGE_KEYS.CONTENT_GROUPS, this.groupNames);
     this.route.data.subscribe(data => {
       this.roomService.getRoomSummaries([data.room.id]).subscribe(summary => {
-        this.infoBarItems.push(new InfoBarItem('user-counter', 'people', summary[0].stats.roomUserCount));
+        this.userCount = summary[0].stats.roomUserCount;
+        this.infoBarItems.push(new InfoBarItem('user-counter', 'people', this.userCount));
       });
     });
   }

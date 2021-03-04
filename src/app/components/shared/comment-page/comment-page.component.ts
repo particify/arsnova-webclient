@@ -44,13 +44,19 @@ export class CommentPageComponent implements OnInit, OnDestroy, AfterContentInit
     } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit4) === true && focusOnInput === false) {
       document.getElementById('filter-button').focus();
     } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit5) === true && focusOnInput === false) {
-      if ( document.getElementById('start-button')) {
+      document.getElementById('select-time-button').focus();
+    } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit6) === true && focusOnInput === false) {
+      if (document.getElementById('start-button')) {
         document.getElementById('start-button').focus();
       } else {
         document.getElementById('pause-button').focus();
       }
-    } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit6) === true && focusOnInput === false) {
-      document.getElementById('comment-describer').focus();
+    } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit7) === true && focusOnInput === false) {
+      if (document.getElementById('comment-entry')) {
+        document.getElementById('comment-entry').focus();
+      } else {
+        document.getElementById('no-comments').focus();
+      }
     } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Escape) === true && focusOnInput === false) {
       this.announce();
     } else if (document.getElementById('search-close-button') && KeyboardUtils.isKeyEvent(event, KeyboardKey.Escape) === true &&

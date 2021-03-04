@@ -11,28 +11,28 @@
       <mat-list-item fxLayout="column" fxLayoutAlign="center" class="bottom-border"
                      *ngFor="let answer of displayAnswers; let i = index">
         <div fxLayout="row" fxLayoutAlign="center center" class="inner">
-          <mat-checkbox *ngIf="!noCorrectAnswers" (ngModelChange)="switchValue(answer.answerOption.label)" [(ngModel)]="answer.correct"
+          <mat-checkbox id="answer-{{i}}" *ngIf="!noCorrectAnswers" (ngModelChange)="switchValue(answer.answerOption.label, i)" [(ngModel)]="answer.correct"
                         [checked]="answer.correct" name="{{ answer.answerOption.label }}"
                         aria-label="{{ 'content.a11y-answer-checkbox' | translate:
                         {answer: answer.answerOption.label} }}">
             <span class="answer-label" *ngIf="isAnswerEdit !== i">{{ answer.answerOption.label }}</span>
           </mat-checkbox>
           <p class="answer-label" *ngIf="isAnswerEdit !== i && noCorrectAnswers">{{ answer.answerOption.label }}</p>
-          <mat-form-field class="editInput" [ngClass]="{'activeInput': isAnswerEdit === i,
-        'inactiveInput': isAnswerEdit !== i}">
-            <input tabindex="-1" name="answerEdit" matInput [(ngModel)]="updatedAnswer">
+          <mat-form-field *ngIf="isAnswerEdit === i" class="editInput activeInput">
+            <input id="answerEdit-{{i}}" name="answerEdit" matInput [(ngModel)]="updatedAnswer">
           </mat-form-field>
           <span class="fill-remaining-space"></span>
-          <button tabindex="-1" *ngIf="isAnswerEdit !== i" mat-icon-button (click)="goInEditMode(i, answer)"
+          <button *ngIf="isAnswerEdit !== i" mat-icon-button (click)="goInEditMode(i, answer)"
+                  attr.aria-label="{{ 'content.a11y-edit-answer' | translate: {answer: answer.answerOption.label} }}"
                   matTooltip="{{ 'content.edit-answer' | translate }}">
             <mat-icon class="editIcon">edit</mat-icon>
           </button>
-          <button tabindex="-1" *ngIf="isAnswerEdit === i" mat-icon-button (click)="updateAnswer(i, answer)"
-                  matTooltip="{{ 'content.save-content-group' | translate}}">
+          <button *ngIf="isAnswerEdit === i" mat-icon-button (click)="updateAnswer(i, answer)"
+                  matTooltip="{{ 'content.save-content-group' | translate}}" aria-labelledby="save">
             <mat-icon class="confirmIcon">done</mat-icon>
           </button>
-          <button tabindex="-1" *ngIf="isAnswerEdit === i" mat-icon-button (click)="leaveEditMode()"
-                  matTooltip="{{ 'content.abort' | translate}}">
+          <button *ngIf="isAnswerEdit === i" mat-icon-button (click)="leaveEditMode(true)"
+                  matTooltip="{{ 'content.abort' | translate}}" aria-labelledby="discard">
             <mat-icon class="confirmIcon">clear</mat-icon>
           </button>
           <button mat-icon-button *ngIf="isAnswerEdit !== i && !isEditMode" class="delete"
@@ -52,7 +52,7 @@
         <mat-label>{{ 'content.add-answer' | translate }}</mat-label>
         <input (focus)="eventService.makeFocusOnInputTrue()" (blur)="eventService.makeFocusOnInputFalse()"
                matInput [(ngModel)]="newAnswerOptionLabel" name="answer" id="answer-input" aria-labelledby="answer">
-        <button class="add-button" mat-icon-button matSuffix (click)="addAnswer($event)">
+        <button tabindex="-1" class="add-button" mat-icon-button matSuffix (click)="addAnswer($event)">
           <mat-icon class="add-icon">add_circle</mat-icon>
         </button>
         <mat-placeholder>{{ 'content.answer' | translate }}</mat-placeholder>
@@ -66,7 +66,8 @@
   <div id="single-choice">{{ 'content.a11y-single-choice' | translate }}</div>
   <div id="multiple-choice">{{ 'content.a11y-multiple-choice' | translate }}</div>
   <div id="answer">{{ 'content.a11y-enter-answer' | translate }}</div>
-  <div id="add-answer">{{ 'content.a11y-add-answer' | translate }}</div>
   <div id="delete-answer">{{ 'content.a11y-delete-answer' | translate }}</div>
   <div id="reset">{{ 'content.a11y-reset' | translate }}</div>
+  <div id="save">{{ 'content.a11y-save-changes' | translate }}</div>
+  <div id="discard">{{ 'content.a11y-discard-changes' | translate }}</div>
 </div>

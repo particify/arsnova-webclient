@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, HostListener, Input, OnInit, ViewChild } from '@angular/core';
 import { ContentText } from '@arsnova/app/models/content-text';
 import { StatisticChoiceComponent } from '@arsnova/app/components/shared/statistic-content/statistic-choice/statistic-choice.component';
 import { StatisticTextComponent } from '@arsnova/app/components/shared/statistic-content/statistic-text/statistic-text.component';
@@ -6,6 +6,9 @@ import { ContentType } from '@arsnova/app/models/content-type.enum';
 import { ContentChoice } from '@arsnova/app/models/content-choice';
 import { StatisticSortComponent } from '@arsnova/app/components/shared/statistic-content/statistic-sort/statistic-sort.component';
 import { MarkdownFeatureset } from '@arsnova/app/services/http/formatting.service';
+import { KeyboardKey } from '@arsnova/app/utils/keyboard/keys';
+import { KeyboardUtils } from '@arsnova/app/utils/keyboard';
+import { AnnounceService } from '@arsnova/app/services/util/announce.service';
 
 @Component({
   selector: 'app-statistic-content',
@@ -20,6 +23,8 @@ export class StatisticContentComponent implements OnInit {
 
   @Input() content: ContentText;
   @Input() directShow: boolean;
+  @Input() active: boolean;
+  @Input() index: number;
 
   attachmentData: any;
   answersVisible = false;
@@ -30,7 +35,24 @@ export class StatisticContentComponent implements OnInit {
   ContentType: typeof ContentType = ContentType;
   flashcardMarkdownFeatures = MarkdownFeatureset.EXTENDED;
 
-  constructor() { }
+  constructor(private announceService: AnnounceService) { }
+
+  @HostListener('window:keyup', ['$event'])
+  keyEvent(event: KeyboardEvent) {
+    if (this.active) {
+      if (KeyboardUtils.isKeyEvent(event, KeyboardKey.SPACE) === true) {
+        this.toggleAnswers();
+        const isText = this.content.format === ContentType.TEXT;
+        if (!isText || this.answerCount > 0) {
+          const action = this.answersVisible ? 'expanded' : 'collapsed';
+          const msg = 'statistic.a11y-' + action + '-answers' + (isText ? '-text' : '');
+          this.announceService.announce(msg);
+        } else {
+          this.announceService.announce('statistic.a11y-no-answers-yet');
+        }
+      }
+    }
+  }
 
   ngOnInit(): void {
     this.attachmentData = {

@@ -1,13 +1,13 @@
 <div fxLayout="column" fxLayoutAlign="center center" fxFill>
   <mat-card class="login-card" fxLayout="column" fxLayoutAlign="center center">
-    <p>
+    <p tabindex="0">
       {{ 'register.info' | translate : { accountService: accountServiceTitle } }}
     </p>
     <form class="full-width" (ngSubmit)="register(userName.value, userPassword1.value)" fxLayout="column"
           fxLayoutAlign="space-around" fxLayoutGap="10px">
       <mat-form-field class="input-block" appearance="outline">
         <mat-label>{{ 'login.email' | translate }}</mat-label>
-        <input (focus)="eventService.makeFocusOnInputTrue()" (blur)="eventService.makeFocusOnInputFalse()"
+        <input id="email-input" (focus)="eventService.makeFocusOnInputTrue()" (blur)="eventService.makeFocusOnInputFalse()"
                matInput type="email" #userName [formControl]="usernameFormControl"
                placeholder="{{ 'login.enter-email' | translate }}"
                [errorStateMatcher]="matcher" aria-labelledby="register-email-description"/>
@@ -52,7 +52,7 @@
       </mat-checkbox>
       <div fxLayout="column" fxLayoutAlign="center center">
         <button class="button-primary login-button" mat-raised-button type="submit"
-                aria-labelledby="login-description">
+                aria-labelledby="register-description">
           {{ 'register.register' | translate }}
         </button>
       </div>
@@ -66,6 +66,7 @@
 </div>
 
 <div class="visually-hidden">
+  <div id="register-description">{{ 'register.a11y-register' | translate }}</div>
   <div id="register-email-description">{{ 'register.email-description' | translate }}</div>
   <div id="register-password-description">{{ 'register.password-description' | translate }}</div>
   <div id="register-password-description-repeat">{{ 'register.password-description-repeat' | translate }}</div>

@@ -178,7 +178,7 @@
     </app-comment>
   </div>
 
-  <div *ngIf="!isLoading" fxLayout="row" fxLayoutAlign="center center">
+  <div *ngIf="!isLoading" fxLayout="row" fxLayoutAlign="center center" tabindex="0" id="no-comments" aria-labelledby="no-comments-label">
     <p *ngIf="comments.length < 1">{{ 'comment-page.no-comments' | translate }}</p>
     <p *ngIf="((hideCommentsList && filteredComments.length < 1) ||
             (!hideCommentsList && commentsFilteredByTime.length < 1)) && comments.length >= 1">
@@ -210,5 +210,6 @@
     <div id="select-time-1d">{{ 'comment-list.a11y-select-time-1d' | translate }}</div>
     <div id="select-time-1w">{{ 'comment-list.a11y-select-time-1w' | translate }}</div>
     <div id="select-time-all">{{ 'comment-list.a11y-select-time-all' | translate }}</div>
+    <div id="no-comments-label">{{ 'comment-page.a11y-no-comments' | translate }}</div>
   </div>
 </div>

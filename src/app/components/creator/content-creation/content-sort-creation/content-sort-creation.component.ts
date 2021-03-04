@@ -13,6 +13,7 @@ import {
   ContentCreationComponent,
   DisplayAnswer
 } from '../content-creation/content-creation.component';
+import { AnnounceService } from '../../../../services/util/announce.service';
 
 @Component({
   selector: 'app-content-sort-creation',
@@ -31,7 +32,8 @@ export class ContentSortCreationComponent extends ContentCreationComponent imple
     protected translationService: TranslateService,
     protected roomService: RoomService,
     protected globalStorageService: GlobalStorageService,
-    protected contentGroupService: ContentGroupService
+    protected contentGroupService: ContentGroupService,
+    private announceService: AnnounceService
   ) {
     super(contentService, notificationService, translationService, roomService, globalStorageService, contentGroupService);
   }
@@ -106,6 +108,7 @@ export class ContentSortCreationComponent extends ContentCreationComponent imple
     if (this.answerInputCheck(true)) {
       this.displayAnswers[index].answerOption.label = this.updatedAnswer;
       this.leaveEditMode();
+      this.announceService.announce('content.a11y-updated');
     }
   }
 
@@ -120,8 +123,11 @@ export class ContentSortCreationComponent extends ContentCreationComponent imple
     document.getElementsByName('answerEdit').item(index).focus();
   }
 
-  leaveEditMode(): void {
+  leaveEditMode(aborted?: boolean): void {
     this.isAnswerEdit = -1;
+    if (aborted) {
+      this.announceService.announce('content.a11y-aborted');
+    }
   }
 
   createContent(): boolean {

@@ -74,8 +74,6 @@ export class RoomParticipantPageComponent extends RoomPageComponent implements O
       } else {
         document.getElementById('no-content-groups').focus();
       }
-    } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit4) === true && focusOnInput === false) {
-      document.getElementById('statistics-button').focus();
     } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Escape) === true && focusOnInput === false) {
       this.announce();
     }

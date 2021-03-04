@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, HostListener, Input, OnInit, Output } from '@angular/core';
 import { ContentType } from '../../../../models/content-type.enum';
 import { Answer } from '../../../../models/answer';
 import { Content } from '../../../../models/content';
@@ -6,6 +6,8 @@ import { ContentChoice } from '../../../../models/content-choice';
 import { TextAnswer } from '../../../../models/text-answer';
 import { ChoiceAnswer } from '../../../../models/choice-answer';
 import { MarkdownFeatureset } from '../../../../services/http/formatting.service';
+import { KeyboardUtils } from '../../../../utils/keyboard';
+import { KeyboardKey } from '../../../../utils/keyboard/keys';
 
 @Component({
   selector: 'app-content-participant',
@@ -17,16 +19,16 @@ export class ContentParticipantComponent implements OnInit {
   @Input() content: Content;
   @Input() answer: Answer;
   @Input() lastContent: boolean;
+  @Input() active: boolean;
+  @Input() index: number;
   @Output() answerChanged = new EventEmitter<Answer>();
   @Output() next = new EventEmitter<boolean>();
 
   sendEvent = new EventEmitter<string>();
   isLoading = true;
   ContentType: typeof ContentType = ContentType;
-  selectedSingleAnswer: string;
   hasAbstained = false;
-  multipleAlreadyAnswered = '';
-  allAnswers = '';
+  answersString = '';
   extensionData: any;
   alreadySent = false;
   flipped: boolean;
@@ -35,11 +37,27 @@ export class ContentParticipantComponent implements OnInit {
 
   constructor() { }
 
+  @HostListener('window:keyup', ['$event'])
+  keyEvent(event: KeyboardEvent) {
+    if (this.active) {
+      if (KeyboardUtils.isKeyEvent(event, KeyboardKey.SPACE) === true) {
+        if (this.alreadySent) {
+          this.goToStats();
+        }
+      }
+    }
+  }
+
   ngOnInit(): void {
     this.setExtensionData(this.content.roomId, this.content.id);
     if (this.answer) {
       this.alreadySent = true;
       this.checkIfAbstention(this.answer);
+      if ([ContentType.TEXT, ContentType.SLIDE].indexOf(this.content.format) === -1) {
+        for (let option of (this.answer as ChoiceAnswer).selectedChoiceIndexes) {
+          this.answersString = this.answersString.concat((this.content as ContentChoice).options[option].label);
+        }
+      }
     }
     this.isMultiple = (this.content as ContentChoice).multiple;
     this.isLoading = false;
@@ -75,7 +93,7 @@ export class ContentParticipantComponent implements OnInit {
   goToStats() {
     this.flipped = !this.flipped;
     setTimeout(() => {
-      document.getElementById('go-to-' + (this.flipped ? 'content' : 'stats')).focus();
+      document.getElementById((this.flipped ? 'message-button' : 'content-message')).focus();
     }, 300);
   }
 

@@ -1,8 +1,10 @@
-import { Component, EventEmitter, HostListener, Input, Output } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, HostListener, Input, Output } from '@angular/core';
 import { CdkStepper } from '@angular/cdk/stepper';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { KeyboardKey } from '../../../utils/keyboard/keys';
 import { KeyboardUtils } from '../../../utils/keyboard';
+import { Directionality } from '@angular/cdk/bidi';
+import { AnnounceService } from '@arsnova/app/services/util/announce.service';
 
 @Component({
   selector: 'app-stepper',
@@ -41,6 +43,12 @@ export class StepperComponent extends CdkStepper {
   nextIndex = 0;
   swipeXLocation?: number;
   swipeTime?: number;
+
+  constructor(private dir: Directionality,
+              private changeDetectorRef: ChangeDetectorRef,
+              private announceService: AnnounceService) {
+    super(dir, changeDetectorRef);
+  }
 
   @HostListener('window:keyup', ['$event'])
   keyEvent(event: KeyboardEvent) {
@@ -86,6 +94,8 @@ export class StepperComponent extends CdkStepper {
       setTimeout(() => {
         document.getElementById('step').focus();
       }, 300);
+    } else {
+      this.announceService.announce('statistic.a11y-no-more-questions');
     }
   }
 

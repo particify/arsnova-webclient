@@ -485,6 +485,15 @@ div {
   margin: 5px 0;
 }
 
+[role="button"], [role="listitem"], button {
+  &:focus-visible {
+    outline: 2px solid var(--secondary)!important;
+  }
+  &:focus:not(:focus-visible) {
+    outline: none;
+  }
+}
+
 // Links
 
 .action-link {

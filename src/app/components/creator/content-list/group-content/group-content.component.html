@@ -11,8 +11,8 @@
       <div fxLayout="row" fxLayoutAlign="space-between">
         <div class="cardTitle">
           <h2 *ngIf="!isInTitleEditMode">{{ collectionName }}</h2>
-          <mat-form-field [ngClass]="{'activeInput': isInTitleEditMode, 'inactiveInput': !isInTitleEditMode}">
-            <input #nameInput (focus)="eventService.makeFocusOnInputTrue()" (blur)="eventService.makeFocusOnInputFalse()"
+          <mat-form-field *ngIf="isInTitleEditMode" [ngClass]="{'activeInput': isInTitleEditMode, 'inactiveInput': !isInTitleEditMode}">
+            <input id="nameInput" (focus)="eventService.makeFocusOnInputTrue()" (blur)="eventService.makeFocusOnInputFalse()"
                    matInput maxlength="25" [(ngModel)]="updatedName" aria-labelledby="enter-content-group-name">
           </mat-form-field>
         </div>
@@ -93,24 +93,22 @@
               <mat-list-item *ngFor="let content of contents; index as i" fxLayout="column" fxLayoutAlign="center"
                              class="bottom-border" (click)="navigateToContentStats(content)"
                              [ngClass]="{'not-supported': contentTypes.indexOf(content.format) === -1}">
-              <div fxLayout="row" fxLayoutAlign="space-between" fxFill
-                    attr.aria-label="{{ 'content.a11y-selected-content' | translate: { name: content.body } }}">
-                <p class="ellipsis">
+              <div fxLayout="row" fxLayoutAlign="space-between" fxFill>
+                <p class="ellipsis" tabindex="0" role="button" (keyup.enter)="navigateToContentStats(content)"
+                   attr.aria-label="{{ 'content.a11y-selected-content' | translate: { name: content.body } }}">
                   {{ content.body }}
                 </p>
                 <div fxLayout="row" fxLayoutAlign="center center">
                   <div fxLayout="row" *ngIf="contentTypes.indexOf(content.format) > -1">
-                    <button mat-icon-button (keyup.enter)="toggleDirectAnswer(content)"
+                    <button mat-icon-button (click)="toggleDirectAnswer(content);$event.stopPropagation()"
                             attr.aria-label="{{ (content.state.responsesVisible ? 'content.a11y-dont-direct-show-answer' : 'content.a11y-direct-show-answer') | translate }}"
-                            (click)="toggleDirectAnswer(content);$event.stopPropagation()"
                             matTooltip="{{(content.state.responsesVisible ? 'content.answer-hide' : 'content.answer-direct') | translate}}">
                       <mat-icon class="lock-icon" [ngClass]="{'locked': !content.state.responsesVisible,
               'unlocked': content.state.responsesVisible}">{{content.state.responsesVisible? 'flash_on' : 'flash_off'}}
                       </mat-icon>
                     </button>
-                    <button mat-icon-button (keyup.enter)="lockContent(content)"
+                    <button mat-icon-button (click)="lockContent(content);$event.stopPropagation()"
                             attr.aria-label="{{ (content.state.visible ? 'content.a11y-lock-question' : 'content.a11y-unlock-question') | translate }}"
-                            (click)="lockContent(content);$event.stopPropagation()"
                             matTooltip="{{(content.state.visible ? 'content.lock-question' : 'content.unlock-question') | translate}}">
                       <mat-icon class="lock-icon" [ngClass]="{'locked': !content.state.visible, 'unlocked': content.state.visible}">
                         {{!content.state.visible? 'lock' : 'lock_open'}}

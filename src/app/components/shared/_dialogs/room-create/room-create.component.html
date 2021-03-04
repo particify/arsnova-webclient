@@ -20,5 +20,6 @@
 ></app-dialog-action-buttons>
 
 <div class="visually-hidden">
-  <div id="room-name-input">{{ 'dialog.a11y-room-name-input' | translate }}</div>
+  <div id="room-name-input">{{ ('dialog.a11y-room-name-input' | translate) }}
+    {{ !auth || auth.authProvider === 'ARSNOVA_GUEST' ? ('dialog.a11y-room-creation-guest' | translate) : '' }}</div>
 </div>

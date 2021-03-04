@@ -83,8 +83,10 @@
   </div>
 
   <div *ngIf="!isLoading" fxLayout="row" fxLayoutAlign="center center">
-    <p *ngIf="comments.length < 1" class="no-comments">{{ 'comment-page.no-comments' | translate }}</p>
-    <p *ngIf="((hideCommentsList && filteredComments.length < 1) ||
+    <p *ngIf="comments.length < 1" class="no-comments" tabindex="0" aria-labelledby="no-comments">
+      {{ 'comment-page.no-comments' | translate }}
+    </p>
+    <p tabindex="0" aria-labelledby="no-comments" *ngIf="((hideCommentsList && filteredComments.length < 1) ||
             (!hideCommentsList && commentsFilteredByTime.length < 1)) && comments.length >= 1" class="no-comments">
       {{ 'comment-page.no-comments-found' | translate }}
     </p>
@@ -92,10 +94,13 @@
 
   <div class="visually-hidden">
     <div id="search-box-input-description">{{ 'comment-page.search-box-input-description' | translate }}</div>
+    <div id="search-list">{{'comment-list.a11y-search-list' | translate}}</div>
     <div id="sort-list">{{'comment-list.a11y-sort-list' | translate}}</div>
+    <div id="select-time">{{'comment-list.a11y-select-time' | translate}}</div>
     <div id="sort-up">{{'comment-list.a11y-sort-up' | translate}}</div>
     <div id="sort-down">{{'comment-list.a11y-sort-down' | translate}}</div>
     <div id="sort-time">{{'comment-list.a11y-sort-time' | translate}}</div>
     <div id="new-comment">{{ 'comment-page.new-comment' | translate:{comment: newestComment.body} }}</div>
+    <div id="no-comments">{{ 'comment-page.a11y-no-comments' | translate }}</div>
   </div>
 </div>
