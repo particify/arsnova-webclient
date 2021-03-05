@@ -1,5 +1,5 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { BarController, CategoryScale, Chart, IBarControllerDatasetOptions, LinearScale, Rectangle, Tooltip } from 'chart.js';
+import { BarController, BarControllerDatasetOptions, BarElement, CategoryScale, Chart, LinearScale, Tooltip } from 'chart.js';
 import { ActivatedRoute } from '@angular/router';
 import { ContentService } from '../../../../services/http/content.service';
 import { ContentChoice } from '../../../../models/content-choice';
@@ -90,7 +90,9 @@ export class StatisticChoiceComponent extends StatisticContentBaseComponent impl
 
 
   createChart(colors: string[]) {
-    Chart.register(BarController, CategoryScale, LinearScale, Rectangle, Tooltip);
+    Chart.defaults.color = this.onSurface;
+    Chart.defaults.font.size = 16;
+    Chart.register(BarController, BarElement, CategoryScale, LinearScale, Tooltip);
     this.chart = new Chart(this.chartId, {
       type: 'bar',
       data: {
@@ -101,16 +103,6 @@ export class StatisticChoiceComponent extends StatisticContentBaseComponent impl
         }]
       },
       options: {
-        font: {
-          color: this.onSurface,
-          size: 16
-        },
-        legend: {
-          display: false
-        },
-        tooltips: {
-          mode: 'index'
-        },
         responsive: true,
         maintainAspectRatio: false,
         scales: {
@@ -129,13 +121,21 @@ export class StatisticChoiceComponent extends StatisticContentBaseComponent impl
               borderColor: this.onSurface
             }
           }
+        },
+        plugins: {
+          legend: {
+            display: false
+          },
+          tooltip: {
+            mode: 'index'
+          }
         }
       }
     });
   }
 
   toggleCorrect() {
-    const dataset = this.chart.config.data.datasets[0] as IBarControllerDatasetOptions;
+    const dataset = this.chart.config.data.datasets[0] as BarControllerDatasetOptions;
     dataset.backgroundColor = this.colorLabel ? this.colors : this.indicationColors;
     this.chart.update();
     this.colorLabel = !this.colorLabel;
