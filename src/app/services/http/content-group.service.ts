@@ -9,7 +9,6 @@ import { EventService } from '../util/event.service';
 import { GlobalStorageService, STORAGE_KEYS } from '../util/global-storage.service';
 import { TranslateService } from '@ngx-translate/core';
 import { NotificationService } from '../util/notification.service';
-import { TSMap } from 'typescript-map';
 
 const httpOptions = {
   headers: new HttpHeaders({})
@@ -80,7 +79,7 @@ export class ContentGroupService extends BaseHttpService {
     );
   }
 
-  patchContentGroup(group: ContentGroup, changes: TSMap<string, any>): Observable<ContentGroup> {
+  patchContentGroup(group: ContentGroup, changes: object): Observable<ContentGroup> {
     const connectionUrl = `${this.getBaseUrl(group.roomId) + this.serviceApiUrl.contentGroup + '/' + group.id}`;
     return this.http.patch(connectionUrl, changes, httpOptions).pipe(
       catchError(this.handleError<any>('patchContentGroup'))

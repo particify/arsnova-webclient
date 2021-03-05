@@ -119,25 +119,39 @@
                       <mat-icon class="lock-icon locked">lock_open</mat-icon>
                     </button>
                     <mat-menu #publishActions="matMenu" xPosition="before">
-                      <div *ngIf="!isPublished(i)">
-                        <button mat-menu-item (click)="publishContent(i, true)" [attr.aria-label]="'content.a11y-unlock-this-content' | translate">
+                      <div class="menu-unlock">
+                        <button mat-menu-item *ngIf="((firstPublishedIndex !== lastPublishedIndex) ||
+                        (firstPublishedIndex === lastPublishedIndex && i !== firstPublishedIndex)) ||
+                        !isPublished(i)" (click)="publishContent(i, true)"
+                                [attr.aria-label]="'content.a11y-unlock-this-content' | translate">
+                          <mat-icon>vertical_align_center</mat-icon>
                           {{ 'content.unlock-this-content' | translate}}
                         </button>
-                        <button *ngIf="isBelowRange(i)" mat-menu-item (click)="publishContentFrom(i, true)" [attr.aria-label]="'content.a11y-unlock-contents-from' | translate">
+                        <button mat-menu-item *ngIf="i !== contents.length -1 && !isPublished(i)" (click)="publishContentFrom(i, true)"
+                                [attr.aria-label]="'content.a11y-unlock-contents-from' | translate">
+                          <mat-icon>vertical_align_top</mat-icon>
                           {{ 'content.unlock-contents-from' | translate}}
                         </button>
-                        <button mat-menu-item *ngIf="isAboveRange(i)" (click)="publishContentUpTo(i, true)" [attr.aria-label]="'content.a11y-unlock-contents-up-to' | translate">
+                        <button mat-menu-item *ngIf="!isPublished(i) && i > 0" (click)="publishContentUpTo(i, true)"
+                                [attr.aria-label]="'content.a11y-unlock-contents-up-to' | translate">
+                          <mat-icon>vertical_align_bottom</mat-icon>
                           {{ 'content.unlock-contents-up-to' | translate}}
                         </button>
                       </div>
-                      <div *ngIf="isPublished(i)">
-                        <button mat-menu-item *ngIf="isStart(i) || isEnd(i)" (click)="publishContent(i, false)" [attr.aria-label]="'content.a11y-lock-this-content' | translate">
+                      <div *ngIf="isPublished(i)" class="menu-lock">
+                        <button mat-menu-item *ngIf="isStart(i) || isEnd(i)" (click)="publishContent(i, false)"
+                                [attr.aria-label]="'content.a11y-lock-this-content' | translate">
+                          <mat-icon>vertical_align_center</mat-icon>
                           {{ 'content.lock-this-content' | translate}}
                         </button>
-                        <button mat-menu-item *ngIf="!isStart(i)" (click)="publishContentUpTo(i, false)" [attr.aria-label]="'content.a11y-lock-contents-up-to' | translate">
+                        <button mat-menu-item *ngIf="!isStart(i)" (click)="publishContentUpTo(i, false)"
+                                [attr.aria-label]="'content.a11y-lock-contents-up-to' | translate">
+                          <mat-icon>vertical_align_top</mat-icon>
                           {{ 'content.lock-contents-up-to' | translate}}
                         </button>
-                        <button mat-menu-item *ngIf="!isEnd(i)" (click)="publishContentFrom(i, false)" [attr.aria-label]="'content.a11y-lock-contents-from' | translate">
+                        <button mat-menu-item *ngIf="!isEnd(i)" (click)="publishContentFrom(i, false)"
+                                  [attr.aria-label]="'content.a11y-lock-contents-from' | translate">
+                          <mat-icon>vertical_align_bottom</mat-icon>
                           {{ 'content.lock-contents-from' | translate}}
                         </button>
                       </div>
@@ -219,7 +233,7 @@
   <div id="present-contents">{{ 'content.a11y-present-contents' | translate }}</div>
   <div id="statistics">{{ 'content.a11y-nav-to-stats' | translate }}</div>
   <div id="publish-statistics">{{ (statisticsPublished ? 'content.a11y-dont-publish-statistics' : 'content.a11y-publish-statistics') | translate }}</div>
-  <div id="lock-questions">{{ (published ? 'content.a11y-lock-questions' : 'content.a11y-unlock-questions') | translate }}</div>
+  <div id="lock-questions">{{ (published ? 'content.a11y-lock-collection' : 'content.a11y-unlock-collection') | translate }}</div>
   <div id="more">{{ 'content.a11y-more-options' | translate }}</div>
   <div id="save-sort-changes">{{ 'content.a11y-save-sort-changes' | translate }}</div>
 </div>

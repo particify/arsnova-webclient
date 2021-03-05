@@ -17,9 +17,9 @@ export class ContentGroup {
     name: string = '',
     contentIds: string[] = [],
     published: boolean = false,
-    firstPublishedIndex: number = -1,
+    firstPublishedIndex: number = 0,
     lastPublishedIndex: number = -1,
-    statisticsPublished: boolean = false,
+    statisticsPublished: boolean = true,
     correctOptionsPublished: boolean = false,
   ) {
     this.id = id;

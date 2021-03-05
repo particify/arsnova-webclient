@@ -17,7 +17,6 @@ import { KeyboardUtils } from '../../../../utils/keyboard';
 import { KeyboardKey } from '../../../../utils/keyboard/keys';
 import { EventService } from '../../../../services/util/event.service';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-import { TSMap } from 'typescript-map';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -33,8 +32,8 @@ export class GroupContentComponent extends ContentListBaseComponent implements O
   updatedName: string;
   baseURL = 'creator/room/';
   published = false;
-  statisticsPublished = false;
-  firstPublishedIndex = -1;
+  statisticsPublished = true;
+  firstPublishedIndex = 0;
   lastPublishedIndex = -1;
   lastPublishedIndexBackup = -1;
   firstPublishedIndexBackup = -1;
@@ -141,8 +140,7 @@ export class GroupContentComponent extends ContentListBaseComponent implements O
 
   saveGroupName(): void {
     if (this.updatedName !== this.collectionName) {
-      const changes = new TSMap<string, any>();
-      changes.set('name', this.updatedName);
+      const changes: { name: string } = { name: this.updatedName };
       this.updateContentGroup(changes).subscribe(updatedGroup => {
           this.contentGroup = updatedGroup;
           this.contentGroupService.updateGroupInMemoryStorage(this.collectionName, this.updatedName);
@@ -182,10 +180,8 @@ export class GroupContentComponent extends ContentListBaseComponent implements O
   saveSorting(): void {
     const newContentIdOrder = this.copiedContents.map(c => c.id);
     if (this.contentGroup.contentIds !== newContentIdOrder) {
-      const changes = new TSMap<string, any>();
-      changes.set('contentIds', newContentIdOrder);
-      changes.set('firstPublishedIndex', this.firstPublishedIndex);
-      changes.set('lastPublishedIndex', this.lastPublishedIndex);
+      const changes: { contendIds: string[], firstPublishedIndex: number, lastPublishedIndex: number } =
+        { contendIds: newContentIdOrder, firstPublishedIndex: this.firstPublishedIndex, lastPublishedIndex: this.lastPublishedIndex };
       this.updateContentGroup(changes).subscribe(updatedContentGroup => {
         this.contentGroup = updatedContentGroup;
         this.contents = this.copiedContents;
@@ -201,13 +197,12 @@ export class GroupContentComponent extends ContentListBaseComponent implements O
     }
   }
 
-  updateContentGroup(changes: TSMap<string, any>): Observable<ContentGroup> {
+  updateContentGroup(changes: object): Observable<ContentGroup> {
     return this.contentGroupService.patchContentGroup(this.contentGroup, changes);
   }
 
   publishContents() {
-    const changes = new TSMap<string, any>();
-    changes.set('published', !this.contentGroup.published);
+    const changes: { published: boolean } = { published: !this.contentGroup.published };
     this.updateContentGroup(changes).subscribe(updatedContentGroup => {
       this.contentGroup = updatedContentGroup;
       this.published = this.contentGroup.published;
@@ -232,25 +227,28 @@ export class GroupContentComponent extends ContentListBaseComponent implements O
 
   publishContentFrom(index: number, publish: boolean) {
     if (publish) {
-      this.updatePublishedIndexes(index, this.lastPublishedIndex);
+      const last = this.lastPublishedIndex === -1 || this.lastPublishedIndex < index ? this.contents.length - 1 : this.lastPublishedIndex;
+      this.updatePublishedIndexes(index, last);
     } else {
-      if (index === 0) {
+      if (index === this.firstPublishedIndex) {
         this.resetPublishing();
       } else {
-        this.updatePublishedIndexes(this.firstPublishedIndex, index - 1)
+        const first = this.firstPublishedIndex === -1 || this.firstPublishedIndex > index ? 0 : this.firstPublishedIndex;
+        this.updatePublishedIndexes(first, index - 1);
       }
     }
   }
 
   publishContentUpTo(index: number, publish: boolean) {
     if (publish) {
-      const firstIndex = this.firstPublishedIndex > -1 ? this.firstPublishedIndex : 0;
-      this.updatePublishedIndexes(firstIndex, index);
+      const first = (this.firstPublishedIndex === -1 || this.firstPublishedIndex > index) ? 0 : this.firstPublishedIndex;
+      this.updatePublishedIndexes(first, index);
     } else {
       if (index === this.lastPublishedIndex) {
         this.resetPublishing();
       } else {
-        this.updatePublishedIndexes(index + 1, this.lastPublishedIndex);
+        const last = this.lastPublishedIndex === -1 || this.lastPublishedIndex < index ? this.contents.length - 1 : this.lastPublishedIndex;
+        this.updatePublishedIndexes(index + 1, last);
       }
     }
   }
@@ -286,8 +284,7 @@ export class GroupContentComponent extends ContentListBaseComponent implements O
   }
 
   toggleStatisticsPublished() {
-    const changes = new TSMap<string, any>();
-    changes.set('statisticsPublished', !this.contentGroup.statisticsPublished);
+    const changes: { statisticsPublished: boolean } = { statisticsPublished: !this.contentGroup.statisticsPublished };
     this.updateContentGroup(changes).subscribe(updatedContentGroup => {
       this.contentGroup = updatedContentGroup;
       this.statisticsPublished = this.contentGroup.statisticsPublished;
@@ -302,37 +299,39 @@ export class GroupContentComponent extends ContentListBaseComponent implements O
   }
 
   sortPublishedIndexes(prev: number, current: number) {
-    if (prev !== current && !(this.isAboveRange(prev) && this.isAboveRange(current)
-      || this.isBelowRange(prev) && this.isBelowRange(current))) {
-      if (this.firstPublishedIndex === this.lastPublishedIndex) {
-        const publishedIndex = this.firstPublishedIndex;
-        if (prev === publishedIndex) {
-          this.setTempRange(current, current);
-        } else {
-          const newPublishedIndex = prev < publishedIndex ? publishedIndex - 1 : publishedIndex + 1;
-          this.setTempRange(newPublishedIndex, newPublishedIndex);
-        }
-      } else {
-        if (this.isInRange(prev)) {
-          if (!this.isInRangeExceptEnds(current)) {
-            if (this.isAboveRange(current)) {
-              this.setTempRange(this.firstPublishedIndex, this.lastPublishedIndex - 1);
-            } else if (this.isBelowRange(current)) {
-              this.setTempRange(this.firstPublishedIndex + 1, this.lastPublishedIndex);
-            }
+    if (this.firstPublishedIndex !== -1 && this.lastPublishedIndex !== -1) {
+      if (prev !== current && !(this.isAboveRange(prev) && this.isAboveRange(current)
+        || this.isBelowRange(prev) && this.isBelowRange(current))) {
+        if (this.firstPublishedIndex === this.lastPublishedIndex) {
+          const publishedIndex = this.firstPublishedIndex;
+          if (prev === publishedIndex) {
+            this.setTempRange(current, current);
+          } else {
+            const newPublishedIndex = prev < publishedIndex ? publishedIndex - 1 : publishedIndex + 1;
+            this.setTempRange(newPublishedIndex, newPublishedIndex);
           }
         } else {
-          if (this.isInRangeExceptEnds(current) || (this.isAboveRange(prev) && this.isEnd(current))
-          || (this.isBelowRange(prev) && this.isStart(current))) {
-            if (this.isBelowRange(prev)) {
-              this.setTempRange(this.firstPublishedIndex - 1, this.lastPublishedIndex);
-            } else if (this.isAboveRange(prev)) {
-              this.setTempRange(this.firstPublishedIndex, this.lastPublishedIndex + 1);
+          if (this.isInRange(prev)) {
+            if (!this.isInRangeExclusive(current)) {
+              if (this.isAboveRange(current)) {
+                this.setTempRange(this.firstPublishedIndex, this.lastPublishedIndex - 1);
+              } else if (this.isBelowRange(current)) {
+                this.setTempRange(this.firstPublishedIndex + 1, this.lastPublishedIndex);
+              }
             }
           } else {
-            if (current <= this.firstPublishedIndex || current >= this.lastPublishedIndex) {
-              const adjustment = this.isBelowRange(prev) ? -1 : 1;
-              this.setTempRange(this.firstPublishedIndex + adjustment, this.lastPublishedIndex + adjustment);
+            if (this.isInRangeExclusive(current) || (this.isAboveRange(prev) && this.isEnd(current))
+              || (this.isBelowRange(prev) && this.isStart(current))) {
+              if (this.isBelowRange(prev)) {
+                this.setTempRange(this.firstPublishedIndex - 1, this.lastPublishedIndex);
+              } else if (this.isAboveRange(prev)) {
+                this.setTempRange(this.firstPublishedIndex, this.lastPublishedIndex + 1);
+              }
+            } else {
+              if (current <= this.firstPublishedIndex || current >= this.lastPublishedIndex) {
+                const adjustment = this.isBelowRange(prev) ? -1 : 1;
+                this.setTempRange(this.firstPublishedIndex + adjustment, this.lastPublishedIndex + adjustment);
+              }
             }
           }
         }
@@ -344,7 +343,7 @@ export class GroupContentComponent extends ContentListBaseComponent implements O
     return index <= this.lastPublishedIndex && index >= this.firstPublishedIndex;
   }
 
-  isInRangeExceptEnds(index: number): boolean {
+  isInRangeExclusive(index: number): boolean {
     return index < this.lastPublishedIndex && index > this.firstPublishedIndex;
   }
   removeContent(delContent: Content) {
@@ -366,9 +365,7 @@ export class GroupContentComponent extends ContentListBaseComponent implements O
   }
 
   updatePublishedIndexes(first: number, last: number) {
-    const changes = new TSMap<string, any>();
-    changes.set('firstPublishedIndex', first);
-    changes.set('lastPublishedIndex', last);
+    const changes: { firstPublishedIndex: number, lastPublishedIndex: number } = { firstPublishedIndex: first, lastPublishedIndex: last };
     this.updateContentGroup(changes).subscribe(updatedContentGroup => {
       this.contentGroup = updatedContentGroup;
       this.setRange();
@@ -378,6 +375,11 @@ export class GroupContentComponent extends ContentListBaseComponent implements O
   setRange() {
     this.firstPublishedIndex = this.contentGroup.firstPublishedIndex;
     this.lastPublishedIndex = this.contentGroup.lastPublishedIndex;
+    const key = this.firstPublishedIndex === - 1 ? 'no' : this.lastPublishedIndex === -1 ? 'all'
+      : this.firstPublishedIndex === this.lastPublishedIndex ? 'single' : 'range';
+    const msg = this.translateService.instant('content.a11y-' + key + '-published',
+      { first: this.firstPublishedIndex + 1, last: this.lastPublishedIndex + 1 });
+    this.announceService.announce(msg);
   }
 
   setTempRange(first: number, last: number) {
@@ -389,7 +391,7 @@ export class GroupContentComponent extends ContentListBaseComponent implements O
     return index < this.firstPublishedIndex;
   }
 
-    isAboveRange(index: number): boolean {
+  isAboveRange(index: number): boolean {
     return index > this.lastPublishedIndex;
   }
 
@@ -402,10 +404,13 @@ export class GroupContentComponent extends ContentListBaseComponent implements O
   }
 
   isPublished(index: number): boolean {
-    if (this.firstPublishedIndex === -1) {
-      return false;
+    if (this.lastPublishedIndex === -1 && this.firstPublishedIndex > -1) {
+      return true;
+    } else {
+      if (this.firstPublishedIndex === -1) {
+        return false;
+      }
+      return ((this.firstPublishedIndex <= index) && (index <= this.lastPublishedIndex));
     }
-    return ((this.firstPublishedIndex <= index) && (index <= this.lastPublishedIndex))
-      || ((this.firstPublishedIndex <= index) && (this.lastPublishedIndex === -1) );
   }
 }
