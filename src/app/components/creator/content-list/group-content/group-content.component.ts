@@ -1,4 +1,4 @@
-import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { Content } from '../../../../models/content';
 import { ContentService } from '../../../../services/http/content.service';
 import { RoomService } from '../../../../services/http/room.service';
@@ -17,6 +17,8 @@ import { KeyboardUtils } from '../../../../utils/keyboard';
 import { KeyboardKey } from '../../../../utils/keyboard/keys';
 import { EventService } from '../../../../services/util/event.service';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { TSMap } from 'typescript-map';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-group-content',
@@ -102,12 +104,8 @@ export class GroupContentComponent extends ContentListBaseComponent implements O
   }
 
   setSettings() {
-    if (this.contentGroup.published) {
-      this.published = true;
-    }
-    if (this.contents.filter(c => c.state.answersPublished).length) {
-      this.statisticsPublished = true;
-    }
+    this.published = this.contentGroup.published;
+    this.statisticsPublished = this.contentGroup.statisticsPublished;
   }
 
   goToEdit(content: Content) {
@@ -143,21 +141,17 @@ export class GroupContentComponent extends ContentListBaseComponent implements O
 
   saveGroupName(): void {
     if (this.updatedName !== this.collectionName) {
-      const newGroup = new ContentGroup();
-      newGroup.roomId = this.contentGroup.roomId;
-      newGroup.contentIds = this.contentGroup.contentIds;
-      this.contentGroupService.delete(this.contentGroup).subscribe(() => {
-        newGroup.name = this.updatedName;
-        this.contentGroupService.post(this.room.id, this.updatedName, newGroup).subscribe(postedContentGroup => {
-          this.contentGroup = postedContentGroup;
+      const changes = new TSMap<string, any>();
+      changes.set('name', this.updatedName);
+      this.updateContentGroup(changes).subscribe(updatedGroup => {
+          this.contentGroup = updatedGroup;
           this.contentGroupService.updateGroupInMemoryStorage(this.collectionName, this.updatedName);
-          this.collectionName = postedContentGroup.name;
+          this.collectionName = this.contentGroup.name;
           this.translateService.get('content.updated-content-group').subscribe(msg => {
             this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.SUCCESS);
           });
           this.updateURL();
         });
-      });
     }
     this.leaveTitleEditMode(true);
   }
@@ -176,37 +170,46 @@ export class GroupContentComponent extends ContentListBaseComponent implements O
   leaveSortingMode(abort?: boolean): void {
     this.isInSortingMode = false;
     if (abort) {
-      this.firstPublishedIndex = this.firstPublishedIndexBackup;
-      this.lastPublishedIndex = this.lastPublishedIndexBackup;
+      this.setPublishedIndexesToBackup();
     }
+  }
+
+  setPublishedIndexesToBackup() {
+    this.firstPublishedIndex = this.firstPublishedIndexBackup;
+    this.lastPublishedIndex = this.lastPublishedIndexBackup;
   }
 
   saveSorting(): void {
     const newContentIdOrder = this.copiedContents.map(c => c.id);
     if (this.contentGroup.contentIds !== newContentIdOrder) {
-      this.contentGroup.contentIds = newContentIdOrder;
-      this.setRangeInGroup(this.firstPublishedIndex, this.lastPublishedIndex);
-      this.contentGroupService.updateGroup(this.contentGroup.roomId, this.contentGroup.name, this.contentGroup).
-      subscribe(postedContentGroup => {
-        this.contentGroup = postedContentGroup;
+      const changes = new TSMap<string, any>();
+      changes.set('contentIds', newContentIdOrder);
+      changes.set('firstPublishedIndex', this.firstPublishedIndex);
+      changes.set('lastPublishedIndex', this.lastPublishedIndex);
+      this.updateContentGroup(changes).subscribe(updatedContentGroup => {
+        this.contentGroup = updatedContentGroup;
         this.contents = this.copiedContents;
         this.initContentList(this.contents);
         this.translateService.get('content.updated-sorting').subscribe(msg => {
           this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.SUCCESS);
         });
         this.leaveSortingMode();
+      },
+        error => {
+        this.setPublishedIndexesToBackup()
       });
     }
   }
 
-  test(event: any) {
-    console.log(event);
+  updateContentGroup(changes: TSMap<string, any>): Observable<ContentGroup> {
+    return this.contentGroupService.patchContentGroup(this.contentGroup, changes);
   }
 
   publishContents() {
-    this.contentGroup.published = !this.contentGroup.published;
-    this.contentGroupService.updateGroup(this.contentGroup.roomId, this.contentGroup.name, this.contentGroup).subscribe(group => {
-      this.contentGroup = group;
+    const changes = new TSMap<string, any>();
+    changes.set('published', !this.contentGroup.published);
+    this.updateContentGroup(changes).subscribe(updatedContentGroup => {
+      this.contentGroup = updatedContentGroup;
       this.published = this.contentGroup.published;
     });
   }
@@ -283,9 +286,11 @@ export class GroupContentComponent extends ContentListBaseComponent implements O
   }
 
   toggleStatisticsPublished() {
-    this.contentGroup.statisticsPublished = !this.contentGroup.statisticsPublished;
-    this.contentGroupService.updateGroup(this.contentGroup.roomId, this.contentGroup.name, this.contentGroup).subscribe(group => {
-      this.statisticsPublished = group.statisticsPublished;
+    const changes = new TSMap<string, any>();
+    changes.set('statisticsPublished', !this.contentGroup.statisticsPublished);
+    this.updateContentGroup(changes).subscribe(updatedContentGroup => {
+      this.contentGroup = updatedContentGroup;
+      this.statisticsPublished = this.contentGroup.statisticsPublished;
     });
   }
 
@@ -361,16 +366,13 @@ export class GroupContentComponent extends ContentListBaseComponent implements O
   }
 
   updatePublishedIndexes(first: number, last: number) {
-    this.setRangeInGroup(first, last);
-    this.contentGroupService.updateGroup(this.contentGroup.roomId, this.contentGroup.name, this.contentGroup).subscribe(group => {
-      this.contentGroup = group;
+    const changes = new TSMap<string, any>();
+    changes.set('firstPublishedIndex', first);
+    changes.set('lastPublishedIndex', last);
+    this.updateContentGroup(changes).subscribe(updatedContentGroup => {
+      this.contentGroup = updatedContentGroup;
       this.setRange();
     });
-  }
-
-  setRangeInGroup(first: number, last: number) {
-    this.contentGroup.firstPublishedIndex = first;
-    this.contentGroup.lastPublishedIndex = last;
   }
 
   setRange() {
