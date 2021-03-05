@@ -58,16 +58,9 @@ export class ContentChoiceCreationComponent extends ContentCreationComponent imp
   }
 
   initContentForEditing() {
-    const options = this.initContentChoiceEditBase();
-    for (let i = 0; i < options.length; i++) {
-      const correct = options[i].points > 0;
-      this.displayAnswers.push(new DisplayAnswer(new AnswerOption(options[i].label, options[i].points), correct));
-      if (correct) {
-        (this.content as ContentChoice).correctOptionIndexes.push(i);
-      }
-    }
+    this.displayAnswers = this.initContentChoiceEditBase();
     this.multipleCorrectAnswers = (this.content as ContentChoice).multiple;
-    this.noCorrectAnswers = (this.content as ContentChoice).correctOptionIndexes.length === 0;
+    this.noCorrectAnswers = !(this.content as ContentChoice).correctOptionIndexes;
     this.isLoading = false;
   }
 
@@ -104,8 +97,7 @@ export class ContentChoiceCreationComponent extends ContentCreationComponent imp
       return;
     }
     if ((this.content as ContentChoice).options.length < 8) {
-      const points = (this.newAnswerOptionChecked) ? 10 : -10;
-      (this.content as ContentChoice).options.push(new AnswerOption(this.newAnswerOptionLabel, points));
+      (this.content as ContentChoice).options.push(new AnswerOption(this.newAnswerOptionLabel));
       this.newAnswerOptionChecked = false;
       this.newAnswerOptionLabel = '';
       this.fillCorrectAnswers();
@@ -150,13 +142,10 @@ export class ContentChoiceCreationComponent extends ContentCreationComponent imp
   }
 
   saveChanges(index: number, answer: DisplayAnswer) {
-    if (!this.multipleCorrectAnswers) {
-      for (const option of (this.content as ContentChoice).options) {
-        option.points = -10;
-      }
-    }
     (this.content as ContentChoice).options[index].label = answer.answerOption.label;
-    (this.content as ContentChoice).options[index].points = (answer.correct) ? 10 : -10;
+    if (!(this.content as ContentChoice).correctOptionIndexes) {
+      (this.content as ContentChoice).correctOptionIndexes = [];
+    }
     const indexInCorrectOptionIndexes = (this.content as ContentChoice).correctOptionIndexes.indexOf(index);
     if (indexInCorrectOptionIndexes === -1 && answer.correct) {
       if (!this.multipleCorrectAnswers) {
@@ -197,8 +186,7 @@ export class ContentChoiceCreationComponent extends ContentCreationComponent imp
     const index = this.findAnswerIndexByLabel(label);
     const answer = new DisplayAnswer(
       new AnswerOption(
-        this.displayAnswers[index].answerOption.label,
-        this.displayAnswers[index].answerOption.points),
+        this.displayAnswers[index].answerOption.label),
       !this.displayAnswers[index].correct);
     this.saveChanges(index, answer);
     const state = answer.correct ? 'correct' : 'wrong';

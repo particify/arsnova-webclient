@@ -23,7 +23,6 @@ export class ContentLikertCreationComponent extends ContentCreationComponent imp
     'content.disagree',
     'content.strongly-disagree'
   ];
-  newAnswerOptionPoints = 0;
 
   constructor(
     protected contentService: ContentService,
@@ -54,10 +53,7 @@ export class ContentLikertCreationComponent extends ContentCreationComponent imp
   }
 
   initContentForEditing() {
-    const options = this.initContentChoiceEditBase();
-    for (const option of options) {
-      this.displayAnswers.push(new DisplayAnswer(option, option.points > 0));
-    }
+    this.displayAnswers = this.initContentChoiceEditBase();
     this.isLoading = false;
   }
 }

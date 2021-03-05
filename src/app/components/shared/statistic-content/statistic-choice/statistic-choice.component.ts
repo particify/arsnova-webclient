@@ -142,7 +142,7 @@ export class StatisticChoiceComponent extends StatisticContentBaseComponent impl
   }
 
   checkIfCorrect(index: number): boolean {
-    return (this.content.options[index].points > 0);
+    return (this.content as ContentChoice).correctOptionIndexes?.indexOf(index) > -1;
   }
 
   initChart() {

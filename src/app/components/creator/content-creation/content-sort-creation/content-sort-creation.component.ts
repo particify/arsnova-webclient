@@ -56,14 +56,7 @@ export class ContentSortCreationComponent extends ContentCreationComponent imple
   }
 
   initContentForEditing() {
-    const options = this.initContentChoiceEditBase();
-    for (let i = 0; i < options.length; i++) {
-      const correct = options[i].points > 0;
-      this.displayAnswers.push(new DisplayAnswer(new AnswerOption(options[i].label, options[i].points), correct));
-      if (correct) {
-        (this.content as ContentChoice).correctOptionIndexes.push(i);
-      }
-    }
+    this.displayAnswers = this.initContentChoiceEditBase();
     this.isLoading = false;
   }
 
@@ -87,7 +80,7 @@ export class ContentSortCreationComponent extends ContentCreationComponent imple
   addAnswer() {
     if (this.answerInputCheck()) {
       if (this.displayAnswers.length < 8) {
-        this.displayAnswers.push(new DisplayAnswer(new AnswerOption(this.newAnswer, 0), true));
+        this.displayAnswers.push(new DisplayAnswer(new AnswerOption(this.newAnswer), true));
         this.newAnswer = '';
       } else {
         const msg = this.translationService.instant('content.max-answers');
@@ -132,7 +125,6 @@ export class ContentSortCreationComponent extends ContentCreationComponent imple
 
   createContent(): boolean {
     if (this.displayAnswers.length >= 2) {
-      this.displayAnswers.map(o => o.answerOption.points =  10);
       (this.content as ContentChoice).options = this.displayAnswers.map(o => o.answerOption);
       (this.content as ContentChoice).correctOptionIndexes = Object.keys(this.displayAnswers.map(a => a.answerOption))
         .map(index => parseInt(index, 10));

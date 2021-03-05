@@ -51,25 +51,14 @@ export class ContentYesNoCreationComponent extends ContentCreationComponent impl
   }
 
   initContentForEditing() {
-    const options = this.initContentChoiceEditBase();
-    for (let i = 0; i < options.length; i++) {
-      if (options[i].points > 0) {
-        this.yesno = i;
-        (this.content as ContentChoice).correctOptionIndexes.push(i);
-      }
-    }
+    this.displayAnswers = this.initContentChoiceEditBase();
     this.isLoading = false;
   }
 
   createContent(): boolean {
     if (this.yesno > -1) {
       const index = this.yesno;
-      (this.content as ContentChoice).options[0].points = index === 0 ? 10 : -10;
-      (this.content as ContentChoice).options[1].points = index === 0 ? -10 : 10;
       (this.content as ContentChoice).correctOptionIndexes = [index];
-    } else {
-      (this.content as ContentChoice).options[0].points = this.newAnswerOptionPoints;
-      (this.content as ContentChoice).options[1].points = this.newAnswerOptionPoints;
     }
     return true;
   }

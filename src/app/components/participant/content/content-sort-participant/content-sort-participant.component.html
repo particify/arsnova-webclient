@@ -1,3 +1,8 @@
 <div class="answer-container">
   <app-content-sort-answer [answerOptions]="answerOptions" [disabled]="alreadySent"></app-content-sort-answer>
+  <div *ngIf="!hasAbstained && statsPublished"
+       class="solution invisible" [ngClass]="{'visible' : alreadySent}">
+    <mat-icon class="icon-indicator" [ngClass]="isCorrect ? 'correct' : 'wrong'">
+      {{isCorrect ? 'check' : 'close'}}</mat-icon>
+  </div>
 </div>

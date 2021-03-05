@@ -91,7 +91,7 @@ export class StatisticListComponent implements OnInit {
 
   public getContents() {
     this.isLoading = true;
-    this.contentService.getContentsByIds(this.contentGroup.roomId, this.contentGroup.contentIds).subscribe(contents => {
+    this.contentService.getContentsByIds(this.contentGroup.roomId, this.contentGroup.contentIds, true).subscribe(contents => {
       this.getData(this.contentService.getSupportedContents(contents));
     });
   }
@@ -136,14 +136,14 @@ export class StatisticListComponent implements OnInit {
         default:
           this.contentService.getAnswer(this.contentGroup.roomId, content.id).subscribe(answer => {
             if (content.format === ContentType.CHOICE) {
-              percent = this.evaluateMultiple((content as ContentChoice).options, answer.roundStatistics[0].combinatedCounts);
+              percent = this.evaluateMultiple((content as ContentChoice).correctOptionIndexes, answer.roundStatistics[0].combinatedCounts);
               count = this.getMultipleCounts(answer.roundStatistics[0].combinatedCounts);
             } else if (content.format === ContentType.SORT) {
               count = this.getMultipleCounts(answer.roundStatistics[0].combinatedCounts);
               percent = this.evaluateSort((content as ContentChoice).options, answer.roundStatistics[0].combinatedCounts, count);
             } else {
               if (content.format === ContentType.BINARY) {
-                percent = this.evaluateSingle((content as ContentChoice).options, answer.roundStatistics[0].independentCounts);
+                percent = this.evaluateSingle((content as ContentChoice).correctOptionIndexes, answer.roundStatistics[0].independentCounts);
               }
               count = this.getSingleCounts(answer.roundStatistics[0].independentCounts);
             }
@@ -201,25 +201,18 @@ export class StatisticListComponent implements OnInit {
     return total;
   }
 
-  checkIfSurvey(options: AnswerOption[]): boolean {
-    return Math.max.apply(Math, options.map(o => o.points)) > 0;
+  checkIfSurvey(correctOptionIndexes: number[]): boolean {
+    return correctOptionIndexes?.length > 0;
   }
 
-  evaluateSingle(options: AnswerOption[], indCounts: number[]): number {
+  evaluateSingle(correctOptionIndexes: number[], indCounts: number[]): number {
 
-    if (this.checkIfSurvey(options)) {
+    if (this.checkIfSurvey(correctOptionIndexes)) {
       let correctCounts = 0;
       let totalCounts = 0;
-      const length = options.length;
-      const correctIndex = new Array<number>();
       let res: number;
-      for (let i = 0; i < length; i++) {
-        if (options[i].points > 0) {
-          correctIndex[0] = i;
-        }
-      }
-      for (let i = 0; i < length; i++) {
-        if (correctIndex.includes(i)) {
+      for (let i = 0; i < correctOptionIndexes.length; i++) {
+        if (i === correctOptionIndexes[0]) {
           correctCounts += indCounts[i];
         }
         totalCounts += indCounts[i];
@@ -236,28 +229,17 @@ export class StatisticListComponent implements OnInit {
     }
   }
 
-  evaluateMultiple(options: AnswerOption[], combCounts?: Combination[]): number {
-    if (combCounts && this.checkIfSurvey(options)) {
-      const combLength = combCounts.length;
+  evaluateMultiple(correctOptionIndexes: number[], combCounts?: Combination[]): number {
+    if (combCounts && this.checkIfSurvey(correctOptionIndexes)) {
       let correctCounts = 0;
       let totalCounts = 0;
-      const optionsLength = options.length;
-      const correctIndexes = new Array<number>();
       let res: number;
-      let cic = 0;
-      for (let i = 0; i < optionsLength; i++) {
-        if (options[i].points > 0) {
-          correctIndexes[cic] = i;
-          cic++;
+      for (let i = 0; i < combCounts.length; i++) {
+        const counts = combCounts[i].count;
+        if (correctOptionIndexes.sort().toString() === combCounts[i].selectedChoiceIndexes.sort().toString()) {
+          correctCounts = counts;
         }
-      }
-      for (let i = 0; i < combLength; i++) {
-        if (combCounts[i].selectedChoiceIndexes.length === correctIndexes.length) {
-          if (combCounts[i].selectedChoiceIndexes.toString() === correctIndexes.toString()) {
-            correctCounts += combCounts[i].count;
-          }
-        }
-        totalCounts += combCounts[i].count;
+        totalCounts += counts;
       }
       res = ((correctCounts / totalCounts) * 100);
       this.contentCounter++;
