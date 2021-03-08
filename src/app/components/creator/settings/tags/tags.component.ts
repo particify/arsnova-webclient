@@ -8,7 +8,6 @@ import { FormControl, Validators } from '@angular/forms';
 import { Room } from '../../../../models/room';
 import { RoomService } from '../../../../services/http/room.service';
 import { UpdateEvent } from '@arsnova/app/components/creator/settings/settings.component';
-import { TSMap } from 'typescript-map';
 
 @Component({
   selector: 'app-tags',
@@ -21,7 +20,7 @@ export class TagsComponent implements OnInit {
 
   @Input() room: Room;
 
-  extension: TSMap<string, any>;
+  tagExtension: object;
   tags: string[] = [];
   tagName = '';
 
@@ -37,17 +36,17 @@ export class TagsComponent implements OnInit {
   }
 
   ngOnInit() {
-    if (this.room.extensions !== undefined && this.room.extensions['tags'] !== undefined) {
-      this.extension = this.room.extensions['tags'];
+    if (this.room.extensions !== undefined && this.room.extensions.tags !== undefined) {
+      this.tagExtension = this.room.extensions.tags;
     }
     if (!this.room.extensions) {
-      this.extension = new TSMap<string, any>();
-      this.extension.set('enableTags', true);
-      this.room.extensions = new TSMap<string, TSMap<string, any>>();
-      this.room.extensions.set('tags', this.extension);
+      this.tagExtension = {};
+      this.tagExtension['enableTags'] = true;
+      this.room.extensions = {};
+      this.room.extensions.tags = this.tagExtension;
     } else {
-      if (this.room.extensions['tags']) {
-        this.tags = this.room.extensions['tags']['tags'];
+      if (this.room.extensions.tags) {
+        this.tags = this.room.extensions.tags['tags'] || [];
       }
     }
   }
@@ -56,17 +55,14 @@ export class TagsComponent implements OnInit {
     if (this.tagFormControl.valid) {
       this.tags.push(this.tagName);
       this.tagName = '';
-      const tagExtension = new TSMap<string, any>();
-      tagExtension.set('enableTags', true);
-      tagExtension.set('tags', this.tags);
-      this.room.extensions['tags'] = tagExtension;
+      this.room.extensions.tags = { enableTags: true, tags: this.tags };
       this.saveChanges(true);
     }
   }
 
   deleteTag(tag: string) {
     this.tags = this.tags.filter(o => o !== tag);
-    this.extension['tags'] = this.tags;
+    this.tagExtension['tags'] = this.tags;
     this.saveChanges(false);
   }
 

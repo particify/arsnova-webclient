@@ -6,7 +6,6 @@ import { catchError, map, tap } from 'rxjs/operators';
 import { BaseHttpService } from './base-http.service';
 import { AnswerStatistics } from '../../models/answer-statistics';
 import { ContentChoice } from '../../models/content-choice';
-import { TSMap } from 'typescript-map';
 import { WsConnectorService } from '../websockets/ws-connector.service';
 import { IMessage } from '@stomp/stompjs';
 import { TranslateService } from '@ngx-translate/core';
@@ -110,7 +109,7 @@ export class ContentService extends BaseHttpService {
     );
   }
 
-  patchContent(content: Content, changes: TSMap<string, any>): Observable<Content> {
+  patchContent(content: Content, changes: object): Observable<Content> {
     const connectionUrl = this.getBaseUrl(content.roomId) + this.serviceApiUrl.content + '/' + content.id;
     return this.http.patch(connectionUrl, changes, httpOptions).pipe(
       tap(_ => ''),
@@ -119,8 +118,7 @@ export class ContentService extends BaseHttpService {
   }
 
   changeState(content: Content): Observable<Content> {
-    const changes = new TSMap<string, any>();
-    changes.set('state', content.state);
+    const changes: { state: object } = { state: content.state };
     return this.patchContent(content, changes).pipe();
   }
 

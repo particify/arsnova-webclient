@@ -26,7 +26,7 @@ export class ContentChoice extends Content {
       body,
       groups,
       format,
-      new Map(),
+      {},
       state);
     this.options = options;
     this.correctOptionIndexes = correctOptionIndexes;

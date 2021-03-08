@@ -154,8 +154,8 @@ export class SurveyPageComponent implements OnInit, OnDestroy, AfterContentInit 
   loadConfig(room: Room) {
     this.room = room;
     this.isClosed = room.settings['feedbackLocked'];
-    if (this.room.extensions && this.room.extensions['feedback'] && this.room.extensions['feedback'].type) {
-      this.type = this.room.extensions['feedback'].type;
+    if (this.room.extensions && this.room.extensions.feedback && this.room.extensions.feedback['type']) {
+      this.type = this.room.extensions.feedback['type'];
     } else {
       this.roomService.changeFeedbackType(this.roomId, this.type);
     }

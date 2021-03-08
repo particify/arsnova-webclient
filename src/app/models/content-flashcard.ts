@@ -23,7 +23,7 @@ export class ContentFlashcard extends Content {
       body,
       groups,
       format,
-      new Map(),
+      {},
       state);
     this.additionalText = additionalText;
   }

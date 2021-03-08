@@ -8,11 +8,10 @@ import { MatDialogRef } from '@angular/material/dialog';
 import { ContentService } from '../../../../services/http/content.service';
 import { AuthenticationService } from '../../../../services/http/authentication.service';
 import { TranslateService } from '@ngx-translate/core';
-import { TSMap } from 'typescript-map';
 import { EventService } from '../../../../services/util/event.service';
 import { GlobalStorageService, STORAGE_KEYS } from '../../../../services/util/global-storage.service';
 import { ClientAuthentication } from '../../../../models/client-authentication';
-import { HINT_TYPES } from '@arsnova/app/components/shared/hint/hint.component';
+import { HINT_TYPES } from '../../hint/hint.component';
 import { AuthProvider } from '../../../../models/auth-provider';
 import { ApiConfigService } from '../../../../services/http/api-config.service';
 import { AuthenticationProvider, AuthenticationProviderRole, AuthenticationProviderType } from '../../../../models/api-config';
@@ -91,10 +90,8 @@ export class RoomCreateComponent implements OnInit {
       return;
     }
     const newRoom = new Room();
-    const commentExtension: TSMap<string, any> = new TSMap();
-    newRoom.extensions = new TSMap();
-    commentExtension.set('enableModeration', true);
-    newRoom.extensions.set('comments', commentExtension);
+    const commentExtension: { enableModeration: boolean } = { enableModeration: true };
+    newRoom.extensions = { comments: commentExtension };
     newRoom.name = longRoomName;
     newRoom.abbreviation = '00000000';
     newRoom.description = '';

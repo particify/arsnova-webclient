@@ -19,7 +19,7 @@ export class ContentText extends Content {
       body,
       groups,
       format,
-      new Map(),
+      {},
       state);
   }
 }

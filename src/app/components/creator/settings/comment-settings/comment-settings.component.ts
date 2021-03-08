@@ -9,12 +9,19 @@ import { BonusTokenService } from '../../../../services/http/bonus-token.service
 import { CommentSettingsService } from '../../../../services/http/comment-settings.service';
 import { Room } from '../../../../models/room';
 import { CommentSettings } from '../../../../models/comment-settings';
-import { TSMap } from 'typescript-map';
 import { DialogService } from '../../../../services/util/dialog.service';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { GlobalStorageService, STORAGE_KEYS } from '../../../../services/util/global-storage.service';
 import { UpdateEvent } from '@arsnova/app/components/creator/settings/settings.component';
 import { Comment } from '@arsnova/app/models/comment';
+
+export class CommentExtensions {
+  enableThreshold: boolean;
+  commentThreshold: number;
+  enableModeration: boolean;
+  enableTags: boolean;
+  tags: string[];
+}
 
 @Component({
   selector: 'app-comment-settings',
@@ -54,8 +61,8 @@ export class CommentSettingsComponent implements OnInit {
   }
 
   ngOnInit() {
-    if (this.editRoom.extensions && this.editRoom.extensions['comments']) {
-      this.commentExtension = this.editRoom.extensions['comments'];
+    if (this.editRoom.extensions && this.editRoom.extensions.comments) {
+      this.commentExtension = this.editRoom.extensions.comments;
       if (this.commentExtension.enableThreshold !== null) {
         this.commentExtension.commentThreshold !== undefined ?
           this.threshold = this.commentExtension.commentThreshold : this.threshold = -100;
@@ -106,7 +113,6 @@ export class CommentSettingsComponent implements OnInit {
     const exportComments = JSON.parse(JSON.stringify(comments));
     let valueFields = '';
     exportComments.forEach(element => {
-      console.log(element);
       valueFields += this.filterNotSupportedCharacters(element['body']) + delimiter;
       let time;
       time = element['timestamp'];
@@ -155,17 +161,16 @@ export class CommentSettingsComponent implements OnInit {
   }
 
   updateCommentSettings() {
-    const commentExtension: TSMap<string, any> = new TSMap();
-    commentExtension.set('enableThreshold', this.enableThreshold);
-    commentExtension.set('commentThreshold', this.threshold);
-    commentExtension.set('enableModeration', this.enableModeration);
-    commentExtension.set('enableTags', this.enableTags);
-    commentExtension.set('tags', this.tags);
+    let commentExtension: CommentExtensions = new CommentExtensions();
+    commentExtension.enableThreshold = this.enableThreshold;
+    commentExtension.commentThreshold = this.threshold;
+    commentExtension.enableModeration = this.enableModeration;
+    commentExtension.enableTags = this.enableTags;
+    commentExtension.tags = this.tags;
     if (!this.editRoom.extensions) {
-      this.editRoom.extensions = new TSMap<string, TSMap<string, any>>();
-      this.editRoom.extensions.set('comments', commentExtension);
+      this.editRoom.extensions = { comments: commentExtension };
     } else {
-      this.editRoom.extensions['comments'] = commentExtension;
+      this.editRoom.extensions.comments = commentExtension;
     }
     this.globalStorageService.setItem(STORAGE_KEYS.MODERATION_ENABLED, String(this.enableModeration));
     this.saveChanges();

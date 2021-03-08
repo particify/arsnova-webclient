@@ -10,7 +10,7 @@ export class Content {
   renderedBody: string;
   groups: string[];
   format: ContentType;
-  formatAttributes: Map<string, string>;
+  formatAttributes: { [key: string ]: string };
   abstentionsAllowed: boolean;
   state: ContentState;
 
@@ -21,7 +21,7 @@ export class Content {
               body: string,
               groups: string[],
               format: ContentType,
-              formatAttributes: Map<string, string>,
+              formatAttributes: { [key: string ]: string },
               state: ContentState) {
     this.id = id;
     this.revision = revision;
