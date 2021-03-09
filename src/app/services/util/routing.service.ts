@@ -2,6 +2,30 @@ import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, ActivationEnd, Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { filter } from 'rxjs/operators';
+import { TranslateService } from '@ngx-translate/core';
+import { LanguageService } from './language.service';
+
+export const TITLES: { [key: string]: string } = {
+  home: 'home',
+  login: 'login',
+  register: 'register',
+  'request-password-reset': 'request-pw-reset',
+  'password-reset/:email': 'pw-reset',
+  user: 'user',
+  import: 'import',
+  '': 'room',
+  comments: 'comments',
+  'moderator/comments': 'moderation',
+  survey: 'live-survey',
+  statistics: 'statistics',
+  'group/:contentGroup/statistics': 'presentation',
+  'create-content': 'content-creation',
+  settings: 'settings',
+  edit: 'content-edit',
+  group: 'content-group',
+  'group/:contentGroup': 'content-group',
+  'group/:contentGroup/statistics/:contentIndex': 'content-group'
+};
 
 @Injectable({
   providedIn: 'root'
@@ -33,10 +57,16 @@ export class RoutingService {
   backRoute: string;
   fullCurrentRoute: string;
   redirectRoute: string;
+  homeTitle: string;
+  suffix: string;
+  titleKey: string;
+  isTranslatedTitle: boolean;
 
   constructor(
     private router: Router,
-    private location: Location) {
+    private location: Location,
+    private translateService: TranslateService,
+    private langService: LanguageService) {
   }
 
   subscribeActivatedRoute() {
@@ -48,6 +78,14 @@ export class RoutingService {
         this.getRoutes(activationEndEvent.snapshot);
       }
     });
+    this.langService.langEmitter.subscribe(lang => {
+      if (this.isTranslatedTitle) {
+        this.translateService.use(lang);
+        this.translateService.get('title.' + this.titleKey).subscribe(msg => {
+          this.updateTitle(msg);
+        });
+      }
+    });
   }
 
   getRoutes(route: ActivatedRouteSnapshot) {
@@ -56,6 +94,7 @@ export class RoutingService {
     this.fullCurrentRoute = this.location.path();
     this.currentRoute = route.routeConfig.path;
     this.getBackRoute(this.currentRoute, shortId, role);
+    this.setTitle(route);
   }
 
   getBackRoute(route: string, shortId: string, role: string) {
@@ -109,5 +148,42 @@ export class RoutingService {
     } else {
       return lowerCaseRole;
     }
+  }
+
+  setTitle(route?: ActivatedRouteSnapshot) {
+    if (!this.homeTitle) {
+      this.homeTitle = document.title;
+      this.suffix = ' | ' + (this.homeTitle.split('|')[0] || this.homeTitle);
+    }
+    this.titleKey = TITLES[route.routeConfig.path];
+    let title: string;
+    switch(this.titleKey) {
+      case 'room':
+        title = route.data.room.name;
+        break;
+      case 'content-group':
+        title = route.params.contentGroup;
+        break;
+      case 'home':
+        title = this.homeTitle;
+        break;
+      default:
+    }
+    if (!title) {
+      this.isTranslatedTitle = true;
+      this.translateService.get('title.' + this.titleKey).subscribe(msg => {
+        this.updateTitle(msg);
+      });
+    } else {
+      this.isTranslatedTitle = false;
+      this.updateTitle(title)
+    }
+  }
+
+  updateTitle(title: string) {
+    if (title !== this.homeTitle) {
+      title = title + this.suffix;
+    }
+    document.title = title;
   }
 }

@@ -331,5 +331,19 @@
     "room-not-found": "There was no room found with this number.",
     "something-went-wrong": "Something went wrong.",
     "http-too-many-requests": "Too many requests from your network."
+  },
+  "title": {
+    "register": "Register",
+    "login": "Login",
+    "request-pw-reset": "Password reset",
+    "pw-reset": "Set new password",
+    "user": "My rooms",
+    "comments": "Comments",
+    "moderation": "Moderation",
+    "presentation": "Present questions",
+    "content-creation": "Create question",
+    "live-survey": "Live-Survey",
+    "statistics": "Statistics",
+    "settings": "Settings"
   }
 }

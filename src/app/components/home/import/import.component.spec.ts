@@ -1,4 +1,4 @@
-import { Injectable, Component } from '@angular/core';
+import { Injectable, Component, EventEmitter } from '@angular/core';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { Observable, of } from 'rxjs';
@@ -7,6 +7,7 @@ import { ImportComponent } from './import.component';
 import { RoomService } from '../../../services/http/room.service';
 import { NotificationService } from '../../../services/util/notification.service';
 import { Router } from '@angular/router';
+import { LanguageService } from '../../../services/util/language.service';
 
 const TRANSLATION_DE = require('../../../../assets/i18n/home/de.json');
 const TRANSLATION_EN = require('../../../../assets/i18n/home/en.json');
@@ -50,6 +51,11 @@ class MockNotificationService {
 
 }
 
+@Injectable()
+class MockLanguageService {
+  public readonly langEmitter = new EventEmitter<string>();
+}
+
 /* eslint-disable @angular-eslint/component-selector */
 @Component({ selector: 'mat-card', template: '<ng-content></ng-content>' })
 class MatCardStubComponent {}
@@ -90,6 +96,10 @@ describe('ImportComponent', () => {
         {
           provide: AuthenticationService,
           useClass: MockAuthenticationService
+        },
+        {
+          provide: LanguageService,
+          useClass: MockLanguageService
         }
       ]
     }).compileComponents()
