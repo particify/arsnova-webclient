@@ -79,6 +79,13 @@ export class ContentGroupService extends BaseHttpService {
     );
   }
 
+  patchContentGroup(group: ContentGroup, changes: object): Observable<ContentGroup> {
+    const connectionUrl = `${this.getBaseUrl(group.roomId) + this.serviceApiUrl.contentGroup + '/' + group.id}`;
+    return this.http.patch(connectionUrl, changes, httpOptions).pipe(
+      catchError(this.handleError<any>('patchContentGroup'))
+    );
+  }
+
   saveGroupInMemoryStorage(newGroup: string): boolean {
     if (newGroup !== '') {
       this.globalStorageService.setItem(STORAGE_KEYS.LAST_GROUP, newGroup);

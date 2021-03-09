@@ -20,7 +20,7 @@
     </mat-list-item>
   </mat-list>
 </mat-radio-group>
-<div *ngIf="isChoice && !hasAbstained && content.state.responsesVisible"
+<div *ngIf="isChoice && !hasAbstained && content.state.answersPublished"
      class="solution invisible" [ngClass]="{'visible' : alreadySent}">
   <mat-icon class="icon-indicator" [ngClass]="isCorrect ? 'correct' : 'wrong'">
     {{isCorrect ? 'check' : 'close'}}</mat-icon>

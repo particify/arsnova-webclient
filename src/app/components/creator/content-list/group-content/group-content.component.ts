@@ -1,4 +1,4 @@
-import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { Content } from '../../../../models/content';
 import { ContentService } from '../../../../services/http/content.service';
 import { RoomService } from '../../../../services/http/room.service';
@@ -17,6 +17,7 @@ import { KeyboardUtils } from '../../../../utils/keyboard';
 import { KeyboardKey } from '../../../../utils/keyboard/keys';
 import { EventService } from '../../../../services/util/event.service';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-group-content',
@@ -30,8 +31,12 @@ export class GroupContentComponent extends ContentListBaseComponent implements O
   isInSortingMode = false;
   updatedName: string;
   baseURL = 'creator/room/';
-  unlocked = false;
-  directAnswer = false;
+  published = false;
+  statisticsPublished = true;
+  firstPublishedIndex = 0;
+  lastPublishedIndex = -1;
+  lastPublishedIndexBackup = -1;
+  firstPublishedIndexBackup = -1;
   copiedContents = [];
 
   constructor(
@@ -87,6 +92,7 @@ export class GroupContentComponent extends ContentListBaseComponent implements O
         this.globalStorageService.setItem(STORAGE_KEYS.LAST_GROUP, this.collectionName);
         this.roomService.getGroupByRoomIdAndName(this.room.id, this.collectionName).subscribe(group => {
           this.contentGroup = group;
+          this.setRange();
           this.contentService.getContentsByIds(this.contentGroup.roomId, this.contentGroup.contentIds).subscribe(contents => {
             this.initContentList(contents);
           });
@@ -97,12 +103,8 @@ export class GroupContentComponent extends ContentListBaseComponent implements O
   }
 
   setSettings() {
-    if (this.contents.filter(c => c.state.visible).length) {
-      this.unlocked = true;
-    }
-    if (this.contents.filter(c => c.state.responsesVisible).length) {
-      this.directAnswer = true;
-    }
+    this.published = this.contentGroup.published;
+    this.statisticsPublished = this.contentGroup.statisticsPublished;
   }
 
   goToEdit(content: Content) {
@@ -138,27 +140,24 @@ export class GroupContentComponent extends ContentListBaseComponent implements O
 
   saveGroupName(): void {
     if (this.updatedName !== this.collectionName) {
-      const newGroup = new ContentGroup();
-      newGroup.roomId = this.contentGroup.roomId;
-      newGroup.contentIds = this.contentGroup.contentIds;
-      this.contentGroupService.delete(this.contentGroup).subscribe(() => {
-        newGroup.name = this.updatedName;
-        this.contentGroupService.post(this.room.id, this.updatedName, newGroup).subscribe(postedContentGroup => {
-          this.contentGroup = postedContentGroup;
+      const changes: { name: string } = { name: this.updatedName };
+      this.updateContentGroup(changes).subscribe(updatedGroup => {
+          this.contentGroup = updatedGroup;
           this.contentGroupService.updateGroupInMemoryStorage(this.collectionName, this.updatedName);
-          this.collectionName = postedContentGroup.name;
+          this.collectionName = this.contentGroup.name;
           this.translateService.get('content.updated-content-group').subscribe(msg => {
             this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.SUCCESS);
           });
           this.updateURL();
         });
-      });
     }
     this.leaveTitleEditMode(true);
   }
 
   createCopy() {
     this.copiedContents = this.contents.map(content => ({ ...content }));
+    this.firstPublishedIndexBackup = this.firstPublishedIndex;
+    this.lastPublishedIndexBackup = this.lastPublishedIndex;
   }
 
   goInSortingMode(): void {
@@ -166,41 +165,96 @@ export class GroupContentComponent extends ContentListBaseComponent implements O
     this.isInSortingMode = true;
   }
 
-  leaveSortingMode(): void {
+  leaveSortingMode(abort?: boolean): void {
     this.isInSortingMode = false;
+    if (abort) {
+      this.setPublishedIndexesToBackup();
+    }
+  }
+
+  setPublishedIndexesToBackup() {
+    this.firstPublishedIndex = this.firstPublishedIndexBackup;
+    this.lastPublishedIndex = this.lastPublishedIndexBackup;
   }
 
   saveSorting(): void {
     const newContentIdOrder = this.copiedContents.map(c => c.id);
     if (this.contentGroup.contentIds !== newContentIdOrder) {
-      this.contentGroup.contentIds = newContentIdOrder;
-      this.contentGroup.autoSort = false;
-      this.contentGroupService.updateGroup(this.contentGroup.roomId, this.contentGroup.name, this.contentGroup).
-      subscribe(postedContentGroup => {
-        this.contentGroup = postedContentGroup;
+      const changes: { contendIds: string[], firstPublishedIndex: number, lastPublishedIndex: number } =
+        { contendIds: newContentIdOrder, firstPublishedIndex: this.firstPublishedIndex, lastPublishedIndex: this.lastPublishedIndex };
+      this.updateContentGroup(changes).subscribe(updatedContentGroup => {
+        this.contentGroup = updatedContentGroup;
         this.contents = this.copiedContents;
         this.initContentList(this.contents);
         this.translateService.get('content.updated-sorting').subscribe(msg => {
           this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.SUCCESS);
         });
         this.leaveSortingMode();
+      },
+        error => {
+        this.setPublishedIndexesToBackup()
       });
     }
   }
 
-  lockContents() {
-    for (const content of this.contents) {
-      this.lockContent(content, this.unlocked);
+  updateContentGroup(changes: object): Observable<ContentGroup> {
+    return this.contentGroupService.patchContentGroup(this.contentGroup, changes);
+  }
+
+  publishContents() {
+    const changes: { published: boolean } = { published: !this.contentGroup.published };
+    this.updateContentGroup(changes).subscribe(updatedContentGroup => {
+      this.contentGroup = updatedContentGroup;
+      this.published = this.contentGroup.published;
+    });
+  }
+
+  publishContent(index: number, publish: boolean) {
+    if (publish) {
+      this.updatePublishedIndexes(index, index);
+    } else {
+      if (this.lastPublishedIndex === this.firstPublishedIndex) {
+        this.resetPublishing()
+      } else {
+        if (index === this.firstPublishedIndex) {
+          this.updatePublishedIndexes(index + 1, this.lastPublishedIndex);
+        } else if (index === this.lastPublishedIndex) {
+          this.updatePublishedIndexes(this.firstPublishedIndex, index - 1);
+        }
+      }
     }
   }
 
-  lockContent(content: Content, unlocked?: boolean) {
-    if (unlocked !== undefined) {
-      content.state.visible = unlocked;
+  publishContentFrom(index: number, publish: boolean) {
+    if (publish) {
+      const last = this.lastPublishedIndex === -1 || this.lastPublishedIndex < index ? this.contents.length - 1 : this.lastPublishedIndex;
+      this.updatePublishedIndexes(index, last);
     } else {
-      content.state.visible = !content.state.visible;
+      if (index === this.firstPublishedIndex) {
+        this.resetPublishing();
+      } else {
+        const first = this.firstPublishedIndex === -1 || this.firstPublishedIndex > index ? 0 : this.firstPublishedIndex;
+        this.updatePublishedIndexes(first, index - 1);
+      }
     }
-    this.contentService.changeState(content).subscribe(updatedContent => content = updatedContent);
+  }
+
+  publishContentUpTo(index: number, publish: boolean) {
+    if (publish) {
+      const first = (this.firstPublishedIndex === -1 || this.firstPublishedIndex > index) ? 0 : this.firstPublishedIndex;
+      this.updatePublishedIndexes(first, index);
+    } else {
+      if (index === this.lastPublishedIndex) {
+        this.resetPublishing();
+      } else {
+        const last = this.lastPublishedIndex === -1 || this.lastPublishedIndex < index ? this.contents.length - 1 : this.lastPublishedIndex;
+        this.updatePublishedIndexes(index + 1, last);
+      }
+    }
+  }
+
+  resetPublishing() {
+    this.updatePublishedIndexes(-1, -1);
   }
 
   showDeleteAnswerDialog(content: Content): void {
@@ -220,26 +274,78 @@ export class GroupContentComponent extends ContentListBaseComponent implements O
     });
   }
 
-  toggleDirectAnswer(content: Content, directAnswer?: boolean) {
-    if (directAnswer !== undefined) {
-      content.state.responsesVisible = directAnswer;
+  toggleAnswersPublished(content: Content, answersPublished?: boolean) {
+    if (answersPublished !== undefined) {
+      content.state.answersPublished = answersPublished;
     } else {
-      content.state.responsesVisible = !content.state.responsesVisible;
+      content.state.answersPublished = !content.state.answersPublished;
     }
     this.contentService.changeState(content).subscribe(updatedContent => content = updatedContent);
   }
 
-  toggleDirectAnswers() {
-    for (const content of this.contents) {
-      this.toggleDirectAnswer(content, this.directAnswer);
-    }
+  toggleStatisticsPublished() {
+    const changes: { statisticsPublished: boolean } = { statisticsPublished: !this.contentGroup.statisticsPublished };
+    this.updateContentGroup(changes).subscribe(updatedContentGroup => {
+      this.contentGroup = updatedContentGroup;
+      this.statisticsPublished = this.contentGroup.statisticsPublished;
+    });
   }
 
   drop(event: CdkDragDrop<Content[]>) {
-    moveItemInArray(this.copiedContents, event.previousIndex, event.currentIndex);
+    const prev = event.previousIndex;
+    const current = event.currentIndex;
+    moveItemInArray(this.copiedContents, prev, current);
+    this.sortPublishedIndexes(prev, current);
   }
 
+  sortPublishedIndexes(prev: number, current: number) {
+    if (this.firstPublishedIndex !== -1 && this.lastPublishedIndex !== -1) {
+      if (prev !== current && !(this.isAboveRange(prev) && this.isAboveRange(current)
+        || this.isBelowRange(prev) && this.isBelowRange(current))) {
+        if (this.firstPublishedIndex === this.lastPublishedIndex) {
+          const publishedIndex = this.firstPublishedIndex;
+          if (prev === publishedIndex) {
+            this.setTempRange(current, current);
+          } else {
+            const newPublishedIndex = prev < publishedIndex ? publishedIndex - 1 : publishedIndex + 1;
+            this.setTempRange(newPublishedIndex, newPublishedIndex);
+          }
+        } else {
+          if (this.isInRange(prev)) {
+            if (!this.isInRangeExclusive(current)) {
+              if (this.isAboveRange(current)) {
+                this.setTempRange(this.firstPublishedIndex, this.lastPublishedIndex - 1);
+              } else if (this.isBelowRange(current)) {
+                this.setTempRange(this.firstPublishedIndex + 1, this.lastPublishedIndex);
+              }
+            }
+          } else {
+            if (this.isInRangeExclusive(current) || (this.isAboveRange(prev) && this.isEnd(current))
+              || (this.isBelowRange(prev) && this.isStart(current))) {
+              if (this.isBelowRange(prev)) {
+                this.setTempRange(this.firstPublishedIndex - 1, this.lastPublishedIndex);
+              } else if (this.isAboveRange(prev)) {
+                this.setTempRange(this.firstPublishedIndex, this.lastPublishedIndex + 1);
+              }
+            } else {
+              if (current <= this.firstPublishedIndex || current >= this.lastPublishedIndex) {
+                const adjustment = this.isBelowRange(prev) ? -1 : 1;
+                this.setTempRange(this.firstPublishedIndex + adjustment, this.lastPublishedIndex + adjustment);
+              }
+            }
+          }
+        }
+      }
+    }
+  }
 
+  isInRange(index: number): boolean {
+    return index <= this.lastPublishedIndex && index >= this.firstPublishedIndex;
+  }
+
+  isInRangeExclusive(index: number): boolean {
+    return index < this.lastPublishedIndex && index > this.firstPublishedIndex;
+  }
   removeContent(delContent: Content) {
     const index = this.findIndexOfId(delContent.id);
     const dialogRef = this.dialogService.openDeleteDialog('really-remove-content', this.contents[index].body, 'remove');
@@ -255,6 +361,56 @@ export class GroupContentComponent extends ContentListBaseComponent implements O
     map(co => co.id).indexOf(content.id);
     if (index > -1) {
       this.router.navigate([`/creator/room/${this.room.shortId}/group/${this.contentGroup.name}/statistics/${index + 1}`]);
+    }
+  }
+
+  updatePublishedIndexes(first: number, last: number) {
+    const changes: { firstPublishedIndex: number, lastPublishedIndex: number } = { firstPublishedIndex: first, lastPublishedIndex: last };
+    this.updateContentGroup(changes).subscribe(updatedContentGroup => {
+      this.contentGroup = updatedContentGroup;
+      this.setRange();
+    });
+  }
+
+  setRange() {
+    this.firstPublishedIndex = this.contentGroup.firstPublishedIndex;
+    this.lastPublishedIndex = this.contentGroup.lastPublishedIndex;
+    const key = this.firstPublishedIndex === - 1 ? 'no' : this.lastPublishedIndex === -1 ? 'all'
+      : this.firstPublishedIndex === this.lastPublishedIndex ? 'single' : 'range';
+    const msg = this.translateService.instant('content.a11y-' + key + '-published',
+      { first: this.firstPublishedIndex + 1, last: this.lastPublishedIndex + 1 });
+    this.announceService.announce(msg);
+  }
+
+  setTempRange(first: number, last: number) {
+    this.firstPublishedIndex = first;
+    this.lastPublishedIndex = last;
+  }
+
+  isBelowRange(index: number): boolean {
+    return index < this.firstPublishedIndex;
+  }
+
+  isAboveRange(index: number): boolean {
+    return index > this.lastPublishedIndex;
+  }
+
+  isStart(index: number): boolean {
+    return index === this.firstPublishedIndex;
+  }
+
+  isEnd(index: number): boolean {
+    return index === this.lastPublishedIndex;
+  }
+
+  isPublished(index: number): boolean {
+    if (this.lastPublishedIndex === -1 && this.firstPublishedIndex > -1) {
+      return true;
+    } else {
+      if (this.firstPublishedIndex === -1) {
+        return false;
+      }
+      return ((this.firstPublishedIndex <= index) && (index <= this.lastPublishedIndex));
     }
   }
 }

@@ -65,7 +65,7 @@
             {{ 'content.sort-content-group' | translate}}
           </button>
           <button *ngIf="isInSortingMode" mat-raised-button class="abort button-abort"
-                  (click)="leaveSortingMode()" (keyup.enter)="leaveTitleEditMode()" aria-labelledby="discard-changes">
+                  (click)="leaveSortingMode(true)" (keyup.enter)="leaveTitleEditMode()" aria-labelledby="discard-changes">
             {{ 'content.abort' | translate }}
           </button>
           <button *ngIf="isInSortingMode" mat-raised-button class="button-primary"
@@ -74,14 +74,14 @@
           </button>
           <span class="fill-remaining-space"></span>
           <p *ngIf="!isInSortingMode" class="slide-text">
-            {{ 'content.answers-direct' | translate}}
-            <mat-slide-toggle id="direct-show-slide" class="lock" (change)="toggleDirectAnswers()"
-                              [(ngModel)]="directAnswer" aria-labelledby="direct-show-answer">
+            {{ 'content.publish-statistics' | translate}}
+            <mat-slide-toggle id="direct-show-slide" class="lock" (change)="toggleStatisticsPublished()"
+                              [(ngModel)]="statisticsPublished" aria-labelledby="publish-statistics">
             </mat-slide-toggle>
           </p>
           <p *ngIf="!isInSortingMode" class="slide-text">
-            {{ 'content.unlock-questions' | translate}}
-            <mat-slide-toggle id="lock-questions-slide" class="lock" (change)="lockContents()" [(ngModel)]="unlocked"
+            {{ 'content.unlock-collection' | translate}}
+            <mat-slide-toggle id="lock-questions-slide" class="lock" (change)="publishContents()" [(ngModel)]="published"
                               aria-labelledby="lock-questions">
             </mat-slide-toggle>
           </p>
@@ -92,7 +92,7 @@
           <mat-list *ngIf="!isInSortingMode">
               <mat-list-item *ngFor="let content of contents; index as i" fxLayout="column" fxLayoutAlign="center"
                              class="bottom-border" (click)="navigateToContentStats(content)"
-                             [ngClass]="{'not-supported': contentTypes.indexOf(content.format) === -1}">
+                             [ngClass]="{'not-supported': contentTypes.indexOf(content.format) === -1, 'locked-content': !isPublished(i), 'unlocked-content': isPublished(i)}">
               <div fxLayout="row" fxLayoutAlign="space-between" fxFill>
                 <p class="ellipsis" tabindex="0" role="button" (keyup.enter)="navigateToContentStats(content)"
                    attr.aria-label="{{ 'content.a11y-selected-content' | translate: { name: content.body } }}">
@@ -100,20 +100,62 @@
                 </p>
                 <div fxLayout="row" fxLayoutAlign="center center">
                   <div fxLayout="row" *ngIf="contentTypes.indexOf(content.format) > -1">
-                    <button mat-icon-button (click)="toggleDirectAnswer(content);$event.stopPropagation()"
-                            attr.aria-label="{{ (content.state.responsesVisible ? 'content.a11y-dont-direct-show-answer' : 'content.a11y-direct-show-answer') | translate }}"
-                            matTooltip="{{(content.state.responsesVisible ? 'content.answer-hide' : 'content.answer-direct') | translate}}">
-                      <mat-icon class="lock-icon" [ngClass]="{'locked': !content.state.responsesVisible,
-              'unlocked': content.state.responsesVisible}">{{content.state.responsesVisible? 'flash_on' : 'flash_off'}}
-                      </mat-icon>
+                    <button mat-icon-button *ngIf="content.format === 'TEXT' && content.state.answersPublished"
+                            (click)="toggleAnswersPublished(content);$event.stopPropagation()"
+                            attr.aria-label="{{ 'content.a11y-dont-publish-answers' | translate }}"
+                            matTooltip="{{ 'content.dont-publish-answers' | translate}}">
+                      <mat-icon class="lock-icon unlocked">visibility</mat-icon>
                     </button>
-                    <button mat-icon-button (click)="lockContent(content);$event.stopPropagation()"
-                            attr.aria-label="{{ (content.state.visible ? 'content.a11y-lock-question' : 'content.a11y-unlock-question') | translate }}"
-                            matTooltip="{{(content.state.visible ? 'content.lock-question' : 'content.unlock-question') | translate}}">
-                      <mat-icon class="lock-icon" [ngClass]="{'locked': !content.state.visible, 'unlocked': content.state.visible}">
-                        {{!content.state.visible? 'lock' : 'lock_open'}}
-                      </mat-icon>
+                    <button mat-icon-button *ngIf="content.format === 'TEXT' && !content.state.answersPublished"
+                            (click)="toggleAnswersPublished(content);$event.stopPropagation()"
+                            attr.aria-label="{{ 'content.a11y-publish-answers' | translate }}"
+                            matTooltip="{{ 'content.publish-answers' | translate}}">
+                      <mat-icon class="lock-icon locked">visibility_off</mat-icon>
                     </button>
+                    <button mat-icon-button (click)="$event.stopPropagation()" #publishTrigger="matMenuTrigger"
+                            [matMenuTriggerFor]="publishActions"
+                            attr.aria-label="{{ 'content.a11y-unlock' | translate }}"
+                            matTooltip="{{ 'content.unlock' | translate}}">
+                      <mat-icon class="lock-icon locked">lock_open</mat-icon>
+                    </button>
+                    <mat-menu #publishActions="matMenu" xPosition="before">
+                      <div class="menu-unlock">
+                        <button mat-menu-item *ngIf="((firstPublishedIndex !== lastPublishedIndex) ||
+                        (firstPublishedIndex === lastPublishedIndex && i !== firstPublishedIndex)) ||
+                        !isPublished(i)" (click)="publishContent(i, true)"
+                                [attr.aria-label]="'content.a11y-unlock-this-content' | translate">
+                          <mat-icon>vertical_align_center</mat-icon>
+                          {{ 'content.unlock-this-content' | translate}}
+                        </button>
+                        <button mat-menu-item *ngIf="i !== contents.length -1 && !isPublished(i)" (click)="publishContentFrom(i, true)"
+                                [attr.aria-label]="'content.a11y-unlock-contents-from' | translate">
+                          <mat-icon>vertical_align_top</mat-icon>
+                          {{ 'content.unlock-contents-from' | translate}}
+                        </button>
+                        <button mat-menu-item *ngIf="!isPublished(i) && i > 0" (click)="publishContentUpTo(i, true)"
+                                [attr.aria-label]="'content.a11y-unlock-contents-up-to' | translate">
+                          <mat-icon>vertical_align_bottom</mat-icon>
+                          {{ 'content.unlock-contents-up-to' | translate}}
+                        </button>
+                      </div>
+                      <div *ngIf="isPublished(i)" class="menu-lock">
+                        <button mat-menu-item *ngIf="isStart(i) || isEnd(i)" (click)="publishContent(i, false)"
+                                [attr.aria-label]="'content.a11y-lock-this-content' | translate">
+                          <mat-icon>vertical_align_center</mat-icon>
+                          {{ 'content.lock-this-content' | translate}}
+                        </button>
+                        <button mat-menu-item *ngIf="!isStart(i)" (click)="publishContentUpTo(i, false)"
+                                [attr.aria-label]="'content.a11y-lock-contents-up-to' | translate">
+                          <mat-icon>vertical_align_top</mat-icon>
+                          {{ 'content.lock-contents-up-to' | translate}}
+                        </button>
+                        <button mat-menu-item *ngIf="!isEnd(i)" (click)="publishContentFrom(i, false)"
+                                  [attr.aria-label]="'content.a11y-lock-contents-from' | translate">
+                          <mat-icon>vertical_align_bottom</mat-icon>
+                          {{ 'content.lock-contents-from' | translate}}
+                        </button>
+                      </div>
+                    </mat-menu>
                     <button mat-icon-button (keyup.enter)="menuTrigger.openMenu()" #menuTrigger="matMenuTrigger"
                             [matMenuTriggerFor]="moreActions" (click)="$event.stopPropagation()" aria-labelledby="more"
                             class="moreButton" matTooltip="{{ 'content.more-options' | translate}}">
@@ -167,7 +209,8 @@
           <div *ngIf="isInSortingMode">
             <mat-list cdkDropList [cdkDropListData]="copiedContents" (cdkDropListDropped)="drop($event)">
               <mat-list-item class="content-box bottom-border" fxLayout="column" fxLayoutAlign="center"
-                             *ngFor="let content of copiedContents" cdkDrag>
+                             *ngFor="let content of copiedContents; index as i" cdkDrag
+                             [ngClass]="{'locked-content': !isPublished(i), 'unlocked-content': isPublished(i)}">
                 <div fxLayout="row" fxLayoutAlign="space-between center" fxFill>
                   <p class="ellipsis">{{content.body}}</p>
                   <mat-icon>drag_handle</mat-icon>
@@ -189,8 +232,8 @@
   <div id="create-content">{{ 'content.a11y-create-content' | translate }}</div>
   <div id="present-contents">{{ 'content.a11y-present-contents' | translate }}</div>
   <div id="statistics">{{ 'content.a11y-nav-to-stats' | translate }}</div>
-  <div id="direct-show-answers">{{ (directAnswer ? 'content.a11y-dont-direct-show-answers' : 'content.a11y-direct-show-answers') | translate }}</div>
-  <div id="lock-questions">{{ (unlocked ? 'content.a11y-lock-questions' : 'content.a11y-unlock-questions') | translate }}</div>
+  <div id="publish-statistics">{{ (statisticsPublished ? 'content.a11y-dont-publish-statistics' : 'content.a11y-publish-statistics') | translate }}</div>
+  <div id="lock-questions">{{ (published ? 'content.a11y-lock-collection' : 'content.a11y-unlock-collection') | translate }}</div>
   <div id="more">{{ 'content.a11y-more-options' | translate }}</div>
   <div id="save-sort-changes">{{ 'content.a11y-save-sort-changes' | translate }}</div>
 </div>

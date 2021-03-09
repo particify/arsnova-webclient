@@ -21,7 +21,7 @@ import { AnnounceService } from '../../../services/util/announce.service';
 
 export abstract class ContentListBaseComponent {
 
-  protected contents: Content[];
+  contents: Content[];
   contentTypes: string[] = Object.values(ContentType);
   room: Room;
   isLoading = true;

@@ -38,7 +38,8 @@
     "show-front": "Umdrehen",
     "show-back": "Umdrehen",
     "next-content": "Weiter",
-    "first-content": "Zum Anfang"
+    "first-content": "Zum Anfang",
+    "group-not-available": "Diese Sammlung ist nicht verfügbar"
   },
   "comment-list": {
     "a11y-search-list": "Durchsuche die Kommentare",

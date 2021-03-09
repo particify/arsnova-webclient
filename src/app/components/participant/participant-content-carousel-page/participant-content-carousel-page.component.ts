@@ -15,6 +15,8 @@ import { Location } from '@angular/common';
 import { ContentAnswerService } from '../../../services/http/content-answer.service';
 import { AuthenticationService } from '../../../services/http/authentication.service';
 import { Answer } from '../../../models/answer';
+import { RoutingService } from '../../../services/util/routing.service';
+import { AdvancedSnackBarTypes, NotificationService } from '../../../services/util/notification.service';
 
 @Component({
   selector: 'app-participant-content-carousel-page',
@@ -52,7 +54,9 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
     private globalStorageService: GlobalStorageService,
     private location: Location,
     private answerService: ContentAnswerService,
-    private authenticationService: AuthenticationService
+    private authenticationService: AuthenticationService,
+    private routingService: RoutingService,
+    private notificationService: NotificationService
   ) {
   }
 
@@ -85,7 +89,7 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
       this.roomService.getGroupByRoomIdAndName('~' + this.shortId, this.contentGroupName).subscribe(contentGroup => {
         this.contentGroup = contentGroup;
         this.contentService.getContentsByIds(this.contentGroup.roomId, this.contentGroup.contentIds).subscribe(contents => {
-          this.contents = this.contentService.getSupportedContents(contents).filter(content => content.state.visible);
+          this.contents = this.contentService.getSupportedContents(contents); // TODO: Removed filter for testing
           this.answerService.getAnswersByUserIdContentIds(contentGroup.roomId, userId, this.contents.map(c => c.id)).subscribe(answers => {
             let answersAdded = 0;
             for (const [index, content] of this.contents.entries()) {
@@ -104,7 +108,12 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
             this.getFirstUnansweredContent();
           });
         });
-      });
+      },
+        error => {
+        this.isLoading = false;
+        const msg = this.translateService.instant('answer.group-not-available');
+        this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
+        });
     });
   }
 
@@ -159,7 +168,7 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
     if (this.started === this.status.NORMAL) {
       if (index < this.contents.length - 1) {
         let wait = 400;
-        if (this.contents[index].state.responsesVisible) {
+        if (this.contents[index].state.answersPublished) {
           wait += 600;
         }
         setTimeout(() => {

@@ -12,6 +12,9 @@
 
 .mat-list-item {
   cursor: pointer;
+  transition-property: background-color, color;
+  transition-duration: 300ms;
+  transition-timing-function: ease-in;
 }
 
 .actionButton {
@@ -112,6 +115,29 @@
 
 .unlocked {
   color: var(--on-surface);
+}
+
+.locked-content {
+  opacity: 0.7;
+}
+
+.unlocked-content {
+  background-color: var(--secondary-variant)!important;
+  & p {
+    color: var(--black);
+  }
+}
+
+.menu-lock {
+  & mat-icon {
+    color: var(--red);
+  }
+}
+
+.menu-unlock {
+  & mat-icon {
+    color: var(--green);
+  }
 }
 
 .content-list {
