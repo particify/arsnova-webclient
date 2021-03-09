@@ -1,5 +1,3 @@
-import { TSMap } from 'typescript-map';
-
 export class Room {
   id: string;
   revision: string;
@@ -10,8 +8,8 @@ export class Room {
   description: string;
   renderedDescription: string;
   closed: boolean;
-  settings: TSMap<string, any>;
-  extensions: TSMap<string, TSMap<string, any>>;
+  settings: object;
+  extensions: { [key: string ]: object };
 
   constructor(
     ownerId: string = '',
@@ -20,7 +18,7 @@ export class Room {
     name: string = '',
     description: string = '',
     closed: boolean = false,
-    extensions: TSMap<string, TSMap<string, any>> = new TSMap()
+    extensions: { [key: string ]: object } = {}
   ) {
     this.id = '';
     this.ownerId = ownerId;

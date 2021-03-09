@@ -142,9 +142,9 @@ export class RoomPageComponent implements OnDestroy {
   initializeRoom(room: Room, role: UserRole, viewRole: UserRole): void {
     this.room = room;
     this.initializeStats();
-    if (this.room.extensions && this.room.extensions['comments']) {
-      if (this.room.extensions['comments'].enableModeration !== null) {
-        this.moderationEnabled = this.room.extensions['comments'].enableModeration;
+    if (this.room.extensions && this.room.extensions.comments) {
+      if (this.room.extensions.comments['enableModeration'] !== null) {
+        this.moderationEnabled = this.room.extensions.comments['enableModeration'];
         // ToDo: make room data cache that's available for components that manages data flow and put that there
       }
     }

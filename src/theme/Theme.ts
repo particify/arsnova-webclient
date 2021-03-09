@@ -16,7 +16,7 @@ export class ThemeTranslationList {
 
   map: string[][] = [];
 
-  constructor(private name, translation: Object) {
+  constructor(private name, translation: object) {
     for (const k in translation) {
       if (translation.hasOwnProperty(k)) {
         this.map.push([k, translation[k]]);

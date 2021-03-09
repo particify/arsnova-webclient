@@ -155,11 +155,11 @@ export class CommentListComponent implements OnInit, OnDestroy {
   initRoom() {
     this.roomService.getRoomByShortId(this.shortId).subscribe(room => {
       this.room = room;
-      if (this.room && this.room.extensions && this.room.extensions['comments']) {
-        if (this.room.extensions['comments'].enableModeration !== null) {
-          this.moderationEnabled = this.room.extensions['comments'].enableModeration;
+      if (this.room && this.room.extensions && this.room.extensions.comments) {
+        if (this.room.extensions.comments['enableModeration'] !== null) {
+          this.moderationEnabled = this.room.extensions.comments['enableModeration'];
           this.globalStorageService.setItem(STORAGE_KEYS.MODERATION_ENABLED,
-            this.room.extensions['comments'].enableModeration);
+            this.room.extensions.comments['enableModeration']);
         }
         this.commentSettingsService.get(this.room.id).subscribe(commentSettings => {
           this.directSend = commentSettings.directSend;
@@ -222,8 +222,8 @@ export class CommentListComponent implements OnInit, OnDestroy {
 
   getComments(scrollToTop?: boolean): void {
     this.scrollToTop = scrollToTop;
-    if (this.room && this.room.extensions && this.room.extensions['comments']) {
-      if (this.room.extensions['comments'].enableThreshold) {
+    if (this.room && this.room.extensions && this.room.extensions.comments) {
+      if (this.room.extensions.comments['enableThreshold']) {
         this.thresholdEnabled = true;
       } else {
         this.thresholdEnabled = false;
@@ -231,7 +231,7 @@ export class CommentListComponent implements OnInit, OnDestroy {
     }
     let commentThreshold;
     if (this.thresholdEnabled) {
-      commentThreshold = this.room.extensions['comments'].commentThreshold;
+      commentThreshold = this.room.extensions.comments['commentThreshold'];
       if (this.hideCommentsList) {
         this.filteredComments = this.filteredComments.filter(x => x.score >= commentThreshold);
       } else {
@@ -337,8 +337,8 @@ export class CommentListComponent implements OnInit, OnDestroy {
 
   openCreateDialog(): void {
     let tags;
-    if (this.room.extensions && this.room.extensions['tags'] && this.room.extensions['tags'].tags) {
-      tags = this.room.extensions['tags'].tags;
+    if (this.room.extensions && this.room.extensions.tags && this.room.extensions.tags['tags']) {
+      tags = this.room.extensions.tags['tags'];
     }
     this.dialogService.openCreateCommentDialog(this.auth, tags, this.roomId, this.directSend, this.viewRole);
   }

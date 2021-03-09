@@ -95,9 +95,9 @@ export class RoomModeratorPageComponent extends RoomPageComponent implements OnI
 
   initializeRoom(room: Room, role: UserRole, viewRole: UserRole): void {
     this.room = room;
-    if (this.room.extensions && this.room.extensions['comments']) {
-      if (this.room.extensions['comments'].enableModeration !== null) {
-        this.moderationEnabled = this.room.extensions['comments'].enableModeration;
+    if (this.room.extensions && this.room.extensions.comments) {
+      if (this.room.extensions.comments['enableModeration'] !== null) {
+        this.moderationEnabled = this.room.extensions.comments['enableModeration'];
         this.viewModuleCount = this.viewModuleCount + 1;
       }
     }

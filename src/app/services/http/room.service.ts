@@ -10,7 +10,6 @@ import { catchError, map, tap, switchMap } from 'rxjs/operators';
 import { AuthenticationService, AUTH_HEADER_KEY, AUTH_SCHEME } from './authentication.service';
 import { BaseHttpService } from './base-http.service';
 import { EventService } from '../util/event.service';
-import { TSMap } from 'typescript-map';
 import { GlobalStorageService, STORAGE_KEYS } from '../util/global-storage.service';
 import { WsConnectorService } from '../websockets/ws-connector.service';
 import { IMessage } from '@stomp/stompjs';
@@ -161,7 +160,7 @@ export class RoomService extends BaseHttpService {
     );
   }
 
-  patchRoom(roomId: string, changes: TSMap<string, any>): void {
+  patchRoom(roomId: string, changes: object): void {
     const connectionUrl = this.getBaseUrl(roomId);
     this.http.patch(connectionUrl, changes, httpOptions).subscribe();
   }
@@ -214,9 +213,8 @@ export class RoomService extends BaseHttpService {
 
   changeFeedbackLock(roomId: string, isFeedbackLocked: boolean) {
     this.getRoom(roomId).subscribe(room => {
-      const changes = new TSMap<string, any>();
+      const changes: { feedbackLocked: boolean, settings: object } = { feedbackLocked: isFeedbackLocked, settings: room.settings };
       room.settings['feedbackLocked'] = isFeedbackLocked;
-      changes.set('settings', room.settings);
       this.patchRoom(roomId, changes);
       if (!isFeedbackLocked) {
         const event = new SurveyStarted();
@@ -227,23 +225,21 @@ export class RoomService extends BaseHttpService {
 
   changeFeedbackType(roomId: string, feedbackType: string) {
     this.getRoom(roomId).subscribe(room => {
-      const feedbackExtension: TSMap<string, any> = new TSMap();
-      feedbackExtension.set('type', feedbackType);
+      const feedbackExtension: { type: string } = { type: feedbackType };
       if (!room.extensions) {
-        room.extensions = new TSMap<string, TSMap<string, any>>();
-        room.extensions.set('feedback', feedbackExtension);
+        room.extensions = {};
+        room.extensions.feedback = feedbackExtension;
       } else {
-        room.extensions['feedback'] = feedbackExtension;
+        room.extensions.feedback = feedbackExtension;
       }
-      const changes = new TSMap<string, any>();
-      changes.set('extensions', room.extensions);
+      const changes: { extensions: object } = { extensions: room.extensions };
       this.patchRoom(roomId, changes);
     });
   }
 
   parseExtensions(room: Room): Room {
     if (room.extensions) {
-      let extensions: TSMap<string, TSMap<string, any>> = new TSMap();
+      let extensions: { [key: string ]: object };
       extensions = room.extensions;
       room.extensions = extensions;
     }

@@ -4,7 +4,6 @@ import { Observable } from 'rxjs';
 import { Comment } from '../../models/comment';
 import { catchError, tap } from 'rxjs/operators';
 import { BaseHttpService } from './base-http.service';
-import { TSMap } from 'typescript-map';
 import { TranslateService } from '@ngx-translate/core';
 import { NotificationService } from '../util/notification.service';
 import { EventService } from '../util/event.service';
@@ -121,39 +120,34 @@ export class CommentService extends BaseHttpService {
 
   answer(comment: Comment, answer: string): Observable<Comment> {
     comment.answer = answer;
-    const changes = new TSMap<string, any>();
-    changes.set('answer', comment.answer);
+    const changes: { answer: string } = { answer: comment.answer };
     return this.patchComment(comment, changes);
   }
 
   toggleRead(comment: Comment): Observable<Comment> {
     comment.read = !comment.read;
-    const changes = new TSMap<string, any>();
-    changes.set('read', comment.read);
+    const changes: { read: boolean } = { read: comment.read };
     return this.patchComment(comment, changes);
   }
 
   toggleFavorite(comment: Comment): Observable<Comment> {
     comment.favorite = !comment.favorite;
-    const changes = new TSMap<string, any>();
-    changes.set('favorite', comment.favorite);
+    const changes: { favorite: boolean } = { favorite: comment.favorite };
     return this.patchComment(comment, changes);
   }
 
   markCorrect(comment: Comment): Observable<Comment> {
-    const changes = new TSMap<string, any>();
-    changes.set('correct', comment.correct);
+    const changes: { correct: number } = { correct: comment.correct };
     return this.patchComment(comment, changes);
   }
 
   toggleAck(comment: Comment): Observable<Comment> {
     comment.ack = !comment.ack;
-    const changes = new TSMap<string, any>();
-    changes.set('ack', comment.ack);
+    const changes: { ack: boolean } = { ack: comment.ack };
     return this.patchComment(comment, changes);
   }
 
-  private patchComment(comment: Comment, changes: TSMap<string, any>): Observable<Comment> {
+  private patchComment(comment: Comment, changes: object): Observable<Comment> {
     const connectionUrl = `${this.getBaseUrl(comment.roomId) + this.serviceApiUrl.comment + '/' + comment.id}`;
     return this.http.patch(connectionUrl, changes, httpOptions).pipe(
       catchError(this.handleError<any>('patchComment'))
