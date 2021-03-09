@@ -35,7 +35,7 @@ export class ContentCreationPageComponent implements OnInit, AfterContentInit {
   lastContentGroup: string;
   formats: ContentFormat[] = [
     { name: 'choice', icon: 'list' },
-    { name: 'likert', icon: 'mood' },
+    { name: 'scale', icon: 'mood' },
     { name: 'binary', icon: 'rule' },
     { name: 'text', icon: 'description' },
     { name: 'slide', icon: 'info' },
@@ -105,9 +105,11 @@ export class ContentCreationPageComponent implements OnInit, AfterContentInit {
           this.abstentionsAllowed = this.content.abstentionsAllowed;
           this.isEditMode = true;
           this.selectedFormat = this.formats.find(c => c.name === this.content.format.toLowerCase());
+          this.prepareAttachmentData(roomId);
           this.isLoading = false;
         });
       } else {
+        this.prepareAttachmentData(roomId);
         this.isLoading = false;
       }
       // this refreshes memory storage
@@ -123,7 +125,6 @@ export class ContentCreationPageComponent implements OnInit, AfterContentInit {
           });
         }
       });
-      this.prepareAttachmentData(roomId);
     });
     this.translateService.use(this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE));
   }
@@ -188,6 +189,7 @@ export class ContentCreationPageComponent implements OnInit, AfterContentInit {
       refType: 'content',
       roomId: roomId,
       detailedView: false,
+      refId: this.isEditMode ? this.content.id : null,
       role: UserRole.CREATOR
     };
   }

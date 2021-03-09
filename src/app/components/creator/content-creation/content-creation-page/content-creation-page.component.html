@@ -61,7 +61,7 @@
                           matInput matTextareaAutosize maxlength="{{ selectedFormat.name !== 'slide' ? 1000 : 2000 }}" name="questionInput"></textarea>
               </mat-form-field>
               <app-hint *ngIf="textContainsImage" text="utils.formatting-image-hint" [type]="warningType"></app-hint>
-              <lib-extension-point extensionId="attachment-list" [extensionData]="attachmentData"></lib-extension-point>
+              <lib-extension-point *ngIf="!isLoading" extensionId="attachment-list" [extensionData]="attachmentData"></lib-extension-point>
               <div class="form-spacer"></div>
             </form>
             <div class="abstentions">
@@ -79,7 +79,7 @@
                                           [editContent]="content">
               </app-content-choice-creation>
               <app-content-likert-creation (contentReset)="reset()" (contentSent)="saveContent($event)" (refId)="linkAttachments($event)"
-                                          *ngIf="selectedFormat.name === 'likert'"
+                                          *ngIf="selectedFormat.name === 'scale'"
                                           [contentBody]="questionInput.value"
                                           [contentGroup]="group.value"
                                           [abstentionsAllowed]="abstentionsAllowed"
