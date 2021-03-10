@@ -7,7 +7,7 @@ import { GlobalStorageService, STORAGE_KEYS } from '../util/global-storage.servi
 import { ClientAuthentication } from '../../models/client-authentication';
 import { AuthenticationStatus, ClientAuthenticationResult } from '../../models/client-authentication-result';
 import { EventService } from '../util/event.service';
-import * as JwtDecode from 'jwt-decode';
+import JwtDecode from 'jwt-decode';
 import { TranslateService } from '@ngx-translate/core';
 import { NotificationService } from '../util/notification.service';
 import { ApiConfigService } from './api-config.service';
@@ -16,6 +16,10 @@ export const AUTH_HEADER_KEY = 'Authorization';
 export const AUTH_SCHEME = 'Bearer';
 const REFRESH_INTERVAL_MINUTES = 30;
 const REFRESH_INTERVAL_MAX_OFFSET_MINUTES = 2;
+
+interface Jwt {
+  roles: string[]
+}
 
 /**
  * Handles app-wide user authentication.
@@ -232,7 +236,7 @@ export class AuthenticationService extends BaseHttpService {
   }
 
   hasAdminRole(auth: ClientAuthentication) {
-    const decodedToken = JwtDecode(auth.token);
+    const decodedToken = JwtDecode<Jwt>(auth.token);
     return decodedToken.roles.some(role => role === this.ADMIN_ROLE);
   }
 

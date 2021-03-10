@@ -4,10 +4,12 @@ import { ContentService } from '../../../../services/http/content.service';
 import { AnswerStatistics } from '../../../../models/answer-statistics';
 import {
   BarController,
+  BarControllerDatasetOptions,
+  BarElement,
   CategoryScale,
-  Chart, IBarControllerDatasetOptions, IChartDataset,
+  Chart,
+  ChartDataset,
   LinearScale,
-  Rectangle,
   Tooltip
 } from 'chart.js';
 import { StatisticContentBaseComponent } from '../statistic-content-base';
@@ -35,7 +37,7 @@ export class StatisticSortComponent extends StatisticContentBaseComponent implem
   chartId: string;
   isLoading = true;
   answerIndexes: Array<Array<number>>;
-  data: IChartDataset[] = [];
+  data: ChartDataset<'bar'>[] = [];
   labels: string[] = [];
   answers: string[] = [];
   colors: string[] = [];
@@ -143,7 +145,7 @@ export class StatisticSortComponent extends StatisticContentBaseComponent implem
   }
 
   toggleCorrect() {
-    const dataset = this.chart.config.data.datasets[0] as IBarControllerDatasetOptions;
+    const dataset = this.chart.config.data.datasets[0] as BarControllerDatasetOptions;
     dataset.backgroundColor = this.showCorrect ? this.colors : this.indicationColors;
     this.chart.update();
     this.showCorrect = !this.showCorrect;
@@ -177,7 +179,9 @@ export class StatisticSortComponent extends StatisticContentBaseComponent implem
   }
 
   createChart() {
-    Chart.register(BarController, CategoryScale, LinearScale, Rectangle, Tooltip);
+    Chart.defaults.color = this.onSurface;
+    Chart.defaults.font.size = 16;
+    Chart.register(BarController, BarElement, CategoryScale, LinearScale, Tooltip);
     this.chart = new Chart(this.chartId, {
       type: 'bar',
       data: {
@@ -185,16 +189,6 @@ export class StatisticSortComponent extends StatisticContentBaseComponent implem
         datasets: this.data
       },
       options: {
-        font: {
-          color: this.onSurface,
-          size: 16
-        },
-        legend: {
-          display: false
-        },
-        tooltips: {
-          mode: 'index'
-        },
         responsive: true,
         maintainAspectRatio: false,
         scales: {
@@ -210,6 +204,14 @@ export class StatisticSortComponent extends StatisticContentBaseComponent implem
             gridLines: {
               borderColor: this.onSurface
             }
+          }
+        },
+        plugins: {
+          legend: {
+            display: false
+          },
+          tooltip: {
+            mode: 'index'
           }
         }
       }
