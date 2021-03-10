@@ -45,7 +45,6 @@ export class ContentCreationComponent implements OnInit, OnDestroy {
   isLoading = true;
   content: Content;
   displayAnswers: DisplayAnswer[] = [];
-  newAnswerOptionPoints = 0;
   answerLabels: string[];
   isEditMode = false;
 
@@ -86,7 +85,7 @@ export class ContentCreationComponent implements OnInit, OnDestroy {
   initTemplateAnswers() {
     this.translationService.get(this.answerLabels).subscribe(msgs => {
       for (let i = 0; i < this.answerLabels.length; i++) {
-        (this.content as ContentChoice).options.push(new AnswerOption(msgs[this.answerLabels[i]], this.newAnswerOptionPoints));
+        (this.content as ContentChoice).options.push(new AnswerOption(msgs[this.answerLabels[i]]));
       }
       this.fillCorrectAnswers();
       this.isLoading = false;
@@ -95,12 +94,10 @@ export class ContentCreationComponent implements OnInit, OnDestroy {
 
   initContentForEditing() {}
 
-  initContentChoiceEditBase(): AnswerOption[] {
+  initContentChoiceEditBase(): DisplayAnswer[] {
     this.content = (this.editContent as ContentChoice);
     this.contentBody = this.content.body;
-    const options = (this.content as ContentChoice).options;
-    (this.content as ContentChoice).correctOptionIndexes = [];
-    return options;
+    return this.getAnswerOptions();
   }
 
   initContentTextEditBase() {
@@ -128,12 +125,18 @@ export class ContentCreationComponent implements OnInit, OnDestroy {
     return true;
   }
 
+  getAnswerOptions(): DisplayAnswer[] {
+    const answers: DisplayAnswer[] = [];
+    const options = (this.content as ContentChoice).options;
+    const correctOptions = (this.content as ContentChoice).correctOptionIndexes;
+    options.map((option, i) => {
+      answers.push(new DisplayAnswer(new AnswerOption(option.label), correctOptions?.includes(i)))
+    });
+    return answers;
+  }
+
   fillCorrectAnswers() {
-    this.displayAnswers = [];
-    for (let i = 0; i < (this.content as ContentChoice).options.length; i++) {
-      this.displayAnswers.push(new DisplayAnswer((this.content as ContentChoice).options[i],
-        (this.content as ContentChoice).correctOptionIndexes.includes(i)));
-    }
+    this.displayAnswers = this.getAnswerOptions();
   }
 
   resetAfterSubmit() {

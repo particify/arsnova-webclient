@@ -1,0 +1,30 @@
+.solution {
+  margin: -40px 0 0 -40px;
+}
+
+.invisible {
+  position: absolute;
+  left: 50%;
+  top: -200px;
+  transform: scale(0);
+}
+
+.visible {
+  top: 50%;
+  transition: 0.5s;
+  transform: scale(1);
+}
+
+.correct {
+  color: var(--green);
+}
+
+.wrong {
+  color: var(--red);
+}
+
+.icon-indicator {
+  font-size: 80px;
+  width: 80px;
+  height: 80px;
+}

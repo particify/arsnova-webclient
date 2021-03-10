@@ -51,7 +51,7 @@ export class ContentService extends BaseHttpService {
   }
 
   getContent(roomId: string, contentId: string): Observable<Content> {
-    const connectionUrl = this.getBaseUrl(roomId) + this.serviceApiUrl.content + '/' + contentId;
+    const connectionUrl = this.getBaseUrl(roomId) + this.serviceApiUrl.content + '/' + contentId + '/?view=extended';
     return this.http.get<Content>(connectionUrl).pipe(
       tap(() => ''),
       catchError(this.handleError<Content>('getContent by id: ' + contentId))
@@ -66,13 +66,14 @@ export class ContentService extends BaseHttpService {
     );
   }
 
-  getContentsByIds(roomId: string, contentIds: string[]): Observable<Content[]> {
+  getContentsByIds(roomId: string, contentIds: string[], extendedView?: boolean): Observable<Content[]> {
     const partitionedIds: string[][] = [];
     for (let i = 0; i < contentIds.length; i += PARTITION_SIZE) {
       partitionedIds.push(contentIds.slice(i, i + PARTITION_SIZE));
     }
     const partitionedContents$: Observable<Content[]>[] = partitionedIds.map(ids => {
-      const connectionUrl = this.getBaseUrl(roomId) + this.serviceApiUrl.content + '/?ids=' + ids;
+      const extended = extendedView ? '&view=extended' : '';
+      const connectionUrl = this.getBaseUrl(roomId) + this.serviceApiUrl.content + '/?ids=' + ids  + extended;
       return this.http.get<Content[]>(connectionUrl).pipe(
         catchError(this.handleError('getContentsByIds', []))
       );
@@ -88,6 +89,14 @@ export class ContentService extends BaseHttpService {
       tap(() => ''),
       catchError(this.handleError('getContentsByIds', []))
     );
+  }
+
+  getCorrectChoiceIndexes(roomId: string, contentId: string): Observable<number[]> {
+    const connectionUrl = this.getBaseUrl(roomId) + this.serviceApiUrl.content + '/' + contentId + '/correct-choice-indexes';
+    return this.http.get<number[]>(connectionUrl).pipe(
+      tap(() => ''),
+      catchError(this.handleError('getCorrectChoiceIndexes', []))
+    )
   }
 
   addContent(content: Content): Observable<Content> {

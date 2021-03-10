@@ -6,11 +6,12 @@ import { ContentType } from '../../../../models/content-type.enum';
 import { TranslateService } from '@ngx-translate/core';
 import { AuthenticationService } from '../../../../services/http/authentication.service';
 import { AnswerOption } from '../../../../models/answer-option';
-import { ContentChoice } from '@arsnova/app/models/content-choice';
+import { ContentChoice } from '../../../../models/content-choice';
 import { ContentParticipantBaseComponent } from '../content-participant-base.component';
-import { LanguageService } from '@arsnova/app/services/util/language.service';
+import { LanguageService } from '../../../../services/util/language.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { GlobalStorageService } from '@arsnova/app/services/util/global-storage.service';
+import { GlobalStorageService } from '../../../../services/util/global-storage.service';
+import { ContentService } from '../../../../services/http/content.service';
 
 
 @Component({
@@ -24,10 +25,13 @@ export class ContentSortParticipantComponent extends ContentParticipantBaseCompo
   @Input() answer: ChoiceAnswer;
   @Input() alreadySent: boolean;
   @Input() sendEvent: EventEmitter<string>;
+  @Input() statsPublished: boolean;
   @Output() answerChanged = new EventEmitter<ChoiceAnswer>();
 
   isLoading = true;
   hasAbstained = false;
+  isCorrect = false;
+  correctOptionIndexes: number[];
   answerOptions: AnswerOption[] = [];
 
   constructor(protected answerService: ContentAnswerService,
@@ -37,7 +41,8 @@ export class ContentSortParticipantComponent extends ContentParticipantBaseCompo
               protected langService: LanguageService,
               protected route: ActivatedRoute,
               protected globalStorageService: GlobalStorageService,
-              protected router: Router
+              protected router: Router,
+              private contentService: ContentService
   ) {
     super(authenticationService, notificationService, translateService, langService, route, globalStorageService, router);
   }
@@ -45,11 +50,21 @@ export class ContentSortParticipantComponent extends ContentParticipantBaseCompo
   initAnswer(userId: string) {
       if (this.answer) {
         this.setSortOfAnswer(this.answer.selectedChoiceIndexes);
+        this.checkIfCorrect();
         this.alreadySent = true;
       } else {
         this.answerOptions = this.shuffleAnswerOptions(JSON.parse(JSON.stringify(this.content.options)));
+        this.isLoading = false;
       }
+  }
+
+  checkIfCorrect() {
+    this.contentService.getCorrectChoiceIndexes(this.content.roomId, this.content.id).subscribe(correctOptions => {
+      this.correctOptionIndexes = correctOptions;
+      (this.content as ContentChoice).correctOptionIndexes = this.correctOptionIndexes;
+      this.isCorrect = this.answer.selectedChoiceIndexes.toString() === this.correctOptionIndexes.toString();
       this.isLoading = false;
+    });
   }
 
   shuffleAnswerOptions(answers: AnswerOption[]): AnswerOption[] {
@@ -86,9 +101,8 @@ export class ContentSortParticipantComponent extends ContentParticipantBaseCompo
       creationTimestamp: null,
       format: ContentType.SORT
     } as ChoiceAnswer).subscribe(answer  => {
-      /*      if (this.isChoice) {
-              this.checkAnswer(selectedAnswers);
-            }*/
+      this.answer = answer;
+      this.checkIfCorrect();
       this.translateService.get('answer.sent').subscribe(msg => {
         this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.SUCCESS);
       });

@@ -11,6 +11,7 @@ import { AuthenticationService } from '../../../../services/http/authentication.
 import { ActivatedRoute, Router } from '@angular/router';
 import { GlobalStorageService } from '../../../../services/util/global-storage.service';
 import { ContentParticipantBaseComponent } from '../content-participant-base.component';
+import { ContentService } from '../../../../services/http/content.service';
 
 class CheckedAnswer {
   answerOption: AnswerOption;
@@ -33,6 +34,7 @@ export class ContentChoiceParticipantComponent extends ContentParticipantBaseCom
   @Input() answer: ChoiceAnswer;
   @Input() alreadySent: boolean;
   @Input() sendEvent: EventEmitter<string>;
+  @Input() statsPublished: boolean;
   @Output() answerChanged = new EventEmitter<ChoiceAnswer>();
 
   isLoading = true;
@@ -55,7 +57,8 @@ export class ContentChoiceParticipantComponent extends ContentParticipantBaseCom
     protected langService: LanguageService,
     protected route: ActivatedRoute,
     protected globalStorageService: GlobalStorageService,
-    protected router: Router
+    protected router: Router,
+    private contentService: ContentService
   ) {
     super(authenticationService, notificationService, translateService, langService, route, globalStorageService, router);
   }
@@ -64,41 +67,53 @@ export class ContentChoiceParticipantComponent extends ContentParticipantBaseCom
     for (const answerOption of this.content.options) {
       this.checkedAnswers.push(new CheckedAnswer(answerOption, false));
     }
-    this.getCorrectAnswer();
-      if (this.answer) {
-        if (this.answer.selectedChoiceIndexes && this.answer.selectedChoiceIndexes.length > 0) {
-          for (const i of this.answer.selectedChoiceIndexes) {
-            this.checkedAnswers[i].checked = true;
-            this.multipleAlreadyAnswered += this.checkedAnswers[i].answerOption.label + '&';
-            if (!this.content.multiple) {
-              this.selectedSingleAnswer = this.checkedAnswers[i].answerOption.label;
-            }
+    if (this.answer) {
+      if (this.answer.selectedChoiceIndexes && this.answer.selectedChoiceIndexes.length > 0) {
+        for (const i of this.answer.selectedChoiceIndexes) {
+          this.checkedAnswers[i].checked = true;
+          this.multipleAlreadyAnswered += this.checkedAnswers[i].answerOption.label + '&';
+          if (!this.content.multiple) {
+            this.selectedSingleAnswer = this.checkedAnswers[i].answerOption.label;
           }
-        }
-        if (this.answer.selectedChoiceIndexes) {
-          if (this.isChoice) {
-            this.checkAnswer(this.answer.selectedChoiceIndexes);
-          }
-        } else {
-          this.hasAbstained = true;
         }
       }
+      if (this.answer.selectedChoiceIndexes) {
+        this.contentService.getCorrectChoiceIndexes(this.content.roomId, this.content.id).subscribe(correctOptions => {
+          this.correctOptionIndexes = correctOptions;
+          (this.content as ContentChoice).correctOptionIndexes = this.correctOptionIndexes;
+          this.getCorrectAnswer();
+          if (this.isChoice) {
+            this.checkAnswer(this.answer.selectedChoiceIndexes);
+            this.isLoading = false;
+          } else {
+            this.isLoading = false;
+          }
+        });
+      } else {
+        this.hasAbstained = true;
+        this.isLoading = false;
+      }
+    } else {
       this.isLoading = false;
+    }
   }
 
   getCorrectAnswer() {
-    const maxPoints = Math.max.apply(Math, this.content.options.map((option) => option.points));
-    if (this.content.format === ContentType.SCALE || maxPoints <= 0) {
-      this.isChoice = false;
-    } else {
+    this.checkIfCorrectAnswer();
+    if (!this.isChoice) {
       for (const i in this.content.options) {
         if (this.content.options[i]) {
           this.allAnswers += this.content.options[i].label + '&';
-          if (this.content.options[i].points > 0) {
-            this.correctOptionIndexes.push(Number(i));
-          }
         }
       }
+    }
+  }
+
+  checkIfCorrectAnswer() {
+    const correctOptions = (this.content as ContentChoice).correctOptionIndexes;
+    const noCorrect = !correctOptions || correctOptions.length === 0;
+    if (this.content.format === ContentType.SCALE || noCorrect) {
+      this.isChoice = false;
     }
   }
 
@@ -157,7 +172,14 @@ export class ContentChoiceParticipantComponent extends ContentParticipantBaseCom
       format: ContentType.CHOICE
     } as ChoiceAnswer).subscribe(answer => {
       if (this.isChoice) {
-        this.checkAnswer(selectedAnswers);
+        this.contentService.getCorrectChoiceIndexes(this.content.roomId, this.content.id).subscribe(correctOptions => {
+          this.correctOptionIndexes = correctOptions;
+          (this.content as ContentChoice).correctOptionIndexes = correctOptions;
+          if (this.statsPublished) {
+            this.checkIfCorrectAnswer();
+            this.checkAnswer(selectedAnswers);
+          }
+        });
       }
       this.translateService.get('answer.sent').subscribe(msg => {
         this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.SUCCESS);

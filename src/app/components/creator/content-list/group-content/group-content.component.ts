@@ -93,7 +93,8 @@ export class GroupContentComponent extends ContentListBaseComponent implements O
         this.roomService.getGroupByRoomIdAndName(this.room.id, this.collectionName).subscribe(group => {
           this.contentGroup = group;
           this.setRange();
-          this.contentService.getContentsByIds(this.contentGroup.roomId, this.contentGroup.contentIds).subscribe(contents => {
+          this.contentService.getContentsByIds(this.contentGroup.roomId, this.contentGroup.contentIds, true)
+            .subscribe(contents => {
             this.initContentList(contents);
           });
         });

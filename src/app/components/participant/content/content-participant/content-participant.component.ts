@@ -21,6 +21,7 @@ export class ContentParticipantComponent implements OnInit {
   @Input() lastContent: boolean;
   @Input() active: boolean;
   @Input() index: number;
+  @Input() statsPublished: boolean;
   @Output() answerChanged = new EventEmitter<Answer>();
   @Output() next = new EventEmitter<boolean>();
 
