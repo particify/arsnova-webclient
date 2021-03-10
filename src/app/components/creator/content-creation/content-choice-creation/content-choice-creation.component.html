@@ -35,7 +35,7 @@
                   matTooltip="{{ 'content.abort' | translate}}" aria-labelledby="discard">
             <mat-icon class="confirmIcon">clear</mat-icon>
           </button>
-          <button mat-icon-button *ngIf="isAnswerEdit !== i && !isEditMode" class="delete"
+          <button mat-icon-button *ngIf="isAnswerEdit !== i && (!isEditMode || noAnswersYet)" class="delete"
                   attr.aria-label="{{ 'content.a11y-delete-answer' | translate: {answer: answer.answerOption.label} }}"
                   (click)="deleteAnswer($event, answer.answerOption.label)"
                   matTooltip="{{ 'content.delete-answer' | translate }}">
@@ -46,7 +46,7 @@
     </mat-list>
   </mat-card>
 
-  <div *ngIf="!isEditMode" fxLayout="row" fxLayoutAlign="center" fxLayoutGap="20px">
+  <div *ngIf="!isEditMode || noAnswersYet" fxLayout="row" fxLayoutAlign="center" fxLayoutGap="20px">
     <form class="answer-form" fxLayout="row">
       <mat-form-field class="answer-input" appearance="fill">
         <mat-label>{{ 'content.add-answer' | translate }}</mat-label>

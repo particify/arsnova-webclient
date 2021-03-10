@@ -26,6 +26,7 @@ export class ContentChoiceCreationComponent extends ContentCreationComponent imp
   newAnswerOptionLabel = '';
   updatedAnswer: string;
   isAnswerEdit = -1;
+  noAnswersYet = false;
 
   constructor(
     protected contentService: ContentService,
@@ -61,7 +62,13 @@ export class ContentChoiceCreationComponent extends ContentCreationComponent imp
     this.displayAnswers = this.initContentChoiceEditBase();
     this.multipleCorrectAnswers = (this.content as ContentChoice).multiple;
     this.noCorrectAnswers = !(this.content as ContentChoice).correctOptionIndexes;
-    this.isLoading = false;
+    this.contentService.getAnswer(this.content.roomId, this.content.id).subscribe(answer => {
+      const answerCount = answer.roundStatistics[0].independentCounts.reduce(function(a, b) {
+        return a + b;
+      });
+      this.noAnswersYet = answerCount === 0;
+      this.isLoading = false;
+    });
   }
 
   findAnswerIndexByLabel(label: string): number {
@@ -205,21 +212,23 @@ export class ContentChoiceCreationComponent extends ContentCreationComponent imp
 
   createContent(): boolean {
     if ((this.content as ContentChoice).options.length < 2) {
-      this.translationService.get('content.need-answers').subscribe(message => {
-        this.notificationService.showAdvanced(message, AdvancedSnackBarTypes.WARNING);
-      });
+      const msg = this.translationService.instant('content.need-answers');
+      this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
       return;
     }
     if ((!this.multipleCorrectAnswers) && (!this.noCorrectAnswers) && (this.content as ContentChoice).correctOptionIndexes.length !== 1) {
-      this.translationService.get('content.select-one').subscribe(message => {
-        this.notificationService.showAdvanced(message, AdvancedSnackBarTypes.WARNING);
-      });
+      const msg = this.translationService.instant('content.select-one');
+      this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
       return;
     }
     if (this.multipleCorrectAnswers && (!this.noCorrectAnswers) && (this.content as ContentChoice).correctOptionIndexes.length < 1) {
-      this.translationService.get('content.at-least-one').subscribe(message => {
-        this.notificationService.showAdvanced(message, AdvancedSnackBarTypes.WARNING);
-      });
+      const msg = this.translationService.instant('content.at-least-one');
+      this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
+      return;
+    }
+    if (this.newAnswerOptionLabel.length > 0) {
+      const msg = this.translationService.instant('content.unsaved-answer');
+      this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
       return;
     }
     (this.content as ContentChoice).multiple = this.multipleCorrectAnswers;
