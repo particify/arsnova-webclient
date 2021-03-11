@@ -23,9 +23,8 @@
               "src/manifest.webmanifest"
             ],
             "styles": [
-              "src/styles.scss",
-              "./node_modules/typeface-roboto/index.css",
-              "./node_modules/katex/dist/katex.min.css"
+              "src/fonts.scss",
+              "src/styles.scss"
             ],
             "scripts": []
           },
@@ -82,6 +81,7 @@
             "tsConfig": "src/tsconfig.spec.json",
             "scripts": [],
             "styles": [
+              "src/fonts.scss",
               "src/styles.scss"
             ],
             "assets": [
