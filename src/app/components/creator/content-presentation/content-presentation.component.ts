@@ -73,7 +73,7 @@ export class ContentPresentationComponent implements OnInit {
   updateURL(index: number) {
     this.currentStep = index;
     this.location.replaceState(`creator/room/${this.shortId}/group/${this.contentGroupName}/statistics/${index + 1}`);
-    if (this.contentIndex !== this.entryIndex) {
+    if (index !== this.entryIndex) {
       this.contentIndex = null;
     }
     setTimeout(() => {
