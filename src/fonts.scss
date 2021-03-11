@@ -1,0 +1,11 @@
+$material-design-icons-font-directory-path: '~material-design-icons-iconfont/dist/fonts/';
+$material-design-icons-class-icons-generate-codepoints: false;
+
+@import '~material-design-icons-iconfont/src/material-design-icons.scss';
+@import '~@fontsource/roboto/index.css';
+@import '~@fontsource/roboto/400-italic.css';
+@import '~@fontsource/roboto/500.css';
+@import '~@fontsource/roboto/500-italic.css';
+@import '~@fontsource/roboto/700.css';
+@import '~@fontsource/roboto/700-italic.css';
+@import '~katex/dist/katex.min.css';
