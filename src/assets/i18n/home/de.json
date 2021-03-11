@@ -331,5 +331,20 @@
     "room-not-found": "Es wurde kein Raum mit dieser Nummer gefunden.",
     "something-went-wrong": "Es ist etwas schief gegangen.",
     "http-too-many-requests": "Zu viele Anfragen aus deinem Netzwerk."
+  },
+  "title": {
+    "register": "Registrieren",
+    "login": "Anmelden",
+    "request-pw-reset": "Passwort zurücksetzen",
+    "pw-reset": "Neues Passwort festlegen",
+    "user": "Meine Räume",
+    "comments": "Kommentare",
+    "moderation": "Moderation",
+    "presentation": "Fragen präsentieren",
+    "content-creation": "Frage erstellen",
+    "live-survey": "Live-Umfrage",
+    "statistics": "Statistiken",
+    "settings": "Einstellungen"
+
   }
 }

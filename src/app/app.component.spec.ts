@@ -6,7 +6,7 @@ import { SwUpdate, UpdateAvailableEvent } from '@angular/service-worker';
 import { CustomIconService } from './services/util/custom-icon.service';
 import { ApiConfigService } from './services/http/api-config.service';
 import { RouterTestingModule } from '@angular/router/testing';
-import { Component, Injectable } from '@angular/core';
+import { Component, Injectable, EventEmitter } from '@angular/core';
 import { defer, Observable, of, Subject } from 'rxjs';
 import { TrackingService } from './services/util/tracking.service';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
@@ -18,6 +18,7 @@ import { ApiConfig } from './models/api-config';
 import { ConsentService } from './services/util/consent.service';
 import { UpdateService } from './services/util/update-service';
 import { UpdateImportance } from './models/version-info';
+import { LanguageService } from '@arsnova/app/services/util/language.service';
 
 @Injectable()
 class MockTranslateService {
@@ -178,6 +179,11 @@ class MockSwUpdate extends SwUpdate {
   }
 }
 
+@Injectable()
+class MockLanguageService {
+  public readonly langEmitter = new EventEmitter<string>();
+}
+
 // Stub for downstream template
 @Component({ selector: 'app-header', template: '' })
 class HeaderStubComponent {}
@@ -255,6 +261,10 @@ describe('AppComponent', () => {
         {
           provide: Window,
           useClass: MockWindow
+        },
+        {
+          provide: LanguageService,
+          useClass: MockLanguageService
         }
       ],
       imports: [
