@@ -62,7 +62,7 @@ export class StepperComponent extends CdkStepper {
 
   init(index: number, length: number) {
     this.onClick(index);
-    if (index > 2) {
+    if (index > 2 && length > 5) {
       const diff = index < (length - 3) ? 2 : 5 - ((length - 1) - index);
       this.headerPos = index - diff;
       this.moveHeaderRight();
