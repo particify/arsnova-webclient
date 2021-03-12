@@ -43,7 +43,7 @@ export class ContentChoiceParticipantComponent extends ContentParticipantBaseCom
   checkedAnswers: CheckedAnswer[] = [];
   correctOptionIndexes: number[] = [];
   isCorrect = false;
-  isChoice = true;
+  isChoice = false;
   hasAbstained = false;
   shortId: string;
   multipleAlreadyAnswered = '';
@@ -112,8 +112,8 @@ export class ContentChoiceParticipantComponent extends ContentParticipantBaseCom
   checkIfCorrectAnswer() {
     const correctOptions = (this.content as ContentChoice).correctOptionIndexes;
     const noCorrect = !correctOptions || correctOptions.length === 0;
-    if (this.content.format === ContentType.SCALE || noCorrect) {
-      this.isChoice = false;
+    if (!noCorrect) {
+      this.isChoice = true;
     }
   }
 
