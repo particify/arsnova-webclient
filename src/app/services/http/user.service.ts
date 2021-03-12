@@ -57,7 +57,6 @@ export class UserService extends BaseHttpService {
       '/~' + encodeURIComponent(username) +
       this.serviceApiUrl.resetActivation;
     return this.http.post<any>(connectionUrl, httpOptions).pipe(
-      tap(_ => ''),
       catchError(this.handleError<User>('resetActivation'))
     );
   }
@@ -98,7 +97,6 @@ export class UserService extends BaseHttpService {
       properties: { loginId: loginId },
       externalFilters: {}
     }).pipe(
-      tap(() => ''),
       catchError(this.handleError('getUserId', []))
     );
   }

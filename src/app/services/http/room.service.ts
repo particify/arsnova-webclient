@@ -147,7 +147,6 @@ export class RoomService extends BaseHttpService {
   removeFromHistory(userId: string, roomId: string): Observable<Room> {
     const connectionUrl = `${this.apiUrl.base + this.apiUrl.user}/${userId}/roomHistory/${roomId}`;
     return this.http.delete<Room>(connectionUrl, httpOptions).pipe(
-      tap(() => ''),
       catchError(this.handleError<Room>('deleteRoom'))
     );
   }
@@ -155,7 +154,6 @@ export class RoomService extends BaseHttpService {
   updateRoom(updatedRoom: Room): Observable<Room> {
     const connectionUrl = this.getBaseUrl(`~${updatedRoom.shortId}`);
     return this.http.put(connectionUrl, updatedRoom, httpOptions).pipe(
-      tap(() => ''),
       catchError(this.handleError<any>('updateRoom'))
     );
   }
@@ -168,7 +166,6 @@ export class RoomService extends BaseHttpService {
   deleteRoom(roomId: string): Observable<Room> {
     const connectionUrl = this.getBaseUrl(roomId);
     return this.http.delete<Room>(connectionUrl, httpOptions).pipe(
-      tap(() => ''),
       catchError(this.handleError<Room>('deleteRoom'))
     );
   }
@@ -176,7 +173,6 @@ export class RoomService extends BaseHttpService {
   getStats(roomId: string): Observable<RoomStats> {
     const connectionUrl = this.getBaseUrl(roomId) + this.apiUrl.stats;
     return this.http.get<RoomStats>(connectionUrl).pipe(
-      tap(() => ''),
       catchError(this.handleError<RoomStats>(`getStats id=${roomId}`))
     );
   }
@@ -185,7 +181,6 @@ export class RoomService extends BaseHttpService {
     const encodedName = encodeURIComponent(name);
     const connectionUrl = `${this.getBaseUrl(roomId) + this.serviceApiUrl.contentGroup}/${encodedName}`;
     return this.http.get<ContentGroup>(connectionUrl, httpOptions).pipe(
-      tap(_ => ''),
       catchError(this.handleError<ContentGroup>(`getGroupByRoomIdAndName, ${roomId}, ${name}`))
     );
   }
@@ -193,7 +188,6 @@ export class RoomService extends BaseHttpService {
   importv2Room(json: JSON): Observable<Room> {
     const connectionUrl = `${this.apiUrl.base + this.serviceApiUrl.v2Import}`;
     return this.http.post<Room>(connectionUrl, json, httpOptions).pipe(
-      tap(_ => ''),
       catchError(this.handleError<Room>(`importv2Room, json: ${json}`))
     );
   }

@@ -34,7 +34,6 @@ export class CommentService extends BaseHttpService {
   getComment(commentId: string, roomId: string): Observable<Comment> {
     const connectionUrl = `${this.getBaseUrl(roomId) + this.serviceApiUrl.comment}/${commentId}`;
     return this.http.get<Comment>(connectionUrl, httpOptions).pipe(
-      tap(_ => ''),
       catchError(this.handleError<Comment>('getComment'))
     );
   }
@@ -53,7 +52,6 @@ export class CommentService extends BaseHttpService {
   deleteComment(comment: Comment): Observable<Comment> {
     const connectionUrl = `${this.getBaseUrl(comment.roomId) + this.serviceApiUrl.comment}/${comment.id}`;
     return this.http.delete<Comment>(connectionUrl, httpOptions).pipe(
-      tap(_ => ''),
       catchError(this.handleError<Comment>('deleteComment'))
     );
   }
@@ -64,7 +62,6 @@ export class CommentService extends BaseHttpService {
       properties: { roomId: roomId, ack: true },
       externalFilters: {}
     }, httpOptions).pipe(
-      tap(_ => ''),
       catchError(this.handleError<Comment[]>('getComments', []))
     );
   }
@@ -75,7 +72,6 @@ export class CommentService extends BaseHttpService {
       properties: { roomId: roomId, ack: false },
       externalFilters: {}
     }, httpOptions).pipe(
-      tap(_ => ''),
       catchError(this.handleError<Comment[]>('getComments', []))
     );
   }
@@ -86,7 +82,6 @@ export class CommentService extends BaseHttpService {
       properties: { roomId: roomId },
       externalFilters: {}
     }, httpOptions).pipe(
-      tap(_ => ''),
       catchError(this.handleError<Comment[]>('getComments', []))
     );
   }
@@ -94,7 +89,6 @@ export class CommentService extends BaseHttpService {
   updateComment(comment: Comment): Observable<any> {
     const connectionUrl = `${this.getBaseUrl(comment.roomId) + this.serviceApiUrl.comment + '/' + comment.id}`;
     return this.http.put(connectionUrl, comment, httpOptions).pipe(
-      tap(_ => ''),
       catchError(this.handleError<any>('updateComment'))
     );
   }
@@ -102,7 +96,6 @@ export class CommentService extends BaseHttpService {
   deleteCommentsByRoomId(roomId: string): Observable<Comment> {
     const connectionUrl = `${this.getBaseUrl(roomId) + this.serviceApiUrl.comment}/byRoom?roomId=${roomId}`;
     return this.http.delete<Comment>(connectionUrl, httpOptions).pipe(
-      tap(_ => ''),
       catchError(this.handleError<Comment>('deleteComment'))
     );
   }
@@ -113,7 +106,6 @@ export class CommentService extends BaseHttpService {
       properties: { roomId: roomId, ack: ack },
       externalFilters: {}
     }, httpOptions).pipe(
-      tap(_ => ''),
       catchError(this.handleError<number>('countByRoomId', 0))
     );
   }

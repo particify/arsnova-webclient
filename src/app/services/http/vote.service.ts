@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Vote } from '../../models/vote';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { catchError, tap } from 'rxjs/operators';
+import { catchError } from 'rxjs/operators';
 import { BaseHttpService } from './base-http.service';
 import { TranslateService } from '@ngx-translate/core';
 import { NotificationService } from '../util/notification.service';
@@ -29,7 +29,6 @@ export class VoteService extends BaseHttpService {
   add(roomId: string, vote: Vote): Observable<Vote> {
     const connectionUrl = this.getBaseUrl(roomId) + this.serviceApiUrl.vote + '/';
     return this.http.post<Vote>(connectionUrl, vote, httpOptions).pipe(
-      tap(_ => ''),
       catchError(this.handleError<Vote>('add vote'))
     );
   }
@@ -47,7 +46,6 @@ export class VoteService extends BaseHttpService {
   deleteVote(roomId: string, commentId: string, userId: string): Observable<Vote> {
     const connectionUrl = `${this.getBaseUrl(roomId) + this.serviceApiUrl.vote}/${commentId}/${userId}`;
     return this.http.delete<Vote>(connectionUrl, httpOptions).pipe(
-      tap(() => ''),
       catchError(this.handleError<Vote>('delete Vote'))
     );
   }
@@ -62,7 +60,6 @@ export class VoteService extends BaseHttpService {
         roomId: roomId
       }
     }).pipe(
-      tap(() => ''),
       catchError(this.handleError<Vote[]>(`get votes by roomid = ${roomId}`))
     );
   }

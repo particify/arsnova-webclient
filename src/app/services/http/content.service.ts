@@ -53,7 +53,6 @@ export class ContentService extends BaseHttpService {
   getContent(roomId: string, contentId: string): Observable<Content> {
     const connectionUrl = this.getBaseUrl(roomId) + this.serviceApiUrl.content + '/' + contentId + '/?view=extended';
     return this.http.get<Content>(connectionUrl).pipe(
-      tap(() => ''),
       catchError(this.handleError<Content>('getContent by id: ' + contentId))
     );
   }
@@ -61,7 +60,6 @@ export class ContentService extends BaseHttpService {
   getChoiceContent(roomId: string, contentId: string): Observable<ContentChoice> {
     const connectionUrl = this.getBaseUrl(roomId) + this.serviceApiUrl.content + '/' + contentId;
     return this.http.get<ContentChoice>(connectionUrl).pipe(
-      tap(() => ''),
       catchError(this.handleError<ContentChoice>('getRoom by id: ' + contentId))
     );
   }
@@ -86,7 +84,6 @@ export class ContentService extends BaseHttpService {
   getContentChoiceByIds(roomId: string, contentIds: string[]): Observable<ContentChoice[]> {
     const connectionUrl = this.getBaseUrl(roomId) + this.serviceApiUrl.content + '/?ids=' + contentIds;
     return this.http.get<ContentChoice[]>(connectionUrl).pipe(
-      tap(() => ''),
       catchError(this.handleError('getContentsByIds', []))
     );
   }
@@ -94,7 +91,6 @@ export class ContentService extends BaseHttpService {
   getCorrectChoiceIndexes(roomId: string, contentId: string): Observable<number[]> {
     const connectionUrl = this.getBaseUrl(roomId) + this.serviceApiUrl.content + '/' + contentId + '/correct-choice-indexes';
     return this.http.get<number[]>(connectionUrl).pipe(
-      tap(() => ''),
       catchError(this.handleError('getCorrectChoiceIndexes', []))
     )
   }
@@ -113,7 +109,6 @@ export class ContentService extends BaseHttpService {
   updateContent(updatedContent: Content): Observable<Content> {
     const connectionUrl = this.getBaseUrl(updatedContent.roomId) + this.serviceApiUrl.content + '/' + updatedContent.id;
     return this.http.put(connectionUrl, updatedContent, httpOptions).pipe(
-      tap(_ => ''),
       catchError(this.handleError<any>('updateContent'))
     );
   }
@@ -121,7 +116,6 @@ export class ContentService extends BaseHttpService {
   patchContent(content: Content, changes: object): Observable<Content> {
     const connectionUrl = this.getBaseUrl(content.roomId) + this.serviceApiUrl.content + '/' + content.id;
     return this.http.patch(connectionUrl, changes, httpOptions).pipe(
-      tap(_ => ''),
       catchError(this.handleError<any>('patchContent'))
     );
   }
@@ -134,7 +128,6 @@ export class ContentService extends BaseHttpService {
   updateChoiceContent(updatedContent: ContentChoice): Observable<ContentChoice> {
     const connectionUrl = this.getBaseUrl(updatedContent.roomId) + this.serviceApiUrl.content + '/' + updatedContent.id;
     return this.http.put(connectionUrl, updatedContent, httpOptions).pipe(
-      tap(_ => ''),
       catchError(this.handleError<any>('updateContentChoice'))
     );
   }
@@ -142,7 +135,6 @@ export class ContentService extends BaseHttpService {
   deleteContent(roomId: string, contentId: string): Observable<Content> {
     const connectionUrl = this.getBaseUrl(roomId) + this.serviceApiUrl.content + '/' + contentId;
     return this.http.delete<Content>(connectionUrl, httpOptions).pipe(
-      tap(_ => ''),
       catchError(this.handleError<Content>('deleteContent'))
     );
   }
@@ -150,7 +142,6 @@ export class ContentService extends BaseHttpService {
   deleteAnswers(roomId: string, contentId: string): Observable<Content> {
     const connectionUrl = this.getBaseUrl(roomId) + this.serviceApiUrl.content + '/' + contentId + this.serviceApiUrl.answer;
     return this.http.delete<Content>(connectionUrl, httpOptions).pipe(
-      tap(_ => ''),
       catchError(this.handleError<Content>('deleteAnswers'))
     );
   }
@@ -158,7 +149,6 @@ export class ContentService extends BaseHttpService {
   getAnswer(roomId: string, contentId: string): Observable<AnswerStatistics> {
     const connectionUrl = this.getBaseUrl(roomId) + this.serviceApiUrl.content + '/' + contentId + '/stats';
     return this.http.get<AnswerStatistics>(connectionUrl).pipe(
-      tap(() => ''),
       catchError(this.handleError<AnswerStatistics>(`getRoom shortId=${contentId}`))
     );
   }
@@ -169,7 +159,6 @@ export class ContentService extends BaseHttpService {
       properties: {},
       externalFilters: { notInContentGroupOfRoomId: roomId }
     }).pipe(
-      tap(() => ''),
       catchError(this.handleError<Content[]>(`findContentsWithoutGroup roomId=${roomId}`))
     );
   }

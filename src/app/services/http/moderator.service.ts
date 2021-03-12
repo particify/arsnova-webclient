@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Moderator } from '../../models/moderator';
-import { catchError, tap } from 'rxjs/operators';
+import { catchError } from 'rxjs/operators';
 import { BaseHttpService } from './base-http.service';
 import { User } from '../../models/user';
 import { TranslateService } from '@ngx-translate/core';
@@ -30,7 +30,6 @@ export class ModeratorService extends BaseHttpService {
   get(roomId: string): Observable<Moderator[]> {
     const url = `${this.getBaseUrl(roomId) + this.serviceApiUrl.moderator}`;
     return this.http.get(url, httpOptions).pipe(
-      tap(_ => ''),
       catchError(this.handleError<any>('getModerator'))
     );
   }
@@ -38,7 +37,6 @@ export class ModeratorService extends BaseHttpService {
   add(roomId: string, userId: string) {
     const url = `${this.getBaseUrl(roomId) + this.serviceApiUrl.moderator}/${userId}`;
     return this.http.put(url, httpOptions).pipe(
-      tap(_ => ''),
       catchError(this.handleError<any>('addModerator'))
     );
   }
@@ -46,7 +44,6 @@ export class ModeratorService extends BaseHttpService {
   delete(roomId: string, userId: string) {
     const url = `${this.getBaseUrl(roomId) + this.serviceApiUrl.moderator}/${userId}`;
     return this.http.delete(url, httpOptions).pipe(
-      tap(_ => ''),
       catchError(this.handleError<any>('deleteModerator'))
     );
   }
@@ -57,7 +54,6 @@ export class ModeratorService extends BaseHttpService {
       properties: { loginId: loginId },
       externalFilters: {}
     }).pipe(
-      tap(() => ''),
       catchError(this.handleError('getUserId', []))
     );
   }
@@ -65,7 +61,6 @@ export class ModeratorService extends BaseHttpService {
   getUserData(userIds: string[]): Observable<User[]> {
     const url = `${this.apiUrl.base + this.apiUrl.user}/?ids=${userIds}`;
     return this.http.get<User[]>(url, httpOptions).pipe(
-      tap(() => ''),
       catchError(this.handleError('getUserData', []))
     );
   }
