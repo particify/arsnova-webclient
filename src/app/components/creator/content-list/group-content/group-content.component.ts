@@ -181,8 +181,8 @@ export class GroupContentComponent extends ContentListBaseComponent implements O
   saveSorting(): void {
     const newContentIdOrder = this.copiedContents.map(c => c.id);
     if (this.contentGroup.contentIds !== newContentIdOrder) {
-      const changes: { contendIds: string[], firstPublishedIndex: number, lastPublishedIndex: number } =
-        { contendIds: newContentIdOrder, firstPublishedIndex: this.firstPublishedIndex, lastPublishedIndex: this.lastPublishedIndex };
+      const changes: { contentIds: string[], firstPublishedIndex: number, lastPublishedIndex: number } =
+        { contentIds: newContentIdOrder, firstPublishedIndex: this.firstPublishedIndex, lastPublishedIndex: this.lastPublishedIndex };
       this.updateContentGroup(changes).subscribe(updatedContentGroup => {
         this.contentGroup = updatedContentGroup;
         this.contents = this.copiedContents;
