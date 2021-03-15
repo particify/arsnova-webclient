@@ -3,7 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { CommentSettings } from '../../models/comment-settings';
 import { catchError } from 'rxjs/operators';
-import { BaseHttpService } from './base-http.service';
+import { AbstractHttpService } from './abstract-http.service';
 import { TranslateService } from '@ngx-translate/core';
 import { NotificationService } from '../util/notification.service';
 import { EventService } from '../util/event.service';
@@ -13,12 +13,12 @@ const httpOptions = {
 };
 
 @Injectable()
-export class CommentSettingsService extends BaseHttpService {
+export class CommentSettingsService extends AbstractHttpService<CommentSettings> {
   constructor(private http: HttpClient,
               protected eventService: EventService,
               protected translateService: TranslateService,
               protected notificationService: NotificationService) {
-    super('/settings', eventService, translateService, notificationService);
+    super('/settings', http, eventService, translateService, notificationService);
   }
 
   get(id: string): Observable<CommentSettings> {

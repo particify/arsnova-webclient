@@ -1,5 +1,5 @@
 import { EventEmitter, Injectable } from '@angular/core';
-import { BaseHttpService } from './base-http.service';
+import { AbstractHttpService } from './abstract-http.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { EventService } from '../util/event.service';
 import { TranslateService } from '@ngx-translate/core';
@@ -14,7 +14,7 @@ const httpOptions = {
 };
 
 @Injectable()
-export class FeedbackService extends BaseHttpService {
+export class FeedbackService extends AbstractHttpService<number[]> {
 
   public messageEvent = new EventEmitter<Message>();
   sub: Subscription;
@@ -26,7 +26,7 @@ export class FeedbackService extends BaseHttpService {
       protected notificationService: NotificationService,
       protected wsFeedbackService: WsFeedbackService
   ) {
-    super('/survey', eventService, translateService, notificationService);
+    super('/survey', http, eventService, translateService, notificationService);
   }
 
   startSub(roomId: string) {

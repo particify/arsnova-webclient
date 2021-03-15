@@ -3,7 +3,7 @@ import { TextAnswer } from '../../models/text-answer';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
-import { BaseHttpService } from './base-http.service';
+import { AbstractEntityService } from './abstract-entity.service';
 import { ChoiceAnswer } from '../../models/choice-answer';
 import { TranslateService } from '@ngx-translate/core';
 import { NotificationService } from '../util/notification.service';
@@ -15,7 +15,7 @@ const httpOptions = {
 };
 
 @Injectable()
-export class ContentAnswerService extends BaseHttpService {
+export class ContentAnswerService extends AbstractEntityService<Answer> {
 
   serviceApiUrl = {
     text: '/text',
@@ -26,7 +26,7 @@ export class ContentAnswerService extends BaseHttpService {
               protected eventService: EventService,
               protected translateService: TranslateService,
               protected notificationService: NotificationService) {
-    super('/answer', eventService, translateService, notificationService);
+    super('/answer', http, eventService, translateService, notificationService);
   }
 
   getAnswers(roomId: string, contentId: string): Observable<TextAnswer[]> {

@@ -8,7 +8,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, Subscription } from 'rxjs';
 import { catchError, map, tap, switchMap } from 'rxjs/operators';
 import { AuthenticationService, AUTH_HEADER_KEY, AUTH_SCHEME } from './authentication.service';
-import { BaseHttpService } from './base-http.service';
+import { AbstractEntityService } from './abstract-entity.service';
 import { EventService } from '../util/event.service';
 import { GlobalStorageService, STORAGE_KEYS } from '../util/global-storage.service';
 import { WsConnectorService } from '../websockets/ws-connector.service';
@@ -22,7 +22,7 @@ const httpOptions = {
 };
 
 @Injectable()
-export class RoomService extends BaseHttpService {
+export class RoomService extends AbstractEntityService<Room> {
 
   serviceApiUrl = {
     stats: '/stats',
@@ -45,7 +45,7 @@ export class RoomService extends BaseHttpService {
     protected translateService: TranslateService,
     protected notificationService: NotificationService,
     private feedbackService: FeedbackService) {
-    super('/room', eventService, translateService, notificationService);
+    super('/room', http, eventService, translateService, notificationService);
   }
 
   /**
@@ -108,15 +108,13 @@ export class RoomService extends BaseHttpService {
   addRoom(room: Room): Observable<Room> {
     delete room.id;
     delete room.revision;
-    const connectionUrl = this.buildUri('/');
-    return this.http.post<Room>(connectionUrl, room, httpOptions).pipe(
+    return this.postEntity(room).pipe(
       catchError(this.handleError<Room>(`add Room ${room}`))
     );
   }
 
   getRoom(id: string): Observable<Room> {
-    const connectionUrl = this.buildUri(`/${id}`);
-    return this.http.get<Room>(connectionUrl).pipe(
+    return this.getById(id).pipe(
       map(room => this.parseExtensions(room)),
       tap(room => this.setRoomId(room)),
       catchError(this.handleError<Room>(`getRoom keyword=${id}`))
@@ -131,29 +129,22 @@ export class RoomService extends BaseHttpService {
   }
 
   getRoomByShortId(shortId: string): Observable<Room> {
-    const connectionUrl = this.buildUri(`/~${shortId}`);
-    return this.http.get<Room>(connectionUrl).pipe(
-      map(room => this.parseExtensions(room)),
-      tap(room => this.setRoomId(room)),
-      catchError(this.handleError<Room>(`getRoom shortId=${shortId}`))
-    );
+    const id = '~' + shortId;
+    return this.getRoom(id);
   }
 
   updateRoom(updatedRoom: Room): Observable<Room> {
-    const connectionUrl = this.buildUri(`/~${updatedRoom.shortId}`);
-    return this.http.put(connectionUrl, updatedRoom, httpOptions).pipe(
+    return this.putEntity(updatedRoom).pipe(
       catchError(this.handleError<any>('updateRoom'))
     );
   }
 
   patchRoom(roomId: string, changes: object): void {
-    const connectionUrl = this.buildUri(`/${roomId}`);
-    this.http.patch(connectionUrl, changes, httpOptions).subscribe();
+    this.patchEntity(roomId, changes).subscribe();
   }
 
   deleteRoom(roomId: string): Observable<Room> {
-    const connectionUrl = this.buildUri(`/${roomId}`);
-    return this.http.delete<Room>(connectionUrl, httpOptions).pipe(
+    return this.deleteEntity(roomId).pipe(
       catchError(this.handleError<Room>('deleteRoom'))
     );
   }

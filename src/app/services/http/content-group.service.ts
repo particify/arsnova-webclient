@@ -4,7 +4,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { AuthenticationService } from './authentication.service';
-import { BaseHttpService } from './base-http.service';
+import { AbstractEntityService } from './abstract-entity.service';
 import { EventService } from '../util/event.service';
 import { GlobalStorageService, STORAGE_KEYS } from '../util/global-storage.service';
 import { TranslateService } from '@ngx-translate/core';
@@ -15,7 +15,7 @@ const httpOptions = {
 };
 
 @Injectable()
-export class ContentGroupService extends BaseHttpService {
+export class ContentGroupService extends AbstractEntityService<ContentGroup> {
   constructor(
     private http: HttpClient,
     private authService: AuthenticationService,
@@ -23,13 +23,12 @@ export class ContentGroupService extends BaseHttpService {
     protected eventService: EventService,
     protected translateService: TranslateService,
     protected notificationService: NotificationService) {
-    super('/contentgroup', eventService, translateService, notificationService);
+    super('/contentgroup', http, eventService, translateService, notificationService);
   }
 
   getByRoomIdAndName(roomId: string, name: string): Observable<ContentGroup> {
     const encodedName = encodeURIComponent(name);
-    const connectionUrl = this.buildUri(`/${encodedName}`, roomId);
-    return this.http.get<ContentGroup>(connectionUrl, httpOptions).pipe(
+    return this.getById(encodedName, { roomId: roomId }).pipe(
       catchError(this.handleError<ContentGroup>(`getByRoomIdAndName, ${roomId}, ${name}`))
     );
   }
@@ -61,17 +60,14 @@ export class ContentGroupService extends BaseHttpService {
     );
   }
 
-  updateGroup(roomId: string, name: string, contentGroup: ContentGroup): Observable<ContentGroup> {
-    const encodedName = encodeURIComponent(name);
-    const connectionUrl = this.buildUri(`/${encodedName}`, roomId);
-    return this.http.put<ContentGroup>(connectionUrl, contentGroup, httpOptions).pipe(
-      catchError(this.handleError<ContentGroup>(`updateGroup, ${ roomId }, ${ name }, ${ ContentGroup }`))
+  updateGroup(contentGroup: ContentGroup): Observable<ContentGroup> {
+    return this.putEntity(contentGroup, contentGroup.roomId).pipe(
+      catchError(this.handleError<ContentGroup>(`updateGroup, ${ contentGroup.roomId }, ${ contentGroup.name }, ${ ContentGroup }`))
     );
   }
 
   patchContentGroup(group: ContentGroup, changes: object): Observable<ContentGroup> {
-    const connectionUrl = this.buildUri(`/${group.id}`, group.roomId);
-    return this.http.patch(connectionUrl, changes, httpOptions).pipe(
+    return this.patchEntity(group.id, changes, group.roomId).pipe(
       catchError(this.handleError<any>('patchContentGroup'))
     );
   }

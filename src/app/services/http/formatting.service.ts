@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BaseHttpService } from './base-http.service';
+import { AbstractHttpService } from './abstract-http.service';
 import { HttpClient } from '@angular/common/http';
 import { catchError } from 'rxjs/operators';
 import { Observable } from 'rxjs';
@@ -21,7 +21,7 @@ export interface FormattingOptions {
 }
 
 @Injectable()
-export class FormattingService extends BaseHttpService {
+export class FormattingService extends AbstractHttpService<void> {
 
   serviceApiUrl = {
     render: '/render'
@@ -31,7 +31,7 @@ export class FormattingService extends BaseHttpService {
               protected eventService: EventService,
               protected translateService: TranslateService,
               protected notificationService: NotificationService) {
-    super('/_util/formatting', eventService, translateService, notificationService);
+    super('/_util/formatting', http, eventService, translateService, notificationService);
   }
 
   postString(text: string, options?: FormattingOptions): Observable<any> {

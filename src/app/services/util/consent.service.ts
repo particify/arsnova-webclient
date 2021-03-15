@@ -1,5 +1,5 @@
 import { Injectable, EventEmitter } from '@angular/core';
-import { BaseHttpService } from '../http/base-http.service';
+import { AbstractHttpService } from '../http/abstract-http.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError } from 'rxjs/operators';
 import { ApiConfigService } from '../http/api-config.service';
@@ -41,7 +41,7 @@ const httpOptions = {
 };
 
 @Injectable()
-export class ConsentService extends BaseHttpService {
+export class ConsentService extends AbstractHttpService<ConsentSettings> {
   private readonly categories: CookieCategory[] = [
     { key: StorageItemCategory.REQUIRED, id: 'essential', consent: true, required: true },
     { key: StorageItemCategory.FUNCTIONAL, id: 'functional', consent: false, required: false },
@@ -64,7 +64,7 @@ export class ConsentService extends BaseHttpService {
     protected eventService: EventService,
     protected translateService: TranslateService,
     protected notificationService: NotificationService) {
-    super('/consent', eventService, translateService, notificationService);
+    super('/consent', http, eventService, translateService, notificationService);
   }
 
   init(consentSettings: ConsentSettings) {

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject, Observable, of, timer } from 'rxjs';
 import { catchError, concatMap, filter, first, map, switchAll, switchMap, shareReplay, take, tap } from 'rxjs/operators';
-import { BaseHttpService } from './base-http.service';
+import { AbstractHttpService } from './abstract-http.service';
 import { GlobalStorageService, STORAGE_KEYS } from '../util/global-storage.service';
 import { ClientAuthentication } from '../../models/client-authentication';
 import { AuthenticationStatus, ClientAuthenticationResult } from '../../models/client-authentication-result';
@@ -25,7 +25,7 @@ interface Jwt {
  * Handles app-wide user authentication.
  */
 @Injectable()
-export class AuthenticationService extends BaseHttpService {
+export class AuthenticationService extends AbstractHttpService<ClientAuthentication> {
   private readonly ADMIN_ROLE: string = 'ADMIN';
   private popupDimensions = [500, 500];
 
@@ -55,7 +55,7 @@ export class AuthenticationService extends BaseHttpService {
     protected translateService: TranslateService,
     protected notificationService: NotificationService,
     private apiConfigService: ApiConfigService) {
-    super('/auth', eventService, translateService, notificationService);
+    super('/auth', http, eventService, translateService, notificationService);
     const savedAuth: ClientAuthentication = this.globalStorageService.getItem(STORAGE_KEYS.USER);
     this.auth$$ = new BehaviorSubject(new BehaviorSubject(savedAuth));
   }

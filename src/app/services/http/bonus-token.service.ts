@@ -3,7 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { BonusToken } from '../../models/bonus-token';
 import { catchError } from 'rxjs/operators';
-import { BaseHttpService } from './base-http.service';
+import { AbstractHttpService } from './abstract-http.service';
 import { TranslateService } from '@ngx-translate/core';
 import { NotificationService } from '../util/notification.service';
 import { EventService } from '../util/event.service';
@@ -13,7 +13,7 @@ const httpOptions = {
 };
 
 @Injectable()
-export class BonusTokenService extends BaseHttpService {
+export class BonusTokenService extends AbstractHttpService<BonusToken> {
 
   serviceApiUrl = {
     delete: '/deleteby'
@@ -23,7 +23,7 @@ export class BonusTokenService extends BaseHttpService {
               protected eventService: EventService,
               protected translateService: TranslateService,
               protected notificationService: NotificationService) {
-    super('/bonustoken', eventService, translateService, notificationService);
+    super('/bonustoken', http, eventService, translateService, notificationService);
   }
 
   getTokensByRoomId(roomId: string): Observable<BonusToken[]> {

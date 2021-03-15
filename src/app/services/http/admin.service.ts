@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError } from 'rxjs/operators';
-import { BaseHttpService } from './base-http.service';
+import { AbstractHttpService } from './abstract-http.service';
 import { Observable } from 'rxjs';
 import { Room } from '../../models/room';
 import { User } from '../../models/user';
@@ -15,7 +15,7 @@ const httpOptions = {
 };
 
 @Injectable()
-export class AdminService extends BaseHttpService {
+export class AdminService extends AbstractHttpService<void> {
 
   serviceApiUrl = {
     adminView: 'view=admin',
@@ -29,7 +29,7 @@ export class AdminService extends BaseHttpService {
     protected translateService: TranslateService,
     protected notificationService: NotificationService,
     protected userService: UserService) {
-    super('', eventService, translateService, notificationService);
+    super('', http, eventService, translateService, notificationService);
   }
 
   getUser(id: string) {

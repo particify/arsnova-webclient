@@ -3,7 +3,7 @@ import { Content } from '../../models/content';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { forkJoin, Observable } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
-import { BaseHttpService } from './base-http.service';
+import { AbstractEntityService } from './abstract-entity.service';
 import { AnswerStatistics } from '../../models/answer-statistics';
 import { ContentChoice } from '../../models/content-choice';
 import { WsConnectorService } from '../websockets/ws-connector.service';
@@ -21,7 +21,7 @@ const httpOptions = {
 };
 
 @Injectable()
-export class ContentService extends BaseHttpService {
+export class ContentService extends AbstractEntityService<Content> {
 
   serviceApiUrl = {
     answer: '/answer'
@@ -32,7 +32,7 @@ export class ContentService extends BaseHttpService {
               protected eventService: EventService,
               protected translateService: TranslateService,
               protected notificationService: NotificationService) {
-    super('/content', eventService, translateService, notificationService);
+    super('/content', http, eventService, translateService, notificationService);
   }
 
   getAnswersChangedStream(roomId: string, contentId: string): Observable<IMessage> {

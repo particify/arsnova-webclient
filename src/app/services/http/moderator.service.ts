@@ -3,7 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Moderator } from '../../models/moderator';
 import { catchError } from 'rxjs/operators';
-import { BaseHttpService } from './base-http.service';
+import { AbstractHttpService } from './abstract-http.service';
 import { TranslateService } from '@ngx-translate/core';
 import { NotificationService } from '../util/notification.service';
 import { EventService } from '../util/event.service';
@@ -13,12 +13,12 @@ const httpOptions = {
 };
 
 @Injectable()
-export class ModeratorService extends BaseHttpService {
+export class ModeratorService extends AbstractHttpService<Moderator> {
   constructor(private http: HttpClient,
               protected eventService: EventService,
               protected translateService: TranslateService,
               protected notificationService: NotificationService) {
-    super('/moderator', eventService, translateService, notificationService);
+    super('/moderator', http, eventService, translateService, notificationService);
   }
 
   get(roomId: string): Observable<Moderator[]> {

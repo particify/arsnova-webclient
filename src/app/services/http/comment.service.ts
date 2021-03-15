@@ -3,7 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Comment } from '../../models/comment';
 import { catchError, tap } from 'rxjs/operators';
-import { BaseHttpService } from './base-http.service';
+import { AbstractEntityService } from './abstract-entity.service';
 import { TranslateService } from '@ngx-translate/core';
 import { NotificationService } from '../util/notification.service';
 import { EventService } from '../util/event.service';
@@ -14,7 +14,7 @@ const httpOptions = {
 };
 
 @Injectable()
-export class CommentService extends BaseHttpService {
+export class CommentService extends AbstractEntityService<Comment> {
 
   serviceApiUrl = {
     highlight: '/highlight',
@@ -27,7 +27,7 @@ export class CommentService extends BaseHttpService {
               protected eventService: EventService,
               protected translateService: TranslateService,
               protected notificationService: NotificationService) {
-    super('/comment', eventService, translateService, notificationService);
+    super('/comment', http, eventService, translateService, notificationService);
   }
 
   getComment(commentId: string, roomId: string): Observable<Comment> {

@@ -3,7 +3,7 @@ import { Vote } from '../../models/vote';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { BaseHttpService } from './base-http.service';
+import { AbstractHttpService } from './abstract-http.service';
 import { TranslateService } from '@ngx-translate/core';
 import { NotificationService } from '../util/notification.service';
 import { EventService } from '../util/event.service';
@@ -13,12 +13,12 @@ const httpOptions = {
 };
 
 @Injectable()
-export class VoteService extends BaseHttpService {
+export class VoteService extends AbstractHttpService<Vote> {
   constructor(private http: HttpClient,
               protected eventService: EventService,
               protected translateService: TranslateService,
               protected notificationService: NotificationService) {
-    super('/vote', eventService, translateService, notificationService);
+    super('/vote', http, eventService, translateService, notificationService);
   }
 
   add(roomId: string, vote: Vote): Observable<Vote> {

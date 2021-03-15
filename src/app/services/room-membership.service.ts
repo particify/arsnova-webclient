@@ -3,7 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { first, map, shareReplay, skip, switchAll, takeUntil, tap } from 'rxjs/operators';
 import { IMessage } from '@stomp/stompjs';
-import { BaseHttpService } from './http/base-http.service';
+import { AbstractHttpService } from './http/abstract-http.service';
 import { WsConnectorService } from './websockets/ws-connector.service';
 import { AuthenticationService, AUTH_HEADER_KEY, AUTH_SCHEME } from './http/authentication.service';
 import { EventService } from './util/event.service';
@@ -18,7 +18,7 @@ import { ClientAuthentication } from '../models/client-authentication';
  * about the user's authorization for rooms.
  */
 @Injectable()
-export class RoomMembershipService extends BaseHttpService {
+export class RoomMembershipService extends AbstractHttpService<Membership> {
 
   serviceApiUrl = {
     byUser: '/by-user'
@@ -34,7 +34,7 @@ export class RoomMembershipService extends BaseHttpService {
     private authenticationService: AuthenticationService,
     protected translateService: TranslateService,
     protected notificationService: NotificationService) {
-    super('/_view/membership', eventService, translateService, notificationService);
+    super('/_view/membership', http, eventService, translateService, notificationService);
       const authChanged$ = authenticationService.getAuthenticationChanges().pipe(skip(1));
       authenticationService.getAuthenticationChanges().subscribe(auth => {
         if (!auth) {

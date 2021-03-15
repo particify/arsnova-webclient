@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { BaseHttpService } from './base-http.service';
+import { AbstractEntityService } from './abstract-entity.service';
 import { User } from '../../models/user';
 import { AccountCreated } from '../../models/events/account-created';
 import { AccountDeleted } from '../../models/events/account-deleted';
@@ -15,7 +15,7 @@ const httpOptions = {
 };
 
 @Injectable()
-export class UserService extends BaseHttpService {
+export class UserService extends AbstractEntityService<User> {
 
   serviceApiUrl = {
     register: '/register',
@@ -28,7 +28,7 @@ export class UserService extends BaseHttpService {
               protected eventService: EventService,
               protected translateService: TranslateService,
               protected notificationService: NotificationService) {
-    super('/user', eventService, translateService, notificationService);
+    super('/user', http, eventService, translateService, notificationService);
   }
 
   register(email: string, password: string): Observable<boolean> {

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { BaseHttpService } from './base-http.service';
+import { AbstractHttpService } from './abstract-http.service';
 import { TranslateService } from '@ngx-translate/core';
 import { NotificationService } from '../util/notification.service';
 import { EventService } from '../util/event.service';
@@ -22,7 +22,7 @@ export interface SummarizedStats {
 }
 
 @Injectable()
-export class SystemInfoService extends BaseHttpService {
+export class SystemInfoService extends AbstractHttpService<void> {
 
   serviceApiUrl = {
     health: '/health',
@@ -35,7 +35,7 @@ export class SystemInfoService extends BaseHttpService {
               protected eventService: EventService,
               protected translateService: TranslateService,
               protected notificationService: NotificationService) {
-    super('', eventService, translateService, notificationService);
+    super('', http, eventService, translateService, notificationService);
   }
 
   getHealthInfo(): Observable<any> {
