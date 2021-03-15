@@ -11,9 +11,6 @@ import * as dayjs from 'dayjs';
 
 @Injectable()
 export class ApiConfigService extends BaseHttpService {
-  private readonly serviceApiUrl = {
-    config: '/configuration'
-  };
   private config$: Observable<ApiConfig>;
   private cacheExpiry: dayjs.Dayjs = dayjs();
 
@@ -21,7 +18,7 @@ export class ApiConfigService extends BaseHttpService {
               protected eventService: EventService,
               protected translateService: TranslateService,
               protected notificationService: NotificationService) {
-    super(eventService, translateService, notificationService);
+    super('/configuration', eventService, translateService, notificationService);
   }
 
   getApiConfig$(): Observable<ApiConfig> {
@@ -34,7 +31,7 @@ export class ApiConfigService extends BaseHttpService {
 
   private load$() {
     console.log('Loading API configuration...');
-    return this.http.get<ApiConfig>(this.getBaseUrl() + this.serviceApiUrl.config).pipe(
+    return this.http.get<ApiConfig>(this.buildUri('')).pipe(
         tap(() => console.log('API configuration loaded.')),
         map((config) => {
           config.authenticationProviders.sort((p1, p2) => {

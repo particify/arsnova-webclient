@@ -11,12 +11,11 @@ export class BaseHttpService {
   protected apiUrl = {
     base: '/api',
     find: '/find',
-    room: '/room',
-    stats: '/stats',
-    user: '/user',
+    room: '/room'
   };
 
   constructor(
+    private uriPrefix: string,
     protected eventService: EventService,
     protected translateService: TranslateService,
     protected notificationService: NotificationService) {
@@ -50,7 +49,19 @@ export class BaseHttpService {
     };
   }
 
-  getBaseUrl(roomId?: string): string {
+  buildUri(path: string, roomId?: string) {
+    return this.getBaseUrl(roomId) + this.uriPrefix + path;
+  }
+
+  buildForeignUri(path: string, roomId?: string) {
+    return this.getBaseUrl(roomId) + path;
+  }
+
+  private getBaseUrl(roomId?: string): string {
     return this.apiUrl.base + (roomId ? (this.apiUrl.room + '/' + roomId) : '');
+  }
+
+  get(id: string, params: { roomId?: string } = {}) {
+    let { roomId, ...rest } = params;
   }
 }

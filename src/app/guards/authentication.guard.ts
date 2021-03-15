@@ -11,12 +11,14 @@ import { TranslateService } from '@ngx-translate/core';
 import { RoomService } from '../services/http/room.service';
 import { RoomMembershipService } from '../services/room-membership.service';
 import { environment } from '../../environments/environment';
+import { UserService } from '../services/http/user.service';
 
 @Injectable()
 export class AuthenticationGuard implements CanActivate {
   constructor(private authenticationService: AuthenticationService,
               private roomMembershipService: RoomMembershipService,
               private roomService: RoomService,
+              private userService: UserService,
               private notificationService: NotificationService,
               private translateService: TranslateService,
               private eventService: EventService,
@@ -55,7 +57,7 @@ export class AuthenticationGuard implements CanActivate {
               if (viewRole === UserRole.PARTICIPANT) {
                 /* First time room member -> add history entry */
                 return this.roomService.getRoomByShortId(route.params.shortId).pipe(
-                    tap(room => this.roomService.addToHistory(auth.userId, room.id).subscribe(() => {
+                    tap(room => this.userService.addRoomToHistory(auth.userId, room.id).subscribe(() => {
                       const event = new MembershipsChanged();
                       this.eventService.broadcast(event.type, event.payload);
                     })),

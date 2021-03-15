@@ -28,11 +28,11 @@ export class UserService extends BaseHttpService {
               protected eventService: EventService,
               protected translateService: TranslateService,
               protected notificationService: NotificationService) {
-    super(eventService, translateService, notificationService);
+    super('/user', eventService, translateService, notificationService);
   }
 
   register(email: string, password: string): Observable<boolean> {
-    const connectionUrl: string = this.apiUrl.base + this.apiUrl.user + this.serviceApiUrl.register;
+    const connectionUrl: string = this.buildUri(this.serviceApiUrl.register);
 
     return this.http.post<boolean>(connectionUrl, {
       loginId: email,
@@ -45,29 +45,26 @@ export class UserService extends BaseHttpService {
   }
 
   activate(name: string, activationKey: string): Observable<string> {
-    const connectionUrl: string = this.apiUrl.base + this.apiUrl.user + '/~' + encodeURIComponent(name) +
-      this.serviceApiUrl.activate + '?key=' + activationKey;
+    const connectionUrl: string = this.buildUri('/~' + encodeURIComponent(name) +
+      this.serviceApiUrl.activate + '?key=' + activationKey);
 
     return this.http.post<string>(connectionUrl, {}, httpOptions);
   }
 
   resetActivation(username: string): Observable<User> {
-    const connectionUrl: string = this.apiUrl.base +
-      this.apiUrl.user +
+    const connectionUrl: string = this.buildUri(
       '/~' + encodeURIComponent(username) +
-      this.serviceApiUrl.resetActivation;
+      this.serviceApiUrl.resetActivation);
     return this.http.post<any>(connectionUrl, httpOptions).pipe(
       catchError(this.handleError<User>('resetActivation'))
     );
   }
 
   setNewPassword(email: string, key?: string, password?: string): Observable<boolean> {
-    const connectionUrl: string =
-      this.apiUrl.base +
-      this.apiUrl.user +
+    const connectionUrl: string = this.buildUri(
       '/~' +
       email +
-      this.serviceApiUrl.resetPassword;
+      this.serviceApiUrl.resetPassword);
     let body = {};
     if (key && password) {
       body = {
@@ -81,7 +78,7 @@ export class UserService extends BaseHttpService {
   }
 
   delete(id: string): Observable<User> {
-    const connectionUrl: string = this.apiUrl.base + this.apiUrl.user + '/' + id;
+    const connectionUrl: string = this.buildUri('/' + id);
     return this.http.delete<User>(connectionUrl, httpOptions).pipe(
       tap(() => {
         const event = new AccountDeleted();
@@ -92,12 +89,31 @@ export class UserService extends BaseHttpService {
   }
 
   getUserByLoginId(loginId: string): Observable<User[]> {
-    const url = `${this.apiUrl.base + this.apiUrl.user + this.apiUrl.find}`;
+    const url = this.buildUri(this.apiUrl.find);
     return this.http.post<User[]>(url, {
       properties: { loginId: loginId },
       externalFilters: {}
     }).pipe(
       catchError(this.handleError('getUserId', []))
+    );
+  }
+
+  getUserData(userIds: string[]): Observable<User[]> {
+    const url = this.buildUri(`/?ids=${userIds}`);
+    return this.http.get<User[]>(url, httpOptions).pipe(
+      catchError(this.handleError('getUserData', []))
+    );
+  }
+
+  addRoomToHistory(userId: string, roomId: string): Observable<void> {
+    const connectionUrl = this.buildUri(`/${userId}/roomHistory`);
+    return this.http.post<void>(connectionUrl, { roomId: roomId, lastVisit: new Date().getTime() }, httpOptions);
+  }
+
+  removeRoomFromHistory(userId: string, roomId: string): Observable<void> {
+    const connectionUrl = this.buildUri(`/${userId}/roomHistory/${roomId}`);
+    return this.http.delete<void>(connectionUrl, httpOptions).pipe(
+      catchError(this.handleError<void>('deleteRoom'))
     );
   }
 }

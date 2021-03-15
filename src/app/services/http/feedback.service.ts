@@ -19,10 +19,6 @@ export class FeedbackService extends BaseHttpService {
   public messageEvent = new EventEmitter<Message>();
   sub: Subscription;
 
-  serviceApiUrl = {
-    survey: '/survey'
-  };
-
   constructor(
       private http: HttpClient,
       protected eventService: EventService,
@@ -30,7 +26,7 @@ export class FeedbackService extends BaseHttpService {
       protected notificationService: NotificationService,
       protected wsFeedbackService: WsFeedbackService
   ) {
-    super(eventService, translateService, notificationService);
+    super('/survey', eventService, translateService, notificationService);
   }
 
   startSub(roomId: string) {
@@ -49,7 +45,7 @@ export class FeedbackService extends BaseHttpService {
   }
 
   get(roomId: string): Observable<number[]> {
-    const connectionUrl = `${this.getBaseUrl(roomId) + this.serviceApiUrl.survey}`;
+    const connectionUrl = this.buildUri('', roomId);
     return this.http.get<number[]>(connectionUrl, httpOptions).pipe(
       catchError(this.handleError<number[]>('get survey'))
     );

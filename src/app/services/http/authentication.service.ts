@@ -42,7 +42,6 @@ export class AuthenticationService extends BaseHttpService {
   private redirect: string;
 
   serviceApiUrl = {
-    auth: '/auth',
     guest: '/guest',
     login: '/login',
     registered: '/registered',
@@ -56,7 +55,7 @@ export class AuthenticationService extends BaseHttpService {
     protected translateService: TranslateService,
     protected notificationService: NotificationService,
     private apiConfigService: ApiConfigService) {
-    super(eventService, translateService, notificationService);
+    super('/auth', eventService, translateService, notificationService);
     const savedAuth: ClientAuthentication = this.globalStorageService.getItem(STORAGE_KEYS.USER);
     this.auth$$ = new BehaviorSubject(new BehaviorSubject(savedAuth));
   }
@@ -120,7 +119,7 @@ export class AuthenticationService extends BaseHttpService {
    */
   login(loginId: string, password: string, providerId: string = 'user-db'): Observable<ClientAuthenticationResult> {
     const providerPath = providerId === 'user-db' ? this.serviceApiUrl.registered : '/' + providerId;
-    const connectionUrl: string = this.getBaseUrl() + this.serviceApiUrl.auth + this.serviceApiUrl.login + providerPath;
+    const connectionUrl: string = this.buildUri(this.serviceApiUrl.login + providerPath);
 
     return this.handleLoginResponse(this.http.post<ClientAuthentication>(connectionUrl, {
       loginId: loginId,
@@ -140,7 +139,7 @@ export class AuthenticationService extends BaseHttpService {
       return of(null);
     }
 
-    const connectionUrl: string = this.getBaseUrl() + this.serviceApiUrl.auth + this.serviceApiUrl.login + '?refresh=true';
+    const connectionUrl: string = this.buildUri(this.serviceApiUrl.login + '?refresh=true');
     const loginHttpHeaders = this.httpOptions.headers.set(AUTH_HEADER_KEY, `${AUTH_SCHEME} ${token}`);
     const auth$ = this.http.post<ClientAuthentication>(connectionUrl, {}, { headers: loginHttpHeaders });
     return this.handleLoginResponse(auth$).pipe(
@@ -160,7 +159,7 @@ export class AuthenticationService extends BaseHttpService {
   fetchGuestAuthentication(): Observable<ClientAuthentication> {
     const token = this.getGuestToken();
     const httpHeaders = this.httpOptions.headers.set(AUTH_HEADER_KEY, `${AUTH_SCHEME} ${token}`);
-    const connectionUrl: string = this.getBaseUrl() + this.serviceApiUrl.auth + this.serviceApiUrl.login + this.serviceApiUrl.guest;
+    const connectionUrl: string = this.buildUri(this.serviceApiUrl.login + this.serviceApiUrl.guest);
     return this.http.post<ClientAuthentication>(connectionUrl, null, { headers: httpHeaders });
   }
 
@@ -173,7 +172,7 @@ export class AuthenticationService extends BaseHttpService {
    * guest account.
    */
   loginGuest(): Observable<ClientAuthenticationResult> {
-    const connectionUrl: string = this.getBaseUrl() + this.serviceApiUrl.auth + this.serviceApiUrl.login + this.serviceApiUrl.guest;
+    const connectionUrl: string = this.buildUri(this.serviceApiUrl.login + this.serviceApiUrl.guest);
     /* The global storage service is not used for guestToken because it is a legacy item. */
     const guestLoginId = localStorage.getItem('guestToken');
     const payload = guestLoginId ? { loginId: guestLoginId } : null;
@@ -204,8 +203,8 @@ export class AuthenticationService extends BaseHttpService {
    * @param userRole User role for the UI
    */
   loginViaSso(providerId: string): Observable<ClientAuthenticationResult> {
-    const ssoUrl = this.getBaseUrl() + this.serviceApiUrl.auth + this.serviceApiUrl.sso + '/' + providerId;
-    const loginUrl = this.getBaseUrl() + this.serviceApiUrl.auth + this.serviceApiUrl.login + '?refresh=true';
+    const ssoUrl = this.buildUri(this.serviceApiUrl.sso + '/' + providerId);
+    const loginUrl = this.buildUri(this.serviceApiUrl.login + '?refresh=true');
     const [popupW, popupH] = this.popupDimensions;
     const popupX = window.top.screenX + window.top.outerWidth / 2 - popupW / 2;
     const popupY = window.top.screenY + window.top.outerHeight / 2 - popupH / 2;

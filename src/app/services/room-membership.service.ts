@@ -21,7 +21,6 @@ import { ClientAuthentication } from '../models/client-authentication';
 export class RoomMembershipService extends BaseHttpService {
 
   serviceApiUrl = {
-    membership: '/_view/membership',
     byUser: '/by-user'
   };
 
@@ -35,7 +34,7 @@ export class RoomMembershipService extends BaseHttpService {
     private authenticationService: AuthenticationService,
     protected translateService: TranslateService,
     protected notificationService: NotificationService) {
-    super(eventService, translateService, notificationService);
+    super('/_view/membership', eventService, translateService, notificationService);
       const authChanged$ = authenticationService.getAuthenticationChanges().pipe(skip(1));
       authenticationService.getAuthenticationChanges().subscribe(auth => {
         if (!auth) {
@@ -79,7 +78,7 @@ export class RoomMembershipService extends BaseHttpService {
    * Creates an Observable for requesting room memberships of a user.
    */
   private fetchMemberships(userId: string, token?: string): Observable<Membership[]> {
-    const url = this.apiUrl.base + this.serviceApiUrl.membership + this.serviceApiUrl.byUser + '/' + userId;
+    const url = this.buildUri(this.serviceApiUrl.byUser + '/' + userId);
     const httpHeaders = token ? new HttpHeaders().set(AUTH_HEADER_KEY, `${AUTH_SCHEME} ${token}`) : null;
     return this.http.get<Membership[]>(url, { headers: httpHeaders }).pipe(
         tap(memberships => memberships.forEach(m => m.primaryRole = this.selectPrimaryRole(m.roles)))

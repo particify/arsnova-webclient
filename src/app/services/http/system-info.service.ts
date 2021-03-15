@@ -35,7 +35,7 @@ export class SystemInfoService extends BaseHttpService {
               protected eventService: EventService,
               protected translateService: TranslateService,
               protected notificationService: NotificationService) {
-    super(eventService, translateService, notificationService);
+    super('', eventService, translateService, notificationService);
   }
 
   getHealthInfo(): Observable<any> {

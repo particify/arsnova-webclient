@@ -24,8 +24,6 @@ export interface FormattingOptions {
 export class FormattingService extends BaseHttpService {
 
   serviceApiUrl = {
-    util: '/_util',
-    formatting: '/formatting',
     render: '/render'
   };
 
@@ -33,7 +31,7 @@ export class FormattingService extends BaseHttpService {
               protected eventService: EventService,
               protected translateService: TranslateService,
               protected notificationService: NotificationService) {
-    super(eventService, translateService, notificationService);
+    super('/_util/formatting', eventService, translateService, notificationService);
   }
 
   postString(text: string, options?: FormattingOptions): Observable<any> {
@@ -43,7 +41,7 @@ export class FormattingService extends BaseHttpService {
       markdownFeatureset: MarkdownFeatureset.EXTENDED,
       linebreaks: true
     };
-    const url = this.apiUrl.base + this.serviceApiUrl.util + this.serviceApiUrl.formatting + this.serviceApiUrl.render;
+    const url = this.buildUri(this.serviceApiUrl.render);
     const body = {
       text: text,
       options: options

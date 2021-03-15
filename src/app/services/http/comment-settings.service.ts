@@ -14,27 +14,22 @@ const httpOptions = {
 
 @Injectable()
 export class CommentSettingsService extends BaseHttpService {
-
-  serviceApiUrl = {
-    settings: '/settings'
-  };
-
   constructor(private http: HttpClient,
               protected eventService: EventService,
               protected translateService: TranslateService,
               protected notificationService: NotificationService) {
-    super(eventService, translateService, notificationService);
+    super('/settings', eventService, translateService, notificationService);
   }
 
   get(id: string): Observable<CommentSettings> {
-    const connectionUrl = `${this.getBaseUrl(id)}${this.serviceApiUrl.settings}/${id}`;
+    const connectionUrl = this.buildUri(`/${id}`, id);
     return this.http.get<CommentSettings>(connectionUrl, httpOptions).pipe(
       catchError(this.handleError<CommentSettings>('addComment'))
     );
   }
 
   add(settings: CommentSettings): Observable<CommentSettings> {
-    const connectionUrl = `${this.getBaseUrl(settings.roomId) + this.serviceApiUrl.settings}/`;
+    const connectionUrl = this.buildUri('/', settings.roomId);
     return this.http.post<CommentSettings>(
       connectionUrl,
       settings,
@@ -45,7 +40,7 @@ export class CommentSettingsService extends BaseHttpService {
   }
 
   update(settings: CommentSettings): Observable<CommentSettings> {
-    const connectionUrl = `${this.getBaseUrl(settings.roomId) + this.serviceApiUrl.settings}/${settings.roomId}`;
+    const connectionUrl = this.buildUri(`/${settings.roomId}`, settings.roomId);
     return this.http.put(connectionUrl, settings, httpOptions).pipe(
       catchError(this.handleError<any>('updateCommentSettings'))
     );

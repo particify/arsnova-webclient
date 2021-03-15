@@ -8,6 +8,7 @@ import { User } from '../../models/user';
 import { TranslateService } from '@ngx-translate/core';
 import { NotificationService } from '../util/notification.service';
 import { EventService } from '../util/event.service';
+import { UserService } from './user.service';
 
 const httpOptions = {
   headers: new HttpHeaders({})
@@ -26,27 +27,28 @@ export class AdminService extends BaseHttpService {
     private http: HttpClient,
     protected eventService: EventService,
     protected translateService: TranslateService,
-    protected notificationService: NotificationService) {
-    super(eventService, translateService, notificationService);
+    protected notificationService: NotificationService,
+    protected userService: UserService) {
+    super('', eventService, translateService, notificationService);
   }
 
   getUser(id: string) {
-    const connectionUrl = `${this.apiUrl.base + this.apiUrl.user}/${id}?${this.serviceApiUrl.adminView}`;
+    const connectionUrl = this.buildUri(`/${id}?${this.serviceApiUrl.adminView}`);
     return this.http.get<User>(connectionUrl);
   }
 
   getRoom(id: string): Observable<Room> {
-    const connectionUrl = `${this.getBaseUrl(id)}?${this.serviceApiUrl.adminView}`;
+    const connectionUrl = this.buildUri(`?${this.serviceApiUrl.adminView}`, id);
     return this.http.get<Room>(connectionUrl);
   }
 
   activateUser(userId: string) {
-    const connectionUrl = `${this.apiUrl.base + this.apiUrl.user}/${userId}${this.serviceApiUrl.activate}`;
+    const connectionUrl = this.userService.buildUri(`/${userId}${this.serviceApiUrl.activate}`);
     return this.http.post<string>(connectionUrl, {}, httpOptions);
   }
 
   transferRoom(roomId: string, newOwnerId: string) {
-    const connectionUrl = `${this.getBaseUrl(roomId)}/${this.serviceApiUrl.transfer}?newOwnerId=${newOwnerId}`;
+    const connectionUrl = this.userService.buildUri(`/${this.serviceApiUrl.transfer}?newOwnerId=${newOwnerId}`, roomId);
     return this.http.post(connectionUrl, {}, httpOptions).pipe(
       catchError(this.handleError<any>('transferRoom'))
     );

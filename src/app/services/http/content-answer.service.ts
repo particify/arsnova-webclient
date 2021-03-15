@@ -18,8 +18,6 @@ const httpOptions = {
 export class ContentAnswerService extends BaseHttpService {
 
   serviceApiUrl = {
-    content: '/content',
-    answer: '/answer',
     text: '/text',
     choice: '/choice'
   };
@@ -28,11 +26,11 @@ export class ContentAnswerService extends BaseHttpService {
               protected eventService: EventService,
               protected translateService: TranslateService,
               protected notificationService: NotificationService) {
-    super(eventService, translateService, notificationService);
+    super('/answer', eventService, translateService, notificationService);
   }
 
   getAnswers(roomId: string, contentId: string): Observable<TextAnswer[]> {
-    const url = this.getBaseUrl(roomId) + this.serviceApiUrl.answer + this.apiUrl.find;
+    const url = this.buildUri(this.apiUrl.find, roomId);
     return this.http.post<TextAnswer[]>(url, {
       properties: { contentId: contentId },
       externalFilters: {}
@@ -42,7 +40,7 @@ export class ContentAnswerService extends BaseHttpService {
   }
 
   getAnswersByUserIdContentIds(roomId: string, userId: string, contentIds: string[]): Observable<Answer[]> {
-    const url = this.getBaseUrl(roomId) + this.serviceApiUrl.answer + this.apiUrl.find;
+    const url = this.buildUri(this.apiUrl.find, roomId);
     return this.http.post<Answer[]>(url, {
       properties: { creatorId: userId },
       externalFilters: {
@@ -54,7 +52,7 @@ export class ContentAnswerService extends BaseHttpService {
   }
 
   getChoiceAnswerByContentIdUserIdCurrentRound(roomId: string, contentId: string, userId: string): Observable<ChoiceAnswer> {
-    const url = this.getBaseUrl(roomId) + this.serviceApiUrl.answer + this.apiUrl.find;
+    const url = this.buildUri(this.apiUrl.find, roomId);
     return this.http.post<ChoiceAnswer[]>(url, {
       properties: {
         contentId: contentId,
@@ -68,7 +66,7 @@ export class ContentAnswerService extends BaseHttpService {
   }
 
   getTextAnswerByContentIdUserIdCurrentRound(roomId: string, contentId: string, userId: string): Observable<TextAnswer> {
-    const url = this.getBaseUrl(roomId) + this.serviceApiUrl.answer + this.apiUrl.find;
+    const url = this.buildUri(this.apiUrl.find, roomId);
     return this.http.post<TextAnswer[]>(url, {
       properties: {
         contentId: contentId,
@@ -82,56 +80,56 @@ export class ContentAnswerService extends BaseHttpService {
   }
 
   addAnswerText(roomId: string, answerText: TextAnswer): Observable<TextAnswer> {
-    const url = this.getBaseUrl(roomId) + this.serviceApiUrl.answer + '/';
+    const url = this.buildUri('/', roomId);
     return this.http.post<TextAnswer>(url, answerText, httpOptions).pipe(
       catchError(this.handleError<TextAnswer>('addTextAnswer'))
     );
   }
 
   addAnswerChoice(roomId: string, answerChoice: ChoiceAnswer): Observable<ChoiceAnswer> {
-    const url = this.getBaseUrl(roomId) + this.serviceApiUrl.answer + '/';
+    const url = this.buildUri('/', roomId);
     return this.http.post<ChoiceAnswer>(url, answerChoice, httpOptions).pipe(
       catchError(this.handleError<ChoiceAnswer>('addChoiceAnswer'))
     );
   }
 
   getAnswerText(roomId: string, id: string): Observable<TextAnswer> {
-    const url = `${this.getBaseUrl(roomId) + this.serviceApiUrl.answer + this.serviceApiUrl.text}/${id}`;
+    const url = this.buildUri(`${this.serviceApiUrl.text}/${id}`, roomId);
     return this.http.get<TextAnswer>(url).pipe(
       catchError(this.handleError<TextAnswer>(`getAnswerText id=${id}`))
     );
   }
 
   getAnswerChoice(roomId: string, id: string): Observable<ChoiceAnswer> {
-    const url = `${this.getBaseUrl(roomId) + this.serviceApiUrl.answer + this.serviceApiUrl.choice}/${id}`;
+    const url = this.buildUri(`${this.serviceApiUrl.choice}/${id}`, roomId);
     return this.http.get<ChoiceAnswer>(url).pipe(
       catchError(this.handleError<ChoiceAnswer>(`getChoiceAnswer id=${id}`))
     );
   }
 
   updateAnswerText(roomId: string, updatedAnswerText: TextAnswer): Observable<TextAnswer> {
-    const connectionUrl = `${this.getBaseUrl(roomId) + this.serviceApiUrl.answer + this.serviceApiUrl.text}/${updatedAnswerText.id}`;
+    const connectionUrl = this.buildUri(`${this.serviceApiUrl.text}/${updatedAnswerText.id}`, roomId);
     return this.http.put(connectionUrl, updatedAnswerText, httpOptions).pipe(
       catchError(this.handleError<any>('updateTextAnswer'))
     );
   }
 
   updateAnswerChoice(roomId: string, updatedAnswerChoice: ChoiceAnswer): Observable<ChoiceAnswer> {
-    const connectionUrl = `${this.getBaseUrl(roomId) + this.serviceApiUrl.answer + this.serviceApiUrl.choice}/${updatedAnswerChoice.id}`;
+    const connectionUrl = this.buildUri(`${this.serviceApiUrl.choice}/${updatedAnswerChoice.id}`, roomId);
     return this.http.put(connectionUrl, updatedAnswerChoice, httpOptions).pipe(
       catchError(this.handleError<any>('updateChoiceAnswer'))
     );
   }
 
   deleteAnswerText(roomId: string, id: string): Observable<TextAnswer> {
-    const url = `${this.getBaseUrl(roomId) + this.serviceApiUrl.answer}/${id}`;
+    const url = this.buildUri(`/${id}`, roomId);
     return this.http.delete<TextAnswer>(url, httpOptions).pipe(
       catchError(this.handleError<TextAnswer>('deleteTextAnswer'))
     );
   }
 
   deleteAnswerChoice(roomId: string, id: string): Observable<ChoiceAnswer> {
-    const url = `${this.getBaseUrl(roomId) + this.serviceApiUrl.answer}/${id}`;
+    const url = this.buildUri(`/${id}`, roomId);
     return this.http.delete<ChoiceAnswer>(url, httpOptions).pipe(
       catchError(this.handleError<ChoiceAnswer>('deleteChoiceAnswer'))
     );

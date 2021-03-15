@@ -16,7 +16,6 @@ const httpOptions = {
 export class BonusTokenService extends BaseHttpService {
 
   serviceApiUrl = {
-    bonustoken: '/bonustoken',
     delete: '/deleteby'
   };
 
@@ -24,11 +23,11 @@ export class BonusTokenService extends BaseHttpService {
               protected eventService: EventService,
               protected translateService: TranslateService,
               protected notificationService: NotificationService) {
-    super(eventService, translateService, notificationService);
+    super('/bonustoken', eventService, translateService, notificationService);
   }
 
   getTokensByRoomId(roomId: string): Observable<BonusToken[]> {
-    const connectionUrl = `${this.getBaseUrl(roomId) + this.serviceApiUrl.bonustoken + this.apiUrl.find}`;
+    const connectionUrl = this.buildUri(this.apiUrl.find, roomId);
     return this.http.post<BonusToken[]>(connectionUrl, {
       properties: {
         roomId: roomId
@@ -39,7 +38,7 @@ export class BonusTokenService extends BaseHttpService {
   }
 
   getTokensByUserId(roomId: string, userId: string): Observable<BonusToken[]> {
-    const connectionUrl = `${this.getBaseUrl(roomId) + this.serviceApiUrl.bonustoken + this.apiUrl.find}`;
+    const connectionUrl = this.buildUri(this.apiUrl.find, roomId);
     return this.http.post<BonusToken[]>(connectionUrl, {
       properties: {
         userId: userId
@@ -50,15 +49,15 @@ export class BonusTokenService extends BaseHttpService {
   }
 
   deleteToken(roomId: string, commentId: string, userId: string) {
-    const connectionUrl = `${this.getBaseUrl(roomId) + this.serviceApiUrl.bonustoken + this.serviceApiUrl.delete}`
-      + `?roomid=${roomId}&commentid=${commentId}&userid=${userId}`;
+    const connectionUrl = this.buildUri(this.serviceApiUrl.delete
+      + `?roomid=${roomId}&commentid=${commentId}&userid=${userId}`, roomId);
     return this.http.delete<BonusToken>(connectionUrl, httpOptions).pipe(
       catchError(this.handleError<BonusToken>('deleteToken'))
     );
   }
 
   deleteTokensByRoomId(roomId: string) {
-    const connectionUrl = `${this.getBaseUrl(roomId) + this.serviceApiUrl.bonustoken + this.serviceApiUrl.delete}?roomid=${roomId}`;
+    const connectionUrl = this.buildUri(`${this.serviceApiUrl.delete}?roomid=${roomId}`);
     return this.http.delete<BonusToken>(connectionUrl, httpOptions).pipe(
       catchError(this.handleError<BonusToken>('deleteToken'))
     );

@@ -14,20 +14,15 @@ const httpOptions = {
 
 @Injectable()
 export class VoteService extends BaseHttpService {
-
-  serviceApiUrl = {
-    vote: '/vote'
-  };
-
   constructor(private http: HttpClient,
               protected eventService: EventService,
               protected translateService: TranslateService,
               protected notificationService: NotificationService) {
-    super(eventService, translateService, notificationService);
+    super('/vote', eventService, translateService, notificationService);
   }
 
   add(roomId: string, vote: Vote): Observable<Vote> {
-    const connectionUrl = this.getBaseUrl(roomId) + this.serviceApiUrl.vote + '/';
+    const connectionUrl = this.buildUri('/', roomId);
     return this.http.post<Vote>(connectionUrl, vote, httpOptions).pipe(
       catchError(this.handleError<Vote>('add vote'))
     );
@@ -44,14 +39,14 @@ export class VoteService extends BaseHttpService {
   }
 
   deleteVote(roomId: string, commentId: string, userId: string): Observable<Vote> {
-    const connectionUrl = `${this.getBaseUrl(roomId) + this.serviceApiUrl.vote}/${commentId}/${userId}`;
+    const connectionUrl = this.buildUri(`/${commentId}/${userId}`, roomId);
     return this.http.delete<Vote>(connectionUrl, httpOptions).pipe(
       catchError(this.handleError<Vote>('delete Vote'))
     );
   }
 
   getByRoomIdAndUserID(roomId: string, userId: string): Observable<Vote[]> {
-    const connectionUrl = `${this.getBaseUrl(roomId) + this.serviceApiUrl.vote + this.apiUrl.find}`;
+    const connectionUrl = this.buildUri(this.apiUrl.find, roomId);
     return this.http.post<Vote[]>(connectionUrl, {
       properties: {
         userId: userId
