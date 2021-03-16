@@ -70,7 +70,7 @@ export class LooseContentComponent extends ContentListBaseComponent implements O
   }
 
   goToEdit(content: Content) {
-    const url = `creator/room/${this.room.shortId}/group/${this.contentGroup.name}/edit/${content.id}`;
+    const url = `creator/room/${this.room.shortId}/group/archive/edit/${content.id}`;
     this.router.navigate([url]);
   }
 
