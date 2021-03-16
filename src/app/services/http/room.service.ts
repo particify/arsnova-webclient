@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Room } from '../../models/room';
 import { RoomStats } from '../../models/room-stats';
-import { ContentGroup } from '../../models/content-group';
 import { RoomSummary } from '../../models/room-summary';
 import { SurveyStarted } from '../../models/events/survey-started';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
@@ -27,7 +26,6 @@ export class RoomService extends AbstractEntityService<Room> {
   serviceApiUrl = {
     stats: '/stats',
     transfer: '/transfer',
-    contentGroup: '/contentgroup',
     v2Import: '/import/v2/room',
     summary: '/_view/room/summary'
   };
@@ -153,14 +151,6 @@ export class RoomService extends AbstractEntityService<Room> {
     const connectionUrl = this.buildForeignUri(this.serviceApiUrl.stats, roomId);
     return this.http.get<RoomStats>(connectionUrl).pipe(
       catchError(this.handleError<RoomStats>(`getStats id=${roomId}`))
-    );
-  }
-
-  getGroupByRoomIdAndName(roomId: string, name: string): Observable<ContentGroup> {
-    const encodedName = encodeURIComponent(name);
-    const connectionUrl = this.buildForeignUri(`${this.serviceApiUrl.contentGroup}/${encodedName}`, roomId);
-    return this.http.get<ContentGroup>(connectionUrl, httpOptions).pipe(
-      catchError(this.handleError<ContentGroup>(`getGroupByRoomIdAndName, ${roomId}, ${name}`))
     );
   }
 

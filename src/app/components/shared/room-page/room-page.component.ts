@@ -16,6 +16,7 @@ import { AdvancedSnackBarTypes, NotificationService } from '../../../services/ut
 import { GlobalStorageService, STORAGE_KEYS } from '../../../services/util/global-storage.service';
 import { UserRole } from '../../../models/user-roles.enum';
 import { InfoBarItem } from '../bars/info-bar/info-bar.component';
+import { ContentGroupService } from '../../../services/http/content-group.service';
 
 @Component({
   selector: 'app-room-page',
@@ -48,6 +49,7 @@ export class RoomPageComponent implements OnDestroy {
 
   constructor(
     protected roomService: RoomService,
+    protected contentGroupService: ContentGroupService,
     protected route: ActivatedRoute,
     protected router: Router,
     protected location: Location,
@@ -187,7 +189,7 @@ export class RoomPageComponent implements OnDestroy {
 
   initializeGroups() {
     for (let i = 0; i < this.roomStats.groupStats.length; i++) {
-      this.roomService.getGroupByRoomIdAndName(this.room.id, this.roomStats.groupStats[i].groupName).subscribe(group => {
+      this.contentGroupService.getById(this.roomStats.groupStats[i].id, { roomId: this.room.id }).subscribe(group => {
         this.contentGroups.push(group);
         this.groupNames.push(group.name);
         if (this.groupNames.length === this.roomStats.groupStats.length) {

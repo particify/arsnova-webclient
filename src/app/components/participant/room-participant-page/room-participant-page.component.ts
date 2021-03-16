@@ -22,6 +22,7 @@ import { AnnounceService } from '../../../services/util/announce.service';
 import { UserRole } from '../../../models/user-roles.enum';
 import { FeedbackMessageType } from '../../../models/messages/feedback-message-type';
 import { FeedbackService } from '../../../services/http/feedback.service';
+import { ContentGroupService } from '../../../services/http/content-group.service';
 
 @Component({
   selector: 'app-room-participant-page',
@@ -37,6 +38,7 @@ export class RoomParticipantPageComponent extends RoomPageComponent implements O
   constructor(
     protected location: Location,
     protected roomService: RoomService,
+    protected contentGroupService: ContentGroupService,
     protected route: ActivatedRoute,
     protected router: Router,
     protected notificationService: NotificationService,
@@ -52,8 +54,8 @@ export class RoomParticipantPageComponent extends RoomPageComponent implements O
     protected globalStorageService: GlobalStorageService,
     private feedbackService: FeedbackService
   ) {
-    super(roomService, route, router, location, wsCommentService, commentService, eventService, contentService, translateService,
-      notificationService, globalStorageService);
+    super(roomService, contentGroupService, route, router, location, wsCommentService,
+      commentService, eventService, contentService, translateService, notificationService, globalStorageService);
     langService.langEmitter.subscribe(lang => translateService.use(lang));
   }
 
