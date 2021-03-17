@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { TextAnswer } from '../../models/text-answer';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { catchError, map, tap } from 'rxjs/operators';
+import { catchError, map } from 'rxjs/operators';
 import { BaseHttpService } from './base-http.service';
 import { ChoiceAnswer } from '../../models/choice-answer';
 import { TranslateService } from '@ngx-translate/core';
@@ -112,7 +112,6 @@ export class ContentAnswerService extends BaseHttpService {
   updateAnswerText(roomId: string, updatedAnswerText: TextAnswer): Observable<TextAnswer> {
     const connectionUrl = `${this.getBaseUrl(roomId) + this.serviceApiUrl.answer + this.serviceApiUrl.text}/${updatedAnswerText.id}`;
     return this.http.put(connectionUrl, updatedAnswerText, httpOptions).pipe(
-      tap(() => ''),
       catchError(this.handleError<any>('updateTextAnswer'))
     );
   }
@@ -120,7 +119,6 @@ export class ContentAnswerService extends BaseHttpService {
   updateAnswerChoice(roomId: string, updatedAnswerChoice: ChoiceAnswer): Observable<ChoiceAnswer> {
     const connectionUrl = `${this.getBaseUrl(roomId) + this.serviceApiUrl.answer + this.serviceApiUrl.choice}/${updatedAnswerChoice.id}`;
     return this.http.put(connectionUrl, updatedAnswerChoice, httpOptions).pipe(
-      tap(() => ''),
       catchError(this.handleError<any>('updateChoiceAnswer'))
     );
   }
@@ -128,7 +126,6 @@ export class ContentAnswerService extends BaseHttpService {
   deleteAnswerText(roomId: string, id: string): Observable<TextAnswer> {
     const url = `${this.getBaseUrl(roomId) + this.serviceApiUrl.answer}/${id}`;
     return this.http.delete<TextAnswer>(url, httpOptions).pipe(
-      tap(() => ''),
       catchError(this.handleError<TextAnswer>('deleteTextAnswer'))
     );
   }
@@ -136,7 +133,6 @@ export class ContentAnswerService extends BaseHttpService {
   deleteAnswerChoice(roomId: string, id: string): Observable<ChoiceAnswer> {
     const url = `${this.getBaseUrl(roomId) + this.serviceApiUrl.answer}/${id}`;
     return this.http.delete<ChoiceAnswer>(url, httpOptions).pipe(
-      tap(() => ''),
       catchError(this.handleError<ChoiceAnswer>('deleteChoiceAnswer'))
     );
   }

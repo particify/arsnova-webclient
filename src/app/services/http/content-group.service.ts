@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { ContentGroup } from '../../models/content-group';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { catchError, tap } from 'rxjs/operators';
+import { catchError } from 'rxjs/operators';
 import { AuthenticationService } from './authentication.service';
 import { BaseHttpService } from './base-http.service';
 import { EventService } from '../util/event.service';
@@ -35,7 +35,6 @@ export class ContentGroupService extends BaseHttpService {
     const encodedName = encodeURIComponent(name);
     const connectionUrl = `${this.getBaseUrl(roomId) + this.serviceApiUrl.contentGroup}/${encodedName}`;
     return this.http.get<ContentGroup>(connectionUrl, httpOptions).pipe(
-      tap(_ => ''),
       catchError(this.handleError<ContentGroup>(`getByRoomIdAndName, ${roomId}, ${name}`))
     );
   }
@@ -46,7 +45,6 @@ export class ContentGroupService extends BaseHttpService {
     const encodedName = encodeURIComponent(name);
     const connectionUrl = `${this.getBaseUrl(roomId) + this.serviceApiUrl.contentGroup}/${encodedName}`;
     return this.http.post<ContentGroup>(connectionUrl, entity, httpOptions).pipe(
-      tap(_ => ''),
       catchError(this.handleError<ContentGroup>(`post, ${roomId}, ${name}`))
     );
   }
@@ -56,7 +54,6 @@ export class ContentGroupService extends BaseHttpService {
     const connectionUrl = `${this.getBaseUrl(contentGroup.roomId) + this.serviceApiUrl.contentGroup}/${encodedName}`;
     contentGroup.contentIds = [];
     return this.http.post<ContentGroup>(connectionUrl, contentGroup, httpOptions).pipe(
-      tap(_ => ''),
       catchError(this.handleError<ContentGroup>(`Delete, ${contentGroup.roomId}, ${name}`))
     );
   }
@@ -65,7 +62,6 @@ export class ContentGroupService extends BaseHttpService {
     const encodedName = encodeURIComponent(name);
     const connectionUrl = `${this.getBaseUrl(roomId) + this.serviceApiUrl.contentGroup}/${encodedName}/${contentId}`;
     return this.http.post<void>(connectionUrl, {}, httpOptions).pipe(
-      tap(_ => ''),
       catchError(this.handleError<void>(`addContentToGroup, ${roomId}, ${name}, ${contentId}`))
     );
   }
@@ -74,7 +70,6 @@ export class ContentGroupService extends BaseHttpService {
     const encodedName = encodeURIComponent(name);
     const connectionUrl = `${this.getBaseUrl(roomId) + this.serviceApiUrl.contentGroup}/${encodedName}`;
     return this.http.put<ContentGroup>(connectionUrl, contentGroup, httpOptions).pipe(
-      tap(_ => ''),
       catchError(this.handleError<ContentGroup>(`updateGroup, ${ roomId }, ${ name }, ${ ContentGroup }`))
     );
   }
@@ -122,7 +117,6 @@ export class ContentGroupService extends BaseHttpService {
   removeContentFromGroup(roomId: string, groupId: string, contentId: String): Observable<void> {
     const connectionUrl = `${this.getBaseUrl(roomId) + this.serviceApiUrl.contentGroup}/${groupId}/${contentId}`;
     return this.http.delete<void>(connectionUrl, httpOptions).pipe(
-      tap(_ => ''),
       catchError(this.handleError<void>(`deleteContentFromGroup, ${roomId}, ${name}, ${contentId}`))
     );
   }

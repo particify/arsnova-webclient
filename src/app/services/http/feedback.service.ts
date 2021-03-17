@@ -5,7 +5,7 @@ import { EventService } from '../util/event.service';
 import { TranslateService } from '@ngx-translate/core';
 import { NotificationService } from '../util/notification.service';
 import { Observable, Subscription } from 'rxjs';
-import { catchError, tap } from 'rxjs/operators';
+import { catchError } from 'rxjs/operators';
 import { Message } from '@stomp/stompjs';
 import { WsFeedbackService } from '../../services/websockets/ws-feedback.service';
 
@@ -51,7 +51,6 @@ export class FeedbackService extends BaseHttpService {
   get(roomId: string): Observable<number[]> {
     const connectionUrl = `${this.getBaseUrl(roomId) + this.serviceApiUrl.survey}`;
     return this.http.get<number[]>(connectionUrl, httpOptions).pipe(
-      tap(_ => ''),
       catchError(this.handleError<number[]>('get survey'))
     );
   }

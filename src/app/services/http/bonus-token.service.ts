@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { BonusToken } from '../../models/bonus-token';
-import { catchError, tap } from 'rxjs/operators';
+import { catchError } from 'rxjs/operators';
 import { BaseHttpService } from './base-http.service';
 import { TranslateService } from '@ngx-translate/core';
 import { NotificationService } from '../util/notification.service';
@@ -34,7 +34,6 @@ export class BonusTokenService extends BaseHttpService {
         roomId: roomId
       }
     }).pipe(
-      tap(() => ''),
       catchError(this.handleError<BonusToken[]>(`get bonus token by roomid = ${roomId}`))
     );
   }
@@ -46,7 +45,6 @@ export class BonusTokenService extends BaseHttpService {
         userId: userId
       }
     }).pipe(
-      tap(() => ''),
       catchError(this.handleError<BonusToken[]>(`get bonus token by userId = ${userId}`))
     );
   }
@@ -55,7 +53,6 @@ export class BonusTokenService extends BaseHttpService {
     const connectionUrl = `${this.getBaseUrl(roomId) + this.serviceApiUrl.bonustoken + this.serviceApiUrl.delete}`
       + `?roomid=${roomId}&commentid=${commentId}&userid=${userId}`;
     return this.http.delete<BonusToken>(connectionUrl, httpOptions).pipe(
-      tap(_ => ''),
       catchError(this.handleError<BonusToken>('deleteToken'))
     );
   }
@@ -63,7 +60,6 @@ export class BonusTokenService extends BaseHttpService {
   deleteTokensByRoomId(roomId: string) {
     const connectionUrl = `${this.getBaseUrl(roomId) + this.serviceApiUrl.bonustoken + this.serviceApiUrl.delete}?roomid=${roomId}`;
     return this.http.delete<BonusToken>(connectionUrl, httpOptions).pipe(
-      tap(_ => ''),
       catchError(this.handleError<BonusToken>('deleteToken'))
     );
   }
