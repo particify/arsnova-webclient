@@ -1,4 +1,4 @@
-import { Component, ElementRef, HostListener, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 import { Comment } from '../../../models/comment';
 import { CommentService } from '../../../services/http/comment.service';
 import { TranslateService } from '@ngx-translate/core';
@@ -35,9 +35,8 @@ export const itemRenderNumber = 20;
 })
 export class ModeratorCommentListComponent implements OnInit {
   @ViewChild('searchBox') searchField: ElementRef;
-  @Input() roomId: string;
   comments: Comment[] = [];
-  room: Room;
+  roomId: string;
   hideCommentsList = false;
   filteredComments: Comment[];
   deviceType: string;
@@ -92,25 +91,26 @@ export class ModeratorCommentListComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.route.data.subscribe(data => this.viewRole = data.viewRole);
-    this.roomId = this.globalStorageService.getItem(STORAGE_KEYS.ROOM_ID);
-    this.roomService.getRoom(this.roomId).subscribe(room => this.room = room);
-    this.period = this.globalStorageService.getItem(STORAGE_KEYS.COMMENT_TIME_FILTER) || Period.ALL;
-    this.hideCommentsList = false;
-    this.wsCommentService.getModeratorCommentStream(this.roomId).subscribe((message: Message) => {
-      this.parseIncomingModeratorMessage(message);
-    });
-    this.wsCommentService.getCommentStream(this.roomId).subscribe((message: Message) => {
-      this.parseIncomingMessage(message);
-    });
-    this.translateService.use(this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE));
-    this.currentSort = this.globalStorageService.getItem(STORAGE_KEYS.COMMENT_SORT) || this.time;
-    this.commentService.getRejectedComments(this.roomId)
-      .subscribe(comments => {
-        this.comments = comments;
-        this.setTimePeriod(this.period);
-        this.isLoading = false;
+    this.route.data.subscribe(data => {
+      this.viewRole = data.viewRole;
+      this.roomId = data.room.id;
+      this.period = this.globalStorageService.getItem(STORAGE_KEYS.COMMENT_TIME_FILTER) || Period.ALL;
+      this.hideCommentsList = false;
+      this.wsCommentService.getModeratorCommentStream(this.roomId).subscribe((message: Message) => {
+        this.parseIncomingModeratorMessage(message);
       });
+      this.wsCommentService.getCommentStream(this.roomId).subscribe((message: Message) => {
+        this.parseIncomingMessage(message);
+      });
+      this.translateService.use(this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE));
+      this.currentSort = this.globalStorageService.getItem(STORAGE_KEYS.COMMENT_SORT) || this.time;
+      this.commentService.getRejectedComments(this.roomId)
+        .subscribe(comments => {
+          this.comments = comments;
+          this.setTimePeriod(this.period);
+          this.isLoading = false;
+        });
+    });
     this.translateService.get('comment-list.search').subscribe(msg => {
       this.searchPlaceholder = msg;
     });

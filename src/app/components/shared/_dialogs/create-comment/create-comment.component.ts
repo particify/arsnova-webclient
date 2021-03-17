@@ -34,7 +34,6 @@ export class CreateCommentComponent implements OnInit {
   eventsSubject: Subject<string> = new Subject<string>();
   eventsWrapper: any;
 
-
   bodyForm = new FormControl('', [Validators.required]);
 
   constructor(
@@ -100,7 +99,7 @@ export class CreateCommentComponent implements OnInit {
   closeDialog(body: string) {
     if (this.checkInputData(body) === true) {
       const comment = new Comment();
-      comment.roomId = this.globalStorageService.getItem(STORAGE_KEYS.ROOM_ID);
+      comment.roomId = this.data.roomId;
       comment.body = body;
       comment.creatorId = this.data.auth.userId;
       if (this.selectedTag !== null) {
