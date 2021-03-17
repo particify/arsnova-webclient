@@ -8,6 +8,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { NotificationService } from '../util/notification.service';
 import { EventService } from '../util/event.service';
 import { CommentCreated } from '../../models/events/comment-created';
+import { CachingService } from '../util/caching.service';
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -26,8 +27,9 @@ export class CommentService extends AbstractEntityService<Comment> {
   constructor(private http: HttpClient,
               protected eventService: EventService,
               protected translateService: TranslateService,
-              protected notificationService: NotificationService) {
-    super('/comment', http, eventService, translateService, notificationService);
+              protected notificationService: NotificationService,
+              cachingService: CachingService) {
+    super('/comment', http, eventService, translateService, notificationService, cachingService);
   }
 
   getComment(commentId: string, roomId: string): Observable<Comment> {

@@ -9,6 +9,7 @@ import { catchError, map, tap } from 'rxjs/operators';
 import { EventService } from '../util/event.service';
 import { TranslateService } from '@ngx-translate/core';
 import { NotificationService } from '../util/notification.service';
+import { CachingService } from '../util/caching.service';
 
 const httpOptions = {
   headers: new HttpHeaders({})
@@ -27,8 +28,9 @@ export class UserService extends AbstractEntityService<User> {
   constructor(private http: HttpClient,
               protected eventService: EventService,
               protected translateService: TranslateService,
-              protected notificationService: NotificationService) {
-    super('/user', http, eventService, translateService, notificationService);
+              protected notificationService: NotificationService,
+              cachingService: CachingService) {
+    super('/user', http, eventService, translateService, notificationService, cachingService);
   }
 
   register(email: string, password: string): Observable<boolean> {

@@ -11,6 +11,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { NotificationService } from '../util/notification.service';
 import { RoomService } from './room.service';
 import { ContentGroupStatistics } from '../../models/content-group-statistics';
+import { CachingService } from '../util/caching.service';
 
 const httpOptions = {
   headers: new HttpHeaders({})
@@ -25,8 +26,9 @@ export class ContentGroupService extends AbstractEntityService<ContentGroup> {
     protected eventService: EventService,
     protected translateService: TranslateService,
     protected notificationService: NotificationService,
-    private roomService: RoomService) {
-    super('/contentgroup', http, eventService, translateService, notificationService);
+    private roomService: RoomService,
+    cachingService: CachingService) {
+    super('/contentgroup', http, eventService, translateService, notificationService, cachingService);
   }
 
   getStatsByRoomIdAndName(roomId: string, name: string): Observable<ContentGroupStatistics> {

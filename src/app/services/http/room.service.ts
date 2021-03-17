@@ -15,6 +15,7 @@ import { IMessage } from '@stomp/stompjs';
 import { TranslateService } from '@ngx-translate/core';
 import { NotificationService } from '../util/notification.service';
 import { FeedbackService } from '@arsnova/app/services/http/feedback.service';
+import { CachingService } from '../util/caching.service';
 
 const httpOptions = {
   headers: new HttpHeaders({})
@@ -42,8 +43,9 @@ export class RoomService extends AbstractEntityService<Room> {
     protected eventService: EventService,
     protected translateService: TranslateService,
     protected notificationService: NotificationService,
-    private feedbackService: FeedbackService) {
-    super('/room', http, eventService, translateService, notificationService);
+    private feedbackService: FeedbackService,
+    cachingService: CachingService) {
+    super('/room', http, eventService, translateService, notificationService, cachingService);
   }
 
   /**

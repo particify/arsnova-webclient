@@ -13,6 +13,7 @@ import { NotificationService } from '../util/notification.service';
 import { ContentType } from '@arsnova/app/models/content-type.enum';
 import { EventService } from '../util/event.service';
 import { ContentCreated } from '../../models/events/content-created';
+import { CachingService } from '../util/caching.service';
 
 const PARTITION_SIZE = 50;
 
@@ -31,8 +32,9 @@ export class ContentService extends AbstractEntityService<Content> {
               private ws: WsConnectorService,
               protected eventService: EventService,
               protected translateService: TranslateService,
-              protected notificationService: NotificationService) {
-    super('/content', http, eventService, translateService, notificationService);
+              protected notificationService: NotificationService,
+              cachingService: CachingService) {
+    super('/content', http, eventService, translateService, notificationService, cachingService);
   }
 
   getAnswersChangedStream(roomId: string, contentId: string): Observable<IMessage> {

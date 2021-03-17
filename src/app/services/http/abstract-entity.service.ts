@@ -1,9 +1,11 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
+import { tap } from 'rxjs/operators';
 import { TranslateService } from '@ngx-translate/core';
 import { AbstractHttpService } from './abstract-http.service';
 import { EventService } from '../util/event.service';
 import { NotificationService } from '../util/notification.service';
+import { CacheKey, CachingService } from '../util/caching.service';
 import { Entity } from '../../models/entity';
 
 /**
@@ -11,25 +13,37 @@ import { Entity } from '../../models/entity';
  * can be referenced through an ID.
  */
 export abstract class AbstractEntityService<T extends Entity> extends AbstractHttpService<T> {
+  private aliasIdMapping: Map<string, string> = new Map<string, string>();
+
   constructor(
     uriPrefix: string,
     protected httpClient: HttpClient,
     protected eventService: EventService,
     protected translateService: TranslateService,
-    protected notificationService: NotificationService) {
+    protected notificationService: NotificationService,
+    private cachingService: CachingService) {
     super(uriPrefix, httpClient, eventService, translateService, notificationService);
   }
 
   /**
    * Retrieves a single entity from the server.
    *
-   * @param id ID of the entity
+   * @param idOrAlias ID or alias of the entity
    * @param params Optional request parameters
    */
-  getById(id: string, params: { roomId?: string } = {}): Observable<T> {
+  getById(idOrAlias: string, params: { roomId?: string } = {}): Observable<T> {
+    const id = this.resolveAlias(idOrAlias);
     const { roomId, ...queryParams } = params;
+    const cacheKey = Object.keys(queryParams).length === 0 ? this.generateCacheKey(id) : null;
+    if (cacheKey) {
+      const cachedEntity = this.cachingService.get(cacheKey);
+      if (cachedEntity) {
+        return of(cachedEntity);
+      }
+    }
     const uri = this.buildUri(`/${id}`, roomId);
-    return this.httpClient.get<T>(uri, { params: new HttpParams(queryParams) })
+    return this.httpClient.get<T>(uri, { params: new HttpParams(queryParams) }).pipe(
+      tap(entity => cacheKey && this.cachingService.put(cacheKey, entity)));
   }
 
   /**
@@ -55,7 +69,8 @@ export abstract class AbstractEntityService<T extends Entity> extends AbstractHt
       throw new Error('Entity property "id" must not be set for new entities.');
     }
     const uri = this.buildUri('/', roomId);
-    return this.httpClient.post<T>(uri, entity);
+    return this.httpClient.post<T>(uri, entity).pipe(
+      tap(updatedEntity => this.cachingService.put(this.generateCacheKey(updatedEntity.id), updatedEntity)));
   }
 
   /**
@@ -69,19 +84,21 @@ export abstract class AbstractEntityService<T extends Entity> extends AbstractHt
       throw new Error('Required entity property "id" is missing.');
     }
     const uri = this.buildUri(`/${entity.id}`, roomId);
-    return this.httpClient.put<T>(uri, entity);
+    return this.httpClient.put<T>(uri, entity).pipe(
+      tap(updatedEntity => this.cachingService.put(this.generateCacheKey(updatedEntity.id), updatedEntity)));
   }
 
   /**
    * Sends a PATCH request with the property changes to update an entity.
    *
-   * @param id ID of the existing entity
+   * @param idOrAlias ID or alias of the existing entity
    * @param changes An object with the requested property changes
    * @param roomId The entity's room ID
    */
-  patchEntity(id: string, changes: { [key: string]: any }, roomId?: string): Observable<T> {
-    const uri = this.buildUri(`/${id}`, roomId);
-    return this.httpClient.patch<T>(uri, changes);
+  patchEntity(idOrAlias: string, changes: { [key: string]: any }, roomId?: string): Observable<T> {
+    const uri = this.buildUri(`/${idOrAlias}`, roomId);
+    return this.httpClient.patch<T>(uri, changes).pipe(
+      tap(entity => this.handleCachingWithAlias(idOrAlias, entity)));
   }
 
   /**
@@ -92,6 +109,22 @@ export abstract class AbstractEntityService<T extends Entity> extends AbstractHt
    */
   deleteEntity(id: string, roomId?: string): Observable<T> {
     const uri = this.buildUri(`/${id}`, roomId);
-    return this.httpClient.delete<T>(uri);
+    return this.httpClient.delete<T>(uri).pipe(
+      tap(() => this.cachingService.remove(this.generateCacheKey(id))));
+  }
+
+  protected handleCachingWithAlias(idOrAlias: string, entity: T) {
+    if (idOrAlias !== entity.id) {
+      this.aliasIdMapping.set(idOrAlias, entity.id);
+    }
+    this.cachingService.put(this.generateCacheKey(entity.id), entity)
+  }
+
+  private resolveAlias(idOrAlias: string): string {
+    return this.aliasIdMapping.get(idOrAlias) ?? idOrAlias;
+  }
+
+  private generateCacheKey(id: string): CacheKey {
+    return { type: 'entity', id: id };
   }
 }
