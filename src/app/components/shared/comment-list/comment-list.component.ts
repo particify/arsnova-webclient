@@ -58,9 +58,8 @@ export const itemRenderNumber = 20;
 export class CommentListComponent implements OnInit, OnDestroy {
   @ViewChild('searchBox') searchField: ElementRef;
   @Input() auth: ClientAuthentication;
-  @Input() roomId: string;
+  roomId: string;
   viewRole: UserRole;
-  shortId: string;
   comments: Comment[] = [];
   room: Room;
   hideCommentsList = false;
@@ -116,15 +115,13 @@ export class CommentListComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.roomId = this.globalStorageService.getItem(STORAGE_KEYS.ROOM_ID);
-    this.shortId = this.route.snapshot.paramMap.get('shortId');
     const userId = this.auth.userId;
     this.currentSort = this.globalStorageService.getItem(STORAGE_KEYS.COMMENT_SORT) || this.sorting.VOTEDESC;
     this.period = this.globalStorageService.getItem(STORAGE_KEYS.COMMENT_TIME_FILTER) || Period.ALL;
     this.currentFilter = '';
-    this.initRoom();
     this.translateService.use(this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE));
     this.route.data.subscribe(data => {
+      this.initRoom(data.room);
       this.viewRole = data.viewRole;
       if (this.viewRole === UserRole.PARTICIPANT) {
         this.voteService.getByRoomIdAndUserID(this.roomId, userId).subscribe(votes => {
@@ -152,25 +149,24 @@ export class CommentListComponent implements OnInit, OnDestroy {
     }
   }
 
-  initRoom() {
-    this.roomService.getRoomByShortId(this.shortId).subscribe(room => {
-      this.room = room;
-      if (this.room && this.room.extensions && this.room.extensions.comments) {
-        if (this.room.extensions.comments['enableModeration'] !== null) {
-          this.moderationEnabled = this.room.extensions.comments['enableModeration'];
-          this.globalStorageService.setItem(STORAGE_KEYS.MODERATION_ENABLED,
-            this.room.extensions.comments['enableModeration']);
-        }
-        this.commentSettingsService.get(this.room.id).subscribe(commentSettings => {
-          this.directSend = commentSettings.directSend;
-        });
+  initRoom(room: Room) {
+    this.room = room;
+    this.roomId = this.room.id;
+    if (this.room && this.room.extensions && this.room.extensions.comments) {
+      if (this.room.extensions.comments['enableModeration'] !== null) {
+        this.moderationEnabled = this.room.extensions.comments['enableModeration'];
+        this.globalStorageService.setItem(STORAGE_KEYS.MODERATION_ENABLED,
+          this.room.extensions.comments['enableModeration']);
       }
-      this.commentService.getAckComments(this.roomId)
-        .subscribe(comments => {
-          this.comments = comments;
-          this.getComments();
-        });
-    });
+      this.commentSettingsService.get(this.roomId).subscribe(commentSettings => {
+        this.directSend = commentSettings.directSend;
+      });
+    }
+    this.commentService.getAckComments(this.roomId)
+      .subscribe(comments => {
+        this.comments = comments;
+        this.getComments();
+      });
     this.subscribeCommentStream();
   }
 

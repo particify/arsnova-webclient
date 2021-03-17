@@ -1,4 +1,4 @@
-import { AfterContentInit, Component, HostListener, OnDestroy, OnInit } from '@angular/core';
+import { AfterContentInit, Component, HostListener, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { NotificationService } from '../../../services/util/notification.service';
 import { AuthenticationService } from '../../../services/http/authentication.service';
@@ -12,8 +12,7 @@ import { AnnounceService } from '../../../services/util/announce.service';
   templateUrl: './moderator-comment-page.component.html',
   styleUrls: ['./moderator-comment-page.component.scss']
 })
-export class ModeratorCommentPageComponent implements OnInit, OnDestroy, AfterContentInit {
-  roomId: string;
+export class ModeratorCommentPageComponent implements OnDestroy, AfterContentInit {
 
   constructor(
     private route: ActivatedRoute,
@@ -46,12 +45,6 @@ export class ModeratorCommentPageComponent implements OnInit, OnDestroy, AfterCo
     setTimeout(() => {
       document.getElementById('live-announcer-button').focus();
     }, 700);
-  }
-
-  ngOnInit(): void {
-    this.route.data.subscribe(data => {
-      this.roomId = data.room;
-    });
   }
 
   ngOnDestroy() {

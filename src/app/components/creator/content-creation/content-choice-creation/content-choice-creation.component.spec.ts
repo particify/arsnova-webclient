@@ -10,10 +10,10 @@ import { EventService } from '../../../../services/util/event.service';
 import { RoomService } from '../../../../services/http/room.service';
 import { Observable, of, Subject } from 'rxjs';
 import { DialogService } from '../../../../services/util/dialog.service';
-import { GlobalStorageService } from '../../../../services/util/global-storage.service';
 import { ContentGroupService } from '../../../../services/http/content-group.service';
 import { MatButtonModule } from '@angular/material/button';
 import { AnnounceService } from '@arsnova/app/services/util/announce.service';
+import { ActivatedRoute } from '@angular/router';
 
 const TRANSLATION_DE = require('../../../../../assets/i18n/home/de.json');
 const TRANSLATION_EN = require('../../../../../assets/i18n/home/en.json');
@@ -34,6 +34,14 @@ class JsonTranslationLoader implements TranslateLoader {
     }
   }
 }
+
+const ROUTE_STUB = {
+  data: of({
+    room: {
+      id: '1234'
+    }
+  })
+};
 
 const mockCreateEvent = new Subject<any>();
 
@@ -185,16 +193,16 @@ describe('ContentChoiceCreationComponent', () => {
           useClass: MockRoomService
         },
         {
-          provide: GlobalStorageService,
-          useClass: MockGlobalStorageService
-        },
-        {
           provide: ContentGroupService,
           useClass: MockContentGroupService
         },
         {
           provide: AnnounceService,
           useClass: MockAnnouncer
+        },
+        {
+          provide: ActivatedRoute,
+          useValue: ROUTE_STUB
         }
       ],
       imports: [
