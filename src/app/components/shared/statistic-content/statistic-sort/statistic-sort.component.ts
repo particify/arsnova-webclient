@@ -36,7 +36,7 @@ export class StatisticSortComponent extends StatisticContentBaseComponent implem
   chart: Chart;
   chartId: string;
   isLoading = true;
-  answerIndexes: Array<Array<number>>;
+  answerIndexes: Array<Array<number>> = [];
   data: ChartDataset<'bar'>[] = [];
   labels: string[] = [];
   answers: string[] = [];
