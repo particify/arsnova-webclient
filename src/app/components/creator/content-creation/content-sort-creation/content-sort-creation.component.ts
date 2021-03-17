@@ -4,7 +4,6 @@ import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { ContentService } from '../../../../services/http/content.service';
 import { AdvancedSnackBarTypes, NotificationService } from '../../../../services/util/notification.service';
 import { RoomService } from '../../../../services/http/room.service';
-import { GlobalStorageService } from '../../../../services/util/global-storage.service';
 import { ContentType } from '../../../../models/content-type.enum';
 import { ContentGroupService } from '../../../../services/http/content-group.service';
 import { ContentChoice } from '../../../../models/content-choice';
@@ -14,6 +13,7 @@ import {
   DisplayAnswer
 } from '../content-creation/content-creation.component';
 import { AnnounceService } from '../../../../services/util/announce.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-content-sort-creation',
@@ -32,11 +32,11 @@ export class ContentSortCreationComponent extends ContentCreationComponent imple
     protected notificationService: NotificationService,
     protected translationService: TranslateService,
     protected roomService: RoomService,
-    protected globalStorageService: GlobalStorageService,
     protected contentGroupService: ContentGroupService,
+    protected route: ActivatedRoute,
     private announceService: AnnounceService
   ) {
-    super(contentService, notificationService, translationService, roomService, globalStorageService, contentGroupService);
+    super(contentService, notificationService, translationService, roomService, contentGroupService, route);
   }
 
   initContentCreation() {

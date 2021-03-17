@@ -7,10 +7,10 @@ import { ContentType } from '../../../../models/content-type.enum';
 import { TranslateService } from '@ngx-translate/core';
 import { EventService } from '../../../../services/util/event.service';
 import { RoomService } from '../../../../services/http/room.service';
-import { GlobalStorageService } from '../../../../services/util/global-storage.service';
 import { ContentGroupService } from '../../../../services/http/content-group.service';
 import { ContentCreationComponent, DisplayAnswer } from '../content-creation/content-creation.component';
 import { AnnounceService  } from '../../../../services/util/announce.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-content-choice-creation',
@@ -33,12 +33,12 @@ export class ContentChoiceCreationComponent extends ContentCreationComponent imp
     protected notificationService: NotificationService,
     protected translationService: TranslateService,
     protected roomService: RoomService,
-    protected globalStorageService: GlobalStorageService,
     protected contentGroupService: ContentGroupService,
+    protected route: ActivatedRoute,
     public eventService: EventService,
     private announceService: AnnounceService
   ) {
-    super(contentService, notificationService, translationService, roomService, globalStorageService, contentGroupService);
+    super(contentService, notificationService, translationService, roomService, contentGroupService, route);
   }
 
   initContentCreation() {

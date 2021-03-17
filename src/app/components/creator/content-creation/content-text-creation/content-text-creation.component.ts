@@ -4,10 +4,10 @@ import { ContentService } from '../../../../services/http/content.service';
 import { NotificationService } from '../../../../services/util/notification.service';
 import { TranslateService } from '@ngx-translate/core';
 import { RoomService } from '../../../../services/http/room.service';
-import { GlobalStorageService } from '../../../../services/util/global-storage.service';
 import { ContentGroupService } from '../../../../services/http/content-group.service';
 import { ContentCreationComponent } from '../content-creation/content-creation.component';
 import { ContentType } from '../../../../models/content-type.enum';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-content-text-creation',
@@ -23,10 +23,10 @@ export class ContentTextCreationComponent extends ContentCreationComponent imple
     protected notificationService: NotificationService,
     protected translationService: TranslateService,
     protected roomService: RoomService,
-    protected globalStorageService: GlobalStorageService,
-    protected contentGroupService: ContentGroupService
+    protected contentGroupService: ContentGroupService,
+    protected route: ActivatedRoute
   ) {
-    super(contentService, notificationService, translationService, roomService, globalStorageService, contentGroupService);
+    super(contentService, notificationService, translationService, roomService, contentGroupService, route);
   }
 
   initContentCreation() {
