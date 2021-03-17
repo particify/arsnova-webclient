@@ -85,7 +85,7 @@ const routes: Routes = [
         component: GroupContentComponent
       },
       {
-        path: 'loosecontent',
+        path: 'archive',
         component: LooseContentComponent
       },
       {

@@ -31,16 +31,17 @@ export class ContentGroupsComponent implements OnInit {
 
   viewContents() {
     if (!this.isLoose) {
+      let role: string;
       if (this.role === UserRole.CREATOR) {
-        this.router.navigate([`creator/room/${this.roomShortId}/group/${this.contentGroupName}`]);
-
+        role = UserRole.CREATOR.toLowerCase();
       } else {
-        this.router.navigate([`participant/room/${this.roomShortId}/group/${this.contentGroupName}`]);
+        role = UserRole.PARTICIPANT.toLowerCase();
       }
+      this.router.navigate([`${role}/room/${this.roomShortId}/group/${this.contentGroupName}`]);
       this.globalStorageService.setItem(STORAGE_KEYS.LAST_GROUP, this.contentGroupName);
     } else {
       if (this.role === UserRole.CREATOR) {
-        this.router.navigate([`creator/room/${this.roomShortId}/loosecontent`]);
+        this.router.navigate([`creator/room/${this.roomShortId}/archive`]);
       }
     }
   }

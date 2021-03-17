@@ -344,6 +344,7 @@
     "content-creation": "Create question",
     "live-survey": "Live-Survey",
     "statistics": "Statistics",
-    "settings": "Settings"
+    "settings": "Settings",
+    "archive": "Archived questions"
   }
 }
