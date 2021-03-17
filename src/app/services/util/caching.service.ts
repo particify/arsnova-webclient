@@ -16,8 +16,10 @@ export interface CacheKey {
 @Injectable()
 export class CachingService {
   private cache: LRU<string, any>;
+  private disposeHandlers: { type: string, handler: (id: string, value: object) => void }[] = [];
 
   constructor() {
+    LRU_OPTIONS.dispose = (key, value) => this.dispatchDispose(key, value);
     this.cache = new LRU(LRU_OPTIONS);
   }
 
@@ -31,6 +33,17 @@ export class CachingService {
 
   remove(key: CacheKey) {
     this.cache.del(this.keyToString(key));
+  }
+
+  registerDisposeHandler(type: string, handler: (id: string, value: object) => void) {
+    this.disposeHandlers.push({ type: type, handler: handler });
+  }
+
+  private dispatchDispose(key: string, value: object) {
+    const [type, id] = key.split('__', 2);
+    this.disposeHandlers
+      .filter(handlerConfig => handlerConfig.type === type)
+      .forEach((handlerConfig) => handlerConfig.handler(id, value));
   }
 
   private keyToString(key: CacheKey): string {
