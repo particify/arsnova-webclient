@@ -9,6 +9,9 @@ import { NotificationService } from '@arsnova/app/services/util/notification.ser
 import { TranslateService } from '@ngx-translate/core';
 import { UpdateImportance, VersionInfo } from '@arsnova/app/models/version-info';
 import { Injectable } from '@angular/core';
+import { UpdateInstalled } from '@arsnova/app/models/events/update-installed';
+import { environment } from '@arsnova/environments/environment';
+import { MockEventService } from '@arsnova/testing/test-helpers';
 
 class MockDialogService {
   public openUpdateInfoDialog = jasmine.createSpy('OpenUpdateInfoDialogSpy').and.returnValue({
@@ -27,8 +30,8 @@ describe('UpdateService', () => {
   let service: UpdateService;
   let translateService: TranslateService;
   let dialogService: DialogService;
+  let eventService: EventService;
   const globalStorageService = jasmine.createSpyObj('GlobalStorageService', ['setItem', 'getItem', 'removeItem']);
-  const eventService = jasmine.createSpyObj('EventService', ['broadcast']);
   const notificationService = jasmine.createSpyObj('NotificationService', ['showAdvanced']);
   const window = jasmine.createSpyObj('Window', ['reload']);
 
@@ -49,10 +52,6 @@ describe('UpdateService', () => {
           useValue: globalStorageService
         },
         {
-          provide: EventService,
-          useValue: eventService
-        },
-        {
           provide: DialogService,
           useClass: MockDialogService
         },
@@ -67,12 +66,17 @@ describe('UpdateService', () => {
         {
           provide: TranslateService,
           useValue: translateService
+        },
+        {
+          provide: EventService,
+          useClass: MockEventService
         }
       ]
     });
     service = TestBed.inject(UpdateService);
     translateService = TestBed.inject(TranslateService);
     dialogService = TestBed.inject(DialogService);
+    eventService = TestBed.inject(EventService);
   });
 
   it('should be created', () => {
@@ -115,8 +119,17 @@ describe('UpdateService', () => {
       }
     ];
     service.handleUpdate(versions);
+    const updateEvent = new UpdateInstalled(
+      '100001',
+      '1111111111111111111111111111111111111111',
+      '1111111111111111111111111111111111111111',
+      environment.version.commitHash,
+      UpdateImportance.MANDATORY,
+      1);
+    // TODO: Need to trigger SwUpdate's 'available'
+    expect(eventService.broadcast).toHaveBeenCalledWith(updateEvent);
     expect(service.importance).toBe(UpdateImportance.MANDATORY);
-    expect(dialogService.openUpdateInfoDialog).toHaveBeenCalledWith(false, expectedRelevantVersions, service.updateReady$);
+    expect(dialogService.openUpdateInfoDialog).toHaveBeenCalledWith(false, expectedRelevantVersions, jasmine.any(Observable));
   });
 
   it('should open UpdateInfoDialog if one of the versions not installed is of type "MANDATORY"', () => {
@@ -144,7 +157,7 @@ describe('UpdateService', () => {
     ];
     service.handleUpdate(versions);
     expect(service.importance).toBe(UpdateImportance.MANDATORY);
-    expect(dialogService.openUpdateInfoDialog).toHaveBeenCalledWith(false, versions, service.updateReady$);
+    expect(dialogService.openUpdateInfoDialog).toHaveBeenCalledWith(false, versions, jasmine.any(Observable));
   });
 
   it('should open UpdateInfoDialog if the version between "OPTIONAL" and "RECOMMENDED" of the versions not installed is of type' +
@@ -205,7 +218,7 @@ describe('UpdateService', () => {
     ];
     service.handleUpdate(versions);
     expect(service.importance).toBe(UpdateImportance.MANDATORY);
-    expect(dialogService.openUpdateInfoDialog).toHaveBeenCalledWith(false, expectedRelevantVersions, service.updateReady$);
+    expect(dialogService.openUpdateInfoDialog).toHaveBeenCalledWith(false, expectedRelevantVersions, jasmine.any(Observable));
   });
 
   it('should subscribe to update event and open UpdateInfoDialog if latest version is of type "RECOMMENDED"', () => {

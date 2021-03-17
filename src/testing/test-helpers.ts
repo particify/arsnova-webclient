@@ -56,9 +56,7 @@ export class MockEventService {
   private _eventBus = new Subject<BroadcastEvent>();
   focusOnInput: boolean;
 
-  broadcast(key: any, data?: any) {
-    this._eventBus.next({ key, data });
-  }
+  broadcast = jasmine.createSpy('BroadcastSpy').and.returnValue({});
 
   makeFocusOnInputTrue() {
     this.focusOnInput = true;

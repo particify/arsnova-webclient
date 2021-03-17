@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { SwUpdate, UpdateAvailableEvent } from '@angular/service-worker';
+import { SwUpdate } from '@angular/service-worker';
 import { TranslateService } from '@ngx-translate/core';
 import { tap } from 'rxjs/operators';
 import { UpdateInstalled } from '../../models/events/update-installed';
@@ -9,7 +9,6 @@ import { EventService } from './event.service';
 import { GlobalStorageService, STORAGE_KEYS } from './global-storage.service';
 import { AdvancedSnackBarTypes, NotificationService } from './notification.service';
 import { environment } from '../../../environments/environment';
-import { Observable } from 'rxjs';
 
 @Injectable()
 export class UpdateService {
@@ -25,7 +24,6 @@ export class UpdateService {
   }
 
   importance: UpdateImportance;
-  updateReady$: Observable<UpdateAvailableEvent>;
 
   public handleUpdate(versionInfos: VersionInfo[] = []) {
     const currentVersion = this.selectVersionByHash(versionInfos, environment.version.commitHash);
@@ -41,26 +39,26 @@ export class UpdateService {
       console.log('No updates announced.');
     }
 
-    this.updateReady$ = this.update.available.pipe(tap(() => {
+    const updateReady$ = this.update.available.pipe(tap(() => {
       this.handleUpdateReady(currentVersion, latestVersion, this.importance);
     }));
 
     switch (this.importance) {
       case UpdateImportance.OPTIONAL: {
         /* Handle the update silently */
-        this.updateReady$.subscribe();
+        updateReady$.subscribe();
         return;
       }
       case UpdateImportance.MANDATORY: {
         /* Show the update dialog immediately */
         const dialogRef = this.dialogService.openUpdateInfoDialog(
-            false, relevantVersions, this.updateReady$);
+            false, relevantVersions, updateReady$);
         dialogRef.afterClosed().subscribe(() => this.handleUpdateConfirmed());
         break;
       }
       default: {
         /* Show the update dialog when the update is ready */
-        this.updateReady$.subscribe(() => {
+        updateReady$.subscribe(() => {
           const dialogRef = this.dialogService.openUpdateInfoDialog(
               false, relevantVersions);
           dialogRef.afterClosed().subscribe(() => this.handleUpdateConfirmed());
