@@ -1,4 +1,5 @@
 import { Injectable } from "@angular/core";
+import { interval } from "rxjs";
 import * as LRU from "lru-cache";
 
 const LRU_OPTIONS: LRU.Options<string, any> = {
@@ -7,6 +8,7 @@ const LRU_OPTIONS: LRU.Options<string, any> = {
   noDisposeOnSet: true,
   updateAgeOnGet: true
 };
+const PRUNE_INTERVAL_MS = 60 * 1000;
 
 export interface CacheKey {
   type: string;
@@ -21,6 +23,8 @@ export class CachingService {
   constructor() {
     LRU_OPTIONS.dispose = (key, value) => this.dispatchDispose(key, value);
     this.cache = new LRU(LRU_OPTIONS);
+    /* Explicitly prune the cache so the disponse handlers are called early. */
+    interval(PRUNE_INTERVAL_MS).subscribe(() => this.cache.prune());
   }
 
   get(key: CacheKey): any {
@@ -33,6 +37,10 @@ export class CachingService {
 
   remove(key: CacheKey) {
     this.cache.del(this.keyToString(key));
+  }
+
+  clear() {
+    this.cache.reset();
   }
 
   registerDisposeHandler(type: string, handler: (id: string, value: object) => void) {

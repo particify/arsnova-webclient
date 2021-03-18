@@ -2,6 +2,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, of, Subscription } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { IMessage } from '@stomp/stompjs';
+import { RxStompState } from '@stomp/rx-stomp';
 import { TranslateService } from '@ngx-translate/core';
 import { AbstractHttpService } from './abstract-http.service';
 import { EventService } from '../util/event.service';
@@ -11,6 +12,8 @@ import { WsConnectorService } from '../websockets/ws-connector.service';
 import { Entity } from '../../models/entity';
 import { EntityChanged } from '../../models/events/entity-changed';
 
+const WS_DISCONNECT_GRACE_PERIOD_MS = 10 * 1000;
+
 /**
  * A specialized version of BaseHttpService which manages persistent data which
  * can be referenced through an ID.
@@ -19,6 +22,7 @@ export abstract class AbstractEntityService<T extends Entity> extends AbstractHt
   private aliasIdMapping: Map<string, string> = new Map<string, string>();
   private stompSubscriptions = new Map<string, Subscription>();
   protected type = 'entity';
+  private wsDisconnectionTimestamp: Date = new Date();
 
   constructor(
     protected uriPrefix: string,
@@ -31,6 +35,7 @@ export abstract class AbstractEntityService<T extends Entity> extends AbstractHt
     super(uriPrefix, httpClient, eventService, translateService, notificationService);
     cachingService.registerDisposeHandler(this.type, (id, value) =>
       this.handleCacheDisposeEvent(id, value));
+    this.wsConnector.getConnectionState().subscribe(state => this.handleWsStateChange(state));
   }
 
   /**
@@ -160,5 +165,23 @@ export abstract class AbstractEntityService<T extends Entity> extends AbstractHt
 
   private generateCacheKey(id: string): CacheKey {
     return { type: this.type, id: id };
+  }
+
+  private handleWsStateChange(state: RxStompState) {
+    switch (state) {
+      case RxStompState.CLOSED:
+        if (!this.wsDisconnectionTimestamp) {
+          this.wsDisconnectionTimestamp = new Date();
+        }
+        break;
+      case RxStompState.OPEN:
+        const currentTimestamp = new Date();
+        if (this.wsDisconnectionTimestamp
+            && currentTimestamp.getTime() - this.wsDisconnectionTimestamp.getTime() > WS_DISCONNECT_GRACE_PERIOD_MS) {
+          console.log('WebSocket disconnection grace period exceeded. Clearing cache.');
+          this.cachingService.clear();
+          this.wsDisconnectionTimestamp = currentTimestamp;
+        }
+    }
   }
 }
