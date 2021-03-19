@@ -1,7 +1,7 @@
 <app-nav-bar></app-nav-bar>
-<app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
+<app-loading-indicator *ngIf="isLoading || isReloading"></app-loading-indicator>
 <div class="nav-bar-container">
-  <div *ngIf="!isLoading" fxLayout="column" fxLayoutAlign="start center">
+  <div *ngIf="!isLoading && !isReloading" fxLayout="column" fxLayoutAlign="start center">
     <button id="live-announcer-button" class="visually-hidden" tabindex="-1" (click)="announce('answer.a11y-shortcuts')">
       {{ 'answer.a11y-message' | translate: { group: contentGroupName } }}</button>
     <app-stepper *ngIf="contents.length > 0" (newIndex)="updateURL($event)" [listLength]="contents.length" [completed]="alreadySent">

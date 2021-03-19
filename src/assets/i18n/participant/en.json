@@ -39,7 +39,9 @@
     "show-back": "Flip",
     "next-content": "Next",
     "first-content": "To the beginning",
-    "group-not-available": "This collection is not available"
+    "group-not-available": "This collection is not available",
+    "state-changed": "The content list has been updated.",
+    "load": "Load"
   },
   "comment-list": {
     "a11y-search-list": "Search for comments",
