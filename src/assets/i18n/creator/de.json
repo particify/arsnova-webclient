@@ -343,7 +343,7 @@
     "a11y-live-survey": "Öffnet die Live-Umfrage.",
     "a11y-content-groups": "In diesem Raum gibt es {{count}} Frage-Sammlungen. Navigiere mit Tab zwischen ihnen und drücke Enter, um Fragen oder Einstellungen der Sammlung zu bearbeiten.",
     "a11y-no-content-groups": "In diesem Raum sind noch keine Fragen vorhanden. Drücke die Taste 4, um eine neue Frage zu erstellen.",
-    "a11y-enter-content-group": "Öffnet die Fragesammlung {{name}}.",
+    "a11y-enter-content-group": "Öffnet die Fragesammlung {{name}}. Diese Sammlung ist {{locked}}.",
     "a11y-moderator-message": "Du befindest dich jetzt in dem Raum {{room}} welchen du moderierst. Um Informationen zu Tastenkombinationen zu erhalten, drücke jetzt die Enter-Taste oder rufe die Ansage zu einem späteren Zeitpunkt mit der Escape-Taste auf.",
     "a11y-moderator-shortcuts": "Um auf die Kommentar-Übersicht zu gelangen drücke die Taste 1, um in die Moderationsübersicht zu gelangen die Taste 2, um auf das Nutzer-Menü zu gelangen die Taste 9, um auf den Zurück-Button zu gelangen die Taste 0 oder die Escape-Taste, um diese Ansage zu wiederholen.",
     "a11y-moderation-disabled": "Dieser Raum wird zurzeit nicht moderiert.",
@@ -364,7 +364,10 @@
     "no-contents": "Es sind noch keine Fragen vorhanden.",
     "switch-role": "Rolle wechseln",
     "share-room": "Raum teilen",
-    "more-options": "Mehr Optionen"
+    "more-options": "Mehr Optionen",
+    "group-locked": "Die Sammlung ist nicht freigegeben",
+    "locked": "nicht freigegeben",
+    "unlocked": "freigegeben"
   },
   "settings": {
     "a11y-message": "Du befindest dich jetzt in den Raum-Einstellungen. Drücke die Enter-Taste, um Informationen über Tastenkombinationen zu erfahren oder rufe die Ansafe zu einem späteren Zeitpunkt mit der Escape-Taste auf.",
