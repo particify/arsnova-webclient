@@ -88,34 +88,36 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
       let userId;
       this.authenticationService.getCurrentAuthentication()
         .subscribe(auth => userId = auth.userId);
-      this.contentgroupService.getByRoomIdAndName('~' + this.shortId, this.contentGroupName).subscribe(contentGroup => {
-        this.contentGroup = contentGroup;
-        this.contentService.getContentsByIds(this.contentGroup.roomId, this.contentGroup.contentIds).subscribe(contents => {
-          this.contents = this.contentService.getSupportedContents(contents); // TODO: Removed filter for testing
-          this.answerService.getAnswersByUserIdContentIds(contentGroup.roomId, userId, this.contents.map(c => c.id)).subscribe(answers => {
-            let answersAdded = 0;
-            for (const [index, content] of this.contents.entries()) {
-              if (answersAdded < answers.length) {
-                for (const answer of answers) {
-                  if (content.id === answer.contentId) {
-                    this.answers[index] = answer;
-                    answersAdded++;
+      this.route.data.subscribe(data => {
+        this.contentgroupService.getByRoomIdAndName(data.room.id, this.contentGroupName).subscribe(contentGroup => {
+            this.contentGroup = contentGroup;
+            this.contentService.getContentsByIds(this.contentGroup.roomId, this.contentGroup.contentIds).subscribe(contents => {
+              this.contents = this.contentService.getSupportedContents(contents); // TODO: Removed filter for testing
+              this.answerService.getAnswersByUserIdContentIds(contentGroup.roomId, userId, this.contents.map(c => c.id)).subscribe(answers => {
+                let answersAdded = 0;
+                for (const [index, content] of this.contents.entries()) {
+                  if (answersAdded < answers.length) {
+                    for (const answer of answers) {
+                      if (content.id === answer.contentId) {
+                        this.answers[index] = answer;
+                        answersAdded++;
+                      }
+                    }
                   }
+                  this.alreadySent.set(index, !!this.answers[index]);
                 }
-              }
-              this.alreadySent.set(index, !!this.answers[index]);
-            }
+                this.isLoading = false;
+                this.checkIfLastContentExists(lastContentIndex);
+                this.getFirstUnansweredContent();
+              });
+            });
+          },
+          error => {
             this.isLoading = false;
-            this.checkIfLastContentExists(lastContentIndex);
-            this.getFirstUnansweredContent();
+            const msg = this.translateService.instant('answer.group-not-available');
+            this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
           });
-        });
-      },
-        error => {
-        this.isLoading = false;
-        const msg = this.translateService.instant('answer.group-not-available');
-        this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
-        });
+      });
     });
   }
 
