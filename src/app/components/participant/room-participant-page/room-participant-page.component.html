@@ -54,7 +54,7 @@
         <p tabindex="-1" id="content-groups" class="visually-hidden">
           {{ 'room-page.a11y-content-groups' | translate: {count: contentGroups.length} }}</p>
         <app-content-groups *ngFor="let contentGroup of contentGroups" [contentGroupName]="contentGroup.name"
-                            [length]="contentGroup.contentIds.length" [isLoose]="false"></app-content-groups>
+                            [length]="calcContentsInGroup(contentGroup)" [isLoose]="false"></app-content-groups>
         <p tabindex="-1" id="no-content-groups" class="visually-hidden">
           {{ 'room-page.a11y-no-content-groups' | translate }}</p>
       </div>
