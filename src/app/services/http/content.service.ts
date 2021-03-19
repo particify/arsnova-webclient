@@ -34,7 +34,7 @@ export class ContentService extends AbstractEntityService<Content> {
               protected translateService: TranslateService,
               protected notificationService: NotificationService,
               cachingService: CachingService) {
-    super('/content', http, ws, eventService, translateService, notificationService, cachingService);
+    super('Content', '/content', http, ws, eventService, translateService, notificationService, cachingService);
   }
 
   getAnswersChangedStream(roomId: string, contentId: string): Observable<IMessage> {

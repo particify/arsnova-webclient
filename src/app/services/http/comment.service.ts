@@ -31,7 +31,7 @@ export class CommentService extends AbstractEntityService<Comment> {
               protected translateService: TranslateService,
               protected notificationService: NotificationService,
               cachingService: CachingService) {
-    super('/comment', http, ws, eventService, translateService, notificationService, cachingService);
+    super('Comment', '/comment', http, ws, eventService, translateService, notificationService, cachingService);
   }
 
   getComment(commentId: string, roomId: string): Observable<Comment> {

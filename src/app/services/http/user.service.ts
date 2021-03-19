@@ -32,7 +32,7 @@ export class UserService extends AbstractEntityService<User> {
               protected translateService: TranslateService,
               protected notificationService: NotificationService,
               cachingService: CachingService) {
-    super('/user', http, ws, eventService, translateService, notificationService, cachingService);
+    super('User', '/user', http, ws, eventService, translateService, notificationService, cachingService);
   }
 
   register(email: string, password: string): Observable<boolean> {

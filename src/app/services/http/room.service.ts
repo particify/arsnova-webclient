@@ -45,7 +45,7 @@ export class RoomService extends AbstractEntityService<Room> {
     protected notificationService: NotificationService,
     private feedbackService: FeedbackService,
     cachingService: CachingService) {
-    super('/room', http, ws, eventService, translateService, notificationService, cachingService);
+    super('Room', '/room', http, ws, eventService, translateService, notificationService, cachingService);
   }
 
   /**

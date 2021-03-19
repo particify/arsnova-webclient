@@ -21,10 +21,11 @@ const WS_DISCONNECT_GRACE_PERIOD_MS = 10 * 1000;
 export abstract class AbstractEntityService<T extends Entity> extends AbstractHttpService<T> {
   private aliasIdMapping: Map<string, string> = new Map<string, string>();
   private stompSubscriptions = new Map<string, Subscription>();
-  protected type = 'entity';
+  protected cacheName = 'entity';
   private wsDisconnectionTimestamp: Date = new Date();
 
   constructor(
+    protected entityType: string,
     protected uriPrefix: string,
     protected httpClient: HttpClient,
     protected wsConnector: WsConnectorService,
@@ -33,7 +34,7 @@ export abstract class AbstractEntityService<T extends Entity> extends AbstractHt
     protected notificationService: NotificationService,
     private cachingService: CachingService) {
     super(uriPrefix, httpClient, eventService, translateService, notificationService);
-    cachingService.registerDisposeHandler(this.type, (id, value) =>
+    cachingService.registerDisposeHandler(this.cacheName, (id, value) =>
       this.handleCacheDisposeEvent(id, value));
     this.wsConnector.getConnectionState().subscribe(state => this.handleWsStateChange(state));
   }
@@ -155,7 +156,7 @@ export abstract class AbstractEntityService<T extends Entity> extends AbstractHt
     for (const [key, value] of Object.entries(changes)) {
       entity[key] = value;
     }
-    const event = new EntityChanged<T>(entity, Object.keys(changes));
+    const event = new EntityChanged<T>(this.entityType, entity, Object.keys(changes));
     this.eventService.broadcast(event.type, event.payload);
   }
 
@@ -164,7 +165,7 @@ export abstract class AbstractEntityService<T extends Entity> extends AbstractHt
   }
 
   private generateCacheKey(id: string): CacheKey {
-    return { type: this.type, id: id };
+    return { type: this.cacheName, id: id };
   }
 
   private handleWsStateChange(state: RxStompState) {

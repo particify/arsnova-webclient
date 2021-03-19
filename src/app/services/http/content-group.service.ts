@@ -30,7 +30,7 @@ export class ContentGroupService extends AbstractEntityService<ContentGroup> {
     protected notificationService: NotificationService,
     private roomService: RoomService,
     cachingService: CachingService) {
-    super('/contentgroup', http, ws, eventService, translateService, notificationService, cachingService);
+    super('ContentGroup', '/contentgroup', http, ws, eventService, translateService, notificationService, cachingService);
   }
 
   getStatsByRoomIdAndName(roomId: string, name: string): Observable<ContentGroupStatistics> {

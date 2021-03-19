@@ -30,7 +30,7 @@ export class ContentAnswerService extends AbstractEntityService<Answer> {
               protected translateService: TranslateService,
               protected notificationService: NotificationService,
               cachingService: CachingService) {
-    super('/answer', http, ws, eventService, translateService, notificationService, cachingService);
+    super('Answer', '/answer', http, ws, eventService, translateService, notificationService, cachingService);
   }
 
   getAnswers(roomId: string, contentId: string): Observable<TextAnswer[]> {
