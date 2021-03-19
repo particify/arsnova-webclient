@@ -120,4 +120,13 @@ export class ContentGroupService extends AbstractEntityService<ContentGroup> {
     );
   }
 
+  isContentPublished(contentGroup: ContentGroup, contentId: string) {
+    const i = contentGroup.contentIds.indexOf(contentId);
+		return i > -1 && contentGroup.firstPublishedIndex > -1 && i >= contentGroup.firstPublishedIndex
+				&& (contentGroup.lastPublishedIndex == -1 || i <= contentGroup.lastPublishedIndex);
+  }
+
+  filterPublishedIds(contentGroup: ContentGroup): string[] {
+    return contentGroup.contentIds.filter(id => this.isContentPublished(contentGroup, id));
+  }
 }

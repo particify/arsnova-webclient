@@ -91,8 +91,9 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
       this.route.data.subscribe(data => {
         this.contentgroupService.getByRoomIdAndName(data.room.id, this.contentGroupName).subscribe(contentGroup => {
             this.contentGroup = contentGroup;
-            this.contentService.getContentsByIds(this.contentGroup.roomId, this.contentGroup.contentIds).subscribe(contents => {
-              this.contents = this.contentService.getSupportedContents(contents); // TODO: Removed filter for testing
+            const publishedIds = this.contentgroupService.filterPublishedIds(contentGroup);
+            this.contentService.getContentsByIds(this.contentGroup.roomId, publishedIds).subscribe(contents => {
+              this.contents = this.contentService.getSupportedContents(contents);
               this.answerService.getAnswersByUserIdContentIds(contentGroup.roomId, userId, this.contents.map(c => c.id)).subscribe(answers => {
                 let answersAdded = 0;
                 for (const [index, content] of this.contents.entries()) {
