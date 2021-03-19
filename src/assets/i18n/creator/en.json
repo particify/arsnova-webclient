@@ -343,7 +343,7 @@
     "a11y-live-survey": "Opens the live survey.",
     "a11y-content-groups": "In this room there are {{count}} Question collections. Tab between them and press Enter to edit questions or settings in the collection.",
     "a11y-no-content-groups": "There are no questions in this room yet. Press key 4 to create a new question.",
-    "a11y-enter-content-group": "Opens the content group {{name}}.",
+    "a11y-enter-content-group": "Opens the collection {{name}}. This collection is {{locked}}.",
     "a11y-moderator-message": "You are now in the room {{room}}, which you are moderating. To get information about key combinations, press the Enter key now or call the announcement later with the Escape key.",
     "a11y-moderator-shortcuts": "To access the comment overview press the key 1, to access the moderation overview the key 2, to access the user menu the key 9, to access the back button the key 0 or the escape key to repeat this announcement",
     "a11y-moderation-disabled": "This room is currently not moderated.",
@@ -364,7 +364,10 @@
     "no-contents": "There are no questions yet.",
     "switch-role": "Switch role",
     "share-room": "Share room",
-    "more-options": "More options"
+    "more-options": "More options",
+    "group-locked": "The collection is not released",
+    "locked": "not released",
+    "unlocked": "released"
   },
   "settings": {
     "a11y-message": "You are now in the room settings. Press the Enter key to get information about key combinations or call the announcement later with the Escape key.",

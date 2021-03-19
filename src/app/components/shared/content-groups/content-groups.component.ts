@@ -14,6 +14,7 @@ export class ContentGroupsComponent implements OnInit {
   @Input() contentGroupName: string;
   @Input() length: number;
   @Input() isLoose: boolean;
+  @Input() isLocked = false;
   role: UserRole;
   roomShortId: string;
 

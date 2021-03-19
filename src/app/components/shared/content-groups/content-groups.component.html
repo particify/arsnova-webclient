@@ -1,5 +1,6 @@
 <mat-card tabindex="0" role=button id="contentGroup" fxLayoutAlign="start center" (click)="viewContents()"
-          attr.aria-label="{{ 'room-page.a11y-enter-content-group' | translate:{name: contentGroupName} }}"
+          attr.aria-label="{{ 'room-page.a11y-enter-content-group' | translate:{name: contentGroupName,
+          locked: 'room-page.' + (isLocked ? 'locked' : 'unlocked') | translate} }}"
           (keyup.enter)="viewContents()">
   <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="10px" class="container">
     <mat-icon *ngIf="isLoose" class="icon-primary">
@@ -8,6 +9,8 @@
     <h3 matBadge="{{length}}" matBadgeOverlap="false">
       {{contentGroupName}}
     </h3>
+    <span class="fill-remaining-space"></span>
+    <mat-icon *ngIf="isLocked" class="locked" [matTooltip]="'room-page.group-locked' | translate">locked</mat-icon>
   </div>
 
 </mat-card>
