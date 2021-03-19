@@ -17,6 +17,7 @@ import { GlobalStorageService, STORAGE_KEYS } from '../../../services/util/globa
 import { AnnounceService } from '../../../services/util/announce.service';
 import { UserRole } from '../../../models/user-roles.enum';
 import { InfoBarItem } from '../../shared/bars/info-bar/info-bar.component';
+import { ContentGroupService } from '../../../services/http/content-group.service';
 
 @Component({
   selector: 'app-room-moderator-page',
@@ -31,6 +32,7 @@ export class RoomModeratorPageComponent extends RoomPageComponent implements OnI
   constructor(
     protected location: Location,
     protected roomService: RoomService,
+    protected contentGroupService: ContentGroupService,
     protected route: ActivatedRoute,
     protected router: Router,
     protected translateService: TranslateService,
@@ -43,8 +45,8 @@ export class RoomModeratorPageComponent extends RoomPageComponent implements OnI
     private announceService: AnnounceService,
     protected globalStorageService: GlobalStorageService
   ) {
-    super(roomService, route, router, location, wsCommentService, commentService, eventService, contentService, translateService,
-      notification, globalStorageService);
+    super(roomService, contentGroupService, route, router, location, wsCommentService,
+      commentService, eventService, contentService, translateService, notification, globalStorageService);
     langService.langEmitter.subscribe(lang => translateService.use(lang));
   }
 

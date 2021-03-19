@@ -90,7 +90,7 @@ export class GroupContentComponent extends ContentListBaseComponent implements O
       this.route.params.subscribe(params => {
         this.collectionName = params['contentGroup'];
         this.globalStorageService.setItem(STORAGE_KEYS.LAST_GROUP, this.collectionName);
-        this.roomService.getGroupByRoomIdAndName(this.room.id, this.collectionName).subscribe(group => {
+        this.contentGroupService.getByRoomIdAndName(this.room.id, this.collectionName).subscribe(group => {
           this.contentGroup = group;
           this.setRange();
           this.contentService.getContentsByIds(this.contentGroup.roomId, this.contentGroup.contentIds, true)

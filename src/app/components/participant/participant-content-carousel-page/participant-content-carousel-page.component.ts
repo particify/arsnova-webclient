@@ -17,6 +17,7 @@ import { AuthenticationService } from '../../../services/http/authentication.ser
 import { Answer } from '../../../models/answer';
 import { RoutingService } from '../../../services/util/routing.service';
 import { AdvancedSnackBarTypes, NotificationService } from '../../../services/util/notification.service';
+import { ContentGroupService } from '../../../services/http/content-group.service';
 
 @Component({
   selector: 'app-participant-content-carousel-page',
@@ -49,6 +50,7 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
     private contentService: ContentService,
     protected translateService: TranslateService,
     protected roomService: RoomService,
+    private contentgroupService: ContentGroupService,
     protected route: ActivatedRoute,
     private announceService: AnnounceService,
     private globalStorageService: GlobalStorageService,
@@ -86,7 +88,7 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
       let userId;
       this.authenticationService.getCurrentAuthentication()
         .subscribe(auth => userId = auth.userId);
-      this.roomService.getGroupByRoomIdAndName('~' + this.shortId, this.contentGroupName).subscribe(contentGroup => {
+      this.contentgroupService.getByRoomIdAndName('~' + this.shortId, this.contentGroupName).subscribe(contentGroup => {
         this.contentGroup = contentGroup;
         this.contentService.getContentsByIds(this.contentGroup.roomId, this.contentGroup.contentIds).subscribe(contents => {
           this.contents = this.contentService.getSupportedContents(contents); // TODO: Removed filter for testing

@@ -8,6 +8,7 @@ import { GlobalStorageService, STORAGE_KEYS } from '../../../services/util/globa
 import { RoomService } from '../../../services/http/room.service';
 import { StepperComponent } from '../../shared/stepper/stepper.component';
 import { Location } from '@angular/common';
+import { ContentGroupService } from '../../../services/http/content-group.service';
 
 @Component({
   selector: 'app-content-presentation',
@@ -30,6 +31,7 @@ export class ContentPresentationComponent implements OnInit {
     protected route: ActivatedRoute,
     private roomService: RoomService,
     private contentService: ContentService,
+    private contentGroupService: ContentGroupService,
     private translateService: TranslateService,
     protected langService: LanguageService,
     private globalStorageService: GlobalStorageService,
@@ -50,7 +52,7 @@ export class ContentPresentationComponent implements OnInit {
       this.route.params.subscribe(params => {
         this.contentGroupName = params['contentGroup'];
         this.globalStorageService.setItem(STORAGE_KEYS.LAST_GROUP, this.contentGroupName);
-        this.roomService.getGroupByRoomIdAndName(room.id, this.contentGroupName).subscribe(group => {
+        this.contentGroupService.getByRoomIdAndName(room.id, this.contentGroupName).subscribe(group => {
           this.contentService.getContentsByIds(group.roomId, group.contentIds, true).subscribe(contents => {
             this.contents = this.contentService.getSupportedContents(contents);
             this.isLoading = false;

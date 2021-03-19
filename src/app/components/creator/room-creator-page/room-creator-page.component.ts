@@ -19,6 +19,7 @@ import { Content } from '../../../models/content';
 import { AnnounceService } from '../../../services/util/announce.service';
 import { UserRole } from '../../../models/user-roles.enum';
 import { InfoBarItem } from '../../shared/bars/info-bar/info-bar.component';
+import { ContentGroupService } from '../../../services/http/content-group.service';
 
 @Component({
   selector: 'app-room-creator-page',
@@ -33,6 +34,7 @@ export class RoomCreatorPageComponent extends RoomPageComponent implements OnIni
 
   constructor(
     protected roomService: RoomService,
+    protected contentGroupService: ContentGroupService,
     protected notification: NotificationService,
     protected route: ActivatedRoute,
     protected router: Router,
@@ -48,8 +50,8 @@ export class RoomCreatorPageComponent extends RoomPageComponent implements OnIni
     private dialogService: DialogService,
     protected globalStorageService: GlobalStorageService
   ) {
-    super(roomService, route, router, location, wsCommentService, commentService, eventService, contentService, translateService,
-      notification, globalStorageService);
+    super(roomService, contentGroupService, route, router, location, wsCommentService,
+      commentService, eventService, contentService, translateService, notification, globalStorageService);
     langService.langEmitter.subscribe(lang => translateService.use(lang));
   }
 

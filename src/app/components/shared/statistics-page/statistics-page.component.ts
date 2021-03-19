@@ -7,6 +7,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { GlobalStorageService, STORAGE_KEYS } from '../../../services/util/global-storage.service';
 import { AnnounceService } from '../../../services/util/announce.service';
 import { StatisticListComponent } from '../statistic-list/statistic-list.component';
+import { ContentGroupService } from '../../../services/http/content-group.service';
 
 
 @Component({
@@ -26,6 +27,7 @@ export class StatisticsPageComponent implements OnInit {
 
   constructor(private route: ActivatedRoute,
               private roomService: RoomService,
+              private contentGroupService: ContentGroupService,
               private announceService: AnnounceService,
               private translateService: TranslateService,
               private globalStorageService: GlobalStorageService
@@ -42,7 +44,7 @@ export class StatisticsPageComponent implements OnInit {
     this.roomService.getStats(id).subscribe(roomStats => {
       const contentGroupsLength = roomStats.groupStats.length;
       for (let i = 0; i < contentGroupsLength; i++) {
-        this.roomService.getGroupByRoomIdAndName(id, roomStats.groupStats[i].groupName).subscribe(group => {
+        this.contentGroupService.getById(roomStats.groupStats[i].id, { roomId: id}).subscribe(group => {
           this.contentGroups.push(group);
           if (this.contentGroups.length === contentGroupsLength) {
             this.initCurrentGroup();

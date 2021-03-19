@@ -93,7 +93,7 @@ export class LooseContentComponent extends ContentListBaseComponent implements O
           })
           .filter(c => c);
         if (newGroup.contentIds.length > 0) {
-          this.contentGroupService.post(this.room.id, this.newName, newGroup).subscribe(
+          this.contentGroupService.post(newGroup).subscribe(
             group => {
               this.contentGroups.push(group.name);
               this.translateService.get('content.content-group-created').subscribe(string => {
