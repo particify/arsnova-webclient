@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { RxStomp } from '@stomp/rx-stomp';
+import { RxStomp, RxStompState } from '@stomp/rx-stomp';
 import { AuthenticationService } from '../http/authentication.service';
 import { ARSRxStompConfig } from '../../rx-stomp.config';
 import { Observable } from 'rxjs';
@@ -53,5 +53,9 @@ export class WsConnectorService {
     if (this.client.connected) {
       return this.client.watch(topic, this.headers);
     }
+  }
+
+  public getConnectionState(): Observable<RxStompState> {
+    return this.client.connectionState$;
   }
 }

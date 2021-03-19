@@ -9,6 +9,8 @@ import { TranslateService } from '@ngx-translate/core';
 import { NotificationService } from '../util/notification.service';
 import { EventService } from '../util/event.service';
 import { Answer } from '@arsnova/app/models/answer';
+import { CachingService } from '../util/caching.service';
+import { WsConnectorService } from '../websockets/ws-connector.service';
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -23,10 +25,12 @@ export class ContentAnswerService extends AbstractEntityService<Answer> {
   };
 
   constructor(private http: HttpClient,
+              protected ws: WsConnectorService,
               protected eventService: EventService,
               protected translateService: TranslateService,
-              protected notificationService: NotificationService) {
-    super('/answer', http, eventService, translateService, notificationService);
+              protected notificationService: NotificationService,
+              cachingService: CachingService) {
+    super('Answer', '/answer', http, ws, eventService, translateService, notificationService, cachingService);
   }
 
   getAnswers(roomId: string, contentId: string): Observable<TextAnswer[]> {

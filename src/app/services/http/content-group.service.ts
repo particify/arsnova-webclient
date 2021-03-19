@@ -11,6 +11,8 @@ import { TranslateService } from '@ngx-translate/core';
 import { NotificationService } from '../util/notification.service';
 import { RoomService } from './room.service';
 import { ContentGroupStatistics } from '../../models/content-group-statistics';
+import { CachingService } from '../util/caching.service';
+import { WsConnectorService } from '../websockets/ws-connector.service';
 
 const httpOptions = {
   headers: new HttpHeaders({})
@@ -20,13 +22,15 @@ const httpOptions = {
 export class ContentGroupService extends AbstractEntityService<ContentGroup> {
   constructor(
     private http: HttpClient,
+    protected ws: WsConnectorService,
     private authService: AuthenticationService,
     private globalStorageService: GlobalStorageService,
     protected eventService: EventService,
     protected translateService: TranslateService,
     protected notificationService: NotificationService,
-    private roomService: RoomService) {
-    super('/contentgroup', http, eventService, translateService, notificationService);
+    private roomService: RoomService,
+    cachingService: CachingService) {
+    super('ContentGroup', '/contentgroup', http, ws, eventService, translateService, notificationService, cachingService);
   }
 
   getStatsByRoomIdAndName(roomId: string, name: string): Observable<ContentGroupStatistics> {

@@ -13,7 +13,7 @@ export abstract class AbstractHttpService<T> {
   };
 
   constructor(
-    private uriPrefix: string,
+    protected uriPrefix: string,
     protected httpClient: HttpClient,
     protected eventService: EventService,
     protected translateService: TranslateService,

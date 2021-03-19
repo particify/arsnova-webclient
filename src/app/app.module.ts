@@ -70,6 +70,7 @@ import { TranslateHttpLoaderFactory } from './translate-http-loader-factory';
 import { TRANSLATION_MODULE_NAME } from './translate-module-name-token';
 import { FeedbackService } from './services/http/feedback.service';
 import { UpdateService } from './services/util/update-service';
+import { CachingService } from './services/util/caching.service';
 
 export function dialogClose(dialogResult: any) {
 }
@@ -179,6 +180,7 @@ export function initializeApp(appConfig: AppConfig) {
     FormattingService,
     RoutingService,
     FeedbackService,
+    CachingService,
     { provide: Window,  useValue: window },
     STORAGE_CONFIG_PROVIDERS,
     {
