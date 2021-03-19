@@ -18,6 +18,7 @@ import { RoomDeleted } from '../../../models/events/room-deleted';
 import { AuthProvider } from '../../../models/auth-provider';
 import { MembershipsChanged } from '../../../models/events/memberships-changed';
 import { ExtensionFactory } from '../../../../../projects/extension-point/src/lib/extension-factory';
+import { UserService } from '../../../services/http/user.service';
 
 interface RoomDataView {
   summary: RoomSummary;
@@ -52,6 +53,7 @@ export class RoomListComponent implements OnInit, OnDestroy {
 
   constructor(
     private roomService: RoomService,
+    private userService: UserService,
     public eventService: EventService,
     protected roomMembershipService: RoomMembershipService,
     private authenticationService: AuthenticationService,
@@ -244,7 +246,7 @@ export class RoomListComponent implements OnInit, OnDestroy {
   }
 
   removeFromHistory(room: RoomDataView) {
-    this.roomService.removeFromHistory(this.auth.userId, room.summary.id).subscribe(() => {
+    this.userService.removeRoomFromHistory(this.auth.userId, room.summary.id).subscribe(() => {
       this.translateService.get('room-list.room-successfully-removed').subscribe(msg => {
         this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
       });
@@ -291,7 +293,7 @@ export class RoomListComponent implements OnInit, OnDestroy {
   }
 
   addRoomFromGuest(roomDataView: RoomDataView) {
-    this.roomService.addToHistory(this.auth.userId, roomDataView.membership.roomId).pipe(
+    this.userService.addRoomToHistory(this.auth.userId, roomDataView.membership.roomId).pipe(
       tap(r => this.translateService.get('room-list.added-successfully').subscribe(msg =>
          this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.SUCCESS)))
     ).subscribe(r => {

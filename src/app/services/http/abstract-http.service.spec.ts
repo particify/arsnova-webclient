@@ -1,11 +1,13 @@
 import { inject, TestBed } from '@angular/core/testing';
 
-import { BaseHttpService } from './base-http.service';
+import { AbstractHttpService } from './abstract-http.service';
 import { TranslateService } from '@ngx-translate/core';
 import { NotificationService } from '../util/notification.service';
 import { EventService } from '../util/event.service';
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 @Injectable()
 class MockEventService {
@@ -24,11 +26,21 @@ class MockTranslateService {
   }
 }
 
-describe('BaseHttpService', () => {
+@Injectable()
+class TestHttpService extends AbstractHttpService<object> {
+  constructor(http: HttpClient,
+    protected eventService: EventService,
+    protected translateService: TranslateService,
+    protected notificationService: NotificationService) {
+    super('/test', http, eventService, translateService, notificationService);
+  }
+}
+
+describe('AbstractHttpService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
-        BaseHttpService,
+        TestHttpService,
         {
           provide: EventService,
           useClass: MockEventService
@@ -41,11 +53,14 @@ describe('BaseHttpService', () => {
           provide: TranslateService,
           useClass: MockTranslateService
         }
+      ],
+      imports: [
+        HttpClientTestingModule
       ]
     });
   });
 
-  it('should be created', inject([BaseHttpService], (service: BaseHttpService) => {
+  it('should be created', inject([TestHttpService], (service: TestHttpService) => {
     expect(service).toBeTruthy();
   }));
 });

@@ -8,6 +8,7 @@ import { FormControl, Validators } from '@angular/forms';
 import { EventService } from '../../../../services/util/event.service';
 import { DialogService } from '../../../../services/util/dialog.service';
 import { UpdateEvent } from '@arsnova/app/components/creator/settings/settings.component';
+import { UserService } from '../../../../services/http/user.service';
 
 @Component({
   selector: 'app-moderators',
@@ -29,6 +30,7 @@ export class ModeratorsComponent implements OnInit {
               public notificationService: NotificationService,
               public translationService: TranslateService,
               protected moderatorService: ModeratorService,
+              protected userService: UserService,
               protected langService: LanguageService,
               public eventService: EventService) {
     langService.langEmitter.subscribe(lang => translationService.use(lang));
@@ -44,7 +46,7 @@ export class ModeratorsComponent implements OnInit {
       this.moderators.forEach((user, i) => {
         this.userIds[i] = user.userId;
       });
-      this.moderatorService.getUserData(this.userIds).subscribe(users => {
+      this.userService.getUserData(this.userIds).subscribe(users => {
         users.forEach((user, i) => {
           this.moderators[i].loginId = user.loginId;
         });
@@ -53,7 +55,7 @@ export class ModeratorsComponent implements OnInit {
   }
 
   addModerator() {
-    this.moderatorService.getUserId(this.loginId).subscribe(list => {
+    this.userService.getUserByLoginId(this.loginId).subscribe(list => {
       if (list.length === 0) {
         this.translationService.get('settings.moderator-not-found').subscribe(msg => {
           this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.FAILED);

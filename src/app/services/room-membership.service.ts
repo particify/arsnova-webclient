@@ -3,7 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { first, map, shareReplay, skip, switchAll, takeUntil, tap } from 'rxjs/operators';
 import { IMessage } from '@stomp/stompjs';
-import { BaseHttpService } from './http/base-http.service';
+import { AbstractHttpService } from './http/abstract-http.service';
 import { WsConnectorService } from './websockets/ws-connector.service';
 import { AuthenticationService, AUTH_HEADER_KEY, AUTH_SCHEME } from './http/authentication.service';
 import { EventService } from './util/event.service';
@@ -18,10 +18,9 @@ import { ClientAuthentication } from '../models/client-authentication';
  * about the user's authorization for rooms.
  */
 @Injectable()
-export class RoomMembershipService extends BaseHttpService {
+export class RoomMembershipService extends AbstractHttpService<Membership> {
 
   serviceApiUrl = {
-    membership: '/_view/membership',
     byUser: '/by-user'
   };
 
@@ -35,7 +34,7 @@ export class RoomMembershipService extends BaseHttpService {
     private authenticationService: AuthenticationService,
     protected translateService: TranslateService,
     protected notificationService: NotificationService) {
-    super(eventService, translateService, notificationService);
+    super('/_view/membership', http, eventService, translateService, notificationService);
       const authChanged$ = authenticationService.getAuthenticationChanges().pipe(skip(1));
       authenticationService.getAuthenticationChanges().subscribe(auth => {
         if (!auth) {
@@ -79,7 +78,7 @@ export class RoomMembershipService extends BaseHttpService {
    * Creates an Observable for requesting room memberships of a user.
    */
   private fetchMemberships(userId: string, token?: string): Observable<Membership[]> {
-    const url = this.apiUrl.base + this.serviceApiUrl.membership + this.serviceApiUrl.byUser + '/' + userId;
+    const url = this.buildUri(this.serviceApiUrl.byUser + '/' + userId);
     const httpHeaders = token ? new HttpHeaders().set(AUTH_HEADER_KEY, `${AUTH_SCHEME} ${token}`) : null;
     return this.http.get<Membership[]>(url, { headers: httpHeaders }).pipe(
         tap(memberships => memberships.forEach(m => m.primaryRole = this.selectPrimaryRole(m.roles)))

@@ -3,7 +3,7 @@ import { Vote } from '../../models/vote';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { BaseHttpService } from './base-http.service';
+import { AbstractHttpService } from './abstract-http.service';
 import { TranslateService } from '@ngx-translate/core';
 import { NotificationService } from '../util/notification.service';
 import { EventService } from '../util/event.service';
@@ -13,21 +13,16 @@ const httpOptions = {
 };
 
 @Injectable()
-export class VoteService extends BaseHttpService {
-
-  serviceApiUrl = {
-    vote: '/vote'
-  };
-
+export class VoteService extends AbstractHttpService<Vote> {
   constructor(private http: HttpClient,
               protected eventService: EventService,
               protected translateService: TranslateService,
               protected notificationService: NotificationService) {
-    super(eventService, translateService, notificationService);
+    super('/vote', http, eventService, translateService, notificationService);
   }
 
   add(roomId: string, vote: Vote): Observable<Vote> {
-    const connectionUrl = this.getBaseUrl(roomId) + this.serviceApiUrl.vote + '/';
+    const connectionUrl = this.buildUri('/', roomId);
     return this.http.post<Vote>(connectionUrl, vote, httpOptions).pipe(
       catchError(this.handleError<Vote>('add vote'))
     );
@@ -44,14 +39,14 @@ export class VoteService extends BaseHttpService {
   }
 
   deleteVote(roomId: string, commentId: string, userId: string): Observable<Vote> {
-    const connectionUrl = `${this.getBaseUrl(roomId) + this.serviceApiUrl.vote}/${commentId}/${userId}`;
+    const connectionUrl = this.buildUri(`/${commentId}/${userId}`, roomId);
     return this.http.delete<Vote>(connectionUrl, httpOptions).pipe(
       catchError(this.handleError<Vote>('delete Vote'))
     );
   }
 
   getByRoomIdAndUserID(roomId: string, userId: string): Observable<Vote[]> {
-    const connectionUrl = `${this.getBaseUrl(roomId) + this.serviceApiUrl.vote + this.apiUrl.find}`;
+    const connectionUrl = this.buildUri(this.apiUrl.find, roomId);
     return this.http.post<Vote[]>(connectionUrl, {
       properties: {
         userId: userId
