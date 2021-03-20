@@ -13,10 +13,11 @@
                   answers: answersString
                 }) : ('answer.a11y-already-answered-text' | translate: {answer: answer.body}) }}</div>
             <span class="fill-remaining-space"></span>
-            <button id="go-to-stats" *ngIf="alreadySent && [ContentType.SLIDE, ContentType.FLASHCARD].indexOf(content.format) === -1" mat-icon-button
+            <button id="go-to-stats" *ngIf="alreadySent && (statsPublished || content.format === ContentType.TEXT)
+            && [ContentType.SLIDE, ContentType.FLASHCARD].indexOf(content.format) === -1" mat-icon-button
                     (click)="goToStats()" matTooltip="{{'answer.go-to-stats' | translate}}" aria-labelledby="flip-to-stats">
               <mat-icon class="corner-icon icon-secondary">
-                {{content.format === ContentType.FLASHCARD ? 'cached' : 'insert_chart' }}
+                insert_chart
               </mat-icon>
             </button>
           </div>
