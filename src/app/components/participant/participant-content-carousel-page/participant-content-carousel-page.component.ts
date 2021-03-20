@@ -46,7 +46,7 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
     PRE_START: 'PRE_START'
   };
   started: string;
-  answers: Answer[] = [];
+  answers: Answer[];
   currentStep = 0;
   isReloading = false;
   displaySnackBar = false;
@@ -103,21 +103,29 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
         this.changesSubscription = this.eventService.on('EntityChanged').subscribe(changes => {
           this.handleStateEvent(changes);
         });
-      });
+      },
+        error => {
+        this.finishLoading()
+        });
     });
   }
 
   getContents(lastContentIndex) {
+    this.contents = [];
     const publishedIds = this.contentgroupService.filterPublishedIds(this.contentGroup);
-    if (publishedIds.length > 0) {
+    if (publishedIds.length > 0 && this.contentGroup.published) {
       this.contentService.getContentsByIds(this.contentGroup.roomId, publishedIds).subscribe(contents => {
         this.contents = this.contentService.getSupportedContents(contents);
         this.getAnswers(lastContentIndex);
       });
     } else {
-      this.isLoading = false;
-      this.isReloading = false;
+      this.finishLoading();
     }
+  }
+
+  finishLoading() {
+    this.isLoading = false;
+    this.isReloading = false;
   }
 
   announce(key: string) {
@@ -194,6 +202,7 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
       this.answerService.getAnswersByUserIdContentIds(this.contentGroup.roomId, auth.userId, this.contents
         .map(c => c.id)).subscribe(answers => {
           let answersAdded = 0;
+          this.answers = [];
           for (const [index, content] of this.contents.entries()) {
             if (answersAdded < answers.length) {
               for (const answer of answers) {
@@ -205,12 +214,11 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
             }
             this.alreadySent.set(index, !!this.answers[index]);
           }
-          this.isReloading = false;
-          this.isLoading = false;
+          this.finishLoading();
           this.checkIfLastContentExists(lastContentIndex);
         },
         error => {
-          this.isLoading = false;
+          this.finishLoading();
           const msg = this.translateService.instant('answer.group-not-available');
           this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
         });
@@ -218,21 +226,24 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
   }
 
   handleStateEvent(changes) {
-    const changedEvent = new EntityChanged('ContentGroup', changes.entity, changes.changedProperties);
-    if (changedEvent.hasPropertyChanged('firstPublishedIndex') || changedEvent.hasPropertyChanged('lastPublishedIndex')) {
-      if (!this.displaySnackBar) {
-        this.displaySnackBar = true;
-        const contentsChangedMessage = this.translateService.instant('answer.state-changed');
-        const loadString = this.translateService.instant('answer.load');
-        this.notificationService.show(contentsChangedMessage, loadString, { duration: 5000 });
-        this.notificationService.snackRef.onAction().subscribe(() => {
-          this.displaySnackBar = false;
-          this.isReloading = true;
-          this.getContents(this.currentStep);
-        });
-        this.notificationService.snackRef.afterDismissed().subscribe(() => {
-          this.displaySnackBar = false;
-        })
+    if (changes.entity.id === this.contentGroup.id) {
+      const changedEvent = new EntityChanged('ContentGroup', changes.entity, changes.changedProperties);
+      if (changedEvent.hasPropertyChanged('firstPublishedIndex') || changedEvent.hasPropertyChanged('lastPublishedIndex')
+        || changedEvent.hasPropertyChanged('published')) {
+        if (!this.displaySnackBar) {
+          this.displaySnackBar = true;
+          const contentsChangedMessage = this.translateService.instant('answer.state-changed');
+          const loadString = this.translateService.instant('answer.load');
+          this.notificationService.show(contentsChangedMessage, loadString, { duration: 5000 });
+          this.notificationService.snackRef.onAction().subscribe(() => {
+            this.displaySnackBar = false;
+            this.isReloading = true;
+            this.getContents(this.currentStep);
+          });
+          this.notificationService.snackRef.afterDismissed().subscribe(() => {
+            this.displaySnackBar = false;
+          })
+        }
       }
     }
   }

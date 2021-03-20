@@ -7,7 +7,7 @@
          [attr.aria-label]="'sidebar.a11y-switch-to-feature' | translate : {feature: (('sidebar.' + barItem.name) | translate)}">
       <mat-icon class="clickable" matTooltip="{{ 'sidebar.' + barItem.name | translate}}">
         {{barItem.icon}}
-        <div [ngClass]="{'show-news': barItem.news}" class="badge"></div>
+        <div [ngClass]="{'show-news': barItem.changeIndicator}" class="badge"></div>
       </mat-icon>
       <p class="text">{{ 'sidebar.' + barItem.name | translate}}</p>
     </div>

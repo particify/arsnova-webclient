@@ -17,22 +17,22 @@ import { ContentGroupStatistics } from '../../../../models/content-group-statist
 export class NavBarItem extends BarItem {
 
   url: string;
-  news: boolean;
+  changeIndicator: boolean;
 
-  constructor(name: string, icon: string, url: string, news: boolean) {
+  constructor(name: string, icon: string, url: string, changeIndicator: boolean) {
     super(name, icon);
     this.url = url;
-    this.news = news;
+    this.changeIndicator = changeIndicator;
   }
 }
 
-export class News {
+export class ChangeIndicator {
   featureName: string;
-  news: boolean;
+  changes: boolean;
 
-  constructor(featureName: string, news: boolean) {
+  constructor(featureName: string, changes: boolean) {
     this.featureName = featureName;
-    this.news = news;
+    this.changes = changes;
   }
 }
 
@@ -83,7 +83,8 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
   roomId: string;
   changesSubscription: Subscription;
   groupSubscriptions: Subscription[];
-  news: News[];
+  feedbackSubscription: Subscription;
+  changeIndicator: ChangeIndicator[];
   contentGroups: ContentGroup[] = [];
   publishedStates: PublishedContentsState[] = [];
 
@@ -107,10 +108,13 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
         subscription.unsubscribe();
       }
     }
+    if (this.feedbackSubscription) {
+      this.feedbackSubscription.unsubscribe();
+    }
   }
 
   initItems() {
-    this.news = this.globalStorageService.getItem(STORAGE_KEYS.FEATURE_NEWS);
+    this.changeIndicator = this.globalStorageService.getItem(STORAGE_KEYS.FEATURE_NEWS);
     this.route.data.subscribe(data => {
       if (!data.room.settings['feedbackLocked']) {
         this.activeFeatures.push(FEATURES.SURVEY);
@@ -132,7 +136,7 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
             if (stats.groupStats) {
               this.groupName = stats.groupStats[0].groupName;
               this.setGroupInSessionStorage(this.groupName);
-              this.activeFeatures.push(FEATURES.GROUP);
+              this.activeFeatures.splice(1, 0, FEATURES.GROUP);
             } else {
               // Initialize storage item with empty string if there are no groups yet
               this.setGroupInSessionStorage('');
@@ -144,7 +148,7 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
           // Checking if storage item is initialized with data
           if (group !== '') {
             this.groupName = group;
-            this.activeFeatures.push(FEATURES.GROUP);
+            this.activeFeatures.splice(1, 0, FEATURES.GROUP);
           }
           this.getItems();
           this.roomService.getStats(data.room.id).subscribe(stats => {
@@ -165,10 +169,13 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
   }
 
   checkForFeedback() {
-    this.feedbackService.messageEvent.subscribe(message => {
+    this.feedbackSubscription = this.feedbackService.messageEvent.subscribe(message => {
       const type = JSON.parse(message.body).type;
       if (type === FeedbackMessageType.STARTED) {
         this.activeFeatures.push(FEATURES.SURVEY);
+        this.changeIndicator.push(
+          new ChangeIndicator(FEATURES.SURVEY, true)
+        );
         this.getItems();
         this.toggleNews(FEATURES.SURVEY);
       } else if (type === FeedbackMessageType.STOPPED) {
@@ -183,7 +190,7 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
 
   getItems() {
     this.barItems = [];
-    const news: News[] = [];
+    const changeIndicator: ChangeIndicator[] = [];
     for (const feature of this.features) {
       let url = this.getBaseUrl();
       if (feature.name !== FEATURES.MODERATION) {
@@ -203,9 +210,9 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
             feature.icon,
             url,
             false));
-        if (!this.news) {
-          news.push(
-            new News(
+        if (!this.changeIndicator) {
+          changeIndicator.push(
+            new ChangeIndicator(
               feature.name,
               false
             )
@@ -213,15 +220,15 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
         }
       }
     }
-    if (!this.news) {
-      this.news = news;
+    if (!this.changeIndicator) {
+      this.changeIndicator = changeIndicator;
     }
     if (this.barItems.length > 1) {
       const matchingRoutes = this.barItems.filter(s => this.router.url.includes(s.name !== FEATURES.GROUP ? s.url : '/group/'));
       if (matchingRoutes.length > 0) {
         this.currentRouteIndex = this.barItems.map(s => s.url).indexOf(matchingRoutes[0].url);
       }
-      this.news.map((n, index) => n.news = n.news && index !== this.currentRouteIndex);
+      this.changeIndicator.map((n, index) => n.changes = n.changes && index !== this.currentRouteIndex);
       this.updateNews();
       setTimeout(() => {
         this.toggleVisibility(false);
@@ -234,12 +241,12 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
   }
 
   updateNews() {
-    this.globalStorageService.setItem(STORAGE_KEYS.FEATURE_NEWS, this.news);
+    this.globalStorageService.setItem(STORAGE_KEYS.FEATURE_NEWS, this.changeIndicator);
     this.updateItemNews();
   }
 
   updateItemNews() {
-    this.barItems.map((b, index) => b.news = this.news[index].news);
+    this.barItems.map((b, index) => b.changeIndicator = this.changeIndicator[index].changes);
   }
 
   getBaseUrl(): string {
@@ -312,9 +319,11 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
     this.contentGroups = this.contentGroups.filter(cg => cg.published);
     if (this.contentGroups.length === 0) {
       const index = this.activeFeatures.indexOf(FEATURES.GROUP);
-      this.activeFeatures.splice(index, 1);
+      if (index !== this.currentRouteIndex) {
+        this.activeFeatures.splice(index, 1);
+        this.getItems();
+      }
       this.removeGroupInSessionStorage();
-      this.getItems();
       return false;
     } else {
       return true;
@@ -332,7 +341,7 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
     currentPublished.lastContentPublished = last;
   }
 
-  getBarIndexOfFeature(name: string) {
+  getBarIndexOfFeature(name: string): number {
     return this.barItems.map(b => b.name).indexOf(name);
   }
 
@@ -375,7 +384,7 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
   toggleNews(feature: string) {
     const featureIndex = this.getBarIndexOfFeature(feature);
     if (featureIndex !== this.currentRouteIndex) {
-      this.news[featureIndex].news = true;
+      this.changeIndicator[featureIndex].changes = true;
       this.updateNews();
     }
   }
@@ -408,6 +417,10 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
           this.setGroup();
         }
       } else {
+        if (this.getBarIndexOfFeature(FEATURES.GROUP) === -1) {
+          this.activeFeatures.splice(1, 0, FEATURES.GROUP);
+          this.getItems();
+        }
         this.toggleNews(FEATURES.GROUP);
       }
     }
