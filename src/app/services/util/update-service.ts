@@ -74,7 +74,7 @@ export class UpdateService {
         currentVersion?.id ?? '',
         environment.version.commitHash,
         importance);
-    this.eventService.broadcast(updateEvent);
+    this.eventService.broadcast(updateEvent.type, updateEvent.payload);
   }
 
   public handleUpdateConfirmed() {
