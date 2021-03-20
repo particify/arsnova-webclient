@@ -192,7 +192,7 @@
     "accept": "I agree to the ",
     "accept-2": ".",
     "terms": "terms of use",
-    "please-accept": "Du musst den Nutzungsbedingungen zustimmen um dich zu registieren.",
+    "please-accept": "You must agree to the terms of use to register.",
     "info": "Create your {{accountService}} account to save rooms permanently and manage them on multiple devices."
   },
   "room-list": {
