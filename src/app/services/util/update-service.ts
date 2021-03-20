@@ -67,13 +67,15 @@ export class UpdateService {
   }
 
   private handleUpdateReady(currentVersion: VersionInfo, latestVersion: VersionInfo, importance: UpdateImportance) {
+    const loadTime = window.performance?.now();
     this.globalStorageService.setItem(STORAGE_KEYS.UPDATED, true);
     const updateEvent = new UpdateInstalled(
         latestVersion?.id ?? '',
         latestVersion?.commitHash ?? '',
         currentVersion?.id ?? '',
         environment.version.commitHash,
-        importance);
+        importance,
+        loadTime);
     this.eventService.broadcast(updateEvent.type, updateEvent.payload);
   }
 
