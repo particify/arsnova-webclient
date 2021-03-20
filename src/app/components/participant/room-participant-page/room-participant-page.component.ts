@@ -23,6 +23,7 @@ import { UserRole } from '../../../models/user-roles.enum';
 import { FeedbackMessageType } from '../../../models/messages/feedback-message-type';
 import { FeedbackService } from '../../../services/http/feedback.service';
 import { ContentGroupService } from '../../../services/http/content-group.service';
+import { ContentGroup } from '../../../models/content-group';
 
 @Component({
   selector: 'app-room-participant-page',
@@ -134,5 +135,9 @@ export class RoomParticipantPageComponent extends RoomPageComponent implements O
     } else if (msg.type === FeedbackMessageType.STOPPED) {
       this.surveyEnabled = false;
     }
+  }
+
+  calcContentsInGroup(group: ContentGroup): number {
+    return this.contentGroupService.filterPublishedIds(group).length;
   }
 }
