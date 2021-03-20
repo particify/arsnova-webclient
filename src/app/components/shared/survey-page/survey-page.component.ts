@@ -109,8 +109,8 @@ export class SurveyPageComponent implements OnInit, OnDestroy, AfterContentInit 
     this.route.data.subscribe(data => {
       this.roomId = data.room.id;
       this.shortId = data.room.shortId;
-      this.loadConfig(data.room);
       this.isCreator = data.viewRole === UserRole.CREATOR;
+      this.loadConfig(data.room);
       this.feedbackService.startSub(data.room.id);
       this.sub = this.feedbackService.messageEvent.subscribe(message => {
         this.parseIncomingMessage(message);
@@ -157,7 +157,9 @@ export class SurveyPageComponent implements OnInit, OnDestroy, AfterContentInit 
     if (this.room.extensions && this.room.extensions.feedback && this.room.extensions.feedback['type']) {
       this.type = this.room.extensions.feedback['type'];
     } else {
-      this.roomService.changeFeedbackType(this.roomId, this.type);
+      if (this.isCreator) {
+        this.roomService.changeFeedbackType(this.roomId, this.type);
+      }
     }
     this.getLabels();
   }
