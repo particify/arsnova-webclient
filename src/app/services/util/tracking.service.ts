@@ -10,7 +10,6 @@ import { ThemeService } from '../../../theme/theme.service';
 import { UserRole } from '../../models/user-roles.enum';
 import { ClientAuthentication } from '../../models/client-authentication';
 import { Subscription, timer } from 'rxjs';
-import { UpdateInstalled } from '../../models/events/update-installed';
 import { environment } from '../../../environments/environment';
 
 const HEARTBEAT_INVERVAL = 150;
@@ -136,9 +135,9 @@ export class TrackingService {
       this.previousAuth = auth;
       this.firstAuth = false;
     });
-    this.eventService.on<UpdateInstalled>('UpdateInstalled')
-        .subscribe(e => this.addEvent(EventCategory.APP_UPDATE, `Update from ${e.payload.oldId}-${e.payload.oldHash} to`
-            + ` ${e.payload.newId}-${e.payload.newHash} (${e.payload.importance.toString().toLowerCase()})`));
+    this.eventService.on<any>('UpdateInstalled')
+        .subscribe(e => this.addEvent(EventCategory.APP_UPDATE, 'Update loading finished', `Update from ${e.oldId}-${e.oldHash} to`
+            + ` ${e.newId}-${e.newHash} (${e.importance.toString().toLowerCase()})`, e.loadTime));
     this.eventService.on<any>('HttpRequestFailed')
         .subscribe(e => this.addEvent(EventCategory.ERROR, 'HTTP request failed', `Status code ${e.status}`, undefined, e.url));
     this.eventService.on<any>('AccountCreated')

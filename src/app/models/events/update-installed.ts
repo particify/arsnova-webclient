@@ -8,16 +8,18 @@ export class UpdateInstalled {
     oldId: string;
     oldHash: string;
     importance: UpdateImportance;
+    loadTime: number;
   };
 
-  constructor(newId: string, newHash: string, oldId: string, oldHash: string, importance: UpdateImportance) {
+  constructor(newId: string, newHash: string, oldId: string, oldHash: string, importance: UpdateImportance, loadTime: number) {
     this.type = 'UpdateInstalled';
     this.payload = {
       newId: newId,
       newHash: newHash,
       oldId: oldId,
       oldHash: oldHash,
-      importance: importance
+      importance: importance,
+      loadTime: loadTime
     };
   }
 }
