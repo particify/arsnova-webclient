@@ -126,6 +126,13 @@ export class RoomParticipantPageComponent extends RoomPageComponent implements O
 
   afterGroupsLoadHook() {
     this.isLoading = false;
+    if (this.contentGroups.length > 0 && this.globalStorageService.getItem(STORAGE_KEYS.LAST_GROUP) === '') {
+      this.globalStorageService.setItem(STORAGE_KEYS.LAST_GROUP, this.contentGroups[0].name);
+    } else {
+      if (this.contentGroups.length === 0) {
+        this.globalStorageService.setItem(STORAGE_KEYS.LAST_GROUP, '');
+      }
+    }
   }
 
   parseFeedbackMessage(message: Message) {

@@ -39,7 +39,9 @@
     "show-back": "Umdrehen",
     "next-content": "Weiter",
     "first-content": "Zum Anfang",
-    "group-not-available": "Diese Sammlung ist nicht verfügbar"
+    "group-not-available": "Diese Sammlung ist nicht verfügbar",
+    "state-changed": "Die Fragenliste wurde aktualisiert.",
+    "load": "Laden"
   },
   "comment-list": {
     "a11y-search-list": "Durchsuche die Kommentare",

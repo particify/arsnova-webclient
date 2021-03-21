@@ -9,6 +9,8 @@
   width: 12px;
   border-radius: 6px;
   background-color: var(--warn);
+  transform: scale(0);
+  transition: all 200ms;
 }
 
 .clickable {
@@ -30,6 +32,10 @@
 
 .item {
   user-select: none;
+}
+
+.show-news {
+  transform: scale(1);
 }
 
 @keyframes active {
@@ -65,7 +71,10 @@
   .clickable {
     padding: 8px 16px;
   }
-;
+
+  .badge {
+    right: 9px;
+  }
 }
 
 @media(min-width: 1001px) {
@@ -79,6 +88,10 @@
 
   .list {
     box-shadow: 0 2px 1px -1px rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.14), 0 1px 3px 0 rgba(0, 0, 0, 0.12);
+  }
+
+  .badge {
+    right: 16px;
   }
 }
 
