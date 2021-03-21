@@ -6,6 +6,7 @@ import { StorageItemCategory } from '../../models/storage';
 import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
 import { AuthenticationService } from '../http/authentication.service';
 import { EventService } from './event.service';
+import { TITLES } from './routing.service';
 import { ThemeService } from '../../../theme/theme.service';
 import { UserRole } from '../../models/user-roles.enum';
 import { ClientAuthentication } from '../../models/client-authentication';
@@ -160,9 +161,10 @@ export class TrackingService {
 
   addRoute(uri: string, route?: ActivatedRouteSnapshot) {
     const titleMatches = document.title.match(/^(.+?)( [|–•].*)?$/);
-    const title = titleMatches ? titleMatches[1] : '';
+    let title = titleMatches ? titleMatches[1] : '';
     const dimensions = {};
     if (route) {
+      title = TITLES[route.routeConfig.path] ?? title;
       const shortId = route.paramMap.get('shortId');
       const role: UserRole = route.data.viewRole;
       if (role) {
