@@ -13,7 +13,7 @@
         <span class="fill-remaining-space"></span>
         <div fxLayoutGap="15px">
           <button *ngIf="creationMode" mat-raised-button class="button-abort" (click)="exitCreation()" aria-labelledby="cancel">
-            {{ 'content.cancel' | translate }}
+            {{ 'content.abort' | translate }}
           </button>
           <button mat-raised-button class="button-primary" (click)="createNewGroup()" aria-labelledby="create">
             {{ ( creationMode ? 'content.create' : 'content.create-group-with-archived-contents') | translate }}

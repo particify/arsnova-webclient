@@ -2,10 +2,6 @@
   width: 92%;
 }
 
-.mat-card-content > :first-child {
-  height: 64px;
-}
-
 .mat-list {
   background-color: var(--surface);
 }
@@ -15,49 +11,6 @@
   transition-property: background-color, color;
   transition-duration: 300ms;
   transition-timing-function: ease-in;
-}
-
-.actionButton {
-  width: 75%;
-  height: 75%;
-  margin: 5px;
-  transition: all 150ms;
-  color: var(--primary) !important;
-  &.mat-focus-indicator {
-    border-radius: 0;
-  }
-
-  &:hover {
-    transform: scale(1.05);
-  }
-}
-
-.actionIcon {
-  font-size: 40px;
-  height: 40px;
-  width: 40px;
-}
-
-
-.desktop {
-  font-size: 50px;
-  height: 50px;
-  width: 50px;
-}
-
-.button-text {
-  padding: 0;
-  margin: 3% 0;
-}
-
-@media (min-width: 500px) {
-  .button-text {
-    font-size: 18px;
-  }
-}
-
-.small-text {
-  font-size: 16px;
 }
 
 .moreButton {
@@ -74,35 +27,94 @@
 
 .cardTitle {
   margin-left: 16px;
-  width: 70%;
-  height: 70px;
+  min-width: 240px;
+  width: 50%;
+  align-items: center;
+}
+@media(min-width: 501px) {
+  .status-bar {
+    margin-right: 16px;
+  }
+}
+
+@media(max-width: 500px) {
+  .cardTitle {
+    margin: 0;
+  }
+
+  .status-bar {
+    margin: 0;
+  }
+
+  .settings-buttons {
+    margin-top: 10px;
+  }
+}
+
+.action-container {
+  min-height: 60px;
+  margin-bottom: 4px;
+}
+
+.status-bar {
+  opacity: 0.8;
+}
+
+.active {
+  animation: activate 400ms;
+  color: var(--green);
+}
+
+.inactive {
+  animation: disable 400ms;
+  color: var(--red);
+}
+
+@keyframes activate {
+  0% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(0.9);
+  }
+
+  80% {
+    transform: scale(1.2);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes disable {
+  0% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(0.9);
+  }
+
+  80% {
+    transform: scale(1.2);
+  }
+
+  100% {
+    transform: scale(1);
+  }
 }
 
 .activeInput {
   width: 100%;
   font-size: larger;
-}
-
-.inactiveInput {
-  height: 0;
-  width: 0;
-}
-
-.lock {
-  margin: 0 10px;
+  font-weight: 500;
 }
 
 .slide-text {
   font-size: 16px;
   text-align: center;
-}
-
-.mat-raised-button {
-  min-width: 120px;
-}
-
-.abort {
-  margin-right: 16px;
 }
 
 .lock-icon {
@@ -180,6 +192,9 @@
   cursor: initial;
 }
 
-h2 {
-  margin: 16px 0;
+.settings-button {
+  opacity: 0.7;
+  &:hover {
+    opacity: 1;
+  }
 }

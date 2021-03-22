@@ -1,5 +1,5 @@
 <app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
-<div fxFill fxLayout="column" fxLayoutAlign="center">
+<div fxFill fxLayout="column">
   <div *ngIf="!isLoading" fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="center">
     <div class="visually-hidden">
       <button id="message-button" tabIndex="-1" (click)="announce()">
@@ -9,82 +9,81 @@
     </div>
     <mat-card>
       <div fxLayout="row" fxLayoutAlign="space-between">
-        <div class="cardTitle">
-          <h2 *ngIf="!isInTitleEditMode">{{ collectionName }}</h2>
-          <mat-form-field *ngIf="isInTitleEditMode" [ngClass]="{'activeInput': isInTitleEditMode, 'inactiveInput': !isInTitleEditMode}">
-            <input id="nameInput" (focus)="eventService.makeFocusOnInputTrue()" (blur)="eventService.makeFocusOnInputFalse()"
-                   matInput maxlength="25" [(ngModel)]="updatedName" aria-labelledby="enter-content-group-name">
+        <div class="cardTitle" fxLayout="row" fxLayoutAlign="start center">
+          <mat-form-field class="activeInput no-field-hint" [ngClass]="{'hideEditing': !isInTitleEditMode && !inputFocus}" appearance="outline">
+            <input id="nameInput" (focus)="eventService.makeFocusOnInputTrue(); goInTitleEditMode()" (blur)="eventService.makeFocusOnInputFalse(); leaveTitleEditMode()"
+                   (mouseenter)="inputFocus = true" (mouseleave)="inputFocus = false"
+                   matInput maxlength="25" [(ngModel)]="updatedName" aria-labelledby="edit-content-group-name">
           </mat-form-field>
         </div>
-        <div fxLayout="column">
-          <div fxLayout="{{ isInTitleEditMode ? 'row' : 'column' }}">
-            <button *ngIf="!isInTitleEditMode" mat-icon-button (click)="goInTitleEditMode()" id="edit-group-name"
-                    matTooltip="{{ 'content.edit-content-group' | translate}}" aria-labelledby="edit-content-group-name">
-              <mat-icon class="corner-icon">edit</mat-icon>
-            </button>
-            <button *ngIf="isInTitleEditMode" mat-icon-button (keyup.enter)="saveGroupName()" (click)="saveGroupName()"
-                    matTooltip="{{ 'content.save-content-group' | translate}}" aria-labelledby="save-changes">
-              <mat-icon class="corner-icon">done</mat-icon>
-            </button>
-            <button *ngIf="isInTitleEditMode" mat-icon-button (click)="leaveTitleEditMode()"
-                      matTooltip="{{ 'content.abort' | translate}}" (keyup.enter)="leaveTitleEditMode()" aria-labelledby="discard-changes">
-              <mat-icon class="corner-icon">clear</mat-icon>
-            </button>
-          </div>
+        <div fxLayoutAlign="center center" fxLayoutGap="8px" class="status-bar">
+          <mat-icon class="status-icon" [ngClass]="{'active': statisticsPublished, 'inactive': !statisticsPublished}"
+                  [matTooltip]="('content.statistics-are' + (statisticsPublished ? '' : '-not') + '-published') | translate"
+                    aria-labelledby="{{ ('content.a11y-statistics-are' + statisticsPublished ? '' : '-not' + '-published') | translate }}">
+            bar_chart
+          </mat-icon>
+          <mat-icon class="status-icon" [ngClass]="{'active': correctOptionsPublished, 'inactive': !correctOptionsPublished}"
+                    [matTooltip]="('content.correct-options-are' + (correctOptionsPublished ? '' : '-not') + '-published') | translate"
+                    aria-labelledby="{{ ('content.a11y-correct-options-are' + correctOptionsPublished ? '' : '-not' + '-published') | translate }}">
+            done_all
+          </mat-icon>
         </div>
       </div>
-      <mat-grid-list cols="2" rowHeight="{{deviceWidth > 500 ? '5:2' : '3:2'}}" *ngIf="!isLoading">
-        <mat-grid-tile>
-          <button class="actionButton" mat-icon-button id="content-create-button"
-                  routerLink="/creator/room/{{ room.shortId }}/create-content" aria-labelledby="create-content">
-            <mat-icon class="actionIcon" [ngClass]="{'desktop' : deviceWidth > 500}">note_add</mat-icon>
-            <p class="button-text" [ngClass]="{'small-text': deviceWidth < 350}">
-              {{ 'room-page.create-content' | translate}}</p>
-          </button>
-        </mat-grid-tile>
-        <mat-grid-tile>
-          <button class="actionButton" mat-icon-button id="statistic-button" aria-labelledby="statistics"
-                  routerLink="/creator/room/{{ room.shortId }}/statistics">
-            <mat-icon class="actionIcon" [ngClass]="{'desktop' : deviceWidth > 500}">insert_chart</mat-icon>
-            <p class="button-text" [ngClass]="{'small-text': deviceWidth < 350}">
-              {{ 'room-page.answer-statistics' | translate}}</p>
-          </button>
-        </mat-grid-tile>
-      </mat-grid-list>
-      <mat-card-content fxLayout="column" fxLayoutGap="16px">
+      <mat-card-content fxLayout="column">
         <app-loading-indicator *ngIf="isLoading" [size]="50"></app-loading-indicator>
-        <div *ngIf="!isLoading" fxLayout="row" fxLayoutAlign="end center">
-          <button *ngIf="!isInSortingMode && deviceWidth <= 500" mat-icon-button class="editButtons"
-                  (click)="goInSortingMode()" id="edit-group-sort"
-                  matTooltip="{{ 'content.sort-content-group' | translate}}" aria-labelledby="edit-content-group-sort">
-            <mat-icon>swap_vert</mat-icon>
-          </button>
-          <button mat-button *ngIf="!isInSortingMode && deviceWidth > 500" (click)="goInSortingMode()"
-                  aria-labelledby="edit-content-group-sort">
-            <mat-icon>swap_vert</mat-icon>
-            {{ 'content.sort-content-group' | translate}}
-          </button>
-          <button *ngIf="isInSortingMode" mat-raised-button class="abort button-abort"
-                  (click)="leaveSortingMode(true)" (keyup.enter)="leaveTitleEditMode()" aria-labelledby="discard-changes">
-            {{ 'content.abort' | translate }}
-          </button>
-          <button *ngIf="isInSortingMode" mat-raised-button class="button-primary"
-                  (keyup.enter)="saveSorting()" (click)="saveSorting()" aria-labelledby="save-sort-changes">
-            {{ 'content.save-sort-content-group' | translate }}
-          </button>
-          <span class="fill-remaining-space"></span>
-          <p *ngIf="!isInSortingMode" class="slide-text">
-            {{ 'content.publish-statistics' | translate}}
-            <mat-slide-toggle id="direct-show-slide" class="lock" (change)="toggleStatisticsPublished()"
-                              [(ngModel)]="statisticsPublished" aria-labelledby="publish-statistics">
-            </mat-slide-toggle>
-          </p>
-          <p *ngIf="!isInSortingMode" class="slide-text">
-            {{ 'content.unlock-collection' | translate}}
-            <mat-slide-toggle id="lock-questions-slide" class="lock" (change)="publishContents()" [(ngModel)]="published"
-                              aria-labelledby="lock-questions">
-            </mat-slide-toggle>
-          </p>
+        <div *ngIf="!isLoading" fxLayout="row wrap" fxLayoutAlign="space-between center" class="action-container">
+          <div *ngIf="!isInSortingMode" fxLayout="row wrap" fxLayoutAlign="space-between center" fxLayoutGap="10px">
+            <button mat-raised-button  id="content-create-button" class="button-primary"
+                    aria-labelledby="create-content" routerLink="/creator/room/{{ room.shortId }}/create-content">
+              <mat-icon>add</mat-icon>
+              {{ 'room-page.create-content' | translate}}
+            </button>
+            <div class="settings-buttons">
+              <button mat-button id="statistic-button" class="settings-button"  aria-labelledby="statistics"
+                      routerLink="/creator/room/{{ room.shortId }}/statistics">
+                <mat-icon>insert_chart</mat-icon>
+                {{ 'room-page.answer-statistics' | translate }}
+              </button>
+              <button mat-button class="settings-button" [matMenuTriggerFor]="groupSettings">
+                <mat-icon>settings</mat-icon>
+                {{ 'content.group-settings' | translate}}
+              </button>
+            </div>
+            <mat-menu #groupSettings="matMenu">
+              <button mat-menu-item (click)="toggleStatisticsPublished()"
+                      aria-labelledby="publish-statistics">
+                <mat-icon>bar_chart</mat-icon>
+                {{ (statisticsPublished ? 'content.dont-publish-statistics' : 'content.publish-statistics') | translate }}
+              </button>
+              <button mat-menu-item (click)="toggleCorrectOptionsPublished()">
+                <mat-icon>done_all</mat-icon>
+                {{ (correctOptionsPublished ? 'content.dont-publish-correct-options' : 'content.publish-correct-options') | translate }}
+              </button>
+              <button mat-menu-item id="edit-group-sort" aria-labelledby="edit-content-group-sort"
+                      (click)="goInSortingMode()">
+                <mat-icon>swap_vert</mat-icon>
+                {{ 'content.sort-content-group' | translate }}
+              </button>
+            </mat-menu>
+          </div>
+          <div fxLayoutGap="10px">
+            <button *ngIf="isInSortingMode" mat-raised-button class="abort button-abort"
+                    (click)="leaveSortingMode(true)" (keyup.enter)="leaveTitleEditMode()" aria-labelledby="discard-changes">
+              {{ 'content.abort' | translate }}
+            </button>
+            <button *ngIf="isInSortingMode" mat-raised-button class="button-secondary"
+                    (keyup.enter)="saveSorting()" (click)="saveSorting()" aria-labelledby="save-sort-changes">
+              {{ 'content.save' | translate }}
+            </button>
+          </div>
+          <div fxLayoutAlign="center center" fxLayoutGap="16px">
+            <p *ngIf="!isInSortingMode" class="slide-text">
+              {{ 'content.unlock-collection' | translate}}
+              <mat-slide-toggle id="lock-questions-slide" (change)="publishContents()" [(ngModel)]="published"
+                                aria-labelledby="lock-questions">
+              </mat-slide-toggle>
+            </p>
+          </div>
         </div>
         <div>
           <div tabindex="-1" id="content-list" class="visually-hidden">
@@ -225,12 +224,8 @@
 </div>
 
 <div class="visually-hidden">
-  <div id="enter-content-group-name">{{ 'content.a11y-enter-content-group-name' | translate }}</div>
   <div id="edit-content-group-name">{{ 'content.a11y-edit-content-group-name' | translate }}</div>
-  <div id="discard-changes">{{ 'content.a11y-discard-changes' | translate }}</div>
-  <div id="save-changes">{{ 'content.a11y-save-changes' | translate }}</div>
   <div id="create-content">{{ 'content.a11y-create-content' | translate }}</div>
-  <div id="present-contents">{{ 'content.a11y-present-contents' | translate }}</div>
   <div id="statistics">{{ 'content.a11y-nav-to-stats' | translate }}</div>
   <div id="publish-statistics">{{ (statisticsPublished ? 'content.a11y-dont-publish-statistics' : 'content.a11y-publish-statistics') | translate }}</div>
   <div id="lock-questions">{{ (published ? 'content.a11y-lock-collection' : 'content.a11y-unlock-collection') | translate }}</div>

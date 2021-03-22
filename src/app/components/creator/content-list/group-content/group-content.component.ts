@@ -28,11 +28,13 @@ export class GroupContentComponent extends ContentListBaseComponent implements O
 
   collectionName: string;
   isInTitleEditMode = false;
+  inputFocus = false;
   isInSortingMode = false;
   updatedName: string;
   baseURL = 'creator/room';
   published = false;
   statisticsPublished = true;
+  correctOptionsPublished = true;
   firstPublishedIndex = 0;
   lastPublishedIndex = -1;
   lastPublishedIndexBackup = -1;
@@ -92,6 +94,7 @@ export class GroupContentComponent extends ContentListBaseComponent implements O
         this.globalStorageService.setItem(STORAGE_KEYS.LAST_GROUP, this.collectionName);
         this.contentGroupService.getByRoomIdAndName(this.room.id, this.collectionName).subscribe(group => {
           this.contentGroup = group;
+          this.updatedName = this.contentGroup.name;
           this.setRange();
           this.contentService.getContentsByIds(this.contentGroup.roomId, this.contentGroup.contentIds, true)
             .subscribe(contents => {
@@ -106,6 +109,7 @@ export class GroupContentComponent extends ContentListBaseComponent implements O
   setSettings() {
     this.published = this.contentGroup.published;
     this.statisticsPublished = this.contentGroup.statisticsPublished;
+    this.correctOptionsPublished = this.contentGroup.correctOptionsPublished;
   }
 
   goToEdit(content: Content) {
@@ -125,13 +129,10 @@ export class GroupContentComponent extends ContentListBaseComponent implements O
 
   }
 
-  leaveTitleEditMode(saved?: boolean): void {
+  leaveTitleEditMode(): void {
     this.isInTitleEditMode = false;
     this.eventService.focusOnInput = false;
-    if (!saved) {
-      const msg = this.translateService.instant('content.not-updated-content-group');
-      this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
-    }
+    this.saveGroupName();
   }
 
   updateURL(): void {
@@ -152,7 +153,6 @@ export class GroupContentComponent extends ContentListBaseComponent implements O
           this.updateURL();
         });
     }
-    this.leaveTitleEditMode(true);
   }
 
   createCopy() {
@@ -289,6 +289,14 @@ export class GroupContentComponent extends ContentListBaseComponent implements O
     this.updateContentGroup(changes).subscribe(updatedContentGroup => {
       this.contentGroup = updatedContentGroup;
       this.statisticsPublished = this.contentGroup.statisticsPublished;
+    });
+  }
+
+  toggleCorrectOptionsPublished() {
+    const changes: { correctOptionsPublished: boolean } = { correctOptionsPublished: !this.contentGroup.correctOptionsPublished };
+    this.updateContentGroup(changes).subscribe(updatedContentGroup => {
+      this.contentGroup = updatedContentGroup;
+      this.correctOptionsPublished = this.contentGroup.correctOptionsPublished;
     });
   }
 
