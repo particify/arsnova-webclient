@@ -342,9 +342,12 @@
     "moderation": "Moderation",
     "presentation": "Present questions",
     "content-creation": "Create question",
+    "content-edit": "Edit question",
     "live-survey": "Live-Survey",
     "statistics": "Statistics",
     "settings": "Settings",
-    "archive": "Archived questions"
+    "archive": "Archived questions",
+    "import": "Import rooms",
+    "admin": "Administration"
   }
 }

@@ -342,9 +342,12 @@
     "moderation": "Moderation",
     "presentation": "Fragen präsentieren",
     "content-creation": "Frage erstellen",
+    "content-edit": "Frage bearbeiten",
     "live-survey": "Live-Umfrage",
     "statistics": "Statistiken",
     "settings": "Einstellungen",
-    "archive": "Archivierte Fragen"
+    "archive": "Archivierte Fragen",
+    "import": "Räume importieren",
+    "admin": "Administration"
   }
 }
