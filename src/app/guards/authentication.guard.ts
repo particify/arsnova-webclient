@@ -86,14 +86,14 @@ export class AuthenticationGuard implements CanActivate {
     this.translateService.get('errors.not-authorized').subscribe(msg => {
       this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
     });
-    this.router.navigate(['/']);
+    this.router.navigateByUrl('');
   }
 
   handleRoomNotFound() {
     this.translateService.get('errors.room-not-found').subscribe(msg => {
       this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.FAILED);
       if (this.router.url !== '/user') {
-        this.router.navigate(['/home']);
+        this.router.navigateByUrl('home');
       }
     });
   }

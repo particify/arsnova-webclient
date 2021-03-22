@@ -60,7 +60,7 @@ export class RoomCreateComponent implements OnInit {
     this.auth = auth;
     if (!this.canCreateRoom(auth)) {
       this.dialogRef.close();
-      this.router.navigate(['login']);
+      this.router.navigateByUrl('login');
     }
   }
 
@@ -109,7 +109,7 @@ export class RoomCreateComponent implements OnInit {
       this.notification.showAdvanced(msg1 + longRoomName + msg2, AdvancedSnackBarTypes.SUCCESS);
       const event = new RoomCreated(room.id, room.shortId);
       this.eventService.broadcast(event.type, event.payload);
-      this.router.navigate([`/creator/room/${this.room.shortId}`]);
+      this.router.navigate(['creator', 'room', this.room.shortId]);
       this.closeDialog();
     });
   }

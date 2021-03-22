@@ -180,11 +180,11 @@ export class HeaderComponent implements OnInit {
   }
 
   navToLogin() {
-    this.router.navigate(['login']);
+    this.router.navigateByUrl('login');
   }
 
   navToHome() {
-    this.router.navigate(['/']);
+    this.router.navigateByUrl('home');
   }
 
   deleteAccount(id: string) {

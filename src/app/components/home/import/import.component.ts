@@ -37,7 +37,7 @@ export class ImportComponent implements OnInit, AfterContentInit {
 
   navToLogin() {
     this.routingService.setRedirect();
-    this.router.navigate(['login']);
+    this.router.navigateByUrl('login');
   }
 
   onFileChanged(event) {
@@ -65,7 +65,7 @@ export class ImportComponent implements OnInit, AfterContentInit {
           this.notificationService.showAdvanced(msg1 + room.name + msg2, AdvancedSnackBarTypes.SUCCESS);
         });
       });
-      this.router.navigate([`creator/room/${room.shortId}`]);
+      this.router.navigate(['creator', 'room', room.shortId]);
     },
         error => {
       this.translateService.get('import.error').subscribe(msg => {

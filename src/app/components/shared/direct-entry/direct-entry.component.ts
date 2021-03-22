@@ -20,14 +20,14 @@ export class DirectEntryComponent {
       const shortId = params['shortId'];
       this.roomService.getRoomByShortId(shortId).subscribe(room => {
         if (room) {
-          this.router.navigate(['/participant/room/' + shortId]);
+          this.router.navigate(['participant', 'room', shortId]);
         }
         },
         error => {
           this.translateService.get('errors.room-not-found').subscribe(msg => {
             this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
           });
-          this.router.navigate(['/home']);
+          this.router.navigateByUrl('home');
         });
     });
   }

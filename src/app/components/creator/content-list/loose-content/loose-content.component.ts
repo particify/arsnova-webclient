@@ -70,8 +70,7 @@ export class LooseContentComponent extends ContentListBaseComponent implements O
   }
 
   goToEdit(content: Content) {
-    const url = `creator/room/${this.room.shortId}/group/archive/edit/${content.id}`;
-    this.router.navigate([url]);
+    this.router.navigate(['creator', 'room', this.room.shortId, 'group', 'archive', 'edit', content.id]);
   }
 
   createNewGroup() {
@@ -116,7 +115,7 @@ export class LooseContentComponent extends ContentListBaseComponent implements O
   }
 
   updateURL(name: string): void {
-    this.router.navigate([`${this.baseURL}${this.room.shortId}/group/${name}`]);
+    this.router.navigate([this.baseURL, this.room.shortId, 'group', name]);
   }
 
 

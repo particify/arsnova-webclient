@@ -30,7 +30,7 @@ export class GroupContentComponent extends ContentListBaseComponent implements O
   isInTitleEditMode = false;
   isInSortingMode = false;
   updatedName: string;
-  baseURL = 'creator/room/';
+  baseURL = 'creator/room';
   published = false;
   statisticsPublished = true;
   firstPublishedIndex = 0;
@@ -109,8 +109,7 @@ export class GroupContentComponent extends ContentListBaseComponent implements O
   }
 
   goToEdit(content: Content) {
-    const url = `creator/room/${this.room.shortId}/group/${this.contentGroup.name}/edit/${content.id}`;
-    this.router.navigate([url]);
+    this.router.navigate(['creator', 'room', this.room.shortId, 'group', this.contentGroup.name, 'edit', content.id]);
   }
 
   announce() {
@@ -136,7 +135,8 @@ export class GroupContentComponent extends ContentListBaseComponent implements O
   }
 
   updateURL(): void {
-    this.location.replaceState(`${this.baseURL}${this.room.shortId}/group/${this.collectionName}`);
+    const urlTree = this.router.createUrlTree([this.baseURL, this.room.shortId, 'group', this.collectionName]);
+    this.location.replaceState(this.router.serializeUrl(urlTree));
   }
 
   saveGroupName(): void {
@@ -361,7 +361,7 @@ export class GroupContentComponent extends ContentListBaseComponent implements O
     const index = this.contents.filter(c => this.contentTypes.indexOf(c.format) > -1).
     map(co => co.id).indexOf(content.id);
     if (index > -1) {
-      this.router.navigate([`/creator/room/${this.room.shortId}/group/${this.contentGroup.name}/statistics/${index + 1}`]);
+      this.router.navigate(['creator', 'room', this.room.shortId, 'group', this.contentGroup.name, 'statistics', index + 1]);
     }
   }
 

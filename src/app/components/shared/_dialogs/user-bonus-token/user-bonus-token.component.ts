@@ -41,8 +41,7 @@ export class UserBonusTokenComponent implements OnInit {
 
   navToComment(index: number) {
     this.dialogRef.close();
-    const commentURL = `participant/room/${this.bonusTokensMixin[index].roomShortId}/comment/${this.bonusTokens[index].commentId}`;
-    this.router.navigate([commentURL]);
+    this.router.navigate(['participant', 'room', this.bonusTokensMixin[index].roomShortId, 'comment', this.bonusTokens[index].commentId]);
   }
 
   closeDialog(): void {

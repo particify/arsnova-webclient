@@ -56,7 +56,7 @@ export class PasswordResetComponent implements OnInit {
           this.translationService.get('password-reset.new-password-successful').subscribe(message => {
             this.notificationService.showAdvanced(message, AdvancedSnackBarTypes.SUCCESS);
           });
-          this.router.navigate(['login'], { state: { data: { username: this.email, password: password } } });
+          this.router.navigateByUrl('login', { state: { data: { username: this.email, password: password } } });
         });
       } else {
         this.translationService.get('login.inputs-incorrect').subscribe(message => {
