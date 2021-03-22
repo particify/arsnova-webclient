@@ -19,13 +19,14 @@ export const TITLES: { [key: string]: string } = {
   survey: 'live-survey',
   statistics: 'statistics',
   'group/:contentGroup/statistics': 'presentation',
+  'group/:contentGroup/statistics/:contentIndex': 'presentation',
+  'group/:contentGroup': 'content-group',
+  'group/:contentGroup/:contentIndex': 'content-group',
+  'group/:contentGroup/edit/:contentId': 'content-edit',
   'create-content': 'content-creation',
   settings: 'settings',
-  edit: 'content-edit',
-  group: 'content-group',
   archive: 'archive',
-  'group/:contentGroup': 'content-group',
-  'group/:contentGroup/statistics/:contentIndex': 'content-group'
+  admin: 'admin'
 };
 
 @Injectable({
