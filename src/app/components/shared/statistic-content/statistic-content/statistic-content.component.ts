@@ -25,6 +25,7 @@ export class StatisticContentComponent implements OnInit {
   @Input() directShow: boolean;
   @Input() active: boolean;
   @Input() index: number;
+  @Input() correctOptionsPublished: boolean;
 
   attachmentData: any;
   answersVisible = false;

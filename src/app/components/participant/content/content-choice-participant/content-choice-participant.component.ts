@@ -35,6 +35,7 @@ export class ContentChoiceParticipantComponent extends ContentParticipantBaseCom
   @Input() alreadySent: boolean;
   @Input() sendEvent: EventEmitter<string>;
   @Input() statsPublished: boolean;
+  @Input() correctOptionsPublished: boolean;
   @Output() answerChanged = new EventEmitter<ChoiceAnswer>();
 
   isLoading = true;
@@ -78,23 +79,29 @@ export class ContentChoiceParticipantComponent extends ContentParticipantBaseCom
         }
       }
       if (this.answer.selectedChoiceIndexes) {
-        this.contentService.getCorrectChoiceIndexes(this.content.roomId, this.content.id).subscribe(correctOptions => {
-          this.correctOptionIndexes = correctOptions;
-          (this.content as ContentChoice).correctOptionIndexes = this.correctOptionIndexes;
-          this.getCorrectAnswer();
-          if (this.isChoice) {
-            this.checkAnswer(this.answer.selectedChoiceIndexes);
-            this.isLoading = false;
-          } else {
-            this.isLoading = false;
-          }
-        });
+        this.getCorrectAnswerOptions();
       } else {
         this.hasAbstained = true;
         this.isLoading = false;
       }
     } else {
       this.isLoading = false;
+    }
+  }
+
+  getCorrectAnswerOptions() {
+    if (this.correctOptionsPublished) {
+      this.contentService.getCorrectChoiceIndexes(this.content.roomId, this.content.id).subscribe(correctOptions => {
+        this.correctOptionIndexes = correctOptions;
+        (this.content as ContentChoice).correctOptionIndexes = this.correctOptionIndexes;
+        this.getCorrectAnswer();
+        if (this.isChoice) {
+          this.checkAnswer(this.answer.selectedChoiceIndexes);
+          this.isLoading = false;
+        } else {
+          this.isLoading = false;
+        }
+      });
     }
   }
 
@@ -171,16 +178,8 @@ export class ContentChoiceParticipantComponent extends ContentParticipantBaseCom
       creationTimestamp: null,
       format: ContentType.CHOICE
     } as ChoiceAnswer).subscribe(answer => {
-      if (this.isChoice) {
-        this.contentService.getCorrectChoiceIndexes(this.content.roomId, this.content.id).subscribe(correctOptions => {
-          this.correctOptionIndexes = correctOptions;
-          (this.content as ContentChoice).correctOptionIndexes = correctOptions;
-          if (this.statsPublished) {
-            this.checkIfCorrectAnswer();
-            this.checkAnswer(selectedAnswers);
-          }
-        });
-      }
+      this.answer = answer;
+      this.getCorrectAnswerOptions();
       this.translateService.get('answer.sent').subscribe(msg => {
         this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.SUCCESS);
       });
