@@ -181,19 +181,14 @@ export class StatisticChoiceComponent extends StatisticContentBaseComponent impl
 
   updateData(stats: AnswerStatistics) {
     this.data = stats.roundStatistics[0].independentCounts;
-    let abstentionCount;
+    let abstentionCount = 0;
     if (this.content.abstentionsAllowed) {
       abstentionCount = stats.roundStatistics[0].abstentionCount;
       this.data.push(abstentionCount);
     }
-    let listToCount: number[];
-    const combinedCount = stats.roundStatistics[0].combinatedCounts?.map(a => a.count);
-    if (combinedCount) {
-      listToCount = combinedCount;
-    } else {
-      listToCount = this.data;
-    }
-    this.updateCounter(listToCount, abstentionCount);
+    const listToCount = stats.roundStatistics[0].combinatedCounts?.map(a => a.count) || [];
+    listToCount.push(abstentionCount);
+    this.updateCounter(listToCount);
   }
 
   updateChart() {

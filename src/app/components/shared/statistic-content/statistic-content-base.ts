@@ -54,12 +54,9 @@ export abstract class StatisticContentBaseComponent implements OnInit {
   updateData(stats: AnswerStatistics) {
   }
 
-  updateCounter(list: number[], additionalCounts?: number) {
+  updateCounter(list: number[]) {
     if (list.length > 0) {
       this.answerCount = list.reduce((a, b) => a + b);
-    }
-    if (additionalCounts) {
-      this.answerCount += additionalCounts;
     }
     this.updateCounterEvent.emit(this.answerCount);
   }

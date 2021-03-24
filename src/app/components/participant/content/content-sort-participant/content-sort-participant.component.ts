@@ -49,13 +49,22 @@ export class ContentSortParticipantComponent extends ContentParticipantBaseCompo
 
   initAnswer(userId: string) {
       if (this.answer) {
-        this.setSortOfAnswer(this.answer.selectedChoiceIndexes);
-        this.checkIfCorrect();
         this.alreadySent = true;
+        if (this.answer.selectedChoiceIndexes) {
+          this.setSortOfAnswer(this.answer.selectedChoiceIndexes);
+          this.checkIfCorrect();
+        } else {
+          this.hasAbstained = true;
+          this.initAnswers();
+        }
       } else {
-        this.answerOptions = this.shuffleAnswerOptions(JSON.parse(JSON.stringify(this.content.options)));
-        this.isLoading = false;
+        this.initAnswers();
       }
+  }
+
+  initAnswers() {
+    this.answerOptions = this.shuffleAnswerOptions(JSON.parse(JSON.stringify(this.content.options)));
+    this.isLoading = false;
   }
 
   checkIfCorrect() {
