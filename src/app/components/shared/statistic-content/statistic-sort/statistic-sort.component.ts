@@ -81,11 +81,12 @@ export class StatisticSortComponent extends StatisticContentBaseComponent implem
   }
 
   updateData(stats: AnswerStatistics) {
-    if (stats.roundStatistics[0].combinatedCounts) {
+    const roundStatistics = stats.roundStatistics[0];
+    if (roundStatistics.combinatedCounts || roundStatistics.abstentionCount) {
       this.data = [];
       this.labels = [];
       this.answerIndexes = [];
-      const combinedCounts = this.checkIfTooMany(stats.roundStatistics[0].combinatedCounts);
+      const combinedCounts = this.checkIfTooMany(roundStatistics.combinatedCounts ?? []);
       this.data.push(
         {
           data: combinedCounts.map(c => c.count),
@@ -94,7 +95,7 @@ export class StatisticSortComponent extends StatisticContentBaseComponent implem
       );
       let abstentionCount = 0;
       if (this.content.abstentionsAllowed) {
-        abstentionCount = stats.roundStatistics[0].abstentionCount;
+        abstentionCount = roundStatistics.abstentionCount;
         this.data[0].data.push(abstentionCount);
       }
       this.answerIndexes = combinedCounts.map(c => c.selectedChoiceIndexes);
@@ -110,7 +111,10 @@ export class StatisticSortComponent extends StatisticContentBaseComponent implem
           this.labels.push(label);
         });
       }
-      this.updateCounter(combinedCounts.map(c => c.count), abstentionCount);
+      const listToCount = combinedCounts.map(c => c.count);
+      listToCount.push(abstentionCount);
+      this.updateCounter(listToCount);
+      this.setColors();
     } else {
       this.updateCounter([0]);
     }
@@ -157,8 +161,20 @@ export class StatisticSortComponent extends StatisticContentBaseComponent implem
     return toCheck === correct;
   }
 
-  initChart() {
+  setColors() {
     const length = this.answerIndexes.length;
+    for (let i = 0; i < length; i++) {
+      this.colors[i] = this.blue;
+      this.indicationColors[i] = this.checkIfCorrect(i) ? this.green : this.blue;
+
+    }
+    if (this.content.abstentionsAllowed) {
+      this.colors.splice(length, 1, this.grey);
+      this.indicationColors.splice(length, 1, this.grey);
+    }
+  }
+
+  initChart() {
     this.themeService.getTheme().pipe(takeUntil(this.destroyed$)).subscribe(theme => {
       const currentTheme = this.themeService.getThemeByKey(theme);
       this.onSurface = currentTheme.get('on-surface').color;
@@ -166,15 +182,7 @@ export class StatisticSortComponent extends StatisticContentBaseComponent implem
       this.green = currentTheme.get('green').color;
       this.grey = currentTheme.get('grey').color;
       this.blue = currentTheme.get('blue').color;
-      for (let i = 0; i < length; i++) {
-        this.colors[i] = this.blue;
-        this.indicationColors[i] = this.checkIfCorrect(i) ? this.green : this.blue;
-
-      }
-      if (this.content.abstentionsAllowed) {
-        this.colors.push(this.grey);
-        this.indicationColors.push(this.grey);
-      }
+      this.setColors();
     });
   }
 
