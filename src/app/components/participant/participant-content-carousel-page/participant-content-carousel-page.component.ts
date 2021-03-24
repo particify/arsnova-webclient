@@ -100,13 +100,13 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
       this.contentgroupService.getByRoomIdAndName(data.room.id, this.contentGroupName).subscribe(contentGroup => {
         this.contentGroup = contentGroup;
         this.getContents(lastContentIndex);
-        this.changesSubscription = this.eventService.on('EntityChanged').subscribe(changes => {
-          this.handleStateEvent(changes);
-        });
       },
         error => {
         this.finishLoading()
         });
+    });
+    this.changesSubscription = this.eventService.on('EntityChanged').subscribe(changes => {
+      this.handleStateEvent(changes);
     });
   }
 
@@ -148,9 +148,10 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
     this.started = this.status.NORMAL;
   }
 
-  updateURL(index: number) {
-    this.currentStep = index;
-    this.location.replaceState(`participant/room/${this.shortId}/group/${this.contentGroup.name}/${index + 1}`);
+  updateURL(index?: number) {
+    this.currentStep = index || 0;
+    const indexExtension = index ? '/' + (index + 1) : '';
+    this.location.replaceState(`participant/room/${this.shortId}/group/${this.contentGroup.name}${indexExtension}`);
   }
 
   getFirstUnansweredContent() {
@@ -227,6 +228,7 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
 
   handleStateEvent(changes) {
     if (changes.entity.id === this.contentGroup.id) {
+      this.contentGroup = changes.entity;
       const changedEvent = new EntityChanged('ContentGroup', changes.entity, changes.changedProperties);
       if (changedEvent.hasPropertyChanged('firstPublishedIndex') || changedEvent.hasPropertyChanged('lastPublishedIndex')
         || changedEvent.hasPropertyChanged('published')) {
@@ -237,6 +239,7 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
           this.notificationService.show(contentsChangedMessage, loadString, { duration: 5000 });
           this.notificationService.snackRef.onAction().subscribe(() => {
             this.displaySnackBar = false;
+            this.updateURL();
             this.isReloading = true;
             this.getContents(this.currentStep);
           });
