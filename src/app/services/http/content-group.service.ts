@@ -122,8 +122,12 @@ export class ContentGroupService extends AbstractEntityService<ContentGroup> {
 
   isContentPublished(contentGroup: ContentGroup, contentId: string) {
     const i = contentGroup.contentIds.indexOf(contentId);
-		return i > -1 && contentGroup.firstPublishedIndex > -1 && i >= contentGroup.firstPublishedIndex
-				&& (contentGroup.lastPublishedIndex == -1 || i <= contentGroup.lastPublishedIndex);
+		return this.isIndexPublished(contentGroup.firstPublishedIndex, contentGroup.lastPublishedIndex, i);
+  }
+
+  isIndexPublished(firstIndex: number, lastIndex: number, contentIndex): boolean {
+    return contentIndex > -1 && firstIndex > -1 && contentIndex >= firstIndex
+      && (lastIndex === -1 || contentIndex <= lastIndex);
   }
 
   filterPublishedIds(contentGroup: ContentGroup): string[] {

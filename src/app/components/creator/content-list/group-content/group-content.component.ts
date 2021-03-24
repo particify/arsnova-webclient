@@ -219,7 +219,7 @@ export class GroupContentComponent extends ContentListBaseComponent implements O
       } else {
         if (index === this.firstPublishedIndex) {
           this.updatePublishedIndexes(index + 1, this.lastPublishedIndex);
-        } else if (index === this.lastPublishedIndex) {
+        } else if (this.isEnd(index)) {
           this.updatePublishedIndexes(this.firstPublishedIndex, index - 1);
         }
       }
@@ -401,17 +401,10 @@ export class GroupContentComponent extends ContentListBaseComponent implements O
   }
 
   isEnd(index: number): boolean {
-    return index === this.lastPublishedIndex;
+    return index === this.lastPublishedIndex || (this.lastPublishedIndex === -1 && index === this.contents.length -1);
   }
 
   isPublished(index: number): boolean {
-    if (this.lastPublishedIndex === -1 && this.firstPublishedIndex > -1) {
-      return true;
-    } else {
-      if (this.firstPublishedIndex === -1) {
-        return false;
-      }
-      return ((this.firstPublishedIndex <= index) && (index <= this.lastPublishedIndex));
-    }
+    return this.contentGroupService.isIndexPublished(this.firstPublishedIndex, this.lastPublishedIndex, index);
   }
 }
