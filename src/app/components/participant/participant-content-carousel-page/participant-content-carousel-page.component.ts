@@ -5,7 +5,7 @@ import { Content } from '../../../models/content';
 import { ContentGroup } from '../../../models/content-group';
 import { TranslateService } from '@ngx-translate/core';
 import { StepperComponent } from '../../shared/stepper/stepper.component';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { RoomService } from '../../../services/http/room.service';
 import { KeyboardUtils } from '../../../utils/keyboard';
 import { KeyboardKey } from '../../../utils/keyboard/keys';
@@ -65,7 +65,8 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
     private authenticationService: AuthenticationService,
     private routingService: RoutingService,
     private notificationService: NotificationService,
-    private eventService: EventService
+    private eventService: EventService,
+    private router: Router
   ) {
   }
 
@@ -151,7 +152,8 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
   updateURL(index?: number) {
     this.currentStep = index || 0;
     const indexExtension = index ? '/' + (index + 1) : '';
-    this.location.replaceState(`participant/room/${this.shortId}/group/${this.contentGroup.name}${indexExtension}`);
+    const urlTree = this.router.createUrlTree(['participant/room', this.shortId, 'group', this.contentGroupName, indexExtension]);
+    this.location.replaceState(this.router.serializeUrl(urlTree));
   }
 
   getFirstUnansweredContent() {

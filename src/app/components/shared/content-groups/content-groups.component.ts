@@ -38,11 +38,11 @@ export class ContentGroupsComponent implements OnInit {
       } else {
         role = UserRole.PARTICIPANT.toLowerCase();
       }
-      this.router.navigate([`${role}/room/${this.roomShortId}/group/${this.contentGroupName}`]);
+      this.router.navigate([role, 'room', this.roomShortId, 'group',this.contentGroupName]);
       this.globalStorageService.setItem(STORAGE_KEYS.LAST_GROUP, this.contentGroupName);
     } else {
       if (this.role === UserRole.CREATOR) {
-        this.router.navigate([`creator/room/${this.roomShortId}/archive`]);
+        this.router.navigate(['creator', 'room', this.roomShortId, 'archive']);
       }
     }
   }

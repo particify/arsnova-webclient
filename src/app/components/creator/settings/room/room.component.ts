@@ -65,7 +65,7 @@ export class RoomComponent implements OnInit {
       });
       const event = new RoomDeleted(room.id);
       this.eventService.broadcast(event.type, event.payload);
-      this.router.navigate([`/user`]);
+      this.router.navigateByUrl('user');
     });
   }
 

@@ -43,7 +43,7 @@ export class AuthenticationInterceptor implements HttpInterceptor {
         if (err instanceof HttpErrorResponse && err.status === 401 && !tokenOverride) {
           this.authenticationService.logout();
           this.routingService.setRedirect();
-          this.router.navigate(['login']);
+          this.router.navigateByUrl('login');
           this.translateService.get('login.authentication-expired').subscribe(msg => {
             this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
           });

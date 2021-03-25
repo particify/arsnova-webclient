@@ -63,7 +63,7 @@ export class LoginComponent implements AfterContentInit, OnChanges, OnInit {
   ngAfterContentInit() {
     this.authenticationService.getCurrentAuthentication().subscribe(auth => {
       if (this.authenticationService.isLoggedIn() && auth.authProvider !== AuthProvider.ARSNOVA_GUEST) {
-        this.router.navigate(['user']);
+        this.router.navigateByUrl('user');
       } else {
         this.usernamePasswordProviders = this.authProviders.filter((p) => p.type === AuthenticationProviderType.USERNAME_PASSWORD);
         if (this.usernamePasswordProviders.length > 0) {
@@ -162,7 +162,7 @@ export class LoginComponent implements AfterContentInit, OnChanges, OnInit {
       this.dialog.closeAll();
       if (this.isStandard) {
         if (!this.routingService.redirect()) {
-          this.router.navigate(['user']);
+          this.router.navigateByUrl('user');
         }
       }
     } else if (result.status === AuthenticationStatus.ACTIVATION_PENDING) {
@@ -185,10 +185,10 @@ export class LoginComponent implements AfterContentInit, OnChanges, OnInit {
         }
       };
     }
-    this.router.navigate(['request-password-reset'], state);
+    this.router.navigateByUrl('request-password-reset', state);
   }
 
   openRegisterDialog(): void {
-    this.router.navigate(['register']);
+    this.router.navigateByUrl('register');
   }
 }

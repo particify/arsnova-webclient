@@ -262,9 +262,18 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
   }
 
   navToUrl(index: number) {
-    const url = this.barItems[index].url;
+    const item = this.barItems[index];
+    const url = item.url;
     if (url) {
-      this.router.navigate([url]);
+      if (item.name === FEATURES.GROUP) {
+        const route = [this.routingService.getRoleString(this.role), 'room', this.shortId, 'group', this.groupName];
+        if (this.role === UserRole.CREATOR) {
+          route.push('statistics');
+        }
+        this.router.navigate(route);
+      } else {
+        this.router.navigateByUrl(url);
+      }
     }
   }
 

@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ContentService } from '../../../services/http/content.service';
 import { TranslateService } from '@ngx-translate/core';
 import { LanguageService } from '../../../services/util/language.service';
@@ -35,7 +35,8 @@ export class ContentPresentationComponent implements OnInit {
     private translateService: TranslateService,
     protected langService: LanguageService,
     private globalStorageService: GlobalStorageService,
-    private location: Location
+    private location: Location,
+    private router: Router
   ) {
     langService.langEmitter.subscribe(lang => translateService.use(lang));
   }
@@ -74,7 +75,8 @@ export class ContentPresentationComponent implements OnInit {
 
   updateURL(index: number) {
     this.currentStep = index;
-    this.location.replaceState(`creator/room/${this.shortId}/group/${this.contentGroupName}/statistics/${index + 1}`);
+    const urlTree = this.router.createUrlTree(['creator/room', this.shortId, 'group', this.contentGroupName, 'statistics', index + 1]);
+    this.location.replaceState(this.router.serializeUrl(urlTree));
     if (index !== this.entryIndex) {
       this.contentIndex = null;
     }

@@ -119,14 +119,14 @@ export class RoutingService {
 
   goBack() {
     if (this.backRoute) {
-      this.router.navigate([this.backRoute]);
+      this.router.navigateByUrl(this.backRoute);
     } else {
       this.location.back();
     }
   }
 
   navigate(route: string) {
-    this.router.navigate([route]);
+    this.router.navigateByUrl(route);
   }
 
   setRedirect() {

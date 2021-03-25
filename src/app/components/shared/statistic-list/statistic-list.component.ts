@@ -98,7 +98,7 @@ export class StatisticListComponent implements OnInit {
 
   goToStats(id: string) {
     const contentIndex = this.dataSource.map(d => d.content.id).indexOf(id);
-    this.router.navigate([`/creator/room/${this.shortId}/group/${this.contentGroup.name}/statistics/${contentIndex + 1}`]);
+    this.router.navigate(['creator', 'room', this.shortId, 'group', this.contentGroup.name, 'statistics', contentIndex + 1]);
     this.globalStorageService.setItem(STORAGE_KEYS.LAST_GROUP, this.contentGroup.name);
   }
 

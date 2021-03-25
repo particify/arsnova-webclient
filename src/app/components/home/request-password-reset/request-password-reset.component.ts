@@ -39,7 +39,7 @@ export class RequestPasswordResetComponent implements OnInit {
           this.translationService.get('password-reset.reset-successful').subscribe(msg => {
             this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.SUCCESS);
           });
-          this.router.navigate([`password-reset/${this.username}`]);
+          this.router.navigate(['password-reset', this.username]);
         },
         err => {
           this.translationService.get('password-reset.request-failed').subscribe(msg => {
