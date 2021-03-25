@@ -198,3 +198,28 @@
     opacity: 1;
   }
 }
+
+.add-mobile {
+  background-color: var(--primary);
+  margin: 0!important;
+  position: fixed;
+  bottom: 4vw;
+  right: 4vw;
+  z-index: 3;
+}
+
+@media(max-width: 500px) {
+  .add-desktop {
+    display: none;
+  }
+
+  .mat-card {
+    margin-bottom: 4vw;
+  }
+}
+
+@media(min-width: 501px) {
+  .add-mobile {
+    display: none;
+  }
+}

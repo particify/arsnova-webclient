@@ -11,8 +11,8 @@
       <div fxLayout="row" fxLayoutAlign="space-between">
         <div class="cardTitle" fxLayout="row" fxLayoutAlign="start center">
           <mat-form-field class="activeInput no-field-hint" [ngClass]="{'hideEditing': !isInTitleEditMode && !inputFocus}" appearance="outline">
-            <input id="nameInput" (focus)="eventService.makeFocusOnInputTrue(); goInTitleEditMode()" (blur)="eventService.makeFocusOnInputFalse(); leaveTitleEditMode()"
-                   (mouseenter)="inputFocus = true" (mouseleave)="inputFocus = false"
+            <input id="nameInput" #nameInput (focus)="goInTitleEditMode()" (blur)="leaveTitleEditMode()"
+                   (mouseenter)="inputFocus = true" (mouseleave)="inputFocus = false" (keyup.enter)="removeFocusFromInput()"
                    matInput maxlength="25" [(ngModel)]="updatedName" aria-labelledby="edit-content-group-name">
           </mat-form-field>
         </div>
@@ -33,10 +33,15 @@
         <app-loading-indicator *ngIf="isLoading" [size]="50"></app-loading-indicator>
         <div *ngIf="!isLoading" fxLayout="row wrap" fxLayoutAlign="space-between center" class="action-container">
           <div *ngIf="!isInSortingMode" fxLayout="row wrap" fxLayoutAlign="space-between center" fxLayoutGap="10px">
-            <button mat-raised-button  id="content-create-button" class="button-primary"
+            <button mat-raised-button id="content-create-button" class="button-primary add-desktop"
                     aria-labelledby="create-content" routerLink="/creator/room/{{ room.shortId }}/create-content">
               <mat-icon>add</mat-icon>
               {{ 'room-page.create-content' | translate}}
+            </button>
+            <button mat-mini-fab id="content-create-button-mobile" class="button-primary add-mobile"
+                    aria-labelledby="create-content" routerLink="/creator/room/{{ room.shortId }}/create-content"
+                    [matTooltip]="'room-page.create-content' | translate">
+              <mat-icon>add</mat-icon>
             </button>
             <div class="settings-buttons">
               <button mat-button id="statistic-button" class="settings-button"  aria-labelledby="statistics"
@@ -44,7 +49,8 @@
                 <mat-icon>insert_chart</mat-icon>
                 {{ 'room-page.answer-statistics' | translate }}
               </button>
-              <button mat-button class="settings-button" [matMenuTriggerFor]="groupSettings">
+              <button mat-button id="settings-button" class="settings-button" [matMenuTriggerFor]="groupSettings"
+                      aria-labelledby="settings">
                 <mat-icon>settings</mat-icon>
                 {{ 'content.group-settings' | translate}}
               </button>
@@ -79,8 +85,8 @@
           <div fxLayoutAlign="center center" fxLayoutGap="16px">
             <p *ngIf="!isInSortingMode" class="slide-text">
               {{ 'content.unlock-collection' | translate}}
-              <mat-slide-toggle id="lock-questions-slide" (change)="publishContents()" [(ngModel)]="published"
-                                aria-labelledby="lock-questions">
+              <mat-slide-toggle id="lock-group-slide" (change)="publishContents()" [(ngModel)]="published"
+                                aria-labelledby="lock-group">
               </mat-slide-toggle>
             </p>
           </div>
@@ -227,8 +233,9 @@
   <div id="edit-content-group-name">{{ 'content.a11y-edit-content-group-name' | translate }}</div>
   <div id="create-content">{{ 'content.a11y-create-content' | translate }}</div>
   <div id="statistics">{{ 'content.a11y-nav-to-stats' | translate }}</div>
+  <div id="settings">{{ 'content.a11y-open-group-settings' | translate }}</div>
   <div id="publish-statistics">{{ (statisticsPublished ? 'content.a11y-dont-publish-statistics' : 'content.a11y-publish-statistics') | translate }}</div>
-  <div id="lock-questions">{{ (published ? 'content.a11y-lock-collection' : 'content.a11y-unlock-collection') | translate }}</div>
+  <div id="lock-group">{{ (published ? 'content.a11y-lock-collection' : 'content.a11y-unlock-collection') | translate }}</div>
   <div id="more">{{ 'content.a11y-more-options' | translate }}</div>
   <div id="save-sort-changes">{{ 'content.a11y-save-sort-changes' | translate }}</div>
 </div>

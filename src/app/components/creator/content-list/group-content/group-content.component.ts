@@ -1,4 +1,4 @@
-import { Component, HostListener, OnInit } from '@angular/core';
+import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 import { Content } from '../../../../models/content';
 import { ContentService } from '../../../../services/http/content.service';
 import { RoomService } from '../../../../services/http/room.service';
@@ -25,6 +25,8 @@ import { Observable } from 'rxjs';
   styleUrls: ['./group-content.component.scss']
 })
 export class GroupContentComponent extends ContentListBaseComponent implements OnInit {
+
+  @ViewChild('nameInput') nameInput: ElementRef;
 
   collectionName: string;
   isInTitleEditMode = false;
@@ -69,16 +71,16 @@ export class GroupContentComponent extends ContentListBaseComponent implements O
     } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit2) === true && focusOnInput === false) {
       document.getElementById('statistic-button').focus();
     } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit3) === true && focusOnInput === false) {
-      document.getElementById('direct-send-slide').focus();
+      document.getElementById('settings-button').focus();
     } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit4) === true && focusOnInput === false) {
-      document.getElementById('lock-questions-slide').focus();
+      document.getElementById('lock-group-slide').focus();
     } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit5) === true && focusOnInput === false) {
       document.getElementById('content-list').focus();
     } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit6) === true && focusOnInput === false) {
-      document.getElementById('edit-group-name').focus();
+      document.getElementById('nameInput').focus();
     } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Escape) === true) {
       if (focusOnInput) {
-        this.leaveTitleEditMode();
+        this.removeFocusFromInput();
       }
       setTimeout(() => {
         document.getElementById('keys-button').focus();
@@ -125,14 +127,20 @@ export class GroupContentComponent extends ContentListBaseComponent implements O
     this.isInTitleEditMode = true;
     setTimeout(() => {
       document.getElementById('nameInput').focus();
+      this.nameInput.nativeElement.selectionStart = this.updatedName.length;
+      this.eventService.makeFocusOnInputTrue();
     }, 100);
 
   }
 
   leaveTitleEditMode(): void {
     this.isInTitleEditMode = false;
-    this.eventService.focusOnInput = false;
+    this.eventService.makeFocusOnInputFalse();
     this.saveGroupName();
+  }
+
+  removeFocusFromInput() {
+    this.nameInput.nativeElement.blur();
   }
 
   updateURL(): void {
