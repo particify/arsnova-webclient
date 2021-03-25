@@ -153,11 +153,19 @@ export abstract class AbstractEntityService<T extends Entity> extends AbstractHt
   private handleChangeEvent(id: string, msg: IMessage) {
     const changes: object = JSON.parse(msg.body);
     const entity = this.cachingService.get(this.generateCacheKey(id));
-    for (const [key, value] of Object.entries(changes)) {
-      entity[key] = value;
-    }
+    this.mergeChangesRecursively(entity, changes);
     const event = new EntityChanged<T>(this.entityType, entity, Object.keys(changes));
     this.eventService.broadcast(event.type, event.payload);
+  }
+
+  private mergeChangesRecursively(originalObject: object, changes: object) {
+    for (const [key, value] of Object.entries(changes)) {
+      if (value && typeof value === 'object') {
+        this.mergeChangesRecursively(originalObject[key], value);
+      } else {
+        originalObject[key] = value;
+      }
+    }
   }
 
   private resolveAlias(idOrAlias: string): string {
