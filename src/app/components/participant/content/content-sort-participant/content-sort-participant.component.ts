@@ -26,6 +26,7 @@ export class ContentSortParticipantComponent extends ContentParticipantBaseCompo
   @Input() alreadySent: boolean;
   @Input() sendEvent: EventEmitter<string>;
   @Input() statsPublished: boolean;
+  @Input() correctOptionsPublished: boolean;
   @Output() answerChanged = new EventEmitter<ChoiceAnswer>();
 
   isLoading = true;
@@ -68,12 +69,14 @@ export class ContentSortParticipantComponent extends ContentParticipantBaseCompo
   }
 
   checkIfCorrect() {
-    this.contentService.getCorrectChoiceIndexes(this.content.roomId, this.content.id).subscribe(correctOptions => {
-      this.correctOptionIndexes = correctOptions;
-      (this.content as ContentChoice).correctOptionIndexes = this.correctOptionIndexes;
-      this.isCorrect = this.answer.selectedChoiceIndexes.toString() === this.correctOptionIndexes.toString();
-      this.isLoading = false;
-    });
+    if (this.correctOptionsPublished) {
+      this.contentService.getCorrectChoiceIndexes(this.content.roomId, this.content.id).subscribe(correctOptions => {
+        this.correctOptionIndexes = correctOptions;
+        (this.content as ContentChoice).correctOptionIndexes = this.correctOptionIndexes;
+        this.isCorrect = this.answer.selectedChoiceIndexes.toString() === this.correctOptionIndexes.toString();
+        this.isLoading = false;
+      });
+    }
   }
 
   shuffleAnswerOptions(answers: AnswerOption[]): AnswerOption[] {

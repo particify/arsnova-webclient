@@ -6,7 +6,7 @@
     </div>
     <app-answer-count tabindex="-1" *ngIf="!isLoading" [count]="answerCount"></app-answer-count>
     <div fxLayout="row" fxLayoutAlign="end" [ngClass]="{'fix-width': !survey}">
-      <button mat-icon-button *ngIf="answersVisible && !survey" disableRipple (click)="toggleCorrect()"
+      <button mat-icon-button *ngIf="answersVisible && !survey && correctOptionsPublished" disableRipple (click)="toggleCorrect()"
             matTooltip="{{ 'statistic.answer-indicator' | translate }}" aria-labelledby="show-correct">
         <mat-icon class="corner-icon icon-primary">playlist_add_check</mat-icon>
       </button>

@@ -7,8 +7,8 @@
       <cdk-step *ngFor="let content of contents; let i = index">
         <div id="step" *ngIf="currentStep >= i - 1 && currentStep <= i + 1">
           <mat-card>
-            <app-statistic-content [content]="content" [directShow]="contentIndex === i" [active]="currentStep === i" [index]="i">
-            </app-statistic-content>
+            <app-statistic-content [content]="content" [directShow]="contentIndex === i" [active]="currentStep === i"
+                                   [index]="i" [correctOptionsPublished]="true"></app-statistic-content>
           </mat-card>
         </div>
         <div tabindex="0" class="visually-hidden">{{ 'statistic.a11y-no-more-answers' | translate }}</div>

@@ -22,6 +22,7 @@ export class ContentParticipantComponent implements OnInit {
   @Input() active: boolean;
   @Input() index: number;
   @Input() statsPublished: boolean;
+  @Input() correctOptionsPublished: boolean;
   @Output() answerChanged = new EventEmitter<Answer>();
   @Output() next = new EventEmitter<boolean>();
 
@@ -87,8 +88,10 @@ export class ContentParticipantComponent implements OnInit {
 
   forwardAnswerMessage($event: Answer) {
     this.answerChanged.emit($event);
-    this.alreadySent = true;
-    this.checkIfAbstention($event);
+    setTimeout(() => {
+      this.checkIfAbstention($event);
+      this.alreadySent = true;
+    }, 100);
   }
 
   goToStats() {
