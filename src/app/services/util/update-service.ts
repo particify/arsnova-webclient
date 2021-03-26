@@ -24,8 +24,8 @@ export class UpdateService {
   }
 
   public handleUpdate(versionInfos: VersionInfo[] = []) {
-    this.handleUpdateCompleted();
     const currentVersion = this.selectVersionByHash(versionInfos, environment.version.commitHash);
+    this.handleUpdateCompleted(currentVersion);
     const latestVersion = this.determineLatestVersion(versionInfos);
     const relevantVersions = this.determineRelevantVersions(versionInfos, currentVersion);
     const importance = this.determineUpdateImportance(versionInfos, currentVersion);
@@ -83,12 +83,20 @@ export class UpdateService {
     this.window.location.reload();
   }
 
-  private handleUpdateCompleted() {
+  private handleUpdateCompleted(version?: VersionInfo) {
     if (this.globalStorageService.getItem(STORAGE_KEYS.UPDATED)) {
       this.globalStorageService.removeItem(STORAGE_KEYS.UPDATED);
       this.translationService.get('home-page.update-successful').subscribe(msg => {
         this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.SUCCESS);
       });
+      const updateEvent = new UpdateInstalled(
+          version?.id ?? '',
+          environment.version.commitHash,
+          '',
+          '',
+          null,
+          0);
+      this.eventService.broadcast(updateEvent.type, updateEvent.payload);
     }
   }
 
