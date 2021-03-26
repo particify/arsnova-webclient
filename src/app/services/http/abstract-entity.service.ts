@@ -161,6 +161,9 @@ export abstract class AbstractEntityService<T extends Entity> extends AbstractHt
   private mergeChangesRecursively(originalObject: object, changes: object) {
     for (const [key, value] of Object.entries(changes)) {
       if (value && typeof value === 'object') {
+        if (!originalObject[key]) {
+          originalObject[key] = {};
+        }
         this.mergeChangesRecursively(originalObject[key], value);
       } else {
         originalObject[key] = value;
