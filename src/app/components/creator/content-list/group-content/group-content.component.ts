@@ -1,4 +1,4 @@
-import { Component, HostListener, OnInit } from '@angular/core';
+import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 import { Content } from '../../../../models/content';
 import { ContentService } from '../../../../services/http/content.service';
 import { RoomService } from '../../../../services/http/room.service';
@@ -26,13 +26,17 @@ import { Observable } from 'rxjs';
 })
 export class GroupContentComponent extends ContentListBaseComponent implements OnInit {
 
+  @ViewChild('nameInput') nameInput: ElementRef;
+
   collectionName: string;
   isInTitleEditMode = false;
+  inputFocus = false;
   isInSortingMode = false;
   updatedName: string;
   baseURL = 'creator/room';
   published = false;
   statisticsPublished = true;
+  correctOptionsPublished = true;
   firstPublishedIndex = 0;
   lastPublishedIndex = -1;
   lastPublishedIndexBackup = -1;
@@ -67,16 +71,16 @@ export class GroupContentComponent extends ContentListBaseComponent implements O
     } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit2) === true && focusOnInput === false) {
       document.getElementById('statistic-button').focus();
     } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit3) === true && focusOnInput === false) {
-      document.getElementById('direct-send-slide').focus();
+      document.getElementById('settings-button').focus();
     } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit4) === true && focusOnInput === false) {
-      document.getElementById('lock-questions-slide').focus();
+      document.getElementById('lock-group-slide').focus();
     } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit5) === true && focusOnInput === false) {
       document.getElementById('content-list').focus();
     } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit6) === true && focusOnInput === false) {
-      document.getElementById('edit-group-name').focus();
+      document.getElementById('nameInput').focus();
     } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Escape) === true) {
       if (focusOnInput) {
-        this.leaveTitleEditMode();
+        this.removeFocusFromInput();
       }
       setTimeout(() => {
         document.getElementById('keys-button').focus();
@@ -92,6 +96,7 @@ export class GroupContentComponent extends ContentListBaseComponent implements O
         this.globalStorageService.setItem(STORAGE_KEYS.LAST_GROUP, this.collectionName);
         this.contentGroupService.getByRoomIdAndName(this.room.id, this.collectionName).subscribe(group => {
           this.contentGroup = group;
+          this.updatedName = this.contentGroup.name;
           this.setRange();
           this.contentService.getContentsByIds(this.contentGroup.roomId, this.contentGroup.contentIds, true)
             .subscribe(contents => {
@@ -106,6 +111,7 @@ export class GroupContentComponent extends ContentListBaseComponent implements O
   setSettings() {
     this.published = this.contentGroup.published;
     this.statisticsPublished = this.contentGroup.statisticsPublished;
+    this.correctOptionsPublished = this.contentGroup.correctOptionsPublished;
   }
 
   goToEdit(content: Content) {
@@ -121,17 +127,20 @@ export class GroupContentComponent extends ContentListBaseComponent implements O
     this.isInTitleEditMode = true;
     setTimeout(() => {
       document.getElementById('nameInput').focus();
+      this.nameInput.nativeElement.selectionStart = this.updatedName.length;
+      this.eventService.makeFocusOnInputTrue();
     }, 100);
 
   }
 
-  leaveTitleEditMode(saved?: boolean): void {
+  leaveTitleEditMode(): void {
     this.isInTitleEditMode = false;
-    this.eventService.focusOnInput = false;
-    if (!saved) {
-      const msg = this.translateService.instant('content.not-updated-content-group');
-      this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
-    }
+    this.eventService.makeFocusOnInputFalse();
+    this.saveGroupName();
+  }
+
+  removeFocusFromInput() {
+    this.nameInput.nativeElement.blur();
   }
 
   updateURL(): void {
@@ -152,7 +161,6 @@ export class GroupContentComponent extends ContentListBaseComponent implements O
           this.updateURL();
         });
     }
-    this.leaveTitleEditMode(true);
   }
 
   createCopy() {
@@ -289,6 +297,14 @@ export class GroupContentComponent extends ContentListBaseComponent implements O
     this.updateContentGroup(changes).subscribe(updatedContentGroup => {
       this.contentGroup = updatedContentGroup;
       this.statisticsPublished = this.contentGroup.statisticsPublished;
+    });
+  }
+
+  toggleCorrectOptionsPublished() {
+    const changes: { correctOptionsPublished: boolean } = { correctOptionsPublished: !this.contentGroup.correctOptionsPublished };
+    this.updateContentGroup(changes).subscribe(updatedContentGroup => {
+      this.contentGroup = updatedContentGroup;
+      this.correctOptionsPublished = this.contentGroup.correctOptionsPublished;
     });
   }
 

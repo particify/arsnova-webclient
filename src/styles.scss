@@ -263,6 +263,32 @@ div {
   padding-bottom: 0;
 }
 
+.activeInput .mat-form-field-flex {
+  transition: padding 0.5s;
+}
+
+.activeInput .mat-form-field-infix {
+  padding: 10px 0;
+  margin-top: 4.8px;
+  border: none;
+}
+
+.hideEditing .mat-form-field-flex {
+  padding: 0!important;
+}
+
+.hideEditing .mat-form-field-outline > * {
+  border: none!important;
+}
+
+/*.activeInput:not(:hover) .mat-form-field-flex {
+  padding: 0!important;
+}
+
+.activeInput:not(:hover) .mat-form-field-outline > * {
+  border: none!important;
+}*/
+
 .big-input {
   .mat-form-field-infix {
     padding: .4em 0 .8em 0;
