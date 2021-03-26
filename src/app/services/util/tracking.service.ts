@@ -137,8 +137,14 @@ export class TrackingService {
       this.firstAuth = false;
     });
     this.eventService.on<any>('UpdateInstalled')
-        .subscribe(e => this.addEvent(EventCategory.APP_UPDATE, 'Update loading finished', `Update from ${e.oldId}-${e.oldHash} to`
-            + ` ${e.newId}-${e.newHash} (${e.importance.toString().toLowerCase()})`, e.loadTime));
+        .subscribe(e => {
+          if (e.oldHash) {
+            const updateTo = e.newHash ? ` to ${e.newId}-${e.newHash} (${e.importance.toString().toLowerCase()})` : '';
+            this.addEvent(EventCategory.APP_UPDATE, 'Update loading finished', `Update from ${e.oldId}-${e.oldHash}${updateTo}`, e.loadTime);
+          } else {
+            this.addEvent(EventCategory.APP_UPDATE, 'Update activated', `Update to ${e.newId}-${e.newHash}`);
+          }
+        });
     this.eventService.on<any>('HttpRequestFailed')
         .subscribe(e => this.addEvent(EventCategory.ERROR, 'HTTP request failed', `Status code ${e.status}`, undefined, e.url));
     this.eventService.on<any>('AccountCreated')
