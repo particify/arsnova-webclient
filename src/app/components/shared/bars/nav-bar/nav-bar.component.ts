@@ -182,6 +182,7 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
         const index = this.activeFeatures.indexOf(FEATURES.SURVEY);
         if (this.currentRouteIndex !== index) {
           this.activeFeatures.splice(index, 1);
+          this.changeIndicator.splice(index, 1);
           this.getItems();
         }
       }
@@ -201,7 +202,8 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
       } else {
         url += 'moderator/comments';
       }
-      if ((this.activeFeatures.indexOf(feature.name) > -1 || (feature.name === FEATURES.SURVEY && this.role === UserRole.CREATOR))
+      const featureIndex = this.activeFeatures.indexOf(feature.name);
+      if ((featureIndex > -1 || (feature.name === FEATURES.SURVEY && this.role === UserRole.CREATOR))
           && this.role !== UserRole.EXECUTIVE_MODERATOR || (this.role === UserRole.EXECUTIVE_MODERATOR
           && (feature.name === FEATURES.MODERATION || feature.name === FEATURES.COMMENTS))) {
         this.barItems.push(
@@ -217,6 +219,8 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
               false
             )
           )
+        } else if (this.changeIndicator.map(c => c.featureName).indexOf(feature.name) === -1) {
+          this.changeIndicator.splice(featureIndex, 0, new ChangeIndicator(feature.name,false));
         }
       }
     }
@@ -330,6 +334,7 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
       const index = this.activeFeatures.indexOf(FEATURES.GROUP);
       if (index !== this.currentRouteIndex) {
         this.activeFeatures.splice(index, 1);
+        this.changeIndicator.splice(index, 1);
         this.getItems();
       }
       this.removeGroupInSessionStorage();
