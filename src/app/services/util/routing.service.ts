@@ -26,7 +26,11 @@ export const TITLES: { [key: string]: string } = {
   'create-content': 'content-creation',
   settings: 'settings',
   archive: 'archive',
-  admin: 'admin'
+  admin: 'admin',
+  status: 'admin',
+  stats: 'admin',
+  users: 'admin',
+  rooms: 'admin'
 };
 
 @Injectable({
@@ -161,7 +165,11 @@ export class RoutingService {
     let title: string;
     switch(this.titleKey) {
       case 'room':
-        title = route.data.room.name;
+        if (route.data.room) {
+          title = route.data.room.name;
+        } else {
+          this.titleKey = TITLES['admin'];
+        }
         break;
       case 'content-group':
         title = route.params.contentGroup;
