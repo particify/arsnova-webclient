@@ -49,6 +49,7 @@ export class TrackingService {
   previousAuth: ClientAuthentication;
   firstAuth = true;
   pingSubscription: Subscription;
+  specialRooms = new Map<string, string>();
 
   constructor(
     private consentService: ConsentService,
@@ -65,6 +66,10 @@ export class TrackingService {
 
   init(uiConfig: any) {
     this.uiConfig = uiConfig;
+
+    const feedbackRoomShortId = uiConfig.links?.feedback?.url?.match(/\/([0-9]{8})$/)?.[1];
+    uiConfig.demo && this.specialRooms.set(uiConfig.demo, 'Demo');
+    feedbackRoomShortId && this.specialRooms.set(feedbackRoomShortId, 'Feedback');
 
     if (uiConfig.tracking.heartbeat) {
       this._paq.push(['enableHeartBeatTimer']);
@@ -175,8 +180,8 @@ export class TrackingService {
       const role: UserRole = route.data.viewRole;
       if (role) {
         dimensions['dimension' + ActionDimension.ROOM_ROLE] = role.toString().toLowerCase();
-        if (shortId === this.uiConfig.demo) {
-          dimensions['dimension' + ActionDimension.SPECIAL_ROOM] = 'Demo';
+        if (this.specialRooms.has(shortId)) {
+          dimensions['dimension' + ActionDimension.SPECIAL_ROOM] = this.specialRooms.get(shortId);
         }
       }
     }
