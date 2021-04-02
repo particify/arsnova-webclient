@@ -2,5 +2,6 @@
   <span>
     {{ data.message }}
   </span>
-  <mat-icon class="{{ data.icon}}">{{ data.icon }}</mat-icon>
+    <mat-spinner *ngIf="data.icon === LOADING_ICON; else showIcon" diameter="24"></mat-spinner>
+    <ng-template #showIcon><mat-icon class="{{ data.icon}}">{{ data.icon }}</mat-icon></ng-template>
 </div>
