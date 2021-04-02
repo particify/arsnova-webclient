@@ -7,6 +7,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { NotificationService } from '../util/notification.service';
 import { map, shareReplay, tap } from 'rxjs/operators';
 import { EventService } from '../util/event.service';
+import { retryBackoff } from 'backoff-rxjs';
 import * as dayjs from 'dayjs';
 
 @Injectable()
@@ -32,6 +33,11 @@ export class ApiConfigService extends AbstractHttpService<ApiConfig> {
   private load$() {
     console.log('Loading API configuration...');
     return this.http.get<ApiConfig>(this.buildUri('')).pipe(
+        retryBackoff({
+          initialInterval: 1000,
+          maxInterval: 60000,
+          resetOnSuccess: true
+        }),
         tap(() => console.log('API configuration loaded.')),
         map((config) => {
           config.authenticationProviders.sort((p1, p2) => {
