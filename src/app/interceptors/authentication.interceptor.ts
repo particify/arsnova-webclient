@@ -1,13 +1,8 @@
 import { tap } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest, HttpResponse } from '@angular/common/http';
-
 import { AuthenticationService, AUTH_HEADER_KEY, AUTH_SCHEME } from '../services/http/authentication.service';
-import { AdvancedSnackBarTypes, NotificationService } from '../services/util/notification.service';
-import { TranslateService } from '@ngx-translate/core';
-import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
-import { RoutingService } from '../services/util/routing.service';
 
 const API_LOGIN_URI_PATTERN = /^\/api\/auth\/login\/[^?].*/;
 
@@ -16,11 +11,7 @@ export class AuthenticationInterceptor implements HttpInterceptor {
   private token: string;
 
   constructor(
-      private authenticationService: AuthenticationService,
-      private router: Router,
-      private notificationService: NotificationService,
-      private translateService: TranslateService,
-      private routingService: RoutingService
+      private authenticationService: AuthenticationService
   ) {
     authenticationService.getAuthenticationChanges().subscribe(auth => this.token = auth?.token);
   }
@@ -41,12 +32,7 @@ export class AuthenticationInterceptor implements HttpInterceptor {
         }
       }, (err: any) => {
         if (err instanceof HttpErrorResponse && err.status === 401 && !tokenOverride) {
-          this.authenticationService.logout();
-          this.routingService.setRedirect();
-          this.router.navigateByUrl('login');
-          this.translateService.get('login.authentication-expired').subscribe(msg => {
-            this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
-          });
+          this.authenticationService.handleUnauthorizedError();
         }
       }));
     } else {

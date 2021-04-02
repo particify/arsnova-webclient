@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Router } from '@angular/router';
 import { BehaviorSubject, Observable, of, timer } from 'rxjs';
 import { catchError, concatMap, filter, first, map, switchAll, switchMap, shareReplay, take, tap } from 'rxjs/operators';
 import { AbstractHttpService } from './abstract-http.service';
@@ -9,8 +10,9 @@ import { AuthenticationStatus, ClientAuthenticationResult } from '../../models/c
 import { EventService } from '../util/event.service';
 import JwtDecode from 'jwt-decode';
 import { TranslateService } from '@ngx-translate/core';
-import { NotificationService } from '../util/notification.service';
+import { AdvancedSnackBarTypes, NotificationService } from '../util/notification.service';
 import { ApiConfigService } from './api-config.service';
+import { RoutingService } from '../util/routing.service';
 
 export const AUTH_HEADER_KEY = 'Authorization';
 export const AUTH_SCHEME = 'Bearer';
@@ -54,7 +56,9 @@ export class AuthenticationService extends AbstractHttpService<ClientAuthenticat
     private http: HttpClient,
     protected translateService: TranslateService,
     protected notificationService: NotificationService,
-    private apiConfigService: ApiConfigService) {
+    private apiConfigService: ApiConfigService,
+    private routingService: RoutingService,
+    private router: Router) {
     super('/auth', http, eventService, translateService, notificationService);
     const savedAuth: ClientAuthentication = this.globalStorageService.getItem(STORAGE_KEYS.USER);
     this.auth$$ = new BehaviorSubject(new BehaviorSubject(savedAuth));
@@ -146,7 +150,7 @@ export class AuthenticationService extends AbstractHttpService<ClientAuthenticat
         tap(result => {
           if (result.status === AuthenticationStatus.INVALID_CREDENTIALS) {
             console.error('Could not refresh authentication.');
-            this.logout();
+            this.handleUnauthorizedError();
           }
         })
     );
@@ -237,6 +241,20 @@ export class AuthenticationService extends AbstractHttpService<ClientAuthenticat
   hasAdminRole(auth: ClientAuthentication) {
     const decodedToken = JwtDecode<Jwt>(auth.token);
     return decodedToken.roles.some(role => role === this.ADMIN_ROLE);
+  }
+
+  /**
+   * Resets the local authentication state and redirects to the login page.
+   * Furthermore, the current route is stored so it can be restored after
+   * login.
+   */
+  handleUnauthorizedError() {
+    this.logout();
+    this.routingService.setRedirect();
+    this.router.navigateByUrl('login');
+    this.translateService.get('login.authentication-expired').subscribe(msg => {
+      this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
+    });
   }
 
   /**
