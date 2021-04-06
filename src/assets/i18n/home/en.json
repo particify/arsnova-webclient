@@ -330,7 +330,8 @@
     "not-authorized": "You're not authorized to view this page.",
     "room-not-found": "There was no room found with this number.",
     "something-went-wrong": "Something went wrong.",
-    "http-too-many-requests": "Too many requests from your network."
+    "http-too-many-requests": "Too many requests from your network.",
+    "establishing-connection": "Establishing connection …"
   },
   "title": {
     "register": "Register",

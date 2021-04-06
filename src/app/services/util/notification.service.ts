@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
-import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
-import { SnackBarAdvancedComponent } from '../../components/shared/snack-bar-advanced/snack-bar-advanced.component';
+import { MatSnackBar, MatSnackBarConfig, MatSnackBarRef } from '@angular/material/snack-bar';
+import { LOADING_ICON, SnackBarAdvancedComponent } from '../../components/shared/snack-bar-advanced/snack-bar-advanced.component';
 
 export enum AdvancedSnackBarTypes {
   SUCCESS = 'SUCCESS',
   FAILED = 'FAILED',
-  WARNING = 'WARNING'
+  WARNING = 'WARNING',
+  LOADING = 'LOADING'
 }
 
 @Injectable()
@@ -25,7 +26,8 @@ export class NotificationService {
     this.snackRef = this.snackBar.open(message, action, Object.assign({}, defaultConfig, config));
   }
 
-  showAdvanced(message: string, type: string) {
+  showAdvanced(message: string, type: AdvancedSnackBarTypes): MatSnackBarRef<SnackBarAdvancedComponent> {
+    let duration = 2500;
     let typeString: string;
     switch (type) {
       case AdvancedSnackBarTypes.SUCCESS:
@@ -33,16 +35,23 @@ export class NotificationService {
         break;
       case AdvancedSnackBarTypes.FAILED:
         typeString = 'close';
+        duration = 4000;
         break;
       case AdvancedSnackBarTypes.WARNING:
         typeString = 'warning';
+        break;
+      case AdvancedSnackBarTypes.LOADING:
+        typeString = LOADING_ICON;
+        duration = 0;
+        break;
     }
     this.snackRef = this.snackBar.openFromComponent(SnackBarAdvancedComponent, {
       data: {
         message: message,
         icon: typeString
       },
-      duration: type === AdvancedSnackBarTypes.FAILED ? 4000 : 2500
+      duration: duration
     });
+    return this.snackRef;
   }
 }
