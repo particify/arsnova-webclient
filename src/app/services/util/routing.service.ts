@@ -134,7 +134,9 @@ export class RoutingService {
   }
 
   setRedirect() {
-    this.redirectRoute = this.fullCurrentRoute ?? location.pathname;
+    if (!this.redirectRoute) {
+      this.redirectRoute = this.fullCurrentRoute ?? location.pathname;
+    }
   }
 
   redirect(): boolean {
