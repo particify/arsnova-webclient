@@ -137,7 +137,7 @@ export class AuthenticationService extends AbstractHttpService<ClientAuthenticat
    */
   refreshLogin(): Observable<ClientAuthenticationResult | null> {
     // Load user authentication from local data store if available
-    const savedAuth = this.globalStorageService.getItem(STORAGE_KEYS.USER);
+    const savedAuth: ClientAuthentication = this.globalStorageService.getItem(STORAGE_KEYS.USER);
     const token: string = savedAuth?.token || this.globalStorageService.getItem(STORAGE_KEYS.GUEST_TOKEN);
     if (!token) {
       return of(null);
@@ -149,8 +149,13 @@ export class AuthenticationService extends AbstractHttpService<ClientAuthenticat
     return this.handleLoginResponse(auth$).pipe(
         tap(result => {
           if (result.status === AuthenticationStatus.INVALID_CREDENTIALS) {
-            console.error('Could not refresh authentication.');
+            console.error('Could not refresh authentication (expired).');
             this.handleUnauthorizedError();
+          } else if (result.status === AuthenticationStatus.UNKNOWN_ERROR) {
+            console.error('Could not refresh authentication.');
+            // Restore authentication from existing credentials if refreshing
+            // fails. It does not matter here that the token might have expired.
+            this.auth$$.next(of(savedAuth));
           }
         })
     );
