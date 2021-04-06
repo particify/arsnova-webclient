@@ -47,7 +47,7 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
   };
   started: string;
   answers: Answer[];
-  currentStep = 0;
+  currentStep: number;
   isReloading = false;
   displaySnackBar = false;
   changesSubscription: Subscription;
@@ -141,11 +141,11 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
     }
   }
 
-  initStepper(index: number) {
+  initStepper(index: number, delay: number = 0) {
     setTimeout(() => {
       this.currentStep = index;
       this.stepper.init(index, this.contents.length);
-    }, 200);
+    }, delay);
     this.started = this.status.NORMAL;
   }
 
@@ -159,7 +159,7 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
     let isInitialized = false;
     for (let i = 0; i < this.alreadySent.size; i++) {
       if (this.alreadySent.get(i) === false) {
-        this.initStepper(i);
+        this.initStepper(i, 200);
         isInitialized = true;
         break;
       }
@@ -167,7 +167,7 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
     if (!isInitialized) {
       this.initStepper(0);
     }
-    if (this.currentStep === 0 && this.answers.length === 0 || this.contents.length === 1) {
+    if (!this.currentStep && this.answers.length === 0 || this.contents.length === 1) {
       this.updateURL(0);
     }
   }
