@@ -19,6 +19,7 @@ export class AdminService extends AbstractHttpService<void> {
 
   serviceApiUrl = {
     adminView: 'view=admin',
+    user: '/user',
     transfer: '/transfer',
     activate: '/activate'
   };
@@ -33,22 +34,22 @@ export class AdminService extends AbstractHttpService<void> {
   }
 
   getUser(id: string) {
-    const connectionUrl = this.buildUri(`/${id}?${this.serviceApiUrl.adminView}`);
+    const connectionUrl = this.buildForeignUri(`${this.serviceApiUrl.user}/${id}?${this.serviceApiUrl.adminView}`);
     return this.http.get<User>(connectionUrl);
   }
 
   getRoom(id: string): Observable<Room> {
-    const connectionUrl = this.buildUri(`?${this.serviceApiUrl.adminView}`, id);
+    const connectionUrl = this.buildForeignUri(`?${this.serviceApiUrl.adminView}`, id);
     return this.http.get<Room>(connectionUrl);
   }
 
   activateUser(userId: string) {
-    const connectionUrl = this.userService.buildUri(`/${userId}${this.serviceApiUrl.activate}`);
+    const connectionUrl = this.userService.buildForeignUri(`${this.serviceApiUrl.user}/${userId}${this.serviceApiUrl.activate}`);
     return this.http.post<string>(connectionUrl, {}, httpOptions);
   }
 
   transferRoom(roomId: string, newOwnerId: string) {
-    const connectionUrl = this.userService.buildUri(`/${this.serviceApiUrl.transfer}?newOwnerId=${newOwnerId}`, roomId);
+    const connectionUrl = this.userService.buildForeignUri(`/${this.serviceApiUrl.transfer}?newOwnerId=${newOwnerId}`, roomId);
     return this.http.post(connectionUrl, {}, httpOptions).pipe(
       catchError(this.handleError<any>('transferRoom'))
     );
