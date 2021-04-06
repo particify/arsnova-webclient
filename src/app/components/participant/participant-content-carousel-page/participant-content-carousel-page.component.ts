@@ -151,8 +151,7 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
 
   updateURL(index?: number) {
     this.currentStep = index || 0;
-    const indexExtension = index ? '/' + (index + 1) : '';
-    const urlTree = this.router.createUrlTree(['participant/room', this.shortId, 'group', this.contentGroupName, indexExtension]);
+    const urlTree = this.router.createUrlTree(['participant/room', this.shortId, 'group', this.contentGroupName, index + 1]);
     this.location.replaceState(this.router.serializeUrl(urlTree));
   }
 
@@ -167,6 +166,9 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
     }
     if (!isInitialized) {
       this.initStepper(0);
+    }
+    if (this.currentStep === 0 && this.answers.length === 0 || this.contents.length === 1) {
+      this.updateURL(0);
     }
   }
 
