@@ -26,6 +26,13 @@
     </mat-cell>
   </ng-container>
 
+  <ng-container matColumnDef="round">
+    <mat-header-cell *matHeaderCellDef> {{'statistic.round' | translate}} </mat-header-cell>
+    <mat-cell *matCellDef="let cp" (click)="goToStats(cp.content.id)">
+      {{cp.round}}
+    </mat-cell>
+  </ng-container>
+
   <ng-container matColumnDef="counts">
     <mat-header-cell *matHeaderCellDef> {{'statistic.answers' | translate}} </mat-header-cell>
     <mat-cell *matCellDef="let cp" (click)="goToStats(cp.content.id)">

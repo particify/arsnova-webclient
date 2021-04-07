@@ -14,11 +14,12 @@ import { ContentGroup } from '../../../../models/content-group';
 import { AnnounceService } from '../../../../services/util/announce.service';
 import { LocalFileService } from '../../../../services/util/local-file.service';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 import { RoomStatsService } from '../../../../services/http/room-stats.service';
 import { HotkeyService } from '../../../../services/util/hotkey.service';
 import { MatButton } from '@angular/material/button';
+import { ContentType } from '../../../../models/content-type.enum';
 
 @Component({
   selector: 'app-group-content',
@@ -49,6 +50,9 @@ export class GroupContentComponent extends ContentListBaseComponent implements O
   contentHotkeysRegistered = false;
 
   private hotkeyRefs: Symbol[] = [];
+
+  ContentType: typeof ContentType = ContentType;
+  resetAnswerEvent: Subject<string> = new Subject<string>();
 
   constructor(
     protected contentService: ContentService,
@@ -280,13 +284,15 @@ export class GroupContentComponent extends ContentListBaseComponent implements O
     const dialogRef = this.dialogService.openDeleteDialog('really-delete-answers');
     dialogRef.afterClosed().subscribe(result => {
       if (result === 'delete') {
-        this.deleteAnswers(content.id);
+        this.deleteAnswers(content);
       }
     });
   }
 
-  deleteAnswers(contentId: string) {
-    this.contentService.deleteAnswers(this.contentGroup.roomId, contentId).subscribe(() => {
+  deleteAnswers(content: Content) {
+    this.contentService.deleteAnswers(this.contentGroup.roomId, content.id).subscribe(() => {
+      content.state.round = 1;
+      this.resetAnswerEvent.next(content.id);
       this.translateService.get('content.answers-deleted').subscribe(msg => {
         this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
       });

@@ -501,6 +501,7 @@
     "answers": "Answers",
     "content": "Content",
     "correct": "Correct",
+    "round": "Round",
     "show-results": "Show results",
     "hide-results": "Hide results",
     "show-correct": "Show correct answers",

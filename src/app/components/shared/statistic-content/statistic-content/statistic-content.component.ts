@@ -49,6 +49,7 @@ export class StatisticContentComponent implements OnInit {
   ContentType: typeof ContentType = ContentType;
   flashcardMarkdownFeatures = MarkdownFeatureset.EXTENDED;
   HotkeyAction = HotkeyAction;
+  multipleRounds: boolean;
 
   constructor(private announceService: AnnounceService,
               private eventService: EventService) { }
@@ -65,6 +66,7 @@ export class StatisticContentComponent implements OnInit {
     if (this.directShow && this.format !== ContentType.FLASHCARD) {
       this.answersVisible = true;
     }
+    this.multipleRounds = this.content.state.round > 1;
     this.isLoading = false;
     this.routeChanged.subscribe(() => {
       this.updateCounter(this.answerCount);
@@ -168,5 +170,11 @@ export class StatisticContentComponent implements OnInit {
     } else {
       this.announceService.announce('statistic.a11y-no-answers-yet');
     }
+  }
+
+  changeRound(round: number) {
+    this.choiceStatistic.roundsToDisplay = round;
+    this.choiceStatistic.updateCounterForRound();
+    this.choiceStatistic.updateChart();
   }
 }
