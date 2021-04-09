@@ -203,3 +203,24 @@ button.selected {
   margin-top: min(1em, 4vw);
   margin-bottom: 20px;
 }
+
+.divider-container {
+  margin: 16px 0;
+  position: relative;
+}
+
+.divider-container .mat-divider {
+  border-top-color: var(--on-dialog);
+  opacity: 0.3;
+}
+
+.divider-label {
+  font-size: 14px;
+  margin: 8px 0;
+  padding: 0 8px;
+  position: absolute;
+  top: -16px;
+  left: 16px;
+  z-index: 3;
+  background-color: var(--dialog);
+}
