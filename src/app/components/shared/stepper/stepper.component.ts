@@ -5,6 +5,7 @@ import { KeyboardKey } from '../../../utils/keyboard/keys';
 import { KeyboardUtils } from '../../../utils/keyboard';
 import { Directionality } from '@angular/cdk/bidi';
 import { AnnounceService } from '@arsnova/app/services/util/announce.service';
+import { EventService } from '@arsnova/app/services/util/event.service';
 
 @Component({
   selector: 'app-stepper',
@@ -46,16 +47,19 @@ export class StepperComponent extends CdkStepper {
 
   constructor(private dir: Directionality,
               private changeDetectorRef: ChangeDetectorRef,
-              private announceService: AnnounceService) {
+              private announceService: AnnounceService,
+              private eventService: EventService) {
     super(dir, changeDetectorRef);
   }
 
   @HostListener('window:keyup', ['$event'])
   keyEvent(event: KeyboardEvent) {
-    if (KeyboardUtils.isKeyEvent(event, KeyboardKey.LEFT) === true) {
-      this.previous();
-    } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.RIGHT) === true) {
-      this.next();
+    if (!this.eventService.focusOnInput) {
+      if (KeyboardUtils.isKeyEvent(event, KeyboardKey.LEFT) === true) {
+        this.previous();
+      } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.RIGHT) === true) {
+        this.next();
+      }
     }
   }
 
