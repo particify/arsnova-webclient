@@ -23,7 +23,7 @@ import { VersionInfo } from '../../models/version-info';
 @Injectable()
 export class DialogService {
 
-  private size = {
+  size = {
     xsmall: '350px',
     small: '400px',
     medium: '600px',

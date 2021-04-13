@@ -57,6 +57,12 @@
         <mat-icon>play_arrow</mat-icon>
       </button>
 
+      <button id="more-button" mat-mini-fab *ngIf="!search && viewRole === 'CREATOR'" class="bar-icon"
+              [matMenuTriggerFor]="moreMenu" aria-labelledby="more"
+              matTooltip="{{ 'comment-list.more-options' | translate }}">
+        <mat-icon>construction</mat-icon>
+      </button>
+
       <button id="add-comment-small-button" class="add-btn" mat-mini-fab aria-labelledby="add"
               *ngIf="!search && deviceType === 'desktop' && !isModerator" (click)="openCreateDialog()"
               matTooltip="{{ 'comment-list.add-comment' | translate }}">
@@ -153,6 +159,32 @@
     </mat-menu>
   </div>
 
+  <mat-menu #moreMenu="matMenu">
+
+    <button mat-menu-item (click)="navToOtherCommentList()" aria-labelledby="delete-comments">
+      <mat-icon class="switch-list-icon">{{ isModerator ? 'question_answer' : 'gavel' }}</mat-icon>
+      <span>{{ ('comment-list.' + (isModerator ? 'public-list' : 'moderation')) | translate }}</span>
+    </button>
+
+    <button mat-menu-item (click)="navToSettings()" aria-labelledby="delete-comments">
+      <mat-icon class="settings-icon">settings</mat-icon>
+      <span>{{ 'comment-list.settings' | translate }}</span>
+    </button>
+
+    <mat-divider></mat-divider>
+
+    <button [disabled]="comments.length === 0" mat-menu-item aria-labelledby="export-comments" (click)="onExport()">
+      <mat-icon class="settings-icon">save</mat-icon>
+      <span>{{ 'comment-list.export-comments' | translate }}</span>
+    </button>
+
+    <button [disabled]="comments.length === 0" mat-menu-item (click)="openDeleteCommentsDialog()" aria-labelledby="delete-comments">
+      <mat-icon class="down">delete_outline</mat-icon>
+      <span>{{ ('comment-list.delete-' + (isModerator ? 'banned' : 'all') + '-comments') | translate }}</span>
+    </button>
+
+  </mat-menu>
+
   <div *ngIf="scroll && (deviceType === 'desktop' || scrollActive)" class="search-bar-placeholder"></div>
 
   <div *ngIf="isLoading" class="loading" fxLayout="column" fxLayoutAlign="center">
@@ -216,6 +248,8 @@
     <div id="select-time-1d">{{ 'comment-list.a11y-select-time-1d' | translate }}</div>
     <div id="select-time-1w">{{ 'comment-list.a11y-select-time-1w' | translate }}</div>
     <div id="select-time-all">{{ 'comment-list.a11y-select-time-all' | translate }}</div>
+    <div id="export-comments">{{ 'comment-list.a11y-export-comments' | translate }}</div>
+    <div id="delete-comments">{{ ('comment-list.a11y-delete-' + (isModerator ? 'banned' : 'all') + '-comments') | translate }}</div>
     <div id="no-comments-label">{{ 'comment-page.a11y-no-comments' | translate }}</div>
   </div>
 </div>

@@ -273,6 +273,7 @@
     "remove": "Remove",
     "really-delete-comment": "Do you really want to delete this comment?",
     "really-delete-comments": "Do you really want to delete all comments of this room? This action cannot be undone.",
+    "really-delete-banned-comments": "Do you really want to delete all comments of the moderation list? This action cannot be undone.",
     "really-delete-comments-hint": "There are comments in this room that you marked for a bonus. Remove the markers to delete all comments.",
     "really-delete-answer": "Do you really want to delete this answer?",
     "really-delete-content": "Do you really want to delete the following content? The content will be irrevocably deleted in all collections.",
@@ -350,5 +351,16 @@
     "archive": "Archived questions",
     "import": "Import rooms",
     "admin": "Administration"
+  },
+  "comment-export": {
+    "answer": "Answer",
+    "tag": "Category",
+    "question": "Question",
+    "favorite": "Favorite",
+    "presented": "Presented",
+    "correct/wrong": "Correct/Wrong",
+    "score": "Score",
+    "timestamp": "Timestamp",
+    "token": "Bonus token"
   }
 }
