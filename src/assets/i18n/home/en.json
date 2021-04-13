@@ -197,7 +197,7 @@
   },
   "room-list": {
     "a11y-join-room": "Enter the room {{room}} with the number {{id}} in the role {{role}}",
-    "a11y-room-history": "Your room history contains {{count}} rooms. Search in your room list or navigate through your rooms with Tab.",
+    "a11y-list-summary": "Your room list contains {{count}} rooms. Search the list or navigate through your rooms with Tab.",
     "a11y-more-options": "Show more options for this room",
     "a11y-import-options": "Opens a menu in which you can transfer rooms created as a guest or import rooms from another ARSnova system.",
     "a11y-participant-role": "Participant",
@@ -210,7 +210,7 @@
     "filter": "Here you can filter the list of rooms.",
     "filter-message": "Search rooms",
     "more-options": "More options",
-    "no-room-history": "You haven't joined any rooms yet.",
+    "no-rooms": "You haven't joined any rooms yet.",
     "panel-remove-room": "Remove room from your history",
     "panel-delete-room": "Delete room",
     "room-settings": "Settings",

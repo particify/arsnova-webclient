@@ -293,7 +293,7 @@ export class RoomListComponent implements OnInit, OnDestroy {
   }
 
   addRoomFromGuest(roomDataView: RoomDataView) {
-    this.userService.addRoomToHistory(this.auth.userId, roomDataView.membership.roomId).pipe(
+    this.roomMembershipService.requestMembership(roomDataView.membership.roomShortId).pipe(
       tap(r => this.translateService.get('room-list.added-successfully').subscribe(msg =>
          this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.SUCCESS)))
     ).subscribe(r => {

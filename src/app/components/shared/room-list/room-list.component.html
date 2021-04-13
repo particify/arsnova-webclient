@@ -5,8 +5,8 @@
     <lib-extension-point extensionId="import-token" [extensionData]="{inMenu: false}"></lib-extension-point>
   </div>
   <div tabindex="0" id="room-list" *ngIf="!isLoading" [ngClass]="{'visually-hidden': rooms.length > 0 || showRoomsFromGuest}">
-    <h3 class="no-rooms">{{ rooms.length === 0 ? ('room-list.no-room-history' | translate) :
-      'room-list.a11y-room-history' | translate:{count: rooms.length} }}</h3>
+    <h3 class="no-rooms">{{ rooms.length === 0 ? ('room-list.no-rooms' | translate) :
+      'room-list.a11y-list-summary' | translate:{count: rooms.length} }}</h3>
   </div>
   <div *ngIf="rooms">
     <mat-card *ngIf="rooms.length > 0" class="account-memberships">
