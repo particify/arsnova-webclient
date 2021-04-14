@@ -1,4 +1,4 @@
-<div>
+<div fxLayout="column" fxLayoutGap="8px">
   <app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
   <div class="chart-container" *ngIf="!isLoading" [ngClass]="{ 'invisible': !answersVisible }">
     <canvas id="{{ chartId }}"></canvas>

@@ -1,5 +1,13 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { BarController, BarControllerDatasetOptions, BarElement, CategoryScale, Chart, LinearScale, Tooltip } from 'chart.js';
+import {
+  BarController,
+  BarControllerDatasetOptions,
+  BarElement,
+  CategoryScale,
+  Chart,
+  LinearScale,
+  Tooltip
+} from 'chart.js';
 import { ActivatedRoute } from '@angular/router';
 import { ContentService } from '../../../../services/http/content.service';
 import { ContentChoice } from '../../../../models/content-choice';
@@ -109,15 +117,15 @@ export class StatisticChoiceComponent extends StatisticContentBaseComponent impl
           y: {
             type: 'linear',
             ticks: {
-              precision: 0
+              precision: 0,
             },
-            gridLines: {
+            grid: {
               borderColor: this.onSurface
-            },
+            }
           },
           x: {
             type: 'category',
-            gridLines: {
+            grid: {
               borderColor: this.onSurface
             }
           }

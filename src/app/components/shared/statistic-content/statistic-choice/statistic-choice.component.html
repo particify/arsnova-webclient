@@ -1,18 +1,18 @@
-<div>
+<div fxLayout="column" fxLayoutGap="8px">
   <app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
   <div class="chart-container" *ngIf="!isLoading" [ngClass]="{ 'invisible': !answersVisible }">
     <canvas id="{{ chartId }}"></canvas>
   </div>
-</div>
-<mat-list *ngIf="!isLoading" role="list">
-  <mat-list-item role="listitem" [ngClass]="{'correct': colorLabel && checkIfCorrect(i)}" tabindex="0"
-                 attr.aria-label="{{ ('statistic.a11y-choice-evaluation' | translate: { count: data[i], answer: a.answer }) +
+  <mat-list *ngIf="!isLoading" role="list">
+    <mat-list-item role="listitem" [ngClass]="{'correct': colorLabel && checkIfCorrect(i)}" tabindex="0"
+                   attr.aria-label="{{ ('statistic.a11y-choice-evaluation' | translate: { count: data[i], answer: a.answer }) +
                  (isSurvey ? '' : ((checkIfCorrect(i) ?
                  'statistic.a11y-correct' : 'statistic.a11y-wrong') | translate)) }}"
-                 *ngFor="let a of answerList; let i = index">
-    <p class="label">{{a.label}}: {{a.answer}}</p>
-  </mat-list-item>
-</mat-list>
+                   *ngFor="let a of answerList; let i = index">
+      <p class="label">{{a.label}}: {{a.answer}}</p>
+    </mat-list-item>
+  </mat-list>
+</div>
 
 <div class="visually-hidden">
   <div id="show-correct">{{ 'statistic.a11y-answer-indicator' | translate }}</div>
