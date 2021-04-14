@@ -8,12 +8,15 @@
                    attr.aria-label="{{ ('statistic.a11y-choice-evaluation' | translate: { count: data[i], answer: a.answer }) +
                  (isSurvey ? '' : ((checkIfCorrect(i) ?
                  'statistic.a11y-correct' : 'statistic.a11y-wrong') | translate)) }}"
-                   *ngFor="let a of answerList; let i = index">
-      <p class="label">{{a.label}}: {{a.answer}}</p>
+                 *ngFor="let a of answerList; let i = index">
+      <div fxFill fxLayoutAlign="space-between center">
+        <p class="label">{{a.label}}: {{a.answer}}</p>
+        <mat-icon *ngIf="!isSurvey" [ngClass]="{'show-correct-icon': colorLabel && checkIfCorrect(i)}"
+                class="correct-icon">check</mat-icon>
+      </div>
     </mat-list-item>
   </mat-list>
 </div>
-
 <div class="visually-hidden">
   <div id="show-correct">{{ 'statistic.a11y-answer-indicator' | translate }}</div>
   <div id="show-chart">{{ 'statistic.a11y-show-chart' | translate }}</div>

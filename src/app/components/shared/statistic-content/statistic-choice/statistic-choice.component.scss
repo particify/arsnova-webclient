@@ -8,11 +8,18 @@
 }
 
 .correct {
-  background-color: var(--green);
-  & .label {
-    transition: 500ms;
-    color: var(--black);
-  }
+  background-color: var(--surface);
+  box-shadow: 0 0 6px var(--green);
+}
+
+.correct-icon {
+  transition: opacity 300ms;
+  opacity: 0;
+  color: var(--green);
+}
+
+.show-correct-icon {
+  opacity: 1;
 }
 
 .chart-container {
