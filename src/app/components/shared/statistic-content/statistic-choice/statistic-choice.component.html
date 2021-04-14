@@ -9,9 +9,12 @@
                  (isSurvey ? '' : ((checkIfCorrect(i) ?
                  'statistic.a11y-correct' : 'statistic.a11y-wrong') | translate)) }}"
                  *ngFor="let a of answerList; let i = index">
-      <div fxFill fxLayoutAlign="space-between center">
-        <p class="label">{{a.label}}: {{a.answer}}</p>
-        <mat-icon *ngIf="!isSurvey" [ngClass]="{'show-correct-icon': colorLabel && checkIfCorrect(i)}"
+    <div fxFill fxLayoutAlign="space-between center">
+      <div fxLayout="row" fxLayoutAlign="start center">
+        <p class="answer-label">{{a.label}}</p>
+        <p>{{a.answer}}</p>
+      </div>
+      <mat-icon *ngIf="!isSurvey" [ngClass]="{'show-correct-icon': colorLabel && checkIfCorrect(i)}"
                 class="correct-icon">check</mat-icon>
       </div>
     </mat-list-item>

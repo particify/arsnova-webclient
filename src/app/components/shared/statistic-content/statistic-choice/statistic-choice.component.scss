@@ -1,16 +1,4 @@
-.mat-list-item {
-  background-color: var(--background);
-  margin-bottom: 10px;
-  border-radius: 5px;
-  align-items: center;
-  transition: 300ms;
-  color: var(--on-surface);
-}
-
-.correct {
-  background-color: var(--surface);
-  box-shadow: 0 0 6px var(--green);
-}
+@import '../statistic-content';
 
 .correct-icon {
   transition: opacity 300ms;
@@ -20,17 +8,6 @@
 
 .show-correct-icon {
   opacity: 1;
-}
-
-.chart-container {
-  height: 40vh;
-  max-height: 500px;
-  transition: all 300ms;
-}
-
-.invisible {
-  height: 0;
-  opacity: 0;
 }
 
 .button-container {
