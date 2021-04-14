@@ -211,4 +211,18 @@ export class RoomMembershipService extends AbstractHttpService<Membership> {
       })
     );
   }
+
+  /**
+   * Sends a request to cancel a membership and emits a MembershipsChanged event
+   * on success.
+   */
+  cancelMembership(roomShortId: string): Observable<Room> {
+    const uri = this.buildForeignUri('/cancel-membership', '~' + roomShortId);
+    return this.http.post<Room>(uri, {}).pipe(
+      tap(() => {
+        const event = new MembershipsChanged();
+        this.eventService.broadcast(event.type, event.payload);
+      })
+    );
+  }
 }
