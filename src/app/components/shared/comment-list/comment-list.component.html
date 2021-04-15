@@ -1,13 +1,13 @@
 <app-nav-bar (isVisible)="checkIfNavBarExists($event)"></app-nav-bar>
 <button class="add-btn mobile-add" mat-mini-fab aria-labelledby="add"
-        *ngIf="!search && deviceType !== 'desktop'" (click)="openCreateDialog()"
+        *ngIf="!search && deviceType !== 'desktop' && !isModerator" (click)="openCreateDialog()"
         [ngClass]="{'above-nav': navBarExists}"
         matTooltip="{{ 'comment-list.add-comment' | translate }}">
   <mat-icon class="bigger-icon">add</mat-icon>
 </button>
 <div class="nav-bar-container">
   <div fxLayout="row" class="search-container" [ngClass]="{'search-container-fixed-invisible': scroll && !scrollActive && deviceType !== 'desktop', 'search-container-fixed': scroll,
-        'search-container-fixed-visible' : scroll && (deviceType === 'desktop' || scrollActive) }"
+        'search-container-fixed-visible' : scroll && (deviceType === 'desktop' || scrollActive), 'search-container-moderator': scroll && isModerator }"
        (window:scroll)="checkScroll()" fxLayoutAlign="center center">
     <input tabindex="-1" (focus)="eventService.makeFocusOnInputTrue()" (blur)="eventService.makeFocusOnInputFalse()"
            #searchBox
@@ -21,7 +21,7 @@
     </button>
 
     <div class="button-bar" fxLayoutAlign="center center" fxLayoutGap="1em">
-      <div class="counter-container" *ngIf="comments && !search">
+      <div [ngClass]="{'counter-container': !isModerator}" *ngIf="comments && !search">
         <h3 class="counter">
           {{ filteredComments && hideCommentsList ? filteredComments.length : commentsFilteredByTime.length }}
         </h3>
@@ -52,19 +52,19 @@
       </button>
 
       <button id="pause-button" mat-mini-fab aria-labelledby="pause" class="bar-icon"
-              *ngIf="!search && !freeze" (click)="pauseCommentStream()"
+              *ngIf="!search && !freeze && !isModerator" (click)="pauseCommentStream()"
               matTooltip="{{ 'comment-list.pause-comments' | translate }}">
         <mat-icon>pause</mat-icon>
       </button>
 
       <button id="start-button" mat-mini-fab aria-labelledby="play" class="bar-icon"
-              *ngIf="!search && freeze" (click)="playCommentStream()"
+              *ngIf="!search && freeze && !isModerator" (click)="playCommentStream()"
               matTooltip="{{ 'comment-list.play-comments' | translate }}">
         <mat-icon>play_arrow</mat-icon>
       </button>
 
       <button id="add-comment-small-button" class="add-btn" mat-mini-fab aria-labelledby="add"
-              *ngIf="!search && deviceType === 'desktop'" (click)="openCreateDialog()"
+              *ngIf="!search && deviceType === 'desktop' && !isModerator" (click)="openCreateDialog()"
               matTooltip="{{ 'comment-list.add-comment' | translate }}">
         <mat-icon class="bigger-icon">add</mat-icon>
       </button>
@@ -157,13 +157,13 @@
 
   <button mat-icon-button class="button-abort scrollTop" tabindex="-1" (click)="scrollTop(true)"
           [ngClass]="{'visible': scrollExtended && scrollActive,
-                      'above-add': navBarExists && deviceType === 'mobile',
-                      'mobile-scroll-position': !navBarExists && deviceType === 'mobile',
+                      'above-add': navBarExists && deviceType === 'mobile' && !isModerator,
+                      'mobile-scroll-position': (!navBarExists || isModerator) && deviceType === 'mobile',
                       'desktop-scroll-position': deviceType === 'desktop'}">
     <mat-icon>arrow_upward</mat-icon>
   </button>
 
-  <div fxLayout="row" fxLayoutAlign="center" *ngIf="comments.length < 3 && !isLoading && !search">
+  <div fxLayout="row" fxLayoutAlign="center" *ngIf="comments.length < 3 && !isLoading && !search && !isModerator">
     <button id="add-comment-button" mat-raised-button class="button-primary fab-extended" (click)="openCreateDialog()"
             aria-labelledby="add">
       <mat-icon class="add">add</mat-icon>

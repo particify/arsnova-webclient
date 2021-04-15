@@ -58,9 +58,11 @@ export const itemRenderNumber = 20;
 export class CommentListComponent implements OnInit, OnDestroy {
   @ViewChild('searchBox') searchField: ElementRef;
   @Input() auth: ClientAuthentication;
+  @Input() comments: Comment[] = [];
+  @Input() isModerator = false;
+
   roomId: string;
   viewRole: UserRole;
-  comments: Comment[] = [];
   room: Room;
   hideCommentsList = false;
   filteredComments: Comment[];
@@ -84,6 +86,7 @@ export class CommentListComponent implements OnInit, OnDestroy {
   newestComment: Comment = new Comment();
   freeze = false;
   commentStream: Subscription;
+  moderatorStream: Subscription;
   commentsFilteredByTime: Comment[] = [];
   displayComments: Comment[] = [];
   commentCounter = itemRenderNumber;
@@ -115,7 +118,7 @@ export class CommentListComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    const userId = this.auth.userId;
+    const userId = this.auth?.userId;
     this.currentSort = this.globalStorageService.getItem(STORAGE_KEYS.COMMENT_SORT) || this.sorting.VOTEDESC;
     this.period = this.globalStorageService.getItem(STORAGE_KEYS.COMMENT_TIME_FILTER) || Period.ALL;
     this.currentFilter = '';
@@ -147,6 +150,9 @@ export class CommentListComponent implements OnInit, OnDestroy {
     if (!this.freeze && this.commentStream) {
       this.commentStream.unsubscribe();
     }
+    if (this.moderatorStream) {
+      this.moderatorStream.unsubscribe();
+    }
   }
 
   initRoom(room: Room) {
@@ -161,13 +167,12 @@ export class CommentListComponent implements OnInit, OnDestroy {
       this.commentSettingsService.get(this.roomId).subscribe(commentSettings => {
         this.directSend = commentSettings.directSend;
       });
+      this.getComments();
     }
-    this.commentService.getAckComments(this.roomId)
-      .subscribe(comments => {
-        this.comments = comments;
-        this.getComments();
-      });
     this.subscribeCommentStream();
+    if (this.isModerator) {
+      this.subscribeModeratorStream();
+    }
   }
 
   checkIfNavBarExists(navBarExists: boolean) {
@@ -249,23 +254,29 @@ export class CommentListComponent implements OnInit, OnDestroy {
     }
   }
 
+  addNewComment(comment: Comment) {
+    const c = new Comment();
+    c.roomId = this.roomId;
+    c.body = comment.body;
+    c.id = comment.id;
+    c.timestamp = comment.timestamp;
+    c.tag = comment.tag;
+    c.answer = comment.answer;
+    c.favorite = comment.favorite;
+    c.correct = comment.correct;
+    this.announceNewComment(c);
+    this.comments = this.comments.concat(c);
+    this.commentCounter++;
+  }
+
   parseIncomingMessage(message: Message) {
     const msg = JSON.parse(message.body);
     const payload = msg.payload;
     switch (msg.type) {
       case 'CommentCreated':
-        const c = new Comment();
-        c.roomId = this.roomId;
-        c.body = payload.body;
-        c.id = payload.id;
-        c.timestamp = payload.timestamp;
-        c.tag = payload.tag;
-        c.answer = payload.answer;
-        c.favorite = payload.favorite;
-        c.correct = payload.correct;
-        this.announceNewComment(c);
-        this.comments = this.comments.concat(c);
-        this.commentCounter++;
+        if (!this.isModerator) {
+          this.addNewComment(payload);
+        }
         break;
       case 'CommentPatched':
         // ToDo: Use a map for comments w/ key = commentId
@@ -287,7 +298,7 @@ export class CommentListComponent implements OnInit, OnDestroy {
                   this.getComments();
                   break;
                 case this.filtering.ACK:
-                  const isNowAck = <boolean>value;
+                  const isNowAck = this.isModerator ? !value : <boolean>value;
                   if (!isNowAck) {
                     this.comments = this.comments.filter(function (el) {
                       return el.id !== payload.id;
@@ -325,6 +336,19 @@ export class CommentListComponent implements OnInit, OnDestroy {
       default:
         this.referenceEvent.next(payload.id);
     }
+    this.afterIncomingMessage();
+  }
+
+  parseIncomingModeratorMessage(message: Message) {
+    const msg = JSON.parse(message.body);
+    const payload = msg.payload;
+    if (msg.type === 'CommentCreated') {
+      this.addNewComment(payload);
+    }
+    this.afterIncomingMessage();
+  }
+
+  afterIncomingMessage() {
     this.setTimePeriod(this.period);
     if (this.hideCommentsList) {
       this.searchComments();
@@ -432,6 +456,12 @@ export class CommentListComponent implements OnInit, OnDestroy {
   subscribeCommentStream() {
     this.commentStream = this.wsCommentService.getCommentStream(this.roomId).subscribe((message: Message) => {
       this.parseIncomingMessage(message);
+    });
+  }
+
+  subscribeModeratorStream() {
+    this.moderatorStream = this.wsCommentService.getModeratorCommentStream(this.roomId).subscribe((message: Message) => {
+      this.parseIncomingModeratorMessage(message);
     });
   }
 
