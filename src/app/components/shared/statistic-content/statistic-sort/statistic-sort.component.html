@@ -5,7 +5,10 @@
   </div>
   <mat-list *ngIf="!isLoading">
     <mat-list-item *ngFor="let answer of answers; let i = index" [ngClass]="{ 'correct': showCorrect }">
-      <p>{{i + 1}}: {{answer}}</p>
+      <div fxLayout="row" fxLayoutAlign="start center">
+        <p class="answer-label">{{i + 1}}</p>
+        <p>{{answer}}</p>
+      </div>
     </mat-list-item>
   </mat-list>
 </div>

@@ -1,29 +1,13 @@
-.mat-list-item {
-  background-color: var(--background);
-  margin-bottom: 10px;
-  border-radius: 5px;
-  align-items: center;
-  transition: 300ms;
-  color: var(--on-surface);
-}
+@import '../statistic-content';
 
-.correct {
-  background-color: var(--green);
-  & .label {
-    transition: 500ms;
-    color: var(--black);
-  }
-}
-
-.chart-container {
-  height: 40vh;
-  max-height: 500px;
-  transition: all 300ms;
-}
-
-.invisible {
-  height: 0;
+.correct-icon {
+  transition: opacity 300ms;
   opacity: 0;
+  color: var(--green);
+}
+
+.show-correct-icon {
+  opacity: 1;
 }
 
 .button-container {
