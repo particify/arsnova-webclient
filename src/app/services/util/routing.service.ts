@@ -25,6 +25,7 @@ export const TITLES: { [key: string]: string } = {
   'group/:contentGroup/edit/:contentId': 'content-edit',
   'create-content': 'content-creation',
   settings: 'settings',
+  'settings/:settingsName': 'settings',
   archive: 'archive',
   admin: 'admin',
   status: 'admin',

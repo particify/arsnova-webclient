@@ -5,6 +5,8 @@ import { ActivatedRoute } from '@angular/router';
 import { KeyboardUtils } from '../../../utils/keyboard';
 import { KeyboardKey } from '../../../utils/keyboard/keys';
 import { EventService } from '../../../services/util/event.service';
+import { LanguageService } from '../../../services/util/language.service';
+import { TranslateService } from '@ngx-translate/core';
 
 export interface Settings {
   headerName: string;
@@ -35,8 +37,12 @@ export class SettingsPageComponent implements OnInit {
   constructor(
     protected roomService: RoomService,
     protected route: ActivatedRoute,
-    protected eventService: EventService
-  ) {}
+    protected eventService: EventService,
+    protected langService: LanguageService,
+    protected translateService: TranslateService
+  ) {
+    langService.langEmitter.subscribe(lang => translateService.use(lang));
+  }
 
   @HostListener('window:keyup', ['$event'])
   keyEvent(event: KeyboardEvent) {

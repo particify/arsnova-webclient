@@ -2,12 +2,12 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { AdvancedSnackBarTypes, NotificationService } from '../../../services/util/notification.service';
 import { TranslateService } from '@ngx-translate/core';
 import { RoomService } from '../../../services/http/room.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { EventService } from '../../../services/util/event.service';
-import { LanguageService } from '../../../services/util/language.service';
 import { MatDialog } from '@angular/material/dialog';
 import { Room } from '../../../models/room';
 import { Settings } from '../settings-page/settings-page.component';
+import { Location } from '@angular/common';
 
 export class UpdateEvent {
   room: Room;
@@ -38,34 +38,57 @@ export class SettingsComponent implements OnInit {
 
   constructor(public dialog: MatDialog,
               public notificationService: NotificationService,
-              public translationService: TranslateService,
               protected roomService: RoomService,
               public router: Router,
               public eventService: EventService,
               protected translateService: TranslateService,
-              protected langService: LanguageService) {
-    langService.langEmitter.subscribe(lang => translateService.use(lang));
+              private location: Location,
+              private route: ActivatedRoute) {
   }
 
   ngOnInit() {
-    if (this.settings.componentName === 'general') {
-      this.expanded = true;
-      this.contentExpanded = true;
-    }
+    this.route.params.subscribe(params => {
+      const settingsRoute = params['settingsName'];
+      if (this.settings.componentName === settingsRoute || !settingsRoute && this.settings.componentName === 'general') {
+        this.expanded = true;
+        this.contentExpanded = true;
+      }
+    });
+    this.eventService.on<any>('SettingsExpanded').subscribe(event => {
+      if (this.expanded && event !== this.settings.componentName) {
+        this.expanded = false;
+        this.collapse();
+      }
+    });
   }
 
   expandSettings() {
     this.expanded = !this.expanded;
     if (!this.contentExpanded) {
-      this.contentExpanded = true;
+      this.expand();
     } else {
-      setTimeout(() => {
-        this.contentExpanded = false;
-      }, 400)
+      this.collapse();
     }
     setTimeout(() => {
       document.getElementById((this.settings.componentName + '-settings')).focus();
     }, 100);
+  }
+
+  updateURL() {
+    const urlTree = this.router.createUrlTree(['creator/room', this.room.shortId, 'settings', this.settings.componentName]);
+    this.location.replaceState(this.router.serializeUrl(urlTree));
+  }
+
+  expand() {
+    this.contentExpanded = true;
+    this.eventService.broadcast('SettingsExpanded', this.settings.componentName);
+    this.updateURL();
+  }
+
+  collapse() {
+    setTimeout(() => {
+      this.contentExpanded = false;
+    }, 400)
   }
 
   saveRoom(updateEvent: UpdateEvent) {
