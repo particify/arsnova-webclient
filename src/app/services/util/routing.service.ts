@@ -15,7 +15,7 @@ export const TITLES: { [key: string]: string } = {
   import: 'import',
   '': 'room',
   comments: 'comments',
-  'moderator/comments': 'moderation',
+  'comments/moderation': 'moderation',
   survey: 'live-survey',
   statistics: 'statistics',
   'group/:contentGroup/statistics': 'presentation',

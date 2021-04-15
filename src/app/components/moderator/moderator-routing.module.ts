@@ -33,7 +33,7 @@ const routes: Routes = [
         component: CommentPageComponent
       },
       {
-        path: 'moderator/comments',
+        path: 'comments/moderation',
         component: ModeratorCommentPageComponent
       },
       {

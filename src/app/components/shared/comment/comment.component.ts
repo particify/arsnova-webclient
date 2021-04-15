@@ -101,7 +101,7 @@ export class CommentComponent implements OnInit, OnDestroy {
       this.getRole();
     } else {
       this.route.data.subscribe(data => {
-        if (this.router.url.includes('/moderator/comments')) {
+        if (this.router.url.includes('/moderation')) {
           this.isModeratorView = true;
         }
         this.viewRole = data.viewRole;

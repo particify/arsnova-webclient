@@ -200,7 +200,7 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
           url += this.getQuestionUrl(this.role, this.groupName);
         }
       } else {
-        url += 'moderator/comments';
+        url += 'comments/moderation';
       }
       const featureIndex = this.activeFeatures.indexOf(feature.name);
       if ((featureIndex > -1 || (feature.name === FEATURES.SURVEY && this.role === UserRole.CREATOR))
@@ -228,10 +228,7 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
       this.changeIndicator = changeIndicator;
     }
     if (this.barItems.length > 1) {
-      const matchingRoutes = this.barItems.filter(s => this.router.url.includes(s.name !== FEATURES.GROUP ? s.url : '/group/'));
-      if (matchingRoutes.length > 0) {
-        this.currentRouteIndex = this.barItems.map(s => s.url).indexOf(matchingRoutes[0].url);
-      }
+      this.getCurrentRouteIndex();
       this.changeIndicator.map((n, index) => n.changes = n.changes && index !== this.currentRouteIndex);
       this.updateNews();
       setTimeout(() => {
@@ -242,6 +239,17 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
       this.tooFewFeatures = true;
     }
     this.isVisible.emit(!this.tooFewFeatures);
+  }
+
+  getCurrentRouteIndex() {
+    const matchingRoutes = this.barItems.filter(b => this.router.url.includes(this.getFeatureUrl(b)));
+    if (matchingRoutes.length > 0) {
+      this.currentRouteIndex = this.barItems.map(s => s.url).indexOf(matchingRoutes[matchingRoutes.length - 1].url);
+    }
+  }
+
+  getFeatureUrl(barItem: NavBarItem): string {
+    return barItem.name === FEATURES.GROUP ? '/group/' : barItem.url;
   }
 
   updateNews() {
