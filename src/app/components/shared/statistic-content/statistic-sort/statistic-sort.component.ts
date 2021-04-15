@@ -202,14 +202,14 @@ export class StatisticSortComponent extends StatisticContentBaseComponent implem
         scales: {
           y: {
             ticks: {
-              precision: 0
+              precision: 0,
             },
-            gridLines: {
+            grid: {
               borderColor: this.onSurface
             }
           },
           x: {
-            gridLines: {
+            grid: {
               borderColor: this.onSurface
             }
           }
