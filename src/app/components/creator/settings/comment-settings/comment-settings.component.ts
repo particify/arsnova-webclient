@@ -12,8 +12,8 @@ import { CommentSettings } from '../../../../models/comment-settings';
 import { DialogService } from '../../../../services/util/dialog.service';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { GlobalStorageService, STORAGE_KEYS } from '../../../../services/util/global-storage.service';
-import { UpdateEvent } from '@arsnova/app/components/creator/settings/settings.component';
-import { Comment } from '@arsnova/app/models/comment';
+import { UpdateEvent } from '../settings.component';
+import { Comment } from '../../../../models/comment';
 
 export class CommentExtensions {
   enableThreshold: boolean;

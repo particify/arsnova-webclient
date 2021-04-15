@@ -7,7 +7,7 @@ import { Moderator } from '../../../../models/moderator';
 import { FormControl, Validators } from '@angular/forms';
 import { EventService } from '../../../../services/util/event.service';
 import { DialogService } from '../../../../services/util/dialog.service';
-import { UpdateEvent } from '@arsnova/app/components/creator/settings/settings.component';
+import { UpdateEvent } from '../settings.component';
 import { UserService } from '../../../../services/http/user.service';
 
 @Component({

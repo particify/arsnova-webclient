@@ -8,7 +8,6 @@ import { LanguageService } from '../../../services/util/language.service';
 import { MatDialog } from '@angular/material/dialog';
 import { Room } from '../../../models/room';
 import { Settings } from '../settings-page/settings-page.component';
-import { AnnounceService } from '@arsnova/app/services/util/announce.service';
 
 export class UpdateEvent {
   room: Room;
@@ -44,8 +43,7 @@ export class SettingsComponent implements OnInit {
               public router: Router,
               public eventService: EventService,
               protected translateService: TranslateService,
-              protected langService: LanguageService,
-              private announceService: AnnounceService) {
+              protected langService: LanguageService) {
     langService.langEmitter.subscribe(lang => translateService.use(lang));
   }
 
@@ -65,9 +63,6 @@ export class SettingsComponent implements OnInit {
         this.contentExpanded = false;
       }, 400)
     }
-    /*const msg = this.translateService.instant(('settings.a11y-' + (this.expanded ? 'expanded' : 'collapsed')),
-      {name: this.settings.componentName});
-    this.announceService.announce(msg);*/
     setTimeout(() => {
       document.getElementById((this.settings.componentName + '-settings')).focus();
     }, 100);
