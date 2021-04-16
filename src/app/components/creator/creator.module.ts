@@ -16,7 +16,6 @@ import { ContentPresentationComponent } from './content-presentation/content-pre
 import { ModeratorsComponent } from './settings/moderators/moderators.component';
 import { BonusTokenComponent } from './settings/bonus-token/bonus-token.component';
 import { CommentSettingsComponent } from './settings/comment-settings/comment-settings.component';
-import { TagsComponent } from './settings/tags/tags.component';
 import { ContentGroupCreationComponent } from '../shared/_dialogs/content-group-creation/content-group-creation.component';
 import { SettingsComponent } from './settings/settings.component';
 import { SettingsPageComponent } from './settings-page/settings-page.component';
@@ -66,7 +65,6 @@ import { ContentFlashcardCreationComponent } from './content-creation/content-fl
     ModeratorsComponent,
     BonusTokenComponent,
     CommentSettingsComponent,
-    TagsComponent,
     ContentGroupCreationComponent,
     SettingsComponent,
     SettingsPageComponent,

@@ -15,12 +15,11 @@
         <div [ngSwitch]="settings.componentName">
           <app-room-edit [editRoom]="room" [name]="room.name" [description]="room.description"
                          *ngSwitchCase="'general'" (saveEvent)="saveRoom($event)"></app-room-edit>
-          <app-comment-settings [editRoom]="room" [roomId]="room.id" *ngSwitchCase="'comments'"
+          <app-comment-settings [room]="room" [roomId]="room.id" *ngSwitchCase="'comments'"
                                 (saveEvent)="saveRoom($event)"></app-comment-settings>
           <app-moderators [roomId]="room.id" *ngSwitchCase="'moderators'"
                           (saveEvent)="saveRoom($event)"></app-moderators>
           <!-- <app-bonus-token [room]="room" *ngSwitchCase="'tokenSettings'"></app-bonus-token> -->
-          <app-tags [room]="room" *ngSwitchCase="'tags'" (saveEvent)="saveRoom($event)"></app-tags>
         </div>
       </div>
     </div>

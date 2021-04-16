@@ -14,6 +14,8 @@ import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { GlobalStorageService, STORAGE_KEYS } from '../../../../services/util/global-storage.service';
 import { UpdateEvent } from '../settings.component';
 import { Comment } from '../../../../models/comment';
+import { EventService } from '../../../../services/util/event.service';
+import { COMMA, ENTER } from '@angular/cdk/keycodes';
 
 export class CommentExtensions {
   enableThreshold: boolean;
@@ -32,7 +34,7 @@ export class CommentSettingsComponent implements OnInit {
 
   @Output() saveEvent: EventEmitter<UpdateEvent> = new EventEmitter<UpdateEvent>();
 
-  @Input() editRoom: Room;
+  @Input() room: Room;
   @Input() roomId: string;
 
   commentExtension: any;
@@ -44,6 +46,9 @@ export class CommentSettingsComponent implements OnInit {
   enableTags = false;
   tags: string[] = [];
   timestamp = new Date();
+  tagExtension: object;
+  tagName = '';
+  readonly separatorKeysCodes: number[] = [ENTER, COMMA];
 
   constructor(
     public dialog: MatDialog,
@@ -56,23 +61,21 @@ export class CommentSettingsComponent implements OnInit {
     private bonusTokenService: BonusTokenService,
     private dialogService: DialogService,
     private globalStorageService: GlobalStorageService,
-    private liveAnnouncer: LiveAnnouncer
+    private liveAnnouncer: LiveAnnouncer,
+    public eventService: EventService
   ) {
   }
 
   ngOnInit() {
-    if (this.editRoom.extensions && this.editRoom.extensions.comments) {
-      this.commentExtension = this.editRoom.extensions.comments;
+    if (this.room.extensions && this.room.extensions.comments) {
+      this.commentExtension = this.room.extensions.comments;
       if (this.commentExtension.enableThreshold !== null) {
         this.commentExtension.commentThreshold !== undefined ?
           this.threshold = this.commentExtension.commentThreshold : this.threshold = -100;
         this.enableThreshold = this.commentExtension.enableThreshold;
       }
 
-      if (this.commentExtension.enableTags !== null) {
-        this.enableTags = this.commentExtension.enableTags;
-        this.tags = this.commentExtension.tags;
-      }
+      this.initTags();
 
       if (this.commentExtension.enableModeration !== null) {
         this.enableModeration = this.commentExtension.enableModeration;
@@ -82,6 +85,48 @@ export class CommentSettingsComponent implements OnInit {
       this.directSend = settings.directSend;
       this.directSendDefault = settings.directSend;
     });
+  }
+
+  initTags() {
+    this.enableTags = this.commentExtension.enableTags;
+    if (this.room.extensions !== undefined && this.room.extensions.tags !== undefined) {
+      this.tagExtension = this.room.extensions.tags;
+    }
+    if (!this.room.extensions) {
+      this.tagExtension = {};
+      this.tagExtension['enableTags'] = true;
+      this.room.extensions = {};
+      this.room.extensions.tags = this.tagExtension;
+    } else {
+      if (this.room.extensions.tags) {
+        this.tags = this.room.extensions.tags['tags'] || [];
+      }
+    }
+  }
+
+  addTag() {
+    if (this.tagName.length > 0) {
+      if (this.checkIfTagExists()) {
+        const msg = this.translationService.instant('settings.tag-error');
+        this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
+      } else {
+        this.tags.push(this.tagName);
+        this.tagName = '';
+        this.room.extensions.tags = { enableTags: true, tags: this.tags };
+        this.saveChanges(true);
+      }
+    }
+  }
+
+  checkIfTagExists(): boolean {
+    return this.tags.indexOf(this.tagName.trim()) > -1;
+  }
+
+  deleteTag(tag: string) {
+    this.tags = this.tags.filter(o => o !== tag);
+    this.tagExtension['tags'] = this.tags;
+    this.room.extensions.tags = this.tagExtension;
+    this.saveChanges(false);
   }
 
   onSliderChange(event: any) {
@@ -148,7 +193,7 @@ export class CommentSettingsComponent implements OnInit {
             csv = keyFields + this.getExportData(comments, ',');
             const myBlob = new Blob([csv], { type: 'text/csv' });
             const link = document.createElement('a');
-            const fileName = this.editRoom.name + '_' + this.editRoom.shortId + '_' + dateString + '.csv';
+            const fileName = this.room.name + '_' + this.room.shortId + '_' + dateString + '.csv';
             link.setAttribute('download', fileName);
             link.href = window.URL.createObjectURL(myBlob);
             link.click();
@@ -167,10 +212,10 @@ export class CommentSettingsComponent implements OnInit {
     commentExtension.enableModeration = this.enableModeration;
     commentExtension.enableTags = this.enableTags;
     commentExtension.tags = this.tags;
-    if (!this.editRoom.extensions) {
-      this.editRoom.extensions = { comments: commentExtension };
+    if (!this.room.extensions) {
+      this.room.extensions = { comments: commentExtension };
     } else {
-      this.editRoom.extensions.comments = commentExtension;
+      this.room.extensions.comments = commentExtension;
     }
     this.globalStorageService.setItem(STORAGE_KEYS.MODERATION_ENABLED, String(this.enableModeration));
     this.saveChanges();
@@ -183,8 +228,12 @@ export class CommentSettingsComponent implements OnInit {
     this.commentSettingsService.update(commentSettings).subscribe();
   }
 
-  saveChanges() {
-    this.saveEvent.emit(new UpdateEvent(this.editRoom, false));
+  saveChanges(addedTag?: boolean) {
+    this.saveEvent.emit(new UpdateEvent(this.room, false));
+    if (addedTag !== undefined) {
+      const msg = this.translationService.instant(addedTag ? 'settings.tag-added' : 'settings.tag-removed');
+      this.notificationService.showAdvanced(msg, addedTag ? AdvancedSnackBarTypes.SUCCESS : AdvancedSnackBarTypes.WARNING);
+    }
   }
 
   announceThreshold() {
