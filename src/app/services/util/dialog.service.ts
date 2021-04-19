@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { ComponentType } from '@angular/cdk/portal';
+import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
 import { UpdateAvailableEvent } from '@angular/service-worker';
 import { Observable } from 'rxjs';
 import { YesNoDialogComponent } from '../../components/shared/_dialogs/yes-no-dialog/yes-no-dialog.component';
@@ -32,6 +33,10 @@ export class DialogService {
   };
 
   constructor(public dialog: MatDialog) {
+  }
+
+  openDialog<T>(component: ComponentType<T>, config?: MatDialogConfig<T>): MatDialogRef<T> {
+    return this.dialog.open(component, config);
   }
 
   openDeleteDialog(body: string, bodyElement?: string, confirmLabel?: string): MatDialogRef<YesNoDialogComponent> {
