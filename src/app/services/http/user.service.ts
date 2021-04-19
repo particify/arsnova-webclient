@@ -108,16 +108,4 @@ export class UserService extends AbstractEntityService<User> {
       catchError(this.handleError('getUserData', []))
     );
   }
-
-  addRoomToHistory(userId: string, roomId: string): Observable<void> {
-    const connectionUrl = this.buildUri(`/${userId}/roomHistory`);
-    return this.http.post<void>(connectionUrl, { roomId: roomId, lastVisit: new Date().getTime() }, httpOptions);
-  }
-
-  removeRoomFromHistory(userId: string, roomId: string): Observable<void> {
-    const connectionUrl = this.buildUri(`/${userId}/roomHistory/${roomId}`);
-    return this.http.delete<void>(connectionUrl, httpOptions).pipe(
-      catchError(this.handleError<void>('deleteRoom'))
-    );
-  }
 }

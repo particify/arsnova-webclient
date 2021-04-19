@@ -12,6 +12,8 @@ import { UserRole } from '../models/user-roles.enum';
 import { TranslateService } from '@ngx-translate/core';
 import { NotificationService } from './util/notification.service';
 import { ClientAuthentication } from '../models/client-authentication';
+import { Room } from '../models/room';
+import { MembershipsChanged } from '../models/events/memberships-changed';
 
 /**
  * This service provides utility methods which handle or provide information
@@ -194,5 +196,33 @@ export class RoomMembershipService extends AbstractHttpService<Membership> {
    */
   getMembershipChangesStream(userId: string): Observable<IMessage> {
     return this.wsConnector.getWatcher(`/topic/${userId}.room-membership.changes.stream`);
+  }
+
+  /**
+   * Sends a request for membership and emits a MembershipsChanged event on
+   * success.
+   */
+  requestMembership(roomShortId: string): Observable<Room> {
+    const uri = this.buildForeignUri('/request-membership', '~' + roomShortId);
+    return this.http.post<Room>(uri, {}).pipe(
+      tap(() => {
+        const event = new MembershipsChanged();
+        this.eventService.broadcast(event.type, event.payload);
+      })
+    );
+  }
+
+  /**
+   * Sends a request to cancel a membership and emits a MembershipsChanged event
+   * on success.
+   */
+  cancelMembership(roomShortId: string): Observable<Room> {
+    const uri = this.buildForeignUri('/cancel-membership', '~' + roomShortId);
+    return this.http.post<Room>(uri, {}).pipe(
+      tap(() => {
+        const event = new MembershipsChanged();
+        this.eventService.broadcast(event.type, event.payload);
+      })
+    );
   }
 }

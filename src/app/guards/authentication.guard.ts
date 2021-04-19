@@ -1,27 +1,22 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot } from '@angular/router';
 import { Observable, of } from 'rxjs';
-import { catchError, map, switchMap, tap } from 'rxjs/operators';
+import { catchError, map, switchMap } from 'rxjs/operators';
 import { AuthenticationService } from '../services/http/authentication.service';
-import { EventService } from '../services/util/event.service';
 import { AdvancedSnackBarTypes, NotificationService } from '../services/util/notification.service';
 import { UserRole } from '../models/user-roles.enum';
-import { MembershipsChanged } from '../models/events/memberships-changed';
 import { TranslateService } from '@ngx-translate/core';
 import { RoomService } from '../services/http/room.service';
 import { RoomMembershipService } from '../services/room-membership.service';
 import { environment } from '../../environments/environment';
-import { UserService } from '../services/http/user.service';
 
 @Injectable()
 export class AuthenticationGuard implements CanActivate {
   constructor(private authenticationService: AuthenticationService,
               private roomMembershipService: RoomMembershipService,
               private roomService: RoomService,
-              private userService: UserService,
               private notificationService: NotificationService,
               private translateService: TranslateService,
-              private eventService: EventService,
               private router: Router) {
   }
 
@@ -55,12 +50,8 @@ export class AuthenticationGuard implements CanActivate {
               }
 
               if (viewRole === UserRole.PARTICIPANT) {
-                /* First time room member -> add history entry */
-                return this.roomService.getRoomByShortId(route.params.shortId).pipe(
-                    tap(room => this.userService.addRoomToHistory(auth.userId, room.id).subscribe(() => {
-                      const event = new MembershipsChanged();
-                      this.eventService.broadcast(event.type, event.payload);
-                    })),
+                /* First time access / not a member yet -> request membership */
+                return this.roomMembershipService.requestMembership(route.params.shortId).pipe(
                     map(room => true),
                     catchError(e => {
                       this.handleRoomNotFound();
