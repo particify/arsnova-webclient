@@ -47,9 +47,14 @@
               aria-labelledby="comment-moderation" matTooltip="{{ 'comment-page.reject' | translate }}">
         <mat-icon class="gavel-icon">lock_open</mat-icon>
       </button>
-      <button mat-icon-button *ngIf="(isCreator || isModerator) && !inAnswerView" [matMenuTriggerFor]="actionsMenu"
+      <button mat-icon-button *ngIf="(isCreator || isModerator) && !inAnswerView && !archived" [matMenuTriggerFor]="actionsMenu"
               tabindex="0" aria-labelledby="more-options">
         <mat-icon matTooltip="{{ 'comment-page.show-actions' | translate }}">more_horiz
+        </mat-icon>
+      </button>
+      <button mat-icon-button *ngIf="(isCreator || isModerator) && archived" (click)="openDeleteCommentDialog()"
+              tabindex="0" aria-labelledby="comment-delete">
+        <mat-icon class="delete-icon" matTooltip="{{ 'comment-page.delete' | translate }}">delete
         </mat-icon>
       </button>
       <mat-menu #actionsMenu="matMenu" xPosition="before">
