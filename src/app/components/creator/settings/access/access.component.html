@@ -1,0 +1,60 @@
+<div *ngIf="isGuest" class="guest-hint">
+  <app-hint [text]="'settings.disabled-for-guests'" [type]="'WARNING'"></app-hint>
+</div>
+<div fxLayout="column" fxLayoutGap="16px">
+  <div tabindex="0" id="access-settings" class="visually-hidden">{{ 'settings.a11y-access' | translate }}</div>
+  <div fxLayout="row wrap" fxLayoutAlign="start center" fxLayoutGap="10px" class="form-container">
+    <mat-form-field class="input-block no-field-hint" appearance="outline" fxFlex>
+      <mat-label>{{ 'settings.username-or-email' | translate }}</mat-label>
+      <input (focus)="eventService.makeFocusOnInputTrue()" (blur)="eventService.makeFocusOnInputFalse()" [disabled]="isGuest" [readonly]="isGuest"
+             matInput type="email" autocomplete="disabled" [(ngModel)]="loginId" [formControl]="usernameFormControl" name="username"
+             aria-labelledby="username"/>
+    </mat-form-field>
+    <mat-form-field class="no-field-hint" appearance="outline" fxFlex>
+      <mat-label>{{ 'settings.role' | translate }}</mat-label>
+      <mat-select [value]="selectedRole" [disabled]="roles.length === 1">
+        <mat-option *ngFor="let role of roles" [value]="role">
+          {{ 'settings.' + role.name | translate }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <button mat-stroked-button class="add-user-button" (click)="addUser()" fxFlex [disabled]="isGuest"
+            aria-labelledby="add-user">{{ 'settings.add-user' | translate }}</button>
+  </div>
+  <app-loading-indicator *ngIf="isLoading" [size]="40"></app-loading-indicator>
+  <p *ngIf="!isLoading && moderators.length === 0">{{ 'settings.no-users' | translate }}</p>
+  <mat-list *ngIf="!isLoading && moderators.length > 0">
+    <mat-list-item class="bottom-border" *ngFor="let moderator of moderators; index as i">
+      <div fxFill fxLayout="row wrap" fxLayoutAlign="space-between">
+        <div fxLayout="row" fxLayoutGap="16px" fxLayoutAlign="center center">
+          <div class="user-character-container" fxLayoutAlign="center center"
+               [ngClass]="{'role-moderator': moderator.roles.indexOf(UserRole.EXECUTIVE_MODERATOR) > -1,
+                            'role-creator': moderator.roles.indexOf(UserRole.CREATOR) > -1,
+                            'role-participant': moderator.roles.indexOf(UserRole.PARTICIPANT) > -1}">
+            <p class="user-character">{{moderator.loginId.toLocaleUpperCase().slice(0, 1)}}</p>
+          </div>
+          <div fxLayout="row" fxLayoutGap="10px" fxLayoutAlign="start center">
+            <p class="login-id">
+              {{moderator.loginId}}
+            </p>
+            <mat-chip-list class="role-chip">
+              <mat-chip>{{ 'settings.' + moderator.roles[0].toLocaleString().toLocaleLowerCase() | translate }}</mat-chip>
+            </mat-chip-list>
+          </div>
+        </div>
+        <div fxLayout="row" fxLayoutAlign="center center">
+          <button mat-icon-button *ngIf="moderator.roles.indexOf(UserRole.CREATOR) === -1" class="close" (click)="openDeleteRoomDialog(moderator)" fxFlex
+                  attr.aria-label="{{'settings.a11y-delete-user' | translate: { loginId: moderator.loginId } }}">
+            <mat-icon class="close-icon">close</mat-icon>
+          </button>
+        </div>
+      </div>
+    </mat-list-item>
+  </mat-list>
+</div>
+<lib-extension-point extensionId="room-password-settings" [extensionData]="{ room: room }"></lib-extension-point>
+
+<div class="visually-hidden">
+  <div id="username">{{'settings.a11y-username' | translate}}</div>
+  <div id="add-user">{{'settings.a11y-add-user' | translate}}</div>
+</div>

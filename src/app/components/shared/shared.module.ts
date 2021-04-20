@@ -46,6 +46,7 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 import { StatisticSortComponent } from './statistic-content/statistic-sort/statistic-sort.component';
 import { NavBarComponent } from './bars/nav-bar/nav-bar.component';
 import { InfoBarComponent } from './bars/info-bar/info-bar.component';
+import { DividerComponent } from './divider/divider.component';
 
 @NgModule({
   imports: [
@@ -98,7 +99,8 @@ import { InfoBarComponent } from './bars/info-bar/info-bar.component';
     ContentSortAnswerComponent,
     StatisticSortComponent,
     NavBarComponent,
-    InfoBarComponent
+    InfoBarComponent,
+    DividerComponent
   ],
   exports: [
     RoomJoinComponent,
@@ -129,7 +131,8 @@ import { InfoBarComponent } from './bars/info-bar/info-bar.component';
     ContentSortAnswerComponent,
     StatisticSortComponent,
     NavBarComponent,
-    InfoBarComponent
+    InfoBarComponent,
+    DividerComponent
   ]
 })
 export class SharedModule {

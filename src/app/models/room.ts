@@ -7,6 +7,7 @@ export class Room {
   name: string;
   description: string;
   renderedDescription: string;
+  passwordProtected: boolean;
   closed: boolean;
   settings: object;
   extensions: { [key: string ]: object };

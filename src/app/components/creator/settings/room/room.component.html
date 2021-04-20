@@ -1,7 +1,6 @@
 <div *ngIf="editRoom">
   <div fxLayout="column">
     <div tabindex="0" id="room-settings" class="visually-hidden">{{ 'settings.a11y-room' | translate }}</div>
-    <lib-extension-point extensionId="room-password-settings" [extensionData]="{ roomId: editRoom.id, passwordProtected: editRoom.passwordProtected }"></lib-extension-point>
     <mat-form-field class="input-block" appearance="outline">
       <mat-label>{{ 'room.room-name' | translate }}</mat-label>
       <input (focus)="eventService.makeFocusOnInputTrue()" (blur)="eventService.makeFocusOnInputFalse()"
