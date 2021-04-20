@@ -5,6 +5,8 @@ import { ActivatedRoute } from '@angular/router';
 import { KeyboardUtils } from '../../../utils/keyboard';
 import { KeyboardKey } from '../../../utils/keyboard/keys';
 import { EventService } from '../../../services/util/event.service';
+import { LanguageService } from '../../../services/util/language.service';
+import { TranslateService } from '@ngx-translate/core';
 
 export interface Settings {
   headerName: string;
@@ -22,8 +24,7 @@ export class SettingsPageComponent implements OnInit {
   settings: Settings[] = [
     { headerName: 'general', iconName: 'settings', componentName: 'general' },
     { headerName: 'comments', iconName: 'comment', componentName: 'comments' },
-    { headerName: 'moderators', iconName: 'gavel', componentName: 'moderators' },
-    { headerName: 'tags', iconName: 'bookmark', componentName: 'tags' }
+    { headerName: 'moderators', iconName: 'gavel', componentName: 'moderators' }
   ];
 
   // { headerName: 'settings.bonus-token', iconName: 'grade', componentName: 'tokenSettings' },
@@ -35,8 +36,12 @@ export class SettingsPageComponent implements OnInit {
   constructor(
     protected roomService: RoomService,
     protected route: ActivatedRoute,
-    protected eventService: EventService
-  ) {}
+    protected eventService: EventService,
+    protected langService: LanguageService,
+    protected translateService: TranslateService
+  ) {
+    langService.langEmitter.subscribe(lang => translateService.use(lang));
+  }
 
   @HostListener('window:keyup', ['$event'])
   keyEvent(event: KeyboardEvent) {
