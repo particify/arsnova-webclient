@@ -550,4 +550,8 @@ export class CommentListComponent implements OnInit, OnDestroy {
     this.router.navigate(['creator', 'room', this.room.shortId, 'settings', 'comments']);
   }
 
+  resetComments() {
+    this.comments = [];
+    this.setTimePeriod(this.period);
+  }
 }
