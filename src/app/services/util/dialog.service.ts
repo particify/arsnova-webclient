@@ -101,11 +101,13 @@ export class DialogService {
     });
   }
 
-  openQRCodeDialog(shortId: string): MatDialogRef<QrCodeComponent> {
+  openQRCodeDialog(shortId: string, passwordProtected: boolean, roomId: string): MatDialogRef<QrCodeComponent> {
     return this.dialog.open(QrCodeComponent, {
       panelClass: 'screenDialog',
       data: {
-        shortId: shortId
+        shortId: shortId,
+        passwordProtected: passwordProtected,
+        roomId: roomId
       }
     });
   }
