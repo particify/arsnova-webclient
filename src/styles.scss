@@ -396,6 +396,16 @@ div {
   background-color: var(--secondary-variant);
 }
 
+.slide-toggle-header {
+  font-weight: bold;
+  margin-bottom: 4px;
+}
+
+.slide-toggle-description {
+  margin-top: 0;
+  opacity: 0.7;
+}
+
 // Mat Select
 
 .mat-select-value-text {

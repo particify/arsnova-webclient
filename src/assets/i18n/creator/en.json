@@ -444,7 +444,8 @@
     "changes-successful": "Your changes have been saved.",
     "comments": "Comments",
     "threshold-info": "If a threshold value is set, only comments that have received a higher rating are displayed.",
-    "direct-send-info": "If this setting is deactivated, a moderator or the lecturer must activate new comments before they become publicly visible."
+    "direct-send-info": "If this setting is deactivated, a moderator or the lecturer must activate new comments before they become publicly visible.",
+    "comment-moderation-info": "There is a moderation list for checking new comments. Also, comments can be moved to this list afterwards."
   },
   "room": {
     "room-name": "Room name",
