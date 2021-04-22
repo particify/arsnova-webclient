@@ -9,6 +9,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { RoomService } from '../services/http/room.service';
 import { RoomMembershipService } from '../services/room-membership.service';
 import { environment } from '../../environments/environment';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Injectable()
 export class AuthenticationGuard implements CanActivate {
@@ -54,8 +55,10 @@ export class AuthenticationGuard implements CanActivate {
                 return this.roomMembershipService.requestMembership(route.params.shortId).pipe(
                     map(room => true),
                     catchError(e => {
-                      this.handleRoomNotFound();
-                      return of(false);
+                      if (e instanceof HttpErrorResponse) {
+                        this.handleRoomNotFound();
+                        return of(false);
+                      }
                     })
                 );
               } else {
