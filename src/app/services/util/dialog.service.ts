@@ -35,7 +35,7 @@ export class DialogService {
   constructor(public dialog: MatDialog) {
   }
 
-  openDialog<T>(component: ComponentType<T>, config?: MatDialogConfig<T>): MatDialogRef<T> {
+  openDialog<T>(component: ComponentType<T>, config?: MatDialogConfig): MatDialogRef<T> {
     return this.dialog.open(component, config);
   }
 
