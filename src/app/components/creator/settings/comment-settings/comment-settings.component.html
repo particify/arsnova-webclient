@@ -2,39 +2,36 @@
   <div>
     <div tabindex="0" id="comments-settings" class="visually-hidden">{{ 'settings.a11y-comments' | translate }}</div>
     <div fxLayout="column">
-      <div fxLayout="row">
-        <p>{{ 'settings.threshold' | translate}}&nbsp;
-          <mat-slide-toggle [(ngModel)]="enableThreshold" (change)="updateCommentSettings()"
-                            aria-labelledby="threshold"></mat-slide-toggle>
-        </p>
-        <button mat-icon-button class="info-button" #ttt="matTooltip" matTooltip="{{ 'settings.threshold-info' | translate }}"
-                (click)="ttt.toggle()">
-          <mat-icon class="info-icon">info</mat-icon>
-        </button>
+      <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="16px">
+        <div>
+          <p class="slide-toggle-header">{{ 'settings.threshold' | translate }}</p>
+          <p class="slide-toggle-description">{{ 'settings.threshold-info' | translate }}</p>
+        </div>
+        <mat-slide-toggle [(ngModel)]="enableThreshold" (change)="updateCommentSettings()"
+                          aria-labelledby="threshold"></mat-slide-toggle>
       </div>
       <div fxLayout="row" fxLayoutAlign="center center" *ngIf="enableThreshold">
-        <mat-slider id="commentSlider" min="-100" max="0" step="5" [(ngModel)]="threshold"
+        <mat-slider id="commentSlider" min="-50" max="-5" step="5" [(ngModel)]="threshold"
                     (input)="onSliderChange($event)" (change)="updateCommentSettings(); announceThreshold();"></mat-slider>
         <h2>&nbsp;{{ threshold | number }}</h2>
       </div>
     </div>
     <div fxLayout="column">
-      <div fxLayout="row">
-        <p>{{ 'settings.comment-moderation' | translate}}&nbsp;
-          <mat-slide-toggle [(ngModel)]="enableModeration" (change)="updateCommentSettings()"
-                            aria-labelledby="settings-comment-moderation"></mat-slide-toggle>
-        </p>
+      <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="16px">
+        <div>
+          <p class="slide-toggle-header">{{ 'settings.comment-moderation' | translate}}</p>
+          <p class="slide-toggle-description">{{ 'settings.comment-moderation-info' | translate}}</p>
+        </div>
+        <mat-slide-toggle [(ngModel)]="enableModeration" (change)="updateCommentSettings()"
+                          aria-labelledby="settings-comment-moderation"></mat-slide-toggle>
       </div>
-      <div fxLayout="row" *ngIf="enableModeration">
-        <p>{{ 'settings.direct-send' | translate}}&nbsp;
-          <mat-slide-toggle [(ngModel)]="directSend" (change)="updateDirectSend()"
+      <div *ngIf="enableModeration" fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="16px">
+        <div>
+          <p class="slide-toggle-header">{{ 'settings.direct-send' | translate }}</p>
+          <p class="slide-toggle-description">{{ 'settings.direct-send-info' | translate }}</p>
+        </div>
+        <mat-slide-toggle [(ngModel)]="directSend" (change)="updateDirectSend()"
                             aria-labelledby="settings-direct-send"></mat-slide-toggle>
-        </p>
-        <button mat-icon-button class="info-button" #dstt="matTooltip"
-                matTooltip="{{ 'settings.direct-send-info' | translate }}"
-                (click)="dstt.toggle()">
-          <mat-icon class="info-icon">info</mat-icon>
-        </button>
       </div>
     </div>
     <div fxLayout="column" fxLayoutAlign="center start" fxLayoutGap="10px">

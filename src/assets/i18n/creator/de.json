@@ -411,7 +411,7 @@
     "tag-removed": "Die Kategorie wurde entfernt.",
     "no-moderators": "Es wurden noch keine moderierenden Personen hinzugefügt.",
     "comment-moderation": "Kommentare moderieren",
-    "direct-send": "Kommentare sofort sichtbar",
+    "direct-send": "Kommentare sofort veröffentlichen",
     "tag-error": "Diese Kategorie existiert bereits.",
     "tags": "Kategorien",
     "threshold": "Schwellenwert",
@@ -444,7 +444,8 @@
     "changes-successful": "Deine Änderungen wurden gespeichert.",
     "comments": "Kommentare",
     "threshold-info": "Wird ein Schwellenwert gesetzt, werden nur Kommentare angezeigt, welche eine höhere Bewertung erhalten haben.",
-    "direct-send-info": "Wenn diese Einstellung deaktiviert ist, muss eine moderierende Person bzw. die vortragende Person neue Kommentare erst freischalten bevor diese öffentlich sichtbar werden."
+    "direct-send-info": "Wenn diese Einstellung deaktiviert ist, muss eine moderierende Person bzw. die vortragende Person neue Kommentare erst freischalten bevor diese öffentlich sichtbar werden.",
+    "comment-moderation-info": "Es gibt eine Moderationsliste zur Überprüfung von neuen Kommentaren. Auch können Kommentare im Nachhinein in diese Liste verschoben werden."
   },
   "room": {
     "room-name": "Name des Raums",
