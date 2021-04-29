@@ -7,19 +7,6 @@
     </button>
     <lib-extension-point extensionId="header-logo" *ngIf="router.url === '/home'"></lib-extension-point>
     <span class="fill-remaining-space"></span>
-    <h2 *ngIf="router.url.includes('comments') && isCreator && deviceType === 'desktop'">
-      {{cTime}}
-    </h2>
-    <span class="fill-remaining-space"
-          *ngIf="router.url.includes('comments') && isCreator && deviceType === 'desktop'"></span>
-    <button mat-icon-button class="gavel" *ngIf="router.url.includes('comments') && isParticipant && moderationEnabled"
-            #tt="matTooltip" matTooltip="{{ 'header.moderation-enabled' | translate }}" (click)="tt.toggle()">
-      <mat-icon class="header-icons">gavel</mat-icon>
-    </button>
-    <h2 id="shortId-header" *ngIf="router.url.includes('comments') && isCreator && deviceType === 'desktop'">
-      {{'header.id' | translate}}: {{ shortId.slice(0, 4) }} {{  shortId.slice(4, 8) }}
-    </h2>
-    <span class="fill-remaining-space"></span>
 
     <mat-menu #userMenu="matMenu" [overlapTrigger]="false" xPosition="before">
       <button mat-menu-item *ngIf="auth" routerLink="/user" tabindex="0">
