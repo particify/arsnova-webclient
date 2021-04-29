@@ -33,12 +33,6 @@
         <mat-icon>search</mat-icon>
       </button>
 
-      <button id="sort-button" mat-mini-fab aria-labelledby="sort-list" class="bar-icon"
-              *ngIf="!search"
-              [matMenuTriggerFor]="sortMenu" matTooltip="{{ 'comment-list.sort-comments' | translate }}">
-        <mat-icon>swap_vert</mat-icon>
-      </button>
-
       <button id="filter-button" mat-mini-fab aria-labelledby="filter-list" class="bar-icon"
               *ngIf="!search"
               [matMenuTriggerFor]="filterMenu" matTooltip="{{ 'comment-list.filter-comments' | translate }}">
@@ -63,6 +57,12 @@
         <mat-icon>play_arrow</mat-icon>
       </button>
 
+      <button id="more-button" mat-mini-fab *ngIf="!search && viewRole === 'CREATOR'" class="bar-icon"
+              [matMenuTriggerFor]="moreMenu" aria-labelledby="more"
+              matTooltip="{{ 'comment-list.more-options' | translate }}">
+        <mat-icon>construction</mat-icon>
+      </button>
+
       <button id="add-comment-small-button" class="add-btn" mat-mini-fab aria-labelledby="add"
               *ngIf="!search && deviceType === 'desktop' && !isModerator" (click)="openCreateDialog()"
               matTooltip="{{ 'comment-list.add-comment' | translate }}">
@@ -70,8 +70,11 @@
       </button>
     </div>
 
-    <mat-menu #sortMenu="matMenu" xPosition="before">
-
+    <mat-menu #filterMenu="matMenu">
+      <div class="divider-container">
+        <mat-divider></mat-divider>
+        <p class="divider-label">{{ 'comment-list.sort' | translate }}</p>
+      </div>
       <button mat-menu-item (click)="sortCommentsManually(sorting.TIME)" [ngClass]="{time: 'selected'}[currentSort]"
               aria-labelledby="sort-time">
         <mat-icon [ngClass]="{time: 'blue-icon'}[currentSort]">access_time</mat-icon>
@@ -90,53 +93,62 @@
         <span>{{ 'comment-list.sort-vote-desc' | translate }}</span>
       </button>
 
-    </mat-menu>
-
-    <mat-menu #filterMenu="matMenu" xPosition="before">
-      <div>
-        <button *ngIf="viewRole === 'CREATOR'" mat-menu-item (click)="filterComments(filtering.READ)"
-                [ngClass]="{read: 'selected'}[currentFilter]" aria-labelledby="read_icon">
-          <mat-icon [ngClass]="{read: 'blue-icon'}[currentFilter]">
-            visibility
-          </mat-icon>
-          <span>{{ 'comment-list.filter-read' | translate }}</span>
-        </button>
-
-        <button mat-menu-item (click)="filterComments(filtering.FAVORITE)"
-                [ngClass]="{favorite: 'selected'}[currentFilter]" aria-labelledby="grade">
-          <mat-icon [ngClass]="{favorite: 'favorite-icon'}[currentFilter]">grade</mat-icon>
-          <span>{{ 'comment-list.filter-favorite' | translate }}</span>
-        </button>
-
-        <button mat-menu-item (click)="filterComments(filtering.CORRECT)"
-                [ngClass]="{correct: 'selected'}[currentFilter]" aria-labelledby="check_circle">
-          <mat-icon [ngClass]="{correct: 'correct-icon'}[currentFilter]">check_circle</mat-icon>
-          <span>{{ 'comment-list.filter-correct' | translate }}</span>
-        </button>
-
-        <button mat-menu-item (focus)="hideCommentsList=true" (click)="filterComments(filtering.WRONG)"
-                [ngClass]="{wrong: 'selected'}[currentFilter]"
-                aria-labelledby="not_interested">
-          <mat-icon [ngClass]="{wrong: 'wrong-icon'}[currentFilter]">cancel</mat-icon>
-          <span>{{ 'comment-list.filter-wrong' | translate }}</span>
-        </button>
-
-        <button mat-menu-item (focus)="hideCommentsList=true" (click)="filterComments(filtering.ANSWER)"
-                [ngClass]="{answer: 'selected'}[currentFilter]"
-                aria-labelledby="comment">
-          <mat-icon [ngClass]="{answer: 'blue-icon'}[currentFilter]">comment</mat-icon>
-          <span>{{ 'comment-list.filter-answered' | translate }}</span>
-        </button>
-
-        <button mat-menu-item (focus)="hideCommentsList=false;filterComments('')"
-                aria-labelledby="close">
-          <mat-icon>close</mat-icon>
-          <span>{{ 'comment-list.filter-reset' | translate }}</span>
-        </button>
+      <div class="divider-container">
+        <mat-divider></mat-divider>
+        <p class="divider-label">{{ 'comment-list.filter' | translate }}</p>
       </div>
+      <button *ngIf="viewRole === 'CREATOR'" mat-menu-item (click)="filterComments(filtering.READ)"
+              [ngClass]="{read: 'selected'}[currentFilter]" aria-labelledby="read_icon">
+        <mat-icon [ngClass]="{read: 'blue-icon'}[currentFilter]">
+          visibility
+        </mat-icon>
+        <span>{{ 'comment-list.filter-read' | translate }}</span>
+      </button>
+
+      <button mat-menu-item (click)="filterComments(filtering.FAVORITE)"
+              [ngClass]="{favorite: 'selected'}[currentFilter]" aria-labelledby="grade">
+        <mat-icon [ngClass]="{favorite: 'favorite-icon'}[currentFilter]">grade</mat-icon>
+        <span>{{ 'comment-list.filter-favorite' | translate }}</span>
+      </button>
+
+      <button mat-menu-item (focus)="hideCommentsList=true" (click)="filterComments(filtering.ANSWER)"
+              [ngClass]="{answer: 'selected'}[currentFilter]"
+              aria-labelledby="comment">
+        <mat-icon [ngClass]="{answer: 'blue-icon'}[currentFilter]">comment</mat-icon>
+        <span>{{ 'comment-list.filter-answered' | translate }}</span>
+      </button>
+
+      <button mat-menu-item [matMenuTriggerFor]="moreFilterMenu"
+              [ngClass]="{'selected': currentFilter === filtering.CORRECT || currentFilter === filtering.WRONG}"
+              aria-labelledby="filter-more">
+        <mat-icon [ngClass]="{'correct-icon': currentFilter === filtering.CORRECT,
+        'wrong-icon': currentFilter === filtering.WRONG}">tune</mat-icon>
+        <span>{{ 'comment-list.filter-more' | translate }}</span>
+      </button>
+
+      <button mat-menu-item (focus)="hideCommentsList=false;filterComments('')"
+              aria-labelledby="close">
+        <mat-icon>close</mat-icon>
+        <span>{{ 'comment-list.filter-reset' | translate }}</span>
+      </button>
     </mat-menu>
 
-    <mat-menu #timeMenu="matMenu" xPosition="before">
+    <mat-menu #moreFilterMenu="matMenu">
+      <button mat-menu-item (click)="filterComments(filtering.CORRECT)"
+              [ngClass]="{correct: 'selected'}[currentFilter]" aria-labelledby="check_circle">
+        <mat-icon [ngClass]="{correct: 'correct-icon'}[currentFilter]">check_circle</mat-icon>
+        <span>{{ 'comment-list.filter-correct' | translate }}</span>
+      </button>
+
+      <button mat-menu-item (focus)="hideCommentsList=true" (click)="filterComments(filtering.WRONG)"
+              [ngClass]="{wrong: 'selected'}[currentFilter]"
+              aria-labelledby="not_interested">
+        <mat-icon [ngClass]="{wrong: 'wrong-icon'}[currentFilter]">cancel</mat-icon>
+        <span>{{ 'comment-list.filter-wrong' | translate }}</span>
+      </button>
+    </mat-menu>
+
+    <mat-menu #timeMenu="matMenu">
       <div *ngFor="let periodItem of periodsList">
         <button mat-menu-item (click)="setTimePeriod(periodItem)" class="period"
                 [ngClass]="{'selected': periodItem === period}"
@@ -146,6 +158,32 @@
       </div>
     </mat-menu>
   </div>
+
+  <mat-menu #moreMenu="matMenu">
+
+    <button mat-menu-item (click)="navToOtherCommentList()" aria-labelledby="delete-comments">
+      <mat-icon class="switch-list-icon">{{ isModerator ? 'question_answer' : 'gavel' }}</mat-icon>
+      <span>{{ ('comment-list.' + (isModerator ? 'public-list' : 'moderation')) | translate }}</span>
+    </button>
+
+    <button mat-menu-item (click)="navToSettings()" aria-labelledby="delete-comments">
+      <mat-icon class="settings-icon">settings</mat-icon>
+      <span>{{ 'comment-list.settings' | translate }}</span>
+    </button>
+
+    <mat-divider></mat-divider>
+
+    <button [disabled]="comments.length === 0" mat-menu-item aria-labelledby="export-comments" (click)="onExport()">
+      <mat-icon class="settings-icon">save</mat-icon>
+      <span>{{ 'comment-list.export-comments' | translate }}</span>
+    </button>
+
+    <button [disabled]="comments.length === 0" mat-menu-item (click)="openDeleteCommentsDialog()" aria-labelledby="delete-comments">
+      <mat-icon class="down">delete_outline</mat-icon>
+      <span>{{ ('comment-list.delete-' + (isModerator ? 'banned' : 'all') + '-comments') | translate }}</span>
+    </button>
+
+  </mat-menu>
 
   <div *ngIf="scroll && (deviceType === 'desktop' || scrollActive)" class="search-bar-placeholder"></div>
 
@@ -189,7 +227,6 @@
   <div class="visually-hidden">
     <div id="search-box-input-description">{{ 'comment-page.search-box-input-description' | translate }}</div>
     <div id="search-list">{{'comment-list.a11y-search-list' | translate}}</div>
-    <div id="sort-list">{{'comment-list.a11y-sort-list' | translate}}</div>
     <div id="sort-up">{{'comment-list.a11y-sort-up' | translate}}</div>
     <div id="sort-down">{{'comment-list.a11y-sort-down' | translate}}</div>
     <div id="sort-time">{{'comment-list.a11y-sort-time' | translate}}</div>
@@ -198,6 +235,7 @@
     <div id="not_interested">{{'comment-list.a11y-filter-wrong' | translate}}</div>
     <div id="grade">{{'comment-list.a11y-filter-favorite' | translate}}</div>
     <div id="read_icon">{{'comment-list.a11y-filter-read' | translate}}</div>
+    <div id="filter-more">{{'comment-list.a11y-filter-more' | translate}}</div>
     <div id="close">{{'comment-list.a11y-filter-close' | translate}}</div>
     <div id="add">{{'comment-list.a11y-add' | translate}}</div>
     <div id="pause">{{'comment-list.a11y-pause' | translate}}</div>
@@ -210,6 +248,8 @@
     <div id="select-time-1d">{{ 'comment-list.a11y-select-time-1d' | translate }}</div>
     <div id="select-time-1w">{{ 'comment-list.a11y-select-time-1w' | translate }}</div>
     <div id="select-time-all">{{ 'comment-list.a11y-select-time-all' | translate }}</div>
+    <div id="export-comments">{{ 'comment-list.a11y-export-comments' | translate }}</div>
+    <div id="delete-comments">{{ ('comment-list.a11y-delete-' + (isModerator ? 'banned' : 'all') + '-comments') | translate }}</div>
     <div id="no-comments-label">{{ 'comment-page.a11y-no-comments' | translate }}</div>
   </div>
 </div>

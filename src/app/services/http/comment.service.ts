@@ -10,6 +10,7 @@ import { EventService } from '../util/event.service';
 import { CommentCreated } from '../../models/events/comment-created';
 import { CachingService } from '../util/caching.service';
 import { WsConnectorService } from '../websockets/ws-connector.service';
+import { Room } from '@arsnova/app/models/room';
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -103,6 +104,13 @@ export class CommentService extends AbstractEntityService<Comment> {
     );
   }
 
+  deleteCommentsById(roomId: string, commentIds: string[]): Observable<Comment[]> {
+    const connectionUrl = this.buildUri('/bulkdelete', roomId);
+    return this.http.post<Comment[]>(connectionUrl, commentIds, httpOptions).pipe(
+      catchError(this.handleError<Comment[]>('deleteCommentsById'))
+    );
+  }
+
   countByRoomId(roomId: string, ack: boolean): Observable<number> {
     const connectionUrl = this.buildUri(`${this.apiUrl.find + this.serviceApiUrl.count}`, roomId);
     return this.http.post<number>(connectionUrl, {
@@ -159,6 +167,52 @@ export class CommentService extends AbstractEntityService<Comment> {
     const connectionUrl = this.buildUri(`/${comment.id +
         this.serviceApiUrl.command + this.serviceApiUrl.lowlight}`, comment.roomId);
     return this.http.post<void>(connectionUrl, {}, httpOptions);
+  }
+
+  // Non http functions
+
+  getExportData(comments: Comment[], delimiter: string): string {
+    const exportComments = JSON.parse(JSON.stringify(comments));
+    let valueFields = '';
+    exportComments.forEach(element => {
+      valueFields += this.filterNotSupportedCharacters(element['body']) + delimiter;
+      let time;
+      time = element['timestamp'];
+      valueFields += time.slice(0, 10) + '-' + time.slice(11, 16) + delimiter;
+      const answer = element['answer'];
+      valueFields += (answer ? this.filterNotSupportedCharacters(answer) : '') + delimiter;
+      valueFields += element['read'] + delimiter;
+      valueFields += element['favorite'] + delimiter;
+      valueFields += element['correct'] + delimiter;
+      valueFields += element['score'] + delimiter;
+      const tag = element['tag'];
+      valueFields += (tag ? this.filterNotSupportedCharacters(tag) : '')  + '\r\n';
+    });
+    return valueFields;
+  }
+
+  filterNotSupportedCharacters(text: string): string {
+    return '"' + text.replace(/[\r\n]/g, ' ').replace(/ +/g, ' ').replace(/"/g, '""') + '"';
+  }
+
+  export(comments: Comment[], room: Room, name?: string): void {
+    let csv: string;
+    const fieldNames = ['comment-export.question', 'comment-export.timestamp', 'comment-export.answer', 'comment-export.presented',
+      'comment-export.favorite', 'comment-export.correct/wrong', 'comment-export.score', 'comment-export.tag'];
+    let keyFields;
+    this.translateService.get(fieldNames).subscribe(msgs => {
+      keyFields = [msgs[fieldNames[0]], msgs[fieldNames[1]], msgs[fieldNames[2]], msgs[fieldNames[3]],
+        msgs[fieldNames[4]], msgs[fieldNames[5]], msgs[fieldNames[6]], msgs[fieldNames[7]], '\r\n'];
+      const date = new Date();
+      const dateString = date.toLocaleDateString();
+      csv = keyFields + this.getExportData(comments, ',');
+      const myBlob = new Blob([csv], {type: 'text/csv'});
+      const link = document.createElement('a');
+      const fileName = (room.name + '_' + room.shortId + '_' + (name ? name : dateString)) + '.csv';
+      link.setAttribute('download', fileName);
+      link.href = window.URL.createObjectURL(myBlob);
+      link.click();
+    });
   }
 
 }

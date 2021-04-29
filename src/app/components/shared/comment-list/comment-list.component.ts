@@ -15,7 +15,7 @@ import { AdvancedSnackBarTypes, NotificationService } from '../../../services/ut
 import { CorrectWrong } from '../../../models/correct-wrong.enum';
 import { EventService } from '../../../services/util/event.service';
 import { Subject, Subscription } from 'rxjs';
-import { Router, ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { DialogService } from '../../../services/util/dialog.service';
 import { GlobalStorageService, STORAGE_KEYS } from '../../../services/util/global-storage.service';
 import { AnnounceService } from '../../../services/util/announce.service';
@@ -503,4 +503,51 @@ export class CommentListComponent implements OnInit, OnDestroy {
     this.filterComments(this.currentFilter);
     this.globalStorageService.setItem(STORAGE_KEYS.COMMENT_TIME_FILTER, this.period);
   }
+
+  openDeleteCommentsDialog(): void {
+    const dialogRef = this.dialogService.openDeleteDialog(this.isModerator ? 'really-delete-banned-comments' : 'really-delete-comments');
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === 'delete') {
+        this.deleteComments();
+      }
+    });
+  }
+
+  deleteComments(): void {
+    if (this.isModerator) {
+      this.commentService.deleteCommentsById(this.roomId, this.comments.map(c => c.id)).subscribe(() => {
+        const msg = this.translateService.instant('comment-list.banned-comments-deleted');
+        this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
+      });
+    } else {
+      this.commentService.deleteCommentsByRoomId(this.roomId).subscribe(() => {
+        const msg = this.translateService.instant('comment-list.all-comments-deleted');
+        this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
+      });
+    }
+  }
+
+  onExport(): void {
+    if (this.isModerator) {
+      this.commentService.getRejectedComments(this.roomId).subscribe(comments => {
+        this.commentService.export(comments, this.room);
+      });
+    }
+    this.commentService.getAckComments(this.roomId).subscribe(comments => {
+      this.commentService.export(comments, this.room);
+    });
+  }
+
+  navToOtherCommentList() {
+    const urlTree = ['creator', 'room', this.room.shortId, 'comments'];
+    if (!this.isModerator) {
+      urlTree.push('moderation');
+    }
+    this.router.navigate(urlTree);
+  }
+
+  navToSettings() {
+    this.router.navigate(['creator', 'room', this.room.shortId, 'settings', 'comments']);
+  }
+
 }
