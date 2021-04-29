@@ -7,6 +7,8 @@ import { EventService } from '../../../services/util/event.service';
 import { KeyboardUtils } from '../../../utils/keyboard';
 import { KeyboardKey } from '../../../utils/keyboard/keys';
 import { AnnounceService } from '../../../services/util/announce.service';
+import { CommentService } from '../../../services/http/comment.service';
+import { Comment } from '../../../models/comment';
 
 @Component({
   selector: 'app-comment-page',
@@ -14,14 +16,18 @@ import { AnnounceService } from '../../../services/util/announce.service';
   styleUrls: ['./comment-page.component.scss']
 })
 export class CommentPageComponent implements OnInit, OnDestroy, AfterContentInit {
+
   auth: ClientAuthentication;
+  comments: Comment[];
+  isLoading = true;
 
   constructor(
     private route: ActivatedRoute,
     private notification: NotificationService,
     private authenticationService: AuthenticationService,
     private eventService: EventService,
-    private announceService: AnnounceService
+    private announceService: AnnounceService,
+    private commentService: CommentService
   ) {
   }
 
@@ -72,6 +78,12 @@ export class CommentPageComponent implements OnInit, OnDestroy, AfterContentInit
   ngOnInit(): void {
     this.authenticationService.getCurrentAuthentication()
         .subscribe(auth => this.auth = auth);
+    this.route.data.subscribe(data => {
+      this.commentService.getAckComments(data.room.id).subscribe(comments => {
+        this.comments = comments;
+        this.isLoading = false;
+      });
+    });
   }
 
   ngOnDestroy() {

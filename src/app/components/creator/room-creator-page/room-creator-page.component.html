@@ -65,7 +65,7 @@
             <mat-grid-tile *ngIf="moderationEnabled">
               <button id="moderation-button" mat-icon-button class="main-button"
                       [ngClass]="{'hover': deviceWidth > 500}" [disableRipple]="true"
-                      routerLink="/moderator/room/{{ room.shortId }}/moderator/comments" aria-labelledby="moderation">
+                      routerLink="/creator/room/{{ room.shortId }}/comments/moderation" aria-labelledby="moderation">
                 <mat-icon matBadge="{{moderatorCommentCounter}}" class="main-icon"
                           [ngClass]="{'desktop' : deviceWidth > 500}">gavel
                 </mat-icon>

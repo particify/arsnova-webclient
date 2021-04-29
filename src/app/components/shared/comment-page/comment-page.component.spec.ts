@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { CommentPageComponent } from './comment-page.component';
 import { Injectable, Renderer2, Component, Input } from '@angular/core';
-import { BehaviorSubject, Observable, of } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { ActivatedRoute } from '@angular/router';
 import { NotificationService } from '../../../services/util/notification.service';
@@ -11,6 +11,7 @@ import { EventService } from '../../../services/util/event.service';
 import { ClientAuthentication } from '../../../models/client-authentication';
 import { GlobalStorageService } from '../../../services/util/global-storage.service';
 import { AnnounceService } from '../../../services/util/announce.service';
+import { CommentService } from '../../../services/http/comment.service';
 
 const TRANSLATION_DE = require('../../../../assets/i18n/home/de.json');
 const TRANSLATION_EN = require('../../../../assets/i18n/home/en.json');
@@ -38,6 +39,11 @@ class JsonTranslationLoader implements TranslateLoader {
 
 @Injectable()
 class MockNotificationService {
+
+}
+
+@Injectable()
+class MockCommentService {
 
 }
 
@@ -113,6 +119,10 @@ describe('CommentPageComponent', () => {
         {
           provide: NotificationService,
           useClass: MockNotificationService
+        },
+        {
+          provide: CommentService,
+          useClass: MockCommentService
         },
         {
           provide: AuthenticationService,
