@@ -121,7 +121,7 @@ describe('RoomJoinComponent', () => {
     expect(component.demoId).not.toBeNull();
     const joinButton = await loader.getHarness(MatButtonHarness.with({selector: '#join-button'}));
     await joinButton.click();
-    expect(router.navigate).toHaveBeenCalledWith([`/participant/room/${component.demoId}`]);
+    expect(router.navigate).toHaveBeenCalledWith(['participant', 'room', component.demoId]);
   });
 
   it('should be display warning notification if the entered room code is shorter than 8 digits', async () => {
@@ -150,6 +150,6 @@ describe('RoomJoinComponent', () => {
     await inputField.setValue(roomIdToEnter);
     await joinButton.click();
     expect(notificationService.showAdvanced).not.toHaveBeenCalled();
-    expect(router.navigate).toHaveBeenCalledWith([`/participant/room/${roomIdToEnter}`]);
+    expect(router.navigate).toHaveBeenCalledWith(['participant', 'room', roomIdToEnter]);
   });
 });

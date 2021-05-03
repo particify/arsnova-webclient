@@ -57,7 +57,7 @@ describe('HeaderComponent', () => {
   const activatedRoute = new ActivatedRouteStub(null, { apiConfig: { ui: { demo: '27273589' } } });
   let notificationService = jasmine.createSpyObj('NotificationService', ['showAdvanced']);
 
-  let routerSpy = jasmine.createSpyObj('MockRouter', ['navigate']);
+  let routerSpy = jasmine.createSpyObj('MockRouter', ['navigate', 'navigateByUrl']);
   let userService = jasmine.createSpyObj('UserService', ['delete']);
   let dialogService = jasmine.createSpyObj('DialogService', ['openUpdateInfoDialog', 'openDeleteDialog']);
   const routingService = jasmine.createSpyObj('RoutingService', ['goBack']);
@@ -390,7 +390,7 @@ describe('HeaderComponent', () => {
     userMenu = await loader.getHarness(MatMenuHarness);
     userMenuItems = await userMenu.getItems({selector: '#logout-button'});
     await userMenuItems[0].click();
-    expect(routerSpy.navigate).toHaveBeenCalledWith(['/']);
+    expect(routerSpy.navigateByUrl).toHaveBeenCalledWith('home');
     expect(notificationService.showAdvanced).toHaveBeenCalledWith('You have been logged out.', AdvancedSnackBarTypes.SUCCESS);
   });
 
@@ -406,7 +406,7 @@ describe('HeaderComponent', () => {
     component.auth = null;
     loginButton = await loader.getHarness(MatButtonHarness.with({selector: '#login-button'}));
     await loginButton.click();
-    expect(routerSpy.navigate).toHaveBeenCalledWith(['login']);
+    expect(routerSpy.navigateByUrl).toHaveBeenCalledWith('login');
   });
 });
 

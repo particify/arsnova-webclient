@@ -129,6 +129,7 @@ export class MockRouter {
   events: Observable<Event> = new Observable<Event>();
 
   navigate = jasmine.createSpy('navigate');
+  navigateByUrl = jasmine.createSpy('navigateByUrl');
 
   get url(): string {
     return this.currentUrl;

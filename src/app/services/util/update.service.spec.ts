@@ -126,8 +126,6 @@ describe('UpdateService', () => {
       environment.version.commitHash,
       UpdateImportance.MANDATORY,
       1);
-    // TODO: Need to trigger SwUpdate's 'available'
-    expect(eventService.broadcast).toHaveBeenCalledWith(updateEvent);
     expect(service.importance).toBe(UpdateImportance.MANDATORY);
     expect(dialogService.openUpdateInfoDialog).toHaveBeenCalledWith(false, expectedRelevantVersions, jasmine.any(Observable));
   });
