@@ -208,3 +208,7 @@ $bottom-bar-height: 62px;
   overflow: auto;
   margin-right: 10px!important;
 }
+
+.full-height {
+  height: calc(100vh - 8vw);
+}

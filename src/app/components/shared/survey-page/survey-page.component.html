@@ -1,11 +1,13 @@
-        <app-nav-bar></app-nav-bar>
+<app-nav-bar *ngIf="!isPresentation"></app-nav-bar>
+<app-info-bar *ngIf="isPresentation && infoBarItems[0]?.count" [barItems]="infoBarItems" [isPresentation]="true"
+              [position]="'right'" [mode]="'pure'"></app-info-bar>
 <app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
-<div class="nav-bar-container">
+<div class="nav-bar-container" [ngClass]="{'full-height': isPresentation}">
   <div fxFill fxLayout="column" fxLayoutAlign="center">
     <button class="visually-hidden" id="message-announcer-button" tabIndex="-1" (click)="announceKeys()">
       {{ 'survey.a11y-message' | translate }}</button>
     <div *ngIf="!isLoading" fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="center">
-      <mat-card>
+      <mat-card [ngClass]="{'presentation-card': isPresentation}">
         <div class="survey-container" [ngClass]="{ 'faded' : isClosed }">
           <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="30px"
                *ngFor="let state of survey; let i = index">
@@ -20,7 +22,7 @@
         <div class="text invisible" [ngClass]="{'visible' : isClosed}">
           <h3 tabindex="-1" id="stopped-label">{{ 'survey.is-stopped' | translate }}</h3>
         </div>
-        <div fxLayoutAlign="center center" fxLayoutGap="20px" *ngIf="isCreator">
+        <div fxLayoutAlign="center center" fxLayoutGap="20px" *ngIf="isCreator && !isPresentation">
           <div class="invisible-button button-container" [ngClass]="{'visible-button': isClosed}">
             <button id="switch-button" tabindex="{{ isClosed ? '0' : '-1' }}" mat-raised-button
                     class="button-abort bottom-button" (click)="changeType()" aria-labelledby="change-type">
