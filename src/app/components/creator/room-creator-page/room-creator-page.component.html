@@ -12,6 +12,21 @@
             <mat-icon class="corner-icon icon-secondary" matTooltip="{{ 'room-page.answer-statistics' | translate}}">insert_chart
             </mat-icon>
           </button>
+          <button mat-icon-button class="corner-buttons" id="presentation-button" [matMenuTriggerFor]="presentationMenu"
+                  aria-labelledby="statistics">
+            <mat-icon class="corner-icon icon-secondary" matTooltip="Präsentation">present_to_all
+            </mat-icon>
+          </button>
+          <mat-menu #presentationMenu>
+            <button mat-menu-item (click)="openPresentation()">
+              <mat-icon class="menu-icon icon-secondary">monitor</mat-icon>
+              Präsentationsmodus
+            </button>
+            <button mat-menu-item (click)="openPresentation(true)">
+              <mat-icon class="menu-icon icon-secondary">open_in_new</mat-icon>
+              In neuem Tab präsentieren
+            </button>
+          </mat-menu>
           <span class="fill-remaining-space"></span>
           <mat-card-header fxLayoutAlign="center" fxLayout="row">
             <mat-card-title fxLayoutAlign="center">

@@ -31,6 +31,7 @@ export class RoomCreatorPageComponent extends RoomPageComponent implements OnIni
   viewModuleCount = 1;
   looseContent: Content[] = [];
   userCount: number;
+  target: Window;
 
   constructor(
     protected roomService: RoomService,
@@ -149,5 +150,14 @@ export class RoomCreatorPageComponent extends RoomPageComponent implements OnIni
         document.getElementById('live-announcer-button').focus();
       }, 300);
     });
+  }
+
+  openPresentation(inNew = false) {
+    if (inNew) {
+      const protocol = window.location.protocol;
+      window.open(`${protocol}/presentation/${this.room.shortId}`, '_blank');
+    } else {
+      this.router.navigate(['presentation', this.room.shortId]);
+    }
   }
 }
