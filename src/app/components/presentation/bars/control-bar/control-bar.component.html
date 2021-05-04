@@ -1,0 +1,59 @@
+<div class="bar-container">
+  <div class="bar bar-hidden" [ngClass]="{'bar-expanded': menuOpen || currentRouteIndex === undefined}" fxLayout="row" fxLayoutAlign="start center">
+    <div fxLayout="row" class="logo-container">
+      <lib-extension-point extensionId="presentation-logo"></lib-extension-point>
+    </div>
+    <div class="action-container" fxFill fxLayout="row" fxLayoutAlign="space-between center">
+      <div fxLayout="row" class="nav-container">
+        <div matRipple role="button" class="nav-button" *ngFor="let barItem of barItems; let i = index" (click)="updateFeature(barItem.name)"
+                [ngClass]="{'active-nav-button': i === currentRouteIndex }" fxLayout="column" fxLayoutAlign="center center"
+        [matTooltip]="(('sidebar.' + barItem.name) | translate) + ' (' + barItem.key  + ')'">
+          <mat-icon class="nav-icon">{{ barItem.icon }}</mat-icon>
+          <p class="text">{{ 'sidebar.' + barItem.name | translate }}</p>
+        </div>
+      </div>
+      <div *ngIf="isActiveFeature('group')" fxLayout="row" fxLayoutAlign="center center" class="feature-container">
+        <button *ngIf="contentGroups.length > 1" mat-button class="group-button" [matMenuTriggerFor]="groupMenu"
+                (menuOpened)="menuOpen = true" (menuClosed)="menuOpen = false">
+          {{ groupName }}
+        <mat-icon>arrow_drop_down</mat-icon>
+        </button>
+        <mat-menu #groupMenu=matMenu>
+          <button mat-menu-item *ngFor="let contentGroup of contentGroups" [value]="contentGroup.name"
+                  (click)="changeGroup(contentGroup)" [ngClass]="{'current-group': contentGroup.name === groupName}">
+            {{contentGroup.name}}
+          </button>
+        </mat-menu>
+        <div matRipple role="button" fxLayout="column" fxLayoutAlign="center center" class="action-button"
+             *ngFor="let groupItem of groupActionItems" (click)="sendKeyEvent(groupItem.key)"
+             [matTooltip]="('control-bar.' + groupItem.name | translate) + ' (' + ('control-bar.' + groupItem.key | translate) + ')'">
+          <mat-icon class="nav-icon">{{groupItem.icon}}</mat-icon>
+          <p class="text">{{ ('control-bar.' + groupItem.name) | translate }}</p>
+        </div>
+        <div class="bar-divider"></div>
+        <div fxLayout="row" class="icon-container">
+          <div matRipple role="button" fxLayout="column" fxLayoutAlign="center center" class="action-button"
+              *ngFor="let arrowItem of arrowActionItems" (click)="sendKeyEvent(arrowItem.key)"
+               [matTooltip]="('control-bar.' + arrowItem.name | translate) + ' (' + ('control-bar.' + arrowItem.key | translate) + ')'">
+            <mat-icon>{{arrowItem.icon}}</mat-icon>
+        </div>
+        </div>
+      </div>
+      <div *ngIf="isActiveFeature('survey')" fxLayout="row" fxLayoutAlign="center center" class="feature-container">
+        <div matRipple role="button" fxLayout="column" fxLayoutAlign="center center" class="action-button"
+             *ngFor="let surveyItem of surveyActionItems" (click)="sendKeyEvent(surveyItem.key)"
+             [matTooltip]="('control-bar.' + surveyItem.name | translate) + ' (' + ('control-bar.' + surveyItem.key | translate) + ')'">
+          <mat-icon class="nav-icon">{{surveyItem.icon}}</mat-icon>
+          <p class="text">{{ ('control-bar.' + surveyItem.name) | translate }}</p>
+        </div>
+      </div>
+      <div fxLayout="row" class="feature-container icon-container">
+        <div matRipple role="button" fxLayout="column" fxLayoutAlign="center center" class="action-button"
+             *ngFor="let generalItem of generalActionItems" (click)="sendKeyEvent(generalItem.key)"
+             [matTooltip]="('control-bar.' + generalItem.name | translate) + ' (' + ('control-bar.' + generalItem.key | translate) + ')'">
+          <mat-icon>{{generalItem.icon}}</mat-icon>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

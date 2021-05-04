@@ -199,4 +199,8 @@ export class RoutingService {
     }
     document.title = title;
   }
+
+  isPresentation(url: string): boolean {
+    return url.slice(1, 13).includes('presentation');
+  }
 }

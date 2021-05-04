@@ -72,6 +72,10 @@ const routes: Routes = [
     loadChildren: () => import('./components/moderator/moderator.module').then(m => m.ModeratorModule)
   },
   {
+    path: 'presentation',
+    loadChildren: () => import('./components/presentation/presentation.module').then(m => m.PresentationModule)
+  },
+  {
     path: '**',
     component: PageNotFoundComponent
   }

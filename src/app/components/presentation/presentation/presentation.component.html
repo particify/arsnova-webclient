@@ -1,0 +1,9 @@
+<app-control-bar [shortId]="shortId" (activeFeature)="updateFeature($event)" (activeGroup)="updateUrl($event)"></app-control-bar>
+<div [ngSwitch]="featureString">
+  <div *ngSwitchCase="undefined">
+    <app-qr-code [shortId]="shortId"></app-qr-code>
+  </div>
+  <app-comment-presentation *ngSwitchCase="'comments'"></app-comment-presentation>
+  <app-group-presentation [groupChanged]="groupChanged" *ngSwitchCase="'group'"></app-group-presentation>
+  <app-survey-presentation *ngSwitchCase="'survey'"></app-survey-presentation>
+</div>

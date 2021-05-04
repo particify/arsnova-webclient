@@ -505,6 +505,7 @@
     "no-contents": "There are no questions.",
     "select-content-group": "Select collection",
     "answer": "Answer",
+    "answers-tooltip": "Number of answers",
     "other-combinations": "Other",
     "show-flashcard-back": "Show the back of the flashcard",
     "hide-flashcard-back": "Hide the back of the flashcard"
@@ -575,5 +576,26 @@
   },
   "import": {
     "import": "Import"
+  },
+  "control-bar": {
+    "results": "Results",
+    "correct": "Correct",
+    "lock": "Lock",
+    "left": "Back",
+    "right": "Next",
+    "start": "Start",
+    "stop": "Stop",
+    "change-type": "Change type",
+    "share": "Share room",
+    "fullscreen": "Fullscreen",
+    "exit": "Exit presentation",
+    "SPACE": "Space",
+    "LEFT": "Left",
+    "RIGHT": "Right",
+    "Escape": "ESC",
+    "LetterC": "C",
+    "LetterL": "L",
+    "LetterF": "F",
+    "LetterQ": "Q"
   }
 }

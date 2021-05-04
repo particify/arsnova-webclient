@@ -505,6 +505,7 @@
     "no-contents": "Es sind keine Fragen vorhanden.",
     "select-content-group": "Sammlung auswählen",
     "answer": "Antwort",
+    "answers-tooltip": "Anzahl der Antworten",
     "other-combinations": "Andere",
     "show-flashcard-back": "Zeige die Rückseite",
     "hide-flashcard-back": "Verstecke die Rückseite"
@@ -575,5 +576,26 @@
   },
   "import": {
     "import": "Importieren"
+  },
+  "control-bar": {
+    "results": "Ergebnisse",
+    "correct": "Richtig",
+    "lock": "Sperren",
+    "left": "Zurück",
+    "right": "Weiter",
+    "start": "Starten",
+    "stop": "Stoppen",
+    "change-type": "Typ ändern",
+    "share": "Raum teilen",
+    "fullscreen": "Vollbildmodus",
+    "exit": "Presentation verlassen",
+    "SPACE": "Leertaste",
+    "LEFT": "Links",
+    "RIGHT": "Rechts",
+    "Escape": "ESC",
+    "LetterC": "C",
+    "LetterL": "L",
+    "LetterF": "F",
+    "LetterQ": "Q"
   }
 }
