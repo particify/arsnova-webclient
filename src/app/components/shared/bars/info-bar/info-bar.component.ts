@@ -19,6 +19,7 @@ export class InfoBarItem extends BarItem {
 export class InfoBarComponent extends BarBaseComponent implements OnInit {
 
   @Input() barItems: InfoBarItem[] = [];
+  @Input() mode = 'badge';
 
   constructor() {
     super();

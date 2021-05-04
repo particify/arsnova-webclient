@@ -16,15 +16,19 @@ export class BarItem {
 export abstract class BarBaseComponent implements OnInit {
 
   @Input() barItems: BarItem[] = [];
+  @Input() position = 'left';
+  @Input() isPresentation = false;
+
   info: BarItem[] = [
     new BarItem('user-count', 'people')
   ];
-  headerHeight =  64;
+  headerHeight: number;
   scrollExtended = false;
 
   protected constructor() { }
 
   ngOnInit(): void {
+    this.headerHeight = this.isPresentation ? 0 : 64;
     this.initItems();
   }
 
