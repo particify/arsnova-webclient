@@ -2,3 +2,37 @@ app-comment-list {
   width: 100%;
   max-width: calc(800px + 2em);
 }
+
+.list-container {
+  background-color: var(--background);
+  position: absolute;
+  right: 0;
+  top: 0;
+  height: calc(100vh - 2em - 72px);
+  overflow: auto;
+  width: calc(40vw - 4em);
+  padding: 2em 2em 72px;
+  margin-bottom: 2em;
+}
+
+.list-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.list-container::-webkit-scrollbar-track {
+  background: var(--background);
+}
+
+.list-container::-webkit-scrollbar-thumb {
+  background: var(--surface);
+  border-radius: 4px;
+}
+
+.presentation-container {
+  position: absolute;
+  top: 4vw;
+  left: 4vw;
+  width: 52vw;
+  height: calc(100vh - 4vw - 72px);
+}
+

@@ -176,24 +176,26 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
   }
 
   checkForFeedback() {
-    this.feedbackSubscription = this.feedbackService.messageEvent.subscribe(message => {
-      const type = JSON.parse(message.body).type;
-      if (type === FeedbackMessageType.STARTED) {
-        this.activeFeatures.push(FEATURES.SURVEY);
-        this.changeIndicator.push(
-          new ChangeIndicator(FEATURES.SURVEY, true)
-        );
-        this.getItems();
-        this.toggleNews(FEATURES.SURVEY);
-      } else if (type === FeedbackMessageType.STOPPED) {
-        const index = this.activeFeatures.indexOf(FEATURES.SURVEY);
-        if (this.currentRouteIndex !== index) {
-          this.activeFeatures.splice(index, 1);
-          this.changeIndicator.splice(index, 1);
+    if (this.role === UserRole.PARTICIPANT) {
+      this.feedbackSubscription = this.feedbackService.messageEvent.subscribe(message => {
+        const type = JSON.parse(message.body).type;
+        if (type === FeedbackMessageType.STARTED) {
+          this.activeFeatures.push(FEATURES.SURVEY);
+          this.changeIndicator.push(
+            new ChangeIndicator(FEATURES.SURVEY, true)
+          );
           this.getItems();
+          this.toggleNews(FEATURES.SURVEY);
+        } else if (type === FeedbackMessageType.STOPPED) {
+          const index = this.activeFeatures.indexOf(FEATURES.SURVEY);
+          if (this.currentRouteIndex !== index) {
+            this.activeFeatures.splice(index, 1);
+            this.changeIndicator.splice(index, 1);
+            this.getItems();
+          }
         }
-      }
-    });
+      });
+    }
   }
 
   getItems() {

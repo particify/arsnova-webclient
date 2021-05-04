@@ -97,11 +97,14 @@
 }
 
 .group-button {
-  height: 52px;
   max-width: 140px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.full-height {
+  height: 52px;
 }
 
 .current-group {

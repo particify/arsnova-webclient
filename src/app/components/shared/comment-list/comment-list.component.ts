@@ -1,4 +1,14 @@
-import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  EventEmitter,
+  HostListener,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+  ViewChild
+} from '@angular/core';
 import { Comment } from '../../../models/comment';
 import { CommentService } from '../../../services/http/comment.service';
 import { TranslateService } from '@ngx-translate/core';
@@ -20,6 +30,8 @@ import { DialogService } from '../../../services/util/dialog.service';
 import { GlobalStorageService, STORAGE_KEYS } from '../../../services/util/global-storage.service';
 import { AnnounceService } from '../../../services/util/announce.service';
 import { CommentSettingsService } from '../../../services/http/comment-settings.service';
+import { KeyboardUtils } from '../../../utils/keyboard';
+import { KeyboardKey } from '../../../utils/keyboard/keys';
 
 // Using lowercase letters in enums because they we're also used for parsing incoming WS-messages
 
@@ -61,6 +73,9 @@ export class CommentListComponent implements OnInit, OnDestroy {
   @Input() comments$: Observable<Comment[]>;
   @Input() isModerator = false;
   @Input() isArchive = false;
+  @Input() isPresentation = false;
+  @Input() activeComment: Comment;
+  @Output() updateActiveComment = new EventEmitter<Comment>();
 
   comments: Comment[] = [];
   roomId: string;
@@ -119,9 +134,21 @@ export class CommentListComponent implements OnInit, OnDestroy {
     langService.langEmitter.subscribe(lang => translateService.use(lang));
   }
 
+  @HostListener('window:keyup', ['$event'])
+  keyEvent(event: KeyboardEvent) {
+    if (this.isPresentation) {
+      if (KeyboardUtils.isKeyEvent(event, KeyboardKey.LEFT) === true) {
+        this.prevComment();
+      } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.RIGHT) === true) {
+        this.nextComment();
+      }
+    }
+  }
+
   ngOnInit() {
     const userId = this.auth?.userId;
-    this.currentSort = this.globalStorageService.getItem(STORAGE_KEYS.COMMENT_SORT) || this.sorting.VOTEDESC;
+    this.currentSort = this.globalStorageService.getItem(STORAGE_KEYS.COMMENT_SORT) ||
+      (this.isPresentation ? this.sorting.TIME : this.sorting.VOTEDESC);
     this.period = this.globalStorageService.getItem(STORAGE_KEYS.COMMENT_TIME_FILTER) || Period.ALL;
     this.currentFilter = '';
     this.translateService.use(this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE));
@@ -247,6 +274,7 @@ export class CommentListComponent implements OnInit, OnDestroy {
       }
     }
     this.setTimePeriod(this.period);
+    this.updateCurrentComment(this.displayComments[0]);
     this.isLoading = false;
   }
 
@@ -560,5 +588,50 @@ export class CommentListComponent implements OnInit, OnDestroy {
   resetComments() {
     this.comments = [];
     this.setTimePeriod(this.period);
+  }
+
+  updateCurrentComment(comment: Comment) {
+    this.updateActiveComment.emit(comment);
+    this.commentService.highlight(comment).subscribe();
+    const index = this.getIndexOfComment(comment);
+    if (index) {
+      this.scrollToComment(index);
+    }
+  }
+
+  getIndexOfComment(comment: Comment): number {
+    return this.displayComments.indexOf(comment);
+  }
+
+  getCurrentIndex(): number {
+    return this.getIndexOfComment(this.activeComment);
+  }
+
+  getCommentElements() {
+    return document.getElementsByName('comment');
+  }
+
+  scrollToComment(index) {
+    this.getCommentElements()[index].scrollIntoView({
+        behavior: 'smooth',
+        block: 'center'
+      }
+    );
+  }
+
+  nextComment() {
+    const index = this.getCurrentIndex();
+    if (index < this.displayComments.length - 1) {
+      const nextComment = this.displayComments[index + 1];
+      this.updateCurrentComment(nextComment);
+    }
+  }
+
+  prevComment() {
+    const index = this.getCurrentIndex();
+    if (index > 0) {
+      const prevComment = this.displayComments[index -1];
+      this.updateCurrentComment(prevComment);
+    }
   }
 }

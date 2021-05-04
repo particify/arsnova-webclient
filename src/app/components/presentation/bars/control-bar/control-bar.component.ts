@@ -100,14 +100,22 @@ export class ControlBarComponent extends NavBarComponent implements OnInit {
   beforeInit() {
     this.subscribeFullscreen();
   }
-
+  
   afterInit() {
     this.route.data.subscribe(data => {
       this.surveyStarted = !data.room.settings.feedbackLocked;
-      this.surveyActionItems[0].name = this.surveyStarted ? 'stop' : 'start';
-      this.surveyActionItems[0].icon = this.surveyStarted ? 'stop' : 'play_arrow';
+      this.setSurveyState();
     });
     this.barItems.map(b => b.key = this.getFeatureKey(b.name));
+    this.eventService.on('SurveyStateChanged').subscribe(state => {
+      this.surveyStarted = state === 'started';
+      this.setSurveyState();
+    })
+  }
+
+  setSurveyState() {
+    this.surveyActionItems[0].name = this.surveyStarted ? 'stop' : 'start';
+    this.surveyActionItems[0].icon = this.surveyStarted ? 'stop' : 'play_arrow';
   }
 
   getFeatureKey(name: string): string {

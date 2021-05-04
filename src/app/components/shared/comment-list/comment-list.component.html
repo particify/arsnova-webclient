@@ -1,12 +1,12 @@
-<app-nav-bar (isVisible)="checkIfNavBarExists($event)"></app-nav-bar>
+<app-nav-bar *ngIf="!isPresentation" (isVisible)="checkIfNavBarExists($event)"></app-nav-bar>
 <button class="add-btn mobile-add" mat-mini-fab aria-labelledby="add"
-        *ngIf="!search && deviceType !== 'desktop' && !isModerator && !isArchive" (click)="openCreateDialog()"
+        *ngIf="!search && deviceType !== 'desktop' && !isModerator && !isPresentation && !isArchive" (click)="openCreateDialog()"
         [ngClass]="{'above-nav': navBarExists}"
         matTooltip="{{ 'comment-list.add-comment' | translate }}">
   <mat-icon class="bigger-icon">add</mat-icon>
 </button>
 <div class="nav-bar-container">
-  <div fxLayout="row" class="search-container" [ngClass]="{'search-container-fixed-invisible': scroll && !scrollActive && deviceType !== 'desktop', 'search-container-fixed': scroll,
+  <div *ngIf="!isPresentation" fxLayout="row" class="search-container" [ngClass]="{'search-container-fixed-invisible': scroll && !scrollActive && deviceType !== 'desktop', 'search-container-fixed': scroll,
         'search-container-fixed-visible' : scroll && (deviceType === 'desktop' || scrollActive), 'search-container-moderator': scroll && isModerator, 'search-container-archive': scroll && isArchive }"
        (window:scroll)="checkScroll()" fxLayoutAlign="center center">
     <input tabindex="-1" (focus)="eventService.makeFocusOnInputTrue()" (blur)="eventService.makeFocusOnInputFalse()"
@@ -196,6 +196,7 @@
   </div>
 
   <button mat-icon-button class="button-abort scrollTop" tabindex="-1" (click)="scrollTop(true)"
+          *ngIf="!isPresentation"
           [ngClass]="{'visible': scrollExtended && scrollActive,
                       'above-add': navBarExists && deviceType === 'mobile' && !isModerator,
                       'mobile-scroll-position': (!navBarExists || isModerator) && deviceType === 'mobile',
@@ -203,7 +204,8 @@
     <mat-icon>arrow_upward</mat-icon>
   </button>
 
-  <div fxLayout="row" fxLayoutAlign="center" *ngIf="comments.length < 3 && !isLoading && !search && !isModerator && !isArchive">
+  <div fxLayout="row" fxLayoutAlign="center" *ngIf="comments.length < 3 && !isLoading && !search && !isModerator
+            && !isPresentation && !isArchive">
     <button id="add-comment-button" mat-raised-button class="button-primary fab-extended" (click)="openCreateDialog()"
             aria-labelledby="add">
       <mat-icon class="add">add</mat-icon>
@@ -211,9 +213,10 @@
     </button>
   </div>
 
-  <div class="comments-container" *ngIf="!isLoading">
+  <div [ngClass]="{'comments-container': !isPresentation}" *ngIf="!isLoading">
     <app-comment *ngFor="let current of displayComments" [comment]="current" [archived]="isArchive"
                  [parseVote]="getVote(current)" (clickedOnTag)="clickedOnTag($event)"
+                 [isPresentation]="isPresentation" (activeComment)="updateCurrentComment($event)"
                  [referenceEvent]="referenceEvent.asObservable()" [isNew]="current.id === newestComment.id">
     </app-comment>
   </div>

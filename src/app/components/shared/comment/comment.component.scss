@@ -7,6 +7,14 @@
   transition: background-color 0.5s linear;
 }
 
+.presentation-comment {
+  box-shadow: none;
+}
+
+.presentation-comment.active {
+  box-shadow: 0 0 5px var(--primary);
+}
+
 .mat-card-content > :first-child {
   margin-top: 20px;
 }

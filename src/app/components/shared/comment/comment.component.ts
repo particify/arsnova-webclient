@@ -56,7 +56,9 @@ export class CommentComponent implements OnInit, OnDestroy {
   @Input() inAnswerView = false;
   @Input() viewRoleInput: UserRole;
   @Input() archived = false;
+  @Input() isPresentation = false;
   @Output() clickedOnTag = new EventEmitter<string>();
+  @Output() activeComment = new EventEmitter<Comment>();
 
   viewRole: UserRole;
   isParticipant = false;
@@ -252,16 +254,20 @@ export class CommentComponent implements OnInit, OnDestroy {
   }
 
   openPresentDialog(comment: Comment): void {
-    if (this.isCreator) {
-      this.commentService.highlight(comment).subscribe();
-      if (!comment.read) {
-        this.setRead(comment);
+    if (this.isPresentation) {
+      this.activeComment.emit(comment);
+    } else {
+      if (this.isCreator) {
+        this.commentService.highlight(comment).subscribe();
+        if (!comment.read) {
+          this.setRead(comment);
+        }
       }
+      const dialogRef = this.dialogService.openCommentPresentationDialog(comment.body);
+      dialogRef.afterClosed()
+        .subscribe(result => {
+          this.commentService.lowlight(comment).subscribe();
+        });
     }
-    const dialogRef = this.dialogService.openCommentPresentationDialog(comment.body);
-    dialogRef.afterClosed()
-      .subscribe(result => {
-        this.commentService.lowlight(comment).subscribe();
-      });
   }
 }

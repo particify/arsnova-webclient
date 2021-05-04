@@ -1,10 +1,11 @@
-import { Component, HostListener, Inject, OnInit } from '@angular/core';
+import { Component, HostListener, Inject, Input, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
 import { DOCUMENT } from '@angular/common';
 import { KeyboardUtils } from '../../../../utils/keyboard';
 import { KeyboardKey } from '../../../../utils/keyboard/keys';
 import { GlobalStorageService, STORAGE_KEYS } from '../../../../services/util/global-storage.service';
+import { Comment } from '../../../../models/comment';
 
 @Component({
   selector: 'app-present-comment',
@@ -12,6 +13,9 @@ import { GlobalStorageService, STORAGE_KEYS } from '../../../../services/util/gl
   styleUrls: ['./present-comment.component.scss']
 })
 export class PresentCommentComponent implements OnInit {
+
+  @Input() isPresentation = false;
+  @Input() comment: Comment;
 
   constructor(
     @Inject(DOCUMENT) private document: Document,

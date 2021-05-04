@@ -1,4 +1,4 @@
-import { AfterContentInit, Component, HostListener, OnDestroy, OnInit } from '@angular/core';
+import { AfterContentInit, Component, HostListener, Input, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ClientAuthentication } from '../../../models/client-authentication';
 import { NotificationService } from '../../../services/util/notification.service';
@@ -18,8 +18,12 @@ import { Comment } from '../../../models/comment';
 })
 export class CommentPageComponent implements OnInit, OnDestroy, AfterContentInit {
 
+  @Input() isPresentation = false;
+
   auth: ClientAuthentication;
   comments$: Observable<Comment[]>;
+  activeComment: Comment;
+  isLoading = true;
 
   constructor(
     private route: ActivatedRoute,
@@ -89,6 +93,13 @@ export class CommentPageComponent implements OnInit, OnDestroy, AfterContentInit
 
   public announce() {
     this.announceService.announce('comment-page.a11y-shortcuts');
+  }
+
+  updateComment(comment: Comment) {
+    if (this.activeComment) {
+      this.commentService.lowlight(this.activeComment).subscribe();
+    }
+    this.activeComment = comment;
   }
 
 }

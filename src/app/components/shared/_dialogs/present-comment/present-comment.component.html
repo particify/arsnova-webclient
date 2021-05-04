@@ -1,4 +1,4 @@
-<div fxLayout="row" fxLayoutAlign="end">
+<div *ngIf="!isPresentation" fxLayout="row" fxLayoutAlign="end">
   <div fxLayout="column" fxLayoutAlign="center">
     <mat-icon>zoom_out</mat-icon>
   </div>
@@ -8,13 +8,15 @@
     <mat-icon>zoom_in</mat-icon>
   </div>
 </div>
-<div tabindex="0" id="comment">
-  <p attr.aria-label="{{ 'dialog.a11y-comment-presentation' | translate: {comment: data} }}">
-    {{data}}
-  </p>
+<div fxFill fxLayoutAlign="center center">
+  <div tabindex="0" id="comment">
+    <p attr.aria-label="{{ 'dialog.a11y-comment-presentation' | translate: {comment: comment || data} }}">
+      {{comment?.body || data}}
+    </p>
+  </div>
 </div>
 
-<button class="header exitBtn" mat-icon-button (click)="onCloseClick()" aria-labelledby="exit">
+<button *ngIf="!isPresentation" class="header exitBtn" mat-icon-button (click)="onCloseClick()" aria-labelledby="exit">
   <mat-icon>arrow_back</mat-icon>
 </button>
 
