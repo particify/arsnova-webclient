@@ -1,5 +1,5 @@
 <div tabindex="-1" class="container" (touchstart)="swipe($event, 'start')" (touchend)="swipe($event, 'end')">
-  <div fxLayout="row">
+  <div fxLayout="row" class="inner-container" *ngIf="!isPresentation">
     <button tabindex="-1" mat-icon-button *ngIf="listLength > 5" disableRipple [disabled]="headerPos < 1"
             (click)="moveHeaderRight(true)">
       <mat-icon class="arrow" [ngClass]="{'disabled': headerPos < 1}">keyboard_arrow_left</mat-icon>

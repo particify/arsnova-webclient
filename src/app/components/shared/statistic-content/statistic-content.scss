@@ -11,8 +11,11 @@
   margin-bottom: 10px;
   border-radius: 5px;
   align-items: center;
-  transition: 300ms;
   color: var(--on-surface);
+}
+
+.all-animations {
+  transition: 300ms;
 }
 
 .answer-label {
@@ -29,4 +32,28 @@
 .invisible {
   height: 0;
   opacity: 0;
+}
+
+.no-background, .no-background > *:not(.answer-label) {
+  transition: box-shadow 300ms;
+  background: transparent;
+  font-weight: $font-weight-bold;
+}
+
+.no-background .answer-label {
+  margin: 0;
+  min-width: 25px;
+  max-height: 25px;
+  line-height: 25px;
+  padding: 6px;
+  text-align: center;
+  border-radius: 50%;
+  border: 1px solid var(--grey);
+  transition: border-color 300ms;
+}
+
+.no-background.correct {
+  .answer-label {
+    border-color: transparent;
+  }
 }

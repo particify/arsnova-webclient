@@ -4,6 +4,10 @@
   overflow: hidden;
 }
 
+.inner-container {
+  margin-bottom: 3%;
+}
+
 .stepper-container {
   width: calc(100vw - calc(70px + 6%));
   max-width: calc(760px + 6%);

@@ -123,7 +123,9 @@ import { MatDialog } from '@angular/material/dialog';
     StatisticSortComponent,
     NavBarComponent,
     InfoBarComponent,
-    DividerComponent
+    DividerComponent,
+    QrCodeComponent,
+    AnswerCountComponent
   ]
 })
 export class SharedModule {

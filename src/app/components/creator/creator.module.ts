@@ -89,6 +89,9 @@ import { QRCodeModule } from 'angularx-qrcode';
     RemindOfTokensComponent,
     StatisticHelpComponent
   ],
+  exports: [
+    ContentPresentationComponent
+  ],
   providers: [
     { provide: TRANSLATION_MODULE_NAME, useValue: 'creator' },
     DialogService

@@ -1,2 +1,2 @@
 <app-loading-indicator [size]="80" *ngIf="isLoading"></app-loading-indicator>
-<div class="rendered-text text-container" *ngIf="!isLoading" [innerHTML]="displayedText"></div>
+<div class="rendered-text text-container" *ngIf="!isLoading" [innerHTML]="displayedText" [ngClass]="{'presentation': isPresentation}"></div>

@@ -1,16 +1,17 @@
-<div fxLayout="column" fxLayoutGap="8px">
+<div fxLayout="column" fxLayoutGap="{{isPresentation ? '1em' : '8px'}}">
   <app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
   <div class="chart-container" *ngIf="!isLoading" [ngClass]="{ 'invisible': !answersVisible }">
     <canvas id="{{ chartId }}"></canvas>
   </div>
   <mat-list *ngIf="!isLoading" role="list">
-    <mat-list-item role="listitem" [ngClass]="{'correct': colorLabel && checkIfCorrect(i)}" tabindex="0"
+    <mat-list-item role="listitem" [ngClass]="{'correct': colorLabel && checkIfCorrect(i), 'no-background': isPresentation,
+                   'all-animations': !isPresentation}" tabindex="0"
                    attr.aria-label="{{ ('statistic.a11y-choice-evaluation' | translate: { count: data[i], answer: a.answer }) +
                  (isSurvey ? '' : ((checkIfCorrect(i) ?
                  'statistic.a11y-correct' : 'statistic.a11y-wrong') | translate)) }}"
                  *ngFor="let a of answerList; let i = index">
     <div fxFill fxLayoutAlign="space-between center">
-      <div fxLayout="row" fxLayoutAlign="start center">
+      <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="12px">
         <p class="answer-label">{{a.label}}</p>
         <p>{{a.answer}}</p>
       </div>

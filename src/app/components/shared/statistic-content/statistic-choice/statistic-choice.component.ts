@@ -101,6 +101,11 @@ export class StatisticChoiceComponent extends StatisticContentBaseComponent impl
     Chart.defaults.color = this.onSurface;
     Chart.defaults.font.size = 16;
     Chart.register(BarController, BarElement, CategoryScale, LinearScale, Tooltip);
+    const gridConfig = {
+      borderColor: this.onSurface,
+      tickColor: this.isPresentation ? this.surface : this.onSurface,
+      drawOnChartArea: !this.isPresentation
+    };
     this.chart = new Chart(this.chartId, {
       type: 'bar',
       data: {
@@ -118,16 +123,17 @@ export class StatisticChoiceComponent extends StatisticContentBaseComponent impl
             type: 'linear',
             ticks: {
               precision: 0,
+              // TODO: Add label to bars, then use: "color: this.isPresentation ? this.surface : this.onSurface"
             },
             grid: {
-              borderColor: this.onSurface
+              borderColor: this.onSurface, // TODO: Waiting for bar labels too : this.isPresentation ? this.surface : this.onSurface,
+              tickColor: this.isPresentation ? this.surface : this.onSurface,
+              drawOnChartArea: !this.isPresentation
             }
           },
           x: {
             type: 'category',
-            grid: {
-              borderColor: this.onSurface
-            }
+            grid: gridConfig
           }
         },
         plugins: {

@@ -1,14 +1,20 @@
-<app-nav-bar></app-nav-bar>
+<app-nav-bar *ngIf="!isPresentation"></app-nav-bar>
+<app-info-bar *ngIf="isPresentation && infoBarItems[0]?.count > 0" [barItems]="infoBarItems" [isPresentation]="true"
+              [position]="'right'" [mode]="'pure'"></app-info-bar>
 <app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
 <div class="nav-bar-container">
   <div tabindex="-1" id="presentation-message" class="visually-hidden">{{ 'statistic.a11y-message-presentation' | translate }}</div>
   <div *ngIf="!isLoading" fxLayout="column" fxLayoutAlign="start center">
-    <app-stepper *ngIf="contents.length > 0" (newIndex)="updateURL($event)" [listLength]="contents.length" [completed]="">
+    <app-stepper *ngIf="contents.length > 0" (newIndex)="updateURL($event)" [listLength]="contents.length"
+                 [completed]="" [isPresentation]="isPresentation">
       <cdk-step *ngFor="let content of contents; let i = index">
-        <div id="step" *ngIf="currentStep >= i - 1 && currentStep <= i + 1">
-          <mat-card>
+        <div id="step" *ngIf="(currentStep >= i - 1 && currentStep <= i + 1) || isPresentation">
+          <mat-card [ngClass]="{'presentation-card': isPresentation}">
             <app-statistic-content [content]="content" [directShow]="contentIndex === i" [active]="currentStep === i"
-                                   [index]="i" [correctOptionsPublished]="true"></app-statistic-content>
+                                   [index]="i" [correctOptionsPublished]="true" [isPresentation]="isPresentation"
+            (updatedCounter)="updateCounter($event, currentStep === i)" [routeChanged]="routeChanged">
+
+            </app-statistic-content>
           </mat-card>
         </div>
         <div tabindex="0" class="visually-hidden">{{ 'statistic.a11y-no-more-answers' | translate }}</div>
