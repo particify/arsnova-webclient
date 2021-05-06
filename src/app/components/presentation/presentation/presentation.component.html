@@ -3,7 +3,9 @@
   <div *ngSwitchCase="undefined">
     <app-qr-code [shortId]="shortId"></app-qr-code>
   </div>
-  <app-comment-presentation *ngSwitchCase="'comments'"></app-comment-presentation>
-  <app-group-presentation [groupChanged]="groupChanged" *ngSwitchCase="'group'"></app-group-presentation>
-  <app-survey-presentation *ngSwitchCase="'survey'"></app-survey-presentation>
+  <app-comment-page *ngSwitchCase="'comments'" [isPresentation]="true"></app-comment-page>
+  <div *ngSwitchCase="'group'" fxLayout="column" fxLayoutAlign="start center">
+    <app-content-presentation [isPresentation]="true" [groupChanged]="groupChanged"></app-content-presentation>
+  </div>
+  <app-survey-page *ngSwitchCase="'survey'" [isPresentation]="true"></app-survey-page>
 </div>

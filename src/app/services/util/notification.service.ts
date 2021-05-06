@@ -57,7 +57,7 @@ export class NotificationService {
         icon: typeString
       },
       duration: duration,
-      verticalPosition: this.isPresentation ? 'top' : 'bottom'
+      panelClass: this.isPresentation ? 'presentation-snack-bar' : ''
     });
     return this.snackRef;
   }

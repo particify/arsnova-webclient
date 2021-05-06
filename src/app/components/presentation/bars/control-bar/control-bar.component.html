@@ -1,5 +1,11 @@
-<div class="bar-container">
-  <div class="bar bar-hidden" [ngClass]="{'bar-expanded': menuOpen || currentRouteIndex === undefined}" fxLayout="row" fxLayoutAlign="start center">
+<div *ngIf="currentRouteIndex > -1" class="info-container" fxLayout="row" fxLayoutGap="1em">
+  <div fxLayoutAlign="center">
+    <p class="code">{{ joinUrl || '#' + shortId }}</p>
+  </div>
+</div>
+<app-bar-notification *ngIf="!isLoading && isActiveFeature('group')" [message]="notificationMessage"  [icon]="notificationIcon" [expanded]="barVisible" [hidden]="isCurrentContentPublished"></app-bar-notification>
+<div class="bar-container" (mouseenter)="toggleBarVisibility(true)" (mouseleave)="toggleBarVisibility(false)">
+  <div class="bar bar-hidden" [ngClass]="{'bar-expanded': barVisible || currentRouteIndex === undefined}" fxLayout="row" fxLayoutAlign="start center">
     <div fxLayout="row" class="logo-container">
       <lib-extension-point extensionId="presentation-logo"></lib-extension-point>
     </div>
@@ -7,82 +13,50 @@
       <div fxLayout="row" class="nav-container">
         <div matRipple role="button" class="nav-button" *ngFor="let barItem of barItems; let i = index" (click)="updateFeature(barItem.name)"
                 [ngClass]="{'active-nav-button': i === currentRouteIndex }" fxLayout="column" fxLayoutAlign="center center"
-        [matTooltip]="(('sidebar.' + barItem.name) | translate) + ' (' + barItem.key  + ')'">
+        [matTooltip]="(('sidebar.' + barItem.name) | translate) + ' (' + ('control-bar.key' | translate) + ' ' + barItem.key  + ')'">
           <mat-icon class="nav-icon">{{ barItem.icon }}</mat-icon>
           <p class="text">{{ 'sidebar.' + barItem.name | translate }}</p>
         </div>
       </div>
-      <div *ngIf="isActiveFeature('group')" fxLayout="row" fxLayoutAlign="center center" class="feature-container">
+      <div *ngIf="isActiveFeature('group')" fxLayout="row" fxLayoutAlign="center center" class="feature-container no-padding">
         <button *ngIf="contentGroups.length > 1" mat-button class="group-button full-height" [matMenuTriggerFor]="groupMenu"
-                (menuOpened)="menuOpen = true" (menuClosed)="menuOpen = false">
+                (menuOpened)="menuOpen = true" (menuClosed)="menuClosed()">
           {{ groupName }}
         <mat-icon>arrow_drop_down</mat-icon>
         </button>
         <mat-menu #groupMenu=matMenu>
-          <button mat-menu-item *ngFor="let contentGroup of contentGroups" [value]="contentGroup.name"
-                  (click)="changeGroup(contentGroup)" [ngClass]="{'current-group': contentGroup.name === groupName}">
+          <button mat-menu-item *ngFor="let contentGroup of contentGroups" [value]="contentGroup.name" [disabled]="!contentGroup.published"
+                  (click)="changeGroup(contentGroup)" [ngClass]="{'selected-menu-item': contentGroup.name === groupName}">
             {{contentGroup.name}}
           </button>
         </mat-menu>
-        <div matRipple role="button" fxLayout="column" fxLayoutAlign="center center" class="action-button"
-             *ngFor="let groupItem of groupActionItems" (click)="sendKeyEvent(groupItem.key)"
-             [matTooltip]="('control-bar.' + groupItem.name | translate) + ' (' + ('control-bar.' + groupItem.key | translate) + ')'">
-          <mat-icon class="nav-icon">{{groupItem.icon}}</mat-icon>
-          <p class="text">{{ ('control-bar.' + groupItem.name) | translate }}</p>
-        </div>
+        <app-key-button-bar [items]="groupItems"></app-key-button-bar>
         <div class="bar-divider"></div>
-        <div fxLayout="row" class="icon-container">
-          <div matRipple role="button" fxLayout="column" fxLayoutAlign="center center" class="action-button"
-              *ngFor="let arrowItem of arrowActionItems" (click)="sendKeyEvent(arrowItem.key)"
-               [matTooltip]="('control-bar.' + arrowItem.name | translate) + ' (' + ('control-bar.' + arrowItem.key | translate) + ')'">
-            <mat-icon>{{arrowItem.icon}}</mat-icon>
-        </div>
-        </div>
+        <app-key-button-bar [items]="arrowItems" [withText]="false"></app-key-button-bar>
       </div>
-      <div *ngIf="isActiveFeature('comments')" fxLayout="row" fxLayoutAlign="center center" class="feature-container">
-        <button mat-button class="full-height" [matMenuTriggerFor]="groupMenu"
-                (menuOpened)="menuOpen = true" (menuClosed)="menuOpen = false">
-          Neueste
+      <div *ngIf="isActiveFeature('comments')" fxLayout="row" fxLayoutAlign="center center" class="feature-container no-padding">
+        <button mat-button class="full-height" [matMenuTriggerFor]="sortMenu"
+                (menuOpened)="menuOpen = true" (menuClosed)="menuClosed()">
+          {{ ('control-bar.comment-sort-' + currentCommentSort) | translate }}
           <mat-icon>arrow_drop_down</mat-icon>
         </button>
-        <mat-menu #groupMenu=matMenu>
-          <button mat-menu-item *ngFor="let contentGroup of contentGroups" [value]="contentGroup.name"
-                  (click)="changeGroup(contentGroup)" [ngClass]="{'current-group': contentGroup.name === groupName}">
-            {{contentGroup.name}}
+        <mat-menu #sortMenu=matMenu>
+          <button mat-menu-item *ngFor="let sort of commentSortTypes" [value]="currentCommentSort"
+                  (click)="changeCommentSort(sort)" [ngClass]="{'selected-menu-item': sort === currentCommentSort}">
+            {{ ('control-bar.comment-sort-' + sort) | translate }}
           </button>
         </mat-menu>
-        <div fxLayout="row" class="icon-container">
-          <div matRipple role="button" fxLayout="column" fxLayoutAlign="center center" class="action-button">
-            <mat-icon class="nav-icon">zoom_in</mat-icon>
-          </div>
-          <p style="margin: 16px 4px">100%</p>
-          <div matRipple role="button" fxLayout="column" fxLayoutAlign="center center" class="action-button">
-            <mat-icon class="nav-icon">zoom_out</mat-icon>
-          </div>
+        <div fxLayout="row">
+          <app-key-button-bar [items]="zoomItems.slice(1, 2)" [withText]="false"></app-key-button-bar>
+          <p>{{ currentCommentZoom }}%</p>
+          <app-key-button-bar [items]="zoomItems.slice(0, 1)" [withText]="false"></app-key-button-bar>
         </div>
         <div class="bar-divider"></div>
-        <div fxLayout="row" class="icon-container">
-          <div matRipple role="button" fxLayout="column" fxLayoutAlign="center center" class="action-button"
-               *ngFor="let arrowItem of arrowActionItems" (click)="sendKeyEvent(arrowItem.key)"
-               [matTooltip]="('control-bar.' + arrowItem.name | translate) + ' (' + ('control-bar.' + arrowItem.key | translate) + ')'">
-            <mat-icon>{{arrowItem.icon}}</mat-icon>
-          </div>
-        </div>
+        <app-key-button-bar [items]="arrowItems" [withText]="false"></app-key-button-bar>
       </div>
-      <div *ngIf="isActiveFeature('survey')" fxLayout="row" fxLayoutAlign="center center" class="feature-container">
-        <div matRipple role="button" fxLayout="column" fxLayoutAlign="center center" class="action-button"
-             *ngFor="let surveyItem of surveyActionItems" (click)="sendKeyEvent(surveyItem.key)"
-             [matTooltip]="('control-bar.' + surveyItem.name | translate) + ' (' + ('control-bar.' + surveyItem.key | translate) + ')'">
-          <mat-icon class="nav-icon">{{surveyItem.icon}}</mat-icon>
-          <p class="text">{{ ('control-bar.' + surveyItem.name) | translate }}</p>
-        </div>
-      </div>
+      <app-key-button-bar *ngIf="isActiveFeature('survey')" [items]="surveyItems"></app-key-button-bar>
       <div fxLayout="row" class="feature-container icon-container">
-        <div matRipple role="button" fxLayout="column" fxLayoutAlign="center center" class="action-button"
-             *ngFor="let generalItem of generalActionItems" (click)="sendKeyEvent(generalItem.key)"
-             [matTooltip]="('control-bar.' + generalItem.name | translate) + ' (' + ('control-bar.' + generalItem.key | translate) + ')'">
-          <mat-icon>{{generalItem.icon}}</mat-icon>
-        </div>
+        <app-key-button-bar [items]="generalItems" [withText]="false"></app-key-button-bar>
       </div>
     </div>
   </div>

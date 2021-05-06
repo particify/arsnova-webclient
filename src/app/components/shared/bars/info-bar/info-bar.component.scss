@@ -7,12 +7,12 @@
 }
 
 .count {
-  color: var(--primary);
-  font-weight: $font-weight-bold;
+  color: var(--on-surface);
+  opacity: 0.8;
   min-width: 30px;
   text-align: center;
   font-size: 24px;
-  margin: 10px 16px;
+  margin: 10px;
   padding: 4px;
 }
 

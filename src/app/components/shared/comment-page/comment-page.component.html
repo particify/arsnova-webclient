@@ -8,7 +8,7 @@
         <app-present-comment fxFill [isPresentation]="true" [comment]="activeComment"></app-present-comment>
       </div>
       <div class="list-container">
-        <app-comment-list *ngIf="!isLoading" [auth]="auth" [comments$]="comments$" [isPresentation]="true"
+        <app-comment-list [auth]="auth" [comments$]="comments$" [isPresentation]="true"
                           [activeComment]="activeComment" (updateActiveComment)="updateComment($event)"></app-comment-list>
       </div>
     </div>

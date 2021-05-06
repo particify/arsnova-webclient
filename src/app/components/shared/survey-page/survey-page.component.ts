@@ -18,7 +18,6 @@ import { AnnounceService } from '../../../services/util/announce.service';
 import { FeedbackService } from '../../../services/http/feedback.service';
 import { FeedbackMessageType } from '../../../models/messages/feedback-message-type';
 import { EventService } from '../../../services/util/event.service';
-import { InfoBarItem } from '../bars/info-bar/info-bar.component';
 
 @Component({
   selector: 'app-survey-page',
@@ -48,7 +47,7 @@ export class SurveyPageComponent implements OnInit, OnDestroy, AfterContentInit 
   type = this.typeFeedback;
   deviceWidth = innerWidth;
   answerCount = 0;
-  infoBarItems: InfoBarItem[] = [];
+  routeData;
 
   constructor(
     private authenticationService: AuthenticationService,
@@ -115,6 +114,7 @@ export class SurveyPageComponent implements OnInit, OnDestroy, AfterContentInit 
     this.authenticationService.getCurrentAuthentication()
         .subscribe(auth => this.userId = auth.userId);
     this.route.data.subscribe(data => {
+      this.routeData = data;
       this.roomId = data.room.id;
       this.shortId = data.room.shortId;
       this.isCreator = data.viewRole === UserRole.CREATOR;
@@ -165,6 +165,7 @@ export class SurveyPageComponent implements OnInit, OnDestroy, AfterContentInit 
 
   loadConfig(room: Room) {
     this.room = room;
+    this.routeData.room = this.room;
     this.isClosed = room.settings['feedbackLocked'];
     if (this.room.extensions && this.room.extensions.feedback && this.room.extensions.feedback['type']) {
       this.type = this.room.extensions.feedback['type'];
@@ -198,17 +199,6 @@ export class SurveyPageComponent implements OnInit, OnDestroy, AfterContentInit 
     this.answerCount = sum;
     for (let i = 0; i < this.survey.length; i++) {
       this.survey[i].count = data[i] / sum * 100;
-    }
-    if (this.isPresentation) {
-      this.updateCounter();
-    }
-  }
-
-  updateCounter() {
-    if (this.infoBarItems.length > 0) {
-      this.infoBarItems[0].count = this.answerCount;
-    } else {
-      this.infoBarItems.push(new InfoBarItem('survey-count', 'person', this.answerCount));
     }
   }
 
@@ -278,6 +268,7 @@ export class SurveyPageComponent implements OnInit, OnDestroy, AfterContentInit 
         });
         break;
       case FeedbackMessageType.STOPPED:
+        this.room.settings['feedbackLocked'] = true;
         this.isClosed = true;
         break;
       case FeedbackMessageType.STATUS:

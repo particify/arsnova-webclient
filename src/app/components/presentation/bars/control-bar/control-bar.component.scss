@@ -1,25 +1,25 @@
 @import '../../../../../variables';
 
+$bar-container-height: 100px;
+$bar-height: 52px;
+$bar-padding: 10px;
+$bar-shadow-top: 2px;
+$logo-width: 120px;
+
 .bar-container {
   z-index: 3;
   position: fixed;
   bottom: 0;
   left: 0;
-  height: 100px;
-  &:hover {
-    .bar {
-      @extend .bar-expanded;
-    }
-  }
+  height: $bar-container-height;
 }
 
 .bar-expanded {
-  margin-top: 28px!important;
+  margin-top: $bar-container-height - $bar-height - ($bar-padding * 2)!important;
 }
 
 .bar-hidden {
-  // Remaining space + 2px shadow height
-  margin-top: 102px;
+  margin-top: $bar-container-height + $bar-shadow-top;
 }
 
 .bar {
@@ -28,15 +28,15 @@
   background: var(--surface);
   color: var(--on-surface);
   width: 100vw;
-  padding: 10px;
+  padding: $bar-padding;
 }
 
 .logo-container {
-  max-width: 120px;
+  max-width: $logo-width;
 }
 
 .action-container {
-  padding-left: 140px;
+  padding-left: $logo-width + ($bar-padding * 2);
 }
 
 .nav-container {
@@ -45,21 +45,26 @@
 }
 
 .feature-container {
-  min-height: 52px;
+  min-height: $bar-height;
   border-radius: 8px;
   background-color: #f6f8f9;
-  > *:not(.bar-divider) {
+  > *:not(.bar-divider):not(.disabled) {
     opacity: 0.8;
   }
+  padding: 0 0.5em;
+}
+
+.feature-container.icon-container {
+  margin-right: 1em;
+  padding: 0;
 }
 
 .icon-container {
-  min-height: 52px;
-  margin-right: 16px;
-}
-
-.icon-container:not(.feature-container) {
-  margin-right: 8px;
+  min-height: $bar-height;
+  .action-button {
+    padding: 14px;
+  };
+  padding: 0 0.5em;
 }
 
 .nav-button {
@@ -75,19 +80,9 @@
   height: 20px;
 }
 
-.nav-icon2 {
-  font-size: 24px;
-  width: 24px;
-  height: 24px;
-}
-
 .text {
   font-size: 12px;
   margin: 2px 0 0;
-}
-
-.timer-text {
-  margin: 8px 0;
 }
 
 .action-button {
@@ -104,10 +99,10 @@
 }
 
 .full-height {
-  height: 52px;
+  height: $bar-height;
 }
 
-.current-group {
+.selected-menu-item {
   color: var(--primary);
   font-weight: $font-weight-bold;
 }
@@ -127,7 +122,27 @@
 .bar-divider {
   opacity: 0.3;
   margin: 0 8px;
-  height: 32px;
+  height: $bar-height - ($bar-padding * 2);
   width: 1px;
   background-color: var(--on-surface);
+}
+
+.code {
+  font-size: 22px;
+  font-weight: $font-weight-bold;
+  margin: 0;
+}
+
+.info-container {
+  min-width: 110px;
+  opacity: 0.5;
+  transition: 300ms;
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: $bar-padding * 2;
+}
+
+.no-padding {
+  padding: 0;
 }

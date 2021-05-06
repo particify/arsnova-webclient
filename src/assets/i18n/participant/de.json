@@ -91,9 +91,9 @@
     "select-time-all": "Unbegrenzt",
     "sort": "Sortieren",
     "filter": "Filtern",
-    "sort-vote-asc": "Positivste Bewertung",
-    "sort-vote-desc": "Negativste Bewertung",
-    "sort-list-time": "Zuletzt erstellt"
+    "sort-votedesc": "Positivste Bewertung",
+    "sort-voteasc": "Negativste Bewertung",
+    "sort-time": "Zuletzt erstellt"
   },
   "comment-page": {
     "a11y-shortcuts": "Um einen Kommentar zu erstellen drücke die Taste 1. Sobald mehrere Kommentare vorhanden sind kannst du Kommentare suchen und filtern. Um die Kommentare zu durchsuchen drücke die Taste 2, um Kommentare zu sortieren die Taste 3, um Kommentare zu filtern die Taste 4, um den Zeitraum auszuwählen die Taste 5, um den Kommentarstream zu pausieren oder fortzusetzen die Taste 6, um zu dem ersten Kommentar zu gelangen die Taste 7, um auf das Nutzer-Menü zu gelangen die Taste 9, um zurück zur Raumübersicht zu gelangen die Taste 0 oder die Escape-Taste um diese Ansage zu wiederholen.",

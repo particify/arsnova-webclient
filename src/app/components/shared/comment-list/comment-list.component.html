@@ -78,19 +78,19 @@
       <button mat-menu-item (click)="sortCommentsManually(sorting.TIME)" [ngClass]="{time: 'selected'}[currentSort]"
               aria-labelledby="sort-time">
         <mat-icon [ngClass]="{time: 'blue-icon'}[currentSort]">access_time</mat-icon>
-        <span>{{ 'comment-list.sort-list-time' | translate }}</span>
+        <span>{{ 'comment-list.sort-time' | translate }}</span>
       </button>
 
       <button mat-menu-item (click)="sortCommentsManually(sorting.VOTEDESC)"
               [ngClass]="{votedesc: 'selected'}[currentSort]" aria-labelledby="sort-up">
         <mat-icon [ngClass]="{votedesc: 'up'}[currentSort]">keyboard_arrow_up</mat-icon>
-        <span>{{ 'comment-list.sort-vote-asc' | translate }}</span>
+        <span>{{ 'comment-list.sort-votedesc' | translate }}</span>
       </button>
 
       <button mat-menu-item (click)="sortCommentsManually(sorting.VOTEASC)"
               [ngClass]="{voteasc: 'selected'}[currentSort]" aria-labelledby="sort-down">
         <mat-icon [ngClass]="{voteasc: 'down'}[currentSort]">keyboard_arrow_down</mat-icon>
-        <span>{{ 'comment-list.sort-vote-desc' | translate }}</span>
+        <span>{{ 'comment-list.sort-voteasc' | translate }}</span>
       </button>
 
       <div class="divider-container">

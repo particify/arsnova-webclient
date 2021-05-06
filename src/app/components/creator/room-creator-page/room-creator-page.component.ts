@@ -152,12 +152,7 @@ export class RoomCreatorPageComponent extends RoomPageComponent implements OnIni
     });
   }
 
-  openPresentation(inNew = false) {
-    if (inNew) {
-      const protocol = window.location.protocol;
-      window.open(`${protocol}/presentation/${this.room.shortId}`, '_blank');
-    } else {
-      this.router.navigate(['presentation', this.room.shortId]);
-    }
+  openPresentationMode() {
+    this.router.navigate(['presentation', this.room.shortId]);
   }
 }

@@ -63,6 +63,7 @@ export class PresentationComponent implements OnInit {
     if (group) {
       this.lastGroup = group;
       this.groupChanged.emit(group);
+      this.globalStorageService.removeItem(STORAGE_KEYS.LAST_INDEX);
     }
     const urlList = ['presentation', this.shortId, feature];
     if (!feature) {

@@ -9,6 +9,7 @@
 
 .presentation-comment {
   box-shadow: none;
+  max-width: calc(100% - 2em);
 }
 
 .presentation-comment.active {

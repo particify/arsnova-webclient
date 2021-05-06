@@ -90,7 +90,8 @@ import { QRCodeModule } from 'angularx-qrcode';
     StatisticHelpComponent
   ],
   exports: [
-    ContentPresentationComponent
+    ContentPresentationComponent,
+    QrCodeComponent
   ],
   providers: [
     { provide: TRANSLATION_MODULE_NAME, useValue: 'creator' },

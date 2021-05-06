@@ -44,7 +44,9 @@ export enum KeyboardKey {
   LetterC,
   LetterF,
   LetterL,
-  LetterQ
+  LetterQ,
+  MINUS,
+  PLUS
 }
 
 // Setup all application available keyboard keys here
@@ -70,3 +72,5 @@ KEYBOARD_KEYS.set(KeyboardKey.LetterC, { key: ['c'], keyCode: 67  });
 KEYBOARD_KEYS.set(KeyboardKey.LetterF, { key: ['f'], keyCode: 70  });
 KEYBOARD_KEYS.set(KeyboardKey.LetterL, { key: ['l'], keyCode: 76  });
 KEYBOARD_KEYS.set(KeyboardKey.LetterQ, { key: ['q'], keyCode: 81  });
+KEYBOARD_KEYS.set(KeyboardKey.MINUS, { key: ['-'], keyCode: 189  });
+KEYBOARD_KEYS.set(KeyboardKey.PLUS, { key: ['+'], keyCode: 187  });

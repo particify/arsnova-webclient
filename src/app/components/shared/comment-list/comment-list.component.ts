@@ -35,7 +35,7 @@ import { KeyboardKey } from '../../../utils/keyboard/keys';
 
 // Using lowercase letters in enums because they we're also used for parsing incoming WS-messages
 
-enum Sort {
+export enum Sort {
   VOTEASC = 'voteasc',
   VOTEDESC = 'votedesc',
   TIME = 'time'
@@ -147,8 +147,9 @@ export class CommentListComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     const userId = this.auth?.userId;
-    this.currentSort = this.globalStorageService.getItem(STORAGE_KEYS.COMMENT_SORT) ||
-      (this.isPresentation ? this.sorting.TIME : this.sorting.VOTEDESC);
+    const lastSort = this.globalStorageService.getItem(STORAGE_KEYS.COMMENT_SORT);
+    this.currentSort = this.isPresentation ? (lastSort && lastSort !== this.sorting.VOTEASC ? lastSort : this.sorting.TIME)
+      : lastSort || this.sorting.VOTEDESC;
     this.period = this.globalStorageService.getItem(STORAGE_KEYS.COMMENT_TIME_FILTER) || Period.ALL;
     this.currentFilter = '';
     this.translateService.use(this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE));
@@ -274,8 +275,26 @@ export class CommentListComponent implements OnInit, OnDestroy {
       }
     }
     this.setTimePeriod(this.period);
-    this.updateCurrentComment(this.displayComments[0]);
+    if (this.isPresentation && this.isLoading) {
+      this.initPresentation();
+    }
     this.isLoading = false;
+  }
+
+  initPresentation() {
+    if (this.displayComments.length > 0) {
+      this.goToFirstComment();
+    }
+    this.eventService.on<string>('CommentSortingChanged').subscribe(sort => {
+      this.sortComments(sort);
+      setTimeout(() => {
+        this.goToFirstComment();
+        }, 300);
+    });
+  }
+
+  goToFirstComment() {
+    this.updateCurrentComment(this.displayComments[0]);
   }
 
   getDisplayComments() {
@@ -387,6 +406,9 @@ export class CommentListComponent implements OnInit, OnDestroy {
     this.setTimePeriod(this.period);
     if (this.hideCommentsList) {
       this.searchComments();
+    }
+    if (this.isPresentation) {
+      this.scrollToComment(this.getCurrentIndex());
     }
   }
 
@@ -594,17 +616,28 @@ export class CommentListComponent implements OnInit, OnDestroy {
     this.updateActiveComment.emit(comment);
     this.commentService.highlight(comment).subscribe();
     const index = this.getIndexOfComment(comment);
-    if (index) {
+    this.eventService.broadcast('CommentStepStateChanged', this.getStepState(index));
+    if (!this.isLoading) {
       this.scrollToComment(index);
     }
   }
 
   getIndexOfComment(comment: Comment): number {
-    return this.displayComments.indexOf(comment);
+    return Math.max(this.displayComments.indexOf(comment), 0);
   }
 
   getCurrentIndex(): number {
     return this.getIndexOfComment(this.activeComment);
+  }
+
+  getStepState(index) {
+    let state;
+    if (index === 0) {
+      state = 'START';
+    } else if (index === this.comments.length - 1) {
+      state = 'END';
+    }
+    return state;
   }
 
   getCommentElements() {

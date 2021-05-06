@@ -1,6 +1,5 @@
 <app-nav-bar *ngIf="!isPresentation"></app-nav-bar>
-<app-info-bar *ngIf="isPresentation && infoBarItems[0]?.count" [barItems]="infoBarItems" [isPresentation]="true"
-              [position]="'right'" [mode]="'pure'"></app-info-bar>
+<app-answer-count *ngIf="!isLoading && isPresentation" [count]="answerCount" [size]="'presentation'"></app-answer-count>
 <app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
 <div class="nav-bar-container" [ngClass]="{'full-height': isPresentation}">
   <div fxFill fxLayout="column" fxLayoutAlign="center">

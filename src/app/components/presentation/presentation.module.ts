@@ -1,9 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PresentationRoutingModule } from './presentation-routing.module';
-import { GroupPresentationComponent } from './group-presentation/group-presentation.component';
-import { CommentPresentationComponent } from './comment-presentation/comment-presentation.component';
-import { SurveyPresentationComponent } from './survey-presentation/survey-presentation.component';
 import { FlexModule } from '@angular/flex-layout';
 import { CreatorModule } from '../creator/creator.module';
 import { ControlBarComponent } from './bars/control-bar/control-bar.component';
@@ -22,14 +19,16 @@ import { MatSelectModule } from '@angular/material/select';
 import { FormsModule } from '@angular/forms';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { QRCodeModule } from 'angularx-qrcode';
+import { KeyButtonBarComponent } from './bars/key-button-bar/key-button-bar.component';
+import { BarNotificationComponent } from './bars/bar-notification/bar-notification.component';
 
 @NgModule({
   declarations: [
-    GroupPresentationComponent,
-    CommentPresentationComponent,
-    SurveyPresentationComponent,
     ControlBarComponent,
-    PresentationComponent
+    PresentationComponent,
+    KeyButtonBarComponent,
+    BarNotificationComponent
   ],
   imports: [
     CommonModule,
@@ -57,6 +56,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     FormsModule,
     MatMenuModule,
     MatTooltipModule,
+    QRCodeModule,
   ]
 })
 export class PresentationModule { }

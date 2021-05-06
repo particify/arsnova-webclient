@@ -164,23 +164,27 @@ export class RoutingService {
       this.homeTitle = document.title;
       this.suffix = ' | ' + (this.homeTitle.split('|')[0] || this.homeTitle);
     }
-    this.titleKey = TITLES[route.routeConfig.path];
     let title: string;
-    switch(this.titleKey) {
-      case 'room':
-        if (route.data.room) {
-          title = route.data.room.name;
-        } else {
-          this.titleKey = TITLES['admin'];
-        }
-        break;
-      case 'content-group':
-        title = route.params.contentGroup;
-        break;
-      case 'home':
-        title = this.homeTitle;
-        break;
-      default:
+    if (route.data.isPresentation) {
+      this.titleKey = 'presentation-mode';
+    } else {
+      this.titleKey = TITLES[route.routeConfig.path];
+      switch(this.titleKey) {
+        case 'room':
+          if (route.data.room) {
+            title = route.data.room.name;
+          } else {
+            this.titleKey = TITLES['admin'];
+          }
+          break;
+        case 'content-group':
+          title = route.params.contentGroup;
+          break;
+        case 'home':
+          title = this.homeTitle;
+          break;
+        default:
+      }
     }
     if (!title) {
       this.isTranslatedTitle = true;

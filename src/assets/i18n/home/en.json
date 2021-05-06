@@ -307,7 +307,8 @@
     "settings": "Settings",
     "archive": "Archived questions",
     "import": "Import rooms",
-    "admin": "Administration"
+    "admin": "Administration",
+    "presentation-mode": "Presentation"
   },
   "comment-export": {
     "answer": "Answer",

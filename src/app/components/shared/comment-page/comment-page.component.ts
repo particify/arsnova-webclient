@@ -23,7 +23,6 @@ export class CommentPageComponent implements OnInit, OnDestroy, AfterContentInit
   auth: ClientAuthentication;
   comments$: Observable<Comment[]>;
   activeComment: Comment;
-  isLoading = true;
 
   constructor(
     private route: ActivatedRoute,
@@ -89,6 +88,9 @@ export class CommentPageComponent implements OnInit, OnDestroy, AfterContentInit
 
   ngOnDestroy() {
     this.eventService.makeFocusOnInputFalse();
+    if (this.activeComment) {
+      this.commentService.lowlight(this.activeComment).subscribe();
+    }
   }
 
   public announce() {

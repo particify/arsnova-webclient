@@ -42,7 +42,7 @@ import { StatisticSortComponent } from './statistic-content/statistic-sort/stati
 import { NavBarComponent } from './bars/nav-bar/nav-bar.component';
 import { InfoBarComponent } from './bars/info-bar/info-bar.component';
 import { DividerComponent } from './divider/divider.component';
-import { MatDialog } from '@angular/material/dialog';
+import { PublishContentComponent } from './_dialogs/publish-content/publish-content.component';
 
 @NgModule({
   imports: [
@@ -91,7 +91,8 @@ import { MatDialog } from '@angular/material/dialog';
     StatisticSortComponent,
     NavBarComponent,
     InfoBarComponent,
-    DividerComponent
+    DividerComponent,
+    PublishContentComponent
   ],
   exports: [
     RoomJoinComponent,
@@ -124,7 +125,6 @@ import { MatDialog } from '@angular/material/dialog';
     NavBarComponent,
     InfoBarComponent,
     DividerComponent,
-    QrCodeComponent,
     AnswerCountComponent
   ]
 })

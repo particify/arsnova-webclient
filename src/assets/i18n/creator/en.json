@@ -49,9 +49,9 @@
     "select-time-all": "Unlimited",
     "sort": "Sort",
     "filter": "Filter",
-    "sort-vote-asc": "Best rating",
-    "sort-vote-desc": "Worst rating",
-    "sort-list-time": "Last created",
+    "sort-votedesc": "Best rating",
+    "sort-voteasc": "Worst rating",
+    "sort-time": "Last created",
     "more-options": "More options",
     "moderation": "Moderation",
     "public-list": "Public list",
@@ -554,7 +554,11 @@
     "error-comment": "Please enter a comment.",
     "tag": "Category",
     "create-comment-description": "Enter your comment here.",
-    "comment-sent": "Your comment has been published."
+    "comment-sent": "Your comment has been published.",
+    "how-to-proceed": "How would you like to proceed?",
+    "publish-this-content": "Release only this question",
+    "publish-contents-up-to-here": "Release all questions up to here",
+    "publish": "Publish"
   },
   "utils": {
     "formatting-image-hint": "Please note that images with a large file size can affect loading times."
@@ -581,6 +585,9 @@
     "results": "Results",
     "correct": "Correct",
     "lock": "Lock",
+    "publish": "Publish",
+    "content-locked": "Content is locked",
+    "content-published": "The content has been published.",
     "left": "Back",
     "right": "Next",
     "start": "Start",
@@ -589,6 +596,11 @@
     "share": "Share room",
     "fullscreen": "Fullscreen",
     "exit": "Exit presentation",
+    "comment-sort-time": "Recent",
+    "comment-sort-votedesc": "Popular",
+    "zoom-in": "Zoom in",
+    "zoom-out": "Zoom out",
+    "key": "Key",
     "SPACE": "Space",
     "LEFT": "Left",
     "RIGHT": "Right",
@@ -596,6 +608,12 @@
     "LetterC": "C",
     "LetterL": "L",
     "LetterF": "F",
-    "LetterQ": "Q"
+    "LetterQ": "Q",
+    "MINUS": "-",
+    "PLUS": "+"
+  },
+  "presentation": {
+    "a11y-presentation-mode": "Go into presentation mode",
+    "presentation-mode": "Presentation mode"
   }
 }

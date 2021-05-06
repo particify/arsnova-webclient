@@ -3,9 +3,9 @@ import { BarBaseComponent, BarItem } from '../bar-base';
 
 export class InfoBarItem extends BarItem {
 
-  count: number;
+  count;
 
-  constructor(name: string, icon: string, count: number) {
+  constructor(name: string, icon: string, count: any) {
     super(name, icon);
     this.count = count;
   }

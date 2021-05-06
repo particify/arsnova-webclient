@@ -1,0 +1,6 @@
+@import '../control-bar/control-bar.component';
+
+.disabled {
+  opacity: 0.6;
+  pointer-events: none;
+}
