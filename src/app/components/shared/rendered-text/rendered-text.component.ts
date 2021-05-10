@@ -14,6 +14,7 @@ export class RenderedTextComponent implements OnChanges {
   @Input() dynamic = false;
   @Input() markdown = true;
   @Input() latex = true;
+  @Input() syntaxHighlighting = true;
   @Input() markdownFeatureset = MarkdownFeatureset.EXTENDED;
   @Input() linebreaks = true;
   @Output() rendered = new EventEmitter();
@@ -38,6 +39,7 @@ export class RenderedTextComponent implements OnChanges {
     this.formattingService.postString(rawText, {
       markdown: this.markdown,
       latex: this.latex,
+      syntaxHighlighting: this.syntaxHighlighting,
       markdownFeatureset: this.markdownFeatureset,
       linebreaks: this.linebreaks
     }).subscribe(renderedBody => {
