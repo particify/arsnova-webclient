@@ -1,13 +1,8 @@
 import { LanguageService } from '../../../services/util/language.service';
 import { Component, OnInit } from '@angular/core';
-import { NotificationService } from '../../../services/util/notification.service';
 import { ActivatedRoute, ActivationEnd, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
-import { AuthenticationService } from '../../../services/http/authentication.service';
 import { Room } from '../../../models/room';
-import { ThemeService } from '../../../../theme/theme.service';
-import { DialogService } from '../../../services/util/dialog.service';
-import { GlobalStorageService } from '../../../services/util/global-storage.service';
 import { ConsentService } from '../../../services/util/consent.service';
 import { filter } from 'rxjs/operators';
 
@@ -25,23 +20,19 @@ export class FooterComponent implements OnInit {
   feedbackUrl: string;
   referenceUrl = 'https://particify.de';
   showToolbar = true;
+  viewWidth: number;
 
   constructor(
-    public notificationService: NotificationService,
     public router: Router,
     private translateService: TranslateService,
     private langService: LanguageService,
-    public authenticationService: AuthenticationService,
-    private themeService: ThemeService,
-    private dialogService: DialogService,
-    private globalStorageService: GlobalStorageService,
     private consentService: ConsentService,
     private route: ActivatedRoute
-  ) {
-    langService.langEmitter.subscribe(lang => translateService.use(lang));
-  }
+  ) {}
 
   ngOnInit() {
+    this.viewWidth = innerWidth;
+    this.langService.langEmitter.subscribe(lang => this.translateService.use(lang));
     if (this.consentService.consentRequired()) {
       this.consentService.openDialog();
     }
@@ -78,6 +69,6 @@ export class FooterComponent implements OnInit {
   }
 
   checkToolbarCondition(url: string) {
-    this.showToolbar = innerWidth > 1000 || !url.match(/\/room\/[0-9]+\/[^\/]+/);
+    this.showToolbar = this.viewWidth > 1000 || !url.match(/\/room\/[0-9]+\/[^\/]+/);
   }
 }

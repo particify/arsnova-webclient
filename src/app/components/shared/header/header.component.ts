@@ -1,7 +1,7 @@
 import { Component, HostListener, Inject, OnInit, Renderer2 } from '@angular/core';
 import { AuthenticationService } from '../../../services/http/authentication.service';
 import { AdvancedSnackBarTypes, NotificationService } from '../../../services/util/notification.service';
-import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ClientAuthentication } from '../../../models/client-authentication';
 import { AuthProvider } from '../../../models/auth-provider';
 import { DOCUMENT, Location } from '@angular/common';
@@ -10,7 +10,6 @@ import { UserService } from '../../../services/http/user.service';
 import { EventService } from '../../../services/util/event.service';
 import { KeyboardUtils } from '../../../utils/keyboard';
 import { KeyboardKey } from '../../../utils/keyboard/keys';
-import { BonusTokenService } from '../../../services/http/bonus-token.service';
 import { DialogService } from '../../../services/util/dialog.service';
 import { GlobalStorageService, STORAGE_KEYS } from '../../../services/util/global-storage.service';
 import { Theme } from '../../../../theme/Theme';
@@ -26,8 +25,6 @@ import { ConsentService } from '../../../services/util/consent.service';
 })
 export class HeaderComponent implements OnInit {
   auth: ClientAuthentication;
-  cTime: string;
-  shortId: string;
   deviceType: string;
   moderationEnabled: boolean;
   isGuest = true;
@@ -55,7 +52,6 @@ export class HeaderComponent implements OnInit {
     private langService: LanguageService,
     private userService: UserService,
     public eventService: EventService,
-    private bonusTokenService: BonusTokenService,
     private _r: Renderer2,
     private dialogService: DialogService,
     private globalStorageService: GlobalStorageService,
@@ -66,7 +62,6 @@ export class HeaderComponent implements OnInit {
     @Inject(DOCUMENT) private document: Document
   ) {
     this.deviceType = this.globalStorageService.getItem(STORAGE_KEYS.DEVICE_TYPE);
-    // LocalStorage setup
     this.translationService.setDefaultLang('en');
     if (!this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE)) {
       const lang = this.translationService.getBrowserLang();
@@ -97,28 +92,6 @@ export class HeaderComponent implements OnInit {
       this.isAdmin = !!auth && this.authenticationService.hasAdminRole(auth);
     });
 
-    let time = new Date();
-    this.getTime(time);
-    setInterval(() => {
-      time = new Date();
-      this.getTime(time);
-    }, 1000);
-
-    this.router.events.subscribe(val => {
-      /* the router will fire multiple events */
-      /* we only want to react if it's the final active route */
-      if (val instanceof NavigationEnd) {
-        /* segments gets all parts of the url */
-        const segments = this.router.parseUrl(this.router.url).root.children.primary.segments;
-        const shortIdRegExp = new RegExp('^[0-9]{8}$');
-        segments.forEach(element => {
-          /* searches the url segments for a short id */
-          if (shortIdRegExp.test(element.path)) {
-            this.shortId = element.path;
-          }
-        });
-      }
-    });
     this.moderationEnabled = !!this.globalStorageService.getItem(STORAGE_KEYS.MODERATION_ENABLED);
     this.themeService.getTheme().subscribe(theme => {
       this.themeClass = theme;
@@ -137,12 +110,6 @@ export class HeaderComponent implements OnInit {
       lang = 'en';
     }
     this.useLanguage(lang);
-  }
-
-  getTime(time: Date) {
-    const hh = ('0' + time.getHours()).substr(-2);
-    const mm = ('0' + time.getMinutes()).substr(-2);
-    this.cTime = hh + ':' + mm;
   }
 
   logout() {
@@ -169,9 +136,8 @@ export class HeaderComponent implements OnInit {
 
   logoutUser() {
     this.authenticationService.logout();
-    this.translationService.get('header.logged-out').subscribe(message => {
-      this.notificationService.showAdvanced(message, AdvancedSnackBarTypes.SUCCESS);
-    });
+    const msg = this.translationService.instant('header.logged-out');
+    this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.SUCCESS);
     this.navToHome();
   }
 
@@ -185,6 +151,10 @@ export class HeaderComponent implements OnInit {
 
   navToHome() {
     this.router.navigateByUrl('home');
+  }
+
+  navToUserHome() {
+    this.router.navigate(['user']);
   }
 
   deleteAccount(id: string) {

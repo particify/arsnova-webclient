@@ -3,7 +3,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { ApiConfigService } from './services/http/api-config.service';
 import { TrackingService } from './services/util/tracking.service';
 import { ConsentService } from './services/util/consent.service';
-import { UpdateService } from './services/util/update-service';
+import { UpdateService } from './services/util/update.service';
 import { RoutingService } from './services/util/routing.service';
 
 @Component({
@@ -19,12 +19,12 @@ export class AppComponent implements OnInit {
               private consentService: ConsentService,
               private updateService: UpdateService,
               private routingService: RoutingService) {
-    translationService.setDefaultLang(this.translationService.getBrowserLang());
   }
 
   title = 'ARSnova';
 
   ngOnInit(): void {
+    this.translationService.setDefaultLang(this.translationService.getBrowserLang());
     this.routingService.subscribeActivatedRoute();
     this.apiConfigService.getApiConfig$().subscribe(config => {
       if (config.ui.tracking?.url && config.ui.tracking?.provider === 'matomo') {

@@ -69,7 +69,7 @@ import { RoutingService } from './services/util/routing.service';
 import { TranslateHttpLoaderFactory } from './translate-http-loader-factory';
 import { TRANSLATION_MODULE_NAME } from './translate-module-name-token';
 import { FeedbackService } from './services/http/feedback.service';
-import { UpdateService } from './services/util/update-service';
+import { UpdateService } from './services/util/update.service';
 import { CachingService } from './services/util/caching.service';
 
 export function dialogClose(dialogResult: any) {

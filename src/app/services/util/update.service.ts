@@ -23,25 +23,27 @@ export class UpdateService {
     console.log('Version:', environment.version.commitHash, environment.version.commitDate);
   }
 
+  importance: UpdateImportance;
+
   public handleUpdate(versionInfos: VersionInfo[] = []) {
     const currentVersion = this.selectVersionByHash(versionInfos, environment.version.commitHash);
     this.handleUpdateCompleted(currentVersion);
     const latestVersion = this.determineLatestVersion(versionInfos);
     const relevantVersions = this.determineRelevantVersions(versionInfos, currentVersion);
-    const importance = this.determineUpdateImportance(versionInfos, currentVersion);
+    this.importance = this.determineUpdateImportance(versionInfos, currentVersion);
     if (relevantVersions.length > 0) {
       console.log('Update announced:', latestVersion.commitHash, latestVersion.importance);
-      console.log('Skipped updates:', relevantVersions.length - 1, importance);
+      console.log('Skipped updates:', relevantVersions.length - 1, this.importance);
       this.globalStorageService.setItem(STORAGE_KEYS.LATEST_ANNOUNCED_VERSION, latestVersion.commitHash);
     } else {
       console.log('No updates announced.');
     }
 
     const updateReady$ = this.update.available.pipe(tap(() => {
-      this.handleUpdateReady(currentVersion, latestVersion, importance);
+      this.handleUpdateReady(currentVersion, latestVersion, this.importance);
     }));
 
-    switch (importance) {
+    switch (this.importance) {
       case UpdateImportance.OPTIONAL: {
         /* Handle the update silently */
         updateReady$.subscribe();

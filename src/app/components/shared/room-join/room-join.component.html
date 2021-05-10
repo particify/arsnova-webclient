@@ -10,7 +10,8 @@
                [errorStateMatcher]="matcher" aria-labelledby="join-input-label" autocomplete="off"
                placeholder="{{'home-page.example' | translate }}{{demoId ? demoId : 11223344}}"
         />
-        <button mat-icon-button class="mat-primary" type="submit" role="button" aria-labelledby="join-button-label" matSuffix>
+        <button id="join-button" mat-icon-button class="mat-primary" type="submit" role="button"
+                (click)="joinRoom(roomCode.value)" aria-labelledby="join-button-label" matSuffix>
             <mat-icon class="button-primary">keyboard_arrow_right</mat-icon>
         </button>
       </mat-form-field>
