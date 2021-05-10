@@ -143,7 +143,7 @@ export class RoomCreatorPageComponent extends RoomPageComponent implements OnIni
   }
 
   public showQRDialog() {
-    const dialogRef = this.dialogService.openQRCodeDialog(this.room.shortId);
+    const dialogRef = this.dialogService.openQRCodeDialog(this.room.shortId, this.room.passwordProtected, this.room.id);
     dialogRef.afterClosed().subscribe(() => {
       setTimeout(() => {
         document.getElementById('live-announcer-button').focus();

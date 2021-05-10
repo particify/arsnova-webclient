@@ -30,10 +30,10 @@ export class RoomMembershipService extends AbstractHttpService<Membership> {
   private newOwnerships: Membership[] = [];
 
   constructor(
-    private http: HttpClient,
-    private wsConnector: WsConnectorService,
-    public eventService: EventService,
-    private authenticationService: AuthenticationService,
+    protected http: HttpClient,
+    protected wsConnector: WsConnectorService,
+    protected eventService: EventService,
+    protected authenticationService: AuthenticationService,
     protected translateService: TranslateService,
     protected notificationService: NotificationService) {
     super('/_view/membership', http, eventService, translateService, notificationService);

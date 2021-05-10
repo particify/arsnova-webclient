@@ -24,7 +24,7 @@ export class SettingsPageComponent implements OnInit {
   settings: Settings[] = [
     { headerName: 'general', iconName: 'settings', componentName: 'general' },
     { headerName: 'comments', iconName: 'comment', componentName: 'comments' },
-    { headerName: 'moderators', iconName: 'gavel', componentName: 'moderators' }
+    { headerName: 'access', iconName: 'admin_panel_settings', componentName: 'access' }
   ];
 
   // { headerName: 'settings.bonus-token', iconName: 'grade', componentName: 'tokenSettings' },

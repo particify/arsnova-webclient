@@ -277,7 +277,7 @@
     "really-delete-comments-hint": "Es gibt Kommentare in diesem Raum, die du für einen Bonus markiert hast. Entferne die Markierungen, um alle Kommentare zu löschen.",
     "really-delete-answer": "Willst du die Antwort wirklich löschen?",
     "really-delete-content": "Willst du die folgende Frage wirklich löschen? Die Frage wird unwideruflich in allen Sammlungen gelöscht.",
-    "really-delete-moderator": "Willst du die folgende moderierende Person wirklich entfernen?",
+    "really-delete-user-rights": "Willst du die Zugriffsrechte der folgende Person wirklich entfernen?",
     "really-delete-room": "Willst du den folgenden Raum wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden.",
     "really-cancel-room-membership": "Willst du den folgenden Raum wirklich aus deiner Liste entfernen? Falls dir Zugangsberechtigungen erteilt wurden, werden diese hierdurch ebenfalls entfernt.",
     "really-delete-token": "Willst du diesen Token wirklich löschen?",

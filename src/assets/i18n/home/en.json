@@ -277,7 +277,7 @@
     "really-delete-comments-hint": "There are comments in this room that you marked for a bonus. Remove the markers to delete all comments.",
     "really-delete-answer": "Do you really want to delete this answer?",
     "really-delete-content": "Do you really want to delete the following content? The content will be irrevocably deleted in all collections.",
-    "really-delete-moderator": "Do you really want to remove the following moderator?",
+    "really-delete-user-rights": "Do you really want to remove the access rights of the following user?",
     "really-delete-room": "Do you really want to delete the following room? This action cannot be undone.",
     "really-cancel-room-membership": "Do you really want to remove the following room from your list? If you have been granted access permissions, this will also remove them.",
     "really-delete-token": "Do you really want to delete this token?",

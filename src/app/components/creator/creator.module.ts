@@ -13,7 +13,7 @@ import { SharedModule } from '../shared/shared.module';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { HttpClient } from '@angular/common/http';
 import { ContentPresentationComponent } from './content-presentation/content-presentation.component';
-import { ModeratorsComponent } from './settings/moderators/moderators.component';
+import { AccessComponent } from './settings/access/access.component';
 import { BonusTokenComponent } from './settings/bonus-token/bonus-token.component';
 import { CommentSettingsComponent } from './settings/comment-settings/comment-settings.component';
 import { ContentGroupCreationComponent } from '../shared/_dialogs/content-group-creation/content-group-creation.component';
@@ -62,7 +62,7 @@ import { ContentFlashcardCreationComponent } from './content-creation/content-fl
     RoomComponent,
     LooseContentComponent,
     ContentPresentationComponent,
-    ModeratorsComponent,
+    AccessComponent,
     BonusTokenComponent,
     CommentSettingsComponent,
     ContentGroupCreationComponent,

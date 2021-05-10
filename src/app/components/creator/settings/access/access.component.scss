@@ -1,0 +1,61 @@
+@import "../../../../../variables";
+
+.login-id {
+  font-weight: $font-weight-bold;
+  font-size: medium;
+  margin: 1.5em 0;
+}
+
+.close-icon {
+  color: var(--warn);
+}
+
+.form-container {
+  margin-top: 1em;
+}
+
+.add-user-button {
+  max-width: 140px;
+  height: 59px;
+  &:not(.mat-button-disabled) {
+    color: var(--primary);
+    border-color: var(--primary);
+  }
+}
+
+.user-character-container {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+
+.user-character {
+  font-weight: $font-weight-bold;
+  font-size: 18px;
+}
+
+.role-moderator {
+  background-color: var(--secondary-variant);
+   > * {
+    color: var(--secondary);
+  }
+}
+
+.role-creator {
+  background-color: var(--primary-variant);
+  > * {
+    color: var(--primary);
+  }
+}
+
+.role-chip {
+  opacity: 0.8;
+  .mat-chip {
+    font-size: 12px;
+    border-radius: 8px;
+  }
+}
+
+.guest-hint {
+  margin-top: 1em;
+}

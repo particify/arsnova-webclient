@@ -17,8 +17,8 @@
                          *ngSwitchCase="'general'" (saveEvent)="saveRoom($event)"></app-room-edit>
           <app-comment-settings [room]="room" [roomId]="room.id" *ngSwitchCase="'comments'"
                                 (saveEvent)="saveRoom($event)"></app-comment-settings>
-          <app-moderators [roomId]="room.id" *ngSwitchCase="'moderators'"
-                          (saveEvent)="saveRoom($event)"></app-moderators>
+          <app-access [room]="room" *ngSwitchCase="'access'"
+                          (saveEvent)="saveRoom($event)"></app-access>
           <!-- <app-bonus-token [room]="room" *ngSwitchCase="'tokenSettings'"></app-bonus-token> -->
         </div>
       </div>

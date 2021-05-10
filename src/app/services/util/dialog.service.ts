@@ -35,7 +35,7 @@ export class DialogService {
   constructor(public dialog: MatDialog) {
   }
 
-  openDialog<T>(component: ComponentType<T>, config?: MatDialogConfig<T>): MatDialogRef<T> {
+  openDialog<T>(component: ComponentType<T>, config?: MatDialogConfig): MatDialogRef<T> {
     return this.dialog.open(component, config);
   }
 
@@ -101,11 +101,13 @@ export class DialogService {
     });
   }
 
-  openQRCodeDialog(shortId: string): MatDialogRef<QrCodeComponent> {
+  openQRCodeDialog(shortId: string, passwordProtected: boolean, roomId: string): MatDialogRef<QrCodeComponent> {
     return this.dialog.open(QrCodeComponent, {
       panelClass: 'screenDialog',
       data: {
-        shortId: shortId
+        shortId: shortId,
+        passwordProtected: passwordProtected,
+        roomId: roomId
       }
     });
   }
