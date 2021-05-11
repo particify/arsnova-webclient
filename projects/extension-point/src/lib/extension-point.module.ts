@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ExtensionPointComponent } from './extension-point.component';
 import { ExtensionFactory } from './extension-factory';
+import { ExtensionRouteProvider, RouteMountPoint } from './extension-route';
 
 @NgModule({
   imports: [
@@ -17,7 +18,12 @@ import { ExtensionFactory } from './extension-factory';
     ExtensionPointComponent
   ],
   providers: [
-    ExtensionFactory
+    ExtensionFactory,
+    {
+      provide: ExtensionRouteProvider,
+      useFactory: () => new ExtensionRouteProvider(RouteMountPoint.ROOT, []),
+      multi: true
+    }
   ]
 })
 export class ExtensionPointModule {
