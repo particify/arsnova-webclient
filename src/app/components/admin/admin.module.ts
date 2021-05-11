@@ -16,6 +16,7 @@ import { UserManagementComponent } from './user-management/user-management.compo
 import { MatTreeModule } from '@angular/material/tree';
 import { TRANSLATION_MODULE_NAME } from '../../translate-module-name-token';
 import { TranslateHttpLoaderFactory } from '../../translate-http-loader-factory';
+import { AdminService } from '../../services/http/admin.service';
 
 @NgModule({
   imports: [
@@ -47,7 +48,8 @@ import { TranslateHttpLoaderFactory } from '../../translate-http-loader-factory'
     UserManagementComponent,
   ],
   providers: [
-    { provide: TRANSLATION_MODULE_NAME, useValue: 'admin' }
+    { provide: TRANSLATION_MODULE_NAME, useValue: 'admin' },
+    AdminService
   ]
 })
 export class AdminModule {

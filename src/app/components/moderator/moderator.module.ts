@@ -9,7 +9,6 @@ import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TRANSLATION_MODULE_NAME } from '../../translate-module-name-token';
 import { TranslateHttpLoaderFactory } from '../../translate-http-loader-factory';
 import { HttpClient } from '@angular/common/http';
-import { CreatorModule } from '../creator/creator.module';
 
 @NgModule({
     imports: [
@@ -27,8 +26,7 @@ import { CreatorModule } from '../creator/creator.module';
                 ]
             },
             isolate: true
-        }),
-        CreatorModule
+        })
     ],
   declarations: [
     RoomModeratorPageComponent,
