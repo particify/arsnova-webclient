@@ -21,7 +21,6 @@ import { UserActivationComponent } from './components/home/_dialogs/user-activat
 import { AuthenticationInterceptor } from './interceptors/authentication.interceptor';
 import { EssentialsModule } from './components/essentials/essentials.module';
 import { SharedModule } from './components/shared/shared.module';
-import { CreatorModule } from './components/creator/creator.module';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LanguageService } from './services/util/language.service';
@@ -36,7 +35,6 @@ import { ModeratorService } from './services/http/moderator.service';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { CommentSettingsService } from './services/http/comment-settings.service';
 import { BonusTokenService } from './services/http/bonus-token.service';
-import { ModeratorModule } from './components/moderator/moderator.module';
 import { ApiConfigService } from './services/http/api-config.service';
 import { CookiesComponent } from './components/home/_dialogs/cookies/cookies.component';
 import { OverlayComponent } from './components/home/_dialogs/overlay/overlay.component';
@@ -47,7 +45,6 @@ import { DialogService } from './services/util/dialog.service';
 import { DirectEntryComponent } from './components/shared/direct-entry/direct-entry.component';
 import { ExtensionPointModule } from '../../projects/extension-point/src/lib/extension-point.module';
 import { TrackingService } from './services/util/tracking.service';
-import { AdminModule } from './components/admin/admin.module';
 import { ImportComponent } from './components/home/import/import.component';
 import { GlobalStorageService, STORAGE_CONFIG_PROVIDERS } from './services/util/global-storage.service';
 import { ConsentService } from './services/util/consent.service';
@@ -59,7 +56,6 @@ import { CommentResolver } from './resolver/comment.resolver';
 import { RoomViewUserRoleResolver } from './resolver/room-view-user-role.resolver';
 import { ContentGroupService } from './services/http/content-group.service';
 import { AnnounceService } from './services/util/announce.service';
-import { AdminService } from './services/http/admin.service';
 import { SystemInfoService } from './services/http/system-info.service';
 import { RequestPasswordResetComponent } from './components/home/request-password-reset/request-password-reset.component';
 import { FormattingService } from './services/http/formatting.service';
@@ -106,9 +102,6 @@ export function initializeApp(appConfig: AppConfig) {
     ThemeModule,
     MatIconModule,
     HttpClientModule,
-    CreatorModule,
-    ModeratorModule,
-    AdminModule,
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
     TranslateModule.forRoot({
       loader: {
@@ -175,7 +168,6 @@ export function initializeApp(appConfig: AppConfig) {
     RoomViewUserRoleResolver,
     RoomUserRoleResolver,
     AnnounceService,
-    AdminService,
     SystemInfoService,
     FormattingService,
     RoutingService,
