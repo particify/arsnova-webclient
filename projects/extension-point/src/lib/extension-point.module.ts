@@ -16,15 +16,20 @@ import { ExtensionRouteProvider, RouteMountPoint } from './extension-route';
   ],
   entryComponents: [
     ExtensionPointComponent
-  ],
-  providers: [
-    ExtensionFactory,
-    {
-      provide: ExtensionRouteProvider,
-      useFactory: () => new ExtensionRouteProvider(RouteMountPoint.ROOT, []),
-      multi: true
-    }
   ]
 })
 export class ExtensionPointModule {
+  static forRoot() {
+    return {
+      ngModule: ExtensionPointModule,
+      providers: [
+        ExtensionFactory,
+        {
+          provide: ExtensionRouteProvider,
+          useFactory: () => new ExtensionRouteProvider(RouteMountPoint.ROOT, []),
+          multi: true
+        }
+      ]
+    };
+  }
 }
