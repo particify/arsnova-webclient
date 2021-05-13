@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Comment } from '../../../models/comment';
 import { CommentService } from '../../../services/http/comment.service';
 import { TranslateService } from '@ngx-translate/core';
@@ -14,7 +14,7 @@ import { VoteService } from '../../../services/http/vote.service';
 import { AdvancedSnackBarTypes, NotificationService } from '../../../services/util/notification.service';
 import { CorrectWrong } from '../../../models/correct-wrong.enum';
 import { EventService } from '../../../services/util/event.service';
-import { Subject, Subscription } from 'rxjs';
+import { Observable, Subject, Subscription } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DialogService } from '../../../services/util/dialog.service';
 import { GlobalStorageService, STORAGE_KEYS } from '../../../services/util/global-storage.service';
@@ -58,9 +58,10 @@ export const itemRenderNumber = 20;
 export class CommentListComponent implements OnInit, OnDestroy {
   @ViewChild('searchBox') searchField: ElementRef;
   @Input() auth: ClientAuthentication;
-  @Input() comments: Comment[] = [];
+  @Input() comments$: Observable<Comment[]>;
   @Input() isModerator = false;
 
+  comments: Comment[] = [];
   roomId: string;
   viewRole: UserRole;
   room: Room;
@@ -124,7 +125,11 @@ export class CommentListComponent implements OnInit, OnDestroy {
     this.currentFilter = '';
     this.translateService.use(this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE));
     this.route.data.subscribe(data => {
-      this.initRoom(data.room);
+      this.room = data.room;
+      this.comments$.subscribe(comments => {
+        this.comments = comments;
+        this.initRoom();
+      });
       this.viewRole = data.viewRole;
       if (this.viewRole === UserRole.PARTICIPANT) {
         this.voteService.getByRoomIdAndUserID(this.roomId, userId).subscribe(votes => {
@@ -155,8 +160,7 @@ export class CommentListComponent implements OnInit, OnDestroy {
     }
   }
 
-  initRoom(room: Room) {
-    this.room = room;
+  initRoom() {
     this.roomId = this.room.id;
     if (this.room && this.room.extensions && this.room.extensions.comments) {
       if (this.room.extensions.comments['enableModeration'] !== null) {

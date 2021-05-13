@@ -21,7 +21,7 @@
     </button>
 
     <div class="button-bar" fxLayoutAlign="center center" fxLayoutGap="1em">
-      <div [ngClass]="{'counter-container': !isModerator}" *ngIf="comments && !search">
+      <div [ngClass]="{'counter-container': !isModerator}" *ngIf="!isLoading && comments && !search">
         <h3 class="counter">
           {{ filteredComments && hideCommentsList ? filteredComments.length : commentsFilteredByTime.length }}
         </h3>
