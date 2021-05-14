@@ -1,9 +1,12 @@
 @import '../../../../variables';
 
 .chart-container {
+  transition: all 300ms;
+}
+
+.normal-chart {
   height: 40vh;
   max-height: 500px;
-  transition: all 300ms;
 }
 
 .mat-list-item {
@@ -34,26 +37,56 @@
   opacity: 0;
 }
 
-.no-background, .no-background > *:not(.answer-label) {
+.no-background, .no-background > * {
   transition: box-shadow 300ms;
   background: transparent;
   font-weight: $font-weight-bold;
+  min-height: 0;
+  font-size: 12px;
+  .mat-icon {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+  }
+}
+
+.no-background.mat-list-item {
+  margin-bottom: 6px;
+  &:last-of-type {
+    margin-bottom: 70px;
+  }
 }
 
 .no-background .answer-label {
   margin: 0;
-  min-width: 25px;
-  max-height: 25px;
-  line-height: 25px;
-  padding: 6px;
+  min-width: 18px;
+  max-height: 18px;
+  line-height: 18px;
+  padding: 4px;
   text-align: center;
   border-radius: 50%;
   border: 1px solid var(--grey);
   transition: border-color 300ms;
+  font-size: 12px;
 }
 
 .no-background.correct {
   .answer-label {
     border-color: transparent;
   }
+}
+
+.no-background p {
+  margin: 10px 0;
+}
+
+.presentation-chart {
+  max-width: 600px;
+  height: 28vh;
+  max-height: 220px;
+}
+
+.chart {
+  max-height: 100%;
+  max-width: 100%;
 }

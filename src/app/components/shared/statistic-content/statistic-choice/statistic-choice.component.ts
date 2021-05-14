@@ -99,7 +99,7 @@ export class StatisticChoiceComponent extends StatisticContentBaseComponent impl
 
   createChart(colors: string[]) {
     Chart.defaults.color = this.onSurface;
-    Chart.defaults.font.size = 16;
+    Chart.defaults.font.size = this.isPresentation ? 14 : 16;
     Chart.register(BarController, BarElement, CategoryScale, LinearScale, Tooltip);
     const gridConfig = {
       borderColor: this.onSurface,
@@ -118,6 +118,7 @@ export class StatisticChoiceComponent extends StatisticContentBaseComponent impl
       options: {
         responsive: true,
         maintainAspectRatio: false,
+        devicePixelRatio: this.isPresentation ? 2 : 1,
         scales: {
           y: {
             type: 'linear',

@@ -71,11 +71,21 @@ export class ContentPresentationComponent implements OnInit {
     }
   }
 
+  initScale() {
+    if (this.isPresentation) {
+      const scale = Math.min(innerWidth, 2100)  / 960;
+      document.getElementById('stepper-container').style.transform = `scale(${scale})`;
+      document.getElementById('stepper-container').style.left = `calc(50vw - calc(300px * ${scale})`;
+      document.getElementById('stepper-container').style.top = `calc(4vw - calc(1em * ${scale}))`;
+    }
+  }
+
   initGroup() {
     this.contentGroupService.getByRoomIdAndName(this.roomId, this.contentGroupName).subscribe(group => {
       this.contentService.getContentsByIds(group.roomId, group.contentIds, true).subscribe(contents => {
         this.contents = this.contentService.getSupportedContents(contents);
         this.isLoading = false;
+        this.initScale();
         if (this.entryIndex) {
           this.contentIndex = this.entryIndex;
           this.currentStep = this.contentIndex;

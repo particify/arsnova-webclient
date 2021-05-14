@@ -17,8 +17,7 @@
       </button>
     </div>
   </div>
-  <app-rendered-text tabindex="-1" [rawText]="content.body" [renderedText]="content.renderedBody"
-                     [isPresentation]="isPresentation"></app-rendered-text>
+  <app-rendered-text tabindex="-1" [rawText]="content.body" [renderedText]="content.renderedBody"></app-rendered-text>
   <div *ngIf="format === ContentType.FLASHCARD && !isPresentation">
     <button mat-icon-button (click)="toggleAnswers()" [matTooltip]="(answersVisible ? 'statistic.hide-flashcard-back' :
     'statistic.show-flashcard-back') | translate">

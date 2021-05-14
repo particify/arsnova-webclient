@@ -1,12 +1,11 @@
-import { Component, EventEmitter, Input, OnChanges, Output, ViewEncapsulation } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { FormattingService, MarkdownFeatureset } from '../../../services/http/formatting.service';
 
 @Component({
   selector: 'app-rendered-text',
   templateUrl: './rendered-text.component.html',
-  styleUrls: ['./rendered-text.component.scss'],
-  encapsulation: ViewEncapsulation.None
+  styleUrls: ['./rendered-text.component.scss']
 })
 export class RenderedTextComponent implements OnChanges {
 
@@ -18,7 +17,6 @@ export class RenderedTextComponent implements OnChanges {
   @Input() syntaxHighlighting = true;
   @Input() markdownFeatureset = MarkdownFeatureset.EXTENDED;
   @Input() linebreaks = true;
-  @Input() isPresentation = false;
   @Output() rendered = new EventEmitter();
   displayedText: string | SafeHtml;
   isLoading = false;
@@ -55,9 +53,6 @@ export class RenderedTextComponent implements OnChanges {
   updateDisplayedText() {
     /* We trust the rendering backend to produce secure HTML,
      * so we can bypass Angular's sanitization which breaks LaTeX rendering. */
-    if (this.isPresentation) {
-      //this.renderedText = this.renderedText.split('p>').join( 'h2>');
-    }
     this.displayedText = this.renderedText
         ? this.domSanitizer.bypassSecurityTrustHtml(this.renderedText)
         : this.rawText;

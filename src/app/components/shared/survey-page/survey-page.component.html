@@ -6,8 +6,8 @@
   <div fxFill fxLayout="column" fxLayoutAlign="center">
     <button class="visually-hidden" id="message-announcer-button" tabIndex="-1" (click)="announceKeys()">
       {{ 'survey.a11y-message' | translate }}</button>
-    <div *ngIf="!isLoading" fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="center">
-      <mat-card [ngClass]="{'presentation-card': isPresentation}">
+    <div fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="center">
+      <mat-card id="survey-card" [ngClass]="{'presentation-card': isPresentation}">
         <div class="survey-container" [ngClass]="{ 'faded' : isClosed }">
           <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="30px"
                *ngFor="let state of survey; let i = index">

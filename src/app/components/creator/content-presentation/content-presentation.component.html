@@ -4,8 +4,8 @@
 <app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
 <div class="nav-bar-container">
   <div tabindex="-1" id="presentation-message" class="visually-hidden">{{ 'statistic.a11y-message-presentation' | translate }}</div>
-  <div *ngIf="!isLoading" fxLayout="column" fxLayoutAlign="start center">
-    <app-stepper *ngIf="contents.length > 0" (newIndex)="updateURL($event)" [listLength]="contents.length"
+  <div id="stepper-container" *ngIf="true" fxLayout="column" fxLayoutAlign="start center" [ngClass]="{'scalable': isPresentation}">
+    <app-stepper *ngIf="contents?.length > 0 && !isLoading" (newIndex)="updateURL($event)" [listLength]="contents.length"
                  [completed]="" [isPresentation]="isPresentation">
       <cdk-step *ngFor="let content of contents; let i = index">
         <div id="step" *ngIf="(currentStep >= i - 1 && currentStep <= i + 1) || isPresentation">

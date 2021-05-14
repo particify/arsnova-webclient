@@ -1,7 +1,8 @@
 <div fxLayout="column" fxLayoutGap="8px">
   <app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
-  <div class="chart-container" *ngIf="!isLoading" [ngClass]="{ 'invisible': !answersVisible }">
-    <canvas id="{{ chartId }}"></canvas>
+  <div class="chart-container" *ngIf="!isLoading" [ngClass]="{ 'invisible': !answersVisible,
+  'normal-chart': !isPresentation && answersVisible, 'presentation-chart': isPresentation && answersVisible}">
+    <canvas class="chart" id="{{ chartId }}"></canvas>
   </div>
   <mat-list *ngIf="!isLoading">
     <mat-list-item *ngFor="let answer of answers; let i = index" [ngClass]="{'correct': showCorrect,
