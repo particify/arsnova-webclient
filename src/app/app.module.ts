@@ -93,7 +93,7 @@ export function initializeApp(appConfig: AppConfig) {
   ],
   imports: [
     extensions,
-    ExtensionPointModule,
+    ExtensionPointModule.forRoot(),
     AppRoutingModule,
     BrowserModule,
     BrowserAnimationsModule,

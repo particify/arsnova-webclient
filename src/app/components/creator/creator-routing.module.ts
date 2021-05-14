@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { RouterModule, ROUTES, Routes } from '@angular/router';
+import { ExtensionRouteProvider, RouteMountPoint } from '../../../../projects/extension-point/src/lib/extension-route';
 import { AuthenticationGuard } from '../../guards/authentication.guard';
 import { UserRole } from '../../models/user-roles.enum';
 import { RoomCreatorPageComponent } from './room-creator-page/room-creator-page.component';
@@ -18,103 +19,114 @@ import { ModeratorCommentPageComponent } from '../moderator/moderator-comment-pa
 
 const routes: Routes = [
   {
-    path: 'room/:shortId',
-    canActivate: [AuthenticationGuard],
-    data: { requiredRole: UserRole.CREATOR },
-    resolve : {
+    path: '',
+    component: RoomCreatorPageComponent,
+    resolve: {
       room: RoomResolver,
-      viewRole: RoomViewUserRoleResolver
-    },
-    children: [
-      {
-        path: '',
-        component: RoomCreatorPageComponent,
-        resolve: {
-          room: RoomResolver,
-          userRole: RoomUserRoleResolver
-        }
-      },
-      {
-        path: 'settings',
-        component: SettingsPageComponent,
-        resolve: {
-          room: RoomResolver
-        }
-      },
-      {
-        path: 'settings/:settingsName',
-        component: SettingsPageComponent,
-        resolve: {
-          room: RoomResolver
-        }
-      },
-      {
-        path: 'create-content',
-        component: ContentCreationPageComponent
-      },
-      {
-        path: 'group/:contentGroup/edit/:contentId',
-        component: ContentCreationPageComponent,
-        data: {
-          isEditMode: true
-        }
-      },
-      {
-        path: 'group/:contentGroup/statistics/:contentIndex',
-        component: ContentPresentationComponent
-      },
-      {
-        path: 'statistics',
-        component: StatisticsPageComponent
-      },
-      {
-        path: 'group/:contentGroup/statistics',
-        component: ContentPresentationComponent,
-        resolve: {
-          room: RoomResolver
-        }
-      },
-      {
-        path: 'comments',
-        component: CommentPageComponent,
-        resolve: {
-          room: RoomResolver
-        }
-      },
-      {
-        path: 'comments/moderation',
-        component: ModeratorCommentPageComponent,
-        resolve: {
-          room: RoomResolver
-        }
-      },
-      {
-        path: 'survey',
-        component: SurveyPageComponent,
-        resolve: {
-          room: RoomResolver
-        }
-      },
-      {
-        path: 'group/:contentGroup',
-        component: GroupContentComponent
-      },
-      {
-        path: 'archive',
-        component: LooseContentComponent
-      },
-      {
-        path: 'group/:contentGroup/presentation',
-        component: ContentPresentationComponent
-      }
-    ]
+      userRole: RoomUserRoleResolver
+    }
+  },
+  {
+    path: 'settings',
+    component: SettingsPageComponent,
+    resolve: {
+      room: RoomResolver
+    }
+  },
+  {
+    path: 'settings/:settingsName',
+    component: SettingsPageComponent,
+    resolve: {
+      room: RoomResolver
+    }
+  },
+  {
+    path: 'create-content',
+    component: ContentCreationPageComponent
+  },
+  {
+    path: 'group/:contentGroup/edit/:contentId',
+    component: ContentCreationPageComponent,
+    data: {
+      isEditMode: true
+    }
+  },
+  {
+    path: 'group/:contentGroup/statistics/:contentIndex',
+    component: ContentPresentationComponent
+  },
+  {
+    path: 'statistics',
+    component: StatisticsPageComponent
+  },
+  {
+    path: 'group/:contentGroup/statistics',
+    component: ContentPresentationComponent,
+    resolve: {
+      room: RoomResolver
+    }
+  },
+  {
+    path: 'comments',
+    component: CommentPageComponent,
+    resolve: {
+      room: RoomResolver
+    }
+  },
+  {
+    path: 'comments/moderation',
+    component: ModeratorCommentPageComponent,
+    resolve: {
+      room: RoomResolver
+    }
+  },
+  {
+    path: 'survey',
+    component: SurveyPageComponent,
+    resolve: {
+      room: RoomResolver
+    }
+  },
+  {
+    path: 'group/:contentGroup',
+    component: GroupContentComponent
+  },
+  {
+    path: 'archive',
+    component: LooseContentComponent
+  },
+  {
+    path: 'group/:contentGroup/presentation',
+    component: ContentPresentationComponent
   }
 ];
 
 @NgModule({
-  imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  imports: [RouterModule.forChild([])],
+  exports: [RouterModule],
+  providers: [
+    {
+      provide: ROUTES,
+      useFactory: (extensionRouteProviders: ExtensionRouteProvider[]) => [
+        {
+          path: 'room/:shortId',
+          canActivate: [AuthenticationGuard],
+          data: { requiredRole: UserRole.CREATOR },
+          resolve: {
+            room: RoomResolver,
+            viewRole: RoomViewUserRoleResolver
+          },
+          children: [
+            ...routes,
+            ...ExtensionRouteProvider.extractRoutesForMountPoint(
+                RouteMountPoint.CREATOR, extensionRouteProviders)
+          ]
+        }
+      ],
+      deps: [ExtensionRouteProvider],
+      multi: true
+    }
+  ]
 })
-
 export class CreatorRoutingModule {
 }

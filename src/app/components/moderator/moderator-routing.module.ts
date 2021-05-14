@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { RouterModule, ROUTES, Routes } from '@angular/router';
+import { ExtensionRouteProvider, RouteMountPoint } from '../../../../projects/extension-point/src/lib/extension-route';
 import { AuthenticationGuard } from '../../guards/authentication.guard';
 import { UserRole } from '../../models/user-roles.enum';
 import { RoomModeratorPageComponent } from './room-moderator-page/room-moderator-page.component';
@@ -13,43 +14,55 @@ import { RoomUserRoleResolver } from '../../resolver/room-user-role.resolver';
 
 const routes: Routes = [
   {
-    path: 'room/:shortId',
-    canActivate: [AuthenticationGuard],
-    data: { requiredRole: UserRole.EXECUTIVE_MODERATOR },
+    path: '',
+    component: RoomModeratorPageComponent,
     resolve: {
-      room: RoomResolver,
-      viewRole: RoomViewUserRoleResolver
-    },
-    children: [
-      {
-        path: '',
-        component: RoomModeratorPageComponent,
-        resolve: {
-          userRole: RoomUserRoleResolver
-        }
-      },
-      {
-        path: 'comments',
-        component: CommentPageComponent
-      },
-      {
-        path: 'comments/moderation',
-        component: ModeratorCommentPageComponent
-      },
-      {
-        path: 'comment/:commentId',
-        component: CommentAnswerComponent,
-        resolve: {
-          comment: CommentResolver
-        }
-      },
-    ]
+      userRole: RoomUserRoleResolver
+    }
+  },
+  {
+    path: 'comments',
+    component: CommentPageComponent
+  },
+  {
+    path: 'comments/moderation',
+    component: ModeratorCommentPageComponent
+  },
+  {
+    path: 'comment/:commentId',
+    component: CommentAnswerComponent,
+    resolve: {
+      comment: CommentResolver
+    }
   }
 ];
 
 @NgModule({
-  imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  imports: [RouterModule.forChild([])],
+  exports: [RouterModule],
+  providers: [
+    {
+      provide: ROUTES,
+      useFactory: (extensionRouteProviders: ExtensionRouteProvider[]) => [
+        {
+          path: 'room/:shortId',
+          canActivate: [AuthenticationGuard],
+          data: { requiredRole: UserRole.EXECUTIVE_MODERATOR },
+          resolve: {
+            room: RoomResolver,
+            viewRole: RoomViewUserRoleResolver
+          },
+          children: [
+            ...routes,
+            ...ExtensionRouteProvider.extractRoutesForMountPoint(
+                RouteMountPoint.MODERATOR, extensionRouteProviders)
+          ]
+        }
+      ],
+      deps: [ExtensionRouteProvider],
+      multi: true
+    }
+  ]
 })
 export class ModeratorRoutingModule {
 }
