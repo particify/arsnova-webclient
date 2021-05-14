@@ -16,6 +16,7 @@ export enum MarkdownFeatureset {
 export interface FormattingOptions {
   markdown: boolean;
   latex: boolean;
+  syntaxHighlighting: boolean;
   markdownFeatureset: MarkdownFeatureset;
   linebreaks: boolean;
 }
@@ -38,6 +39,7 @@ export class FormattingService extends AbstractHttpService<void> {
     options = options ?? {
       markdown: true,
       latex: false,
+      syntaxHighlighting: false,
       markdownFeatureset: MarkdownFeatureset.EXTENDED,
       linebreaks: true
     };
