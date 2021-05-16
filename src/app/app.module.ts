@@ -67,6 +67,7 @@ import { TRANSLATION_MODULE_NAME } from './translate-module-name-token';
 import { FeedbackService } from './services/http/feedback.service';
 import { UpdateService } from './services/util/update.service';
 import { CachingService } from './services/util/caching.service';
+import { LocalFileService } from './services/util/local-file.service';
 
 export function dialogClose(dialogResult: any) {
 }
@@ -173,6 +174,7 @@ export function initializeApp(appConfig: AppConfig) {
     RoutingService,
     FeedbackService,
     CachingService,
+    LocalFileService,
     { provide: Window,  useValue: window },
     STORAGE_CONFIG_PROVIDERS,
     {
