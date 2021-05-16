@@ -133,4 +133,11 @@ export class ContentGroupService extends AbstractEntityService<ContentGroup> {
   filterPublishedIds(contentGroup: ContentGroup): string[] {
     return contentGroup.contentIds.filter(id => this.isContentPublished(contentGroup, id));
   }
+
+  import(roomId: string, groupId: string, blob: Blob) {
+    const connectionUrl = this.buildUri(`/${groupId}/import`, roomId);
+    const formData = new FormData();
+    formData.append('file', blob);
+    return this.httpClient.post(connectionUrl, formData);
+  }
 }

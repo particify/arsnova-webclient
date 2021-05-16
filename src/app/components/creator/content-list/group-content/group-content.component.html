@@ -70,6 +70,14 @@
                 <mat-icon>swap_vert</mat-icon>
                 {{ 'content.sort-content-group' | translate }}
               </button>
+              <button mat-menu-item (click)="exportToCsv()">
+                <mat-icon>file_download</mat-icon>
+                {{ 'export.export' | translate }}
+              </button>
+              <button mat-menu-item (click)="importFromCsv()">
+                <mat-icon>file_upload</mat-icon>
+                {{ 'import.import' | translate }}
+              </button>
             </mat-menu>
           </div>
           <div fxLayoutGap="10px">

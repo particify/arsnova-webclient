@@ -19,6 +19,7 @@ import { UserActivationComponent } from '../../components/home/_dialogs/user-act
 import { UpdateInfoComponent } from '../../components/shared/_dialogs/update-info/update-info.component';
 import { UserRole } from '../../models/user-roles.enum';
 import { VersionInfo } from '../../models/version-info';
+import { ExportComponent, ExportOptions } from '../../components/creator/_dialogs/export/export.component';
 
 @Injectable()
 export class DialogService {
@@ -169,5 +170,9 @@ export class DialogService {
         updateAvailable: updateAvailable
       }
     });
+  }
+
+  openExportDialog(): MatDialogRef<ExportComponent, ExportOptions> {
+    return this.dialog.open(ExportComponent);
   }
 }

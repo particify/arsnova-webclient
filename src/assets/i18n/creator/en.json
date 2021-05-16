@@ -316,7 +316,8 @@
     "abstentions-allowed": "Allow abstentions",
     "flashcard-front": "Front",
     "flashcard-back": "Back",
-    "group-settings": "Settings"
+    "group-settings": "Settings",
+    "import-successful": "Your contents has been imported."
   },
   "survey": {
     "a11y-message": "You are now in live survey mode. Press the Enter key to get information about key combinations or use the Escape key to call up the announcement later.",
@@ -525,5 +526,15 @@
     "group": "Questions",
     "survey": "Live-Survey",
     "moderation": "Moderation"
+  },
+  "export": {
+    "export": "Export",
+    "tsv": "Tab-separated values",
+    "csv": "Comma-separated values",
+    "file-type": "File type",
+    "charset": "Charset"
+  },
+  "import": {
+    "import": "Import"
   }
 }
