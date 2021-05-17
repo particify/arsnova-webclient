@@ -55,7 +55,9 @@ export class CommentComponent implements OnInit, OnDestroy {
   @Input() referenceEvent: Observable<string>;
   @Input() inAnswerView = false;
   @Input() viewRoleInput: UserRole;
+  @Input() archived = false;
   @Output() clickedOnTag = new EventEmitter<string>();
+
   viewRole: UserRole;
   isParticipant = false;
   isCreator = false;

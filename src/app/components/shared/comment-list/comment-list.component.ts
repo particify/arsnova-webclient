@@ -60,6 +60,7 @@ export class CommentListComponent implements OnInit, OnDestroy {
   @Input() auth: ClientAuthentication;
   @Input() comments: Comment[] = [];
   @Input() isModerator = false;
+  @Input() isArchive = false;
 
   roomId: string;
   viewRole: UserRole;
@@ -169,9 +170,11 @@ export class CommentListComponent implements OnInit, OnDestroy {
       });
       this.getComments();
     }
-    this.subscribeCommentStream();
-    if (this.isModerator) {
-      this.subscribeModeratorStream();
+    if (!this.isArchive) {
+      this.subscribeCommentStream();
+      if (this.isModerator) {
+        this.subscribeModeratorStream();
+      }
     }
   }
 
@@ -550,4 +553,8 @@ export class CommentListComponent implements OnInit, OnDestroy {
     this.router.navigate(['creator', 'room', this.room.shortId, 'settings', 'comments']);
   }
 
+  resetComments() {
+    this.comments = [];
+    this.setTimePeriod(this.period);
+  }
 }
