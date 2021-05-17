@@ -8,6 +8,7 @@ import { KeyboardKey } from '../../../utils/keyboard/keys';
 import { AnnounceService } from '../../../services/util/announce.service';
 import { Comment } from '../../../models/comment';
 import { CommentService } from '../../../services/http/comment.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-moderator-comment-page',
@@ -16,8 +17,7 @@ import { CommentService } from '../../../services/http/comment.service';
 })
 export class ModeratorCommentPageComponent implements OnInit, OnDestroy, AfterContentInit {
 
-  comments: Comment[];
-  isLoading = true;
+  comments$: Observable<Comment[]>;
 
   constructor(
     private route: ActivatedRoute,
@@ -49,10 +49,7 @@ export class ModeratorCommentPageComponent implements OnInit, OnDestroy, AfterCo
 
   ngOnInit(): void {
     this.route.data.subscribe(data => {
-      this.commentService.getRejectedComments(data.room.id).subscribe(comments => {
-        this.comments = comments;
-        this.isLoading = false;
-      });
+      this.comments$ = this.commentService.getRejectedComments(data.room.id);
     });
   }
 

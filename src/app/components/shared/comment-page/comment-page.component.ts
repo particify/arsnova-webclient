@@ -8,6 +8,7 @@ import { KeyboardUtils } from '../../../utils/keyboard';
 import { KeyboardKey } from '../../../utils/keyboard/keys';
 import { AnnounceService } from '../../../services/util/announce.service';
 import { CommentService } from '../../../services/http/comment.service';
+import { Observable } from 'rxjs';
 import { Comment } from '../../../models/comment';
 
 @Component({
@@ -18,8 +19,7 @@ import { Comment } from '../../../models/comment';
 export class CommentPageComponent implements OnInit, OnDestroy, AfterContentInit {
 
   auth: ClientAuthentication;
-  comments: Comment[];
-  isLoading = true;
+  comments$: Observable<Comment[]>;
 
   constructor(
     private route: ActivatedRoute,
@@ -79,10 +79,7 @@ export class CommentPageComponent implements OnInit, OnDestroy, AfterContentInit
     this.authenticationService.getCurrentAuthentication()
         .subscribe(auth => this.auth = auth);
     this.route.data.subscribe(data => {
-      this.commentService.getAckComments(data.room.id).subscribe(comments => {
-        this.comments = comments;
-        this.isLoading = false;
-      });
+      this.comments$ = this.commentService.getAckComments(data.room.id);
     });
   }
 
