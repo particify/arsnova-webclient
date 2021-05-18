@@ -31,6 +31,7 @@ import { ExtensionPointModule } from '../../../../projects/extension-point/src/l
 import { ContentSortCreationComponent } from './content-creation/content-sort-creation/content-sort-creation.component';
 import { ContentFlashcardCreationComponent } from './content-creation/content-flashcard-creation/content-flashcard-creation.component';
 import { ExportComponent } from './_dialogs/export/export.component';
+import { DialogService } from '../../services/util/dialog.service';
 
 @NgModule({
   imports: [
@@ -77,7 +78,8 @@ import { ExportComponent } from './_dialogs/export/export.component';
     ExportComponent
   ],
   providers: [
-    { provide: TRANSLATION_MODULE_NAME, useValue: 'creator' }
+    { provide: TRANSLATION_MODULE_NAME, useValue: 'creator' },
+    DialogService
   ]
 })
 export class CreatorModule {
