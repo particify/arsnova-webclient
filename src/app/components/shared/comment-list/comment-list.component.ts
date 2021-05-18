@@ -619,6 +619,7 @@ export class CommentListComponent implements OnInit, OnDestroy {
     this.eventService.broadcast('CommentStepStateChanged', this.getStepState(index));
     if (!this.isLoading) {
       this.scrollToComment(index);
+      this.announceCommentPresentation(index);
     }
   }
 
@@ -650,6 +651,10 @@ export class CommentListComponent implements OnInit, OnDestroy {
         block: 'center'
       }
     );
+  }
+
+  announceCommentPresentation(index: number) {
+    this.announceService.announce('presentation.a11y-present-comment', { comment: this.displayComments[index].body });
   }
 
   nextComment() {

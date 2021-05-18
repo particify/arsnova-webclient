@@ -16,6 +16,8 @@ import { KeyboardKey } from '../../../utils/keyboard/keys';
 import { ContentGroup } from '../../../models/content-group';
 import { DialogService } from '../../../services/util/dialog.service';
 import { PublishContentComponent } from '../../shared/_dialogs/publish-content/publish-content.component';
+import { AnnounceService } from '../../../services/util/announce.service';
+import { ContentType } from '../../../models/content-type.enum';
 
 @Component({
   selector: 'app-content-presentation',
@@ -53,7 +55,8 @@ export class ContentPresentationComponent implements OnInit {
     private location: Location,
     private router: Router,
     private eventService: EventService,
-    private dialogService: DialogService
+    private dialogService: DialogService,
+    private announceService: AnnounceService
   ) {
     langService.langEmitter.subscribe(lang => translateService.use(lang));
   }
@@ -117,10 +120,16 @@ export class ContentPresentationComponent implements OnInit {
           this.updateInfoBar();
         }
         setTimeout(() => {
-          document.getElementById('presentation-message').focus();
+          const id = this.isPresentation ? 'presentation-mode-message' : 'presentation-message';
+          document.getElementById(id).focus();
         }, 700);
       });
     });
+  }
+
+  announcePresentationShortcuts() {
+    this.announceService.announce('presentation.a11y-content-shortcuts');
+    document.getElementById('presentation-mode-message').blur();
   }
 
   getStepString(): string {
@@ -142,11 +151,10 @@ export class ContentPresentationComponent implements OnInit {
     }
     this.updateInfoBar();
     this.routeChanged.emit(true);
-    if (!this.isPresentation) {
-      setTimeout(() => {
-        document.getElementById('message-button').focus();
-      }, 300);
-    }
+    setTimeout(() => {
+      const id = [ContentType.SLIDE, ContentType.FLASHCARD].indexOf(this.contents[index].format) > -1 ? 'message-type-info-button' : 'message-button';
+      document.getElementById(id).focus();
+    }, 300);
   }
 
   updateCounter($event, isActive) {

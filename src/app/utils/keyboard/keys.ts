@@ -43,6 +43,7 @@ export enum KeyboardKey {
   SPACE,
   LetterC,
   LetterF,
+  LetterI,
   LetterL,
   LetterQ,
   MINUS,
@@ -70,6 +71,7 @@ KEYBOARD_KEYS.set(KeyboardKey.ENTER, { key: ['Enter'], keyCode: 13  });
 KEYBOARD_KEYS.set(KeyboardKey.SPACE, { key: [' '], keyCode: 32  });
 KEYBOARD_KEYS.set(KeyboardKey.LetterC, { key: ['c'], keyCode: 67  });
 KEYBOARD_KEYS.set(KeyboardKey.LetterF, { key: ['f'], keyCode: 70  });
+KEYBOARD_KEYS.set(KeyboardKey.LetterI, { key: ['i'], keyCode: 73  });
 KEYBOARD_KEYS.set(KeyboardKey.LetterL, { key: ['l'], keyCode: 76  });
 KEYBOARD_KEYS.set(KeyboardKey.LetterQ, { key: ['q'], keyCode: 81  });
 KEYBOARD_KEYS.set(KeyboardKey.MINUS, { key: ['-'], keyCode: 189  });

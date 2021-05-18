@@ -471,6 +471,7 @@
     "a11y-message-overview": "You are now on the statistics overview. Press the Enter key to get information about key combinations or call the announcement later with the Escape key.",
     "a11y-message-evaluation": "Question {{index}}, {{content}}. There are no answers yet.",
     "a11y-message-evaluation-answers": "Question {{index}}, {{content}}. {{answers}} participants have answered the question. Navigate through the answers with the tab key.",
+    "a11y-message-type-info": "Question {{index}}, {{content}}.",
     "a11y-message-presentation": "You are now in the question presentation. Press the tab key to go to the question and navigate between the questions with the arrow keys.",
     "a11y-shortcuts-overview": "To go to the selection of the question collection press the Tab key. Then navigate through the results of the collection. To get to the user menu press the 9 key, to get back to the room overview press the 0 key or the escape key to repeat this announcement.",
     "a11y-group-progress": "{{percent}} percent of the questions in the collection {{group}} were answered correctly.",
@@ -613,7 +614,18 @@
     "PLUS": "+"
   },
   "presentation": {
-    "a11y-presentation-mode": "Go into presentation mode",
+    "a11y-welcome": "You are now in presentation mode. Information for joining the room are displayed. If you want to know about key combinations, press the enter key or press the key i later.",
+    "a11y-shortcuts": "Use the keys 1, 2, and 3 to switch between the comment list, questions and live poll. Press the key q to display information for joining the room, the key f to enter or exit full screen mode, or the escape key to exit presentation mode and return to the room overview.",
+    "a11y-comment-message": "You are now presenting the comment list. Press the enter key to get information about keyboard shortcuts.",
+    "a11y-comment-shortcuts": "Use the arrow keys to navigate between comments. Use the plus and minus keys to zoom in or out on the current comment.",
+    "a11y-present-comment": "The following comment is now presented: {{comment}}",
+    "a11y-comment-zoom-changed": "Zoom changed to {{zoom}} percent.",
+    "a11y-content-message": "You are now presenting the questions of the collection {{group}}. Press the enter key to get information about keyboard shortcuts. Press the tab key to get to the current question.",
+    "a11y-content-shortcuts": "Navigate between your questions using the arrow keys. Press the spacebar to see the results, the key c to see the correct answers, or the key l to lock or unlock the question.",
+    "a11y-survey-shortcuts": "Press the key 5 to know the status of the survey, the spacebar to start or stop the survey and the key c to change the type of the survey",
+    "a11y-presentation-mode": "Go into presentation mode.",
+    "a11y-entered-fullscreen": "You are now in fullscreen mode.",
+    "a11y-leaved-fullscreen": "You have left fullscreen mode.",
     "presentation-mode": "Presentation mode"
   }
 }

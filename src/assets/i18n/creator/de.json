@@ -471,6 +471,7 @@
     "a11y-message-overview": "Du befindest dich jetzt auf der Statistikübersicht. Drücke jetzt die Enter-Taste, um Informationen über Tastenkombinationen zu erhalten oder rufe die Ansage zu einem späteren Zeitpunkt mit der Escape-Taste auf.",
     "a11y-message-evaluation": "Frage {{index}}, {{content}}. Es gibt noch keine Antworten auf diese Frage.",
     "a11y-message-evaluation-answers": "Frage {{index}}, {{content}}. {{answers}} Teilnehmende haben die Frage beantwortet. Navigiere mit der Tab-Taste durch die Antworten.",
+    "a11y-message-type-info": "Frage {{index}}, {{content}}.",
     "a11y-message-presentation": "Du befindest dich jetzt in der Präsentation der Fragen. Drücke die Tab-Taste um zur Frage zu gelangen oder navigiere mit den Pfeiltasten zur nächsten oder vorherigen Frage.",
     "a11y-shortcuts-overview": "Um zur Auswahl der Fragesammlung zu gelangen drücke die Tab-Taste. Navigiere anschließend durch die Ergebnisse der Sammlung. Um zum Nutzer-Menü zu gelangen drücke die Taste 9, um zurück zur Raumübersicht zu gelangen die Taste 0 oder die Escape-Taste um diese Ansage zu wiederholen.",
     "a11y-group-progress": "{{percent}} Prozent der Fragen in der Sammlung {{group}} wurden richtig beantwortet.",
@@ -613,7 +614,18 @@
     "PLUS": "+"
   },
   "presentation": {
-    "a11y-presentation-mode": "Gehe in den Präsentationsmodus",
+    "a11y-welcome": "Du befindest dich jetzt im Präsentationsmodus. Es werden Informationen für das Beitreten des Raums angezeigt. Wenn du Informationen über Tastenkombinationen erfahren möchtest, drücke die Enter-Taste oder drücke später die Taste i.",
+    "a11y-shortcuts": "Nutze die Tasten 1, 2 und 3 um zwischen der Kommentarliste, den Fragen und der Live-Umfrage zu wechseln. Drücke die Taste q um Informationen für das Betreten des Raums anzuzeigen, die Taste f um in den Vollbildmodus zu wechseln oder diesen zu verlassen oder die escape taste um den Präsentationsmodus zu verlassen und in die Raumübersicht zurückzukehren.",
+    "a11y-comment-message": "Du präsentierst nun die Kommentarliste. Drücke die enter taste um Informationen über Tastenkombinationen zu erhalten.",
+    "a11y-comment-shortcuts": "Nutze die Pfeiltasten um zwischen den Kommentaren zu navigieren. Mit den Tasten plus und minus kannst du den aktuellen Kommentar vergrößern oder verkleinern.",
+    "a11y-present-comment": "Der folgende Kommentar wird jetzt präsentiert: {{comment}}",
+    "a11y-comment-zoom-changed": "Zoom auf {{zoom}} Prozent geändert.",
+    "a11y-content-message": "Du präsentierst jetzt die Fragen der Sammlung {{group}}. Drücke die Enter-Taste um Informationen zu Tastenkombinationen zu erhalten. Mit der Tab-Taste gelangst du zur aktuellen Frage.",
+    "a11y-content-shortcuts": "Navigiere mit den Pfeiltasten zwischen deinen Fragen. Drücke die Leertaste um die Ergebnisse anzuzeigen, die Taste c um die richtigen Antworten anzuzeigen oder die Taste l um die Frage zu sperren oder freizugeben.",
+    "a11y-survey-shortcuts": "Drücke die Taste 5 um den Status der Umfrage zu erfahren, die Leertaste um die Umfrage zu starten oder zu stoppen und die Taste c um den Typ der Umfrage zu ändern.",
+    "a11y-presentation-mode": "Gehe in den Präsentationsmodus.",
+    "a11y-entered-fullscreen": "Du befindest dich jetzt im Vollbildmodus.",
+    "a11y-leaved-fullscreen": "Du hast den Vollbildmodus verlassen.",
     "presentation-mode": "Präsentationsmodus"
   }
 }

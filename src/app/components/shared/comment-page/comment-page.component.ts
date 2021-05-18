@@ -74,7 +74,8 @@ export class CommentPageComponent implements OnInit, OnDestroy, AfterContentInit
 
   ngAfterContentInit(): void {
     setTimeout(() => {
-      document.getElementById('live-announcer-button').focus();
+      const id = this.isPresentation ? 'presentation-button' : 'live-announcer-button';
+      document.getElementById(id).focus();
     }, 800);
   }
 
@@ -94,7 +95,8 @@ export class CommentPageComponent implements OnInit, OnDestroy, AfterContentInit
   }
 
   public announce() {
-    this.announceService.announce('comment-page.a11y-shortcuts');
+    const msg = this.isPresentation ? 'presentation.a11y-comment-shortcuts' : 'comment-page.a11y-shortcuts';
+    this.announceService.announce(msg);
   }
 
   updateComment(comment: Comment) {

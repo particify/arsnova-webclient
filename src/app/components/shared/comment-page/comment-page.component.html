@@ -1,9 +1,12 @@
 <div fxLayout="column" fxLayoutAlign="center" fxLayoutGap="20px">
   <div fxLayout="row" fxLayoutAlign="center">
-    <button id="live-announcer-button" tabIndex="-1" (click)="announce()"
+    <button *ngIf="!isPresentation" id="live-announcer-button" tabIndex="-1" (click)="announce()"
             class="visually-hidden">{{ 'comment-page.a11y-message' | translate }}</button>
     <app-comment-list *ngIf="!isPresentation"  [auth]="auth" [comments$]="comments$"></app-comment-list>
     <div *ngIf="isPresentation" fxLayout="row" fxLayoutAlign="start">
+      <button id="presentation-button" tabIndex="-1" (click)="announce()" class="visually-hidden">
+        {{ 'presentation.a11y-comment-message' | translate }}
+      </button>
       <div class="presentation-container">
         <app-present-comment fxFill [isPresentation]="true" [comment]="activeComment"></app-present-comment>
       </div>
