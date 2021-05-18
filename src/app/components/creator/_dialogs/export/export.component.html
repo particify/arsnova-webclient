@@ -1,0 +1,23 @@
+<mat-dialog-content fxLayout="column">
+  <mat-form-field appearance="outline">
+    <mat-label>{{ 'export.file-type' | translate }}</mat-label>
+    <mat-select required [(ngModel)]="selectedExportType">
+      <mat-option *ngFor="let exportType of exportTypes" [value]="exportType">{{ exportType.label | translate }}</mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field appearance="outline">
+    <mat-label>{{ 'export.charset' | translate }}</mat-label>
+    <mat-select required [(ngModel)]="selectedCharset">
+      <mat-option *ngFor="let charset of charsets" [value]="charset">{{ charset }}</mat-option>
+    </mat-select>
+  </mat-form-field>
+</mat-dialog-content>
+
+<div fxLayout="row wrap" fxLayoutAlign="end" fxLayoutGap="5px">
+  <button mat-flat-button class="button-abort" (click)="cancel()">
+    {{ 'dialog.cancel' | translate }}
+  </button>
+  <button mat-flat-button class="button-primary accept-button" (click)="export()">
+    {{ 'export.export' | translate }}
+  </button>
+</div>

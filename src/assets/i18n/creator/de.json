@@ -316,7 +316,8 @@
     "abstentions-allowed": "Enthaltungen erlauben",
     "flashcard-front": "Vorderseite",
     "flashcard-back": "Rückseite",
-    "group-settings": "Einstellungen"
+    "group-settings": "Einstellungen",
+    "import-successful": "Deine Fragen wurden importiert."
   },
   "survey": {
     "a11y-message": "Du befindest dich jetzt bei der Live-Umfrage. Drücke die Enter-Taste, um Informationen zu Tastenkombinationen zu erhalten oder rufe die Ansage später mit der Escape-Taste auf.",
@@ -525,6 +526,15 @@
     "group": "Fragen",
     "survey": "Live-Umfrage",
     "moderation": "Moderation"
+  },
+  "export": {
+    "export": "Exportieren",
+    "tsv": "Tabulator-separierte Werte",
+    "csv": "Komma-separierte Werte",
+    "file-type": "Dateityp",
+    "charset": "Zeichensatz"
+  },
+  "import": {
+    "import": "Importieren"
   }
-
 }

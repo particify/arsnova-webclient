@@ -14,6 +14,7 @@ import { ContentType } from '@arsnova/app/models/content-type.enum';
 import { EventService } from '../util/event.service';
 import { ContentCreated } from '../../models/events/content-created';
 import { CachingService } from '../util/caching.service';
+import { ExportFileType } from '../../models/export-file-type';
 
 const PARTITION_SIZE = 50;
 
@@ -166,5 +167,13 @@ export class ContentService extends AbstractEntityService<Content> {
 
   getSupportedContents(contents: Content[]) {
     return contents.filter(content => Object.values(ContentType).indexOf(content.format) > -1);
+  }
+
+  export(fileType: ExportFileType, roomId: string, contentIds: string[], charset?: string): Observable<Blob> {
+    const connectionUrl = this.buildUri('/-/export', roomId);
+    return this.http.post(
+        connectionUrl,
+        { fileType: fileType, contentIds: contentIds, charset: charset },
+        { responseType: 'blob' });
   }
 }

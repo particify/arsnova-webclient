@@ -16,8 +16,10 @@ import { AnnounceService } from '../../../../services/util/announce.service';
 import { KeyboardUtils } from '../../../../utils/keyboard';
 import { KeyboardKey } from '../../../../utils/keyboard/keys';
 import { EventService } from '../../../../services/util/event.service';
+import { LocalFileService } from '../../../../services/util/local-file.service';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Observable } from 'rxjs';
+import { mergeMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-group-content',
@@ -56,6 +58,7 @@ export class GroupContentComponent extends ContentListBaseComponent implements O
     protected contentGroupService: ContentGroupService,
     protected announceService: AnnounceService,
     public eventService: EventService,
+    protected localFileService: LocalFileService,
     protected router: Router
   ) {
     super(contentService, roomService, route, location, notificationService, translateService, langService, dialogService,
@@ -94,18 +97,26 @@ export class GroupContentComponent extends ContentListBaseComponent implements O
       this.route.params.subscribe(params => {
         this.collectionName = params['contentGroup'];
         this.globalStorageService.setItem(STORAGE_KEYS.LAST_GROUP, this.collectionName);
-        this.contentGroupService.getByRoomIdAndName(this.room.id, this.collectionName).subscribe(group => {
-          this.contentGroup = group;
-          this.updatedName = this.contentGroup.name;
-          this.setRange();
-          this.contentService.getContentsByIds(this.contentGroup.roomId, this.contentGroup.contentIds, true)
-            .subscribe(contents => {
-            this.initContentList(contents);
-          });
-        });
+        this.reloadContentGroup()
       });
     });
     this.translateService.use(this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE));
+  }
+
+  reloadContentGroup(imported = false) {
+    this.contentGroupService.getByRoomIdAndName(this.room.id, this.collectionName).subscribe(group => {
+      this.contentGroup = group;
+      this.updatedName = this.contentGroup.name;
+      this.setRange();
+      this.contentService.getContentsByIds(this.contentGroup.roomId, this.contentGroup.contentIds, true)
+          .subscribe(contents => {
+        this.initContentList(contents);
+        if (imported) {
+          const msg = this.translateService.instant('content.import-successful');
+          this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.SUCCESS);
+        }
+      });
+    });
   }
 
   setSettings() {
@@ -422,5 +433,32 @@ export class GroupContentComponent extends ContentListBaseComponent implements O
 
   isPublished(index: number): boolean {
     return this.contentGroupService.isIndexPublished(this.firstPublishedIndex, this.lastPublishedIndex, index);
+  }
+
+  exportToCsv() {
+    const dialogRef = this.dialogService.openExportDialog();
+    dialogRef.afterClosed().subscribe(options => {
+      const blob$ = this.contentService.export(
+          options.exportType,
+          this.room.id,
+          this.contentGroup.contentIds,
+          options.charset);
+      this.localFileService.download(blob$, this.generateExportFilename('csv'));
+    });
+  }
+
+  importFromCsv() {
+    const blob$ = this.localFileService.upload([
+        'text/csv',
+        'text/tab-separated-values']);
+    blob$.pipe(mergeMap(blob => this.contentGroupService.import(this.room.id, this.contentGroup.id, blob)))
+        .subscribe(() => {
+          this.reloadContentGroup(true);
+        });
+  }
+
+  generateExportFilename(extension: string): string {
+    const name = this.localFileService.generateFilename([this.contentGroup.name, this.room.shortId], true);
+    return `${name}.${extension}`;
   }
 }
