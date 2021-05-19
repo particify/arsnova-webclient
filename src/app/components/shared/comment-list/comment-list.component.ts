@@ -127,6 +127,7 @@ export class CommentListComponent implements OnInit, OnDestroy {
     this.translateService.use(this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE));
     this.route.data.subscribe(data => {
       this.room = data.room;
+      this.roomId = this.room.id;
       this.comments$.subscribe(comments => {
         this.comments = comments;
         this.initRoom();
@@ -162,7 +163,6 @@ export class CommentListComponent implements OnInit, OnDestroy {
   }
 
   initRoom() {
-    this.roomId = this.room.id;
     if (this.room && this.room.extensions && this.room.extensions.comments) {
       if (this.room.extensions.comments['enableModeration'] !== null) {
         this.moderationEnabled = this.room.extensions.comments['enableModeration'];
