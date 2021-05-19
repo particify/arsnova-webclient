@@ -1,0 +1,22 @@
+.word {
+  font-size: 20px;
+  margin: 10px 0;
+  opacity: 0.7;
+}
+
+.word-container {
+  padding: 0;
+  background-color: var(--background);
+}
+
+.mat-form-field {
+  width: 100%;
+}
+
+.add-button {
+  color: var(--primary);
+}
+
+.delete {
+  color: var(--warn);
+}

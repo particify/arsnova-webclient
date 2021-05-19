@@ -97,6 +97,13 @@ export class ContentAnswerService extends AbstractEntityService<Answer> {
     );
   }
 
+  addAnswer<T extends Answer>(roomId: string, answer: T): Observable<T> {
+    const url = this.buildUri('/', roomId);
+    return this.http.post<T>(url, answer, httpOptions).pipe(
+      catchError(this.handleError<T>('addAnswer'))
+    );
+  }
+
   getAnswerText(roomId: string, id: string): Observable<TextAnswer> {
     const url = this.buildUri(`${this.serviceApiUrl.text}/${id}`, roomId);
     return this.http.get<TextAnswer>(url).pipe(

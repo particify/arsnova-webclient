@@ -9,6 +9,7 @@ import { MarkdownFeatureset } from '@arsnova/app/services/http/formatting.servic
 import { KeyboardKey } from '@arsnova/app/utils/keyboard/keys';
 import { KeyboardUtils } from '@arsnova/app/utils/keyboard';
 import { AnnounceService } from '@arsnova/app/services/util/announce.service';
+import { StatisticWordcloudComponent } from '../statistic-wordcloud/statistic-wordcloud.component';
 
 @Component({
   selector: 'app-statistic-content',
@@ -20,6 +21,7 @@ export class StatisticContentComponent implements OnInit {
   @ViewChild(StatisticChoiceComponent) choiceStatistic: StatisticChoiceComponent;
   @ViewChild(StatisticTextComponent) textStatistic: StatisticTextComponent;
   @ViewChild(StatisticSortComponent) sortStatistic: StatisticSortComponent;
+  @ViewChild(StatisticWordcloudComponent) wordcloudStatistic: StatisticWordcloudComponent;
 
   @Input() content: ContentText;
   @Input() directShow: boolean;
@@ -90,6 +92,9 @@ export class StatisticContentComponent implements OnInit {
       case ContentType.FLASHCARD:
         this.answersVisible = !this.answersVisible;
         break;
+      case ContentType.WORDCLOUD:
+        this.answersVisible = this.wordcloudStatistic.toggleAnswers();
+        break;
       default:
         this.answersVisible = this.choiceStatistic.toggleAnswers();
     }
@@ -104,14 +109,14 @@ export class StatisticContentComponent implements OnInit {
   }
 
   checkIfSurvey() {
-    let noCorrect;
-    if (this.format === ContentType.BINARY || this.format === ContentType.CHOICE) {
+    let noCorrect = false;
+    if ([ContentType.TEXT, ContentType.SCALE, ContentType.WORDCLOUD].includes(this.format)) {
+      noCorrect = true;
+    } else if ([ContentType.BINARY, ContentType.CHOICE].includes(this.format)) {
       const correctOptions = (this.content as ContentChoice).correctOptionIndexes;
       noCorrect = !correctOptions || correctOptions.length === 0;
     }
-    if ((this.format === ContentType.TEXT || this.format === ContentType.SCALE || noCorrect) && this.format !== ContentType.SORT) {
-      this.survey = true;
-    }
+    this.survey = noCorrect;
   }
 
   updateCounter($event: number) {

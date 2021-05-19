@@ -40,7 +40,8 @@ export class ContentCreationPageComponent implements OnInit, AfterContentInit {
     { name: 'text', icon: 'description' },
     { name: 'slide', icon: 'info' },
     { name: 'flashcard', icon: 'school' },
-    { name: 'sort', icon: 'sort' }
+    { name: 'sort', icon: 'sort' },
+    { name: 'wordcloud', icon: 'cloud' }
   ];
   selectedFormat: ContentFormat = this.formats[0];
 

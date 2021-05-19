@@ -1,0 +1,6 @@
+<mat-form-field appearance="outline">
+  <mat-label>{{ 'content.max-keywords' | translate }}</mat-label>
+  <input matInput type="number" min="1" max="10" [(ngModel)]="maxAnswers"
+         (focus)="eventService.makeFocusOnInputTrue()"
+         (blur)="eventService.makeFocusOnInputFalse()">
+</mat-form-field>

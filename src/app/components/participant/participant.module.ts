@@ -16,6 +16,7 @@ import { TranslateHttpLoaderFactory } from '../../translate-http-loader-factory'
 import { ExtensionPointModule } from '../../../../projects/extension-point/src/lib/extension-point.module';
 import { ContentParticipantComponent } from './content/content-participant/content-participant.component';
 import { ContentSortParticipantComponent } from './content/content-sort-participant/content-sort-participant.component';
+import { ContentWordcloudComponent } from './content/content-wordcloud-participant/content-wordcloud-participant.component';
 
 @NgModule({
   imports: [
@@ -44,7 +45,8 @@ import { ContentSortParticipantComponent } from './content/content-sort-particip
     RoomParticipantPageComponent,
     ParticipantContentCarouselPageComponent,
     ContentParticipantComponent,
-    ContentSortParticipantComponent
+    ContentSortParticipantComponent,
+    ContentWordcloudComponent
   ],
   providers: [
     { provide: TRANSLATION_MODULE_NAME, useValue: 'participant' }

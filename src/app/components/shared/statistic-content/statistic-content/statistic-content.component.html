@@ -38,6 +38,8 @@
                     [directShow]="directShow" (updateCounterEvent)="updateCounter($event)"></app-statistic-text>
 <app-statistic-sort *ngIf="format === ContentType.SORT" [content]="content" [isPresentation]="isPresentation"
                     [directShow]="directShow" (updateCounterEvent)="updateCounter($event)"></app-statistic-sort>
+<app-statistic-wordcloud *ngIf="format === ContentType.WORDCLOUD" [content]="content"
+                    [directShow]="directShow" (updateCounterEvent)="updateCounter($event)"></app-statistic-wordcloud>
 <div *ngIf="content.format === ContentType.FLASHCARD && answersVisible">
   <div class="divider-space"></div>
   <mat-divider></mat-divider>

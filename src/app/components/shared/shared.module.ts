@@ -43,6 +43,8 @@ import { NavBarComponent } from './bars/nav-bar/nav-bar.component';
 import { InfoBarComponent } from './bars/info-bar/info-bar.component';
 import { DividerComponent } from './divider/divider.component';
 import { PublishContentComponent } from './_dialogs/publish-content/publish-content.component';
+import { StatisticWordcloudComponent } from './statistic-content/statistic-wordcloud/statistic-wordcloud.component';
+import { WordcloudComponent } from './wordcloud/wordcloud.component';
 
 @NgModule({
   imports: [
@@ -76,6 +78,7 @@ import { PublishContentComponent } from './_dialogs/publish-content/publish-cont
     DialogActionButtonsComponent,
     StatisticChoiceComponent,
     StatisticTextComponent,
+    StatisticWordcloudComponent,
     LoadingIndicatorComponent,
     YesNoDialogComponent,
     InfoDialogComponent,
@@ -92,7 +95,8 @@ import { PublishContentComponent } from './_dialogs/publish-content/publish-cont
     NavBarComponent,
     InfoBarComponent,
     DividerComponent,
-    PublishContentComponent
+    PublishContentComponent,
+    WordcloudComponent
   ],
   exports: [
     RoomJoinComponent,
@@ -116,6 +120,7 @@ import { PublishContentComponent } from './_dialogs/publish-content/publish-cont
     StepperComponent,
     StatisticChoiceComponent,
     StatisticTextComponent,
+    StatisticWordcloudComponent,
     RenderedTextComponent,
     HintComponent,
     StatisticContentComponent,
@@ -125,7 +130,8 @@ import { PublishContentComponent } from './_dialogs/publish-content/publish-cont
     NavBarComponent,
     InfoBarComponent,
     DividerComponent,
-    AnswerCountComponent
+    AnswerCountComponent,
+    WordcloudComponent
   ]
 })
 export class SharedModule {

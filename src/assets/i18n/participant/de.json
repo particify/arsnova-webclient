@@ -21,6 +21,8 @@
     "a11y-back": "Zeige die Vorderseite der Lernkarte.",
     "a11y-show-back": "Zeige die Rückseite der Lernkarte.",
     "a11y-next-content": "Navigiere zur nächsten Frage.",
+    "a11y-edit-keyword": "Schlagwort bearbeiten: {{keyword}}",
+    "a11y-delete-keyword": "Schlagwort löschen: {{keyword}}",
     "abstain": "Enthalten",
     "at-least-one": "Bitte wähle mindestens eine Antwort.",
     "please-answer": "Bitte gib eine Antwort ein.",
@@ -41,7 +43,13 @@
     "first-content": "Zum Anfang",
     "group-not-available": "Diese Sammlung ist nicht verfügbar",
     "state-changed": "Die Fragenliste wurde aktualisiert.",
-    "load": "Laden"
+    "load": "Laden",
+    "new-keyword": "Neues Schlagwort",
+    "add-keyword": "Schlagwort hinzufügen",
+    "edit-keyword": "Schlagwort bearbeiten",
+    "delete-keyword": "Schlagwort löschen",
+    "confirm-edit": "Bearbeitung übernehmen",
+    "discard-edit": "Bearbeitung verwerfen"
   },
   "comment-list": {
     "a11y-search-list": "Durchsuche die Kommentare",

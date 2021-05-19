@@ -21,6 +21,8 @@
     "a11y-back": "Shows the front of the flashcard.",
     "a11y-show-back": "Show the back of the flashcard.",
     "a11y-next-content": "Navigate to the next content.",
+    "a11y-edit-keyword": "Edit keyword: {{keyword}}",
+    "a11y-delete-keyword": "Delete keyword: {{keyword}}",
     "abstain": "Abstain",
     "at-least-one": "Please select at least one answer.",
     "please-answer": "Please enter an answer.",
@@ -41,7 +43,13 @@
     "first-content": "To the beginning",
     "group-not-available": "This collection is not available",
     "state-changed": "The content list has been updated.",
-    "load": "Load"
+    "load": "Load",
+    "new-keyword": "New keyword",
+    "add-keyword": "Add keyword",
+    "edit-keyword": "Edit keyword",
+    "delete-keyword": "Delete keyword",
+    "confirm-edit": "Confirm edit",
+    "discard-edit": "Discard edit"
   },
   "comment-list": {
     "a11y-search-list": "Search for comments",

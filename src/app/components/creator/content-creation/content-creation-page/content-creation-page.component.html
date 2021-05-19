@@ -126,6 +126,13 @@
                                          [abstentionsAllowed]="abstentionsAllowed"
                                          [createEvent]="createEventSubject.asObservable()" [editContent]="content">
               </app-content-sort-creation>
+              <app-content-wordcloud-creation (contentReset)="reset()" (contentSent)="saveContent($event)" (refId)="linkAttachments($event)"
+                                         *ngIf="selectedFormat.name === 'wordcloud'"
+                                         [contentBody]="questionInput.value"
+                                         [contentGroup]="group.value"
+                                         [abstentionsAllowed]="abstentionsAllowed"
+                                         [createEvent]="createEventSubject.asObservable()" [editContent]="content">
+              </app-content-wordcloud-creation>
               <div fxLayout="row" fxLayoutAlign="center" fxLayoutGap="1em" [ngClass]="{'top-space': isEditMode}">
                 <button (click)="showPreview()" attr.aria-label="{{ 'content.a11y-preview' | translate }}"
                         class="button-abort button-md" mat-raised-button>
@@ -159,6 +166,7 @@
   <div id="format-text">{{ 'content.a11y-format-text' | translate }}</div>
   <div id="format-slide">{{ 'content.a11y-format-slide' | translate }}</div>
   <div id="format-sort">{{ 'content.a11y-format-sort' | translate }}</div>
+  <div id="format-wordcloud">{{ 'content.a11y-format-wordcloud' | translate }}</div>
   <div id="choose-format">{{ 'content.a11y-choose-format' | translate:
     { format: 'content.format-' + selectedFormat.name | translate } }}</div>
 </div>

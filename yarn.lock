@@ -1743,6 +1743,11 @@
     "@types/source-list-map" "*"
     source-map "^0.6.1"
 
+"@types/wordcloud@^1.1.2":
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/@types/wordcloud/-/wordcloud-1.1.2.tgz#83b75d1919979132f7d1b326196ba3884b4caa24"
+  integrity sha512-90iXfWmxZWN/sTZ5Qgi1RbjVjtrHbtB3WsrM9Bg8L7kRNPw0ebAOwVthdwFTFAaI9qr11L5j55SjyAKhLqO/oQ==
+
 "@typescript-eslint/eslint-plugin@^4.17.0":
   version "4.17.0"
   resolved "https://registry.yarnpkg.com/@typescript-eslint/eslint-plugin/-/eslint-plugin-4.17.0.tgz#6f856eca4e6a52ce9cf127dfd349096ad936aa2d"
@@ -10577,6 +10582,11 @@ word-wrap@^1.2.3:
   version "1.2.3"
   resolved "https://registry.yarnpkg.com/word-wrap/-/word-wrap-1.2.3.tgz#610636f6b1f703891bd34771ccb17fb93b47079c"
   integrity sha512-Hz/mrNwitNRh/HUAtM/VT/5VH+ygD6DV7mYKZAtHOrbs8U7lvPS6xf7EJKMF0uW1KJCl0H701g3ZGus+muE5vQ==
+
+wordcloud@^1.2.2:
+  version "1.2.2"
+  resolved "https://registry.yarnpkg.com/wordcloud/-/wordcloud-1.2.2.tgz#2d32a99d8ac6a54d8b56915be1d41928f205854d"
+  integrity sha512-fUnDsGrHXou+49j1OeKaC7nOeZPx+sWjIet0L/j6eAcm0nXy+a+AuUs/iDAX4PLBg1Zc6wgXWXhoXdQsXRWAEw==
 
 worker-farm@^1.7.0:
   version "1.7.0"
