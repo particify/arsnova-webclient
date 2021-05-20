@@ -16,19 +16,14 @@ import { StatisticListComponent } from './statistic-list/statistic-list.componen
 import { RoomJoinComponent } from './room-join/room-join.component';
 import { RoomCreateComponent } from './_dialogs/room-create/room-create.component';
 import { UserBonusTokenComponent } from './_dialogs/user-bonus-token/user-bonus-token.component';
-import { RemindOfTokensComponent } from './_dialogs/remind-of-tokens/remind-of-tokens.component';
-import { StatisticHelpComponent } from './_dialogs/statistic-help/statistic-help.component';
 import { CommentComponent, DateFromNow } from './comment/comment.component';
 import { CreateCommentComponent } from './_dialogs/create-comment/create-comment.component';
 import { PresentCommentComponent } from './_dialogs/present-comment/present-comment.component';
 import { DialogActionButtonsComponent } from './dialog/dialog-action-buttons/dialog-action-buttons.component';
 import { MatRippleModule } from '@angular/material/core';
 import { ArsModule } from '../../../../projects/ars/src/lib/ars.module';
-import { CommentAnswerComponent } from './comment-answer/comment-answer.component';
 import { StatisticTextComponent } from './statistic-content/statistic-text/statistic-text.component';
 import { StatisticChoiceComponent } from './statistic-content/statistic-choice/statistic-choice.component';
-import { QrCodeComponent } from './_dialogs/qr-code/qr-code.component';
-import { QRCodeModule } from 'angularx-qrcode';
 import { LoadingIndicatorComponent } from './loading-indicator/loading-indicator.component';
 import { YesNoDialogComponent } from './_dialogs/yes-no-dialog/yes-no-dialog.component';
 import { InfoDialogComponent } from './_dialogs/info-dialog/info-dialog.component';
@@ -47,6 +42,7 @@ import { StatisticSortComponent } from './statistic-content/statistic-sort/stati
 import { NavBarComponent } from './bars/nav-bar/nav-bar.component';
 import { InfoBarComponent } from './bars/info-bar/info-bar.component';
 import { DividerComponent } from './divider/divider.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @NgModule({
   imports: [
@@ -55,7 +51,6 @@ import { DividerComponent } from './divider/divider.component';
     SharedRoutingModule,
     MatRippleModule,
     ArsModule,
-    QRCodeModule,
     CdkStepperModule,
     ExtensionPointModule,
     DragDropModule
@@ -75,14 +70,10 @@ import { DividerComponent } from './divider/divider.component';
     StatisticListComponent,
     RoomCreateComponent,
     UserBonusTokenComponent,
-    RemindOfTokensComponent,
-    StatisticHelpComponent,
     CommentComponent,
     CreateCommentComponent,
     PresentCommentComponent,
     DialogActionButtonsComponent,
-    CommentAnswerComponent,
-    QrCodeComponent,
     StatisticChoiceComponent,
     StatisticTextComponent,
     LoadingIndicatorComponent,

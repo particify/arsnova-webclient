@@ -1,18 +1,18 @@
 import { AfterContentInit, Component, HostListener, Inject, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
-import { LanguageService } from '../../../services/util/language.service';
-import { CommentService } from '../../../services/http/comment.service';
-import { Comment } from '../../../models/comment';
-import { AuthenticationService } from '../../../services/http/authentication.service';
-import { UserRole } from '../../../models/user-roles.enum';
-import { AdvancedSnackBarTypes, NotificationService } from '../../../services/util/notification.service';
-import { DialogService } from '../../../services/util/dialog.service';
-import { KeyboardUtils } from '../../../utils/keyboard';
-import { KeyboardKey } from '../../../utils/keyboard/keys';
-import { EventService } from '../../../services/util/event.service';
-import { AnnounceService } from '../../../services/util/announce.service';
-import { MarkdownFeatureset } from '../../../services/http/formatting.service';
+import { LanguageService } from '../../../../services/util/language.service';
+import { CommentService } from '../../../../services/http/comment.service';
+import { Comment } from '../../../../models/comment';
+import { AuthenticationService } from '../../../../services/http/authentication.service';
+import { UserRole } from '../../../../models/user-roles.enum';
+import { AdvancedSnackBarTypes, NotificationService } from '../../../../services/util/notification.service';
+import { DialogService } from '../../../../services/util/dialog.service';
+import { KeyboardUtils } from '../../../../utils/keyboard';
+import { KeyboardKey } from '../../../../utils/keyboard/keys';
+import { EventService } from '../../../../services/util/event.service';
+import { AnnounceService } from '../../../../services/util/announce.service';
+import { MarkdownFeatureset } from '../../../../services/http/formatting.service';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
