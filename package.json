@@ -33,6 +33,7 @@
     "angularx-qrcode": "^11.0.0",
     "backoff-rxjs": "^6.5.7",
     "chart.js": "^3.1.0",
+    "d3-cloud": "^1.2.5",
     "dayjs": "^1.10.0",
     "is-docker": "^2.1.0",
     "jwt-decode": "^3.1.0",
@@ -42,7 +43,6 @@
     "prismjs": "^1.23.0",
     "rxjs": "^6.5.5",
     "tslib": "^2.0.0",
-    "wordcloud": "^1.2.2",
     "zone.js": "~0.10.3"
   },
   "devDependencies": {

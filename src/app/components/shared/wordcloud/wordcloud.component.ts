@@ -1,97 +1,72 @@
-import { AfterViewInit, Component, ElementRef, Input, OnChanges, OnInit, ViewChild } from '@angular/core';
-import * as WordCloud from 'wordcloud';
+import { Component, ElementRef, Input, OnChanges, ViewChild } from '@angular/core';
+import * as Wordcloud from 'd3-cloud';
 
-const TARGET_FONT_SIZE = 120;
-const RENDER_WIDTH = 1600;
-const RENDER_HEIGHT = 900;
-
-export enum WordcloudMode {
-  DEFAULT,
-  PLAYFUL,
-  BORING
-}
-
-type WordCloudOptions = WordCloud.Options & {
-  rotationSteps? : number;
-  shrinkToFit? : boolean;
-};
+const TARGET_FONT_SIZE = 80;
+const RATIO = 16 / 9;
 
 @Component({
   selector: 'app-wordcloud',
-  template: `<canvas #wordcloud width="${RENDER_WIDTH}" height="${RENDER_HEIGHT}" fxFlexFill>`
+  templateUrl: './wordcloud.component.svg',
+  styles: ['svg text { transition: all .5s ease-in-out }']
 })
-export class WordcloudComponent implements AfterViewInit, OnChanges, OnInit {
+export class WordcloudComponent implements OnChanges {
   @Input() wordWeights: [string, number][];
-  @Input() mode = WordcloudMode.DEFAULT;
-  @ViewChild('wordcloud') elementRef: ElementRef<HTMLCanvasElement>;
+  @ViewChild('wordcloud') elementRef: ElementRef<SVGElement>;
 
-  presets: WordCloudOptions = {}
+  width: number;
+  height: number;
+  renderedWords = [];
+  fontFamily: string;
 
-  ngOnInit() {
+  private canvas = document.createElement('canvas');
+
+  constructor() {
     // Determine theme CSS so we can avoid to hard code styles here.
     const bodyStyle = getComputedStyle(document.body);
-    this.presets.weightFactor = weight => weight * TARGET_FONT_SIZE;
-    this.presets.shrinkToFit = true;
-    this.presets.backgroundColor = 'transparent';
-    switch(this.mode) {
-      case WordcloudMode.PLAYFUL:
-        // A cursive font is used and words can be rotated by any angle in the
-        // range of -90 to 90 degrees.
-        this.presets.fontFamily = 'cursive, ' + bodyStyle.fontFamily;
-        this.presets.rotateRatio = 1 / 3;
-        break;
-      case WordcloudMode.BORING:
-        // The default font is used and words are never rotated.
-        this.presets.fontFamily = bodyStyle.fontFamily;
-        this.presets.rotateRatio = 0;
-        break;
-      default:
-        // The default font is used and words can be rotated by exactly +90 or
-        // -90 degrees.
-        this.presets.fontFamily = bodyStyle.fontFamily;
-        this.presets.rotateRatio = 0.5;
-        this.presets.rotationSteps = 2;
-        break;
-    }
-  }
-
-  ngAfterViewInit() {
-    this.updateGridSize();
+    this.fontFamily = bodyStyle.fontFamily;
   }
 
   ngOnChanges() {
-    if (this.elementRef) {
-      this.updateWordcloud();
-    }
+    this.updateWordcloud();
   }
 
   updateWordcloud() {
-    if (!this.presets.gridSize) {
-      // ngAfterViewInit might not have set the grid size correctly.
-      this.updateGridSize();
+    if (!this.elementRef) {
+      return;
     }
-    const options: WordCloud.Options & { rotationSteps? : number } = {
-      list: this.normalizedWeights(),
-      ...this.presets
-    }
-    if (this.mode === WordcloudMode.DEFAULT) {
-    }
-    WordCloud(this.elementRef.nativeElement, options);
-  }
-
-  normalizedWeights(): [string, number][] {
-    const maxWeight = this.wordWeights.map(w => w[1]).reduce((a, b) => Math.max(a, b));
-    return this.wordWeights.map(w => [w[0], w[1] / maxWeight]);
-  }
-
-  scaleFactor(): number {
-    const maxWeight = this.wordWeights.map(w => w[1]).reduce((a, b) => Math.max(a, b));
-    return TARGET_FONT_SIZE / maxWeight;
-  }
-
-  updateGridSize() {
     const elementStyle = getComputedStyle(this.elementRef.nativeElement);
-    const renderingRatio = RENDER_WIDTH / parseInt(elementStyle.width);
-    this.presets.gridSize = 20 * renderingRatio;
+    this.width = parseInt(elementStyle.width);
+    this.height = this.width / RATIO;
+
+    const scaleFactor = this.scaleFactor();
+    const max = this.max();
+    Wordcloud()
+        .size([this.width, this.height])
+        .canvas(this.canvas)
+        .words(this.wordWeights.map(d => ({ text: d[0], size: d[1] })))
+        .padding(4)
+        .rotate(d => (d.size === max) ? 0 : ~~(Math.random() * 2) * 90)
+        .font(this.fontFamily)
+        .fontSize(d => d.size * scaleFactor )
+        .on('end', d => this.renderedWords = d )
+        .start();
+  }
+
+  wordIdentity(index: number, word: any) {
+    return word?.text;
+  }
+
+  color(i: number) {
+    // TODO: Move color palette to theme service.
+    const colors = ['#027db9', '#eb0054', '#4d8076', '#9f6b3f', '#8e79ab', '#e64a19', '#787b1d'];
+    return colors[i % colors.length];
+  }
+
+  private max() {
+    return this.wordWeights.map(w => w[1]).reduce((a, b) => Math.max(a, b));
+  }
+
+  private scaleFactor(): number {
+    return TARGET_FONT_SIZE / this.max();
   }
 }
