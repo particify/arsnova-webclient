@@ -54,7 +54,6 @@ export class StatisticChoiceComponent extends StatisticContentBaseComponent impl
   surface: string;
   green: string;
   grey: string;
-  blue: string;
 
   constructor(protected route: ActivatedRoute,
               protected contentService: ContentService,
@@ -161,19 +160,18 @@ export class StatisticChoiceComponent extends StatisticContentBaseComponent impl
       this.surface = currentTheme.get('surface').color;
       this.green = currentTheme.get('green').color;
       this.grey = currentTheme.get('grey').color;
-      this.blue = currentTheme.get('blue').color;
-
+      const barColors = this.themeService.getBarColors();
       for (let i = 0; i < length; i++) {
         this.answerList[i] = new AnswerList(null, null);
         this.labels[i] = this.label.charAt(i);
         this.answerList[i].label = this.labels[i];
         this.answerList[i].answer = this.content.options[i].label;
-        this.colors[i] = this.blue;
+        this.colors[i] = barColors[i % barColors.length].color;
         if (!this.survey) {
           if (this.checkIfCorrect(i)) {
             this.indicationColors[i] = this.green;
           } else {
-            this.indicationColors[i] = this.blue;
+            this.indicationColors[i] = this.grey;
           }
         }
       }
