@@ -565,6 +565,7 @@ button {
 // Card
 
 .mat-card {
+  width: calc(92vw - 2em);
   max-width: 800px;
   color: var(--on-surface);
   background: var(--surface);

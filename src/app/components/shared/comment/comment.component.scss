@@ -1,8 +1,9 @@
 @import '../../../../variables';
 
 #comment-card {
+  width: calc(92vw - 2em);
   margin-bottom: 3%;
-  padding: 1.5% 1.5% 3% 3%;
+  padding: 1.5% 1em 1em;
   transition: background-color 0.5s linear;
 }
 
