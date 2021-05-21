@@ -16,7 +16,7 @@ import { ContentPresentationComponent } from './content-presentation/content-pre
 import { AccessComponent } from './settings/access/access.component';
 import { BonusTokenComponent } from './settings/bonus-token/bonus-token.component';
 import { CommentSettingsComponent } from './settings/comment-settings/comment-settings.component';
-import { ContentGroupCreationComponent } from '../shared/_dialogs/content-group-creation/content-group-creation.component';
+import { ContentGroupCreationComponent } from './_dialogs/content-group-creation/content-group-creation.component';
 import { SettingsComponent } from './settings/settings.component';
 import { SettingsPageComponent } from './settings-page/settings-page.component';
 import { LooseContentComponent } from './content-list/loose-content/loose-content.component';
@@ -32,6 +32,12 @@ import { ContentSortCreationComponent } from './content-creation/content-sort-cr
 import { ContentFlashcardCreationComponent } from './content-creation/content-flashcard-creation/content-flashcard-creation.component';
 import { ExportComponent } from './_dialogs/export/export.component';
 import { DialogService } from '../../services/util/dialog.service';
+import { CommentAnswerComponent } from './_dialogs/comment-answer/comment-answer.component';
+import { QrCodeComponent } from './_dialogs/qr-code/qr-code.component';
+import { RemindOfTokensComponent } from './_dialogs/remind-of-tokens/remind-of-tokens.component';
+import { StatisticHelpComponent } from './_dialogs/statistic-help/statistic-help.component';
+import { ArsModule } from '../../../../projects/ars/src/lib/ars.module';
+import { QRCodeModule } from 'angularx-qrcode';
 
 @NgModule({
   imports: [
@@ -52,7 +58,9 @@ import { DialogService } from '../../services/util/dialog.service';
       isolate: true
     }),
     CdkStepperModule,
-    ExtensionPointModule
+    ExtensionPointModule,
+    ArsModule,
+    QRCodeModule
   ],
   declarations: [
     ContentChoiceCreationComponent,
@@ -75,7 +83,11 @@ import { DialogService } from '../../services/util/dialog.service';
     PreviewComponent,
     ContentSortCreationComponent,
     ContentFlashcardCreationComponent,
-    ExportComponent
+    ExportComponent,
+    CommentAnswerComponent,
+    QrCodeComponent,
+    RemindOfTokensComponent,
+    StatisticHelpComponent
   ],
   providers: [
     { provide: TRANSLATION_MODULE_NAME, useValue: 'creator' },
