@@ -25,11 +25,13 @@ export class ContentWordcloudComponent extends ContentParticipantBaseComponent i
   @Input() sendEvent: EventEmitter<string>;
   @Output() answerChanged = new EventEmitter<MultipleTextsAnswer>();
 
+  readonly maxLength = 25;
+
   givenAnswer: MultipleTextsAnswer;
 
   words: string[] = [];
-  editIndex = -1;
-  wordLimitReached = false;
+  answerCount: number;
+  currentInputIndex: number;
 
   constructor(
     protected authenticationService: AuthenticationService,
@@ -37,7 +39,7 @@ export class ContentWordcloudComponent extends ContentParticipantBaseComponent i
     protected notificationService: NotificationService,
     protected translateService: TranslateService,
     protected langService: LanguageService,
-    protected eventService: EventService,
+    public eventService: EventService,
     protected route: ActivatedRoute,
     protected globalStorageService: GlobalStorageService,
     protected router: Router
@@ -50,6 +52,8 @@ export class ContentWordcloudComponent extends ContentParticipantBaseComponent i
       this.givenAnswer = this.answer;
       this.words = this.answer.texts;
     }
+    this.answerCount = this.content.maxAnswers;
+    this.words = new Array<string>(this.answerCount).fill('');
     this.isLoading = false;
   }
 
@@ -60,30 +64,13 @@ export class ContentWordcloudComponent extends ContentParticipantBaseComponent i
     }
   }
 
-  addWord(input: HTMLInputElement) {
-    const word = input.value.trim();
-    if (word.length > 0) {
-      if (this.words.indexOf(word) === -1) {
-        this.words.push(word);
-      }
-      input.value = '';
-    }
-    this.wordLimitReached = this.words.length >= this.content.maxAnswers;
-  }
-
-  deleteWord(index: number) {
-    this.words = this.words.filter((w, i) => i !== index);
-    this.wordLimitReached = false;
-    this.disableEditMode();
-  }
-
-  updateWord(index: number, word: string) {
-    this.words[index] = word;
-    this.disableEditMode();
+  trackByIndex(index: number) {
+    return index;
   }
 
   submitAnswer() {
-    if (this.words.length === 0) {
+    const words = this.words.filter(w => w);
+    if (words.length === 0) {
       this.translateService.get('answer.please-answer').subscribe(message => {
         this.notificationService.showAdvanced(message, AdvancedSnackBarTypes.WARNING);
       });
@@ -94,11 +81,11 @@ export class ContentWordcloudComponent extends ContentParticipantBaseComponent i
       revision: null,
       contentId: this.content.id,
       round: this.content.state.round,
-      texts: this.words,
+      texts: words,
       creationTimestamp: null,
       format: ContentType.WORDCLOUD
     }).subscribe(answer => {
-      this.createAnswer(this.words);
+      this.createAnswer(words);
       this.translateService.get('answer.sent').subscribe(msg => {
         this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.SUCCESS);
       });
@@ -120,13 +107,5 @@ export class ContentWordcloudComponent extends ContentParticipantBaseComponent i
       this.createAnswer();
       this.sendStatusToParent(answer);
     });
-  }
-
-  enableEditMode(index: number) {
-    this.editIndex = index;
-  }
-
-  disableEditMode() {
-    this.editIndex = -1;
   }
 }

@@ -1,59 +1,10 @@
-<div fxLayout="column" fxLayoutAlign="space-between" fxLayoutGap="10px">
-  <mat-card *ngIf="words?.length > 0" class="word-container">
-    <mat-list>
-      <mat-list-item *ngFor="let word of words; let i = index" class="bottom-border">
-        <div fxLayout="row" fxLayoutAlign="start center" fxFlexFill>
-          <ng-container *ngIf="editIndex !== i; else editing">
-            <p class="answer-label" fxFlex>{{ word }}</p>
-            <button *ngIf="!givenAnswer && editIndex === -1" mat-icon-button type="button" fxFlex="nogrow" (click)="enableEditMode(i, answer)"
-                    attr.aria-label="{{ 'content.a11y-edit-keyword' | translate: { keyword: word } }}"
-                    matTooltip="{{ 'answer.edit-keyword' | translate }}">
-              <mat-icon class="editIcon">edit</mat-icon>
-            </button>
-            <button *ngIf="!givenAnswer && editIndex === -1" mat-icon-button type="button" fxFlex="nogrow" class="delete"
-                    attr.aria-label="{{ 'content.a11y-delete-keyword' | translate: { keyword: word } }}"
-                    (click)="deleteWord(i)"
-                    matTooltip="{{ 'answer.delete-keyword' | translate }}">
-              <mat-icon>delete</mat-icon>
-            </button>
-          </ng-container>
-
-          <ng-template #editing>
-            <mat-form-field fxFlex fxFlexAlign="stretch" class="editInput activeInput">
-              <mat-label></mat-label>
-              <input #editedWord name="answerEdit" matInput [value]="word" placeholder="{{ 'answer.edit-keyword' | translate }}"
-                     (focus)="eventService.makeFocusOnInputTrue()"
-                     (blur)="eventService.makeFocusOnInputFalse()">
-            </mat-form-field>
-            <button mat-icon-button type="button" fxFlex="nogrow" (click)="updateWord(i, editedWord.value)"
-                    matTooltip="{{ 'answer.confirm-edit' | translate }}">
-              <mat-icon class="confirmIcon">done</mat-icon>
-            </button>
-            <button mat-icon-button type="button" fxFlex="nogrow" (click)="disableEditMode()"
-                    matTooltip="{{ 'answer.discard-edit' | translate }}">
-              <mat-icon class="confirmIcon">clear</mat-icon>
-            </button>
-          </ng-template>
-        </div>
-      </mat-list-item>
-    </mat-list>
-  </mat-card>
-
-  <div *ngIf="!givenAnswer" fxLayout="row" fxLayoutAlign="center" fxLayoutGap="20px">
-    <form fxFlexFill>
-      <mat-form-field class="answer-input" appearance="fill">
-        <mat-label>{{ 'answer.new-keyword' | translate }}</mat-label>
-        <input matInput #newWord
-                [disabled]="wordLimitReached"
-                (focus)="eventService.makeFocusOnInputTrue()"
-                (blur)="eventService.makeFocusOnInputFalse()">
-        <button mat-icon-button matSuffix tabindex="-1" class="add-button"
-                matTooltip="{{ 'answer.add-keyword' | translate }}"
-                (click)="addWord(newWord)"
-                [disabled]="wordLimitReached">
-          <mat-icon class="add-icon">add_circle</mat-icon>
-        </button>
-      </mat-form-field>
-    </form>
-  </div>
+<div fxLayout="column" fxLayoutGap="0.5em">
+  <mat-form-field *ngFor="let word of words; let i = index; trackBy: trackByIndex" appearance="outline" class="no-field-hint">
+    <mat-label>{{ ('answer.word' | translate) + ' ' + (i + 1) }}</mat-label>
+    <input matInput [(ngModel)]="words[i]" placeholder="{{ 'answer.enter-word' | translate }}"
+           [disabled]="!!givenAnswer" [maxLength]="maxLength"
+           (focus)="eventService.makeFocusOnInputTrue(); currentInputIndex = i"
+           (blur)="eventService.makeFocusOnInputFalse(); currentInputIndex = null">
+    <mat-hint matSuffix *ngIf="currentInputIndex === i">{{word.length + ' / ' + maxLength}}</mat-hint>
+  </mat-form-field>
 </div>
