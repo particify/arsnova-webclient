@@ -1,7 +1,8 @@
 import { Component, ElementRef, Input, OnChanges, ViewChild } from '@angular/core';
 import * as Wordcloud from 'd3-cloud';
 
-const TARGET_FONT_SIZE = 80;
+const TARGET_FONT_SIZE = 160;
+const RENDER_WIDTH = 1600;
 const RATIO = 16 / 9;
 
 @Component({
@@ -13,8 +14,8 @@ export class WordcloudComponent implements OnChanges {
   @Input() wordWeights: [string, number][];
   @ViewChild('wordcloud') elementRef: ElementRef<SVGElement>;
 
-  width: number;
-  height: number;
+  width: number = RENDER_WIDTH;
+  height: number = RENDER_WIDTH / RATIO;
   renderedWords = [];
   fontFamily: string;
 
@@ -31,13 +32,6 @@ export class WordcloudComponent implements OnChanges {
   }
 
   updateWordcloud() {
-    if (!this.elementRef) {
-      return;
-    }
-    const elementStyle = getComputedStyle(this.elementRef.nativeElement);
-    this.width = parseInt(elementStyle.width);
-    this.height = this.width / RATIO;
-
     const scaleFactor = this.scaleFactor();
     const max = this.max();
     Wordcloud()
@@ -47,7 +41,7 @@ export class WordcloudComponent implements OnChanges {
         .padding(4)
         .rotate(d => (d.size === max) ? 0 : ~~(Math.random() * 2) * 90)
         .font(this.fontFamily)
-        .fontSize(d => d.size * scaleFactor )
+        .fontSize(d => d.size * scaleFactor)
         .on('end', d => this.renderedWords = d )
         .start();
   }
@@ -63,7 +57,7 @@ export class WordcloudComponent implements OnChanges {
   }
 
   private max() {
-    return this.wordWeights.map(w => w[1]).reduce((a, b) => Math.max(a, b));
+    return this.wordWeights.map(w => w[1]).reduce((a, b) => Math.max(a, b), 0);
   }
 
   private scaleFactor(): number {

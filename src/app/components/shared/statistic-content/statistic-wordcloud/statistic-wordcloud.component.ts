@@ -46,6 +46,6 @@ export class StatisticWordcloudComponent extends StatisticContentBaseComponent i
       return;
     }
     this.wordWeights = stats.roundStatistics[0].independentCounts.map((count, i) => [texts[i], count]);
-    this.updateCounter(this.wordWeights.map(w => w[1]));
+    this.updateCounter([stats.roundStatistics[0].answerCount]);
   }
 }

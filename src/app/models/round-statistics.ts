@@ -9,6 +9,7 @@ export class RoundStatistics {
   independentCounts: number[];
   combinatedCounts: Combination[];
   abstentionCount: number;
+  answerCount: number;
 }
 
 export class TextRoundStatistics extends RoundStatistics {
