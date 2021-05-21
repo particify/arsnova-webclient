@@ -311,7 +311,7 @@
     "format-sort-description": "Die Teilnehmenden könnnen die Reihenfolge der Antworten wählen.",
     "format-flashcard-description": "Mit Lernkarten können die Teilnehmenden Inhalte mit Vorder- und Rückseite lernen.",
     "format-wordcloud": "Wortwolke",
-    "format-wordcloud-description": "Die Teilnehmenden können mit einem oder mehren Schlagwörtern antworten. Die relativen Häufigkeiten werden in Form einer Wortwolke visualisiert.",
+    "format-wordcloud-description": "Die Teilnehmenden können mit Schlagwörtern antworten. Die relativen Häufigkeiten werden in Form einer Wortwolke visualisiert.",
     "multiple-answers-allowed": "Mehrfachauswahl für Antworten erlauben",
     "no-correct-answer": "Keine richtigen Antworten festlegen",
     "format-not-supported": "Dieses Format wird derzeit nicht unterstützt.",
@@ -320,8 +320,8 @@
     "flashcard-back": "Rückseite",
     "group-settings": "Einstellungen",
     "import-successful": "Deine Fragen wurden importiert.",
-    "max-keywords": "Schlagwortlimit pro Antwort",
-    "max-keywords-out-of-range": "Schlagwortlimit muss zwischen {{min}} und {{max}} liegen."
+    "max-keywords": "Schlagworte pro Antwort",
+    "max-keywords-out-of-range": "Anzahl der Worte muss zwischen {{min}} und {{max}} liegen."
   },
   "survey": {
     "a11y-message": "Du befindest dich jetzt bei der Live-Umfrage. Drücke die Enter-Taste, um Informationen zu Tastenkombinationen zu erhalten oder rufe die Ansage später mit der Escape-Taste auf.",

@@ -21,7 +21,7 @@ export class ContentWordcloudCreationComponent extends ContentCreationComponent 
 
   @Input() format: ContentType;
 
-  maxAnswers = 5;
+  maxAnswers = 3;
 
   constructor(
     public eventService: EventService,
@@ -59,7 +59,7 @@ export class ContentWordcloudCreationComponent extends ContentCreationComponent 
       (this.content as ContentWordcloud).maxAnswers = this.maxAnswers;
       return true;
     } else {
-      const msg = this.translationService.instant('content.wordcloud-max-keywords-out-of-range', { min: 1, max: MAX_KEYWORDS });
+      const msg = this.translationService.instant('content.max-keywords-out-of-range', { min: 1, max: MAX_KEYWORDS });
       this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
       return false;
     }

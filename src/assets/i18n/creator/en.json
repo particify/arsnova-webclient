@@ -311,7 +311,7 @@
     "format-sort-description": "Participants can answer the question by ordering the answers.",
     "format-flashcard-description": "With flashcards participants can learn with front and back.",
     "format-wordcloud": "Word cloud",
-    "format-wordcloud-description": "Participants can answer with one or more keywords. The relative frequencies are visualized in the form of a word cloud.",
+    "format-wordcloud-description": "Participants can answer with keywords. The relative frequencies are visualized in the form of a word cloud.",
     "multiple-answers-allowed": "Allow to select multiple answers",
     "no-correct-answer": "Do not set correct answers",
     "format-not-supported": "This format is currently not supported.",
@@ -320,8 +320,8 @@
     "flashcard-back": "Back",
     "group-settings": "Settings",
     "import-successful": "Your contents has been imported.",
-    "max-keywords": "Keyword limit per answer",
-    "max-keywords-out-of-range": "Keyword limit must be between {{min}} and {{max}}."
+    "max-keywords": "Keywords per answer",
+    "max-keywords-out-of-range": "Number of words must be between {{min}} and {{max}}."
   },
   "survey": {
     "a11y-message": "You are now in live survey mode. Press the Enter key to get information about key combinations or use the Escape key to call up the announcement later.",
