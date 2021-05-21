@@ -9,6 +9,7 @@ export class ThemeService {
   private themeName: string;
   private activeTheme = new BehaviorSubject(null);
   private themes: Theme[] = [];
+  private barColors = ['blue', 'yellow', 'teal', 'red', 'purple', 'brown', 'green', 'pink'];
 
   constructor(private globalStorageService: GlobalStorageService) {
     let currentTheme = this.globalStorageService.getItem(STORAGE_KEYS.THEME);
@@ -41,6 +42,7 @@ export class ThemeService {
 
   public activate(name) {
     this.activeTheme.next(name);
+    this.themeName = name;
     this.globalStorageService.setItem(STORAGE_KEYS.THEME, name);
   }
 
@@ -56,4 +58,14 @@ export class ThemeService {
     }
     return null;
   }
+
+  getColorArray(names: string[]) {
+    const currentTheme = this.getThemeByKey(this.themeName);
+    return names.map(c => currentTheme.get('color-' + c));
+  }
+
+  public getBarColors() {
+    return this.getColorArray(this.barColors);
+  }
+
 }
