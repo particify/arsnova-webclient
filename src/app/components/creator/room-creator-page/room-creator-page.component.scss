@@ -96,3 +96,9 @@
 .question-button-div {
   margin: 5% 0;
 }
+
+#presentation-button {
+  @media(max-width: 900px) {
+    display: none;
+  }
+}

@@ -63,7 +63,7 @@ export class PresentCommentComponent implements OnInit {
   }
 
   updateFontSize(): void {
-    document.getElementById('comment').style.fontSize = (this.currentZoom * 2.5) + 'em';
+    document.getElementById('comment').style.fontSize = 'calc(' + (this.currentZoom * 18) + 'px + 1.5vw)';
     this.eventService.broadcast('CommentZoomChanged', this.currentZoom * 100);
   }
 

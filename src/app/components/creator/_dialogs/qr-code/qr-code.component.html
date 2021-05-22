@@ -17,9 +17,10 @@
         <mat-icon>link</mat-icon>
         {{ 'dialog.copy-url' | translate}}
       </button>
+      <mat-divider vertical style="margin: 0 2em 0 5em"></mat-divider>
       <qrcode fxLayout="column" fxLayoutAlign="center center" [qrdata]="qrUrl"
               [width]="qrWidth" [colorDark]="fgColor" [colorLight]="bgColor" [errorCorrectionLevel]="'M'"
-              [margin]="3"></qrcode>
+              [margin]="4"></qrcode>
     </div>
   </div>
 </ars-screen>

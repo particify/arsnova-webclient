@@ -11,6 +11,7 @@ app-comment-list {
   height: calc(100vh - 2em - 72px);
   overflow: auto;
   width: calc(40vw - 4em);
+  max-width: 800px;
   padding: 2em 2em 72px;
   margin-bottom: 2em;
 }

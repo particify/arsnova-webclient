@@ -90,7 +90,7 @@ export class ContentPresentationComponent implements OnInit {
 
   initScale() {
     if (this.isPresentation) {
-      const scale = Math.min(innerWidth, 2100)  / 960;
+      const scale = Math.max((Math.min(innerWidth, 2100)  / 960), 1);
       document.getElementById('stepper-container').style.transform = `scale(${scale})`;
       document.getElementById('stepper-container').style.left = `calc(50vw - calc(305px * ${scale})`;
       document.getElementById('stepper-container').style.top = `calc(4vw - calc(1em * ${scale}))`;
