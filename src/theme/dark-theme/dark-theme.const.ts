@@ -50,8 +50,8 @@ export const dark_meta = {
       de: 'Dark Mode'
     },
     description: {
-      en: 'Dark, battery-saving background',
-      de: 'Dunkler akkuschonender Hintergrund'
+      en: 'Optimized for low-light settings',
+      de: 'Für dunkle Lichtverhältnisse optimiert'
     }
   },
   order: 3,
