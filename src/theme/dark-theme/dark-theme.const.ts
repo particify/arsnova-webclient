@@ -39,7 +39,16 @@ export const dark = {
   '--yellow-light': '#fff9c4',
   '--blue': '#3f51b5',
   '--grey': '#BDBDBD',
-  '--black': '#000000'
+  '--black': '#000000',
+
+  '--color-blue': '#027DB9',
+  '--color-yellow': '#ffca28',
+  '--color-teal': '#4D8076',
+  '--color-red': '#e64a19',
+  '--color-purple': '#8E79AB',
+  '--color-brown': '#9f6b3f',
+  '--color-green': '#787B1D',
+  '--color-pink': '#EB0054',
 };
 
 export const dark_meta = {
