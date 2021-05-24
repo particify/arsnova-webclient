@@ -47,7 +47,6 @@ export class StatisticSortComponent extends StatisticContentBaseComponent implem
   surface: string;
   green: string;
   grey: string;
-  blue: string;
 
   constructor(protected contentService: ContentService,
               protected route: ActivatedRoute,
@@ -162,10 +161,11 @@ export class StatisticSortComponent extends StatisticContentBaseComponent implem
   }
 
   setColors() {
+    const barColors = this.themeService.getBarColors();
     const length = this.answerIndexes.length;
     for (let i = 0; i < length; i++) {
-      this.colors[i] = this.blue;
-      this.indicationColors[i] = this.checkIfCorrect(i) ? this.green : this.blue;
+      this.colors[i] = barColors[i % barColors.length].color;
+      this.indicationColors[i] = this.checkIfCorrect(i) ? this.green : this.grey;
 
     }
     if (this.content.abstentionsAllowed) {
@@ -181,7 +181,6 @@ export class StatisticSortComponent extends StatisticContentBaseComponent implem
       this.surface = currentTheme.get('surface').color;
       this.green = currentTheme.get('green').color;
       this.grey = currentTheme.get('grey').color;
-      this.blue = currentTheme.get('blue').color;
       this.setColors();
     });
   }
