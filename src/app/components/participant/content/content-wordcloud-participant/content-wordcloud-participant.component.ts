@@ -30,7 +30,6 @@ export class ContentWordcloudComponent extends ContentParticipantBaseComponent i
   givenAnswer: MultipleTextsAnswer;
 
   words: string[] = [];
-  answerCount: number;
   currentInputIndex: number;
 
   constructor(
@@ -51,9 +50,9 @@ export class ContentWordcloudComponent extends ContentParticipantBaseComponent i
     if (this.answer) {
       this.givenAnswer = this.answer;
       this.words = this.answer.texts;
+    } else {
+      this.words = new Array<string>(this.content.maxAnswers).fill('');
     }
-    this.answerCount = this.content.maxAnswers;
-    this.words = new Array<string>(this.answerCount).fill('');
     this.isLoading = false;
   }
 
