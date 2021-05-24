@@ -59,8 +59,8 @@ export const arsnova_meta = {
       de: 'ARSnova'
     },
     description: {
-      en: 'Optimized for presentation in lecture halls',
-      de: 'Für die Präsentation im Hörsaal optimiert'
+      en: 'Optimized for presentation',
+      de: 'Für die Präsentation optimiert'
     }
   },
   order: 1,
