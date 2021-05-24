@@ -540,6 +540,7 @@
     "content-group-created": "Your question was added to new collection.",
     "content-group-already-exists": "This collection already exists.",
     "copy-url": "Copy address",
+    "url-copied": "Room link was copied to the clipboard.",
     "delete": "Delete",
     "remove": "Remove",
     "statistic-good": "Good",

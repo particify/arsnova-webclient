@@ -540,6 +540,7 @@
     "content-group-created": "Deine Frage wurde der neuer Sammlung hinzugefügt.",
     "content-group-already-exists": "Diese Sammlung existiert bereits.",
     "copy-url": "Adresse kopieren",
+    "url-copied": "Direktlink wurde in die Zwischenablage kopiert.",
     "delete": "Löschen",
     "remove": "Entfernen",
     "statistic-good": "Gut",
