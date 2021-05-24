@@ -76,7 +76,7 @@ export class QrCodeComponent implements OnInit, OnDestroy {
     selBox.select();
     document.execCommand('copy');
     document.body.removeChild(selBox);
-    this.translateService.get('header.room-id-copied').subscribe(msg => {
+    this.translateService.get('dialog.url-copied').subscribe(msg => {
       this.notification.showAdvanced(msg, AdvancedSnackBarTypes.SUCCESS);
     });
   }
