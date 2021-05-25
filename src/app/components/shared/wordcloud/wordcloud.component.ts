@@ -2,8 +2,8 @@ import { Component, ElementRef, Input, OnChanges, ViewChild } from '@angular/cor
 import * as Wordcloud from 'd3-cloud';
 import { Subscription, timer } from 'rxjs';
 
-const TARGET_FONT_SIZE = 160;
-const RENDER_WIDTH = 1600;
+const TARGET_FONT_SIZE = 80;
+const RENDER_WIDTH = 800;
 const RATIO = 16 / 9;
 const ZOOM_EFFECT = 'zoom-effect';
 
@@ -21,7 +21,9 @@ export class WordcloudComponent implements OnChanges {
 
   width: number = RENDER_WIDTH;
   height: number = RENDER_WIDTH / RATIO;
-  scale = 1;
+  scale = 1.2;
+  scaleOffsetX = 0;
+  scaleOffsetY = 0;
   renderedWords = [];
   fontFamily: string;
 
@@ -52,7 +54,7 @@ export class WordcloudComponent implements OnChanges {
         .font(this.fontFamily)
         .fontSize(d => d.size * scaleFactor)
         .on('end', d => {
-          this.determineScaling(d);
+          this.determineScaling();
           return this.renderedWords = d;
         })
         .start();
@@ -72,30 +74,21 @@ export class WordcloudComponent implements OnChanges {
    * it just fits into the view port. The scale factor is chosen between 0.5 and
    * 2. The word cloud is not moved, so there might still be margins left if it
    * is not centered. */
-  private determineScaling(data: any) {
-    let minX = 0;
-    let maxX = 0;
-    let minY = 0;
-    let maxY = 0;
-    for (const word of data) {
-      minX = Math.min(minX, word.x0);
-      maxX = Math.max(maxX, word.x1);
-      minY = Math.min(minY, word.y0);
-      maxY = Math.max(maxY, word.y1);
-    }
-    const width = maxX - minX;
-    const height = maxY - minY;
+  private determineScaling() {
     this.timerSubscription?.unsubscribe();
     this.elementRef?.nativeElement.classList.remove(ZOOM_EFFECT);
     this.timerSubscription = timer(500).subscribe(() => {
       this.elementRef.nativeElement.classList.add(ZOOM_EFFECT);
       const boundaries = this.elementRef.nativeElement.getBBox();
-      const marginX = Math.min(this.width / 2 + boundaries.x, this.width / 2 - boundaries.x - boundaries.width);
-      const marginY = Math.min(this.height / 2 + boundaries.y, this.height / 2 - boundaries.y - boundaries.height);
-      const marginOffset = -5;
-      const scaleX = (width + marginX + marginOffset) / width;
-      const scaleY = (height + marginY + marginOffset) / height;
-      this.scale = Math.max(Math.min(scaleX, scaleY, 2), 0.5);
+      const marginX0 = this.width / 2 + boundaries.x;
+      const marginX1 = this.width / 2 - boundaries.x - boundaries.width;
+      const marginY0 = this.height / 2 + boundaries.y;
+      const marginY1 = this.height / 2 - boundaries.y - boundaries.height;
+      this.scaleOffsetX = (marginX1 - marginX0) / 2;
+      this.scaleOffsetY = (marginY1 - marginY0) / 2;
+      const scaleX = this.width / boundaries.width;
+      const scaleY = this.height / boundaries.height;
+      this.scale = Math.max(Math.min(scaleX, scaleY, 4), 0.5);
     });
   }
 
