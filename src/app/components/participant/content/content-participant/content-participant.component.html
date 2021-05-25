@@ -48,7 +48,7 @@
                 <div fxLayoutAlign="center" fxLayoutGap="10px">
                   <button tabindex="{{alreadySent ? '-1' : '0'}}" mat-raised-button *ngIf="content.abstentionsAllowed"
                           class="button-abort"
-                          [ngClass]="{'disabled' : alreadySent}" (click)="submitAnswerEvent($event, 'abstention')" aria-labelledby="abstain">
+                          [ngClass]="{'disabled' : alreadySent}" type="button" (click)="submitAnswerEvent($event, 'abstention')" aria-labelledby="abstain">
                     {{ 'answer.abstain' | translate }}</button>
                   <button tabindex="{{alreadySent ? '-1' : '0'}}" mat-raised-button class="button-primary"
                           [ngClass]="{'disabled' : alreadySent}" type="submit"
