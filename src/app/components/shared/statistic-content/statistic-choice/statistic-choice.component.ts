@@ -169,7 +169,7 @@ export class StatisticChoiceComponent extends StatisticContentBaseComponent impl
         this.colors[i] = barColors[i % barColors.length].color;
         if (!this.survey) {
           if (this.checkIfCorrect(i)) {
-            this.indicationColors[i] = this.green;
+            this.indicationColors[i] = this.content.correctOptionIndexes?.length === 1 ? this.colors[i] : this.green;
           } else {
             this.indicationColors[i] = this.grey;
           }
