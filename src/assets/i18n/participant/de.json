@@ -42,8 +42,7 @@
     "group-not-available": "Diese Sammlung ist nicht verfügbar",
     "state-changed": "Die Fragenliste wurde aktualisiert.",
     "load": "Laden",
-    "word": "Wort",
-    "enter-word": "Gib ein Schlagwort ein"
+    "word": "Schlagwort"
   },
   "comment-list": {
     "a11y-search-list": "Durchsuche die Kommentare",

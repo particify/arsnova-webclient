@@ -321,7 +321,7 @@
     "group-settings": "Einstellungen",
     "import-successful": "Deine Fragen wurden importiert.",
     "max-keywords": "Schlagworte pro Antwort",
-    "max-keywords-out-of-range": "Anzahl der Worte muss zwischen {{min}} und {{max}} liegen."
+    "max-keywords-out-of-range": "Schlagwortanzahl muss zwischen {{min}} und {{max}} liegen."
   },
   "survey": {
     "a11y-message": "Du befindest dich jetzt bei der Live-Umfrage. Drücke die Enter-Taste, um Informationen zu Tastenkombinationen zu erhalten oder rufe die Ansage später mit der Escape-Taste auf.",

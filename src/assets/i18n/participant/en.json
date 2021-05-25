@@ -42,8 +42,7 @@
     "group-not-available": "This collection is not available",
     "state-changed": "The content list has been updated.",
     "load": "Load",
-    "word": "Word",
-    "enter-word": "Enter a word"
+    "word": "Keyword"
   },
   "comment-list": {
     "a11y-search-list": "Search for comments",
