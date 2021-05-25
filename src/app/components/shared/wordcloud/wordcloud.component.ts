@@ -2,7 +2,7 @@ import { Component, ElementRef, Input, OnChanges, ViewChild } from '@angular/cor
 import * as Wordcloud from 'd3-cloud';
 import { Subscription, timer } from 'rxjs';
 
-const TARGET_FONT_SIZE = 80;
+const TARGET_FONT_SIZE = 60;
 const RENDER_WIDTH = 800;
 const RATIO = 16 / 9;
 const ZOOM_EFFECT = 'zoom-effect';
@@ -43,7 +43,6 @@ export class WordcloudComponent implements OnChanges {
   }
 
   updateWordcloud() {
-    const scaleFactor = this.scaleFactor();
     const max = this.max();
     Wordcloud()
         .size([this.width, this.height])
@@ -52,7 +51,7 @@ export class WordcloudComponent implements OnChanges {
         .padding(4)
         .rotate(d => (d.size === max) ? 0 : ~~(Math.random() * 2) * 90)
         .font(this.fontFamily)
-        .fontSize(d => d.size * scaleFactor)
+        .fontSize(d => this.fontSize(d))
         .on('end', d => {
           this.determineScaling();
           return this.renderedWords = d;
@@ -92,11 +91,16 @@ export class WordcloudComponent implements OnChanges {
     });
   }
 
-  private max() {
-    return this.wordWeights.map(w => w[1]).reduce((a, b) => Math.max(a, b), 0);
+  /* Calculates the font size based on word frequency (logarithmical). The font
+   * size is reduced for long words (> 20 chars) if they would otherwise be
+   * rendered with a large font size to ensure they will fit the canvas. */
+  private fontSize(word: any) {
+    let factor = Math.log2(word.size + 1) / Math.log2(this.max() + 1);
+    factor *= factor > 0.9 && word.text.length > 20 ? Math.pow(0.95, word.text.length - 20) : 1;
+    return TARGET_FONT_SIZE * factor;
   }
 
-  private scaleFactor(): number {
-    return TARGET_FONT_SIZE / this.max();
+  private max() {
+    return this.wordWeights.map(w => w[1]).reduce((a, b) => Math.max(a, b), 0);
   }
 }
