@@ -1,5 +1,5 @@
-<svg #wordcloud xmlns="http://www.w3.org/2000/svg" width="100%" [attr.viewBox]="'0 0 ' + width + ' ' + height">
-  <g [attr.transform]="'translate(' + width / 2 + ', ' + height / 2 + ')'">
+<svg xmlns="http://www.w3.org/2000/svg" width="100%" [attr.viewBox]="'0 0 ' + width + ' ' + height">
+  <g #wordcloud [attr.style]="'transform: scale(' + scale + ')' + 'translate(' + width / 2 + 'px, ' + height / 2 + 'px); transform-origin: center'">
     <text *ngFor="let word of renderedWords; index as i; trackBy: wordIdentity"
           text-anchor="middle"
           [attr.style]="'transform: translate(' + word.x + 'px, ' + word.y + 'px) rotate(' + word.rotate + 'deg); font-size: ' + word.size + 'px; fill: ' + color(i)">

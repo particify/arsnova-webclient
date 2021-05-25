@@ -1,3 +1,3 @@
 <div class="cloud-container" [ngClass]="{'visible': answersVisible}">
-  <app-wordcloud [wordWeights]="wordWeights"></app-wordcloud>
+  <app-wordcloud *ngIf="answersVisible" [wordWeights]="wordWeights"></app-wordcloud>
 </div>
