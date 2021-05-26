@@ -74,17 +74,19 @@ export class ContentPresentationComponent implements OnInit {
     window.scroll(0, 0);
     this.translateService.use(this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE));
     this.route.params.subscribe(params => {
-      this.entryIndex = this.globalStorageService.getItem(STORAGE_KEYS.LAST_INDEX) || params['contentIndex'] - 1;
+      const lastIndex = this.globalStorageService.getItem(STORAGE_KEYS.LAST_INDEX);
+      this.entryIndex = (lastIndex > -1 ? lastIndex : params['contentIndex'] - 1) || 0;
       this.contentGroupName = this.globalStorageService.getItem(STORAGE_KEYS.LAST_GROUP) || params['contentGroup'];
       this.globalStorageService.setItem(STORAGE_KEYS.LAST_GROUP, this.contentGroupName);
       this.route.data.subscribe(data => {
         this.roomId = data.room.id;
         this.shortId = data.room.shortId;
-        this.initGroup();
+        this.initGroup(true);
       });
     });
     if (this.isPresentation) {
       this.groupChanged.subscribe(group => {
+        this.isLoading = true;
         this.contentGroupName = group;
         this.initGroup()
       })
@@ -100,15 +102,15 @@ export class ContentPresentationComponent implements OnInit {
     }
   }
 
-  initGroup() {
+  initGroup(initial = false) {
     this.contentGroupService.getByRoomIdAndName(this.roomId, this.contentGroupName).subscribe(group => {
       this.contentGroup = group;
       this.contentService.getContentsByIds(this.contentGroup.roomId, this.contentGroup.contentIds, true).subscribe(contents => {
         this.contents = this.contentService.getSupportedContents(contents);
         this.isLoading = false;
         this.initScale();
-        if (this.entryIndex) {
-          this.contentIndex = this.entryIndex;
+        if (this.entryIndex > -1) {
+          this.contentIndex = initial ? this.entryIndex : 0;
           this.currentStep = this.contentIndex;
           setTimeout(() => {
             this.stepper.init(this.contentIndex, this.contents.length);
