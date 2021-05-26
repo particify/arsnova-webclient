@@ -8,6 +8,7 @@ import { ChoiceAnswer } from '../../../../models/choice-answer';
 import { MarkdownFeatureset } from '../../../../services/http/formatting.service';
 import { KeyboardUtils } from '../../../../utils/keyboard';
 import { KeyboardKey } from '../../../../utils/keyboard/keys';
+import { MultipleTextsAnswer } from '../../../../models/multiple-texts-answer';
 
 @Component({
   selector: 'app-content-participant',
@@ -75,9 +76,12 @@ export class ContentParticipantComponent implements OnInit {
   }
 
   checkIfAbstention(answer: Answer) {
-    if ((answer.format === ContentType.TEXT && !(answer as TextAnswer).body) ||
-      answer.format !== ContentType.TEXT && !(answer as ChoiceAnswer).selectedChoiceIndexes) {
-      this.hasAbstained = true;
+    if (answer.format === ContentType.TEXT) {
+      this.hasAbstained = !(answer as TextAnswer).body;
+    } else if (answer.format === ContentType.WORDCLOUD) {
+      this.hasAbstained = !((answer as MultipleTextsAnswer).texts?.length > 0);
+    } else {
+      this.hasAbstained = !(answer as ChoiceAnswer).selectedChoiceIndexes;
     }
   }
 

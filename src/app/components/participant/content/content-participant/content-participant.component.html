@@ -38,6 +38,11 @@
                                             (answerChanged)="forwardAnswerMessage($event)" [statsPublished]="statsPublished"
                                             [correctOptionsPublished]="correctOptionsPublished">
               </app-content-sort-participant>
+              <app-content-wordcloud-participant *ngIf="content.format === ContentType.WORDCLOUD" [answer]="answer"
+                                            [content]="content" [alreadySent]="alreadySent" [sendEvent]="sendEvent"
+                                            (answerChanged)="forwardAnswerMessage($event)" [statsPublished]="statsPublished"
+                                            [correctOptionsPublished]="correctOptionsPublished">
+              </app-content-wordcloud-participant>
             </div>
             <div *ngIf="[ContentType.SLIDE, ContentType.FLASHCARD].indexOf(content.format) === -1">
               <div [ngClass]="{'visible' : alreadySent, 'invisible': !alreadySent}" class="text">

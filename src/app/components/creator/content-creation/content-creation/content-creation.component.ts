@@ -143,8 +143,8 @@ export class ContentCreationComponent implements OnInit, OnDestroy {
 
   resetAfterSubmit() {
     this.contentReset.emit(true);
-    if ([ContentType.TEXT, ContentType.SLIDE, ContentType.FLASHCARD].indexOf(this.content.format) === -1) {
-      if ([ContentType.CHOICE, ContentType.SORT].indexOf(this.content.format) > -1) {
+    if (![ContentType.TEXT, ContentType.SLIDE, ContentType.FLASHCARD, ContentType.WORDCLOUD].includes(this.content.format)) {
+      if ([ContentType.CHOICE, ContentType.SORT].includes(this.content.format)) {
         (this.content as ContentChoice).options = [];
       }
       (this.content as ContentChoice).correctOptionIndexes = [];

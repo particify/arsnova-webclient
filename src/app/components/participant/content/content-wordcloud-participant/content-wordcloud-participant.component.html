@@ -1,0 +1,9 @@
+<div fxLayout="column" fxLayoutGap="0.5em">
+  <mat-form-field *ngFor="let word of words; let i = index; trackBy: trackByIndex" appearance="outline" class="no-field-hint">
+    <input matInput [(ngModel)]="words[i]" placeholder="{{ ('answer.word' | translate) + ' ' + (i + 1) }}"
+           [disabled]="!!givenAnswer" [maxLength]="maxLength"
+           (focus)="eventService.makeFocusOnInputTrue(); currentInputIndex = i"
+           (blur)="eventService.makeFocusOnInputFalse(); currentInputIndex = null">
+    <mat-hint matSuffix *ngIf="currentInputIndex === i">{{word.length + ' / ' + maxLength}}</mat-hint>
+  </mat-form-field>
+</div>

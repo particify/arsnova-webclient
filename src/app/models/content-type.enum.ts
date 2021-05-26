@@ -5,5 +5,6 @@ export enum ContentType {
   TEXT = 'TEXT',
   SLIDE = 'SLIDE',
   SORT = 'SORT',
-  FLASHCARD = 'FLASHCARD'
+  FLASHCARD = 'FLASHCARD',
+  WORDCLOUD = 'WORDCLOUD'
 }

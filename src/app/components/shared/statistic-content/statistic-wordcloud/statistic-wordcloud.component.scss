@@ -1,0 +1,13 @@
+@import '../statistic-content';
+
+.cloud-container {
+  opacity: 0;
+  max-height: 0;
+  overflow: hidden;
+  transition: 500ms;
+}
+
+.visible {
+  max-height: 800px;
+  opacity: 1;
+}

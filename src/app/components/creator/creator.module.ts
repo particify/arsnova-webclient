@@ -30,6 +30,7 @@ import { TranslateHttpLoaderFactory } from '../../translate-http-loader-factory'
 import { ExtensionPointModule } from '../../../../projects/extension-point/src/lib/extension-point.module';
 import { ContentSortCreationComponent } from './content-creation/content-sort-creation/content-sort-creation.component';
 import { ContentFlashcardCreationComponent } from './content-creation/content-flashcard-creation/content-flashcard-creation.component';
+import { ContentWordcloudCreationComponent } from './content-creation/content-wordcloud-creation/content-wordcloud-creation.component';
 import { ExportComponent } from './_dialogs/export/export.component';
 import { DialogService } from '../../services/util/dialog.service';
 import { CommentAnswerComponent } from './_dialogs/comment-answer/comment-answer.component';
@@ -83,6 +84,7 @@ import { QRCodeModule } from 'angularx-qrcode';
     PreviewComponent,
     ContentSortCreationComponent,
     ContentFlashcardCreationComponent,
+    ContentWordcloudCreationComponent,
     ExportComponent,
     CommentAnswerComponent,
     QrCodeComponent,
