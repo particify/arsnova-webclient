@@ -1,4 +1,4 @@
-import { AfterContentInit, Component, HostListener, OnDestroy, OnInit, Renderer2 } from '@angular/core';
+import { AfterContentInit, Component, HostListener, Input, OnDestroy, OnInit, Renderer2 } from '@angular/core';
 import { AuthenticationService } from '../../../services/http/authentication.service';
 import { RoomService } from '../../../services/http/room.service';
 import { UserRole } from '../../../models/user-roles.enum';
@@ -16,7 +16,8 @@ import { GlobalStorageService, STORAGE_KEYS } from '../../../services/util/globa
 import { ActivatedRoute } from '@angular/router';
 import { AnnounceService } from '../../../services/util/announce.service';
 import { FeedbackService } from '../../../services/http/feedback.service';
-import { FeedbackMessageType } from '@arsnova/app/models/messages/feedback-message-type';
+import { FeedbackMessageType } from '../../../models/messages/feedback-message-type';
+import { EventService } from '../../../services/util/event.service';
 
 @Component({
   selector: 'app-survey-page',
@@ -24,6 +25,8 @@ import { FeedbackMessageType } from '@arsnova/app/models/messages/feedback-messa
   styleUrls: ['./survey-page.component.scss']
 })
 export class SurveyPageComponent implements OnInit, OnDestroy, AfterContentInit {
+
+  @Input() isPresentation = false;
 
   feedbackIcons = ['sentiment_very_satisfied', 'sentiment_satisfied_alt', 'sentiment_very_dissatisfied', 'mood_bad'];
   feedbackLabels = ['feeling-very-good', 'feeling-good', 'feeling-not-so-good', 'feeling-bad'];
@@ -44,6 +47,7 @@ export class SurveyPageComponent implements OnInit, OnDestroy, AfterContentInit 
   type = this.typeFeedback;
   deviceWidth = innerWidth;
   answerCount = 0;
+  routeData;
 
   constructor(
     private authenticationService: AuthenticationService,
@@ -56,7 +60,8 @@ export class SurveyPageComponent implements OnInit, OnDestroy, AfterContentInit 
     private announceService: AnnounceService,
     private _r: Renderer2,
     private globalStorageService: GlobalStorageService,
-    protected route: ActivatedRoute
+    protected route: ActivatedRoute,
+    private eventService: EventService
   ) {
     langService.langEmitter.subscribe(lang => translateService.use(lang));
   }
@@ -64,11 +69,13 @@ export class SurveyPageComponent implements OnInit, OnDestroy, AfterContentInit 
   @HostListener('window:keyup', ['$event'])
   keyEvent(event: KeyboardEvent) {
     if (this.isCreator) {
-      if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit1) === true) {
-        document.getElementById('toggle-button').focus();
-      } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit2) === true) {
+      const toggleKey = this.isPresentation ? KeyboardKey.SPACE : KeyboardKey.Digit1;
+      const changeKey = this.isPresentation ? KeyboardKey.LetterC : KeyboardKey.Digit2;
+      if (KeyboardUtils.isKeyEvent(event, toggleKey) === true) {
+        this.toggle();
+      } else if (KeyboardUtils.isKeyEvent(event, changeKey) === true) {
         if (this.isClosed) {
-          document.getElementById('switch-button').focus();
+          this.changeType();
         } else {
           const msg = this.translateService.instant('survey.a11y-first-stop-survey');
           this.announceService.announce(msg);
@@ -107,6 +114,7 @@ export class SurveyPageComponent implements OnInit, OnDestroy, AfterContentInit 
     this.authenticationService.getCurrentAuthentication()
         .subscribe(auth => this.userId = auth.userId);
     this.route.data.subscribe(data => {
+      this.routeData = data;
       this.roomId = data.room.id;
       this.shortId = data.room.shortId;
       this.isCreator = data.viewRole === UserRole.CREATOR;
@@ -119,6 +127,10 @@ export class SurveyPageComponent implements OnInit, OnDestroy, AfterContentInit 
         this.updateFeedback(values);
       });
       this.isLoading = false;
+      if (this.isPresentation) {
+        const scale = Math.max((Math.min(innerWidth, 2100)  / 1400), 1);
+        document.getElementById('survey-card').style.transform = `scale(${scale})`;
+      }
     });
   }
 
@@ -153,6 +165,7 @@ export class SurveyPageComponent implements OnInit, OnDestroy, AfterContentInit 
 
   loadConfig(room: Room) {
     this.room = room;
+    this.routeData.room = this.room;
     this.isClosed = room.settings['feedbackLocked'];
     if (this.room.extensions && this.room.extensions.feedback && this.room.extensions.feedback['type']) {
       this.type = this.room.extensions.feedback['type'];
@@ -194,9 +207,11 @@ export class SurveyPageComponent implements OnInit, OnDestroy, AfterContentInit 
     this.getLabels();
     this.roomService.changeFeedbackType(this.roomId, this.type);
     this.announceType();
-    setTimeout(() => {
-      document.getElementById('toggle-button').focus();
-    }, 500);
+    if (!this.isPresentation) {
+      setTimeout(() => {
+        document.getElementById('toggle-button').focus();
+      }, 500);
+    }
   }
 
   updateRoom(isClosed: boolean) {
@@ -229,8 +244,10 @@ export class SurveyPageComponent implements OnInit, OnDestroy, AfterContentInit 
         { status: status[keys[0]], nextStatus: status[keys[1]] });
     });
     this.translateService.get('survey.' + currentState).subscribe(msg => {
-      this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.SUCCESS);
+      this.notificationService.showAdvanced(msg, currentState === 'started' ? AdvancedSnackBarTypes.SUCCESS
+        : AdvancedSnackBarTypes.WARNING);
     });
+    this.eventService.broadcast('SurveyStateChanged', currentState);
   }
 
   reset() {
@@ -251,6 +268,7 @@ export class SurveyPageComponent implements OnInit, OnDestroy, AfterContentInit 
         });
         break;
       case FeedbackMessageType.STOPPED:
+        this.room.settings['feedbackLocked'] = true;
         this.isClosed = true;
         break;
       case FeedbackMessageType.STATUS:

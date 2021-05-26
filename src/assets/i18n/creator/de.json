@@ -49,9 +49,9 @@
     "select-time-all": "Unbegrenzt",
     "sort": "Sortieren",
     "filter": "Filtern",
-    "sort-vote-asc": "Positivste Bewertung",
-    "sort-vote-desc": "Negativste Bewertung",
-    "sort-list-time": "Zuletzt erstellt",
+    "sort-votedesc": "Positivste Bewertung",
+    "sort-voteasc": "Negativste Bewertung",
+    "sort-time": "Zuletzt erstellt",
     "more-options": "Mehr Optionen",
     "moderation": "Moderation",
     "public-list": "Öffentliche Liste",
@@ -505,6 +505,7 @@
     "no-contents": "Es sind keine Fragen vorhanden.",
     "select-content-group": "Sammlung auswählen",
     "answer": "Antwort",
+    "answers-tooltip": "Anzahl der Antworten",
     "other-combinations": "Andere",
     "show-flashcard-back": "Zeige die Rückseite",
     "hide-flashcard-back": "Verstecke die Rückseite"
@@ -554,7 +555,11 @@
     "error-comment": "Bitte gib einen Kommentar ein.",
     "tag": "Kategorie",
     "create-comment-description": "Gib hier deinen Kommentar ein.",
-    "comment-sent": "Dein Kommentar wurde veröffentlicht."
+    "comment-sent": "Dein Kommentar wurde veröffentlicht.",
+    "how-to-proceed": "Wie möchtest du vorgehen?",
+    "publish-this-content": "Nur diese Frage freigeben",
+    "publish-contents-up-to-here": "Alle Fragen bis hier freigeben",
+    "publish": "Freigeben"
   },
   "utils": {
     "formatting-image-hint": "Bitte beachte, dass Bilder mit hoher Dateigröße die Ladezeiten beeinträchtigen können."
@@ -576,5 +581,40 @@
   },
   "import": {
     "import": "Importieren"
+  },
+  "control-bar": {
+    "results": "Ergebnisse",
+    "correct": "Richtig",
+    "lock": "Sperren",
+    "publish": "Freigeben",
+    "content-locked": "Frage ist gesperrt",
+    "content-published": "Die Frage wurde freigegeben.",
+    "left": "Zurück",
+    "right": "Weiter",
+    "start": "Starten",
+    "stop": "Stoppen",
+    "change-type": "Typ ändern",
+    "share": "Raum teilen",
+    "fullscreen": "Vollbildmodus",
+    "exit": "Präsentation verlassen",
+    "comment-sort-time": "Neueste",
+    "comment-sort-votedesc": "Beliebt",
+    "zoom-in": "Vergrößern",
+    "zoom-out": "Verkleinern",
+    "key": "Taste",
+    "SPACE": "Leertaste",
+    "LEFT": "Links",
+    "RIGHT": "Rechts",
+    "Escape": "ESC",
+    "LetterC": "C",
+    "LetterL": "L",
+    "LetterF": "F",
+    "LetterQ": "Q",
+    "MINUS": "-",
+    "PLUS": "+"
+  },
+  "presentation": {
+    "a11y-presentation-mode": "Gehe in den Präsentationsmodus",
+    "presentation-mode": "Präsentationsmodus"
   }
 }

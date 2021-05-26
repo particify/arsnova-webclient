@@ -4,15 +4,15 @@
       <h1 class="text" fxLayout="column" fxLayoutAlign="center center">
         <mat-icon class="web-icon disabled">language</mat-icon>
         <span *ngIf="!useJoinUrl" class="url">{{ displayUrl }}</span>
-        <span class="url">{{ useJoinUrl ? displayUrl : data.shortId }}</span>
+        <span class="url">{{ useJoinUrl ? displayUrl : (shortId ? shortId : data.shortId) }}</span>
         <lib-extension-point *ngIf="data.passwordProtected" [extensionData]="{roomId: data.roomId}"
                              extensionId="share-room-password"></lib-extension-point>
       </h1>
       <p tabindex="-1" id="qr-message" class="visually-hidden">{{ 'dialog.a11y-qr-code' | translate }}</p>
-      <button class="header exitBtn" mat-icon-button (click)="onCloseClick()" aria-labelledby="exit">
+      <button *ngIf="!shortId" class="header exitBtn" mat-icon-button (click)="onCloseClick()" aria-labelledby="exit">
         <mat-icon>arrow_back</mat-icon>
       </button>
-      <button mat-button class="icon-secondary header copyBtn" (click)="copyShortId()"
+      <button *ngIf="!shortId" mat-button class="icon-secondary header copyBtn" (click)="copyShortId()"
               aria-labelledby="copy-url">
         <mat-icon>link</mat-icon>
         {{ 'dialog.copy-url' | translate}}

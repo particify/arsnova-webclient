@@ -1,4 +1,5 @@
-<mat-card id="comment-card" [ngClass]="{'highlighted': comment.highlighted, '': !comment.highlighted, 'mat-elevation-z2': inAnswerView}"
+<mat-card name="comment" id="comment-card" [ngClass]="{'highlighted': comment.highlighted && !isPresentation,
+           'mat-elevation-z2': inAnswerView, 'presentation-comment': isPresentation, 'active': comment.highlighted && isPresentation}"
           [@slide]="isNew ? slideAnimationState : null" (@slide.done)="changeSlideState()">
   <div fxLayout="column" id="comment-entry" tabindex="0" role="button" (keyup.enter)="openPresentDialog(comment)" attr.aria-label="{{ 'comment-page.comment' | translate: {
       time: (language === 'de' ? (comment.timestamp | date: ' HH:mm ') : (comment.timestamp | date: 'h:mm a')),
@@ -47,7 +48,8 @@
               aria-labelledby="comment-moderation" matTooltip="{{ 'comment-page.reject' | translate }}">
         <mat-icon class="gavel-icon">lock_open</mat-icon>
       </button>
-      <button mat-icon-button *ngIf="(isCreator || isModerator) && !inAnswerView && !archived" [matMenuTriggerFor]="actionsMenu"
+      <button mat-icon-button *ngIf="(isCreator || isModerator) && !inAnswerView && !isPresentation  && !archived"
+              [matMenuTriggerFor]="actionsMenu"
               tabindex="0" aria-labelledby="more-options">
         <mat-icon matTooltip="{{ 'comment-page.show-actions' | translate }}">more_horiz
         </mat-icon>

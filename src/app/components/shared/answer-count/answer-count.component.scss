@@ -1,3 +1,5 @@
+@import '../../../../_variables.scss';
+
 .container {
   margin: 8px 0;
   text-align: center;
@@ -17,6 +19,8 @@
 }
 
 .counter {
+  font-size: 24px;
+  font-weight: $font-weight-bold;
   margin: 0;
   color: var(--secondary);
 }
@@ -24,4 +28,30 @@
 .counter-text {
   line-height: 28px;
   margin: 0;
+}
+
+.presentation-container {
+  position: fixed;
+  bottom: 1em;
+  right: 4px;
+  margin: 0;
+  padding: 0 1em;
+  .counter-text {
+    font-weight: $font-weight-bold;
+    font-size: 20px;
+    line-height: 33px;
+  }
+  .counter {
+    font-size: 28px;
+    color: var(--primary);
+  }
+  transition: bottom 300ms;
+}
+
+.over-control-bar {
+  bottom: calc(1em + 70px);
+}
+
+.hidden {
+  bottom: -50px;
 }

@@ -1,5 +1,6 @@
 <div fxLayout="column" [ngClass]="{'flashcard-container': format === ContentType.FLASHCARD}" fxLayoutAlign="space-between">
-  <div *ngIf="[ContentType.SLIDE, ContentType.FLASHCARD].indexOf(format) === -1" fxLayout="row" fxLayoutAlign="space-between">
+  <div *ngIf="[ContentType.SLIDE, ContentType.FLASHCARD].indexOf(format) === -1 && !isPresentation" fxLayout="row"
+       fxLayoutAlign="space-between">
     <div tabindex="0" id="message-button" class="visually-hidden">
       {{ (answerCount === 0 ? 'statistic.a11y-message-evaluation' : 'statistic.a11y-message-evaluation-answers')
       | translate: {index: index+1, content: content.body, answers: answerCount} }}
@@ -17,7 +18,7 @@
     </div>
   </div>
   <app-rendered-text tabindex="-1" [rawText]="content.body" [renderedText]="content.renderedBody"></app-rendered-text>
-  <div *ngIf="format === ContentType.FLASHCARD">
+  <div *ngIf="format === ContentType.FLASHCARD && !isPresentation">
     <button mat-icon-button (click)="toggleAnswers()" [matTooltip]="(answersVisible ? 'statistic.hide-flashcard-back' :
     'statistic.show-flashcard-back') | translate">
       <mat-icon class="corner-icon icon-primary">fact_check</mat-icon>
@@ -25,11 +26,12 @@
   </div>
 </div>
 <lib-extension-point extensionId="attachment-list" [extensionData]="attachmentData"></lib-extension-point>
-<app-statistic-choice *ngIf="[ContentType.CHOICE, ContentType.SCALE, ContentType.BINARY].indexOf(format) !== -1" [content]="content"
-                      [directShow]="directShow" (updateCounterEvent)="updateCounter($event)" [isSurvey]="survey"></app-statistic-choice>
-<app-statistic-text *ngIf="format === ContentType.TEXT" [content]="content"
+<app-statistic-choice *ngIf="[ContentType.CHOICE, ContentType.SCALE, ContentType.BINARY].indexOf(format) !== -1"
+                      [content]="content" [directShow]="directShow" (updateCounterEvent)="updateCounter($event)"
+                      [isSurvey]="survey" [isPresentation]="isPresentation"></app-statistic-choice>
+<app-statistic-text *ngIf="format === ContentType.TEXT" [content]="content" [isPresentation]="isPresentation"
                     [directShow]="directShow" (updateCounterEvent)="updateCounter($event)"></app-statistic-text>
-<app-statistic-sort *ngIf="format === ContentType.SORT" [content]="content"
+<app-statistic-sort *ngIf="format === ContentType.SORT" [content]="content" [isPresentation]="isPresentation"
                     [directShow]="directShow" (updateCounterEvent)="updateCounter($event)"></app-statistic-sort>
 <div *ngIf="content.format === ContentType.FLASHCARD && answersVisible">
   <div class="divider-space"></div>

@@ -1,0 +1,5 @@
+<div *ngIf="message" class="notification-container" fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="10px"
+     [ngClass]="{'expanded': expanded, 'hidden': hidden}">
+  <mat-icon *ngIf="icon">{{ icon }}</mat-icon>
+  <p class="notification">{{ message | translate }}</p>
+</div>

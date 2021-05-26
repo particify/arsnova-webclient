@@ -187,8 +187,13 @@ export class StatisticSortComponent extends StatisticContentBaseComponent implem
 
   createChart() {
     Chart.defaults.color = this.onSurface;
-    Chart.defaults.font.size = 16;
+    Chart.defaults.font.size = this.isPresentation ? 14 : 16;
     Chart.register(BarController, BarElement, CategoryScale, LinearScale, Tooltip);
+    const gridConfig = {
+      borderColor: this.onSurface,
+      tickColor: this.isPresentation ? this.surface : this.onSurface,
+      drawOnChartArea: !this.isPresentation
+    };
     this.chart = new Chart(this.chartId, {
       type: 'bar',
       data: {
@@ -198,19 +203,20 @@ export class StatisticSortComponent extends StatisticContentBaseComponent implem
       options: {
         responsive: true,
         maintainAspectRatio: false,
+        devicePixelRatio: this.isPresentation ? 2 : 1,
         scales: {
           y: {
             ticks: {
               precision: 0,
             },
             grid: {
-              borderColor: this.onSurface
+              borderColor: this.onSurface, // TODO: Waiting for bar labels too : this.isPresentation ? this.surface : this.onSurface,
+              tickColor: this.isPresentation ? this.surface : this.onSurface,
+              drawOnChartArea: !this.isPresentation
             }
           },
           x: {
-            grid: {
-              borderColor: this.onSurface
-            }
+            grid: gridConfig
           }
         },
         plugins: {

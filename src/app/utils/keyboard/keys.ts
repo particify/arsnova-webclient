@@ -40,7 +40,13 @@ export enum KeyboardKey {
   LEFT,
   RIGHT,
   ENTER,
-  SPACE
+  SPACE,
+  LetterC,
+  LetterF,
+  LetterL,
+  LetterQ,
+  MINUS,
+  PLUS
 }
 
 // Setup all application available keyboard keys here
@@ -62,3 +68,9 @@ KEYBOARD_KEYS.set(KeyboardKey.LEFT, { key: ['ArrowLeft'], keyCode: 37 });
 KEYBOARD_KEYS.set(KeyboardKey.RIGHT, { key: ['ArrowRight'], keyCode: 39  });
 KEYBOARD_KEYS.set(KeyboardKey.ENTER, { key: ['Enter'], keyCode: 13  });
 KEYBOARD_KEYS.set(KeyboardKey.SPACE, { key: [' '], keyCode: 32  });
+KEYBOARD_KEYS.set(KeyboardKey.LetterC, { key: ['c'], keyCode: 67  });
+KEYBOARD_KEYS.set(KeyboardKey.LetterF, { key: ['f'], keyCode: 70  });
+KEYBOARD_KEYS.set(KeyboardKey.LetterL, { key: ['l'], keyCode: 76  });
+KEYBOARD_KEYS.set(KeyboardKey.LetterQ, { key: ['q'], keyCode: 81  });
+KEYBOARD_KEYS.set(KeyboardKey.MINUS, { key: ['-'], keyCode: 189  });
+KEYBOARD_KEYS.set(KeyboardKey.PLUS, { key: ['+'], keyCode: 187  });

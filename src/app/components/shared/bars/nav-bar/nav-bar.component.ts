@@ -88,14 +88,14 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
   contentGroups: ContentGroup[] = [];
   publishedStates: PublishedContentsState[] = [];
 
-  constructor(private router: Router,
-              private routingService: RoutingService,
-              private route: ActivatedRoute,
-              private globalStorageService: GlobalStorageService,
-              private roomService: RoomService,
-              private feedbackService: FeedbackService,
-              private contentGroupService: ContentGroupService,
-              private eventService: EventService) {
+  constructor(protected router: Router,
+              protected routingService: RoutingService,
+              protected route: ActivatedRoute,
+              protected globalStorageService: GlobalStorageService,
+              protected roomService: RoomService,
+              protected feedbackService: FeedbackService,
+              protected contentGroupService: ContentGroupService,
+              protected eventService: EventService) {
     super();
   }
 
@@ -113,7 +113,14 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
     }
   }
 
+  beforeInit() {
+  }
+
+  afterInit() {
+  }
+
   initItems() {
+    this.beforeInit();
     this.changeIndicator = this.globalStorageService.getItem(STORAGE_KEYS.FEATURE_NEWS);
     this.route.data.subscribe(data => {
       if (!data.room.settings['feedbackLocked']) {
@@ -169,24 +176,26 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
   }
 
   checkForFeedback() {
-    this.feedbackSubscription = this.feedbackService.messageEvent.subscribe(message => {
-      const type = JSON.parse(message.body).type;
-      if (type === FeedbackMessageType.STARTED) {
-        this.activeFeatures.push(FEATURES.SURVEY);
-        this.changeIndicator.push(
-          new ChangeIndicator(FEATURES.SURVEY, true)
-        );
-        this.getItems();
-        this.toggleNews(FEATURES.SURVEY);
-      } else if (type === FeedbackMessageType.STOPPED) {
-        const index = this.activeFeatures.indexOf(FEATURES.SURVEY);
-        if (this.currentRouteIndex !== index) {
-          this.activeFeatures.splice(index, 1);
-          this.changeIndicator.splice(index, 1);
+    if (this.role === UserRole.PARTICIPANT) {
+      this.feedbackSubscription = this.feedbackService.messageEvent.subscribe(message => {
+        const type = JSON.parse(message.body).type;
+        if (type === FeedbackMessageType.STARTED) {
+          this.activeFeatures.push(FEATURES.SURVEY);
+          this.changeIndicator.push(
+            new ChangeIndicator(FEATURES.SURVEY, true)
+          );
           this.getItems();
+          this.toggleNews(FEATURES.SURVEY);
+        } else if (type === FeedbackMessageType.STOPPED) {
+          const index = this.activeFeatures.indexOf(FEATURES.SURVEY);
+          if (this.currentRouteIndex !== index) {
+            this.activeFeatures.splice(index, 1);
+            this.changeIndicator.splice(index, 1);
+            this.getItems();
+          }
         }
-      }
-    });
+      });
+    }
   }
 
   getItems() {
@@ -195,10 +204,7 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
     for (const feature of this.features) {
       let url = this.getBaseUrl();
       if (feature.name !== FEATURES.MODERATION) {
-        url += feature.name;
-        if (this.groupName && feature.name === FEATURES.GROUP) {
-          url += this.getQuestionUrl(this.role, this.groupName);
-        }
+        url += this.getFeatureUrl(feature.name);
       } else {
         url += 'comments/moderation';
       }
@@ -239,17 +245,28 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
       this.tooFewFeatures = true;
     }
     this.isVisible.emit(!this.tooFewFeatures);
+    this.afterInit();
   }
 
   getCurrentRouteIndex() {
-    const matchingRoutes = this.barItems.filter(b => this.router.url.includes(this.getFeatureUrl(b)));
+    const matchingRoutes = this.barItems.filter(b => this.isRouteMatching(b.url));
     if (matchingRoutes.length > 0) {
       this.currentRouteIndex = this.barItems.map(s => s.url).indexOf(matchingRoutes[matchingRoutes.length - 1].url);
     }
   }
 
-  getFeatureUrl(barItem: NavBarItem): string {
-    return barItem.name === FEATURES.GROUP ? '/group/' : barItem.url;
+  getFeatureUrl(feature: string): string {
+    let url = feature;
+    if (this.groupName && feature === FEATURES.GROUP) {
+      url += this.getQuestionUrl(this.role, this.groupName);
+    }
+    return url;
+  }
+
+
+  isRouteMatching(url): boolean {
+    const urlTree = this.router.createUrlTree([url]);
+    return this.router.url.includes(this.router.serializeUrl(urlTree))
   }
 
   updateNews() {
@@ -325,8 +342,8 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
     }
   }
 
-  setGroup() {
-    this.group = this.getFirstGroupWithPublishedContents();
+  setGroup(group?: ContentGroup) {
+    this.group = group || this.getFirstGroupWithPublishedContents();
     this.setGroupProperties();
     this.updateGroupName(this.groupName);
   }

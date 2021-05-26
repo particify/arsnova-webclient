@@ -91,9 +91,9 @@
     "select-time-all": "Unlimited",
     "sort": "Sort",
     "filter": "Filter",
-    "sort-vote-asc": "Best rating",
-    "sort-vote-desc": "Worst rating",
-    "sort-list-time": "Last created"
+    "sort-votedesc": "Best rating",
+    "sort-voteasc": "Worst rating",
+    "sort-time": "Last created"
   },
   "comment-page": {
     "a11y-shortcuts": "To create a comment, press the key 1. Once there are several comments, you can search and filter comments. To browse the comments press key 2, to sort comments key 3, to filter comments key 4, to select the time period key 5, to pause or resume the comment stream key 6, to go to the first comment key 7, to go to the user menu key 9, to go back to the room overview key 0 or the escape key to repeat this announcement",

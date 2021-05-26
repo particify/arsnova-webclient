@@ -1,11 +1,20 @@
 .list {
-  left: 0;
   position: fixed;
   background: var(--surface);
   transition-property: opacity, box-shadow;
   transition-duration: 300ms;
   opacity: 1;
   z-index: 1;
+}
+
+.left {
+  left: 0;
+  border-left: none!important;
+}
+
+.right {
+  right: 0;
+  border-right: none!important;
 }
 
 .hidden {
@@ -17,6 +26,11 @@
   display: flex;
 }
 
+.presentation-mode {
+  background-color: var(--surface);
+  border: 2px solid var(--grey);
+}
+
 @media(min-width: 1001px) {
   .icon-container {
     margin: 16px 0;
@@ -24,12 +38,24 @@
     gap: 16px;
   }
 
+  .left {
+    border-bottom-right-radius: 10px;
+    border-top-right-radius: 10px;
+  }
+
+  .right {
+    border-bottom-left-radius: 10px;
+    border-top-left-radius: 10px;
+  }
+
   .list {
     // 64px (Header height) + 4vw (app-padding)
     top: calc(64px + 4vw);
-    border-bottom-right-radius: 10px;
-    border-top-right-radius: 10px;
     position: absolute;
+  }
+
+  .presentation-mode {
+    top: 4vw;
   }
 
   .fixed {

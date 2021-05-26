@@ -1,0 +1,148 @@
+@import '../../../../../variables';
+
+$bar-container-height: 100px;
+$bar-height: 52px;
+$bar-padding: 10px;
+$bar-shadow-top: 2px;
+$logo-width: 120px;
+
+.bar-container {
+  z-index: 3;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  height: $bar-container-height;
+}
+
+.bar-expanded {
+  margin-top: $bar-container-height - $bar-height - ($bar-padding * 2)!important;
+}
+
+.bar-hidden {
+  margin-top: $bar-container-height + $bar-shadow-top;
+}
+
+.bar {
+  box-shadow: 0 0 2px 1px rgba(0, 0, 0, 0.1);
+  transition: margin-top 300ms;
+  background: var(--surface);
+  color: var(--on-surface);
+  width: 100vw;
+  padding: $bar-padding;
+}
+
+.logo-container {
+  max-width: $logo-width;
+}
+
+.action-container {
+  padding-left: $logo-width + ($bar-padding * 2);
+}
+
+.nav-container {
+  border-radius: 8px;
+  background-color: #f6f8f9;
+}
+
+.feature-container {
+  min-height: $bar-height;
+  border-radius: 8px;
+  background-color: #f6f8f9;
+  > *:not(.bar-divider):not(.disabled) {
+    opacity: 0.8;
+  }
+  padding: 0 0.5em;
+}
+
+.feature-container.icon-container {
+  margin-right: 1em;
+  padding: 0;
+}
+
+.icon-container {
+  min-height: $bar-height;
+  .action-button {
+    padding: 14px;
+  };
+  padding: 0 0.5em;
+}
+
+.nav-button {
+  user-select: none;
+  cursor: pointer;
+  padding: 8px;
+  min-width: 100px;
+}
+
+.nav-icon {
+  font-size: 20px;
+  width: 20px;
+  height: 20px;
+}
+
+.text {
+  font-size: 12px;
+  margin: 2px 0 0;
+}
+
+.action-button {
+  user-select: none;
+  cursor: pointer;
+  padding: 8px 16px;
+}
+
+.group-button {
+  max-width: 140px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.full-height {
+  height: $bar-height;
+}
+
+.selected-menu-item {
+  color: var(--primary);
+  font-weight: $font-weight-bold;
+}
+
+.nav-button:not(.active-nav-button) {
+  opacity: 0.6;
+}
+
+.active-nav-button {
+  color: var(--primary);
+  > * {
+    font-weight: $font-weight-bold;
+    color: var(--primary);
+  }
+}
+
+.bar-divider {
+  opacity: 0.3;
+  margin: 0 8px;
+  height: $bar-height - ($bar-padding * 2);
+  width: 1px;
+  background-color: var(--on-surface);
+}
+
+.code {
+  font-size: 22px;
+  font-weight: $font-weight-bold;
+  margin: 0;
+}
+
+.info-container {
+  min-width: 110px;
+  opacity: 0.5;
+  transition: 300ms;
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: $bar-padding * 2;
+}
+
+.no-padding {
+  padding: 0;
+}

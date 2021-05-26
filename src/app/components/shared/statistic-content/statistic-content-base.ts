@@ -13,6 +13,7 @@ export abstract class StatisticContentBaseComponent implements OnInit {
   @Input() content: Content;
   @Input() directShow: boolean;
   @Output() updateCounterEvent: EventEmitter<number> = new EventEmitter<number>();
+  @Input() isPresentation = false;
 
   contentId: string;
   isLoading = true;

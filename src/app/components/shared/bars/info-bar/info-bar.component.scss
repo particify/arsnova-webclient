@@ -1,10 +1,20 @@
 @import '../bar-base';
+@import '../../../../../_variables';
 
 .icon {
   opacity: 0.8;
   margin: 8px 32px 0 16px;
 }
 
+.count {
+  color: var(--on-surface);
+  opacity: 0.8;
+  min-width: 30px;
+  text-align: center;
+  font-size: 24px;
+  margin: 10px;
+  padding: 4px;
+}
 
 @media(max-width: 1000px) {
 

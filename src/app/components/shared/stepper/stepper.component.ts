@@ -38,6 +38,7 @@ export class StepperComponent extends CdkStepper {
   @Output() newIndex = new EventEmitter<number>();
   @Input() listLength: number;
   @Input() completed: Map<number, boolean> = new Map<number, boolean>();
+  @Input() isPresentation = false;
   headerPos = 0;
   containerAnimationState = 'current';
   headerAnimationState = 'init';

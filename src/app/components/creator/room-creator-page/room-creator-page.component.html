@@ -12,6 +12,12 @@
             <mat-icon class="corner-icon icon-secondary" matTooltip="{{ 'room-page.answer-statistics' | translate}}">insert_chart
             </mat-icon>
           </button>
+          <button mat-icon-button class="corner-buttons" id="presentation-button" (click)="openPresentationMode()"
+                  aria-labelledby="presentation-mode">
+            <mat-icon class="corner-icon icon-secondary" [matTooltip]="'presentation.presentation-mode' | translate">
+              present_to_all
+            </mat-icon>
+          </button>
           <span class="fill-remaining-space"></span>
           <mat-card-header fxLayoutAlign="center" fxLayout="row">
             <mat-card-title fxLayoutAlign="center">
@@ -137,4 +143,5 @@
   <div id="share">{{'room-page.a11y-share' | translate}}</div>
   <div id="switch-role">{{'room-page.a11y-switch-role' | translate}}</div>
   <div id="more-options">{{'room-page.a11y-more-options' | translate}}</div>
+  <div id="presentation-mode">{{ 'presentation.a11y-presentation-mode' | translate}}</div>
 </div>

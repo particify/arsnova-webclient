@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { MatSnackBar, MatSnackBarConfig, MatSnackBarRef } from '@angular/material/snack-bar';
 import { LOADING_ICON, SnackBarAdvancedComponent } from '../../components/shared/snack-bar-advanced/snack-bar-advanced.component';
+import { Router } from '@angular/router';
+import { RoutingService } from './routing.service';
 
 export enum AdvancedSnackBarTypes {
   SUCCESS = 'SUCCESS',
@@ -12,8 +14,11 @@ export enum AdvancedSnackBarTypes {
 @Injectable()
 export class NotificationService {
   public snackRef: any;
+  isPresentation = false;
 
-  constructor(public snackBar: MatSnackBar) {
+  constructor(public snackBar: MatSnackBar,
+              private router: Router,
+              private routingService: RoutingService) {
   }
 
   show(message: string, action?: string, config?: MatSnackBarConfig) {
@@ -45,12 +50,14 @@ export class NotificationService {
         duration = 0;
         break;
     }
+    this.isPresentation = this.routingService.isPresentation(this.router.url);
     this.snackRef = this.snackBar.openFromComponent(SnackBarAdvancedComponent, {
       data: {
         message: message,
         icon: typeString
       },
-      duration: duration
+      duration: duration,
+      panelClass: this.isPresentation ? 'presentation-snack-bar' : ''
     });
     return this.snackRef;
   }

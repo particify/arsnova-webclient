@@ -306,7 +306,8 @@
     "settings": "Einstellungen",
     "archive": "Archivierte Fragen",
     "import": "Räume importieren",
-    "admin": "Administration"
+    "admin": "Administration",
+    "presentation-mode": "Präsentation"
   },
   "comment-export": {
     "answer": "Antwort",

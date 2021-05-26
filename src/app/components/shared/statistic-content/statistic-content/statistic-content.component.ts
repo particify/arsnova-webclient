@@ -1,4 +1,4 @@
-import { Component, HostListener, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, EventEmitter, HostListener, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { ContentText } from '@arsnova/app/models/content-text';
 import { StatisticChoiceComponent } from '@arsnova/app/components/shared/statistic-content/statistic-choice/statistic-choice.component';
 import { StatisticTextComponent } from '@arsnova/app/components/shared/statistic-content/statistic-text/statistic-text.component';
@@ -26,6 +26,9 @@ export class StatisticContentComponent implements OnInit {
   @Input() active: boolean;
   @Input() index: number;
   @Input() correctOptionsPublished: boolean;
+  @Input() isPresentation = false;
+  @Input() routeChanged: EventEmitter<boolean> = new EventEmitter<boolean>();
+  @Output() updatedCounter: EventEmitter<number> = new EventEmitter<number>();
 
   attachmentData: any;
   answersVisible = false;
@@ -52,6 +55,9 @@ export class StatisticContentComponent implements OnInit {
           this.announceService.announce('statistic.a11y-no-answers-yet');
         }
       }
+      if (KeyboardUtils.isKeyEvent(event, KeyboardKey.LetterC) === true) {
+        this.toggleCorrect();
+      }
     }
   }
 
@@ -68,6 +74,9 @@ export class StatisticContentComponent implements OnInit {
       this.answersVisible = true;
     }
     this.isLoading = false;
+    this.routeChanged.subscribe(() => {
+      this.updateCounter(this.answerCount);
+    })
   }
 
   toggleAnswers() {
@@ -107,5 +116,8 @@ export class StatisticContentComponent implements OnInit {
 
   updateCounter($event: number) {
     this.answerCount = $event;
+    if (this.isPresentation) {
+      this.updatedCounter.emit(this.answerCount);
+    }
   }
 }

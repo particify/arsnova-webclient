@@ -20,6 +20,7 @@ export const STORAGE_KEYS: { [key: string]: symbol } = {
   MODERATION_ENABLED: Symbol(),
   CONTENT_GROUPS: Symbol(),
   LAST_GROUP: Symbol(),
+  LAST_INDEX: Symbol(),
   THEME: Symbol(),
   LANGUAGE: Symbol(),
   COMMENT_SORT: Symbol(),
@@ -85,6 +86,12 @@ export const STORAGE_CONFIG: StorageItem[] = [
   {
     key: STORAGE_KEYS.LAST_GROUP,
     name: 'LAST_GROUP',
+    category: StorageItemCategory.REQUIRED,
+    backend: StorageBackend.MEMORY
+  },
+  {
+    key: STORAGE_KEYS.LAST_INDEX,
+    name: 'LAST_INDEX',
     category: StorageItemCategory.REQUIRED,
     backend: StorageBackend.MEMORY
   },

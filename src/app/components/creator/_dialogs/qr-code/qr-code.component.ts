@@ -1,4 +1,4 @@
-import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, HostListener, Inject, Input, OnDestroy, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { AdvancedSnackBarTypes, NotificationService } from '../../../../services/util/notification.service';
 import { TranslateService } from '@ngx-translate/core';
@@ -13,6 +13,8 @@ import { ApiConfigService } from '../../../../services/http/api-config.service';
   styleUrls: ['./qr-code.component.scss']
 })
 export class QrCodeComponent implements OnInit, OnDestroy {
+
+  @Input() shortId: string;
 
   qrWidth: number;
   bgColor: string;
@@ -31,6 +33,7 @@ export class QrCodeComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
+    const shortId = this.shortId || this.data.shortId;
     const minSize = Math.min(document.body.clientWidth, document.body.clientHeight);
     this.qrWidth = minSize * 0.75;
     this.themeService.getTheme().pipe(takeUntil(this.destroyed$)).subscribe(theme => {
@@ -42,13 +45,13 @@ export class QrCodeComponent implements OnInit, OnDestroy {
       let url;
       if (config.ui.links?.join) {
         url = config.ui.links.join.url;
-        this.displayUrl = url.replace(/^https?:\/\//, '') + this.data.shortId;
+        this.displayUrl = url.replace(/^https?:\/\//, '') + shortId;
         this.useJoinUrl = true;
       } else {
         url = document.baseURI + 'join/';
         this.displayUrl = document.baseURI.replace(/^https?:\/\//, '').replace(/\/$/, '');
       }
-      this.qrUrl = url + this.data.shortId;
+      this.qrUrl = url + shortId;
     });
     setTimeout(() => {
       document.getElementById('qr-message').focus();
