@@ -214,14 +214,15 @@ export class CommentListComponent implements OnInit, OnDestroy {
     this.navBarExists = navBarExists;
   }
 
-  checkScroll(): void {
-    const currentScroll = document.documentElement.scrollTop;
+  checkScroll(scrollPosition?: number, scrollHeight?: number): void {
+    const currentScroll = scrollPosition || document.documentElement.scrollTop;
     this.scroll = currentScroll >= this.scrollMax;
     this.scrollActive = this.scroll && currentScroll < this.lastScroll;
     this.scrollExtended = currentScroll >= this.scrollExtendedMax;
     const length = this.hideCommentsList ? this.filteredComments.length : this.commentsFilteredByTime.length;
     if (this.displayComments.length !== length) {
-      if (((window.innerHeight * 2) + window.scrollY) >= document.body.scrollHeight) {
+      const height = scrollHeight || document.body.scrollHeight;
+      if (((window.innerHeight * 2) + currentScroll) >= height) {
         this.commentCounter += itemRenderNumber / 2;
         this.getDisplayComments();
       }

@@ -1,4 +1,13 @@
-import { AfterContentInit, Component, HostListener, Input, OnDestroy, OnInit } from '@angular/core';
+import {
+  AfterContentInit,
+  Component,
+  ElementRef,
+  HostListener,
+  Input,
+  OnDestroy,
+  OnInit,
+  ViewChild
+} from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ClientAuthentication } from '../../../models/client-authentication';
 import { NotificationService } from '../../../services/util/notification.service';
@@ -10,6 +19,7 @@ import { AnnounceService } from '../../../services/util/announce.service';
 import { CommentService } from '../../../services/http/comment.service';
 import { Observable } from 'rxjs';
 import { Comment } from '../../../models/comment';
+import { CommentListComponent } from '../comment-list/comment-list.component';
 
 @Component({
   selector: 'app-comment-page',
@@ -19,6 +29,9 @@ import { Comment } from '../../../models/comment';
 export class CommentPageComponent implements OnInit, OnDestroy, AfterContentInit {
 
   @Input() isPresentation = false;
+
+  @ViewChild(CommentListComponent) commentList: CommentListComponent;
+  @ViewChild('commentList') commentListRef: ElementRef;
 
   auth: ClientAuthentication;
   comments$: Observable<Comment[]>;
@@ -104,6 +117,13 @@ export class CommentPageComponent implements OnInit, OnDestroy, AfterContentInit
       this.commentService.lowlight(this.activeComment).subscribe();
     }
     this.activeComment = comment;
+  }
+
+  onScroll() {
+    const nativeCommentList = this.commentListRef.nativeElement;
+    const scrollTop = nativeCommentList.scrollTop;
+    const scrollHeight = nativeCommentList.scrollHeight;
+    this.commentList.checkScroll(scrollTop, scrollHeight);
   }
 
 }
