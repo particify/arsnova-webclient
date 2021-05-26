@@ -1,4 +1,5 @@
 .mat-card {
+  width: calc(100% - 2em);
   margin-top: 8px;
   background-color: var(--background)!important;
   cursor: grabbing;
