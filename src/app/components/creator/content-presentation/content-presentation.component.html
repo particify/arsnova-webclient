@@ -4,7 +4,13 @@
 <app-answer-count *ngIf="!isLoading && isPresentation" [count]="answerCount" [size]="'presentation'" [visible]="answerCount"></app-answer-count>
 <app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
 <div class="nav-bar-container">
-  <div tabindex="-1" id="presentation-message" class="visually-hidden">{{ 'statistic.a11y-message-presentation' | translate }}</div>
+  <div *ngIf="!isPresentation" tabindex="-1" id="presentation-message" class="visually-hidden">
+    {{ 'statistic.a11y-message-presentation' | translate }}
+  </div>
+  <button *ngIf="isPresentation" tabindex="-1" id="presentation-mode-message" class="visually-hidden"
+          (click)="announcePresentationShortcuts()">
+    {{ 'presentation.a11y-content-message' | translate: { group: contentGroup.name} }}
+  </button>
   <div id="stepper-container" *ngIf="true" fxLayout="column" fxLayoutAlign="start center" [ngClass]="{'scalable': isPresentation}">
     <app-stepper *ngIf="contents?.length > 0 && !isLoading" (newIndex)="updateURL($event)" [listLength]="contents.length"
                  [completed]="" [isPresentation]="isPresentation">

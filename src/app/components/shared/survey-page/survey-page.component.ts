@@ -106,7 +106,7 @@ export class SurveyPageComponent implements OnInit, OnDestroy, AfterContentInit 
   ngAfterContentInit() {
     setTimeout(() => {
       document.getElementById('message-announcer-button').focus();
-    }, 200);
+    }, 500);
   }
 
   ngOnInit() {
@@ -135,7 +135,8 @@ export class SurveyPageComponent implements OnInit, OnDestroy, AfterContentInit 
   }
 
   announceKeys() {
-    this.announceService.announce('survey.a11y-shortcuts');
+    const msg = this.isPresentation ? 'presentation.a11y-survey-shortcuts' : 'survey.a11y-shortcuts';
+    this.announceService.announce(msg);
   }
 
   announceStatus() {

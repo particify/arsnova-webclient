@@ -8,7 +8,7 @@
         <lib-extension-point *ngIf="data.passwordProtected" [extensionData]="{roomId: data.roomId}"
                              extensionId="share-room-password"></lib-extension-point>
       </h1>
-      <p tabindex="-1" id="qr-message" class="visually-hidden">{{ 'dialog.a11y-qr-code' | translate }}</p>
+      <p  *ngIf="!shortId" tabindex="-1" id="qr-message" class="visually-hidden">{{ 'dialog.a11y-qr-code' | translate }}</p>
       <button *ngIf="!shortId" class="header exitBtn" mat-icon-button (click)="onCloseClick()" aria-labelledby="exit">
         <mat-icon>arrow_back</mat-icon>
       </button>

@@ -1,4 +1,4 @@
-import { Component, HostListener, Inject, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, Inject, Input, OnDestroy, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { AdvancedSnackBarTypes, NotificationService } from '../../../../services/util/notification.service';
 import { TranslateService } from '@ngx-translate/core';
@@ -53,9 +53,11 @@ export class QrCodeComponent implements OnInit, OnDestroy {
       }
       this.qrUrl = url + shortId;
     });
-    setTimeout(() => {
-      document.getElementById('qr-message').focus();
-    }, 700);
+    if (this.shortId) {
+      setTimeout(() => {
+        document.getElementById('qr-message').focus();
+      }, 700);
+    }
   }
 
   ngOnDestroy() {

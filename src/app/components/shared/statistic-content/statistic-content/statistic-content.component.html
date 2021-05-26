@@ -1,20 +1,25 @@
 <div fxLayout="column" [ngClass]="{'flashcard-container': format === ContentType.FLASHCARD}" fxLayoutAlign="space-between">
-  <div *ngIf="[ContentType.SLIDE, ContentType.FLASHCARD].indexOf(format) === -1 && !isPresentation" fxLayout="row"
-       fxLayoutAlign="space-between">
+  <div *ngIf="[ContentType.SLIDE, ContentType.FLASHCARD].indexOf(format) > -1" tabindex="0"
+       id="message-type-info-button" class="visually-hidden">
+    {{ 'statistic.a11y-message-type-info' | translate: {index: index+1, content: content.body} }}
+  </div>
+  <div *ngIf="[ContentType.SLIDE, ContentType.FLASHCARD].indexOf(format) === -1">
     <div tabindex="0" id="message-button" class="visually-hidden">
       {{ (answerCount === 0 ? 'statistic.a11y-message-evaluation' : 'statistic.a11y-message-evaluation-answers')
       | translate: {index: index+1, content: content.body, answers: answerCount} }}
     </div>
-    <app-answer-count tabindex="-1" *ngIf="!isLoading" [count]="answerCount"></app-answer-count>
-    <div fxLayout="row" fxLayoutAlign="end" [ngClass]="{'fix-width': !survey}">
-      <button mat-icon-button *ngIf="answersVisible && !survey && correctOptionsPublished" disableRipple (click)="toggleCorrect()"
-            matTooltip="{{ 'statistic.answer-indicator' | translate }}" aria-labelledby="show-correct">
-        <mat-icon class="corner-icon icon-primary">playlist_add_check</mat-icon>
-      </button>
-      <button id="show-chart-btn" mat-icon-button disableRipple (click)="toggleAnswers()" aria-labelledby="show-chart"
-              matTooltip="{{ (answersVisible ? 'statistic.hide-chart' : 'statistic.show-chart') | translate }}">
-        <mat-icon class="corner-icon icon-primary">insert_chart</mat-icon>
-      </button>
+    <div *ngIf="!isPresentation" fxLayout="row" fxLayoutAlign="space-between">
+      <app-answer-count tabindex="-1" *ngIf="!isLoading" [count]="answerCount"></app-answer-count>
+      <div fxLayout="row" fxLayoutAlign="end" [ngClass]="{'fix-width': !survey}">
+        <button mat-icon-button *ngIf="answersVisible && !survey && correctOptionsPublished" disableRipple (click)="toggleCorrect()"
+                matTooltip="{{ 'statistic.answer-indicator' | translate }}" aria-labelledby="show-correct">
+          <mat-icon class="corner-icon icon-primary">playlist_add_check</mat-icon>
+        </button>
+        <button id="show-chart-btn" mat-icon-button disableRipple (click)="toggleAnswers()" aria-labelledby="show-chart"
+                matTooltip="{{ (answersVisible ? 'statistic.hide-chart' : 'statistic.show-chart') | translate }}">
+          <mat-icon class="corner-icon icon-primary">insert_chart</mat-icon>
+        </button>
+      </div>
     </div>
   </div>
   <app-rendered-text tabindex="-1" [rawText]="content.body" [renderedText]="content.renderedBody"></app-rendered-text>

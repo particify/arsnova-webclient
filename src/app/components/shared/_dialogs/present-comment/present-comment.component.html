@@ -10,7 +10,8 @@
 </div>
 <div fxFill fxLayoutAlign="center center">
   <div tabindex="0" id="comment">
-    <p attr.aria-label="{{ 'dialog.a11y-comment-presentation' | translate: {comment: comment || data} }}">
+    <p attr.aria-label="{{ (isPresentation ? 'presentation.a11y-present-comment' : 'dialog.a11y-comment-presentation')
+    | translate: {comment: comment?.body || data} }}">
       {{comment?.body || data}}
     </p>
   </div>

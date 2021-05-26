@@ -42,7 +42,6 @@ export class PresentCommentComponent implements OnInit {
 
   ngOnInit() {
     this.translateService.use(this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE));
-    this.updateFontSize();
   }
 
   @HostListener('document:keyup', ['$event'])

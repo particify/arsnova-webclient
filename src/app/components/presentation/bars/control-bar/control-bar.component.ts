@@ -16,6 +16,7 @@ import { takeUntil } from 'rxjs/operators';
 import { ApiConfigService } from '../../../../services/http/api-config.service';
 import { Subject } from 'rxjs';
 import { Sort } from '../../../shared/comment-list/comment-list.component';
+import { AnnounceService } from '../../../../services/util/announce.service';
 
 export class KeyNavBarItem extends NavBarItem {
   key: string;
@@ -100,7 +101,8 @@ export class ControlBarComponent extends NavBarComponent implements OnInit, OnDe
     protected feedbackService: FeedbackService,
     protected contentGroupService: ContentGroupService,
     protected eventService: EventService,
-    protected apiConfigService: ApiConfigService
+    protected apiConfigService: ApiConfigService,
+    private announceService: AnnounceService
   ) {
     super(router, routingService, route, globalStorageService,
       roomService, feedbackService, contentGroupService, eventService);
@@ -221,6 +223,7 @@ export class ControlBarComponent extends NavBarComponent implements OnInit, OnDe
     });
     this.eventService.on<number>('CommentZoomChanged').subscribe(zoom => {
       this.currentCommentZoom = Math.round(zoom);
+      this.announceService.announce('presentation.a11y-comment-zoom-changed', { zoom: this.currentCommentZoom })
     });
     this.eventService.on<ContentGroup>('ContentGroupStateChanged').subscribe(updatedContentGroup => {
       this.group = updatedContentGroup;
@@ -233,11 +236,15 @@ export class ControlBarComponent extends NavBarComponent implements OnInit, OnDe
     this.groupItems[2].icon = this.isCurrentContentPublished ? 'lock' : 'lock_open';
     this.groupItems[2].name = this.isCurrentContentPublished ? 'lock' : 'publish';
     if (!this.isCurrentContentPublished) {
-      this.showNotification = true;
-      this.notificationMessage = 'control-bar.content-locked';
-      this.notificationIcon = 'lock';
-    } else {
+      if (!this.showNotification) {
+        this.notificationMessage = 'control-bar.content-locked';
+        this.notificationIcon = 'lock';
+        this.showNotification = true;
+        this.announceService.announce('control-bar.content-locked');
+      }
+    } else if (this.showNotification) {
       this.showNotification = false;
+      this.announceService.announce('control-bar.content-published')
     }
   }
 
@@ -339,10 +346,12 @@ export class ControlBarComponent extends NavBarComponent implements OnInit, OnDe
 
   requestFullscreen() {
     document.documentElement.requestFullscreen();
+    this.announceService.announce('presentation.a11y-entered-fullscreen');
   }
 
   exitFullscreen() {
     document.exitFullscreen();
+    this.announceService.announce('presentation.a11y-leaved-fullscreen');
   }
 
   exitPresentation() {
