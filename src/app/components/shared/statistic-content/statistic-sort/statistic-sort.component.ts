@@ -165,7 +165,7 @@ export class StatisticSortComponent extends StatisticContentBaseComponent implem
     const length = this.answerIndexes.length;
     for (let i = 0; i < length; i++) {
       this.colors[i] = barColors[i % barColors.length].color;
-      this.indicationColors[i] = this.checkIfCorrect(i) ? this.green : this.grey;
+      this.indicationColors[i] = this.checkIfCorrect(i) ? this.colors[i] : this.grey;
 
     }
     if (this.content.abstentionsAllowed) {
