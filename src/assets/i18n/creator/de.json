@@ -575,7 +575,8 @@
     "comments": "Kommentare",
     "group": "Fragen",
     "survey": "Live-Umfrage",
-    "moderation": "Moderation"
+    "moderation": "Moderation",
+    "content-counter": "Aktuelle Position in der Sammlung"
   },
   "export": {
     "export": "Exportieren",
