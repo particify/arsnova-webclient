@@ -11,6 +11,7 @@ import { EventService } from '../util/event.service';
 import { Answer } from '@arsnova/app/models/answer';
 import { CachingService } from '../util/caching.service';
 import { WsConnectorService } from '../websockets/ws-connector.service';
+import { AnswerOption } from '@arsnova/app/models/answer-option';
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -144,5 +145,15 @@ export class ContentAnswerService extends AbstractEntityService<Answer> {
     return this.http.delete<ChoiceAnswer>(url, httpOptions).pipe(
       catchError(this.handleError<ChoiceAnswer>('deleteChoiceAnswer'))
     );
+  }
+
+  shuffleAnswerOptions(answers: AnswerOption[]): AnswerOption[] {
+    for (let i = answers.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * i);
+      const temp = answers[i];
+      answers[i] = answers[j];
+      answers[j] = temp;
+    }
+    return answers;
   }
 }

@@ -3,7 +3,8 @@ import { Content } from '../../../../models/content';
 import { ContentType } from '../../../../models/content-type.enum';
 import { ContentChoice } from '../../../../models/content-choice';
 import { MarkdownFeatureset } from '../../../../services/http/formatting.service';
-import { AnswerOption } from '@arsnova/app/models/answer-option';
+import { AnswerOption } from '../../../../models/answer-option';
+import { ContentAnswerService } from '../../../../services/http/content-answer.service';
 
 @Component({
   selector: 'app-preview',
@@ -23,12 +24,13 @@ export class PreviewComponent implements OnInit {
   markdownFeatureset: MarkdownFeatureset;
   attachmentData: any;
 
-  constructor() { }
+  constructor(private answerService: ContentAnswerService) { }
 
   ngOnInit(): void {
     const format = this.content.format;
-    if (format === ContentType.CHOICE || format === ContentType.SCALE || format === ContentType.BINARY) {
-      this.answerOptions = (this.content as ContentChoice).options;
+    if ([ContentType.CHOICE, ContentType.SCALE, ContentType.BINARY, ContentType.SORT].indexOf(format) > -1) {
+      const options = (this.content as ContentChoice).options;
+      this.answerOptions = format === ContentType.SORT ? this.answerService.shuffleAnswerOptions(options) : options;
       this.multipleAnswers = (this.content as ContentChoice).multiple;
     }
     this.markdownFeatureset = [ContentType.SLIDE, ContentType.FLASHCARD].indexOf(format) > -1 ? MarkdownFeatureset.EXTENDED
@@ -51,5 +53,4 @@ export class PreviewComponent implements OnInit {
       useTempAttachments: true
     };
   }
-
 }
