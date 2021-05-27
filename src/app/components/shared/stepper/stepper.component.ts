@@ -82,7 +82,7 @@ export class StepperComponent extends CdkStepper {
       this.swipeTime = time;
     } else if (when === 'end') {
       const duration = time - this.swipeTime;
-      if (duration < 1000 && Math.abs(this.swipeXLocation - xPos) > 30) {
+      if (duration < 1000 && Math.abs(this.swipeXLocation - xPos) > Math.min(window.innerWidth / 3, 150)) {
         const direction = this.swipeXLocation > xPos ? 'next' : 'previous';
         if (direction === 'next') {
           this.next();
