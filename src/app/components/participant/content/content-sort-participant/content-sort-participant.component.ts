@@ -64,7 +64,7 @@ export class ContentSortParticipantComponent extends ContentParticipantBaseCompo
   }
 
   initAnswers() {
-    this.answerOptions = this.shuffleAnswerOptions(JSON.parse(JSON.stringify(this.content.options)));
+    this.answerOptions = this.answerService.shuffleAnswerOptions(JSON.parse(JSON.stringify(this.content.options)));
     this.isLoading = false;
   }
 
@@ -77,16 +77,6 @@ export class ContentSortParticipantComponent extends ContentParticipantBaseCompo
         this.isLoading = false;
       });
     }
-  }
-
-  shuffleAnswerOptions(answers: AnswerOption[]): AnswerOption[] {
-    for (let i = answers.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * i);
-      const temp = answers[i];
-      answers[i] = answers[j];
-      answers[j] = temp;
-    }
-    return answers;
   }
 
   setSortOfAnswer(sorting: number[]) {
