@@ -26,6 +26,7 @@ export class WordcloudComponent implements OnChanges {
   scaleOffsetY = 0;
   renderedWords = [];
   fontFamily: string;
+  wordColorIndexes: string[] = [];
 
   private canvas = document.createElement('canvas');
   private timerSubscription: Subscription;
@@ -38,8 +39,24 @@ export class WordcloudComponent implements OnChanges {
 
   ngOnChanges() {
     if (this.wordWeights.length > 0) {
+      // Sorting is not required but leads to a consistent color order based on
+      // word frequency for the initially rendered cloud.
+      this.wordWeights.sort((a, b) => b[1] - a[1]);
+      this.updateColorIndex();
       this.updateWordcloud();
     }
+  }
+
+  /**
+   * Updates the color indexes assigned to words and ensures that already
+   * existing color index assignments for words do not change.
+   */
+  updateColorIndex() {
+    const updatedWords = this.wordWeights.map(ww => ww[0]);
+    const newWords = updatedWords.filter(word => !this.wordColorIndexes.includes(word));
+    this.wordColorIndexes = this.wordColorIndexes
+        .map(word => updatedWords.includes(word) ? word : newWords.pop())
+        .concat(newWords);
   }
 
   updateWordcloud() {
@@ -63,10 +80,11 @@ export class WordcloudComponent implements OnChanges {
     return word?.text;
   }
 
-  color(i: number) {
+  color(word: string) {
     // TODO: Move color palette to theme service.
     const colors = ['#027db9', '#eb0054', '#4d8076', '#9f6b3f', '#8e79ab', '#e64a19', '#787b1d'];
-    return colors[i % colors.length];
+    const index = this.wordColorIndexes.indexOf(word);
+    return colors[index % colors.length];
   }
 
   /* Calculates the scale based on the bounding box of the word cloud so that
