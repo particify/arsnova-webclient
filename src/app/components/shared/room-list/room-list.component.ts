@@ -178,6 +178,7 @@ export class RoomListComponent implements OnInit, OnDestroy {
   }
 
   setCurrentRoom(shortId: string, role: UserRole) {
+    this.updateLastAccess(shortId);
     this.router.navigate([this.roleToString(role), 'room', shortId]);
   }
 
@@ -223,15 +224,8 @@ export class RoomListComponent implements OnInit, OnDestroy {
   }
 
   private sortRooms(rooms: RoomDataView[]) {
-    return rooms.sort((a, b) => {
-      if (a.membership.lastVisit > b.membership.lastVisit) {
-        return 1;
-      } else if (a.membership.lastVisit < b.membership.lastVisit) {
-        return -1;
-      } else {
-        return a.summary.name.localeCompare(b.summary.name);
-      }
-    });
+    return rooms.sort((a, b) =>
+        new Date(b.membership.lastVisit).getTime() - new Date(a.membership.lastVisit).getTime());
   }
 
   deleteRoom(room: RoomDataView) {
@@ -299,5 +293,9 @@ export class RoomListComponent implements OnInit, OnDestroy {
     ).subscribe(r => {
       this.emitTransferChanges(roomDataView);
     });
+  }
+
+  updateLastAccess(shortId: string) {
+    this.rooms.find(r => r.membership.roomShortId === shortId).membership.lastVisit = new Date().toISOString();
   }
 }
