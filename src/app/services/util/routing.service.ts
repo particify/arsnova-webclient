@@ -183,6 +183,9 @@ export class RoutingService {
         case 'home':
           title = this.homeTitle;
           break;
+        case undefined:
+          title = this.homeTitle;
+          break;
         default:
       }
     }
