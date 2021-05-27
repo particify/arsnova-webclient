@@ -575,7 +575,8 @@
     "comments": "Comments",
     "group": "Questions",
     "survey": "Live-Survey",
-    "moderation": "Moderation"
+    "moderation": "Moderation",
+    "content-counter": "Current position in collection"
   },
   "export": {
     "export": "Export",

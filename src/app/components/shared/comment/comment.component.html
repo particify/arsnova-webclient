@@ -14,7 +14,7 @@
       <div class="date-container light">
         <div>{{comment.timestamp | dateFromNow : language : refreshCounter }}</div>
       </div>
-      <button mat-icon-button *ngIf="comment.read && viewRole === 'CREATOR'" [disabled]="true" (click)="setRead(comment)">
+      <button mat-icon-button *ngIf="comment.read && viewRole === 'CREATOR' && !isPresentation" [disabled]="true" (click)="setRead(comment)">
         <mat-icon class="read-icon" matTooltip="{{ 'comment-page.mark-read' | translate }}">
           visibility
         </mat-icon>

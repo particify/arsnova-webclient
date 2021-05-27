@@ -9,7 +9,7 @@
   </div>
   <button *ngIf="isPresentation" tabindex="-1" id="presentation-mode-message" class="visually-hidden"
           (click)="announcePresentationShortcuts()">
-    {{ 'presentation.a11y-content-message' | translate: { group: contentGroup.name} }}
+    {{ 'presentation.a11y-content-message' | translate: { group: contentGroup?.name} }}
   </button>
   <div id="stepper-container" *ngIf="true" fxLayout="column" fxLayoutAlign="start center" [ngClass]="{'scalable': isPresentation}">
     <app-stepper *ngIf="contents?.length > 0 && !isLoading" (newIndex)="updateURL($event)" [listLength]="contents.length"
