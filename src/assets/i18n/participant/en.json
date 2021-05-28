@@ -44,6 +44,9 @@
     "load": "Load",
     "word": "Keyword"
   },
+  "content": {
+    "a11y-wordcloud-info": "Used keywords by frequency in descending order."
+  },
   "comment-list": {
     "a11y-search-list": "Search for comments",
     "a11y-close-search": "Closes the search of comments",
