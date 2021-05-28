@@ -31,15 +31,17 @@
   </div>
 </div>
 <lib-extension-point extensionId="attachment-list" [extensionData]="attachmentData"></lib-extension-point>
-<app-statistic-choice *ngIf="[ContentType.CHOICE, ContentType.SCALE, ContentType.BINARY].indexOf(format) !== -1"
-                      [content]="content" [directShow]="directShow" (updateCounterEvent)="updateCounter($event)"
-                      [isSurvey]="survey" [isPresentation]="isPresentation"></app-statistic-choice>
-<app-statistic-text *ngIf="format === ContentType.TEXT" [content]="content" [isPresentation]="isPresentation"
-                    [directShow]="directShow" (updateCounterEvent)="updateCounter($event)"></app-statistic-text>
-<app-statistic-sort *ngIf="format === ContentType.SORT" [content]="content" [isPresentation]="isPresentation"
-                    [directShow]="directShow" (updateCounterEvent)="updateCounter($event)"></app-statistic-sort>
-<app-statistic-wordcloud *ngIf="format === ContentType.WORDCLOUD" [content]="content"
-                    [directShow]="directShow" (updateCounterEvent)="updateCounter($event)"></app-statistic-wordcloud>
+<div [ngClass]="{'presentation-space': isPresentation}" >
+  <app-statistic-choice *ngIf="[ContentType.CHOICE, ContentType.SCALE, ContentType.BINARY].indexOf(format) !== -1"
+                        [content]="content" [directShow]="directShow" (updateCounterEvent)="updateCounter($event)"
+                        [isSurvey]="survey" [isPresentation]="isPresentation"></app-statistic-choice>
+  <app-statistic-text *ngIf="format === ContentType.TEXT" [content]="content" [isPresentation]="isPresentation"
+                      [directShow]="directShow" (updateCounterEvent)="updateCounter($event)"></app-statistic-text>
+  <app-statistic-sort *ngIf="format === ContentType.SORT" [content]="content" [isPresentation]="isPresentation"
+                      [directShow]="directShow" (updateCounterEvent)="updateCounter($event)"></app-statistic-sort>
+  <app-statistic-wordcloud *ngIf="format === ContentType.WORDCLOUD" [content]="content"
+                           [directShow]="directShow" (updateCounterEvent)="updateCounter($event)"></app-statistic-wordcloud>
+</div>
 <div *ngIf="content.format === ContentType.FLASHCARD && answersVisible">
   <div class="divider-space"></div>
   <mat-divider></mat-divider>
