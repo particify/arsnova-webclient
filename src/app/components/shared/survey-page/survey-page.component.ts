@@ -128,7 +128,7 @@ export class SurveyPageComponent implements OnInit, OnDestroy, AfterContentInit 
       });
       this.isLoading = false;
       if (this.isPresentation) {
-        const scale = Math.max((Math.min(innerWidth, 2100)  / 1400), 1);
+        const scale = Math.max((Math.min(innerWidth, 2100)  / 1500), 1);
         document.getElementById('survey-card').style.transform = `scale(${scale})`;
       }
     });
