@@ -5,7 +5,7 @@
     <mat-radio-button [value]="false">{{ 'dialog.publish-contents-up-to-here' | translate }}</mat-radio-button>
   </mat-radio-group>
   <div fxLayout="row" fxLayoutAlign="end" fxLayoutGap="10px">
-    <button mat-flat-button role="button" class="button-abort" (click)="close(false)">{{ 'dialog.cancel' | translate }}</button>
+    <button mat-flat-button type="button" class="button-abort" (click)="close(false)">{{ 'dialog.cancel' | translate }}</button>
     <button mat-flat-button class="button-primary">{{ 'dialog.publish' | translate }}</button>
   </div>
 </form>
