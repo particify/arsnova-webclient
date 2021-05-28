@@ -546,6 +546,7 @@
     "create-content-group": "Create",
     "content-group-created": "Your question was added to new collection.",
     "content-group-already-exists": "This collection already exists.",
+    "please-enter-name": "Please enter a name.",
     "copy-url": "Copy address",
     "url-copied": "Room link was copied to the clipboard.",
     "delete": "Delete",
