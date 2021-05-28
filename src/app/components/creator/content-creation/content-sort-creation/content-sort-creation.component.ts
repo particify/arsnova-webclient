@@ -137,7 +137,7 @@ export class ContentSortCreationComponent extends ContentCreationComponent imple
         .map(index => parseInt(index, 10));
       return true;
     } else {
-      const msg = this.translationService.instant('content.min-answers');
+      const msg = this.translationService.instant('content.need-answers');
       this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
     }
   }
