@@ -210,6 +210,7 @@
     "a11y-edit-content-group-sort": "Startet die Sortierung der Sammlung",
     "a11y-delete-answers": "Löscht alle Antworten zu der Frage",
     "a11y-delete-all-answers": "Löscht alle Antworten dieser Sammlung",
+    "a11y-wordcloud-info": "Verwendete Schlagwörter nach Häufigkeit in absteigender Reihenfolge.",
     "abort": "Abbrechen",
     "answer": "Antwort",
     "add-answer": "Antwort hinzufügen",

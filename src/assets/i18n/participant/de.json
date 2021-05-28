@@ -44,6 +44,9 @@
     "load": "Laden",
     "word": "Schlagwort"
   },
+  "content": {
+    "a11y-wordcloud-info": "Verwendete Schlagwörter nach Häufigkeit in absteigender Reihenfolge."
+  },
   "comment-list": {
     "a11y-search-list": "Durchsuche die Kommentare",
     "a11y-close-search": "Schließt den Suchvorgang von Kommentare",
