@@ -1,13 +1,8 @@
-app-comment, .mat-card {
+.answer {
   width: 100%;
   max-width: 800px;
-}
-
-.answer {
   background-color: var(--alt-surface);
   color: var(--on-surface);
-  padding: 20px;
-  box-sizing: border-box
 }
 
 .mat-raised-button, .mat-stroked-button {
