@@ -40,6 +40,7 @@ export class PresentationComponent implements OnInit {
     }
   }
   ngOnInit(): void {
+    this.globalStorageService.removeItem(STORAGE_KEYS.LAST_INDEX);
     document.body.style.background = 'var(--surface)';
     this.translateService.use(this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE));
     this.route.params.subscribe(params => {
