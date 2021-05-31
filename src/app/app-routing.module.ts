@@ -74,10 +74,6 @@ const routes: Routes = [
   {
     path: 'presentation',
     loadChildren: () => import('./components/presentation/presentation.module').then(m => m.PresentationModule)
-  },
-  {
-    path: '**',
-    component: PageNotFoundComponent
   }
 ];
 
@@ -112,7 +108,11 @@ const routes: Routes = [
           children: [
             ...routes,
             ...ExtensionRouteProvider.extractRoutesForMountPoint(
-                RouteMountPoint.ROOT, extensionRouteProviders)
+                RouteMountPoint.ROOT, extensionRouteProviders),
+            {
+              path: '**',
+              component: PageNotFoundComponent
+            }
           ]
         }
       ],
