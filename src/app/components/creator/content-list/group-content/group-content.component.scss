@@ -13,6 +13,35 @@
   transition-timing-function: ease-in;
 }
 
+
+@mixin show-button-bar {
+  opacity: 1;
+  max-width: 200px;
+  pointer-events: initial;
+}
+
+.show-bar {
+  @include show-button-bar;
+}
+
+.mat-list-item:hover {
+  * > .button-bar {
+    @include show-button-bar;
+  }
+}
+
+.button-bar {
+  pointer-events: none;
+  opacity: 0;
+  max-width: 0;
+}
+
+@media(hover: none) {
+  .button-bar {
+    @include show-button-bar;
+  }
+}
+
 .moreButton {
   color: var(--primary)
 }
