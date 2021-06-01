@@ -1,7 +1,6 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { Content } from '../../../../models/content';
 import { ContentService } from '../../../../services/http/content.service';
-import { RoomService } from '../../../../services/http/room.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { AdvancedSnackBarTypes, NotificationService } from '../../../../services/util/notification.service';
@@ -18,15 +17,18 @@ import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Observable } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 import { RoomStatsService } from '../../../../services/http/room-stats.service';
+import { HotkeyService } from '../../../../services/util/hotkey.service';
+import { MatButton } from '@angular/material/button';
 
 @Component({
   selector: 'app-group-content',
   templateUrl: './group-content.component.html',
   styleUrls: ['./group-content.component.scss']
 })
-export class GroupContentComponent extends ContentListBaseComponent implements OnInit {
+export class GroupContentComponent extends ContentListBaseComponent implements OnInit, OnDestroy {
 
   @ViewChild('nameInput') nameInput: ElementRef;
+  @ViewChildren('lockMenu') lockMenus: QueryList<MatButton>;
 
   collectionName: string;
   isInTitleEditMode = false;
@@ -43,6 +45,10 @@ export class GroupContentComponent extends ContentListBaseComponent implements O
   firstPublishedIndexBackup = -1;
   copiedContents = [];
   activeMenuIndex: number;
+  activeContentId: string;
+  contentHotkeysRegistered = false;
+
+  private hotkeyRefs: Symbol[] = [];
 
   constructor(
     protected contentService: ContentService,
@@ -57,7 +63,8 @@ export class GroupContentComponent extends ContentListBaseComponent implements O
     protected contentGroupService: ContentGroupService,
     protected announceService: AnnounceService,
     protected localFileService: LocalFileService,
-    protected router: Router
+    protected router: Router,
+    private hotkeyService: HotkeyService
   ) {
     super(contentService, roomStatsService, route, location, notificationService, translateService, langService, dialogService,
     globalStorageService, contentGroupService, announceService, router);
@@ -74,6 +81,27 @@ export class GroupContentComponent extends ContentListBaseComponent implements O
       });
     });
     this.translateService.use(this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE));
+  }
+
+  ngOnDestroy() {
+    this.unregisterHotkeys();
+  }
+
+  registerHotkeys() {
+    this.translateService.get('control-bar.publish-or-lock-content').subscribe(t =>
+      this.hotkeyService.registerHotkey({
+        key: 'l',
+        action: () => {
+          const activeIndex = this.contents.map(c => c.id).indexOf(this.activeContentId);
+          this.lockMenus.toArray()[activeIndex].focus();
+        },
+        actionTitle: t
+      }, this.hotkeyRefs)
+    );
+  }
+
+  unregisterHotkeys() {
+    this.hotkeyRefs.forEach(h => this.hotkeyService.unregisterHotkey(h));
   }
 
   reloadContentGroup(imported = false) {
@@ -456,4 +484,16 @@ export class GroupContentComponent extends ContentListBaseComponent implements O
     });
   }
 
+  updateActive(contentId: string) {
+    this.activeContentId = contentId;
+    if (this.activeContentId) {
+      if (!this.contentHotkeysRegistered) {
+        this.registerHotkeys();
+        this.contentHotkeysRegistered = true;
+      }
+    } else {
+      this.unregisterHotkeys();
+      this.contentHotkeysRegistered = false;
+    }
+  }
 }

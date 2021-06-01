@@ -12,12 +12,12 @@
       <app-answer-count tabindex="-1" *ngIf="!isLoading" [count]="answerCount"></app-answer-count>
       <div fxLayout="row" fxLayoutAlign="end" [ngClass]="{'fix-width': !survey}">
         <button mat-icon-button *ngIf="answersVisible && !survey && correctOptionsPublished" disableRipple (click)="toggleCorrect()"
-                matTooltip="{{ 'statistic.answer-indicator' | translate }}" aria-labelledby="show-correct"
+                matTooltip="{{ 'statistic.show-correct' | translate }}" aria-labelledby="show-correct"
                 appHotkey="c" [appHotkeyAction]="HotkeyAction.CLICK" [appHotkeyDisabled]="!active">
           <mat-icon class="corner-icon icon-primary">playlist_add_check</mat-icon>
         </button>
         <button id="show-chart-btn" mat-icon-button disableRipple (click)="toggleAnswers()" aria-labelledby="show-chart"
-                matTooltip="{{ (answersVisible ? 'statistic.hide-chart' : 'statistic.show-chart') | translate }}"
+                matTooltip="{{ (answersVisible ? 'statistic.hide-results' : 'statistic.show-results') | translate }}"
                 appHotkey=" " [appHotkeyAction]="HotkeyAction.CLICK" [appHotkeyDisabled]="!active">
           <mat-icon class="corner-icon icon-primary">insert_chart</mat-icon>
         </button>

@@ -248,20 +248,13 @@ export class CommentComponent implements OnInit, OnDestroy {
   }
 
   openPresentDialog(comment: Comment): void {
-    if (this.isPresentation) {
+    if (this.isPresentation || this.isCreator) {
       this.activeComment.emit(comment);
-    } else {
-      if (this.isCreator) {
-        this.commentService.highlight(comment).subscribe();
-        if (!comment.read) {
-          this.setRead(comment);
-        }
+      if (!comment.read) {
+        this.setRead(comment);
       }
-      const dialogRef = this.dialogService.openCommentPresentationDialog(comment.body);
-      dialogRef.afterClosed()
-        .subscribe(result => {
-          this.commentService.lowlight(comment).subscribe();
-        });
+    } else {
+      this.answerComment();
     }
   }
 }

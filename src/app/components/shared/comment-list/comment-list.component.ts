@@ -31,6 +31,7 @@ import { AnnounceService } from '../../../services/util/announce.service';
 import { CommentSettingsService } from '../../../services/http/comment-settings.service';
 import { Location } from '@angular/common';
 import { HotkeyService } from '../../../services/util/hotkey.service';
+import { RemoteMessage } from '../../../models/events/remote/remote-message.enum';
 
 // Using lowercase letters in enums because they we're also used for parsing incoming WS-messages
 
@@ -60,6 +61,16 @@ enum Period {
 }
 
 export const itemRenderNumber = 20;
+
+export class CommentPresentationState {
+  stepState: string;
+  commentId: string;
+
+  constructor(step: string, commentId: string) {
+    this.stepState = step;
+    this.commentId = commentId;
+  }
+}
 
 @Component({
   selector: 'app-comment-list',
@@ -338,6 +349,23 @@ export class CommentListComponent implements OnInit, OnDestroy {
         this.goToFirstComment();
         }, 300);
     });
+    let comment;
+    this.eventService.on<string>('CommentIdChanged').subscribe(commentId => {
+      if (this.activeComment?.id !== commentId && comment?.id !== commentId) {
+        comment = this.displayComments.find(c => c.id === commentId);
+        let timeout = 0;
+        if (!comment) {
+          timeout = 500;
+          this.commentCounter = this.hideCommentsList ? this.filteredComments.length : this.commentsFilteredByTime.length;
+          this.getDisplayComments();
+          comment = this.displayComments.find(c => c.id === commentId);
+        }
+        comment.highlighted = true;
+        setTimeout(() => {
+          this.updateCurrentComment(comment, true);
+        }, timeout);
+      }
+    });
   }
 
   goToFirstComment() {
@@ -372,6 +400,7 @@ export class CommentListComponent implements OnInit, OnDestroy {
 
   parseIncomingMessage(message: Message) {
     let updateList = false;
+    let highlightEvent = false;
     const msg = JSON.parse(message.body);
     const payload = msg.payload;
     switch (msg.type) {
@@ -408,6 +437,7 @@ export class CommentListComponent implements OnInit, OnDestroy {
                       return el.id !== payload.id;
                     });
                     this.reduceCommentCounter();
+                    this.checkIfActiveComment(payload.id);
                     if (this.isModerator) {
                       this.moderationCounter--;
                     } else {
@@ -431,6 +461,7 @@ export class CommentListComponent implements OnInit, OnDestroy {
         }
         break;
       case 'CommentHighlighted':
+        highlightEvent = true;
         // ToDo: Use a map for comments w/ key = commentId
         for (let i = 0; i < this.comments.length; i++) {
           if (payload.id === this.comments[i].id) {
@@ -451,11 +482,12 @@ export class CommentListComponent implements OnInit, OnDestroy {
           this.publicCounter--;
         }
         this.reduceCommentCounter();
+        this.checkIfActiveComment(payload.id);
         break;
       default:
         this.referenceEvent.next(payload.id);
     }
-    if (!this.freeze || updateList) {
+    if (!highlightEvent && (!this.freeze || updateList)) {
       this.afterIncomingMessage();
     }
   }
@@ -477,8 +509,15 @@ export class CommentListComponent implements OnInit, OnDestroy {
     if (this.hideCommentsList) {
       this.searchComments();
     }
-    if (this.isPresentation) {
+    if (this.isPresentation && this.activeComment) {
       this.scrollToComment(this.getCurrentIndex());
+    }
+  }
+
+  checkIfActiveComment(id: string) {
+    if (id === this.activeComment?.id) {
+      this.updateActiveComment.emit(null);
+      this.activeComment = null;
     }
   }
 
@@ -661,12 +700,23 @@ export class CommentListComponent implements OnInit, OnDestroy {
     this.setTimePeriod(this.period);
   }
 
-  updateCurrentComment(comment: Comment) {
+  updateCurrentComment(comment: Comment, idChanged = false) {
+    if (!idChanged) {
+      if (comment.highlighted) {
+        this.commentService.lowlight(comment).subscribe();
+      } else {
+        const highlightedComment = this.comments.filter(c => c.highlighted)[0];
+        if (highlightedComment) {
+          this.commentService.lowlight(highlightedComment).subscribe();
+        }
+        this.commentService.highlight(comment).subscribe();
+      }
+    }
     this.updateActiveComment.emit(comment);
-    this.commentService.highlight(comment).subscribe();
     const index = this.getIndexOfComment(comment);
-    this.eventService.broadcast('CommentStepStateChanged', this.getStepState(index));
-    if (!this.isLoading) {
+    const state = new CommentPresentationState(this.getStepState(index),comment.id);
+    this.eventService.broadcast(RemoteMessage.UPDATE_COMMENT_STATE, state);
+    if (!this.isLoading && this.isPresentation) {
       this.scrollToComment(index);
       this.announceCommentPresentation(index);
     }

@@ -14,14 +14,20 @@
             </span>
             <span class="room-short-id">{{room.shortId | splitShortId}}</span>
           </div>
-          <button mat-icon-button class="corner-buttons" id="presentation-button" (click)="openPresentationMode()"
-                  aria-labelledby="presentation-mode"
-                  appHotkey="5"
-                  [matTooltip]="'presentation.presentation-mode' | translate">
+          <button mat-icon-button class="corner-buttons" id="presentation-button" [matMenuTriggerFor]="presentationMenu"
+                  appHotkey="5" [matTooltip]="'presentation.presentation-mode' | translate"aria-labelledby="presentation-mode">
             <mat-icon class="corner-icon icon-secondary">
               present_to_all
             </mat-icon>
           </button>
+          <mat-menu #presentationMenu="matMenu">
+            <button mat-menu-item tabindex="0" (click)="openPresentationMode()"
+                    aria-labelledby="present">
+              <mat-icon class="menu-icon icon-secondary">personal_video</mat-icon>
+              <span>{{ 'presentation.present' | translate }}</span>
+            </button>
+            <lib-extension-point extensionId="present-in-new-tab" [extensionData]="{shortId: room.shortId}"></lib-extension-point>
+          </mat-menu>
           <button id="more-button" mat-icon-button [matMenuTriggerFor]="moreMenu" matTooltip="{{ 'room-page.more-options' | translate }}"
                   aria-labelledby="more-options" appHotkey="6">
             <mat-icon class="corner-icon icon-secondary">more_vert</mat-icon>
@@ -116,4 +122,5 @@
   <div id="switch-role">{{'room-page.a11y-switch-role' | translate}}</div>
   <div id="more-options">{{'room-page.a11y-more-options' | translate}}</div>
   <div id="presentation-mode">{{ 'presentation.a11y-presentation-mode' | translate}}</div>
+  <div id="present">{{ 'presentation.a11y-present' | translate}}</div>
 </div>

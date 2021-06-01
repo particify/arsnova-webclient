@@ -7,6 +7,7 @@
       </div>
     </div>
     <mat-card>
+      <lib-extension-point extensionId="remote" [extensionData]="{roomId: room.id}"></lib-extension-point>
       <div fxLayout="row" fxLayoutAlign="space-between">
         <div class="cardTitle" fxLayout="row" fxLayoutAlign="start center">
           <mat-form-field class="activeInput no-field-hint" [ngClass]="{'hideEditing': !isInTitleEditMode && !inputFocus}" appearance="outline">
@@ -123,8 +124,9 @@
                    attr.aria-label="{{ 'content.a11y-selected-content' | translate: { name: content.body } }}">
                   {{ content.body }}
                 </p>
-                <div fxLayout="row" fxLayoutAlign="center center" [ngClass]="{'show-bar': i === activeMenuIndex, 'button-bar': i !== activeMenuIndex}">
+                <div fxLayout="row" fxLayoutAlign="center center" [ngClass]="{'show-bar': i === activeMenuIndex || content.id === activeContentId, 'button-bar': i !== activeMenuIndex && content.id !== activeContentId}">
                   <div fxLayout="row" *ngIf="contentTypes.indexOf(content.format) > -1">
+                    <lib-extension-point extensionId="content-focus" [extensionData]="{contentId: content.id, contentGroupId: contentGroup.id, contents: contents}" (extensionEvent)="updateActive($event)"></lib-extension-point>
                     <button mat-icon-button *ngIf="content.format === 'TEXT' && content.state.answersPublished"
                             (click)="toggleAnswersPublished(content);$event.stopPropagation()"
                             attr.aria-label="{{ 'content.a11y-dont-publish-answers' | translate }}"
@@ -140,7 +142,7 @@
                     <button mat-icon-button (click)="$event.stopPropagation()" #publishTrigger="matMenuTrigger"
                             [matMenuTriggerFor]="publishActions" (menuOpened)="openedMenu(i)"
                             attr.aria-label="{{ 'content.a11y-unlock' | translate }}"
-                            matTooltip="{{ 'content.unlock' | translate}}">
+                            matTooltip="{{ 'content.unlock' | translate}}" #lockMenu>
                       <mat-icon class="lock-icon locked">lock_open</mat-icon>
                     </button>
                     <mat-menu #publishActions="matMenu" xPosition="before" (closed)="closedMenu()">

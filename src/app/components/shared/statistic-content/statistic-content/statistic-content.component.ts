@@ -10,6 +10,11 @@ import { AnnounceService } from '@arsnova/app/services/util/announce.service';
 import { StatisticWordcloudComponent } from '../statistic-wordcloud/statistic-wordcloud.component';
 import { StatisticScaleComponent } from '../statistic-scale/statistic-scale.component';
 import { HotkeyAction } from '../../../../directives/hotkey.directive';
+import { EventService } from '../../../../services/util/event.service';
+import { RemoteMessage } from '../../../../models/events/remote/remote-message.enum';
+import { UiState } from '../../../../models/events/remote/ui-state-changed-event';
+import { ContentInitializedEvent } from '../../../../models/events/remote/content-initialized-event';
+import { ContentFocusState } from '../../../../models/events/remote/content-focus-state';
 
 @Component({
   selector: 'app-statistic-content',
@@ -31,10 +36,12 @@ export class StatisticContentComponent implements OnInit {
   @Input() correctOptionsPublished: boolean;
   @Input() isPresentation = false;
   @Input() routeChanged: EventEmitter<boolean> = new EventEmitter<boolean>();
+  @Input() contentGroupId: string;
   @Output() updatedCounter: EventEmitter<number> = new EventEmitter<number>();
 
   attachmentData: any;
   answersVisible = false;
+  correctVisible = false;
   survey = false;
   answerCount: number;
   isLoading = true;
@@ -43,7 +50,8 @@ export class StatisticContentComponent implements OnInit {
   flashcardMarkdownFeatures = MarkdownFeatureset.EXTENDED;
   HotkeyAction = HotkeyAction;
 
-  constructor(private announceService: AnnounceService) { }
+  constructor(private announceService: AnnounceService,
+              private eventService: EventService) { }
 
   ngOnInit(): void {
     this.attachmentData = {
@@ -60,11 +68,41 @@ export class StatisticContentComponent implements OnInit {
     this.isLoading = false;
     this.routeChanged.subscribe(() => {
       this.updateCounter(this.answerCount);
-    })
+    });
+    if (this.isPresentation) {
+      this.eventService.on<UiState>(RemoteMessage.UI_STATE_CHANGED).subscribe(state => {
+        if (this.content.id === state.contentId) {
+          if (state.resultsVisible !== this.answersVisible) {
+            this.toggleAnswers(false);
+          }
+          if (state.correctAnswersVisible !== this.correctVisible) {
+            const timeout = state.timeout ? 500 : 0;
+            setTimeout(() => {
+              this.toggleCorrect(false);
+            }, timeout);
+          }
+        }
+      });
+      if (this.active) {
+        const event = new ContentInitializedEvent(new ContentFocusState(this.content.id, this.contentGroupId, false, false));
+        this.eventService.broadcast(event.type, event.payload);
+      }
+    }
   }
 
-  toggleAnswers() {
+  sendUiState() {
+    const state = {
+      resultsVisible: this.answersVisible,
+      correctAnswersVisible: this.correctVisible
+    };
+    this.eventService.broadcast(RemoteMessage.CHANGE_UI_STATE, state);
+  }
+
+  toggleAnswers(sendState = true) {
     this.announceAnswers();
+    if (this.correctVisible) {
+      this.toggleCorrect(false);
+    }
     switch (this.format) {
       case ContentType.SCALE:
         this.answersVisible = this.scaleStatistic.toggleAnswers();
@@ -84,13 +122,22 @@ export class StatisticContentComponent implements OnInit {
       default:
         this.answersVisible = this.choiceStatistic.toggleAnswers();
     }
+    if (this.isPresentation && sendState) {
+      this.sendUiState();
+    }
   }
 
-  toggleCorrect() {
-    if (this.format === ContentType.SORT) {
-      this.sortStatistic.toggleCorrect();
-    } else {
-      this.choiceStatistic.toggleCorrect();
+  toggleCorrect(sendState = true) {
+    if (this.answersVisible) {
+      if (this.format === ContentType.SORT) {
+        this.sortStatistic.toggleCorrect();
+      } else if ([ContentType.CHOICE, ContentType.BINARY].includes(this.format)) {
+        this.choiceStatistic.toggleCorrect();
+      }
+      this.correctVisible = !this.correctVisible;
+      if (this.isPresentation && sendState) {
+        this.sendUiState();
+      }
     }
   }
 

@@ -5,6 +5,7 @@ import { GlobalStorageService, STORAGE_KEYS } from '../../../services/util/globa
 import { RoomStatsService } from '../../../services/http/room-stats.service';
 import { LanguageService } from '../../../services/util/language.service';
 import { TranslateService } from '@ngx-translate/core';
+import { Features } from '../../../models/features.enum';
 
 @Component({
   selector: 'app-presentation',
@@ -63,7 +64,7 @@ export class PresentationComponent implements OnInit {
   }
 
   updateUrl(group?: string) {
-    const isGroup = this.featureString === 'group';
+    const isGroup = this.featureString === Features.CONTENTS;
     let feature =  isGroup ? group || this.lastGroup : this.featureString;
     if (group) {
       this.lastGroup = group;
