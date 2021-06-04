@@ -45,6 +45,7 @@ import { DividerComponent } from './divider/divider.component';
 import { PublishContentComponent } from './_dialogs/publish-content/publish-content.component';
 import { StatisticWordcloudComponent } from './statistic-content/statistic-wordcloud/statistic-wordcloud.component';
 import { WordcloudComponent } from './wordcloud/wordcloud.component';
+import { CommentAnswerComponent } from './_dialogs/comment-answer/comment-answer.component';
 
 @NgModule({
   imports: [
@@ -96,7 +97,8 @@ import { WordcloudComponent } from './wordcloud/wordcloud.component';
     InfoBarComponent,
     DividerComponent,
     PublishContentComponent,
-    WordcloudComponent
+    WordcloudComponent,
+    CommentAnswerComponent
   ],
   exports: [
     RoomJoinComponent,

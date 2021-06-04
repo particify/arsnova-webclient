@@ -1,4 +1,4 @@
-/*
+/*_dialogs
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { CommentAnswerComponent } from './comment-answer.component';

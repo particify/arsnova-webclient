@@ -8,8 +8,8 @@ import { AuthenticationService } from '../../../../services/http/authentication.
 import { UserRole } from '../../../../models/user-roles.enum';
 import { AdvancedSnackBarTypes, NotificationService } from '../../../../services/util/notification.service';
 import { DialogService } from '../../../../services/util/dialog.service';
-import { KeyboardUtils } from '../../../../utils/keyboard';
-import { KeyboardKey } from '../../../../utils/keyboard/keys';
+import { KeyboardUtils } from '../../../../../app/utils/keyboard';
+import { KeyboardKey } from '../../../../../app/utils/keyboard/keys';
 import { EventService } from '../../../../services/util/event.service';
 import { AnnounceService } from '../../../../services/util/announce.service';
 import { MarkdownFeatureset } from '../../../../services/http/formatting.service';
