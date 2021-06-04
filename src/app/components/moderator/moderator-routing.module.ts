@@ -6,7 +6,7 @@ import { UserRole } from '../../models/user-roles.enum';
 import { RoomModeratorPageComponent } from './room-moderator-page/room-moderator-page.component';
 import { CommentPageComponent } from '../shared/comment-page/comment-page.component';
 import { ModeratorCommentPageComponent } from './moderator-comment-page/moderator-comment-page.component';
-import { CommentAnswerComponent } from '../creator/_dialogs/comment-answer/comment-answer.component';
+import { CommentAnswerComponent } from '../shared/_dialogs/comment-answer/comment-answer.component';
 import { RoomResolver } from '../../resolver/room.resolver';
 import { CommentResolver } from '../../resolver/comment.resolver';
 import { RoomViewUserRoleResolver } from '../../resolver/room-view-user-role.resolver';

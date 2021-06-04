@@ -22,7 +22,7 @@ import { VoteService } from '../../../services/http/vote.service';
 import { Observable, Subject, timer } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { MatDialog } from '@angular/material/dialog';
-import { CommentAnswerComponent } from '@arsnova/app/components/creator/_dialogs/comment-answer/comment-answer.component';
+import { CommentAnswerComponent } from '@arsnova/app/components/shared/_dialogs/comment-answer/comment-answer.component';
 
 const TIME_UPDATE_INTERVAL = 60000;
 
