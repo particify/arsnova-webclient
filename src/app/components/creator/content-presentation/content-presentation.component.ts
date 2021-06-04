@@ -74,8 +74,8 @@ export class ContentPresentationComponent implements OnInit {
     window.scroll(0, 0);
     this.translateService.use(this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE));
     this.route.params.subscribe(params => {
-      const lastIndex = this.isPresentation ? this.globalStorageService.getItem(STORAGE_KEYS.LAST_INDEX) : 0;
-      this.entryIndex = (lastIndex > -1 ? lastIndex : params['contentIndex'] - 1) || 0;
+      const lastIndex = this.globalStorageService.getItem(STORAGE_KEYS.LAST_INDEX);
+      this.entryIndex = (this.isPresentation && lastIndex > -1 ? lastIndex : params['contentIndex'] - 1) || 0;
       this.contentGroupName = this.globalStorageService.getItem(STORAGE_KEYS.LAST_GROUP) || params['contentGroup'];
       this.globalStorageService.setItem(STORAGE_KEYS.LAST_GROUP, this.contentGroupName);
       this.route.data.subscribe(data => {
