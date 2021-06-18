@@ -24,7 +24,7 @@
   @include show-button-bar;
 }
 
-.mat-list-item:hover {
+.mat-list-item:hover, .mat-list-item:focus-within {
   * > .button-bar {
     @include show-button-bar;
   }
