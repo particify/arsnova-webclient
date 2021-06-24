@@ -1,13 +1,5 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import {
-  BarController,
-  BarControllerDatasetOptions,
-  BarElement,
-  CategoryScale,
-  Chart,
-  LinearScale,
-  Tooltip
-} from 'chart.js';
+import { BarController, BarControllerDatasetOptions, BarElement, CategoryScale, Chart, LinearScale, Tooltip } from 'chart.js';
 import { ActivatedRoute } from '@angular/router';
 import { ContentService } from '../../../../services/http/content.service';
 import { ContentChoice } from '../../../../models/content-choice';
@@ -17,6 +9,9 @@ import { AnswerStatistics } from '../../../../models/answer-statistics';
 import { takeUntil } from 'rxjs/operators';
 import { StatisticContentBaseComponent } from '../statistic-content-base';
 import { Subject } from 'rxjs';
+import { ContentType } from '../../../../models/content-type.enum';
+import { ColorElem } from '@arsnova/theme/Theme';
+import { ContentScale } from '@arsnova/app/models/content-scale';
 
 export class AnswerList {
   label: string;
@@ -163,6 +158,24 @@ export class StatisticChoiceComponent extends StatisticContentBaseComponent impl
     return this.correctOptionIndexes?.indexOf(index) > -1;
   }
 
+  getBarColors(): ColorElem[] {
+    let colors;
+    switch(this.content.format) {
+      case ContentType.SCALE:
+        colors = this.themeService.getLikertColors();
+        if ((this.content as ContentScale).optionCount === 4) {
+          colors.splice(2, 1);
+        }
+        break;
+      case ContentType.BINARY:
+        colors = this.themeService.getBinaryColors();
+        break;
+      default:
+        colors = this.themeService.getBarColors();
+    }
+    return colors;
+  }
+
   initChart() {
     const length = this.optionLabels.length;
     this.themeService.getTheme().pipe(takeUntil(this.destroyed$)).subscribe(theme => {
@@ -171,7 +184,7 @@ export class StatisticChoiceComponent extends StatisticContentBaseComponent impl
       this.surface = currentTheme.get('surface').color;
       this.green = currentTheme.get('green').color;
       this.grey = currentTheme.get('grey').color;
-      const barColors = this.themeService.getBarColors();
+      const barColors = this.getBarColors();
       for (let i = 0; i < length; i++) {
         this.answerList[i] = new AnswerList(null, null);
         this.labels[i] = this.label.charAt(i);
