@@ -131,7 +131,7 @@ export class ContentCreationComponent implements OnInit, OnDestroy {
     const answers: DisplayAnswer[] = [];
     const options = (this.content as ContentChoice).options;
     const correctOptions = (this.content as ContentChoice).correctOptionIndexes;
-    options.map((option, i) => {
+    options?.map((option, i) => {
       answers.push(new DisplayAnswer(new AnswerOption(option.label), correctOptions?.includes(i)))
     });
     return answers;

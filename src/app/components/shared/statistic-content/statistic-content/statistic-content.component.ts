@@ -83,6 +83,9 @@ export class StatisticContentComponent implements OnInit {
 
   toggleAnswers() {
     switch (this.format) {
+      case ContentType.CHOICE:
+        this.answersVisible = this.choiceStatistic.toggleAnswers();
+        break;
       case ContentType.TEXT:
         this.answersVisible = this.textStatistic.toggleAnswers();
         break;
@@ -96,7 +99,7 @@ export class StatisticContentComponent implements OnInit {
         this.answersVisible = this.wordcloudStatistic.toggleAnswers();
         break;
       default:
-        this.answersVisible = this.choiceStatistic.toggleAnswers();
+        throw new Error('Unsupported format.');
     }
   }
 
