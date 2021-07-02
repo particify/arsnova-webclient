@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { CreatorRoutingModule } from './creator-routing.module';
 import { ContentChoiceCreationComponent } from './content-creation/content-choice-creation/content-choice-creation.component';
 import { ContentCreationPageComponent } from './content-creation/content-creation-page/content-creation-page.component';
-import { ContentLikertCreationComponent } from './content-creation/content-likert-creation/content-likert-creation.component';
+import { ContentScaleCreationComponent } from './content-creation/content-scale-creation/content-scale-creation.component';
 import { ContentTextCreationComponent } from './content-creation/content-text-creation/content-text-creation.component';
 import { ContentYesNoCreationComponent } from './content-creation/content-yes-no-creation/content-yes-no-creation.component';
 import { RoomCreatorPageComponent } from './room-creator-page/room-creator-page.component';
@@ -66,7 +66,7 @@ import { QRCodeModule } from 'angularx-qrcode';
   declarations: [
     ContentChoiceCreationComponent,
     ContentCreationPageComponent,
-    ContentLikertCreationComponent,
+    ContentScaleCreationComponent,
     ContentTextCreationComponent,
     ContentYesNoCreationComponent,
     RoomCreatorPageComponent,

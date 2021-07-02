@@ -1,20 +1,20 @@
 /* import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
-import { ContentLikertCreationComponent } from './content-likert-creation.component';
+import { ContentScaleCreationComponent } from './content-likert-creation.component';
 
-describe('ContentLikertCreationComponent', () => {
-  let component: ContentLikertCreationComponent;
-  let fixture: ComponentFixture<ContentLikertCreationComponent>;
+describe('ContentScaleCreationComponent', () => {
+  let component: ContentScaleCreationComponent;
+  let fixture: ComponentFixture<ContentScaleCreationComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ ContentLikertCreationComponent ]
+      declarations: [ ContentScaleCreationComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ContentLikertCreationComponent);
+    fixture = TestBed.createComponent(ContentScaleCreationComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -1,0 +1,21 @@
+<div>
+  <mat-checkbox [(ngModel)]="neutralOption" [disabled]="isEditMode">Neutrale Option anbieten</mat-checkbox>
+  <div>
+    <mat-form-field appearance="outline" class="no-field-hint" style="margin-top: 10px">
+      <mat-label>Antwortvorlage</mat-label>
+      <mat-select [(value)]="selectedTemplate" [disabled]="isEditMode">
+        <mat-option *ngFor="let template of templates" [value]="template">{{ ('option-template.' + (template | lowercase)) | translate }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+  <mat-card *ngIf="!isLoading">
+    <mat-list>
+      <mat-list-item fxLayout="column" fxLayoutAlign="center" class="bottom-border"
+                     *ngFor="let answerLabel of answerLabels">
+        <div fxLayout="row">
+          <p>{{ answerLabel | translate }}</p>
+        </div>
+      </mat-list-item>
+    </mat-list>
+  </mat-card>
+</div>

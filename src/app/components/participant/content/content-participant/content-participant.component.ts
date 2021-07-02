@@ -56,7 +56,7 @@ export class ContentParticipantComponent implements OnInit {
     if (this.answer) {
       this.alreadySent = true;
       this.checkIfAbstention(this.answer);
-      if ([ContentType.TEXT, ContentType.SLIDE].indexOf(this.content.format) === -1) {
+      if ([ContentType.CHOICE, ContentType.BINARY].includes(this.content.format)) {
         for (let option of (this.answer as ChoiceAnswer).selectedChoiceIndexes ?? []) {
           this.answersString = this.answersString.concat((this.content as ContentChoice).options[option].label);
         }

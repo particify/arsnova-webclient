@@ -59,7 +59,7 @@ export class StatisticChoiceComponent extends StatisticContentBaseComponent impl
 
   constructor(protected route: ActivatedRoute,
               protected contentService: ContentService,
-              private translateService: TranslateService,
+              protected translateService: TranslateService,
               private themeService: ThemeService) {
     super(route, contentService);
   }

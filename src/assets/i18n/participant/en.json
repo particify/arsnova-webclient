@@ -204,5 +204,32 @@
     "comments": "Comments",
     "group": "Questions",
     "survey": "Live-Survey"
+  },
+  "option-template": {
+    "agreement-negative-2": "Strongly agree",
+    "agreement-negative-1": "Somewhat agree",
+    "agreement-neutral": "Neither agree or disagree",
+    "agreement-positive-1": "Somewhat disagree",
+    "agreement-positive-2": "Strongly disagree",
+    "intensity-negative-2": "Not at all",
+    "intensity-negative-1": "Slightly",
+    "intensity-neutral": "Moderately",
+    "intensity-positive-1": "Quite",
+    "intensity-positive-2": "Extremely",
+    "frequency-negative-2": "Never",
+    "frequency-negative-1": "Rarely",
+    "frequency-neutral": "Sometimes",
+    "frequency-positive-1": "Often",
+    "frequency-positive-2": "Always",
+    "quality-negative-2": "Very poor",
+    "quality-negative-1": "Poor",
+    "quality-neutral": "Average",
+    "quality-positive-1": "Good",
+    "quality-positive-2": "Very good",
+    "probability-negative-2": "Definitely not",
+    "probability-negative-1": "Probably not",
+    "probability-neutral": "Possibly",
+    "probability-positive-1": "Probably",
+    "probability-positive-2": "Definitely"
   }
 }

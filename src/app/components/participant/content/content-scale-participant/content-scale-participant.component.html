@@ -1,0 +1,11 @@
+<mat-radio-group [(ngModel)]="selectedChoiceIndex" [disabled]="alreadySent">
+  <mat-list>
+    <mat-list-item *ngFor="let option of optionLabels; let i = index" fxLayout="column" fxLayoutAlign="center">
+      <mat-radio-button (change)="selectAnswer(i)"
+                        aria-label="{{ 'answer.a11y-select-answer' | translate: {answer: option | translate} }}"
+                        [value]="i">
+        {{ option | translate }}
+      </mat-radio-button>
+    </mat-list-item>
+  </mat-list>
+</mat-radio-group>
