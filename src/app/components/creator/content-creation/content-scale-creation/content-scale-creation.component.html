@@ -4,7 +4,7 @@
     <mat-form-field appearance="outline" class="no-field-hint" style="margin-top: 10px">
       <mat-label>Antwortvorlage</mat-label>
       <mat-select [(value)]="selectedTemplate" [disabled]="isEditMode">
-        <mat-option *ngFor="let template of templates" [value]="template">{{ ('option-template.' + (template | lowercase)) | translate }}</mat-option>
+        <mat-option *ngFor="let template of templates; let i = index" [value]="template">{{ templateLabels[i] | translate }}</mat-option>
       </mat-select>
     </mat-form-field>
   </div>

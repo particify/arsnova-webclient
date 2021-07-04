@@ -230,6 +230,26 @@
     "probability-negative-1": "Probably not",
     "probability-neutral": "Possibly",
     "probability-positive-1": "Probably",
-    "probability-positive-2": "Definitely"
+    "probability-positive-2": "Definitely",
+    "level-negative-2": "Very low",
+    "level-negative-1": "Somewhat low",
+    "level-neutral": "Average",
+    "level-positive-1": "Somewhat high",
+    "level-positive-2": "Very high",
+    "importance-negative-2": "Not at all important",
+    "importance-negative-1": "Slightly important",
+    "importance-neutral": "Moderately important",
+    "importance-positive-1": "Quite important",
+    "importance-positive-2": "Extremely important",
+    "difficulty-negative-2": "Very easy",
+    "difficulty-negative-1": "Somewhat easy",
+    "difficulty-neutral": "Average",
+    "difficulty-positive-1": "Somewhat difficult",
+    "difficulty-positive-2": "Very difficult",
+    "pace-negative-2": "Very slow",
+    "pace-negative-1": "Somewhat slow",
+    "pace-neutral": "Average",
+    "pace-positive-1": "Somewhat fast",
+    "pace-positive-2": "Very fast"
   }
 }

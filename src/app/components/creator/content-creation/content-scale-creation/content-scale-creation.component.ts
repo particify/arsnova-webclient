@@ -17,6 +17,8 @@ import { ContentScale } from '../../../../models/content-scale';
 })
 export class ContentScaleCreationComponent extends ContentCreationComponent implements OnChanges, OnInit {
   templates = LIKERT_SCALE_TEMPLATES;
+  templateLabels = LIKERT_SCALE_TEMPLATES
+      .map(t => 'option-template.' + t.toLowerCase().replace(/_/g, '-'));
   selectedTemplate = LikertScaleTemplate.AGREEMENT;
   neutralOption = true;
 
