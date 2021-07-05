@@ -91,11 +91,9 @@ export abstract class ContentListBaseComponent {
     });
   }
 
-  editContent(content: Content) {
-    this.goToEdit(content);
+  editContent(content: Content, group: string) {
+    this.contentService.goToEdit(content.id, this.room.shortId, group);
   }
-
-  goToEdit(content: Content) {}
 
 
   updateContentChanges(index: number, action: string) {

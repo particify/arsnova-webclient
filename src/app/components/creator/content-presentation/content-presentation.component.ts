@@ -189,8 +189,8 @@ export class ContentPresentationComponent implements OnInit, OnDestroy {
       this.contentIndex = null;
     }
     this.updateInfoBar();
-    this.routeChanged.emit(true);
     setTimeout(() => {
+      this.routeChanged.emit(true);
       const id = [ContentType.SLIDE, ContentType.FLASHCARD].indexOf(this.contents[index].format) > -1 ? 'message-type-info-button' : 'message-button';
       document.getElementById(id).focus();
     }, 300);
@@ -218,7 +218,7 @@ export class ContentPresentationComponent implements OnInit, OnDestroy {
         position = 'END';
       }
     }
-    const state = {position: position, index: step};
+    const state = {position: position, index: step, content: this.contents[this.currentStep]};
     this.eventService.broadcast('ContentStepStateChanged', state);
   }
 

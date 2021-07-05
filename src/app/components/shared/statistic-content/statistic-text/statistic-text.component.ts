@@ -8,6 +8,7 @@ import { ContentAnswerService } from '../../../../services/http/content-answer.s
 import { TextAnswer } from '../../../../models/text-answer';
 import { StatisticContentBaseComponent } from '../statistic-content-base';
 import { Observable } from 'rxjs';
+import { EventService } from '../../../../services/util/event.service';
 
 export class TextStatistic {
   answer: string;
@@ -37,9 +38,9 @@ export class StatisticTextComponent extends StatisticContentBaseComponent implem
     protected contentService: ContentService,
     private contentAnswerService: ContentAnswerService,
     private translateService: TranslateService,
-    protected langService: LanguageService
-  ) {
-    super(route, contentService);
+    protected langService: LanguageService,
+    protected eventService: EventService) {
+    super(route, contentService, eventService);
   }
 
   loadData(): Observable<TextAnswer[]> {
@@ -48,6 +49,11 @@ export class StatisticTextComponent extends StatisticContentBaseComponent implem
 
   initData(answers: TextAnswer[]) {
     this.getData(answers);
+  }
+
+  deleteAnswers() {
+    this.answers = [];
+    this.getData([]);
   }
 
   getData(answers: TextAnswer[]) {

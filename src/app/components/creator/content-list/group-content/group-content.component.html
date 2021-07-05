@@ -190,7 +190,7 @@
                       <mat-icon>more_vert</mat-icon>
                     </button>
                     <mat-menu #moreActions="matMenu" xPosition="before" (closed)="closedMenu()">
-                      <button mat-menu-item (click)="editContent(content)" attr.aria-label="{{ 'content.a11y-edit-content' | translate }}">
+                      <button mat-menu-item (click)="editContent(content, contentGroup.name)" attr.aria-label="{{ 'content.a11y-edit-content' | translate }}">
                         <mat-icon>edit</mat-icon>
                         <span> {{ 'content.edit-content' | translate}}</span>
                       </button>
@@ -203,7 +203,7 @@
                         <span>{{ 'content.remove-content-from-group' | translate}}</span>
                       </button>
                       <mat-divider></mat-divider>
-                      <button mat-menu-item (click)="showDeleteAnswerDialog(content)" attr.aria-label="{{ 'content.a11y-delete-answers' | translate }}">
+                      <button mat-menu-item (click)="deleteAnswers(content)" attr.aria-label="{{ 'content.a11y-delete-answers' | translate }}">
                         <mat-icon>clear_all</mat-icon>
                         <span>{{ 'content.delete-answers' | translate}}</span>
                       </button>

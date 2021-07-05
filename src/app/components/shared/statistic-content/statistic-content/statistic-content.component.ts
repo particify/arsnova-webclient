@@ -50,6 +50,7 @@ export class StatisticContentComponent implements OnInit {
   flashcardMarkdownFeatures = MarkdownFeatureset.EXTENDED;
   HotkeyAction = HotkeyAction;
   multipleRounds: boolean;
+  roundsToDisplay = 0;
 
   constructor(private announceService: AnnounceService,
               private eventService: EventService) { }
@@ -66,10 +67,18 @@ export class StatisticContentComponent implements OnInit {
     if (this.directShow && this.format !== ContentType.FLASHCARD) {
       this.answersVisible = true;
     }
-    this.multipleRounds = this.content.state.round > 1;
+    this.roundsToDisplay = this.content.state.round - 1;
+    this.multipleRounds = this.roundsToDisplay > 0;
     this.isLoading = false;
     this.routeChanged.subscribe(() => {
       this.updateCounter(this.answerCount);
+      this.broadcastRoundState();
+    });
+    this.broadcastRoundState();
+    this.eventService.on<any>('ContentRoundChanged').subscribe(roundData => {
+      if (this.index === roundData.contentIndex) {
+        this.changeRound(roundData.round);
+      }
     });
     if (this.isPresentation) {
       this.eventService.on<UiState>(RemoteMessage.UI_STATE_CHANGED).subscribe(state => {
@@ -89,6 +98,12 @@ export class StatisticContentComponent implements OnInit {
         const event = new ContentInitializedEvent(new ContentFocusState(this.content.id, this.contentGroupId, false, false));
         this.eventService.broadcast(event.type, event.payload);
       }
+    }
+  }
+
+  broadcastRoundState() {
+    if (this.active) {
+      this.eventService.broadcast('MultipleContentRounds', this.multipleRounds);
     }
   }
 
@@ -173,8 +188,12 @@ export class StatisticContentComponent implements OnInit {
   }
 
   changeRound(round: number) {
-    this.choiceStatistic.roundsToDisplay = round;
-    this.choiceStatistic.updateCounterForRound();
-    this.choiceStatistic.updateChart();
+    const chartComponent: StatisticChoiceComponent | StatisticScaleComponent = this.content.format === ContentType.SCALE ? this.scaleStatistic : this.choiceStatistic;
+    chartComponent.roundsToDisplay = round;
+    chartComponent.rounds = round + 1;
+    chartComponent.updateCounterForRound();
+    if (this.answersVisible) {
+      chartComponent.updateChart();
+    }
   }
 }

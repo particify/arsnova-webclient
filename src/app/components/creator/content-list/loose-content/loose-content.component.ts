@@ -69,10 +69,6 @@ export class LooseContentComponent extends ContentListBaseComponent implements O
     this.creationSelection.fill(true);
   }
 
-  goToEdit(content: Content) {
-    this.router.navigate(['creator', 'room', this.room.shortId, 'group', 'archive', 'edit', content.id]);
-  }
-
   createNewGroup() {
     if (!this.creationMode) {
       this.creationMode = true;

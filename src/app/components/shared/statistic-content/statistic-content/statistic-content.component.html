@@ -11,7 +11,7 @@
     <div [attr.hidden]="isPresentation || null" fxLayout="row" fxLayoutAlign="space-between">
       <app-answer-count tabindex="-1" *ngIf="!isLoading" [count]="answerCount"></app-answer-count>
       <div fxLayout="row">
-        <lib-extension-point *ngIf="multipleRounds && answersVisible" extensionId="round-selection" (extensionEvent)="changeRound($event)"></lib-extension-point>
+        <lib-extension-point *ngIf="multipleRounds && answersVisible" extensionId="round-selection" (extensionEvent)="changeRound($event)" [extensionData]="{round: roundsToDisplay}"></lib-extension-point>
         <div fxLayout="row" fxLayoutAlign="end" [ngClass]="{'fix-width': !survey}">
           <button mat-icon-button *ngIf="answersVisible && !survey && correctOptionsPublished" disableRipple (click)="toggleCorrect()"
                   matTooltip="{{ 'statistic.show-correct' | translate }}" aria-labelledby="show-correct"

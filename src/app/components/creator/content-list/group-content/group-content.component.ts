@@ -12,6 +12,7 @@ import { ContentGroupService } from '../../../../services/http/content-group.ser
 import { ContentListBaseComponent } from '../content-list-base.component';
 import { ContentGroup } from '../../../../models/content-group';
 import { AnnounceService } from '../../../../services/util/announce.service';
+import { EventService } from '../../../../services/util/event.service';
 import { LocalFileService } from '../../../../services/util/local-file.service';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Observable, Subject } from 'rxjs';
@@ -66,6 +67,7 @@ export class GroupContentComponent extends ContentListBaseComponent implements O
     protected globalStorageService: GlobalStorageService,
     protected contentGroupService: ContentGroupService,
     protected announceService: AnnounceService,
+    public eventService: EventService,
     protected localFileService: LocalFileService,
     protected router: Router,
     private hotkeyService: HotkeyService
@@ -85,6 +87,11 @@ export class GroupContentComponent extends ContentListBaseComponent implements O
       });
     });
     this.translateService.use(this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE));
+    this.eventService.on('AnswersDeleted').subscribe(contentId => {
+      const content = this.contents.find(c => c.id === contentId);
+      content.state.round = 1;
+      this.resetAnswerEvent.next(content.id);
+    })
   }
 
   ngOnDestroy() {
@@ -136,6 +143,10 @@ export class GroupContentComponent extends ContentListBaseComponent implements O
 
   goToEdit(content: Content) {
     this.router.navigate(['creator', 'room', this.room.shortId, 'group', this.contentGroup.name, 'edit', content.id]);
+  }
+
+  announce() {
+    this.announceService.announce('content.a11y-content-list-shortcuts');
   }
 
   goInTitleEditMode(): void {
@@ -280,22 +291,12 @@ export class GroupContentComponent extends ContentListBaseComponent implements O
     this.updatePublishedIndexes(-1, -1);
   }
 
-  showDeleteAnswerDialog(content: Content): void {
+  deleteAnswers(content: Content) {
     const dialogRef = this.dialogService.openDeleteDialog('really-delete-answers');
     dialogRef.afterClosed().subscribe(result => {
       if (result === 'delete') {
-        this.deleteAnswers(content);
+        this.contentService.deleteAnswersOfContent(content.id, this.room.id);
       }
-    });
-  }
-
-  deleteAnswers(content: Content) {
-    this.contentService.deleteAnswers(this.contentGroup.roomId, content.id).subscribe(() => {
-      content.state.round = 1;
-      this.resetAnswerEvent.next(content.id);
-      this.translateService.get('content.answers-deleted').subscribe(msg => {
-        this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
-      });
     });
   }
 

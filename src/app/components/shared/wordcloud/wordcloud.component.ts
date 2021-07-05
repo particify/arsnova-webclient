@@ -38,13 +38,11 @@ export class WordcloudComponent implements OnChanges {
   }
 
   ngOnChanges() {
-    if (this.wordWeights.length > 0) {
-      // Sorting is not required but leads to a consistent color order based on
-      // word frequency for the initially rendered cloud.
-      this.wordWeights.sort((a, b) => b[1] - a[1]);
-      this.updateColorIndex();
-      this.updateWordcloud();
-    }
+    // Sorting is not required but leads to a consistent color order based on
+    // word frequency for the initially rendered cloud.
+    this.wordWeights.sort((a, b) => b[1] - a[1]);
+    this.updateColorIndex();
+    this.updateWordcloud();
   }
 
   /**

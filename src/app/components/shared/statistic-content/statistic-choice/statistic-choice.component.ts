@@ -14,6 +14,7 @@ import { Subject } from 'rxjs';
 import { ContentType } from '../../../../models/content-type.enum';
 import { ColorElem } from '@arsnova/theme/Theme';
 import { ContentScale } from '@arsnova/app/models/content-scale';
+import { EventService } from '../../../../services/util/event.service';
 
 export class AnswerList {
   label: string;
@@ -44,7 +45,7 @@ export class StatisticChoiceComponent extends StatisticContentBaseComponent impl
   indicationColors: Array<string[]> = [[], []];
   label = 'ABCDEFGH';
   labels: string[] = [];
-  data: number[] = [];
+  data: Array<number[]> = [[], []];
   colorLabel = false;
   survey = false;
   optionLabels: string[];
@@ -63,8 +64,9 @@ export class StatisticChoiceComponent extends StatisticContentBaseComponent impl
   constructor(protected route: ActivatedRoute,
               protected contentService: ContentService,
               protected translateService: TranslateService,
-              private themeService: ThemeService) {
-    super(route, contentService);
+              private themeService: ThemeService,
+              protected eventService: EventService) {
+    super(route, contentService, eventService);
   }
 
   ngOnDestroy() {
@@ -77,6 +79,7 @@ export class StatisticChoiceComponent extends StatisticContentBaseComponent impl
 
   init() {
     this.rounds = this.content.state.round;
+    this.roundsToDisplay = this.rounds - 1;
     this.chartId = 'chart-' + this.content.id;
     this.optionLabels = this.optionLabels ?? this.content.options.map(o => o.label);
     this.correctOptionIndexes = this.content.correctOptionIndexes;
@@ -106,6 +109,10 @@ export class StatisticChoiceComponent extends StatisticContentBaseComponent impl
     return this.answersVisible;
   }
 
+  deleteAnswers() {
+    this.data = [[], []];
+    this.updateChart();
+  }
 
   createChart(colors: Array<string[]>) {
     Chart.defaults.color = this.colorStrings.onBackground;
@@ -118,8 +125,8 @@ export class StatisticChoiceComponent extends StatisticContentBaseComponent impl
     };
     const dataSets = [
       {
-        data: this.data[0],
-        backgroundColor: colors[0]
+        data: this.data[this.roundsToDisplay],
+        backgroundColor: colors[this.roundsToDisplay]
       }
     ];
     if (this.roundsToDisplay > 1) {
@@ -261,20 +268,24 @@ export class StatisticChoiceComponent extends StatisticContentBaseComponent impl
       this.answerList[i] = new AnswerList(null, null);
       this.labels[i] = this.label.charAt(i);
       this.answerList[i].label = this.labels[i];
-      this.answerList[i].answer = this.content.options[i].label;
+      this.answerList[i].answer = this.optionLabels[i];
       this.initRoundAnswerOptions(i, length);
     }
   }
 
   updateData(stats: AnswerStatistics) {
-    if (this.rounds > 1) {
-      for (let i = 0; i < this.rounds; i++) {
-        if (stats.roundStatistics[i]) {
-          this.setData(stats, i);
+    if (stats) {
+      if (this.rounds > 1) {
+        for (let i = 0; i < this.rounds; i++) {
+          if (stats.roundStatistics[i]) {
+            this.setData(stats, i);
+          }
         }
+      } else {
+        this.setData(stats, this.roundsToDisplay);
       }
     } else {
-      this.setData(stats, this.roundsToDisplay);
+      this.independentAnswerCount = [[], [], []];
     }
     this.updateCounterForRound();
   }
@@ -303,6 +314,31 @@ export class StatisticChoiceComponent extends StatisticContentBaseComponent impl
     this.updateCounter(this.independentAnswerCount[this.roundsToDisplay]);
   }
 
+  prepareChartForRoundCompare(resetChart: boolean) {
+    for (let i = 0; i < this.rounds; i++) {
+      if (resetChart) {
+        this.chart.data.datasets.push({
+          data: this.data[i],
+          backgroundColor: this.colorLabel ? this.indicationColors[i] : this.colors[i]
+        });
+      } else {
+        this.chart.data.datasets[i].data = this.data[i];
+      }
+    }
+  }
+
+  prepareChartForSingleRound(resetChart: boolean) {
+    if (resetChart) {
+      this.chart.data.datasets.push({
+        data: this.data[this.roundsToDisplay],
+        backgroundColor: this.colorLabel ? this.indicationColors[this.roundsToDisplay] : this.colors[this.roundsToDisplay]
+      });
+    } else {
+      this.chart.data.datasets[0].data = this.data[this.roundsToDisplay];
+      this.chart.data.datasets[0].backgroundColor = this.colors[this.roundsToDisplay];
+    }
+  }
+
   updateChart() {
     if (this.chart) {
       let reset = false;
@@ -310,17 +346,14 @@ export class StatisticChoiceComponent extends StatisticContentBaseComponent impl
         this.chart.data.datasets = [];
         reset = true;
       }
-      for (let i = 0; i < this.rounds; i++) {
-        if (i === this.roundsToDisplay || this.roundsToDisplay === 2) {
-          if (reset) {
-            this.chart.data.datasets.push({
-              data: this.data[i],
-              backgroundColor: this.colorLabel ? this.indicationColors[i] : this.colors[i]
-            });
-          } else {
-            this.chart.data.datasets[i].data = this.data[i];
-          }
-        }
+      if (this.roundsToDisplay > 0) {
+        this.colors[1] = this.colors[0];
+        this.indicationColors[1] = this.indicationColors[0];
+      }
+      if (this.roundsToDisplay < 2) {
+        this.prepareChartForSingleRound(reset);
+      } else {
+        this.prepareChartForRoundCompare(reset);
       }
       this.chart.update();
     } else {

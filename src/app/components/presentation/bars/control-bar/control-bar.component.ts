@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { NavBarComponent, NavBarItem } from '../../../shared/bars/nav-bar/nav-bar.component';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RoutingService } from '../../../../services/util/routing.service';
@@ -21,6 +21,10 @@ import { TranslateService } from '@ngx-translate/core';
 import { RemoteMessage } from '../../../../models/events/remote/remote-message.enum';
 import { ContentGroupEvent } from '../../../../models/events/remote/content-group-event';
 import { Features } from '../../../../models/features.enum';
+import { MatMenuTrigger } from '@angular/material/menu';
+import { ContentService } from '../../../../services/http/content.service';
+import { Content } from '../../../../models/content';
+import { DialogService } from '../../../../services/util/dialog.service';
 
 export class KeyNavBarItem extends NavBarItem {
   key: string;
@@ -47,6 +51,8 @@ export class ControlBarComponent extends NavBarComponent implements OnInit, OnDe
   @Output() activeFeature: EventEmitter<string> = new EventEmitter<string>();
   @Output() activeGroup: EventEmitter<string> = new EventEmitter<string>();
 
+  @ViewChild('moreMenuTrigger') moreMenuTrigger: MatMenuTrigger;
+
   isLoading = true;
   destroyed$ = new Subject();
   destroyed = false;
@@ -62,6 +68,9 @@ export class ControlBarComponent extends NavBarComponent implements OnInit, OnDe
   commentSortTypes = [Sort.TIME, Sort.VOTEDESC];
   isCurrentContentPublished = false;
   contentIndex = 0;
+  content: Content;
+  contentLoaded = false;
+  resetAnswerEvent: Subject<string> = new Subject<string>();
   notificationMessage: string;
   notificationIcon: string;
   showNotification = false;
@@ -102,6 +111,9 @@ export class ControlBarComponent extends NavBarComponent implements OnInit, OnDe
 
   private hotkeyRefs: Symbol[] = [];
 
+  multipleRounds = false;
+  contentRounds = new Map<string, number>();
+
   constructor(
     protected router: Router,
     protected routingService: RoutingService,
@@ -114,7 +126,9 @@ export class ControlBarComponent extends NavBarComponent implements OnInit, OnDe
     protected apiConfigService: ApiConfigService,
     private announceService: AnnounceService,
     private hotkeyService: HotkeyService,
-    private translateService: TranslateService
+    private translateService: TranslateService,
+    private contentService: ContentService,
+    private dialogService: DialogService
   ) {
     super(router, routingService, route, globalStorageService,
       roomStatsService, feedbackService, contentGroupService, eventService);
@@ -204,6 +218,14 @@ export class ControlBarComponent extends NavBarComponent implements OnInit, OnDe
     this.eventService.on<any>('ContentStepStateChanged').subscribe(state => {
       this.contentStepState = state.position;
       this.contentIndex = state.index;
+      this.content = state.content;
+      this.contentLoaded = false;
+      if (!this.contentRounds.get(this.content.id)) {
+        this.contentRounds.set(this.content.id, this.content.state.round - 1);
+      }
+      setTimeout(() => {
+        this.contentLoaded = true;
+      },0);
       this.globalStorageService.setItem(STORAGE_KEYS.LAST_INDEX, this.contentIndex);
       this.setArrowsState(this.contentStepState);
       this.checkIfContentLocked();
@@ -226,6 +248,9 @@ export class ControlBarComponent extends NavBarComponent implements OnInit, OnDe
     this.eventService.on<string>(event.type).subscribe(contentGroupId => {
       this.changeGroup(this.contentGroups.filter(cg => cg.id === contentGroupId)[0]);
     });
+    this.eventService.on<boolean>('MultipleContentRounds').subscribe(multipleRounds => {
+      this.multipleRounds = multipleRounds;
+    })
   }
 
   checkIfContentLocked() {
@@ -414,8 +439,53 @@ export class ControlBarComponent extends NavBarComponent implements OnInit, OnDe
           key: item.key,
           action: actions[item.name],
           actionTitle: t
-        } as Hotkey))
+        } as Hotkey)),
       ).subscribe((h: Hotkey) => this.hotkeyService.registerHotkey(h, this.hotkeyRefs))
     );
+    this.translateService.get('control-bar.more').subscribe(t =>
+      this.hotkeyService.registerHotkey({
+        key: 'm',
+        action: () => this.toggleMoreMenu(),
+        actionTitle: t
+      }, this.hotkeyRefs)
+    );
+  }
+
+  toggleMoreMenu() {
+    this.moreMenuTrigger.openMenu();
+  }
+
+  editContent() {
+    this.contentService.goToEdit(this.content.id, this.shortId, this.group.name);
+  }
+
+  deleteContentAnswers() {
+    this.eventService.on<string>('AnswersDeleted').subscribe(contentId => {
+      this.content.state.round = 1;
+      this.resetAnswerEvent.next(this.content.id);
+      this.changeRound(0);
+      this.multipleRounds = false;
+    });
+    const dialogRef = this.dialogService.openDeleteDialog('really-delete-answers');
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === 'delete') {
+        this.contentService.deleteAnswersOfContent(this.content.id, this.roomId);
+      }
+    });
+  }
+
+  changeRound(round: number) {
+    this.contentRounds.set(this.content.id, round);
+    const body = {
+      contentIndex: this.contentIndex,
+      round: round
+    };
+    this.eventService.broadcast('ContentRoundChanged', body);
+  }
+
+  afterRoundStarted(content: Content) {
+    this.content = content;
+    this.changeRound(this.content.state.round - 1);
+    this.multipleRounds = true;
   }
 }

@@ -16,9 +16,10 @@ import { StatisticContentBaseComponent } from '../statistic-content-base';
 import { ActivatedRoute } from '@angular/router';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
-import { ThemeService } from '@arsnova/theme/theme.service';
+import { ThemeService } from '../../../../../theme/theme.service';
 import { TranslateService } from '@ngx-translate/core';
-import { Combination } from '@arsnova/app/models/round-statistics';
+import { Combination } from '../../../../models/round-statistics';
+import { EventService } from '../../../../services/util/event.service';
 
 export const MAX_COMBINATIONS = 4;
 
@@ -51,8 +52,9 @@ export class StatisticSortComponent extends StatisticContentBaseComponent implem
   constructor(protected contentService: ContentService,
               protected route: ActivatedRoute,
               private themeService: ThemeService,
-              private translateService: TranslateService) {
-    super(route, contentService);
+              private translateService: TranslateService,
+              protected eventService: EventService) {
+    super(route, contentService, eventService);
   }
 
   ngOnDestroy() {
@@ -145,6 +147,11 @@ export class StatisticSortComponent extends StatisticContentBaseComponent implem
       this.toggleCorrect();
     }
     return this.answersVisible;
+  }
+
+  deleteAnswers() {
+    this.data = [];
+    this.updateChart();
   }
 
   toggleCorrect() {
