@@ -44,6 +44,7 @@ export class GroupContentComponent extends ContentListBaseComponent implements O
   lastPublishedIndexBackup = -1;
   firstPublishedIndexBackup = -1;
   copiedContents = [];
+  activeMenuIndex: number;
 
   constructor(
     protected contentService: ContentService,
@@ -461,4 +462,13 @@ export class GroupContentComponent extends ContentListBaseComponent implements O
     const name = this.localFileService.generateFilename([this.contentGroup.name, this.room.shortId], true);
     return `${name}.${extension}`;
   }
+
+  openedMenu(index: number) {
+    this.activeMenuIndex = index;
+  }
+
+  closedMenu() {
+    this.activeMenuIndex = null;
+  }
+
 }

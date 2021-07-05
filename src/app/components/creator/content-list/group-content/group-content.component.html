@@ -111,7 +111,7 @@
                    attr.aria-label="{{ 'content.a11y-selected-content' | translate: { name: content.body } }}">
                   {{ content.body }}
                 </p>
-                <div fxLayout="row" fxLayoutAlign="center center">
+                <div fxLayout="row" fxLayoutAlign="center center" [ngClass]="{'show-bar': i === activeMenuIndex, 'button-bar': i !== activeMenuIndex}">
                   <div fxLayout="row" *ngIf="contentTypes.indexOf(content.format) > -1">
                     <button mat-icon-button *ngIf="content.format === 'TEXT' && content.state.answersPublished"
                             (click)="toggleAnswersPublished(content);$event.stopPropagation()"
@@ -126,12 +126,12 @@
                       <mat-icon class="lock-icon locked">visibility_off</mat-icon>
                     </button>
                     <button mat-icon-button (click)="$event.stopPropagation()" #publishTrigger="matMenuTrigger"
-                            [matMenuTriggerFor]="publishActions"
+                            [matMenuTriggerFor]="publishActions" (menuOpened)="openedMenu(i)"
                             attr.aria-label="{{ 'content.a11y-unlock' | translate }}"
                             matTooltip="{{ 'content.unlock' | translate}}">
                       <mat-icon class="lock-icon locked">lock_open</mat-icon>
                     </button>
-                    <mat-menu #publishActions="matMenu" xPosition="before">
+                    <mat-menu #publishActions="matMenu" xPosition="before" (closed)="closedMenu()">
                       <div class="menu-unlock">
                         <button mat-menu-item *ngIf="((firstPublishedIndex !== lastPublishedIndex) ||
                         (firstPublishedIndex === lastPublishedIndex && i !== firstPublishedIndex)) ||
@@ -171,10 +171,11 @@
                     </mat-menu>
                     <button mat-icon-button (keyup.enter)="menuTrigger.openMenu()" #menuTrigger="matMenuTrigger"
                             [matMenuTriggerFor]="moreActions" (click)="$event.stopPropagation()" aria-labelledby="more"
+                            (menuOpened)="openedMenu(i)"
                             class="moreButton" matTooltip="{{ 'content.more-options' | translate}}">
                       <mat-icon>more_vert</mat-icon>
                     </button>
-                    <mat-menu #moreActions="matMenu" xPosition="before">
+                    <mat-menu #moreActions="matMenu" xPosition="before" (closed)="closedMenu()">
                       <button mat-menu-item (click)="editContent(content)" attr.aria-label="{{ 'content.a11y-edit-content' | translate }}">
                         <mat-icon>edit</mat-icon>
                         <span> {{ 'content.edit-content' | translate}}</span>
