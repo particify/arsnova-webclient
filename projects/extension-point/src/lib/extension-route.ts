@@ -8,7 +8,8 @@ export enum RouteMountPoint {
   CREATOR,
   MODERATOR,
   PARTICIPANT,
-  PRESENTATION
+  PRESENTATION,
+  ADMIN
 }
 
 /**
