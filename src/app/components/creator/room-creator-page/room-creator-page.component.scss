@@ -2,6 +2,10 @@
   width: 100%;
 }
 
+.mat-card-content {
+  margin-bottom: 2em;
+}
+
 .main-button {
   width: 90%;
   height: 100%;
@@ -34,22 +38,47 @@
 .corner-buttons {
   width: 40px;
   height: 40px;
-  margin-bottom: 5%;
 }
 
 .menu-icon {
   color: var(--secondary);
 }
 
-.room-short-id {
-  opacity: 0.8;
-  font-size: calc(14px + 0.6vw);
-  color: var(--on-surface);
-  margin-top: 3%;
+.header {
+  width: 100%;
+  display: flex;
+  align-items: center;
 }
 
-.mat-card-subtitle {
+@media(min-width: 701px) {
+  .header {
+    flex-direction: row;
+    justify-content: space-between;
+    & > * {
+      font-size: 24px;
+    }
+  }
+}
+
+@media(max-width: 700px) {
+  .header {
+    flex-direction: column;
+    justify-content: center;
+    & > * {
+      font-size: 18px;
+    }
+  }
+}
+
+.room-name {
+  word-break: break-all;
   margin: 0;
+  padding: 8px;
+}
+
+.room-short-id {
+  opacity: 0.5;
+  padding: 8px 16px;
 }
 
 .button-text {
@@ -74,16 +103,6 @@
   &:last-of-type {
     margin-bottom: 5%;
   }
-}
-
-.mat-card-header {
-  margin: 4% 0 1% 0;
-}
-
-.mat-card-title {
-  word-break: break-all;
-  font-size: calc(18px + 0.8vw) !important;
-  font-weight: normal;
 }
 
 .mat-grid-tile {

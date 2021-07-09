@@ -7,29 +7,20 @@
     <mat-card *ngIf="!isLoading && room">
       <mat-card-content>
         <div fxLayout="row">
-          <button mat-icon-button class="corner-buttons" [ngClass]="{'disabled': noGroups}" id="statistics-button"
-                  (click)="navToStats('creator')" aria-labelledby="statistics">
-            <mat-icon class="corner-icon icon-secondary" matTooltip="{{ 'room-page.answer-statistics' | translate}}">insert_chart
-            </mat-icon>
-          </button>
+          <div class="header">
+            <span class="room-name">
+              {{ room.name }}
+            </span>
+            <span class="room-short-id">
+               #{{ room.shortId.slice(0, 4) }}{{  room.shortId.slice(4, 8) }}
+            </span>
+          </div>
           <button mat-icon-button class="corner-buttons" id="presentation-button" (click)="openPresentationMode()"
                   aria-labelledby="presentation-mode">
             <mat-icon class="corner-icon icon-secondary" [matTooltip]="'presentation.presentation-mode' | translate">
               present_to_all
             </mat-icon>
           </button>
-          <span class="fill-remaining-space"></span>
-          <mat-card-header fxLayoutAlign="center" fxLayout="row">
-            <mat-card-title fxLayoutAlign="center">
-              {{ room.name }}
-            </mat-card-title>
-            <mat-card-subtitle fxLayoutAlign="center">
-            <span class="room-short-id">
-              {{ room.shortId.slice(0, 4) }} {{  room.shortId.slice(4, 8) }}
-            </span>
-            </mat-card-subtitle>
-          </mat-card-header>
-          <span class="fill-remaining-space"></span>
           <button id="more-button" mat-icon-button [matMenuTriggerFor]="moreMenu" matTooltip="{{ 'room-page.more-options' | translate }}"
                   aria-labelledby="more-options">
             <mat-icon class="corner-icon icon-secondary">more_vert</mat-icon>
@@ -139,7 +130,6 @@
   <div id="settings">{{'room-page.a11y-settings' | translate}}</div>
   <div id="create-content">{{'room-page.a11y-create-content' | translate}}</div>
   <div id="live-survey">{{'room-page.a11y-live-survey' | translate}}</div>
-  <div id="statistics">{{'room-page.a11y-statistics' | translate}}</div>
   <div id="share">{{'room-page.a11y-share' | translate}}</div>
   <div id="switch-role">{{'room-page.a11y-switch-role' | translate}}</div>
   <div id="more-options">{{'room-page.a11y-more-options' | translate}}</div>
