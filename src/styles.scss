@@ -526,6 +526,11 @@ div {
   }
 }
 
+.stroked-primary {
+  color: var(--primary);
+  border-color: var(--primary)!important;
+}
+
 // Links
 
 .action-link {

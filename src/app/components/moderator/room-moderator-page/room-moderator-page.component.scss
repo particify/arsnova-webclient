@@ -1,88 +1,11 @@
-.mat-card {
-  width: 100%;
-  min-height: 270px;
+@import '../../shared/room-page/room-page.component';
+
+.mat-card-content {
+  margin-bottom: 1em;
 }
 
-.mat-icon-button {
-  width: 100%;
-  height: 100%;
-  color: var(--primary);
-  transition: all 150ms;
-  &.mat-focus-indicator {
-    border-radius: 0;
+@media(min-width: 701px) {
+  .action-button-container {
+    min-height: 180px;
   }
-}
-
-.hover {
-  &:hover {
-    transform: scale(1.1)
-  }
-}
-
-.main-icon {
-  font-size: 70px;
-  height: 70px;
-  width: 70px;
-}
-
-.desktop {
-  font-size: 80px;
-  height: 80px;
-  width: 80px;
-}
-
-.button-text {
-  padding: 0;
-  margin: 3% 0;
-}
-
-.room-short-id {
-  opacity: 0.8;
-  font-size: calc(14px + 0.6vw);
-  color: var(--on-surface);
-  margin-top: 10%;
-}
-
-.mat-card-header {
-  margin: 4% 0 1% 0;
-}
-
-.mat-card-title {
-  word-break: break-all;
-  font-size: calc(18px + 0.8vw) !important;
-  font-weight: normal;
-}
-
-.mat-card-subtitle {
-  margin: 0;
-}
-
-.mat-grid-list {
-  width: 100%;
-  min-height: 140px;
-  padding: 0 !important;
-  margin: 4% 0;
-}
-
-.mat-grid-tile {
-  height: 90%;
-  padding: 2% !important;
-  overflow: inherit;
-}
-
-.single-tile {
-  width: calc(100% - 32px) !important;
-}
-
-.double-tile {
-  width: calc(50% - 16px) !important;
-}
-
-.big-container {
-  min-height: 180px;
-}
-
-.corner-buttons {
-  width: 40px;
-  height: 40px;
 }

@@ -1,54 +1,55 @@
-<app-sidebar *ngIf="!isLoading" [barItems]="barItems"></app-sidebar>
-<div fxLayout="column" fxLayoutAlign="center" fxLayoutGap="20px" fxFill>
+<app-sidebar *ngIf="!isLoading" [barItems]="infoBarItems"></app-sidebar>
+<div fxLayout="column" fxLayoutGap="20px" fxFill>
   <div fxLayout="row" fxLayoutAlign="center">
     <button id="live_announcer-button" tabIndex="-1" (click)="announce()"
             class="visually-hidden">{{ 'room-page.a11y-moderator-message' | translate: {room: room.name} }}</button>
     <app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
     <mat-card *ngIf="!isLoading && room">
-      <div fxLayout="row" fxLayoutAlign="space-between">
-        <span class="corner-buttons"></span>
-        <mat-card-header fxLayoutAlign="center">
-          <mat-card-title fxLayoutAlign="center">
-            {{ room.name }}
-          </mat-card-title>
-          <mat-card-subtitle fxLayoutAlign="center">
+      <mat-card-content>
+        <div fxLayout="row">
+          <div class="header">
+            <span class="room-name">
+              {{ room.name }}
+            </span>
             <span class="room-short-id">
-               {{ room.shortId.slice(0, 4) }} {{  room.shortId.slice(4, 8) }}
-              </span>
-          </mat-card-subtitle>
-        </mat-card-header>
-        <button mat-icon-button class="corner-buttons" (click)="switchRole('participant')"
-                aria-labelledby="switch-role">
-          <mat-icon class="corner-icon icon-secondary" matTooltip="{{ 'room-page.switch-role' | translate}}">{{roleIconString}}
-          </mat-icon>
-        </button>
-      </div>
-      <mat-card-content *ngIf="room.description" fxLayoutAlign="center">
-        <app-rendered-text [rawText]="room.description.trim()" [renderedText]="room.renderedDescription"></app-rendered-text>
+               {{room.shortId}}
+            </span>
+          </div>
+          <button mat-icon-button class="corner-buttons" (click)="switchRole('participant')"
+                  aria-labelledby="switch-role">
+            <mat-icon class="corner-icon icon-secondary"
+                      matTooltip="{{ 'room-page.switch-role' | translate}}">{{roleIconString}}
+            </mat-icon>
+          </button>
+        </div>
+        <div *ngIf="room.description" fxLayoutAlign="center">
+          <app-rendered-text [rawText]="room.description.trim()"
+                             [renderedText]="room.renderedDescription"></app-rendered-text>
+        </div>
       </mat-card-content>
-      <div fxLayout="column" fxLayoutAlign="center" fxLayoutGap="20px">
-        <mat-grid-list cols="{{viewModuleCount}}" rowHeight="1:1" [ngClass]="{'big-container': deviceWidth >= 500, 'single-container': !moderationEnabled}">
-          <mat-grid-tile [ngClass]="{'single-tile': !moderationEnabled, 'double-tile': moderationEnabled}">
-            <button id="comments-button" mat-icon-button aria-labelledby="comments"
-                    [ngClass]="{'hover': deviceWidth > 500}" [disableRipple]="true"
-                    routerLink="/moderator/room/{{ room.shortId }}/comments">
-              <mat-icon matBadge="{{commentCounter}}" class="main-icon"
-                        [ngClass]="{'desktop' : deviceWidth > 500}">question_answer
+      <div fxLayout="column" fxLayoutAlign="center">
+        <div class="action-button-container" fxLayout="row" fxLayoutAlign="center">
+          <div class="action-button-item" fxLayoutAlign="center center">
+            <button id="comments-button" mat-icon-button class="main-button" [disableRipple]="true"
+                    routerLink="/creator/room/{{ room.shortId }}/comments" aria-labelledby="comments">
+              <mat-icon matBadge="{{commentCounter}}" class="main-icon">
+                question_answer
               </mat-icon>
-              <h3 class="button-text">{{ 'room-page.public-stream' | translate}}</h3>
+              <p class="button-text">
+                {{ 'room-page.comments' | translate}}</p>
             </button>
-          </mat-grid-tile>
-          <mat-grid-tile *ngIf="moderationEnabled">
+          </div>
+          <div *ngIf="moderationEnabled" class="action-button-item" fxLayoutAlign="center center">
             <button id="moderation-button" mat-icon-button aria-labelledby="moderation"
-                    [ngClass]="{'hover': deviceWidth > 500}" [disableRipple]="true"
+                    class="main-button"  [disableRipple]="true"
                     routerLink="/moderator/room/{{ room.shortId }}/comments/moderation">
-              <mat-icon matBadge="{{moderatorCommentCounter}}" class="main-icon"
-                        [ngClass]="{'desktop' : deviceWidth > 500}">gavel
+              <mat-icon matBadge="{{moderatorCommentCounter}}" class="main-icon">
+                gavel
               </mat-icon>
               <h3 class="button-text">{{ 'room-page.moderating-stream' | translate}}</h3>
             </button>
-          </mat-grid-tile>
-        </mat-grid-list>
+          </div>
+        </div>
         <p tabindex="-1" id="moderation-disabled" class="visually-hidden">
           {{ 'room-page.a11y-moderation-disabled' | translate }}</p>
       </div>
