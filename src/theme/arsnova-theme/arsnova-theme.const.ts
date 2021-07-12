@@ -41,14 +41,20 @@ export const arsnova = {
   '--grey': '#BDBDBD',
   '--black': '#000000',
 
-  '--color-blue': '#027DB9',
-  '--color-yellow': '#ffca28',
-  '--color-teal': '#4D8076',
-  '--color-red': '#e64a19',
-  '--color-purple': '#8E79AB',
-  '--color-brown': '#9f6b3f',
-  '--color-green': '#787B1D',
-  '--color-pink': '#EB0054',
+  '--bar-blue': '#027DB9',
+  '--bar-yellow': '#ffca28',
+  '--bar-teal': '#4D8076',
+  '--bar-red': '#e64a19',
+  '--bar-purple': '#8E79AB',
+  '--bar-brown': '#9f6b3f',
+  '--bar-green': '#787B1D',
+  '--bar-pink': '#EB0054',
+
+  '--likert-strongly-agree': '#3f51b5',
+  '--likert-agree': '#7986cb',
+  '--likert-neither': '#e0e0e0',
+  '--likert-disagree': '#ff8a65',
+  '--likert-strongly-disagree': '#ff5722'
 };
 
 export const arsnova_meta = {

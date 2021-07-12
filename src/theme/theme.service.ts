@@ -10,6 +10,8 @@ export class ThemeService {
   private activeTheme = new BehaviorSubject(null);
   private themes: Theme[] = [];
   private barColors = ['blue', 'yellow', 'teal', 'red', 'purple', 'brown', 'green', 'pink'];
+  private likertColors = ['strongly-agree', 'agree', 'neither', 'disagree', 'strongly-disagree'];
+  private binaryColors = ['strongly-agree', 'strongly-disagree'];
 
   constructor(private globalStorageService: GlobalStorageService) {
     let currentTheme = this.globalStorageService.getItem(STORAGE_KEYS.THEME);
@@ -59,13 +61,21 @@ export class ThemeService {
     return null;
   }
 
-  getColorArray(names: string[]) {
+  getColorArray(names: string[], prefix: string) {
     const currentTheme = this.getThemeByKey(this.themeName);
-    return names.map(c => currentTheme.get('color-' + c));
+    return names.map(c => currentTheme.get(prefix + '-' + c));
   }
 
   public getBarColors() {
-    return this.getColorArray(this.barColors);
+    return this.getColorArray(this.barColors, 'bar');
+  }
+
+  public getLikertColors() {
+    return this.getColorArray(this.likertColors, 'likert');
+  }
+
+  getBinaryColors() {
+    return this.getColorArray(this.binaryColors, 'likert');
   }
 
 }
