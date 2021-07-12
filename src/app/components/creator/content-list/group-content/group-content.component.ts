@@ -105,7 +105,7 @@ export class GroupContentComponent extends ContentListBaseComponent implements O
   }
 
   reloadContentGroup(imported = false) {
-    this.contentGroupService.getByRoomIdAndName(this.room.id, this.collectionName).subscribe(group => {
+    this.contentGroupService.getByRoomIdAndName(this.room.id, this.collectionName, true).subscribe(group => {
       this.contentGroup = group;
       this.updatedName = this.contentGroup.name;
       this.setRange();

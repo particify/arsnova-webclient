@@ -52,7 +52,7 @@ export class PresentationComponent implements OnInit {
         if (this.lastGroup === undefined) {
           this.lastGroup = this.globalStorageService.getItem(STORAGE_KEYS.LAST_GROUP);
           if (this.lastGroup === undefined) {
-            this.roomService.getStats(this.roomId).subscribe(stats => {
+            this.roomService.getStats(this.roomId, true).subscribe(stats => {
               if (stats.groupStats) {
                 this.lastGroup = stats.groupStats[0].groupName;
                 this.setGroupInSessionStorage(this.lastGroup);

@@ -149,9 +149,10 @@ export class RoomService extends AbstractEntityService<Room> {
     );
   }
 
-  getStats(roomId: string): Observable<RoomStats> {
+  getStats(roomId: string, extendedView?: boolean): Observable<RoomStats> {
+    const queryParams = extendedView ? '?view=read-extended' : '';
     const connectionUrl = this.buildForeignUri(this.serviceApiUrl.stats, roomId);
-    return this.http.get<RoomStats>(connectionUrl).pipe(
+    return this.http.get<RoomStats>(`${connectionUrl}${queryParams}`).pipe(
       catchError(this.handleError<RoomStats>(`getStats id=${roomId}`))
     );
   }

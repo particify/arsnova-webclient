@@ -41,7 +41,7 @@ export class StatisticsPageComponent implements OnInit {
   }
 
   getContentGroups(id: string): void {
-    this.roomService.getStats(id).subscribe(roomStats => {
+    this.roomService.getStats(id, true).subscribe(roomStats => {
       const contentGroupsLength = roomStats.groupStats.length;
       for (let i = 0; i < contentGroupsLength; i++) {
         this.contentGroupService.getById(roomStats.groupStats[i].id, { roomId: id}).subscribe(group => {
