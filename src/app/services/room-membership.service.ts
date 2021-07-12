@@ -69,7 +69,7 @@ export class RoomMembershipService extends AbstractHttpService<Membership> {
         tap(() => this.newOwnerships = []),
         tap(memberships => memberships.forEach(m => m.primaryRole = this.selectPrimaryRole(m.roles))),
         shareReplay(),
-        map(memberships => memberships.concat(this.newOwnerships))
+        map(memberships => this.newOwnerships.concat(memberships))
     );
     this.memberships$$.next(memberships$);
 
@@ -98,7 +98,7 @@ export class RoomMembershipService extends AbstractHttpService<Membership> {
     membership.roomShortId = roomShortId;
     membership.roles = [UserRole.CREATOR];
     membership.primaryRole = UserRole.CREATOR;
-    this.newOwnerships.push(membership);
+    this.newOwnerships.unshift(membership);
   }
 
   /**
