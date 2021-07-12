@@ -78,14 +78,14 @@
                                           [createEvent]="createEventSubject.asObservable()"
                                           [editContent]="content">
               </app-content-choice-creation>
-              <app-content-likert-creation (contentReset)="reset()" (contentSent)="saveContent($event)" (refId)="linkAttachments($event)"
+              <app-content-scale-creation (contentReset)="reset()" (contentSent)="saveContent($event)" (refId)="linkAttachments($event)"
                                           *ngIf="selectedFormat.name === 'scale'"
                                           [contentBody]="questionInput.value"
                                           [contentGroup]="group.value"
                                           [abstentionsAllowed]="abstentionsAllowed"
                                           [createEvent]="createEventSubject.asObservable()"
                                           [editContent]="content">
-              </app-content-likert-creation>
+              </app-content-scale-creation>
               <app-content-yes-no-creation (contentReset)="reset()" (contentSent)="saveContent($event)" (refId)="linkAttachments($event)"
                                           *ngIf="selectedFormat.name === 'binary'"
                                           [contentBody]="questionInput.value"

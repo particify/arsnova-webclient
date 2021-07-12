@@ -24,11 +24,14 @@
           <lib-extension-point extensionId="attachment-list" [extensionData]="extensionData"></lib-extension-point>
           <form (ngSubmit)="submitAnswerEvent($event,'answer')" id="answerForm">
             <div *ngIf="!flipped">
-              <app-content-choice-participant *ngIf="content.format === ContentType.CHOICE ||
-            content.format === ContentType.SCALE || content.format === ContentType.BINARY" [answer]="answer"
+              <app-content-choice-participant *ngIf="content.format === ContentType.CHOICE || content.format === ContentType.BINARY" [answer]="answer"
                                               [content]="content" [alreadySent]="alreadySent" (answerChanged)="forwardAnswerMessage($event)"
                                               [sendEvent]="sendEvent" [statsPublished]="statsPublished" [correctOptionsPublished]="correctOptionsPublished">
               </app-content-choice-participant>
+              <app-content-scale-participant *ngIf="content.format === ContentType.SCALE" [answer]="answer"
+                                              [content]="content" [alreadySent]="alreadySent" (answerChanged)="forwardAnswerMessage($event)"
+                                              [sendEvent]="sendEvent" [statsPublished]="statsPublished">
+              </app-content-scale-participant>
               <app-content-text-participant *ngIf="content.format === ContentType.TEXT" [answer]="answer"
                                             [content]="content" [alreadySent]="alreadySent" [sendEvent]="sendEvent"
                                             (answerChanged)="forwardAnswerMessage($event)"

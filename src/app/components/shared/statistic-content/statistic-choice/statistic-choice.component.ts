@@ -54,10 +54,12 @@ export class StatisticChoiceComponent extends StatisticContentBaseComponent impl
   surface: string;
   green: string;
   grey: string;
+  optionLabels: string[];
+  correctOptionIndexes: number[];
 
   constructor(protected route: ActivatedRoute,
               protected contentService: ContentService,
-              private translateService: TranslateService,
+              protected translateService: TranslateService,
               private themeService: ThemeService) {
     super(route, contentService);
   }
@@ -69,6 +71,8 @@ export class StatisticChoiceComponent extends StatisticContentBaseComponent impl
 
   init() {
     this.chartId = 'chart-' + this.content.id;
+    this.optionLabels = this.optionLabels ?? this.content.options.map(o => o.label);
+    this.correctOptionIndexes = this.content.correctOptionIndexes;
     this.initChart();
   }
 
@@ -156,11 +160,11 @@ export class StatisticChoiceComponent extends StatisticContentBaseComponent impl
   }
 
   checkIfCorrect(index: number): boolean {
-    return (this.content as ContentChoice).correctOptionIndexes?.indexOf(index) > -1;
+    return this.correctOptionIndexes?.indexOf(index) > -1;
   }
 
   initChart() {
-    const length = this.content.options.length;
+    const length = this.optionLabels.length;
     this.themeService.getTheme().pipe(takeUntil(this.destroyed$)).subscribe(theme => {
       const currentTheme = this.themeService.getThemeByKey(theme);
       this.onSurface = currentTheme.get('on-surface').color;
@@ -172,11 +176,11 @@ export class StatisticChoiceComponent extends StatisticContentBaseComponent impl
         this.answerList[i] = new AnswerList(null, null);
         this.labels[i] = this.label.charAt(i);
         this.answerList[i].label = this.labels[i];
-        this.answerList[i].answer = this.content.options[i].label;
+        this.answerList[i].answer = this.optionLabels[i];
         this.colors[i] = barColors[i % barColors.length].color;
         if (!this.survey) {
           if (this.checkIfCorrect(i)) {
-            this.indicationColors[i] = this.content.correctOptionIndexes?.length === 1 ? this.colors[i] : this.green;
+            this.indicationColors[i] = this.correctOptionIndexes?.length === 1 ? this.colors[i] : this.green;
           } else {
             this.indicationColors[i] = this.grey;
           }

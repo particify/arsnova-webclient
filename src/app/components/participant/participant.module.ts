@@ -17,6 +17,7 @@ import { ExtensionPointModule } from '../../../../projects/extension-point/src/l
 import { ContentParticipantComponent } from './content/content-participant/content-participant.component';
 import { ContentSortParticipantComponent } from './content/content-sort-participant/content-sort-participant.component';
 import { ContentWordcloudComponent } from './content/content-wordcloud-participant/content-wordcloud-participant.component';
+import { ContentScaleParticipantComponent } from './content/content-scale-participant/content-scale-participant.component';
 
 @NgModule({
   imports: [
@@ -41,6 +42,7 @@ import { ContentWordcloudComponent } from './content/content-wordcloud-participa
   ],
   declarations: [
     ContentChoiceParticipantComponent,
+    ContentScaleParticipantComponent,
     ContentTextParticipantComponent,
     RoomParticipantPageComponent,
     ParticipantContentCarouselPageComponent,

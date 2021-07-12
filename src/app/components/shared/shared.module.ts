@@ -46,6 +46,7 @@ import { PublishContentComponent } from './_dialogs/publish-content/publish-cont
 import { StatisticWordcloudComponent } from './statistic-content/statistic-wordcloud/statistic-wordcloud.component';
 import { WordcloudComponent } from './wordcloud/wordcloud.component';
 import { CommentAnswerComponent } from './_dialogs/comment-answer/comment-answer.component';
+import { StatisticScaleComponent } from './statistic-content/statistic-scale/statistic-scale.component';
 
 @NgModule({
   imports: [
@@ -78,6 +79,7 @@ import { CommentAnswerComponent } from './_dialogs/comment-answer/comment-answer
     PresentCommentComponent,
     DialogActionButtonsComponent,
     StatisticChoiceComponent,
+    StatisticScaleComponent,
     StatisticTextComponent,
     StatisticWordcloudComponent,
     LoadingIndicatorComponent,
@@ -121,6 +123,7 @@ import { CommentAnswerComponent } from './_dialogs/comment-answer/comment-answer
     RoomNotFoundComponent,
     StepperComponent,
     StatisticChoiceComponent,
+    StatisticScaleComponent,
     StatisticTextComponent,
     StatisticWordcloudComponent,
     RenderedTextComponent,

@@ -68,6 +68,7 @@ import { FeedbackService } from './services/http/feedback.service';
 import { UpdateService } from './services/util/update.service';
 import { CachingService } from './services/util/caching.service';
 import { LocalFileService } from './services/util/local-file.service';
+import { LikertScaleService } from './services/util/likert-scale.service';
 
 export function dialogClose(dialogResult: any) {
 }
@@ -175,6 +176,7 @@ export function initializeApp(appConfig: AppConfig) {
     FeedbackService,
     CachingService,
     LocalFileService,
+    LikertScaleService,
     { provide: Window,  useValue: window },
     STORAGE_CONFIG_PROVIDERS,
     {

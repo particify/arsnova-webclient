@@ -10,6 +10,7 @@ import { KeyboardKey } from '@arsnova/app/utils/keyboard/keys';
 import { KeyboardUtils } from '@arsnova/app/utils/keyboard';
 import { AnnounceService } from '@arsnova/app/services/util/announce.service';
 import { StatisticWordcloudComponent } from '../statistic-wordcloud/statistic-wordcloud.component';
+import { StatisticScaleComponent } from '../statistic-scale/statistic-scale.component';
 
 @Component({
   selector: 'app-statistic-content',
@@ -19,6 +20,7 @@ import { StatisticWordcloudComponent } from '../statistic-wordcloud/statistic-wo
 export class StatisticContentComponent implements OnInit {
 
   @ViewChild(StatisticChoiceComponent) choiceStatistic: StatisticChoiceComponent;
+  @ViewChild(StatisticScaleComponent) scaleStatistic: StatisticScaleComponent;
   @ViewChild(StatisticTextComponent) textStatistic: StatisticTextComponent;
   @ViewChild(StatisticSortComponent) sortStatistic: StatisticSortComponent;
   @ViewChild(StatisticWordcloudComponent) wordcloudStatistic: StatisticWordcloudComponent;
@@ -83,6 +85,9 @@ export class StatisticContentComponent implements OnInit {
 
   toggleAnswers() {
     switch (this.format) {
+      case ContentType.SCALE:
+        this.answersVisible = this.scaleStatistic.toggleAnswers();
+        break;
       case ContentType.TEXT:
         this.answersVisible = this.textStatistic.toggleAnswers();
         break;
