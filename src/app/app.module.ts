@@ -70,6 +70,7 @@ import { CachingService } from './services/util/caching.service';
 import { LocalFileService } from './services/util/local-file.service';
 import { LikertScaleService } from './services/util/likert-scale.service';
 import { RoomStatsService } from './services/http/room-stats.service';
+import { WsRoomEventDispatcher } from './services/websockets/ws-room-event-dispatcher.service';
 
 export function dialogClose(dialogResult: any) {
 }
@@ -132,6 +133,12 @@ export function initializeApp(appConfig: AppConfig) {
       multi: true
     },
     {
+      provide: APP_INITIALIZER,
+      useFactory: initWsRoomEventDispatcher,
+      deps: [WsRoomEventDispatcher],
+      multi: true
+    },
+    {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthenticationInterceptor,
       multi: true
@@ -179,6 +186,7 @@ export function initializeApp(appConfig: AppConfig) {
     LocalFileService,
     LikertScaleService,
     RoomStatsService,
+    WsRoomEventDispatcher,
     { provide: Window,  useValue: window },
     STORAGE_CONFIG_PROVIDERS,
     {
@@ -199,4 +207,8 @@ export class AppModule {
 
 export function initAuthenticationService(authenticationService: AuthenticationService) {
   return () => authenticationService.init();
+}
+
+export function initWsRoomEventDispatcher(wsRoomEventDispatcher: WsRoomEventDispatcher) {
+  return () => wsRoomEventDispatcher.init();
 }

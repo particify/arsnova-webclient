@@ -2,28 +2,49 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { Observable } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { catchError, filter } from 'rxjs/operators';
+import { DataChanged, ModeratorDataChanged, PublicDataChanged } from '../../models/events/data-changed';
 import { RoomStats } from '../../models/room-stats';
+import { CachingService } from '../util/caching.service';
 import { EventService } from '../util/event.service';
 import { NotificationService } from '../util/notification.service';
-import { AbstractHttpService } from './abstract-http.service';
+import { WsConnectorService } from '../websockets/ws-connector.service';
+import { AbstractCachingHttpService } from './abstract-caching-http.service';
 
 @Injectable()
-export class RoomStatsService extends AbstractHttpService<RoomStats> {
+export class RoomStatsService extends AbstractCachingHttpService<RoomStats> {
   constructor(
     protected http: HttpClient,
+    ws: WsConnectorService,
     eventService: EventService,
     translateService: TranslateService,
-    notificationService: NotificationService
+    notificationService: NotificationService,
+    cachingService: CachingService
   ) {
-    super('/stats', http, eventService, translateService, notificationService);
+    super('/stats', http, ws, eventService, translateService, notificationService, cachingService);
+    eventService.on<PublicDataChanged<RoomStats>>('PublicDataChanged')
+        .pipe(filter(e => e.payload.dataType === 'RoomStatistics'))
+        .subscribe(e => this.handlePublicDataChanged(e))
+    eventService.on<ModeratorDataChanged<RoomStats>>('ModeratorDataChanged')
+        .pipe(filter(e => e.payload.dataType === 'RoomStatistics'))
+        .subscribe(e => this.handleModeratorDataChanged(e))
   }
 
   getStats(roomId: string, extendedView = false): Observable<RoomStats> {
     const queryParams = extendedView ? '?view=read-extended' : '';
     const connectionUrl = this.buildUri('', roomId);
-    return this.http.get<RoomStats>(connectionUrl + queryParams).pipe(
+    return this.fetch(connectionUrl + queryParams).pipe(
       catchError(this.handleError<RoomStats>(`getStats id=${roomId}`))
     );
+  }
+
+  private handlePublicDataChanged(e: DataChanged<RoomStats>) {
+    const uri = this.buildUri('', e.payload.roomId);
+    this.cache.put(this.generateCacheKey(uri), e.payload.data);
+  }
+
+  private handleModeratorDataChanged(e: DataChanged<RoomStats>) {
+    const uri = this.buildUri('', e.payload.roomId) + '?view=read-extended';
+    this.cache.put(this.generateCacheKey(uri), e.payload.data);
   }
 }

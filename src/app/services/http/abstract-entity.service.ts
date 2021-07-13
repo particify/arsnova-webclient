@@ -2,15 +2,15 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, of, Subscription } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { IMessage } from '@stomp/stompjs';
-import { RxStompState } from '@stomp/rx-stomp';
 import { TranslateService } from '@ngx-translate/core';
-import { AbstractHttpService } from './abstract-http.service';
+import { AbstractCachingHttpService } from './abstract-caching-http.service';
 import { EventService } from '../util/event.service';
 import { NotificationService } from '../util/notification.service';
 import { CacheKey, CachingService } from '../util/caching.service';
 import { WsConnectorService } from '../websockets/ws-connector.service';
 import { Entity } from '../../models/entity';
 import { EntityChanged } from '../../models/events/entity-changed';
+import { ChangeType, EntityChangeNotification } from '../../models/events/entity-change-notification';
 
 const WS_DISCONNECT_GRACE_PERIOD_MS = 10 * 1000;
 
@@ -18,11 +18,10 @@ const WS_DISCONNECT_GRACE_PERIOD_MS = 10 * 1000;
  * A specialized version of BaseHttpService which manages persistent data which
  * can be referenced through an ID.
  */
-export abstract class AbstractEntityService<T extends Entity> extends AbstractHttpService<T> {
+export abstract class AbstractEntityService<T extends Entity> extends AbstractCachingHttpService<T> {
   private aliasIdMapping: Map<string, string> = new Map<string, string>();
   private stompSubscriptions = new Map<string, Subscription>();
   protected cacheName = 'entity';
-  private wsDisconnectionTimestamp: Date = new Date();
 
   constructor(
     protected entityType: string,
@@ -32,11 +31,14 @@ export abstract class AbstractEntityService<T extends Entity> extends AbstractHt
     protected eventService: EventService,
     protected translateService: TranslateService,
     protected notificationService: NotificationService,
-    private cachingService: CachingService) {
-    super(uriPrefix, httpClient, eventService, translateService, notificationService);
-    cachingService.registerDisposeHandler(this.cacheName, (id, value) =>
+    cachingService: CachingService,
+    useSharedCache = true
+  ) {
+    super(uriPrefix, httpClient, wsConnector, eventService, translateService, notificationService, cachingService, useSharedCache);
+    this.cache.registerDisposeHandler(this.cacheName, (id, value) =>
       this.handleCacheDisposeEvent(id, value));
-    this.wsConnector.getConnectionState().subscribe(state => this.handleWsStateChange(state));
+    this.eventService.on<EntityChangeNotification>('EntityChangeNotification')
+      .subscribe(event => this.handleEntityChangeNotificationEvent(event));
   }
 
   /**
@@ -50,14 +52,14 @@ export abstract class AbstractEntityService<T extends Entity> extends AbstractHt
     const { roomId, ...queryParams } = params;
     const cachable = Object.keys(queryParams).length === 0;
     if (cachable) {
-      const cachedEntity = this.cachingService.get(this.generateCacheKey(id));
+      const cachedEntity = this.cache.get(this.generateCacheKey(id));
       if (cachedEntity) {
         return of(cachedEntity);
       }
     }
     const uri = this.buildUri(`/${id}`, roomId);
     return this.httpClient.get<T>(uri, { params: new HttpParams(queryParams) }).pipe(
-      tap(entity => cachable && this.handleCaching(id, entity)));
+      tap(entity => cachable && this.handleEntityCaching(id, entity)));
   }
 
   /**
@@ -84,7 +86,7 @@ export abstract class AbstractEntityService<T extends Entity> extends AbstractHt
     }
     const uri = this.buildUri('/', roomId);
     return this.httpClient.post<T>(uri, entity).pipe(
-      tap(updatedEntity => this.handleCaching(updatedEntity.id, updatedEntity)));
+      tap(updatedEntity => this.handleEntityCaching(updatedEntity.id, updatedEntity)));
   }
 
   /**
@@ -99,7 +101,7 @@ export abstract class AbstractEntityService<T extends Entity> extends AbstractHt
     }
     const uri = this.buildUri(`/${entity.id}`, roomId);
     return this.httpClient.put<T>(uri, entity).pipe(
-      tap(updatedEntity => this.handleCaching(updatedEntity.id, updatedEntity)));
+      tap(updatedEntity => this.handleEntityCaching(updatedEntity.id, updatedEntity)));
   }
 
   /**
@@ -112,7 +114,7 @@ export abstract class AbstractEntityService<T extends Entity> extends AbstractHt
   patchEntity(idOrAlias: string, changes: { [key: string]: any }, roomId?: string): Observable<T> {
     const uri = this.buildUri(`/${idOrAlias}`, roomId);
     return this.httpClient.patch<T>(uri, changes).pipe(
-      tap(entity => this.handleCaching(idOrAlias, entity)));
+      tap(entity => this.handleEntityCaching(idOrAlias, entity)));
   }
 
   /**
@@ -124,10 +126,10 @@ export abstract class AbstractEntityService<T extends Entity> extends AbstractHt
   deleteEntity(id: string, roomId?: string): Observable<T> {
     const uri = this.buildUri(`/${id}`, roomId);
     return this.httpClient.delete<T>(uri).pipe(
-      tap(() => this.cachingService.remove(this.generateCacheKey(id))));
+      tap(() => this.cache.remove(this.generateCacheKey(id))));
   }
 
-  protected handleCaching(idOrAlias: string, entity: T) {
+  protected handleEntityCaching(idOrAlias: string, entity: T) {
     if (idOrAlias !== entity.id) {
       this.aliasIdMapping.set(idOrAlias, entity.id);
     }
@@ -137,9 +139,13 @@ export abstract class AbstractEntityService<T extends Entity> extends AbstractHt
       const entityChanges$ = this.wsConnector.getWatcher(
         `/topic/${roomId}.${entityType}-${entity.id}.changes.stream`);
       this.stompSubscriptions.set(entity.id,
-        entityChanges$.subscribe((msg) => this.handleChangeEvent(entity.id, msg)));
+        entityChanges$.subscribe((msg) => this.handleEntityChangeEvent(entity.id, msg)));
     }
-    this.cachingService.put(this.generateCacheKey(entity.id), entity)
+    this.cache.put(this.generateCacheKey(entity.id), entity)
+  }
+
+  protected generateCacheKey(id: string): CacheKey {
+    return { type: `${this.cacheName}-${this.entityType}`, id: id };
   }
 
   private handleCacheDisposeEvent(id: string, value: object) {
@@ -150,12 +156,18 @@ export abstract class AbstractEntityService<T extends Entity> extends AbstractHt
     }
   }
 
-  private handleChangeEvent(id: string, msg: IMessage) {
+  private handleEntityChangeEvent(id: string, msg: IMessage) {
     const changes: object = JSON.parse(msg.body);
-    const entity = this.cachingService.get(this.generateCacheKey(id));
+    const entity = this.cache.get(this.generateCacheKey(id));
     this.mergeChangesRecursively(entity, changes);
     const event = new EntityChanged<T>(this.entityType, entity, Object.keys(changes));
     this.eventService.broadcast(event.type, event.payload);
+  }
+
+  private handleEntityChangeNotificationEvent(event: EntityChangeNotification) {
+    if (event.payload.changeType === ChangeType.DELETE) {
+      this.cache.remove(this.generateCacheKey(event.payload.id));
+    }
   }
 
   private mergeChangesRecursively(originalObject: object, changes: object) {
@@ -173,27 +185,5 @@ export abstract class AbstractEntityService<T extends Entity> extends AbstractHt
 
   private resolveAlias(idOrAlias: string): string {
     return this.aliasIdMapping.get(idOrAlias) ?? idOrAlias;
-  }
-
-  private generateCacheKey(id: string): CacheKey {
-    return { type: this.cacheName, id: id };
-  }
-
-  private handleWsStateChange(state: RxStompState) {
-    switch (state) {
-      case RxStompState.CLOSED:
-        if (!this.wsDisconnectionTimestamp) {
-          this.wsDisconnectionTimestamp = new Date();
-        }
-        break;
-      case RxStompState.OPEN:
-        const currentTimestamp = new Date();
-        if (this.wsDisconnectionTimestamp
-            && currentTimestamp.getTime() - this.wsDisconnectionTimestamp.getTime() > WS_DISCONNECT_GRACE_PERIOD_MS) {
-          console.log('WebSocket disconnection grace period exceeded. Clearing cache.');
-          this.cachingService.clear();
-          this.wsDisconnectionTimestamp = currentTimestamp;
-        }
-    }
   }
 }

@@ -3,7 +3,7 @@ import { Room } from '../../models/room';
 import { RoomSummary } from '../../models/room-summary';
 import { SurveyStarted } from '../../models/events/survey-started';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable, Subscription } from 'rxjs';
+import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { catchError, map, tap, switchMap } from 'rxjs/operators';
 import { AuthenticationService, AUTH_HEADER_KEY, AUTH_SCHEME } from './authentication.service';
 import { AbstractEntityService } from './abstract-entity.service';
@@ -14,7 +14,7 @@ import { IMessage } from '@stomp/stompjs';
 import { TranslateService } from '@ngx-translate/core';
 import { NotificationService } from '../util/notification.service';
 import { FeedbackService } from '@arsnova/app/services/http/feedback.service';
-import { CachingService } from '../util/caching.service';
+import { CachingService, DefaultCache } from '../util/caching.service';
 
 const httpOptions = {
   headers: new HttpHeaders({})
@@ -24,13 +24,13 @@ const httpOptions = {
 export class RoomService extends AbstractEntityService<Room> {
 
   serviceApiUrl = {
-    stats: '/stats',
     transfer: '/transfer',
     v2Import: '/import/v2/room',
     summary: '/_view/room/summary'
   };
 
   private currentRoom: Room;
+  private currentRoomStream$: BehaviorSubject<Room> = new BehaviorSubject(null);
   private messageStream$: Observable<IMessage>;
   private messageStreamSubscription: Subscription;
 
@@ -43,7 +43,8 @@ export class RoomService extends AbstractEntityService<Room> {
     protected translateService: TranslateService,
     protected notificationService: NotificationService,
     private feedbackService: FeedbackService,
-    cachingService: CachingService) {
+    protected cachingService: CachingService
+  ) {
     super('Room', '/room', http, ws, eventService, translateService, notificationService, cachingService);
   }
 
@@ -58,6 +59,8 @@ export class RoomService extends AbstractEntityService<Room> {
       return;
     }
     this.currentRoom = room;
+    this.currentRoomStream$.next(room);
+    this.cachingService.getCache(DefaultCache.CURRENT_ROOM).clear();
     if (this.messageStreamSubscription) {
       this.messageStreamSubscription.unsubscribe();
       this.messageStream$ = null;
@@ -78,6 +81,10 @@ export class RoomService extends AbstractEntityService<Room> {
    */
   leaveCurrentRoom() {
     this.joinRoom();
+  }
+
+  getCurrentRoomStream(): Observable<Room> {
+    return this.currentRoomStream$;
   }
 
   getCurrentRoomsMessageStream(): Observable<IMessage> {
