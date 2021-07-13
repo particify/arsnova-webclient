@@ -318,7 +318,9 @@
     "import-successful": "Your contents has been imported.",
     "max-keywords": "Keywords per answer",
     "max-keywords-out-of-range": "Keyword limit must be between {{min}} and {{max}}.",
-    "no-contents-yet": "There are no contents yet."
+    "no-contents-yet": "There are no contents yet.",
+    "delete-content-group": "Delete collection",
+    "content-group-deleted": "Your collection has been deleted."
   },
   "survey": {
     "a11y-message": "You are now in live survey mode. Press the Enter key to get information about key combinations or use the Escape key to call up the announcement later.",
@@ -536,6 +538,7 @@
     "really-delete-token": "Do you really want to delete this token?",
     "really-delete-tokens": "Do you really want to delete all tokens of this room?",
     "really-remove-content": "Do you really want to remove the following question?",
+    "really-delete-content-group": "Do you really want to remove the following collection",
     "sure": "Are you sure?",
     "cancel": "Cancel",
     "cancel-description": "Cancels the current process and closes the dialog.",

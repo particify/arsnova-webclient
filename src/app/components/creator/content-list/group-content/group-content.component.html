@@ -65,11 +65,13 @@
                 <mat-icon>done_all</mat-icon>
                 {{ (correctOptionsPublished ? 'content.dont-publish-correct-options' : 'content.publish-correct-options') | translate }}
               </button>
+              <mat-divider></mat-divider>
               <button mat-menu-item id="edit-group-sort" aria-labelledby="edit-content-group-sort"
                       (click)="goInSortingMode()" [disabled]="contents.length < 2">
                 <mat-icon>swap_vert</mat-icon>
                 {{ 'content.sort-content-group' | translate }}
               </button>
+              <mat-divider></mat-divider>
               <button mat-menu-item (click)="exportToCsv()" [disabled]="contents.length === 0">
                 <mat-icon>file_download</mat-icon>
                 {{ 'export.export' | translate }}
@@ -77,6 +79,11 @@
               <button mat-menu-item (click)="importFromCsv()">
                 <mat-icon>file_upload</mat-icon>
                 {{ 'import.import' | translate }}
+              </button>
+              <mat-divider></mat-divider>
+              <button mat-menu-item (click)="deleteGroup()">
+                <mat-icon class="delete">delete_forever</mat-icon>
+                {{ 'content.delete-content-group' | translate }}
               </button>
             </mat-menu>
           </div>

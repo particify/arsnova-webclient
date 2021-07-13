@@ -475,4 +475,18 @@ export class GroupContentComponent extends ContentListBaseComponent implements O
     this.activeMenuIndex = null;
   }
 
+  deleteGroup() {
+    const dialogRef = this.dialogService.openDeleteDialog('really-delete-content-group', this.contentGroup.name, 'delete');
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.contentGroupService.delete(this.contentGroup).subscribe(() => {
+          this.location.back();
+          this.translateService.get('content.content-group-deleted').subscribe(msg => {
+            this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
+          });
+        })
+      }
+    });
+  }
+
 }

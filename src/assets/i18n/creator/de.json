@@ -318,7 +318,9 @@
     "import-successful": "Deine Fragen wurden importiert.",
     "max-keywords": "Schlagworte pro Antwort",
     "max-keywords-out-of-range": "Schlagwortanzahl muss zwischen {{min}} und {{max}} liegen.",
-    "no-contents-yet": "Es sind noch keine Inhalte vorhanden."
+    "no-contents-yet": "Es sind noch keine Inhalte vorhanden.",
+    "delete-content-group": "Sammlung löschen",
+    "content-group-deleted": "Deine Sammlung wurde gelöscht."
   },
   "survey": {
     "a11y-message": "Du befindest dich jetzt bei der Live-Umfrage. Drücke die Enter-Taste, um Informationen zu Tastenkombinationen zu erhalten oder rufe die Ansage später mit der Escape-Taste auf.",
@@ -536,6 +538,7 @@
     "really-delete-token": "Willst du diesen Token wirklich löschen?",
     "really-delete-tokens": "Willst du wirklich alle Tokens dieses Raums löschen?",
     "really-remove-content": "Willst du die folgende Frage wirklich entfernen?",
+    "really-delete-content-group": "Willst du die folgende Sammlung wirklich löschen?",
     "sure": "Bist du sicher?",
     "cancel": "Abbrechen",
     "cancel-description": "Bricht den aktuellen Vorgang ab und schließt den Dialog.",
