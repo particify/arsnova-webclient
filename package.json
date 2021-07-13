@@ -33,6 +33,7 @@
     "angularx-qrcode": "^11.0.0",
     "backoff-rxjs": "^6.5.7",
     "chart.js": "^3.1.0",
+    "chartjs-plugin-datalabels": "^2.0.0",
     "d3-cloud": "^1.2.5",
     "dayjs": "^1.10.0",
     "is-docker": "^2.1.0",

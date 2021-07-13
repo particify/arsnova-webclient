@@ -1,5 +1,6 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { BarController, BarControllerDatasetOptions, BarElement, CategoryScale, Chart, LinearScale, Tooltip } from 'chart.js';
+import { BarController, BarControllerDatasetOptions, BarElement, CategoryScale, Chart, LinearScale } from 'chart.js';
+import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { ActivatedRoute } from '@angular/router';
 import { ContentService } from '../../../../services/http/content.service';
 import { ContentChoice } from '../../../../models/content-choice';
@@ -98,7 +99,7 @@ export class StatisticChoiceComponent extends StatisticContentBaseComponent impl
   createChart(colors: string[]) {
     Chart.defaults.color = this.onSurface;
     Chart.defaults.font.size = this.isPresentation ? 14 : 16;
-    Chart.register(BarController, BarElement, CategoryScale, LinearScale, Tooltip);
+    Chart.register(BarController, BarElement, CategoryScale, LinearScale, ChartDataLabels);
     const gridConfig = {
       borderColor: this.onSurface,
       tickColor: this.isPresentation ? this.surface : this.onSurface,
@@ -118,15 +119,23 @@ export class StatisticChoiceComponent extends StatisticContentBaseComponent impl
         responsive: true,
         maintainAspectRatio: false,
         devicePixelRatio: window.devicePixelRatio * scale,
+        layout: {
+          padding: {
+            top: 25
+          }
+        },
         scales: {
           y: {
             type: 'linear',
             ticks: {
+              display: !this.isPresentation,
               precision: 0,
-              // TODO: Add label to bars, then use: "color: this.isPresentation ? this.surface : this.onSurface"
+              color: this.isPresentation ? this.surface : this.onSurface
             },
             grid: {
-              borderColor: this.onSurface, // TODO: Waiting for bar labels too : this.isPresentation ? this.surface : this.onSurface,
+              display: !this.isPresentation,
+              borderWidth: this.isPresentation ? 0 : 1,
+              borderColor: this.onSurface,
               tickColor: this.isPresentation ? this.surface : this.onSurface,
               drawOnChartArea: !this.isPresentation
             }
@@ -140,8 +149,11 @@ export class StatisticChoiceComponent extends StatisticContentBaseComponent impl
           legend: {
             display: false
           },
-          tooltip: {
-            mode: 'index'
+          datalabels: {
+            color: this.onSurface,
+            anchor: 'end',
+            align: 'end',
+            offset: 0
           }
         }
       }
