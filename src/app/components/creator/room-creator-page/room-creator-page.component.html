@@ -73,16 +73,17 @@
       <div fxLayout="column" fxLayoutAlign="center center">
         <app-divider [padding]="true"></app-divider>
         <div fxLayout="column" [ngClass]="{'group-container': contentGroups.length > 0, 'empty-group-container': contentGroups.length === 0}">
-          <button mat-stroked-button class="stroked-primary add-group" routerLink="/creator/room/{{room.shortId}}/create-content">
-            <mat-icon>note_add</mat-icon>
-            {{ 'room-page.create-content' | translate }}
+          <button mat-stroked-button class="stroked-primary add-group" aria-labelledby="create-content-group"
+                  (click)="openCreateContentGroupDialog()">
+            <mat-icon>playlist_add</mat-icon>
+            {{ 'room-page.create-content-group' | translate }}
           </button>
           <p *ngIf="contentGroups.length === 0">{{ 'room-page.no-contents' | translate }}</p>
           <div *ngIf="room && contentGroups">
             <p tabindex="-1" id="content-groups" class="visually-hidden">
               {{ 'room-page.a11y-content-groups' | translate: {count: contentGroups.length} }}</p>
             <app-content-groups *ngFor="let contentGroup of contentGroups" [contentGroupName]="contentGroup.name"
-                                [length]="contentGroup.contentIds.length" [isLoose]="false" [isLocked]="!contentGroup.published"></app-content-groups>
+                                [length]="contentGroup.contentIds?.length" [isLoose]="false" [isLocked]="!contentGroup.published"></app-content-groups>
             <app-content-groups *ngIf="looseContent.length > 0" [contentGroupName]="'content.archived-contents' | translate" [length]="looseContent.length"
                                 [isLoose]="true"></app-content-groups>
             <p tabindex="-1" id="no-content-groups" class="visually-hidden">
@@ -102,7 +103,7 @@
   <div id="comments">{{'room-page.a11y-comments' | translate}}</div>
   <div id="moderation">{{'room-page.a11y-moderation' | translate}}</div>
   <div id="settings">{{'room-page.a11y-settings' | translate}}</div>
-  <div id="create-content">{{'room-page.a11y-create-content' | translate}}</div>
+  <div id="create-content-group">{{'room-page.a11y-create-content-group' | translate}}</div>
   <div id="live-survey">{{'room-page.a11y-live-survey' | translate}}</div>
   <div id="share">{{'room-page.a11y-share' | translate}}</div>
   <div id="switch-role">{{'room-page.a11y-switch-role' | translate}}</div>

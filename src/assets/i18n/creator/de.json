@@ -317,7 +317,8 @@
     "group-settings": "Einstellungen",
     "import-successful": "Deine Fragen wurden importiert.",
     "max-keywords": "Schlagworte pro Antwort",
-    "max-keywords-out-of-range": "Schlagwortanzahl muss zwischen {{min}} und {{max}} liegen."
+    "max-keywords-out-of-range": "Schlagwortanzahl muss zwischen {{min}} und {{max}} liegen.",
+    "no-contents-yet": "Es sind noch keine Inhalte vorhanden."
   },
   "survey": {
     "a11y-message": "Du befindest dich jetzt bei der Live-Umfrage. Drücke die Enter-Taste, um Informationen zu Tastenkombinationen zu erhalten oder rufe die Ansage später mit der Escape-Taste auf.",
@@ -362,6 +363,7 @@
     "a11y-shortcuts": "Um auf die Kommentar-Übersicht zu gelangen drücke die Taste 1, um in die Moderationsübersicht zu gelangen die Taste 2, um eine neue Frage zu erstellen die Taste 3, um zur Live-Umfrage zu gelangen die Taste 4, um durch deine Fragensammlungen zu navigieren die Taste 5, um weitere Optionen für den Raum anzuzeigen die Taste 6, um die Anzahl der aktuellen Nutzer anzusagen die Taste 7, um auf das Nutzer-Menü zu gelangen die Taste 9, um auf den Zurück-Button zu gelangen die Taste 0 oder die Escape-Taste, um diese Ansage zu wiederholen.",
     "a11y-room-message": "Du befindest dich jetzt in deinem Raum {{room}} mit der Nummer {{key}}. Um Informationen zu Tastenkombinationen zu erhalten drücke jetzt die Enter-Taste, oder rufe die Ansage zu einem späteren Zeitpunkt mit der Escape-Taste auf.",
     "a11y-create-content": "Öffnet ein Formular zum erstellen neuer Fragen.",
+    "a11y-create-content-group": "Öffnet einen Dialog zum erstellen einer neuen Fragenserie.",
     "a11y-live-survey": "Öffnet die Live-Umfrage.",
     "a11y-content-groups": "In diesem Raum gibt es {{count}} Frage-Sammlungen. Navigiere mit Tab zwischen ihnen und drücke Enter, um Fragen oder Einstellungen der Sammlung zu bearbeiten.",
     "a11y-no-content-groups": "In diesem Raum sind noch keine Fragen vorhanden. Drücke die Taste 4, um eine neue Frage zu erstellen.",
@@ -376,6 +378,8 @@
     "a11y-user-count-only-one": "Aktuell bist du die einzige Person in diesem Raum.",
     "answer-statistics": "Statistiken",
     "create-content": "Frage erstellen",
+    "create-content-group": "Neue Fragenserie",
+    "content-group-created": "Deine Fragenserie wurde erstellt.",
     "live-survey": "Live-Umfrage",
     "comments": "Kommentare",
     "moderating-stream": "Moderation",
@@ -383,7 +387,7 @@
     "public-stream": "Kommentare",
     "room-loading-error": "Der Raum konnte nicht geladen werden",
     "room-settings": "Einstellungen",
-    "no-contents": "Es sind noch keine Fragen vorhanden.",
+    "no-content-groups": "Es sind noch keine Fragenserien vorhanden.",
     "switch-role": "Rolle wechseln",
     "share-room": "Raum teilen",
     "more-options": "Mehr Optionen",

@@ -317,7 +317,8 @@
     "group-settings": "Settings",
     "import-successful": "Your contents has been imported.",
     "max-keywords": "Keywords per answer",
-    "max-keywords-out-of-range": "Keyword limit must be between {{min}} and {{max}}."
+    "max-keywords-out-of-range": "Keyword limit must be between {{min}} and {{max}}.",
+    "no-contents-yet": "There are no contents yet."
   },
   "survey": {
     "a11y-message": "You are now in live survey mode. Press the Enter key to get information about key combinations or use the Escape key to call up the announcement later.",
@@ -362,6 +363,7 @@
     "a11y-shortcuts": "To access the comment overview press key 1, to access the moderation overview key 2, to create a new question key 3, to access the live poll key 4, to navigate through your question collections key 5, to view more options for the room key 6, to announce the current user count key 7, to access the user menu key 9, to access the back button key 0 or the escape key to repeat this announcement. ",
     "a11y-room-message": "You're now in your room {{room}} with the key {{key}}. To get information about key combinations press the Enter key or call the announcement later with the Escape key.",
     "a11y-create-content": "Opens a form to create new questions.",
+    "a11y-create-content-group": "Opens a dialog to create a new question series.",
     "a11y-live-survey": "Opens the live survey.",
     "a11y-content-groups": "In this room there are {{count}} Question collections. Tab between them and press Enter to edit questions or settings in the collection.",
     "a11y-no-content-groups": "There are no questions in this room yet. Press key 4 to create a new question.",
@@ -376,6 +378,8 @@
     "a11y-user-count-only-one": "Currently you are the only in this room.",
     "answer-statistics": "Statistics",
     "create-content": "Create content",
+    "create-content-group": "New question series",
+    "content-group-created": "Your question series has been created.",
     "live-survey": "Live Survey",
     "comments": "Comments",
     "moderating-stream": "Moderation",
@@ -383,7 +387,7 @@
     "public-stream": "Comments",
     "room-loading-error": "The room could not be loaded",
     "room-settings": "Room administration",
-    "no-contents": "There are no questions yet.",
+    "no-content-groups": "There are no question series yet.",
     "switch-role": "Switch role",
     "share-room": "Share room",
     "more-options": "More options",
