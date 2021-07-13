@@ -59,7 +59,7 @@ export class ContentGroupService extends AbstractEntityService<ContentGroup> {
     );
   }
 
-  addContentToGroup(roomId: string, name: string, contentId: String): Observable<void> {
+  addContentToGroup(roomId: string, name: string, contentId?: String): Observable<void> {
     const connectionUrl = this.buildUri('/-/content/', roomId);
     return this.http.post<void>(connectionUrl,
       { roomId: roomId, contentGroupName: name, contentId: contentId },

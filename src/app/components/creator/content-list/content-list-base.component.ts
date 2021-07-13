@@ -120,16 +120,16 @@ export abstract class ContentListBaseComponent {
 
   removeContentFromList(index: number) {
     this.contents.splice(index, 1);
-    if (this.contents.length === 0) {
-      this.globalStorageService.setItem(STORAGE_KEYS.LAST_GROUP, this.contentGroups[0]);
-      this.location.back();
-    }
   }
 
   addToContentGroup(contentId: string, cgName: string, newGroup: boolean, wasArchived?: boolean): void {
     this.contentGroupService.addContentToGroup(this.room.id, cgName, contentId).subscribe(() => {
       if (!newGroup) {
         this.translateService.get('content.added-to-content-group').subscribe(msg => {
+          this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.SUCCESS);
+        });
+      } else {
+        this.translateService.get('dialog.content-group-created').subscribe(msg => {
           this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.SUCCESS);
         });
       }

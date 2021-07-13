@@ -45,7 +45,7 @@
             </button>
             <div class="settings-buttons">
               <button mat-button id="statistic-button" class="settings-button"  aria-labelledby="statistics"
-                      routerLink="/creator/room/{{ room.shortId }}/statistics">
+                      routerLink="/creator/room/{{ room.shortId }}/statistics" [disabled]="contents.length === 0">
                 <mat-icon>insert_chart</mat-icon>
                 {{ 'room-page.answer-statistics' | translate }}
               </button>
@@ -66,11 +66,11 @@
                 {{ (correctOptionsPublished ? 'content.dont-publish-correct-options' : 'content.publish-correct-options') | translate }}
               </button>
               <button mat-menu-item id="edit-group-sort" aria-labelledby="edit-content-group-sort"
-                      (click)="goInSortingMode()">
+                      (click)="goInSortingMode()" [disabled]="contents.length < 2">
                 <mat-icon>swap_vert</mat-icon>
                 {{ 'content.sort-content-group' | translate }}
               </button>
-              <button mat-menu-item (click)="exportToCsv()">
+              <button mat-menu-item (click)="exportToCsv()" [disabled]="contents.length === 0">
                 <mat-icon>file_download</mat-icon>
                 {{ 'export.export' | translate }}
               </button>
@@ -102,6 +102,7 @@
         <div>
           <div tabindex="-1" id="content-list" class="visually-hidden">
             {{ 'content.a11y-content-list-contents' | translate: { count: contents.length } }}</div>
+          <p *ngIf="contents.length === 0">{{ 'content.no-contents-yet' | translate }}</p>
           <mat-list *ngIf="!isInSortingMode">
               <mat-list-item *ngFor="let content of contents; index as i" fxLayout="column" fxLayoutAlign="center"
                              class="bottom-border" (click)="navigateToContentStats(content)"

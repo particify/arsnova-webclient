@@ -109,14 +109,18 @@ export class GroupContentComponent extends ContentListBaseComponent implements O
       this.contentGroup = group;
       this.updatedName = this.contentGroup.name;
       this.setRange();
-      this.contentService.getContentsByIds(this.contentGroup.roomId, this.contentGroup.contentIds, true)
+      if (this.contentGroup.contentIds) {
+        this.contentService.getContentsByIds(this.contentGroup.roomId, this.contentGroup.contentIds, true)
           .subscribe(contents => {
-        this.initContentList(contents);
-        if (imported) {
-          const msg = this.translateService.instant('content.import-successful');
-          this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.SUCCESS);
-        }
-      });
+            this.initContentList(contents);
+            if (imported) {
+              const msg = this.translateService.instant('content.import-successful');
+              this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.SUCCESS);
+            }
+          });
+      } else {
+        this.initContentList([]);
+      }
     });
   }
 
