@@ -1,7 +1,7 @@
 <app-control-bar [shortId]="shortId" (activeFeature)="updateFeature($event)" (activeGroup)="updateUrl($event)"></app-control-bar>
 <button tabindex="-1" id="welcome-message" class="visually-hidden" (click)="announceShortcuts()">{{ 'presentation.a11y-welcome' | translate }}</button>
-<div [ngSwitch]="featureString">
-  <div *ngSwitchCase="undefined">
+<div [ngSwitch]="featureString" fxFill>
+  <div *ngSwitchCase="undefined" fxFill>
     <app-qr-code [shortId]="shortId"></app-qr-code>
   </div>
   <app-comment-page *ngSwitchCase="'comments'" [isPresentation]="true"></app-comment-page>
