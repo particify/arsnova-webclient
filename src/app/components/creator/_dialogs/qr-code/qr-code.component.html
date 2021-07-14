@@ -1,5 +1,15 @@
-<ars-screen>
-  <div fxLayout="row" fxLayoutAlign="center center" fxFill>
+<div fxLayout="column" fxFill>
+  <div fxLayout="row" fxLayoutAlign="space-between">
+    <button *ngIf="!shortId" class="header exitBtn" mat-icon-button (click)="onCloseClick()" aria-labelledby="exit">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <button *ngIf="!shortId" mat-button class="icon-secondary header copyBtn" (click)="copyShortId()"
+            aria-labelledby="copy-url">
+      <mat-icon>link</mat-icon>
+      {{ 'dialog.copy-url' | translate}}
+    </button>
+  </div>
+  <div fxFill fxLayout="row" fxLayoutAlign="center center">
     <div class="qr-container">
       <h1 class="text" fxLayout="column" fxLayoutAlign="center center">
         <mat-icon class="web-icon disabled">language</mat-icon>
@@ -9,21 +19,13 @@
                              extensionId="share-room-password"></lib-extension-point>
       </h1>
       <p  *ngIf="!shortId" tabindex="-1" id="qr-message" class="visually-hidden">{{ 'dialog.a11y-qr-code' | translate }}</p>
-      <button *ngIf="!shortId" class="header exitBtn" mat-icon-button (click)="onCloseClick()" aria-labelledby="exit">
-        <mat-icon>arrow_back</mat-icon>
-      </button>
-      <button *ngIf="!shortId" mat-button class="icon-secondary header copyBtn" (click)="copyShortId()"
-              aria-labelledby="copy-url">
-        <mat-icon>link</mat-icon>
-        {{ 'dialog.copy-url' | translate}}
-      </button>
       <mat-divider vertical style="margin: 0 2em 0 5em"></mat-divider>
       <qrcode fxLayout="column" fxLayoutAlign="center center" [qrdata]="qrUrl"
               [width]="qrWidth" [colorDark]="fgColor" [colorLight]="bgColor" [errorCorrectionLevel]="'M'"
               [margin]="4"></qrcode>
     </div>
   </div>
-</ars-screen>
+</div>
 <div class="visually-hidden">
   <div id="copy-url">{{ 'dialog.a11y-copy-url' | translate}}</div>
   <div id="exit">{{ 'dialog.a11y-close' | translate}}</div>

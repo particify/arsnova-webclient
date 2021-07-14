@@ -161,7 +161,9 @@ textarea {
   max-width: 100%;
   height: 100%;
   margin: 0;
-  padding: 0;
+  .mat-dialog-container {
+    padding: min(4vw, 24px);
+  }
 }
 
 .mat-dialog-content {

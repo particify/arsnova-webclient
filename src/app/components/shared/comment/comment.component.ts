@@ -227,10 +227,7 @@ export class CommentComponent implements OnInit, OnDestroy {
 
   answerComment() {
     this.dialog.open(CommentAnswerComponent, {
-      maxWidth: '100vw',
-      maxHeight: '100vh',
-      height: '100%',
-      width: '100%',
+      panelClass: 'screenDialog',
       data: {
         comment: this.comment,
         role: this.viewRole
