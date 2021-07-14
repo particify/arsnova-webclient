@@ -104,6 +104,7 @@ export class StatisticChoiceComponent extends StatisticContentBaseComponent impl
       tickColor: this.isPresentation ? this.surface : this.onSurface,
       drawOnChartArea: !this.isPresentation
     };
+    const scale = this.isPresentation ? Math.max((Math.min(innerWidth, 2100) / 1100), 1) : 1;
     this.chart = new Chart(this.chartId, {
       type: 'bar',
       data: {
@@ -116,7 +117,7 @@ export class StatisticChoiceComponent extends StatisticContentBaseComponent impl
       options: {
         responsive: true,
         maintainAspectRatio: false,
-        devicePixelRatio: this.isPresentation ? 2 : 1,
+        devicePixelRatio: window.devicePixelRatio * scale,
         scales: {
           y: {
             type: 'linear',
