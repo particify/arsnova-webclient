@@ -53,7 +53,7 @@ export class QrCodeComponent implements OnInit, OnDestroy {
       }
       this.qrUrl = url + shortId;
     });
-    if (this.shortId) {
+    if (!this.shortId) {
       setTimeout(() => {
         document.getElementById('qr-message').focus();
       }, 700);
