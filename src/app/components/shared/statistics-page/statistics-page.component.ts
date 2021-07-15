@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { RoomService } from '../../../services/http/room.service';
+import { RoomStatsService } from '../../../services/http/room-stats.service';
 import { ContentGroup } from '../../../models/content-group';
 import { Room } from '../../../models/room';
 import { TranslateService } from '@ngx-translate/core';
@@ -26,7 +26,7 @@ export class StatisticsPageComponent implements OnInit {
   @ViewChild(StatisticListComponent) statisticList: StatisticListComponent;
 
   constructor(private route: ActivatedRoute,
-              private roomService: RoomService,
+              private roomStatsService: RoomStatsService,
               private contentGroupService: ContentGroupService,
               private announceService: AnnounceService,
               private translateService: TranslateService,
@@ -41,7 +41,7 @@ export class StatisticsPageComponent implements OnInit {
   }
 
   getContentGroups(id: string): void {
-    this.roomService.getStats(id, true).subscribe(roomStats => {
+    this.roomStatsService.getStats(id, true).subscribe(roomStats => {
       const contentGroupsLength = roomStats.groupStats.length;
       for (let i = 0; i < contentGroupsLength; i++) {
         this.contentGroupService.getById(roomStats.groupStats[i].id, { roomId: id}).subscribe(group => {

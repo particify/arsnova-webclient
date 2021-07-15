@@ -15,6 +15,7 @@ import { FormattingService } from '../../../../services/http/formatting.service'
 import { HINT_TYPES } from '../../../shared/hint/hint.component';
 import { UserRole } from '../../../../models/user-roles.enum';
 import { ContentService } from '../../../../services/http/content.service';
+import { RoomStatsService } from '../../../../services/http/room-stats.service';
 
 class ContentFormat {
   name: string;
@@ -68,6 +69,7 @@ export class ContentCreationPageComponent implements OnInit, AfterContentInit {
     private globalStorageService: GlobalStorageService,
     protected route: ActivatedRoute,
     private roomService: RoomService,
+    private roomStatsService: RoomStatsService,
     private formattingService: FormattingService,
     private contentService: ContentService) {
     langService.langEmitter.subscribe(lang => translateService.use(lang));
@@ -114,7 +116,7 @@ export class ContentCreationPageComponent implements OnInit, AfterContentInit {
         this.isLoading = false;
       }
       // this refreshes memory storage
-      this.roomService.getStats(roomId, true).subscribe(stats => {
+      this.roomStatsService.getStats(roomId, true).subscribe(stats => {
         if (stats.groupStats) {
           this.contentGroups = stats.groupStats.map(stat => stat.groupName);
           const lastGroup = this.globalStorageService.getItem(STORAGE_KEYS.LAST_GROUP);

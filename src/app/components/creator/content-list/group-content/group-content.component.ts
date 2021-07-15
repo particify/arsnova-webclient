@@ -20,6 +20,7 @@ import { LocalFileService } from '../../../../services/util/local-file.service';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Observable } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
+import { RoomStatsService } from '../../../../services/http/room-stats.service';
 
 @Component({
   selector: 'app-group-content',
@@ -48,7 +49,7 @@ export class GroupContentComponent extends ContentListBaseComponent implements O
 
   constructor(
     protected contentService: ContentService,
-    protected roomService: RoomService,
+    protected roomStatsService: RoomStatsService,
     protected route: ActivatedRoute,
     protected location: Location,
     protected notificationService: NotificationService,
@@ -62,7 +63,7 @@ export class GroupContentComponent extends ContentListBaseComponent implements O
     protected localFileService: LocalFileService,
     protected router: Router
   ) {
-    super(contentService, roomService, route, location, notificationService, translateService, langService, dialogService,
+    super(contentService, roomStatsService, route, location, notificationService, translateService, langService, dialogService,
     globalStorageService, contentGroupService, announceService, router);
     langService.langEmitter.subscribe(lang => translateService.use(lang));
   }

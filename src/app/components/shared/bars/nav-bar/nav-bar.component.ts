@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { RoutingService } from '../../../../services/util/routing.service';
 import { GlobalStorageService, STORAGE_KEYS } from '../../../../services/util/global-storage.service';
 import { UserRole } from '../../../../models/user-roles.enum';
-import { RoomService } from '../../../../services/http/room.service';
+import { RoomStatsService } from '../../../../services/http/room-stats.service';
 import { FeedbackService } from '../../../../services/http/feedback.service';
 import { FeedbackMessageType } from '../../../../models/messages/feedback-message-type';
 import { ContentGroupService } from '../../../../services/http/content-group.service';
@@ -92,7 +92,7 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
               protected routingService: RoutingService,
               protected route: ActivatedRoute,
               protected globalStorageService: GlobalStorageService,
-              protected roomService: RoomService,
+              protected roomStatsService: RoomStatsService,
               protected feedbackService: FeedbackService,
               protected contentGroupService: ContentGroupService,
               protected eventService: EventService) {
@@ -139,7 +139,7 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
         }
         // Checking if storage item is initialized yet
         if (group === undefined) {
-          this.roomService.getStats(data.room.id).subscribe(stats => {
+          this.roomStatsService.getStats(data.room.id).subscribe(stats => {
             if (stats.groupStats) {
               this.groupName = stats.groupStats[0].groupName;
               this.setGroupInSessionStorage(this.groupName);
@@ -158,7 +158,7 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
             this.activeFeatures.splice(1, 0, FEATURES.GROUP);
           }
           this.getItems();
-          this.roomService.getStats(data.room.id).subscribe(stats => {
+          this.roomStatsService.getStats(data.room.id).subscribe(stats => {
             this.subscribeToContentGroups(stats.groupStats, true);
           });
         }

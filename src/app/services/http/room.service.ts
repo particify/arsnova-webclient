@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { Room } from '../../models/room';
-import { RoomStats } from '../../models/room-stats';
 import { RoomSummary } from '../../models/room-summary';
 import { SurveyStarted } from '../../models/events/survey-started';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
@@ -146,14 +145,6 @@ export class RoomService extends AbstractEntityService<Room> {
   deleteRoom(roomId: string): Observable<Room> {
     return this.deleteEntity(roomId).pipe(
       catchError(this.handleError<Room>('deleteRoom'))
-    );
-  }
-
-  getStats(roomId: string, extendedView?: boolean): Observable<RoomStats> {
-    const queryParams = extendedView ? '?view=read-extended' : '';
-    const connectionUrl = this.buildForeignUri(this.serviceApiUrl.stats, roomId);
-    return this.http.get<RoomStats>(`${connectionUrl}${queryParams}`).pipe(
-      catchError(this.handleError<RoomStats>(`getStats id=${roomId}`))
     );
   }
 

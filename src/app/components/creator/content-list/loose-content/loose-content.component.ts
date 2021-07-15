@@ -5,7 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { AdvancedSnackBarTypes, NotificationService } from '../../../../services/util/notification.service';
 import { Room } from '../../../../models/room';
-import { RoomService } from '../../../../services/http/room.service';
+import { RoomStatsService } from '../../../../services/http/room-stats.service';
 import { TranslateService } from '@ngx-translate/core';
 import { LanguageService } from '../../../../services/util/language.service';
 import { DialogService } from '../../../../services/util/dialog.service';
@@ -36,7 +36,7 @@ export class LooseContentComponent extends ContentListBaseComponent implements O
 
   constructor(
     protected contentService: ContentService,
-    protected roomService: RoomService,
+    protected roomStatsService: RoomStatsService,
     protected route: ActivatedRoute,
     protected location: Location,
     protected notificationService: NotificationService,
@@ -48,7 +48,7 @@ export class LooseContentComponent extends ContentListBaseComponent implements O
     protected announceService: AnnounceService,
     protected router: Router
   ) {
-    super(contentService, roomService, route, location, notificationService, translateService, langService, dialogService,
+    super(contentService, roomStatsService, route, location, notificationService, translateService, langService, dialogService,
       globalStorageService, contentGroupService, announceService, router);
     this.deviceType = this.globalStorageService.getItem(STORAGE_KEYS.DEVICE_TYPE);
     langService.langEmitter.subscribe(lang => translateService.use(lang));

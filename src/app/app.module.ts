@@ -69,6 +69,7 @@ import { UpdateService } from './services/util/update.service';
 import { CachingService } from './services/util/caching.service';
 import { LocalFileService } from './services/util/local-file.service';
 import { LikertScaleService } from './services/util/likert-scale.service';
+import { RoomStatsService } from './services/http/room-stats.service';
 
 export function dialogClose(dialogResult: any) {
 }
@@ -177,6 +178,7 @@ export function initializeApp(appConfig: AppConfig) {
     CachingService,
     LocalFileService,
     LikertScaleService,
+    RoomStatsService,
     { provide: Window,  useValue: window },
     STORAGE_CONFIG_PROVIDERS,
     {
