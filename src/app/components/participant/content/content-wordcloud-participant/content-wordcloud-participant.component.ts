@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ContentAnswerService } from '../../../../services/http/content-answer.service';
 import { AdvancedSnackBarTypes, NotificationService } from '../../../../services/util/notification.service';
 import { TranslateService } from '@ngx-translate/core';
@@ -17,7 +17,7 @@ import { ContentWordcloud } from '../../../../models/content-wordcloud';
   templateUrl: './content-wordcloud-participant.component.html',
   styleUrls: ['./content-wordcloud-participant.component.scss']
 })
-export class ContentWordcloudComponent extends ContentParticipantBaseComponent implements OnInit {
+export class ContentWordcloudComponent extends ContentParticipantBaseComponent {
 
   @Input() content: ContentWordcloud;
   @Input() answer: MultipleTextsAnswer;
@@ -46,7 +46,7 @@ export class ContentWordcloudComponent extends ContentParticipantBaseComponent i
     super(authenticationService, notificationService, translateService, langService, route, globalStorageService, router);
   }
 
-  initAnswer(userId: string) {
+  init() {
     if (this.answer) {
       this.givenAnswer = this.answer;
       this.words = this.answer.texts;

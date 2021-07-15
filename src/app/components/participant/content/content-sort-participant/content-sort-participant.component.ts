@@ -48,7 +48,7 @@ export class ContentSortParticipantComponent extends ContentParticipantBaseCompo
     super(authenticationService, notificationService, translateService, langService, route, globalStorageService, router);
   }
 
-  initAnswer(userId: string) {
+  init() {
       if (this.answer) {
         this.alreadySent = true;
         if (this.answer.selectedChoiceIndexes) {

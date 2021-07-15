@@ -43,8 +43,7 @@ export class ContentScaleParticipantComponent extends ContentParticipantBaseComp
     super(authenticationService, notificationService, translateService, langService, route, globalStorageService, router);
   }
 
-  ngOnInit() {
-    super.ngOnInit();
+  init() {
     this.optionLabels = this.likertScaleService.getOptionLabels(
         this.content.optionTemplate,
         this.content.optionCount);
