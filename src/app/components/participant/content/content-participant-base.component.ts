@@ -34,8 +34,7 @@ export abstract class ContentParticipantBaseComponent implements OnInit {
 
   ngOnInit() {
     this.translateService.use(this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE));
-    this.authenticationService.getCurrentAuthentication()
-        .subscribe(auth => this.initAnswer(auth.userId));
+    this.init();
     this.route.params.subscribe(params => {
       this.shortId = params['shortId'];
       this.contentGroupName = params['contentGroup'];
@@ -49,7 +48,7 @@ export abstract class ContentParticipantBaseComponent implements OnInit {
     });
   }
 
-  initAnswer(userId: string) {
+  init() {
   }
 
   sendStatusToParent(answer: Answer) {

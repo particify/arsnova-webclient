@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ContentChoice } from '../../../../models/content-choice';
 import { AnswerOption } from '../../../../models/answer-option';
 import { ContentAnswerService } from '../../../../services/http/content-answer.service';
@@ -28,7 +28,7 @@ class CheckedAnswer {
   templateUrl: './content-choice-participant.component.html',
   styleUrls: ['./content-choice-participant.component.scss']
 })
-export class ContentChoiceParticipantComponent extends ContentParticipantBaseComponent implements OnInit {
+export class ContentChoiceParticipantComponent extends ContentParticipantBaseComponent {
 
   @Input() content: ContentChoice;
   @Input() answer: ChoiceAnswer;
@@ -64,7 +64,7 @@ export class ContentChoiceParticipantComponent extends ContentParticipantBaseCom
     super(authenticationService, notificationService, translateService, langService, route, globalStorageService, router);
   }
 
-  initAnswer(userId: string) {
+  init() {
     for (const answerOption of this.content.options) {
       this.checkedAnswers.push(new CheckedAnswer(answerOption, false));
     }

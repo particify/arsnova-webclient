@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ContentText } from '../../../../models/content-text';
 import { ContentAnswerService } from '../../../../services/http/content-answer.service';
 import { TextAnswer } from '../../../../models/text-answer';
@@ -17,7 +17,7 @@ import { ContentParticipantBaseComponent } from '../content-participant-base.com
   templateUrl: './content-text-participant.component.html',
   styleUrls: ['./content-text-participant.component.scss']
 })
-export class ContentTextParticipantComponent extends ContentParticipantBaseComponent implements OnInit {
+export class ContentTextParticipantComponent extends ContentParticipantBaseComponent {
 
   @Input() content: ContentText;
   @Input() answer: TextAnswer;
@@ -43,7 +43,7 @@ export class ContentTextParticipantComponent extends ContentParticipantBaseCompo
     super(authenticationService, notificationService, translateService, langService, route, globalStorageService, router);
   }
 
-  initAnswer(userId: string) {
+  init() {
     if (this.answer) {
       this.givenAnswer = this.answer;
     }
