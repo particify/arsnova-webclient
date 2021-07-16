@@ -13,6 +13,8 @@ import { EventService } from '../../../../services/util/event.service';
 import { Subscription } from 'rxjs';
 import { EntityChanged } from '../../../../models/events/entity-changed';
 import { ContentGroupStatistics } from '../../../../models/content-group-statistics';
+import { DataChanged } from '../../../../models/events/data-changed';
+import { RoomStats } from '../../../../models/room-stats';
 
 export class NavBarItem extends BarItem {
 
@@ -82,6 +84,7 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
   shortId: string;
   roomId: string;
   changesSubscription: Subscription;
+  statsChangesSubscription: Subscription;
   groupSubscriptions: Subscription[];
   feedbackSubscription: Subscription;
   changeIndicator: ChangeIndicator[];
@@ -102,6 +105,9 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
   ngOnDestroy(): void {
     if (this.changesSubscription) {
       this.changesSubscription.unsubscribe();
+    }
+    if (this.statsChangesSubscription) {
+      this.statsChangesSubscription.unsubscribe();
     }
     if (this.groupSubscriptions) {
       for (let subscription of this.groupSubscriptions) {
@@ -138,8 +144,9 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
           this.setGroupInSessionStorage(group);
         }
         // Checking if storage item is initialized yet
+        const extendedView = this.role !== UserRole.PARTICIPANT;
         if (group === undefined) {
-          this.roomStatsService.getStats(data.room.id).subscribe(stats => {
+          this.roomStatsService.getStats(data.room.id, extendedView).subscribe(stats => {
             if (stats.groupStats) {
               this.groupName = stats.groupStats[0].groupName;
               this.setGroupInSessionStorage(this.groupName);
@@ -149,7 +156,8 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
               this.setGroupInSessionStorage('');
             }
             this.getItems();
-            this.subscribeToContentGroups(stats.groupStats, false);
+            this.subscribeToContentGroups();
+            this.updateGroups(stats.groupStats, false);
           });
         } else {
           // Checking if storage item is initialized with data
@@ -158,8 +166,9 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
             this.activeFeatures.splice(1, 0, FEATURES.GROUP);
           }
           this.getItems();
-          this.roomStatsService.getStats(data.room.id).subscribe(stats => {
-            this.subscribeToContentGroups(stats.groupStats, true);
+          this.roomStatsService.getStats(data.room.id, extendedView).subscribe(stats => {
+            this.subscribeToContentGroups();
+            this.updateGroups(stats.groupStats, true);
           });
         }
       })
@@ -313,33 +322,49 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
     }, timeout);
   }
 
-  subscribeToContentGroups(groupStats: ContentGroupStatistics[], alreadySet: boolean) {
-    if (groupStats) {
-      const groupCount = groupStats.length;
-      this.groupSubscriptions = [];
-      for (let i = 0; i < groupCount; i++) {
-        this.groupSubscriptions[i] = this.contentGroupService.getById(groupStats[i].id, { roomId: this.roomId }).subscribe(group => {
-          this.contentGroups.push(group);
-          this.publishedStates.push(
-            new PublishedContentsState(group.name, group.firstPublishedIndex, group.lastPublishedIndex)
-          );
-          if (alreadySet) {
-            if (this.groupName === group.name) {
-              this.group = group;
-              this.setGroupProperties();
-            }
-          }
-          if (this.contentGroups.length === groupCount && !alreadySet) {
-            if (groupCount > 1) {
-              this.setGroup();
-            }
-          }
-        });
+  updateGroups(groupStats: ContentGroupStatistics[], alreadySet: boolean) {
+    if (this.contentGroups.length > 0) {
+      if (this.listObjectIdsEquals(this.contentGroups, groupStats)) {
+        return;
       }
-      this.changesSubscription = this.eventService.on('EntityChanged').subscribe(changes => {
-        this.handleContentGroupChanges(changes);
+      this.resetGroups();
+    }
+    const groupCount = groupStats.length;
+    this.groupSubscriptions = [];
+    for (let i = 0; i < groupCount; i++) {
+      this.groupSubscriptions[i] = this.contentGroupService.getById(groupStats[i].id, { roomId: this.roomId }).subscribe(group => {
+        this.contentGroups.push(group);
+        this.publishedStates.push(
+          new PublishedContentsState(group.name, group.firstPublishedIndex, group.lastPublishedIndex)
+        );
+        if (alreadySet) {
+          if (this.groupName === group.name) {
+            this.group = group;
+            this.setGroupProperties();
+          }
+        }
+        if (this.contentGroups.length === groupCount && !alreadySet) {
+          if (groupCount > 1) {
+            this.setGroup();
+          }
+        }
       });
     }
+  }
+
+  resetGroups() {
+    this.contentGroups.splice(0, this.contentGroups.length);
+    this.groupSubscriptions.forEach(s => s.unsubscribe());
+    this.groupSubscriptions = [];
+  }
+
+  subscribeToContentGroups() {
+    this.changesSubscription = this.eventService.on('EntityChanged').subscribe(changes => {
+      this.handleContentGroupChanges(changes);
+    });
+    const changeEventType = this.role === UserRole.PARTICIPANT ? 'PublicDataChanged' : 'ModeratorDataChanged';
+    this.statsChangesSubscription = this.eventService.on<DataChanged<RoomStats>>(changeEventType)
+        .subscribe(event => this.updateGroups(event.payload.data.groupStats, true));
   }
 
   setGroup(group?: ContentGroup) {
@@ -463,5 +488,9 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
         this.toggleNews(FEATURES.GROUP);
       }
     }
+  }
+
+  private listObjectIdsEquals(obj1: {id: string}[], obj2: {id: string}[]) {
+    return JSON.stringify(obj1.map(cg => cg.id)) === JSON.stringify(obj2.map(cg => cg.id));
   }
 }
