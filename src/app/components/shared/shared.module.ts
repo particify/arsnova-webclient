@@ -53,6 +53,8 @@ import { CounterBraces } from '../../pipes/counter-braces';
 import { HotkeyDirective } from '../../directives/hotkey.directive';
 import { HotkeysComponent } from './_dialogs/hotkeys/hotkeys.component';
 import { A11yIntroPipe } from '../../pipes/a11y-intro.pipe';
+import { UserProfileComponent } from './user-profile/user-profile.component';
+import { UserFormFieldComponent } from './user-profile/user-form-field/user-form-field.component';
 
 @NgModule({
   imports: [
@@ -112,7 +114,9 @@ import { A11yIntroPipe } from '../../pipes/a11y-intro.pipe';
     CounterBraces,
     HotkeyDirective,
     HotkeysComponent,
-    A11yIntroPipe
+    A11yIntroPipe,
+    UserProfileComponent,
+    UserFormFieldComponent
   ],
   exports: [
     RoomJoinComponent,

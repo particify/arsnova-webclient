@@ -51,7 +51,7 @@
     "account-deleted": "Dein Konto wurde gelöscht.",
     "back": "Zurück",
     "admin-area": "Administration",
-    "delete-account": "Konto löschen",
+    "user-profile": "Mein Account",
     "demo": "Einführung",
     "english": "Englisch",
     "german": "Deutsch",
@@ -195,6 +195,20 @@
     "terms": "Nutzungsbedingungen",
     "please-accept": "Du musst die Nutzungsbedingungen akzeptieren, um dich zu registrieren.",
     "info": "Erstelle ein {{accountService}}-Konto"
+  },
+  "user-profile": {
+    "a11y-message": "Du befindest dich jetzt auf der Account-Seite.",
+    "username": "Benutzername",
+    "first-name": "Vorname",
+    "last-name": "Nachname",
+    "enter-first-name": "Gib deinen Vornamen ein",
+    "enter-last-name": "Gib deinen Nachnamen ein",
+    "organization": "Einrichtung",
+    "enter-institution": "Gib deine Einrichtung ein",
+    "department": "Fachbereich/Abteilung",
+    "enter-department": "Gib deinen Fachbereich ein",
+    "delete-account": "Account löschen",
+    "delete-account-info": "Wenn du dein Account löschst, werden alle von dir erstellen Räume gelöscht."
   },
   "room-list": {
     "a11y-join-room": "Den Raum {{room}} mit der Nummer {{id}} in der Rolle {{role}} betreten.",

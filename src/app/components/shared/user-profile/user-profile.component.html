@@ -1,0 +1,40 @@
+<div tabindex="-1" #messageButton class="visually-hidden">
+  {{ 'user-profile.a11y-message' | a11yIntro | async }}
+</div>
+<div fxLayout="row" fxLayoutAlign="center center">
+  <mat-card fxLayout="column" fxLayoutGap="16px">
+    <div fxLayout="column">
+      <h4 class="less-important">{{ ('user-profile.username' | translate) + ': ' + auth.loginId }}</h4>
+      <div fxLayout="column" fxLayoutGap="16px">
+        <div class="bigger">
+          <mat-icon class="type-icon">person</mat-icon>
+          <ng-container *ngFor="let formField of formFields; let i = index">
+            <app-user-form-field *ngIf="i < 2" class="input-field" [formField]="formField" (fieldUpdated)="update($event)"></app-user-form-field>
+          </ng-container>
+        </div>
+        <div class="bigger">
+          <mat-icon class="type-icon">business</mat-icon>
+          <ng-container *ngFor="let formField of formFields; let i = index">
+            <app-user-form-field *ngIf="i >= 2" class="input-field" [formField]="formField" (fieldUpdated)="update($event)"></app-user-form-field>
+          </ng-container>
+        </div>
+        <div class="smaller">
+          <app-user-form-field  *ngFor="let formField of formFields" class="input-field" [formField]="formField" (fieldUpdated)="update($event)"></app-user-form-field>
+        </div>
+      </div>
+    </div>
+    <div>
+      <app-divider [padding]="true"></app-divider>
+      <div fxLayout="row wrap" fxLayoutAlign="space-between center" fxLayoutGap="16px" class="less-important">
+        <div class="delete-item">
+          <span tabindex="0">{{ 'user-profile.delete-account-info' | translate }}</span>
+        </div>
+        <button mat-stroked-button class="delete delete-item" (click)="openDeleteUserDialog()"
+                aria-labelledby="delete-account">
+          <mat-icon>delete</mat-icon>
+          {{ 'user-profile.delete-account' | translate }}
+        </button>
+      </div>
+    </div>
+  </mat-card>
+</div>
