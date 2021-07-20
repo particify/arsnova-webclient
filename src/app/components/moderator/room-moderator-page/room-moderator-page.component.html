@@ -11,9 +11,7 @@
             <span class="room-name">
               {{ room.name }}
             </span>
-            <span class="room-short-id">
-               {{room.shortId}}
-            </span>
+            <span class="room-short-id">{{room.shortId | splitShortId}}</span>
           </div>
           <button mat-icon-button class="corner-buttons" (click)="switchRole('participant')"
                   aria-labelledby="switch-role">

@@ -40,7 +40,7 @@
                 <div class="badge" fxLayoutAlign="center center" *ngIf="room.summary.stats.ackCommentCount > 0">
                   <span>{{ room.summary.stats.ackCommentCount }}</span>
                 </div>
-                <p class="short-id">{{room.summary.shortId}}</p>
+                <p class="short-id">{{room.summary.shortId | splitShortId}}</p>
                 <mat-icon mat-list-icon *ngSwitchCase="creatorRole"
                           matTooltip="{{ 'room-list.creator-role' | translate }}"
                           title="{{ 'room-list.creator-role' | translate }}">
