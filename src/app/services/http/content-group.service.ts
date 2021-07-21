@@ -33,13 +33,13 @@ export class ContentGroupService extends AbstractEntityService<ContentGroup> {
     super('ContentGroup', '/contentgroup', http, ws, eventService, translateService, notificationService, cachingService);
   }
 
-  getStatsByRoomIdAndName(roomId: string, name: string): Observable<ContentGroupStatistics> {
-    return this.roomService.getStats(roomId).pipe(
+  getStatsByRoomIdAndName(roomId: string, name: string, extendedView = false): Observable<ContentGroupStatistics> {
+    return this.roomService.getStats(roomId, extendedView).pipe(
       map(stats => stats.groupStats.find(groupStats => groupStats.groupName === name)));
   }
 
-  getByRoomIdAndName(roomId: string, name: string): Observable<ContentGroup> {
-    return this.roomService.getStats(roomId).pipe(
+  getByRoomIdAndName(roomId: string, name: string, extendedView = false): Observable<ContentGroup> {
+    return this.roomService.getStats(roomId, extendedView).pipe(
       map(stats => stats.groupStats.find(groupStats => groupStats.groupName === name).id),
       mergeMap(id => this.getById(id, { roomId: roomId })));
   }

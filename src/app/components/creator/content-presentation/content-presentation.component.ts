@@ -103,7 +103,7 @@ export class ContentPresentationComponent implements OnInit {
   }
 
   initGroup(initial = false) {
-    this.contentGroupService.getByRoomIdAndName(this.roomId, this.contentGroupName).subscribe(group => {
+    this.contentGroupService.getByRoomIdAndName(this.roomId, this.contentGroupName, true).subscribe(group => {
       this.contentGroup = group;
       this.contentService.getContentsByIds(this.contentGroup.roomId, this.contentGroup.contentIds, true).subscribe(contents => {
         this.contents = this.contentService.getSupportedContents(contents);

@@ -142,7 +142,7 @@ export class RoomPageComponent implements OnDestroy {
 
   initializeRoom(room: Room, role: UserRole, viewRole: UserRole): void {
     this.room = room;
-    this.initializeStats();
+    this.initializeStats(viewRole);
     if (this.room.extensions && this.room.extensions.comments) {
       if (this.room.extensions.comments['enableModeration'] !== null) {
         this.moderationEnabled = this.room.extensions.comments['enableModeration'];
@@ -173,8 +173,9 @@ export class RoomPageComponent implements OnDestroy {
     }
   }
 
-  initializeStats() {
-    this.roomService.getStats(this.room.id).subscribe(roomStats => {
+  initializeStats(viewRole: UserRole) {
+    let extendedView = [UserRole.CREATOR, UserRole.EDITING_MODERATOR, UserRole.EXECUTIVE_MODERATOR].includes(viewRole);
+    this.roomService.getStats(this.room.id, extendedView).subscribe(roomStats => {
       this.roomStats = roomStats;
       if (this.roomStats.groupStats) {
         this.initializeGroups();

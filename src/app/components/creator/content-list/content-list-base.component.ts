@@ -61,7 +61,7 @@ export abstract class ContentListBaseComponent {
   getGroups(): void {
     this.contentGroups = this.globalStorageService.getItem(STORAGE_KEYS.CONTENT_GROUPS);
     if (!this.contentGroups) {
-      this.roomService.getStats(this.room.id).subscribe(roomStats => {
+      this.roomService.getStats(this.room.id, true).subscribe(roomStats => {
         if (roomStats.groupStats) {
           this.contentGroups = roomStats.groupStats.map(stat => stat.groupName);
         }

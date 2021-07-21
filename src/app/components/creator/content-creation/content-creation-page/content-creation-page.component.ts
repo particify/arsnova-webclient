@@ -114,7 +114,7 @@ export class ContentCreationPageComponent implements OnInit, AfterContentInit {
         this.isLoading = false;
       }
       // this refreshes memory storage
-      this.roomService.getStats(roomId).subscribe(stats => {
+      this.roomService.getStats(roomId, true).subscribe(stats => {
         if (stats.groupStats) {
           this.contentGroups = stats.groupStats.map(stat => stat.groupName);
           const lastGroup = this.globalStorageService.getItem(STORAGE_KEYS.LAST_GROUP);
