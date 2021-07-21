@@ -4,7 +4,7 @@
       <mat-label>{{ 'answer.your-answer' | translate }}</mat-label>
       <textarea matInput (focus)="eventService.makeFocusOnInputTrue()"
                 (blur)="eventService.makeFocusOnInputFalse()" [(ngModel)]="textAnswer" name="answer"
-                matTextareaAutosize matAutosizeMinRows="3" matAutosizeMaxRows="8" maxLength="255"
+                matTextareaAutosize matAutosizeMinRows="3" matAutosizeMaxRows="8" maxLength="500"
                 aria-labelledby="answer-input" placeholder="{{ 'answer.enter-answer' | translate }}"></textarea>
     </mat-form-field>
   </form>
