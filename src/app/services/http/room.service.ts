@@ -24,6 +24,7 @@ const httpOptions = {
 export class RoomService extends AbstractEntityService<Room> {
 
   serviceApiUrl = {
+    duplicate: '/duplicate',
     transfer: '/transfer',
     v2Import: '/import/v2/room',
     summary: '/_view/room/summary'
@@ -152,6 +153,13 @@ export class RoomService extends AbstractEntityService<Room> {
   deleteRoom(roomId: string): Observable<Room> {
     return this.deleteEntity(roomId).pipe(
       catchError(this.handleError<Room>('deleteRoom'))
+    );
+  }
+
+  duplicateRoom(roomId: string): Observable<Room> {
+    const connectionUrl = this.buildForeignUri(this.serviceApiUrl.duplicate, roomId);
+    return this.http.post<Room>(connectionUrl, null).pipe(
+      catchError(this.handleError<Room>(`duplicateRoom`))
     );
   }
 

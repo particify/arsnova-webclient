@@ -71,6 +71,8 @@ import { LocalFileService } from './services/util/local-file.service';
 import { LikertScaleService } from './services/util/likert-scale.service';
 import { RoomStatsService } from './services/http/room-stats.service';
 import { WsRoomEventDispatcher } from './services/websockets/ws-room-event-dispatcher.service';
+import { DemoService } from './services/demo.service';
+import { DemoRoomGuard } from './guards/demo-room.guard';
 
 export function dialogClose(dialogResult: any) {
 }
@@ -152,6 +154,7 @@ export function initializeApp(appConfig: AppConfig) {
     DialogService,
     AuthenticationService,
     AuthenticationGuard,
+    DemoRoomGuard,
     RoomMembershipService,
     EventService,
     RoomService,
@@ -186,6 +189,7 @@ export function initializeApp(appConfig: AppConfig) {
     LocalFileService,
     LikertScaleService,
     RoomStatsService,
+    DemoService,
     WsRoomEventDispatcher,
     { provide: Window,  useValue: window },
     STORAGE_CONFIG_PROVIDERS,
