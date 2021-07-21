@@ -12,7 +12,7 @@ import { IMessage, Message } from '@stomp/stompjs';
 import { Observable, Subscription } from 'rxjs';
 import { ContentService } from '../../../services/http/content.service';
 import { TranslateService } from '@ngx-translate/core';
-import { AdvancedSnackBarTypes, NotificationService } from '../../../services/util/notification.service';
+import { NotificationService } from '../../../services/util/notification.service';
 import { GlobalStorageService, STORAGE_KEYS } from '../../../services/util/global-storage.service';
 import { UserRole } from '../../../models/user-roles.enum';
 import { InfoBarItem } from '../bars/info-bar/info-bar.component';
@@ -38,7 +38,6 @@ export class RoomPageComponent implements OnDestroy {
   protected roomSub: Subscription;
   protected roomWatch: Observable<IMessage>;
   protected commentWatch: Observable<IMessage>;
-  protected noGroups = true;
   protected attachmentData: any;
   moderationCommentWatch: Observable<IMessage>;
   moderationSub: Subscription;
@@ -178,7 +177,6 @@ export class RoomPageComponent implements OnDestroy {
     this.roomService.getStats(this.room.id).subscribe(roomStats => {
       this.roomStats = roomStats;
       if (this.roomStats.groupStats) {
-        this.noGroups = false;
         this.initializeGroups();
       } else {
         this.isLoading = false;
@@ -196,16 +194,6 @@ export class RoomPageComponent implements OnDestroy {
           this.afterGroupsLoadHook();
         }
       });
-    }
-  }
-
-  navToStats(role: string) {
-    if (this.noGroups) {
-      this.translateService.get('room-page.no-contents').subscribe(msg => {
-        this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
-      });
-    } else {
-      this.router.navigate([`/${role}/room/${this.room.shortId}/statistics`]);
     }
   }
 

@@ -82,10 +82,8 @@ export class RoomCreatorPageComponent extends RoomPageComponent implements OnIni
         document.getElementById('no-content-groups').focus();
       }
     } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit6) === true && focusOnInput === false) {
-      document.getElementById('statistics-button').focus();
-    } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit7) === true && focusOnInput === false) {
       document.getElementById('more-button').focus();
-    } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit8) === true && focusOnInput === false) {
+    } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit7) === true && focusOnInput === false) {
       const adKey = this.userCount === 1 ? '-only-one' : '';
       const msg = this.translateService.instant('room-page.a11y-user-count' + adKey, {count: this.userCount})
       this.announceService.announce(msg);

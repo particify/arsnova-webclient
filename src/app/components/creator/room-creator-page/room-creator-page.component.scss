@@ -1,104 +1,24 @@
-.mat-card {
-  width: 100%;
-}
+@import '../../shared/room-page/room-page.component';
 
-.main-button {
-  width: 90%;
-  height: 100%;
-  color: var(--primary);
-  transition: all 150ms;
-  &.mat-focus-indicator {
-    border-radius: 0;
-  }
-}
-
-.hover {
-  &:hover {
-    transform: scale(1.1);
-  }
-}
-
-.main-icon {
-  font-size: 60px;
-  height: 60px;
-  width: 60px;
-}
-
-.desktop {
-  font-size: 70px;
-  height: 70px;
-  width: 70px;
-  margin-bottom: 8px;
-}
-
-.corner-buttons {
-  width: 40px;
-  height: 40px;
-  margin-bottom: 5%;
+.mat-card-content {
+  margin-bottom: 0;
 }
 
 .menu-icon {
   color: var(--secondary);
 }
 
-.room-short-id {
-  opacity: 0.8;
-  font-size: calc(14px + 0.6vw);
-  color: var(--on-surface);
-  margin-top: 3%;
-}
-
-.mat-card-subtitle {
-  margin: 0;
-}
-
-.button-text {
-  font-size: 18px;
-  padding: 0;
-  margin: 3% 0;
-}
-
-.small-text {
-  font-size: 16px;
-}
-
-.big-container {
-  min-height: 160px;
-}
-
-.mat-grid-list {
-  width: 100%;
-  min-height: 120px;
-  padding: 0 !important;
-  margin: 2% 0;
-  &:last-of-type {
-    margin-bottom: 5%;
-  }
-}
-
-.mat-card-header {
-  margin: 4% 0 1% 0;
-}
-
-.mat-card-title {
-  word-break: break-all;
-  font-size: calc(18px + 0.8vw) !important;
-  font-weight: normal;
-}
-
-.mat-grid-tile {
-  overflow: visible;
-  width: calc(50% - 16px) !important;
-  height: 100% !important;
-  padding: 2% !important;
-}
-
-.question-button-div {
-  margin: 5% 0;
-}
-
 #presentation-button {
   @media(max-width: 900px) {
     display: none;
+  }
+}
+
+.empty-group-container {
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  .add-group {
+    margin-top: 16px;
   }
 }
