@@ -391,7 +391,7 @@ describe('HeaderComponent', () => {
     userMenuItems = await userMenu.getItems({selector: '#logout-button'});
     await userMenuItems[0].click();
     expect(routerSpy.navigateByUrl).toHaveBeenCalledWith('home');
-    expect(notificationService.showAdvanced).toHaveBeenCalledWith('You have been logged out.', AdvancedSnackBarTypes.SUCCESS);
+    expect(notificationService.showAdvanced).toHaveBeenCalledWith(jasmine.any(String), AdvancedSnackBarTypes.SUCCESS);
   });
 
   // # If not logged in

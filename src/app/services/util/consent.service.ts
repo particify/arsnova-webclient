@@ -1,4 +1,4 @@
-import { Injectable, EventEmitter } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { AbstractHttpService } from '../http/abstract-http.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError } from 'rxjs/operators';
@@ -10,6 +10,8 @@ import { TranslateService } from '@ngx-translate/core';
 import { NotificationService } from './notification.service';
 import { EventService } from './event.service';
 import { ApiConfig } from '../../models/api-config';
+import { ConsentChangedEvent } from '../../models/events/consent-changed';
+import { GlobalStorageService, STORAGE_KEYS } from './global-storage.service';
 
 export const CONSENT_VERSION = 1;
 
@@ -31,11 +33,6 @@ export interface ConsentSettings {
   consentGiven: { [key: string]: boolean };
 }
 
-export interface ConsentChangeEvent {
-  categoriesSettings: CookieCategory[];
-  consentSettings?: ConsentSettings;
-}
-
 const httpOptions = {
   headers: new HttpHeaders({})
 };
@@ -55,16 +52,18 @@ export class ConsentService extends AbstractHttpService<ConsentSettings> {
   private privacyUrl: string;
   private consentRecording;
 
-  private settingsChanged: EventEmitter<ConsentChangeEvent> = new EventEmitter();
-
   constructor(
     public dialog: MatDialog,
     private http: HttpClient,
     private config: ApiConfigService,
+    private globalStorageService: GlobalStorageService,
     protected eventService: EventService,
     protected translateService: TranslateService,
-    protected notificationService: NotificationService) {
+    protected notificationService: NotificationService
+  ) {
     super('/consent', http, eventService, translateService, notificationService);
+    const settings = globalStorageService.getItem(STORAGE_KEYS.COOKIE_CONSENT);
+    this.init(settings);
   }
 
   init(consentSettings: ConsentSettings) {
@@ -72,6 +71,7 @@ export class ConsentService extends AbstractHttpService<ConsentSettings> {
       this.consentSettings = consentSettings;
     }
     this.loadLocalSettings();
+    this.globalStorageService.handleConsentChange({ categoriesSettings: this.categories });
   }
 
   setConfig(apiConfig: ApiConfig) {
@@ -112,13 +112,6 @@ export class ConsentService extends AbstractHttpService<ConsentSettings> {
    */
   consentGiven(categoryKey: StorageItemCategory) {
     return this.categoryMap.get(categoryKey)?.consent ?? false;
-  }
-
-  /**
-   * Subscribes to changes in consent settings.
-   */
-  subscribeToChanges(callback: (event: ConsentChangeEvent) => void) {
-    return this.settingsChanged.subscribe(callback);
   }
 
   /**
@@ -165,10 +158,12 @@ export class ConsentService extends AbstractHttpService<ConsentSettings> {
     this.consentSettings.consentGiven = consentGiven;
     if (this.consentRecording?.enabled) {
       this.recordConsentSettings(this.consentSettings).subscribe((persistedConsentSettings) => {
-        this.settingsChanged.emit({ categoriesSettings: this.categories, consentSettings: this.consentSettings });
+        const event = new ConsentChangedEvent(this.categories, this.consentSettings);
+        this.eventService.broadcast(event.type, event.payload);
       });
     } else {
-      this.settingsChanged.emit({ categoriesSettings: this.categories, consentSettings: this.consentSettings });
+      const event = new ConsentChangedEvent(this.categories, this.consentSettings);
+      this.eventService.broadcast(event.type, event.payload);
     }
   }
 
