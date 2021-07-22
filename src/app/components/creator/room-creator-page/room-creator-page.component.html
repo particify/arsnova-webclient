@@ -73,7 +73,7 @@
       <div fxLayout="column" fxLayoutAlign="center center">
         <app-divider [padding]="true"></app-divider>
         <div fxLayout="column" [ngClass]="{'group-container': contentGroups.length > 0, 'empty-group-container': contentGroups.length === 0}">
-          <button mat-stroked-button class="stroked-primary add-group" aria-labelledby="create-content-group"
+          <button id="content-group-create-button" mat-stroked-button class="stroked-primary add-group" aria-labelledby="create-content-group"
                   (click)="openCreateContentGroupDialog()">
             <mat-icon>playlist_add</mat-icon>
             {{ 'room-page.create-content-group' | translate }}
