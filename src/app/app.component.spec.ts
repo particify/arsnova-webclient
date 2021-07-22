@@ -37,6 +37,7 @@ describe('AppComponent', () => {
   const apiConfigService = jasmine.createSpyObj('ApiConfigService', ['getApiConfig$']);
   const consentService = jasmine.createSpyObj('ConsentService', ['setConfig']);
   const routingService = jasmine.createSpyObj('RoutingService', ['subscribeActivatedRoute']);
+  const languageService = jasmine.createSpyObj('LanguageService', ['init']);
 
   let translateService: TranslateService;
 
@@ -79,11 +80,6 @@ describe('AppComponent', () => {
     };
 
     getApiConfig$Spy = apiConfigService.getApiConfig$.and.returnValue(of(testApiConfig));
-@Injectable()
-class MockLanguageService {
-  public readonly langEmitter = new EventEmitter<string>();
-}
-
 
     TestBed.configureTestingModule({
       declarations: [
@@ -124,7 +120,7 @@ class MockLanguageService {
         },
         {
           provide: LanguageService,
-          useClass: MockLanguageService
+          useValue: languageService
         }
       ],
       imports: [
@@ -168,9 +164,8 @@ class MockLanguageService {
   });
 
   it('default lang should has been set after init', () => {
-    expect(translateService.defaultLang).toBeUndefined('lang should be undefined before init');
     fixture.detectChanges();
-    expect(translateService.defaultLang).toContain('de', 'lang should be "de" after init');
+    expect(languageService.init).toHaveBeenCalled();
   });
 
   it('should call the routing service to start route subscription', () => {

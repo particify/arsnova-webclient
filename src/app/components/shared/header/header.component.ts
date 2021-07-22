@@ -1,10 +1,10 @@
-import { Component, HostListener, Inject, OnInit, Renderer2 } from '@angular/core';
+import { Component, HostListener, OnInit, Renderer2 } from '@angular/core';
 import { AuthenticationService } from '../../../services/http/authentication.service';
 import { AdvancedSnackBarTypes, NotificationService } from '../../../services/util/notification.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ClientAuthentication } from '../../../models/client-authentication';
 import { AuthProvider } from '../../../models/auth-provider';
-import { DOCUMENT, Location } from '@angular/common';
+import { Location } from '@angular/common';
 import { TranslateService } from '@ngx-translate/core';
 import { UserService } from '../../../services/http/user.service';
 import { EventService } from '../../../services/util/event.service';
@@ -58,17 +58,10 @@ export class HeaderComponent implements OnInit {
     private themeService: ThemeService,
     private routingService: RoutingService,
     private route: ActivatedRoute,
-    private consentService: ConsentService,
-    @Inject(DOCUMENT) private document: Document
+    private consentService: ConsentService
   ) {
     this.deviceType = this.globalStorageService.getItem(STORAGE_KEYS.DEVICE_TYPE);
-    this.translationService.setDefaultLang('en');
-    if (!this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE)) {
-      const lang = this.translationService.getBrowserLang();
-      this.setLang(lang);
-    } else {
-      this.setLang(this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE));
-    }
+    this.lang = this.translationService.currentLang;
   }
 
   @HostListener('window:keyup', ['$event'])
@@ -102,14 +95,12 @@ export class HeaderComponent implements OnInit {
       this.privacyUrl = data.apiConfig.ui.links?.privacy?.url;
       this.imprintUrl = data.apiConfig.ui.links?.imprint?.url ;
     });
+    this.translationService.onLangChange.subscribe(e => this.lang = e.lang);
     this.showNews = false;
   }
 
-  setLang(lang: string) {
-    if (['de', 'en'].indexOf(lang) === -1) {
-      lang = 'en';
-    }
-    this.useLanguage(lang);
+  changeLanguage(lang: string) {
+    this.langService.setLang(lang);
   }
 
   logout() {
@@ -175,14 +166,6 @@ export class HeaderComponent implements OnInit {
         this.deleteAccount(this.auth.userId);
       }
     });
-  }
-
-  useLanguage(language: string) {
-    this.translationService.use(language);
-    this.lang = language;
-    this.globalStorageService.setItem(STORAGE_KEYS.LANGUAGE, language);
-    this.document.documentElement.lang = language;
-    this.langService.langEmitter.emit(language);
   }
 
   changeTheme(theme: Theme) {
