@@ -53,13 +53,12 @@ export class ContentGroupService extends AbstractEntityService<ContentGroup> {
   }
 
   delete(contentGroup: ContentGroup): Observable<ContentGroup> {
-    contentGroup.contentIds = [];
-    return this.updateGroup(contentGroup).pipe(
+    return this.deleteEntity(contentGroup.id, contentGroup.roomId).pipe(
       catchError(this.handleError<ContentGroup>(`Delete, ${contentGroup.roomId}, ${contentGroup.name}`))
     );
   }
 
-  addContentToGroup(roomId: string, name: string, contentId: String): Observable<void> {
+  addContentToGroup(roomId: string, name: string, contentId?: String): Observable<void> {
     const connectionUrl = this.buildUri('/-/content/', roomId);
     return this.http.post<void>(connectionUrl,
       { roomId: roomId, contentGroupName: name, contentId: contentId },

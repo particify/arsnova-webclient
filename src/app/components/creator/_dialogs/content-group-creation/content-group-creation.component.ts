@@ -26,10 +26,7 @@ export class ContentGroupCreationComponent {
   addContentGroup() {
     if (this.name) {
       if (this.contentGroupService.saveGroupInMemoryStorage(this.name)) {
-        this.translateService.get('dialog.content-group-created').subscribe(msg => {
-          this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.SUCCESS);
-          this.closeDialog(this.name);
-        });
+        this.closeDialog(this.name);
       } else {
         this.translateService.get('dialog.content-group-already-exists').subscribe(msg => {
           this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.FAILED);

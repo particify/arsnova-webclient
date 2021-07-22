@@ -109,14 +109,18 @@ export class GroupContentComponent extends ContentListBaseComponent implements O
       this.contentGroup = group;
       this.updatedName = this.contentGroup.name;
       this.setRange();
-      this.contentService.getContentsByIds(this.contentGroup.roomId, this.contentGroup.contentIds, true)
+      if (this.contentGroup.contentIds) {
+        this.contentService.getContentsByIds(this.contentGroup.roomId, this.contentGroup.contentIds, true)
           .subscribe(contents => {
-        this.initContentList(contents);
-        if (imported) {
-          const msg = this.translateService.instant('content.import-successful');
-          this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.SUCCESS);
-        }
-      });
+            this.initContentList(contents);
+            if (imported) {
+              const msg = this.translateService.instant('content.import-successful');
+              this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.SUCCESS);
+            }
+          });
+      } else {
+        this.initContentList([]);
+      }
     });
   }
 
@@ -469,6 +473,20 @@ export class GroupContentComponent extends ContentListBaseComponent implements O
 
   closedMenu() {
     this.activeMenuIndex = null;
+  }
+
+  deleteGroup() {
+    const dialogRef = this.dialogService.openDeleteDialog('really-delete-content-group', this.contentGroup.name, 'delete');
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.contentGroupService.delete(this.contentGroup).subscribe(() => {
+          this.location.back();
+          this.translateService.get('content.content-group-deleted').subscribe(msg => {
+            this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
+          });
+        })
+      }
+    });
   }
 
 }

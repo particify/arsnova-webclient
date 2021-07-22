@@ -45,7 +45,7 @@
             </button>
             <div class="settings-buttons">
               <button mat-button id="statistic-button" class="settings-button"  aria-labelledby="statistics"
-                      routerLink="/creator/room/{{ room.shortId }}/statistics">
+                      routerLink="/creator/room/{{ room.shortId }}/statistics" [disabled]="contents.length === 0">
                 <mat-icon>insert_chart</mat-icon>
                 {{ 'room-page.answer-statistics' | translate }}
               </button>
@@ -65,18 +65,25 @@
                 <mat-icon>done_all</mat-icon>
                 {{ (correctOptionsPublished ? 'content.dont-publish-correct-options' : 'content.publish-correct-options') | translate }}
               </button>
+              <mat-divider></mat-divider>
               <button mat-menu-item id="edit-group-sort" aria-labelledby="edit-content-group-sort"
-                      (click)="goInSortingMode()">
+                      (click)="goInSortingMode()" [disabled]="contents.length < 2">
                 <mat-icon>swap_vert</mat-icon>
                 {{ 'content.sort-content-group' | translate }}
               </button>
-              <button mat-menu-item (click)="exportToCsv()">
+              <mat-divider></mat-divider>
+              <button mat-menu-item (click)="exportToCsv()" [disabled]="contents.length === 0">
                 <mat-icon>file_download</mat-icon>
                 {{ 'export.export' | translate }}
               </button>
               <button mat-menu-item (click)="importFromCsv()">
                 <mat-icon>file_upload</mat-icon>
                 {{ 'import.import' | translate }}
+              </button>
+              <mat-divider></mat-divider>
+              <button mat-menu-item (click)="deleteGroup()">
+                <mat-icon class="delete">delete_forever</mat-icon>
+                {{ 'content.delete-content-group' | translate }}
               </button>
             </mat-menu>
           </div>
@@ -102,6 +109,7 @@
         <div>
           <div tabindex="-1" id="content-list" class="visually-hidden">
             {{ 'content.a11y-content-list-contents' | translate: { count: contents.length } }}</div>
+          <p *ngIf="contents.length === 0">{{ 'content.no-contents-yet' | translate }}</p>
           <mat-list *ngIf="!isInSortingMode">
               <mat-list-item *ngFor="let content of contents; index as i" fxLayout="column" fxLayoutAlign="center"
                              class="bottom-border" (click)="navigateToContentStats(content)"

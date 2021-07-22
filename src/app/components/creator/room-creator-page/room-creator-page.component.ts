@@ -3,7 +3,7 @@ import { RoomService } from '../../../services/http/room.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RoomPageComponent } from '../../shared/room-page/room-page.component';
 import { Location } from '@angular/common';
-import { NotificationService } from '../../../services/util/notification.service';
+import { AdvancedSnackBarTypes, NotificationService } from '../../../services/util/notification.service';
 import { MatDialog } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
 import { LanguageService } from '../../../services/util/language.service';
@@ -20,6 +20,7 @@ import { AnnounceService } from '../../../services/util/announce.service';
 import { UserRole } from '../../../models/user-roles.enum';
 import { InfoBarItem } from '../../shared/bars/info-bar/info-bar.component';
 import { ContentGroupService } from '../../../services/http/content-group.service';
+import { ContentGroup } from '../../../models/content-group';
 
 @Component({
   selector: 'app-room-creator-page',
@@ -152,5 +153,21 @@ export class RoomCreatorPageComponent extends RoomPageComponent implements OnIni
 
   openPresentationMode() {
     this.router.navigate(['presentation', this.room.shortId]);
+  }
+
+  openCreateContentGroupDialog() {
+    this.dialogService.openContentGroupCreationDialog().afterClosed().subscribe(name => {
+      if (name) {
+        const newGroup = new ContentGroup();
+        newGroup.roomId = this.room.id;
+        newGroup.name = name;
+        this.contentGroupService.post(newGroup).subscribe(() => {
+          this.translateService.get('room-page.content-group-created').subscribe(msg => {
+            this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.SUCCESS);
+          });
+          this.router.navigate(['creator', 'room', this.room.shortId, 'group', name]);
+        });
+      }
+    });
   }
 }
