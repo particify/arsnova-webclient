@@ -68,8 +68,13 @@ export class TrackingService {
   init(uiConfig: any) {
     this.uiConfig = uiConfig;
 
+    if (uiConfig.demo instanceof Object) {
+      for (const [lang, demoId] of Object.entries<string>(uiConfig.demo)) {
+        console.log('this.specialRooms.set('+demoId+', `Demo ('+lang+')`)')
+        this.specialRooms.set(demoId, `Demo (${lang})`);
+      }
+    }
     const feedbackRoomShortId = uiConfig.links?.feedback?.url?.match(/\/([0-9]{8})$/)?.[1];
-    uiConfig.demo && this.specialRooms.set(uiConfig.demo, 'Demo');
     feedbackRoomShortId && this.specialRooms.set(feedbackRoomShortId, 'Feedback');
 
     if (uiConfig.tracking.heartbeat) {
