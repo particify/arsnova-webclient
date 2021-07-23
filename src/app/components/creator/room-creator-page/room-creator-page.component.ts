@@ -61,27 +61,19 @@ export class RoomCreatorPageComponent extends RoomPageComponent implements OnIni
   keyEvent(event: KeyboardEvent) {
     const focusOnInput = this.eventService.focusOnInput;
     if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit1) === true && focusOnInput === false) {
-      if (this.moderationEnabled) {
-        document.getElementById('comments-button').focus();
-      } else {
-        document.getElementById('comments-button2').focus();
-      }
+      document.getElementById('comments-button').focus();
     } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit2) === true && focusOnInput === false) {
-      if (this.moderationEnabled) {
-        document.getElementById('moderation-button').focus();
-      } else {
-        document.getElementById('moderation-disabled').focus();
-      }
-    } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit3) === true && focusOnInput === false) {
-      document.getElementById('content-create-button').focus();
-    } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit4) === true && focusOnInput === false) {
       document.getElementById('live-survey-button').focus();
-    } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit5) === true && focusOnInput === false) {
+    } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit3) === true && focusOnInput === false) {
+      document.getElementById('content-group-create-button').focus();
+    } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit4) === true && focusOnInput === false) {
       if (this.contentGroups.length > 0) {
         document.getElementById('content-groups').focus();
       } else {
         document.getElementById('no-content-groups').focus();
       }
+    } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit5) === true && focusOnInput === false) {
+      document.getElementById('presentation-button').focus();
     } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit6) === true && focusOnInput === false) {
       document.getElementById('more-button').focus();
     } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit7) === true && focusOnInput === false) {
