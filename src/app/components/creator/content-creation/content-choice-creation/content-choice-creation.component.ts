@@ -21,10 +21,8 @@ export class ContentChoiceCreationComponent extends ContentCreationComponent imp
 
   multipleCorrectAnswers = false;
   noCorrectAnswers = false;
-  lastDeletedDisplayAnswer: DisplayAnswer;
   newAnswerOptionChecked = false;
   newAnswerOptionLabel = '';
-  updatedAnswer: string;
   isAnswerEdit = -1;
   noAnswersYet = false;
 
@@ -35,10 +33,10 @@ export class ContentChoiceCreationComponent extends ContentCreationComponent imp
     protected roomService: RoomService,
     protected contentGroupService: ContentGroupService,
     protected route: ActivatedRoute,
-    public eventService: EventService,
-    private announceService: AnnounceService
+    protected announceService: AnnounceService,
+  public eventService: EventService
   ) {
-    super(contentService, notificationService, translationService, roomService, contentGroupService, route);
+    super(contentService, notificationService, translationService, roomService, contentGroupService, route, announceService);
   }
 
   initContentCreation() {
@@ -71,17 +69,6 @@ export class ContentChoiceCreationComponent extends ContentCreationComponent imp
     });
   }
 
-  findAnswerIndexByLabel(label: string): number {
-    let index = -1;
-    for (let i = 0; i < (this.content as ContentChoice).options.length; i++) {
-      if ((this.content as ContentChoice).options[i].label.valueOf() === label.valueOf()) {
-        index = i;
-        break;
-      }
-    }
-    return index;
-  }
-
   addAnswer($event) {
     $event.preventDefault();
     if (this.newAnswerOptionLabel === '') {
@@ -100,7 +87,7 @@ export class ContentChoiceCreationComponent extends ContentCreationComponent imp
       this.newAnswerOptionLabel = '';
       return;
     }
-    if (this.checkIfAnswerExists(this.newAnswerOptionLabel.valueOf())) {
+    if (this.answerExists(this.newAnswerOptionLabel.valueOf())) {
       return;
     }
     if ((this.content as ContentChoice).options.length < 8) {
@@ -116,36 +103,29 @@ export class ContentChoiceCreationComponent extends ContentCreationComponent imp
     }
   }
 
-  checkIfAnswerExists(label: string): boolean {
-    for (let i = 0; i < (this.content as ContentChoice).options.length; i++) {
-      if ((this.content as ContentChoice).options[i].label === label) {
-        const msg = this.translationService.instant('content.same-answer');
-        this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
-        return true;
+  goInEditMode(index: number): void {
+    this.isAnswerEdit = index;
+    this.eventService.makeFocusOnInputTrue();
+  }
+
+  leaveEditMode(): void {
+    this.saveAnswerLabels();
+    this.isAnswerEdit = -1;
+    this.eventService.makeFocusOnInputFalse();
+  }
+
+  deleteAnswer(index: number) {
+    (this.content as ContentChoice).options.splice(index, 1);
+    for (let j = 0; j < (this.content as ContentChoice).correctOptionIndexes.length; j++) {
+      if ((this.content as ContentChoice).correctOptionIndexes[j] === index) {
+        (this.content as ContentChoice).correctOptionIndexes.splice(j, 1);
+      }
+      if ((this.content as ContentChoice).correctOptionIndexes[j] > index) {
+        (this.content as ContentChoice).correctOptionIndexes[j] = (this.content as ContentChoice).correctOptionIndexes[j] - 1;
       }
     }
-  }
-
-  updateAnswer(index: number, answer: DisplayAnswer) {
-    answer.answerOption.label = this.updatedAnswer;
-    this.saveChanges(index, answer);
-    this.leaveEditMode();
-    this.announceService.announce('content.a11y-updated');
-  }
-
-  goInEditMode(index: number, answer: DisplayAnswer): void {
-    this.updatedAnswer = answer.answerOption.label;
-    this.isAnswerEdit = index;
-    setTimeout(() => {
-      document.getElementById('answerEdit-' + index).focus();
-    }, 100);
-  }
-
-  leaveEditMode(aborted?: boolean): void {
-    this.isAnswerEdit = -1;
-    if (aborted) {
-      this.announceService.announce('content.a11y-aborted');
-    }
+    this.fillCorrectAnswers();
+    this.afterAnswerDeletion();
   }
 
   saveChanges(index: number, answer: DisplayAnswer) {
@@ -168,29 +148,7 @@ export class ContentChoiceCreationComponent extends ContentCreationComponent imp
     this.fillCorrectAnswers();
   }
 
-  deleteAnswer($event, label: string) {
-    $event.preventDefault();
-    const index = this.findAnswerIndexByLabel(label);
-    this.lastDeletedDisplayAnswer = new DisplayAnswer((this.content as ContentChoice).options[index], false);
-    (this.content as ContentChoice).options.splice(index, 1);
-    for (let j = 0; j < (this.content as ContentChoice).correctOptionIndexes.length; j++) {
-      if ((this.content as ContentChoice).correctOptionIndexes[j] === index) {
-        this.lastDeletedDisplayAnswer.correct = true;
-        (this.content as ContentChoice).correctOptionIndexes.splice(j, 1);
-      }
-      if ((this.content as ContentChoice).correctOptionIndexes[j] > index) {
-        (this.content as ContentChoice).correctOptionIndexes[j] = (this.content as ContentChoice).correctOptionIndexes[j] - 1;
-      }
-    }
-    this.fillCorrectAnswers();
-    this.announceService.announce('content.a11y-answer-deleted');
-    this.translationService.get('content.answer-deleted').subscribe(message => {
-      this.notificationService.showAdvanced(message, AdvancedSnackBarTypes.WARNING);
-    });
-  }
-
-  switchValue(label: string, i: number) {
-    const index = this.findAnswerIndexByLabel(label);
+  switchValue(label: string, index: number) {
     const answer = new DisplayAnswer(
       new AnswerOption(
         this.displayAnswers[index].answerOption.label),
@@ -198,9 +156,6 @@ export class ContentChoiceCreationComponent extends ContentCreationComponent imp
     this.saveChanges(index, answer);
     const state = answer.correct ? 'correct' : 'wrong';
     this.announceService.announce('content.a11y-answer-marked-' + state);
-    setTimeout(() => {
-      document.getElementsByName(label).item(0).focus();
-    }, 1000);
   }
 
   removeCorrectAnswers() {
@@ -232,6 +187,9 @@ export class ContentChoiceCreationComponent extends ContentCreationComponent imp
       return;
     }
     (this.content as ContentChoice).multiple = this.multipleCorrectAnswers;
+    if (!this.saveAnswerLabels(true)) {
+      return;
+    }
     return true;
   }
 }

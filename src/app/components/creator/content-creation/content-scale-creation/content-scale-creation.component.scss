@@ -2,16 +2,15 @@ form > button {
   margin: 20px 0;
 }
 
-.mat-card {
-  margin: 20px 0;
-  padding: 0;
-  background-color: var(--background) !important;
+.mat-checkbox {
+  padding-left: 16px;
+  margin-bottom: 12px;
 }
 
 .mat-list {
-  background-color: var(--background);
+  margin: 12px 0 20px;
 }
 
-.mat-checkbox {
-  padding-left: 16px;
+.mat-list-item:last-of-type {
+  border-bottom: solid 1px var(--border);
 }

@@ -8,6 +8,7 @@ import { ContentGroupService } from '../../../../services/http/content-group.ser
 import { ContentCreationComponent } from '../content-creation/content-creation.component';
 import { ContentType } from '../../../../models/content-type.enum';
 import { ActivatedRoute } from '@angular/router';
+import { AnnounceService } from '../../../../services/util/announce.service';
 
 @Component({
   selector: 'app-content-text-creation',
@@ -24,9 +25,10 @@ export class ContentTextCreationComponent extends ContentCreationComponent imple
     protected translationService: TranslateService,
     protected roomService: RoomService,
     protected contentGroupService: ContentGroupService,
-    protected route: ActivatedRoute
+    protected route: ActivatedRoute,
+    protected announceService: AnnounceService
   ) {
-    super(contentService, notificationService, translationService, roomService, contentGroupService, route);
+    super(contentService, notificationService, translationService, roomService, contentGroupService, route, announceService);
   }
 
   initContentCreation() {

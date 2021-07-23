@@ -1,0 +1,52 @@
+.mat-list-item {
+  min-height: 52px;
+}
+
+.form {
+  margin-bottom: 16px;
+}
+
+.editInput {
+  height: 50px;
+  margin-left: 8px;
+  input {
+    padding-bottom: 20px;
+  }
+  margin-top: -16px;
+}
+
+.delete {
+  margin-left: 8px;
+  opacity: 0.3;
+}
+
+.answer-form {
+  margin-top: 16px;
+}
+
+.add-icon {
+  color: var(--primary);
+  line-height: 28px;
+  font-size: 28px;
+  height: 28px!important;
+  width: 28px;
+}
+
+.add-button {
+  margin-right: 4px;
+}
+
+@mixin button-hover {
+  opacity: 0.6;
+}
+
+@media(hover: none) {
+  .delete {
+    @include button-hover;
+  }
+}
+
+.delete:hover, .delete:focus-within {
+  @include button-hover;
+}
+
