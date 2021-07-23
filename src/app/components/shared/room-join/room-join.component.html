@@ -8,7 +8,7 @@
                type="text" pattern="[0-9 ]*" inputmode="numeric" min="00000000" max="99999999"
                (keydown)="prettifyRoomCode($event)" [formControl]="roomCodeFormControl"
                [errorStateMatcher]="matcher" aria-labelledby="join-input-label" autocomplete="off"
-               placeholder="{{'home-page.example' | translate }}{{(demoId ? demoId : '11223344') | splitShortId: false: true}}"
+               placeholder="{{'home-page.example' | translate }}{{'11223344' | splitShortId: false: true}}"
         />
         <button id="join-button" mat-icon-button class="mat-primary" type="submit" role="button"
                 (click)="joinRoom(roomCode.value)" aria-labelledby="join-button-label" matSuffix>

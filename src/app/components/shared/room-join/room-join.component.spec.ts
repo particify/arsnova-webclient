@@ -37,7 +37,7 @@ export class MockAuthenticationService {
 describe('RoomJoinComponent', () => {
   let component: RoomJoinComponent;
   let fixture: ComponentFixture<RoomJoinComponent>;
-  const activatedRoute = new ActivatedRouteStub(null, { apiConfig: { ui: { demo: '27273589' } } });
+  const activatedRoute = new ActivatedRouteStub();
   let notificationService = jasmine.createSpyObj('NotificationService', ['showAdvanced']);
   let router = jasmine.createSpyObj('Router', ['navigate']);
   let loader: HarnessLoader;
@@ -122,13 +122,6 @@ describe('RoomJoinComponent', () => {
 
   it('should be able to load input field', async () => {
     expect(inputField).not.toBeNull();
-  });
-
-  it('should navigate to demo session if there is no input', async () => {
-    expect(component.demoId).not.toBeNull();
-    const joinButton = await loader.getHarness(MatButtonHarness.with({selector: '#join-button'}));
-    await joinButton.click();
-    expect(router.navigate).toHaveBeenCalledWith(['participant', 'room', component.demoId]);
   });
 
   it('should be display warning notification if the entered room code is shorter than 8 digits', async () => {
