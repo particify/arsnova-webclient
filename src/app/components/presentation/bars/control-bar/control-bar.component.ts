@@ -3,7 +3,7 @@ import { FEATURES, NavBarComponent, NavBarItem } from '../../../shared/bars/nav-
 import { ActivatedRoute, Router } from '@angular/router';
 import { RoutingService } from '../../../../services/util/routing.service';
 import { GlobalStorageService, STORAGE_KEYS } from '../../../../services/util/global-storage.service';
-import { RoomService } from '../../../../services/http/room.service';
+import { RoomStatsService } from '../../../../services/http/room-stats.service';
 import { FeedbackService } from '../../../../services/http/feedback.service';
 import { ContentGroupService } from '../../../../services/http/content-group.service';
 import { EventService } from '../../../../services/util/event.service';
@@ -97,7 +97,7 @@ export class ControlBarComponent extends NavBarComponent implements OnInit, OnDe
     protected routingService: RoutingService,
     protected route: ActivatedRoute,
     protected globalStorageService: GlobalStorageService,
-    protected roomService: RoomService,
+    protected roomStatsService: RoomStatsService,
     protected feedbackService: FeedbackService,
     protected contentGroupService: ContentGroupService,
     protected eventService: EventService,
@@ -105,7 +105,7 @@ export class ControlBarComponent extends NavBarComponent implements OnInit, OnDe
     private announceService: AnnounceService
   ) {
     super(router, routingService, route, globalStorageService,
-      roomService, feedbackService, contentGroupService, eventService);
+      roomStatsService, feedbackService, contentGroupService, eventService);
   }
 
   @HostListener('window:keyup', ['$event'])

@@ -17,6 +17,8 @@ import { GlobalStorageService, STORAGE_KEYS } from '../../../services/util/globa
 import { UserRole } from '../../../models/user-roles.enum';
 import { InfoBarItem } from '../bars/info-bar/info-bar.component';
 import { ContentGroupService } from '../../../services/http/content-group.service';
+import { RoomStatsService } from '../../../services/http/room-stats.service';
+import { DataChanged } from '../../../models/events/data-changed';
 
 @Component({
   selector: 'app-room-page',
@@ -48,6 +50,7 @@ export class RoomPageComponent implements OnDestroy {
 
   constructor(
     protected roomService: RoomService,
+    protected roomStatsService: RoomStatsService,
     protected contentGroupService: ContentGroupService,
     protected route: ActivatedRoute,
     protected router: Router,
@@ -142,6 +145,8 @@ export class RoomPageComponent implements OnDestroy {
 
   initializeRoom(room: Room, role: UserRole, viewRole: UserRole): void {
     this.room = room;
+    const changeEventType = viewRole === UserRole.PARTICIPANT ? 'PublicDataChanged' : 'ModeratorDataChanged';
+    this.eventService.on<DataChanged<RoomStats>>(changeEventType).subscribe(event => this.initializeStats(viewRole));
     this.initializeStats(viewRole);
     if (this.room.extensions && this.room.extensions.comments) {
       if (this.room.extensions.comments['enableModeration'] !== null) {
@@ -175,7 +180,7 @@ export class RoomPageComponent implements OnDestroy {
 
   initializeStats(viewRole: UserRole) {
     let extendedView = [UserRole.CREATOR, UserRole.EDITING_MODERATOR, UserRole.EXECUTIVE_MODERATOR].includes(viewRole);
-    this.roomService.getStats(this.room.id, extendedView).subscribe(roomStats => {
+    this.roomStatsService.getStats(this.room.id, extendedView).subscribe(roomStats => {
       this.roomStats = roomStats;
       if (this.roomStats.groupStats) {
         this.initializeGroups();
@@ -187,6 +192,7 @@ export class RoomPageComponent implements OnDestroy {
   }
 
   initializeGroups() {
+    this.contentGroups.splice(0, this.contentGroups.length);
     for (let i = 0; i < this.roomStats.groupStats.length; i++) {
       this.contentGroupService.getById(this.roomStats.groupStats[i].id, { roomId: this.room.id }).subscribe(group => {
         this.contentGroups.push(group);

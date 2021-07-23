@@ -2,7 +2,7 @@ import { Component, EventEmitter, HostListener, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { GlobalStorageService, STORAGE_KEYS } from '../../../services/util/global-storage.service';
-import { RoomService } from '../../../services/http/room.service';
+import { RoomStatsService } from '../../../services/http/room-stats.service';
 import { LanguageService } from '../../../services/util/language.service';
 import { TranslateService } from '@ngx-translate/core';
 import { AnnounceService } from '../../../services/util/announce.service';
@@ -26,7 +26,7 @@ export class PresentationComponent implements OnInit {
               private router: Router,
               private location: Location,
               private globalStorageService: GlobalStorageService,
-              private roomService: RoomService,
+              private roomStatsService: RoomStatsService,
               private langService: LanguageService,
               private translateService: TranslateService,
               private announceService: AnnounceService) {
@@ -52,7 +52,7 @@ export class PresentationComponent implements OnInit {
         if (this.lastGroup === undefined) {
           this.lastGroup = this.globalStorageService.getItem(STORAGE_KEYS.LAST_GROUP);
           if (this.lastGroup === undefined) {
-            this.roomService.getStats(this.roomId, true).subscribe(stats => {
+            this.roomStatsService.getStats(this.roomId, true).subscribe(stats => {
               if (stats.groupStats) {
                 this.lastGroup = stats.groupStats[0].groupName;
                 this.setGroupInSessionStorage(this.lastGroup);

@@ -9,7 +9,7 @@ import { EventService } from '../util/event.service';
 import { GlobalStorageService, STORAGE_KEYS } from '../util/global-storage.service';
 import { TranslateService } from '@ngx-translate/core';
 import { NotificationService } from '../util/notification.service';
-import { RoomService } from './room.service';
+import { RoomStatsService } from './room-stats.service';
 import { ContentGroupStatistics } from '../../models/content-group-statistics';
 import { CachingService } from '../util/caching.service';
 import { WsConnectorService } from '../websockets/ws-connector.service';
@@ -28,18 +28,18 @@ export class ContentGroupService extends AbstractEntityService<ContentGroup> {
     protected eventService: EventService,
     protected translateService: TranslateService,
     protected notificationService: NotificationService,
-    private roomService: RoomService,
+    private roomStatsService: RoomStatsService,
     cachingService: CachingService) {
     super('ContentGroup', '/contentgroup', http, ws, eventService, translateService, notificationService, cachingService);
   }
 
   getStatsByRoomIdAndName(roomId: string, name: string, extendedView = false): Observable<ContentGroupStatistics> {
-    return this.roomService.getStats(roomId, extendedView).pipe(
+    return this.roomStatsService.getStats(roomId, extendedView).pipe(
       map(stats => stats.groupStats.find(groupStats => groupStats.groupName === name)));
   }
 
   getByRoomIdAndName(roomId: string, name: string, extendedView = false): Observable<ContentGroup> {
-    return this.roomService.getStats(roomId, extendedView).pipe(
+    return this.roomStatsService.getStats(roomId, extendedView).pipe(
       map(stats => stats.groupStats.find(groupStats => groupStats.groupName === name).id),
       mergeMap(id => this.getById(id, { roomId: roomId })));
   }

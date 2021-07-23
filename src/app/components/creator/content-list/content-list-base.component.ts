@@ -14,6 +14,7 @@ import { DialogService } from '../../../services/util/dialog.service';
 import { GlobalStorageService, STORAGE_KEYS } from '../../../services/util/global-storage.service';
 import { ContentGroupService } from '../../../services/http/content-group.service';
 import { AnnounceService } from '../../../services/util/announce.service';
+import { RoomStatsService } from '../../../services/http/room-stats.service';
 
 @Component({
   template: ''
@@ -32,7 +33,7 @@ export abstract class ContentListBaseComponent {
 
   protected constructor(
     protected contentService: ContentService,
-    protected roomService: RoomService,
+    protected roomStatsService: RoomStatsService,
     protected route: ActivatedRoute,
     protected location: Location,
     protected notificationService: NotificationService,
@@ -61,7 +62,7 @@ export abstract class ContentListBaseComponent {
   getGroups(): void {
     this.contentGroups = this.globalStorageService.getItem(STORAGE_KEYS.CONTENT_GROUPS);
     if (!this.contentGroups) {
-      this.roomService.getStats(this.room.id, true).subscribe(roomStats => {
+      this.roomStatsService.getStats(this.room.id, true).subscribe(roomStats => {
         if (roomStats.groupStats) {
           this.contentGroups = roomStats.groupStats.map(stat => stat.groupName);
         }
