@@ -41,7 +41,7 @@ const routes: Routes = [
     }
   },
   {
-    path: 'create-content',
+    path: 'group/:contentGroup/create',
     component: ContentCreationPageComponent
   },
   {

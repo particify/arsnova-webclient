@@ -35,17 +35,12 @@
                 <span class="fill-remaining-space"></span>
                 <mat-form-field appearance="outline" class="group disabled">
                   <mat-label>{{ 'content.collection' | translate }}</mat-label>
-                  <input tabindex="-1" #group (blur)="eventService.makeFocusOnInputFalse()"
-                         (focus)="eventService.makeFocusOnInputTrue()" [(ngModel)]="lastContentGroup"
-                         [formControl]="myControl" [matAutocomplete]="auto" aria-labelledby="content-group"
+                  <input tabindex="-1" #group [(ngModel)]="contentGroup" [value]="contentGroup"
+                         [ngModelOptions]="{standalone: true}"
+                         aria-labelledby="content-group"
                          id="group-input"
-                         matInput maxlength="25"
+                         matInput
                          placeholder="{{ 'content.choose-collection' | translate }}"/>
-                  <mat-autocomplete #auto="matAutocomplete">
-                    <mat-option *ngFor="let collection of contentGroups" [value]="collection">
-                      {{collection}}
-                    </mat-option>
-                  </mat-autocomplete>
                 </mat-form-field>
               </div>
               <mat-form-field appearance="outline" class="input-block no-field-hint">

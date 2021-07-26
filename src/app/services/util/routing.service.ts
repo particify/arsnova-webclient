@@ -23,7 +23,7 @@ export const TITLES: { [key: string]: string } = {
   'group/:contentGroup': 'content-group',
   'group/:contentGroup/:contentIndex': 'content-group',
   'group/:contentGroup/edit/:contentId': 'content-edit',
-  'create-content': 'content-creation',
+  'group/:contentGroup/create': 'content-creation',
   settings: 'settings',
   'settings/:settingsName': 'settings',
   archive: 'archive',
