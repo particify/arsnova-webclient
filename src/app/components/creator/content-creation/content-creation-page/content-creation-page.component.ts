@@ -1,7 +1,6 @@
 import { AfterContentInit, Component, HostListener, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { LanguageService } from '../../../../services/util/language.service';
-import { FormControl } from '@angular/forms';
 import { EventService } from '../../../../services/util/event.service';
 import { KeyboardUtils } from '../../../../utils/keyboard';
 import { KeyboardKey } from '../../../../utils/keyboard/keys';
@@ -32,8 +31,7 @@ export class ContentCreationPageComponent implements OnInit, AfterContentInit {
 
   createEventSubject: Subject<boolean> = new Subject<boolean>();
   question: string;
-  contentGroups: string[] = [];
-  lastContentGroup: string;
+  contentGroup: string;
   formats: ContentFormat[] = [
     { name: 'choice', icon: 'list' },
     { name: 'scale', icon: 'mood' },
@@ -45,8 +43,6 @@ export class ContentCreationPageComponent implements OnInit, AfterContentInit {
     { name: 'wordcloud', icon: 'cloud' }
   ];
   selectedFormat: ContentFormat = this.formats[0];
-
-  myControl = new FormControl();
 
   attachmentData: any;
   linkAttachmentsSubject: Subject<string> = new Subject<string>();
@@ -115,19 +111,7 @@ export class ContentCreationPageComponent implements OnInit, AfterContentInit {
         this.prepareAttachmentData(roomId);
         this.isLoading = false;
       }
-      // this refreshes memory storage
-      this.roomStatsService.getStats(roomId, true).subscribe(stats => {
-        if (stats.groupStats) {
-          this.contentGroups = stats.groupStats.map(stat => stat.groupName);
-          const lastGroup = this.globalStorageService.getItem(STORAGE_KEYS.LAST_GROUP);
-          this.lastContentGroup = lastGroup ? lastGroup : this.contentGroups[0];
-        } else {
-          this.contentGroups = [];
-          this.translateService.get('content.default-group').subscribe(defaultGroup => {
-            this.lastContentGroup = defaultGroup;
-          });
-        }
-      });
+      this.contentGroup = this.route.snapshot.params['contentGroup'];
     });
     this.translateService.use(this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE));
   }
