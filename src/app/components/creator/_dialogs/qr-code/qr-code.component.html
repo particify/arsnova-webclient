@@ -14,7 +14,7 @@
       <h1 class="text" fxLayout="column" fxLayoutAlign="center center">
         <mat-icon class="web-icon disabled">language</mat-icon>
         <span *ngIf="!useJoinUrl" class="url">{{ displayUrl }}</span>
-        <span class="url">{{ useJoinUrl ? displayUrl : (shortId ? shortId : data.shortId) }}</span>
+        <span class="url">{{(useJoinUrl ? displayUrl : (shortId ? shortId : data.shortId)) | splitShortId: false}}</span>
         <lib-extension-point *ngIf="data.passwordProtected" [extensionData]="{roomId: data.roomId}"
                              extensionId="share-room-password"></lib-extension-point>
       </h1>
