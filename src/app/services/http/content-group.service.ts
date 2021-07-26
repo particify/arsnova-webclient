@@ -130,7 +130,7 @@ export class ContentGroupService extends AbstractEntityService<ContentGroup> {
   }
 
   filterPublishedIds(contentGroup: ContentGroup): string[] {
-    return contentGroup.contentIds.filter(id => this.isContentPublished(contentGroup, id));
+    return contentGroup.contentIds?.filter(id => this.isContentPublished(contentGroup, id)) || [];
   }
 
   import(roomId: string, groupId: string, blob: Blob) {
