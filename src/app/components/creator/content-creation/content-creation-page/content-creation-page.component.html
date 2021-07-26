@@ -33,9 +33,9 @@
                   </button>
                 </mat-menu>
                 <span class="fill-remaining-space"></span>
-                <mat-form-field appearance="outline" class="group">
+                <mat-form-field appearance="outline" class="group disabled">
                   <mat-label>{{ 'content.collection' | translate }}</mat-label>
-                  <input tabindex="{{isEditMode ? '-1' : '0'}}" #group (blur)="eventService.makeFocusOnInputFalse()"
+                  <input tabindex="-1" #group (blur)="eventService.makeFocusOnInputFalse()"
                          (focus)="eventService.makeFocusOnInputTrue()" [(ngModel)]="lastContentGroup"
                          [formControl]="myControl" [matAutocomplete]="auto" aria-labelledby="content-group"
                          id="group-input"
