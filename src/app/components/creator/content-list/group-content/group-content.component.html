@@ -34,7 +34,7 @@
         <div *ngIf="!isLoading" fxLayout="row wrap" fxLayoutAlign="space-between center" class="action-container">
           <div *ngIf="!isInSortingMode" fxLayout="row wrap" fxLayoutAlign="space-between center" fxLayoutGap="10px">
             <button mat-raised-button id="content-create-button" class="button-primary add-desktop"
-                    aria-labelledby="create-content" routerLink="/creator/room/{{ room.shortId }}/create-content">
+                    aria-labelledby="create-content" [routerLink]="['create']">
               <mat-icon>add</mat-icon>
               {{ 'room-page.create-content' | translate}}
             </button>
