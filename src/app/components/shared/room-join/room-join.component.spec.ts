@@ -24,6 +24,7 @@ import { MatInputHarness } from '@angular/material/input/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { BehaviorSubject } from 'rxjs';
 import { FormsModule } from '@angular/forms';
+import { SplitShortId } from '@arsnova/app/pipes/split-short-id';
 
 export class MockAuthenticationService {
   private auth$$ = new BehaviorSubject<any>({});
@@ -42,6 +43,7 @@ describe('RoomJoinComponent', () => {
   let loader: HarnessLoader;
   let joinButton: MatButtonHarness;
   let inputField: MatInputHarness;
+  const splitShortId = new SplitShortId();
 
   beforeEach(async () => {
 
@@ -50,7 +52,8 @@ describe('RoomJoinComponent', () => {
 
     TestBed.configureTestingModule({
       declarations: [
-        RoomJoinComponent
+        RoomJoinComponent,
+        SplitShortId
       ],
       imports: [
         BrowserAnimationsModule,
@@ -93,6 +96,10 @@ describe('RoomJoinComponent', () => {
         {
           provide: ActivatedRoute,
           useValue: activatedRoute
+        },
+        {
+          provide: SplitShortId,
+          useValue: splitShortId
         }
       ]
     }).compileComponents();
