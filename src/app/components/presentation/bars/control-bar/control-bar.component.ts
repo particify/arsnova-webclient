@@ -233,19 +233,21 @@ export class ControlBarComponent extends NavBarComponent implements OnInit, OnDe
   }
 
   checkIfContentLocked() {
-    this.isCurrentContentPublished = this.contentGroupService.isIndexPublished(this.group.firstPublishedIndex, this.group.lastPublishedIndex, this.contentIndex);
-    this.groupItems[2].icon = this.isCurrentContentPublished ? 'lock' : 'lock_open';
-    this.groupItems[2].name = this.isCurrentContentPublished ? 'lock' : 'publish';
-    if (!this.isCurrentContentPublished) {
-      if (!this.showNotification) {
-        this.notificationMessage = 'control-bar.content-locked';
-        this.notificationIcon = 'lock';
-        this.showNotification = true;
-        this.announceService.announce('control-bar.content-locked');
+    if (this.contentIndex) {
+      this.isCurrentContentPublished = this.contentGroupService.isIndexPublished(this.group.firstPublishedIndex, this.group.lastPublishedIndex, this.contentIndex);
+      this.groupItems[2].icon = this.isCurrentContentPublished ? 'lock' : 'lock_open';
+      this.groupItems[2].name = this.isCurrentContentPublished ? 'lock' : 'publish';
+      if (!this.isCurrentContentPublished) {
+        if (!this.showNotification) {
+          this.notificationMessage = 'control-bar.content-locked';
+          this.notificationIcon = 'lock';
+          this.showNotification = true;
+          this.announceService.announce('control-bar.content-locked');
+        }
+      } else if (this.showNotification) {
+        this.showNotification = false;
+        this.announceService.announce('control-bar.content-published')
       }
-    } else if (this.showNotification) {
-      this.showNotification = false;
-      this.announceService.announce('control-bar.content-published')
     }
   }
 

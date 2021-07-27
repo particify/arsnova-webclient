@@ -105,27 +105,34 @@ export class ContentPresentationComponent implements OnInit {
   initGroup(initial = false) {
     this.contentGroupService.getByRoomIdAndName(this.roomId, this.contentGroupName, true).subscribe(group => {
       this.contentGroup = group;
-      this.contentService.getContentsByIds(this.contentGroup.roomId, this.contentGroup.contentIds, true).subscribe(contents => {
-        this.contents = this.contentService.getSupportedContents(contents);
+      if (this.contentGroup.contentIds) {
+        this.contentService.getContentsByIds(this.contentGroup.roomId, this.contentGroup.contentIds, true).subscribe(contents => {
+          this.contents = this.contentService.getSupportedContents(contents);
+          this.isLoading = false;
+          this.initScale();
+          if (this.entryIndex > -1) {
+            this.contentIndex = initial ? this.entryIndex : 0;
+            this.currentStep = this.contentIndex;
+            setTimeout(() => {
+              this.stepper.init(this.contentIndex, this.contents.length);
+            }, 100);
+          }
+          if (this.infoBarItems.length === 0) {
+            this.infoBarItems.push(new InfoBarItem('content-counter', 'people', this.getStepString()));
+            this.sendContentStepState();
+          } else {
+            this.updateInfoBar();
+          }
+          setTimeout(() => {
+            const id = this.isPresentation ? 'presentation-mode-message' : 'presentation-message';
+            document.getElementById(id).focus();
+          }, 700);
+        });
+      } else {
         this.isLoading = false;
         this.initScale();
-        if (this.entryIndex > -1) {
-          this.contentIndex = initial ? this.entryIndex : 0;
-          this.currentStep = this.contentIndex;
-          setTimeout(() => {
-            this.stepper.init(this.contentIndex, this.contents.length);
-          }, 100);
-        }
-        if (this.infoBarItems.length === 0) {
-          this.infoBarItems.push(new InfoBarItem('content-counter', 'people', this.getStepString()));
-        } else {
-          this.updateInfoBar();
-        }
-        setTimeout(() => {
-          const id = this.isPresentation ? 'presentation-mode-message' : 'presentation-message';
-          document.getElementById(id).focus();
-        }, 700);
-      });
+        this.sendContentStepState(true);
+      }
     });
   }
 
@@ -170,14 +177,18 @@ export class ContentPresentationComponent implements OnInit {
     this.sendContentStepState();
   }
 
-  sendContentStepState() {
+  sendContentStepState(emptyList = false) {
     let position;
-    if (this.currentStep === 0) {
-      position = 'START';
-    } else if (this.currentStep === this.contents.length - 1) {
-      position = 'END';
+    let step;
+    if (!emptyList) {
+      step = this.currentStep;
+      if (this.currentStep === 0) {
+        position = 'START';
+      } else if (this.currentStep === this.contents.length - 1) {
+        position = 'END';
+      }
     }
-    const state = {position: position, index: this.currentStep};
+    const state = {position: position, index: step};
     this.eventService.broadcast('ContentStepStateChanged', state);
   }
 

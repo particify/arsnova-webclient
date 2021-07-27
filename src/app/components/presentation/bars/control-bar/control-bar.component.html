@@ -25,7 +25,8 @@
         <mat-icon>arrow_drop_down</mat-icon>
         </button>
         <mat-menu #groupMenu=matMenu>
-          <button mat-menu-item *ngFor="let contentGroup of contentGroups" [value]="contentGroup.name" [disabled]="!contentGroup.published"
+          <button mat-menu-item *ngFor="let contentGroup of contentGroups" [value]="contentGroup.name"
+                  [disabled]="!contentGroup.published || contentGroup.contentIds?.length < 1"
                   (click)="changeGroup(contentGroup)" [ngClass]="{'selected-menu-item': contentGroup.name === groupName}">
             {{contentGroup.name}}
           </button>
