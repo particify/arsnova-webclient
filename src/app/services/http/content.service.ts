@@ -68,7 +68,7 @@ export class ContentService extends AbstractEntityService<Content> {
 
   getContentsByIds(roomId: string, contentIds: string[], extendedView?: boolean): Observable<Content[]> {
     const partitionedIds: string[][] = [];
-    for (let i = 0; i < contentIds.length; i += PARTITION_SIZE) {
+    for (let i = 0; i < contentIds?.length; i += PARTITION_SIZE) {
       partitionedIds.push(contentIds.slice(i, i + PARTITION_SIZE));
     }
     const partitionedContents$: Observable<Content[]>[] = partitionedIds.map(ids => {
