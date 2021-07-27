@@ -38,13 +38,21 @@ export class RoomStatsService extends AbstractCachingHttpService<RoomStats> {
     );
   }
 
+  public removeCacheEntry(roomId: string) {
+    this.cache.remove(this.generateStatsCacheKey(roomId));
+    this.cache.remove(this.generateStatsCacheKey(roomId, true));
+  }
+
   private handlePublicDataChanged(e: DataChanged<RoomStats>) {
-    const uri = this.buildUri('', e.payload.roomId);
-    this.cache.put(this.generateCacheKey(uri), e.payload.data);
+    this.cache.put(this.generateStatsCacheKey(e.payload.roomId), e.payload.data);
   }
 
   private handleModeratorDataChanged(e: DataChanged<RoomStats>) {
-    const uri = this.buildUri('', e.payload.roomId) + '?view=read-extended';
-    this.cache.put(this.generateCacheKey(uri), e.payload.data);
+    this.cache.put(this.generateStatsCacheKey(e.payload.roomId, true), e.payload.data);
+  }
+
+  private generateStatsCacheKey(roomId: string, moderator = false) {
+    const uri = this.buildUri('', roomId) + (moderator ? '?view=read-extended' : '');
+    return this.generateCacheKey(uri)
   }
 }

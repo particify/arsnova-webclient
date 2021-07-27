@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { ContentGroup } from '../../models/content-group';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { catchError, map, mergeMap } from 'rxjs/operators';
+import { catchError, map, mergeMap, tap } from 'rxjs/operators';
 import { AuthenticationService } from './authentication.service';
 import { AbstractEntityService } from './abstract-entity.service';
 import { EventService } from '../util/event.service';
@@ -48,12 +48,14 @@ export class ContentGroupService extends AbstractEntityService<ContentGroup> {
     delete entity.id;
     delete entity.revision;
     return this.postEntity(entity, entity.roomId).pipe(
+      tap(() => this.roomStatsService.removeCacheEntry(entity.roomId)),
       catchError(this.handleError<ContentGroup>(`post, ${entity.roomId}, ${entity.name}`))
     );
   }
 
   delete(contentGroup: ContentGroup): Observable<ContentGroup> {
     return this.deleteEntity(contentGroup.id, contentGroup.roomId).pipe(
+      tap(() => this.roomStatsService.removeCacheEntry(contentGroup.roomId)),
       catchError(this.handleError<ContentGroup>(`Delete, ${contentGroup.roomId}, ${contentGroup.name}`))
     );
   }
