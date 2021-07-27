@@ -3,7 +3,8 @@
     <mat-form-field appearance="outline">
       <mat-label>{{ 'dialog.content-group-name' | translate }}</mat-label>
       <input matInput id="name-input" class="input-block" type="text" maxlength="25" [(ngModel)]="name"
-             name="contentGroupName" aria-labelledby="content-group-name-input"/>
+             name="contentGroupName" aria-labelledby="content-group-name-input"
+             (focus)="eventService.makeFocusOnInputTrue()" (blur)="eventService.makeFocusOnInputFalse()"/>
     </mat-form-field>
   </div>
 </form>
