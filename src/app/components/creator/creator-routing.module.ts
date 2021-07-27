@@ -52,19 +52,12 @@ const routes: Routes = [
     }
   },
   {
-    path: 'group/:contentGroup/statistics/:contentIndex',
-    component: ContentPresentationComponent
-  },
-  {
-    path: 'statistics',
+    path: 'group/:contentGroup/statistics',
     component: StatisticsPageComponent
   },
   {
-    path: 'group/:contentGroup/statistics',
-    component: ContentPresentationComponent,
-    resolve: {
-      room: RoomResolver
-    }
+    path: 'group/:contentGroup/:contentIndex',
+    component: ContentPresentationComponent
   },
   {
     path: 'comments',

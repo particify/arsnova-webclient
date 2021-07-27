@@ -17,9 +17,7 @@ export const TITLES: { [key: string]: string } = {
   comments: 'comments',
   'comments/moderation': 'comments',
   survey: 'live-survey',
-  statistics: 'statistics',
-  'group/:contentGroup/statistics': 'presentation',
-  'group/:contentGroup/statistics/:contentIndex': 'presentation',
+  'group/:contentGroup/statistics': 'statistics',
   'group/:contentGroup': 'content-group',
   'group/:contentGroup/:contentIndex': 'content-group',
   'group/:contentGroup/edit/:contentId': 'content-edit',
@@ -39,6 +37,10 @@ export const TITLES: { [key: string]: string } = {
 })
 export class RoutingService {
 
+  groupChildRoutes = [
+    'group/:contentGroup/create',
+    'group/:contentGroup/statistics'
+  ];
   roomChildRoutes = [
     'survey',
     'comments',
@@ -55,14 +57,14 @@ export class RoutingService {
     'request-password-reset'
   ];
   parentRoute = {
-    home: '/home',
-    login: '/login',
-    user: '/user',
-    room: '/room/'
+    home: 'home',
+    login: 'login',
+    user: 'user',
+    room: 'room'
   };
   moderator = 'moderator';
   currentRoute: string;
-  backRoute: string;
+  backRoute: string[];
   fullCurrentRoute: string;
   redirectRoute: string;
   homeTitle: string;
@@ -98,23 +100,27 @@ export class RoutingService {
 
   getRoutes(route: ActivatedRouteSnapshot) {
     const shortId = route.paramMap.get('shortId') || '';
+    const group  = route.paramMap.get('contentGroup') || '';
     const role = route.data.requiredRole || '';
     this.fullCurrentRoute = this.location.path();
     this.currentRoute = route.routeConfig.path;
-    this.getBackRoute(this.currentRoute, shortId, role);
+    this.getBackRoute(this.currentRoute, shortId, role, group);
     this.setTitle(route);
   }
 
-  getBackRoute(route: string, shortId: string, role: string) {
-    let backRoute: string;
+  getBackRoute(route: string, shortId: string, role: string, group: string) {
+    console.log(route);
+    let backRoute: string[];
     if (route === '') {
-      backRoute = this.parentRoute.user;
+      backRoute = [this.parentRoute.user];
     } else if (this.routeExistsInArray(this.homeChildRoutes)) {
-      backRoute = this.parentRoute.home;
+      backRoute = [this.parentRoute.home];
     } else if (this.routeExistsInArray(this.loginChildRoutes)) {
-      backRoute = this.parentRoute.login;
+      backRoute = [this.parentRoute.login];
     } else if (this.routeExistsInArray(this.roomChildRoutes)) {
-      backRoute = this.getRoleString(role) + this.parentRoute.room + shortId;
+      backRoute = [this.getRoleString(role), this.parentRoute.room, shortId];
+    } else if (this.routeExistsInArray(this.groupChildRoutes)) {
+      backRoute = [this.getRoleString(role), this.parentRoute.room, shortId, 'group', group];
     }
     this.backRoute = backRoute;
   }
@@ -125,7 +131,7 @@ export class RoutingService {
 
   goBack() {
     if (this.backRoute) {
-      this.router.navigateByUrl(this.backRoute);
+      this.router.navigate(this.backRoute);
     } else {
       this.location.back();
     }

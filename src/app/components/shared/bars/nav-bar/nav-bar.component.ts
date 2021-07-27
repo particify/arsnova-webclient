@@ -299,11 +299,7 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
   }
 
   getQuestionUrl(role: UserRole, group: string): string {
-    let url =  '/' + group;
-    if (role === UserRole.CREATOR) {
-      url += '/statistics';
-    }
-    return url;
+    return '/' + group;
   }
 
   navToUrl(index: number) {
@@ -313,7 +309,7 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
       if (item.name === Features.CONTENTS) {
         const route = [this.routingService.getRoleString(this.role), 'room', this.shortId, 'group', this.groupName];
         if (this.role === UserRole.CREATOR) {
-          route.push('statistics');
+          route.push('1');
         }
         this.router.navigate(route);
       } else {

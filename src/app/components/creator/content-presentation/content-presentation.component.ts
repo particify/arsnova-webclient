@@ -185,7 +185,7 @@ export class ContentPresentationComponent implements OnInit, OnDestroy {
       const remoteState = new ContentFocusState(this.contents[this.currentStep].id, this.contentGroup.id, null, null);
       this.eventService.broadcast(RemoteMessage.CHANGE_CONTENTS_STATE, remoteState)
     } else {
-      urlTree = this.router.createUrlTree(['creator/room', this.shortId, 'group', this.contentGroupName, 'statistics', urlIndex]);
+      urlTree = this.router.createUrlTree(['creator/room', this.shortId, 'group', this.contentGroupName, urlIndex]);
     }
     this.location.replaceState(this.router.serializeUrl(urlTree));
     if (index !== this.entryIndex) {

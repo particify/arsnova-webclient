@@ -1,8 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { RoomStatsService } from '../../../services/http/room-stats.service';
 import { ContentGroup } from '../../../models/content-group';
-import { Room } from '../../../models/room';
 import { TranslateService } from '@ngx-translate/core';
 import { GlobalStorageService, STORAGE_KEYS } from '../../../services/util/global-storage.service';
 import { StatisticListComponent } from '../statistic-list/statistic-list.component';
@@ -17,7 +16,7 @@ import { ContentGroupService } from '../../../services/http/content-group.servic
 
 export class StatisticsPageComponent implements OnInit {
 
-  room: Room;
+  shortId: string;
   contentGroups: ContentGroup[] = [];
   isLoading = true;
   currentGroup: ContentGroup;
@@ -28,12 +27,14 @@ export class StatisticsPageComponent implements OnInit {
               private roomStatsService: RoomStatsService,
               private contentGroupService: ContentGroupService,
               private translateService: TranslateService,
-              private globalStorageService: GlobalStorageService
+              private globalStorageService: GlobalStorageService,
+              private router: Router
   ) {
   }
 
   ngOnInit(): void {
     this.route.data.subscribe(data => {
+      this.shortId = data.room.shortId;
       this.getContentGroups(data.room.id);
     });
   }
@@ -71,10 +72,16 @@ export class StatisticsPageComponent implements OnInit {
 
   updateCollection() {
     if (this.statisticList.contentGroup !== this.currentGroup) {
+      this.updateUrl();
       this.statisticList.contentGroup = this.currentGroup;
       this.statisticList.total = this.statisticList.status.empty;
       this.statisticList.getContents();
     }
+  }
+
+  updateUrl() {
+    const urlList = ['creator', 'room', this.shortId, 'group', this.currentGroup.name, 'statistics'];
+    this.router.navigate(urlList);
   }
 
   showDeleteDialog() {

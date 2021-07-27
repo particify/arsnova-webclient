@@ -403,7 +403,7 @@ export class GroupContentComponent extends ContentListBaseComponent implements O
     const index = this.contents.filter(c => this.contentTypes.indexOf(c.format) > -1).
     map(co => co.id).indexOf(content.id);
     if (index > -1) {
-      this.router.navigate(['creator', 'room', this.room.shortId, 'group', this.contentGroup.name, 'statistics', index + 1]);
+      this.router.navigate(['creator', 'room', this.room.shortId, 'group', this.contentGroup.name, index + 1]);
     }
   }
 
