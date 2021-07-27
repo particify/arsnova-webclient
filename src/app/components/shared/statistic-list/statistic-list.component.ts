@@ -183,7 +183,7 @@ export class StatisticListComponent implements OnInit {
 
   getSingleCounts(answers: number[]): number {
     let total = 0;
-    const indLength = answers.length;
+    const indLength = answers?.length ?? 0;
     for (let i = 0; i < indLength; i++) {
       total += answers[i];
     }
@@ -193,7 +193,7 @@ export class StatisticListComponent implements OnInit {
   getMultipleCounts(answers: Combination[]): number {
     let total = 0;
     if (answers) {
-      const indLength = answers.length;
+      const indLength = answers?.length ?? 0;
       for (let i = 0; i < indLength; i++) {
         total += answers[i].count;
       }
