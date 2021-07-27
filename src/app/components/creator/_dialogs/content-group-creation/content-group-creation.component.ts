@@ -4,6 +4,7 @@ import { ContentListBaseComponent } from '../../content-list/content-list-base.c
 import { AdvancedSnackBarTypes, NotificationService } from '../../../../services/util/notification.service';
 import { TranslateService } from '@ngx-translate/core';
 import { ContentGroupService } from '../../../../services/http/content-group.service';
+import { EventService } from '../../../../services/util/event.service';
 
 @Component({
   selector: 'app-content-group-creation',
@@ -19,7 +20,8 @@ export class ContentGroupCreationComponent {
     public dialog: MatDialog,
     private notificationService: NotificationService,
     private translateService: TranslateService,
-    private contentGroupService: ContentGroupService
+    private contentGroupService: ContentGroupService,
+    public eventService: EventService
   ) {
   }
 
