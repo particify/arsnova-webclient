@@ -1,6 +1,7 @@
 import { Inject, Injectable, InjectionToken, Provider } from '@angular/core';
-import { ConsentChangeEvent, ConsentService } from './consent.service';
 import { StorageBackend, StorageItem, StorageItemCategory } from '../../models/storage';
+import { EventService } from './event.service';
+import { ConsentChangedEvent, ConsentChangedEventPayload } from '../../models/events/consent-changed';
 
 export const STORAGECONFIG_PROVIDER_TOKEN: InjectionToken<StorageItem> = new InjectionToken('STORAGECONFIG_PROVIDER_TOKEN');
 
@@ -172,14 +173,12 @@ export class GlobalStorageService {
 
   constructor(
     @Inject(STORAGECONFIG_PROVIDER_TOKEN) storageConfigItems: StorageItem[],
-    private consentService: ConsentService
+    private eventService: EventService
   ) {
     storageConfigItems.forEach((item) => {
       this.storageConfig.set(item.key, item);
     });
-    this.consentService.init(this.getItem(STORAGE_KEYS.COOKIE_CONSENT));
-    this.consentService.subscribeToChanges(settings => this.handleConsentChange(settings));
-    this.handleConsentChange({ categoriesSettings: this.consentService.getInternalSettings() });
+    this.eventService.on<ConsentChangedEventPayload>('ConsentChangedEvent').subscribe(e => this.handleConsentChange(e))
 
     // Memory setup
     const userAgent = navigator.userAgent;
@@ -335,7 +334,7 @@ export class GlobalStorageService {
   /**
    * Override storage backend config based on changes to user consent settings.
    */
-  handleConsentChange(event: ConsentChangeEvent) {
+  handleConsentChange(event: ConsentChangedEventPayload) {
     if (event.consentSettings) {
       this.setItem(STORAGE_KEYS.COOKIE_CONSENT, event.consentSettings);
     }

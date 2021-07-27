@@ -12,6 +12,7 @@ import { UserRole } from '../../models/user-roles.enum';
 import { ClientAuthentication } from '../../models/client-authentication';
 import { Subscription, timer } from 'rxjs';
 import { environment } from '../../../environments/environment';
+import { ConsentChangedEvent } from '../../models/events/consent-changed';
 
 const HEARTBEAT_INVERVAL = 150;
 
@@ -86,7 +87,7 @@ export class TrackingService {
       this.loadTrackerScript();
     }
     /* Defer loading of tracking script if consent have not been given (yet). */
-    this.consentService.subscribeToChanges(() => {
+    this.eventService.on<ConsentChangedEvent>('ConsentChangedEvent').subscribe(() => {
       this.consentGiven = this.consentService.consentGiven(StorageItemCategory.STATISTICS);
       if (this.consentGiven) {
         this.loadTrackerScript();

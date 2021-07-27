@@ -75,9 +75,9 @@
     </mat-menu>
 
     <mat-menu #langMenu="matMenu" [dir]="" xPosition="before" [overlapTrigger]="false">
-      <button class="item-title lang-title" mat-menu-item (click)="useLanguage('de')">
+      <button class="item-title lang-title" mat-menu-item (click)="changeLanguage('de')">
         {{ 'header.german' | translate }}</button>
-      <button class="item-title lang-title" mat-menu-item (click)="useLanguage('en')">
+      <button class="item-title lang-title" mat-menu-item (click)="changeLanguage('en')">
         {{ 'header.english' | translate }}</button>
     </mat-menu>
 

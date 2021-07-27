@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { TranslateService } from '@ngx-translate/core';
 import { ApiConfigService } from './services/http/api-config.service';
 import { TrackingService } from './services/util/tracking.service';
 import { ConsentService } from './services/util/consent.service';
 import { UpdateService } from './services/util/update.service';
 import { RoutingService } from './services/util/routing.service';
+import { LanguageService } from './services/util/language.service';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { filter } from 'rxjs/operators';
 
@@ -15,7 +15,7 @@ import { filter } from 'rxjs/operators';
 })
 export class AppComponent implements OnInit {
 
-  constructor(private translationService: TranslateService,
+  constructor(private languageService: LanguageService,
               private apiConfigService: ApiConfigService,
               private trackingService: TrackingService,
               private consentService: ConsentService,
@@ -29,7 +29,7 @@ export class AppComponent implements OnInit {
   isPresentation = false;
 
   ngOnInit(): void {
-    this.translationService.setDefaultLang(this.translationService.getBrowserLang());
+    this.languageService.init();
     this.router.events.pipe(
       filter(event => event instanceof NavigationEnd)
     ).subscribe((event: NavigationEnd) => {
