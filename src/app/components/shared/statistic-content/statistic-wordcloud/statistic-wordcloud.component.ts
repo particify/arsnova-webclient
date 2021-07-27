@@ -42,10 +42,10 @@ export class StatisticWordcloudComponent extends StatisticContentBaseComponent i
 
   updateData(stats: AnswerStatistics) {
     const texts = (stats.roundStatistics[0] as TextRoundStatistics).texts;
+    this.updateCounter([stats.roundStatistics[0].answerCount]);
     if (!texts) {
       return;
     }
     this.wordWeights = stats.roundStatistics[0].independentCounts.map((count, i) => [texts[i], count]);
-    this.updateCounter([stats.roundStatistics[0].answerCount]);
   }
 }
