@@ -25,7 +25,6 @@ export class RoomJoinComponent implements OnInit, OnDestroy {
 
   auth: ClientAuthentication;
   isDesktop: boolean;
-  demoId: string;
 
   roomCodeFormControl = new FormControl('', [Validators.pattern('[0-9 ]*')]);
   matcher = new RegisterErrorStateMatcher();
@@ -46,11 +45,6 @@ export class RoomJoinComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.authenticationService.getAuthenticationChanges().pipe(takeUntil(this.destroy$))
         .subscribe(auth => this.auth = auth);
-    this.route.data.subscribe(data => {
-      if (data.apiConfig.ui.demo) {
-        this.demoId = data.apiConfig.ui.demo;
-      }
-    });
   }
 
   ngOnDestroy() {
@@ -63,9 +57,6 @@ export class RoomJoinComponent implements OnInit, OnDestroy {
   }
 
   joinRoom(shortId: string): void {
-    if (!shortId && this.demoId) {
-      shortId = this.demoId;
-    }
     shortId = shortId.replace(/[\s]/g, '');
     if (this.roomCodeFormControl.hasError('required') || this.roomCodeFormControl.hasError('minlength')) {
       return;
