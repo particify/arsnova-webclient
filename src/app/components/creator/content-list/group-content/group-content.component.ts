@@ -479,7 +479,7 @@ export class GroupContentComponent extends ContentListBaseComponent implements O
   deleteGroup() {
     const dialogRef = this.dialogService.openDeleteDialog('really-delete-content-group', this.contentGroup.name, 'delete');
     dialogRef.afterClosed().subscribe(result => {
-      if (result) {
+      if (result === 'delete') {
         this.contentGroupService.delete(this.contentGroup).subscribe(() => {
           this.location.back();
           this.translateService.get('content.content-group-deleted').subscribe(msg => {
