@@ -47,6 +47,7 @@ export class RoomPageComponent implements OnDestroy {
   infoBarItems: InfoBarItem[] = [];
   role: UserRole;
   roleIconString;
+  onChangeSubscription: Subscription;
 
   constructor(
     protected roomService: RoomService,
@@ -73,6 +74,7 @@ export class RoomPageComponent implements OnDestroy {
     if (this.roomSub) {
       this.roomSub.unsubscribe();
     }
+    this.onChangeSubscription.unsubscribe();
     this.unsubscribe();
   }
 
@@ -146,7 +148,8 @@ export class RoomPageComponent implements OnDestroy {
   initializeRoom(room: Room, role: UserRole, viewRole: UserRole): void {
     this.room = room;
     const changeEventType = viewRole === UserRole.PARTICIPANT ? 'PublicDataChanged' : 'ModeratorDataChanged';
-    this.eventService.on<DataChanged<RoomStats>>(changeEventType).subscribe(event => this.initializeStats(viewRole));
+    this.onChangeSubscription = this.eventService.on<DataChanged<RoomStats>>(changeEventType)
+        .subscribe(() => this.initializeStats(viewRole));
     this.initializeStats(viewRole);
     if (this.room.extensions && this.room.extensions.comments) {
       if (this.room.extensions.comments['enableModeration'] !== null) {
