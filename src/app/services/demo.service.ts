@@ -16,7 +16,7 @@ export class DemoService {
 
   createDemoRoom(): Observable<Room> {
     return this.getLocalizedDemoRoomId().pipe(mergeMap(shortId => {
-      return this.roomService.duplicateRoom(`~${shortId}`);
+      return this.roomService.duplicateRoom(`~${shortId}`, true);
     }));
   }
 
