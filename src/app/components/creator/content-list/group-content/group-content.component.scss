@@ -163,9 +163,9 @@
 }
 
 .unlocked-content {
-  background-color: var(--secondary-variant)!important;
+  background-color: var(--unlocked)!important;
   & p {
-    color: var(--black);
+    color: var(--on-surface);
   }
 }
 
