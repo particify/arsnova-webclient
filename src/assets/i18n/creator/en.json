@@ -457,7 +457,7 @@
     "delete-room": "Delete room",
     "delete-room-description": "Delete room",
     "deleted": " deleted.",
-    "enter-room": "Enter a name ",
+    "enter-room-name": "Enter a name",
     "description": "Description",
     "enter-room-description": "Enter a description here",
     "bonus-token": "Tokens for bonus points",
