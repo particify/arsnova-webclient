@@ -39,7 +39,7 @@
               {{ 'room-page.create-content' | translate}}
             </button>
             <button mat-mini-fab id="content-create-button-mobile" class="button-primary add-mobile"
-                    aria-labelledby="create-content" routerLink="/creator/room/{{ room.shortId }}/create-content"
+                    aria-labelledby="create-content" [routerLink]="['create']"
                     [matTooltip]="'room-page.create-content' | translate">
               <mat-icon>add</mat-icon>
             </button>
