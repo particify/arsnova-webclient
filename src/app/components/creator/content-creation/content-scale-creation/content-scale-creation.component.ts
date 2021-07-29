@@ -9,6 +9,7 @@ import { ActivatedRoute } from '@angular/router';
 import { LikertScaleTemplate, LIKERT_SCALE_TEMPLATES } from '../../../../models/likert-scale-template.enum';
 import { LikertScaleService } from '../../../../services/util/likert-scale.service';
 import { ContentScale } from '../../../../models/content-scale';
+import { AnnounceService } from '../../../../services/util/announce.service';
 
 @Component({
   selector: 'app-content-scale-creation',
@@ -29,9 +30,10 @@ export class ContentScaleCreationComponent extends ContentCreationComponent impl
     protected roomService: RoomService,
     protected contentGroupService: ContentGroupService,
     protected likertScaleService: LikertScaleService,
-    protected route: ActivatedRoute
+    protected route: ActivatedRoute,
+    protected announceService: AnnounceService
   ) {
-    super(contentService, notificationService, translationService, roomService, contentGroupService, route);
+    super(contentService, notificationService, translationService, roomService, contentGroupService, route, announceService);
   }
 
   ngOnInit() {

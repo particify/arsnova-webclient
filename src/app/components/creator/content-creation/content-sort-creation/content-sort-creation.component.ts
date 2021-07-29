@@ -14,6 +14,7 @@ import {
 } from '../content-creation/content-creation.component';
 import { AnnounceService } from '../../../../services/util/announce.service';
 import { ActivatedRoute } from '@angular/router';
+import { EventService } from '../../../../services/util/event.service';
 
 @Component({
   selector: 'app-content-sort-creation',
@@ -23,8 +24,7 @@ import { ActivatedRoute } from '@angular/router';
 export class ContentSortCreationComponent extends ContentCreationComponent implements OnInit {
 
   isAnswerEdit = -1;
-  updatedAnswer: string;
-  newAnswer: string;
+  newAnswer = '';
   noAnswersYet = false;
 
   constructor(
@@ -34,9 +34,10 @@ export class ContentSortCreationComponent extends ContentCreationComponent imple
     protected roomService: RoomService,
     protected contentGroupService: ContentGroupService,
     protected route: ActivatedRoute,
-    private announceService: AnnounceService
+    protected announceService: AnnounceService,
+    private eventService: EventService
   ) {
-    super(contentService, notificationService, translationService, roomService, contentGroupService, route);
+    super(contentService, notificationService, translationService, roomService, contentGroupService, route, announceService);
   }
 
   initContentCreation() {
@@ -71,10 +72,9 @@ export class ContentSortCreationComponent extends ContentCreationComponent imple
     moveItemInArray(this.displayAnswers, event.previousIndex, event.currentIndex);
   }
 
-  answerInputCheck(isUpdate?: boolean): boolean {
-    const answer = isUpdate ? this.updatedAnswer : this.newAnswer;
-    if (answer !== '') {
-      if (!this.answerExists(answer)) {
+  answerInputCheck(): boolean {
+    if (this.newAnswer !== '') {
+      if (!this.answerExists(this.newAnswer)) {
         return true;
       } else {
         this.showWarning('content.same-answer');
@@ -96,20 +96,9 @@ export class ContentSortCreationComponent extends ContentCreationComponent imple
     }
   }
 
-  answerExists(answer: string): boolean {
-    return this.displayAnswers.map(o => o.answerOption.label).indexOf(answer) >= 0;
-  }
-
   deleteAnswer(index: number) {
     this.displayAnswers.splice(index, 1);
-  }
-
-  updateAnswer(index: number) {
-    if (this.answerInputCheck(true)) {
-      this.displayAnswers[index].answerOption.label = this.updatedAnswer;
-      this.leaveEditMode();
-      this.announceService.announce('content.a11y-updated');
-    }
+    this.afterAnswerDeletion();
   }
 
   showWarning(translationKey: string) {
@@ -117,22 +106,21 @@ export class ContentSortCreationComponent extends ContentCreationComponent imple
     this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
   }
 
-  goInEditMode(index: number, answer: string): void {
-    this.updatedAnswer = answer;
+  goInEditMode(index: number): void {
     this.isAnswerEdit = index;
-    document.getElementsByName('answerEdit').item(index).focus();
+    this.eventService.makeFocusOnInputTrue();
   }
 
-  leaveEditMode(aborted?: boolean): void {
+  leaveEditMode(): void {
     this.isAnswerEdit = -1;
-    if (aborted) {
-      this.announceService.announce('content.a11y-aborted');
-    }
+    this.eventService.makeFocusOnInputFalse();
   }
 
   createContent(): boolean {
+    if (!this.saveAnswerLabels(true)) {
+      return;
+    }
     if (this.displayAnswers.length >= 2) {
-      (this.content as ContentChoice).options = this.displayAnswers.map(o => o.answerOption);
       (this.content as ContentChoice).correctOptionIndexes = Object.keys(this.displayAnswers.map(a => a.answerOption))
         .map(index => parseInt(index, 10));
       return true;

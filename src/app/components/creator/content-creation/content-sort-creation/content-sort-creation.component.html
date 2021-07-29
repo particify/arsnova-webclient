@@ -1,43 +1,37 @@
-<div>
-    <div cdkDropList cdkDropListOrientation="vertical" (cdkDropListDropped)="drop($event)" class="list"
-         [cdkDropListDisabled]="isEditMode">
-        <mat-card cdkDrag fxLayout="column" fxLayoutAlign="center" *ngFor="let answer of displayAnswers; let i = index">
-            <div fxLayout="row" fxLayoutAlign="center center" class="inner">
-                <mat-icon cdkDragHandle *ngIf="!isAnswerEdit > -1 && !isEditMode" class="drag-icon">
+<div fxLayout="column" fxLayoutGap="10px">
+    <div cdkDropList cdkDropListOrientation="vertical" (cdkDropListDropped)="drop($event)"
+         [cdkDropListDisabled]="isEditMode && !noAnswersYet">
+      <mat-list>
+        <app-divider *ngIf="displayAnswers.length  > 0"></app-divider>
+        <mat-list-item cdkDrag fxLayout="column" fxLayoutAlign="center" *ngFor="let answer of displayAnswers; let i = index">
+            <div fxLayout="row" fxLayoutAlign="center center" class="full-width">
+                <mat-icon cdkDragHandle *ngIf="!isAnswerEdit > -1 && (!isEditMode || noAnswersYet)" class="drag-icon">
                   drag_handle
                 </mat-icon>
-                <span class="answer-label" *ngIf="isAnswerEdit !== i">{{ answer.answerOption.label }}</span>
-                <mat-form-field class="editInput" [ngClass]="{'activeInput': isAnswerEdit === i,
-        'inactiveInput': isAnswerEdit !== i}">
-                    <input tabindex="-1" name="answerEdit" matInput [(ngModel)]="updatedAnswer">
-                </mat-form-field>
+                <form fxLayout="row" class="full-width">
+                  <mat-form-field class="editInput full-width no-field-hint" appearance="standard">
+                    <input id="answerEdit-{{i}}" name="answerEdit" matInput [(ngModel)]="answer.answerOption.label"
+                         (focus)="goInEditMode(i)" (blur)="leaveEditMode()" class="full-width" autocomplete="off">
+                  </mat-form-field>
+                </form>
                 <span class="fill-remaining-space"></span>
-                <button *ngIf="isAnswerEdit !== i" mat-icon-button (click)="goInEditMode(i, answer.answerOption.label)"
-                        attr.aria-label="{{ 'content.a11y-edit-answer' | translate: {answer: answer.answerOption.label} }}"
-                        matTooltip="{{ 'content.edit-answer' | translate }}">
-                    <mat-icon class="editIcon">edit</mat-icon>
-                </button>
-                <button *ngIf="isAnswerEdit === i" mat-icon-button (click)="updateAnswer(i)"
-                        matTooltip="{{ 'content.save-content-group' | translate}}" aria-labelledby="save">
-                    <mat-icon class="confirmIcon">done</mat-icon>
-                </button>
-                <button *ngIf="isAnswerEdit === i" mat-icon-button (click)="leaveEditMode(true)"
-                        matTooltip="{{ 'content.abort' | translate}}" aria-labelledby="discard">
-                    <mat-icon class="confirmIcon">clear</mat-icon>
-                </button>
-                <button mat-icon-button *ngIf="isAnswerEdit !== i && (!isEditMode || noAnswersYet)" class="delete" (click)="deleteAnswer(i)"
+                <button mat-icon-button *ngIf="!isEditMode || noAnswersYet"
                         attr.aria-label="{{ 'content.a11y-delete-answer' | translate: {answer: answer.answerOption.label} }}"
+                        class="delete" (click)="deleteAnswer(i)"
                         matTooltip="{{ 'content.delete-answer' | translate }}">
-                    <mat-icon>delete</mat-icon>
+                  <mat-icon>clear</mat-icon>
                 </button>
             </div>
-        </mat-card>
+        </mat-list-item>
+      </mat-list>
     </div>
     <div *ngIf="(!isEditMode || noAnswersYet)" fxLayout="row" fxLayoutAlign="center" fxLayoutGap="20px">
-        <form class="answer-form" fxLayout="row">
-            <mat-form-field class="answer-input" appearance="fill">
+        <form class="full-width answer-form" fxLayout="row">
+            <mat-form-field class="full-width" appearance="fill">
                 <mat-label>{{ 'content.add-answer' | translate }}</mat-label>
-                <input matInput name="answer" id="answer-input" aria-labelledby="answer" [(ngModel)]="newAnswer">
+                <input (focus)="eventService.makeFocusOnInputTrue()" (blur)="eventService.makeFocusOnInputFalse()"
+                       matInput name="answer" id="answer-input" aria-labelledby="answer" [(ngModel)]="newAnswer"
+                       autocomplete="off">
                 <button class="add-button" mat-icon-button matSuffix (click)="addAnswer()">
                     <mat-icon class="add-icon">add_circle</mat-icon>
                 </button>
@@ -45,9 +39,4 @@
             </mat-form-field>
         </form>
     </div>
-</div>
-
-<div class="visually-hidden">
-  <div id="save">{{ 'content.a11y-save-changes' | translate }}</div>
-  <div id="discard">{{ 'content.a11y-discard-changes' | translate }}</div>
 </div>

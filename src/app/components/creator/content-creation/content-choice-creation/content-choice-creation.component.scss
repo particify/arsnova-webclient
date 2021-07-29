@@ -1,43 +1,4 @@
-.mat-card {
-  margin-top: 16px;
-  padding: 0;
-  background-color: var(--background)!important;
-}
-
-.mat-list {
-  background-color: var(--background);
-}
-
-.inner {
-  width: 100%;
-}
-
-.delete {
-  color: var(--warn);
-}
-
-.editIcon {
-  color: var(--secondary);
-}
-
-.confirmIcon {
-  color: var(--on-surface);
-}
-
-.editInput {
-  margin-left: 8px;
-  max-width: calc(100% - 120px);
-  height: 60px;
-}
-
-.activeInput {
-  width: 100%;
-  font-size: medium;
-}
-
-.inactiveInput {
-  width: 0;
-}
+@import '../content-creation/content-creation.component';
 
 .mat-checkbox {
   color: var(--on-surface);
@@ -45,36 +6,4 @@
 
 .loose-checkbox {
   margin-left: 16px;
-}
-
-.mat-checkbox-label {
-  height: auto;
-  text-align: center;
-  line-height: 18px;
-}
-
-.answer-label {
-  font-size: medium;
-  word-break: break-all;
-}
-
-.answer-form {
-  width: 100%;
-  margin-top: 16px;
-}
-
-.answer-input {
-  width: 100%;
-}
-
-.add-icon {
-  color: var(--primary);
-  line-height: 28px;
-  font-size: 28px;
-  height: 28px!important;
-  width: 28px;
-}
-
-.add-button {
-  margin-right: 4px;
 }

@@ -1,4 +1,4 @@
-<form *ngIf="!isLoading" fxLayout="column" fxLayoutGap="10px">
+<div *ngIf="!isLoading" fxLayout="column" fxLayoutGap="10px">
 
   <mat-checkbox class="loose-checkbox" [checked]="multipleCorrectAnswers" [(ngModel)]="multipleCorrectAnswers" name="multiple">
     <span>{{ 'content.multiple-answers-allowed' | translate }}</span>
@@ -6,52 +6,40 @@
   <mat-checkbox class="loose-checkbox" [checked]="noCorrectAnswers" [(ngModel)]="noCorrectAnswers" (ngModelChange)="removeCorrectAnswers()" name="noCorrect">
     <span>{{ 'content.no-correct-answer' | translate }}</span>
   </mat-checkbox>
-  <mat-card *ngIf="displayAnswers.length > 0">
+  <div *ngIf="displayAnswers.length > 0">
+    <app-divider></app-divider>
     <mat-list>
-      <mat-list-item fxLayout="column" fxLayoutAlign="center" class="bottom-border"
-                     *ngFor="let answer of displayAnswers; let i = index">
-        <div fxLayout="row" fxLayoutAlign="center center" class="inner">
+      <mat-list-item fxLayout="column" fxLayoutAlign="center" *ngFor="let answer of displayAnswers; let i = index">
+        <div fxLayout="row" fxLayoutAlign="center center" class="full-width">
           <mat-checkbox id="answer-{{i}}" *ngIf="!noCorrectAnswers" (ngModelChange)="switchValue(answer.answerOption.label, i)" [(ngModel)]="answer.correct"
                         [checked]="answer.correct" name="{{ answer.answerOption.label }}"
                         aria-label="{{ 'content.a11y-answer-checkbox' | translate:
                         {answer: answer.answerOption.label} }}">
-            <span class="answer-label" *ngIf="isAnswerEdit !== i">{{ answer.answerOption.label }}</span>
           </mat-checkbox>
-          <p class="answer-label" *ngIf="isAnswerEdit !== i && noCorrectAnswers">{{ answer.answerOption.label }}</p>
-          <mat-form-field *ngIf="isAnswerEdit === i" class="editInput activeInput">
-            <input id="answerEdit-{{i}}" name="answerEdit" matInput [(ngModel)]="updatedAnswer">
-          </mat-form-field>
-          <span class="fill-remaining-space"></span>
-          <button *ngIf="isAnswerEdit !== i" mat-icon-button (click)="goInEditMode(i, answer)"
-                  attr.aria-label="{{ 'content.a11y-edit-answer' | translate: {answer: answer.answerOption.label} }}"
-                  matTooltip="{{ 'content.edit-answer' | translate }}">
-            <mat-icon class="editIcon">edit</mat-icon>
-          </button>
-          <button *ngIf="isAnswerEdit === i" mat-icon-button (click)="updateAnswer(i, answer)"
-                  matTooltip="{{ 'content.save-content-group' | translate}}" aria-labelledby="save">
-            <mat-icon class="confirmIcon">done</mat-icon>
-          </button>
-          <button *ngIf="isAnswerEdit === i" mat-icon-button (click)="leaveEditMode(true)"
-                  matTooltip="{{ 'content.abort' | translate}}" aria-labelledby="discard">
-            <mat-icon class="confirmIcon">clear</mat-icon>
-          </button>
-          <button mat-icon-button *ngIf="isAnswerEdit !== i && (!isEditMode || noAnswersYet)" class="delete"
+          <form fxLayout="row" class="form full-width">
+            <mat-form-field class="editInput full-width no-field-hint" appearance="standard">
+              <input id="answerEdit-{{i}}" name="answerEdit" matInput [(ngModel)]="answer.answerOption.label"
+                     (focus)="goInEditMode(i)" (blur)="leaveEditMode()" autocomplete="off">
+            </mat-form-field>
+          </form>
+          <button mat-icon-button *ngIf="!isEditMode || noAnswersYet"
                   attr.aria-label="{{ 'content.a11y-delete-answer' | translate: {answer: answer.answerOption.label} }}"
-                  (click)="deleteAnswer($event, answer.answerOption.label)"
+                  class="delete" (click)="deleteAnswer(i)"
                   matTooltip="{{ 'content.delete-answer' | translate }}">
-            <mat-icon>delete</mat-icon>
+            <mat-icon>clear</mat-icon>
           </button>
         </div>
       </mat-list-item>
     </mat-list>
-  </mat-card>
+  </div>
 
   <div *ngIf="!isEditMode || noAnswersYet" fxLayout="row" fxLayoutAlign="center" fxLayoutGap="20px">
-    <form class="answer-form" fxLayout="row">
-      <mat-form-field class="answer-input" appearance="fill">
+    <form class="full-width answer-form" fxLayout="row">
+      <mat-form-field class="full-width" appearance="fill">
         <mat-label>{{ 'content.add-answer' | translate }}</mat-label>
         <input (focus)="eventService.makeFocusOnInputTrue()" (blur)="eventService.makeFocusOnInputFalse()"
-               matInput [(ngModel)]="newAnswerOptionLabel" name="answer" id="answer-input" aria-labelledby="answer">
+               matInput [(ngModel)]="newAnswerOptionLabel" name="answer" id="answer-input" aria-labelledby="answer"
+               autocomplete="off">
         <button tabindex="-1" class="add-button" mat-icon-button matSuffix (click)="addAnswer($event)">
           <mat-icon class="add-icon">add_circle</mat-icon>
         </button>
@@ -60,7 +48,7 @@
     </form>
   </div>
 
-</form>
+</div>
 
 <div class="visually-hidden">
   <div id="single-choice">{{ 'content.a11y-single-choice' | translate }}</div>
@@ -68,6 +56,4 @@
   <div id="answer">{{ 'content.a11y-enter-answer' | translate }}</div>
   <div id="delete-answer">{{ 'content.a11y-delete-answer' | translate }}</div>
   <div id="reset">{{ 'content.a11y-reset' | translate }}</div>
-  <div id="save">{{ 'content.a11y-save-changes' | translate }}</div>
-  <div id="discard">{{ 'content.a11y-discard-changes' | translate }}</div>
 </div>

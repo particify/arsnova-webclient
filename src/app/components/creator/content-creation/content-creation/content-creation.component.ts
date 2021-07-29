@@ -12,6 +12,7 @@ import { Observable, Subscription } from 'rxjs';
 import { ContentText } from '@arsnova/app/models/content-text';
 import { ContentFlashcard } from '@arsnova/app/models/content-flashcard';
 import { ActivatedRoute } from '@angular/router';
+import { AnnounceService } from '../../../../services/util/announce.service';
 
 export class DisplayAnswer {
   answerOption: AnswerOption;
@@ -53,7 +54,9 @@ export class ContentCreationComponent implements OnInit, OnDestroy {
               protected translationService: TranslateService,
               protected roomService: RoomService,
               protected contentGroupService: ContentGroupService,
-              protected route: ActivatedRoute) { }
+              protected route: ActivatedRoute,
+              protected announceService: AnnounceService
+  ) { }
 
   ngOnInit(): void {
     this.route.data.subscribe(data => {
@@ -135,6 +138,47 @@ export class ContentCreationComponent implements OnInit, OnDestroy {
       answers.push(new DisplayAnswer(new AnswerOption(option.label), correctOptions?.includes(i)))
     });
     return answers;
+  }
+
+  afterAnswerDeletion() {
+    this.announceService.announce('content.a11y-answer-deleted');
+    this.translationService.get('content.answer-deleted').subscribe(message => {
+      this.notificationService.showAdvanced(message, AdvancedSnackBarTypes.WARNING);
+    });
+  }
+
+  answerExists(label: string): boolean {
+    if (this.displayAnswers.map(o => o.answerOption.label).indexOf(label) >= 0) {
+      const msg = this.translationService.instant('content.same-answer');
+      this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  checkForDuplicates(labels: string[]) {
+    return labels.filter((answer, index) => labels.indexOf(answer) != index).length > 0;
+  }
+
+  saveAnswerLabels(checkForEmpty = false) {
+    const answerLabels = this.displayAnswers.map(a => new AnswerOption(a.answerOption.label));
+    (this.content as ContentChoice).options = answerLabels;
+    if (checkForEmpty) {
+      let valid = true;
+      let labels = answerLabels.map(a => a.label);
+      if (labels.includes('')) {
+        this.translationService.get('content.no-empty2').subscribe(message => {
+          this.notificationService.showAdvanced(message, AdvancedSnackBarTypes.FAILED);
+        });
+        valid = false;
+      } else if (this.checkForDuplicates(labels)) {
+        const msg = this.translationService.instant('content.same-answer');
+        this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
+        valid = false;
+      }
+      return valid;
+    }
   }
 
   fillCorrectAnswers() {

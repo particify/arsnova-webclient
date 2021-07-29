@@ -9,6 +9,7 @@ import { ContentType } from '../../../../models/content-type.enum';
 import { ContentWordcloud } from '../../../../models/content-wordcloud';
 import { ActivatedRoute } from '@angular/router';
 import { EventService } from '../../../../services/util/event.service';
+import { AnnounceService } from '../../../../services/util/announce.service';
 
 const MAX_KEYWORDS = 10;
 
@@ -30,9 +31,10 @@ export class ContentWordcloudCreationComponent extends ContentCreationComponent 
     protected translationService: TranslateService,
     protected roomService: RoomService,
     protected contentGroupService: ContentGroupService,
-    protected route: ActivatedRoute
+    protected route: ActivatedRoute,
+    protected announceService: AnnounceService
   ) {
-    super(contentService, notificationService, translationService, roomService, contentGroupService, route);
+    super(contentService, notificationService, translationService, roomService, contentGroupService, route, announceService);
   }
 
   initContentCreation() {

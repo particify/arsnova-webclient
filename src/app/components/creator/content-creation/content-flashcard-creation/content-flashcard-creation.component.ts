@@ -11,6 +11,7 @@ import { EventService } from '../../../../services/util/event.service';
 import { FormattingService } from '../../../../services/http/formatting.service';
 import { HINT_TYPES } from '../../../../components/shared/hint/hint.component';
 import { ActivatedRoute } from '@angular/router';
+import { AnnounceService } from '../../../../services/util/announce.service';
 
 @Component({
   selector: 'app-content-flashcard-creation',
@@ -30,10 +31,11 @@ export class ContentFlashcardCreationComponent extends ContentCreationComponent 
     protected roomService: RoomService,
     protected contentGroupService: ContentGroupService,
     protected route: ActivatedRoute,
+    protected announceService: AnnounceService,
     public eventService: EventService,
     private formattingService: FormattingService
   ) {
-    super(contentService, notificationService, translationService, roomService, contentGroupService, route);
+    super(contentService, notificationService, translationService, roomService, contentGroupService, route, announceService);
   }
 
   initContentCreation() {
