@@ -2,14 +2,13 @@
           attr.aria-label="{{ 'room-page.a11y-enter-content-group' | translate:{name: contentGroupName,
           locked: 'room-page.' + (isLocked ? 'locked' : 'unlocked') | translate} }}"
           (keyup.enter)="viewContents()">
-  <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="10px" class="container">
-    <mat-icon *ngIf="isLoose" class="icon-primary">
-      all_inbox
-    </mat-icon>
-    <h3 matBadge="{{length}}" matBadgeOverlap="false">
+  <div fxLayout="row" fxLayoutAlign="start center" class="container">
+    <h3 class="ellipsis">
       {{contentGroupName}}
     </h3>
+    <app-list-badge class="badge" [count]="length"></app-list-badge>
     <span class="fill-remaining-space"></span>
+    <mat-icon *ngIf="isLoose" class="icon-primary">all_inbox</mat-icon>
     <mat-icon *ngIf="isLocked" class="locked" [matTooltip]="'room-page.group-locked' | translate">locked</mat-icon>
   </div>
 
