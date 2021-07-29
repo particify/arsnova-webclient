@@ -17,7 +17,6 @@ import { KeyboardUtils } from '../../../utils/keyboard';
 import { KeyboardKey } from '../../../utils/keyboard/keys';
 import { AnnounceService } from '../../../services/util/announce.service';
 import { CommentService } from '../../../services/http/comment.service';
-import { Observable } from 'rxjs';
 import { Comment } from '../../../models/comment';
 import { CommentListComponent } from '../comment-list/comment-list.component';
 
@@ -34,7 +33,6 @@ export class CommentPageComponent implements OnInit, OnDestroy, AfterContentInit
   @ViewChild('commentList') commentListRef: ElementRef;
 
   auth: ClientAuthentication;
-  comments$: Observable<Comment[]>;
   activeComment: Comment;
 
   constructor(
@@ -95,9 +93,6 @@ export class CommentPageComponent implements OnInit, OnDestroy, AfterContentInit
   ngOnInit(): void {
     this.authenticationService.getCurrentAuthentication()
         .subscribe(auth => this.auth = auth);
-    this.route.data.subscribe(data => {
-      this.comments$ = this.commentService.getAckComments(data.room.id);
-    });
   }
 
   ngOnDestroy() {

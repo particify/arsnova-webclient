@@ -59,11 +59,11 @@ export class CommentComponent implements OnInit, OnDestroy {
   @Input() isPresentation = false;
   @Output() clickedOnTag = new EventEmitter<string>();
   @Output() activeComment = new EventEmitter<Comment>();
+  @Input() isModeratorView = false;
 
   viewRole: UserRole;
   isParticipant = false;
   isCreator = false;
-  isModeratorView = false;
   isModerator = false;
   hasVoted = 0;
   currentVote: string;
@@ -105,9 +105,6 @@ export class CommentComponent implements OnInit, OnDestroy {
       this.getRole();
     } else {
       this.route.data.subscribe(data => {
-        if (this.router.url.includes('/moderation')) {
-          this.isModeratorView = true;
-        }
         this.viewRole = data.viewRole;
         this.getRole();
       });

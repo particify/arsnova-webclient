@@ -15,7 +15,7 @@ export const TITLES: { [key: string]: string } = {
   import: 'import',
   '': 'room',
   comments: 'comments',
-  'comments/moderation': 'moderation',
+  'comments/moderation': 'comments',
   survey: 'live-survey',
   statistics: 'statistics',
   'group/:contentGroup/statistics': 'presentation',
@@ -42,6 +42,7 @@ export class RoutingService {
   roomChildRoutes = [
     'survey',
     'comments',
+    'comments/moderation',
     'group/:contentGroup',
     'group/:contentGroup/:contentIndex'
   ];

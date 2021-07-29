@@ -1,167 +1,176 @@
 <app-nav-bar *ngIf="!isPresentation" (isVisible)="checkIfNavBarExists($event)"></app-nav-bar>
 <button class="add-btn mobile-add" mat-mini-fab aria-labelledby="add"
-        *ngIf="!search && deviceType !== 'desktop' && !isModerator && !isPresentation && !isArchive" (click)="openCreateDialog()"
+        *ngIf="!search && deviceType !== 'desktop' && !isPresentation && !isArchive && !isModerator" (click)="openCreateDialog()"
         [ngClass]="{'above-nav': navBarExists}"
         matTooltip="{{ 'comment-list.add-comment' | translate }}">
   <mat-icon class="bigger-icon">add</mat-icon>
 </button>
 <div class="nav-bar-container">
-  <div *ngIf="!isPresentation" fxLayout="row" class="search-container" [ngClass]="{'search-container-fixed-invisible': scroll && !scrollActive && deviceType !== 'desktop', 'search-container-fixed': scroll,
-        'search-container-fixed-visible' : scroll && (deviceType === 'desktop' || scrollActive), 'search-container-moderator': scroll && isModerator, 'search-container-archive': scroll && isArchive }"
-       (window:scroll)="checkScroll()" fxLayoutAlign="center center">
-    <input tabindex="-1" (focus)="eventService.makeFocusOnInputTrue()" (blur)="eventService.makeFocusOnInputFalse()"
-           #searchBox
-           id="searchBox" [ngClass]="{'search-input-hidden': !search, 'search-input': search }"
-           (input)="searchComments()" [(ngModel)]="searchInput" [placeholder]="searchPlaceholder"
-           aria-labelledby="search-box-input-description">
-    <button id="search-close-button" mat-icon-button *ngIf="searchInput !== '' || search" class="close-btn"
-            (click)="hideCommentsList=false; searchInput = ''; search = false; searchPlaceholder = ''; getDisplayComments()"
-            aria-labelledby="close_search">
-      <mat-icon>close</mat-icon>
-    </button>
-
-    <div class="button-bar" fxLayoutAlign="center center" fxLayoutGap="1em">
-      <div [ngClass]="{'counter-container': !isModerator}" *ngIf="!isLoading && comments && !search">
-        <h3 class="counter">
-          {{ filteredComments && hideCommentsList ? filteredComments.length : commentsFilteredByTime.length }}
-        </h3>
-      </div>
-
-      <button id="search-button" mat-mini-fab (click)="activateSearch(); filterComments('')" class="bar-icon"
-              *ngIf="!search" aria-labelledby="search-list"
-              matTooltip="{{ 'comment-list.filter-search' | translate }}">
-        <mat-icon>search</mat-icon>
-      </button>
-
-      <button id="filter-button" mat-mini-fab aria-labelledby="filter-list" class="bar-icon"
-              *ngIf="!search"
-              [matMenuTriggerFor]="filterMenu" matTooltip="{{ 'comment-list.filter-comments' | translate }}">
-        <mat-icon>filter_list</mat-icon>
-      </button>
-
-      <button id="select-time-button" mat-mini-fab aria-labelledby="select-time" class="bar-icon"
-              *ngIf="!search"
-              [matMenuTriggerFor]="timeMenu" matTooltip="{{ 'comment-list.select-time' | translate }}">
-        <mat-icon class="bigger-icon">access_time</mat-icon>
-      </button>
-
-      <button id="pause-button" mat-mini-fab aria-labelledby="pause" class="bar-icon"
-              *ngIf="!search && !freeze && !isModerator && !isArchive" (click)="pauseCommentStream()"
-              matTooltip="{{ 'comment-list.pause-comments' | translate }}">
-        <mat-icon>pause</mat-icon>
-      </button>
-
-      <button id="start-button" mat-mini-fab aria-labelledby="play" class="bar-icon"
-              *ngIf="!search && freeze && !isModerator && !isArchive" (click)="playCommentStream()"
-              matTooltip="{{ 'comment-list.play-comments' | translate }}">
-        <mat-icon>play_arrow</mat-icon>
-      </button>
-
-      <button id="more-button" mat-mini-fab *ngIf="!search && viewRole === 'CREATOR' && !isArchive" class="bar-icon"
-              [matMenuTriggerFor]="moreMenu" aria-labelledby="more"
-              matTooltip="{{ 'comment-list.more-options' | translate }}">
-        <mat-icon>construction</mat-icon>
-      </button>
-
-      <button id="add-comment-small-button" class="add-btn" mat-mini-fab aria-labelledby="add"
-              *ngIf="!search && deviceType === 'desktop' && !isModerator && !isArchive" (click)="openCreateDialog()"
-              matTooltip="{{ 'comment-list.add-comment' | translate }}">
-        <mat-icon class="bigger-icon">add</mat-icon>
-      </button>
-    </div>
-
-    <mat-menu #filterMenu="matMenu">
-      <div class="divider-container">
-        <mat-divider></mat-divider>
-        <p class="divider-label">{{ 'comment-list.sort' | translate }}</p>
-      </div>
-      <button mat-menu-item (click)="sortCommentsManually(sorting.TIME)" [ngClass]="{time: 'selected'}[currentSort]"
-              aria-labelledby="sort-time">
-        <mat-icon [ngClass]="{time: 'blue-icon'}[currentSort]">access_time</mat-icon>
-        <span>{{ 'comment-list.sort-time' | translate }}</span>
-      </button>
-
-      <button mat-menu-item (click)="sortCommentsManually(sorting.VOTEDESC)"
-              [ngClass]="{votedesc: 'selected'}[currentSort]" aria-labelledby="sort-up">
-        <mat-icon [ngClass]="{votedesc: 'up'}[currentSort]">keyboard_arrow_up</mat-icon>
-        <span>{{ 'comment-list.sort-votedesc' | translate }}</span>
-      </button>
-
-      <button mat-menu-item (click)="sortCommentsManually(sorting.VOTEASC)"
-              [ngClass]="{voteasc: 'selected'}[currentSort]" aria-labelledby="sort-down">
-        <mat-icon [ngClass]="{voteasc: 'down'}[currentSort]">keyboard_arrow_down</mat-icon>
-        <span>{{ 'comment-list.sort-voteasc' | translate }}</span>
-      </button>
-
-      <div class="divider-container">
-        <mat-divider></mat-divider>
-        <p class="divider-label">{{ 'comment-list.filter' | translate }}</p>
-      </div>
-      <button *ngIf="viewRole === 'CREATOR'" mat-menu-item (click)="filterComments(filtering.READ)"
-              [ngClass]="{read: 'selected'}[currentFilter]" aria-labelledby="read_icon">
-        <mat-icon [ngClass]="{read: 'blue-icon'}[currentFilter]">
-          visibility
-        </mat-icon>
-        <span>{{ 'comment-list.filter-read' | translate }}</span>
-      </button>
-
-      <button mat-menu-item (click)="filterComments(filtering.FAVORITE)"
-              [ngClass]="{favorite: 'selected'}[currentFilter]" aria-labelledby="grade">
-        <mat-icon [ngClass]="{favorite: 'favorite-icon'}[currentFilter]">grade</mat-icon>
-        <span>{{ 'comment-list.filter-favorite' | translate }}</span>
-      </button>
-
-      <button mat-menu-item (focus)="hideCommentsList=true" (click)="filterComments(filtering.ANSWER)"
-              [ngClass]="{answer: 'selected'}[currentFilter]"
-              aria-labelledby="comment">
-        <mat-icon [ngClass]="{answer: 'blue-icon'}[currentFilter]">comment</mat-icon>
-        <span>{{ 'comment-list.filter-answered' | translate }}</span>
-      </button>
-
-      <button mat-menu-item [matMenuTriggerFor]="moreFilterMenu"
-              [ngClass]="{'selected': currentFilter === filtering.CORRECT || currentFilter === filtering.WRONG}"
-              aria-labelledby="filter-more">
-        <mat-icon [ngClass]="{'correct-icon': currentFilter === filtering.CORRECT,
-        'wrong-icon': currentFilter === filtering.WRONG}">tune</mat-icon>
-        <span>{{ 'comment-list.filter-more' | translate }}</span>
-      </button>
-
-      <button mat-menu-item (focus)="hideCommentsList=false;filterComments('')"
-              aria-labelledby="close">
+  <div [ngClass]="{'header-container': !isPresentation, 'centered': viewRole === 'PARTICIPANT'}">
+    <mat-tab-group *ngIf="!isPresentation && viewRole !== 'PARTICIPANT'" (selectedTabChange)="switchList($event.index)" class="list-switcher" [selectedIndex]="isModerator ? 1 : 0">
+      <mat-tab label="{{ 'comment-list.public-list' | translate }} {{ publicCounter | counterBraces }}"></mat-tab>
+      <mat-tab label="{{ 'comment-list.moderation' | translate }} {{ moderationCounter | counterBraces }}"></mat-tab>
+    </mat-tab-group>
+    <div *ngIf="!isPresentation" fxLayout="row" fxLayoutAlign="center center" class="search-container" [ngClass]="{'search-container-fixed-invisible': scroll && !scrollActive && deviceType !== 'desktop', 'search-container-fixed': scroll && (!isScrollStart || deviceType === 'mobile'),
+        'search-container-fixed-visible' : scroll && (deviceType === 'desktop' || scrollActive), 'search-container-archive': scroll && isArchive, 'fixed-start-position': isScrollStart && deviceType === 'desktop'}"
+         (window:scroll)="checkScroll()">
+      <input tabindex="-1" (focus)="eventService.makeFocusOnInputTrue()" (blur)="eventService.makeFocusOnInputFalse()"
+             #searchBox
+             id="searchBox" [ngClass]="{'search-input-hidden': !search, 'search-input': search }"
+             (input)="searchComments()" [(ngModel)]="searchInput" [placeholder]="searchPlaceholder"
+             aria-labelledby="search-box-input-description">
+      <button id="search-close-button" mat-icon-button *ngIf="searchInput !== '' || search" class="close-btn"
+              (click)="stopSearch()"
+              aria-labelledby="close_search">
         <mat-icon>close</mat-icon>
-        <span>{{ 'comment-list.filter-reset' | translate }}</span>
-      </button>
-    </mat-menu>
-
-    <mat-menu #moreFilterMenu="matMenu">
-      <button mat-menu-item (click)="filterComments(filtering.CORRECT)"
-              [ngClass]="{correct: 'selected'}[currentFilter]" aria-labelledby="check_circle">
-        <mat-icon [ngClass]="{correct: 'correct-icon'}[currentFilter]">check_circle</mat-icon>
-        <span>{{ 'comment-list.filter-correct' | translate }}</span>
       </button>
 
-      <button mat-menu-item (focus)="hideCommentsList=true" (click)="filterComments(filtering.WRONG)"
-              [ngClass]="{wrong: 'selected'}[currentFilter]"
-              aria-labelledby="not_interested">
-        <mat-icon [ngClass]="{wrong: 'wrong-icon'}[currentFilter]">cancel</mat-icon>
-        <span>{{ 'comment-list.filter-wrong' | translate }}</span>
-      </button>
-    </mat-menu>
+      <div class="button-bar" fxLayoutAlign="center center" fxLayoutGap="1em">
+        <div class="counter-container" *ngIf="!isLoading && comments && !search && (scroll && (deviceType === 'desktop' || scrollActive) || hideCommentsList || viewRole === 'PARTICIPANT')">
+          <h3 class="counter">
+            {{ filteredComments && hideCommentsList ? filteredComments.length : commentsFilteredByTime.length }}
+          </h3>
+        </div>
 
-    <mat-menu #timeMenu="matMenu">
-      <div *ngFor="let periodItem of periodsList">
-        <button mat-menu-item (click)="setTimePeriod(periodItem)" class="period"
-                [ngClass]="{'selected': periodItem === period}"
-                aria-labelledby="{{periodItem}}">
-          <span>{{ ('comment-list.select-' + periodItem) | translate }}</span>
+        <button id="search-button" mat-mini-fab (click)="activateSearch(); filterComments('')" class="bar-icon"
+                *ngIf="!search" aria-labelledby="search-list"
+                matTooltip="{{ 'comment-list.filter-search' | translate }}">
+          <mat-icon>search</mat-icon>
+        </button>
+
+        <button id="filter-button" mat-mini-fab aria-labelledby="filter-list" class="bar-icon"
+                *ngIf="!search"
+                [matMenuTriggerFor]="filterMenu" matTooltip="{{ 'comment-list.filter-comments' | translate }}">
+          <mat-icon>filter_list</mat-icon>
+        </button>
+
+        <button id="select-time-button" mat-mini-fab aria-labelledby="select-time" class="bar-icon"
+                *ngIf="!search"
+                [matMenuTriggerFor]="timeMenu" matTooltip="{{ 'comment-list.select-time' | translate }}">
+          <mat-icon class="bigger-icon">access_time</mat-icon>
+        </button>
+
+        <button id="pause-button" mat-mini-fab aria-labelledby="pause" class="bar-icon"
+                [ngClass]="{'disabled': isModerator}"
+                *ngIf="!search && !freeze && !isArchive" (click)="pauseCommentStream()"
+                matTooltip="{{ 'comment-list.pause-comments' | translate }}">
+          <mat-icon>pause</mat-icon>
+        </button>
+
+        <button id="start-button" mat-mini-fab aria-labelledby="play" class="bar-icon"
+                [ngClass]="{'disabled': isModerator}"
+                *ngIf="!search && freeze && !isArchive" (click)="playCommentStream()"
+                matTooltip="{{ 'comment-list.play-comments' | translate }}">
+          <mat-icon>play_arrow</mat-icon>
+        </button>
+
+        <button id="more-button" mat-mini-fab *ngIf="!search && viewRole !== 'PARTICIPANT' && !isArchive" class="bar-icon"
+                [matMenuTriggerFor]="moreMenu" aria-labelledby="more"
+                matTooltip="{{ 'comment-list.more-options' | translate }}">
+          <mat-icon>construction</mat-icon>
+        </button>
+
+        <button id="add-comment-small-button" class="add-btn" mat-mini-fab aria-labelledby="add"
+                [ngClass]="{'disabled': isModerator}"
+                *ngIf="!search && deviceType === 'desktop' && !isArchive" (click)="openCreateDialog()"
+                matTooltip="{{ 'comment-list.add-comment' | translate }}">
+          <mat-icon class="bigger-icon">add</mat-icon>
         </button>
       </div>
-    </mat-menu>
+
+      <mat-menu #filterMenu="matMenu">
+        <div class="divider-container">
+          <mat-divider></mat-divider>
+          <p class="divider-label">{{ 'comment-list.sort' | translate }}</p>
+        </div>
+        <button mat-menu-item (click)="sortCommentsManually(sorting.TIME)" [ngClass]="{time: 'selected'}[currentSort]"
+                aria-labelledby="sort-time">
+          <mat-icon [ngClass]="{time: 'blue-icon'}[currentSort]">access_time</mat-icon>
+          <span>{{ 'comment-list.sort-time' | translate }}</span>
+        </button>
+
+        <button mat-menu-item (click)="sortCommentsManually(sorting.VOTEDESC)"
+                [ngClass]="{votedesc: 'selected'}[currentSort]" aria-labelledby="sort-up">
+          <mat-icon [ngClass]="{votedesc: 'up'}[currentSort]">keyboard_arrow_up</mat-icon>
+          <span>{{ 'comment-list.sort-votedesc' | translate }}</span>
+        </button>
+
+        <button mat-menu-item (click)="sortCommentsManually(sorting.VOTEASC)"
+                [ngClass]="{voteasc: 'selected'}[currentSort]" aria-labelledby="sort-down">
+          <mat-icon [ngClass]="{voteasc: 'down'}[currentSort]">keyboard_arrow_down</mat-icon>
+          <span>{{ 'comment-list.sort-voteasc' | translate }}</span>
+        </button>
+
+        <div class="divider-container">
+          <mat-divider></mat-divider>
+          <p class="divider-label">{{ 'comment-list.filter' | translate }}</p>
+        </div>
+        <button *ngIf="viewRole === 'CREATOR'" mat-menu-item (click)="filterComments(filtering.READ)"
+                [ngClass]="{read: 'selected'}[currentFilter]" aria-labelledby="read_icon">
+          <mat-icon [ngClass]="{read: 'blue-icon'}[currentFilter]">
+            visibility
+          </mat-icon>
+          <span>{{ 'comment-list.filter-read' | translate }}</span>
+        </button>
+
+        <button mat-menu-item (click)="filterComments(filtering.FAVORITE)"
+                [ngClass]="{favorite: 'selected'}[currentFilter]" aria-labelledby="grade">
+          <mat-icon [ngClass]="{favorite: 'favorite-icon'}[currentFilter]">grade</mat-icon>
+          <span>{{ 'comment-list.filter-favorite' | translate }}</span>
+        </button>
+
+        <button mat-menu-item (focus)="hideCommentsList=true" (click)="filterComments(filtering.ANSWER)"
+                [ngClass]="{answer: 'selected'}[currentFilter]"
+                aria-labelledby="comment">
+          <mat-icon [ngClass]="{answer: 'blue-icon'}[currentFilter]">comment</mat-icon>
+          <span>{{ 'comment-list.filter-answered' | translate }}</span>
+        </button>
+
+        <button mat-menu-item [matMenuTriggerFor]="moreFilterMenu"
+                [ngClass]="{'selected': currentFilter === filtering.CORRECT || currentFilter === filtering.WRONG}"
+                aria-labelledby="filter-more">
+          <mat-icon [ngClass]="{'correct-icon': currentFilter === filtering.CORRECT,
+        'wrong-icon': currentFilter === filtering.WRONG}">tune</mat-icon>
+          <span>{{ 'comment-list.filter-more' | translate }}</span>
+        </button>
+
+        <button mat-menu-item (focus)="hideCommentsList=false;filterComments('')"
+                aria-labelledby="close">
+          <mat-icon>close</mat-icon>
+          <span>{{ 'comment-list.filter-reset' | translate }}</span>
+        </button>
+      </mat-menu>
+
+      <mat-menu #moreFilterMenu="matMenu">
+        <button mat-menu-item (click)="filterComments(filtering.CORRECT)"
+                [ngClass]="{correct: 'selected'}[currentFilter]" aria-labelledby="check_circle">
+          <mat-icon [ngClass]="{correct: 'correct-icon'}[currentFilter]">check_circle</mat-icon>
+          <span>{{ 'comment-list.filter-correct' | translate }}</span>
+        </button>
+
+        <button mat-menu-item (focus)="hideCommentsList=true" (click)="filterComments(filtering.WRONG)"
+                [ngClass]="{wrong: 'selected'}[currentFilter]"
+                aria-labelledby="not_interested">
+          <mat-icon [ngClass]="{wrong: 'wrong-icon'}[currentFilter]">cancel</mat-icon>
+          <span>{{ 'comment-list.filter-wrong' | translate }}</span>
+        </button>
+      </mat-menu>
+
+      <mat-menu #timeMenu="matMenu">
+        <div *ngFor="let periodItem of periodsList">
+          <button mat-menu-item (click)="setTimePeriod(periodItem)" class="period"
+                  [ngClass]="{'selected': periodItem === period}"
+                  aria-labelledby="{{periodItem}}">
+            <span>{{ ('comment-list.select-' + periodItem) | translate }}</span>
+          </button>
+        </div>
+      </mat-menu>
+    </div>
   </div>
 
   <mat-menu #moreMenu="matMenu">
 
-    <button mat-menu-item (click)="navToOtherCommentList()" aria-labelledby="delete-comments">
+    <button mat-menu-item (click)="switchList(isModerator ? 0 : 1)" aria-labelledby="delete-comments">
       <mat-icon class="switch-list-icon">{{ isModerator ? 'question_answer' : 'gavel' }}</mat-icon>
       <span>{{ ('comment-list.' + (isModerator ? 'public-list' : 'moderation')) | translate }}</span>
     </button>
@@ -187,8 +196,6 @@
 
   </mat-menu>
 
-  <div *ngIf="scroll && (deviceType === 'desktop' || scrollActive)" class="search-bar-placeholder"></div>
-
   <div *ngIf="isLoading" class="loading" fxLayout="column" fxLayoutAlign="center">
     <div fxLayout="row" fxLayoutAlign="center">
       <app-loading-indicator [size]="100"></app-loading-indicator>
@@ -199,8 +206,9 @@
           *ngIf="!isPresentation"
           [ngClass]="{'visible': scrollExtended && scrollActive,
                       'above-add': navBarExists && deviceType === 'mobile' && !isModerator,
-                      'mobile-scroll-position': (!navBarExists || isModerator) && deviceType === 'mobile',
-                      'desktop-scroll-position': deviceType === 'desktop'}">
+                      'mobile-scroll-position': !navBarExists && deviceType === 'mobile' && !isModerator,
+                      'desktop-scroll-position': deviceType === 'desktop' || isModerator,
+                      'above-nav': viewRole === 'CREATOR' && isModerator && navBarExists && deviceType === 'mobile'}">
     <mat-icon>arrow_upward</mat-icon>
   </button>
 
@@ -215,7 +223,7 @@
 
   <div [ngClass]="{'comments-container': !isPresentation}" *ngIf="!isLoading">
     <app-comment *ngFor="let current of displayComments" [comment]="current" [archived]="isArchive"
-                 [parseVote]="getVote(current)" (clickedOnTag)="clickedOnTag($event)"
+                 [parseVote]="getVote(current)" (clickedOnTag)="clickedOnTag($event)" [isModeratorView]="isModerator"
                  [isPresentation]="isPresentation" (activeComment)="updateCurrentComment($event)"
                  [referenceEvent]="referenceEvent.asObservable()" [isNew]="current.id === newestComment.id">
     </app-comment>
