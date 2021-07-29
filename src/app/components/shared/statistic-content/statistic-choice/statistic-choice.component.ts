@@ -150,6 +150,9 @@ export class StatisticChoiceComponent extends StatisticContentBaseComponent impl
             display: false
           },
           datalabels: {
+            display: context => {
+              return context.dataset.data[context.dataIndex] > 0;
+            },
             color: this.onSurface,
             anchor: 'end',
             align: 'end',
