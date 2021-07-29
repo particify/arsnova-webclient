@@ -226,14 +226,13 @@ export class ControlBarComponent extends NavBarComponent implements OnInit, OnDe
       this.announceService.announce('presentation.a11y-comment-zoom-changed', { zoom: this.currentCommentZoom })
     });
     this.eventService.on<ContentGroup>('ContentGroupStateChanged').subscribe(updatedContentGroup => {
-      this.contentIndex = 0;
       this.group = updatedContentGroup;
       this.checkIfContentLocked();
     });
   }
 
   checkIfContentLocked() {
-    if (this.contentIndex) {
+    if (this.contentIndex !== undefined) {
       this.isCurrentContentPublished = this.contentGroupService.isIndexPublished(this.group.firstPublishedIndex, this.group.lastPublishedIndex, this.contentIndex);
       this.groupItems[2].icon = this.isCurrentContentPublished ? 'lock' : 'lock_open';
       this.groupItems[2].name = this.isCurrentContentPublished ? 'lock' : 'publish';
