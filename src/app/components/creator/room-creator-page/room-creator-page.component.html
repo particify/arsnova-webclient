@@ -76,7 +76,7 @@
             <mat-icon>playlist_add</mat-icon>
             {{ 'room-page.create-content-group' | translate }}
           </button>
-          <p *ngIf="contentGroups.length === 0">{{ 'room-page.no-contents' | translate }}</p>
+          <p *ngIf="contentGroups.length === 0">{{ 'room-page.no-content-groups' | translate }}</p>
           <div *ngIf="room && contentGroups">
             <p tabindex="-1" id="content-groups" class="visually-hidden">
               {{ 'room-page.a11y-content-groups' | translate: {count: contentGroups.length} }}</p>
