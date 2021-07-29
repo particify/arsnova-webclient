@@ -248,10 +248,16 @@ export class StatisticSortComponent extends StatisticContentBaseComponent implem
 
   updateChart() {
     if (this.chart) {
+      if (this.chart.data.datasets[0]) {
+        this.chart.data.datasets[0].data = this.data[0].data;
+      } else {
+        this.chart.destroy();
+        this.createChart();
+        return;
+      }
       if (this.chart.data.labels.toString() !== this.labels.toString()) {
         this.chart.data.labels = this.labels;
       }
-      this.chart.data.datasets[0].data = this.data[0].data;
       this.chart.update();
     } else {
       this.initChart();
