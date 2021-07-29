@@ -37,9 +37,7 @@
               <p class="ellipsis">
                 {{room.summary.name}}</p>
               <div fxLayout="row" fxLayoutAlign="center center">
-                <div class="badge" fxLayoutAlign="center center" *ngIf="room.summary.stats.ackCommentCount > 0">
-                  <span>{{ room.summary.stats.ackCommentCount }}</span>
-                </div>
+                <app-list-badge [count]="room.summary.stats.ackCommentCount"></app-list-badge>
                 <p class="short-id">{{room.summary.shortId | splitShortId}}</p>
                 <mat-icon mat-list-icon *ngSwitchCase="creatorRole"
                           matTooltip="{{ 'room-list.creator-role' | translate }}"
