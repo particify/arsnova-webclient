@@ -31,11 +31,12 @@
 }
 
 .step {
+  transition: 300ms;
   min-width: 30px;
   height: 30px;
   font-size: 18px;
-  background-color: var(--primary);
-  color: var(--on-primary);
+  background-color: var(--surface);
+  color: var(--on-surface);
   outline: 0;
   border: 0;
   border-radius: 50%;
@@ -50,9 +51,8 @@
 }
 
 .sent {
-  background-color: var(--surface);
-  color: var(--on-surface);
-  transition: 1000ms;
+  color: var(--secondary);
+  border: 1px solid var(--secondary);
 }
 
 .mat-icon-button {

@@ -1,5 +1,6 @@
 #contentGroup {
-  background-color: var(--background) !important;
+  box-shadow: none;
+  border: 1px solid var(--grey);
   overflow: hidden;
   position: relative;
   top: 0;
@@ -11,8 +12,7 @@
 
   &:hover {
     cursor: pointer;
-    transform: scale(1.001);
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 0 3px var(--primary);
   }
 }
 

@@ -41,13 +41,13 @@ $logo-width: 120px;
 
 .nav-container {
   border-radius: 8px;
-  background-color: #f6f8f9;
+  background-color: var(--surface);
 }
 
 .feature-container {
   min-height: $bar-height;
   border-radius: 8px;
-  background-color: #f6f8f9;
+  background-color: var(--surface);
   > *:not(.bar-divider):not(.disabled) {
     opacity: 0.8;
   }
