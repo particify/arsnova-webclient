@@ -3,20 +3,20 @@
     <mat-form-field appearance="outline">
       <mat-label>{{ 'dialog.content-group-name' | translate }}</mat-label>
       <input matInput id="name-input" class="input-block" type="text" maxlength="25" [(ngModel)]="name"
-             name="contentGroupName" aria-labelledby="content-group-name-input"
+             name="contentGroupName" aria-labelledby="content-group-name-input" autocomplete="off"
              (focus)="eventService.makeFocusOnInputTrue()" (blur)="eventService.makeFocusOnInputFalse()"/>
     </mat-form-field>
   </div>
+  <div fxLayout="row" fxLayoutAlign="end" fxLayoutGap="10px">
+    <button (click)="closeDialog()" aria-labelledby="cancel" mat-flat-button class="button-abort" type="button">
+      {{ 'dialog.cancel' | translate }}
+    </button>
+    <button (click)="addContentGroup()" mat-flat-button  class="button-primary"
+            attr.aria-label="{{ 'dialog.a11y-create-content-group' | translate: { group: name } }}">
+      {{ 'dialog.create-content-group' | translate }}
+    </button>
+  </div>
 </form>
-<div fxLayout="row" fxLayoutAlign="end" fxLayoutGap="10px">
-  <button (click)="closeDialog()" aria-labelledby="cancel" mat-flat-button class="button-abort">
-    {{ 'dialog.cancel' | translate }}
-  </button>
-  <button (click)="addContentGroup()" mat-flat-button  class="button-primary"
-          attr.aria-label="{{ 'dialog.a11y-create-content-group' | translate: { group: name } }}">
-    {{ 'dialog.create-content-group' | translate }}
-  </button>
-</div>
 
 <div class="visually-hidden">
   <div id="content-group-name-input">{{ 'dialog.content-group-name-input' | translate }}</div>
