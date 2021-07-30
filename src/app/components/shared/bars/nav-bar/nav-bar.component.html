@@ -5,11 +5,11 @@
     <div *ngFor="let barItem of barItems; let i = index" fxLayoutAlign="center center" class="item"
          [ngClass]="{'current': i === currentRouteIndex }" (click)="navToUrl(i)"
          [attr.aria-label]="'sidebar.a11y-switch-to-feature' | translate : {feature: (('sidebar.' + barItem.name) | translate)}">
-      <mat-icon class="clickable" matTooltip="{{ 'sidebar.' + barItem.name | translate}}">
+      <mat-icon class="clickable" matTooltip="{{barItem.name === 'group' ? groupName : ('sidebar.' + barItem.name | translate)}}">
         {{barItem.icon}}
         <div [ngClass]="{'show-news': barItem.changeIndicator}" class="badge"></div>
       </mat-icon>
-      <p class="text">{{ 'sidebar.' + barItem.name | translate}}</p>
+      <p class="text ellipsis">{{barItem.name === 'group' ? groupName : ('sidebar.' + barItem.name | translate)}}</p>
     </div>
   </div>
 </div>
