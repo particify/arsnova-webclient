@@ -26,7 +26,7 @@ export class RoomJoinComponent implements OnInit, OnDestroy {
   auth: ClientAuthentication;
   isDesktop: boolean;
 
-  roomCodeFormControl = new FormControl('', [Validators.pattern('[0-9 ]*')]);
+  roomCodeFormControl = new FormControl('', [Validators.pattern(/[0-9\s]*/)]);
   matcher = new RegisterErrorStateMatcher();
   destroy$ = new Subject();
 
@@ -92,7 +92,7 @@ export class RoomJoinComponent implements OnInit, OnDestroy {
 
     if (!isSelected) {
       // allow only backspace key press after all 8 digits were entered by the user
-      if (roomCode.length - (roomCode.split(' ').length - 1) === 8 && isBackspaceKeyboardEvent === false) {
+      if (roomCode.length - (roomCode.split(/\s/).length - 1) === 8 && isBackspaceKeyboardEvent === false) {
         keyboardEvent.preventDefault();
         keyboardEvent.stopPropagation();
       } else if (roomCode.length === 4 && isBackspaceKeyboardEvent === false) { // add a space between each 4 digit group
