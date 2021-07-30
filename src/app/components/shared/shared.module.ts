@@ -48,6 +48,7 @@ import { WordcloudComponent } from './wordcloud/wordcloud.component';
 import { CommentAnswerComponent } from './_dialogs/comment-answer/comment-answer.component';
 import { StatisticScaleComponent } from './statistic-content/statistic-scale/statistic-scale.component';
 import { SplitShortId } from '@arsnova/app/pipes/split-short-id';
+import { ListBadgeComponent } from './list-badge/list-badge.component';
 
 @NgModule({
   imports: [
@@ -102,7 +103,8 @@ import { SplitShortId } from '@arsnova/app/pipes/split-short-id';
     PublishContentComponent,
     WordcloudComponent,
     CommentAnswerComponent,
-    SplitShortId
+    SplitShortId,
+    ListBadgeComponent
   ],
   exports: [
     RoomJoinComponent,
