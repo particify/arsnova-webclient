@@ -67,8 +67,8 @@ export class RoomListComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.getRoomDataViews().pipe(takeUntil(this.unsubscribe$)).subscribe(roomDataViews => this.updateRoomList(roomDataViews));
     this.guestAuth$ = this.authenticationService.fetchGuestAuthentication().pipe(shareReplay());
+    this.getRoomDataViews().pipe(takeUntil(this.unsubscribe$)).subscribe(roomDataViews => this.updateRoomList(roomDataViews));
     if (this.auth.authProvider === AuthProvider.ARSNOVA_GUEST) {
       this.isGuest = true;
     } else {
