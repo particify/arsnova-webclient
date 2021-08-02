@@ -236,6 +236,9 @@ export class StatisticSortComponent extends StatisticContentBaseComponent implem
             display: false
           },
           datalabels: {
+            display: context => {
+              return context.dataset.data[context.dataIndex] > 0;
+            },
             color: this.onSurface,
             anchor: 'end',
             align: 'end',
