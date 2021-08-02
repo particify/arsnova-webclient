@@ -543,6 +543,7 @@
     "cancel": "Cancel",
     "cancel-description": "Cancels the current process and closes the dialog.",
     "content-group-name": "Name of the question series",
+    "content-group-example": "e.g. Quiz",
     "content-group-name-input": "Enter the name of the question series you want to create here.",
     "create-content-group": "Create",
     "content-group-created": "Your content was added to new question series.",
