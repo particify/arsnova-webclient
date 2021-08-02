@@ -9,9 +9,9 @@ import {
   CategoryScale,
   Chart,
   ChartDataset,
-  LinearScale,
-  Tooltip
+  LinearScale
 } from 'chart.js';
+import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { StatisticContentBaseComponent } from '../statistic-content-base';
 import { ActivatedRoute } from '@angular/router';
 import { takeUntil } from 'rxjs/operators';
@@ -188,12 +188,13 @@ export class StatisticSortComponent extends StatisticContentBaseComponent implem
   createChart() {
     Chart.defaults.color = this.onSurface;
     Chart.defaults.font.size = this.isPresentation ? 14 : 16;
-    Chart.register(BarController, BarElement, CategoryScale, LinearScale, Tooltip);
+    Chart.register(BarController, BarElement, CategoryScale, LinearScale, ChartDataLabels);
     const gridConfig = {
       borderColor: this.onSurface,
       tickColor: this.isPresentation ? this.surface : this.onSurface,
       drawOnChartArea: !this.isPresentation
     };
+    const scale = this.isPresentation ? Math.max((Math.min(innerWidth, 2100) / 1100), 1) : 1;
     this.chart = new Chart(this.chartId, {
       type: 'bar',
       data: {
@@ -203,19 +204,30 @@ export class StatisticSortComponent extends StatisticContentBaseComponent implem
       options: {
         responsive: true,
         maintainAspectRatio: false,
-        devicePixelRatio: this.isPresentation ? 2 : 1,
+        devicePixelRatio: window.devicePixelRatio * scale,
+        layout: {
+          padding: {
+            top: 25
+          }
+        },
         scales: {
           y: {
+            type: 'linear',
             ticks: {
+              display: !this.isPresentation,
               precision: 0,
+              color: this.isPresentation ? this.surface : this.onSurface
             },
             grid: {
-              borderColor: this.onSurface, // TODO: Waiting for bar labels too : this.isPresentation ? this.surface : this.onSurface,
+              display: !this.isPresentation,
+              borderWidth: this.isPresentation ? 0 : 1,
+              borderColor: this.onSurface,
               tickColor: this.isPresentation ? this.surface : this.onSurface,
               drawOnChartArea: !this.isPresentation
             }
           },
           x: {
+            type: 'category',
             grid: gridConfig
           }
         },
@@ -223,8 +235,11 @@ export class StatisticSortComponent extends StatisticContentBaseComponent implem
           legend: {
             display: false
           },
-          tooltip: {
-            mode: 'index'
+          datalabels: {
+            color: this.onSurface,
+            anchor: 'end',
+            align: 'end',
+            offset: 0
           }
         }
       }
@@ -233,10 +248,16 @@ export class StatisticSortComponent extends StatisticContentBaseComponent implem
 
   updateChart() {
     if (this.chart) {
+      if (this.chart.data.datasets[0]) {
+        this.chart.data.datasets[0].data = this.data[0].data;
+      } else {
+        this.chart.destroy();
+        this.createChart();
+        return;
+      }
       if (this.chart.data.labels.toString() !== this.labels.toString()) {
         this.chart.data.labels = this.labels;
       }
-      this.chart.data.datasets[0].data = this.data[0].data;
       this.chart.update();
     } else {
       this.initChart();
