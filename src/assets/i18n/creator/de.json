@@ -543,6 +543,7 @@
     "cancel": "Abbrechen",
     "cancel-description": "Bricht den aktuellen Vorgang ab und schließt den Dialog.",
     "content-group-name": "Name der Fragenserie",
+    "content-group-example": "z. B. Quiz",
     "content-group-name-input": "Gib hier den Namen der Fragenserie ein, die du erstellen möchtest.",
     "create-content-group": "Anlegen",
     "content-group-created": "Dein Inhalt wurde der neuer Fragenserie hinzugefügt.",
