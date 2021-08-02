@@ -19,6 +19,8 @@ import { UserRole } from '../../../models/user-roles.enum';
 import { InfoBarItem } from '../../shared/bars/info-bar/info-bar.component';
 import { ContentGroupService } from '../../../services/http/content-group.service';
 import { RoomStatsService } from '../../../services/http/room-stats.service';
+import { DataChanged } from '../../../models/events/data-changed';
+import { RoomStats } from '../../../models/room-stats';
 
 @Component({
   selector: 'app-room-moderator-page',
@@ -99,6 +101,8 @@ export class RoomModeratorPageComponent extends RoomPageComponent implements OnI
 
   initializeRoom(room: Room, role: UserRole, viewRole: UserRole): void {
     this.room = room;
+    this.onChangeSubscription = this.eventService.on<DataChanged<RoomStats>>('ModeratorDataChanged')
+      .subscribe(() => this.initializeStats(viewRole));
     if (this.room.extensions && this.room.extensions.comments) {
       if (this.room.extensions.comments['enableModeration'] !== null) {
         this.moderationEnabled = this.room.extensions.comments['enableModeration'];
