@@ -1,6 +1,6 @@
 <div fxLayout="column" class="container">
   <div class="heading" fxLayoutAlign="center center">
-    <lib-extension-point extensionId="app-logo">
+    <lib-extension-point extensionId="app-logo" [extensionData]="{ 'height': '65px' }">
       <h1>
         <span class="main-heading-secondary" aria-hidden="true">{{ 'home-page.welcome' | translate }}</span>
         <span class="main-heading-primary">ARSnova</span>
