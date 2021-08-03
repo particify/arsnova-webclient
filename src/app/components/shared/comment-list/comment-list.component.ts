@@ -32,7 +32,6 @@ import { AnnounceService } from '../../../services/util/announce.service';
 import { CommentSettingsService } from '../../../services/http/comment-settings.service';
 import { KeyboardUtils } from '../../../utils/keyboard';
 import { KeyboardKey } from '../../../utils/keyboard/keys';
-import { MatTabChangeEvent } from "@angular/material/tabs";
 import { Location } from '@angular/common';
 
 // Using lowercase letters in enums because they we're also used for parsing incoming WS-messages
@@ -237,7 +236,9 @@ export class CommentListComponent implements OnInit, OnDestroy {
     }
     if (!this.isArchive && !reload) {
       this.subscribeCommentStream();
-      this.subscribeModeratorStream();
+      if (this.viewRole !== UserRole.PARTICIPANT) {
+        this.subscribeModeratorStream();
+      }
     }
   }
 
@@ -261,6 +262,12 @@ export class CommentListComponent implements OnInit, OnDestroy {
       }
     }
     this.lastScroll = currentScroll;
+  }
+
+  reduceCommentCounter() {
+    if (this.commentCounter > 20) {
+      this.commentCounter--;
+    }
   }
 
   scrollTop(smooth?: boolean) {
@@ -290,7 +297,7 @@ export class CommentListComponent implements OnInit, OnDestroy {
     this.searchField.nativeElement.focus();
   }
 
-  stopSearch() {
+  resetSearch() {
     this.hideCommentsList = false;
     this.searchInput = '';
     this.searchPlaceholder = '';
@@ -402,7 +409,7 @@ export class CommentListComponent implements OnInit, OnDestroy {
                     this.comments = this.comments.filter(function (el) {
                       return el.id !== payload.id;
                     });
-                    this.commentCounter--;
+                    this.reduceCommentCounter();
                     if (this.isModerator) {
                       this.moderationCounter--;
                     } else {
@@ -441,7 +448,7 @@ export class CommentListComponent implements OnInit, OnDestroy {
         } else {
           this.publicCounter--;
         }
-        this.commentCounter--;
+        this.reduceCommentCounter();
         break;
       default:
         this.referenceEvent.next(payload.id);
