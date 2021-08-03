@@ -34,8 +34,8 @@ export class QrCodeComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     const shortId = this.shortId || this.data.shortId;
-    const minSize = Math.min(document.body.clientWidth, document.body.clientHeight);
-    this.qrWidth = minSize * 0.65;
+    const minSize = Math.min(innerWidth, innerHeight);
+    this.qrWidth = minSize * (innerWidth > 1279 ? 0.65 : 0.5);
     this.themeService.getTheme().pipe(takeUntil(this.destroyed$)).subscribe(theme => {
       const currentTheme = this.themeService.getThemeByKey(theme);
       this.bgColor = currentTheme.get('surface').color;
