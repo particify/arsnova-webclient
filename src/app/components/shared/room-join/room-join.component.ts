@@ -1,4 +1,5 @@
 import { Component, ElementRef, Input, OnInit, ViewChild, OnDestroy } from '@angular/core';
+import { NAMED_ENTITIES } from '@angular/compiler';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { Room } from '../../../models/room';
@@ -10,8 +11,6 @@ import { TranslateService } from '@ngx-translate/core';
 import { AuthenticationService } from '../../../services/http/authentication.service';
 import { ClientAuthentication } from '../../../models/client-authentication';
 import { EventService } from '../../../services/util/event.service';
-import { KeyboardUtils } from '../../../utils/keyboard';
-import { KeyboardKey } from '../../../utils/keyboard/keys';
 import { GlobalStorageService, STORAGE_KEYS } from '../../../services/util/global-storage.service';
 
 @Component({
@@ -80,24 +79,22 @@ export class RoomJoinComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Prettifies the room code input element which:
-   *
-   * - casts a 'xxxx xxxx' layout to the input field
+   * Sanitizes the room code input element which. All non-numeric chars are
+   * removed. Furthermore, a space is inserted after a block of 4 digits.
    */
-  prettifyRoomCode(keyboardEvent: KeyboardEvent): void {
-    const roomCode: string = this.roomCodeElement.nativeElement.value;
-    const isBackspaceKeyboardEvent: boolean = KeyboardUtils.isKeyEvent(keyboardEvent, KeyboardKey.Backspace);
-    const selectedText = window.getSelection();
-    const isSelected: boolean = roomCode === selectedText.toString();
-
-    if (!isSelected) {
-      // allow only backspace key press after all 8 digits were entered by the user
-      if (roomCode.length - (roomCode.split(/\s/).length - 1) === 8 && isBackspaceKeyboardEvent === false) {
-        keyboardEvent.preventDefault();
-        keyboardEvent.stopPropagation();
-      } else if (roomCode.length === 4 && isBackspaceKeyboardEvent === false) { // add a space between each 4 digit group
-        this.roomCodeElement.nativeElement.value += ' ';
-      }
-    }
+  handleInput(event: InputEvent): void {
+    const inputField = event.target as HTMLInputElement;
+    const rawShortId = inputField.value;
+    const pos = inputField.selectionStart;
+    const ins = event.inputType?.startsWith('insert');
+    const del = event.inputType === 'deleteContentForward';
+    const spaceOffset = (ins && inputField.selectionStart === 5)
+        || (del && inputField.selectionStart === 4) ? 1 : 0;
+    const shortId = rawShortId
+        .replace(/[^0-9]/g, '')
+        .replace(/^([0-9]{4})([0-9]{1,4}).*$/, '$1' + NAMED_ENTITIES['thinsp'] + '$2');
+    inputField.value = shortId;
+    inputField.selectionStart = pos + spaceOffset;
+    inputField.selectionEnd = inputField.selectionStart;
   }
 }
