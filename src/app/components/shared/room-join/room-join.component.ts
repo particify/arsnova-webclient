@@ -97,4 +97,13 @@ export class RoomJoinComponent implements OnInit, OnDestroy {
     inputField.selectionStart = pos + spaceOffset;
     inputField.selectionEnd = inputField.selectionStart;
   }
+
+  enforceLengthLimit(event: InputEvent): void {
+    const inputField = event.target as HTMLInputElement;
+    const ins = event.inputType.startsWith('insert');
+    const selection = inputField.selectionEnd > inputField.selectionStart;
+    if (ins && !selection && inputField.value.length >= 9) {
+      event.preventDefault();
+    }
+  }
 }
