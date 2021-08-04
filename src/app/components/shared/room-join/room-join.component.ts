@@ -1,5 +1,4 @@
 import { Component, ElementRef, Input, OnInit, ViewChild, OnDestroy } from '@angular/core';
-import { NAMED_ENTITIES } from '@angular/compiler/src/ml_parser/entities';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { Room } from '../../../models/room';
@@ -12,6 +11,7 @@ import { AuthenticationService } from '../../../services/http/authentication.ser
 import { ClientAuthentication } from '../../../models/client-authentication';
 import { EventService } from '../../../services/util/event.service';
 import { GlobalStorageService, STORAGE_KEYS } from '../../../services/util/global-storage.service';
+import { THINSP } from '../../../utils/html-entities';
 
 @Component({
   selector: 'app-room-join',
@@ -91,7 +91,7 @@ export class RoomJoinComponent implements OnInit, OnDestroy {
     }
     const shortId = rawShortId
         .replace(/[^0-9]/g, '')
-        .replace(/^([0-9]{4})([0-9]{1,4}).*$/, '$1' + NAMED_ENTITIES['thinsp'] + '$2');
+        .replace(/^([0-9]{4})([0-9]{1,4}).*$/, '$1' + THINSP + '$2');
     inputField.value = shortId;
     inputField.selectionStart = pos + spaceOffset;
     inputField.selectionEnd = inputField.selectionStart;
