@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { NAMED_ENTITIES } from '@angular/compiler';
+import { NAMED_ENTITIES } from '@angular/compiler/src/ml_parser/entities';
 
 @Pipe({name: 'splitShortId'})
 export class SplitShortId implements PipeTransform {

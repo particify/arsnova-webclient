@@ -1,5 +1,5 @@
 import { Component, ElementRef, Input, OnInit, ViewChild, OnDestroy } from '@angular/core';
-import { NAMED_ENTITIES } from '@angular/compiler';
+import { NAMED_ENTITIES } from '@angular/compiler/src/ml_parser/entities';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { Room } from '../../../models/room';
