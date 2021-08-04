@@ -1,26 +1,32 @@
-@media(max-width: 1200px){
+@media(max-width: 1279px){
   .qr-container {
     display: flex;
     flex-direction: column;
   }
 
   .url {
-    margin-bottom: 5%;
+    margin-bottom: 32px;
+    &:last-of-type {
+      margin: 0;
+    }
   }
 
   .text {
-    margin-bottom: 0;
+    margin: 0;
   }
 }
 
-@media(min-width: 1200px){
+@media(min-width: 1280px){
   .qr-container {
     display: flex;
     flex-direction: row;
   }
 
   .url {
-    margin: 10% 0;
+    margin: 0;
+    &:first-of-type {
+      margin: 32px 0 48px;
+    }
   }
 }
 
@@ -28,7 +34,7 @@
   color: var(--on-surface);
 }
 
-$font-size: calc(32px + 1.5vw);
+$font-size: calc(32px + 1.4vw);
 $icon-size: calc(32px + 6vw);
 
 .web-icon {
