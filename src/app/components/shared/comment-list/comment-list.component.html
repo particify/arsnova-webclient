@@ -12,7 +12,8 @@
       <mat-tab label="{{ 'comment-list.moderation' | translate }} {{ moderationCounter | counterBraces }}"></mat-tab>
     </mat-tab-group>
     <div *ngIf="!isPresentation" fxLayout="row" fxLayoutAlign="center center" class="search-container" [ngClass]="{'search-container-fixed-invisible': scroll && !scrollActive && deviceType !== 'desktop', 'search-container-fixed': scroll && (!isScrollStart || deviceType === 'mobile'),
-        'search-container-fixed-visible' : scroll && (deviceType === 'desktop' || scrollActive), 'search-container-archive': scroll && isArchive, 'fixed-start-position': isScrollStart && deviceType === 'desktop'}"
+        'search-container-fixed-visible' : scroll && (deviceType === 'desktop' || scrollActive), 'search-container-archive': scroll && isArchive, 'fixed-start-position': isScrollStart && deviceType === 'desktop',
+        'four-buttons': viewRole === 'PARTICIPANT', 'five-buttons': viewRole !== 'PARTICIPANT'}"
          (window:scroll)="checkScroll()">
       <input tabindex="-1" (focus)="eventService.makeFocusOnInputTrue()" (blur)="eventService.makeFocusOnInputFalse()"
              #searchBox
@@ -26,7 +27,7 @@
       </button>
 
       <div class="button-bar" fxLayoutAlign="center center" fxLayoutGap="1em">
-        <div class="counter-container" *ngIf="!isLoading && comments && !search && (scroll && (deviceType === 'desktop' || scrollActive) || hideCommentsList || viewRole === 'PARTICIPANT')">
+        <div class="counter-container" *ngIf="!isLoading && comments && !search && (scroll && (deviceType === 'desktop' || scrollActive) || hideCommentsList || viewRole === 'PARTICIPANT' || deviceType === 'mobile')">
           <h3 class="counter">
             {{ filteredComments && hideCommentsList ? filteredComments.length : commentsFilteredByTime.length }}
           </h3>

@@ -21,7 +21,7 @@ $bar-height: 70px;
 
 .search-input-hidden {
   width: 0;
-  padding: 0;
+  padding: 0!important;
 }
 
 .search-input {
@@ -97,18 +97,31 @@ $bar-height: 70px;
   opacity: 1;
   min-height: $bar-height;
   position: fixed;
-  right: calc(50% - 205px);
   width: 100%;
-  max-width: 410px;
-  @media(max-width: 1000px) {
-    right: calc(50% - 175px);
-    max-width: 350px;
+}
+
+@media(max-width: 1000px) {
+  .five-buttons {
+    right: calc(50% - 170px);
+    max-width: 340px;
   }
-  @media(max-width: 420px) {
+  .four-buttons {
     right: calc(50% - 143px);
     max-width: 286px;
   }
 }
+
+@media(min-width: 1001px) {
+  .five-buttons {
+    right: calc(50% - 205px);
+    max-width: 410px;
+  }
+  .four-buttons {
+    right: calc(50% - 178px);
+    max-width: 356px;
+  }
+}
+
 
 .search-container-archive {
   right: calc(50% - 122px);
@@ -181,12 +194,6 @@ button.selected {
 
 .favorite-icon {
   color: var(--yellow);
-}
-
-.counter-container {
-  @media(max-width: 420px) {
-    display: none;
-  }
 }
 
 .counter {
