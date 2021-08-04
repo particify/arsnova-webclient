@@ -8,7 +8,7 @@ import { EventService } from '../../../../services/util/event.service';
 import { RoomDeleted } from '../../../../models/events/room-deleted';
 import { LanguageService } from '../../../../services/util/language.service';
 import { DialogService } from '../../../../services/util/dialog.service';
-import { GlobalStorageService, STORAGE_KEYS } from '../../../../services/util/global-storage.service';
+import { GlobalStorageService } from '../../../../services/util/global-storage.service';
 import { FormattingService, MarkdownFeatureset } from '../../../../services/http/formatting.service';
 import { UpdateEvent } from '../settings.component';
 import { HINT_TYPES } from '../../../shared/hint/hint.component';
@@ -18,7 +18,7 @@ import { HINT_TYPES } from '../../../shared/hint/hint.component';
   templateUrl: './room.component.html',
   styleUrls: ['./room.component.scss']
 })
-export class RoomComponent implements OnInit {
+export class RoomComponent {
 
   @Output() saveEvent: EventEmitter<UpdateEvent> = new EventEmitter<UpdateEvent>();
 
@@ -43,10 +43,6 @@ export class RoomComponent implements OnInit {
     private formattingService: FormattingService
   ) {
     langService.langEmitter.subscribe(lang => translateService.use(lang));
-  }
-
-  ngOnInit() {
-    this.translateService.use(this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE));
   }
 
   openDeleteRoomDialog(): void {

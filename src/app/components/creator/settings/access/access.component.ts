@@ -12,7 +12,7 @@ import { UserService } from '../../../../services/http/user.service';
 import { Room } from '../../../../models/room';
 import { UserRole } from '../../../../models/user-roles.enum';
 import { AuthenticationService } from '../../../../services/http/authentication.service';
-import { AuthProvider } from '@arsnova/app/models/auth-provider';
+import { AuthProvider } from '../../../../models/auth-provider';
 
 export interface Role {
   name: string;

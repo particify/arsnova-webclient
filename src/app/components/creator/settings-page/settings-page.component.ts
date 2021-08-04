@@ -7,6 +7,7 @@ import { KeyboardKey } from '../../../utils/keyboard/keys';
 import { EventService } from '../../../services/util/event.service';
 import { LanguageService } from '../../../services/util/language.service';
 import { TranslateService } from '@ngx-translate/core';
+import { GlobalStorageService, STORAGE_KEYS } from '../../../services/util/global-storage.service';
 
 export interface Settings {
   headerName: string;
@@ -38,7 +39,8 @@ export class SettingsPageComponent implements OnInit {
     protected route: ActivatedRoute,
     protected eventService: EventService,
     protected langService: LanguageService,
-    protected translateService: TranslateService
+    protected translateService: TranslateService,
+    private globalStorageService: GlobalStorageService
   ) {
     langService.langEmitter.subscribe(lang => translateService.use(lang));
   }
@@ -60,6 +62,7 @@ export class SettingsPageComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.translateService.use(this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE));
     this.route.data.subscribe(data => {
       this.room = data.room;
       this.isLoading = false;
