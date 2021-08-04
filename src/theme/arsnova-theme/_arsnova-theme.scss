@@ -1,7 +1,7 @@
-@import '~@angular/material/theming';
+@use '~@angular/material' as mat;
 
-$arsnova-primary: mat-palette($mat-deep-purple, 600);
-$arsnova-accent: mat-palette($mat-green, 800);
-$arsnova-warn: mat-palette($mat-red, 600);
+$arsnova-primary: mat.define-palette(mat.$deep-purple-palette, 600);
+$arsnova-accent: mat.define-palette(mat.$green-palette, 800);
+$arsnova-warn: mat.define-palette(mat.$red-palette, 600);
 
-$arsnova-theme: mat-light-theme($arsnova-primary, $arsnova-accent, $arsnova-warn);
+$arsnova-theme: mat.define-light-theme($arsnova-primary, $arsnova-accent, $arsnova-warn);
