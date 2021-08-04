@@ -1,5 +1,6 @@
-import { ChangeDetectorRef, Component, EventEmitter, HostListener, Input, Output } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, Inject, Input, Output } from '@angular/core';
 import { CdkStepper } from '@angular/cdk/stepper';
+import { DOCUMENT } from '@angular/common';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { KeyboardKey } from '../../../utils/keyboard/keys';
 import { KeyboardUtils } from '../../../utils/keyboard';
@@ -46,11 +47,13 @@ export class StepperComponent extends CdkStepper {
   swipeXLocation?: number;
   swipeTime?: number;
 
-  constructor(private dir: Directionality,
-              private changeDetectorRef: ChangeDetectorRef,
-              private announceService: AnnounceService,
-              private eventService: EventService) {
-    super(dir, changeDetectorRef);
+  constructor(private announceService: AnnounceService,
+              private eventService: EventService,
+              dir: Directionality,
+              changeDetectorRef: ChangeDetectorRef,
+              elementRef: ElementRef<HTMLElement>,
+              @Inject(DOCUMENT) doc: any) {
+    super(dir, changeDetectorRef, elementRef, doc);
   }
 
   @HostListener('window:keyup', ['$event'])

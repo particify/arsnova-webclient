@@ -11,7 +11,6 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "aot": true,
             "outputPath": "dist",
             "index": "src/index.html",
             "main": "src/main.ts",
@@ -26,7 +25,13 @@
               "src/fonts.scss",
               "src/styles.scss"
             ],
-            "scripts": []
+            "scripts": [],
+            "vendorChunk": true,
+            "extractLicenses": false,
+            "buildOptimizer": false,
+            "sourceMap": true,
+            "optimization": false,
+            "namedChunks": true
           },
           "configurations": {
             "production": {
@@ -40,7 +45,6 @@
               "outputHashing": "all",
               "sourceMap": false,
               "namedChunks": false,
-              "aot": true,
               "extractLicenses": true,
               "vendorChunk": false,
               "buildOptimizer": true,
@@ -53,7 +57,8 @@
               "serviceWorker": true,
               "ngswConfigPath": "ngsw-config.json"
             }
-          }
+          },
+          "defaultConfiguration": ""
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
