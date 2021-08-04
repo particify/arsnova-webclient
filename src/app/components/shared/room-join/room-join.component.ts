@@ -65,11 +65,6 @@ export class RoomJoinComponent implements OnInit, OnDestroy {
       this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
       return;
     }
-    if (this.roomCodeFormControl.hasError('pattern')) {
-      const msg = this.translateService.instant('home-page.only-numbers');
-      this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
-      return;
-    }
 
     this.navigate(shortId);
   }
@@ -90,6 +85,10 @@ export class RoomJoinComponent implements OnInit, OnDestroy {
     const del = event.inputType === 'deleteContentForward';
     const spaceOffset = (ins && inputField.selectionStart === 5)
         || (del && inputField.selectionStart === 4) ? 1 : 0;
+    if (!rawShortId.match(/^[0-9\s]*$/)) {
+      const msg = this.translateService.instant('home-page.only-numbers');
+      this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
+    }
     const shortId = rawShortId
         .replace(/[^0-9]/g, '')
         .replace(/^([0-9]{4})([0-9]{1,4}).*$/, '$1' + NAMED_ENTITIES['thinsp'] + '$2');

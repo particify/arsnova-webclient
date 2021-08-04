@@ -5,7 +5,7 @@
         <mat-label>{{ 'home-page.room-id' | translate }}</mat-label>
         <input id="room-id-input" matInput #roomCode (focus)="eventService.makeFocusOnInputTrue()"
                (blur)="eventService.makeFocusOnInputFalse()"
-               type="text" pattern="[0-9\s]*" inputmode="numeric"
+               type="text" inputmode="numeric"
                (beforeinput)="enforceLengthLimit($event)"
                (input)="handleInput($event)" [formControl]="roomCodeFormControl"
                [errorStateMatcher]="matcher" aria-labelledby="join-input-label" autocomplete="off"

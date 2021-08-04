@@ -139,10 +139,8 @@ describe('RoomJoinComponent', () => {
   });
 
   it('should be display warning notification if the entered input not only contains numbers', async () => {
-    await inputField.setValue('ABCDEFGH');
-    await joinButton.click();
+    await inputField.setValue('A');
     expect(notificationService.showAdvanced).toHaveBeenCalledWith('home-page.only-numbers', 'WARNING');
-    expect(router.navigate).not.toHaveBeenCalled();
   });
 
   it('should be route to room view if entered a 8 digit room number', async () => {
