@@ -54,8 +54,7 @@ export class PublishedContentsState {
 export enum FEATURES {
   COMMENTS = 'comments',
   GROUP = 'group',
-  SURVEY = 'survey',
-  MODERATION = 'moderation'
+  SURVEY = 'survey'
 }
 
 @Component({
@@ -71,8 +70,7 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
   features: BarItem[] = [
     new BarItem(FEATURES.COMMENTS, 'question_answer'),
     new BarItem(FEATURES.GROUP, 'equalizer'),
-    new BarItem(FEATURES.SURVEY, 'thumbs_up_down'),
-    new BarItem(FEATURES.MODERATION, 'gavel')
+    new BarItem(FEATURES.SURVEY, 'thumbs_up_down')
   ];
   currentRouteIndex: number;
   isActive = true;
@@ -211,16 +209,10 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
     this.barItems = [];
     const changeIndicator: ChangeIndicator[] = [];
     for (const feature of this.features) {
-      let url = this.getBaseUrl();
-      if (feature.name !== FEATURES.MODERATION) {
-        url += this.getFeatureUrl(feature.name);
-      } else {
-        url += 'comments/moderation';
-      }
+      let url = this.getBaseUrl() + this.getFeatureUrl(feature.name);
       const featureIndex = this.activeFeatures.indexOf(feature.name);
       if ((featureIndex > -1 || (feature.name === FEATURES.SURVEY && this.role === UserRole.CREATOR))
-          && this.role !== UserRole.EXECUTIVE_MODERATOR || (this.role === UserRole.EXECUTIVE_MODERATOR
-          && (feature.name === FEATURES.MODERATION || feature.name === FEATURES.COMMENTS))) {
+          && this.role !== UserRole.EXECUTIVE_MODERATOR) {
         this.barItems.push(
           new NavBarItem(
             feature.name,

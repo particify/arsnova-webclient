@@ -1,4 +1,4 @@
-import { AfterContentInit, Component, HostListener, OnDestroy, OnInit } from '@angular/core';
+import { AfterContentInit, Component, HostListener, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { NotificationService } from '../../../services/util/notification.service';
 import { AuthenticationService } from '../../../services/http/authentication.service';
@@ -6,26 +6,20 @@ import { EventService } from '../../../services/util/event.service';
 import { KeyboardUtils } from '../../../utils/keyboard';
 import { KeyboardKey } from '../../../utils/keyboard/keys';
 import { AnnounceService } from '../../../services/util/announce.service';
-import { Comment } from '../../../models/comment';
-import { CommentService } from '../../../services/http/comment.service';
-import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-moderator-comment-page',
   templateUrl: './moderator-comment-page.component.html',
   styleUrls: ['./moderator-comment-page.component.scss']
 })
-export class ModeratorCommentPageComponent implements OnInit, OnDestroy, AfterContentInit {
-
-  comments$: Observable<Comment[]>;
+export class ModeratorCommentPageComponent implements OnDestroy, AfterContentInit {
 
   constructor(
     private route: ActivatedRoute,
     private notification: NotificationService,
     private authenticationService: AuthenticationService,
     public eventService: EventService,
-    private announceService: AnnounceService,
-    private commentService: CommentService
+    private announceService: AnnounceService
   ) {
   }
 
@@ -45,12 +39,6 @@ export class ModeratorCommentPageComponent implements OnInit, OnDestroy, AfterCo
     } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Escape) === true && focusOnInput === true) {
       document.getElementById('live-announcer-button').focus();
     }
-  }
-
-  ngOnInit(): void {
-    this.route.data.subscribe(data => {
-      this.comments$ = this.commentService.getRejectedComments(data.room.id);
-    });
   }
 
   ngAfterContentInit(): void {

@@ -47,8 +47,9 @@ import { StatisticWordcloudComponent } from './statistic-content/statistic-wordc
 import { WordcloudComponent } from './wordcloud/wordcloud.component';
 import { CommentAnswerComponent } from './_dialogs/comment-answer/comment-answer.component';
 import { StatisticScaleComponent } from './statistic-content/statistic-scale/statistic-scale.component';
-import { SplitShortId } from '@arsnova/app/pipes/split-short-id';
+import { SplitShortId } from '../../pipes/split-short-id';
 import { ListBadgeComponent } from './list-badge/list-badge.component';
+import { CounterBraces } from '../../pipes/counter-braces';
 
 @NgModule({
   imports: [
@@ -104,7 +105,8 @@ import { ListBadgeComponent } from './list-badge/list-badge.component';
     WordcloudComponent,
     CommentAnswerComponent,
     SplitShortId,
-    ListBadgeComponent
+    ListBadgeComponent,
+    CounterBraces
   ],
   exports: [
     RoomJoinComponent,
