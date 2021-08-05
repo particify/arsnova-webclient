@@ -19,14 +19,6 @@
     <div fxLayout="column">
       <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="16px">
         <div>
-          <p class="slide-toggle-header">{{ 'settings.comment-moderation' | translate}}</p>
-          <p class="slide-toggle-description">{{ 'settings.comment-moderation-info' | translate}}</p>
-        </div>
-        <mat-slide-toggle [(ngModel)]="enableModeration" (change)="updateCommentSettings()"
-                          aria-labelledby="settings-comment-moderation"></mat-slide-toggle>
-      </div>
-      <div *ngIf="enableModeration" fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="16px">
-        <div>
           <p class="slide-toggle-header">{{ 'settings.direct-send' | translate }}</p>
           <p class="slide-toggle-description">{{ 'settings.direct-send-info' | translate }}</p>
         </div>
@@ -60,7 +52,6 @@
 
 <div class="visually-hidden">
   <div id="threshold">{{'settings.a11y-threshold' | translate}} </div>
-  <div id="settings-comment-moderation">{{'settings.a11y-comment-moderation' | translate}} </div>
   <div id="settings-direct-send">{{'settings.a11y-direct-send' | translate}} </div>
   <div id="category">{{ 'settings.a11y-enter-tag' | translate }}</div>
 </div>

@@ -220,19 +220,12 @@ export class CommentListComponent implements OnInit, OnDestroy {
   }
 
   initRoom(reload = false) {
-    if (this.room && this.room.extensions && this.room.extensions.comments) {
-      if (this.room.extensions.comments['enableModeration'] !== null) {
-        this.moderationEnabled = this.room.extensions.comments['enableModeration'];
-        this.globalStorageService.setItem(STORAGE_KEYS.MODERATION_ENABLED,
-          this.room.extensions.comments['enableModeration']);
-      }
-      this.commentSettingsService.get(this.roomId).subscribe(commentSettings => {
-        this.directSend = commentSettings.directSend;
-      });
-      this.getComments();
-      if (reload && this.search) {
-        this.searchComments();
-      }
+    this.commentSettingsService.get(this.roomId).subscribe(commentSettings => {
+      this.directSend = commentSettings.directSend;
+    });
+    this.getComments();
+    if (reload && this.search) {
+      this.searchComments();
     }
     if (!this.isArchive && !reload) {
       this.subscribeCommentStream();

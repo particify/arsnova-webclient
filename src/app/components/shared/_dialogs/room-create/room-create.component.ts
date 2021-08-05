@@ -90,8 +90,6 @@ export class RoomCreateComponent implements OnInit {
       return;
     }
     const newRoom = new Room();
-    const commentExtension: { enableModeration: boolean } = { enableModeration: true };
-    newRoom.extensions = { comments: commentExtension };
     newRoom.name = longRoomName;
     newRoom.abbreviation = '00000000';
     newRoom.description = '';

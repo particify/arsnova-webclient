@@ -18,7 +18,6 @@ export const STORAGE_KEYS: { [key: string]: symbol } = {
   ROOM_ID: Symbol(),
   SHORT_ID: Symbol(),
   DEVICE_TYPE: Symbol(),
-  MODERATION_ENABLED: Symbol(),
   CONTENT_GROUPS: Symbol(),
   LAST_GROUP: Symbol(),
   LAST_INDEX: Symbol(),
@@ -69,12 +68,6 @@ export const STORAGE_CONFIG: StorageItem[] = [
   {
     key: STORAGE_KEYS.DEVICE_TYPE,
     name: 'DEVICE_TYPE',
-    category: StorageItemCategory.REQUIRED,
-    backend: StorageBackend.MEMORY
-  },
-  {
-    key: STORAGE_KEYS.MODERATION_ENABLED,
-    name: 'MODERATION_ENABLED',
     category: StorageItemCategory.REQUIRED,
     backend: StorageBackend.MEMORY
   },

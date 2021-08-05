@@ -434,7 +434,6 @@
     "tag-added": "Die Kategorie wurde hinzugefügt.",
     "tag-removed": "Die Kategorie wurde entfernt.",
     "no-users": "Es wurden noch keine moderierenden Personen hinzugefügt.",
-    "comment-moderation": "Beiträge moderieren",
     "direct-send": "Beiträge sofort veröffentlichen",
     "tag-error": "Diese Kategorie existiert bereits.",
     "tags": "Kategorien",
@@ -465,8 +464,7 @@
     "changes-successful": "Deine Änderungen wurden gespeichert.",
     "comments": "Q&A",
     "threshold-info": "Wird ein Schwellenwert gesetzt, werden nur Beiträge angezeigt, welche eine höhere Bewertung erhalten haben.",
-    "direct-send-info": "Wenn diese Einstellung deaktiviert ist, muss eine moderierende Person bzw. die vortragende Person neue Beiträge erst freischalten bevor diese öffentlich sichtbar werden.",
-    "comment-moderation-info": "Es gibt eine Moderationsliste zur Überprüfung von neuen Beiträgen. Auch können Beiträge im Nachhinein in diese Liste verschoben werden."
+    "direct-send-info": "Wenn diese Einstellung deaktiviert ist, muss eine moderierende Person bzw. die vortragende Person neue Beiträge erst freischalten bevor diese öffentlich sichtbar werden."
   },
   "room": {
     "room-name": "Name des Raums",

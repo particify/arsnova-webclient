@@ -35,7 +35,6 @@ export class RoomPageComponent implements OnDestroy {
   isLoading = true;
   errorOnLoading = false;
   commentCounter: number;
-  protected moderationEnabled = false;
   protected sub: Subscription;
   protected roomSub: Subscription;
   protected roomWatch: Observable<IMessage>;
@@ -151,13 +150,6 @@ export class RoomPageComponent implements OnDestroy {
     this.onChangeSubscription = this.eventService.on<DataChanged<RoomStats>>(changeEventType)
         .subscribe(() => this.initializeStats(viewRole));
     this.initializeStats(viewRole);
-    if (this.room.extensions && this.room.extensions.comments) {
-      if (this.room.extensions.comments['enableModeration'] !== null) {
-        this.moderationEnabled = this.room.extensions.comments['enableModeration'];
-        // ToDo: make room data cache that's available for components that manages data flow and put that there
-      }
-    }
-    this.globalStorageService.setItem(STORAGE_KEYS.MODERATION_ENABLED, String(this.moderationEnabled));
     this.afterRoomLoadHook();
     this.globalStorageService.setItem(STORAGE_KEYS.SHORT_ID, room.shortId);
     this.role = role === viewRole ? UserRole.NONE : role;

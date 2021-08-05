@@ -20,7 +20,6 @@ import { COMMA, ENTER } from '@angular/cdk/keycodes';
 export class CommentExtensions {
   enableThreshold: boolean;
   commentThreshold: number;
-  enableModeration: boolean;
   enableTags: boolean;
   tags: string[];
 }
@@ -40,7 +39,6 @@ export class CommentSettingsComponent implements OnInit {
   commentExtension: any;
   threshold: number;
   enableThreshold = false;
-  enableModeration = false;
   directSend = true;
   directSendDefault = true;
   enableTags = false;
@@ -76,10 +74,6 @@ export class CommentSettingsComponent implements OnInit {
       }
 
       this.initTags();
-
-      if (this.commentExtension.enableModeration !== null) {
-        this.enableModeration = this.commentExtension.enableModeration;
-      }
     }
     this.commentSettingsService.get(this.roomId).subscribe(settings => {
       this.directSend = settings.directSend;
@@ -141,7 +135,6 @@ export class CommentSettingsComponent implements OnInit {
     let commentExtension: CommentExtensions = new CommentExtensions();
     commentExtension.enableThreshold = this.enableThreshold;
     commentExtension.commentThreshold = this.threshold;
-    commentExtension.enableModeration = this.enableModeration;
     commentExtension.enableTags = this.enableTags;
     commentExtension.tags = this.tags;
     if (!this.room.extensions) {
@@ -149,7 +142,6 @@ export class CommentSettingsComponent implements OnInit {
     } else {
       this.room.extensions.comments = commentExtension;
     }
-    this.globalStorageService.setItem(STORAGE_KEYS.MODERATION_ENABLED, String(this.enableModeration));
     this.saveChanges();
   }
 
