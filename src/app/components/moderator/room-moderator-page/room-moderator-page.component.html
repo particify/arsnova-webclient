@@ -37,19 +37,7 @@
                 {{ 'room-page.comments' | translate}}</p>
             </button>
           </div>
-          <div class="action-button-item" fxLayoutAlign="center center">
-            <button id="moderation-button" mat-icon-button aria-labelledby="moderation"
-                    class="main-button"  [disableRipple]="true"
-                    routerLink="/moderator/room/{{ room.shortId }}/comments/moderation">
-              <mat-icon matBadge="{{moderatorCommentCounter}}" class="main-icon">
-                gavel
-              </mat-icon>
-              <h3 class="button-text">{{ 'room-page.moderating-stream' | translate}}</h3>
-            </button>
-          </div>
         </div>
-        <p tabindex="-1" id="moderation-disabled" class="visually-hidden">
-          {{ 'room-page.a11y-moderation-disabled' | translate }}</p>
       </div>
     </mat-card>
 
@@ -58,6 +46,5 @@
 
 <div class="visually-hidden">
   <div id="comments">{{'room-page.a11y-comments' | translate}}</div>
-  <div id="moderation">{{'room-page.a11y-moderation' | translate}}</div>
   <div id="switch-role">{{'room-page.a11y-switch-role' | translate}}</div>
 </div>

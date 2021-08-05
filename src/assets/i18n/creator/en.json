@@ -359,7 +359,6 @@
     "created-2": "” successfully created."
   },
   "room-page": {
-    "a11y-moderation": "Opens the moderator board",
     "a11y-comments": "Opens the Q&A list.",
     "a11y-settings": "Navigates to the settings where you can manage the room and its posts and add moderators or categories.",
     "a11y-shortcuts": "To access the Q&A list press key 1, to access the live feedback key 2, to create a new question series key 3, to navigate through your question series key 4, to go into presentation mode key 5, to view more options for the room key 6, to announce the current user count key 7, to access the user menu key 9, to access the back button key 0 or the escape key to repeat this announcement. ",
@@ -371,8 +370,7 @@
     "a11y-no-content-groups": "There are no question series in this room yet. Press key 2 to create a new question series.",
     "a11y-enter-content-group": "Opens the question series {{name}}. This question series is {{locked}}.",
     "a11y-moderator-message": "You are now in the room {{room}}, which you are moderating. To get information about key combinations, press the Enter key now or call the announcement later with the Escape key.",
-    "a11y-moderator-shortcuts": "To access the Q&A list press the key 1, to access the moderation overview the key 2, to access the user menu the key 9, to access the back button the key 0 or the escape key to repeat this announcement",
-    "a11y-moderation-disabled": "This room is currently not moderated.",
+    "a11y-moderator-shortcuts": "To access the Q&A list press the key 1, to access the user menu the key 9, to access the back button the key 0 or the escape key to repeat this announcement",
     "a11y-share": "Opens a dialog box that displays the room link and a QR code. Also you can copy the room adress.",
     "a11y-switch-role": "Switch role to see participants view.",
     "a11y-more-options": "Shows more options for this room in a menu.",
@@ -384,7 +382,6 @@
     "content-group-created": "Your question series has been created.",
     "live-survey": "Live Feedback",
     "comments": "Q&A",
-    "moderating-stream": "Moderation",
     "present": "Present",
     "public-stream": "Q&A",
     "room-loading-error": "The room could not be loaded",

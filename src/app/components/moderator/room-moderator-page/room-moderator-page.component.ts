@@ -77,13 +77,6 @@ export class RoomModeratorPageComponent extends RoomPageComponent implements OnI
     this.translateService.use(this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE));
   }
 
-
-  protected unsubscribe() {
-    if (this.moderationSub) {
-      this.moderationSub.unsubscribe();
-    }
-  }
-
   public announce() {
     this.announceService.announce('room-page.a11y-moderator-shortcuts');
   }
@@ -97,7 +90,6 @@ export class RoomModeratorPageComponent extends RoomPageComponent implements OnI
       this.isLoading = false;
     });
     this.subscribeCommentStream();
-    this.subscribeCommentModeratorStream();
     this.role = role === viewRole ? UserRole.NONE : role;
     this.getRoleIcon();
   }
