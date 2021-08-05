@@ -1,6 +1,6 @@
 <div *ngIf="currentRouteIndex > -1" class="info-container" fxLayout="row" fxLayoutGap="1em">
   <div fxLayoutAlign="center">
-    <p class="code">{{ joinUrl || '#' + shortId }}</p>
+    <p class="code">{{ joinUrl || (shortId | splitShortId) }}</p>
   </div>
 </div>
 <app-bar-notification *ngIf="!isLoading && isActiveFeature('group')" [message]="notificationMessage"  [icon]="notificationIcon" [expanded]="barVisible" [hidden]="isCurrentContentPublished"></app-bar-notification>
