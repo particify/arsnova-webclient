@@ -482,6 +482,7 @@ export class GroupContentComponent extends ContentListBaseComponent implements O
       if (result === 'delete') {
         this.contentGroupService.delete(this.contentGroup).subscribe(() => {
           this.location.back();
+          this.globalStorageService.removeItem(STORAGE_KEYS.LAST_GROUP);
           this.translateService.get('content.content-group-deleted').subscribe(msg => {
             this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
           });
