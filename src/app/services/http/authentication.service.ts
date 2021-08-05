@@ -13,6 +13,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { AdvancedSnackBarTypes, NotificationService } from '../util/notification.service';
 import { ApiConfigService } from './api-config.service';
 import { RoutingService } from '../util/routing.service';
+import { environment } from '../../../environments/environment';
 
 export const AUTH_HEADER_KEY = 'Authorization';
 export const AUTH_SCHEME = 'Bearer';
@@ -72,9 +73,12 @@ export class AuthenticationService extends AbstractHttpService<ClientAuthenticat
       this.refreshLogin().subscribe();
     }
 
-    this.getAuthenticationChanges().subscribe(auth => {
-      console.log('Authentication changed', auth);
-    });
+    if (!environment.production) {
+      this.getAuthenticationChanges().subscribe(auth => {
+        console.log('Authentication changed', auth);
+      });
+    }
+
     this.apiConfigService.getApiConfig$().subscribe(config => {
       const popupDimensions = /^([0-9]+)x([0-9]+)$/.exec(config.ui.sso?.popup?.dimensions || '');
       if (popupDimensions) {
