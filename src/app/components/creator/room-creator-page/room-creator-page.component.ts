@@ -102,19 +102,12 @@ export class RoomCreatorPageComponent extends RoomPageComponent implements OnIni
     this.roomSub = this.roomWatch.subscribe(msg => this.parseUserCount(msg.body));
   }
 
-  protected unsubscribe() {
-    if (this.moderationSub) {
-      this.moderationSub.unsubscribe();
-    }
-  }
-
   announce() {
     this.announceService.announce('room-page.a11y-shortcuts');
   }
 
   afterRoomLoadHook() {
     this.subscribeCommentStream();
-    this.subscribeCommentModeratorStream();
   }
 
   afterGroupsLoadHook() {

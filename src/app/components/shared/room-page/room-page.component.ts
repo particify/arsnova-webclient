@@ -40,9 +40,6 @@ export class RoomPageComponent implements OnDestroy {
   protected roomWatch: Observable<IMessage>;
   protected commentWatch: Observable<IMessage>;
   protected attachmentData: any;
-  moderationCommentWatch: Observable<IMessage>;
-  moderationSub: Subscription;
-  moderatorCommentCounter: number;
   infoBarItems: InfoBarItem[] = [];
   role: UserRole;
   roleIconString;
@@ -112,9 +109,7 @@ export class RoomPageComponent implements OnDestroy {
             switch (key) {
               case 'ack':
                 const isNowAck = <boolean>value;
-                if (isNowAck) {
-                  this.moderatorCommentCounter = this.moderatorCommentCounter - 1;
-                } else {
+                if (!isNowAck) {
                   this.commentCounter = this.commentCounter - 1;
                 }
                 break;
@@ -122,25 +117,6 @@ export class RoomPageComponent implements OnDestroy {
           }
         }
       });
-    });
-  }
-
-  subscribeCommentModeratorStream() {
-    this.commentService.countByRoomId(this.room.id, false).subscribe(commentCounter => {
-      this.moderatorCommentCounter = commentCounter;
-    });
-    this.moderationCommentWatch = this.wsCommentService.getModeratorCommentStream(this.room.id);
-    if (this.moderationSub) {
-      this.moderationSub.unsubscribe();
-    }
-    this.moderationSub = this.moderationCommentWatch.subscribe((message: Message) => {
-      const msg = JSON.parse(message.body);
-      const payload = msg.payload;
-      if (msg.type === 'CommentCreated') {
-        this.moderatorCommentCounter = this.moderatorCommentCounter + 1;
-      } else if (msg.type === 'CommentDeleted') {
-        this.moderatorCommentCounter = this.moderatorCommentCounter - 1;
-      }
     });
   }
 

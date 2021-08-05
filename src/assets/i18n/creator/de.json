@@ -359,7 +359,6 @@
     "created-2": "“ erfolgreich erstellt."
   },
   "room-page": {
-    "a11y-moderation": "Öffnet das Moderations-Board.",
     "a11y-comments": "Öffnet die Q&A-Seite.",
     "a11y-settings": "Navigiert zu den Einstellungen in welchen du den Raum und dessen Beiträge verwalten und moderierende Personen oder Kategorien hinzufügen kannst.",
     "a11y-shortcuts": "Um auf die Q&A-Seite zu gelangen drücke die Taste 1, um zum Live Feedback zu gelangen die Taste 2, um eine neue Fragenserie zu erstellen die Taste 3, um durch deine Fragenserien zu navigieren die Taste 4, um in den Präsentationsmodus zu wechseln die Taste 5, um weitere Optionen für den Raum anzuzeigen die Taste 6, um die Anzahl der aktuellen Nutzer anzusagen die Taste 7, um auf das Nutzer-Menü zu gelangen die Taste 9, um auf den Zurück-Button zu gelangen die Taste 0 oder die Escape-Taste, um diese Ansage zu wiederholen.",
@@ -371,8 +370,7 @@
     "a11y-no-content-groups": "In diesem Raum sind noch keine Fragenserien vorhanden. Drücke die Taste 2, um eine neue Fragenserie zu erstellen.",
     "a11y-enter-content-group": "Öffnet die Fragenserie {{name}}. Diese Fragenserie ist {{locked}}.",
     "a11y-moderator-message": "Du befindest dich jetzt in dem Raum {{room}} welchen du moderierst. Um Informationen zu Tastenkombinationen zu erhalten, drücke jetzt die Enter-Taste oder rufe die Ansage zu einem späteren Zeitpunkt mit der Escape-Taste auf.",
-    "a11y-moderator-shortcuts": "Um auf die Q&A-Seite zu gelangen drücke die Taste 1, um in die Moderationsübersicht zu gelangen die Taste 2, um auf das Nutzer-Menü zu gelangen die Taste 9, um auf den Zurück-Button zu gelangen die Taste 0 oder die Escape-Taste, um diese Ansage zu wiederholen.",
-    "a11y-moderation-disabled": "Dieser Raum wird zurzeit nicht moderiert.",
+    "a11y-moderator-shortcuts": "Um auf die Q&A-Seite zu gelangen drücke die Taste 1, um auf das Nutzer-Menü zu gelangen die Taste 9, um auf den Zurück-Button zu gelangen die Taste 0 oder die Escape-Taste, um diese Ansage zu wiederholen.",
     "a11y-share": "Öffnet ein Dialogfenster welches den Link zu diesem Raum und einen QR-Code anzeigt. Außerdem kannst du die Adresse des Raums kopieren",
     "a11y-switch-role": "Wechsel die Rolle um die Ansicht der Teilnehmer zu sehen.",
     "a11y-more-options": "Zeigt mehr Optionen für diesen Raum in einem Menü.",
@@ -384,7 +382,6 @@
     "content-group-created": "Deine Fragenserie wurde erstellt.",
     "live-survey": "Live Feedback",
     "comments": "Q&A",
-    "moderating-stream": "Moderation",
     "present": "Präsentieren",
     "public-stream": "Q&A",
     "room-loading-error": "Der Raum konnte nicht geladen werden",
