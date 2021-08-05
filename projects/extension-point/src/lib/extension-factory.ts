@@ -1,4 +1,5 @@
 import { ComponentFactoryResolver, Inject, Injectable, Optional, ViewContainerRef, ComponentRef, EventEmitter } from '@angular/core';
+import { environment } from '../../../../src/environments/environment';
 import { Extension } from './extension';
 
 @Injectable()
@@ -8,7 +9,9 @@ export class ExtensionFactory {
   constructor(@Inject(Extension) @Optional() extensions: Extension[], private resolver: ComponentFactoryResolver) {
     if (extensions) {
       extensions.forEach(e => {
-        console.log(`Extension registered: ${e.getId()}`);
+        if (!environment.production) {
+          console.log(`Extension registered: ${e.getId()}`);
+        }
         this.extensions[e.getId()] = e;
       });
     }
@@ -21,7 +24,9 @@ export class ExtensionFactory {
   createExtension(id: string, data: object, eventEmitter: EventEmitter<any>, ref: ViewContainerRef): ComponentRef<any> | null {
     const extension = this.getExtension(id);
     if (!extension) {
-      console.log(`No extension found for "${id}".`);
+      if (!environment.production) {
+        console.log(`No extension found for "${id}".`);
+      }
       return;
     }
     ref.clear();

@@ -70,7 +70,6 @@ export class TrackingService {
 
     if (uiConfig.demo instanceof Object) {
       for (const [lang, demoId] of Object.entries<string>(uiConfig.demo)) {
-        console.log('this.specialRooms.set('+demoId+', `Demo ('+lang+')`)')
         this.specialRooms.set(demoId, `Demo (${lang})`);
       }
     }
