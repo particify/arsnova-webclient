@@ -155,7 +155,7 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
             }
             this.getItems();
             this.subscribeToContentGroups();
-            this.updateGroups(stats.groupStats, false);
+            this.updateGroups(stats.groupStats ?? [], false);
           });
         } else {
           // Checking if storage item is initialized with data
@@ -166,7 +166,7 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
           this.getItems();
           this.roomStatsService.getStats(data.room.id, extendedView).subscribe(stats => {
             this.subscribeToContentGroups();
-            this.updateGroups(stats.groupStats, true);
+            this.updateGroups(stats.groupStats ?? [], true);
           });
         }
       })
