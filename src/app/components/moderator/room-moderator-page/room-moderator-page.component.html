@@ -37,7 +37,7 @@
                 {{ 'room-page.comments' | translate}}</p>
             </button>
           </div>
-          <div *ngIf="moderationEnabled" class="action-button-item" fxLayoutAlign="center center">
+          <div class="action-button-item" fxLayoutAlign="center center">
             <button id="moderation-button" mat-icon-button aria-labelledby="moderation"
                     class="main-button"  [disableRipple]="true"
                     routerLink="/moderator/room/{{ room.shortId }}/comments/moderation">

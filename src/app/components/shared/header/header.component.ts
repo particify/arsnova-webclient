@@ -26,7 +26,6 @@ import { ConsentService } from '../../../services/util/consent.service';
 export class HeaderComponent implements OnInit {
   auth: ClientAuthentication;
   deviceType: string;
-  moderationEnabled: boolean;
   isGuest = true;
   isAdmin = false;
 
@@ -85,7 +84,6 @@ export class HeaderComponent implements OnInit {
       this.isAdmin = !!auth && this.authenticationService.hasAdminRole(auth);
     });
 
-    this.moderationEnabled = !!this.globalStorageService.getItem(STORAGE_KEYS.MODERATION_ENABLED);
     this.themeService.getTheme().subscribe(theme => {
       this.themeClass = theme;
     });

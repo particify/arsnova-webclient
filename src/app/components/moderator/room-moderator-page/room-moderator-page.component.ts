@@ -30,7 +30,6 @@ import { RoomStats } from '../../../models/room-stats';
 export class RoomModeratorPageComponent extends RoomPageComponent implements OnInit, AfterContentInit {
 
   room: Room;
-  viewModuleCount = 1;
 
   constructor(
     protected location: Location,
@@ -58,17 +57,7 @@ export class RoomModeratorPageComponent extends RoomPageComponent implements OnI
   keyEvent(event: KeyboardEvent) {
     const focusOnInput = this.eventService.focusOnInput;
     if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit1) === true && focusOnInput === false) {
-      if (this.moderationEnabled) {
-        document.getElementById('comments-button').focus();
-      } else {
-        document.getElementById('comments-button2').focus();
-      }
-    } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit3) === true && focusOnInput === false) {
-      if (this.moderationEnabled) {
-        document.getElementById('moderation-button').focus();
-      } else {
-        document.getElementById('moderation-disabled').focus();
-      }
+      document.getElementById('comments-button').focus();
     } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Escape) === true && focusOnInput === false) {
       this.announce();
     }
@@ -103,20 +92,12 @@ export class RoomModeratorPageComponent extends RoomPageComponent implements OnI
     this.room = room;
     this.onChangeSubscription = this.eventService.on<DataChanged<RoomStats>>('ModeratorDataChanged')
       .subscribe(() => this.initializeStats(viewRole));
-    if (this.room.extensions && this.room.extensions.comments) {
-      if (this.room.extensions.comments['enableModeration'] !== null) {
-        this.moderationEnabled = this.room.extensions.comments['enableModeration'];
-        this.viewModuleCount = this.viewModuleCount + 1;
-      }
-    }
     this.roomService.getRoomSummaries([room.id]).subscribe(summary => {
       this.infoBarItems.push(new InfoBarItem('user-counter', 'people', summary[0].stats.roomUserCount));
       this.isLoading = false;
     });
     this.subscribeCommentStream();
-    if (this.moderationEnabled) {
-      this.subscribeCommentModeratorStream();
-    }
+    this.subscribeCommentModeratorStream();
     this.role = role === viewRole ? UserRole.NONE : role;
     this.getRoleIcon();
   }

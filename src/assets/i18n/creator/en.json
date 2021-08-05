@@ -410,7 +410,6 @@
     "a11y-delete-room": "Deletes your room",
     "a11y-moderator-username": "Enter the username or email of the user you want to add as a moderator",
     "a11y-room-name": "Give the room a new name here.",
-    "a11y-comment-moderation": "Slider to moderate posts",
     "a11y-direct-send": "Slider to send posts directly to participant",
     "a11y-threshold": "Slider for setting the threshold for visible posts",
     "a11y-room-description": "Enter a description for the room",
@@ -434,7 +433,6 @@
     "tag-added": "Category has been added.",
     "tag-removed": "Category has been removed.",
     "no-users": "No users yet",
-    "comment-moderation": "Moderate posts",
     "direct-send": "Posts visible immediately",
     "tag-error": "This category does already exists.",
     "tags": "Categories",
@@ -465,8 +463,7 @@
     "changes-successful": "Your changes have been saved.",
     "comments": "Q&A",
     "threshold-info": "If a threshold value is set, only posts that have received a higher rating are displayed.",
-    "direct-send-info": "If this setting is deactivated, a moderator or the lecturer must activate new posts before they become publicly visible.",
-    "comment-moderation-info": "There is a moderation list for checking new posts. Also, posts can be moved to this list afterwards."
+    "direct-send-info": "If this setting is deactivated, a moderator or the lecturer must activate new posts before they become publicly visible."
   },
   "room": {
     "room-name": "Room name",

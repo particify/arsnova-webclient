@@ -30,7 +30,6 @@ import { RoomStatsService } from '../../../services/http/room-stats.service';
 })
 export class RoomCreatorPageComponent extends RoomPageComponent implements OnInit, AfterContentInit {
 
-  viewModuleCount = 1;
   looseContent: Content[] = [];
   userCount: number;
   target: Window;
@@ -115,10 +114,7 @@ export class RoomCreatorPageComponent extends RoomPageComponent implements OnIni
 
   afterRoomLoadHook() {
     this.subscribeCommentStream();
-    if (this.moderationEnabled) {
-      this.viewModuleCount = this.viewModuleCount + 1;
-      this.subscribeCommentModeratorStream();
-    }
+    this.subscribeCommentModeratorStream();
   }
 
   afterGroupsLoadHook() {
