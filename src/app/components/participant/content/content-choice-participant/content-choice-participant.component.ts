@@ -92,7 +92,9 @@ export class ContentChoiceParticipantComponent extends ContentParticipantBaseCom
   getCorrectAnswerOptions() {
     if (this.correctOptionsPublished) {
       this.contentService.getCorrectChoiceIndexes(this.content.roomId, this.content.id).subscribe(correctOptions => {
-        this.correctOptionIndexes = correctOptions;
+        this.correctOptionIndexes = correctOptions.sort((a, b) => {
+          return a < b ? -1 : 1;
+        });
         (this.content as ContentChoice).correctOptionIndexes = this.correctOptionIndexes;
         this.getCorrectAnswer();
         if (this.isChoice) {
