@@ -102,7 +102,6 @@ export class CommentListComponent implements OnInit, OnDestroy {
   searchInput = '';
   search = false;
   searchPlaceholder = '';
-  moderationEnabled = false;
   directSend = true;
   thresholdEnabled = false;
   newestComment: Comment = new Comment();
