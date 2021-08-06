@@ -41,9 +41,9 @@
   </ng-container>
 
   <ng-container matColumnDef="percentage">
-    <mat-header-cell *matHeaderCellDef> {{'statistic.percentage' | translate }} </mat-header-cell>
+    <mat-header-cell *matHeaderCellDef> {{'statistic.correct' | translate }} </mat-header-cell>
     <mat-cell *matCellDef="let cp" (click)="goToStats(cp.content.id)">
-      {{cp.type === types.CHOICE ? (cp.percent.toFixed() +' %') : '-' }}
+      {{cp.type === types.CHOICE && cp.percent > -1 ? (cp.percent.toFixed() +' %') : '-' }}
     </mat-cell>
   </ng-container>
 
