@@ -639,14 +639,7 @@ export class CommentListComponent implements OnInit, OnDestroy {
   }
 
   onExport(): void {
-    if (this.isModerator) {
-      this.commentService.getRejectedComments(this.roomId).subscribe(comments => {
-        this.commentService.export(comments, this.room);
-      });
-    }
-    this.commentService.getAckComments(this.roomId).subscribe(comments => {
-      this.commentService.export(comments, this.room);
-    });
+    this.commentService.export(this.comments, this.room);
   }
 
   navToSettings() {
