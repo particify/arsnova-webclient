@@ -65,16 +65,20 @@ export class CommentSettingsComponent implements OnInit {
   }
 
   ngOnInit() {
-    if (this.room.extensions && this.room.extensions.comments) {
-      this.commentExtension = this.room.extensions.comments;
-      if (this.commentExtension.enableThreshold !== null) {
-        this.commentExtension.commentThreshold !== undefined ?
-          this.threshold = this.commentExtension.commentThreshold : this.threshold = -100;
-        this.enableThreshold = this.commentExtension.enableThreshold;
-      }
-
-      this.initTags();
+    if (!this.room.extensions) {
+      this.room.extensions = {};
     }
+    if (!this.room.extensions.comments) {
+      this.room.extensions.comments = {};
+    }
+    this.commentExtension = this.room.extensions.comments;
+    if (this.commentExtension.enableThreshold !== null) {
+      this.commentExtension.commentThreshold !== undefined ?
+        this.threshold = this.commentExtension.commentThreshold : this.threshold = -100;
+      this.enableThreshold = this.commentExtension.enableThreshold;
+    }
+
+    this.initTags();
     this.commentSettingsService.get(this.roomId).subscribe(settings => {
       this.directSend = settings.directSend;
       this.directSendDefault = settings.directSend;
@@ -83,18 +87,12 @@ export class CommentSettingsComponent implements OnInit {
 
   initTags() {
     this.enableTags = this.commentExtension.enableTags;
-    if (this.room.extensions !== undefined && this.room.extensions.tags !== undefined) {
+    if (this.room.extensions.tags) {
       this.tagExtension = this.room.extensions.tags;
-    }
-    if (!this.room.extensions) {
-      this.tagExtension = {};
-      this.tagExtension['enableTags'] = true;
-      this.room.extensions = {};
-      this.room.extensions.tags = this.tagExtension;
+      this.tags = this.room.extensions.tags['tags'] || [];
     } else {
-      if (this.room.extensions.tags) {
-        this.tags = this.room.extensions.tags['tags'] || [];
-      }
+      this.tagExtension = { enableTags: true };
+      this.room.extensions.tags = this.tagExtension;
     }
   }
 
@@ -137,11 +135,7 @@ export class CommentSettingsComponent implements OnInit {
     commentExtension.commentThreshold = this.threshold;
     commentExtension.enableTags = this.enableTags;
     commentExtension.tags = this.tags;
-    if (!this.room.extensions) {
-      this.room.extensions = { comments: commentExtension };
-    } else {
-      this.room.extensions.comments = commentExtension;
-    }
+    this.room.extensions.comments = commentExtension;
     this.saveChanges();
   }
 
