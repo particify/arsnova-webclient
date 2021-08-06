@@ -153,7 +153,7 @@ export class RoomPageComponent implements OnDestroy {
     let extendedView = [UserRole.CREATOR, UserRole.EDITING_MODERATOR, UserRole.EXECUTIVE_MODERATOR].includes(viewRole);
     this.roomStatsService.getStats(this.room.id, extendedView).subscribe(roomStats => {
       this.roomStats = roomStats;
-      if (this.roomStats.groupStats) {
+      if (this.roomStats.groupStats?.length > 0) {
         this.initializeGroups();
       } else {
         this.isLoading = false;
