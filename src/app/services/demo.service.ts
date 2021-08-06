@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { Observable } from 'rxjs';
-import { map, mergeMap } from 'rxjs/operators';
+import { map, mergeMap, tap } from 'rxjs/operators';
 import { Room } from '../models/room';
 import { ApiConfigService } from './http/api-config.service';
 import { RoomService } from './http/room.service';
@@ -15,9 +15,11 @@ export class DemoService {
   ) {}
 
   createDemoRoom(): Observable<Room> {
-    return this.getLocalizedDemoRoomId().pipe(mergeMap(shortId => {
-      return this.roomService.duplicateRoom(`~${shortId}`, true);
-    }));
+    return this.getLocalizedDemoRoomId().pipe(
+        mergeMap(shortId => {
+          return this.roomService.duplicateRoom(`~${shortId}`, true);
+        }),
+        tap(room => this.roomService.generateRandomData(room.id)));
   }
 
   getLocalizedDemoRoomId(): Observable<string> {
