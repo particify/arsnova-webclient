@@ -25,6 +25,7 @@ export class RoomService extends AbstractEntityService<Room> {
 
   serviceApiUrl = {
     duplicate: '/duplicate',
+    generateRandomData: '/generate-random-data',
     transfer: '/transfer',
     v2Import: '/import/v2/room',
     summary: '/_view/room/summary'
@@ -161,6 +162,13 @@ export class RoomService extends AbstractEntityService<Room> {
         + (temporary ? '?temporary=true' : '');
     return this.http.post<Room>(connectionUrl, null).pipe(
       catchError(this.handleError<Room>(`duplicateRoom`))
+    );
+  }
+
+  generateRandomData(roomId: string): Observable<void> {
+    const connectionUrl = this.buildForeignUri(this.serviceApiUrl.generateRandomData, roomId);
+    return this.http.post<void>(connectionUrl, null).pipe(
+      catchError(this.handleError<void>(`generateRandomData`))
     );
   }
 
