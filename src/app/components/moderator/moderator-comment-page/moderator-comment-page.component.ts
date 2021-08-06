@@ -1,4 +1,4 @@
-import { AfterContentInit, Component, HostListener, OnDestroy } from '@angular/core';
+import { AfterContentInit, Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { NotificationService } from '../../../services/util/notification.service';
 import { AuthenticationService } from '../../../services/http/authentication.service';
@@ -6,13 +6,16 @@ import { EventService } from '../../../services/util/event.service';
 import { KeyboardUtils } from '../../../utils/keyboard';
 import { KeyboardKey } from '../../../utils/keyboard/keys';
 import { AnnounceService } from '../../../services/util/announce.service';
+import { ClientAuthentication } from '../../../models/client-authentication';
 
 @Component({
   selector: 'app-moderator-comment-page',
   templateUrl: './moderator-comment-page.component.html',
   styleUrls: ['./moderator-comment-page.component.scss']
 })
-export class ModeratorCommentPageComponent implements OnDestroy, AfterContentInit {
+export class ModeratorCommentPageComponent implements OnInit, OnDestroy, AfterContentInit {
+
+  auth: ClientAuthentication;
 
   constructor(
     private route: ActivatedRoute,
@@ -47,6 +50,11 @@ export class ModeratorCommentPageComponent implements OnDestroy, AfterContentIni
     }, 700);
   }
 
+  ngOnInit(): void {
+    this.authenticationService.getCurrentAuthentication()
+      .subscribe(auth => this.auth = auth);
+  }
+
   ngOnDestroy() {
     this.eventService.makeFocusOnInputFalse();
   }
@@ -54,6 +62,4 @@ export class ModeratorCommentPageComponent implements OnDestroy, AfterContentIni
   public announce() {
     this.announceService.announce('comment-page.a11y-shortcuts-moderation');
   }
-
-
 }
