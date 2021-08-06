@@ -407,6 +407,10 @@ export class CommentListComponent implements OnInit, OnDestroy {
                     } else {
                       this.publicCounter--;
                     }
+                  } else {
+                    if (!this.isModerator) {
+                      this.moderationCounter--;
+                    }
                   }
                   break;
                 case this.filtering.TAG:
