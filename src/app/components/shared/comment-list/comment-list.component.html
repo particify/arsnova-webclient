@@ -27,7 +27,7 @@
       </button>
 
       <div class="button-bar" fxLayoutAlign="center center" fxLayoutGap="1em">
-        <div class="counter-container" *ngIf="!isLoading && comments && !search && (scroll && (deviceType === 'desktop' || scrollActive) || hideCommentsList || viewRole === 'PARTICIPANT' || deviceType === 'mobile')">
+        <div class="counter-container" *ngIf="!isLoading && comments && !search && (scroll && (deviceType === 'desktop' || scrollActive) || hideCommentsList || viewRole === 'PARTICIPANT' || deviceWidth < 768)">
           <h3 class="counter">
             {{ filteredComments && hideCommentsList ? filteredComments.length : commentsFilteredByTime.length }}
           </h3>
