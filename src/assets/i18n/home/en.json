@@ -266,6 +266,7 @@
     "enter-comment": "Enter your post here",
     "error-comment": "Please enter a post.",
     "tag": "Category",
+    "none": "None",
     "create-comment-description": "Enter your post here.",
     "update": "Update",
     "user-got-tokens": "You have bonus tokens linked to this account that will be lost.",

@@ -266,6 +266,7 @@
     "enter-comment": "Gib hier deinen Beitrag ein",
     "error-comment": "Bitte gib einen Beitrag ein.",
     "tag": "Kategorie",
+    "none": "Keine",
     "create-comment-description": "Gib hier deinen Beitrag ein.",
     "update": "Speichern",
     "user-got-tokens": "Du hast noch Tokens für Bonuspunkte, die verloren gehen.",
