@@ -557,6 +557,7 @@
     "enter-comment": "Enter your post here",
     "error-comment": "Please enter a post.",
     "tag": "Category",
+    "none": "None",
     "create-comment-description": "Enter your post here.",
     "comment-sent": "Your post has been published.",
     "how-to-proceed": "How would you like to proceed?",

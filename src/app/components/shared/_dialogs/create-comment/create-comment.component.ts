@@ -77,6 +77,10 @@ export class CreateCommentComponent implements OnInit {
     return true;
   }
 
+  updateTag(tag) {
+    this.selectedTag = tag;
+  }
+
   send(comment: Comment): void {
     let message;
     this.commentService.addComment(comment).subscribe(newComment => {
