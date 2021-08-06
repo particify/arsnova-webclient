@@ -87,6 +87,7 @@ export class CommentListComponent implements OnInit, OnDestroy {
   hideCommentsList = false;
   filteredComments: Comment[];
   deviceType: string;
+  deviceWidth = innerWidth;
   isLoading = true;
   currentSort: string;
   sorting = Sort;
