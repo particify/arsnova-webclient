@@ -19,7 +19,7 @@ export class DemoService {
         mergeMap(shortId => {
           return this.roomService.duplicateRoom(`~${shortId}`, true);
         }),
-        tap(room => this.roomService.generateRandomData(room.id)));
+        tap(room => this.roomService.generateRandomData(room.id).subscribe()));
   }
 
   getLocalizedDemoRoomId(): Observable<string> {
