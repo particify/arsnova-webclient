@@ -68,11 +68,6 @@ export class TrackingService {
   init(uiConfig: any) {
     this.uiConfig = uiConfig;
 
-    if (uiConfig.demo instanceof Object) {
-      for (const [lang, demoId] of Object.entries<string>(uiConfig.demo)) {
-        this.specialRooms.set(demoId, `Demo (${lang})`);
-      }
-    }
     const feedbackRoomShortId = uiConfig.links?.feedback?.url?.match(/\/([0-9]{8})$/)?.[1];
     feedbackRoomShortId && this.specialRooms.set(feedbackRoomShortId, 'Feedback');
 
@@ -163,6 +158,11 @@ export class TrackingService {
         .subscribe(e => this.addEvent(EventCategory.ACCOUNT, 'Account deleted'));
     this.eventService.on<any>('RoomCreated')
         .subscribe(e => this.addEvent(EventCategory.USER_DATA_ROOM, 'Room created'));
+    this.eventService.on<any>('DemoRoomCreated')
+        .subscribe(e => {
+          this.addEvent(EventCategory.USER_DATA_ROOM, 'Demo room created');
+          this.specialRooms.set(e.shortId, 'Demo')
+        });
     this.eventService.on<any>('CommentCreated')
         .subscribe(e => this.addEvent(EventCategory.USER_DATA_COMMENT, 'Comment created'));
     this.eventService.on<any>('ContentCreated')
