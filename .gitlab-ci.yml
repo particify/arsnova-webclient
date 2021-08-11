@@ -1,8 +1,5 @@
 variables:
   BUILD_DIR: dist
-  NODE_VERSION: "12.18"
-  NGINX_VERSION: stable
-  IMAGE_VARIANT: alpine
   YARN_CACHE_FOLDER: .yarn-cache
 
 stages:
@@ -12,7 +9,7 @@ stages:
   - deploy
 
 default:
-  image: node:$NODE_VERSION-$IMAGE_VARIANT
+  image: node:14.17-alpine
   before_script:
     - export PATH="`pwd`/node_modules/.bin:$PATH"
     - date
@@ -70,7 +67,7 @@ unit_tests:
   stage: test
   needs:
     - yarn_install
-  image: registry.gitlab.com/arsnova/devops/docker/nodejs_chrome:202010051202
+  image: registry.gitlab.com/particify/dev/devops/ci-builder-images/nodejs_chrome:202108111931
   allow_failure: false
   variables:
     CHROME_BIN: /usr/bin/google-chrome
@@ -113,7 +110,7 @@ ngbuild:
   script:
     - mkdir -p /kaniko/.docker
     - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
-    - /kaniko/executor --context "$KANIKO_CONTEXT" --dockerfile "$KANIKO_DOCKERFILE" --destination "$KANIKO_DESTINATION" --build-arg "ARSNOVA_BUILD_DIR=`echo $BUILD_DIR`" --build-arg "IMAGE_BASETAG=`echo $NGINX_VERSION-$IMAGE_VARIANT`"
+    - /kaniko/executor --context "$KANIKO_CONTEXT" --dockerfile "$KANIKO_DOCKERFILE" --destination "$KANIKO_DESTINATION" --build-arg "ARSNOVA_BUILD_DIR=`echo $BUILD_DIR`"
 
 # Temporary workaround until GitLab bug is fixed
 docker_image:

@@ -1,5 +1,4 @@
-ARG IMAGE_BASETAG=stable-alpine
-FROM nginx:$IMAGE_BASETAG
+FROM nginx:stable-alpine
 LABEL maintainer "Daniel Gerhardt <code@dgerhardt.net>"
 
 ARG ARSNOVA_BUILD_DIR
