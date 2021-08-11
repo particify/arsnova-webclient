@@ -152,8 +152,10 @@ export class CommentService extends AbstractEntityService<Comment> {
 
   private patchComment(comment: Comment, changes: object): Observable<Comment> {
     const connectionUrl = this.buildUri(`/${comment.id}`, comment.roomId);
-    return this.http.patch(connectionUrl, changes, httpOptions).pipe(
-      catchError(this.handleError<any>('patchComment'))
+    const score = comment.score;
+    return this.http.patch<Comment>(connectionUrl, changes, httpOptions).pipe(
+      tap(c => c.score = score),
+      catchError(this.handleError<Comment>('patchComment'))
     );
   }
 
