@@ -206,11 +206,11 @@
     "survey": "Live Feedback"
   },
   "option-template": {
-    "agreement-negative-2": "Strongly agree",
-    "agreement-negative-1": "Somewhat agree",
+    "agreement-negative-2": "Strongly disagree",
+    "agreement-negative-1": "Somewhat disagree",
     "agreement-neutral": "Neither agree or disagree",
-    "agreement-positive-1": "Somewhat disagree",
-    "agreement-positive-2": "Strongly disagree",
+    "agreement-positive-1": "Somewhat agree",
+    "agreement-positive-2": "Strongly agree",
     "intensity-negative-2": "Not at all",
     "intensity-negative-1": "Slightly",
     "intensity-neutral": "Moderately",
