@@ -4,7 +4,6 @@ import { ExtensionRouteProvider, RouteMountPoint } from '../../projects/extensio
 import { PageNotFoundComponent } from './components/shared/page-not-found/page-not-found.component';
 import { HomePageComponent } from './components/home/home-page/home-page.component';
 import { UserHomeComponent } from './components/home/user-home/user-home.component';
-import { DirectEntryComponent } from './components/shared/direct-entry/direct-entry.component';
 import { LoginComponent } from './components/home/login/login.component';
 import { ImportComponent } from './components/home/import/import.component';
 import { AuthenticationGuard } from './guards/authentication.guard';
@@ -49,7 +48,7 @@ const routes: Routes = [
   },
   {
     path: 'join/:shortId',
-    component: DirectEntryComponent
+    redirectTo: 'participant/room/:shortId'
   },
   {
     path: 'import',
