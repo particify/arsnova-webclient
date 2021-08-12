@@ -164,6 +164,8 @@ export class AuthenticationService extends AbstractHttpService<ClientAuthenticat
             // Restore authentication from existing credentials if refreshing
             // fails. It does not matter here that the token might have expired.
             this.auth$$.next(of(savedAuth));
+          } else if (result.status === AuthenticationStatus.SUCCESS && guest) {
+            this.globalStorageService.setItem(STORAGE_KEYS.GUEST_TOKEN, result.authentication.token);
           }
         })
     );
