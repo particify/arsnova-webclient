@@ -104,10 +104,11 @@ export class CommentAnswerComponent implements OnInit, AfterContentInit {
   }
 
   deleteAnswer() {
-    this.answer = null;
-    this.commentService.answer(this.comment, this.answer);
-    this.translateService.get('comment-page.answer-deleted').subscribe(msg => {
-      this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
+    this.answer = '';
+    this.commentService.answer(this.comment, this.answer).subscribe(() => {
+      this.translateService.get('comment-page.answer-deleted').subscribe(msg => {
+        this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
+      });
     });
   }
 
