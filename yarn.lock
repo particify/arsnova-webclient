@@ -1441,26 +1441,26 @@
     "@angular-devkit/schematics" "12.1.4"
     jsonc-parser "3.0.0"
 
-"@stomp/ng2-stompjs@7.2.0":
-  version "7.2.0"
-  resolved "https://registry.yarnpkg.com/@stomp/ng2-stompjs/-/ng2-stompjs-7.2.0.tgz#2107b7e3d416dc0c69cce2d39f45e1f17261d7fb"
-  integrity sha512-sQO1a7stOIRlj1DO8W2Gix7bUYiw8eU1OzKBLVN+hOTjjYQt93H3ph9ifHvRQlBLMPR/RZnQ3LgUxJVcrhwodQ==
+"@stomp/ng2-stompjs@8.0.0":
+  version "8.0.0"
+  resolved "https://registry.yarnpkg.com/@stomp/ng2-stompjs/-/ng2-stompjs-8.0.0.tgz#7404aa699fb9fcf089f50633136a743b31b5cea9"
+  integrity sha512-1TTwdK7aUaRLfewG2FOqd3ZeIyIchKwOBzJytvUckjrBbpdeAXLXY0mCBFczoY16fSsxiAnZfJffFicStD+Dug==
   dependencies:
-    "@stomp/rx-stomp" "^0.3.0 >=0.3.0"
+    "@stomp/rx-stomp" "^1.0.0 >=1.0.1"
     tslib "^1.9.0"
 
-"@stomp/rx-stomp@^0.3.0 >=0.3.0":
-  version "0.3.5"
-  resolved "https://registry.yarnpkg.com/@stomp/rx-stomp/-/rx-stomp-0.3.5.tgz#3739f44f3f098ddfaf4f46d1f3b6541e3a1d4224"
-  integrity sha512-oEaMkq2IejzVKFg8EtSTe0xnyhPVWJxuQmnuTQStC3EAPcJgH9eQziJc0BR9tUvm6m962v4LPvyJKlzxOJhFWg==
+"@stomp/rx-stomp@^1.0.0 >=1.0.1":
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/@stomp/rx-stomp/-/rx-stomp-1.1.2.tgz#0d6beaf6ee87b99b276d5711b315d7d5d099c74c"
+  integrity sha512-RG6QsalsnpGC6qJT727PTe33azu9NvSwfMWQhoxOm4Ii2f8TAbNLVUBv0+WvgXGxiPREoqw5a0v5jwwrS+yMNQ==
   dependencies:
-    "@stomp/stompjs" "^5.1.0 >=5.4.2"
+    "@stomp/stompjs" "^6.0.0 >=6.1.0"
     angular2-uuid "^1.1.1"
 
-"@stomp/stompjs@^5.1.0 >=5.4.2":
-  version "5.4.4"
-  resolved "https://registry.yarnpkg.com/@stomp/stompjs/-/stompjs-5.4.4.tgz#f51d2edf9a00fac645dde3a494738d96ca17e5aa"
-  integrity sha512-RIzQ7MLRSJLUpTHcje1ZclnHH982amJSKC9bDxGO0wyu5OF9ROuuiLf7TxKxo1zUu7lGEYNedg9SEi87uMWDqg==
+"@stomp/stompjs@^6.0.0 >=6.1.0":
+  version "6.1.0"
+  resolved "https://registry.yarnpkg.com/@stomp/stompjs/-/stompjs-6.1.0.tgz#b77ca240775a7a34289b2c09618e256be761d142"
+  integrity sha512-Bt+whL0V51rSKP35OkgM1yeVu/usunpz5l1VYuoWw8mGsDMNd3W3FpWa4/4eis6QfXO3uteNGfyE21XWn0pGAQ==
 
 "@tootallnate/once@1":
   version "1.1.2"
