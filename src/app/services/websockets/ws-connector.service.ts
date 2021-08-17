@@ -21,9 +21,9 @@ export class WsConnectorService {
     private authService: AuthenticationService
   ) {
     this.client = new RxStomp();
-    authService.getAuthenticationChanges().subscribe((auth: ClientAuthentication) => {
+    authService.getAuthenticationChanges().subscribe(async (auth: ClientAuthentication) => {
       if (this.client.connected) {
-        this.client.deactivate();
+        await this.client.deactivate();
       }
 
       if (auth && auth.userId) {
