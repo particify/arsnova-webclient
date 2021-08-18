@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CreatorRoutingModule } from './creator-routing.module';
+import { extensions } from './creator.extensions';
 import { ContentChoiceCreationComponent } from './content-creation/content-choice-creation/content-choice-creation.component';
 import { ContentCreationPageComponent } from './content-creation/content-creation-page/content-creation-page.component';
 import { ContentScaleCreationComponent } from './content-creation/content-scale-creation/content-scale-creation.component';
@@ -42,6 +43,7 @@ import { QRCodeModule } from 'angularx-qrcode';
 
 @NgModule({
   imports: [
+    extensions,
     CommonModule,
     CreatorRoutingModule,
     EssentialsModule,

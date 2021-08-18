@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AdminRoutingModule } from './admin-routing.module';
+import { extensions } from './admin.extensions';
 import { EssentialsModule } from '../essentials/essentials.module';
 import { SharedModule } from '../shared/shared.module';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
@@ -20,6 +21,7 @@ import { AdminService } from '../../services/http/admin.service';
 
 @NgModule({
   imports: [
+    extensions,
     CommonModule,
     AdminRoutingModule,
     EssentialsModule,
