@@ -4,11 +4,6 @@
   <app-admin-summary-bar></app-admin-summary-bar>
 
   <div fxLayout="row" fxLayoutAlign="center">
-    <div [ngSwitch]="page">
-      <app-system-status *ngSwitchCase="'status'"></app-system-status>
-      <app-system-statistics *ngSwitchCase="'stats'"></app-system-statistics>
-      <app-user-management *ngSwitchCase="'users'"></app-user-management>
-      <app-room-management *ngSwitchCase="'rooms'"></app-room-management>
-    </div>
+    <router-outlet></router-outlet>
   </div>
 </div>
