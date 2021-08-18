@@ -2,7 +2,9 @@ import { ComponentFactoryResolver, Inject, Injectable, Optional, ViewContainerRe
 import { environment } from '../../../../src/environments/environment';
 import { Extension } from './extension';
 
-@Injectable()
+@Injectable({
+  providedIn: 'any'
+})
 export class ExtensionFactory {
   extensions: { [ key: string ]: Extension } = {};
 
