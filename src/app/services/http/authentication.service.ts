@@ -5,7 +5,7 @@ import { BehaviorSubject, Observable, of, timer } from 'rxjs';
 import { catchError, concatMap, filter, first, map, switchAll, switchMap, shareReplay, take, tap } from 'rxjs/operators';
 import { AbstractHttpService } from './abstract-http.service';
 import { GlobalStorageService, STORAGE_KEYS } from '../util/global-storage.service';
-import { ClientAuthentication } from '../../models/client-authentication';
+import { ClientAuthentication, TransientClientAuthentication } from '../../models/client-authentication';
 import { AuthenticationStatus, ClientAuthenticationResult } from '../../models/client-authentication-result';
 import { EventService } from '../util/event.service';
 import JwtDecode from 'jwt-decode';
@@ -62,7 +62,8 @@ export class AuthenticationService extends AbstractHttpService<ClientAuthenticat
     private router: Router) {
     super('/auth', http, eventService, translateService, notificationService);
     const savedAuth: ClientAuthentication = this.globalStorageService.getItem(STORAGE_KEYS.USER);
-    this.auth$$ = new BehaviorSubject(new BehaviorSubject(savedAuth));
+    const transientAuth = savedAuth ? new TransientClientAuthentication(savedAuth) : null;
+    this.auth$$ = new BehaviorSubject(new BehaviorSubject(transientAuth));
   }
 
   /**
