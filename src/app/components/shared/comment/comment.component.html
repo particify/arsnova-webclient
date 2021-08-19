@@ -76,7 +76,7 @@
         <button mat-menu-item (click)="markCorrect(comment, 2)"
                 aria-labelledby="comment-not-correct">
           <mat-icon class="wrong-icon">cancel</mat-icon>
-          <span>{{ (comment.correct != 2 ? 'comment-page.mark-wrong' :
+          <span>{{ (comment.correct !== 2 ? 'comment-page.mark-wrong' :
             'comment-page.mark-not-wrong') | translate }}</span>
         </button>
         <button mat-menu-item (click)="setFavorite(comment)" aria-labelledby="comment-grade">
@@ -133,10 +133,10 @@
 <!--Hidden Div's for a11y-Descriptions-->
 <div class="visually-hidden">
   <div id="more-options">{{ 'comment-page.a11y-more-options' | translate }}</div>
-  <div id="comment-correct">{{ (comment.correct != 1 ? 'comment-page.a11y-comment-not-marked-correct' :
+  <div id="comment-correct">{{ (comment.correct !== 1 ? 'comment-page.a11y-comment-not-marked-correct' :
     'comment-page.a11y-comment-marked-correct') | translate }}
   </div>
-  <div id="comment-not-correct">{{ (comment.correct != 2 ? 'comment-page.a11y-comment-not-marked-wrong' :
+  <div id="comment-not-correct">{{ (comment.correct !== 2 ? 'comment-page.a11y-comment-not-marked-wrong' :
     'comment-page.a11y-comment-marked-wrong') | translate }}
   </div>
   <div id="comment-grade">{{ (!comment.favorite ? 'comment-page.a11y-comment-grade' :
