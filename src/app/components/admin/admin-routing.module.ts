@@ -1,35 +1,35 @@
 import { Routes, RouterModule, ROUTES } from '@angular/router';
-import { AdminHomeComponent } from './admin-home/admin-home.component';
 import { NgModule } from '@angular/core';
 import { AuthenticationGuard } from '../../guards/authentication.guard';
 import { ExtensionRouteProvider, RouteMountPoint } from '../../../../projects/extension-point/src/lib/extension-route';
+import { SystemStatusComponent } from './system-status/system-status.component';
+import { SystemStatisticsComponent } from './system-statistics/system-statistics.component';
+import { UserManagementComponent } from './user-management/user-management.component';
+import { RoomManagementComponent } from './room-management/room-management.component';
+import { AdminHomeComponent } from './admin-home/admin-home.component';
 
 const routes: Routes = [
-  {
-    path: '',
-    component: AdminHomeComponent,
-    data: {page: 'status'}
-  },
-  {
-    path: 'status',
-    component: AdminHomeComponent,
-    data: {page: 'status'}
-  },
-  {
-    path: 'stats',
-    component: AdminHomeComponent,
-    data: {page: 'stats'}
-  },
-  {
-    path: 'users',
-    component: AdminHomeComponent,
-    data: {page: 'users'}
-  },
-  {
-    path: 'rooms',
-    component: AdminHomeComponent,
-    data: {page: 'rooms'}
-  }
+      {
+        path: '',
+        pathMatch: 'full',
+        redirectTo: 'status'
+      },
+      {
+        path: 'status',
+        component: SystemStatusComponent
+      },
+      {
+        path: 'stats',
+        component: SystemStatisticsComponent
+      },
+      {
+        path: 'users',
+        component: UserManagementComponent
+      },
+      {
+        path: 'rooms',
+        component: RoomManagementComponent
+      }
 ];
 
 @NgModule({
@@ -42,11 +42,15 @@ const routes: Routes = [
         {
           path: '',
           canActivate: [AuthenticationGuard],
-          children: [
-            ...routes,
-            ...ExtensionRouteProvider.extractRoutesForMountPoint(
-              RouteMountPoint.ADMIN, extensionRouteProviders)
-          ]
+          children: [{
+            path: '',
+            component: AdminHomeComponent,
+            children: [
+              ...routes,
+              ...ExtensionRouteProvider.extractRoutesForMountPoint(
+                  RouteMountPoint.ADMIN, extensionRouteProviders)
+            ]
+          }]
         }
       ],
       deps: [ExtensionRouteProvider],
