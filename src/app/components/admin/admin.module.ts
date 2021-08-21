@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AdminRoutingModule } from './admin-routing.module';
 import { extensions } from './admin.extensions';
+import { SharedAdminModule } from './shared-admin.module';
 import { EssentialsModule } from '../essentials/essentials.module';
 import { SharedModule } from '../shared/shared.module';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
@@ -10,11 +11,8 @@ import { AdminHomeComponent } from './admin-home/admin-home.component';
 import { SummaryBarComponent } from './summary-bar/summary-bar.component';
 import { SystemStatusComponent } from './system-status/system-status.component';
 import { SystemStatisticsComponent } from './system-statistics/system-statistics.component';
-import { UserSearchFieldComponent } from './user-search-field/user-search-field.component';
-import { EntityPropertiesComponent } from './entity-properties/entity-properties.component';
 import { RoomManagementComponent } from './room-management/room-management.component';
 import { UserManagementComponent } from './user-management/user-management.component';
-import { MatTreeModule } from '@angular/material/tree';
 import { TRANSLATION_MODULE_NAME } from '../../translate-module-name-token';
 import { TranslateHttpLoaderFactory } from '../../translate-http-loader-factory';
 import { AdminService } from '../../services/http/admin.service';
@@ -26,7 +24,7 @@ import { AdminService } from '../../services/http/admin.service';
     AdminRoutingModule,
     EssentialsModule,
     SharedModule,
-    MatTreeModule,
+    SharedAdminModule,
     TranslateModule.forChild({
       loader: {
         provide: TranslateLoader,
@@ -44,8 +42,6 @@ import { AdminService } from '../../services/http/admin.service';
     SummaryBarComponent,
     SystemStatusComponent,
     SystemStatisticsComponent,
-    UserSearchFieldComponent,
-    EntityPropertiesComponent,
     RoomManagementComponent,
     UserManagementComponent,
   ],
