@@ -4,7 +4,8 @@ import { AuthenticationService } from '../http/authentication.service';
 import { ARSRxStompConfig } from '../../rx-stomp.config';
 import { Observable } from 'rxjs';
 import { IMessage } from '@stomp/stompjs';
-import { ClientAuthentication } from '../../models/client-authentication';
+import { ClientAuthentication, TransientClientAuthentication } from '../../models/client-authentication';
+import { filter } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -21,7 +22,9 @@ export class WsConnectorService {
     private authService: AuthenticationService
   ) {
     this.client = new RxStomp();
-    authService.getAuthenticationChanges().subscribe(async (auth: ClientAuthentication) => {
+    authService.getAuthenticationChanges()
+        .pipe(filter(auth => !(auth instanceof TransientClientAuthentication)))
+        .subscribe(async (auth: ClientAuthentication) => {
       if (this.client.connected) {
         await this.client.deactivate();
       }
