@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ParticipantRoutingModule } from './participant-routing.module';
+import { extensions } from './participant.extensions';
 import { EssentialsModule } from '../essentials/essentials.module';
 import { ContentChoiceParticipantComponent } from './content/content-choice-participant/content-choice-participant.component';
 import { ContentTextParticipantComponent } from './content/content-text-participant/content-text-participant.component';
@@ -21,6 +22,7 @@ import { ContentScaleParticipantComponent } from './content/content-scale-partic
 
 @NgModule({
   imports: [
+    extensions,
     CommonModule,
     ParticipantRoutingModule,
     EssentialsModule,

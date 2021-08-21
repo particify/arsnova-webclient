@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PresentationRoutingModule } from './presentation-routing.module';
+import { extensions } from './presentation.extensions';
 import { FlexModule } from '@angular/flex-layout';
 import { CreatorModule } from '../creator/creator.module';
 import { ControlBarComponent } from './bars/control-bar/control-bar.component';
@@ -31,6 +32,7 @@ import { BarNotificationComponent } from './bars/bar-notification/bar-notificati
     BarNotificationComponent
   ],
   imports: [
+    extensions,
     CommonModule,
     PresentationRoutingModule,
     FlexModule,
