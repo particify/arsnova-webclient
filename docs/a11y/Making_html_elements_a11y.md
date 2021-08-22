@@ -95,66 +95,56 @@ Attribute "aria-label" does not work with multi-language titles, voice output re
 
 ### Keyboard Shortcut
 
-To enter Keyboard Shortcuts you first need to import `Renderer2`, `InDestroy` and the `EventService` form `angular/core`:
-```typescript
-import { Component, OnInit, OnDestroy, Renderer2 } from '@angular/core';
-import { EventService } from '../../../services/util/event.service';
+#### Directive
+
+Keyboard shortcuts can be added to any DOM element by using the `appHotkey` directive.
+This directive automatically registers and unregisters hotkeys which can either focus the element or trigger its click handler.
+The following additional attributes can be set:
+
+* `appHotkeyCtrl`, `appHotkeyAlt` and `appHotkeyShift`: Sets modifier keys which need to be pressed to trigger the hotkey.
+* `appHotkeyAction`: `HotkeyAction.FOCUS` (default) or `HotkeyAction.CLICK`
+* `appHotkeyTitle`: Sets the title for a11y. If not set, `matTooltip` will be used as a fallback.
+* `appHotkeyDisabled`: Disables the hotkey. This is useful if a the element is rendered but currently not visible.
+
+##### Example
+
+```html
+<button appHotkey="h">Do something!</button>
+
+<button
+  appHotkey="i"
+  [appHotkeyControl]="true"
+  [appHotkeyAction]="HotkeyAction.CLICK"
+  appHotkeyTitle="Optional hotkey action description"
+  [appHotkeyDisabled]="!hotkeyCondition"
+  (click)="doSomething()"
+>Do something!</button>
 ```
 
-After that you also need to add it to the constructor
-```typescript
-constructor(
-    ...
-    private eventService: EventService,
-    private _r: Renderer2){
-        ...
-}
-    }
-```
+#### Manual registration
 
-When this is done you need to add a listener to the ``ngOnInit()`` function.
+If there is no element to bind a hotkey to or a custom action handler is required,
+a hotkey can be registered via the `HotkeyService`'s `registerHotkey` method.
+If manual registration is used, it is the developers responsibility to unregister the hotkey when it is no longer valid.
 
-Example:
+##### Example
 
 ```typescript
+private hotkeyRefs: Symbol[] = [];
+
+constructor(private hotkeyService: HotkeyService) { }
+
 ngOnInit() {
-    ...
-    // But first you need to add a variable:
-    listenerFn: () => void;
-    // listenerFn is for closing the listener in the ngOnDestroy() function when leaving the page
-    
-    // Example of start-page 
-    this.listenerFn = this._r.listen(document, 'keyup', (event) => {
-      if (event.keyCode === 49 && this.eventService.focusOnInput === false) {
-        document.getElementById('session_id-input').focus();
-      } else if (event.keyCode === 51 && this.eventService.focusOnInput === false) {
-        document.getElementById('new_session-button').focus();
-      } else if (event.keyCode === 52 && this.eventService.focusOnInput === false) {
-        document.getElementById('language-menu').focus();
-      } else if ((event.keyCode === 57 || event.keyCode === 27) && this.eventService.focusOnInput === false) {
-        this.announce();
-      } else if (event.keyCode === 27 && this.eventService.focusOnInput === true) {
-        document.getElementById('session_enter-button').focus();
-      }
-    });
+  this.hotkeyService.registerHotkey({
+    key: 'h',
+    action: () => this.doSomething(),
+    actionTitle: 'Do something!'
+  }, this.hotkeyRefs);
 }
 
-// HTML Code:
-
-<button id="session_enter-button" ...>
-    ...
-</button>
-
-// 'focusOnInput' is a boolean variable which should be triggered when an input element is focused and unfocused
-// Example of room-join.component.html
-<input id="session_id-input" matInput #roomId   (focus)="eventService.makeFocusOnInputTrue()" 
-                                                (blur)="eventService.makeFocusOnInputFalse()"
-             .../>
-             
-// ngOnDestroy function for closing the listener when leaving the page
 ngOnDestroy() {
-    this.listenerFn();
- }
+  this.hotkeyRefs.forEach(h => this.hotkeyService.unregisterHotkey(h));
+}
 ```
 
 ## HTML5 Accessibility: aria-hidden and role=”presentation”
