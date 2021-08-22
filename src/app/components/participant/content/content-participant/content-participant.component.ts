@@ -1,4 +1,4 @@
-import { Component, EventEmitter, HostListener, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ContentType } from '../../../../models/content-type.enum';
 import { Answer } from '../../../../models/answer';
 import { Content } from '../../../../models/content';
@@ -6,9 +6,8 @@ import { ContentChoice } from '../../../../models/content-choice';
 import { TextAnswer } from '../../../../models/text-answer';
 import { ChoiceAnswer } from '../../../../models/choice-answer';
 import { MarkdownFeatureset } from '../../../../services/http/formatting.service';
-import { KeyboardUtils } from '../../../../utils/keyboard';
-import { KeyboardKey } from '../../../../utils/keyboard/keys';
 import { MultipleTextsAnswer } from '../../../../models/multiple-texts-answer';
+import { HotkeyAction } from '../../../../directives/hotkey.directive';
 
 @Component({
   selector: 'app-content-participant',
@@ -37,19 +36,9 @@ export class ContentParticipantComponent implements OnInit {
   flipped: boolean;
   isMultiple: boolean;
   flashcardMarkdownFeatures = MarkdownFeatureset.EXTENDED;
+  HotkeyAction = HotkeyAction;
 
   constructor() { }
-
-  @HostListener('window:keyup', ['$event'])
-  keyEvent(event: KeyboardEvent) {
-    if (this.active) {
-      if (KeyboardUtils.isKeyEvent(event, KeyboardKey.SPACE) === true) {
-        if (this.alreadySent) {
-          this.goToStats();
-        }
-      }
-    }
-  }
 
   ngOnInit(): void {
     this.setExtensionData(this.content.roomId, this.content.id);

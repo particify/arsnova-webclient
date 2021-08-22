@@ -58,6 +58,7 @@ export class StepperComponent extends CdkStepper {
 
   @HostListener('window:keyup', ['$event'])
   keyEvent(event: KeyboardEvent) {
+    // TODO: use hotkey service
     if (!this.eventService.focusOnInput) {
       if (KeyboardUtils.isKeyEvent(event, KeyboardKey.LEFT) === true) {
         this.previous();

@@ -27,7 +27,8 @@
         <div class="action-button-container" fxLayout="row" fxLayoutAlign="center">
           <div class="action-button-item" fxLayoutAlign="center center">
             <button id="comments-button" mat-icon-button class="main-button" [disableRipple]="true"
-                    routerLink="/participant/room/{{ room.shortId }}/comments" aria-labelledby="comments">
+                    routerLink="/participant/room/{{ room.shortId }}/comments" aria-labelledby="comments"
+                    appHotkey="1">
               <mat-icon matBadge="{{commentCounter}}" class="main-icon">
                 question_answer
               </mat-icon>
@@ -37,7 +38,8 @@
           </div>
           <div *ngIf="surveyEnabled" class="action-button-item" fxLayoutAlign="center center">
             <button mat-icon-button class="main-button" id="live-survey-button" aria-labelledby="live-survey"
-                    [disableRipple]="true" routerLink="/participant/room/{{ room.shortId }}/survey">
+                    [disableRipple]="true" routerLink="/participant/room/{{ room.shortId }}/survey"
+                    appHotkey="2">
               <mat-icon class="main-icon">
                 thumbs_up_down
               </mat-icon>
@@ -45,17 +47,23 @@
                 {{ 'room-page.live-survey' | translate}}</p>
             </button>
           </div>
+          <p *ngIf="!surveyEnabled" tabindex="-1" id="live-survey-disabled" class="visually-hidden"
+             appHotkey="2">
+            {{ 'room-page.a11y-live-survey-disabled' | translate }}
+          </p>
         </div>
       </div>
-      <p tabindex="-1" id="live-survey-disabled" class="visually-hidden">
-        {{ 'room-page.a11y-live-survey-disabled' | translate }}</p>
-      <div *ngIf="room && contentGroups">
-        <p tabindex="-1" id="content-groups" class="visually-hidden">
+      <ng-container *ngIf="contentGroups?.length > 0; else noContents">
+        <p tabindex="-1" id="content-groups" class="visually-hidden" appHotkey="3">
           {{ 'room-page.a11y-content-groups' | translate: {count: contentGroups.length} }}</p>
+      </ng-container>
+      <ng-template #noContents>
+        <p tabindex="-1" id="no-content-groups" class="visually-hidden" appHotkey="3">
+          {{ 'room-page.a11y-no-content-groups' | translate }}</p>
+      </ng-template>
+      <div *ngIf="room && contentGroups">
         <app-content-groups *ngFor="let contentGroup of contentGroups" [contentGroupName]="contentGroup.name"
                             [length]="calcContentsInGroup(contentGroup)" [isLoose]="false"></app-content-groups>
-        <p tabindex="-1" id="no-content-groups" class="visually-hidden">
-          {{ 'room-page.a11y-no-content-groups' | translate }}</p>
       </div>
 
       <lib-extension-point extensionId="attachment-list" [extensionData]="attachmentData">

@@ -110,6 +110,7 @@ export class ControlBarComponent extends NavBarComponent implements OnInit, OnDe
 
   @HostListener('window:keyup', ['$event'])
   keyEvent(event: KeyboardEvent) {
+    // TODO: use hotkey service
     if (!this.eventService.focusOnInput) {
       if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit1) === true) {
         this.updateFeatureWithIndex(0)

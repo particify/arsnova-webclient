@@ -18,6 +18,7 @@ import { AnnounceService } from '../../../services/util/announce.service';
 import { FeedbackService } from '../../../services/http/feedback.service';
 import { FeedbackMessageType } from '../../../models/messages/feedback-message-type';
 import { EventService } from '../../../services/util/event.service';
+import { HotkeyAction } from '../../../directives/hotkey.directive';
 
 @Component({
   selector: 'app-survey-page',
@@ -48,6 +49,10 @@ export class SurveyPageComponent implements OnInit, OnDestroy, AfterContentInit 
   deviceWidth = innerWidth;
   answerCount = 0;
   routeData;
+  toggleKey = "1";
+  changeKey = "2";
+  voteKeys = ["1", "2", "3", "4"];
+  hotkeyAction = HotkeyAction.FOCUS;
 
   constructor(
     private authenticationService: AuthenticationService,
@@ -68,37 +73,10 @@ export class SurveyPageComponent implements OnInit, OnDestroy, AfterContentInit 
 
   @HostListener('window:keyup', ['$event'])
   keyEvent(event: KeyboardEvent) {
-    if (this.isCreator) {
-      const toggleKey = this.isPresentation ? KeyboardKey.SPACE : KeyboardKey.Digit1;
-      const changeKey = this.isPresentation ? KeyboardKey.LetterC : KeyboardKey.Digit2;
-      if (KeyboardUtils.isKeyEvent(event, toggleKey) === true) {
-        this.toggle();
-      } else if (KeyboardUtils.isKeyEvent(event, changeKey) === true) {
-        if (this.isClosed) {
-          this.changeType();
-        } else {
-          const msg = this.translateService.instant('survey.a11y-first-stop-survey');
-          this.announceService.announce(msg);
-        }
-      }
-    } else {
-      if (!this.isClosed) {
-        if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit1) === true) {
-          document.getElementById('survey-button-0').focus();
-        } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit2) === true) {
-          document.getElementById('survey-button-1').focus();
-        } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit3) === true) {
-          document.getElementById('survey-button2-2').focus();
-        } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit4) === true) {
-          document.getElementById('survey-button2-3').focus();
-        }
-      } else {
-        this.announceStatus();
-      }
-    }
+    // TODO: use hotkey service
     if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Escape) === true) {
       this.announceKeys();
-    } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit5) === true) {
+    } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit5) === true && !this.isClosed) {
       this.announceStatus();
     }
   }
@@ -110,6 +88,11 @@ export class SurveyPageComponent implements OnInit, OnDestroy, AfterContentInit 
   }
 
   ngOnInit() {
+    if (this.isPresentation) {
+      this.hotkeyAction = HotkeyAction.CLICK;
+      this.toggleKey = " ";
+      this.changeKey = "c";
+    }
     this.translateService.use(this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE));
     this.authenticationService.getCurrentAuthentication()
         .subscribe(auth => this.userId = auth.userId);

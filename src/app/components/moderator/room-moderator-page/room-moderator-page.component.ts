@@ -56,9 +56,8 @@ export class RoomModeratorPageComponent extends RoomPageComponent implements OnI
   @HostListener('window:keyup', ['$event'])
   keyEvent(event: KeyboardEvent) {
     const focusOnInput = this.eventService.focusOnInput;
-    if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit1) === true && focusOnInput === false) {
-      document.getElementById('comments-button').focus();
-    } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Escape) === true && focusOnInput === false) {
+    // TODO: Use hotkey service
+    if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Escape) === true && focusOnInput === false) {
       this.announce();
     }
   }

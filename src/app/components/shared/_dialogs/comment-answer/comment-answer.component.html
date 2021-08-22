@@ -10,8 +10,9 @@
             class="visually-hidden">{{ 'comment-page.a11y-message-answer' | translate }}</button>
     <div fxLayout="row" fxLayoutAlign="center">
       <mat-card class="answer mat-elevation-z2" *ngIf="!isParticipant || answer">
-        <div tabindex="-1" id="answer-text" class="visually-hidden">{{ 'comment-page.a11y-entered-answer' | translate:
-          {answer: answer} }}</div>
+        <div tabindex="-1" id="answer-text" class="visually-hidden" appHotkey="1">
+          {{ 'comment-page.a11y-entered-answer' | translate: {answer: answer} }}
+        </div>
         <div *ngIf="(isParticipant || !edit) && answer">
           <app-rendered-text [rawText]="answer" [dynamic]="true" [markdownFeatureset]="MarkdownFeatureset.SIMPLE">
           </app-rendered-text>
@@ -36,7 +37,8 @@
                       maxlength="500"
                       name="answer"
                       aria-labelledby="answer"
-                      [placeholder]="'comment-page.enter-answer' | translate">
+                      [placeholder]="'comment-page.enter-answer' | translate"
+                      appHotkey="1">
               </textarea>
               <mat-hint align="end">
                 <span aria-hidden="true">

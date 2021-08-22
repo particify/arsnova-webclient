@@ -8,6 +8,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { Room } from '../../../models/room';
 import { Settings } from '../settings-page/settings-page.component';
 import { Location } from '@angular/common';
+import { HotkeyAction } from '../../../directives/hotkey.directive';
 
 export class UpdateEvent {
   room: Room;
@@ -35,6 +36,7 @@ export class SettingsComponent implements OnInit {
 
   expanded = false;
   contentExpanded = false;
+  HotkeyAction = HotkeyAction;
 
   constructor(public dialog: MatDialog,
               public notificationService: NotificationService,

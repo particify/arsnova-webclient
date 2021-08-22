@@ -2,6 +2,7 @@
   <mat-toolbar-row>
     <button id="back-button" mat-icon-button aria-labelledby="back-label" *ngIf="router.url !== '/home'"
             (click)="goBack()"
+            appHotkey="0"
             matTooltip="{{'header.back' | translate}}">
       <mat-icon class="header-icons">arrow_back</mat-icon>
     </button>
@@ -95,13 +96,13 @@
       </mat-icon>
     </button>
 
-    <button mat-button *ngIf="auth" [matMenuTriggerFor]="userMenu" aria-labelledby="room-label" id="menu-button">
+    <button mat-button *ngIf="auth" [matMenuTriggerFor]="userMenu" aria-labelledby="room-label" id="menu-button" appHotkey="9">
         <mat-icon class="header-icons">account_circle</mat-icon>
         <span class="button-text" *ngIf="!isGuest">{{'header.my-account' | translate}}</span>
         <span class="button-text" *ngIf="isGuest">{{'header.my-guest-account' | translate}}</span>
     </button>
     <div *ngIf="router.url !== '/login'">
-      <button id="login-button" mat-button *ngIf="!auth" (click)=navToLogin() aria-labelledby="login-label">
+      <button id="login-button" mat-button *ngIf="!auth" (click)=navToLogin() aria-labelledby="login-label" appHotkey="9">
         <mat-icon class="header-icons">account_circle</mat-icon>
         <span class="button-text">{{'header.login' | translate}}</span>
       </button>

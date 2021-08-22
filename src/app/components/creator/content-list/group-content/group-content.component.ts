@@ -1,4 +1,4 @@
-import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Content } from '../../../../models/content';
 import { ContentService } from '../../../../services/http/content.service';
 import { RoomService } from '../../../../services/http/room.service';
@@ -13,8 +13,6 @@ import { ContentGroupService } from '../../../../services/http/content-group.ser
 import { ContentListBaseComponent } from '../content-list-base.component';
 import { ContentGroup } from '../../../../models/content-group';
 import { AnnounceService } from '../../../../services/util/announce.service';
-import { KeyboardUtils } from '../../../../utils/keyboard';
-import { KeyboardKey } from '../../../../utils/keyboard/keys';
 import { EventService } from '../../../../services/util/event.service';
 import { LocalFileService } from '../../../../services/util/local-file.service';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
@@ -66,31 +64,6 @@ export class GroupContentComponent extends ContentListBaseComponent implements O
     super(contentService, roomStatsService, route, location, notificationService, translateService, langService, dialogService,
     globalStorageService, contentGroupService, announceService, router);
     langService.langEmitter.subscribe(lang => translateService.use(lang));
-  }
-
-  @HostListener('window:keyup', ['$event'])
-  keyEvent(event: KeyboardEvent) {
-    const focusOnInput = this.eventService.focusOnInput;
-    if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit1) === true && focusOnInput === false) {
-      document.getElementById('content-create-button').focus();
-    } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit2) === true && focusOnInput === false) {
-      document.getElementById('statistic-button').focus();
-    } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit3) === true && focusOnInput === false) {
-      document.getElementById('settings-button').focus();
-    } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit4) === true && focusOnInput === false) {
-      document.getElementById('lock-group-slide').focus();
-    } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit5) === true && focusOnInput === false) {
-      document.getElementById('content-list').focus();
-    } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit6) === true && focusOnInput === false) {
-      document.getElementById('nameInput').focus();
-    } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Escape) === true) {
-      if (focusOnInput) {
-        this.removeFocusFromInput();
-      }
-      setTimeout(() => {
-        document.getElementById('keys-button').focus();
-      }, 200);
-    }
   }
 
   ngOnInit() {

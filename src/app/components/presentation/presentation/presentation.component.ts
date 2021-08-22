@@ -35,6 +35,7 @@ export class PresentationComponent implements OnInit {
 
   @HostListener('window:keyup', ['$event'])
   keyEvent(event: KeyboardEvent) {
+    // TODO: use hotkey service
     if (KeyboardUtils.isKeyEvent(event, KeyboardKey.LetterI) === true) {
       this.announceShortcuts();
     }

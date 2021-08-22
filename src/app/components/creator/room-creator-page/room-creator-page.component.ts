@@ -61,23 +61,8 @@ export class RoomCreatorPageComponent extends RoomPageComponent implements OnIni
   @HostListener('window:keyup', ['$event'])
   keyEvent(event: KeyboardEvent) {
     const focusOnInput = this.eventService.focusOnInput;
-    if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit1) === true && focusOnInput === false) {
-      document.getElementById('comments-button').focus();
-    } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit2) === true && focusOnInput === false) {
-      document.getElementById('live-survey-button').focus();
-    } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit3) === true && focusOnInput === false) {
-      document.getElementById('content-group-create-button').focus();
-    } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit4) === true && focusOnInput === false) {
-      if (this.contentGroups.length > 0) {
-        document.getElementById('content-groups').focus();
-      } else {
-        document.getElementById('no-content-groups').focus();
-      }
-    } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit5) === true && focusOnInput === false) {
-      document.getElementById('presentation-button').focus();
-    } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit6) === true && focusOnInput === false) {
-      document.getElementById('more-button').focus();
-    } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit7) === true && focusOnInput === false) {
+    // TODO: Use hotkey service
+    if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit7) === true && focusOnInput === false) {
       const adKey = this.userCount === 1 ? '-only-one' : '';
       const msg = this.translateService.instant('room-page.a11y-user-count' + adKey, {count: this.userCount})
       this.announceService.announce(msg);

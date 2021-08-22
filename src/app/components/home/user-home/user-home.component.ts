@@ -33,13 +33,8 @@ export class UserHomeComponent implements OnInit, AfterContentInit {
 
   @HostListener('window:keyup', ['$event'])
   keyEvent(event: KeyboardEvent) {
-    if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit1) === true && this.eventService.focusOnInput === false) {
-      document.getElementById('create-room-button').focus();
-    } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit2) === true && this.eventService.focusOnInput === false) {
-      document.getElementById('room-id-input').focus();
-    } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit3) === true && this.eventService.focusOnInput === false) {
-      document.getElementById('room-list').focus();
-    } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Escape) === true &&
+    // TODO: use hotkey service
+    if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Escape) === true &&
       this.eventService.focusOnInput === false) {
       this.announce();
     }

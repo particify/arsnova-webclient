@@ -72,9 +72,8 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
 
   @HostListener('window:keyup', ['$event'])
   keyEvent(event: KeyboardEvent) {
-    if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit1) === true && this.eventService.focusOnInput === false) {
-      document.getElementById('step').focus();
-    } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Escape) === true) {
+    // TODO: use hotkey service
+    if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Escape) === true) {
       this.announce('answer.a11y-shortcuts');
     }
   }

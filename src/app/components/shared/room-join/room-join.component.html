@@ -10,6 +10,7 @@
                (input)="handleInput($event)" [formControl]="roomCodeFormControl"
                [errorStateMatcher]="matcher" aria-labelledby="join-input-label" autocomplete="off"
                placeholder="{{'home-page.example' | translate }}{{'11223344' | splitShortId: false: true}}"
+               appHotkey="1"
         />
         <button id="join-button" mat-icon-button class="mat-primary" type="submit" role="button"
                 (click)="joinRoom(roomCode.value)" aria-labelledby="join-button-label" matSuffix>

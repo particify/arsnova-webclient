@@ -62,6 +62,7 @@ export class ContentPresentationComponent implements OnInit {
   }
 
   @HostListener('window:keyup', ['$event'])
+  // TODO: Use hotkey service
   keyEvent(event: KeyboardEvent) {
     if (this.isPresentation && !this.eventService.focusOnInput) {
       if (KeyboardUtils.isKeyEvent(event, KeyboardKey.LetterL) === true) {

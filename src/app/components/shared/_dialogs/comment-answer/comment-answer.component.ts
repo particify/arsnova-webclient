@@ -46,13 +46,8 @@ export class CommentAnswerComponent implements OnInit, AfterContentInit {
   @HostListener('window:keyup', ['$event'])
   keyEvent(event: KeyboardEvent) {
     const focusOnInput = this.eventService.focusOnInput;
-    if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit1) === true && focusOnInput === false) {
-      if (document.getElementById('answer-input')) {
-        document.getElementById('answer-input').focus();
-      } else {
-        document.getElementById('answer-text').focus();
-      }
-    } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit2) === true && focusOnInput === false) {
+    // TODO: use hotkey service
+    if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit2) === true && focusOnInput === false) {
       this.announce();
     }
   }

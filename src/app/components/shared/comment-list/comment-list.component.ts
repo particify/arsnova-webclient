@@ -144,6 +144,7 @@ export class CommentListComponent implements OnInit, OnDestroy {
 
   @HostListener('window:keyup', ['$event'])
   keyEvent(event: KeyboardEvent) {
+    // TODO: use hotkey service
     if (this.isPresentation) {
       if (KeyboardUtils.isKeyEvent(event, KeyboardKey.LEFT) === true) {
         this.prevComment();
