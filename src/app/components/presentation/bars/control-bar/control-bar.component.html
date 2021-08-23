@@ -12,8 +12,9 @@
     <div class="action-container" fxFill fxLayout="row" fxLayoutAlign="space-between center">
       <div fxLayout="row" class="nav-container">
         <div matRipple role="button" class="nav-button" *ngFor="let barItem of barItems; let i = index" (click)="updateFeature(barItem.name)"
-                [ngClass]="{'active-nav-button': i === currentRouteIndex }" fxLayout="column" fxLayoutAlign="center center"
-        [matTooltip]="(('sidebar.' + barItem.name) | translate) + ' (' + ('control-bar.key' | translate) + ' ' + barItem.key  + ')'">
+             [ngClass]="{'active-nav-button': i === currentRouteIndex }" fxLayout="column" fxLayoutAlign="center center"
+             [matTooltip]="(('sidebar.' + barItem.name) | translate) + ' (' + ('control-bar.key' | translate) + ' ' + barItem.key  + ')'"
+             [appHotkey]="barItem.key" [appHotkeyAction]="HotkeyAction.CLICK" [appHotkeyTitle]="'sidebar.' + barItem.name | translate">
           <mat-icon class="nav-icon">{{ barItem.icon }}</mat-icon>
           <p class="text">{{ 'sidebar.' + barItem.name | translate }}</p>
         </div>
