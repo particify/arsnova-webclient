@@ -1,4 +1,4 @@
-import { AfterContentInit, Component, HostListener, Inject, OnInit } from '@angular/core';
+import { AfterContentInit, Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { LanguageService } from '../../../../services/util/language.service';
@@ -8,19 +8,18 @@ import { AuthenticationService } from '../../../../services/http/authentication.
 import { UserRole } from '../../../../models/user-roles.enum';
 import { AdvancedSnackBarTypes, NotificationService } from '../../../../services/util/notification.service';
 import { DialogService } from '../../../../services/util/dialog.service';
-import { KeyboardUtils } from '../../../../../app/utils/keyboard';
-import { KeyboardKey } from '../../../../../app/utils/keyboard/keys';
 import { EventService } from '../../../../services/util/event.service';
 import { AnnounceService } from '../../../../services/util/announce.service';
 import { MarkdownFeatureset } from '../../../../services/http/formatting.service';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { HotkeyService } from '../../../../services/util/hotkey.service';
 
 @Component({
   selector: 'app-comment-answer',
   templateUrl: './comment-answer.component.html',
   styleUrls: ['./comment-answer.component.scss']
 })
-export class CommentAnswerComponent implements OnInit, AfterContentInit {
+export class CommentAnswerComponent implements OnInit, OnDestroy, AfterContentInit {
 
   comment: Comment;
   answer: string;
@@ -29,6 +28,8 @@ export class CommentAnswerComponent implements OnInit, AfterContentInit {
   edit = false;
   MarkdownFeatureset = MarkdownFeatureset;
   renderPreview = false;
+
+  private hotkeyRefs: Symbol[] = [];
 
   constructor(protected route: ActivatedRoute,
               private notificationService: NotificationService,
@@ -39,17 +40,9 @@ export class CommentAnswerComponent implements OnInit, AfterContentInit {
               private dialogService: DialogService,
               private announceService: AnnounceService,
               private eventService: EventService,
+              private hotkeyService: HotkeyService,
               public dialogRef: MatDialogRef<CommentAnswerComponent>,
               @Inject(MAT_DIALOG_DATA) public data: any) {
-  }
-
-  @HostListener('window:keyup', ['$event'])
-  keyEvent(event: KeyboardEvent) {
-    const focusOnInput = this.eventService.focusOnInput;
-    // TODO: use hotkey service
-    if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit2) === true && focusOnInput === false) {
-      this.announce();
-    }
   }
 
   ngAfterContentInit() {
@@ -66,6 +59,15 @@ export class CommentAnswerComponent implements OnInit, AfterContentInit {
     this.comment = this.data.comment;
     this.answer = this.comment.answer;
     this.isParticipant = this.data.role === UserRole.PARTICIPANT;
+    this.hotkeyService.registerHotkey({
+      key: '2',
+      action: () => this.announce(),
+      actionTitle: 'TODO'
+    }, this.hotkeyRefs);
+  }
+
+  ngOnDestroy() {
+    this.hotkeyRefs.forEach(h => this.hotkeyService.unregisterHotkey(h));
   }
 
   public announce() {

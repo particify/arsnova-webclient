@@ -1,4 +1,4 @@
-import { AfterContentInit, Component, HostListener, Input, OnDestroy, OnInit, Renderer2 } from '@angular/core';
+import { AfterContentInit, Component, Input, OnDestroy, OnInit, Renderer2 } from '@angular/core';
 import { AuthenticationService } from '../../../services/http/authentication.service';
 import { RoomService } from '../../../services/http/room.service';
 import { UserRole } from '../../../models/user-roles.enum';
@@ -9,8 +9,6 @@ import { WsFeedbackService } from '../../../services/websockets/ws-feedback.serv
 import { Subscription } from 'rxjs';
 import { TranslateService } from '@ngx-translate/core';
 import { LanguageService } from '../../../services/util/language.service';
-import { KeyboardUtils } from '../../../utils/keyboard';
-import { KeyboardKey } from '../../../utils/keyboard/keys';
 import { Survey } from '../../../models/survey';
 import { GlobalStorageService, STORAGE_KEYS } from '../../../services/util/global-storage.service';
 import { ActivatedRoute } from '@angular/router';
@@ -19,6 +17,7 @@ import { FeedbackService } from '../../../services/http/feedback.service';
 import { FeedbackMessageType } from '../../../models/messages/feedback-message-type';
 import { EventService } from '../../../services/util/event.service';
 import { HotkeyAction } from '../../../directives/hotkey.directive';
+import { HotkeyService } from '../../../services/util/hotkey.service';
 
 @Component({
   selector: 'app-survey-page',
@@ -54,6 +53,8 @@ export class SurveyPageComponent implements OnInit, OnDestroy, AfterContentInit 
   voteKeys = ["1", "2", "3", "4"];
   hotkeyAction = HotkeyAction.FOCUS;
 
+  private hotkeyRefs: Symbol[] = [];
+
   constructor(
     private authenticationService: AuthenticationService,
     private notificationService: NotificationService,
@@ -66,19 +67,10 @@ export class SurveyPageComponent implements OnInit, OnDestroy, AfterContentInit 
     private _r: Renderer2,
     private globalStorageService: GlobalStorageService,
     protected route: ActivatedRoute,
-    private eventService: EventService
+    private eventService: EventService,
+    private hotkeyService: HotkeyService
   ) {
     langService.langEmitter.subscribe(lang => translateService.use(lang));
-  }
-
-  @HostListener('window:keyup', ['$event'])
-  keyEvent(event: KeyboardEvent) {
-    // TODO: use hotkey service
-    if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Escape) === true) {
-      this.announceKeys();
-    } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit5) === true && !this.isClosed) {
-      this.announceStatus();
-    }
   }
 
   ngAfterContentInit() {
@@ -115,6 +107,16 @@ export class SurveyPageComponent implements OnInit, OnDestroy, AfterContentInit 
         document.getElementById('survey-card').style.transform = `scale(${scale})`;
       }
     });
+    this.hotkeyService.registerHotkey({
+      key: 'Escape',
+      action: () => this.announceKeys(),
+      actionTitle: 'TODO'
+    }, this.hotkeyRefs);
+    this.hotkeyService.registerHotkey({
+      key: '5',
+      action: () => !this.isClosed && this.announceStatus(),
+      actionTitle: 'TODO'
+    }, this.hotkeyRefs);
   }
 
   announceKeys() {
@@ -175,6 +177,7 @@ export class SurveyPageComponent implements OnInit, OnDestroy, AfterContentInit 
     if (this.sub) {
       this.sub.unsubscribe();
     }
+    this.hotkeyRefs.forEach(h => this.hotkeyService.unregisterHotkey(h));
   }
 
   private updateFeedback(data) {

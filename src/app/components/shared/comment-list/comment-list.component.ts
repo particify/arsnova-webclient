@@ -2,7 +2,6 @@ import {
   Component,
   ElementRef,
   EventEmitter,
-  HostListener,
   Input,
   OnDestroy,
   OnInit,
@@ -30,9 +29,8 @@ import { DialogService } from '../../../services/util/dialog.service';
 import { GlobalStorageService, STORAGE_KEYS } from '../../../services/util/global-storage.service';
 import { AnnounceService } from '../../../services/util/announce.service';
 import { CommentSettingsService } from '../../../services/http/comment-settings.service';
-import { KeyboardUtils } from '../../../utils/keyboard';
-import { KeyboardKey } from '../../../utils/keyboard/keys';
 import { Location } from '@angular/common';
+import { HotkeyService } from '../../../services/util/hotkey.service';
 
 // Using lowercase letters in enums because they we're also used for parsing incoming WS-messages
 
@@ -122,6 +120,8 @@ export class CommentListComponent implements OnInit, OnDestroy {
   publicCounter = 0;
   moderationCounter = 0;
 
+  private hotkeyRefs: Symbol[] = [];
+
   constructor(
     private commentService: CommentService,
     private translateService: TranslateService,
@@ -137,21 +137,10 @@ export class CommentListComponent implements OnInit, OnDestroy {
     protected route: ActivatedRoute,
     private globalStorageService: GlobalStorageService,
     private commentSettingsService: CommentSettingsService,
-    private location: Location
+    private location: Location,
+    private hotkeyService: HotkeyService
   ) {
     langService.langEmitter.subscribe(lang => translateService.use(lang));
-  }
-
-  @HostListener('window:keyup', ['$event'])
-  keyEvent(event: KeyboardEvent) {
-    // TODO: use hotkey service
-    if (this.isPresentation) {
-      if (KeyboardUtils.isKeyEvent(event, KeyboardKey.LEFT) === true) {
-        this.prevComment();
-      } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.RIGHT) === true) {
-        this.nextComment();
-      }
-    }
   }
 
   ngOnInit() {
@@ -193,6 +182,18 @@ export class CommentListComponent implements OnInit, OnDestroy {
     } else {
       this.scrollMax = 56;
     }
+    if (this.isPresentation) {
+      this.hotkeyService.registerHotkey({
+        key: 'ArrowRight',
+        action: () => this.nextComment(),
+        actionTitle: this.translateService.instant('control-bar.right')
+      }, this.hotkeyRefs);
+      this.hotkeyService.registerHotkey({
+        key: 'ArrowLeft',
+        action: () => this.prevComment(),
+        actionTitle: this.translateService.instant('control-bar.left')
+      }, this.hotkeyRefs);
+    }
   }
 
   initCounter() {
@@ -218,6 +219,7 @@ export class CommentListComponent implements OnInit, OnDestroy {
     if (this.moderatorStream) {
       this.moderatorStream.unsubscribe();
     }
+    this.hotkeyRefs.forEach(h => this.hotkeyService.unregisterHotkey(h));
   }
 
   initRoom(reload = false) {

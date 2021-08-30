@@ -2,7 +2,6 @@ import {
   AfterContentInit,
   Component,
   ElementRef,
-  HostListener,
   Input,
   OnDestroy,
   OnInit,
@@ -13,12 +12,11 @@ import { ClientAuthentication } from '../../../models/client-authentication';
 import { NotificationService } from '../../../services/util/notification.service';
 import { AuthenticationService } from '../../../services/http/authentication.service';
 import { EventService } from '../../../services/util/event.service';
-import { KeyboardUtils } from '../../../utils/keyboard';
-import { KeyboardKey } from '../../../utils/keyboard/keys';
 import { AnnounceService } from '../../../services/util/announce.service';
 import { CommentService } from '../../../services/http/comment.service';
 import { Comment } from '../../../models/comment';
 import { CommentListComponent } from '../comment-list/comment-list.component';
+import { HotkeyService } from '../../../services/util/hotkey.service';
 
 @Component({
   selector: 'app-comment-page',
@@ -35,27 +33,17 @@ export class CommentPageComponent implements OnInit, OnDestroy, AfterContentInit
   auth: ClientAuthentication;
   activeComment: Comment;
 
+  private hotkeyRefs: Symbol[] = [];
+
   constructor(
     private route: ActivatedRoute,
     private notification: NotificationService,
     private authenticationService: AuthenticationService,
     private eventService: EventService,
     private announceService: AnnounceService,
-    private commentService: CommentService
+    private commentService: CommentService,
+    private hotkeyService: HotkeyService
   ) {
-  }
-
-  @HostListener('window:keyup', ['$event'])
-  keyEvent(event: KeyboardEvent) {
-    const focusOnInput = this.eventService.focusOnInput;
-    // TODO: use hotkey service
-    if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Escape) === true && focusOnInput === false) {
-      this.announce();
-    } else if (document.getElementById('search-close-button') && KeyboardUtils.isKeyEvent(event, KeyboardKey.Escape) === true &&
-      focusOnInput === true) {
-      document.getElementById('search-close-button').click();
-      document.getElementById('live-announcer-button').focus();
-    }
   }
 
   ngAfterContentInit(): void {
@@ -68,6 +56,18 @@ export class CommentPageComponent implements OnInit, OnDestroy, AfterContentInit
   ngOnInit(): void {
     this.authenticationService.getCurrentAuthentication()
         .subscribe(auth => this.auth = auth);
+    this.hotkeyService.registerHotkey({
+      key: 'Escape',
+      action: () => {
+        if (document.getElementById('search-close-button')) {
+          document.getElementById('search-close-button').click();
+          document.getElementById('live-announcer-button').focus();
+        } else {
+          this.announce();
+        }
+      },
+      actionTitle: 'TODO'
+    }, this.hotkeyRefs);
   }
 
   ngOnDestroy() {
@@ -75,6 +75,7 @@ export class CommentPageComponent implements OnInit, OnDestroy, AfterContentInit
     if (this.activeComment) {
       this.commentService.lowlight(this.activeComment).subscribe();
     }
+    this.hotkeyRefs.forEach(h => this.hotkeyService.unregisterHotkey(h));
   }
 
   public announce() {

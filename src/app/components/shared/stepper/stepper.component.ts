@@ -1,12 +1,10 @@
-import { ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, Inject, Input, Output } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, EventEmitter, Inject, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { CdkStepper } from '@angular/cdk/stepper';
 import { DOCUMENT } from '@angular/common';
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { KeyboardKey } from '../../../utils/keyboard/keys';
-import { KeyboardUtils } from '../../../utils/keyboard';
 import { Directionality } from '@angular/cdk/bidi';
 import { AnnounceService } from '@arsnova/app/services/util/announce.service';
-import { EventService } from '@arsnova/app/services/util/event.service';
+import { HotkeyService } from '../../../services/util/hotkey.service';
 
 @Component({
   selector: 'app-stepper',
@@ -34,7 +32,7 @@ import { EventService } from '@arsnova/app/services/util/event.service';
     ])
   ]
 })
-export class StepperComponent extends CdkStepper {
+export class StepperComponent extends CdkStepper implements OnInit, OnDestroy {
 
   @Output() newIndex = new EventEmitter<number>();
   @Input() listLength: number;
@@ -47,8 +45,10 @@ export class StepperComponent extends CdkStepper {
   swipeXLocation?: number;
   swipeTime?: number;
 
+  private hotkeyRefs: Symbol[] = [];
+
   constructor(private announceService: AnnounceService,
-              private eventService: EventService,
+              private hotkeyService: HotkeyService,
               dir: Directionality,
               changeDetectorRef: ChangeDetectorRef,
               elementRef: ElementRef<HTMLElement>,
@@ -56,18 +56,22 @@ export class StepperComponent extends CdkStepper {
     super(dir, changeDetectorRef, elementRef, doc);
   }
 
-  @HostListener('window:keyup', ['$event'])
-  keyEvent(event: KeyboardEvent) {
-    // TODO: use hotkey service
-    if (!this.eventService.focusOnInput) {
-      if (KeyboardUtils.isKeyEvent(event, KeyboardKey.LEFT) === true) {
-        this.previous();
-      } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.RIGHT) === true) {
-        this.next();
-      }
-    }
+  ngOnInit() {
+    this.hotkeyService.registerHotkey({
+      key: 'ArrowLeft',
+      action: () => this.previous(),
+      actionTitle: 'TODO'
+    }, this.hotkeyRefs);
+    this.hotkeyService.registerHotkey({
+      key: 'ArrowRight',
+      action: () => this.next(),
+      actionTitle: 'TODO'
+    }, this.hotkeyRefs);
   }
 
+  ngOnDestroy() {
+    this.hotkeyRefs.forEach(h => this.hotkeyService.unregisterHotkey(h));
+  }
 
   init(index: number, length: number) {
     this.onClick(index);

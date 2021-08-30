@@ -1,4 +1,4 @@
-import { Component, EventEmitter, HostListener, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ContentService } from '../../../services/http/content.service';
 import { TranslateService } from '@ngx-translate/core';
@@ -11,20 +11,19 @@ import { Location } from '@angular/common';
 import { ContentGroupService } from '../../../services/http/content-group.service';
 import { InfoBarItem } from '../../shared/bars/info-bar/info-bar.component';
 import { EventService } from '../../../services/util/event.service';
-import { KeyboardUtils } from '../../../utils/keyboard';
-import { KeyboardKey } from '../../../utils/keyboard/keys';
 import { ContentGroup } from '../../../models/content-group';
 import { DialogService } from '../../../services/util/dialog.service';
 import { PublishContentComponent } from '../../shared/_dialogs/publish-content/publish-content.component';
 import { AnnounceService } from '../../../services/util/announce.service';
 import { ContentType } from '../../../models/content-type.enum';
+import { HotkeyService } from '../../../services/util/hotkey.service';
 
 @Component({
   selector: 'app-content-presentation',
   templateUrl: './content-presentation.component.html',
   styleUrls: ['./content-presentation.component.scss']
 })
-export class ContentPresentationComponent implements OnInit {
+export class ContentPresentationComponent implements OnInit, OnDestroy {
 
   @Input() isPresentation = false;
   @Input() groupChanged: EventEmitter<string> = new EventEmitter<string>();
@@ -44,6 +43,8 @@ export class ContentPresentationComponent implements OnInit {
   routeChanged: EventEmitter<boolean> = new EventEmitter<boolean>();
   contentGroup: ContentGroup;
 
+  private hotkeyRefs: Symbol[] = [];
+
   constructor(
     protected route: ActivatedRoute,
     private roomService: RoomService,
@@ -56,19 +57,10 @@ export class ContentPresentationComponent implements OnInit {
     private router: Router,
     private eventService: EventService,
     private dialogService: DialogService,
-    private announceService: AnnounceService
+    private announceService: AnnounceService,
+    private hotkeyService: HotkeyService
   ) {
     langService.langEmitter.subscribe(lang => translateService.use(lang));
-  }
-
-  @HostListener('window:keyup', ['$event'])
-  // TODO: Use hotkey service
-  keyEvent(event: KeyboardEvent) {
-    if (this.isPresentation && !this.eventService.focusOnInput) {
-      if (KeyboardUtils.isKeyEvent(event, KeyboardKey.LetterL) === true) {
-        this.updatePublishedIndexes();
-      }
-    }
   }
 
   ngOnInit() {
@@ -90,8 +82,17 @@ export class ContentPresentationComponent implements OnInit {
         this.isLoading = true;
         this.contentGroupName = group;
         this.initGroup()
-      })
+      });
+      this.hotkeyService.registerHotkey({
+        key: 'l',
+        action: () => this.updatePublishedIndexes(),
+        actionTitle: 'TODO'
+      }, this.hotkeyRefs);
     }
+  }
+
+  ngOnDestroy() {
+    this.hotkeyRefs.forEach(h => this.hotkeyService.unregisterHotkey(h));
   }
 
   initScale() {

@@ -1,23 +1,24 @@
-import { AfterContentInit, Component, HostListener, OnInit } from '@angular/core';
+import { AfterContentInit, Component, OnDestroy, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { LanguageService } from '../../../services/util/language.service';
 import { ClientAuthentication } from '../../../models/client-authentication';
 import { AuthenticationService } from '../../../services/http/authentication.service';
 import { EventService } from '../../../services/util/event.service';
-import { KeyboardUtils } from '../../../utils/keyboard';
-import { KeyboardKey } from '../../../utils/keyboard/keys';
 import { DialogService } from '../../../services/util/dialog.service';
 import { GlobalStorageService } from '../../../services/util/global-storage.service';
 import { AnnounceService } from '../../../services/util/announce.service';
+import { HotkeyService } from '../../../services/util/hotkey.service';
 
 @Component({
   selector: 'app-user-home',
   templateUrl: './user-home.component.html',
   styleUrls: ['./user-home.component.scss']
 })
-export class UserHomeComponent implements OnInit, AfterContentInit {
+export class UserHomeComponent implements OnInit, OnDestroy, AfterContentInit {
 
   auth: ClientAuthentication;
+
+  private hotkeyRefs: Symbol[] = [];
 
   constructor(
     private dialogService: DialogService,
@@ -26,18 +27,10 @@ export class UserHomeComponent implements OnInit, AfterContentInit {
     private authenticationService: AuthenticationService,
     private eventService: EventService,
     private globalStorageService: GlobalStorageService,
-    private announceService: AnnounceService
+    private announceService: AnnounceService,
+    private hotkeyService: HotkeyService
   ) {
     langService.langEmitter.subscribe(lang => translateService.use(lang));
-  }
-
-  @HostListener('window:keyup', ['$event'])
-  keyEvent(event: KeyboardEvent) {
-    // TODO: use hotkey service
-    if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Escape) === true &&
-      this.eventService.focusOnInput === false) {
-      this.announce();
-    }
   }
 
   ngAfterContentInit(): void {
@@ -49,6 +42,15 @@ export class UserHomeComponent implements OnInit, AfterContentInit {
   ngOnInit() {
     this.authenticationService.getCurrentAuthentication()
         .subscribe(auth => this.auth = auth);
+    this.hotkeyService.registerHotkey({
+      key: 'Escape',
+      action: () => this.announce(),
+      actionTitle: 'TODO'
+    }, this.hotkeyRefs);
+  }
+
+  ngOnDestroy() {
+    this.hotkeyRefs.forEach(h => this.hotkeyService.unregisterHotkey(h));
   }
 
   announce() {

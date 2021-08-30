@@ -1,4 +1,4 @@
-import { AfterContentInit, Component, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterContentInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ContentType } from '../../../models/content-type.enum';
 import { ContentService } from '../../../services/http/content.service';
 import { Content } from '../../../models/content';
@@ -7,8 +7,6 @@ import { TranslateService } from '@ngx-translate/core';
 import { StepperComponent } from '../../shared/stepper/stepper.component';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RoomService } from '../../../services/http/room.service';
-import { KeyboardUtils } from '../../../utils/keyboard';
-import { KeyboardKey } from '../../../utils/keyboard/keys';
 import { GlobalStorageService, STORAGE_KEYS } from '../../../services/util/global-storage.service';
 import { AnnounceService } from '../../../services/util/announce.service';
 import { Location } from '@angular/common';
@@ -21,6 +19,7 @@ import { ContentGroupService } from '../../../services/http/content-group.servic
 import { EventService } from '../../../services/util/event.service';
 import { EntityChanged } from '../../../models/events/entity-changed';
 import { Subscription } from 'rxjs';
+import { HotkeyService } from '../../../services/util/hotkey.service';
 
 @Component({
   selector: 'app-participant-content-carousel-page',
@@ -52,6 +51,8 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
   displaySnackBar = false;
   changesSubscription: Subscription;
 
+  private hotkeyRefs: Symbol[] = [];
+
   constructor(
     private contentService: ContentService,
     protected translateService: TranslateService,
@@ -66,16 +67,9 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
     private routingService: RoutingService,
     private notificationService: NotificationService,
     private eventService: EventService,
-    private router: Router
+    private router: Router,
+    private hotkeyService: HotkeyService
   ) {
-  }
-
-  @HostListener('window:keyup', ['$event'])
-  keyEvent(event: KeyboardEvent) {
-    // TODO: use hotkey service
-    if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Escape) === true) {
-      this.announce('answer.a11y-shortcuts');
-    }
   }
 
   ngAfterContentInit() {
@@ -89,6 +83,7 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
     if (this.changesSubscription) {
       this.changesSubscription.unsubscribe();
     }
+    this.hotkeyRefs.forEach(h => this.hotkeyService.unregisterHotkey(h));
   }
 
   ngOnInit() {
@@ -108,6 +103,11 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
     this.changesSubscription = this.eventService.on('EntityChanged').subscribe(changes => {
       this.handleStateEvent(changes);
     });
+    this.hotkeyService.registerHotkey({
+      key: 'Escape',
+      action: () => this.announce('answer.a11y-shortcuts'),
+      actionTitle: 'TODO'
+    }, this.hotkeyRefs);
   }
 
   getContents(lastContentIndex) {
