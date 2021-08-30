@@ -51,6 +51,7 @@ import { SplitShortId } from '../../pipes/split-short-id';
 import { ListBadgeComponent } from './list-badge/list-badge.component';
 import { CounterBraces } from '../../pipes/counter-braces';
 import { HotkeyDirective } from '../../directives/hotkey.directive';
+import { HotkeysComponent } from './_dialogs/hotkeys/hotkeys.component';
 
 @NgModule({
   imports: [
@@ -108,7 +109,8 @@ import { HotkeyDirective } from '../../directives/hotkey.directive';
     SplitShortId,
     ListBadgeComponent,
     CounterBraces,
-    HotkeyDirective
+    HotkeyDirective,
+    HotkeysComponent
   ],
   exports: [
     RoomJoinComponent,
@@ -146,7 +148,8 @@ import { HotkeyDirective } from '../../directives/hotkey.directive';
     AnswerCountComponent,
     WordcloudComponent,
     SplitShortId,
-    HotkeyDirective
+    HotkeyDirective,
+    HotkeysComponent
   ]
 })
 export class SharedModule {

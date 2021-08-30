@@ -1,7 +1,12 @@
 import { DOCUMENT } from '@angular/common';
 import { Inject, Injectable } from '@angular/core';
+import { MatDialogRef, MatDialogState } from '@angular/material/dialog';
 import { EventManager } from '@angular/platform-browser';
 import { environment } from '../../../environments/environment';
+import { HotkeysComponent } from '../../components/shared/_dialogs/hotkeys/hotkeys.component';
+import { DialogService } from './dialog.service';
+
+export const HELP_KEY = 'h';
 
 export interface Hotkey {
   key: string;
@@ -16,6 +21,18 @@ export enum HotkeyModifier {
   SHIFT = 'Shift'
 }
 
+export interface HotkeyInfo {
+  keySymbol: string;
+  translateKeyName: boolean;
+  modifiers?: HotkeyModifier[];
+  actionTitle: string;
+}
+
+export const KEY_SYMBOLS = new Map<string, string>([
+  ['ArrowLeft', '⬅'],
+  ['ArrowRight', '➡']
+]);
+
 const includedInputTypes = ['button', 'checkbox', 'radio'];
 
 const excludedElementTypes = new Map<string, (el: Element) => boolean>([
@@ -29,11 +46,15 @@ export class HotkeyService {
   hotkeyRegistrations: Map<Symbol, Hotkey> = new Map();
   unregisterHandler: Function;
 
+  private dialogRef: MatDialogRef<HotkeysComponent>;
+
   constructor(
     private eventManager: EventManager,
+    private dialogService: DialogService,
     @Inject(DOCUMENT) private document: HTMLDocument
   ) {
     this.registerHandler();
+    this.registerDialogHotkey();
   }
 
   registerHotkey(hotkey: Hotkey, localHotkeyRegistrations?: Symbol[]): Symbol {
@@ -54,6 +75,42 @@ export class HotkeyService {
     this.hotkeyRegistrations.set(registrationRef, hotkey);
   }
 
+  private registerDialogHotkey() {
+    this.registerHotkey({
+      key: HELP_KEY,
+      action: () => this.showDialog(),
+      actionTitle: 'hotkeys.display-overview'
+    });
+  }
+
+  private showDialog() {
+    if (this.dialogRef?.getState() === MatDialogState.OPEN) {
+      return;
+    }
+    // Remove focus to avoid screenreaders to announce the active element immediately after closing the dialog.
+    (this.document.activeElement as HTMLElement).blur();
+    this.dialogRef = this.dialogService.openDialog(HotkeysComponent, {
+      data: this.getHotkeyInfos(),
+      width: '500px'
+    });
+  }
+
+  private getHotkeyInfos(): HotkeyInfo[] {
+    return this.sortHotkeys(Array.from(this.hotkeyRegistrations.values()))
+        .map(h => h.key === ' ' ? { ...h, key: 'Space' } : h )
+        .map(h => ({
+          keyName: h.key.toLowerCase(),
+          keySymbol: KEY_SYMBOLS.get(h.key) ?? h.key.toUpperCase(),
+          translateKeyName: h.key.length > 1 && !KEY_SYMBOLS.has(h.key),
+          modifiers: h.modifiers,
+          actionTitle: h.actionTitle
+        }));
+  }
+
+  private sortHotkeys(hotkeys: Hotkey[]) {
+    return hotkeys.sort((a, b) => a.key.length === b.key.length ? a.key.localeCompare(b.key) : b.key.length - a.key.length);
+  }
+
   private handleKeyboardEvent(event: KeyboardEvent) {
     for (const hotkey of this.hotkeyRegistrations.values()) {
       if (event.key !== hotkey.key) {
@@ -71,6 +128,18 @@ export class HotkeyService {
           console.log('Registered hotkey detected but ignored.', hotkey, event);
         }
         return;
+      }
+      if (this.dialogRef && event.key !== HELP_KEY) {
+        this.dialogRef.close();
+        // Explicitly reset dialogRef because we cannot rely on MatDialogState here.
+        // The dialog is closed before this handler is called when pressing Escape.
+        this.dialogRef = null;
+        if (event.key === 'Escape') {
+          if (!environment.production) {
+            console.log('Registered hotkey detected but ignored.', hotkey, event);
+          }
+          return;
+        }
       }
       if (!environment.production) {
         console.log('Registered hotkey detected.', hotkey, event);

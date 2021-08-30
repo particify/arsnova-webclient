@@ -318,5 +318,18 @@
     "score": "Score",
     "timestamp": "Zeitstempel",
     "token": "Bonus-Token"
+  },
+  "hotkeys": {
+    "overview-title": "Tastaturbefehle",
+    "display-overview": "Tastaturbefehle anzeigen",
+    "action": "Aktion",
+    "keys": "Tastenkürzel"
+  },
+  "keys": {
+    "ctrl": "Strg",
+    "alt": "Alt",
+    "shift": "Umschalt",
+    "space": "Leertaste",
+    "escape": "Escape"
   }
 }
