@@ -60,7 +60,10 @@
     "delete-all-comments": "Delete all",
     "delete-banned-comments": "Delete list",
     "all-comments-deleted": "All posts have been deleted.",
-    "banned-comments-deleted": "The moderation list has been deleted."
+    "banned-comments-deleted": "The moderation list has been deleted.",
+    "next": "Next post",
+    "previous": "Previous post",
+    "list": "Post list"
   },
   "comment-page": {
     "a11y-shortcuts": "To create a post, press key 1. Once there are multiple posts, you can search and filter posts. To browse the posts press key 2, to sort posts key 3, to filter posts key 4, to select the time period key 5, to pause or resume the post stream key 6, to go to the first post key 7, to go to the user menu key 9, to go back to the room overview key 0 or the escape key to repeat this announcement",
@@ -123,7 +126,9 @@
     "search-box-input-description": "Here you can search for post.",
     "show-actions": "Show more options",
     "vote-down": "Vote down",
-    "vote-up": "Vote up"
+    "vote-up": "Vote up",
+    "zoom-in": "Zoom in",
+    "zoom-out": "Zoom out"
   },
   "content": {
     "a11y-content-create-message": "You can now create a new content. Press the Enter key to get information about key combinations or call up the announcement later via the Escape key.",
@@ -292,6 +297,7 @@
     "content-group-name": "Name of the question series",
     "sort-content-group": "Sort the question series",
     "updated-sorting": "Your sorting has been saved.",
+    "format": "Format",
     "format-choice": "Multiple-Choice",
     "format-scale": "Likert",
     "format-binary": "Yes / No",
@@ -320,7 +326,11 @@
     "max-keywords-out-of-range": "Keyword limit must be between {{min}} and {{max}}.",
     "no-contents-yet": "There are no contents yet.",
     "delete-content-group": "Delete question series",
-    "content-group-deleted": "Your question series has been deleted."
+    "content-group-deleted": "Your question series has been deleted.",
+    "contents": "Contents",
+    "groups": "Question series",
+    "next": "Next content",
+    "previous": "Previous content"
   },
   "survey": {
     "a11y-message": "You are now in live feedback mode. Press the Enter key to get information about key combinations or use the Escape key to call up the announcement later.",
@@ -351,7 +361,8 @@
     "survey-b": "B",
     "survey-c": "C",
     "survey-d": "D",
-    "change-type": "Change type"
+    "change-type": "Change type",
+    "status-summary": "Status summary"
   },
   "home-page": {
     "create-room": "New Room",
@@ -608,7 +619,8 @@
     "zoom-out": "Zoom out",
     "key": "Key",
     "space": "Space",
-    "escape": "ESC"
+    "escape": "ESC",
+    "publish-or-lock-content": "Publish or lock content"
   },
   "presentation": {
     "a11y-welcome": "You are now in presentation mode. Information for joining the room are displayed. If you want to know about key combinations, press the enter key or press the key i later.",

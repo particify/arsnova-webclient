@@ -68,7 +68,8 @@
     "my-rooms": "My rooms",
     "style": "Display",
     "user-bonus-token": "See your bonus tokens",
-    "news": "There are news"
+    "news": "There are news",
+    "menu": "Main menu"
   },
   "home-page": {
     "a11y-create-room": "Create a new room",
@@ -98,7 +99,8 @@
     "update": "Update",
     "update-successful": "Update installed successfully.",
     "welcome": "Feedback and Interaction",
-    "example": "e.g. "
+    "example": "e.g. ",
+    "enter-room-number": "Enter room number"
   },
   "imprint": {
     "a11y": "Below you will find the legal info of ARSnova.",

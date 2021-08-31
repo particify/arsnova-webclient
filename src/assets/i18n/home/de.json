@@ -68,7 +68,8 @@
     "my-rooms": "Meine Räume",
     "style": "Anzeige",
     "user-bonus-token": "Zu deinen Bonus Tokens",
-    "news": "Es gibt Neuigkeiten"
+    "news": "Es gibt Neuigkeiten",
+    "menu": "Hauptmenü"
   },
   "home-page": {
     "a11y-create-room": "Erstellt einen neuen Raum.",
@@ -98,7 +99,8 @@
     "update": "Aktualisieren",
     "update-successful": "Update erfolgreich installiert.",
     "welcome": "Feedback und Interaktion",
-    "example": "z. B. "
+    "example": "z. B. ",
+    "enter-room-number": "Raumnummer eingeben"
   },
   "imprint": {
     "a11y": "Es folgt das Impressum von ARSnova.",

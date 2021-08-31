@@ -45,7 +45,11 @@
     "word": "Keyword"
   },
   "content": {
-    "a11y-wordcloud-info": "Used keywords by frequency in descending order."
+    "a11y-wordcloud-info": "Used keywords by frequency in descending order.",
+    "groups": "Question series",
+    "next": "Next content",
+    "previous": "Previous content",
+    "description": "Content description"
   },
   "comment-list": {
     "a11y-search-list": "Search for posts",
@@ -97,7 +101,8 @@
     "filter": "Filter",
     "sort-votedesc": "Best rating",
     "sort-voteasc": "Worst rating",
-    "sort-time": "Last created"
+    "sort-time": "Last created",
+    "list": "Post list"
   },
   "comment-page": {
     "a11y-shortcuts": "To create a post, press the key 1. Once there are several posts, you can search and filter posts. To browse the posts press key 2, to sort posts key 3, to filter posts key 4, to select the time period key 5, to pause or resume the post stream key 6, to go to the first post key 7, to go to the user menu key 9, to go back to the room overview key 0 or the escape key to repeat this announcement",
@@ -122,7 +127,9 @@
     "no-comments-found": "No posts found.",
     "search-box-input-description": "Here you can search for posts.",
     "vote-down": "Vote down",
-    "vote-up": "Vote up"
+    "vote-up": "Vote up",
+    "zoom-in": "Zoom in",
+    "zoom-out": "Zoom out"
   },
   "survey": {
     "a11y-message": "You are now in live feedback mode. Press the Enter key to get information about key combinations or use the Escape key to call up the announcement later.",
@@ -147,7 +154,8 @@
     "survey-a": "A",
     "survey-b": "B",
     "survey-c": "C",
-    "survey-d": "D"
+    "survey-d": "D",
+    "status-summary": "Status summary"
   },
   "room-page": {
     "a11y-room-message": "You're in the room {{name}} now. To get information about key combinations press the Enter key or call the announcement later with the Escape key.",

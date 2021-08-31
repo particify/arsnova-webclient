@@ -14,7 +14,7 @@
               <div [ngClass]="{'disabled': isEditMode}" fxLayout="row wrap" fxLayoutAlign="start">
                 <button tabindex="{{isEditMode ? '-1' : '0'}}" [matMenuTriggerFor]="formatMenu" aria-labelledby="choose-format" class="format-button"
                         id="format-button" mat-stroked-button
-                        appHotkey="2">
+                        appHotkey="2" [appHotkeyTitle]="'content.format' | translate">
                   <mat-icon class="format-button-icon">{{ selectedFormat.icon }}</mat-icon>
                   <span>
           {{ 'content.format-' + selectedFormat.name | translate}}

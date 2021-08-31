@@ -15,8 +15,9 @@
           </div>
           <button mat-icon-button class="corner-buttons" id="presentation-button" (click)="openPresentationMode()"
                   aria-labelledby="presentation-mode"
-                  appHotkey="5">
-            <mat-icon class="corner-icon icon-secondary" [matTooltip]="'presentation.presentation-mode' | translate">
+                  appHotkey="5"
+                  [matTooltip]="'presentation.presentation-mode' | translate">
+            <mat-icon class="corner-icon icon-secondary">
               present_to_all
             </mat-icon>
           </button>
@@ -50,7 +51,7 @@
           <div class="action-button-item" fxLayoutAlign="center center">
             <button id="comments-button" mat-icon-button class="main-button" [disableRipple]="true"
                     routerLink="/creator/room/{{ room.shortId }}/comments" aria-labelledby="comments"
-                    appHotkey="1">
+                    appHotkey="1" [appHotkeyTitle]="'room-page.comments' | translate">
               <mat-icon matBadge="{{commentCounter}}" class="main-icon">
                 question_answer
               </mat-icon>
@@ -61,7 +62,7 @@
           <div class="action-button-item" fxLayoutAlign="center center">
             <button mat-icon-button class="main-button" id="live-survey-button" aria-labelledby="live-survey"
                     [disableRipple]="true" routerLink="/creator/room/{{ room.shortId }}/survey"
-                    appHotkey="2">
+                    appHotkey="2" [appHotkeyTitle]="'room-page.live-survey' | translate">
               <mat-icon class="main-icon">
                 thumbs_up_down
               </mat-icon>
@@ -76,17 +77,17 @@
         <div fxLayout="column" [ngClass]="{'group-container': contentGroups.length > 0, 'empty-group-container': contentGroups.length === 0}">
           <button id="content-group-create-button" mat-stroked-button class="stroked-primary add-group" aria-labelledby="create-content-group"
                   (click)="openCreateContentGroupDialog()"
-                  appHotkey="3">
+                  appHotkey="3" [appHotkeyTitle]="'room-page.create-content-group' | translate">
             <mat-icon>playlist_add</mat-icon>
             {{ 'room-page.create-content-group' | translate }}
           </button>
           <ng-container *ngIf="contentGroups?.length > 0; else noContents">
-            <p tabindex="-1" id="content-groups" class="visually-hidden" appHotkey="4">
+            <p tabindex="-1" id="content-groups" class="visually-hidden" appHotkey="4" [appHotkeyTitle]="'content.groups' | translate">
               {{ 'room-page.a11y-content-groups' | translate: {count: contentGroups.length} }}</p>
           </ng-container>
           <ng-template #noContents>
             <p>{{ 'room-page.no-content-groups' | translate }}</p>
-            <p tabindex="-1" id="no-content-groups" class="visually-hidden" appHotkey="4">
+            <p tabindex="-1" id="no-content-groups" class="visually-hidden" appHotkey="4" [appHotkeyTitle]="'content.groups' | translate">
               {{ 'room-page.a11y-no-content-groups' | translate }}</p>
           </ng-template>
           <div *ngIf="room && contentGroups">

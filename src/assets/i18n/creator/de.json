@@ -60,7 +60,10 @@
     "delete-all-comments": "Alle löschen",
     "delete-banned-comments": "Liste löschen",
     "all-comments-deleted": "Alle Beiträge wurden gelöscht.",
-    "banned-comments-deleted": "Die Moderationsliste wurde gelöscht."
+    "banned-comments-deleted": "Die Moderationsliste wurde gelöscht.",
+    "next": "Nächster Beitrag",
+    "previous": "Vorheriger Beitrag",
+    "list": "Beitragsliste"
   },
   "comment-page": {
     "a11y-shortcuts": "Um einen Beitrag zu erstellen drücke die Taste 1. Sobald mehrere Beiträge vorhanden sind kannst du Beiträge suchen und filtern. Um die Beiträge zu durchsuchen drücke die Taste 2, um Beiträge zu sortieren die Taste 3, um Beiträge zu filtern die Taste 4, um den Zeitraum auszuwählen die Taste 5, um den Beitragstream zu pausieren oder fortzusetzen die Taste 6, um zu dem ersten Beitrag zu gelangen die Taste 7, um auf das Nutzer-Menü zu gelangen die Taste 9, um zurück zur Raumübersicht zu gelangen die Taste 0 oder die Escape-Taste um diese Ansage zu wiederholen.",
@@ -123,7 +126,9 @@
     "search-box-input-description": "Hier kannst du nach Beiträgen suchen.",
     "show-actions": "Zeige weitere Optionen",
     "vote-down": "Beitrag abwerten",
-    "vote-up": "Beitrag aufwerten"
+    "vote-up": "Beitrag aufwerten",
+    "zoom-in": "Vergrößern",
+    "zoom-out": "Verkleinern"
   },
   "content": {
     "a11y-content-create-message": "Du kannst jetzt einen neuen Inhalt erstellen. Drücke die Enter-Taste, um Informationen über Tastenkombinationen zu erhalten oder rufe die Ansage später über die Escape-Taste auf.",
@@ -292,6 +297,7 @@
     "content-group-name": "Name der Fragenserie",
     "sort-content-group": "Sortieren",
     "updated-sorting": "Deine Sortierung wurde gespeichert.",
+    "format": "Format",
     "format-choice": "Multiple-Choice",
     "format-scale": "Likert",
     "format-binary": "Ja / Nein",
@@ -320,7 +326,11 @@
     "max-keywords-out-of-range": "Schlagwortanzahl muss zwischen {{min}} und {{max}} liegen.",
     "no-contents-yet": "Es sind noch keine Inhalte vorhanden.",
     "delete-content-group": "Fragenserie löschen",
-    "content-group-deleted": "Deine Fragenserie wurde gelöscht."
+    "content-group-deleted": "Deine Fragenserie wurde gelöscht.",
+    "contents": "Inhalte",
+    "groups": "Fragenserien",
+    "next": "Nächster Inhalt",
+    "previous": "Vorheriger Inhalt"
   },
   "survey": {
     "a11y-message": "Du befindest dich jetzt im Live Feedback. Drücke die Enter-Taste, um Informationen zu Tastenkombinationen zu erhalten oder rufe die Ansage später mit der Escape-Taste auf.",
@@ -351,7 +361,8 @@
     "survey-b": "B",
     "survey-c": "C",
     "survey-d": "D",
-    "change-type": "Typ ändern"
+    "change-type": "Typ ändern",
+    "status-summary": "Status-Zusammenfassung"
   },
   "home-page": {
     "create-room": "Neuer Raum",
@@ -609,7 +620,8 @@
     "zoom-out": "Verkleinern",
     "key": "Taste",
     "space": "Leertaste",
-    "escape": "ESC"
+    "escape": "ESC",
+    "publish-or-lock-content": "Inhalt freigeben oder sperren"
   },
   "presentation": {
     "a11y-welcome": "Du befindest dich jetzt im Präsentationsmodus. Es werden Informationen für das Beitreten des Raums angezeigt. Wenn du Informationen über Tastenkombinationen erfahren möchtest, drücke die Enter-Taste oder drücke später die Taste i.",

@@ -45,7 +45,11 @@
     "word": "Schlagwort"
   },
   "content": {
-    "a11y-wordcloud-info": "Verwendete Schlagwörter nach Häufigkeit in absteigender Reihenfolge."
+    "a11y-wordcloud-info": "Verwendete Schlagwörter nach Häufigkeit in absteigender Reihenfolge.",
+    "groups": "Fragenserien",
+    "next": "Nächster Inhalt",
+    "previous": "Vorheriger Inhalt",
+    "description": "Inhaltsbeschreibung"
   },
   "comment-list": {
     "a11y-search-list": "Durchsuche die Beiträge",
@@ -97,7 +101,8 @@
     "filter": "Filtern",
     "sort-votedesc": "Positivste Bewertung",
     "sort-voteasc": "Negativste Bewertung",
-    "sort-time": "Zuletzt erstellt"
+    "sort-time": "Zuletzt erstellt",
+    "list": "Beitragsliste"
   },
   "comment-page": {
     "a11y-shortcuts": "Um einen Beitrag zu erstellen drücke die Taste 1. Sobald mehrere Beiträge vorhanden sind kannst du Beiträge suchen und filtern. Um die Beiträge zu durchsuchen drücke die Taste 2, um Beiträge zu sortieren die Taste 3, um Beiträge zu filtern die Taste 4, um den Zeitraum auszuwählen die Taste 5, um den Beitragrstream zu pausieren oder fortzusetzen die Taste 6, um zu dem ersten Beitrag zu gelangen die Taste 7, um auf das Nutzer-Menü zu gelangen die Taste 9, um zurück zur Raumübersicht zu gelangen die Taste 0 oder die Escape-Taste um diese Ansage zu wiederholen.",
@@ -122,7 +127,9 @@
     "no-comments-found": "Keine Beiträge gefunden.",
     "search-box-input-description": "Hier kannst du nach Beiträgen suchen.",
     "vote-down": "Beitrag abwerten",
-    "vote-up": "Beitrag aufwerten"
+    "vote-up": "Beitrag aufwerten",
+    "zoom-in": "Vergrößern",
+    "zoom-out": "Verkleinern"
   },
   "survey": {
     "a11y-message": "Du befindest dich jetzt im Live Feedback. Drücke die Enter-Taste, um Informationen zu Tastenkombinationen zu erhalten oder rufe die Ansage später mit der Escape-Taste auf.",
@@ -147,7 +154,8 @@
     "survey-a": "A",
     "survey-b": "B",
     "survey-c": "C",
-    "survey-d": "D"
+    "survey-d": "D",
+    "status-summary": "Status-Zusammenfassung"
   },
   "room-page": {
     "a11y-room-message": "Du befindest dich jetzt in dem Raum {{name}}. Um Informationen zu Tastenkombinationen zu erhalten, drücke jetzt die Enter-Taste oder rufe die Ansage zu einem späteren Zeitpunkt mit der Escape-Taste auf.",

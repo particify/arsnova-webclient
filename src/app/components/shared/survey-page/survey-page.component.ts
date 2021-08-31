@@ -112,11 +112,13 @@ export class SurveyPageComponent implements OnInit, OnDestroy, AfterContentInit 
       action: () => this.announceKeys(),
       actionTitle: 'TODO'
     }, this.hotkeyRefs);
-    this.hotkeyService.registerHotkey({
-      key: '5',
-      action: () => !this.isClosed && this.announceStatus(),
-      actionTitle: 'TODO'
-    }, this.hotkeyRefs);
+    this.translateService.get('survey.status-summary').subscribe(t =>
+      this.hotkeyService.registerHotkey({
+        key: '5',
+        action: () => !this.isClosed && this.announceStatus(),
+        actionTitle: t
+      }, this.hotkeyRefs)
+    );
   }
 
   announceKeys() {

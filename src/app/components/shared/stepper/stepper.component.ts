@@ -5,6 +5,7 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
 import { Directionality } from '@angular/cdk/bidi';
 import { AnnounceService } from '@arsnova/app/services/util/announce.service';
 import { HotkeyService } from '../../../services/util/hotkey.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-stepper',
@@ -38,6 +39,7 @@ export class StepperComponent extends CdkStepper implements OnInit, OnDestroy {
   @Input() listLength: number;
   @Input() completed: Map<number, boolean> = new Map<number, boolean>();
   @Input() isPresentation = false;
+  @Input() i18nPrefix: string;
   headerPos = 0;
   containerAnimationState = 'current';
   headerAnimationState = 'init';
@@ -49,6 +51,7 @@ export class StepperComponent extends CdkStepper implements OnInit, OnDestroy {
 
   constructor(private announceService: AnnounceService,
               private hotkeyService: HotkeyService,
+              private translateService: TranslateService,
               dir: Directionality,
               changeDetectorRef: ChangeDetectorRef,
               elementRef: ElementRef<HTMLElement>,
@@ -57,16 +60,20 @@ export class StepperComponent extends CdkStepper implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.hotkeyService.registerHotkey({
-      key: 'ArrowLeft',
-      action: () => this.previous(),
-      actionTitle: 'TODO'
-    }, this.hotkeyRefs);
-    this.hotkeyService.registerHotkey({
-      key: 'ArrowRight',
-      action: () => this.next(),
-      actionTitle: 'TODO'
-    }, this.hotkeyRefs);
+    this.translateService.get(this.i18nPrefix + '.previous').subscribe(t =>
+      this.hotkeyService.registerHotkey({
+        key: 'ArrowLeft',
+        action: () => this.previous(),
+        actionTitle: t
+      }, this.hotkeyRefs)
+    );
+    this.translateService.get(this.i18nPrefix + '.next').subscribe(t =>
+      this.hotkeyService.registerHotkey({
+        key: 'ArrowRight',
+        action: () => this.next(),
+        actionTitle: t
+      }, this.hotkeyRefs)
+    );
   }
 
   ngOnDestroy() {

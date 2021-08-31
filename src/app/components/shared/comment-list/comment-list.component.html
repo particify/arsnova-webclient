@@ -228,7 +228,8 @@
     </button>
   </div>
 
-  <div [ngClass]="{'comments-container': !isPresentation}" *ngIf="!isLoading" tabindex="-1" appHotkey="7">
+  <div [ngClass]="{'comments-container': !isPresentation}" *ngIf="!isLoading" tabindex="-1"
+       appHotkey="7" [appHotkeyTitle]="'comment-list.list' | translate" [attr.aria-label]="'comment-list.list' | translate">
     <app-comment *ngFor="let current of displayComments" [comment]="current" [archived]="isArchive"
                  [parseVote]="getVote(current)" (clickedOnTag)="clickedOnTag($event)" [isModeratorView]="isModerator"
                  [isPresentation]="isPresentation" (activeComment)="updateCurrentComment($event)"

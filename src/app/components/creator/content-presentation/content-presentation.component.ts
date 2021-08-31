@@ -83,11 +83,13 @@ export class ContentPresentationComponent implements OnInit, OnDestroy {
         this.contentGroupName = group;
         this.initGroup()
       });
-      this.hotkeyService.registerHotkey({
-        key: 'l',
-        action: () => this.updatePublishedIndexes(),
-        actionTitle: 'TODO'
-      }, this.hotkeyRefs);
+      this.translateService.get('control-bar.publish-or-lock-content').subscribe(t =>
+        this.hotkeyService.registerHotkey({
+          key: 'l',
+          action: () => this.updatePublishedIndexes(),
+          actionTitle: t
+        }, this.hotkeyRefs)
+      );
     }
   }
 

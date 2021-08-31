@@ -183,16 +183,18 @@ export class CommentListComponent implements OnInit, OnDestroy {
       this.scrollMax = 56;
     }
     if (this.isPresentation) {
-      this.hotkeyService.registerHotkey({
-        key: 'ArrowRight',
-        action: () => this.nextComment(),
-        actionTitle: this.translateService.instant('control-bar.right')
-      }, this.hotkeyRefs);
-      this.hotkeyService.registerHotkey({
-        key: 'ArrowLeft',
-        action: () => this.prevComment(),
-        actionTitle: this.translateService.instant('control-bar.left')
-      }, this.hotkeyRefs);
+      this.translateService.get(['comment-list.next', 'comment-list.previous']).subscribe(t => {
+        this.hotkeyService.registerHotkey({
+          key: 'ArrowRight',
+          action: () => this.nextComment(),
+          actionTitle: t['comment-list.next']
+        }, this.hotkeyRefs);
+        this.hotkeyService.registerHotkey({
+          key: 'ArrowLeft',
+          action: () => this.prevComment(),
+          actionTitle: t['comment-list.previous']
+        }, this.hotkeyRefs);
+      });
     }
   }
 
