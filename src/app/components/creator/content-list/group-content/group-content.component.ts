@@ -13,7 +13,6 @@ import { ContentGroupService } from '../../../../services/http/content-group.ser
 import { ContentListBaseComponent } from '../content-list-base.component';
 import { ContentGroup } from '../../../../models/content-group';
 import { AnnounceService } from '../../../../services/util/announce.service';
-import { EventService } from '../../../../services/util/event.service';
 import { LocalFileService } from '../../../../services/util/local-file.service';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Observable } from 'rxjs';
@@ -57,7 +56,6 @@ export class GroupContentComponent extends ContentListBaseComponent implements O
     protected globalStorageService: GlobalStorageService,
     protected contentGroupService: ContentGroupService,
     protected announceService: AnnounceService,
-    public eventService: EventService,
     protected localFileService: LocalFileService,
     protected router: Router
   ) {
@@ -118,14 +116,12 @@ export class GroupContentComponent extends ContentListBaseComponent implements O
     setTimeout(() => {
       document.getElementById('nameInput').focus();
       this.nameInput.nativeElement.selectionStart = this.updatedName.length;
-      this.eventService.makeFocusOnInputTrue();
     }, 100);
 
   }
 
   leaveTitleEditMode(): void {
     this.isInTitleEditMode = false;
-    this.eventService.makeFocusOnInputFalse();
     this.saveGroupName();
   }
 

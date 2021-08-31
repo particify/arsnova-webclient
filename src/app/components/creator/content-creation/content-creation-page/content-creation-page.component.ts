@@ -1,7 +1,6 @@
 import { AfterContentInit, Component, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { LanguageService } from '../../../../services/util/language.service';
-import { EventService } from '../../../../services/util/event.service';
 import { GlobalStorageService, STORAGE_KEYS } from '../../../../services/util/global-storage.service';
 import { ActivatedRoute } from '@angular/router';
 import { RoomService } from '../../../../services/http/room.service';
@@ -58,7 +57,6 @@ export class ContentCreationPageComponent implements OnInit, AfterContentInit {
   constructor(
     private translateService: TranslateService,
     protected langService: LanguageService,
-    public eventService: EventService,
     private announceService: AnnounceService,
     private globalStorageService: GlobalStorageService,
     protected route: ActivatedRoute,
@@ -73,7 +71,6 @@ export class ContentCreationPageComponent implements OnInit, AfterContentInit {
     setTimeout(() => {
       document.getElementById('message-announcer-button').focus();
     }, 700);
-    this.eventService.makeFocusOnInputFalse();
   }
 
   ngOnInit() {

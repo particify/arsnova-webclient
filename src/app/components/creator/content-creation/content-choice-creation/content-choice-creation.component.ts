@@ -33,8 +33,7 @@ export class ContentChoiceCreationComponent extends ContentCreationComponent imp
     protected roomService: RoomService,
     protected contentGroupService: ContentGroupService,
     protected route: ActivatedRoute,
-    protected announceService: AnnounceService,
-  public eventService: EventService
+    protected announceService: AnnounceService
   ) {
     super(contentService, notificationService, translationService, roomService, contentGroupService, route, announceService);
   }
@@ -105,13 +104,11 @@ export class ContentChoiceCreationComponent extends ContentCreationComponent imp
 
   goInEditMode(index: number): void {
     this.isAnswerEdit = index;
-    this.eventService.makeFocusOnInputTrue();
   }
 
   leaveEditMode(): void {
     this.saveAnswerLabels();
     this.isAnswerEdit = -1;
-    this.eventService.makeFocusOnInputFalse();
   }
 
   deleteAnswer(index: number) {

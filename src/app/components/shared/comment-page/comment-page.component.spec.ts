@@ -57,8 +57,7 @@ class MockAuthenticationService {
 
 @Injectable()
 class MockEventService {
-  makeFocusOnInputFalse() {
-  }
+
 }
 
 @Injectable()

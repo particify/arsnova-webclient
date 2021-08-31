@@ -2,7 +2,6 @@ import { AfterContentInit, Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { NotificationService } from '../../../services/util/notification.service';
 import { AuthenticationService } from '../../../services/http/authentication.service';
-import { EventService } from '../../../services/util/event.service';
 import { AnnounceService } from '../../../services/util/announce.service';
 import { ClientAuthentication } from '../../../models/client-authentication';
 
@@ -11,7 +10,7 @@ import { ClientAuthentication } from '../../../models/client-authentication';
   templateUrl: './moderator-comment-page.component.html',
   styleUrls: ['./moderator-comment-page.component.scss']
 })
-export class ModeratorCommentPageComponent implements OnInit, OnDestroy, AfterContentInit {
+export class ModeratorCommentPageComponent implements OnInit, AfterContentInit {
 
   auth: ClientAuthentication;
 
@@ -19,7 +18,6 @@ export class ModeratorCommentPageComponent implements OnInit, OnDestroy, AfterCo
     private route: ActivatedRoute,
     private notification: NotificationService,
     private authenticationService: AuthenticationService,
-    public eventService: EventService,
     private announceService: AnnounceService
   ) {
   }
@@ -33,10 +31,6 @@ export class ModeratorCommentPageComponent implements OnInit, OnDestroy, AfterCo
   ngOnInit(): void {
     this.authenticationService.getCurrentAuthentication()
       .subscribe(auth => this.auth = auth);
-  }
-
-  ngOnDestroy() {
-    this.eventService.makeFocusOnInputFalse();
   }
 
   public announce() {

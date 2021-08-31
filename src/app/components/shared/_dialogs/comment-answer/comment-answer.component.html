@@ -28,8 +28,6 @@
           <mat-tab label="{{'comment-page.your-answer' | translate}}">
             <mat-form-field class="input-block" appearance="outline">
               <textarea id="answer-input" [(ngModel)]="answer" (input)="edit = true"
-                      (blur)="eventService.makeFocusOnInputFalse()"
-                      (focus)="eventService.makeFocusOnInputTrue()"
                       matInput
                       matTextareaAutosize
                       matAutosizeMinRows="3"

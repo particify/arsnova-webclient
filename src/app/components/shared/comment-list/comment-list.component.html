@@ -15,7 +15,7 @@
         'search-container-fixed-visible' : scroll && (deviceType === 'desktop' || scrollActive), 'search-container-archive': scroll && isArchive, 'fixed-start-position': isScrollStart && deviceType === 'desktop',
         'four-buttons': viewRole === 'PARTICIPANT', 'five-buttons': viewRole !== 'PARTICIPANT'}"
          (window:scroll)="checkScroll()">
-      <input tabindex="-1" (focus)="eventService.makeFocusOnInputTrue()" (blur)="eventService.makeFocusOnInputFalse()"
+      <input tabindex="-1"
              #searchBox
              id="searchBox" [ngClass]="{'search-input-hidden': !search, 'search-input': search }"
              (input)="searchComments()" [(ngModel)]="searchInput" [placeholder]="searchPlaceholder"

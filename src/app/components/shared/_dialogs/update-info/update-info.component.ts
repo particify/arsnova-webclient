@@ -32,8 +32,7 @@ export class UpdateInfoComponent implements OnInit {
   constructor(public dialogRef: MatDialogRef<UpdateInfoComponent>,
               @Inject(MAT_DIALOG_DATA) private data: DialogData,
               private apiConfigService: ApiConfigService,
-              private globalStorageService: GlobalStorageService,
-              private eventService: EventService) {
+              private globalStorageService: GlobalStorageService) {
     this.afterUpdate = data.afterUpdate;
     this.versions = data.versions;
   }
@@ -52,12 +51,9 @@ export class UpdateInfoComponent implements OnInit {
       this.newsUrl = config.ui.links?.news?.url;
       this.isLoading = false;
     });
-    this.inputFocus = this.eventService.focusOnInput;
-    this.eventService.focusOnInput = true;
   }
 
   close() {
-    this.eventService.focusOnInput = this.inputFocus;
     this.dialogRef.close();
   }
 

@@ -2,8 +2,7 @@
       fxLayoutGap="10px">
   <mat-form-field class="input-block" appearance="outline">
     <mat-label>{{ 'user-activation.key' | translate }}</mat-label>
-    <input (focus)="eventService.makeFocusOnInputTrue()" (blur)="eventService.makeFocusOnInputFalse()"
-           matInput #userActivationKey type="text"
+    <input matInput #userActivationKey type="text"
            [formControl]="activationKeyFormControl" name="activation-key"
            aria-labelledby="key-input"/>
   </mat-form-field>

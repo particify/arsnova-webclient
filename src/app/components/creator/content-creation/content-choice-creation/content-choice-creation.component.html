@@ -37,7 +37,7 @@
     <form class="full-width answer-form" fxLayout="row">
       <mat-form-field class="full-width" appearance="fill">
         <mat-label>{{ 'content.add-answer' | translate }}</mat-label>
-        <input (focus)="eventService.makeFocusOnInputTrue()" (blur)="eventService.makeFocusOnInputFalse()"
+        <input
                matInput [(ngModel)]="newAnswerOptionLabel" name="answer" id="answer-input" aria-labelledby="answer"
                autocomplete="off">
         <button tabindex="-1" class="add-button" mat-icon-button matSuffix (click)="addAnswer($event)">

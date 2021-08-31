@@ -12,7 +12,7 @@
     <mat-card *ngIf="rooms.length > 0" class="account-memberships">
       <mat-form-field class="filterWrapper" appearance="fill">
         <mat-label>{{ 'room-list.filter-message' | translate }}</mat-label>
-        <input (focus)="eventService.makeFocusOnInputTrue()" (blur)="eventService.makeFocusOnInputFalse()" matInput
+        <input matInput
                #search (keyup)="filterRooms(search.value)" aria-labelledby="filter-rooms"/>
         <button *ngIf="showMenu" mat-icon-button matSuffix [matMenuTriggerFor]="more" aria-labelledby="import-options">
           <mat-icon id="more" class="more">more_horiz</mat-icon>

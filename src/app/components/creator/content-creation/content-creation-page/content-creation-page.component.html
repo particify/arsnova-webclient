@@ -47,8 +47,7 @@
               </div>
               <mat-form-field appearance="outline" class="input-block no-field-hint">
                 <mat-label>{{ (selectedFormat.name !== 'slide' ? 'content.body' : 'content.body-neutral') | translate }}</mat-label>
-                <textarea #questionInput (blur)="eventService.makeFocusOnInputFalse()"
-                          (focus)="eventService.makeFocusOnInputTrue()"
+                <textarea #questionInput
                           (input)="updateTextContainsImage(questionInput.value)"
                           [(ngModel)]="question"
                           [placeholder]="(selectedFormat.name !== 'slide' ? 'content.enter-body' : 'content.enter-body-neutral') | translate"

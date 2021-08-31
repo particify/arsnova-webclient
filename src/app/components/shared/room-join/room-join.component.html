@@ -3,8 +3,7 @@
     <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="10px">
       <mat-form-field (keyup.enter)="onEnter(roomCode.value)" appearance="outline" class="no-field-hint big-input" floatLabel="always">
         <mat-label>{{ 'home-page.room-id' | translate }}</mat-label>
-        <input id="room-id-input" matInput #roomCode (focus)="eventService.makeFocusOnInputTrue()"
-               (blur)="eventService.makeFocusOnInputFalse()"
+        <input id="room-id-input" matInput #roomCode
                type="text" inputmode="numeric"
                (beforeinput)="enforceLengthLimit($event)"
                (input)="handleInput($event)" [formControl]="roomCodeFormControl"

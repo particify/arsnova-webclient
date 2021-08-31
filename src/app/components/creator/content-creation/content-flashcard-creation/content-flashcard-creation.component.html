@@ -1,8 +1,7 @@
 <form>
   <mat-form-field appearance="outline" class="input-block no-field-hint">
     <mat-label>{{ 'content.answer' | translate }}</mat-label>
-    <textarea #answerInput (blur)="eventService.makeFocusOnInputFalse()"
-              (focus)="eventService.makeFocusOnInputTrue()"
+    <textarea #answerInput
               (input)="updateTextContainsImage(answerInput.value)"
               [(ngModel)]="answer"
               [placeholder]="'content.enter-answer' | translate"

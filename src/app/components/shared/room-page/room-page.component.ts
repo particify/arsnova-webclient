@@ -63,7 +63,6 @@ export class RoomPageComponent implements OnDestroy {
   }
 
   ngOnDestroy() {
-    this.eventService.makeFocusOnInputFalse();
     if (this.sub) {
       this.sub.unsubscribe();
     }

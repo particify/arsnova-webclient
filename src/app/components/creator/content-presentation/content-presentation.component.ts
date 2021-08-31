@@ -226,9 +226,7 @@ export class ContentPresentationComponent implements OnInit, OnDestroy {
       if (this.isContentAfterPublished()) {
         if (this.areContentsBetween()) {
           const dialogRef = this.dialogService.openDialog(PublishContentComponent);
-          this.eventService.makeFocusOnInputTrue();
           dialogRef.afterClosed().subscribe(result => {
-            this.eventService.makeFocusOnInputFalse();
             if (result === true) {
               this.updateContentGroup(firstIndex, lastIndex);
             } else if (result === false) {

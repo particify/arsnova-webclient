@@ -11,7 +11,6 @@ import { ActivatedRoute } from '@angular/router';
 import { ClientAuthentication } from '../../../models/client-authentication';
 import { NotificationService } from '../../../services/util/notification.service';
 import { AuthenticationService } from '../../../services/http/authentication.service';
-import { EventService } from '../../../services/util/event.service';
 import { AnnounceService } from '../../../services/util/announce.service';
 import { CommentService } from '../../../services/http/comment.service';
 import { Comment } from '../../../models/comment';
@@ -39,7 +38,6 @@ export class CommentPageComponent implements OnInit, OnDestroy, AfterContentInit
     private route: ActivatedRoute,
     private notification: NotificationService,
     private authenticationService: AuthenticationService,
-    private eventService: EventService,
     private announceService: AnnounceService,
     private commentService: CommentService,
     private hotkeyService: HotkeyService
@@ -71,7 +69,6 @@ export class CommentPageComponent implements OnInit, OnDestroy, AfterContentInit
   }
 
   ngOnDestroy() {
-    this.eventService.makeFocusOnInputFalse();
     if (this.activeComment) {
       this.commentService.lowlight(this.activeComment).subscribe();
     }
