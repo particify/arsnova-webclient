@@ -171,6 +171,10 @@ textarea {
   }
 }
 
+.mat-dialog-title {
+  color: var(--on-surface);
+}
+
 .mat-dialog-content {
   outline: none;
 }
@@ -467,6 +471,16 @@ div {
   .mat-list-item-content {
     padding: 0!important;
   }
+}
+
+// Mat Table
+
+.mat-table {
+  background-color: inherit;
+}
+
+.mat-cell, .mat-header-cell {
+  color: var(--on-surface);
 }
 
 // Buttons
