@@ -24,6 +24,10 @@ body {
   outline: none;
 }
 
+[hidden] {
+  display: none ! important;
+}
+
 // Scrollbar
 
 body::-webkit-scrollbar {

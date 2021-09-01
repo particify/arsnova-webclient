@@ -1,4 +1,4 @@
-<div *ngIf="!isPresentation" fxLayout="row" fxLayoutAlign="end">
+<div [attr.hidden]="isPresentation || null" fxLayout="row" fxLayoutAlign="end">
   <button mat-icon-button (click)="updateZoom(-1)" tabindex="-1"
           appHotkey="-" [appHotkeyAction]="HotkeyAction.CLICK">
     <mat-icon>zoom_out</mat-icon>
