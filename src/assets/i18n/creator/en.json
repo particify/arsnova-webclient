@@ -607,16 +607,8 @@
     "zoom-in": "Zoom in",
     "zoom-out": "Zoom out",
     "key": "Key",
-    "SPACE": "Space",
-    "LEFT": "Left",
-    "RIGHT": "Right",
-    "Escape": "ESC",
-    "LetterC": "C",
-    "LetterL": "L",
-    "LetterF": "F",
-    "LetterQ": "Q",
-    "MINUS": "-",
-    "PLUS": "+"
+    "space": "Space",
+    "escape": "ESC"
   },
   "presentation": {
     "a11y-welcome": "You are now in presentation mode. Information for joining the room are displayed. If you want to know about key combinations, press the enter key or press the key i later.",

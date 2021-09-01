@@ -608,16 +608,8 @@
     "zoom-in": "Vergrößern",
     "zoom-out": "Verkleinern",
     "key": "Taste",
-    "SPACE": "Leertaste",
-    "LEFT": "Links",
-    "RIGHT": "Rechts",
-    "Escape": "ESC",
-    "LetterC": "C",
-    "LetterL": "L",
-    "LetterF": "F",
-    "LetterQ": "Q",
-    "MINUS": "-",
-    "PLUS": "+"
+    "space": "Leertaste",
+    "escape": "ESC"
   },
   "presentation": {
     "a11y-welcome": "Du befindest dich jetzt im Präsentationsmodus. Es werden Informationen für das Beitreten des Raums angezeigt. Wenn du Informationen über Tastenkombinationen erfahren möchtest, drücke die Enter-Taste oder drücke später die Taste i.",

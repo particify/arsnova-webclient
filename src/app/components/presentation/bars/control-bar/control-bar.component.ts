@@ -21,11 +21,14 @@ import { TranslateService } from '@ngx-translate/core';
 
 export class KeyNavBarItem extends NavBarItem {
   key: string;
+  displayKey: string;
   disabled: boolean;
 
   constructor(name: string, icon: string, url: string, key: string, disabled = false) {
     super(name, icon, url, false);
+    const keyInfo = HotkeyService.getKeyDisplayInfo(key);
     this.key = key;
+    this.displayKey = keyInfo.translateKeyName ? 'control-bar.' + keyInfo.keyName : keyInfo.keySymbol;
     this.disabled = disabled;
   }
 }

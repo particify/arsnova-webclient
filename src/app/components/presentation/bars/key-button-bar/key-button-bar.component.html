@@ -2,7 +2,7 @@
   <div matRipple role="button" fxLayout="column" fxLayoutAlign="center center" class="action-button"
        [ngClass]="{'disabled': item.disabled}"
        *ngFor="let item of items" (click)="sendKeyEvent(item.key)"
-       [matTooltip]="('control-bar.' + item.name | translate) + ' (' + ('control-bar.' + item.key | translate) + ')'">
+       [matTooltip]="('control-bar.' + item.name | translate) + ' (' + (item.displayKey | translate) + ')'">
     <mat-icon [ngClass]="{'nav-icon': withText}">{{item.icon}}</mat-icon>
     <p *ngIf="withText" class="text">{{ ('control-bar.' + item.name) | translate }}</p>
   </div>

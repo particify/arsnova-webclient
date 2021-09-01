@@ -21,9 +21,13 @@ export enum HotkeyModifier {
   SHIFT = 'Shift'
 }
 
-export interface HotkeyInfo {
+export interface HotkeyDisplayInfo {
+  keyName: string;
   keySymbol: string;
   translateKeyName: boolean;
+}
+
+export interface HotkeyInfo extends HotkeyDisplayInfo {
   modifiers?: HotkeyModifier[];
   actionTitle: string;
 }
@@ -55,6 +59,15 @@ export class HotkeyService {
   ) {
     this.registerHandler();
     this.registerDialogHotkey();
+  }
+
+  static getKeyDisplayInfo(key: string): HotkeyDisplayInfo {
+    let keyName = key === ' ' ? 'space' : key.toLowerCase();
+    return {
+      keyName: keyName,
+      keySymbol: KEY_SYMBOLS.get(key) ?? key.toUpperCase(),
+      translateKeyName: keyName.length > 1 && !KEY_SYMBOLS.has(key)
+    }
   }
 
   registerHotkey(hotkey: Hotkey, localHotkeyRegistrations?: Symbol[]): Symbol {
@@ -97,11 +110,8 @@ export class HotkeyService {
 
   private getHotkeyInfos(): HotkeyInfo[] {
     return this.sortHotkeys(Array.from(this.hotkeyRegistrations.values()))
-        .map(h => h.key === ' ' ? { ...h, key: 'Space' } : h )
         .map(h => ({
-          keyName: h.key.toLowerCase(),
-          keySymbol: KEY_SYMBOLS.get(h.key) ?? h.key.toUpperCase(),
-          translateKeyName: h.key.length > 1 && !KEY_SYMBOLS.has(h.key),
+          ...HotkeyService.getKeyDisplayInfo(h.key),
           modifiers: h.modifiers,
           actionTitle: h.actionTitle
         }));
