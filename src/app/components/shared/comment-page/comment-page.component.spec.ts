@@ -12,6 +12,7 @@ import { ClientAuthentication } from '../../../models/client-authentication';
 import { GlobalStorageService } from '../../../services/util/global-storage.service';
 import { AnnounceService } from '../../../services/util/announce.service';
 import { CommentService } from '../../../services/http/comment.service';
+import { HotkeyService } from '../../../services/util/hotkey.service';
 
 const TRANSLATION_DE = require('../../../../assets/i18n/home/de.json');
 const TRANSLATION_EN = require('../../../../assets/i18n/home/en.json');
@@ -83,6 +84,11 @@ class MockGlobalStorageService {
   }
 }
 
+@Injectable()
+class MockHotkeyService {
+  registerHotkey() { }
+}
+
 @Component({ selector: 'app-comment-list', template: '' })
 class CommentListStubComponent {
   @Input() auth: ClientAuthentication;
@@ -148,6 +154,10 @@ describe('CommentPageComponent', () => {
           provide: GlobalStorageService,
           useClass: MockGlobalStorageService
         },
+        {
+          provide: HotkeyService,
+          useClass: MockHotkeyService
+        }
       ]
     })
       .compileComponents()
