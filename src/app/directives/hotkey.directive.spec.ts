@@ -1,6 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { HotkeyModifier, HotkeyService } from '../services/util/hotkey.service';
+import { HotkeyActionType, HotkeyModifier, HotkeyService } from '../services/util/hotkey.service';
 import { HotkeyDirective } from './hotkey.directive';
 
 @Component({
@@ -41,7 +41,8 @@ describe('HotkeyDirective', () => {
       key: 'a',
       modifiers: [HotkeyModifier.CONTROL],
       action: jasmine.any(Function),
-      actionTitle: 'title'
+      actionTitle: 'title',
+      actionType: HotkeyActionType.DEFAULT
     });
   });
 });

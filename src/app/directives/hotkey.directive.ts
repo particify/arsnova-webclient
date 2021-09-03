@@ -1,10 +1,13 @@
 import { Directive, ElementRef, Input, OnChanges, OnDestroy } from '@angular/core';
-import { Hotkey, HotkeyModifier, HotkeyService } from '../services/util/hotkey.service';
+import { Hotkey, HotkeyActionType, HotkeyModifier, HotkeyService } from '../services/util/hotkey.service';
 
 export enum HotkeyAction {
   FOCUS,
   CLICK
 }
+
+const NON_TEXT_INPUT_TYPES = ['button', 'checkbox', 'radio'];
+
 @Directive({
   selector: '[appHotkey]'
 })
@@ -50,7 +53,8 @@ export class HotkeyDirective implements OnDestroy, OnChanges {
       key: this.appHotkey,
       modifiers: this.buildModifierList(),
       actionTitle: title,
-      action: action
+      action: action,
+      actionType: this.determineActionType(this.elementRef.nativeElement)
     };
   }
 
@@ -67,5 +71,13 @@ export class HotkeyDirective implements OnDestroy, OnChanges {
     }
 
     return modifiers;
+  }
+
+  private determineActionType(element: HTMLElement): HotkeyActionType {
+    if (element.nodeName === 'INPUT' && !NON_TEXT_INPUT_TYPES.includes((element as HTMLInputElement).type)
+        || element.nodeName === 'TEXTAREA') {
+      return HotkeyActionType.INPUT;
+    }
+    return HotkeyActionType.DEFAULT;
   }
 }

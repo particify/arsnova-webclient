@@ -2,7 +2,10 @@
 <table mat-table [dataSource]="hotkeys">
   <ng-container matColumnDef="action">
     <th mat-header-cell *matHeaderCellDef tabindex="0">{{'hotkeys.action' | translate}}</th>
-    <td mat-cell *matCellDef="let item">{{item.actionTitle | translate}}</td>
+    <td mat-cell *matCellDef="let item">
+      {{item.actionTitle | translate}}
+      <span *ngIf="item.actionType === HotkeyActionType.INPUT" class="action-type-hint">({{'hotkeys.input-field' | translate}})</span>
+    </td>
   </ng-container>
   <ng-container matColumnDef="keys">
     <th mat-header-cell *matHeaderCellDef tabindex="0">{{'hotkeys.keys' | translate}}</th>

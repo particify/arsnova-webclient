@@ -1,6 +1,6 @@
 import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Hotkey } from '../../../../services/util/hotkey.service';
+import { Hotkey, HotkeyActionType } from '../../../../services/util/hotkey.service';
 
 @Component({
   selector: 'app-hotkeys',
@@ -9,6 +9,7 @@ import { Hotkey } from '../../../../services/util/hotkey.service';
 })
 export class HotkeysComponent {
   displayedColumns = ['action', 'keys'];
+  HotkeyActionType = HotkeyActionType;
 
   constructor(@Inject(MAT_DIALOG_DATA) public hotkeys: Hotkey[]) { }
 }

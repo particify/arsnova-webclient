@@ -13,12 +13,18 @@ export interface Hotkey {
   modifiers?: HotkeyModifier[];
   actionTitle: string;
   action: Function;
+  actionType?: HotkeyActionType;
 }
 
 export enum HotkeyModifier {
   CONTROL = 'Control',
   ALT = 'Alt',
   SHIFT = 'Shift'
+}
+
+export enum HotkeyActionType {
+  DEFAULT,
+  INPUT
 }
 
 export interface HotkeyDisplayInfo {
@@ -30,6 +36,7 @@ export interface HotkeyDisplayInfo {
 export interface HotkeyInfo extends HotkeyDisplayInfo {
   modifiers?: HotkeyModifier[];
   actionTitle: string;
+  actionType: HotkeyActionType;
 }
 
 export const KEY_SYMBOLS = new Map<string, string>([
@@ -73,7 +80,8 @@ export class HotkeyService {
   registerHotkey(hotkey: Hotkey, localHotkeyRegistrations?: Symbol[]): Symbol {
     const registrationRef = Symbol(hotkey.key);
     const modifiers = hotkey.modifiers ?? [];
-    this.hotkeyRegistrations.set(registrationRef, { ...hotkey, modifiers: modifiers });
+    const actionType = hotkey.actionType ?? HotkeyActionType.DEFAULT;
+    this.hotkeyRegistrations.set(registrationRef, { ...hotkey, modifiers: modifiers, actionType: actionType });
     if (localHotkeyRegistrations) {
       localHotkeyRegistrations.push(registrationRef);
     }
@@ -113,7 +121,8 @@ export class HotkeyService {
         .map(h => ({
           ...HotkeyService.getKeyDisplayInfo(h.key),
           modifiers: h.modifiers,
-          actionTitle: h.actionTitle
+          actionTitle: h.actionTitle,
+          actionType: h.actionType
         }));
   }
 

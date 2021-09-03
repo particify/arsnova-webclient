@@ -323,7 +323,8 @@
     "overview-title": "Tastaturbefehle",
     "display-overview": "Tastaturbefehle anzeigen",
     "action": "Aktion",
-    "keys": "Tastenkürzel"
+    "keys": "Tastenkürzel",
+    "input-field": "Eingabefeld"
   },
   "keys": {
     "ctrl": "Strg",

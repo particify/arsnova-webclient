@@ -323,7 +323,8 @@
     "overview-title": "Keyboard shortcuts",
     "display-overview": "Display keyboard shortcuts",
     "action": "Action",
-    "keys": "Keyboard shortcut"
+    "keys": "Keyboard shortcut",
+    "input-field": "input field"
   },
   "keys": {
     "ctrl": "Ctrl",
