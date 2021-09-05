@@ -21,7 +21,7 @@
 
       <mat-form-field class="input-block" appearance="outline">
         <mat-label>{{ 'login.password' | translate }}</mat-label>
-        <input matInput type="password" [type]="hidePw ? 'password' : 'text'" #userPassword [formControl]="passwordFormControl"
+        <input matInput minlength="8" type="password" [type]="hidePw ? 'password' : 'text'" #userPassword [formControl]="passwordFormControl"
                [errorStateMatcher]="matcher"
                placeholder="{{ 'login.enter-password' | translate }}" aria-labelledby="register-password-description"
                autocomplete="new-password"/>
@@ -31,6 +31,15 @@
         <mat-error *ngIf="passwordFormControl.hasError('required')">
           {{ 'register.password-required' | translate }}
         </mat-error>
+        <mat-error *ngIf="!passwordFormControl.hasError('required') && passwordFormControl.hasError('minlength')">
+          {{ 'register.password-too-short' | translate }}
+        </mat-error>
+        <mat-error *ngIf="!passwordFormControl.hasError('required') && !passwordFormControl.hasError('minlength') && passwordFormControl.hasError('passwordIsStrong')">
+          {{ 'register.password-too-weak' | translate }}
+        </mat-error>
+        <mat-hint class="success" *ngIf="!passwordFormControl.hasError('required') && !passwordFormControl.hasError('minlength') && !passwordFormControl.hasError('passwordIsStrong')">
+          {{ 'register.password-strong' | translate }}
+        </mat-hint>
       </mat-form-field>
 
       <mat-checkbox [(ngModel)]="acceptToS" name="accept">
@@ -55,5 +64,4 @@
   <div id="register-description">{{ 'register.a11y-register' | translate }}</div>
   <div id="register-email-description">{{ 'register.email-description' | translate }}</div>
   <div id="register-password-description">{{ 'register.password-description' | translate }}</div>
-  <div id="register-password-description-repeat">{{ 'register.password-description-repeat' | translate }}</div>
 </div>

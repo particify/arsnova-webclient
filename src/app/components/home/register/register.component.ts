@@ -14,6 +14,40 @@ export class RegisterErrorStateMatcher implements ErrorStateMatcher {
   }
 }
 
+const PASSWORD_STRICTNESS_LEVEL = 2;
+
+const LENGTH_PATTERN = /.{20,}/;
+const NUMBER_PATTERN = /\d/;
+const LOWER_CASE_PATTERN = /\p{Ll}/u;
+const UPPER_CASE_PATTERN = /\p{Lu}/u;
+const SPECIAL_CHARACTERS_PATTERN = /\W/;
+
+const PATTERN: RegExp[] = [LENGTH_PATTERN, NUMBER_PATTERN, LOWER_CASE_PATTERN, UPPER_CASE_PATTERN, SPECIAL_CHARACTERS_PATTERN];
+
+export function validatePasswordStrength() {
+  return (formControl: FormControl) => {
+    if (getPasswordStrength(formControl.value) < PASSWORD_STRICTNESS_LEVEL) {
+      return {
+        passwordIsStrong: {
+          isStrong: false
+        }
+      };
+    } else {
+      return null;
+    }
+  }
+}
+
+export function getPasswordStrength(password: string): number {
+  let strength = 0;
+  for (let pattern of PATTERN) {
+    if (pattern.test(password)) {
+      strength++;
+    }
+  }
+  return strength;
+}
+
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
@@ -22,7 +56,7 @@ export class RegisterErrorStateMatcher implements ErrorStateMatcher {
 export class RegisterComponent implements OnInit {
 
   usernameFormControl = new FormControl('', [Validators.required, Validators.email]);
-  passwordFormControl = new FormControl('', [Validators.required]);
+  passwordFormControl = new FormControl('', [Validators.required, Validators.min(8), validatePasswordStrength()]);
   matcher = new RegisterErrorStateMatcher();
   deviceWidth = innerWidth;
   acceptToS = false;
