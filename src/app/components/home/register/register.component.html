@@ -3,7 +3,7 @@
     <p tabindex="0">
       {{ 'register.info' | translate : { accountService: accountServiceTitle } }}
     </p>
-    <form class="full-width" (ngSubmit)="register(userName.value, userPassword1.value)" fxLayout="column"
+    <form class="full-width" fxLayout="column"
           fxLayoutAlign="space-around" fxLayoutGap="10px">
       <mat-form-field class="input-block" appearance="outline">
         <mat-label>{{ 'login.email' | translate }}</mat-label>
@@ -21,35 +21,23 @@
 
       <mat-form-field class="input-block" appearance="outline">
         <mat-label>{{ 'login.password' | translate }}</mat-label>
-        <input matInput type="password" #userPassword1 [formControl]="password1FormControl"
+        <input matInput type="password" [type]="hidePw ? 'password' : 'text'" #userPassword [formControl]="passwordFormControl"
                [errorStateMatcher]="matcher"
                placeholder="{{ 'login.enter-password' | translate }}" aria-labelledby="register-password-description"
                autocomplete="new-password"/>
-        <mat-error *ngIf="password1FormControl.hasError('required')">
+        <button mat-icon-button matSuffix (click)="hidePw = !hidePw" [matTooltip]="(hidePw ? 'register.show-password' : 'register.hide-password') | translate">
+          <mat-icon>{{hidePw ? 'visibility_off' : 'visibility'}}</mat-icon>
+        </button>
+        <mat-error *ngIf="passwordFormControl.hasError('required')">
           {{ 'register.password-required' | translate }}
         </mat-error>
       </mat-form-field>
 
-      <mat-form-field class="input-block" appearance="outline">
-        <mat-label>{{ 'register.password-verify' | translate }}</mat-label>
-        <input matInput type="password" #userPassword2 [formControl]="password2FormControl"
-               [errorStateMatcher]="matcher"
-               placeholder="{{ 'register.enter-password-again' | translate }}"
-               aria-labelledby="register-password-description-repeat"
-               autocomplete="new-password"/>
-        <mat-error *ngIf="password2FormControl.hasError('required')">
-          {{ 'register.password-required' | translate }}
-        </mat-error>
-        <mat-error
-          *ngIf="password2FormControl.hasError('passwordIsEqual') && !password2FormControl.hasError('required')">
-          {{ 'register.password-unmatch' | translate }}
-        </mat-error>
-      </mat-form-field>
       <mat-checkbox [(ngModel)]="acceptToS" name="accept">
         {{ 'register.accept' | translate }}<a href="{{linkOfToS}}" target="_blank">{{ 'register.terms' | translate }}</a>{{ 'register.accept-2' | translate }}
       </mat-checkbox>
       <div fxLayout="column" fxLayoutAlign="center center">
-        <button class="button-primary login-button" mat-raised-button type="submit"
+        <button class="button-primary login-button" mat-raised-button type="submit" (click)="register(userName.value, userPassword.value)"
                 aria-labelledby="register-description">
           {{ 'register.register' | translate }}
         </button>

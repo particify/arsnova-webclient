@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroupDirective, NgForm, Validators } from '@angular/forms';
 import { ErrorStateMatcher } from '@angular/material/core';
-import { validatePassword } from '../register/register.component';
 import { UserService } from '../../../services/http/user.service';
 import { AdvancedSnackBarTypes, NotificationService } from '../../../services/util/notification.service';
 import { TranslateService } from '@ngx-translate/core';
@@ -24,7 +23,6 @@ export class PasswordResetErrorStateMatcher implements ErrorStateMatcher {
 export class PasswordResetComponent implements OnInit {
 
   passwordFormControl = new FormControl('', [Validators.required]);
-  passwordFormControl2 = new FormControl('', [Validators.required, validatePassword(this.passwordFormControl)]);
   keyFormControl = new FormControl('', [Validators.required]);
 
   matcher = new PasswordResetErrorStateMatcher();
@@ -50,24 +48,17 @@ export class PasswordResetComponent implements OnInit {
   }
 
   setNewPassword(password: string, key: string) {
-    if (!this.passwordFormControl2.hasError('passwordIsEqual')) {
-      if (this.email !== '' && key !== '' && password !== '') {
-        this.userService.setNewPassword(this.email, password, key).subscribe(() => {
-          this.translationService.get('password-reset.new-password-successful').subscribe(message => {
-            this.notificationService.showAdvanced(message, AdvancedSnackBarTypes.SUCCESS);
-          });
-          this.router.navigateByUrl('login', { state: { data: { username: this.email, password: password } } });
+    if (this.email !== '' && key !== '' && password !== '') {
+      this.userService.setNewPassword(this.email, password, key).subscribe(() => {
+        this.translationService.get('password-reset.new-password-successful').subscribe(message => {
+          this.notificationService.showAdvanced(message, AdvancedSnackBarTypes.SUCCESS);
         });
-      } else {
-        this.translationService.get('login.inputs-incorrect').subscribe(message => {
-          this.notificationService.showAdvanced(message, AdvancedSnackBarTypes.WARNING);
-        });
-      }
+        this.router.navigateByUrl('login', {state: {data: {username: this.email, password: password}}});
+      });
     } else {
       this.translationService.get('login.inputs-incorrect').subscribe(message => {
         this.notificationService.showAdvanced(message, AdvancedSnackBarTypes.WARNING);
       });
     }
   }
-
 }
