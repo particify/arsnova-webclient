@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { FormControl, FormGroupDirective, NgForm, Validators } from '@angular/forms';
 import { UserService } from '../../../services/http/user.service';
@@ -6,46 +6,13 @@ import { AdvancedSnackBarTypes, NotificationService } from '../../../services/ut
 import { TranslateService } from '@ngx-translate/core';
 import { EventService } from '../../../services/util/event.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { PasswordEntryComponent } from '../password-entry/password-entry.component';
 
 export class RegisterErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
     const isSubmitted = form && form.submitted;
     return (control && control.invalid && (control.dirty || control.touched || isSubmitted));
   }
-}
-
-const PASSWORD_STRICTNESS_LEVEL = 2;
-
-const LENGTH_PATTERN = /.{20,}/;
-const NUMBER_PATTERN = /\d/;
-const LOWER_CASE_PATTERN = /\p{Ll}/u;
-const UPPER_CASE_PATTERN = /\p{Lu}/u;
-const SPECIAL_CHARACTERS_PATTERN = /\W/;
-
-const PATTERN: RegExp[] = [LENGTH_PATTERN, NUMBER_PATTERN, LOWER_CASE_PATTERN, UPPER_CASE_PATTERN, SPECIAL_CHARACTERS_PATTERN];
-
-export function validatePasswordStrength() {
-  return (formControl: FormControl) => {
-    if (getPasswordStrength(formControl.value) < PASSWORD_STRICTNESS_LEVEL) {
-      return {
-        passwordIsStrong: {
-          isStrong: false
-        }
-      };
-    } else {
-      return null;
-    }
-  }
-}
-
-export function getPasswordStrength(password: string): number {
-  let strength = 0;
-  for (let pattern of PATTERN) {
-    if (pattern.test(password)) {
-      strength++;
-    }
-  }
-  return strength;
 }
 
 @Component({
@@ -55,14 +22,14 @@ export function getPasswordStrength(password: string): number {
 })
 export class RegisterComponent implements OnInit {
 
+  @ViewChild(PasswordEntryComponent) passwordEntry: PasswordEntryComponent;
+
   usernameFormControl = new FormControl('', [Validators.required, Validators.email]);
-  passwordFormControl = new FormControl('', [Validators.required, Validators.min(8), validatePasswordStrength()]);
   matcher = new RegisterErrorStateMatcher();
   deviceWidth = innerWidth;
   acceptToS = false;
   linkOfToS: string;
   accountServiceTitle: string;
-  hidePw = true;
 
   constructor(private translationService: TranslateService,
               public userService: UserService,
@@ -80,9 +47,10 @@ export class RegisterComponent implements OnInit {
     document.getElementById('email-input').focus();
   }
 
-  register(username: string, password: string): void {
-    if (!this.usernameFormControl.hasError('required') && !this.usernameFormControl.hasError('email') &&
-      !this.passwordFormControl.hasError('required')) {
+  register(username: string): void {
+    const password = this.passwordEntry.getPassword();
+    if (!this.usernameFormControl.hasError('required') && !this.usernameFormControl.hasError('email')
+        && password) {
       if (this.acceptToS) {
         this.userService.register(username, password).subscribe(result => {
             this.router.navigateByUrl('login', { state: { data: { username: username, password: password } } });

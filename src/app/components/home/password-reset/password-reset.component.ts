@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroupDirective, NgForm, Validators } from '@angular/forms';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { UserService } from '../../../services/http/user.service';
@@ -6,6 +6,7 @@ import { AdvancedSnackBarTypes, NotificationService } from '../../../services/ut
 import { TranslateService } from '@ngx-translate/core';
 import { EventService } from '../../../services/util/event.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { PasswordEntryComponent } from '../password-entry/password-entry.component';
 
 
 export class PasswordResetErrorStateMatcher implements ErrorStateMatcher {
@@ -22,9 +23,9 @@ export class PasswordResetErrorStateMatcher implements ErrorStateMatcher {
 })
 export class PasswordResetComponent implements OnInit {
 
-  passwordFormControl = new FormControl('', [Validators.required]);
-  keyFormControl = new FormControl('', [Validators.required]);
+  @ViewChild(PasswordEntryComponent) passwordEntry: PasswordEntryComponent;
 
+  keyFormControl = new FormControl('', [Validators.required]);
   matcher = new PasswordResetErrorStateMatcher();
 
   deviceWidth = innerWidth;
@@ -47,9 +48,10 @@ export class PasswordResetComponent implements OnInit {
     });
   }
 
-  setNewPassword(password: string, key: string) {
-    if (this.email !== '' && key !== '' && password !== '') {
-      this.userService.setNewPassword(this.email, password, key).subscribe(() => {
+  setNewPassword(key: string) {
+    const password = this.passwordEntry.getPassword();
+    if (this.email !== '' && key !== '' && password) {
+      this.userService.setNewPassword(this.email, key, password).subscribe(() => {
         this.translationService.get('password-reset.new-password-successful').subscribe(message => {
           this.notificationService.showAdvanced(message, AdvancedSnackBarTypes.SUCCESS);
         });

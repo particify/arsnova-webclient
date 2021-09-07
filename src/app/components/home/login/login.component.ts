@@ -1,4 +1,4 @@
-import { AfterContentInit, Component, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { AfterContentInit, Component, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { AuthenticationService } from '../../../services/http/authentication.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AdvancedSnackBarTypes, NotificationService } from '../../../services/util/notification.service';
@@ -12,6 +12,7 @@ import { DialogService } from '../../../services/util/dialog.service';
 import { AuthenticationStatus, ClientAuthenticationResult } from '../../../models/client-authentication-result';
 import { AuthProvider } from '../../../models/auth-provider';
 import { RoutingService } from '../../../services/util/routing.service';
+import { PasswordEntryComponent } from '../password-entry/password-entry.component';
 
 export class LoginErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
@@ -27,6 +28,8 @@ export class LoginErrorStateMatcher implements ErrorStateMatcher {
 })
 export class LoginComponent implements AfterContentInit, OnChanges, OnInit {
 
+  @ViewChild(PasswordEntryComponent) passwordEntry: PasswordEntryComponent;
+
   isStandard = true;
   username: string;
   password: string;
@@ -41,7 +44,6 @@ export class LoginComponent implements AfterContentInit, OnChanges, OnInit {
   loginIdIsEmail = false;
 
   loginIdFormControl = new FormControl('', [Validators.required]);
-  passwordFormControl = new FormControl('', [Validators.required]);
 
   matcher = new LoginErrorStateMatcher();
 
@@ -101,7 +103,6 @@ export class LoginComponent implements AfterContentInit, OnChanges, OnInit {
     const registeredUserData = history.state.data;
       if (registeredUserData && registeredUserData.username && registeredUserData.password) {
         this.loginIdFormControl.setValue(registeredUserData.username);
-        this.passwordFormControl.setValue(registeredUserData.password);
         this.username = registeredUserData.username;
         this.password = registeredUserData.password;
       }
@@ -112,10 +113,6 @@ export class LoginComponent implements AfterContentInit, OnChanges, OnInit {
     if (changes.loginid) {
       this.loginIdFormControl.setValue(changes.loginid.currentValue);
       u = true;
-    }
-    if (changes.password) {
-      this.passwordFormControl.setValue(changes.password.currentValue);
-      p = true;
     }
     if (u && p && !changes.loginid.isFirstChange() && !changes.loginid.isFirstChange()) {
       // TODO: this throws an Exception because data and UI are inconsistent
@@ -139,8 +136,9 @@ export class LoginComponent implements AfterContentInit, OnChanges, OnInit {
   }
 
   loginWithUsernamePassword(providerId: string = 'user-db'): void {
-    if (this.loginIdFormControl.valid && this.passwordFormControl.valid) {
-      this.authenticationService.login(this.username, this.password, providerId).subscribe(loginSuccessful => {
+    const password = this.passwordEntry.getPassword();
+    if (this.loginIdFormControl.valid && password) {
+      this.authenticationService.login(this.username, password, providerId).subscribe(loginSuccessful => {
         this.checkLogin(loginSuccessful);
       });
     } else {
