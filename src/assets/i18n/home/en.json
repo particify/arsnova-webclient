@@ -128,9 +128,10 @@
     "show-password": "Show password",
     "hide-password": "Hide password",
     "password-required": "Password required",
-    "password-too-short": "Too short. Please use at least 8 characters.",
-    "password-too-weak": "Too weak. Please use a strong password.",
-    "password-strong": "Strong password.",
+    "password-too-short": "Please use at least 8 characters",
+    "password-too-weak": "Please use a strong password",
+    "password-okay": "Sufficient password",
+    "password-strong": "Strong password",
     "unsuccessful": "Please check your password."
   },
   "login": {

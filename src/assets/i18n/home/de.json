@@ -128,9 +128,10 @@
     "show-password": "Passwort anzeigen",
     "hide-password": "Passwort verstecken",
     "password-required": "Passwort erforderlich",
-    "password-too-short": "Zu kurz. Bitte nutze mindestens 8 Zeichen.",
-    "password-too-weak": "Zu schwach. Bitte wähle ein sicheres Passwort.",
-    "password-strong": "Starkes Passwort.",
+    "password-too-short": "Bitte nutze mindestens 8 Zeichen",
+    "password-too-weak": "Bitte wähle ein sicheres Passwort",
+    "password-okay": "Ausreichendes Passwort",
+    "password-strong": "Starkes Passwort",
     "unsuccessful": "Bitte prüfe dein Passwort."
   },
   "login": {

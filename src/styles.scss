@@ -143,6 +143,19 @@ textarea {
   color: var(--on-surface) !important;
 }
 
+.mat-hint.warn {
+  color: var(--warn)!important;
+}
+
+.mat-hint.warn-soft {
+  color: var(--warn-soft)!important;
+}
+
+.mat-hint.success {
+  color: var(--green)!important;
+}
+
+
 .mat-error {
   color: var(--warn) !important;
 }
