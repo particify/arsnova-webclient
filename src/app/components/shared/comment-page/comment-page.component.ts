@@ -14,7 +14,6 @@ import { AuthenticationService } from '../../../services/http/authentication.ser
 import { CommentService } from '../../../services/http/comment.service';
 import { Comment } from '../../../models/comment';
 import { CommentListComponent } from '../comment-list/comment-list.component';
-import { HotkeyService } from '../../../services/util/hotkey.service';
 
 @Component({
   selector: 'app-comment-page',
@@ -31,14 +30,11 @@ export class CommentPageComponent implements OnInit, OnDestroy, AfterContentInit
   auth: ClientAuthentication;
   activeComment: Comment;
 
-  private hotkeyRefs: Symbol[] = [];
-
   constructor(
     private route: ActivatedRoute,
     private notification: NotificationService,
     private authenticationService: AuthenticationService,
-    private commentService: CommentService,
-    private hotkeyService: HotkeyService
+    private commentService: CommentService
   ) {
   }
 
@@ -52,23 +48,12 @@ export class CommentPageComponent implements OnInit, OnDestroy, AfterContentInit
   ngOnInit(): void {
     this.authenticationService.getCurrentAuthentication()
         .subscribe(auth => this.auth = auth);
-    this.hotkeyService.registerHotkey({
-      key: 'Escape',
-      action: () => {
-        if (document.getElementById('search-close-button')) {
-          document.getElementById('search-close-button').click();
-          document.getElementById('live-announcer-button').focus();
-        }
-      },
-      actionTitle: 'TODO'
-    }, this.hotkeyRefs);
   }
 
   ngOnDestroy() {
     if (this.activeComment) {
       this.commentService.lowlight(this.activeComment).subscribe();
     }
-    this.hotkeyRefs.forEach(h => this.hotkeyService.unregisterHotkey(h));
   }
 
   updateComment(comment: Comment) {

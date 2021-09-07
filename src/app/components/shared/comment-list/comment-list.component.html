@@ -18,7 +18,8 @@
       <input tabindex="-1"
              #searchBox
              id="searchBox" [ngClass]="{'search-input-hidden': !search, 'search-input': search }"
-             (input)="searchComments()" [(ngModel)]="searchInput" [placeholder]="searchPlaceholder"
+             (input)="searchComments()" (keyup.escape)="resetSearch()"
+             [(ngModel)]="searchInput" [placeholder]="searchPlaceholder"
              aria-labelledby="search-box-input-description">
       <button id="search-close-button" mat-icon-button *ngIf="searchInput !== '' || search" class="close-btn"
               (click)="resetSearch()"
