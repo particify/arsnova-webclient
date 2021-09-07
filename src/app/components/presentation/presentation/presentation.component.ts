@@ -1,19 +1,17 @@
-import { Component, EventEmitter, OnDestroy, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { GlobalStorageService, STORAGE_KEYS } from '../../../services/util/global-storage.service';
 import { RoomStatsService } from '../../../services/http/room-stats.service';
 import { LanguageService } from '../../../services/util/language.service';
 import { TranslateService } from '@ngx-translate/core';
-import { AnnounceService } from '../../../services/util/announce.service';
-import { HotkeyService } from '../../../services/util/hotkey.service';
 
 @Component({
   selector: 'app-presentation',
   templateUrl: './presentation.component.html',
   styleUrls: ['./presentation.component.scss']
 })
-export class PresentationComponent implements OnInit, OnDestroy {
+export class PresentationComponent implements OnInit {
 
   shortId: string;
   roomId: string;
@@ -21,17 +19,13 @@ export class PresentationComponent implements OnInit, OnDestroy {
   featureString: string;
   groupChanged: EventEmitter<string> = new EventEmitter<string>();
 
-  private hotkeyRefs: Symbol[] = [];
-
   constructor(private route: ActivatedRoute,
               private router: Router,
               private location: Location,
               private globalStorageService: GlobalStorageService,
               private roomStatsService: RoomStatsService,
               private langService: LanguageService,
-              private translateService: TranslateService,
-              private announceService: AnnounceService,
-              private hotkeyService: HotkeyService) {
+              private translateService: TranslateService) {
     langService.langEmitter.subscribe(lang => translateService.use(lang));
   }
 
@@ -61,19 +55,6 @@ export class PresentationComponent implements OnInit, OnDestroy {
         }, 500);
       });
     });
-    this.hotkeyService.registerHotkey({
-      key: 'i',
-      action: () => this.announceShortcuts(),
-      actionTitle: 'TODO'
-    }, this.hotkeyRefs);
-  }
-
-  ngOnDestroy() {
-    this.hotkeyRefs.forEach(h => this.hotkeyService.unregisterHotkey(h));
-  }
-
-  announceShortcuts() {
-    this.announceService.announce('presentation.a11y-shortcuts');
   }
 
   updateFeature(feature: string) {

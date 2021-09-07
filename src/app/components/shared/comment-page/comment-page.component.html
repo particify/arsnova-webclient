@@ -1,12 +1,13 @@
 <div fxLayout="column" fxLayoutAlign="center" fxLayoutGap="20px">
   <div fxLayout="row" fxLayoutAlign="center">
-    <button *ngIf="!isPresentation" id="live-announcer-button" tabIndex="-1" (click)="announce()"
-            class="visually-hidden">{{ 'comment-page.a11y-message' | translate }}</button>
+    <div *ngIf="!isPresentation" id="live-announcer-button" tabIndex="-1" class="visually-hidden">
+      {{ 'comment-page.a11y-message' | a11yIntro | async }}
+    </div>
     <app-comment-list *ngIf="!isPresentation" [auth]="auth"></app-comment-list>
     <div *ngIf="isPresentation" fxLayout="row" fxLayoutAlign="start">
-      <button id="presentation-button" tabIndex="-1" (click)="announce()" class="visually-hidden">
+      <div id="presentation-button" tabIndex="-1" class="visually-hidden">
         {{ 'presentation.a11y-comment-message' | translate }}
-      </button>
+      </div>
       <div class="presentation-container">
         <app-present-comment fxFill [isPresentation]="true" [comment]="activeComment"></app-present-comment>
       </div>
@@ -17,4 +18,3 @@
     </div>
   </div>
 </div>
-

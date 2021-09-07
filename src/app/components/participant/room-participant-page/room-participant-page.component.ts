@@ -1,4 +1,4 @@
-import { AfterContentInit, Component, OnDestroy, OnInit } from '@angular/core';
+import { AfterContentInit, Component, OnInit } from '@angular/core';
 import { Room } from '../../../models/room';
 import { RoomPageComponent } from '../../shared/room-page/room-page.component';
 import { Location } from '@angular/common';
@@ -16,27 +16,23 @@ import { Message } from '@stomp/stompjs';
 import { Subscription } from 'rxjs';
 import { WsFeedbackService } from '../../../services/websockets/ws-feedback.service';
 import { GlobalStorageService, STORAGE_KEYS } from '../../../services/util/global-storage.service';
-import { AnnounceService } from '../../../services/util/announce.service';
 import { UserRole } from '../../../models/user-roles.enum';
 import { FeedbackMessageType } from '../../../models/messages/feedback-message-type';
 import { FeedbackService } from '../../../services/http/feedback.service';
 import { ContentGroupService } from '../../../services/http/content-group.service';
 import { ContentGroup } from '../../../models/content-group';
 import { RoomStatsService } from '../../../services/http/room-stats.service';
-import { HotkeyService } from '../../../services/util/hotkey.service';
 
 @Component({
   selector: 'app-room-participant-page',
   templateUrl: './room-participant-page.component.html',
   styleUrls: ['./room-participant-page.component.scss']
 })
-export class RoomParticipantPageComponent extends RoomPageComponent implements OnInit, AfterContentInit, OnDestroy {
+export class RoomParticipantPageComponent extends RoomPageComponent implements OnInit, AfterContentInit {
 
   room: Room;
   protected surveySub: Subscription;
   surveyEnabled = false;
-
-  private hotkeyRefs: Symbol[] = [];
 
   constructor(
     protected location: Location,
@@ -52,12 +48,10 @@ export class RoomParticipantPageComponent extends RoomPageComponent implements O
     protected commentService: CommentService,
     protected contentService: ContentService,
     protected authenticationService: AuthenticationService,
-    private announceService: AnnounceService,
     public eventService: EventService,
     private wsFeedbackService: WsFeedbackService,
     protected globalStorageService: GlobalStorageService,
-    private feedbackService: FeedbackService,
-    private hotkeyService: HotkeyService
+    private feedbackService: FeedbackService
   ) {
     super(roomService, roomStatsService, contentGroupService, route, router, location, wsCommentService,
       commentService, eventService, contentService, translateService, notificationService, globalStorageService);
@@ -76,26 +70,12 @@ export class RoomParticipantPageComponent extends RoomPageComponent implements O
       this.initializeRoom(data.room, data.userRole, data.viewRole);
     });
     this.translateService.use(this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE));
-    this.hotkeyService.registerHotkey({
-      key: 'Escape',
-      action: () => this.announce(),
-      actionTitle: 'TODO'
-    }, this.hotkeyRefs);
-  }
-
-  ngOnDestroy() {
-    super.ngOnDestroy();
-    this.hotkeyRefs.forEach(h => this.hotkeyService.unregisterHotkey(h));
   }
 
   unsubscribe() {
     if (this.surveySub) {
       this.surveySub.unsubscribe();
     }
-  }
-
-  public announce() {
-    this.announceService.announce('room-page.a11y-shortcuts');
   }
 
   getFeedback() {

@@ -57,7 +57,6 @@ export class ContentPresentationComponent implements OnInit, OnDestroy {
     private router: Router,
     private eventService: EventService,
     private dialogService: DialogService,
-    private announceService: AnnounceService,
     private hotkeyService: HotkeyService
   ) {
     langService.langEmitter.subscribe(lang => translateService.use(lang));
@@ -138,11 +137,6 @@ export class ContentPresentationComponent implements OnInit, OnDestroy {
         this.sendContentStepState(true);
       }
     });
-  }
-
-  announcePresentationShortcuts() {
-    this.announceService.announce('presentation.a11y-content-shortcuts');
-    document.getElementById('presentation-mode-message').blur();
   }
 
   getStepString(): string {

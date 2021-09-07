@@ -3,8 +3,9 @@
 <app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
 <div class="nav-bar-container" [ngClass]="{'full-height': isPresentation}">
   <div fxFill fxLayout="column" fxLayoutAlign="center">
-    <button class="visually-hidden" id="message-announcer-button" tabIndex="-1" (click)="announceKeys()">
-      {{ 'survey.a11y-message' | translate }}</button>
+    <div class="visually-hidden" id="message-announcer-button" tabIndex="-1">
+      {{ 'survey.a11y-message' | a11yIntro | async }}
+    </div>
     <div fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="center">
       <mat-card id="survey-card" [ngClass]="{'presentation-card': isPresentation}">
         <div class="survey-container" [ngClass]="{ 'faded' : isClosed }">

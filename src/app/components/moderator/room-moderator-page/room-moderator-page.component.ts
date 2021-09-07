@@ -1,4 +1,4 @@
-import { AfterContentInit, Component, OnDestroy, OnInit } from '@angular/core';
+import { AfterContentInit, Component, OnInit } from '@angular/core';
 import { Room } from '../../../models/room';
 import { RoomPageComponent } from '../../shared/room-page/room-page.component';
 import { Location } from '@angular/common';
@@ -12,25 +12,21 @@ import { ContentService } from '../../../services/http/content.service';
 import { NotificationService } from '../../../services/util/notification.service';
 import { EventService } from '../../../services/util/event.service';
 import { GlobalStorageService, STORAGE_KEYS } from '../../../services/util/global-storage.service';
-import { AnnounceService } from '../../../services/util/announce.service';
 import { UserRole } from '../../../models/user-roles.enum';
 import { InfoBarItem } from '../../shared/bars/info-bar/info-bar.component';
 import { ContentGroupService } from '../../../services/http/content-group.service';
 import { RoomStatsService } from '../../../services/http/room-stats.service';
 import { DataChanged } from '../../../models/events/data-changed';
 import { RoomStats } from '../../../models/room-stats';
-import { HotkeyService } from '../../../services/util/hotkey.service';
 
 @Component({
   selector: 'app-room-moderator-page',
   templateUrl: './room-moderator-page.component.html',
   styleUrls: ['./room-moderator-page.component.scss']
 })
-export class RoomModeratorPageComponent extends RoomPageComponent implements OnInit, OnDestroy, AfterContentInit {
+export class RoomModeratorPageComponent extends RoomPageComponent implements OnInit, AfterContentInit {
 
   room: Room;
-
-  private hotkeyRefs: Symbol[] = [];
 
   constructor(
     protected location: Location,
@@ -46,9 +42,7 @@ export class RoomModeratorPageComponent extends RoomPageComponent implements OnI
     protected contentService: ContentService,
     protected notification: NotificationService,
     public eventService: EventService,
-    private announceService: AnnounceService,
-    protected globalStorageService: GlobalStorageService,
-    private hotkeyService: HotkeyService
+    protected globalStorageService: GlobalStorageService
   ) {
     super(roomService, roomStatsService, contentGroupService, route, router, location, wsCommentService,
       commentService, eventService, contentService, translateService, notification, globalStorageService);
@@ -67,20 +61,6 @@ export class RoomModeratorPageComponent extends RoomPageComponent implements OnI
       this.initializeRoom(data.room, data.userRole, data.viewRole);
     });
     this.translateService.use(this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE));
-    this.hotkeyService.registerHotkey({
-      key: 'Escape',
-      action: () => this.announce(),
-      actionTitle: 'TODO'
-    }, this.hotkeyRefs);
-  }
-
-  ngOnDestroy() {
-    super.ngOnDestroy();
-    this.hotkeyRefs.forEach(h => this.hotkeyService.unregisterHotkey(h));
-  }
-
-  public announce() {
-    this.announceService.announce('room-page.a11y-moderator-shortcuts');
   }
 
   initializeRoom(room: Room, role: UserRole, viewRole: UserRole): void {

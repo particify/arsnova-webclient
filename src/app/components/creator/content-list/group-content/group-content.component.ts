@@ -106,10 +106,6 @@ export class GroupContentComponent extends ContentListBaseComponent implements O
     this.router.navigate(['creator', 'room', this.room.shortId, 'group', this.contentGroup.name, 'edit', content.id]);
   }
 
-  announce() {
-    this.announceService.announce('content.a11y-content-list-shortcuts');
-  }
-
   goInTitleEditMode(): void {
     this.updatedName = this.collectionName;
     this.isInTitleEditMode = true;

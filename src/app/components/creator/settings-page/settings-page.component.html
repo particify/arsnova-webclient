@@ -1,7 +1,8 @@
 <div *ngIf="!isLoading && !errorOnLoading">
   <div class="visually-hidden">
-    <button id="message-button" (click)="announce()">{{ 'settings.a11y-message' | translate}}</button>
-    <button tabindex="-1" id="keys-button" appHotkey="Escape"> {{ 'settings.a11y-shortcuts' | translate}}</button>
+    <div tabindex="-1" id="message-button">
+      {{ 'settings.a11y-message' | a11yIntro | async }}
+    </div>
   </div>
   <div *ngFor="let setting of settings">
     <app-settings [settings]="setting" [room]="room" (updateEvent)="updateRoom($event)"></app-settings>

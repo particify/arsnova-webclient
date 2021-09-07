@@ -1,4 +1,4 @@
-import { AfterContentInit, Component, Inject, OnDestroy, OnInit } from '@angular/core';
+import { AfterContentInit, Component, Inject, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { LanguageService } from '../../../../services/util/language.service';
@@ -9,17 +9,15 @@ import { UserRole } from '../../../../models/user-roles.enum';
 import { AdvancedSnackBarTypes, NotificationService } from '../../../../services/util/notification.service';
 import { DialogService } from '../../../../services/util/dialog.service';
 import { EventService } from '../../../../services/util/event.service';
-import { AnnounceService } from '../../../../services/util/announce.service';
 import { MarkdownFeatureset } from '../../../../services/http/formatting.service';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { HotkeyService } from '../../../../services/util/hotkey.service';
 
 @Component({
   selector: 'app-comment-answer',
   templateUrl: './comment-answer.component.html',
   styleUrls: ['./comment-answer.component.scss']
 })
-export class CommentAnswerComponent implements OnInit, OnDestroy, AfterContentInit {
+export class CommentAnswerComponent implements OnInit, AfterContentInit {
 
   comment: Comment;
   answer: string;
@@ -29,8 +27,6 @@ export class CommentAnswerComponent implements OnInit, OnDestroy, AfterContentIn
   MarkdownFeatureset = MarkdownFeatureset;
   renderPreview = false;
 
-  private hotkeyRefs: Symbol[] = [];
-
   constructor(protected route: ActivatedRoute,
               private notificationService: NotificationService,
               private translateService: TranslateService,
@@ -38,9 +34,7 @@ export class CommentAnswerComponent implements OnInit, OnDestroy, AfterContentIn
               protected commentService: CommentService,
               private authenticationService: AuthenticationService,
               private dialogService: DialogService,
-              private announceService: AnnounceService,
               private eventService: EventService,
-              private hotkeyService: HotkeyService,
               public dialogRef: MatDialogRef<CommentAnswerComponent>,
               @Inject(MAT_DIALOG_DATA) public data: any) {
   }
@@ -59,19 +53,6 @@ export class CommentAnswerComponent implements OnInit, OnDestroy, AfterContentIn
     this.comment = this.data.comment;
     this.answer = this.comment.answer;
     this.isParticipant = this.data.role === UserRole.PARTICIPANT;
-    this.hotkeyService.registerHotkey({
-      key: '2',
-      action: () => this.announce(),
-      actionTitle: 'TODO'
-    }, this.hotkeyRefs);
-  }
-
-  ngOnDestroy() {
-    this.hotkeyRefs.forEach(h => this.hotkeyService.unregisterHotkey(h));
-  }
-
-  public announce() {
-    this.announceService.announce('comment-page.a11y-shortcuts-answer');
   }
 
   editAnswer() {

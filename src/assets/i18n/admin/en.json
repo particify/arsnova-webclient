@@ -33,5 +33,8 @@
     "room-deleted": "The room was sucessfully deleted.",
     "transfer-room": "Transfer room",
     "room-transferred": "The room was sucessfully transferred."
+  },
+  "hotkeys": {
+    "a11y-help-key-announcement": "Press {{helpKey}} for a list of keyboard shortcuts."
   }
 }

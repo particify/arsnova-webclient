@@ -95,12 +95,6 @@ export class ContentCreationPageComponent implements OnInit, AfterContentInit {
     this.translateService.use(this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE));
   }
 
-  announce() {
-    if (!this.isEditMode) {
-      this.announceService.announce('content.a11y-content-create-shortcuts');
-    }
-  }
-
   reset() {
     this.question = '';
     this.content = null;

@@ -6,8 +6,9 @@
     <div fxLayout="row" fxLayoutAlign="center">
       <app-comment [comment]="comment" [inAnswerView]="true" [viewRoleInput]="data.role"></app-comment>
     </div>
-    <button id="message-button" tabIndex="-1" (click)="announce()"
-            class="visually-hidden">{{ 'comment-page.a11y-message-answer' | translate }}</button>
+    <div id="message-button" tabIndex="-1" class="visually-hidden">
+      {{ 'comment-page.a11y-message-answer' | a11yIntro | async }}
+    </div>
     <div fxLayout="row" fxLayoutAlign="center">
       <mat-card class="answer mat-elevation-z2" *ngIf="!isParticipant || answer">
         <div tabindex="-1" id="answer-text" class="visually-hidden" appHotkey="1">

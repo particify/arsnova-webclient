@@ -5,10 +5,9 @@
         <mat-card>
           <div class="side" [ngClass]="{'invisible-card-content': flipped}">
             <div class="visually-hidden">
-              <button (click)="announce()" id="message-announcer-button" tabIndex="-1">
-                {{ (isEditMode ? 'content.a11y-content-edit-message' : 'content.a11y-content-create-message') | translate }}</button>
-              <button (click)="announce()" id="keys-announcer-button" tabIndex="-1" appHotkey="Escape">
-                {{ 'content.a11y-content-create-shortcuts' | translate }}</button>
+              <div id="message-announcer-button" tabIndex="-1">
+                {{ (isEditMode ? 'content.a11y-content-edit-message' : 'content.a11y-content-create-message') | a11yIntro | async }}
+              </div>
             </div>
             <form>
               <div [ngClass]="{'disabled': isEditMode}" fxLayout="row wrap" fxLayoutAlign="start">

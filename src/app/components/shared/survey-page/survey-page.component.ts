@@ -107,11 +107,6 @@ export class SurveyPageComponent implements OnInit, OnDestroy, AfterContentInit 
         document.getElementById('survey-card').style.transform = `scale(${scale})`;
       }
     });
-    this.hotkeyService.registerHotkey({
-      key: 'Escape',
-      action: () => this.announceKeys(),
-      actionTitle: 'TODO'
-    }, this.hotkeyRefs);
     this.translateService.get('survey.status-summary').subscribe(t =>
       this.hotkeyService.registerHotkey({
         key: '5',
@@ -119,11 +114,6 @@ export class SurveyPageComponent implements OnInit, OnDestroy, AfterContentInit 
         actionTitle: t
       }, this.hotkeyRefs)
     );
-  }
-
-  announceKeys() {
-    const msg = this.isPresentation ? 'presentation.a11y-survey-shortcuts' : 'survey.a11y-shortcuts';
-    this.announceService.announce(msg);
   }
 
   announceStatus() {

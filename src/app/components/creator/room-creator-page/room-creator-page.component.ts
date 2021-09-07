@@ -85,20 +85,11 @@ export class RoomCreatorPageComponent extends RoomPageComponent implements OnIni
         actionTitle: t
       }, this.hotkeyRefs)
     );
-    this.hotkeyService.registerHotkey({
-      key: 'Escape',
-      action: () => this.announce(),
-      actionTitle: 'TODO'
-    }, this.hotkeyRefs);
   }
 
   ngOnDestroy() {
     super.ngOnDestroy();
     this.hotkeyRefs.forEach(h => this.hotkeyService.unregisterHotkey(h));
-  }
-
-  announce() {
-    this.announceService.announce('room-page.a11y-shortcuts');
   }
 
   afterRoomLoadHook() {

@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { CommentPageComponent } from './comment-page.component';
-import { Injectable, Renderer2, Component, Input } from '@angular/core';
+import { Injectable, Renderer2, Component, Input, Pipe, PipeTransform } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { ActivatedRoute } from '@angular/router';
@@ -70,6 +70,13 @@ class MockRenderer2 {
 
 }
 
+@Pipe({name: 'a11yIntro'})
+class MockA11yIntroPipe implements PipeTransform {
+  transform(i18nKey: string, args?: object): Observable<string> {
+    return of(i18nKey);
+  }
+}
+
 @Injectable()
 class MockGlobalStorageService {
   getItem(key: symbol) {
@@ -102,7 +109,8 @@ describe('CommentPageComponent', () => {
     TestBed.configureTestingModule({
       declarations: [
         CommentPageComponent,
-        CommentListStubComponent
+        CommentListStubComponent,
+        MockA11yIntroPipe
       ],
       imports: [
         TranslateModule.forRoot({

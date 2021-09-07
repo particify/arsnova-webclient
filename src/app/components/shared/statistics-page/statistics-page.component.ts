@@ -5,7 +5,6 @@ import { ContentGroup } from '../../../models/content-group';
 import { Room } from '../../../models/room';
 import { TranslateService } from '@ngx-translate/core';
 import { GlobalStorageService, STORAGE_KEYS } from '../../../services/util/global-storage.service';
-import { AnnounceService } from '../../../services/util/announce.service';
 import { StatisticListComponent } from '../statistic-list/statistic-list.component';
 import { ContentGroupService } from '../../../services/http/content-group.service';
 
@@ -28,7 +27,6 @@ export class StatisticsPageComponent implements OnInit {
   constructor(private route: ActivatedRoute,
               private roomStatsService: RoomStatsService,
               private contentGroupService: ContentGroupService,
-              private announceService: AnnounceService,
               private translateService: TranslateService,
               private globalStorageService: GlobalStorageService
   ) {
@@ -81,9 +79,5 @@ export class StatisticsPageComponent implements OnInit {
 
   showDeleteDialog() {
     this.statisticList.showDeleteAnswerDialog();
-  }
-
-  announce() {
-    this.announceService.announce('statistic.a11y-shortcuts-overview');
   }
 }

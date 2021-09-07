@@ -2,10 +2,9 @@
 <div fxFill fxLayout="column">
   <div *ngIf="!isLoading" fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="center">
     <div class="visually-hidden">
-      <button id="message-button" tabIndex="-1" (click)="announce()">
-        {{ 'content.a11y-content-list-message' | translate: { name: contentGroup.name } }}</button>
-      <button id="keys-button" tabIndex="-1" (click)="announce()" appHotkey="Escape">
-        {{ 'content.a11y-content-list-shortcuts' | translate }}</button>
+      <div id="message-button" tabIndex="-1">
+        {{ 'content.a11y-content-list-message' | a11yIntro: { name: contentGroup.name } | async }}
+      </div>
     </div>
     <mat-card>
       <div fxLayout="row" fxLayoutAlign="space-between">

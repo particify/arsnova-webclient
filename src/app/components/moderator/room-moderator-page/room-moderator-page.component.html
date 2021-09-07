@@ -1,8 +1,9 @@
 <app-sidebar *ngIf="!isLoading" [barItems]="infoBarItems"></app-sidebar>
 <div fxLayout="column" fxLayoutGap="20px" fxFill>
   <div fxLayout="row" fxLayoutAlign="center">
-    <button id="live_announcer-button" tabIndex="-1" (click)="announce()"
-            class="visually-hidden">{{ 'room-page.a11y-moderator-message' | translate: {room: room.name} }}</button>
+    <div id="live_announcer-button" tabIndex="-1" class="visually-hidden">
+      {{ 'room-page.a11y-moderator-message' | a11yIntro: {room: room.name} | async }}
+    </div>
     <app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
     <mat-card *ngIf="!isLoading && room">
       <mat-card-content>

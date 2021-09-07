@@ -11,7 +11,6 @@ import { ActivatedRoute } from '@angular/router';
 import { ClientAuthentication } from '../../../models/client-authentication';
 import { NotificationService } from '../../../services/util/notification.service';
 import { AuthenticationService } from '../../../services/http/authentication.service';
-import { AnnounceService } from '../../../services/util/announce.service';
 import { CommentService } from '../../../services/http/comment.service';
 import { Comment } from '../../../models/comment';
 import { CommentListComponent } from '../comment-list/comment-list.component';
@@ -38,7 +37,6 @@ export class CommentPageComponent implements OnInit, OnDestroy, AfterContentInit
     private route: ActivatedRoute,
     private notification: NotificationService,
     private authenticationService: AuthenticationService,
-    private announceService: AnnounceService,
     private commentService: CommentService,
     private hotkeyService: HotkeyService
   ) {
@@ -60,8 +58,6 @@ export class CommentPageComponent implements OnInit, OnDestroy, AfterContentInit
         if (document.getElementById('search-close-button')) {
           document.getElementById('search-close-button').click();
           document.getElementById('live-announcer-button').focus();
-        } else {
-          this.announce();
         }
       },
       actionTitle: 'TODO'
@@ -73,11 +69,6 @@ export class CommentPageComponent implements OnInit, OnDestroy, AfterContentInit
       this.commentService.lowlight(this.activeComment).subscribe();
     }
     this.hotkeyRefs.forEach(h => this.hotkeyService.unregisterHotkey(h));
-  }
-
-  public announce() {
-    const msg = this.isPresentation ? 'presentation.a11y-comment-shortcuts' : 'comment-page.a11y-shortcuts';
-    this.announceService.announce(msg);
   }
 
   updateComment(comment: Comment) {

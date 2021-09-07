@@ -52,6 +52,7 @@ import { ListBadgeComponent } from './list-badge/list-badge.component';
 import { CounterBraces } from '../../pipes/counter-braces';
 import { HotkeyDirective } from '../../directives/hotkey.directive';
 import { HotkeysComponent } from './_dialogs/hotkeys/hotkeys.component';
+import { A11yIntroPipe } from '../../pipes/a11y-intro.pipe';
 
 @NgModule({
   imports: [
@@ -110,7 +111,8 @@ import { HotkeysComponent } from './_dialogs/hotkeys/hotkeys.component';
     ListBadgeComponent,
     CounterBraces,
     HotkeyDirective,
-    HotkeysComponent
+    HotkeysComponent,
+    A11yIntroPipe
   ],
   exports: [
     RoomJoinComponent,
@@ -149,7 +151,8 @@ import { HotkeysComponent } from './_dialogs/hotkeys/hotkeys.component';
     WordcloudComponent,
     SplitShortId,
     HotkeyDirective,
-    HotkeysComponent
+    HotkeysComponent,
+    A11yIntroPipe
   ]
 })
 export class SharedModule {
