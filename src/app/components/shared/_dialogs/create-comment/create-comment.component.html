@@ -1,7 +1,7 @@
 <div fxLayout="column" fxLayoutAlign="center" fxLayoutGap="20px">
   <mat-form-field appearance="outline">
     <mat-label>{{ 'dialog.comment' | translate }}</mat-label>
-    <textarea (focus)="eventService.makeFocusOnInputTrue()" (blur)="eventService.makeFocusOnInputFalse()" matInput
+    <textarea matInput
               #commentBody matTextareaAutosize matAutosizeMinRows=5 matAutosizeMaxRows=10 maxlength="500"
               [formControl]="bodyForm" aria-labelledby="ask-question-description"
               [placeholder]="'dialog.enter-comment' | translate"></textarea>

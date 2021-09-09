@@ -1,4 +1,4 @@
-import { Component, EventEmitter, HostListener, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { FEATURES, NavBarComponent, NavBarItem } from '../../../shared/bars/nav-bar/nav-bar.component';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RoutingService } from '../../../../services/util/routing.service';
@@ -9,22 +9,26 @@ import { ContentGroupService } from '../../../../services/http/content-group.ser
 import { EventService } from '../../../../services/util/event.service';
 import { BarItem } from '../../../shared/bars/bar-base';
 import { UserRole } from '../../../../models/user-roles.enum';
-import { KeyboardKey } from '../../../../utils/keyboard/keys';
-import { KeyboardUtils } from '../../../../utils/keyboard';
 import { ContentGroup } from '../../../../models/content-group';
-import { takeUntil } from 'rxjs/operators';
+import { map, takeUntil } from 'rxjs/operators';
 import { ApiConfigService } from '../../../../services/http/api-config.service';
 import { Subject } from 'rxjs';
 import { Sort } from '../../../shared/comment-list/comment-list.component';
 import { AnnounceService } from '../../../../services/util/announce.service';
+import { Hotkey, HotkeyService } from '../../../../services/util/hotkey.service';
+import { HotkeyAction } from '../../../../directives/hotkey.directive';
+import { TranslateService } from '@ngx-translate/core';
 
 export class KeyNavBarItem extends NavBarItem {
   key: string;
+  displayKey: string;
   disabled: boolean;
 
   constructor(name: string, icon: string, url: string, key: string, disabled = false) {
     super(name, icon, url, false);
+    const keyInfo = HotkeyService.getKeyDisplayInfo(key);
     this.key = key;
+    this.displayKey = keyInfo.translateKeyName ? 'control-bar.' + keyInfo.keyName : keyInfo.keySymbol;
     this.disabled = disabled;
   }
 }
@@ -65,32 +69,35 @@ export class ControlBarComponent extends NavBarComponent implements OnInit, OnDe
     new BarItem(FEATURES.SURVEY, 'thumbs_up_down')
   ];
   groupItems: KeyNavBarItem[] = [
-    new KeyNavBarItem('results', 'insert_chart', '', 'SPACE'),
-    new KeyNavBarItem('correct', 'check_circle', '', 'LetterC'),
-    new KeyNavBarItem('lock', 'lock', '', 'LetterL'),
+    new KeyNavBarItem('results', 'insert_chart', '', ' '),
+    new KeyNavBarItem('correct', 'check_circle', '', 'c'),
+    new KeyNavBarItem('lock', 'lock', '', 'l'),
   ];
   surveyItems: KeyNavBarItem[] = [
-    new KeyNavBarItem('start', 'play_arrow', '', 'SPACE'),
-    new KeyNavBarItem('change-type', 'swap_horiz', '', 'LetterC')
+    new KeyNavBarItem('start', 'play_arrow', '', ' '),
+    new KeyNavBarItem('change-type', 'swap_horiz', '', 'c')
   ];
   arrowItems: KeyNavBarItem[] = [
-    new KeyNavBarItem('left', 'arrow_back', '', 'LEFT', true),
-    new KeyNavBarItem('right', 'arrow_forward', '', 'RIGHT'),
+    new KeyNavBarItem('left', 'arrow_back', '', 'ArrowLeft', true),
+    new KeyNavBarItem('right', 'arrow_forward', '', 'ArrowRight'),
   ];
   generalItems: KeyNavBarItem[] = [
-    new KeyNavBarItem('share', 'qr_code', '', 'LetterQ'),
-    new KeyNavBarItem('fullscreen', 'open_in_full', '', 'LetterF'),
+    new KeyNavBarItem('share', 'qr_code', '', 'q'),
+    new KeyNavBarItem('fullscreen', 'open_in_full', '', 'f'),
     new KeyNavBarItem('exit', 'close', '', 'Escape'),
   ];
   zoomItems: KeyNavBarItem[] = [
-    new KeyNavBarItem('zoom-in', 'zoom_in', '', 'PLUS'),
-    new KeyNavBarItem('zoom-out', 'zoom_out', '', 'MINUS')
+    new KeyNavBarItem('zoom-in', 'zoom_in', '', '+'),
+    new KeyNavBarItem('zoom-out', 'zoom_out', '', '-')
   ];
 
   cursorTimer;
   barTimer;
   cursorVisible = true;
   barVisible = false;
+  HotkeyAction = HotkeyAction;
+
+  private hotkeyRefs: Symbol[] = [];
 
   constructor(
     protected router: Router,
@@ -102,29 +109,12 @@ export class ControlBarComponent extends NavBarComponent implements OnInit, OnDe
     protected contentGroupService: ContentGroupService,
     protected eventService: EventService,
     protected apiConfigService: ApiConfigService,
-    private announceService: AnnounceService
+    private announceService: AnnounceService,
+    private hotkeyService: HotkeyService,
+    private translateService: TranslateService
   ) {
     super(router, routingService, route, globalStorageService,
       roomStatsService, feedbackService, contentGroupService, eventService);
-  }
-
-  @HostListener('window:keyup', ['$event'])
-  keyEvent(event: KeyboardEvent) {
-    if (!this.eventService.focusOnInput) {
-      if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit1) === true) {
-        this.updateFeatureWithIndex(0)
-      } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit2) === true) {
-        this.updateFeatureWithIndex(1)
-      } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit3) === true) {
-        this.updateFeatureWithIndex(2)
-      } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.LetterQ) === true) {
-        this.updateFeature(undefined);
-      } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.LetterF) === true) {
-        this.toggleFullscreen();
-      } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Escape) === true) {
-        this.exitPresentation();
-      }
-    }
   }
 
   updateFeatureWithIndex(index: number) {
@@ -137,6 +127,7 @@ export class ControlBarComponent extends NavBarComponent implements OnInit, OnDe
     this.destroyed = true;
     this.showCursor();
     clearTimeout(this.cursorTimer);
+    this.hotkeyRefs.forEach(h => this.hotkeyService.unregisterHotkey(h));
   }
 
   sendControlBarState() {
@@ -149,6 +140,7 @@ export class ControlBarComponent extends NavBarComponent implements OnInit, OnDe
 
   beforeInit() {
     this.subscribeFullscreen();
+    this.registerHotkeys();
   }
 
   afterInit() {
@@ -405,5 +397,22 @@ export class ControlBarComponent extends NavBarComponent implements OnInit, OnDe
   changeCommentSort(sort: Sort) {
     this.currentCommentSort = sort;
     this.eventService.broadcast('CommentSortingChanged', this.currentCommentSort);
+  }
+
+  private registerHotkeys() {
+    const actions = {
+      'share': () => this.updateFeature(undefined),
+      'fullscreen': () => this.toggleFullscreen(),
+      'exit': () => this.exitPresentation()
+    }
+    this.generalItems.forEach(item =>
+      this.translateService.get('control-bar.' + item.name).pipe(
+        map(t => ({
+          key: item.key,
+          action: actions[item.name],
+          actionTitle: t
+        } as Hotkey))
+      ).subscribe((h: Hotkey) => this.hotkeyService.registerHotkey(h, this.hotkeyRefs))
+    );
   }
 }

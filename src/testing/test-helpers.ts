@@ -58,14 +58,6 @@ export class MockEventService {
 
   broadcast = jasmine.createSpy('BroadcastSpy').and.returnValue({});
 
-  makeFocusOnInputTrue() {
-    this.focusOnInput = true;
-  }
-
-  makeFocusOnInputFalse() {
-    this.focusOnInput = false;
-  }
-
   on<T>(key: any): Observable<T> {
     return this._eventBus.asObservable().pipe(
       filter(event => event.key === key),

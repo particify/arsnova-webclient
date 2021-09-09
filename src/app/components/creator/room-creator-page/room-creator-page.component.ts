@@ -1,4 +1,4 @@
-import { AfterContentInit, Component, HostListener, OnInit } from '@angular/core';
+import { AfterContentInit, Component, OnDestroy, OnInit } from '@angular/core';
 import { RoomService } from '../../../services/http/room.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RoomPageComponent } from '../../shared/room-page/room-page.component';
@@ -10,8 +10,6 @@ import { LanguageService } from '../../../services/util/language.service';
 import { WsCommentServiceService } from '../../../services/websockets/ws-comment-service.service';
 import { CommentService } from '../../../services/http/comment.service';
 import { EventService } from '../../../services/util/event.service';
-import { KeyboardUtils } from '../../../utils/keyboard';
-import { KeyboardKey } from '../../../utils/keyboard/keys';
 import { ContentService } from '../../../services/http/content.service';
 import { DialogService } from '../../../services/util/dialog.service';
 import { GlobalStorageService, STORAGE_KEYS } from '../../../services/util/global-storage.service';
@@ -22,17 +20,20 @@ import { InfoBarItem } from '../../shared/bars/info-bar/info-bar.component';
 import { ContentGroupService } from '../../../services/http/content-group.service';
 import { ContentGroup } from '../../../models/content-group';
 import { RoomStatsService } from '../../../services/http/room-stats.service';
+import { HotkeyService } from '../../../services/util/hotkey.service';
 
 @Component({
   selector: 'app-room-creator-page',
   templateUrl: './room-creator-page.component.html',
   styleUrls: ['./room-creator-page.component.scss']
 })
-export class RoomCreatorPageComponent extends RoomPageComponent implements OnInit, AfterContentInit {
+export class RoomCreatorPageComponent extends RoomPageComponent implements OnInit, OnDestroy, AfterContentInit {
 
   looseContent: Content[] = [];
   userCount: number;
   target: Window;
+
+  private hotkeyRefs: Symbol[] = [];
 
   constructor(
     protected roomService: RoomService,
@@ -51,39 +52,12 @@ export class RoomCreatorPageComponent extends RoomPageComponent implements OnIni
     public eventService: EventService,
     protected contentService: ContentService,
     private dialogService: DialogService,
-    protected globalStorageService: GlobalStorageService
+    protected globalStorageService: GlobalStorageService,
+    private hotkeyService: HotkeyService
   ) {
     super(roomService, roomStatsService, contentGroupService, route, router, location, wsCommentService,
       commentService, eventService, contentService, translateService, notification, globalStorageService);
     langService.langEmitter.subscribe(lang => translateService.use(lang));
-  }
-
-  @HostListener('window:keyup', ['$event'])
-  keyEvent(event: KeyboardEvent) {
-    const focusOnInput = this.eventService.focusOnInput;
-    if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit1) === true && focusOnInput === false) {
-      document.getElementById('comments-button').focus();
-    } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit2) === true && focusOnInput === false) {
-      document.getElementById('live-survey-button').focus();
-    } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit3) === true && focusOnInput === false) {
-      document.getElementById('content-group-create-button').focus();
-    } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit4) === true && focusOnInput === false) {
-      if (this.contentGroups.length > 0) {
-        document.getElementById('content-groups').focus();
-      } else {
-        document.getElementById('no-content-groups').focus();
-      }
-    } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit5) === true && focusOnInput === false) {
-      document.getElementById('presentation-button').focus();
-    } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit6) === true && focusOnInput === false) {
-      document.getElementById('more-button').focus();
-    } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit7) === true && focusOnInput === false) {
-      const adKey = this.userCount === 1 ? '-only-one' : '';
-      const msg = this.translateService.instant('room-page.a11y-user-count' + adKey, {count: this.userCount})
-      this.announceService.announce(msg);
-    } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Escape) === true && focusOnInput === false) {
-      this.announce();
-    }
   }
 
   ngAfterContentInit(): void {
@@ -100,10 +74,22 @@ export class RoomCreatorPageComponent extends RoomPageComponent implements OnIni
     });
     this.roomWatch = this.roomService.getCurrentRoomsMessageStream();
     this.roomSub = this.roomWatch.subscribe(msg => this.parseUserCount(msg.body));
+    this.translateService.get('sidebar.user-counter').subscribe(t =>
+      this.hotkeyService.registerHotkey({
+        key: '7',
+        action: () => {
+          const adKey = this.userCount === 1 ? '-only-one' : '';
+          const msg = this.translateService.instant('room-page.a11y-user-count' + adKey, {count: this.userCount})
+          this.announceService.announce(msg);
+        },
+        actionTitle: t
+      }, this.hotkeyRefs)
+    );
   }
 
-  announce() {
-    this.announceService.announce('room-page.a11y-shortcuts');
+  ngOnDestroy() {
+    super.ngOnDestroy();
+    this.hotkeyRefs.forEach(h => this.hotkeyService.unregisterHotkey(h));
   }
 
   afterRoomLoadHook() {

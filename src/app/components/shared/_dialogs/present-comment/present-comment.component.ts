@@ -1,12 +1,11 @@
-import { Component, HostListener, Inject, Input, OnInit } from '@angular/core';
+import { Component, Inject, Input, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
 import { DOCUMENT } from '@angular/common';
-import { KeyboardUtils } from '../../../../utils/keyboard';
-import { KeyboardKey } from '../../../../utils/keyboard/keys';
 import { GlobalStorageService, STORAGE_KEYS } from '../../../../services/util/global-storage.service';
 import { Comment } from '../../../../models/comment';
 import { EventService } from '../../../../services/util/event.service';
+import { HotkeyAction } from '../../../../directives/hotkey.directive';
 
 @Component({
   selector: 'app-present-comment',
@@ -18,6 +17,7 @@ export class PresentCommentComponent implements OnInit {
   @Input() isPresentation = false;
   @Input() comment: Comment;
 
+  HotkeyAction = HotkeyAction;
   currentZoom = 1;
 
   constructor(
@@ -31,25 +31,8 @@ export class PresentCommentComponent implements OnInit {
   ) {
   }
 
-  @HostListener('window:keyup', ['$event'])
-  keyEvent(event: KeyboardEvent) {
-    if (KeyboardUtils.isKeyEvent(event, KeyboardKey.PLUS) === true) {
-      this.updateZoom(1);
-    } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.MINUS) === true) {
-      this.updateZoom(-1);
-    }
-  }
-
   ngOnInit() {
     this.translateService.use(this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE));
-  }
-
-  @HostListener('document:keyup', ['$event'])
-  onKeyUp(event: KeyboardEvent) {
-    // ToDo: migrate from deprecated event api
-    if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Escape) === true) {
-      this.onCloseClick();
-    }
   }
 
   onCloseClick(): void {

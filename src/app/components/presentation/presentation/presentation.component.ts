@@ -1,13 +1,10 @@
-import { Component, EventEmitter, HostListener, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { GlobalStorageService, STORAGE_KEYS } from '../../../services/util/global-storage.service';
 import { RoomStatsService } from '../../../services/http/room-stats.service';
 import { LanguageService } from '../../../services/util/language.service';
 import { TranslateService } from '@ngx-translate/core';
-import { AnnounceService } from '../../../services/util/announce.service';
-import { KeyboardUtils } from '../../../utils/keyboard';
-import { KeyboardKey } from '../../../utils/keyboard/keys';
 
 @Component({
   selector: 'app-presentation',
@@ -28,17 +25,10 @@ export class PresentationComponent implements OnInit {
               private globalStorageService: GlobalStorageService,
               private roomStatsService: RoomStatsService,
               private langService: LanguageService,
-              private translateService: TranslateService,
-              private announceService: AnnounceService) {
+              private translateService: TranslateService) {
     langService.langEmitter.subscribe(lang => translateService.use(lang));
   }
 
-  @HostListener('window:keyup', ['$event'])
-  keyEvent(event: KeyboardEvent) {
-    if (KeyboardUtils.isKeyEvent(event, KeyboardKey.LetterI) === true) {
-      this.announceShortcuts();
-    }
-  }
   ngOnInit(): void {
     this.globalStorageService.removeItem(STORAGE_KEYS.LAST_INDEX);
     document.body.style.background = 'var(--surface)';
@@ -65,10 +55,6 @@ export class PresentationComponent implements OnInit {
         }, 500);
       });
     });
-  }
-
-  announceShortcuts() {
-    this.announceService.announce('presentation.a11y-shortcuts');
   }
 
   updateFeature(feature: string) {

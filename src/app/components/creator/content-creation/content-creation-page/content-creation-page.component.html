@@ -5,15 +5,15 @@
         <mat-card>
           <div class="side" [ngClass]="{'invisible-card-content': flipped}">
             <div class="visually-hidden">
-              <button (click)="announce()" id="message-announcer-button" tabIndex="-1">
-                {{ (isEditMode ? 'content.a11y-content-edit-message' : 'content.a11y-content-create-message') | translate }}</button>
-              <button (click)="announce()" id="keys-announcer-button" tabIndex="-1">
-                {{ 'content.a11y-content-create-shortcuts' | translate }}</button>
+              <div id="message-announcer-button" tabIndex="-1">
+                {{ (isEditMode ? 'content.a11y-content-edit-message' : 'content.a11y-content-create-message') | a11yIntro | async }}
+              </div>
             </div>
             <form>
               <div [ngClass]="{'disabled': isEditMode}" fxLayout="row wrap" fxLayoutAlign="start">
                 <button tabindex="{{isEditMode ? '-1' : '0'}}" [matMenuTriggerFor]="formatMenu" aria-labelledby="choose-format" class="format-button"
-                        id="format-button" mat-stroked-button>
+                        id="format-button" mat-stroked-button
+                        appHotkey="2" [appHotkeyTitle]="'content.format' | translate">
                   <mat-icon class="format-button-icon">{{ selectedFormat.icon }}</mat-icon>
                   <span>
           {{ 'content.format-' + selectedFormat.name | translate}}
@@ -40,20 +40,21 @@
                          aria-labelledby="content-group"
                          id="group-input"
                          matInput
-                         placeholder="{{ 'content.choose-collection' | translate }}"/>
+                         placeholder="{{ 'content.choose-collection' | translate }}"
+                         appHotkey="3" [appHotkeyTitle]="'content.collection' | translate"/>
                 </mat-form-field>
               </div>
               <mat-form-field appearance="outline" class="input-block no-field-hint">
                 <mat-label>{{ (selectedFormat.name !== 'slide' ? 'content.body' : 'content.body-neutral') | translate }}</mat-label>
-                <textarea #questionInput (blur)="eventService.makeFocusOnInputFalse()"
-                          (focus)="eventService.makeFocusOnInputTrue()"
+                <textarea #questionInput
                           (input)="updateTextContainsImage(questionInput.value)"
                           [(ngModel)]="question"
                           [placeholder]="(selectedFormat.name !== 'slide' ? 'content.enter-body' : 'content.enter-body-neutral') | translate"
                           aria-labelledby="body" id="body-input"
                           matAutosizeMaxRows="8"
                           matAutosizeMinRows="3"
-                          matInput matTextareaAutosize maxlength="{{ selectedFormat.name !== 'slide' ? 1000 : 2000 }}" name="questionInput"></textarea>
+                          matInput matTextareaAutosize maxlength="{{ selectedFormat.name !== 'slide' ? 1000 : 2000 }}" name="questionInput"
+                          appHotkey="1" [appHotkeyTitle]="'content.body' | translate"></textarea>
               </mat-form-field>
               <app-hint *ngIf="textContainsImage" text="utils.formatting-image-hint" [type]="warningType"></app-hint>
               <lib-extension-point *ngIf="!isLoading" extensionId="attachment-list" [extensionData]="attachmentData"></lib-extension-point>

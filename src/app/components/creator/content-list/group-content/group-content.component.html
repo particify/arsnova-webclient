@@ -2,10 +2,9 @@
 <div fxFill fxLayout="column">
   <div *ngIf="!isLoading" fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="center">
     <div class="visually-hidden">
-      <button id="message-button" tabIndex="-1" (click)="announce()">
-        {{ 'content.a11y-content-list-message' | translate: { name: contentGroup.name } }}</button>
-      <button id="keys-button" tabIndex="-1" (click)="announce()">
-        {{ 'content.a11y-content-list-shortcuts' | translate }}</button>
+      <div id="message-button" tabIndex="-1">
+        {{ 'content.a11y-content-list-message' | a11yIntro: { name: contentGroup.name } | async }}
+      </div>
     </div>
     <mat-card>
       <div fxLayout="row" fxLayoutAlign="space-between">
@@ -13,7 +12,8 @@
           <mat-form-field class="activeInput no-field-hint" [ngClass]="{'hideEditing': !isInTitleEditMode && !inputFocus}" appearance="outline">
             <input id="nameInput" #nameInput (focus)="goInTitleEditMode()" (blur)="leaveTitleEditMode()"
                    (mouseenter)="inputFocus = true" (mouseleave)="inputFocus = false" (keyup.enter)="removeFocusFromInput()"
-                   matInput maxlength="25" [(ngModel)]="updatedName" aria-labelledby="edit-content-group-name">
+                   matInput maxlength="25" [(ngModel)]="updatedName" aria-labelledby="edit-content-group-name"
+                   appHotkey="6" [appHotkeyTitle]="'content.content-group-name' | translate">
           </mat-form-field>
         </div>
         <div fxLayoutAlign="center center" fxLayoutGap="8px" class="status-bar">
@@ -34,7 +34,8 @@
         <div *ngIf="!isLoading" fxLayout="row wrap" fxLayoutAlign="space-between center" class="action-container">
           <div *ngIf="!isInSortingMode" fxLayout="row wrap" fxLayoutAlign="space-between center" fxLayoutGap="10px">
             <button mat-raised-button id="content-create-button" class="button-primary add-desktop"
-                    aria-labelledby="create-content" [routerLink]="['create']">
+                    aria-labelledby="create-content" [routerLink]="['create']"
+                    appHotkey="1" [appHotkeyTitle]="'room-page.create-content' | translate">
               <mat-icon>add</mat-icon>
               {{ 'room-page.create-content' | translate}}
             </button>
@@ -45,12 +46,14 @@
             </button>
             <div class="settings-buttons">
               <button mat-button id="statistic-button" class="settings-button"  aria-labelledby="statistics"
-                      routerLink="/creator/room/{{ room.shortId }}/statistics" [disabled]="contents.length === 0">
+                      routerLink="/creator/room/{{ room.shortId }}/statistics" [disabled]="contents.length === 0"
+                      appHotkey="2" [appHotkeyTitle]="'room-page.answer-statistics' | translate">
                 <mat-icon>insert_chart</mat-icon>
                 {{ 'room-page.answer-statistics' | translate }}
               </button>
               <button mat-button id="settings-button" class="settings-button" [matMenuTriggerFor]="groupSettings"
-                      aria-labelledby="settings">
+                      aria-labelledby="settings"
+                      appHotkey="3" [appHotkeyTitle]="'content.group-settings' | translate">
                 <mat-icon>settings</mat-icon>
                 {{ 'content.group-settings' | translate}}
               </button>
@@ -101,13 +104,14 @@
             <p *ngIf="!isInSortingMode" class="slide-text">
               {{ 'content.unlock-collection' | translate}}
               <mat-slide-toggle id="lock-group-slide" (change)="publishContents()" [(ngModel)]="published"
-                                aria-labelledby="lock-group">
+                                aria-labelledby="lock-group"
+                                appHotkey="4" [appHotkeyTitle]="'content.unlock-collection' | translate">
               </mat-slide-toggle>
             </p>
           </div>
         </div>
         <div>
-          <div tabindex="-1" id="content-list" class="visually-hidden">
+          <div tabindex="-1" id="content-list" class="visually-hidden" appHotkey="5" [appHotkeyTitle]="'content.contents' | translate">
             {{ 'content.a11y-content-list-contents' | translate: { count: contents.length } }}</div>
           <p *ngIf="contents.length === 0">{{ 'content.no-contents-yet' | translate }}</p>
           <mat-list *ngIf="!isInSortingMode">

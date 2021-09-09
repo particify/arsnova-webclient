@@ -2,8 +2,7 @@
   <div fxLayout="column" fxLayoutAlign="center" fxLayoutGap="10px">
     <mat-form-field appearance="outline">
       <mat-label>{{ 'dialog.room-name' | translate }}</mat-label>
-      <input (focus)="eventService.makeFocusOnInputTrue()" (blur)="eventService.makeFocusOnInputFalse()"
-             (keypress)="resetEmptyInputs()" matInput #roomName class="input-block" type="text" autocomplete="off"
+      <input (keypress)="resetEmptyInputs()" matInput #roomName class="input-block" type="text" autocomplete="off"
              maxlength="30" [(ngModel)]="longName" name="roomName" aria-labelledby="room-name-input"/>
       <mat-hint align="end" *ngIf="!emptyInputs"><span aria-hidden="true">{{roomName.value.length}}
         / 30</span></mat-hint>

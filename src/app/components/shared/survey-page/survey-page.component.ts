@@ -1,4 +1,4 @@
-import { AfterContentInit, Component, HostListener, Input, OnDestroy, OnInit, Renderer2 } from '@angular/core';
+import { AfterContentInit, Component, Input, OnDestroy, OnInit, Renderer2 } from '@angular/core';
 import { AuthenticationService } from '../../../services/http/authentication.service';
 import { RoomService } from '../../../services/http/room.service';
 import { UserRole } from '../../../models/user-roles.enum';
@@ -9,8 +9,6 @@ import { WsFeedbackService } from '../../../services/websockets/ws-feedback.serv
 import { Subscription } from 'rxjs';
 import { TranslateService } from '@ngx-translate/core';
 import { LanguageService } from '../../../services/util/language.service';
-import { KeyboardUtils } from '../../../utils/keyboard';
-import { KeyboardKey } from '../../../utils/keyboard/keys';
 import { Survey } from '../../../models/survey';
 import { GlobalStorageService, STORAGE_KEYS } from '../../../services/util/global-storage.service';
 import { ActivatedRoute } from '@angular/router';
@@ -18,6 +16,8 @@ import { AnnounceService } from '../../../services/util/announce.service';
 import { FeedbackService } from '../../../services/http/feedback.service';
 import { FeedbackMessageType } from '../../../models/messages/feedback-message-type';
 import { EventService } from '../../../services/util/event.service';
+import { HotkeyAction } from '../../../directives/hotkey.directive';
+import { HotkeyService } from '../../../services/util/hotkey.service';
 
 @Component({
   selector: 'app-survey-page',
@@ -48,6 +48,12 @@ export class SurveyPageComponent implements OnInit, OnDestroy, AfterContentInit 
   deviceWidth = innerWidth;
   answerCount = 0;
   routeData;
+  toggleKey = "1";
+  changeKey = "2";
+  voteKeys = ["1", "2", "3", "4"];
+  hotkeyAction = HotkeyAction.FOCUS;
+
+  private hotkeyRefs: Symbol[] = [];
 
   constructor(
     private authenticationService: AuthenticationService,
@@ -61,46 +67,10 @@ export class SurveyPageComponent implements OnInit, OnDestroy, AfterContentInit 
     private _r: Renderer2,
     private globalStorageService: GlobalStorageService,
     protected route: ActivatedRoute,
-    private eventService: EventService
+    private eventService: EventService,
+    private hotkeyService: HotkeyService
   ) {
     langService.langEmitter.subscribe(lang => translateService.use(lang));
-  }
-
-  @HostListener('window:keyup', ['$event'])
-  keyEvent(event: KeyboardEvent) {
-    if (this.isCreator) {
-      const toggleKey = this.isPresentation ? KeyboardKey.SPACE : KeyboardKey.Digit1;
-      const changeKey = this.isPresentation ? KeyboardKey.LetterC : KeyboardKey.Digit2;
-      if (KeyboardUtils.isKeyEvent(event, toggleKey) === true) {
-        this.toggle();
-      } else if (KeyboardUtils.isKeyEvent(event, changeKey) === true) {
-        if (this.isClosed) {
-          this.changeType();
-        } else {
-          const msg = this.translateService.instant('survey.a11y-first-stop-survey');
-          this.announceService.announce(msg);
-        }
-      }
-    } else {
-      if (!this.isClosed) {
-        if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit1) === true) {
-          document.getElementById('survey-button-0').focus();
-        } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit2) === true) {
-          document.getElementById('survey-button-1').focus();
-        } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit3) === true) {
-          document.getElementById('survey-button2-2').focus();
-        } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit4) === true) {
-          document.getElementById('survey-button2-3').focus();
-        }
-      } else {
-        this.announceStatus();
-      }
-    }
-    if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Escape) === true) {
-      this.announceKeys();
-    } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit5) === true) {
-      this.announceStatus();
-    }
   }
 
   ngAfterContentInit() {
@@ -110,6 +80,11 @@ export class SurveyPageComponent implements OnInit, OnDestroy, AfterContentInit 
   }
 
   ngOnInit() {
+    if (this.isPresentation) {
+      this.hotkeyAction = HotkeyAction.CLICK;
+      this.toggleKey = " ";
+      this.changeKey = "c";
+    }
     this.translateService.use(this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE));
     this.authenticationService.getCurrentAuthentication()
         .subscribe(auth => this.userId = auth.userId);
@@ -132,11 +107,13 @@ export class SurveyPageComponent implements OnInit, OnDestroy, AfterContentInit 
         document.getElementById('survey-card').style.transform = `scale(${scale})`;
       }
     });
-  }
-
-  announceKeys() {
-    const msg = this.isPresentation ? 'presentation.a11y-survey-shortcuts' : 'survey.a11y-shortcuts';
-    this.announceService.announce(msg);
+    this.translateService.get('survey.status-summary').subscribe(t =>
+      this.hotkeyService.registerHotkey({
+        key: '5',
+        action: () => !this.isClosed && this.announceStatus(),
+        actionTitle: t
+      }, this.hotkeyRefs)
+    );
   }
 
   announceStatus() {
@@ -192,6 +169,7 @@ export class SurveyPageComponent implements OnInit, OnDestroy, AfterContentInit 
     if (this.sub) {
       this.sub.unsubscribe();
     }
+    this.hotkeyRefs.forEach(h => this.hotkeyService.unregisterHotkey(h));
   }
 
   private updateFeedback(data) {

@@ -68,16 +68,16 @@
     "my-rooms": "Meine Räume",
     "style": "Anzeige",
     "user-bonus-token": "Zu deinen Bonus Tokens",
-    "news": "Es gibt Neuigkeiten"
+    "news": "Es gibt Neuigkeiten",
+    "menu": "Hauptmenü"
   },
   "home-page": {
     "a11y-create-room": "Erstellt einen neuen Raum.",
     "a11y-join-button": "Betritt den Raum, von welchem du die Nummer eingegeben hast.",
     "a11y-join-input": "Hier kannst du die Nummer des Raums eingeben, dem du beitreten möchtest.",
-    "a11y-welcome-message": "Willkommen bei ARSnova. Gib eine achtstellige Raumnummer ein, um einem Raum beizutreten oder drücke die Escape-Taste, um Informationen zu Tastenkombinationen zu erhalten.",
-    "a11y-home-shortcuts": "Du befindest dich auf der Startseite von ARSnova. Um eine Raumnummer einzugeben drücke die Taste 1, um einen neuen Raum zu erstellen die Taste 2, um in die Benutzer-Anmeldung oder das Nutzer-Menü zu gelangen die Taste 9 oder die Escape-Taste, um diese Ansage zu wiederholen.",
-    "a11y-user-message": "Du befindest dich jetzt auf der Benutzer-Seite. Um Informationen zu Tastenkombinationen zu erhalten, drücke jetzt die Enter-Taste oder rufe die Ansage zu einem späteren Zeitpunkt mit der Escape-Taste auf.",
-    "a11y-user-shortcuts": "Um einen neuen Raum zu erstellen drücke die Taste 1, um einem Raum beizutreten die Taste 2, um Ihre besuchten und erstellten Räume zu erhalten die Taste 3, um in das Nutzer-Menü zu gelangen die Taste 9, um zurück zur Startseite zu gelangen die Taste 0 oder die Escape-Taste, um diese Ansage zu wiederholen.",
+    "a11y-welcome-message": "Willkommen bei ARSnova. Gib eine achtstellige Raumnummer ein, um einem Raum beizutreten.",
+    "a11y-home": "Du befindest dich auf der Startseite von ARSnova.",
+    "a11y-user-message": "Du befindest dich jetzt auf der Benutzer-Seite.",
     "a11y-room-join": "Gib jetzt die Raumnummer von dem Raum, welchem du beitreten möchtest, ein.",
     "a11y-update-available": "Eine neue Version ist verfügbar. Um zu den Änderungen zu gelangen drücke die Tab-Taste. Um das Update durchzuführen drücke erneut die Tab-Taste.",
     "a11y-update-made": "Du nutzt die neuste Version von ARSnova. Drücke die Tab-Taste um zu den letzten Änderungen zu gelangen. Um den Dialog zu schließen drücke erneut die Tab-Taste",
@@ -98,7 +98,8 @@
     "update": "Aktualisieren",
     "update-successful": "Update erfolgreich installiert.",
     "welcome": "Feedback und Interaktion",
-    "example": "z. B. "
+    "example": "z. B. ",
+    "enter-room-number": "Raumnummer eingeben"
   },
   "imprint": {
     "a11y": "Es folgt das Impressum von ARSnova.",
@@ -318,5 +319,20 @@
     "score": "Score",
     "timestamp": "Zeitstempel",
     "token": "Bonus-Token"
+  },
+  "hotkeys": {
+    "a11y-help-key-announcement": "Drücke {{helpKey}} für eine Auflistung von Tastaturbefehlen.",
+    "overview-title": "Tastaturbefehle",
+    "display-overview": "Tastaturbefehle anzeigen",
+    "action": "Aktion",
+    "keys": "Tastenkürzel",
+    "input-field": "Eingabefeld"
+  },
+  "keys": {
+    "ctrl": "Strg",
+    "alt": "Alt",
+    "shift": "Umschalt",
+    "space": "Leertaste",
+    "escape": "Escape"
   }
 }

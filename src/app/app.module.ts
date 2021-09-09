@@ -72,6 +72,7 @@ import { RoomStatsService } from './services/http/room-stats.service';
 import { WsRoomEventDispatcher } from './services/websockets/ws-room-event-dispatcher.service';
 import { DemoService } from './services/demo.service';
 import { DemoRoomGuard } from './guards/demo-room.guard';
+import { HotkeyService } from './services/util/hotkey.service';
 
 export function dialogClose(dialogResult: any) {
 }
@@ -189,6 +190,7 @@ export function initializeApp(appConfig: AppConfig) {
     RoomStatsService,
     DemoService,
     WsRoomEventDispatcher,
+    HotkeyService,
     { provide: Window,  useValue: window },
     STORAGE_CONFIG_PROVIDERS,
     {

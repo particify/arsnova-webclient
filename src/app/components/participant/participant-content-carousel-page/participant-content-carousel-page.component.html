@@ -2,11 +2,14 @@
 <app-loading-indicator *ngIf="isLoading || isReloading"></app-loading-indicator>
 <div class="nav-bar-container">
   <div *ngIf="!isLoading && !isReloading" fxLayout="column" fxLayoutAlign="start center">
-    <button id="live-announcer-button" class="visually-hidden" tabindex="-1" (click)="announce('answer.a11y-shortcuts')">
-      {{ 'answer.a11y-message' | translate: { group: contentGroupName } }}</button>
-    <app-stepper *ngIf="contents.length > 0" (newIndex)="updateURL($event)" [listLength]="contents.length" [completed]="alreadySent">
+    <div id="live-announcer-button" class="visually-hidden" tabindex="-1">
+      {{ 'answer.a11y-message' | a11yIntro: { group: contentGroupName } | async }}
+    </div>
+    <app-stepper *ngIf="contents.length > 0" (newIndex)="updateURL($event)" [listLength]="contents.length" [completed]="alreadySent"
+                 i18nPrefix="content">
       <cdk-step *ngFor="let content of contents; let i = index">
-        <div tabindex="0" id="step" *ngIf="currentStep >= i - 1 && currentStep <= i + 1">
+        <div tabindex="0" id="step" *ngIf="currentStep >= i - 1 && currentStep <= i + 1"
+             appHotkey="1" [appHotkeyDisabled]="currentStep !== i" [appHotkeyTitle]="'content.description' | translate">
           <app-content-participant (answerChanged)="receiveSentStatus($event, i)" (next)="nextContent($event)"
                                    [content]="content" [answer]="answers[i]" [lastContent]="i === contents.length - 1"
                                    [active]="currentStep === i" [index]="i" [statsPublished]="contentGroup.statisticsPublished"

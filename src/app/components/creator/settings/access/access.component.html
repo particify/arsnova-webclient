@@ -6,7 +6,7 @@
   <div fxLayout="row wrap" fxLayoutAlign="start center" fxLayoutGap="10px" class="form-container">
     <mat-form-field class="input-block no-field-hint" appearance="outline" fxFlex>
       <mat-label>{{ 'settings.username-or-email' | translate }}</mat-label>
-      <input (focus)="eventService.makeFocusOnInputTrue()" (blur)="eventService.makeFocusOnInputFalse()" [disabled]="isGuest" [readonly]="isGuest"
+      <input [disabled]="isGuest" [readonly]="isGuest"
              matInput type="email" autocomplete="disabled" [(ngModel)]="loginId" [formControl]="usernameFormControl" name="username"
              aria-labelledby="username"/>
     </mat-form-field>

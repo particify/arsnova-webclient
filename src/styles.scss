@@ -24,6 +24,10 @@ body {
   outline: none;
 }
 
+[hidden] {
+  display: none ! important;
+}
+
 // Scrollbar
 
 body::-webkit-scrollbar {
@@ -165,6 +169,10 @@ textarea {
   .mat-dialog-container {
     padding: min(4vw, 24px);
   }
+}
+
+.mat-dialog-title {
+  color: var(--on-surface);
 }
 
 .mat-dialog-content {
@@ -463,6 +471,16 @@ div {
   .mat-list-item-content {
     padding: 0!important;
   }
+}
+
+// Mat Table
+
+.mat-table {
+  background-color: inherit;
+}
+
+.mat-cell, .mat-header-cell {
+  color: var(--on-surface);
 }
 
 // Buttons

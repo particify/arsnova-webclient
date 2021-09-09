@@ -10,13 +10,12 @@
   <div *ngIf="!isPresentation" tabindex="-1" id="presentation-message" class="visually-hidden">
     {{ 'statistic.a11y-message-presentation' | translate }}
   </div>
-  <button *ngIf="isPresentation" tabindex="-1" id="presentation-mode-message" class="visually-hidden"
-          (click)="announcePresentationShortcuts()">
+  <div *ngIf="isPresentation" tabindex="-1" id="presentation-mode-message" class="visually-hidden">
     {{ 'presentation.a11y-content-message' | translate: { group: contentGroup?.name} }}
-  </button>
+  </div>
   <div id="stepper-container" fxLayout="column" fxLayoutAlign="start center" [ngClass]="{'scalable': isPresentation}">
     <app-stepper *ngIf="contents?.length > 0 && !isLoading" (newIndex)="updateURL($event)" [listLength]="contents.length"
-                 [completed]="" [isPresentation]="isPresentation">
+                 [completed]="" [isPresentation]="isPresentation" i18nPrefix="content">
       <cdk-step *ngFor="let content of contents; let i = index">
         <div id="step" *ngIf="(currentStep >= i - 1 && currentStep <= i + 1) || isPresentation">
           <mat-card [ngClass]="{'presentation-card': isPresentation}">

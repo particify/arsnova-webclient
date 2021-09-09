@@ -15,10 +15,11 @@
         'search-container-fixed-visible' : scroll && (deviceType === 'desktop' || scrollActive), 'search-container-archive': scroll && isArchive, 'fixed-start-position': isScrollStart && deviceType === 'desktop',
         'four-buttons': viewRole === 'PARTICIPANT', 'five-buttons': viewRole !== 'PARTICIPANT'}"
          (window:scroll)="checkScroll()">
-      <input tabindex="-1" (focus)="eventService.makeFocusOnInputTrue()" (blur)="eventService.makeFocusOnInputFalse()"
+      <input tabindex="-1"
              #searchBox
              id="searchBox" [ngClass]="{'search-input-hidden': !search, 'search-input': search }"
-             (input)="searchComments()" [(ngModel)]="searchInput" [placeholder]="searchPlaceholder"
+             (input)="searchComments()" (keyup.escape)="resetSearch()"
+             [(ngModel)]="searchInput" [placeholder]="searchPlaceholder"
              aria-labelledby="search-box-input-description">
       <button id="search-close-button" mat-icon-button *ngIf="searchInput !== '' || search" class="close-btn"
               (click)="resetSearch()"
@@ -35,33 +36,38 @@
 
         <button id="search-button" mat-mini-fab (click)="activateSearch(); filterComments('')" class="bar-icon"
                 *ngIf="!search" aria-labelledby="search-list"
-                matTooltip="{{ 'comment-list.filter-search' | translate }}">
+                matTooltip="{{ 'comment-list.filter-search' | translate }}"
+                appHotkey="2">
           <mat-icon>search</mat-icon>
         </button>
 
         <button id="filter-button" mat-mini-fab aria-labelledby="filter-list" class="bar-icon"
                 *ngIf="!search"
-                [matMenuTriggerFor]="filterMenu" matTooltip="{{ 'comment-list.filter-comments' | translate }}">
+                [matMenuTriggerFor]="filterMenu" matTooltip="{{ 'comment-list.filter-comments' | translate }}"
+                appHotkey="4">
           <mat-icon>filter_list</mat-icon>
         </button>
 
         <button id="select-time-button" mat-mini-fab aria-labelledby="select-time" class="bar-icon"
                 *ngIf="!search"
-                [matMenuTriggerFor]="timeMenu" matTooltip="{{ 'comment-list.select-time' | translate }}">
+                [matMenuTriggerFor]="timeMenu" matTooltip="{{ 'comment-list.select-time' | translate }}"
+                appHotkey="5">
           <mat-icon class="bigger-icon">access_time</mat-icon>
         </button>
 
         <button id="pause-button" mat-mini-fab aria-labelledby="pause" class="bar-icon"
                 [ngClass]="{'disabled': isModerator}"
                 *ngIf="!search && !freeze && !isArchive" (click)="pauseCommentStream()"
-                matTooltip="{{ 'comment-list.pause-comments' | translate }}">
+                matTooltip="{{ 'comment-list.pause-comments' | translate }}"
+                appHotkey="6">
           <mat-icon>pause</mat-icon>
         </button>
 
         <button id="start-button" mat-mini-fab aria-labelledby="play" class="bar-icon"
                 [ngClass]="{'disabled': isModerator}"
                 *ngIf="!search && freeze && !isArchive" (click)="playCommentStream()"
-                matTooltip="{{ 'comment-list.play-comments' | translate }}">
+                matTooltip="{{ 'comment-list.play-comments' | translate }}"
+                appHotkey="6">
           <mat-icon>play_arrow</mat-icon>
         </button>
 
@@ -74,7 +80,8 @@
         <button id="add-comment-small-button" class="add-btn" mat-mini-fab aria-labelledby="add"
                 [ngClass]="{'disabled': isModerator}"
                 *ngIf="!search && deviceType === 'desktop' && !isArchive" (click)="openCreateDialog()"
-                matTooltip="{{ 'comment-list.add-comment' | translate }}">
+                matTooltip="{{ 'comment-list.add-comment' | translate }}"
+                appHotkey="1">
           <mat-icon class="bigger-icon">add</mat-icon>
         </button>
       </div>
@@ -222,7 +229,8 @@
     </button>
   </div>
 
-  <div [ngClass]="{'comments-container': !isPresentation}" *ngIf="!isLoading">
+  <div [ngClass]="{'comments-container': !isPresentation}" *ngIf="!isLoading" tabindex="-1"
+       appHotkey="7" [appHotkeyTitle]="'comment-list.list' | translate" [attr.aria-label]="'comment-list.list' | translate">
     <app-comment *ngFor="let current of displayComments" [comment]="current" [archived]="isArchive"
                  [parseVote]="getVote(current)" (clickedOnTag)="clickedOnTag($event)" [isModeratorView]="isModerator"
                  [isPresentation]="isPresentation" (activeComment)="updateCurrentComment($event)"

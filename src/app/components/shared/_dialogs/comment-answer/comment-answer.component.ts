@@ -1,4 +1,4 @@
-import { AfterContentInit, Component, HostListener, Inject, OnInit } from '@angular/core';
+import { AfterContentInit, Component, Inject, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { LanguageService } from '../../../../services/util/language.service';
@@ -8,10 +8,7 @@ import { AuthenticationService } from '../../../../services/http/authentication.
 import { UserRole } from '../../../../models/user-roles.enum';
 import { AdvancedSnackBarTypes, NotificationService } from '../../../../services/util/notification.service';
 import { DialogService } from '../../../../services/util/dialog.service';
-import { KeyboardUtils } from '../../../../../app/utils/keyboard';
-import { KeyboardKey } from '../../../../../app/utils/keyboard/keys';
 import { EventService } from '../../../../services/util/event.service';
-import { AnnounceService } from '../../../../services/util/announce.service';
 import { MarkdownFeatureset } from '../../../../services/http/formatting.service';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
@@ -37,24 +34,9 @@ export class CommentAnswerComponent implements OnInit, AfterContentInit {
               protected commentService: CommentService,
               private authenticationService: AuthenticationService,
               private dialogService: DialogService,
-              private announceService: AnnounceService,
               private eventService: EventService,
               public dialogRef: MatDialogRef<CommentAnswerComponent>,
               @Inject(MAT_DIALOG_DATA) public data: any) {
-  }
-
-  @HostListener('window:keyup', ['$event'])
-  keyEvent(event: KeyboardEvent) {
-    const focusOnInput = this.eventService.focusOnInput;
-    if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit1) === true && focusOnInput === false) {
-      if (document.getElementById('answer-input')) {
-        document.getElementById('answer-input').focus();
-      } else {
-        document.getElementById('answer-text').focus();
-      }
-    } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit2) === true && focusOnInput === false) {
-      this.announce();
-    }
   }
 
   ngAfterContentInit() {
@@ -71,10 +53,6 @@ export class CommentAnswerComponent implements OnInit, AfterContentInit {
     this.comment = this.data.comment;
     this.answer = this.comment.answer;
     this.isParticipant = this.data.role === UserRole.PARTICIPANT;
-  }
-
-  public announce() {
-    this.announceService.announce('comment-page.a11y-shortcuts-answer');
   }
 
   editAnswer() {

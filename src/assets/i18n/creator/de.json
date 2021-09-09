@@ -60,13 +60,14 @@
     "delete-all-comments": "Alle löschen",
     "delete-banned-comments": "Liste löschen",
     "all-comments-deleted": "Alle Beiträge wurden gelöscht.",
-    "banned-comments-deleted": "Die Moderationsliste wurde gelöscht."
+    "banned-comments-deleted": "Die Moderationsliste wurde gelöscht.",
+    "next": "Nächster Beitrag",
+    "previous": "Vorheriger Beitrag",
+    "list": "Beitragsliste"
   },
   "comment-page": {
-    "a11y-shortcuts": "Um einen Beitrag zu erstellen drücke die Taste 1. Sobald mehrere Beiträge vorhanden sind kannst du Beiträge suchen und filtern. Um die Beiträge zu durchsuchen drücke die Taste 2, um Beiträge zu sortieren die Taste 3, um Beiträge zu filtern die Taste 4, um den Zeitraum auszuwählen die Taste 5, um den Beitragstream zu pausieren oder fortzusetzen die Taste 6, um zu dem ersten Beitrag zu gelangen die Taste 7, um auf das Nutzer-Menü zu gelangen die Taste 9, um zurück zur Raumübersicht zu gelangen die Taste 0 oder die Escape-Taste um diese Ansage zu wiederholen.",
-    "a11y-shortcuts-moderation": "Sobald mehrere Beiträge vorhanden sind kannst du Beiträge suchen und filtern. Um die Beiträge zu durchsuchen drücke die Taste 1, um Beiträge zu sortieren die Taste 2, um den Zeitraum auszuwählen die Taste 3, um zu dem ersten Beitrag zu gelangen die Taste 4, um zur öffentlichen Q&A-Liste zu gelangen die Taste 5, um auf das Nutzer-Menü zu gelangen die Taste 9, um zurück zur Raumübersicht zu gelangen die Taste 0 oder die Escape-Taste um diese Ansage zu wiederholen.",
-    "a11y-message": "Du befindest dich jetzt auf der Q&A-Seite. Um Informationen zu Tastenkombinationen zu erhalten drücke jetzt die Enter-Taste oder rufe die Ansage zu einem späteren Zeitpunkt mit der Escape-Taste auf.",
-    "a11y-message-moderation": "Du befindest dich jetzt auf der Moderations-Seite. Um Informationen zu Tastenkombinationen zu erhalten, drücke jetzt die Enter-Taste oder rufe die Ansage zu einem späteren Zeitpunkt mit der Escape-Taste auf.",
+    "a11y-message": "Du befindest dich jetzt auf der Q&A-Seite.",
+    "a11y-message-moderation": "Du befindest dich jetzt auf der Moderations-Seite.",
     "a11y-comment-delete": "Löscht diesen Beitrag",
     "a11y-comment-grade": "Markiert diesen Beitrag als Favorit",
     "a11y-comment-marked-correct": "Hebt die Bejahung auf",
@@ -85,8 +86,7 @@
     "a11y-text-wrong": "Dieser Beitrag wurde verneint.",
     "a11y-text-answer": "Dieser Beitrag wurde beantwortet.",
     "a11y-more-options": "Zeige Optionen für diesen Beitrag",
-    "a11y-message-answer": "Du befindest dich jetzt auf der Beitrag-Antwort-Seite. Um Informationen zu Tastenkombinationen zu erhalten, drücke jetzt die Enter-Taste oder rufe die Ansage zu einem späteren Zeitpunkt mit der Escape-Taste auf.",
-    "a11y-shortcuts-answer": "Um eine Antwort zu verfassen oder zu deiner Antwort zu gelangen drücke die Taste 1, um auf das Nutzer-Menü zu gelangen die Taste 9, um zur Q&A-Seite zurückzukehren die Taste 0 oder die Escape-Taste um diese Ansage zu wiederholen.",
+    "a11y-message-answer": "Du befindest dich jetzt auf der Beitrag-Antwort-Seite.",
     "a11y-enter-answer": "Gib hier deine Antwort auf den Beitrag ein",
     "a11y-entered-answer": "Du hast den Beitrag mit {{answer}} beantwortet.",
     "a11y-delete-answer": "Lösche deine Antwort auf den Beitrag",
@@ -123,12 +123,13 @@
     "search-box-input-description": "Hier kannst du nach Beiträgen suchen.",
     "show-actions": "Zeige weitere Optionen",
     "vote-down": "Beitrag abwerten",
-    "vote-up": "Beitrag aufwerten"
+    "vote-up": "Beitrag aufwerten",
+    "zoom-in": "Vergrößern",
+    "zoom-out": "Verkleinern"
   },
   "content": {
-    "a11y-content-create-message": "Du kannst jetzt einen neuen Inhalt erstellen. Drücke die Enter-Taste, um Informationen über Tastenkombinationen zu erhalten oder rufe die Ansage später über die Escape-Taste auf.",
+    "a11y-content-create-message": "Du kannst jetzt einen neuen Inhalt erstellen.",
     "a11y-content-edit-message": "Du kannst deinen Inhalt jetzt bearbeiten.",
-    "a11y-content-create-shortcuts": "Um einen neuen Inhalt einzugeben drücke die Taste 1, um das Format zu ändern die Taste 2, um die Fragenserie zu ändern die Taste 3, um auf das Nutzer-Menü zu gelangen die Taste 9, um zur Raumübersicht zurückzukehren die Taste 0 oder die Escape-Taste, um diese Ansage zu widerholen.",
     "a11y-enter-body": "Gib hier den Inhalt ein. Hinweis: In diesem Textfeld wird Textformatierung mit markdown unterstützt.",
     "a11y-enter-flashcard-answer": "Gib hier die Antwort ein. Hinweis: In diesem Textfeld wird Textformatierung mit markdown unterstützt.",
     "a11y-enter-content-group": "Benutze die Pfeiltasten, um eine deiner Fragenserien auszuwählen oder gib eine neue Fragenserie ein.",
@@ -165,8 +166,7 @@
     "a11y-preview-header": "Nachfolgend findest du deinen Inhalt aus der Sicht der Teilnehmer.",
     "a11y-leave-preview": "Bringt dich zurück zur Inhalterstellung.",
     "a11y-back-in-creation": "Du befindest dich jetzt wieder in der Inhalterstellung.",
-    "a11y-content-list-message": "Du befindest dich jetzt in deiner Fragenserie {{name}}. Drücke die Enter-Taste, um Informationen über Tastenkombinationen zu erfahren oder rufe die Ansage später mit der Escape-Taste auf.",
-    "a11y-content-list-shortcuts": "Um einen neuen Inhalt zu erstellen drücke die Taste 1, um zu den Statistiken zu navigieren die Taste 2, um ein Menu für weitere Einstellungen zu öffnen die Taste 3, um die Fragenserie freizugeben oder zu sperren die Taste 4, um zu den Fragen der Fragenserie zu gelangen die Taste 5, um den Namen der Fragenserie zu bearbeiten die Taste 6, um auf das Nutzer-Menü zu gelangen die Taste 9, um zurück zur Raumübersicher zu gelangen die Taste 0 oder die Escape-Taste, um diese Ansage zu wiederholen.",
+    "a11y-content-list-message": "Du befindest dich jetzt in deiner Fragenserie {{name}}.",
     "a11y-content-list-contents": "Die Fragenserie enthält {{count}} Inhalte. Navigiere nun mit der Tab-Taste duch diese.",
     "a11y-edit-content-group-name": "Ändere hier den Namen der Fragenserie",
     "a11y-create-content": "Erstelle einen neuen Inhalt für diese Fragenserie",
@@ -292,6 +292,7 @@
     "content-group-name": "Name der Fragenserie",
     "sort-content-group": "Sortieren",
     "updated-sorting": "Deine Sortierung wurde gespeichert.",
+    "format": "Format",
     "format-choice": "Multiple-Choice",
     "format-scale": "Likert",
     "format-binary": "Ja / Nein",
@@ -320,11 +321,14 @@
     "max-keywords-out-of-range": "Schlagwortanzahl muss zwischen {{min}} und {{max}} liegen.",
     "no-contents-yet": "Es sind noch keine Inhalte vorhanden.",
     "delete-content-group": "Fragenserie löschen",
-    "content-group-deleted": "Deine Fragenserie wurde gelöscht."
+    "content-group-deleted": "Deine Fragenserie wurde gelöscht.",
+    "contents": "Inhalte",
+    "groups": "Fragenserien",
+    "next": "Nächster Inhalt",
+    "previous": "Vorheriger Inhalt"
   },
   "survey": {
-    "a11y-message": "Du befindest dich jetzt im Live Feedback. Drücke die Enter-Taste, um Informationen zu Tastenkombinationen zu erhalten oder rufe die Ansage später mit der Escape-Taste auf.",
-    "a11y-shortcuts": "Um den Status des aktuellen Feedbacks zu erfahren drücke die Taste 5, um das Feedback zu starten oder anzuhalten die Taste 1, um die Art des Feedbacks zu verändern die Taste 2, um auf das Nutzer-Menü zu gelangen die Taste 9, um zur Raumübersicht zurückzukehren die Taste 0 oder die Escape-Taste, um diese Ansage zu widerholen.",
+    "a11y-message": "Du befindest dich jetzt im Live Feedback.",
     "a11y-status": "Aktuell ist das Feedback {{status}}. {{answers}} Teilnehmende haben bisher geantwortet. {{state0}} Prozent haben Antwort {{answer0}} gewählt, {{state1}} Prozent haben Antwort {{answer1}} gewählt, {{state2}} Prozent haben Antwort {{answer2}} gewählt, {{state3}} Prozent haben Antwort {{answer3}} gewählt.",
     "a11y-stop-survey": "Stoppt das Live Feedback.",
     "a11y-start-survey": "Startet die Live Feedback.",
@@ -351,7 +355,8 @@
     "survey-b": "B",
     "survey-c": "C",
     "survey-d": "D",
-    "change-type": "Typ ändern"
+    "change-type": "Typ ändern",
+    "status-summary": "Status-Zusammenfassung"
   },
   "home-page": {
     "create-room": "Neuer Raum",
@@ -361,16 +366,14 @@
   "room-page": {
     "a11y-comments": "Öffnet die Q&A-Seite.",
     "a11y-settings": "Navigiert zu den Einstellungen in welchen du den Raum und dessen Beiträge verwalten und moderierende Personen oder Kategorien hinzufügen kannst.",
-    "a11y-shortcuts": "Um auf die Q&A-Seite zu gelangen drücke die Taste 1, um zum Live Feedback zu gelangen die Taste 2, um eine neue Fragenserie zu erstellen die Taste 3, um durch deine Fragenserien zu navigieren die Taste 4, um in den Präsentationsmodus zu wechseln die Taste 5, um weitere Optionen für den Raum anzuzeigen die Taste 6, um die Anzahl der aktuellen Nutzer anzusagen die Taste 7, um auf das Nutzer-Menü zu gelangen die Taste 9, um auf den Zurück-Button zu gelangen die Taste 0 oder die Escape-Taste, um diese Ansage zu wiederholen.",
-    "a11y-room-message": "Du befindest dich jetzt in deinem Raum {{room}} mit der Nummer {{key}}. Um Informationen zu Tastenkombinationen zu erhalten drücke jetzt die Enter-Taste, oder rufe die Ansage zu einem späteren Zeitpunkt mit der Escape-Taste auf.",
+    "a11y-room-message": "Du befindest dich jetzt in deinem Raum {{room}} mit der Nummer {{key}}.",
     "a11y-create-content": "Öffnet ein Formular zum erstellen neuer Inhalte.",
     "a11y-create-content-group": "Öffnet einen Dialog zum erstellen einer neuen Fragenserie.",
     "a11y-live-survey": "Öffnet das Live Feedback.",
     "a11y-content-groups": "In diesem Raum gibt es {{count}} Fragenserien. Navigiere mit Tab zwischen ihnen und drücke Enter, um Inhalte oder Einstellungen der Fragenserie zu bearbeiten.",
     "a11y-no-content-groups": "In diesem Raum sind noch keine Fragenserien vorhanden. Drücke die Taste 2, um eine neue Fragenserie zu erstellen.",
     "a11y-enter-content-group": "Öffnet die Fragenserie {{name}}. Diese Fragenserie ist {{locked}}.",
-    "a11y-moderator-message": "Du befindest dich jetzt in dem Raum {{room}} welchen du moderierst. Um Informationen zu Tastenkombinationen zu erhalten, drücke jetzt die Enter-Taste oder rufe die Ansage zu einem späteren Zeitpunkt mit der Escape-Taste auf.",
-    "a11y-moderator-shortcuts": "Um auf die Q&A-Seite zu gelangen drücke die Taste 1, um auf das Nutzer-Menü zu gelangen die Taste 9, um auf den Zurück-Button zu gelangen die Taste 0 oder die Escape-Taste, um diese Ansage zu wiederholen.",
+    "a11y-moderator-message": "Du befindest dich jetzt in dem Raum {{room}} welchen du moderierst.",
     "a11y-share": "Öffnet ein Dialogfenster welches den Link zu diesem Raum und einen QR-Code anzeigt. Außerdem kannst du die Adresse des Raums kopieren",
     "a11y-switch-role": "Wechsel die Rolle um die Ansicht der Teilnehmer zu sehen.",
     "a11y-more-options": "Zeigt mehr Optionen für diesen Raum in einem Menü.",
@@ -395,8 +398,7 @@
     "unlocked": "freigegeben"
   },
   "settings": {
-    "a11y-message": "Du befindest dich jetzt in den Raum-Einstellungen. Drücke die Enter-Taste, um Informationen über Tastenkombinationen zu erfahren oder rufe die Ansafe zu einem späteren Zeitpunkt mit der Escape-Taste auf.",
-    "a11y-shortcuts": "Um zu den allgemeinen Raum-Einstellungen zu gelangen drücke die Taste 1, um zu den Q&A-Einstellungen zu gelangen die Taste 2, um moderierende Personen zu verwalten die Taste 3, um Kategorien zu verwalten die Taste 4, um auf das Nutzer-Menü zu gelangen die Taste 9, um zur Raumübersicht zurückzukehren die Taste 0 oder die Escape-Taste um diese Ansage zu wiederholen.",
+    "a11y-message": "Du befindest dich jetzt in den Raum-Einstellungen.",
     "a11y-room": "Du befindest dich jetzt in den allgemeinen Raum-Einstellungen. Hier kannst du den Namen oder die Beschreibung des Raums bearbeiten oder den Raum löschen.",
     "a11y-comments": "Du befindest dich jetzt in den Q&A-Einstellungen.",
     "a11y-access": "Du befindest dich jetzt in der Verwaltung der Zugriffsrechte. Hier kannst du moderierende Personen verwalen oder ein Passwort für diesen Raum festlegen.",
@@ -468,12 +470,11 @@
     "preview": "Vorschau"
   },
   "statistic": {
-    "a11y-message-overview": "Du befindest dich jetzt auf der Statistikübersicht. Drücke jetzt die Enter-Taste, um Informationen über Tastenkombinationen zu erhalten oder rufe die Ansage zu einem späteren Zeitpunkt mit der Escape-Taste auf.",
+    "a11y-message-overview": "Du befindest dich jetzt auf der Statistikübersicht.",
     "a11y-message-evaluation": "Inhalt {{index}}, {{content}}. Es gibt noch keine Antworten zu diesen Inhalt.",
     "a11y-message-evaluation-answers": "Inhalt {{index}}, {{content}}. {{answers}} Teilnehmende haben den Inhalt beantwortet. Navigiere mit der Tab-Taste durch die Antworten.",
     "a11y-message-type-info": "Inhalt {{index}}, {{content}}.",
     "a11y-message-presentation": "Du befindest dich jetzt in der Präsentation der Inhalte. Drücke die Tab-Taste um zum Inhalt zu gelangen oder navigiere mit den Pfeiltasten zum nächsten oder vorherigen Inhalt.",
-    "a11y-shortcuts-overview": "Um zur Auswahl der Fragenserie zu gelangen drücke die Tab-Taste. Navigiere anschließend durch die Ergebnisse der Fragenserie. Um zum Nutzer-Menü zu gelangen drücke die Taste 9, um zurück zur Raumübersicht zu gelangen die Taste 0 oder die Escape-Taste um diese Ansage zu wiederholen.",
     "a11y-group-progress": "{{percent}} Prozent der Inhalte in der Fragenserie {{group}} wurden richtig beantwortet.",
     "a11y-content-result": "Der Inhalt {{content}} wurde bisher von {{count}} Personen beantwortet, {{abstentions}} Personen haben sich enthalten.",
     "a11y-choice-result": "Der Inhalt wurde von {{percent}} Prozent richtig beantwortet.",
@@ -608,27 +609,16 @@
     "zoom-in": "Vergrößern",
     "zoom-out": "Verkleinern",
     "key": "Taste",
-    "SPACE": "Leertaste",
-    "LEFT": "Links",
-    "RIGHT": "Rechts",
-    "Escape": "ESC",
-    "LetterC": "C",
-    "LetterL": "L",
-    "LetterF": "F",
-    "LetterQ": "Q",
-    "MINUS": "-",
-    "PLUS": "+"
+    "space": "Leertaste",
+    "escape": "ESC",
+    "publish-or-lock-content": "Inhalt freigeben oder sperren"
   },
   "presentation": {
-    "a11y-welcome": "Du befindest dich jetzt im Präsentationsmodus. Es werden Informationen für das Beitreten des Raums angezeigt. Wenn du Informationen über Tastenkombinationen erfahren möchtest, drücke die Enter-Taste oder drücke später die Taste i.",
-    "a11y-shortcuts": "Nutze die Tasten 1, 2 und 3 um zwischen der Q&A-Liste, der Fragenserie und dem Live Feedback zu wechseln. Drücke die Taste q um Informationen für das Betreten des Raums anzuzeigen, die Taste f um in den Vollbildmodus zu wechseln oder diesen zu verlassen oder die escape taste um den Präsentationsmodus zu verlassen und in die Raumübersicht zurückzukehren.",
-    "a11y-comment-message": "Du präsentierst nun die Q&A-Liste. Drücke die enter taste um Informationen über Tastenkombinationen zu erhalten.",
-    "a11y-comment-shortcuts": "Nutze die Pfeiltasten um zwischen den Beiträgen zu navigieren. Mit den Tasten plus und minus kannst du den aktuellen Beitrag vergrößern oder verkleinern.",
+    "a11y-welcome": "Du befindest dich jetzt im Präsentationsmodus. Es werden Informationen für das Beitreten des Raums angezeigt.",
+    "a11y-comment-message": "Du präsentierst nun die Q&A-Liste.",
     "a11y-present-comment": "Der folgende Beitrag wird jetzt präsentiert: {{comment}}",
     "a11y-comment-zoom-changed": "Zoom auf {{zoom}} Prozent geändert.",
-    "a11y-content-message": "Du präsentierst jetzt die Inhalte der Fragenserie {{group}}. Drücke die Enter-Taste um Informationen zu Tastenkombinationen zu erhalten. Mit der Tab-Taste gelangst du zum aktuellen Inhalt.",
-    "a11y-content-shortcuts": "Navigiere mit den Pfeiltasten zwischen deinen Inhalten. Drücke die Leertaste um die Ergebnisse anzuzeigen, die Taste c um die richtigen Antworten anzuzeigen oder die Taste l um den Inhalt zu sperren oder freizugeben.",
-    "a11y-survey-shortcuts": "Drücke die Taste 5 um den Status des Live Feedbacks zu erfahren, die Leertaste um das Live Feedback zu starten oder zu stoppen und die Taste c um den Typ des Live Feedbacks zu ändern.",
+    "a11y-content-message": "Du präsentierst jetzt die Inhalte der Fragenserie {{group}}.",
     "a11y-presentation-mode": "Gehe in den Präsentationsmodus.",
     "a11y-entered-fullscreen": "Du befindest dich jetzt im Vollbildmodus.",
     "a11y-leaved-fullscreen": "Du hast den Vollbildmodus verlassen.",
@@ -692,5 +682,8 @@
     "emoji": "Emoji",
     "plus-minus": "Plus/Minus",
     "points": "Punkte"
+  },
+  "hotkeys": {
+    "a11y-help-key-announcement": "Drücke {{helpKey}} für eine Auflistung von Tastaturbefehlen."
   }
 }

@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { CommentPageComponent } from './comment-page.component';
-import { Injectable, Renderer2, Component, Input } from '@angular/core';
+import { Injectable, Renderer2, Component, Input, Pipe, PipeTransform } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { ActivatedRoute } from '@angular/router';
@@ -12,6 +12,7 @@ import { ClientAuthentication } from '../../../models/client-authentication';
 import { GlobalStorageService } from '../../../services/util/global-storage.service';
 import { AnnounceService } from '../../../services/util/announce.service';
 import { CommentService } from '../../../services/http/comment.service';
+import { HotkeyService } from '../../../services/util/hotkey.service';
 
 const TRANSLATION_DE = require('../../../../assets/i18n/home/de.json');
 const TRANSLATION_EN = require('../../../../assets/i18n/home/en.json');
@@ -56,8 +57,7 @@ class MockAuthenticationService {
 
 @Injectable()
 class MockEventService {
-  makeFocusOnInputFalse() {
-  }
+
 }
 
 @Injectable()
@@ -68,6 +68,13 @@ class MockAnnouncer {
 @Injectable()
 class MockRenderer2 {
 
+}
+
+@Pipe({name: 'a11yIntro'})
+class MockA11yIntroPipe implements PipeTransform {
+  transform(i18nKey: string, args?: object): Observable<string> {
+    return of(i18nKey);
+  }
 }
 
 @Injectable()
@@ -81,6 +88,11 @@ class MockGlobalStorageService {
 
   removeItem(key: symbol) {
   }
+}
+
+@Injectable()
+class MockHotkeyService {
+  registerHotkey() { }
 }
 
 @Component({ selector: 'app-comment-list', template: '' })
@@ -97,7 +109,8 @@ describe('CommentPageComponent', () => {
     TestBed.configureTestingModule({
       declarations: [
         CommentPageComponent,
-        CommentListStubComponent
+        CommentListStubComponent,
+        MockA11yIntroPipe
       ],
       imports: [
         TranslateModule.forRoot({
@@ -148,6 +161,10 @@ describe('CommentPageComponent', () => {
           provide: GlobalStorageService,
           useClass: MockGlobalStorageService
         },
+        {
+          provide: HotkeyService,
+          useClass: MockHotkeyService
+        }
       ]
     })
       .compileComponents()

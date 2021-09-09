@@ -37,8 +37,7 @@
             {{tag}}
             <mat-icon matChipRemove attr.aria-label="{{ 'settings.a11y-remove-tag' | translate: { name: tag } }}">cancel</mat-icon>
           </mat-chip>
-          <input (focus)="eventService.makeFocusOnInputTrue()" (blur)="eventService.makeFocusOnInputFalse()"
-                 [matChipInputFor]="tagList" (matChipInputTokenEnd)="addTag()"
+          <input [matChipInputFor]="tagList" (matChipInputTokenEnd)="addTag()"
                  [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
                  type="text" [(ngModel)]="tagName" name="taginput" aria-labelledby="category" maxlength="15"
           placeholder="{{ 'settings.new-tag' | translate }}"/>

@@ -1,7 +1,6 @@
 {
   "answer": {
-    "a11y-message": "Du kannst jetzt die Antworten der Fragenserie {{group}} beantworten. Drücke Enter, um Informationen über Tastenkobinationen zu erhalten oder rufe die Ansage später mit der Escape-Taste auf.",
-    "a11y-shortcuts": "Um zum aktuellen Inhalt zu gelangen drücke die Taste 1, um zwischen den Inhalte zu wechseln die Pfeiltasten rechts und links, um das Benutzermenü zu öffnen die Taste 9, um zur Raumübersicht zu gelangen die Taste 0 oder die Escape-Taste um diese Ansage zu wiederholen.",
+    "a11y-message": "Du kannst jetzt die Antworten der Fragenserie {{group}} beantworten.",
     "a11y-current-multiple": "Inhalt {{index}}, {{question}}. Dies ist ein Multiple-Choice-Inhalt. Drücke die Tab-Taste um zu den Antworten zu gelangen und  drücke die Leertaste, um Antworten auszuwählen.",
     "a11y-current-single": "Inhalt {{index}}, {{question}}. Dies ist ein Single-Choice-Inhalt. Drücke die Tab-Taste um zu den Antworten zu gelangen und navigiere mit den Pfeiltasten, um eine Antwort auszuwählen.",
     "a11y-current-text": "Inhalt {{index}}, {{question}}. Das ist eine Offene Frage. Um zur Eingabe der Antwort zu gelangen drücke die Tab-Taste.",
@@ -45,7 +44,11 @@
     "word": "Schlagwort"
   },
   "content": {
-    "a11y-wordcloud-info": "Verwendete Schlagwörter nach Häufigkeit in absteigender Reihenfolge."
+    "a11y-wordcloud-info": "Verwendete Schlagwörter nach Häufigkeit in absteigender Reihenfolge.",
+    "groups": "Fragenserien",
+    "next": "Nächster Inhalt",
+    "previous": "Vorheriger Inhalt",
+    "description": "Inhaltsbeschreibung"
   },
   "comment-list": {
     "a11y-search-list": "Durchsuche die Beiträge",
@@ -97,11 +100,11 @@
     "filter": "Filtern",
     "sort-votedesc": "Positivste Bewertung",
     "sort-voteasc": "Negativste Bewertung",
-    "sort-time": "Zuletzt erstellt"
+    "sort-time": "Zuletzt erstellt",
+    "list": "Beitragsliste"
   },
   "comment-page": {
-    "a11y-shortcuts": "Um einen Beitrag zu erstellen drücke die Taste 1. Sobald mehrere Beiträge vorhanden sind kannst du Beiträge suchen und filtern. Um die Beiträge zu durchsuchen drücke die Taste 2, um Beiträge zu sortieren die Taste 3, um Beiträge zu filtern die Taste 4, um den Zeitraum auszuwählen die Taste 5, um den Beitragrstream zu pausieren oder fortzusetzen die Taste 6, um zu dem ersten Beitrag zu gelangen die Taste 7, um auf das Nutzer-Menü zu gelangen die Taste 9, um zurück zur Raumübersicht zu gelangen die Taste 0 oder die Escape-Taste um diese Ansage zu wiederholen.",
-    "a11y-message": "Du befindest dich jetzt auf der Q&A-Seite. Um Informationen zu Tastenkombinationen zu erhalten, drücke jetzt die Enter-Taste oder rufe die Ansage zu einem späteren Zeitpunkt mit der Escape-Taste auf.",
+    "a11y-message": "Du befindest dich jetzt auf der Q&A-Seite.",
     "a11y-comment-vote-down": "Diesen Beitrag abwerten",
     "a11y-comment-vote-up": "Diesen Beitrag aufwerten",
     "a11y-comment-answered": "Gehe zu der Antwort auf diesen Beitrag",
@@ -122,11 +125,12 @@
     "no-comments-found": "Keine Beiträge gefunden.",
     "search-box-input-description": "Hier kannst du nach Beiträgen suchen.",
     "vote-down": "Beitrag abwerten",
-    "vote-up": "Beitrag aufwerten"
+    "vote-up": "Beitrag aufwerten",
+    "zoom-in": "Vergrößern",
+    "zoom-out": "Verkleinern"
   },
   "survey": {
-    "a11y-message": "Du befindest dich jetzt im Live Feedback. Drücke die Enter-Taste, um Informationen zu Tastenkombinationen zu erhalten oder rufe die Ansage später mit der Escape-Taste auf.",
-    "a11y-shortcuts": "Um den Status des aktuellen Feedbacks zu erfahren drpcke die Taste 5, um die erste Antwort auszuwählen die Taste 1, um die zweite Antwort auszuwählen die Taste 2, um die dritte Antwort auszuwählen die Taste 3, um die vierte Antwort auszuwählen die Taste 4, um auf das Nutzer-Menü zu gelangen die Taste 9, um zur Raumübersicht zurückzukehren die Taste 0 oder die Escape-Taste um diese Ansage zu wiederholen.",
+    "a11y-message": "Du befindest dich jetzt im Live Feedback.",
     "a11y-status": "Aktuell ist das Feedback {{status}}. {{answers}} Teilnehmende haben bisher geantwortet. {{state0}} Prozent haben Antwort {{answer0}} gewählt, {{state1}} Prozent haben Antwort {{answer1}} gewählt, {{state2}} Prozent haben Antwort {{answer2}} gewählt, {{state3}} Prozent haben Antwort {{answer3}} gewählt.",
     "a11y-stopped": "getoppt",
     "a11y-started": "gestartet",
@@ -147,11 +151,11 @@
     "survey-a": "A",
     "survey-b": "B",
     "survey-c": "C",
-    "survey-d": "D"
+    "survey-d": "D",
+    "status-summary": "Status-Zusammenfassung"
   },
   "room-page": {
-    "a11y-room-message": "Du befindest dich jetzt in dem Raum {{name}}. Um Informationen zu Tastenkombinationen zu erhalten, drücke jetzt die Enter-Taste oder rufe die Ansage zu einem späteren Zeitpunkt mit der Escape-Taste auf.",
-    "a11y-shortcuts": "Um auf die Q&A-Liste zu gelangen drücke die Taste 1, um zum Live Feedback zu gelangen die Taste 2, um durch die Fragenserien zu navigieren die Taste 3, um auf das Nutzer-Menü zu gelangen die Taste 9, um auf den Zurück-Button zu gelangen die Taste 0 oder die Escape-Taste um diese Ansage zu wiederholen.",
+    "a11y-room-message": "Du befindest dich jetzt in dem Raum {{name}}.",
     "a11y-comments": "Öffnet die Q&A-Liste und bietet dir die Möglichkeit, Beiträge zu erstellen.",
     "a11y-statistics": "Öffnet die Statistiken zu den Fragenserie.",
     "a11y-live-survey": "Öffnet das Live Feedback.",
@@ -167,9 +171,8 @@
     "switch-role": "Rolle wechseln"
   },
   "statistic": {
-    "a11y-message-overview": "Du befindest dich jetzt auf der Statistikübersicht. Drücke jetzt die Enter-Taste, um Informationen über Tastenkombinationen zu erhalten oder rufe die Ansage zu einem späteren Zeitpunkt mit der Escape-Taste auf.",
+    "a11y-message-overview": "Du befindest dich jetzt auf der Statistikübersicht.",
     "a11y-message-evaluation-answers": "Du befindest dich jetzt bei den Ergebnissen. {{answers}} Teilnehmende haben den Inhalt beantwortet. Navigiere mit der Tab-Taste durch die Antworten oder drücke die Leertaste um zu deiner Antwort zurückzukehren.",
-    "a11y-shortcuts-overview": "Um zur Auswahl der Fragenserie zu gelangen drücke die Tab-Taste. Navigiere anschließend durch die Ergebnisse der Fragenserie. Um zum Nutzer-Menü zu gelangen drücke die Taste 9, um zurück zur Raumübersicht zu gelangen die Taste 0 oder die Escape-Taste um diese Ansage zu wiederholen.",
     "a11y-group-progress": "{{percent}} Prozent der Inhalte in der Fragenserie {{group}} wurden richtig beantwortet.",
     "a11y-content-result": "Der Inhalt {{content}} wurde bisher von {{count}} Personen beantwortet, {{abstentions}} Personen haben sich enthalten.",
     "a11y-choice-result": "Der Inhalt wurde von {{percent}} Prozent richtig beantwortet.",
@@ -253,5 +256,8 @@
     "pace-positive-2": "sehr schnell",
     "plus-minus": "Plus/Minus",
     "points": "Punkte"
+  },
+  "hotkeys": {
+    "a11y-help-key-announcement": "Drücke {{helpKey}} für eine Auflistung von Tastaturbefehlen."
   }
 }

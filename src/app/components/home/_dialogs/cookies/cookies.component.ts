@@ -25,8 +25,7 @@ export class CookiesComponent implements OnInit, AfterViewInit {
     private dialogRef: MatDialogRef<CookiesComponent>,
     protected route: ActivatedRoute,
     private translateService: TranslateService,
-    private notificationService: NotificationService,
-    private eventService: EventService
+    private notificationService: NotificationService
   ) {
     this.categories = data.categories;
     this.privacyUrl = data.privacyUrl;
@@ -35,8 +34,6 @@ export class CookiesComponent implements OnInit, AfterViewInit {
   ngOnInit() {
     // not really the nicest way but should do its job until a better or native solution was found
     setTimeout(() => document.getElementById('cookie-header').focus(), 400);
-    this.inputFocus = this.eventService.focusOnInput;
-    this.eventService.focusOnInput = true;
   }
 
   ngAfterViewInit() {
@@ -65,7 +62,6 @@ export class CookiesComponent implements OnInit, AfterViewInit {
     this.dialogRef.close(consentGiven);
     const msg = this.translateService.instant('cookies.settings-saved');
     this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.SUCCESS);
-    this.eventService.focusOnInput = this.inputFocus;
     setTimeout(() => {
       document.getElementById('room-id-input').focus();
     }, 500);

@@ -1,4 +1,4 @@
-import { AfterContentInit, Component, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterContentInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ContentType } from '../../../models/content-type.enum';
 import { ContentService } from '../../../services/http/content.service';
 import { Content } from '../../../models/content';
@@ -7,8 +7,6 @@ import { TranslateService } from '@ngx-translate/core';
 import { StepperComponent } from '../../shared/stepper/stepper.component';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RoomService } from '../../../services/http/room.service';
-import { KeyboardUtils } from '../../../utils/keyboard';
-import { KeyboardKey } from '../../../utils/keyboard/keys';
 import { GlobalStorageService, STORAGE_KEYS } from '../../../services/util/global-storage.service';
 import { AnnounceService } from '../../../services/util/announce.service';
 import { Location } from '@angular/common';
@@ -68,15 +66,6 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
     private eventService: EventService,
     private router: Router
   ) {
-  }
-
-  @HostListener('window:keyup', ['$event'])
-  keyEvent(event: KeyboardEvent) {
-    if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit1) === true && this.eventService.focusOnInput === false) {
-      document.getElementById('step').focus();
-    } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Escape) === true) {
-      this.announce('answer.a11y-shortcuts');
-    }
   }
 
   ngAfterContentInit() {

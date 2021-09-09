@@ -1,4 +1,4 @@
-import { AfterContentInit, Component, HostListener, OnInit } from '@angular/core';
+import { AfterContentInit, Component, OnInit } from '@angular/core';
 import { Room } from '../../../models/room';
 import { RoomPageComponent } from '../../shared/room-page/room-page.component';
 import { Location } from '@angular/common';
@@ -11,10 +11,7 @@ import { CommentService } from '../../../services/http/comment.service';
 import { ContentService } from '../../../services/http/content.service';
 import { NotificationService } from '../../../services/util/notification.service';
 import { EventService } from '../../../services/util/event.service';
-import { KeyboardUtils } from '../../../utils/keyboard';
-import { KeyboardKey } from '../../../utils/keyboard/keys';
 import { GlobalStorageService, STORAGE_KEYS } from '../../../services/util/global-storage.service';
-import { AnnounceService } from '../../../services/util/announce.service';
 import { UserRole } from '../../../models/user-roles.enum';
 import { InfoBarItem } from '../../shared/bars/info-bar/info-bar.component';
 import { ContentGroupService } from '../../../services/http/content-group.service';
@@ -45,22 +42,11 @@ export class RoomModeratorPageComponent extends RoomPageComponent implements OnI
     protected contentService: ContentService,
     protected notification: NotificationService,
     public eventService: EventService,
-    private announceService: AnnounceService,
     protected globalStorageService: GlobalStorageService
   ) {
     super(roomService, roomStatsService, contentGroupService, route, router, location, wsCommentService,
       commentService, eventService, contentService, translateService, notification, globalStorageService);
     langService.langEmitter.subscribe(lang => translateService.use(lang));
-  }
-
-  @HostListener('window:keyup', ['$event'])
-  keyEvent(event: KeyboardEvent) {
-    const focusOnInput = this.eventService.focusOnInput;
-    if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit1) === true && focusOnInput === false) {
-      document.getElementById('comments-button').focus();
-    } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Escape) === true && focusOnInput === false) {
-      this.announce();
-    }
   }
 
   ngAfterContentInit(): void {
@@ -75,10 +61,6 @@ export class RoomModeratorPageComponent extends RoomPageComponent implements OnI
       this.initializeRoom(data.room, data.userRole, data.viewRole);
     });
     this.translateService.use(this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE));
-  }
-
-  public announce() {
-    this.announceService.announce('room-page.a11y-moderator-shortcuts');
   }
 
   initializeRoom(room: Room, role: UserRole, viewRole: UserRole): void {

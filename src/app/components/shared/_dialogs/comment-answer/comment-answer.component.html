@@ -6,12 +6,14 @@
     <div fxLayout="row" fxLayoutAlign="center">
       <app-comment [comment]="comment" [inAnswerView]="true" [viewRoleInput]="data.role"></app-comment>
     </div>
-    <button id="message-button" tabIndex="-1" (click)="announce()"
-            class="visually-hidden">{{ 'comment-page.a11y-message-answer' | translate }}</button>
+    <div id="message-button" tabIndex="-1" class="visually-hidden">
+      {{ 'comment-page.a11y-message-answer' | a11yIntro | async }}
+    </div>
     <div fxLayout="row" fxLayoutAlign="center">
       <mat-card class="answer mat-elevation-z2" *ngIf="!isParticipant || answer">
-        <div tabindex="-1" id="answer-text" class="visually-hidden">{{ 'comment-page.a11y-entered-answer' | translate:
-          {answer: answer} }}</div>
+        <div tabindex="-1" id="answer-text" class="visually-hidden" appHotkey="1">
+          {{ 'comment-page.a11y-entered-answer' | translate: {answer: answer} }}
+        </div>
         <div *ngIf="(isParticipant || !edit) && answer">
           <app-rendered-text [rawText]="answer" [dynamic]="true" [markdownFeatureset]="MarkdownFeatureset.SIMPLE">
           </app-rendered-text>
@@ -27,8 +29,6 @@
           <mat-tab label="{{'comment-page.your-answer' | translate}}">
             <mat-form-field class="input-block" appearance="outline">
               <textarea id="answer-input" [(ngModel)]="answer" (input)="edit = true"
-                      (blur)="eventService.makeFocusOnInputFalse()"
-                      (focus)="eventService.makeFocusOnInputTrue()"
                       matInput
                       matTextareaAutosize
                       matAutosizeMinRows="3"
@@ -36,7 +36,8 @@
                       maxlength="500"
                       name="answer"
                       aria-labelledby="answer"
-                      [placeholder]="'comment-page.enter-answer' | translate">
+                      [placeholder]="'comment-page.enter-answer' | translate"
+                      appHotkey="1">
               </textarea>
               <mat-hint align="end">
                 <span aria-hidden="true">

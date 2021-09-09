@@ -1,8 +1,5 @@
-import { AfterContentInit, Component, HostListener } from '@angular/core';
-import { KeyboardUtils } from '../../../utils/keyboard';
-import { KeyboardKey } from '../../../utils/keyboard/keys';
+import { AfterContentInit, Component } from '@angular/core';
 import { DialogService } from '../../../services/util/dialog.service';
-import { EventService } from '../../../services/util/event.service';
 import { GlobalStorageService, STORAGE_KEYS } from '../../../services/util/global-storage.service';
 
 @Component({
@@ -16,31 +13,14 @@ export class HomePageComponent implements AfterContentInit {
 
   constructor(
     private dialogService: DialogService,
-    private eventService: EventService,
     private globalStorageService: GlobalStorageService
   ) {
     this.deviceType = this.globalStorageService.getItem(STORAGE_KEYS.DEVICE_TYPE);
   }
 
-  @HostListener('window:keyup', ['$event'])
-  keyEvent(event: KeyboardEvent) {
-    if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit1) === true && this.eventService.focusOnInput === false) {
-      document.getElementById('room-id-input').focus();
-      this.eventService.makeFocusOnInputTrue();
-    } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit2) === true && this.eventService.focusOnInput === false) {
-      document.getElementById('new-room-button').focus();
-    } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit3) === true && this.eventService.focusOnInput === false) {
-      document.getElementById('language-menu').focus();
-    } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Escape) === true && this.eventService.focusOnInput === true) {
-      this.eventService.makeFocusOnInputFalse();
-      document.getElementById('key-combinations').focus();
-    }
-  }
-
   ngAfterContentInit(): void {
     if (this.deviceType === 'desktop') {
       document.getElementById('room-id-input').focus();
-      this.eventService.makeFocusOnInputTrue();
     } else {
       document.getElementById('welcome-message').focus();
     }

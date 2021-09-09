@@ -3,8 +3,7 @@
     <div tabindex="0" id="room-settings" class="visually-hidden">{{ 'settings.a11y-room' | translate }}</div>
     <mat-form-field class="input-block" appearance="outline">
       <mat-label>{{ 'room.room-name' | translate }}</mat-label>
-      <input (focus)="eventService.makeFocusOnInputTrue()" (blur)="eventService.makeFocusOnInputFalse()"
-             [(ngModel)]="name" matInput placeholder="{{ 'settings.enter-room-name' | translate }}"
+      <input [(ngModel)]="name" matInput placeholder="{{ 'settings.enter-room-name' | translate }}"
              name="room-name" maxlength="30" aria-labelledby="room-name"/>
       <mat-hint align="end"><span aria-hidden="true">{{ name.length }} / 30</span></mat-hint>
     </mat-form-field>
@@ -12,8 +11,6 @@
       <mat-tab label="{{'settings.description' | translate}}">
         <mat-form-field class="input-block" appearance="outline">
       <textarea #descriptionInput
-        (focus)="eventService.makeFocusOnInputTrue()"
-        (blur)="eventService.makeFocusOnInputFalse()"
         (input)="updateTextContainsImage(descriptionInput.value)"
         [(ngModel)]="description" matInput matTextareaAutosize matAutosizeMinRows="3" matAutosizeMaxRows="5"
         maxlength="500" name="description" aria-labelledby="room-description"

@@ -1,6 +1,6 @@
-import { Component, Input } from '@angular/core';
+import { DOCUMENT } from '@angular/common';
+import { Component, Inject, Input } from '@angular/core';
 import { KeyNavBarItem } from '../control-bar/control-bar.component';
-import { KEYBOARD_KEYS, KeyboardKey } from '../../../../utils/keyboard/keys';
 
 @Component({
   selector: 'app-key-button-bar',
@@ -12,13 +12,13 @@ export class KeyButtonBarComponent {
   @Input() items: KeyNavBarItem[]
   @Input() withText = true;
 
-  constructor() { }
+  constructor(@Inject(DOCUMENT) private document: HTMLDocument) { }
 
   sendKeyEvent(key: string) {
     const event = new KeyboardEvent('keyup', {
-      key: KEYBOARD_KEYS.get(KeyboardKey[key]).key[0],
+      key: key,
     });
-    window.dispatchEvent(event);
+    this.document.documentElement.dispatchEvent(event);
   }
 
 }

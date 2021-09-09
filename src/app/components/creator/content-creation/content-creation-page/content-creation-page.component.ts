@@ -1,9 +1,6 @@
-import { AfterContentInit, Component, HostListener, OnInit } from '@angular/core';
+import { AfterContentInit, Component, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { LanguageService } from '../../../../services/util/language.service';
-import { EventService } from '../../../../services/util/event.service';
-import { KeyboardUtils } from '../../../../utils/keyboard';
-import { KeyboardKey } from '../../../../utils/keyboard/keys';
 import { GlobalStorageService, STORAGE_KEYS } from '../../../../services/util/global-storage.service';
 import { ActivatedRoute } from '@angular/router';
 import { RoomService } from '../../../../services/http/room.service';
@@ -60,7 +57,6 @@ export class ContentCreationPageComponent implements OnInit, AfterContentInit {
   constructor(
     private translateService: TranslateService,
     protected langService: LanguageService,
-    public eventService: EventService,
     private announceService: AnnounceService,
     private globalStorageService: GlobalStorageService,
     protected route: ActivatedRoute,
@@ -71,27 +67,10 @@ export class ContentCreationPageComponent implements OnInit, AfterContentInit {
     langService.langEmitter.subscribe(lang => translateService.use(lang));
   }
 
-  @HostListener('window:keyup', ['$event'])
-  keyEvent(event: KeyboardEvent) {
-    const focusOnInput = this.eventService.focusOnInput;
-    if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit1) === true && focusOnInput === false) {
-      document.getElementById('body-input').focus();
-    } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit2) === true && focusOnInput === false) {
-      document.getElementById('format-button').focus();
-    } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit3) === true && focusOnInput === false) {
-      document.getElementById('group-input').focus();
-    } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Escape) === true) {
-      if (!this.isEditMode) {
-        document.getElementById('keys-announcer-button').focus();
-      }
-    }
-  }
-
   ngAfterContentInit() {
     setTimeout(() => {
       document.getElementById('message-announcer-button').focus();
     }, 700);
-    this.eventService.makeFocusOnInputFalse();
   }
 
   ngOnInit() {
@@ -114,12 +93,6 @@ export class ContentCreationPageComponent implements OnInit, AfterContentInit {
       this.contentGroup = this.route.snapshot.params['contentGroup'];
     });
     this.translateService.use(this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE));
-  }
-
-  announce() {
-    if (!this.isEditMode) {
-      this.announceService.announce('content.a11y-content-create-shortcuts');
-    }
   }
 
   reset() {

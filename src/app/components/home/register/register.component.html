@@ -7,7 +7,7 @@
           fxLayoutAlign="space-around" fxLayoutGap="10px">
       <mat-form-field class="input-block" appearance="outline">
         <mat-label>{{ 'login.email' | translate }}</mat-label>
-        <input id="email-input" (focus)="eventService.makeFocusOnInputTrue()" (blur)="eventService.makeFocusOnInputFalse()"
+        <input id="email-input"
                matInput type="email" #userName [formControl]="usernameFormControl"
                placeholder="{{ 'login.enter-email' | translate }}"
                [errorStateMatcher]="matcher" aria-labelledby="register-email-description"/>
@@ -21,8 +21,7 @@
 
       <mat-form-field class="input-block" appearance="outline">
         <mat-label>{{ 'login.password' | translate }}</mat-label>
-        <input (focus)="eventService.makeFocusOnInputTrue()" (blur)="eventService.makeFocusOnInputFalse()"
-               matInput type="password" #userPassword1 [formControl]="password1FormControl"
+        <input matInput type="password" #userPassword1 [formControl]="password1FormControl"
                [errorStateMatcher]="matcher"
                placeholder="{{ 'login.enter-password' | translate }}" aria-labelledby="register-password-description"
                autocomplete="new-password"/>
@@ -33,8 +32,7 @@
 
       <mat-form-field class="input-block" appearance="outline">
         <mat-label>{{ 'register.password-verify' | translate }}</mat-label>
-        <input (focus)="eventService.makeFocusOnInputTrue()" (blur)="eventService.makeFocusOnInputFalse()"
-               matInput type="password" #userPassword2 [formControl]="password2FormControl"
+        <input matInput type="password" #userPassword2 [formControl]="password2FormControl"
                [errorStateMatcher]="matcher"
                placeholder="{{ 'register.enter-password-again' | translate }}"
                aria-labelledby="register-password-description-repeat"

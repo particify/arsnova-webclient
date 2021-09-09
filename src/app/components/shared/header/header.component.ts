@@ -1,4 +1,4 @@
-import { Component, HostListener, OnInit, Renderer2 } from '@angular/core';
+import { Component, OnInit, Renderer2 } from '@angular/core';
 import { AuthenticationService } from '../../../services/http/authentication.service';
 import { AdvancedSnackBarTypes, NotificationService } from '../../../services/util/notification.service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -8,8 +8,6 @@ import { Location } from '@angular/common';
 import { TranslateService } from '@ngx-translate/core';
 import { UserService } from '../../../services/http/user.service';
 import { EventService } from '../../../services/util/event.service';
-import { KeyboardUtils } from '../../../utils/keyboard';
-import { KeyboardKey } from '../../../utils/keyboard/keys';
 import { DialogService } from '../../../services/util/dialog.service';
 import { GlobalStorageService, STORAGE_KEYS } from '../../../services/util/global-storage.service';
 import { Theme } from '../../../../theme/Theme';
@@ -17,6 +15,7 @@ import { ThemeService } from '../../../../theme/theme.service';
 import { LanguageService } from '../../../services/util/language.service';
 import { RoutingService } from '../../../services/util/routing.service';
 import { ConsentService } from '../../../services/util/consent.service';
+import { HotkeyAction } from '../../../directives/hotkey.directive';
 
 @Component({
   selector: 'app-header',
@@ -41,6 +40,7 @@ export class HeaderComponent implements OnInit {
   imprintUrl: string;
   showNews: boolean;
   lang: string;
+  HotkeyAction = HotkeyAction;
 
   constructor(
     public location: Location,
@@ -61,20 +61,6 @@ export class HeaderComponent implements OnInit {
   ) {
     this.deviceType = this.globalStorageService.getItem(STORAGE_KEYS.DEVICE_TYPE);
     this.lang = this.translationService.currentLang;
-  }
-
-  @HostListener('window:keyup', ['$event'])
-  keyEvent(event: KeyboardEvent) {
-    if (document.getElementById('back-button') && KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit0) === true &&
-      this.eventService.focusOnInput === false) {
-      document.getElementById('back-button').focus();
-    } else if (KeyboardUtils.isKeyEvent(event, KeyboardKey.Digit9) === true && this.eventService.focusOnInput === false) {
-      if (this.auth) {
-        document.getElementById('room-button').focus();
-      } else {
-        document.getElementById('login-button').focus();
-      }
-    }
   }
 
   ngOnInit() {

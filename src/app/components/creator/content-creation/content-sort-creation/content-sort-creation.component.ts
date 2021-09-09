@@ -14,7 +14,6 @@ import {
 } from '../content-creation/content-creation.component';
 import { AnnounceService } from '../../../../services/util/announce.service';
 import { ActivatedRoute } from '@angular/router';
-import { EventService } from '../../../../services/util/event.service';
 
 @Component({
   selector: 'app-content-sort-creation',
@@ -34,8 +33,7 @@ export class ContentSortCreationComponent extends ContentCreationComponent imple
     protected roomService: RoomService,
     protected contentGroupService: ContentGroupService,
     protected route: ActivatedRoute,
-    protected announceService: AnnounceService,
-    private eventService: EventService
+    protected announceService: AnnounceService
   ) {
     super(contentService, notificationService, translationService, roomService, contentGroupService, route, announceService);
   }
@@ -108,12 +106,10 @@ export class ContentSortCreationComponent extends ContentCreationComponent imple
 
   goInEditMode(index: number): void {
     this.isAnswerEdit = index;
-    this.eventService.makeFocusOnInputTrue();
   }
 
   leaveEditMode(): void {
     this.isAnswerEdit = -1;
-    this.eventService.makeFocusOnInputFalse();
   }
 
   createContent(): boolean {
