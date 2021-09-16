@@ -64,6 +64,8 @@ export class AuthenticationGuard implements CanActivate {
                           this.handleAccessDenied(auth, state.url);
                         } else if (e.status === 404) {
                           this.handleRoomNotFound();
+                        } else {
+                          this.handleUnknownError();
                         }
                         return of(false);
                       }
@@ -84,6 +86,11 @@ export class AuthenticationGuard implements CanActivate {
     }));
   }
 
+  handleUnknownError() {
+    this.translateService.get('errors.something-went-wrong').subscribe(msg =>
+        this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.FAILED));
+  }
+
   handleAccessDenied(auth?: ClientAuthentication, url?: string) {
     this.translateService.get('errors.not-authorized').subscribe(msg => {
       this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
@@ -92,7 +99,7 @@ export class AuthenticationGuard implements CanActivate {
         this.router.navigate(['login']);
       } else {
         if (this.router.url !== '/user') {
-          this.router.navigate([]);
+          this.router.navigate(['']);
         }
       }
     });
