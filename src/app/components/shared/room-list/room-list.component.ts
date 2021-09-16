@@ -36,6 +36,7 @@ export class RoomListComponent implements OnInit, OnDestroy {
   showGuestAccountControls = false;
   isGuest = false;
   rooms: RoomDataView[] = [];
+  roomIds: string[] = [];
   displayRooms: RoomDataView[];
   roomsFromGuest: RoomDataView[];
   guestAuth$: Observable<ClientAuthentication>;
@@ -164,6 +165,7 @@ export class RoomListComponent implements OnInit, OnDestroy {
 
   updateRoomList(rooms: RoomDataView[]) {
     this.rooms = rooms;
+    this.roomIds = rooms.map(r => r.summary.id);
     this.setDisplayedRooms(this.rooms);
     this.showGuestRooms();
     this.isLoading = false;

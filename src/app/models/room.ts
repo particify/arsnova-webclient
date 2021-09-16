@@ -10,6 +10,7 @@ export class Room {
   passwordProtected: boolean;
   closed: boolean;
   settings: object;
+  lmsCourseId: string;
   extensions: { [key: string ]: object };
 
   constructor(
