@@ -135,9 +135,12 @@ export class RoutingService {
     this.router.navigateByUrl(route);
   }
 
-  setRedirect() {
+  setRedirect(url?: string) {
     if (!this.redirectRoute) {
-      this.redirectRoute = this.fullCurrentRoute ?? location.pathname;
+      if (!url) {
+        url = this.fullCurrentRoute ?? this.location.path();
+      }
+      this.redirectRoute = url;
     }
   }
 
