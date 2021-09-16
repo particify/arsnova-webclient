@@ -10,6 +10,9 @@ import { RoomService } from '../services/http/room.service';
 import { RoomMembershipService } from '../services/room-membership.service';
 import { environment } from '../../environments/environment';
 import { HttpErrorResponse } from '@angular/common/http';
+import { AuthProvider } from '../models/auth-provider';
+import { RoutingService } from '../services/util/routing.service';
+import { ClientAuthentication } from '../models/client-authentication';
 
 @Injectable()
 export class AuthenticationGuard implements CanActivate {
@@ -18,6 +21,7 @@ export class AuthenticationGuard implements CanActivate {
               private roomService: RoomService,
               private notificationService: NotificationService,
               private translateService: TranslateService,
+              private routingService: RoutingService,
               private router: Router) {
   }
 
@@ -35,7 +39,7 @@ export class AuthenticationGuard implements CanActivate {
     return this.authenticationService.requireAuthentication().pipe(switchMap(auth => {
       if (!auth) {
         /* User is still not logged in (shouldn't usually happen) */
-        this.handleAccessDenied();
+        this.handleAccessDenied(auth, state.url);
         return of(false);
       }
 
@@ -56,7 +60,13 @@ export class AuthenticationGuard implements CanActivate {
                     map(room => true),
                     catchError(e => {
                       if (e instanceof HttpErrorResponse) {
-                        this.handleRoomNotFound();
+                        if (e.status === 403) {
+                          this.handleAccessDenied(auth, state.url);
+                        } else if (e.status === 404) {
+                          this.handleRoomNotFound();
+                        } else {
+                          this.handleUnknownError();
+                        }
                         return of(false);
                       }
                     })
@@ -67,7 +77,7 @@ export class AuthenticationGuard implements CanActivate {
                   return of(true);
                 }
 
-                this.handleAccessDenied();
+                this.handleAccessDenied(auth, state.url);
                 return of(false);
               }
             })
@@ -76,11 +86,23 @@ export class AuthenticationGuard implements CanActivate {
     }));
   }
 
-  handleAccessDenied() {
+  handleUnknownError() {
+    this.translateService.get('errors.something-went-wrong').subscribe(msg =>
+        this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.FAILED));
+  }
+
+  handleAccessDenied(auth?: ClientAuthentication, url?: string) {
     this.translateService.get('errors.not-authorized').subscribe(msg => {
       this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
+      if (url && auth?.authProvider === AuthProvider.ARSNOVA_GUEST) {
+        this.routingService.setRedirect(url);
+        this.router.navigate(['login']);
+      } else {
+        if (this.router.url !== '/user') {
+          this.router.navigate(['']);
+        }
+      }
     });
-    this.router.navigateByUrl('');
   }
 
   handleRoomNotFound() {
