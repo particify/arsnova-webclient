@@ -1,8 +1,6 @@
 <div fxLayout="column" fxLayoutAlign="center center" fxFill>
   <mat-card class="login-card" fxLayout="column" fxLayoutAlign="center center">
-    <p tabindex="0">
-      {{ 'register.info' | translate : { accountService: accountServiceTitle } }}
-    </p>
+    <app-form-header [text]="'register.info' | translate  : { accountService: accountServiceTitle }"></app-form-header>
     <form class="full-width" fxLayout="column"
           fxLayoutAlign="space-around" fxLayoutGap="10px">
       <mat-form-field class="input-block" appearance="outline">

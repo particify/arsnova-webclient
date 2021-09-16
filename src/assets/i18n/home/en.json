@@ -157,7 +157,8 @@
     "password-reset": "Forgot your password?",
     "register": "Register",
     "or": "or",
-    "authentication-expired": "Please log in again."
+    "authentication-expired": "Please log in again.",
+    "welcome": "Welcome back!"
   },
   "password-reset": {
     "a11y-cancel": "Cancels password reset and brings you back to login.",

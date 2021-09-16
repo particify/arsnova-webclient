@@ -74,6 +74,7 @@ import { DemoService } from './services/demo.service';
 import { DemoRoomGuard } from './guards/demo-room.guard';
 import { HotkeyService } from './services/util/hotkey.service';
 import { PasswordEntryComponent } from './components/home/password-entry/password-entry.component';
+import { FormHeaderComponent } from './components/home/form-header/form-header.component';
 
 export function dialogClose(dialogResult: any) {
 }
@@ -96,7 +97,8 @@ export function initializeApp(appConfig: AppConfig) {
     ImportComponent,
     RequestPasswordResetComponent,
     SnackBarAdvancedComponent,
-    PasswordEntryComponent
+    PasswordEntryComponent,
+    FormHeaderComponent
   ],
   imports: [
     extensions,
