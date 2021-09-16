@@ -4,6 +4,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { UserService } from '../../../services/http/user.service';
 import { AdvancedSnackBarTypes, NotificationService } from '../../../services/util/notification.service';
 import { RegisterErrorStateMatcher } from '../register/register.component';
+import { AutofillMonitor } from '@angular/cdk/text-field';
 
 enum Strength {
   WEAK = 1,
@@ -38,16 +39,34 @@ export class PasswordEntryComponent implements AfterViewInit {
   strength = 0;
   strengthLevels: typeof Strength = Strength;
   hidePw = true;
+  showPwButton = false;
+  autofilled = false;
+  lastInput: string;
 
   constructor(private translationService: TranslateService,
               public userService: UserService,
-              public notificationService: NotificationService) {}
+              public notificationService: NotificationService,
+              private _autofill: AutofillMonitor) {}
 
   ngAfterViewInit(): void {
+    this._autofill.monitor(this.passwordInput).subscribe(p => {
+      this.autofilled = p.isAutofilled;
+      if (this.showPwButton) {
+        this.showPwButton = !p.isAutofilled;
+        this.hidePw = true;
+      }
+    });
     if (this.preFill) {
       this.password = this.preFill;
       this.passwordInput.nativeElement.value = this.password;
     }
+  }
+
+  checkInput() {
+    if ((!this.lastInput || this.lastInput?.length === 0) && this.password.length > 0 && !this.autofilled) {
+      this.showPwButton = true;
+    }
+    this.lastInput = this.password;
   }
 
   getPassword(): string {
