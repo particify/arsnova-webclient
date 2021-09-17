@@ -73,6 +73,7 @@ import { WsRoomEventDispatcher } from './services/websockets/ws-room-event-dispa
 import { DemoService } from './services/demo.service';
 import { DemoRoomGuard } from './guards/demo-room.guard';
 import { HotkeyService } from './services/util/hotkey.service';
+import { PasswordEntryComponent } from './components/home/password-entry/password-entry.component';
 
 export function dialogClose(dialogResult: any) {
 }
@@ -94,7 +95,8 @@ export function initializeApp(appConfig: AppConfig) {
     OverlayComponent,
     ImportComponent,
     RequestPasswordResetComponent,
-    SnackBarAdvancedComponent
+    SnackBarAdvancedComponent,
+    PasswordEntryComponent
   ],
   imports: [
     extensions,
