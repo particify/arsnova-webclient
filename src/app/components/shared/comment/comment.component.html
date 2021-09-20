@@ -1,7 +1,7 @@
 <mat-card name="comment" id="comment-card" [ngClass]="{'highlighted': comment.highlighted && !isPresentation,
            'mat-elevation-z2': inAnswerView, 'presentation-comment': isPresentation, 'active': comment.highlighted && isPresentation}"
           [@slide]="isNew ? slideAnimationState : null" (@slide.done)="changeSlideState()">
-  <div fxLayout="column" id="comment-entry" tabindex="0" role="button" (keyup.enter)="openPresentDialog(comment)" attr.aria-label="{{ 'comment-page.comment' | translate: {
+  <div fxLayout="column" id="comment-entry" tabindex="0" role="button" (keyup.enter)="openPresentDialog()" attr.aria-label="{{ 'comment-page.comment' | translate: {
       time: (language === 'de' ? (comment.timestamp | date: ' HH:mm ') : (comment.timestamp | date: 'h:mm a')),
       votes: comment.score === 1 ? ('comment-page.a11y-text-textForOneVote' | translate) : comment.score + ('comment-page.a11y-text-textForVotes' | translate),
       comment: comment.body.trim(),
@@ -14,7 +14,7 @@
       <div class="date-container light">
         <div>{{comment.timestamp | dateFromNow : language : refreshCounter }}</div>
       </div>
-      <button mat-icon-button *ngIf="comment.read && viewRole === 'CREATOR' && !isPresentation" [disabled]="true" (click)="setRead(comment)">
+      <button mat-icon-button *ngIf="comment.read && viewRole === 'CREATOR' && !isPresentation" [disabled]="true" (click)="setRead()">
         <mat-icon class="read-icon" matTooltip="{{ 'comment-page.mark-read' | translate }}">
           visibility
         </mat-icon>
@@ -28,23 +28,23 @@
       </button>
 
       <button mat-icon-button *ngIf="comment.correct === 1" [disabled]="isParticipant"
-              (click)="markCorrect(comment, 1)" tabindex="0"
+              (click)="markCorrect(1)" tabindex="0"
               aria-labelledby="comment-correct">
         <mat-icon class="correct-icon" [matTooltip]="'comment-page.mark-not-correct' | translate">check_circle
         </mat-icon>
       </button>
       <button mat-icon-button *ngIf="comment.correct === 2" [disabled]="isParticipant"
-              (click)="markCorrect(comment, 2)" tabindex="0"
+              (click)="markCorrect(2)" tabindex="0"
               aria-labelledby="comment-not-correct">
         <mat-icon class="wrong-icon" [matTooltip]="'comment-page.mark-not-wrong' | translate">cancel
         </mat-icon>
       </button>
       <button mat-icon-button *ngIf="comment.favorite" [disabled]="isParticipant"
-              (click)="setFavorite(comment)" tabindex="0" aria-labelledby="comment-grade">
+              (click)="setFavorite()" tabindex="0" aria-labelledby="comment-grade">
         <mat-icon class="favorite-icon" [matTooltip]="'comment-page.mark-not-favorite' | translate">grade
         </mat-icon>
       </button>
-      <button *ngIf="isModeratorView" mat-icon-button (click)="setAck(comment)"
+      <button *ngIf="isModeratorView" mat-icon-button (click)="setAck()"
               aria-labelledby="comment-moderation" matTooltip="{{ 'comment-page.reject' | translate }}">
         <mat-icon class="gavel-icon">lock_open</mat-icon>
       </button>
@@ -66,20 +66,20 @@
           <span>{{ (!comment.answer ? 'comment-page.answer' : 'comment-page.go-to-answer') | translate }}</span>
         </button>
 
-        <button mat-menu-item (click)="markCorrect(comment, 1)"
+        <button mat-menu-item (click)="markCorrect(1)"
                 aria-labelledby="comment-correct">
           <mat-icon class="correct-icon">check_circle</mat-icon>
           <span>{{ (comment.correct !== 1 ? 'comment-page.mark-correct' :
             'comment-page.mark-not-correct') | translate }}</span>
         </button>
 
-        <button mat-menu-item (click)="markCorrect(comment, 2)"
+        <button mat-menu-item (click)="markCorrect(2)"
                 aria-labelledby="comment-not-correct">
           <mat-icon class="wrong-icon">cancel</mat-icon>
           <span>{{ (comment.correct !== 2 ? 'comment-page.mark-wrong' :
             'comment-page.mark-not-wrong') | translate }}</span>
         </button>
-        <button mat-menu-item (click)="setFavorite(comment)" aria-labelledby="comment-grade">
+        <button mat-menu-item (click)="setFavorite()" aria-labelledby="comment-grade">
           <mat-icon class="favorite-icon">grade</mat-icon>
           <span>{{ (!comment.favorite ? 'comment-page.mark-favorite' :
             'comment-page.mark-not-favorite') | translate }}</span>
@@ -88,7 +88,7 @@
           <mat-icon class="delete-icon">delete</mat-icon>
           <span>{{ 'comment-page.delete' | translate }}</span>
         </button>
-        <button *ngIf="!isModeratorView" mat-menu-item (click)="setAck(comment)" aria-labelledby="comment-moderation">
+        <button *ngIf="!isModeratorView" mat-menu-item (click)="setAck()" aria-labelledby="comment-moderation">
           <mat-icon class="gavel-icon">{{ comment.ack ? 'gavel' : 'lock_open' }}</mat-icon>
           <span>{{ (comment.ack ? 'comment-page.banish' : 'comment-page.reject') | translate }}</span>
         </button>
@@ -96,10 +96,10 @@
       </mat-menu>
     </div>
     <div fxLayout="row">
-      <div class="body click" (click)="openPresentDialog(comment)">
+      <div class="body click" (click)="openPresentDialog()">
         <span aria-hidden="true">{{ comment.body.trim() }}</span>
       </div>
-      <span class="fill-remaining-space click" (click)="openPresentDialog(comment)"></span>
+      <span class="fill-remaining-space click" (click)="openPresentDialog()"></span>
       <div fxLayout="column" *ngIf="isParticipant" [ngClass]="{ '1': 'voteUp', '-1': 'voteDown', '0': 'reset'}[currentVote]">
         <button mat-icon-button (click)="vote(1)" [matTooltip]="'comment-page.vote-up' | translate"
                 tabindex="0" aria-labelledby="comment-vote-up">
