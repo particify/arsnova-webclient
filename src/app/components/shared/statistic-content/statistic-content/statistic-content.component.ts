@@ -128,7 +128,7 @@ export class StatisticContentComponent implements OnInit {
   }
 
   toggleCorrect(sendState = true) {
-    if (this.answersVisible) {
+    if (this.answersVisible && !this.survey) {
       if (this.format === ContentType.SORT) {
         this.sortStatistic.toggleCorrect();
       } else if ([ContentType.CHOICE, ContentType.BINARY].includes(this.format)) {
