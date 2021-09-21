@@ -27,14 +27,14 @@ const routes: Routes = [
     }
   },
   {
-    path: ':seriesName',
+    path: 'series/:seriesName',
     component: PresentationComponent,
     data: {
       feature: 'series'
     }
   },
   {
-    path: ':seriesName/:contentIndex',
+    path: 'series/:seriesName/:contentIndex',
     component: PresentationComponent,
     data: {
       feature: 'series'
