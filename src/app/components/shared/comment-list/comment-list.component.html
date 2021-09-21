@@ -238,10 +238,10 @@
     </app-comment>
   </div>
 
-  <div *ngIf="!isLoading" fxLayout="row" fxLayoutAlign="center center" tabindex="0" id="no-comments" aria-labelledby="no-comments-label">
-    <p *ngIf="comments.length < 1">{{ 'comment-page.no-comments' | translate }}</p>
+  <div *ngIf="!isLoading" fxLayout="row" fxLayoutAlign="center center">
+    <p *ngIf="comments.length < 1" tabindex="0" aria-labelledby="no-comments-label">{{ 'comment-page.no-comments' | translate }}</p>
     <p *ngIf="((hideCommentsList && filteredComments.length < 1) ||
-            (!hideCommentsList && commentsFilteredByTime.length < 1)) && comments.length >= 1">
+            (!hideCommentsList && commentsFilteredByTime.length < 1)) && comments.length >= 1" tabindex="0">
       {{ 'comment-page.no-comments-found' | translate }}
     </p>
   </div>
