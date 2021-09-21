@@ -27,17 +27,17 @@ const routes: Routes = [
     }
   },
   {
-    path: ':contentGroup',
+    path: ':seriesName',
     component: PresentationComponent,
     data: {
-      feature: 'group'
+      feature: 'series'
     }
   },
   {
-    path: ':contentGroup/:contentIndex',
+    path: ':seriesName/:contentIndex',
     component: PresentationComponent,
     data: {
-      feature: 'group'
+      feature: 'series'
     }
   }
 ];

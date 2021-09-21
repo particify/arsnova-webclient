@@ -4,7 +4,7 @@
     <p class="code">{{ joinUrl || (shortId | splitShortId) }}</p>
   </div>
 </div>
-<app-bar-notification *ngIf="!isLoading && isActiveFeature('group')" [message]="notificationMessage"  [icon]="notificationIcon" [expanded]="barVisible" [hidden]="isCurrentContentPublished"></app-bar-notification>
+<app-bar-notification *ngIf="!isLoading && isActiveFeature('series')" [message]="notificationMessage"  [icon]="notificationIcon" [expanded]="barVisible" [hidden]="isCurrentContentPublished"></app-bar-notification>
 <div class="bar-container" (mouseenter)="toggleBarVisibility(true)" (mouseleave)="toggleBarVisibility(false)">
   <div class="bar bar-hidden" [ngClass]="{'bar-expanded': barVisible || currentRouteIndex === undefined}" fxLayout="row" fxLayoutAlign="start center">
     <div fxLayout="row" class="logo-container">
@@ -20,7 +20,7 @@
           <p class="text">{{ 'sidebar.' + barItem.name | translate }}</p>
         </div>
       </div>
-      <div *ngIf="isActiveFeature('group')" fxLayout="row" fxLayoutAlign="center center" class="feature-container no-padding">
+      <div *ngIf="isActiveFeature('series')" fxLayout="row" fxLayoutAlign="center center" class="feature-container no-padding">
         <button *ngIf="contentGroups.length > 1" mat-button class="group-button full-height" [matMenuTriggerFor]="groupMenu"
                 (menuOpened)="menuOpen = true" (menuClosed)="menuClosed()">
           {{ groupName }}

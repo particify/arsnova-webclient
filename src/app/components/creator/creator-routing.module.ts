@@ -41,22 +41,22 @@ const routes: Routes = [
     }
   },
   {
-    path: 'group/:contentGroup/create',
+    path: 'series/:seriesName/create',
     component: ContentCreationPageComponent
   },
   {
-    path: 'group/:contentGroup/edit/:contentId',
+    path: 'series/:seriesName/edit/:contentId',
     component: ContentCreationPageComponent,
     data: {
       isEditMode: true
     }
   },
   {
-    path: 'group/:contentGroup/statistics',
+    path: 'series/:seriesName/statistics',
     component: StatisticsPageComponent
   },
   {
-    path: 'group/:contentGroup/:contentIndex',
+    path: 'series/:seriesName/:contentIndex',
     component: ContentPresentationComponent
   },
   {
@@ -81,7 +81,7 @@ const routes: Routes = [
     }
   },
   {
-    path: 'group/:contentGroup',
+    path: 'series/:seriesName',
     component: GroupContentComponent
   },
   {
@@ -89,7 +89,7 @@ const routes: Routes = [
     component: LooseContentComponent
   },
   {
-    path: 'group/:contentGroup/presentation',
+    path: 'series/:seriesName/presentation',
     component: ContentPresentationComponent
   }
 ];

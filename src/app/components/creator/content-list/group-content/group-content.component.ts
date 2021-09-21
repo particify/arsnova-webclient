@@ -82,7 +82,7 @@ export class GroupContentComponent extends ContentListBaseComponent implements O
     this.route.data.subscribe(data => {
       this.room = data.room;
       this.route.params.subscribe(params => {
-        this.collectionName = params['contentGroup'];
+        this.collectionName = params['seriesName'];
         this.globalStorageService.setItem(STORAGE_KEYS.LAST_GROUP, this.collectionName);
         this.reloadContentGroup()
       });
@@ -143,7 +143,7 @@ export class GroupContentComponent extends ContentListBaseComponent implements O
   }
 
   goToEdit(content: Content) {
-    this.router.navigate(['creator', 'room', this.room.shortId, 'group', this.contentGroup.name, 'edit', content.id]);
+    this.router.navigate(['creator', 'room', this.room.shortId, 'series', this.contentGroup.name, 'edit', content.id]);
   }
 
   announce() {
@@ -170,7 +170,7 @@ export class GroupContentComponent extends ContentListBaseComponent implements O
   }
 
   updateURL(): void {
-    const urlTree = this.router.createUrlTree([this.baseURL, this.room.shortId, 'group', this.collectionName]);
+    const urlTree = this.router.createUrlTree([this.baseURL, this.room.shortId, 'series', this.collectionName]);
     this.location.replaceState(this.router.serializeUrl(urlTree));
   }
 
@@ -403,7 +403,7 @@ export class GroupContentComponent extends ContentListBaseComponent implements O
     const index = this.contents.filter(c => this.contentTypes.indexOf(c.format) > -1).
     map(co => co.id).indexOf(content.id);
     if (index > -1) {
-      this.router.navigate(['creator', 'room', this.room.shortId, 'group', this.contentGroup.name, index + 1]);
+      this.router.navigate(['creator', 'room', this.room.shortId, 'series', this.contentGroup.name, index + 1]);
     }
   }
 

@@ -96,7 +96,7 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
   ngOnInit() {
     this.translateService.use(this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE));
     const lastContentIndex = this.route.snapshot.params['contentIndex'] - 1;
-    this.contentGroupName = this.route.snapshot.params['contentGroup'];
+    this.contentGroupName = this.route.snapshot.params['seriesName'];
     this.route.data.subscribe(data => {
       this.shortId = data.room.shortId;
       this.contentgroupService.getByRoomIdAndName(data.room.id, this.contentGroupName).subscribe(contentGroup => {
@@ -207,7 +207,7 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
   updateURL(index?: number) {
     if (this.currentStep !== index || !this.isReloading) {
       this.currentStep = index || 0;
-      const urlTree = this.router.createUrlTree(['participant/room', this.shortId, 'group', this.contentGroupName, index + 1]);
+      const urlTree = this.router.createUrlTree(['participant/room', this.shortId, 'series', this.contentGroupName, index + 1]);
       this.location.replaceState(this.router.serializeUrl(urlTree));
     }
   }

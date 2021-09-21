@@ -1,5 +1,5 @@
 export enum Features {
   COMMENTS = 'comments',
-  CONTENTS = 'group',
+  CONTENTS = 'series',
   SURVEY = 'survey'
 }

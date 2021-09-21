@@ -111,7 +111,7 @@ export class LooseContentComponent extends ContentListBaseComponent implements O
   }
 
   updateURL(name: string): void {
-    this.router.navigate([this.baseURL, this.room.shortId, 'group', name]);
+    this.router.navigate([this.baseURL, this.room.shortId, 'series', name]);
   }
 
 

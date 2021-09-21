@@ -42,7 +42,7 @@ const routes: Routes = [
     }
   },
   {
-    path: 'group/:contentGroup',
+    path: 'series/:seriesName',
     component: ParticipantContentCarouselPageComponent,
     resolve: {
       room: RoomResolver
@@ -52,7 +52,7 @@ const routes: Routes = [
     }
   },
   {
-    path: 'group/:contentGroup/:contentIndex',
+    path: 'series/:seriesName/:contentIndex',
     component: ParticipantContentCarouselPageComponent,
     resolve: {
       room: RoomResolver

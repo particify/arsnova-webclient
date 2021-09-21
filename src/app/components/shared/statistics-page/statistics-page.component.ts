@@ -3,7 +3,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { RoomStatsService } from '../../../services/http/room-stats.service';
 import { ContentGroup } from '../../../models/content-group';
 import { TranslateService } from '@ngx-translate/core';
-import { GlobalStorageService, STORAGE_KEYS } from '../../../services/util/global-storage.service';
 import { StatisticListComponent } from '../statistic-list/statistic-list.component';
 import { ContentGroupService } from '../../../services/http/content-group.service';
 
@@ -27,7 +26,6 @@ export class StatisticsPageComponent implements OnInit {
               private roomStatsService: RoomStatsService,
               private contentGroupService: ContentGroupService,
               private translateService: TranslateService,
-              private globalStorageService: GlobalStorageService,
               private router: Router
   ) {
   }
@@ -35,18 +33,19 @@ export class StatisticsPageComponent implements OnInit {
   ngOnInit(): void {
     this.route.data.subscribe(data => {
       this.shortId = data.room.shortId;
-      this.getContentGroups(data.room.id);
+      this.getContentGroups(data.room.id, this.route.snapshot.params['seriesName']);
     });
   }
 
-  getContentGroups(id: string): void {
+  getContentGroups(id: string, groupName: string): void {
     this.roomStatsService.getStats(id, true).subscribe(roomStats => {
       const contentGroupsLength = roomStats.groupStats.length;
       for (let i = 0; i < contentGroupsLength; i++) {
         this.contentGroupService.getById(roomStats.groupStats[i].id, { roomId: id}).subscribe(group => {
           this.contentGroups.push(group);
           if (this.contentGroups.length === contentGroupsLength) {
-            this.initCurrentGroup();
+            this.contentGroups = this.contentGroups.filter(cg => cg.contentIds?.length > 0);
+            this.initCurrentGroup(groupName);
             this.isLoading = false;
           }
         });
@@ -57,10 +56,9 @@ export class StatisticsPageComponent implements OnInit {
     });
   }
 
-  initCurrentGroup() {
-    const lastGroup = this.globalStorageService.getItem(STORAGE_KEYS.LAST_GROUP);
-    if (lastGroup) {
-      this.setCurrentGroupByName(lastGroup);
+  initCurrentGroup(routeGroup: string) {
+    if (routeGroup) {
+      this.setCurrentGroupByName(routeGroup);
     } else {
       this.currentGroup = this.contentGroups[0];
     }
@@ -80,7 +78,7 @@ export class StatisticsPageComponent implements OnInit {
   }
 
   updateUrl() {
-    const urlList = ['creator', 'room', this.shortId, 'group', this.currentGroup.name, 'statistics'];
+    const urlList = ['creator', 'room', this.shortId, 'series', this.currentGroup.name, 'statistics'];
     this.router.navigate(urlList);
   }
 

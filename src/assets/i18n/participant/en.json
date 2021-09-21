@@ -205,7 +205,7 @@
   "a11y-switch-to-feature": "Switch to {{feature}}.",
   "user-counter": "Number of active participants",
     "comments": "Q&A",
-    "group": "Question series",
+    "series": "Question series",
     "survey": "Live Feedback"
   },
   "option-template": {

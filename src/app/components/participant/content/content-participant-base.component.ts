@@ -37,7 +37,7 @@ export abstract class ContentParticipantBaseComponent implements OnInit {
     this.init();
     this.route.params.subscribe(params => {
       this.shortId = params['shortId'];
-      this.contentGroupName = params['contentGroup'];
+      this.contentGroupName = params['seriesName'];
     });
     this.sendEvent.subscribe(send => {
       if (send === 'answer') {

@@ -17,11 +17,11 @@ export const TITLES: { [key: string]: string } = {
   comments: 'comments',
   'comments/moderation': 'comments',
   survey: 'live-survey',
-  'group/:contentGroup/statistics': 'statistics',
-  'group/:contentGroup': 'content-group',
-  'group/:contentGroup/:contentIndex': 'content-group',
-  'group/:contentGroup/edit/:contentId': 'content-edit',
-  'group/:contentGroup/create': 'content-creation',
+  'series/:seriesName/statistics': 'statistics',
+  'series/:seriesName': 'content-group',
+  'series/:seriesName/:contentIndex': 'content-group',
+  'series/:seriesName/edit/:contentId': 'content-edit',
+  'series/:seriesName/create': 'content-creation',
   settings: 'settings',
   'settings/:settingsName': 'settings',
   archive: 'archive',
@@ -38,15 +38,14 @@ export const TITLES: { [key: string]: string } = {
 export class RoutingService {
 
   groupChildRoutes = [
-    'group/:contentGroup/create',
-    'group/:contentGroup/statistics'
+    'series/:seriesName/create',
+    'series/:seriesName/statistics'
   ];
   roomChildRoutes = [
     'survey',
     'comments',
     'comments/moderation',
-    'group/:contentGroup',
-    'group/:contentGroup/:contentIndex'
+    'series/:seriesName'
   ];
   homeChildRoutes = [
     'user',
@@ -100,7 +99,7 @@ export class RoutingService {
 
   getRoutes(route: ActivatedRouteSnapshot) {
     const shortId = route.paramMap.get('shortId') || '';
-    const group  = route.paramMap.get('contentGroup') || '';
+    const group  = route.paramMap.get('seriesName') || '';
     const role = route.data.requiredRole || '';
     this.fullCurrentRoute = this.location.path();
     this.currentRoute = route.routeConfig.path;
@@ -109,7 +108,6 @@ export class RoutingService {
   }
 
   getBackRoute(route: string, shortId: string, role: string, group: string) {
-    console.log(route);
     let backRoute: string[];
     if (route === '') {
       backRoute = [this.parentRoute.user];
@@ -120,7 +118,7 @@ export class RoutingService {
     } else if (this.routeExistsInArray(this.roomChildRoutes)) {
       backRoute = [this.getRoleString(role), this.parentRoute.room, shortId];
     } else if (this.routeExistsInArray(this.groupChildRoutes)) {
-      backRoute = [this.getRoleString(role), this.parentRoute.room, shortId, 'group', group];
+      backRoute = [this.getRoleString(role), this.parentRoute.room, shortId, 'series', group];
     }
     this.backRoute = backRoute;
   }
@@ -188,7 +186,7 @@ export class RoutingService {
           }
           break;
         case 'content-group':
-          title = route.params.contentGroup;
+          title = route.params.seriesName;
           break;
         case 'home':
           title = this.homeTitle;

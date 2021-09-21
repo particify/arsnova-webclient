@@ -150,7 +150,7 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
       this.roomId = data.room.id;
       this.feedbackService.startSub(data.room.id);
       this.route.params.subscribe(params => {
-        let group = params['contentGroup'];
+        let group = params['seriesName'];
         if (group === undefined) {
           group = this.globalStorageService.getItem(STORAGE_KEYS.LAST_GROUP);
         } else {
@@ -307,7 +307,7 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
     const url = item.url;
     if (url) {
       if (item.name === Features.CONTENTS) {
-        const route = [this.routingService.getRoleString(this.role), 'room', this.shortId, 'group', this.groupName];
+        const route = [this.routingService.getRoleString(this.role), 'room', this.shortId, 'series', this.groupName];
         if (this.role === UserRole.CREATOR) {
           route.push('1');
         }

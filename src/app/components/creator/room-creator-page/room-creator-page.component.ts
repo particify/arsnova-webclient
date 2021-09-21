@@ -134,7 +134,7 @@ export class RoomCreatorPageComponent extends RoomPageComponent implements OnIni
           this.translateService.get('room-page.content-group-created').subscribe(msg => {
             this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.SUCCESS);
           });
-          this.router.navigate(['creator', 'room', this.room.shortId, 'group', name]);
+          this.router.navigate(['creator', 'room', this.room.shortId, 'series', name]);
         });
       }
     });

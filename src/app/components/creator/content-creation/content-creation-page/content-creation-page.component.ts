@@ -90,7 +90,7 @@ export class ContentCreationPageComponent implements OnInit, AfterContentInit {
         this.prepareAttachmentData(roomId);
         this.isLoading = false;
       }
-      this.contentGroup = this.route.snapshot.params['contentGroup'];
+      this.contentGroup = this.route.snapshot.params['seriesName'];
     });
     this.translateService.use(this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE));
   }
