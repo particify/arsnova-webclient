@@ -295,7 +295,7 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
   }
 
   getBaseUrl(): string {
-    return `/${this.routingService.getRoleString(this.role)}/room/${this.shortId}/`;
+    return `/${this.routingService.getRoleString(this.role)}/${this.shortId}/`;
   }
 
   getQuestionUrl(role: UserRole, group: string): string {
@@ -307,7 +307,7 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
     const url = item.url;
     if (url) {
       if (item.name === Features.CONTENTS) {
-        const route = [this.routingService.getRoleString(this.role), 'room', this.shortId, 'series', this.groupName];
+        const route = [this.routingService.getRoleString(this.role), this.shortId, 'series', this.groupName];
         if (this.role === UserRole.CREATOR) {
           route.push('1');
         }

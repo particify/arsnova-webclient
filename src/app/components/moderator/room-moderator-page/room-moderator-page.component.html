@@ -30,7 +30,7 @@
         <div class="action-button-container" fxLayout="row" fxLayoutAlign="center">
           <div class="action-button-item" fxLayoutAlign="center center">
             <button id="comments-button" mat-icon-button class="main-button" [disableRipple]="true"
-                    routerLink="/moderator/room/{{ room.shortId }}/comments" aria-labelledby="comments"
+                    routerLink="/moderator/{{ room.shortId }}/comments" aria-labelledby="comments"
                     appHotkey="1">
               <mat-icon matBadge="{{commentCounter}}" class="main-icon">
                 question_answer

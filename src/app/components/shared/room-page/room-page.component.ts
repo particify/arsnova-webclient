@@ -207,6 +207,6 @@ export class RoomPageComponent implements OnDestroy {
           break;
       }
     }
-    this.router.navigate([`/${roleRoute}/room/${this.room.shortId}`]);
+    this.router.navigate([`/${roleRoute}/${this.room.shortId}`]);
   }
 }

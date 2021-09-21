@@ -384,7 +384,7 @@ export class ControlBarComponent extends NavBarComponent implements OnInit, OnDe
     if (this.inFullscreen) {
       this.exitFullscreen();
     }
-    this.router.navigateByUrl(`creator/room/${this.shortId}`);
+    this.router.navigateByUrl(`creator/${this.shortId}`);
   }
 
   changeGroup(contentGroup: ContentGroup) {

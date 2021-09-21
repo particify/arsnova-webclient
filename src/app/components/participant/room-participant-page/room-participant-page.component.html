@@ -28,7 +28,7 @@
         <div class="action-button-container" fxLayout="row" fxLayoutAlign="center">
           <div class="action-button-item" fxLayoutAlign="center center">
             <button id="comments-button" mat-icon-button class="main-button" [disableRipple]="true"
-                    routerLink="/participant/room/{{ room.shortId }}/comments" aria-labelledby="comments"
+                    routerLink="/participant/{{ room.shortId }}/comments" aria-labelledby="comments"
                     appHotkey="1" [appHotkeyTitle]="'room-page.comments' | translate">
               <mat-icon matBadge="{{commentCounter}}" class="main-icon">
                 question_answer
@@ -39,7 +39,7 @@
           </div>
           <div *ngIf="surveyEnabled" class="action-button-item" fxLayoutAlign="center center">
             <button mat-icon-button class="main-button" id="live-survey-button" aria-labelledby="live-survey"
-                    [disableRipple]="true" routerLink="/participant/room/{{ room.shortId }}/feedback"
+                    [disableRipple]="true" routerLink="/participant/{{ room.shortId }}/feedback"
                     appHotkey="2" [appHotkeyTitle]="'room-page.live-survey' | translate">
               <mat-icon class="main-icon">
                 thumbs_up_down

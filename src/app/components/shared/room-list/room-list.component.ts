@@ -181,11 +181,11 @@ export class RoomListComponent implements OnInit, OnDestroy {
 
   setCurrentRoom(shortId: string, role: UserRole) {
     this.updateLastAccess(shortId);
-    this.router.navigate([this.roleToString(role), 'room', shortId]);
+    this.router.navigate([this.roleToString(role), shortId]);
   }
 
   navToSettings(shortId: string) {
-    this.router.navigate(['creator', 'room', shortId, 'settings']);
+    this.router.navigate(['creator', shortId, 'settings']);
   }
 
   openDeleteRoomDialog(room: RoomDataView) {

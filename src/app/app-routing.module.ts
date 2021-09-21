@@ -49,7 +49,7 @@ const routes: Routes = [
   },
   {
     path: 'join/:shortId',
-    redirectTo: 'participant/room/:shortId'
+    redirectTo: 'participant/:shortId'
   },
   {
     path: 'import',

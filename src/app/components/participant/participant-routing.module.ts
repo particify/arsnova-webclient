@@ -71,7 +71,7 @@ const routes: Routes = [
       provide: ROUTES,
       useFactory: (extensionRouteProviders: ExtensionRouteProvider[]) => [
         {
-          path: 'room/:shortId',
+          path: ':shortId',
           canActivate: [AuthenticationGuard],
           data: { requiredRole: UserRole.PARTICIPANT },
           resolve: {

@@ -695,7 +695,7 @@ export class CommentListComponent implements OnInit, OnDestroy {
   }
 
   navToSettings() {
-    this.router.navigate(['creator', 'room', this.room.shortId, 'settings', 'comments']);
+    this.router.navigate(['creator', this.room.shortId, 'settings', 'comments']);
   }
 
   resetComments() {
@@ -783,7 +783,7 @@ export class CommentListComponent implements OnInit, OnDestroy {
 
   updateUrl() {
     const role = this.viewRole === UserRole.CREATOR ? 'creator' : 'moderator';
-    const url = [role, 'room', this.room.shortId, 'comments'];
+    const url = [role, this.room.shortId, 'comments'];
     if (this.isModerator) {
       url.push('moderation');
     }

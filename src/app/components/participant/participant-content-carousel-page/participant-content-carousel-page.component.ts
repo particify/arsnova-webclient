@@ -207,7 +207,7 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
   updateURL(index?: number) {
     if (this.currentStep !== index || !this.isReloading) {
       this.currentStep = index || 0;
-      const urlTree = this.router.createUrlTree(['participant/room', this.shortId, 'series', this.contentGroupName, index + 1]);
+      const urlTree = this.router.createUrlTree(['participant', this.shortId, 'series', this.contentGroupName, index + 1]);
       this.location.replaceState(this.router.serializeUrl(urlTree));
     }
   }

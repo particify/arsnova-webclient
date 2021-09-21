@@ -12,8 +12,8 @@ export const TITLES: { [key: string]: string } = {
   'request-password-reset': 'request-pw-reset',
   'password-reset/:email': 'pw-reset',
   user: 'user',
-  import: 'import',
   '': 'room',
+  import: 'import',
   comments: 'comments',
   'comments/moderation': 'comments',
   feedback: 'live-survey',
@@ -59,7 +59,6 @@ export class RoutingService {
     home: 'home',
     login: 'login',
     user: 'user',
-    room: 'room'
   };
   moderator = 'moderator';
   currentRoute: string;
@@ -116,9 +115,9 @@ export class RoutingService {
     } else if (this.routeExistsInArray(this.loginChildRoutes)) {
       backRoute = [this.parentRoute.login];
     } else if (this.routeExistsInArray(this.roomChildRoutes)) {
-      backRoute = [this.getRoleString(role), this.parentRoute.room, shortId];
+      backRoute = [this.getRoleString(role), shortId];
     } else if (this.routeExistsInArray(this.groupChildRoutes)) {
-      backRoute = [this.getRoleString(role), this.parentRoute.room, shortId, 'series', group];
+      backRoute = [this.getRoleString(role), shortId, 'series', group];
     }
     this.backRoute = backRoute;
   }
