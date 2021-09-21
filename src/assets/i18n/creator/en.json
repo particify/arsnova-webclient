@@ -576,7 +576,7 @@
     "user-counter": "Number of active participants",
     "comments": "Q&A",
     "series": "Question series",
-    "survey": "Live Feedback",
+    "feedback": "Live Feedback",
     "moderation": "Moderation",
     "content-counter": "Current position in question series"
   },

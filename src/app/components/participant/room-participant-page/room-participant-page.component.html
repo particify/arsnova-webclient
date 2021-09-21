@@ -39,7 +39,7 @@
           </div>
           <div *ngIf="surveyEnabled" class="action-button-item" fxLayoutAlign="center center">
             <button mat-icon-button class="main-button" id="live-survey-button" aria-labelledby="live-survey"
-                    [disableRipple]="true" routerLink="/participant/room/{{ room.shortId }}/survey"
+                    [disableRipple]="true" routerLink="/participant/room/{{ room.shortId }}/feedback"
                     appHotkey="2" [appHotkeyTitle]="'room-page.live-survey' | translate">
               <mat-icon class="main-icon">
                 thumbs_up_down

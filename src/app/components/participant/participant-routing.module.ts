@@ -32,7 +32,7 @@ const routes: Routes = [
     }
   },
   {
-    path: 'survey',
+    path: 'feedback',
     component: SurveyPageComponent,
     resolve: {
       room: RoomResolver

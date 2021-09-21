@@ -20,10 +20,10 @@ const routes: Routes = [
     }
   },
   {
-    path: 'survey',
+    path: 'feedback',
     component: PresentationComponent,
     data: {
-      feature: 'survey'
+      feature: 'feedback'
     }
   },
   {
