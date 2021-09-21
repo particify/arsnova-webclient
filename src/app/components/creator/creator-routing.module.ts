@@ -19,6 +19,15 @@ import { ModeratorCommentPageComponent } from '../moderator/moderator-comment-pa
 
 const routes: Routes = [
   {
+    path: 'group',
+    redirectTo: 'series'
+  },
+  {
+    path: 'survey',
+    redirectTo: 'feedback',
+    pathMatch: 'full'
+  },
+  {
     path: '',
     component: RoomCreatorPageComponent,
     resolve: {
@@ -87,10 +96,6 @@ const routes: Routes = [
   {
     path: 'archive',
     component: LooseContentComponent
-  },
-  {
-    path: 'series/:seriesName/presentation',
-    component: ContentPresentationComponent
   }
 ];
 
@@ -101,6 +106,10 @@ const routes: Routes = [
     {
       provide: ROUTES,
       useFactory: (extensionRouteProviders: ExtensionRouteProvider[]) => [
+        {
+          path: 'room/:shortId',
+          redirectTo: ':shortId'
+        },
         {
           path: ':shortId',
           canActivate: [AuthenticationGuard],
