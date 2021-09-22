@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
-import { FEATURES, NavBarComponent, NavBarItem } from '../../../shared/bars/nav-bar/nav-bar.component';
+import { NavBarComponent, NavBarItem } from '../../../shared/bars/nav-bar/nav-bar.component';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RoutingService } from '../../../../services/util/routing.service';
 import { GlobalStorageService, STORAGE_KEYS } from '../../../../services/util/global-storage.service';
@@ -13,11 +13,14 @@ import { ContentGroup } from '../../../../models/content-group';
 import { map, takeUntil } from 'rxjs/operators';
 import { ApiConfigService } from '../../../../services/http/api-config.service';
 import { Subject } from 'rxjs';
-import { Sort } from '../../../shared/comment-list/comment-list.component';
+import { CommentPresentationState, Sort } from '../../../shared/comment-list/comment-list.component';
 import { AnnounceService } from '../../../../services/util/announce.service';
 import { Hotkey, HotkeyService } from '../../../../services/util/hotkey.service';
 import { HotkeyAction } from '../../../../directives/hotkey.directive';
 import { TranslateService } from '@ngx-translate/core';
+import { RemoteMessage } from '../../../../models/events/remote/remote-message.enum';
+import { ContentGroupEvent } from '../../../../models/events/remote/content-group-event';
+import { Features } from '../../../../models/features.enum';
 
 export class KeyNavBarItem extends NavBarItem {
   key: string;
@@ -64,9 +67,9 @@ export class ControlBarComponent extends NavBarComponent implements OnInit, OnDe
   showNotification = false;
 
   features: BarItem[] = [
-    new BarItem(FEATURES.COMMENTS, 'question_answer'),
-    new BarItem(FEATURES.GROUP, 'equalizer'),
-    new BarItem(FEATURES.SURVEY, 'thumbs_up_down')
+    new BarItem(Features.COMMENTS, 'question_answer'),
+    new BarItem(Features.CONTENTS, 'equalizer'),
+    new BarItem(Features.SURVEY, 'thumbs_up_down')
   ];
   groupItems: KeyNavBarItem[] = [
     new KeyNavBarItem('results', 'insert_chart', '', ' '),
@@ -115,10 +118,6 @@ export class ControlBarComponent extends NavBarComponent implements OnInit, OnDe
   ) {
     super(router, routingService, route, globalStorageService,
       roomStatsService, feedbackService, contentGroupService, eventService);
-  }
-
-  updateFeatureWithIndex(index: number) {
-    this.updateFeature(this.barItems[index].name);
   }
 
   ngOnDestroy() {
@@ -198,7 +197,7 @@ export class ControlBarComponent extends NavBarComponent implements OnInit, OnDe
 
   subscribeToEvents() {
     this.barItems.map(b => b.key = this.getFeatureKey(b.name));
-    this.eventService.on('SurveyStateChanged').subscribe(state => {
+    this.eventService.on(RemoteMessage.SURVEY_STATE_CHANGED).subscribe(state => {
       this.surveyStarted = state === 'started';
       this.setSurveyState();
     });
@@ -209,9 +208,9 @@ export class ControlBarComponent extends NavBarComponent implements OnInit, OnDe
       this.setArrowsState(this.contentStepState);
       this.checkIfContentLocked();
     });
-    this.eventService.on<string>('CommentStepStateChanged').subscribe(state => {
-      this.commentStepState = state;
-      if (this.isActiveFeature(FEATURES.COMMENTS)) {
+    this.eventService.on<CommentPresentationState>(RemoteMessage.UPDATE_COMMENT_STATE).subscribe(state => {
+      this.commentStepState = state.stepState;
+      if (this.isActiveFeature(Features.COMMENTS)) {
         this.setArrowsState(this.commentStepState);
       }
     });
@@ -222,6 +221,10 @@ export class ControlBarComponent extends NavBarComponent implements OnInit, OnDe
     this.eventService.on<ContentGroup>('ContentGroupStateChanged').subscribe(updatedContentGroup => {
       this.group = updatedContentGroup;
       this.checkIfContentLocked();
+    });
+    const event = new ContentGroupEvent('');
+    this.eventService.on<string>(event.type).subscribe(contentGroupId => {
+      this.changeGroup(this.contentGroups.filter(cg => cg.id === contentGroupId)[0]);
     });
   }
 
@@ -283,9 +286,9 @@ export class ControlBarComponent extends NavBarComponent implements OnInit, OnDe
       this.currentRouteIndex = undefined;
     }
     this.activeFeature.emit(feature);
-    if (feature === FEATURES.GROUP) {
+    if (feature === Features.CONTENTS) {
       this.setArrowsState(this.contentStepState);
-    } else if (feature === FEATURES.COMMENTS) {
+    } else if (feature === Features.COMMENTS) {
       this.setArrowsState(this.commentStepState);
     }
     setTimeout(() => {
@@ -317,7 +320,7 @@ export class ControlBarComponent extends NavBarComponent implements OnInit, OnDe
   }
 
   getFeatureUrl(feature: string): string {
-    return this.groupName && feature === FEATURES.GROUP ? this.getQuestionUrl(this.role, this.groupName) : feature;
+    return this.groupName && feature === Features.CONTENTS ? this.getQuestionUrl(this.role, this.groupName) : feature;
   }
 
   getQuestionUrl(role: UserRole, group: string): string {
@@ -404,7 +407,7 @@ export class ControlBarComponent extends NavBarComponent implements OnInit, OnDe
       'share': () => this.updateFeature(undefined),
       'fullscreen': () => this.toggleFullscreen(),
       'exit': () => this.exitPresentation()
-    }
+    };
     this.generalItems.forEach(item =>
       this.translateService.get('control-bar.' + item.name).pipe(
         map(t => ({

@@ -175,21 +175,21 @@ export class CommentComponent implements OnInit, OnDestroy {
     }
   }
 
-  setRead(comment: Comment): void {
-    this.commentService.toggleRead(comment).subscribe(updatedComment => this.comment = updatedComment);
+  setRead(): void {
+    this.commentService.toggleRead(this.comment).subscribe(updatedComment => this.comment.read = updatedComment.read);
   }
 
-  markCorrect(comment: Comment, type: CorrectWrong): void {
-    if (comment.correct === type) {
-      comment.correct = CorrectWrong.NULL;
+  markCorrect(type: CorrectWrong): void {
+    if (this.comment.correct === type) {
+      this.comment.correct = CorrectWrong.NULL;
     } else {
-      comment.correct = type;
+      this.comment.correct = type;
     }
-    this.commentService.markCorrect(comment).subscribe(updatedComment => this.comment = updatedComment);
+    this.commentService.markCorrect(this.comment).subscribe(updatedComment => this.comment = updatedComment);
   }
 
-  setFavorite(comment: Comment): void {
-    this.commentService.toggleFavorite(comment).subscribe(updatedComment => this.comment = updatedComment);
+  setFavorite(): void {
+    this.commentService.toggleFavorite(this.comment).subscribe(updatedComment => this.comment = updatedComment);
   }
 
   vote(vote: number) {
@@ -240,28 +240,21 @@ export class CommentComponent implements OnInit, OnDestroy {
     });
   }
 
-  setAck(comment: Comment): void {
-    this.commentService.toggleAck(comment).subscribe(updatedComment => this.comment = updatedComment);
-    this.translateService.get(comment.ack ? 'comment-page.a11y-rejected' : 'comment-page.a11y-banned').subscribe(status => {
+  setAck(): void {
+    this.commentService.toggleAck(this.comment).subscribe(updatedComment => this.comment = updatedComment);
+    this.translateService.get(this.comment.ack ? 'comment-page.a11y-rejected' : 'comment-page.a11y-banned').subscribe(status => {
       this.announceService.announce('comment-page.a11y-comment-has-been', { status: status });
     });
   }
 
-  openPresentDialog(comment: Comment): void {
-    if (this.isPresentation) {
-      this.activeComment.emit(comment);
-    } else {
-      if (this.isCreator) {
-        this.commentService.highlight(comment).subscribe();
-        if (!comment.read) {
-          this.setRead(comment);
-        }
+  openPresentDialog(): void {
+    if (this.isPresentation || this.isCreator) {
+      this.activeComment.emit(this.comment);
+      if (!this.comment.read) {
+        this.setRead();
       }
-      const dialogRef = this.dialogService.openCommentPresentationDialog(comment.body);
-      dialogRef.afterClosed()
-        .subscribe(result => {
-          this.commentService.lowlight(comment).subscribe();
-        });
+    } else {
+      this.answerComment();
     }
   }
 }

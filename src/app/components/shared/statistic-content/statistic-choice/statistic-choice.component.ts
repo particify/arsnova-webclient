@@ -63,6 +63,9 @@ export class StatisticChoiceComponent extends StatisticContentBaseComponent impl
   ngOnDestroy() {
     this.destroyed$.next();
     this.destroyed$.complete();
+    if (this.chart) {
+      this.chart.destroy();
+    }
   }
 
   init() {
@@ -94,7 +97,6 @@ export class StatisticChoiceComponent extends StatisticContentBaseComponent impl
     }
     return this.answersVisible;
   }
-
 
   createChart(colors: string[]) {
     Chart.defaults.color = this.onSurface;

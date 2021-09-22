@@ -14,9 +14,13 @@ import { EventService } from '../../../services/util/event.service';
 import { ContentGroup } from '../../../models/content-group';
 import { DialogService } from '../../../services/util/dialog.service';
 import { PublishContentComponent } from '../../shared/_dialogs/publish-content/publish-content.component';
-import { AnnounceService } from '../../../services/util/announce.service';
 import { ContentType } from '../../../models/content-type.enum';
 import { HotkeyService } from '../../../services/util/hotkey.service';
+import { RemoteMessage } from '../../../models/events/remote/remote-message.enum';
+import { ContentFocusState } from '../../../models/events/remote/content-focus-state';
+import { ContentGroupEvent } from '../../../models/events/remote/content-group-event';
+import { ContentGroupChangedEvent } from '../../../models/events/remote/content-group-changed-event';
+import { ContentChangedEvent } from '../../../models/events/remote/content-changed-event';
 
 @Component({
   selector: 'app-content-presentation',
@@ -76,20 +80,6 @@ export class ContentPresentationComponent implements OnInit, OnDestroy {
         this.initGroup(true);
       });
     });
-    if (this.isPresentation) {
-      this.groupChanged.subscribe(group => {
-        this.isLoading = true;
-        this.contentGroupName = group;
-        this.initGroup()
-      });
-      this.translateService.get('control-bar.publish-or-lock-content').subscribe(t =>
-        this.hotkeyService.registerHotkey({
-          key: 'l',
-          action: () => this.updatePublishedIndexes(),
-          actionTitle: t
-        }, this.hotkeyRefs)
-      );
-    }
   }
 
   ngOnDestroy() {
@@ -105,6 +95,36 @@ export class ContentPresentationComponent implements OnInit, OnDestroy {
     }
   }
 
+  initPresentation() {
+    if (this.isPresentation) {
+      this.groupChanged.subscribe(group => {
+        this.isLoading = true;
+        this.contentGroupName = group;
+        this.initGroup();
+      });
+      this.eventService.on<ContentFocusState>(RemoteMessage.CONTENT_STATE_UPDATED).subscribe(state => {
+        if (this.contentGroup.id === state.contentGroupId) {
+          if (this.contents[this.currentStep].id !== state.contentId) {
+            const newIndex = this.contents.map(c => c.id).indexOf(state.contentId);
+            if (newIndex > -1) {
+              this.stepper.onClick(newIndex);
+            }
+          }
+        } else {
+          const event = new ContentGroupEvent(state.contentGroupId);
+          this.eventService.broadcast(event.type, event.payload.contentGroupId);
+        }
+      });
+      this.translateService.get('control-bar.publish-or-lock-content').subscribe(t =>
+        this.hotkeyService.registerHotkey({
+          key: 'l',
+          action: () => this.updatePublishedIndexes(),
+          actionTitle: t
+        }, this.hotkeyRefs)
+      );
+    }
+  }
+
   initGroup(initial = false) {
     this.contentGroupService.getByRoomIdAndName(this.roomId, this.contentGroupName, true).subscribe(group => {
       this.contentGroup = group;
@@ -113,11 +133,18 @@ export class ContentPresentationComponent implements OnInit, OnDestroy {
           this.contents = this.contentService.getSupportedContents(contents);
           this.isLoading = false;
           this.initScale();
+          if (initial) {
+            this.initPresentation();
+          }
           if (this.entryIndex > -1) {
             this.contentIndex = initial ? this.entryIndex : 0;
             this.currentStep = this.contentIndex;
             setTimeout(() => {
               this.stepper.init(this.contentIndex, this.contents.length);
+              if (this.isPresentation && !initial) {
+                const event = new ContentGroupChangedEvent(this.contentGroup.id);
+                this.eventService.broadcast(event.type, event.payload.contentGroupId);
+              }
             }, 100);
           }
           if (this.infoBarItems.length === 0) {
@@ -134,6 +161,9 @@ export class ContentPresentationComponent implements OnInit, OnDestroy {
       } else {
         this.isLoading = false;
         this.initScale();
+        if (initial) {
+          this.initPresentation();
+        }
         this.sendContentStepState(true);
       }
     });
@@ -149,6 +179,8 @@ export class ContentPresentationComponent implements OnInit, OnDestroy {
     let urlTree;
     if (this.isPresentation) {
       urlTree = this.router.createUrlTree(['presentation', this.shortId, this.contentGroupName, urlIndex]);
+      const event = new ContentChangedEvent(this.contents[this.currentStep].id, this.contentGroup.id);
+      this.eventService.broadcast(event.type, event);
     } else {
       urlTree = this.router.createUrlTree(['creator/room', this.shortId, 'group', this.contentGroupName, 'statistics', urlIndex]);
     }

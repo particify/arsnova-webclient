@@ -36,6 +36,10 @@
   max-width: 0;
 }
 
+.button-bar .active {
+  @include show-button-bar;
+}
+
 @media(hover: none) {
   .button-bar {
     @include show-button-bar;

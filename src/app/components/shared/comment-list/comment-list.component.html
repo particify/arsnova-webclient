@@ -1,4 +1,5 @@
 <app-nav-bar *ngIf="!isPresentation" (isVisible)="checkIfNavBarExists($event)"></app-nav-bar>
+<lib-extension-point *ngIf="!isPresentation" extensionId="remote" [extensionData]="{roomId: roomId}"></lib-extension-point>
 <button class="add-btn mobile-add" mat-mini-fab aria-labelledby="add"
         *ngIf="!search && deviceType !== 'desktop' && !isPresentation && !isArchive && !isModerator" (click)="openCreateDialog()"
         [ngClass]="{'above-nav': navBarExists}"

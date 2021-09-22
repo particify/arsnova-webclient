@@ -57,8 +57,10 @@ export class CommentPageComponent implements OnInit, OnDestroy, AfterContentInit
   }
 
   updateComment(comment: Comment) {
-    if (this.activeComment) {
-      this.commentService.lowlight(this.activeComment).subscribe();
+    if (comment) {
+      if (this.activeComment?.highlighted) {
+        this.commentService.lowlight(this.activeComment).subscribe();
+      }
     }
     this.activeComment = comment;
   }

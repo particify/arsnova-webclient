@@ -1,3 +1,4 @@
+<lib-extension-point *ngIf="!isLoading" extensionId="remote" [extensionData]="{roomId: roomId, feature: barItems[currentRouteIndex]?.name}"></lib-extension-point>
 <div *ngIf="currentRouteIndex > -1" class="info-container" fxLayout="row" fxLayoutGap="1em">
   <div fxLayoutAlign="center">
     <p class="code">{{ joinUrl || (shortId | splitShortId) }}</p>

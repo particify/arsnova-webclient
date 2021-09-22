@@ -21,7 +21,8 @@
           <mat-card [ngClass]="{'presentation-card': isPresentation}">
             <app-statistic-content [content]="content" [directShow]="contentIndex === i" [active]="currentStep === i"
                                    [index]="i" [correctOptionsPublished]="true" [isPresentation]="isPresentation"
-            (updatedCounter)="updateCounter($event, currentStep === i)" [routeChanged]="routeChanged">
+            (updatedCounter)="updateCounter($event, currentStep === i)" [routeChanged]="routeChanged"
+            [contentGroupId]="contentGroup.id">
 
             </app-statistic-content>
           </mat-card>

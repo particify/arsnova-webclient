@@ -15,6 +15,7 @@ import { EntityChanged } from '../../../../models/events/entity-changed';
 import { ContentGroupStatistics } from '../../../../models/content-group-statistics';
 import { DataChanged } from '../../../../models/events/data-changed';
 import { RoomStats } from '../../../../models/room-stats';
+import { Features } from '../../../../models/features.enum';
 
 export class NavBarItem extends BarItem {
 
@@ -51,12 +52,6 @@ export class PublishedContentsState {
 
 }
 
-export enum FEATURES {
-  COMMENTS = 'comments',
-  GROUP = 'group',
-  SURVEY = 'survey'
-}
-
 @Component({
   selector: 'app-nav-bar',
   templateUrl: './nav-bar.component.html',
@@ -68,13 +63,13 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
 
   barItems: NavBarItem[] = [];
   features: BarItem[] = [
-    new BarItem(FEATURES.COMMENTS, 'question_answer'),
-    new BarItem(FEATURES.GROUP, 'equalizer'),
-    new BarItem(FEATURES.SURVEY, 'thumbs_up_down')
+    new BarItem(Features.COMMENTS, 'question_answer'),
+    new BarItem(Features.CONTENTS, 'equalizer'),
+    new BarItem(Features.SURVEY, 'thumbs_up_down')
   ];
   currentRouteIndex: number;
   isActive = true;
-  activeFeatures: string[] = [FEATURES.COMMENTS];
+  activeFeatures: string[] = [Features.COMMENTS];
   tooFewFeatures = false;
   group: ContentGroup;
   groupName: string;
@@ -128,7 +123,7 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
     this.changeIndicator = this.globalStorageService.getItem(STORAGE_KEYS.FEATURE_NEWS);
     this.route.data.subscribe(data => {
       if (!data.room.settings['feedbackLocked']) {
-        this.activeFeatures.push(FEATURES.SURVEY);
+        this.activeFeatures.push(Features.SURVEY);
       }
       this.role = data.viewRole;
       this.shortId = data.room.shortId;
@@ -148,7 +143,7 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
             if (stats.groupStats) {
               this.groupName = stats.groupStats[0].groupName;
               this.setGroupInSessionStorage(this.groupName);
-              this.activeFeatures.splice(1, 0, FEATURES.GROUP);
+              this.activeFeatures.splice(1, 0, Features.CONTENTS);
             } else {
               // Initialize storage item with empty string if there are no groups yet
               this.setGroupInSessionStorage('');
@@ -161,7 +156,7 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
           // Checking if storage item is initialized with data
           if (group !== '') {
             this.groupName = group;
-            this.activeFeatures.splice(1, 0, FEATURES.GROUP);
+            this.activeFeatures.splice(1, 0, Features.CONTENTS);
           }
           this.getItems();
           this.roomStatsService.getStats(data.room.id, extendedView).subscribe(stats => {
@@ -187,14 +182,14 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
       this.feedbackSubscription = this.feedbackService.messageEvent.subscribe(message => {
         const type = JSON.parse(message.body).type;
         if (type === FeedbackMessageType.STARTED) {
-          this.activeFeatures.push(FEATURES.SURVEY);
+          this.activeFeatures.push(Features.SURVEY);
           this.changeIndicator.push(
-            new ChangeIndicator(FEATURES.SURVEY, true)
+            new ChangeIndicator(Features.SURVEY, true)
           );
           this.getItems();
-          this.toggleNews(FEATURES.SURVEY);
+          this.toggleNews(Features.SURVEY);
         } else if (type === FeedbackMessageType.STOPPED) {
-          const index = this.activeFeatures.indexOf(FEATURES.SURVEY);
+          const index = this.activeFeatures.indexOf(Features.SURVEY);
           if (this.currentRouteIndex !== index) {
             this.activeFeatures.splice(index, 1);
             this.changeIndicator.splice(index, 1);
@@ -211,7 +206,7 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
     for (const feature of this.features) {
       let url = this.getBaseUrl() + this.getFeatureUrl(feature.name);
       const featureIndex = this.activeFeatures.indexOf(feature.name);
-      if ((featureIndex > -1 || (feature.name === FEATURES.SURVEY && this.role === UserRole.CREATOR))
+      if ((featureIndex > -1 || (feature.name === Features.SURVEY && this.role === UserRole.CREATOR))
           && this.role !== UserRole.EXECUTIVE_MODERATOR) {
         this.barItems.push(
           new NavBarItem(
@@ -258,7 +253,7 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
 
   getFeatureUrl(feature: string): string {
     let url = feature;
-    if (this.groupName && feature === FEATURES.GROUP) {
+    if (this.groupName && feature === Features.CONTENTS) {
       url += this.getQuestionUrl(this.role, this.groupName);
     }
     return url;
@@ -295,7 +290,7 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
     const item = this.barItems[index];
     const url = item.url;
     if (url) {
-      if (item.name === FEATURES.GROUP) {
+      if (item.name === Features.CONTENTS) {
         const route = [this.routingService.getRoleString(this.role), 'room', this.shortId, 'group', this.groupName];
         if (this.role === UserRole.CREATOR) {
           route.push('statistics');
@@ -373,7 +368,7 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
   filterPublishedGroups(): boolean {
     this.contentGroups = this.contentGroups.filter(cg => cg.published);
     if (this.contentGroups.length === 0) {
-      const index = this.activeFeatures.indexOf(FEATURES.GROUP);
+      const index = this.activeFeatures.indexOf(Features.CONTENTS);
       if (index !== this.currentRouteIndex) {
         this.activeFeatures.splice(index, 1);
         this.changeIndicator.splice(index, 1);
@@ -403,8 +398,8 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
 
   updateGroupName(name: string) {
     this.groupName = name;
-    const groupBarIndex = this.getBarIndexOfFeature(FEATURES.GROUP);
-    this.barItems[groupBarIndex].url = `${this.getBaseUrl()}/${FEATURES.GROUP}/${this.getQuestionUrl(this.role, this.groupName)}`;
+    const groupBarIndex = this.getBarIndexOfFeature(Features.CONTENTS);
+    this.barItems[groupBarIndex].url = `${this.getBaseUrl()}/${Features.CONTENTS}/${this.getQuestionUrl(this.role, this.groupName)}`;
     this.setGroupInSessionStorage(this.groupName);
   }
 
@@ -430,7 +425,7 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
     if (this.noContentsPublished(currentPublished.firstContentPublished, currentPublished.lastContentPublished)
       || (!this.noContentsPublished(first, last)
       && !this.isAlreadyPublished(first, last))) {
-      this.toggleNews(FEATURES.GROUP);
+      this.toggleNews(Features.CONTENTS);
     }
     if (setNewState) {
       this.setPublishedState(first, last);
@@ -473,11 +468,11 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
           this.setGroup();
         }
       } else {
-        if (this.getBarIndexOfFeature(FEATURES.GROUP) === -1) {
-          this.activeFeatures.splice(1, 0, FEATURES.GROUP);
+        if (this.getBarIndexOfFeature(Features.CONTENTS) === -1) {
+          this.activeFeatures.splice(1, 0, Features.CONTENTS);
           this.getItems();
         }
-        this.toggleNews(FEATURES.GROUP);
+        this.toggleNews(Features.CONTENTS);
       }
     }
   }
