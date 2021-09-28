@@ -7,6 +7,7 @@
         {{ 'login.login-with' | translate }} {{ provider.title }}
       </button>
     </div>
+    <app-form-header [text]="'login.welcome' | translate"></app-form-header>
     <ng-container *ngIf="passwordLoginEnabled">
       <ng-container *ngIf="ssoProviders.length > 0">
         <p>{{ 'login.or' | translate }}</p>
