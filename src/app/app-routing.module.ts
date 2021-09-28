@@ -14,6 +14,7 @@ import { ApiConfigResolver } from './resolver/api-config.resolver';
 import { HeaderComponent } from './components/shared/header/header.component';
 import { FooterComponent } from './components/shared/footer/footer.component';
 import { DemoRoomGuard } from './guards/demo-room.guard';
+import { UserProfileComponent } from './components/shared/user-profile/user-profile.component';
 
 const routes: Routes = [
   {
@@ -54,6 +55,11 @@ const routes: Routes = [
     path: 'import',
     canActivate: [AuthenticationGuard],
     component: ImportComponent
+  },
+
+  {
+    path: 'account',
+    component: UserProfileComponent
   },
   {
     path: 'demo',

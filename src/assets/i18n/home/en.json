@@ -51,7 +51,7 @@
     "account-deleted": "Your account has been deleted.",
     "back": "Back",
     "admin-area": "Administration",
-    "delete-account": "Delete account",
+    "user-profile": "My account",
     "demo": "Introduction",
     "english": "English",
     "german": "German",
@@ -195,6 +195,20 @@
     "terms": "terms of use",
     "please-accept": "You must agree to the terms of use to register.",
     "info": "Create your {{accountService}} account to save rooms permanently and manage them on multiple devices."
+  },
+  "user-profile": {
+    "a11y-message": "You are now in the account page.",
+    "username": "Username",
+    "first-name": "First name",
+    "last-name": "Last name",
+    "enter-first-name": "Enter your first name",
+    "enter-last-name": "Enter your last name",
+    "organization": "Organization",
+    "enter-institution": "Enter your institution",
+    "department": "Department",
+    "enter-department": "Enter your department",
+    "delete-account": "Delete account",
+    "delete-account-info": "If you delete your account, all the rooms you created will be deleted."
   },
   "room-list": {
     "a11y-join-room": "Enter the room {{room}} with the number {{id}} in the role {{role}}",
