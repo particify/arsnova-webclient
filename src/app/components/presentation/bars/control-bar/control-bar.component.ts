@@ -25,6 +25,8 @@ import { MatMenuTrigger } from '@angular/material/menu';
 import { ContentService } from '../../../../services/http/content.service';
 import { Content } from '../../../../models/content';
 import { DialogService } from '../../../../services/util/dialog.service';
+import { ContentMessages } from '../../../../models/events/content-messages.enum';
+import { ContentType } from '../../../../models/content-type.enum';
 
 export class KeyNavBarItem extends NavBarItem {
   key: string;
@@ -102,6 +104,7 @@ export class ControlBarComponent extends NavBarComponent implements OnInit, OnDe
     new KeyNavBarItem('zoom-in', 'zoom_in', '', '+'),
     new KeyNavBarItem('zoom-out', 'zoom_out', '', '-')
   ];
+  moreItem: KeyNavBarItem = new KeyNavBarItem('more', 'more_horiz', '', 'm');
 
   cursorTimer;
   barTimer;
@@ -113,6 +116,7 @@ export class ControlBarComponent extends NavBarComponent implements OnInit, OnDe
 
   multipleRounds = false;
   contentRounds = new Map<string, number>();
+  ContentType: typeof ContentType = ContentType;
 
   constructor(
     protected router: Router,
@@ -215,7 +219,7 @@ export class ControlBarComponent extends NavBarComponent implements OnInit, OnDe
       this.surveyStarted = state === 'started';
       this.setSurveyState();
     });
-    this.eventService.on<any>('ContentStepStateChanged').subscribe(state => {
+    this.eventService.on<any>(ContentMessages.STEP_STATE_CHANGED).subscribe(state => {
       this.contentStepState = state.position;
       this.contentIndex = state.index;
       this.content = state.content;
@@ -248,7 +252,7 @@ export class ControlBarComponent extends NavBarComponent implements OnInit, OnDe
     this.eventService.on<string>(event.type).subscribe(contentGroupId => {
       this.changeGroup(this.contentGroups.filter(cg => cg.id === contentGroupId)[0]);
     });
-    this.eventService.on<boolean>('MultipleContentRounds').subscribe(multipleRounds => {
+    this.eventService.on<boolean>(ContentMessages.MULTIPLE_ROUNDS).subscribe(multipleRounds => {
       this.multipleRounds = multipleRounds;
     })
   }
@@ -442,17 +446,14 @@ export class ControlBarComponent extends NavBarComponent implements OnInit, OnDe
         } as Hotkey)),
       ).subscribe((h: Hotkey) => this.hotkeyService.registerHotkey(h, this.hotkeyRefs))
     );
-    this.translateService.get('control-bar.more').subscribe(t =>
-      this.hotkeyService.registerHotkey({
-        key: 'm',
-        action: () => this.toggleMoreMenu(),
-        actionTitle: t
-      }, this.hotkeyRefs)
-    );
   }
 
-  toggleMoreMenu() {
-    this.moreMenuTrigger.openMenu();
+  hasFormatAnswer(format: ContentType): boolean {
+    return ![ContentType.SLIDE, ContentType.FLASHCARD].includes(format);
+  }
+
+  hasFormatRounds(format: ContentType): boolean {
+    return [ContentType.CHOICE, ContentType.SCALE, ContentType.BINARY].includes(format);
   }
 
   editContent() {
@@ -460,7 +461,7 @@ export class ControlBarComponent extends NavBarComponent implements OnInit, OnDe
   }
 
   deleteContentAnswers() {
-    this.eventService.on<string>('AnswersDeleted').subscribe(contentId => {
+    this.eventService.on<string>(ContentMessages.ANSWERS_DELETED).subscribe(contentId => {
       this.content.state.round = 1;
       this.resetAnswerEvent.next(this.content.id);
       this.changeRound(0);
@@ -480,7 +481,7 @@ export class ControlBarComponent extends NavBarComponent implements OnInit, OnDe
       contentIndex: this.contentIndex,
       round: round
     };
-    this.eventService.broadcast('ContentRoundChanged', body);
+    this.eventService.broadcast(ContentMessages.ROUND_CHANGED, body);
   }
 
   afterRoundStarted(content: Content) {

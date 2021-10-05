@@ -21,6 +21,7 @@ import { RoomStatsService } from '../../../../services/http/room-stats.service';
 import { HotkeyService } from '../../../../services/util/hotkey.service';
 import { MatButton } from '@angular/material/button';
 import { ContentType } from '../../../../models/content-type.enum';
+import { ContentMessages } from '../../../../models/events/content-messages.enum';
 
 @Component({
   selector: 'app-group-content',
@@ -87,7 +88,7 @@ export class GroupContentComponent extends ContentListBaseComponent implements O
       });
     });
     this.translateService.use(this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE));
-    this.eventService.on('AnswersDeleted').subscribe(contentId => {
+    this.eventService.on(ContentMessages.ANSWERS_DELETED).subscribe(contentId => {
       const content = this.contents.find(c => c.id === contentId);
       content.state.round = 1;
       this.resetAnswerEvent.next(content.id);

@@ -15,6 +15,7 @@ import { RemoteMessage } from '../../../../models/events/remote/remote-message.e
 import { UiState } from '../../../../models/events/remote/ui-state-changed-event';
 import { ContentInitializedEvent } from '../../../../models/events/remote/content-initialized-event';
 import { ContentFocusState } from '../../../../models/events/remote/content-focus-state';
+import { ContentMessages } from '../../../../models/events/content-messages.enum';
 
 @Component({
   selector: 'app-statistic-content',
@@ -75,7 +76,7 @@ export class StatisticContentComponent implements OnInit {
       this.broadcastRoundState();
     });
     this.broadcastRoundState();
-    this.eventService.on<any>('ContentRoundChanged').subscribe(roundData => {
+    this.eventService.on<any>(ContentMessages.ROUND_CHANGED).subscribe(roundData => {
       if (this.index === roundData.contentIndex) {
         this.changeRound(roundData.round);
       }
@@ -103,7 +104,7 @@ export class StatisticContentComponent implements OnInit {
 
   broadcastRoundState() {
     if (this.active) {
-      this.eventService.broadcast('MultipleContentRounds', this.multipleRounds);
+      this.eventService.broadcast(ContentMessages.MULTIPLE_ROUNDS, this.multipleRounds);
     }
   }
 
