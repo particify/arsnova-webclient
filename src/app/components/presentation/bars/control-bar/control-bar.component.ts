@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { NavBarComponent, NavBarItem } from '../../../shared/bars/nav-bar/nav-bar.component';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RoutingService } from '../../../../services/util/routing.service';
@@ -19,9 +19,7 @@ import { Hotkey, HotkeyService } from '../../../../services/util/hotkey.service'
 import { HotkeyAction } from '../../../../directives/hotkey.directive';
 import { TranslateService } from '@ngx-translate/core';
 import { RemoteMessage } from '../../../../models/events/remote/remote-message.enum';
-import { ContentGroupEvent } from '../../../../models/events/remote/content-group-event';
 import { Features } from '../../../../models/features.enum';
-import { MatMenuTrigger } from '@angular/material/menu';
 import { ContentService } from '../../../../services/http/content.service';
 import { Content } from '../../../../models/content';
 import { DialogService } from '../../../../services/util/dialog.service';
@@ -52,8 +50,6 @@ export class ControlBarComponent extends NavBarComponent implements OnInit, OnDe
   @Input() shortId: string;
   @Output() activeFeature: EventEmitter<string> = new EventEmitter<string>();
   @Output() activeGroup: EventEmitter<string> = new EventEmitter<string>();
-
-  @ViewChild('moreMenuTrigger') moreMenuTrigger: MatMenuTrigger;
 
   isLoading = true;
   destroyed$ = new Subject<void>();
@@ -248,10 +244,10 @@ export class ControlBarComponent extends NavBarComponent implements OnInit, OnDe
       this.group = updatedContentGroup;
       this.checkIfContentLocked();
     });
-    const event = new ContentGroupEvent('');
-    this.eventService.on<string>(event.type).subscribe(contentGroupId => {
+    this.eventService.on<string>(RemoteMessage.CONTENT_GROUP_UPDATED).subscribe(contentGroupId => {
       this.changeGroup(this.contentGroups.filter(cg => cg.id === contentGroupId)[0]);
     });
+    this.eventService.on<string>(RemoteMessage.CHANGE_FEATURE_ROUTE).subscribe(feature => this.updateFeature(feature));
     this.eventService.on<boolean>(ContentMessages.MULTIPLE_ROUNDS).subscribe(multipleRounds => {
       this.multipleRounds = multipleRounds;
     })
@@ -309,20 +305,22 @@ export class ControlBarComponent extends NavBarComponent implements OnInit, OnDe
   }
 
   updateFeature(feature: string) {
-    if (feature) {
-      this.getCurrentRouteIndex(feature);
-    } else {
-      this.currentRouteIndex = undefined;
+    if (this.currentRouteIndex !== this.barItems.map(i => i.name).indexOf(feature)) {
+      if (feature) {
+        this.getCurrentRouteIndex(feature);
+      } else {
+        this.currentRouteIndex = undefined;
+      }
+      this.activeFeature.emit(feature);
+      if (feature === Features.CONTENTS) {
+        this.setArrowsState(this.contentStepState);
+      } else if (feature === Features.COMMENTS) {
+        this.setArrowsState(this.commentStepState);
+      }
+      setTimeout(() => {
+        this.sendControlBarState();
+      }, 300);
     }
-    this.activeFeature.emit(feature);
-    if (feature === Features.CONTENTS) {
-      this.setArrowsState(this.contentStepState);
-    } else if (feature === Features.COMMENTS) {
-      this.setArrowsState(this.commentStepState);
-    }
-    setTimeout(() => {
-      this.sendControlBarState();
-    }, 300);
   }
 
   getCurrentRouteIndex(feature?: string) {
@@ -443,7 +441,7 @@ export class ControlBarComponent extends NavBarComponent implements OnInit, OnDe
           key: item.key,
           action: actions[item.name],
           actionTitle: t
-        } as Hotkey)),
+        } as Hotkey))
       ).subscribe((h: Hotkey) => this.hotkeyService.registerHotkey(h, this.hotkeyRefs))
     );
   }

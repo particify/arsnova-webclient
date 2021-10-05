@@ -19,6 +19,7 @@ import { EventService } from '../../../services/util/event.service';
 import { HotkeyAction } from '../../../directives/hotkey.directive';
 import { HotkeyService } from '../../../services/util/hotkey.service';
 import { RemoteMessage } from '../../../models/events/remote/remote-message.enum';
+import { SurveyFocusState } from '../../../models/events/remote/survey-focus-state';
 
 @Component({
   selector: 'app-survey-page',
@@ -245,14 +246,18 @@ export class SurveyPageComponent implements OnInit, OnDestroy, AfterContentInit 
           this.loadConfig(room);
           this.isClosed = false;
         });
-        this.eventService.broadcast(RemoteMessage.UPDATE_SURVEY_STATE, true);
-        this.eventService.broadcast(RemoteMessage.SURVEY_STATE_CHANGED, 'started');
+        if (this.isCreator) {
+          this.eventService.broadcast(RemoteMessage.CHANGE_SURVEY_STATE, new SurveyFocusState(true));
+          this.eventService.broadcast(RemoteMessage.SURVEY_STATE_CHANGED, 'started');
+        }
         break;
       case FeedbackMessageType.STOPPED:
         this.room.settings['feedbackLocked'] = true;
         this.isClosed = true;
-        this.eventService.broadcast(RemoteMessage.UPDATE_SURVEY_STATE, false);
-        this.eventService.broadcast(RemoteMessage.SURVEY_STATE_CHANGED, 'stopped');
+        if (this.isCreator) {
+          this.eventService.broadcast(RemoteMessage.CHANGE_SURVEY_STATE, new SurveyFocusState(false));
+          this.eventService.broadcast(RemoteMessage.SURVEY_STATE_CHANGED, 'stopped');
+        }
         break;
       case FeedbackMessageType.STATUS:
         this.isClosed = payload.closed;

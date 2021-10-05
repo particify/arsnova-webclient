@@ -1,13 +1,4 @@
-import {
-  Component,
-  ElementRef,
-  EventEmitter,
-  Input,
-  OnDestroy,
-  OnInit,
-  Output,
-  ViewChild
-} from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { Comment } from '../../../models/comment';
 import { CommentService } from '../../../services/http/comment.service';
 import { TranslateService } from '@ngx-translate/core';
@@ -32,6 +23,7 @@ import { CommentSettingsService } from '../../../services/http/comment-settings.
 import { Location } from '@angular/common';
 import { HotkeyService } from '../../../services/util/hotkey.service';
 import { RemoteMessage } from '../../../models/events/remote/remote-message.enum';
+import { CommentFocusState } from '../../../models/events/remote/comment-focus-state';
 
 // Using lowercase letters in enums because they we're also used for parsing incoming WS-messages
 
@@ -333,24 +325,26 @@ export class CommentListComponent implements OnInit, OnDestroy {
       }
     }
     this.setTimePeriod(this.period);
-    if (this.isPresentation && this.isLoading) {
-      this.initPresentation();
+    if (this.isLoading) {
+      this.initSubscriptions();
     }
     this.isLoading = false;
   }
 
-  initPresentation() {
-    if (this.displayComments.length > 0) {
-      this.goToFirstComment();
-    }
-    this.eventService.on<string>('CommentSortingChanged').subscribe(sort => {
-      this.sortComments(sort);
-      setTimeout(() => {
+  initSubscriptions() {
+    if (this.isPresentation) {
+      if (this.displayComments.length > 0) {
         this.goToFirstComment();
+      }
+      this.eventService.on<string>('CommentSortingChanged').subscribe(sort => {
+        this.sortComments(sort);
+        setTimeout(() => {
+          this.goToFirstComment();
         }, 300);
-    });
+      });
+    }
     let comment;
-    this.eventService.on<string>('CommentIdChanged').subscribe(commentId => {
+    this.eventService.on<string>(RemoteMessage.COMMENT_ID_CHANGED).subscribe(commentId => {
       if (this.activeComment?.id !== commentId && comment?.id !== commentId) {
         comment = this.displayComments.find(c => c.id === commentId);
         let timeout = 0;
@@ -361,9 +355,11 @@ export class CommentListComponent implements OnInit, OnDestroy {
           comment = this.displayComments.find(c => c.id === commentId);
         }
         comment.highlighted = true;
-        setTimeout(() => {
-          this.updateCurrentComment(comment, true);
-        }, timeout);
+        if (this.viewRole === UserRole.CREATOR) {
+          setTimeout(() => {
+            this.updateCurrentComment(comment, true);
+          }, timeout);
+        }
       }
     });
   }
@@ -714,8 +710,10 @@ export class CommentListComponent implements OnInit, OnDestroy {
     }
     this.updateActiveComment.emit(comment);
     const index = this.getIndexOfComment(comment);
-    const state = new CommentPresentationState(this.getStepState(index),comment.id);
-    this.eventService.broadcast(RemoteMessage.UPDATE_COMMENT_STATE, state);
+    const stepState = new CommentPresentationState(this.getStepState(index),comment.id);
+    this.eventService.broadcast(RemoteMessage.UPDATE_COMMENT_STATE, stepState);
+    const remoteState = new CommentFocusState(comment.id);
+    this.eventService.broadcast(RemoteMessage.CHANGE_COMMENTS_STATE, remoteState);
     if (!this.isLoading && this.isPresentation) {
       this.scrollToComment(index);
       this.announceCommentPresentation(index);

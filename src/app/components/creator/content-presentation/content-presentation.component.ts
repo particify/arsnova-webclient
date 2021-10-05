@@ -18,9 +18,6 @@ import { ContentType } from '../../../models/content-type.enum';
 import { HotkeyService } from '../../../services/util/hotkey.service';
 import { RemoteMessage } from '../../../models/events/remote/remote-message.enum';
 import { ContentFocusState } from '../../../models/events/remote/content-focus-state';
-import { ContentGroupEvent } from '../../../models/events/remote/content-group-event';
-import { ContentGroupChangedEvent } from '../../../models/events/remote/content-group-changed-event';
-import { ContentChangedEvent } from '../../../models/events/remote/content-changed-event';
 import { ContentMessages } from '../../../models/events/content-messages.enum';
 
 @Component({
@@ -112,8 +109,7 @@ export class ContentPresentationComponent implements OnInit, OnDestroy {
             }
           }
         } else {
-          const event = new ContentGroupEvent(state.contentGroupId);
-          this.eventService.broadcast(event.type, event.payload.contentGroupId);
+          this.eventService.broadcast(RemoteMessage.CONTENT_GROUP_UPDATED, state.contentGroupId);
         }
       });
       this.translateService.get('control-bar.publish-or-lock-content').subscribe(t =>
@@ -143,8 +139,8 @@ export class ContentPresentationComponent implements OnInit, OnDestroy {
             setTimeout(() => {
               this.stepper.init(this.contentIndex, this.contents.length);
               if (this.isPresentation && !initial) {
-                const event = new ContentGroupChangedEvent(this.contentGroup.id);
-                this.eventService.broadcast(event.type, event.payload.contentGroupId);
+                const remoteState = new ContentFocusState(this.contents[this.currentStep].id, this.contentGroup.id, false, false);
+                this.eventService.broadcast(RemoteMessage.CHANGE_CONTENTS_STATE, remoteState);
               }
             }, 100);
           }
@@ -180,8 +176,8 @@ export class ContentPresentationComponent implements OnInit, OnDestroy {
     let urlTree;
     if (this.isPresentation) {
       urlTree = this.router.createUrlTree(['presentation', this.shortId, this.contentGroupName, urlIndex]);
-      const event = new ContentChangedEvent(this.contents[this.currentStep].id, this.contentGroup.id);
-      this.eventService.broadcast(event.type, event);
+      const remoteState = new ContentFocusState(this.contents[this.currentStep].id, this.contentGroup.id, null, null);
+      this.eventService.broadcast(RemoteMessage.CHANGE_CONTENTS_STATE, remoteState)
     } else {
       urlTree = this.router.createUrlTree(['creator/room', this.shortId, 'group', this.contentGroupName, 'statistics', urlIndex]);
     }

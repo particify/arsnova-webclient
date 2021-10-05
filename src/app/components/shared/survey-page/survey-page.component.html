@@ -1,5 +1,4 @@
 <app-nav-bar *ngIf="!isPresentation"></app-nav-bar>
-<lib-extension-point *ngIf="!isPresentation" extensionId="remote" [extensionData]="{roomId: roomId}"></lib-extension-point>
 <app-answer-count *ngIf="!isLoading && isPresentation" [count]="answerCount" [size]="'presentation'"></app-answer-count>
 <app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
 <div class="nav-bar-container" [ngClass]="{'full-height': isPresentation}">
