@@ -105,6 +105,9 @@ export class SurveyPageComponent implements OnInit, OnDestroy, AfterContentInit 
       });
       this.isLoading = false;
       if (this.isPresentation) {
+        if (!this.isClosed) {
+          this.sendStateChangeEvent(true);
+        }
         const scale = Math.max((Math.min(innerWidth, 2100)  / 1500), 1);
         document.getElementById('survey-card').style.transform = `scale(${scale})`;
       }
@@ -234,6 +237,10 @@ export class SurveyPageComponent implements OnInit, OnDestroy, AfterContentInit 
     this.wsFeedbackService.reset(this.roomId);
   }
 
+  sendStateChangeEvent(started: boolean) {
+    this.eventService.broadcast(RemoteMessage.CHANGE_SURVEY_STATE, new SurveyFocusState(started));
+  }
+
   parseIncomingMessage(message: Message) {
     const msg = JSON.parse(message.body);
     const payload = msg.payload;
@@ -247,7 +254,7 @@ export class SurveyPageComponent implements OnInit, OnDestroy, AfterContentInit 
           this.isClosed = false;
         });
         if (this.isCreator) {
-          this.eventService.broadcast(RemoteMessage.CHANGE_SURVEY_STATE, new SurveyFocusState(true));
+          this.sendStateChangeEvent(true);
           this.eventService.broadcast(RemoteMessage.SURVEY_STATE_CHANGED, 'started');
         }
         break;
@@ -255,7 +262,7 @@ export class SurveyPageComponent implements OnInit, OnDestroy, AfterContentInit 
         this.room.settings['feedbackLocked'] = true;
         this.isClosed = true;
         if (this.isCreator) {
-          this.eventService.broadcast(RemoteMessage.CHANGE_SURVEY_STATE, new SurveyFocusState(false));
+          this.sendStateChangeEvent(false);
           this.eventService.broadcast(RemoteMessage.SURVEY_STATE_CHANGED, 'stopped');
         }
         break;

@@ -40,6 +40,7 @@ export class StepperComponent extends CdkStepper implements OnInit, OnDestroy {
   @Input() completed: Map<number, boolean> = new Map<number, boolean>();
   @Input() isPresentation = false;
   @Input() i18nPrefix: string;
+  @Input() disabled = false;
   headerPos = 0;
   containerAnimationState = 'current';
   headerAnimationState = 'init';
@@ -109,22 +110,26 @@ export class StepperComponent extends CdkStepper implements OnInit, OnDestroy {
   }
 
   next(): void {
-    if (this.selectedIndex < this.listLength - 1) {
-      this.onClick(this.selectedIndex + 1);
-      setTimeout(() => {
-        document.getElementById('step').focus();
-      }, 300);
-    } else {
-      this.announceService.announce('statistic.a11y-no-more-questions');
+    if (!this.disabled) {
+      if (this.selectedIndex < this.listLength - 1) {
+        this.onClick(this.selectedIndex + 1);
+        setTimeout(() => {
+          document.getElementById('step').focus();
+        }, 300);
+      } else {
+        this.announceService.announce('statistic.a11y-no-more-questions');
+      }
     }
   }
 
   previous(): void {
-    if (this.selectedIndex > 0) {
-      this.onClick(this.selectedIndex - 1);
-      setTimeout(() => {
-        document.getElementById('step').focus();
-      }, 300);
+    if (!this.disabled) {
+      if (this.selectedIndex > 0) {
+        this.onClick(this.selectedIndex - 1);
+        setTimeout(() => {
+          document.getElementById('step').focus();
+        }, 300);
+      }
     }
   }
 

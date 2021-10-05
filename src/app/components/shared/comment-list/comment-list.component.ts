@@ -214,6 +214,9 @@ export class CommentListComponent implements OnInit, OnDestroy {
     this.activeComments$.subscribe(comments => {
       this.comments = comments;
       this.initRoom(reload);
+      if (this.isPresentation && this.comments.length === 0) {
+        this.sendCommentStateChange('NO_COMMENTS_YET');
+      }
     });
   }
 
@@ -354,11 +357,13 @@ export class CommentListComponent implements OnInit, OnDestroy {
           this.getDisplayComments();
           comment = this.displayComments.find(c => c.id === commentId);
         }
-        comment.highlighted = true;
-        if (this.viewRole === UserRole.CREATOR) {
-          setTimeout(() => {
-            this.updateCurrentComment(comment, true);
-          }, timeout);
+        if (comment) {
+          comment.highlighted = true;
+          if (this.viewRole === UserRole.CREATOR) {
+            setTimeout(() => {
+              this.updateCurrentComment(comment, true);
+            }, timeout);
+          }
         }
       }
     });
@@ -712,8 +717,7 @@ export class CommentListComponent implements OnInit, OnDestroy {
     const index = this.getIndexOfComment(comment);
     const stepState = new CommentPresentationState(this.getStepState(index),comment.id);
     this.eventService.broadcast(RemoteMessage.UPDATE_COMMENT_STATE, stepState);
-    const remoteState = new CommentFocusState(comment.id);
-    this.eventService.broadcast(RemoteMessage.CHANGE_COMMENTS_STATE, remoteState);
+    this.sendCommentStateChange(comment.id);
     if (!this.isLoading && this.isPresentation) {
       this.scrollToComment(index);
       this.announceCommentPresentation(index);
@@ -748,6 +752,11 @@ export class CommentListComponent implements OnInit, OnDestroy {
         block: 'center'
       }
     );
+  }
+
+  sendCommentStateChange(commentId: string) {
+    const remoteState = new CommentFocusState(commentId);
+    this.eventService.broadcast(RemoteMessage.CHANGE_COMMENTS_STATE, remoteState);
   }
 
   announceCommentPresentation(index: number) {
