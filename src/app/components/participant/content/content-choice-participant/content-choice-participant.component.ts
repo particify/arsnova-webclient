@@ -126,6 +126,28 @@ export class ContentChoiceParticipantComponent extends ContentParticipantBaseCom
     }
   }
 
+  isCorrectOptionVisible(index: number) {
+    return this.isChoice && !this.hasAbstained && this.correctOptionsPublished && this.alreadySent && (this.isAnswerOptionSelected(index) ||this.correctOptionIndexes.includes(index))
+  }
+
+  checkOption(index: number, checkCorrect: boolean) {
+    if (this.isChoice && this.isAnswerOptionSelected(index)) {
+      if (checkCorrect) {
+        return this.correctOptionIndexes.includes(index);
+      } else {
+        return !this.correctOptionIndexes.includes(index);
+      }
+    }
+  }
+
+  isAnswerOptionSelected(index: number) {
+    return this.answer?.selectedChoiceIndexes.includes(index);
+  }
+
+  isAnswerOptionCorrect(index: number) {
+    return this.correctOptionIndexes.includes(index);
+  }
+
   checkAnswer(selectedAnswers: number[]) {
     if (this.correctOptionIndexes.length === selectedAnswers.length &&
       this.correctOptionIndexes.every((value, index) => value === selectedAnswers[index])) {
