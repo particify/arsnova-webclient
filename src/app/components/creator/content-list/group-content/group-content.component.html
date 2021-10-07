@@ -85,6 +85,11 @@
                 {{ 'import.import' | translate }}
               </button>
               <mat-divider></mat-divider>
+              <button mat-menu-item (click)="deleteAllAnswers()" [disabled]="contents.length === 0"
+                      attr.aria-label="{{ 'content.a11y-delete-all-answers' | translate }}">
+                <mat-icon>clear_all</mat-icon>
+                <span>{{ 'content.delete-answers' | translate}}</span>
+              </button>
               <button mat-menu-item (click)="deleteGroup()">
                 <mat-icon class="delete">delete_forever</mat-icon>
                 {{ 'content.delete-content-group' | translate }}

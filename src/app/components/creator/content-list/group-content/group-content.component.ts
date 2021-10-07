@@ -301,6 +301,14 @@ export class GroupContentComponent extends ContentListBaseComponent implements O
     });
   }
 
+  deleteAllAnswers() {
+    this.contentService.showDeleteAllAnswersDialog(this.contentGroup).subscribe(() => {
+      this.translateService.get('content.all-answers-deleted').subscribe(msg => {
+        this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
+      });
+    });
+  }
+
   toggleAnswersPublished(content: Content, answersPublished?: boolean) {
     if (answersPublished !== undefined) {
       content.state.answersPublished = answersPublished;
