@@ -11,5 +11,19 @@
 
 .mat-list-item {
   margin-bottom: 16px;
+  padding: 0 0.5em 0 1em!important;
+  border-width: 2px;
+  border-style: solid;
+  border-radius: 5px;
+  &:not(.correct-answer):not(.wrong-answer) {
+    border-color: var(--surface);
+  }
 }
 
+.correct-answer {
+  border-color: var(--green);
+}
+
+.wrong-answer {
+  border-color: var(--red);
+}
