@@ -78,6 +78,6 @@ export class StatisticsPageComponent implements OnInit {
   }
 
   showDeleteDialog() {
-    this.statisticList.showDeleteAnswerDialog();
+    this.statisticList.deleteAllAnswers();
   }
 }
