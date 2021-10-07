@@ -48,6 +48,7 @@ export class ContentCreationComponent implements OnInit, OnDestroy {
   displayAnswers: DisplayAnswer[] = [];
   answerLabels: string[];
   isEditMode = false;
+  noAnswersYet = false;
 
   constructor(protected contentService: ContentService,
               protected notificationService: NotificationService,
@@ -98,6 +99,16 @@ export class ContentCreationComponent implements OnInit, OnDestroy {
   }
 
   initContentForEditing() {}
+
+  checkIfAnswersExist() {
+    this.contentService.getAnswer(this.content.roomId, this.content.id).subscribe(answer => {
+      const answerCount = answer.roundStatistics[0].independentCounts.reduce(function(a, b) {
+        return a + b;
+      });
+      this.noAnswersYet = answerCount === 0;
+      this.isLoading = false;
+    });
+  }
 
   initContentChoiceEditBase(): DisplayAnswer[] {
     this.content = (this.editContent as ContentChoice);
