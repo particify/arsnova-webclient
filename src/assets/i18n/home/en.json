@@ -194,7 +194,7 @@
     "accept-2": ".",
     "terms": "terms of use",
     "please-accept": "You must agree to the terms of use to register.",
-    "info": "Create your {{accountService}} account to save rooms permanently and manage them on multiple devices."
+    "info": "Create your {{accountService}} account"
   },
   "user-profile": {
     "a11y-message": "You are now in the account page.",
