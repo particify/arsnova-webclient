@@ -24,7 +24,6 @@ export class ContentChoiceCreationComponent extends ContentCreationComponent imp
   newAnswerOptionChecked = false;
   newAnswerOptionLabel = '';
   isAnswerEdit = -1;
-  noAnswersYet = false;
 
   constructor(
     protected contentService: ContentService,
@@ -59,13 +58,7 @@ export class ContentChoiceCreationComponent extends ContentCreationComponent imp
     this.displayAnswers = this.initContentChoiceEditBase();
     this.multipleCorrectAnswers = (this.content as ContentChoice).multiple;
     this.noCorrectAnswers = !(this.content as ContentChoice).correctOptionIndexes;
-    this.contentService.getAnswer(this.content.roomId, this.content.id).subscribe(answer => {
-      const answerCount = answer.roundStatistics[0].independentCounts.reduce(function(a, b) {
-        return a + b;
-      });
-      this.noAnswersYet = answerCount === 0;
-      this.isLoading = false;
-    });
+    this.checkIfAnswersExist();
   }
 
   addAnswer($event) {

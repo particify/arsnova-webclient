@@ -56,7 +56,7 @@ export class ContentScaleCreationComponent extends ContentCreationComponent impl
 
   initContentForEditing() {
     this.displayAnswers = this.initContentChoiceEditBase();
-    this.isLoading = false;
+    this.checkIfAnswersExist();
   }
 
   updateOptionLabels() {

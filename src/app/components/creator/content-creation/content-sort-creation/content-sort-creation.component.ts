@@ -24,7 +24,6 @@ export class ContentSortCreationComponent extends ContentCreationComponent imple
 
   isAnswerEdit = -1;
   newAnswer = '';
-  noAnswersYet = false;
 
   constructor(
     protected contentService: ContentService,
@@ -57,13 +56,7 @@ export class ContentSortCreationComponent extends ContentCreationComponent imple
 
   initContentForEditing() {
     this.displayAnswers = this.initContentChoiceEditBase();
-    this.contentService.getAnswer(this.content.roomId, this.content.id).subscribe(answer => {
-      const answerCount = answer.roundStatistics[0].independentCounts.reduce(function(a, b) {
-        return a + b;
-      });
-      this.noAnswersYet = answerCount === 0;
-      this.isLoading = false;
-    });
+    this.checkIfAnswersExist();
   }
 
   drop(event: CdkDragDrop<String[]>) {
