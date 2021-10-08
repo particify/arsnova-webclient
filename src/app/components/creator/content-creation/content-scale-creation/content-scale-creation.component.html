@@ -1,9 +1,9 @@
 <div>
-  <mat-checkbox [(ngModel)]="neutralOption" [disabled]="isEditMode && !noAnswersYet">Neutrale Option anbieten</mat-checkbox>
+  <mat-checkbox [(ngModel)]="neutralOption" [disabled]="isEditMode && !noAnswersYet">{{ 'content.offer-neutral-option' | translate }}</mat-checkbox>
   <div style="padding: 0 16px">
     <div>
       <mat-form-field appearance="outline" class="no-field-hint" style="margin-top: 10px">
-        <mat-label>Antwortvorlage</mat-label>
+        <mat-label>{{ 'content.answer-template' | translate }}</mat-label>
         <mat-select [(value)]="selectedTemplate" [disabled]="isEditMode && !noAnswersYet">
           <mat-option *ngFor="let template of templates; let i = index" [value]="template">{{ templateLabels[i] | translate }}</mat-option>
         </mat-select>

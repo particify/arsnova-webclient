@@ -313,6 +313,8 @@
     "no-correct-answer": "Do not set correct answers",
     "format-not-supported": "This format is currently not supported.",
     "abstentions-allowed": "Allow abstentions",
+    "offer-neutral-option": "Offer neutral option",
+    "answer-template": "Answer template",
     "flashcard-front": "Front",
     "flashcard-back": "Back",
     "group-settings": "Settings",

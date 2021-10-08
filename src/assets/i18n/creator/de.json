@@ -313,6 +313,8 @@
     "no-correct-answer": "Keine richtigen Antworten festlegen",
     "format-not-supported": "Dieses Format wird derzeit nicht unterstützt.",
     "abstentions-allowed": "Enthaltungen erlauben",
+    "offer-neutral-option": "Neutrale Option anbieten",
+    "answer-template": "Antwortvorlage",
     "flashcard-front": "Vorderseite",
     "flashcard-back": "Rückseite",
     "group-settings": "Einstellungen",
