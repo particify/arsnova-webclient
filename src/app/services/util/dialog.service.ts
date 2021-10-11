@@ -107,8 +107,8 @@ export class DialogService {
       panelClass: 'screenDialog',
       data: {
         shortId: shortId,
-        passwordProtected: passwordProtected,
-        roomId: roomId
+        roomId: roomId,
+        passwordProtected: passwordProtected
       }
     });
   }

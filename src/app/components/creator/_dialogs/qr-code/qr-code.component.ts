@@ -7,14 +7,24 @@ import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { ApiConfigService } from '../../../../services/http/api-config.service';
 
+
+export interface QrCodeData {
+  shortId: string;
+  roomId: string;
+  passwordProtected: boolean;
+}
+
 @Component({
   selector: 'app-qr-code',
   templateUrl: './qr-code.component.html',
   styleUrls: ['./qr-code.component.scss']
 })
+
 export class QrCodeComponent implements OnInit, OnDestroy {
 
   @Input() shortId: string;
+  @Input() roomId: string;
+  @Input() passwordProtected: boolean;
 
   qrWidth: number;
   bgColor: string;
@@ -23,9 +33,10 @@ export class QrCodeComponent implements OnInit, OnDestroy {
   qrUrl: string;
   displayUrl: string;
   useJoinUrl = false;
+  isDialog = true;
 
   constructor(public dialogRef: MatDialogRef<QrCodeComponent>,
-              @Inject(MAT_DIALOG_DATA) public data: any,
+              @Inject(MAT_DIALOG_DATA) public data: QrCodeData,
               protected notification: NotificationService,
               protected translateService: TranslateService,
               private themeService: ThemeService,
@@ -33,7 +44,22 @@ export class QrCodeComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    const shortId = this.shortId || this.data.shortId;
+    if (this.shortId) {
+      this.isDialog = false;
+    } else {
+      this.shortId = this.data.shortId;
+      this.passwordProtected = this.data.passwordProtected;
+      this.roomId = this.data.roomId;
+    }
+    this.initQrCode();
+    if (this.isDialog) {
+      setTimeout(() => {
+        document.getElementById('qr-message').focus();
+      }, 700);
+    }
+  }
+
+  initQrCode() {
     const minSize = Math.min(innerWidth, innerHeight);
     this.qrWidth = minSize * (innerWidth > 1279 ? 0.65 : 0.5);
     this.themeService.getTheme().pipe(takeUntil(this.destroyed$)).subscribe(theme => {
@@ -45,19 +71,14 @@ export class QrCodeComponent implements OnInit, OnDestroy {
       let url;
       if (config.ui.links?.join) {
         url = config.ui.links.join.url;
-        this.displayUrl = url.replace(/^https?:\/\//, '') + shortId;
+        this.displayUrl = url.replace(/^https?:\/\//, '') + this.shortId;
         this.useJoinUrl = true;
       } else {
         url = document.baseURI + 'join/';
         this.displayUrl = document.baseURI.replace(/^https?:\/\//, '').replace(/\/$/, '');
       }
-      this.qrUrl = url + shortId;
+      this.qrUrl = url + this.shortId;
     });
-    if (!this.shortId) {
-      setTimeout(() => {
-        document.getElementById('qr-message').focus();
-      }, 700);
-    }
   }
 
   ngOnDestroy() {

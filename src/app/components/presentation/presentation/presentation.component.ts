@@ -16,6 +16,7 @@ export class PresentationComponent implements OnInit {
 
   shortId: string;
   roomId: string;
+  passwordProtected: boolean;
   lastGroup: string;
   featureString: string;
   groupChanged: EventEmitter<string> = new EventEmitter<string>();
@@ -40,6 +41,7 @@ export class PresentationComponent implements OnInit {
       this.route.data.subscribe(data => {
         this.featureString = data.feature;
         this.roomId = data.room.id;
+        this.passwordProtected = data.room.passwordProtected;
         if (this.lastGroup === undefined) {
           this.lastGroup = this.globalStorageService.getItem(STORAGE_KEYS.LAST_GROUP);
           if (this.lastGroup === undefined) {
