@@ -1,6 +1,6 @@
 import { TestBed, inject } from '@angular/core/testing';
 
-import { ContentService } from '@arsnova/app/services/http/content.service';
+import { UserService } from '@arsnova/app/services/http/user.service';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { EventService } from '@arsnova/app/services/util/event.service';
 import { MockEventService, MockNotificationService, MockTranslateService } from '@arsnova/testing/test-helpers';
@@ -21,11 +21,11 @@ class MockCachingService {
   }
 }
 
-describe('ContentService', () => {
+describe('UserService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
-        ContentService,
+        UserService,
         {
           provide: EventService,
           useClass: MockEventService
@@ -53,7 +53,7 @@ describe('ContentService', () => {
     });
   });
 
-  it('should be created', inject([ContentService], (service: ContentService) => {
+  it('should be created', inject([UserService], (service: UserService) => {
     expect(service).toBeTruthy();
   }));
 });

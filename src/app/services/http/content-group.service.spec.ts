@@ -1,18 +1,36 @@
 import { TestBed, inject } from '@angular/core/testing';
 
-import { ContentService } from '@arsnova/app/services/http/content.service';
+import { ContentGroupService } from '@arsnova/app/services/http/content-group.service';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { EventService } from '@arsnova/app/services/util/event.service';
-import { MockEventService, MockNotificationService, MockTranslateService } from '@arsnova/testing/test-helpers';
+import { MockEventService, MockGlobalStorageService, MockNotificationService, MockTranslateService } from '@arsnova/testing/test-helpers';
 import { TranslateService } from '@ngx-translate/core';
 import { NotificationService } from '@arsnova/app/services/util/notification.service';
 import { WsConnectorService } from '@arsnova/app/services/websockets/ws-connector.service';
 import { Cache, CachingService } from '@arsnova/app/services/util/caching.service';
 import { Injectable } from '@angular/core';
+import { AuthenticationService } from '@arsnova/app/services/http/authentication.service';
+import { GlobalStorageService } from '@arsnova/app/services/util/global-storage.service';
+import { FeedbackService } from '@arsnova/app/services/http/feedback.service';
+import { RoomStatsService } from '@arsnova/app/services/http/room-stats.service';
 
 @Injectable()
 class MockWsConnectorService {
 }
+
+@Injectable()
+class MockAuthenticationService {
+  getCurrentAuthentication(){}
+}
+
+@Injectable()
+class MockFeedbackService {
+}
+
+@Injectable()
+class MockRoomStatsService {
+}
+
 
 @Injectable()
 class MockCachingService {
@@ -21,11 +39,11 @@ class MockCachingService {
   }
 }
 
-describe('ContentService', () => {
+describe('ContentGroupService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
-        ContentService,
+        ContentGroupService,
         {
           provide: EventService,
           useClass: MockEventService
@@ -43,6 +61,22 @@ describe('ContentService', () => {
           useClass: MockWsConnectorService
         },
         {
+          provide: AuthenticationService,
+          useClass: MockAuthenticationService
+        },
+        {
+          provide: GlobalStorageService,
+          useClass: MockGlobalStorageService
+        },
+        {
+          provide: FeedbackService,
+          useClass: MockFeedbackService
+        },
+        {
+          provide: RoomStatsService,
+          useClass: MockRoomStatsService
+        },
+        {
           provide: CachingService,
           useClass: MockCachingService
         }
@@ -53,7 +87,7 @@ describe('ContentService', () => {
     });
   });
 
-  it('should be created', inject([ContentService], (service: ContentService) => {
+  it('should be created', inject([ContentGroupService], (service: ContentGroupService) => {
     expect(service).toBeTruthy();
   }));
 });
