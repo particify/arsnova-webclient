@@ -8,6 +8,7 @@
     <h3 class="no-rooms">{{ rooms.length === 0 ? ('room-list.no-rooms' | translate) :
       'room-list.a11y-list-summary' | translate:{count: rooms.length} }}</h3>
   </div>
+  <lib-extension-point extensionId="lms-course-room-list" [extensionData]="{ userId: auth.userId, excludeRoomIds: roomIds }"></lib-extension-point>
   <div *ngIf="rooms">
     <mat-card *ngIf="rooms.length > 0" class="account-memberships">
       <mat-form-field class="filterWrapper" appearance="fill">

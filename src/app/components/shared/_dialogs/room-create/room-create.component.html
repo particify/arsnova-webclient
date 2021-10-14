@@ -1,12 +1,14 @@
-<form (ngSubmit)="checkLogin(roomName.value)">
+<form (ngSubmit)="checkLogin()">
   <div fxLayout="column" fxLayoutAlign="center" fxLayoutGap="10px">
-    <mat-form-field appearance="outline">
-      <mat-label>{{ 'dialog.room-name' | translate }}</mat-label>
-      <input (keypress)="resetEmptyInputs()" matInput #roomName class="input-block" type="text" autocomplete="off"
-             maxlength="30" [(ngModel)]="longName" name="roomName" aria-labelledby="room-name-input"/>
-      <mat-hint align="end" *ngIf="!emptyInputs"><span aria-hidden="true">{{roomName.value.length}}
-        / 30</span></mat-hint>
-    </mat-form-field>
+    <lib-extension-point extensionId="lms-course-autocomplete" [extensionData]="{ userId: auth.userId, room: newRoom }">
+      <mat-form-field appearance="outline" fxFill>
+        <mat-label>{{ 'dialog.room-name' | translate }}</mat-label>
+        <input (keypress)="resetEmptyInputs()" matInput #roomName class="input-block" type="text" autocomplete="off"
+               maxlength="30" [(ngModel)]="newRoom.name" name="roomName" aria-labelledby="room-name-input"/>
+        <mat-hint align="end" *ngIf="!emptyInputs"><span aria-hidden="true">{{roomName.value.length}}
+          / 30</span></mat-hint>
+      </mat-form-field>
+    </lib-extension-point>
     <app-hint *ngIf="!auth || auth.authProvider === 'ARSNOVA_GUEST'"
               [type]="warningType" text="dialog.not-logged-in"></app-hint>
   </div>
@@ -15,7 +17,7 @@
   buttonsLabelSection="dialog"
   confirmButtonLabel="create-room"
   [cancelButtonClickAction]="buildCloseDialogActionCallback()"
-  [confirmButtonClickAction]="buildRoomCreateActionCallback(roomName)"
+  [confirmButtonClickAction]="buildRoomCreateActionCallback()"
 ></app-dialog-action-buttons>
 
 <div class="visually-hidden">

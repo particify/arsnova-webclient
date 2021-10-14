@@ -22,9 +22,8 @@ import { AuthenticationProvider, AuthenticationProviderRole, AuthenticationProvi
   styleUrls: ['./room-create.component.scss']
 })
 export class RoomCreateComponent implements OnInit {
-  longName: string;
   emptyInputs = false;
-  room: Room;
+  newRoom = new Room();
   roomId: string;
   auth: ClientAuthentication;
   warningType = HINT_TYPES.WARNING;
@@ -69,33 +68,31 @@ export class RoomCreateComponent implements OnInit {
         || (auth && auth.authProvider !== AuthProvider.ARSNOVA_GUEST);
   }
 
-  checkLogin(longRoomName: string) {
+  checkLogin() {
     if (!this.auth) {
       this.authenticationService.loginGuest().subscribe(result => {
         this.auth = result.authentication;
-        this.addRoom(longRoomName);
+        this.addRoom();
       });
     } else {
-      this.addRoom(longRoomName);
+      this.addRoom();
     }
   }
 
-  addRoom(longRoomName: string) {
-    longRoomName = longRoomName.trim();
-    if (!longRoomName) {
+  addRoom() {
+    this.newRoom.name = this.newRoom.name.trim();
+    if (!this.newRoom.name) {
       this.emptyInputs = true;
       this.translateService.get('dialog.no-empty-name').subscribe(msg => {
         this.notification.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
       });
       return;
     }
-    const newRoom = new Room();
-    newRoom.name = longRoomName;
-    newRoom.abbreviation = '00000000';
-    newRoom.description = '';
-    newRoom.ownerId = this.auth.userId;
-    this.roomService.addRoom(newRoom).subscribe(room => {
-      this.room = room;
+    this.newRoom.abbreviation = '00000000';
+    this.newRoom.description = '';
+    this.newRoom.ownerId = this.auth.userId;
+    this.roomService.addRoom(this.newRoom).subscribe(room => {
+      this.newRoom = room;
       let msg1: string;
       let msg2: string;
       this.translateService.get('home-page.created-1').subscribe(msg => {
@@ -104,10 +101,10 @@ export class RoomCreateComponent implements OnInit {
       this.translateService.get('home-page.created-2').subscribe(msg => {
         msg2 = msg;
       });
-      this.notification.showAdvanced(msg1 + longRoomName + msg2, AdvancedSnackBarTypes.SUCCESS);
+      this.notification.showAdvanced(msg1 + this.newRoom.name + msg2, AdvancedSnackBarTypes.SUCCESS);
       const event = new RoomCreated(room.id, room.shortId);
       this.eventService.broadcast(event.type, event.payload);
-      this.router.navigate(['creator', 'room', this.room.shortId]);
+      this.router.navigate(['creator', 'room', room.shortId]);
       this.closeDialog();
     });
   }
@@ -124,8 +121,8 @@ export class RoomCreateComponent implements OnInit {
   /**
    * Returns a lambda which executes the dialog dedicated action on call.
    */
-  buildRoomCreateActionCallback(room: HTMLInputElement): () => void {
-    return () => this.checkLogin(room.value);
+  buildRoomCreateActionCallback(): () => void {
+    return () => this.checkLogin();
   }
 
 
