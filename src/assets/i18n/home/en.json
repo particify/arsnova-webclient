@@ -297,7 +297,9 @@
     "really-delete-room": "Do you really want to delete the following room? This action cannot be undone.",
     "really-cancel-room-membership": "Do you really want to remove the following room from your list? If you have been granted access permissions, this will also remove them.",
     "really-delete-account": "Do you want to irrevocably delete your account with all rooms?",
-    "really-delete-account-admin": "Do you want to irrevocably delete this account with all rooms?"
+    "really-delete-account-admin": "Do you want to irrevocably delete this account with all rooms?",
+    "really-delete-answers": "Do you really want to delete the answers to this question?",
+    "answers-deleted": "Answers to this question has been deleted."
   },
   "errors": {
     "not-authorized": "You're not authorized to view this page.",

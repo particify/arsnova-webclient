@@ -15,6 +15,7 @@ import { RemoteMessage } from '../../../../models/events/remote/remote-message.e
 import { UiState } from '../../../../models/events/remote/ui-state-changed-event';
 import { ContentInitializedEvent } from '../../../../models/events/remote/content-initialized-event';
 import { ContentFocusState } from '../../../../models/events/remote/content-focus-state';
+import { ContentMessages } from '../../../../models/events/content-messages.enum';
 
 @Component({
   selector: 'app-statistic-content',
@@ -49,6 +50,8 @@ export class StatisticContentComponent implements OnInit {
   ContentType: typeof ContentType = ContentType;
   flashcardMarkdownFeatures = MarkdownFeatureset.EXTENDED;
   HotkeyAction = HotkeyAction;
+  multipleRounds: boolean;
+  roundsToDisplay = 0;
 
   constructor(private announceService: AnnounceService,
               private eventService: EventService) { }
@@ -65,9 +68,18 @@ export class StatisticContentComponent implements OnInit {
     if (this.directShow && this.format !== ContentType.FLASHCARD) {
       this.answersVisible = true;
     }
+    this.roundsToDisplay = this.content.state.round - 1;
+    this.multipleRounds = this.roundsToDisplay > 0;
     this.isLoading = false;
     this.routeChanged.subscribe(() => {
       this.updateCounter(this.answerCount);
+      this.broadcastRoundState();
+    });
+    this.broadcastRoundState();
+    this.eventService.on<any>(ContentMessages.ROUND_CHANGED).subscribe(roundData => {
+      if (this.index === roundData.contentIndex) {
+        this.changeRound(roundData.round);
+      }
     });
     if (this.isPresentation) {
       this.eventService.on<UiState>(RemoteMessage.UI_STATE_CHANGED).subscribe(state => {
@@ -87,6 +99,12 @@ export class StatisticContentComponent implements OnInit {
         const event = new ContentInitializedEvent(new ContentFocusState(this.content.id, this.contentGroupId, false, false));
         this.eventService.broadcast(event.type, event.payload);
       }
+    }
+  }
+
+  broadcastRoundState() {
+    if (this.active) {
+      this.eventService.broadcast(ContentMessages.MULTIPLE_ROUNDS, this.multipleRounds);
     }
   }
 
@@ -167,6 +185,16 @@ export class StatisticContentComponent implements OnInit {
       this.announceService.announce(msg);
     } else {
       this.announceService.announce('statistic.a11y-no-answers-yet');
+    }
+  }
+
+  changeRound(round: number) {
+    const chartComponent: StatisticChoiceComponent | StatisticScaleComponent = this.content.format === ContentType.SCALE ? this.scaleStatistic : this.choiceStatistic;
+    chartComponent.roundsToDisplay = round;
+    chartComponent.rounds = round + 1;
+    chartComponent.updateCounterForRound();
+    if (this.answersVisible) {
+      chartComponent.updateChart();
     }
   }
 }

@@ -12,13 +12,16 @@ import { ContentGroupService } from '../../../../services/http/content-group.ser
 import { ContentListBaseComponent } from '../content-list-base.component';
 import { ContentGroup } from '../../../../models/content-group';
 import { AnnounceService } from '../../../../services/util/announce.service';
+import { EventService } from '../../../../services/util/event.service';
 import { LocalFileService } from '../../../../services/util/local-file.service';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 import { RoomStatsService } from '../../../../services/http/room-stats.service';
 import { HotkeyService } from '../../../../services/util/hotkey.service';
 import { MatButton } from '@angular/material/button';
+import { ContentType } from '../../../../models/content-type.enum';
+import { ContentMessages } from '../../../../models/events/content-messages.enum';
 
 @Component({
   selector: 'app-group-content',
@@ -50,6 +53,9 @@ export class GroupContentComponent extends ContentListBaseComponent implements O
 
   private hotkeyRefs: Symbol[] = [];
 
+  ContentType: typeof ContentType = ContentType;
+  resetAnswerEvent: Subject<string> = new Subject<string>();
+
   constructor(
     protected contentService: ContentService,
     protected roomStatsService: RoomStatsService,
@@ -62,6 +68,7 @@ export class GroupContentComponent extends ContentListBaseComponent implements O
     protected globalStorageService: GlobalStorageService,
     protected contentGroupService: ContentGroupService,
     protected announceService: AnnounceService,
+    public eventService: EventService,
     protected localFileService: LocalFileService,
     protected router: Router,
     private hotkeyService: HotkeyService
@@ -81,6 +88,11 @@ export class GroupContentComponent extends ContentListBaseComponent implements O
       });
     });
     this.translateService.use(this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE));
+    this.eventService.on(ContentMessages.ANSWERS_DELETED).subscribe(contentId => {
+      const content = this.contents.find(c => c.id === contentId);
+      content.state.round = 1;
+      this.resetAnswerEvent.next(content.id);
+    })
   }
 
   ngOnDestroy() {
@@ -132,6 +144,10 @@ export class GroupContentComponent extends ContentListBaseComponent implements O
 
   goToEdit(content: Content) {
     this.router.navigate(['creator', 'room', this.room.shortId, 'group', this.contentGroup.name, 'edit', content.id]);
+  }
+
+  announce() {
+    this.announceService.announce('content.a11y-content-list-shortcuts');
   }
 
   goInTitleEditMode(): void {
@@ -276,20 +292,12 @@ export class GroupContentComponent extends ContentListBaseComponent implements O
     this.updatePublishedIndexes(-1, -1);
   }
 
-  showDeleteAnswerDialog(content: Content): void {
+  deleteAnswers(content: Content) {
     const dialogRef = this.dialogService.openDeleteDialog('really-delete-answers');
     dialogRef.afterClosed().subscribe(result => {
       if (result === 'delete') {
-        this.deleteAnswers(content.id);
+        this.contentService.deleteAnswersOfContent(content.id, this.room.id);
       }
-    });
-  }
-
-  deleteAnswers(contentId: string) {
-    this.contentService.deleteAnswers(this.contentGroup.roomId, contentId).subscribe(() => {
-      this.translateService.get('content.answers-deleted').subscribe(msg => {
-        this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
-      });
     });
   }
 

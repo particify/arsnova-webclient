@@ -6,6 +6,7 @@ import { ContentService } from '../../../../services/http/content.service';
 import { ContentChoice } from '../../../../models/content-choice';
 import { TranslateService } from '@ngx-translate/core';
 import { ThemeService } from '../../../../../theme/theme.service';
+import { Theme } from '../../../../../theme/Theme';
 import { AnswerStatistics } from '../../../../models/answer-statistics';
 import { takeUntil } from 'rxjs/operators';
 import { StatisticContentBaseComponent } from '../statistic-content-base';
@@ -13,6 +14,7 @@ import { Subject } from 'rxjs';
 import { ContentType } from '../../../../models/content-type.enum';
 import { ColorElem } from '@arsnova/theme/Theme';
 import { ContentScale } from '@arsnova/app/models/content-scale';
+import { EventService } from '../../../../services/util/event.service';
 
 export class AnswerList {
   label: string;
@@ -39,25 +41,32 @@ export class StatisticChoiceComponent extends StatisticContentBaseComponent impl
   answerList: AnswerList[] = [];
   chart: Chart;
   chartId: string;
-  colors: string[] = [];
-  indicationColors: string[] = [];
+  colors: Array<string[]> = [[], []];
+  indicationColors: Array<string[]> = [[], []];
   label = 'ABCDEFGH';
   labels: string[] = [];
-  data: number[] = [];
+  data: Array<number[]> = [[], []];
   colorLabel = false;
   survey = false;
-  onSurface: string;
-  surface: string;
-  green: string;
-  grey: string;
   optionLabels: string[];
   correctOptionIndexes: number[];
+  colorStrings = {
+    onBackground: '',
+    background: '',
+    correct: '',
+    abstention: ''
+  };
+  rounds: number;
+  roundsToDisplay = 0;
+  roundsDisplayed: number;
+  independentAnswerCount = [[], [], []];
 
   constructor(protected route: ActivatedRoute,
               protected contentService: ContentService,
               protected translateService: TranslateService,
-              private themeService: ThemeService) {
-    super(route, contentService);
+              private themeService: ThemeService,
+              protected eventService: EventService) {
+    super(route, contentService, eventService);
   }
 
   ngOnDestroy() {
@@ -69,6 +78,8 @@ export class StatisticChoiceComponent extends StatisticContentBaseComponent impl
   }
 
   init() {
+    this.rounds = this.content.state.round;
+    this.roundsToDisplay = this.rounds - 1;
     this.chartId = 'chart-' + this.content.id;
     this.optionLabels = this.optionLabels ?? this.content.options.map(o => o.label);
     this.correctOptionIndexes = this.content.correctOptionIndexes;
@@ -98,24 +109,40 @@ export class StatisticChoiceComponent extends StatisticContentBaseComponent impl
     return this.answersVisible;
   }
 
-  createChart(colors: string[]) {
-    Chart.defaults.color = this.onSurface;
+  deleteAnswers() {
+    this.data = [[], []];
+    this.updateChart();
+  }
+
+  createChart(colors: Array<string[]>) {
+    Chart.defaults.color = this.colorStrings.onBackground;
     Chart.defaults.font.size = this.isPresentation ? 14 : 16;
     Chart.register(BarController, BarElement, CategoryScale, LinearScale, ChartDataLabels);
     const gridConfig = {
-      borderColor: this.onSurface,
-      tickColor: this.isPresentation ? this.surface : this.onSurface,
+      borderColor: this.colorStrings.onBackground,
+      tickColor: this.isPresentation ? this.colorStrings.background : this.colorStrings.onBackground,
       drawOnChartArea: !this.isPresentation
     };
+    const dataSets = [
+      {
+        data: this.data[this.roundsToDisplay],
+        backgroundColor: colors[this.roundsToDisplay]
+      }
+    ];
+    if (this.roundsToDisplay > 1) {
+      dataSets.push(
+        {
+          data: this.data[1],
+          backgroundColor: colors[1]
+        }
+      )
+    }
     const scale = this.isPresentation ? Math.max((Math.min(innerWidth, 2100) / 1100), 1) : 1;
     this.chart = new Chart(this.chartId, {
       type: 'bar',
       data: {
         labels: this.labels,
-        datasets: [{
-          data: this.data,
-          backgroundColor: colors
-        }]
+        datasets: dataSets
       },
       options: {
         responsive: true,
@@ -132,12 +159,12 @@ export class StatisticChoiceComponent extends StatisticContentBaseComponent impl
             ticks: {
               display: !this.isPresentation,
               precision: 0,
-              color: this.isPresentation ? this.surface : this.onSurface
+              color: this.isPresentation ? this.colorStrings.background : this.colorStrings.onBackground
             },
             grid: {
               borderWidth: this.isPresentation ? 0 : 1,
-              borderColor: this.onSurface,
-              tickColor: this.isPresentation ? this.surface : this.onSurface,
+              borderColor: this.colorStrings.onBackground,
+              tickColor: this.isPresentation ? this.colorStrings.background : this.colorStrings.onBackground,
               drawOnChartArea: !this.isPresentation
             }
           },
@@ -154,7 +181,7 @@ export class StatisticChoiceComponent extends StatisticContentBaseComponent impl
             display: context => {
               return context.dataset.data[context.dataIndex] > 0;
             },
-            color: this.onSurface,
+            color: this.colorStrings.onBackground,
             anchor: 'end',
             align: 'end',
             offset: 0
@@ -165,10 +192,20 @@ export class StatisticChoiceComponent extends StatisticContentBaseComponent impl
   }
 
   toggleCorrect() {
-    const dataset = this.chart.config.data.datasets[0] as BarControllerDatasetOptions;
-    dataset.backgroundColor = this.colorLabel ? this.colors : this.indicationColors;
+    if (this.roundsDisplayed > 1) {
+      for (let i = 0; i < this.roundsDisplayed; i++) {
+        this.toggleChartColor(i, i);
+      }
+    } else {
+      this.toggleChartColor(0, this.roundsDisplayed);
+    }
     this.chart.update();
     this.colorLabel = !this.colorLabel;
+  }
+
+  toggleChartColor(dataSetIndex: number, roundIndex: number) {
+    const dataset = this.chart.config.data.datasets[dataSetIndex] as BarControllerDatasetOptions;
+    dataset.backgroundColor = this.colorLabel ? this.colors[roundIndex] : this.indicationColors[roundIndex];
   }
 
   checkIfCorrect(index: number): boolean {
@@ -193,54 +230,131 @@ export class StatisticChoiceComponent extends StatisticContentBaseComponent impl
     return colors;
   }
 
-  initChart() {
-    const length = this.optionLabels.length;
-    this.themeService.getTheme().pipe(takeUntil(this.destroyed$)).subscribe(theme => {
-      const currentTheme = this.themeService.getThemeByKey(theme);
-      this.onSurface = currentTheme.get('on-surface').color;
-      this.surface = currentTheme.get('surface').color;
-      this.green = currentTheme.get('green').color;
-      this.grey = currentTheme.get('grey').color;
-      const barColors = this.getBarColors();
-      for (let i = 0; i < length; i++) {
-        this.answerList[i] = new AnswerList(null, null);
-        this.labels[i] = this.label.charAt(i);
-        this.answerList[i].label = this.labels[i];
-        this.answerList[i].answer = this.optionLabels[i];
-        this.colors[i] = barColors[i % barColors.length].color;
-        if (!this.survey) {
-          if (this.checkIfCorrect(i)) {
-            this.indicationColors[i] = this.correctOptionIndexes?.length === 1 ? this.colors[i] : this.green;
-          } else {
-            this.indicationColors[i] = this.grey;
-          }
+  getColors(theme: Theme) {
+    this.colorStrings.onBackground = theme.get('on-surface').color;
+    this.colorStrings.background = theme.get('surface').color;
+    this.colorStrings.correct = theme.get('green').color;
+    this.colorStrings.abstention = theme.get('grey').color;
+  }
+
+  initRoundAnswerOptions(answerIndex: number, length: number) {
+    const barColors = this.getBarColors();
+    for (let j = 0; j < this.rounds; j++) {
+      this.colors[j][answerIndex] = barColors[answerIndex % barColors.length].color;
+      if (!this.survey) {
+        if (this.checkIfCorrect(answerIndex)) {
+          this.indicationColors[j][answerIndex] = this.content.correctOptionIndexes?.length === 1 ? this.colors[j][answerIndex] : this.colorStrings.correct;
+        } else {
+          this.indicationColors[j][answerIndex] = this.colorStrings.abstention;
         }
       }
-      if (this.content.abstentionsAllowed) {
-        this.translateService.get('statistic.abstentions').subscribe(label => {
+      if (answerIndex === length - 1 && this.content.abstentionsAllowed) {
+        this.colors[j].push(this.colorStrings.abstention);
+        this.indicationColors[j].push(this.colorStrings.abstention);
+        if (j === this.rounds -1) {
+          const label = this.translateService.instant('statistic.abstentions');
           this.labels.push(label);
-          this.colors.push(this.grey);
-          this.indicationColors.push(this.grey);
-        });
+        }
       }
-    });
+    }
+  }
+
+  initChart() {
+    const length = this.optionLabels.length;
+    const theme = this.themeService.getCurrentThemeName();
+    const currentTheme = this.themeService.getThemeByKey(theme);
+    this.getColors(currentTheme);
+    for (let i = 0; i < length; i++) {
+      this.answerList[i] = new AnswerList(null, null);
+      this.labels[i] = this.label.charAt(i);
+      this.answerList[i].label = this.labels[i];
+      this.answerList[i].answer = this.optionLabels[i];
+      this.initRoundAnswerOptions(i, length);
+    }
   }
 
   updateData(stats: AnswerStatistics) {
-    this.data = stats.roundStatistics[0].independentCounts;
-    let abstentionCount = 0;
-    if (this.content.abstentionsAllowed) {
-      abstentionCount = stats.roundStatistics[0].abstentionCount;
-      this.data.push(abstentionCount);
+    if (stats) {
+      if (this.rounds > 1) {
+        for (let i = 0; i < this.rounds; i++) {
+          if (stats.roundStatistics[i]) {
+            this.setData(stats, i);
+          }
+        }
+      } else {
+        this.setData(stats, this.roundsToDisplay);
+      }
+    } else {
+      this.independentAnswerCount = [[], [], []];
     }
-    const listToCount = stats.roundStatistics[0].combinatedCounts?.map(a => a.count) || [];
-    listToCount.push(abstentionCount);
-    this.updateCounter(listToCount);
+    this.updateCounterForRound();
+  }
+
+  setData(stats, roundIndex) {
+    let abstentionCount = 0;
+    this.data[roundIndex] = stats.roundStatistics[roundIndex].independentCounts;
+    if (this.content.abstentionsAllowed) {
+      abstentionCount = stats.roundStatistics[roundIndex].abstentionCount;
+      this.data[roundIndex].push(abstentionCount);
+    }
+    this.updateIndependentAnswerCounts(stats, roundIndex, abstentionCount);
+  }
+
+  updateIndependentAnswerCounts(stats: AnswerStatistics, round: number, abstentions: number) {
+    this.independentAnswerCount[round] = stats.roundStatistics[round].combinatedCounts?.map(a => a.count) || [];
+    this.independentAnswerCount[2] = this.independentAnswerCount[this.getMaxCountIndex()];
+    this.independentAnswerCount[round].push(abstentions);
+  }
+
+  getMaxCountIndex() {
+    return this.getSum(this.independentAnswerCount[0]) > this.getSum(this.independentAnswerCount[1]) ? 0 : 1;
+  }
+
+  updateCounterForRound() {
+    this.updateCounter(this.independentAnswerCount[this.roundsToDisplay]);
+  }
+
+  prepareChartForRoundCompare(resetChart: boolean) {
+    for (let i = 0; i < this.rounds; i++) {
+      if (resetChart) {
+        this.chart.data.datasets.push({
+          data: this.data[i],
+          backgroundColor: this.colorLabel ? this.indicationColors[i] : this.colors[i]
+        });
+      } else {
+        this.chart.data.datasets[i].data = this.data[i];
+      }
+    }
+  }
+
+  prepareChartForSingleRound(resetChart: boolean) {
+    if (resetChart) {
+      this.chart.data.datasets.push({
+        data: this.data[this.roundsToDisplay],
+        backgroundColor: this.colorLabel ? this.indicationColors[this.roundsToDisplay] : this.colors[this.roundsToDisplay]
+      });
+    } else {
+      this.chart.data.datasets[0].data = this.data[this.roundsToDisplay];
+      this.chart.data.datasets[0].backgroundColor = this.colors[this.roundsToDisplay];
+    }
   }
 
   updateChart() {
     if (this.chart) {
-      this.chart.data.datasets[0].data = this.data;
+      let reset = false;
+      if (this.roundsDisplayed !== this.roundsToDisplay) {
+        this.chart.data.datasets = [];
+        reset = true;
+      }
+      if (this.roundsToDisplay > 0) {
+        this.colors[1] = this.colors[0];
+        this.indicationColors[1] = this.indicationColors[0];
+      }
+      if (this.roundsToDisplay < 2) {
+        this.prepareChartForSingleRound(reset);
+      } else {
+        this.prepareChartForRoundCompare(reset);
+      }
       this.chart.update();
     } else {
       /* Wait for flip animation */
@@ -248,5 +362,6 @@ export class StatisticChoiceComponent extends StatisticContentBaseComponent impl
         this.createChart(this.colors);
       }, 300);
     }
+    this.roundsDisplayed = this.roundsToDisplay;
   }
 }

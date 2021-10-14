@@ -42,6 +42,10 @@ export class ThemeService {
     return this.activeTheme.asObservable();
   }
 
+  public getCurrentThemeName() {
+    return this.themeName;
+  }
+
   public activate(name) {
     this.activeTheme.next(name);
     this.themeName = name;

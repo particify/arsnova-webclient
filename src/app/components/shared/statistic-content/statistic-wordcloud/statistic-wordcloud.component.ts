@@ -6,6 +6,7 @@ import { AnswerStatistics } from "../../../../models/answer-statistics";
 import { TextRoundStatistics } from "../../../../models/round-statistics";
 import { ContentService } from "../../../../services/http/content.service";
 import { StatisticContentBaseComponent } from "../statistic-content-base";
+import { EventService } from '../../../../services/util/event.service';
 
 @Component({
   selector: 'app-statistic-wordcloud',
@@ -18,8 +19,9 @@ export class StatisticWordcloudComponent extends StatisticContentBaseComponent i
 
   constructor(
       protected contentService: ContentService,
-      protected route: ActivatedRoute) {
-    super(route, contentService);
+      protected route: ActivatedRoute,
+      protected eventService: EventService) {
+    super(route, contentService, eventService);
   }
 
   afterInit() {
@@ -40,12 +42,19 @@ export class StatisticWordcloudComponent extends StatisticContentBaseComponent i
     this.updateData(stats);
   }
 
+  deleteAnswers() {
+    this.wordWeights = [];
+    this.updateCounter([]);
+  }
+
   updateData(stats: AnswerStatistics) {
-    const texts = (stats.roundStatistics[0] as TextRoundStatistics).texts;
-    this.updateCounter([stats.roundStatistics[0].answerCount]);
-    if (!texts) {
-      return;
+    if (stats) {
+      const texts = (stats?.roundStatistics[0] as TextRoundStatistics)?.texts;
+      this.updateCounter([stats.roundStatistics[0].answerCount]);
+      if (!texts) {
+        return;
+      }
+      this.wordWeights = stats.roundStatistics[0].independentCounts.map((count, i) => [texts[i], count]);
     }
-    this.wordWeights = stats.roundStatistics[0].independentCounts.map((count, i) => [texts[i], count]);
   }
 }

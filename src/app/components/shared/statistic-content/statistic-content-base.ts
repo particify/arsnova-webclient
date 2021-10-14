@@ -4,6 +4,8 @@ import { ActivatedRoute } from '@angular/router';
 import { ContentService } from '../../../services/http/content.service';
 import { Content } from '../../../models/content';
 import { AnswerStatistics } from '../../../models/answer-statistics';
+import { EventService } from '../../../services/util/event.service';
+import { ContentMessages } from '../../../models/events/content-messages.enum';
 
 @Component({
   template: ''
@@ -21,7 +23,8 @@ export abstract class StatisticContentBaseComponent implements OnInit {
   answerCount = 0;
 
   protected constructor(protected route: ActivatedRoute,
-                        protected contentService: ContentService) {
+                        protected contentService: ContentService,
+                        protected eventService: EventService) {
   }
 
   ngOnInit(): void {
@@ -32,6 +35,11 @@ export abstract class StatisticContentBaseComponent implements OnInit {
       this.toggleAnswers(this.directShow);
     });
     this.afterInit();
+    this.eventService.on(ContentMessages.ANSWERS_DELETED).subscribe(contentId => {
+      if (this.content.id === contentId) {
+        this.deleteAnswers();
+      }
+    });
   }
 
   init() {
@@ -41,6 +49,9 @@ export abstract class StatisticContentBaseComponent implements OnInit {
   }
 
   afterInit() {
+  }
+
+  deleteAnswers() {
   }
 
   toggleAnswers(visible?: boolean): boolean {
@@ -55,9 +66,19 @@ export abstract class StatisticContentBaseComponent implements OnInit {
   updateData(stats: AnswerStatistics) {
   }
 
+  getSum(list: number[]): number {
+    if (list.length > 0) {
+      return list.reduce((a, b) => a + b);
+    } else {
+      return 0;
+    }
+  }
+
   updateCounter(list: number[]) {
     if (list.length > 0) {
-      this.answerCount = list.reduce((a, b) => a + b);
+      this.answerCount = this.getSum(list);
+    } else {
+      this.answerCount = 0;
     }
     this.updateCounterEvent.emit(this.answerCount);
   }

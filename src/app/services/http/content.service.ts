@@ -9,12 +9,14 @@ import { ContentChoice } from '../../models/content-choice';
 import { WsConnectorService } from '../websockets/ws-connector.service';
 import { IMessage } from '@stomp/stompjs';
 import { TranslateService } from '@ngx-translate/core';
-import { NotificationService } from '../util/notification.service';
+import { AdvancedSnackBarTypes, NotificationService } from '../util/notification.service';
 import { ContentType } from '@arsnova/app/models/content-type.enum';
 import { EventService } from '../util/event.service';
 import { ContentCreated } from '../../models/events/content-created';
 import { CachingService } from '../util/caching.service';
 import { ExportFileType } from '../../models/export-file-type';
+import { Router } from '@angular/router';
+import { ContentMessages } from '../../models/events/content-messages.enum';
 
 const PARTITION_SIZE = 50;
 
@@ -34,7 +36,8 @@ export class ContentService extends AbstractEntityService<Content> {
               protected eventService: EventService,
               protected translateService: TranslateService,
               protected notificationService: NotificationService,
-              cachingService: CachingService) {
+              cachingService: CachingService,
+              private router: Router) {
     super('Content', '/content', http, ws, eventService, translateService, notificationService, cachingService);
   }
 
@@ -175,5 +178,18 @@ export class ContentService extends AbstractEntityService<Content> {
         connectionUrl,
         { fileType: fileType, contentIds: contentIds, charset: charset },
         { responseType: 'blob' });
+  }
+
+  goToEdit(contentId: string, shortId: string, group: string) {
+    this.router.navigate(['creator', 'room', shortId, 'group', group, 'edit', contentId]);
+  }
+
+  deleteAnswersOfContent(contentId, roomId) {
+    this.deleteAnswers(roomId, contentId).subscribe(() => {
+      this.translateService.get('dialog.answers-deleted').subscribe(msg => {
+        this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
+        this.eventService.broadcast(ContentMessages.ANSWERS_DELETED, contentId);
+      });
+    });
   }
 }

@@ -27,6 +27,12 @@ table {
   max-width: 80px;
 }
 
+.mat-column-round {
+  display: flex;;
+  justify-content: center;;
+  max-width: 80px;
+}
+
 .mat-header-cell {
   color: var(--on-surface);
   background-color: var(--table-b);

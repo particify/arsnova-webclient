@@ -190,7 +190,7 @@
                       <mat-icon>more_vert</mat-icon>
                     </button>
                     <mat-menu #moreActions="matMenu" xPosition="before" (closed)="closedMenu()">
-                      <button mat-menu-item (click)="editContent(content)" attr.aria-label="{{ 'content.a11y-edit-content' | translate }}">
+                      <button mat-menu-item (click)="editContent(content, contentGroup.name)" attr.aria-label="{{ 'content.a11y-edit-content' | translate }}">
                         <mat-icon>edit</mat-icon>
                         <span> {{ 'content.edit-content' | translate}}</span>
                       </button>
@@ -198,14 +198,18 @@
                         <mat-icon>library_add</mat-icon>
                         <span>{{ 'content.add-content-to-group' | translate}}</span>
                       </button>
-                      <button mat-menu-item (click)="showDeleteAnswerDialog(content)" attr.aria-label="{{ 'content.a11y-delete-answers' | translate }}">
-                        <mat-icon>clear_all</mat-icon>
-                        <span>{{ 'content.delete-answers' | translate}}</span>
-                      </button>
                       <button mat-menu-item (click)="removeContent(content)" attr.aria-label="{{ 'content.a11y-remove-content-from-group' | translate }}">
                         <mat-icon>clear</mat-icon>
                         <span>{{ 'content.remove-content-from-group' | translate}}</span>
                       </button>
+                      <mat-divider></mat-divider>
+                      <button mat-menu-item (click)="deleteAnswers(content)" attr.aria-label="{{ 'content.a11y-delete-answers' | translate }}">
+                        <mat-icon>clear_all</mat-icon>
+                        <span>{{ 'content.delete-answers' | translate}}</span>
+                      </button>
+                      <lib-extension-point *ngIf="[ContentType.CHOICE, ContentType.BINARY, ContentType.SCALE].indexOf(content.format) > -1"
+                                           extensionId="start-new-round" [extensionData]="{content: content, resetEvent: resetAnswerEvent}"></lib-extension-point>
+                      <mat-divider></mat-divider>
                       <button mat-menu-item (click)="deleteContent(content)" attr.aria-label="{{ 'content.a11y-delete-content' | translate }}">
                         <mat-icon class="delete">delete_forever</mat-icon>
                         <span>{{ 'content.delete-content' | translate}}</span>

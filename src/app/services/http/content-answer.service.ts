@@ -47,7 +47,10 @@ export class ContentAnswerService extends AbstractEntityService<Answer> {
   getAnswersByUserIdContentIds(roomId: string, userId: string, contentIds: string[]): Observable<Answer[]> {
     const url = this.buildUri(this.apiUrl.find, roomId);
     return this.http.post<Answer[]>(url, {
-      properties: { creatorId: userId },
+      properties: {
+        creatorId: userId,
+        round: -1
+      },
       externalFilters: {
         contentIds: contentIds
       }

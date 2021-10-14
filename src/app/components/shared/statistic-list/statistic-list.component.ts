@@ -29,13 +29,15 @@ export class ContentStatistic {
   percent: number;
   counts: number;
   abstentions: number;
+  round: number;
 
-  constructor(content: Content, type: StatisticType, percent: number, counts: number, abstentions: number) {
+  constructor(content: Content, type: StatisticType, percent: number, counts: number, abstentions: number, round: number) {
     this.content = content;
     this.type = type;
     this.percent = percent;
     this.counts = counts;
     this.abstentions = abstentions;
+    this.round = round;
   }
 }
 
@@ -65,6 +67,7 @@ export class StatisticListComponent implements OnInit {
   isLoading = true;
   statisticsAdded;
   statsLength: number;
+  multipleRounds = false;
 
   constructor(
     private contentService: ContentService,
@@ -108,6 +111,7 @@ export class StatisticListComponent implements OnInit {
     this.dataSource = new Array<ContentStatistic>(this.statsLength);
     for (let i = 0; i < this.statsLength; i++) {
       const content = contents[i];
+      const round = content.state.round;
       let percent = this.status.empty;
       let count = 0;
       let abstentions = 0;
@@ -118,36 +122,36 @@ export class StatisticListComponent implements OnInit {
             abstentions = answers.filter(a => a.body === undefined).length;
             count = answers.length - abstentions;
             type = StatisticType.TEXT;
-            this.addNewStatistic(i, new ContentStatistic(content, type, percent, count, abstentions));
+            this.addNewStatistic(i, new ContentStatistic(content, type, percent, count, abstentions, round));
           });
           break;
         case ContentType.SLIDE:
           abstentions = this.status.empty;
           count = this.status.empty;
           type = StatisticType.SLIDE;
-          this.addNewStatistic(i, new ContentStatistic(content, type, percent, count, abstentions));
+          this.addNewStatistic(i, new ContentStatistic(content, type, percent, count, abstentions, round));
           break;
         case ContentType.FLASHCARD:
           abstentions = this.status.empty;
           count = this.status.empty;
           type = StatisticType.FLASHCARD;
-          this.addNewStatistic(i, new ContentStatistic(content, type, percent, count, abstentions));
+          this.addNewStatistic(i, new ContentStatistic(content, type, percent, count, abstentions, round));
           break;
         default:
           this.contentService.getAnswer(this.contentGroup.roomId, content.id).subscribe(answer => {
             if (content.format === ContentType.CHOICE) {
-              percent = this.evaluateMultiple((content as ContentChoice).correctOptionIndexes, answer.roundStatistics[0].combinatedCounts);
-              count = this.getMultipleCounts(answer.roundStatistics[0].combinatedCounts);
+              percent = this.evaluateMultiple((content as ContentChoice).correctOptionIndexes, answer.roundStatistics[round - 1].combinatedCounts);
+              count = this.getMultipleCounts(answer.roundStatistics[round - 1].combinatedCounts);
             } else if (content.format === ContentType.SORT) {
-              count = this.getMultipleCounts(answer.roundStatistics[0].combinatedCounts);
-              percent = this.evaluateSort((content as ContentChoice).options, answer.roundStatistics[0].combinatedCounts, count);
+              count = this.getMultipleCounts(answer.roundStatistics[round - 1].combinatedCounts);
+              percent = this.evaluateSort((content as ContentChoice).options, answer.roundStatistics[round - 1].combinatedCounts, count);
             } else {
               if (content.format === ContentType.BINARY) {
-                percent = this.evaluateSingle((content as ContentChoice).correctOptionIndexes, answer.roundStatistics[0].independentCounts);
+                percent = this.evaluateSingle((content as ContentChoice).correctOptionIndexes, answer.roundStatistics[round - 1].independentCounts);
               }
-              count = this.getSingleCounts(answer.roundStatistics[0].independentCounts);
+              count = this.getSingleCounts(answer.roundStatistics[round - 1].independentCounts);
             }
-            abstentions = answer.roundStatistics[0].abstentionCount;
+            abstentions = answer.roundStatistics[round - 1].abstentionCount;
             if (percent > this.status.empty) {
               type = StatisticType.CHOICE;
               this.totalP += percent;
@@ -155,8 +159,11 @@ export class StatisticListComponent implements OnInit {
             } else {
               type = StatisticType.SURVEY;
             }
-            this.addNewStatistic(i, new ContentStatistic(content, type, percent, count, abstentions));
+            this.addNewStatistic(i, new ContentStatistic(content, type, percent, count, abstentions, round));
           });
+      }
+      if (round > 1) {
+        this.multipleRounds = true;
       }
     }
   }
@@ -169,13 +176,15 @@ export class StatisticListComponent implements OnInit {
   checkIfLoadingFinished() {
     this.statisticsAdded++;
     if (this.statisticsAdded === this.statsLength) {
-      if (this.deviceType === 'desktop') {
-        this.displayedColumns = ['content', 'counts', 'abstentions', 'percentage'];
-      } else {
-        this.displayedColumns = ['content', 'counts', 'percentage'];
-      }
+      this.displayedColumns = ['content', 'round', 'counts', 'abstentions', 'percentage'];
       if (this.total < this.status.zero) {
         this.displayedColumns.pop();
+      }
+      if (!this.multipleRounds || this.deviceType !== 'desktop') {
+        this.displayedColumns = this.displayedColumns.filter(d => d !== 'round');
+      }
+      if (this.dataSource.filter(d => d.abstentions > 0).length === 0 || this.deviceType !== 'desktop') {
+        this.displayedColumns = this.displayedColumns.filter(d => d !== 'abstentions');
       }
       this.isLoading = false;
     }

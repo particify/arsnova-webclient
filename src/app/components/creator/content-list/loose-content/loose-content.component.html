@@ -41,7 +41,7 @@
               </div>
 
               <mat-menu #moreActions="matMenu" xPosition="before">
-                <button mat-menu-item (click)="editContent(content)" attr.aria-label="{{ 'content.a11y-edit-content' | translate }}">
+                <button mat-menu-item (click)="editContent(content, 'archive')" attr.aria-label="{{ 'content.a11y-edit-content' | translate }}">
                   <mat-icon>edit</mat-icon>
                   <span> {{ 'content.edit-content' | translate}}</span>
                 </button>

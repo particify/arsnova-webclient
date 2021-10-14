@@ -92,11 +92,11 @@ $logo-width: 120px;
   padding: 0;
 }
 
-@media(max-width: 1180px) {
+@media(max-width: 1200px) {
   .nav-container {
     @include smaller-container;
   }
-  @media(max-width: 1050px) {
+  @media(max-width: 1100px) {
     .feature-container, .icon-container {
       @include smaller-container;
     }
@@ -182,4 +182,8 @@ $logo-width: 120px;
 
 .no-padding {
   padding: 0;
+}
+
+.more-button {
+  margin-left: -8px;
 }

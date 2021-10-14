@@ -9,7 +9,7 @@ import { KeyNavBarItem } from '../control-bar/control-bar.component';
 })
 export class KeyButtonBarComponent {
 
-  @Input() items: KeyNavBarItem[]
+  @Input() items: KeyNavBarItem[];
   @Input() withText = true;
 
   constructor(@Inject(DOCUMENT) private document: HTMLDocument) { }

@@ -21,6 +21,7 @@ import { ContentFocusState } from '../../../models/events/remote/content-focus-s
 import { ContentGroupEvent } from '../../../models/events/remote/content-group-event';
 import { ContentGroupChangedEvent } from '../../../models/events/remote/content-group-changed-event';
 import { ContentChangedEvent } from '../../../models/events/remote/content-changed-event';
+import { ContentMessages } from '../../../models/events/content-messages.enum';
 
 @Component({
   selector: 'app-content-presentation',
@@ -189,8 +190,8 @@ export class ContentPresentationComponent implements OnInit, OnDestroy {
       this.contentIndex = null;
     }
     this.updateInfoBar();
-    this.routeChanged.emit(true);
     setTimeout(() => {
+      this.routeChanged.emit(true);
       const id = [ContentType.SLIDE, ContentType.FLASHCARD].indexOf(this.contents[index].format) > -1 ? 'message-type-info-button' : 'message-button';
       document.getElementById(id).focus();
     }, 300);
@@ -218,8 +219,8 @@ export class ContentPresentationComponent implements OnInit, OnDestroy {
         position = 'END';
       }
     }
-    const state = {position: position, index: step};
-    this.eventService.broadcast('ContentStepStateChanged', state);
+    const state = {position: position, index: step, content: this.contents[this.currentStep]};
+    this.eventService.broadcast(ContentMessages.STEP_STATE_CHANGED, state);
   }
 
   areContentsPublished() {
