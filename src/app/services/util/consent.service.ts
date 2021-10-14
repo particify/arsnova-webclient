@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { AbstractHttpService } from '../http/abstract-http.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError } from 'rxjs/operators';
-import { ApiConfigService } from '../http/api-config.service';
 import { MatDialog } from '@angular/material/dialog';
 import { CookiesComponent } from '../../components/home/_dialogs/cookies/cookies.component';
 import { StorageItemCategory } from '../../models/storage';
@@ -55,7 +54,6 @@ export class ConsentService extends AbstractHttpService<ConsentSettings> {
   constructor(
     public dialog: MatDialog,
     private http: HttpClient,
-    private config: ApiConfigService,
     private globalStorageService: GlobalStorageService,
     protected eventService: EventService,
     protected translateService: TranslateService,

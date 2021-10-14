@@ -85,6 +85,8 @@ export class MockGlobalStorageService {
 
   removeItem(key: symbol) {
   }
+
+  handleConsentChange() {}
 }
 
 // Renderer

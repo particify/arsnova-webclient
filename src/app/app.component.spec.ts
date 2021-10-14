@@ -1,7 +1,6 @@
 import { TranslateService } from '@ngx-translate/core';
 import { TestBed, ComponentFixture, waitForAsync, fakeAsync } from '@angular/core/testing';
 import { AppComponent } from './app.component';
-import { CustomIconService } from './services/util/custom-icon.service';
 import { ApiConfigService } from './services/http/api-config.service';
 import { RouterTestingModule } from '@angular/router/testing';
 import { Component, Injectable, EventEmitter } from '@angular/core';
@@ -93,11 +92,6 @@ describe('AppComponent', () => {
           provide: TranslateService,
           useClass: MockTranslateService
         },
-        {
-          provide: CustomIconService,
-          useValue: customIconService
-        },
-
         {
           provide: ApiConfigService,
           useValue: apiConfigService
