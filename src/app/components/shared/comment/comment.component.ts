@@ -75,7 +75,7 @@ export class CommentComponent implements OnInit, OnDestroy {
   extensionData: any;
   extensionEvent: Subject<string> = new Subject<string>();
   refreshCounter = 0;
-  destroyed$: Subject<void> = new Subject();
+  destroyed$ = new Subject<void>();
 
   constructor(
     protected authenticationService: AuthenticationService,

@@ -27,7 +27,7 @@ export class RoomJoinComponent implements OnInit, OnDestroy {
 
   roomCodeFormControl = new FormControl('', [Validators.pattern(/[0-9\s]*/)]);
   matcher = new RegisterErrorStateMatcher();
-  destroy$ = new Subject();
+  destroy$ = new Subject<void>();
 
   constructor(
     private router: Router,

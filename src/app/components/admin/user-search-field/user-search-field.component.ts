@@ -17,7 +17,7 @@ export class UserSearchFieldComponent implements OnInit, OnDestroy {
   submittable: boolean;
   @Input() label: string;
   @Output() submitted: EventEmitter<string> = new EventEmitter();
-  ngUnsubscribe = new Subject();
+  ngUnsubscribe = new Subject<void>();
 
   constructor(protected userService: UserService) {
   }

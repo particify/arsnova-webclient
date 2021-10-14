@@ -43,7 +43,7 @@ export class RoomListComponent implements OnInit, OnDestroy {
   showRoomsFromGuest = false;
   isLoading = true;
   sub: Subscription;
-  unsubscribe$: Subject<void> = new Subject();
+  unsubscribe$ = new Subject<void>();
   deviceType: string;
   roles: Map<UserRole, string> = new Map<UserRole, string>();
   showMenu = false;

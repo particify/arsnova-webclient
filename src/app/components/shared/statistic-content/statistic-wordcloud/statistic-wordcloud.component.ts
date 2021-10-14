@@ -15,7 +15,7 @@ import { EventService } from '../../../../services/util/event.service';
 })
 export class StatisticWordcloudComponent extends StatisticContentBaseComponent implements OnInit, OnDestroy {
   wordWeights: [string, number][] = [];
-  destroyed$ = new Subject();
+  destroyed$ = new Subject<void>();
 
   constructor(
       protected contentService: ContentService,
