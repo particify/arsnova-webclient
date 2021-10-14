@@ -14,7 +14,7 @@ import { IMessage } from '@stomp/stompjs';
 @Injectable({
   providedIn: 'root'
 })
-export class WsCommentServiceService {
+export class WsCommentService {
 
   constructor(private wsConnector: WsConnectorService) {
   }

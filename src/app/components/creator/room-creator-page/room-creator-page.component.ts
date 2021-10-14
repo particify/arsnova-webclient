@@ -7,7 +7,7 @@ import { AdvancedSnackBarTypes, NotificationService } from '../../../services/ut
 import { MatDialog } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
 import { LanguageService } from '../../../services/util/language.service';
-import { WsCommentServiceService } from '../../../services/websockets/ws-comment-service.service';
+import { WsCommentService } from '../../../services/websockets/ws-comment.service';
 import { CommentService } from '../../../services/http/comment.service';
 import { EventService } from '../../../services/util/event.service';
 import { ContentService } from '../../../services/http/content.service';
@@ -46,7 +46,7 @@ export class RoomCreatorPageComponent extends RoomPageComponent implements OnIni
     public dialog: MatDialog,
     protected translateService: TranslateService,
     protected langService: LanguageService,
-    protected wsCommentService: WsCommentServiceService,
+    protected wsCommentService: WsCommentService,
     protected commentService: CommentService,
     private announceService: AnnounceService,
     public eventService: EventService,
