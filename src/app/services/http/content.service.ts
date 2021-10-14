@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Content } from '../../models/content';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { forkJoin, Observable } from 'rxjs';
-import { catchError, map, tap } from 'rxjs/operators';
+import { catchError, map, switchMap, tap } from 'rxjs/operators';
 import { AbstractEntityService } from './abstract-entity.service';
 import { AnswerStatistics } from '../../models/answer-statistics';
 import { ContentChoice } from '../../models/content-choice';
@@ -17,6 +17,8 @@ import { CachingService } from '../util/caching.service';
 import { ExportFileType } from '../../models/export-file-type';
 import { Router } from '@angular/router';
 import { ContentMessages } from '../../models/events/content-messages.enum';
+import { ContentGroup } from '../../models/content-group';
+import { DialogService } from '../../services/util/dialog.service';
 
 const PARTITION_SIZE = 50;
 
@@ -37,7 +39,8 @@ export class ContentService extends AbstractEntityService<Content> {
               protected translateService: TranslateService,
               protected notificationService: NotificationService,
               cachingService: CachingService,
-              private router: Router) {
+              private router: Router,
+              private dialogService: DialogService) {
     super('Content', '/content', http, ws, eventService, translateService, notificationService, cachingService);
   }
 
@@ -149,6 +152,25 @@ export class ContentService extends AbstractEntityService<Content> {
     return this.http.delete<Content>(connectionUrl, httpOptions).pipe(
       catchError(this.handleError<Content>('deleteAnswers'))
     );
+  }
+
+  showDeleteAllAnswersDialog(contentGroup: ContentGroup) {
+    const dialogRef = this.dialogService.openDeleteDialog('really-delete-all-answers');
+    return dialogRef.afterClosed().pipe(
+      switchMap(result => {
+        if (result === 'delete') {
+          return this.deleteAllAnswersOfContentGroup(contentGroup);
+        }
+      })
+    );
+  }
+
+  deleteAllAnswersOfContentGroup(contentGroup: ContentGroup) {
+    const observableBatch = [];
+    for (const contentId of contentGroup.contentIds) {
+      observableBatch.push(this.deleteAnswers(contentGroup.roomId, contentId));
+    }
+    return forkJoin(observableBatch);
   }
 
   getAnswer(roomId: string, contentId: string): Observable<AnswerStatistics> {

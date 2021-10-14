@@ -299,7 +299,8 @@
     "really-delete-account": "Willst du dein Konto mit allen Räumen unwiderruflich löschen?",
     "really-delete-account-admin": "Willst du das Konto mit allen Räumen unwiderruflich löschen?",
     "really-delete-answers": "Willst du wirklich die Antworten auf diese Frage löschen?",
-    "answers-deleted": "Antworten auf diese Frage wurden gelöscht."
+    "answers-deleted": "Antworten auf diese Frage wurden gelöscht.",
+    "really-delete-all-answers": "Willst du wirklich alle Antworten dieser Fragenserie löschen?"
   },
   "errors": {
     "not-authorized": "Du bist nicht autorisiert diese Seite zu sehen.",

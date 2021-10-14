@@ -11,9 +11,9 @@ import { LanguageService } from '../../../services/util/language.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ContentAnswerService } from '../../../services/http/content-answer.service';
 import { GlobalStorageService, STORAGE_KEYS } from '../../../services/util/global-storage.service';
-import { forkJoin } from 'rxjs';
 import { AdvancedSnackBarTypes, NotificationService } from '../../../services/util/notification.service';
 import { DialogService } from '../../../services/util/dialog.service';
+import { EventService } from '../../../services/util/event.service';
 
 export enum StatisticType {
   CHOICE = 'C',
@@ -78,7 +78,8 @@ export class StatisticListComponent implements OnInit {
     protected route: ActivatedRoute,
     private globalStorageService: GlobalStorageService,
     private notificationService: NotificationService,
-    private dialogService: DialogService
+    private dialogService: DialogService,
+    private eventService: EventService
   ) {
     this.deviceType = this.globalStorageService.getItem(STORAGE_KEYS.DEVICE_TYPE);
     langService.langEmitter.subscribe(lang => translateService.use(lang));
@@ -277,15 +278,6 @@ export class StatisticListComponent implements OnInit {
     }
   }
 
-  public showDeleteAnswerDialog(): void {
-    const dialogRef = this.dialogService.openDeleteDialog('really-delete-all-answers');
-    dialogRef.afterClosed().subscribe(result => {
-      if (result === 'delete') {
-        this.deleteAllAnswers();
-      }
-    });
-  }
-
   resetAllAnswers() {
     for (const content of this.dataSource) {
       content.abstentions = 0;
@@ -296,12 +288,8 @@ export class StatisticListComponent implements OnInit {
   }
 
   deleteAllAnswers() {
-    const observableBatch = [];
-    for (const data of this.dataSource) {
-      observableBatch.push(this.contentService.deleteAnswers(this.contentGroup.roomId, data.content.id));
-    }
-    this.resetAllAnswers();
-    forkJoin(observableBatch).subscribe(() => {
+    this.contentService.showDeleteAllAnswersDialog(this.contentGroup).subscribe(() => {
+      this.resetAllAnswers();
       this.translateService.get('content.all-answers-deleted').subscribe(msg => {
         this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
       });
