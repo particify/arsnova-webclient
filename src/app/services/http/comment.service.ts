@@ -8,9 +8,9 @@ import { TranslateService } from '@ngx-translate/core';
 import { NotificationService } from '../util/notification.service';
 import { EventService } from '../util/event.service';
 import { CommentCreated } from '../../models/events/comment-created';
-import { CachingService } from '../util/caching.service';
 import { WsConnectorService } from '../websockets/ws-connector.service';
 import { Room } from '@arsnova/app/models/room';
+import { CachingService } from '@arsnova/app/services/util/caching.service';
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })

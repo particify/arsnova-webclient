@@ -5,7 +5,7 @@ import { RoomStats } from '../../../models/room-stats';
 import { RoomService } from '../../../services/http/room.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Location } from '@angular/common';
-import { WsCommentServiceService } from '../../../services/websockets/ws-comment-service.service';
+import { WsCommentService } from '../../../services/websockets/ws-comment.service';
 import { CommentService } from '../../../services/http/comment.service';
 import { EventService } from '../../../services/util/event.service';
 import { IMessage, Message } from '@stomp/stompjs';
@@ -52,7 +52,7 @@ export class RoomPageComponent implements OnDestroy {
     protected route: ActivatedRoute,
     protected router: Router,
     protected location: Location,
-    protected wsCommentService: WsCommentServiceService,
+    protected wsCommentService: WsCommentService,
     protected commentService: CommentService,
     protected eventService: EventService,
     protected contentService: ContentService,

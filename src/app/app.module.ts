@@ -69,12 +69,13 @@ import { CachingService } from './services/util/caching.service';
 import { LocalFileService } from './services/util/local-file.service';
 import { LikertScaleService } from './services/util/likert-scale.service';
 import { RoomStatsService } from './services/http/room-stats.service';
-import { WsRoomEventDispatcher } from './services/websockets/ws-room-event-dispatcher.service';
+import { WsRoomEventDispatcherService } from './services/websockets/ws-room-event-dispatcher.service';
 import { DemoService } from './services/demo.service';
 import { DemoRoomGuard } from './guards/demo-room.guard';
 import { HotkeyService } from './services/util/hotkey.service';
 import { PasswordEntryComponent } from './components/home/password-entry/password-entry.component';
 import { FormHeaderComponent } from './components/home/form-header/form-header.component';
+import { WsCommentService } from './services/websockets/ws-comment.service';
 
 export function dialogClose(dialogResult: any) {
 }
@@ -139,8 +140,8 @@ export function initializeApp(appConfig: AppConfig) {
     },
     {
       provide: APP_INITIALIZER,
-      useFactory: initWsRoomEventDispatcher,
-      deps: [WsRoomEventDispatcher],
+      useFactory: initWsRoomEventDispatcherService,
+      deps: [WsRoomEventDispatcherService],
       multi: true
     },
     {
@@ -171,7 +172,7 @@ export function initializeApp(appConfig: AppConfig) {
     CommentSettingsService,
     BonusTokenService,
     ContentGroupService,
-    WsConnectorService,
+    WsCommentService,
     ApiConfigService,
     GlobalStorageService,
     ConsentService,
@@ -193,7 +194,7 @@ export function initializeApp(appConfig: AppConfig) {
     LikertScaleService,
     RoomStatsService,
     DemoService,
-    WsRoomEventDispatcher,
+    WsRoomEventDispatcherService,
     HotkeyService,
     { provide: Window,  useValue: window },
     STORAGE_CONFIG_PROVIDERS,
@@ -217,6 +218,6 @@ export function initAuthenticationService(authenticationService: AuthenticationS
   return () => authenticationService.init();
 }
 
-export function initWsRoomEventDispatcher(wsRoomEventDispatcher: WsRoomEventDispatcher) {
-  return () => wsRoomEventDispatcher.init();
+export function initWsRoomEventDispatcherService(wsRoomEventDispatcherService: WsRoomEventDispatcherService) {
+  return () => wsRoomEventDispatcherService.init();
 }

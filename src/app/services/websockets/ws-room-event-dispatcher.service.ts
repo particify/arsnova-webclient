@@ -12,7 +12,7 @@ import { EventService } from '../util/event.service';
 import { WsConnectorService } from './ws-connector.service';
 
 @Injectable()
-export class WsRoomEventDispatcher {
+export class WsRoomEventDispatcherService {
   private roomChanged$ = new Subject<void>();
 
   constructor(

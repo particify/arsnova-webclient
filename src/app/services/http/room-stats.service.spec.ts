@@ -1,6 +1,6 @@
 import { TestBed, inject } from '@angular/core/testing';
 
-import { ContentService } from '@arsnova/app/services/http/content.service';
+import { RoomStatsService } from '@arsnova/app/services/http/room-stats.service';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { EventService } from '@arsnova/app/services/util/event.service';
 import { MockEventService, MockNotificationService, MockTranslateService } from '@arsnova/testing/test-helpers';
@@ -15,17 +15,22 @@ class MockWsConnectorService {
 }
 
 @Injectable()
+class MockFeedbackService {
+}
+
+
+@Injectable()
 class MockCachingService {
   getCache() {
     return new Cache();
   }
 }
 
-describe('ContentService', () => {
+describe('RoomStatsService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
-        ContentService,
+        RoomStatsService,
         {
           provide: EventService,
           useClass: MockEventService
@@ -53,7 +58,7 @@ describe('ContentService', () => {
     });
   });
 
-  it('should be created', inject([ContentService], (service: ContentService) => {
+  it('should be created', inject([RoomStatsService], (service: RoomStatsService) => {
     expect(service).toBeTruthy();
   }));
 });

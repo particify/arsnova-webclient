@@ -11,7 +11,7 @@ import { CommentService } from '../../../services/http/comment.service';
 import { AdvancedSnackBarTypes, NotificationService } from '../../../services/util/notification.service';
 import { TranslateService } from '@ngx-translate/core';
 import { LanguageService } from '../../../services/util/language.service';
-import { WsCommentServiceService } from '../../../services/websockets/ws-comment-service.service';
+import { WsCommentService } from '../../../services/websockets/ws-comment.service';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { CorrectWrong } from '../../../models/correct-wrong.enum';
 import { UserRole } from '../../../models/user-roles.enum';
@@ -88,7 +88,7 @@ export class CommentComponent implements OnInit, OnDestroy {
     private translateService: TranslateService,
     private dialogService: DialogService,
     protected langService: LanguageService,
-    private wsCommentService: WsCommentServiceService,
+    private wsCommentService: WsCommentService,
     private announceService: AnnounceService,
     private globalStorageService: GlobalStorageService,
     public dialog: MatDialog
