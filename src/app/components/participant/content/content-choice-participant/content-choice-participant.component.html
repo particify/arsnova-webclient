@@ -13,7 +13,7 @@
       {{ isAnswerOptionCorrect(i) ? 'check' : 'close'}}</mat-icon>
   </div>
 </mat-list>
-<mat-radio-group [disabled]="alreadySent" *ngIf="!content.multiple" name="Radio">
+<mat-radio-group [disabled]="alreadySent" *ngIf="!content.multiple" name="{{'answer' + content.id}}">
   <mat-list>
     <div class="mat-list-item" *ngFor="let checkedAnswer of checkedAnswers; let i = index" fxLayout="row" fxLayoutAlign="space-between center"
          [ngClass]="{'correct-answer': checkOption(i, true), 'wrong-answer': checkOption(i, false)}">
