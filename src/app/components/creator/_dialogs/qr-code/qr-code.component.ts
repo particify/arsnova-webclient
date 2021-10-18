@@ -29,7 +29,7 @@ export class QrCodeComponent implements OnInit, OnDestroy {
   qrWidth: number;
   bgColor: string;
   fgColor: string;
-  destroyed$ = new Subject();
+  destroyed$ = new Subject<void>();
   qrUrl: string;
   displayUrl: string;
   useJoinUrl = false;

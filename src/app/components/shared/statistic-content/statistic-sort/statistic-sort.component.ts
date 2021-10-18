@@ -33,7 +33,7 @@ export class StatisticSortComponent extends StatisticContentBaseComponent implem
   @Input() content: ContentChoice;
   @Input() directShow: boolean;
 
-  destroyed$ = new Subject();
+  destroyed$ = new Subject<void>();
   chart: Chart;
   chartId: string;
   isLoading = true;

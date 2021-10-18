@@ -56,7 +56,7 @@ export class ControlBarComponent extends NavBarComponent implements OnInit, OnDe
   @ViewChild('moreMenuTrigger') moreMenuTrigger: MatMenuTrigger;
 
   isLoading = true;
-  destroyed$ = new Subject();
+  destroyed$ = new Subject<void>();
   destroyed = false;
   inFullscreen = false;
   barItems: KeyNavBarItem[] = [];

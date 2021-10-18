@@ -31,7 +31,7 @@ export class CreateCommentComponent implements OnInit {
 
   comment: Comment;
   selectedTag: string;
-  eventsSubject: Subject<string> = new Subject<string>();
+  eventsSubject = new Subject<string | void>();
   eventsWrapper: any;
 
   bodyForm = new FormControl('', [Validators.required]);
