@@ -39,7 +39,8 @@ export const dark = {
   '--yellow': '#fdd835',
   '--yellow-light': '#fff9c4',
   '--blue': '#3f51b5',
-  '--grey': '#BDBDBD',
+  '--grey': '#aaaaaa',
+  '--grey-light': '#444444',
   '--black': '#000000',
 
   '--bar-blue': '#027DB9',

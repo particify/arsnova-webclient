@@ -10,13 +10,19 @@
 }
 
 .mat-list-item {
-  margin-bottom: 16px;
-  padding: 0 0.5em 0 1em!important;
+  margin-top: 14px;
   border-width: 2px;
   border-style: solid;
   border-radius: 5px;
-  &:not(.correct-answer):not(.wrong-answer) {
-    border-color: var(--surface);
+  transition: border-color 300ms;
+  &:not(.correct-answer):not(.wrong-answer):not(.selected) {
+    border-color: var(--grey-light);
+  }
+  &:last-of-type {
+    margin-bottom: 16px;
+  }
+  &:first-of-type {
+    margin-top: 8px;
   }
 }
 
@@ -27,3 +33,20 @@
 .wrong-answer {
   border-color: var(--red);
 }
+
+.selected {
+  border-color: var(--primary);
+}
+
+.mat-radio-button, .mat-checkbox {
+  width: 100%;
+}
+
+.mat-checkbox .mat-checkbox-label {
+  margin: 0!important;
+}
+
+.answer-indicator {
+  margin-right: 14px;
+}
+
