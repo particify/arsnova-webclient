@@ -47,9 +47,9 @@ import { StatisticWordcloudComponent } from './statistic-content/statistic-wordc
 import { WordcloudComponent } from './wordcloud/wordcloud.component';
 import { CommentAnswerComponent } from './_dialogs/comment-answer/comment-answer.component';
 import { StatisticScaleComponent } from './statistic-content/statistic-scale/statistic-scale.component';
-import { SplitShortId } from '../../pipes/split-short-id';
+import { SplitShortIdPipe } from 'app/pipes/split-short-id.pipe';
 import { ListBadgeComponent } from './list-badge/list-badge.component';
-import { CounterBraces } from '../../pipes/counter-braces';
+import { CounterBracesPipe } from 'app/pipes/counter-braces.pipe';
 import { HotkeyDirective } from '../../directives/hotkey.directive';
 import { HotkeysComponent } from './_dialogs/hotkeys/hotkeys.component';
 import { A11yIntroPipe } from '../../pipes/a11y-intro.pipe';
@@ -109,9 +109,9 @@ import { UserFormFieldComponent } from './user-profile/user-form-field/user-form
     PublishContentComponent,
     WordcloudComponent,
     CommentAnswerComponent,
-    SplitShortId,
+    SplitShortIdPipe,
     ListBadgeComponent,
-    CounterBraces,
+    CounterBracesPipe,
     HotkeyDirective,
     HotkeysComponent,
     A11yIntroPipe,
@@ -153,7 +153,7 @@ import { UserFormFieldComponent } from './user-profile/user-form-field/user-form
     DividerComponent,
     AnswerCountComponent,
     WordcloudComponent,
-    SplitShortId,
+    SplitShortIdPipe,
     HotkeyDirective,
     HotkeysComponent,
     A11yIntroPipe

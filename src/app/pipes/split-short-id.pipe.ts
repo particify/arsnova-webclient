@@ -2,7 +2,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 import { NBSP, THINSP } from '../utils/html-entities';
 
 @Pipe({name: 'splitShortId'})
-export class SplitShortId implements PipeTransform {
+export class SplitShortIdPipe implements PipeTransform {
   transform(shortId: string, smaller = true): any {
     if (!shortId) return shortId;
     const space = smaller ? THINSP : NBSP;
