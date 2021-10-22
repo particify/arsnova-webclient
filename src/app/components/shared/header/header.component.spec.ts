@@ -22,7 +22,7 @@ import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { LanguageService } from '@arsnova/app/services/util/language.service';
 import { UserService } from '@arsnova/app/services/http/user.service';
 import { DialogService } from '@arsnova/app/services/util/dialog.service';
-import { Renderer2 } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, Renderer2 } from '@angular/core';
 import { ThemeService } from '@arsnova/theme/theme.service';
 import { RoutingService } from '@arsnova/app/services/util/routing.service';
 import { ConsentService } from '@arsnova/app/services/util/consent.service';
@@ -138,6 +138,9 @@ describe('HeaderComponent', () => {
           provide: ConsentService,
           useValue: consentService
         }
+      ],
+      schemas: [
+        CUSTOM_ELEMENTS_SCHEMA
       ]
     })
     .compileComponents();
