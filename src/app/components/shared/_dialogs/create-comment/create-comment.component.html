@@ -18,7 +18,7 @@
   </mat-form-field>
 </div>
 <div>
-  <lib-extension-point extensionId="image-upload" [extensionData]="eventsWrapper"></lib-extension-point>
+  <lib-extension-point *ngIf="data.fileUploadEnabled" extensionId="image-upload" [extensionData]="eventsWrapper"></lib-extension-point>
   <app-dialog-action-buttons
     buttonsLabelSection="dialog"
     confirmButtonLabel="send"

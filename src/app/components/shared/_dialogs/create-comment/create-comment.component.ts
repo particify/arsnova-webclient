@@ -18,6 +18,7 @@ export interface DialogData {
   tags: string[];
   roomId: string;
   directSend: boolean;
+  fileUploadEnabled: boolean;
   role: UserRole;
 }
 

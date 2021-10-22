@@ -11,9 +11,8 @@ import { Room } from '../../../../models/room';
 import { CommentSettings } from '../../../../models/comment-settings';
 import { DialogService } from '../../../../services/util/dialog.service';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
-import { GlobalStorageService, STORAGE_KEYS } from '../../../../services/util/global-storage.service';
+import { GlobalStorageService } from '../../../../services/util/global-storage.service';
 import { UpdateEvent } from '../settings.component';
-import { Comment } from '../../../../models/comment';
 import { EventService } from '../../../../services/util/event.service';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 
@@ -40,13 +39,14 @@ export class CommentSettingsComponent implements OnInit {
   threshold: number;
   enableThreshold = false;
   directSend = true;
-  directSendDefault = true;
+  fileUploadEnabled = false;
   enableTags = false;
   tags: string[] = [];
   timestamp = new Date();
   tagExtension: object;
   tagName = '';
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
+  isLoading = true;
 
   constructor(
     public dialog: MatDialog,
@@ -81,7 +81,8 @@ export class CommentSettingsComponent implements OnInit {
     this.initTags();
     this.commentSettingsService.get(this.roomId).subscribe(settings => {
       this.directSend = settings.directSend;
-      this.directSendDefault = settings.directSend;
+      this.fileUploadEnabled = settings.fileUploadEnabled;
+      this.isLoading = false;
     });
   }
 
@@ -129,7 +130,7 @@ export class CommentSettingsComponent implements OnInit {
     }
   }
 
-  updateCommentSettings() {
+  updateCommentExtensions() {
     let commentExtension: CommentExtensions = new CommentExtensions();
     commentExtension.enableThreshold = this.enableThreshold;
     commentExtension.commentThreshold = this.threshold;
@@ -139,11 +140,14 @@ export class CommentSettingsComponent implements OnInit {
     this.saveChanges();
   }
 
-  updateDirectSend() {
-    const commentSettings = new CommentSettings();
-    commentSettings.roomId = this.roomId;
-    commentSettings.directSend = this.directSend;
+  updateCommentSettings() {
+    const commentSettings = new CommentSettings(this.roomId, this.directSend, this.fileUploadEnabled);
     this.commentSettingsService.update(commentSettings).subscribe();
+  }
+
+  updateFileUploadEnabled(fileUploadEnabled: boolean) {
+    this.fileUploadEnabled = fileUploadEnabled;
+    this.updateCommentSettings();
   }
 
   saveChanges(addedTag?: boolean) {

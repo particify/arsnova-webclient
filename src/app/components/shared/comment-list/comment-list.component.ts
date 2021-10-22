@@ -105,6 +105,7 @@ export class CommentListComponent implements OnInit, OnDestroy {
   search = false;
   searchPlaceholder = '';
   directSend = true;
+  fileUploadEnabled = true;
   thresholdEnabled = false;
   newestComment: Comment = new Comment();
   freeze = false;
@@ -233,6 +234,7 @@ export class CommentListComponent implements OnInit, OnDestroy {
   initRoom(reload = false) {
     this.commentSettingsService.get(this.roomId).subscribe(commentSettings => {
       this.directSend = commentSettings.directSend;
+      this.fileUploadEnabled = commentSettings.fileUploadEnabled;
     });
     this.getComments();
     if (reload && this.search) {
@@ -527,7 +529,7 @@ export class CommentListComponent implements OnInit, OnDestroy {
     if (this.room.extensions && this.room.extensions.tags && this.room.extensions.tags['tags']) {
       tags = this.room.extensions.tags['tags'];
     }
-    this.dialogService.openCreateCommentDialog(this.auth, tags, this.roomId, this.directSend, this.viewRole);
+    this.dialogService.openCreateCommentDialog(this.auth, tags, this.roomId, this.directSend, this.fileUploadEnabled, this.viewRole);
   }
 
   filterComments(type: string, tag?: string): void {

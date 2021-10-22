@@ -60,6 +60,7 @@ export class CommentComponent implements OnInit, OnDestroy {
   @Output() clickedOnTag = new EventEmitter<string>();
   @Output() activeComment = new EventEmitter<Comment>();
   @Input() isModeratorView = false;
+  @Input() fileUploadEnabled = false;
 
   viewRole: UserRole;
   isParticipant = false;
