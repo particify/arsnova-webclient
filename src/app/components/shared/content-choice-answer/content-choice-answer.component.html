@@ -1,0 +1,28 @@
+<mat-list *ngIf="multipleAnswersAllowed">
+  <div class="mat-list-item" *ngFor="let checkedAnswer of selectableAnswers; let i = index" fxLayout="row" fxLayoutAlign="space-between center"
+       [ngClass]="{'correct-answer': checkOption(i ,true), 'wrong-answer': checkOption(i, false), 'selected': checkedAnswer.checked && !isDisabled}">
+    <mat-checkbox [disabled]="true" *ngIf="isDisabled" [checked]="checkedAnswer.checked" name="answer" class="answer-checkbox">
+      {{ checkedAnswer.answerOption.label }}
+    </mat-checkbox>
+    <mat-checkbox *ngIf="!isDisabled" [(ngModel)]="checkedAnswer.checked" name="answer" class="answer-checkbox"
+                  aria-label="{{ 'answer.a11y-select-answer' | translate: {answer: checkedAnswer.answerOption.label} }}">
+      {{ checkedAnswer.answerOption.label }}
+    </mat-checkbox>
+    <mat-icon *ngIf="isCorrectOptionVisible(i)" class="answer-indicator" [ngClass]="correctOptionIndexes.includes(i) ? 'correct' : 'wrong'">
+      {{ isAnswerOptionCorrect(i) ? 'check' : 'close'}}</mat-icon>
+  </div>
+</mat-list>
+<mat-radio-group [disabled]="isDisabled" *ngIf="!multipleAnswersAllowed" [(ngModel)]="selectedAnswerIndex" name="{{'answer' + contentId}}">
+  <mat-list>
+    <div class="mat-list-item unanswered" *ngFor="let checkedAnswer of selectableAnswers; let i = index" fxLayout="row" fxLayoutAlign="space-between center"
+         [ngClass]="{'correct-answer': checkOption(i, true), 'wrong-answer': checkOption(i, false), 'selected': selectedAnswerIndex === i && !isDisabled}">
+      <mat-radio-button (change)="selectSingleAnswer(i)" class="answer-radio-button" [ngClass]="{'answer-radio-checked': selectedAnswerIndex === i}"
+                        aria-label="{{ 'answer.a11y-select-answer' | translate: {answer: checkedAnswer.answerOption.label} }}"
+                        [checked]="checkedAnswer.checked" [value]="i" name="answer">
+        {{ checkedAnswer.answerOption.label | translate }}
+      </mat-radio-button>
+      <mat-icon *ngIf="isCorrectOptionVisible(i)" class="answer-indicator" [ngClass]="correctOptionIndexes.includes(i) ? 'correct' : 'wrong'">
+        {{ isAnswerOptionCorrect(i) ? 'check' : 'close'}}</mat-icon>
+    </div>
+  </mat-list>
+</mat-radio-group>

@@ -55,6 +55,7 @@ import { HotkeysComponent } from './_dialogs/hotkeys/hotkeys.component';
 import { A11yIntroPipe } from '../../pipes/a11y-intro.pipe';
 import { UserProfileComponent } from './user-profile/user-profile.component';
 import { UserFormFieldComponent } from './user-profile/user-form-field/user-form-field.component';
+import { ContentChoiceAnswerComponent } from './content-choice-answer/content-choice-answer.component';
 
 @NgModule({
   imports: [
@@ -116,7 +117,8 @@ import { UserFormFieldComponent } from './user-profile/user-form-field/user-form
     HotkeysComponent,
     A11yIntroPipe,
     UserProfileComponent,
-    UserFormFieldComponent
+    UserFormFieldComponent,
+    ContentChoiceAnswerComponent
   ],
   exports: [
     RoomJoinComponent,
@@ -157,7 +159,8 @@ import { UserFormFieldComponent } from './user-profile/user-form-field/user-form
     HotkeyDirective,
     HotkeysComponent,
     A11yIntroPipe,
-    CounterBracesPipe
+    CounterBracesPipe,
+    ContentChoiceAnswerComponent
   ]
 })
 export class SharedModule {

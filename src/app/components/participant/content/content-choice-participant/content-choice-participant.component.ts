@@ -1,6 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ContentChoice } from '../../../../models/content-choice';
-import { AnswerOption } from '../../../../models/answer-option';
 import { ContentAnswerService } from '../../../../services/http/content-answer.service';
 import { AdvancedSnackBarTypes, NotificationService } from '../../../../services/util/notification.service';
 import { ChoiceAnswer } from '../../../../models/choice-answer';
@@ -12,21 +11,11 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { GlobalStorageService } from '../../../../services/util/global-storage.service';
 import { ContentParticipantBaseComponent } from '../content-participant-base.component';
 import { ContentService } from '../../../../services/http/content.service';
-
-class CheckedAnswer {
-  answerOption: AnswerOption;
-  checked: boolean;
-
-  constructor(answerOption: AnswerOption, checked: boolean) {
-    this.answerOption = answerOption;
-    this.checked = checked;
-  }
-}
+import { SelectableAnswer } from '../../../../models/selectable-answer';
 
 @Component({
   selector: 'app-content-choice-participant',
-  templateUrl: './content-choice-participant.component.html',
-  styleUrls: ['./content-choice-participant.component.scss']
+  templateUrl: './content-choice-participant.component.html'
 })
 export class ContentChoiceParticipantComponent extends ContentParticipantBaseComponent {
 
@@ -40,8 +29,8 @@ export class ContentChoiceParticipantComponent extends ContentParticipantBaseCom
 
   isLoading = true;
   ContentType: typeof ContentType = ContentType;
-  selectedSingleAnswer: string;
-  checkedAnswers: CheckedAnswer[] = [];
+  selectedAnswerIndex: number;
+  selectableAnswers: SelectableAnswer[] = [];
   correctOptionIndexes: number[] = [];
   isCorrect = false;
   isChoice = false;
@@ -66,15 +55,15 @@ export class ContentChoiceParticipantComponent extends ContentParticipantBaseCom
 
   init() {
     for (const answerOption of this.content.options) {
-      this.checkedAnswers.push(new CheckedAnswer(answerOption, false));
+      this.selectableAnswers.push(new SelectableAnswer(answerOption, false));
     }
     if (this.answer) {
       if (this.answer.selectedChoiceIndexes && this.answer.selectedChoiceIndexes.length > 0) {
         for (const i of this.answer.selectedChoiceIndexes) {
-          this.checkedAnswers[i].checked = true;
-          this.multipleAlreadyAnswered += this.checkedAnswers[i].answerOption.label + '&';
+          this.selectableAnswers[i].checked = true;
+          this.multipleAlreadyAnswered += this.selectableAnswers[i].answerOption.label + '&';
           if (!this.content.multiple) {
-            this.selectedSingleAnswer = this.checkedAnswers[i].answerOption.label;
+            this.selectedAnswerIndex = this.answer.selectedChoiceIndexes[0];
           }
         }
       }
@@ -126,28 +115,6 @@ export class ContentChoiceParticipantComponent extends ContentParticipantBaseCom
     }
   }
 
-  isCorrectOptionVisible(index: number) {
-    return this.isChoice && !this.hasAbstained && this.correctOptionsPublished && this.alreadySent && (this.isAnswerOptionSelected(index) ||this.correctOptionIndexes.includes(index))
-  }
-
-  checkOption(index: number, checkCorrect: boolean) {
-    if (this.isChoice && this.isAnswerOptionSelected(index)) {
-      if (checkCorrect) {
-        return this.correctOptionIndexes.includes(index);
-      } else {
-        return !this.correctOptionIndexes.includes(index);
-      }
-    }
-  }
-
-  isAnswerOptionSelected(index: number) {
-    return this.answer?.selectedChoiceIndexes.includes(index);
-  }
-
-  isAnswerOptionCorrect(index: number) {
-    return this.correctOptionIndexes.includes(index);
-  }
-
   checkAnswer(selectedAnswers: number[]) {
     if (this.correctOptionIndexes.length === selectedAnswers.length &&
       this.correctOptionIndexes.every((value, index) => value === selectedAnswers[index])) {
@@ -156,26 +123,27 @@ export class ContentChoiceParticipantComponent extends ContentParticipantBaseCom
   }
 
   resetCheckedAnswers() {
-    for (const answer of this.checkedAnswers) {
+    for (const answer of this.selectableAnswers) {
       answer.checked = false;
     }
+    this.setAnswerIndex(null);
   }
 
-  selectSingleAnswer(answerLabel: string) {
-    this.selectedSingleAnswer = answerLabel;
+  setAnswerIndex(index: number) {
+    this.selectedAnswerIndex = index;
   }
 
   submitAnswer(): void {
     const selectedAnswers: number[] = [];
     if (this.content.multiple) {
-      for (let i = 0; i < this.checkedAnswers.length; i++) {
-        if (this.checkedAnswers[i].checked) {
+      for (let i = 0; i < this.selectableAnswers.length; i++) {
+        if (this.selectableAnswers[i].checked) {
           selectedAnswers.push(i);
         }
       }
     } else {
-      for (let i = 0; i < this.checkedAnswers.length; i++) {
-        if (this.checkedAnswers[i].answerOption.label === this.selectedSingleAnswer) {
+      for (let i = 0; i < this.selectableAnswers.length; i++) {
+        if (i === this.selectedAnswerIndex) {
           selectedAnswers.push(i);
           break;
         }

@@ -1,28 +1,7 @@
-<mat-list *ngIf="content.multiple">
-  <div class="mat-list-item" *ngFor="let checkedAnswer of checkedAnswers; let i = index" fxLayout="row" fxLayoutAlign="space-between center"
-       [ngClass]="{'correct-answer': checkOption(i ,true), 'wrong-answer': checkOption(i, false), 'selected': checkedAnswer.checked && !alreadySent}">
-    <mat-checkbox [disabled]="true" *ngIf="alreadySent" [checked]="checkedAnswer.checked" name="answer" class="answer-checkbox">
-      {{ checkedAnswer.answerOption.label }}
-    </mat-checkbox>
-    <mat-checkbox *ngIf="!alreadySent" [(ngModel)]="checkedAnswer.checked" name="answer" class="answer-checkbox"
-                  aria-label="{{ 'answer.a11y-select-answer' | translate: {answer: checkedAnswer.answerOption.label} }}">
-      {{ checkedAnswer.answerOption.label }}
-    </mat-checkbox>
-    <mat-icon *ngIf="isCorrectOptionVisible(i)" class="answer-indicator" [ngClass]="correctOptionIndexes.includes(i) ? 'correct' : 'wrong'">
-      {{ isAnswerOptionCorrect(i) ? 'check' : 'close'}}</mat-icon>
-  </div>
-</mat-list>
-<mat-radio-group [disabled]="alreadySent" *ngIf="!content.multiple" name="{{'answer' + content.id}}">
-  <mat-list>
-    <div class="mat-list-item unanswered" *ngFor="let checkedAnswer of checkedAnswers; let i = index" fxLayout="row" fxLayoutAlign="space-between center"
-         [ngClass]="{'correct-answer': checkOption(i, true), 'wrong-answer': checkOption(i, false), 'selected': selectedSingleAnswer === checkedAnswer.answerOption.label && !alreadySent}">
-      <mat-radio-button (change)="selectSingleAnswer(checkedAnswer.answerOption.label)" class="answer-radio-button" [ngClass]="{'answer-radio-checked': selectedSingleAnswer === checkedAnswer.answerOption.label}"
-                        aria-label="{{ 'answer.a11y-select-answer' | translate: {answer: checkedAnswer.answerOption.label} }}"
-                        [checked]="checkedAnswer.checked" [value]="checkedAnswer.answerOption.label" name="answer">
-        {{ checkedAnswer.answerOption.label }}
-      </mat-radio-button>
-      <mat-icon *ngIf="isCorrectOptionVisible(i)" class="answer-indicator" [ngClass]="correctOptionIndexes.includes(i) ? 'correct' : 'wrong'">
-        {{ isAnswerOptionCorrect(i) ? 'check' : 'close'}}</mat-icon>
-    </div>
-  </mat-list>
-</mat-radio-group>
+<app-content-choice-answer *ngIf="!isLoading" [answer]="answer" [selectableAnswers]="selectableAnswers"
+                           [isDisabled]="alreadySent" [multipleAnswersAllowed]="content.multiple"
+                           [hasAbstained]="hasAbstained" [hasCorrectAnswer]="isChoice"
+                           [isCorrectAnswerPublished]="correctOptionsPublished" [contentId]="content.id"
+                           [selectedAnswerIndex]="selectedAnswerIndex" [correctOptionIndexes]="correctOptionIndexes"
+                           (answerIndexSelected)="setAnswerIndex($event)">
+</app-content-choice-answer>

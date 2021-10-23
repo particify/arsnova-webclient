@@ -11,11 +11,12 @@ import { LanguageService } from '../../../../services/util/language.service';
 import { LikertScaleService } from '../../../../services/util/likert-scale.service';
 import { AdvancedSnackBarTypes, NotificationService } from '../../../../services/util/notification.service';
 import { ContentParticipantBaseComponent } from '../content-participant-base.component';
+import { AnswerOption } from '../../../../models/answer-option';
+import { SelectableAnswer } from '../../../../models/selectable-answer';
 
 @Component({
   selector: 'app-content-scale-participant',
-  templateUrl: './content-scale-participant.component.html',
-  styleUrls: ['./content-scale-participant.component.scss']
+  templateUrl: './content-scale-participant.component.html'
 })
 export class ContentScaleParticipantComponent extends ContentParticipantBaseComponent {
   @Input() content: ContentScale;
@@ -25,9 +26,9 @@ export class ContentScaleParticipantComponent extends ContentParticipantBaseComp
   @Input() statsPublished: boolean;
   @Output() answerChanged = new EventEmitter<ChoiceAnswer>();
 
-  optionLabels: string[];
+  selectableAnswers: SelectableAnswer[] = [];
   hasAbstained = false;
-  selectedChoiceIndex: number;
+  selectedAnswerIndex: number;
 
   constructor(
     authenticationService: AuthenticationService,
@@ -44,24 +45,24 @@ export class ContentScaleParticipantComponent extends ContentParticipantBaseComp
   }
 
   init() {
-    this.optionLabels = this.likertScaleService.getOptionLabels(
-        this.content.optionTemplate,
-        this.content.optionCount);
+    this.selectableAnswers = this.likertScaleService.getOptionLabels(this.content.optionTemplate, this.content.optionCount)
+      .map(label => new SelectableAnswer(new AnswerOption(label), false));
     if (this.answer) {
       if (this.answer.selectedChoiceIndexes?.length > 0) {
-        this.selectedChoiceIndex = this.answer.selectedChoiceIndexes[0];
+        this.selectedAnswerIndex = this.answer.selectedChoiceIndexes[0];
       } else {
         this.hasAbstained = true;
       }
     }
+    this.isLoading = false;
   }
 
-  selectAnswer(index) {
-    this.selectedChoiceIndex = index;
+  setAnswer(index: number) {
+    this.selectedAnswerIndex = index;
   }
 
   submitAnswer(): void {
-    if (this.selectedChoiceIndex === undefined) {
+    if (this.selectedAnswerIndex === undefined) {
       this.translateService.get('answer.please-one').subscribe(message => {
         this.notificationService.showAdvanced(message, AdvancedSnackBarTypes.WARNING);
       });
@@ -70,7 +71,7 @@ export class ContentScaleParticipantComponent extends ContentParticipantBaseComp
     this.answerService.addAnswerChoice(this.content.roomId, {
       contentId: this.content.id,
       round: this.content.state.round,
-      selectedChoiceIndexes: [this.selectedChoiceIndex],
+      selectedChoiceIndexes: [this.selectedAnswerIndex],
       format: ContentType.SCALE
     } as ChoiceAnswer).subscribe(answer => {
       this.answer = answer;
