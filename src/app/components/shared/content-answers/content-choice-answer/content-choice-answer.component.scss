@@ -1,4 +1,4 @@
-@import '../../participant/content/contents-with-solution';
+@import '../contents-with-options';
 
 .disabled {
   opacity: 0.8;
@@ -10,7 +10,7 @@
 }
 
 .mat-list-item {
-  margin-top: 14px;
+  margin-top: $option-padding-full;
   border-width: 2px;
   border-style: solid;
   border-radius: 5px;
@@ -47,6 +47,6 @@
 }
 
 .answer-indicator {
-  margin-right: 14px;
+  margin-right: $option-padding-full;
 }
 

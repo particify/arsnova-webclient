@@ -1,8 +1,19 @@
+@import '../contents-with-options';
+
 .mat-card {
   width: calc(100% - 2em);
-  margin-top: 8px;
-  background-color: var(--background)!important;
+  margin-top: $option-padding-full;
   cursor: grabbing;
+  box-shadow: none;
+  padding: $option-padding $option-padding-full;
+  border: 2px solid var(--grey-light);
+  &:first-of-type {
+    margin-top: 8px;
+  }
+}
+
+.mat-icon {
+  color: var(--grey);
 }
 
 .no-grab {
@@ -18,11 +29,10 @@
 }
 
 .cdk-drag-preview {
+  border-color: var(--surface);
   box-sizing: border-box;
   border-radius: 4px;
-  box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
-  0 8px 10px 1px rgba(0, 0, 0, 0.14),
-  0 3px 14px 2px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 0 5px var(--primary);
 }
 
 .cdk-drag-placeholder {

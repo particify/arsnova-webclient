@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ContentSortAnswerComponent } from './content-sort-answer.component';
+import { ContentSortAnswerComponent } from 'app/components/shared/content-answers/content-sort-answer/content-sort-answer.component';
 
 describe('ContentSortAnswerComponent', () => {
   let component: ContentSortAnswerComponent;

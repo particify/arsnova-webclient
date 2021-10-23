@@ -3,6 +3,9 @@
   &:last-of-type {
     margin-bottom: 1em;
   }
+  &:first-of-type {
+    margin-top: 0.5em;
+  }
 }
 
 .mat-hint {

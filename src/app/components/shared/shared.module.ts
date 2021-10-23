@@ -36,7 +36,7 @@ import { HintComponent } from './hint/hint.component';
 import { ExtensionPointModule } from '../../../../projects/extension-point/src/lib/extension-point.module';
 import { AnswerCountComponent } from './answer-count/answer-count.component';
 import { StatisticContentComponent } from './statistic-content/statistic-content/statistic-content.component';
-import { ContentSortAnswerComponent } from './content-sort-answer/content-sort-answer.component';
+import { ContentSortAnswerComponent } from './content-answers/content-sort-answer/content-sort-answer.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { StatisticSortComponent } from './statistic-content/statistic-sort/statistic-sort.component';
 import { NavBarComponent } from './bars/nav-bar/nav-bar.component';
@@ -55,7 +55,7 @@ import { HotkeysComponent } from './_dialogs/hotkeys/hotkeys.component';
 import { A11yIntroPipe } from '../../pipes/a11y-intro.pipe';
 import { UserProfileComponent } from './user-profile/user-profile.component';
 import { UserFormFieldComponent } from './user-profile/user-form-field/user-form-field.component';
-import { ContentChoiceAnswerComponent } from './content-choice-answer/content-choice-answer.component';
+import { ContentChoiceAnswerComponent } from './content-answers/content-choice-answer/content-choice-answer.component';
 
 @NgModule({
   imports: [
