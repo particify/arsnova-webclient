@@ -15,7 +15,7 @@ import { ClientAuthentication } from '@arsnova/app/models/client-authentication'
 import { AuthProvider } from '@arsnova/app/models/auth-provider';
 import { User } from '@arsnova/app/models/user';
 import { Person } from '@arsnova/app/models/person';
-import { Pipe, PipeTransform } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, Pipe, PipeTransform } from '@angular/core';
 
 export class MockAuthenticationService {
   getCurrentAuthentication() {
@@ -89,6 +89,9 @@ describe('UserProfileComponent', () => {
           provide: DialogService,
           useClass: MockDialogService
         }
+      ],
+      schemas: [
+        CUSTOM_ELEMENTS_SCHEMA
       ]
     })
     .compileComponents();

@@ -14,6 +14,9 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatMenuModule } from '@angular/material/menu';
 import { By } from '@angular/platform-browser';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { ExtensionPointModule } from '../../../../../projects/extension-point/src/lib/extension-point.module';
+import { RouterTestingModule } from '@angular/router/testing';
 
 describe('FooterComponent', () => {
   let component: FooterComponent;
@@ -54,7 +57,8 @@ describe('FooterComponent', () => {
             useClass: JsonTranslationLoader
           },
           isolate: true
-        })
+        }),
+        ExtensionPointModule
       ],
       providers: [
         FooterComponent,
@@ -74,6 +78,9 @@ describe('FooterComponent', () => {
           provide: ConsentService,
           useValue: consentService
         }
+      ],
+      schemas: [
+        CUSTOM_ELEMENTS_SCHEMA
       ]
     })
     .compileComponents();

@@ -25,6 +25,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { BehaviorSubject } from 'rxjs';
 import { FormsModule } from '@angular/forms';
 import { SplitShortIdPipe } from '@arsnova/app/pipes/split-short-id.pipe';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 export class MockAuthenticationService {
   private auth$$ = new BehaviorSubject<any>({});
@@ -101,6 +102,9 @@ describe('RoomJoinComponent', () => {
           provide: SplitShortIdPipe,
           useValue: splitShortIdPipe
         }
+      ],
+      schemas: [
+        CUSTOM_ELEMENTS_SCHEMA
       ]
     }).compileComponents();
 
