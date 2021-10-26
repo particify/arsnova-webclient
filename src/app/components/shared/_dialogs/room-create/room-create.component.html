@@ -1,6 +1,6 @@
 <form (ngSubmit)="checkLogin()">
   <div fxLayout="column" fxLayoutAlign="center" fxLayoutGap="10px">
-    <lib-extension-point extensionId="lms-course-autocomplete" [extensionData]="{ userId: auth.userId, room: newRoom }">
+    <lib-extension-point extensionId="lms-course-autocomplete" [extensionData]="{ userId: auth?.userId, room: newRoom }">
       <mat-form-field appearance="outline" fxFill>
         <mat-label>{{ 'dialog.room-name' | translate }}</mat-label>
         <input (keypress)="resetEmptyInputs()" matInput #roomName class="input-block" type="text" autocomplete="off"
