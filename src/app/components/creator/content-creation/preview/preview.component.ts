@@ -9,6 +9,7 @@ import { ContentScale } from '../../../../models/content-scale';
 import { LikertScaleService } from '../../../../services/util/likert-scale.service';
 import { TranslateService } from '@ngx-translate/core';
 import { forkJoin, Observable } from 'rxjs';
+import { SelectableAnswer } from '../../../../models/selectable-answer';
 
 @Component({
   selector: 'app-preview',
@@ -23,6 +24,7 @@ export class PreviewComponent implements OnInit {
 
   body: string;
   answerOptions: AnswerOption[];
+  selectableAnswers: SelectableAnswer[] = [];
   multipleAnswers: boolean;
   isLoading = true;
   markdownFeatureset: MarkdownFeatureset;
@@ -49,6 +51,9 @@ export class PreviewComponent implements OnInit {
       forkJoin(optionLabels$).subscribe(labels =>
           this.answerOptions = labels.map(l =>
               ({ label: l, renderedLabel: l })));
+    }
+    if (this.answerOptions) {
+      this.answerOptions.map(o => this.selectableAnswers.push(new SelectableAnswer(o, false)));
     }
     this.markdownFeatureset = [ContentType.SLIDE, ContentType.FLASHCARD].indexOf(format) > -1 ? MarkdownFeatureset.EXTENDED
       : MarkdownFeatureset.SIMPLE;
