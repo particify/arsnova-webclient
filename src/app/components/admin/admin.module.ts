@@ -16,6 +16,7 @@ import { UserManagementComponent } from './user-management/user-management.compo
 import { TRANSLATION_MODULE_NAME } from '../../translate-module-name-token';
 import { TranslateHttpLoaderFactory } from '../../translate-http-loader-factory';
 import { AdminService } from '../../services/http/admin.service';
+import { MatSidenavModule } from '@angular/material/sidenav';
 
 @NgModule({
   imports: [
@@ -35,7 +36,8 @@ import { AdminService } from '../../services/http/admin.service';
         ]
       },
       isolate: true
-    })
+    }),
+    MatSidenavModule
   ],
   declarations: [
     AdminHomeComponent,
@@ -48,6 +50,9 @@ import { AdminService } from '../../services/http/admin.service';
   providers: [
     { provide: TRANSLATION_MODULE_NAME, useValue: 'admin' },
     AdminService
+  ],
+  exports: [
+    MatSidenavModule
   ]
 })
 export class AdminModule {

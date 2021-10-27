@@ -1,10 +1,14 @@
-:host {
-  text-align: center;
+.summary-container {
+  padding: 2em 0;
 }
 
-.mat-card-content, .mat-card-content .mat-icon {
-  font-size: 20px;
-  vertical-align: middle;
+.mat-icon, span, b {
+  font-size: 24px;
+}
+
+p {
+  margin-bottom: 0;
+  opacity: 0.7
 }
 
 .system-health-up {

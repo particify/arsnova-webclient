@@ -1,9 +1,34 @@
-<div fxLayout="column" fxLayoutGap="10px">
-  <h1 fxLayout="row" fxLayoutAlign="center">{{ 'admin-area.title' | translate }}</h1>
-
-  <app-admin-summary-bar></app-admin-summary-bar>
-
-  <div fxLayout="row" fxLayoutAlign="center">
-    <router-outlet></router-outlet>
+<div fxLayout="column" class="admin-container">
+  <div fxLayout="row" fxFill>
+    <mat-drawer-container fxFill>
+      <mat-drawer mode="side" opened>
+        <h2 class="title">{{ 'admin-area.title' | translate }}</h2>
+        <p class="section-header">{{ 'admin-area.general' | translate }}</p>
+        <div class="button-container" fxLayout="column" fxLayoutGap="8px">
+          <button mat-button (click)="changePage('status')" [ngClass]="{'active-page': currentPage === 'status'}">
+            <mat-icon>dns</mat-icon>
+            {{ 'admin-area.status-details' | translate }}
+          </button>
+          <button mat-button (click)="changePage('stats')" [ngClass]="{'active-page': currentPage === 'stats'}">
+            <mat-icon>insights</mat-icon>
+            {{ 'admin-area.system-stats' | translate }}
+          </button>
+          <button mat-button (click)="changePage('users')" [ngClass]="{'active-page': currentPage === 'users'}">
+            <mat-icon>people</mat-icon>
+            {{ 'admin-area.manage-accounts' | translate }}
+          </button>
+          <button mat-button (click)="changePage('rooms')" [ngClass]="{'active-page': currentPage === 'rooms'}">
+            <mat-icon>room_preferences</mat-icon>
+            {{ 'admin-area.manage-rooms' | translate }}
+          </button>
+        </div>
+      </mat-drawer>
+      <mat-drawer-content fxLayout="column">
+        <app-admin-summary-bar></app-admin-summary-bar>
+        <div class="routing-container">
+          <router-outlet></router-outlet>
+        </div>
+      </mat-drawer-content>
+    </mat-drawer-container>
   </div>
 </div>
