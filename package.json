@@ -38,7 +38,7 @@
     "dayjs": "1.10.7",
     "is-docker": "2.2.1",
     "jwt-decode": "3.1.2",
-    "katex": "0.13.24",
+    "katex": "0.15.1",
     "lru-cache": "6.0.0",
     "material-design-icons-iconfont": "6.1.1",
     "prismjs": "1.25.0",
