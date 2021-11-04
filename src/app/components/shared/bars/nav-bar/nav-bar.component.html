@@ -1,3 +1,4 @@
+<lib-extension-point *ngIf="role === 'CREATOR'" extensionId="remote" [extensionData]="{roomId: roomId}"></lib-extension-point>
 <div *ngIf="!tooFewFeatures" class="list nav {{position}}" fxLayout="column" fxLayoutAlign="center center" (window:scroll)="checkScroll()"
      [ngClass]="{'notActive': !isActive, 'fixed': scrollExtended}"
      (mouseenter)="toggleVisibility(true)" (mouseleave)="toggleVisibility(false)">

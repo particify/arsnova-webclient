@@ -1,12 +1,12 @@
 export enum RemoteMessage {
   UPDATE_COMMENT_STATE = 'UpdateCommentState',
-  UPDATE_CONTENT_STATE = 'UpdateContentState',
-  UPDATE_SURVEY_STATE = 'UpdateSurveyState',
-  COMMENT_STATE_UPDATED = 'CommentStateUpdated',
+  COMMENT_ID_CHANGED = 'CommentIdChanged',
   CONTENT_STATE_UPDATED = 'ContentStateUpdated',
-  SURVEY_STATE_UPDATED = 'SurveyStateUpdated',
-  CHANGE_UI_STATE = 'ChangeUiState',
+  CONTENT_GROUP_UPDATED = 'ContentGroupUpdated',
   UI_STATE_CHANGED = 'UiStateChanged',
   SURVEY_STATE_CHANGED = 'SurveyStateChanged',
-  CONTENT_INITIALIZED = 'ContentInitialized'
+  CHANGE_CONTENTS_STATE = 'ChangeContentsState',
+  CHANGE_COMMENTS_STATE = 'ChangeCommentsState',
+  CHANGE_SURVEY_STATE = 'ChangeSurveyState',
+  CHANGE_FEATURE_ROUTE = 'ChangeFeatureRoute'
 }

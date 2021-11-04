@@ -13,7 +13,6 @@ import { HotkeyAction } from '../../../../directives/hotkey.directive';
 import { EventService } from '../../../../services/util/event.service';
 import { RemoteMessage } from '../../../../models/events/remote/remote-message.enum';
 import { UiState } from '../../../../models/events/remote/ui-state-changed-event';
-import { ContentInitializedEvent } from '../../../../models/events/remote/content-initialized-event';
 import { ContentFocusState } from '../../../../models/events/remote/content-focus-state';
 import { ContentMessages } from '../../../../models/events/content-messages.enum';
 
@@ -96,8 +95,8 @@ export class StatisticContentComponent implements OnInit {
         }
       });
       if (this.active) {
-        const event = new ContentInitializedEvent(new ContentFocusState(this.content.id, this.contentGroupId, false, false));
-        this.eventService.broadcast(event.type, event.payload);
+        const remoteState = new ContentFocusState(this.content.id, this.contentGroupId, false, false);
+        this.eventService.broadcast(RemoteMessage.CHANGE_CONTENTS_STATE, remoteState);
       }
     }
   }
@@ -109,11 +108,8 @@ export class StatisticContentComponent implements OnInit {
   }
 
   sendUiState() {
-    const state = {
-      resultsVisible: this.answersVisible,
-      correctAnswersVisible: this.correctVisible
-    };
-    this.eventService.broadcast(RemoteMessage.CHANGE_UI_STATE, state);
+    const remoteState = new ContentFocusState(this.content.id, this.contentGroupId, this.answersVisible, this.correctVisible);
+    this.eventService.broadcast(RemoteMessage.CHANGE_CONTENTS_STATE, remoteState);
   }
 
   toggleAnswers(sendState = true) {
