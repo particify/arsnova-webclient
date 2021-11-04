@@ -19,6 +19,7 @@ import { HotkeyService } from '../../../services/util/hotkey.service';
 import { RemoteMessage } from '../../../models/events/remote/remote-message.enum';
 import { ContentFocusState } from '../../../models/events/remote/content-focus-state';
 import { ContentMessages } from '../../../models/events/content-messages.enum';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-content-presentation',
@@ -44,6 +45,7 @@ export class ContentPresentationComponent implements OnInit, OnDestroy {
   answerCount;
   routeChanged: EventEmitter<boolean> = new EventEmitter<boolean>();
   contentGroup: ContentGroup;
+  remoteSubscription: Subscription;
 
   private hotkeyRefs: Symbol[] = [];
 
@@ -82,6 +84,9 @@ export class ContentPresentationComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.hotkeyRefs.forEach(h => this.hotkeyService.unregisterHotkey(h));
+    if (this.remoteSubscription) {
+      this.remoteSubscription.unsubscribe();
+    }
   }
 
   initScale() {
@@ -100,7 +105,7 @@ export class ContentPresentationComponent implements OnInit, OnDestroy {
         this.contentGroupName = group;
         this.initGroup();
       });
-      this.eventService.on<ContentFocusState>(RemoteMessage.CONTENT_STATE_UPDATED).subscribe(state => {
+      this.remoteSubscription = this.eventService.on<ContentFocusState>(RemoteMessage.CONTENT_STATE_UPDATED).subscribe(state => {
         if (this.contentGroup.id === state.contentGroupId) {
           if (this.contents[this.currentStep].id !== state.contentId) {
             const newIndex = this.contents.map(c => c.id).indexOf(state.contentId);
@@ -138,6 +143,7 @@ export class ContentPresentationComponent implements OnInit, OnDestroy {
             this.currentStep = this.contentIndex;
             setTimeout(() => {
               this.stepper.init(this.contentIndex, this.contents.length);
+              this.updateURL(this.contentIndex);
               if (this.isPresentation && !initial) {
                 const remoteState = new ContentFocusState(this.contents[this.currentStep].id, this.contentGroup.id, false, false);
                 this.eventService.broadcast(RemoteMessage.CHANGE_CONTENTS_STATE, remoteState);

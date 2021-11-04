@@ -19,6 +19,8 @@ import { ContentGroupService } from '../../../services/http/content-group.servic
 import { EventService } from '../../../services/util/event.service';
 import { EntityChanged } from '../../../models/events/entity-changed';
 import { Subscription } from 'rxjs';
+import { ContentFocusState } from '../../../models/events/remote/content-focus-state';
+import { RemoteMessage } from '../../../models/events/remote/remote-message.enum';
 
 @Component({
   selector: 'app-participant-content-carousel-page',
@@ -48,7 +50,11 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
   currentStep: number;
   isReloading = false;
   displaySnackBar = false;
+  guided = false;
+  lockedContentId: string;
   changesSubscription: Subscription;
+  remoteSubscription: Subscription;
+  focusStateSubscription: Subscription;
 
   constructor(
     private contentService: ContentService,
@@ -79,6 +85,12 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
     if (this.changesSubscription) {
       this.changesSubscription.unsubscribe();
     }
+    if (this.remoteSubscription) {
+      this.remoteSubscription.unsubscribe();
+    }
+    if (this.focusStateSubscription) {
+      this.focusStateSubscription.unsubscribe();
+    }
   }
 
   ngOnInit() {
@@ -98,19 +110,71 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
     this.changesSubscription = this.eventService.on('EntityChanged').subscribe(changes => {
       this.handleStateEvent(changes);
     });
+    this.remoteSubscription = this.eventService.on<ContentFocusState>(RemoteMessage.CONTENT_STATE_UPDATED).subscribe(state => {
+      if (this.contentGroup.id === state.contentGroupId) {
+        if (!this.currentStep || this.contents[this.currentStep]?.id !== state.contentId) {
+          const newIndex = this.getIndexOfContentById(state.contentId);
+          if (newIndex > -1) {
+            if (this.started === this.status.NORMAL) {
+              this.stepper.onClick(newIndex);
+            } else {
+              this.initStepper(newIndex);
+            }
+          } else {
+            this.lockedContentId = state.contentId;
+          }
+        }
+      } else {
+        this.contentgroupService.getById(state.contentGroupId).subscribe(group => {
+          this.router.navigate(['participant', 'room', this.shortId, 'group', group.name]).then(() => {
+            this.contentGroup = group;
+            this.isReloading = true;
+            this.getContents(null, state.contentId);
+          });
+        });
+      }
+    });
+    this.focusStateSubscription = this.eventService.on<boolean>(RemoteMessage.FOCUS_STATE_CHANGED).subscribe(guided => {
+      this.guided = guided;
+    });
   }
 
-  getContents(lastContentIndex) {
+  getIndexOfContentById(id: string): number {
+    return this.contents.map(c => c.id).indexOf(id);
+  }
+
+  getContents(lastContentIndex, nextContentId?: string) {
     this.contents = [];
     const publishedIds = this.contentgroupService.filterPublishedIds(this.contentGroup);
     if (publishedIds.length > 0 && this.contentGroup.published) {
       this.contentService.getContentsByIds(this.contentGroup.roomId, publishedIds).subscribe(contents => {
         this.contents = this.contentService.getSupportedContents(contents);
+        if (nextContentId) {
+          lastContentIndex = this.getIndexOfContentById(nextContentId);
+        }
+        if (lastContentIndex >= this.contents.length) {
+          lastContentIndex = this.contents.length - 1;
+        }
+        if (this.isReloading) {
+          if (this.lockedContentId) {
+            const newIndex = this.getIndexOfContentById(this.lockedContentId);
+            if (newIndex) {
+              lastContentIndex = newIndex;
+              this.lockedContentId = null;
+            }
+          }
+          this.updateURL(lastContentIndex);
+        }
         this.getAnswers(lastContentIndex);
       });
     } else {
       this.finishLoading();
     }
+  }
+
+  reloadContents() {
+    this.isReloading = true;
+    this.getContents(this.currentStep);
   }
 
   finishLoading() {
@@ -126,7 +190,9 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
     if (contentIndex >= 0) {
       this.initStepper(contentIndex);
     } else {
-      this.getFirstUnansweredContent();
+      if (!this.guided) {
+        this.getFirstUnansweredContent();
+      }
     }
   }
 
@@ -139,9 +205,11 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
   }
 
   updateURL(index?: number) {
-    this.currentStep = index || 0;
-    const urlTree = this.router.createUrlTree(['participant/room', this.shortId, 'group', this.contentGroupName, index + 1]);
-    this.location.replaceState(this.router.serializeUrl(urlTree));
+    if (this.currentStep !== index || !this.isReloading) {
+      this.currentStep = index || 0;
+      const urlTree = this.router.createUrlTree(['participant/room', this.shortId, 'group', this.contentGroupName, index + 1]);
+      this.location.replaceState(this.router.serializeUrl(urlTree));
+    }
   }
 
   getFirstUnansweredContent() {
@@ -172,21 +240,23 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
 
   receiveSentStatus(answer: Answer, index: number) {
     this.alreadySent.set(index, !!answer);
-    this.answers[this.contents.map(c => c.id).indexOf(answer.contentId)] = answer;
-    if (this.started === this.status.NORMAL) {
-      if (index < this.contents.length - 1) {
-        let wait = 400;
-        if (this.contents[index].state.answersPublished) {
-          wait += 600;
-        }
-        setTimeout(() => {
-          this.nextContent();
+    this.answers[this.getIndexOfContentById(answer.contentId)] = answer;
+    if (!this.guided) {
+      if (this.started === this.status.NORMAL) {
+        if (index < this.contents.length - 1) {
+          let wait = 400;
+          if (this.contents[index].state.answersPublished) {
+            wait += 600;
+          }
           setTimeout(() => {
-            document.getElementById('step').focus();
-          }, 200);
-        }, wait);
-      } else {
-        this.announce('answer.a11y-last-content');
+            this.nextContent();
+            setTimeout(() => {
+              document.getElementById('step').focus();
+            }, 200);
+          }, wait);
+        } else {
+          this.announce('answer.a11y-last-content');
+        }
       }
     }
   }
@@ -225,20 +295,22 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
       const changedEvent = new EntityChanged('ContentGroup', changes.entity, changes.changedProperties);
       if (changedEvent.hasPropertyChanged('firstPublishedIndex') || changedEvent.hasPropertyChanged('lastPublishedIndex')
         || changedEvent.hasPropertyChanged('published')) {
-        if (!this.displaySnackBar) {
-          this.displaySnackBar = true;
-          const contentsChangedMessage = this.translateService.instant('answer.state-changed');
-          const loadString = this.translateService.instant('answer.load');
-          this.notificationService.show(contentsChangedMessage, loadString, { duration: 5000 });
-          this.notificationService.snackRef.onAction().subscribe(() => {
-            this.displaySnackBar = false;
-            this.updateURL();
-            this.isReloading = true;
-            this.getContents(this.currentStep);
-          });
-          this.notificationService.snackRef.afterDismissed().subscribe(() => {
-            this.displaySnackBar = false;
-          })
+        if (this.guided) {
+          this.reloadContents();
+        } else {
+          if (!this.displaySnackBar) {
+            this.displaySnackBar = true;
+            const contentsChangedMessage = this.translateService.instant('answer.state-changed');
+            const loadString = this.translateService.instant('answer.load');
+            this.notificationService.show(contentsChangedMessage, loadString, { duration: 5000 });
+            this.notificationService.snackRef.onAction().subscribe(() => {
+              this.displaySnackBar = false;
+              this.reloadContents();
+            });
+            this.notificationService.snackRef.afterDismissed().subscribe(() => {
+              this.displaySnackBar = false;
+            })
+          }
         }
       }
     }

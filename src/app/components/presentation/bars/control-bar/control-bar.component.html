@@ -80,8 +80,11 @@
         <app-key-button-bar [items]="arrowItems" [withText]="false"></app-key-button-bar>
       </div>
       <app-key-button-bar *ngIf="isActiveFeature('survey')" [items]="surveyItems"></app-key-button-bar>
-      <div fxLayout="row" class="feature-container icon-container">
-        <app-key-button-bar [items]="generalItems" [withText]="false"></app-key-button-bar>
+      <div fxLayout="row">
+        <lib-extension-point extensionId="focus-mode-presentation-control" [extensionData]="{roomId: roomId}"></lib-extension-point>
+        <div fxLayout="row" class="feature-container icon-container">
+          <app-key-button-bar [items]="generalItems" [withText]="false"></app-key-button-bar>
+        </div>
       </div>
     </div>
   </div>

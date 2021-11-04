@@ -8,5 +8,6 @@ export enum RemoteMessage {
   CHANGE_CONTENTS_STATE = 'ChangeContentsState',
   CHANGE_COMMENTS_STATE = 'ChangeCommentsState',
   CHANGE_SURVEY_STATE = 'ChangeSurveyState',
-  CHANGE_FEATURE_ROUTE = 'ChangeFeatureRoute'
+  CHANGE_FEATURE_ROUTE = 'ChangeFeatureRoute',
+  FOCUS_STATE_CHANGED = 'FocusStateChanged'
 }

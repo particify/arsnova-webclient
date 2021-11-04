@@ -10,6 +10,7 @@ import { RoomResolver } from '../../resolver/room.resolver';
 import { RoomViewUserRoleResolver } from '../../resolver/room-view-user-role.resolver';
 import { AuthenticationGuard } from '../../guards/authentication.guard';
 import { RoomUserRoleResolver } from '../../resolver/room-user-role.resolver';
+import { Features } from '../../models/features.enum';
 
 const routes: Routes = [
   {
@@ -25,6 +26,9 @@ const routes: Routes = [
     component: CommentPageComponent,
     resolve: {
       room: RoomResolver
+    },
+    data: {
+      feature: Features.COMMENTS
     }
   },
   {
@@ -32,6 +36,9 @@ const routes: Routes = [
     component: SurveyPageComponent,
     resolve: {
       room: RoomResolver
+    },
+    data: {
+      feature: Features.SURVEY
     }
   },
   {
@@ -39,6 +46,9 @@ const routes: Routes = [
     component: ParticipantContentCarouselPageComponent,
     resolve: {
       room: RoomResolver
+    },
+    data: {
+      feature: Features.CONTENTS
     }
   },
   {
@@ -46,6 +56,9 @@ const routes: Routes = [
     component: ParticipantContentCarouselPageComponent,
     resolve: {
       room: RoomResolver
+    },
+    data: {
+      feature: Features.CONTENTS
     }
   }
 ];

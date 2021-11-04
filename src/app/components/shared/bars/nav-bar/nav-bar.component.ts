@@ -16,6 +16,7 @@ import { ContentGroupStatistics } from '../../../../models/content-group-statist
 import { DataChanged } from '../../../../models/events/data-changed';
 import { RoomStats } from '../../../../models/room-stats';
 import { Features } from '../../../../models/features.enum';
+import { RemoteMessage } from '../../../../models/events/remote/remote-message.enum';
 
 export class NavBarItem extends BarItem {
 
@@ -83,6 +84,10 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
   changeIndicator: ChangeIndicator[];
   contentGroups: ContentGroup[] = [];
   publishedStates: PublishedContentsState[] = [];
+  hideBarForParticipants;
+  focusStateSubscription: Subscription;
+  guidedModeExtensionData: object;
+  isLoading = true;
 
   constructor(protected router: Router,
               protected routingService: RoutingService,
@@ -110,12 +115,21 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
     if (this.feedbackSubscription) {
       this.feedbackSubscription.unsubscribe();
     }
+    if (this.focusStateSubscription) {
+      this.focusStateSubscription.unsubscribe();
+    }
   }
 
   beforeInit() {
+    this.focusStateSubscription = this.eventService.on<boolean>(RemoteMessage.FOCUS_STATE_CHANGED).subscribe(guided => {
+      this.hideBarForParticipants = guided && this.role === UserRole.PARTICIPANT;
+      this.isVisible.emit(!this.tooFewFeatures && !this.hideBarForParticipants);
+    });
   }
 
   afterInit() {
+    this.guidedModeExtensionData = {featureUrl: [this.activeFeatures[this.currentRouteIndex] !== 'group' ? this.activeFeatures[this.currentRouteIndex] : this.groupName]};
+    this.isLoading = false;
   }
 
   initItems() {
@@ -126,6 +140,12 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
         this.activeFeatures.push(Features.SURVEY);
       }
       this.role = data.viewRole;
+      if (this.role === UserRole.PARTICIPANT) {
+        this.eventService.on<string>(RemoteMessage.CHANGE_FEATURE_ROUTE).subscribe(feature => {
+          const featureIndex = this.barItems.map(b => b.name).indexOf(feature);
+          this.navToUrl(featureIndex);
+        });
+      }
       this.shortId = data.room.shortId;
       this.roomId = data.room.id;
       this.feedbackService.startSub(data.room.id);
@@ -240,7 +260,7 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
     } else {
       this.tooFewFeatures = true;
     }
-    this.isVisible.emit(!this.tooFewFeatures);
+    this.isVisible.emit(!this.tooFewFeatures && !this.hideBarForParticipants);
     this.afterInit();
   }
 
