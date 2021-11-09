@@ -18,12 +18,12 @@ import { UserProfileComponent } from './components/shared/user-profile/user-prof
 
 const routes: Routes = [
   {
-    path: '',
-    redirectTo: '/home',
+    path: 'home',
+    redirectTo: '',
     pathMatch: 'full'
   },
   {
-    path: 'home',
+    path: '',
     component: HomePageComponent
   },
   {
