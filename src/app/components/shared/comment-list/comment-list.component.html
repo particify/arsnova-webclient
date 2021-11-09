@@ -234,7 +234,8 @@
     <app-comment *ngFor="let current of displayComments" [comment]="current" [archived]="isArchive"
                  [parseVote]="getVote(current)" (clickedOnTag)="clickedOnTag($event)" [isModeratorView]="isModerator"
                  [isPresentation]="isPresentation" (activeComment)="updateCurrentComment($event)"
-                 [referenceEvent]="referenceEvent.asObservable()" [isNew]="current.id === newestComment.id">
+                 [referenceEvent]="referenceEvent.asObservable()" [isNew]="current.id === newestComment.id"
+                 [fileUploadEnabled]="fileUploadEnabled">
     </app-comment>
   </div>
 

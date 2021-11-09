@@ -74,7 +74,7 @@ export class DialogService {
 
   // Shared dialogs
 
-  openCreateCommentDialog(auth: ClientAuthentication, tags: string[], roomId: string, directSend: boolean,
+  openCreateCommentDialog(auth: ClientAuthentication, tags: string[], roomId: string, directSend: boolean, fileUploadEnabled: boolean,
                           role: UserRole): MatDialogRef<CreateCommentComponent> {
     return this.dialog.open(CreateCommentComponent, {
       width: this.size.small,
@@ -83,6 +83,7 @@ export class DialogService {
         tags: tags,
         roomId: roomId,
         directSend: directSend,
+        fileUploadEnabled: fileUploadEnabled,
         role: role
       }
     });

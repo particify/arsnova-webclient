@@ -7,12 +7,12 @@
           <p class="slide-toggle-header">{{ 'settings.threshold' | translate }}</p>
           <p class="slide-toggle-description">{{ 'settings.threshold-info' | translate }}</p>
         </div>
-        <mat-slide-toggle [(ngModel)]="enableThreshold" (change)="updateCommentSettings()"
+        <mat-slide-toggle [(ngModel)]="enableThreshold" (change)="updateCommentExtensions()"
                           aria-labelledby="threshold"></mat-slide-toggle>
       </div>
       <div fxLayout="row" fxLayoutAlign="center center" *ngIf="enableThreshold">
         <mat-slider id="commentSlider" min="-50" max="-5" step="5" [(ngModel)]="threshold"
-                    (input)="onSliderChange($event)" (change)="updateCommentSettings(); announceThreshold();"></mat-slider>
+                    (input)="onSliderChange($event)" (change)="updateCommentExtensions(); announceThreshold();"></mat-slider>
         <h2>&nbsp;{{ threshold | number }}</h2>
       </div>
     </div>
@@ -22,10 +22,14 @@
           <p class="slide-toggle-header">{{ 'settings.direct-send' | translate }}</p>
           <p class="slide-toggle-description">{{ 'settings.direct-send-info' | translate }}</p>
         </div>
-        <mat-slide-toggle [(ngModel)]="directSend" (change)="updateDirectSend()"
+        <mat-slide-toggle [(ngModel)]="directSend" (change)="updateCommentSettings()"
                             aria-labelledby="settings-direct-send"></mat-slide-toggle>
       </div>
     </div>
+    <lib-extension-point *ngIf="!isLoading" extensionId="comment-image-settings"
+                         [extensionData]="{fileUploadEnabled: fileUploadEnabled}"
+                         (extensionEvent)="updateFileUploadEnabled($event)">
+    </lib-extension-point>
   </div>
   <div>
     <div tabindex="0" id="tags-settings" class="visually-hidden">{{ 'settings.a11y-categories' | translate }}</div>
