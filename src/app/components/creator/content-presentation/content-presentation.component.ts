@@ -176,18 +176,21 @@ export class ContentPresentationComponent implements OnInit, OnDestroy {
     return `${this.currentStep + 1} / ${this.contents.length}`;
   }
 
+  updateRoute(rolePrefix: string, index: number) {
+    const urlTree = this.router.createUrlTree([rolePrefix, this.shortId, 'series', this.contentGroupName, index]);
+    this.location.replaceState(this.router.serializeUrl(urlTree));
+  }
+
   updateURL(index: number) {
     this.currentStep = index;
     const urlIndex = index + 1;
-    let urlTree;
     if (this.isPresentation) {
-      urlTree = this.router.createUrlTree(['presentation', this.shortId, this.contentGroupName, urlIndex]);
+      this.updateRoute('present', urlIndex);
       const remoteState = new ContentFocusState(this.contents[this.currentStep].id, this.contentGroup.id, null, null);
       this.eventService.broadcast(RemoteMessage.CHANGE_CONTENTS_STATE, remoteState)
     } else {
-      urlTree = this.router.createUrlTree(['creator', this.shortId, 'series', this.contentGroupName, urlIndex]);
+      this.updateRoute('edit', urlIndex);
     }
-    this.location.replaceState(this.router.serializeUrl(urlTree));
     if (index !== this.entryIndex) {
       this.contentIndex = null;
     }

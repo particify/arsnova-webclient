@@ -19,6 +19,7 @@ import { AuthProvider } from '../../../models/auth-provider';
 import { MembershipsChanged } from '../../../models/events/memberships-changed';
 import { ExtensionFactory } from '../../../../../projects/extension-point/src/lib/extension-factory';
 import { UserService } from '../../../services/http/user.service';
+import { RoutingService } from '../../../services/util/routing.service';
 
 interface RoomDataView {
   summary: RoomSummary;
@@ -63,7 +64,8 @@ export class RoomListComponent implements OnInit, OnDestroy {
     protected router: Router,
     private dialogService: DialogService,
     private globalStorageService: GlobalStorageService,
-    private extensionFactory: ExtensionFactory
+    private extensionFactory: ExtensionFactory,
+    private routingService: RoutingService
   ) {
   }
 
@@ -185,7 +187,7 @@ export class RoomListComponent implements OnInit, OnDestroy {
   }
 
   navToSettings(shortId: string) {
-    this.router.navigate(['creator', shortId, 'settings']);
+    this.router.navigate(['edit', shortId, 'settings']);
   }
 
   openDeleteRoomDialog(room: RoomDataView) {
@@ -251,14 +253,7 @@ export class RoomListComponent implements OnInit, OnDestroy {
   }
 
   roleToString(role: UserRole): string {
-    switch (role) {
-      case UserRole.CREATOR:
-        return 'creator';
-      case UserRole.PARTICIPANT:
-        return 'participant';
-      case UserRole.EXECUTIVE_MODERATOR:
-        return 'moderator';
-    }
+    return this.routingService.getRoleString(role);
   }
 
   filterRooms(search: string) {

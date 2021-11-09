@@ -38,7 +38,7 @@ export class GroupContentComponent extends ContentListBaseComponent implements O
   inputFocus = false;
   isInSortingMode = false;
   updatedName: string;
-  baseURL = 'creator';
+  baseURL = 'edit';
   published = false;
   statisticsPublished = true;
   correctOptionsPublished = true;
@@ -143,7 +143,7 @@ export class GroupContentComponent extends ContentListBaseComponent implements O
   }
 
   goToEdit(content: Content) {
-    this.router.navigate(['creator', this.room.shortId, 'series', this.contentGroup.name, 'edit', content.id]);
+    this.router.navigate(['edit', this.room.shortId, 'series', this.contentGroup.name, 'edit', content.id]);
   }
 
   announce() {
@@ -403,7 +403,7 @@ export class GroupContentComponent extends ContentListBaseComponent implements O
     const index = this.contents.filter(c => this.contentTypes.indexOf(c.format) > -1).
     map(co => co.id).indexOf(content.id);
     if (index > -1) {
-      this.router.navigate(['creator', this.room.shortId, 'series', this.contentGroup.name, index + 1]);
+      this.router.navigate(['edit', this.room.shortId, 'series', this.contentGroup.name, index + 1]);
     }
   }
 

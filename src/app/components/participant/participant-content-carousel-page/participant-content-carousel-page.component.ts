@@ -126,7 +126,7 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
         }
       } else {
         this.contentgroupService.getById(state.contentGroupId).subscribe(group => {
-          this.router.navigate(['participant', 'room', this.shortId, 'group', group.name]).then(() => {
+          this.router.navigate(['p', 'room', this.shortId, 'group', group.name]).then(() => {
             this.contentGroup = group;
             this.isReloading = true;
             this.getContents(null, state.contentId);
@@ -207,7 +207,7 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
   updateURL(index?: number) {
     if (this.currentStep !== index || !this.isReloading) {
       this.currentStep = index || 0;
-      const urlTree = this.router.createUrlTree(['participant', this.shortId, 'series', this.contentGroupName, index + 1]);
+      const urlTree = this.router.createUrlTree(['p', this.shortId, 'series', this.contentGroupName, index + 1]);
       this.location.replaceState(this.router.serializeUrl(urlTree));
     }
   }

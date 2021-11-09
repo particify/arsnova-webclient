@@ -42,7 +42,7 @@ export class ContentGroupsComponent implements OnInit {
       this.globalStorageService.setItem(STORAGE_KEYS.LAST_GROUP, this.contentGroupName);
     } else {
       if (this.role === UserRole.CREATOR) {
-        this.router.navigate(['creator', this.roomShortId, 'archive']);
+        this.router.navigate(['edit', this.roomShortId, 'archive']);
       }
     }
   }

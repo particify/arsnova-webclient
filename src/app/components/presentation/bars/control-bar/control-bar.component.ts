@@ -8,7 +8,6 @@ import { FeedbackService } from '../../../../services/http/feedback.service';
 import { ContentGroupService } from '../../../../services/http/content-group.service';
 import { EventService } from '../../../../services/util/event.service';
 import { BarItem } from '../../../shared/bars/bar-base';
-import { UserRole } from '../../../../models/user-roles.enum';
 import { ContentGroup } from '../../../../models/content-group';
 import { map, takeUntil } from 'rxjs/operators';
 import { ApiConfigService } from '../../../../services/http/api-config.service';
@@ -76,7 +75,7 @@ export class ControlBarComponent extends NavBarComponent implements OnInit, OnDe
   features: BarItem[] = [
     new BarItem(Features.COMMENTS, 'question_answer'),
     new BarItem(Features.CONTENTS, 'equalizer'),
-    new BarItem(Features.SURVEY, 'thumbs_up_down')
+    new BarItem(Features.FEEDBACK, 'thumbs_up_down')
   ];
   groupItems: KeyNavBarItem[] = [
     new KeyNavBarItem('results', 'insert_chart', '', ' '),
@@ -347,11 +346,7 @@ export class ControlBarComponent extends NavBarComponent implements OnInit, OnDe
   }
 
   getFeatureUrl(feature: string): string {
-    return this.groupName && feature === Features.CONTENTS ? this.getQuestionUrl(this.role, this.groupName) : feature;
-  }
-
-  getQuestionUrl(role: UserRole, group: string): string {
-    return group;
+    return this.groupName && feature === Features.CONTENTS ? feature + this.getGroupUrl() : feature;
   }
 
   navToUrl(index: number) {
@@ -384,7 +379,7 @@ export class ControlBarComponent extends NavBarComponent implements OnInit, OnDe
     if (this.inFullscreen) {
       this.exitFullscreen();
     }
-    this.router.navigateByUrl(`creator/${this.shortId}`);
+    this.router.navigateByUrl(`edit/${this.shortId}`);
   }
 
   changeGroup(contentGroup: ContentGroup) {

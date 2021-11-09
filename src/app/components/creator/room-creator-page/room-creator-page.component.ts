@@ -21,6 +21,7 @@ import { ContentGroupService } from '../../../services/http/content-group.servic
 import { ContentGroup } from '../../../models/content-group';
 import { RoomStatsService } from '../../../services/http/room-stats.service';
 import { HotkeyService } from '../../../services/util/hotkey.service';
+import { RoutingService } from '../../../services/util/routing.service';
 
 @Component({
   selector: 'app-room-creator-page',
@@ -53,10 +54,11 @@ export class RoomCreatorPageComponent extends RoomPageComponent implements OnIni
     protected contentService: ContentService,
     private dialogService: DialogService,
     protected globalStorageService: GlobalStorageService,
-    private hotkeyService: HotkeyService
+    private hotkeyService: HotkeyService,
+    protected routingService: RoutingService
   ) {
     super(roomService, roomStatsService, contentGroupService, route, router, location, wsCommentService,
-      commentService, eventService, contentService, translateService, notification, globalStorageService);
+      commentService, eventService, contentService, translateService, notification, globalStorageService, routingService);
     langService.langEmitter.subscribe(lang => translateService.use(lang));
   }
 
@@ -121,7 +123,7 @@ export class RoomCreatorPageComponent extends RoomPageComponent implements OnIni
   }
 
   openPresentationMode() {
-    this.router.navigate(['presentation', this.room.shortId]);
+    this.router.navigate(['present', this.room.shortId]);
   }
 
   openCreateContentGroupDialog() {
@@ -134,7 +136,7 @@ export class RoomCreatorPageComponent extends RoomPageComponent implements OnIni
           this.translateService.get('room-page.content-group-created').subscribe(msg => {
             this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.SUCCESS);
           });
-          this.router.navigate(['creator', this.room.shortId, 'series', name]);
+          this.router.navigate(['edit', this.room.shortId, 'series', name]);
         });
       }
     });

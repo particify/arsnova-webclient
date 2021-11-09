@@ -14,7 +14,7 @@
             </span>
             <span class="room-short-id">{{room.shortId | splitShortId}}</span>
           </div>
-          <button mat-icon-button class="corner-buttons" (click)="switchRole('participant')"
+          <button mat-icon-button class="corner-buttons" (click)="switchRole('p')"
                   aria-labelledby="switch-role">
             <mat-icon class="corner-icon icon-secondary"
                       matTooltip="{{ 'room-page.switch-role' | translate}}">{{roleIconString}}
@@ -30,7 +30,7 @@
         <div class="action-button-container" fxLayout="row" fxLayoutAlign="center">
           <div class="action-button-item" fxLayoutAlign="center center">
             <button id="comments-button" mat-icon-button class="main-button" [disableRipple]="true"
-                    routerLink="/moderator/{{ room.shortId }}/comments" aria-labelledby="comments"
+                    [routerLink]="['comments']" aria-labelledby="comments"
                     appHotkey="1">
               <mat-icon matBadge="{{commentCounter}}" class="main-icon">
                 question_answer

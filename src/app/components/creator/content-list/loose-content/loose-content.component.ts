@@ -32,7 +32,7 @@ export class LooseContentComponent extends ContentListBaseComponent implements O
   creationMode = false;
   newName: string;
   creationSelection: boolean[] = [];
-  baseURL = 'creator/';
+  baseURL = 'edit';
 
   constructor(
     protected contentService: ContentService,

@@ -24,8 +24,7 @@ const routes: Routes = [
   },
   {
     path: 'survey',
-    redirectTo: 'feedback',
-    pathMatch: 'full'
+    redirectTo: 'feedback'
   },
   {
     path: '',

@@ -47,7 +47,7 @@ const routes: Routes = [
       room: RoomResolver
     },
     data: {
-      feature: Features.SURVEY
+      feature: Features.FEEDBACK
     }
   },
   {

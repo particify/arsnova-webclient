@@ -125,7 +125,7 @@ export class HeaderComponent implements OnInit {
   }
 
   navToHome() {
-    this.router.navigateByUrl('home');
+    this.router.navigateByUrl('');
   }
 
   navToUserHome() {

@@ -78,7 +78,7 @@ export class StatisticsPageComponent implements OnInit {
   }
 
   updateUrl() {
-    const urlList = ['creator', this.shortId, 'series', this.currentGroup.name, 'statistics'];
+    const urlList = ['edit', this.shortId, 'series', this.currentGroup.name, 'statistics'];
     this.router.navigate(urlList);
   }
 

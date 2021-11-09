@@ -77,7 +77,7 @@ export class SettingsComponent implements OnInit {
   }
 
   updateURL() {
-    const urlTree = this.router.createUrlTree(['creator', this.room.shortId, 'settings', this.settings.componentName]);
+    const urlTree = this.router.createUrlTree(['edit', this.room.shortId, 'settings', this.settings.componentName]);
     this.location.replaceState(this.router.serializeUrl(urlTree));
   }
 

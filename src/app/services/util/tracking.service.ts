@@ -218,11 +218,11 @@ export class TrackingService {
    * Replaces IDs in a URI to protect the user's privacy.
    */
   stripIdsFromUri(uri: string) {
-    return uri.replace(/\/room\/[0-9]+(\/|$)/, '__ROOM_SHORT_ID__$1')
+    return uri.replace(/\/[0-9]+(\/|$)/, '/__ROOM_SHORT_ID__$1')
         .replace(/\/~.*?(\/|$)/, '/__ALIAS__$1')
         .replace(/\/[0-9a-f]{32}(\/|$)/, '/__ID__$1')
         .replace(/\/[0-9]{1,4}(\/|$)/, '/__INDEX__$1')
-        .replace(/\/series\/[^\/]+/, '/series/__GROUP__')
-        .replace(/\/presentation\/[0-9]+(\/|$)/, '/presentation/__ROOM_SHORT_ID__$1');
+        .replace(/\/series\/[^\/]+/, '/series/__SERIES__')
+        .replace(/\/present\/[0-9]+(\/|$)/, '/present/__ROOM_SHORT_ID__$1');
   }
 }

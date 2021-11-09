@@ -75,6 +75,6 @@ export class BonusTokenComponent implements OnInit {
   }
 
   navToComment(commentId: string) {
-    this.router.navigate(['creator', this.room.shortId, 'comment', commentId]);
+    this.router.navigate(['edit', this.room.shortId, 'comment', commentId]);
   }
 }

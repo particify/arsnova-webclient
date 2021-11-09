@@ -33,7 +33,7 @@
             <mat-icon class="corner-icon icon-secondary">more_vert</mat-icon>
           </button>
           <mat-menu #moreMenu="matMenu">
-            <button mat-menu-item tabindex="0" (click)="switchRole('participant')"
+            <button mat-menu-item tabindex="0" (click)="switchRole('p')"
                     aria-labelledby="switch-role">
               <mat-icon class="menu-icon icon-secondary">{{roleIconString}}</mat-icon>
               <span>{{ 'room-page.switch-role' | translate }}</span>
@@ -57,7 +57,7 @@
         <div class="action-button-container" fxLayout="row" fxLayoutAlign="center">
           <div class="action-button-item" fxLayoutAlign="center center">
             <button id="comments-button" mat-icon-button class="main-button" [disableRipple]="true"
-                    routerLink="/creator/{{ room.shortId }}/comments" aria-labelledby="comments"
+                    [routerLink]="['comments']" aria-labelledby="comments"
                     appHotkey="1" [appHotkeyTitle]="'room-page.comments' | translate">
               <mat-icon matBadge="{{commentCounter}}" class="main-icon">
                 question_answer
@@ -68,7 +68,7 @@
           </div>
           <div class="action-button-item" fxLayoutAlign="center center">
             <button mat-icon-button class="main-button" id="live-survey-button" aria-labelledby="live-survey"
-                    [disableRipple]="true" routerLink="/creator/{{ room.shortId }}/feedback"
+                    [disableRipple]="true" [routerLink]="['feedback']"
                     appHotkey="2" [appHotkeyTitle]="'room-page.live-survey' | translate">
               <mat-icon class="main-icon">
                 thumbs_up_down

@@ -24,6 +24,7 @@ import { Location } from '@angular/common';
 import { HotkeyService } from '../../../services/util/hotkey.service';
 import { RemoteMessage } from '../../../models/events/remote/remote-message.enum';
 import { CommentFocusState } from '../../../models/events/remote/comment-focus-state';
+import { RoutingService } from '../../../services/util/routing.service';
 
 // Using lowercase letters in enums because they we're also used for parsing incoming WS-messages
 
@@ -142,7 +143,8 @@ export class CommentListComponent implements OnInit, OnDestroy {
     private globalStorageService: GlobalStorageService,
     private commentSettingsService: CommentSettingsService,
     private location: Location,
-    private hotkeyService: HotkeyService
+    private hotkeyService: HotkeyService,
+    private routingService: RoutingService
   ) {
     langService.langEmitter.subscribe(lang => translateService.use(lang));
   }
@@ -695,7 +697,7 @@ export class CommentListComponent implements OnInit, OnDestroy {
   }
 
   navToSettings() {
-    this.router.navigate(['creator', this.room.shortId, 'settings', 'comments']);
+    this.router.navigate(['edit', this.room.shortId, 'settings', 'comments']);
   }
 
   resetComments() {
@@ -782,7 +784,7 @@ export class CommentListComponent implements OnInit, OnDestroy {
   }
 
   updateUrl() {
-    const role = this.viewRole === UserRole.CREATOR ? 'creator' : 'moderator';
+    const role = this.routingService.getRoleString(this.viewRole);
     const url = [role, this.room.shortId, 'comments'];
     if (this.isModerator) {
       url.push('moderation');

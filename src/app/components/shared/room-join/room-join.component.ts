@@ -70,7 +70,7 @@ export class RoomJoinComponent implements OnInit, OnDestroy {
   }
 
   navigate(shortId: string) {
-    this.router.navigate(['participant', shortId]);
+    this.router.navigate(['p', shortId]);
   }
 
   /**
