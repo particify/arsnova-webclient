@@ -53,8 +53,6 @@ import { CounterBracesPipe } from '../../pipes/counter-braces.pipe';
 import { HotkeyDirective } from '../../directives/hotkey.directive';
 import { HotkeysComponent } from './_dialogs/hotkeys/hotkeys.component';
 import { A11yIntroPipe } from '../../pipes/a11y-intro.pipe';
-import { UserProfileComponent } from './user-profile/user-profile.component';
-import { UserFormFieldComponent } from './user-profile/user-form-field/user-form-field.component';
 import { ContentChoiceAnswerComponent } from './content-answers/content-choice-answer/content-choice-answer.component';
 
 @NgModule({
@@ -116,8 +114,6 @@ import { ContentChoiceAnswerComponent } from './content-answers/content-choice-a
     HotkeyDirective,
     HotkeysComponent,
     A11yIntroPipe,
-    UserProfileComponent,
-    UserFormFieldComponent,
     ContentChoiceAnswerComponent
   ],
   exports: [
