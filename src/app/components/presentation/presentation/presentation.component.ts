@@ -67,15 +67,19 @@ export class PresentationComponent implements OnInit {
 
   updateUrl(group?: string) {
     const isGroup = this.featureString === Features.CONTENTS;
-    let feature =  isGroup ? group || this.lastGroup : this.featureString;
     if (group) {
       this.lastGroup = group;
       this.groupChanged.emit(group);
       this.globalStorageService.removeItem(STORAGE_KEYS.LAST_INDEX);
     }
-    const urlList = ['presentation', this.shortId, feature];
-    if (!feature) {
-      urlList.pop();
+    const urlList = ['present', this.shortId];
+    if (this.featureString) {
+      urlList.push(this.featureString);
+      if (isGroup) {
+        const groupName = group || this.lastGroup;
+        urlList.push(groupName);
+      }
+    } else {
       document.getElementById('welcome-message').focus();
     }
     const urlTree = this.router.createUrlTree(urlList);
