@@ -432,7 +432,7 @@ div {
 
 .mat-checkbox-label {
   margin-left: 10px;
-  color: var(--on-surface);
+  color: var(--on-surface)!important;
 }
 
 .mat-checkbox-layout {
