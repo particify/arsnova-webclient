@@ -22,6 +22,7 @@ import { FeedbackService } from '../../../services/http/feedback.service';
 import { ContentGroupService } from '../../../services/http/content-group.service';
 import { ContentGroup } from '../../../models/content-group';
 import { RoomStatsService } from '../../../services/http/room-stats.service';
+import { RoutingService } from '../../../services/util/routing.service';
 
 @Component({
   selector: 'app-room-participant-page',
@@ -51,10 +52,11 @@ export class RoomParticipantPageComponent extends RoomPageComponent implements O
     public eventService: EventService,
     private wsFeedbackService: WsFeedbackService,
     protected globalStorageService: GlobalStorageService,
-    private feedbackService: FeedbackService
+    private feedbackService: FeedbackService,
+    protected routingService: RoutingService
   ) {
     super(roomService, roomStatsService, contentGroupService, route, router, location, wsCommentService,
-      commentService, eventService, contentService, translateService, notificationService, globalStorageService);
+      commentService, eventService, contentService, translateService, notificationService, globalStorageService, routingService);
     langService.langEmitter.subscribe(lang => translateService.use(lang));
   }
 

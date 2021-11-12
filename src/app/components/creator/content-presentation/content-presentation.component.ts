@@ -72,7 +72,7 @@ export class ContentPresentationComponent implements OnInit, OnDestroy {
     this.route.params.subscribe(params => {
       const lastIndex = this.globalStorageService.getItem(STORAGE_KEYS.LAST_INDEX);
       this.entryIndex = (this.isPresentation && lastIndex > -1 ? lastIndex : params['contentIndex'] - 1) || 0;
-      this.contentGroupName = this.globalStorageService.getItem(STORAGE_KEYS.LAST_GROUP) || params['contentGroup'];
+      this.contentGroupName = this.globalStorageService.getItem(STORAGE_KEYS.LAST_GROUP) || params['seriesName'];
       this.globalStorageService.setItem(STORAGE_KEYS.LAST_GROUP, this.contentGroupName);
       this.route.data.subscribe(data => {
         this.roomId = data.room.id;
@@ -176,18 +176,21 @@ export class ContentPresentationComponent implements OnInit, OnDestroy {
     return `${this.currentStep + 1} / ${this.contents.length}`;
   }
 
+  updateRoute(rolePrefix: string, index: number) {
+    const urlTree = this.router.createUrlTree([rolePrefix, this.shortId, 'series', this.contentGroupName, index]);
+    this.location.replaceState(this.router.serializeUrl(urlTree));
+  }
+
   updateURL(index: number) {
     this.currentStep = index;
     const urlIndex = index + 1;
-    let urlTree;
     if (this.isPresentation) {
-      urlTree = this.router.createUrlTree(['presentation', this.shortId, this.contentGroupName, urlIndex]);
+      this.updateRoute('present', urlIndex);
       const remoteState = new ContentFocusState(this.contents[this.currentStep].id, this.contentGroup.id, null, null);
       this.eventService.broadcast(RemoteMessage.CHANGE_CONTENTS_STATE, remoteState)
     } else {
-      urlTree = this.router.createUrlTree(['creator/room', this.shortId, 'group', this.contentGroupName, 'statistics', urlIndex]);
+      this.updateRoute('edit', urlIndex);
     }
-    this.location.replaceState(this.router.serializeUrl(urlTree));
     if (index !== this.entryIndex) {
       this.contentIndex = null;
     }

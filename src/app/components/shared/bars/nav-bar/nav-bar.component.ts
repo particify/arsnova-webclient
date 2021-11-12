@@ -66,7 +66,7 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
   features: BarItem[] = [
     new BarItem(Features.COMMENTS, 'question_answer'),
     new BarItem(Features.CONTENTS, 'equalizer'),
-    new BarItem(Features.SURVEY, 'thumbs_up_down')
+    new BarItem(Features.FEEDBACK, 'thumbs_up_down')
   ];
   currentRouteIndex: number;
   isActive = true;
@@ -128,7 +128,7 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
   }
 
   afterInit() {
-    this.guidedModeExtensionData = {featureUrl: [this.activeFeatures[this.currentRouteIndex] !== 'group' ? this.activeFeatures[this.currentRouteIndex] : this.groupName]};
+    this.guidedModeExtensionData = {featureUrl: [this.activeFeatures[this.currentRouteIndex] !== Features.CONTENTS ? this.activeFeatures[this.currentRouteIndex] : this.groupName]};
     this.isLoading = false;
   }
 
@@ -137,7 +137,7 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
     this.changeIndicator = this.globalStorageService.getItem(STORAGE_KEYS.FEATURE_NEWS);
     this.route.data.subscribe(data => {
       if (!data.room.settings['feedbackLocked']) {
-        this.activeFeatures.push(Features.SURVEY);
+        this.activeFeatures.push(Features.FEEDBACK);
       }
       this.role = data.viewRole;
       if (this.role === UserRole.PARTICIPANT) {
@@ -150,7 +150,7 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
       this.roomId = data.room.id;
       this.feedbackService.startSub(data.room.id);
       this.route.params.subscribe(params => {
-        let group = params['contentGroup'];
+        let group = params['seriesName'];
         if (group === undefined) {
           group = this.globalStorageService.getItem(STORAGE_KEYS.LAST_GROUP);
         } else {
@@ -202,14 +202,14 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
       this.feedbackSubscription = this.feedbackService.messageEvent.subscribe(message => {
         const type = JSON.parse(message.body).type;
         if (type === FeedbackMessageType.STARTED) {
-          this.activeFeatures.push(Features.SURVEY);
+          this.activeFeatures.push(Features.FEEDBACK);
           this.changeIndicator.push(
-            new ChangeIndicator(Features.SURVEY, true)
+            new ChangeIndicator(Features.FEEDBACK, true)
           );
           this.getItems();
-          this.toggleNews(Features.SURVEY);
+          this.toggleNews(Features.FEEDBACK);
         } else if (type === FeedbackMessageType.STOPPED) {
-          const index = this.activeFeatures.indexOf(Features.SURVEY);
+          const index = this.activeFeatures.indexOf(Features.FEEDBACK);
           if (this.currentRouteIndex !== index) {
             this.activeFeatures.splice(index, 1);
             this.changeIndicator.splice(index, 1);
@@ -226,7 +226,7 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
     for (const feature of this.features) {
       let url = this.getBaseUrl() + this.getFeatureUrl(feature.name);
       const featureIndex = this.activeFeatures.indexOf(feature.name);
-      if ((featureIndex > -1 || (feature.name === Features.SURVEY && this.role === UserRole.CREATOR))
+      if ((featureIndex > -1 || (feature.name === Features.FEEDBACK && this.role === UserRole.CREATOR))
           && this.role !== UserRole.EXECUTIVE_MODERATOR) {
         this.barItems.push(
           new NavBarItem(
@@ -274,7 +274,7 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
   getFeatureUrl(feature: string): string {
     let url = feature;
     if (this.groupName && feature === Features.CONTENTS) {
-      url += this.getQuestionUrl(this.role, this.groupName);
+      url += this.getGroupUrl();
     }
     return url;
   }
@@ -295,15 +295,11 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
   }
 
   getBaseUrl(): string {
-    return `/${this.routingService.getRoleString(this.role)}/room/${this.shortId}/`;
+    return `/${this.routingService.getRoleString(this.role)}/${this.shortId}/`;
   }
 
-  getQuestionUrl(role: UserRole, group: string): string {
-    let url =  '/' + group;
-    if (role === UserRole.CREATOR) {
-      url += '/statistics';
-    }
-    return url;
+  getGroupUrl() {
+    return '/' + this.groupName;
   }
 
   navToUrl(index: number) {
@@ -311,9 +307,9 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
     const url = item.url;
     if (url) {
       if (item.name === Features.CONTENTS) {
-        const route = [this.routingService.getRoleString(this.role), 'room', this.shortId, 'group', this.groupName];
+        const route = [this.routingService.getRoleString(this.role), this.shortId, 'series', this.groupName];
         if (this.role === UserRole.CREATOR) {
-          route.push('statistics');
+          route.push('1');
         }
         this.router.navigate(route);
       } else {
@@ -419,7 +415,7 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
   updateGroupName(name: string) {
     this.groupName = name;
     const groupBarIndex = this.getBarIndexOfFeature(Features.CONTENTS);
-    this.barItems[groupBarIndex].url = `${this.getBaseUrl()}/${Features.CONTENTS}/${this.getQuestionUrl(this.role, this.groupName)}`;
+    this.barItems[groupBarIndex].url = `${this.getBaseUrl()}/${Features.CONTENTS}/${this.groupName}`;
     this.setGroupInSessionStorage(this.groupName);
   }
 

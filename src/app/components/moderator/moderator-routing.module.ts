@@ -46,6 +46,10 @@ const routes: Routes = [
       useFactory: (extensionRouteProviders: ExtensionRouteProvider[]) => [
         {
           path: 'room/:shortId',
+          redirectTo: ':shortId'
+        },
+        {
+          path: ':shortId',
           canActivate: [AuthenticationGuard],
           data: { requiredRole: UserRole.EXECUTIVE_MODERATOR },
           resolve: {

@@ -152,6 +152,6 @@ describe('RoomJoinComponent', () => {
     await inputField.setValue(roomIdToEnter);
     await joinButton.click();
     expect(notificationService.showAdvanced).not.toHaveBeenCalled();
-    expect(router.navigate).toHaveBeenCalledWith(['participant', 'room', roomIdToEnter]);
+    expect(router.navigate).toHaveBeenCalledWith(['p', roomIdToEnter]);
   });
 });

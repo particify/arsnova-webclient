@@ -393,7 +393,7 @@ describe('HeaderComponent', () => {
     userMenu = await loader.getHarness(MatMenuHarness);
     userMenuItems = await userMenu.getItems({selector: '#logout-button'});
     await userMenuItems[0].click();
-    expect(routerSpy.navigateByUrl).toHaveBeenCalledWith('home');
+    expect(routerSpy.navigateByUrl).toHaveBeenCalledWith('');
     expect(notificationService.showAdvanced).toHaveBeenCalledWith(jasmine.any(String), AdvancedSnackBarTypes.SUCCESS);
   });
 

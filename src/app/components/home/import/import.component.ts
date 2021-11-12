@@ -65,7 +65,7 @@ export class ImportComponent implements OnInit, AfterContentInit {
           this.notificationService.showAdvanced(msg1 + room.name + msg2, AdvancedSnackBarTypes.SUCCESS);
         });
       });
-      this.router.navigate(['creator', 'room', room.shortId]);
+      this.router.navigate(['edit', room.shortId]);
     },
         error => {
       this.translateService.get('import.error').subscribe(msg => {

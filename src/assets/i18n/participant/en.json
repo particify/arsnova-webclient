@@ -205,8 +205,8 @@
   "a11y-switch-to-feature": "Switch to {{feature}}.",
   "user-counter": "Number of active participants",
     "comments": "Q&A",
-    "group": "Question series",
-    "survey": "Live Feedback"
+    "series": "Question series",
+    "feedback": "Live Feedback"
   },
   "option-template": {
     "agreement-negative-2": "Strongly disagree",

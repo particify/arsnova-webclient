@@ -23,6 +23,7 @@ import { Observable, Subject, timer } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { MatDialog } from '@angular/material/dialog';
 import { CommentAnswerComponent } from '@arsnova/app/components/shared/_dialogs/comment-answer/comment-answer.component';
+import { RoutingService } from '@arsnova/app/services/util/routing.service';
 
 const TIME_UPDATE_INTERVAL = 60000;
 
@@ -92,7 +93,8 @@ export class CommentComponent implements OnInit, OnDestroy {
     private wsCommentService: WsCommentService,
     private announceService: AnnounceService,
     private globalStorageService: GlobalStorageService,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private routingService: RoutingService
   ) {
     langService.langEmitter.subscribe(lang => {
       translateService.use(lang);
@@ -141,20 +143,18 @@ export class CommentComponent implements OnInit, OnDestroy {
   }
 
   getRole() {
+    this.roleString = this.routingService.getRoleString(this.viewRole);
     switch (this.viewRole) {
       case UserRole.PARTICIPANT:
         this.isParticipant = true;
-        this.roleString = 'participant';
         break;
       case UserRole.CREATOR:
         this.isCreator = true;
-        this.roleString = 'creator';
         break;
       case UserRole.EXECUTIVE_MODERATOR:
       /* fall through */
       case UserRole.EDITING_MODERATOR:
         this.isModerator = true;
-        this.roleString = 'moderator';
     }
   }
 

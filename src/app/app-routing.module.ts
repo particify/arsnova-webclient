@@ -18,12 +18,12 @@ import { UserProfileComponent } from './components/shared/user-profile/user-prof
 
 const routes: Routes = [
   {
-    path: '',
-    redirectTo: '/home',
+    path: 'home',
+    redirectTo: '',
     pathMatch: 'full'
   },
   {
-    path: 'home',
+    path: '',
     component: HomePageComponent
   },
   {
@@ -49,7 +49,7 @@ const routes: Routes = [
   },
   {
     path: 'join/:shortId',
-    redirectTo: 'participant/room/:shortId'
+    redirectTo: 'p/:shortId'
   },
   {
     path: 'import',
@@ -67,15 +67,27 @@ const routes: Routes = [
     component: UserHomeComponent
   },
   {
+    path: 'participant',
+    redirectTo: 'p'
+  },
+  {
+    path: 'creator',
+    redirectTo: 'edit'
+  },
+  {
+    path: 'presentation',
+    redirectTo: 'present'
+  },
+  {
     path: 'admin',
     loadChildren: () => import('./components/admin/admin.module').then(m => m.AdminModule)
   },
   {
-    path: 'creator',
+    path: 'edit',
     loadChildren: () => import('./components/creator/creator.module').then(m => m.CreatorModule)
   },
   {
-    path: 'participant',
+    path: 'p',
     loadChildren: () => import('./components/participant/participant.module').then(m => m.ParticipantModule)
   },
   {
@@ -83,7 +95,7 @@ const routes: Routes = [
     loadChildren: () => import('./components/moderator/moderator.module').then(m => m.ModeratorModule)
   },
   {
-    path: 'presentation',
+    path: 'present',
     loadChildren: () => import('./components/presentation/presentation.module').then(m => m.PresentationModule)
   }
 ];

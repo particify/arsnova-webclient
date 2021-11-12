@@ -97,19 +97,19 @@ describe('FooterComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should display footer if route is "/home" and device with is smaller than 1001', () => {
+  it('should display footer if route is "" and device with is smaller than 1001', () => {
     component.viewWidth = 1000;
     fixture.detectChanges();
-    component.checkToolbarCondition('/home');
+    component.checkToolbarCondition('');
     fixture.detectChanges();
     const footerContainer = fixture.debugElement.query(By.css('#footer-toolbar'));
     expect(footerContainer).not.toBeNull();
   });
 
-  it('should display footer if route is "/home" and device with is bigger than 1000', () => {
+  it('should display footer if route is "" and device with is bigger than 1000', () => {
     component.viewWidth = 1001;
     fixture.detectChanges();
-    component.checkToolbarCondition('/home');
+    component.checkToolbarCondition('');
     fixture.detectChanges();
     const footerContainer = fixture.debugElement.query(By.css('#footer-toolbar'));
     expect(footerContainer).not.toBeNull();
@@ -118,7 +118,7 @@ describe('FooterComponent', () => {
   it('should not display footer if route is room subroute and device width is smaller than 1001', () => {
     component.viewWidth = 1000;
     fixture.detectChanges();
-    component.checkToolbarCondition('/creator/room/12345678/comments');
+    component.checkToolbarCondition('/edit/12345678/comments');
     fixture.detectChanges();
     const footerContainer = fixture.debugElement.query(By.css('#footer-toolbar'));
     expect(footerContainer).toBeNull();
@@ -127,7 +127,7 @@ describe('FooterComponent', () => {
   it('should display footer if route is room subroute and device with is bigger than 1000', () => {
     component.viewWidth = 1001;
     fixture.detectChanges();
-    component.checkToolbarCondition('/creator/room/12345678/comments');
+    component.checkToolbarCondition('/edit/12345678/comments');
     fixture.detectChanges();
     const footerContainer = fixture.debugElement.query(By.css('#footer-toolbar'));
     expect(footerContainer).not.toBeNull();

@@ -11,12 +11,12 @@ export class DemoRoomGuard implements CanActivate {
               private authenticationGuard: AuthenticationGuard,
               private router: Router) {
   }
-  
+
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
     return this.authenticationGuard.canActivate(route, state).pipe(
       mergeMap(() => {
         const demoRoom = this.demoService.createDemoRoom();
-        return demoRoom.pipe(mergeMap(r => this.router.navigate(['creator/room', r.shortId])));
+        return demoRoom.pipe(mergeMap(r => this.router.navigate(['edit', r.shortId])));
       })
     );
   }

@@ -19,6 +19,14 @@ import { ModeratorCommentPageComponent } from '../moderator/moderator-comment-pa
 
 const routes: Routes = [
   {
+    path: 'group',
+    redirectTo: 'series'
+  },
+  {
+    path: 'survey',
+    redirectTo: 'feedback'
+  },
+  {
     path: '',
     component: RoomCreatorPageComponent,
     resolve: {
@@ -41,30 +49,23 @@ const routes: Routes = [
     }
   },
   {
-    path: 'group/:contentGroup/create',
+    path: 'series/:seriesName/create',
     component: ContentCreationPageComponent
   },
   {
-    path: 'group/:contentGroup/edit/:contentId',
+    path: 'series/:seriesName/edit/:contentId',
     component: ContentCreationPageComponent,
     data: {
       isEditMode: true
     }
   },
   {
-    path: 'group/:contentGroup/statistics/:contentIndex',
-    component: ContentPresentationComponent
-  },
-  {
-    path: 'statistics',
+    path: 'series/:seriesName/statistics',
     component: StatisticsPageComponent
   },
   {
-    path: 'group/:contentGroup/statistics',
-    component: ContentPresentationComponent,
-    resolve: {
-      room: RoomResolver
-    }
+    path: 'series/:seriesName/:contentIndex',
+    component: ContentPresentationComponent
   },
   {
     path: 'comments',
@@ -81,23 +82,19 @@ const routes: Routes = [
     }
   },
   {
-    path: 'survey',
+    path: 'feedback',
     component: SurveyPageComponent,
     resolve: {
       room: RoomResolver
     }
   },
   {
-    path: 'group/:contentGroup',
+    path: 'series/:seriesName',
     component: GroupContentComponent
   },
   {
     path: 'archive',
     component: LooseContentComponent
-  },
-  {
-    path: 'group/:contentGroup/presentation',
-    component: ContentPresentationComponent
   }
 ];
 
@@ -110,6 +107,10 @@ const routes: Routes = [
       useFactory: (extensionRouteProviders: ExtensionRouteProvider[]) => [
         {
           path: 'room/:shortId',
+          redirectTo: ':shortId'
+        },
+        {
+          path: ':shortId',
           canActivate: [AuthenticationGuard],
           data: { requiredRole: UserRole.CREATOR },
           resolve: {

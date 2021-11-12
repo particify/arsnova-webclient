@@ -4,6 +4,13 @@ import { Location } from '@angular/common';
 import { filter } from 'rxjs/operators';
 import { TranslateService } from '@ngx-translate/core';
 import { LanguageService } from './language.service';
+import { UserRole } from '@arsnova/app/models/user-roles.enum';
+
+export enum RoutePrefix {
+  CREATOR = 'edit',
+  PARTICIPANT = 'p',
+  MODERATOR = 'moderator'
+}
 
 export const TITLES: { [key: string]: string } = {
   home: 'home',
@@ -12,18 +19,16 @@ export const TITLES: { [key: string]: string } = {
   'request-password-reset': 'request-pw-reset',
   'password-reset/:email': 'pw-reset',
   user: 'user',
-  import: 'import',
   '': 'room',
+  import: 'import',
   comments: 'comments',
   'comments/moderation': 'comments',
-  survey: 'live-survey',
-  statistics: 'statistics',
-  'group/:contentGroup/statistics': 'presentation',
-  'group/:contentGroup/statistics/:contentIndex': 'presentation',
-  'group/:contentGroup': 'content-group',
-  'group/:contentGroup/:contentIndex': 'content-group',
-  'group/:contentGroup/edit/:contentId': 'content-edit',
-  'group/:contentGroup/create': 'content-creation',
+  feedback: 'live-feedback',
+  'series/:seriesName/statistics': 'series',
+  'series/:seriesName': 'series',
+  'series/:seriesName/:contentIndex': 'series',
+  'series/:seriesName/edit/:contentId': 'content-edit',
+  'series/:seriesName/create': 'content-creation',
   settings: 'settings',
   'settings/:settingsName': 'settings',
   archive: 'archive',
@@ -39,12 +44,15 @@ export const TITLES: { [key: string]: string } = {
 })
 export class RoutingService {
 
+  seriesChildRoutes = [
+    'series/:seriesName/create',
+    'series/:seriesName/statistics'
+  ];
   roomChildRoutes = [
-    'survey',
+    'feedback',
     'comments',
     'comments/moderation',
-    'group/:contentGroup',
-    'group/:contentGroup/:contentIndex'
+    'series/:seriesName'
   ];
   homeChildRoutes = [
     'user',
@@ -55,14 +63,12 @@ export class RoutingService {
     'request-password-reset'
   ];
   parentRoute = {
-    home: '/home',
-    login: '/login',
-    user: '/user',
-    room: '/room/'
+    home: '',
+    login: 'login',
+    user: 'user',
   };
-  moderator = 'moderator';
   currentRoute: string;
-  backRoute: string;
+  backRoute: string[];
   fullCurrentRoute: string;
   redirectRoute: string;
   homeTitle: string;
@@ -98,23 +104,26 @@ export class RoutingService {
 
   getRoutes(route: ActivatedRouteSnapshot) {
     const shortId = route.paramMap.get('shortId') || '';
+    const series  = route.paramMap.get('seriesName') || '';
     const role = route.data.requiredRole || '';
     this.fullCurrentRoute = this.location.path();
     this.currentRoute = route.routeConfig.path;
-    this.getBackRoute(this.currentRoute, shortId, role);
+    this.getBackRoute(this.currentRoute, shortId, role, series);
     this.setTitle(route);
   }
 
-  getBackRoute(route: string, shortId: string, role: string) {
-    let backRoute: string;
+  getBackRoute(route: string, shortId: string, role: string, series: string) {
+    let backRoute: string[];
     if (route === '') {
-      backRoute = this.parentRoute.user;
+      backRoute = [this.parentRoute.user];
     } else if (this.routeExistsInArray(this.homeChildRoutes)) {
-      backRoute = this.parentRoute.home;
+      backRoute = [this.parentRoute.home];
     } else if (this.routeExistsInArray(this.loginChildRoutes)) {
-      backRoute = this.parentRoute.login;
+      backRoute = [this.parentRoute.login];
     } else if (this.routeExistsInArray(this.roomChildRoutes)) {
-      backRoute = this.getRoleString(role) + this.parentRoute.room + shortId;
+      backRoute = [this.getRoleString(role), shortId];
+    } else if (this.routeExistsInArray(this.seriesChildRoutes)) {
+      backRoute = [this.getRoleString(role), shortId, 'series', series];
     }
     this.backRoute = backRoute;
   }
@@ -125,7 +134,7 @@ export class RoutingService {
 
   goBack() {
     if (this.backRoute) {
-      this.router.navigateByUrl(this.backRoute);
+      this.router.navigate(this.backRoute);
     } else {
       this.location.back();
     }
@@ -155,12 +164,19 @@ export class RoutingService {
   }
 
   getRoleString(role: string): string {
-    const lowerCaseRole = role.toLowerCase();
-    if (lowerCaseRole.includes(this.moderator)) {
-      return this.moderator;
-    } else {
-      return lowerCaseRole;
+    let roleString;
+    switch (role) {
+      case UserRole.CREATOR:
+        roleString = RoutePrefix.CREATOR;
+        break;
+      case UserRole.PARTICIPANT:
+        roleString = RoutePrefix.PARTICIPANT;
+        break;
+      case UserRole.EXECUTIVE_MODERATOR:
+        roleString = RoutePrefix.MODERATOR;
+        break;
     }
+    return roleString;
   }
 
   setTitle(route?: ActivatedRouteSnapshot) {
@@ -171,6 +187,8 @@ export class RoutingService {
     let title: string;
     if (route.data.isPresentation) {
       this.titleKey = 'presentation-mode';
+    } else if (route['_routerState'].url === '/')  {
+      title = this.homeTitle;
     } else {
       this.titleKey = TITLES[route.routeConfig.path];
       switch(this.titleKey) {
@@ -181,11 +199,8 @@ export class RoutingService {
             this.titleKey = TITLES['admin'];
           }
           break;
-        case 'content-group':
-          title = route.params.contentGroup;
-          break;
-        case 'home':
-          title = this.homeTitle;
+        case 'series':
+          title = route.params.seriesName;
           break;
         case undefined:
           title = this.homeTitle;
@@ -212,6 +227,6 @@ export class RoutingService {
   }
 
   isPresentation(url: string): boolean {
-    return url.slice(1, 13).includes('presentation');
+    return url.slice(1, 8).includes('present');
   }
 }

@@ -14,6 +14,15 @@ import { Features } from '../../models/features.enum';
 
 const routes: Routes = [
   {
+    path: 'group',
+    redirectTo: 'series'
+  },
+  {
+    path: 'survey',
+    redirectTo: 'feedback',
+    pathMatch: 'full'
+  },
+  {
     path: '',
     component: RoomParticipantPageComponent,
     resolve: {
@@ -32,17 +41,17 @@ const routes: Routes = [
     }
   },
   {
-    path: 'survey',
+    path: 'feedback',
     component: SurveyPageComponent,
     resolve: {
       room: RoomResolver
     },
     data: {
-      feature: Features.SURVEY
+      feature: Features.FEEDBACK
     }
   },
   {
-    path: 'group/:contentGroup',
+    path: 'series/:seriesName',
     component: ParticipantContentCarouselPageComponent,
     resolve: {
       room: RoomResolver
@@ -52,7 +61,7 @@ const routes: Routes = [
     }
   },
   {
-    path: 'group/:contentGroup/:contentIndex',
+    path: 'series/:seriesName/:contentIndex',
     component: ParticipantContentCarouselPageComponent,
     resolve: {
       room: RoomResolver
@@ -72,6 +81,10 @@ const routes: Routes = [
       useFactory: (extensionRouteProviders: ExtensionRouteProvider[]) => [
         {
           path: 'room/:shortId',
+          redirectTo: ':shortId'
+        },
+        {
+          path: ':shortId',
           canActivate: [AuthenticationGuard],
           data: { requiredRole: UserRole.PARTICIPANT },
           resolve: {

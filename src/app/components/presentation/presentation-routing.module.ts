@@ -20,24 +20,24 @@ const routes: Routes = [
     }
   },
   {
-    path: 'survey',
+    path: 'feedback',
     component: PresentationComponent,
     data: {
-      feature: 'survey'
+      feature: 'feedback'
     }
   },
   {
-    path: ':contentGroup',
+    path: 'series/:seriesName',
     component: PresentationComponent,
     data: {
-      feature: 'group'
+      feature: 'series'
     }
   },
   {
-    path: ':contentGroup/:contentIndex',
+    path: 'series/:seriesName/:contentIndex',
     component: PresentationComponent,
     data: {
-      feature: 'group'
+      feature: 'series'
     }
   }
 ];

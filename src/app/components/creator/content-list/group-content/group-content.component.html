@@ -47,7 +47,7 @@
             </button>
             <div class="settings-buttons">
               <button mat-button id="statistic-button" class="settings-button"  aria-labelledby="statistics"
-                      routerLink="/creator/room/{{ room.shortId }}/statistics" [disabled]="contents.length === 0"
+                      [routerLink]="['statistics']" [disabled]="contents.length === 0"
                       appHotkey="2" [appHotkeyTitle]="'room-page.answer-statistics' | translate">
                 <mat-icon>insert_chart</mat-icon>
                 {{ 'room-page.answer-statistics' | translate }}

@@ -205,8 +205,8 @@
     "a11y-switch-to-feature": "Zu {{feature}} wechseln.",
     "user-counter": "Anzahl der teilnehmenden Personen",
     "comments": "Q&A",
-    "group": "Fragenserie",
-    "survey": "Live Feedback"
+    "series": "Fragenserie",
+    "feedback": "Live Feedback"
   },
   "option-template": {
     "agreement-negative-2": "stimme gar nicht zu",

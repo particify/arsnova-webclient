@@ -18,6 +18,7 @@ import { ContentGroupService } from '../../../services/http/content-group.servic
 import { RoomStatsService } from '../../../services/http/room-stats.service';
 import { DataChanged } from '../../../models/events/data-changed';
 import { RoomStats } from '../../../models/room-stats';
+import { RoutingService } from '../../../services/util/routing.service';
 
 @Component({
   selector: 'app-room-moderator-page',
@@ -42,10 +43,11 @@ export class RoomModeratorPageComponent extends RoomPageComponent implements OnI
     protected contentService: ContentService,
     protected notification: NotificationService,
     public eventService: EventService,
-    protected globalStorageService: GlobalStorageService
+    protected globalStorageService: GlobalStorageService,
+    protected routingService: RoutingService
   ) {
     super(roomService, roomStatsService, contentGroupService, route, router, location, wsCommentService,
-      commentService, eventService, contentService, translateService, notification, globalStorageService);
+      commentService, eventService, contentService, translateService, notification, globalStorageService, routingService);
     langService.langEmitter.subscribe(lang => translateService.use(lang));
   }
 

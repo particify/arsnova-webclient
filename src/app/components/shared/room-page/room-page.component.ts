@@ -19,6 +19,7 @@ import { InfoBarItem } from '../bars/info-bar/info-bar.component';
 import { ContentGroupService } from '../../../services/http/content-group.service';
 import { RoomStatsService } from '../../../services/http/room-stats.service';
 import { DataChanged } from '../../../models/events/data-changed';
+import { RoutingService } from '../../../services/util/routing.service';
 
 @Component({
   selector: 'app-room-page',
@@ -58,7 +59,8 @@ export class RoomPageComponent implements OnDestroy {
     protected contentService: ContentService,
     protected translateService: TranslateService,
     protected notificationService: NotificationService,
-    protected globalStorageService: GlobalStorageService
+    protected globalStorageService: GlobalStorageService,
+    protected routingService: RoutingService
   ) {
   }
 
@@ -195,18 +197,8 @@ export class RoomPageComponent implements OnDestroy {
     if (role) {
       roleRoute = role;
     } else {
-      switch (this.role) {
-        case UserRole.CREATOR:
-          roleRoute = 'creator';
-          break;
-        case UserRole.EXECUTIVE_MODERATOR || UserRole.EDITING_MODERATOR:
-          roleRoute = 'moderator';
-          break;
-        case UserRole.PARTICIPANT:
-          roleRoute = 'participant';
-          break;
-      }
+      roleRoute = this.routingService.getRoleString(this.role);
     }
-    this.router.navigate([`/${roleRoute}/room/${this.room.shortId}`]);
+    this.router.navigate([`/${roleRoute}/${this.room.shortId}`]);
   }
 }

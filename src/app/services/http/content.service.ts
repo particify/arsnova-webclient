@@ -203,7 +203,7 @@ export class ContentService extends AbstractEntityService<Content> {
   }
 
   goToEdit(contentId: string, shortId: string, group: string) {
-    this.router.navigate(['creator', 'room', shortId, 'group', group, 'edit', contentId]);
+    this.router.navigate(['edit', shortId, 'series', group, 'edit', contentId]);
   }
 
   deleteAnswersOfContent(contentId, roomId) {
