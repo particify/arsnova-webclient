@@ -93,6 +93,8 @@ export class ContentChoiceParticipantComponent extends ContentParticipantBaseCom
           this.isLoading = false;
         }
       });
+    } else {
+      this.isLoading = false;
     }
   }
 
