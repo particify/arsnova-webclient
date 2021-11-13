@@ -342,7 +342,7 @@ export class ControlBarComponent extends NavBarComponent implements OnInit, OnDe
   }
 
   getBaseUrl(): string {
-    return `/presentation/${this.shortId}/`;
+    return `/present/${this.shortId}/`;
   }
 
   getFeatureUrl(feature: string): string {
