@@ -226,6 +226,7 @@ export class ContentCreationComponent implements OnInit, OnDestroy {
         document.getElementById('body-input').focus();
       });
     } else {
+      this.refId.emit(this.content.id);
       this.contentService.updateContent(this.content).subscribe(updateContent => {
         this.content = updateContent;
         window.history.back();
