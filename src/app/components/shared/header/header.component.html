@@ -1,12 +1,12 @@
 <mat-toolbar class="mat-elevation-z2">
   <mat-toolbar-row>
-    <button id="back-button" mat-icon-button aria-labelledby="back-label" *ngIf="router.url !== '/home'"
+    <button id="back-button" mat-icon-button aria-labelledby="back-label" *ngIf="router.url !== '/'"
             (click)="goBack()"
             appHotkey="0"
             matTooltip="{{'header.back' | translate}}">
       <mat-icon class="header-icons">arrow_back</mat-icon>
     </button>
-    <lib-extension-point extensionId="header-logo" *ngIf="router.url === '/home'"></lib-extension-point>
+    <lib-extension-point extensionId="header-logo" *ngIf="router.url === '/'"></lib-extension-point>
     <span class="fill-remaining-space"></span>
 
     <mat-menu id="user-menu" #userMenu="matMenu" [overlapTrigger]="false" xPosition="before">
