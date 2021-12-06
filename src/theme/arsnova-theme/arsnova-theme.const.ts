@@ -15,16 +15,16 @@ export const arsnova = {
   '--on-warn': '#FFFFFF',
 
   '--background': '#f5f5f5',
-  '--surface': '#ffffff',
-  '--dialog': '#ffffff',
+  '--surface': '#fdfdfd',
+  '--dialog': '#fcfcfc',
   '--cancel': '#e0e0e0',
   '--alt-surface': '#eeeeee',
   '--alt-dialog': '#eeeeee',
 
   '--on-primary': '#ffffff',
   '--on-secondary': '#ffffff',
-  '--on-background': '#000000',
-  '--on-surface': '#000000',
+  '--on-background': '#212121',
+  '--on-surface': '#212121',
   '--on-cancel': '#000000',
 
   '--table-a': '#e0e0e0',
@@ -41,7 +41,7 @@ export const arsnova = {
   '--blue': '#3f51b5',
   '--grey': '#9e9e9e',
   '--grey-light': '#e0e0e0',
-  '--black': '#000000',
+  '--black': '#212121',
 
   '--bar-blue': '#027DB9',
   '--bar-yellow': '#ffca28',

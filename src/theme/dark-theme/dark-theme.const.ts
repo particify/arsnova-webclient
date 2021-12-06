@@ -23,8 +23,8 @@ export const dark = {
 
   '--on-primary': '#000000',
   '--on-secondary': '#000000',
-  '--on-background': '#ffffff',
-  '--on-surface': '#ffffff',
+  '--on-background': '#fcfcfc',
+  '--on-surface': '#fcfcfc',
   '--on-cancel': '#ffffff',
 
   '--table-a': '#424242',
