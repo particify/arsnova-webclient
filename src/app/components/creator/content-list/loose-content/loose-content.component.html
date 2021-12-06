@@ -12,7 +12,7 @@
         </div>
         <span class="fill-remaining-space"></span>
         <div fxLayoutGap="15px">
-          <button *ngIf="creationMode" mat-raised-button class="button-abort" (click)="exitCreation()" aria-labelledby="cancel">
+          <button *ngIf="creationMode" mat-button class="button-abort" (click)="exitCreation()" aria-labelledby="cancel">
             {{ 'content.abort' | translate }}
           </button>
           <button mat-raised-button class="button-primary" (click)="createNewGroup()" aria-labelledby="create">
@@ -50,7 +50,7 @@
                   <span>{{ 'content.add-content-to-group' | translate}}</span>
                 </button>
                 <button mat-menu-item (click)="deleteContent(content)" attr.aria-label="{{ 'content.a11y-delete-content' | translate }}">
-                  <mat-icon class="delete">delete_forever</mat-icon>
+                  <mat-icon class="icon-warn">delete_forever</mat-icon>
                   <span>{{ 'content.delete-content' | translate}}</span>
                 </button>
               </mat-menu>

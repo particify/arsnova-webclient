@@ -131,7 +131,7 @@
               </app-content-wordcloud-creation>
               <div fxLayout="row" fxLayoutAlign="center" fxLayoutGap="1em" [ngClass]="{'top-space': isEditMode}">
                 <button (click)="showPreview()" attr.aria-label="{{ 'content.a11y-preview' | translate }}"
-                        class="button-abort button-md" mat-raised-button>
+                        class="button-md" mat-stroked-button>
                   {{ 'content.preview' | translate }}</button>
                 <button (click)="emitCreateEvent(true)"
                         attr.aria-label="{{ 'content.a11y-submit' | translate: { group: group.value } }}"

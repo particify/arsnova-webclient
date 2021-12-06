@@ -11,32 +11,32 @@
 
     <mat-menu id="user-menu" #userMenu="matMenu" [overlapTrigger]="false" xPosition="before">
       <button id="my-rooms-button" mat-menu-item *ngIf="auth" (click)="navToUserHome()" tabindex="0">
-        <mat-icon class="rooms">home</mat-icon>
+        <mat-icon class="icon-primary">home</mat-icon>
         <span>{{'header.my-rooms' | translate}}</span>
       </button>
       <button id="menu-login-button" *ngIf="auth && isGuest" mat-menu-item [routerLink]="'login'" tabindex="0">
-        <mat-icon class="login">exit_to_app</mat-icon>
+        <mat-icon class="icon-primary">exit_to_app</mat-icon>
         <span>{{ 'header.login' | translate }}</span>
       </button>
       <a id="help-button" *ngIf="helpUrl" [attr.href]="helpUrl" target="_blank" mat-menu-item  tabindex="0">
-        <mat-icon class="less-important">help</mat-icon>
+        <mat-icon>help</mat-icon>
         <span>{{'header.help' | translate}}</span>
       </a>
       <button id="theme-menu" mat-menu-item aria-labelledby="style-label" [matMenuTriggerFor]="themeMenu">
-        <mat-icon class="less-important">palette</mat-icon>
+        <mat-icon>palette</mat-icon>
         <span>{{'header.style' | translate}}</span>
       </button>
       <button id="language-menu" mat-menu-item aria-labelledby="language-label" [matMenuTriggerFor]="langMenu">
-        <mat-icon class="less-important">language</mat-icon>
+        <mat-icon>language</mat-icon>
         <span>{{'header.language' | translate}}</span>
       </button>
       <div *ngIf="deviceWidth < 1000">
         <button id="privacy-button" mat-menu-item aria-labelledby="privacy-label" [matMenuTriggerFor]="privacyMenu">
-          <mat-icon class="less-important">security</mat-icon>
+          <mat-icon>security</mat-icon>
           <span>{{'footer.dsgvo' | translate}}</span>
         </button>
         <a id="imprint-button" *ngIf="imprintUrl" [attr.href]="imprintUrl" target="_blank" mat-menu-item aria-labelledby="imprint-label">
-          <mat-icon class="less-important">contact_mail</mat-icon>
+          <mat-icon>contact_mail</mat-icon>
           <span>{{'footer.imprint' | translate}}</span>
         </a>
       </div>
@@ -49,11 +49,11 @@
         <span>{{'header.admin-area' | translate}}</span>
       </button>
       <button id="user-profile-button" mat-menu-item *ngIf="auth && !isGuest" (click)="navToProfile()" tabindex="0">
-        <mat-icon class="less-important">account_box</mat-icon>
+        <mat-icon>account_box</mat-icon>
         <span>{{'header.user-profile' | translate}}</span>
       </button>
       <button id="logout-button" *ngIf="auth && !isGuest" mat-menu-item (click)="logoutUser()" tabindex="0">
-        <mat-icon class="delete">exit_to_app</mat-icon>
+        <mat-icon class="icon-warn">exit_to_app</mat-icon>
         <span>{{ 'header.logout' | translate }}</span>
       </button>
     </mat-menu>

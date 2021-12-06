@@ -4,7 +4,7 @@
   <p *ngIf="data.bodyElement"><strong>{{ data.bodyElement }}</strong></p>
 </div>
 <div fxLayout="row" fxLayoutAlign="end" fxLayoutGap="10px">
-  <button mat-flat-button class="button-abort" aria-labelledby="cancel" (click)="closeDialog(data.abortLabel)">
+  <button mat-button class="button-abort" aria-labelledby="cancel" (click)="closeDialog(data.abortLabel)">
     {{ data.section + data.abortLabel | translate}}
   </button>
   <button mat-flat-button class="{{data.type}}"  aria-labelledby="submit" (click)="closeDialog(data.confirmLabel)">
