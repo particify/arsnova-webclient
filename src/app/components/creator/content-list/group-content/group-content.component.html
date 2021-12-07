@@ -125,10 +125,13 @@
                              class="bottom-border" (click)="navigateToContentStats(content)"
                              [ngClass]="{'not-supported': contentTypes.indexOf(content.format) === -1, 'locked-content': !isPublished(i), 'unlocked-content': isPublished(i)}">
               <div fxLayout="row" fxLayoutAlign="space-between" fxFill>
-                <p class="ellipsis" tabindex="0" role="button" (keyup.enter)="navigateToContentStats(content)"
-                   attr.aria-label="{{ 'content.a11y-selected-content' | translate: { name: content.body } }}">
-                  {{ content.body }}
-                </p>
+                <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="12px">
+                  <mat-icon class="type-icon">{{iconList.get(content.format)}}</mat-icon>
+                  <p class="ellipsis" tabindex="0" role="button" (keyup.enter)="navigateToContentStats(content)"
+                     attr.aria-label="{{ 'content.a11y-selected-content' | translate: { name: content.body } }}">
+                    {{ content.body }}
+                  </p>
+                </div>
                 <div fxLayout="row" fxLayoutAlign="center center" [ngClass]="{'show-bar': i === activeMenuIndex || content.id === activeContentId, 'button-bar': i !== activeMenuIndex && content.id !== activeContentId}">
                   <div fxLayout="row" *ngIf="contentTypes.indexOf(content.format) > -1">
                     <lib-extension-point extensionId="content-focus" [extensionData]="{contentId: content.id, contentGroupId: contentGroup.id, contents: contents}" (extensionEvent)="updateActive($event)"></lib-extension-point>

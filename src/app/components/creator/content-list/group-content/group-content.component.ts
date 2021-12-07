@@ -56,6 +56,8 @@ export class GroupContentComponent extends ContentListBaseComponent implements O
   ContentType: typeof ContentType = ContentType;
   resetAnswerEvent: Subject<string> = new Subject<string>();
 
+  iconList: Map<ContentType, string>;
+
   constructor(
     protected contentService: ContentService,
     protected roomStatsService: RoomStatsService,
@@ -79,6 +81,7 @@ export class GroupContentComponent extends ContentListBaseComponent implements O
   }
 
   ngOnInit() {
+    this.iconList = this.contentService.getTypeIcons();
     this.route.data.subscribe(data => {
       this.room = data.room;
       this.route.params.subscribe(params => {
