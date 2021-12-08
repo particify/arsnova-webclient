@@ -7,7 +7,6 @@ import { ContentType } from '../../../models/content-type.enum';
 import { ContentGroup } from '../../../models/content-group';
 import { AdvancedSnackBarTypes, NotificationService } from '../../../services/util/notification.service';
 import { Room } from '../../../models/room';
-import { RoomService } from '../../../services/http/room.service';
 import { TranslateService } from '@ngx-translate/core';
 import { LanguageService } from '../../../services/util/language.service';
 import { DialogService } from '../../../services/util/dialog.service';
@@ -49,8 +48,6 @@ export abstract class ContentListBaseComponent {
 
   initContentList(contentList: Content[]) {
     this.contents = contentList;
-    this.setSettings();
-    this.getGroups();
     this.isLoading = false;
     setTimeout(() => {
       document.getElementById('message-button').focus();

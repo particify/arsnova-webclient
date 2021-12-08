@@ -8,46 +8,18 @@ import { MatDialog } from '@angular/material/dialog';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { EventService } from '../../../../services/util/event.service';
 import { RoomService } from '../../../../services/http/room.service';
-import { Observable, of, Subject } from 'rxjs';
+import { Subject } from 'rxjs';
 import { DialogService } from '../../../../services/util/dialog.service';
 import { ContentGroupService } from '../../../../services/http/content-group.service';
 import { MatButtonModule } from '@angular/material/button';
 import { AnnounceService } from '@arsnova/app/services/util/announce.service';
 import { ActivatedRoute } from '@angular/router';
-
-const TRANSLATION_DE = require('../../../../../assets/i18n/home/de.json');
-const TRANSLATION_EN = require('../../../../../assets/i18n/home/en.json');
-
-const TRANSLATIONS = {
-  DE: TRANSLATION_DE,
-  EN: TRANSLATION_EN
-};
-
-class JsonTranslationLoader implements TranslateLoader {
-  getTranslation(code: string = ''): Observable<object> {
-    if (code !== null) {
-      const uppercased = code.toUpperCase();
-
-      return of(TRANSLATIONS[uppercased]);
-    } else {
-      return of({});
-    }
-  }
-}
-
-const ROUTE_STUB = {
-  data: of({
-    room: {
-      id: '1234'
-    }
-  })
-};
+import { ActivatedRouteStub, JsonTranslationLoader } from '@arsnova/testing/test-helpers';
 
 const mockCreateEvent = new Subject<any>();
 
 @Injectable()
 class MockContentService {
-
 }
 
 @Injectable()
@@ -62,22 +34,18 @@ class MockMatDialiog {
 
 @Injectable()
 class MockEventService {
-
 }
 
 @Injectable()
 class MockRoomService {
-
 }
 
 @Injectable()
 class MockDialogService {
-
 }
 
 @Injectable()
 class MockContentGroupService {
-
 }
 
 @Injectable()
@@ -92,7 +60,6 @@ class MockGlobalStorageService {
 
 @Injectable()
 class MockAnnouncer {
-
 }
 
 /* eslint-disable @angular-eslint/component-selector */
@@ -150,6 +117,14 @@ describe('ContentChoiceCreationComponent', () => {
   let component: ContentChoiceCreationComponent;
   let fixture: ComponentFixture<ContentChoiceCreationComponent>;
 
+  const data = {
+    room: {
+      id: '1234'
+    }
+  }
+
+  const activatedRouteStub = new ActivatedRouteStub(null, data);
+
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [
@@ -202,7 +177,7 @@ describe('ContentChoiceCreationComponent', () => {
         },
         {
           provide: ActivatedRoute,
-          useValue: ROUTE_STUB
+          useValue: activatedRouteStub
         }
       ],
       imports: [

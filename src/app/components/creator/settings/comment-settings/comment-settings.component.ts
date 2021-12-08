@@ -5,7 +5,6 @@ import { TranslateService } from '@ngx-translate/core';
 import { RoomService } from '../../../../services/http/room.service';
 import { Router } from '@angular/router';
 import { CommentService } from '../../../../services/http/comment.service';
-import { BonusTokenService } from '../../../../services/http/bonus-token.service';
 import { CommentSettingsService } from '../../../../services/http/comment-settings.service';
 import { Room } from '../../../../models/room';
 import { CommentSettings } from '../../../../models/comment-settings';
@@ -56,7 +55,6 @@ export class CommentSettingsComponent implements OnInit {
     public router: Router,
     public commentService: CommentService,
     public commentSettingsService: CommentSettingsService,
-    private bonusTokenService: BonusTokenService,
     private dialogService: DialogService,
     private globalStorageService: GlobalStorageService,
     private liveAnnouncer: LiveAnnouncer,

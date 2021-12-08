@@ -1,16 +1,18 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
-import { StatisticHelpComponent } from './statistic-help.component';
+import { ExportComponent } from './export.component';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
-import { JsonTranslationLoader } from '@arsnova/testing/test-helpers';
+import { MatDialogRef } from '@angular/material/dialog';
+import { JsonTranslationLoader, MockMatDialogRef } from '@arsnova/testing/test-helpers';
 
-describe('StatisticHelpComponent', () => {
-  let component: StatisticHelpComponent;
-  let fixture: ComponentFixture<StatisticHelpComponent>;
+
+describe('ExportComponent', () => {
+  let component: ExportComponent;
+  let fixture: ComponentFixture<ExportComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ StatisticHelpComponent ],
+      declarations: [ ExportComponent ],
       imports: [
         TranslateModule.forRoot({
           loader: {
@@ -19,13 +21,19 @@ describe('StatisticHelpComponent', () => {
           },
           isolate: true
         })
+      ],
+      providers: [
+        {
+          provide: MatDialogRef,
+          useClass: MockMatDialogRef
+        }
       ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(StatisticHelpComponent);
+    fixture = TestBed.createComponent(ExportComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
@@ -34,3 +42,4 @@ describe('StatisticHelpComponent', () => {
     expect(component).toBeTruthy();
   });
 });
+

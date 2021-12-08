@@ -69,16 +69,16 @@ export class ContentPresentationComponent implements OnInit, OnDestroy {
   ngOnInit() {
     window.scroll(0, 0);
     this.translateService.use(this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE));
-    this.route.params.subscribe(params => {
-      const lastIndex = this.globalStorageService.getItem(STORAGE_KEYS.LAST_INDEX);
-      this.entryIndex = (this.isPresentation && lastIndex > -1 ? lastIndex : params['contentIndex'] - 1) || 0;
-      this.contentGroupName = this.globalStorageService.getItem(STORAGE_KEYS.LAST_GROUP) || params['seriesName'];
-      this.globalStorageService.setItem(STORAGE_KEYS.LAST_GROUP, this.contentGroupName);
-      this.route.data.subscribe(data => {
-        this.roomId = data.room.id;
-        this.shortId = data.room.shortId;
-        this.initGroup(true);
-      });
+    const routeContentIndex = this.route.snapshot.params['contentIndex'];
+    const routeSeriesName = this.route.snapshot.params['seriesName'];
+    const lastIndex = this.globalStorageService.getItem(STORAGE_KEYS.LAST_INDEX);
+    this.entryIndex = (this.isPresentation && lastIndex > -1 ? lastIndex : routeContentIndex - 1) || 0;
+    this.contentGroupName = this.globalStorageService.getItem(STORAGE_KEYS.LAST_GROUP) || routeSeriesName;
+    this.globalStorageService.setItem(STORAGE_KEYS.LAST_GROUP, this.contentGroupName);
+    this.route.data.subscribe(data => {
+      this.roomId = data.room.id;
+      this.shortId = data.room.shortId;
+      this.initGroup(true);
     });
   }
 

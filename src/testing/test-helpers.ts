@@ -2,7 +2,7 @@ import { TranslateLoader } from '@ngx-translate/core';
 import { BehaviorSubject, Observable, of, ReplaySubject, Subject } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 import { BroadcastEvent } from '@arsnova/app/services/util/event.service';
-import { convertToParamMap, Event, ParamMap, Params } from '@angular/router';
+import { ActivatedRouteSnapshot, convertToParamMap, Event, ParamMap, Params } from '@angular/router';
 import { Theme } from '@arsnova/theme/Theme';
 import { EventEmitter } from '@angular/core';
 import { arsnova, arsnova_meta } from '../theme/arsnova-theme/arsnova-theme.const';
@@ -100,10 +100,12 @@ export class MockRenderer2 {
 export class ActivatedRouteStub {
   private subject = new ReplaySubject<ParamMap>();
   data: Observable<any>;
+  snapshot: ActivatedRouteSnapshot;
 
-  constructor(initialParams?: Params, data?: any) {
+  constructor(initialParams?: Params, data?: any, snapshot: ActivatedRouteSnapshot = new ActivatedRouteSnapshot()) {
     this.setParamMap(initialParams);
     this.setData(data);
+    this.setSnapshot(snapshot);
   }
 
   readonly paramMap = this.subject.asObservable();
@@ -114,6 +116,10 @@ export class ActivatedRouteStub {
 
   setData(data: any) {
     this.data = of(data);
+  }
+
+  setSnapshot(snapshot: ActivatedRouteSnapshot) {
+    this.snapshot = snapshot;
   }
 }
 
@@ -172,4 +178,16 @@ export class MockThemeService {
   getThemeByKey(key: string) {
     return new Theme(key, arsnova, arsnova_meta);
   }
+}
+
+// MatDialog
+
+export class MockMatDialog {
+  afterClosed() {}
+}
+
+export class MockMatDialogRef {
+}
+
+export class MockMatDialogData {
 }

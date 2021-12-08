@@ -1,10 +1,11 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
-import { CommentSettingsComponent } from './comment-settings.component';
-import { MatDialog } from '@angular/material/dialog';
+import { AccessComponent } from './access.component';
 import {
-  JsonTranslationLoader, MockEventService, MockGlobalStorageService,
-  MockMatDialog,
+  JsonTranslationLoader,
+  MockEventService,
+  MockGlobalStorageService,
+  MockLangService,
   MockNotificationService,
   MockRouter
 } from '@arsnova/testing/test-helpers';
@@ -13,28 +14,31 @@ import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { RoomService } from '@arsnova/app/services/http/room.service';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { CommentService } from '@arsnova/app/services/http/comment.service';
-import { CommentSettingsService } from '@arsnova/app/services/http/comment-settings.service';
 import { DialogService } from '@arsnova/app/services/util/dialog.service';
 import { GlobalStorageService } from '@arsnova/app/services/util/global-storage.service';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { EventService } from '@arsnova/app/services/util/event.service';
 import { Room } from '@arsnova/app/models/room';
-import { CommentSettings } from '@arsnova/app/models/comment-settings';
+import { ModeratorService } from '@arsnova/app/services/http/moderator.service';
+import { UserService } from '@arsnova/app/services/http/user.service';
+import { AuthenticationService } from '@arsnova/app/services/http/authentication.service';
+import { LanguageService } from '@arsnova/app/services/util/language.service';
+import { ClientAuthentication } from '@arsnova/app/models/client-authentication';
+import { AuthProvider } from '@arsnova/app/models/auth-provider';
 import { of } from 'rxjs';
+import { Moderator } from '@arsnova/app/models/moderator';
+import { UserRole } from '@arsnova/app/models/user-roles.enum';
+import { User } from '@arsnova/app/models/user';
+import { Person } from '@arsnova/app/models/person';
 
 @Injectable()
 class MockRoomService {
 }
 
 @Injectable()
-class MockCommentService {
-}
-
-@Injectable()
-class MockCommentSettingsService {
+class MockModeratorService {
   get() {
-    return of(new CommentSettings())
+    return of([new Moderator('12345', 'b@a.cd', [UserRole.EXECUTIVE_MODERATOR])])
   }
 }
 
@@ -46,19 +50,28 @@ class MockDialogService {
 class MockLiveAnnouncer {
 }
 
+@Injectable()
+class MockUserService {
+  getUserData() {
+    return of([new User('12345', 'b@a.cd', AuthProvider.ARSNOVA, '0', new Person())]);
+  }
+}
 
-describe('CommentSettingsComponent', () => {
-  let component: CommentSettingsComponent;
-  let fixture: ComponentFixture<CommentSettingsComponent>;
+@Injectable()
+class MockAuthenticationService {
+  getCurrentAuthentication() {
+    return of(new ClientAuthentication('1234', 'a@b.cd', AuthProvider.ARSNOVA, 'token'));
+  }
+}
+
+describe('AccessComponent', () => {
+  let component: AccessComponent;
+  let fixture: ComponentFixture<AccessComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ CommentSettingsComponent ],
+      declarations: [ AccessComponent ],
       providers: [
-        {
-          provide: MatDialog,
-          useClass: MockMatDialog
-        },
         {
           provide: NotificationService,
           useClass: MockNotificationService
@@ -72,12 +85,8 @@ describe('CommentSettingsComponent', () => {
           useClass: MockRouter
         },
         {
-          provide: CommentService,
-          useClass: MockCommentService
-        },
-        {
-          provide: CommentSettingsService,
-          useClass: MockCommentSettingsService
+          provide: ModeratorService,
+          useClass: MockModeratorService
         },
         {
           provide: DialogService,
@@ -94,6 +103,18 @@ describe('CommentSettingsComponent', () => {
         {
           provide: EventService,
           useClass: MockEventService
+        },
+        {
+          provide: UserService,
+          useClass: MockUserService
+        },
+        {
+          provide: AuthenticationService,
+          useClass: MockAuthenticationService
+        },
+        {
+          provide: LanguageService,
+          useClass: MockLangService
         }
       ],
       imports: [
@@ -110,7 +131,7 @@ describe('CommentSettingsComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(CommentSettingsComponent);
+    fixture = TestBed.createComponent(AccessComponent);
     component = fixture.componentInstance;
     component.room = new Room('1234', 'shortId', 'abbreviation', 'name', 'description');
     fixture.detectChanges();

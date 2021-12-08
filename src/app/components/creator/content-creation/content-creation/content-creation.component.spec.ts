@@ -1,9 +1,10 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
-import { ContentTextCreationComponent } from './content-text-creation.component';
+import { ContentCreationComponent } from './content-creation.component';
 import { Injectable } from '@angular/core';
 import { ContentService } from '../../../../services/http/content.service';
 import { NotificationService } from '../../../../services/util/notification.service';
+import { MatDialog } from '@angular/material/dialog';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { EventService } from '../../../../services/util/event.service';
 import { RoomService } from '../../../../services/http/room.service';
@@ -13,6 +14,7 @@ import { ActivatedRoute } from '@angular/router';
 import {
   MockEventService,
   MockNotificationService,
+  MockMatDialog,
   JsonTranslationLoader, ActivatedRouteStub
 } from '@arsnova/testing/test-helpers';
 import { ContentGroupService } from '@arsnova/app/services/http/content-group.service';
@@ -35,9 +37,9 @@ class MockContentGroupService {
 class MockAnnouncer {
 }
 
-describe('ContentTextCreationComponent', () => {
-  let component: ContentTextCreationComponent;
-  let fixture: ComponentFixture<ContentTextCreationComponent>;
+describe('ContentChoiceCreationComponent', () => {
+  let component: ContentCreationComponent;
+  let fixture: ComponentFixture<ContentCreationComponent>;
 
   const data = {
     room: {
@@ -50,7 +52,7 @@ describe('ContentTextCreationComponent', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [
-        ContentTextCreationComponent
+        ContentCreationComponent
       ],
       providers: [
         {
@@ -60,6 +62,10 @@ describe('ContentTextCreationComponent', () => {
         {
           provide: NotificationService,
           useClass: MockNotificationService
+        },
+        {
+          provide: MatDialog,
+          useClass: MockMatDialog
         },
         {
           provide: EventService,
@@ -92,13 +98,13 @@ describe('ContentTextCreationComponent', () => {
         })
       ],
     })
-      .compileComponents()
-      .then(() => {
-        fixture = TestBed.createComponent(ContentTextCreationComponent);
-        component = fixture.componentInstance;
-        component.createEvent = mockCreateEvent;
-        fixture.detectChanges();
-      });
+    .compileComponents()
+    .then(() => {
+      fixture = TestBed.createComponent(ContentCreationComponent);
+      component = fixture.componentInstance;
+      component.createEvent = mockCreateEvent;
+      fixture.detectChanges();
+    });
   }));
 
   it('should create', () => {
