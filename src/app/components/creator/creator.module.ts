@@ -39,7 +39,7 @@ import { QrCodeComponent } from './_dialogs/qr-code/qr-code.component';
 import { RemindOfTokensComponent } from './_dialogs/remind-of-tokens/remind-of-tokens.component';
 import { StatisticHelpComponent } from './_dialogs/statistic-help/statistic-help.component';
 import { ArsModule } from '../../../../projects/ars/src/lib/ars.module';
-import { QRCodeModule } from 'angularx-qrcode';
+import { QrCodeModule } from 'ng-qrcode';
 
 @NgModule({
   imports: [
@@ -63,7 +63,7 @@ import { QRCodeModule } from 'angularx-qrcode';
     CdkStepperModule,
     ExtensionPointModule,
     ArsModule,
-    QRCodeModule
+    QrCodeModule
   ],
   declarations: [
     ContentChoiceCreationComponent,
