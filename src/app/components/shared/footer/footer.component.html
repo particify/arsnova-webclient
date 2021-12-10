@@ -14,7 +14,7 @@
       {{'footer.feedback' | translate}}</a>
     <a [routerLink]="[]" [matMenuTriggerFor]="privacyMenu" aria-labelledby="data-protection-menu" class="link text">
       {{'footer.dsgvo' | translate}}</a>
-    <a *ngIf="imprintUrl" [routerLink]="[][]" (click)="showImprint()" aria-labelledby="imprint-label" class="link text">
+    <a *ngIf="imprintUrl" [routerLink]="[]" (click)="showImprint()" aria-labelledby="imprint-label" class="link text">
       {{'footer.imprint' | translate}}</a>
   </div>
   <mat-menu #privacyMenu="matMenu" [overlapTrigger]="false">
