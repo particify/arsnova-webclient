@@ -295,4 +295,8 @@ export class RoomListComponent implements OnInit, OnDestroy {
   updateLastAccess(shortId: string) {
     this.rooms.find(r => r.membership.roomShortId === shortId).membership.lastVisit = new Date().toISOString();
   }
+
+  openCreateRoomDialog(): void {
+    this.dialogService.openRoomCreateDialog();
+  }
 }

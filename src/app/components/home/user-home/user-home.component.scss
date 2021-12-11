@@ -3,13 +3,13 @@ app-room-list {
   max-width: 800px;
 }
 
-.mat-raised-button {
-  height: 50px;
-  border-radius: 25px;
-  // ' - 0.25em' because of margin bottom from form field above to make space around button consistent
-  margin: calc(1em + 2% - 0.25em) 0 calc(1em + 2%) 0;
-  font-size: 18px;
-  width: 250px;
+button {
+  margin-bottom: 0.5em;
+}
+
+.container {
+  width: calc(92vw - 2em);
+  max-width: 800px;
 }
 
 .add-icon {
