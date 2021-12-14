@@ -74,7 +74,7 @@ export class QrCodeComponent implements OnInit, OnDestroy {
         this.displayUrl = url.replace(/^https?:\/\//, '') + this.shortId;
         this.useJoinUrl = true;
       } else {
-        url = document.baseURI + 'join/';
+        url = document.baseURI + 'p/';
         this.displayUrl = document.baseURI.replace(/^https?:\/\//, '').replace(/\/$/, '');
       }
       this.qrUrl = url + this.shortId;
