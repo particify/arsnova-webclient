@@ -28,7 +28,7 @@
         </ng-template>
         <app-password-entry [preFill]="password"></app-password-entry>
         <div *ngIf="dbLoginEnabled" fxLayout="row">
-          <a class="action-link forgot-pw" [routerLink]="" (click)="navToPasswordReset(); $event.preventDefault();
+          <a class="action-link forgot-pw" [routerLink]="[]" (click)="navToPasswordReset(); $event.preventDefault();
       $event.stopPropagation();" aria-labelledby="forgot-pw">
             {{ 'login.password-reset' | translate }}
           </a>

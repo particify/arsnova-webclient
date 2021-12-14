@@ -13,9 +13,6 @@ import { ExtensionRouteProvider, RouteMountPoint } from './extension-route';
   ],
   exports: [
     ExtensionPointComponent
-  ],
-  entryComponents: [
-    ExtensionPointComponent
   ]
 })
 export class ExtensionPointModule {

@@ -20,7 +20,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { FormsModule } from '@angular/forms';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { QRCodeModule } from 'angularx-qrcode';
+import { QrCodeModule } from 'ng-qrcode';
 import { KeyButtonBarComponent } from './bars/key-button-bar/key-button-bar.component';
 import { BarNotificationComponent } from './bars/bar-notification/bar-notification.component';
 
@@ -58,7 +58,7 @@ import { BarNotificationComponent } from './bars/bar-notification/bar-notificati
     FormsModule,
     MatMenuModule,
     MatTooltipModule,
-    QRCodeModule,
+    QrCodeModule,
   ]
 })
 export class PresentationModule { }

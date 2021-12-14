@@ -22,9 +22,9 @@
       </h1>
       <p  *ngIf="isDialog" tabindex="-1" id="qr-message" class="visually-hidden">{{ 'dialog.a11y-qr-code' | translate }}</p>
       <mat-divider vertical style="margin: 0 2em 0 5em"></mat-divider>
-      <qrcode fxLayout="column" fxLayoutAlign="center center" [qrdata]="qrUrl"
-              [width]="qrWidth" [colorDark]="fgColor" [colorLight]="bgColor" [errorCorrectionLevel]="'M'"
-              [margin]="4"></qrcode>
+      <qr-code fxLayout="column" fxLayoutAlign="center center" [value]="qrUrl"
+              [size]="qrWidth" [lightColor]="bgColor" [darkColor]="fgColor" [errorCorrectionLevel]="'M'"
+              [margin]="4"></qr-code>
     </div>
   </div>
 </div>
