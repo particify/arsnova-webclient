@@ -1559,7 +1559,7 @@
   dependencies:
     tslib "^2.3.0"
 
-"@ngx-translate/http-loader@^7.0.0":
+"@ngx-translate/http-loader@7.0.0":
   version "7.0.0"
   resolved "https://registry.yarnpkg.com/@ngx-translate/http-loader/-/http-loader-7.0.0.tgz#905f38d8d13342621516635bf480ff9a4f73e9fc"
   integrity sha512-j+NpXXlcGVdyUNyY/qsJrqqeAdJdizCd+GKh3usXExSqy1aE9866jlAIL+xrfDU4w+LiMoma5pgE4emvFebZmA==
@@ -1750,7 +1750,7 @@
     "@stomp/stompjs" "^6.0.0 >=6.1.1"
     angular2-uuid "^1.1.1"
 
-"@stomp/stompjs@^6.0.0 >=6.1.1", "@stomp/stompjs@^6.1.2":
+"@stomp/stompjs@6.1.2", "@stomp/stompjs@^6.0.0 >=6.1.1":
   version "6.1.2"
   resolved "https://registry.yarnpkg.com/@stomp/stompjs/-/stompjs-6.1.2.tgz#4ac3c380e8d1de1da94a3623d404e67de69dd01e"
   integrity sha512-FHDTrIFM5Ospi4L3Xhj6v2+NzCVAeNDcBe95YjUWhWiRMrBF6uN3I7AUOlRgT6jU/2WQvvYK8ZaIxFfxFp+uHQ==
