@@ -33,6 +33,17 @@ export class ContentService extends AbstractEntityService<Content> {
     answer: '/answer'
   };
 
+  typeIcons: Map<ContentType, string> = new Map<ContentType, string>([
+    [ContentType.CHOICE, 'list'],
+    [ContentType.SCALE, 'mood'],
+    [ContentType.BINARY, 'rule'],
+    [ContentType.TEXT, 'description'],
+    [ContentType.SLIDE, 'info'],
+    [ContentType.FLASHCARD, 'school'],
+    [ContentType.SORT, 'sort'],
+    [ContentType.WORDCLOUD, 'cloud']
+  ]);
+
   constructor(private http: HttpClient,
               private ws: WsConnectorService,
               protected eventService: EventService,
@@ -214,4 +225,9 @@ export class ContentService extends AbstractEntityService<Content> {
       });
     });
   }
+
+  getTypeIcons(): Map<ContentType, string> {
+    return this.typeIcons;
+  }
+
 }

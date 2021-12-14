@@ -12,6 +12,7 @@ import { HINT_TYPES } from '../../../shared/hint/hint.component';
 import { UserRole } from '../../../../models/user-roles.enum';
 import { ContentService } from '../../../../services/http/content.service';
 import { RoomStatsService } from '../../../../services/http/room-stats.service';
+import { ContentType } from '../../../../models/content-type.enum';
 
 class ContentFormat {
   name: string;
@@ -29,17 +30,9 @@ export class ContentCreationPageComponent implements OnInit, AfterContentInit {
   createEventSubject: Subject<boolean> = new Subject<boolean>();
   question: string;
   contentGroup: string;
-  formats: ContentFormat[] = [
-    { name: 'choice', icon: 'list' },
-    { name: 'scale', icon: 'mood' },
-    { name: 'binary', icon: 'rule' },
-    { name: 'text', icon: 'description' },
-    { name: 'slide', icon: 'info' },
-    { name: 'flashcard', icon: 'school' },
-    { name: 'sort', icon: 'sort' },
-    { name: 'wordcloud', icon: 'cloud' }
-  ];
-  selectedFormat: ContentFormat = this.formats[0];
+  contentTypes: ContentType[] = Object.values(ContentType);
+  formats: ContentFormat[] = [];
+  selectedFormat: ContentFormat;
 
   attachmentData: any;
   linkAttachmentsSubject: Subject<string> = new Subject<string>();
@@ -74,6 +67,11 @@ export class ContentCreationPageComponent implements OnInit, AfterContentInit {
   }
 
   ngOnInit() {
+    const iconList = this.contentService.getTypeIcons();
+    for (let type of this.contentTypes) {
+      this.formats.push({name: type.toLowerCase(), icon: iconList.get(type)})
+    }
+    this.selectedFormat = this.formats[0];
     this.route.data.subscribe(data => {
       const roomId = data.room.id;
       if (data.isEditMode) {
