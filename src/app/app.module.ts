@@ -38,7 +38,6 @@ import { BonusTokenService } from './services/http/bonus-token.service';
 import { ApiConfigService } from './services/http/api-config.service';
 import { CookiesComponent } from './components/home/_dialogs/cookies/cookies.component';
 import { OverlayComponent } from './components/home/_dialogs/overlay/overlay.component';
-import { ArsModule } from '../../projects/ars/src/lib/ars.module';
 import { MatIconModule } from '@angular/material/icon';
 import { LoginComponent } from './components/home/login/login.component';
 import { DialogService } from './services/util/dialog.service';
@@ -123,8 +122,7 @@ export function initializeApp(appConfig: AppConfig) {
         ]
       },
       isolate: true
-    }),
-    ArsModule
+    })
   ],
   providers: [
     /*AppConfig,

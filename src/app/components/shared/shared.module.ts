@@ -21,7 +21,6 @@ import { CreateCommentComponent } from './_dialogs/create-comment/create-comment
 import { PresentCommentComponent } from './_dialogs/present-comment/present-comment.component';
 import { DialogActionButtonsComponent } from './dialog/dialog-action-buttons/dialog-action-buttons.component';
 import { MatRippleModule } from '@angular/material/core';
-import { ArsModule } from '../../../../projects/ars/src/lib/ars.module';
 import { StatisticTextComponent } from './statistic-content/statistic-text/statistic-text.component';
 import { StatisticChoiceComponent } from './statistic-content/statistic-choice/statistic-choice.component';
 import { LoadingIndicatorComponent } from './loading-indicator/loading-indicator.component';
@@ -63,7 +62,6 @@ import { ContentChoiceAnswerComponent } from './content-answers/content-choice-a
     EssentialsModule,
     SharedRoutingModule,
     MatRippleModule,
-    ArsModule,
     CdkStepperModule,
     ExtensionPointModule,
     DragDropModule
