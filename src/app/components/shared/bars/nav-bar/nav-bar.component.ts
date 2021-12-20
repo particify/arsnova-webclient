@@ -128,7 +128,8 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
   }
 
   afterInit() {
-    this.guidedModeExtensionData = {featureUrl: [this.activeFeatures[this.currentRouteIndex] !== Features.CONTENTS ? this.activeFeatures[this.currentRouteIndex] : this.groupName]};
+    const featureUrl = this.activeFeatures[this.currentRouteIndex] !== Features.CONTENTS ? this.activeFeatures[this.currentRouteIndex] : this.groupName;
+    this.guidedModeExtensionData = {featureUrl: [featureUrl], roomId: this.roomId};
     this.isLoading = false;
   }
 
