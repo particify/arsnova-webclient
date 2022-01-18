@@ -16,6 +16,7 @@ import { LanguageService } from '../../../services/util/language.service';
 import { RoutingService } from '../../../services/util/routing.service';
 import { ConsentService } from '../../../services/util/consent.service';
 import { HotkeyAction } from '../../../directives/hotkey.directive';
+import { UserRole } from '../../../models/user-roles.enum';
 
 @Component({
   selector: 'app-header',
@@ -28,9 +29,7 @@ export class HeaderComponent implements OnInit {
   isGuest = true;
   isAdmin = false;
 
-  /* FIXME: Those role values are not updated to the real role. */
-  isParticipant = true;
-  isCreator = false;
+  role: UserRole;
 
   themeClass: String;
   themes: Theme[];
@@ -41,6 +40,8 @@ export class HeaderComponent implements OnInit {
   showNews: boolean;
   lang: string;
   HotkeyAction = HotkeyAction;
+  isRoom: boolean;
+  isPreview: boolean;
 
   constructor(
     public location: Location,
@@ -81,6 +82,15 @@ export class HeaderComponent implements OnInit {
     });
     this.translationService.onLangChange.subscribe(e => this.lang = e.lang);
     this.showNews = false;
+    this.isRoom = this.routingService.isRoom;
+    this.routingService.getIsRoom().subscribe(isRoom => {
+      this.isRoom = isRoom;
+    });
+    this.isPreview = this.routingService.isPreview;
+    this.routingService.getIsPreview().subscribe(isPreview => {
+      this.isPreview = isPreview;
+    });
+
   }
 
   changeLanguage(lang: string) {
@@ -170,6 +180,14 @@ export class HeaderComponent implements OnInit {
 
   showCookieSettings() {
     this.consentService.openDialog();
+  }
+
+  presentCurrentView() {
+    this.routingService.navToPresentation();
+  }
+
+  switchRole() {
+    this.routingService.switchRole();
   }
 
   /*

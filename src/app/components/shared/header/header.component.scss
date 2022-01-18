@@ -10,12 +10,10 @@
   color: var(--on-surface);
 }
 
-.gavel {
-  cursor: initial;
-}
-
-.bonus {
-  color: var(--yellow);
+.user-button {
+  background: var(--primary-variant);
+  color: var(--black);
+  margin-right: 0;
 }
 
 .rooms {
@@ -28,10 +26,6 @@
 
 .delete {
   color: var(--warn);
-}
-
-.mat-button {
-  padding: 0;
 }
 
 .color {
@@ -84,4 +78,19 @@
 
 .color-text-container {
   padding-right: 16px;
+}
+
+.room-action-container {
+  height: 36px;
+  margin-right: 1em;
+}
+
+@media(max-width: 1000px) {
+  .presentation-button {
+    display: none;
+  }
+}
+
+.mat-button {
+  opacity: 0.7;
 }

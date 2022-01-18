@@ -26,8 +26,7 @@ const routes: Routes = [
     path: '',
     component: RoomParticipantPageComponent,
     resolve: {
-      room: RoomResolver,
-      userRole: RoomUserRoleResolver
+      room: RoomResolver
     }
   },
   {
@@ -89,7 +88,8 @@ const routes: Routes = [
           data: { requiredRole: UserRole.PARTICIPANT },
           resolve: {
             room: RoomResolver,
-            viewRole: RoomViewUserRoleResolver
+            viewRole: RoomViewUserRoleResolver,
+            userRole: RoomUserRoleResolver
           },
           children: [
             ...routes,

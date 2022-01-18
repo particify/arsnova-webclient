@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { EventEmitter, Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, ActivationEnd, Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { filter } from 'rxjs/operators';
@@ -9,7 +9,8 @@ import { UserRole } from '@arsnova/app/models/user-roles.enum';
 export enum RoutePrefix {
   CREATOR = 'edit',
   PARTICIPANT = 'p',
-  MODERATOR = 'moderator'
+  MODERATOR = 'moderator',
+  PRESENTATION = 'present'
 }
 
 export const TITLES: { [key: string]: string } = {
@@ -76,6 +77,13 @@ export class RoutingService {
   suffix: string;
   titleKey: string;
   isTranslatedTitle: boolean;
+  private role: UserRole;
+  private viewRole: UserRole;
+  private shortId: string;
+  isRoom: boolean;
+  isRoom$ = new EventEmitter<boolean>();
+  isPreview: boolean;
+  isPreview$ = new EventEmitter<boolean>();
 
   constructor(
     private router: Router,
@@ -90,6 +98,7 @@ export class RoutingService {
         filter(event => (event as ActivationEnd).snapshot.outlet === 'primary')
     ).subscribe((activationEndEvent: ActivationEnd) => {
       if (activationEndEvent.snapshot.component) {
+        this.getRoomUrlData(activationEndEvent.snapshot);
         this.getRoutes(activationEndEvent.snapshot);
       }
     });
@@ -103,8 +112,18 @@ export class RoutingService {
     });
   }
 
+  getRoomUrlData(route: ActivatedRouteSnapshot) {
+    this.role = route.data.userRole;
+    this.viewRole = route.data.viewRole;
+    this.shortId = route.paramMap.get('shortId');
+    this.isPreview = this.role !== this.viewRole;
+    this.isPreview$.emit(this.isPreview);
+    this.isRoom = !!this.shortId;
+    this.isRoom$.emit(this.isRoom);
+  }
+
   getRoutes(route: ActivatedRouteSnapshot) {
-    const shortId = route.paramMap.get('shortId') || '';
+    const shortId = this.shortId || '';
     const series  = route.paramMap.get('seriesName') || '';
     const role = route.data.requiredRole || '';
     this.fullCurrentRoute = this.location.path();
@@ -233,5 +252,41 @@ export class RoutingService {
 
   isAdminView(url: string): boolean {
     return url.slice(1, 6).includes('admin');
+  }
+
+  getIsRoom(): EventEmitter<boolean> {
+    return this.isRoom$;
+  }
+
+  getIsPreview(): EventEmitter<boolean> {
+    return this.isPreview$;
+  }
+
+  navToPresentation(newTab = false) {
+    const url = this.currentRoute === 'settings' ? this.getPresentationHomeUrl() : this.getPresentationUrl(this.fullCurrentRoute);
+    if (newTab) {
+      window.open(url, '_blank');
+    } else {
+      this.router.navigateByUrl(url);
+    }
+  }
+
+  getPresentationHomeUrl(): string {
+    return RoutePrefix.PRESENTATION + '/' + this.shortId;
+  }
+
+  getPresentationUrl(url: string): string {
+    return this.replaceRoleInUrl(url, this.getRoleString(this.viewRole), RoutePrefix.PRESENTATION);
+  }
+
+  switchRole() {
+    const currentRoleString = this.getRoleString(this.role);
+    const url = '/' + (this.fullCurrentRoute.includes(currentRoleString) ? RoutePrefix.PARTICIPANT : currentRoleString) + '/' + this.shortId;
+    this.router.navigateByUrl(url);
+  }
+
+  replaceRoleInUrl(url, oldRole, newRole): string {
+    const reg = new RegExp(`\/${oldRole}+(\|$)`);
+    return url.replace(reg, newRole);
   }
 }
