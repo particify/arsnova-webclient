@@ -14,39 +14,10 @@
             </span>
             <span class="room-short-id">{{room.shortId | splitShortId}}</span>
           </div>
-          <button mat-icon-button class="corner-buttons" id="presentation-button" [matMenuTriggerFor]="presentationMenu"
-                  appHotkey="5" [matTooltip]="'presentation.presentation-mode' | translate"aria-labelledby="presentation-mode">
-            <mat-icon class="corner-icon icon-secondary">
-              present_to_all
-            </mat-icon>
+          <button mat-icon-button class="corner-buttons" aria-labelledby="settings" routerLink="settings">
+            <mat-icon class="corner-icon icon-secondary" [matTooltip]="'room-page.room-settings' | translate">settings</mat-icon>
+            <span></span>
           </button>
-          <mat-menu #presentationMenu="matMenu">
-            <button mat-menu-item tabindex="0" (click)="openPresentationMode()"
-                    aria-labelledby="present">
-              <mat-icon class="menu-icon icon-secondary">personal_video</mat-icon>
-              <span>{{ 'presentation.present' | translate }}</span>
-            </button>
-            <lib-extension-point extensionId="present-in-new-tab" [extensionData]="{shortId: room.shortId}"></lib-extension-point>
-          </mat-menu>
-          <button id="more-button" mat-icon-button [matMenuTriggerFor]="moreMenu" matTooltip="{{ 'room-page.more-options' | translate }}"
-                  aria-labelledby="more-options" appHotkey="6">
-            <mat-icon class="corner-icon icon-secondary">more_vert</mat-icon>
-          </button>
-          <mat-menu #moreMenu="matMenu">
-            <button mat-menu-item tabindex="0" (click)="switchRole('p')"
-                    aria-labelledby="switch-role">
-              <mat-icon class="menu-icon icon-secondary">{{roleIconString}}</mat-icon>
-              <span>{{ 'room-page.switch-role' | translate }}</span>
-            </button>
-            <button mat-menu-item (click)="showQRDialog()" aria-labelledby="share">
-              <mat-icon class="menu-icon">qr_code</mat-icon>
-              <span>{{ 'room-page.share-room' | translate }}</span>
-            </button>
-            <button mat-menu-item aria-labelledby="settings" routerLink="settings">
-              <mat-icon class="menu-icon icon-secondary">settings</mat-icon>
-              <span>{{ 'room-page.room-settings' | translate}}</span>
-            </button>
-          </mat-menu>
         </div>
         <div *ngIf="room.description" fxLayoutAlign="center">
           <app-rendered-text [rawText]="room.description.trim()" [renderedText]="room.renderedDescription"></app-rendered-text>
@@ -118,9 +89,4 @@
   <div id="settings">{{'room-page.a11y-settings' | translate}}</div>
   <div id="create-content-group">{{'room-page.a11y-create-content-group' | translate}}</div>
   <div id="live-survey">{{'room-page.a11y-live-survey' | translate}}</div>
-  <div id="share">{{'room-page.a11y-share' | translate}}</div>
-  <div id="switch-role">{{'room-page.a11y-switch-role' | translate}}</div>
-  <div id="more-options">{{'room-page.a11y-more-options' | translate}}</div>
-  <div id="presentation-mode">{{ 'presentation.a11y-presentation-mode' | translate}}</div>
-  <div id="present">{{ 'presentation.a11y-present' | translate}}</div>
 </div>
