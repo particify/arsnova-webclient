@@ -1,3 +1,7 @@
+.qr-container {
+  height: 80%;
+}
+
 @media(max-width: 1279px){
   .qr-container {
     display: flex;
@@ -20,6 +24,7 @@
   .qr-container {
     display: flex;
     flex-direction: row;
+    margin-bottom: 70px;
   }
 
   .url {
@@ -49,4 +54,18 @@ $icon-size: calc(32px + 6vw);
 
 .url {
   font-size: $font-size;
+}
+
+.mat-divider {
+  margin: 0 6vw;
+}
+
+.copy-url {
+  position: absolute;
+  top: 1em;
+  right: 1em;
+  opacity: 0.5;
+  &:hover {
+    opacity: 0.7;
+  }
 }

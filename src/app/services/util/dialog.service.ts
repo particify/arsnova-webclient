@@ -8,7 +8,6 @@ import { InfoDialogComponent } from '../../components/shared/_dialogs/info-dialo
 import { ContentGroupCreationComponent } from '../../components/creator/_dialogs/content-group-creation/content-group-creation.component';
 import { ClientAuthentication } from '../../models/client-authentication';
 import { CreateCommentComponent } from '../../components/shared/_dialogs/create-comment/create-comment.component';
-import { QrCodeComponent } from '../../components/creator/_dialogs/qr-code/qr-code.component';
 // import { RemindOfTokensComponent } from '../../components/shared/_dialogs/remind-of-tokens/remind-of-tokens.component';
 import { RoomCreateComponent } from '../../components/shared/_dialogs/room-create/room-create.component';
 import { StatisticHelpComponent } from '../../components/creator/_dialogs/statistic-help/statistic-help.component';
@@ -84,17 +83,6 @@ export class DialogService {
         directSend: directSend,
         fileUploadEnabled: fileUploadEnabled,
         role: role
-      }
-    });
-  }
-
-  openQRCodeDialog(shortId: string, passwordProtected: boolean, roomId: string): MatDialogRef<QrCodeComponent> {
-    return this.dialog.open(QrCodeComponent, {
-      panelClass: 'screenDialog',
-      data: {
-        shortId: shortId,
-        roomId: roomId,
-        passwordProtected: passwordProtected
       }
     });
   }

@@ -1,11 +1,7 @@
 <div fxLayout="column" fxFill>
-  <div *ngIf="isDialog" fxLayout="row" fxLayoutAlign="space-between">
-    <button class="header exitBtn" mat-icon-button (click)="onCloseClick()" aria-labelledby="exit">
-      <mat-icon>arrow_back</mat-icon>
-    </button>
-    <button mat-button class="icon-secondary header copyBtn" (click)="copyShortId()"
-            aria-labelledby="copy-url">
-      <mat-icon>link</mat-icon>
+  <div fxLayout="row" fxLayoutAlign="end">
+    <button mat-button class="copy-url" (click)="copyShortId()" aria-labelledby="copy-url">
+      <mat-icon>content_copy</mat-icon>
       {{ 'dialog.copy-url' | translate}}
     </button>
   </div>
@@ -20,15 +16,13 @@
         <lib-extension-point *ngIf="passwordProtected" [extensionData]="{roomId: roomId}"
                              extensionId="share-room-password"></lib-extension-point>
       </h1>
-      <p  *ngIf="isDialog" tabindex="-1" id="qr-message" class="visually-hidden">{{ 'dialog.a11y-qr-code' | translate }}</p>
-      <mat-divider vertical style="margin: 0 2em 0 5em"></mat-divider>
+      <mat-divider vertical></mat-divider>
       <qr-code fxLayout="column" fxLayoutAlign="center center" [value]="qrUrl"
               [size]="qrWidth" [lightColor]="bgColor" [darkColor]="fgColor" [errorCorrectionLevel]="'M'"
-              [margin]="4"></qr-code>
+              [margin]="0"></qr-code>
     </div>
   </div>
 </div>
 <div class="visually-hidden">
   <div id="copy-url">{{ 'dialog.a11y-copy-url' | translate}}</div>
-  <div id="exit">{{ 'dialog.a11y-close' | translate}}</div>
 </div>

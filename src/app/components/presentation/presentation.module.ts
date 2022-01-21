@@ -23,13 +23,16 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { QrCodeModule } from 'ng-qrcode';
 import { KeyButtonBarComponent } from './bars/key-button-bar/key-button-bar.component';
 import { BarNotificationComponent } from './bars/bar-notification/bar-notification.component';
+import { QrCodeComponent } from './qr-code/qr-code.component';
+
 
 @NgModule({
   declarations: [
     ControlBarComponent,
     PresentationComponent,
     KeyButtonBarComponent,
-    BarNotificationComponent
+    BarNotificationComponent,
+    QrCodeComponent
   ],
   imports: [
     extensions,

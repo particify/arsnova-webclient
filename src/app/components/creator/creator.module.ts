@@ -35,10 +35,8 @@ import { ContentWordcloudCreationComponent } from './content-creation/content-wo
 import { ExportComponent } from './_dialogs/export/export.component';
 import { DialogService } from '../../services/util/dialog.service';
 import { CommentAnswerComponent } from '../shared/_dialogs/comment-answer/comment-answer.component';
-import { QrCodeComponent } from './_dialogs/qr-code/qr-code.component';
 import { RemindOfTokensComponent } from './_dialogs/remind-of-tokens/remind-of-tokens.component';
 import { StatisticHelpComponent } from './_dialogs/statistic-help/statistic-help.component';
-import { QrCodeModule } from 'ng-qrcode';
 
 @NgModule({
   imports: [
@@ -60,8 +58,7 @@ import { QrCodeModule } from 'ng-qrcode';
       isolate: true
     }),
     CdkStepperModule,
-    ExtensionPointModule,
-    QrCodeModule
+    ExtensionPointModule
   ],
   declarations: [
     ContentChoiceCreationComponent,
@@ -86,13 +83,11 @@ import { QrCodeModule } from 'ng-qrcode';
     ContentFlashcardCreationComponent,
     ContentWordcloudCreationComponent,
     ExportComponent,
-    QrCodeComponent,
     RemindOfTokensComponent,
     StatisticHelpComponent
   ],
   exports: [
-    ContentPresentationComponent,
-    QrCodeComponent
+    ContentPresentationComponent
   ],
   providers: [
     { provide: TRANSLATION_MODULE_NAME, useValue: 'creator' },
