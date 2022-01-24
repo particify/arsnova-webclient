@@ -35,7 +35,7 @@ import { MatButtonHarness } from '@angular/material/button/testing';
 import { ClientAuthentication } from '@arsnova/app/models/client-authentication';
 import { AuthProvider } from '@arsnova/app/models/auth-provider';
 import { MatSelectModule } from '@angular/material/select';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, of } from 'rxjs';
 
 export class MockAuthenticationService {
   private auth$$ = new BehaviorSubject<any>({});
@@ -51,6 +51,19 @@ export class MockAuthenticationService {
   }
 }
 
+class MockRoutingService {
+  goBack() {
+  }
+
+  getIsRoom() {
+    return of({});
+  }
+
+  getIsPreview() {
+    return of({});
+  }
+}
+
 describe('HeaderComponent', () => {
   let component: HeaderComponent;
   let fixture: ComponentFixture<HeaderComponent>;
@@ -60,7 +73,6 @@ describe('HeaderComponent', () => {
   let routerSpy = jasmine.createSpyObj('MockRouter', ['navigate', 'navigateByUrl']);
   let userService = jasmine.createSpyObj('UserService', ['delete']);
   let dialogService = jasmine.createSpyObj('DialogService', ['openUpdateInfoDialog', 'openDeleteDialog']);
-  const routingService = jasmine.createSpyObj('RoutingService', ['goBack']);
   const consentService = jasmine.createSpyObj('ConsentService', ['openDialog']);
   let loader: HarnessLoader;
   let userButton: MatButtonHarness;
@@ -132,7 +144,7 @@ describe('HeaderComponent', () => {
         },
         {
           provide: RoutingService,
-          useValue: routingService
+          useClass: MockRoutingService
         },
         {
           provide: ConsentService,
@@ -167,7 +179,7 @@ describe('HeaderComponent', () => {
     component.auth = new ClientAuthentication('1234', 'a@b.cd', AuthProvider.ARSNOVA, 'token');
     userButton = await loader.getHarness(MatButtonHarness.with({selector: '#menu-button'}));
     await userButton.click();
-    userMenu = await loader.getHarness(MatMenuHarness);
+    userMenu = await loader.getHarness(MatMenuHarness.with({selector: '#menu-button'}));
     const isOpen = await userMenu.isOpen();
     expect(isOpen).toBe(true, 'UserMenu should be open after click');
   });
@@ -181,7 +193,7 @@ describe('HeaderComponent', () => {
     component.deviceWidth = 1001;
     userButton = await loader.getHarness(MatButtonHarness.with({selector: '#menu-button'}));
     await userButton.click();
-    userMenu = await loader.getHarness(MatMenuHarness);
+    userMenu = await loader.getHarness(MatMenuHarness.with({selector: '#menu-button'}));
     userMenuItems = await userMenu.getItems();
     const myRooms = await userMenu.getHarness(MatMenuItemHarness.with({selector: '#my-rooms-button'}));
     expect(myRooms).not.toBeUndefined('Header should contain item "My Rooms"');
@@ -202,7 +214,7 @@ describe('HeaderComponent', () => {
     component.helpUrl = 'help';
     userButton = await loader.getHarness(MatButtonHarness.with({selector: '#menu-button'}));
     await userButton.click();
-    userMenu = await loader.getHarness(MatMenuHarness);
+    userMenu = await loader.getHarness(MatMenuHarness.with({selector: '#menu-button'}));
     userMenuItems = await userMenu.getItems();
     const myRooms = await userMenu.getHarness(MatMenuItemHarness.with({selector: '#my-rooms-button'}));
     expect(myRooms).not.toBeUndefined('Header should contain item "My Rooms"');
@@ -225,7 +237,7 @@ describe('HeaderComponent', () => {
     component.helpUrl = 'help';
     userButton = await loader.getHarness(MatButtonHarness.with({selector: '#menu-button'}));
     await userButton.click();
-    userMenu = await loader.getHarness(MatMenuHarness);
+    userMenu = await loader.getHarness(MatMenuHarness.with({selector: '#menu-button'}));
     userMenuItems = await userMenu.getItems();
     const myRooms = await userMenu.getHarness(MatMenuItemHarness.with({selector: '#my-rooms-button'}));
     expect(myRooms).not.toBeUndefined('Header should contain item "My Rooms"');
@@ -252,7 +264,7 @@ describe('HeaderComponent', () => {
     component.imprintUrl = 'imprint';
     userButton = await loader.getHarness(MatButtonHarness.with({selector: '#menu-button'}));
     await userButton.click();
-    userMenu = await loader.getHarness(MatMenuHarness);
+    userMenu = await loader.getHarness(MatMenuHarness.with({selector: '#menu-button'}));
     userMenuItems = await userMenu.getItems();
     const myRooms = await userMenu.getHarness(MatMenuItemHarness.with({selector: '#my-rooms-button'}));
     expect(myRooms).not.toBeUndefined('Header should contain item "My Rooms"');
@@ -283,7 +295,7 @@ describe('HeaderComponent', () => {
     component.imprintUrl = 'imprint';
     userButton = await loader.getHarness(MatButtonHarness.with({selector: '#menu-button'}));
     await userButton.click();
-    userMenu = await loader.getHarness(MatMenuHarness);
+    userMenu = await loader.getHarness(MatMenuHarness.with({selector: '#menu-button'}));
     userMenuItems = await userMenu.getItems();
     const myRooms = await userMenu.getHarness(MatMenuItemHarness.with({selector: '#my-rooms-button'}));
     expect(myRooms).not.toBeUndefined('Header should contain item "My Rooms"');
@@ -312,7 +324,7 @@ describe('HeaderComponent', () => {
     component.deviceWidth = 1001;
     userButton = await loader.getHarness(MatButtonHarness.with({selector: '#menu-button'}));
     await userButton.click();
-    userMenu = await loader.getHarness(MatMenuHarness);
+    userMenu = await loader.getHarness(MatMenuHarness.with({selector: '#menu-button'}));
     userMenuItems = await userMenu.getItems();
     const myRooms = await userMenu.getHarness(MatMenuItemHarness.with({selector: '#my-rooms-button'}));
     expect(myRooms).not.toBeUndefined('Header should contain item "My Rooms"');
@@ -331,7 +343,7 @@ describe('HeaderComponent', () => {
     component.helpUrl = 'help';
     userButton = await loader.getHarness(MatButtonHarness.with({selector: '#menu-button'}));
     await userButton.click();
-    userMenu = await loader.getHarness(MatMenuHarness);
+    userMenu = await loader.getHarness(MatMenuHarness.with({selector: '#menu-button'}));
     userMenuItems = await userMenu.getItems();
     const myRooms = await userMenu.getHarness(MatMenuItemHarness.with({selector: '#my-rooms-button'}));
     expect(myRooms).not.toBeUndefined('Header should contain item "My Rooms"');
@@ -354,7 +366,7 @@ describe('HeaderComponent', () => {
     component.imprintUrl = 'imprint';
     userButton = await loader.getHarness(MatButtonHarness.with({selector: '#menu-button'}));
     await userButton.click();
-    userMenu = await loader.getHarness(MatMenuHarness);
+    userMenu = await loader.getHarness(MatMenuHarness.with({selector: '#menu-button'}));
     userMenuItems = await userMenu.getItems();
     const myRooms = await userMenu.getHarness(MatMenuItemHarness.with({selector: '#my-rooms-button'}));
     expect(myRooms).not.toBeUndefined('Header should contain item "My Rooms"');
@@ -378,7 +390,7 @@ describe('HeaderComponent', () => {
     component.auth = new ClientAuthentication('1234', 'a@b.cd', AuthProvider.ARSNOVA, 'token');
     userButton = await loader.getHarness(MatButtonHarness.with({selector: '#menu-button'}));
     await userButton.click();
-    userMenu = await loader.getHarness(MatMenuHarness);
+    userMenu = await loader.getHarness(MatMenuHarness.with({selector: '#menu-button'}));
     userMenuItems = await userMenu.getItems({selector: '#my-rooms-button'});
     await userMenuItems[0].click();
     expect(routerSpy.navigate).toHaveBeenCalledWith(['user']);
@@ -390,7 +402,7 @@ describe('HeaderComponent', () => {
     component.auth = new ClientAuthentication('1234', 'a@b.cd', AuthProvider.ARSNOVA, 'token');
     userButton = await loader.getHarness(MatButtonHarness.with({selector: '#menu-button'}));
     await userButton.click();
-    userMenu = await loader.getHarness(MatMenuHarness);
+    userMenu = await loader.getHarness(MatMenuHarness.with({selector: '#menu-button'}));
     userMenuItems = await userMenu.getItems({selector: '#logout-button'});
     await userMenuItems[0].click();
     expect(routerSpy.navigateByUrl).toHaveBeenCalledWith('');
@@ -412,4 +424,3 @@ describe('HeaderComponent', () => {
     expect(routerSpy.navigateByUrl).toHaveBeenCalledWith('login');
   });
 });
-
