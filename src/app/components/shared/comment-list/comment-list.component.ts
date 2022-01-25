@@ -35,8 +35,6 @@ export enum Sort {
 }
 
 enum Filter {
-  READ = 'read',
-  UNREAD = 'unread',
   FAVORITE = 'favorite',
   CORRECT = 'correct',
   WRONG = 'wrong',
@@ -421,9 +419,6 @@ export class CommentListComponent implements OnInit, OnDestroy {
           if (payload.id === this.comments[i].id) {
             for (const [key, value] of Object.entries(payload.changes)) {
               switch (key) {
-                case this.filtering.READ:
-                  this.comments[i].read = <boolean>value;
-                  break;
                 case this.filtering.CORRECT:
                   this.comments[i].correct = <CorrectWrong>value;
                   break;
@@ -550,10 +545,6 @@ export class CommentListComponent implements OnInit, OnDestroy {
           return c.correct === CorrectWrong.WRONG ? 1 : 0;
         case this.filtering.FAVORITE:
           return c.favorite;
-        case this.filtering.READ:
-          return c.read;
-        case this.filtering.UNREAD:
-          return !c.read;
         case this.filtering.TAG:
           return c.tag === tag;
         case this.filtering.ANSWER:

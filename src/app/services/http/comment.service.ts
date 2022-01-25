@@ -127,12 +127,6 @@ export class CommentService extends AbstractEntityService<Comment> {
     return this.patchComment(comment, changes);
   }
 
-  toggleRead(comment: Comment): Observable<Comment> {
-    comment.read = !comment.read;
-    const changes: { read: boolean } = { read: comment.read };
-    return this.patchComment(comment, changes);
-  }
-
   toggleFavorite(comment: Comment): Observable<Comment> {
     comment.favorite = !comment.favorite;
     const changes: { favorite: boolean } = { favorite: comment.favorite };

@@ -8,17 +8,11 @@
       correct: comment.correct === 1 ? ('comment-page.a11y-text-correct' | translate) : '',
   wrong: comment.correct === 2 ? ('comment-page.a11y-text-wrong' | translate) : '',
   bonus: comment.favorite ? ('comment-page.a11y-text-grade' | translate) : '',
-  read: comment.read ? ('comment-page.a11y-text-read' | translate) : '',
   answer: comment.answer ? ('comment-page.a11y-text-answer' | translate) : ''} }}">
     <div fxLayout="row" class="comment-actions">
-      <div class="date-container light">
+      <div class="date light">
         <div>{{comment.timestamp | dateFromNow : language : refreshCounter }}</div>
       </div>
-      <button mat-icon-button *ngIf="comment.read && viewRole === 'CREATOR' && !isPresentation" [disabled]="true" (click)="setRead()">
-        <mat-icon class="read-icon" matTooltip="{{ 'comment-page.mark-read' | translate }}">
-          visibility
-        </mat-icon>
-      </button>
       <span class="fill-remaining-space"></span>
 
       <button mat-icon-button *ngIf="comment.answer && !inAnswerView" (click)="answerComment()"
@@ -95,9 +89,9 @@
 
       </mat-menu>
     </div>
-    <div fxLayout="row">
-      <div class="body click" (click)="openPresentDialog()">
-        <span aria-hidden="true">{{ comment.body.trim() }}</span>
+    <div fxLayout="row" fxLayoutAlign="start end">
+      <div class="body click" fxLayout="column" fxLayoutAlign="center" (click)="openPresentDialog()">
+      <span aria-hidden="true">{{ comment.body.trim() }}</span>
       </div>
       <span class="fill-remaining-space click" (click)="openPresentDialog()"></span>
       <div fxLayout="column" *ngIf="isParticipant" [ngClass]="{ '1': 'voteUp', '-1': 'voteDown', '0': 'reset'}[currentVote]">
@@ -111,10 +105,10 @@
           <mat-icon class="voting-icon light" [ngClass]="{'downVoted' : hasVoted === -1}">keyboard_arrow_down</mat-icon>
         </button>
       </div>
-      <div *ngIf="!isParticipant" fxLayout="column" fxLayoutAlign="center">
-        <span class="scoreCreator">{{comment.score}}</span>
+      <div *ngIf="!isParticipant" fxLayout="row" fxLayoutAlign="start center">
+        <mat-icon class="vote-icon">thumb_up</mat-icon>
+        <span class="scoreCreator light">{{comment.score}}</span>
       </div>
-
     </div>
     <lib-extension-point *ngIf="fileUploadEnabled" extensionId="attachment-list" [extensionData]="extensionData"></lib-extension-point>
     <div (click)="this.clickedOnTag.emit(comment.tag)" *ngIf="comment.tag && comment.tag !== ''"
@@ -126,7 +120,7 @@
         </mat-chip>
       </mat-chip-list>
     </div>
-  </div>
+    </div>
   </div>
 </mat-card>
 

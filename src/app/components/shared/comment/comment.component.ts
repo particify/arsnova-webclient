@@ -176,10 +176,6 @@ export class CommentComponent implements OnInit, OnDestroy {
     }
   }
 
-  setRead(): void {
-    this.commentService.toggleRead(this.comment).subscribe(updatedComment => this.comment.read = updatedComment.read);
-  }
-
   markCorrect(type: CorrectWrong): void {
     if (this.comment.correct === type) {
       this.comment.correct = CorrectWrong.NULL;
@@ -251,9 +247,6 @@ export class CommentComponent implements OnInit, OnDestroy {
   openPresentDialog(): void {
     if (this.isPresentation || this.isCreator) {
       this.activeComment.emit(this.comment);
-      if (!this.comment.read) {
-        this.setRead();
-      }
     } else {
       this.answerComment();
     }

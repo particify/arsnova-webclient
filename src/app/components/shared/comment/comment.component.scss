@@ -2,8 +2,7 @@
 
 #comment-card {
   width: calc(92vw - 2em);
-  margin-bottom: 16px;
-  padding: 1.5% 1em 1em;
+  margin-bottom: 10px;
   transition: background-color 0.5s linear;
 }
 
@@ -26,6 +25,15 @@
   font-size: 35px;
   font-weight: $font-weight-bold;
   color: var(--on-surface);
+}
+
+.date {
+  @media(min-width: 1920px) {
+    font-size: 16px;
+  }
+  @media(max-width: 1919px) {
+    font-size: 14px;
+  }
 }
 
 .light {
@@ -56,11 +64,6 @@
   color: var(--red);
 }
 
-.read-icon {
-  color: var(--on-surface);
-}
-
-
 .gavel-icon {
   color: var(--primary);
 }
@@ -78,19 +81,35 @@
 
 .scoreCreator {
   color: var(--on-surface);
-  margin: 0 10px 0 10px;
-  font-size: 24px;
+  margin: 0 8px;
+  @media(min-width: 1920px) {
+    font-size: 20px;
+  }
+  @media(max-width: 1919px) {
+    font-size: 18px;
+  }
 }
 
 .body {
   min-width: 200px;
-  min-height: 100px;
   text-align: start;
-  font-size: calc(16px + 0.4vw);
   overflow: auto;
   color: var(--on-surface);
   white-space: pre-line;
   hyphens: auto;
+  min-height: 2em;
+  line-height: 150%;
+  @media(min-width: 1920px) {
+    font-size: 22px;
+  }
+  @media(max-width: 1919px) {
+    @media(min-width: 768px) {
+      font-size: 18px;
+    }
+    @media(max-width: 767px) {
+      font-size: 16px;
+    }
+  }
 }
 
 .comment-image {
@@ -105,18 +124,10 @@
   cursor: pointer;
 }
 
-.mat-icon {
-  transform: scale(1.2);
-}
-
-.date-container {
-  color: var(--on-surface);
-  padding-top: .3rem;
-}
-
 .comment-actions {
   align-items: center;
-  height: 3.5rem;
+  height: 40px;
+  margin-bottom: 8px;
 }
 
 .highlighted {
@@ -135,6 +146,19 @@
 
 .mat-chip {
   cursor: pointer;
+}
+
+.vote-icon {
+  font-size: 16px;
+  height: 16px;
+  width: 16px;
+  opacity: 0.3;
+  @media(max-width: 767px) {
+    margin-left: 0.5em;
+  }
+  @media(min-width: 767px) {
+    margin-left: 1em;
+  }
 }
 
 .voteUp {
