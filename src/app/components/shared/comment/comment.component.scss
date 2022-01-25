@@ -1,9 +1,14 @@
 @import '../../../../variables';
 
 #comment-card {
-  width: calc(92vw - 2em);
+  width: 92vw ;
+  max-width: 832px;
   margin-bottom: 10px;
   transition: background-color 0.5s linear;
+}
+
+#comment-entry {
+  width: 100%;
 }
 
 .presentation-comment {
@@ -20,14 +25,18 @@
 }
 
 .voting-icon {
-  width: 35px;
-  height: 35px;
-  font-size: 35px;
-  font-weight: $font-weight-bold;
-  color: var(--on-surface);
+  height: 40px;
+  width: 40px;
+  font-size: 40px;
+  &:not(.upVoted):not(.downVoted) {
+    opacity: 0.6;
+  }
 }
 
+
+
 .date {
+  margin-right: 8px;
   @media(min-width: 1920px) {
     font-size: 16px;
   }
@@ -38,6 +47,12 @@
 
 .light {
   opacity: 0.7;
+}
+
+.light-buttons {
+  .mat-icon-button {
+    opacity: 0.8;
+  }
 }
 
 .upVoted {
@@ -74,9 +89,8 @@
 
 .score {
   text-align: center;
-  margin: 0;
-  color: var(--on-surface);
-  font-size: 24px;
+  font-size: 18px;
+  opacity: 0.8;
 }
 
 .scoreCreator {
@@ -141,7 +155,7 @@
 
 .comment-tags {
   max-width: 140px;
-  margin-top: 1rem;
+  margin-top: 12px;
 }
 
 .mat-chip {
@@ -161,16 +175,20 @@
   }
 }
 
+.vote-container {
+  margin-left: 8px;
+}
+
 .voteUp {
-  animation: upVote 1s;
+  animation: upVote 800ms;
 }
 
 .voteDown {
-  animation: downVote 1s;
+  animation: downVote 800ms;
 }
 
 .reset {
-  animation: rubber 1s;
+  animation: rubber 800ms;
 }
 
 @keyframes upVote {
