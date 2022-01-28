@@ -51,7 +51,7 @@ export class UserProfileComponent implements OnInit {
           new FormField(this.user.person?.firstName, 'firstName', 'first-name'),
           new FormField(this.user.person?.lastName,'lastName', 'last-name'),
           new FormField(this.user.person?.organization, 'organization', 'organization'),
-          new FormField(this.user.person?.department, 'department', 'department'),
+          new FormField(this.user.person?.department, 'department', 'department')
         ];
         this.isLoading = false;
         this.announceButton.nativeElement.focus();
