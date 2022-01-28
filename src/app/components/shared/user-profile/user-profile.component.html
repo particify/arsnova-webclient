@@ -6,16 +6,20 @@
     <div fxLayout="column">
       <h4 class="less-important">{{ ('user-profile.username' | translate) + ': ' + auth.loginId }}</h4>
       <div fxLayout="column" fxLayoutGap="16px">
-        <div class="container">
+        <div fxLayout="row wrap" class="container">
           <mat-icon class="type-icon">person</mat-icon>
           <ng-container *ngFor="let formField of formFields; let i = index">
-            <app-user-form-field *ngIf="i < 2" class="input-field" [formField]="formField" (fieldUpdated)="update($event)"></app-user-form-field>
+            <app-user-form-field *ngIf="i < 2" class="input-field" [disabled]="isSso" [formField]="formField" (fieldUpdated)="update($event)"></app-user-form-field>
           </ng-container>
         </div>
-        <div class="container">
+        <div *ngIf="isSso" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="16px">
+          <mat-icon class="type-icon">mail</mat-icon>
+          <app-user-form-field class="full-width" [disabled]="true" [formField]="formFields[4]"></app-user-form-field>
+        </div>
+        <div *ngIf="!isSso" fxLayout="row wrap" class="container">
           <mat-icon class="type-icon">business</mat-icon>
           <ng-container *ngFor="let formField of formFields; let i = index">
-            <app-user-form-field *ngIf="i >= 2" class="input-field" [formField]="formField" (fieldUpdated)="update($event)"></app-user-form-field>
+            <app-user-form-field *ngIf="i >= 2 && i < 4" class="input-field" [formField]="formField" (fieldUpdated)="update($event)"></app-user-form-field>
           </ng-container>
         </div>
       </div>

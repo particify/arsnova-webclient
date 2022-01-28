@@ -9,6 +9,7 @@ import { FormField } from '../user-profile.component';
 export class UserFormFieldComponent {
 
   @Input() formField: FormField;
+  @Input() disabled = false;
   @Output() fieldUpdated: EventEmitter<FormField> = new EventEmitter<FormField>();
 
   beforeEdit: string;

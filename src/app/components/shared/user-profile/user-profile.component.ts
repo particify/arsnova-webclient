@@ -8,6 +8,7 @@ import { ClientAuthentication } from '../../../models/client-authentication';
 import { Router } from '@angular/router';
 import { User } from '../../../models/user';
 import { Person } from '../../../models/person';
+import { AuthProvider } from '@arsnova/app/models/auth-provider';
 
 export class FormField {
   value: string;
@@ -33,6 +34,7 @@ export class UserProfileComponent implements OnInit {
   auth: ClientAuthentication;
   user: User;
   formFields: FormField[] = [];
+  isSso = true;
   isLoading = true;
 
   constructor(private authenticationService: AuthenticationService,
@@ -45,13 +47,15 @@ export class UserProfileComponent implements OnInit {
   ngOnInit(): void {
     this.authenticationService.getCurrentAuthentication().subscribe(auth => {
       this.auth = auth;
+      this.isSso = this.auth.authProvider !== AuthProvider.ARSNOVA;
       this.userService.getUserByLoginId(this.auth.loginId, true).subscribe(user => {
         this.user = user[0];
         this.formFields = [
           new FormField(this.user.person?.firstName, 'firstName', 'first-name'),
           new FormField(this.user.person?.lastName,'lastName', 'last-name'),
           new FormField(this.user.person?.organization, 'organization', 'organization'),
-          new FormField(this.user.person?.department, 'department', 'department')
+          new FormField(this.user.person?.department, 'department', 'department'),
+          new FormField(this.user.person?.mail, 'mail', 'mail')
         ];
         this.isLoading = false;
         this.announceButton.nativeElement.focus();

@@ -203,6 +203,8 @@
     "last-name": "Nachname",
     "enter-first-name": "Gib deinen Vornamen ein",
     "enter-last-name": "Gib deinen Nachnamen ein",
+    "mail": "E-Mail",
+    "enter-mail": "Gib deine E-Mail ein",
     "organization": "Einrichtung",
     "enter-institution": "Gib deine Einrichtung ein",
     "department": "Fachbereich/Abteilung",

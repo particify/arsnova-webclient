@@ -203,6 +203,8 @@
     "last-name": "Last name",
     "enter-first-name": "Enter your first name",
     "enter-last-name": "Enter your last name",
+    "mail": "E-mail",
+    "enter-mail": "Enter your e-mail",
     "organization": "Organization",
     "enter-institution": "Enter your institution",
     "department": "Department",
