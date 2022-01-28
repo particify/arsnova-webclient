@@ -206,7 +206,7 @@
     "mail": "E-Mail",
     "enter-mail": "Gib deine E-Mail ein",
     "organization": "Einrichtung",
-    "enter-institution": "Gib deine Einrichtung ein",
+    "enter-organization": "Gib deine Einrichtung ein",
     "department": "Fachbereich/Abteilung",
     "enter-department": "Gib deinen Fachbereich ein",
     "delete-account": "Account löschen",
@@ -326,7 +326,8 @@
     "archive": "Archivierte Inhalte",
     "import": "Räume importieren",
     "admin": "Administration",
-    "presentation-mode": "Präsentation"
+    "presentation-mode": "Präsentation",
+    "account": "Mein Account"
   },
   "comment-export": {
     "answer": "Antwort",
