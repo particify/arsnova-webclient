@@ -224,13 +224,15 @@ export class CommentComponent implements OnInit, OnDestroy {
   }
 
   answerComment() {
-    this.dialog.open(CommentAnswerComponent, {
-      panelClass: 'screenDialog',
-      data: {
-        comment: this.comment,
-        role: this.viewRole
-      }
-    });
+    if (!this.inAnswerView) {
+      this.dialog.open(CommentAnswerComponent, {
+        panelClass: 'screenDialog',
+        data: {
+          comment: this.comment,
+          role: this.viewRole
+        }
+      });
+    }
   }
 
   delete(): void {
