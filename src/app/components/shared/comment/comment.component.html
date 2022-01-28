@@ -104,7 +104,7 @@
       <span class="fill-remaining-space click" (click)="openPresentDialog()"></span>
       <div *ngIf="!isParticipant" fxLayout="row" fxLayoutAlign="start end">
         <mat-icon class="vote-icon">thumb_up</mat-icon>
-        <span class="scoreCreator light">{{comment.score}}</span>
+        <span class="scoreCreator">{{comment.score}}</span>
       </div>
     </div>
     <lib-extension-point *ngIf="fileUploadEnabled" extensionId="attachment-list" [extensionData]="extensionData"></lib-extension-point>

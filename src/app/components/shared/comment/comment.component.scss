@@ -36,7 +36,7 @@
 
 
 .date {
-  margin-right: 8px;
+  margin-right: 4px;
   @media(min-width: 1920px) {
     font-size: 16px;
   }
@@ -96,6 +96,7 @@
 .scoreCreator {
   color: var(--on-surface);
   margin: 0 8px;
+  opacity: 0.8;
   @media(min-width: 1920px) {
     font-size: 20px;
   }
@@ -163,9 +164,9 @@
 }
 
 .vote-icon {
-  font-size: 16px;
-  height: 16px;
-  width: 16px;
+  font-size: 18px;
+  height: 18px;
+  width: 18px;
   opacity: 0.3;
   @media(max-width: 767px) {
     margin-left: 0.5em;
