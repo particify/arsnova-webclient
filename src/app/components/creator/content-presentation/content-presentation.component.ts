@@ -91,7 +91,10 @@ export class ContentPresentationComponent implements OnInit, OnDestroy {
 
   initScale() {
     if (this.isPresentation) {
-      const scale = Math.max((Math.min(innerWidth, 2100) / 1100), 1);
+      const scaleFactor = 1000;
+      const minScale = 1;
+      const maxScale = 1.9;
+      const scale = Math.min(Math.max((innerWidth / scaleFactor), minScale), maxScale);
       document.getElementById('stepper-container').style.transform = `scale(${scale})`;
       document.getElementById('stepper-container').style.left = `calc(50vw - calc(305px * ${scale})`;
       document.getElementById('stepper-container').style.top = `calc(4vw - calc(1em * ${scale}))`;

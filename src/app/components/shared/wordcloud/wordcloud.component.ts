@@ -2,7 +2,8 @@ import { Component, ElementRef, Input, OnChanges, ViewChild } from '@angular/cor
 import * as Wordcloud from 'd3-cloud';
 import { Subscription, timer } from 'rxjs';
 
-const TARGET_FONT_SIZE = 60;
+// Font size was reduced from 60 to avoid dropped words
+const TARGET_FONT_SIZE = 50;
 const RENDER_WIDTH = 800;
 const RATIO = 16 / 9;
 const ZOOM_EFFECT = 'zoom-effect';
