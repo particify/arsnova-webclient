@@ -4,4 +4,5 @@ export class Person {
   lastName: string;
   organization: string;
   department: string;
+  mail: string;
 }

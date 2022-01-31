@@ -203,8 +203,10 @@
     "last-name": "Last name",
     "enter-first-name": "Enter your first name",
     "enter-last-name": "Enter your last name",
+    "mail": "E-mail",
+    "enter-mail": "Enter your e-mail",
     "organization": "Organization",
-    "enter-institution": "Enter your institution",
+    "enter-organization": "Enter your organization",
     "department": "Department",
     "enter-department": "Enter your department",
     "delete-account": "Delete account",
@@ -324,7 +326,8 @@
     "archive": "Archived contents",
     "import": "Import rooms",
     "admin": "Administration",
-    "presentation-mode": "Presentation"
+    "presentation-mode": "Presentation",
+    "account": "My account"
   },
   "comment-export": {
     "answer": "Answer",

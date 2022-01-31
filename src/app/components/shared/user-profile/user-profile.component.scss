@@ -30,35 +30,23 @@ span {
   color: var(--warn);
 }
 
+.container {
+  align-items: center;
+  gap: 16px;
+}
+
 @media (max-width: 600px) {
   .input-field {
-    width: 100%;
+    width: calc(100% - 40px);
   }
 
-  .bigger {
-    display: none;
-  }
-
-  .smaller {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
+  .container {
+    justify-content: end;
   }
 }
 
 @media (min-width: 600px) {
   .input-field {
-    width: calc(50% - 8px);
+    width: calc(50% - 28px);
   }
-
-  .bigger {
-    display: flex;
-    flex-direction: row;
-    gap: 16px;
-    align-items: center;
   }
-
-  .smaller {
-    display: none;
-  }
-}

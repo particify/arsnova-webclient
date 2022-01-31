@@ -36,7 +36,8 @@ export const TITLES: { [key: string]: string } = {
   status: 'admin',
   stats: 'admin',
   users: 'admin',
-  rooms: 'admin'
+  rooms: 'admin',
+  account: 'account'
 };
 
 @Injectable({
