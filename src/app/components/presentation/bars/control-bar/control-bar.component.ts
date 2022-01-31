@@ -24,6 +24,7 @@ import { Content } from '../../../../models/content';
 import { DialogService } from '../../../../services/util/dialog.service';
 import { ContentMessages } from '../../../../models/events/content-messages.enum';
 import { ContentType } from '../../../../models/content-type.enum';
+import { AdvancedSnackBarTypes, NotificationService } from '../../../../services/util/notification.service';
 
 export class KeyNavBarItem extends NavBarItem {
   key: string;
@@ -127,7 +128,8 @@ export class ControlBarComponent extends NavBarComponent implements OnInit, OnDe
     private hotkeyService: HotkeyService,
     private translateService: TranslateService,
     private contentService: ContentService,
-    private dialogService: DialogService
+    private dialogService: DialogService,
+    private notificationService: NotificationService
   ) {
     super(router, routingService, route, globalStorageService,
       roomStatsService, feedbackService, contentGroupService, eventService);
@@ -376,13 +378,35 @@ export class ControlBarComponent extends NavBarComponent implements OnInit, OnDe
   }
 
   exitPresentation() {
-    if (this.inFullscreen) {
-      this.exitFullscreen();
+    if (this.dialogService.dialog.openDialogs.length === 0) {
+      if (this.inFullscreen) {
+        this.exitFullscreen();
+      }
+      this.router.navigateByUrl(`edit/${this.shortId}`);
     }
-    this.router.navigateByUrl(`edit/${this.shortId}`);
   }
 
   changeGroup(contentGroup: ContentGroup) {
+    if (this.group.id !== contentGroup.id) {
+      if (contentGroup.published) {
+        this.updateGroup(contentGroup);
+      } else {
+        const dialogRef = this.dialogService.openPublishGroupDialog(contentGroup.name);
+        dialogRef.afterClosed().subscribe(result => {
+          if (result === 'publish') {
+            const changes = { published: true };
+            this.contentGroupService.patchContentGroup(contentGroup, changes).subscribe(updatedGroup => {
+              const msg = this.translateService.instant('content.group-published');
+              this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.SUCCESS);
+              this.updateGroup(updatedGroup);
+            })
+          }
+        });
+      }
+    }
+  }
+
+  updateGroup(contentGroup: ContentGroup) {
     this.setGroup(contentGroup);
     this.activeGroup.emit(this.groupName);
   }
