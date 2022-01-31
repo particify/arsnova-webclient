@@ -1,4 +1,4 @@
-<mat-card name="comment" id="comment-card" [ngClass]="{'highlighted': comment.highlighted && !isPresentation,
+<mat-card name="comment" fxLayout="row" fxLayoutAlign="space-between" id="comment-card" [ngClass]="{'highlighted': comment.highlighted && !isPresentation,
            'mat-elevation-z2': inAnswerView, 'presentation-comment': isPresentation, 'active': comment.highlighted && isPresentation}"
           [@slide]="isNew ? slideAnimationState : null" (@slide.done)="changeSlideState()">
   <div fxLayout="column" id="comment-entry" tabindex="0" role="button" (keyup.enter)="openPresentDialog()" attr.aria-label="{{ 'comment-page.comment' | translate: {
@@ -8,24 +8,12 @@
       correct: comment.correct === 1 ? ('comment-page.a11y-text-correct' | translate) : '',
   wrong: comment.correct === 2 ? ('comment-page.a11y-text-wrong' | translate) : '',
   bonus: comment.favorite ? ('comment-page.a11y-text-grade' | translate) : '',
-  read: comment.read ? ('comment-page.a11y-text-read' | translate) : '',
   answer: comment.answer ? ('comment-page.a11y-text-answer' | translate) : ''} }}">
-    <div fxLayout="row" class="comment-actions">
-      <div class="date-container light">
+    <div fxLayout="row" class="comment-actions" [ngClass]="{'light-buttons': isParticipant}">
+      <div class="date light">
         <div>{{comment.timestamp | dateFromNow : language : refreshCounter }}</div>
       </div>
-      <button mat-icon-button *ngIf="comment.read && viewRole === 'CREATOR' && !isPresentation" [disabled]="true" (click)="setRead()">
-        <mat-icon class="read-icon" matTooltip="{{ 'comment-page.mark-read' | translate }}">
-          visibility
-        </mat-icon>
-      </button>
       <span class="fill-remaining-space"></span>
-
-      <button mat-icon-button *ngIf="comment.answer && !inAnswerView" (click)="answerComment()"
-              tabindex="0" aria-labelledby="comment-answered">
-        <mat-icon class="answered-icon" [matTooltip]="'comment-page.go-to-answer' | translate">comment
-        </mat-icon>
-      </button>
 
       <button mat-icon-button *ngIf="comment.correct === 1" [disabled]="isParticipant"
               (click)="markCorrect(1)" tabindex="0"
@@ -42,6 +30,11 @@
       <button mat-icon-button *ngIf="comment.favorite" [disabled]="isParticipant"
               (click)="setFavorite()" tabindex="0" aria-labelledby="comment-grade">
         <mat-icon class="favorite-icon" [matTooltip]="'comment-page.mark-not-favorite' | translate">grade
+        </mat-icon>
+      </button>
+      <button mat-icon-button *ngIf="comment.answer && !inAnswerView" (click)="answerComment()"
+              tabindex="0" aria-labelledby="comment-answered">
+        <mat-icon class="answered-icon" [matTooltip]="'comment-page.go-to-answer' | translate">comment
         </mat-icon>
       </button>
       <button *ngIf="isModeratorView" mat-icon-button (click)="setAck()"
@@ -95,38 +88,38 @@
 
       </mat-menu>
     </div>
-    <div fxLayout="row">
-      <div class="body click" (click)="openPresentDialog()">
-        <span aria-hidden="true">{{ comment.body.trim() }}</span>
+    <div fxLayout="row" fxLayoutAlign="start">
+      <div fxLayout="column">
+        <div class="body click" fxLayout="column" fxLayoutAlign="start" (click)="openPresentDialog()">
+          <span aria-hidden="true">{{ comment.body.trim() }}</span>
+        </div>
+        <div *ngIf="comment.tag && comment.tag !== ''" class="comment-tags light">
+          <mat-chip-list>
+            <mat-chip (click)="this.clickedOnTag.emit(comment.tag)" >
+              {{comment.tag}}
+            </mat-chip>
+          </mat-chip-list>
+        </div>
       </div>
       <span class="fill-remaining-space click" (click)="openPresentDialog()"></span>
-      <div fxLayout="column" *ngIf="isParticipant" [ngClass]="{ '1': 'voteUp', '-1': 'voteDown', '0': 'reset'}[currentVote]">
-        <button mat-icon-button (click)="vote(1)" [matTooltip]="'comment-page.vote-up' | translate"
-                tabindex="0" aria-labelledby="comment-vote-up">
-          <mat-icon class="voting-icon light" [ngClass]="{'upVoted' : hasVoted === 1}">keyboard_arrow_up</mat-icon>
-        </button>
-        <span class="score">{{comment.score}}</span>
-        <button mat-icon-button (click)="vote(-1)" [matTooltip]="'comment-page.vote-down' | translate"
-                tabindex="0" aria-labelledby="comment-vote-down">
-          <mat-icon class="voting-icon light" [ngClass]="{'downVoted' : hasVoted === -1}">keyboard_arrow_down</mat-icon>
-        </button>
-      </div>
-      <div *ngIf="!isParticipant" fxLayout="column" fxLayoutAlign="center">
+      <div *ngIf="!isParticipant" fxLayout="row" fxLayoutAlign="start end">
+        <mat-icon class="vote-icon">thumb_up</mat-icon>
         <span class="scoreCreator">{{comment.score}}</span>
       </div>
-
     </div>
     <lib-extension-point *ngIf="fileUploadEnabled" extensionId="attachment-list" [extensionData]="extensionData"></lib-extension-point>
-    <div (click)="this.clickedOnTag.emit(comment.tag)" *ngIf="comment.tag && comment.tag !== ''"
-         class="comment-tags light">
-    <div *ngIf="comment.tag && comment.tag !== ''" class="comment-tags light">
-      <mat-chip-list>
-        <mat-chip (click)="this.clickedOnTag.emit(comment.tag)" >
-          {{comment.tag}}
-        </mat-chip>
-      </mat-chip-list>
-    </div>
   </div>
+  <div fxLayout="column" fxLayoutAlign="center" *ngIf="isParticipant" class="vote-container"
+       [ngClass]="{ '1': 'voteUp', '-1': 'voteDown', '0': 'reset'}[currentVote]">
+    <button mat-icon-button (click)="vote(1)" [matTooltip]="'comment-page.vote-up' | translate"
+            tabindex="0" aria-labelledby="comment-vote-up">
+      <mat-icon class="voting-icon" [ngClass]="{'upVoted' : hasVoted === 1}">keyboard_arrow_up</mat-icon>
+    </button>
+    <span class="score">{{comment.score}}</span>
+    <button mat-icon-button (click)="vote(-1)" [matTooltip]="'comment-page.vote-down' | translate"
+            tabindex="0" aria-labelledby="comment-vote-down">
+      <mat-icon class="voting-icon"[ngClass]="{'downVoted' : hasVoted === -1}">keyboard_arrow_down</mat-icon>
+    </button>
   </div>
 </mat-card>
 

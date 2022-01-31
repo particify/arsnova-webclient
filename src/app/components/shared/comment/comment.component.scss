@@ -1,10 +1,14 @@
 @import '../../../../variables';
 
 #comment-card {
-  width: calc(92vw - 2em);
-  margin-bottom: 16px;
-  padding: 1.5% 1em 1em;
+  width: 92vw ;
+  max-width: 832px;
+  margin-bottom: 10px;
   transition: background-color 0.5s linear;
+}
+
+#comment-entry {
+  width: 100%;
 }
 
 .presentation-comment {
@@ -21,15 +25,34 @@
 }
 
 .voting-icon {
-  width: 35px;
-  height: 35px;
-  font-size: 35px;
-  font-weight: $font-weight-bold;
-  color: var(--on-surface);
+  height: 40px;
+  width: 40px;
+  font-size: 40px;
+  &:not(.upVoted):not(.downVoted) {
+    opacity: 0.6;
+  }
+}
+
+
+
+.date {
+  margin-right: 4px;
+  @media(min-width: 1920px) {
+    font-size: 16px;
+  }
+  @media(max-width: 1919px) {
+    font-size: 14px;
+  }
 }
 
 .light {
   opacity: 0.7;
+}
+
+.light-buttons {
+  .mat-icon-button {
+    opacity: 0.8;
+  }
 }
 
 .upVoted {
@@ -56,11 +79,6 @@
   color: var(--red);
 }
 
-.read-icon {
-  color: var(--on-surface);
-}
-
-
 .gavel-icon {
   color: var(--primary);
 }
@@ -71,26 +89,42 @@
 
 .score {
   text-align: center;
-  margin: 0;
-  color: var(--on-surface);
-  font-size: 24px;
+  font-size: 18px;
+  opacity: 0.8;
 }
 
 .scoreCreator {
   color: var(--on-surface);
-  margin: 0 10px 0 10px;
-  font-size: 24px;
+  margin: 0 8px;
+  opacity: 0.8;
+  @media(min-width: 1920px) {
+    font-size: 20px;
+  }
+  @media(max-width: 1919px) {
+    font-size: 18px;
+  }
 }
 
 .body {
   min-width: 200px;
-  min-height: 100px;
   text-align: start;
-  font-size: calc(16px + 0.4vw);
   overflow: auto;
   color: var(--on-surface);
   white-space: pre-line;
   hyphens: auto;
+  min-height: 2em;
+  line-height: 150%;
+  @media(min-width: 1920px) {
+    font-size: 22px;
+  }
+  @media(max-width: 1919px) {
+    @media(min-width: 768px) {
+      font-size: 18px;
+    }
+    @media(max-width: 767px) {
+      font-size: 16px;
+    }
+  }
 }
 
 .comment-image {
@@ -105,18 +139,10 @@
   cursor: pointer;
 }
 
-.mat-icon {
-  transform: scale(1.2);
-}
-
-.date-container {
-  color: var(--on-surface);
-  padding-top: .3rem;
-}
-
 .comment-actions {
   align-items: center;
-  height: 3.5rem;
+  height: 40px;
+  margin-bottom: 8px;
 }
 
 .highlighted {
@@ -130,23 +156,40 @@
 
 .comment-tags {
   max-width: 140px;
-  margin-top: 1rem;
+  margin-top: 12px;
 }
 
 .mat-chip {
   cursor: pointer;
 }
 
+.vote-icon {
+  font-size: 18px;
+  height: 18px;
+  width: 18px;
+  opacity: 0.3;
+  @media(max-width: 767px) {
+    margin-left: 0.5em;
+  }
+  @media(min-width: 767px) {
+    margin-left: 1em;
+  }
+}
+
+.vote-container {
+  margin-left: 8px;
+}
+
 .voteUp {
-  animation: upVote 1s;
+  animation: upVote 800ms;
 }
 
 .voteDown {
-  animation: downVote 1s;
+  animation: downVote 800ms;
 }
 
 .reset {
-  animation: rubber 1s;
+  animation: rubber 800ms;
 }
 
 @keyframes upVote {
