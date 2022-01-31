@@ -3,7 +3,7 @@
     <app-form-header [text]="'register.info' | translate  : { accountService: accountServiceTitle }"></app-form-header>
     <form class="full-width" fxLayout="column"
           fxLayoutAlign="space-around" fxLayoutGap="10px">
-      <mat-form-field class="input-block" appearance="outline">
+      <mat-form-field class="input-block" appearance="outline" [hideRequiredMarker]="true">
         <mat-label>{{ 'login.email' | translate }}</mat-label>
         <input id="email-input" matInput type="email" #userName [formControl]="usernameFormControl"
                placeholder="{{ 'login.enter-email' | translate }}"

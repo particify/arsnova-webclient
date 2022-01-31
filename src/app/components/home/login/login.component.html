@@ -14,13 +14,13 @@
         <mat-divider></mat-divider>
       </ng-container>
       <form class="full-width" fxLayout="column" fxLayoutGap="10px">
-        <mat-form-field *ngIf="loginIdIsEmail; else loginIdIsUsername" class="input-block" appearance="outline">
+        <mat-form-field *ngIf="loginIdIsEmail; else loginIdIsUsername" class="input-block" appearance="outline" [hideRequiredMarker]="true">
           <mat-label>{{ 'login.email' | translate }}</mat-label>
           <input [(ngModel)]="username" [errorStateMatcher]="matcher" [formControl]="loginIdFormControl" matInput
                  id="loginid-input" name="loginid" aria-labelledby="email-description" placeholder="{{ 'login.enter-email' | translate }}"/>
         </mat-form-field>
         <ng-template #loginIdIsUsername>
-          <mat-form-field class="input-block" appearance="outline">
+          <mat-form-field class="input-block" appearance="outline" [hideRequiredMarker]="true">
           <mat-label>{{ 'login.username' | translate }}</mat-label>
           <input [(ngModel)]="username" [errorStateMatcher]="matcher" [formControl]="loginIdFormControl" matInput
                  id="loginid-input" name="loginid" aria-labelledby="username-description" placeholder="{{ 'login.enter-username' | translate }}"/>
