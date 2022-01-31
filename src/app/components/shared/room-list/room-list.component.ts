@@ -257,7 +257,7 @@ export class RoomListComponent implements OnInit, OnDestroy {
   }
 
   filterRooms(search: string) {
-    if (search.length > 2) {
+    if (search.length > 0) {
       this.setDisplayedRooms(this.rooms.filter(room => room.summary.name.toLowerCase().includes(search.toLowerCase())));
     } else {
       this.setDisplayedRooms(this.rooms);
@@ -294,5 +294,9 @@ export class RoomListComponent implements OnInit, OnDestroy {
 
   updateLastAccess(shortId: string) {
     this.rooms.find(r => r.membership.roomShortId === shortId).membership.lastVisit = new Date().toISOString();
+  }
+
+  openCreateRoomDialog(): void {
+    this.dialogService.openRoomCreateDialog();
   }
 }

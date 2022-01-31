@@ -17,6 +17,10 @@
   width: calc(100% - 40px);
 }
 
+.outer {
+  padding: 0 0.5em 0 1em;
+}
+
 .inner {
   outline: none;
   height: 60px;
@@ -26,7 +30,6 @@
   .inner {
     cursor: pointer;
   }
-  padding-bottom: 0;
 }
 
 .rooms-from-guest {
@@ -45,8 +48,13 @@
   margin-right: 10px;
 }
 
-.no-rooms {
-  text-align: center;
+.hint {
+  margin: 3em 0 1.5em;
+  opacity: 0.7;
+}
+
+.alt-button {
+  margin-bottom: 2.5em;
 }
 
 @media (max-width: 500px) {
@@ -57,8 +65,69 @@
   }
 }
 
-#more {
-  height: 1em;
+.header-container {
+  margin-bottom: 0.5em;
+}
+
+.search-container {
+  position: relative;
+}
+
+.search-icon {
+  color: var(--grey);
+  position: absolute;
+  height: 20px;
+  width: 20px;
+  font-size: 20px;
+  top: 8px;
+  left: 10px;
+  opacity: 0.8;
+}
+
+.search-input {
+  height: 36px;
+  padding: 0 0 0 40px;
+  margin: 0;
+  border: 1px solid var(--grey);
+  border-radius: 4px;
+}
+
+.add-mobile {
+  background-color: var(--primary);
+  position: fixed;
+  bottom: 4vw;
+  right: 4vw;
+  z-index: 3;
+}
+
+@media(max-width: 600px) {
+  .desktop-buttons {
+    display: none;
+  }
+
+  .header-container {
+    flex-direction: row-reverse!important;
+  }
+
+  .search-input {
+    font-size: 12px;
+    width: 130px;
+  }
+}
+
+@media(min-width: 600px) {
+  .mobile-buttons {
+    display: none;
+  }
+  .search-input {
+    font-size: 14px;
+    width: 150px;
+  }
+
+}
+
+.button-container {
+  height: 36px;
 }
 
 .import {
@@ -66,9 +135,5 @@
 }
 
 .mat-button {
-  color: var(--secondary);
-}
-
-.mat-stroked-button {
-  height: 36px;
+  opacity: 0.7;
 }

@@ -83,7 +83,7 @@
     "a11y-update-made": "Du nutzt die neuste Version von ARSnova. Drücke die Tab-Taste um zu den letzten Änderungen zu gelangen. Um den Dialog zu schließen drücke erneut die Tab-Taste",
     "a11y-update": "Führt das Update durch und schließt den Dialog. Anschließend wird die Seite neu geladen.",
     "a11y-close": "Schließt den Dialog und kehrt zur letzten Ansicht zurück.",
-    "create-room": "Neuen Raum erstellen",
+    "create-room": "Raum erstellen",
     "created-1": "Der Raum „",
     "created-2": "“ wurde erstellt.",
     "exactly-8": "Die Raumnummer ist eine Kombination aus genau 8 Ziffern.",
@@ -226,8 +226,10 @@
     "editing-moderator-role": "Moderator/in",
     "filter": "In diesem Textfeld kannst du die aufgelisteten Räume nach Name filtern.",
     "filter-message": "Räume durchsuchen",
+    "no-rooms-found": "Keine Räume gefunden.",
+    "join-room": "Raum beitreten",
     "more-options": "Mehr Optionen",
-    "no-rooms": "Du hast bisher keine Räume betreten.",
+    "no-rooms": "Du hast noch keine Räume erstellt.",
     "panel-remove-room": "Raum aus der Liste entfernen",
     "panel-delete-room": "Raum löschen",
     "room-settings": "Einstellungen",
@@ -244,7 +246,8 @@
     "visited-rooms": "Besuchte Räume",
     "load-rooms": "Räume laden",
     "transfer-no-rooms": "Es wurden keine Räume zum Transferieren gefunden.",
-    "hide-guest-rooms": "Ausblenden"
+    "hide-guest-rooms": "Ausblenden",
+    "import": "Importieren"
   },
   "user-activation": {
     "a11y-activate": "Aktiviert deinen Account.",
