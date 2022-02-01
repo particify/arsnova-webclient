@@ -72,9 +72,10 @@
     "user-bonus-token": "Zu deinen Bonus Tokens",
     "news": "Es gibt Neuigkeiten",
     "menu": "Hauptmenü",
-    "participant-view": "Teilnameansicht",
-    "admin-view": "Adminansicht",
-    "presentation": "Präsentation",
+    "preview": "Vorschau",
+    "editing-view": "Bearbeiten",
+    "room-settings": "Raumeinstellungen",
+    "present": "Präsentieren",
     "presentation-mode": "Präsentationsmodus"
   },
   "home-page": {

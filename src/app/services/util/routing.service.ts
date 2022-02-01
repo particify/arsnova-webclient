@@ -77,9 +77,10 @@ export class RoutingService {
   suffix: string;
   titleKey: string;
   isTranslatedTitle: boolean;
-  private role: UserRole;
   private viewRole: UserRole;
   private shortId: string;
+  role: UserRole;
+  role$ = new EventEmitter<UserRole>();
   isRoom: boolean;
   isRoom$ = new EventEmitter<boolean>();
   isPreview: boolean;
@@ -114,6 +115,7 @@ export class RoutingService {
 
   getRoomUrlData(route: ActivatedRouteSnapshot) {
     this.role = route.data.userRole;
+    this.role$.emit(this.role);
     this.viewRole = route.data.viewRole;
     this.shortId = route.paramMap.get('shortId');
     this.isPreview = this.role !== this.viewRole;
@@ -254,6 +256,10 @@ export class RoutingService {
     return url.slice(1, 6).includes('admin');
   }
 
+  getRole(): EventEmitter<UserRole> {
+    return this.role$;
+  }
+
   getIsRoom(): EventEmitter<boolean> {
     return this.isRoom$;
   }
@@ -288,5 +294,10 @@ export class RoutingService {
   replaceRoleInUrl(url, oldRole, newRole): string {
     const reg = new RegExp(`\/${oldRole}+(\|$)`);
     return url.replace(reg, newRole);
+  }
+
+  navToSettings() {
+    const url = `${RoutePrefix.CREATOR}/${this.shortId}/settings`;
+    this.router.navigateByUrl(url);
   }
 }

@@ -38,7 +38,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { BehaviorSubject, of } from 'rxjs';
 
 export class MockAuthenticationService {
-  private auth$$ = new BehaviorSubject<any>({});
+  private auth$$ = new BehaviorSubject<any>({ loginId: 'test@test.de' });
 
   getAuthenticationChanges() {
     return this.auth$$.asObservable();
@@ -60,6 +60,10 @@ class MockRoutingService {
   }
 
   getIsPreview() {
+    return of({});
+  }
+
+  getRole() {
     return of({});
   }
 }

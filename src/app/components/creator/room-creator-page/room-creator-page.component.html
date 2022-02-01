@@ -14,10 +14,6 @@
             </span>
             <span class="room-short-id">{{room.shortId | splitShortId}}</span>
           </div>
-          <button mat-icon-button class="corner-buttons" aria-labelledby="settings" routerLink="settings">
-            <mat-icon class="corner-icon icon-secondary" [matTooltip]="'room-page.room-settings' | translate">settings</mat-icon>
-            <span></span>
-          </button>
         </div>
         <div *ngIf="room.description" fxLayoutAlign="center">
           <app-rendered-text [rawText]="room.description.trim()" [renderedText]="room.renderedDescription"></app-rendered-text>
@@ -86,7 +82,6 @@
 
 <div class="visually-hidden" *ngIf="!isLoading">
   <div id="comments">{{'room-page.a11y-comments' | translate}}</div>
-  <div id="settings">{{'room-page.a11y-settings' | translate}}</div>
   <div id="create-content-group">{{'room-page.a11y-create-content-group' | translate}}</div>
   <div id="live-survey">{{'room-page.a11y-live-survey' | translate}}</div>
 </div>

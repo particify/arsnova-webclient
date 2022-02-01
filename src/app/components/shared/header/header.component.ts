@@ -42,6 +42,7 @@ export class HeaderComponent implements OnInit {
   HotkeyAction = HotkeyAction;
   isRoom: boolean;
   isPreview: boolean;
+  userCharacter: string;
 
   constructor(
     public location: Location,
@@ -67,6 +68,7 @@ export class HeaderComponent implements OnInit {
   ngOnInit() {
     this.authenticationService.getAuthenticationChanges().subscribe(auth => {
       this.auth = auth;
+      this.userCharacter = this.auth.loginId.slice(0, 1).toLocaleUpperCase();
       this.isGuest = !auth || auth.authProvider === AuthProvider.ARSNOVA_GUEST;
       this.isAdmin = !!auth && this.authenticationService.hasAdminRole(auth);
     });
@@ -90,7 +92,10 @@ export class HeaderComponent implements OnInit {
     this.routingService.getIsPreview().subscribe(isPreview => {
       this.isPreview = isPreview;
     });
-
+    this.role = this.routingService.role;
+    this.routingService.getRole().subscribe(role => {
+      this.role = role;
+    });
   }
 
   changeLanguage(lang: string) {
@@ -188,6 +193,10 @@ export class HeaderComponent implements OnInit {
 
   switchRole() {
     this.routingService.switchRole();
+  }
+
+  goToSettings() {
+    this.routingService.navToSettings();
   }
 
   /*

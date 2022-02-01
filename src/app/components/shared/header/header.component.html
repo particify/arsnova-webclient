@@ -90,20 +90,45 @@
     </mat-menu>
 
     <div fxLayout="row" fxLayoutAlign="start center">
-      <div *ngIf="isRoom" fxLayout="row" fxLayoutGap="10px" class="room-action-container">
-        <button mat-button class="preview-button" (click)="switchRole()" aria-labelledby="switch-role">
-          <mat-icon>{{ isPreview ? 'manage_accounts' : 'people' }}</mat-icon>
-          {{ (isPreview ? 'header.admin-view' : 'header.participant-view') | translate }}
-        </button>
-        <button mat-raised-button class="button-primary presentation-button" [matMenuTriggerFor]="presentationMenu"
-        aria-labelledby="present">
-          <mat-icon>present_to_all</mat-icon>
-          {{ 'header.presentation' | translate }}
-        </button>
+      <div *ngIf="isRoom && role !== 'PARTICIPANT'">
+        <div fxLayout="row" fxLayoutGap="10px" class="desktop-action-container">
+          <button mat-button class="preview-button" (click)="switchRole()" aria-labelledby="switch-role"
+          [ngClass]="{'back-to-edit': isPreview}">
+            <mat-icon>{{ isPreview ? 'edit' : 'preview' }}</mat-icon>
+            {{ (isPreview ? 'header.editing-view' : 'header.preview') | translate }}
+          </button>
+          <button [disabled]="isPreview" mat-button class="preview-button" (click)="goToSettings()" aria-labelledby="switch-role">
+            <mat-icon>settings</mat-icon>
+            {{ 'header.room-settings' | translate }}
+          </button>
+          <button [disabled]="isPreview" mat-raised-button class="button-primary" [matMenuTriggerFor]="presentationMenu"
+                  aria-labelledby="present">
+            <mat-icon>present_to_all</mat-icon>
+            {{ 'header.present' | translate }}
+          </button>
+        </div>
+        <div class="mobile-action-container">
+          <button *ngIf="!isPreview" mat-icon-button [matMenuTriggerFor]="roomMenu">
+            <mat-icon>more_vert</mat-icon>
+          </button>
+          <button *ngIf="isPreview" mat-icon-button class="icon-primary" (click)="switchRole()" aria-labelledby="switch-role">
+            <mat-icon>edit</mat-icon>
+          </button>
+        </div>
+        <mat-menu #roomMenu="matMenu">
+          <button mat-menu-item tabindex="0" (click)="switchRole()" aria-labelledby="switch-role">
+            <mat-icon>preview</mat-icon>
+            {{ 'header.preview' | translate }}
+          </button>
+          <button mat-menu-item tabindex="0" (click)="goToSettings()" aria-labelledby="settings">
+            <mat-icon>settings</mat-icon>
+            <span>{{ 'header.room-settings' | translate }}</span>
+          </button>
+        </mat-menu>
       </div>
       <mat-menu #presentationMenu="matMenu">
         <button mat-menu-item tabindex="0" (click)="presentCurrentView()" aria-labelledby="presentation-mode">
-          <mat-icon class="menu-icon icon-secondary">personal_video</mat-icon>
+          <mat-icon class="menu-icon">personal_video</mat-icon>
           <span>{{ 'header.presentation-mode' | translate }}</span>
         </button>
         <lib-extension-point extensionId="present-in-new-tab"></lib-extension-point>
@@ -115,8 +140,10 @@
             notifications
           </mat-icon>
         </button>
-        <button mat-icon-button *ngIf="auth" class="user-button" [matMenuTriggerFor]="userMenu" aria-labelledby="room-label" id="menu-button" appHotkey="9" [appHotkeyTitle]="'header.menu' | translate">
-          <mat-icon>person_outline</mat-icon>
+        <button mat-icon-button *ngIf="auth" class="user-button" [matMenuTriggerFor]="userMenu" aria-labelledby="room-label"
+                id="menu-button" appHotkey="9" [appHotkeyTitle]="'header.menu' | translate" [ngClass]="{'guest': isGuest}">
+          <mat-icon *ngIf="isGuest">person_outline</mat-icon>
+          <span *ngIf="!isGuest">{{userCharacter}}</span>
         </button>
         <div *ngIf="router.url !== '/login'">
           <button id="login-button" mat-button *ngIf="!auth" (click)=navToLogin() aria-labelledby="login-label" appHotkey="9" [appHotkeyTitle]="'header.login' | translate">

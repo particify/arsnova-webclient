@@ -72,9 +72,10 @@
     "user-bonus-token": "See your bonus tokens",
     "news": "There are news",
     "menu": "Main menu",
-    "participant-view": "Participant view",
-    "admin-view": "Admin view",
-    "presentation": "Presentation",
+    "preview": "Preview",
+    "editing-view": "Edit",
+    "room-settings": "Room settings",
+    "present": "Present",
     "presentation-mode": "Presentation mode"
   },
   "home-page": {
