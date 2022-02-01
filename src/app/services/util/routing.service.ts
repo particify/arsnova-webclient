@@ -230,4 +230,8 @@ export class RoutingService {
   isPresentation(url: string): boolean {
     return url.slice(1, 8).includes('present');
   }
+
+  isAdminView(url: string): boolean {
+    return url.slice(1, 6).includes('admin');
+  }
 }

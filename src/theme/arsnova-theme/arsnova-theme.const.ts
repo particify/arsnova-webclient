@@ -1,10 +1,10 @@
 export const arsnova = {
 
   '--primary': '#5e35b1',
-  '--primary-variant': '#d1c4e9',
+  '--primary-variant': '#ebe5f7',
 
   '--secondary': '#2e7d32',
-  '--secondary-variant': '#e8f5e9',
+  '--secondary-variant': '#e1f4e2',
 
   '--primary-logo': '#5e35b1',
   '--secondary-logo': '#2e7d32',

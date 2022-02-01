@@ -1,58 +1,38 @@
-<div fxLayout="row" fxLayoutAlign="center" fxLayoutGap="10px">
-  <mat-card fxFlex="250px">
-    <mat-card-title>
-      {{ 'admin-area.system-health' | translate }}
-    </mat-card-title>
-    <mat-card-content fxLayout="column" fxLayoutAlign="center">
+<div fxLayout="row" fxLayoutAlign="space-around" fxLayoutGap="10px" class="summary-container">
+  <div fxLayout="column" fxLayoutAlign="center center">
+    <div fxLayout="column" fxLayoutAlign="center">
       <div class="system-health system-health-{{ (healthInfo | async)?.status | lowercase }}" ngSwitch="{{ (healthInfo | async)?.status }}">
         <mat-icon *ngSwitchCase="STATUS_UP">check</mat-icon>
         <mat-icon *ngSwitchCase="STATUS_DOWN">warning</mat-icon>
         <b *ngSwitchDefault>?</b>
       </div>
-    </mat-card-content>
-    <mat-card-actions>
-      <button mat-button [routerLink]="['status']">
-        {{ 'admin-area.status-details' | translate }}
-      </button>
-    </mat-card-actions>
-  </mat-card>
-  <mat-card fxFlex="250px">
-    <mat-card-title>
+    </div>
+    <p>
+      {{ 'admin-area.system-health' | translate }}
+    </p>
+  </div>
+  <div fxLayout="column" fxLayoutAlign="center center">
+    <div fxLayout="column" fxLayoutAlign="center">
+      <span>{{ (stats | async)?.connectedUsers }}</span>
+    </div>
+    <p>
       {{ 'admin-area.connected-users' | translate }}
-    </mat-card-title>
-    <mat-card-content fxLayout="column" fxLayoutAlign="center">
-      <div class="system-stats user-count"><mat-icon>record_voice_over</mat-icon>&nbsp;{{ (stats | async)?.connectedUsers }}</div>
-    </mat-card-content>
-    <mat-card-actions>
-      <button mat-button [routerLink]="['stats']">
-        {{ 'admin-area.system-stats' | translate }}
-      </button>
-    </mat-card-actions>
-  </mat-card>
-  <mat-card fxFlex="250px">
-    <mat-card-title>
+    </p>
+  </div>
+  <div fxLayout="column" fxLayoutAlign="center center">
+    <div fxLayout="column" fxLayoutAlign="center">
+      <span>{{ (stats | async)?.users }}</span>
+    </div>
+    <p>
       {{ 'admin-area.user-accounts' | translate }}
-    </mat-card-title>
-    <mat-card-content fxLayout="column" fxLayoutAlign="center">
-      <div class="system-stats user-count"><mat-icon>people</mat-icon>&nbsp;{{ (stats | async)?.users }}</div>
-    </mat-card-content>
-    <mat-card-actions>
-      <button mat-button [routerLink]="['users']">
-        {{ 'admin-area.manage-accounts' | translate }}
-      </button>
-    </mat-card-actions>
-  </mat-card>
-  <mat-card fxFlex="250px">
-    <mat-card-title>
+    </p>
+  </div>
+  <div fxLayout="column" fxLayoutAlign="center center">
+    <div fxLayout="column" fxLayoutAlign="center">
+      <span>{{ (stats | async)?.rooms }}</span>
+    </div>
+    <p>
       {{ 'admin-area.rooms' | translate }}
-    </mat-card-title>
-    <mat-card-content fxLayout="column" fxLayoutAlign="center">
-      <div class="system-stats room-count"><mat-icon>work</mat-icon>&nbsp;{{ (stats | async)?.rooms }}</div>
-    </mat-card-content>
-    <mat-card-actions>
-      <button mat-button [routerLink]="['rooms']">
-        {{ 'admin-area.manage-rooms' | translate }}
-      </button>
-    </mat-card-actions>
-  </mat-card>
+    </p>
+  </div>
 </div>

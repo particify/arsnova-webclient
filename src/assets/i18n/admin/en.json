@@ -1,6 +1,7 @@
 {
   "admin-area": {
     "title": "Administration",
+    "general": "General",
     "search": "Search",
     "properties": "Properties",
     "system-health": "System Status",
@@ -11,7 +12,7 @@
     "status-ping": "Ping",
     "status-rabbit": "Message queue (RabbitMQ)",
     "system-stats": "Statistics",
-    "user-accounts": "User accounts",
+    "user-accounts": "Accounts",
     "connected-users": "Connected users",
     "manage-accounts": "Manage accounts",
     "user-management": "User Management",

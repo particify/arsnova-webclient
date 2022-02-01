@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { LanguageService } from '../../../services/util/language.service';
 import { GlobalStorageService, STORAGE_KEYS } from '../../../services/util/global-storage.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-admin-home',
@@ -9,17 +10,26 @@ import { GlobalStorageService, STORAGE_KEYS } from '../../../services/util/globa
   styleUrls: ['./admin-home.component.scss']
 })
 export class AdminHomeComponent implements OnInit {
-  page: string;
+  routePrefix = '/admin/';
+  currentPage: string;
 
   constructor(
     protected langService: LanguageService,
     protected translateService: TranslateService,
-    protected globalStorageService: GlobalStorageService
+    protected globalStorageService: GlobalStorageService,
+    protected router: Router
   ) {
     langService.langEmitter.subscribe(lang => translateService.use(lang));
   }
 
   ngOnInit() {
     this.translateService.use(this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE));
+    const url = this.router.url;
+    this.currentPage = url.slice(this.routePrefix.length, url.length);
+  }
+
+  changePage(page: string) {
+    this.router.navigate([this.routePrefix, page]);
+    this.currentPage = page;
   }
 }
