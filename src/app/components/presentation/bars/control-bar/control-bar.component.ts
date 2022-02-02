@@ -164,10 +164,11 @@ export class ControlBarComponent extends NavBarComponent implements OnInit, OnDe
       this.surveyStarted = !data.room.settings.feedbackLocked;
       this.setSurveyState();
       if (this.groupName) {
-        this.contentGroupService.getByRoomIdAndName(data.room.id, this.groupName, true).subscribe(group => {
-          this.group = group;
-          this.checkIfContentLocked();
-        });
+        this.group = this.contentGroups.find(g => g.name === this.groupName);
+        this.checkIfContentLocked();
+        if (this.isActiveFeature(Features.CONTENTS) && !this.group.published) {
+          this.publishContentGroup()
+        }
       }
     });
     this.subscribeToEvents();
@@ -315,6 +316,9 @@ export class ControlBarComponent extends NavBarComponent implements OnInit, OnDe
       this.activeFeature.emit(feature);
       if (feature === Features.CONTENTS) {
         this.setArrowsState(this.contentStepState);
+        if (!this.group.published) {
+          this.publishContentGroup();
+        }
       } else if (feature === Features.COMMENTS) {
         this.setArrowsState(this.commentStepState);
       }
@@ -391,17 +395,7 @@ export class ControlBarComponent extends NavBarComponent implements OnInit, OnDe
       if (contentGroup.published) {
         this.updateGroup(contentGroup);
       } else {
-        const dialogRef = this.dialogService.openPublishGroupDialog(contentGroup.name);
-        dialogRef.afterClosed().subscribe(result => {
-          if (result === 'publish') {
-            const changes = { published: true };
-            this.contentGroupService.patchContentGroup(contentGroup, changes).subscribe(updatedGroup => {
-              const msg = this.translateService.instant('content.group-published');
-              this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.SUCCESS);
-              this.updateGroup(updatedGroup);
-            })
-          }
-        });
+        this.publishContentGroup(contentGroup);
       }
     }
   }
@@ -409,6 +403,20 @@ export class ControlBarComponent extends NavBarComponent implements OnInit, OnDe
   updateGroup(contentGroup: ContentGroup) {
     this.setGroup(contentGroup);
     this.activeGroup.emit(this.groupName);
+  }
+
+  publishContentGroup(contentGroup: ContentGroup = this.group) {
+    const dialogRef = this.dialogService.openPublishGroupDialog(contentGroup.name);
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === 'publish') {
+        const changes = { published: true };
+        this.contentGroupService.patchContentGroup(contentGroup, changes).subscribe(updatedGroup => {
+          const msg = this.translateService.instant('content.group-published');
+          this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.SUCCESS);
+          this.updateGroup(updatedGroup);
+        });
+      }
+    });
   }
 
   toggleBarVisibility(visible: boolean) {
