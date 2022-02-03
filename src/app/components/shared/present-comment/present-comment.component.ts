@@ -26,6 +26,7 @@ export class PresentCommentComponent implements OnInit {
 
   ngOnInit(): void {
     this.registerHotkeys();
+    this.updateFontSize();
   }
 
   ngOnDestroy() {
