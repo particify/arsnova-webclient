@@ -15,6 +15,7 @@ import { RemoteMessage } from '../../../../models/events/remote/remote-message.e
 import { UiState } from '../../../../models/events/remote/ui-state-changed-event';
 import { ContentFocusState } from '../../../../models/events/remote/content-focus-state';
 import { ContentMessages } from '../../../../models/events/content-messages.enum';
+import { ContentService } from '../../../../services/http/content.service';
 
 @Component({
   selector: 'app-statistic-content',
@@ -53,7 +54,8 @@ export class StatisticContentComponent implements OnInit {
   roundsToDisplay = 0;
 
   constructor(private announceService: AnnounceService,
-              private eventService: EventService) { }
+              private eventService: EventService,
+              private contentService: ContentService) { }
 
   ngOnInit(): void {
     this.attachmentData = {
@@ -94,10 +96,23 @@ export class StatisticContentComponent implements OnInit {
           }
         }
       });
+      if (this.contentService.allowsUnitChange(this.content)) {
+        this.eventService.on(RemoteMessage.TOGGLE_VISUALIZATION_UNIT).subscribe(() => {
+          this.toggleVisualizationUnit();
+        });
+      }
       if (this.active) {
         const remoteState = new ContentFocusState(this.content.id, this.contentGroupId, false, false);
         this.eventService.broadcast(RemoteMessage.CHANGE_CONTENTS_STATE, remoteState);
       }
+    }
+  }
+
+  toggleVisualizationUnit() {
+    if (this.format === ContentType.SCALE) {
+      this.scaleStatistic.toggleVisualizationUnit();
+    } else {
+      this.choiceStatistic.toggleVisualizationUnit();
     }
   }
 

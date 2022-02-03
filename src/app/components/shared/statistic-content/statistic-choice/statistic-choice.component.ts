@@ -16,6 +16,11 @@ import { ColorElem } from '@arsnova/theme/Theme';
 import { ContentScale } from '@arsnova/app/models/content-scale';
 import { EventService } from '../../../../services/util/event.service';
 
+export enum VisualizationUnit {
+  ABSOLUTE = 'ABSOLUTE',
+  PERCENTAGE = 'PERCENTAGE'
+}
+
 export class AnswerList {
   label: string;
   answer: string;
@@ -60,6 +65,7 @@ export class StatisticChoiceComponent extends StatisticContentBaseComponent impl
   roundsToDisplay = 0;
   roundsDisplayed: number;
   independentAnswerCount = [[], [], []];
+  visualizationUnit = VisualizationUnit.ABSOLUTE;
 
   constructor(protected route: ActivatedRoute,
               protected contentService: ContentService,
@@ -178,8 +184,11 @@ export class StatisticChoiceComponent extends StatisticContentBaseComponent impl
             display: false
           },
           datalabels: {
+            formatter: (value, context) => {
+              return this.getDataLabel(context.dataset.data[context.dataIndex]);
+            },
             display: context => {
-              return context.dataset.data[context.dataIndex] > 0;
+              return context.dataset.data[context.dataIndex] > 0; 
             },
             color: this.colorStrings.onBackground,
             anchor: 'end',
@@ -189,6 +198,16 @@ export class StatisticChoiceComponent extends StatisticContentBaseComponent impl
         }
       }
     });
+  }
+
+  getDataLabel(value): string {
+    let label: string;
+    if (this.visualizationUnit === VisualizationUnit.ABSOLUTE) {
+      label = value;
+    } else {
+      label = (value / this.answerCount * 100).toFixed(0) + '%';
+    }
+    return label;
   }
 
   toggleCorrect() {
@@ -363,5 +382,12 @@ export class StatisticChoiceComponent extends StatisticContentBaseComponent impl
       }, 300);
     }
     this.roundsDisplayed = this.roundsToDisplay;
+  }
+
+  toggleVisualizationUnit() {
+    this.visualizationUnit = this.visualizationUnit === VisualizationUnit.ABSOLUTE ? VisualizationUnit.PERCENTAGE : VisualizationUnit.ABSOLUTE;
+    if (this.chart) {
+      this.chart.update();
+    }
   }
 }
