@@ -1,18 +1,10 @@
-import { Component, Inject, Input, OnDestroy, OnInit } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { AdvancedSnackBarTypes, NotificationService } from '../../../../services/util/notification.service';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { AdvancedSnackBarTypes, NotificationService } from '../../../services/util/notification.service';
 import { TranslateService } from '@ngx-translate/core';
-import { ThemeService } from '../../../../../theme/theme.service';
+import { ThemeService } from '../../../../theme/theme.service';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
-import { ApiConfigService } from '../../../../services/http/api-config.service';
-
-
-export interface QrCodeData {
-  shortId: string;
-  roomId: string;
-  passwordProtected: boolean;
-}
+import { ApiConfigService } from '../../../services/http/api-config.service';
 
 @Component({
   selector: 'app-qr-code',
@@ -33,35 +25,20 @@ export class QrCodeComponent implements OnInit, OnDestroy {
   qrUrl: string;
   displayUrl: string;
   useJoinUrl = false;
-  isDialog = true;
 
-  constructor(public dialogRef: MatDialogRef<QrCodeComponent>,
-              @Inject(MAT_DIALOG_DATA) public data: QrCodeData,
-              protected notification: NotificationService,
+  constructor(protected notification: NotificationService,
               protected translateService: TranslateService,
               private themeService: ThemeService,
               private apiConfigService: ApiConfigService
   ) {}
 
   ngOnInit(): void {
-    if (this.shortId) {
-      this.isDialog = false;
-    } else {
-      this.shortId = this.data.shortId;
-      this.passwordProtected = this.data.passwordProtected;
-      this.roomId = this.data.roomId;
-    }
     this.initQrCode();
-    if (this.isDialog) {
-      setTimeout(() => {
-        document.getElementById('qr-message').focus();
-      }, 700);
-    }
   }
 
   initQrCode() {
     const minSize = Math.min(innerWidth, innerHeight);
-    this.qrWidth = minSize * (innerWidth > 1279 ? 0.65 : 0.5);
+    this.qrWidth = minSize * (innerWidth > 1279 ? 0.5 : 0.35);
     this.themeService.getTheme().pipe(takeUntil(this.destroyed$)).subscribe(theme => {
       const currentTheme = this.themeService.getThemeByKey(theme);
       this.bgColor = currentTheme.get('surface').color;
@@ -84,10 +61,6 @@ export class QrCodeComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.destroyed$.next();
     this.destroyed$.complete();
-  }
-
-  onCloseClick(): void {
-    this.dialogRef.close();
   }
 
   copyShortId(): void {

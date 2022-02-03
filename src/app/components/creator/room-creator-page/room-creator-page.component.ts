@@ -21,7 +21,6 @@ import { ContentGroupService } from '../../../services/http/content-group.servic
 import { ContentGroup } from '../../../models/content-group';
 import { RoomStatsService } from '../../../services/http/room-stats.service';
 import { HotkeyService } from '../../../services/util/hotkey.service';
-import { RoutingService } from '../../../services/util/routing.service';
 
 @Component({
   selector: 'app-room-creator-page',
@@ -54,11 +53,10 @@ export class RoomCreatorPageComponent extends RoomPageComponent implements OnIni
     protected contentService: ContentService,
     private dialogService: DialogService,
     protected globalStorageService: GlobalStorageService,
-    private hotkeyService: HotkeyService,
-    protected routingService: RoutingService
+    private hotkeyService: HotkeyService
   ) {
     super(roomService, roomStatsService, contentGroupService, route, router, location, wsCommentService,
-      commentService, eventService, contentService, translateService, notification, globalStorageService, routingService);
+      commentService, eventService, contentService, translateService, notification, globalStorageService);
     langService.langEmitter.subscribe(lang => translateService.use(lang));
   }
 
@@ -111,19 +109,6 @@ export class RoomCreatorPageComponent extends RoomPageComponent implements OnIni
         this.infoBarItems.push(new InfoBarItem('user-counter', 'people', this.userCount));
       });
     });
-  }
-
-  public showQRDialog() {
-    const dialogRef = this.dialogService.openQRCodeDialog(this.room.shortId, this.room.passwordProtected, this.room.id);
-    dialogRef.afterClosed().subscribe(() => {
-      setTimeout(() => {
-        document.getElementById('live-announcer-button').focus();
-      }, 300);
-    });
-  }
-
-  openPresentationMode() {
-    this.router.navigate(['present', this.room.shortId]);
   }
 
   openCreateContentGroupDialog() {

@@ -163,12 +163,10 @@
     "a11y-no-content-groups": "There are no contents in this room yet.",
     "a11y-enter-content-group": "Opens the content group {{name}}.",
     "a11y-live-survey-disabled": "The live feedback is currently not active.",
-    "a11y-switch-role": "Switch back your creator role.",
     "answer-statistics": "Statistics",
     "comments": "Q&A",
     "live-survey": "Live Feedback",
-    "no-contents": "There are no contents yet.",
-    "switch-role": "Switch role"
+    "no-contents": "There are no contents yet."
   },
   "statistic": {
     "a11y-message-overview": "You are now on the statistics overview.",

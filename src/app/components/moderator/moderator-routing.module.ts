@@ -15,10 +15,7 @@ import { RoomUserRoleResolver } from '../../resolver/room-user-role.resolver';
 const routes: Routes = [
   {
     path: '',
-    component: RoomModeratorPageComponent,
-    resolve: {
-      userRole: RoomUserRoleResolver
-    }
+    component: RoomModeratorPageComponent
   },
   {
     path: 'comments',
@@ -54,7 +51,8 @@ const routes: Routes = [
           data: { requiredRole: UserRole.EXECUTIVE_MODERATOR },
           resolve: {
             room: RoomResolver,
-            viewRole: RoomViewUserRoleResolver
+            viewRole: RoomViewUserRoleResolver,
+            userRole: RoomUserRoleResolver
           },
           children: [
             ...routes,

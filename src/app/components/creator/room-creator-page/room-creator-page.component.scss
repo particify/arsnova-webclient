@@ -4,16 +4,6 @@
   margin-bottom: 0;
 }
 
-.menu-icon {
-  color: var(--secondary);
-}
-
-#presentation-button {
-  @media(max-width: 900px) {
-    display: none;
-  }
-}
-
 .empty-group-container {
   align-items: center;
   justify-content: center;

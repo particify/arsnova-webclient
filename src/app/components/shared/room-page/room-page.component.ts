@@ -19,7 +19,6 @@ import { InfoBarItem } from '../bars/info-bar/info-bar.component';
 import { ContentGroupService } from '../../../services/http/content-group.service';
 import { RoomStatsService } from '../../../services/http/room-stats.service';
 import { DataChanged } from '../../../models/events/data-changed';
-import { RoutingService } from '../../../services/util/routing.service';
 
 @Component({
   selector: 'app-room-page',
@@ -43,7 +42,6 @@ export class RoomPageComponent implements OnDestroy {
   protected attachmentData: any;
   infoBarItems: InfoBarItem[] = [];
   role: UserRole;
-  roleIconString;
   onChangeSubscription: Subscription;
 
   constructor(
@@ -59,8 +57,7 @@ export class RoomPageComponent implements OnDestroy {
     protected contentService: ContentService,
     protected translateService: TranslateService,
     protected notificationService: NotificationService,
-    protected globalStorageService: GlobalStorageService,
-    protected routingService: RoutingService
+    protected globalStorageService: GlobalStorageService
   ) {
   }
 
@@ -130,24 +127,7 @@ export class RoomPageComponent implements OnDestroy {
     this.afterRoomLoadHook();
     this.globalStorageService.setItem(STORAGE_KEYS.SHORT_ID, room.shortId);
     this.role = role === viewRole ? UserRole.NONE : role;
-    this.getRoleIcon();
 
-  }
-
-  getRoleIcon() {
-    if (this.role === UserRole.NONE) {
-      this.roleIconString = 'people';
-    } else {
-      this.getUserRoleIcon();
-    }
-  }
-
-  getUserRoleIcon() {
-    if (this.role === UserRole.CREATOR) {
-      this.roleIconString = 'record_voice_over';
-    } else if (['EDITING_MODERATOR', 'EXECUTIVE_MODERATOR'].indexOf(this.role) !== -1) {
-      this.roleIconString = 'gavel';
-    }
   }
 
   initializeStats(viewRole: UserRole) {
@@ -190,15 +170,5 @@ export class RoomPageComponent implements OnDestroy {
       detailedView: true,
       pureImageView: false
     };
-  }
-
-  switchRole(role?: string) {
-    let roleRoute;
-    if (role) {
-      roleRoute = role;
-    } else {
-      roleRoute = this.routingService.getRoleString(this.role);
-    }
-    this.router.navigate([`/${roleRoute}/${this.room.shortId}`]);
   }
 }

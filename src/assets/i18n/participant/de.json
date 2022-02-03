@@ -163,12 +163,10 @@
     "a11y-no-content-groups": "In diesem Raum sind noch keine Inhalte vorhanden.",
     "a11y-enter-content-group": "Öffnet die Fragenserie {{name}}.",
     "a11y-live-survey-disabled": "Das Live Feedback ist derzeit nicht aktiv.",
-    "a11y-switch-role": "Wechsel zurück zu deiner Bearbeitungsrolle.",
     "answer-statistics": "Statistiken",
     "comments": "Q&A",
     "live-survey": "Live Feedback",
-    "no-contents": "Es sind noch keine Inhalte vorhanden.",
-    "switch-role": "Rolle wechseln"
+    "no-contents": "Es sind noch keine Inhalte vorhanden."
   },
   "statistic": {
     "a11y-message-overview": "Du befindest dich jetzt auf der Statistikübersicht.",

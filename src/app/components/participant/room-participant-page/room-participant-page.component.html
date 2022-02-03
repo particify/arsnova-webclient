@@ -13,12 +13,6 @@
             </span>
             <span class="room-short-id">{{room.shortId | splitShortId}}</span>
           </div>
-          <button mat-icon-button class="corner-buttons" *ngIf="role !== ''" (click)="switchRole()"
-                  aria-labelledby="switch-role">
-            <mat-icon class="corner-icon icon-secondary" matTooltip="{{ 'room-page.switch-role' | translate}}">{{roleIconString}}
-            </mat-icon>
-          </button>
-          <span *ngIf="role === ''"></span>
         </div>
         <div *ngIf="room.description" fxLayoutAlign="center">
           <app-rendered-text [rawText]="room.description.trim()" [renderedText]="room.renderedDescription"></app-rendered-text>
@@ -78,5 +72,4 @@
   <div id="comments">{{'room-page.a11y-comments' | translate}}</div>
   <div id="live-survey">{{'room-page.a11y-live-survey' | translate}}</div>
   <div id="statistics">{{'room-page.a11y-statistics' | translate}}</div>
-  <div id="switch-role">{{'room-page.a11y-switch-role' | translate}}</div>
 </div>

@@ -10,12 +10,22 @@
   color: var(--on-surface);
 }
 
-.gavel {
-  cursor: initial;
+.user-button {
+  background: var(--primary-variant);
+  color: var(--black);
+  margin-right: 0;
+  span {
+    font-size: 16px;
+  }
+  .mat-icon {
+    height: 20px;
+    width: 20px;
+    font-size: 20px;
+  }
 }
 
-.bonus {
-  color: var(--yellow);
+.guest {
+  background-color: var(--grey-light);
 }
 
 .rooms {
@@ -28,10 +38,6 @@
 
 .delete {
   color: var(--warn);
-}
-
-.mat-button {
-  padding: 0;
 }
 
 .color {
@@ -84,4 +90,38 @@
 
 .color-text-container {
   padding-right: 16px;
+}
+
+.desktop-action-container {
+  height: 36px;
+  margin-right: 16px;
+}
+
+.mobile-action-container {
+  margin-right: 8px;
+}
+
+@media(max-width: 1000px) {
+  .desktop-action-container {
+    display: none!important;
+  }
+}
+
+@media(min-width: 1001px) {
+  .mobile-action-container {
+    display: none;
+  }
+}
+
+.mat-button {
+  opacity: 0.7;
+  &:disabled {
+    color: var(--on-surface);
+    opacity: 0.6;
+  }
+}
+
+.back-to-edit {
+  opacity: 1;
+  color: var(--primary);
 }

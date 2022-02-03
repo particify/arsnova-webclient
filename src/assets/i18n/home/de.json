@@ -48,6 +48,8 @@
     "a11y-room": "Öffnet das Nutzer-Menü. Hier kannst du deine besuchten Räume einsehen oder dich von deinem Konto abmelden. Auch findest du einen Link zu einer Hilfe-Seite und Einstellungsmöglichkeiten für Sprache und Anzeige. ",
     "a11y-style": "Öffnet die Anzeigeoptionen für hohen Kontrast, Hörsaal-Projektion, heller und dunkler Hintergrund.",
     "a11y-news": "Öffnet einen Dialog, welcher dir die neusten Änderungen zeigt und dich auf unsere News-Seite verweist.",
+    "a11y-switch-role": "Wechsel die Rolle um die Ansicht der Teilnehmenden zu sehen.",
+    "a11y-switch-back": "Wechsel zurück zur Adminansicht.",
     "account-deleted": "Dein Konto wurde gelöscht.",
     "back": "Zurück",
     "admin-area": "Administration",
@@ -69,7 +71,12 @@
     "style": "Anzeige",
     "user-bonus-token": "Zu deinen Bonus Tokens",
     "news": "Es gibt Neuigkeiten",
-    "menu": "Hauptmenü"
+    "menu": "Hauptmenü",
+    "preview": "Vorschau",
+    "editing-view": "Bearbeiten",
+    "room-settings": "Raumeinstellungen",
+    "present": "Präsentieren",
+    "presentation-mode": "Präsentationsmodus"
   },
   "home-page": {
     "a11y-create-room": "Erstellt einen neuen Raum.",
