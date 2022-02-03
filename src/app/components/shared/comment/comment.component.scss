@@ -2,9 +2,11 @@
 
 #comment-card {
   width: 92vw ;
-  max-width: 832px;
   margin-bottom: 10px;
   transition: background-color 0.5s linear;
+  &:not(.presentation-comment) {
+    max-width: 832px;
+  }
 }
 
 #comment-entry {
@@ -13,7 +15,7 @@
 
 .presentation-comment {
   box-shadow: none;
-  max-width: calc(100% - 2em);
+  max-width: 100%;
 }
 
 .presentation-comment.active {
