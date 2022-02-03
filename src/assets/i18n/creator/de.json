@@ -520,7 +520,6 @@
     "a11y-send": "Schickt deinen Beitrag ab und schließt den Dialog.",
     "a11y-tag": "Wähle hier eine Kategorie aus, wenn du deinen Beitrag kategorisieren möchtest.",
     "a11y-select-tag": "Wähle die Kategorie {{tag}} aus.",
-    "a11y-comment-presentation": "Der Beitrag {{comment}} wird jetzt im Fullscreenmodus dargestellt. Drücke die Escape-Taste, um den Dialog zu Schließen und zur Q&A-Liste zurückzukehren.",
     "really-delete-comment": "Willst du diesen Beitrag wirklich löschen?",
     "really-delete-comments": "Willst du wirklich alle Beiträge dieses Raums löschen? Diese Aktion kann nicht rückgängig gemacht werden.",
     "really-delete-banned-comments": "Willst du wirklich alle Beiträge aus der Moderationsliste löschen? Diese Aktion kann nicht rückgängig gemacht werden.",

@@ -520,7 +520,6 @@
     "a11y-send": "Sends your post and closes the dialog.",
     "a11y-tag": "Select a category here if you want to categorize your post.",
     "a11y-select-tag": "Selects the category {{tag}}.",
-    "a11y-comment-presentation": "The post {{comment}} is now displayed in full screen mode. Press the Escape key to close the dialog and return to the Q&A list.",
     "really-delete-comment": "Do you really want to delete this post?",
     "really-delete-comments": "Do you really want to delete all posts of this room? This action cannot be undone.",
     "really-delete-banned-comments": "Do you really want to delete all posts of the moderation list? This action cannot be undone.",

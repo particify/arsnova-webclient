@@ -18,7 +18,7 @@ import { RoomCreateComponent } from './_dialogs/room-create/room-create.componen
 import { UserBonusTokenComponent } from './_dialogs/user-bonus-token/user-bonus-token.component';
 import { CommentComponent, DateFromNow } from './comment/comment.component';
 import { CreateCommentComponent } from './_dialogs/create-comment/create-comment.component';
-import { PresentCommentComponent } from './_dialogs/present-comment/present-comment.component';
+import { PresentCommentComponent } from './present-comment/present-comment.component';
 import { DialogActionButtonsComponent } from './dialog/dialog-action-buttons/dialog-action-buttons.component';
 import { MatRippleModule } from '@angular/material/core';
 import { StatisticTextComponent } from './statistic-content/statistic-text/statistic-text.component';

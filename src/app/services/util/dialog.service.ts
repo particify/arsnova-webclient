@@ -8,7 +8,6 @@ import { InfoDialogComponent } from '../../components/shared/_dialogs/info-dialo
 import { ContentGroupCreationComponent } from '../../components/creator/_dialogs/content-group-creation/content-group-creation.component';
 import { ClientAuthentication } from '../../models/client-authentication';
 import { CreateCommentComponent } from '../../components/shared/_dialogs/create-comment/create-comment.component';
-import { PresentCommentComponent } from '../../components/shared/_dialogs/present-comment/present-comment.component';
 import { QrCodeComponent } from '../../components/creator/_dialogs/qr-code/qr-code.component';
 // import { RemindOfTokensComponent } from '../../components/shared/_dialogs/remind-of-tokens/remind-of-tokens.component';
 import { RoomCreateComponent } from '../../components/shared/_dialogs/room-create/room-create.component';
@@ -86,20 +85,6 @@ export class DialogService {
         fileUploadEnabled: fileUploadEnabled,
         role: role
       }
-    });
-  }
-
-  openCommentPresentationDialog(commentBody: string): MatDialogRef<PresentCommentComponent> {
-    return this.dialog.open(PresentCommentComponent, {
-      position: {
-        left: '10px',
-        right: '10px'
-      },
-      maxWidth: '100vw',
-      maxHeight: '100vh',
-      height: '100%',
-      width: '100%',
-      data: commentBody
     });
   }
 
