@@ -149,4 +149,19 @@ export class DialogService {
   openExportDialog(): MatDialogRef<ExportComponent, ExportOptions> {
     return this.dialog.open(ExportComponent);
   }
+
+  openPublishGroupDialog(groupName: string): MatDialogRef<YesNoDialogComponent> {
+    return this.dialog.open(YesNoDialogComponent, {
+      width: this.size.small,
+      data: {
+        section: 'dialog',
+        headerLabel: 'publish-group',
+        body: 'want-publish-group',
+        confirmLabel: 'publish',
+        abortLabel: 'cancel',
+        type: 'button-primary',
+        bodyElement: groupName,
+      }
+    });
+  }
 }

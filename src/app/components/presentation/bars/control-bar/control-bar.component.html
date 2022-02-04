@@ -27,10 +27,11 @@
         <mat-icon>arrow_drop_down</mat-icon>
         </button>
         <mat-menu #groupMenu=matMenu>
-          <button mat-menu-item *ngFor="let contentGroup of contentGroups" [value]="contentGroup.name"
-                  [disabled]="!contentGroup.published || contentGroup.contentIds?.length < 1"
+          <button mat-menu-item fxLayout="row" fxLayoutAlign="space-between center" *ngFor="let contentGroup of contentGroups" [value]="contentGroup.name"
+                  [disabled]="contentGroup.contentIds?.length < 1"
                   (click)="changeGroup(contentGroup)" [ngClass]="{'selected-menu-item': contentGroup.name === groupName}">
-            {{contentGroup.name}}
+            <span>{{contentGroup.name}}</span>
+            <mat-icon *ngIf="!contentGroup.published" class="locked-icon">locked</mat-icon>
           </button>
         </mat-menu>
         <app-key-button-bar [items]="groupItems"></app-key-button-bar>

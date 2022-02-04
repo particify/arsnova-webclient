@@ -262,7 +262,6 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
       this.tooFewFeatures = true;
     }
     this.isVisible.emit(!this.tooFewFeatures && !this.hideBarForParticipants);
-    this.afterInit();
   }
 
   getCurrentRouteIndex() {
@@ -341,15 +340,18 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
         this.publishedStates.push(
           new PublishedContentsState(group.name, group.firstPublishedIndex, group.lastPublishedIndex)
         );
-        if (alreadySet) {
-          if (this.groupName === group.name) {
-            this.group = group;
-            this.setGroupProperties();
-          }
-        }
-        if (this.contentGroups.length === groupCount && !alreadySet) {
-          if (groupCount > 1) {
-            this.setGroup();
+        if (this.contentGroups.length === groupCount) {
+          if (alreadySet) {
+            if (this.groupName === group.name) {
+              this.group = group;
+              this.setGroupProperties();
+            }
+            this.afterInit();
+          } else {
+            this.afterInit();
+            if (groupCount > 1) {
+              this.setGroup();
+            }
           }
         }
       });

@@ -323,7 +323,8 @@
     "contents": "Contents",
     "groups": "Question series",
     "next": "Next content",
-    "previous": "Previous content"
+    "previous": "Previous content",
+    "group-published": "The question series has been published."
   },
   "survey": {
     "a11y-message": "You are now in live feedback mode.",
@@ -553,6 +554,8 @@
     "how-to-proceed": "How would you like to proceed?",
     "publish-this-content": "Release only this content",
     "publish-contents-up-to-here": "Release all contents up to here",
+    "publish-group": "Publish question series",
+    "want-publish-group": "Do you want to publish the following question series?",
     "publish": "Publish"
   },
   "utils": {

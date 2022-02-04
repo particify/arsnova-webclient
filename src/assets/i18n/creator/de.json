@@ -323,7 +323,8 @@
     "contents": "Inhalte",
     "groups": "Fragenserien",
     "next": "Nächster Inhalt",
-    "previous": "Vorheriger Inhalt"
+    "previous": "Vorheriger Inhalt",
+    "group-published": "Die Fragenserie wurde freigegeben."
   },
   "survey": {
     "a11y-message": "Du befindest dich jetzt im Live Feedback.",
@@ -553,6 +554,8 @@
     "how-to-proceed": "Wie möchtest du vorgehen?",
     "publish-this-content": "Nur diesen Inhalt freigeben",
     "publish-contents-up-to-here": "Alle Inhalte bis hier freigeben",
+    "publish-group": "Fragenserie freigeben",
+    "want-publish-group": "Willst du die folgende Fragenserie freigeben?",
     "publish": "Freigeben"
   },
   "utils": {
