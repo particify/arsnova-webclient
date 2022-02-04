@@ -842,3 +842,9 @@ app-rendered-text {
     padding-bottom: calc(62px + 4%);
   }
 }
+
+// Divider
+
+.mat-divider {
+  border-color: var(--grey-light);
+}
