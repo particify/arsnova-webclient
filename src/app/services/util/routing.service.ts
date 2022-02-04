@@ -186,19 +186,7 @@ export class RoutingService {
   }
 
   getRoleString(role: string): string {
-    let roleString;
-    switch (role) {
-      case UserRole.CREATOR:
-        roleString = RoutePrefix.CREATOR;
-        break;
-      case UserRole.PARTICIPANT:
-        roleString = RoutePrefix.PARTICIPANT;
-        break;
-      case UserRole.EXECUTIVE_MODERATOR:
-        roleString = RoutePrefix.MODERATOR;
-        break;
-    }
-    return roleString;
+    return role === UserRole.PARTICIPANT ? RoutePrefix.PARTICIPANT : RoutePrefix.CREATOR;
   }
 
   setTitle(route?: ActivatedRouteSnapshot) {

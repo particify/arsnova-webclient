@@ -9,7 +9,6 @@ import {
 } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ClientAuthentication } from '../../../models/client-authentication';
-import { NotificationService } from '../../../services/util/notification.service';
 import { AuthenticationService } from '../../../services/http/authentication.service';
 import { CommentService } from '../../../services/http/comment.service';
 import { Comment } from '../../../models/comment';
@@ -29,10 +28,10 @@ export class CommentPageComponent implements OnInit, OnDestroy, AfterContentInit
 
   auth: ClientAuthentication;
   activeComment: Comment;
+  isModeration = false;
 
   constructor(
     private route: ActivatedRoute,
-    private notification: NotificationService,
     private authenticationService: AuthenticationService,
     private commentService: CommentService
   ) {
@@ -48,6 +47,7 @@ export class CommentPageComponent implements OnInit, OnDestroy, AfterContentInit
   ngOnInit(): void {
     this.authenticationService.getCurrentAuthentication()
         .subscribe(auth => this.auth = auth);
+    this.isModeration = this.route.snapshot.data.isModeration;
   }
 
   ngOnDestroy() {

@@ -1,8 +1,8 @@
-<app-info-bar [barItems]="infoBarItems"></app-info-bar>
+<app-info-bar *ngIf="!isModerator" [barItems]="infoBarItems"></app-info-bar>
 <div fxLayout="column" fxLayoutGap="20px" fxFill>
   <div fxLayout="row" fxLayoutAlign="center">
     <div id="live-announcer-button" tabIndex="-1" class="visually-hidden">
-      {{ 'room-page.a11y-room-message' | a11yIntro: {room: room.name, key: room.shortId} | async }}
+      {{ (isModerator ? 'room-page.a11y-moderator-message' : 'room-page.a11y-room-message') | a11yIntro: {room: room.name, key: room.shortId} | async }}
     </div>
     <app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
     <mat-card *ngIf="!isLoading && room">
@@ -19,9 +19,9 @@
           <app-rendered-text [rawText]="room.description.trim()" [renderedText]="room.renderedDescription"></app-rendered-text>
         </div>
       </mat-card-content>
-      <app-divider [padding]="true"></app-divider>
+      <app-divider *ngIf="!isModerator" [padding]="true"></app-divider>
       <div fxLayout="column" fxLayoutAlign="center">
-        <div class="action-button-container" fxLayout="row" fxLayoutAlign="center">
+        <div class="action-button-container" fxLayout="row" fxLayoutAlign="center" [ngClass]="{'moderator-container': isModerator}">
           <div class="action-button-item" fxLayoutAlign="center center">
             <button id="comments-button" mat-icon-button class="main-button" [disableRipple]="true"
                     [routerLink]="['comments']" aria-labelledby="comments"
@@ -33,7 +33,7 @@
                 {{ 'room-page.comments' | translate}}</p>
             </button>
           </div>
-          <div class="action-button-item" fxLayoutAlign="center center">
+          <div *ngIf="!isModerator" class="action-button-item" fxLayoutAlign="center center">
             <button mat-icon-button class="main-button" id="live-survey-button" aria-labelledby="live-survey"
                     [disableRipple]="true" [routerLink]="['feedback']"
                     appHotkey="2" [appHotkeyTitle]="'room-page.live-survey' | translate">
@@ -46,7 +46,7 @@
           </div>
         </div>
       </div>
-      <div fxLayout="column" fxLayoutAlign="center center">
+      <div *ngIf="!isModerator" fxLayout="column" fxLayoutAlign="center center">
         <app-divider [padding]="true"></app-divider>
         <div fxLayout="column" [ngClass]="{'group-container': contentGroups.length > 0, 'empty-group-container': contentGroups.length === 0}">
           <button id="content-group-create-button" mat-stroked-button class="stroked-primary add-group" aria-labelledby="create-content-group"
@@ -73,7 +73,7 @@
         </div>
       </div>
 
-      <lib-extension-point extensionId="attachment-list" [extensionData]="attachmentData"></lib-extension-point>
+      <lib-extension-point *ngIf="!isModerator" extensionId="attachment-list" [extensionData]="attachmentData"></lib-extension-point>
 
     </mat-card>
     <app-room-not-found *ngIf="!isLoading && errorOnLoading"></app-room-not-found>

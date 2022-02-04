@@ -92,7 +92,7 @@ const routes: Routes = [
   },
   {
     path: 'moderator',
-    loadChildren: () => import('./components/moderator/moderator.module').then(m => m.ModeratorModule)
+    redirectTo: 'edit'
   },
   {
     path: 'present',
