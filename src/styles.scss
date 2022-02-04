@@ -792,6 +792,9 @@ button {
 
 .mat-menu-item {
   color: var(--on-dialog);
+  .mat-icon {
+    margin-bottom: 2px;
+  }
 }
 
 .mat-menu-item .mat-icon-no-color {
