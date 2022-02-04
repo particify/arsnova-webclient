@@ -84,7 +84,11 @@
   padding: 0 0 0 40px;
   margin: 0;
   border: 1px solid var(--grey);
+  background-color: var(--surface);
   border-radius: 4px;
+  &::placeholder {
+    color: var(--on-surface);
+  }
 }
 
 .add-mobile {
