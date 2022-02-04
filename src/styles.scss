@@ -637,6 +637,16 @@ div {
   border-color: var(--primary)!important;
 }
 
+.mat-button, .mat-raised-button, .mat-stroked-button {
+  .mat-icon {
+    height: 20px;
+    width: 20px;
+    font-size: 20px;
+    margin-right: 4px;
+    margin-bottom: 2px;
+  }
+}
+
 // Links
 
 .action-link {
@@ -782,6 +792,9 @@ button {
 
 .mat-menu-item {
   color: var(--on-dialog);
+  .mat-icon {
+    margin-bottom: 2px;
+  }
 }
 
 .mat-menu-item .mat-icon-no-color {
