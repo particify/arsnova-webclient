@@ -106,14 +106,12 @@
               {{ 'content.save' | translate }}
             </button>
           </div>
-          <div fxLayoutAlign="center center" fxLayoutGap="16px">
-            <p *ngIf="!isInSortingMode" class="slide-text">
-              {{ 'content.unlock-collection' | translate}}
-              <mat-slide-toggle id="lock-group-slide" (change)="publishContents()" [(ngModel)]="published"
+          <div *ngIf="!isInSortingMode" fxLayoutAlign="center center" fxLayoutGap="16px">
+            <mat-slide-toggle id="lock-group-slide" (change)="publishContents()" [(ngModel)]="published" labelPosition="before"
                                 aria-labelledby="lock-group"
                                 appHotkey="4" [appHotkeyTitle]="'content.unlock-collection' | translate">
-              </mat-slide-toggle>
-            </p>
+                                {{ 'content.unlock-collection' | translate}}
+            </mat-slide-toggle>
           </div>
         </div>
         <div>
