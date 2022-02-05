@@ -13,7 +13,7 @@
         <button mat-raised-button *ngIf="!isLoggedIn" class="button-primary login" aria-labelledby="login"
                 (click)="navToLogin()">{{ 'import.go-to-login' | translate }}</button>
         <button mat-raised-button *ngIf="jsonToUpload === undefined && isLoggedIn" aria-labelledby="select"
-                class="button-secondary" (click)="fileInput.click()">
+                class="button-primary" (click)="fileInput.click()">
           {{ 'import.select-file' | translate }}</button>
         <button mat-raised-button class="button-primary" id="create-button"
                 *ngIf="isLoggedIn && jsonToUpload" (click)="onUpload()"

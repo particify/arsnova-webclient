@@ -27,7 +27,7 @@
       </button>
       <mat-menu #more="matMenu" xPosition="before">
         <button *ngIf="showGuestAccountControls" mat-menu-item (click)="getGuestRooms()">
-          <mat-icon class="import">swap_horiz</mat-icon>
+          <mat-icon class="icon-primary">swap_horiz</mat-icon>
           <span>{{ 'room-list.rooms-from-guest' | translate }}</span>
         </button>
         <lib-extension-point extensionId="import-token" [extensionData]="{inMenu: true}"></lib-extension-point>
@@ -82,7 +82,7 @@
               </button>
               <mat-menu #moreActions="matMenu" xPosition="before">
                 <button mat-menu-item (click)="openDeleteRoomDialog(room)">
-                  <mat-icon class="delete">delete_forever</mat-icon>
+                  <mat-icon class="icon-warn">delete_forever</mat-icon>
                   <span class="delete-text"> {{ (room.membership.primaryRole !== creatorRole ? 'room-list.panel-remove-room' :
                     'room-list.panel-delete-room') | translate}}</span>
                 </button>
@@ -101,7 +101,7 @@
   <mat-card *ngIf="showRoomsFromGuest" id="guest-rooms" class="account-memberships">
     <div fxLayout="row" fxLayoutAlign="space-between">
       <h3>{{ 'room-list.rooms-from-guest' | translate }}</h3>
-      <button mat-stroked-button class="icon-secondary" (click)="showRoomsFromGuest = false">
+      <button mat-stroked-button (click)="showRoomsFromGuest = false">
         {{ 'room-list.hide-guest-rooms' | translate }}
       </button>
     </div>

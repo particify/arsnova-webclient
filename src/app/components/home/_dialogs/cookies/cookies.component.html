@@ -26,7 +26,7 @@
 
 </mat-dialog-content>
 <div fxLayout="row wrap" fxLayoutAlign="end">
-  <button mat-flat-button class="button-abort" (click)="acceptSelectedCookies()"
+  <button mat-button class="button-abort" (click)="acceptSelectedCookies()"
           [attr.aria-label]="'cookies.a11y-accept-selected' | translate: {
           functional: categories[1].consent ? '' : ('cookies.not' | translate),
           statistic: categories[2].consent ? '' : ('cookies.not' | translate)}">

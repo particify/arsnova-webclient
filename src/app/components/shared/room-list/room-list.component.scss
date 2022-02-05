@@ -1,7 +1,7 @@
 @import '../../../../variables';
 
 .mat-icon-button {
-  color: var(--secondary);
+  color: var(--primary);
 }
 
 .filterWrapper {
@@ -41,11 +41,6 @@
 .short-id {
   margin: 0 1em;
   white-space: nowrap;
-}
-
-.delete {
-  color: var(--warn);
-  margin-right: 10px;
 }
 
 .hint {
@@ -89,7 +84,11 @@
   padding: 0 0 0 40px;
   margin: 0;
   border: 1px solid var(--grey);
+  background-color: var(--surface);
   border-radius: 4px;
+  &::placeholder {
+    color: var(--on-surface);
+  }
 }
 
 .add-mobile {
@@ -130,10 +129,10 @@
   height: 36px;
 }
 
-.import {
-  color: var(--primary);
+.mat-button {
+  opacity: 0.8;
 }
 
-.mat-button {
-  opacity: 0.7;
+.mat-stroked-button {
+  height: 36px;
 }

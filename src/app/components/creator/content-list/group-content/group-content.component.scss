@@ -50,10 +50,6 @@
   color: var(--primary)
 }
 
-.delete {
-  color: var(--warn)
-}
-
 .mat-tooltip-component {
   position: relative;
 }
@@ -226,7 +222,7 @@
 }
 
 .settings-button {
-  opacity: 0.7;
+  opacity: 0.8;
   &:hover {
     opacity: 1;
   }

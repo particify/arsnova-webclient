@@ -28,18 +28,6 @@
   background-color: var(--grey-light);
 }
 
-.rooms {
-  color: var(--secondary);
-}
-
-.login {
-  color: var(--primary);
-}
-
-.delete {
-  color: var(--warn);
-}
-
 .color {
   font-size: 44px;
   width: 44px;
@@ -79,10 +67,6 @@
   text-align: center;
 }
 
-.less-important {
-  opacity: 0.6;
-}
-
 .news-btn {
   color: var(--on-surface);
   margin-right: 0.5em;
@@ -114,10 +98,10 @@
 }
 
 .mat-button {
-  opacity: 0.7;
+  opacity: 0.8;
   &:disabled {
     color: var(--on-surface);
-    opacity: 0.6;
+    opacity: 0.7;
   }
 }
 

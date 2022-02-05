@@ -584,19 +584,14 @@ div {
   color: var(--on-primary);
 }
 
-.button-secondary {
-  background-color: var(--secondary);
-  color: var(--on-secondary);
-}
-
 .button-warn {
   background-color: var(--warn);
   color: var(--on-warn);
 }
 
 .button-abort {
-  background-color: var(--cancel);
-  color: var(--on-cancel);
+  color: var(--on-dialog);
+  opacity: 0.8;
 }
 
 .button-text {
@@ -607,14 +602,6 @@ div {
 
 .button-md {
   min-width: 120px!important;
-}
-
-.info-icon {
-  color: var(--secondary);
-}
-
-.warn-icon {
-  color: var(--warn-soft);
 }
 
 .login-button {
@@ -680,9 +667,16 @@ button {
 }
 
 .icon-primary {
-  color: var(--primary);
+  color: var(--primary)!important;
 }
 
+.icon-warn {
+  color: var(--warn)!important;
+}
+
+.icon-warn-soft {
+  color: var(--warn-soft);
+}
 // Card
 
 .mat-card {
@@ -823,6 +817,10 @@ button.mat-menu-item:hover {
   }
 }
 
+.mat-menu-item > .mat-icon:not(.icon-primary, .icon-warn, .icon-important) {
+  opacity: 0.7;
+}
+
 // Snackbar
 
 .mat-snack-bar-container {
@@ -856,4 +854,10 @@ app-rendered-text {
     margin-bottom: calc(-62px - 4%);
     padding-bottom: calc(62px + 4%);
   }
+}
+
+// Divider
+
+.mat-divider {
+  border-color: var(--grey-light);
 }

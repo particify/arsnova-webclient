@@ -15,8 +15,8 @@
       <button
         *ngIf="cancelButtonClickAction !== undefined"
         type="button"
-        mat-flat-button
-        class="cancel-button"
+        mat-button
+        class="button-abort"
         attr.aria-labelledby="{{ ariaPrefix + 'cancel' | translate }}"
         (click)="performCancelButtonClickAction()"
       >{{ buttonsLabelSection + '.cancel' | translate}}</button>

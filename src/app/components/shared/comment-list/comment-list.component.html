@@ -172,7 +172,7 @@
   <mat-menu #moreMenu="matMenu">
 
     <button mat-menu-item (click)="switchList(isModerator ? 0 : 1)" aria-labelledby="delete-comments">
-      <mat-icon class="switch-list-icon">{{ isModerator ? 'question_answer' : 'gavel' }}</mat-icon>
+      <mat-icon class="icon-primary">{{ isModerator ? 'question_answer' : 'gavel' }}</mat-icon>
       <span>{{ ('comment-list.' + (isModerator ? 'public-list' : 'moderation')) | translate }}</span>
     </button>
 
@@ -191,7 +191,7 @@
     </button>
 
     <button [disabled]="comments.length === 0" mat-menu-item (click)="openDeleteCommentsDialog()" aria-labelledby="delete-comments">
-      <mat-icon class="down">delete_outline</mat-icon>
+      <mat-icon class="icon-warn">delete_outline</mat-icon>
       <span>{{ ('comment-list.delete-' + (isModerator ? 'banned' : 'all') + '-comments') | translate }}</span>
     </button>
 
@@ -203,7 +203,7 @@
     </div>
   </div>
 
-  <button mat-icon-button class="button-abort scrollTop" tabindex="-1" (click)="scrollTop(true)"
+  <button mat-icon-button class="bar-icon scrollTop" tabindex="-1" (click)="scrollTop(true)"
           *ngIf="!isPresentation"
           [ngClass]="{'visible': scrollExtended && scrollActive,
                       'above-add': navBarExists && deviceType === 'mobile' && !isModerator,
@@ -215,7 +215,7 @@
 
   <div fxLayout="row" fxLayoutAlign="center" *ngIf="comments.length < 3 && !isLoading && !search && !isModerator
             && !isPresentation && !isArchive">
-    <button id="add-comment-button" mat-raised-button class="button-primary fab-extended" (click)="openCreateDialog()"
+    <button id="add-comment-button" mat-raised-button class="add-btn fab-extended" (click)="openCreateDialog()"
             aria-labelledby="add">
       <mat-icon class="add">add</mat-icon>
       <span>{{'comment-list.add-comment' | translate}}</span>

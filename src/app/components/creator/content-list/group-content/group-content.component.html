@@ -91,17 +91,17 @@
                 <span>{{ 'content.delete-answers' | translate}}</span>
               </button>
               <button mat-menu-item (click)="deleteGroup()">
-                <mat-icon class="delete">delete_forever</mat-icon>
+                <mat-icon class="icon-warn">delete_forever</mat-icon>
                 {{ 'content.delete-content-group' | translate }}
               </button>
             </mat-menu>
           </div>
           <div fxLayoutGap="10px">
-            <button *ngIf="isInSortingMode" mat-raised-button class="abort button-abort"
+            <button *ngIf="isInSortingMode" mat-button class="abort button-abort"
                     (click)="leaveSortingMode(true)" (keyup.enter)="leaveTitleEditMode()" aria-labelledby="discard-changes">
               {{ 'content.abort' | translate }}
             </button>
-            <button *ngIf="isInSortingMode" mat-raised-button class="button-secondary"
+            <button *ngIf="isInSortingMode" mat-raised-button class="button-primary"
                     (keyup.enter)="saveSorting()" (click)="saveSorting()" aria-labelledby="save-sort-changes">
               {{ 'content.save' | translate }}
             </button>
@@ -157,34 +157,34 @@
                         (firstPublishedIndex === lastPublishedIndex && i !== firstPublishedIndex)) ||
                         !isPublished(i)" (click)="publishContent(i, true)"
                                 [attr.aria-label]="'content.a11y-unlock-this-content' | translate">
-                          <mat-icon>vertical_align_center</mat-icon>
+                          <mat-icon class="icon-important">vertical_align_center</mat-icon>
                           {{ 'content.unlock-this-content' | translate}}
                         </button>
                         <button mat-menu-item *ngIf="i !== contents.length -1 && !isPublished(i)" (click)="publishContentFrom(i, true)"
                                 [attr.aria-label]="'content.a11y-unlock-contents-from' | translate">
-                          <mat-icon>vertical_align_top</mat-icon>
+                          <mat-icon class="icon-important">vertical_align_top</mat-icon>
                           {{ 'content.unlock-contents-from' | translate}}
                         </button>
                         <button mat-menu-item *ngIf="!isPublished(i) && i > 0" (click)="publishContentUpTo(i, true)"
                                 [attr.aria-label]="'content.a11y-unlock-contents-up-to' | translate">
-                          <mat-icon>vertical_align_bottom</mat-icon>
+                          <mat-icon class="icon-important">vertical_align_bottom</mat-icon>
                           {{ 'content.unlock-contents-up-to' | translate}}
                         </button>
                       </div>
                       <div *ngIf="isPublished(i)" class="menu-lock">
                         <button mat-menu-item *ngIf="isStart(i) || isEnd(i)" (click)="publishContent(i, false)"
                                 [attr.aria-label]="'content.a11y-lock-this-content' | translate">
-                          <mat-icon>vertical_align_center</mat-icon>
+                          <mat-icon class="icon-important">vertical_align_center</mat-icon>
                           {{ 'content.lock-this-content' | translate}}
                         </button>
                         <button mat-menu-item *ngIf="!isStart(i)" (click)="publishContentUpTo(i, false)"
                                 [attr.aria-label]="'content.a11y-lock-contents-up-to' | translate">
-                          <mat-icon>vertical_align_top</mat-icon>
+                          <mat-icon class="icon-important">vertical_align_top</mat-icon>
                           {{ 'content.lock-contents-up-to' | translate}}
                         </button>
                         <button mat-menu-item *ngIf="!isEnd(i)" (click)="publishContentFrom(i, false)"
                                   [attr.aria-label]="'content.a11y-lock-contents-from' | translate">
-                          <mat-icon>vertical_align_bottom</mat-icon>
+                          <mat-icon class="icon-important">vertical_align_bottom</mat-icon>
                           {{ 'content.lock-contents-from' | translate}}
                         </button>
                       </div>
@@ -217,7 +217,7 @@
                                            extensionId="start-new-round" [extensionData]="{content: content, resetEvent: resetAnswerEvent}"></lib-extension-point>
                       <mat-divider></mat-divider>
                       <button mat-menu-item (click)="deleteContent(content)" attr.aria-label="{{ 'content.a11y-delete-content' | translate }}">
-                        <mat-icon class="delete">delete_forever</mat-icon>
+                        <mat-icon class="icon-warn">delete_forever</mat-icon>
                         <span>{{ 'content.delete-content' | translate}}</span>
                       </button>
                     </mat-menu>
@@ -238,7 +238,7 @@
                   <button *ngIf="contentTypes.indexOf(content.format) === -1" class="not-supported" mat-icon-button
                           #warning="matTooltip" matTooltip="{{ 'content.format-not-supported' | translate }}"
                           (click)="warning.toggle();$event.stopPropagation()">
-                    <mat-icon class="warn-icon">warning</mat-icon>
+                    <mat-icon class="icon-warn-soft">warning</mat-icon>
                   </button>
                 </div>
               </div>

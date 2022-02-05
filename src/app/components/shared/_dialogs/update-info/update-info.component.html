@@ -14,7 +14,7 @@
 </div>
 <div class="dialog-footer" fxLayoutAlign="end center" fxLayoutGap="10px">
   <app-loading-indicator *ngIf="!afterUpdate && !updateReady" size="24" height="auto"></app-loading-indicator>
-  <button mat-flat-button class="{{ afterUpdate ? 'button-abort' : 'button-primary'}}"
+  <button mat-button class="{{ afterUpdate ? 'button-abort' : 'button-primary'}}"
           aria-labelledby="update-button" [disabled]="!afterUpdate && !updateReady" (click)="close()">
     {{ (afterUpdate ? 'dialog.close' : 'home-page.update') | translate }}</button>
 </div>

@@ -39,13 +39,13 @@ form {
 }
 
 .format-button {
-  color: var(--secondary);
-  border-color: var(--secondary);
+  color: var(--primary);
+  border-color: var(--primary);
   margin: 3px 20px 20px 0;
   height: 60px;
   &:disabled {
     opacity: 0.7;
-    color: var(--secondary);
+    color: var(--primary);
   }
 }
 

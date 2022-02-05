@@ -39,7 +39,7 @@
       </button>
       <button *ngIf="isModeratorView" mat-icon-button (click)="setAck()"
               aria-labelledby="comment-moderation" matTooltip="{{ 'comment-page.reject' | translate }}">
-        <mat-icon class="gavel-icon">lock_open</mat-icon>
+        <mat-icon class="icon-primary">lock_open</mat-icon>
       </button>
       <button mat-icon-button *ngIf="(isCreator || isModerator) && !inAnswerView && !isPresentation  && !archived"
               [matMenuTriggerFor]="actionsMenu"
@@ -55,34 +55,34 @@
       <mat-menu #actionsMenu="matMenu" xPosition="before">
 
         <button mat-menu-item (click)="answerComment()">
-          <mat-icon class="answered-icon">comment</mat-icon>
+          <mat-icon class="answered-icon icon-important">comment</mat-icon>
           <span>{{ (!comment.answer ? 'comment-page.answer' : 'comment-page.go-to-answer') | translate }}</span>
         </button>
 
         <button mat-menu-item (click)="markCorrect(1)"
                 aria-labelledby="comment-correct">
-          <mat-icon class="correct-icon">check_circle</mat-icon>
+          <mat-icon class="correct-icon icon-important">check_circle</mat-icon>
           <span>{{ (comment.correct !== 1 ? 'comment-page.mark-correct' :
             'comment-page.mark-not-correct') | translate }}</span>
         </button>
 
         <button mat-menu-item (click)="markCorrect(2)"
                 aria-labelledby="comment-not-correct">
-          <mat-icon class="wrong-icon">cancel</mat-icon>
+          <mat-icon class="wrong-icon icon-important">cancel</mat-icon>
           <span>{{ (comment.correct !== 2 ? 'comment-page.mark-wrong' :
             'comment-page.mark-not-wrong') | translate }}</span>
         </button>
         <button mat-menu-item (click)="setFavorite()" aria-labelledby="comment-grade">
-          <mat-icon class="favorite-icon">grade</mat-icon>
+          <mat-icon class="favorite-icon icon-important">grade</mat-icon>
           <span>{{ (!comment.favorite ? 'comment-page.mark-favorite' :
             'comment-page.mark-not-favorite') | translate }}</span>
         </button>
         <button *ngIf="isCreator" mat-menu-item (click)="openDeleteCommentDialog()" aria-labelledby="comment-delete">
-          <mat-icon class="delete-icon">delete</mat-icon>
+          <mat-icon class="icon-warn">delete</mat-icon>
           <span>{{ 'comment-page.delete' | translate }}</span>
         </button>
         <button *ngIf="!isModeratorView" mat-menu-item (click)="setAck()" aria-labelledby="comment-moderation">
-          <mat-icon class="gavel-icon">{{ comment.ack ? 'gavel' : 'lock_open' }}</mat-icon>
+          <mat-icon class="icon-primary">{{ comment.ack ? 'gavel' : 'lock_open' }}</mat-icon>
           <span>{{ (comment.ack ? 'comment-page.banish' : 'comment-page.reject') | translate }}</span>
         </button>
 
