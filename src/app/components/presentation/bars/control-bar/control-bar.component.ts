@@ -473,6 +473,10 @@ export class ControlBarComponent extends NavBarComponent implements OnInit, OnDe
     );
   }
 
+  allowUnitChange(content: Content) {
+    return this.contentService.allowsUnitChange(content);
+  }
+
   hasFormatAnswer(format: ContentType): boolean {
     return ![ContentType.SLIDE, ContentType.FLASHCARD].includes(format);
   }
@@ -498,6 +502,10 @@ export class ControlBarComponent extends NavBarComponent implements OnInit, OnDe
         this.contentService.deleteAnswersOfContent(this.content.id, this.roomId);
       }
     });
+  }
+
+  toggleVisualizationUnit() {
+    this.eventService.broadcast(RemoteMessage.TOGGLE_VISUALIZATION_UNIT);
   }
 
   changeRound(round: number) {
