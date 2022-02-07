@@ -25,13 +25,13 @@
   </p>
 
 </mat-dialog-content>
-<div fxLayout="row wrap" fxLayoutAlign="end">
-  <button mat-button class="button-abort" (click)="acceptSelectedCookies()"
+<div fxLayout="row wrap" fxLayoutAlign="end" fxLayoutGap="10px">
+  <button mat-stroked-button (click)="acceptSelectedCookies()"
           [attr.aria-label]="'cookies.a11y-accept-selected' | translate: {
           functional: categories[1].consent ? '' : ('cookies.not' | translate),
           statistic: categories[2].consent ? '' : ('cookies.not' | translate)}">
     {{ 'cookies.cancel' | translate }}</button>
-  <button mat-flat-button class="button-primary accept-button" (click)="acceptAllCookies()"
+  <button mat-flat-button class="button-primary" (click)="acceptAllCookies()"
           [attr.aria-label]="'cookies.a11y-accept' | translate">
     {{ 'cookies.accept' | translate }}</button>
 </div>
