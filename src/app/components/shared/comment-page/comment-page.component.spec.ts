@@ -126,7 +126,10 @@ describe('CommentPageComponent', () => {
           provide: ActivatedRoute,
           useValue: {
             params: of([{ id: 1 }]),
-            data: of()
+            data: of(),
+            snapshot: {
+              data: {}
+            }
           },
         },
         {

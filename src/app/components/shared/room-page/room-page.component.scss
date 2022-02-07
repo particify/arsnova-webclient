@@ -14,6 +14,10 @@
   align-items: center;
 }
 
+.moderator-container {
+  margin-top: 1em;
+}
+
 @media (hover: hover) {
   .main-button {
     &:hover {
@@ -33,6 +37,10 @@
 
   .action-button-container {
     min-height: 160px;
+  }
+
+  .moderator-container {
+    min-height: 180px;
   }
 
   .main-icon {

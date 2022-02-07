@@ -32,6 +32,7 @@ export class RoomCreatorPageComponent extends RoomPageComponent implements OnIni
   looseContent: Content[] = [];
   userCount: number;
   target: Window;
+  isModerator = false;
 
   private hotkeyRefs: Symbol[] = [];
 
@@ -70,21 +71,25 @@ export class RoomCreatorPageComponent extends RoomPageComponent implements OnIni
     window.scroll(0, 0);
     this.translateService.use(this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE));
     this.route.data.subscribe(data => {
+      this.isModerator = data.userRole === UserRole.EXECUTIVE_MODERATOR;
       this.initializeRoom(data.room, data.userRole, data.viewRole);
+      if (!this.isModerator) {
+        this.translateService.get('sidebar.user-counter').subscribe(t =>
+          this.hotkeyService.registerHotkey({
+            key: '7',
+            action: () => {
+              const adKey = this.userCount === 1 ? '-only-one' : '';
+              const msg = this.translateService.instant('room-page.a11y-user-count' + adKey, {count: this.userCount})
+              this.announceService.announce(msg);
+            },
+            actionTitle: t
+          }, this.hotkeyRefs)
+        );
+      }
     });
     this.roomWatch = this.roomService.getCurrentRoomsMessageStream();
     this.roomSub = this.roomWatch.subscribe(msg => this.parseUserCount(msg.body));
-    this.translateService.get('sidebar.user-counter').subscribe(t =>
-      this.hotkeyService.registerHotkey({
-        key: '7',
-        action: () => {
-          const adKey = this.userCount === 1 ? '-only-one' : '';
-          const msg = this.translateService.instant('room-page.a11y-user-count' + adKey, {count: this.userCount})
-          this.announceService.announce(msg);
-        },
-        actionTitle: t
-      }, this.hotkeyRefs)
-    );
+  
   }
 
   ngOnDestroy() {

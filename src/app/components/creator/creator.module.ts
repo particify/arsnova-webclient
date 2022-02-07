@@ -34,7 +34,6 @@ import { ContentFlashcardCreationComponent } from './content-creation/content-fl
 import { ContentWordcloudCreationComponent } from './content-creation/content-wordcloud-creation/content-wordcloud-creation.component';
 import { ExportComponent } from './_dialogs/export/export.component';
 import { DialogService } from '../../services/util/dialog.service';
-import { CommentAnswerComponent } from '../shared/_dialogs/comment-answer/comment-answer.component';
 import { RemindOfTokensComponent } from './_dialogs/remind-of-tokens/remind-of-tokens.component';
 import { StatisticHelpComponent } from './_dialogs/statistic-help/statistic-help.component';
 
