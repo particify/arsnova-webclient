@@ -33,9 +33,16 @@
     "delete-room": "Delete room",
     "room-deleted": "The room was sucessfully deleted.",
     "transfer-room": "Transfer room",
-    "room-transferred": "The room was sucessfully transferred."
+    "room-transferred": "The room was sucessfully transferred.",
+    "new-account": "New account",
+    "enter-email": "Enter e-mail adress",
+    "add": "Add account",
+    "account-added": "The account has been added."
   },
   "hotkeys": {
     "a11y-help-key-announcement": "Press {{helpKey}} for a list of keyboard shortcuts."
+  },
+  "errors": {
+    "something-went-wrong": "Something went wrong."
   }
 }

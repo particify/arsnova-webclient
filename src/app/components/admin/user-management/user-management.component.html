@@ -3,6 +3,13 @@
     {{ 'admin-area.user-management' | translate }}
   </mat-card-title>
   <mat-card-content fxLayout="column" fxLayoutGap="10px">
+    <div *ngIf="showAccountAdding" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="10px">
+      <mat-form-field appearance="outline" floatLabel="always" fxFlex="auto" class="no-field-hint">
+        <mat-label>{{ 'admin-area.new-account' | translate }}</mat-label>
+        <input matNativeControl [(ngModel)]="newLoginId" placeholder="{{ 'admin-area.enter-email' | translate }}">
+      </mat-form-field>
+      <button mat-raised-button class="button-primary" (click)=addAccount()>{{ 'admin-area.add' | translate }}</button>
+    </div>
     <div fxLayout="row" fxLayoutGap="10px">
       <app-user-search-field label="{{ 'admin-area.user-id' | translate }}" (submitted)="loadEntity($event)" fxFlex="auto" class="no-field-hint"></app-user-search-field>
       <mat-form-field appearance="outline" floatLabel="always" fxFlex="auto" class="no-field-hint">
