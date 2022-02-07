@@ -33,9 +33,16 @@
     "delete-room": "Raum löschen",
     "room-deleted": "Der Raum wurde erfolgreich gelöscht.",
     "transfer-room": "Raum übertragen",
-    "room-transferred": "Der Raum wurde erfolgreich übertragen."
+    "room-transferred": "Der Raum wurde erfolgreich übertragen.",
+    "new-account": "Neuer Account",
+    "enter-email": "Gib die E-Mail-Adresse ein",
+    "add": "Hinzufügen",
+    "account-added": "Der Account wurde hinzugefügt."
   },
   "hotkeys": {
     "a11y-help-key-announcement": "Drücke {{helpKey}} für eine Auflistung von Tastaturbefehlen."
+  },
+  "errors": {
+    "something-went-wrong": "Es ist etwas schief gelaufen."
   }
 }

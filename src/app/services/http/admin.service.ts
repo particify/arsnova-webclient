@@ -9,6 +9,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { NotificationService } from '../util/notification.service';
 import { EventService } from '../util/event.service';
 import { UserService } from './user.service';
+import { AuthProvider } from '../../models/auth-provider';
 
 const httpOptions = {
   headers: new HttpHeaders({})
@@ -52,6 +53,17 @@ export class AdminService extends AbstractHttpService<void> {
     const connectionUrl = this.userService.buildForeignUri(`/${this.serviceApiUrl.transfer}?newOwnerId=${newOwnerId}`, roomId);
     return this.http.post(connectionUrl, {}, httpOptions).pipe(
       catchError(this.handleError<any>('transferRoom'))
+    );
+  }
+
+  addAccount(loginId: string) {
+    const connectionUrl = this.userService.buildUri('/');
+    const body = {
+      loginId: loginId,
+      authProvider: AuthProvider.ARSNOVA
+    }
+    return this.http.post<User>(connectionUrl, body, httpOptions).pipe(
+      catchError(this.handleError<User>('addAccount'))
     );
   }
 }

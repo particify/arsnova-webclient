@@ -1,24 +1,37 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { User } from '../../../models/user';
 import { UserService } from '../../../services/http/user.service';
 import { DialogService } from '../../../services/util/dialog.service';
 import { AdminService } from '../../../services/http/admin.service';
 import { AdvancedSnackBarTypes, NotificationService } from '../../../services/util/notification.service';
 import { TranslateService } from '@ngx-translate/core';
+import { ApiConfigService } from '../../../services/http/api-config.service';
+import { AuthenticationProviderType } from '../../../models/api-config';
 
 @Component({
   selector: 'app-user-management',
-  templateUrl: './user-management.component.html'
+  templateUrl: './user-management.component.html',
+  styles: ['.mat-raised-button {height: 50px;}']
 })
-export class UserManagementComponent {
+export class UserManagementComponent implements OnInit {
   user: User;
+
+  showAccountAdding = false;
+  newLoginId = '';
 
   constructor(
     protected adminService: AdminService,
     protected userService: UserService,
     protected dialogService: DialogService,
     protected notificationService: NotificationService,
-    protected translateService: TranslateService) {
+    protected translateService: TranslateService,
+    protected apiConfigService: ApiConfigService) {
+  }
+
+  ngOnInit(): void {
+    this.apiConfigService.getApiConfig$().subscribe(config => {
+      this.showAccountAdding = config.authenticationProviders.map(p => p.id).includes('user-db');
+    })
   }
 
   loadEntity(id: string) {
@@ -50,4 +63,12 @@ export class UserManagementComponent {
             this.translateService.get('admin-area.user-activated').subscribe(message =>
                 this.notificationService.showAdvanced(message, AdvancedSnackBarTypes.SUCCESS)));
   }
+
+  addAccount() {
+    this.adminService.addAccount(this.newLoginId).subscribe(() => {
+      this.translateService.get('admin-area.account-added').subscribe(message =>
+        this.notificationService.showAdvanced(message, AdvancedSnackBarTypes.SUCCESS));
+    });
+  }
+
 }
