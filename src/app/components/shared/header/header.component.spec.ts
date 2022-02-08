@@ -332,7 +332,7 @@ describe('HeaderComponent', () => {
     userMenuItems = await userMenu.getItems();
     const myRooms = await userMenu.getHarness(MatMenuItemHarness.with({selector: '#my-rooms-button'}));
     expect(myRooms).not.toBeUndefined('Header should contain item "My Rooms"');
-    const login = await userMenu.getHarness(MatMenuItemHarness.with({selector: '#menu-login-button'}));
+    const login = await userMenu.getHarness(MatMenuItemHarness.with({selector: '#login-button'}));
     expect(login).not.toBeUndefined('Header should contain item "Login"');
     const theme = await userMenu.getHarness(MatMenuItemHarness.with({selector: '#theme-menu'}));
     expect(theme).not.toBeUndefined('Header should contain item "Theme"');
@@ -351,7 +351,7 @@ describe('HeaderComponent', () => {
     userMenuItems = await userMenu.getItems();
     const myRooms = await userMenu.getHarness(MatMenuItemHarness.with({selector: '#my-rooms-button'}));
     expect(myRooms).not.toBeUndefined('Header should contain item "My Rooms"');
-    const login = await userMenu.getHarness(MatMenuItemHarness.with({selector: '#menu-login-button'}));
+    const login = await userMenu.getHarness(MatMenuItemHarness.with({selector: '#login-button'}));
     expect(login).not.toBeUndefined('Header should contain item "Login"');
     const help = await userMenu.getHarness(MatMenuItemHarness.with({selector: '#help-button'}));
     expect(help).not.toBeUndefined('Header should contain item "Help"');
@@ -374,7 +374,7 @@ describe('HeaderComponent', () => {
     userMenuItems = await userMenu.getItems();
     const myRooms = await userMenu.getHarness(MatMenuItemHarness.with({selector: '#my-rooms-button'}));
     expect(myRooms).not.toBeUndefined('Header should contain item "My Rooms"');
-    const login = await userMenu.getHarness(MatMenuItemHarness.with({selector: '#menu-login-button'}));
+    const login = await userMenu.getHarness(MatMenuItemHarness.with({selector: '#login-button'}));
     expect(login).not.toBeUndefined('Header should contain item "Login"');
     const help = await userMenu.getHarness(MatMenuItemHarness.with({selector: '#help-button'}));
     expect(help).not.toBeUndefined('Header should contain item "Help"');
@@ -415,16 +415,18 @@ describe('HeaderComponent', () => {
 
   // # If not logged in
 
-  it('should display login button if not logged in', async () => {
+  it('should display user menu button if not logged in', async () => {
     component.auth = null;
-    loginButton = await loader.getHarness(MatButtonHarness.with({selector: '#login-button'}));
-    expect(loginButton).not.toBeNull();
+    userButton = await loader.getHarness(MatButtonHarness.with({selector: '#menu-button'}));
+    expect(userButton).not.toBeNull();
   });
 
   it('should navigate to login route after when clicking login button', async () => {
     component.auth = null;
-    loginButton = await loader.getHarness(MatButtonHarness.with({selector: '#login-button'}));
+    userButton = await loader.getHarness(MatButtonHarness.with({selector: '#menu-button'}));
+    await userButton.click();
+    userMenu = await loader.getHarness(MatMenuHarness.with({selector: '#menu-button'}));
+    loginButton = await userMenu.getHarness(MatMenuItemHarness.with({selector: '#login-button'}));
     await loginButton.click();
-    expect(routerSpy.navigateByUrl).toHaveBeenCalledWith('login');
   });
 });
