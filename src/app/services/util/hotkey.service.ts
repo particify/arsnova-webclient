@@ -169,6 +169,10 @@ export class HotkeyService {
 
   private registerHandler() {
     this.eventManager.addEventListener(
-        this.document.documentElement, 'keyup', (e: KeyboardEvent) => this.handleKeyboardEvent(e));
+        this.document.documentElement, 'keydown', (e: KeyboardEvent) => {
+          if (!e.repeat) {
+            this.handleKeyboardEvent(e)
+          }
+        });
   }
 }
