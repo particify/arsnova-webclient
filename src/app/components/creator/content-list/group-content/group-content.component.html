@@ -123,7 +123,7 @@
                              class="bottom-border" (click)="navigateToContentStats(content)"
                              [ngClass]="{'not-supported': contentTypes.indexOf(content.format) === -1, 'locked-content': !isPublished(i), 'unlocked-content': isPublished(i)}">
               <div fxLayout="row" fxLayoutAlign="space-between" fxFill>
-                <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="12px">
+                <div class="ellipsis"  fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="12px">
                   <mat-icon class="type-icon">{{iconList.get(content.format)}}</mat-icon>
                   <p class="ellipsis" tabindex="0" role="button" (keyup.enter)="navigateToContentStats(content)"
                      attr.aria-label="{{ 'content.a11y-selected-content' | translate: { name: content.body } }}">
