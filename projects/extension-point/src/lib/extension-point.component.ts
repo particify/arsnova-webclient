@@ -3,7 +3,8 @@ import { ExtensionFactory } from './extension-factory';
 
 @Component({
   selector: 'lib-extension-point',
-  templateUrl: './extension-point.component.html'
+  templateUrl: './extension-point.component.html',
+  styles: [':host:empty { display: none; }']
 })
 export class ExtensionPointComponent implements OnInit {
   @Input() extensionId: string;
