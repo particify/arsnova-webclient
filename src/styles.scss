@@ -109,6 +109,13 @@ ul {
   text-overflow: ellipsis;
 }
 
+.hint {
+  font-size: 18px;
+  font-weight: $font-weight-bold;
+  margin: 3em 0 2em;
+  opacity: 0.7;
+}
+
 // Inputs
 
 input, input:focus {
