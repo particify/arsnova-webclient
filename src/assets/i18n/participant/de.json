@@ -31,7 +31,7 @@
     "has-abstained": "Du hast dich enthalten.",
     "has-voted": "Du hast geantwortet.",
     "has-answered": "Du hast auf den Inhalt geantwortet.",
-    "questions-locked": "Es wurden noch keine Inhalte freigegeben.",
+    "no-contents-published": "Keine Inhalte freigegeben.",
     "go-to-stats": "Gehe zu den Ergebnissen",
     "go-to-content": "Gehe zurück zum Inhalt",
     "show-front": "Umdrehen",
@@ -166,7 +166,7 @@
     "answer-statistics": "Statistiken",
     "comments": "Q&A",
     "live-survey": "Live Feedback",
-    "no-contents": "Es sind noch keine Inhalte vorhanden."
+    "no-contents": "Keine Inhalte vorhanden."
   },
   "statistic": {
     "a11y-message-overview": "Du befindest dich jetzt auf der Statistikübersicht.",

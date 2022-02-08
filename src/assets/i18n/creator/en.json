@@ -317,7 +317,7 @@
     "import-successful": "Your contents has been imported.",
     "max-keywords": "Keywords per answer",
     "max-keywords-out-of-range": "Keyword limit must be between {{min}} and {{max}}.",
-    "no-contents-yet": "There are no contents yet.",
+    "no-contents-yet": "There are no contents.",
     "delete-content-group": "Delete question series",
     "content-group-deleted": "Your question series has been deleted.",
     "contents": "Contents",
@@ -385,7 +385,7 @@
     "public-stream": "Q&A",
     "room-loading-error": "The room could not be loaded",
     "room-settings": "Room administration",
-    "no-content-groups": "There are no question series yet.",
+    "no-content-groups": "There are no question series.",
     "group-locked": "The question series is not released",
     "locked": "not released",
     "unlocked": "released"

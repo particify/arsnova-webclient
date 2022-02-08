@@ -114,11 +114,11 @@
             </mat-slide-toggle>
           </div>
         </div>
-        <div>
+        <div fxLayout="column" fxLayoutAlign="start center">
           <div tabindex="-1" id="content-list" class="visually-hidden" appHotkey="5" [appHotkeyTitle]="'content.contents' | translate">
             {{ 'content.a11y-content-list-contents' | translate: { count: contents.length } }}</div>
-          <p *ngIf="contents.length === 0">{{ 'content.no-contents-yet' | translate }}</p>
-          <mat-list *ngIf="!isInSortingMode">
+          <p class="hint" *ngIf="contents.length === 0">{{ 'content.no-contents-yet' | translate }}</p>
+          <mat-list *ngIf="!isInSortingMode" fxFill>
               <mat-list-item *ngFor="let content of contents; index as i" fxLayout="column" fxLayoutAlign="center"
                              class="bottom-border" (click)="navigateToContentStats(content)"
                              [ngClass]="{'not-supported': contentTypes.indexOf(content.format) === -1, 'locked-content': !isPublished(i), 'unlocked-content': isPublished(i)}">
