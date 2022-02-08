@@ -31,15 +31,12 @@
           <mat-icon class="icon-primary">swap_horiz</mat-icon>
           <span>{{ 'room-list.rooms-from-guest' | translate }}</span>
         </button>
-        <lib-extension-point extensionId="import-token" [extensionData]="{inMenu: true}"></lib-extension-point>
+        <lib-extension-point extensionId="import-token"></lib-extension-point>
       </mat-menu>
       <div *ngIf="!isLoading" fxFill fxLayout="column" fxLayoutAlign="center center" tabindex="0" id="room-list"
            [ngClass]="{'visually-hidden': rooms.length > 0}">
         <h3 class="hint">{{ rooms.length === 0 ? ('room-list.no-rooms' | translate) :
           'room-list.a11y-list-summary' | translate:{count: rooms.length} }}</h3>
-      </div>
-      <div *ngIf="rooms.length === 0 && !isGuest" fxLayout="row" fxLayoutAlign="center">
-        <lib-extension-point extensionId="import-token" [extensionData]="{inMenu: false}"></lib-extension-point>
       </div>
       <div *ngIf="displayRooms.length === 0 && rooms.length > 0" fxLayout="column" fxLayoutAlign="center center">
         <h3 class="hint">{{ 'room-list.no-rooms-found' | translate }}</h3>
