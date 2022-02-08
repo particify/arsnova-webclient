@@ -11,14 +11,15 @@
             <mat-icon class="add-icon">add</mat-icon>
             <span>{{ 'home-page.create-room' | translate }}</span>
           </button>
-          <button mat-button [matMenuTriggerFor]="more" aria-labelledby="import-options">
+          <button *ngIf="showImportMenu" mat-button [matMenuTriggerFor]="more" aria-labelledby="import-options">
             <mat-icon class="add-icon">file_upload</mat-icon>
             <span>{{ 'room-list.import' | translate }}</span>
           </button>
         </div>
-        <div class="search-container">
+        <div class="search-container" [ngClass]="{'full-width-container': !showImportMenu}">
           <mat-icon matPrefix class="search-icon">search</mat-icon>
-          <input [disabled]="rooms?.length === 0" matInput class="search-input" #search (keyup)="filterRooms(search.value)"
+          <input [disabled]="rooms?.length === 0" matInput class="search-input"  [ngClass]="{'full-width-search': !showImportMenu}"
+                 #search (keyup)="filterRooms(search.value)"
                  placeholder="{{'room-list.filter-message' | translate }}" aria-labelledby="filter-rooms"/>
         </div>
       </div>

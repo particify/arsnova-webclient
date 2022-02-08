@@ -47,7 +47,7 @@ export class RoomListComponent implements OnInit, OnDestroy {
   unsubscribe$ = new Subject<void>();
   deviceType: string;
   roles: Map<UserRole, string> = new Map<UserRole, string>();
-  showMenu = false;
+  showImportMenu = false;
 
   creatorRole = UserRole.CREATOR;
   participantRole = UserRole.PARTICIPANT;
@@ -77,7 +77,7 @@ export class RoomListComponent implements OnInit, OnDestroy {
     } else {
       this.showGuestAccountControls = !!this.authenticationService.getGuestToken();
     }
-    this.showMenu = this.showGuestAccountControls || !!this.extensionFactory.getExtension('import-token');
+    this.showImportMenu = this.showGuestAccountControls || !!this.extensionFactory.getExtension('import-token');
     this.sub = this.eventService.on<any>('RoomDeleted').subscribe(payload => {
       this.rooms = this.rooms.filter(r => r.summary.id !== payload.id);
     });
