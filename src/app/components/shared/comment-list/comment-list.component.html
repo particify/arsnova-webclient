@@ -213,15 +213,6 @@
     <mat-icon>arrow_upward</mat-icon>
   </button>
 
-  <div fxLayout="row" fxLayoutAlign="center" *ngIf="comments.length < 3 && !isLoading && !search && !isModerator
-            && !isPresentation && !isArchive">
-    <button id="add-comment-button" mat-raised-button class="add-btn fab-extended" (click)="openCreateDialog()"
-            aria-labelledby="add">
-      <mat-icon class="add">add</mat-icon>
-      <span>{{'comment-list.add-comment' | translate}}</span>
-    </button>
-  </div>
-
   <div [ngClass]="{'comments-container': !isPresentation}" *ngIf="!isLoading" tabindex="-1"
        appHotkey="7" [appHotkeyTitle]="'comment-list.list' | translate" [attr.aria-label]="'comment-list.list' | translate">
     <app-comment *ngFor="let current of displayComments" [comment]="current" [archived]="isArchive"
@@ -233,11 +224,20 @@
   </div>
 
   <div *ngIf="!isLoading" fxLayout="row" fxLayoutAlign="center center">
-    <p *ngIf="comments.length < 1" tabindex="0" aria-labelledby="no-comments-label">{{ 'comment-page.no-comments' | translate }}</p>
+    <p *ngIf="comments.length < 1" class="hint" tabindex="0" aria-labelledby="no-comments-label">{{ 'comment-page.no-comments' | translate }}</p>
     <p *ngIf="((hideCommentsList && filteredComments.length < 1) ||
-            (!hideCommentsList && commentsFilteredByTime.length < 1)) && comments.length >= 1" tabindex="0">
+            (!hideCommentsList && commentsFilteredByTime.length < 1)) && comments.length >= 1" class="hint" tabindex="0">
       {{ 'comment-page.no-comments-found' | translate }}
     </p>
+  </div>
+
+  <div fxLayout="row" fxLayoutAlign="center" *ngIf="comments.length < 3 && !isLoading && !search && !isModerator
+       && !isPresentation && !isArchive">
+    <button id="add-comment-button" mat-stroked-button class="stroked-primary add-big" (click)="openCreateDialog()"
+            aria-labelledby="add">
+      <mat-icon class="add">add</mat-icon>
+      <span>{{'comment-list.add-comment' | translate}}</span>
+    </button>
   </div>
 
   <div class="visually-hidden">

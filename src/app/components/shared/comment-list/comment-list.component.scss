@@ -161,6 +161,10 @@ $bar-height: 70px;
   color: var(--on-primary);
 }
 
+.add-big {
+  margin-top: 0.5em;
+}
+
 .mobile-add {
   position: fixed;
   right: 4vw;
@@ -214,14 +218,6 @@ button.selected {
 ::placeholder {
   color: var(--on-surface);
   opacity: 1;
-}
-
-.fab-extended {
-  height: 50px;
-  border-radius: 25px;
-  margin: 10% 0;
-  font-size: 18px;
-  width: 250px;
 }
 
 .above-add {
