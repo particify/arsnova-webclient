@@ -112,6 +112,14 @@
     font-size: 12px;
     width: 130px;
   }
+
+  .full-width-search {
+    width: calc(100% - 42px);
+  }
+
+  .full-width-container {
+    width: 100%;
+  }
 }
 
 @media(min-width: 600px) {
