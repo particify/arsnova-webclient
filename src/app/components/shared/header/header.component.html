@@ -90,18 +90,18 @@
     </mat-menu>
 
     <div fxLayout="row" fxLayoutAlign="start center">
-      <div *ngIf="isRoom && role !== 'PARTICIPANT'">
+      <div *ngIf="isRoom && !hasRole(UserRole.PARTICIPANT)">
         <div fxLayout="row" fxLayoutGap="10px" class="desktop-action-container">
           <button mat-button class="preview-button" (click)="switchRole()" aria-labelledby="switch-role"
           [ngClass]="{'back-to-edit': isPreview}">
             <mat-icon>{{ isPreview ? 'edit' : 'preview' }}</mat-icon>
             {{ (isPreview ? 'header.editing-view' : 'header.preview') | translate }}
           </button>
-          <button [disabled]="isPreview" mat-button class="preview-button" (click)="goToSettings()" aria-labelledby="switch-role">
+          <button *ngIf="hasRole(UserRole.CREATOR)" [disabled]="isPreview" mat-button class="preview-button" (click)="goToSettings()" aria-labelledby="switch-role">
             <mat-icon>settings</mat-icon>
             {{ 'header.room-settings' | translate }}
           </button>
-          <button [disabled]="isPreview" mat-raised-button class="button-primary" [matMenuTriggerFor]="presentationMenu"
+          <button *ngIf="hasRole(UserRole.CREATOR)" [disabled]="isPreview" mat-raised-button class="button-primary" [matMenuTriggerFor]="presentationMenu"
                   aria-labelledby="present">
             <mat-icon>present_to_all</mat-icon>
             {{ 'header.present' | translate }}
@@ -120,7 +120,7 @@
             <mat-icon>preview</mat-icon>
             {{ 'header.preview' | translate }}
           </button>
-          <button mat-menu-item tabindex="0" (click)="goToSettings()" aria-labelledby="settings">
+          <button *ngIf="hasRole(UserRole.CREATOR)" mat-menu-item tabindex="0" (click)="goToSettings()" aria-labelledby="settings">
             <mat-icon>settings</mat-icon>
             <span>{{ 'header.room-settings' | translate }}</span>
           </button>

@@ -30,6 +30,7 @@ export class HeaderComponent implements OnInit {
   isAdmin = false;
 
   role: UserRole;
+  UserRole: typeof UserRole = UserRole;
 
   themeClass: String;
   themes: Theme[];
@@ -100,6 +101,10 @@ export class HeaderComponent implements OnInit {
 
   changeLanguage(lang: string) {
     this.langService.setLang(lang);
+  }
+
+  hasRole(role: UserRole): boolean {
+    return this.role === role;
   }
 
   logout() {
