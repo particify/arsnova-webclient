@@ -333,28 +333,32 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
       this.resetGroups();
     }
     const groupCount = groupStats.length;
-    this.groupSubscriptions = [];
-    for (let i = 0; i < groupCount; i++) {
-      this.groupSubscriptions[i] = this.contentGroupService.getById(groupStats[i].id, { roomId: this.roomId }).subscribe(group => {
-        this.contentGroups.push(group);
-        this.publishedStates.push(
-          new PublishedContentsState(group.name, group.firstPublishedIndex, group.lastPublishedIndex)
-        );
-        if (this.contentGroups.length === groupCount) {
-          if (alreadySet) {
-            if (this.groupName === group.name) {
-              this.group = group;
-              this.setGroupProperties();
-            }
-            this.afterInit();
-          } else {
-            this.afterInit();
-            if (groupCount > 1) {
-              this.setGroup();
+    if (groupCount > 0) {
+      this.groupSubscriptions = [];
+      for (let i = 0; i < groupCount; i++) {
+        this.groupSubscriptions[i] = this.contentGroupService.getById(groupStats[i].id, { roomId: this.roomId }).subscribe(group => {
+          this.contentGroups.push(group);
+          this.publishedStates.push(
+            new PublishedContentsState(group.name, group.firstPublishedIndex, group.lastPublishedIndex)
+          );
+          if (this.contentGroups.length === groupCount) {
+            if (alreadySet) {
+              if (this.groupName === group.name) {
+                this.group = group;
+                this.setGroupProperties();
+              }
+              this.afterInit();
+            } else {
+              this.afterInit();
+              if (groupCount > 1) {
+                this.setGroup();
+              }
             }
           }
-        }
-      });
+        });
+      }
+    } else {
+      this.afterInit();
     }
   }
 
