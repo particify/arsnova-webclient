@@ -67,7 +67,7 @@ export class HeaderComponent implements OnInit {
   ngOnInit() {
     this.authenticationService.getAuthenticationChanges().subscribe(auth => {
       this.auth = auth;
-      this.userCharacter = this.auth.loginId.slice(0, 1).toLocaleUpperCase();
+      this.userCharacter = this.auth?.loginId.slice(0, 1).toLocaleUpperCase();
     });
 
     this.themeService.getTheme().subscribe(theme => {
