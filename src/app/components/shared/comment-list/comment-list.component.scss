@@ -220,12 +220,14 @@ button.selected {
   opacity: 1;
 }
 
+// 2 x padding (8vw) + fab height (56px) + nav bar height (56px)
 .above-add {
-  bottom: calc(8vw + 96px);
+  bottom: calc(8vw + 112px);
 }
 
+// 2 x padding (8vw) + fab height (56px)
 .mobile-scroll-position {
-  bottom: calc(8vw + 40px);
+  bottom: calc(8vw + 56px);
 }
 
 .desktop-scroll-position {
@@ -234,7 +236,7 @@ button.selected {
 
 .scrollTop {
   position: fixed;
-  right: -40px;
+  right: -64px;
   z-index: 1;
   transition: right 400ms;
   opacity: 1;

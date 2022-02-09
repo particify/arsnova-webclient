@@ -1,5 +1,5 @@
 <app-nav-bar *ngIf="!isPresentation" (isVisible)="checkIfNavBarExists($event)"></app-nav-bar>
-<button class="add-btn mobile-add" mat-mini-fab aria-labelledby="add"
+<button class="add-btn mobile-add" mat-fab aria-labelledby="add"
         *ngIf="!search && deviceType !== 'desktop' && !isPresentation && !isArchive && !isModerator" (click)="openCreateDialog()"
         [ngClass]="{'above-nav': navBarExists}"
         matTooltip="{{ 'comment-list.add-comment' | translate }}">
@@ -203,7 +203,7 @@
     </div>
   </div>
 
-  <button mat-icon-button class="bar-icon scrollTop" tabindex="-1" (click)="scrollTop(true)"
+  <button mat-fab class="bar-icon scrollTop" tabindex="-1" (click)="scrollTop(true)"
           *ngIf="!isPresentation"
           [ngClass]="{'visible': scrollExtended && scrollActive,
                       'above-add': navBarExists && deviceType === 'mobile' && !isModerator,
