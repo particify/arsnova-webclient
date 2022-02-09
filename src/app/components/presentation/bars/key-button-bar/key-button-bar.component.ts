@@ -15,7 +15,7 @@ export class KeyButtonBarComponent {
   constructor(@Inject(DOCUMENT) private document: HTMLDocument) { }
 
   sendKeyEvent(key: string) {
-    const event = new KeyboardEvent('keyup', {
+    const event = new KeyboardEvent('keydown', {
       key: key,
     });
     this.document.documentElement.dispatchEvent(event);
