@@ -26,8 +26,6 @@ import { UserRole } from '../../../models/user-roles.enum';
 export class HeaderComponent implements OnInit {
   auth: ClientAuthentication;
   deviceType: string;
-  isGuest = true;
-  isAdmin = false;
 
   role: UserRole;
   UserRole: typeof UserRole = UserRole;
@@ -69,9 +67,7 @@ export class HeaderComponent implements OnInit {
   ngOnInit() {
     this.authenticationService.getAuthenticationChanges().subscribe(auth => {
       this.auth = auth;
-      this.userCharacter = this.auth.loginId.slice(0, 1).toLocaleUpperCase();
-      this.isGuest = !auth || auth.authProvider === AuthProvider.ARSNOVA_GUEST;
-      this.isAdmin = !!auth && this.authenticationService.hasAdminRole(auth);
+      this.userCharacter = this.auth?.loginId.slice(0, 1).toLocaleUpperCase();
     });
 
     this.themeService.getTheme().subscribe(theme => {
@@ -105,6 +101,14 @@ export class HeaderComponent implements OnInit {
 
   hasRole(role: UserRole): boolean {
     return this.role === role;
+  }
+
+  isGuest(): boolean {
+    return !this.auth || this.auth.authProvider === AuthProvider.ARSNOVA_GUEST;
+  }
+
+  isAdmin(): boolean {
+    return !!this.auth && this.authenticationService.hasAdminRole(this.auth);
   }
 
   logout() {

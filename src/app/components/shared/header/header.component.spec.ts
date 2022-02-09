@@ -44,7 +44,8 @@ export class MockAuthenticationService {
     return this.auth$$.asObservable();
   }
 
-  hasAdminRole(){
+  hasAdminRole(auth: ClientAuthentication): boolean {
+    return auth.token === 'ADMIN_TOKEN';
   }
 
   logout() {
@@ -193,7 +194,6 @@ describe('HeaderComponent', () => {
   it('should display user menu with 5 items: AuthProvider: ARSNOVA, isAdmin: false, deviceWidth: 1001, ' +
     'missing helpUrl', async () => {
     component.auth = new ClientAuthentication('1234', 'a@b.cd', AuthProvider.ARSNOVA, 'token');
-    component.isAdmin = false;
     component.deviceWidth = 1001;
     userButton = await loader.getHarness(MatButtonHarness.with({selector: '#menu-button'}));
     await userButton.click();
@@ -213,7 +213,6 @@ describe('HeaderComponent', () => {
 
   it('should display user menu with 6 items: AuthProvider: ARSNOVA, isAdmin: false, deviceWidth: 1001', async () => {
     component.auth = new ClientAuthentication('1234', 'a@b.cd', AuthProvider.ARSNOVA, 'token');
-    component.isAdmin = false;
     component.deviceWidth = 1001;
     component.helpUrl = 'help';
     userButton = await loader.getHarness(MatButtonHarness.with({selector: '#menu-button'}));
@@ -235,8 +234,7 @@ describe('HeaderComponent', () => {
   });
 
   it('should display user menu with 7 items: AuthProvider: ARSNOVA, isAdmin: true, deviceWidth: 1001', async () => {
-    component.auth = new ClientAuthentication('1234', 'a@b.cd', AuthProvider.ARSNOVA, 'token');
-    component.isAdmin = true;
+    component.auth = new ClientAuthentication('1234', 'a@b.cd', AuthProvider.ARSNOVA, 'ADMIN_TOKEN');
     component.deviceWidth = 1001;
     component.helpUrl = 'help';
     userButton = await loader.getHarness(MatButtonHarness.with({selector: '#menu-button'}));
@@ -260,8 +258,7 @@ describe('HeaderComponent', () => {
   });
 
   it('should display user menu with 9 items: AuthProvider: ARSNOVA, isAdmin: true, deviceWidth: 420', async () => {
-    component.auth = new ClientAuthentication('1234', 'a@b.cd', AuthProvider.ARSNOVA, 'token');
-    component.isAdmin = true;
+    component.auth = new ClientAuthentication('1234', 'a@b.cd', AuthProvider.ARSNOVA, 'ADMIN_TOKEN');
     component.deviceWidth = 420;
     component.helpUrl = 'help';
     component.privacyUrl = 'privacy';
@@ -292,7 +289,6 @@ describe('HeaderComponent', () => {
 
   it('should display user menu with 8 items: AuthProvider: ARSNOVA, isAdmin: false, deviceWidth: 420', async () => {
     component.auth = new ClientAuthentication('1234', 'a@b.cd', AuthProvider.ARSNOVA, 'token');
-    component.isAdmin = false;
     component.deviceWidth = 420;
     component.helpUrl = 'help';
     component.privacyUrl = 'privacy';
@@ -324,7 +320,6 @@ describe('HeaderComponent', () => {
   it('should display user menu with 4 items: ARSNOVA_GUEST, isGuest: true, deviceWidth: 1001,'  +
     'missing helpUrl', async () => {
     component.auth = new ClientAuthentication('1234', 'guest', AuthProvider.ARSNOVA_GUEST, 'token');
-    component.isGuest = true;
     component.deviceWidth = 1001;
     userButton = await loader.getHarness(MatButtonHarness.with({selector: '#menu-button'}));
     await userButton.click();
@@ -342,7 +337,6 @@ describe('HeaderComponent', () => {
 
   it('should display user menu with 5 items: AuthProvider: ARSNOVA_GUEST, isGuest: true, deviceWidth: 1001', async () => {
     component.auth = new ClientAuthentication('1234', 'guest', AuthProvider.ARSNOVA_GUEST, 'token');
-    component.isGuest = true;
     component.deviceWidth = 1001;
     component.helpUrl = 'help';
     userButton = await loader.getHarness(MatButtonHarness.with({selector: '#menu-button'}));
@@ -363,7 +357,6 @@ describe('HeaderComponent', () => {
 
   it('should display user menu with 7 items: AuthProvider: ARSNOVA_GUEST, isGuest: true, deviceWidth: 420', async () => {
     component.auth = new ClientAuthentication('1234', 'guest', AuthProvider.ARSNOVA_GUEST, 'token');
-    component.isGuest = true;
     component.deviceWidth = 420;
     component.helpUrl = 'help';
     component.privacyUrl = 'privacy';
