@@ -41,6 +41,8 @@ export class StepperComponent extends CdkStepper implements OnInit, OnDestroy {
   @Input() isPresentation = false;
   @Input() i18nPrefix: string;
   @Input() disabled = false;
+  @Input() additionalSteps = 0;
+  @Input() finished = false;
   headerPos = 0;
   containerAnimationState = 'current';
   headerAnimationState = 'init';
@@ -84,10 +86,15 @@ export class StepperComponent extends CdkStepper implements OnInit, OnDestroy {
   init(index: number, length: number) {
     this.onClick(index);
     if (index > 2 && length > 5) {
-      const diff = index < (length - 3) ? 2 : 5 - ((length - 1) - index);
+      const diff = index < (length - 3) ? 2 : 5 - ((length - 1 + this.additionalSteps) - index);
       this.headerPos = index - diff;
       this.moveHeaderRight();
     }
+  }
+
+  setHeaderPosition(stepIndex: number) {
+    const lastHeaderPos = this.listLength - 5 + this.additionalSteps;
+    this.headerPos = stepIndex < lastHeaderPos ? stepIndex : lastHeaderPos;
   }
 
   swipe(event: TouchEvent, when: string): void {
@@ -111,11 +118,15 @@ export class StepperComponent extends CdkStepper implements OnInit, OnDestroy {
 
   next(): void {
     if (!this.disabled) {
-      if (this.selectedIndex < this.listLength - 1) {
-        this.onClick(this.selectedIndex + 1);
-        setTimeout(() => {
-          document.getElementById('step').focus();
-        }, 300);
+      if (this.selectedIndex < this.listLength - (1 - this.additionalSteps)) {
+        if ((this.selectedIndex < this.listLength - 1) || this.finished) {
+          this.onClick(this.selectedIndex + 1);
+          setTimeout(() => {
+            document.getElementById('step').focus();
+          }, 300);
+        } else {
+          this.announceService.announce('statistic.a11y-no-more-questions');
+        }
       } else {
         this.announceService.announce('statistic.a11y-no-more-questions');
       }
@@ -154,7 +165,7 @@ export class StepperComponent extends CdkStepper implements OnInit, OnDestroy {
   }
 
   moveHeaderRight(clicked?: boolean) {
-    if (this.headerPos > 0 && ((this.nextIndex < this.listLength - 3) || clicked)) {
+    if (this.headerPos > 0 && ((this.nextIndex < this.listLength - 3 + this.additionalSteps) || clicked)) {
       if (Math.abs(this.nextIndex - this.selectedIndex) > 1 && (Math.abs(this.headerPos - this.nextIndex) < 1)
         && (this.headerPos > 1)) {
         this.headerPos -= 2;
@@ -166,7 +177,7 @@ export class StepperComponent extends CdkStepper implements OnInit, OnDestroy {
   }
 
   moveHeaderLeft(clicked?: boolean) {
-    if (this.headerPos  < this.listLength - 5 && (this.nextIndex > 2 || clicked)) {
+    if (this.headerPos  < this.listLength - (5 - this.additionalSteps) && (this.nextIndex > 2 || clicked)) {
       if ((Math.abs(this.nextIndex - this.selectedIndex) > 1) && (Math.abs(this.headerPos - this.nextIndex) > 3)
         && (this.headerPos < this.listLength - 6)) {
         this.headerPos += 2;

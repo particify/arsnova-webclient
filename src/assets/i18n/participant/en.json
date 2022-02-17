@@ -52,7 +52,8 @@
     "thanks-for-participation": "Thanks for your participation!",
     "all-contents-answered": "You have answered all contents in this series. Review your answers or return to the room overview.",
     "body-label": "Content {{index}}: No preview available",
-    "go-to-room-overview": "Go to room overview"
+    "go-to-room-overview": "Go to room overview",
+    "go-to-overview": "Go to overview"
   },
   "comment-list": {
     "a11y-search-list": "Search for posts",

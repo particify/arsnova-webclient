@@ -6,16 +6,23 @@
       {{ 'answer.a11y-message' | a11yIntro: { group: contentGroupName } | async }}
     </div>
     <app-stepper *ngIf="contents.length > 0" (newIndex)="updateURL($event)" [listLength]="contents.length"
-                 [completed]="alreadySent" [disabled]="guided" i18nPrefix="content">
+                 [completed]="alreadySent" [disabled]="guided" [additionalSteps]="additionalSteps" [finished]="finished" i18nPrefix="content">
       <cdk-step *ngFor="let content of contents; let i = index">
         <div tabindex="0" id="step" *ngIf="currentStep >= i - 1 && currentStep <= i + 1"
              appHotkey="1" [appHotkeyDisabled]="currentStep !== i" [appHotkeyTitle]="'content.description' | translate">
           <app-content-participant (answerChanged)="receiveSentStatus($event, i)" (next)="nextContent($event)"
                                    [content]="content" [answer]="answers[i]" [lastContent]="i === contents.length - 1"
                                    [active]="currentStep === i" [index]="i" [statsPublished]="contentGroup.statisticsPublished"
-                                   [correctOptionsPublished]="contentGroup.correctOptionsPublished">
+                                   [correctOptionsPublished]="contentGroup.correctOptionsPublished" [finished]="finished">
           </app-content-participant>
         </div>
+      </cdk-step>
+      <cdk-step>
+        <div id="step" *ngIf="currentStep === contents.length">
+          <app-series-results [group]="contentGroup" [contents]="contents" [hasAnsweredLastContent]="hasAnsweredLastContent"
+                              (newContentIndex)="goToContent($event)"></app-series-results>
+        </div>
+        <div tabindex="0" class="visually-hidden">{{ 'statistic.a11y-no-more-answers' | translate }}</div>
       </cdk-step>
     </app-stepper>
     <h3 *ngIf="!isLoading && !isReloading && contents.length === 0">{{ 'answer.questions-locked' | translate }}</h3>

@@ -23,6 +23,7 @@ export class ContentParticipantComponent implements OnInit {
   @Input() index: number;
   @Input() statsPublished: boolean;
   @Input() correctOptionsPublished: boolean;
+  @Input() finished: boolean;
   @Output() answerChanged = new EventEmitter<Answer>();
   @Output() next = new EventEmitter<boolean>();
 
@@ -98,4 +99,7 @@ export class ContentParticipantComponent implements OnInit {
     this.next.emit(last);
   }
 
+  goToOverview() {
+    this.goToNextContent(null);
+  }
 }
