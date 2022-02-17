@@ -5,6 +5,7 @@ import { BroadcastEvent } from '@arsnova/app/services/util/event.service';
 import { convertToParamMap, Event, ParamMap, Params } from '@angular/router';
 import { Theme } from '@arsnova/theme/Theme';
 import { EventEmitter } from '@angular/core';
+import { arsnova, arsnova_meta } from '../theme/arsnova-theme/arsnova-theme.const';
 
 // SERVICES - UTIL
 
@@ -162,5 +163,13 @@ export class MockThemeService {
 
   public activate(name) {
     this.activeTheme.next(name);
+  }
+
+  getCurrentThemeName() {
+    return 'ARSnova';
+  }
+
+  getThemeByKey(key: string) {
+    return new Theme(key, arsnova, arsnova_meta);
   }
 }

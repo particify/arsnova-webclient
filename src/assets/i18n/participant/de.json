@@ -48,7 +48,11 @@
     "groups": "Fragenserien",
     "next": "Nächster Inhalt",
     "previous": "Vorheriger Inhalt",
-    "description": "Inhaltsbeschreibung"
+    "description": "Inhaltsbeschreibung",
+    "thanks-for-participation": "Danke für deine Teilnahme!",
+    "all-contents-answered": "Du hast alle Inhalte dieser Serie beantwortet. Schaue dir deine Antworten noch einmal an oder kehre zur Raumübersicht zurück.",
+    "body-label": "Inhalt {{index}}: Keine Vorschau möglich",
+    "go-to-room-overview": "Zur Raumübersicht"
   },
   "comment-list": {
     "a11y-search-list": "Durchsuche die Beiträge",

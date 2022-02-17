@@ -13,6 +13,7 @@ import { RoomStatsService } from './room-stats.service';
 import { ContentGroupStatistics } from '../../models/content-group-statistics';
 import { CachingService } from '../util/caching.service';
 import { WsConnectorService } from '../websockets/ws-connector.service';
+import { AnswerResultOverview } from '../../models/answer-result';
 
 const httpOptions = {
   headers: new HttpHeaders({})
@@ -140,5 +141,12 @@ export class ContentGroupService extends AbstractEntityService<ContentGroup> {
     const formData = new FormData();
     formData.append('file', blob);
     return this.httpClient.post(connectionUrl, formData);
+  }
+
+  getAnswerStats(roomId: string, groupId: string, userId: string): Observable<AnswerResultOverview> {
+    const connectionUrl = this.buildUri(`/${groupId}/stats/user/${userId}`, roomId);
+    return this.http.get<AnswerResultOverview>(connectionUrl, httpOptions).pipe(
+      catchError(this.handleError<AnswerResultOverview>('getAnswerResultOverview'))
+    );
   }
 }
