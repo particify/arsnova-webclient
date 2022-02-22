@@ -1,9 +1,8 @@
 import { AfterViewInit, Component, ElementRef, Input, ViewChild } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
-import { UserService } from '../../../services/http/user.service';
 import { AdvancedSnackBarTypes, NotificationService } from '../../../services/util/notification.service';
-import { RegisterErrorStateMatcher } from '../register/register.component';
+import { FormErrorStateMatcher } from '../form-error-state-matcher/form-error-state-matcher';
 import { AutofillMonitor } from '@angular/cdk/text-field';
 
 enum Strength {
@@ -35,7 +34,7 @@ export class PasswordEntryComponent implements AfterViewInit {
 
   password: string;
   passwordFormControl = new FormControl('', [Validators.required, Validators.minLength(8), this.validatePasswordStrength()]);
-  matcher = new RegisterErrorStateMatcher();
+  matcher = new FormErrorStateMatcher();
   strength = 0;
   strengthLevels: typeof Strength = Strength;
   hidePw = true;
@@ -44,7 +43,6 @@ export class PasswordEntryComponent implements AfterViewInit {
   lastInput: string;
 
   constructor(private translationService: TranslateService,
-              public userService: UserService,
               public notificationService: NotificationService,
               private _autofill: AutofillMonitor) {}
 

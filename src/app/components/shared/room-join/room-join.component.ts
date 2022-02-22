@@ -3,7 +3,7 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { Room } from '../../../models/room';
 import { ActivatedRoute, Router } from '@angular/router';
-import { RegisterErrorStateMatcher } from '../../home/register/register.component';
+import { FormErrorStateMatcher } from '../../home/form-error-state-matcher/form-error-state-matcher';
 import { FormControl, Validators } from '@angular/forms';
 import { AdvancedSnackBarTypes, NotificationService } from '../../../services/util/notification.service';
 import { TranslateService } from '@ngx-translate/core';
@@ -26,7 +26,7 @@ export class RoomJoinComponent implements OnInit, OnDestroy {
   isDesktop: boolean;
 
   roomCodeFormControl = new FormControl('', [Validators.pattern(/[0-9\s]*/)]);
-  matcher = new RegisterErrorStateMatcher();
+  matcher = new FormErrorStateMatcher();
   destroy$ = new Subject<void>();
 
   constructor(

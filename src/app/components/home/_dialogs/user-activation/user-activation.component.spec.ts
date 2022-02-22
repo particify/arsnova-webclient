@@ -1,50 +1,35 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { UserActivationComponent } from './user-activation.component';
 
-import { CookiesComponent } from './cookies.component';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import {
   JsonTranslationLoader,
   MockNotificationService,
   MockMatDialogRef,
-  ActivatedRouteStub
+  ActivatedRouteStub,
+  MockEventService
 } from '@arsnova/testing/test-helpers';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 import { NotificationService } from '@arsnova/app/services/util/notification.service';
+import { EventService } from '@arsnova/app/services/util/event.service';
+import { UserService } from '@arsnova/app/services/http/user.service';
 
- describe('CookiesComponent', () => {
-  let component: CookiesComponent;
-  let fixture: ComponentFixture<CookiesComponent>;
+ describe('UserActivationComponent', () => {
+  let component: UserActivationComponent;
+  let fixture: ComponentFixture<UserActivationComponent>;
 
   const activatedRouteStub = new ActivatedRouteStub();
 
   const dialogData = {
-    categories: [
-      {
-        key: 'cat-1',
-        id: '1',
-        required: true,
-        consent: false
-      },
-      {
-        key: 'cat-2',
-        id: '2',
-        required: false,
-        consent: false
-      },
-      {
-        key: 'cat-3',
-        id: '3',
-        required: false,
-        consent: false
-      }
-    ],
-    privacyUrl: 'privacy'
+    activationKey: '1234'
   };
+
+  const mockUserService = jasmine.createSpyObj(['activate', 'resetActivation']);
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ CookiesComponent ],
+      declarations: [ UserActivationComponent ],
       imports: [
         TranslateModule.forRoot({
           loader: {
@@ -69,6 +54,14 @@ import { NotificationService } from '@arsnova/app/services/util/notification.ser
         {
           provide: NotificationService,
           useClass: MockNotificationService
+        },
+        {
+          provide: EventService,
+          useClass: MockEventService
+        },
+        {
+          provide: UserService,
+          useValue: mockUserService
         }
       ]
     })
@@ -76,7 +69,7 @@ import { NotificationService } from '@arsnova/app/services/util/notification.ser
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(CookiesComponent);
+    fixture = TestBed.createComponent(UserActivationComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

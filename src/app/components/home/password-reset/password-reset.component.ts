@@ -42,10 +42,8 @@ export class PasswordResetComponent implements OnInit {
 
 
   ngOnInit(): void {
-    this.route.params.subscribe(params => {
-      this.email = params['email'];
-      this.isLoading = false;
-    });
+    this.email = this.route.snapshot.params['email'];
+    this.isLoading = false;
   }
 
   setNewPassword(key: string) {
