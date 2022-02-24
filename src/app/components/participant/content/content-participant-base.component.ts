@@ -2,7 +2,6 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { NotificationService } from '../../../services/util/notification.service';
 import { TranslateService } from '@ngx-translate/core';
 import { LanguageService } from '../../../services/util/language.service';
-import { AuthenticationService } from '../../../services/http/authentication.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GlobalStorageService, STORAGE_KEYS } from '../../../services/util/global-storage.service';
 import { Answer } from '../../../models/answer';
@@ -21,7 +20,6 @@ export abstract class ContentParticipantBaseComponent implements OnInit {
   contentGroupName: string;
 
   protected constructor(
-    protected authenticationService: AuthenticationService,
     protected notificationService: NotificationService,
     protected translateService: TranslateService,
     protected langService: LanguageService,
@@ -35,10 +33,9 @@ export abstract class ContentParticipantBaseComponent implements OnInit {
   ngOnInit() {
     this.translateService.use(this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE));
     this.init();
-    this.route.params.subscribe(params => {
-      this.shortId = params['shortId'];
-      this.contentGroupName = params['seriesName'];
-    });
+    const params = this.route.snapshot.params;
+    this.shortId = params['shortId'];
+    this.contentGroupName = params['seriesName'];
     this.sendEvent.subscribe(send => {
       if (send === 'answer') {
         this.submitAnswer();

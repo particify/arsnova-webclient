@@ -4,7 +4,6 @@ import { TranslateService } from '@ngx-translate/core';
 import { ChoiceAnswer } from '../../../../models/choice-answer';
 import { ContentScale } from '../../../../models/content-scale';
 import { ContentType } from '../../../../models/content-type.enum';
-import { AuthenticationService } from '../../../../services/http/authentication.service';
 import { ContentAnswerService } from '../../../../services/http/content-answer.service';
 import { GlobalStorageService } from '../../../../services/util/global-storage.service';
 import { LanguageService } from '../../../../services/util/language.service';
@@ -31,17 +30,16 @@ export class ContentScaleParticipantComponent extends ContentParticipantBaseComp
   selectedAnswerIndex: number;
 
   constructor(
-    authenticationService: AuthenticationService,
     protected answerService: ContentAnswerService,
     protected notificationService: NotificationService,
     protected translateService: TranslateService,
-    langService: LanguageService,
-    route: ActivatedRoute,
-    globalStorageService: GlobalStorageService,
-    router: Router,
+    protected langService: LanguageService,
+    protected route: ActivatedRoute,
+    protected globalStorageService: GlobalStorageService,
+    protected router: Router,
     private likertScaleService: LikertScaleService
   ) {
-    super(authenticationService, notificationService, translateService, langService, route, globalStorageService, router);
+    super(notificationService, translateService, langService, route, globalStorageService, router);
   }
 
   init() {

@@ -6,14 +6,12 @@ import { ContentGroup } from '../../../models/content-group';
 import { TranslateService } from '@ngx-translate/core';
 import { StepperComponent } from '../../shared/stepper/stepper.component';
 import { ActivatedRoute, Router } from '@angular/router';
-import { RoomService } from '../../../services/http/room.service';
 import { GlobalStorageService, STORAGE_KEYS } from '../../../services/util/global-storage.service';
 import { AnnounceService } from '../../../services/util/announce.service';
 import { Location } from '@angular/common';
 import { ContentAnswerService } from '../../../services/http/content-answer.service';
 import { AuthenticationService } from '../../../services/http/authentication.service';
 import { Answer } from '../../../models/answer';
-import { RoutingService } from '../../../services/util/routing.service';
 import { AdvancedSnackBarTypes, NotificationService } from '../../../services/util/notification.service';
 import { ContentGroupService } from '../../../services/http/content-group.service';
 import { EventService } from '../../../services/util/event.service';
@@ -63,7 +61,6 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
   constructor(
     private contentService: ContentService,
     protected translateService: TranslateService,
-    protected roomService: RoomService,
     private contentgroupService: ContentGroupService,
     protected route: ActivatedRoute,
     private announceService: AnnounceService,
@@ -71,7 +68,6 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
     private location: Location,
     private answerService: ContentAnswerService,
     private authenticationService: AuthenticationService,
-    private routingService: RoutingService,
     private notificationService: NotificationService,
     private eventService: EventService,
     private router: Router
@@ -99,10 +95,11 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
 
   ngOnInit() {
     this.translateService.use(this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE));
-    const lastContentIndex = this.route.snapshot.params['contentIndex'] - 1;
-    this.contentGroupName = this.route.snapshot.params['seriesName'];
+    const params = this.route.snapshot.params;
+    const lastContentIndex = params['contentIndex'] - 1;
+    this.contentGroupName = params['seriesName'];
+    this.shortId = params['shortId'];
     this.route.data.subscribe(data => {
-      this.shortId = data.room.shortId;
       this.contentgroupService.getByRoomIdAndName(data.room.id, this.contentGroupName).subscribe(contentGroup => {
         this.contentGroup = contentGroup;
         this.getContents(lastContentIndex);

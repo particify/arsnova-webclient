@@ -7,7 +7,6 @@ import { TranslateService } from '@ngx-translate/core';
 import { LanguageService } from '../../../../services/util/language.service';
 import { ContentType } from '../../../../models/content-type.enum';
 import { EventService } from '../../../../services/util/event.service';
-import { AuthenticationService } from '../../../../services/http/authentication.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GlobalStorageService } from '../../../../services/util/global-storage.service';
 import { ContentParticipantBaseComponent } from '../content-participant-base.component';
@@ -30,7 +29,6 @@ export class ContentTextParticipantComponent extends ContentParticipantBaseCompo
   textAnswer = '';
 
   constructor(
-    protected authenticationService: AuthenticationService,
     protected answerService: ContentAnswerService,
     protected notificationService: NotificationService,
     protected translateService: TranslateService,
@@ -40,7 +38,7 @@ export class ContentTextParticipantComponent extends ContentParticipantBaseCompo
     protected globalStorageService: GlobalStorageService,
     protected router: Router
   ) {
-    super(authenticationService, notificationService, translateService, langService, route, globalStorageService, router);
+    super(notificationService, translateService, langService, route, globalStorageService, router);
   }
 
   init() {

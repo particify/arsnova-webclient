@@ -4,7 +4,6 @@ import { AdvancedSnackBarTypes, NotificationService } from '../../../../services
 import { ContentAnswerService } from '../../../../services/http/content-answer.service';
 import { ContentType } from '../../../../models/content-type.enum';
 import { TranslateService } from '@ngx-translate/core';
-import { AuthenticationService } from '../../../../services/http/authentication.service';
 import { AnswerOption } from '../../../../models/answer-option';
 import { ContentChoice } from '../../../../models/content-choice';
 import { ContentParticipantBaseComponent } from '../content-participant-base.component';
@@ -38,14 +37,13 @@ export class ContentSortParticipantComponent extends ContentParticipantBaseCompo
   constructor(protected answerService: ContentAnswerService,
               protected notificationService: NotificationService,
               protected translateService: TranslateService,
-              protected authenticationService: AuthenticationService,
               protected langService: LanguageService,
               protected route: ActivatedRoute,
               protected globalStorageService: GlobalStorageService,
               protected router: Router,
               private contentService: ContentService
   ) {
-    super(authenticationService, notificationService, translateService, langService, route, globalStorageService, router);
+    super(notificationService, translateService, langService, route, globalStorageService, router);
   }
 
   init() {

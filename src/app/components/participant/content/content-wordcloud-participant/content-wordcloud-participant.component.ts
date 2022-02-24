@@ -5,7 +5,6 @@ import { TranslateService } from '@ngx-translate/core';
 import { LanguageService } from '../../../../services/util/language.service';
 import { ContentType } from '../../../../models/content-type.enum';
 import { EventService } from '../../../../services/util/event.service';
-import { AuthenticationService } from '../../../../services/http/authentication.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GlobalStorageService } from '../../../../services/util/global-storage.service';
 import { ContentParticipantBaseComponent } from '../content-participant-base.component';
@@ -17,7 +16,7 @@ import { ContentWordcloud } from '../../../../models/content-wordcloud';
   templateUrl: './content-wordcloud-participant.component.html',
   styleUrls: ['./content-wordcloud-participant.component.scss']
 })
-export class ContentWordcloudComponent extends ContentParticipantBaseComponent {
+export class ContentWordcloudParticipantComponent extends ContentParticipantBaseComponent {
 
   @Input() content: ContentWordcloud;
   @Input() answer: MultipleTextsAnswer;
@@ -33,7 +32,6 @@ export class ContentWordcloudComponent extends ContentParticipantBaseComponent {
   currentInputIndex: number;
 
   constructor(
-    protected authenticationService: AuthenticationService,
     protected answerService: ContentAnswerService,
     protected notificationService: NotificationService,
     protected translateService: TranslateService,
@@ -43,7 +41,7 @@ export class ContentWordcloudComponent extends ContentParticipantBaseComponent {
     protected globalStorageService: GlobalStorageService,
     protected router: Router
   ) {
-    super(authenticationService, notificationService, translateService, langService, route, globalStorageService, router);
+    super(notificationService, translateService, langService, route, globalStorageService, router);
   }
 
   init() {

@@ -6,7 +6,6 @@ import { ChoiceAnswer } from '../../../../models/choice-answer';
 import { ContentType } from '../../../../models/content-type.enum';
 import { TranslateService } from '@ngx-translate/core';
 import { LanguageService } from '../../../../services/util/language.service';
-import { AuthenticationService } from '../../../../services/http/authentication.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GlobalStorageService } from '../../../../services/util/global-storage.service';
 import { ContentParticipantBaseComponent } from '../content-participant-base.component';
@@ -40,7 +39,6 @@ export class ContentChoiceParticipantComponent extends ContentParticipantBaseCom
   allAnswers = '';
 
   constructor(
-    protected authenticationService: AuthenticationService,
     protected answerService: ContentAnswerService,
     protected notificationService: NotificationService,
     protected translateService: TranslateService,
@@ -50,7 +48,7 @@ export class ContentChoiceParticipantComponent extends ContentParticipantBaseCom
     protected router: Router,
     private contentService: ContentService
   ) {
-    super(authenticationService, notificationService, translateService, langService, route, globalStorageService, router);
+    super(notificationService, translateService, langService, route, globalStorageService, router);
   }
 
   init() {

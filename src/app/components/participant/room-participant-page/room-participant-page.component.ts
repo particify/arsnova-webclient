@@ -14,7 +14,6 @@ import { EventService } from '../../../services/util/event.service';
 import { NotificationService } from '../../../services/util/notification.service';
 import { Message } from '@stomp/stompjs';
 import { Subscription } from 'rxjs';
-import { WsFeedbackService } from '../../../services/websockets/ws-feedback.service';
 import { GlobalStorageService, STORAGE_KEYS } from '../../../services/util/global-storage.service';
 import { UserRole } from '../../../models/user-roles.enum';
 import { FeedbackMessageType } from '../../../models/messages/feedback-message-type';
@@ -49,7 +48,6 @@ export class RoomParticipantPageComponent extends RoomPageComponent implements O
     protected contentService: ContentService,
     protected authenticationService: AuthenticationService,
     public eventService: EventService,
-    private wsFeedbackService: WsFeedbackService,
     protected globalStorageService: GlobalStorageService,
     private feedbackService: FeedbackService
   ) {

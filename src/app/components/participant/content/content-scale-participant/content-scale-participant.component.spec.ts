@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { ContentTextParticipantComponent } from './content-text-participant.component';
+import { ContentScaleParticipantComponent } from './content-scale-participant.component';
 import { ActivatedRoute, ActivatedRouteSnapshot, Router } from '@angular/router';
 import { NotificationService } from '@arsnova/app/services/util/notification.service';
 import { LanguageService } from '@arsnova/app/services/util/language.service';
@@ -10,24 +10,28 @@ import {
   MockNotificationService,
   ActivatedRouteStub,
   MockGlobalStorageService,
-  MockRouter,
-  MockEventService
+  MockRouter
 } from '@arsnova/testing/test-helpers';
 import { of } from 'rxjs';
 import { GlobalStorageService } from '@arsnova/app/services/util/global-storage.service';
 import { ContentAnswerService } from '@arsnova/app/services/http/content-answer.service';
+import { ContentService } from '@arsnova/app/services/http/content.service';
 import { EventEmitter } from '@angular/core';
-import { ContentText } from '@arsnova/app/models/content-text';
-import { ContentType } from '@arsnova/app/models/content-type.enum';
-import { ContentState } from '@arsnova/app/models/content-state';
-import { EventService } from '@arsnova/app/services/util/event.service';
+import { LikertScaleService } from '@arsnova/app/services/util/likert-scale.service';
+import { ContentScale } from '@arsnova/app/models/content-scale';
+import { LikertScaleTemplate } from '@arsnova/app/models/likert-scale-template.enum';
 
 
-describe('ContentTextParticipantComponent', () => {
-  let component: ContentTextParticipantComponent;
-  let fixture: ComponentFixture<ContentTextParticipantComponent>;
+describe('ContentScaleParticipantComponent', () => {
+  let component: ContentScaleParticipantComponent;
+  let fixture: ComponentFixture<ContentScaleParticipantComponent>;
 
-  const mockContentAnswerService = jasmine.createSpyObj(['addAnswerText']);
+  const mockContentAnswerService = jasmine.createSpyObj(['addAnswerChoice']);
+
+  const mockContentService = jasmine.createSpyObj(['getCorrectChoiceIndexes']);
+
+  const mockLikertScaleService = jasmine.createSpyObj(['getOptionLabels']);
+  mockLikertScaleService.getOptionLabels.and.returnValue([]);
 
   const snapshot = new ActivatedRouteSnapshot();
 
@@ -42,7 +46,7 @@ describe('ContentTextParticipantComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ ContentTextParticipantComponent ],
+      declarations: [ ContentScaleParticipantComponent ],
       imports: [
         TranslateModule.forRoot({
           loader: {
@@ -78,8 +82,12 @@ describe('ContentTextParticipantComponent', () => {
           useClass: MockRouter
         },
         {
-          provide: EventService,
-          useClass: MockEventService
+          provide: ContentService,
+          useValue: mockContentService
+        },
+        {
+          provide: LikertScaleService,
+          useValue: mockLikertScaleService
         }
       ]
     })
@@ -87,9 +95,9 @@ describe('ContentTextParticipantComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ContentTextParticipantComponent);
+    fixture = TestBed.createComponent(ContentScaleParticipantComponent);
     component = fixture.componentInstance;
-    component.content = new ContentText('1234', '1', '1234', 'subject', 'body', [], ContentType.TEXT, new ContentState(1, new Date(), false));
+    component.content = new ContentScale(LikertScaleTemplate.AGREEMENT, 5);
     component.sendEvent = new EventEmitter<string>();
     fixture.detectChanges();
   });
