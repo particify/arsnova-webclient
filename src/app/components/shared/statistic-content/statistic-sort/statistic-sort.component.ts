@@ -13,7 +13,6 @@ import {
 } from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { StatisticContentBaseComponent } from '../statistic-content-base';
-import { ActivatedRoute } from '@angular/router';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { ThemeService } from '../../../../../theme/theme.service';
@@ -51,12 +50,11 @@ export class StatisticSortComponent extends StatisticContentBaseComponent implem
   grey: string;
 
   constructor(protected contentService: ContentService,
-              protected route: ActivatedRoute,
               private themeService: ThemeService,
               private translateService: TranslateService,
               protected eventService: EventService,
               private presentationService: PresentationService) {
-    super(route, contentService, eventService);
+    super(contentService, eventService);
   }
 
   ngOnDestroy() {

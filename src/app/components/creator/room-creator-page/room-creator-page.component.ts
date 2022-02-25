@@ -40,7 +40,7 @@ export class RoomCreatorPageComponent extends RoomPageComponent implements OnIni
     protected roomService: RoomService,
     protected roomStatsService: RoomStatsService,
     protected contentGroupService: ContentGroupService,
-    protected notification: NotificationService,
+    protected notificationService: NotificationService,
     protected route: ActivatedRoute,
     protected router: Router,
     protected location: Location,
@@ -56,8 +56,8 @@ export class RoomCreatorPageComponent extends RoomPageComponent implements OnIni
     protected globalStorageService: GlobalStorageService,
     private hotkeyService: HotkeyService
   ) {
-    super(roomService, roomStatsService, contentGroupService, route, router, location, wsCommentService,
-      commentService, eventService, contentService, translateService, notification, globalStorageService);
+    super(roomStatsService, contentGroupService, route, wsCommentService,
+      commentService, eventService, translateService, globalStorageService);
     langService.langEmitter.subscribe(lang => translateService.use(lang));
   }
 

@@ -151,6 +151,11 @@ export class MockRouter {
 // NotificationService
 
 export class MockNotificationService {
+  show() {
+  }
+
+  showAdvanced() {
+  }
 }
 
 // LangService
@@ -183,6 +188,30 @@ export class MockThemeService {
 
   getThemeByKey(key: string) {
     return new Theme(key, arsnova, arsnova_meta);
+  }
+
+  getCurrentThemeName() {
+    return 'arsnova';
+  }
+
+  getBarColors() {
+    return [
+      {
+        color: '#FFFFFFF',
+        name: 'test',
+        attr: 'attr'
+      }
+    ];
+  }
+
+  getLikertColors() {
+    return [
+      {
+        color: '#FFFFFFF',
+        name: 'test',
+        attr: 'attr'
+      }
+    ];
   }
 }
 

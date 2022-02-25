@@ -1,21 +1,17 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { YesNoDialogComponent } from './yes-no-dialog.component';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { JsonTranslationLoader, MockMatDialogRef } from '@arsnova/testing/test-helpers';
+import { AnswerCountComponent } from './answer-count.component';
+import { JsonTranslationLoader, MockEventService } from '@arsnova/testing/test-helpers';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { EventService } from '@arsnova/app/services/util/event.service';
 
-describe('YesNoDialogComponent', () => {
-  let component: YesNoDialogComponent;
-  let fixture: ComponentFixture<YesNoDialogComponent>;
-
-  const mockMatDialogData = {
-    section: 'section'
-  }
+describe('AnswerCountComponent', () => {
+  let component: AnswerCountComponent;
+  let fixture: ComponentFixture<AnswerCountComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [
-        YesNoDialogComponent
+        AnswerCountComponent
       ],
       imports: [
         TranslateModule.forRoot({
@@ -28,12 +24,8 @@ describe('YesNoDialogComponent', () => {
       ],
       providers: [
         {
-          provide: MatDialogRef,
-          useClass: MockMatDialogRef
-        },
-        {
-          provide: MAT_DIALOG_DATA,
-          useValue: mockMatDialogData
+          provide: EventService,
+          useClass: MockEventService
         }
       ]
     })
@@ -41,7 +33,7 @@ describe('YesNoDialogComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(YesNoDialogComponent);
+    fixture = TestBed.createComponent(AnswerCountComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

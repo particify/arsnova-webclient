@@ -1,17 +1,13 @@
 import { AfterContentInit, Component, OnInit } from '@angular/core';
 import { Room } from '../../../models/room';
 import { RoomPageComponent } from '../../shared/room-page/room-page.component';
-import { Location } from '@angular/common';
-import { RoomService } from '../../../services/http/room.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { LanguageService } from '../../../services/util/language.service';
 import { WsCommentService } from '../../../services/websockets/ws-comment.service';
 import { CommentService } from '../../../services/http/comment.service';
-import { ContentService } from '../../../services/http/content.service';
 import { AuthenticationService } from '../../../services/http/authentication.service';
 import { EventService } from '../../../services/util/event.service';
-import { NotificationService } from '../../../services/util/notification.service';
 import { Message } from '@stomp/stompjs';
 import { Subscription } from 'rxjs';
 import { GlobalStorageService, STORAGE_KEYS } from '../../../services/util/global-storage.service';
@@ -34,25 +30,20 @@ export class RoomParticipantPageComponent extends RoomPageComponent implements O
   surveyEnabled = false;
 
   constructor(
-    protected location: Location,
-    protected roomService: RoomService,
     protected roomStatsService: RoomStatsService,
     protected contentGroupService: ContentGroupService,
     protected route: ActivatedRoute,
-    protected router: Router,
-    protected notificationService: NotificationService,
     protected translateService: TranslateService,
     protected langService: LanguageService,
     protected wsCommentService: WsCommentService,
     protected commentService: CommentService,
-    protected contentService: ContentService,
     protected authenticationService: AuthenticationService,
     public eventService: EventService,
     protected globalStorageService: GlobalStorageService,
     private feedbackService: FeedbackService
   ) {
-    super(roomService, roomStatsService, contentGroupService, route, router, location, wsCommentService,
-      commentService, eventService, contentService, translateService, notificationService, globalStorageService);
+    super(roomStatsService, contentGroupService, route, wsCommentService,
+      commentService, eventService, translateService, globalStorageService);
     langService.langEmitter.subscribe(lang => translateService.use(lang));
   }
 

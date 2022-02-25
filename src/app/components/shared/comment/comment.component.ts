@@ -5,13 +5,11 @@ import 'dayjs/locale/de';
 import { Comment } from '../../../models/comment';
 import { Vote } from '../../../models/vote';
 import { AuthenticationService } from '../../../services/http/authentication.service';
-import { ActivatedRoute, Router } from '@angular/router';
-import { Location } from '@angular/common';
+import { ActivatedRoute } from '@angular/router';
 import { CommentService } from '../../../services/http/comment.service';
 import { AdvancedSnackBarTypes, NotificationService } from '../../../services/util/notification.service';
 import { TranslateService } from '@ngx-translate/core';
 import { LanguageService } from '../../../services/util/language.service';
-import { WsCommentService } from '../../../services/websockets/ws-comment.service';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { CorrectWrong } from '../../../models/correct-wrong.enum';
 import { UserRole } from '../../../models/user-roles.enum';
@@ -82,15 +80,12 @@ export class CommentComponent implements OnInit, OnDestroy {
   constructor(
     protected authenticationService: AuthenticationService,
     private route: ActivatedRoute,
-    protected router: Router,
-    private location: Location,
     private commentService: CommentService,
     private voteService: VoteService,
     private notification: NotificationService,
     private translateService: TranslateService,
     private dialogService: DialogService,
     protected langService: LanguageService,
-    private wsCommentService: WsCommentService,
     private announceService: AnnounceService,
     private globalStorageService: GlobalStorageService,
     public dialog: MatDialog,

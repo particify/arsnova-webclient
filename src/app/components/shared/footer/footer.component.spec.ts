@@ -2,7 +2,8 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { FooterComponent } from './footer.component';
 import {
-  ActivatedRouteStub, JsonTranslationLoader,
+  ActivatedRouteStub,
+  JsonTranslationLoader,
   MockLangService,
   MockRouter
 } from '@arsnova/testing/test-helpers';
@@ -16,7 +17,6 @@ import { MatMenuModule } from '@angular/material/menu';
 import { By } from '@angular/platform-browser';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { ExtensionPointModule } from '../../../../../projects/extension-point/src/lib/extension-point.module';
-import { RouterTestingModule } from '@angular/router/testing';
 
 describe('FooterComponent', () => {
   let component: FooterComponent;

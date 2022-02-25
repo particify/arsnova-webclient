@@ -15,7 +15,6 @@ import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { HttpClient } from '@angular/common/http';
 import { ContentPresentationComponent } from './content-presentation/content-presentation.component';
 import { AccessComponent } from './settings/access/access.component';
-import { BonusTokenComponent } from './settings/bonus-token/bonus-token.component';
 import { CommentSettingsComponent } from './settings/comment-settings/comment-settings.component';
 import { ContentGroupCreationComponent } from './_dialogs/content-group-creation/content-group-creation.component';
 import { SettingsComponent } from './settings/settings.component';
@@ -34,8 +33,8 @@ import { ContentFlashcardCreationComponent } from './content-creation/content-fl
 import { ContentWordcloudCreationComponent } from './content-creation/content-wordcloud-creation/content-wordcloud-creation.component';
 import { ExportComponent } from './_dialogs/export/export.component';
 import { DialogService } from '../../services/util/dialog.service';
-import { RemindOfTokensComponent } from './_dialogs/remind-of-tokens/remind-of-tokens.component';
 import { StatisticHelpComponent } from './_dialogs/statistic-help/statistic-help.component';
+import { PublishContentComponent } from './_dialogs/publish-content/publish-content.component';
 
 @NgModule({
   imports: [
@@ -70,7 +69,6 @@ import { StatisticHelpComponent } from './_dialogs/statistic-help/statistic-help
     LooseContentComponent,
     ContentPresentationComponent,
     AccessComponent,
-    BonusTokenComponent,
     CommentSettingsComponent,
     ContentGroupCreationComponent,
     SettingsComponent,
@@ -82,8 +80,8 @@ import { StatisticHelpComponent } from './_dialogs/statistic-help/statistic-help
     ContentFlashcardCreationComponent,
     ContentWordcloudCreationComponent,
     ExportComponent,
-    RemindOfTokensComponent,
-    StatisticHelpComponent
+    StatisticHelpComponent,
+    PublishContentComponent
   ],
   exports: [
     ContentPresentationComponent

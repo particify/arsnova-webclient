@@ -1,15 +1,15 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { JsonTranslationLoader } from '@arsnova/testing/test-helpers';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
-import { HintComponent } from './hint.component';
+import { WordcloudComponent } from './wordcloud.component';
 
-describe('HintComponent', () => {
-  let component: HintComponent;
-  let fixture: ComponentFixture<HintComponent>;
+describe('WordcloudComponent', () => {
+  let component: WordcloudComponent;
+  let fixture: ComponentFixture<WordcloudComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ HintComponent ],
+      declarations: [ WordcloudComponent ],
       imports: [
         TranslateModule.forRoot({
           loader: {
@@ -24,7 +24,7 @@ describe('HintComponent', () => {
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(HintComponent);
+    fixture = TestBed.createComponent(WordcloudComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { StatisticSortComponent } from './statistic-sort.component';
+import { StatisticWordcloudComponent } from './statistic-wordcloud.component';
 import { EventService } from '@arsnova/app/services/util/event.service';
 import { ContentService } from '@arsnova/app/services/http/content.service';
 import { ThemeService } from '@arsnova/theme/theme.service';
@@ -12,9 +12,9 @@ import { of } from 'rxjs';
 import { RoundStatistics } from '@arsnova/app/models/round-statistics';
 import { AnswerStatistics } from '@arsnova/app/models/answer-statistics';
 
-describe('StatisticSortComponent', () => {
-  let component: StatisticSortComponent;
-  let fixture: ComponentFixture<StatisticSortComponent>;
+describe('StatisticWordcloudComponent', () => {
+  let component: StatisticWordcloudComponent;
+  let fixture: ComponentFixture<StatisticWordcloudComponent>;
 
   const mockContentService = jasmine.createSpyObj(['getAnswersChangedStream', 'getAnswer']);
   const roundStatistics = new RoundStatistics();
@@ -39,7 +39,7 @@ describe('StatisticSortComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ StatisticSortComponent ],
+      declarations: [ StatisticWordcloudComponent ],
       imports: [
         TranslateModule.forRoot({
           loader: {
@@ -68,9 +68,9 @@ describe('StatisticSortComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(StatisticSortComponent);
+    fixture = TestBed.createComponent(StatisticWordcloudComponent);
     component = fixture.componentInstance;
-    component.content = new ContentChoice('1234', '0', 'room1234', 'subject', 'body', [], [], [], false, ContentType.SORT, new ContentState(1, new Date(), false));
+    component.content = new ContentChoice('1234', '0', 'room1234', 'subject', 'body', [], [], [], false, ContentType.WORDCLOUD, new ContentState(1, new Date(), false));
     fixture.detectChanges();
   });
 

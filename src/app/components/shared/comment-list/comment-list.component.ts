@@ -9,7 +9,6 @@ import { ClientAuthentication } from '../../../models/client-authentication';
 import { Vote } from '../../../models/vote';
 import { UserRole } from '../../../models/user-roles.enum';
 import { Room } from '../../../models/room';
-import { RoomService } from '../../../services/http/room.service';
 import { VoteService } from '../../../services/http/vote.service';
 import { AdvancedSnackBarTypes, NotificationService } from '../../../services/util/notification.service';
 import { CorrectWrong } from '../../../models/correct-wrong.enum';
@@ -131,7 +130,6 @@ export class CommentListComponent implements OnInit, OnDestroy {
     private dialogService: DialogService,
     protected langService: LanguageService,
     private wsCommentService: WsCommentService,
-    protected roomService: RoomService,
     protected voteService: VoteService,
     private notificationService: NotificationService,
     public eventService: EventService,

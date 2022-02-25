@@ -4,14 +4,11 @@ import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dial
 import { UpdateAvailableEvent } from '@angular/service-worker';
 import { Observable } from 'rxjs';
 import { YesNoDialogComponent } from '../../components/shared/_dialogs/yes-no-dialog/yes-no-dialog.component';
-import { InfoDialogComponent } from '../../components/shared/_dialogs/info-dialog/info-dialog.component';
 import { ContentGroupCreationComponent } from '../../components/creator/_dialogs/content-group-creation/content-group-creation.component';
 import { ClientAuthentication } from '../../models/client-authentication';
 import { CreateCommentComponent } from '../../components/shared/_dialogs/create-comment/create-comment.component';
-// import { RemindOfTokensComponent } from '../../components/shared/_dialogs/remind-of-tokens/remind-of-tokens.component';
 import { RoomCreateComponent } from '../../components/shared/_dialogs/room-create/room-create.component';
 import { StatisticHelpComponent } from '../../components/creator/_dialogs/statistic-help/statistic-help.component';
-// import { UserBonusTokenComponent } from '../../components/shared/_dialogs/user-bonus-token/user-bonus-token.component';
 import { OverlayComponent } from '../../components/home/_dialogs/overlay/overlay.component';
 import { UserActivationComponent } from '../../components/home/_dialogs/user-activation/user-activation.component';
 import { UpdateInfoComponent } from '../../components/shared/_dialogs/update-info/update-info.component';
@@ -68,17 +65,6 @@ export class DialogService {
     });
   }
 
-  openInfoDialog(section: string, body: string): void {
-    this.openDialog(InfoDialogComponent, {
-      maxWidth: this.size.max,
-      width: this.size.xlarge,
-      data: {
-        section: section,
-        body: body
-      }
-    });
-  }
-
   openContentGroupCreationDialog(): MatDialogRef<ContentGroupCreationComponent> {
     return this.openDialog(ContentGroupCreationComponent, {
       width: this.size.small
@@ -102,14 +88,6 @@ export class DialogService {
     });
   }
 
-  /*
-  openTokenReminderDialog(): MatDialogRef<RemindOfTokensComponent> {
-    return this.dialog.open(RemindOfTokensComponent, {
-      width: this.size.medium
-    });
-  }
-  */
-
   openRoomCreateDialog(): void {
     this.openDialog(RoomCreateComponent, {
       width: this.size.xsmall
@@ -121,18 +99,6 @@ export class DialogService {
       width: this.size.xsmall
     });
   }
-
-  /*
-  openBonusTokenDialog(userId: string, roomId: string): void {
-    const dialogRef = this.dialog.open(UserBonusTokenComponent, {
-      width: this.size.medium,
-      data: {
-        userId: userId,
-        roomId: roomId
-      }
-    });
-  }
-  */
 
   openOverlayDialog(): MatDialogRef<OverlayComponent> {
     return this.openDialog(OverlayComponent);

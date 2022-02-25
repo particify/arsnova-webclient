@@ -26,7 +26,7 @@ export const HINTS: Hint[] = [
 export class HintComponent implements OnInit {
 
   @Input() text: string;
-  @Input() type: HINT_TYPES;
+  @Input() type: HINT_TYPES = HINT_TYPES.WARNING;
 
   hint: Hint;
 

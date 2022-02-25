@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { forkJoin } from 'rxjs';
 import { ThemeService } from '../../../../../theme/theme.service';
@@ -18,16 +17,14 @@ import { GlobalStorageService } from '../../../../services/util/global-storage.s
 })
 export class StatisticScaleComponent extends StatisticChoiceComponent {
   constructor(
-    protected route: ActivatedRoute,
     protected contentService: ContentService,
     protected translateService: TranslateService,
     protected themeService: ThemeService,
     protected eventService: EventService,
     protected presentationService: PresentationService,
     protected globalStorageService: GlobalStorageService,
-    private likertScaleService: LikertScaleService
-  ) {
-    super(route, contentService, translateService, themeService, eventService, presentationService, globalStorageService);
+    private likertScaleService: LikertScaleService) {
+    super(contentService, translateService, themeService, eventService, presentationService, globalStorageService);
   }
 
   init() {

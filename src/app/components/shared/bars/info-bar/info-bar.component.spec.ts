@@ -1,15 +1,17 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { InfoBarComponent } from './info-bar.component';
 import { JsonTranslationLoader } from '@arsnova/testing/test-helpers';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
-import { HintComponent } from './hint.component';
 
-describe('HintComponent', () => {
-  let component: HintComponent;
-  let fixture: ComponentFixture<HintComponent>;
+describe('InfoBarComponent', () => {
+  let component: InfoBarComponent;
+  let fixture: ComponentFixture<InfoBarComponent>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      declarations: [ HintComponent ],
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      declarations: [
+        InfoBarComponent
+      ],
       imports: [
         TranslateModule.forRoot({
           loader: {
@@ -21,10 +23,10 @@ describe('HintComponent', () => {
       ]
     })
     .compileComponents();
-  });
+  }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(HintComponent);
+    fixture = TestBed.createComponent(InfoBarComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

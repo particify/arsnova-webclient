@@ -12,7 +12,7 @@ import { InfoBarItem } from '../../shared/bars/info-bar/info-bar.component';
 import { EventService } from '../../../services/util/event.service';
 import { ContentGroup } from '../../../models/content-group';
 import { DialogService } from '../../../services/util/dialog.service';
-import { PublishContentComponent } from '../../shared/_dialogs/publish-content/publish-content.component';
+import { PublishContentComponent } from '../_dialogs/publish-content/publish-content.component';
 import { ContentType } from '../../../models/content-type.enum';
 import { HotkeyService } from '../../../services/util/hotkey.service';
 import { RemoteMessage } from '../../../models/events/remote/remote-message.enum';

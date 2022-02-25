@@ -1,8 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 import { ContentService } from '../../../../services/http/content.service';
 import { TranslateService } from '@ngx-translate/core';
-import { LanguageService } from '../../../../services/util/language.service';
 import { ContentText } from '../../../../models/content-text';
 import { ContentAnswerService } from '../../../../services/http/content-answer.service';
 import { TextAnswer } from '../../../../models/text-answer';
@@ -34,13 +32,11 @@ export class StatisticTextComponent extends StatisticContentBaseComponent implem
   abstentionCount = 0;
 
   constructor(
-    protected route: ActivatedRoute,
     protected contentService: ContentService,
     private contentAnswerService: ContentAnswerService,
     private translateService: TranslateService,
-    protected langService: LanguageService,
     protected eventService: EventService) {
-    super(route, contentService, eventService);
+    super(contentService, eventService);
   }
 
   loadData(): Observable<TextAnswer[]> {

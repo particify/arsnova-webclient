@@ -5,7 +5,6 @@ import { Observable } from 'rxjs';
 import { VersionInfo } from '../../../../models/version-info';
 import { ApiConfigService } from '../../../../services/http/api-config.service';
 import { GlobalStorageService, STORAGE_KEYS } from '../../../../services/util/global-storage.service';
-import { EventService } from '../../../../services/util/event.service';
 
 interface DialogData {
   afterUpdate: boolean;

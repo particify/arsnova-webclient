@@ -1,20 +1,19 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ListBadgeComponent } from './list-badge.component';
 
-import { PageNotFoundComponent } from './page-not-found.component';
-
-describe('PageNotFoundComponent', () => {
-  let component: PageNotFoundComponent;
-  let fixture: ComponentFixture<PageNotFoundComponent>;
+describe('ListBadgeComponent', () => {
+  let component: ListBadgeComponent;
+  let fixture: ComponentFixture<ListBadgeComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ PageNotFoundComponent ]
+      declarations: [ ListBadgeComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(PageNotFoundComponent);
+    fixture = TestBed.createComponent(ListBadgeComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -1,21 +1,21 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { YesNoDialogComponent } from './yes-no-dialog.component';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { JsonTranslationLoader, MockMatDialogRef } from '@arsnova/testing/test-helpers';
+import { HotkeysComponent } from './hotkeys.component';
+import { JsonTranslationLoader } from '@arsnova/testing/test-helpers';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 
-describe('YesNoDialogComponent', () => {
-  let component: YesNoDialogComponent;
-  let fixture: ComponentFixture<YesNoDialogComponent>;
+describe('HotkeysComponent', () => {
+  let component: HotkeysComponent;
+  let fixture: ComponentFixture<HotkeysComponent>;
 
-  const mockMatDialogData = {
-    section: 'section'
-  }
+  const mockDialogData = {
+    hotkeys: []
+  };
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [
-        YesNoDialogComponent
+        HotkeysComponent
       ],
       imports: [
         TranslateModule.forRoot({
@@ -28,12 +28,8 @@ describe('YesNoDialogComponent', () => {
       ],
       providers: [
         {
-          provide: MatDialogRef,
-          useClass: MockMatDialogRef
-        },
-        {
           provide: MAT_DIALOG_DATA,
-          useValue: mockMatDialogData
+          useValue: mockDialogData
         }
       ]
     })
@@ -41,7 +37,7 @@ describe('YesNoDialogComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(YesNoDialogComponent);
+    fixture = TestBed.createComponent(HotkeysComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

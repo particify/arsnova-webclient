@@ -5,7 +5,6 @@ import { RoomCreated } from '../../../../models/events/room-created';
 import { Router } from '@angular/router';
 import { AdvancedSnackBarTypes, NotificationService } from '../../../../services/util/notification.service';
 import { MatDialogRef } from '@angular/material/dialog';
-import { ContentService } from '../../../../services/http/content.service';
 import { AuthenticationService } from '../../../../services/http/authentication.service';
 import { TranslateService } from '@ngx-translate/core';
 import { EventService } from '../../../../services/util/event.service';
@@ -33,7 +32,6 @@ export class RoomCreateComponent implements OnInit {
 
   constructor(
     private roomService: RoomService,
-    private contentService: ContentService,
     private router: Router,
     private notification: NotificationService,
     public dialogRef: MatDialogRef<RoomCreateComponent>,

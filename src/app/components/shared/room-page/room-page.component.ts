@@ -2,17 +2,13 @@ import { Component, OnDestroy } from '@angular/core';
 import { Room } from '../../../models/room';
 import { ContentGroup } from '../../../models/content-group';
 import { RoomStats } from '../../../models/room-stats';
-import { RoomService } from '../../../services/http/room.service';
-import { ActivatedRoute, Router } from '@angular/router';
-import { Location } from '@angular/common';
+import { ActivatedRoute } from '@angular/router';
 import { WsCommentService } from '../../../services/websockets/ws-comment.service';
 import { CommentService } from '../../../services/http/comment.service';
 import { EventService } from '../../../services/util/event.service';
 import { IMessage, Message } from '@stomp/stompjs';
 import { Observable, Subscription } from 'rxjs';
-import { ContentService } from '../../../services/http/content.service';
 import { TranslateService } from '@ngx-translate/core';
-import { NotificationService } from '../../../services/util/notification.service';
 import { GlobalStorageService, STORAGE_KEYS } from '../../../services/util/global-storage.service';
 import { UserRole } from '../../../models/user-roles.enum';
 import { InfoBarItem } from '../bars/info-bar/info-bar.component';
@@ -22,7 +18,7 @@ import { DataChanged } from '../../../models/events/data-changed';
 
 @Component({
   selector: 'app-room-page',
-  templateUrl: './room-page.component.html',
+  template: '',
   styleUrls: ['./room-page.component.scss']
 })
 export class RoomPageComponent implements OnDestroy {
@@ -45,18 +41,13 @@ export class RoomPageComponent implements OnDestroy {
   onChangeSubscription: Subscription;
 
   constructor(
-    protected roomService: RoomService,
     protected roomStatsService: RoomStatsService,
     protected contentGroupService: ContentGroupService,
     protected route: ActivatedRoute,
-    protected router: Router,
-    protected location: Location,
     protected wsCommentService: WsCommentService,
     protected commentService: CommentService,
     protected eventService: EventService,
-    protected contentService: ContentService,
     protected translateService: TranslateService,
-    protected notificationService: NotificationService,
     protected globalStorageService: GlobalStorageService
   ) {
   }
@@ -154,11 +145,6 @@ export class RoomPageComponent implements OnDestroy {
         }
       });
     }
-  }
-
-  delete(room: Room): void {
-    this.roomService.deleteRoom(room.id).subscribe();
-    this.location.back();
   }
 
   prepareAttachmentData(role: UserRole) {

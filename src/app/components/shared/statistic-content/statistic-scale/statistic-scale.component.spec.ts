@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { StatisticSortComponent } from './statistic-sort.component';
+import { StatisticScaleComponent } from './statistic-scale.component';
 import { EventService } from '@arsnova/app/services/util/event.service';
 import { ContentService } from '@arsnova/app/services/http/content.service';
 import { ThemeService } from '@arsnova/theme/theme.service';
@@ -9,12 +9,13 @@ import { ContentChoice } from '@arsnova/app/models/content-choice';
 import { ContentType } from '@arsnova/app/models/content-type.enum';
 import { ContentState } from '@arsnova/app/models/content-state';
 import { of } from 'rxjs';
+import { LikertScaleService } from '@arsnova/app/services/util/likert-scale.service';
 import { RoundStatistics } from '@arsnova/app/models/round-statistics';
 import { AnswerStatistics } from '@arsnova/app/models/answer-statistics';
 
-describe('StatisticSortComponent', () => {
-  let component: StatisticSortComponent;
-  let fixture: ComponentFixture<StatisticSortComponent>;
+describe('StatisticScaleComponent', () => {
+  let component: StatisticScaleComponent;
+  let fixture: ComponentFixture<StatisticScaleComponent>;
 
   const mockContentService = jasmine.createSpyObj(['getAnswersChangedStream', 'getAnswer']);
   const roundStatistics = new RoundStatistics();
@@ -37,9 +38,12 @@ describe('StatisticSortComponent', () => {
   mockContentService.getAnswer.and.returnValue(of(stats));
   mockContentService.getAnswersChangedStream.and.returnValue(of(message));
 
+  const mockLikertScaleService = jasmine.createSpyObj(['getOptionLabels']);
+  mockLikertScaleService.getOptionLabels.and.returnValue(['5', '4', '3', '2', '1']);
+
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ StatisticSortComponent ],
+      declarations: [ StatisticScaleComponent ],
       imports: [
         TranslateModule.forRoot({
           loader: {
@@ -61,6 +65,10 @@ describe('StatisticSortComponent', () => {
         {
           provide: ThemeService,
           useClass: MockThemeService
+        },
+        {
+          provide: LikertScaleService,
+          useValue: mockLikertScaleService
         }
       ]
     })
@@ -68,9 +76,9 @@ describe('StatisticSortComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(StatisticSortComponent);
+    fixture = TestBed.createComponent(StatisticScaleComponent);
     component = fixture.componentInstance;
-    component.content = new ContentChoice('1234', '0', 'room1234', 'subject', 'body', [], [], [], false, ContentType.SORT, new ContentState(1, new Date(), false));
+    component.content = new ContentChoice('1234', '0', 'room1234', 'subject', 'body', [], [], [], false, ContentType.SCALE, new ContentState(1, new Date(), false));
     fixture.detectChanges();
   });
 

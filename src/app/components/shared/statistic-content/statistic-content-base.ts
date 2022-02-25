@@ -1,6 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Observable } from 'rxjs';
-import { ActivatedRoute } from '@angular/router';
 import { ContentService } from '../../../services/http/content.service';
 import { Content } from '../../../models/content';
 import { AnswerStatistics } from '../../../models/answer-statistics';
@@ -22,8 +21,7 @@ export abstract class StatisticContentBaseComponent implements OnInit {
   answersVisible = false;
   answerCount = 0;
 
-  protected constructor(protected route: ActivatedRoute,
-                        protected contentService: ContentService,
+  protected constructor(protected contentService: ContentService,
                         protected eventService: EventService) {
   }
 
