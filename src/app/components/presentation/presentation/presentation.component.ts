@@ -26,7 +26,7 @@ export class PresentationComponent implements OnInit {
               private location: Location,
               private globalStorageService: GlobalStorageService,
               private roomStatsService: RoomStatsService,
-              private langService: LanguageService,
+              protected langService: LanguageService,
               private translateService: TranslateService) {
     langService.langEmitter.subscribe(lang => translateService.use(lang));
   }
@@ -35,28 +35,27 @@ export class PresentationComponent implements OnInit {
     this.globalStorageService.removeItem(STORAGE_KEYS.LAST_INDEX);
     document.body.style.background = 'var(--surface)';
     this.translateService.use(this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE));
-    this.route.params.subscribe(params => {
-      this.shortId = params['shortId'];
-      this.lastGroup = params['seriesName'];
-      this.route.data.subscribe(data => {
-        this.featureString = data.feature;
-        this.roomId = data.room.id;
-        this.passwordProtected = data.room.passwordProtected;
+    const params = this.route.snapshot.params;
+    this.shortId = params['shortId'];
+    this.lastGroup = params['seriesName'];
+    this.route.data.subscribe(data => {
+      this.featureString = data.feature;
+      this.roomId = data.room.id;
+      this.passwordProtected = data.room.passwordProtected;
+      if (this.lastGroup === undefined) {
+        this.lastGroup = this.globalStorageService.getItem(STORAGE_KEYS.LAST_GROUP);
         if (this.lastGroup === undefined) {
-          this.lastGroup = this.globalStorageService.getItem(STORAGE_KEYS.LAST_GROUP);
-          if (this.lastGroup === undefined) {
-            this.roomStatsService.getStats(this.roomId, true).subscribe(stats => {
-              if (stats.groupStats) {
-                this.lastGroup = stats.groupStats[0].groupName;
-                this.setGroupInSessionStorage(this.lastGroup);
-              }
-            });
-          }
+          this.roomStatsService.getStats(this.roomId, true).subscribe(stats => {
+            if (stats.groupStats) {
+              this.lastGroup = stats.groupStats[0].groupName;
+              this.setGroupInSessionStorage(this.lastGroup);
+            }
+          });
         }
-        setTimeout(() => {
-          document.getElementById('welcome-message').focus();
-        }, 500);
-      });
+      }
+      setTimeout(() => {
+        document.getElementById('welcome-message').focus();
+      }, 500);
     });
   }
 

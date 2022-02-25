@@ -163,7 +163,7 @@ export class ControlBarComponent extends NavBarComponent implements OnInit, OnDe
     this.route.data.subscribe(data => {
       this.surveyStarted = !data.room.settings.feedbackLocked;
       this.setSurveyState();
-      if (this.groupName) {
+      if (this.groupName && this.contentGroups.length > 0) {
         this.group = this.contentGroups.find(g => g.name === this.groupName);
         this.checkIfContentLocked();
         if (this.isActiveFeature(Features.CONTENTS) && !this.group.published) {
