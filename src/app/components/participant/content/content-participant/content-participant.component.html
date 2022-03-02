@@ -1,7 +1,7 @@
 <div id="content-message" tabindex="-1" attr.aria-label="{{ (alreadySent? 'answer.a11y-already-answered' : content.format === ContentType.TEXT ?
   'answer.a11y-current-text' : (isMultiple ? 'answer.a11y-current-multiple' : 'answer.a11y-current-single')) | translate: {index: index+1, question: content.body} }}">
   <app-loading-indicator *ngIf="isLoading" [size]="80"></app-loading-indicator>
-  <section class="card-container" *ngIf="!isLoading">
+  <section class="card-container with-margin" *ngIf="!isLoading">
     <div class="card" [ngClass]="{'flipped': flipped}">
       <mat-card>
         <div class="side" [ngClass]="{'invisible-card-content': flipped}">

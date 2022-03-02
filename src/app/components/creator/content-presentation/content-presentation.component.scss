@@ -1,9 +1,9 @@
 @import '../../presentation/bars/control-bar/control-bar.component';
 
 .mat-card {
-  margin: 3% 5px;
+  margin: 5px;
   max-width: 800px;
-  width: calc(calc(92vw - 2em) - 10px);
+  width: calc(100% - 2em - 10px);
 }
 
 .presentation-card {

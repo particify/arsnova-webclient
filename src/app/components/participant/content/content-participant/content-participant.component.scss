@@ -1,6 +1,10 @@
 .mat-card {
-  margin: 3% 5px;
+  margin: 5px;
   width: calc(100% - 2em - 10px);
+}
+
+.with-margin {
+  max-width: calc(832px + 10px);
 }
 
 .disabled {

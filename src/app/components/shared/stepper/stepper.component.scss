@@ -1,11 +1,11 @@
 .container {
-  width: 92vw;
+  width: calc(92vw + 10px);
   max-width: calc(810px + 2em);
   overflow: hidden;
 }
 
 .inner-container {
-  margin-bottom: 3%;
+  margin: 0 5px min(3%, 1em);
 }
 
 .stepper-container {
@@ -17,7 +17,6 @@
 .stepper-navigation-bar {
   display: flex;
   justify-content: flex-start;
-  margin-top: 10px;
 }
 
 .step-container {
@@ -56,9 +55,8 @@
 }
 
 .mat-icon-button {
-  margin-top: 10px;
   align-self: center;
-  width: calc(20px + 3%);
+  width: max(calc(20px + 3%), 40px);
 }
 
 .arrow {
