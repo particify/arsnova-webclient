@@ -79,14 +79,14 @@
                 <mat-icon>more_vert</mat-icon>
               </button>
               <mat-menu #moreActions="matMenu" xPosition="before">
+                <button mat-menu-item *ngIf="room.membership.primaryRole === creatorRole" (click)="navToSettings(room.summary.shortId)">
+                  <mat-icon>settings</mat-icon>
+                  <span class="delete-text"> {{ 'room-list.room-settings' | translate }}</span>
+                </button>
                 <button mat-menu-item (click)="openDeleteRoomDialog(room)">
                   <mat-icon class="icon-warn">delete_forever</mat-icon>
                   <span class="delete-text"> {{ (room.membership.primaryRole !== creatorRole ? 'room-list.panel-remove-room' :
                     'room-list.panel-delete-room') | translate}}</span>
-                </button>
-                <button mat-menu-item *ngIf="room.membership.primaryRole === creatorRole" (click)="navToSettings(room.summary.shortId)">
-                  <mat-icon>settings</mat-icon>
-                  <span class="delete-text"> {{ 'room-list.room-settings' | translate }}</span>
                 </button>
               </mat-menu>
             </div>
