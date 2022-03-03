@@ -101,11 +101,12 @@
             <mat-icon>settings</mat-icon>
             {{ 'header.room-settings' | translate }}
           </button>
-          <button *ngIf="hasRole(UserRole.CREATOR)" [disabled]="isPreview" mat-raised-button class="button-primary" [matMenuTriggerFor]="presentationMenu"
-                  aria-labelledby="present">
+          <button *ngIf="hasRole(UserRole.CREATOR)" [disabled]="isPreview" mat-raised-button class="button-primary" [matMenuTriggerFor]="openPresentationDirectly ? hideMenu : presentationMenu"
+                  aria-labelledby="present" (click)="presentCurrentView()">
             <mat-icon>present_to_all</mat-icon>
             {{ 'header.present' | translate }}
           </button>
+          <mat-menu class="visually-hidden" #hideMenu="matMenu"></mat-menu>
         </div>
         <div class="mobile-action-container">
           <button *ngIf="!isPreview" mat-icon-button [matMenuTriggerFor]="roomMenu">
@@ -127,7 +128,7 @@
         </mat-menu>
       </div>
       <mat-menu #presentationMenu="matMenu">
-        <button mat-menu-item tabindex="0" (click)="presentCurrentView()" aria-labelledby="presentation-mode">
+        <button mat-menu-item tabindex="0" (click)="presentCurrentView(true)" aria-labelledby="presentation-mode">
           <mat-icon class="menu-icon">personal_video</mat-icon>
           <span>{{ 'header.presentation-mode' | translate }}</span>
         </button>
