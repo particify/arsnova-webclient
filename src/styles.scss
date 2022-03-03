@@ -591,6 +591,12 @@ div {
   color: var(--on-primary);
 }
 
+.mat-button.button-primary[disabled] {
+  background-color: var(--cancel);
+  color: var(--on-surface);
+  opacity: 0.8;
+}
+
 .button-warn {
   background-color: var(--warn);
   color: var(--on-warn);
