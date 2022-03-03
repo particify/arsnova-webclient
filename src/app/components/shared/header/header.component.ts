@@ -17,6 +17,7 @@ import { RoutingService } from '../../../services/util/routing.service';
 import { ConsentService } from '../../../services/util/consent.service';
 import { HotkeyAction } from '../../../directives/hotkey.directive';
 import { UserRole } from '../../../models/user-roles.enum';
+import { ExtensionFactory } from '../../../../../projects/extension-point/src/public-api';
 
 @Component({
   selector: 'app-header',
@@ -42,6 +43,7 @@ export class HeaderComponent implements OnInit {
   isRoom: boolean;
   isPreview: boolean;
   userCharacter: string;
+  openPresentationDirectly = false;
 
   constructor(
     public location: Location,
@@ -58,7 +60,8 @@ export class HeaderComponent implements OnInit {
     private themeService: ThemeService,
     private routingService: RoutingService,
     private route: ActivatedRoute,
-    private consentService: ConsentService
+    private consentService: ConsentService,
+    private extensionFactory: ExtensionFactory
   ) {
     this.deviceType = this.globalStorageService.getItem(STORAGE_KEYS.DEVICE_TYPE);
     this.lang = this.translationService.currentLang;
@@ -93,6 +96,7 @@ export class HeaderComponent implements OnInit {
     this.routingService.getRole().subscribe(role => {
       this.role = role;
     });
+    this.openPresentationDirectly = !this.extensionFactory.getExtension('present-in-new-tab');
   }
 
   changeLanguage(lang: string) {
@@ -196,8 +200,10 @@ export class HeaderComponent implements OnInit {
     this.consentService.openDialog();
   }
 
-  presentCurrentView() {
-    this.routingService.navToPresentation();
+  presentCurrentView(shouldOpen = this.openPresentationDirectly) {
+    if (shouldOpen) {
+      this.routingService.navToPresentation();
+    }
   }
 
   switchRole() {
