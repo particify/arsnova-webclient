@@ -20,6 +20,7 @@ import { ThemeService } from '../../../../../theme/theme.service';
 import { TranslateService } from '@ngx-translate/core';
 import { Combination } from '../../../../models/round-statistics';
 import { EventService } from '../../../../services/util/event.service';
+import { PresentationService } from '../../../../services/util/presentation.service';
 
 export const MAX_COMBINATIONS = 4;
 
@@ -53,7 +54,8 @@ export class StatisticSortComponent extends StatisticContentBaseComponent implem
               protected route: ActivatedRoute,
               private themeService: ThemeService,
               private translateService: TranslateService,
-              protected eventService: EventService) {
+              protected eventService: EventService,
+              private presentationService: PresentationService) {
     super(route, contentService, eventService);
   }
 
@@ -199,9 +201,10 @@ export class StatisticSortComponent extends StatisticContentBaseComponent implem
     const gridConfig = {
       borderColor: this.onSurface,
       tickColor: this.isPresentation ? this.surface : this.onSurface,
-      drawOnChartArea: !this.isPresentation
+      drawOnChartArea: !this.isPresentation,
+      z: 1
     };
-    const scale = this.isPresentation ? Math.max((Math.min(innerWidth, 2100) / 1100), 1) : 1;
+    const scale = this.presentationService.getScale();
     this.chart = new Chart(this.chartId, {
       type: 'bar',
       data: {

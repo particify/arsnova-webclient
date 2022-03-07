@@ -51,11 +51,14 @@
 }
 
 .no-background.mat-list-item {
-  margin-bottom: 6px;
+  margin-bottom: 4px;
+  &:first-of-type {
+    margin-top: 4px;
+  }
 }
 
 .no-background .answer-label {
-  margin: 0;
+  margin: 8px 0;
   min-width: 18px;
   max-height: 18px;
   line-height: 18px;
@@ -74,13 +77,13 @@
 }
 
 .no-background p {
-  margin: 10px 0;
+  margin: 0;
 }
 
 .presentation-chart {
   max-width: 650px;
   height: 28vh;
-  max-height: 200px;
+  max-height: 180px;
 }
 
 .chart {

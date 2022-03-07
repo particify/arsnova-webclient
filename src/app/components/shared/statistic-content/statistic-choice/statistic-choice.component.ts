@@ -15,6 +15,7 @@ import { ContentType } from '../../../../models/content-type.enum';
 import { ColorElem } from '@arsnova/theme/Theme';
 import { ContentScale } from '@arsnova/app/models/content-scale';
 import { EventService } from '../../../../services/util/event.service';
+import { PresentationService } from '../../../../services/util/presentation.service';
 
 export enum VisualizationUnit {
   ABSOLUTE = 'ABSOLUTE',
@@ -70,8 +71,9 @@ export class StatisticChoiceComponent extends StatisticContentBaseComponent impl
   constructor(protected route: ActivatedRoute,
               protected contentService: ContentService,
               protected translateService: TranslateService,
-              private themeService: ThemeService,
-              protected eventService: EventService) {
+              protected themeService: ThemeService,
+              protected eventService: EventService,
+              protected presentationService: PresentationService) {
     super(route, contentService, eventService);
   }
 
@@ -127,7 +129,8 @@ export class StatisticChoiceComponent extends StatisticContentBaseComponent impl
     const gridConfig = {
       borderColor: this.colorStrings.onBackground,
       tickColor: this.isPresentation ? this.colorStrings.background : this.colorStrings.onBackground,
-      drawOnChartArea: !this.isPresentation
+      drawOnChartArea: !this.isPresentation,
+      z: 1
     };
     const dataSets = [
       {
@@ -143,7 +146,7 @@ export class StatisticChoiceComponent extends StatisticContentBaseComponent impl
         }
       )
     }
-    const scale = this.isPresentation ? Math.max((Math.min(innerWidth, 2100) / 1100), 1) : 1;
+    const scale = this.presentationService.getScale();
     this.chart = new Chart(this.chartId, {
       type: 'bar',
       data: {
