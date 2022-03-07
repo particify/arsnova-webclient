@@ -325,7 +325,8 @@
     "next": "Next content",
     "previous": "Previous content",
     "group-published": "The question series has been published.",
-    "change-visualization-unit": "Change visualization unit"
+    "change-visualization-unit": "Change visualization unit",
+    "change-answer-list": "Change layout of answers"
   },
   "survey": {
     "a11y-message": "You are now in live feedback mode.",

@@ -205,6 +205,7 @@ export class StatisticSortComponent extends StatisticContentBaseComponent implem
       z: 1
     };
     const scale = this.presentationService.getScale();
+    this.data[0].barThickness = this.isPresentation ? 80 : 100;
     this.chart = new Chart(this.chartId, {
       type: 'bar',
       data: {
