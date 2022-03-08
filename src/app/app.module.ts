@@ -75,6 +75,7 @@ import { HotkeyService } from './services/util/hotkey.service';
 import { PasswordEntryComponent } from './components/home/password-entry/password-entry.component';
 import { FormHeaderComponent } from './components/home/form-header/form-header.component';
 import { WsCommentService } from './services/websockets/ws-comment.service';
+import { PresentationService } from './services/util/presentation.service';
 
 export function dialogClose(dialogResult: any) {
 }
@@ -194,6 +195,7 @@ export function initializeApp(appConfig: AppConfig) {
     DemoService,
     WsRoomEventDispatcherService,
     HotkeyService,
+    PresentationService,
     { provide: Window,  useValue: window },
     STORAGE_CONFIG_PROVIDERS,
     {

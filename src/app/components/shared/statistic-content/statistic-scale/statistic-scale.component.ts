@@ -8,6 +8,7 @@ import { ContentService } from '../../../../services/http/content.service';
 import { LikertScaleService } from '../../../../services/util/likert-scale.service';
 import { StatisticChoiceComponent } from '../statistic-choice/statistic-choice.component';
 import { EventService } from '../../../../services/util/event.service';
+import { PresentationService } from '../../../../services/util/presentation.service';
 
 @Component({
   selector: 'app-statistic-scale',
@@ -15,14 +16,16 @@ import { EventService } from '../../../../services/util/event.service';
   styleUrls: ['../statistic-choice/statistic-choice.component.scss']
 })
 export class StatisticScaleComponent extends StatisticChoiceComponent {
-  constructor(protected route: ActivatedRoute,
-    contentService: ContentService,
+  constructor(
+    protected route: ActivatedRoute,
+    protected contentService: ContentService,
     protected translateService: TranslateService,
-    themeService: ThemeService,
-    private likertScaleService: LikertScaleService,
-              protected eventService: EventService
+    protected themeService: ThemeService,
+    protected eventService: EventService,
+    protected presentationService: PresentationService,
+    private likertScaleService: LikertScaleService
   ) {
-    super(route, contentService, translateService, themeService, eventService);
+    super(route, contentService, translateService, themeService, eventService, presentationService);
   }
 
   init() {

@@ -5,7 +5,6 @@ import { TranslateService } from '@ngx-translate/core';
 import { LanguageService } from '../../../services/util/language.service';
 import { Content } from '../../../models/content';
 import { GlobalStorageService, STORAGE_KEYS } from '../../../services/util/global-storage.service';
-import { RoomService } from '../../../services/http/room.service';
 import { StepperComponent } from '../../shared/stepper/stepper.component';
 import { Location } from '@angular/common';
 import { ContentGroupService } from '../../../services/http/content-group.service';
@@ -20,6 +19,7 @@ import { RemoteMessage } from '../../../models/events/remote/remote-message.enum
 import { ContentFocusState } from '../../../models/events/remote/content-focus-state';
 import { ContentMessages } from '../../../models/events/content-messages.enum';
 import { Subscription } from 'rxjs';
+import { PresentationService } from '../../../services/util/presentation.service';
 
 @Component({
   selector: 'app-content-presentation',
@@ -51,7 +51,6 @@ export class ContentPresentationComponent implements OnInit, OnDestroy {
 
   constructor(
     protected route: ActivatedRoute,
-    private roomService: RoomService,
     private contentService: ContentService,
     private contentGroupService: ContentGroupService,
     private translateService: TranslateService,
@@ -61,7 +60,8 @@ export class ContentPresentationComponent implements OnInit, OnDestroy {
     private router: Router,
     private eventService: EventService,
     private dialogService: DialogService,
-    private hotkeyService: HotkeyService
+    private hotkeyService: HotkeyService,
+    private presentationService: PresentationService
   ) {
     langService.langEmitter.subscribe(lang => translateService.use(lang));
   }
@@ -91,10 +91,7 @@ export class ContentPresentationComponent implements OnInit, OnDestroy {
 
   initScale() {
     if (this.isPresentation) {
-      const scaleFactor = 1000;
-      const minScale = 1;
-      const maxScale = 1.9;
-      const scale = Math.min(Math.max((innerWidth / scaleFactor), minScale), maxScale);
+      const scale = this.presentationService.getScale();
       document.getElementById('stepper-container').style.transform = `scale(${scale})`;
       document.getElementById('stepper-container').style.left = `calc(50vw - calc(305px * ${scale})`;
       document.getElementById('stepper-container').style.top = `calc(4vw - calc(1em * ${scale}))`;
