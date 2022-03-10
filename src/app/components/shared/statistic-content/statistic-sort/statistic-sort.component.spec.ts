@@ -11,6 +11,7 @@ import { ContentState } from '@arsnova/app/models/content-state';
 import { of } from 'rxjs';
 import { RoundStatistics } from '@arsnova/app/models/round-statistics';
 import { AnswerStatistics } from '@arsnova/app/models/answer-statistics';
+import { PresentationService } from '@arsnova/app/services/util/presentation.service';
 
 describe('StatisticSortComponent', () => {
   let component: StatisticSortComponent;
@@ -37,6 +38,8 @@ describe('StatisticSortComponent', () => {
   mockContentService.getAnswer.and.returnValue(of(stats));
   mockContentService.getAnswersChangedStream.and.returnValue(of(message));
 
+  const mockPresentationService = jasmine.createSpyObj(['getScale']);
+
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ StatisticSortComponent ],
@@ -61,6 +64,10 @@ describe('StatisticSortComponent', () => {
         {
           provide: ThemeService,
           useClass: MockThemeService
+        },
+        {
+          provide: PresentationService,
+          useValue: mockPresentationService
         }
       ]
     })

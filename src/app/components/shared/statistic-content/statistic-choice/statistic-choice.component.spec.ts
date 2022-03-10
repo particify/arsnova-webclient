@@ -11,6 +11,9 @@ import { ContentState } from '@arsnova/app/models/content-state';
 import { of } from 'rxjs';
 import { RoundStatistics } from '@arsnova/app/models/round-statistics';
 import { AnswerStatistics } from '@arsnova/app/models/answer-statistics';
+import { PresentationService } from '@arsnova/app/services/util/presentation.service';
+import { GlobalStorageService } from '@arsnova/app/services/util/global-storage.service';
+import { MockGlobalStorageService } from '@arsnova/testing/test-helpers';
 
 describe('StatisticChoiceComponent', () => {
   let component: StatisticChoiceComponent;
@@ -37,6 +40,8 @@ describe('StatisticChoiceComponent', () => {
   mockContentService.getAnswer.and.returnValue(of(stats));
   mockContentService.getAnswersChangedStream.and.returnValue(of(message));
 
+  const mockPresentationService = jasmine.createSpyObj(['getScale']);
+
   beforeEach(waitForAsync(() => {
 
     TestBed.configureTestingModule({
@@ -62,6 +67,14 @@ describe('StatisticChoiceComponent', () => {
         {
           provide: ThemeService,
           useClass: MockThemeService
+        },
+        {
+          provide: PresentationService,
+          useValue: mockPresentationService
+        },
+        {
+          provide: GlobalStorageService,
+          useClass: MockGlobalStorageService
         }
       ]
     })

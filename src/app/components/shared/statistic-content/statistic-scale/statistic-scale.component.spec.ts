@@ -12,6 +12,9 @@ import { of } from 'rxjs';
 import { LikertScaleService } from '@arsnova/app/services/util/likert-scale.service';
 import { RoundStatistics } from '@arsnova/app/models/round-statistics';
 import { AnswerStatistics } from '@arsnova/app/models/answer-statistics';
+import { PresentationService } from '@arsnova/app/services/util/presentation.service';
+import { GlobalStorageService } from '@arsnova/app/services/util/global-storage.service';
+import { MockGlobalStorageService } from '@arsnova/testing/test-helpers';
 
 describe('StatisticScaleComponent', () => {
   let component: StatisticScaleComponent;
@@ -41,6 +44,8 @@ describe('StatisticScaleComponent', () => {
   const mockLikertScaleService = jasmine.createSpyObj(['getOptionLabels']);
   mockLikertScaleService.getOptionLabels.and.returnValue(['5', '4', '3', '2', '1']);
 
+  const mockPresentationService = jasmine.createSpyObj(['getScale']);
+
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ StatisticScaleComponent ],
@@ -69,6 +74,14 @@ describe('StatisticScaleComponent', () => {
         {
           provide: LikertScaleService,
           useValue: mockLikertScaleService
+        },
+        {
+          provide: PresentationService,
+          useValue: mockPresentationService
+        },
+        {
+          provide: GlobalStorageService,
+          useClass: MockGlobalStorageService
         }
       ]
     })

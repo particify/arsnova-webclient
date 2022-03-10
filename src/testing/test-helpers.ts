@@ -190,10 +190,6 @@ export class MockThemeService {
     return new Theme(key, arsnova, arsnova_meta);
   }
 
-  getCurrentThemeName() {
-    return 'arsnova';
-  }
-
   getBarColors() {
     return [
       {

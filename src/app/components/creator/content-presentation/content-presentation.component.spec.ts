@@ -27,6 +27,7 @@ import { ContentGroup } from '@arsnova/app/models/content-group';
 import { Content } from '@arsnova/app/models/content';
 import { ContentType } from '@arsnova/app/models/content-type.enum';
 import { ContentState } from '@arsnova/app/models/content-state';
+import { PresentationService } from '@arsnova/app/services/util/presentation.service';
 
 @Injectable()
 class MockContentService {
@@ -70,7 +71,9 @@ describe('ContentPresentationComponent', () => {
 
   snapshot.params = of([{seriesName: 'SERIES'}]);
 
-  const activatedRouteStub = new ActivatedRouteStub(null, data, snapshot);
+  const activatedRouteStub = new ActivatedRouteStub(null,data, snapshot);
+
+  const mockPresentationService = jasmine.createSpyObj(['getScale']);
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
@@ -119,6 +122,10 @@ describe('ContentPresentationComponent', () => {
         {
           provide: HotkeyService,
           useClass: MockHotykeyService
+        },
+        {
+          provide: PresentationService,
+          useValue: mockPresentationService
         }
       ],
       imports: [

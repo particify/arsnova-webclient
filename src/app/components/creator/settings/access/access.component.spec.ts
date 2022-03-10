@@ -62,6 +62,9 @@ class MockAuthenticationService {
   getCurrentAuthentication() {
     return of(new ClientAuthentication('1234', 'a@b.cd', AuthProvider.ARSNOVA, 'token'));
   }
+  isLoginIdEmailAddress() {
+    return of(true);
+  }
 }
 
 describe('AccessComponent', () => {
