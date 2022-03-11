@@ -266,7 +266,7 @@ export class AuthenticationService extends AbstractHttpService<ClientAuthenticat
    */
   handleUnauthorizedError() {
     this.logout();
-    this.routingService.setRedirect();
+    this.routingService.setRedirect(null, true);
     this.router.navigateByUrl('login');
     this.translateService.get('login.authentication-expired').subscribe(msg => {
       this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);

@@ -166,9 +166,9 @@ export class RoutingService {
     this.router.navigateByUrl(route);
   }
 
-  setRedirect(url?: string) {
+  setRedirect(url?: string, checkIfAlreadyOnLogin = false) {
     if (!this.redirectRoute) {
-      if (!url) {
+      if (!url && (checkIfAlreadyOnLogin && this.location.path() !== '/login')) {
         url = this.fullCurrentRoute ?? this.location.path();
       }
       this.redirectRoute = url;
