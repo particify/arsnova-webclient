@@ -234,4 +234,8 @@ export class ContentService extends AbstractEntityService<Content> {
     return [ContentType.BINARY, ContentType.SCALE, ContentType.CHOICE].includes(content.format) && !(content as ContentChoice).multiple;
   }
 
+  allowsListChange(content: Content): boolean {
+    return [ContentType.BINARY, ContentType.SCALE, ContentType.CHOICE].includes(content.format);
+  }
+
 }

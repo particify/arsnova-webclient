@@ -67,6 +67,7 @@ export class StatisticChoiceComponent extends StatisticContentBaseComponent impl
   roundsDisplayed: number;
   independentAnswerCount = [[], [], []];
   visualizationUnit = VisualizationUnit.ABSOLUTE;
+  showAnswersBelow = false;
 
   constructor(protected route: ActivatedRoute,
               protected contentService: ContentService,
@@ -132,17 +133,20 @@ export class StatisticChoiceComponent extends StatisticContentBaseComponent impl
       drawOnChartArea: !this.isPresentation,
       z: 1
     };
+    const barThickness = this.isPresentation ? 80 : 100;
     const dataSets = [
       {
         data: this.data[this.roundsToDisplay],
-        backgroundColor: colors[this.roundsToDisplay]
+        backgroundColor: colors[this.roundsToDisplay],
+        barThickness: barThickness
       }
     ];
     if (this.roundsToDisplay > 1) {
       dataSets.push(
         {
           data: this.data[1],
-          backgroundColor: colors[1]
+          backgroundColor: colors[1],
+          barThickness: barThickness
         }
       )
     }
@@ -159,7 +163,8 @@ export class StatisticChoiceComponent extends StatisticContentBaseComponent impl
         devicePixelRatio: window.devicePixelRatio * scale,
         layout: {
           padding: {
-            top: 25
+            top: 25,
+            left: this.isPresentation ? -10 : 0
           }
         },
         scales: {
@@ -179,7 +184,11 @@ export class StatisticChoiceComponent extends StatisticContentBaseComponent impl
           },
           x: {
             type: 'category',
-            grid: gridConfig
+            ticks: {
+              display: !this.showAnswersBelow
+            },
+            grid: gridConfig,
+            display: true
           }
         },
         plugins: {
@@ -391,6 +400,14 @@ export class StatisticChoiceComponent extends StatisticContentBaseComponent impl
     this.visualizationUnit = this.visualizationUnit === VisualizationUnit.ABSOLUTE ? VisualizationUnit.PERCENTAGE : VisualizationUnit.ABSOLUTE;
     if (this.chart) {
       this.chart.update();
+    }
+  }
+
+  toggleAnswerListLayout() {
+    this.showAnswersBelow = !this.showAnswersBelow;
+    if (this.chart) {
+      this.chart.destroy();
+      this.createChart(this.colors);
     }
   }
 }

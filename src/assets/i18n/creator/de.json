@@ -325,7 +325,8 @@
     "next": "Nächster Inhalt",
     "previous": "Vorheriger Inhalt",
     "group-published": "Die Fragenserie wurde freigegeben.",
-    "change-visualization-unit": "Anzeigeeinheit ändern"
+    "change-visualization-unit": "Anzeigeeinheit ändern",
+    "change-answer-list": "Ansicht der Antworten ändern"
   },
   "survey": {
     "a11y-message": "Du befindest dich jetzt im Live Feedback.",

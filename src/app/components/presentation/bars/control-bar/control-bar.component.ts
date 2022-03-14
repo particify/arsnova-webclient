@@ -477,6 +477,10 @@ export class ControlBarComponent extends NavBarComponent implements OnInit, OnDe
     return this.contentService.allowsUnitChange(content);
   }
 
+  allowListChange(content: Content) {
+    return this.contentService.allowsListChange(content);
+  }
+
   hasFormatAnswer(format: ContentType): boolean {
     return ![ContentType.SLIDE, ContentType.FLASHCARD].includes(format);
   }
@@ -506,6 +510,10 @@ export class ControlBarComponent extends NavBarComponent implements OnInit, OnDe
 
   toggleVisualizationUnit() {
     this.eventService.broadcast(RemoteMessage.TOGGLE_VISUALIZATION_UNIT);
+  }
+
+  toggleAnswerListLayout() {
+    this.eventService.broadcast(RemoteMessage.TOGGLE_ANSWER_LIST_LAYOUT);
   }
 
   changeRound(round: number) {
