@@ -1,0 +1,133 @@
+$graphic-size: 140px;
+$graphic-size-sm: 80px;
+$icon-container-size: 40px;
+
+.mat-card {
+  width: calc(92vw - 10px);
+  max-width: 832px;
+  margin-bottom: 4px;
+}
+
+@mixin header-text-base {
+  margin: 0;
+  opacity: 0.8;
+  font-weight: bold;
+}
+
+.canvas-container {
+  position: relative;
+}
+
+@media(max-width: 767px) {
+  .header-container {
+    align-items: center;
+  }
+
+  .header-text {
+    @include header-text-base;
+    padding-top: 8px;
+    font-size: 18px;
+  }
+
+  .header-text.small {
+    display: none;
+  }
+
+  .canvas-container {
+    height: $graphic-size-sm;
+    width: $graphic-size-sm;
+    margin: 1em 1em 1em 0.5em;
+  }
+
+  .button-container-sm {
+    margin-bottom: 1em;
+  }
+
+  .button-container {
+    display: none;
+  }
+
+  .graphic {
+    width: $graphic-size-sm;
+    height: $graphic-size-sm;
+  }
+}
+
+@media(min-width: 768px) {
+  .mat-card {
+    padding-top: 3em;
+  }
+
+  .header-text {
+    @include header-text-base;
+    font-size: 24px;
+  }
+
+  .small {
+    display: none;
+  }
+
+  .canvas-container {
+    height: $graphic-size;
+    width: $graphic-size;
+    margin-right: 2.5em;
+  }
+
+  .graphic {
+    width: $graphic-size;
+    height: $graphic-size;
+  }
+
+  .header-container {
+    margin: 0 2em 2.5em;
+  }
+
+  .button-container-sm {
+    display: none;
+  }
+}
+
+.score-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.correct:not(.answered) {
+  color: var(--green);
+}
+
+.wrong:not(.answered) {
+  color: var(--red);
+}
+
+.answered {
+  width: 16px;
+  height: 16px;
+  font-size: 16px;
+  color: var(--grey);
+}
+
+.full-border {
+  transition: all 150ms;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+  &:not(:last-of-type) {
+    margin-bottom: 8px;
+  }
+  &:hover {
+    cursor: pointer;
+    box-shadow: 0 0 3px var(--grey);
+    border: 1px solid var(--surface);
+  }
+}
+
+.icon-container {
+  height: $icon-container-size;
+  width: $icon-container-size;
+}
+
+.body {
+  max-width: calc(100% - (#{$icon-container-size} + 16px));;
+}

@@ -19,6 +19,7 @@ import { ContentParticipantComponent } from './content/content-participant/conte
 import { ContentSortParticipantComponent } from './content/content-sort-participant/content-sort-participant.component';
 import { ContentWordcloudComponent } from './content/content-wordcloud-participant/content-wordcloud-participant.component';
 import { ContentScaleParticipantComponent } from './content/content-scale-participant/content-scale-participant.component';
+import { SeriesResultsComponent } from './series-results/series-results.component';
 
 @NgModule({
   imports: [
@@ -50,7 +51,8 @@ import { ContentScaleParticipantComponent } from './content/content-scale-partic
     ParticipantContentCarouselPageComponent,
     ContentParticipantComponent,
     ContentSortParticipantComponent,
-    ContentWordcloudComponent
+    ContentWordcloudComponent,
+    SeriesResultsComponent
   ],
   providers: [
     { provide: TRANSLATION_MODULE_NAME, useValue: 'participant' }

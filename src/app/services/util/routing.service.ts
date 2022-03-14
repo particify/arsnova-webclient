@@ -288,4 +288,8 @@ export class RoutingService {
     const url = `${RoutePrefix.CREATOR}/${this.shortId}/settings`;
     this.router.navigateByUrl(url);
   }
+
+  getShortId() {
+    return this.shortId;
+  }
 }

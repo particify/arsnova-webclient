@@ -56,6 +56,10 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
   remoteSubscription: Subscription;
   focusStateSubscription: Subscription;
 
+  additionalSteps = 1;
+  finished = false;
+  hasAnsweredLastContent = false;
+
   constructor(
     private contentService: ContentService,
     protected translateService: TranslateService,
@@ -152,7 +156,7 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
         if (nextContentId) {
           lastContentIndex = this.getIndexOfContentById(nextContentId);
         }
-        if (lastContentIndex >= this.contents.length) {
+        if (lastContentIndex >= this.contents.length + this.additionalSteps) {
           lastContentIndex = this.contents.length - 1;
         }
         if (this.isReloading) {
@@ -187,6 +191,7 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
   }
 
   checkIfLastContentExists(contentIndex: number) {
+    this.checkIfFinished();
     if (contentIndex >= 0) {
       this.initStepper(contentIndex);
     } else {
@@ -204,6 +209,12 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
     this.started = this.status.NORMAL;
   }
 
+  goToContent(index: number) {
+    this.stepper.setHeaderPosition(index);
+    this.stepper.onClick(index);
+    this.updateURL(index);
+  }
+
   updateURL(index?: number) {
     if (this.currentStep !== index || !this.isReloading) {
       this.currentStep = index || 0;
@@ -214,36 +225,58 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
 
   getFirstUnansweredContent() {
     let isInitialized = false;
-    for (let i = 0; i < this.alreadySent.size; i++) {
-      if (this.alreadySent.get(i) === false) {
-        this.initStepper(i, 200);
-        isInitialized = true;
-        break;
-      }
+    const firstIndex = this.getFirstUnansweredContentIndex();
+    if (firstIndex !== null) {
+      this.initStepper(firstIndex, 200);
+      isInitialized = true;
     }
     if (!isInitialized) {
-      this.initStepper(0);
+      this.initStepper(this.contents.length);
     }
     if (!this.currentStep && this.answers.length === 0 || this.contents.length === 1) {
       this.updateURL(0);
     }
   }
 
+  getFirstUnansweredContentIndex(): number {
+    for (let i = 0; i < this.alreadySent.size; i++) {
+      if (this.alreadySent.get(i) === false && this.contents[i].format !== ContentType.SLIDE) {
+        return i;
+      }
+    }
+    return null;
+  }
+
+  checkIfFinished() {
+    this.finished = this.getFirstUnansweredContentIndex() === null;
+  }
+
   nextContent(finish?: boolean) {
-    if (!finish) {
+    if (finish !== null) {
+      if (!finish) {
       this.stepper.next();
+      } else {
+        this.stepper.headerPos = 0;
+        this.stepper.onClick(0);
+      }
     } else {
-      this.stepper.headerPos = 0;
-      this.stepper.onClick(0);
+      if (this.contents.length > 5) {
+        this.stepper.headerPos = this.contents.length - 4;
+      }
+      this.stepper.onClick(this.contents.length);
     }
   }
 
   receiveSentStatus(answer: Answer, index: number) {
     this.alreadySent.set(index, !!answer);
+    if (index === this.contents.length -1) {
+      this.hasAnsweredLastContent = this.alreadySent.get(index);
+    }
+    this.checkIfFinished();
     this.answers[this.getIndexOfContentById(answer.contentId)] = answer;
     if (!this.guided) {
       if (this.started === this.status.NORMAL) {
-        if (index < this.contents.length - 1) {
+        if (index < this.contents.length - 1 + this.additionalSteps) {
           let wait = 400;
           if (this.contents[index].state.answersPublished) {
             wait += 600;
