@@ -35,19 +35,19 @@
         <div *ngIf="!isLoading" fxLayout="row wrap" fxLayoutAlign="space-between center" class="action-container">
           <div *ngIf="!isInSortingMode" fxLayout="row wrap" fxLayoutAlign="space-between center" fxLayoutGap="10px">
             <button mat-raised-button id="content-create-button" class="button-primary add-desktop"
-                    aria-labelledby="create-content" [routerLink]="['create']"
+                    aria-labelledby="create-content" (click)="navigateToSubroute('create')"
                     appHotkey="1" [appHotkeyTitle]="'room-page.create-content' | translate">
               <mat-icon>add</mat-icon>
               {{ 'room-page.create-content' | translate}}
             </button>
             <button mat-fab id="content-create-button-mobile" class="button-primary add-mobile"
-                    aria-labelledby="create-content" [routerLink]="['create']"
+                    aria-labelledby="create-content" (click)="navigateToSubroute('create')"
                     [matTooltip]="'room-page.create-content' | translate">
               <mat-icon>add</mat-icon>
             </button>
             <div class="settings-buttons">
               <button mat-button id="statistic-button" class="settings-button"  aria-labelledby="statistics"
-                      [routerLink]="['statistics']" [disabled]="contents.length === 0"
+              (click)="navigateToSubroute('statistics')" [disabled]="contents.length === 0"
                       appHotkey="2" [appHotkeyTitle]="'room-page.answer-statistics' | translate">
                 <mat-icon>insert_chart</mat-icon>
                 {{ 'room-page.answer-statistics' | translate }}
