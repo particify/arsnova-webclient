@@ -402,11 +402,15 @@ export class GroupContentComponent extends ContentListBaseComponent implements O
     });
   }
 
+  navigateToSubroute(subRoute: string) {
+    this.router.navigate(['edit', this.room.shortId, 'series', this.contentGroup.name, subRoute]);
+  }
+
   navigateToContentStats(content: Content) {
     const index = this.contents.filter(c => this.contentTypes.indexOf(c.format) > -1).
     map(co => co.id).indexOf(content.id);
     if (index > -1) {
-      this.router.navigate(['edit', this.room.shortId, 'series', this.contentGroup.name, index + 1]);
+      this.navigateToSubroute((index + 1).toString());
     }
   }
 
