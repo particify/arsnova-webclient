@@ -31,7 +31,7 @@
     "has-abstained": "You have abstained.",
     "has-voted": "You have answered.",
     "has-answered": "You have answered to the content.",
-    "questions-locked": "No contents have been released yet.",
+    "no-contents-published": "No contents released.",
     "go-to-stats": "Go to the results",
     "go-to-content": "Go back to the content",
     "show-front": "Flip",

@@ -49,21 +49,21 @@
       <div *ngIf="!isModerator" fxLayout="column" fxLayoutAlign="center center">
         <app-divider [padding]="true"></app-divider>
         <div fxLayout="column" [ngClass]="{'group-container': contentGroups.length > 0, 'empty-group-container': contentGroups.length === 0}">
+          <ng-container *ngIf="contentGroups?.length === 0">
+            <p class="hint-sm">{{ 'room-page.no-content-groups' | translate }}</p>
+            <p tabindex="-1" id="no-content-groups" class="visually-hidden" appHotkey="4" [appHotkeyTitle]="'content.groups' | translate">
+              {{ 'room-page.a11y-no-content-groups' | translate }}</p>
+          </ng-container>
           <button id="content-group-create-button" mat-stroked-button class="stroked-primary add-group" aria-labelledby="create-content-group"
                   (click)="openCreateContentGroupDialog()"
                   appHotkey="3" [appHotkeyTitle]="'room-page.create-content-group' | translate">
             <mat-icon>playlist_add</mat-icon>
             {{ 'room-page.create-content-group' | translate }}
           </button>
-          <ng-container *ngIf="contentGroups?.length > 0; else noContents">
+          <ng-container *ngIf="contentGroups?.length > 0">
             <p tabindex="-1" id="content-groups" class="visually-hidden" appHotkey="4" [appHotkeyTitle]="'content.groups' | translate">
               {{ 'room-page.a11y-content-groups' | translate: {count: contentGroups.length} }}</p>
-          </ng-container>
-          <ng-template #noContents>
-            <p>{{ 'room-page.no-content-groups' | translate }}</p>
-            <p tabindex="-1" id="no-content-groups" class="visually-hidden" appHotkey="4" [appHotkeyTitle]="'content.groups' | translate">
-              {{ 'room-page.a11y-no-content-groups' | translate }}</p>
-          </ng-template>
+            </ng-container>
           <div *ngIf="room && contentGroups">
             <app-content-groups *ngFor="let contentGroup of contentGroups" [contentGroupName]="contentGroup.name"
                                 [length]="contentGroup.contentIds?.length" [isLoose]="false" [isLocked]="!contentGroup.published"></app-content-groups>
