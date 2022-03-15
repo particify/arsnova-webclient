@@ -20,6 +20,11 @@
   pointer-events: initial;
 }
 
+@mixin show-sort-icon {
+  opacity: 1;
+  max-width: 24px;
+}
+
 .show-bar {
   @include show-button-bar;
 }
@@ -28,10 +33,19 @@
   * > .button-bar {
     @include show-button-bar;
   }
+
+  * > .sort-icon {
+    @include show-sort-icon;
+  }
 }
 
 .button-bar {
   pointer-events: none;
+  opacity: 0;
+  max-width: 0;
+}
+
+.sort-icon {
   opacity: 0;
   max-width: 0;
 }
@@ -43,6 +57,10 @@
 @media(hover: none) {
   .button-bar {
     @include show-button-bar;
+  }
+
+  .sort-icon {
+    @include show-sort-icon;
   }
 }
 

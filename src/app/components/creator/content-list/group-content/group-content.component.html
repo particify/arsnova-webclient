@@ -244,14 +244,17 @@
               </div>
               </mat-list-item>
           </mat-list>
-          <div *ngIf="isInSortingMode">
+          <div *ngIf="isInSortingMode" fxFill>
             <mat-list cdkDropList [cdkDropListData]="copiedContents" (cdkDropListDropped)="drop($event)">
               <mat-list-item class="content-box bottom-border" fxLayout="column" fxLayoutAlign="center"
                              *ngFor="let content of copiedContents; index as i" cdkDrag [cdkDragStartDelay]="50"
                              [ngClass]="{'locked-content': !isPublished(i), 'unlocked-content': isPublished(i)}">
                 <div fxLayout="row" fxLayoutAlign="space-between center" fxFill>
-                  <p class="ellipsis">{{content.body}}</p>
-                  <mat-icon>drag_handle</mat-icon>
+                  <div class="ellipsis" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="12px" >
+                    <mat-icon class="type-icon">{{iconList.get(content.format)}}</mat-icon>
+                    <p class="ellipsis">{{content.body}}</p>
+                  </div>
+                  <mat-icon class="sort-icon">drag_handle</mat-icon>
                 </div>
               </mat-list-item>
             </mat-list>
