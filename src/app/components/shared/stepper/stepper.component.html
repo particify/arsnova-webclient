@@ -12,7 +12,7 @@
           <button class="step" tabindex="-1"
                   [ngClass]="{'active': selectedIndex === i, 'sent': completed.get(i), 'last': i === listLength}">
             <span *ngIf="i < listLength">{{i + 1}}</span>
-            <mat-icon style="height: 20px; width: 20px; font-size: 20px;" *ngIf="i === listLength">outlined_flag</mat-icon>
+            <mat-icon class="flag-icon" *ngIf="i === listLength">outlined_flag</mat-icon>
           </button>
         </div>
         <span class="fill-remaining-space"></span>
