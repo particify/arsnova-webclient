@@ -242,12 +242,6 @@ button.selected {
   opacity: 1;
 }
 
-@media(max-width: 1000px) {
-  .scrollTop {
-    background-color: var(--grey-light);
-  }
-}
-
 .visible {
   right: 4vw;
 }
