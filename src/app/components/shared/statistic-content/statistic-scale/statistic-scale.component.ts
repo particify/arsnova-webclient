@@ -9,6 +9,7 @@ import { LikertScaleService } from '../../../../services/util/likert-scale.servi
 import { StatisticChoiceComponent } from '../statistic-choice/statistic-choice.component';
 import { EventService } from '../../../../services/util/event.service';
 import { PresentationService } from '../../../../services/util/presentation.service';
+import { GlobalStorageService } from '../../../../services/util/global-storage.service';
 
 @Component({
   selector: 'app-statistic-scale',
@@ -23,9 +24,10 @@ export class StatisticScaleComponent extends StatisticChoiceComponent {
     protected themeService: ThemeService,
     protected eventService: EventService,
     protected presentationService: PresentationService,
+    protected globalStorageService: GlobalStorageService,
     private likertScaleService: LikertScaleService
   ) {
-    super(route, contentService, translateService, themeService, eventService, presentationService);
+    super(route, contentService, translateService, themeService, eventService, presentationService, globalStorageService);
   }
 
   init() {

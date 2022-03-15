@@ -28,7 +28,9 @@ export const STORAGE_KEYS: { [key: string]: symbol } = {
   LATEST_ANNOUNCED_VERSION: Symbol(),
   IMPORT_TOKEN: Symbol(),
   COMMENT_TIME_FILTER: Symbol(),
-  FEATURE_NEWS: Symbol()
+  FEATURE_NEWS: Symbol(),
+  SHOW_ANSWERS_BELOW: Symbol(),
+  ANSWER_VISUALIZATION_UNIT: Symbol()
 };
 
 /**
@@ -117,6 +119,18 @@ export const STORAGE_CONFIG: StorageItem[] = [
     key: STORAGE_KEYS.LATEST_ANNOUNCED_VERSION,
     name: 'LATEST_ANNOUNCED_VERSION',
     category: StorageItemCategory.REQUIRED,
+    backend: StorageBackend.SESSIONSTORAGE
+  },
+  {
+    key: STORAGE_KEYS.SHOW_ANSWERS_BELOW,
+    name: 'SHOW_ANSWERS_BELOW',
+    category: StorageItemCategory.FUNCTIONAL,
+    backend: StorageBackend.SESSIONSTORAGE
+  },
+  {
+    key: STORAGE_KEYS.ANSWER_VISUALIZATION_UNIT,
+    name: 'ANSWER_VISUALIZATION_UNIT',
+    category: StorageItemCategory.FUNCTIONAL,
     backend: StorageBackend.SESSIONSTORAGE
   },
   // Used by extensions

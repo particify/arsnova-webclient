@@ -16,6 +16,7 @@ import { ColorElem } from '@arsnova/theme/Theme';
 import { ContentScale } from '@arsnova/app/models/content-scale';
 import { EventService } from '../../../../services/util/event.service';
 import { PresentationService } from '../../../../services/util/presentation.service';
+import { GlobalStorageService, STORAGE_KEYS } from '../../../../services/util/global-storage.service';
 
 export enum VisualizationUnit {
   ABSOLUTE = 'ABSOLUTE',
@@ -74,7 +75,8 @@ export class StatisticChoiceComponent extends StatisticContentBaseComponent impl
               protected translateService: TranslateService,
               protected themeService: ThemeService,
               protected eventService: EventService,
-              protected presentationService: PresentationService) {
+              protected presentationService: PresentationService,
+              protected globalStorageService: GlobalStorageService) {
     super(route, contentService, eventService);
   }
 
@@ -92,6 +94,8 @@ export class StatisticChoiceComponent extends StatisticContentBaseComponent impl
     this.chartId = 'chart-' + this.content.id;
     this.optionLabels = this.optionLabels ?? this.content.options.map(o => o.label);
     this.correctOptionIndexes = this.content.correctOptionIndexes;
+    this.showAnswersBelow = this.globalStorageService.getItem(STORAGE_KEYS.SHOW_ANSWERS_BELOW);
+    this.visualizationUnit = this.globalStorageService.getItem(STORAGE_KEYS.ANSWER_VISUALIZATION_UNIT);
     this.initChart();
   }
 
@@ -398,6 +402,7 @@ export class StatisticChoiceComponent extends StatisticContentBaseComponent impl
 
   toggleVisualizationUnit() {
     this.visualizationUnit = this.visualizationUnit === VisualizationUnit.ABSOLUTE ? VisualizationUnit.PERCENTAGE : VisualizationUnit.ABSOLUTE;
+    this.globalStorageService.setItem(STORAGE_KEYS.ANSWER_VISUALIZATION_UNIT, this.visualizationUnit);
     if (this.chart) {
       this.chart.update();
     }
@@ -405,6 +410,7 @@ export class StatisticChoiceComponent extends StatisticContentBaseComponent impl
 
   toggleAnswerListLayout() {
     this.showAnswersBelow = !this.showAnswersBelow;
+    this.globalStorageService.setItem(STORAGE_KEYS.SHOW_ANSWERS_BELOW, this.showAnswersBelow);
     if (this.chart) {
       this.chart.destroy();
       this.createChart(this.colors);
