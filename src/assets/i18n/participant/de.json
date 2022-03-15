@@ -201,6 +201,7 @@
     "show-chart": "Zeige die Statistiken in einem Diagramm",
     "show-answers": "Zeige die Antworten",
     "hide-chart": "Verstecke das Diagramm",
+    "show-correct": "Richtige Antworten anzeigen",
     "answer": "Antwort",
     "other-combinations": "Andere"
   },

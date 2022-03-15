@@ -201,6 +201,7 @@
     "show-chart": "Shows statistics with a chart",
     "show-answers": "Show answers",
     "hide-chart": "Hide chart",
+    "show-correct": "Show correct answers",
     "answer": "Answer",
     "other-combinations": "Other"
   },
