@@ -12,7 +12,7 @@
         <div fxLayout="row" fxLayoutAlign="center">
           <div fxLayout="column" fxLayoutAlign="center center" fxFill>
             <app-room-join [inputA11yString]="'home-page.a11y-welcome-message'"></app-room-join>
-            <button id="new-room-button" mat-button (click)="openCreateRoomDialog()"
+            <button id="new-room-button" mat-button class="mat-button-classic" (click)="openCreateRoomDialog()"
                     aria-labelledby="create-label"
                     appHotkey="2" [appHotkeyTitle]="'home-page.create-room' | translate">
               <mat-icon>add</mat-icon>

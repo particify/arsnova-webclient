@@ -97,14 +97,6 @@
   }
 }
 
-.mat-button {
-  opacity: 0.8;
-  &:disabled {
-    color: var(--on-surface);
-    opacity: 0.7;
-  }
-}
-
 .back-to-edit {
   opacity: 1;
   color: var(--primary);

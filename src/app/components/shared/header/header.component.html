@@ -93,7 +93,7 @@
       <div *ngIf="isRoom && !hasRole(UserRole.PARTICIPANT)">
         <div fxLayout="row" fxLayoutGap="10px" class="desktop-action-container">
           <button mat-button class="preview-button" (click)="switchRole()" aria-labelledby="switch-role"
-          [ngClass]="{'back-to-edit': isPreview}">
+          [ngClass]="{'back-to-edit nav-button': isPreview}">
             <mat-icon>{{ isPreview ? 'edit' : 'preview' }}</mat-icon>
             {{ (isPreview ? 'header.editing-view' : 'header.preview') | translate }}
           </button>

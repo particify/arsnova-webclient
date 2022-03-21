@@ -591,6 +591,18 @@ div {
   opacity: 0.6;
 }
 
+.mat-button:not([disabled]):not(.nav-button) {
+  opacity: 0.8;
+  &:hover {
+    opacity: 1;
+  }
+}
+
+.mat-button:disabled {
+  color: var(--on-surface)!important;
+  opacity: 0.5;
+}
+
 .mat-flat-button {
   min-width: 100px!important;
 }
@@ -613,7 +625,6 @@ div {
 
 .button-abort {
   color: var(--on-dialog);
-  opacity: 0.8;
 }
 
 .button-text {
