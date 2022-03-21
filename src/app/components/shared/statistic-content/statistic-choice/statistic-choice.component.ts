@@ -94,8 +94,10 @@ export class StatisticChoiceComponent extends StatisticContentBaseComponent impl
     this.chartId = 'chart-' + this.content.id;
     this.optionLabels = this.optionLabels ?? this.content.options.map(o => o.label);
     this.correctOptionIndexes = this.content.correctOptionIndexes;
-    this.showAnswersBelow = this.globalStorageService.getItem(STORAGE_KEYS.SHOW_ANSWERS_BELOW);
-    this.visualizationUnit = this.globalStorageService.getItem(STORAGE_KEYS.ANSWER_VISUALIZATION_UNIT);
+    if (this.isPresentation) {
+      this.showAnswersBelow = this.globalStorageService.getItem(STORAGE_KEYS.SHOW_ANSWERS_BELOW);
+      this.visualizationUnit = this.globalStorageService.getItem(STORAGE_KEYS.ANSWER_VISUALIZATION_UNIT);
+    }
     this.initChart();
   }
 
