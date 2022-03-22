@@ -48,8 +48,8 @@
         <mat-icon>build</mat-icon>
         <span>{{'header.admin-area' | translate}}</span>
       </button>
-      <button id="delete-account-button" mat-menu-item *ngIf="auth && !isGuest" (click)="openDeleteUserDialog()" tabindex="0">
-        <mat-icon class="delete">delete</mat-icon>
+      <button id="delete-account-button" mat-menu-item *ngIf="auth && !isGuest()" (click)="openDeleteUserDialog()" tabindex="0">
+        <mat-icon class="icon-warn">delete</mat-icon>
         <span>{{'header.delete-account' | translate}}</span>
       </button>
       <button id="logout-button" *ngIf="auth && !isGuest()" mat-menu-item (click)="logoutUser()" tabindex="0">
