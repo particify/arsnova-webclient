@@ -139,7 +139,7 @@ export class StatisticChoiceComponent extends StatisticContentBaseComponent impl
       drawOnChartArea: !this.isPresentation,
       z: 1
     };
-    const barThickness = this.isPresentation ? 80 : 100;
+    const barThickness = this.isPresentation ? 80 : null;
     const dataSets = [
       {
         data: this.data[this.roundsToDisplay],
