@@ -81,13 +81,6 @@ export class UserService extends AbstractEntityService<User> {
     }));
   }
 
-  updateUser(user: User): Observable<User> {
-    const connectionUrl = this.buildUri('/' + user.id) + '/?view=owner';
-    return this.http.put(connectionUrl, user, httpOptions).pipe(
-      catchError(this.handleError<any>('updateUser'))
-    );
-  }
-
   delete(id: string): Observable<User> {
     const connectionUrl: string = this.buildUri('/' + id);
     return this.http.delete<User>(connectionUrl, httpOptions).pipe(
@@ -99,8 +92,8 @@ export class UserService extends AbstractEntityService<User> {
     );
   }
 
-  getUserByLoginId(loginId: string, extended = false): Observable<User[]> {
-    const url = this.buildUri(this.apiUrl.find) + (extended ? '/?view=owner' : '');
+  getUserByLoginId(loginId: string): Observable<User[]> {
+    const url = this.buildUri(this.apiUrl.find);
     return this.http.post<User[]>(url, {
       properties: { loginId: loginId },
       externalFilters: {}
