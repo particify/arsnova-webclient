@@ -259,6 +259,13 @@ export class AuthenticationService extends AbstractHttpService<ClientAuthenticat
     return decodedToken.roles.some(role => role === this.ADMIN_ROLE);
   }
 
+  isLoginIdEmailAddress(): Observable<boolean> {
+    // While other authentication providers might also use an e-mail address,
+    // we only consider this to be the case for internal accounts.
+    return this.apiConfigService.getApiConfig$().pipe(
+      map(config => config.authenticationProviders.every(p => ['user-db', 'guest'].includes(p.id))));
+  }
+
   /**
    * Resets the local authentication state and redirects to the login page.
    * Furthermore, the current route is stored so it can be restored after

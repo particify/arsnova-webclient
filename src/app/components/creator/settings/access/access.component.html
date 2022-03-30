@@ -5,7 +5,10 @@
   <div tabindex="0" id="access-settings" class="visually-hidden">{{ 'settings.a11y-access' | translate }}</div>
   <div fxLayout="row wrap" fxLayoutAlign="start center" fxLayoutGap="10px" class="form-container">
     <mat-form-field class="input-block no-field-hint" appearance="outline" fxFlex>
-      <mat-label>{{ 'settings.username-or-email' | translate }}</mat-label>
+      <mat-label>
+        <ng-container *ngIf="loginIdIsEmail; else loginIdLabel">{{ 'settings.email' | translate }}</ng-container>
+        <ng-template #loginIdLabel>{{ 'settings.login-id' | translate }}</ng-template>
+      </mat-label>
       <input [disabled]="isGuest" [readonly]="isGuest"
              matInput type="email" autocomplete="disabled" [(ngModel)]="loginId" [formControl]="usernameFormControl" name="username"
              aria-labelledby="username"/>

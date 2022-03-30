@@ -42,6 +42,7 @@ export class AccessComponent implements OnInit {
     }
    ];
   isGuest = false;
+  loginIdIsEmail = false;
 
   usernameFormControl = new FormControl('', [Validators.email]);
 
@@ -59,6 +60,8 @@ export class AccessComponent implements OnInit {
   ngOnInit() {
     this.selectedRole = this.roles[0];
     this.getModerators();
+    this.authenticationService.isLoginIdEmailAddress()
+        .subscribe(loginIdIsEmail => this.loginIdIsEmail = loginIdIsEmail);
   }
 
   getModerators() {
