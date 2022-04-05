@@ -32,6 +32,7 @@ enum ActionDimension {
 
 export enum EventCategory {
   UI_DIALOG = 'UI dialog',
+  UI_INTERACTION = 'UI interaction',
   APP_UPDATE = 'App Update',
   ERROR = 'Error',
   ACCOUNT = 'Account',

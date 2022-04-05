@@ -55,6 +55,7 @@ import { A11yIntroPipe } from '../../pipes/a11y-intro.pipe';
 import { UserProfileComponent } from './user-profile/user-profile.component';
 import { UserFormFieldComponent } from './user-profile/user-form-field/user-form-field.component';
 import { ContentChoiceAnswerComponent } from './content-answers/content-choice-answer/content-choice-answer.component';
+import { TrackInteractionDirective } from '../../directives/track-interaction.directive';
 
 @NgModule({
   imports: [
@@ -116,7 +117,8 @@ import { ContentChoiceAnswerComponent } from './content-answers/content-choice-a
     A11yIntroPipe,
     UserProfileComponent,
     UserFormFieldComponent,
-    ContentChoiceAnswerComponent
+    ContentChoiceAnswerComponent,
+    TrackInteractionDirective
   ],
   exports: [
     RoomJoinComponent,
@@ -158,7 +160,8 @@ import { ContentChoiceAnswerComponent } from './content-answers/content-choice-a
     HotkeysComponent,
     A11yIntroPipe,
     CounterBracesPipe,
-    ContentChoiceAnswerComponent
+    ContentChoiceAnswerComponent,
+    TrackInteractionDirective
   ]
 })
 export class SharedModule {
