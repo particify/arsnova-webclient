@@ -30,7 +30,8 @@ enum ActionDimension {
   SPECIAL_ROOM = 4
 }
 
-enum EventCategory {
+export enum EventCategory {
+  UI_DIALOG = 'UI dialog',
   APP_UPDATE = 'App Update',
   ERROR = 'Error',
   ACCOUNT = 'Account',

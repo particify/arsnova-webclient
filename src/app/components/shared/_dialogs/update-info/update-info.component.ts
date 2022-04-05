@@ -20,6 +20,7 @@ interface DialogData {
   styleUrls: ['./update-info.component.scss']
 })
 export class UpdateInfoComponent implements OnInit {
+  readonly dialogId = 'update-info';
 
   isLoading = true;
   changes: string[];
@@ -54,7 +55,7 @@ export class UpdateInfoComponent implements OnInit {
   }
 
   close() {
-    this.dialogRef.close();
+    this.dialogRef.close(true);
   }
 
 }

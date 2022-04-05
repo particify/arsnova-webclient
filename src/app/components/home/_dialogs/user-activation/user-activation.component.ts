@@ -12,6 +12,7 @@ import { EventService } from '../../../../services/util/event.service';
   styleUrls: ['./user-activation.component.scss']
 })
 export class UserActivationComponent {
+  readonly dialogId = 'activate-user';
 
   activationKeyFormControl = new FormControl('', [Validators.required]);
 

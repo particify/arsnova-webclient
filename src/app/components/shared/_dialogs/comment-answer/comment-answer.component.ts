@@ -18,6 +18,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
   styleUrls: ['./comment-answer.component.scss']
 })
 export class CommentAnswerComponent implements OnInit, AfterContentInit {
+  readonly dialogId = 'comment-answer';
 
   comment: Comment;
   answer: string;

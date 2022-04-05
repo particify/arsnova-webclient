@@ -12,6 +12,7 @@ import { EventService } from '../../../../services/util/event.service';
   styleUrls: ['./content-group-creation.component.scss']
 })
 export class ContentGroupCreationComponent {
+  readonly dialogId = 'create-content-group';
 
   name = '';
 

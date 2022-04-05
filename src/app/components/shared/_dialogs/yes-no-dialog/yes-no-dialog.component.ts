@@ -17,6 +17,7 @@ export interface DialogData {
   styleUrls: ['./yes-no-dialog.component.scss']
 })
 export class YesNoDialogComponent {
+  readonly dialogId = 'confirm';
 
   constructor(
     public dialogRef: MatDialogRef<YesNoDialogComponent>,

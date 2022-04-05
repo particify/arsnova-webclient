@@ -7,6 +7,7 @@ import { MatDialogRef } from '@angular/material/dialog';
   styleUrls: ['./publish-content.component.scss']
 })
 export class PublishContentComponent {
+  readonly dialogId = 'publish-content';
 
   publishSingle = true;
 
