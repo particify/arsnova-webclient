@@ -22,7 +22,10 @@
       </mat-select>
     </mat-form-field>
     <button mat-stroked-button class="add-user-button" (click)="addUser()" fxFlex [disabled]="isGuest"
-            aria-labelledby="add-user">{{ 'settings.add-user' | translate }}</button>
+            aria-labelledby="add-user"
+            appTrackInteraction="Room member role assigned" [appTrackName]="selectedRole.name">
+      {{ 'settings.add-user' | translate }}
+    </button>
   </div>
   <app-loading-indicator *ngIf="isLoading" [size]="40"></app-loading-indicator>
   <p *ngIf="!isLoading && moderators.length === 0">{{ 'settings.no-users' | translate }}</p>

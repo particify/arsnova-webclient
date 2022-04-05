@@ -95,7 +95,8 @@
         </div>
         <div *ngIf="comment.tag && comment.tag !== ''" class="comment-tags light">
           <mat-chip-list>
-            <mat-chip (click)="this.clickedOnTag.emit(comment.tag)" >
+            <mat-chip (click)="this.clickedOnTag.emit(comment.tag)"
+                      appTrackInteraction="Comments filtered" appTrackName="toggle-category">
               {{comment.tag}}
             </mat-chip>
           </mat-chip-list>

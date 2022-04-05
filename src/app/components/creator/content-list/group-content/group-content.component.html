@@ -61,17 +61,20 @@
             </div>
             <mat-menu #groupSettings="matMenu">
               <button mat-menu-item (click)="toggleStatisticsPublished()"
-                      aria-labelledby="publish-statistics">
+                      aria-labelledby="publish-statistics"
+                      appTrackInteraction="Content group publish stats toggled" [appTrackName]="statisticsPublished ? 'off' : 'on'">
                 <mat-icon>bar_chart</mat-icon>
                 {{ (statisticsPublished ? 'content.dont-publish-statistics' : 'content.publish-statistics') | translate }}
               </button>
-              <button mat-menu-item (click)="toggleCorrectOptionsPublished()">
+              <button mat-menu-item (click)="toggleCorrectOptionsPublished()"
+                      appTrackInteraction="Content group publish correct options toggled" [appTrackName]="correctOptionsPublished ? 'off' : 'on'">
                 <mat-icon>done_all</mat-icon>
                 {{ (correctOptionsPublished ? 'content.dont-publish-correct-options' : 'content.publish-correct-options') | translate }}
               </button>
               <mat-divider></mat-divider>
               <button mat-menu-item id="edit-group-sort" aria-labelledby="edit-content-group-sort"
-                      (click)="goInSortingMode()" [disabled]="contents.length < 2">
+                      (click)="goInSortingMode()" [disabled]="contents.length < 2"
+                      appTrackInteraction="Content group sorting started">
                 <mat-icon>swap_vert</mat-icon>
                 {{ 'content.sort-content-group' | translate }}
               </button>
@@ -80,7 +83,8 @@
                 <mat-icon>file_download</mat-icon>
                 {{ 'export.export' | translate }}
               </button>
-              <button mat-menu-item (click)="importFromCsv()">
+              <button mat-menu-item (click)="importFromCsv()"
+                      appTrackInteraction="File dialog for CSV import opened">
                 <mat-icon>file_upload</mat-icon>
                 {{ 'import.import' | translate }}
               </button>
@@ -98,18 +102,21 @@
           </div>
           <div fxLayoutGap="10px">
             <button *ngIf="isInSortingMode" mat-button class="abort button-abort"
-                    (click)="leaveSortingMode(true)" (keyup.enter)="leaveTitleEditMode()" aria-labelledby="discard-changes">
+                    (click)="leaveSortingMode(true)" (keyup.enter)="leaveTitleEditMode()" aria-labelledby="discard-changes"
+                    appTrackInteraction="Content group sorting finished" appTrackName="reset">
               {{ 'content.abort' | translate }}
             </button>
             <button *ngIf="isInSortingMode" mat-raised-button class="button-primary"
-                    (keyup.enter)="saveSorting()" (click)="saveSorting()" aria-labelledby="save-sort-changes">
+                    (keyup.enter)="saveSorting()" (click)="saveSorting()" aria-labelledby="save-sort-changes"
+                    appTrackInteraction="Content group sorting finished" appTrackName="save">
               {{ 'content.save' | translate }}
             </button>
           </div>
           <div *ngIf="!isInSortingMode" fxLayoutAlign="center center" fxLayoutGap="16px">
             <mat-slide-toggle id="lock-group-slide" (change)="publishContents()" [(ngModel)]="published" labelPosition="before"
                                 aria-labelledby="lock-group"
-                                appHotkey="4" [appHotkeyTitle]="'content.unlock-collection' | translate">
+                                appHotkey="4" [appHotkeyTitle]="'content.unlock-collection' | translate"
+                                appTrackInteraction="Content group publish toggled" [appTrackName]="published ? 'off' : 'on'">
                                 {{ 'content.unlock-collection' | translate}}
             </mat-slide-toggle>
           </div>
@@ -136,13 +143,15 @@
                     <button mat-icon-button *ngIf="content.format === 'TEXT' && content.state.answersPublished"
                             (click)="toggleAnswersPublished(content);$event.stopPropagation()"
                             attr.aria-label="{{ 'content.a11y-dont-publish-answers' | translate }}"
-                            matTooltip="{{ 'content.dont-publish-answers' | translate}}">
+                            matTooltip="{{ 'content.dont-publish-answers' | translate}}"
+                            appTrackInteraction="Content publish text answers toggled" appTrackName="off">
                       <mat-icon class="lock-icon unlocked">visibility</mat-icon>
                     </button>
                     <button mat-icon-button *ngIf="content.format === 'TEXT' && !content.state.answersPublished"
                             (click)="toggleAnswersPublished(content);$event.stopPropagation()"
                             attr.aria-label="{{ 'content.a11y-publish-answers' | translate }}"
-                            matTooltip="{{ 'content.publish-answers' | translate}}">
+                            matTooltip="{{ 'content.publish-answers' | translate}}"
+                            appTrackInteraction="Content publish text answers toggled" appTrackName="on">
                       <mat-icon class="lock-icon locked">visibility_off</mat-icon>
                     </button>
                     <button mat-icon-button (click)="$event.stopPropagation()" #publishTrigger="matMenuTrigger"
@@ -156,34 +165,40 @@
                         <button mat-menu-item *ngIf="((firstPublishedIndex !== lastPublishedIndex) ||
                         (firstPublishedIndex === lastPublishedIndex && i !== firstPublishedIndex)) ||
                         !isPublished(i)" (click)="publishContent(i, true)"
-                                [attr.aria-label]="'content.a11y-unlock-this-content' | translate">
+                                [attr.aria-label]="'content.a11y-unlock-this-content' | translate"
+                                appTrackInteraction="Content group publish range changed" appTrackName="publish-single">
                           <mat-icon class="icon-important">vertical_align_center</mat-icon>
                           {{ 'content.unlock-this-content' | translate}}
                         </button>
                         <button mat-menu-item *ngIf="i !== contents.length -1 && !isPublished(i)" (click)="publishContentFrom(i, true)"
-                                [attr.aria-label]="'content.a11y-unlock-contents-from' | translate">
+                                [attr.aria-label]="'content.a11y-unlock-contents-from' | translate"
+                                appTrackInteraction="Content group publish range changed" appTrackName="publish-multiple">
                           <mat-icon class="icon-important">vertical_align_top</mat-icon>
                           {{ 'content.unlock-contents-from' | translate}}
                         </button>
                         <button mat-menu-item *ngIf="!isPublished(i) && i > 0" (click)="publishContentUpTo(i, true)"
-                                [attr.aria-label]="'content.a11y-unlock-contents-up-to' | translate">
+                                [attr.aria-label]="'content.a11y-unlock-contents-up-to' | translate"
+                                appTrackInteraction="Content group publish range changed" appTrackName="publish-multiple">
                           <mat-icon class="icon-important">vertical_align_bottom</mat-icon>
                           {{ 'content.unlock-contents-up-to' | translate}}
                         </button>
                       </div>
                       <div *ngIf="isPublished(i)" class="menu-lock">
                         <button mat-menu-item *ngIf="isStart(i) || isEnd(i)" (click)="publishContent(i, false)"
-                                [attr.aria-label]="'content.a11y-lock-this-content' | translate">
+                                [attr.aria-label]="'content.a11y-lock-this-content' | translate"
+                                appTrackInteraction="Content group publish range changed" appTrackName="lock-single">
                           <mat-icon class="icon-important">vertical_align_center</mat-icon>
                           {{ 'content.lock-this-content' | translate}}
                         </button>
                         <button mat-menu-item *ngIf="!isStart(i)" (click)="publishContentUpTo(i, false)"
-                                [attr.aria-label]="'content.a11y-lock-contents-up-to' | translate">
+                                [attr.aria-label]="'content.a11y-lock-contents-up-to' | translate"
+                                appTrackInteraction="Content group publish range changed" appTrackName="lock-multiple">
                           <mat-icon class="icon-important">vertical_align_top</mat-icon>
                           {{ 'content.lock-contents-up-to' | translate}}
                         </button>
                         <button mat-menu-item *ngIf="!isEnd(i)" (click)="publishContentFrom(i, false)"
-                                  [attr.aria-label]="'content.a11y-lock-contents-from' | translate">
+                                  [attr.aria-label]="'content.a11y-lock-contents-from' | translate"
+                                  appTrackInteraction="Content group publish range changed" appTrackName="lock-multiple">
                           <mat-icon class="icon-important">vertical_align_bottom</mat-icon>
                           {{ 'content.lock-contents-from' | translate}}
                         </button>

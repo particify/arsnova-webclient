@@ -1,6 +1,7 @@
 <div fxLayout="column" fxFill>
   <div fxLayout="row" fxLayoutAlign="end">
-    <button mat-button class="copy-url" (click)="copyShortId()" aria-labelledby="copy-url">
+    <button mat-button class="copy-url" (click)="copyShortId()" aria-labelledby="copy-url"
+            appTrackInteraction="Copied room URL">
       <mat-icon>content_copy</mat-icon>
       {{ 'dialog.copy-url' | translate}}
     </button>
