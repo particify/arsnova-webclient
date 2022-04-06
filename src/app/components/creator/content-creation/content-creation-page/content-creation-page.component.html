@@ -51,9 +51,9 @@
                           [(ngModel)]="question"
                           [placeholder]="(selectedFormat.name !== 'slide' ? 'content.enter-body' : 'content.enter-body-neutral') | translate"
                           aria-labelledby="body" id="body-input"
-                          matAutosizeMaxRows="8"
-                          matAutosizeMinRows="3"
-                          matInput matTextareaAutosize maxlength="{{ selectedFormat.name !== 'slide' ? 1000 : 2000 }}" name="questionInput"
+                          cdkAutosizeMaxRows="8"
+                          cdkAutosizeMinRows="3"
+                          matInput cdkTextareaAutosize maxlength="{{ selectedFormat.name !== 'slide' ? 1000 : 2000 }}" name="questionInput"
                           appHotkey="1" [appHotkeyTitle]="'content.body' | translate"></textarea>
               </mat-form-field>
               <app-hint *ngIf="textContainsImage" text="utils.formatting-image-hint" [type]="warningType"></app-hint>

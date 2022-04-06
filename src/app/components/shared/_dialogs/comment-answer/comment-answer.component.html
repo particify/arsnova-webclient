@@ -30,9 +30,9 @@
             <mat-form-field class="input-block" appearance="outline">
               <textarea id="answer-input" [(ngModel)]="answer" (input)="edit = true"
                       matInput
-                      matTextareaAutosize
-                      matAutosizeMinRows="3"
-                      matAutosizeMaxRows="8"
+                      cdkTextareaAutosize
+                      cdkAutosizeMinRows="3"
+                      cdkAutosizeMaxRows="8"
                       maxlength="500"
                       name="answer"
                       aria-labelledby="answer"
