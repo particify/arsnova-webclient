@@ -93,8 +93,10 @@ export class StepperComponent extends CdkStepper implements OnInit, OnDestroy {
   }
 
   setHeaderPosition(stepIndex: number) {
-    const lastHeaderPos = this.listLength - 5 + this.additionalSteps;
-    this.headerPos = stepIndex < lastHeaderPos ? stepIndex : lastHeaderPos;
+    if ((this.listLength + this.additionalSteps) > 5) {
+      const lastHeaderPos = this.listLength - 5 + this.additionalSteps;
+      this.headerPos = stepIndex < lastHeaderPos ? stepIndex : lastHeaderPos;
+    }
   }
 
   swipe(event: TouchEvent, when: string): void {
