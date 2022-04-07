@@ -52,10 +52,11 @@ export class DialogService {
     return ref;
   }
 
-  openDeleteDialog(body: string, bodyElement?: string, confirmLabel?: string): MatDialogRef<YesNoDialogComponent> {
+  openDeleteDialog(dialogIdSuffix: string, body: string, bodyElement?: string, confirmLabel?: string): MatDialogRef<YesNoDialogComponent> {
     return this.openDialog(YesNoDialogComponent, {
       width: this.size.small,
       data: {
+        dialogId: 'delete-' + dialogIdSuffix,
         section: 'dialog',
         headerLabel: 'sure',
         body: body,
@@ -168,6 +169,7 @@ export class DialogService {
     return this.openDialog(YesNoDialogComponent, {
       width: this.size.small,
       data: {
+        dialogId: 'publish-content-group',
         section: 'dialog',
         headerLabel: 'publish-group',
         body: 'want-publish-group',

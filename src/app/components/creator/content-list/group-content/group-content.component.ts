@@ -296,7 +296,7 @@ export class GroupContentComponent extends ContentListBaseComponent implements O
   }
 
   deleteAnswers(content: Content) {
-    const dialogRef = this.dialogService.openDeleteDialog('really-delete-answers');
+    const dialogRef = this.dialogService.openDeleteDialog('content-answers', 'really-delete-answers');
     dialogRef.afterClosed().subscribe(result => {
       if (result === 'delete') {
         this.contentService.deleteAnswersOfContent(content.id, this.room.id);
@@ -394,7 +394,7 @@ export class GroupContentComponent extends ContentListBaseComponent implements O
   }
   removeContent(delContent: Content) {
     const index = this.findIndexOfId(delContent.id);
-    const dialogRef = this.dialogService.openDeleteDialog('really-remove-content', this.contents[index].body, 'remove');
+    const dialogRef = this.dialogService.openDeleteDialog('content-from-group', 'really-remove-content', this.contents[index].body, 'remove');
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.updateContentChanges(index, result);
@@ -493,7 +493,7 @@ export class GroupContentComponent extends ContentListBaseComponent implements O
   }
 
   deleteGroup() {
-    const dialogRef = this.dialogService.openDeleteDialog('really-delete-content-group', this.contentGroup.name, 'delete');
+    const dialogRef = this.dialogService.openDeleteDialog('content-group', 'really-delete-content-group', this.contentGroup.name, 'delete');
     dialogRef.afterClosed().subscribe(result => {
       if (result === 'delete') {
         this.contentGroupService.delete(this.contentGroup).subscribe(() => {

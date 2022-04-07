@@ -107,7 +107,7 @@ export class AccessComponent implements OnInit {
   }
 
   openDeleteRoomDialog(moderator: Moderator): void {
-    const dialogRef = this.dialogService.openDeleteDialog('really-delete-user-rights', moderator.loginId, 'remove');
+    const dialogRef = this.dialogService.openDeleteDialog('room-moderator', 'really-delete-user-rights', moderator.loginId, 'remove');
     dialogRef.afterClosed().subscribe(result => {
       if (result === 'remove') {
         this.removeModerator(moderator.userId, this.moderators.indexOf(moderator));

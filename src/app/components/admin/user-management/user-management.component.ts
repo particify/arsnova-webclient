@@ -44,7 +44,7 @@ export class UserManagementComponent implements OnInit {
   }
 
   deleteEntity() {
-    const dialogRef = this.dialogService.openDeleteDialog('really-delete-account-admin');
+    const dialogRef = this.dialogService.openDeleteDialog('account-as-admin', 'really-delete-account-admin');
     dialogRef.afterClosed().subscribe(closeAction => {
       if (closeAction === 'delete')  {
         this.userService.delete(this.user.id)

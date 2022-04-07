@@ -2,6 +2,7 @@ import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 export interface DialogData {
+  dialogId: string;
   section: string;
   headerLabel: string;
   body: string;
@@ -17,12 +18,13 @@ export interface DialogData {
   styleUrls: ['./yes-no-dialog.component.scss']
 })
 export class YesNoDialogComponent {
-  readonly dialogId = 'confirm';
+  readonly dialogId: string;
 
   constructor(
     public dialogRef: MatDialogRef<YesNoDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData) {
     data.section = data.section + '.';
+    this.dialogId = data.dialogId;
   }
 
   closeDialog(action: string): void {

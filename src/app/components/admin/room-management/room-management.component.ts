@@ -34,7 +34,7 @@ export class RoomManagementComponent {
   }
 
   deleteEntity() {
-    const dialogRef = this.dialogService.openDeleteDialog('really-delete-room');
+    const dialogRef = this.dialogService.openDeleteDialog('room-as-admin', 'really-delete-room');
     dialogRef.afterClosed().subscribe(closeAction => {
       if (closeAction === 'delete')  {
         this.roomService.deleteRoom(this.room.id)

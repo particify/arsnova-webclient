@@ -74,7 +74,7 @@ export class CommentAnswerComponent implements OnInit, AfterContentInit {
   }
 
   openDeleteAnswerDialog(): void {
-    const dialogRef = this.dialogService.openDeleteDialog('really-delete-answer');
+    const dialogRef = this.dialogService.openDeleteDialog('comment-answer', 'really-delete-answer');
     dialogRef.afterClosed().subscribe(result => {
       if (result === 'delete') {
         this.deleteAnswer();

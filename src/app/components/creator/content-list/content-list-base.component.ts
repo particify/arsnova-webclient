@@ -83,7 +83,7 @@ export abstract class ContentListBaseComponent {
 
   deleteContent(delContent: Content) {
     const index = this.findIndexOfId(delContent.id);
-    const dialogRef = this.dialogService.openDeleteDialog('really-delete-content', this.contents[index].body);
+    const dialogRef = this.dialogService.openDeleteDialog('content', 'really-delete-content', this.contents[index].body);
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.updateContentChanges(index, result);
