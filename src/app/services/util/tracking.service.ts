@@ -13,6 +13,7 @@ import { ClientAuthentication } from '../../models/client-authentication';
 import { Subscription, timer } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { ConsentChangedEvent } from '../../models/events/consent-changed';
+import { GlobalStorageService, STORAGE_KEYS } from './global-storage.service';
 
 const HEARTBEAT_INVERVAL = 150;
 
@@ -21,7 +22,8 @@ enum VisitDimension {
   UI_LANGUAGE = 1,
   THEME = 2,
   AUTH_PROVIDER = 5,
-  APP_VERSION = 6
+  APP_VERSION = 6,
+  ENTRY = 7
 }
 
 /* This enum maps to Matomo dimension IDs for actions. */
@@ -33,6 +35,7 @@ enum ActionDimension {
 export enum EventCategory {
   UI_DIALOG = 'UI dialog',
   UI_INTERACTION = 'UI interaction',
+  BROSWER = 'Browser',
   APP_UPDATE = 'App Update',
   ERROR = 'Error',
   ACCOUNT = 'Account',
@@ -60,7 +63,8 @@ export class TrackingService {
     private eventService: EventService,
     private authenticationService: AuthenticationService,
     private translateService: TranslateService,
-    private themeService: ThemeService
+    private themeService: ThemeService,
+    private globalStorageService: GlobalStorageService,
   ) {
     window['_paq'] = window['_paq'] || [];
     this._paq = window['_paq'];
@@ -83,6 +87,8 @@ export class TrackingService {
     if (this.router.url === location.pathname) {
       this.addRoute(this.router.url);
     }
+
+    this.trackEntryOrReload();
 
     if (this.consentGiven) {
       this.loadTrackerScript();
@@ -229,5 +235,16 @@ export class TrackingService {
         .replace(/\/[0-9]{1,4}(\/|$)/, '/__INDEX__$1')
         .replace(/\/series\/[^\/]+/, '/series/__SERIES__')
         .replace(/\/present\/[0-9]+(\/|$)/, '/present/__ROOM_SHORT_ID__$1');
+  }
+
+  private trackEntryOrReload() {
+    const queryParams = new URL(document.location.href).searchParams;
+    const entry = queryParams.get('entry');
+    if (this.globalStorageService.getItem(STORAGE_KEYS.BROWSER_SESSION_INITIALIZED)) {
+      this.addEvent(EventCategory.BROSWER, 'App reinitialized');
+    } else if (entry) {
+      this.setVisitDimension(VisitDimension.ENTRY, entry);
+    }
+    this.globalStorageService.setItem(STORAGE_KEYS.BROWSER_SESSION_INITIALIZED, true);
   }
 }

@@ -22,6 +22,7 @@ export class QrCodeComponent implements OnInit, OnDestroy {
   bgColor: string;
   fgColor: string;
   destroyed$ = new Subject<void>();
+  url: string;
   qrUrl: string;
   displayUrl: string;
   useJoinUrl = false;
@@ -54,7 +55,8 @@ export class QrCodeComponent implements OnInit, OnDestroy {
         url = document.baseURI + 'p/';
         this.displayUrl = document.baseURI.replace(/^https?:\/\//, '').replace(/\/$/, '');
       }
-      this.qrUrl = url + this.shortId;
+      this.url = url + this.shortId;
+      this.qrUrl = this.url + '?entry=qr';
     });
   }
 
@@ -69,7 +71,7 @@ export class QrCodeComponent implements OnInit, OnDestroy {
     selBox.style.left = '0';
     selBox.style.top = '0';
     selBox.style.opacity = '0';
-    selBox.value = this.qrUrl;
+    selBox.value = this.url;
     document.body.appendChild(selBox);
     selBox.focus();
     selBox.select();
