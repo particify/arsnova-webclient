@@ -6,9 +6,9 @@
               [(ngModel)]="answer"
               [placeholder]="'content.enter-answer' | translate"
               aria-labelledby="answer" id="body-input"
-              matAutosizeMaxRows="8"
-              matAutosizeMinRows="3"
-              matInput matTextareaAutosize maxlength="2000" name="questionInput"></textarea>
+              cdkAutosizeMaxRows="8"
+              cdkAutosizeMinRows="3"
+              matInput cdkTextareaAutosize maxlength="2000" name="questionInput"></textarea>
   </mat-form-field>
   <app-hint *ngIf="textContainsImage" text="utils.formatting-image-hint" [type]="warningType"></app-hint>
   <div class="form-spacer"></div>

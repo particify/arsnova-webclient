@@ -12,7 +12,7 @@
         <mat-form-field class="input-block" appearance="outline">
       <textarea #descriptionInput
         (input)="updateTextContainsImage(descriptionInput.value)"
-        [(ngModel)]="description" matInput matTextareaAutosize matAutosizeMinRows="3" matAutosizeMaxRows="5"
+        [(ngModel)]="description" matInput cdkTextareaAutosize cdkAutosizeMinRows="3" cdkAutosizeMaxRows="5"
         maxlength="500" name="description" aria-labelledby="room-description"
         placeholder="{{ 'settings.enter-room-description' | translate }}"></textarea>
           <mat-hint align="end">

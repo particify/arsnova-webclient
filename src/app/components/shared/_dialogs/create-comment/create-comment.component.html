@@ -2,7 +2,7 @@
   <mat-form-field appearance="outline">
     <mat-label>{{ 'dialog.comment' | translate }}</mat-label>
     <textarea matInput
-              #commentBody matTextareaAutosize matAutosizeMinRows=5 matAutosizeMaxRows=10 maxlength="500"
+              #commentBody cdkTextareaAutosize cdkAutosizeMinRows=5 cdkAutosizeMaxRows=10 maxlength="500"
               [formControl]="bodyForm" aria-labelledby="ask-question-description"
               [placeholder]="'dialog.enter-comment' | translate"></textarea>
     <mat-hint align="end"><span aria-hidden="true">{{commentBody.value.length}} / 500</span></mat-hint>
