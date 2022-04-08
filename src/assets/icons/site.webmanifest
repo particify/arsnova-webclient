@@ -17,6 +17,6 @@
     "theme_color": "#000000",
     "background_color": "#03dac6",
     "scope": "/",
-    "start_url": "",
+    "start_url": "?entry=pwa",
     "display": "standalone"
 }

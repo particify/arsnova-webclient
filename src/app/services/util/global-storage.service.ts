@@ -30,7 +30,8 @@ export const STORAGE_KEYS: { [key: string]: symbol } = {
   COMMENT_TIME_FILTER: Symbol(),
   FEATURE_NEWS: Symbol(),
   SHOW_ANSWERS_BELOW: Symbol(),
-  ANSWER_VISUALIZATION_UNIT: Symbol()
+  ANSWER_VISUALIZATION_UNIT: Symbol(),
+  BROWSER_SESSION_INITIALIZED: Symbol()
 };
 
 /**
@@ -131,6 +132,12 @@ export const STORAGE_CONFIG: StorageItem[] = [
     key: STORAGE_KEYS.ANSWER_VISUALIZATION_UNIT,
     name: 'ANSWER_VISUALIZATION_UNIT',
     category: StorageItemCategory.FUNCTIONAL,
+    backend: StorageBackend.SESSIONSTORAGE
+  },
+  {
+    key: STORAGE_KEYS.BROWSER_SESSION_INITIALIZED,
+    name: 'BROWSER_SESSION_INITIALIZED',
+    category: StorageItemCategory.STATISTICS,
     backend: StorageBackend.SESSIONSTORAGE
   },
   // Used by extensions
