@@ -133,11 +133,13 @@
                 </mat-icon>
               </div>
               <div fxLayout="row" fxLayoutAlign="center center" class="action-buttons">
-                <button mat-button (click)="transferRoomFromGuest(room)" [hidden]="" *ngIf="room.membership.primaryRole === creatorRole">
+                <button mat-button (click)="transferRoomFromGuest(room)" [hidden]="" *ngIf="room.membership.primaryRole === creatorRole"
+                        appTrackInteraction="Room transferred from guest" appTrackName="owner">
                   <mat-icon>swap_horiz</mat-icon>
                   {{ 'room-list.transfer' | translate }}
                 </button>
-                <button mat-button (click)="addRoomFromGuest(room)" [hidden]="room.transferred" *ngIf="room.membership.primaryRole !== creatorRole">
+                <button mat-button (click)="addRoomFromGuest(room)" [hidden]="room.transferred" *ngIf="room.membership.primaryRole !== creatorRole"
+                        appTrackInteraction="Room transferred from guest" appTrackName="participant">
                   <mat-icon>add</mat-icon>
                   {{ 'room-list.add' | translate }}
                 </button>

@@ -12,6 +12,7 @@ import { EventService } from '../../../../services/util/event.service';
   styleUrls: ['./cookies.component.scss']
 })
 export class CookiesComponent implements OnInit, AfterViewInit {
+  readonly dialogId = 'cookie-settings';
 
   @ViewChild('header') dialogTitle: ElementRef;
 

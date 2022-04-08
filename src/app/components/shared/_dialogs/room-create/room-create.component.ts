@@ -22,6 +22,8 @@ import { AuthenticationProvider, AuthenticationProviderRole, AuthenticationProvi
   styleUrls: ['./room-create.component.scss']
 })
 export class RoomCreateComponent implements OnInit {
+  readonly dialogId = 'create-room';
+
   emptyInputs = false;
   newRoom = new Room();
   roomId: string;
@@ -105,7 +107,7 @@ export class RoomCreateComponent implements OnInit {
       const event = new RoomCreated(room.id, room.shortId);
       this.eventService.broadcast(event.type, event.payload);
       this.router.navigate(['edit', room.shortId]);
-      this.closeDialog();
+      this.closeDialog(true);
     });
   }
 
@@ -129,7 +131,7 @@ export class RoomCreateComponent implements OnInit {
   /**
    * Closes the room create dialog on call.
    */
-  closeDialog(): void {
-    this.dialogRef.close();
+  closeDialog(result?: boolean): void {
+    this.dialogRef.close(result);
   }
 }

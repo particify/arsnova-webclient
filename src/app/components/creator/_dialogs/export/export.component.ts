@@ -19,6 +19,8 @@ export interface ExportOptions {
   templateUrl: './export.component.html'
 })
 export class ExportComponent {
+  readonly dialogId = 'export';
+
   exportTypes = [
     { label: 'export.tsv', value: ExportFileType.TSV },
     { label: 'export.csv', value: ExportFileType.CSV }

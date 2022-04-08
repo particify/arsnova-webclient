@@ -166,7 +166,7 @@ export class ContentService extends AbstractEntityService<Content> {
   }
 
   showDeleteAllAnswersDialog(contentGroup: ContentGroup) {
-    const dialogRef = this.dialogService.openDeleteDialog('really-delete-all-answers');
+    const dialogRef = this.dialogService.openDeleteDialog('content-answers', 'really-delete-all-answers');
     return dialogRef.afterClosed().pipe(
       switchMap(result => {
         if (result === 'delete') {

@@ -29,6 +29,7 @@ export interface DialogData {
 })
 
 export class CreateCommentComponent implements OnInit {
+  readonly dialogId = 'create-comment';
 
   comment: Comment;
   selectedTag: string;
@@ -97,7 +98,7 @@ export class CreateCommentComponent implements OnInit {
         });
       }
       this.notificationService.showAdvanced(message, AdvancedSnackBarTypes.SUCCESS);
-      this.dialogRef.close();
+      this.dialogRef.close(true);
     });
   }
 

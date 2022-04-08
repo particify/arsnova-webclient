@@ -661,7 +661,7 @@ export class CommentListComponent implements OnInit, OnDestroy {
   }
 
   openDeleteCommentsDialog(): void {
-    const dialogRef = this.dialogService.openDeleteDialog(this.isModerator ? 'really-delete-banned-comments' : 'really-delete-comments');
+    const dialogRef = this.dialogService.openDeleteDialog('comments', this.isModerator ? 'really-delete-banned-comments' : 'really-delete-comments');
     dialogRef.afterClosed().subscribe(result => {
       if (result === 'delete') {
         this.deleteComments();

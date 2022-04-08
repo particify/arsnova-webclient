@@ -18,6 +18,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
   styleUrls: ['./comment-answer.component.scss']
 })
 export class CommentAnswerComponent implements OnInit, AfterContentInit {
+  readonly dialogId = 'comment-answer';
 
   comment: Comment;
   answer: string;
@@ -73,7 +74,7 @@ export class CommentAnswerComponent implements OnInit, AfterContentInit {
   }
 
   openDeleteAnswerDialog(): void {
-    const dialogRef = this.dialogService.openDeleteDialog('really-delete-answer');
+    const dialogRef = this.dialogService.openDeleteDialog('comment-answer', 'really-delete-answer');
     dialogRef.afterClosed().subscribe(result => {
       if (result === 'delete') {
         this.deleteAnswer();

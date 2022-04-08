@@ -500,7 +500,7 @@ export class ControlBarComponent extends NavBarComponent implements OnInit, OnDe
       this.changeRound(0);
       this.multipleRounds = false;
     });
-    const dialogRef = this.dialogService.openDeleteDialog('really-delete-answers');
+    const dialogRef = this.dialogService.openDeleteDialog('content-answers', 'really-delete-answers');
     dialogRef.afterClosed().subscribe(result => {
       if (result === 'delete') {
         this.contentService.deleteAnswersOfContent(this.content.id, this.roomId);

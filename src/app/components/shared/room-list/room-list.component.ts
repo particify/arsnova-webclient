@@ -192,7 +192,7 @@ export class RoomListComponent implements OnInit, OnDestroy {
 
   openDeleteRoomDialog(room: RoomDataView) {
     if (room.membership.roles.indexOf(UserRole.CREATOR) === -1) {
-      const dialogRef = this.dialogService.openDeleteDialog('really-cancel-room-membership', room.summary.name);
+      const dialogRef = this.dialogService.openDeleteDialog('room-membership', 'really-cancel-room-membership', room.summary.name);
       dialogRef.afterClosed().subscribe(result => {
         if (result === 'delete') {
           this.cancelMembership(room);
@@ -201,7 +201,7 @@ export class RoomListComponent implements OnInit, OnDestroy {
         }
       });
     } else {
-      const dialogRef = this.dialogService.openDeleteDialog('really-delete-room', room.summary.name);
+      const dialogRef = this.dialogService.openDeleteDialog('room', 'really-delete-room', room.summary.name);
       dialogRef.afterClosed().subscribe(result => {
         if (result === 'delete') {
           this.deleteRoom(room);

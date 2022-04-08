@@ -30,7 +30,9 @@ enum ActionDimension {
   SPECIAL_ROOM = 4
 }
 
-enum EventCategory {
+export enum EventCategory {
+  UI_DIALOG = 'UI dialog',
+  UI_INTERACTION = 'UI interaction',
   APP_UPDATE = 'App Update',
   ERROR = 'Error',
   ACCOUNT = 'Account',
@@ -196,6 +198,9 @@ export class TrackingService {
   }
 
   addEvent(category: EventCategory, action: string, name?: string, value?: number, url?: string) {
+    if (!environment.production) {
+      console.log(`Tracking: addEvent(category=${category}, action=${action}, name=${name}, value=${value}, url=${url})`);
+    }
     this._paq.push(['setCustomUrl', this.stripIdsFromUri(url ?? this.router.url)]);
     const event: (string|number)[] = ['trackEvent', category, action];
     /* Check for undefined explicitly because 0 is a valid value */

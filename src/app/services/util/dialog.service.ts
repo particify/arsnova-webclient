@@ -18,6 +18,7 @@ import { UpdateInfoComponent } from '../../components/shared/_dialogs/update-inf
 import { UserRole } from '../../models/user-roles.enum';
 import { VersionInfo } from '../../models/version-info';
 import { ExportComponent, ExportOptions } from '../../components/creator/_dialogs/export/export.component';
+import { EventCategory, TrackingService } from './tracking.service';
 
 @Injectable()
 export class DialogService {
@@ -31,17 +32,31 @@ export class DialogService {
     max: '832px',
   };
 
-  constructor(public dialog: MatDialog) {
+  constructor(public dialog: MatDialog,
+              private trackingService: TrackingService) {
+    // FIXME: This condition is currently necessary because there are multiple
+    // dialog service instances - one per lazy loaded module. It is a workaround
+    // until we have a way to only create a single instance and might break if
+    // subscriptions to the afterOpened event are added in other places.
+    if (!this.dialog.afterOpened.observed) {
+      this.dialog.afterOpened.subscribe(dialogRef =>
+          this.trackingService.addEvent(EventCategory.UI_DIALOG, 'Dialog opened', dialogRef.componentInstance.dialogId));
+    }
   }
 
   openDialog<T>(component: ComponentType<T>, config?: MatDialogConfig): MatDialogRef<T> {
-    return this.dialog.open(component, config);
+    const ref = this.dialog.open(component, config);
+    ref.afterClosed().subscribe(result =>
+        this.trackingService.addEvent(EventCategory.UI_DIALOG,
+            this.isCancelAction(result) ? 'Dialog cancelled' : 'Dialog confirmed', (ref.componentInstance as any).dialogId));
+    return ref;
   }
 
-  openDeleteDialog(body: string, bodyElement?: string, confirmLabel?: string): MatDialogRef<YesNoDialogComponent> {
-    return this.dialog.open(YesNoDialogComponent, {
+  openDeleteDialog(dialogIdSuffix: string, body: string, bodyElement?: string, confirmLabel?: string): MatDialogRef<YesNoDialogComponent> {
+    return this.openDialog(YesNoDialogComponent, {
       width: this.size.small,
       data: {
+        dialogId: 'delete-' + dialogIdSuffix,
         section: 'dialog',
         headerLabel: 'sure',
         body: body,
@@ -54,7 +69,7 @@ export class DialogService {
   }
 
   openInfoDialog(section: string, body: string): void {
-    this.dialog.open(InfoDialogComponent, {
+    this.openDialog(InfoDialogComponent, {
       maxWidth: this.size.max,
       width: this.size.xlarge,
       data: {
@@ -65,7 +80,7 @@ export class DialogService {
   }
 
   openContentGroupCreationDialog(): MatDialogRef<ContentGroupCreationComponent> {
-    return this.dialog.open(ContentGroupCreationComponent, {
+    return this.openDialog(ContentGroupCreationComponent, {
       width: this.size.small
     });
   }
@@ -74,7 +89,7 @@ export class DialogService {
 
   openCreateCommentDialog(auth: ClientAuthentication, tags: string[], roomId: string, directSend: boolean, fileUploadEnabled: boolean,
                           role: UserRole): MatDialogRef<CreateCommentComponent> {
-    return this.dialog.open(CreateCommentComponent, {
+    return this.openDialog(CreateCommentComponent, {
       width: this.size.small,
       data: {
         auth: auth,
@@ -96,13 +111,13 @@ export class DialogService {
   */
 
   openRoomCreateDialog(): void {
-    this.dialog.open(RoomCreateComponent, {
+    this.openDialog(RoomCreateComponent, {
       width: this.size.xsmall
     });
   }
 
   openStatisticHelpDialog(): void {
-    this.dialog.open(StatisticHelpComponent, {
+    this.openDialog(StatisticHelpComponent, {
       width: this.size.xsmall
     });
   }
@@ -120,11 +135,11 @@ export class DialogService {
   */
 
   openOverlayDialog(): MatDialogRef<OverlayComponent> {
-    return this.dialog.open(OverlayComponent);
+    return this.openDialog(OverlayComponent);
   }
 
   openUserActivationDialog(username: string): MatDialogRef<UserActivationComponent> {
-    return this.dialog.open(UserActivationComponent, {
+    return this.openDialog(UserActivationComponent, {
       width: this.size.xsmall,
       data: username
     });
@@ -135,7 +150,7 @@ export class DialogService {
       versions?: VersionInfo[],
       updateAvailable?: Observable<UpdateAvailableEvent>
   ): MatDialogRef<UpdateInfoComponent> {
-    return this.dialog.open(UpdateInfoComponent, {
+    return this.openDialog(UpdateInfoComponent, {
       width: this.size.medium,
       disableClose: !afterUpdate,
       data: {
@@ -147,13 +162,14 @@ export class DialogService {
   }
 
   openExportDialog(): MatDialogRef<ExportComponent, ExportOptions> {
-    return this.dialog.open(ExportComponent);
+    return this.openDialog(ExportComponent);
   }
 
   openPublishGroupDialog(groupName: string): MatDialogRef<YesNoDialogComponent> {
-    return this.dialog.open(YesNoDialogComponent, {
+    return this.openDialog(YesNoDialogComponent, {
       width: this.size.small,
       data: {
+        dialogId: 'publish-content-group',
         section: 'dialog',
         headerLabel: 'publish-group',
         body: 'want-publish-group',
@@ -163,5 +179,9 @@ export class DialogService {
         bodyElement: groupName,
       }
     });
+  }
+
+  private isCancelAction(action: any) {
+    return !action || action === 'cancel';
   }
 }

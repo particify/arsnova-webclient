@@ -15,12 +15,14 @@
         <div fxLayout="row" fxLayoutAlign="end" [ngClass]="{'fix-width': !survey}">
           <button mat-icon-button *ngIf="answersVisible && !survey && correctOptionsPublished" disableRipple (click)="toggleCorrect()"
                   matTooltip="{{ 'statistic.show-correct' | translate }}" aria-labelledby="show-correct"
-                  appHotkey="c" [appHotkeyAction]="HotkeyAction.CLICK" [appHotkeyDisabled]="!active">
+                  appHotkey="c" [appHotkeyAction]="HotkeyAction.CLICK" [appHotkeyDisabled]="!active"
+                  appTrackInteraction="Correct content answer options visibility toggled" [appTrackName]="correctVisible ? 'on' : 'off'">
           <mat-icon class="corner-icon icon-primary">playlist_add_check</mat-icon>
           </button>
           <button id="show-chart-btn" mat-icon-button disableRipple (click)="toggleAnswers()" aria-labelledby="show-chart"
                   matTooltip="{{ (answersVisible ? 'statistic.hide-results' : 'statistic.show-results') | translate }}"
-                  appHotkey=" " [appHotkeyAction]="HotkeyAction.CLICK" [appHotkeyDisabled]="!active">
+                  appHotkey=" " [appHotkeyAction]="HotkeyAction.CLICK" [appHotkeyDisabled]="!active"
+                  appTrackInteraction="Content results visibility toggled" [appTrackName]="answersVisible ? 'on' : 'off'">
           <mat-icon class="corner-icon icon-primary">insert_chart</mat-icon>
           </button>
         </div>

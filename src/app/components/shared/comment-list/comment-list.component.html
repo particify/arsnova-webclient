@@ -37,7 +37,7 @@
         <button id="search-button" mat-mini-fab (click)="activateSearch(); filterComments('')" class="bar-icon"
                 *ngIf="!search" aria-labelledby="search-list"
                 matTooltip="{{ 'comment-list.filter-search' | translate }}"
-                appHotkey="2">
+                appHotkey="2" appTrackInteraction="Search comments">
           <mat-icon>search</mat-icon>
         </button>
 
@@ -59,7 +59,7 @@
                 [ngClass]="{'disabled': isModerator}"
                 *ngIf="!search && !freeze && !isArchive" (click)="pauseCommentStream()"
                 matTooltip="{{ 'comment-list.pause-comments' | translate }}"
-                appHotkey="6">
+                appHotkey="6" appTrackInteraction="Comments (un)paused" appTrackName="stop">
           <mat-icon>pause</mat-icon>
         </button>
 
@@ -67,7 +67,7 @@
                 [ngClass]="{'disabled': isModerator}"
                 *ngIf="!search && freeze && !isArchive" (click)="playCommentStream()"
                 matTooltip="{{ 'comment-list.play-comments' | translate }}"
-                appHotkey="6">
+                appHotkey="6" appTrackInteraction="Comments (un)paused" appTrackName="start">
           <mat-icon>play_arrow</mat-icon>
         </button>
 
@@ -86,25 +86,28 @@
         </button>
       </div>
 
-      <mat-menu #filterMenu="matMenu">
+      <mat-menu #filterMenu="matMenu" appTrackInteraction="Open comment sort/filter menu">
         <div class="divider-container">
           <mat-divider></mat-divider>
           <p class="divider-label">{{ 'comment-list.sort' | translate }}</p>
         </div>
         <button mat-menu-item (click)="sortCommentsManually(sorting.TIME)" [ngClass]="{time: 'selected'}[currentSort]"
-                aria-labelledby="sort-time">
+                aria-labelledby="sort-time"
+                appTrackInteraction="Sort comments" appTrackName="time">
           <mat-icon [ngClass]="{time: 'blue-icon'}[currentSort]">access_time</mat-icon>
           <span>{{ 'comment-list.sort-time' | translate }}</span>
         </button>
 
         <button mat-menu-item (click)="sortCommentsManually(sorting.VOTEDESC)"
-                [ngClass]="{votedesc: 'selected'}[currentSort]" aria-labelledby="sort-up">
+                [ngClass]="{votedesc: 'selected'}[currentSort]" aria-labelledby="sort-up"
+                appTrackInteraction="Sort comments" appTrackName="vote-desc">
           <mat-icon [ngClass]="{votedesc: 'up'}[currentSort]">keyboard_arrow_up</mat-icon>
           <span>{{ 'comment-list.sort-votedesc' | translate }}</span>
         </button>
 
         <button mat-menu-item (click)="sortCommentsManually(sorting.VOTEASC)"
-                [ngClass]="{voteasc: 'selected'}[currentSort]" aria-labelledby="sort-down">
+                [ngClass]="{voteasc: 'selected'}[currentSort]" aria-labelledby="sort-down"
+                appTrackInteraction="Sort comments" appTrackName="vote-asc">
           <mat-icon [ngClass]="{voteasc: 'down'}[currentSort]">keyboard_arrow_down</mat-icon>
           <span>{{ 'comment-list.sort-voteasc' | translate }}</span>
         </button>
@@ -115,14 +118,16 @@
         </div>
 
         <button mat-menu-item (click)="filterComments(filtering.FAVORITE)"
-                [ngClass]="{favorite: 'selected'}[currentFilter]" aria-labelledby="grade">
+                [ngClass]="{favorite: 'selected'}[currentFilter]" aria-labelledby="grade"
+                appTrackInteraction="Comments filtered" appTrackName="favorite">
           <mat-icon [ngClass]="{favorite: 'favorite-icon'}[currentFilter]">grade</mat-icon>
           <span>{{ 'comment-list.filter-favorite' | translate }}</span>
         </button>
 
         <button mat-menu-item (focus)="hideCommentsList=true" (click)="filterComments(filtering.ANSWER)"
                 [ngClass]="{answer: 'selected'}[currentFilter]"
-                aria-labelledby="comment">
+                aria-labelledby="comment"
+                appTrackInteraction="Comments filtered" appTrackName="answer">
           <mat-icon [ngClass]="{answer: 'blue-icon'}[currentFilter]">comment</mat-icon>
           <span>{{ 'comment-list.filter-answered' | translate }}</span>
         </button>
@@ -136,7 +141,8 @@
         </button>
 
         <button mat-menu-item (focus)="hideCommentsList=false;filterComments('')"
-                aria-labelledby="close">
+                aria-labelledby="close"
+                appTrackInteraction="Comments filtered" appTrackName="reset">
           <mat-icon>close</mat-icon>
           <span>{{ 'comment-list.filter-reset' | translate }}</span>
         </button>
@@ -144,14 +150,16 @@
 
       <mat-menu #moreFilterMenu="matMenu">
         <button mat-menu-item (click)="filterComments(filtering.CORRECT)"
-                [ngClass]="{correct: 'selected'}[currentFilter]" aria-labelledby="check_circle">
+                [ngClass]="{correct: 'selected'}[currentFilter]" aria-labelledby="check_circle"
+                appTrackInteraction="Comments filtered" appTrackName="correct">
           <mat-icon [ngClass]="{correct: 'correct-icon'}[currentFilter]">check_circle</mat-icon>
           <span>{{ 'comment-list.filter-correct' | translate }}</span>
         </button>
 
         <button mat-menu-item (focus)="hideCommentsList=true" (click)="filterComments(filtering.WRONG)"
                 [ngClass]="{wrong: 'selected'}[currentFilter]"
-                aria-labelledby="not_interested">
+                aria-labelledby="not_interested"
+                appTrackInteraction="Comments filtered" appTrackName="wrong">
           <mat-icon [ngClass]="{wrong: 'wrong-icon'}[currentFilter]">cancel</mat-icon>
           <span>{{ 'comment-list.filter-wrong' | translate }}</span>
         </button>
@@ -161,7 +169,8 @@
         <div *ngFor="let periodItem of periodsList">
           <button mat-menu-item (click)="setTimePeriod(periodItem)" class="period"
                   [ngClass]="{'selected': periodItem === period}"
-                  aria-labelledby="{{periodItem}}">
+                  aria-labelledby="{{periodItem}}"
+                  appTrackInteraction="Comments filtered (period)" [appTrackName]="periodItem">
             <span>{{ ('comment-list.select-' + periodItem) | translate }}</span>
           </button>
         </div>
@@ -185,7 +194,7 @@
 
     <lib-extension-point extensionId="add-archive" [extensionData]="{roomId: room.id}" (extensionEvent)="resetComments()"></lib-extension-point>
 
-    <button [disabled]="comments.length === 0" mat-menu-item aria-labelledby="export-comments" (click)="onExport()">
+    <button [disabled]="comments.length === 0" mat-menu-item aria-labelledby="export-comments" (click)="onExport()" appTrackInteraction="Export comments">
       <mat-icon class="settings-icon">save</mat-icon>
       <span>{{ 'comment-list.export-comments' | translate }}</span>
     </button>

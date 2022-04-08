@@ -76,7 +76,7 @@ export class UserProfileComponent implements OnInit {
   }
 
   openDeleteUserDialog() {
-    const dialogRef = this.dialogService.openDeleteDialog('really-delete-account');
+    const dialogRef = this.dialogService.openDeleteDialog('account', 'really-delete-account');
     dialogRef.afterClosed().subscribe(result => {
       if (result === 'abort') {
         return;

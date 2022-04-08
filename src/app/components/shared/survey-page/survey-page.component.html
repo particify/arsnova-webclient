@@ -27,7 +27,8 @@
             <button *ngIf="isClosed; else noSwitching" id="switch-button" tabindex="{{ isClosed ? '0' : '-1' }}" mat-stroked-button
                     class="bottom-button" (click)="changeType()" aria-labelledby="change-type"
                     [appHotkey]="changeKey" [appHotkeyTitle]="'survey.change-type' | translate"
-                    [appHotkeyAction]="hotkeyAction">
+                    [appHotkeyAction]="hotkeyAction"
+                    appTrackInteraction="Survey type toggled" [appTrackName]="type.toLowerCase()">
               {{ 'survey.change-type' | translate }}
             </button>
             <ng-template #noSwitching>
@@ -44,7 +45,8 @@
           <button tabindex="0" mat-raised-button id="toggle-button" class="button-primary bottom-button"
                   fxLayoutAlign="center" (click)="toggle()" aria-labelledby="toggle"
                   [appHotkey]="toggleKey" [appHotkeyTitle]="(isClosed ? 'survey.start' : 'survey.stop') | translate"
-                  [appHotkeyAction]="hotkeyAction">
+                  [appHotkeyAction]="hotkeyAction"
+                  appTrackInteraction="Survey toggled" [appTrackName]="isClosed ? 'on' : 'off'">
             {{ (isClosed ? 'survey.start' : 'survey.stop') | translate }}
           </button>
         </div>

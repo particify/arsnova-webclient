@@ -8,6 +8,8 @@ import { Hotkey, HotkeyActionType } from '../../../../services/util/hotkey.servi
   styleUrls: ['./hotkeys.component.scss']
 })
 export class HotkeysComponent {
+  readonly dialogId = 'hotkeys';
+
   displayedColumns = ['action', 'keys'];
   HotkeyActionType = HotkeyActionType;
 

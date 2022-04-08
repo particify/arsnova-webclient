@@ -38,7 +38,7 @@ export class BonusTokenComponent implements OnInit {
   }
 
   openDeleteSingleBonusDialog(userId: string, commentId: string, index: number): void {
-    const dialogRef = this.dialogService.openDeleteDialog('really-delete-token');
+    const dialogRef = this.dialogService.openDeleteDialog('', 'really-delete-token');
     dialogRef.afterClosed().subscribe(result => {
       if (result === 'delete') {
         this.deleteBonus(userId, commentId, index);
@@ -47,7 +47,7 @@ export class BonusTokenComponent implements OnInit {
   }
 
   openDeleteAllBonusDialog(): void {
-    const dialogRef = this.dialogService.openDeleteDialog('really-delete-tokens');
+    const dialogRef = this.dialogService.openDeleteDialog('', 'really-delete-tokens');
     dialogRef.afterClosed().subscribe(result => {
       if (result === 'delete') {
         this.deleteAllBonuses();
