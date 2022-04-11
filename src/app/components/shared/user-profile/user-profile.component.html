@@ -4,6 +4,7 @@
 <div *ngIf="!isLoading" fxLayout="row" fxLayoutAlign="center center">
   <mat-card fxLayout="column" fxLayoutGap="16px">
     <div fxLayout="column">
+      <lib-extension-point extensionId="profile-subscription"></lib-extension-point>
       <h4 class="less-important">{{ ('user-profile.username' | translate) + ': ' + auth.loginId }}</h4>
       <div fxLayout="column" fxLayoutGap="16px">
         <div fxLayout="row wrap" class="container">
