@@ -4,52 +4,47 @@ import { UserProfileComponent } from './user-profile.component';
 import { Router } from '@angular/router';
 import { NotificationService } from '@arsnova/app/services/util/notification.service';
 import { EventService } from '@arsnova/app/services/util/event.service';
-import { JsonTranslationLoader, MockEventService, MockGlobalStorageService } from '@arsnova/testing/test-helpers';
+import { JsonTranslationLoader,
+  MockEventService,
+  MockGlobalStorageService,
+  MockRouter
+} from '@arsnova/testing/test-helpers';
 import { GlobalStorageService } from '@arsnova/app/services/util/global-storage.service';
 import { AuthenticationService } from '@arsnova/app/services/http/authentication.service';
-import { Observable, of } from 'rxjs';
+import { of } from 'rxjs';
 import { UserService } from '@arsnova/app/services/http/user.service';
-import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { TranslateLoader, TranslateModule, TranslateService } from '@ngx-translate/core';
 import { DialogService } from '@arsnova/app/services/util/dialog.service';
 import { ClientAuthentication } from '@arsnova/app/models/client-authentication';
 import { AuthProvider } from '@arsnova/app/models/auth-provider';
 import { User } from '@arsnova/app/models/user';
 import { Person } from '@arsnova/app/models/person';
-import { CUSTOM_ELEMENTS_SCHEMA, Pipe, PipeTransform } from '@angular/core';
-
-export class MockAuthenticationService {
-  getCurrentAuthentication() {
-    return of(new ClientAuthentication('1', 'a@b.cd', AuthProvider.ARSNOVA, 'token'));
-  }
-}
-
-export class MockUserService {
-  getUserByLoginId(loginId: string): Observable<User[]> {
-    return of([new User('1', 'a@b.cd', AuthProvider.ARSNOVA, 'revision', new Person())]);
-  }
-}
-
-@Pipe({name: 'a11yIntro'})
-class MockA11yIntroPipe implements PipeTransform {
-  transform(i18nKey: string, args?: object): Observable<string> {
-    return of(i18nKey);
-  }
-}
-
-class MockDialogService {
-}
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { A11yIntroPipe } from '@arsnova/app/pipes/a11y-intro.pipe';
 
 describe('UserProfileComponent', () => {
   let component: UserProfileComponent;
   let fixture: ComponentFixture<UserProfileComponent>;
   let notificationService = jasmine.createSpyObj('NotificationService', ['showAdvanced']);
-  let router = jasmine.createSpyObj('Router', ['navigate']);
+
+  const mockDialogService = jasmine.createSpyObj(['openDeleteDialog']);
+
+  const mockUserService = jasmine.createSpyObj(['getUserByLoginId', 'delete', 'updateUser']);
+  const user = new User('1', 'a@b.cd', AuthProvider.ARSNOVA, 'revision', new Person());
+  mockUserService.getUserByLoginId.and.returnValue(of([user]));
+
+  const mockAuthenticationService = jasmine.createSpyObj(['getCurrentAuthentication', 'logout']);
+  const auth = new ClientAuthentication('1', 'a@b.cd', AuthProvider.ARSNOVA, 'token');
+  mockAuthenticationService.getCurrentAuthentication.and.returnValue(of(auth));
+
+  let translateService: TranslateService;
+  const a11yIntroPipe = new A11yIntroPipe(translateService);
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [
         UserProfileComponent,
-        MockA11yIntroPipe
+        A11yIntroPipe
       ],
       imports: [
         TranslateModule.forRoot({
@@ -63,7 +58,7 @@ describe('UserProfileComponent', () => {
       providers: [
         {
           provide: Router,
-          useValue: router
+          useClass: MockRouter
         },
         {
           provide: NotificationService,
@@ -71,7 +66,7 @@ describe('UserProfileComponent', () => {
         },
         {
           provide: UserService,
-          useClass: MockUserService
+          useValue: mockUserService
         },
         {
           provide: EventService,
@@ -83,11 +78,15 @@ describe('UserProfileComponent', () => {
         },
         {
           provide: AuthenticationService,
-          useClass: MockAuthenticationService
+          useValue: mockAuthenticationService
         },
         {
           provide: DialogService,
-          useClass: MockDialogService
+          useValue: mockDialogService
+        },
+        {
+          provide: A11yIntroPipe,
+          useValue: a11yIntroPipe
         }
       ],
       schemas: [

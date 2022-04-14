@@ -1,12 +1,11 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { Comment } from '../../../../models/comment';
 import { AdvancedSnackBarTypes, NotificationService } from '../../../../services/util/notification.service';
-import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
 import { FormControl, Validators } from '@angular/forms';
 import { ClientAuthentication } from '../../../../models/client-authentication';
 import { CommentListComponent } from '../../comment-list/comment-list.component';
-import { EventService } from '../../../../services/util/event.service';
 import { GlobalStorageService, STORAGE_KEYS } from '../../../../services/util/global-storage.service';
 import { Subject } from 'rxjs';
 import { CommentService } from '../../../../services/http/comment.service';
@@ -39,17 +38,13 @@ export class CreateCommentComponent implements OnInit {
   bodyForm = new FormControl('', [Validators.required]);
 
   constructor(
-    private notification: NotificationService,
     public dialogRef: MatDialogRef<CommentListComponent>,
     private translateService: TranslateService,
-    public dialog: MatDialog,
-    private translationService: TranslateService,
-    public eventService: EventService,
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
     private globalStorageService: GlobalStorageService,
     private commentService: CommentService,
     private notificationService: NotificationService,
-    private langService: LanguageService
+    protected langService: LanguageService
   ) {
     langService.langEmitter.subscribe(lang => translateService.use(lang));
   }
@@ -71,8 +66,8 @@ export class CreateCommentComponent implements OnInit {
   checkInputData(body: string): boolean {
     body = body.trim();
     if (!body) {
-      this.translationService.get('dialog.error-comment').subscribe(message => {
-        this.notification.showAdvanced(message, AdvancedSnackBarTypes.WARNING);
+      this.translateService.get('dialog.error-comment').subscribe(message => {
+        this.notificationService.showAdvanced(message, AdvancedSnackBarTypes.WARNING);
       });
       return false;
     }

@@ -12,7 +12,7 @@ export class KeyButtonBarComponent {
   @Input() items: KeyNavBarItem[];
   @Input() withText = true;
 
-  constructor(@Inject(DOCUMENT) private document: HTMLDocument) { }
+  constructor(@Inject(DOCUMENT) private document: Document) { }
 
   sendKeyEvent(key: string) {
     const event = new KeyboardEvent('keydown', {

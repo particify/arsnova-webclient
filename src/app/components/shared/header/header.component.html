@@ -40,10 +40,6 @@
           <span>{{'footer.imprint' | translate}}</span>
         </a>
       </div>
-      <!-- <button mat-menu-item *ngIf="auth" (click)="openUserBonusTokenDialog()" tabindex="0">
-        <mat-icon class="bonus">grade</mat-icon>
-        <span>{{'header.user-bonus-token' | translate}}</span>
-      </button> -->
       <button id="admin-button" mat-menu-item *ngIf="isAdmin()" routerLink="/admin" tabindex="0">
         <mat-icon>build</mat-icon>
         <span>{{'header.admin-area' | translate}}</span>

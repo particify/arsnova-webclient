@@ -1,15 +1,41 @@
-/*
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-
 import { YesNoDialogComponent } from './yes-no-dialog.component';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { JsonTranslationLoader, MockMatDialogRef } from '@arsnova/testing/test-helpers';
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 
 describe('YesNoDialogComponent', () => {
   let component: YesNoDialogComponent;
   let fixture: ComponentFixture<YesNoDialogComponent>;
 
+  const mockMatDialogData = {
+    section: 'section'
+  }
+
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ YesNoDialogComponent ]
+      declarations: [
+        YesNoDialogComponent
+      ],
+      imports: [
+        TranslateModule.forRoot({
+          loader: {
+            provide: TranslateLoader,
+            useClass: JsonTranslationLoader
+          },
+          isolate: true
+        })
+      ],
+      providers: [
+        {
+          provide: MatDialogRef,
+          useClass: MockMatDialogRef
+        },
+        {
+          provide: MAT_DIALOG_DATA,
+          useValue: mockMatDialogData
+        }
+      ]
     })
     .compileComponents();
   }));
@@ -24,4 +50,3 @@ describe('YesNoDialogComponent', () => {
     expect(component).toBeTruthy();
   });
 });
-*/

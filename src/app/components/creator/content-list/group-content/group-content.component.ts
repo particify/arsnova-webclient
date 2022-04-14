@@ -84,11 +84,10 @@ export class GroupContentComponent extends ContentListBaseComponent implements O
     this.iconList = this.contentService.getTypeIcons();
     this.route.data.subscribe(data => {
       this.room = data.room;
-      this.route.params.subscribe(params => {
-        this.collectionName = params['seriesName'];
-        this.globalStorageService.setItem(STORAGE_KEYS.LAST_GROUP, this.collectionName);
-        this.reloadContentGroup()
-      });
+      this.getGroups();
+      this.collectionName = this.route.snapshot.params['seriesName'];
+      this.globalStorageService.setItem(STORAGE_KEYS.LAST_GROUP, this.collectionName);
+      this.reloadContentGroup();
     });
     this.translateService.use(this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE));
     this.eventService.on(ContentMessages.ANSWERS_DELETED).subscribe(contentId => {
@@ -122,6 +121,7 @@ export class GroupContentComponent extends ContentListBaseComponent implements O
   reloadContentGroup(imported = false) {
     this.contentGroupService.getByRoomIdAndName(this.room.id, this.collectionName, true).subscribe(group => {
       this.contentGroup = group;
+      this.setSettings();
       this.updatedName = this.contentGroup.name;
       this.setRange();
       if (this.contentGroup.contentIds) {

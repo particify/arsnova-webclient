@@ -2,9 +2,8 @@ import { AfterContentInit, Component, OnChanges, OnInit, SimpleChanges, ViewChil
 import { AuthenticationService } from '../../../services/http/authentication.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AdvancedSnackBarTypes, NotificationService } from '../../../services/util/notification.service';
-import { ErrorStateMatcher } from '@angular/material/core';
 import { MatDialog } from '@angular/material/dialog';
-import { FormControl, FormGroupDirective, NgForm, Validators } from '@angular/forms';
+import { FormControl, Validators } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
 import { EventService } from '../../../services/util/event.service';
 import { AuthenticationProvider, AuthenticationProviderType } from '../../../models/api-config';
@@ -13,13 +12,7 @@ import { AuthenticationStatus, ClientAuthenticationResult } from '../../../model
 import { AuthProvider } from '../../../models/auth-provider';
 import { RoutingService } from '../../../services/util/routing.service';
 import { PasswordEntryComponent } from '../password-entry/password-entry.component';
-
-export class LoginErrorStateMatcher implements ErrorStateMatcher {
-  isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
-    const isSubmitted = form && form.submitted;
-    return (control && control.invalid && (control.dirty || control.touched || isSubmitted));
-  }
-}
+import { FormErrorStateMatcher } from '../form-error-state-matcher/form-error-state-matcher';
 
 @Component({
   selector: 'app-login',
@@ -45,7 +38,7 @@ export class LoginComponent implements AfterContentInit, OnChanges, OnInit {
 
   loginIdFormControl = new FormControl('', [Validators.required]);
 
-  matcher = new LoginErrorStateMatcher();
+  matcher = new FormErrorStateMatcher();
 
   constructor(public authenticationService: AuthenticationService,
               public router: Router,
@@ -100,7 +93,7 @@ export class LoginComponent implements AfterContentInit, OnChanges, OnInit {
         }
       }
     });
-    const registeredUserData = history.state.data;
+    const registeredUserData = history.state?.data;
       if (registeredUserData && registeredUserData.username && registeredUserData.password) {
         this.loginIdFormControl.setValue(registeredUserData.username);
         this.username = registeredUserData.username;

@@ -2,7 +2,6 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RoomStatsService } from '../../../services/http/room-stats.service';
 import { ContentGroup } from '../../../models/content-group';
-import { TranslateService } from '@ngx-translate/core';
 import { StatisticListComponent } from '../statistic-list/statistic-list.component';
 import { ContentGroupService } from '../../../services/http/content-group.service';
 
@@ -25,7 +24,6 @@ export class StatisticsPageComponent implements OnInit {
   constructor(private route: ActivatedRoute,
               private roomStatsService: RoomStatsService,
               private contentGroupService: ContentGroupService,
-              private translateService: TranslateService,
               private router: Router
   ) {
   }

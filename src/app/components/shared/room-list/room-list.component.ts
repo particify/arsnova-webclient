@@ -18,7 +18,6 @@ import { RoomDeleted } from '../../../models/events/room-deleted';
 import { AuthProvider } from '../../../models/auth-provider';
 import { MembershipsChanged } from '../../../models/events/memberships-changed';
 import { ExtensionFactory } from '../../../../../projects/extension-point/src/lib/extension-factory';
-import { UserService } from '../../../services/http/user.service';
 import { RoutingService } from '../../../services/util/routing.service';
 
 interface RoomDataView {
@@ -55,7 +54,6 @@ export class RoomListComponent implements OnInit, OnDestroy {
 
   constructor(
     private roomService: RoomService,
-    private userService: UserService,
     public eventService: EventService,
     protected roomMembershipService: RoomMembershipService,
     private authenticationService: AuthenticationService,

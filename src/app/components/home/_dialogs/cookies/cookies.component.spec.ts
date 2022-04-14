@@ -1,15 +1,76 @@
-/**
- import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
- import { CookiesComponent } from './cookies.component';
+import { CookiesComponent } from './cookies.component';
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import {
+  JsonTranslationLoader,
+  MockNotificationService,
+  MockMatDialogRef,
+  ActivatedRouteStub
+} from '@arsnova/testing/test-helpers';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { ActivatedRoute } from '@angular/router';
+import { NotificationService } from '@arsnova/app/services/util/notification.service';
 
  describe('CookiesComponent', () => {
   let component: CookiesComponent;
   let fixture: ComponentFixture<CookiesComponent>;
 
+  const activatedRouteStub = new ActivatedRouteStub();
+
+  const dialogData = {
+    categories: [
+      {
+        key: 'cat-1',
+        id: '1',
+        required: true,
+        consent: false
+      },
+      {
+        key: 'cat-2',
+        id: '2',
+        required: false,
+        consent: false
+      },
+      {
+        key: 'cat-3',
+        id: '3',
+        required: false,
+        consent: false
+      }
+    ],
+    privacyUrl: 'privacy'
+  };
+
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ CookiesComponent ]
+      declarations: [ CookiesComponent ],
+      imports: [
+        TranslateModule.forRoot({
+          loader: {
+            provide: TranslateLoader,
+            useClass: JsonTranslationLoader
+          },
+          isolate: true
+        })
+      ],
+      providers: [
+        { provide: MAT_DIALOG_DATA,
+          useValue: dialogData
+        },
+        {
+          provide: MatDialogRef,
+          useClass: MockMatDialogRef
+        },
+        {
+          provide: ActivatedRoute,
+          useValue: activatedRouteStub 
+        },
+        {
+          provide: NotificationService,
+          useClass: MockNotificationService
+        }
+      ]
     })
     .compileComponents();
   }));
@@ -24,4 +85,3 @@
     expect(component).toBeTruthy();
   });
 });
- **/

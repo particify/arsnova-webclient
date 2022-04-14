@@ -1,14 +1,10 @@
 import { AfterContentInit, Component, Inject, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
-import { LanguageService } from '../../../../services/util/language.service';
 import { CommentService } from '../../../../services/http/comment.service';
 import { Comment } from '../../../../models/comment';
-import { AuthenticationService } from '../../../../services/http/authentication.service';
 import { UserRole } from '../../../../models/user-roles.enum';
 import { AdvancedSnackBarTypes, NotificationService } from '../../../../services/util/notification.service';
 import { DialogService } from '../../../../services/util/dialog.service';
-import { EventService } from '../../../../services/util/event.service';
 import { MarkdownFeatureset } from '../../../../services/http/formatting.service';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
@@ -28,14 +24,10 @@ export class CommentAnswerComponent implements OnInit, AfterContentInit {
   MarkdownFeatureset = MarkdownFeatureset;
   renderPreview = false;
 
-  constructor(protected route: ActivatedRoute,
-              private notificationService: NotificationService,
+  constructor(private notificationService: NotificationService,
               private translateService: TranslateService,
-              protected langService: LanguageService,
               protected commentService: CommentService,
-              private authenticationService: AuthenticationService,
               private dialogService: DialogService,
-              private eventService: EventService,
               public dialogRef: MatDialogRef<CommentAnswerComponent>,
               @Inject(MAT_DIALOG_DATA) public data: any) {
   }

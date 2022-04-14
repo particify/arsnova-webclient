@@ -1,7 +1,8 @@
-/**
- import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
  import { OverlayComponent } from './overlay.component';
+ import { MockMatDialogRef, JsonTranslationLoader } from '@arsnova/testing/test-helpers';
+import { MatDialogRef } from '@angular/material/dialog';
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 
  describe('OverlayComponent', () => {
   let component: OverlayComponent;
@@ -9,7 +10,22 @@
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ OverlayComponent ]
+      declarations: [ OverlayComponent ],
+      imports: [
+        TranslateModule.forRoot({
+          loader: {
+            provide: TranslateLoader,
+            useClass: JsonTranslationLoader
+          },
+          isolate: true
+        })
+      ],
+      providers: [
+        {
+          provide: MatDialogRef,
+          useClass: MockMatDialogRef
+        },
+      ]
     })
     .compileComponents();
   }));
@@ -24,4 +40,3 @@
     expect(component).toBeTruthy();
   });
 });
- **/

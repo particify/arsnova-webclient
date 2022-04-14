@@ -57,8 +57,10 @@ export class LooseContentComponent extends ContentListBaseComponent implements O
   ngOnInit() {
     this.route.data.subscribe(data => {
       this.room = data.room;
+      this.getGroups();
       this.contentService.findContentsWithoutGroup(this.room.id).subscribe(contents => {
         this.initContentList(contents);
+        this.setSettings();
       });
       this.translateService.use(this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE));
     });

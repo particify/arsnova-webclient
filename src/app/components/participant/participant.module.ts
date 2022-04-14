@@ -17,7 +17,7 @@ import { TranslateHttpLoaderFactory } from '../../translate-http-loader-factory'
 import { ExtensionPointModule } from '../../../../projects/extension-point/src/lib/extension-point.module';
 import { ContentParticipantComponent } from './content/content-participant/content-participant.component';
 import { ContentSortParticipantComponent } from './content/content-sort-participant/content-sort-participant.component';
-import { ContentWordcloudComponent } from './content/content-wordcloud-participant/content-wordcloud-participant.component';
+import { ContentWordcloudParticipantComponent } from './content/content-wordcloud-participant/content-wordcloud-participant.component';
 import { ContentScaleParticipantComponent } from './content/content-scale-participant/content-scale-participant.component';
 import { SeriesResultsComponent } from './series-results/series-results.component';
 
@@ -51,7 +51,7 @@ import { SeriesResultsComponent } from './series-results/series-results.componen
     ParticipantContentCarouselPageComponent,
     ContentParticipantComponent,
     ContentSortParticipantComponent,
-    ContentWordcloudComponent,
+    ContentWordcloudParticipantComponent,
     SeriesResultsComponent
   ],
   providers: [

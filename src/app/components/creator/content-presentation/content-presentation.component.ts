@@ -12,7 +12,7 @@ import { InfoBarItem } from '../../shared/bars/info-bar/info-bar.component';
 import { EventService } from '../../../services/util/event.service';
 import { ContentGroup } from '../../../models/content-group';
 import { DialogService } from '../../../services/util/dialog.service';
-import { PublishContentComponent } from '../../shared/_dialogs/publish-content/publish-content.component';
+import { PublishContentComponent } from '../_dialogs/publish-content/publish-content.component';
 import { ContentType } from '../../../models/content-type.enum';
 import { HotkeyService } from '../../../services/util/hotkey.service';
 import { RemoteMessage } from '../../../models/events/remote/remote-message.enum';
@@ -69,16 +69,16 @@ export class ContentPresentationComponent implements OnInit, OnDestroy {
   ngOnInit() {
     window.scroll(0, 0);
     this.translateService.use(this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE));
-    this.route.params.subscribe(params => {
-      const lastIndex = this.globalStorageService.getItem(STORAGE_KEYS.LAST_INDEX);
-      this.entryIndex = (this.isPresentation && lastIndex > -1 ? lastIndex : params['contentIndex'] - 1) || 0;
-      this.contentGroupName = this.globalStorageService.getItem(STORAGE_KEYS.LAST_GROUP) || params['seriesName'];
-      this.globalStorageService.setItem(STORAGE_KEYS.LAST_GROUP, this.contentGroupName);
-      this.route.data.subscribe(data => {
-        this.roomId = data.room.id;
-        this.shortId = data.room.shortId;
-        this.initGroup(true);
-      });
+    const routeContentIndex = this.route.snapshot.params['contentIndex'];
+    const routeSeriesName = this.route.snapshot.params['seriesName'];
+    const lastIndex = this.globalStorageService.getItem(STORAGE_KEYS.LAST_INDEX);
+    this.entryIndex = (this.isPresentation && lastIndex > -1 ? lastIndex : routeContentIndex - 1) || 0;
+    this.contentGroupName = this.globalStorageService.getItem(STORAGE_KEYS.LAST_GROUP) || routeSeriesName;
+    this.globalStorageService.setItem(STORAGE_KEYS.LAST_GROUP, this.contentGroupName);
+    this.route.data.subscribe(data => {
+      this.roomId = data.room.id;
+      this.shortId = data.room.shortId;
+      this.initGroup(true);
     });
   }
 

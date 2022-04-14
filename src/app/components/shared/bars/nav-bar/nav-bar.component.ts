@@ -150,42 +150,40 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
       this.shortId = data.room.shortId;
       this.roomId = data.room.id;
       this.feedbackService.startSub(data.room.id);
-      this.route.params.subscribe(params => {
-        let group = params['seriesName'];
-        if (group === undefined) {
-          group = this.globalStorageService.getItem(STORAGE_KEYS.LAST_GROUP);
-        } else {
-          this.setGroupInSessionStorage(group);
-        }
-        // Checking if storage item is initialized yet
-        const extendedView = this.role !== UserRole.PARTICIPANT;
-        if (group === undefined) {
-          this.roomStatsService.getStats(data.room.id, extendedView).subscribe(stats => {
-            if (stats.groupStats) {
-              this.groupName = stats.groupStats[0].groupName;
-              this.setGroupInSessionStorage(this.groupName);
-              this.activeFeatures.splice(1, 0, Features.CONTENTS);
-            } else {
-              // Initialize storage item with empty string if there are no groups yet
-              this.setGroupInSessionStorage('');
-            }
-            this.getItems();
-            this.subscribeToContentGroups();
-            this.updateGroups(stats.groupStats ?? [], false);
-          });
-        } else {
-          // Checking if storage item is initialized with data
-          if (group !== '') {
-            this.groupName = group;
+      let group = this.route.snapshot.params['seriesName'];
+      if (group === undefined) {
+        group = this.globalStorageService.getItem(STORAGE_KEYS.LAST_GROUP);
+      } else {
+        this.setGroupInSessionStorage(group);
+      }
+      // Checking if storage item is initialized yet
+      const extendedView = this.role !== UserRole.PARTICIPANT;
+      if (group === undefined) {
+        this.roomStatsService.getStats(data.room.id, extendedView).subscribe(stats => {
+          if (stats.groupStats) {
+            this.groupName = stats.groupStats[0].groupName;
+            this.setGroupInSessionStorage(this.groupName);
             this.activeFeatures.splice(1, 0, Features.CONTENTS);
+          } else {
+            // Initialize storage item with empty string if there are no groups yet
+            this.setGroupInSessionStorage('');
           }
           this.getItems();
-          this.roomStatsService.getStats(data.room.id, extendedView).subscribe(stats => {
-            this.subscribeToContentGroups();
-            this.updateGroups(stats.groupStats ?? [], true);
-          });
+          this.subscribeToContentGroups();
+          this.updateGroups(stats.groupStats ?? [], false);
+        });
+      } else {
+        // Checking if storage item is initialized with data
+        if (group !== '') {
+          this.groupName = group;
+          this.activeFeatures.splice(1, 0, Features.CONTENTS);
         }
-      })
+        this.getItems();
+        this.roomStatsService.getStats(data.room.id, extendedView).subscribe(stats => {
+          this.subscribeToContentGroups();
+          this.updateGroups(stats.groupStats ?? [], true);
+        });
+      }
     });
     this.checkForFeedback();
   }

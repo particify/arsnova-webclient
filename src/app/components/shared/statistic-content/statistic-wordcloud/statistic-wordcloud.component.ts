@@ -1,5 +1,4 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
-import { ActivatedRoute } from "@angular/router";
 import { Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
 import { AnswerStatistics } from "../../../../models/answer-statistics";
@@ -19,9 +18,8 @@ export class StatisticWordcloudComponent extends StatisticContentBaseComponent i
 
   constructor(
       protected contentService: ContentService,
-      protected route: ActivatedRoute,
       protected eventService: EventService) {
-    super(route, contentService, eventService);
+    super(contentService, eventService);
   }
 
   afterInit() {

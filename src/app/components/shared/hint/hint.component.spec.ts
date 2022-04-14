@@ -1,6 +1,6 @@
-/*
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { JsonTranslationLoader } from '@arsnova/testing/test-helpers';
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { HintComponent } from './hint.component';
 
 describe('HintComponent', () => {
@@ -9,7 +9,16 @@ describe('HintComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ HintComponent ]
+      declarations: [ HintComponent ],
+      imports: [
+        TranslateModule.forRoot({
+          loader: {
+            provide: TranslateLoader,
+            useClass: JsonTranslationLoader
+          },
+          isolate: true
+        })
+      ]
     })
     .compileComponents();
   });
@@ -24,4 +33,3 @@ describe('HintComponent', () => {
     expect(component).toBeTruthy();
   });
 });
-*/

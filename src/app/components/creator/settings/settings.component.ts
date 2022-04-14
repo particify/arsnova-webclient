@@ -49,13 +49,11 @@ export class SettingsComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.route.params.subscribe(params => {
-      const settingsRoute = params['settingsName'];
-      if (this.settings.componentName === settingsRoute || !settingsRoute && this.settings.componentName === 'general') {
-        this.expanded = true;
-        this.contentExpanded = true;
-      }
-    });
+    const settingsRoute = this.route.snapshot.params['settingsName'];
+    if (this.settings.componentName === settingsRoute || !settingsRoute && this.settings.componentName === 'general') {
+      this.expanded = true;
+      this.contentExpanded = true;
+    }
     this.eventService.on<any>('SettingsExpanded').subscribe(event => {
       if (this.expanded && event !== this.settings.componentName) {
         this.expanded = false;

@@ -15,7 +15,6 @@ import { SharedRoutingModule } from './shared-routing.module';
 import { StatisticListComponent } from './statistic-list/statistic-list.component';
 import { RoomJoinComponent } from './room-join/room-join.component';
 import { RoomCreateComponent } from './_dialogs/room-create/room-create.component';
-import { UserBonusTokenComponent } from './_dialogs/user-bonus-token/user-bonus-token.component';
 import { CommentComponent, DateFromNow } from './comment/comment.component';
 import { CreateCommentComponent } from './_dialogs/create-comment/create-comment.component';
 import { PresentCommentComponent } from './present-comment/present-comment.component';
@@ -25,8 +24,6 @@ import { StatisticTextComponent } from './statistic-content/statistic-text/stati
 import { StatisticChoiceComponent } from './statistic-content/statistic-choice/statistic-choice.component';
 import { LoadingIndicatorComponent } from './loading-indicator/loading-indicator.component';
 import { YesNoDialogComponent } from './_dialogs/yes-no-dialog/yes-no-dialog.component';
-import { InfoDialogComponent } from './_dialogs/info-dialog/info-dialog.component';
-import { RoomNotFoundComponent } from './room-not-found/room-not-found.component';
 import { StepperComponent } from './stepper/stepper.component';
 import { CdkStepperModule } from '@angular/cdk/stepper';
 import { RenderedTextComponent } from './rendered-text/rendered-text.component';
@@ -41,7 +38,6 @@ import { StatisticSortComponent } from './statistic-content/statistic-sort/stati
 import { NavBarComponent } from './bars/nav-bar/nav-bar.component';
 import { InfoBarComponent } from './bars/info-bar/info-bar.component';
 import { DividerComponent } from './divider/divider.component';
-import { PublishContentComponent } from './_dialogs/publish-content/publish-content.component';
 import { StatisticWordcloudComponent } from './statistic-content/statistic-wordcloud/statistic-wordcloud.component';
 import { WordcloudComponent } from './wordcloud/wordcloud.component';
 import { CommentAnswerComponent } from './_dialogs/comment-answer/comment-answer.component';
@@ -81,7 +77,6 @@ import { TrackInteractionDirective } from '../../directives/track-interaction.di
     StatisticsPageComponent,
     StatisticListComponent,
     RoomCreateComponent,
-    UserBonusTokenComponent,
     CommentComponent,
     CreateCommentComponent,
     PresentCommentComponent,
@@ -92,8 +87,6 @@ import { TrackInteractionDirective } from '../../directives/track-interaction.di
     StatisticWordcloudComponent,
     LoadingIndicatorComponent,
     YesNoDialogComponent,
-    InfoDialogComponent,
-    RoomNotFoundComponent,
     DateFromNow,
     StepperComponent,
     RenderedTextComponent,
@@ -106,7 +99,6 @@ import { TrackInteractionDirective } from '../../directives/track-interaction.di
     NavBarComponent,
     InfoBarComponent,
     DividerComponent,
-    PublishContentComponent,
     WordcloudComponent,
     CommentAnswerComponent,
     SplitShortIdPipe,
@@ -136,9 +128,7 @@ import { TrackInteractionDirective } from '../../directives/track-interaction.di
     PresentCommentComponent,
     CommentComponent,
     DialogActionButtonsComponent,
-    UserBonusTokenComponent,
     LoadingIndicatorComponent,
-    RoomNotFoundComponent,
     StepperComponent,
     StatisticChoiceComponent,
     StatisticScaleComponent,

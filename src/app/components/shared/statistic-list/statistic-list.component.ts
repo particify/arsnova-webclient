@@ -13,7 +13,6 @@ import { ContentAnswerService } from '../../../services/http/content-answer.serv
 import { GlobalStorageService, STORAGE_KEYS } from '../../../services/util/global-storage.service';
 import { AdvancedSnackBarTypes, NotificationService } from '../../../services/util/notification.service';
 import { DialogService } from '../../../services/util/dialog.service';
-import { EventService } from '../../../services/util/event.service';
 
 export enum StatisticType {
   CHOICE = 'C',
@@ -78,17 +77,14 @@ export class StatisticListComponent implements OnInit {
     protected route: ActivatedRoute,
     private globalStorageService: GlobalStorageService,
     private notificationService: NotificationService,
-    private dialogService: DialogService,
-    private eventService: EventService
+    private dialogService: DialogService
   ) {
     this.deviceType = this.globalStorageService.getItem(STORAGE_KEYS.DEVICE_TYPE);
     langService.langEmitter.subscribe(lang => translateService.use(lang));
   }
 
   ngOnInit() {
-    this.route.params.subscribe(params => {
-      this.shortId = params['shortId'];
-    });
+    this.shortId = this.route.snapshot.params['shortId'];
     this.translateService.use(this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE));
     this.getContents();
   }

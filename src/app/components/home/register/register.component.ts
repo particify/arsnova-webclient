@@ -1,19 +1,12 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { ErrorStateMatcher } from '@angular/material/core';
-import { FormControl, FormGroupDirective, NgForm, Validators } from '@angular/forms';
+import { FormControl, Validators } from '@angular/forms';
 import { UserService } from '../../../services/http/user.service';
 import { AdvancedSnackBarTypes, NotificationService } from '../../../services/util/notification.service';
 import { TranslateService } from '@ngx-translate/core';
 import { EventService } from '../../../services/util/event.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PasswordEntryComponent } from '../password-entry/password-entry.component';
-
-export class RegisterErrorStateMatcher implements ErrorStateMatcher {
-  isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
-    const isSubmitted = form && form.submitted;
-    return (control && control.invalid && (control.dirty || control.touched || isSubmitted));
-  }
-}
+import { FormErrorStateMatcher } from '../form-error-state-matcher/form-error-state-matcher';
 
 @Component({
   selector: 'app-register',
@@ -25,7 +18,7 @@ export class RegisterComponent implements OnInit {
   @ViewChild(PasswordEntryComponent) passwordEntry: PasswordEntryComponent;
 
   usernameFormControl = new FormControl('', [Validators.required, Validators.email]);
-  matcher = new RegisterErrorStateMatcher();
+  matcher = new FormErrorStateMatcher();
   deviceWidth = innerWidth;
   acceptToS = false;
   linkOfToS: string;
@@ -40,10 +33,9 @@ export class RegisterComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.route.data.subscribe(data => {
-      this.accountServiceTitle = data.apiConfig.ui.registration?.service || 'ARSnova';
-      this.linkOfToS = data.apiConfig.ui.links.tos.url;
-    });
+    const data = this.route.snapshot.data;
+    this.accountServiceTitle = data.apiConfig.ui.registration?.service || 'ARSnova';
+    this.linkOfToS = data.apiConfig.ui.links.tos.url;
     document.getElementById('email-input').focus();
   }
 

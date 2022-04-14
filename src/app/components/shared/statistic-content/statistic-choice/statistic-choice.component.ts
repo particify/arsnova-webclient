@@ -1,7 +1,6 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { BarController, BarControllerDatasetOptions, BarElement, CategoryScale, Chart, LinearScale } from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
-import { ActivatedRoute } from '@angular/router';
 import { ContentService } from '../../../../services/http/content.service';
 import { ContentChoice } from '../../../../models/content-choice';
 import { TranslateService } from '@ngx-translate/core';
@@ -70,14 +69,13 @@ export class StatisticChoiceComponent extends StatisticContentBaseComponent impl
   visualizationUnit = VisualizationUnit.ABSOLUTE;
   showAnswersBelow = false;
 
-  constructor(protected route: ActivatedRoute,
-              protected contentService: ContentService,
+  constructor(protected contentService: ContentService,
               protected translateService: TranslateService,
               protected themeService: ThemeService,
               protected eventService: EventService,
               protected presentationService: PresentationService,
               protected globalStorageService: GlobalStorageService) {
-    super(route, contentService, eventService);
+    super(contentService, eventService);
   }
 
   ngOnDestroy() {
@@ -206,7 +204,7 @@ export class StatisticChoiceComponent extends StatisticContentBaseComponent impl
               return this.getDataLabel(context.dataset.data[context.dataIndex]);
             },
             display: context => {
-              return context.dataset.data[context.dataIndex] > 0; 
+              return context.dataset.data[context.dataIndex] > 0;
             },
             color: this.colorStrings.onBackground,
             anchor: 'end',

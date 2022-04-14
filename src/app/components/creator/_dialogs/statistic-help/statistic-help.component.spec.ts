@@ -1,6 +1,8 @@
-/* import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { StatisticHelpComponent } from './statistic-help.component';
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { JsonTranslationLoader } from '@arsnova/testing/test-helpers';
 
 describe('StatisticHelpComponent', () => {
   let component: StatisticHelpComponent;
@@ -8,7 +10,16 @@ describe('StatisticHelpComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ StatisticHelpComponent ]
+      declarations: [ StatisticHelpComponent ],
+      imports: [
+        TranslateModule.forRoot({
+          loader: {
+            provide: TranslateLoader,
+            useClass: JsonTranslationLoader
+          },
+          isolate: true
+        })
+      ]
     })
     .compileComponents();
   }));
@@ -23,4 +34,3 @@ describe('StatisticHelpComponent', () => {
     expect(component).toBeTruthy();
   });
 });
- */

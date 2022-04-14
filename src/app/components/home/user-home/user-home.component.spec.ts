@@ -1,7 +1,7 @@
 import { Injectable, Renderer2, Component, EventEmitter, Input, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
-import { Observable, of, BehaviorSubject } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { UserHomeComponent } from './user-home.component';
 import { MatDialog } from '@angular/material/dialog';
 

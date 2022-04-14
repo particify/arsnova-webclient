@@ -1,102 +1,74 @@
-/*
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { ContentSortParticipantComponent } from './content-sort-participant.component';
-import { EventEmitter, Injectable } from '@angular/core';
-import { ContentAnswerService } from '../../../../services/http/content-answer.service';
-import { NotificationService } from '../../../..//services/util/notification.service';
-import { Observable, of } from 'rxjs';
-import { TranslateService } from '@ngx-translate/core';
-import { AuthenticationService } from '@arsnova/app/services/http/authentication.service';
+import { ActivatedRoute, ActivatedRouteSnapshot, Router } from '@angular/router';
+import { NotificationService } from '@arsnova/app/services/util/notification.service';
 import { LanguageService } from '@arsnova/app/services/util/language.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import {
+  JsonTranslationLoader,
+  MockLangService,
+  MockNotificationService,
+  ActivatedRouteStub,
+  MockGlobalStorageService,
+  MockRouter
+} from '@arsnova/testing/test-helpers';
+import { of } from 'rxjs';
 import { GlobalStorageService } from '@arsnova/app/services/util/global-storage.service';
+import { ContentAnswerService } from '@arsnova/app/services/http/content-answer.service';
+import { ContentService } from '@arsnova/app/services/http/content.service';
+import { EventEmitter } from '@angular/core';
+import { ContentChoice } from '@arsnova/app/models/content-choice';
+import { ContentType } from '@arsnova/app/models/content-type.enum';
+import { ContentState } from '@arsnova/app/models/content-state';
 
-@Injectable()
-class MockContentAnswerService {
-
-}
-
-@Injectable()
-class MockNotificationService {
-
-}
-
-@Injectable()
-class MockTranslateService {
-  public get(key: string): Observable<String> {
-    return of (key);
-  }
-
-  public use(key: string): void {
-
-  }
-}
-
-@Injectable()
-class MockAuthenticationService {
-  getCurrentAuthentication() {
-    return of(null);
-  }
-}
-
-@Injectable()
-class MockLanguageService {
-  public readonly langEmitter = new EventEmitter<string>();
-}
-
-@Injectable()
-class MockGlobalStorageService {
-  public getItem(key: string): string {
-    return '';
-  }
-
-  public setItem(key: string, value: any) {
-  }
-
-  public removeItem(key: string) {
-  }
-}
-
-@Injectable()
-class MockRouter {
-
-}
 
 describe('ContentSortParticipantComponent', () => {
   let component: ContentSortParticipantComponent;
   let fixture: ComponentFixture<ContentSortParticipantComponent>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
+  const mockContentAnswerService = jasmine.createSpyObj(['addAnswerChoice', 'shuffleAnswerOptions']);
+
+  const mockContentService = jasmine.createSpyObj(['getCorrectChoiceIndexes']);
+
+  const snapshot = new ActivatedRouteSnapshot();
+
+  const params = {
+    shortId: '12345678',
+    seriesName: 'Quiz'
+  }
+
+  snapshot.params = of([params]);
+
+  const activatedRouteStub = new ActivatedRouteStub(null, null, snapshot);
+
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
       declarations: [ ContentSortParticipantComponent ],
+      imports: [
+        TranslateModule.forRoot({
+          loader: {
+            provide: TranslateLoader,
+            useClass: JsonTranslationLoader
+          },
+          isolate: true
+        })
+      ],
       providers: [
         {
           provide: ContentAnswerService,
-          useClass: MockContentAnswerService
+          useValue: mockContentAnswerService
         },
         {
           provide: NotificationService,
           useClass: MockNotificationService
         },
         {
-          provide: TranslateService,
-          useClass: MockTranslateService
-        },
-        {
-          provide: AuthenticationService,
-          useClass: MockAuthenticationService
-        },
-        {
           provide: LanguageService,
-          useClass: MockLanguageService
+          useClass: MockLangService
         },
         {
           provide: ActivatedRoute,
-          useValue: {
-            params: of([{ id: 1 }]),
-            data: of()
-          },
+          useValue: activatedRouteStub
         },
         {
           provide: GlobalStorageService,
@@ -105,15 +77,21 @@ describe('ContentSortParticipantComponent', () => {
         {
           provide: Router,
           useClass: MockRouter
+        },
+        {
+          provide: ContentService,
+          useValue: mockContentService
         }
       ]
     })
     .compileComponents();
-  });
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(ContentSortParticipantComponent);
     component = fixture.componentInstance;
+    component.content = new ContentChoice('1234', '1', '1234', 'subject', 'body', [], [], [], false, ContentType.SORT, new ContentState(1, new Date(), false));
+    component.sendEvent = new EventEmitter<string>();
     fixture.detectChanges();
   });
 
@@ -121,4 +99,3 @@ describe('ContentSortParticipantComponent', () => {
     expect(component).toBeTruthy();
   });
 });
-*/

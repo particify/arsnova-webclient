@@ -1,78 +1,83 @@
-/*
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { StatisticSortComponent } from './statistic-sort.component';
-import { Injectable } from '@angular/core';
-import { ContentService } from '../../../../services/http/content.service';
-import { ContentAnswerService } from '../../../../services/http/content-answer.service';
-import { ActivatedRoute } from '@angular/router';
-import { Observable, of } from 'rxjs';
+import { EventService } from '@arsnova/app/services/util/event.service';
+import { ContentService } from '@arsnova/app/services/http/content.service';
 import { ThemeService } from '@arsnova/theme/theme.service';
-import { TranslateService } from '@ngx-translate/core';
-
-
-@Injectable()
-class MockContentService {
-
-}
-
-@Injectable()
-class MockContentAnswerService {
-
-}
-
-
-@Injectable()
-class MockThemeService {
-
-}
-
-@Injectable()
-class MockTranslateService {
-  public get(key: string): Observable<String> {
-    return of (key);
-  }
-}
+import { JsonTranslationLoader, MockEventService, MockThemeService } from '@arsnova/testing/test-helpers';
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { ContentChoice } from '@arsnova/app/models/content-choice';
+import { ContentType } from '@arsnova/app/models/content-type.enum';
+import { ContentState } from '@arsnova/app/models/content-state';
+import { of } from 'rxjs';
+import { RoundStatistics } from '@arsnova/app/models/round-statistics';
+import { AnswerStatistics } from '@arsnova/app/models/answer-statistics';
+import { PresentationService } from '@arsnova/app/services/util/presentation.service';
 
 describe('StatisticSortComponent', () => {
   let component: StatisticSortComponent;
   let fixture: ComponentFixture<StatisticSortComponent>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
+  const mockContentService = jasmine.createSpyObj(['getAnswersChangedStream', 'getAnswer']);
+  const roundStatistics = new RoundStatistics();
+  roundStatistics.abstentionCount = 0;
+  roundStatistics.answerCount = 0;
+  roundStatistics.combinatedCounts = [];
+  roundStatistics.independentCounts = [];
+  roundStatistics.round = 1;
+  const stats = new AnswerStatistics();
+  stats.contentId = '1234',
+  stats.roundStatistics = [roundStatistics];
+  const body = {
+    payload: {
+      stats: stats
+    }
+  }
+  const message = {
+    body: JSON.stringify(body)
+  }
+  mockContentService.getAnswer.and.returnValue(of(stats));
+  mockContentService.getAnswersChangedStream.and.returnValue(of(message));
+
+  const mockPresentationService = jasmine.createSpyObj(['getScale']);
+
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
       declarations: [ StatisticSortComponent ],
+      imports: [
+        TranslateModule.forRoot({
+          loader: {
+            provide: TranslateLoader,
+            useClass: JsonTranslationLoader
+          },
+          isolate: true
+        })
+      ],
       providers: [
         {
+          provide: EventService,
+          useClass: MockEventService
+        },
+        {
           provide: ContentService,
-          useClass: MockContentService
-        },
-        {
-          provide: ContentAnswerService,
-          useClass: MockContentAnswerService
-        },
-        {
-          provide: ActivatedRoute,
-          useValue: {
-            params: of([{ id: 1 }]),
-            data: of()
-          },
+          useValue: mockContentService
         },
         {
           provide: ThemeService,
           useClass: MockThemeService
         },
         {
-          provide: TranslateService,
-          useClass: MockTranslateService
+          provide: PresentationService,
+          useValue: mockPresentationService
         }
       ]
     })
     .compileComponents();
-  });
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(StatisticSortComponent);
     component = fixture.componentInstance;
+    component.content = new ContentChoice('1234', '0', 'room1234', 'subject', 'body', [], [], [], false, ContentType.SORT, new ContentState(1, new Date(), false));
     fixture.detectChanges();
   });
 
@@ -80,5 +85,3 @@ describe('StatisticSortComponent', () => {
     expect(component).toBeTruthy();
   });
 });
-
-*/
