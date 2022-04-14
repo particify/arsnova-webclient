@@ -8,7 +8,7 @@
     <div *ngFor="let barItem of barItems; let i = index" fxLayoutAlign="center center" class="item"
          [ngClass]="{'current': i === currentRouteIndex }" (click)="navToUrl(i)"
          [matTooltip]="barItem.name === 'series' ? groupName : ('sidebar.' + barItem.name | translate)"
-         matTooltipPosition="right"
+         matTooltipPosition="right" matTooltipClass="hide-lg"
          [attr.aria-label]="'sidebar.a11y-switch-to-feature' | translate : {feature: (('sidebar.' + barItem.name) | translate)}">
       <mat-icon class="clickable">
         {{barItem.icon}}

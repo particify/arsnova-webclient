@@ -28,6 +28,12 @@ body {
   display: none ! important;
 }
 
+@media(max-width: 1000px) {
+  .hide-lg {
+    display: none;
+  }
+}
+
 // Scrollbar
 
 body::-webkit-scrollbar {
