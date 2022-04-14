@@ -1751,10 +1751,10 @@
   resolved "https://registry.yarnpkg.com/@types/jasmine/-/jasmine-3.10.3.tgz#a89798b3d5a8bd23ca56e855a9aee3e5a93bdaaa"
   integrity sha512-SWyMrjgdAUHNQmutvDcKablrJhkDLy4wunTme8oYLjKp41GnHGxMRXr2MQMvy/qy8H3LdzwQk9gH4hZ6T++H8g==
 
-"@types/jasmine@3.10.5":
-  version "3.10.5"
-  resolved "https://registry.yarnpkg.com/@types/jasmine/-/jasmine-3.10.5.tgz#ae155a9ec66e765c39646fb74c438cffcd6e3f78"
-  integrity sha512-RYxEJkk/RK1S6W0nMOx9Mxm5v2bKwAVjzTHiBcHkQskwKDqHKHjSU46jx/q9IffyuctNl8ebaAjb5/461faKqQ==
+"@types/jasmine@3.10.6":
+  version "3.10.6"
+  resolved "https://registry.yarnpkg.com/@types/jasmine/-/jasmine-3.10.6.tgz#8c8fe733d89813bf3dc3f9282d347fa1dbc90567"
+  integrity sha512-twY9adK/vz72oWxCWxzXaxoDtF9TpfEEsxvbc1ibjF3gMD/RThSuSud/GKUTR3aJnfbivAbC/vLqhY+gdWCHfA==
 
 "@types/jasminewd2@2.0.10":
   version "2.0.10"
