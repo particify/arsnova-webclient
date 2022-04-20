@@ -857,7 +857,8 @@ button.mat-menu-item:hover {
   }
 }
 
-.mat-menu-item > .mat-icon:not(.icon-primary, .icon-warn, .icon-important), .mat-menu-item[disabled] > .mat-icon {
+.mat-menu-item > .mat-icon:not(.icon-primary, .icon-warn, .icon-important), .mat-menu-item[disabled] > .mat-icon,
+.mat-menu-item > * > .mat-icon:not(.icon-primary, .icon-warn, .icon-important) {
   opacity: 0.7;
 }
 

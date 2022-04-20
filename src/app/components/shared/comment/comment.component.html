@@ -49,7 +49,7 @@
       </button>
       <button mat-icon-button *ngIf="(isCreator || isModerator) && archived" (click)="openDeleteCommentDialog()"
               tabindex="0" aria-labelledby="comment-delete">
-        <mat-icon class="delete-icon" matTooltip="{{ 'comment-page.delete' | translate }}">delete
+        <mat-icon class="icon-warn" matTooltip="{{ 'comment-page.delete' | translate }}">delete
         </mat-icon>
       </button>
       <mat-menu #actionsMenu="matMenu" xPosition="before">
@@ -101,6 +101,7 @@
             </mat-chip>
           </mat-chip-list>
         </div>
+        <lib-extension-point *ngIf="fileUploadEnabled" extensionId="attachment-list" [extensionData]="extensionData"></lib-extension-point>
       </div>
       <span class="fill-remaining-space click" (click)="openPresentDialog()"></span>
       <div *ngIf="!isParticipant" fxLayout="row" fxLayoutAlign="start end">
@@ -108,7 +109,6 @@
         <span class="scoreCreator">{{comment.score}}</span>
       </div>
     </div>
-    <lib-extension-point *ngIf="fileUploadEnabled" extensionId="attachment-list" [extensionData]="extensionData"></lib-extension-point>
   </div>
   <div fxLayout="column" fxLayoutAlign="center" *ngIf="isParticipant" class="vote-container"
        [ngClass]="{ '1': 'voteUp', '-1': 'voteDown', '0': 'reset'}[currentVote]">
