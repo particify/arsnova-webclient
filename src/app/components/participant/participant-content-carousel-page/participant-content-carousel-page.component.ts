@@ -237,7 +237,7 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
 
   getFirstUnansweredContentIndex(): number {
     for (let i = 0; i < this.alreadySent.size; i++) {
-      if (this.alreadySent.get(i) === false && this.contents[i].format !== ContentType.SLIDE) {
+      if (this.alreadySent.get(i) === false && ![ContentType.SLIDE, ContentType.FLASHCARD].includes(this.contents[i].format)) {
         return i;
       }
     }
