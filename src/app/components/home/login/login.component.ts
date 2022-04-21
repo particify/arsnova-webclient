@@ -57,7 +57,7 @@ export class LoginComponent implements AfterContentInit, OnChanges, OnInit {
 
   ngAfterContentInit() {
     this.authenticationService.getCurrentAuthentication().subscribe(auth => {
-      if (this.authenticationService.isLoggedIn() && auth.authProvider !== AuthProvider.ARSNOVA_GUEST) {
+      if (this.authenticationService.isLoggedIn() && auth?.authProvider !== AuthProvider.ARSNOVA_GUEST) {
         this.router.navigateByUrl('user');
       } else {
         this.usernamePasswordProviders = this.authProviders.filter((p) => p.type === AuthenticationProviderType.USERNAME_PASSWORD);
