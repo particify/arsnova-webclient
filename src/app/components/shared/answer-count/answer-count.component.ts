@@ -10,7 +10,6 @@ export class AnswerCountComponent implements OnInit {
 
   @Input() count: number;
   @Input() size: string;
-  @Input() visible = true;
 
   controlBar = false;
 
