@@ -6,19 +6,11 @@
 }
 
 h2 {
-  margin: 0;
-}
-
-.less-important {
-  opacity: 0.8;
+  margin: 16px 0;
 }
 
 .type-icon {
   opacity: 0.6;
-}
-
-.delete-item {
-  margin-top: 16px;
 }
 
 span {
@@ -49,4 +41,4 @@ span {
   .input-field {
     width: calc(50% - 28px);
   }
-  }
+}

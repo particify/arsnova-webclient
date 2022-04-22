@@ -4,8 +4,9 @@
 <div *ngIf="!isLoading" fxLayout="row" fxLayoutAlign="center center">
   <mat-card fxLayout="column" fxLayoutGap="16px">
     <div fxLayout="column">
+      <h2>{{ 'user-profile.account-settings' | translate }}</h2>
       <lib-extension-point extensionId="profile-subscription"></lib-extension-point>
-      <h4 class="less-important">{{ ('user-profile.username' | translate) + ': ' + auth.loginId }}</h4>
+      <h4>{{ ('user-profile.username' | translate) + ': ' + auth.loginId }}</h4>
       <div fxLayout="column" fxLayoutGap="16px">
         <div fxLayout="row wrap" class="container">
           <mat-icon class="type-icon">person</mat-icon>
@@ -26,12 +27,14 @@
       </div>
     </div>
     <div>
+      <lib-extension-point extensionId="user-quota"></lib-extension-point>
       <app-divider [padding]="true"></app-divider>
-      <div fxLayout="row wrap" fxLayoutAlign="space-between center" fxLayoutGap="16px" class="less-important">
-        <div class="delete-item">
+      <h2>{{ 'user-profile.delete-account' | translate }}</h2>
+      <div fxLayout="row wrap" fxLayoutAlign="space-between center" fxLayoutGap="16px">
+        <div>
           <span tabindex="0">{{ 'user-profile.delete-account-info' | translate }}</span>
         </div>
-        <button mat-stroked-button class="delete delete-item" (click)="openDeleteUserDialog()"
+        <button mat-stroked-button class="delete" (click)="openDeleteUserDialog()"
                 aria-labelledby="delete-account">
           <mat-icon>delete</mat-icon>
           {{ 'user-profile.delete-account' | translate }}
