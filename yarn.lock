@@ -5673,10 +5673,10 @@ make-fetch-happen@^9.1.0:
     socks-proxy-agent "^6.0.0"
     ssri "^8.0.0"
 
-material-design-icons-iconfont@6.6.0:
-  version "6.6.0"
-  resolved "https://registry.yarnpkg.com/material-design-icons-iconfont/-/material-design-icons-iconfont-6.6.0.tgz#6f7165ab5d02b97d008543f2ed46fb53a8b32e5e"
-  integrity sha512-ZK4hugbTsGob1o2HvYJgkT32YMgfIWQx9soWJaN2T7KMb9byr68IaM1W8lGI+0fPLApdMD00dIE6u1bO488tng==
+material-design-icons-iconfont@6.7.0:
+  version "6.7.0"
+  resolved "https://registry.yarnpkg.com/material-design-icons-iconfont/-/material-design-icons-iconfont-6.7.0.tgz#55cf0f3d7e4c76e032855b7e810b6e30535eff3c"
+  integrity sha512-lSj71DgVv20kO0kGbs42icDzbRot61gEDBLQACzkUuznRQBUYmbxzEkGU6dNBb5fRWHMaScYlAXX96HQ4/cJWA==
 
 media-typer@0.3.0:
   version "0.3.0"
