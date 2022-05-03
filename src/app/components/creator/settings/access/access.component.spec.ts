@@ -30,6 +30,7 @@ import { Moderator } from '@arsnova/app/models/moderator';
 import { UserRole } from '@arsnova/app/models/user-roles.enum';
 import { User } from '@arsnova/app/models/user';
 import { Person } from '@arsnova/app/models/person';
+import { AccessTokenService } from '@arsnova/app/services/http/access-token.service';
 
 @Injectable()
 class MockRoomService {
@@ -64,6 +65,12 @@ class MockAuthenticationService {
   }
   isLoginIdEmailAddress() {
     return of(true);
+  }
+}
+
+@Injectable()
+class MockAccessTokenService {
+  invite() {
   }
 }
 
@@ -118,6 +125,10 @@ describe('AccessComponent', () => {
         {
           provide: LanguageService,
           useClass: MockLangService
+        },
+        {
+          provide: AccessTokenService,
+          useClass: MockAccessTokenService
         }
       ],
       imports: [

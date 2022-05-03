@@ -14,6 +14,7 @@ const httpOptions = {
 
 @Injectable()
 export class ModeratorService extends AbstractHttpService<Moderator> {
+
   constructor(private http: HttpClient,
               protected eventService: EventService,
               protected translateService: TranslateService,

@@ -75,6 +75,7 @@ import { PasswordEntryComponent } from './components/home/password-entry/passwor
 import { FormHeaderComponent } from './components/home/form-header/form-header.component';
 import { WsCommentService } from './services/websockets/ws-comment.service';
 import { PresentationService } from './services/util/presentation.service';
+import { AccessTokenService } from './services/http/access-token.service';
 
 export function dialogClose(dialogResult: any) {
 }
@@ -194,6 +195,7 @@ export function initializeApp(appConfig: AppConfig) {
     WsRoomEventDispatcherService,
     HotkeyService,
     PresentationService,
+    AccessTokenService,
     { provide: Window,  useValue: window },
     STORAGE_CONFIG_PROVIDERS,
     {

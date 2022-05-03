@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { AdvancedSnackBarTypes, NotificationService } from '../../../../services/util/notification.service';
 import { TranslateService } from '@ngx-translate/core';
 import { ModeratorService } from '../../../../services/http/moderator.service';
@@ -13,6 +13,8 @@ import { Room } from '../../../../models/room';
 import { UserRole } from '../../../../models/user-roles.enum';
 import { AuthenticationService } from '../../../../services/http/authentication.service';
 import { AuthProvider } from '../../../../models/auth-provider';
+import { debounceTime, map, Subject, takeUntil } from 'rxjs';
+import { AccessTokenService } from '../../../../services/http/access-token.service';
 
 export interface Role {
   name: string;
@@ -24,13 +26,15 @@ export interface Role {
   templateUrl: './access.component.html',
   styleUrls: ['./access.component.scss']
 })
-export class AccessComponent implements OnInit {
+export class AccessComponent implements OnInit, OnDestroy {
 
   @Output() saveEvent: EventEmitter<UpdateEvent> = new EventEmitter<UpdateEvent>();
 
   @Input() room: Room;
   moderators: Moderator[] = [];
   userIds: string[] = [];
+  userFound = false;
+  newModeratorId: string;
   loginId = '';
   isLoading = true;
   selectedRole: Role;
@@ -45,6 +49,9 @@ export class AccessComponent implements OnInit {
   loginIdIsEmail = false;
 
   usernameFormControl = new FormControl('', [Validators.email]);
+  formSubscription = new Subject<void>();
+  currentInputIsChecked = true;
+
 
   constructor(private dialogService: DialogService,
               public notificationService: NotificationService,
@@ -53,15 +60,31 @@ export class AccessComponent implements OnInit {
               protected userService: UserService,
               protected langService: LanguageService,
               public eventService: EventService,
-              private authenticationService: AuthenticationService) {
+              private authenticationService: AuthenticationService,
+              private accessTokenService: AccessTokenService) {
     langService.langEmitter.subscribe(lang => translationService.use(lang));
   }
 
   ngOnInit() {
     this.selectedRole = this.roles[0];
     this.getModerators();
-    this.authenticationService.isLoginIdEmailAddress()
-        .subscribe(loginIdIsEmail => this.loginIdIsEmail = loginIdIsEmail);
+    this.authenticationService.isLoginIdEmailAddress().subscribe(loginIdIsEmail => {
+      this.loginIdIsEmail = loginIdIsEmail;
+      if (this.loginIdIsEmail) {
+        this.usernameFormControl.valueChanges.pipe(map(() => this.changesMade()), debounceTime(500), takeUntil(this.formSubscription)).subscribe(() => this.getUser());
+      } else {
+        this.userFound = true;
+      }
+    });
+  }
+
+  ngOnDestroy() {
+    this.formSubscription.next();
+    this.formSubscription.unsubscribe();
+  }
+
+  changesMade() {
+    this.currentInputIsChecked = false;
   }
 
   getModerators() {
@@ -89,20 +112,46 @@ export class AccessComponent implements OnInit {
     });
   }
 
-  addUser() {
+  getUser() {
     this.userService.getUserByLoginId(this.loginId).subscribe(list => {
-      if (list.length === 0) {
+      this.userFound = list.length > 0;
+      this.currentInputIsChecked = true;
+      if (this.userFound) {
+        this.newModeratorId = list[0].id;
+        if (!this.loginIdIsEmail) {
+          this.addModerator();
+        }
+      } else if(!this.loginIdIsEmail) {
         this.translationService.get('settings.user-not-found').subscribe(msg => {
           this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.FAILED);
         });
-        return;
       }
-      this.moderatorService.add(this.room.id, list[0].id).subscribe(() => {
+    });
+  }
+
+  addModerator() {
+    if (this.userFound) {
+      this.moderatorService.add(this.room.id, this.newModeratorId).subscribe(() => {
         this.saveEvent.emit(new UpdateEvent(null, false, true));
-        this.moderators.push(new Moderator(list[0].id, this.loginId, UserRole.EXECUTIVE_MODERATOR));
+        this.moderators.push(new Moderator(this.newModeratorId, this.loginId, UserRole.EXECUTIVE_MODERATOR));
         this.translationService.get('settings.user-added').subscribe(msg => {
           this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.SUCCESS);
         });
+        this.loginId = '';
+      });
+    } else {
+      if (this.loginIdIsEmail) {
+        this.inviteModerator();
+      } else {
+        this.getUser();
+      }
+    }
+  }
+
+  inviteModerator() {
+    this.accessTokenService.invite(this.room.id, UserRole.EXECUTIVE_MODERATOR, this.loginId).subscribe(() => {
+      this.translationService.get('settings.user-invited').subscribe(msg => {
+        this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.SUCCESS);
         this.loginId = '';
       });
     });
