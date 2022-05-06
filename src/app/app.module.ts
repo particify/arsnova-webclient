@@ -76,6 +76,7 @@ import { FormHeaderComponent } from './components/home/form-header/form-header.c
 import { WsCommentService } from './services/websockets/ws-comment.service';
 import { PresentationService } from './services/util/presentation.service';
 import { AccessTokenService } from './services/http/access-token.service';
+import { RedeemTokenComponent } from './components/home/redeem-token/redeem-token.component';
 
 export function dialogClose(dialogResult: any) {
 }
@@ -99,7 +100,8 @@ export function initializeApp(appConfig: AppConfig) {
     RequestPasswordResetComponent,
     SnackBarAdvancedComponent,
     PasswordEntryComponent,
-    FormHeaderComponent
+    FormHeaderComponent,
+    RedeemTokenComponent
   ],
   imports: [
     extensions,
