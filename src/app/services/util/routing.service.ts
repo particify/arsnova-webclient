@@ -4,7 +4,8 @@ import { Location } from '@angular/common';
 import { filter } from 'rxjs/operators';
 import { TranslateService } from '@ngx-translate/core';
 import { LanguageService } from './language.service';
-import { UserRole } from '@arsnova/app/models/user-roles.enum';
+import { UserRole } from '../../models/user-roles.enum';
+import { GlobalStorageService, STORAGE_KEYS } from './global-storage.service';
 
 export enum RoutePrefix {
   CREATOR = 'edit',
@@ -72,7 +73,6 @@ export class RoutingService {
   currentRoute: string;
   backRoute: string[];
   fullCurrentRoute: string;
-  redirectRoute: string;
   homeTitle: string;
   suffix: string;
   titleKey: string;
@@ -91,7 +91,8 @@ export class RoutingService {
     private router: Router,
     private location: Location,
     private translateService: TranslateService,
-    private langService: LanguageService) {
+    private langService: LanguageService,
+    private globalStorageService: GlobalStorageService) {
   }
 
   subscribeActivatedRoute() {
@@ -169,22 +170,36 @@ export class RoutingService {
   }
 
   setRedirect(url?: string, checkIfAlreadyOnLogin = false) {
-    if (!this.redirectRoute) {
+    const redirectRoute = this.getRedirectUrl();
+    if (!redirectRoute) {
       if (!url && (checkIfAlreadyOnLogin && this.location.path() !== '/login')) {
         url = this.fullCurrentRoute ?? this.location.path();
       }
-      this.redirectRoute = url;
+      this.setRedirectUrl(url);
     }
   }
 
   redirect(): boolean {
-    if (this.redirectRoute) {
-      this.navigate(this.redirectRoute);
-      this.redirectRoute = null;
+    const url = this.getRedirectUrl();
+    if (url) {
+      this.navigate(url);
+      this.removeRedirectUrl();
       return true;
     } else {
       return false;
     }
+  }
+
+  getRedirectUrl(): string {
+    return this.globalStorageService.getItem(STORAGE_KEYS.REDIRECT_URL);
+  }
+
+  setRedirectUrl(url: string) {
+    this.globalStorageService.setItem(STORAGE_KEYS.REDIRECT_URL, url);
+  }
+
+  removeRedirectUrl() {
+    this.globalStorageService.removeItem(STORAGE_KEYS.REDIRECT_URL);
   }
 
   getRoleString(role: string): string {
