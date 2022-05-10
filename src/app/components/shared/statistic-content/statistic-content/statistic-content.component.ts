@@ -59,7 +59,6 @@ export class StatisticContentComponent implements OnInit {
 
   ngOnInit(): void {
     this.attachmentData = {
-      roomId: this.content.roomId,
       refType: 'content',
       refId: this.content.id,
       detailedView: false

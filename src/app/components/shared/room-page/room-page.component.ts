@@ -151,7 +151,6 @@ export class RoomPageComponent implements OnDestroy {
     this.attachmentData = {
       refId: this.room.id,
       refType: 'room',
-      roomId: this.room.id,
       role: role,
       detailedView: true,
       pureImageView: false

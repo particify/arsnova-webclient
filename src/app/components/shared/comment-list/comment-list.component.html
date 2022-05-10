@@ -193,7 +193,7 @@
 
     <mat-divider></mat-divider>
 
-    <lib-extension-point extensionId="add-archive" [extensionData]="{roomId: room.id}" (extensionEvent)="resetComments()"></lib-extension-point>
+    <lib-extension-point extensionId="add-archive" (extensionEvent)="resetComments()"></lib-extension-point>
 
     <button [disabled]="comments.length === 0" mat-menu-item aria-labelledby="export-comments" (click)="onExport()" appTrackInteraction="Export comments">
       <mat-icon class="settings-icon">save</mat-icon>

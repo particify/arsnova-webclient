@@ -79,6 +79,7 @@ export class RoutingService {
   isTranslatedTitle: boolean;
   private viewRole: UserRole;
   private shortId: string;
+  private roomId: string;
   role: UserRole;
   role$ = new EventEmitter<UserRole>();
   isRoom: boolean;
@@ -115,6 +116,7 @@ export class RoutingService {
 
   getRoomUrlData(route: ActivatedRouteSnapshot) {
     this.role = route.data.userRole;
+    this.roomId = route.data.room?.id;
     this.role$.emit(this.role);
     this.viewRole = route.data.viewRole;
     this.shortId = route.paramMap.get('shortId');
@@ -291,5 +293,9 @@ export class RoutingService {
 
   getShortId() {
     return this.shortId;
+  }
+
+  getRoomId() {
+    return this.roomId;
   }
 }

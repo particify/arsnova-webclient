@@ -1,4 +1,4 @@
-<lib-extension-point *ngIf="!isLoading" extensionId="remote" [extensionData]="{roomId: roomId, feature: barItems[currentRouteIndex]?.name}"></lib-extension-point>
+<lib-extension-point *ngIf="!isLoading" extensionId="remote" [extensionData]="{remoteFeature: barItems[currentRouteIndex]?.name}"></lib-extension-point>
 <div *ngIf="currentRouteIndex > -1" class="info-container" fxLayout="row" fxLayoutGap="1em">
   <div fxLayoutAlign="center">
     <p class="code">{{ joinUrl || (shortId | splitShortId) }}</p>
@@ -90,7 +90,7 @@
       </div>
       <app-key-button-bar *ngIf="isActiveFeature('feedback')" [items]="surveyItems"></app-key-button-bar>
       <div fxLayout="row">
-        <lib-extension-point extensionId="focus-mode-presentation-control" [extensionData]="{roomId: roomId}"></lib-extension-point>
+        <lib-extension-point extensionId="focus-mode-presentation-control"></lib-extension-point>
         <div fxLayout="row" class="feature-container icon-container">
           <app-key-button-bar [items]="generalItems" [withText]="false"></app-key-button-bar>
         </div>
