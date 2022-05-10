@@ -3,7 +3,7 @@ import { environment } from '../../../../src/environments/environment';
 import { Extension } from './extension';
 
 @Injectable({
-  providedIn: 'any'
+  providedIn: 'root'
 })
 export class ExtensionFactory {
   extensions: { [ key: string ]: Extension } = {};
