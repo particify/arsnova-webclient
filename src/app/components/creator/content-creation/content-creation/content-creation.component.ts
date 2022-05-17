@@ -2,7 +2,6 @@ import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angu
 import { ContentService } from '../../../../services/http/content.service';
 import { AdvancedSnackBarTypes, NotificationService } from '../../../../services/util/notification.service';
 import { TranslateService } from '@ngx-translate/core';
-import { RoomService } from '../../../../services/http/room.service';
 import { ContentGroupService } from '../../../../services/http/content-group.service';
 import { Content } from '../../../../models/content';
 import { ContentChoice } from '../../../../models/content-choice';
@@ -11,8 +10,8 @@ import { AnswerOption } from '../../../../models/answer-option';
 import { Observable, Subscription } from 'rxjs';
 import { ContentText } from '@arsnova/app/models/content-text';
 import { ContentFlashcard } from '@arsnova/app/models/content-flashcard';
-import { ActivatedRoute } from '@angular/router';
 import { AnnounceService } from '../../../../services/util/announce.service';
+import { ActivatedRoute } from '@angular/router';
 
 export class DisplayAnswer {
   answerOption: AnswerOption;
@@ -53,9 +52,8 @@ export class ContentCreationComponent implements OnInit, OnDestroy {
   constructor(protected contentService: ContentService,
               protected notificationService: NotificationService,
               protected translationService: TranslateService,
-              protected roomService: RoomService,
-              protected contentGroupService: ContentGroupService,
               protected route: ActivatedRoute,
+              protected contentGroupService: ContentGroupService,
               protected announceService: AnnounceService
   ) { }
 

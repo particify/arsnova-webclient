@@ -1,3 +1,5 @@
+@import '../../../../variables';
+
 .list {
   position: fixed;
   background: var(--surface);
@@ -49,18 +51,17 @@
   }
 
   .list {
-    // 64px (Header height) + 4vw (app-padding)
-    top: calc(64px + 4vw);
+    top: $app-padding;
     position: absolute;
   }
 
   .presentation-mode {
-    top: 4vw;
+    top: $app-padding;
   }
 
   .fixed {
     position: fixed;
-    top: 4vw;
+    top: $app-padding;
   }
 
   .notActive {

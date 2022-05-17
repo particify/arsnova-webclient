@@ -37,8 +37,6 @@ describe('ControlBarComponent', () => {
 
   const mockContentService = jasmine.createSpyObj(['findContentsWithoutGroup']);
 
-  const mockRoutingService = jasmine.createSpyObj(['getRoleString']);
-
   const mockRoomStatsService = jasmine.createSpyObj(['getStats']);
   mockRoomStatsService.getStats.and.returnValue(of({}));
 
@@ -77,6 +75,9 @@ describe('ControlBarComponent', () => {
   const activatedRouteStub = new ActivatedRouteStub(null, data, snapshot);
 
   const splitShortIdPipe = new SplitShortIdPipe();
+
+  const mockRoutingService = jasmine.createSpyObj(['getRoleString', 'getRouteChanges']);
+  mockRoutingService.getRouteChanges.and.returnValue(of(snapshot));
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({

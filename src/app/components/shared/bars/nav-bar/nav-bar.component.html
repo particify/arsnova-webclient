@@ -1,6 +1,4 @@
 <lib-extension-point *ngIf="role === 'CREATOR' && !isLoading" extensionId="focus-mode-control" [extensionData]="guidedModeExtensionData"></lib-extension-point>
-<lib-extension-point *ngIf="role === 'PARTICIPANT'" extensionId="participant-header" [extensionData]="{roomId: roomId}"></lib-extension-point>
-<lib-extension-point *ngIf="role === 'CREATOR'" extensionId="remote"></lib-extension-point>
 <div *ngIf="!tooFewFeatures && !hideBarForParticipants" class="list nav {{position}}" fxLayout="column" fxLayoutAlign="center center" (window:scroll)="checkScroll()"
      [ngClass]="{'notActive': !isActive, 'fixed': scrollExtended}"
      (mouseenter)="toggleVisibility(true)" (mouseleave)="toggleVisibility(false)">

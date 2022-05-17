@@ -5,7 +5,6 @@ import { extensions } from './participant.extensions';
 import { EssentialsModule } from '../essentials/essentials.module';
 import { ContentChoiceParticipantComponent } from './content/content-choice-participant/content-choice-participant.component';
 import { ContentTextParticipantComponent } from './content/content-text-participant/content-text-participant.component';
-import { RoomParticipantPageComponent } from './room-participant-page/room-participant-page.component';
 import { SharedModule } from '../shared/shared.module';
 import { ParticipantContentCarouselPageComponent } from './participant-content-carousel-page/participant-content-carousel-page.component';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
@@ -20,6 +19,7 @@ import { ContentSortParticipantComponent } from './content/content-sort-particip
 import { ContentWordcloudParticipantComponent } from './content/content-wordcloud-participant/content-wordcloud-participant.component';
 import { ContentScaleParticipantComponent } from './content/content-scale-participant/content-scale-participant.component';
 import { SeriesResultsComponent } from './series-results/series-results.component';
+import { ParticipantOverviewComponent } from './participant-overview/participant-overview.component';
 
 @NgModule({
   imports: [
@@ -47,12 +47,12 @@ import { SeriesResultsComponent } from './series-results/series-results.componen
     ContentChoiceParticipantComponent,
     ContentScaleParticipantComponent,
     ContentTextParticipantComponent,
-    RoomParticipantPageComponent,
     ParticipantContentCarouselPageComponent,
     ContentParticipantComponent,
     ContentSortParticipantComponent,
     ContentWordcloudParticipantComponent,
-    SeriesResultsComponent
+    SeriesResultsComponent,
+    ParticipantOverviewComponent
   ],
   providers: [
     { provide: TRANSLATION_MODULE_NAME, useValue: 'participant' }

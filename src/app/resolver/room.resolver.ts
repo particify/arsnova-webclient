@@ -14,7 +14,8 @@ export class RoomResolver implements Resolve<Room> {
   }
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<Room> {
-    return this.roomService.getRoomByShortId(route.params['shortId']).pipe(
+    const shortId = route.params['shortId'] || route.parent.params['shortId'];
+    return this.roomService.getRoomByShortId(shortId).pipe(
         tap(room => this.roomService.joinRoom(room))
     );
   }

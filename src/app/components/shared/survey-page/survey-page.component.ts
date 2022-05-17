@@ -49,7 +49,6 @@ export class SurveyPageComponent implements OnInit, OnDestroy, AfterContentInit 
   type = this.typeFeedback;
   deviceWidth = innerWidth;
   answerCount = 0;
-  routeData;
   toggleKey = "1";
   changeKey = "2";
   voteKeys = ["1", "2", "3", "4"];
@@ -91,7 +90,6 @@ export class SurveyPageComponent implements OnInit, OnDestroy, AfterContentInit 
     this.authenticationService.getCurrentAuthentication()
         .subscribe(auth => this.userId = auth.userId);
     this.route.data.subscribe(data => {
-      this.routeData = data;
       this.roomId = data.room.id;
       this.shortId = data.room.shortId;
       this.isCreator = data.viewRole === UserRole.CREATOR;
@@ -148,7 +146,6 @@ export class SurveyPageComponent implements OnInit, OnDestroy, AfterContentInit 
 
   loadConfig(room: Room) {
     this.room = room;
-    this.routeData.room = this.room;
     this.isClosed = room.settings['feedbackLocked'];
     if (this.room.extensions && this.room.extensions.feedback && this.room.extensions.feedback['type']) {
       this.type = this.room.extensions.feedback['type'];

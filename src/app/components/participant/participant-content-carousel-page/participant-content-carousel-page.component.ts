@@ -98,8 +98,8 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
     const params = this.route.snapshot.params;
     const lastContentIndex = params['contentIndex'] - 1;
     this.contentGroupName = params['seriesName'];
-    this.shortId = params['shortId'];
     this.route.data.subscribe(data => {
+      this.shortId = data.room.shortId;
       this.contentgroupService.getByRoomIdAndName(data.room.id, this.contentGroupName).subscribe(contentGroup => {
         this.contentGroup = contentGroup;
         this.getContents(lastContentIndex);

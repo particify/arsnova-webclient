@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { RoomParticipantPageComponent } from './room-participant-page.component';
+import { ParticipantOverviewComponent } from './participant-overview.component';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NotificationService } from '@arsnova/app/services/util/notification.service';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
@@ -40,9 +40,9 @@ class MockA11yIntroPipe implements PipeTransform {
   }
 }
 
-describe('RoomParticipantPageComponent', () => {
-  let component: RoomParticipantPageComponent;
-  let fixture: ComponentFixture<RoomParticipantPageComponent>;
+describe('ParticipantOverviewComponent', () => {
+  let component: ParticipantOverviewComponent;
+  let fixture: ComponentFixture<ParticipantOverviewComponent>;
 
   const mockContentService = jasmine.createSpyObj(['findContentsWithoutGroup']);
 
@@ -83,8 +83,8 @@ describe('RoomParticipantPageComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ 
-        RoomParticipantPageComponent,
+      declarations: [
+        ParticipantOverviewComponent,
         MockA11yIntroPipe,
         SplitShortIdPipe
        ],
@@ -172,7 +172,7 @@ describe('RoomParticipantPageComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(RoomParticipantPageComponent);
+    fixture = TestBed.createComponent(ParticipantOverviewComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

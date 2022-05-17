@@ -1,11 +1,10 @@
-<app-nav-bar *ngIf="!isPresentation" (isVisible)="checkIfNavBarExists($event)"></app-nav-bar>
 <button class="add-btn mobile-add" mat-fab aria-labelledby="add"
         *ngIf="!search && deviceType !== 'desktop' && !isPresentation && !isArchive && !isModerator" (click)="openCreateDialog()"
-        [ngClass]="{'above-nav': navBarExists}"
+        [ngClass]="{'mobile-add-above-nav': navBarExists, 'mobile-add-hide': !onInit}"
         matTooltip="{{ 'comment-list.add-comment' | translate }}">
   <mat-icon class="bigger-icon">add</mat-icon>
 </button>
-<div class="nav-bar-container">
+<div>
   <div [ngClass]="{'header-container': !isPresentation, 'centered': viewRole === 'PARTICIPANT'}">
     <mat-tab-group *ngIf="!isPresentation && viewRole !== 'PARTICIPANT'" (selectedTabChange)="switchList($event.index)" class="list-switcher" [selectedIndex]="isModerator ? 1 : 0">
       <mat-tab *ngIf="!isArchive" label="{{ 'comment-list.public-list' | translate }} {{ publicCounter | counterBraces }}"></mat-tab>
@@ -14,8 +13,7 @@
     </mat-tab-group>
     <div *ngIf="!isPresentation" fxLayout="row" fxLayoutAlign="center center" class="search-container" [ngClass]="{'search-container-fixed-invisible': scroll && !scrollActive && deviceType !== 'desktop', 'search-container-fixed': scroll && (!isScrollStart || deviceType === 'mobile'),
         'search-container-fixed-visible' : scroll && (deviceType === 'desktop' || scrollActive), 'search-container-archive': scroll && isArchive, 'fixed-start-position': isScrollStart && deviceType === 'desktop',
-        'four-buttons': viewRole === 'PARTICIPANT', 'five-buttons': viewRole !== 'PARTICIPANT'}"
-         (window:scroll)="checkScroll()">
+        'four-buttons': viewRole === 'PARTICIPANT', 'five-buttons': viewRole !== 'PARTICIPANT'}">
       <input tabindex="-1"
              #searchBox
              id="searchBox" [ngClass]="{'search-input-hidden': !search, 'search-input': search }"

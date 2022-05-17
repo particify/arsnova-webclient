@@ -37,7 +37,7 @@ export class ContentPresentationComponent implements OnInit, OnDestroy {
   isLoading = true;
   entryIndex = 0;
   contentIndex = 0;
-  shortId: number;
+  shortId: string;
   roomId: string;
   contentGroupName: string;
   currentStep = 0;

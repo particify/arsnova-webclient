@@ -1,6 +1,5 @@
-<app-nav-bar></app-nav-bar>
 <app-loading-indicator *ngIf="isLoading || isReloading"></app-loading-indicator>
-<div class="nav-bar-container">
+<div>
   <div *ngIf="!isLoading && !isReloading" fxLayout="column" fxLayoutAlign="start center">
     <div id="live-announcer-button" class="visually-hidden" tabindex="-1">
       {{ 'answer.a11y-message' | a11yIntro: { group: contentGroupName } | async }}

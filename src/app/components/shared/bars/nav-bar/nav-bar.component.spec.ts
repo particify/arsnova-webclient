@@ -25,8 +25,6 @@ describe('NavBarComponent', () => {
   let component: NavBarComponent;
   let fixture: ComponentFixture<NavBarComponent>;
 
-  const mockRoutingService = jasmine.createSpyObj(['getRoleString']);
-
   const mockRoomStatsService = jasmine.createSpyObj(['getStats']);
   mockRoomStatsService.getStats.and.returnValue(of({}));
 
@@ -47,6 +45,9 @@ describe('NavBarComponent', () => {
     room: room
   }
   const activatedRouteStub = new ActivatedRouteStub(null, data, snapshot);
+
+  const mockRoutingService = jasmine.createSpyObj(['getRoleString', 'getRouteChanges']);
+  mockRoutingService.getRouteChanges.and.returnValue(of(snapshot));
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({

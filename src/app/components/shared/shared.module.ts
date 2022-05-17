@@ -7,7 +7,7 @@ import { FooterComponent } from './footer/footer.component';
 import { HeaderComponent } from './header/header.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { RoomListComponent } from './room-list/room-list.component';
-import { RoomPageComponent } from './room-page/room-page.component';
+import { RoomOverviewComponent } from './room-overview/room-overview.component';
 import { StatisticsPageComponent } from './statistics-page/statistics-page.component';
 import { CommentPageComponent } from './comment-page/comment-page.component';
 import { EssentialsModule } from '../essentials/essentials.module';
@@ -53,6 +53,7 @@ import { UserFormFieldComponent } from './user-profile/user-form-field/user-form
 import { ContentChoiceAnswerComponent } from './content-answers/content-choice-answer/content-choice-answer.component';
 import { TrackInteractionDirective } from '../../directives/track-interaction.directive';
 import { SettingsSlideToggleComponent } from './settings-slide-toggle/settings-slide-toggle.component';
+import { RoomPageComponent } from './room-page/room-page.component';
 
 @NgModule({
   imports: [
@@ -67,6 +68,7 @@ import { SettingsSlideToggleComponent } from './settings-slide-toggle/settings-s
   declarations: [
     RoomJoinComponent,
     PageNotFoundComponent,
+    RoomOverviewComponent,
     RoomPageComponent,
     RoomListComponent,
     ContentGroupsComponent,
@@ -117,7 +119,7 @@ import { SettingsSlideToggleComponent } from './settings-slide-toggle/settings-s
   exports: [
     RoomJoinComponent,
     PageNotFoundComponent,
-    RoomPageComponent,
+    RoomOverviewComponent,
     RoomListComponent,
     ContentGroupsComponent,
     HeaderComponent,

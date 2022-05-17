@@ -1,4 +1,3 @@
-<app-nav-bar *ngIf="!isPresentation"></app-nav-bar>
 <app-info-bar *ngIf="!isLoading && isPresentation && contents?.length > 1" [barItems]="infoBarItems" [isPresentation]="true"
               [position]="'right'" [mode]="'pure'"></app-info-bar>
 <app-answer-count *ngIf="!isLoading && isPresentation" [count]="answerCount" [size]="'presentation'"></app-answer-count>
@@ -6,7 +5,7 @@
 <div fxLayoutAlign="center center" *ngIf="!isLoading && !contents">
   <p class="hint">{{ 'content.no-contents-yet' | translate }}</p>
 </div>
-<div class="nav-bar-container">
+<div>
   <div *ngIf="!isPresentation" tabindex="-1" id="presentation-message" class="visually-hidden">
     {{ 'statistic.a11y-message-presentation' | translate }}
   </div>

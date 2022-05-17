@@ -5,8 +5,6 @@ import { ContentService } from '../../../../services/http/content.service';
 import { AdvancedSnackBarTypes, NotificationService } from '../../../../services/util/notification.service';
 import { ContentType } from '../../../../models/content-type.enum';
 import { TranslateService } from '@ngx-translate/core';
-import { EventService } from '../../../../services/util/event.service';
-import { RoomService } from '../../../../services/http/room.service';
 import { ContentGroupService } from '../../../../services/http/content-group.service';
 import { ContentCreationComponent, DisplayAnswer } from '../content-creation/content-creation.component';
 import { AnnounceService  } from '../../../../services/util/announce.service';
@@ -29,12 +27,11 @@ export class ContentChoiceCreationComponent extends ContentCreationComponent imp
     protected contentService: ContentService,
     protected notificationService: NotificationService,
     protected translationService: TranslateService,
-    protected roomService: RoomService,
     protected contentGroupService: ContentGroupService,
     protected route: ActivatedRoute,
     protected announceService: AnnounceService
   ) {
-    super(contentService, notificationService, translationService, roomService, contentGroupService, route, announceService);
+    super(contentService, notificationService, translationService, route, contentGroupService, announceService);
   }
 
   initContentCreation() {

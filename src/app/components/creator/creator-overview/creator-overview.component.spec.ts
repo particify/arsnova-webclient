@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
-import { RoomCreatorPageComponent } from './room-creator-page.component';
+import { CreatorOverviewComponent } from './creator-overview.component';
 import { ContentService } from '@arsnova/app/services/http/content.service';
 import { RoomStatsService } from '@arsnova/app/services/http/room-stats.service';
 import { NotificationService } from '@arsnova/app/services/util/notification.service';
@@ -123,9 +123,9 @@ class MockCommentService {
   }
 }
 
-describe('RoomCreatorPageComponent', () => {
-  let component: RoomCreatorPageComponent;
-  let fixture: ComponentFixture<RoomCreatorPageComponent>;
+describe('CreatorOverviewComponent', () => {
+  let component: CreatorOverviewComponent;
+  let fixture: ComponentFixture<CreatorOverviewComponent>;
 
   const data = {
     room: new Room('1234', 'shortId', 'abbreviation', 'name', 'description')
@@ -146,7 +146,7 @@ describe('RoomCreatorPageComponent', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [
-        RoomCreatorPageComponent,
+        CreatorOverviewComponent,
         A11yIntroPipe,
         SplitShortIdPipe
       ],
@@ -247,7 +247,7 @@ describe('RoomCreatorPageComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(RoomCreatorPageComponent);
+    fixture = TestBed.createComponent(CreatorOverviewComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

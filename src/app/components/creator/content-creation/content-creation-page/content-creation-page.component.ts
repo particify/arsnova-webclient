@@ -3,7 +3,6 @@ import { TranslateService } from '@ngx-translate/core';
 import { LanguageService } from '../../../../services/util/language.service';
 import { GlobalStorageService, STORAGE_KEYS } from '../../../../services/util/global-storage.service';
 import { ActivatedRoute } from '@angular/router';
-import { RoomService } from '../../../../services/http/room.service';
 import { AnnounceService } from '../../../../services/util/announce.service';
 import { Subject } from 'rxjs';
 import { Content } from '../../../../models/content';
@@ -11,7 +10,6 @@ import { FormattingService } from '../../../../services/http/formatting.service'
 import { HINT_TYPES } from '../../../shared/hint/hint.component';
 import { UserRole } from '../../../../models/user-roles.enum';
 import { ContentService } from '../../../../services/http/content.service';
-import { RoomStatsService } from '../../../../services/http/room-stats.service';
 import { ContentType } from '../../../../models/content-type.enum';
 
 class ContentFormat {
@@ -53,8 +51,6 @@ export class ContentCreationPageComponent implements OnInit, AfterContentInit {
     private announceService: AnnounceService,
     private globalStorageService: GlobalStorageService,
     protected route: ActivatedRoute,
-    private roomService: RoomService,
-    private roomStatsService: RoomStatsService,
     private formattingService: FormattingService,
     private contentService: ContentService) {
     langService.langEmitter.subscribe(lang => translateService.use(lang));
@@ -73,9 +69,8 @@ export class ContentCreationPageComponent implements OnInit, AfterContentInit {
     }
     this.selectedFormat = this.formats[0];
     this.route.data.subscribe(data => {
-      const roomId = data.room.id;
       if (data.isEditMode) {
-        this.contentService.getContent(roomId, this.route.snapshot.params['contentId']).subscribe(content => {
+        this.contentService.getContent(data.room.id, this.route.snapshot.params['contentId']).subscribe(content => {
           this.content = content;
           this.question = this.content.body;
           this.abstentionsAllowed = this.content.abstentionsAllowed;
