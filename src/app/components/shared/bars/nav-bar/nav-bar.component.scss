@@ -23,7 +23,6 @@
 
 .current > * {
   opacity: 1;
-  cursor: default;
   color: var(--primary);
   font-weight: $font-weight-bold;
   animation: active 300ms;

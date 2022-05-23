@@ -14,6 +14,8 @@ import { ContentGroupStatistics } from '../../models/content-group-statistics';
 import { CachingService } from '../util/caching.service';
 import { WsConnectorService } from '../websockets/ws-connector.service';
 import { AnswerResultOverview } from '../../models/answer-result';
+import { SeriesCreated } from '../../models/events/series-created';
+import { SeriesDeleted } from '../../models/events/series-deleted';
 
 const httpOptions = {
   headers: new HttpHeaders({})
@@ -49,16 +51,32 @@ export class ContentGroupService extends AbstractEntityService<ContentGroup> {
     delete entity.id;
     delete entity.revision;
     return this.postEntity(entity, entity.roomId).pipe(
-      tap(() => this.roomStatsService.removeCacheEntry(entity.roomId)),
+      tap(group => {
+        this.roomStatsService.removeCacheEntry(entity.roomId);
+        this.sendCreatedEvent(group);
+      }),
       catchError(this.handleError<ContentGroup>(`post, ${entity.roomId}, ${entity.name}`))
     );
   }
 
+  sendCreatedEvent(group: ContentGroup) {
+    const event = new SeriesCreated(group);
+    this.eventService.broadcast(event.type, event.payload);
+  }
+
   delete(contentGroup: ContentGroup): Observable<ContentGroup> {
     return this.deleteEntity(contentGroup.id, contentGroup.roomId).pipe(
-      tap(() => this.roomStatsService.removeCacheEntry(contentGroup.roomId)),
+      tap(() =>  {
+        this.roomStatsService.removeCacheEntry(contentGroup.roomId);
+        this.sendDeletedEvent(contentGroup);
+      }),
       catchError(this.handleError<ContentGroup>(`Delete, ${contentGroup.roomId}, ${contentGroup.name}`))
     );
+  }
+
+  sendDeletedEvent(group: ContentGroup) {
+    const event = new SeriesDeleted(group);
+    this.eventService.broadcast(event.type, event.payload);
   }
 
   addContentToGroup(roomId: string, name: string, contentId?: String): Observable<void> {

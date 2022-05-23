@@ -19,6 +19,7 @@ import { EntityChanged } from '../../../models/events/entity-changed';
 import { Subscription } from 'rxjs';
 import { ContentFocusState } from '../../../models/events/remote/content-focus-state';
 import { RemoteMessage } from '../../../models/events/remote/remote-message.enum';
+import { UiState } from '../../../models/events/ui/ui-state.enum';
 
 @Component({
   selector: 'app-participant-content-carousel-page',
@@ -137,6 +138,14 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
     });
     this.focusStateSubscription = this.eventService.on<boolean>(RemoteMessage.FOCUS_STATE_CHANGED).subscribe(guided => {
       this.guided = guided;
+    });
+    this.eventService.on<string>(UiState.NEW_GROUP_SELECTED).subscribe(newGroup => {
+      this.contentgroupService.getByRoomIdAndName(this.contentGroup.roomId, newGroup).subscribe(group => {
+        this.contentGroupName = group.name;
+        this.contentGroup = group;
+        this.isReloading = true;
+        this.getContents(null);
+      });
     });
   }
 

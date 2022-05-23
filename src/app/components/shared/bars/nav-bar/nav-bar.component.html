@@ -1,18 +1,26 @@
 <lib-extension-point *ngIf="role === 'CREATOR' && !isLoading" extensionId="focus-mode-control" [extensionData]="guidedModeExtensionData"></lib-extension-point>
 <div *ngIf="!tooFewFeatures && !hideBarForParticipants" class="list nav {{position}}" fxLayout="column" fxLayoutAlign="center center" (window:scroll)="checkScroll()"
-     [ngClass]="{'notActive': !isActive, 'fixed': scrollExtended}"
-     (mouseenter)="toggleVisibility(true)" (mouseleave)="toggleVisibility(false)">
+     [ngClass]="{'fixed': scrollExtended}">
   <div class="icon-container">
     <div *ngFor="let barItem of barItems; let i = index" fxLayoutAlign="center center" class="item"
          [ngClass]="{'current': i === currentRouteIndex }" (click)="navToUrl(i)"
-         [matTooltip]="barItem.name === 'series' ? groupName : ('sidebar.' + barItem.name | translate)"
-         matTooltipPosition="right" matTooltipClass="hide-lg"
+         [matTooltip]="getFeatureText(barItem.name, true) | translate" #menuTrigger="matMenuTrigger"
+         matTooltipPosition="right" matTooltipClass="hide-lg" [matMenuTriggerFor]="isMenuActive(barItem.name) ? groupMenu : hideMenu" (menuOpened)="checkMenu(barItem.name, menuTrigger)"
          [attr.aria-label]="'sidebar.a11y-switch-to-feature' | translate : {feature: (('sidebar.' + barItem.name) | translate)}">
       <mat-icon class="clickable">
         {{barItem.icon}}
         <div [ngClass]="{'show-news': barItem.changeIndicator}" class="badge"></div>
       </mat-icon>
-      <p class="text ellipsis">{{barItem.name === 'series' ? groupName : ('sidebar.' + barItem.name | translate)}}</p>
+      <p class="text ellipsis">{{getFeatureText(barItem.name) | translate}}</p>
+      <div style="position: relative">
+        <mat-menu #groupMenu="matMenu" class="series-menu">
+          <button mat-menu-item *ngFor="let group of contentGroups" [ngClass]="{'current': group.name === groupName && i === currentRouteIndex}"
+                  (click)="navToUrl(i, group)">
+            <span>{{ group.name }}</span>
+          </button>
+        </mat-menu>
+        <mat-menu class="visually-hidden" #hideMenu="matMenu"></mat-menu>
+      </div>
     </div>
   </div>
 </div>

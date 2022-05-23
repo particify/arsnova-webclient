@@ -112,7 +112,7 @@ export class CreatorOverviewComponent extends RoomOverviewComponent implements O
         const newGroup = new ContentGroup();
         newGroup.roomId = this.room.id;
         newGroup.name = name;
-        this.contentGroupService.post(newGroup).subscribe(() => {
+        this.contentGroupService.post(newGroup).subscribe(group => {
           this.translateService.get('room-page.content-group-created').subscribe(msg => {
             this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.SUCCESS);
           });

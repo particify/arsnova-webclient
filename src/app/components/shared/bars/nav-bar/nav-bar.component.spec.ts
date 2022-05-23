@@ -20,6 +20,7 @@ import { Message } from '@stomp/stompjs';
 import { RoutingService } from '@arsnova/app/services/util/routing.service';
 import { RoomStatsService } from '@arsnova/app/services/http/room-stats.service';
 import { ContentGroup } from '@arsnova/app/models/content-group';
+import { MatMenuModule } from '@angular/material/menu';
 
 describe('NavBarComponent', () => {
   let component: NavBarComponent;
@@ -61,7 +62,8 @@ describe('NavBarComponent', () => {
             useClass: JsonTranslationLoader
           },
           isolate: true
-        })
+        }),
+        MatMenuModule
       ],
       providers: [
         {

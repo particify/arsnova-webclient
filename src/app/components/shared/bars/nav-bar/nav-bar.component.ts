@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { BarBaseComponent, BarItem } from '../bar-base';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RoutingService } from '../../../../services/util/routing.service';
@@ -18,6 +18,9 @@ import { RoomStats } from '../../../../models/room-stats';
 import { Features } from '../../../../models/features.enum';
 import { RemoteMessage } from '../../../../models/events/remote/remote-message.enum';
 import { UiState } from '../../../../models/events/ui/ui-state.enum';
+import { SeriesCreated } from '../../../../models/events/series-created';
+import { SeriesDeleted } from '../../../../models/events/series-deleted';
+import { MatMenuTrigger } from '@angular/material/menu';
 
 export class NavBarItem extends BarItem {
 
@@ -58,7 +61,6 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
     new BarItem(Features.FEEDBACK, 'thumbs_up_down')
   ];
   currentRouteIndex: number;
-  isActive = true;
   activeFeatures: string[] = [Features.COMMENTS];
   tooFewFeatures = false;
   group: ContentGroup;
@@ -76,6 +78,7 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
   focusStateSubscription: Subscription;
   guidedModeExtensionData: object;
   isLoading = true;
+  closeMenuTimeout;
 
   constructor(protected router: Router,
               protected routingService: RoutingService,
@@ -155,6 +158,8 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
       if (this.role === UserRole.PARTICIPANT) {
         this.subscribeToContentGroups();
         this.subscribeToRemoteEvent();
+      } else {
+        this.subscribeToContentGroupEvents();
       }
     });
   }
@@ -207,14 +212,37 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
     });
   }
 
+  subscribeToContentGroupEvents() {
+    const createdEvent = new SeriesCreated();
+      this.eventService.on<typeof createdEvent.payload>(createdEvent.type).subscribe(group => {
+        this.roomStatsService.getStats(this.roomId, true).subscribe(stats => {
+          this.groupName = group.name;
+          this.activeFeatures.splice(1, 0, Features.CONTENTS);
+          this.getItems();
+          this.updateGroups(stats.groupStats, true);
+        });
+      });
+      const deletedEvent = new SeriesDeleted();
+      this.eventService.on<typeof deletedEvent.payload>(deletedEvent.type).subscribe(() => {
+        this.roomStatsService.getStats(this.roomId, true).subscribe(stats => {
+          if (!stats.groupStats) {
+            const index = this.activeFeatures.indexOf(Features.CONTENTS);
+            this.activeFeatures.splice(index, 1);
+            this.getItems();
+          }
+          this.updateGroups(stats.groupStats, false);
+        });
+      });
+  }
+
   getItems() {
     for (const feature of this.features) {
       let url = this.getBaseUrl() + this.getFeatureUrl(feature.name);
       const index = this.activeFeatures.indexOf(feature.name);
-      const isVisible = this.barItems.map(b => b.name).includes(feature.name)
+      const barIndex = this.barItems.map(b => b.name).indexOf(feature.name)
       if (index > -1) {
-        if (!isVisible) {
-          this.barItems.push(
+        if (barIndex < 0) {
+          this.barItems.splice(index, 0,
             new NavBarItem(
               feature.name,
               feature.icon,
@@ -224,16 +252,13 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
           );
         }
       } else {
-        if (isVisible) {
-          this.barItems.splice(index, 1);
+        if (barIndex > -1) {
+          this.barItems.splice(barIndex, 1);
         }
       }
     }
     if (this.barItems.length > 1) {
       this.getCurrentRouteIndex();
-      setTimeout(() => {
-        this.toggleVisibility(false);
-      }, 500);
       this.tooFewFeatures = false;
     } else {
       this.tooFewFeatures = true;
@@ -275,13 +300,21 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
     return '/' + this.groupName;
   }
 
-  navToUrl(index: number) {
+  navToUrl(index: number, newGroup?: ContentGroup) {
     const item = this.barItems[index];
+    if (newGroup) {
+      this.setGroup(newGroup);
+      this.eventService.broadcast(UiState.NEW_GROUP_SELECTED, this.groupName);
+    } else {
+      if (item.name === Features.CONTENTS && this.contentGroups.length > 1) {
+        return;
+      }
+    }
     const url = item.url;
     if (url) {
       if (item.name === Features.CONTENTS) {
         const route = [this.routingService.getRoleString(this.role), this.shortId, 'series', this.groupName];
-        if (this.role === UserRole.CREATOR) {
+        if (this.isPresentation) {
           route.push('1');
         }
         this.router.navigate(route);
@@ -293,13 +326,6 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
 
   disableNewsForCurrentRoute() {
     this.barItems[this.currentRouteIndex].changeIndicator = false;
-  }
-
-  toggleVisibility(active: boolean) {
-    const timeout = active ? 0 : 500;
-    setTimeout(() => {
-      this.isActive = active;
-    }, timeout);
   }
 
   updateGroups(groupStats: ContentGroupStatistics[], alreadySet: boolean) {
@@ -327,9 +353,7 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
               this.afterInit();
             } else {
               this.afterInit();
-              if (groupCount > 1) {
-                this.setGroup();
-              }
+              this.setGroup();
             }
           }
         });
@@ -480,5 +504,26 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
 
   private listObjectIdsEquals(obj1: {id: string}[], obj2: {id: string}[]) {
     return JSON.stringify(obj1.map(cg => cg.id)) === JSON.stringify(obj2.map(cg => cg.id));
+  }
+
+  getFeatureText(feature: Features, tooltip = false) {
+    if (feature === Features.CONTENTS) {
+      if (this.contentGroups.length === 0) {
+        return this.groupName;
+      } else if (tooltip) {
+        return null;
+      }
+    }
+    return 'sidebar.' + feature;
+  }
+
+  isMenuActive(feature: string): boolean {
+    return feature === Features.CONTENTS && this.contentGroups.length > 1
+  }
+
+  checkMenu(feature: string, trigger: MatMenuTrigger) {
+    if (!this.isMenuActive(feature)) {
+      trigger.closeMenu();
+    }
   }
 }
