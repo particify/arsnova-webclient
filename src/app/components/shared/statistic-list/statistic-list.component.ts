@@ -12,7 +12,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ContentAnswerService } from '../../../services/http/content-answer.service';
 import { GlobalStorageService, STORAGE_KEYS } from '../../../services/util/global-storage.service';
 import { AdvancedSnackBarTypes, NotificationService } from '../../../services/util/notification.service';
-import { DialogService } from '../../../services/util/dialog.service';
 
 export enum StatisticType {
   CHOICE = 'C',
@@ -76,8 +75,7 @@ export class StatisticListComponent implements OnInit {
     protected langService: LanguageService,
     protected route: ActivatedRoute,
     private globalStorageService: GlobalStorageService,
-    private notificationService: NotificationService,
-    private dialogService: DialogService
+    private notificationService: NotificationService
   ) {
     this.deviceType = this.globalStorageService.getItem(STORAGE_KEYS.DEVICE_TYPE);
     langService.langEmitter.subscribe(lang => translateService.use(lang));
@@ -290,9 +288,5 @@ export class StatisticListComponent implements OnInit {
         this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
       });
     });
-  }
-
-  showHelp(): void {
-    this.dialogService.openStatisticHelpDialog();
   }
 }

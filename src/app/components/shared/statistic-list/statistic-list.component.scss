@@ -52,8 +52,6 @@ table {
 
 .mat-progress-bar {
   height: 8px;
-  width: 90%;
-  max-width: calc(100vw - 110px);
 }
 
 .mat-row {
@@ -71,7 +69,7 @@ h3 {
 
 .percent {
   line-break: strict;
-  margin-left: 8px;
+  margin: 0 1em;
   white-space: nowrap;
 }
 

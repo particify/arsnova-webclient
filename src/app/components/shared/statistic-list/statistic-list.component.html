@@ -6,10 +6,6 @@
                             'statistic-status-bad': total < status.okay && total !== status.empty}"></mat-progress-bar>
   <span class="fill-remaining-space"></span>
   <span class="percent">{{total.toFixed() + ' %'}}</span>
-  <button mat-icon-button (click)="showHelp()">
-    <mat-icon>help</mat-icon>
-  </button>
-  <span class="fill-remaining-space"></span>
 </div>
 <mat-toolbar *ngIf="!isLoading && total < status.zero"></mat-toolbar>
 
