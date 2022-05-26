@@ -116,28 +116,6 @@ export class HeaderComponent implements OnInit {
   }
 
   logout() {
-    /*
-    if (this.user.authProvider === AuthProvider.ARSNOVA_GUEST) {
-      this.bonusTokenService.getTokensByUserId(this.user.id).subscribe(list => {
-        if (list && list.length > 0) {
-          const dialogRef = this.dialogService.openTokenReminderDialog();
-          dialogRef.afterClosed().subscribe(result => {
-            if (result === 'logout') {
-              this.logoutUser();
-            }
-          });
-        } else {
-          this.logoutUser();
-        }
-      });
-    } else {
-      this.logoutUser();
-    }
-    */
-    this.logoutUser();
-  }
-
-  logoutUser() {
     this.authenticationService.logout();
     const msg = this.translationService.instant('header.logged-out');
     this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.SUCCESS);
@@ -217,10 +195,4 @@ export class HeaderComponent implements OnInit {
   goToSettings() {
     this.routingService.navToSettings();
   }
-
-  /*
-  openUserBonusTokenDialog() {
-    this.dialogService.openBonusTokenDialog(this.user.id);
-  }
-  */
 }

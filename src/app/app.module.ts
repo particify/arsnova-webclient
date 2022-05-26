@@ -34,7 +34,6 @@ import { extensions } from '../environments/extensions';
 import { ModeratorService } from './services/http/moderator.service';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { CommentSettingsService } from './services/http/comment-settings.service';
-import { BonusTokenService } from './services/http/bonus-token.service';
 import { ApiConfigService } from './services/http/api-config.service';
 import { CookiesComponent } from './components/home/_dialogs/cookies/cookies.component';
 import { OverlayComponent } from './components/home/_dialogs/overlay/overlay.component';
@@ -169,7 +168,6 @@ export function initializeApp(appConfig: AppConfig) {
     VoteService,
     ModeratorService,
     CommentSettingsService,
-    BonusTokenService,
     ContentGroupService,
     WsCommentService,
     ApiConfigService,

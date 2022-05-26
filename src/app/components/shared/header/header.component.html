@@ -48,7 +48,7 @@
         <mat-icon>account_box</mat-icon>
         <span>{{'header.user-profile' | translate}}</span>
       </button>
-      <button id="logout-button" *ngIf="auth && !isGuest()" mat-menu-item (click)="logoutUser()" tabindex="0">
+      <button id="logout-button" *ngIf="auth && !isGuest()" mat-menu-item (click)="logout()" tabindex="0">
         <mat-icon class="icon-warn">exit_to_app</mat-icon>
         <span>{{ 'header.logout' | translate }}</span>
       </button>

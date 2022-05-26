@@ -27,8 +27,6 @@ export class SettingsPageComponent implements OnInit {
     { headerName: 'access', iconName: 'admin_panel_settings', componentName: 'access', hotkey: '3' }
   ];
 
-  // { headerName: 'settings.bonus-token', iconName: 'grade', componentName: 'tokenSettings' },
-
   room: Room;
   isLoading = true;
   errorOnLoading = false;
