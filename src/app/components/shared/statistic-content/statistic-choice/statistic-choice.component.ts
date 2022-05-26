@@ -363,14 +363,16 @@ export class StatisticChoiceComponent extends StatisticContentBaseComponent impl
   }
 
   prepareChartForSingleRound(resetChart: boolean) {
+    const data = this.data[this.roundsToDisplay];
+    const colors = this.colorLabel ? this.indicationColors[this.roundsToDisplay] : this.colors[this.roundsToDisplay];
     if (resetChart) {
       this.chart.data.datasets.push({
-        data: this.data[this.roundsToDisplay],
-        backgroundColor: this.colorLabel ? this.indicationColors[this.roundsToDisplay] : this.colors[this.roundsToDisplay]
+        data: data,
+        backgroundColor: colors
       });
     } else {
-      this.chart.data.datasets[0].data = this.data[this.roundsToDisplay];
-      this.chart.data.datasets[0].backgroundColor = this.colors[this.roundsToDisplay];
+      this.chart.data.datasets[0].data = data;
+      this.chart.data.datasets[0].backgroundColor = colors;
     }
   }
 
