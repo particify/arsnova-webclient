@@ -14,8 +14,7 @@
         </lib-extension-point>
         <span *ngIf="!useJoinUrl" class="url">{{ displayUrl }}</span>
         <span class="url">{{useJoinUrl ? displayUrl : (shortId | splitShortId: false)}}</span>
-        <lib-extension-point *ngIf="passwordProtected" [extensionData]="{roomId: roomId}"
-                             extensionId="share-room-password"></lib-extension-point>
+        <lib-extension-point *ngIf="passwordProtected" extensionId="share-room-password"></lib-extension-point>
       </h1>
       <mat-divider vertical></mat-divider>
       <qr-code fxLayout="column" fxLayoutAlign="center center" [value]="qrUrl"

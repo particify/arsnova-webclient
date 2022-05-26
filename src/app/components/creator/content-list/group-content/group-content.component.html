@@ -7,7 +7,7 @@
       </div>
     </div>
     <mat-card>
-      <lib-extension-point extensionId="remote" [extensionData]="{roomId: room.id}"></lib-extension-point>
+      <lib-extension-point extensionId="remote" [extensionData]="{remoteFeature: 'series'}"></lib-extension-point>
       <div fxLayout="row" fxLayoutAlign="space-between">
         <div class="cardTitle" fxLayout="row" fxLayoutAlign="start center">
           <mat-form-field class="activeInput no-field-hint" [ngClass]="{'hideEditing': !isInTitleEditMode && !inputFocus}" appearance="outline">

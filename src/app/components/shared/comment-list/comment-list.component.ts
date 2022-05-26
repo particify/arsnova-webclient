@@ -74,6 +74,7 @@ export class CommentListComponent implements OnInit, OnDestroy {
   @Input() isArchive = false;
   @Input() isPresentation = false;
   @Input() activeComment: Comment;
+  @Input() archivedComments$: Observable<Comment[]>;
   @Output() updateActiveComment = new EventEmitter<Comment>();
 
   publicComments$: Observable<Comment[]>;
@@ -156,9 +157,13 @@ export class CommentListComponent implements OnInit, OnDestroy {
     this.route.data.subscribe(data => {
       this.room = data.room;
       this.roomId = this.room.id;
-      this.publicComments$ = this.commentService.getAckComments(this.room.id);
-      this.moderationComments$ = this.commentService.getRejectedComments(this.room.id);
-      this.activeComments$ = this.isModerator ? this.moderationComments$ : this.publicComments$;
+      if (this.isArchive) {
+        this.activeComments$ = this.archivedComments$;
+      } else {
+        this.publicComments$ = this.commentService.getAckComments(this.room.id);
+        this.moderationComments$ = this.commentService.getRejectedComments(this.room.id);
+        this.activeComments$ = this.isModerator ? this.moderationComments$ : this.publicComments$;
+      }
       this.initCounter();
       this.init();
       this.viewRole = data.viewRole;

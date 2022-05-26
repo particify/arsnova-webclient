@@ -8,8 +8,9 @@
 <div class="nav-bar-container">
   <div [ngClass]="{'header-container': !isPresentation, 'centered': viewRole === 'PARTICIPANT'}">
     <mat-tab-group *ngIf="!isPresentation && viewRole !== 'PARTICIPANT'" (selectedTabChange)="switchList($event.index)" class="list-switcher" [selectedIndex]="isModerator ? 1 : 0">
-      <mat-tab label="{{ 'comment-list.public-list' | translate }} {{ publicCounter | counterBraces }}"></mat-tab>
-      <mat-tab label="{{ 'comment-list.moderation' | translate }} {{ moderationCounter | counterBraces }}"></mat-tab>
+      <mat-tab *ngIf="!isArchive" label="{{ 'comment-list.public-list' | translate }} {{ publicCounter | counterBraces }}"></mat-tab>
+      <mat-tab *ngIf="!isArchive" label="{{ 'comment-list.moderation' | translate }} {{ moderationCounter | counterBraces }}"></mat-tab>
+      <mat-tab *ngIf="isArchive" label="{{ 'comment-list.archive' | translate }}"></mat-tab>
     </mat-tab-group>
     <div *ngIf="!isPresentation" fxLayout="row" fxLayoutAlign="center center" class="search-container" [ngClass]="{'search-container-fixed-invisible': scroll && !scrollActive && deviceType !== 'desktop', 'search-container-fixed': scroll && (!isScrollStart || deviceType === 'mobile'),
         'search-container-fixed-visible' : scroll && (deviceType === 'desktop' || scrollActive), 'search-container-archive': scroll && isArchive, 'fixed-start-position': isScrollStart && deviceType === 'desktop',
@@ -192,7 +193,7 @@
 
     <mat-divider></mat-divider>
 
-    <lib-extension-point extensionId="add-archive" [extensionData]="{roomId: room.id}" (extensionEvent)="resetComments()"></lib-extension-point>
+    <lib-extension-point extensionId="add-archive" (extensionEvent)="resetComments()"></lib-extension-point>
 
     <button [disabled]="comments.length === 0" mat-menu-item aria-labelledby="export-comments" (click)="onExport()" appTrackInteraction="Export comments">
       <mat-icon class="settings-icon">save</mat-icon>

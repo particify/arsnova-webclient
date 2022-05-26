@@ -27,7 +27,7 @@
       </div>
     </div>
     <lib-extension-point *ngIf="!isLoading" extensionId="comment-image-settings"
-                         [extensionData]="{fileUploadEnabled: fileUploadEnabled, roomId: this.roomId}"
+                         [extensionData]="{fileUploadEnabled: fileUploadEnabled}"
                          (extensionEvent)="updateFileUploadEnabled($event)">
     </lib-extension-point>
   </div>

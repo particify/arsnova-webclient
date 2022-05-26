@@ -205,6 +205,7 @@
   },
   "user-profile": {
     "a11y-message": "You are now in the account page.",
+    "account-settings": "Account settings",
     "username": "Username",
     "first-name": "First name",
     "last-name": "Last name",

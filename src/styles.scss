@@ -252,6 +252,14 @@ div {
   background-color: var(--red-light);
 }
 
+.progress-primary .mat-progress-bar-fill::after {
+  background-color: var(--primary);
+}
+
+.progress-primary .mat-progress-bar-buffer {
+  background-color: var(--primary-variant);
+}
+
 // Mat progress spinner
 
 .mat-progress-spinner circle, .mat-spinner circle {
@@ -857,7 +865,8 @@ button.mat-menu-item:hover {
   }
 }
 
-.mat-menu-item > .mat-icon:not(.icon-primary, .icon-warn, .icon-important), .mat-menu-item[disabled] > .mat-icon {
+.mat-menu-item > .mat-icon:not(.icon-primary, .icon-warn, .icon-important), .mat-menu-item[disabled] > .mat-icon,
+.mat-menu-item > * > .mat-icon:not(.icon-primary, .icon-warn, .icon-important) {
   opacity: 0.7;
 }
 

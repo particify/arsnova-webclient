@@ -130,7 +130,7 @@
           <mat-icon class="menu-icon">personal_video</mat-icon>
           <span>{{ 'header.presentation-mode' | translate }}</span>
         </button>
-        <lib-extension-point extensionId="present-in-new-tab"></lib-extension-point>
+        <lib-extension-point extensionId="present-in-new-tab" (extensionEvent)="checkIfOpenPresentationDirectly($event)"></lib-extension-point>
       </mat-menu>
       <div fxLayoutGap="10px">
         <button *ngIf="showNews" mat-icon-button class="news-btn" (click)="openUpdateInfoDialog()" aria-labelledby="news"

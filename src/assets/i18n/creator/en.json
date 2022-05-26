@@ -61,7 +61,8 @@
     "banned-comments-deleted": "The moderation list has been deleted.",
     "next": "Next post",
     "previous": "Previous post",
-    "list": "Post list"
+    "list": "Post list",
+    "archive": "Archive"
   },
   "comment-page": {
     "a11y-message": "You are now on the posts page.",

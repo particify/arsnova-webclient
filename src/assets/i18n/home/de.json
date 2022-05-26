@@ -205,6 +205,7 @@
   },
   "user-profile": {
     "a11y-message": "Du befindest dich jetzt auf der Account-Seite.",
+    "account-settings": "Kontoeinstellungen",
     "username": "Benutzername",
     "first-name": "Vorname",
     "last-name": "Nachname",
@@ -217,7 +218,7 @@
     "department": "Fachbereich/Abteilung",
     "enter-department": "Gib deinen Fachbereich ein",
     "delete-account": "Account löschen",
-    "delete-account-info": "Wenn du dein Account löschst, werden alle von dir erstellen Räume gelöscht."
+    "delete-account-info": "Wenn du deinen Account löschst, werden alle von dir erstellen Räume gelöscht."
   },
   "room-list": {
     "a11y-join-room": "Den Raum {{room}} mit der Nummer {{id}} in der Rolle {{role}} betreten.",

@@ -81,11 +81,11 @@ export class ContentCreationPageComponent implements OnInit, AfterContentInit {
           this.abstentionsAllowed = this.content.abstentionsAllowed;
           this.isEditMode = true;
           this.selectedFormat = this.formats.find(c => c.name === this.content.format.toLowerCase());
-          this.prepareAttachmentData(roomId);
+          this.prepareAttachmentData();
           this.isLoading = false;
         });
       } else {
-        this.prepareAttachmentData(roomId);
+        this.prepareAttachmentData();
         this.isLoading = false;
       }
       this.contentGroup = this.route.snapshot.params['seriesName'];
@@ -141,11 +141,10 @@ export class ContentCreationPageComponent implements OnInit, AfterContentInit {
     this.linkAttachmentsSubject.next(id);
   }
 
-  prepareAttachmentData(roomId: string) {
+  prepareAttachmentData() {
     this.attachmentData = {
       eventsSubject: this.linkAttachmentsSubject,
       refType: 'content',
-      roomId: roomId,
       detailedView: false,
       refId: this.isEditMode ? this.content.id : null,
       role: UserRole.CREATOR

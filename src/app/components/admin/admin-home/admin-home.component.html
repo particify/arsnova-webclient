@@ -22,6 +22,7 @@
             {{ 'admin-area.manage-rooms' | translate }}
           </button>
         </div>
+        <lib-extension-point extensionId="premium-admin" [extensionData]="{pageChanged: pageChanged}" (extensionEvent)="changePage($event)"></lib-extension-point>
       </mat-drawer>
       <mat-drawer-content fxLayout="column">
         <app-admin-summary-bar></app-admin-summary-bar>

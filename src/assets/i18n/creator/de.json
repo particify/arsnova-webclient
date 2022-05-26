@@ -61,7 +61,8 @@
     "banned-comments-deleted": "Die Moderationsliste wurde gelöscht.",
     "next": "Nächster Beitrag",
     "previous": "Vorheriger Beitrag",
-    "list": "Beitragsliste"
+    "list": "Beitragsliste",
+    "archive": "Archiv"
   },
   "comment-page": {
     "a11y-message": "Du befindest dich jetzt auf der Q&A-Seite.",

@@ -206,6 +206,10 @@ export class HeaderComponent implements OnInit {
     }
   }
 
+  checkIfOpenPresentationDirectly(isVisble: boolean) {
+    this.openPresentationDirectly = !isVisble;
+  }
+
   switchRole() {
     this.routingService.switchRole();
   }
