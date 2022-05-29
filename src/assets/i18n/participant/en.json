@@ -120,7 +120,7 @@
     "a11y-text-wrong": "This post was marked as not correct.",
     "a11y-text-answer": "The post has been answered.",
     "a11y-entered-answer": "This post has been answered with: {{answer}}.",
-    "comment": "The post {{ comment }} was asked at {{ time }} and has currently {{ votes }}. {{correct}} {{wrong}} {{bonus}} {{answer}}",
+    "comment": "The post {{ comment }} was asked at {{ time }} and has currently {{ votes }}. {{correct}} {{wrong}} {{favorite}} {{answer}}",
     "go-to-answer": "See the answer",
     "mark-not-correct": "Marked as correct by the professor",
     "mark-not-favorite": "Marked as favorite by the professor.",

@@ -120,7 +120,7 @@
     "a11y-text-wrong": "Dieser Beitrag wurde verneint.",
     "a11y-text-answer": "Dieser Beitrag wurde beantwortet.",
     "a11y-entered-answer": "Auf diesen Beitrag wurde wie folgt geantwortet: {{answer}}.",
-    "comment": "Der Beitrag {{ comment }} wurde um {{ time }} Uhr verfasst und hat derzeitig {{ votes }}. {{correct}} {{wrong}} {{bonus}} {{answer}}",
+    "comment": "Der Beitrag {{ comment }} wurde um {{ time }} Uhr verfasst und hat derzeitig {{ votes }}. {{correct}} {{wrong}} {{favorite}} {{answer}}",
     "go-to-answer": "Gehe zur Antwort",
     "mark-not-correct": "Die vortragende Person hat den Beitrag bejaht.",
     "mark-not-favorite": "Die vortragende Person hat den Beitrag favorisiert.",

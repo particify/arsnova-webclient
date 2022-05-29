@@ -7,7 +7,7 @@
       comment: comment.body.trim(),
       correct: comment.correct === 1 ? ('comment-page.a11y-text-correct' | translate) : '',
   wrong: comment.correct === 2 ? ('comment-page.a11y-text-wrong' | translate) : '',
-  bonus: comment.favorite ? ('comment-page.a11y-text-grade' | translate) : '',
+  favorite: comment.favorite ? ('comment-page.a11y-text-grade' | translate) : '',
   answer: comment.answer ? ('comment-page.a11y-text-answer' | translate) : ''} }}">
     <div fxLayout="row" class="comment-actions" [ngClass]="{'light-buttons': isParticipant}">
       <div class="date light">
