@@ -15,7 +15,6 @@ import { ContentService } from '@arsnova/app/services/http/content.service';
 import { ContentAnswerService } from '@arsnova/app/services/http/content-answer.service';
 import { LanguageService } from '@arsnova/app/services/util/language.service';
 import { NotificationService } from '@arsnova/app/services/util/notification.service';
-import { DialogService } from '@arsnova/app/services/util/dialog.service';
 import { of } from 'rxjs';
 import { ContentGroup } from '@arsnova/app/models/content-group';
 
@@ -29,8 +28,6 @@ describe('StatisticListComponent', () => {
 
   const mockContentAnswerService = jasmine.createSpyObj(['getAnswers']);
   mockContentAnswerService.getAnswers.and.returnValue(of([]));
-
-  const mockDialogService = jasmine.createSpyObj(['openStatisticHelpDialog']);
 
   const snapshot = new ActivatedRouteSnapshot();
   snapshot.params = {
@@ -78,10 +75,6 @@ describe('StatisticListComponent', () => {
         {
           provide: NotificationService,
           useClass: MockNotificationService
-        },
-        {
-          provide: DialogService,
-          useValue: mockDialogService
         }
       ]
     })

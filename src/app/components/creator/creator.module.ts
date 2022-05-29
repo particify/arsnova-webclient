@@ -33,7 +33,6 @@ import { ContentFlashcardCreationComponent } from './content-creation/content-fl
 import { ContentWordcloudCreationComponent } from './content-creation/content-wordcloud-creation/content-wordcloud-creation.component';
 import { ExportComponent } from './_dialogs/export/export.component';
 import { DialogService } from '../../services/util/dialog.service';
-import { StatisticHelpComponent } from './_dialogs/statistic-help/statistic-help.component';
 import { PublishContentComponent } from './_dialogs/publish-content/publish-content.component';
 
 @NgModule({
@@ -80,7 +79,6 @@ import { PublishContentComponent } from './_dialogs/publish-content/publish-cont
     ContentFlashcardCreationComponent,
     ContentWordcloudCreationComponent,
     ExportComponent,
-    StatisticHelpComponent,
     PublishContentComponent
   ],
   exports: [

@@ -8,7 +8,6 @@ import { ContentGroupCreationComponent } from '../../components/creator/_dialogs
 import { ClientAuthentication } from '../../models/client-authentication';
 import { CreateCommentComponent } from '../../components/shared/_dialogs/create-comment/create-comment.component';
 import { RoomCreateComponent } from '../../components/shared/_dialogs/room-create/room-create.component';
-import { StatisticHelpComponent } from '../../components/creator/_dialogs/statistic-help/statistic-help.component';
 import { OverlayComponent } from '../../components/home/_dialogs/overlay/overlay.component';
 import { UserActivationComponent } from '../../components/home/_dialogs/user-activation/user-activation.component';
 import { UpdateInfoComponent } from '../../components/shared/_dialogs/update-info/update-info.component';
@@ -90,12 +89,6 @@ export class DialogService {
 
   openRoomCreateDialog(): void {
     this.openDialog(RoomCreateComponent, {
-      width: this.size.xsmall
-    });
-  }
-
-  openStatisticHelpDialog(): void {
-    this.openDialog(StatisticHelpComponent, {
       width: this.size.xsmall
     });
   }
