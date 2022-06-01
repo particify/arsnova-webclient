@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, ElementRef, Input, ViewChild } from '@angular/core';
-import { FormControl, Validators } from '@angular/forms';
+import { UntypedFormControl, Validators } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
 import { AdvancedSnackBarTypes, NotificationService } from '../../../services/util/notification.service';
 import { FormErrorStateMatcher } from '../form-error-state-matcher/form-error-state-matcher';
@@ -33,7 +33,7 @@ export class PasswordEntryComponent implements AfterViewInit {
   @Input() isNew = false;
 
   password: string;
-  passwordFormControl = new FormControl('', [Validators.required, Validators.minLength(8), this.validatePasswordStrength()]);
+  passwordFormControl = new UntypedFormControl('', [Validators.required, Validators.minLength(8), this.validatePasswordStrength()]);
   matcher = new FormErrorStateMatcher();
   strength = 0;
   strengthLevels: typeof Strength = Strength;
@@ -77,7 +77,7 @@ export class PasswordEntryComponent implements AfterViewInit {
   }
 
   validatePasswordStrength() {
-    return (formControl: FormControl) => {
+    return (formControl: UntypedFormControl) => {
       this.strength = this.getPasswordStrength(formControl.value);
       return null;
     }

@@ -4,7 +4,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { ModeratorService } from '../../../../services/http/moderator.service';
 import { LanguageService } from '../../../../services/util/language.service';
 import { Moderator } from '../../../../models/moderator';
-import { FormControl, Validators } from '@angular/forms';
+import { UntypedFormControl, Validators } from '@angular/forms';
 import { EventService } from '../../../../services/util/event.service';
 import { DialogService } from '../../../../services/util/dialog.service';
 import { UpdateEvent } from '../settings.component';
@@ -48,7 +48,7 @@ export class AccessComponent implements OnInit, OnDestroy {
   isGuest = false;
   loginIdIsEmail = false;
 
-  usernameFormControl = new FormControl('', [Validators.email]);
+  usernameFormControl = new UntypedFormControl('', [Validators.email]);
   formSubscription = new Subject<void>();
   currentInputIsChecked = true;
 

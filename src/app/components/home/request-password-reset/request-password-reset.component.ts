@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, Validators } from '@angular/forms';
+import { UntypedFormControl, Validators } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
 import { UserService } from '../../../services/http/user.service';
 import { AdvancedSnackBarTypes, NotificationService } from '../../../services/util/notification.service';
@@ -14,7 +14,7 @@ import { Router } from '@angular/router';
 })
 export class RequestPasswordResetComponent implements OnInit {
 
-  usernameFormControl = new FormControl('', [Validators.required, Validators.email]);
+  usernameFormControl = new UntypedFormControl('', [Validators.required, Validators.email]);
   matcher = new PasswordResetErrorStateMatcher();
   deviceWidth = innerWidth;
   username: string;

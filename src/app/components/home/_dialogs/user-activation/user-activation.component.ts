@@ -1,7 +1,7 @@
 import { Component, Inject } from '@angular/core';
 import { AdvancedSnackBarTypes, NotificationService } from '../../../../services/util/notification.service';
 import { UserService } from '../../../../services/http/user.service';
-import { FormControl, Validators } from '@angular/forms';
+import { UntypedFormControl, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
 import { EventService } from '../../../../services/util/event.service';
@@ -14,7 +14,7 @@ import { EventService } from '../../../../services/util/event.service';
 export class UserActivationComponent {
   readonly dialogId = 'activate-user';
 
-  activationKeyFormControl = new FormControl('', [Validators.required]);
+  activationKeyFormControl = new UntypedFormControl('', [Validators.required]);
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: string,

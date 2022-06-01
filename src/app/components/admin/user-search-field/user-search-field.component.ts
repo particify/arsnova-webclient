@@ -1,7 +1,7 @@
 import { Component, OnInit, Output, EventEmitter, OnDestroy, Input } from '@angular/core';
 import { UserService } from '../../../services/http/user.service';
 import { debounceTime, takeUntil, map } from 'rxjs/operators';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 import { User } from '../../../models/user';
 import { Subject } from 'rxjs';
 
@@ -11,7 +11,7 @@ import { Subject } from 'rxjs';
   styleUrls: ['./user-search-field.component.scss']
 })
 export class UserSearchFieldComponent implements OnInit, OnDestroy {
-  formControl = new FormControl();
+  formControl = new UntypedFormControl();
   users: User[] = [];
   value: string;
   submittable: boolean;

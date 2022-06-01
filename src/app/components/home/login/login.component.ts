@@ -3,7 +3,7 @@ import { AuthenticationService } from '../../../services/http/authentication.ser
 import { ActivatedRoute, Router } from '@angular/router';
 import { AdvancedSnackBarTypes, NotificationService } from '../../../services/util/notification.service';
 import { MatDialog } from '@angular/material/dialog';
-import { FormControl, Validators } from '@angular/forms';
+import { UntypedFormControl, Validators } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
 import { EventService } from '../../../services/util/event.service';
 import { AuthenticationProvider, AuthenticationProviderType } from '../../../models/api-config';
@@ -36,7 +36,7 @@ export class LoginComponent implements AfterContentInit, OnChanges, OnInit {
   authProviders: AuthenticationProvider[];
   loginIdIsEmail = false;
 
-  loginIdFormControl = new FormControl('', [Validators.required]);
+  loginIdFormControl = new UntypedFormControl('', [Validators.required]);
 
   matcher = new FormErrorStateMatcher();
 
