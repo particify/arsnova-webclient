@@ -200,7 +200,7 @@
       <span>{{ 'comment-list.export-comments' | translate }}</span>
     </button>
 
-    <button [disabled]="comments.length === 0" mat-menu-item (click)="openDeleteCommentsDialog()" aria-labelledby="delete-comments">
+    <button *ngIf="viewRole === 'CREATOR'" [disabled]="comments.length === 0" mat-menu-item (click)="openDeleteCommentsDialog()" aria-labelledby="delete-comments">
       <mat-icon class="icon-warn">delete_outline</mat-icon>
       <span>{{ ('comment-list.delete-' + (isModerator ? 'banned' : 'all') + '-comments') | translate }}</span>
     </button>
