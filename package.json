@@ -58,7 +58,7 @@
     "@angular/language-service": "13.2.7",
     "@types/jasmine": "4.0.3",
     "@types/jasminewd2": "2.0.10",
-    "@types/node": "16.11.36",
+    "@types/node": "16.11.38",
     "@types/wordcloud": "1.1.3",
     "@typescript-eslint/eslint-plugin": "5.27.0",
     "@typescript-eslint/parser": "5.27.0",
