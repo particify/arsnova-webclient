@@ -206,11 +206,12 @@
     "other-combinations": "Other"
   },
   "sidebar": {
-  "a11y-switch-to-feature": "Switch to {{feature}}.",
-  "user-counter": "Number of active participants",
+    "a11y-switch-to-feature": "Switch to {{feature}}.",
+    "user-counter": "Number of active participants",
     "comments": "Q&A",
     "series": "Question series",
-    "feedback": "Live Feedback"
+    "feedback": "Live Feedback",
+    "": "Overview"
   },
   "option-template": {
     "agreement-negative-2": "Strongly disagree",

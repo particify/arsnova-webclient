@@ -21,6 +21,7 @@ import { RoutingService } from '@arsnova/app/services/util/routing.service';
 import { RoomStatsService } from '@arsnova/app/services/http/room-stats.service';
 import { ContentGroup } from '@arsnova/app/models/content-group';
 import { MatMenuModule } from '@angular/material/menu';
+import { RoomService } from '@arsnova/app/services/http/room.service';
 
 describe('NavBarComponent', () => {
   let component: NavBarComponent;
@@ -49,6 +50,27 @@ describe('NavBarComponent', () => {
 
   const mockRoutingService = jasmine.createSpyObj(['getRoleString', 'getRouteChanges']);
   mockRoutingService.getRouteChanges.and.returnValue(of(snapshot));
+
+  const body = {
+    UserCountChanged: {
+      userCount: 42
+    }
+  };
+  const message = {
+    body: JSON.stringify(body)
+  }
+
+  const summaries = [
+    {
+      stats: {
+        roomUserCount: 24
+      }
+    }
+  ]
+
+  let mockRoomService = jasmine.createSpyObj(['getCurrentRoomsMessageStream', 'getRoomSummaries']);
+  mockRoomService.getCurrentRoomsMessageStream.and.returnValue(of(message));
+  mockRoomService.getRoomSummaries.and.returnValue(of(summaries));
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
@@ -97,6 +119,10 @@ describe('NavBarComponent', () => {
         {
           provide: RoutingService,
           useValue: mockRoutingService
+        },
+        {
+          provide: RoomService,
+          useValue: mockRoomService
         }
       ]
     })

@@ -1,10 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { RoomService } from '../../../services/http/room.service';
-import { IMessage } from '@stomp/stompjs';
-import { Observable, Subscription } from 'rxjs';
+import { UiState } from '../../../models/events/ui/ui-state.enum';
+import { EventService } from '../../../services/util/event.service';
 import { UserRole } from '../../../models/user-roles.enum';
-import { InfoBarItem } from '../bars/info-bar/info-bar.component';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-room-page',
@@ -15,37 +14,27 @@ export class RoomPageComponent implements OnInit, OnDestroy {
 
   isCreator: boolean;
   roomId: string;
-  infoBarItems: InfoBarItem[] = [];
+  navBarExists = false;
 
-  private roomSub: Subscription;
-  private roomWatch: Observable<IMessage>;
+  navBarStateSubscription: Subscription;
 
   constructor(
     private route: ActivatedRoute,
-    private roomService: RoomService) {}
+    private eventService: EventService) {}
 
   ngOnInit(): void {
+    this.navBarStateSubscription = this.eventService.on<boolean>(UiState.NAV_BAR_VISIBLE).subscribe(isVisible => {
+      this.navBarExists = isVisible;
+    });
     this.route.data.subscribe(data => {
       this.isCreator = data.viewRole === UserRole.CREATOR;
       this.roomId = data.room.id;
-      if (this.isCreator) {
-        this.roomService.getRoomSummaries([data.room.id]).subscribe(summary => {
-          this.infoBarItems.push(new InfoBarItem('user-counter', 'people', summary[0].stats.roomUserCount));
-          this.roomWatch = this.roomService.getCurrentRoomsMessageStream();
-          this.roomSub = this.roomWatch.subscribe(msg => this.parseUserCount(msg.body));
-        });
-      }
     });
   }
 
   ngOnDestroy(): void {
-    if (this.roomSub) {
-      this.roomSub.unsubscribe();
+    if (this.navBarStateSubscription) {
+      this.navBarStateSubscription.unsubscribe();
     }
   }
-
-  parseUserCount(body: string) {
-    this.infoBarItems[0].count = JSON.parse(body).UserCountChanged.userCount;
-  }
-
 }

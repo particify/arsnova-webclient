@@ -1,10 +1,9 @@
 <lib-extension-point *ngIf="role === 'CREATOR' && !isLoading" extensionId="focus-mode-control" [extensionData]="guidedModeExtensionData"></lib-extension-point>
-<div *ngIf="!tooFewFeatures && !hideBarForParticipants" class="list nav {{position}}" fxLayout="column" fxLayoutAlign="center center" (window:scroll)="checkScroll()"
-     [ngClass]="{'fixed': scrollExtended}">
+<div *ngIf="!tooFewFeatures && !hideBarForParticipants" class="list nav {{position}}" fxLayout="column" fxLayoutAlign="space-between center">
   <div class="icon-container">
-    <div *ngFor="let barItem of barItems; let i = index" fxLayoutAlign="center center" class="item"
+    <div *ngFor="let barItem of barItems; let i = index" fxLayoutAlign="center center" class="item" matRipple
          [ngClass]="{'current': i === currentRouteIndex }" (click)="navToUrl(i)"
-         [matTooltip]="getFeatureText(barItem.name, true) | translate" #menuTrigger="matMenuTrigger"
+         [matTooltip]="getFeatureText(barItem.name) | translate" #menuTrigger="matMenuTrigger"
          matTooltipPosition="right" matTooltipClass="hide-lg" [matMenuTriggerFor]="isMenuActive(barItem.name) ? groupMenu : hideMenu" (menuOpened)="checkMenu(barItem.name, menuTrigger)"
          [attr.aria-label]="'sidebar.a11y-switch-to-feature' | translate : {feature: (('sidebar.' + barItem.name) | translate)}">
       <mat-icon class="clickable">
@@ -22,5 +21,9 @@
         <mat-menu class="visually-hidden" #hideMenu="matMenu"></mat-menu>
       </div>
     </div>
+  </div>
+  <div *ngIf="role === 'CREATOR'" fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="4px" class="user-count-container" [matTooltip]="'sidebar.user-counter' | translate">
+    <mat-icon>people</mat-icon>
+    <span>{{ userCount }}</span>
   </div>
 </div>

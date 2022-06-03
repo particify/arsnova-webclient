@@ -15,9 +15,6 @@
 
 .clickable {
   opacity: 0.7;
-  font-size: 32px;
-  width: 32px;
-  height: 32px;
   position: relative;
 }
 
@@ -81,16 +78,34 @@
     display: none;
   }
 
+  .item {
+    flex-direction: column!important;
+    padding: 24px;
+    &:hover {
+      background-color: var(--background);
+      opacity: 1;
+    }
+
+  }
+
   .clickable {
-    padding: 0 20px;
+    padding: 0;
   }
 
   .list {
-    box-shadow: 0 2px 1px -1px rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.14), 0 1px 3px 0 rgba(0, 0, 0, 0.12);
+    padding: 0.5em 0 1em;
+    height: calc(100vh - $bar-height);
+    top: 0;
+    border-radius: 0;
+    border-right: 1px solid var(--grey-light);;
   }
 
   .badge {
     right: 16px;
+  }
+
+  .user-count-container {
+    opacity: 0.65;
   }
 }
 
@@ -109,14 +124,8 @@
   }
 
   .item {
-    padding: 8px;
+    padding: 8px 12px;
     width: 100%;
-  }
-
-  .clickable {
-    font-size: 24px;
-    width: 24px;
-    height: 24px;
   }
 
   .text {
@@ -124,5 +133,9 @@
     font-size: 12px;
     margin: 2px 0 0;
     max-width: calc(100vw / 3 - 16px);
+  }
+
+  .user-count-container {
+    display: none!important;
   }
 }
