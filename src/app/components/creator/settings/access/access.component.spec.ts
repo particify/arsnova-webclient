@@ -38,7 +38,7 @@ class MockRoomService {
 @Injectable()
 class MockModeratorService {
   get() {
-    return of([new Moderator('12345', 'b@a.cd', [UserRole.EXECUTIVE_MODERATOR])])
+    return of([new Moderator('12345', 'b@a.cd', UserRole.EXECUTIVE_MODERATOR)])
   }
 }
 
