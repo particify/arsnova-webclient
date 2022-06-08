@@ -15,8 +15,7 @@ const httpOptions = {
 export class AccessTokenService extends AbstractHttpService<void> {
 
   serviceApiUrl = {
-    invite: '/invite',
-    redeem: '/redeem'
+    invite: '/invite'
   };
 
   constructor(private http: HttpClient,
@@ -34,16 +33,6 @@ export class AccessTokenService extends AbstractHttpService<void> {
     };
     return this.http.post<any>(url, body, httpOptions).pipe(
       catchError(this.handleError<any>('invite'))
-    );
-  }
-
-  redeemToken(roomId: string, token: string) {
-    const url = this.buildUri(this.serviceApiUrl.redeem, roomId);
-    const body = {
-      token: token
-    };
-    return this.http.post<any>(url, body, httpOptions).pipe(
-      catchError(this.handleError<any>('redeem'))
     );
   }
 }

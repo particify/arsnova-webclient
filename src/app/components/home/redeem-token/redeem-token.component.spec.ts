@@ -3,7 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute, ActivatedRouteSnapshot, Router } from '@angular/router';
 import { AuthProvider } from '@arsnova/app/models/auth-provider';
 import { ClientAuthentication } from '@arsnova/app/models/client-authentication';
-import { AccessTokenService } from '@arsnova/app/services/http/access-token.service';
+import { RoomMembershipService } from '@arsnova/app/services/room-membership.service';
 import { AuthenticationService } from '@arsnova/app/services/http/authentication.service';
 import { RoutingService } from '@arsnova/app/services/util/routing.service';
 import { ActivatedRouteStub, MockRouter } from '@arsnova/testing/test-helpers';
@@ -18,8 +18,8 @@ class MockAuthenticationService {
 }
 
 @Injectable()
-class MockAccessTokenService {
-  redeemToken() {
+class MockRoomMembershipService {
+  requestMembership() {
     return of({});
   }
 }
@@ -60,8 +60,8 @@ describe('RedeemTokenComponent', () => {
           useClass: MockAuthenticationService
         },
         {
-          provide: AccessTokenService,
-          useClass: MockAccessTokenService
+          provide: RoomMembershipService,
+          useClass: MockRoomMembershipService
         }
       ]
     })

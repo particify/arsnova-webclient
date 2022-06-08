@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { RoutingService } from '../../../services/util/routing.service';
 import { AuthProvider } from '../../../models/auth-provider';
 import { AuthenticationService } from '../../../services/http/authentication.service';
-import { AccessTokenService } from '../../../services/http/access-token.service';
+import { RoomMembershipService } from '../../../services/room-membership.service';
 import { Subject, takeUntil } from 'rxjs';
 
 @Component({
@@ -18,7 +18,7 @@ export class RedeemTokenComponent implements OnInit, OnDestroy {
     private router: Router,
     private routingService: RoutingService,
     private authenticationService: AuthenticationService,
-    private accessTokenService: AccessTokenService) { }
+    private roomMembershipService: RoomMembershipService) { }
 
 
   ngOnDestroy(): void {
@@ -31,7 +31,7 @@ export class RedeemTokenComponent implements OnInit, OnDestroy {
       if(!!auth && auth.authProvider !== AuthProvider.ARSNOVA_GUEST) {
         const roomId = this.route.snapshot.params.roomId;
         const token = this.route.snapshot.params.token;
-        this.accessTokenService.redeemToken(roomId, token).subscribe(() => {
+        this.roomMembershipService.requestMembership(roomId, token).subscribe(() => {
           this.router.navigate(['user']);
         });
       } else {

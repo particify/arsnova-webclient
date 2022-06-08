@@ -202,9 +202,10 @@ export class RoomMembershipService extends AbstractHttpService<Membership> {
    * Sends a request for membership and emits a MembershipsChanged event on
    * success.
    */
-  requestMembership(roomShortId: string): Observable<Room> {
+  requestMembership(roomShortId: string, token?: string): Observable<Room> {
     const uri = this.buildForeignUri('/request-membership', '~' + roomShortId);
-    return this.http.post<Room>(uri, {}).pipe(
+    const payload = token ? { token: token } : {};
+    return this.http.post<Room>(uri, payload).pipe(
       tap(() => {
         const event = new MembershipsChanged();
         this.eventService.broadcast(event.type, event.payload);
