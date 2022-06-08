@@ -67,19 +67,21 @@ export class AccessComponent implements OnInit {
   getModerators() {
     this.authenticationService.getCurrentAuthentication().subscribe(auth => {
       this.isGuest = auth.authProvider === AuthProvider.ARSNOVA_GUEST;
-      this.moderators.push(new Moderator(auth.userId, auth.loginId, [UserRole.CREATOR]));
-      if (this.isGuest) {
-        this.translationService.get('settings.you').subscribe(msg => {
-          this.moderators[0].loginId = msg;
-        });
-      }
-      this.moderatorService.get(this.room.id).subscribe(list => {
-        list.forEach((user) => {
-          this.userIds.push(user.userId);
+      this.moderatorService.get(this.room.id).subscribe(moderators => {
+        moderators.forEach((moderator) => {
+          this.userIds.push(moderator.userId);
         });
         this.userService.getUserData(this.userIds).subscribe(users => {
           users.forEach((user) => {
-            this.moderators.push(new Moderator(user.id, user.loginId, [UserRole.EXECUTIVE_MODERATOR]));
+            this.moderators.push(new Moderator(user.id, user.loginId, moderators.find(m => m.userId === user.id).role));
+          });
+          if (this.isGuest) {
+            this.translationService.get('settings.you').subscribe(msg => {
+              this.moderators[0].loginId = msg;
+            });
+          }
+          this.moderators = this.moderators.sort(a => {
+            return a.role === UserRole.CREATOR ? -1 : 1;
           });
           this.isLoading = false;
         });
@@ -97,7 +99,7 @@ export class AccessComponent implements OnInit {
       }
       this.moderatorService.add(this.room.id, list[0].id).subscribe(() => {
         this.saveEvent.emit(new UpdateEvent(null, false, true));
-        this.moderators.push(new Moderator(list[0].id, this.loginId, [UserRole.EXECUTIVE_MODERATOR]));
+        this.moderators.push(new Moderator(list[0].id, this.loginId, UserRole.EXECUTIVE_MODERATOR));
         this.translationService.get('settings.user-added').subscribe(msg => {
           this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.SUCCESS);
         });
