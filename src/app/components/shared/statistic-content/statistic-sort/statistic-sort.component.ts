@@ -270,7 +270,7 @@ export class StatisticSortComponent extends StatisticContentBaseComponent implem
         this.chart.data.labels = this.labels;
       }
       this.chart.update();
-    } else {
+    } else if (this.active) {
       this.initChart();
       /* Wait for flip animation */
       setTimeout(() => {
