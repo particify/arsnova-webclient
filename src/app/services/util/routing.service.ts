@@ -182,8 +182,8 @@ export class RoutingService {
   redirect(): boolean {
     const url = this.getRedirectUrl();
     if (url) {
-      this.navigate(url);
       this.removeRedirectUrl();
+      this.navigate(url);
       return true;
     } else {
       return false;
