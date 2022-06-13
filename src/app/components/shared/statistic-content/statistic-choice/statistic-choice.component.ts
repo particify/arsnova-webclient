@@ -393,7 +393,7 @@ export class StatisticChoiceComponent extends StatisticContentBaseComponent impl
         this.prepareChartForRoundCompare(reset);
       }
       this.chart.update();
-    } else {
+    } else if (this.active) {
       /* Wait for flip animation */
       setTimeout(() => {
         this.createChart(this.colors);
