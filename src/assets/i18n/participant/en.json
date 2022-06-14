@@ -211,7 +211,7 @@
     "comments": "Q&A",
     "series": "Question series",
     "feedback": "Live Feedback",
-    "": "Overview"
+    "overview": "Overview"
   },
   "option-template": {
     "agreement-negative-2": "Strongly disagree",

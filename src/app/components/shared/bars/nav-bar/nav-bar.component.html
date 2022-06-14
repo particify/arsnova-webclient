@@ -1,19 +1,19 @@
 <lib-extension-point *ngIf="role === 'CREATOR' && !isLoading" extensionId="focus-mode-control" [extensionData]="guidedModeExtensionData"></lib-extension-point>
 <div *ngIf="!tooFewFeatures && !hideBarForParticipants" class="list nav {{position}}" fxLayout="column" fxLayoutAlign="space-between center">
   <div class="icon-container">
-    <button *ngFor="let barItem of barItems; let i = index" fxLayoutAlign="center center" class="item nav-button" mat-button id="{{barItem.name}}-button"
+    <button *ngFor="let barItem of barItems; let i = index" fxLayoutAlign="center center" class="item nav-button" mat-button [id]="barItem.name + '-button'"
          [ngClass]="{'current': i === currentRouteIndex }" (click)="navToUrl(i)"
          [matTooltip]="getFeatureText(barItem.name) | translate" #menuTrigger="matMenuTrigger"
          matTooltipPosition="right" matTooltipClass="hide-lg" [matMenuTriggerFor]="isMenuActive(barItem.name) ? groupMenu : hideMenu" (menuOpened)="checkMenu(barItem.name, menuTrigger)"
          [attr.aria-label]="'sidebar.a11y-switch-to-feature' | translate : {feature: (('sidebar.' + barItem.name) | translate)}">
       <mat-icon class="button-icon">
         {{barItem.icon}}
-        <div [ngClass]="{'show-news': barItem.changeIndicator}" class="badge"></div>
+        <div [id]="barItem.name + '-badge'" [ngClass]="{'show-news': barItem.changeIndicator}" class="badge"></div>
       </mat-icon>
       <span class="text ellipsis">{{getFeatureText(barItem.name) | translate}}</span>
       <div class="menu-container">
         <mat-menu #groupMenu="matMenu" class="series-menu">
-          <button mat-menu-item *ngFor="let group of contentGroups" [ngClass]="{'current': group.name === groupName && i === currentRouteIndex}"
+          <button mat-menu-item *ngFor="let group of contentGroups" [id]="group.name + '-series-button'" [ngClass]="{'current': group.name === groupName && i === currentRouteIndex}"
                   (click)="navToUrl(i, group)">
             <span>{{ group.name }}</span>
           </button>
@@ -22,7 +22,7 @@
       </div>
     </button>
   </div>
-  <div *ngIf="role === 'CREATOR'" fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="4px" class="user-count-container" [matTooltip]="'sidebar.user-counter' | translate">
+  <div *ngIf="role === 'CREATOR'" fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="4px" id="user-count-container" [matTooltip]="'sidebar.user-counter' | translate">
     <mat-icon>people</mat-icon>
     <span>{{ userCount }}</span>
   </div>

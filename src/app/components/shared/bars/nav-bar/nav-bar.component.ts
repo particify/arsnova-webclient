@@ -313,6 +313,8 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
         url += this.getGroupUrl();
       }
       return url;
+    } else {
+      return '';
     }
   }
 
@@ -334,20 +336,17 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
         return;
       }
     }
-    const url = item.url;
-    if (url) {
+    const route = [this.routingService.getRoleString(this.role), this.shortId];
+    if (item.name !== Features.OVERVIEW) {
+      route.push(item.name);
       if (item.name === Features.CONTENTS) {
-        const route = [this.routingService.getRoleString(this.role), this.shortId, 'series', this.groupName];
+        route.push(this.groupName);
         if (this.isPresentation) {
           route.push('1');
         }
-        this.router.navigate(route);
-      } else if (item.name === Features.OVERVIEW) {
-        this.router.navigate([this.routingService.getRoleString(this.role), this.shortId]);
-      } else {
-        this.router.navigateByUrl(url);
       }
     }
+    this.router.navigate(route);
   }
 
   disableNewsForCurrentRoute() {
@@ -375,6 +374,9 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
               if (this.groupName === group.name) {
                 this.group = group;
                 this.setGroupProperties();
+              }
+              if (this.role === UserRole.PARTICIPANT) {
+                this.toggleNews(Features.CONTENTS);
               }
               this.afterInit();
             } else {
@@ -537,7 +539,7 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
   }
 
   isMenuActive(feature: string): boolean {
-    return feature === Features.CONTENTS && this.contentGroups.length > 1
+    return feature === Features.CONTENTS && this.contentGroups.length > 1;
   }
 
   checkMenu(feature: string, trigger: MatMenuTrigger) {

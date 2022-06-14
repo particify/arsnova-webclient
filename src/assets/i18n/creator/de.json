@@ -566,7 +566,7 @@
     "feedback": "Live Feedback",
     "moderation": "Moderation",
     "content-counter": "Aktuelle Position in der Fragenserie",
-    "": "Übersicht"
+    "overview": "Übersicht"
   },
   "export": {
     "export": "Exportieren",
