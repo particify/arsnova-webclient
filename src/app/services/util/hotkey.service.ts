@@ -163,6 +163,7 @@ export class HotkeyService {
       if (!environment.production) {
         console.log('Registered hotkey detected.', hotkey, event);
       }
+      event.preventDefault();
       hotkey.action();
     }
   }
