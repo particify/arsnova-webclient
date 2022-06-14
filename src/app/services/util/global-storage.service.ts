@@ -31,7 +31,8 @@ export const STORAGE_KEYS: { [key: string]: symbol } = {
   FEATURE_NEWS: Symbol(),
   SHOW_ANSWERS_BELOW: Symbol(),
   ANSWER_VISUALIZATION_UNIT: Symbol(),
-  BROWSER_SESSION_INITIALIZED: Symbol()
+  BROWSER_SESSION_INITIALIZED: Symbol(),
+  REDIRECT_URL: Symbol()
 };
 
 /**
@@ -158,6 +159,12 @@ export const STORAGE_CONFIG: StorageItem[] = [
     name: 'FEATURE_NEWS',
     category: StorageItemCategory.REQUIRED,
     backend: StorageBackend.MEMORY
+  },
+  {
+    key: STORAGE_KEYS.REDIRECT_URL,
+    name: 'REDIRECT_URL',
+    category: StorageItemCategory.FUNCTIONAL,
+    backend: StorageBackend.SESSIONSTORAGE
   }
 ];
 
