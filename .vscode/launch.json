@@ -1,0 +1,18 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Open with Chrome",
+      "request": "launch",
+      "type": "chrome",
+      "url": "http://localhost:4200",
+      "webRoot": "${workspaceFolder}"
+    },
+    {
+      "command": "yarn start",
+      "name": "Run Webclient",
+      "request": "launch",
+      "type": "node-terminal"
+    }
+  ]
+}

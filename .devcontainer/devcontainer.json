@@ -1,0 +1,20 @@
+{
+  "name": "Webclient",
+  "service": "arsnova-web",
+  "dockerComposeFile": [
+    "../../.compose.yaml"
+  ],
+  "workspaceFolder": "/workspace/arsnova-webclient",
+  "forwardPorts": [4200],
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "angular.ng-template",
+        "dbaeumer.vscode-eslint"
+      ]
+    }
+  },
+  "postStartCommand": "yarn",
+  "shutdownAction": "none",
+  "remoteUser": "dev"
+}
