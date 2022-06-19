@@ -34,6 +34,7 @@
       <app-formatting-toolbar *ngIf="!renderPreview" class="tab-group-formatting-bar" [inputElement]="descriptionInput" (valueChanged)="description = $event"></app-formatting-toolbar>
     </div>
   </div>
+  <lib-extension-point extensionId="focus-mode-control"></lib-extension-point>
   <div fxLayout="row">
     <button mat-stroked-button class="delete" (click)="openDeleteRoomDialog()" aria-labelledby="delete-room">
       <mat-icon>delete</mat-icon>

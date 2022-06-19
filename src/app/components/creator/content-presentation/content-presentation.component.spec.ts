@@ -33,6 +33,7 @@ import { ClientAuthentication } from '@arsnova/app/models/client-authentication'
 import { STORAGE_KEYS } from '@arsnova/app/services/util/global-storage.service';
 import { UserSettings } from '@arsnova/app/models/user-settings';
 import { StepperComponent } from '../../shared/stepper/stepper.component';
+import { RemoteService } from '@arsnova/app/services/util/remote.service';
 
 
 @Injectable()
@@ -93,6 +94,8 @@ describe('ContentPresentationComponent', () => {
   mockGlobalStorageService.getItem.withArgs(STORAGE_KEYS.LAST_GROUP).and.returnValue('series');
   mockGlobalStorageService.getItem.withArgs(STORAGE_KEYS.USER).and.returnValue(new ClientAuthentication('1234', 'a@b.cd', AuthProvider.ARSNOVA, 'token'));
 
+  const mockRemoteService = jasmine.createSpyObj(['getContentState']);
+
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [
@@ -151,6 +154,10 @@ describe('ContentPresentationComponent', () => {
         {
           provide: UserService,
           useValue: mockUserService
+        },
+        {
+          provide: RemoteService,
+          useValue: mockRemoteService
         }
       ],
       imports: [

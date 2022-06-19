@@ -31,6 +31,7 @@ import { DialogService } from '@arsnova/app/services/util/dialog.service';
 import { RoomStatsService } from '@arsnova/app/services/http/room-stats.service';
 import { ContentGroup } from '@arsnova/app/models/content-group';
 import { RoomService } from '@arsnova/app/services/http/room.service';
+import { RemoteService } from '@arsnova/app/services/util/remote.service';
 
 describe('ControlBarComponent', () => {
   let component: ControlBarComponent;
@@ -100,6 +101,8 @@ describe('ControlBarComponent', () => {
   const mockRoomService = jasmine.createSpyObj(['getCurrentRoomsMessageStream', 'getRoomSummaries']);
   mockRoomService.getCurrentRoomsMessageStream.and.returnValue(of(message));
   mockRoomService.getRoomSummaries.and.returnValue(of(summaries));
+
+  const mockRemoteService = jasmine.createSpyObj(['getFeedbackState']);
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
@@ -184,6 +187,10 @@ describe('ControlBarComponent', () => {
         {
           provide: RoomService,
           useValue: mockRoomService
+        },
+        {
+          provide: RemoteService,
+          useValue: mockRemoteService
         }
       ],
       schemas: [

@@ -216,7 +216,14 @@ export class RoutingService {
     this.globalStorageService.removeItem(STORAGE_KEYS.REDIRECT_URL);
   }
 
-  getRoleString(role: string): string {
+  getRoleString(role?: string): string {
+    if (!role) {
+      if (this.role) {
+        role = this.role;
+      } else {
+        return RoutePrefix.PRESENTATION;
+      }
+    }
     return role === UserRole.PARTICIPANT ? RoutePrefix.PARTICIPANT : RoutePrefix.CREATOR;
   }
 

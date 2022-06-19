@@ -16,9 +16,9 @@ import { ContentCreated } from '../../models/events/content-created';
 import { CachingService } from '../util/caching.service';
 import { ExportFileType } from '../../models/export-file-type';
 import { Router } from '@angular/router';
-import { ContentMessages } from '../../models/events/content-messages.enum';
 import { ContentGroup } from '../../models/content-group';
 import { DialogService } from '../../services/util/dialog.service';
+import { PresentationEvent } from '../../models/events/presentation-events.enum';
 
 const PARTITION_SIZE = 50;
 
@@ -245,7 +245,7 @@ export class ContentService extends AbstractEntityService<Content> {
     this.deleteAnswers(roomId, contentId).subscribe(() => {
       this.translateService.get('dialog.answers-deleted').subscribe(msg => {
         this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
-        this.eventService.broadcast(ContentMessages.ANSWERS_DELETED, contentId);
+        this.eventService.broadcast(PresentationEvent.CONTENT_ANSWERS_DELETED, contentId);
       });
     });
   }

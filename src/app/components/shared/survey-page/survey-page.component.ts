@@ -15,11 +15,9 @@ import { ActivatedRoute } from '@angular/router';
 import { AnnounceService } from '../../../services/util/announce.service';
 import { FeedbackService } from '../../../services/http/feedback.service';
 import { FeedbackMessageType } from '../../../models/messages/feedback-message-type';
-import { EventService } from '../../../services/util/event.service';
 import { HotkeyAction } from '../../../directives/hotkey.directive';
 import { HotkeyService } from '../../../services/util/hotkey.service';
-import { RemoteMessage } from '../../../models/events/remote/remote-message.enum';
-import { SurveyFocusState } from '../../../models/events/remote/survey-focus-state';
+import { RemoteService } from '../../../services/util/remote.service';
 
 @Component({
   selector: 'app-survey-page',
@@ -68,7 +66,7 @@ export class SurveyPageComponent implements OnInit, OnDestroy, AfterContentInit 
     private announceService: AnnounceService,
     private globalStorageService: GlobalStorageService,
     protected route: ActivatedRoute,
-    private eventService: EventService,
+    private remoteService: RemoteService,
     private hotkeyService: HotkeyService
   ) {
     langService.langEmitter.subscribe(lang => translateService.use(lang));
@@ -105,7 +103,7 @@ export class SurveyPageComponent implements OnInit, OnDestroy, AfterContentInit 
       this.isLoading = false;
       if (this.isPresentation) {
         if (!this.isClosed) {
-          this.sendStateChangeEvent(true);
+          this.remoteService.updateFeedbackStateChange(true);
         }
         const scale = Math.max((Math.min(innerWidth, 2100)  / 1500), 1);
         document.getElementById('survey-card').style.transform = `scale(${scale})`;
@@ -227,10 +225,6 @@ export class SurveyPageComponent implements OnInit, OnDestroy, AfterContentInit 
     this.wsFeedbackService.reset(this.roomId);
   }
 
-  sendStateChangeEvent(started: boolean) {
-    this.eventService.broadcast(RemoteMessage.CHANGE_SURVEY_STATE, new SurveyFocusState(started));
-  }
-
   parseIncomingMessage(message: Message) {
     const msg = JSON.parse(message.body);
     const payload = msg.payload;
@@ -244,16 +238,14 @@ export class SurveyPageComponent implements OnInit, OnDestroy, AfterContentInit 
           this.isClosed = false;
         });
         if (this.role === UserRole.CREATOR) {
-          this.sendStateChangeEvent(true);
-          this.eventService.broadcast(RemoteMessage.SURVEY_STATE_CHANGED, 'started');
+          this.remoteService.updateFeedbackStateChange(true);
         }
         break;
       case FeedbackMessageType.STOPPED:
         this.room.settings['feedbackLocked'] = true;
         this.isClosed = true;
         if (this.role === UserRole.CREATOR) {
-          this.sendStateChangeEvent(false);
-          this.eventService.broadcast(RemoteMessage.SURVEY_STATE_CHANGED, 'stopped');
+          this.remoteService.updateFeedbackStateChange(false);
         }
         break;
       case FeedbackMessageType.STATUS:

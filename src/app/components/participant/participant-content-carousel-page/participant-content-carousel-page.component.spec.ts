@@ -29,6 +29,7 @@ import { STORAGE_KEYS } from '@arsnova/app/services/util/global-storage.service'
 import { ClientAuthentication } from '@arsnova/app/models/client-authentication';
 import { AuthProvider } from '@arsnova/app/models/auth-provider';
 import { RoutingService } from '@arsnova/app/services/util/routing.service';
+import { RemoteService } from '@arsnova/app/services/util/remote.service';
 
 describe('ParticipantContentCarouselPageComponent', () => {
   let component: ParticipantContentCarouselPageComponent;
@@ -72,6 +73,10 @@ describe('ParticipantContentCarouselPageComponent', () => {
 
   let translateService: TranslateService;
   const a11yIntroPipe = new A11yIntroPipe(translateService);
+
+  const mockRemoteService = jasmine.createSpyObj(['getFocusModeState', 'getContentState']);
+  mockRemoteService.getFocusModeState.and.returnValue(of(true));
+  mockRemoteService.getContentState.and.returnValue(of({}));
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
@@ -144,6 +149,10 @@ describe('ParticipantContentCarouselPageComponent', () => {
         {
           provide: RoutingService,
           useValue: mockRoutingService
+        },
+        {
+          provide: RemoteService,
+          useValue: mockRemoteService
         }
       ],
       schemas: [

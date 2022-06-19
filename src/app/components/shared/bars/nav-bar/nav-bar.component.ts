@@ -16,8 +16,6 @@ import { ContentGroupStatistics } from '../../../../models/content-group-statist
 import { DataChanged } from '../../../../models/events/data-changed';
 import { RoomStats } from '../../../../models/room-stats';
 import { Features } from '../../../../models/features.enum';
-import { RemoteMessage } from '../../../../models/events/remote/remote-message.enum';
-import { UiState } from '../../../../models/events/ui/ui-state.enum';
 import { SeriesCreated } from '../../../../models/events/series-created';
 import { SeriesDeleted } from '../../../../models/events/series-deleted';
 import { MatLegacyMenuTrigger as MatMenuTrigger } from '@angular/material/legacy-menu';
@@ -65,7 +63,6 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
   ];
   currentRouteIndex: number;
   activeFeatures: string[] = [Features.OVERVIEW, Features.COMMENTS];
-  tooFewFeatures = false;
   group: ContentGroup;
   groupName: string;
   role: UserRole;
@@ -78,9 +75,7 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
   feedbackSubscription: Subscription;
   contentGroups: ContentGroup[] = [];
   publishedStates: PublishedContentsState[] = [];
-  hideBarForParticipants;
   focusStateSubscription: Subscription;
-  guidedModeExtensionData: object;
   isLoading = true;
 
   userCount: number;
@@ -122,25 +117,21 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
     }
   }
 
-  beforeInit() {
-    this.subscribeToFocusModeEvent();
-  }
-
-  subscribeToFocusModeEvent() {
-    this.focusStateSubscription = this.eventService.on<boolean>(RemoteMessage.FOCUS_STATE_CHANGED).subscribe(guided => {
-      this.hideBarForParticipants = guided && this.viewRole === UserRole.PARTICIPANT;
-      this.sendVisibleStatusEvent();
-    });
-  }
-
   afterInit() {
-    const featureUrl = this.activeFeatures[this.currentRouteIndex] !== Features.CONTENTS ? this.activeFeatures[this.currentRouteIndex] : this.groupName;
-    this.guidedModeExtensionData = {featureUrl: [featureUrl], roomId: this.roomId};
+    if (this.role === UserRole.PARTICIPANT) {
+      this.subscribeToContentGroups();
+    } else {
+      this.subscribeToContentGroupEvents();
+      this.roomService.getRoomSummaries([this.roomId]).subscribe(summary => {
+        this.userCount = summary[0].stats.roomUserCount;
+        this.roomWatch = this.roomService.getCurrentRoomsMessageStream();
+        this.roomSub = this.roomWatch.subscribe(msg => this.parseUserCount(msg.body));
+      });
+    }
     this.isLoading = false;
   }
 
   initItems() {
-    this.beforeInit();
     this.route.data.subscribe(data => {
       this.role = data.userRole;
       this.viewRole = data.viewRole;
@@ -167,29 +158,11 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
       });
       this.subscribeToFeedbackEvent();
       this.subscribeToRouteChanges();
-      if (this.viewRole === UserRole.PARTICIPANT) {
-        this.subscribeToContentGroups();
-        this.subscribeToRemoteEvent();
-      } else {
-        this.subscribeToContentGroupEvents();
-          this.roomService.getRoomSummaries([data.room.id]).subscribe(summary => {
-            this.userCount = summary[0].stats.roomUserCount;
-            this.roomWatch = this.roomService.getCurrentRoomsMessageStream();
-            this.roomSub = this.roomWatch.subscribe(msg => this.parseUserCount(msg.body));
-          });
-      }
     });
   }
 
   parseUserCount(body: string) {
     this.userCount = JSON.parse(body).UserCountChanged.userCount;
-  }
-
-  subscribeToRemoteEvent() {
-    this.eventService.on<string>(RemoteMessage.CHANGE_FEATURE_ROUTE).subscribe(feature => {
-      const featureIndex = this.barItems.map(b => b.name).indexOf(feature);
-      this.navToUrl(featureIndex);
-    });
   }
 
   setGroupInSessionStorage(group: string) {
@@ -227,9 +200,6 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
       if (this.currentRouteIndex > -1) {
         this.disableNewsForCurrentRoute();
       }
-      setTimeout(() => {
-        this.sendVisibleStatusEvent();
-      }, 0);
     });
   }
 
@@ -276,17 +246,7 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
         }
       }
     }
-    if (this.barItems.length > 1) {
-      this.getCurrentRouteIndex();
-      this.tooFewFeatures = false;
-    } else {
-      this.tooFewFeatures = true;
-    }
-    this.sendVisibleStatusEvent();
-  }
-
-  sendVisibleStatusEvent() {
-    this.eventService.broadcast(UiState.NAV_BAR_VISIBLE, !this.tooFewFeatures && !this.hideBarForParticipants);
+    this.getCurrentRouteIndex();
   }
 
   getCurrentRouteIndex() {
@@ -331,7 +291,7 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
     if (newGroup) {
       this.setGroup(newGroup);
     } else {
-      if (item.name === Features.CONTENTS && this.contentGroups.length > 1) {
+      if (this.isMenuActive(item.name)) {
         return;
       }
     }

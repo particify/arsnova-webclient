@@ -77,6 +77,7 @@ import { WsCommentService } from './services/websockets/ws-comment.service';
 import { PresentationService } from './services/util/presentation.service';
 import { AccessTokenService } from './services/http/access-token.service';
 import { RedeemTokenComponent } from './components/home/redeem-token/redeem-token.component';
+import { RemoteService } from './services/util/remote.service';
 
 export function initializeApp(appConfig: AppConfig) {
   return () => appConfig.load();
@@ -195,6 +196,7 @@ export function initializeApp(appConfig: AppConfig) {
     HotkeyService,
     PresentationService,
     AccessTokenService,
+    RemoteService,
     { provide: Window,  useValue: window },
     STORAGE_CONFIG_PROVIDERS,
     {

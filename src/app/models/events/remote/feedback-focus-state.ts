@@ -1,4 +1,4 @@
-export class SurveyFocusState {
+export class FeedbackFocusState {
   started: boolean;
 
   constructor(started: boolean) {

@@ -1,4 +1,5 @@
 <mat-toolbar class="mat-elevation-z2">
+  <lib-extension-point *ngIf="isRoom && hasRole(UserRole.PARTICIPANT)" extensionId="participant-header"></lib-extension-point>
   <mat-toolbar-row>
     <button id="back-button" mat-icon-button aria-labelledby="back-label" *ngIf="router.url !== '/'"
             (click)="goBack()"

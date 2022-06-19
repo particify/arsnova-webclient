@@ -32,6 +32,7 @@ import { Room } from '@arsnova/app/models/room';
 import { CounterBracesPipe } from '@arsnova/app/pipes/counter-braces.pipe';
 import { of } from 'rxjs';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { RemoteService } from '@arsnova/app/services/util/remote.service';
 
 describe('CommentListComponent', () => {
   let component: CommentListComponent;
@@ -68,6 +69,8 @@ describe('CommentListComponent', () => {
   const activatedRouteStub = new ActivatedRouteStub(null, data);
 
   const mockCounterBracesPipe = new CounterBracesPipe();
+
+  const mockRemoteService = jasmine.createSpyObj(['getCommentState']);
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
@@ -154,6 +157,10 @@ describe('CommentListComponent', () => {
         {
           provide: CounterBracesPipe,
           useValue: mockCounterBracesPipe
+        },
+        {
+          provide: RemoteService,
+          useValue: mockRemoteService
         }
       ],
       schemas: [

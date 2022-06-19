@@ -18,8 +18,8 @@ import { EventService } from '../../../services/util/event.service';
 import { EntityChanged } from '../../../models/events/entity-changed';
 import { Subscription } from 'rxjs';
 import { ContentFocusState } from '../../../models/events/remote/content-focus-state';
-import { RemoteMessage } from '../../../models/events/remote/remote-message.enum';
 import { RoutingService } from '../../../services/util/routing.service';
+import { RemoteService } from '../../../services/util/remote.service';
 
 @Component({
   selector: 'app-participant-content-carousel-page',
@@ -49,7 +49,7 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
   currentStep: number;
   isReloading = false;
   displaySnackBar = false;
-  guided = false;
+  isGuided = false;
   lockedContentId: string;
   changesSubscription: Subscription;
   remoteSubscription: Subscription;
@@ -74,7 +74,8 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
     private notificationService: NotificationService,
     private eventService: EventService,
     private router: Router,
-    private routingService: RoutingService
+    private routingService: RoutingService,
+    private remoteService: RemoteService
   ) {
   }
 
@@ -101,6 +102,9 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
   }
 
   ngOnInit() {
+    this.focusStateSubscription = this.remoteService.getFocusModeState().subscribe(isGuided => {
+      this.isGuided = isGuided;
+    });
     this.translateService.use(this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE));
     const params = this.route.snapshot.params;
     const lastContentIndex = params['contentIndex'] - 1;
@@ -117,7 +121,7 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
     this.changesSubscription = this.eventService.on('EntityChanged').subscribe(changes => {
       this.handleStateEvent(changes);
     });
-    this.remoteSubscription = this.eventService.on<ContentFocusState>(RemoteMessage.CONTENT_STATE_UPDATED).subscribe(state => {
+    this.remoteSubscription = this.remoteService.getContentState().subscribe(state => {
       if (this.contentGroup.id === state.contentGroupId) {
         if (!this.currentStep || this.contents[this.currentStep]?.id !== state.contentId) {
           const newIndex = this.getIndexOfContentById(state.contentId);
@@ -125,7 +129,8 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
             if (this.started === this.status.NORMAL) {
               this.stepper.onClick(newIndex);
             } else {
-              this.initStepper(newIndex);
+              this.showOverview = false;
+              this.initStepper(newIndex, 0);
             }
           } else {
             this.lockedContentId = state.contentId;
@@ -141,9 +146,6 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
         });
       }
     });
-    this.focusStateSubscription = this.eventService.on<boolean>(RemoteMessage.FOCUS_STATE_CHANGED).subscribe(guided => {
-      this.guided = guided;
-    });
     this.routeChangedSubscription = this.routingService.getRouteChanges().subscribe(route => {
       const newGroup = route.params['seriesName'];
       if (newGroup && newGroup !== this.contentGroupName) {
@@ -155,6 +157,31 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
         });
       }
     });
+  }
+
+  evaluateNewContentState(state: ContentFocusState) {
+    if (this.contentGroup.id === state.contentGroupId) {
+      if (!this.currentStep || this.contents[this.currentStep]?.id !== state.contentId) {
+        const newIndex = this.getIndexOfContentById(state.contentId);
+        if (newIndex > -1) {
+          if (this.started === this.status.NORMAL) {
+            this.stepper.onClick(newIndex);
+          } else {
+            this.initStepper(newIndex, 300);
+          }
+        } else {
+          this.lockedContentId = state.contentId;
+        }
+      }
+    } else {
+      this.contentgroupService.getById(state.contentGroupId).subscribe(group => {
+        this.router.navigate(['p', 'room', this.shortId, 'group', group.name]).then(() => {
+          this.contentGroup = group;
+          this.isReloading = true;
+          this.getContents(null, state.contentId);
+        });
+      });
+    }
   }
 
   getIndexOfContentById(id: string): number {
@@ -210,7 +237,7 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
     if (contentIndex === 0 || contentIndex > 0) {
       this.initStepper(contentIndex);
     } else {
-      if (!this.guided) {
+      if (!this.isGuided) {
         this.getInitialStep();
       }
     }
@@ -296,7 +323,7 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
     }
     this.checkState();
     this.answers[this.getIndexOfContentById(answer.contentId)] = answer;
-    if (!this.guided) {
+    if (!this.isGuided) {
       if (this.started === this.status.NORMAL) {
         const wait = this.contents[index].state.answersPublished ? 1000 : 400;
         setTimeout(() => {
@@ -347,7 +374,7 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
       const changedEvent = new EntityChanged('ContentGroup', changes.entity, changes.changedProperties);
       if (changedEvent.hasPropertyChanged('firstPublishedIndex') || changedEvent.hasPropertyChanged('lastPublishedIndex')
         || changedEvent.hasPropertyChanged('published')) {
-        if (this.guided) {
+        if (this.isGuided) {
           this.reloadContents();
         } else {
           if (!this.displaySnackBar) {

@@ -3,6 +3,7 @@ import { HotkeyService } from '../../../services/util/hotkey.service';
 import { TranslateService } from '@ngx-translate/core';
 import { Comment } from '../../../models/comment';
 import { EventService } from '../../../services/util/event.service';
+import { PresentationEvent } from '../../../models/events/presentation-events.enum';
 
 @Component({
   selector: 'app-present-comment',
@@ -54,7 +55,7 @@ export class PresentCommentComponent implements OnInit, OnDestroy {
 
   updateFontSize(): void {
     document.getElementById('comment').style.fontSize = 'calc(' + (this.currentZoom * 18) + 'px + 1.5vw)';
-    this.eventService.broadcast('CommentZoomChanged', this.currentZoom * 100);
+    this.eventService.broadcast(PresentationEvent.COMMENT_ZOOM_UPDATED, this.currentZoom * 100);
   }
 
   updateZoom(adjustment: number) {

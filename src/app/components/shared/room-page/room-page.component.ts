@@ -14,7 +14,7 @@ export class RoomPageComponent implements OnInit, OnDestroy {
 
   isCreator: boolean;
   roomId: string;
-  navBarExists = false;
+  hideNavigation = false;
 
   navBarStateSubscription: Subscription;
 
@@ -23,12 +23,12 @@ export class RoomPageComponent implements OnInit, OnDestroy {
     private eventService: EventService) {}
 
   ngOnInit(): void {
-    this.navBarStateSubscription = this.eventService.on<boolean>(UiState.NAV_BAR_VISIBLE).subscribe(isVisible => {
-      this.navBarExists = isVisible;
-    });
     this.route.data.subscribe(data => {
-      this.isCreator = data.viewRole === UserRole.CREATOR;
+      this.isCreator = data.userRole === UserRole.CREATOR;
       this.roomId = data.room.id;
+      this.navBarStateSubscription = this.eventService.on<boolean>(UiState.NAV_BAR_VISIBLE).subscribe(isVisible => {
+        this.hideNavigation = !isVisible && !this.isCreator;
+      });
     });
   }
 

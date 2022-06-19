@@ -15,13 +15,12 @@ import { DialogService } from '../../../services/util/dialog.service';
 import { PublishContentComponent } from '../_dialogs/publish-content/publish-content.component';
 import { ContentType } from '../../../models/content-type.enum';
 import { HotkeyService } from '../../../services/util/hotkey.service';
-import { RemoteMessage } from '../../../models/events/remote/remote-message.enum';
-import { ContentFocusState } from '../../../models/events/remote/content-focus-state';
-import { ContentMessages } from '../../../models/events/content-messages.enum';
 import { Subscription } from 'rxjs';
 import { PresentationService } from '../../../services/util/presentation.service';
 import { UserService } from '../../../services/http/user.service';
 import { UserSettings } from '../../../models/user-settings';
+import { RemoteService } from '../../../services/util/remote.service';
+import { PresentationEvent } from '../../../models/events/presentation-events.enum';
 
 @Component({
   selector: 'app-content-presentation',
@@ -65,7 +64,8 @@ export class ContentPresentationComponent implements OnInit, OnDestroy {
     private dialogService: DialogService,
     private hotkeyService: HotkeyService,
     private presentationService: PresentationService,
-    private userService: UserService
+    private userService: UserService,
+    private remoteService: RemoteService
   ) {
     langService.langEmitter.subscribe(lang => translateService.use(lang));
   }
@@ -116,7 +116,7 @@ export class ContentPresentationComponent implements OnInit, OnDestroy {
         this.contentGroupName = group;
         this.initGroup();
       });
-      this.remoteSubscription = this.eventService.on<ContentFocusState>(RemoteMessage.CONTENT_STATE_UPDATED).subscribe(state => {
+      this.remoteSubscription = this.remoteService.getContentState().subscribe(state => {
         if (this.contentGroup.id === state.contentGroupId) {
           if (this.contents[this.currentStep].id !== state.contentId) {
             const newIndex = this.contents.map(c => c.id).indexOf(state.contentId);
@@ -124,8 +124,6 @@ export class ContentPresentationComponent implements OnInit, OnDestroy {
               this.stepper.onClick(newIndex);
             }
           }
-        } else {
-          this.eventService.broadcast(RemoteMessage.CONTENT_GROUP_UPDATED, state.contentGroupId);
         }
       });
       this.translateService.get('control-bar.publish-or-lock-content').subscribe(t =>
@@ -152,8 +150,7 @@ export class ContentPresentationComponent implements OnInit, OnDestroy {
               this.stepper.init(this.contentIndex, this.contents.length);
               this.updateURL(this.contentIndex, true);
               if (this.isPresentation && !initial) {
-                const remoteState = new ContentFocusState(this.contents[this.currentStep].id, this.contentGroup.id, false, false);
-                this.eventService.broadcast(RemoteMessage.CHANGE_CONTENTS_STATE, remoteState);
+                this.updateStateChange();
               }
             }, 0);
           }
@@ -200,8 +197,7 @@ export class ContentPresentationComponent implements OnInit, OnDestroy {
     const urlIndex = index + 1;
     if (this.isPresentation) {
       this.updateRoute('present', urlIndex);
-      const remoteState = new ContentFocusState(this.contents[this.currentStep].id, this.contentGroup.id, null, null);
-      this.eventService.broadcast(RemoteMessage.CHANGE_CONTENTS_STATE, remoteState);
+      this.updateStateChange();
       this.canAnswerContent = ![ContentType.SLIDE, ContentType.FLASHCARD].includes(this.contents[this.currentStep].format);
     } else {
       this.updateRoute('edit', urlIndex);
@@ -228,6 +224,10 @@ export class ContentPresentationComponent implements OnInit, OnDestroy {
     this.sendContentStepState();
   }
 
+  updateStateChange() {
+    this.remoteService.updateContentStateChange(this.contents[this.currentStep].id, this.currentStep, this.contentGroup.id, this.contentGroup.name, false, false);
+  }
+
   sendContentStepState(emptyList = false) {
     let position;
     let step;
@@ -240,7 +240,7 @@ export class ContentPresentationComponent implements OnInit, OnDestroy {
       }
     }
     const state = {position: position, index: step, content: this.contents[this.currentStep]};
-    this.eventService.broadcast(ContentMessages.STEP_STATE_CHANGED, state);
+    this.eventService.broadcast(PresentationEvent.CONTENT_STATE_UPDATED, state);
   }
 
   areContentsPublished() {
@@ -311,7 +311,7 @@ export class ContentPresentationComponent implements OnInit, OnDestroy {
     const changes: { firstPublishedIndex: number, lastPublishedIndex: number } = { firstPublishedIndex: firstIndex, lastPublishedIndex: lastIndex };
     this.contentGroupService.patchContentGroup(this.contentGroup, changes).subscribe(updatedContentGroup => {
       this.contentGroup = updatedContentGroup;
-      this.eventService.broadcast('ContentGroupStateChanged', this.contentGroup);
+      this.eventService.broadcast(PresentationEvent.CONTENT_GROUP_UPDATED, this.contentGroup);
     });
   }
 }

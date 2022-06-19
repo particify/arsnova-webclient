@@ -4,8 +4,8 @@ import { ContentService } from '../../../services/http/content.service';
 import { Content } from '../../../models/content';
 import { AnswerStatistics } from '../../../models/answer-statistics';
 import { EventService } from '../../../services/util/event.service';
-import { ContentMessages } from '../../../models/events/content-messages.enum';
 import { TextAnswer } from '../../../models/text-answer';
+import { PresentationEvent } from '../../../models/events/presentation-events.enum';
 
 @Component({
   template: ''
@@ -35,7 +35,7 @@ export abstract class StatisticContentBaseComponent implements OnInit {
       this.toggleAnswers(this.directShow);
     });
     this.afterInit();
-    this.eventService.on(ContentMessages.ANSWERS_DELETED).subscribe(contentId => {
+    this.eventService.on(PresentationEvent.CONTENT_ANSWERS_DELETED).subscribe(contentId => {
       if (this.content.id === contentId) {
         this.deleteAnswers();
       }

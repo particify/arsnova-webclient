@@ -8,6 +8,7 @@ import { HotkeyService } from '@arsnova/app/services/util/hotkey.service';
 import { Directionality } from '@angular/cdk/bidi';
 import { ChangeDetectorRef, NO_ERRORS_SCHEMA, ElementRef } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { RemoteService } from '@arsnova/app/services/util/remote.service';
 
 describe('StepperComponent', () => {
   let component: StepperComponent;
@@ -18,6 +19,8 @@ describe('StepperComponent', () => {
   let changeDetectorRef: ChangeDetectorRef;
 
   const mockHotkeyService = jasmine.createSpyObj(['registerHotkey', 'unregisterHotkey']);
+
+  const mockRemoteService = jasmine.createSpyObj(['getFocusModeState']);
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
@@ -52,6 +55,10 @@ describe('StepperComponent', () => {
         {
           provide: ElementRef,
           useValue: elementRef
+        },
+        {
+          provide: RemoteService,
+          useValue: mockRemoteService
         }
       ],
       schemas: [
