@@ -1,6 +1,6 @@
 {
   "/api/ws": {
-    "target": "ws://arsnova-ws-gateway:8080",
+    "target": "ws://localhost:8099",
     "secure": false,
     "pathRewrite": {
       "^/api": ""
@@ -9,8 +9,11 @@
     "logLevel": "debug"
   },
   "/api": {
-    "target": "http://arsnova-proxy",
+    "target": "http://localhost:9090",
     "secure": false,
+    "pathRewrite": {
+      "^/api": ""
+    },
     "logLevel": "debug"
   }
 }
