@@ -404,8 +404,6 @@
     "a11y-delete-room" : "Löscht deinen Raum.",
     "a11y-moderator-username": "Gib den Benutzernamen oder die E-Mail-Adresse des Nutzers ein, welchen du als moderierende Person hinzufügen möchtest",
     "a11y-room-name": "Vergebe dem Raum hier einen neuen Namen.",
-    "a11y-direct-send": "Schieberegler, um Beiträge sofort sichtbar zu machen.",
-    "a11y-threshold": "Schieberegler zum Einstellen des Schwellenwerts für sichtbare Beiträge",
     "a11y-room-description": "Gib eine Beschreibung für den Raum ein.",
     "a11y-save-changes": "Speichert die Änderungen an dem Raum.",
     "a11y-expand-settings": "Go to the {{name}} settings.",

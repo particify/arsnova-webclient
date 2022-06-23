@@ -52,6 +52,7 @@ import { UserProfileComponent } from './user-profile/user-profile.component';
 import { UserFormFieldComponent } from './user-profile/user-form-field/user-form-field.component';
 import { ContentChoiceAnswerComponent } from './content-answers/content-choice-answer/content-choice-answer.component';
 import { TrackInteractionDirective } from '../../directives/track-interaction.directive';
+import { SettingsSlideToggleComponent } from './settings-slide-toggle/settings-slide-toggle.component';
 
 @NgModule({
   imports: [
@@ -110,7 +111,8 @@ import { TrackInteractionDirective } from '../../directives/track-interaction.di
     UserProfileComponent,
     UserFormFieldComponent,
     ContentChoiceAnswerComponent,
-    TrackInteractionDirective
+    TrackInteractionDirective,
+    SettingsSlideToggleComponent
   ],
   exports: [
     RoomJoinComponent,
@@ -151,7 +153,8 @@ import { TrackInteractionDirective } from '../../directives/track-interaction.di
     A11yIntroPipe,
     CounterBracesPipe,
     ContentChoiceAnswerComponent,
-    TrackInteractionDirective
+    TrackInteractionDirective,
+    SettingsSlideToggleComponent
   ]
 })
 export class SharedModule {

@@ -128,7 +128,9 @@ export class CommentSettingsComponent implements OnInit {
     }
   }
 
-  updateCommentExtensions() {
+  updateCommentExtensions(enableTreshold?: boolean, directSend?: boolean) {
+    this.enableThreshold = enableTreshold ?? this.enableThreshold;
+    this.directSend = directSend ?? this.directSend;
     let commentExtension: CommentExtensions = new CommentExtensions();
     commentExtension.enableThreshold = this.enableThreshold;
     commentExtension.commentThreshold = this.threshold;
@@ -138,7 +140,8 @@ export class CommentSettingsComponent implements OnInit {
     this.saveChanges();
   }
 
-  updateCommentSettings() {
+  updateCommentSettings(directSend?: boolean) {
+    this.directSend = directSend ?? this.directSend;
     const commentSettings = new CommentSettings(this.roomId, this.directSend, this.fileUploadEnabled);
     this.commentSettingsService.update(commentSettings).subscribe();
   }

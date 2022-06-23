@@ -404,8 +404,6 @@
     "a11y-delete-room": "Deletes your room",
     "a11y-moderator-username": "Enter the username or email of the user you want to add as a moderator",
     "a11y-room-name": "Give the room a new name here.",
-    "a11y-direct-send": "Slider to send posts directly to participant",
-    "a11y-threshold": "Slider for setting the threshold for visible posts",
     "a11y-room-description": "Enter a description for the room",
     "a11y-save-changes": "Saves the changes to the room.",
     "a11y-expand-settings": "Go to the {{name}} settings.",
