@@ -84,7 +84,7 @@
                 cached
               </mat-icon>
             </button>
-            <app-statistic-content *ngIf="content.format !== ContentType.FLASHCARD && flipped" [content]="content"
+            <app-statistic-content *ngIf="content.format !== ContentType.FLASHCARD && flipped" [content]="content" [active]="true"
                                    [directShow]="true" [correctOptionsPublished]="correctOptionsPublished"></app-statistic-content>
             <div *ngIf="content.format === ContentType.FLASHCARD && flipped">
               <app-rendered-text [rawText]="content.additionalText" [renderedText]="content.renderedAdditionalText"
