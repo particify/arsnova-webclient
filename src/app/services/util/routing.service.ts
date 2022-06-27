@@ -136,7 +136,7 @@ export class RoutingService {
   }
 
   getRoutes(route: ActivatedRouteSnapshot) {
-    const shortId = this.shortId || route.parent.params['shortId'];
+    const shortId = this.shortId;
     const series  = route.paramMap.get('seriesName') || '';
     const role = route.data.requiredRole || '';
     this.fullCurrentRoute = this.location.path();

@@ -32,24 +32,15 @@ const routes: Routes = [
   },
   {
     path: 'settings',
-    component: SettingsPageComponent,
-    resolve: {
-      room: RoomResolver
-    }
+    component: SettingsPageComponent
   },
   {
     path: 'settings/:settingsName',
-    component: SettingsPageComponent,
-    resolve: {
-      room: RoomResolver
-    }
+    component: SettingsPageComponent
   },
   {
     path: 'series/:seriesName/create',
-    component: ContentCreationPageComponent,
-    resolve: {
-      room: RoomResolver
-    }
+    component: ContentCreationPageComponent
   },
   {
     path: 'series/:seriesName/edit/:contentId',
@@ -60,57 +51,34 @@ const routes: Routes = [
   },
   {
     path: 'series/:seriesName/statistics',
-    component: StatisticsPageComponent,
-    resolve: {
-      room: RoomResolver
-    }
+    component: StatisticsPageComponent
   },
   {
     path: 'series/:seriesName/:contentIndex',
-    component: ContentPresentationComponent,
-    resolve: {
-      room: RoomResolver
-    }
+    component: ContentPresentationComponent
   },
   {
     path: 'comments',
-    component: CommentPageComponent,
-    resolve: {
-      room: RoomResolver,
-      viewRole: RoomViewUserRoleResolver
-    }
+    component: CommentPageComponent
   },
   {
     path: 'comments/moderation',
     component: CommentPageComponent,
     data: {
       isModeration: true
-    },
-    resolve: {
-      room: RoomResolver
     }
   },
   {
     path: 'feedback',
-    component: SurveyPageComponent,
-    resolve: {
-      room: RoomResolver,
-      viewRole: RoomViewUserRoleResolver
-    }
+    component: SurveyPageComponent
   },
   {
     path: 'series/:seriesName',
-    component: GroupContentComponent,
-    resolve: {
-      room: RoomResolver
-    }
+    component: GroupContentComponent
   },
   {
     path: 'archive',
-    component: LooseContentComponent,
-    resolve: {
-      room: RoomResolver
-    }
+    component: LooseContentComponent
   }
 ];
 

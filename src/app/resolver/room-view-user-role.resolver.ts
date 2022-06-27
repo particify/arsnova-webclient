@@ -17,7 +17,7 @@ export class RoomViewUserRoleResolver implements Resolve<UserRole> {
   }
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<UserRole> {
-    const viewRole = route.data['requiredRole'] || route.parent.data['requiredRole'] as UserRole;
+    const viewRole = route.data['requiredRole'] as UserRole;
 
     /* Ignore the user's real role, always use PARTICIPANT role for view. */
     if (viewRole === UserRole.PARTICIPANT) {
@@ -31,8 +31,7 @@ export class RoomViewUserRoleResolver implements Resolve<UserRole> {
 
     /* Use the user's real role for moderation. */
     if (this.roomMembershipService.isRoleSubstitutable(viewRole, UserRole.EXECUTIVE_MODERATOR)) {
-      const shortId = route.params['shortId'] || route.parent.params['shortId']
-      return this.roomMembershipService.getPrimaryRoleByRoom(shortId);
+      return this.roomMembershipService.getPrimaryRoleByRoom(route.params['shortId']);
     }
 
     throw Error(`No room view found for '${route.data['requiredRole']}'.`);

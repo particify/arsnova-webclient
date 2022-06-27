@@ -30,46 +30,29 @@ const routes: Routes = [
   {
     path: 'comments',
     component: CommentPageComponent,
-    resolve: {
-      room: RoomResolver,
-      viewRole: RoomViewUserRoleResolver
-    },
     data: {
-      feature: Features.COMMENTS,
-      requiredRole: UserRole.PARTICIPANT
+      feature: Features.COMMENTS
     }
   },
   {
     path: 'feedback',
     component: SurveyPageComponent,
-    resolve: {
-      room: RoomResolver
-    },
     data: {
-      feature: Features.FEEDBACK,
-      requiredRole: UserRole.PARTICIPANT
+      feature: Features.FEEDBACK
     }
   },
   {
     path: 'series/:seriesName',
     component: ParticipantContentCarouselPageComponent,
-    resolve: {
-      room: RoomResolver
-    },
     data: {
-      feature: Features.CONTENTS,
-      requiredRole: UserRole.PARTICIPANT
+      feature: Features.CONTENTS
     }
   },
   {
     path: 'series/:seriesName/:contentIndex',
     component: ParticipantContentCarouselPageComponent,
-    resolve: {
-      room: RoomResolver
-    },
     data: {
-      feature: Features.CONTENTS,
-      requiredRole: UserRole.PARTICIPANT
+      feature: Features.CONTENTS
     }
   }
 ];
