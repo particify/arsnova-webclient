@@ -3,7 +3,7 @@ import { RouterModule, ROUTES, Routes } from '@angular/router';
 import { ExtensionRouteProvider, RouteMountPoint } from '../../../../projects/extension-point/src/lib/extension-route';
 import { AuthenticationGuard } from '../../guards/authentication.guard';
 import { UserRole } from '../../models/user-roles.enum';
-import { RoomCreatorPageComponent } from './room-creator-page/room-creator-page.component';
+import { RoomPageComponent } from '../shared/room-page/room-page.component';
 import { ContentCreationPageComponent } from './content-creation/content-creation-page/content-creation-page.component';
 import { StatisticsPageComponent } from '../shared/statistics-page/statistics-page.component';
 import { SurveyPageComponent } from '../shared/survey-page/survey-page.component';
@@ -15,6 +15,7 @@ import { RoomViewUserRoleResolver } from '../../resolver/room-view-user-role.res
 import { LooseContentComponent } from './content-list/loose-content/loose-content.component';
 import { GroupContentComponent } from './content-list/group-content/group-content.component';
 import { RoomUserRoleResolver } from '../../resolver/room-user-role.resolver';
+import { CreatorOverviewComponent } from './creator-overview/creator-overview.component';
 
 const routes: Routes = [
   {
@@ -27,24 +28,15 @@ const routes: Routes = [
   },
   {
     path: '',
-    component: RoomCreatorPageComponent,
-    resolve: {
-      room: RoomResolver
-    }
+    component: CreatorOverviewComponent
   },
   {
     path: 'settings',
-    component: SettingsPageComponent,
-    resolve: {
-      room: RoomResolver
-    }
+    component: SettingsPageComponent
   },
   {
     path: 'settings/:settingsName',
-    component: SettingsPageComponent,
-    resolve: {
-      room: RoomResolver
-    }
+    component: SettingsPageComponent
   },
   {
     path: 'series/:seriesName/create',
@@ -67,27 +59,18 @@ const routes: Routes = [
   },
   {
     path: 'comments',
-    component: CommentPageComponent,
-    resolve: {
-      room: RoomResolver
-    }
+    component: CommentPageComponent
   },
   {
     path: 'comments/moderation',
     component: CommentPageComponent,
     data: {
       isModeration: true
-    },
-    resolve: {
-      room: RoomResolver
     }
   },
   {
     path: 'feedback',
-    component: SurveyPageComponent,
-    resolve: {
-      room: RoomResolver
-    }
+    component: SurveyPageComponent
   },
   {
     path: 'series/:seriesName',
@@ -112,6 +95,7 @@ const routes: Routes = [
         },
         {
           path: ':shortId',
+          component: RoomPageComponent,
           canActivate: [AuthenticationGuard],
           data: { requiredRole: UserRole.EXECUTIVE_MODERATOR },
           resolve: {

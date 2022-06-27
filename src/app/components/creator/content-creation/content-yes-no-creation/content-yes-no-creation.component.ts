@@ -3,11 +3,10 @@ import { ContentChoice } from '../../../../models/content-choice';
 import { NotificationService } from '../../../../services/util/notification.service';
 import { ContentType } from '../../../../models/content-type.enum';
 import { ContentService } from '../../../../services/http/content.service';
-import { RoomService } from '../../../../services/http/room.service';
+import { ActivatedRoute } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { ContentGroupService } from '../../../../services/http/content-group.service';
 import { ContentCreationComponent } from '../content-creation/content-creation.component';
-import { ActivatedRoute } from '@angular/router';
 import { AnnounceService } from '../../../../services/util/announce.service';
 
 @Component({
@@ -27,12 +26,11 @@ export class ContentYesNoCreationComponent extends ContentCreationComponent impl
     protected contentService: ContentService,
     protected notificationService: NotificationService,
     protected translationService: TranslateService,
-    protected roomService: RoomService,
-    protected contentGroupService: ContentGroupService,
     protected route: ActivatedRoute,
+    protected contentGroupService: ContentGroupService,
     protected announceService: AnnounceService
   ) {
-    super(contentService, notificationService, translationService, roomService, contentGroupService, route, announceService);
+    super(contentService, notificationService, translationService, route, contentGroupService, announceService);
   }
 
   initContentCreation() {

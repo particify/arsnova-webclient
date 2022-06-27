@@ -15,13 +15,15 @@ import { AnnounceService } from '../../../../services/util/announce.service';
 import { EventService } from '../../../../services/util/event.service';
 import { LocalFileService } from '../../../../services/util/local-file.service';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-import { Observable, Subject } from 'rxjs';
+import { Observable, Subject, Subscription } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 import { RoomStatsService } from '../../../../services/http/room-stats.service';
 import { HotkeyService } from '../../../../services/util/hotkey.service';
 import { MatButton } from '@angular/material/button';
 import { ContentType } from '../../../../models/content-type.enum';
 import { ContentMessages } from '../../../../models/events/content-messages.enum';
+import { UiState } from '../../../../models/events/ui/ui-state.enum';
+import { RoutingService } from '../../../../services/util/routing.service';
 
 @Component({
   selector: 'app-group-content',
@@ -58,6 +60,11 @@ export class GroupContentComponent extends ContentListBaseComponent implements O
 
   iconList: Map<ContentType, string>;
 
+  navBarExists = false;
+  onInit = false;
+
+  navBarStateSubscription: Subscription;
+
   constructor(
     protected contentService: ContentService,
     protected roomStatsService: RoomStatsService,
@@ -73,7 +80,8 @@ export class GroupContentComponent extends ContentListBaseComponent implements O
     public eventService: EventService,
     protected localFileService: LocalFileService,
     protected router: Router,
-    private hotkeyService: HotkeyService
+    private hotkeyService: HotkeyService,
+    private routingService: RoutingService
   ) {
     super(contentService, roomStatsService, route, location, notificationService, translateService, langService, dialogService,
     globalStorageService, contentGroupService, announceService, router);
@@ -81,6 +89,10 @@ export class GroupContentComponent extends ContentListBaseComponent implements O
   }
 
   ngOnInit() {
+    this.navBarStateSubscription = this.eventService.on<boolean>(UiState.NAV_BAR_VISIBLE).subscribe(isVisible => {
+      this.navBarExists = isVisible;
+    });
+    this.onInit = true;
     this.iconList = this.contentService.getTypeIcons();
     this.route.data.subscribe(data => {
       this.room = data.room;
@@ -94,7 +106,11 @@ export class GroupContentComponent extends ContentListBaseComponent implements O
       const content = this.contents.find(c => c.id === contentId);
       content.state.round = 1;
       this.resetAnswerEvent.next(content.id);
-    })
+    });
+    this.eventService.on<string>(UiState.NEW_GROUP_SELECTED).subscribe(newGroup => {
+      this.collectionName = newGroup;
+      this.reloadContentGroup();
+    });
   }
 
   ngOnDestroy() {
@@ -119,6 +135,7 @@ export class GroupContentComponent extends ContentListBaseComponent implements O
   }
 
   reloadContentGroup(imported = false) {
+    this.isLoading = true;
     this.contentGroupService.getByRoomIdAndName(this.room.id, this.collectionName, true).subscribe(group => {
       this.contentGroup = group;
       this.setSettings();
@@ -132,9 +149,11 @@ export class GroupContentComponent extends ContentListBaseComponent implements O
               const msg = this.translateService.instant('content.import-successful');
               this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.SUCCESS);
             }
+            this.isLoading = false;
           });
       } else {
         this.initContentList([]);
+        this.isLoading = false;
       }
     });
   }
@@ -497,7 +516,7 @@ export class GroupContentComponent extends ContentListBaseComponent implements O
     dialogRef.afterClosed().subscribe(result => {
       if (result === 'delete') {
         this.contentGroupService.delete(this.contentGroup).subscribe(() => {
-          this.location.back();
+          this.routingService.goBack();
           this.globalStorageService.removeItem(STORAGE_KEYS.LAST_GROUP);
           this.translateService.get('content.content-group-deleted').subscribe(msg => {
             this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);

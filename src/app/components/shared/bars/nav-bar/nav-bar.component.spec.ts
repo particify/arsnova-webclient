@@ -20,12 +20,11 @@ import { Message } from '@stomp/stompjs';
 import { RoutingService } from '@arsnova/app/services/util/routing.service';
 import { RoomStatsService } from '@arsnova/app/services/http/room-stats.service';
 import { ContentGroup } from '@arsnova/app/models/content-group';
+import { MatMenuModule } from '@angular/material/menu';
 
 describe('NavBarComponent', () => {
   let component: NavBarComponent;
   let fixture: ComponentFixture<NavBarComponent>;
-
-  const mockRoutingService = jasmine.createSpyObj(['getRoleString']);
 
   const mockRoomStatsService = jasmine.createSpyObj(['getStats']);
   mockRoomStatsService.getStats.and.returnValue(of({}));
@@ -48,6 +47,9 @@ describe('NavBarComponent', () => {
   }
   const activatedRouteStub = new ActivatedRouteStub(null, data, snapshot);
 
+  const mockRoutingService = jasmine.createSpyObj(['getRoleString', 'getRouteChanges']);
+  mockRoutingService.getRouteChanges.and.returnValue(of(snapshot));
+
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [
@@ -60,7 +62,8 @@ describe('NavBarComponent', () => {
             useClass: JsonTranslationLoader
           },
           isolate: true
-        })
+        }),
+        MatMenuModule
       ],
       providers: [
         {

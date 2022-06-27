@@ -38,7 +38,6 @@ import { ExtensionPointModule } from '../../../../projects/extension-point/src/l
       },
       isolate: true
     }),
-    MatSidenavModule,
     ExtensionPointModule
   ],
   declarations: [
@@ -52,9 +51,6 @@ import { ExtensionPointModule } from '../../../../projects/extension-point/src/l
   providers: [
     { provide: TRANSLATION_MODULE_NAME, useValue: 'admin' },
     AdminService
-  ],
-  exports: [
-    MatSidenavModule
   ]
 })
 export class AdminModule {

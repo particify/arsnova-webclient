@@ -7,7 +7,6 @@ import { ContentCreationPageComponent } from './content-creation/content-creatio
 import { ContentScaleCreationComponent } from './content-creation/content-scale-creation/content-scale-creation.component';
 import { ContentTextCreationComponent } from './content-creation/content-text-creation/content-text-creation.component';
 import { ContentYesNoCreationComponent } from './content-creation/content-yes-no-creation/content-yes-no-creation.component';
-import { RoomCreatorPageComponent } from './room-creator-page/room-creator-page.component';
 import { EssentialsModule } from '../essentials/essentials.module';
 import { RoomComponent } from './settings/room/room.component';
 import { SharedModule } from '../shared/shared.module';
@@ -34,6 +33,7 @@ import { ContentWordcloudCreationComponent } from './content-creation/content-wo
 import { ExportComponent } from './_dialogs/export/export.component';
 import { DialogService } from '../../services/util/dialog.service';
 import { PublishContentComponent } from './_dialogs/publish-content/publish-content.component';
+import { CreatorOverviewComponent } from './creator-overview/creator-overview.component';
 
 @NgModule({
   imports: [
@@ -63,7 +63,7 @@ import { PublishContentComponent } from './_dialogs/publish-content/publish-cont
     ContentScaleCreationComponent,
     ContentTextCreationComponent,
     ContentYesNoCreationComponent,
-    RoomCreatorPageComponent,
+    CreatorOverviewComponent,
     RoomComponent,
     LooseContentComponent,
     ContentPresentationComponent,

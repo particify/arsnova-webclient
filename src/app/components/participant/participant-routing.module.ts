@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { RouterModule, ROUTES, Routes } from '@angular/router';
 import { ExtensionRouteProvider, RouteMountPoint } from '../../../../projects/extension-point/src/lib/extension-route';
 import { UserRole } from '../../models/user-roles.enum';
-import { RoomParticipantPageComponent } from './room-participant-page/room-participant-page.component';
 import { SurveyPageComponent } from '../shared/survey-page/survey-page.component';
 import { ParticipantContentCarouselPageComponent } from './participant-content-carousel-page/participant-content-carousel-page.component';
 import { CommentPageComponent } from '../shared/comment-page/comment-page.component';
@@ -11,6 +10,8 @@ import { RoomViewUserRoleResolver } from '../../resolver/room-view-user-role.res
 import { AuthenticationGuard } from '../../guards/authentication.guard';
 import { RoomUserRoleResolver } from '../../resolver/room-user-role.resolver';
 import { Features } from '../../models/features.enum';
+import { RoomPageComponent } from '../shared/room-page/room-page.component';
+import { ParticipantOverviewComponent } from './participant-overview/participant-overview.component';
 
 const routes: Routes = [
   {
@@ -24,17 +25,11 @@ const routes: Routes = [
   },
   {
     path: '',
-    component: RoomParticipantPageComponent,
-    resolve: {
-      room: RoomResolver
-    }
+    component: ParticipantOverviewComponent
   },
   {
     path: 'comments',
     component: CommentPageComponent,
-    resolve: {
-      room: RoomResolver
-    },
     data: {
       feature: Features.COMMENTS
     }
@@ -42,9 +37,6 @@ const routes: Routes = [
   {
     path: 'feedback',
     component: SurveyPageComponent,
-    resolve: {
-      room: RoomResolver
-    },
     data: {
       feature: Features.FEEDBACK
     }
@@ -52,9 +44,6 @@ const routes: Routes = [
   {
     path: 'series/:seriesName',
     component: ParticipantContentCarouselPageComponent,
-    resolve: {
-      room: RoomResolver
-    },
     data: {
       feature: Features.CONTENTS
     }
@@ -62,9 +51,6 @@ const routes: Routes = [
   {
     path: 'series/:seriesName/:contentIndex',
     component: ParticipantContentCarouselPageComponent,
-    resolve: {
-      room: RoomResolver
-    },
     data: {
       feature: Features.CONTENTS
     }
@@ -84,6 +70,7 @@ const routes: Routes = [
         },
         {
           path: ':shortId',
+          component: RoomPageComponent,
           canActivate: [AuthenticationGuard],
           data: { requiredRole: UserRole.PARTICIPANT },
           resolve: {

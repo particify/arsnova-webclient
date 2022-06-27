@@ -2,10 +2,9 @@ import { Component, OnChanges, OnInit } from '@angular/core';
 import { ContentService } from '../../../../services/http/content.service';
 import { NotificationService } from '../../../../services/util/notification.service';
 import { TranslateService } from '@ngx-translate/core';
-import { RoomService } from '../../../../services/http/room.service';
+import { ActivatedRoute } from '@angular/router';
 import { ContentGroupService } from '../../../../services/http/content-group.service';
 import { ContentCreationComponent } from '../content-creation/content-creation.component';
-import { ActivatedRoute } from '@angular/router';
 import { LikertScaleTemplate, LIKERT_SCALE_TEMPLATES } from '../../../../models/likert-scale-template.enum';
 import { LikertScaleService } from '../../../../services/util/likert-scale.service';
 import { ContentScale } from '../../../../models/content-scale';
@@ -27,13 +26,12 @@ export class ContentScaleCreationComponent extends ContentCreationComponent impl
     protected contentService: ContentService,
     protected notificationService: NotificationService,
     protected translationService: TranslateService,
-    protected roomService: RoomService,
+    protected route: ActivatedRoute,
     protected contentGroupService: ContentGroupService,
     protected likertScaleService: LikertScaleService,
-    protected route: ActivatedRoute,
     protected announceService: AnnounceService
   ) {
-    super(contentService, notificationService, translationService, roomService, contentGroupService, route, announceService);
+    super(contentService, notificationService, translationService, route, contentGroupService, announceService);
   }
 
   ngOnInit() {

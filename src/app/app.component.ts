@@ -28,6 +28,7 @@ export class AppComponent implements OnInit {
   title = 'ARSnova';
   isPresentation = false;
   isAdmin = false;
+  isRoom = false;
 
   ngOnInit(): void {
     this.languageService.init();
@@ -49,5 +50,6 @@ export class AppComponent implements OnInit {
   checkRoute(url: string) {
     this.isPresentation = this.routingService.isPresentation(url);
     this.isAdmin = this.routingService.isAdminView(url);
+    this.isRoom = this.routingService.isRoom;
   }
 }

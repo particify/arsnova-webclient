@@ -1,75 +1,56 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { RoomPageComponent } from './room-page.component';
 import { ActivatedRoute } from '@angular/router';
-import {
-  MockGlobalStorageService,
-  MockEventService,
-  ActivatedRouteStub,
-  JsonTranslationLoader
-} from '@arsnova/testing/test-helpers';
-import { GlobalStorageService } from '@arsnova/app/services/util/global-storage.service';
-import { EventService } from '@arsnova/app/services/util/event.service';
-import { ContentGroupService } from '@arsnova/app/services/http/content-group.service';
-import { RoomStatsService } from '@arsnova/app/services/http/room-stats.service';
-import { WsCommentService } from '@arsnova/app/services/websockets/ws-comment.service';
-import { CommentService } from '@arsnova/app/services/http/comment.service';
-import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { RoomService } from '../../../services/http/room.service';
+import { ActivatedRouteStub } from '../../../../testing/test-helpers';
+import { RoomPageComponent } from './room-page.component';
+import { UserRole } from '../../../models/user-roles.enum';
+import { of } from 'rxjs';
 
 describe('RoomPageComponent', () => {
   let component: RoomPageComponent;
   let fixture: ComponentFixture<RoomPageComponent>;
 
-  const mockRoomStatsService = jasmine.createSpyObj(['getStats']);
+  const body = {
+    UserCountChanged: {
+      userCount: 42
+    }
+  };
+  const message = {
+    body: JSON.stringify(body)
+  }
 
-  const mockWsCommentService = jasmine.createSpyObj(['getCommentStream']);
+  const summaries = [
+    {
+      stats: {
+        roomUserCount: 24
+      }
+    }
+  ]
 
-  const mockCommentService = jasmine.createSpyObj(['countByRoomId']);
+  let mockRoomService = jasmine.createSpyObj(['getCurrentRoomsMessageStream', 'getRoomSummaries']);
+  mockRoomService.getCurrentRoomsMessageStream.and.returnValue(of(message));
+  mockRoomService.getRoomSummaries.and.returnValue(of(summaries));
 
-  const mockContentGroupService = jasmine.createSpyObj(['getById']);
+  const data = {
+    room: {
+      id: '1234'
+    },
+    viewRole: UserRole.CREATOR
+  }
 
-  const activatedRouteStub = new ActivatedRouteStub();
-
+  const activatedRouteStub = new ActivatedRouteStub(null, data);
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ RoomPageComponent ],
-      imports: [
-        TranslateModule.forRoot({
-          loader: {
-            provide: TranslateLoader,
-            useClass: JsonTranslationLoader
-          },
-          isolate: true
-        })
-      ],
+      declarations: [RoomPageComponent],
       providers: [
-        {
-          provide: RoomStatsService,
-          useValue: mockRoomStatsService
-        },
-        {
-          provide: WsCommentService,
-          useValue: mockWsCommentService
-        },
-        {
-          provide: CommentService,
-          useValue: mockCommentService
-        },
-        {
-          provide: ContentGroupService,
-          useValue: mockContentGroupService
-        },
         {
           provide: ActivatedRoute,
           useValue: activatedRouteStub
         },
         {
-          provide: GlobalStorageService,
-          useClass: MockGlobalStorageService
-        },
-        {
-          provide: EventService,
-          useClass: MockEventService
+          provide: RoomService,
+          useValue: mockRoomService
         }
       ]
     })

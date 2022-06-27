@@ -101,7 +101,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot([])],
+  imports: [RouterModule.forRoot([], { paramsInheritanceStrategy: 'always' })],
   exports: [RouterModule],
   providers: [
     {

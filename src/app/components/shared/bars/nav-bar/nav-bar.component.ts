@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { BarBaseComponent, BarItem } from '../bar-base';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RoutingService } from '../../../../services/util/routing.service';
@@ -17,6 +17,10 @@ import { DataChanged } from '../../../../models/events/data-changed';
 import { RoomStats } from '../../../../models/room-stats';
 import { Features } from '../../../../models/features.enum';
 import { RemoteMessage } from '../../../../models/events/remote/remote-message.enum';
+import { UiState } from '../../../../models/events/ui/ui-state.enum';
+import { SeriesCreated } from '../../../../models/events/series-created';
+import { SeriesDeleted } from '../../../../models/events/series-deleted';
+import { MatMenuTrigger } from '@angular/material/menu';
 
 export class NavBarItem extends BarItem {
 
@@ -27,16 +31,6 @@ export class NavBarItem extends BarItem {
     super(name, icon);
     this.url = url;
     this.changeIndicator = changeIndicator;
-  }
-}
-
-export class ChangeIndicator {
-  featureName: string;
-  changes: boolean;
-
-  constructor(featureName: string, changes: boolean) {
-    this.featureName = featureName;
-    this.changes = changes;
   }
 }
 
@@ -60,8 +54,6 @@ export class PublishedContentsState {
 })
 export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestroy {
 
-  @Output() isVisible = new EventEmitter<boolean>();
-
   barItems: NavBarItem[] = [];
   features: BarItem[] = [
     new BarItem(Features.COMMENTS, 'question_answer'),
@@ -69,7 +61,6 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
     new BarItem(Features.FEEDBACK, 'thumbs_up_down')
   ];
   currentRouteIndex: number;
-  isActive = true;
   activeFeatures: string[] = [Features.COMMENTS];
   tooFewFeatures = false;
   group: ContentGroup;
@@ -81,13 +72,13 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
   statsChangesSubscription: Subscription;
   groupSubscriptions: Subscription[];
   feedbackSubscription: Subscription;
-  changeIndicator: ChangeIndicator[];
   contentGroups: ContentGroup[] = [];
   publishedStates: PublishedContentsState[] = [];
   hideBarForParticipants;
   focusStateSubscription: Subscription;
   guidedModeExtensionData: object;
   isLoading = true;
+  closeMenuTimeout;
 
   constructor(protected router: Router,
               protected routingService: RoutingService,
@@ -121,9 +112,13 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
   }
 
   beforeInit() {
+    this.subscribeToFocusModeEvent();
+  }
+
+  subscribeToFocusModeEvent() {
     this.focusStateSubscription = this.eventService.on<boolean>(RemoteMessage.FOCUS_STATE_CHANGED).subscribe(guided => {
       this.hideBarForParticipants = guided && this.role === UserRole.PARTICIPANT;
-      this.isVisible.emit(!this.tooFewFeatures && !this.hideBarForParticipants);
+      this.sendVisibleStatusEvent();
     });
   }
 
@@ -135,57 +130,45 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
 
   initItems() {
     this.beforeInit();
-    this.changeIndicator = this.globalStorageService.getItem(STORAGE_KEYS.FEATURE_NEWS);
     this.route.data.subscribe(data => {
-      if (!data.room.settings['feedbackLocked']) {
-        this.activeFeatures.push(Features.FEEDBACK);
-      }
       this.role = data.viewRole;
-      if (this.role === UserRole.PARTICIPANT) {
-        this.eventService.on<string>(RemoteMessage.CHANGE_FEATURE_ROUTE).subscribe(feature => {
-          const featureIndex = this.barItems.map(b => b.name).indexOf(feature);
-          this.navToUrl(featureIndex);
-        });
-      }
       this.shortId = data.room.shortId;
       this.roomId = data.room.id;
-      this.feedbackService.startSub(data.room.id);
-      let group = this.route.snapshot.params['seriesName'];
+      if (!data.room.settings['feedbackLocked'] || this.role !== UserRole.PARTICIPANT) {
+        this.activeFeatures.push(Features.FEEDBACK);
+      }
+      this.feedbackService.startSub(this.roomId);
+      let group = this.routingService.seriesName;
       if (group === undefined) {
         group = this.globalStorageService.getItem(STORAGE_KEYS.LAST_GROUP);
       } else {
         this.setGroupInSessionStorage(group);
       }
-      // Checking if storage item is initialized yet
-      const extendedView = this.role !== UserRole.PARTICIPANT;
-      if (group === undefined) {
-        this.roomStatsService.getStats(data.room.id, extendedView).subscribe(stats => {
-          if (stats.groupStats) {
-            this.groupName = stats.groupStats[0].groupName;
-            this.setGroupInSessionStorage(this.groupName);
-            this.activeFeatures.splice(1, 0, Features.CONTENTS);
-          } else {
-            // Initialize storage item with empty string if there are no groups yet
-            this.setGroupInSessionStorage('');
-          }
-          this.getItems();
-          this.subscribeToContentGroups();
-          this.updateGroups(stats.groupStats ?? [], false);
-        });
-      } else {
-        // Checking if storage item is initialized with data
-        if (group !== '') {
-          this.groupName = group;
+      this.roomStatsService.getStats(this.roomId, this.role !== UserRole.PARTICIPANT).subscribe(stats => {
+        if (stats.groupStats) {
+          this.groupName = group || stats.groupStats[0].groupName;
+          this.setGroupInSessionStorage(this.groupName);
           this.activeFeatures.splice(1, 0, Features.CONTENTS);
         }
         this.getItems();
-        this.roomStatsService.getStats(data.room.id, extendedView).subscribe(stats => {
-          this.subscribeToContentGroups();
-          this.updateGroups(stats.groupStats ?? [], true);
-        });
+        this.updateGroups(stats.groupStats ?? [], !!group);
+      });
+      this.subscribeToFeedbackEvent();
+      this.subscribeToRouteChanges();
+      if (this.role === UserRole.PARTICIPANT) {
+        this.subscribeToContentGroups();
+        this.subscribeToRemoteEvent();
+      } else {
+        this.subscribeToContentGroupEvents();
       }
     });
-    this.checkForFeedback();
+  }
+
+  subscribeToRemoteEvent() {
+    this.eventService.on<string>(RemoteMessage.CHANGE_FEATURE_ROUTE).subscribe(feature => {
+      const featureIndex = this.barItems.map(b => b.name).indexOf(feature);
+      this.navToUrl(featureIndex);
+    });
   }
 
   setGroupInSessionStorage(group: string) {
@@ -196,77 +179,109 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
     this.globalStorageService.removeItem(STORAGE_KEYS.LAST_GROUP);
   }
 
-  checkForFeedback() {
+  subscribeToFeedbackEvent() {
     if (this.role === UserRole.PARTICIPANT) {
       this.feedbackSubscription = this.feedbackService.messageEvent.subscribe(message => {
         const type = JSON.parse(message.body).type;
         if (type === FeedbackMessageType.STARTED) {
           this.activeFeatures.push(Features.FEEDBACK);
-          this.changeIndicator.push(
-            new ChangeIndicator(Features.FEEDBACK, true)
-          );
           this.getItems();
           this.toggleNews(Features.FEEDBACK);
         } else if (type === FeedbackMessageType.STOPPED) {
           const index = this.activeFeatures.indexOf(Features.FEEDBACK);
-          if (this.currentRouteIndex !== index) {
-            this.activeFeatures.splice(index, 1);
-            this.changeIndicator.splice(index, 1);
-            this.getItems();
-          }
+          this.activeFeatures.splice(index, 1);
+          this.getItems();
         }
       });
     }
   }
 
+  subscribeToRouteChanges() {
+    this.routingService.getRouteChanges().subscribe(route => {
+      const newGroup = route.params['seriesName'];
+      if (newGroup && newGroup !== this.groupName) {
+        this.updateGroupName(newGroup);
+      }
+      this.getCurrentRouteIndex();
+      if (this.currentRouteIndex > -1) {
+        this.disableNewsForCurrentRoute();
+      }
+      setTimeout(() => {
+        this.sendVisibleStatusEvent();
+      }, 0);
+    });
+  }
+
+  subscribeToContentGroupEvents() {
+    const createdEvent = new SeriesCreated();
+      this.eventService.on<typeof createdEvent.payload>(createdEvent.type).subscribe(group => {
+        this.roomStatsService.getStats(this.roomId, true).subscribe(stats => {
+          this.groupName = group.name;
+          this.activeFeatures.splice(1, 0, Features.CONTENTS);
+          this.getItems();
+          this.updateGroups(stats.groupStats, true);
+        });
+      });
+      const deletedEvent = new SeriesDeleted();
+      this.eventService.on<typeof deletedEvent.payload>(deletedEvent.type).subscribe(() => {
+        this.roomStatsService.getStats(this.roomId, true).subscribe(stats => {
+          if (!stats.groupStats) {
+            const index = this.activeFeatures.indexOf(Features.CONTENTS);
+            this.activeFeatures.splice(index, 1);
+            this.getItems();
+          }
+          this.updateGroups(stats.groupStats, false);
+        });
+      });
+  }
+
   getItems() {
-    this.barItems = [];
-    const changeIndicator: ChangeIndicator[] = [];
     for (const feature of this.features) {
       let url = this.getBaseUrl() + this.getFeatureUrl(feature.name);
-      const featureIndex = this.activeFeatures.indexOf(feature.name);
-      if ((featureIndex > -1 || (feature.name === Features.FEEDBACK && this.role === UserRole.CREATOR))
-          && this.role !== UserRole.EXECUTIVE_MODERATOR) {
-        this.barItems.push(
-          new NavBarItem(
-            feature.name,
-            feature.icon,
-            url,
-            false));
-        if (!this.changeIndicator) {
-          changeIndicator.push(
-            new ChangeIndicator(
+      const index = this.activeFeatures.indexOf(feature.name);
+      const barIndex = this.barItems.map(b => b.name).indexOf(feature.name)
+      if (index > -1) {
+        if (barIndex < 0) {
+          this.barItems.splice(index, 0,
+            new NavBarItem(
               feature.name,
+              feature.icon,
+              url,
               false
             )
-          )
-        } else if (this.changeIndicator.map(c => c.featureName).indexOf(feature.name) === -1) {
-          this.changeIndicator.splice(featureIndex, 0, new ChangeIndicator(feature.name,false));
+          );
+        }
+      } else {
+        if (barIndex > -1) {
+          this.barItems.splice(barIndex, 1);
         }
       }
     }
-    if (!this.changeIndicator) {
-      this.changeIndicator = changeIndicator;
-    }
     if (this.barItems.length > 1) {
       this.getCurrentRouteIndex();
-      this.changeIndicator.map((n, index) => n.changes = n.changes && index !== this.currentRouteIndex);
-      this.updateNews();
-      setTimeout(() => {
-        this.toggleVisibility(false);
-      }, 500);
       this.tooFewFeatures = false;
     } else {
       this.tooFewFeatures = true;
     }
-    this.isVisible.emit(!this.tooFewFeatures && !this.hideBarForParticipants);
+    this.sendVisibleStatusEvent();
+  }
+
+  sendVisibleStatusEvent() {
+    this.eventService.broadcast(UiState.NAV_BAR_VISIBLE, !this.tooFewFeatures && !this.hideBarForParticipants);
   }
 
   getCurrentRouteIndex() {
     const matchingRoutes = this.barItems.filter(b => this.isRouteMatching(b.url));
     if (matchingRoutes.length > 0) {
       this.currentRouteIndex = this.barItems.map(s => s.url).indexOf(matchingRoutes[matchingRoutes.length - 1].url);
+    } else {
+      this.currentRouteIndex = -1;
     }
+  }
+
+  isRouteMatching(url): boolean {
+    const urlTree = this.router.createUrlTree([url]);
+    return this.router.url.includes(this.router.serializeUrl(urlTree))
   }
 
   getFeatureUrl(feature: string): string {
@@ -277,21 +292,6 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
     return url;
   }
 
-
-  isRouteMatching(url): boolean {
-    const urlTree = this.router.createUrlTree([url]);
-    return this.router.url.includes(this.router.serializeUrl(urlTree))
-  }
-
-  updateNews() {
-    this.globalStorageService.setItem(STORAGE_KEYS.FEATURE_NEWS, this.changeIndicator);
-    this.updateItemNews();
-  }
-
-  updateItemNews() {
-    this.barItems.map((b, index) => b.changeIndicator = this.changeIndicator[index].changes);
-  }
-
   getBaseUrl(): string {
     return `/${this.routingService.getRoleString(this.role)}/${this.shortId}/`;
   }
@@ -300,13 +300,21 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
     return '/' + this.groupName;
   }
 
-  navToUrl(index: number) {
+  navToUrl(index: number, newGroup?: ContentGroup) {
     const item = this.barItems[index];
+    if (newGroup) {
+      this.setGroup(newGroup);
+      this.eventService.broadcast(UiState.NEW_GROUP_SELECTED, this.groupName);
+    } else {
+      if (item.name === Features.CONTENTS && this.contentGroups.length > 1) {
+        return;
+      }
+    }
     const url = item.url;
     if (url) {
       if (item.name === Features.CONTENTS) {
         const route = [this.routingService.getRoleString(this.role), this.shortId, 'series', this.groupName];
-        if (this.role === UserRole.CREATOR) {
+        if (this.isPresentation) {
           route.push('1');
         }
         this.router.navigate(route);
@@ -316,11 +324,8 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
     }
   }
 
-  toggleVisibility(active: boolean) {
-    const timeout = active ? 0 : 500;
-    setTimeout(() => {
-      this.isActive = active;
-    }, timeout);
+  disableNewsForCurrentRoute() {
+    this.barItems[this.currentRouteIndex].changeIndicator = false;
   }
 
   updateGroups(groupStats: ContentGroupStatistics[], alreadySet: boolean) {
@@ -348,9 +353,7 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
               this.afterInit();
             } else {
               this.afterInit();
-              if (groupCount > 1) {
-                this.setGroup();
-              }
+              this.setGroup();
             }
           }
         });
@@ -392,7 +395,7 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
       const index = this.activeFeatures.indexOf(Features.CONTENTS);
       if (index !== this.currentRouteIndex) {
         this.activeFeatures.splice(index, 1);
-        this.changeIndicator.splice(index, 1);
+        this.toggleNews(Features.CONTENTS);
         this.getItems();
       }
       this.removeGroupInSessionStorage();
@@ -420,7 +423,9 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
   updateGroupName(name: string) {
     this.groupName = name;
     const groupBarIndex = this.getBarIndexOfFeature(Features.CONTENTS);
-    this.barItems[groupBarIndex].url = `${this.getBaseUrl()}/${Features.CONTENTS}/${this.groupName}`;
+    if (this.barItems[groupBarIndex]) {
+      this.barItems[groupBarIndex].url = `${this.getBaseUrl()}/${Features.CONTENTS}/${this.groupName}`;
+    }
     this.setGroupInSessionStorage(this.groupName);
   }
 
@@ -456,8 +461,7 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
   toggleNews(feature: string) {
     const featureIndex = this.getBarIndexOfFeature(feature);
     if (featureIndex !== this.currentRouteIndex) {
-      this.changeIndicator[featureIndex].changes = true;
-      this.updateNews();
+      this.barItems[featureIndex].changeIndicator = true;
     }
   }
 
@@ -500,5 +504,26 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
 
   private listObjectIdsEquals(obj1: {id: string}[], obj2: {id: string}[]) {
     return JSON.stringify(obj1.map(cg => cg.id)) === JSON.stringify(obj2.map(cg => cg.id));
+  }
+
+  getFeatureText(feature: Features, tooltip = false) {
+    if (feature === Features.CONTENTS) {
+      if (this.contentGroups.length === 0) {
+        return this.groupName;
+      } else if (tooltip) {
+        return null;
+      }
+    }
+    return 'sidebar.' + feature;
+  }
+
+  isMenuActive(feature: string): boolean {
+    return feature === Features.CONTENTS && this.contentGroups.length > 1
+  }
+
+  checkMenu(feature: string, trigger: MatMenuTrigger) {
+    if (!this.isMenuActive(feature)) {
+      trigger.closeMenu();
+    }
   }
 }

@@ -261,5 +261,18 @@
   },
   "hotkeys": {
     "a11y-help-key-announcement": "Press {{helpKey}} for a list of keyboard shortcuts."
+  },
+  "footer": {
+    "a11y-data-protection": "Open the privacy statement.",
+    "a11y-data-protection-menu": "Open the privacy menu. Here you find the privacy statement and the cookie settings.",
+    "a11y-imprint": "Open the imprint.",
+    "a11y-feedback": "Navigates to a room in which you can give us feedback.",
+    "cookie-settings": "Cookie settings",
+    "dsgvo": "Data Protection",
+    "imprint": "Imprint",
+    "privacy-policy": "Privacy policy",
+    "feedback": "Feedback",
+    "powered-by": "Audience Response System by ",
+    "by": "powered by "
   }
 }

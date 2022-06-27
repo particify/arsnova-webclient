@@ -671,6 +671,24 @@ div {
   }
 }
 
+.mobile-add-hide {
+  transform: translateY(calc(4vw + 56px))!important;
+}
+
+.mobile-add {
+  background-color: var(--primary)!important;
+  color: var(--on-primary)!important;
+  position: fixed!important;
+  transition: transform 100ms ease-out!important;
+  right: 4vw;
+  bottom: 4vw;
+  z-index: 3;
+}
+
+.mobile-add-above-nav {
+  transform: translateY(-56px)!important;
+}
+
 // Links
 
 .action-link {
@@ -855,6 +873,14 @@ button.mat-menu-item:hover {
   }
 }
 
+@media(min-width: 1000px) {
+  .mat-menu-panel.series-menu {
+    position: absolute;
+    left: 72px;
+    top: -48px;
+  }
+}
+
 .mat-menu-item > .mat-icon:not(.icon-primary, .icon-warn, .icon-important), .mat-menu-item[disabled] > .mat-icon,
 .mat-menu-item > * > .mat-icon:not(.icon-primary, .icon-warn, .icon-important) {
   opacity: 0.7;
@@ -884,15 +910,6 @@ button.mat-menu-item:hover {
 
 app-rendered-text {
   width: 100%;
-}
-
-// Bars
-
-@media(max-width: 1000px) {
-  .nav-bar-container {
-    margin-bottom: calc(-62px - 4%);
-    padding-bottom: calc(62px + 4%);
-  }
 }
 
 // Divider

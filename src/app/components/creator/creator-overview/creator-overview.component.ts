@@ -1,7 +1,7 @@
 import { AfterContentInit, Component, OnDestroy, OnInit } from '@angular/core';
 import { RoomService } from '../../../services/http/room.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { RoomPageComponent } from '../../shared/room-page/room-page.component';
+import { RoomOverviewComponent } from '../../shared/room-overview/room-overview.component';
 import { Location } from '@angular/common';
 import { AdvancedSnackBarTypes, NotificationService } from '../../../services/util/notification.service';
 import { MatDialog } from '@angular/material/dialog';
@@ -16,18 +16,17 @@ import { GlobalStorageService, STORAGE_KEYS } from '../../../services/util/globa
 import { Content } from '../../../models/content';
 import { AnnounceService } from '../../../services/util/announce.service';
 import { UserRole } from '../../../models/user-roles.enum';
-import { InfoBarItem } from '../../shared/bars/info-bar/info-bar.component';
 import { ContentGroupService } from '../../../services/http/content-group.service';
 import { ContentGroup } from '../../../models/content-group';
 import { RoomStatsService } from '../../../services/http/room-stats.service';
 import { HotkeyService } from '../../../services/util/hotkey.service';
 
 @Component({
-  selector: 'app-room-creator-page',
-  templateUrl: './room-creator-page.component.html',
-  styleUrls: ['./room-creator-page.component.scss']
+  selector: 'app-creator-overview',
+  templateUrl: './creator-overview.component.html',
+  styleUrls: ['./creator-overview.component.scss']
 })
-export class RoomCreatorPageComponent extends RoomPageComponent implements OnInit, OnDestroy, AfterContentInit {
+export class CreatorOverviewComponent extends RoomOverviewComponent implements OnInit, OnDestroy, AfterContentInit {
 
   looseContent: Content[] = [];
   userCount: number;
@@ -71,8 +70,8 @@ export class RoomCreatorPageComponent extends RoomPageComponent implements OnIni
     window.scroll(0, 0);
     this.translateService.use(this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE));
     this.route.data.subscribe(data => {
-      this.isModerator = data.userRole === UserRole.EXECUTIVE_MODERATOR;
       this.initializeRoom(data.room, data.userRole, data.viewRole);
+      this.isModerator = data.userRole === UserRole.EXECUTIVE_MODERATOR;
       if (!this.isModerator) {
         this.translateService.get('sidebar.user-counter').subscribe(t =>
           this.hotkeyService.registerHotkey({
@@ -87,9 +86,6 @@ export class RoomCreatorPageComponent extends RoomPageComponent implements OnIni
         );
       }
     });
-    this.roomWatch = this.roomService.getCurrentRoomsMessageStream();
-    this.roomSub = this.roomWatch.subscribe(msg => this.parseUserCount(msg.body));
-  
   }
 
   ngOnDestroy() {
@@ -108,12 +104,6 @@ export class RoomCreatorPageComponent extends RoomPageComponent implements OnIni
       this.isLoading = false;
     });
     this.globalStorageService.setItem(STORAGE_KEYS.CONTENT_GROUPS, this.groupNames);
-    this.route.data.subscribe(data => {
-      this.roomService.getRoomSummaries([data.room.id]).subscribe(summary => {
-        this.userCount = summary[0].stats.roomUserCount;
-        this.infoBarItems.push(new InfoBarItem('user-counter', 'people', this.userCount));
-      });
-    });
   }
 
   openCreateContentGroupDialog() {
@@ -122,7 +112,7 @@ export class RoomCreatorPageComponent extends RoomPageComponent implements OnIni
         const newGroup = new ContentGroup();
         newGroup.roomId = this.room.id;
         newGroup.name = name;
-        this.contentGroupService.post(newGroup).subscribe(() => {
+        this.contentGroupService.post(newGroup).subscribe(group => {
           this.translateService.get('room-page.content-group-created').subscribe(msg => {
             this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.SUCCESS);
           });

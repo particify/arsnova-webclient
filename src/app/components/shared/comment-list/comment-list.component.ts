@@ -24,6 +24,7 @@ import { HotkeyService } from '../../../services/util/hotkey.service';
 import { RemoteMessage } from '../../../models/events/remote/remote-message.enum';
 import { CommentFocusState } from '../../../models/events/remote/comment-focus-state';
 import { RoutingService } from '../../../services/util/routing.service';
+import { UiState } from '../../../models/events/ui/ui-state.enum';
 
 // Using lowercase letters in enums because they we're also used for parsing incoming WS-messages
 
@@ -95,7 +96,7 @@ export class CommentListComponent implements OnInit, OnDestroy {
   filtering = Filter;
   commentVoteMap = new Map<string, Vote>();
   scroll = false;
-  scrollMax: number;
+  scrollMax = 0;
   scrollStart: number;
   scrollExtended = false;
   isScrollStart = false;
@@ -122,6 +123,9 @@ export class CommentListComponent implements OnInit, OnDestroy {
   scrollActive = false;
   publicCounter = 0;
   moderationCounter = 0;
+  onInit = false;
+
+  navBarStateSubscription: Subscription;
 
   private hotkeyRefs: Symbol[] = [];
 
@@ -147,6 +151,10 @@ export class CommentListComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.navBarStateSubscription = this.eventService.on<boolean>(UiState.NAV_BAR_VISIBLE).subscribe(isVisible => {
+      this.navBarExists = isVisible;
+    });
+    this.onInit = true;
     const userId = this.auth?.userId;
     const lastSort = this.globalStorageService.getItem(STORAGE_KEYS.COMMENT_SORT);
     this.currentSort = this.isPresentation ? (lastSort && lastSort !== this.sorting.VOTEASC ? lastSort : this.sorting.TIME)
@@ -179,15 +187,9 @@ export class CommentListComponent implements OnInit, OnDestroy {
       this.searchPlaceholder = msg;
     });
     this.deviceType = innerWidth > 1000 ? 'desktop' : 'mobile';
-    // Header height is 56 if smaller than 600px
-    if (innerWidth >= 600) {
-      this.scrollMax = 64;
-      if (this.viewRole !== UserRole.PARTICIPANT) {
-        this.scrollMax += innerWidth * 0.04 + 240;
-        this.scrollStart = this.scrollMax;
-      }
-    } else {
-      this.scrollMax = 56;
+    if (this.viewRole !== UserRole.PARTICIPANT) {
+      this.scrollMax += innerWidth * 0.04 + 240;
+      this.scrollStart = this.scrollMax;
     }
     if (this.isPresentation) {
       this.translateService.get(['comment-list.next', 'comment-list.previous']).subscribe(t => {
@@ -203,6 +205,9 @@ export class CommentListComponent implements OnInit, OnDestroy {
         }, this.hotkeyRefs);
       });
     }
+    document.getElementById('routing-content')?.addEventListener('scroll', () => {
+        this.checkScroll();
+    }, true);
   }
 
   initCounter() {
@@ -231,6 +236,9 @@ export class CommentListComponent implements OnInit, OnDestroy {
     if (this.moderatorStream) {
       this.moderatorStream.unsubscribe();
     }
+    if (this.navBarStateSubscription) {
+      this.navBarStateSubscription.unsubscribe();
+    }
     this.hotkeyRefs.forEach(h => this.hotkeyService.unregisterHotkey(h));
   }
 
@@ -251,12 +259,8 @@ export class CommentListComponent implements OnInit, OnDestroy {
     }
   }
 
-  checkIfNavBarExists(navBarExists: boolean) {
-    this.navBarExists = navBarExists;
-  }
-
   checkScroll(scrollPosition?: number, scrollHeight?: number): void {
-    const currentScroll = scrollPosition || document.documentElement.scrollTop;
+    const currentScroll = scrollPosition || document.getElementById('routing-content').scrollTop;
     const additionalSpace = this.deviceType === 'mobile' ? 70 + innerWidth * 0.04 : 0;
     this.scroll = currentScroll >= (this.scrollMax + additionalSpace) || currentScroll >= this.scrollMax && currentScroll < this.lastScroll;
     this.scrollActive = this.scroll && currentScroll < this.lastScroll;
@@ -281,7 +285,7 @@ export class CommentListComponent implements OnInit, OnDestroy {
 
   scrollTop(smooth?: boolean) {
     const behavior = this.displayComments.length <= itemRenderNumber || smooth ? 'smooth' : 'auto';
-    window.scrollTo({ top: 0, behavior: behavior });
+    document.getElementById('routing-content').scrollTo({top: 0, behavior: behavior});
   }
 
   searchComments(): void {

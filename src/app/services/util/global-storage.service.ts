@@ -28,7 +28,6 @@ export const STORAGE_KEYS: { [key: string]: symbol } = {
   LATEST_ANNOUNCED_VERSION: Symbol(),
   IMPORT_TOKEN: Symbol(),
   COMMENT_TIME_FILTER: Symbol(),
-  FEATURE_NEWS: Symbol(),
   SHOW_ANSWERS_BELOW: Symbol(),
   ANSWER_VISUALIZATION_UNIT: Symbol(),
   BROWSER_SESSION_INITIALIZED: Symbol(),
@@ -153,12 +152,6 @@ export const STORAGE_CONFIG: StorageItem[] = [
     name: 'COMMENT_TIME_FILTER',
     category: StorageItemCategory.FUNCTIONAL,
     backend: StorageBackend.SESSIONSTORAGE
-  },
-  {
-    key: STORAGE_KEYS.FEATURE_NEWS,
-    name: 'FEATURE_NEWS',
-    category: StorageItemCategory.REQUIRED,
-    backend: StorageBackend.MEMORY
   },
   {
     key: STORAGE_KEYS.REDIRECT_URL,

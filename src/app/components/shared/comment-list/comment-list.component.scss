@@ -1,6 +1,6 @@
 @import '../../../../variables';
 
-$bar-height: 70px;
+$search-bar-height: 70px;
 
 .mat-form-field {
   float: left;
@@ -69,7 +69,7 @@ $bar-height: 70px;
 }
 
 .list-switcher {
-  margin-top: calc(calc(#{$bar-height} - 48px) / 2);
+  margin-top: calc(calc(#{$search-bar-height} - 48px) / 2);
 }
 
 .search-container {
@@ -95,18 +95,16 @@ $bar-height: 70px;
 
 .search-container-fixed {
   opacity: 1;
-  min-height: $bar-height;
+  min-height: $search-bar-height;
   position: fixed;
   width: 100%;
 }
 
 @media(max-width: 1000px) {
   .five-buttons {
-    right: calc(50% - 170px);
     max-width: 340px;
   }
   .four-buttons {
-    right: calc(50% - 143px);
     max-width: 286px;
   }
 }
@@ -117,7 +115,6 @@ $bar-height: 70px;
     max-width: 410px;
   }
   .four-buttons {
-    right: calc(50% - 178px);
     max-width: 356px;
   }
 }
@@ -128,12 +125,24 @@ $bar-height: 70px;
   max-width: 244px;
 }
 
-.search-container-fixed-visible {
-  top: 4vw;
+@media(max-width: 599px) {
+  .search-container-fixed-visible {
+    top: calc(4vw + $mobile-bar-height);
+  }
+
+  .search-container-fixed-invisible {
+    top: calc(-4vw - $search-bar-height + $mobile-bar-height);
+  }
 }
 
-.search-container-fixed-invisible {
-  top: calc(-4vw - #{$bar-height});
+@media(min-width: 600px) {
+  .search-container-fixed-visible {
+    top: calc(4vw + $bar-height);
+  }
+
+  .search-container-fixed-invisible {
+    top: calc(-4vw - $search-bar-height + $bar-height);
+  }
 }
 
 .close-btn {
@@ -163,17 +172,6 @@ $bar-height: 70px;
 
 .add-big {
   margin-top: 0.5em;
-}
-
-.mobile-add {
-  position: fixed;
-  right: 4vw;
-  bottom: 4vw;
-  z-index: 3
-}
-
-.above-nav {
-  bottom: calc(4vw + 56px)!important;
 }
 
 button.selected {
@@ -278,7 +276,7 @@ button.selected {
 }
 
 .header-container {
-  height: $bar-height;
+  height: $search-bar-height;
   display: flex;
   flex-direction: row;
 }

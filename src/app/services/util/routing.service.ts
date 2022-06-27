@@ -72,11 +72,13 @@ export class RoutingService {
   };
   currentRoute: string;
   backRoute: string[];
+  backRouteIsSet = false;
   fullCurrentRoute: string;
   homeTitle: string;
   suffix: string;
-  titleKey: string;
-  isTranslatedTitle: boolean;
+  private title: string;
+  private titleKey: string;
+  private isTranslatedTitle: boolean;
   private viewRole: UserRole;
   private shortId: string;
   private roomId: string;
@@ -86,6 +88,8 @@ export class RoutingService {
   isRoom$ = new EventEmitter<boolean>();
   isPreview: boolean;
   isPreview$ = new EventEmitter<boolean>();
+  routeEvent = new EventEmitter<ActivatedRouteSnapshot>();
+  seriesName: string;
 
   constructor(
     private router: Router,
@@ -125,19 +129,24 @@ export class RoutingService {
     this.isPreview$.emit(this.isPreview);
     this.isRoom = !!this.shortId;
     this.isRoom$.emit(this.isRoom);
+    const series = route.params['seriesName'];
+    if (series) {
+      this.seriesName = series;
+    }
   }
 
   getRoutes(route: ActivatedRouteSnapshot) {
-    const shortId = this.shortId || '';
+    const shortId = this.shortId;
     const series  = route.paramMap.get('seriesName') || '';
     const role = route.data.requiredRole || '';
     this.fullCurrentRoute = this.location.path();
     this.currentRoute = route.routeConfig.path;
-    this.getBackRoute(this.currentRoute, shortId, role, series);
+    this.routeEvent.emit(route);
+    this.getBackRoute(this.currentRoute, shortId, role, series, route.parent.routeConfig['path']);
     this.setTitle(route);
   }
 
-  getBackRoute(route: string, shortId: string, role: string, series: string) {
+  getBackRoute(route: string, shortId: string, role: string, series: string, parent?: string) {
     let backRoute: string[];
     if (route === '') {
       backRoute = [this.parentRoute.user];
@@ -150,11 +159,16 @@ export class RoutingService {
     } else if (this.routeExistsInArray(this.seriesChildRoutes)) {
       backRoute = [this.getRoleString(role), shortId, 'series', series];
     }
-    this.backRoute = backRoute;
+    if (!this.backRouteIsSet || parent === ':shortId') {
+      this.backRoute = backRoute;
+      this.backRouteIsSet = true;
+    } else {
+      this.backRouteIsSet = false;
+    }
   }
 
   routeExistsInArray(routeList: string[]) {
-    return routeList.indexOf(this.currentRoute) > -1;
+    return routeList.includes(this.currentRoute);
   }
 
   goBack() {
@@ -211,38 +225,48 @@ export class RoutingService {
       this.homeTitle = document.title;
       this.suffix = ' | ' + (this.homeTitle.split('|')[0] || this.homeTitle);
     }
-    let title: string;
+    this.isTranslatedTitle = true;
+    let newTitle: string;
     if (route.data.isPresentation) {
       this.titleKey = 'presentation-mode';
     } else if (route['_routerState'].url === '/')  {
-      title = this.homeTitle;
+      newTitle = this.homeTitle;
+      this.isTranslatedTitle = false;
     } else {
-      this.titleKey = TITLES[route.routeConfig.path];
-      switch(this.titleKey) {
+      if (TITLES[route.routeConfig.path]) {
+        this.titleKey = TITLES[route.routeConfig.path];
+      }
+      if (!newTitle) {
+        switch(this.titleKey) {
         case 'room':
           if (route.data.room) {
-            title = route.data.room.name;
+            newTitle = route.data.room.name;
+            this.isTranslatedTitle = false;
           } else {
             this.titleKey = TITLES['admin'];
           }
           break;
         case 'series':
-          title = route.params.seriesName;
+          newTitle = route.params.seriesName;
+          this.isTranslatedTitle = false;
           break;
         case undefined:
-          title = this.homeTitle;
+          newTitle = this.homeTitle;
           break;
         default:
       }
+      }
+
     }
-    if (!title) {
-      this.isTranslatedTitle = true;
+    if (this.title !== newTitle && newTitle) {
+      this.title = newTitle;
+    }
+    if (this.isTranslatedTitle) {
       this.translateService.get('title.' + this.titleKey).subscribe(msg => {
         this.updateTitle(msg);
       });
     } else {
-      this.isTranslatedTitle = false;
-      this.updateTitle(title)
+      this.updateTitle(this.title);
     }
   }
 
@@ -274,7 +298,7 @@ export class RoutingService {
   }
 
   navToPresentation(newTab = false) {
-    const url = this.currentRoute === 'settings' ? this.getPresentationHomeUrl() : this.getPresentationUrl(this.fullCurrentRoute);
+    const url = this.fullCurrentRoute.includes('/settings') ? this.getPresentationHomeUrl() : this.getPresentationUrl(this.fullCurrentRoute);
     if (newTab) {
       window.open(url, '_blank');
     } else {
@@ -312,5 +336,9 @@ export class RoutingService {
 
   getRoomId() {
     return this.roomId;
+  }
+
+  getRouteChanges(): EventEmitter<ActivatedRouteSnapshot> {
+    return this.routeEvent;
   }
 }

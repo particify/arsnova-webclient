@@ -1,6 +1,6 @@
 import { AfterContentInit, Component, OnInit } from '@angular/core';
 import { Room } from '../../../models/room';
-import { RoomPageComponent } from '../../shared/room-page/room-page.component';
+import { RoomOverviewComponent } from '../../shared/room-overview/room-overview.component';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { LanguageService } from '../../../services/util/language.service';
@@ -19,11 +19,11 @@ import { ContentGroup } from '../../../models/content-group';
 import { RoomStatsService } from '../../../services/http/room-stats.service';
 
 @Component({
-  selector: 'app-room-participant-page',
-  templateUrl: './room-participant-page.component.html',
-  styleUrls: ['./room-participant-page.component.scss']
+  selector: 'app-participant-overview',
+  templateUrl: './participant-overview.component.html',
+  styleUrls: ['./participant-overview.component.scss']
 })
-export class RoomParticipantPageComponent extends RoomPageComponent implements OnInit, AfterContentInit {
+export class ParticipantOverviewComponent extends RoomOverviewComponent implements OnInit, AfterContentInit {
 
   room: Room;
   protected surveySub: Subscription;

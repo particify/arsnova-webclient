@@ -1,6 +1,11 @@
 @import '../bar-base';
 @import '../../../../../_variables';
 
+.left {
+  top: unset;
+  bottom: 4vw;
+}
+
 .icon {
   opacity: 0.8;
   margin: 8px 32px 0 16px;
