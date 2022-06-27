@@ -1,10 +1,10 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
-import { RoomService } from '../../../services/http/room.service';
-import { ActivatedRouteStub } from '../../../../testing/test-helpers';
+import { ActivatedRouteStub, MockEventService } from '../../../../testing/test-helpers';
 import { RoomPageComponent } from './room-page.component';
 import { UserRole } from '../../../models/user-roles.enum';
 import { of } from 'rxjs';
+import { EventService } from '../../../services/util/event.service';
 
 describe('RoomPageComponent', () => {
   let component: RoomPageComponent;
@@ -49,8 +49,8 @@ describe('RoomPageComponent', () => {
           useValue: activatedRouteStub
         },
         {
-          provide: RoomService,
-          useValue: mockRoomService
+          provide: EventService,
+          useClass: MockEventService
         }
       ]
     })

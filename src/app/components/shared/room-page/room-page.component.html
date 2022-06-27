@@ -6,10 +6,9 @@
           <lib-extension-point *ngIf="isCreator" extensionId="remote"></lib-extension-point>
           <lib-extension-point *ngIf="!isCreator" extensionId="participant-header" [extensionData]="{roomId: roomId}"></lib-extension-point>
           <app-nav-bar></app-nav-bar>
-          <app-info-bar *ngIf="isCreator" [barItems]="infoBarItems"></app-info-bar>
         </div>
       </mat-drawer>
-      <mat-drawer-content fxLayout="column" fxLayoutAlign="space-between" id="routing-content">
+      <mat-drawer-content fxLayout="column" fxLayoutAlign="space-between" id="routing-content" [ngClass]="{'scrollbar-bottom-margin': navBarExists}">
         <div class="routing-container">
           <router-outlet></router-outlet>
         </div>

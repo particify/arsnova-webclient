@@ -25,6 +25,7 @@ import { DialogService } from '../../../../services/util/dialog.service';
 import { ContentMessages } from '../../../../models/events/content-messages.enum';
 import { ContentType } from '../../../../models/content-type.enum';
 import { AdvancedSnackBarTypes, NotificationService } from '../../../../services/util/notification.service';
+import { RoomService } from '../../../../services/http/room.service';
 
 export class KeyNavBarItem extends NavBarItem {
   key: string;
@@ -124,6 +125,7 @@ export class ControlBarComponent extends NavBarComponent implements OnInit, OnDe
     protected contentGroupService: ContentGroupService,
     protected eventService: EventService,
     protected apiConfigService: ApiConfigService,
+    protected roomService: RoomService,
     private announceService: AnnounceService,
     private hotkeyService: HotkeyService,
     private translateService: TranslateService,
@@ -132,7 +134,7 @@ export class ControlBarComponent extends NavBarComponent implements OnInit, OnDe
     private notificationService: NotificationService
   ) {
     super(router, routingService, route, globalStorageService,
-      roomStatsService, feedbackService, contentGroupService, eventService);
+      roomStatsService, feedbackService, contentGroupService, eventService, roomService);
   }
 
   ngOnDestroy() {
@@ -333,7 +335,7 @@ export class ControlBarComponent extends NavBarComponent implements OnInit, OnDe
     if (feature) {
       index = this.barItems.map(s => s.name).indexOf(feature);
     } else {
-      const matchingRoutes = this.barItems.filter(s => this.isRouteMatching(s.url));
+      const matchingRoutes = this.barItems.filter(s => this.isRouteMatching(s));
       if (matchingRoutes.length > 0) {
         index = this.barItems.map(s => s.url).indexOf(matchingRoutes[0].url);
       }

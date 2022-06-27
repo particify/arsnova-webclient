@@ -210,7 +210,8 @@
     "user-counter": "Anzahl der teilnehmenden Personen",
     "comments": "Q&A",
     "series": "Fragenserie",
-    "feedback": "Live Feedback"
+    "feedback": "Live Feedback",
+    "": "Übersicht"
   },
   "option-template": {
     "agreement-negative-2": "stimme gar nicht zu",

@@ -1,5 +1,6 @@
 export enum Features {
   COMMENTS = 'comments',
   CONTENTS = 'series',
-  FEEDBACK = 'feedback'
+  FEEDBACK = 'feedback',
+  OVERVIEW = ''
 }

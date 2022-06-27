@@ -30,6 +30,7 @@ import { HotkeyService } from '@arsnova/app/services/util/hotkey.service';
 import { DialogService } from '@arsnova/app/services/util/dialog.service';
 import { RoomStatsService } from '@arsnova/app/services/http/room-stats.service';
 import { ContentGroup } from '@arsnova/app/models/content-group';
+import { RoomService } from '@arsnova/app/services/http/room.service';
 
 describe('ControlBarComponent', () => {
   let component: ControlBarComponent;
@@ -78,6 +79,27 @@ describe('ControlBarComponent', () => {
 
   const mockRoutingService = jasmine.createSpyObj(['getRoleString', 'getRouteChanges']);
   mockRoutingService.getRouteChanges.and.returnValue(of(snapshot));
+
+  const body = {
+    UserCountChanged: {
+      userCount: 42
+    }
+  };
+  const message = {
+    body: JSON.stringify(body)
+  }
+
+  const summaries = [
+    {
+      stats: {
+        roomUserCount: 24
+      }
+    }
+  ]
+
+  let mockRoomService = jasmine.createSpyObj(['getCurrentRoomsMessageStream', 'getRoomSummaries']);
+  mockRoomService.getCurrentRoomsMessageStream.and.returnValue(of(message));
+  mockRoomService.getRoomSummaries.and.returnValue(of(summaries));
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
@@ -158,6 +180,10 @@ describe('ControlBarComponent', () => {
         {
           provide: DialogService,
           useValue: mockDialogService
+        },
+        {
+          provide: RoomService,
+          useValue: mockRoomService
         }
       ]
     })

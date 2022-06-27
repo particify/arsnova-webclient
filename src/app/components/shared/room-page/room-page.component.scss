@@ -1,6 +1,6 @@
 @import '../../../../variables';
 
-$drawer-width: 80px;
+$drawer-width: 73px;
 $content-padding: 2em;
 
 #routing-content::-webkit-scrollbar {
@@ -9,11 +9,16 @@ $content-padding: 2em;
 
 #routing-content::-webkit-scrollbar-track {
   background: var(--background);
+  margin: 8px 0;
 }
 
 #routing-content::-webkit-scrollbar-thumb {
   background: var(--surface);
   border-radius: 10px;
+}
+
+#routing-content.scrollbar-bottom-margin::-webkit-scrollbar-track {
+  margin-bottom: $mobile-bar-height + 8px;
 }
 
 .routing-container {

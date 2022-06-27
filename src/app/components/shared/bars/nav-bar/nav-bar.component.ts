@@ -10,7 +10,7 @@ import { FeedbackMessageType } from '../../../../models/messages/feedback-messag
 import { ContentGroupService } from '../../../../services/http/content-group.service';
 import { ContentGroup } from '../../../../models/content-group';
 import { EventService } from '../../../../services/util/event.service';
-import { Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { EntityChanged } from '../../../../models/events/entity-changed';
 import { ContentGroupStatistics } from '../../../../models/content-group-statistics';
 import { DataChanged } from '../../../../models/events/data-changed';
@@ -21,6 +21,8 @@ import { UiState } from '../../../../models/events/ui/ui-state.enum';
 import { SeriesCreated } from '../../../../models/events/series-created';
 import { SeriesDeleted } from '../../../../models/events/series-deleted';
 import { MatMenuTrigger } from '@angular/material/menu';
+import { RoomService } from '../../../../services/http/room.service';
+import { IMessage } from '@stomp/stompjs';
 
 export class NavBarItem extends BarItem {
 
@@ -56,12 +58,13 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
 
   barItems: NavBarItem[] = [];
   features: BarItem[] = [
+    new BarItem(Features.OVERVIEW, 'home'),
     new BarItem(Features.COMMENTS, 'question_answer'),
     new BarItem(Features.CONTENTS, 'equalizer'),
     new BarItem(Features.FEEDBACK, 'thumbs_up_down')
   ];
   currentRouteIndex: number;
-  activeFeatures: string[] = [Features.COMMENTS];
+  activeFeatures: string[] = [Features.OVERVIEW, Features.COMMENTS];
   tooFewFeatures = false;
   group: ContentGroup;
   groupName: string;
@@ -78,7 +81,10 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
   focusStateSubscription: Subscription;
   guidedModeExtensionData: object;
   isLoading = true;
-  closeMenuTimeout;
+
+  userCount: number;
+  private roomSub: Subscription;
+  private roomWatch: Observable<IMessage>;
 
   constructor(protected router: Router,
               protected routingService: RoutingService,
@@ -87,7 +93,8 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
               protected roomStatsService: RoomStatsService,
               protected feedbackService: FeedbackService,
               protected contentGroupService: ContentGroupService,
-              protected eventService: EventService) {
+              protected eventService: EventService,
+              protected roomService: RoomService) {
     super();
   }
 
@@ -108,6 +115,9 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
     }
     if (this.focusStateSubscription) {
       this.focusStateSubscription.unsubscribe();
+    }
+    if (this.roomSub) {
+      this.roomSub.unsubscribe();
     }
   }
 
@@ -135,7 +145,7 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
       this.shortId = data.room.shortId;
       this.roomId = data.room.id;
       if (!data.room.settings['feedbackLocked'] || this.role !== UserRole.PARTICIPANT) {
-        this.activeFeatures.push(Features.FEEDBACK);
+        this.activeFeatures.splice(2, 0, Features.FEEDBACK);
       }
       this.feedbackService.startSub(this.roomId);
       let group = this.routingService.seriesName;
@@ -148,7 +158,7 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
         if (stats.groupStats) {
           this.groupName = group || stats.groupStats[0].groupName;
           this.setGroupInSessionStorage(this.groupName);
-          this.activeFeatures.splice(1, 0, Features.CONTENTS);
+          this.activeFeatures.splice(2, 0, Features.CONTENTS);
         }
         this.getItems();
         this.updateGroups(stats.groupStats ?? [], !!group);
@@ -160,8 +170,17 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
         this.subscribeToRemoteEvent();
       } else {
         this.subscribeToContentGroupEvents();
+          this.roomService.getRoomSummaries([data.room.id]).subscribe(summary => {
+            this.userCount = summary[0].stats.roomUserCount;
+            this.roomWatch = this.roomService.getCurrentRoomsMessageStream();
+            this.roomSub = this.roomWatch.subscribe(msg => this.parseUserCount(msg.body));
+          });
       }
     });
+  }
+
+  parseUserCount(body: string) {
+    this.userCount = JSON.parse(body).UserCountChanged.userCount;
   }
 
   subscribeToRemoteEvent() {
@@ -217,7 +236,7 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
       this.eventService.on<typeof createdEvent.payload>(createdEvent.type).subscribe(group => {
         this.roomStatsService.getStats(this.roomId, true).subscribe(stats => {
           this.groupName = group.name;
-          this.activeFeatures.splice(1, 0, Features.CONTENTS);
+          this.activeFeatures.splice(2, 0, Features.CONTENTS);
           this.getItems();
           this.updateGroups(stats.groupStats, true);
         });
@@ -227,7 +246,7 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
         this.roomStatsService.getStats(this.roomId, true).subscribe(stats => {
           if (!stats.groupStats) {
             const index = this.activeFeatures.indexOf(Features.CONTENTS);
-            this.activeFeatures.splice(index, 1);
+            this.activeFeatures.splice(index, 2);
             this.getItems();
           }
           this.updateGroups(stats.groupStats, false);
@@ -271,7 +290,7 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
   }
 
   getCurrentRouteIndex() {
-    const matchingRoutes = this.barItems.filter(b => this.isRouteMatching(b.url));
+    const matchingRoutes = this.barItems.filter(b => this.isRouteMatching(b));
     if (matchingRoutes.length > 0) {
       this.currentRouteIndex = this.barItems.map(s => s.url).indexOf(matchingRoutes[matchingRoutes.length - 1].url);
     } else {
@@ -279,21 +298,26 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
     }
   }
 
-  isRouteMatching(url): boolean {
-    const urlTree = this.router.createUrlTree([url]);
-    return this.router.url.includes(this.router.serializeUrl(urlTree))
+  isRouteMatching(barItem: NavBarItem): boolean {
+    if (barItem.name === Features.OVERVIEW && this.router.url === this.getBaseUrl()) {
+      return true;
+    }
+    const urlTree = this.router.createUrlTree([barItem.url]);
+    return this.router.url.includes(this.router.serializeUrl(urlTree));
   }
 
   getFeatureUrl(feature: string): string {
-    let url = feature;
-    if (this.groupName && feature === Features.CONTENTS) {
-      url += this.getGroupUrl();
+    if (feature) {
+      let url = '/' + feature;
+      if (this.groupName && feature === Features.CONTENTS) {
+        url += this.getGroupUrl();
+      }
+      return url;
     }
-    return url;
   }
 
   getBaseUrl(): string {
-    return `/${this.routingService.getRoleString(this.role)}/${this.shortId}/`;
+    return `/${this.routingService.getRoleString(this.role)}/${this.shortId}`;
   }
 
   getGroupUrl() {
@@ -318,6 +342,8 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
           route.push('1');
         }
         this.router.navigate(route);
+      } else if (item.name === Features.OVERVIEW) {
+        this.router.navigate([this.routingService.getRoleString(this.role), this.shortId]);
       } else {
         this.router.navigateByUrl(url);
       }
@@ -506,15 +532,8 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
     return JSON.stringify(obj1.map(cg => cg.id)) === JSON.stringify(obj2.map(cg => cg.id));
   }
 
-  getFeatureText(feature: Features, tooltip = false) {
-    if (feature === Features.CONTENTS) {
-      if (this.contentGroups.length === 0) {
-        return this.groupName;
-      } else if (tooltip) {
-        return null;
-      }
-    }
-    return 'sidebar.' + feature;
+  getFeatureText(feature: Features) {
+    return feature === Features.CONTENTS && this.contentGroups.length === 1 ? this.groupName : ('sidebar.' + feature);
   }
 
   isMenuActive(feature: string): boolean {

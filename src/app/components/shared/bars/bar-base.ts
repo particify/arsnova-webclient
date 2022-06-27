@@ -19,24 +19,14 @@ export abstract class BarBaseComponent implements OnInit {
   @Input() position = 'left';
   @Input() isPresentation = false;
 
-  info: BarItem[] = [
-    new BarItem('user-count', 'people')
-  ];
-  headerHeight: number;
-  scrollExtended = false;
+  info: BarItem[] = [];
 
   protected constructor() { }
 
   ngOnInit(): void {
-    this.headerHeight = this.isPresentation ? 0 : 64;
     this.initItems();
   }
 
   initItems() {
-  }
-
-  checkScroll() {
-    const currentScroll = document.documentElement.scrollTop;
-    this.scrollExtended = currentScroll >= this.headerHeight;
   }
 }

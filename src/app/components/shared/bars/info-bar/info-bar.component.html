@@ -1,5 +1,4 @@
-<div class="list info {{position}}" fxLayout="column" fxLayoutAlign="center center" (window:scroll)="checkScroll()"
-     [ngClass]="{'fixed': scrollExtended, 'presentation-mode': isPresentation}">
+<div class="list info {{position}}" fxLayout="column" fxLayoutAlign="center center" [ngClass]="{'presentation-mode': isPresentation}">
   <div class="icon-container" fxLayout="column" fxLayoutGap="16px" *ngIf="mode === 'badge'">
     <mat-icon *ngFor="let barItem of barItems; let i = index" class="icon"
               matBadge="{{barItem.count > 0 ? barItem.count : null}}" matBadgeOverlap="false"
