@@ -79,7 +79,7 @@ import { PublishContentComponent } from './_dialogs/publish-content/publish-cont
     ContentFlashcardCreationComponent,
     ContentWordcloudCreationComponent,
     ExportComponent,
-    PublishContentComponent
+    PublishContentComponent,
   ],
   exports: [
     ContentPresentationComponent
