@@ -15,6 +15,7 @@ import { HeaderComponent } from './components/shared/header/header.component';
 import { FooterComponent } from './components/shared/footer/footer.component';
 import { DemoRoomGuard } from './guards/demo-room.guard';
 import { UserProfileComponent } from './components/shared/user-profile/user-profile.component';
+import { RedeemTokenComponent } from './components/home/redeem-token/redeem-token.component';
 
 const routes: Routes = [
   {
@@ -60,6 +61,11 @@ const routes: Routes = [
   {
     path: 'account',
     component: UserProfileComponent
+  },
+  {
+    path: 'redeem-token/:roomId/token/:token',
+    canActivate: [AuthenticationGuard],
+    component: RedeemTokenComponent
   },
   {
     path: 'demo',
