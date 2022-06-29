@@ -11,7 +11,6 @@ stages:
 default:
   image: node:16.15-alpine
   before_script:
-    - export PATH="`pwd`/node_modules/.bin:$PATH"
     - date
   after_script:
     - date
@@ -61,7 +60,7 @@ lint:
     - yarn_install
   allow_failure: false
   script:
-    - ng lint
+    - yarn lint
 
 unit_tests:
   stage: test
@@ -72,7 +71,7 @@ unit_tests:
   variables:
     CHROME_BIN: /usr/bin/google-chrome
   script:
-    - ng test --watch=false --browsers=ChromeHeadlessCustom
+    - yarn test
 
 ngbuild:
   stage: build
@@ -85,7 +84,7 @@ ngbuild:
   script:
     - sed -i "s/\$VERSION_COMMIT_HASH/$CI_COMMIT_SHA/" src/environments/environment.prod.ts
     - sed -i "s/\$VERSION_COMMIT_DATE/$CI_COMMIT_TIMESTAMP/" src/environments/environment.prod.ts
-    - ng build --prod
+    - yarn build
 
 .docker_image: &docker_image
   stage: deploy

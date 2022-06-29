@@ -3,7 +3,7 @@ import { Comment } from '../../../../models/comment';
 import { AdvancedSnackBarTypes, NotificationService } from '../../../../services/util/notification.service';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
-import { FormControl, Validators } from '@angular/forms';
+import { UntypedFormControl, Validators } from '@angular/forms';
 import { ClientAuthentication } from '../../../../models/client-authentication';
 import { CommentListComponent } from '../../comment-list/comment-list.component';
 import { GlobalStorageService, STORAGE_KEYS } from '../../../../services/util/global-storage.service';
@@ -35,7 +35,7 @@ export class CreateCommentComponent implements OnInit {
   eventsSubject = new Subject<string | void>();
   eventsWrapper: any;
 
-  bodyForm = new FormControl('', [Validators.required]);
+  bodyForm = new UntypedFormControl('', [Validators.required]);
 
   constructor(
     public dialogRef: MatDialogRef<CommentListComponent>,

@@ -57,9 +57,8 @@ export class StepperComponent extends CdkStepper implements OnInit, OnDestroy {
               private translateService: TranslateService,
               dir: Directionality,
               changeDetectorRef: ChangeDetectorRef,
-              elementRef: ElementRef<HTMLElement>,
-              @Inject(DOCUMENT) doc: any) {
-    super(dir, changeDetectorRef, elementRef, doc);
+              elementRef: ElementRef<HTMLElement>) {
+    super(dir, changeDetectorRef, elementRef);
   }
 
   ngOnInit() {

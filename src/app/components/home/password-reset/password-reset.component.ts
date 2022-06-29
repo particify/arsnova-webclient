@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormControl, FormGroupDirective, NgForm, Validators } from '@angular/forms';
+import { UntypedFormControl, FormGroupDirective, NgForm, Validators } from '@angular/forms';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { UserService } from '../../../services/http/user.service';
 import { AdvancedSnackBarTypes, NotificationService } from '../../../services/util/notification.service';
@@ -10,7 +10,7 @@ import { PasswordEntryComponent } from '../password-entry/password-entry.compone
 
 
 export class PasswordResetErrorStateMatcher implements ErrorStateMatcher {
-  isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
+  isErrorState(control: UntypedFormControl | null, form: FormGroupDirective | NgForm | null): boolean {
     const isSubmitted = form && form.submitted;
     return (control && control.invalid && (control.dirty || control.touched || isSubmitted));
   }
@@ -25,7 +25,7 @@ export class PasswordResetComponent implements OnInit {
 
   @ViewChild(PasswordEntryComponent) passwordEntry: PasswordEntryComponent;
 
-  keyFormControl = new FormControl('', [Validators.required]);
+  keyFormControl = new UntypedFormControl('', [Validators.required]);
   matcher = new PasswordResetErrorStateMatcher();
 
   deviceWidth = innerWidth;

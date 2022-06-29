@@ -169,7 +169,6 @@
       }
     }
   },
-  "defaultProject": "arsnova-angular-frontend",
   "schematics": {
     "@schematics/angular:component": {
       "prefix": "app",
@@ -180,6 +179,7 @@
     }
   },
   "cli": {
-    "packageManager": "yarn"
+    "packageManager": "yarn",
+    "analytics": false
   }
 }

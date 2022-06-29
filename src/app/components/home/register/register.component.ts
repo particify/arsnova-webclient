@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormControl, Validators } from '@angular/forms';
+import { UntypedFormControl, Validators } from '@angular/forms';
 import { UserService } from '../../../services/http/user.service';
 import { AdvancedSnackBarTypes, NotificationService } from '../../../services/util/notification.service';
 import { TranslateService } from '@ngx-translate/core';
@@ -17,7 +17,7 @@ export class RegisterComponent implements OnInit {
 
   @ViewChild(PasswordEntryComponent) passwordEntry: PasswordEntryComponent;
 
-  usernameFormControl = new FormControl('', [Validators.required, Validators.email]);
+  usernameFormControl = new UntypedFormControl('', [Validators.required, Validators.email]);
   matcher = new FormErrorStateMatcher();
   deviceWidth = innerWidth;
   acceptToS = false;
