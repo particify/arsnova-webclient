@@ -78,6 +78,7 @@ const routes: Routes = [
             viewRole: RoomViewUserRoleResolver,
             userRole: RoomUserRoleResolver
           },
+          runGuardsAndResolvers: 'always',
           children: [
             ...routes,
             ...ExtensionRouteProvider.extractRoutesForMountPoint(
