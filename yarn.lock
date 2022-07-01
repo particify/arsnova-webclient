@@ -2632,10 +2632,10 @@ babel-plugin-polyfill-regenerator@^0.3.0:
   dependencies:
     "@babel/helper-define-polyfill-provider" "^0.3.1"
 
-backoff-rxjs@6.5.7:
-  version "6.5.7"
-  resolved "https://registry.yarnpkg.com/backoff-rxjs/-/backoff-rxjs-6.5.7.tgz#876e8652487b5b5fdba7ddad7b4d2fff92bf4c96"
-  integrity sha512-j3pEcM5ivIxZhkZ+CcF8LVb5/jORNT4HCEnzavFfBkXSEJfx/WMtq79NKKp8Z0IDThgXxnlvzf41Gvajb4C2NQ==
+backoff-rxjs@7.0.0:
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/backoff-rxjs/-/backoff-rxjs-7.0.0.tgz#9ff74bc9077560f9c95ba77ffccd3fdb421e9dec"
+  integrity sha512-ZLxc3iR7f6V4qngxL8CTBjIvQj1VCVK/EaQ26a2Xcrq0lXtSsl1ESvFFjMTSqcL93c9gcSinPf6xg/Sm+zYckg==
 
 balanced-match@^1.0.0:
   version "1.0.2"
