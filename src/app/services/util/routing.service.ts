@@ -130,9 +130,7 @@ export class RoutingService {
     this.isRoom = !!this.shortId;
     this.isRoom$.emit(this.isRoom);
     const series = route.params['seriesName'];
-    if (series) {
-      this.seriesName = series;
-    }
+    this.seriesName = series;
   }
 
   getRoutes(route: ActivatedRouteSnapshot) {
