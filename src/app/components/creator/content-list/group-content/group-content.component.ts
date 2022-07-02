@@ -69,7 +69,6 @@ export class GroupContentComponent extends ContentListBaseComponent implements O
     protected contentService: ContentService,
     protected roomStatsService: RoomStatsService,
     protected route: ActivatedRoute,
-    protected location: Location,
     protected notificationService: NotificationService,
     protected translateService: TranslateService,
     protected langService: LanguageService,
@@ -83,7 +82,7 @@ export class GroupContentComponent extends ContentListBaseComponent implements O
     private hotkeyService: HotkeyService,
     private routingService: RoutingService
   ) {
-    super(contentService, roomStatsService, route, location, notificationService, translateService, langService, dialogService,
+    super(contentService, roomStatsService, route, notificationService, translateService, langService, dialogService,
     globalStorageService, contentGroupService, announceService, router);
     langService.langEmitter.subscribe(lang => translateService.use(lang));
   }
@@ -192,8 +191,7 @@ export class GroupContentComponent extends ContentListBaseComponent implements O
   }
 
   updateURL(): void {
-    const urlTree = this.router.createUrlTree([this.baseURL, this.room.shortId, 'series', this.collectionName]);
-    this.location.replaceState(this.router.serializeUrl(urlTree));
+    this.router.navigate([this.baseURL, this.room.shortId, 'series', this.collectionName]);
   }
 
   saveGroupName(): void {
