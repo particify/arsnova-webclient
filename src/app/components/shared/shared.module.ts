@@ -54,6 +54,7 @@ import { ContentChoiceAnswerComponent } from './content-answers/content-choice-a
 import { TrackInteractionDirective } from '../../directives/track-interaction.directive';
 import { SettingsSlideToggleComponent } from './settings-slide-toggle/settings-slide-toggle.component';
 import { RoomPageComponent } from './room-page/room-page.component';
+import { FormattingToolbarComponent } from './formatting-toolbar/formatting-toolbar.component';
 
 @NgModule({
   imports: [
@@ -114,7 +115,8 @@ import { RoomPageComponent } from './room-page/room-page.component';
     UserFormFieldComponent,
     ContentChoiceAnswerComponent,
     TrackInteractionDirective,
-    SettingsSlideToggleComponent
+    SettingsSlideToggleComponent,
+    FormattingToolbarComponent
   ],
   exports: [
     RoomJoinComponent,
@@ -156,7 +158,8 @@ import { RoomPageComponent } from './room-page/room-page.component';
     CounterBracesPipe,
     ContentChoiceAnswerComponent,
     TrackInteractionDirective,
-    SettingsSlideToggleComponent
+    SettingsSlideToggleComponent,
+    FormattingToolbarComponent
   ]
 })
 export class SharedModule {

@@ -689,5 +689,15 @@
     "feedback": "Feedback",
     "powered-by": "Audience Response System by ",
     "by": "powered by "
+  },
+  "formatting": {
+    "bold": "Bold",
+    "italic": "Italic",
+    "list": "Bullet list",
+    "numbered-list": "Numbered list",
+    "code": "Code",
+    "formular": "Formular",
+    "link": "Link",
+    "image": "Image"
   }
 }

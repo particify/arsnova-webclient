@@ -870,18 +870,25 @@ button.mat-menu-item:hover {
 }
 
 .bigger-panel {
-  max-width: 500px!important;
-  max-height: unset!important;
+  @media(max-width: 767px) {
+    max-width: 90vw!important;
+    max-height: 400px!important;
+  }
+
+  @media(min-width: 768px) {
+    max-width: 500px!important;
+    max-height: unset!important;
+  }
 }
 
 .mat-form-field-appearance-outline.primary-form-field {
   .mat-form-field-outline-start {
-    border: 1px solid var(--primary)!important;
+    border-color: var(--primary)!important;
     border-right-style: none!important;
   }
   
   .mat-form-field-outline-end {
-    border: 1px solid var(--primary)!important;
+    border-color: var(--primary)!important;
     border-left-style: none!important;
   }
 
@@ -893,7 +900,7 @@ button.mat-menu-item:hover {
   }
 
   .mat-form-field-infix {
-    padding: 12px 0;
+    padding: 0.5em 0;
   }
 }
 
