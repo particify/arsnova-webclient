@@ -8,12 +8,12 @@ import { MatDialog } from '@angular/material/dialog';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { EventService } from '../../../../services/util/event.service';
 import { RoomService } from '../../../../services/http/room.service';
-import { Subject } from 'rxjs';
+import { of, Subject } from 'rxjs';
 import { DialogService } from '../../../../services/util/dialog.service';
 import { ContentGroupService } from '../../../../services/http/content-group.service';
 import { MatButtonModule } from '@angular/material/button';
 import { AnnounceService } from '@arsnova/app/services/util/announce.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
 import { ActivatedRouteStub, JsonTranslationLoader } from '@arsnova/testing/test-helpers';
 
 const mockCreateEvent = new Subject<any>();
@@ -123,7 +123,11 @@ describe('ContentChoiceCreationComponent', () => {
     }
   }
 
-  const activatedRouteStub = new ActivatedRouteStub(null, data);
+  const snapshot = new ActivatedRouteSnapshot();
+
+  snapshot.params = of([{seriesName: 'SERIES'}]);
+
+  const activatedRouteStub = new ActivatedRouteStub(null, data, snapshot);
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({

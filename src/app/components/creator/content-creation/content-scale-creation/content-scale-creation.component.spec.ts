@@ -7,10 +7,10 @@ import { NotificationService } from '../../../../services/util/notification.serv
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { EventService } from '../../../../services/util/event.service';
 import { RoomService } from '../../../../services/http/room.service';
-import { Subject } from 'rxjs';
+import { of, Subject } from 'rxjs';
 import { ContentGroupService } from '../../../../services/http/content-group.service';
 import { AnnounceService } from '@arsnova/app/services/util/announce.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
 import { ActivatedRouteStub, JsonTranslationLoader } from '@arsnova/testing/test-helpers';
 import { LikertScaleService } from '@arsnova/app/services/util/likert-scale.service';
 
@@ -71,8 +71,11 @@ describe('ContentScaleCreationComponent', () => {
     }
   }
 
-  const activatedRouteStub = new ActivatedRouteStub(null, data);
+  const snapshot = new ActivatedRouteSnapshot();
 
+  snapshot.params = of([{seriesName: 'SERIES'}]);
+
+  const activatedRouteStub = new ActivatedRouteStub(null, data, snapshot);
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [

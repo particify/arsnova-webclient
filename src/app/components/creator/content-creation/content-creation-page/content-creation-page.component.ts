@@ -27,7 +27,6 @@ export class ContentCreationPageComponent implements OnInit, AfterContentInit {
 
   createEventSubject: Subject<boolean> = new Subject<boolean>();
   question: string;
-  contentGroup: string;
   contentTypes: ContentType[] = Object.values(ContentType);
   formats: ContentFormat[] = [];
   selectedFormat: ContentFormat;
@@ -83,7 +82,6 @@ export class ContentCreationPageComponent implements OnInit, AfterContentInit {
         this.prepareAttachmentData();
         this.isLoading = false;
       }
-      this.contentGroup = this.route.snapshot.params['seriesName'];
     });
     this.translateService.use(this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE));
   }
