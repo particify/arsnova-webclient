@@ -17,8 +17,10 @@ $content-padding: 2em;
   border-radius: 10px;
 }
 
-#routing-content.scrollbar-bottom-margin::-webkit-scrollbar-track {
-  margin-bottom: $mobile-bar-height + 8px;
+@media(max-width: 1000px) {
+  #routing-content.scrollbar-bottom-margin::-webkit-scrollbar-track {
+    margin-bottom: $mobile-bar-height + 8px;
+  }
 }
 
 .routing-container {
