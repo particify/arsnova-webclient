@@ -864,6 +864,46 @@ button.mat-menu-item:hover {
   background-color: var(--dialog);
 }
 
+.mat-option.higher-option {
+  height: unset!important;
+  padding: 8px 16px!important;
+}
+
+.bigger-panel {
+  @media(max-width: 767px) {
+    max-width: 90vw!important;
+    max-height: 400px!important;
+  }
+
+  @media(min-width: 768px) {
+    max-width: 500px!important;
+    max-height: unset!important;
+  }
+}
+
+.mat-form-field-appearance-outline.primary-form-field {
+  .mat-form-field-outline-start {
+    border-color: var(--primary)!important;
+    border-right-style: none!important;
+  }
+  
+  .mat-form-field-outline-end {
+    border-color: var(--primary)!important;
+    border-left-style: none!important;
+  }
+
+  .mat-select-arrow-wrapper {
+    transform: translateX(0)!important;
+    .mat-select-arrow {
+      color: var(--primary)!important;
+    }
+  }
+
+  .mat-form-field-infix {
+    padding: 0.5em 0;
+  }
+}
+
 .mat-menu-panel.wider-panel {
   max-width: 500px;
   @media(max-width: 520px) {

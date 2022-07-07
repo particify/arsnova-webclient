@@ -78,6 +78,7 @@ export class ContentCreationComponent implements OnInit, OnDestroy {
         }
       });
     });
+    this.contentGroup = this.route.snapshot.params['seriesName'];
   }
 
   ngOnDestroy(): void {
