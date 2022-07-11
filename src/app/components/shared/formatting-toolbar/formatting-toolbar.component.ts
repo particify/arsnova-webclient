@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormattingOption } from '../../../models/formatting-option';
 
 @Component({
@@ -9,6 +9,7 @@ import { FormattingOption } from '../../../models/formatting-option';
 export class FormattingToolbarComponent {
 
   @Input() inputElement: HTMLTextAreaElement;
+  @Output() valueChanged = new EventEmitter<string>();
 
   formattingOptions: FormattingOption[] = [
     new FormattingOption('bold', 'format_bold', '**', true),
@@ -70,6 +71,7 @@ export class FormattingToolbarComponent {
 
   private setNewValueAndFocusInput(value: string) {
     this.inputElement.value = value;
+    this.valueChanged.emit(value);
     this.inputElement.focus();
   }
 
