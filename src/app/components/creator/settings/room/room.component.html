@@ -7,34 +7,32 @@
              name="room-name" maxlength="30" aria-labelledby="room-name"/>
       <mat-hint align="end"><span aria-hidden="true">{{ name.length }} / 30</span></mat-hint>
     </mat-form-field>
-    <mat-tab-group [dynamicHeight]=true (selectedTabChange)="descriptionTabChanged($event)">
-      <mat-tab label="{{'settings.description' | translate}}">
-        <mat-form-field class="input-block" appearance="outline">
-      <textarea #descriptionInput
-        (input)="updateTextContainsImage(descriptionInput.value)"
-        [(ngModel)]="description" matInput cdkTextareaAutosize cdkAutosizeMinRows="3" cdkAutosizeMaxRows="5"
-        maxlength="500" name="description" aria-labelledby="room-description"
-        placeholder="{{ 'settings.enter-room-description' | translate }}"></textarea>
-          <mat-hint align="end">
-            <span aria-hidden="true">
-              {{ description ? description.length : 0 }} / 500
-            </span>
-          </mat-hint>
-        </mat-form-field>
-        <app-hint *ngIf="textContainsImage" text="utils.formatting-image-hint" [type]="warningType"></app-hint>
-      </mat-tab>
-      <mat-tab label="{{'room.preview' | translate}}" [disabled]="!description">
-        <div fxLayout="row">
-          <app-rendered-text [rawText]="description" [dynamic]="renderPreview" [markdownFeatureset]="markdownFeatureset">
-          </app-rendered-text>
-          <span class="fill-remaining-space"></span>
-          <button mat-icon-button #mdtt="matTooltip" matTooltip="{{ 'content.md-info' | translate }}"
-                  (click)="mdtt.toggle()">
-            <mat-icon class="icon-secondary">info</mat-icon>
-          </button>
-        </div>
-      </mat-tab>
-    </mat-tab-group>
+    <div class="relative">
+      <mat-tab-group [dynamicHeight]=true animationDuration="0" (selectedTabChange)="descriptionTabChanged($event)">
+        <mat-tab label="{{'settings.description' | translate}}">
+          <mat-form-field class="input-block" appearance="outline">
+        <textarea #descriptionInput
+          (input)="updateTextContainsImage(descriptionInput.value)"
+          [(ngModel)]="description" matInput cdkTextareaAutosize cdkAutosizeMinRows="3" cdkAutosizeMaxRows="5"
+          maxlength="500" name="description" aria-labelledby="room-description"
+          placeholder="{{ 'settings.enter-room-description' | translate }}"></textarea>
+            <mat-hint align="end">
+              <span aria-hidden="true">
+                {{ description ? description.length : 0 }} / 500
+              </span>
+            </mat-hint>
+          </mat-form-field>
+          <app-hint *ngIf="textContainsImage" text="utils.formatting-image-hint" [type]="warningType"></app-hint>
+        </mat-tab>
+        <mat-tab label="{{'room.preview' | translate}}" [disabled]="!description">
+          <div class="preview-container">
+            <app-rendered-text [rawText]="description" [dynamic]="renderPreview" [markdownFeatureset]="markdownFeatureset">
+            </app-rendered-text>
+          </div>
+        </mat-tab>
+      </mat-tab-group>
+      <app-formatting-toolbar *ngIf="!renderPreview" class="tab-group-formatting-bar" [inputElement]="descriptionInput" (valueChanged)="description = $event"></app-formatting-toolbar>
+    </div>
   </div>
   <div fxLayout="row">
     <button mat-stroked-button class="delete" (click)="openDeleteRoomDialog()" aria-labelledby="delete-room">
