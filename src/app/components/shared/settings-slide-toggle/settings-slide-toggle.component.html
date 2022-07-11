@@ -1,6 +1,11 @@
 <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="16px">
   <div>
-    <p class="slide-toggle-header">{{ label | translate }}</p>
+    <div fxLayout="row" fxLayoutAlign="start center">
+      <p class="slide-toggle-header">{{ label | translate }}</p>
+      <ng-content>
+        <!-- Used by extensions -->
+      </ng-content>
+    </div>
     <p id="toggle-{{ label }}-description" class="slide-toggle-description">
       {{ label + '-info' | translate }}
     </p>
