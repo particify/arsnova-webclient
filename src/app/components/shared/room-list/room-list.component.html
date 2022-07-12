@@ -53,8 +53,12 @@
             (keyup.enter)="setCurrentRoom(room.summary.shortId, room.membership.primaryRole)">
               <p class="ellipsis">
                 {{room.summary.name}}</p>
-              <div fxLayout="row" fxLayoutAlign="center center">
-                <app-list-badge [count]="room.summary.stats.ackCommentCount"></app-list-badge>
+              <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="1em">
+                <div *ngIf="isRoomActive(room.summary.stats.roomUserCount)" fxLayoutAlign="center" class="active-label"
+                [matTooltip]="'room-list.active-info' | translate: {userCount: room.summary.stats.roomUserCount}">
+                  <span>{{ 'room-list.active' | translate }}</span>
+                </div>
+                <app-list-badge *ngIf="room.summary.stats.ackCommentCount" [count]="room.summary.stats.ackCommentCount"></app-list-badge>
                 <p class="short-id">{{room.summary.shortId | splitShortId}}</p>
                 <mat-icon mat-list-icon *ngSwitchCase="creatorRole"
                           matTooltip="{{ 'room-list.creator-role' | translate }}"

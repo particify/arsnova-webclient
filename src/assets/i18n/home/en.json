@@ -254,7 +254,9 @@
     "load-rooms": "Load rooms",
     "transfer-no-rooms": "No rooms were found for transfer.",
     "hide-guest-rooms": "Hide",
-    "import": "Import"
+    "import": "Import",
+    "active": "Active",
+    "active-info": "There are currently {{userCount}} people in this room."
   },
   "user-activation": {
     "a11y-activate": "Activates your account.",

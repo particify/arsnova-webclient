@@ -39,7 +39,6 @@
 }
 
 .short-id {
-  margin: 0 1em;
   white-space: nowrap;
 }
 
@@ -94,7 +93,7 @@
   z-index: 3;
 }
 
-@media(max-width: 600px) {
+@media(max-width: 599px) {
   .desktop-buttons {
     display: none;
   }
@@ -134,4 +133,34 @@
 
 .mat-stroked-button {
   height: 36px;
+}
+
+
+@media(min-width: 600px) {
+  .active-label {
+    padding: 2px 6px;
+    border-radius: 4px;
+    border-width: 2px;
+    border-style: solid;
+    color: var(--primary);
+    span {
+      text-transform: uppercase;
+      font-size: 12px;
+      font-weight: $font-weight-bold;
+    }
+    animation: activeRoom 2s infinite;
+  }
+}
+
+@media(max-width: 599px) {
+  .active-label * {
+    display: none;
+  }
+}
+
+
+@keyframes activeRoom {
+  0% {border-color: var(--primary);}
+  50% {border-color: var(--primary-variant);}
+  100% {border-color: var(--primary);}
 }

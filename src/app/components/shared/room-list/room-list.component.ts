@@ -20,6 +20,8 @@ import { MembershipsChanged } from '../../../models/events/memberships-changed';
 import { ExtensionFactory } from '../../../../../projects/extension-point/src/lib/extension-factory';
 import { RoutingService } from '../../../services/util/routing.service';
 
+const ACTIVE_ROOM_THRESHOLD = 15;
+
 interface RoomDataView {
   summary: RoomSummary;
   membership: Membership;
@@ -227,7 +229,7 @@ export class RoomListComponent implements OnInit, OnDestroy {
 
   private sortRooms(rooms: RoomDataView[]) {
     return rooms.sort((a, b) =>
-        new Date(b.membership.lastVisit).getTime() - new Date(a.membership.lastVisit).getTime());
+      new Date(b.membership.lastVisit).getTime() - new Date(a.membership.lastVisit).getTime());
   }
 
   deleteRoom(room: RoomDataView) {
@@ -296,5 +298,9 @@ export class RoomListComponent implements OnInit, OnDestroy {
 
   openCreateRoomDialog(): void {
     this.dialogService.openRoomCreateDialog();
+  }
+
+  isRoomActive(userCount: number) {
+    return userCount >= ACTIVE_ROOM_THRESHOLD;
   }
 }
