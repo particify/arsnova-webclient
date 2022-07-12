@@ -58,26 +58,26 @@
          class="answer-container">
       <div fxLayout="row" class="card-row">
         <ng-container *ngFor="let state of survey; let i = index">
-          <mat-card *ngIf="i < 2" id="survey-button-{{i}}" fxLayout="row" fxLayoutAlign="center center" class="answer"
+          <button mat-raised-button *ngIf="i < 2" id="survey-button-{{i}}" fxLayout="row" fxLayoutAlign="center center" class="answer-button button-primary"
                     attr.aria-label="{{ state.a11y | translate }}" (click)="submitAnswer(state.state)" tabindex="0"
-                    (keyup.enter)="submitAnswerViaEnter(state.state, state.label)" role="button"
+                    (keyup.enter)="submitAnswerViaEnter(state.state, state.label)"
                     [appHotkey]="voteKeys[i]" [appHotkeyTitle]="state.a11y | translate">
             <p *ngIf="type === typeSurvey" class="answer-button-label">{{ state.label | translate }}</p>
             <mat-icon *ngIf="type === typeFeedback" class="button-label-icon" matTooltip="{{ state.label | translate }}">
               {{ feedbackIcons[i] }}</mat-icon>
-          </mat-card>
+            </button>
         </ng-container>
       </div>
       <div fxLayout="row" class="card-row">
         <ng-container *ngFor="let state of survey; let i = index">
-          <mat-card *ngIf="i >= 2" id="survey-button2-{{i}}" fxLayout="row" fxLayoutAlign="center center" class="answer"
+          <button mat-raised-button *ngIf="i >= 2" id="survey-button2-{{i}}" fxLayout="row" fxLayoutAlign="center center" class="answer-button button-primary"
                     attr.aria-label="{{ state.a11y | translate }}" (click)="submitAnswer(state.state)" tabindex="0"
-                    (keyup.enter)="submitAnswerViaEnter(state.state, state.label)" role="button"
+                    (keyup.enter)="submitAnswerViaEnter(state.state, state.label)"
                     [appHotkey]="voteKeys[i]" [appHotkeyTitle]="state.a11y | translate">
             <p *ngIf="type === typeSurvey" class="answer-button-label">{{ state.label | translate }}</p>
             <mat-icon *ngIf="type === typeFeedback" class="button-label-icon" matTooltip="{{ state.label | translate }}">
               {{ feedbackIcons[i] }}</mat-icon>
-          </mat-card>
+            </button>
         </ng-container>
       </div>
     </div>
