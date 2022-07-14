@@ -499,7 +499,8 @@
     "answers-tooltip": "Number of answers",
     "other-combinations": "Other",
     "show-flashcard-back": "Show the back of the flashcard",
-    "hide-flashcard-back": "Hide the back of the flashcard"
+    "hide-flashcard-back": "Hide the back of the flashcard",
+    "no-answers": "There are no answers."
   },
   "dialog": {
     "a11y-cancel": "Cancels the current process and closes the dialog.",

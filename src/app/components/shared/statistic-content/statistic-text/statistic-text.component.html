@@ -7,4 +7,7 @@
       <mat-divider *ngIf="i < answers.length -  1"></mat-divider>
     </mat-list-item>
   </mat-list>
+  <div fxLayoutAlign="center">
+    <p *ngIf="answers.length === 0" class="hint">{{ 'statistic.no-answers' | translate }}</p>
+  </div>
 </div>
