@@ -22,13 +22,13 @@
 </div>
 <div fxLayout="row" fxLayoutAlign="center" fxLayoutGap="1em">
   <button (click)="emitFlipEvent(false)" attr.aria-label="{{ 'content.a11y-leave-preview' | translate }}"
-          class="button-abort button-md"
+          class="button-abort"
           mat-stroked-button>
     {{ 'content.back' | translate }}
   </button>
   <button (click)="emitFlipEvent(true)"
           attr.aria-label="{{ 'content.a11y-preview-submit' | translate }}"
-          class="button-primary button-md"
+          class="button-primary"
           mat-raised-button>
     {{ (isEditMode ? 'content.save' : 'content.create') | translate }}</button>
 </div>

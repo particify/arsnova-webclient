@@ -132,7 +132,7 @@
                   gavel
                 </mat-icon>
               </div>
-              <div fxLayout="row" fxLayoutAlign="center center" class="action-buttons">
+              <div fxLayout="row" fxLayoutAlign="center center">
                 <button mat-button (click)="transferRoomFromGuest(room)" [hidden]="" *ngIf="room.membership.primaryRole === creatorRole"
                         appTrackInteraction="Room transferred from guest" appTrackName="owner">
                   <mat-icon>swap_horiz</mat-icon>

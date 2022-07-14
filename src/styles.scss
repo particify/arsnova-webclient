@@ -607,10 +607,6 @@ div {
   opacity: 0.5;
 }
 
-.mat-flat-button {
-  min-width: 100px!important;
-}
-
 .button-primary {
   background-color: var(--primary);
   color: var(--on-primary);
@@ -635,10 +631,6 @@ div {
   color: var(--on-surface);
   padding-left: 5px;
   font-size: 16px;
-}
-
-.button-md {
-  min-width: 120px!important;
 }
 
 .login-button {
