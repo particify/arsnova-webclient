@@ -12,7 +12,7 @@
   <mat-list *ngIf="!isLoading && !showAnswersBelow" role="list">
     <mat-list-item role="listitem" [ngClass]="{'correct': colorLabel && checkIfCorrect(i), 'no-background': isPresentation,
                    'all-animations': !isPresentation}" tabindex="0"
-                   attr.aria-label="{{ ('statistic.a11y-choice-evaluation' | translate: { count: data[i], answer: a.answer }) +
+                   attr.aria-label="{{ ('statistic.a11y-choice-evaluation' | translate: { count: data[roundsToDisplay][i], answer: a.answer }) +
                  (isSurvey ? '' : ((checkIfCorrect(i) ?
                  'statistic.a11y-correct' : 'statistic.a11y-wrong') | translate)) }}"
                  *ngFor="let a of answerList; let i = index">
