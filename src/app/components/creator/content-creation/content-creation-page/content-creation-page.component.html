@@ -32,7 +32,7 @@
                     </mat-option>
                   </mat-select>
                 </mat-form-field>
-                <app-formatting-toolbar [inputElement]="questionInput"></app-formatting-toolbar>
+                <app-formatting-toolbar [inputElement]="questionInput" (valueChanged)="question = $event"></app-formatting-toolbar>
               </div>
               <mat-form-field appearance="outline" class="input-block no-field-hint">
                 <mat-label>{{ (selectedFormat.name !== 'slide' ? 'content.body' : 'content.body-neutral') | translate }}</mat-label>

@@ -25,39 +25,37 @@
             </button>
           </div>
         </div>
-        <mat-tab-group *ngIf="!isParticipant && (edit || !answer)" [dynamicHeight]="true" (selectedTabChange)="tabChanged($event)">
-          <mat-tab label="{{'comment-page.your-answer' | translate}}">
-            <mat-form-field class="input-block" appearance="outline">
-              <textarea id="answer-input" [(ngModel)]="answer" (input)="edit = true"
-                      matInput
-                      cdkTextareaAutosize
-                      cdkAutosizeMinRows="3"
-                      cdkAutosizeMaxRows="8"
-                      maxlength="500"
-                      name="answer"
-                      aria-labelledby="answer"
-                      [placeholder]="'comment-page.enter-answer' | translate"
-                      appHotkey="1">
-              </textarea>
-              <mat-hint align="end">
-                <span aria-hidden="true">
-                {{ answer ? answer.length : 0 }} / 500
-                </span>
-              </mat-hint>
-            </mat-form-field>
-          </mat-tab>
-          <mat-tab label="{{'room.preview' | translate}}" [disabled]="!answer">
-            <div>
-              <app-rendered-text [rawText]="answer" [dynamic]="renderPreview" [markdownFeatureset]="MarkdownFeatureset.SIMPLE">
-              </app-rendered-text>
-              <span class="fill-remaining-space"></span>
-              <button mat-icon-button #mdtt="matTooltip" matTooltip="{{ 'content.md-info' | translate }}"
-                      (click)="mdtt.toggle()">
-                <mat-icon class="icon-secondary">info</mat-icon>
-              </button>
-            </div>
-          </mat-tab>
-        </mat-tab-group>
+        <div class="relative" *ngIf="!isParticipant && (edit || !answer)">
+          <mat-tab-group animationDuration="0" [dynamicHeight]="true" (selectedTabChange)="tabChanged($event)">
+            <mat-tab label="{{'comment-page.your-answer' | translate}}">
+              <mat-form-field class="input-block" appearance="outline">
+                <textarea #answerInput [(ngModel)]="answer" (focus)="edit = true"
+                        matInput
+                        cdkTextareaAutosize
+                        cdkAutosizeMinRows="3"
+                        cdkAutosizeMaxRows="8"
+                        maxlength="500"
+                        name="answer"
+                        aria-labelledby="answer"
+                        [placeholder]="'comment-page.enter-answer' | translate"
+                        appHotkey="1">
+                </textarea>
+                <mat-hint align="end">
+                  <span aria-hidden="true">
+                  {{ answer ? answer.length : 0 }} / 500
+                  </span>
+                </mat-hint>
+              </mat-form-field>
+            </mat-tab>
+            <mat-tab label="{{'room.preview' | translate}}" [disabled]="!answer">
+              <div class="preview-container">
+                <app-rendered-text [rawText]="answer" [dynamic]="renderPreview" [markdownFeatureset]="MarkdownFeatureset.SIMPLE">
+                </app-rendered-text>
+              </div>
+            </mat-tab>
+          </mat-tab-group>
+          <app-formatting-toolbar *ngIf="!renderPreview" class="tab-group-formatting-bar" [inputElement]="answerInput" (valueChanged)="answer = $event"></app-formatting-toolbar>
+        </div>
         <div fxLayout="row" fxLayoutAlign="end" fxLayoutGap="10px">
           <button mat-stroked-button *ngIf="!isParticipant && answer && edit" class="delete"
                   aria-labelledby="delete" (click)="openDeleteAnswerDialog()">

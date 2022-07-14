@@ -34,6 +34,12 @@ body {
   }
 }
 
+// Positioning
+
+.relative {
+  position: relative;
+}
+
 // Scrollbar
 
 body::-webkit-scrollbar {
@@ -289,6 +295,15 @@ div {
 
 .mat-ink-bar {
   background-color: var(--primary) !important;
+}
+
+@media(min-width: 768px) {
+  .tab-group-formatting-bar {
+    z-index: 2;
+    position:absolute;
+    top: 4px;
+    right: 0;
+  }
 }
 
 // Mat Form Field
@@ -943,6 +958,12 @@ button.mat-menu-item:hover {
 
 app-rendered-text {
   width: 100%;
+}
+
+.preview-container {
+  margin-top: 10px;
+  min-height: 76px;
+  padding: 12px;
 }
 
 // Divider
