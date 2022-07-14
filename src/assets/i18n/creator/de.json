@@ -499,7 +499,8 @@
     "answers-tooltip": "Anzahl der Antworten",
     "other-combinations": "Andere",
     "show-flashcard-back": "Zeige die Rückseite",
-    "hide-flashcard-back": "Verstecke die Rückseite"
+    "hide-flashcard-back": "Verstecke die Rückseite",
+    "no-answers": "Es sind keine Antworten vorhanden."
   },
   "dialog": {
     "a11y-cancel": "Bricht den aktuellen Vorgang ab und schließt den Dialog.",
