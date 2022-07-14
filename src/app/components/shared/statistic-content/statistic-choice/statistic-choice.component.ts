@@ -9,7 +9,6 @@ import { Theme } from '../../../../../theme/Theme';
 import { AnswerStatistics } from '../../../../models/answer-statistics';
 import { takeUntil } from 'rxjs/operators';
 import { StatisticContentBaseComponent } from '../statistic-content-base';
-import { Subject } from 'rxjs';
 import { ContentType } from '../../../../models/content-type.enum';
 import { ColorElem } from '@arsnova/theme/Theme';
 import { ContentScale } from '@arsnova/app/models/content-scale';
@@ -34,7 +33,6 @@ export class StatisticChoiceComponent extends StatisticContentBaseComponent impl
   @Input() directShow: boolean;
   @Input() isSurvey: boolean;
 
-  destroyed$ = new Subject<void>();
   chart: Chart;
   chartId: string;
   colors: Array<string[]> = [[], []];

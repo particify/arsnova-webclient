@@ -1,11 +1,11 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { ContentService } from '../../../../services/http/content.service';
 import { TranslateService } from '@ngx-translate/core';
 import { ContentText } from '../../../../models/content-text';
 import { ContentAnswerService } from '../../../../services/http/content-answer.service';
 import { TextAnswer } from '../../../../models/text-answer';
 import { StatisticContentBaseComponent } from '../statistic-content-base';
-import { Observable } from 'rxjs';
+import { Observable, takeUntil } from 'rxjs';
 import { EventService } from '../../../../services/util/event.service';
 import { TextStatistic } from '../../../../models/text-statistic';
 
@@ -14,7 +14,7 @@ import { TextStatistic } from '../../../../models/text-statistic';
   templateUrl: './statistic-text.component.html',
   styleUrls: ['./statistic-text.component.scss']
 })
-export class StatisticTextComponent extends StatisticContentBaseComponent implements OnInit {
+export class StatisticTextComponent extends StatisticContentBaseComponent implements OnInit, OnDestroy {
 
   @Input() content: ContentText;
   @Input() directShow: boolean;
@@ -36,18 +36,45 @@ export class StatisticTextComponent extends StatisticContentBaseComponent implem
   }
 
   initData(answers: TextAnswer[]) {
-    this.getData(answers);
+    this.initAnswers(answers);
+    this.getData();
+  }
+
+  afterInit() {
+    this.contentService.getTextAnswerCreatedStream(this.content.roomId, this.content.id).pipe(
+      takeUntil(this.destroyed$)
+    ).subscribe(msg => {
+      const answer = JSON.parse(msg.body).payload as TextAnswer;
+      answer.contentId = this.content.id;
+      this.addAnswerToList(answer);
+    });
+  }
+
+  ngOnDestroy() {
+    this.destroyed$.next();
+    this.destroyed$.complete();
   }
 
   deleteAnswers() {
     this.answers = [];
-    this.getData([]);
+    this.getData();
   }
 
-  getData(answers: TextAnswer[]) {
-    const answersMap = new Map<string, TextStatistic>();
-    for (const answer of answers) {
+  initAnswers(answers: TextAnswer[]) {
+    answers.forEach(answer => {
       this.answers.push(answer);
+    });
+  }
+
+  getData() {
+    this.getAnswerStats();
+    this.updateCounter(this.answerStats.map(a => a.count));
+  }
+
+  getAnswerStats() {
+    this.answerStats = [];
+    const answersMap = new Map<string, TextStatistic>();
+    for (const answer of this.answers) {
       if (answer.body) {
         const answerBody = answer.body.toLowerCase();
         const count = answersMap.has(answerBody) ? answersMap.get(answerBody).count + 1 : 1;
@@ -66,10 +93,14 @@ export class StatisticTextComponent extends StatisticContentBaseComponent implem
       const abstentionString = this.translateService.instant(this.abstentionCount === 1 ? 'statistic.abstention' : 'statistic.abstentions');
       this.answerStats.push(new TextStatistic(abstentionString, this.abstentionCount));
     }
-    this.updateCounter(this.answerStats.map(a => a.count));
   }
 
   filterAnswers(answerId: string) {
     this.answerStats = this.answerStats.filter(a => a.id !== answerId);
+  }
+
+  addAnswerToList(answer: TextAnswer) {
+    this.answers.push(answer);
+    this.getData();
   }
 }

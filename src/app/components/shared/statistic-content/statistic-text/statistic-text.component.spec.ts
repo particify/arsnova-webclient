@@ -17,7 +17,7 @@ describe('StatisticTextComponent', () => {
   let component: StatisticTextComponent;
   let fixture: ComponentFixture<StatisticTextComponent>;
 
-  const mockContentService = jasmine.createSpyObj(['getAnswersChangedStream', 'getAnswer']);
+  const mockContentService = jasmine.createSpyObj(['getTextAnswerCreatedStream', 'getAnswers']);
   const roundStatistics = new RoundStatistics();
   roundStatistics.abstentionCount = 0;
   roundStatistics.answerCount = 0;
@@ -29,14 +29,15 @@ describe('StatisticTextComponent', () => {
   stats.roundStatistics = [roundStatistics];
   const body = {
     payload: {
-      stats: stats
+      id: '1234',
+      body: 'body'
     }
   }
   const message = {
     body: JSON.stringify(body)
   }
-  mockContentService.getAnswer.and.returnValue(of(stats));
-  mockContentService.getAnswersChangedStream.and.returnValue(of(message));
+  mockContentService.getAnswers.and.returnValue(of(stats));
+  mockContentService.getTextAnswerCreatedStream.and.returnValue(of(message));
 
   const mockContentAnswerService = jasmine.createSpyObj(['getAnswers']);
   mockContentAnswerService.getAnswers.and.returnValue(of([]));
