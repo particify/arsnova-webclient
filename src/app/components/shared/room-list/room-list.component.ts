@@ -228,8 +228,13 @@ export class RoomListComponent implements OnInit, OnDestroy {
   }
 
   private sortRooms(rooms: RoomDataView[]) {
-    return rooms.sort((a, b) =>
-      new Date(b.membership.lastVisit).getTime() - new Date(a.membership.lastVisit).getTime());
+    const sortedRooms = rooms.sort((a, b) => this.sortByTime(a, b));
+    return sortedRooms.sort((a, b) =>
+      this.isRoomActive(a.summary.stats.roomUserCount) ? -1 : 1);
+  }
+
+  private sortByTime(a: RoomDataView, b: RoomDataView) {
+    return new Date(b.membership.lastVisit).getTime() - new Date(a.membership.lastVisit).getTime()
   }
 
   deleteRoom(room: RoomDataView) {
