@@ -36,7 +36,7 @@ describe('ControlBarComponent', () => {
   let component: ControlBarComponent;
   let fixture: ComponentFixture<ControlBarComponent>;
 
-  const mockContentService = jasmine.createSpyObj(['findContentsWithoutGroup']);
+  const mockContentService = jasmine.createSpyObj(['']);
 
   const mockRoomStatsService = jasmine.createSpyObj(['getStats']);
   mockRoomStatsService.getStats.and.returnValue(of({}));

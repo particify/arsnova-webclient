@@ -191,16 +191,6 @@ export class ContentService extends AbstractEntityService<Content> {
     );
   }
 
-  findContentsWithoutGroup(roomId: string): Observable<Content[]> {
-    const connectionUrl = this.buildUri(this.apiUrl.find, roomId);
-    return this.http.post<Content[]>(connectionUrl, {
-      properties: {},
-      externalFilters: { notInContentGroupOfRoomId: roomId }
-    }).pipe(
-      catchError(this.handleError<Content[]>(`findContentsWithoutGroup roomId=${roomId}`))
-    );
-  }
-
   getSupportedContents(contents: Content[]) {
     return contents.filter(content => Object.values(ContentType).indexOf(content.format) > -1);
   }

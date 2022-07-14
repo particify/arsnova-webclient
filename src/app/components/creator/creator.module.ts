@@ -18,7 +18,6 @@ import { CommentSettingsComponent } from './settings/comment-settings/comment-se
 import { ContentGroupCreationComponent } from './_dialogs/content-group-creation/content-group-creation.component';
 import { SettingsComponent } from './settings/settings.component';
 import { SettingsPageComponent } from './settings-page/settings-page.component';
-import { LooseContentComponent } from './content-list/loose-content/loose-content.component';
 import { GroupContentComponent } from './content-list/group-content/group-content.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { CdkStepperModule } from '@angular/cdk/stepper';
@@ -65,7 +64,6 @@ import { CreatorOverviewComponent } from './creator-overview/creator-overview.co
     ContentYesNoCreationComponent,
     CreatorOverviewComponent,
     RoomComponent,
-    LooseContentComponent,
     ContentPresentationComponent,
     AccessComponent,
     CommentSettingsComponent,

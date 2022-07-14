@@ -2,14 +2,12 @@ import { Component, ElementRef, OnDestroy, OnInit, QueryList, ViewChild, ViewChi
 import { Content } from '../../../../models/content';
 import { ContentService } from '../../../../services/http/content.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Location } from '@angular/common';
 import { AdvancedSnackBarTypes, NotificationService } from '../../../../services/util/notification.service';
 import { TranslateService } from '@ngx-translate/core';
 import { LanguageService } from '../../../../services/util/language.service';
 import { DialogService } from '../../../../services/util/dialog.service';
 import { GlobalStorageService, STORAGE_KEYS } from '../../../../services/util/global-storage.service';
 import { ContentGroupService } from '../../../../services/http/content-group.service';
-import { ContentListBaseComponent } from '../content-list-base.component';
 import { ContentGroup } from '../../../../models/content-group';
 import { AnnounceService } from '../../../../services/util/announce.service';
 import { EventService } from '../../../../services/util/event.service';
@@ -24,16 +22,26 @@ import { ContentType } from '../../../../models/content-type.enum';
 import { ContentMessages } from '../../../../models/events/content-messages.enum';
 import { UiState } from '../../../../models/events/ui/ui-state.enum';
 import { RoutingService } from '../../../../services/util/routing.service';
+import { Room } from '../../../../models/room';
 
 @Component({
   selector: 'app-group-content',
   templateUrl: './group-content.component.html',
   styleUrls: ['./group-content.component.scss']
 })
-export class GroupContentComponent extends ContentListBaseComponent implements OnInit, OnDestroy {
+export class GroupContentComponent implements OnInit, OnDestroy {
 
   @ViewChild('nameInput') nameInput: ElementRef;
   @ViewChildren('lockMenu') lockMenus: QueryList<MatButton>;
+
+  room: Room;
+  contents: Content[];
+  contentGroups: string[] = [];
+  contentGroup: ContentGroup;
+  currentGroupIndex: number;
+  contentTypes: string[] = Object.values(ContentType);
+  deviceWidth = innerWidth;
+  isLoading = true;
 
   collectionName: string;
   isInTitleEditMode = false;
@@ -82,8 +90,6 @@ export class GroupContentComponent extends ContentListBaseComponent implements O
     private hotkeyService: HotkeyService,
     private routingService: RoutingService
   ) {
-    super(contentService, roomStatsService, route, notificationService, translateService, langService, dialogService,
-    globalStorageService, contentGroupService, announceService, router);
     langService.langEmitter.subscribe(lang => translateService.use(lang));
   }
 
@@ -131,6 +137,99 @@ export class GroupContentComponent extends ContentListBaseComponent implements O
 
   unregisterHotkeys() {
     this.hotkeyRefs.forEach(h => this.hotkeyService.unregisterHotkey(h));
+  }
+
+  getGroups(): void {
+    this.contentGroups = this.globalStorageService.getItem(STORAGE_KEYS.CONTENT_GROUPS);
+    if (!this.contentGroups) {
+      this.roomStatsService.getStats(this.room.id, true).subscribe(roomStats => {
+        if (roomStats.groupStats) {
+          this.contentGroups = roomStats.groupStats.map(stat => stat.groupName);
+        }
+      });
+    }
+    if (this.contentGroups && this.contentGroup && this.contentGroups.length > 0) {
+      for (let i = 0; i < this.contentGroups.length; i++) {
+        if (this.contentGroups[i] === this.contentGroup.name) {
+          this.currentGroupIndex = i;
+        }
+      }
+    }
+  }
+
+  findIndexOfId(id: string): number {
+    return this.contents.map(c => c.id).indexOf(id);
+  }
+
+  deleteContent(delContent: Content) {
+    const index = this.findIndexOfId(delContent.id);
+    const dialogRef = this.dialogService.openDeleteDialog('content', 'really-delete-content', this.contents[index].body);
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.updateContentChanges(index, result);
+      }
+    });
+  }
+
+  editContent(content: Content, group: string) {
+    this.contentService.goToEdit(content.id, this.room.shortId, group);
+  }
+
+
+  updateContentChanges(index: number, action: string) {
+    if (action) {
+      switch (action.valueOf()) {
+        case 'delete':
+          this.contentService.deleteContent(this.room.id, this.contents[index].id).subscribe(() => {
+            this.removeContentFromList(index);
+            this.translateService.get('content.content-deleted').subscribe(message => {
+              this.notificationService.showAdvanced(message, AdvancedSnackBarTypes.WARNING);
+            });
+          });
+          break;
+        case 'remove':
+          this.contentGroupService.removeContentFromGroup(this.room.id, this.contentGroup.id, this.contents[index].id)
+            .subscribe(() => {
+            this.removeContentFromList(index);
+          });
+
+      }
+    }
+  }
+
+  removeContentFromList(index: number) {
+    this.contents.splice(index, 1);
+  }
+
+  addToContentGroup(contentId: string, cgName: string, newGroup: boolean): void {
+    this.contentGroupService.addContentToGroup(this.room.id, cgName, contentId).subscribe(() => {
+      if (!newGroup) {
+        this.translateService.get('content.added-to-content-group').subscribe(msg => {
+          this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.SUCCESS);
+        });
+      } else {
+        this.translateService.get('dialog.content-group-created').subscribe(msg => {
+          this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.SUCCESS);
+        });
+      }
+    });
+  }
+
+  showContentGroupCreationDialog(contentId: string): void {
+    const dialogRef = this.dialogService.openContentGroupCreationDialog();
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.addToContentGroup(contentId, result, true);
+      }
+    });
+  }
+
+  initContentList(contentList: Content[]) {
+    this.contents = contentList;
+    this.isLoading = false;
+    setTimeout(() => {
+      document.getElementById('message-button').focus();
+    }, 500);
   }
 
   reloadContentGroup(imported = false) {
@@ -408,15 +507,6 @@ export class GroupContentComponent extends ContentListBaseComponent implements O
 
   isInRangeExclusive(index: number): boolean {
     return index < this.lastPublishedIndex && index > this.firstPublishedIndex;
-  }
-  removeContent(delContent: Content) {
-    const index = this.findIndexOfId(delContent.id);
-    const dialogRef = this.dialogService.openDeleteDialog('content-from-group', 'really-remove-content', this.contents[index].body, 'remove');
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.updateContentChanges(index, result);
-      }
-    });
   }
 
   navigateToSubroute(subRoute: string) {
