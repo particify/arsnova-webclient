@@ -23,6 +23,7 @@ import { ContentMessages } from '../../../../models/events/content-messages.enum
 import { UiState } from '../../../../models/events/ui/ui-state.enum';
 import { RoutingService } from '../../../../services/util/routing.service';
 import { Room } from '../../../../models/room';
+import { ContentGroupStatistics } from '../../../../models/content-group-statistics';
 
 @Component({
   selector: 'app-group-content',
@@ -36,7 +37,7 @@ export class GroupContentComponent implements OnInit, OnDestroy {
 
   room: Room;
   contents: Content[];
-  contentGroups: string[] = [];
+  contentGroupStats: ContentGroupStatistics[] = [];
   contentGroup: ContentGroup;
   currentGroupIndex: number;
   contentTypes: string[] = Object.values(ContentType);
@@ -101,7 +102,6 @@ export class GroupContentComponent implements OnInit, OnDestroy {
     this.iconList = this.contentService.getTypeIcons();
     this.route.data.subscribe(data => {
       this.room = data.room;
-      this.getGroups();
       this.collectionName = this.route.snapshot.params['seriesName'];
       this.globalStorageService.setItem(STORAGE_KEYS.LAST_GROUP, this.collectionName);
       this.reloadContentGroup();
@@ -140,17 +140,18 @@ export class GroupContentComponent implements OnInit, OnDestroy {
   }
 
   getGroups(): void {
-    this.contentGroups = this.globalStorageService.getItem(STORAGE_KEYS.CONTENT_GROUPS);
-    if (!this.contentGroups) {
-      this.roomStatsService.getStats(this.room.id, true).subscribe(roomStats => {
-        if (roomStats.groupStats) {
-          this.contentGroups = roomStats.groupStats.map(stat => stat.groupName);
-        }
-      });
-    }
-    if (this.contentGroups && this.contentGroup && this.contentGroups.length > 0) {
-      for (let i = 0; i < this.contentGroups.length; i++) {
-        if (this.contentGroups[i] === this.contentGroup.name) {
+    this.roomStatsService.getStats(this.room.id, true).subscribe(roomStats => {
+      if (roomStats.groupStats) {
+        this.contentGroupStats = roomStats.groupStats;
+        this.getCurrentGroupIndex();
+      }
+    });
+  }
+
+  getCurrentGroupIndex() {
+    if (this.contentGroupStats && this.contentGroup && this.contentGroupStats.length > 0) {
+      for (let i = 0; i < this.contentGroupStats.length; i++) {
+        if (this.contentGroupStats[i].groupName === this.contentGroup.name) {
           this.currentGroupIndex = i;
         }
       }
@@ -166,7 +167,7 @@ export class GroupContentComponent implements OnInit, OnDestroy {
     const dialogRef = this.dialogService.openDeleteDialog('content', 'really-delete-content', this.contents[index].body);
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.updateContentChanges(index, result);
+        this.updateContentChanges(index);
       }
     });
   }
@@ -176,50 +177,49 @@ export class GroupContentComponent implements OnInit, OnDestroy {
   }
 
 
-  updateContentChanges(index: number, action: string) {
-    if (action) {
-      switch (action.valueOf()) {
-        case 'delete':
-          this.contentService.deleteContent(this.room.id, this.contents[index].id).subscribe(() => {
-            this.removeContentFromList(index);
-            this.translateService.get('content.content-deleted').subscribe(message => {
-              this.notificationService.showAdvanced(message, AdvancedSnackBarTypes.WARNING);
-            });
-          });
-          break;
-        case 'remove':
-          this.contentGroupService.removeContentFromGroup(this.room.id, this.contentGroup.id, this.contents[index].id)
-            .subscribe(() => {
-            this.removeContentFromList(index);
-          });
-
-      }
-    }
+  updateContentChanges(index: number) {
+    this.contentService.deleteContent(this.room.id, this.contents[index].id).subscribe(() => {
+      this.removeContentFromList(index);
+      this.translateService.get('content.content-deleted').subscribe(message => {
+        this.notificationService.showAdvanced(message, AdvancedSnackBarTypes.WARNING);
+      });
+    });
   }
 
   removeContentFromList(index: number) {
     this.contents.splice(index, 1);
   }
 
-  addToContentGroup(contentId: string, cgName: string, newGroup: boolean): void {
-    this.contentGroupService.addContentToGroup(this.room.id, cgName, contentId).subscribe(() => {
-      if (!newGroup) {
-        this.translateService.get('content.added-to-content-group').subscribe(msg => {
-          this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.SUCCESS);
+  useContentInOtherGroup(contentId: string, groupStats: ContentGroupStatistics, action: 'move' | 'copy'): void {
+    this.duplicateContent$(contentId, groupStats.id).subscribe(() => {
+      if (action === 'move') {
+        this.contentService.deleteContent(this.room.id, contentId).subscribe(() => {
+          this.contents = this.contents.filter(c => c.id !== contentId);
+          this.showSuccessNotification('moved', groupStats);
         });
-      } else {
-        this.translateService.get('dialog.content-group-created').subscribe(msg => {
-          this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.SUCCESS);
-        });
+      } else if (action === 'copy') {
+        this.showSuccessNotification('copied', groupStats);
       }
     });
   }
 
-  showContentGroupCreationDialog(contentId: string): void {
+  showSuccessNotification(actionString: string, groupStats: ContentGroupStatistics) {
+    const msg = this.translateService.instant(`content.${actionString}-to-content-group`, {series: groupStats.groupName});
+    this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.SUCCESS);
+  }
+
+  showContentGroupCreationDialog(contentId: string, action: 'move' | 'copy'): void {
     const dialogRef = this.dialogService.openContentGroupCreationDialog();
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.addToContentGroup(contentId, result, true);
+    dialogRef.afterClosed().subscribe(groupName => {
+      if (groupName) {
+        const newGroup = new ContentGroup();
+        newGroup.roomId = this.room.id;
+        newGroup.name = groupName;
+        this.contentGroupService.post(newGroup).subscribe(group => {
+          const groupStats = new ContentGroupStatistics(group.id, group.name, 0);
+          this.contentGroupStats.push(groupStats);
+          this.useContentInOtherGroup(contentId, groupStats, action);
+        });
       }
     });
   }
@@ -236,6 +236,7 @@ export class GroupContentComponent implements OnInit, OnDestroy {
     this.isLoading = true;
     this.contentGroupService.getByRoomIdAndName(this.room.id, this.collectionName, true).subscribe(group => {
       this.contentGroup = group;
+      this.getGroups();
       this.setSettings();
       this.updatedName = this.contentGroup.name;
       this.setRange();
@@ -625,5 +626,17 @@ export class GroupContentComponent implements OnInit, OnDestroy {
       this.unregisterHotkeys();
       this.contentHotkeysRegistered = false;
     }
+  }
+
+  duplicate(contentId: string) {
+    this.duplicateContent$(contentId).subscribe(content => {
+      this.contents.push(content);
+      const msg = this.translateService.instant('content.content-has-been-duplicated');
+      this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.SUCCESS);
+    });
+  }
+
+  duplicateContent$(contentId: string, contentGroupId = this.contentGroup.id) {
+    return this.contentService.duplicateContent(this.room.id, contentGroupId, contentId);
   }
 }

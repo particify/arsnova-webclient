@@ -30,7 +30,8 @@ const httpOptions = {
 export class ContentService extends AbstractEntityService<Content> {
 
   serviceApiUrl = {
-    answer: '/answer'
+    answer: '/answer',
+    duplicate: '/duplicate'
   };
 
   typeIcons: Map<ContentType, string> = new Map<ContentType, string>([
@@ -188,6 +189,16 @@ export class ContentService extends AbstractEntityService<Content> {
     const connectionUrl = this.buildUri('/' + contentId + '/stats', roomId);
     return this.http.get<AnswerStatistics>(connectionUrl).pipe(
       catchError(this.handleError<AnswerStatistics>(`getRoom shortId=${contentId}`))
+    );
+  }
+
+  duplicateContent(roomId: string, groupId: string, contentId: string): Observable<Content> {
+    const connectionUrl = this.buildUri(`/${contentId}${this.serviceApiUrl.duplicate}`, roomId);
+    const body = {
+      roomId: roomId, contentGroupId: groupId
+    };
+    return this.http.post<Content>(connectionUrl, body, httpOptions).pipe(
+        catchError(this.handleError<Content>(`duplicateContent, ${roomId}, ${groupId}, ${contentId}`))
     );
   }
 

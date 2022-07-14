@@ -79,7 +79,7 @@ export class ContentGroupService extends AbstractEntityService<ContentGroup> {
     this.eventService.broadcast(event.type, event.payload);
   }
 
-  addContentToGroup(roomId: string, name: string, contentId?: String): Observable<void> {
+  addContentToGroup(roomId: string, name: string, contentId: string): Observable<void> {
     const connectionUrl = this.buildUri('/-/content/', roomId);
     return this.http.post<void>(connectionUrl,
       { roomId: roomId, contentGroupName: name, contentId: contentId },
@@ -131,13 +131,6 @@ export class ContentGroupService extends AbstractEntityService<ContentGroup> {
       this.globalStorageService.setItem(STORAGE_KEYS.LAST_GROUP, newName);
     }
     this.globalStorageService.setItem(STORAGE_KEYS.CONTENT_GROUPS, groups);
-  }
-
-  removeContentFromGroup(roomId: string, groupId: string, contentId: String): Observable<void> {
-    const connectionUrl = this.buildUri(`/${groupId}/content/${contentId}`, roomId);
-    return this.http.delete<void>(connectionUrl, httpOptions).pipe(
-      catchError(this.handleError<void>(`deleteContentFromGroup, ${roomId}, ${contentId}`))
-    );
   }
 
   isContentPublished(contentGroup: ContentGroup, contentId: string) {
