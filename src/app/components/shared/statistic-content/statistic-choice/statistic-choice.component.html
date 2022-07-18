@@ -5,7 +5,8 @@
   </div>
   <div *ngIf="!isLoading && isPresentation && showAnswersBelow" fxLayout="row" fxLayoutAlign="space-around">
     <p *ngFor="let a of options; let i = index" class="chartAnswerLabel" [ngClass]="{'not-correct': colorLabel && !checkIfCorrect(i)}">
-      {{a.label}}</p>
+      <app-rendered-text [rawText]="a.label" [renderedText]="a.renderedLabel"></app-rendered-text>
+    </p>
     <p *ngIf="content.abstentionsAllowed" class="chartAnswerLabel" [ngClass]="{'not-correct': colorLabel}">
         {{ 'statistic.abstentions' | translate }}</p>
   </div>
@@ -19,7 +20,7 @@
     <div fxFill fxLayoutAlign="space-between center">
       <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="12px">
         <p class="answer-label">{{labelLetters[i]}}</p>
-        <p>{{a.label}}</p>
+        <app-rendered-text [rawText]="a.label" [renderedText]="a.renderedLabel"></app-rendered-text>
       </div>
       <mat-icon *ngIf="!isSurvey" [ngClass]="{'show-correct-icon': colorLabel && checkIfCorrect(i)}"
                 class="correct-icon">check</mat-icon>

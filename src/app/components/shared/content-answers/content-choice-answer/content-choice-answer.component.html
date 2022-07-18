@@ -2,11 +2,14 @@
   <div class="mat-list-item" *ngFor="let checkedAnswer of selectableAnswers; let i = index" fxLayout="row" fxLayoutAlign="space-between center"
        [ngClass]="{'correct-answer': checkOption(i ,true), 'wrong-answer': checkOption(i, false), 'selected': checkedAnswer.checked && !isDisabled}">
     <mat-checkbox [disabled]="true" *ngIf="isDisabled" [checked]="checkedAnswer.checked" name="answer" class="answer-checkbox">
-      {{ checkedAnswer.answerOption.label }}
+      <app-rendered-text [rawText]="checkedAnswer.answerOption.label" [renderedText]="checkedAnswer.answerOption.renderedLabel"></app-rendered-text>
     </mat-checkbox>
     <mat-checkbox *ngIf="!isDisabled" [(ngModel)]="checkedAnswer.checked" name="answer" class="answer-checkbox"
                   aria-label="{{ 'answer.a11y-select-answer' | translate: {answer: checkedAnswer.answerOption.label} }}">
-      {{ checkedAnswer.answerOption.label }}
+      <app-rendered-text [rawText]="checkedAnswer.answerOption.label"
+                         [renderedText]="checkedAnswer.answerOption.renderedLabel"
+                         [dynamic]="dynamicRendering"
+                         [markdown]="false"></app-rendered-text>
     </mat-checkbox>
     <mat-icon *ngIf="isCorrectOptionVisible(i)" class="answer-indicator" [ngClass]="correctOptionIndexes.includes(i) ? 'correct' : 'wrong'">
       {{ isAnswerOptionCorrect(i) ? 'check' : 'close'}}</mat-icon>
@@ -19,7 +22,10 @@
       <mat-radio-button (change)="selectSingleAnswer(i)" class="answer-radio-button" [ngClass]="{'answer-radio-checked': selectedAnswerIndex === i}"
                         aria-label="{{ 'answer.a11y-select-answer' | translate: {answer: checkedAnswer.answerOption.label} }}"
                         [checked]="checkedAnswer.checked" [value]="i" name="answer">
-        {{ checkedAnswer.answerOption.label | translate }}
+        <app-rendered-text [rawText]="checkedAnswer.answerOption.label | translate"
+                           [renderedText]="checkedAnswer.answerOption.renderedLabel"
+                           [dynamic]="dynamicRendering"
+                           [markdown]="false"></app-rendered-text>
       </mat-radio-button>
       <mat-icon *ngIf="isCorrectOptionVisible(i)" class="answer-indicator" [ngClass]="correctOptionIndexes.includes(i) ? 'correct' : 'wrong'">
         {{ isAnswerOptionCorrect(i) ? 'check' : 'close'}}</mat-icon>

@@ -19,6 +19,7 @@ export class ContentChoiceAnswerComponent {
   @Input() selectedAnswerIndex: number;
   @Input() correctOptionIndexes: number[] = [];
   @Input() contentId: string;
+  @Input() dynamicRendering: boolean;
   @Output() answerIndexSelected = new EventEmitter<number>();
 
   selectSingleAnswer(index: number) {

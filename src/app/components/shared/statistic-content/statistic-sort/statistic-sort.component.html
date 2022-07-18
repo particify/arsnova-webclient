@@ -9,7 +9,7 @@
                     'no-background': isPresentation, 'all-animations': !isPresentation}">
       <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="12px">
         <p class="answer-label">{{i + 1}}</p>
-        <p>{{answer.label}}</p>
+        <app-rendered-text [rawText]="answer.label" [renderedText]="answer.renderedLabel"></app-rendered-text>
       </div>
     </mat-list-item>
   </mat-list>
