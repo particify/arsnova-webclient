@@ -10,10 +10,6 @@ $small-mobile-bar-margin: 5px;
 $card-padding: min(4vw, 16px);
 $bottom-bar-height: 62px;
 
-.mat-card {
-  width: 100%;
-}
-
 .label-icon, .icon-fixed-size {
   font-size: 40px;
   height: 40px;
@@ -64,11 +60,8 @@ $bottom-bar-height: 62px;
   margin: 0 30px 0 14px!important;
 }
 
-.answer {
-  width: 100%;
-  background-color: var(--primary)!important;
-  cursor: pointer;
-  outline: none;
+.answer-button {
+  width: calc(50% - $card-padding / 2);
 }
 
 .bar-fixed-size {
@@ -177,9 +170,7 @@ $bottom-bar-height: 62px;
   width: 100%;
   max-width: 832px;
   margin-top: $card-padding;
-  .mat-card:first-child {
-    margin-right: $card-padding;
-  }
+  gap: $card-padding;
 }
 
 .button-container {
