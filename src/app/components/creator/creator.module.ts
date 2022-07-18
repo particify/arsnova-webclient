@@ -34,6 +34,7 @@ import { ExportComponent } from './_dialogs/export/export.component';
 import { DialogService } from '../../services/util/dialog.service';
 import { PublishContentComponent } from './_dialogs/publish-content/publish-content.component';
 import { CreatorOverviewComponent } from './creator-overview/creator-overview.component';
+import { AnnouncementSettingsComponent } from './settings/announcement-settings/announcement-settings.component';
 
 @NgModule({
   imports: [
@@ -80,6 +81,7 @@ import { CreatorOverviewComponent } from './creator-overview/creator-overview.co
     ContentWordcloudCreationComponent,
     ExportComponent,
     PublishContentComponent,
+    AnnouncementSettingsComponent,
   ],
   exports: [
     ContentPresentationComponent

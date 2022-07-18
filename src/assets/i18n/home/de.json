@@ -359,5 +359,14 @@
     "shift": "Umschalt",
     "space": "Leertaste",
     "escape": "Escape"
+  },
+  "announcement": {
+    "announcements": "Ankündigungen",
+    "close": "Schließen",
+    "new": "Neu",
+    "edited": "Bearbeitet",
+    "new-announcements": "Es gibt neue Ankündigungen",
+    "all-rooms": "Alle Räume",
+    "no-announcements": "Es gibt keine Ankündigungen."
   }
 }

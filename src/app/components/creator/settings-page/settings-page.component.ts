@@ -24,7 +24,8 @@ export class SettingsPageComponent implements OnInit {
   settings: Settings[] = [
     { headerName: 'general', iconName: 'settings', componentName: 'general', hotkey: '1' },
     { headerName: 'comments', iconName: 'comment', componentName: 'comments', hotkey: '2' },
-    { headerName: 'access', iconName: 'admin_panel_settings', componentName: 'access', hotkey: '3' }
+    { headerName: 'access', iconName: 'admin_panel_settings', componentName: 'access', hotkey: '3' },
+    { headerName: 'announcements', iconName: 'newspaper', componentName: 'announcements', hotkey: '4' }
   ];
 
   room: Room;

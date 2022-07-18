@@ -218,6 +218,11 @@ export class MockMatDialog {
 }
 
 export class MockMatDialogRef {
+  beforeClosed() {
+    return of({});
+  }
+
+  close() {}
 }
 
 export class MockMatDialogData {

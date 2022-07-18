@@ -10,7 +10,8 @@ import {
   MockLangService,
   MockRenderer2,
   MockRouter,
-  MockThemeService
+  MockThemeService,
+  MockMatDialog
 } from '@arsnova/testing/test-helpers';
 import { AdvancedSnackBarTypes, NotificationService } from '@arsnova/app/services/util/notification.service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -36,6 +37,9 @@ import { ClientAuthentication } from '@arsnova/app/models/client-authentication'
 import { AuthProvider } from '@arsnova/app/models/auth-provider';
 import { MatSelectModule } from '@angular/material/select';
 import { BehaviorSubject, of } from 'rxjs';
+import { MatDialog } from '@angular/material/dialog';
+import { AnnounceService } from '@arsnova/app/services/util/announce.service';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 export class MockAuthenticationService {
   private auth$$ = new BehaviorSubject<any>({ loginId: 'test@test.de' });
@@ -79,6 +83,8 @@ describe('HeaderComponent', () => {
   let userService = jasmine.createSpyObj('UserService', ['delete']);
   let dialogService = jasmine.createSpyObj('DialogService', ['openUpdateInfoDialog', 'openDeleteDialog']);
   const consentService = jasmine.createSpyObj('ConsentService', ['openDialog']);
+  let announcementService = jasmine.createSpyObj('AnnouncementService', ['getStateByUserId']);
+  announcementService.getStateByUserId.and.returnValue(of({}));
   let loader: HarnessLoader;
   let userButton: MatButtonHarness;
   let loginButton: MatButtonHarness;
@@ -100,7 +106,8 @@ describe('HeaderComponent', () => {
             useClass: JsonTranslationLoader
           },
           isolate: true
-        })
+        }),
+        HttpClientTestingModule
       ],
       providers: [
         {
@@ -154,6 +161,14 @@ describe('HeaderComponent', () => {
         {
           provide: ConsentService,
           useValue: consentService
+        },
+        {
+          provide: MatDialog,
+          useClass: MockMatDialog
+        },
+        {
+          provide: AnnounceService,
+          useValue: announcementService
         }
       ],
       schemas: [

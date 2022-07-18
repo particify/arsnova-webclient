@@ -1,0 +1,30 @@
+<mat-card [ngClass]="{'disabled': editMode}">
+  <div fxLayout="row" fxLayoutAlign="space-between start">
+    <h3 class="title">{{ announcement.title }}</h3>
+    <div fxLayoutAlign="center center" *ngIf="!!label" class="label-container new-container">
+      <span class="label-text new-label">{{ ('announcement.' + label) | translate }}</span>
+    </div>
+    <button mat-icon-button *ngIf="role === 'CREATOR'" [matMenuTriggerFor]="moreMenu" [disabled]="editMode">
+      <mat-icon>more_vert</mat-icon>
+    </button>
+    <mat-menu #moreMenu>
+      <button mat-menu-item (click)="edit()">
+        <mat-icon>edit</mat-icon>
+        {{ 'announcement.edit' | translate }}
+      </button>
+      <button mat-menu-item (click)="delete()">
+        <mat-icon class="icon-warn">delete</mat-icon>
+        {{ 'announcement.delete' | translate }}
+      </button>
+    </mat-menu>
+  </div>
+  <mat-card-subtitle>{{ announcement.creationTimestamp | dateFormat : lang }}</mat-card-subtitle>
+  <div>
+    <app-rendered-text [rawText]="announcement.renderedBody" [markdownFeatureset]="markdownFeatureset"></app-rendered-text>
+  </div>
+  <div fxLayoutAlign="start">
+    <div fxLayoutAlign="center center" *ngIf="role !== 'CREATOR'" class="label-container room-container">
+      <span class="label-text room-label">{{ announcement.roomName }}</span>
+    </div>
+  </div>
+</mat-card>

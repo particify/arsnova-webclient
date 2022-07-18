@@ -167,7 +167,7 @@ textarea {
   color: var(--on-surface);
 }
 
-.mat-hint {
+.mat-form-field:not(.mat-form-field-disabled) .mat-hint {
   color: var(--on-surface) !important;
 }
 
@@ -222,6 +222,14 @@ textarea {
 
 div {
   outline: none;
+}
+
+@media(min-width: 1000px) {
+  .dialog-margin {
+    .mat-dialog-container {
+      margin-left: 72px;
+    }
+  }
 }
 
 // Mat Progress Bar
@@ -310,6 +318,11 @@ div {
 
 .mat-form-field-label {
   color: var(--on-surface) !important;
+}
+
+.mat-form-field.mat-form-field-disabled .mat-form-field-label {
+  color: var(--on-surface) !important;
+  opacity: 0.7;
 }
 
 .mat-form-field-underline {
@@ -822,11 +835,21 @@ button {
   box-shadow: none!important;
 }
 
+.mat-card-subtitle {
+  color: var(--on-surface);
+  opacity: 0.7;
+}
+
 // Badge
 
 .mat-badge-content {
   background: var(--secondary);
   color: var(--on-secondary);
+}
+
+.icon-badge .mat-badge-content {
+  top: -2px!important;
+  right: -2px!important;
 }
 
 // Mat expansion panel
@@ -909,6 +932,19 @@ button.mat-menu-item:hover {
 
   .mat-form-field-infix {
     padding: 0.5em 0;
+  }
+}
+
+.mat-form-field-appearance-outline.smaller-select {
+  .mat-select-arrow-wrapper {
+    transform: translateX(0)!important;
+    .mat-select-arrow {
+      color: var(--on-surface)!important;
+    }
+  }
+
+  .mat-form-field-infix {
+    padding: 0.5em 0 1em;
   }
 }
 

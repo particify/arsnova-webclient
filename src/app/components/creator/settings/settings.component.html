@@ -21,6 +21,7 @@
                                 (saveEvent)="saveRoom($event)"></app-comment-settings>
           <app-access [room]="room" *ngSwitchCase="'access'"
                       (saveEvent)="saveRoom($event)"></app-access>
+          <app-announcement-settings *ngSwitchCase="'announcements'" [room]="room"></app-announcement-settings>
         </div>
       </div>
     </div>
