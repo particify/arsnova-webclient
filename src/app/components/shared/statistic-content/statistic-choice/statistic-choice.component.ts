@@ -16,20 +16,11 @@ import { ContentScale } from '@arsnova/app/models/content-scale';
 import { EventService } from '../../../../services/util/event.service';
 import { PresentationService } from '../../../../services/util/presentation.service';
 import { GlobalStorageService, STORAGE_KEYS } from '../../../../services/util/global-storage.service';
+import { AnswerOption } from '../../../../models/answer-option';
 
 export enum VisualizationUnit {
   ABSOLUTE = 'ABSOLUTE',
   PERCENTAGE = 'PERCENTAGE'
-}
-
-export class AnswerList {
-  label: string;
-  answer: string;
-
-  constructor(label: string, answer: string) {
-    this.label = label;
-    this.answer = answer;
-  }
 }
 
 @Component({
@@ -44,17 +35,15 @@ export class StatisticChoiceComponent extends StatisticContentBaseComponent impl
   @Input() isSurvey: boolean;
 
   destroyed$ = new Subject<void>();
-  answerList: AnswerList[] = [];
   chart: Chart;
   chartId: string;
   colors: Array<string[]> = [[], []];
   indicationColors: Array<string[]> = [[], []];
-  label = 'ABCDEFGH';
-  labels: string[] = [];
+  labelLetters = 'ABCDEFGH';
   data: Array<number[]> = [[], []];
   colorLabel = false;
   survey = false;
-  optionLabels: string[];
+  options: AnswerOption[];
   correctOptionIndexes: number[];
   colorStrings = {
     onBackground: '',
@@ -90,7 +79,9 @@ export class StatisticChoiceComponent extends StatisticContentBaseComponent impl
     this.rounds = this.content.state.round;
     this.roundsToDisplay = this.rounds - 1;
     this.chartId = 'chart-' + this.content.id;
-    this.optionLabels = this.optionLabels ?? this.content.options.map(o => o.label);
+    if (this.content.options) {
+      this.options = [...this.content.options];
+    }
     this.correctOptionIndexes = this.content.correctOptionIndexes;
     if (this.isPresentation) {
       this.showAnswersBelow = this.globalStorageService.getItem(STORAGE_KEYS.SHOW_ANSWERS_BELOW);
@@ -155,10 +146,15 @@ export class StatisticChoiceComponent extends StatisticContentBaseComponent impl
       )
     }
     const scale = this.presentationService.getScale();
+    const labels = Array.from(this.labelLetters).slice(0, this.options.length);
+    if (this.content.abstentionsAllowed) {
+      const label = this.translateService.instant('statistic.abstentions');
+      labels.push(label);
+    }
     this.chart = new Chart(this.chartId, {
       type: 'bar',
       data: {
-        labels: this.labels,
+        labels: labels,
         datasets: dataSets
       },
       options: {
@@ -286,24 +282,16 @@ export class StatisticChoiceComponent extends StatisticContentBaseComponent impl
       if (answerIndex === length - 1 && this.content.abstentionsAllowed) {
         this.colors[j].push(this.colorStrings.abstention);
         this.indicationColors[j].push(this.colorStrings.abstention);
-        if (j === this.rounds -1) {
-          const label = this.translateService.instant('statistic.abstentions');
-          this.labels.push(label);
-        }
       }
     }
   }
 
   initChart() {
-    const length = this.optionLabels.length;
+    const length = this.options.length;
     const theme = this.themeService.getCurrentThemeName();
     const currentTheme = this.themeService.getThemeByKey(theme);
     this.getColors(currentTheme);
     for (let i = 0; i < length; i++) {
-      this.answerList[i] = new AnswerList(null, null);
-      this.labels[i] = this.label.charAt(i);
-      this.answerList[i].label = this.labels[i];
-      this.answerList[i].answer = this.optionLabels[i];
       this.initRoundAnswerOptions(i, length);
     }
   }
