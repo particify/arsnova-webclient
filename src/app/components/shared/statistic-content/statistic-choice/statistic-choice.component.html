@@ -1,13 +1,15 @@
-<div fxLayout="column" fxLayoutGap="0.5em">
+<div fxLayout="column">
   <app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
-  <div class="chart-container" *ngIf="!isLoading" [ngClass]="{ 'invisible': !answersVisible, 'normal-chart': !isPresentation && answersVisible, 'presentation-chart': isPresentation && answersVisible}">
+  <div class="chart-container" *ngIf="!isLoading"
+       [ngClass]="{ 'invisible': !answersVisible, 'normal-chart': !isPresentation && answersVisible,
+                    'presentation-chart': isPresentation && answersVisible, 'no-bottom-margin': showAnswersBelow}">
     <canvas class="chart" id="{{ chartId }}"></canvas>
   </div>
   <div *ngIf="!isLoading && isPresentation && showAnswersBelow" fxLayout="row" fxLayoutAlign="space-around">
     <p *ngFor="let a of options; let i = index" class="chartAnswerLabel" [ngClass]="{'not-correct': colorLabel && !checkIfCorrect(i)}">
       <app-rendered-text [rawText]="a.label" [renderedText]="a.renderedLabel"></app-rendered-text>
     </p>
-    <p *ngIf="content.abstentionsAllowed" class="chartAnswerLabel" [ngClass]="{'not-correct': colorLabel}">
+    <p *ngIf="content.abstentionsAllowed" class="chartAnswerLabel abstention-label" [ngClass]="{'not-correct': colorLabel}">
         {{ 'statistic.abstentions' | translate }}</p>
   </div>
   <mat-list *ngIf="!isLoading && !showAnswersBelow" role="list">

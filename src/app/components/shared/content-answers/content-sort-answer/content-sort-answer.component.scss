@@ -1,5 +1,7 @@
 @import '../contents-with-options';
 
+$option-padding: 0;
+
 .mat-card {
   width: calc(100% - 2em);
   margin-top: $option-padding-full;

@@ -2,6 +2,9 @@
 
 .chart-container {
   transition: all 300ms;
+  &:not(.no-bottom-margin) {
+    margin-bottom: 1em;
+  }
 }
 
 .normal-chart {
