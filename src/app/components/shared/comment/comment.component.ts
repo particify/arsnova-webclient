@@ -1,7 +1,4 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, Pipe, PipeTransform } from '@angular/core';
-import * as dayjs from 'dayjs';
-import * as relativeTime from 'dayjs/plugin/relativeTime';
-import 'dayjs/locale/de';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { Comment } from '../../../models/comment';
 import { Vote } from '../../../models/vote';
 import { AuthenticationService } from '../../../services/http/authentication.service';
@@ -17,23 +14,10 @@ import { DialogService } from '../../../services/util/dialog.service';
 import { GlobalStorageService, STORAGE_KEYS } from '../../../services/util/global-storage.service';
 import { AnnounceService } from '../../../services/util/announce.service';
 import { VoteService } from '../../../services/http/vote.service';
-import { Observable, Subject, timer } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { Observable, Subject } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { CommentAnswerComponent } from '@arsnova/app/components/shared/_dialogs/comment-answer/comment-answer.component';
 import { RoutingService } from '@arsnova/app/services/util/routing.service';
-
-const TIME_UPDATE_INTERVAL = 60000;
-
-@Pipe({ name: 'dateFromNow' })
-export class DateFromNow implements PipeTransform {
-  /* The refresh parameter is not used but forces rerendering when changed. */
-  transform(date: Date, lang: string, refresh?: number): string {
-    dayjs.extend(relativeTime);
-    dayjs.locale(lang);
-    return dayjs(date).fromNow();
-  }
-}
 
 @Component({
   selector: 'app-comment',
@@ -74,7 +58,6 @@ export class CommentComponent implements OnInit, OnDestroy {
   userId: string;
   extensionData: any;
   extensionEvent: Subject<string> = new Subject<string>();
-  refreshCounter = 0;
   destroyed$ = new Subject<void>();
 
   constructor(
@@ -127,9 +110,6 @@ export class CommentComponent implements OnInit, OnDestroy {
         }
       });
     }
-    timer(TIME_UPDATE_INTERVAL, TIME_UPDATE_INTERVAL)
-        .pipe(takeUntil(this.destroyed$))
-        .subscribe(() => this.refreshCounter++);
   }
 
   ngOnDestroy() {
