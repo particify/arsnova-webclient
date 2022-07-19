@@ -318,7 +318,9 @@
     "previous": "Previous content",
     "group-published": "The question series has been published.",
     "change-visualization-unit": "Change visualization unit",
-    "change-answer-list": "Change layout of answers"
+    "change-answer-list": "Change layout of answers",
+    "reset-banned-answers": "Reset banned keywords",
+    "banned-keywords-reset": "Banned keywords have been reset."
   },
   "survey": {
     "a11y-message": "You are now in live feedback mode.",
@@ -496,7 +498,13 @@
     "other-combinations": "Other",
     "show-flashcard-back": "Show the back of the flashcard",
     "hide-flashcard-back": "Hide the back of the flashcard",
-    "no-answers": "There are no answers."
+    "no-answers": "There are no answers.",
+    "delete-answer": "Delete answer",
+    "answer-deleted": "The answer has been deleted.",
+    "show-wordcloud-list": "Show answers as list",
+    "show-wordcloud": "Show answers as wordcloud",
+    "ban-answer": "Ban keyword",
+    "answer-banned": "The keyword has been banned."
   },
   "dialog": {
     "a11y-cancel": "Cancels the current process and closes the dialog.",
@@ -551,7 +559,9 @@
     "publish": "Publish",
     "really-delete-announcement": "Do you really want to delete this announcement?",
     "really-discard-announcement": "Do you really want to discard your input?",
-    "discard": "Discard"
+    "discard": "Discard",
+    "ban": "Ban",
+    "really-ban-answer": "Do you really want to ban the keyword?"
   },
   "utils": {
     "formatting-image-hint": "Please note that images with a large file size can affect loading times."

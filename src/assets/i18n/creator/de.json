@@ -318,7 +318,9 @@
     "previous": "Vorheriger Inhalt",
     "group-published": "Die Fragenserie wurde freigegeben.",
     "change-visualization-unit": "Anzeigeeinheit ändern",
-    "change-answer-list": "Ansicht der Antworten ändern"
+    "change-answer-list": "Ansicht der Antworten ändern",
+    "reset-banned-answers": "Gebannte Wörter zurücksetzen",
+    "banned-keywords-reset": "Gebannte Schlagwörter wurden zurückgesetzt."
   },
   "survey": {
     "a11y-message": "Du befindest dich jetzt im Live Feedback.",
@@ -496,7 +498,13 @@
     "other-combinations": "Andere",
     "show-flashcard-back": "Zeige die Rückseite",
     "hide-flashcard-back": "Verstecke die Rückseite",
-    "no-answers": "Es sind keine Antworten vorhanden."
+    "no-answers": "Es sind keine Antworten vorhanden.",
+    "delete-answer": "Antwort löschen",
+    "answer-deleted": "Die Antwort wurde gelöscht.",
+    "show-wordcloud-list": "Zeige die Antworten als Liste",
+    "show-wordcloud": "Zeige die Antworten als Wortwolke",
+    "ban-answer": "Schlagwort verbannen",
+    "answer-banned": "Das Schlagwort wurde gebannt."
   },
   "dialog": {
     "a11y-cancel": "Bricht den aktuellen Vorgang ab und schließt den Dialog.",
@@ -549,7 +557,9 @@
     "publish": "Freigeben",
     "really-delete-announcement": "Willst du diese Ankündigung wirklich löschen?",
     "really-discard-announcement": "Willst du deine Eingaben wirklich verwerfen?",
-    "discard": "Verwefen"
+    "discard": "Verwefen",
+    "ban": "Verbannen",
+    "really-ban-answer": "Willst du das Schlagwort wirklich verbannen?"
   },
   "utils": {
     "formatting-image-hint": "Bitte beachte, dass Bilder mit hoher Dateigröße die Ladezeiten beeinträchtigen können."

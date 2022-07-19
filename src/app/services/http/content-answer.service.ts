@@ -150,6 +150,13 @@ export class ContentAnswerService extends AbstractEntityService<Answer> {
     );
   }
 
+  hideAnswerText(roomId: string, id: string): Observable<void> {
+    const url = this.buildUri(`/${id}/hide`, roomId);
+    return this.http.post<void>(url, null, httpOptions).pipe(
+      catchError(this.handleError<void>('hideAnswer'))
+    );
+  }
+
   shuffleAnswerOptions(answers: AnswerOption[]): AnswerOption[] {
     for (let i = answers.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * i);

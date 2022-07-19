@@ -7,16 +7,7 @@ import { TextAnswer } from '../../../../models/text-answer';
 import { StatisticContentBaseComponent } from '../statistic-content-base';
 import { Observable } from 'rxjs';
 import { EventService } from '../../../../services/util/event.service';
-
-export class TextStatistic {
-  answer: string;
-  count: number;
-
-  constructor(answer: string, count: number) {
-    this.answer = answer;
-    this.count = count;
-  }
-}
+import { TextStatistic } from '../../../../models/text-statistic';
 
 @Component({
   selector: 'app-statistic-text',
@@ -28,7 +19,8 @@ export class StatisticTextComponent extends StatisticContentBaseComponent implem
   @Input() content: ContentText;
   @Input() directShow: boolean;
 
-  answers: TextStatistic[] = [];
+  answerStats: TextStatistic[] = [];
+  answers: TextAnswer[] = [];
   abstentionCount = 0;
 
   constructor(
@@ -55,27 +47,29 @@ export class StatisticTextComponent extends StatisticContentBaseComponent implem
   getData(answers: TextAnswer[]) {
     const answersMap = new Map<string, TextStatistic>();
     for (const answer of answers) {
+      this.answers.push(answer);
       if (answer.body) {
-        if (answersMap.has(answer.body.toLowerCase())) {
-          const count = answersMap.get(answer.body.toLowerCase()).count + 1;
-          answersMap.set(answer.body.toLowerCase(), new TextStatistic(answersMap.get(answer.body.toLowerCase()).answer, count));
-        } else {
-          answersMap.set(answer.body.toLowerCase(), new TextStatistic(answer.body, 1));
-        }
+        const answerBody = answer.body.toLowerCase();
+        const count = answersMap.has(answerBody) ? answersMap.get(answerBody).count + 1 : 1;
+        answersMap.set(answerBody, new TextStatistic(answer.body, count, answer.id));
       } else {
         this.abstentionCount++;
       }
     }
     answersMap.forEach((value: TextStatistic) => {
-      this.answers.push(new TextStatistic(value.answer, value.count));
+      this.answerStats.push(new TextStatistic(value.answer, value.count, value.id));
     });
-    this.answers.sort((a, b) => {
+    this.answerStats.sort((a, b) => {
       return a.count > b.count ? -1 : 1;
     });
     if (this.abstentionCount > 0) {
       const abstentionString = this.translateService.instant(this.abstentionCount === 1 ? 'statistic.abstention' : 'statistic.abstentions');
-      this.answers.push(new TextStatistic(abstentionString, this.abstentionCount));
+      this.answerStats.push(new TextStatistic(abstentionString, this.abstentionCount));
     }
-    this.updateCounter(this.answers.map(a => a.count));
+    this.updateCounter(this.answerStats.map(a => a.count));
+  }
+
+  filterAnswers(answerId: string) {
+    this.answerStats = this.answerStats.filter(a => a.id !== answerId);
   }
 }

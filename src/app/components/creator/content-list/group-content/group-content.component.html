@@ -231,6 +231,10 @@
                         <span>{{ 'content.duplicate-content' | translate}}</span>
                       </button>
                       <mat-divider></mat-divider>
+                      <button *ngIf="content.format === ContentType.WORDCLOUD" mat-menu-item (click)="resetBannedAnswers(content.id)" attr.aria-label="{{ 'content.a11y-delete-answers' | translate }}">
+                        <mat-icon>lock_reset</mat-icon>
+                        <span>{{ 'content.reset-banned-answers' | translate}}</span>
+                      </button>
                       <button mat-menu-item (click)="deleteAnswers(content)" attr.aria-label="{{ 'content.a11y-delete-answers' | translate }}">
                         <mat-icon>clear_all</mat-icon>
                         <span>{{ 'content.delete-answers' | translate}}</span>

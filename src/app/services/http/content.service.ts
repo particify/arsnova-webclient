@@ -31,7 +31,8 @@ export class ContentService extends AbstractEntityService<Content> {
 
   serviceApiUrl = {
     answer: '/answer',
-    duplicate: '/duplicate'
+    duplicate: '/duplicate',
+    bannedKeywords: '/banned-keywords'
   };
 
   typeIcons: Map<ContentType, string> = new Map<ContentType, string>([
@@ -199,6 +200,23 @@ export class ContentService extends AbstractEntityService<Content> {
     };
     return this.http.post<Content>(connectionUrl, body, httpOptions).pipe(
         catchError(this.handleError<Content>(`duplicateContent, ${roomId}, ${groupId}, ${contentId}`))
+    );
+  }
+
+  banKeywordForContent(roomId: string, contentId: string, keyword: string): Observable<void> {
+    const connectionUrl = this.buildUri(`/${contentId}${this.serviceApiUrl.bannedKeywords}`, roomId);
+    const body = {
+      keyword: keyword
+    };
+    return this.http.post<void>(connectionUrl, body, httpOptions).pipe(
+        catchError(this.handleError<void>(`Ban keyword for content, ${roomId}, ${keyword}, ${contentId}`))
+    );
+  }
+
+  resetBannedKeywords(roomId: string, contentId: string): Observable<void> {
+    const connectionUrl = this.buildUri(`/${contentId}${this.serviceApiUrl.bannedKeywords}`, roomId);
+    return this.http.delete<void>(connectionUrl, httpOptions).pipe(
+        catchError(this.handleError<void>(`Reset banned keywords for content, ${roomId}, ${contentId}`))
     );
   }
 

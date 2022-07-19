@@ -2,5 +2,8 @@
   <div fxLayoutAlign="center">
     <p *ngIf="wordWeights.length === 0" class="hint-sm">{{ 'statistic.no-answers' | translate }}</p>
   </div>
-  <app-wordcloud *ngIf="answersVisible" [wordWeights]="wordWeights"></app-wordcloud>
+  <div *ngIf="answersVisible">
+    <app-wordcloud *ngIf="!showModeration" [wordWeights]="wordWeights"></app-wordcloud>
+    <app-answer-list *ngIf="showModeration" [answers]="answerList" [roomId]="content.roomId" [contentId]="content.id" (answerBanned)="filterAnswers($event)"></app-answer-list>
+  </div>
 </div>

@@ -16,6 +16,8 @@ import { UiState } from '../../../../models/events/remote/ui-state-changed-event
 import { ContentFocusState } from '../../../../models/events/remote/content-focus-state';
 import { ContentMessages } from '../../../../models/events/content-messages.enum';
 import { ContentService } from '../../../../services/http/content.service';
+import { ActivatedRoute } from '@angular/router';
+import { UserRole } from '../../../../models/user-roles.enum';
 
 @Component({
   selector: 'app-statistic-content',
@@ -52,10 +54,13 @@ export class StatisticContentComponent implements OnInit {
   HotkeyAction = HotkeyAction;
   multipleRounds: boolean;
   roundsToDisplay = 0;
+  showWordcloudModeration = false;
+  isParticipant = true;
 
   constructor(private announceService: AnnounceService,
               private eventService: EventService,
-              private contentService: ContentService) { }
+              private contentService: ContentService,
+              private route: ActivatedRoute) { }
 
   ngOnInit(): void {
     this.attachmentData = {
@@ -70,6 +75,7 @@ export class StatisticContentComponent implements OnInit {
     }
     this.roundsToDisplay = this.content.state.round - 1;
     this.multipleRounds = this.roundsToDisplay > 0;
+    this.isParticipant = this.route.snapshot.data.viewRole === UserRole.PARTICIPANT;
     this.isLoading = false;
     this.routeChanged.subscribe(() => {
       this.updateCounter(this.answerCount);
@@ -180,6 +186,10 @@ export class StatisticContentComponent implements OnInit {
         this.sendUiState();
       }
     }
+  }
+
+  toggleWordcloudView() {
+    this.showWordcloudModeration = !this.showWordcloudModeration;
   }
 
   checkIfSurvey() {
