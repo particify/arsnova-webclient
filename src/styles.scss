@@ -227,7 +227,7 @@ div {
 @media(min-width: 1000px) {
   .dialog-margin {
     .mat-dialog-container {
-      margin-left: 72px;
+      margin-left: $navigation-rail-width;
     }
   }
 }
@@ -961,7 +961,7 @@ button.mat-menu-item:hover {
 @media(min-width: 1000px) {
   .mat-menu-panel.series-menu {
     position: absolute;
-    left: 72px;
+    left: $navigation-rail-width;
     top: -64px;
   }
 }

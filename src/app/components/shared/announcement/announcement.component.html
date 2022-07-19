@@ -18,7 +18,10 @@
       </button>
     </mat-menu>
   </div>
-  <mat-card-subtitle>{{ announcement.creationTimestamp | dateFormat : lang }}</mat-card-subtitle>
+  <mat-card-subtitle>
+    <app-date [timestamp]="announcement.updateTimestamp || announcement.creationTimestamp" [responsive]="true"></app-date>
+    <span *ngIf="announcement.updateTimestamp">&nbsp;({{ 'announcement.edited' | translate }})</span>
+  </mat-card-subtitle>
   <div>
     <app-rendered-text [rawText]="announcement.renderedBody" [markdownFeatureset]="markdownFeatureset"></app-rendered-text>
   </div>
