@@ -2,7 +2,10 @@
     <mat-card *ngFor="let answer of answerOptions" cdkDrag [cdkDragStartDelay]="50" [ngClass]="{'no-grab': disabled}">
         <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="15px">
             <mat-icon>drag_handle</mat-icon>
-            <span>{{ answer.label }}</span>
+            <app-rendered-text [rawText]="answer.label"
+                               [renderedText]="answer.renderedLabel"
+                               [dynamic]="dynamicRendering"
+                               [markdown]="false"></app-rendered-text>
         </div>
     </mat-card>
 </div>

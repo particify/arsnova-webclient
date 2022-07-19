@@ -11,6 +11,7 @@ export class ContentSortAnswerComponent {
 
   @Input() answerOptions: AnswerOption[];
   @Input() disabled: boolean;
+  @Input() dynamicRendering: boolean;
 
   constructor() {
   }

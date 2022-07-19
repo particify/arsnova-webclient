@@ -40,7 +40,6 @@ export class StatisticSortComponent extends StatisticContentBaseComponent implem
   answerIndexes: Array<Array<number>> = [];
   data: ChartDataset<'bar'>[] = [];
   labels: string[] = [];
-  answers: string[] = [];
   colors: string[] = [];
   indicationColors: string[] = [];
   showCorrect = false;
@@ -67,7 +66,6 @@ export class StatisticSortComponent extends StatisticContentBaseComponent implem
   }
 
   initData(stats: AnswerStatistics) {
-    this.answers = this.content.options.map(o => o.label);
     this.updateData(stats);
   }
 

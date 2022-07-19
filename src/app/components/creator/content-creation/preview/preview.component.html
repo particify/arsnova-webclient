@@ -7,8 +7,8 @@
                      (rendered)="renderingFinished()"></app-rendered-text>
   <lib-extension-point extensionId="attachment-list" [extensionData]="attachmentData"></lib-extension-point>
   <app-content-choice-answer *ngIf="content.format === 'CHOICE' || content.format === 'SCALE' || content.format === 'BINARY'"
-                             [selectableAnswers]="selectableAnswers" [multipleAnswersAllowed]="multipleAnswers"></app-content-choice-answer>
-  <app-content-sort-answer *ngIf="content.format === 'SORT'" [answerOptions]="answerOptions"></app-content-sort-answer>
+                             [selectableAnswers]="selectableAnswers" [multipleAnswersAllowed]="multipleAnswers" [dynamicRendering]="content.format === 'CHOICE'"></app-content-choice-answer>
+  <app-content-sort-answer *ngIf="content.format === 'SORT'" [answerOptions]="answerOptions" [dynamicRendering]="true"></app-content-sort-answer>
 </mat-card>
 <div *ngIf="content.format === 'FLASHCARD'">
   <h3 aria-labelledby="back">{{ 'content.flashcard-back' | translate }}

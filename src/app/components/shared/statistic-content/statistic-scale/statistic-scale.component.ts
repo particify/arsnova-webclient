@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { forkJoin } from 'rxjs';
+import { forkJoin, Observable } from 'rxjs';
 import { ThemeService } from '../../../../../theme/theme.service';
 import { ContentScale } from '../../../../models/content-scale';
 import { ContentService } from '../../../../services/http/content.service';
@@ -32,8 +32,8 @@ export class StatisticScaleComponent extends StatisticChoiceComponent {
     const optionLabels$ = this.likertScaleService.getOptionLabels(
         scaleContent.optionTemplate,
         scaleContent.optionCount)
-        .map(l => this.translateService.get(l));
-    forkJoin(optionLabels$).subscribe(labels => this.optionLabels = labels);
+        .map(l => this.translateService.get(l) as Observable<string>);
+    forkJoin(optionLabels$).subscribe(labels => this.options = labels.map(l => ({ label: l })));
     this.correctOptionIndexes = [];
     super.init();
   }

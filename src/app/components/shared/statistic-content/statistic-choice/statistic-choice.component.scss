@@ -25,9 +25,11 @@
 }
 
 .chartAnswerLabel {
+  &:not(.abstention-label) {
+    margin: 0;
+  }
   font-size: 10px;
   width: 100px;
-  margin: 0;
   text-align: center;
   display: -webkit-box;
   -webkit-line-clamp: 10;
