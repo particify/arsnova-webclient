@@ -254,7 +254,9 @@
     "load-rooms": "Räume laden",
     "transfer-no-rooms": "Es wurden keine Räume zum Transferieren gefunden.",
     "hide-guest-rooms": "Ausblenden",
-    "import": "Importieren"
+    "import": "Importieren",
+    "active": "Aktiv",
+    "active-info": "In diesem Raum befinden sich gerade {{userCount}} Personen."
   },
   "user-activation": {
     "a11y-activate": "Aktiviert deinen Account.",
