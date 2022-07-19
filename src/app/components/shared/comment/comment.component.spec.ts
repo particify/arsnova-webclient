@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { CommentComponent, DateFromNow } from './comment.component';
+import { CommentComponent } from './comment.component';
 import { ActivatedRoute } from '@angular/router';
 import { NotificationService } from '@arsnova/app/services/util/notification.service';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
@@ -50,13 +50,10 @@ describe('CommentComponent', () => {
   }
   const activatedRouteStub = new ActivatedRouteStub(null, data);
 
-  const dateFromNowStub = new DateFromNow();
-
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [
-        CommentComponent,
-        DateFromNow
+        CommentComponent
       ],
       imports: [
         TranslateModule.forRoot({
@@ -113,10 +110,6 @@ describe('CommentComponent', () => {
         {
           provide: MatDialog,
           useClass: MockMatDialog
-        },
-        {
-          provide: DateFromNow,
-          useValue: dateFromNowStub 
         }
       ]
     })

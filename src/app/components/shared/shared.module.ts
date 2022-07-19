@@ -15,7 +15,7 @@ import { SharedRoutingModule } from './shared-routing.module';
 import { StatisticListComponent } from './statistic-list/statistic-list.component';
 import { RoomJoinComponent } from './room-join/room-join.component';
 import { RoomCreateComponent } from './_dialogs/room-create/room-create.component';
-import { CommentComponent, DateFromNow } from './comment/comment.component';
+import { CommentComponent } from './comment/comment.component';
 import { CreateCommentComponent } from './_dialogs/create-comment/create-comment.component';
 import { PresentCommentComponent } from './present-comment/present-comment.component';
 import { DialogActionButtonsComponent } from './dialog/dialog-action-buttons/dialog-action-buttons.component';
@@ -57,6 +57,8 @@ import { RoomPageComponent } from './room-page/room-page.component';
 import { FormattingToolbarComponent } from './formatting-toolbar/formatting-toolbar.component';
 import { AnnouncementComponent } from './announcement/announcement.component';
 import { DateFormatPipe } from '../../pipes/date-format.pipe';
+import { DateFromNowPipe } from '../../pipes/date-from-now.pipe';
+import { DateComponent } from './date/date.component';
 
 @NgModule({
   imports: [
@@ -93,7 +95,6 @@ import { DateFormatPipe } from '../../pipes/date-format.pipe';
     StatisticWordcloudComponent,
     LoadingIndicatorComponent,
     YesNoDialogComponent,
-    DateFromNow,
     StepperComponent,
     RenderedTextComponent,
     UpdateInfoComponent,
@@ -120,7 +121,9 @@ import { DateFormatPipe } from '../../pipes/date-format.pipe';
     SettingsSlideToggleComponent,
     FormattingToolbarComponent,
     AnnouncementComponent,
-    DateFormatPipe
+    DateFromNowPipe,
+    DateFormatPipe,
+    DateComponent
   ],
   exports: [
     RoomJoinComponent,
@@ -164,8 +167,7 @@ import { DateFormatPipe } from '../../pipes/date-format.pipe';
     TrackInteractionDirective,
     SettingsSlideToggleComponent,
     FormattingToolbarComponent,
-    AnnouncementComponent,
-    DateFormatPipe
+    AnnouncementComponent
   ]
 })
 export class SharedModule {

@@ -11,7 +11,7 @@
   answer: comment.answer ? ('comment-page.a11y-text-answer' | translate) : ''} }}">
     <div fxLayout="row" class="comment-actions" [ngClass]="{'light-buttons': isParticipant}">
       <div class="date light">
-        <div>{{comment.timestamp | dateFromNow : language : refreshCounter }}</div>
+        <app-date [timestamp]="comment.timestamp" [responsive]="true"></app-date>
       </div>
       <span class="fill-remaining-space"></span>
 
