@@ -67,11 +67,6 @@
   text-align: center;
 }
 
-.news-btn {
-  color: var(--on-surface);
-  margin-right: 0.5em;
-}
-
 .color-text-container {
   padding-right: 16px;
 }
@@ -100,4 +95,8 @@
 .back-to-edit {
   opacity: 1;
   color: var(--primary);
+}
+
+.mat-icon-button .mat-icon {
+  opacity: 0.8;
 }

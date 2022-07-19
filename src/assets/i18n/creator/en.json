@@ -452,7 +452,9 @@
     "changes-successful": "Your changes have been saved.",
     "comments": "Q&A",
     "threshold-info": "If a threshold value is set, only posts that have received a higher rating are displayed.",
-    "direct-send-info": "If this setting is deactivated, a moderator or the lecturer must activate new posts before they become publicly visible."
+    "direct-send-info": "If this setting is deactivated, a moderator or the lecturer must activate new posts before they become publicly visible.",
+    "announcements": "Announcements",
+    "announcements-info": "With announcements you can inform the participants about dates and news."
   },
   "room": {
     "room-name": "Room name",
@@ -553,7 +555,10 @@
     "publish-contents-up-to-here": "Release all contents up to here",
     "publish-group": "Publish question series",
     "want-publish-group": "Do you want to publish the following question series?",
-    "publish": "Publish"
+    "publish": "Publish",
+    "really-delete-announcement": "Do you really want to delete this announcement?",
+    "really-discard-announcement": "Do you really want to discard your input?",
+    "discard": "Discard"
   },
   "utils": {
     "formatting-image-hint": "Please note that images with a large file size can affect loading times."
@@ -700,5 +705,18 @@
     "formular": "Formular",
     "link": "Link",
     "image": "Image"
+  },
+  "announcement": {
+    "title": "Title",
+    "body": "Body",
+    "enter-body": "Enter your content here",
+    "create": "Create",
+    "missing-input": "Please enter title and body.",
+    "created": "Your announcement has been created.",
+    "deleted": "The announcement has been deleted.",
+    "edit": "Edit",
+    "delete": "Delete",
+    "save": "Save",
+    "cancel": "Cancel"
   }
 }

@@ -359,5 +359,14 @@
     "shift": "Shift",
     "space": "Spacebar",
     "escape": "Escape"
+  },
+  "announcement": {
+    "announcements": "Announcements",
+    "close": "Close",
+    "new": "New",
+    "edited": "Edited",
+    "new-announcements": "There are new announcements",
+    "all-rooms": "All rooms",
+    "no-announcements": "There are no announcements."
   }
 }

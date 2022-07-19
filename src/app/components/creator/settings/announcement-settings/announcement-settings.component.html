@@ -1,0 +1,34 @@
+<div fxLayout="column" fxLayoutGap="1em">
+  <p class="info">{{ 'settings.announcements-info' | translate }}</p>
+  <form fxLayout="column" fxLayoutGap="1em">
+    <mat-form-field class="input-block no-field-hint" appearance="outline">
+      <mat-label>{{ 'announcement.title' | translate }}</mat-label>
+      <input #titleInput [(ngModel)]="title" matInput name="title"/>
+    </mat-form-field>
+    <div class="relative">
+      <mat-tab-group #inputTabs [dynamicHeight]=true animationDuration="0" (selectedTabChange)="tabChanged($event)">
+      <mat-tab label="{{ 'announcement.body' | translate}}">
+        <mat-form-field id="body-input" class="input-block no-field-hint " appearance="outline">
+          <textarea #bodyInput [(ngModel)]="body" matInput cdkTextareaAutosize cdkAutosizeMinRows="3" cdkAutosizeMaxRows="5" name="body"
+                    [placeholder]="'announcement.enter-body' | translate"></textarea>
+        </mat-form-field>
+      </mat-tab>
+      <mat-tab label="{{'room.preview' | translate}}" [disabled]="!body">
+        <div>
+          <app-rendered-text [rawText]="bodyInput.value" [dynamic]="renderPreview" [markdownFeatureset]="markdownFeatureset"></app-rendered-text>
+        </div>
+      </mat-tab>
+    </mat-tab-group>
+    <app-formatting-toolbar *ngIf="!renderPreview" class="tab-group-formatting-bar" [inputElement]="bodyInput" (valueChanged)="body = $event"></app-formatting-toolbar>
+    </div>
+    <div fxLayout="row" fxLayoutAlign="end" fxLayoutGap="10px">
+      <button mat-stroked-button *ngIf="editId" (click)="resetEdit()">{{ 'announcement.cancel' | translate }}</button>
+      <button mat-raised-button class="button-primary" (click)="save()">{{ ( editId ? 'announcement.save' : 'announcement.create') | translate }}</button>
+    </div>
+  </form>
+  <div *ngIf="!isLoading" fxLayout="column" fxLayoutGap="1em" class="announcement-list-container">
+    <app-announcement *ngFor="let announcement of announcements" [announcement]="announcement" [role]="'CREATOR'" [editMode]="editId === announcement.id"
+                      (deleteEvent)="delete($event)" (editEvent)="edit($event)"></app-announcement>
+  </div>
+  <app-loading-indicator *ngIf="isLoading" [size]="60"></app-loading-indicator>
+</div>

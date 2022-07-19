@@ -132,10 +132,11 @@
         </button>
         <lib-extension-point extensionId="present-in-new-tab" (extensionEvent)="checkIfOpenPresentationDirectly($event)"></lib-extension-point>
       </mat-menu>
-      <div fxLayoutGap="10px">
-        <button *ngIf="showNews" mat-icon-button class="news-btn" (click)="openUpdateInfoDialog()" aria-labelledby="news"
-                matTooltip="{{ 'header.news' | translate }}">
-          <mat-icon matBadge="1">
+      <div fxLayoutGap="16px">
+        <button *ngIf="announcementState" mat-icon-button (click)="showNews()" class="icon-badge"
+                [matTooltip]="(announcementState.new > 0 ? 'announcement.new-announcements' : 'announcement.announcements') | translate"
+                matBadge="{{announcementState.new}}" [matBadgeHidden]="announcementState.new === 0">
+          <mat-icon>
             notifications
           </mat-icon>
         </button>
@@ -157,7 +158,6 @@
   <div id="help-label">{{'header.a11y-help' | translate}}</div>
   <div id="style-label">{{'header.a11y-style' | translate}}</div>
   <div id="language-label">{{'header.a11y-language' | translate}}</div>
-  <div id="news">{{'header.a11y-news' | translate}}</div>
   <div id="data-protection-label">{{'footer.a11y-data-protection' | translate}}</div>
   <div id="imprint-label">{{'footer.a11y-imprint' | translate}}</div>
   <div id="switch-role">{{ (isPreview ? 'header.a11y-switch-back' : 'header.a11y-switch-role') | translate}}</div>

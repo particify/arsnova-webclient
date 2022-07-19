@@ -18,6 +18,10 @@ import { ConsentService } from '../../../services/util/consent.service';
 import { HotkeyAction } from '../../../directives/hotkey.directive';
 import { UserRole } from '../../../models/user-roles.enum';
 import { ExtensionFactory } from '../../../../../projects/extension-point/src/public-api';
+import { MatDialog } from '@angular/material/dialog';
+import { AnnouncementListComponent } from '../../participant/announcement-list/announcement-list.component';
+import { AnnouncementService } from '@arsnova/app/services/http/announcement.service';
+import { AnnouncementState } from '@arsnova/app/models/announcement-state';
 
 @Component({
   selector: 'app-header',
@@ -37,13 +41,13 @@ export class HeaderComponent implements OnInit {
   helpUrl: string;
   privacyUrl: string;
   imprintUrl: string;
-  showNews: boolean;
   lang: string;
   HotkeyAction = HotkeyAction;
   isRoom: boolean;
   isPreview: boolean;
   userCharacter: string;
   openPresentationDirectly = false;
+  announcementState: AnnouncementState;
 
   constructor(
     public location: Location,
@@ -61,7 +65,9 @@ export class HeaderComponent implements OnInit {
     private routingService: RoutingService,
     private route: ActivatedRoute,
     private consentService: ConsentService,
-    private extensionFactory: ExtensionFactory
+    private extensionFactory: ExtensionFactory,
+    private dialog: MatDialog,
+    private announcementService: AnnouncementService
   ) {
     this.deviceType = this.globalStorageService.getItem(STORAGE_KEYS.DEVICE_TYPE);
     this.lang = this.translationService.currentLang;
@@ -71,6 +77,7 @@ export class HeaderComponent implements OnInit {
     this.authenticationService.getAuthenticationChanges().subscribe(auth => {
       this.auth = auth;
       this.userCharacter = this.auth?.loginId.slice(0, 1).toLocaleUpperCase();
+      this.getAnnouncementState();
     });
 
     this.themeService.getTheme().subscribe(theme => {
@@ -83,7 +90,6 @@ export class HeaderComponent implements OnInit {
       this.imprintUrl = data.apiConfig.ui.links?.imprint?.url ;
     });
     this.translationService.onLangChange.subscribe(e => this.lang = e.lang);
-    this.showNews = false;
     this.isRoom = this.routingService.isRoom;
     this.routingService.getIsRoom().subscribe(isRoom => {
       this.isRoom = isRoom;
@@ -97,6 +103,18 @@ export class HeaderComponent implements OnInit {
       this.role = role;
     });
     this.openPresentationDirectly = !this.extensionFactory.getExtension('present-in-new-tab');
+    this.getAnnouncementState();
+    // TODO: Subscribe to WS events for announcement state
+  }
+
+  getAnnouncementState() {
+    if (this.auth) {
+      this.announcementService.getStateByUserId(this.auth.userId).subscribe(state => {
+        this.announcementState = state;
+      });
+    } else {
+      this.announcementState = null;
+    }
   }
 
   changeLanguage(lang: string) {
@@ -167,13 +185,6 @@ export class HeaderComponent implements OnInit {
     this.themeService.activate(theme.key);
   }
 
-  openUpdateInfoDialog() {
-    const dialogRef = this.dialogService.openUpdateInfoDialog(true);
-    dialogRef.afterClosed().subscribe(() => {
-      this.showNews = false;
-    });
-  }
-
   showCookieSettings() {
     this.consentService.openDialog();
   }
@@ -194,5 +205,19 @@ export class HeaderComponent implements OnInit {
 
   goToSettings() {
     this.routingService.navToSettings();
+  }
+
+  showNews() {
+    const dialogRef = this.dialog.open(AnnouncementListComponent, {
+      panelClass: 'dialog-margin',
+      width: '90%',
+      maxWidth: '872px',
+      data: {
+        state: this.announcementState
+      }
+    });
+    dialogRef.afterClosed().subscribe(newReadTimestamp => {
+      this.announcementState.readTimestamp = newReadTimestamp;
+    });
   }
 }

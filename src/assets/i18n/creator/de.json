@@ -452,7 +452,9 @@
     "changes-successful": "Deine Änderungen wurden gespeichert.",
     "comments": "Q&A",
     "threshold-info": "Wird ein Schwellenwert gesetzt, werden nur Beiträge angezeigt, welche eine höhere Bewertung erhalten haben.",
-    "direct-send-info": "Wenn diese Einstellung deaktiviert ist, muss eine moderierende Person bzw. die vortragende Person neue Beiträge erst freischalten bevor diese öffentlich sichtbar werden."
+    "direct-send-info": "Wenn diese Einstellung deaktiviert ist, muss eine moderierende Person bzw. die vortragende Person neue Beiträge erst freischalten bevor diese öffentlich sichtbar werden.",
+    "announcements": "Ankündigungen",
+    "announcements-info": "Mit Ankündigungen kannst du die Teilnehmenden über Termine und Neuigkeiten informieren."
   },
   "room": {
     "room-name": "Name des Raums",
@@ -553,7 +555,10 @@
     "publish-contents-up-to-here": "Alle Inhalte bis hier freigeben",
     "publish-group": "Fragenserie freigeben",
     "want-publish-group": "Willst du die folgende Fragenserie freigeben?",
-    "publish": "Freigeben"
+    "publish": "Freigeben",
+    "really-delete-announcement": "Willst du diese Ankündigung wirklich löschen?",
+    "really-discard-announcement": "Willst du deine Eingaben wirklich verwerfen?",
+    "discard": "Verwefen"
   },
   "utils": {
     "formatting-image-hint": "Bitte beachte, dass Bilder mit hoher Dateigröße die Ladezeiten beeinträchtigen können."
@@ -700,5 +705,18 @@
     "formulars": "Formel",
     "link": "Link",
     "image": "Bild"
+  },
+  "announcement": {
+    "title": "Titel",
+    "body": "Inhalt",
+    "enter-body": "Gib hier deinen Inhalt ein",
+    "create": "Erstellen",
+    "missing-input": "Bitte gib Titel und Inhalt ein.",
+    "created": "Deine Ankündigung wurde erstellt.",
+    "deleted": "Die Ankündigung wurde gelöscht.",
+    "edit": "Bearbeiten",
+    "delete": "Löschen",
+    "save": "Speichern",
+    "cancel": "Abbrechen"
   }
 }

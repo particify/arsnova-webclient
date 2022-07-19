@@ -1,0 +1,36 @@
+.mat-card {
+  box-shadow: none;
+  border: 1px solid var(--grey-light);
+  width: calc(100% - 2em - 2px);
+}
+
+.title {
+  margin-top: 0;
+}
+
+.label-container {
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+.label-text {
+  font-size: 12px;
+}
+
+.room-label {
+  color: var(--on-surface);
+  opacity: 0.7;
+}
+
+.room-container {
+  border: 1px solid var(--grey);
+}
+
+.new-container {
+  background: var(--secondary);
+}
+
+.new-label {
+  text-transform: uppercase;
+  color: var(--on-secondary);
+}

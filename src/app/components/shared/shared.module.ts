@@ -55,6 +55,8 @@ import { TrackInteractionDirective } from '../../directives/track-interaction.di
 import { SettingsSlideToggleComponent } from './settings-slide-toggle/settings-slide-toggle.component';
 import { RoomPageComponent } from './room-page/room-page.component';
 import { FormattingToolbarComponent } from './formatting-toolbar/formatting-toolbar.component';
+import { AnnouncementComponent } from './announcement/announcement.component';
+import { DateFormatPipe } from '../../pipes/date-format.pipe';
 
 @NgModule({
   imports: [
@@ -116,7 +118,9 @@ import { FormattingToolbarComponent } from './formatting-toolbar/formatting-tool
     ContentChoiceAnswerComponent,
     TrackInteractionDirective,
     SettingsSlideToggleComponent,
-    FormattingToolbarComponent
+    FormattingToolbarComponent,
+    AnnouncementComponent,
+    DateFormatPipe
   ],
   exports: [
     RoomJoinComponent,
@@ -159,7 +163,9 @@ import { FormattingToolbarComponent } from './formatting-toolbar/formatting-tool
     ContentChoiceAnswerComponent,
     TrackInteractionDirective,
     SettingsSlideToggleComponent,
-    FormattingToolbarComponent
+    FormattingToolbarComponent,
+    AnnouncementComponent,
+    DateFormatPipe
   ]
 })
 export class SharedModule {
