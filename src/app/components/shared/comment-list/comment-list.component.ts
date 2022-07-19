@@ -290,7 +290,7 @@ export class CommentListComponent implements OnInit, OnDestroy {
 
   searchComments(): void {
     if (this.searchInput) {
-      if (this.searchInput.length > 2) {
+      if (this.searchInput.length > 0) {
         this.hideCommentsList = true;
         this.filteredComments = this.commentsFilteredByTime
           .filter(c => c.body.toLowerCase().includes(this.searchInput.toLowerCase()));
