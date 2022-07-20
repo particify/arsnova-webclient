@@ -13,7 +13,6 @@ export class ContentGroupsComponent implements OnInit {
 
   @Input() contentGroupName: string;
   @Input() length: number;
-  @Input() isLoose: boolean;
   @Input() isLocked = false;
   role: UserRole;
   roomShortId: string;
@@ -31,19 +30,13 @@ export class ContentGroupsComponent implements OnInit {
   }
 
   viewContents() {
-    if (!this.isLoose) {
-      let role: string;
-      if (this.role === UserRole.CREATOR) {
-        role = UserRole.CREATOR.toLowerCase();
-      } else {
-        role = UserRole.PARTICIPANT.toLowerCase();
-      }
-      this.router.navigate([role, this.roomShortId, 'series',this.contentGroupName]);
-      this.globalStorageService.setItem(STORAGE_KEYS.LAST_GROUP, this.contentGroupName);
+    let role: string;
+    if (this.role === UserRole.CREATOR) {
+      role = UserRole.CREATOR.toLowerCase();
     } else {
-      if (this.role === UserRole.CREATOR) {
-        this.router.navigate(['edit', this.roomShortId, 'archive']);
-      }
+      role = UserRole.PARTICIPANT.toLowerCase();
     }
+    this.router.navigate([role, this.roomShortId, 'series',this.contentGroupName]);
+    this.globalStorageService.setItem(STORAGE_KEYS.LAST_GROUP, this.contentGroupName);
   }
 }

@@ -65,9 +65,7 @@
             </ng-container>
           <div *ngIf="room && contentGroups">
             <app-content-groups *ngFor="let contentGroup of contentGroups" [contentGroupName]="contentGroup.name"
-                                [length]="contentGroup.contentIds?.length" [isLoose]="false" [isLocked]="!contentGroup.published"></app-content-groups>
-            <app-content-groups *ngIf="looseContent.length > 0" [contentGroupName]="'content.archived-contents' | translate" [length]="looseContent.length"
-                                [isLoose]="true"></app-content-groups>
+                                [length]="contentGroup.contentIds?.length" [isLocked]="!contentGroup.published"></app-content-groups>
           </div>
         </div>
       </div>

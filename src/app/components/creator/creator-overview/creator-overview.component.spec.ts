@@ -44,10 +44,6 @@ class MockContentService {
   getContentsByIds() {
     return of([new Content('1234', '0', '1', 'subject', 'body', [], ContentType.CHOICE, {}, new ContentState(1, new Date(), true))]);
   }
-
-  findContentsWithoutGroup() {
-    return of([]);
-  }
 }
 
 @Injectable()

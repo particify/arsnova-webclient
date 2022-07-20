@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { ContentListBaseComponent } from '../../content-list/content-list-base.component';
 import { AdvancedSnackBarTypes, NotificationService } from '../../../../services/util/notification.service';
 import { TranslateService } from '@ngx-translate/core';
 import { ContentGroupService } from '../../../../services/http/content-group.service';
 import { EventService } from '../../../../services/util/event.service';
+import { GroupContentComponent } from '../../content-list/group-content/group-content.component';
 
 @Component({
   selector: 'app-content-group-creation',
@@ -17,7 +17,7 @@ export class ContentGroupCreationComponent {
   name = '';
 
   constructor(
-    public dialogRef: MatDialogRef<ContentListBaseComponent>,
+    public dialogRef: MatDialogRef<GroupContentComponent>,
     public dialog: MatDialog,
     private notificationService: NotificationService,
     private translateService: TranslateService,

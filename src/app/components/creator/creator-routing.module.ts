@@ -12,7 +12,6 @@ import { CommentPageComponent } from '../shared/comment-page/comment-page.compon
 import { SettingsPageComponent } from './settings-page/settings-page.component';
 import { RoomResolver } from '../../resolver/room.resolver';
 import { RoomViewUserRoleResolver } from '../../resolver/room-view-user-role.resolver';
-import { LooseContentComponent } from './content-list/loose-content/loose-content.component';
 import { GroupContentComponent } from './content-list/group-content/group-content.component';
 import { RoomUserRoleResolver } from '../../resolver/room-user-role.resolver';
 import { CreatorOverviewComponent } from './creator-overview/creator-overview.component';
@@ -75,10 +74,6 @@ const routes: Routes = [
   {
     path: 'series/:seriesName',
     component: GroupContentComponent
-  },
-  {
-    path: 'archive',
-    component: LooseContentComponent
   }
 ];
 

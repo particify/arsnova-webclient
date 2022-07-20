@@ -28,7 +28,6 @@ import { HotkeyService } from '../../../services/util/hotkey.service';
 })
 export class CreatorOverviewComponent extends RoomOverviewComponent implements OnInit, OnDestroy, AfterContentInit {
 
-  looseContent: Content[] = [];
   userCount: number;
   target: Window;
   isModerator = false;
@@ -99,10 +98,7 @@ export class CreatorOverviewComponent extends RoomOverviewComponent implements O
 
   afterGroupsLoadHook() {
     this.prepareAttachmentData(UserRole.CREATOR);
-    this.contentService.findContentsWithoutGroup(this.room.id).subscribe(contents => {
-      this.looseContent = contents;
-      this.isLoading = false;
-    });
+    this.isLoading = false;
     this.globalStorageService.setItem(STORAGE_KEYS.CONTENT_GROUPS, this.groupNames);
   }
 

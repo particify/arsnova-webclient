@@ -30,7 +30,8 @@ const httpOptions = {
 export class ContentService extends AbstractEntityService<Content> {
 
   serviceApiUrl = {
-    answer: '/answer'
+    answer: '/answer',
+    duplicate: '/duplicate'
   };
 
   typeIcons: Map<ContentType, string> = new Map<ContentType, string>([
@@ -191,13 +192,13 @@ export class ContentService extends AbstractEntityService<Content> {
     );
   }
 
-  findContentsWithoutGroup(roomId: string): Observable<Content[]> {
-    const connectionUrl = this.buildUri(this.apiUrl.find, roomId);
-    return this.http.post<Content[]>(connectionUrl, {
-      properties: {},
-      externalFilters: { notInContentGroupOfRoomId: roomId }
-    }).pipe(
-      catchError(this.handleError<Content[]>(`findContentsWithoutGroup roomId=${roomId}`))
+  duplicateContent(roomId: string, groupId: string, contentId: string): Observable<Content> {
+    const connectionUrl = this.buildUri(`/${contentId}${this.serviceApiUrl.duplicate}`, roomId);
+    const body = {
+      roomId: roomId, contentGroupId: groupId
+    };
+    return this.http.post<Content>(connectionUrl, body, httpOptions).pipe(
+        catchError(this.handleError<Content>(`duplicateContent, ${roomId}, ${groupId}, ${contentId}`))
     );
   }
 

@@ -15,7 +15,6 @@ import {
 import { Observable, of } from 'rxjs';
 import { GlobalStorageService } from '@arsnova/app/services/util/global-storage.service';
 import { EventService } from '@arsnova/app/services/util/event.service';
-import { ContentService } from '@arsnova/app/services/http/content.service';
 import { ContentGroupService } from '@arsnova/app/services/http/content-group.service';
 import { AnnounceService } from '@arsnova/app/services/util/announce.service';
 import { MockLocationStrategy } from '@angular/common/testing';
@@ -43,8 +42,6 @@ class MockA11yIntroPipe implements PipeTransform {
 describe('ParticipantOverviewComponent', () => {
   let component: ParticipantOverviewComponent;
   let fixture: ComponentFixture<ParticipantOverviewComponent>;
-
-  const mockContentService = jasmine.createSpyObj(['findContentsWithoutGroup']);
 
   const mockRoomService = jasmine.createSpyObj(['getCurrentRoomsMessageStream', 'getRoomSummaries', 'deleteRoom']);
 
@@ -121,10 +118,6 @@ describe('ParticipantOverviewComponent', () => {
         {
           provide: FeedbackService,
           useValue: mockFeedbackService
-        },
-        {
-          provide: ContentService,
-          useValue: mockContentService
         },
         {
           provide: ContentGroupService,

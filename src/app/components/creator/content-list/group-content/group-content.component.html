@@ -216,13 +216,19 @@
                         <mat-icon>edit</mat-icon>
                         <span> {{ 'content.edit-content' | translate}}</span>
                       </button>
-                      <button mat-menu-item [matMenuTriggerFor]="chooseGroups" attr.aria-label="{{ 'content.a11y-add-to-content-group' | translate }}">
+                      <mat-divider></mat-divider>
+                      <button mat-menu-item [matMenuTriggerFor]="chooseGroups" [matMenuTriggerData]="{action: 'copy'}" attr.aria-label="{{ 'content.a11y-copy-to-content-group' | translate }}">
                         <mat-icon>library_add</mat-icon>
-                        <span>{{ 'content.add-content-to-group' | translate}}</span>
+                        <span>{{ 'content.copy-content-to-group' | translate}}</span>
                       </button>
-                      <button mat-menu-item (click)="removeContent(content)" attr.aria-label="{{ 'content.a11y-remove-content-from-group' | translate }}">
-                        <mat-icon>clear</mat-icon>
-                        <span>{{ 'content.remove-content-from-group' | translate}}</span>
+                      <button mat-menu-item [matMenuTriggerFor]="chooseGroups"  [matMenuTriggerData]="{action: 'move'}" attr.aria-label="{{ 'content.a11y-move-to-content-group' | translate }}">
+                        <mat-icon>drive_file_move_outline</mat-icon>
+                        <span>{{ 'content.move-content-to-group' | translate}}</span>
+                      </button>
+                      <mat-divider></mat-divider>
+                      <button mat-menu-item (click)="duplicate(content.id)" attr.aria-label="{{ 'content.a11y-duplicate-content' | translate }}">
+                        <mat-icon>dynamic_feed</mat-icon>
+                        <span>{{ 'content.duplicate-content' | translate}}</span>
                       </button>
                       <mat-divider></mat-divider>
                       <button mat-menu-item (click)="deleteAnswers(content)" attr.aria-label="{{ 'content.a11y-delete-answers' | translate }}">
@@ -239,16 +245,18 @@
                     </mat-menu>
 
                     <mat-menu #chooseGroups="matMenu" xPosition="before">
-                      <button mat-menu-item *ngFor="let cg of contentGroups; index as i" [disabled]="i === currentGroupIndex"
-                              (click)="addToContentGroup(content.id, cg, false)"
-                              attr.aria-label="{{ 'content.a11y-add-to-this-content-group' | translate: { name: cg } }}">
-                        <span>{{ cg }}</span>
+                      <ng-template matMenuContent let-action="action">
+                        <button mat-menu-item *ngFor="let groupStats of contentGroupStats; index as i" [disabled]="i === currentGroupIndex"
+                              (click)="useContentInOtherGroup(content.id, groupStats, action)"
+                              attr.aria-label="{{ 'content.a11y-add-to-this-content-group' | translate: { name: groupStats.groupName } }}">
+                        <span>{{ groupStats.groupName }}</span>
                       </button>
                       <mat-divider></mat-divider>
-                      <button mat-menu-item (click)="showContentGroupCreationDialog(content.id, false)" attr.aria-label="{{ 'content.a11y-new-content-group' | translate }}">
+                      <button mat-menu-item (click)="showContentGroupCreationDialog(content.id, action)" attr.aria-label="{{ 'content.a11y-new-content-group' | translate }}">
                         <mat-icon>add</mat-icon>
                         <span>{{ 'content.new-content-group' | translate}}</span>
                       </button>
+                      </ng-template>
                     </mat-menu>
                   </div>
                   <button *ngIf="contentTypes.indexOf(content.format) === -1" class="not-supported" mat-icon-button

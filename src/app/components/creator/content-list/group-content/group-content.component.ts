@@ -2,14 +2,12 @@ import { Component, ElementRef, OnDestroy, OnInit, QueryList, ViewChild, ViewChi
 import { Content } from '../../../../models/content';
 import { ContentService } from '../../../../services/http/content.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Location } from '@angular/common';
 import { AdvancedSnackBarTypes, NotificationService } from '../../../../services/util/notification.service';
 import { TranslateService } from '@ngx-translate/core';
 import { LanguageService } from '../../../../services/util/language.service';
 import { DialogService } from '../../../../services/util/dialog.service';
 import { GlobalStorageService, STORAGE_KEYS } from '../../../../services/util/global-storage.service';
 import { ContentGroupService } from '../../../../services/http/content-group.service';
-import { ContentListBaseComponent } from '../content-list-base.component';
 import { ContentGroup } from '../../../../models/content-group';
 import { AnnounceService } from '../../../../services/util/announce.service';
 import { EventService } from '../../../../services/util/event.service';
@@ -24,16 +22,27 @@ import { ContentType } from '../../../../models/content-type.enum';
 import { ContentMessages } from '../../../../models/events/content-messages.enum';
 import { UiState } from '../../../../models/events/ui/ui-state.enum';
 import { RoutingService } from '../../../../services/util/routing.service';
+import { Room } from '../../../../models/room';
+import { ContentGroupStatistics } from '../../../../models/content-group-statistics';
 
 @Component({
   selector: 'app-group-content',
   templateUrl: './group-content.component.html',
   styleUrls: ['./group-content.component.scss']
 })
-export class GroupContentComponent extends ContentListBaseComponent implements OnInit, OnDestroy {
+export class GroupContentComponent implements OnInit, OnDestroy {
 
   @ViewChild('nameInput') nameInput: ElementRef;
   @ViewChildren('lockMenu') lockMenus: QueryList<MatButton>;
+
+  room: Room;
+  contents: Content[];
+  contentGroupStats: ContentGroupStatistics[] = [];
+  contentGroup: ContentGroup;
+  currentGroupIndex: number;
+  contentTypes: string[] = Object.values(ContentType);
+  deviceWidth = innerWidth;
+  isLoading = true;
 
   collectionName: string;
   isInTitleEditMode = false;
@@ -82,8 +91,6 @@ export class GroupContentComponent extends ContentListBaseComponent implements O
     private hotkeyService: HotkeyService,
     private routingService: RoutingService
   ) {
-    super(contentService, roomStatsService, route, notificationService, translateService, langService, dialogService,
-    globalStorageService, contentGroupService, announceService, router);
     langService.langEmitter.subscribe(lang => translateService.use(lang));
   }
 
@@ -95,7 +102,6 @@ export class GroupContentComponent extends ContentListBaseComponent implements O
     this.iconList = this.contentService.getTypeIcons();
     this.route.data.subscribe(data => {
       this.room = data.room;
-      this.getGroups();
       this.collectionName = this.route.snapshot.params['seriesName'];
       this.globalStorageService.setItem(STORAGE_KEYS.LAST_GROUP, this.collectionName);
       this.reloadContentGroup();
@@ -133,10 +139,104 @@ export class GroupContentComponent extends ContentListBaseComponent implements O
     this.hotkeyRefs.forEach(h => this.hotkeyService.unregisterHotkey(h));
   }
 
+  getGroups(): void {
+    this.roomStatsService.getStats(this.room.id, true).subscribe(roomStats => {
+      if (roomStats.groupStats) {
+        this.contentGroupStats = roomStats.groupStats;
+        this.getCurrentGroupIndex();
+      }
+    });
+  }
+
+  getCurrentGroupIndex() {
+    if (this.contentGroupStats && this.contentGroup && this.contentGroupStats.length > 0) {
+      for (let i = 0; i < this.contentGroupStats.length; i++) {
+        if (this.contentGroupStats[i].groupName === this.contentGroup.name) {
+          this.currentGroupIndex = i;
+        }
+      }
+    }
+  }
+
+  findIndexOfId(id: string): number {
+    return this.contents.map(c => c.id).indexOf(id);
+  }
+
+  deleteContent(delContent: Content) {
+    const index = this.findIndexOfId(delContent.id);
+    const dialogRef = this.dialogService.openDeleteDialog('content', 'really-delete-content', this.contents[index].body);
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.updateContentChanges(index);
+      }
+    });
+  }
+
+  editContent(content: Content, group: string) {
+    this.contentService.goToEdit(content.id, this.room.shortId, group);
+  }
+
+
+  updateContentChanges(index: number) {
+    this.contentService.deleteContent(this.room.id, this.contents[index].id).subscribe(() => {
+      this.removeContentFromList(index);
+      this.translateService.get('content.content-deleted').subscribe(message => {
+        this.notificationService.showAdvanced(message, AdvancedSnackBarTypes.WARNING);
+      });
+    });
+  }
+
+  removeContentFromList(index: number) {
+    this.contents.splice(index, 1);
+  }
+
+  useContentInOtherGroup(contentId: string, groupStats: ContentGroupStatistics, action: 'move' | 'copy'): void {
+    this.duplicateContent$(contentId, groupStats.id).subscribe(() => {
+      if (action === 'move') {
+        this.contentService.deleteContent(this.room.id, contentId).subscribe(() => {
+          this.contents = this.contents.filter(c => c.id !== contentId);
+          this.showSuccessNotification('moved', groupStats);
+        });
+      } else if (action === 'copy') {
+        this.showSuccessNotification('copied', groupStats);
+      }
+    });
+  }
+
+  showSuccessNotification(actionString: string, groupStats: ContentGroupStatistics) {
+    const msg = this.translateService.instant(`content.${actionString}-to-content-group`, {series: groupStats.groupName});
+    this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.SUCCESS);
+  }
+
+  showContentGroupCreationDialog(contentId: string, action: 'move' | 'copy'): void {
+    const dialogRef = this.dialogService.openContentGroupCreationDialog();
+    dialogRef.afterClosed().subscribe(groupName => {
+      if (groupName) {
+        const newGroup = new ContentGroup();
+        newGroup.roomId = this.room.id;
+        newGroup.name = groupName;
+        this.contentGroupService.post(newGroup).subscribe(group => {
+          const groupStats = new ContentGroupStatistics(group.id, group.name, 0);
+          this.contentGroupStats.push(groupStats);
+          this.useContentInOtherGroup(contentId, groupStats, action);
+        });
+      }
+    });
+  }
+
+  initContentList(contentList: Content[]) {
+    this.contents = contentList;
+    this.isLoading = false;
+    setTimeout(() => {
+      document.getElementById('message-button').focus();
+    }, 500);
+  }
+
   reloadContentGroup(imported = false) {
     this.isLoading = true;
     this.contentGroupService.getByRoomIdAndName(this.room.id, this.collectionName, true).subscribe(group => {
       this.contentGroup = group;
+      this.getGroups();
       this.setSettings();
       this.updatedName = this.contentGroup.name;
       this.setRange();
@@ -409,15 +509,6 @@ export class GroupContentComponent extends ContentListBaseComponent implements O
   isInRangeExclusive(index: number): boolean {
     return index < this.lastPublishedIndex && index > this.firstPublishedIndex;
   }
-  removeContent(delContent: Content) {
-    const index = this.findIndexOfId(delContent.id);
-    const dialogRef = this.dialogService.openDeleteDialog('content-from-group', 'really-remove-content', this.contents[index].body, 'remove');
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.updateContentChanges(index, result);
-      }
-    });
-  }
 
   navigateToSubroute(subRoute: string) {
     this.router.navigate(['edit', this.room.shortId, 'series', this.contentGroup.name, subRoute]);
@@ -535,5 +626,17 @@ export class GroupContentComponent extends ContentListBaseComponent implements O
       this.unregisterHotkeys();
       this.contentHotkeysRegistered = false;
     }
+  }
+
+  duplicate(contentId: string) {
+    this.duplicateContent$(contentId).subscribe(content => {
+      this.contents.push(content);
+      const msg = this.translateService.instant('content.content-has-been-duplicated');
+      this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.SUCCESS);
+    });
+  }
+
+  duplicateContent$(contentId: string, contentGroupId = this.contentGroup.id) {
+    return this.contentService.duplicateContent(this.room.id, contentGroupId, contentId);
   }
 }

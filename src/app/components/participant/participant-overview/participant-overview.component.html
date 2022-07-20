@@ -58,7 +58,7 @@
       </ng-template>
       <div *ngIf="room && contentGroups">
         <app-content-groups *ngFor="let contentGroup of contentGroups" [contentGroupName]="contentGroup.name"
-                            [length]="calcContentsInGroup(contentGroup)" [isLoose]="false"></app-content-groups>
+                            [length]="calcContentsInGroup(contentGroup)"></app-content-groups>
       </div>
 
       <lib-extension-point extensionId="attachment-list" [extensionData]="attachmentData">
