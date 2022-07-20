@@ -102,9 +102,9 @@ export class GroupContentComponent implements OnInit, OnDestroy {
     this.iconList = this.contentService.getTypeIcons();
     this.route.data.subscribe(data => {
       this.room = data.room;
-      this.collectionName = this.route.snapshot.params['seriesName'];
-      this.globalStorageService.setItem(STORAGE_KEYS.LAST_GROUP, this.collectionName);
-      this.reloadContentGroup();
+      this.route.params.subscribe(params => {
+        this.setContentGroup(params['seriesName']);
+      });
     });
     this.translateService.use(this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE));
     this.eventService.on(ContentMessages.ANSWERS_DELETED).subscribe(contentId => {
@@ -113,13 +113,18 @@ export class GroupContentComponent implements OnInit, OnDestroy {
       this.resetAnswerEvent.next(content.id);
     });
     this.eventService.on<string>(UiState.NEW_GROUP_SELECTED).subscribe(newGroup => {
-      this.collectionName = newGroup;
-      this.reloadContentGroup();
+      this.setContentGroup(newGroup);
     });
   }
 
   ngOnDestroy() {
     this.unregisterHotkeys();
+  }
+
+  setContentGroup(groupName: string) {
+    this.collectionName = groupName;
+    this.globalStorageService.setItem(STORAGE_KEYS.LAST_GROUP, this.collectionName);
+    this.reloadContentGroup();
   }
 
   registerHotkeys() {
