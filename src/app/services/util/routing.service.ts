@@ -120,6 +120,10 @@ export class RoutingService {
 
   getRoomUrlData(route: ActivatedRouteSnapshot) {
     this.role = route.data.userRole;
+    const series = route.params['seriesName'];
+    if (series || route.data.room?.id !== this.roomId) {
+      this.seriesName = series;
+    }
     this.roomId = route.data.room?.id;
     this.role$.emit(this.role);
     this.viewRole = route.data.viewRole;
@@ -128,8 +132,6 @@ export class RoutingService {
     this.isPreview$.emit(this.isPreview);
     this.isRoom = !!this.shortId;
     this.isRoom$.emit(this.isRoom);
-    const series = route.params['seriesName'];
-    this.seriesName = series;
   }
 
   getRoutes(route: ActivatedRouteSnapshot) {
