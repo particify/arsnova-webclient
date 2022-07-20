@@ -256,7 +256,9 @@
     "hide-guest-rooms": "Hide",
     "import": "Import",
     "active": "Active",
-    "active-info": "There are currently {{userCount}} people in this room."
+    "active-info": "There are currently {{userCount}} people in this room.",
+    "duplicate-room": "Duplicate room",
+    "room-duplicated": "Your room has been duplicated."
   },
   "user-activation": {
     "a11y-activate": "Activates your account.",
