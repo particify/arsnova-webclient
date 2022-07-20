@@ -44,7 +44,7 @@ export class GroupContentComponent implements OnInit, OnDestroy {
   deviceWidth = innerWidth;
   isLoading = true;
 
-  collectionName: string;
+  groupName: string;
   isInTitleEditMode = false;
   inputFocus = false;
   isInSortingMode = false;
@@ -122,8 +122,8 @@ export class GroupContentComponent implements OnInit, OnDestroy {
   }
 
   setContentGroup(groupName: string) {
-    this.collectionName = groupName;
-    this.globalStorageService.setItem(STORAGE_KEYS.LAST_GROUP, this.collectionName);
+    this.groupName = groupName;
+    this.globalStorageService.setItem(STORAGE_KEYS.LAST_GROUP, this.groupName);
     this.reloadContentGroup();
   }
 
@@ -239,7 +239,7 @@ export class GroupContentComponent implements OnInit, OnDestroy {
 
   reloadContentGroup(imported = false) {
     this.isLoading = true;
-    this.contentGroupService.getByRoomIdAndName(this.room.id, this.collectionName, true).subscribe(group => {
+    this.contentGroupService.getByRoomIdAndName(this.room.id, this.groupName, true).subscribe(group => {
       this.contentGroup = group;
       this.getGroups();
       this.setSettings();
@@ -277,7 +277,7 @@ export class GroupContentComponent implements OnInit, OnDestroy {
   }
 
   goInTitleEditMode(): void {
-    this.updatedName = this.collectionName;
+    this.updatedName = this.groupName;
     this.isInTitleEditMode = true;
     setTimeout(() => {
       document.getElementById('nameInput').focus();
@@ -296,16 +296,16 @@ export class GroupContentComponent implements OnInit, OnDestroy {
   }
 
   updateURL(): void {
-    this.router.navigate([this.baseURL, this.room.shortId, 'series', this.collectionName]);
+    this.router.navigate([this.baseURL, this.room.shortId, 'series', this.groupName]);
   }
 
   saveGroupName(): void {
-    if (this.updatedName !== this.collectionName) {
+    if (this.updatedName !== this.groupName) {
       const changes: { name: string } = { name: this.updatedName };
       this.updateContentGroup(changes).subscribe(updatedGroup => {
           this.contentGroup = updatedGroup;
-          this.contentGroupService.updateGroupInMemoryStorage(this.collectionName, this.updatedName);
-          this.collectionName = this.contentGroup.name;
+          this.contentGroupService.updateGroupInMemoryStorage(this.groupName, this.updatedName);
+          this.groupName = this.contentGroup.name;
           this.translateService.get('content.updated-content-group').subscribe(msg => {
             this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.SUCCESS);
           });
