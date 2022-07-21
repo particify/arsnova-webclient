@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { RoomCreateComponent } from './room-create.component';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { NotificationService } from '@arsnova/app/services/util/notification.service';
 import { JsonTranslationLoader,
   MockMatDialogRef,
@@ -19,6 +19,7 @@ import { AuthenticationService } from '@arsnova/app/services/http/authentication
 import { EventService } from '@arsnova/app/services/util/event.service';
 import { ApiConfigService } from '@arsnova/app/services/http/api-config.service';
 import { of } from 'rxjs';
+import { MockMatDialogData } from '@arsnova/testing/test-helpers';
 
 describe('RoomCreateComponent', () => {
   let component: RoomCreateComponent;
@@ -85,6 +86,10 @@ describe('RoomCreateComponent', () => {
         {
           provide: ApiConfigService,
           useValue: mockApiConfigService
+        },
+        {
+          provide: MAT_DIALOG_DATA,
+          useClass: MockMatDialogData
         }
       ]
     })

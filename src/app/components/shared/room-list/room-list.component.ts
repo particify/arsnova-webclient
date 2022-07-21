@@ -19,6 +19,7 @@ import { AuthProvider } from '../../../models/auth-provider';
 import { MembershipsChanged } from '../../../models/events/memberships-changed';
 import { ExtensionFactory } from '../../../../../projects/extension-point/src/lib/extension-factory';
 import { RoutingService } from '../../../services/util/routing.service';
+import { RoomCreated } from '../../../models/events/room-created';
 
 const ACTIVE_ROOM_THRESHOLD = 15;
 
@@ -71,7 +72,7 @@ export class RoomListComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.guestAuth$ = this.authenticationService.fetchGuestAuthentication().pipe(shareReplay());
-    this.getRoomDataViews().pipe(takeUntil(this.unsubscribe$)).subscribe(roomDataViews => this.updateRoomList(roomDataViews));
+    this.loadRoomDataViews();
     if (this.auth.authProvider === AuthProvider.ARSNOVA_GUEST) {
       this.isGuest = true;
     } else {
@@ -107,6 +108,10 @@ export class RoomListComponent implements OnInit, OnDestroy {
     if (this.sub) {
       this.sub.unsubscribe();
     }
+  }
+
+  loadRoomDataViews() {
+    this.getRoomDataViews().pipe(takeUntil(this.unsubscribe$)).subscribe(roomDataViews => this.updateRoomList(roomDataViews));
   }
 
   getRoomDataViews(): Observable<RoomDataView[]> {
@@ -312,5 +317,20 @@ export class RoomListComponent implements OnInit, OnDestroy {
 
   isRoomActive(userCount: number) {
     return userCount >= ACTIVE_ROOM_THRESHOLD;
+  }
+
+  duplicateRoom(roomId: string, roomName: string) {
+    const dialogRef = this.dialogService.openRoomCreateDialog(roomName);
+    dialogRef.afterClosed().subscribe(name => {
+      if (name) {
+        this.roomService.duplicateRoom(roomId, false, name).subscribe(room => {
+          const event = new RoomCreated(room.id, room.shortId);
+          this.eventService.broadcast(event.type, event.payload);
+          this.loadRoomDataViews();
+          const msg = this.translateService.instant('room-list.room-duplicated');
+          this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.SUCCESS);
+        });
+      }
+    });
   }
 }

@@ -85,11 +85,15 @@
               <mat-menu #moreActions="matMenu" xPosition="before">
                 <button mat-menu-item *ngIf="room.membership.primaryRole === creatorRole" (click)="navToSettings(room.summary.shortId)">
                   <mat-icon>settings</mat-icon>
-                  <span class="delete-text"> {{ 'room-list.room-settings' | translate }}</span>
+                  <span> {{ 'room-list.room-settings' | translate }}</span>
+                </button>
+                <button mat-menu-item *ngIf="room.membership.primaryRole === creatorRole" (click)="duplicateRoom(room.summary.id, room.summary.name)">
+                  <mat-icon>dynamic_feed</mat-icon>
+                  <span> {{ 'room-list.duplicate-room' | translate }}</span>
                 </button>
                 <button mat-menu-item (click)="openDeleteRoomDialog(room)">
                   <mat-icon class="icon-warn">delete_forever</mat-icon>
-                  <span class="delete-text"> {{ (room.membership.primaryRole !== creatorRole ? 'room-list.panel-remove-room' :
+                  <span> {{ (room.membership.primaryRole !== creatorRole ? 'room-list.panel-remove-room' :
                     'room-list.panel-delete-room') | translate}}</span>
                 </button>
               </mat-menu>
