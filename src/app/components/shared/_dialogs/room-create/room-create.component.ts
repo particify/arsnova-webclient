@@ -1,10 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { RoomService } from '../../../../services/http/room.service';
 import { Room } from '../../../../models/room';
 import { RoomCreated } from '../../../../models/events/room-created';
 import { Router } from '@angular/router';
 import { AdvancedSnackBarTypes, NotificationService } from '../../../../services/util/notification.service';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { AuthenticationService } from '../../../../services/http/authentication.service';
 import { TranslateService } from '@ngx-translate/core';
 import { EventService } from '../../../../services/util/event.service';
@@ -29,6 +29,7 @@ export class RoomCreateComponent implements OnInit {
   auth: ClientAuthentication;
   warningType = HINT_TYPES.WARNING;
   anonymousProvider: AuthenticationProvider;
+  createDuplication: boolean;
 
   constructor(
     private roomService: RoomService,
@@ -39,11 +40,16 @@ export class RoomCreateComponent implements OnInit {
     private authenticationService: AuthenticationService,
     public eventService: EventService,
     private globalStorageService: GlobalStorageService,
-    private apiConfigService: ApiConfigService
+    private apiConfigService: ApiConfigService,
+    @Inject(MAT_DIALOG_DATA) private data: {duplicatedName: string}
   ) {
   }
 
   ngOnInit() {
+    this.createDuplication = !!this.data?.duplicatedName;
+    if (this.createDuplication) {
+      this.newRoom.name = this.data.duplicatedName;
+    }
     this.translateService.use(this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE));
     this.apiConfigService.getApiConfig$().subscribe(config => {
       this.anonymousProvider = config.authenticationProviders.filter((p) => p.type === AuthenticationProviderType.ANONYMOUS)[0];
@@ -81,6 +87,10 @@ export class RoomCreateComponent implements OnInit {
 
   addRoom() {
     this.newRoom.name = this.newRoom.name.trim();
+    if (this.createDuplication) {
+      this.dialogRef.close(this.newRoom.name);
+      return;
+    }
     if (!this.newRoom.name) {
       this.emptyInputs = true;
       this.translateService.get('dialog.no-empty-name').subscribe(msg => {

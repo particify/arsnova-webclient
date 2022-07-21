@@ -157,9 +157,9 @@ export class RoomService extends AbstractEntityService<Room> {
     );
   }
 
-  duplicateRoom(roomId: string, temporary = false): Observable<Room> {
+  duplicateRoom(roomId: string, temporary = false, name?: string): Observable<Room> {
     const connectionUrl = this.buildForeignUri(this.serviceApiUrl.duplicate, roomId)
-        + (temporary ? '?temporary=true' : '');
+        + (temporary ? '?temporary=true' : '') + (name ? `?name=${name}` : '');
     return this.http.post<Room>(connectionUrl, null).pipe(
       catchError(this.handleError<Room>(`duplicateRoom`))
     );

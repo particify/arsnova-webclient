@@ -319,14 +319,18 @@ export class RoomListComponent implements OnInit, OnDestroy {
     return userCount >= ACTIVE_ROOM_THRESHOLD;
   }
 
-  duplicateRoom(roomId: string) {
-    this.roomService.duplicateRoom(roomId).subscribe(room => {
-      this.isLoading = true;
-      const event = new RoomCreated(room.id, room.shortId);
-      this.eventService.broadcast(event.type, event.payload);
-      this.loadRoomDataViews();
-      const msg = this.translateService.instant('room-list.room-duplicated');
-      this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.SUCCESS);
+  duplicateRoom(roomId: string, roomName: string) {
+    const dialogRef = this.dialogService.openRoomCreateDialog(roomName);
+    dialogRef.afterClosed().subscribe(name => {
+      if (name) {
+        this.roomService.duplicateRoom(roomId, false, name).subscribe(room => {
+          const event = new RoomCreated(room.id, room.shortId);
+          this.eventService.broadcast(event.type, event.payload);
+          this.loadRoomDataViews();
+          const msg = this.translateService.instant('room-list.room-duplicated');
+          this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.SUCCESS);
+        });
+      }
     });
   }
 }

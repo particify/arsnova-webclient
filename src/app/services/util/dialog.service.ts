@@ -87,9 +87,12 @@ export class DialogService {
     });
   }
 
-  openRoomCreateDialog(): void {
-    this.openDialog(RoomCreateComponent, {
-      width: this.size.xsmall
+  openRoomCreateDialog(duplicatedName?: string): MatDialogRef<RoomCreateComponent> {
+    return this.openDialog(RoomCreateComponent, {
+      width: this.size.xsmall,
+      data: {
+        duplicatedName: duplicatedName
+      }
     });
   }
 

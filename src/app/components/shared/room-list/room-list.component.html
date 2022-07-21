@@ -87,7 +87,7 @@
                   <mat-icon>settings</mat-icon>
                   <span> {{ 'room-list.room-settings' | translate }}</span>
                 </button>
-                <button mat-menu-item *ngIf="room.membership.primaryRole === creatorRole" (click)="duplicateRoom(room.summary.id)">
+                <button mat-menu-item *ngIf="room.membership.primaryRole === creatorRole" (click)="duplicateRoom(room.summary.id, room.summary.name)">
                   <mat-icon>dynamic_feed</mat-icon>
                   <span> {{ 'room-list.duplicate-room' | translate }}</span>
                 </button>
