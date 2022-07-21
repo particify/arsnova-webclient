@@ -101,11 +101,13 @@ export class ActivatedRouteStub {
   private subject = new ReplaySubject<ParamMap>();
   data: Observable<any>;
   snapshot: ActivatedRouteSnapshot;
+  params: Observable<Params>;
 
   constructor(initialParams?: Params, data?: any, snapshot: ActivatedRouteSnapshot = new ActivatedRouteSnapshot()) {
     this.setParamMap(initialParams);
     this.setData(data);
     this.setSnapshot(snapshot);
+    this.setParams(initialParams);
   }
 
   readonly paramMap = this.subject.asObservable();
@@ -120,6 +122,10 @@ export class ActivatedRouteStub {
 
   setSnapshot(snapshot: ActivatedRouteSnapshot) {
     this.snapshot = snapshot;
+  }
+
+  setParams(params: Params) {
+    this.params = of(params);
   }
 }
 

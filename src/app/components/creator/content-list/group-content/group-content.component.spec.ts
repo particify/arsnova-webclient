@@ -100,10 +100,11 @@ describe('GroupContentComponent', () => {
   }
 
   const snapshot = new ActivatedRouteSnapshot();
+  const params =  of({seriesName: 'SERIES'});
 
-  snapshot.params = of([{seriesName: 'SERIES'}]);
+  snapshot.params = params;
 
-  const activatedRouteStub = new ActivatedRouteStub(null, data, snapshot);
+  const activatedRouteStub = new ActivatedRouteStub(params, data, snapshot);
 
   let translateService: TranslateService;
 

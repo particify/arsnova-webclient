@@ -44,7 +44,7 @@ export class GroupContentComponent implements OnInit, OnDestroy {
   deviceWidth = innerWidth;
   isLoading = true;
 
-  collectionName: string;
+  groupName: string;
   isInTitleEditMode = false;
   inputFocus = false;
   isInSortingMode = false;
@@ -102,9 +102,9 @@ export class GroupContentComponent implements OnInit, OnDestroy {
     this.iconList = this.contentService.getTypeIcons();
     this.route.data.subscribe(data => {
       this.room = data.room;
-      this.collectionName = this.route.snapshot.params['seriesName'];
-      this.globalStorageService.setItem(STORAGE_KEYS.LAST_GROUP, this.collectionName);
-      this.reloadContentGroup();
+      this.route.params.subscribe(params => {
+        this.setContentGroup(params['seriesName']);
+      });
     });
     this.translateService.use(this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE));
     this.eventService.on(ContentMessages.ANSWERS_DELETED).subscribe(contentId => {
@@ -113,13 +113,18 @@ export class GroupContentComponent implements OnInit, OnDestroy {
       this.resetAnswerEvent.next(content.id);
     });
     this.eventService.on<string>(UiState.NEW_GROUP_SELECTED).subscribe(newGroup => {
-      this.collectionName = newGroup;
-      this.reloadContentGroup();
+      this.setContentGroup(newGroup);
     });
   }
 
   ngOnDestroy() {
     this.unregisterHotkeys();
+  }
+
+  setContentGroup(groupName: string) {
+    this.groupName = groupName;
+    this.globalStorageService.setItem(STORAGE_KEYS.LAST_GROUP, this.groupName);
+    this.reloadContentGroup();
   }
 
   registerHotkeys() {
@@ -234,7 +239,7 @@ export class GroupContentComponent implements OnInit, OnDestroy {
 
   reloadContentGroup(imported = false) {
     this.isLoading = true;
-    this.contentGroupService.getByRoomIdAndName(this.room.id, this.collectionName, true).subscribe(group => {
+    this.contentGroupService.getByRoomIdAndName(this.room.id, this.groupName, true).subscribe(group => {
       this.contentGroup = group;
       this.getGroups();
       this.setSettings();
@@ -272,7 +277,7 @@ export class GroupContentComponent implements OnInit, OnDestroy {
   }
 
   goInTitleEditMode(): void {
-    this.updatedName = this.collectionName;
+    this.updatedName = this.groupName;
     this.isInTitleEditMode = true;
     setTimeout(() => {
       document.getElementById('nameInput').focus();
@@ -291,16 +296,16 @@ export class GroupContentComponent implements OnInit, OnDestroy {
   }
 
   updateURL(): void {
-    this.router.navigate([this.baseURL, this.room.shortId, 'series', this.collectionName]);
+    this.router.navigate([this.baseURL, this.room.shortId, 'series', this.groupName]);
   }
 
   saveGroupName(): void {
-    if (this.updatedName !== this.collectionName) {
+    if (this.updatedName !== this.groupName) {
       const changes: { name: string } = { name: this.updatedName };
       this.updateContentGroup(changes).subscribe(updatedGroup => {
           this.contentGroup = updatedGroup;
-          this.contentGroupService.updateGroupInMemoryStorage(this.collectionName, this.updatedName);
-          this.collectionName = this.contentGroup.name;
+          this.contentGroupService.updateGroupInMemoryStorage(this.groupName, this.updatedName);
+          this.groupName = this.contentGroup.name;
           this.translateService.get('content.updated-content-group').subscribe(msg => {
             this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.SUCCESS);
           });
