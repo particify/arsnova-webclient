@@ -18,7 +18,7 @@
           <app-rendered-text [rawText]="room.description.trim()" [renderedText]="room.renderedDescription"></app-rendered-text>
         </div>
       </mat-card-content>
-      <app-divider *ngIf="!isModerator" [padding]="true"></app-divider>
+      <app-divider *ngIf="!isModerator"></app-divider>
       <div fxLayout="column" fxLayoutAlign="center">
         <div class="action-button-container" fxLayout="row" fxLayoutAlign="center" [ngClass]="{'moderator-container': isModerator}">
           <div class="action-button-item" fxLayoutAlign="center center">
@@ -46,7 +46,7 @@
         </div>
       </div>
       <div *ngIf="!isModerator" fxLayout="column" fxLayoutAlign="center center">
-        <app-divider [padding]="true"></app-divider>
+        <app-divider></app-divider>
         <div fxLayout="column" [ngClass]="{'group-container': contentGroups.length > 0, 'empty-group-container': contentGroups.length === 0}">
           <ng-container *ngIf="contentGroups?.length === 0">
             <p class="hint-sm">{{ 'room-page.no-content-groups' | translate }}</p>
