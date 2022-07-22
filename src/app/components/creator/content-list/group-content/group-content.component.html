@@ -30,7 +30,7 @@
           </mat-icon>
         </div>
       </div>
-      <mat-card-content fxLayout="column">
+      <div fxLayout="column">
         <app-loading-indicator *ngIf="isLoading" [size]="50"></app-loading-indicator>
         <div *ngIf="!isLoading" fxLayout="row wrap" fxLayoutAlign="space-between center" class="action-container">
           <div *ngIf="!isInSortingMode" fxLayout="row wrap" fxLayoutAlign="space-between center" fxLayoutGap="10px">
@@ -286,7 +286,7 @@
             </mat-list>
           </div>
         </div>
-      </mat-card-content>
+      </div>
     </mat-card>
   </div>
 </div>
