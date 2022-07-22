@@ -17,7 +17,7 @@
                     && [ContentType.SLIDE, ContentType.FLASHCARD].indexOf(content.format) === -1" mat-icon-button
                     (click)="goToStats()" matTooltip="{{'answer.go-to-stats' | translate}}" aria-labelledby="flip-to-stats"
                     appHotkey=" " [appHotkeyAction]="HotkeyAction.CLICK">
-              <mat-icon class="corner-icon icon-primary">
+              <mat-icon class="icon-primary">
                 insert_chart
               </mat-icon>
             </button>
@@ -80,7 +80,7 @@
             <button id="go-to-content" *ngIf="content.format !== ContentType.FLASHCARD && flipped" tabindex="0" class="toggleSide" mat-icon-button
                     matTooltip="{{'answer.go-to-content' | translate}}" (click)="goToStats()" aria-labelledby="flip-back"
                     appHotkey=" " [appHotkeyAction]="HotkeyAction.CLICK">
-              <mat-icon class="corner-icon icon-primary">
+              <mat-icon class="icon-primary">
                 cached
               </mat-icon>
             </button>
