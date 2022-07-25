@@ -17,7 +17,7 @@ export class FooterComponent implements OnInit {
 
   privacyUrl: string;
   imprintUrl: string;
-  feedbackUrl: string;
+  accessibilityUrl: string;
   referenceUrl = 'https://particify.de';
   showToolbar = true;
   viewWidth: number;
@@ -39,7 +39,7 @@ export class FooterComponent implements OnInit {
     this.route.data.subscribe(data => {
       this.privacyUrl = data.apiConfig.ui.links?.privacy?.url;
       this.imprintUrl = data.apiConfig.ui.links?.imprint?.url ;
-      this.feedbackUrl = data.apiConfig.ui.links?.feedback?.url;
+      this.accessibilityUrl = data.apiConfig.ui.links?.accessibility?.url;
     });
     this.checkToolbarCondition(this.router.url);
     this.router.events.pipe(
@@ -54,6 +54,10 @@ export class FooterComponent implements OnInit {
 
   openUrlInNewTab(url: string) {
     window.open(url, '_blank');
+  }
+
+  showAccessibilityStatement() {
+    this.openUrlInNewTab(this.accessibilityUrl);
   }
 
   showImprint() {
