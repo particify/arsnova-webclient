@@ -22,7 +22,7 @@
       </mat-select>
     </mat-form-field>
     <button mat-stroked-button class="add-user-button" [ngClass]="{'btn-animated': userFound}" (click)="addModerator()" fxFlex
-            [disabled]="isGuest || !currentInputIsChecked"
+            [disabled]="isGuest || !currentInputIsChecked || loginId.length === 0"
             aria-labelledby="add-user"
             appTrackInteraction="Room member role assigned" [appTrackName]="selectedRole.name">
             <mat-icon>{{ userFound ? 'add' : 'mail'}}</mat-icon>
