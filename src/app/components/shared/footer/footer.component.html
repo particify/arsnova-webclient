@@ -10,8 +10,8 @@
   </lib-extension-point>
   <span class="fill-remaining-space"></span>
   <div fxLayout="row wrap" fxLayoutAlign="end">
-    <a *ngIf="feedbackUrl" [routerLink]="feedbackUrl" aria-labelledby="feedback-label" class="link text">
-      {{'footer.feedback' | translate}}</a>
+    <a *ngIf="accessibilityUrl" [routerLink]="[]" (click)="showAccessibilityStatement()" aria-labelledby="accessibility-label" class="link text">
+      {{'footer.accessibility' | translate}}</a>
     <a [routerLink]="[]" [matMenuTriggerFor]="privacyMenu" aria-labelledby="data-protection-menu" class="link text">
       {{'footer.dsgvo' | translate}}</a>
     <a *ngIf="imprintUrl" [routerLink]="[]" (click)="showImprint()" aria-labelledby="imprint-label" class="link text">
@@ -29,5 +29,5 @@
   <div id="data-protection-label">{{'footer.a11y-data-protection' | translate}}</div>
   <div id="data-protection-menu">{{'footer.a11y-data-protection-menu' | translate}}</div>
   <div id="imprint-label">{{'footer.a11y-imprint' | translate}}</div>
-  <div id="feedback-label">{{'footer.a11y-feedback' | translate}}</div>
+  <div id="accessibility-label">{{'footer.a11y-accessibility' | translate}}</div>
 </div>
