@@ -45,7 +45,7 @@
           </div>
         </div>
       </div>
-      <div *ngIf="!isModerator" fxLayout="column" fxLayoutAlign="center center">
+      <div *ngIf="!isModerator">
         <app-divider></app-divider>
         <div fxLayout="column" [ngClass]="{'group-container': contentGroups.length > 0, 'empty-group-container': contentGroups.length === 0}">
           <ng-container *ngIf="contentGroups?.length === 0">
