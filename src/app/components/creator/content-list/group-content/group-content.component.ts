@@ -644,4 +644,11 @@ export class GroupContentComponent implements OnInit, OnDestroy {
   duplicateContent$(contentId: string, contentGroupId = this.contentGroup.id) {
     return this.contentService.duplicateContent(this.room.id, contentGroupId, contentId);
   }
+
+  resetBannedAnswers(contentId: string) {
+    this.contentService.resetBannedKeywords(this.room.id, contentId).subscribe(() => {
+      const msg = this.translateService.instant('content.banned-keywords-reset');
+      this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
+    });
+  }
 }

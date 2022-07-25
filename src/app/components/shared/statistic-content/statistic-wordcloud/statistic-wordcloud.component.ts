@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from "@angular/core";
+import { Component, Input, OnDestroy, OnInit } from "@angular/core";
 import { Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
 import { AnswerStatistics } from "../../../../models/answer-statistics";
@@ -6,6 +6,7 @@ import { TextRoundStatistics } from "../../../../models/round-statistics";
 import { ContentService } from "../../../../services/http/content.service";
 import { StatisticContentBaseComponent } from "../statistic-content-base";
 import { EventService } from '../../../../services/util/event.service';
+import { TextStatistic } from '../../../../models/text-statistic';
 
 @Component({
   selector: 'app-statistic-wordcloud',
@@ -13,8 +14,13 @@ import { EventService } from '../../../../services/util/event.service';
   styleUrls: ['./statistic-wordcloud.component.scss']
 })
 export class StatisticWordcloudComponent extends StatisticContentBaseComponent implements OnInit, OnDestroy {
+
+  @Input() showModeration = false;
+
   wordWeights: [string, number][] = [];
   destroyed$ = new Subject<void>();
+
+  answerList: TextStatistic[] = [];
 
   constructor(
       protected contentService: ContentService,
@@ -53,6 +59,12 @@ export class StatisticWordcloudComponent extends StatisticContentBaseComponent i
         return;
       }
       this.wordWeights = stats.roundStatistics[0].independentCounts.map((count, i) => [texts[i], count]);
+      this.answerList = Array.from(this.wordWeights, ([answer, count]) => new TextStatistic(answer, count));
     }
+  }
+
+  filterAnswers(keyword: string) {
+    this.wordWeights = this.wordWeights.filter(w => w[0] !== keyword);
+    this.answerList = this.answerList.filter(a => a.answer !== keyword);
   }
 }

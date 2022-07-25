@@ -1,0 +1,45 @@
+.answer {
+  color: var(--on-surface);
+  flex: 1;
+  min-height: 48px;
+  display: inline-flex;
+  align-items: center;
+  margin: 8px 0;
+}
+
+.answer-list {
+  height: 100%;
+  transition: 300ms;
+}
+
+.invisible > * {
+  height: 0;
+  opacity: 0;
+}
+
+.count {
+  margin-left: 0.5em;
+}
+
+.delete-button {
+  opacity: 0;
+  margin-left: 0.5em;
+}
+
+@mixin show-delete-button {
+  opacity: 1;
+}
+
+@media(hover: none) {
+  .moderation .delete-button {
+    @include show-delete-button;
+  }
+}
+
+.moderation.mat-list-item:hover, .moderation.mat-list-item:focus-within {
+  background-color: var(--surface);
+  filter: brightness(97%);
+  .delete-button {
+    @include show-delete-button;
+  }
+}

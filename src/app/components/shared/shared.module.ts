@@ -59,6 +59,7 @@ import { AnnouncementComponent } from './announcement/announcement.component';
 import { DateFormatPipe } from '../../pipes/date-format.pipe';
 import { DateFromNowPipe } from '../../pipes/date-from-now.pipe';
 import { DateComponent } from './date/date.component';
+import { AnswerListComponent } from './answer-list/answer-list.component';
 
 @NgModule({
   imports: [
@@ -123,7 +124,8 @@ import { DateComponent } from './date/date.component';
     AnnouncementComponent,
     DateFromNowPipe,
     DateFormatPipe,
-    DateComponent
+    DateComponent,
+    AnswerListComponent
   ],
   exports: [
     RoomJoinComponent,
@@ -167,7 +169,8 @@ import { DateComponent } from './date/date.component';
     TrackInteractionDirective,
     SettingsSlideToggleComponent,
     FormattingToolbarComponent,
-    AnnouncementComponent
+    AnnouncementComponent,
+    AnswerListComponent
   ]
 })
 export class SharedModule {

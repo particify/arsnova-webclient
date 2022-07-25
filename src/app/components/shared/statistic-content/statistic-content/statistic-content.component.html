@@ -12,12 +12,16 @@
       <app-answer-count tabindex="-1" *ngIf="!isLoading" [count]="answerCount"></app-answer-count>
       <div fxLayout="row">
         <lib-extension-point *ngIf="multipleRounds && answersVisible" extensionId="round-selection" (extensionEvent)="changeRound($event)" [extensionData]="{round: roundsToDisplay}"></lib-extension-point>
-        <div fxLayout="row" fxLayoutAlign="end" [ngClass]="{'fix-width': !survey}">
+        <div fxLayout="row" fxLayoutAlign="end" [ngClass]="{'fix-width': !survey}" fxLayoutGap="8px">
           <button mat-icon-button *ngIf="answersVisible && !survey && correctOptionsPublished" disableRipple (click)="toggleCorrect()"
                   matTooltip="{{ 'statistic.show-correct' | translate }}" aria-labelledby="show-correct"
                   appHotkey="c" [appHotkeyAction]="HotkeyAction.CLICK" [appHotkeyDisabled]="!active"
                   appTrackInteraction="Correct content answer options visibility toggled" [appTrackName]="correctVisible ? 'on' : 'off'">
           <mat-icon class="corner-icon icon-primary">playlist_add_check</mat-icon>
+          </button>
+          <button mat-icon-button *ngIf="answersVisible && format === ContentType.WORDCLOUD && !isParticipant" disableRipple (click)="toggleWordcloudView()"
+                  matTooltip="{{ (showWordcloudModeration ? 'statistic.show-wordcloud' : 'statistic.show-wordcloud-list') | translate }}">
+          <mat-icon class="corner-icon icon-primary">toc</mat-icon>
           </button>
           <button id="show-chart-btn" mat-icon-button disableRipple (click)="toggleAnswers()" aria-labelledby="show-chart"
                   matTooltip="{{ (answersVisible ? 'statistic.hide-results' : 'statistic.show-results') | translate }}"
@@ -49,7 +53,7 @@
                       [directShow]="directShow" (updateCounterEvent)="updateCounter($event)"></app-statistic-text>
   <app-statistic-sort *ngIf="format === ContentType.SORT" [content]="content" [isPresentation]="isPresentation"
                       [directShow]="directShow" (updateCounterEvent)="updateCounter($event)" [active]="active"></app-statistic-sort>
-  <app-statistic-wordcloud *ngIf="format === ContentType.WORDCLOUD" [content]="content"
+  <app-statistic-wordcloud *ngIf="format === ContentType.WORDCLOUD" [content]="content" [showModeration]="showWordcloudModeration"
                            [directShow]="directShow" (updateCounterEvent)="updateCounter($event)"></app-statistic-wordcloud>
 </div>
 <div *ngIf="content.format === ContentType.FLASHCARD && answersVisible">
