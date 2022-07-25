@@ -1,5 +1,5 @@
 <div>
-  <div fxLayout="row" fxLayoutAlign="space-between">
+  <div fxLayout="row wrap" fxLayoutAlign="space-between">
     <h2 tabindex="0">{{ 'announcement.announcements' | translate }}</h2>
     <mat-form-field appearance="outline" class="no-field-hint smaller-select">
       <mat-select [(value)]="selectedRoomId" (selectionChange)="filter()" [disabled]="announcements.length === 0">
