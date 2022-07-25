@@ -30,7 +30,7 @@
           </mat-icon>
         </div>
       </div>
-      <mat-card-content fxLayout="column">
+      <div fxLayout="column">
         <app-loading-indicator *ngIf="isLoading" [size]="50"></app-loading-indicator>
         <div *ngIf="!isLoading" fxLayout="row wrap" fxLayoutAlign="space-between center" class="action-container">
           <div *ngIf="!isInSortingMode" fxLayout="row wrap" fxLayoutAlign="space-between center" fxLayoutGap="10px">
@@ -225,7 +225,6 @@
                         <mat-icon>drive_file_move_outline</mat-icon>
                         <span>{{ 'content.move-content-to-group' | translate}}</span>
                       </button>
-                      <mat-divider></mat-divider>
                       <button mat-menu-item (click)="duplicate(content.id)" attr.aria-label="{{ 'content.a11y-duplicate-content' | translate }}">
                         <mat-icon>dynamic_feed</mat-icon>
                         <span>{{ 'content.duplicate-content' | translate}}</span>
@@ -241,7 +240,6 @@
                       </button>
                       <lib-extension-point *ngIf="[ContentType.CHOICE, ContentType.BINARY, ContentType.SCALE].indexOf(content.format) > -1"
                                            extensionId="start-new-round" [extensionData]="{content: content, resetEvent: resetAnswerEvent}"></lib-extension-point>
-                      <mat-divider></mat-divider>
                       <button mat-menu-item (click)="deleteContent(content)" attr.aria-label="{{ 'content.a11y-delete-content' | translate }}">
                         <mat-icon class="icon-warn">delete_forever</mat-icon>
                         <span>{{ 'content.delete-content' | translate}}</span>
@@ -288,7 +286,7 @@
             </mat-list>
           </div>
         </div>
-      </mat-card-content>
+      </div>
     </mat-card>
   </div>
 </div>

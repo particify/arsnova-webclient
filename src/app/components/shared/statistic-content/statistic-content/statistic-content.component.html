@@ -17,17 +17,17 @@
                   matTooltip="{{ 'statistic.show-correct' | translate }}" aria-labelledby="show-correct"
                   appHotkey="c" [appHotkeyAction]="HotkeyAction.CLICK" [appHotkeyDisabled]="!active"
                   appTrackInteraction="Correct content answer options visibility toggled" [appTrackName]="correctVisible ? 'on' : 'off'">
-          <mat-icon class="corner-icon icon-primary">playlist_add_check</mat-icon>
+          <mat-icon class="icon-primary">playlist_add_check</mat-icon>
           </button>
-          <button mat-icon-button *ngIf="answersVisible && format === ContentType.WORDCLOUD && !isParticipant" disableRipple (click)="toggleWordcloudView()"
+          <button mat-icon-button *ngIf="answersVisible && format === ContentType.WORDCLOUD && !isParticipant" (click)="toggleWordcloudView()"
                   matTooltip="{{ (showWordcloudModeration ? 'statistic.show-wordcloud' : 'statistic.show-wordcloud-list') | translate }}">
-          <mat-icon class="corner-icon icon-primary">toc</mat-icon>
+          <mat-icon class="icon-primary">toc</mat-icon>
           </button>
-          <button id="show-chart-btn" mat-icon-button disableRipple (click)="toggleAnswers()" aria-labelledby="show-chart"
+          <button id="show-chart-btn" mat-icon-button (click)="toggleAnswers()" aria-labelledby="show-chart"
                   matTooltip="{{ (answersVisible ? 'statistic.hide-results' : 'statistic.show-results') | translate }}"
                   appHotkey=" " [appHotkeyAction]="HotkeyAction.CLICK" [appHotkeyDisabled]="!active"
                   appTrackInteraction="Content results visibility toggled" [appTrackName]="answersVisible ? 'on' : 'off'">
-          <mat-icon class="corner-icon icon-primary">insert_chart</mat-icon>
+          <mat-icon class="icon-primary">insert_chart</mat-icon>
           </button>
         </div>
       </div>
@@ -37,7 +37,7 @@
   <div *ngIf="format === ContentType.FLASHCARD && !isPresentation">
     <button mat-icon-button (click)="toggleAnswers()" [matTooltip]="(answersVisible ? 'statistic.hide-flashcard-back' :
     'statistic.show-flashcard-back') | translate">
-      <mat-icon class="corner-icon icon-primary">fact_check</mat-icon>
+      <mat-icon class="icon-primary">fact_check</mat-icon>
     </button>
   </div>
 </div>
