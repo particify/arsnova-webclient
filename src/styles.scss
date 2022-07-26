@@ -167,7 +167,7 @@ textarea {
   color: var(--on-surface);
 }
 
-.mat-form-field:not(.mat-form-field-disabled) .mat-hint {
+.mat-form-field:not(.mat-form-field-disabled) .mat-hint:not(.warn, .warn-soft, .success) {
   color: var(--on-surface) !important;
 }
 
