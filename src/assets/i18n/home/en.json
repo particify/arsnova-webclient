@@ -38,7 +38,7 @@
     "account-deleted": "Your account has been deleted.",
     "back": "Back",
     "admin-area": "Administration",
-    "user-profile": "My account",
+    "delete-account": "Delete account",
     "english": "English",
     "german": "German",
     "help": "Help",
@@ -155,23 +155,6 @@
     "terms": "terms of use",
     "please-accept": "You must agree to the terms of use to register.",
     "info": "Create your {{accountService}} account"
-  },
-  "user-profile": {
-    "a11y-message": "You are now in the account page.",
-    "account-settings": "Account settings",
-    "username": "Username",
-    "first-name": "First name",
-    "last-name": "Last name",
-    "enter-first-name": "Enter your first name",
-    "enter-last-name": "Enter your last name",
-    "mail": "E-mail",
-    "enter-mail": "Enter your e-mail",
-    "organization": "Organization",
-    "enter-organization": "Enter your organization",
-    "department": "Department",
-    "enter-department": "Enter your department",
-    "delete-account": "Delete account",
-    "delete-account-info": "If you delete your account, all the rooms you created will be deleted."
   },
   "room-list": {
     "a11y-join-room": "Enter the room {{room}} with the number {{id}} in the role {{role}}",

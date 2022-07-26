@@ -220,8 +220,8 @@ describe('HeaderComponent', () => {
     expect(theme).not.toBeUndefined('Header should contain item "Theme"');
     const language = await userMenu.getHarness(MatMenuItemHarness.with({selector: '#language-menu'}));
     expect(language).not.toBeUndefined('Header should contain item "Language"');
-    const myAccount = await userMenu.getHarness(MatMenuItemHarness.with({selector: '#user-profile-button'}));
-    expect(myAccount).not.toBeUndefined('Header should contain item "My account"');
+    const deleteAccount = await userMenu.getHarness(MatMenuItemHarness.with({selector: '#delete-account-button'}));
+    expect(deleteAccount).not.toBeUndefined('Header should contain item "Delete account"');
     const logout = await userMenu.getHarness(MatMenuItemHarness.with({selector: '#logout-button'}));
     expect(logout).not.toBeUndefined('Header should contain item "Logout"');
   });
@@ -242,8 +242,8 @@ describe('HeaderComponent', () => {
     expect(theme).not.toBeUndefined('Header should contain item "Theme"');
     const language = await userMenu.getHarness(MatMenuItemHarness.with({selector: '#language-menu'}));
     expect(language).not.toBeUndefined('Header should contain item "Language"');
-    const myAccount = await userMenu.getHarness(MatMenuItemHarness.with({selector: '#user-profile-button'}));
-    expect(myAccount).not.toBeUndefined('Header should contain item "My account"');
+    const deleteAccount = await userMenu.getHarness(MatMenuItemHarness.with({selector: '#delete-account-button'}));
+    expect(deleteAccount).not.toBeUndefined('Header should contain item "Delete account"');
     const logout = await userMenu.getHarness(MatMenuItemHarness.with({selector: '#logout-button'}));
     expect(logout).not.toBeUndefined('Header should contain item "Logout"');
   });
@@ -266,8 +266,8 @@ describe('HeaderComponent', () => {
     expect(language).not.toBeUndefined('Header should contain item "Language"');
     const admin = await userMenu.getHarness(MatMenuItemHarness.with({selector: '#admin-button'}));
     expect(admin).not.toBeUndefined('Header should contain item "Administration"');
-    const myAccount = await userMenu.getHarness(MatMenuItemHarness.with({selector: '#user-profile-button'}));
-    expect(myAccount).not.toBeUndefined('Header should contain item "My account"');
+    const deleteAccount = await userMenu.getHarness(MatMenuItemHarness.with({selector: '#delete-account-button'}));
+    expect(deleteAccount).not.toBeUndefined('Header should contain item "Delete account"');
     const logout = await userMenu.getHarness(MatMenuItemHarness.with({selector: '#logout-button'}));
     expect(logout).not.toBeUndefined('Header should contain item "Logout"');
   });
@@ -296,8 +296,8 @@ describe('HeaderComponent', () => {
     expect(language).not.toBeUndefined('Header should contain item "Language"');
     const admin = await userMenu.getHarness(MatMenuItemHarness.with({selector: '#admin-button'}));
     expect(admin).not.toBeUndefined('Header should contain item "Administration"');
-    const myAccount = await userMenu.getHarness(MatMenuItemHarness.with({selector: '#user-profile-button'}));
-    expect(myAccount).not.toBeUndefined('Header should contain item "My account"');
+    const deleteAccount = await userMenu.getHarness(MatMenuItemHarness.with({selector: '#delete-account-button'}));
+    expect(deleteAccount).not.toBeUndefined('Header should contain item "Delete account"');
     const logout = await userMenu.getHarness(MatMenuItemHarness.with({selector: '#logout-button'}));
     expect(logout).not.toBeUndefined('Header should contain item "Logout"');
   });
@@ -324,8 +324,8 @@ describe('HeaderComponent', () => {
     expect(theme).not.toBeUndefined('Header should contain item "Theme"');
     const language = await userMenu.getHarness(MatMenuItemHarness.with({selector: '#language-menu'}));
     expect(language).not.toBeUndefined('Header should contain item "Language"');
-    const myAccount = await userMenu.getHarness(MatMenuItemHarness.with({selector: '#user-profile-button'}));
-    expect(myAccount).not.toBeUndefined('Header should contain item "My account"');
+    const deleteAccount = await userMenu.getHarness(MatMenuItemHarness.with({selector: '#delete-account-button'}));
+    expect(deleteAccount).not.toBeUndefined('Header should contain item "Delete account"');
     const logout = await userMenu.getHarness(MatMenuItemHarness.with({selector: '#logout-button'}));
     expect(logout).not.toBeUndefined('Header should contain item "Logout"');
   });
