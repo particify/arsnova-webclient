@@ -1,4 +1,4 @@
-<div class="answer-list" [ngClass]="{'invisible': !answersVisible}">
+<div *ngIf="answersVisible">
   <app-answer-list *ngIf="!isLoading" [answers]="answerStats" [roomId]="content.roomId"
                    [banMode]="false" [isPresentation]="isPresentation" (answerDeleted)="filterAnswers($event)"></app-answer-list>
   <div fxLayoutAlign="center">
