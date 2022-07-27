@@ -57,30 +57,27 @@ export class FormattingToolbarComponent {
   }
 
   private getFormattedText(text: string, cursorStart: number, cursorEnd: number, option: FormattingOption): string {
-    let formattedText = text.substring(0, cursorStart) || '';
-    if (option.hasClosingTag() || cursorStart !== cursorEnd) {
+    let formattedText: string;
+    let lineStartPos: number;
+    if (option.hasClosingTag()) {
+      formattedText = text.substring(0, cursorStart) || '';
       // Add formatting sign to cursor position or start of selected text
       formattedText += option.openingTag;
-    }
-    let lineStartPos: number;
-    // Check if text is selected
-    if (cursorStart !== cursorEnd) {
-      // Add selected text
-      formattedText += text.substring(cursorStart, cursorEnd);
-    } else {
-      if (option.hasClosingTag()) {
-        if (option.placeholder) {
-          // Add placeholder if exists for formatting option
-          formattedText += option.placeholder;
-        }
-      } else {
-        // Insert formatting sign at line start if no text is selected and formatting option has no closing tag 
-        lineStartPos = text.substring(0, cursorStart).lastIndexOf('\n') + 1;
-        formattedText = text.slice(0, lineStartPos) + option.openingTag + text.slice(lineStartPos);
+      // Check if text is selected
+      if (cursorStart !== cursorEnd) {
+        // Add selected text
+        formattedText += text.substring(cursorStart, cursorEnd);
+      } else if (option.placeholder) {
+        // Add placeholder if exists for formatting option
+        formattedText += option.placeholder;
       }
+      // Add closing tag if exists
+      formattedText += option.closingTag ?? '';
+    } else {
+      // Insert formatting sign at line start if no text is selected and formatting option has no closing tag
+      lineStartPos = text.substring(0, cursorStart).lastIndexOf('\n') + 1;
+      formattedText = text.slice(0, lineStartPos) + option.openingTag + text.slice(lineStartPos);
     }
-    // Add closing tag if exists
-    formattedText += option.closingTag ?? '';
     // Add rest of text
     if (lineStartPos === undefined) {
       formattedText += text.substring(cursorEnd, text.length);
