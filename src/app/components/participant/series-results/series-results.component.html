@@ -38,10 +38,11 @@
             </mat-icon>
             <app-loading-indicator *ngIf="isLoadingLastContent && i === contentsWithResults.length - 1" [size]="20"></app-loading-indicator>
           </div>
-          <p class="ellipsis body">{{content.body}}</p>
+          <app-rendered-text class="ellipsis body rendered-list-preview-container" [renderedText]="content.body" [markdownFeatureset]="markdownFeatureset" [listPreview]="true"
+                                     tabindex="0" role="button" (keyup.enter)="navigateToContentStats(content)"></app-rendered-text>
         </div>
       </mat-list-item>
-    </mat-list>    
+    </mat-list>
   </mat-card>
 </div>
 

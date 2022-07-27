@@ -17,6 +17,7 @@ export class RenderedTextComponent implements OnChanges {
   @Input() syntaxHighlighting = true;
   @Input() markdownFeatureset = MarkdownFeatureset.EXTENDED;
   @Input() linebreaks = true;
+  @Input() listPreview = false;
   @Output() rendered = new EventEmitter();
   displayedText: string | SafeHtml;
   isLoading = false;

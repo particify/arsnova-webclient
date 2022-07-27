@@ -258,20 +258,6 @@ describe('SeriesResultsComponent', () => {
     expect(score.nativeElement.textContent).toBe('67%');
   });
 
-  it('should display full content body if there is nothing rendered specially', async () => {
-    component.contents[0].body = 'Test';
-    component.contents[0].renderedBody = '<p>Test</p>';
-    fixture.detectChanges();
-    expect(component.contentsWithResults[0].body).toBe(component.contents[0].body);
-  });
-
-  it('should display message if body is rendered specially', async () => {
-    component.contents[0].body = '![alt](https://particify.de/4cbbab6358d4d02282f53f815816232e.svg)';
-    component.contents[0].renderedBody = '<p><img src=\"https://particify.de/4cbbab6358d4d02282f53f815816232e.svg\" alt=\"alt\"></p>\n'; 
-    fixture.detectChanges();
-    expect(component.contentsWithResults[0].body).not.toBe(component.contents[0].body);
-  });
-
   it('should not finish content loading if last content result is not received yet', async () => {
     component.hasAnsweredLastContent = true;
     const resultOverview =  {

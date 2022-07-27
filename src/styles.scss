@@ -115,10 +115,14 @@ ul {
   margin-bottom: 0;
 }
 
-.ellipsis {
+@mixin ellipsis-mixin {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.ellipsis {
+  @include ellipsis-mixin();
 }
 
 @mixin hint-base {
@@ -985,7 +989,7 @@ button.mat-menu-item:hover {
   }
 }
 
-app-rendered-text {
+app-rendered-text:not(.rendered-list-preview-container) {
   width: 100%;
 }
 
@@ -993,6 +997,34 @@ app-rendered-text {
   margin-top: 10px;
   min-height: 76px;
   padding: 12px;
+}
+
+.text-container > p {
+  @include ellipsis-mixin();
+}
+
+.rendered-list-preview-container {
+  position: relative;
+  @include ellipsis-mixin();
+  // 2 * margin (1em) + text height (19px)
+  max-height: calc(2em + 19px);
+}
+
+.rendered-list-preview {
+  h1, h2, h3, h4 {
+    font-size: 1em!important;
+    margin: 1em 0;
+  }
+}
+
+.rendered-list-preview > .katex-block {
+  height: 100%;
+  margin: 0;
+}
+
+.rendered-list-preview > * > img {
+  height: 40px;
+  margin: 0;
 }
 
 // Divider
