@@ -33,7 +33,7 @@ export class FormattingToolbarComponent {
     // Set new input value and focus input element
     this.setNewValueAndFocusInput(formattedText);
     // Set new cursor position
-    this.setNewCursorPosition(startPos, endPos, option);
+    this.setNewCursorPosition(startPos, endPos, option, reverse);
   }
 
   private isSelectionFormatted(text: string, cursorStart: number, cursorEnd: number, option: FormattingOption): boolean {
@@ -107,25 +107,16 @@ export class FormattingToolbarComponent {
     this.inputElement.focus();
   }
 
-  private setNewCursorPosition(cursorStart: number, cursorEnd: number, option: FormattingOption) {
-    let newEndPos: number;
-    const signsLength = option.openingTag.length;
-    // Set additional length to lengh of selection
-    let additionalLength = cursorEnd - cursorStart;
-    // If no text is selected and formatting option has closing tag add length of closing tag sign
-      if (cursorStart !== cursorEnd && option.hasClosingTag()) {
-        additionalLength += option.closingTag.length;
-      }
-      // Set selectionStart position to cursorStart plus inserted signs and selected text
-      this.inputElement.selectionStart = cursorStart + signsLength + additionalLength;
-      if (option.placeholder && cursorStart === cursorEnd) {
-        // If option has placeholder and no text is selected set selectionEnd to end of placeholder
-        newEndPos = cursorStart + signsLength + option.placeholder.length;
-      } else {
-        // Set selectionEnd to same as selectionStart
-        newEndPos = this.inputElement.selectionStart;
-      }
-      this.inputElement.selectionEnd = newEndPos;
+  private setNewCursorPosition(cursorStart: number, cursorEnd: number, option: FormattingOption, reverse: boolean) {
+    const startPosDiff = option.openingTag.length;
+    let endPosDiff = startPosDiff;
+    if (option.placeholder && cursorStart === cursorEnd && !reverse) {
+      // Add placeholder length if applicable, no text is selected and it is no reverse operation
+      endPosDiff += option.placeholder.length;
+    }
+    // Add or substract the difference to the selection positions
+    this.inputElement.selectionStart = cursorStart + (reverse ? -1 : 1) * startPosDiff;
+    this.inputElement.selectionEnd = cursorEnd + (reverse ? -1 : 1) * endPosDiff;
   }
 
 }

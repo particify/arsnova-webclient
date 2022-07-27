@@ -123,8 +123,8 @@ describe('FormattingToolbarComponent', () => {
     component.inputElement.selectionEnd = 25;
     const boldOption = component.formattingOptions.find(o => o.name === 'bold');
     component.addFormatting(boldOption);
-    expect(component.inputElement.selectionStart).toBe(29);
-    expect(component.inputElement.selectionEnd).toBe(29);
+    expect(component.inputElement.selectionStart).toBe(23);
+    expect(component.inputElement.selectionEnd).toBe(27);
   });
 
   it('should set cursor selection on placeholder after insert image formatting w/o selected text', () => {
@@ -143,7 +143,8 @@ describe('FormattingToolbarComponent', () => {
     component.inputElement.selectionEnd = 50;
     const imageOption = component.formattingOptions.find(o => o.name === 'image');
     component.addFormatting(imageOption);
-    expect(component.inputElement.selectionStart).toBe(component.inputElement.value.length);
-    expect(component.inputElement.selectionEnd).toBe(component.inputElement.value.length);
+    // Expect offset of 12 for opening tag
+    expect(component.inputElement.selectionStart).toBe(25 + 12);
+    expect(component.inputElement.selectionEnd).toBe(50 + 12);
   });
 });
