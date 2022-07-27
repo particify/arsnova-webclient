@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { ContentService } from '../../../services/http/content.service';
 import { Content } from '../../../models/content';
 import { AnswerStatistics } from '../../../models/answer-statistics';
@@ -17,6 +17,7 @@ export abstract class StatisticContentBaseComponent implements OnInit {
   @Input() isPresentation = false;
   @Input() active: boolean;
 
+  destroyed$ = new Subject<void>();
   contentId: string;
   isLoading = true;
   answersVisible = false;

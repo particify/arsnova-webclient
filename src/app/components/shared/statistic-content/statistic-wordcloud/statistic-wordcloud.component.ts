@@ -1,5 +1,4 @@
 import { Component, Input, OnDestroy, OnInit } from "@angular/core";
-import { Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
 import { AnswerStatistics } from "../../../../models/answer-statistics";
 import { TextRoundStatistics } from "../../../../models/round-statistics";
@@ -18,7 +17,6 @@ export class StatisticWordcloudComponent extends StatisticContentBaseComponent i
   @Input() showModeration = false;
 
   wordWeights: [string, number][] = [];
-  destroyed$ = new Subject<void>();
 
   answerList: TextStatistic[] = [];
 

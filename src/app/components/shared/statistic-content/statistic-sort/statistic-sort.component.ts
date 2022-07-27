@@ -14,7 +14,6 @@ import {
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { StatisticContentBaseComponent } from '../statistic-content-base';
 import { takeUntil } from 'rxjs/operators';
-import { Subject } from 'rxjs';
 import { ThemeService } from '../../../../../theme/theme.service';
 import { TranslateService } from '@ngx-translate/core';
 import { Combination } from '../../../../models/round-statistics';
@@ -33,7 +32,6 @@ export class StatisticSortComponent extends StatisticContentBaseComponent implem
   @Input() content: ContentChoice;
   @Input() directShow: boolean;
 
-  destroyed$ = new Subject<void>();
   chart: Chart;
   chartId: string;
   isLoading = true;

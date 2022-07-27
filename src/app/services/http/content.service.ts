@@ -61,6 +61,10 @@ export class ContentService extends AbstractEntityService<Content> {
     return this.ws.getWatcher(`/topic/${roomId}.content-${contentId}.answers-changed.stream`);
   }
 
+  getTextAnswerCreatedStream(roomId: string, contentId: string): Observable<IMessage> {
+    return this.ws.getWatcher(`/topic/${roomId}.content-${contentId}.text-answer-created.stream`);
+  }
+
   getContents(roomId: string): Observable<Content[]> {
     const connectionUrl = this.buildUri(this.apiUrl.find, roomId);
     return this.http.post<Content[]>(connectionUrl, {
