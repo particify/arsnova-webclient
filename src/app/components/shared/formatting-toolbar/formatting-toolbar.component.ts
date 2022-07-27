@@ -12,14 +12,14 @@ export class FormattingToolbarComponent {
   @Output() valueChanged = new EventEmitter<string>();
 
   formattingOptions: FormattingOption[] = [
-    new FormattingOption('bold', 'format_bold', '**', true),
-    new FormattingOption('italic', 'format_italic', '*', true),
+    new FormattingOption('bold', 'format_bold', '**', '**'),
+    new FormattingOption('italic', 'format_italic', '*', '*'),
     new FormattingOption('list', 'format_list_bulleted', '* '),
     new FormattingOption('numbered-list', 'format_list_numbered', '1. '),
-    new FormattingOption('code', 'code', '`', true),
-    new FormattingOption('formulars', 'functions', '$', true, 0, '\\LaTeX'),
-    new FormattingOption('link', 'link', '[url text]()', true, 11, 'https://'),
-    new FormattingOption('image', 'image', '![alt text]()', true, 12, 'https://')
+    new FormattingOption('code', 'code', '`', '`'),
+    new FormattingOption('formulars', 'functions', '$', '$', '\\LaTeX'),
+    new FormattingOption('link', 'link', '[url text](', ')', 'https://'),
+    new FormattingOption('image', 'image', '![alt text](', ')', 'https://')
   ];
 
   constructor() {}
@@ -37,9 +37,9 @@ export class FormattingToolbarComponent {
 
   private getFormattedText(text: string, cursorStart: number, cursorEnd: number, option: FormattingOption): string {
     let formattedText = text.substring(0, cursorStart) || '';
-    if (option.closingTag || cursorStart !== cursorEnd) {
+    if (option.hasClosingTag() || cursorStart !== cursorEnd) {
       // Add formatting sign to cursor position or start of selected text
-      formattedText += option.signs.substring(0, option.startPos || option.signs.length);
+      formattedText += option.openingTag;
     }
     let lineStartPos: number;
     // Check if text is selected
@@ -47,7 +47,7 @@ export class FormattingToolbarComponent {
       // Add selected text
       formattedText += text.substring(cursorStart, cursorEnd);
     } else {
-      if (option.closingTag) {
+      if (option.hasClosingTag()) {
         if (option.placeholder) {
           // Add placeholder if exists for formatting option
           formattedText += option.placeholder;
@@ -55,13 +55,11 @@ export class FormattingToolbarComponent {
       } else {
         // Insert formatting sign at line start if no text is selected and formatting option has no closing tag 
         lineStartPos = text.substring(0, cursorStart).lastIndexOf('\n') + 1;
-        formattedText = text.slice(0, lineStartPos) + option.signs + text.slice(lineStartPos);
+        formattedText = text.slice(0, lineStartPos) + option.openingTag + text.slice(lineStartPos);
       }
     }
     // Add closing tag if exists
-    if (option.closingTag) {
-      formattedText += option.signs.substring(option.startPos, option.signs.length);
-    }
+    formattedText += option.closingTag ?? '';
     // Add rest of text
     if (lineStartPos === undefined) {
       formattedText += text.substring(cursorEnd, text.length);
@@ -77,12 +75,12 @@ export class FormattingToolbarComponent {
 
   private setNewCursorPosition(cursorStart: number, cursorEnd: number, option: FormattingOption) {
     let newEndPos: number;
-    const signsLength = (option.startPos || option.signs.length);
+    const signsLength = option.openingTag.length;
     // Set additional length to lengh of selection
     let additionalLength = cursorEnd - cursorStart;
     // If no text is selected and formatting option has closing tag add length of closing tag sign
-      if (cursorStart !== cursorEnd && option.closingTag) {
-        additionalLength += option.signs.length - option.startPos;
+      if (cursorStart !== cursorEnd && option.hasClosingTag()) {
+        additionalLength += option.closingTag.length;
       }
       // Set selectionStart position to cursorStart plus inserted signs and selected text
       this.inputElement.selectionStart = cursorStart + signsLength + additionalLength;

@@ -95,8 +95,8 @@ describe('FormattingToolbarComponent', () => {
     component.inputElement.selectionEnd = component.inputElement.value.length;
     const boldOption = component.formattingOptions.find(o => o.name === 'bold');
     component.addFormatting(boldOption);
-    expect(component.inputElement.selectionStart).toBe(component.inputElement.value.length - boldOption.signs.length);
-    expect(component.inputElement.selectionEnd).toBe(component.inputElement.value.length - boldOption.signs.length);
+    expect(component.inputElement.selectionStart).toBe(component.inputElement.value.length - boldOption.openingTag.length);
+    expect(component.inputElement.selectionEnd).toBe(component.inputElement.value.length - boldOption.openingTag.length);
   });
 
   it('should set cursor position after formatted selection', () => {
