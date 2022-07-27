@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { FormattingOption } from '../../../models/formatting-option';
+import { FormattingOption, PATTERN_PLACEHOLDER } from '../../../models/formatting-option';
 
 @Component({
   selector: 'app-formatting-toolbar',
@@ -33,6 +33,27 @@ export class FormattingToolbarComponent {
     this.setNewValueAndFocusInput(formattedText);
     // Set new cursor position
     this.setNewCursorPosition(startPos, endPos, option);
+  }
+
+  private isSelectionFormatted(text: string, cursorStart: number, cursorEnd: number, option: FormattingOption): boolean {
+    return option.getPattern().test(option.hasClosingTag()
+        ? this.replaceSelection(text, cursorStart, cursorEnd)
+        : this.extractFromCurrentLine(text, cursorStart));
+  }
+
+  private replaceSelection(text: string, cursorStart: number, cursorEnd: number): string {
+    return text.substring(0, cursorStart) + PATTERN_PLACEHOLDER + text.substring(cursorEnd);
+  }
+
+  private extractFromCurrentLine(text: string, cursorStart: number) {
+    let pos = -1;
+    let lineStart = 0;
+    do {
+      // Add 1 to start after the line break and at 0 for the first line
+      lineStart = pos + 1;
+      pos = text.indexOf('\n', lineStart);
+    } while (pos !== -1 && pos < cursorStart)
+    return text.substring(lineStart);
   }
 
   private getFormattedText(text: string, cursorStart: number, cursorEnd: number, option: FormattingOption): string {
