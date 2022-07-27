@@ -13,7 +13,7 @@ export class FormattingToolbarComponent {
 
   formattingOptions: FormattingOption[] = [
     new FormattingOption('bold', 'format_bold', '**', '**'),
-    new FormattingOption('italic', 'format_italic', '*', '*'),
+    new FormattingOption('italic', 'format_italic', '_', '_'),
     new FormattingOption('list', 'format_list_bulleted', '* '),
     new FormattingOption('numbered-list', 'format_list_numbered', '1. '),
     new FormattingOption('code', 'code', '`', '`'),
@@ -27,8 +27,9 @@ export class FormattingToolbarComponent {
   addFormatting(option: FormattingOption) {
     const startPos = this.inputElement.selectionStart;
     const endPos = this.inputElement.selectionEnd;
+    const reverse = this.isSelectionFormatted(this.inputElement.value, startPos, endPos, option);
     // Get formatted text for formatting option, current input and cursor position
-    const formattedText = this.getFormattedText(this.inputElement.value, startPos, endPos, option);
+    const formattedText = this.getFormattedText(this.inputElement.value, startPos, endPos, option, reverse);
     // Set new input value and focus input element
     this.setNewValueAndFocusInput(formattedText);
     // Set new cursor position
@@ -56,31 +57,46 @@ export class FormattingToolbarComponent {
     return text.substring(lineStart);
   }
 
-  private getFormattedText(text: string, cursorStart: number, cursorEnd: number, option: FormattingOption): string {
+  private getFormattedText(text: string, cursorStart: number, cursorEnd: number, option: FormattingOption, reverse: boolean): string {
     let formattedText: string;
     let lineStartPos: number;
+
     if (option.hasClosingTag()) {
       formattedText = text.substring(0, cursorStart) || '';
-      // Add formatting sign to cursor position or start of selected text
-      formattedText += option.openingTag;
+      if (reverse) {
+        formattedText = formattedText.substring(0, formattedText.length - option.openingTag.length);
+      } else {
+        // Add formatting sign to cursor position or start of selected text
+        formattedText += option.openingTag;
+      }
+
       // Check if text is selected
       if (cursorStart !== cursorEnd) {
         // Add selected text
         formattedText += text.substring(cursorStart, cursorEnd);
-      } else if (option.placeholder) {
+      } else if (option.placeholder && !reverse) {
         // Add placeholder if exists for formatting option
         formattedText += option.placeholder;
       }
-      // Add closing tag if exists
-      formattedText += option.closingTag ?? '';
+
+      if (!reverse) {
+        // Add closing tag if exists
+        formattedText += option.closingTag ?? '';
+      }
     } else {
       // Insert formatting sign at line start if no text is selected and formatting option has no closing tag
       lineStartPos = text.substring(0, cursorStart).lastIndexOf('\n') + 1;
-      formattedText = text.slice(0, lineStartPos) + option.openingTag + text.slice(lineStartPos);
+      if (reverse) {
+        formattedText = text.slice(0, lineStartPos)+ text.slice(lineStartPos + option.openingTag.length);
+      } else {
+        formattedText = text.slice(0, lineStartPos) + option.openingTag + text.slice(lineStartPos);
+      }
     }
+
     // Add rest of text
     if (lineStartPos === undefined) {
-      formattedText += text.substring(cursorEnd, text.length);
+      const restStart = reverse && option.hasClosingTag() ? cursorEnd + option.closingTag.length : cursorEnd;
+      formattedText += text.substring(restStart, text.length);
     }
     return formattedText;
   }
