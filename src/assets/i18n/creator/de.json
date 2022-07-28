@@ -480,7 +480,7 @@
     "a11y-collapsed-answers": "Das Diagramm ist jetzt ausgeblendet.",
     "a11y-expanded-answers-text": "Die Antworten werden jetzt angezeigt.",
     "a11y-collapsed-answers-text": "Die Antworten werden jetzt ausgeblendet.",
-    "a11y-no-answers-yet": "Es sind keine Antwoten zum Anzeigen vorhanden.",
+    "a11y-no-answers-yet": "Es sind keine Antworten zum Anzeigen vorhanden.",
     "a11y-no-more-questions": "Es sind keine weiteren Inhalte vorhanden.",
     "abstentions": "Enthaltungen",
     "abstention": "Enthaltung",
@@ -703,7 +703,7 @@
     "list": "Liste",
     "numbered-list": "Numerierte Liste",
     "code": "Code",
-    "formulars": "Formel",
+    "formula": "Formel",
     "link": "Link",
     "image": "Bild"
   },

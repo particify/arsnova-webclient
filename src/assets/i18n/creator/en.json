@@ -228,7 +228,7 @@
     "need-answers": "Please add at least two answers.",
     "need-answer": "Please enter an answer.",
     "no-empty": "No empty fields allowed. Please check your content.",
-    "no-empty2": "No empty filed allowed.",
+    "no-empty2": "No empty field allowed.",
     "only-one": "Please select exactly one correct answer.",
     "max-answers": "There's a maximum of eight answers.",
     "reset": "Reset",
@@ -705,7 +705,7 @@
     "list": "Bullet list",
     "numbered-list": "Numbered list",
     "code": "Code",
-    "formular": "Formular",
+    "formula": "Formula",
     "link": "Link",
     "image": "Image"
   },
