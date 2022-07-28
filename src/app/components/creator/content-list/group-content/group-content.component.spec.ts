@@ -100,7 +100,9 @@ describe('GroupContentComponent', () => {
   }
 
   const snapshot = new ActivatedRouteSnapshot();
-  const params =  of({seriesName: 'SERIES'});
+  const params =  {
+    seriesName: 'SERIES'
+  };
 
   snapshot.params = params;
 

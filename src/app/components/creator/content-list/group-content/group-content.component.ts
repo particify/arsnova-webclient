@@ -122,9 +122,11 @@ export class GroupContentComponent implements OnInit, OnDestroy {
   }
 
   setContentGroup(groupName: string) {
-    this.groupName = groupName;
-    this.globalStorageService.setItem(STORAGE_KEYS.LAST_GROUP, this.groupName);
-    this.reloadContentGroup();
+    if (groupName !== this.groupName) {
+      this.groupName = groupName;
+      this.globalStorageService.setItem(STORAGE_KEYS.LAST_GROUP, this.groupName);
+      this.reloadContentGroup();
+    }
   }
 
   registerHotkeys() {
