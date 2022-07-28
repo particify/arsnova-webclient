@@ -718,6 +718,7 @@
     "edit": "Bearbeiten",
     "delete": "Löschen",
     "save": "Speichern",
-    "cancel": "Abbrechen"
+    "cancel": "Abbrechen",
+    "edited": "Bearbeitet"
   }
 }
