@@ -74,7 +74,7 @@ export class ConsentService extends AbstractHttpService<ConsentSettings> {
 
   setConfig(apiConfig: ApiConfig) {
     this.privacyUrl = apiConfig.ui.links?.privacy?.url;
-    this.consentRecording = apiConfig.features.consentRecording;
+    this.consentRecording = apiConfig.features?.consentRecording;
   }
 
   /**
