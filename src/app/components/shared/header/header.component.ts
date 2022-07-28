@@ -103,8 +103,6 @@ export class HeaderComponent implements OnInit {
       this.role = role;
     });
     this.openPresentationDirectly = !this.extensionFactory.getExtension('present-in-new-tab');
-    this.getAnnouncementState();
-    // TODO: Subscribe to WS events for announcement state
   }
 
   getAnnouncementState() {
