@@ -203,7 +203,8 @@
     "hide-chart": "Hide chart",
     "show-correct": "Show correct answers",
     "answer": "Answer",
-    "other-combinations": "Other"
+    "other-combinations": "Other",
+    "no-answers": "There are no answers."
   },
   "sidebar": {
     "a11y-switch-to-feature": "Switch to {{feature}}.",

@@ -17,7 +17,7 @@ export class FormattingToolbarComponent {
     new FormattingOption('list', 'format_list_bulleted', '* '),
     new FormattingOption('numbered-list', 'format_list_numbered', '1. '),
     new FormattingOption('code', 'code', '`', '`'),
-    new FormattingOption('formulars', 'functions', '$', '$', '\\LaTeX'),
+    new FormattingOption('formula', 'functions', '$', '$', '\\LaTeX'),
     new FormattingOption('link', 'link', '[url text](', ')', 'https://'),
     new FormattingOption('image', 'image', '![alt text](', ')', 'https://')
   ];
