@@ -1,7 +1,7 @@
 export enum ChangeType {
-  CREATE,
-  UPDATE,
-  DELETE
+  CREATE = 'CREATE',
+  UPDATE = 'UPDATE',
+  DELETE = 'DELETE'
 }
 
 export class EntityChangeNotification {
