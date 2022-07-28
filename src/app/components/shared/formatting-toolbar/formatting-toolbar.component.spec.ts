@@ -53,6 +53,15 @@ describe('FormattingToolbarComponent', () => {
     expect(component.inputElement.value).toBe('I would like to make **THIS** bold.');
   });
 
+  it('should remove bold signs around selection of input value', () => {
+    component.inputElement.value = 'I no longer want to make **THIS** bold.';
+    component.inputElement.selectionStart = 27;
+    component.inputElement.selectionEnd = 31;
+    const boldOption = component.formattingOptions.find(o => o.name === 'bold');
+    component.addFormatting(boldOption);
+    expect(component.inputElement.value).toBe('I no longer want to make THIS bold.');
+  });
+
   it('should insert list sign at start of line if no selection', () => {
     component.inputElement.value = 'List:\nThis should be a list item';
     component.inputElement.selectionStart = component.inputElement.value.length;
@@ -69,6 +78,15 @@ describe('FormattingToolbarComponent', () => {
     const listOption = component.formattingOptions.find(o => o.name === 'list');
     component.addFormatting(listOption);
     expect(component.inputElement.value).toBe('List:\n* This should be a list item\nThis should be another list item later');
+  });
+
+  it('should remove list sign from start of line', () => {
+    component.inputElement.value = 'List:\n* This is a list item';
+    component.inputElement.selectionStart = component.inputElement.value.length;
+    component.inputElement.selectionEnd = component.inputElement.value.length;
+    const listOption = component.formattingOptions.find(o => o.name === 'list');
+    component.addFormatting(listOption);
+    expect(component.inputElement.value).toBe('List:\nThis is a list item');
   });
 
   it('should insert image sign at cursor position w/ url placeholder if no selection', () => {
@@ -95,18 +113,18 @@ describe('FormattingToolbarComponent', () => {
     component.inputElement.selectionEnd = component.inputElement.value.length;
     const boldOption = component.formattingOptions.find(o => o.name === 'bold');
     component.addFormatting(boldOption);
-    expect(component.inputElement.selectionStart).toBe(component.inputElement.value.length - boldOption.signs.length);
-    expect(component.inputElement.selectionEnd).toBe(component.inputElement.value.length - boldOption.signs.length);
+    expect(component.inputElement.selectionStart).toBe(component.inputElement.value.length - boldOption.openingTag.length);
+    expect(component.inputElement.selectionEnd).toBe(component.inputElement.value.length - boldOption.openingTag.length);
   });
 
-  it('should set cursor position after formatted selection', () => {
+  it('should offset the text selection when formatting it bold', () => {
     component.inputElement.value = 'I would like to make THIS bold.';
     component.inputElement.selectionStart = 21;
     component.inputElement.selectionEnd = 25;
     const boldOption = component.formattingOptions.find(o => o.name === 'bold');
     component.addFormatting(boldOption);
-    expect(component.inputElement.selectionStart).toBe(29);
-    expect(component.inputElement.selectionEnd).toBe(29);
+    expect(component.inputElement.selectionStart).toBe(23);
+    expect(component.inputElement.selectionEnd).toBe(27);
   });
 
   it('should set cursor selection on placeholder after insert image formatting w/o selected text', () => {
@@ -119,13 +137,14 @@ describe('FormattingToolbarComponent', () => {
     expect(component.inputElement.selectionEnd).toBe(45);
   });
 
-  it('should set cursor position after inserted image with selected url', () => {
+  it('should offset the selection of the URL when inserting an image', () => {
     component.inputElement.value = 'See the following image: https://example.com/image';
     component.inputElement.selectionStart = 25;
     component.inputElement.selectionEnd = 50;
     const imageOption = component.formattingOptions.find(o => o.name === 'image');
     component.addFormatting(imageOption);
-    expect(component.inputElement.selectionStart).toBe(component.inputElement.value.length);
-    expect(component.inputElement.selectionEnd).toBe(component.inputElement.value.length);
+    // Expect offset of 12 for opening tag
+    expect(component.inputElement.selectionStart).toBe(25 + 12);
+    expect(component.inputElement.selectionEnd).toBe(50 + 12);
   });
 });
