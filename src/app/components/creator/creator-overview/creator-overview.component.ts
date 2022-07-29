@@ -99,7 +99,7 @@ export class CreatorOverviewComponent extends RoomOverviewComponent implements O
   afterGroupsLoadHook() {
     this.prepareAttachmentData(UserRole.CREATOR);
     this.isLoading = false;
-    this.globalStorageService.setItem(STORAGE_KEYS.CONTENT_GROUPS, this.groupNames);
+    this.globalStorageService.setItem(STORAGE_KEYS.CONTENT_GROUPS, this.contentGroups.map(cg => cg.name));
   }
 
   openCreateContentGroupDialog() {

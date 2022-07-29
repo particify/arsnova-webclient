@@ -26,7 +26,6 @@ export class RoomOverviewComponent implements OnDestroy {
   room: Room = null;
   protected roomStats: RoomStats;
   protected contentGroups: ContentGroup[] = [];
-  protected groupNames: string[] = [];
   isLoading = true;
   errorOnLoading = false;
   commentCounter: number;
@@ -117,6 +116,7 @@ export class RoomOverviewComponent implements OnDestroy {
       if (this.roomStats.groupStats?.length > 0) {
         this.initializeGroups();
       } else {
+        this.contentGroups = [];
         this.isLoading = false;
         this.afterGroupsLoadHook();
       }
@@ -128,8 +128,7 @@ export class RoomOverviewComponent implements OnDestroy {
     for (let i = 0; i < this.roomStats.groupStats.length; i++) {
       this.contentGroupService.getById(this.roomStats.groupStats[i].id, { roomId: this.room.id }).subscribe(group => {
         this.contentGroups.push(group);
-        this.groupNames.push(group.name);
-        if (this.groupNames.length === this.roomStats.groupStats.length) {
+        if (this.contentGroups.length === this.roomStats.groupStats.length) {
           this.afterGroupsLoadHook();
         }
       });
