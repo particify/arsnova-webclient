@@ -723,6 +723,7 @@
     "delete": "Löschen",
     "save": "Speichern",
     "cancel": "Abbrechen",
-    "edited": "bearbeitet"
+    "edited": "bearbeitet",
+    "options": "Optionen"
   }
 }

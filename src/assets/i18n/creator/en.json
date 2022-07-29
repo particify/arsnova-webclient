@@ -725,6 +725,7 @@
     "delete": "Delete",
     "save": "Save",
     "cancel": "Cancel",
-    "edited": "edited"
+    "edited": "edited",
+    "options": "Options"
   }
 }
