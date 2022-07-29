@@ -245,9 +245,7 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
       this.eventService.on<typeof deletedEvent.payload>(deletedEvent.type).subscribe(() => {
         this.roomStatsService.getStats(this.roomId, true).subscribe(stats => {
           if (!stats.groupStats) {
-            const index = this.activeFeatures.indexOf(Features.CONTENTS);
-            this.activeFeatures.splice(index, 2);
-            this.getItems();
+            this.removeContentFeatureItem();
           }
           this.updateGroups(stats.groupStats, false);
         });
@@ -371,10 +369,10 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
           );
           if (this.contentGroups.length === groupCount) {
             if (alreadySet) {
-              if (this.groupName === group.name) {
-                this.group = group;
-                this.setGroupProperties();
+              if (this.groupName === group.name || !this.groupName) {
+                this.setGroup(group);
               }
+              this.addContentFeatureItem();
               if (this.role === UserRole.PARTICIPANT) {
                 this.toggleNews(Features.CONTENTS);
               }
@@ -387,7 +385,24 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
         });
       }
     } else {
+      this.removeContentFeatureItem();
       this.afterInit();
+    }
+  }
+
+  addContentFeatureItem() {
+    if (this.getBarIndexOfFeature(Features.CONTENTS) === -1) {
+      this.activeFeatures.splice(2, 0, Features.CONTENTS);
+      this.getItems();
+    }
+  }
+
+  removeContentFeatureItem() {
+    const index = this.activeFeatures.indexOf(Features.CONTENTS);
+    if (index > -1) {
+      this.activeFeatures.splice(index, 1);
+      this.getItems();
+      this.removeGroupInSessionStorage();
     }
   }
 
@@ -420,13 +435,7 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
   filterPublishedGroups(): boolean {
     this.contentGroups = this.contentGroups.filter(cg => cg.published);
     if (this.contentGroups.length === 0) {
-      const index = this.activeFeatures.indexOf(Features.CONTENTS);
-      if (index !== this.currentRouteIndex) {
-        this.activeFeatures.splice(index, 1);
-        this.toggleNews(Features.CONTENTS);
-        this.getItems();
-      }
-      this.removeGroupInSessionStorage();
+      this.removeContentFeatureItem();
       return false;
     } else {
       return true;
@@ -495,6 +504,10 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
 
   handleContentGroupChanges(changes) {
     if (changes.entityType === 'ContentGroup') {
+      const index = this.contentGroups.map(cg => cg.id).indexOf(changes.entity.id);
+      if (index !== undefined) {
+        this.contentGroups[index] = changes.entity;
+      }
       if (this.groupName !== changes.entity.name) {
         if (changes.entity.published && !this.noContentsPublished(changes.entity.firstPublishedIndex, changes.entity.lastPublishedIndex)) {
           this.group = changes.entity;
@@ -521,10 +534,7 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
           this.setGroup();
         }
       } else {
-        if (this.getBarIndexOfFeature(Features.CONTENTS) === -1) {
-          this.activeFeatures.splice(1, 0, Features.CONTENTS);
-          this.getItems();
-        }
+        this.addContentFeatureItem();
         this.toggleNews(Features.CONTENTS);
       }
     }
