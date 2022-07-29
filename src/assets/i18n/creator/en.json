@@ -725,6 +725,7 @@
     "save": "Save",
     "cancel": "Cancel",
     "edited": "edited",
-    "options": "Options"
+    "options": "Options",
+    "changes-saved": "Your changes have been saved."
   }
 }

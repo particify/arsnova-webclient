@@ -723,6 +723,7 @@
     "save": "Speichern",
     "cancel": "Abbrechen",
     "edited": "bearbeitet",
-    "options": "Optionen"
+    "options": "Optionen",
+    "changes-saved": "Deine Änderungen wurden gespeichert."
   }
 }
