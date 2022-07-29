@@ -22,7 +22,7 @@
     <app-formatting-toolbar *ngIf="!renderPreview" class="tab-group-formatting-bar" [inputElement]="bodyInput" (valueChanged)="body = $event"></app-formatting-toolbar>
     </div>
     <div fxLayout="row" fxLayoutAlign="end" fxLayoutGap="10px">
-      <button mat-stroked-button *ngIf="editId" (click)="resetEdit()">{{ 'announcement.cancel' | translate }}</button>
+      <button mat-stroked-button *ngIf="editId" (click)="reset()">{{ 'announcement.cancel' | translate }}</button>
       <button mat-raised-button class="button-primary" (click)="save()">{{ ( editId ? 'announcement.save' : 'announcement.create') | translate }}</button>
     </div>
   </form>

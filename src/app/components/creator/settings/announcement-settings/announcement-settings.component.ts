@@ -73,14 +73,14 @@ export class AnnouncementSettingsComponent implements OnInit {
       this.announcementService.update(this.room.id, this.editId, this.title, this.body).subscribe(announcement => {
         const index = this.announcements.map(a => a.id).indexOf(announcement.id);
         this.announcements[index] = announcement;
-        this.resetEdit();
+        this.reset();
       });
     } else {
       this.announcementService.add(this.room.id, this.title, this.body).subscribe(announcement => {
         this.announcements.unshift(announcement);
         const msg = this.translateService.instant('announcement.created');
         this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.SUCCESS);
-        this.resetInputs();
+        this.reset();
       });
     }
   }
@@ -104,7 +104,7 @@ export class AnnouncementSettingsComponent implements OnInit {
     }
   }
 
-  resetEdit() {
+  reset() {
     this.editId = null;
     this.inputTabs.selectedIndex = 0;
     this.renderPreview = false;
