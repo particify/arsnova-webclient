@@ -366,8 +366,8 @@
   "announcement": {
     "announcements": "Announcements",
     "close": "Close",
-    "new": "New",
-    "edited": "Edited",
+    "new": "new",
+    "edited": "edited",
     "new-announcements": "There are new announcements",
     "all-rooms": "All rooms",
     "no-announcements": "There are no announcements."
