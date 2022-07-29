@@ -2,7 +2,7 @@
   <mat-card [ngClass]="{'card-closed': !expanded, 'card-expanded': expanded}">
     <div class="card-header" id="{{settings.componentName}}" tabindex="0" role="button" fxLayout="row" fxLayoutAlign="start center"
          (keyup.enter)="expandSettings()" (click)="expandSettings()"
-         [appHotkey]="settings.hotkey" [appHotkeyAction]="HotkeyAction.CLICK" [appHotkeyTitle]="'settings.' + settings.componentName | translate"
+         [appHotkey]="settings.hotkey" [appHotkeyAction]="HotkeyAction.CLICK" [appHotkeyTitle]="'settings.hotkey-' + settings.componentName | translate"
          attr.aria-label="{{ ('settings.a11y-'
          + (expanded ? 'collapse-' : 'expand-') + 'settings') | translate: {name: ('settings.' + settings.componentName) | translate } }}">
       <mat-icon class="header-icon">{{settings.iconName}}</mat-icon>
