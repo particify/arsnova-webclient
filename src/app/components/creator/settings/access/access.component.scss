@@ -66,4 +66,8 @@
   box-shadow: inset 140px 0 0 0 var(--primary);
   border: none;
   color: var(--on-primary);
+  &.mat-button-disabled {
+    color: var(--on-primary);
+    opacity: 0.5;
+  }
 }
