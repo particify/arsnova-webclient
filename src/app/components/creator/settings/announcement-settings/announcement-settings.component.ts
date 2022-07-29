@@ -37,7 +37,9 @@ export class AnnouncementSettingsComponent implements OnInit {
 
   ngOnInit(): void {
     this.announcementService.getByRoomId(this.room.id).subscribe(announcements => {
-      this.announcements = announcements;
+      this.announcements = announcements.sort((a, b) => {
+        return new Date(b.creationTimestamp).getTime() - new Date(a.creationTimestamp).getTime();
+      });
       this.isLoading = false;
     })
   }
@@ -75,7 +77,7 @@ export class AnnouncementSettingsComponent implements OnInit {
       });
     } else {
       this.announcementService.add(this.room.id, this.title, this.body).subscribe(announcement => {
-        this.announcements.push(announcement);
+        this.announcements.unshift(announcement);
         const msg = this.translateService.instant('announcement.created');
         this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.SUCCESS);
         this.resetInputs();
