@@ -370,6 +370,7 @@
     "edited": "Edited",
     "new-announcements": "There are new announcements",
     "all-rooms": "All rooms",
-    "no-announcements": "There are no announcements."
+    "no-announcements": "There are no announcements.",
+    "filter": "Filter"
   }
 }
