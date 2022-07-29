@@ -366,8 +366,8 @@
   "announcement": {
     "announcements": "Ankündigungen",
     "close": "Schließen",
-    "new": "Neu",
-    "edited": "Bearbeitet",
+    "new": "neu",
+    "edited": "bearbeitet",
     "new-announcements": "Es gibt neue Ankündigungen",
     "all-rooms": "Alle Räume",
     "no-announcements": "Es gibt keine Ankündigungen.",
