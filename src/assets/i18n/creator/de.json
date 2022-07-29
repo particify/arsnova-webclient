@@ -619,7 +619,6 @@
     "a11y-present-comment": "Der folgende Beitrag wird jetzt präsentiert: {{comment}}",
     "a11y-comment-zoom-changed": "Zoom auf {{zoom}} Prozent geändert.",
     "a11y-content-message": "Du präsentierst jetzt die Inhalte der Fragenserie {{group}}.",
-    "a11y-presentation-mode": "Öffne ein Menü, um dem Raum zu präsentieren.",
     "a11y-entered-fullscreen": "Du befindest dich jetzt im Vollbildmodus.",
     "a11y-leaved-fullscreen": "Du hast den Vollbildmodus verlassen.",
     "a11y-present": "Gehe in den Präsentationsmodus",
