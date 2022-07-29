@@ -135,7 +135,8 @@
       <div fxLayoutGap="16px">
         <button *ngIf="announcementState" mat-icon-button (click)="showNews()" class="icon-badge"
                 [matTooltip]="(announcementState.new > 0 ? 'announcement.new-announcements' : 'announcement.announcements') | translate"
-                matBadge="{{announcementState.new}}" [matBadgeHidden]="announcementState.new === 0">
+                matBadge="{{announcementState.new}}" [matBadgeHidden]="announcementState.new === 0"
+                appHotkey="a">
           <mat-icon>
             notifications
           </mat-icon>
