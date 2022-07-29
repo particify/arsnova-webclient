@@ -450,7 +450,11 @@
     "threshold-info": "Wird ein Schwellenwert gesetzt, werden nur Beiträge angezeigt, welche eine höhere Bewertung erhalten haben.",
     "direct-send-info": "Wenn diese Einstellung deaktiviert ist, muss eine moderierende Person bzw. die vortragende Person neue Beiträge erst freischalten bevor diese öffentlich sichtbar werden.",
     "announcements": "Ankündigungen",
-    "announcements-info": "Mit Ankündigungen kannst du die Teilnehmenden über Termine und Neuigkeiten informieren."
+    "announcements-info": "Mit Ankündigungen kannst du die Teilnehmenden über Termine und Neuigkeiten informieren.",
+    "hotkey-general": "Raumeinstellungen",
+    "hotkey-comments": "Q&A-Einstellungen",
+    "hotkey-access": "Verwaltung von Zugriffsrechten",
+    "hotkey-announcements": "Verwaltung von Ankündigungen"
   },
   "room": {
     "room-name": "Name des Raums",

@@ -450,7 +450,11 @@
     "threshold-info": "If a threshold value is set, only posts that have received a higher rating are displayed.",
     "direct-send-info": "If this setting is deactivated, a moderator or the lecturer must activate new posts before they become publicly visible.",
     "announcements": "Announcements",
-    "announcements-info": "With announcements you can inform the participants about dates and news."
+    "announcements-info": "With announcements you can inform the participants about dates and news.",
+    "hotkey-general": "Room settings",
+    "hotkey-comments": "Q&A settings",
+    "hotkey-access": "Access rights management",
+    "hotkey-announcements": "Announcement management"
   },
   "room": {
     "room-name": "Room name",
