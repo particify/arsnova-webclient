@@ -60,6 +60,7 @@ import { DateFormatPipe } from '../../pipes/date-format.pipe';
 import { DateFromNowPipe } from '../../pipes/date-from-now.pipe';
 import { DateComponent } from './date/date.component';
 import { AnswerListComponent } from './answer-list/answer-list.component';
+import { AnnouncementListComponent } from './announcement-list/announcement-list.component';
 
 @NgModule({
   imports: [
@@ -125,7 +126,8 @@ import { AnswerListComponent } from './answer-list/answer-list.component';
     DateFromNowPipe,
     DateFormatPipe,
     DateComponent,
-    AnswerListComponent
+    AnswerListComponent,
+    AnnouncementListComponent
   ],
   exports: [
     RoomJoinComponent,

@@ -26,7 +26,6 @@ export class AnnouncementListComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.data.state.readTimestamp;
     this.authService.getCurrentAuthentication().subscribe(auth => {
       this.announcementService.getByUserId(auth.userId).subscribe(announcements => {
         this.announcements = announcements;
@@ -61,7 +60,7 @@ export class AnnouncementListComponent implements OnInit {
   }
 
   close() {
-    this.dialogRef.close(this.newReadTimestamp);
+    this.dialogRef.close(this.newReadTimestamp.toDateString());
   }
 
 }

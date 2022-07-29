@@ -19,9 +19,11 @@ import { HotkeyAction } from '../../../directives/hotkey.directive';
 import { UserRole } from '../../../models/user-roles.enum';
 import { ExtensionFactory } from '../../../../../projects/extension-point/src/public-api';
 import { MatDialog } from '@angular/material/dialog';
-import { AnnouncementListComponent } from '../../participant/announcement-list/announcement-list.component';
+import { AnnouncementListComponent } from '../announcement-list/announcement-list.component';
 import { AnnouncementService } from '@arsnova/app/services/http/announcement.service';
 import { AnnouncementState } from '@arsnova/app/models/announcement-state';
+import { EntityChangeNotification } from '@arsnova/app/models/events/entity-change-notification';
+import { ChangeType } from '@arsnova/app/models/events/entity-change-notification';
 
 @Component({
   selector: 'app-header',
@@ -79,7 +81,15 @@ export class HeaderComponent implements OnInit {
       this.userCharacter = this.auth?.loginId.slice(0, 1).toLocaleUpperCase();
       this.getAnnouncementState();
     });
-
+    this.eventService.on('EntityChangeNotification').subscribe((notification: EntityChangeNotification) => {
+      if (this.role !== UserRole.CREATOR) {
+        const entityType = notification.payload.entityType;
+        const changeType = notification.payload.changeType;
+        if(entityType === 'Announcement' && [ChangeType.CREATE, ChangeType.UPDATE].includes(changeType)) {
+          this.getAnnouncementState();
+        }
+      }
+    });
     this.themeService.getTheme().subscribe(theme => {
       this.themeClass = theme;
     });
