@@ -4,7 +4,7 @@
     <div fxLayoutAlign="center center" *ngIf="!!label" class="label-container new-container">
       <span class="label-text new-label">{{ ('announcement.' + label) | translate }}</span>
     </div>
-    <button mat-icon-button *ngIf="role === 'CREATOR'" [matMenuTriggerFor]="moreMenu" [disabled]="editMode">
+    <button mat-icon-button *ngIf="role === 'CREATOR'" [matMenuTriggerFor]="moreMenu" [disabled]="editMode" [matTooltip]="'announcement.options' | translate">
       <mat-icon>more_vert</mat-icon>
     </button>
     <mat-menu #moreMenu>

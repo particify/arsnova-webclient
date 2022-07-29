@@ -1,5 +1,5 @@
 <div fxLayout="column" fxLayoutGap="1em">
-  <p class="info">{{ 'settings.announcements-info' | translate }}</p>
+  <p class="info" tabindex="0">{{ 'settings.announcements-info' | translate }}</p>
   <form fxLayout="column" fxLayoutGap="1em">
     <mat-form-field class="input-block no-field-hint" appearance="outline">
       <mat-label>{{ 'announcement.title' | translate }}</mat-label>
@@ -28,7 +28,7 @@
   </form>
   <div *ngIf="!isLoading" fxLayout="column" fxLayoutGap="1em" class="announcement-list-container">
     <app-announcement *ngFor="let announcement of announcements" [announcement]="announcement" [role]="'CREATOR'" [editMode]="editId === announcement.id"
-                      (deleteEvent)="delete($event)" (editEvent)="edit($event)"></app-announcement>
+                      (deleteEvent)="delete($event)" (editEvent)="edit($event)" tabindex="0"></app-announcement>
   </div>
   <app-loading-indicator *ngIf="isLoading" [size]="60"></app-loading-indicator>
 </div>

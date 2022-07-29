@@ -95,12 +95,12 @@
             <mat-icon>{{ isPreview ? 'edit' : 'preview' }}</mat-icon>
             {{ (isPreview ? 'header.editing-view' : 'header.preview') | translate }}
           </button>
-          <button *ngIf="hasRole(UserRole.CREATOR)" [disabled]="isPreview" mat-button class="preview-button" (click)="goToSettings()" aria-labelledby="switch-role">
+          <button *ngIf="hasRole(UserRole.CREATOR)" [disabled]="isPreview" mat-button class="preview-button" (click)="goToSettings()">
             <mat-icon>settings</mat-icon>
             {{ 'header.room-settings' | translate }}
           </button>
           <button *ngIf="hasRole(UserRole.CREATOR)" [disabled]="isPreview" mat-raised-button class="button-primary" [matMenuTriggerFor]="openPresentationDirectly ? hideMenu : presentationMenu"
-                  aria-labelledby="present" (click)="presentCurrentView()">
+                  (click)="presentCurrentView()">
             <mat-icon>present_to_all</mat-icon>
             {{ 'header.present' | translate }}
           </button>
@@ -119,14 +119,14 @@
             <mat-icon>preview</mat-icon>
             {{ 'header.preview' | translate }}
           </button>
-          <button *ngIf="hasRole(UserRole.CREATOR)" mat-menu-item tabindex="0" (click)="goToSettings()" aria-labelledby="settings">
+          <button *ngIf="hasRole(UserRole.CREATOR)" mat-menu-item tabindex="0" (click)="goToSettings()">
             <mat-icon>settings</mat-icon>
             <span>{{ 'header.room-settings' | translate }}</span>
           </button>
         </mat-menu>
       </div>
       <mat-menu #presentationMenu="matMenu">
-        <button mat-menu-item tabindex="0" (click)="presentCurrentView(true)" aria-labelledby="presentation-mode">
+        <button mat-menu-item tabindex="0" (click)="presentCurrentView(true)">
           <mat-icon class="menu-icon">personal_video</mat-icon>
           <span>{{ 'header.presentation-mode' | translate }}</span>
         </button>
@@ -162,6 +162,5 @@
   <div id="data-protection-label">{{'footer.a11y-data-protection' | translate}}</div>
   <div id="imprint-label">{{'footer.a11y-imprint' | translate}}</div>
   <div id="switch-role">{{ (isPreview ? 'header.a11y-switch-back' : 'header.a11y-switch-role') | translate}}</div>
-  <div id="presentation-mode">{{'header.a11y-presentation-mode' | translate}}</div>
   <div id="present">{{'header.a11y-present' | translate}}</div>
 </div>

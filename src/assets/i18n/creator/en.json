@@ -621,7 +621,6 @@
     "a11y-present-comment": "The following postFQ  is now presented: {{comment}}",
     "a11y-comment-zoom-changed": "Zoom changed to {{zoom}} percent.",
     "a11y-content-message": "You are now presenting the contents of the question series {{group}}.",
-    "a11y-presentation-mode": "Open a menu for presenting this room.",
     "a11y-entered-fullscreen": "You are now in fullscreen mode.",
     "a11y-leaved-fullscreen": "You have left fullscreen mode.",
     "a11y-present": "Go into presentation mode",
@@ -725,6 +724,7 @@
     "delete": "Delete",
     "save": "Save",
     "cancel": "Cancel",
-    "edited": "edited"
+    "edited": "edited",
+    "options": "Options"
   }
 }

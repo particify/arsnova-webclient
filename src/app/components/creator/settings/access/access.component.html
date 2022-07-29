@@ -42,7 +42,7 @@
             <p class="user-character">{{moderator.loginId.toLocaleUpperCase().slice(0, 1)}}</p>
           </div>
           <div fxLayout="row" fxLayoutGap="10px" fxLayoutAlign="start center">
-            <p class="login-id">
+            <p class="login-id" tabindex="0">
               {{moderator.loginId}}
             </p>
             <mat-chip-list class="role-chip">
@@ -52,7 +52,7 @@
         </div>
         <div fxLayout="row" fxLayoutAlign="center center">
           <button mat-icon-button *ngIf="moderator.role !== UserRole.CREATOR" class="close" (click)="openDeleteRoomDialog(moderator)" fxFlex
-                  attr.aria-label="{{'settings.a11y-delete-user' | translate: { loginId: moderator.loginId } }}">
+                  attr.aria-label="{{'settings.a11y-delete-moderator' | translate: { loginId: moderator.loginId } }}">
             <mat-icon class="close-icon">close</mat-icon>
           </button>
         </div>
