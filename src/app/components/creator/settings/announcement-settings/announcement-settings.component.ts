@@ -73,6 +73,8 @@ export class AnnouncementSettingsComponent implements OnInit {
       this.announcementService.update(this.room.id, this.editId, this.title, this.body).subscribe(announcement => {
         const index = this.announcements.map(a => a.id).indexOf(announcement.id);
         this.announcements[index] = announcement;
+        const msg = this.translateService.instant('announcement.changes-saved');
+        this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.SUCCESS);
         this.reset();
       });
     } else {
