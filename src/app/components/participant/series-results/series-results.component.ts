@@ -68,8 +68,8 @@ export class SeriesResultsComponent implements OnInit {
 
   private init() {
     this.contentGroupService.getAnswerStats(this.group.roomId, this.group.id, this.auth.userId).subscribe(resultOverview => {
-      this.resultOverview = resultOverview;
-      this.setData();
+      this.setResultOverview(resultOverview);
+      this.setViewData();
       this.checkIfLastContentIsLoaded();
       this.isLoading = false;
       if (this.hasScore) {
@@ -78,7 +78,20 @@ export class SeriesResultsComponent implements OnInit {
     });
   }
 
-  private setData() {
+  private setResultOverview(resultOverview: AnswerResultOverview) {
+    this.resultOverview = resultOverview;
+    this.setAnswerResultsForPublishedContents();
+  }
+
+  private setAnswerResultsForPublishedContents() {
+    this.resultOverview.answerResults = this.resultOverview.answerResults.filter(a => this.checkIfContentIsPublished(a.contentId));
+  }
+
+  private checkIfContentIsPublished(contentId: string) {
+    return this.contents.map(c => c.id).includes(contentId);
+  }
+
+  private setViewData() {
     this.hasScore = this.checkIfHasScore();
     this.score = this.getScore();
     this.getContentResultView();
@@ -123,14 +136,14 @@ export class SeriesResultsComponent implements OnInit {
     this.checkIfLastAnswerHasAnswered();
     if (this.isLoadingLastContent && this.retryCount < RETRY_LIMIT) {
       setTimeout(() => {
-        this.contentGroupService.getAnswerStats(this.group.roomId, this.group.id, this.auth.userId).subscribe(results => {
-          this.resultOverview = results;
+        this.contentGroupService.getAnswerStats(this.group.roomId, this.group.id, this.auth.userId).subscribe(resultOverview => {
+          this.setResultOverview(resultOverview);
           this.checkIfLastContentIsLoaded();
           this.retryCount++;
         });
       }, RELOAD_INTERVAL);
     } else if (!this.isLoading) {
-      this.setData();
+      this.setViewData();
       if (this.hasScore) {
         this.updateChart();
       }
