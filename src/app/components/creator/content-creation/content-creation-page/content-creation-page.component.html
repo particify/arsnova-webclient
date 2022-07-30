@@ -112,7 +112,7 @@
                                          [abstentionsAllowed]="abstentionsAllowed"
                                          [createEvent]="createEventSubject.asObservable()" [editContent]="content">
               </app-content-wordcloud-creation>
-              <div fxLayout="row" fxLayoutAlign="center" fxLayoutGap="1em" [ngClass]="{'top-space': isEditMode}">
+              <div fxLayout="row" fxLayoutAlign="center" fxLayoutGap="10px" [ngClass]="{'top-space': isEditMode}">
                 <button (click)="showPreview()" attr.aria-label="{{ 'content.a11y-preview' | translate }}" mat-stroked-button>
                   {{ 'content.preview' | translate }}</button>
                 <button (click)="emitCreateEvent(true)"
