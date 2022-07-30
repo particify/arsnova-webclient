@@ -46,6 +46,7 @@ export class ContentPresentationComponent implements OnInit, OnDestroy {
   routeChanged: EventEmitter<boolean> = new EventEmitter<boolean>();
   contentGroup: ContentGroup;
   remoteSubscription: Subscription;
+  canAnswerContent = false;
 
   private hotkeyRefs: Symbol[] = [];
 
@@ -187,7 +188,8 @@ export class ContentPresentationComponent implements OnInit, OnDestroy {
     if (this.isPresentation) {
       this.updateRoute('present', urlIndex);
       const remoteState = new ContentFocusState(this.contents[this.currentStep].id, this.contentGroup.id, null, null);
-      this.eventService.broadcast(RemoteMessage.CHANGE_CONTENTS_STATE, remoteState)
+      this.eventService.broadcast(RemoteMessage.CHANGE_CONTENTS_STATE, remoteState);
+      this.canAnswerContent = ![ContentType.SLIDE, ContentType.FLASHCARD].includes(this.contents[this.currentStep].format);
     } else {
       this.updateRoute('edit', urlIndex);
     }
