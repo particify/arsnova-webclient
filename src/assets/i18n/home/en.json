@@ -22,10 +22,6 @@
     "not": "not",
     "settings-saved": "Your settings have been saved."
   },
-  "data-protection": {
-    "a11y": "Below you will find the privacy policy of ARSnova.",
-    "title": "Data Privacy"
-  },
   "footer": {
     "a11y-data-protection": "Open the privacy statement.",
     "a11y-data-protection-menu": "Open the privacy menu. Here you find the privacy statement and the cookie settings.",
@@ -41,7 +37,6 @@
   },
   "header": {
     "a11y-back": "Go back to the previous page.",
-    "a11y-demo": "Open the introduction.",
     "a11y-help": "Open help.",
     "a11y-language": "Open the language selector.",
     "a11y-login": "Navigates to the Login.",
@@ -54,17 +49,13 @@
     "back": "Back",
     "admin-area": "Administration",
     "user-profile": "My account",
-    "demo": "Introduction",
     "english": "English",
     "german": "German",
-    "go-to-home": "Go to home",
     "help": "Help",
-    "id": "Key",
     "language": "Language",
     "logged-out": "You have been logged out.",
     "login": "Log in",
     "logout": "Log out",
-    "moderation-enabled": "This room is moderated.",
     "my-account": "Account",
     "my-guest-account": "Guest Account",
     "my-rooms": "My rooms",
@@ -82,7 +73,7 @@
     "a11y-join-button": "Enter the room with the specified room number.",
     "a11y-join-input": "Here you can enter the  key of the room you want to join. Your lecturer will tell you the room number.",
     "a11y-welcome-message": "Welcome to ARSnova. Enter an eight-digit room number to join a room.",
-    "a11y-home    ": "You are on the ARSnova home page.",
+    "a11y-home": "You are on the ARSnova home page.",
     "a11y-user-message": "You are now on the user page.",
     "a11y-room-join": "Now enter the room number of the room you want to join.",
     "a11y-update-available": "A new version is available. To get the latest changes press the tab key. To perform the update press the tab key again.",
@@ -106,14 +97,6 @@
     "welcome": "Feedback and Interaction",
     "example": "e.g. ",
     "enter-room-number": "Enter room number"
-  },
-  "imprint": {
-    "a11y": "Below you will find the legal info of ARSnova.",
-    "title": "Imprint"
-  },
-  "introduction": {
-    "a11y": "Below you will find an introduction to ARSnova.",
-    "title": "»ARSnova«"
   },
   "import": {
     "a11y-select-file": "Select a file to import.",

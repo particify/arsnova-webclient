@@ -22,10 +22,6 @@
     "not": "nicht",
     "settings-saved": "Deine Einstellungen wurden gespeichert."
   },
-  "data-protection": {
-    "a11y": "Es folgt die Datenschutzerklärung von ARSnova.",
-    "title": "Datenschutz"
-  },
   "footer": {
     "a11y-data-protection": "Öffnet die Datenschutzerklärung.",
     "a11y-data-protection-menu": "Öffnet das Datenschutzmenü. Hier findest du die Datenschutzerklärung und die Cookie-Einstellungen.",
@@ -41,7 +37,6 @@
   },
   "header": {
     "a11y-back": "Führt zur vorherigen Seite.",
-    "a11y-demo": "Öffnet die Einführung zu ARSnova.",
     "a11y-help": "Öffnet die Hilfe.",
     "a11y-language": "Öffnet die Sprachauswahl.",
     "a11y-login": "Navigiert zur Anmeldung.",
@@ -54,17 +49,13 @@
     "back": "Zurück",
     "admin-area": "Administration",
     "user-profile": "Mein Account",
-    "demo": "Einführung",
     "english": "Englisch",
     "german": "Deutsch",
-    "go-to-home": "Startseite",
     "help": "Hilfe",
-    "id": "Nr.",
     "language": "Sprache",
     "logged-out": "Du hast dich abgemeldet.",
     "login": "Anmelden",
     "logout": "Abmelden",
-    "moderation-enabled": "Dieser Raum wird moderiert.",
     "my-account": "Konto",
     "my-guest-account": "Gastkonto",
     "my-rooms": "Meine Räume",
@@ -106,14 +97,6 @@
     "welcome": "Feedback und Interaktion",
     "example": "z. B. ",
     "enter-room-number": "Raumnummer eingeben"
-  },
-  "imprint": {
-    "a11y": "Es folgt das Impressum von ARSnova.",
-    "title": "Impressum"
-  },
-  "introduction": {
-    "a11y": "Es folgt eine Einführung in ARSnova.",
-    "title": "ARSnova"
   },
   "import": {
     "a11y-select-file": "Wähle eine Datei zum importieren aus.",
