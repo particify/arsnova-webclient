@@ -17,13 +17,13 @@
         <mat-form-field *ngIf="loginIdIsEmail; else loginIdIsUsername" class="input-block" appearance="outline">
           <mat-label>{{ 'login.email' | translate }}</mat-label>
           <input [(ngModel)]="username" [errorStateMatcher]="matcher" [formControl]="loginIdFormControl" matInput
-                 id="loginid-input" name="loginid" aria-labelledby="email-description" placeholder="{{ 'login.enter-email' | translate }}"/>
+                 id="loginid-input" name="loginid"/>
         </mat-form-field>
         <ng-template #loginIdIsUsername>
           <mat-form-field class="input-block" appearance="outline">
           <mat-label>{{ 'login.username' | translate }}</mat-label>
           <input [(ngModel)]="username" [errorStateMatcher]="matcher" [formControl]="loginIdFormControl" matInput
-                 id="loginid-input" name="loginid" aria-labelledby="username-description" placeholder="{{ 'login.enter-username' | translate }}"/>
+                 id="loginid-input" name="loginid"/>
           </mat-form-field>
         </ng-template>
         <app-password-entry [preFill]="password"></app-password-entry>
@@ -54,8 +54,6 @@
 
 <div class="visually-hidden">
   <ng-container *ngIf="passwordLoginEnabled">
-    <div id="email-description">{{ 'login.email-description' | translate }}</div>
-    <div id="login-description">{{ 'login.login-description' | translate }}</div>
     <div id="forgot-pw">{{ 'login.a11y-reset-pw' | translate }}</div>
     <div id="register">{{ 'login.a11y-register' | translate }}</div>
   </ng-container>

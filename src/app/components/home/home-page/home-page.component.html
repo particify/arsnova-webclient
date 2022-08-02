@@ -11,9 +11,8 @@
   <div fxLayout="row" fxLayoutAlign="center">
         <div fxLayout="row" fxLayoutAlign="center">
           <div fxLayout="column" fxLayoutAlign="center center" fxFill>
-            <app-room-join [inputA11yString]="'home-page.a11y-welcome-message'"></app-room-join>
+            <app-room-join [inputA11yString]="'home-page.a11y-welcome-message'" [appTitle]="appTitle"></app-room-join>
             <button id="new-room-button" mat-button class="mat-button-classic" (click)="openCreateRoomDialog()"
-                    aria-labelledby="create-label"
                     appHotkey="2" [appHotkeyTitle]="'home-page.create-room' | translate">
               <mat-icon>add</mat-icon>
               {{'home-page.create-room' | translate}}
@@ -24,7 +23,5 @@
   <lib-extension-point extensionId="home-info"></lib-extension-point>
 </div>
 <div class="visually-hidden">
-  <div tabindex="0" id="key-combinations">{{ 'home-page.a11y-home' | a11yIntro | async }}</div>
-  <button tabindex="-1" id="welcome-message">{{ 'home-page.a11y-welcome-message' | translate }}</button>
-  <div id="create-label">{{ 'home-page.a11y-create-room' | translate}}</div>
+  <button tabindex="-1" id="welcome-message">{{ 'home-page.a11y-welcome-message' | translate: {title: appTitle} }}</button>
 </div>

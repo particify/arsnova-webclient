@@ -1,4 +1,5 @@
 import { AfterContentInit, Component } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { DialogService } from '../../../services/util/dialog.service';
 import { GlobalStorageService, STORAGE_KEYS } from '../../../services/util/global-storage.service';
 
@@ -10,10 +11,12 @@ import { GlobalStorageService, STORAGE_KEYS } from '../../../services/util/globa
 export class HomePageComponent implements AfterContentInit {
 
   deviceType: string;
+  appTitle: string;
 
   constructor(
     private dialogService: DialogService,
-    private globalStorageService: GlobalStorageService
+    private globalStorageService: GlobalStorageService,
+    private route: ActivatedRoute
   ) {
     this.deviceType = this.globalStorageService.getItem(STORAGE_KEYS.DEVICE_TYPE);
   }
@@ -24,6 +27,7 @@ export class HomePageComponent implements AfterContentInit {
     } else {
       document.getElementById('welcome-message').focus();
     }
+    this.appTitle = this.route.snapshot.data.apiConfig.ui.registration?.service || 'ARSnova';
   }
 
   openCreateRoomDialog(): void {

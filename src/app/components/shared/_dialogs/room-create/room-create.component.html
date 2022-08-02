@@ -4,7 +4,7 @@
       <mat-form-field appearance="outline" fxFill>
         <mat-label>{{ 'dialog.room-name' | translate }}</mat-label>
         <input (keypress)="resetEmptyInputs()" matInput #roomName class="input-block" type="text" autocomplete="off"
-               maxlength="30" [(ngModel)]="newRoom.name" name="roomName" aria-labelledby="room-name-input"/>
+               maxlength="30" [(ngModel)]="newRoom.name" name="roomName"/>
         <mat-hint align="end" *ngIf="!emptyInputs"><span aria-hidden="true">{{roomName.value.length}}
           / 30</span></mat-hint>
       </mat-form-field>
@@ -19,8 +19,3 @@
   [cancelButtonClickAction]="buildCloseDialogActionCallback()"
   [confirmButtonClickAction]="buildRoomCreateActionCallback()"
 ></app-dialog-action-buttons>
-
-<div class="visually-hidden">
-  <div id="room-name-input">{{ ('dialog.a11y-room-name-input' | translate) }}
-    {{ !auth || auth.authProvider === 'ARSNOVA_GUEST' ? ('dialog.a11y-room-creation-guest' | translate) : '' }}</div>
-</div>

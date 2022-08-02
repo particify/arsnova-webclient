@@ -12,18 +12,14 @@
 </p>
 <div fxLayout="row" class="register">
   <p>{{ 'user-activation.didnt-get' | translate }}</p>
-  <button mat-button class="reset" (click)="resetActivation(); $event.preventDefault(); $event.stopPropagation();"
-  aria-labelledby="send-again">
+  <button mat-button class="reset" (click)="resetActivation(); $event.preventDefault(); $event.stopPropagation();">
     {{ 'user-activation.reset-button' | translate }}</button>
 </div>
-<app-dialog-action-buttons
-  buttonsLabelSection="user-activation"
-  confirmButtonLabel="activate"
-  [cancelButtonClickAction]="buildCloseDialogActionCallback()"
-  [confirmButtonClickAction]="buildActivationActionCallback(userActivationKey)"
-></app-dialog-action-buttons>
+<div fxLayout="row-reverse" fxLayoutGap="10px" class="button-container">
+  <button mat-flat-button class="button-primary" (click)="login(userActivationKey.value)">{{'user-activation.activate' | translate }}</button>
+  <button mat-button class="button-abort" (click)="cancel()">{{'user-activation.cancel' | translate }}</button>
+</div>
 
 <div class="visually-hidden">
   <div id="key-input">{{ 'user-activation.a11y-key-input' | translate }}</div>
-  <div id="send-again">{{ 'user-activation.a11y-send-again' | translate }}</div>
 </div>
