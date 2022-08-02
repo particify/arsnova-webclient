@@ -10,7 +10,7 @@ import { TextStatistic } from '../../../../models/text-statistic';
 @Component({
   selector: 'app-statistic-wordcloud',
   templateUrl: './statistic-wordcloud.component.html',
-  styleUrls: ['./statistic-wordcloud.component.scss']
+  styleUrls: ['../text-statistic-content.scss']
 })
 export class StatisticWordcloudComponent extends StatisticContentBaseComponent implements OnInit, OnDestroy {
 

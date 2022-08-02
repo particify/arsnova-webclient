@@ -1,5 +1,5 @@
-<div *ngIf="answersVisible">
-  <app-answer-list *ngIf="!isLoading" [answers]="answerStats" [roomId]="content.roomId"
+<div class="text-answer-container" [ngClass]="{'answers-visible': answersVisible}">
+  <app-answer-list *ngIf="!isLoading && answersVisible" [answers]="answerStats" [roomId]="content.roomId"
                    [banMode]="false" [isPresentation]="isPresentation" (answerDeleted)="filterAnswers($event)"></app-answer-list>
   <div fxLayoutAlign="center">
     <app-loading-indicator *ngIf="isLoading"></app-loading-indicator>

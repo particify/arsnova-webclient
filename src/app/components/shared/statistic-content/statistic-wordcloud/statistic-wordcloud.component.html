@@ -1,4 +1,4 @@
-<div class="cloud-container" [ngClass]="{'visible': answersVisible}">
+<div class="text-answer-container" [ngClass]="{'answers-visible': answersVisible}">
   <div fxLayoutAlign="center">
     <p *ngIf="wordWeights.length === 0" class="hint-sm">{{ 'statistic.no-answers' | translate }}</p>
   </div>
