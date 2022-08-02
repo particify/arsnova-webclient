@@ -133,7 +133,8 @@
               <div fxLayout="row" fxLayoutAlign="space-between" fxFill>
                 <div class="ellipsis"  fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="12px">
                   <mat-icon class="type-icon">{{iconList.get(content.format)}}</mat-icon>
-                  <app-rendered-text class="ellipsis rendered-list-preview-container" [renderedText]="content.renderedBody" [markdownFeatureset]="markdownFeatureset" [listPreview]="true"
+                  <app-rendered-text class="ellipsis rendered-list-preview-container" [ngClass]="{'bg-unlocked': isPublished(i)}"
+                                     [renderedText]="content.renderedBody" [markdownFeatureset]="markdownFeatureset" [listPreview]="true"
                                      tabindex="0" role="button" (keyup.enter)="navigateToContentStats(content)"></app-rendered-text>
                 </div>
                 <div fxLayout="row" fxLayoutAlign="center center" [ngClass]="{'show-bar': i === activeMenuIndex || content.id === activeContentId, 'button-bar': i !== activeMenuIndex && content.id !== activeContentId}">
