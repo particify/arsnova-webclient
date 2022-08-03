@@ -108,23 +108,13 @@ export class SeriesResultsComponent implements OnInit {
   private getContentResultView() {
     this.contentsWithResults = [];
     this.contents.forEach((val, i) => {
-      const body = this.getContentLabel(this.contents[i], i);
       this.contentsWithResults.push({
-        body: body,
+        body: val.renderedBody,
         state: this.resultOverview.answerResults[i].state
       });
     });
   }
 
-  private getContentLabel(content: Content, index: number) {
-    const text = document.createElement('span');
-    text.innerHTML = content.renderedBody;
-    if (content.body.trim() === text.textContent.trim()) {
-      return content.body;
-    } else {
-      return this.translateService.instant('content.body-label', {index: index + 1});; 
-    }
-  }
 
   private getColors() {
     const theme = this.themeService.getThemeByKey(this.themeService.getCurrentThemeName());

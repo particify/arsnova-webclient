@@ -24,6 +24,7 @@ import { UiState } from '../../../../models/events/ui/ui-state.enum';
 import { RoutingService } from '../../../../services/util/routing.service';
 import { Room } from '../../../../models/room';
 import { ContentGroupStatistics } from '../../../../models/content-group-statistics';
+import { MarkdownFeatureset } from '../../../../services/http/formatting.service';
 
 @Component({
   selector: 'app-group-content',
@@ -61,6 +62,7 @@ export class GroupContentComponent implements OnInit, OnDestroy {
   activeMenuIndex: number;
   activeContentId: string;
   contentHotkeysRegistered = false;
+  markdownFeatureset = MarkdownFeatureset.MINIMUM;
 
   private hotkeyRefs: Symbol[] = [];
 
