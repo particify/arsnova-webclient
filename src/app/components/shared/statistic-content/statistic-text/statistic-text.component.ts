@@ -12,7 +12,7 @@ import { TextStatistic } from '../../../../models/text-statistic';
 @Component({
   selector: 'app-statistic-text',
   templateUrl: './statistic-text.component.html',
-  styleUrls: ['./statistic-text.component.scss']
+  styleUrls: ['../text-statistic-content.scss']
 })
 export class StatisticTextComponent extends StatisticContentBaseComponent implements OnInit, OnDestroy {
 

@@ -1,0 +1,14 @@
+
+.text-answer-container {
+  opacity: 0;
+  overflow: hidden;
+  transition: all 300ms ease-out;
+  &:not(.answers-visible) {
+    transform: scaleY(0);
+  }
+}
+
+.answers-visible {
+  transform-origin: top center;
+  opacity: 1;
+}
