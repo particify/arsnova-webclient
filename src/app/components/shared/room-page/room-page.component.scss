@@ -70,7 +70,10 @@ $content-padding: 2em;
 
 @media(max-width: 1000px) {
   .mat-drawer {
-    width: 0;
+    width: 100vw;
+    height: $mobile-bar-height;
+    position: fixed;
+    top: unset;
   }
 
   .footer {
@@ -79,6 +82,7 @@ $content-padding: 2em;
 
   .mat-drawer-content {
     height: calc(100vh - $mobile-bar-height);
+    margin-left: 0!important;
     margin-bottom: -$mobile-bar-height;
     padding-bottom: $mobile-bar-height;
   }
