@@ -187,7 +187,7 @@ export class CommentListComponent implements OnInit, OnDestroy {
       this.searchPlaceholder = msg;
     });
     this.deviceType = innerWidth > 1000 ? 'desktop' : 'mobile';
-    if (this.viewRole !== UserRole.PARTICIPANT) {
+    if (this.viewRole !== UserRole.PARTICIPANT && innerWidth > 1000) {
       this.scrollMax += innerWidth * 0.04 + 240;
       this.scrollStart = this.scrollMax;
     }
@@ -262,7 +262,7 @@ export class CommentListComponent implements OnInit, OnDestroy {
   checkScroll(scrollPosition?: number, scrollHeight?: number): void {
     const currentScroll = scrollPosition || document.getElementById('routing-content').scrollTop;
     const additionalSpace = this.deviceType === 'mobile' ? 70 + innerWidth * 0.04 : 0;
-    this.scroll = currentScroll >= (this.scrollMax + additionalSpace) || currentScroll >= this.scrollMax && currentScroll < this.lastScroll;
+    this.scroll = currentScroll > (this.scrollMax + additionalSpace) || currentScroll > this.scrollMax && currentScroll < this.lastScroll;
     this.scrollActive = this.scroll && currentScroll < this.lastScroll;
     this.scrollExtended = currentScroll >= this.scrollExtendedMax;
     this.isScrollStart = currentScroll >= this.scrollStart && currentScroll <= (this.scrollStart + 200);
