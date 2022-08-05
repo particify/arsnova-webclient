@@ -999,10 +999,6 @@ app-rendered-text:not(.rendered-list-preview-container) {
   padding: 12px;
 }
 
-.text-container > p {
-  @include ellipsis-mixin();
-}
-
 .rendered-list-preview-container {
   position: relative;
   @include ellipsis-mixin();
@@ -1014,6 +1010,10 @@ app-rendered-text:not(.rendered-list-preview-container) {
   h1, h2, h3, h4 {
     font-size: 1em!important;
     margin: 1em 0;
+  }
+
+  & > p {
+    @include ellipsis-mixin();
   }
 }
 
