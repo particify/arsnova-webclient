@@ -24,7 +24,7 @@
     "@angular/platform-browser-dynamic": "14.1.1",
     "@angular/router": "14.1.1",
     "@angular/service-worker": "14.1.1",
-    "@fontsource/roboto": "4.5.7",
+    "@fontsource/roboto": "4.5.8",
     "@ngx-translate/core": "14.0.0",
     "@ngx-translate/http-loader": "7.0.0",
     "@stomp/rx-stomp": "1.1.4",
