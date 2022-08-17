@@ -556,6 +556,10 @@ div {
 
 // Mat Select
 
+.mat-select-panel {
+  background: var(--surface);
+}
+
 .mat-select-value-text {
   color: var(--on-surface);
   caret-color: var(--on-surface);
@@ -566,6 +570,10 @@ div {
 }
 
 .mat-select-value-text {
+  color: var(--on-surface);
+}
+
+.mat-option {
   color: var(--on-surface);
 }
 
@@ -872,6 +880,20 @@ div {
   color: var(--on-dialog);
   .mat-icon {
     margin-bottom: 2px;
+  }
+
+  &[disabled], &[disabled] .mat-icon-no-color {
+    // Material uses rgba color:
+    // Override the color and reset the opacity to Material's value.
+    color: var(--on-dialog);
+    opacity: 0.38;
+  }
+
+  .mat-menu-submenu-icon {
+    // Material uses rgba color:
+    // Override the color and reset the opacity to Material's value.
+    color: var(--on-dialog);
+    opacity: 0.54;
   }
 }
 
