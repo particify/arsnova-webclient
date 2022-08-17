@@ -1,4 +1,5 @@
-import { Injectable } from '@angular/core';
+import { DOCUMENT } from '@angular/common';
+import { Inject, Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { themes, themes_meta } from './themes.const';
 import { Theme } from './Theme';
@@ -6,6 +7,7 @@ import { GlobalStorageService, STORAGE_KEYS } from '../app/services/util/global-
 
 @Injectable()
 export class ThemeService {
+  private bodyClassList: DOMTokenList;
   private themeName: string;
   private activeTheme = new BehaviorSubject(null);
   private themes: Theme[] = [];
@@ -13,7 +15,10 @@ export class ThemeService {
   private likertColors = ['strongly-agree', 'agree', 'neither', 'disagree', 'strongly-disagree'];
   private binaryColors = ['strongly-agree', 'strongly-disagree'];
 
-  constructor(private globalStorageService: GlobalStorageService) {
+  constructor(
+      private globalStorageService: GlobalStorageService,
+      @Inject(DOCUMENT) document: Document) {
+    this.bodyClassList = document.body.classList;
     let currentTheme = this.globalStorageService.getItem(STORAGE_KEYS.THEME);
     if (!currentTheme) {
       currentTheme = 'arsnova';
@@ -50,6 +55,10 @@ export class ThemeService {
     this.activeTheme.next(name);
     this.themeName = name;
     this.globalStorageService.setItem(STORAGE_KEYS.THEME, name);
+    for (const theme of this.themes) {
+      this.bodyClassList.remove(`theme-${theme.key}`);
+    }
+    this.bodyClassList.add(`theme-${name}`);
   }
 
   public getThemes(): Theme[] {
