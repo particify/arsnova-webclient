@@ -22,7 +22,8 @@
       </div>
     </button>
   </div>
-  <div *ngIf="role === 'CREATOR'" fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="4px" id="user-count-container" [matTooltip]="'sidebar.user-counter' | translate">
+  <div *ngIf="role === 'CREATOR'" fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="4px" id="user-count-container" [matTooltip]="'sidebar.user-counter' | translate"
+       attr.aria-label="{{ 'sidebar.a11y-user-counter' | translate: {count: userCount} }}">
     <mat-icon>people</mat-icon>
     <span>{{ userCount }}</span>
   </div>

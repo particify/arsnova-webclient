@@ -38,9 +38,10 @@
       <mat-form-field class="full-width" appearance="fill">
         <mat-label>{{ 'content.add-answer' | translate }}</mat-label>
         <input
-               matInput [(ngModel)]="newAnswerOptionLabel" name="answer" id="answer-input" aria-labelledby="answer"
+               matInput [(ngModel)]="newAnswerOptionLabel" name="answer" id="answer-input"
                autocomplete="off">
-        <button tabindex="-1" class="add-button" mat-icon-button matSuffix (click)="addAnswer($event)">
+        <button class="add-button" mat-icon-button matSuffix (click)="addAnswer($event)"
+                [matTooltip]="'content.add-answer' | translate">
           <mat-icon class="add-icon">add_circle</mat-icon>
         </button>
         <mat-placeholder>{{ 'content.answer' | translate }}</mat-placeholder>
@@ -53,7 +54,5 @@
 <div class="visually-hidden">
   <div id="single-choice">{{ 'content.a11y-single-choice' | translate }}</div>
   <div id="multiple-choice">{{ 'content.a11y-multiple-choice' | translate }}</div>
-  <div id="answer">{{ 'content.a11y-enter-answer' | translate }}</div>
   <div id="delete-answer">{{ 'content.a11y-delete-answer' | translate }}</div>
-  <div id="reset">{{ 'content.a11y-reset' | translate }}</div>
 </div>

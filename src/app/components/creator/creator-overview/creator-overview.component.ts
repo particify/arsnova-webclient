@@ -13,14 +13,10 @@ import { EventService } from '../../../services/util/event.service';
 import { ContentService } from '../../../services/http/content.service';
 import { DialogService } from '../../../services/util/dialog.service';
 import { GlobalStorageService, STORAGE_KEYS } from '../../../services/util/global-storage.service';
-import { Content } from '../../../models/content';
-import { AnnounceService } from '../../../services/util/announce.service';
 import { UserRole } from '../../../models/user-roles.enum';
 import { ContentGroupService } from '../../../services/http/content-group.service';
 import { ContentGroup } from '../../../models/content-group';
 import { RoomStatsService } from '../../../services/http/room-stats.service';
-import { HotkeyService } from '../../../services/util/hotkey.service';
-
 @Component({
   selector: 'app-creator-overview',
   templateUrl: './creator-overview.component.html',
@@ -28,11 +24,8 @@ import { HotkeyService } from '../../../services/util/hotkey.service';
 })
 export class CreatorOverviewComponent extends RoomOverviewComponent implements OnInit, OnDestroy, AfterContentInit {
 
-  userCount: number;
   target: Window;
   isModerator = false;
-
-  private hotkeyRefs: Symbol[] = [];
 
   constructor(
     protected roomService: RoomService,
@@ -47,12 +40,10 @@ export class CreatorOverviewComponent extends RoomOverviewComponent implements O
     protected langService: LanguageService,
     protected wsCommentService: WsCommentService,
     protected commentService: CommentService,
-    private announceService: AnnounceService,
     public eventService: EventService,
     protected contentService: ContentService,
     private dialogService: DialogService,
-    protected globalStorageService: GlobalStorageService,
-    private hotkeyService: HotkeyService
+    protected globalStorageService: GlobalStorageService
   ) {
     super(roomStatsService, contentGroupService, route, wsCommentService,
       commentService, eventService, translateService, globalStorageService);
@@ -71,25 +62,11 @@ export class CreatorOverviewComponent extends RoomOverviewComponent implements O
     this.route.data.subscribe(data => {
       this.initializeRoom(data.room, data.userRole, data.viewRole);
       this.isModerator = data.userRole === UserRole.EXECUTIVE_MODERATOR;
-      if (!this.isModerator) {
-        this.translateService.get('sidebar.user-counter').subscribe(t =>
-          this.hotkeyService.registerHotkey({
-            key: '7',
-            action: () => {
-              const adKey = this.userCount === 1 ? '-only-one' : '';
-              const msg = this.translateService.instant('room-page.a11y-user-count' + adKey, {count: this.userCount})
-              this.announceService.announce(msg);
-            },
-            actionTitle: t
-          }, this.hotkeyRefs)
-        );
-      }
     });
   }
 
   ngOnDestroy() {
     super.ngOnDestroy();
-    this.hotkeyRefs.forEach(h => this.hotkeyService.unregisterHotkey(h));
   }
 
   afterRoomLoadHook() {
