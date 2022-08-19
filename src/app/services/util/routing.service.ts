@@ -127,7 +127,7 @@ export class RoutingService {
     this.roomId = route.data.room?.id;
     this.role$.emit(this.role);
     this.viewRole = route.data.viewRole;
-    this.shortId = route.paramMap.get('shortId');
+    this.shortId = route.params['shortId'];
     this.isPreview = this.role !== this.viewRole;
     this.isPreview$.emit(this.isPreview);
     this.isRoom = !!this.shortId;
@@ -135,30 +135,31 @@ export class RoutingService {
   }
 
   getRoutes(route: ActivatedRouteSnapshot) {
-    const shortId = this.shortId;
     const series  = route.paramMap.get('seriesName') || '';
     const role = route.data.requiredRole || '';
     this.fullCurrentRoute = this.location.path();
     this.currentRoute = route.routeConfig.path;
     this.routeEvent.emit(route);
-    this.getBackRoute(this.currentRoute, shortId, role, series, route.parent.routeConfig['path']);
+    this.getBackRoute(role, series, route.parent.routeConfig['path']);
     this.setTitle(route);
   }
 
-  getBackRoute(route: string, shortId: string, role: string, series: string, parent?: string) {
+  getBackRoute(role: string, series: string, parentRoute?: string) {
+    const roomRoute = ':shortId';
     let backRoute: string[];
-    if (route === '') {
+    if (this.currentRoute === '') {
       backRoute = [this.parentRoute.user];
     } else if (this.routeExistsInArray(this.homeChildRoutes)) {
       backRoute = [this.parentRoute.home];
     } else if (this.routeExistsInArray(this.loginChildRoutes)) {
       backRoute = [this.parentRoute.login];
     } else if (this.routeExistsInArray(this.roomChildRoutes)) {
-      backRoute = [this.getRoleString(role), shortId];
+      backRoute = [this.getRoleString(role), this.shortId];
     } else if (this.routeExistsInArray(this.seriesChildRoutes)) {
-      backRoute = [this.getRoleString(role), shortId, 'series', series];
+      backRoute = [this.getRoleString(role), this.shortId, 'series', series];
     }
-    if (!this.backRouteIsSet || parent === ':shortId') {
+    // Set back route if not set yet, parent route is a room route or if current route is no room route at all 
+    if (!this.backRouteIsSet || parentRoute === roomRoute || this.currentRoute !== roomRoute) {
       this.backRoute = backRoute;
       this.backRouteIsSet = true;
     } else {
