@@ -5,7 +5,7 @@
       <app-rendered-text [rawText]="checkedAnswer.answerOption.label" [renderedText]="checkedAnswer.answerOption.renderedLabel"></app-rendered-text>
     </mat-checkbox>
     <mat-checkbox *ngIf="!isDisabled" [(ngModel)]="checkedAnswer.checked" name="answer" class="answer-checkbox"
-                  aria-label="{{ 'answer.a11y-select-answer' | translate: {answer: checkedAnswer.answerOption.label} }}">
+                  aria-label="{{ checkedAnswer.answerOption.label | translate }}">
       <app-rendered-text [rawText]="checkedAnswer.answerOption.label"
                          [renderedText]="checkedAnswer.answerOption.renderedLabel"
                          [dynamic]="dynamicRendering"
@@ -20,7 +20,7 @@
     <div class="mat-list-item unanswered" *ngFor="let checkedAnswer of selectableAnswers; let i = index" fxLayout="row" fxLayoutAlign="space-between center"
          [ngClass]="{'correct-answer': checkOption(i, true), 'wrong-answer': checkOption(i, false), 'selected': selectedAnswerIndex === i && !isDisabled}">
       <mat-radio-button (change)="selectSingleAnswer(i)" class="answer-radio-button" [ngClass]="{'answer-radio-checked': selectedAnswerIndex === i}"
-                        aria-label="{{ 'answer.a11y-select-answer' | translate: {answer: checkedAnswer.answerOption.label} }}"
+                        aria-label="{{ checkedAnswer.answerOption.label | translate }}"
                         [checked]="checkedAnswer.checked" [value]="i" name="answer">
         <app-rendered-text [rawText]="checkedAnswer.answerOption.label | translate"
                            [renderedText]="checkedAnswer.answerOption.renderedLabel"

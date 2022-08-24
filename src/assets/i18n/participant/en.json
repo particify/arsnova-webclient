@@ -1,6 +1,6 @@
 {
   "answer": {
-    "a11y-message": "You can now answer the answers of the question series {{group}}.",
+    "a11y-message": "You can now answer the contents of the question series {{group}}.",
     "a11y-current-multiple": "Content {{index}}, {{question}}. This is a multiple choice content. To go to the answers press the tab key and select an answer the space key.",
     "a11y-current-single": "Content {{index}}, {{question}}. This is a single choice content. To go to the answers press the tab key select an answer press the arrow keys.",
     "a11y-current-text": "Content {{index}}, {{question}}. This is a open question. To go to the answer input press the tab key.",
@@ -12,8 +12,6 @@
     "a11y-already-answered-text": "You have answered to this content with {{answer}}.",
     "a11y-has-abstained": "You abstained on that content. Press the tab key to hear the content again.",
     "a11y-last-content": "This was the last content of this question series. Press the key 0 to return to room overview.",
-    "a11y-select-answer": "Selects the answer {{answer}}.",
-    "a11y-enter-answer": "Enter your answer here.",
     "a11y-submit": "Sends the answer and go to the next one.",
     "a11y-abstain": "Abstain on this content and go to the next one.",
     "a11y-go-to-stats": "Flips the card and shows the statistic of this content.",
@@ -28,8 +26,7 @@
     "please-one": "Please select an answer.",
     "submit": "Submit",
     "sent": "Your answer has been sent.",
-    "your-answer": "Answer",
-    "enter-answer": "Enter an answer",
+    "your-answer": "Your answer",
     "has-abstained": "You have abstained.",
     "has-voted": "You have answered.",
     "has-answered": "You have answered to the content.",

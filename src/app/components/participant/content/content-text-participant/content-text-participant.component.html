@@ -3,14 +3,10 @@
     <mat-form-field appearance="outline">
       <mat-label>{{ 'answer.your-answer' | translate }}</mat-label>
       <textarea matInput [(ngModel)]="textAnswer" name="answer"
-                cdkTextareaAutosize cdkAutosizeMinRows="3" cdkAutosizeMaxRows="8" maxLength="500"
-                aria-labelledby="answer-input" placeholder="{{ 'answer.enter-answer' | translate }}"></textarea>
+                cdkTextareaAutosize cdkAutosizeMinRows="3" cdkAutosizeMaxRows="8" maxLength="500"></textarea>
     </mat-form-field>
   </form>
   <div *ngIf="givenAnswer && givenAnswer.body">
     <p class="answer">{{givenAnswer.body}}</p>
   </div>
-</div>
-<div tabindex="-1" class="visually-hidden">
-  <div id="answer-input">{{ 'answer.a11y-enter-answer' | translate }}</div>
 </div>
