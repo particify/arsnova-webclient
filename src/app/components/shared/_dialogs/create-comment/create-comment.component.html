@@ -1,10 +1,9 @@
 <div fxLayout="column" fxLayoutAlign="center" fxLayoutGap="20px">
   <mat-form-field appearance="outline">
-    <mat-label>{{ 'dialog.comment' | translate }}</mat-label>
+    <mat-label>{{ 'dialog.your-comment' | translate }}</mat-label>
     <textarea matInput
               #commentBody cdkTextareaAutosize cdkAutosizeMinRows=5 cdkAutosizeMaxRows=10 maxlength="500"
-              [formControl]="bodyForm" aria-labelledby="ask-question-description"
-              [placeholder]="'dialog.enter-comment' | translate"></textarea>
+              [formControl]="bodyForm"></textarea>
     <mat-hint align="end"><span aria-hidden="true">{{commentBody.value.length}} / 500</span></mat-hint>
   </mat-form-field>
   <mat-form-field *ngIf="data.tags !== null && data.tags !== undefined && data.tags.length > 0" appearance="outline"
@@ -28,6 +27,5 @@
 </div>
 
 <div class="visually-hidden">
-  <div id="ask-question-description">{{ 'dialog.create-comment-description' | translate }}</div>
   <div id="category">{{ 'dialog.a11y-tag' | translate }}</div>
 </div>
