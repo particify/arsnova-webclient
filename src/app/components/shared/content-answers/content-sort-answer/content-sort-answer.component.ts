@@ -1,22 +1,21 @@
-import { Component, Input } from '@angular/core';
-import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { Component, Input, OnInit } from '@angular/core';
 import { AnswerOption } from '@arsnova/app/models/answer-option';
-
+import { DragDropBaseComponent } from '../../drag-drop-base/drag-drop-base.component';
 @Component({
   selector: 'app-content-sort-answer',
   templateUrl: './content-sort-answer.component.html',
   styleUrls: ['./content-sort-answer.component.scss']
 })
-export class ContentSortAnswerComponent {
+export class ContentSortAnswerComponent extends DragDropBaseComponent implements OnInit {
 
   @Input() answerOptions: AnswerOption[];
   @Input() disabled: boolean;
   @Input() dynamicRendering: boolean;
 
   constructor() {
+    super();
   }
-
-  drop(event: CdkDragDrop<String[]>) {
-    moveItemInArray(this.answerOptions, event.previousIndex, event.currentIndex);
+  ngOnInit(): void {
+    this.dragDroplist = this.answerOptions;
   }
 }

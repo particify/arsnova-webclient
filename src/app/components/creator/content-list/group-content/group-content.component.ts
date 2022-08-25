@@ -25,13 +25,14 @@ import { RoutingService } from '../../../../services/util/routing.service';
 import { Room } from '../../../../models/room';
 import { ContentGroupStatistics } from '../../../../models/content-group-statistics';
 import { MarkdownFeatureset } from '../../../../services/http/formatting.service';
+import { DragDropBaseComponent } from '../../../shared/drag-drop-base/drag-drop-base.component';
 
 @Component({
   selector: 'app-group-content',
   templateUrl: './group-content.component.html',
   styleUrls: ['./group-content.component.scss']
 })
-export class GroupContentComponent implements OnInit, OnDestroy {
+export class GroupContentComponent extends DragDropBaseComponent implements OnInit, OnDestroy {
 
   @ViewChild('nameInput') nameInput: ElementRef;
   @ViewChildren('lockMenu') lockMenus: QueryList<MatButton>;
@@ -93,6 +94,7 @@ export class GroupContentComponent implements OnInit, OnDestroy {
     private hotkeyService: HotkeyService,
     private routingService: RoutingService
   ) {
+    super();
     langService.langEmitter.subscribe(lang => translateService.use(lang));
   }
 
@@ -320,6 +322,7 @@ export class GroupContentComponent implements OnInit, OnDestroy {
 
   createCopy() {
     this.copiedContents = this.contents.map(content => ({ ...content }));
+    this.dragDroplist = this.copiedContents;
     this.firstPublishedIndexBackup = this.firstPublishedIndex;
     this.lastPublishedIndexBackup = this.lastPublishedIndex;
   }
@@ -463,10 +466,10 @@ export class GroupContentComponent implements OnInit, OnDestroy {
     });
   }
 
-  drop(event: CdkDragDrop<Content[]>) {
-    const prev = event.previousIndex;
+  dropContent(event: CdkDragDrop<String[]>) {
     const current = event.currentIndex;
-    moveItemInArray(this.copiedContents, prev, current);
+    const prev = event.previousIndex;
+    this.moveItem(current, prev);
     this.sortPublishedIndexes(prev, current);
   }
 
