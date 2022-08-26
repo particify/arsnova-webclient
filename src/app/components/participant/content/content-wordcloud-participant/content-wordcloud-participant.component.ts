@@ -24,12 +24,9 @@ export class ContentWordcloudParticipantComponent extends ContentParticipantBase
   @Input() sendEvent: EventEmitter<string>;
   @Output() answerChanged = new EventEmitter<MultipleTextsAnswer>();
 
-  readonly maxLength = 25;
-
   givenAnswer: MultipleTextsAnswer;
 
   words: string[] = [];
-  currentInputIndex: number;
 
   constructor(
     protected answerService: ContentAnswerService,
@@ -59,10 +56,6 @@ export class ContentWordcloudParticipantComponent extends ContentParticipantBase
     if (texts) {
       this.givenAnswer.texts = texts;
     }
-  }
-
-  trackByIndex(index: number) {
-    return index;
   }
 
   submitAnswer() {

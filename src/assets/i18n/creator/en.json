@@ -322,6 +322,9 @@
     "reset-banned-answers": "Reset banned keywords",
     "banned-keywords-reset": "Banned keywords have been reset."
   },
+  "answer": {
+    "word": "Keyword"
+  },
   "survey": {
     "a11y-message": "You are now in live feedback mode.",
     "a11y-status": "Currently the live feedback is {{status}}. {{answers}} participants have answered yet. {{state0}} percent have selected answer {{answer0}}, {{state1}} percent have selected answer {{answer1}}, {{state2}} percent have selected answer {{answer2}}, {{state3}} percent have selected answer {{answer3}}.",

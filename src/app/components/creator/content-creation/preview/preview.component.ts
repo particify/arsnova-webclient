@@ -10,6 +10,7 @@ import { LikertScaleService } from '../../../../services/util/likert-scale.servi
 import { TranslateService } from '@ngx-translate/core';
 import { forkJoin, Observable } from 'rxjs';
 import { SelectableAnswer } from '../../../../models/selectable-answer';
+import { ContentWordcloud } from '../../../../models/content-wordcloud';
 
 @Component({
   selector: 'app-preview',
@@ -29,6 +30,7 @@ export class PreviewComponent implements OnInit {
   isLoading = true;
   markdownFeatureset: MarkdownFeatureset;
   attachmentData: any;
+  words: string[];
 
   constructor(
     private answerService: ContentAnswerService,
@@ -51,6 +53,8 @@ export class PreviewComponent implements OnInit {
       forkJoin(optionLabels$).subscribe(labels =>
           this.answerOptions = labels.map(l =>
               ({ label: l, renderedLabel: l })));
+    } else if (format === ContentType.WORDCLOUD) {
+      this.words = new Array<string>((this.content as ContentWordcloud).maxAnswers).fill('');
     }
     if (this.answerOptions) {
       this.answerOptions.map(o => this.selectableAnswers.push(new SelectableAnswer(o, false)));

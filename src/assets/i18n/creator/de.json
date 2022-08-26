@@ -322,6 +322,9 @@
     "reset-banned-answers": "Gebannte Wörter zurücksetzen",
     "banned-keywords-reset": "Gebannte Schlagwörter wurden zurückgesetzt."
   },
+  "answer": {
+    "word": "Schlagwort"
+  },
   "survey": {
     "a11y-message": "Du befindest dich jetzt im Live Feedback.",
     "a11y-status": "Aktuell ist das Feedback {{status}}. {{answers}} Teilnehmende haben bisher geantwortet. {{state0}} Prozent haben Antwort {{answer0}} gewählt, {{state1}} Prozent haben Antwort {{answer1}} gewählt, {{state2}} Prozent haben Antwort {{answer2}} gewählt, {{state3}} Prozent haben Antwort {{answer3}} gewählt.",
