@@ -61,6 +61,7 @@ import { DateFromNowPipe } from '../../pipes/date-from-now.pipe';
 import { DateComponent } from './date/date.component';
 import { AnswerListComponent } from './answer-list/answer-list.component';
 import { AnnouncementListComponent } from './announcement-list/announcement-list.component';
+import { ContentWordcloudAnswerComponent } from './content-answers/content-wordcloud-answer/content-wordcloud-answer.component';
 
 @NgModule({
   imports: [
@@ -127,7 +128,8 @@ import { AnnouncementListComponent } from './announcement-list/announcement-list
     DateFormatPipe,
     DateComponent,
     AnswerListComponent,
-    AnnouncementListComponent
+    AnnouncementListComponent,
+    ContentWordcloudAnswerComponent
   ],
   exports: [
     RoomJoinComponent,
@@ -172,7 +174,8 @@ import { AnnouncementListComponent } from './announcement-list/announcement-list
     SettingsSlideToggleComponent,
     FormattingToolbarComponent,
     AnnouncementComponent,
-    AnswerListComponent
+    AnswerListComponent,
+    ContentWordcloudAnswerComponent
   ]
 })
 export class SharedModule {
