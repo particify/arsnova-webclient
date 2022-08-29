@@ -21,12 +21,12 @@
         </mat-option>
       </mat-select>
     </mat-form-field>
-    <button mat-stroked-button class="add-user-button" [ngClass]="{'btn-animated': userFound}" (click)="addModerator()" fxFlex
+    <button mat-stroked-button class="add-user-button" [ngClass]="{'btn-animated': canBeAdded()}" (click)="addModerator()" fxFlex
             [disabled]="isGuest || !currentInputIsChecked || loginId.length === 0"
-            aria-labelledby="add-user"
+            aria-labelledby="add-user" id="add-button"
             appTrackInteraction="Room member role assigned" [appTrackName]="selectedRole.name">
-            <mat-icon>{{ userFound ? 'add' : 'mail'}}</mat-icon>
-      {{ (userFound ? 'settings.add-user' : 'settings.invite-user') | translate }}
+            <mat-icon>{{ canBeAdded() ? 'add' : 'mail'}}</mat-icon>
+      {{ (canBeAdded() ? 'settings.add-user' : 'settings.invite-user') | translate }}
     </button>
   </div>
   <app-loading-indicator *ngIf="isLoading" [size]="40"></app-loading-indicator>
