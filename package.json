@@ -37,7 +37,7 @@
     "dayjs": "1.11.5",
     "is-docker": "2.2.1",
     "jwt-decode": "3.1.2",
-    "katex": "0.16.0",
+    "katex": "0.16.1",
     "lru-cache": "6.0.0",
     "material-design-icons-iconfont": "6.7.0",
     "ng-qrcode": "7.0.0",
