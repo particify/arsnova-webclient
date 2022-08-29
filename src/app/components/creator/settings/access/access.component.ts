@@ -69,9 +69,12 @@ export class AccessComponent implements OnInit, OnDestroy {
     this.getModerators();
     this.authenticationService.isLoginIdEmailAddress().subscribe(loginIdIsEmail => {
       this.loginIdIsEmail = loginIdIsEmail;
-      if (this.loginIdIsEmail) {
-        this.usernameFormControl.valueChanges.pipe(map(() => this.changesMade()), debounceTime(500), takeUntil(this.formSubscription)).subscribe(() => this.getUser());
-      }
+      this.usernameFormControl.valueChanges.pipe(map(() => this.changesMade()), debounceTime(500), takeUntil(this.formSubscription)).subscribe(() => {
+        this.newModeratorId = null;
+        if (this.loginIdIsEmail) {
+          this.getUser();
+        }
+      });
     });
   }
 
@@ -81,7 +84,9 @@ export class AccessComponent implements OnInit, OnDestroy {
   }
 
   changesMade() {
-    this.currentInputIsChecked = false;
+    if (this.loginIdIsEmail) {
+      this.currentInputIsChecked = false;
+    }
   }
 
   getModerators() {
