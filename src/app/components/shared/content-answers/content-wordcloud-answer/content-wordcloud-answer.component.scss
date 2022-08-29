@@ -1,0 +1,13 @@
+.mat-form-field {
+  width: 100%;
+  &:last-of-type {
+    margin-bottom: 1em;
+  }
+  &:first-of-type {
+    margin-top: 0.5em;
+  }
+}
+
+.mat-hint {
+  opacity: 0.8;
+}
