@@ -11,10 +11,10 @@
       <div fxLayout="row" fxLayoutAlign="space-between">
         <div class="cardTitle" fxLayout="row" fxLayoutAlign="start center">
           <mat-form-field class="activeInput no-field-hint" [ngClass]="{'hideEditing': !isInTitleEditMode && !inputFocus}" appearance="outline">
-            <input id="nameInput" #nameInput (focus)="goInTitleEditMode()" (blur)="leaveTitleEditMode()"
+            <input id="nameInput" [disabled]="isModerator" #nameInput (focus)="goInTitleEditMode()" (blur)="leaveTitleEditMode()"
                    (mouseenter)="inputFocus = true" (mouseleave)="inputFocus = false" (keyup.enter)="removeFocusFromInput()"
                    matInput maxlength="25" [(ngModel)]="updatedName" aria-labelledby="edit-content-group-name"
-                   appHotkey="6" [appHotkeyTitle]="'content.content-group-name' | translate">
+                   appHotkey="6" [appHotkeyTitle]="'content.content-group-name' | translate" [appHotkeyDisabled]="isModerator">
           </mat-form-field>
         </div>
         <div fxLayoutAlign="center center" fxLayoutGap="8px" class="status-bar">
@@ -32,7 +32,7 @@
       </div>
       <div fxLayout="column">
         <app-loading-indicator *ngIf="isLoading" [size]="50"></app-loading-indicator>
-        <div *ngIf="!isLoading" fxLayout="row wrap" fxLayoutAlign="space-between center" class="action-container">
+        <div *ngIf="!isLoading && !isModerator" fxLayout="row wrap" fxLayoutAlign="space-between center" class="action-container">
           <div *ngIf="!isInSortingMode" fxLayout="row wrap" fxLayoutAlign="space-between center" fxLayoutGap="10px">
             <button mat-raised-button id="content-create-button" class="button-primary add-desktop"
                     aria-labelledby="create-content" (click)="navigateToSubroute('create')"
@@ -140,21 +140,21 @@
                 <div fxLayout="row" fxLayoutAlign="center center" [ngClass]="{'show-bar': i === activeMenuIndex || content.id === activeContentId, 'button-bar': i !== activeMenuIndex && content.id !== activeContentId}">
                   <div fxLayout="row" *ngIf="contentTypes.indexOf(content.format) > -1">
                     <lib-extension-point extensionId="content-focus" [extensionData]="{contentId: content.id, contentGroupId: contentGroup.id, contents: contents}" (extensionEvent)="updateActive($event)"></lib-extension-point>
-                    <button mat-icon-button *ngIf="content.format === 'TEXT' && content.state.answersPublished"
+                    <button mat-icon-button *ngIf="content.format === 'TEXT' && content.state.answersPublished && !isModerator"
                             (click)="toggleAnswersPublished(content);$event.stopPropagation()"
                             attr.aria-label="{{ 'content.a11y-dont-publish-answers' | translate }}"
                             matTooltip="{{ 'content.dont-publish-answers' | translate}}"
                             appTrackInteraction="Content publish text answers toggled" appTrackName="off">
                       <mat-icon class="lock-icon unlocked">visibility</mat-icon>
                     </button>
-                    <button mat-icon-button *ngIf="content.format === 'TEXT' && !content.state.answersPublished"
+                    <button mat-icon-button *ngIf="content.format === 'TEXT' && !content.state.answersPublished && !isModerator"
                             (click)="toggleAnswersPublished(content);$event.stopPropagation()"
                             attr.aria-label="{{ 'content.a11y-publish-answers' | translate }}"
                             matTooltip="{{ 'content.publish-answers' | translate}}"
                             appTrackInteraction="Content publish text answers toggled" appTrackName="on">
                       <mat-icon class="lock-icon locked">visibility_off</mat-icon>
                     </button>
-                    <button mat-icon-button (click)="$event.stopPropagation()" #publishTrigger="matMenuTrigger"
+                    <button *ngIf="!isModerator" mat-icon-button (click)="$event.stopPropagation()" #publishTrigger="matMenuTrigger"
                             [matMenuTriggerFor]="publishActions" (menuOpened)="openedMenu(i)"
                             attr.aria-label="{{ 'content.a11y-unlock' | translate }}"
                             matTooltip="{{ 'content.unlock' | translate}}" #lockMenu>
@@ -204,7 +204,7 @@
                         </button>
                       </div>
                     </mat-menu>
-                    <button mat-icon-button (keyup.enter)="menuTrigger.openMenu()" #menuTrigger="matMenuTrigger"
+                    <button *ngIf="!isModerator" mat-icon-button (keyup.enter)="menuTrigger.openMenu()" #menuTrigger="matMenuTrigger"
                             [matMenuTriggerFor]="moreActions" (click)="$event.stopPropagation()" aria-labelledby="more"
                             (menuOpened)="openedMenu(i)"
                             class="moreButton" matTooltip="{{ 'content.more-options' | translate}}">

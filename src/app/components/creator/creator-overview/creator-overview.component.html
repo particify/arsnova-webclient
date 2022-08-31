@@ -18,7 +18,7 @@
           <app-rendered-text [rawText]="room.description.trim()" [renderedText]="room.renderedDescription"></app-rendered-text>
         </div>
       </mat-card-content>
-      <app-divider *ngIf="!isModerator"></app-divider>
+      <app-divider></app-divider>
       <div fxLayout="column" fxLayoutAlign="center">
         <div class="action-button-container" fxLayout="row" fxLayoutAlign="center" [ngClass]="{'moderator-container': isModerator}">
           <div class="action-button-item" fxLayoutAlign="center center">
@@ -32,7 +32,7 @@
                 {{ 'room-page.comments' | translate}}</p>
             </button>
           </div>
-          <div *ngIf="!isModerator" class="action-button-item" fxLayoutAlign="center center">
+          <div class="action-button-item" fxLayoutAlign="center center">
             <button mat-icon-button class="main-button" id="live-survey-button" aria-labelledby="live-survey"
                     [disableRipple]="true" [routerLink]="['feedback']"
                     appHotkey="2" [appHotkeyTitle]="'room-page.live-survey' | translate">
@@ -45,7 +45,7 @@
           </div>
         </div>
       </div>
-      <div *ngIf="!isModerator">
+      <div>
         <app-divider></app-divider>
         <div fxLayout="column" [ngClass]="{'group-container': contentGroups.length > 0, 'empty-group-container': contentGroups.length === 0}">
           <ng-container *ngIf="contentGroups?.length === 0">
@@ -53,7 +53,7 @@
             <p tabindex="-1" id="no-content-groups" class="visually-hidden" appHotkey="4" [appHotkeyTitle]="'content.groups' | translate">
               {{ 'room-page.a11y-no-content-groups' | translate }}</p>
           </ng-container>
-          <button id="content-group-create-button" mat-stroked-button class="stroked-primary add-group" aria-labelledby="create-content-group"
+          <button *ngIf="!isModerator" id="content-group-create-button" mat-stroked-button class="stroked-primary add-group" aria-labelledby="create-content-group"
                   (click)="openCreateContentGroupDialog()"
                   appHotkey="3" [appHotkeyTitle]="'room-page.create-content-group' | translate">
             <mat-icon>playlist_add</mat-icon>

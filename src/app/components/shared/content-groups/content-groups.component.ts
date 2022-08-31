@@ -31,10 +31,10 @@ export class ContentGroupsComponent implements OnInit {
 
   viewContents() {
     let role: string;
-    if (this.role === UserRole.CREATOR) {
-      role = UserRole.CREATOR.toLowerCase();
-    } else {
+    if (this.role === UserRole.PARTICIPANT) {
       role = UserRole.PARTICIPANT.toLowerCase();
+    } else {
+      role = UserRole.CREATOR.toLowerCase();
     }
     this.router.navigate([role, this.roomShortId, 'series',this.contentGroupName]);
     this.globalStorageService.setItem(STORAGE_KEYS.LAST_GROUP, this.contentGroupName);
