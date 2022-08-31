@@ -33,6 +33,7 @@ import { ContentType } from '@arsnova/app/models/content-type.enum';
 import { ContentState } from '@arsnova/app/models/content-state';
 import { ContentGroup } from '@arsnova/app/models/content-group';
 import { Room } from '@arsnova/app/models/room';
+import { A11yRenderedBodyPipe } from '@arsnova/app/pipes/a11y-rendered-body.pipe';
 
 @Injectable()
 class MockContentService {
@@ -111,12 +112,15 @@ describe('GroupContentComponent', () => {
   let translateService: TranslateService;
 
   const a11yIntroPipe = new A11yIntroPipe(translateService);
+  
+  const a11yRenderedBodyPipe = new A11yRenderedBodyPipe();
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [
         GroupContentComponent,
-        A11yIntroPipe
+        A11yIntroPipe,
+        A11yRenderedBodyPipe
       ],
       providers: [
         {
@@ -182,6 +186,10 @@ describe('GroupContentComponent', () => {
         {
           provide: A11yIntroPipe,
           useValue: a11yIntroPipe
+        },
+        {
+          provide: A11yRenderedBodyPipe,
+          useValue: a11yRenderedBodyPipe
         }
       ],
       imports: [

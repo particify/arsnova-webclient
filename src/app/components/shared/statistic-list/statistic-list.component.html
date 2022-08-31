@@ -15,7 +15,7 @@
     <mat-header-cell *matHeaderCellDef> {{'statistic.content' | translate}} </mat-header-cell>
     <mat-cell tabindex="0" *matCellDef="let cp" (click)="goToStats(cp.content.id)"
               attr.aria-label="{{ ('statistic.a11y-content-result' | translate: {
-              content: cp.content.body, count: cp.counts > -1 ? cp.counts : 0, abstentions: cp.abstentions > -1 ? cp.abstentions : 0 }) +
+              content: cp.content.renderedBody | a11yRenderedBody, count: cp.counts > -1 ? cp.counts : 0, abstentions: cp.abstentions > -1 ? cp.abstentions : 0 }) +
               (cp.percent >= status.zero ? ('statistic.a11y-choice-result' | translate: { percent: cp.percent.toFixed() }) : '') +
               ('statistic.a11y-go-to-statistic' | translate) }}" (keyup.enter)="goToStats(cp.content.id)">
       {{cp.content.body.length > 80 ? cp.content.body.substr(0, 80) + '…' : cp.content.body}}

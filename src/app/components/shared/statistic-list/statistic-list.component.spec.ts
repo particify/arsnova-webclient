@@ -17,6 +17,7 @@ import { LanguageService } from '@arsnova/app/services/util/language.service';
 import { NotificationService } from '@arsnova/app/services/util/notification.service';
 import { of } from 'rxjs';
 import { ContentGroup } from '@arsnova/app/models/content-group';
+import { A11yRenderedBodyPipe } from '@arsnova/app/pipes/a11y-rendered-body.pipe';
 
 describe('StatisticListComponent', () => {
   let component: StatisticListComponent;
@@ -35,9 +36,14 @@ describe('StatisticListComponent', () => {
   }
   const activatedRouteStub = new ActivatedRouteStub(null, null, snapshot);
 
+  const a11yRenderedBodyPipe = new A11yRenderedBodyPipe();
+
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ StatisticListComponent ],
+      declarations: [
+        StatisticListComponent,
+        A11yRenderedBodyPipe
+      ],
       imports: [
         TranslateModule.forRoot({
           loader: {
@@ -75,6 +81,10 @@ describe('StatisticListComponent', () => {
         {
           provide: NotificationService,
           useClass: MockNotificationService
+        },
+        {
+          provide: A11yRenderedBodyPipe,
+          useValue: a11yRenderedBodyPipe
         }
       ]
     })

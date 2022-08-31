@@ -5,14 +5,20 @@ import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { ContentType } from '@arsnova/app/models/content-type.enum';
 import { ContentState } from '@arsnova/app/models/content-state';
 import { Content } from '@arsnova/app/models/content';
+import { A11yRenderedBodyPipe } from '@arsnova/app/pipes/a11y-rendered-body.pipe';
 
 describe('ContentParticipantComponent', () => {
   let component: ContentParticipantComponent;
   let fixture: ComponentFixture<ContentParticipantComponent>;
 
+  const a11yRenderedBodyPipe = new A11yRenderedBodyPipe();
+
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ ContentParticipantComponent ],
+      declarations: [
+        ContentParticipantComponent,
+        A11yRenderedBodyPipe
+      ],
       imports: [
         TranslateModule.forRoot({
           loader: {
@@ -21,6 +27,12 @@ describe('ContentParticipantComponent', () => {
           },
           isolate: true
         })
+      ],
+      providers: [
+        {
+          provide: A11yRenderedBodyPipe,
+          useValue: a11yRenderedBodyPipe
+        }
       ]
     })
     .compileComponents();

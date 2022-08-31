@@ -121,7 +121,7 @@
             {{ 'content.a11y-content-list-contents' | translate: { count: contents.length } }}</div>
           <p class="hint" *ngIf="contents.length === 0">{{ 'content.no-contents-yet' | translate }}</p>
           <mat-list *ngIf="!isInSortingMode" fxFill>
-              <mat-list-item *ngFor="let content of contents; index as i" fxLayout="column" fxLayoutAlign="center" attr.aria-label="{{ 'content.a11y-content-item-selected' | translate : {index: i+1, length: contents.length, body: content.body} }}"
+              <mat-list-item *ngFor="let content of contents; index as i" fxLayout="column" fxLayoutAlign="center" attr.aria-label="{{ 'content.a11y-content-item-selected' | translate : {index: i+1, length: contents.length, body: content.renderedBody | a11yRenderedBody} }}"
                              class="bottom-border" (click)="navigateToContentStats(content)" (keyup.enter)="navigateToContentStats(content)" tabindex="0"
                              [ngClass]="{'not-supported': contentTypes.indexOf(content.format) === -1, 'locked-content': !isPublished(i), 'unlocked-content': isPublished(i)}">
               <div fxLayout="row" fxLayoutAlign="space-between" fxFill>
@@ -260,7 +260,7 @@
               <div class="content-box bottom-border" fxLayout="column" fxLayoutAlign="center"
                              *ngFor="let content of copiedContents; index as i" cdkDrag [cdkDragStartDelay]="50"
                              [ngClass]="{'locked-content': !isPublished(i), 'unlocked-content': isPublished(i)}"
-                             [attr.aria-label]="'content.a11y-sort-content' | translate : {content: content.body, index: i+1, length: copiedContents.length}"
+                             [attr.aria-label]="'content.a11y-sort-content' | translate : {content: content.renderedBody | a11yRenderedBody, index: i+1, length: copiedContents.length}"
                              tabindex="0" (keyup)="moveAnswer($event, i)" #sortListItem>
                 <div fxLayout="row" fxLayoutAlign="space-between center" fxFill>
                   <div class="ellipsis" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="12px" >
