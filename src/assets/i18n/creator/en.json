@@ -202,6 +202,7 @@
     "a11y-delete-answers": "Delete all answers to this content",
     "a11y-delete-all-answers": "Delete all answers of this question series",
     "a11y-wordcloud-info": "Used keywords by frequency in descending order.",
+    "a11y-sort-content": "Position {{index}} of {{length}}: {{content}}.",
     "abort": "Abort",
     "answer": "Answer",
     "add-answer": "Add answer",

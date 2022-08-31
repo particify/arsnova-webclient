@@ -62,6 +62,7 @@ import { DateComponent } from './date/date.component';
 import { AnswerListComponent } from './answer-list/answer-list.component';
 import { AnnouncementListComponent } from './announcement-list/announcement-list.component';
 import { ContentWordcloudAnswerComponent } from './content-answers/content-wordcloud-answer/content-wordcloud-answer.component';
+import { DragDropBaseComponent } from './drag-drop-base/drag-drop-base.component';
 
 @NgModule({
   imports: [
@@ -129,7 +130,8 @@ import { ContentWordcloudAnswerComponent } from './content-answers/content-wordc
     DateComponent,
     AnswerListComponent,
     AnnouncementListComponent,
-    ContentWordcloudAnswerComponent
+    ContentWordcloudAnswerComponent,
+    DragDropBaseComponent
   ],
   exports: [
     RoomJoinComponent,

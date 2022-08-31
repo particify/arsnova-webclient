@@ -32,7 +32,9 @@
   * > .button-bar {
     @include show-button-bar;
   }
+}
 
+.content-box:hover, .content-box:focus-within {
   * > .sort-icon {
     @include show-sort-icon;
   }
@@ -200,8 +202,15 @@
 }
 
 .content-box {
+  padding: 0 1em;
   cursor: move;
   background: var(--surface);
+  &:not(.cdk-drag-preview) {
+    border: 2px solid var(--surface);
+  }
+  &:focus {
+    border-color: var(--grey-light);
+  }
 }
 
 .cdk-drag-preview {

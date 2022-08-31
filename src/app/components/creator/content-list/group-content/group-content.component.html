@@ -271,9 +271,11 @@
           </mat-list>
           <div *ngIf="isInSortingMode" fxFill>
             <mat-list cdkDropList [cdkDropListData]="copiedContents" (cdkDropListDropped)="drop($event)">
-              <mat-list-item class="content-box bottom-border" fxLayout="column" fxLayoutAlign="center"
+              <div class="content-box bottom-border" fxLayout="column" fxLayoutAlign="center"
                              *ngFor="let content of copiedContents; index as i" cdkDrag [cdkDragStartDelay]="50"
-                             [ngClass]="{'locked-content': !isPublished(i), 'unlocked-content': isPublished(i)}">
+                             [ngClass]="{'locked-content': !isPublished(i), 'unlocked-content': isPublished(i)}"
+                             [attr.aria-label]="'content.a11y-sort-content' | translate : {content: content.body, index: i+1, length: copiedContents.length}"
+                             tabindex="0" (keyup)="moveAnswer($event, i)" #sortListItem>
                 <div fxLayout="row" fxLayoutAlign="space-between center" fxFill>
                   <div class="ellipsis" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="12px" >
                     <mat-icon class="type-icon">{{iconList.get(content.format)}}</mat-icon>
@@ -281,7 +283,7 @@
                   </div>
                   <mat-icon class="sort-icon">drag_handle</mat-icon>
                 </div>
-              </mat-list-item>
+              </div>
             </mat-list>
           </div>
         </div>

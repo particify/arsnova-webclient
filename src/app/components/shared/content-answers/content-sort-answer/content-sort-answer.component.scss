@@ -2,15 +2,25 @@
 
 $option-padding: 0;
 
-.mat-card {
-  width: calc(100% - 2em);
+@mixin selected {
+  border-color: var(--surface);
+  box-sizing: border-box;
+  border-radius: 4px;
+  box-shadow: 0 0 5px var(--primary);
+}
+
+.answer {
+  background-color: var(--surface);
   margin-top: $option-padding-full;
   cursor: grabbing;
-  box-shadow: none;
   padding: $option-padding $option-padding-full;
   border: 2px solid var(--grey-light);
+  border-radius: 4px;
   &:first-of-type {
     margin-top: 8px;
+  }
+  &:focus {
+    @include selected;
   }
 }
 
@@ -31,10 +41,7 @@ $option-padding: 0;
 }
 
 .cdk-drag-preview {
-  border-color: var(--surface);
-  box-sizing: border-box;
-  border-radius: 4px;
-  box-shadow: 0 0 5px var(--primary);
+  @include selected;
 }
 
 .cdk-drag-placeholder {
