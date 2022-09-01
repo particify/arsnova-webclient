@@ -16,7 +16,7 @@
             <button id="go-to-stats" *ngIf="!flipped && alreadySent && (statsPublished || content.format === ContentType.TEXT)
                     && [ContentType.SLIDE, ContentType.FLASHCARD].indexOf(content.format) === -1" mat-icon-button
                     (click)="goToStats()" matTooltip="{{'answer.go-to-stats' | translate}}" aria-labelledby="flip-to-stats"
-                    appHotkey=" " [appHotkeyAction]="HotkeyAction.CLICK">
+                    appHotkey=" " [appHotkeyAction]="HotkeyAction.CLICK" [appHotkeyDisabled]="!active">
               <mat-icon class="icon-primary">
                 insert_chart
               </mat-icon>
@@ -69,7 +69,7 @@
             </div>
             <div *ngIf="content.format === ContentType.FLASHCARD" fxLayoutAlign="center">
               <button mat-raised-button class="button-primary" (click)="goToStats()" aria-labelledby="show-front"
-                      appHotkey=" " [appHotkeyAction]="HotkeyAction.CLICK">
+                      appHotkey=" " [appHotkeyAction]="HotkeyAction.CLICK" [appHotkeyDisabled]="!active">
                 {{ 'answer.show-back' | translate }}
               </button>
             </div>
@@ -79,7 +79,7 @@
           <div *ngIf="flipped" class="back-container">
             <button id="go-to-content" *ngIf="content.format !== ContentType.FLASHCARD && flipped" tabindex="0" class="toggleSide" mat-icon-button
                     matTooltip="{{'answer.go-to-content' | translate}}" (click)="goToStats()" aria-labelledby="flip-back"
-                    appHotkey=" " [appHotkeyAction]="HotkeyAction.CLICK">
+                    appHotkey=" " [appHotkeyAction]="HotkeyAction.CLICK" [appHotkeyDisabled]="!active">
               <mat-icon class="icon-primary">
                 cached
               </mat-icon>
@@ -91,7 +91,7 @@
                                  [markdownFeatureset]="flashcardMarkdownFeatures" (rendered)="isLoading = false;"></app-rendered-text>
               <div fxLayoutAlign="center" fxLayoutGap="10px">
                 <button mat-stroked-button class="button-abort" (click)="goToStats()" aria-labelledby="show-front"
-                        appHotkey=" " [appHotkeyAction]="HotkeyAction.CLICK">
+                        appHotkey=" " [appHotkeyAction]="HotkeyAction.CLICK" [appHotkeyDisabled]="!active">
                   {{ 'answer.show-front' | translate }}
                 </button>
                 <button mat-raised-button class="button-primary"
