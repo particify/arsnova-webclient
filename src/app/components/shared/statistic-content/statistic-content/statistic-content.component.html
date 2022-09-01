@@ -23,12 +23,19 @@
                   matTooltip="{{ (showWordcloudModeration ? 'statistic.show-wordcloud' : 'statistic.show-wordcloud-list') | translate }}">
           <mat-icon class="icon-primary">toc</mat-icon>
           </button>
-          <button id="show-chart-btn" mat-icon-button (click)="toggleAnswers()"
+          <button *ngIf="!useCustomFlipAction" id="show-chart-btn" mat-icon-button (click)="toggleAnswers()"
                   matTooltip="{{ (answersVisible ? 'statistic.hide-results' : 'statistic.show-results') | translate }}"
                   appHotkey=" " [appHotkeyAction]="HotkeyAction.CLICK" [appHotkeyDisabled]="!active"
                   appTrackInteraction="Content results visibility toggled" [appTrackName]="answersVisible ? 'on' : 'off'">
           <mat-icon class="icon-primary">insert_chart</mat-icon>
           </button>
+          <button *ngIf="content.format !== ContentType.FLASHCARD && useCustomFlipAction" mat-icon-button
+                    matTooltip="{{'answer.go-to-content' | translate}}" (click)="customFlipEvent.emit()" aria-labelledby="flip-back"
+                    appHotkey=" " [appHotkeyAction]="HotkeyAction.CLICK" [appHotkeyDisabled]="!active">
+              <mat-icon class="icon-primary">
+                cached
+              </mat-icon>
+            </button>
         </div>
       </div>
     </div>

@@ -40,7 +40,9 @@ export class StatisticContentComponent implements OnInit {
   @Input() isPresentation = false;
   @Input() routeChanged: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Input() contentGroupId: string;
+  @Input() useCustomFlipAction = false;
   @Output() updatedCounter: EventEmitter<number> = new EventEmitter<number>();
+  @Output() customFlipEvent = new EventEmitter();
 
   attachmentData: any;
   answersVisible = false;

@@ -77,15 +77,9 @@
         </div>
         <div class="back side" [ngClass]="{'invisible-card-content': !flipped}">
           <div *ngIf="flipped" class="back-container">
-            <button id="go-to-content" *ngIf="content.format !== ContentType.FLASHCARD && flipped" tabindex="0" class="toggleSide" mat-icon-button
-                    matTooltip="{{'answer.go-to-content' | translate}}" (click)="goToStats()" aria-labelledby="flip-back"
-                    appHotkey=" " [appHotkeyAction]="HotkeyAction.CLICK" [appHotkeyDisabled]="!active">
-              <mat-icon class="icon-primary">
-                cached
-              </mat-icon>
-            </button>
             <app-statistic-content *ngIf="content.format !== ContentType.FLASHCARD && flipped" [content]="content" [active]="true"
-                                   [directShow]="true" [correctOptionsPublished]="correctOptionsPublished"></app-statistic-content>
+                                   [directShow]="true" [correctOptionsPublished]="correctOptionsPublished" [useCustomFlipAction]="true"
+                                   (customFlipEvent)="goToStats()"></app-statistic-content>
             <div *ngIf="content.format === ContentType.FLASHCARD && flipped">
               <app-rendered-text [rawText]="content.additionalText" [renderedText]="content.renderedAdditionalText"
                                  [markdownFeatureset]="flashcardMarkdownFeatures" (rendered)="isLoading = false;"></app-rendered-text>
@@ -110,7 +104,6 @@
     <div id="submit">{{ 'answer.a11y-submit' | translate }}</div>
     <div id="abstain">{{ 'answer.a11y-abstain' | translate }}</div>
     <div id="flip-to-stats">{{ 'answer.a11y-go-to-stats' | translate }}</div>
-    <div id="flip-back">{{ 'answer.a11y-go-to-content' | translate }}</div>
     <div id="show-back">{{ 'answer.a11y-show-back' | translate }}</div>
     <div id="show-front">{{ 'answer.a11y-show-front' | translate }}</div>
     <div id="next-content">{{ 'answer.a11y-next-content' | translate }}</div>
