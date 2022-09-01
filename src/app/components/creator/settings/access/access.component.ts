@@ -33,7 +33,6 @@ export class AccessComponent implements OnInit, OnDestroy {
   @Input() room: Room;
   moderators: Moderator[] = [];
   userIds: string[] = [];
-  userFound = false;
   newModeratorId: string;
   loginId = '';
   isLoading = true;
@@ -70,11 +69,12 @@ export class AccessComponent implements OnInit, OnDestroy {
     this.getModerators();
     this.authenticationService.isLoginIdEmailAddress().subscribe(loginIdIsEmail => {
       this.loginIdIsEmail = loginIdIsEmail;
-      if (this.loginIdIsEmail) {
-        this.usernameFormControl.valueChanges.pipe(map(() => this.changesMade()), debounceTime(500), takeUntil(this.formSubscription)).subscribe(() => this.getUser());
-      } else {
-        this.userFound = true;
-      }
+      this.usernameFormControl.valueChanges.pipe(map(() => this.changesMade()), debounceTime(500), takeUntil(this.formSubscription)).subscribe(() => {
+        this.newModeratorId = null;
+        if (this.loginIdIsEmail) {
+          this.getUser();
+        }
+      });
     });
   }
 
@@ -84,7 +84,9 @@ export class AccessComponent implements OnInit, OnDestroy {
   }
 
   changesMade() {
-    this.currentInputIsChecked = false;
+    if (this.loginIdIsEmail) {
+      this.currentInputIsChecked = false;
+    }
   }
 
   getModerators() {
@@ -114,46 +116,44 @@ export class AccessComponent implements OnInit, OnDestroy {
 
   getUser() {
     this.userService.getUserByLoginId(this.loginId).subscribe(list => {
-      this.userFound = list.length > 0;
+      console.log(list);
+      const userFound = list.length > 0;
       this.currentInputIsChecked = true;
-      if (this.userFound) {
+      if (userFound) {
         this.newModeratorId = list[0].id;
         if (!this.loginIdIsEmail) {
           this.addModerator();
         }
       } else if(!this.loginIdIsEmail) {
-        this.translationService.get('settings.user-not-found').subscribe(msg => {
-          this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.FAILED);
-        });
+        const msg = this.translationService.instant('settings.user-not-found');
+        this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.FAILED);
       }
     });
   }
 
   addModerator() {
-    if (this.userFound) {
+    if (!this.loginIdIsEmail && !this.newModeratorId) {
+      this.getUser();
+      return;
+    }
+    if (this.newModeratorId) {
       this.moderatorService.add(this.room.id, this.newModeratorId).subscribe(() => {
         this.saveEvent.emit(new UpdateEvent(null, false, true));
         this.moderators.push(new Moderator(this.newModeratorId, this.loginId, UserRole.EXECUTIVE_MODERATOR));
-        this.translationService.get('settings.user-added').subscribe(msg => {
-          this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.SUCCESS);
-        });
+        const msg = this.translationService.instant('settings.user-added');
+        this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.SUCCESS);
         this.loginId = '';
       });
     } else {
-      if (this.loginIdIsEmail) {
-        this.inviteModerator();
-      } else {
-        this.getUser();
-      }
+      this.inviteModerator();
     }
   }
 
   inviteModerator() {
     this.accessTokenService.invite(this.room.id, UserRole.EXECUTIVE_MODERATOR, this.loginId).subscribe(() => {
-      this.translationService.get('settings.user-invited').subscribe(msg => {
-        this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.SUCCESS);
-        this.loginId = '';
-      });
+      const msg = this.translationService.instant('settings.user-invited');
+      this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.SUCCESS);
+      this.loginId = '';
     });
   }
 
@@ -169,10 +169,13 @@ export class AccessComponent implements OnInit, OnDestroy {
   removeModerator(userId: string, index: number) {
     this.moderatorService.delete(this.room.id, userId).subscribe(() => {
       this.saveEvent.emit(new UpdateEvent(null, false, true));
-      this.translationService.get('settings.user-removed').subscribe(msg => {
-        this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
-      });
+      const msg = this.translationService.instant('settings.user-removed');
+      this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
       this.moderators.splice(index, 1);
     });
+  }
+
+  canBeAdded(): boolean {
+    return !!this.newModeratorId || !this.loginIdIsEmail;
   }
 }
