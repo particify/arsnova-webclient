@@ -22,10 +22,6 @@
     "settings-saved": "Your settings have been saved."
   },
   "footer": {
-    "a11y-data-protection": "Open the privacy statement.",
-    "a11y-data-protection-menu": "Open the privacy menu. Here you find the privacy statement and the cookie settings.",
-    "a11y-imprint": "Open the imprint.",
-    "a11y-accessibilty": "Open the accessibility statement.",
     "cookie-settings": "Cookie settings",
     "dsgvo": "Data Protection",
     "imprint": "Imprint",
@@ -36,12 +32,7 @@
   },
   "header": {
     "a11y-back": "Go back to the previous page.",
-    "a11y-help": "Open help.",
-    "a11y-language": "Open the language selector.",
-    "a11y-login": "Navigates to the Login.",
     "a11y-room": "Open the user menu. Here you can view the rooms you have attended or log out of your account. You will also find a link to a help page and settings for language and display.",
-    "a11y-style": "Open the display selector.",
-    "a11y-news": "Opens a dialog that shows you the latest changes and links you to our news page.",
     "a11y-switch-role": "Switch role to see participants view.",
     "a11y-switch-back": "Switch back to admin view.",
     "account-deleted": "Your account has been deleted.",

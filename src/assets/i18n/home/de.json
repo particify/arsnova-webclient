@@ -22,10 +22,6 @@
     "settings-saved": "Deine Einstellungen wurden gespeichert."
   },
   "footer": {
-    "a11y-data-protection": "Öffnet die Datenschutzerklärung.",
-    "a11y-data-protection-menu": "Öffnet das Datenschutzmenü. Hier findest du die Datenschutzerklärung und die Cookie-Einstellungen.",
-    "a11y-imprint": "Öffnet das Impressum.",
-    "a11y-accessibility": "Öffnet die Erklärung zur Barrierefreiheit.",
     "cookie-settings": "Cookie-Einstellungen",
     "dsgvo": "Datenschutz",
     "imprint": "Impressum",
@@ -36,12 +32,7 @@
   },
   "header": {
     "a11y-back": "Führt zur vorherigen Seite.",
-    "a11y-help": "Öffnet die Hilfe.",
-    "a11y-language": "Öffnet die Sprachauswahl.",
-    "a11y-login": "Navigiert zur Anmeldung.",
     "a11y-room": "Öffnet das Nutzer-Menü. Hier kannst du deine besuchten Räume einsehen oder dich von deinem Konto abmelden. Auch findest du einen Link zu einer Hilfe-Seite und Einstellungsmöglichkeiten für Sprache und Anzeige. ",
-    "a11y-style": "Öffnet die Anzeigeoptionen für hohen Kontrast, Hörsaal-Projektion, heller und dunkler Hintergrund.",
-    "a11y-news": "Öffnet einen Dialog, welcher dir die neusten Änderungen zeigt und dich auf unsere News-Seite verweist.",
     "a11y-switch-role": "Wechsel die Rolle um die Ansicht der Teilnehmenden zu sehen.",
     "a11y-switch-back": "Wechsel zurück zur Adminansicht.",
     "account-deleted": "Dein Konto wurde gelöscht.",
