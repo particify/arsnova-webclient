@@ -1,4 +1,4 @@
-<div *ngIf="showToolbar" id="footer-toolbar" fxLayout="row">
+<div *ngIf="showToolbar" id="footer-toolbar" fxLayout="row wrap" fxLayoutAlign="space-between">
   <lib-extension-point extensionId="footer-reference">
       <div fxLayout="row" fxLayoutAlign="center center" fxFill>
         <a [attr.href]="referenceUrl" target="_blank" class="slogan">
@@ -8,7 +8,6 @@
         </a>
     </div>
   </lib-extension-point>
-  <span class="fill-remaining-space"></span>
   <div fxLayout="row wrap" fxLayoutAlign="end">
     <a *ngIf="accessibilityUrl" [routerLink]="[]" (click)="showAccessibilityStatement()" aria-labelledby="accessibility-label" class="link text">
       {{'footer.accessibility' | translate}}</a>
