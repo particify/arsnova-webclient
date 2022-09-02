@@ -21,6 +21,7 @@ import { THINSP } from '../../../utils/html-entities';
 export class RoomJoinComponent implements OnInit, OnDestroy {
   @ViewChild('roomCode', { static: true }) roomCodeElement: ElementRef;
   @Input() inputA11yString: string;
+  @Input() appTitle: string;
 
   auth: ClientAuthentication;
   isDesktop: boolean;

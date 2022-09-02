@@ -8,6 +8,7 @@ import { DialogService } from '../../../services/util/dialog.service';
 import { GlobalStorageService } from '../../../services/util/global-storage.service';
 import { AnnounceService } from '../../../services/util/announce.service';
 import {
+  ActivatedRouteStub,
   JsonTranslationLoader,
   MockAnnounceService,
   MockEventService,
@@ -17,6 +18,7 @@ import { HarnessLoader } from '@angular/cdk/testing';
 import { MatButtonHarness } from '@angular/material/button/testing';
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 import { Observable, of } from 'rxjs';
+import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
 
 @Component({ selector: 'app-room-join', template: '' })
 class RoomJoinStubComponent {
@@ -50,6 +52,21 @@ describe('HomePageComponent', () => {
 
   let loader: HarnessLoader;
   let newRoomButton: MatButtonHarness;
+
+  const data = {
+    apiConfig: {
+      ui: {
+        registration: {
+          service: 'ARSnova'
+        }
+      }
+    }
+  };
+
+  const snapshot = new ActivatedRouteSnapshot();
+  snapshot.data = data;
+
+  const activatedRouteStub = new ActivatedRouteStub(null, null, snapshot);
 
   beforeEach(async () => {
     TestBed.configureTestingModule({
@@ -89,6 +106,10 @@ describe('HomePageComponent', () => {
           provide: GlobalStorageService,
           useClass: MockGlobalStorageService
         },
+        {
+          provide: ActivatedRoute,
+          useValue: activatedRouteStub
+        }
       ],
       schemas: [
         CUSTOM_ELEMENTS_SCHEMA

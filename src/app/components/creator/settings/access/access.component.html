@@ -10,8 +10,7 @@
         <ng-template #loginIdLabel>{{ 'settings.login-id' | translate }}</ng-template>
       </mat-label>
       <input [disabled]="isGuest" [readonly]="isGuest"
-             matInput type="email" autocomplete="disabled" [(ngModel)]="loginId" [formControl]="usernameFormControl" name="username"
-             aria-labelledby="username"/>
+             matInput type="email" autocomplete="disabled" [(ngModel)]="loginId" [formControl]="usernameFormControl" name="username"/>
     </mat-form-field>
     <mat-form-field class="no-field-hint" appearance="outline" fxFlex>
       <mat-label>{{ 'settings.role' | translate }}</mat-label>
@@ -22,8 +21,7 @@
       </mat-select>
     </mat-form-field>
     <button mat-stroked-button class="add-user-button" [ngClass]="{'btn-animated': canBeAdded()}" (click)="addModerator()" fxFlex
-            [disabled]="isGuest || !currentInputIsChecked || loginId.length === 0"
-            aria-labelledby="add-user" id="add-button"
+            [disabled]="isGuest || !currentInputIsChecked || loginId.length === 0" id="add-button"
             appTrackInteraction="Room member role assigned" [appTrackName]="selectedRole.name">
             <mat-icon>{{ canBeAdded() ? 'add' : 'mail'}}</mat-icon>
       {{ (canBeAdded() ? 'settings.add-user' : 'settings.invite-user') | translate }}
@@ -61,8 +59,3 @@
   </mat-list>
 </div>
 <lib-extension-point extensionId="room-password-settings" [extensionData]="{ room: room }"></lib-extension-point>
-
-<div class="visually-hidden">
-  <div id="username">{{'settings.a11y-username' | translate}}</div>
-  <div id="add-user">{{'settings.a11y-add-user' | translate}}</div>
-</div>

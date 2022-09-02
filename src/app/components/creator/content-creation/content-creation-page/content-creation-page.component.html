@@ -39,7 +39,6 @@
                 <textarea #questionInput
                           (input)="updateTextContainsImage(questionInput.value)"
                           [(ngModel)]="question"
-                          [placeholder]="(selectedFormat.name !== 'slide' ? 'content.enter-body' : 'content.enter-body-neutral') | translate"
                           aria-labelledby="body" id="body-input"
                           cdkAutosizeMaxRows="8"
                           cdkAutosizeMinRows="3"

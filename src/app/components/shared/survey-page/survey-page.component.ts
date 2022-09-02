@@ -125,7 +125,7 @@ export class SurveyPageComponent implements OnInit, OnDestroy, AfterContentInit 
       const answerLabels: string[] = labels;
       this.translateService.get(this.isClosed ? 'survey.a11y-stopped' : 'survey.a11y-started').subscribe(status => {
         this.announceService.announce('survey.a11y-status', { status: status, answers: this.answerCount,
-          state0: this.survey[0].count, state1: this.survey[1].count, state2: this.survey[2].count, state3: this.survey[3].count,
+          state0: this.survey[0].count || 0, state1: this.survey[1].count || 0, state2: this.survey[2].count || 0, state3: this.survey[3].count || 0,
           answer0: answerLabels[this.survey[0].label], answer1: answerLabels[this.survey[1].label],
           answer2: answerLabels[this.survey[2].label], answer3: answerLabels[this.survey[3].label]});
       });
@@ -216,17 +216,9 @@ export class SurveyPageComponent implements OnInit, OnDestroy, AfterContentInit 
 
   toggle() {
     this.updateRoom(!this.isClosed);
-    const a11yPrefix = 'survey.a11y-';
-    const currentState = this.isClosed ? 'started' : 'stopped';
-    const nextState = this.isClosed ? 'start' : 'stop';
-    const keys = [a11yPrefix + currentState,
-                  a11yPrefix + nextState];
-    this.translateService.get(keys).subscribe(status => {
-      this.announceService.announce(a11yPrefix + 'status-changed',
-        { status: status[keys[0]], nextStatus: status[keys[1]] });
-    });
-    this.translateService.get('survey.' + currentState).subscribe(msg => {
-      this.notificationService.showAdvanced(msg, currentState === 'started' ? AdvancedSnackBarTypes.SUCCESS
+    const state = this.isClosed ? 'started' : 'stopped';
+    this.translateService.get('survey.' + state).subscribe(msg => {
+      this.notificationService.showAdvanced(msg, state === 'started' ? AdvancedSnackBarTypes.SUCCESS
         : AdvancedSnackBarTypes.WARNING);
     });
   }

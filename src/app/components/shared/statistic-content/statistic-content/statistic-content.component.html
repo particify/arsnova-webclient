@@ -14,7 +14,7 @@
         <lib-extension-point *ngIf="multipleRounds && answersVisible" extensionId="round-selection" (extensionEvent)="changeRound($event)" [extensionData]="{round: roundsToDisplay}"></lib-extension-point>
         <div fxLayout="row" fxLayoutAlign="end" [ngClass]="{'fix-width': !survey}" fxLayoutGap="8px">
           <button mat-icon-button *ngIf="answersVisible && !survey && correctOptionsPublished" disableRipple (click)="toggleCorrect()"
-                  matTooltip="{{ 'statistic.show-correct' | translate }}" aria-labelledby="show-correct"
+                  matTooltip="{{ 'statistic.show-correct' | translate }}"
                   appHotkey="c" [appHotkeyAction]="HotkeyAction.CLICK" [appHotkeyDisabled]="!active"
                   appTrackInteraction="Correct content answer options visibility toggled" [appTrackName]="correctVisible ? 'on' : 'off'">
           <mat-icon class="icon-primary">playlist_add_check</mat-icon>
@@ -23,7 +23,7 @@
                   matTooltip="{{ (showWordcloudModeration ? 'statistic.show-wordcloud' : 'statistic.show-wordcloud-list') | translate }}">
           <mat-icon class="icon-primary">toc</mat-icon>
           </button>
-          <button id="show-chart-btn" mat-icon-button (click)="toggleAnswers()" aria-labelledby="show-chart"
+          <button id="show-chart-btn" mat-icon-button (click)="toggleAnswers()"
                   matTooltip="{{ (answersVisible ? 'statistic.hide-results' : 'statistic.show-results') | translate }}"
                   appHotkey=" " [appHotkeyAction]="HotkeyAction.CLICK" [appHotkeyDisabled]="!active"
                   appTrackInteraction="Content results visibility toggled" [appTrackName]="answersVisible ? 'on' : 'off'">
@@ -61,8 +61,4 @@
   <mat-divider></mat-divider>
   <div class="divider-space"></div>
   <app-rendered-text [rawText]="content.additionalText" [dynamic]="true" [markdownFeatureset]="flashcardMarkdownFeatures"></app-rendered-text>
-</div>
-<div class="visually-hidden">
-  <div id="show-correct">{{ 'statistic.a11y-answer-indicator' | translate }}</div>
-  <div id="show-chart">{{ 'statistic.a11y-show-chart' | translate }}</div>
 </div>

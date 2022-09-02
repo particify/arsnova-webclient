@@ -35,26 +35,23 @@
         <div *ngIf="!isLoading && !isModerator" fxLayout="row wrap" fxLayoutAlign="space-between center" class="action-container">
           <div *ngIf="!isInSortingMode" fxLayout="row wrap" fxLayoutAlign="space-between center" fxLayoutGap="10px">
             <button mat-raised-button id="content-create-button" class="button-primary add-desktop"
-                    aria-labelledby="create-content" (click)="navigateToSubroute('create')"
-                    appHotkey="1" [appHotkeyTitle]="'room-page.create-content' | translate">
+                    (click)="navigateToSubroute('create')" appHotkey="1" [appHotkeyTitle]="'room-page.create-content' | translate">
               <mat-icon>add</mat-icon>
               {{ 'room-page.create-content' | translate}}
             </button>
             <button mat-fab id="content-create-button-mobile" class="mobile-add"
                     [ngClass]="{'mobile-add-above-nav': navBarExists, 'mobile-add-hide': !onInit}"
-                    aria-labelledby="create-content" (click)="navigateToSubroute('create')"
-                    [matTooltip]="'room-page.create-content' | translate">
+                    (click)="navigateToSubroute('create')" [matTooltip]="'room-page.create-content' | translate">
               <mat-icon>add</mat-icon>
             </button>
             <div class="settings-buttons">
-              <button mat-button id="statistic-button" class="settings-button"  aria-labelledby="statistics"
+              <button mat-button id="statistic-button" class="settings-button"
               (click)="navigateToSubroute('statistics')" [disabled]="contents.length === 0"
                       appHotkey="2" [appHotkeyTitle]="'room-page.answer-statistics' | translate">
                 <mat-icon>insert_chart</mat-icon>
                 {{ 'room-page.answer-statistics' | translate }}
               </button>
               <button mat-button id="settings-button" class="settings-button" [matMenuTriggerFor]="groupSettings"
-                      aria-labelledby="settings"
                       appHotkey="3" [appHotkeyTitle]="'content.group-settings' | translate">
                 <mat-icon>settings</mat-icon>
                 {{ 'content.group-settings' | translate}}
@@ -62,7 +59,6 @@
             </div>
             <mat-menu #groupSettings="matMenu">
               <button mat-menu-item (click)="toggleStatisticsPublished()"
-                      aria-labelledby="publish-statistics"
                       appTrackInteraction="Content group publish stats toggled" [appTrackName]="statisticsPublished ? 'off' : 'on'">
                 <mat-icon>bar_chart</mat-icon>
                 {{ (statisticsPublished ? 'content.dont-publish-statistics' : 'content.publish-statistics') | translate }}
@@ -73,7 +69,7 @@
                 {{ (correctOptionsPublished ? 'content.dont-publish-correct-options' : 'content.publish-correct-options') | translate }}
               </button>
               <mat-divider></mat-divider>
-              <button mat-menu-item id="edit-group-sort" aria-labelledby="edit-content-group-sort"
+              <button mat-menu-item id="edit-group-sort"
                       (click)="goInSortingMode()" [disabled]="contents.length < 2"
                       appTrackInteraction="Content group sorting started">
                 <mat-icon>swap_vert</mat-icon>
@@ -90,8 +86,7 @@
                 {{ 'import.import' | translate }}
               </button>
               <mat-divider></mat-divider>
-              <button mat-menu-item (click)="deleteAllAnswers()" [disabled]="contents.length === 0"
-                      attr.aria-label="{{ 'content.a11y-delete-all-answers' | translate }}">
+              <button mat-menu-item (click)="deleteAllAnswers()" [disabled]="contents.length === 0">
                 <mat-icon>clear_all</mat-icon>
                 <span>{{ 'content.delete-answers' | translate}}</span>
               </button>
@@ -108,14 +103,13 @@
               {{ 'content.abort' | translate }}
             </button>
             <button *ngIf="isInSortingMode" mat-raised-button class="button-primary"
-                    (keyup.enter)="saveSorting()" (click)="saveSorting()" aria-labelledby="save-sort-changes"
+                    (keyup.enter)="saveSorting()" (click)="saveSorting()"
                     appTrackInteraction="Content group sorting finished" appTrackName="save">
               {{ 'content.save' | translate }}
             </button>
           </div>
           <div *ngIf="!isInSortingMode" fxLayoutAlign="center center" fxLayoutGap="16px">
             <mat-slide-toggle id="lock-group-slide" (change)="publishContents()" [(ngModel)]="published" labelPosition="before"
-                                aria-labelledby="lock-group"
                                 appHotkey="4" [appHotkeyTitle]="'content.unlock-collection' | translate"
                                 appTrackInteraction="Content group publish toggled" [appTrackName]="published ? 'off' : 'on'">
                                 {{ 'content.unlock-collection' | translate}}
@@ -127,15 +121,14 @@
             {{ 'content.a11y-content-list-contents' | translate: { count: contents.length } }}</div>
           <p class="hint" *ngIf="contents.length === 0">{{ 'content.no-contents-yet' | translate }}</p>
           <mat-list *ngIf="!isInSortingMode" fxFill>
-              <mat-list-item *ngFor="let content of contents; index as i" fxLayout="column" fxLayoutAlign="center"
-                             class="bottom-border" (click)="navigateToContentStats(content)"
+              <mat-list-item *ngFor="let content of contents; index as i" fxLayout="column" fxLayoutAlign="center" attr.aria-label="{{ 'content.a11y-content-item-selected' | translate : {index: i+1, length: contents.length, body: content.body} }}"
+                             class="bottom-border" (click)="navigateToContentStats(content)" (keyup.enter)="navigateToContentStats(content)" tabindex="0"
                              [ngClass]="{'not-supported': contentTypes.indexOf(content.format) === -1, 'locked-content': !isPublished(i), 'unlocked-content': isPublished(i)}">
               <div fxLayout="row" fxLayoutAlign="space-between" fxFill>
                 <div class="ellipsis"  fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="12px">
                   <mat-icon class="type-icon">{{iconList.get(content.format)}}</mat-icon>
                   <app-rendered-text class="ellipsis rendered-list-preview-container" [ngClass]="{'bg-unlocked': isPublished(i)}"
-                                     [renderedText]="content.renderedBody" [markdownFeatureset]="markdownFeatureset" [listPreview]="true"
-                                     tabindex="0" role="button" (keyup.enter)="navigateToContentStats(content)"></app-rendered-text>
+                                     [renderedText]="content.renderedBody" [markdownFeatureset]="markdownFeatureset" [listPreview]="true"></app-rendered-text>
                 </div>
                 <div fxLayout="row" fxLayoutAlign="center center" [ngClass]="{'show-bar': i === activeMenuIndex || content.id === activeContentId, 'button-bar': i !== activeMenuIndex && content.id !== activeContentId}">
                   <div fxLayout="row" *ngIf="contentTypes.indexOf(content.format) > -1">
@@ -156,8 +149,7 @@
                     </button>
                     <button *ngIf="!isModerator" mat-icon-button (click)="$event.stopPropagation()" #publishTrigger="matMenuTrigger"
                             [matMenuTriggerFor]="publishActions" (menuOpened)="openedMenu(i)"
-                            attr.aria-label="{{ 'content.a11y-unlock' | translate }}"
-                            matTooltip="{{ 'content.unlock' | translate}}" #lockMenu>
+                            [matTooltip]="'content.unlock' | translate" #lockMenu>
                       <mat-icon class="lock-icon locked">lock_open</mat-icon>
                     </button>
                     <mat-menu #publishActions="matMenu" xPosition="before" (closed)="closedMenu()">
@@ -165,19 +157,16 @@
                         <button mat-menu-item *ngIf="((firstPublishedIndex !== lastPublishedIndex) ||
                         (firstPublishedIndex === lastPublishedIndex && i !== firstPublishedIndex)) ||
                         !isPublished(i)" (click)="publishContent(i, true)"
-                                [attr.aria-label]="'content.a11y-unlock-this-content' | translate"
                                 appTrackInteraction="Content group publish range changed" appTrackName="publish-single">
                           <mat-icon class="icon-important">vertical_align_center</mat-icon>
                           {{ 'content.unlock-this-content' | translate}}
                         </button>
                         <button mat-menu-item *ngIf="i !== contents.length -1 && !isPublished(i)" (click)="publishContentFrom(i, true)"
-                                [attr.aria-label]="'content.a11y-unlock-contents-from' | translate"
                                 appTrackInteraction="Content group publish range changed" appTrackName="publish-multiple">
                           <mat-icon class="icon-important">vertical_align_top</mat-icon>
                           {{ 'content.unlock-contents-from' | translate}}
                         </button>
                         <button mat-menu-item *ngIf="!isPublished(i) && i > 0" (click)="publishContentUpTo(i, true)"
-                                [attr.aria-label]="'content.a11y-unlock-contents-up-to' | translate"
                                 appTrackInteraction="Content group publish range changed" appTrackName="publish-multiple">
                           <mat-icon class="icon-important">vertical_align_bottom</mat-icon>
                           {{ 'content.unlock-contents-up-to' | translate}}
@@ -185,19 +174,16 @@
                       </div>
                       <div *ngIf="isPublished(i)" class="menu-lock">
                         <button mat-menu-item *ngIf="isStart(i) || isEnd(i)" (click)="publishContent(i, false)"
-                                [attr.aria-label]="'content.a11y-lock-this-content' | translate"
                                 appTrackInteraction="Content group publish range changed" appTrackName="lock-single">
                           <mat-icon class="icon-important">vertical_align_center</mat-icon>
                           {{ 'content.lock-this-content' | translate}}
                         </button>
                         <button mat-menu-item *ngIf="!isStart(i)" (click)="publishContentUpTo(i, false)"
-                                [attr.aria-label]="'content.a11y-lock-contents-up-to' | translate"
                                 appTrackInteraction="Content group publish range changed" appTrackName="lock-multiple">
                           <mat-icon class="icon-important">vertical_align_top</mat-icon>
                           {{ 'content.lock-contents-up-to' | translate}}
                         </button>
                         <button mat-menu-item *ngIf="!isEnd(i)" (click)="publishContentFrom(i, false)"
-                                  [attr.aria-label]="'content.a11y-lock-contents-from' | translate"
                                   appTrackInteraction="Content group publish range changed" appTrackName="lock-multiple">
                           <mat-icon class="icon-important">vertical_align_bottom</mat-icon>
                           {{ 'content.lock-contents-from' | translate}}
@@ -205,41 +191,41 @@
                       </div>
                     </mat-menu>
                     <button *ngIf="!isModerator" mat-icon-button (keyup.enter)="menuTrigger.openMenu()" #menuTrigger="matMenuTrigger"
-                            [matMenuTriggerFor]="moreActions" (click)="$event.stopPropagation()" aria-labelledby="more"
+                            [matMenuTriggerFor]="moreActions" (click)="$event.stopPropagation()"
                             (menuOpened)="openedMenu(i)"
                             class="moreButton" matTooltip="{{ 'content.more-options' | translate}}">
                       <mat-icon>more_vert</mat-icon>
                     </button>
                     <mat-menu #moreActions="matMenu" xPosition="before" (closed)="closedMenu()">
-                      <button mat-menu-item (click)="editContent(content, contentGroup.name)" attr.aria-label="{{ 'content.a11y-edit-content' | translate }}">
+                      <button mat-menu-item (click)="editContent(content, contentGroup.name)">
                         <mat-icon>edit</mat-icon>
                         <span> {{ 'content.edit-content' | translate}}</span>
                       </button>
                       <mat-divider></mat-divider>
-                      <button mat-menu-item [matMenuTriggerFor]="chooseGroups" [matMenuTriggerData]="{action: 'copy'}" attr.aria-label="{{ 'content.a11y-copy-to-content-group' | translate }}">
+                      <button mat-menu-item [matMenuTriggerFor]="chooseGroups" [matMenuTriggerData]="{action: 'copy'}">
                         <mat-icon>library_add</mat-icon>
                         <span>{{ 'content.copy-content-to-group' | translate}}</span>
                       </button>
-                      <button mat-menu-item [matMenuTriggerFor]="chooseGroups"  [matMenuTriggerData]="{action: 'move'}" attr.aria-label="{{ 'content.a11y-move-to-content-group' | translate }}">
+                      <button mat-menu-item [matMenuTriggerFor]="chooseGroups"  [matMenuTriggerData]="{action: 'move'}">
                         <mat-icon>drive_file_move_outline</mat-icon>
                         <span>{{ 'content.move-content-to-group' | translate}}</span>
                       </button>
-                      <button mat-menu-item (click)="duplicate(content.id)" attr.aria-label="{{ 'content.a11y-duplicate-content' | translate }}">
+                      <button mat-menu-item (click)="duplicate(content.id)">
                         <mat-icon>dynamic_feed</mat-icon>
                         <span>{{ 'content.duplicate-content' | translate}}</span>
                       </button>
                       <mat-divider></mat-divider>
-                      <button *ngIf="content.format === ContentType.WORDCLOUD" mat-menu-item (click)="resetBannedAnswers(content.id)" attr.aria-label="{{ 'content.a11y-delete-answers' | translate }}">
+                      <button *ngIf="content.format === ContentType.WORDCLOUD" mat-menu-item (click)="resetBannedAnswers(content.id)">
                         <mat-icon>lock_reset</mat-icon>
                         <span>{{ 'content.reset-banned-answers' | translate}}</span>
                       </button>
-                      <button mat-menu-item (click)="deleteAnswers(content)" attr.aria-label="{{ 'content.a11y-delete-answers' | translate }}">
+                      <button mat-menu-item (click)="deleteAnswers(content)">
                         <mat-icon>clear_all</mat-icon>
                         <span>{{ 'content.delete-answers' | translate}}</span>
                       </button>
                       <lib-extension-point *ngIf="[ContentType.CHOICE, ContentType.BINARY, ContentType.SCALE].indexOf(content.format) > -1"
                                            extensionId="start-new-round" [extensionData]="{content: content, resetEvent: resetAnswerEvent}"></lib-extension-point>
-                      <button mat-menu-item (click)="deleteContent(content)" attr.aria-label="{{ 'content.a11y-delete-content' | translate }}">
+                      <button mat-menu-item (click)="deleteContent(content)">
                         <mat-icon class="icon-warn">delete_forever</mat-icon>
                         <span>{{ 'content.delete-content' | translate}}</span>
                       </button>
@@ -294,11 +280,4 @@
 
 <div class="visually-hidden">
   <div id="edit-content-group-name">{{ 'content.a11y-edit-content-group-name' | translate }}</div>
-  <div id="create-content">{{ 'content.a11y-create-content' | translate }}</div>
-  <div id="statistics">{{ 'content.a11y-nav-to-stats' | translate }}</div>
-  <div id="settings">{{ 'content.a11y-open-group-settings' | translate }}</div>
-  <div id="publish-statistics">{{ (statisticsPublished ? 'content.a11y-dont-publish-statistics' : 'content.a11y-publish-statistics') | translate }}</div>
-  <div id="lock-group">{{ (published ? 'content.a11y-lock-collection' : 'content.a11y-unlock-collection') | translate }}</div>
-  <div id="more">{{ 'content.a11y-more-options' | translate }}</div>
-  <div id="save-sort-changes">{{ 'content.a11y-save-sort-changes' | translate }}</div>
 </div>

@@ -10,7 +10,7 @@
       <mat-tab label="{{ 'announcement.body' | translate}}">
         <mat-form-field id="body-input" class="input-block no-field-hint " appearance="outline">
           <textarea #bodyInput [(ngModel)]="body" matInput cdkTextareaAutosize cdkAutosizeMinRows="3" cdkAutosizeMaxRows="5" name="body"
-                    [placeholder]="'announcement.enter-body' | translate"></textarea>
+                    [placeholder]="'announcement.enter-body' | translate" aria-labelledby="body-description"></textarea>
         </mat-form-field>
       </mat-tab>
       <mat-tab label="{{'room.preview' | translate}}" [disabled]="!body">
@@ -31,4 +31,8 @@
                       (deleteEvent)="delete($event)" (editEvent)="edit($event)" tabindex="0"></app-announcement>
   </div>
   <app-loading-indicator *ngIf="isLoading" [size]="60"></app-loading-indicator>
+</div>
+
+<div class="visually-hidden">
+  <div id="body-description">{{ 'settings.a11y-announcement-description' | translate }}</div>
 </div>

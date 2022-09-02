@@ -15,41 +15,38 @@
       </div>
       <span class="fill-remaining-space"></span>
 
-      <button mat-icon-button *ngIf="comment.correct === 1" [disabled]="isParticipant"
-              (click)="markCorrect(1)" tabindex="0"
-              aria-labelledby="comment-correct">
-        <mat-icon class="correct-icon" [matTooltip]="'comment-page.mark-not-correct' | translate">check_circle
+      <button mat-icon-button *ngIf="comment.correct === 1" [disabled]="isParticipant" (click)="markCorrect(1)"
+              [matTooltip]="'comment-page.mark-not-correct' | translate">
+        <mat-icon class="correct-icon">check_circle
         </mat-icon>
       </button>
-      <button mat-icon-button *ngIf="comment.correct === 2" [disabled]="isParticipant"
-              (click)="markCorrect(2)" tabindex="0"
-              aria-labelledby="comment-not-correct">
-        <mat-icon class="wrong-icon" [matTooltip]="'comment-page.mark-not-wrong' | translate">cancel
+      <button mat-icon-button *ngIf="comment.correct === 2" [disabled]="isParticipant" (click)="markCorrect(2)"
+              [matTooltip]="'comment-page.mark-not-wrong' | translate">
+        <mat-icon class="wrong-icon">cancel
         </mat-icon>
       </button>
-      <button mat-icon-button *ngIf="comment.favorite" [disabled]="isParticipant"
-              (click)="setFavorite()" tabindex="0" aria-labelledby="comment-grade">
-        <mat-icon class="favorite-icon" [matTooltip]="'comment-page.mark-not-favorite' | translate">grade
+      <button mat-icon-button *ngIf="comment.favorite" [disabled]="isParticipant" (click)="setFavorite()"
+              [matTooltip]="'comment-page.mark-not-favorite' | translate">
+        <mat-icon class="favorite-icon">grade
         </mat-icon>
       </button>
       <button mat-icon-button *ngIf="comment.answer && !inAnswerView" (click)="answerComment()"
-              tabindex="0" aria-labelledby="comment-answered">
-        <mat-icon class="answered-icon" [matTooltip]="'comment-page.go-to-answer' | translate">comment
+              [matTooltip]="'comment-page.go-to-answer' | translate">
+        <mat-icon class="answered-icon">comment
         </mat-icon>
       </button>
       <button *ngIf="isModeratorView" mat-icon-button (click)="setAck()"
-              aria-labelledby="comment-moderation" matTooltip="{{ 'comment-page.reject' | translate }}">
+              [matTooltip]="'comment-page.reject' | translate">
         <mat-icon class="icon-primary">lock_open</mat-icon>
       </button>
       <button mat-icon-button *ngIf="(isCreator || isModerator) && !inAnswerView && !isPresentation  && !archived"
-              [matMenuTriggerFor]="actionsMenu"
-              tabindex="0" aria-labelledby="more-options">
-        <mat-icon matTooltip="{{ 'comment-page.show-actions' | translate }}">more_horiz
+              [matMenuTriggerFor]="actionsMenu" [matTooltip]="'comment-page.show-actions' | translate">
+        <mat-icon>more_horiz
         </mat-icon>
       </button>
       <button mat-icon-button *ngIf="(isCreator || isModerator) && archived" (click)="openDeleteCommentDialog()"
-              tabindex="0" aria-labelledby="comment-delete">
-        <mat-icon class="icon-warn" matTooltip="{{ 'comment-page.delete' | translate }}">delete
+              [matTooltip]="'comment-page.delete' | translate">
+        <mat-icon class="icon-warn">delete
         </mat-icon>
       </button>
       <mat-menu #actionsMenu="matMenu" xPosition="before">
@@ -59,29 +56,27 @@
           <span>{{ (!comment.answer ? 'comment-page.answer' : 'comment-page.go-to-answer') | translate }}</span>
         </button>
 
-        <button mat-menu-item (click)="markCorrect(1)"
-                aria-labelledby="comment-correct">
+        <button mat-menu-item (click)="markCorrect(1)">
           <mat-icon class="correct-icon icon-important">check_circle</mat-icon>
           <span>{{ (comment.correct !== 1 ? 'comment-page.mark-correct' :
             'comment-page.mark-not-correct') | translate }}</span>
         </button>
 
-        <button mat-menu-item (click)="markCorrect(2)"
-                aria-labelledby="comment-not-correct">
+        <button mat-menu-item (click)="markCorrect(2)">
           <mat-icon class="wrong-icon icon-important">cancel</mat-icon>
           <span>{{ (comment.correct !== 2 ? 'comment-page.mark-wrong' :
             'comment-page.mark-not-wrong') | translate }}</span>
         </button>
-        <button mat-menu-item (click)="setFavorite()" aria-labelledby="comment-grade">
+        <button mat-menu-item (click)="setFavorite()">
           <mat-icon class="favorite-icon icon-important">grade</mat-icon>
           <span>{{ (!comment.favorite ? 'comment-page.mark-favorite' :
             'comment-page.mark-not-favorite') | translate }}</span>
         </button>
-        <button *ngIf="isCreator" mat-menu-item (click)="openDeleteCommentDialog()" aria-labelledby="comment-delete">
+        <button *ngIf="isCreator" mat-menu-item (click)="openDeleteCommentDialog()">
           <mat-icon class="icon-warn">delete</mat-icon>
           <span>{{ 'comment-page.delete' | translate }}</span>
         </button>
-        <button *ngIf="!isModeratorView" mat-menu-item (click)="setAck()" aria-labelledby="comment-moderation">
+        <button *ngIf="!isModeratorView" mat-menu-item (click)="setAck()">
           <mat-icon class="icon-primary">{{ comment.ack ? 'gavel' : 'lock_open' }}</mat-icon>
           <span>{{ (comment.ack ? 'comment-page.banish' : 'comment-page.reject') | translate }}</span>
         </button>
@@ -112,35 +107,12 @@
   </div>
   <div fxLayout="column" fxLayoutAlign="center" *ngIf="isParticipant" class="vote-container"
        [ngClass]="{ '1': 'voteUp', '-1': 'voteDown', '0': 'reset'}[currentVote]">
-    <button mat-icon-button (click)="vote(1)" [matTooltip]="'comment-page.vote-up' | translate"
-            tabindex="0" aria-labelledby="comment-vote-up">
+    <button mat-icon-button (click)="vote(1)" [matTooltip]="'comment-page.vote-up' | translate">
       <mat-icon class="voting-icon" [ngClass]="{'upVoted' : hasVoted === 1}">keyboard_arrow_up</mat-icon>
     </button>
     <span class="score">{{comment.score}}</span>
-    <button mat-icon-button (click)="vote(-1)" [matTooltip]="'comment-page.vote-down' | translate"
-            tabindex="0" aria-labelledby="comment-vote-down">
+    <button mat-icon-button (click)="vote(-1)" [matTooltip]="'comment-page.vote-down' | translate">
       <mat-icon class="voting-icon"[ngClass]="{'downVoted' : hasVoted === -1}">keyboard_arrow_down</mat-icon>
     </button>
   </div>
 </mat-card>
-
-<!--Hidden Div's for a11y-Descriptions-->
-<div class="visually-hidden">
-  <div id="more-options">{{ 'comment-page.a11y-more-options' | translate }}</div>
-  <div id="comment-correct">{{ (comment.correct !== 1 ? 'comment-page.a11y-comment-not-marked-correct' :
-    'comment-page.a11y-comment-marked-correct') | translate }}
-  </div>
-  <div id="comment-not-correct">{{ (comment.correct !== 2 ? 'comment-page.a11y-comment-not-marked-wrong' :
-    'comment-page.a11y-comment-marked-wrong') | translate }}
-  </div>
-  <div id="comment-grade">{{ (!comment.favorite ? 'comment-page.a11y-comment-grade' :
-    'comment-page.a11y-comment-not-grade') | translate }}
-  </div>
-  <div id="comment-answered">{{ 'comment-page.a11y-comment-answered' | translate }}</div>
-  <div id="comment-delete">{{'comment-page.a11y-comment-delete' | translate }}</div>
-  <div id="comment-moderation">{{ (comment.ack ? 'comment-page.a11y-comment-banish' :
-    'comment-page.a11y-comment-reject') | translate }}</div>
-  <div *ngIf="isParticipant" id="comment-vote-up">{{'comment-page.a11y-comment-vote-up' | translate}}</div>
-  <div *ngIf="isParticipant"
-       id="comment-vote-down{{ comment.id }}">{{'comment-page.a11y-comment-vote-down' | translate}}</div>
-</div>

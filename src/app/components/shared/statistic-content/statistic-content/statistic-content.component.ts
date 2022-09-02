@@ -146,7 +146,6 @@ export class StatisticContentComponent implements OnInit {
   }
 
   toggleAnswers(sendState = true) {
-    this.announceAnswers();
     if (this.correctVisible) {
       this.toggleCorrect(false);
     }
@@ -169,6 +168,7 @@ export class StatisticContentComponent implements OnInit {
       default:
         this.answersVisible = this.choiceStatistic.toggleAnswers();
     }
+    this.announceAnswers();
     if (this.isPresentation && sendState) {
       this.sendUiState();
     }
