@@ -1,12 +1,12 @@
 {
   "answer": {
     "a11y-message": "You can now answer the contents of the question series {{group}}.",
-    "a11y-current-multiple": "Content {{index}}, {{question}}. This is a multiple choice content. To go to the answers press the tab key and select an answer the space key.",
-    "a11y-current-single": "Content {{index}}, {{question}}. This is a single choice content. To go to the answers press the tab key select an answer press the arrow keys.",
-    "a11y-current-text": "Content {{index}}, {{question}}. This is a open question. To go to the answer input press the tab key.",
-    "a11y-current-slide": "Content {{index}}, {{question}}. This is a slide. Navigate with tab to the content.",
-    "a11y-current-sort": "Content {{index}}, {{question}}. This is a sort content. To go to the answers press the tab key and move up and down with arrow keys.",
-    "a11y-already-answered": "You have already answered the content {{question}}. Navigate with tab to your answer or answers or press the space button to see the results.",
+    "a11y-current-multiple": "Content {{index}}. This is a multiple choice content. To go to content and the answers press the tab key and select an answer the space key.",
+    "a11y-current-single": "Content {{index}}. This is a single choice content. To go to the content and the answers press the tab key select an answer press the arrow keys.",
+    "a11y-current-text": "Content {{index}}. This is a open question. To go to the content and the answer input press the tab key.",
+    "a11y-current-slide": "Content {{index}}}. This is a slide. Navigate with tab to the content.",
+    "a11y-current-sort": "Content {{index}}. This is a sort content. To go to content and the answers press the tab key and move up and down with arrow keys.",
+    "a11y-already-answered": "You have already answered the content {{index}}. Navigate with tab to the content and your answer or answers or press the space button to see the results.",
     "a11y-already-answered-single": "You have answered to this content with the answer {{answers}}.",
     "a11y-already-answered-multiple": "You have answered to this content with the answers {{answers}}.",
     "a11y-already-answered-text": "You have answered to this content with {{answer}}.",

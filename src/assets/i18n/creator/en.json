@@ -414,9 +414,9 @@
   },
   "statistic": {
     "a11y-message-overview": "You are now on the statistics overview.",
-    "a11y-message-evaluation": "Content {{index}}, {{content}}. There are no answers yet.",
-    "a11y-message-evaluation-answers": "Content {{index}}, {{content}}. {{answers}} participants have answered to the content. Navigate through the answers with the tab key.",
-    "a11y-message-type-info": "Content {{index}}, {{content}}.",
+    "a11y-message-evaluation": "Content {{index}}. There are no answers yet. Navigate to the content with the tab key.",
+    "a11y-message-evaluation-answers": "Content {{index}}. {{answers}} participants have answered to the content. Navigate to the content and through the answers with the tab key.",
+    "a11y-message-type-info": "Content {{index}}. Navigate to the content with the tab key.",
     "a11y-message-presentation": "You are now in the content presentation. Press the tab key to go to the content and navigate between the contents with the arrow keys.",
     "a11y-group-progress": "{{percent}} percent of the contents in the question series {{group}} were answered correctly.",
     "a11y-content-result": "The content {{content}} has been answered by {{count}} persons so far, {{abstentions}} persons have abstained.",
