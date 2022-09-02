@@ -19,10 +19,10 @@ export class DragDropBaseComponent {
 
   moveAnswer(event: KeyboardEvent, answerIndex: number) {
     let nextIndex = answerIndex
-    if (event.key === 'ArrowDown') {
+    if (event.key === 'ArrowDown' && nextIndex < this.dragDroplist.length - 1) {
       nextIndex += 1;
     }
-    if (event.key === 'ArrowUp') {
+    if (event.key === 'ArrowUp' && nextIndex > 0) {
       nextIndex -= 1;
     }
     this.moveItem(answerIndex, nextIndex);
