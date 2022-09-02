@@ -46,11 +46,16 @@ export class ContentParticipantComponent implements OnInit {
     if (this.answer) {
       this.alreadySent = true;
       this.checkIfAbstention(this.answer);
-      if ([ContentType.CHOICE, ContentType.BINARY].includes(this.content.format)) {
+      if ([ContentType.CHOICE, ContentType.BINARY, ContentType.SORT].includes(this.content.format)) {
         for (let option of (this.answer as ChoiceAnswer).selectedChoiceIndexes ?? []) {
-          this.answersString = this.answersString.concat((this.content as ContentChoice).options[option].label);
+          this.answersString = this.answersString.concat((this.content as ContentChoice).options[option].label + ',');
+        }
+      } else if (this.content.format === ContentType.WORDCLOUD) {
+        for (let text of (this.answer as MultipleTextsAnswer).texts) {
+          this.answersString = this.answersString.concat(text + ',');
         }
       }
+      console.log(this.answer);
     }
     this.isMultiple = (this.content as ContentChoice).multiple;
     this.isLoading = false;

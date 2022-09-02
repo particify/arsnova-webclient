@@ -63,6 +63,7 @@ import { AnswerListComponent } from './answer-list/answer-list.component';
 import { AnnouncementListComponent } from './announcement-list/announcement-list.component';
 import { ContentWordcloudAnswerComponent } from './content-answers/content-wordcloud-answer/content-wordcloud-answer.component';
 import { DragDropBaseComponent } from './drag-drop-base/drag-drop-base.component';
+import { A11yRenderedBodyPipe } from '../../pipes/a11y-rendered-body.pipe';
 
 @NgModule({
   imports: [
@@ -131,7 +132,8 @@ import { DragDropBaseComponent } from './drag-drop-base/drag-drop-base.component
     AnswerListComponent,
     AnnouncementListComponent,
     ContentWordcloudAnswerComponent,
-    DragDropBaseComponent
+    DragDropBaseComponent,
+    A11yRenderedBodyPipe
   ],
   exports: [
     RoomJoinComponent,
@@ -177,7 +179,8 @@ import { DragDropBaseComponent } from './drag-drop-base/drag-drop-base.component
     FormattingToolbarComponent,
     AnnouncementComponent,
     AnswerListComponent,
-    ContentWordcloudAnswerComponent
+    ContentWordcloudAnswerComponent,
+    A11yRenderedBodyPipe
   ]
 })
 export class SharedModule {

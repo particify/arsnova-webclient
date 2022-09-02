@@ -1,12 +1,12 @@
 {
   "answer": {
     "a11y-message": "Du kannst jetzt die Inhalte der Fragenserie {{group}} beantworten.",
-    "a11y-current-multiple": "Inhalt {{index}}, {{question}}. Dies ist ein Multiple-Choice-Inhalt. Drücke die Tab-Taste um zu den Antworten zu gelangen und  drücke die Leertaste, um Antworten auszuwählen.",
-    "a11y-current-single": "Inhalt {{index}}, {{question}}. Dies ist ein Single-Choice-Inhalt. Drücke die Tab-Taste um zu den Antworten zu gelangen und navigiere mit den Pfeiltasten, um eine Antwort auszuwählen.",
-    "a11y-current-text": "Inhalt {{index}}, {{question}}. Das ist eine Offene Frage. Um zur Eingabe der Antwort zu gelangen drücke die Tab-Taste.",
-    "a11y-current-slide": "Inhalt {{index}}, {{question}}. Das ist eine Folie.",
-    "a11y-current-sort": "Inhalt {{index}}, {{question}}. Dies ist eine Sortierfrage. Drücke die Tab-Taste, um zu den Antworten zu gelangen und nutze die Pfeiltasten, um sie hoch und runter zu verschieben.",
-    "a11y-already-answered": "Du hast den Inhalt {{question}} bereits beantwortet. Navigiere mit der Tab-Taste zu Ihrer Antwort oder Antworten order drücke die Leertaste um zu den Ergebnissen zu gelangen.",
+    "a11y-current-multiple": "Inhalt {{index}}. Dies ist ein Multiple-Choice-Inhalt. Drücke die Tab-Taste, um zum Inhalt und den Antworten zu gelangen und  drücke die Leertaste, um Antworten auszuwählen.",
+    "a11y-current-single": "Inhalt {{index}}. Dies ist ein Single-Choice-Inhalt. Drücke die Tab-Taste, um zum Inhalt und den Antworten zu gelangen und navigiere mit den Pfeiltasten, um eine Antwort auszuwählen.",
+    "a11y-current-text": "Inhalt {{index}}. Das ist eine Offene Frage. Drücke die Tab-Taste, um zum Inhalt und zur Eingabe der Antwort zu gelangen.",
+    "a11y-current-slide": "Inhalt {{index}}. Das ist eine Folie. Drücke die Tab-Taste zum Inhalt zu gelangen.",
+    "a11y-current-sort": "Inhalt {{index}}. Dies ist eine Sortierfrage. Drücke die Tab-Taste, um zum Inhalt und den Antworten zu gelangen und nutze die Pfeiltasten, um sie hoch und runter zu verschieben.",
+    "a11y-already-answered": "Du hast Inhalt {{index}} bereits beantwortet. Navigiere mit der Tab-Taste zu Ihrer Antwort oder Antworten order drücke die Leertaste um zu den Ergebnissen zu gelangen.",
     "a11y-already-answered-single": "Du hast diesen Inhalt bereits mit der Antwort {{answers}} beantwortet.",
     "a11y-already-answered-multiple": "Du hast diesen Inhalt bereits mit den Antworten {{answers}} beantwortet.",
     "a11y-already-answered-text": "Du hast diesen Inhalt wie folgt beantwortet: {{answer}}.",
