@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { ContentService } from '../../../../services/http/content.service';
 import { AdvancedSnackBarTypes, NotificationService } from '../../../../services/util/notification.service';
 import { ActivatedRoute } from '@angular/router';
@@ -54,11 +53,8 @@ export class ContentSortCreationComponent extends ContentCreationComponent imple
 
   initContentForEditing() {
     this.displayAnswers = this.initContentChoiceEditBase();
+    this.updateDragDropList();
     this.checkIfAnswersExist();
-  }
-
-  drop(event: CdkDragDrop<String[]>) {
-    moveItemInArray(this.displayAnswers, event.previousIndex, event.currentIndex);
   }
 
   answerInputCheck(): boolean {
@@ -77,6 +73,7 @@ export class ContentSortCreationComponent extends ContentCreationComponent imple
     if (this.answerInputCheck()) {
       if (this.displayAnswers.length < 8) {
         this.displayAnswers.push(new DisplayAnswer(new AnswerOption(this.newAnswer), true));
+        this.updateDragDropList();
         this.newAnswer = '';
       } else {
         const msg = this.translationService.instant('content.max-answers');
@@ -88,6 +85,7 @@ export class ContentSortCreationComponent extends ContentCreationComponent imple
   deleteAnswer(index: number) {
     this.displayAnswers.splice(index, 1);
     this.afterAnswerDeletion();
+    this.updateDragDropList();
   }
 
   showWarning(translationKey: string) {
@@ -115,6 +113,10 @@ export class ContentSortCreationComponent extends ContentCreationComponent imple
       const msg = this.translationService.instant('content.need-answers');
       this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
     }
+  }
+
+  updateDragDropList() {
+    this.dragDroplist = this.displayAnswers;
   }
 
 }

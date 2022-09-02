@@ -157,6 +157,7 @@
     "a11y-wordcloud-info": "Used keywords by frequency in descending order.",
     "a11y-sort-content": "Position {{index}} of {{length}}: {{content}}.",
     "a11y-content-item-selected": "Content {{index}} of {{length}}: {{body}}",
+    "a11y-sort-answer": "Position {{index}} of {{length}}: {{answer}}.",
     "abort": "Abort",
     "answer": "Answer",
     "add-answer": "Add answer",

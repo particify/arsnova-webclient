@@ -12,6 +12,7 @@ import { ContentText } from '@arsnova/app/models/content-text';
 import { ContentFlashcard } from '@arsnova/app/models/content-flashcard';
 import { AnnounceService } from '../../../../services/util/announce.service';
 import { ActivatedRoute } from '@angular/router';
+import { DragDropBaseComponent } from '../../../shared/drag-drop-base/drag-drop-base.component';
 
 export class DisplayAnswer {
   answerOption: AnswerOption;
@@ -28,7 +29,7 @@ export class DisplayAnswer {
   templateUrl: './content-creation.component.html',
   styleUrls: ['./content-creation.component.scss']
 })
-export class ContentCreationComponent implements OnInit, OnDestroy {
+export class ContentCreationComponent extends DragDropBaseComponent implements OnInit, OnDestroy {
 
   private createEventSubscription: Subscription;
 
@@ -55,7 +56,9 @@ export class ContentCreationComponent implements OnInit, OnDestroy {
               protected route: ActivatedRoute,
               protected contentGroupService: ContentGroupService,
               protected announceService: AnnounceService
-  ) { }
+  ) {
+    super();
+  }
 
   ngOnInit(): void {
     this.route.data.subscribe(data => {
