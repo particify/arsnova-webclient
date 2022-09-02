@@ -38,7 +38,8 @@ export class SurveyPageComponent implements OnInit, OnDestroy, AfterContentInit 
 
   survey: Survey[] = [];
 
-  isCreator = false;
+  userRole: typeof UserRole = UserRole;
+  role: UserRole;
   userId: string;
   roomId: string;
   shortId: string;
@@ -92,7 +93,7 @@ export class SurveyPageComponent implements OnInit, OnDestroy, AfterContentInit 
     this.route.data.subscribe(data => {
       this.roomId = data.room.id;
       this.shortId = data.room.shortId;
-      this.isCreator = data.viewRole === UserRole.CREATOR;
+      this.role = data.viewRole;
       this.loadConfig(data.room);
       this.feedbackService.startSub(data.room.id);
       this.sub = this.feedbackService.messageEvent.subscribe(message => {
@@ -150,7 +151,7 @@ export class SurveyPageComponent implements OnInit, OnDestroy, AfterContentInit 
     if (this.room.extensions && this.room.extensions.feedback && this.room.extensions.feedback['type']) {
       this.type = this.room.extensions.feedback['type'];
     } else {
-      if (this.isCreator) {
+      if (this.role === UserRole.CREATOR) {
         this.roomService.changeFeedbackType(this.roomId, this.type);
       }
     }
@@ -203,7 +204,7 @@ export class SurveyPageComponent implements OnInit, OnDestroy, AfterContentInit 
   }
 
   submitAnswer(state: number) {
-    if (!this.isCreator) {
+    if (this.role === UserRole.PARTICIPANT) {
       this.wsFeedbackService.send(this.userId, state, this.roomId);
     }
   }
@@ -250,7 +251,7 @@ export class SurveyPageComponent implements OnInit, OnDestroy, AfterContentInit 
           this.loadConfig(room);
           this.isClosed = false;
         });
-        if (this.isCreator) {
+        if (this.role === UserRole.CREATOR) {
           this.sendStateChangeEvent(true);
           this.eventService.broadcast(RemoteMessage.SURVEY_STATE_CHANGED, 'started');
         }
@@ -258,7 +259,7 @@ export class SurveyPageComponent implements OnInit, OnDestroy, AfterContentInit 
       case FeedbackMessageType.STOPPED:
         this.room.settings['feedbackLocked'] = true;
         this.isClosed = true;
-        if (this.isCreator) {
+        if (this.role === UserRole.CREATOR) {
           this.sendStateChangeEvent(false);
           this.eventService.broadcast(RemoteMessage.SURVEY_STATE_CHANGED, 'stopped');
         }

@@ -26,6 +26,7 @@ import { Room } from '../../../../models/room';
 import { ContentGroupStatistics } from '../../../../models/content-group-statistics';
 import { MarkdownFeatureset } from '../../../../services/http/formatting.service';
 import { DragDropBaseComponent } from '../../../shared/drag-drop-base/drag-drop-base.component';
+import { UserRole } from '../../../../models/user-roles.enum';
 
 @Component({
   selector: 'app-group-content',
@@ -77,6 +78,8 @@ export class GroupContentComponent extends DragDropBaseComponent implements OnIn
 
   navBarStateSubscription: Subscription;
 
+  isModerator = false;
+
   constructor(
     protected contentService: ContentService,
     protected roomStatsService: RoomStatsService,
@@ -105,6 +108,7 @@ export class GroupContentComponent extends DragDropBaseComponent implements OnIn
     this.onInit = true;
     this.iconList = this.contentService.getTypeIcons();
     this.route.data.subscribe(data => {
+      this.isModerator = data.userRole === UserRole.EXECUTIVE_MODERATOR;
       this.room = data.room;
       this.route.params.subscribe(params => {
         this.setContentGroup(params['seriesName']);
