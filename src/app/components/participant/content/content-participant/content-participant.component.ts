@@ -55,7 +55,6 @@ export class ContentParticipantComponent implements OnInit {
           this.answersString = this.answersString.concat(text + ',');
         }
       }
-      console.log(this.answer);
     }
     this.isMultiple = (this.content as ContentChoice).multiple;
     this.isLoading = false;
