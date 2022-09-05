@@ -31,6 +31,7 @@ import { HotkeyService } from '@arsnova/app/services/util/hotkey.service';
 import { Room } from '@arsnova/app/models/room';
 import { CounterBracesPipe } from '@arsnova/app/pipes/counter-braces.pipe';
 import { of } from 'rxjs';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 describe('CommentListComponent', () => {
   let component: CommentListComponent;
@@ -154,6 +155,9 @@ describe('CommentListComponent', () => {
           provide: CounterBracesPipe,
           useValue: mockCounterBracesPipe
         }
+      ],
+      schemas: [
+        NO_ERRORS_SCHEMA
       ]
     })
     .compileComponents();

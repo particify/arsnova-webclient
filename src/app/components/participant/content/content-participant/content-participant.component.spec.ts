@@ -6,6 +6,7 @@ import { ContentType } from '@arsnova/app/models/content-type.enum';
 import { ContentState } from '@arsnova/app/models/content-state';
 import { Content } from '@arsnova/app/models/content';
 import { A11yRenderedBodyPipe } from '@arsnova/app/pipes/a11y-rendered-body.pipe';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 describe('ContentParticipantComponent', () => {
   let component: ContentParticipantComponent;
@@ -33,6 +34,9 @@ describe('ContentParticipantComponent', () => {
           provide: A11yRenderedBodyPipe,
           useValue: a11yRenderedBodyPipe
         }
+      ],
+      schemas: [
+        NO_ERRORS_SCHEMA
       ]
     })
     .compileComponents();

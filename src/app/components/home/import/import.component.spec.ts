@@ -1,4 +1,4 @@
-import { Injectable, Component, EventEmitter, Inject } from '@angular/core';
+import { Injectable, Component, EventEmitter, Inject, NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { Observable, of } from 'rxjs';
@@ -112,6 +112,9 @@ describe('ImportComponent', () => {
           provide: RoutingService,
           useClass: MockRoutingServie
         }
+      ],
+      schemas: [
+        NO_ERRORS_SCHEMA
       ]
     }).compileComponents()
       .then(() => {

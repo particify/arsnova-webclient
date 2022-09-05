@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { PreviewComponent } from './preview.component';
-import { Injectable } from '@angular/core';
+import { NO_ERRORS_SCHEMA, Injectable } from '@angular/core';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { JsonTranslationLoader } from '@arsnova/testing/test-helpers';
 import { ContentAnswerService } from '@arsnova/app/services/http/content-answer.service';
@@ -46,6 +46,9 @@ describe('PreviewComponent', () => {
           isolate: true
         })
       ],
+      schemas: [
+        NO_ERRORS_SCHEMA
+      ]
     })
       .compileComponents()
       .then(() => {

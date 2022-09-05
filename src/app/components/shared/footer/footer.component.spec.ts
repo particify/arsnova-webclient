@@ -15,7 +15,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatMenuModule } from '@angular/material/menu';
 import { By } from '@angular/platform-browser';
-import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ExtensionPointModule } from '../../../../../projects/extension-point/src/lib/extension-point.module';
 
 describe('FooterComponent', () => {
@@ -80,7 +80,7 @@ describe('FooterComponent', () => {
         }
       ],
       schemas: [
-        CUSTOM_ELEMENTS_SCHEMA
+        NO_ERRORS_SCHEMA
       ]
     })
     .compileComponents();

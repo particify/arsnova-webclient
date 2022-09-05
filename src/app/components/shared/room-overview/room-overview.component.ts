@@ -51,7 +51,9 @@ export class RoomOverviewComponent implements OnDestroy {
     if (this.sub) {
       this.sub.unsubscribe();
     }
-    this.onChangeSubscription.unsubscribe();
+    if (this.onChangeSubscription) {
+      this.onChangeSubscription.unsubscribe();
+    }
     this.unsubscribe();
   }
 

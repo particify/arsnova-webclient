@@ -4,6 +4,7 @@ import { ExportComponent } from './export.component';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { JsonTranslationLoader, MockMatDialogRef } from '@arsnova/testing/test-helpers';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 
 describe('ExportComponent', () => {
@@ -27,6 +28,9 @@ describe('ExportComponent', () => {
           provide: MatDialogRef,
           useClass: MockMatDialogRef
         }
+      ],
+      schemas: [
+        NO_ERRORS_SCHEMA
       ]
     })
     .compileComponents();

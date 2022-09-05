@@ -16,7 +16,7 @@ import { of } from 'rxjs';
 import { GlobalStorageService } from '@arsnova/app/services/util/global-storage.service';
 import { ContentAnswerService } from '@arsnova/app/services/http/content-answer.service';
 import { ContentService } from '@arsnova/app/services/http/content.service';
-import { EventEmitter } from '@angular/core';
+import { NO_ERRORS_SCHEMA, EventEmitter } from '@angular/core';
 import { LikertScaleService } from '@arsnova/app/services/util/likert-scale.service';
 import { ContentScale } from '@arsnova/app/models/content-scale';
 import { LikertScaleTemplate } from '@arsnova/app/models/likert-scale-template.enum';
@@ -89,6 +89,9 @@ describe('ContentScaleParticipantComponent', () => {
           provide: LikertScaleService,
           useValue: mockLikertScaleService
         }
+      ],
+      schemas: [
+        NO_ERRORS_SCHEMA
       ]
     })
     .compileComponents();

@@ -3,6 +3,7 @@ import { HotkeysComponent } from './hotkeys.component';
 import { JsonTranslationLoader } from '@arsnova/testing/test-helpers';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 describe('HotkeysComponent', () => {
   let component: HotkeysComponent;
@@ -31,6 +32,9 @@ describe('HotkeysComponent', () => {
           provide: MAT_DIALOG_DATA,
           useValue: mockDialogData
         }
+      ],
+      schemas: [
+        NO_ERRORS_SCHEMA
       ]
     })
     .compileComponents();

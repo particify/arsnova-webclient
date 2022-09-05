@@ -19,7 +19,7 @@ import { ClientAuthentication } from '@arsnova/app/models/client-authentication'
 import { AuthProvider } from '@arsnova/app/models/auth-provider';
 import { User } from '@arsnova/app/models/user';
 import { Person } from '@arsnova/app/models/person';
-import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { A11yIntroPipe } from '@arsnova/app/pipes/a11y-intro.pipe';
 
 describe('UserProfileComponent', () => {
@@ -90,7 +90,7 @@ describe('UserProfileComponent', () => {
         }
       ],
       schemas: [
-        CUSTOM_ELEMENTS_SCHEMA
+        NO_ERRORS_SCHEMA
       ]
     })
     .compileComponents();

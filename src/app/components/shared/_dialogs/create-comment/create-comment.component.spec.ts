@@ -13,6 +13,7 @@ import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { GlobalStorageService } from '@arsnova/app/services/util/global-storage.service';
 import { LanguageService } from '@arsnova/app/services/util/language.service';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 describe('CreateCommentComponent', () => {
   let component: CreateCommentComponent;
@@ -67,6 +68,9 @@ describe('CreateCommentComponent', () => {
           provide: MAT_DIALOG_DATA,
           useValue: mockDialogData
         }
+      ],
+      schemas: [
+        NO_ERRORS_SCHEMA
       ]
     })
     .compileComponents();

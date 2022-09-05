@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { ContentCreationPageComponent } from './content-creation-page.component';
-import { Injectable } from '@angular/core';
+import { NO_ERRORS_SCHEMA, Injectable } from '@angular/core';
 import { ContentService } from '../../../../services/http/content.service';
 import { NotificationService } from '../../../../services/util/notification.service';
 import { MatDialog } from '@angular/material/dialog';
@@ -170,6 +170,9 @@ describe('ContentCreationPageComponent', () => {
         }),
         MatMenuModule
       ],
+      schemas: [
+        NO_ERRORS_SCHEMA
+      ]
     })
       .compileComponents()
       .then(() => {

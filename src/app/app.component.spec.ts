@@ -3,7 +3,7 @@ import { TestBed, ComponentFixture, waitForAsync, fakeAsync } from '@angular/cor
 import { AppComponent } from './app.component';
 import { ApiConfigService } from './services/http/api-config.service';
 import { RouterTestingModule } from '@angular/router/testing';
-import { Component, Injectable, EventEmitter } from '@angular/core';
+import { Component, Injectable, EventEmitter, NO_ERRORS_SCHEMA } from '@angular/core';
 import { of } from 'rxjs';
 import { TrackingService } from './services/util/tracking.service';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
@@ -120,6 +120,9 @@ describe('AppComponent', () => {
       imports: [
         RouterTestingModule,
         HttpClientTestingModule
+      ],
+      schemas: [
+        NO_ERRORS_SCHEMA
       ]
     });
     fixture = TestBed.createComponent(AppComponent);

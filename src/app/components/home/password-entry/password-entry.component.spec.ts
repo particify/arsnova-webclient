@@ -3,6 +3,7 @@ import { PasswordEntryComponent } from './password-entry.component';
 import { NotificationService } from '@arsnova/app/services/util/notification.service';
 import { MockNotificationService, JsonTranslationLoader } from '@arsnova/testing/test-helpers';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 describe('PasswordEntryComponent', () => {
   let component: PasswordEntryComponent;
@@ -25,7 +26,10 @@ describe('PasswordEntryComponent', () => {
           provide: NotificationService,
           useClass: MockNotificationService
         }
-      ]      
+      ],
+      schemas: [
+        NO_ERRORS_SCHEMA
+      ]  
     })
     .compileComponents();
     fixture = TestBed.createComponent(PasswordEntryComponent);

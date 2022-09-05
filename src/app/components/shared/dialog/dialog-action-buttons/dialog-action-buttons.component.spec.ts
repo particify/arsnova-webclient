@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { DialogActionButtonsComponent } from './dialog-action-buttons.component';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { JsonTranslationLoader } from '@arsnova/testing/test-helpers';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 describe('DialogActionButtonsComponent', () => {
   let component: DialogActionButtonsComponent;
@@ -18,6 +19,9 @@ describe('DialogActionButtonsComponent', () => {
           },
           isolate: true
         })
+      ],
+      schemas: [
+        NO_ERRORS_SCHEMA
       ]
     })
     .compileComponents();

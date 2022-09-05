@@ -3,6 +3,7 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
  import { MockMatDialogRef, JsonTranslationLoader } from '@arsnova/testing/test-helpers';
 import { MatDialogRef } from '@angular/material/dialog';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 
  describe('OverlayComponent', () => {
   let component: OverlayComponent;
@@ -25,6 +26,9 @@ import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
           provide: MatDialogRef,
           useClass: MockMatDialogRef
         },
+      ],
+      schemas: [
+        NO_ERRORS_SCHEMA
       ]
     })
     .compileComponents();

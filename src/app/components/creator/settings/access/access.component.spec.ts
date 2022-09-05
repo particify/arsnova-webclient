@@ -27,6 +27,7 @@ import { HarnessLoader } from '@angular/cdk/testing';
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 import { MatButtonHarness } from '@angular/material/button/testing';
 import { AdvancedSnackBarTypes } from '@arsnova/app/services/util/notification.service';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 describe('AccessComponent', () => {
   let component: AccessComponent;
@@ -99,6 +100,9 @@ describe('AccessComponent', () => {
           },
           isolate: true
         })
+      ],
+      schemas: [
+        NO_ERRORS_SCHEMA
       ]
     })
     .compileComponents();

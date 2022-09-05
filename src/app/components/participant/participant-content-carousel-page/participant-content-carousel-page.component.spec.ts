@@ -23,6 +23,7 @@ import { MockLocationStrategy } from '@angular/common/testing';
 import { AuthenticationService } from '@arsnova/app/services/http/authentication.service';
 import { Room } from '@arsnova/app/models/room';
 import { A11yIntroPipe } from '@arsnova/app/pipes/a11y-intro.pipe';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 describe('ParticipantContentCarouselPageComponent', () => {
   let component: ParticipantContentCarouselPageComponent;
@@ -119,6 +120,9 @@ describe('ParticipantContentCarouselPageComponent', () => {
           provide: A11yIntroPipe,
           useValue: a11yIntroPipe
         }
+      ],
+      schemas: [
+        NO_ERRORS_SCHEMA
       ]
     })
     .compileComponents();

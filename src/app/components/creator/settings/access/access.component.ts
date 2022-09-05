@@ -116,7 +116,6 @@ export class AccessComponent implements OnInit, OnDestroy {
 
   getUser() {
     this.userService.getUserByLoginId(this.loginId).subscribe(list => {
-      console.log(list);
       const userFound = list.length > 0;
       this.currentInputIsChecked = true;
       if (userFound) {

@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { NO_ERRORS_SCHEMA, Injectable } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute, ActivatedRouteSnapshot, Router } from '@angular/router';
 import { AuthProvider } from '@arsnova/app/models/auth-provider';
@@ -63,6 +63,9 @@ describe('RedeemTokenComponent', () => {
           provide: RoomMembershipService,
           useClass: MockRoomMembershipService
         }
+      ],
+      schemas: [
+        NO_ERRORS_SCHEMA
       ]
     })
     .compileComponents();

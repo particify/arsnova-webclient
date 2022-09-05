@@ -13,6 +13,7 @@ import {
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { UserService } from '@arsnova/app/services/http/user.service';
 import { of } from 'rxjs';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 describe('PasswordResetComponent', () => {
   let component: PasswordResetComponent;
@@ -59,6 +60,9 @@ describe('PasswordResetComponent', () => {
           provide: ActivatedRoute,
           useValue: activatedRouteStub
         }
+      ],
+      schemas: [
+        NO_ERRORS_SCHEMA
       ]
     })
     .compileComponents();

@@ -18,6 +18,7 @@ import { NotificationService } from '@arsnova/app/services/util/notification.ser
 import { of } from 'rxjs';
 import { ContentGroup } from '@arsnova/app/models/content-group';
 import { A11yRenderedBodyPipe } from '@arsnova/app/pipes/a11y-rendered-body.pipe';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 describe('StatisticListComponent', () => {
   let component: StatisticListComponent;
@@ -86,6 +87,9 @@ describe('StatisticListComponent', () => {
           provide: A11yRenderedBodyPipe,
           useValue: a11yRenderedBodyPipe
         }
+      ],
+      schemas: [
+        NO_ERRORS_SCHEMA
       ]
     })
     .compileComponents();

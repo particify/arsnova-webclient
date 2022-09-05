@@ -3,6 +3,7 @@ import { YesNoDialogComponent } from './yes-no-dialog.component';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { JsonTranslationLoader, MockMatDialogRef } from '@arsnova/testing/test-helpers';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 describe('YesNoDialogComponent', () => {
   let component: YesNoDialogComponent;
@@ -35,6 +36,9 @@ describe('YesNoDialogComponent', () => {
           provide: MAT_DIALOG_DATA,
           useValue: mockMatDialogData
         }
+      ],
+      schemas: [
+        NO_ERRORS_SCHEMA
       ]
     })
     .compileComponents();

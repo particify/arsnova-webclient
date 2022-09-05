@@ -10,6 +10,7 @@ import {
 } from '@arsnova/testing/test-helpers';
 import { GlobalStorageService } from '@arsnova/app/services/util/global-storage.service';
 import { UserRole } from '@arsnova/app/models/user-roles.enum';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 describe('ContentGroupsComponent', () => {
   let component: ContentGroupsComponent;
@@ -52,6 +53,9 @@ describe('ContentGroupsComponent', () => {
           provide: Router,
           useClass: MockRouter
         }
+      ],
+      schemas: [
+        NO_ERRORS_SCHEMA
       ]
     })
     .compileComponents();

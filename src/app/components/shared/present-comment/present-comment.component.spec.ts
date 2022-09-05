@@ -1,3 +1,4 @@
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { EventService } from '@arsnova/app/services/util/event.service';
 import { HotkeyService } from '@arsnova/app/services/util/hotkey.service';
@@ -32,6 +33,9 @@ describe('PresentCommentComponent', () => {
           provide: HotkeyService,
           useValue: mockHotKeyService
         }
+      ],
+      schemas: [
+        NO_ERRORS_SCHEMA
       ]
     })
     .compileComponents();

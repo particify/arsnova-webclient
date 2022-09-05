@@ -12,6 +12,7 @@ import { of } from 'rxjs';
 import { RoundStatistics } from '@arsnova/app/models/round-statistics';
 import { AnswerStatistics } from '@arsnova/app/models/answer-statistics';
 import { PresentationService } from '@arsnova/app/services/util/presentation.service';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 describe('StatisticSortComponent', () => {
   let component: StatisticSortComponent;
@@ -69,6 +70,9 @@ describe('StatisticSortComponent', () => {
           provide: PresentationService,
           useValue: mockPresentationService
         }
+      ],
+      schemas: [
+        NO_ERRORS_SCHEMA
       ]
     })
     .compileComponents();

@@ -14,6 +14,7 @@ import { AnswerStatistics } from '@arsnova/app/models/answer-statistics';
 import { PresentationService } from '@arsnova/app/services/util/presentation.service';
 import { GlobalStorageService } from '@arsnova/app/services/util/global-storage.service';
 import { MockGlobalStorageService } from '@arsnova/testing/test-helpers';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 describe('StatisticChoiceComponent', () => {
   let component: StatisticChoiceComponent;
@@ -76,6 +77,9 @@ describe('StatisticChoiceComponent', () => {
           provide: GlobalStorageService,
           useClass: MockGlobalStorageService
         }
+      ],
+      schemas: [
+        NO_ERRORS_SCHEMA
       ]
     })
     .compileComponents();

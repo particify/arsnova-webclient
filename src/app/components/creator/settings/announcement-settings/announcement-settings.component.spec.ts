@@ -8,6 +8,7 @@ import { TranslateLoader, TranslateModule, TranslateService } from '@ngx-transla
 
 import { AnnouncementSettingsComponent } from './announcement-settings.component';
 import { of } from 'rxjs';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 describe('AnnouncementSettingsComponent', () => {
   let component: AnnouncementSettingsComponent;
@@ -43,6 +44,9 @@ describe('AnnouncementSettingsComponent', () => {
           },
           isolate: true
         })
+      ],
+      schemas: [
+        NO_ERRORS_SCHEMA
       ]
     })
     .compileComponents();

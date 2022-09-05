@@ -20,7 +20,7 @@ import { AnnounceService } from '@arsnova/app/services/util/announce.service';
 import { MockLocationStrategy } from '@angular/common/testing';
 import { AuthenticationService } from '@arsnova/app/services/http/authentication.service';
 import { Room } from '@arsnova/app/models/room';
-import { EventEmitter, Pipe, PipeTransform } from '@angular/core';
+import { NO_ERRORS_SCHEMA, EventEmitter, Pipe, PipeTransform } from '@angular/core';
 import { UserRole } from '@arsnova/app/models/user-roles.enum';
 import { SplitShortIdPipe } from '@arsnova/app/pipes/split-short-id.pipe';
 import { RoomService } from '@arsnova/app/services/http/room.service';
@@ -159,6 +159,9 @@ describe('ParticipantOverviewComponent', () => {
           provide: SplitShortIdPipe,
           useValue: splitShortIdPipe
         }
+      ],
+      schemas: [
+        NO_ERRORS_SCHEMA
       ]
     })
     .compileComponents();

@@ -14,6 +14,7 @@ import { ActivatedRoute } from '@angular/router';
 import { NotificationService } from '@arsnova/app/services/util/notification.service';
 import { EventService } from '@arsnova/app/services/util/event.service';
 import { UserService } from '@arsnova/app/services/http/user.service';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 
  describe('UserActivationComponent', () => {
   let component: UserActivationComponent;
@@ -63,6 +64,9 @@ import { UserService } from '@arsnova/app/services/http/user.service';
           provide: UserService,
           useValue: mockUserService
         }
+      ],
+      schemas: [
+        NO_ERRORS_SCHEMA
       ]
     })
     .compileComponents();

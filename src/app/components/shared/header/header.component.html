@@ -14,7 +14,7 @@
         <mat-icon class="icon-primary">home</mat-icon>
         <span>{{'header.my-rooms' | translate}}</span>
       </button>
-      <button id="login-button" *ngIf="isGuest()" mat-menu-item [routerLink]="'login'">
+      <button id="login-button" *ngIf="isGuest()" mat-menu-item (click)="navToLogin()">
         <mat-icon class="icon-primary">exit_to_app</mat-icon>
         <span>{{ 'header.login' | translate }}</span>
       </button>

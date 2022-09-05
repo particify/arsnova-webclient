@@ -12,7 +12,7 @@ import {
 import { NotificationService } from '@arsnova/app/services/util/notification.service';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { RoomService } from '@arsnova/app/services/http/room.service';
-import { Injectable } from '@angular/core';
+import { NO_ERRORS_SCHEMA, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { DialogService } from '@arsnova/app/services/util/dialog.service';
 import { GlobalStorageService } from '@arsnova/app/services/util/global-storage.service';
@@ -81,6 +81,9 @@ describe('RoomComponent', () => {
           },
           isolate: true
         })
+      ],
+      schemas: [
+        NO_ERRORS_SCHEMA
       ]
     })
     .compileComponents();

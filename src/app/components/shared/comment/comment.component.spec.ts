@@ -26,6 +26,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatMenuModule } from '@angular/material/menu';
 import { of } from 'rxjs';
 import { Comment } from '@arsnova/app/models/comment';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 describe('CommentComponent', () => {
   let component: CommentComponent;
@@ -111,6 +112,9 @@ describe('CommentComponent', () => {
           provide: MatDialog,
           useClass: MockMatDialog
         }
+      ],
+      schemas: [
+        NO_ERRORS_SCHEMA
       ]
     })
     .compileComponents();

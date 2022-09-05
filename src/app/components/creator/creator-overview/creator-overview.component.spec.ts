@@ -24,7 +24,7 @@ import { MockLocationStrategy } from '@angular/common/testing';
 import { LocalFileService } from '@arsnova/app/services/util/local-file.service';
 import { HotkeyService } from '@arsnova/app/services/util/hotkey.service';
 import { A11yIntroPipe } from '@arsnova/app/pipes/a11y-intro.pipe';
-import { Injectable } from '@angular/core';
+import { NO_ERRORS_SCHEMA, Injectable } from '@angular/core';
 import { of } from 'rxjs';
 import { Content } from '@arsnova/app/models/content';
 import { ContentType } from '@arsnova/app/models/content-type.enum';
@@ -238,6 +238,9 @@ describe('CreatorOverviewComponent', () => {
         }),
         MatMenuModule
       ],
+      schemas: [
+        NO_ERRORS_SCHEMA
+      ]
     })
     .compileComponents();
   }));

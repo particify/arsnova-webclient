@@ -12,6 +12,7 @@ import { RoundStatistics } from '@arsnova/app/models/round-statistics';
 import { AnswerStatistics } from '@arsnova/app/models/answer-statistics';
 import { ContentAnswerService } from '@arsnova/app/services/http/content-answer.service';
 import { ContentText } from '@arsnova/app/models/content-text';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 describe('StatisticTextComponent', () => {
   let component: StatisticTextComponent;
@@ -71,6 +72,9 @@ describe('StatisticTextComponent', () => {
           provide: ContentAnswerService,
           useValue: mockContentAnswerService
         }
+      ],
+      schemas: [
+        NO_ERRORS_SCHEMA
       ]
     })
     .compileComponents();

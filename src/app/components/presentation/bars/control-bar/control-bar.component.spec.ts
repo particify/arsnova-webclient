@@ -20,7 +20,7 @@ import { ContentGroupService } from '@arsnova/app/services/http/content-group.se
 import { AnnounceService } from '@arsnova/app/services/util/announce.service';
 import { MockLocationStrategy } from '@angular/common/testing';
 import { Room } from '@arsnova/app/models/room';
-import { EventEmitter } from '@angular/core';
+import { NO_ERRORS_SCHEMA, EventEmitter } from '@angular/core';
 import { SplitShortIdPipe } from '@arsnova/app/pipes/split-short-id.pipe';
 import { FeedbackService } from '@arsnova/app/services/http/feedback.service';
 import { Message } from '@stomp/stompjs';
@@ -185,6 +185,9 @@ describe('ControlBarComponent', () => {
           provide: RoomService,
           useValue: mockRoomService
         }
+      ],
+      schemas: [
+        NO_ERRORS_SCHEMA
       ]
     })
     .compileComponents();
