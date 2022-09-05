@@ -182,7 +182,7 @@
       <span>{{ ('comment-list.' + (isModerator ? 'public-list' : 'moderation')) | translate }}</span>
     </button>
 
-    <button mat-menu-item (click)="navToSettings()">
+    <button mat-menu-item (click)="navToSettings()" *ngIf="viewRole === 'CREATOR'">
       <mat-icon class="settings-icon">settings</mat-icon>
       <span>{{ 'comment-list.settings' | translate }}</span>
     </button>
