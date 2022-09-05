@@ -12,7 +12,7 @@ import {
 import { NotificationService } from '@arsnova/app/services/util/notification.service';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { RoomService } from '@arsnova/app/services/http/room.service';
-import { Injectable } from '@angular/core';
+import { NO_ERRORS_SCHEMA, Injectable } from '@angular/core';
 import { ActivatedRoute, ActivatedRouteSnapshot, Router } from '@angular/router';
 import { EventService } from '@arsnova/app/services/util/event.service';
 import { MatDialog } from '@angular/material/dialog';
@@ -76,6 +76,9 @@ describe('SettingsComponent', () => {
           },
           isolate: true
         })
+      ],
+      schemas: [
+        NO_ERRORS_SCHEMA
       ]
     })
       .compileComponents();

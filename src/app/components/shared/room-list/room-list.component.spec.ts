@@ -21,6 +21,7 @@ import { SplitShortIdPipe } from '@arsnova/app/pipes/split-short-id.pipe';
 import { ClientAuthentication } from '@arsnova/app/models/client-authentication';
 import { AuthProvider } from '@arsnova/app/models/auth-provider';
 import { MatMenuModule } from '@angular/material/menu';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 describe('RoomListComponent', () => {
   let component: RoomListComponent;
@@ -99,6 +100,9 @@ describe('RoomListComponent', () => {
           provide: SplitShortIdPipe,
           useValue: mockSplitShortId
         }
+      ],
+      schemas: [
+        NO_ERRORS_SCHEMA
       ]
     })
     .compileComponents();

@@ -6,6 +6,7 @@ import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { GlobalStorageService } from '@arsnova/app/services/util/global-storage.service';
 import { ApiConfigService } from '@arsnova/app/services/http/api-config.service';
 import { of } from 'rxjs';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 describe('UpdateInfoComponent', () => {
   let component: UpdateInfoComponent;
@@ -60,6 +61,9 @@ describe('UpdateInfoComponent', () => {
           provide: MAT_DIALOG_DATA,
           useValue: mockMatDialogData
         }
+      ],
+      schemas: [
+        NO_ERRORS_SCHEMA
       ]
     })
     .compileComponents();

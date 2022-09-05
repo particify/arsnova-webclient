@@ -9,6 +9,7 @@ import { ActivatedRouteStub, JsonTranslationLoader, MockNotificationService } fr
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 
 import { AnswerListComponent } from './answer-list.component';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 describe('AnswerListComponent', () => {
   let component: AnswerListComponent;
@@ -57,6 +58,9 @@ describe('AnswerListComponent', () => {
           provide: DialogService,
           useValue: dialogService
         }
+      ],
+      schemas: [
+        NO_ERRORS_SCHEMA
       ]
     })
     .compileComponents();

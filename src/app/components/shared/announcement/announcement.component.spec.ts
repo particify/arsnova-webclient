@@ -6,6 +6,7 @@ import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 
 import { AnnouncementComponent } from './announcement.component';
 import { UserAnnouncement } from '@arsnova/app/models/user-announcement';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 describe('AnnouncementComponent', () => {
   let component: AnnouncementComponent;
@@ -31,6 +32,9 @@ describe('AnnouncementComponent', () => {
           },
           isolate: true
         })
+      ],
+      schemas: [
+        NO_ERRORS_SCHEMA
       ]
     })
     .compileComponents();

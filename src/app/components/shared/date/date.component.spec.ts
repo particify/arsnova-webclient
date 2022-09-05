@@ -1,3 +1,4 @@
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { DateFormatPipe } from '@arsnova/app/pipes/date-format.pipe';
 import { DateFromNowPipe } from '@arsnova/app/pipes/date-from-now.pipe';
@@ -38,6 +39,9 @@ describe('DateComponent', () => {
           provide: DateFormatPipe,
           useValue: dateFormatPipeStub
         }
+      ],
+      schemas: [
+        NO_ERRORS_SCHEMA
       ]
     })
     .compileComponents();

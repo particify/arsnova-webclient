@@ -17,7 +17,7 @@ import { EventService } from '@arsnova/app/services/util/event.service';
 import { AnnounceService } from '@arsnova/app/services/util/announce.service';
 import { AuthenticationService } from '@arsnova/app/services/http/authentication.service';
 import { Room } from '@arsnova/app/models/room';
-import { EventEmitter, Pipe, PipeTransform, Renderer2 } from '@angular/core';
+import { NO_ERRORS_SCHEMA, EventEmitter, Pipe, PipeTransform, Renderer2 } from '@angular/core';
 import { UserRole } from '@arsnova/app/models/user-roles.enum';
 import { RoomService } from '@arsnova/app/services/http/room.service';
 import { MockLangService } from '@arsnova/testing/test-helpers';
@@ -133,6 +133,9 @@ describe('SurveyPageComponent', () => {
           provide: A11yIntroPipe,
           useValue: mockA11yIntroPipe
         }
+      ],
+      schemas: [
+        NO_ERRORS_SCHEMA
       ]
     })
     .compileComponents();

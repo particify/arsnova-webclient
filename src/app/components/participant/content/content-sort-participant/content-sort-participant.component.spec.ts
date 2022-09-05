@@ -16,7 +16,7 @@ import { of } from 'rxjs';
 import { GlobalStorageService } from '@arsnova/app/services/util/global-storage.service';
 import { ContentAnswerService } from '@arsnova/app/services/http/content-answer.service';
 import { ContentService } from '@arsnova/app/services/http/content.service';
-import { EventEmitter } from '@angular/core';
+import { NO_ERRORS_SCHEMA, EventEmitter } from '@angular/core';
 import { ContentChoice } from '@arsnova/app/models/content-choice';
 import { ContentType } from '@arsnova/app/models/content-type.enum';
 import { ContentState } from '@arsnova/app/models/content-state';
@@ -82,6 +82,9 @@ describe('ContentSortParticipantComponent', () => {
           provide: ContentService,
           useValue: mockContentService
         }
+      ],
+      schemas: [
+        NO_ERRORS_SCHEMA
       ]
     })
     .compileComponents();

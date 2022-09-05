@@ -15,6 +15,7 @@ import { ThemeService } from '@arsnova/theme/theme.service';
 import { ApiConfigService } from '@arsnova/app/services/http/api-config.service';
 import { SplitShortIdPipe } from '@arsnova/app/pipes/split-short-id.pipe';
 import { of } from 'rxjs';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 class MockApiConfigService {
   getApiConfig$() {
@@ -76,6 +77,9 @@ describe('QrCodeComponent', () => {
           provide: MAT_DIALOG_DATA,
           useClass: MockMatDialogData
         }
+      ],
+      schemas: [
+        NO_ERRORS_SCHEMA
       ]
     })
     .compileComponents();

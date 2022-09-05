@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { ContentGroupCreationComponent } from './content-group-creation.component';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
-import { Injectable } from '@angular/core';
+import { NO_ERRORS_SCHEMA, Injectable } from '@angular/core';
 import { NotificationService } from '@arsnova/app/services/util/notification.service';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { EventService } from '@arsnova/app/services/util/event.service';
@@ -56,6 +56,9 @@ describe('ContentGroupCreationComponent', () => {
           provide: MatDialogRef,
           useClass: MockMatDialogRef
         }
+      ],
+      schemas: [
+        NO_ERRORS_SCHEMA
       ]
     })
     .compileComponents();

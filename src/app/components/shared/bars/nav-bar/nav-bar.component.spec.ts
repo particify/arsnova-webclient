@@ -8,7 +8,7 @@ import { GlobalStorageService } from '@arsnova/app/services/util/global-storage.
 import { EventService } from '@arsnova/app/services/util/event.service';
 import { ContentGroupService } from '@arsnova/app/services/http/content-group.service';
 import { Room } from '@arsnova/app/models/room';
-import { EventEmitter } from '@angular/core';
+import { NO_ERRORS_SCHEMA, EventEmitter } from '@angular/core';
 import { FeedbackService } from '@arsnova/app/services/http/feedback.service';
 import { Message } from '@stomp/stompjs';
 import { RoutingService } from '@arsnova/app/services/util/routing.service';
@@ -119,6 +119,9 @@ describe('NavBarComponent', () => {
           provide: RoomService,
           useValue: mockRoomService
         }
+      ],
+      schemas: [
+        NO_ERRORS_SCHEMA
       ]
     })
     .compileComponents();

@@ -9,6 +9,7 @@ import { JsonTranslationLoader, MockMatDialogRef, MockNotificationService } from
 import { TranslateLoader, TranslateModule, TranslateService } from '@ngx-translate/core';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { Comment } from '@arsnova/app/models/comment';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 describe('CommentAnswerComponent', () => {
   let component: CommentAnswerComponent;
@@ -67,6 +68,9 @@ describe('CommentAnswerComponent', () => {
           provide: A11yIntroPipe,
           useValue: a11yIntroPipe
         }
+      ],
+      schemas: [
+        NO_ERRORS_SCHEMA
       ]
     })
     .compileComponents();

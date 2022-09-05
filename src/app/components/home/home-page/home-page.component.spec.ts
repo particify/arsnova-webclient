@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { HomePageComponent } from './home-page.component';
-import { Component, CUSTOM_ELEMENTS_SCHEMA, Input, Pipe, PipeTransform, Renderer2 } from '@angular/core';
+import { Component, NO_ERRORS_SCHEMA, Input, Pipe, PipeTransform, Renderer2 } from '@angular/core';
 import { EventService } from '../../../services/util/event.service';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { DialogService } from '../../../services/util/dialog.service';
@@ -112,7 +112,7 @@ describe('HomePageComponent', () => {
         }
       ],
       schemas: [
-        CUSTOM_ELEMENTS_SCHEMA
+        NO_ERRORS_SCHEMA
       ]
     }).compileComponents();
 

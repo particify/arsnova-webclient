@@ -11,6 +11,7 @@ import {
 } from '@arsnova/testing/test-helpers';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { UserService } from '@arsnova/app/services/http/user.service';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 describe('RequestPasswordResetComponent', () => {
   let component: RequestPasswordResetComponent;
@@ -49,6 +50,9 @@ describe('RequestPasswordResetComponent', () => {
           provide: EventService,
           useClass: MockEventService
         }
+      ],
+      schemas: [
+        NO_ERRORS_SCHEMA
       ]
     })
     .compileComponents();

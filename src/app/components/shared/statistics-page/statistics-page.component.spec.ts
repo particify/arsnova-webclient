@@ -8,6 +8,7 @@ import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { Room } from '@arsnova/app/models/room';
 import { of } from 'rxjs';
 import { RoomStats } from '@arsnova/app/models/room-stats';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 describe('StatisticsPageComponent', () => {
   let component: StatisticsPageComponent;
@@ -59,6 +60,9 @@ describe('StatisticsPageComponent', () => {
           provide: Router,
           useClass: MockRouter
         }
+      ],
+      schemas: [
+        NO_ERRORS_SCHEMA
       ]
     })
     .compileComponents();

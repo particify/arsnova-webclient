@@ -14,7 +14,7 @@ import { ContentService } from '@arsnova/app/services/http/content.service';
 import { ContentChoice } from '@arsnova/app/models/content-choice';
 import { ContentType } from '@arsnova/app/models/content-type.enum';
 import { ContentState } from '@arsnova/app/models/content-state';
-import { EventEmitter } from '@angular/core';
+import { NO_ERRORS_SCHEMA, EventEmitter } from '@angular/core';
 
 
 describe('ContentChoiceParticipantComponent', () => {
@@ -77,6 +77,9 @@ describe('ContentChoiceParticipantComponent', () => {
           provide: ContentService,
           useValue: mockContentService
         },
+      ],
+      schemas: [
+        NO_ERRORS_SCHEMA
       ]
     })
     .compileComponents();

@@ -11,6 +11,7 @@ import {
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 import { NotificationService } from '@arsnova/app/services/util/notification.service';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 
  describe('CookiesComponent', () => {
   let component: CookiesComponent;
@@ -70,6 +71,9 @@ import { NotificationService } from '@arsnova/app/services/util/notification.ser
           provide: NotificationService,
           useClass: MockNotificationService
         }
+      ],
+      schemas: [
+        NO_ERRORS_SCHEMA
       ]
     })
     .compileComponents();

@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { ContentChoiceCreationComponent } from './content-choice-creation.component';
-import { Component, Injectable, Input } from '@angular/core';
+import { Component, NO_ERRORS_SCHEMA, Injectable, Input } from '@angular/core';
 import { ContentService } from '../../../../services/http/content.service';
 import { NotificationService } from '../../../../services/util/notification.service';
 import { MatDialog } from '@angular/material/dialog';
@@ -194,6 +194,9 @@ describe('ContentChoiceCreationComponent', () => {
         }),
         MatButtonModule
       ],
+      schemas: [
+        NO_ERRORS_SCHEMA
+      ]
     })
     .compileComponents()
     .then(() => {

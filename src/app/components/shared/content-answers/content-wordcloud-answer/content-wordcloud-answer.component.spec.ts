@@ -1,3 +1,4 @@
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ContentWordcloudAnswerComponent } from './content-wordcloud-answer.component';
@@ -8,7 +9,10 @@ describe('ContentWordcloudAnswerComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ContentWordcloudAnswerComponent ]
+      declarations: [ ContentWordcloudAnswerComponent ],
+      schemas: [
+        NO_ERRORS_SCHEMA
+      ]
     })
     .compileComponents();
 

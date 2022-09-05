@@ -1,3 +1,4 @@
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { DomSanitizer } from '@angular/platform-browser';
 import { FormattingService } from '@arsnova/app/services/http/formatting.service';
@@ -24,6 +25,9 @@ describe('RenderedTextComponent', () => {
           provide: DomSanitizer,
           useValue: mockDomSanitizer
         }
+      ],
+      schemas: [
+        NO_ERRORS_SCHEMA
       ]
     })
     .compileComponents();

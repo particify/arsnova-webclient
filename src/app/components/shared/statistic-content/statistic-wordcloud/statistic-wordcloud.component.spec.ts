@@ -11,6 +11,7 @@ import { ContentState } from '@arsnova/app/models/content-state';
 import { of } from 'rxjs';
 import { RoundStatistics } from '@arsnova/app/models/round-statistics';
 import { AnswerStatistics } from '@arsnova/app/models/answer-statistics';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 describe('StatisticWordcloudComponent', () => {
   let component: StatisticWordcloudComponent;
@@ -62,6 +63,9 @@ describe('StatisticWordcloudComponent', () => {
           provide: ThemeService,
           useClass: MockThemeService
         }
+      ],
+      schemas: [
+        NO_ERRORS_SCHEMA
       ]
     })
     .compileComponents();

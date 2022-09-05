@@ -14,6 +14,7 @@ import { RoomStatsService } from '@arsnova/app/services/http/room-stats.service'
 import { WsCommentService } from '@arsnova/app/services/websockets/ws-comment.service';
 import { CommentService } from '@arsnova/app/services/http/comment.service';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 describe('RoomOverviewComponent', () => {
   let component: RoomOverviewComponent;
@@ -71,6 +72,9 @@ describe('RoomOverviewComponent', () => {
           provide: EventService,
           useClass: MockEventService
         }
+      ],
+      schemas: [
+        NO_ERRORS_SCHEMA
       ]
     })
     .compileComponents();

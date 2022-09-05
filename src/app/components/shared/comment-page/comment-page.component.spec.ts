@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { CommentPageComponent } from './comment-page.component';
-import { Renderer2, Component, Input, Pipe, PipeTransform } from '@angular/core';
+import { Renderer2, Component, Input, Pipe, PipeTransform, NO_ERRORS_SCHEMA } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { TranslateModule, TranslateLoader, TranslateService } from '@ngx-translate/core';
 import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
@@ -110,6 +110,9 @@ describe('CommentPageComponent', () => {
           provide: A11yIntroPipe,
           useValue: mockA11yIntroPipe
         }
+      ],
+      schemas: [
+        NO_ERRORS_SCHEMA
       ]
     })
       .compileComponents()

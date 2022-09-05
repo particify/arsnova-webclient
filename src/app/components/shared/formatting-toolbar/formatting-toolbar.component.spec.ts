@@ -3,6 +3,7 @@ import { JsonTranslationLoader } from '@arsnova/testing/test-helpers';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { FormattingToolbarComponent } from './formatting-toolbar.component';
 import { MatIconModule } from '@angular/material/icon';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 
 describe('FormattingToolbarComponent', () => {
@@ -22,6 +23,9 @@ describe('FormattingToolbarComponent', () => {
         }),
         MatIconModule
       ],
+      schemas: [
+        NO_ERRORS_SCHEMA
+      ]
     })
     .compileComponents();
 

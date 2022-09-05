@@ -3,6 +3,7 @@ import { KeyButtonBarComponent } from './key-button-bar.component';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { JsonTranslationLoader } from '@arsnova/testing/test-helpers';
 import { DOCUMENT } from '@angular/common';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 describe('KeyButtonBarComponent', () => {
   let component: KeyButtonBarComponent;
@@ -20,6 +21,9 @@ describe('KeyButtonBarComponent', () => {
           },
           isolate: true
         })
+      ],
+      schemas: [
+        NO_ERRORS_SCHEMA
       ]
     })
     .compileComponents();

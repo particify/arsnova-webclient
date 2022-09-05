@@ -6,7 +6,7 @@ import { AnnounceService } from '@arsnova/app/services/util/announce.service';
 import { MockAnnounceService } from '@arsnova/testing/test-helpers';
 import { HotkeyService } from '@arsnova/app/services/util/hotkey.service';
 import { Directionality } from '@angular/cdk/bidi';
-import { ChangeDetectorRef, ElementRef } from '@angular/core';
+import { ChangeDetectorRef, NO_ERRORS_SCHEMA, ElementRef } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
@@ -55,6 +55,9 @@ describe('StepperComponent', () => {
           provide: ElementRef,
           useValue: elementRef
         }
+      ],
+      schemas: [
+        NO_ERRORS_SCHEMA
       ]
     })
     .compileComponents();

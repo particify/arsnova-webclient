@@ -20,6 +20,7 @@ import { EventService } from '@arsnova/app/services/util/event.service';
 import { ApiConfigService } from '@arsnova/app/services/http/api-config.service';
 import { of } from 'rxjs';
 import { MockMatDialogData } from '@arsnova/testing/test-helpers';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 describe('RoomCreateComponent', () => {
   let component: RoomCreateComponent;
@@ -91,6 +92,9 @@ describe('RoomCreateComponent', () => {
           provide: MAT_DIALOG_DATA,
           useClass: MockMatDialogData
         }
+      ],
+      schemas: [
+        NO_ERRORS_SCHEMA
       ]
     })
     .compileComponents();

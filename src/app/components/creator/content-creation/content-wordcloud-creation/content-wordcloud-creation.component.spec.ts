@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { ContentWordcloudCreationComponent } from './content-wordcloud-creation.component';
-import { Injectable } from '@angular/core';
+import { NO_ERRORS_SCHEMA, Injectable } from '@angular/core';
 import { ContentService } from '../../../../services/http/content.service';
 import { NotificationService } from '../../../../services/util/notification.service';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
@@ -94,6 +94,9 @@ describe('ContentWordcloudCreationComponent', () => {
           isolate: true
         })
       ],
+      schemas: [
+        NO_ERRORS_SCHEMA
+      ]
     })
       .compileComponents()
       .then(() => {

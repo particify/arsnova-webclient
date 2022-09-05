@@ -12,7 +12,7 @@ import {
 } from '@arsnova/testing/test-helpers';
 import { EventService } from '@arsnova/app/services/util/event.service';
 import { TranslateLoader, TranslateModule, TranslateService } from '@ngx-translate/core';
-import { Injectable } from '@angular/core';
+import { NO_ERRORS_SCHEMA, Injectable } from '@angular/core';
 import { GlobalStorageService } from '@arsnova/app/services/util/global-storage.service';
 import { LanguageService } from '@arsnova/app/services/util/language.service';
 import { A11yIntroPipe } from '@arsnova/app/pipes/a11y-intro.pipe';
@@ -81,6 +81,9 @@ describe('SettingsPageComponent', () => {
           },
           isolate: true
         })
+      ],
+      schemas: [
+        NO_ERRORS_SCHEMA
       ]
     })
     .compileComponents();

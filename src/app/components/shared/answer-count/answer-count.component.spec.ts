@@ -3,6 +3,7 @@ import { AnswerCountComponent } from './answer-count.component';
 import { JsonTranslationLoader, MockEventService } from '@arsnova/testing/test-helpers';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { EventService } from '@arsnova/app/services/util/event.service';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 describe('AnswerCountComponent', () => {
   let component: AnswerCountComponent;
@@ -27,6 +28,9 @@ describe('AnswerCountComponent', () => {
           provide: EventService,
           useClass: MockEventService
         }
+      ],
+      schemas: [
+        NO_ERRORS_SCHEMA
       ]
     })
     .compileComponents();

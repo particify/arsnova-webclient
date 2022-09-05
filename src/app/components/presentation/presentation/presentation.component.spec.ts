@@ -15,6 +15,7 @@ import { MockLocationStrategy } from '@angular/common/testing';
 import { Room } from '@arsnova/app/models/room';
 import { RoomStatsService } from '@arsnova/app/services/http/room-stats.service';
 import { LanguageService } from '@arsnova/app/services/util/language.service';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 describe('PresentationComponent', () => {
   let component: PresentationComponent;
@@ -74,6 +75,9 @@ describe('PresentationComponent', () => {
           provide: LanguageService,
           useClass: MockLangService
         }
+      ],
+      schemas: [
+        NO_ERRORS_SCHEMA
       ]
     })
     .compileComponents();

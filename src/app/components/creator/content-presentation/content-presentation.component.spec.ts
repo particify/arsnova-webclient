@@ -19,7 +19,7 @@ import {
 import { Location } from '@angular/common';
 import { MockLocationStrategy } from '@angular/common/testing';
 import { HotkeyService } from '@arsnova/app/services/util/hotkey.service';
-import { Injectable } from '@angular/core';
+import { NO_ERRORS_SCHEMA, Injectable } from '@angular/core';
 import { Room } from '@arsnova/app/models/room';
 import { of } from 'rxjs';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
@@ -136,6 +136,9 @@ describe('ContentPresentationComponent', () => {
           },
           isolate: true
         })
+      ],
+      schemas: [
+        NO_ERRORS_SCHEMA
       ]
     })
     .compileComponents();

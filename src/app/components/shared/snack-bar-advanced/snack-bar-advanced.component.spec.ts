@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { SnackBarAdvancedComponent } from './snack-bar-advanced.component';
 import { MAT_SNACK_BAR_DATA } from '@angular/material/snack-bar';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 describe('SnackBarAdvancedComponent', () => {
   let component: SnackBarAdvancedComponent;
@@ -19,6 +20,9 @@ describe('SnackBarAdvancedComponent', () => {
           provide: MAT_SNACK_BAR_DATA,
           useValue: mockMatSnackBarData
         }
+      ],
+      schemas: [
+        NO_ERRORS_SCHEMA
       ]
     })
     .compileComponents();

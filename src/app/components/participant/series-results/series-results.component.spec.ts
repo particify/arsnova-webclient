@@ -14,6 +14,7 @@ import { By } from '@angular/platform-browser';
 import { Content } from '@arsnova/app/models/content';
 import { ContentType } from '@arsnova/app/models/content-type.enum';
 import { ContentState } from '@arsnova/app/models/content-state';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 class MockAuthenticationService {
   getCurrentAuthentication() {
@@ -84,6 +85,9 @@ describe('SeriesResultsComponent', () => {
           useValue: mockContentGroupService
         }
       ],
+      schemas: [
+        NO_ERRORS_SCHEMA
+      ]
     })
     .compileComponents();
   });

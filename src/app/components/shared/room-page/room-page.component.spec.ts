@@ -5,6 +5,7 @@ import { RoomPageComponent } from './room-page.component';
 import { UserRole } from '../../../models/user-roles.enum';
 import { of } from 'rxjs';
 import { EventService } from '../../../services/util/event.service';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 describe('RoomPageComponent', () => {
   let component: RoomPageComponent;
@@ -52,6 +53,9 @@ describe('RoomPageComponent', () => {
           provide: EventService,
           useClass: MockEventService
         }
+      ],
+      schemas: [
+        NO_ERRORS_SCHEMA
       ]
     })
     .compileComponents();

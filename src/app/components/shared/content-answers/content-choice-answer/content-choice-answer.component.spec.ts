@@ -1,3 +1,4 @@
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ContentChoiceAnswerComponent } from 'app/components/shared/content-answers/content-choice-answer/content-choice-answer.component';
@@ -8,7 +9,10 @@ describe('ContentChoiceAnswerComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ContentChoiceAnswerComponent ]
+      declarations: [ ContentChoiceAnswerComponent ],
+      schemas: [
+        NO_ERRORS_SCHEMA
+      ]
     })
     .compileComponents();
   });

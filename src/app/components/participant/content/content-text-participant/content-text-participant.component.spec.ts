@@ -16,7 +16,7 @@ import {
 import { of } from 'rxjs';
 import { GlobalStorageService } from '@arsnova/app/services/util/global-storage.service';
 import { ContentAnswerService } from '@arsnova/app/services/http/content-answer.service';
-import { EventEmitter } from '@angular/core';
+import { NO_ERRORS_SCHEMA, EventEmitter } from '@angular/core';
 import { ContentText } from '@arsnova/app/models/content-text';
 import { ContentType } from '@arsnova/app/models/content-type.enum';
 import { ContentState } from '@arsnova/app/models/content-state';
@@ -81,6 +81,9 @@ describe('ContentTextParticipantComponent', () => {
           provide: EventService,
           useClass: MockEventService
         }
+      ],
+      schemas: [
+        NO_ERRORS_SCHEMA
       ]
     })
     .compileComponents();
