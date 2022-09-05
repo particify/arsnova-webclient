@@ -21,7 +21,7 @@ class TestComponent {
 
 describe('HotkeyDirective', () => {
   let fixture: ComponentFixture<TestComponent>;
-  const hotkeyService = jasmine.createSpyObj('HotkeyService', ['registerHotkey']);
+  const hotkeyService = jasmine.createSpyObj('HotkeyService', ['registerHotkey', 'unregisterHotkey']);
 
   beforeEach(() => {
     fixture = TestBed.configureTestingModule({
