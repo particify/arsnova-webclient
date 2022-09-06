@@ -8,7 +8,8 @@ import { ClientAuthentication } from '../../../models/client-authentication';
 import { Router } from '@angular/router';
 import { User } from '../../../models/user';
 import { Person } from '../../../models/person';
-import { AuthProvider } from '@arsnova/app/models/auth-provider';
+import { AuthProvider } from '../../../models/auth-provider';
+import { UserSettings } from '../../../models/user-settings';
 
 export class FormField {
   value: string;
@@ -37,6 +38,8 @@ export class UserProfileComponent implements OnInit {
   isSso = true;
   isLoading = true;
 
+  settings: UserSettings;
+
   constructor(private authenticationService: AuthenticationService,
               private userService: UserService,
               private translationService: TranslateService,
@@ -50,6 +53,7 @@ export class UserProfileComponent implements OnInit {
       this.isSso = this.auth.authProvider !== AuthProvider.ARSNOVA;
       this.userService.getUserByLoginId(this.auth.loginId, true).subscribe(user => {
         this.user = user[0];
+        this.settings = this.user.settings || new UserSettings();
         this.formFields = [
           new FormField(this.user.person?.firstName, 'firstName', 'first-name'),
           new FormField(this.user.person?.lastName,'lastName', 'last-name'),
@@ -90,11 +94,21 @@ export class UserProfileComponent implements OnInit {
     this.router.navigate(['/']);
   }
 
-  update(field: FormField) {
+  updatePerson(field: FormField) {
     const person = this.user.person || new Person();
     person[field.name] = field.value;
     const updatedUser = this.user;
     updatedUser.person = person;
+    this.updateUser(updatedUser);
+  }
+
+  updateSettings(value: boolean, propertyName: string) {
+    this.settings[propertyName] = value;
+    this.user.settings = this.settings;
+    this.updateUser();
+  }
+
+  updateUser(updatedUser = this.user) {
     this.userService.updateUser(updatedUser).subscribe(user => {
       this.user = user;
     });

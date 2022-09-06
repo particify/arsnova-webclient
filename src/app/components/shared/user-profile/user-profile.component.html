@@ -20,7 +20,7 @@
           <div fxLayout="row wrap" class="container">
             <mat-icon class="type-icon">person</mat-icon>
             <ng-container *ngFor="let formField of formFields; let i = index">
-              <app-user-form-field *ngIf="i < 2" class="input-field" [disabled]="isSso" [formField]="formField" (fieldUpdated)="update($event)"></app-user-form-field>
+              <app-user-form-field *ngIf="i < 2" class="input-field" [disabled]="isSso" [formField]="formField" (fieldUpdated)="updatePerson($event)"></app-user-form-field>
             </ng-container>
           </div>
           <div *ngIf="isSso" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="16px">
@@ -30,7 +30,7 @@
           <div *ngIf="!isSso" fxLayout="row wrap" class="container">
             <mat-icon class="type-icon">business</mat-icon>
             <ng-container *ngFor="let formField of formFields; let i = index">
-              <app-user-form-field *ngIf="i >= 2 && i < 4" class="input-field" [formField]="formField" (fieldUpdated)="update($event)"></app-user-form-field>
+              <app-user-form-field *ngIf="i >= 2 && i < 4" class="input-field" [formField]="formField" (fieldUpdated)="updatePerson($event)"></app-user-form-field>
             </ng-container>
           </div>
         </div>
@@ -47,6 +47,22 @@
         </div>
       </div>
     </mat-expansion-panel>
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          <span class="title" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="10px">
+            <mat-icon>settings_suggest</mat-icon>
+            <span>{{ 'user-profile.preferences' | translate }}</span>
+          </span>
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <app-loading-indicator [size]="50" *ngIf="isLoading"></app-loading-indicator>
+      <div *ngIf="!isLoading">
+        <span>{{ 'user-profile.preferences-description' | translate }}</span>
+        <app-settings-slide-toggle label="user-profile.visualization-unit-percent" [isChecked]="settings.visualizationUnitPercent" (toggleEvent)="updateSettings($event, 'visualizationUnitPercent')"></app-settings-slide-toggle>
+        <app-settings-slide-toggle label="user-profile.answers-below-chart" [isChecked]="settings.answersDirectlyBelowChart" (toggleEvent)="updateSettings($event, 'answersDirectlyBelowChart')"></app-settings-slide-toggle>
+        <lib-extension-point extensionId="user-quota"></lib-extension-point>
+      </div>
+    </mat-expansion-panel>
   </mat-accordion>
 </div>
-
