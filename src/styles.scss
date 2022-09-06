@@ -863,8 +863,8 @@ div {
   color: var(--on-surface);
 }
 
-.mat-expansion-panel:not(.mat-expanded) {
-  background-color: var(--table-a);
+.mat-expansion-panel {
+  background-color: var(--surface);
 }
 
 // Menu

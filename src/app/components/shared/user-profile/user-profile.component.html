@@ -1,45 +1,52 @@
 <div tabindex="-1" #messageButton class="visually-hidden">
   {{ 'user-profile.a11y-message' | a11yIntro | async }}
 </div>
-<div *ngIf="!isLoading" fxLayout="row" fxLayoutAlign="center center">
-  <mat-card fxLayout="column" fxLayoutGap="16px">
-    <div fxLayout="column">
-      <h2>{{ 'user-profile.account-settings' | translate }}</h2>
-      <lib-extension-point extensionId="profile-subscription"></lib-extension-point>
-      <h4>{{ ('user-profile.username' | translate) + ': ' + auth.loginId }}</h4>
-      <div fxLayout="column" fxLayoutGap="16px">
-        <div fxLayout="row wrap" class="container">
-          <mat-icon class="type-icon">person</mat-icon>
-          <ng-container *ngFor="let formField of formFields; let i = index">
-            <app-user-form-field *ngIf="i < 2" class="input-field" [disabled]="isSso" [formField]="formField" (fieldUpdated)="update($event)"></app-user-form-field>
-          </ng-container>
+<div fxLayoutAlign="center">
+  <mat-accordion>
+    <mat-expansion-panel [expanded]="true">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          <span class="title" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="10px">
+            <mat-icon>manage_accounts</mat-icon>
+            <span>{{ 'user-profile.account-settings' | translate }}</span>
+          </span>
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <app-loading-indicator [size]="50" *ngIf="isLoading"></app-loading-indicator>
+      <div *ngIf="!isLoading">
+        <lib-extension-point extensionId="profile-subscription"></lib-extension-point>
+        <p class="username">{{ ('user-profile.username' | translate) + ': ' + auth.loginId }}</p>
+        <div fxLayout="column" fxLayoutGap="16px">
+          <div fxLayout="row wrap" class="container">
+            <mat-icon class="type-icon">person</mat-icon>
+            <ng-container *ngFor="let formField of formFields; let i = index">
+              <app-user-form-field *ngIf="i < 2" class="input-field" [disabled]="isSso" [formField]="formField" (fieldUpdated)="update($event)"></app-user-form-field>
+            </ng-container>
+          </div>
+          <div *ngIf="isSso" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="16px">
+            <mat-icon class="type-icon">mail</mat-icon>
+            <app-user-form-field class="full-width" [disabled]="true" [formField]="formFields[4]"></app-user-form-field>
+          </div>
+          <div *ngIf="!isSso" fxLayout="row wrap" class="container">
+            <mat-icon class="type-icon">business</mat-icon>
+            <ng-container *ngFor="let formField of formFields; let i = index">
+              <app-user-form-field *ngIf="i >= 2 && i < 4" class="input-field" [formField]="formField" (fieldUpdated)="update($event)"></app-user-form-field>
+            </ng-container>
+          </div>
         </div>
-        <div *ngIf="isSso" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="16px">
-          <mat-icon class="type-icon">mail</mat-icon>
-          <app-user-form-field class="full-width" [disabled]="true" [formField]="formFields[4]"></app-user-form-field>
-        </div>
-        <div *ngIf="!isSso" fxLayout="row wrap" class="container">
-          <mat-icon class="type-icon">business</mat-icon>
-          <ng-container *ngFor="let formField of formFields; let i = index">
-            <app-user-form-field *ngIf="i >= 2 && i < 4" class="input-field" [formField]="formField" (fieldUpdated)="update($event)"></app-user-form-field>
-          </ng-container>
-        </div>
-      </div>
-    </div>
-    <div>
-      <lib-extension-point extensionId="user-quota"></lib-extension-point>
-      <app-divider [padding]="true"></app-divider>
-      <h2>{{ 'user-profile.delete-account' | translate }}</h2>
-      <div fxLayout="row wrap" fxLayoutAlign="space-between center" fxLayoutGap="16px">
         <div>
-          <span tabindex="0">{{ 'user-profile.delete-account-info' | translate }}</span>
+          <div fxLayout="row wrap" class="delete-container" fxLayoutAlign="space-between center" fxLayoutGap="16px">
+            <div>
+              <span>{{ 'user-profile.delete-account-info' | translate }}</span>
+            </div>
+            <button mat-stroked-button class="delete" (click)="openDeleteUserDialog()">
+              <mat-icon>delete</mat-icon>
+              {{ 'user-profile.delete-account' | translate }}
+            </button>
+          </div>
         </div>
-        <button mat-stroked-button class="delete" (click)="openDeleteUserDialog()"
-                aria-labelledby="delete-account">
-          <mat-icon>delete</mat-icon>
-          {{ 'user-profile.delete-account' | translate }}
-        </button>
       </div>
-    </div>
-  </mat-card>
+    </mat-expansion-panel>
+  </mat-accordion>
 </div>
+

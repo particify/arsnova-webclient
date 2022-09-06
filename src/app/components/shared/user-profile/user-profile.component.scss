@@ -1,21 +1,44 @@
 @import '../../../../variables';
 
-.mat-card {
+.mat-accordion {
   width: 100%;
   max-width: 800px;
 }
 
-h2 {
-  margin: 16px 0;
+.mat-expansion-panel-header-title {
+  color: var(--on-surface);
+}
+
+.mat-expansion-panel-header {
+  padding: 0.8em 1.5em;
+}
+
+.mat-expansion-panel-header.mat-expanded {
+  height: unset;
+}
+
+.mat-expansion-panel {
+  margin-bottom: 16px;
+  border-top-right-radius: 4px!important;
+  border-top-left-radius: 4px!important;
+  border-bottom-right-radius: 4px!important;
+  border-bottom-left-radius: 4px!important;
+}
+
+.title {
+  font-weight: $font-weight-bold;
+  font-size: 24px;
+  margin: 12px 0;
+}
+
+.username {
+  opacity: 0.8;
+  font-size: 16px;
+  margin-top: 0;
 }
 
 .type-icon {
   opacity: 0.6;
-}
-
-span {
-  line-height: 20px;
-  vertical-align: middle;
 }
 
 .delete {
@@ -25,6 +48,10 @@ span {
 .container {
   align-items: center;
   gap: 16px;
+}
+
+.delete-container > * {
+  margin-top: 12px;
 }
 
 @media (max-width: 600px) {
