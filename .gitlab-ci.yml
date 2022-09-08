@@ -44,7 +44,7 @@ yarn_populate_cache:
 yarn_install:
   stage: prepare
   artifacts:
-    expire_in: 12 hours
+    expire_in: 2 hours
     paths:
       - node_modules
   cache:
@@ -79,6 +79,7 @@ ngbuild:
     - yarn_install
   allow_failure: false
   artifacts:
+    expire_in: 2 days
     paths:
       - "$BUILD_DIR"
   script:
