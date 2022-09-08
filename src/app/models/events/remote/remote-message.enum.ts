@@ -9,7 +9,5 @@ export enum RemoteMessage {
   CHANGE_COMMENTS_STATE = 'ChangeCommentsState',
   CHANGE_SURVEY_STATE = 'ChangeSurveyState',
   CHANGE_FEATURE_ROUTE = 'ChangeFeatureRoute',
-  FOCUS_STATE_CHANGED = 'FocusStateChanged',
-  TOGGLE_VISUALIZATION_UNIT = 'ToggleVisualizationUnit',
-  TOGGLE_ANSWER_LIST_LAYOUT = 'ToggleAnswerListLayout'
+  FOCUS_STATE_CHANGED = 'FocusStateChanged'
 }

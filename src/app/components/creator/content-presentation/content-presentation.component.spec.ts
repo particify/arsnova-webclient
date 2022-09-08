@@ -12,7 +12,6 @@ import { LanguageService } from '@arsnova/app/services/util/language.service';
 import {
   ActivatedRouteStub, JsonTranslationLoader,
   MockEventService,
-  MockGlobalStorageService,
   MockLangService,
   MockRouter
 } from '@arsnova/testing/test-helpers';
@@ -28,6 +27,13 @@ import { Content } from '@arsnova/app/models/content';
 import { ContentType } from '@arsnova/app/models/content-type.enum';
 import { ContentState } from '@arsnova/app/models/content-state';
 import { PresentationService } from '@arsnova/app/services/util/presentation.service';
+import { UserService } from '@arsnova/app/services/http/user.service';
+import { User } from '@arsnova/app/models/user';
+import { AuthProvider } from '@arsnova/app/models/auth-provider';
+import { Person } from '@arsnova/app/models/person';
+import { ClientAuthentication } from '@arsnova/app/models/client-authentication';
+import { STORAGE_KEYS } from '@arsnova/app/services/util/global-storage.service';
+import { UserSettings } from '@arsnova/app/models/user-settings';
 
 @Injectable()
 class MockContentService {
@@ -75,6 +81,15 @@ describe('ContentPresentationComponent', () => {
 
   const mockPresentationService = jasmine.createSpyObj(['getScale']);
 
+  const mockUserService = jasmine.createSpyObj('UserService', ['getUserSettingsByLoginId']);
+  mockUserService.getUserSettingsByLoginId.and.returnValue(of(new UserSettings()));
+
+  const mockGlobalStorageService = jasmine.createSpyObj('GlobalStorageService', ['getItem', 'setItem']);
+  mockGlobalStorageService.getItem.withArgs(STORAGE_KEYS.LANGUAGE).and.returnValue('de');
+  mockGlobalStorageService.getItem.withArgs(STORAGE_KEYS.LAST_INDEX).and.returnValue(null);
+  mockGlobalStorageService.getItem.withArgs(STORAGE_KEYS.LAST_GROUP).and.returnValue('series');
+  mockGlobalStorageService.getItem.withArgs(STORAGE_KEYS.USER).and.returnValue(new ClientAuthentication('1234', 'a@b.cd', AuthProvider.ARSNOVA, 'token'));
+
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ ContentPresentationComponent ],
@@ -105,7 +120,7 @@ describe('ContentPresentationComponent', () => {
         },
         {
           provide: GlobalStorageService,
-          useClass: MockGlobalStorageService
+          useValue: mockGlobalStorageService
         },
         {
           provide: LanguageService,
@@ -126,6 +141,10 @@ describe('ContentPresentationComponent', () => {
         {
           provide: PresentationService,
           useValue: mockPresentationService
+        },
+        {
+          provide: UserService,
+          useValue: mockUserService
         }
       ],
       imports: [

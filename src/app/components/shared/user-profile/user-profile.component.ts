@@ -97,19 +97,18 @@ export class UserProfileComponent implements OnInit {
   updatePerson(field: FormField) {
     const person = this.user.person || new Person();
     person[field.name] = field.value;
-    const updatedUser = this.user;
-    updatedUser.person = person;
-    this.updateUser(updatedUser);
+    this.updateUser('person', person);
   }
 
   updateSettings(value: boolean, propertyName: string) {
     this.settings[propertyName] = value;
-    this.user.settings = this.settings;
-    this.updateUser();
+    this.updateUser('settings', this.settings);
   }
 
-  updateUser(updatedUser = this.user) {
-    this.userService.updateUser(updatedUser).subscribe(user => {
+  updateUser(propertyName: string, value: object) {
+    const changes = {};
+    changes[propertyName] = value;
+    this.userService.updateUser(this.user.id, changes).subscribe(user => {
       this.user = user;
     });
   }

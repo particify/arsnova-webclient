@@ -8,6 +8,7 @@ import { ChoiceAnswer } from '../../../../models/choice-answer';
 import { MarkdownFeatureset } from '../../../../services/http/formatting.service';
 import { MultipleTextsAnswer } from '../../../../models/multiple-texts-answer';
 import { HotkeyAction } from '../../../../directives/hotkey.directive';
+import { UserSettings } from '../../../../models/user-settings';
 
 @Component({
   selector: 'app-content-participant',
@@ -24,6 +25,7 @@ export class ContentParticipantComponent implements OnInit {
   @Input() statsPublished: boolean;
   @Input() correctOptionsPublished: boolean;
   @Input() finished: boolean;
+  @Input() settings: UserSettings;
   @Output() answerChanged = new EventEmitter<Answer>();
   @Output() next = new EventEmitter<boolean>();
 

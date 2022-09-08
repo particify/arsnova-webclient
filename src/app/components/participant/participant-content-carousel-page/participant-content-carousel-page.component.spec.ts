@@ -7,7 +7,6 @@ import {
   JsonTranslationLoader,
   MockNotificationService,
   ActivatedRouteStub,
-  MockGlobalStorageService,
   MockRouter,
   MockEventService,
   MockAnnounceService
@@ -24,6 +23,11 @@ import { AuthenticationService } from '@arsnova/app/services/http/authentication
 import { Room } from '@arsnova/app/models/room';
 import { A11yIntroPipe } from '@arsnova/app/pipes/a11y-intro.pipe';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { UserSettings } from '@arsnova/app/models/user-settings';
+import { UserService } from '@arsnova/app/services/http/user.service';
+import { STORAGE_KEYS } from '@arsnova/app/services/util/global-storage.service';
+import { ClientAuthentication } from '@arsnova/app/models/client-authentication';
+import { AuthProvider } from '@arsnova/app/models/auth-provider';
 
 describe('ParticipantContentCarouselPageComponent', () => {
   let component: ParticipantContentCarouselPageComponent;
@@ -38,6 +42,13 @@ describe('ParticipantContentCarouselPageComponent', () => {
   mockContentGroupService.filterPublishedIds.and.returnValue([]);
 
   const mockAuthenticationService = jasmine.createSpyObj(['getCurrentAuthentication']);
+
+  const mockUserService = jasmine.createSpyObj('UserService', ['getUserSettingsByLoginId']);
+  mockUserService.getUserSettingsByLoginId.and.returnValue(of(new UserSettings()));
+
+  const mockGlobalStorageService = jasmine.createSpyObj('GlobalStorageService', ['getItem']);
+  mockGlobalStorageService.getItem.withArgs(STORAGE_KEYS.LANGUAGE).and.returnValue('de');
+  mockGlobalStorageService.getItem.withArgs(STORAGE_KEYS.USER).and.returnValue(new ClientAuthentication('1234', 'a@b.cd', AuthProvider.ARSNOVA, 'token'));
 
 
   const data = {
@@ -106,7 +117,7 @@ describe('ParticipantContentCarouselPageComponent', () => {
         },
         {
           provide: GlobalStorageService,
-          useClass: MockGlobalStorageService
+          useValue: mockGlobalStorageService
         },
         {
           provide: Router,
@@ -119,6 +130,10 @@ describe('ParticipantContentCarouselPageComponent', () => {
         {
           provide: A11yIntroPipe,
           useValue: a11yIntroPipe
+        },
+        {
+          provide: UserService,
+          useValue: mockUserService
         }
       ],
       schemas: [

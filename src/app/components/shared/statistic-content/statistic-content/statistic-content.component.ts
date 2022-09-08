@@ -18,6 +18,7 @@ import { ContentMessages } from '../../../../models/events/content-messages.enum
 import { ContentService } from '../../../../services/http/content.service';
 import { ActivatedRoute } from '@angular/router';
 import { UserRole } from '../../../../models/user-roles.enum';
+import { UserSettings } from '../../../../models/user-settings';
 
 @Component({
   selector: 'app-statistic-content',
@@ -43,6 +44,7 @@ export class StatisticContentComponent implements OnInit {
   @Input() useCustomFlipAction = false;
   @Output() updatedCounter: EventEmitter<number> = new EventEmitter<number>();
   @Output() customFlipEvent = new EventEmitter();
+  @Input() settings: UserSettings;
 
   attachmentData: any;
   answersVisible = false;
@@ -103,36 +105,10 @@ export class StatisticContentComponent implements OnInit {
           }
         }
       });
-      if (this.contentService.allowsUnitChange(this.content)) {
-        this.eventService.on(RemoteMessage.TOGGLE_VISUALIZATION_UNIT).subscribe(() => {
-          this.toggleVisualizationUnit();
-        });
-      }
-      if (this.contentService.allowsListChange(this.content)) {
-        this.eventService.on(RemoteMessage.TOGGLE_ANSWER_LIST_LAYOUT).subscribe(() => {
-          this.toggleAnswerListLayout();
-        });
-      }
       if (this.active) {
         const remoteState = new ContentFocusState(this.content.id, this.contentGroupId, false, false);
         this.eventService.broadcast(RemoteMessage.CHANGE_CONTENTS_STATE, remoteState);
       }
-    }
-  }
-
-  toggleVisualizationUnit() {
-    if (this.format === ContentType.SCALE) {
-      this.scaleStatistic.toggleVisualizationUnit();
-    } else {
-      this.choiceStatistic.toggleVisualizationUnit();
-    }
-  }
-
-  toggleAnswerListLayout() {
-    if (this.format === ContentType.SCALE) {
-      this.scaleStatistic.toggleAnswerListLayout();
-    } else {
-      this.choiceStatistic.toggleAnswerListLayout();
     }
   }
 

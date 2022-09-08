@@ -53,13 +53,9 @@
               <mat-icon>clear_all</mat-icon>
               <span>{{ 'content.delete-answers' | translate}}</span>
             </button>
-            <button mat-menu-item *ngIf="contentLoaded && allowUnitChange(content)" (click)="toggleVisualizationUnit()">
-              <mat-icon>percentage</mat-icon>
-              <span>{{ 'content.change-visualization-unit' | translate }}</span>
-            </button>
-            <button mat-menu-item *ngIf="contentLoaded && allowListChange(content)" (click)="toggleAnswerListLayout()">
-              <mat-icon>view_week</mat-icon>
-              <span>{{ 'content.change-answer-list' | translate }}</span>
+            <button mat-menu-item [routerLink]="'/account'">
+              <mat-icon>settings_suggest</mat-icon>
+              <span>{{ 'content.preferences' | translate }}</span>
             </button>
             <lib-extension-point *ngIf="multipleRounds && contentLoaded" extensionId="round-selection" [extensionData]="{standalone: false, round: this.contentRounds.get(content.id)}" (extensionEvent)="changeRound($event)"></lib-extension-point>
             <lib-extension-point *ngIf="contentLoaded && hasFormatRounds(content.format)" extensionId="start-new-round" [extensionData]="{content: content, resetEvent: resetAnswerEvent}" (extensionEvent)="afterRoundStarted($event)"></lib-extension-point>

@@ -21,7 +21,7 @@
             <app-statistic-content [content]="content" [directShow]="contentIndex === i" [active]="currentStep === i"
                                    [index]="i" [correctOptionsPublished]="true" [isPresentation]="isPresentation"
             (updatedCounter)="updateCounter($event, currentStep === i)" [routeChanged]="routeChanged"
-            [contentGroupId]="contentGroup.id">
+            [contentGroupId]="contentGroup.id" [settings]="settings">
 
             </app-statistic-content>
           </mat-card>
