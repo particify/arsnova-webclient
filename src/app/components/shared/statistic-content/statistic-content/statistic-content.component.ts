@@ -39,7 +39,7 @@ export class StatisticContentComponent implements OnInit {
   @Input() index: number;
   @Input() correctOptionsPublished: boolean;
   @Input() isPresentation = false;
-  @Input() routeChanged: EventEmitter<boolean> = new EventEmitter<boolean>();
+  @Input() indexChanged: EventEmitter<number> = new EventEmitter<number>();
   @Input() contentGroupId: string;
   @Input() useCustomFlipAction = false;
   @Output() updatedCounter: EventEmitter<number> = new EventEmitter<number>();
@@ -81,9 +81,12 @@ export class StatisticContentComponent implements OnInit {
     this.multipleRounds = this.roundsToDisplay > 0;
     this.isParticipant = this.route.snapshot.data.viewRole === UserRole.PARTICIPANT;
     this.isLoading = false;
-    this.routeChanged.subscribe(() => {
+    this.indexChanged.subscribe(index => {
       this.updateCounter(this.answerCount);
       this.broadcastRoundState();
+      if (this.settings.showResultsDirectly && index === this.index && !this.answersVisible) {
+        this.toggleAnswers();
+      }
     });
     this.broadcastRoundState();
     this.eventService.on<any>(ContentMessages.ROUND_CHANGED).subscribe(roundData => {

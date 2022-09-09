@@ -172,7 +172,9 @@
     "visualization-unit-percent": "Show results in percent",
     "visualization-unit-percent-info": "Results on single-choice and Likert questions are displayed in percent.",
     "answers-below-chart": "Show answer options below charts",
-    "answers-below-chart-info": "Answer options displayed directly below chart rather than as a list."
+    "answers-below-chart-info": "Answer options displayed directly below chart rather than as a list.",
+    "show-results-directly": "Show results directly",
+    "show-results-directly-info": "Content results are displayed directly when presented."
   },
   "room-list": {
     "a11y-join-room": "Enter the room {{room}} with the number {{id}} in the role {{role}}",

@@ -45,7 +45,7 @@ export class ContentPresentationComponent implements OnInit, OnDestroy {
   currentStep = 0;
   infoBarItems: InfoBarItem[] = [];
   answerCount;
-  routeChanged: EventEmitter<boolean> = new EventEmitter<boolean>();
+  indexChanged: EventEmitter<number> = new EventEmitter<number>();
   contentGroup: ContentGroup;
   remoteSubscription: Subscription;
   canAnswerContent = false;
@@ -206,7 +206,7 @@ export class ContentPresentationComponent implements OnInit, OnDestroy {
     }
     this.updateInfoBar();
     setTimeout(() => {
-      this.routeChanged.emit(true);
+      this.indexChanged.emit(this.currentStep);
       const id = [ContentType.SLIDE, ContentType.FLASHCARD].indexOf(this.contents[index].format) > -1 ? 'message-type-info-button' : 'message-button';
       document.getElementById(id).focus();
     }, 300);
