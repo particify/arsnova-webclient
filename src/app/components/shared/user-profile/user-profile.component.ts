@@ -5,11 +5,12 @@ import { UserService } from '../../../services/http/user.service';
 import { TranslateService } from '@ngx-translate/core';
 import { DialogService } from '../../../services/util/dialog.service';
 import { ClientAuthentication } from '../../../models/client-authentication';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { User } from '../../../models/user';
 import { Person } from '../../../models/person';
 import { AuthProvider } from '../../../models/auth-provider';
 import { UserSettings } from '../../../models/user-settings';
+import { Location } from '@angular/common';
 
 export class FormField {
   value: string;
@@ -39,15 +40,19 @@ export class UserProfileComponent implements OnInit {
   isLoading = true;
 
   settings: UserSettings;
+  page: string;
 
   constructor(private authenticationService: AuthenticationService,
               private userService: UserService,
               private translationService: TranslateService,
               private notificationService: NotificationService,
               private dialogService: DialogService,
-              private router: Router) { }
+              private router: Router,
+              private route: ActivatedRoute,
+              private location: Location) { }
 
   ngOnInit(): void {
+    this.page = this.route.snapshot.params['accountSettingsName'];
     this.authenticationService.getCurrentAuthentication().subscribe(auth => {
       this.auth = auth;
       this.isSso = this.auth.authProvider !== AuthProvider.ARSNOVA;
@@ -111,5 +116,10 @@ export class UserProfileComponent implements OnInit {
     this.userService.updateUser(this.user.id, changes).subscribe(user => {
       this.user = user;
     });
+  }
+
+  updatePage(page: string) {
+    this.page = page;
+    this.location.replaceState(`account/${this.page}`);
   }
 }

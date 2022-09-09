@@ -165,7 +165,7 @@ export class HeaderComponent implements OnInit {
   }
 
   navToProfile() {
-    this.router.navigateByUrl('account');
+    this.router.navigateByUrl('account/user');
   }
 
   deleteAccount(id: string) {

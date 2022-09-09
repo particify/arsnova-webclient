@@ -1,13 +1,14 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { UserProfileComponent } from './user-profile.component';
-import { Router } from '@angular/router';
+import { ActivatedRoute, ActivatedRouteSnapshot, Router } from '@angular/router';
 import { NotificationService } from '@arsnova/app/services/util/notification.service';
 import { EventService } from '@arsnova/app/services/util/event.service';
 import { JsonTranslationLoader,
   MockEventService,
   MockGlobalStorageService,
-  MockRouter
+  MockRouter,
+  ActivatedRouteStub
 } from '@arsnova/testing/test-helpers';
 import { GlobalStorageService } from '@arsnova/app/services/util/global-storage.service';
 import { AuthenticationService } from '@arsnova/app/services/http/authentication.service';
@@ -39,6 +40,12 @@ describe('UserProfileComponent', () => {
 
   let translateService: TranslateService;
   const a11yIntroPipe = new A11yIntroPipe(translateService);
+
+  const snapshot = new ActivatedRouteSnapshot();
+
+  snapshot.params = of([{accountSettingsName: null}]);
+
+  const activatedRouteStub = new ActivatedRouteStub(null, null, snapshot);
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -87,6 +94,10 @@ describe('UserProfileComponent', () => {
         {
           provide: A11yIntroPipe,
           useValue: a11yIntroPipe
+        },
+        {
+          provide: ActivatedRoute,
+          useValue: activatedRouteStub
         }
       ],
       schemas: [

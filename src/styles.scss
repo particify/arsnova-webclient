@@ -867,6 +867,14 @@ div {
   background-color: var(--surface);
 }
 
+.settings-panel > .mat-expansion-panel-header.mat-expanded {
+  height: unset;
+}
+
+.settings-panel > .mat-expansion-panel-header {
+  padding: 0.8em 1.5em;
+}
+
 // Menu
 
 .mat-menu-panel {

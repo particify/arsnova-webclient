@@ -3,14 +3,9 @@
 </div>
 <div fxLayoutAlign="center">
   <mat-accordion>
-    <mat-expansion-panel [expanded]="true">
+    <mat-expansion-panel class="settings-panel" [expanded]="page === 'user'" (afterExpand)="updatePage('user')">
       <mat-expansion-panel-header>
-        <mat-panel-title>
-          <span class="title" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="10px">
-            <mat-icon>manage_accounts</mat-icon>
-            <span>{{ 'user-profile.account-settings' | translate }}</span>
-          </span>
-        </mat-panel-title>
+        <app-settings-panel-header [text]="'user-profile.account-settings'" [icon]="'manage_accounts'"></app-settings-panel-header>
       </mat-expansion-panel-header>
       <app-loading-indicator [size]="50" *ngIf="isLoading"></app-loading-indicator>
       <div *ngIf="!isLoading">
@@ -47,14 +42,9 @@
         </div>
       </div>
     </mat-expansion-panel>
-    <mat-expansion-panel>
+    <mat-expansion-panel class="settings-panel" [expanded]="page === 'preferences'" (afterExpand)="updatePage('preferences')">
       <mat-expansion-panel-header>
-        <mat-panel-title>
-          <span class="title" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="10px">
-            <mat-icon>settings_suggest</mat-icon>
-            <span>{{ 'user-profile.preferences' | translate }}</span>
-          </span>
-        </mat-panel-title>
+        <app-settings-panel-header [text]="'user-profile.preferences'" [icon]="'settings_suggest'"></app-settings-panel-header>
       </mat-expansion-panel-header>
       <app-loading-indicator [size]="50" *ngIf="isLoading"></app-loading-indicator>
       <div *ngIf="!isLoading">
