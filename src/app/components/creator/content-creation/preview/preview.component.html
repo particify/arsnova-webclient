@@ -10,6 +10,7 @@
                              [selectableAnswers]="selectableAnswers" [multipleAnswersAllowed]="multipleAnswers" [dynamicRendering]="content.format === 'CHOICE'"></app-content-choice-answer>
   <app-content-sort-answer *ngIf="content.format === 'SORT'" [answerOptions]="answerOptions" [dynamicRendering]="true"></app-content-sort-answer>
   <app-content-wordcloud-answer *ngIf="content.format === 'WORDCLOUD'" [words]="words"></app-content-wordcloud-answer>
+  <app-content-priorization-answer *ngIf="content.format === 'PRIORIZATION'" [answerOptions]="answerOptionsWithPoints" [assignablePoints]="content.assignablePoints"></app-content-priorization-answer>
 </mat-card>
 <div *ngIf="content.format === 'FLASHCARD'">
   <h3 aria-labelledby="back">{{ 'content.flashcard-back' | translate }}

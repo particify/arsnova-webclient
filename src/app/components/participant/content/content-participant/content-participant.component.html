@@ -1,5 +1,4 @@
-<div id="content-message" tabindex="-1" attr.aria-label="{{ (alreadySent? 'answer.a11y-already-answered' : content.format === ContentType.TEXT ?
-  'answer.a11y-current-text' : (content.format === ContentType.SORT ? 'answer.a11y-current-sort' : (isMultiple ? 'answer.a11y-current-multiple' : 'answer.a11y-current-single'))) | translate: {index: index+1} }}">
+<div id="content-message" tabindex="-1" attr.aria-label="{{ getContentMessage() | translate: {index: index+1} }}">
   <app-loading-indicator *ngIf="isLoading" [size]="80"></app-loading-indicator>
   <section class="card-container with-margin" *ngIf="!isLoading">
     <div class="card" [ngClass]="{'flipped': flipped}">
@@ -47,6 +46,9 @@
                                             (answerChanged)="forwardAnswerMessage($event)" [statsPublished]="statsPublished"
                                             [correctOptionsPublished]="correctOptionsPublished">
               </app-content-wordcloud-participant>
+              <app-content-priorization-participant *ngIf="content.format === ContentType.PRIORIZATION" [answer]="answer"
+              [content]="content" [alreadySent]="alreadySent" [sendEvent]="sendEvent" (answerChanged)="forwardAnswerMessage($event)" [statsPublished]="statsPublished">
+            </app-content-priorization-participant>
             </div>
             <div *ngIf="[ContentType.SLIDE, ContentType.FLASHCARD].indexOf(content.format) === -1">
               <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="1em" [ngClass]="{'visible' : alreadySent, 'invisible': !alreadySent}" class="text">

@@ -1,0 +1,21 @@
+.mat-icon-button {
+  background-color: var(--background);
+}
+
+.list-item {
+  padding: 0.5em 1em;
+  &:not(:last-of-type) {
+    border-bottom: 1px solid var(--grey-light);
+  }
+  &:last-of-type {
+    margin-bottom: 1em;
+  }
+}
+
+@media(min-width: 768px) {
+  .answer-text {
+    // 170px = button + input field width
+    max-width: calc(100% - 170px - 1em);
+    margin-right: 1em;
+  }
+}

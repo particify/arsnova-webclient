@@ -9,6 +9,7 @@ import { MarkdownFeatureset } from '../../../../services/http/formatting.service
 import { MultipleTextsAnswer } from '../../../../models/multiple-texts-answer';
 import { HotkeyAction } from '../../../../directives/hotkey.directive';
 import { UserSettings } from '../../../../models/user-settings';
+import { PriorizationAnswer } from '../../../../models/priorization-answer';
 
 @Component({
   selector: 'app-content-participant',
@@ -76,6 +77,8 @@ export class ContentParticipantComponent implements OnInit {
       this.hasAbstained = !(answer as TextAnswer).body;
     } else if (answer.format === ContentType.WORDCLOUD) {
       this.hasAbstained = !((answer as MultipleTextsAnswer).texts?.length > 0);
+    } else if(answer.format === ContentType.PRIORIZATION) {
+      this.hasAbstained = !(answer as PriorizationAnswer).assignedPoints;
     } else {
       this.hasAbstained = !(answer as ChoiceAnswer).selectedChoiceIndexes;
     }
@@ -107,5 +110,22 @@ export class ContentParticipantComponent implements OnInit {
 
   goToOverview() {
     this.goToNextContent(null);
+  }
+
+  getContentMessage(): string {
+    let msg = 'answer.a11y-';
+    if (this.alreadySent) {
+      msg += 'already-answered';
+    } else {
+      msg += 'current-';
+      let format: string;
+      if (this.content.format !== ContentType.CHOICE) {
+        format = this.content.format.toLowerCase();
+      } else {
+        format = (this.content as ContentChoice).multiple ? 'multiple' : 'single';
+      }
+      msg += format;
+    }
+    return msg;
   }
 }
