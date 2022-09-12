@@ -34,6 +34,7 @@ import { DialogService } from '../../services/util/dialog.service';
 import { PublishContentComponent } from './_dialogs/publish-content/publish-content.component';
 import { CreatorOverviewComponent } from './creator-overview/creator-overview.component';
 import { AnnouncementSettingsComponent } from './settings/announcement-settings/announcement-settings.component';
+import { CreateAnswerOptionComponent } from './content-creation/create-answer-option/create-answer-option.component';
 
 @NgModule({
   imports: [
@@ -80,6 +81,7 @@ import { AnnouncementSettingsComponent } from './settings/announcement-settings/
     ExportComponent,
     PublishContentComponent,
     AnnouncementSettingsComponent,
+    CreateAnswerOptionComponent,
   ],
   exports: [
     ContentPresentationComponent

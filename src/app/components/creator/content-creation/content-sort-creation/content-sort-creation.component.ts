@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { ContentService } from '../../../../services/http/content.service';
 import { AdvancedSnackBarTypes, NotificationService } from '../../../../services/util/notification.service';
@@ -21,7 +21,7 @@ import { AnnounceService } from '../../../../services/util/announce.service';
 export class ContentSortCreationComponent extends ContentCreationComponent implements OnInit {
 
   isAnswerEdit = -1;
-  newAnswer = '';
+  resetAnswerInputEvent: EventEmitter<boolean> = new EventEmitter<boolean>();
 
   constructor(
     protected contentService: ContentService,
@@ -57,9 +57,9 @@ export class ContentSortCreationComponent extends ContentCreationComponent imple
     this.checkIfAnswersExist();
   }
 
-  answerInputCheck(): boolean {
-    if (this.newAnswer !== '') {
-      if (!this.answerExists(this.newAnswer)) {
+  answerInputCheck(answer): boolean {
+    if (answer !== '') {
+      if (!this.answerExists(answer)) {
         return true;
       } else {
         this.showWarning('content.same-answer');
@@ -69,12 +69,12 @@ export class ContentSortCreationComponent extends ContentCreationComponent imple
     }
   }
 
-  addAnswer() {
-    if (this.answerInputCheck()) {
+  addAnswer(answer: string) {
+    if (this.answerInputCheck(answer)) {
       if (this.displayAnswers.length < 8) {
-        this.displayAnswers.push(new DisplayAnswer(new AnswerOption(this.newAnswer), true));
+        this.displayAnswers.push(new DisplayAnswer(new AnswerOption(answer), true));
         this.updateDragDropList();
-        this.newAnswer = '';
+        this.resetAnswerInputEvent.emit(true);
       } else {
         const msg = this.translationService.instant('content.max-answers');
         this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
