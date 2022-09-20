@@ -49,9 +49,9 @@
       <app-loading-indicator [size]="50" *ngIf="isLoading"></app-loading-indicator>
       <div *ngIf="!isLoading">
         <span>{{ 'user-profile.preferences-description' | translate }}</span>
-        <app-settings-slide-toggle label="user-profile.visualization-unit-percent" [isChecked]="settings.visualizationUnitPercent" (toggleEvent)="updateSettings($event, 'visualizationUnitPercent')"></app-settings-slide-toggle>
-        <app-settings-slide-toggle label="user-profile.answers-below-chart" [isChecked]="settings.answersDirectlyBelowChart" (toggleEvent)="updateSettings($event, 'answersDirectlyBelowChart')"></app-settings-slide-toggle>
-        <app-settings-slide-toggle label="user-profile.show-results-directly" [isChecked]="settings.showResultsDirectly" (toggleEvent)="updateSettings($event, 'showResultsDirectly')"></app-settings-slide-toggle>
+        <app-settings-slide-toggle label="user-profile.visualization-unit-percent" [isChecked]="settings.contentVisualizationUnitPercent" (toggleEvent)="updateSettings($event, 'contentVisualizationUnitPercent')"></app-settings-slide-toggle>
+        <app-settings-slide-toggle label="user-profile.answers-below-chart" [isChecked]="settings.contentAnswersDirectlyBelowChart" (toggleEvent)="updateSettings($event, 'contentAnswersDirectlyBelowChart')"></app-settings-slide-toggle>
+        <app-settings-slide-toggle label="user-profile.show-results-directly" [isChecked]="settings.showContentResultsDirectly" (toggleEvent)="updateSettings($event, 'showContentResultsDirectly')"></app-settings-slide-toggle>
         <lib-extension-point extensionId="user-quota"></lib-extension-point>
       </div>
     </mat-expansion-panel>

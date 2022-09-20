@@ -18,7 +18,7 @@
       <cdk-step *ngFor="let content of contents; let i = index">
         <div id="step" *ngIf="(currentStep >= i - 1 && currentStep <= i + 1) || isPresentation">
           <mat-card [ngClass]="{'presentation-card': isPresentation}">
-            <app-statistic-content [content]="content" [directShow]="contentIndex === i && settings.showResultsDirectly" [active]="currentStep === i"
+            <app-statistic-content [content]="content" [directShow]="contentIndex === i && settings.showContentResultsDirectly" [active]="currentStep === i"
                                    [index]="i" [correctOptionsPublished]="true" [isPresentation]="isPresentation"
             (updatedCounter)="updateCounter($event, currentStep === i)" [indexChanged]="indexChanged"
             [contentGroupId]="contentGroup.id" [settings]="settings">

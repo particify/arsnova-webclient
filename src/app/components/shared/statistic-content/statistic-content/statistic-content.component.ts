@@ -84,7 +84,7 @@ export class StatisticContentComponent implements OnInit {
     this.indexChanged.subscribe(index => {
       this.updateCounter(this.answerCount);
       this.broadcastRoundState();
-      if (this.settings.showResultsDirectly && index === this.index && !this.answersVisible) {
+      if (this.settings.showContentResultsDirectly && index === this.index && !this.answersVisible) {
         this.toggleAnswers();
       }
     });

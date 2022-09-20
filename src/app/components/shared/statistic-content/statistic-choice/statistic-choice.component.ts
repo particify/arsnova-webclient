@@ -172,11 +172,7 @@ export class StatisticChoiceComponent extends StatisticContentBaseComponent impl
           x: {
             type: 'category',
             ticks: {
-<<<<<<< HEAD
-              display: !this.settings.answersDirectlyBelowChart
-=======
               display: !this.settings.contentAnswersDirectlyBelowChart || !this.isPresentation
->>>>>>> f0e48de6... d
             },
             grid: gridConfig,
             display: true
@@ -205,7 +201,7 @@ export class StatisticChoiceComponent extends StatisticContentBaseComponent impl
 
   getDataLabel(value): string {
     let label: string;
-    if (this.settings.visualizationUnitPercent) {
+    if (this.settings.contentVisualizationUnitPercent) {
       label = (value / this.answerCount * 100).toFixed(0) + '%';
     } else {
       label = value;
