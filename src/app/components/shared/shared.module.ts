@@ -66,6 +66,7 @@ import { DragDropBaseComponent } from './drag-drop-base/drag-drop-base.component
 import { A11yRenderedBodyPipe } from '../../pipes/a11y-rendered-body.pipe';
 import { SettingsPanelHeaderComponent } from './settings-panel-header/settings-panel-header.component';
 import { ContentPriorizationAnswerComponent } from './content-answers/content-priorization-answer/content-priorization-answer.component';
+import { StatisticPriorizationComponent } from './statistic-content/statistic-priorization/statistic-priorization.component';
 
 @NgModule({
   imports: [
@@ -137,7 +138,8 @@ import { ContentPriorizationAnswerComponent } from './content-answers/content-pr
     DragDropBaseComponent,
     A11yRenderedBodyPipe,
     SettingsPanelHeaderComponent,
-    ContentPriorizationAnswerComponent
+    ContentPriorizationAnswerComponent,
+    StatisticPriorizationComponent
   ],
   exports: [
     RoomJoinComponent,
