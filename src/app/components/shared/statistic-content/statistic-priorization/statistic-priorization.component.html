@@ -1,8 +1,7 @@
 <div fxLayout="column">
   <app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
   <div class="chart-container" *ngIf="!isLoading"
-       [ngClass]="{'invisible': !answersVisible}"
-       [ngStyle]="answersVisible && {'height.vh': chartHeight, 'max-height.px': maxChartHeight}">
+       [ngStyle]="{'height.vh': chartHeight, 'max-height.px': maxChartHeight}">
     <canvas class="chart" id="{{ chartId }}"></canvas>
   </div>
 </div>

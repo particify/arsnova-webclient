@@ -1,7 +1,6 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { AnswerStatistics } from '@arsnova/app/models/answer-statistics';
-import { RoundStatistics } from '@arsnova/app/models/round-statistics';
 import { ContentService } from '@arsnova/app/services/http/content.service';
 import { EventService } from '@arsnova/app/services/util/event.service';
 import { GlobalStorageService } from '@arsnova/app/services/util/global-storage.service';
@@ -20,17 +19,17 @@ import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { of } from 'rxjs';
 
 import { StatisticPriorizationComponent } from './statistic-priorization.component';
+import { PriorizationRoundStatistics } from '@arsnova/app/models/round-statistics';
 
 describe('StatisticPriorizationComponent', () => {
   let component: StatisticPriorizationComponent;
   let fixture: ComponentFixture<StatisticPriorizationComponent>;
 
   const mockContentService = jasmine.createSpyObj(['getAnswersChangedStream', 'getAnswer']);
-  const roundStatistics = new RoundStatistics();
+  const roundStatistics = new PriorizationRoundStatistics();
   roundStatistics.abstentionCount = 0;
   roundStatistics.answerCount = 0;
-  roundStatistics.combinatedCounts = [];
-  roundStatistics.independentCounts = [];
+  roundStatistics.assignedPoints = [];
   roundStatistics.round = 1;
   const stats = new AnswerStatistics();
   stats.contentId = '1234',

@@ -23,6 +23,7 @@ export class StatisticPriorizationComponent extends StatisticChoiceComponent imp
 
   chartColors: string[] = [];
   chartData: number[] = [];
+  emptyData: number[] = [];
   answerCount: number;
   abstentionCount: number;
   chartHeight: number;
@@ -74,6 +75,12 @@ export class StatisticPriorizationComponent extends StatisticChoiceComponent imp
     this.updateChart();
   }
 
+  toggleAnswers(visible?: boolean): boolean {
+    this.answersVisible = visible ?? !this.answersVisible;
+    this.updateChart();
+    return this.answersVisible;
+  }
+
   createHorizontalChart(colors: string[]) {
     const optionScale = this.options.length < 5 ? 1 : (1 - 0.05 * (this.options.length - 4));
     Chart.defaults.color = this.colorStrings.onBackground;
@@ -88,9 +95,10 @@ export class StatisticPriorizationComponent extends StatisticChoiceComponent imp
     const barThickness = 20 * optionScale;
     const dataSets = [
       {
-        data: this.chartData,
+        data: this.answersVisible ? this.chartData : this.emptyData,
         backgroundColor: colors,
-        barThickness: barThickness
+        barThickness: barThickness,
+        minBarLength: 5
       }
     ];
     const scale = this.presentationService.getScale();
@@ -104,7 +112,6 @@ export class StatisticPriorizationComponent extends StatisticChoiceComponent imp
       data: {
         labels: labels,
         datasets: dataSets
-
       },
       options: {
         indexAxis: 'y',
@@ -129,7 +136,7 @@ export class StatisticPriorizationComponent extends StatisticChoiceComponent imp
               borderWidth: 0
             }
           },
-          y: {  
+          y: {
             type: 'category',
             ticks: {
               display: true,
@@ -155,7 +162,7 @@ export class StatisticPriorizationComponent extends StatisticChoiceComponent imp
             color: this.colorStrings.onBackground,
             anchor: 'start',
             align: 'start',
-            offset: 8     
+            offset: 8
           }
         }
       }
@@ -198,11 +205,12 @@ export class StatisticPriorizationComponent extends StatisticChoiceComponent imp
 
   setData(stats: AnswerStatistics) {
     this.chartData = (stats.roundStatistics[0] as PriorizationRoundStatistics).assignedPoints;
+    this.emptyData = this.chartData.map(() => 0);
     this.abstentionCount = stats.roundStatistics[0].abstentionCount;
   }
 
   prepareChart() {
-    this.chart.data.datasets[0].data = this.chartData;
+    this.chart.data.datasets[0].data = this.answersVisible ? this.chartData : this.emptyData;
     this.chart.data.datasets[0].backgroundColor = this.chartColors;
   }
 
