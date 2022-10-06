@@ -94,7 +94,11 @@ export class StatisticPriorizationComponent extends StatisticChoiceComponent imp
       }
     ];
     const scale = this.presentationService.getScale();
+    const chartWidth = document.getElementsByClassName('chart-container')[0].clientWidth;
     const labels = this.options.map(a => a.label);
+    labels.forEach((value, index) => {
+      labels[index] = this.getLabel(value, this.isPresentation ? 14 * optionScale : 12, chartWidth);
+    });
     this.chart = new Chart(this.chartId, {
       type: 'bar',
       data: {
@@ -131,11 +135,7 @@ export class StatisticPriorizationComponent extends StatisticChoiceComponent imp
               display: true,
               mirror: true,
               labelOffset: - (20 * optionScale),
-              padding: 8,
-              callback: (value, index, ticks) => {
-                // TODO: This needs to be fixed for full width, multiple lines and mobile devices
-                return labels[index].length > 90 ? (labels[index].substring(0, 90) + '…') : labels[index];
-              }
+              padding: 8
             },
             grid: gridConfig,
             display: true
@@ -216,5 +216,28 @@ export class StatisticPriorizationComponent extends StatisticChoiceComponent imp
         this.createHorizontalChart(this.chartColors);
       }, 300);
     }
+  }
+
+  getLabel(label: string, fontSize, chartWidth: number): string {
+    const width = this.getLabelTextWidth(label, fontSize);
+    const diff = chartWidth - width - 8 - 30 - 20;
+    if (diff >= 0) {
+      return label;
+    } else {
+      return this.getLabel(label.substring(0, label.length - 3) + '…', fontSize, chartWidth);
+    }
+  }
+
+  getLabelTextWidth(label: string, fontSize: number) {
+    const element = document.createElement('div');
+    document.body.appendChild(element);
+    element.style.fontSize = fontSize + 'px';
+    element.style.position = 'absolute';
+    element.style.left = -1000 + 'px';
+    element.style.top = -1000 + 'px';
+    element.textContent = label;
+    const width = element.clientWidth;
+    document.body.removeChild(element);
+    return width;
   }
 }
