@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit } from '@angular/core';
 import { BarController, BarElement, CategoryScale, Chart, LinearScale } from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { ContentService } from '@arsnova/app/services/http/content.service';
@@ -20,6 +20,8 @@ import { StatisticChoiceComponent } from '../statistic-choice/statistic-choice.c
 export class StatisticPriorizationComponent extends StatisticChoiceComponent implements OnInit, OnDestroy {
 
   @Input() content: ContentPriorization;
+  @Input() indexChanged: EventEmitter<number> = new EventEmitter<number>();
+  @Input() isCreator = true;
 
   chartColors: string[] = [];
   chartData: number[] = [];
@@ -27,7 +29,8 @@ export class StatisticPriorizationComponent extends StatisticChoiceComponent imp
   answerCount: number;
   abstentionCount: number;
   chartHeight: number;
-  maxChartHeight: number;
+  scale: number;
+  fontSize: number;
 
   constructor(protected contentService: ContentService,
               protected translateService: TranslateService,
@@ -50,10 +53,18 @@ export class StatisticPriorizationComponent extends StatisticChoiceComponent imp
     if (this.content.options) {
       this.options = [...this.content.options];
     }
-    const chartScale = this.options.length < 5 ? 1 : (1 + 0.1 * (this.options.length - 4));
-    this.chartHeight = 40 * chartScale;
-    this.maxChartHeight = 320 * chartScale;
+    this.scale = Math.min(1, 1 - 0.06  * (this.options.length - 4));
+    const chartScale = Math.min(1, 1 - 0.1 * (this.options.length - 4));
+    this.chartHeight = 80 * this.options.length * chartScale;
+    this.fontSize = this.isPresentation ? 14 * this.scale : 12;
     this.initChart();
+    this.indexChanged.subscribe(() => {
+      if (this.active) {
+        setTimeout(() => {
+          this.updateChart();
+        }, 0);
+      }
+    });
   }
 
   initData(stats: AnswerStatistics) {
@@ -82,17 +93,17 @@ export class StatisticPriorizationComponent extends StatisticChoiceComponent imp
   }
 
   createHorizontalChart(colors: string[]) {
-    const optionScale = this.options.length < 5 ? 1 : (1 - 0.05 * (this.options.length - 4));
-    Chart.defaults.color = this.colorStrings.onBackground;
-    Chart.defaults.font.size = this.isPresentation ? 14 * optionScale : 12;
-    Chart.register(BarController, BarElement, CategoryScale, LinearScale, ChartDataLabels);
+    const padding = {
+      top: 25,
+      left: 30
+    }
     const gridConfig = {
       borderColor: this.colorStrings.onBackground,
       tickColor: this.colorStrings.background,
       drawOnChartArea: false,
       z: 1
     };
-    const barThickness = 20 * optionScale;
+    const barThickness = 18 * this.scale;
     const dataSets = [
       {
         data: this.answersVisible ? this.chartData : this.emptyData,
@@ -102,11 +113,9 @@ export class StatisticPriorizationComponent extends StatisticChoiceComponent imp
       }
     ];
     const scale = this.presentationService.getScale();
-    const chartWidth = document.getElementsByClassName('chart-container')[0].clientWidth;
-    const labels = this.options.map(a => a.label);
-    labels.forEach((value, index) => {
-      labels[index] = this.getLabel(value, this.isPresentation ? 14 * optionScale : 12, chartWidth);
-    });
+    const labels = this.options.map(a => this.getLabel(a.label));
+    Chart.defaults.color = this.colorStrings.onBackground;
+    Chart.register(BarController, BarElement, CategoryScale, LinearScale, ChartDataLabels);
     this.chart = new Chart(this.chartId, {
       type: 'bar',
       data: {
@@ -115,13 +124,12 @@ export class StatisticPriorizationComponent extends StatisticChoiceComponent imp
       },
       options: {
         indexAxis: 'y',
-        responsive: true,
         maintainAspectRatio: false,
         devicePixelRatio: window.devicePixelRatio * scale,
         layout: {
           padding: {
-            top: 25,
-            left: 30
+            top: padding.top,
+            left: padding.left
           }
         },
         scales: {
@@ -141,8 +149,11 @@ export class StatisticPriorizationComponent extends StatisticChoiceComponent imp
             ticks: {
               display: true,
               mirror: true,
-              labelOffset: - (20 * optionScale),
-              padding: 8
+              labelOffset: - (this.fontSize + 4),
+              padding: 8,
+              font: {
+                size: this.fontSize
+              }
             },
             grid: gridConfig,
             display: true
@@ -167,6 +178,47 @@ export class StatisticPriorizationComponent extends StatisticChoiceComponent imp
         }
       }
     });
+  }
+
+  reorderChart() {
+    const reorderBar = {
+      id: 'reorderBar',
+      beforeUpdate: (chart) => {
+        if (this.active) {
+          // Get data from chart
+          const data = JSON.parse(JSON.stringify(this.answersVisible ? this.chartData : this.emptyData));
+          // Get array with indexes
+          const indexes = data.map((d, i) => i);
+          // Sort indexes descending according to data values
+          indexes.sort((a, b) => data[b] - data[a]);
+          // Sort data as well
+          data.sort((a, b) => b - a);
+  
+          // Get current meta data, labels and colors
+          const meta = chart.getDatasetMeta(0);
+          const newMeta = [];
+          const labels = JSON.parse(JSON.stringify(this.options.map(o => this.getLabel(o.label))));
+          const newLabels = [];
+          const newColors = [];
+  
+          // Set new data according to sorted indexes
+          meta.data.forEach((data, index) => {
+            const newIndex = indexes.indexOf(index);
+            newMeta[newIndex] = data;
+            newLabels[newIndex] = labels[index];
+            newColors[newIndex] = this.chartColors[index];
+          });
+
+          // Apply sorted data to chart
+          meta.data = newMeta;
+          chart.data.labels = newLabels;
+          chart.data.datasets[0].data = data;
+          chart.data.datasets[0].backgroundColor = newColors;
+          Chart.unregister(reorderBar);
+        }
+      }
+    };
+    return reorderBar;
   }
 
   getDataLabel(value): string {
@@ -216,30 +268,34 @@ export class StatisticPriorizationComponent extends StatisticChoiceComponent imp
 
   updateChart() {
     if (this.chart) {
+      if (this.isCreator) {
+        Chart.register(this.reorderChart());
+      }
       this.prepareChart();
       this.chart.update();
     } else if (this.active) {
-      /* Wait for flip animation */
       setTimeout(() => {
         this.createHorizontalChart(this.chartColors);
-      }, 300);
+      }, 0);
     }
   }
 
-  getLabel(label: string, fontSize, chartWidth: number): string {
-    const width = this.getLabelTextWidth(label, fontSize);
+  getLabel(label: string): string {
+    const chartWidth = document.getElementById('container-' + this.chartId).clientWidth;
+    const width = this.getLabelTextWidth(label);
     const diff = chartWidth - width - 8 - 30 - 20;
     if (diff >= 0) {
+      console.log(width);
       return label;
     } else {
-      return this.getLabel(label.substring(0, label.length - 3) + '…', fontSize, chartWidth);
+      return this.getLabel(label.substring(0, label.length - 3) + '…');
     }
   }
 
-  getLabelTextWidth(label: string, fontSize: number) {
+  getLabelTextWidth(label: string) {
     const element = document.createElement('div');
     document.body.appendChild(element);
-    element.style.fontSize = fontSize + 'px';
+    element.style.fontSize = this.fontSize + 'px';
     element.style.position = 'absolute';
     element.style.left = -1000 + 'px';
     element.style.top = -1000 + 'px';
