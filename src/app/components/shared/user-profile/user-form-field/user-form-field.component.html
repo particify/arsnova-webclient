@@ -1,5 +1,5 @@
 <mat-form-field fxFill appearance="outline" class="no-field-hint">
   <mat-label>{{ ('user-profile.' + formField.label) | translate }}</mat-label>
-  <input [disabled]="disabled" [(ngModel)]="formField.value" matInput maxlength="50" placeholder="{{ ('user-profile.enter-' + formField.label) | translate }}"
+  <input [disabled]="disabled" [(ngModel)]="formField.value" matInput maxlength="50"
          (focus)="goIntoEdit()" (blur)="saveProfile()" type="text" name="{{formField.name}}" autocomplete="nope"/>
 </mat-form-field>

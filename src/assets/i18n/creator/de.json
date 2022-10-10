@@ -271,8 +271,7 @@
     "next": "Nächster Inhalt",
     "previous": "Vorheriger Inhalt",
     "group-published": "Die Fragenserie wurde freigegeben.",
-    "change-visualization-unit": "Anzeigeeinheit ändern",
-    "change-answer-list": "Ansicht der Antworten ändern",
+    "preferences": "Präferenzen",
     "reset-banned-answers": "Gebannte Wörter zurücksetzen",
     "banned-keywords-reset": "Gebannte Schlagwörter wurden zurückgesetzt."
   },

@@ -16,6 +16,7 @@ import { PresentationService } from '@arsnova/app/services/util/presentation.ser
 import { GlobalStorageService } from '@arsnova/app/services/util/global-storage.service';
 import { MockGlobalStorageService } from '@arsnova/testing/test-helpers';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { UserSettings } from '@arsnova/app/models/user-settings';
 
 describe('StatisticScaleComponent', () => {
   let component: StatisticScaleComponent;
@@ -96,6 +97,7 @@ describe('StatisticScaleComponent', () => {
     fixture = TestBed.createComponent(StatisticScaleComponent);
     component = fixture.componentInstance;
     component.content = new ContentChoice('1234', '0', 'room1234', 'subject', 'body', [], [], [], false, ContentType.SCALE, new ContentState(1, new Date(), false));
+    component.settings = new UserSettings();
     fixture.detectChanges();
   });
 

@@ -20,6 +20,8 @@ import { ContentFocusState } from '../../../models/events/remote/content-focus-s
 import { ContentMessages } from '../../../models/events/content-messages.enum';
 import { Subscription } from 'rxjs';
 import { PresentationService } from '../../../services/util/presentation.service';
+import { UserService } from '../../../services/http/user.service';
+import { UserSettings } from '../../../models/user-settings';
 
 @Component({
   selector: 'app-content-presentation',
@@ -43,10 +45,11 @@ export class ContentPresentationComponent implements OnInit, OnDestroy {
   currentStep = 0;
   infoBarItems: InfoBarItem[] = [];
   answerCount;
-  routeChanged: EventEmitter<boolean> = new EventEmitter<boolean>();
+  indexChanged: EventEmitter<number> = new EventEmitter<number>();
   contentGroup: ContentGroup;
   remoteSubscription: Subscription;
   canAnswerContent = false;
+  settings: UserSettings;
 
   private hotkeyRefs: Symbol[] = [];
 
@@ -62,7 +65,8 @@ export class ContentPresentationComponent implements OnInit, OnDestroy {
     private eventService: EventService,
     private dialogService: DialogService,
     private hotkeyService: HotkeyService,
-    private presentationService: PresentationService
+    private presentationService: PresentationService,
+    private userService: UserService
   ) {
     langService.langEmitter.subscribe(lang => translateService.use(lang));
   }
@@ -76,10 +80,14 @@ export class ContentPresentationComponent implements OnInit, OnDestroy {
     this.entryIndex = (this.isPresentation && lastIndex > -1 ? lastIndex : routeContentIndex - 1) || 0;
     this.contentGroupName = this.globalStorageService.getItem(STORAGE_KEYS.LAST_GROUP) || routeSeriesName;
     this.globalStorageService.setItem(STORAGE_KEYS.LAST_GROUP, this.contentGroupName);
-    this.route.data.subscribe(data => {
-      this.roomId = data.room.id;
-      this.shortId = data.room.shortId;
-      this.initGroup(true);
+    const loginId = this.globalStorageService.getItem(STORAGE_KEYS.USER).loginId;
+    this.userService.getUserSettingsByLoginId(loginId).subscribe(settings => {
+      this.settings = settings || new UserSettings();
+      this.route.data.subscribe(data => {
+        this.roomId = data.room.id;
+        this.shortId = data.room.shortId;
+        this.initGroup(true);
+      });
     });
   }
 
@@ -198,7 +206,7 @@ export class ContentPresentationComponent implements OnInit, OnDestroy {
     }
     this.updateInfoBar();
     setTimeout(() => {
-      this.routeChanged.emit(true);
+      this.indexChanged.emit(this.currentStep);
       const id = [ContentType.SLIDE, ContentType.FLASHCARD].indexOf(this.contents[index].format) > -1 ? 'message-type-info-button' : 'message-button';
       document.getElementById(id).focus();
     }, 300);

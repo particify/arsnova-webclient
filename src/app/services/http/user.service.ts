@@ -11,6 +11,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { NotificationService } from '../util/notification.service';
 import { CachingService } from '../util/caching.service';
 import { WsConnectorService } from '../websockets/ws-connector.service';
+import { UserSettings } from '../../models/user-settings';
 
 const httpOptions = {
   headers: new HttpHeaders({})
@@ -81,9 +82,9 @@ export class UserService extends AbstractEntityService<User> {
     }));
   }
 
-  updateUser(user: User): Observable<User> {
-    const connectionUrl = this.buildUri('/' + user.id) + '/?view=owner';
-    return this.http.put(connectionUrl, user, httpOptions).pipe(
+  updateUser(userId: string, changes: object): Observable<User> {
+    const connectionUrl = this.buildUri('/' + userId) + '/?view=owner';
+    return this.http.patch(connectionUrl, changes, httpOptions).pipe(
       catchError(this.handleError<any>('updateUser'))
     );
   }
@@ -106,6 +107,19 @@ export class UserService extends AbstractEntityService<User> {
       externalFilters: {}
     }).pipe(
       catchError(this.handleError('getUserId', []))
+    );
+  }
+
+  getUserSettingsByLoginId(loginId: string): Observable<UserSettings> {
+    const url = this.buildUri(this.apiUrl.find) +  '/?view=owner';
+    return this.http.post(url, {
+      properties: { loginId: loginId },
+      externalFilters: {}
+    }).pipe(
+      map(users => {
+        return users[0].settings;
+      }),
+      catchError(this.handleError('getUserSettingsByLoginId', []))
     );
   }
 

@@ -57,9 +57,8 @@ const routes: Routes = [
     canActivate: [AuthenticationGuard],
     component: ImportComponent
   },
-
   {
-    path: 'account',
+    path: 'account/:accountSettingsName',
     component: UserProfileComponent
   },
   {

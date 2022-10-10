@@ -5,10 +5,12 @@ import { UserService } from '../../../services/http/user.service';
 import { TranslateService } from '@ngx-translate/core';
 import { DialogService } from '../../../services/util/dialog.service';
 import { ClientAuthentication } from '../../../models/client-authentication';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { User } from '../../../models/user';
 import { Person } from '../../../models/person';
-import { AuthProvider } from '@arsnova/app/models/auth-provider';
+import { AuthProvider } from '../../../models/auth-provider';
+import { UserSettings } from '../../../models/user-settings';
+import { Location } from '@angular/common';
 
 export class FormField {
   value: string;
@@ -37,19 +39,26 @@ export class UserProfileComponent implements OnInit {
   isSso = true;
   isLoading = true;
 
+  settings: UserSettings;
+  page: string;
+
   constructor(private authenticationService: AuthenticationService,
               private userService: UserService,
               private translationService: TranslateService,
               private notificationService: NotificationService,
               private dialogService: DialogService,
-              private router: Router) { }
+              private router: Router,
+              private route: ActivatedRoute,
+              private location: Location) { }
 
   ngOnInit(): void {
+    this.page = this.route.snapshot.params['accountSettingsName'];
     this.authenticationService.getCurrentAuthentication().subscribe(auth => {
       this.auth = auth;
       this.isSso = this.auth.authProvider !== AuthProvider.ARSNOVA;
       this.userService.getUserByLoginId(this.auth.loginId, true).subscribe(user => {
         this.user = user[0];
+        this.settings = this.user.settings || new UserSettings();
         this.formFields = [
           new FormField(this.user.person?.firstName, 'firstName', 'first-name'),
           new FormField(this.user.person?.lastName,'lastName', 'last-name'),
@@ -90,13 +99,27 @@ export class UserProfileComponent implements OnInit {
     this.router.navigate(['/']);
   }
 
-  update(field: FormField) {
+  updatePerson(field: FormField) {
     const person = this.user.person || new Person();
     person[field.name] = field.value;
-    const updatedUser = this.user;
-    updatedUser.person = person;
-    this.userService.updateUser(updatedUser).subscribe(user => {
+    this.updateUser('person', person);
+  }
+
+  updateSettings(value: boolean, propertyName: string) {
+    this.settings[propertyName] = value;
+    this.updateUser('settings', this.settings);
+  }
+
+  updateUser(propertyName: string, value: object) {
+    const changes = {};
+    changes[propertyName] = value;
+    this.userService.updateUser(this.user.id, changes).subscribe(user => {
       this.user = user;
     });
+  }
+
+  updatePage(page: string) {
+    this.page = page;
+    this.location.replaceState(`account/${this.page}`);
   }
 }

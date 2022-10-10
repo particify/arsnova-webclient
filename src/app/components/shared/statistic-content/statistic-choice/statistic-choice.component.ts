@@ -14,13 +14,8 @@ import { ColorElem } from '@arsnova/theme/Theme';
 import { ContentScale } from '@arsnova/app/models/content-scale';
 import { EventService } from '../../../../services/util/event.service';
 import { PresentationService } from '../../../../services/util/presentation.service';
-import { GlobalStorageService, STORAGE_KEYS } from '../../../../services/util/global-storage.service';
 import { AnswerOption } from '../../../../models/answer-option';
-
-export enum VisualizationUnit {
-  ABSOLUTE = 'ABSOLUTE',
-  PERCENTAGE = 'PERCENTAGE'
-}
+import { UserSettings } from '../../../../models/user-settings';
 
 @Component({
   selector: 'app-statistic-choice',
@@ -32,6 +27,7 @@ export class StatisticChoiceComponent extends StatisticContentBaseComponent impl
   @Input() content: ContentChoice;
   @Input() directShow: boolean;
   @Input() isSurvey: boolean;
+  @Input() settings: UserSettings;
 
   chart: Chart;
   chartId: string;
@@ -53,15 +49,12 @@ export class StatisticChoiceComponent extends StatisticContentBaseComponent impl
   roundsToDisplay = 0;
   roundsDisplayed: number;
   independentAnswerCount = [[], [], []];
-  visualizationUnit = VisualizationUnit.ABSOLUTE;
-  showAnswersBelow = false;
 
   constructor(protected contentService: ContentService,
               protected translateService: TranslateService,
               protected themeService: ThemeService,
               protected eventService: EventService,
-              protected presentationService: PresentationService,
-              protected globalStorageService: GlobalStorageService) {
+              protected presentationService: PresentationService) {
     super(contentService, eventService);
   }
 
@@ -81,10 +74,6 @@ export class StatisticChoiceComponent extends StatisticContentBaseComponent impl
       this.options = [...this.content.options];
     }
     this.correctOptionIndexes = this.content.correctOptionIndexes;
-    if (this.isPresentation) {
-      this.showAnswersBelow = this.globalStorageService.getItem(STORAGE_KEYS.SHOW_ANSWERS_BELOW);
-      this.visualizationUnit = this.globalStorageService.getItem(STORAGE_KEYS.ANSWER_VISUALIZATION_UNIT);
-    }
     this.initChart();
   }
 
@@ -183,7 +172,7 @@ export class StatisticChoiceComponent extends StatisticContentBaseComponent impl
           x: {
             type: 'category',
             ticks: {
-              display: !this.showAnswersBelow
+              display: !this.settings.contentAnswersDirectlyBelowChart || !this.isPresentation
             },
             grid: gridConfig,
             display: true
@@ -212,10 +201,10 @@ export class StatisticChoiceComponent extends StatisticContentBaseComponent impl
 
   getDataLabel(value): string {
     let label: string;
-    if (this.visualizationUnit === VisualizationUnit.ABSOLUTE) {
-      label = value;
-    } else {
+    if (this.settings.contentVisualizationUnitPercent) {
       label = (value / this.answerCount * 100).toFixed(0) + '%';
+    } else {
+      label = value;
     }
     return label;
   }
@@ -386,22 +375,5 @@ export class StatisticChoiceComponent extends StatisticContentBaseComponent impl
       }, 300);
     }
     this.roundsDisplayed = this.roundsToDisplay;
-  }
-
-  toggleVisualizationUnit() {
-    this.visualizationUnit = this.visualizationUnit === VisualizationUnit.ABSOLUTE ? VisualizationUnit.PERCENTAGE : VisualizationUnit.ABSOLUTE;
-    this.globalStorageService.setItem(STORAGE_KEYS.ANSWER_VISUALIZATION_UNIT, this.visualizationUnit);
-    if (this.chart) {
-      this.chart.update();
-    }
-  }
-
-  toggleAnswerListLayout() {
-    this.showAnswersBelow = !this.showAnswersBelow;
-    this.globalStorageService.setItem(STORAGE_KEYS.SHOW_ANSWERS_BELOW, this.showAnswersBelow);
-    if (this.chart) {
-      this.chart.destroy();
-      this.createChart(this.colors);
-    }
   }
 }
