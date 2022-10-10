@@ -65,6 +65,8 @@ import { ContentWordcloudAnswerComponent } from './content-answers/content-wordc
 import { DragDropBaseComponent } from './drag-drop-base/drag-drop-base.component';
 import { A11yRenderedBodyPipe } from '../../pipes/a11y-rendered-body.pipe';
 import { SettingsPanelHeaderComponent } from './settings-panel-header/settings-panel-header.component';
+import { ContentPriorizationAnswerComponent } from './content-answers/content-priorization-answer/content-priorization-answer.component';
+import { StatisticPriorizationComponent } from './statistic-content/statistic-priorization/statistic-priorization.component';
 
 @NgModule({
   imports: [
@@ -135,7 +137,9 @@ import { SettingsPanelHeaderComponent } from './settings-panel-header/settings-p
     ContentWordcloudAnswerComponent,
     DragDropBaseComponent,
     A11yRenderedBodyPipe,
-    SettingsPanelHeaderComponent
+    SettingsPanelHeaderComponent,
+    ContentPriorizationAnswerComponent,
+    StatisticPriorizationComponent
   ],
   exports: [
     RoomJoinComponent,
@@ -183,7 +187,8 @@ import { SettingsPanelHeaderComponent } from './settings-panel-header/settings-p
     AnswerListComponent,
     ContentWordcloudAnswerComponent,
     A11yRenderedBodyPipe,
-    SettingsPanelHeaderComponent
+    SettingsPanelHeaderComponent,
+    ContentPriorizationAnswerComponent
   ]
 })
 export class SharedModule {

@@ -6,6 +6,7 @@
     "a11y-current-text": "Inhalt {{index}}. Das ist eine Offene Frage. Drücke die Tab-Taste, um zum Inhalt und zur Eingabe der Antwort zu gelangen.",
     "a11y-current-slide": "Inhalt {{index}}. Das ist eine Folie. Drücke die Tab-Taste zum Inhalt zu gelangen.",
     "a11y-current-sort": "Inhalt {{index}}. Dies ist eine Sortierfrage. Drücke die Tab-Taste, um zum Inhalt und den Antworten zu gelangen und nutze die Pfeiltasten, um sie hoch und runter zu verschieben.",
+    "a11y-current-priorization": "Inhalt {{index}}. Dies ist eine Priorisierungsfrage. Drücke die Tab-Taste, um zum Inhalt und den Antworten zu gelangen.",
     "a11y-already-answered": "Du hast Inhalt {{index}} bereits beantwortet. Navigiere mit der Tab-Taste zu Ihrer Antwort oder Antworten order drücke die Leertaste um zu den Ergebnissen zu gelangen.",
     "a11y-already-answered-single": "Du hast diesen Inhalt bereits mit der Antwort {{answers}} beantwortet.",
     "a11y-already-answered-multiple": "Du hast diesen Inhalt bereits mit den Antworten {{answers}} beantwortet.",
@@ -40,7 +41,13 @@
     "group-not-available": "Diese Fragenserie ist nicht verfügbar",
     "state-changed": "Die Fragenliste wurde aktualisiert.",
     "load": "Laden",
-    "word": "Schlagwort"
+    "word": "Schlagwort",
+    "please-assign-points-correctly": "Bitte vergib genau {{points}} Punkte.",
+    "please-assign-valid-points": "Bitte vergib zwischen 0 und {{points}} Punkten pro Antwort.",
+    "points-left": "Punkte übrig",
+    "points-too-much": "Punkte zu viel vergeben",
+    "add-points": "10 Punkte hinzufügen",
+    "remove-points": "10 Punkte entfernen"
   },
   "content": {
     "a11y-wordcloud-info": "Verwendete Schlagwörter nach Häufigkeit in absteigender Reihenfolge.",

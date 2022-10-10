@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, ViewChild } from '@angular/core';
 import { AnswerOption } from '../../../../models/answer-option';
 import { ContentChoice } from '../../../../models/content-choice';
 import { ContentService } from '../../../../services/http/content.service';
@@ -9,6 +9,7 @@ import { ContentGroupService } from '../../../../services/http/content-group.ser
 import { ContentCreationComponent, DisplayAnswer } from '../content-creation/content-creation.component';
 import { AnnounceService  } from '../../../../services/util/announce.service';
 import { ActivatedRoute } from '@angular/router';
+import { CreateAnswerOptionComponent } from '../create-answer-option/create-answer-option.component';
 
 @Component({
   selector: 'app-content-choice-creation',
@@ -17,10 +18,12 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class ContentChoiceCreationComponent extends ContentCreationComponent implements OnInit {
 
+  @ViewChild(CreateAnswerOptionComponent) createAnswerOptionComponent: CreateAnswerOptionComponent;
+
   multipleCorrectAnswers = false;
   noCorrectAnswers = false;
   newAnswerOptionChecked = false;
-  newAnswerOptionLabel = '';
+  resetAnswerInputEvent: EventEmitter<boolean> = new EventEmitter<boolean>();
   isAnswerEdit = -1;
 
   constructor(
@@ -58,14 +61,13 @@ export class ContentChoiceCreationComponent extends ContentCreationComponent imp
     this.checkIfAnswersExist();
   }
 
-  addAnswer($event) {
-    $event.preventDefault();
-    if (this.newAnswerOptionLabel === '') {
+  addAnswer(answer: string) {
+    if (answer === '') {
       this.translationService.get('content.no-empty2').subscribe(message => {
         this.notificationService.showAdvanced(message, AdvancedSnackBarTypes.FAILED);
       });
       this.newAnswerOptionChecked = false;
-      this.newAnswerOptionLabel = '';
+      this.resetAnswerInputEvent.emit(true);
       return;
     }
     if ((!this.multipleCorrectAnswers) && (this.content as ContentChoice).correctOptionIndexes.length > 0 && this.newAnswerOptionChecked) {
@@ -73,16 +75,16 @@ export class ContentChoiceCreationComponent extends ContentCreationComponent imp
         this.notificationService.showAdvanced(message, AdvancedSnackBarTypes.FAILED);
       });
       this.newAnswerOptionChecked = false;
-      this.newAnswerOptionLabel = '';
+      this.resetAnswerInputEvent.emit(true);
       return;
     }
-    if (this.answerExists(this.newAnswerOptionLabel.valueOf())) {
+    if (this.answerExists(answer)) {
       return;
     }
     if ((this.content as ContentChoice).options.length < 8) {
-      (this.content as ContentChoice).options.push(new AnswerOption(this.newAnswerOptionLabel));
+      (this.content as ContentChoice).options.push(new AnswerOption(answer));
       this.newAnswerOptionChecked = false;
-      this.newAnswerOptionLabel = '';
+      this.resetAnswerInputEvent.emit(true);
       this.fillCorrectAnswers();
       document.getElementById('answer-input').focus();
       this.announceService.announce('content.a11y-answer-added');
@@ -168,7 +170,7 @@ export class ContentChoiceCreationComponent extends ContentCreationComponent imp
       this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
       return;
     }
-    if (this.newAnswerOptionLabel.length > 0) {
+    if (this.createAnswerOptionComponent?.newAnswer.length > 0) {
       const msg = this.translationService.instant('content.unsaved-answer');
       this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
       return;

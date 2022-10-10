@@ -11,6 +11,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { forkJoin, Observable } from 'rxjs';
 import { SelectableAnswer } from '../../../../models/selectable-answer';
 import { ContentWordcloud } from '../../../../models/content-wordcloud';
+import { AnswerWithPoints } from '@arsnova/app/models/answer-with-points';
 
 @Component({
   selector: 'app-preview',
@@ -25,6 +26,7 @@ export class PreviewComponent implements OnInit {
 
   body: string;
   answerOptions: AnswerOption[];
+  answerOptionsWithPoints: AnswerWithPoints[] = [];
   selectableAnswers: SelectableAnswer[] = [];
   multipleAnswers: boolean;
   isLoading = true;
@@ -40,10 +42,15 @@ export class PreviewComponent implements OnInit {
 
   ngOnInit(): void {
     const format = this.content.format;
-    if ([ContentType.CHOICE, ContentType.BINARY, ContentType.SORT].indexOf(format) > -1) {
+    if ([ContentType.CHOICE, ContentType.BINARY, ContentType.SORT, ContentType.PRIORIZATION].indexOf(format) > -1) {
       const options = (this.content as ContentChoice).options;
       this.answerOptions = format === ContentType.SORT ? this.answerService.shuffleAnswerOptions(options) : options;
       this.multipleAnswers = (this.content as ContentChoice).multiple;
+      if (format === ContentType.PRIORIZATION) {
+        options.forEach((option, index) => {
+          this.answerOptionsWithPoints.push(new AnswerWithPoints(option, 0));
+        });
+      }
     } else if (format === ContentType.SCALE) {
       const scaleContent = this.content as ContentScale
       const optionLabels$ = this.likertScaleService.getOptionLabels(

@@ -6,6 +6,7 @@
     "a11y-current-text": "Content {{index}}. This is a open question. To go to the content and the answer input press the tab key.",
     "a11y-current-slide": "Content {{index}}}. This is a slide. Navigate with tab to the content.",
     "a11y-current-sort": "Content {{index}}. This is a sort content. To go to content and the answers press the tab key and move up and down with arrow keys.",
+    "a11y-current-priorization": "Content {{index}}. This is a priorization content. To go to the content and the answer options press the tab key.",
     "a11y-already-answered": "You have already answered the content {{index}}. Navigate with tab to the content and your answer or answers or press the space button to see the results.",
     "a11y-already-answered-single": "You have answered to this content with the answer {{answers}}.",
     "a11y-already-answered-multiple": "You have answered to this content with the answers {{answers}}.",
@@ -40,7 +41,13 @@
     "group-not-available": "This question series is not available",
     "state-changed": "The content list has been updated.",
     "load": "Load",
-    "word": "Keyword"
+    "word": "Keyword",
+    "please-assign-points-correctly": "Please assign exactly {{points}} points.",
+    "please-assign-valid-points": "Please assign between 0 and {{points}} Points per answer.",
+    "points-left": "Points left",
+    "points-too-much": "Points assigned too much",
+    "add-points": "Add 10 points",
+    "remove-points": "Remove 10 points"
   },
   "content": {
     "a11y-wordcloud-info": "Used keywords by frequency in descending order.",

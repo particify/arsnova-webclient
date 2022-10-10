@@ -367,6 +367,13 @@ div {
   border: none!important;
 }
 
+.number-input-small .mat-form-field-infix {
+  padding: 11px 0;
+  border-top: none;
+  margin-top: 4px;
+  width: 50px;
+}
+
 /*.activeInput:not(:hover) .mat-form-field-flex {
   padding: 0!important;
 }
@@ -1020,7 +1027,7 @@ button.mat-menu-item:hover {
   }
 }
 
-app-rendered-text:not(.rendered-list-preview-container) {
+app-rendered-text:not(.rendered-list-preview-container):not(.no-full-width) {
   width: 100%;
 }
 

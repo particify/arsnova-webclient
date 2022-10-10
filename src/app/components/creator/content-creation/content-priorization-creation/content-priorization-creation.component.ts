@@ -1,24 +1,23 @@
 import { Component, EventEmitter, OnInit } from '@angular/core';
-import { TranslateService } from '@ngx-translate/core';
-import { ContentService } from '../../../../services/http/content.service';
-import { AdvancedSnackBarTypes, NotificationService } from '../../../../services/util/notification.service';
 import { ActivatedRoute } from '@angular/router';
-import { ContentType } from '../../../../models/content-type.enum';
-import { ContentGroupService } from '../../../../services/http/content-group.service';
-import { ContentChoice } from '../../../../models/content-choice';
-import { AnswerOption } from '../../../../models/answer-option';
-import {
-  ContentCreationComponent,
-  DisplayAnswer
-} from '../content-creation/content-creation.component';
-import { AnnounceService } from '../../../../services/util/announce.service';
+import { ContentType } from '@arsnova/app/models/content-type.enum';
+import { ContentGroupService } from '@arsnova/app/services/http/content-group.service';
+import { ContentService } from '@arsnova/app/services/http/content.service';
+import { AnnounceService } from '@arsnova/app/services/util/announce.service';
+import { NotificationService } from '@arsnova/app/services/util/notification.service';
+import { AnswerOption } from '@arsnova/app/models/answer-option';
+import { AdvancedSnackBarTypes } from '@arsnova/app/services/util/notification.service';
+import { TranslateService } from '@ngx-translate/core';
+import { ContentCreationComponent, DisplayAnswer } from '../content-creation/content-creation.component';
+import { ContentPriorization } from '@arsnova/app/models/content-priorization';
+import { PriorizationRoundStatistics } from '@arsnova/app/models/round-statistics';
 
 @Component({
-  selector: 'app-content-sort-creation',
-  templateUrl: './content-sort-creation.component.html',
-  styleUrls: ['./content-sort-creation.component.scss']
+  selector: 'app-content-priorization-creation',
+  templateUrl: './content-priorization-creation.component.html',
+  styleUrls: ['./content-priorization-creation.component.scss']
 })
-export class ContentSortCreationComponent extends ContentCreationComponent implements OnInit {
+export class ContentPriorizationCreationComponent extends ContentCreationComponent implements OnInit {
 
   isAnswerEdit = -1;
   resetAnswerInputEvent: EventEmitter<boolean> = new EventEmitter<boolean>();
@@ -35,7 +34,7 @@ export class ContentSortCreationComponent extends ContentCreationComponent imple
   }
 
   initContentCreation() {
-    this.content = new ContentChoice(
+    this.content = new ContentPriorization(
       null,
       null,
       '',
@@ -43,17 +42,15 @@ export class ContentSortCreationComponent extends ContentCreationComponent imple
       '',
       [],
       [],
-      [],
-      true,
-      ContentType.SORT,
-      null
+      ContentType.PRIORIZATION,
+      null,
+      100
     );
     this.fillCorrectAnswers();
   }
 
   initContentForEditing() {
     this.displayAnswers = this.initContentChoiceEditBase();
-    this.updateDragDropList();
     this.checkIfAnswersExist();
   }
 
@@ -69,11 +66,17 @@ export class ContentSortCreationComponent extends ContentCreationComponent imple
     }
   }
 
+  checkIfAnswersExist() {
+    this.contentService.getAnswer(this.content.roomId, this.content.id).subscribe(answer => {
+      this.noAnswersYet = !!(answer.roundStatistics[0] as PriorizationRoundStatistics).assignedPoints;
+      this.isLoading = false;
+    });
+  }
+
   addAnswer(answer: string) {
     if (this.answerInputCheck(answer)) {
       if (this.displayAnswers.length < 8) {
         this.displayAnswers.push(new DisplayAnswer(new AnswerOption(answer), true));
-        this.updateDragDropList();
         this.resetAnswerInputEvent.emit(true);
       } else {
         const msg = this.translationService.instant('content.max-answers');
@@ -85,7 +88,6 @@ export class ContentSortCreationComponent extends ContentCreationComponent imple
   deleteAnswer(index: number) {
     this.displayAnswers.splice(index, 1);
     this.afterAnswerDeletion();
-    this.updateDragDropList();
   }
 
   showWarning(translationKey: string) {
@@ -106,8 +108,6 @@ export class ContentSortCreationComponent extends ContentCreationComponent imple
       return;
     }
     if (this.displayAnswers.length >= 2) {
-      (this.content as ContentChoice).correctOptionIndexes = Object.keys(this.displayAnswers.map(a => a.answerOption))
-        .map(index => parseInt(index, 10));
       return true;
     } else {
       const msg = this.translationService.instant('content.need-answers');
@@ -115,8 +115,7 @@ export class ContentSortCreationComponent extends ContentCreationComponent imple
     }
   }
 
-  updateDragDropList() {
-    this.dragDroplist = this.displayAnswers;
+  resetAnswers() {
+    this.displayAnswers = [];
   }
-
 }

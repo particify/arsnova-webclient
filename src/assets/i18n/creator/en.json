@@ -124,6 +124,7 @@
     "a11y-format-slide": "Select the format “Slide”.",
     "a11y-format-sort": "Select the format “Sort”.",
     "a11y-format-flashcard": "Select the format “Flashcard”.",
+    "a11y-format-priorization": "Select the format “Priorization”.",
     "a11y-single-choice": "Currently you've chosen the format Single-Choice. Switch to multiple-choice with the arrow keys.",
     "a11y-multiple-choice": "Currently you've chosen the format multiple choice. Switch to Single-Choice with the arrow keys.",
     "a11y-answer-yes": "Currently the answer to this content is “Yes”. Change to “No” with the arrow keys.",
@@ -251,6 +252,8 @@
     "format-flashcard-description": "With flashcards participants can learn with front and back.",
     "format-wordcloud": "Word cloud",
     "format-wordcloud-description": "Participants can answer with keywords. The relative frequencies are visualized in the form of a word cloud.",
+    "format-priorization": "Priorization",
+    "format-priorization-description": "Participants can assign a certain number of points to the answer options.",
     "multiple-answers-allowed": "Allow to select multiple answers",
     "no-correct-answer": "Do not set correct answers",
     "format-not-supported": "This format is currently not supported.",
@@ -276,7 +279,11 @@
     "banned-keywords-reset": "Banned keywords have been reset."
   },
   "answer": {
-    "word": "Keyword"
+    "word": "Keyword",
+    "points-left": "Points left",
+    "points-too-much": "Points assigned too much",
+    "add-points": "Add 10 points",
+    "remove-points": "Remove 10 points"
   },
   "survey": {
     "a11y-message": "You are now in live feedback mode.",

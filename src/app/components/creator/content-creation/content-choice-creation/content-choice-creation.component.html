@@ -32,23 +32,8 @@
       </mat-list-item>
     </mat-list>
   </div>
-
-  <div *ngIf="!isEditMode || noAnswersYet" fxLayout="row" fxLayoutAlign="center" fxLayoutGap="20px">
-    <form class="full-width answer-form" fxLayout="row">
-      <mat-form-field class="full-width" appearance="fill">
-        <mat-label>{{ 'content.add-answer' | translate }}</mat-label>
-        <input
-               matInput [(ngModel)]="newAnswerOptionLabel" name="answer" id="answer-input"
-               autocomplete="off">
-        <button class="add-button" mat-icon-button matSuffix (click)="addAnswer($event)"
-                [matTooltip]="'content.add-answer' | translate">
-          <mat-icon class="add-icon">add_circle</mat-icon>
-        </button>
-        <mat-placeholder>{{ 'content.answer' | translate }}</mat-placeholder>
-      </mat-form-field>
-    </form>
-  </div>
-
+  <app-create-answer-option *ngIf="!isEditMode || noAnswersYet" (answerCreated)="addAnswer($event)" 
+                            [resetEvent]="resetAnswerInputEvent"></app-create-answer-option>
 </div>
 
 <div class="visually-hidden">

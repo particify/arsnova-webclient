@@ -3,7 +3,6 @@ export class Combination {
   selectedChoiceIndexes: number[];
 }
 
-
 export class RoundStatistics {
   round: number;
   independentCounts: number[];
@@ -14,4 +13,8 @@ export class RoundStatistics {
 
 export class TextRoundStatistics extends RoundStatistics {
   texts: string[];
+}
+
+export class PriorizationRoundStatistics extends RoundStatistics {
+  assignedPoints: number[];
 }
