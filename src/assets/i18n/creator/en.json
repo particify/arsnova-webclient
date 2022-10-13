@@ -465,7 +465,8 @@
     "show-wordcloud-list": "Show answers as list",
     "show-wordcloud": "Show answers as wordcloud",
     "ban-answer": "Ban keyword",
-    "answer-banned": "The keyword has been banned."
+    "answer-banned": "The keyword has been banned.",
+    "points": "Points"
   },
   "dialog": {
     "a11y-cancel": "Cancels the current process and closes the dialog.",

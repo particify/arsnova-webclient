@@ -261,6 +261,20 @@ export class StatisticPriorizationComponent extends StatisticChoiceComponent imp
     this.abstentionCount = stats.roundStatistics[0].abstentionCount;
   }
 
+  getA11yMessage(): string {
+    let a11yMsg = '';
+    if (this.answerCount === 0) {
+      a11yMsg = this.translateService.instant('statistic.no-answers');
+    } else {
+      this.options.forEach((option, i) => {
+        a11yMsg += this.chartData[i] + ' ' + this.translateService.instant('statistic.points') + ': ';
+        a11yMsg += this.translateService.instant('statistic.answer') + (i + 1) + ': ';
+        a11yMsg += option.label + ', ';
+      });
+    }
+    return a11yMsg;
+  }
+
   prepareChart() {
     this.chart.data.datasets[0].data = this.answersVisible ? this.chartData : this.emptyData;
     this.chart.data.datasets[0].backgroundColor = this.chartColors;

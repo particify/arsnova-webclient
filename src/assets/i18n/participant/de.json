@@ -210,7 +210,8 @@
     "show-correct": "Richtige Antworten anzeigen",
     "answer": "Antwort",
     "other-combinations": "Andere",
-    "no-answers": "Es sind keine Antworten vorhanden."
+    "no-answers": "Es sind keine Antworten vorhanden.",
+    "points": "Punkte"
   },
   "sidebar": {
     "a11y-switch-to-feature": "Zu {{feature}} wechseln.",

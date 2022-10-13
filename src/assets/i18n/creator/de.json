@@ -465,7 +465,8 @@
     "show-wordcloud-list": "Zeige die Antworten als Liste",
     "show-wordcloud": "Zeige die Antworten als Wortwolke",
     "ban-answer": "Schlagwort verbannen",
-    "answer-banned": "Das Schlagwort wurde gebannt."
+    "answer-banned": "Das Schlagwort wurde gebannt.",
+    "points": "Punkte"
   },
   "dialog": {
     "a11y-cancel": "Bricht den aktuellen Vorgang ab und schließt den Dialog.",

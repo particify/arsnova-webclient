@@ -210,7 +210,8 @@
     "show-correct": "Show correct answers",
     "answer": "Answer",
     "other-combinations": "Other",
-    "no-answers": "There are no answers."
+    "no-answers": "There are no answers.",
+    "points": "Points"
   },
   "sidebar": {
     "a11y-switch-to-feature": "Switch to {{feature}}.",
