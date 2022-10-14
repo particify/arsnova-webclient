@@ -41,6 +41,7 @@ export class ContentParticipantComponent implements OnInit {
   isMultiple: boolean;
   flashcardMarkdownFeatures = MarkdownFeatureset.EXTENDED;
   HotkeyAction = HotkeyAction;
+  a11yMsg: string;
 
   constructor() { }
 
@@ -60,6 +61,7 @@ export class ContentParticipantComponent implements OnInit {
       }
     }
     this.isMultiple = (this.content as ContentChoice).multiple;
+    this.a11yMsg = this.getA11yMessage();
     this.isLoading = false;
   }
 
@@ -112,7 +114,7 @@ export class ContentParticipantComponent implements OnInit {
     this.goToNextContent(null);
   }
 
-  getContentMessage(): string {
+  getA11yMessage(): string {
     let msg = 'answer.a11y-';
     if (this.alreadySent) {
       msg += 'already-answered';
