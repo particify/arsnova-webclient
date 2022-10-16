@@ -55,7 +55,7 @@ export class ContentParticipantComponent implements OnInit {
           this.answersString = this.answersString.concat((this.content as ContentChoice).options[option].label + ',');
         }
       } else if (this.content.format === ContentType.WORDCLOUD) {
-        for (let text of (this.answer as MultipleTextsAnswer).texts) {
+        for (let text of (this.answer as MultipleTextsAnswer).texts ?? []) {
           this.answersString = this.answersString.concat(text + ',');
         }
       }
