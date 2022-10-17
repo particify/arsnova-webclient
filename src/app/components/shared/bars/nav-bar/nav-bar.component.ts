@@ -69,6 +69,7 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
   group: ContentGroup;
   groupName: string;
   role: UserRole;
+  viewRole: UserRole;
   shortId: string;
   roomId: string;
   changesSubscription: Subscription;
@@ -127,7 +128,7 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
 
   subscribeToFocusModeEvent() {
     this.focusStateSubscription = this.eventService.on<boolean>(RemoteMessage.FOCUS_STATE_CHANGED).subscribe(guided => {
-      this.hideBarForParticipants = guided && this.role === UserRole.PARTICIPANT;
+      this.hideBarForParticipants = guided && this.viewRole === UserRole.PARTICIPANT;
       this.sendVisibleStatusEvent();
     });
   }
@@ -141,10 +142,11 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
   initItems() {
     this.beforeInit();
     this.route.data.subscribe(data => {
-      this.role = data.viewRole;
+      this.role = data.userRole;
+      this.viewRole = data.viewRole;
       this.shortId = data.room.shortId;
       this.roomId = data.room.id;
-      if (!data.room.settings['feedbackLocked'] || this.role !== UserRole.PARTICIPANT) {
+      if (!data.room.settings['feedbackLocked'] || this.viewRole !== UserRole.PARTICIPANT) {
         this.activeFeatures.splice(2, 0, Features.FEEDBACK);
       }
       this.feedbackService.startSub(this.roomId);
@@ -154,7 +156,7 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
       } else {
         this.setGroupInSessionStorage(group);
       }
-      this.roomStatsService.getStats(this.roomId, this.role !== UserRole.PARTICIPANT).subscribe(stats => {
+      this.roomStatsService.getStats(this.roomId, this.viewRole !== UserRole.PARTICIPANT).subscribe(stats => {
         if (stats.groupStats) {
           this.groupName = group || stats.groupStats[0].groupName;
           this.setGroupInSessionStorage(this.groupName);
@@ -165,7 +167,7 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
       });
       this.subscribeToFeedbackEvent();
       this.subscribeToRouteChanges();
-      if (this.role === UserRole.PARTICIPANT) {
+      if (this.viewRole === UserRole.PARTICIPANT) {
         this.subscribeToContentGroups();
         this.subscribeToRemoteEvent();
       } else {
@@ -199,7 +201,7 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
   }
 
   subscribeToFeedbackEvent() {
-    if (this.role === UserRole.PARTICIPANT) {
+    if (this.viewRole === UserRole.PARTICIPANT) {
       this.feedbackSubscription = this.feedbackService.messageEvent.subscribe(message => {
         const type = JSON.parse(message.body).type;
         if (type === FeedbackMessageType.STARTED) {
@@ -317,7 +319,7 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
   }
 
   getBaseUrl(): string {
-    return `/${this.routingService.getRoleString(this.role)}/${this.shortId}`;
+    return `/${this.routingService.getRoleString(this.viewRole)}/${this.shortId}`;
   }
 
   getGroupUrl() {
@@ -334,7 +336,7 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
         return;
       }
     }
-    const route = [this.routingService.getRoleString(this.role), this.shortId];
+    const route = [this.routingService.getRoleString(this.viewRole), this.shortId];
     if (item.name !== Features.OVERVIEW) {
       route.push(item.name);
       if (item.name === Features.CONTENTS) {
@@ -373,6 +375,7 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
                 this.setGroup(group);
               }
               this.addContentFeatureItem();
+              // route data's `userRole` is used here to prevent showing notification indicator in creators room preview
               if (this.role === UserRole.PARTICIPANT) {
                 this.toggleNews(Features.CONTENTS);
               }
@@ -416,7 +419,7 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
     this.changesSubscription = this.eventService.on('EntityChanged').subscribe(changes => {
       this.handleContentGroupChanges(changes);
     });
-    const changeEventType = this.role === UserRole.PARTICIPANT ? 'PublicDataChanged' : 'ModeratorDataChanged';
+    const changeEventType = this.viewRole === UserRole.PARTICIPANT ? 'PublicDataChanged' : 'ModeratorDataChanged';
     this.statsChangesSubscription = this.eventService.on<DataChanged<RoomStats>>(changeEventType)
         .subscribe(event => this.updateGroups(event.payload.data.groupStats, true));
   }
