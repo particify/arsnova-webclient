@@ -10,6 +10,7 @@ stages:
 
 default:
   image: node:16.17-alpine
+  interruptible: true
   before_script:
     - date
   after_script:
@@ -105,6 +106,7 @@ ngbuild:
     KANIKO_CONTEXT: $CI_PROJECT_DIR
     KANIKO_DOCKERFILE: $CI_PROJECT_DIR/docker/Dockerfile
     KANIKO_DESTINATION: $CI_REGISTRY/$CI_PROJECT_PATH:$CI_COMMIT_REF_SLUG
+  interruptible: false
   before_script:
     - date
   script:
