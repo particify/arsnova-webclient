@@ -2,6 +2,10 @@ variables:
   BUILD_DIR: dist
   YARN_CACHE_FOLDER: .yarn-cache
 
+workflow:
+  rules:
+    - if: $CI_MERGE_REQUEST_ID || $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH || $CI_COMMIT_REF_NAME =~ /^v[0-9]+/ || $CI_COMMIT_REF_NAME =~ /^[0-9]+\.[0-9]+$/
+
 default:
   image: node:16.17-alpine
   interruptible: true
