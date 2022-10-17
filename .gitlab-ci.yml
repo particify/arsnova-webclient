@@ -2,12 +2,6 @@ variables:
   BUILD_DIR: dist
   YARN_CACHE_FOLDER: .yarn-cache
 
-stages:
-  - prepare
-  - build
-  - test
-  - deploy
-
 default:
   image: node:16.17-alpine
   interruptible: true
@@ -23,7 +17,7 @@ default:
     - $YARN_CACHE_FOLDER
 
 yarn_populate_cache:
-  stage: prepare
+  stage: .pre
   rules:
     - if: '$CI_COMMIT_BRANCH != "master" || $CI_MERGE_REQUEST_ID'
       when: never
@@ -43,7 +37,7 @@ yarn_populate_cache:
     - yarn --frozen-lockfile
 
 yarn_install:
-  stage: prepare
+  stage: .pre
   artifacts:
     expire_in: 2 hours
     paths:
