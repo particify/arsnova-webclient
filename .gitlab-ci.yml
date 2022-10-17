@@ -82,43 +82,34 @@ ngbuild:
     - sed -i "s/\$VERSION_COMMIT_DATE/$CI_COMMIT_TIMESTAMP/" src/environments/environment.prod.ts
     - yarn build
 
-.docker_image: &docker_image
+docker_image:
   stage: deploy
   dependencies:
     - ngbuild
   image:
     name: gcr.io/kaniko-project/executor:debug
     entrypoint: [""]
-  # Disabled for now. See https://gitlab.com/gitlab-org/gitlab/issues/34756.
-  #rules:
-  #  - if: '$CI_COMMIT_REF_NAME == "master"'
-  #    when: on_success
-  #  - if: '$CI_COMMIT_REF_NAME == "latest" || $CI_COMMIT_REF_NAME =~ /^v[0-9]+/ || $CI_COMMIT_REF_NAME =~ /^[0-9]+\.[0-9]+$/'
-  #    when: never
-  #  - when: manual
+  rules:
+    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
+      when: on_success
+      variables:
+        DOCKER_TAG: next
+    - when: manual
+      variables:
+        DOCKER_TAG: dev-$CI_COMMIT_REF_SLUG
   variables:
+    DOCKER_IMAGE: $CI_REGISTRY/$CI_PROJECT_PATH/$PROJECT
     KANIKO_CONTEXT: $CI_PROJECT_DIR
     KANIKO_DOCKERFILE: $CI_PROJECT_DIR/docker/Dockerfile
-    KANIKO_DESTINATION: $CI_REGISTRY/$CI_PROJECT_PATH:$CI_COMMIT_REF_SLUG
+  allow_failure: true
   interruptible: false
   before_script:
     - date
   script:
     - mkdir -p /kaniko/.docker
     - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
-    - /kaniko/executor --context "$KANIKO_CONTEXT" --dockerfile "$KANIKO_DOCKERFILE" --destination "$KANIKO_DESTINATION" --build-arg "ARSNOVA_BUILD_DIR=`echo $BUILD_DIR`"
-
-# Temporary workaround until GitLab bug is fixed
-docker_image:
-  <<: *docker_image
-  only:
-    - master
-
-docker_image_dev:
-  <<: *docker_image
-  except:
-    - master
-    - latest
-    - /^v[0-9]+/
-    - /^[0-9]+\.[0-9]+$/
-  when: manual
+    - /kaniko/executor
+      --context "$KANIKO_CONTEXT"
+      --dockerfile "$KANIKO_DOCKERFILE"
+      --destination "$DOCKER_IMAGE:$DOCKER_TAG"
+      --build-arg "ARSNOVA_BUILD_DIR=`echo $BUILD_DIR`"
