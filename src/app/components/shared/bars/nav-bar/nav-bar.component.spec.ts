@@ -176,6 +176,7 @@ describe('NavBarComponent', () => {
     room.shortId = '12345678';
     const data = {
       room: room,
+      userRole: UserRole.PARTICIPANT,
       viewRole: UserRole.PARTICIPANT
     }
     route.data = of(data);
@@ -192,6 +193,7 @@ describe('NavBarComponent', () => {
     room.shortId = '12345678';
     const data = {
       room: room,
+      userRole: UserRole.CREATOR,
       viewRole: UserRole.CREATOR
     }
     route.data = of(data);
@@ -208,6 +210,7 @@ describe('NavBarComponent', () => {
     room.shortId = '12345678';
     const data = {
       room: room,
+      userRole: UserRole.CREATOR,
       viewRole: UserRole.CREATOR
     }
     route.data = of(data);
@@ -458,6 +461,7 @@ describe('NavBarComponent', () => {
     room.shortId = '12345678';
     const data = {
       room: room,
+      userRole: UserRole.PARTICIPANT,
       viewRole: UserRole.PARTICIPANT
     }
     route.data = of(data);
@@ -506,6 +510,7 @@ describe('NavBarComponent', () => {
     room.shortId = '12345678';
     const data = {
       room: room,
+      userRole: UserRole.PARTICIPANT,
       viewRole: UserRole.PARTICIPANT
     }
     route.data = of(data);
@@ -542,6 +547,7 @@ describe('NavBarComponent', () => {
     room.shortId = '12345678';
     const data = {
       room: room,
+      userRole: UserRole.PARTICIPANT,
       viewRole: UserRole.PARTICIPANT
     }
     route.data = of(data);
@@ -568,6 +574,7 @@ describe('NavBarComponent', () => {
     room.shortId = '12345678';
     const data = {
       room: room,
+      userRole: UserRole.PARTICIPANT,
       viewRole: UserRole.PARTICIPANT
     }
     route.data = of(data);
@@ -594,6 +601,7 @@ describe('NavBarComponent', () => {
     room.shortId = '12345678';
     const data = {
       room: room,
+      userRole: UserRole.PARTICIPANT,
       viewRole: UserRole.PARTICIPANT
     }
     route.data = of(data);
