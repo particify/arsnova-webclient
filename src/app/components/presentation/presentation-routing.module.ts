@@ -6,39 +6,31 @@ import { UserRole } from '../../models/user-roles.enum';
 import { RoomResolver } from '../../resolver/room.resolver';
 import { RoomViewUserRoleResolver } from '../../resolver/room-view-user-role.resolver';
 import { PresentationComponent } from './presentation/presentation.component';
+import { CommentPageComponent } from '../shared/comment-page/comment-page.component';
+import { SurveyPageComponent } from '../shared/survey-page/survey-page.component';
+import { ContentPresentationComponent } from '../creator/content-presentation/content-presentation.component';
+import { QrCodeComponent } from './qr-code/qr-code.component';
 
 const routes: Routes = [
   {
     path: '',
-    component: PresentationComponent
+    component: QrCodeComponent
   },
   {
     path: 'comments',
-    component: PresentationComponent,
-    data: {
-      feature: 'comments'
-    }
+    component: CommentPageComponent
   },
   {
     path: 'feedback',
-    component: PresentationComponent,
-    data: {
-      feature: 'feedback'
-    }
+    component: SurveyPageComponent
   },
   {
     path: 'series/:seriesName',
-    component: PresentationComponent,
-    data: {
-      feature: 'series'
-    }
+    component: ContentPresentationComponent
   },
   {
     path: 'series/:seriesName/:contentIndex',
-    component: PresentationComponent,
-    data: {
-      feature: 'series'
-    }
+    component: ContentPresentationComponent
   }
 ];
 
@@ -51,6 +43,7 @@ const routes: Routes = [
       useFactory: (extensionRouteProviders: ExtensionRouteProvider[]) => [
         {
           path: ':shortId',
+          component: PresentationComponent,
           canActivate: [AuthenticationGuard],
           data: {
             requiredRole: UserRole.CREATOR,
@@ -60,6 +53,7 @@ const routes: Routes = [
             room: RoomResolver,
             viewRole: RoomViewUserRoleResolver
           },
+          runGuardsAndResolvers: 'always',
           children: [
             ...routes,
             ...ExtensionRouteProvider.extractRoutesForMountPoint(

@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { SurveyPageComponent } from './survey-page.component';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
 import { NotificationService } from '@arsnova/app/services/util/notification.service';
 import { TranslateLoader, TranslateModule, TranslateService } from '@ngx-translate/core';
 import {
@@ -60,8 +60,11 @@ describe('SurveyPageComponent', () => {
     room: room,
     viewRole: UserRole.PARTICIPANT
   }
-
-  const activatedRouteStub = new ActivatedRouteStub(null, data);
+  const snapshot = new ActivatedRouteSnapshot();
+  snapshot.data = {
+    isPresentation: false
+  }
+  const activatedRouteStub = new ActivatedRouteStub(null, data, snapshot);
   let translateService: TranslateService;
   const mockA11yIntroPipe = new A11yIntroPipe(translateService);
 

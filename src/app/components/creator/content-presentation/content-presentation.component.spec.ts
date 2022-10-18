@@ -15,7 +15,7 @@ import {
   MockLangService,
   MockRouter
 } from '@arsnova/testing/test-helpers';
-import { Location } from '@angular/common';
+import { DOCUMENT, Location } from '@angular/common';
 import { MockLocationStrategy } from '@angular/common/testing';
 import { HotkeyService } from '@arsnova/app/services/util/hotkey.service';
 import { NO_ERRORS_SCHEMA, Injectable } from '@angular/core';
@@ -34,6 +34,8 @@ import { Person } from '@arsnova/app/models/person';
 import { ClientAuthentication } from '@arsnova/app/models/client-authentication';
 import { STORAGE_KEYS } from '@arsnova/app/services/util/global-storage.service';
 import { UserSettings } from '@arsnova/app/models/user-settings';
+import { StepperComponent } from '../../shared/stepper/stepper.component';
+
 
 @Injectable()
 class MockContentService {
@@ -74,6 +76,9 @@ describe('ContentPresentationComponent', () => {
   }
 
   const snapshot = new ActivatedRouteSnapshot();
+  snapshot.data = {
+    isPresentation: false
+  }
 
   snapshot.params = of([{seriesName: 'SERIES'}]);
 
@@ -92,7 +97,10 @@ describe('ContentPresentationComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ ContentPresentationComponent ],
+      declarations: [
+        ContentPresentationComponent,
+        StepperComponent
+      ],
       providers: [
         {
           provide: ContentService,
@@ -166,7 +174,9 @@ describe('ContentPresentationComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(ContentPresentationComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
+    setTimeout(() => {
+      fixture.detectChanges();
+    }, 100);
   });
 
   it('should create', () => {

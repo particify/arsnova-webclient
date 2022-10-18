@@ -28,7 +28,7 @@ import { SurveyFocusState } from '../../../models/events/remote/survey-focus-sta
 })
 export class SurveyPageComponent implements OnInit, OnDestroy, AfterContentInit {
 
-  @Input() isPresentation = false;
+  isPresentation = false;
 
   feedbackIcons = ['sentiment_very_satisfied', 'sentiment_satisfied_alt', 'sentiment_very_dissatisfied', 'mood_bad'];
   feedbackLabels = ['feeling-very-good', 'feeling-good', 'feeling-not-so-good', 'feeling-bad'];
@@ -82,6 +82,7 @@ export class SurveyPageComponent implements OnInit, OnDestroy, AfterContentInit 
   }
 
   ngOnInit() {
+    this.isPresentation = this.route.snapshot.data.isPresentation;
     if (this.isPresentation) {
       this.hotkeyAction = HotkeyAction.CLICK;
       this.toggleKey = " ";

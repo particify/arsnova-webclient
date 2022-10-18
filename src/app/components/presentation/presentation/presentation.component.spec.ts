@@ -16,20 +16,31 @@ import { Room } from '@arsnova/app/models/room';
 import { RoomStatsService } from '@arsnova/app/services/http/room-stats.service';
 import { LanguageService } from '@arsnova/app/services/util/language.service';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { PresentationService } from '@arsnova/app/services/util/presentation.service';
 
 describe('PresentationComponent', () => {
   let component: PresentationComponent;
   let fixture: ComponentFixture<PresentationComponent>;
 
-
   const mockRoomStatsService = jasmine.createSpyObj(['getStats']);
   mockRoomStatsService.getStats.and.returnValue(of({}));
 
+  const mockPresentationService = jasmine.createSpyObj(['updateCurrentGroup']);
+
   const snapshot = new ActivatedRouteSnapshot();
   snapshot.params = {
-    shortId: '12345678',
-    seriesName: 'Quiz'
+      shortId: '12345678',
+      seriesName: 'Quiz'
+  };
+  const firstChild = {
+    url: [
+      {
+        path: 'path'
+      }
+    ]
   }
+
+  Object.defineProperty(snapshot, 'firstChild', { value: firstChild });
 
   const room = new Room();
   room.settings = {};
@@ -74,6 +85,10 @@ describe('PresentationComponent', () => {
         {
           provide: LanguageService,
           useClass: MockLangService
+        },
+        {
+          provide: PresentationService,
+          useValue: mockPresentationService
         }
       ],
       schemas: [

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, EventEmitter, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ContentService } from '../../../services/http/content.service';
 import { TranslateService } from '@ngx-translate/core';
@@ -30,11 +30,9 @@ import { UserSettings } from '../../../models/user-settings';
 })
 export class ContentPresentationComponent implements OnInit, OnDestroy {
 
-  @Input() isPresentation = false;
-  @Input() groupChanged: EventEmitter<string> = new EventEmitter<string>();
-
   @ViewChild(StepperComponent) stepper: StepperComponent;
 
+  isPresentation = false;
   contents: Content[];
   isLoading = true;
   entryIndex = 0;
@@ -48,6 +46,7 @@ export class ContentPresentationComponent implements OnInit, OnDestroy {
   indexChanged: EventEmitter<number> = new EventEmitter<number>();
   contentGroup: ContentGroup;
   remoteSubscription: Subscription;
+  groupSubscription: Subscription;
   canAnswerContent = false;
   settings: UserSettings;
 
@@ -73,6 +72,7 @@ export class ContentPresentationComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.translateService.use(this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE));
+    this.isPresentation = this.route.snapshot.data.isPresentation;
     const routeSeriesName = this.route.snapshot.params['seriesName'];
     const routeContentIndex = this.route.snapshot.params['contentIndex'];
     const lastIndex = this.globalStorageService.getItem(STORAGE_KEYS.LAST_INDEX);
@@ -95,6 +95,9 @@ export class ContentPresentationComponent implements OnInit, OnDestroy {
     if (this.remoteSubscription) {
       this.remoteSubscription.unsubscribe();
     }
+    if (this.groupSubscription) {
+      this.groupSubscription.unsubscribe();
+    }
   }
 
   initScale() {
@@ -108,7 +111,7 @@ export class ContentPresentationComponent implements OnInit, OnDestroy {
 
   initPresentation() {
     if (this.isPresentation) {
-      this.groupChanged.subscribe(group => {
+      this.groupSubscription = this.presentationService.getCurrentGroup().subscribe(group => {
         this.isLoading = true;
         this.contentGroupName = group;
         this.initGroup();
@@ -147,7 +150,7 @@ export class ContentPresentationComponent implements OnInit, OnDestroy {
             this.currentStep = this.contentIndex;
             setTimeout(() => {
               this.stepper.init(this.contentIndex, this.contents.length);
-              this.updateURL(this.contentIndex);
+              this.updateURL(this.contentIndex, true);
               if (this.isPresentation && !initial) {
                 const remoteState = new ContentFocusState(this.contents[this.currentStep].id, this.contentGroup.id, false, false);
                 this.eventService.broadcast(RemoteMessage.CHANGE_CONTENTS_STATE, remoteState);
@@ -174,8 +177,8 @@ export class ContentPresentationComponent implements OnInit, OnDestroy {
 
   finishInit(initial: boolean) {
     this.isLoading = false;
-    this.initScale();
     if (initial) {
+      this.initScale();
       this.initPresentation();
     }
   }
@@ -189,7 +192,10 @@ export class ContentPresentationComponent implements OnInit, OnDestroy {
     this.location.replaceState(this.router.serializeUrl(urlTree));
   }
 
-  updateURL(index: number) {
+  updateURL(index: number, initial = false) {
+    if (this.currentStep === index && !initial) {
+      return;
+    }
     this.currentStep = index;
     const urlIndex = index + 1;
     if (this.isPresentation) {
