@@ -157,7 +157,7 @@ export class ContentPresentationComponent implements OnInit, OnDestroy {
                 const remoteState = new ContentFocusState(this.contents[this.currentStep].id, this.contentGroup.id, false, false);
                 this.eventService.broadcast(RemoteMessage.CHANGE_CONTENTS_STATE, remoteState);
               }
-            }, 100);
+            }, 0);
           }
           if (this.infoBarItems.length === 0) {
             this.infoBarItems.push(new InfoBarItem('content-counter', 'people', this.getStepString()));
