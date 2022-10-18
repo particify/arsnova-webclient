@@ -65,7 +65,7 @@ unit_tests:
   stage: test
   needs:
     - yarn_install
-  image: registry.gitlab.com/particify/dev/devops/ci-builder-images/nodejs_chrome:202108111931
+  image: particifydev/chromebrowser-nodejs:106.0.5249.119-1-nodejs16.18.0
   allow_failure: false
   variables:
     CHROME_BIN: /usr/bin/google-chrome
