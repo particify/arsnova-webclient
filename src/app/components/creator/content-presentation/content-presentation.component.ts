@@ -72,10 +72,9 @@ export class ContentPresentationComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    window.scroll(0, 0);
     this.translateService.use(this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE));
-    const routeContentIndex = this.route.snapshot.params['contentIndex'];
     const routeSeriesName = this.route.snapshot.params['seriesName'];
+    const routeContentIndex = this.route.snapshot.params['contentIndex'];
     const lastIndex = this.globalStorageService.getItem(STORAGE_KEYS.LAST_INDEX);
     this.entryIndex = (lastIndex > -1 ? lastIndex : routeContentIndex - 1) || 0;
     this.contentGroupName = this.globalStorageService.getItem(STORAGE_KEYS.LAST_GROUP) || routeSeriesName;
@@ -142,11 +141,7 @@ export class ContentPresentationComponent implements OnInit, OnDestroy {
       if (this.contentGroup.contentIds) {
         this.contentService.getContentsByIds(this.contentGroup.roomId, this.contentGroup.contentIds, true).subscribe(contents => {
           this.contents = this.contentService.getSupportedContents(contents);
-          this.isLoading = false;
-          this.initScale();
-          if (initial) {
-            this.initPresentation();
-          }
+          this.finishInit(initial);
           if (this.entryIndex > -1) {
             this.contentIndex = initial ? this.entryIndex : 0;
             this.currentStep = this.contentIndex;
@@ -171,14 +166,18 @@ export class ContentPresentationComponent implements OnInit, OnDestroy {
           }, 700);
         });
       } else {
-        this.isLoading = false;
-        this.initScale();
-        if (initial) {
-          this.initPresentation();
-        }
+        this.finishInit(initial);
         this.sendContentStepState(true);
       }
     });
+  }
+
+  finishInit(initial: boolean) {
+    this.isLoading = false;
+    this.initScale();
+    if (initial) {
+      this.initPresentation();
+    }
   }
 
   getStepString(): string {
