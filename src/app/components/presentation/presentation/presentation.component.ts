@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { GlobalStorageService, STORAGE_KEYS } from '../../../services/util/global-storage.service';
@@ -12,7 +12,7 @@ import { Features } from '../../../models/features.enum';
   templateUrl: './presentation.component.html',
   styleUrls: ['./presentation.component.scss']
 })
-export class PresentationComponent implements OnInit {
+export class PresentationComponent implements OnInit, OnDestroy {
 
   shortId: string;
   roomId: string;
@@ -32,7 +32,6 @@ export class PresentationComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.globalStorageService.removeItem(STORAGE_KEYS.LAST_INDEX);
     document.body.style.background = 'var(--surface)';
     this.translateService.use(this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE));
     const params = this.route.snapshot.params;
@@ -57,6 +56,10 @@ export class PresentationComponent implements OnInit {
         document.getElementById('welcome-message').focus();
       }, 500);
     });
+  }
+
+  ngOnDestroy(): void {
+    this.globalStorageService.removeItem(STORAGE_KEYS.LAST_INDEX);
   }
 
   updateFeature(feature: string) {

@@ -77,7 +77,7 @@ export class ContentPresentationComponent implements OnInit, OnDestroy {
     const routeContentIndex = this.route.snapshot.params['contentIndex'];
     const routeSeriesName = this.route.snapshot.params['seriesName'];
     const lastIndex = this.globalStorageService.getItem(STORAGE_KEYS.LAST_INDEX);
-    this.entryIndex = (this.isPresentation && lastIndex > -1 ? lastIndex : routeContentIndex - 1) || 0;
+    this.entryIndex = (lastIndex > -1 ? lastIndex : routeContentIndex - 1) || 0;
     this.contentGroupName = this.globalStorageService.getItem(STORAGE_KEYS.LAST_GROUP) || routeSeriesName;
     this.globalStorageService.setItem(STORAGE_KEYS.LAST_GROUP, this.contentGroupName);
     const loginId = this.globalStorageService.getItem(STORAGE_KEYS.USER).loginId;
