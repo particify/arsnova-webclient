@@ -1,16 +1,19 @@
 {
   "name": "Webclient",
-  "service": "arsnova-web",
+  "service": "arsnova-webclient",
   "dockerComposeFile": [
-    "../../.compose.yaml"
+    "../../.docker/compose/development/.compose.yaml"
   ],
-  "workspaceFolder": "/workspace/arsnova-webclient",
+  "workspaceFolder": "/workspace/webclient",
   "forwardPorts": [4200],
   "customizations": {
     "vscode": {
       "extensions": [
         "angular.ng-template",
-        "dbaeumer.vscode-eslint"
+        "asciidoctor.asciidoctor-vscode",
+        "dbaeumer.vscode-eslint",
+        "eamodio.gitlens",
+        "editorconfig.editorconfig",
       ]
     }
   },

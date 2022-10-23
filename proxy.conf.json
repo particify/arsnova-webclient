@@ -1,6 +1,6 @@
 {
   "/api/ws": {
-    "target": "ws://arsnova-ws-gateway:8080",
+    "target": "ws://arsnova-server-websocket:8080",
     "secure": false,
     "pathRewrite": {
       "^/api": ""
