@@ -1,14 +1,9 @@
 @import '../../../../variables';
 
-$bar-height: 65px;
-$mobile-bar-height: 50px;
-$smaller-mobile-bar-height: 40px;
-$small-mobile-bar-height: 35px;
-$bar-margin: 10px;
-$mobile-bar-margin: 8px;
-$small-mobile-bar-margin: 5px;
+$bar-height-desktop: min(65px, 6vh);
+$bar-margin-desktop: min(10px, 2vh);
+$bar-margin-mobile: min(6px, 1vh);
 $card-padding: min(4vw, 16px);
-$bottom-bar-height: 62px;
 
 .label-icon, .icon-fixed-size {
   font-size: 40px;
@@ -65,91 +60,70 @@ $bottom-bar-height: 62px;
 }
 
 .bar-fixed-size {
-  height: $bar-height;
-  margin: $bar-margin 0;
+  height: $bar-height-desktop;
+  margin: $bar-margin-desktop 0;
 }
 
-@media (min-width: 700px) {
-  .answer-container {
-    height: calc(100vh - ((#{$card-padding} * 2) + (#{$bar-height} * 4) + (#{$bar-margin} * 8)));
-  }
+@mixin desktop($bottom-bar-height) {
+  @media (min-height: 701px) {
+    .answer-container {
+      height: calc(100vh - (($card-padding * 4) + ($bar-height-desktop * 4) + ($bar-margin-desktop * 8) + ($app-padding * 2) + $bar-height + $bottom-bar-height));
+    }
 
-  .bar {
-    height: $bar-height;
-    margin: $bar-margin 0;
+    .bar {
+      height: $bar-height-desktop;
+      margin: $bar-margin-desktop 0;
+    }
+
+    .button-label-icon {
+      font-size: 40px;
+      height: 40px;
+      width: 40px;
+    }
+  }
+}
+
+@mixin mobile($bar-height-mobile, $min-button-height) {
+  @media (max-height: 700px) {
+    .answer-container {
+      height: calc(100vh - calc(($card-padding * 4) + ($bar-height-mobile * 4) + ($bar-margin-mobile * 8) + $mobile-bar-height + ($app-padding * 2) + $bar-height));
+    }
+
+    .bar {
+      height: $bar-height-mobile;
+      margin: $bar-margin-mobile 0;
+    }
+
+    .label-icon {
+      font-size: $bar-height-mobile;
+      height: $bar-height-mobile;
+      width: $bar-height-mobile;
+    }
+
+    .button-label-icon {
+      font-size: $bar-height-mobile;
+      height: $bar-height-mobile;
+      width: $bar-height-mobile;
+    }
+
+    .card-row {
+      min-height: $min-button-height;
+    }
   }
 }
 
 @media (max-width: 1000px) {
-  .answer-container {
-    height: calc(100vh - calc(((#{$card-padding} * 2) + (#{$bar-height} * 4) + (#{$bar-margin} * 8) + #{$bottom-bar-height}) + calc(64px + 8vw) + 36px));
-  }
+  @include desktop($bottom-bar-height: $mobile-bar-height);
+  @include mobile($bar-height-mobile: max(30px, 6vh), $min-button-height: 40px);
 }
 
-@media (max-width: 700px) {
-  .answer-container {
-    height: calc(100vh - calc(((#{$card-padding} * 2) + (#{$mobile-bar-height} * 4) + (#{$mobile-bar-margin} * 8) + #{$bottom-bar-height}) + calc(56px + 8vw) + 36px));
-  }
-
-  .bar, .bar-fixed-size {
-    height: $mobile-bar-height;
-    margin: $mobile-bar-margin 0;
-  }
-}
-
-@media (max-height: 680px) {
-  .answer-container {
-    height: calc(100vh - calc(((#{$card-padding} * 2) + (#{$smaller-mobile-bar-height} * 4) + (#{$small-mobile-bar-margin} * 8) + #{$bottom-bar-height}) + calc(56px + 8vw) + 36px));
-  }
-
-  .bar {
-    height: $smaller-mobile-bar-height;
-    margin: $small-mobile-bar-margin 0;
-  }
-
-  .label-icon {
-    font-size: $smaller-mobile-bar-height;
-    height: $smaller-mobile-bar-height;
-    width: $smaller-mobile-bar-height;
-  }
-
-  .button-label-icon {
-    font-size: $smaller-mobile-bar-height!important;
-    height: $smaller-mobile-bar-height!important;
-    width: $smaller-mobile-bar-height!important;
-  }
-}
-
-@media (max-height: 600px) {
-  .answer-container {
-    height: calc(100vh - calc(((#{$card-padding} * 2) + (#{$small-mobile-bar-height} * 4) + (#{$small-mobile-bar-margin} * 8) + #{$bottom-bar-height}) + calc(56px + 8vw) + 36px));
-  }
-
-  .bar {
-    height: $small-mobile-bar-height;
-    margin: $small-mobile-bar-margin 0;
-  }
-
-  .label-icon {
-    font-size: $small-mobile-bar-height;
-    height: $small-mobile-bar-height;
-    width: $small-mobile-bar-height;
-  }
-
-  .button-label-icon {
-    font-size: $small-mobile-bar-height!important;
-    height: $small-mobile-bar-height!important;
-    width: $small-mobile-bar-height!important;
-  }
-
-  .card-row {
-    min-height: 50px!important;
-  }
+@media (min-width: 1001px) {
+  @include desktop($bottom-bar-height: 0px);
+  @include mobile($bar-height-mobile: min(40px, 8vh), $min-button-height: 60px);
 }
 
 .answer-container {
   max-height: 400px;
-  transition: 600ms;
 }
 
 .answer-button-label {
@@ -158,15 +132,11 @@ $bottom-bar-height: 62px;
 }
 
 .button-label-icon {
-  font-size: 40px;
-  height: 40px;
-  width: 40px;
   color: var(--on-primary);
 }
 
 .card-row {
   height: 50%;
-  min-height: 80px;
   width: 100%;
   max-width: 832px;
   margin-top: $card-padding;
