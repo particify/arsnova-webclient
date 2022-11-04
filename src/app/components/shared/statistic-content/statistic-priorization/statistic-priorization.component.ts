@@ -19,6 +19,12 @@ import { StatisticChoiceComponent } from '../statistic-choice/statistic-choice.c
 })
 export class StatisticPriorizationComponent extends StatisticChoiceComponent implements OnInit, OnDestroy {
 
+  readonly padding = {
+    label: 8,
+    top: 25,
+    left: 30
+  };
+
   @Input() content: ContentPriorization;
   @Input() indexChanged: EventEmitter<number> = new EventEmitter<number>();
   @Input() isCreator = true;
@@ -93,10 +99,6 @@ export class StatisticPriorizationComponent extends StatisticChoiceComponent imp
   }
 
   createHorizontalChart(colors: string[]) {
-    const padding = {
-      top: 25,
-      left: 30
-    }
     const gridConfig = {
       borderColor: this.colorStrings.onBackground,
       tickColor: this.colorStrings.background,
@@ -128,8 +130,8 @@ export class StatisticPriorizationComponent extends StatisticChoiceComponent imp
         devicePixelRatio: window.devicePixelRatio * scale,
         layout: {
           padding: {
-            top: padding.top,
-            left: padding.left
+            top: this.padding.top,
+            left: this.padding.left
           }
         },
         scales: {
@@ -150,7 +152,7 @@ export class StatisticPriorizationComponent extends StatisticChoiceComponent imp
               display: true,
               mirror: true,
               labelOffset: - (this.fontSize + 4),
-              padding: 8,
+              padding: this.padding.label,
               font: {
                 size: this.fontSize
               }
@@ -173,7 +175,7 @@ export class StatisticPriorizationComponent extends StatisticChoiceComponent imp
             color: this.colorStrings.onBackground,
             anchor: 'start',
             align: 'start',
-            offset: 8
+            offset: this.padding.label
           }
         }
       }
@@ -193,14 +195,14 @@ export class StatisticPriorizationComponent extends StatisticChoiceComponent imp
           indexes.sort((a, b) => data[b] - data[a]);
           // Sort data as well
           data.sort((a, b) => b - a);
-  
+
           // Get current meta data, labels and colors
           const meta = chart.getDatasetMeta(0);
           const newMeta = [];
           const labels = JSON.parse(JSON.stringify(this.options.map(o => this.getLabel(o.label))));
           const newLabels = [];
           const newColors = [];
-  
+
           // Set new data according to sorted indexes
           meta.data.forEach((data, index) => {
             const newIndex = indexes.indexOf(index);
@@ -296,17 +298,16 @@ export class StatisticPriorizationComponent extends StatisticChoiceComponent imp
 
   getLabel(label: string): string {
     const chartWidth = document.getElementById('container-' + this.chartId).clientWidth;
-    const width = this.getLabelTextWidth(label);
-    const diff = chartWidth - width - 8 - 30 - 20;
+    const width = this.getTextWidth(label);
+    const diff = chartWidth - width - this.padding.label * 4 - this.padding.left;
     if (diff >= 0) {
-      console.log(width);
       return label;
     } else {
       return this.getLabel(label.substring(0, label.length - 3) + '…');
     }
   }
 
-  getLabelTextWidth(label: string) {
+  getTextWidth(label: string) {
     const element = document.createElement('div');
     document.body.appendChild(element);
     element.style.fontSize = this.fontSize + 'px';
