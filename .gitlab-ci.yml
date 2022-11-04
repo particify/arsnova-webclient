@@ -7,7 +7,7 @@ workflow:
     - if: $CI_MERGE_REQUEST_ID || $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH || $CI_COMMIT_TAG =~ /^v[0-9]+/ || $CI_COMMIT_BRANCH =~ /^[0-9]+\.[0-9]+$/ || $CI_COMMIT_BRANCH =~ /^renovate\/(patch-.*|-x$)/
 
 default:
-  image: node:16.18-alpine
+  image: node:18.12-alpine
   interruptible: true
   before_script:
     - date
@@ -65,7 +65,7 @@ unit_tests:
   stage: test
   needs:
     - yarn_install
-  image: particifydev/chromebrowser-nodejs:106.0.5249.119-1-nodejs16.18.0
+  image: particifydev/chromebrowser-nodejs:107.0.5304.87-1-nodejs-18.12.0
   allow_failure: false
   variables:
     CHROME_BIN: /usr/bin/google-chrome
