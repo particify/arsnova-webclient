@@ -56,10 +56,11 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
   changesSubscription: Subscription;
   remoteSubscription: Subscription;
   focusStateSubscription: Subscription;
+  groupChangedSubscription: Subscription;
 
-  additionalSteps = 1;
   finished = false;
   hasAnsweredLastContent = false;
+  showOverview = false;
 
   settings: UserSettings;
 
@@ -96,6 +97,9 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
     }
     if (this.focusStateSubscription) {
       this.focusStateSubscription.unsubscribe();
+    }
+    if (this.groupChangedSubscription) {
+      this.groupChangedSubscription.unsubscribe();
     }
   }
 
@@ -148,7 +152,7 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
     this.focusStateSubscription = this.eventService.on<boolean>(RemoteMessage.FOCUS_STATE_CHANGED).subscribe(guided => {
       this.guided = guided;
     });
-    this.eventService.on<string>(UiState.NEW_GROUP_SELECTED).subscribe(newGroup => {
+    this.groupChangedSubscription = this.eventService.on<string>(UiState.NEW_GROUP_SELECTED).subscribe(newGroup => {
       this.contentgroupService.getByRoomIdAndName(this.contentGroup.roomId, newGroup).subscribe(group => {
         this.contentGroupName = group.name;
         this.contentGroup = group;
@@ -171,7 +175,7 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
         if (nextContentId) {
           lastContentIndex = this.getIndexOfContentById(nextContentId);
         }
-        if (lastContentIndex >= this.contents.length + this.additionalSteps) {
+        if (lastContentIndex >= this.contents.length) {
           lastContentIndex = this.contents.length - 1;
         }
         if (this.isReloading) {
@@ -211,7 +215,7 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
       this.initStepper(contentIndex);
     } else {
       if (!this.guided) {
-        this.getFirstUnansweredContent();
+        this.getInitialStep();
       }
     }
   }
@@ -238,24 +242,24 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
     }
   }
 
-  getFirstUnansweredContent() {
-    let isInitialized = false;
+  getInitialStep() {
     const firstIndex = this.getFirstUnansweredContentIndex();
-    if (firstIndex !== null) {
-      this.initStepper(firstIndex, 200);
-      isInitialized = true;
-    }
-    if (!isInitialized) {
-      this.initStepper(this.contents.length);
-    }
-    if (!this.currentStep && this.answers.length === 0 || this.contents.length === 1) {
+    const isPureInfoSeries = this.isPureInfoSeries();
+    if (firstIndex === 0 && !isPureInfoSeries) {
+      this.initStepper(0);
       this.updateURL(0);
+    } else {
+      this.showOverview = true;
     }
+  }
+
+  isPureInfoSeries(): boolean {
+    return this.contents.map(c => c.format).every(f => [ContentType.SLIDE, ContentType.FLASHCARD].includes(f));
   }
 
   getFirstUnansweredContentIndex(): number {
     for (let i = 0; i < this.alreadySent.size; i++) {
-      if (this.alreadySent.get(i) === false && ![ContentType.SLIDE, ContentType.FLASHCARD].includes(this.contents[i].format)) {
+      if (this.alreadySent.get(i) === false) {
         return i;
       }
     }
@@ -275,11 +279,16 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
         this.stepper.onClick(0);
       }
     } else {
-      if (this.contents.length > 5) {
-        this.stepper.headerPos = this.contents.length - 4;
-      }
-      this.stepper.onClick(this.contents.length);
+      this.goToOverview();
     }
+  }
+
+  goToOverview() {
+    const url = ['p', this.shortId, 'series', this.contentGroupName];
+    this.router.navigate(url);
+    const urlTree = this.router.createUrlTree(url);
+    this.location.replaceState(this.router.serializeUrl(urlTree));
+    this.showOverview = true;
   }
 
   receiveSentStatus(answer: Answer, index: number) {
@@ -291,20 +300,17 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
     this.answers[this.getIndexOfContentById(answer.contentId)] = answer;
     if (!this.guided) {
       if (this.started === this.status.NORMAL) {
-        if (index < this.contents.length - 1 + this.additionalSteps) {
-          let wait = 400;
-          if (this.contents[index].state.answersPublished) {
-            wait += 600;
-          }
-          setTimeout(() => {
+        const wait = this.contents[index].state.answersPublished ? 1000 : 400;
+        setTimeout(() => {
+          if (index < this.contents.length - 1) {
             this.nextContent();
             setTimeout(() => {
               document.getElementById('step').focus();
             }, 200);
-          }, wait);
-        } else {
-          this.announce('answer.a11y-last-content');
-        }
+          } else {
+            this.goToOverview();
+          }
+        }, wait);
       }
     }
   }
