@@ -25,7 +25,6 @@ export class ContentParticipantComponent implements OnInit {
   @Input() index: number;
   @Input() statsPublished: boolean;
   @Input() correctOptionsPublished: boolean;
-  @Input() finished: boolean;
   @Input() settings: UserSettings;
   @Output() answerChanged = new EventEmitter<Answer>();
   @Output() next = new EventEmitter<boolean>();

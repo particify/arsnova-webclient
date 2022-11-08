@@ -12,7 +12,7 @@
           <app-content-participant (answerChanged)="receiveSentStatus($event, i)" (next)="nextContent($event)"
                                    [content]="content" [answer]="answers[i]" [lastContent]="i === contents.length - 1"
                                    [active]="currentStep === i" [index]="i" [statsPublished]="contentGroup.statisticsPublished"
-                                   [correctOptionsPublished]="contentGroup.correctOptionsPublished" [finished]="finished" [settings]="settings">
+                                   [correctOptionsPublished]="contentGroup.correctOptionsPublished" [settings]="settings">
           </app-content-participant>
         </div>
       </cdk-step>
