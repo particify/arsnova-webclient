@@ -18,7 +18,7 @@ import { ContentParticipantComponent } from './content/content-participant/conte
 import { ContentSortParticipantComponent } from './content/content-sort-participant/content-sort-participant.component';
 import { ContentWordcloudParticipantComponent } from './content/content-wordcloud-participant/content-wordcloud-participant.component';
 import { ContentScaleParticipantComponent } from './content/content-scale-participant/content-scale-participant.component';
-import { SeriesResultsComponent } from './series-results/series-results.component';
+import { SeriesOverviewComponent } from './series-overview/series-overview.component';
 import { ParticipantOverviewComponent } from './participant-overview/participant-overview.component';
 import { ContentPriorizationParticipantComponent } from './content/content-priorization-participant/content-priorization-participant.component';
 
@@ -52,10 +52,10 @@ import { ContentPriorizationParticipantComponent } from './content/content-prior
     ContentParticipantComponent,
     ContentSortParticipantComponent,
     ContentWordcloudParticipantComponent,
-    SeriesResultsComponent,
+    SeriesOverviewComponent,
     ParticipantOverviewComponent,
     ContentPriorizationParticipantComponent
-    
+
   ],
   providers: [
     { provide: TRANSLATION_MODULE_NAME, useValue: 'participant' }

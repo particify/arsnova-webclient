@@ -23,11 +23,11 @@ interface ContentResultView {
 }
 
 @Component({
-  selector: 'app-series-results',
-  templateUrl: './series-results.component.html',
-  styleUrls: ['./series-results.component.scss']
+  selector: 'app-series-overview',
+  templateUrl: './series-overview.component.html',
+  styleUrls: ['./series-overview.component.scss']
 })
-export class SeriesResultsComponent implements OnInit {
+export class SeriesOverviewComponent implements OnInit {
 
   @Input() group: ContentGroup;
   @Input() contents: Content[];

@@ -17,9 +17,9 @@
         </div>
       </cdk-step>
     </app-stepper>
-    <app-series-results *ngIf="showOverview" [group]="contentGroup" [contents]="contents" [finished]="isFinished" [isPureInfoSeries]="isPureInfoSeries"
+    <app-series-overview *ngIf="showOverview" [group]="contentGroup" [contents]="contents" [finished]="isFinished" [isPureInfoSeries]="isPureInfoSeries"
                         [hasAnsweredLastContent]="hasAnsweredLastContent" (newContentIndex)="goToContent($event)">
-    </app-series-results>
+    </app-series-overview>
     <span *ngIf="!isLoading && !isReloading && contents.length === 0" class="hint">{{ 'answer.no-contents-published' | translate }}</span>
   </div>
 </div>

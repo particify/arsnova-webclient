@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { SeriesResultsComponent } from './series-results.component';
+import { SeriesOverviewComponent } from './series-overview.component';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { ThemeService } from '@arsnova/theme/theme.service';
 import { AuthenticationService } from '@arsnova/app/services/http/authentication.service';
@@ -33,9 +33,9 @@ class MockRoutingService {
   }
 }
 
-describe('SeriesResultsComponent', () => {
-  let component: SeriesResultsComponent;
-  let fixture: ComponentFixture<SeriesResultsComponent>;
+describe('SeriesOverviewComponent', () => {
+  let component: SeriesOverviewComponent;
+  let fixture: ComponentFixture<SeriesOverviewComponent>;
 
   const resultOverview =  {
     correctAnswerCount: 0,
@@ -57,7 +57,7 @@ describe('SeriesResultsComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ SeriesResultsComponent ],
+      declarations: [ SeriesOverviewComponent ],
       imports: [
         TranslateModule.forRoot({
           loader: {
@@ -93,7 +93,7 @@ describe('SeriesResultsComponent', () => {
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(SeriesResultsComponent);
+    fixture = TestBed.createComponent(SeriesOverviewComponent);
     component = fixture.componentInstance;
     component.group = new ContentGroup();
     component.contents = [new Content('1234', '1', '1', 'subject', 'body', [], ContentType.CHOICE, {}, new ContentState(1, new Date(), true))];
