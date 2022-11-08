@@ -5,7 +5,7 @@
       {{ 'answer.a11y-message' | a11yIntro: { group: contentGroupName } | async }}
     </div>
     <app-stepper *ngIf="contents.length > 0 && !this.showOverview" (newIndex)="updateURL($event)" [listLength]="contents.length"
-                 [completed]="alreadySent" [disabled]="guided" [finished]="finished" i18nPrefix="content">
+                 [completed]="alreadySent" [disabled]="guided" [finished]="isFinished" i18nPrefix="content">
       <cdk-step *ngFor="let content of contents; let i = index">
         <div tabindex="0" id="step" *ngIf="currentStep >= i - 1 && currentStep <= i + 1"
              appHotkey="1" [appHotkeyDisabled]="currentStep !== i" [appHotkeyTitle]="'content.description' | translate">
@@ -17,7 +17,7 @@
         </div>
       </cdk-step>
     </app-stepper>
-    <app-series-results *ngIf="showOverview" [group]="contentGroup" [contents]="contents"
+    <app-series-results *ngIf="showOverview" [group]="contentGroup" [contents]="contents" [finished]="isFinished" [isPureInfoSeries]="isPureInfoSeries"
                         [hasAnsweredLastContent]="hasAnsweredLastContent" (newContentIndex)="goToContent($event)">
     </app-series-results>
     <span *ngIf="!isLoading && !isReloading && contents.length === 0" class="hint">{{ 'answer.no-contents-published' | translate }}</span>

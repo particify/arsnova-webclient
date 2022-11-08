@@ -61,7 +61,9 @@
     "description": "Inhaltsbeschreibung",
     "thanks-for-participation": "Danke für deine Teilnahme!",
     "all-contents-answered": "Du hast alle Inhalte dieser Serie beantwortet. Schaue dir deine Antworten noch einmal an oder kehre zur Raumübersicht zurück.",
-    "body-label": "Inhalt {{index}}: Keine Vorschau möglich",
+    "continue-where-you-stopped": "Mach da weiter, wo du aufgehört hast",
+    "some-contents-answered": "Schaue dir deine Antworten noch einmal an, springe zum nächsten Inhalt oder kehre zur Raumübersicht zurück.",
+    "pure-info-contents": "Springe zu einem beliebigen Inhalt oder kehre zur Raumübersicht zurück.",
     "go-to-room-overview": "Zur Raumübersicht",
     "go-to-overview": "Zur Übersicht"
   },

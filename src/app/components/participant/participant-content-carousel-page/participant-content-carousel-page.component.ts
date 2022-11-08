@@ -58,7 +58,8 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
   focusStateSubscription: Subscription;
   groupChangedSubscription: Subscription;
 
-  finished = false;
+  isFinished = false;
+  isPureInfoSeries = false;
   hasAnsweredLastContent = false;
   showOverview = false;
 
@@ -210,7 +211,7 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
   }
 
   checkIfLastContentExists(contentIndex: number) {
-    this.checkIfFinished();
+    this.checkState();
     if (contentIndex >= 0) {
       this.initStepper(contentIndex);
     } else {
@@ -237,15 +238,13 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
   updateURL(index?: number) {
     if (this.currentStep !== index || !this.isReloading) {
       this.currentStep = index || 0;
-      const urlTree = this.router.createUrlTree(['p', this.shortId, 'series', this.contentGroupName, index + 1]);
-      this.location.replaceState(this.router.serializeUrl(urlTree));
+      this.replaceUrl(['p', this.shortId, 'series', this.contentGroupName, index + 1]);
     }
   }
 
   getInitialStep() {
     const firstIndex = this.getFirstUnansweredContentIndex();
-    const isPureInfoSeries = this.isPureInfoSeries();
-    if (firstIndex === 0 && !isPureInfoSeries) {
+    if (firstIndex === 0 && !this.isPureInfoSeries) {
       this.initStepper(0);
       this.updateURL(0);
     } else {
@@ -253,21 +252,26 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
     }
   }
 
-  isPureInfoSeries(): boolean {
-    return this.contents.map(c => c.format).every(f => [ContentType.SLIDE, ContentType.FLASHCARD].includes(f));
+  checkIfPureInfoSeries(): boolean {
+    return this.contents.every(c => this.isInfoContent(c));
+  }
+
+  isInfoContent(content: Content): boolean {
+    return [ContentType.SLIDE, ContentType.FLASHCARD].includes(content.format);
   }
 
   getFirstUnansweredContentIndex(): number {
     for (let i = 0; i < this.alreadySent.size; i++) {
-      if (this.alreadySent.get(i) === false) {
+      if (this.alreadySent.get(i) === false && !this.isInfoContent(this.contents[i])) {
         return i;
       }
     }
     return null;
   }
 
-  checkIfFinished() {
-    this.finished = this.getFirstUnansweredContentIndex() === null;
+  checkState() {
+    this.isFinished = this.getFirstUnansweredContentIndex() === null;
+    this.isPureInfoSeries = this.checkIfPureInfoSeries();
   }
 
   nextContent(finish?: boolean) {
@@ -284,11 +288,13 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
   }
 
   goToOverview() {
-    const url = ['p', this.shortId, 'series', this.contentGroupName];
-    this.router.navigate(url);
+    this.showOverview = true;
+    this.replaceUrl(['p', this.shortId, 'series', this.contentGroupName]);
+  }
+
+  replaceUrl(url) {
     const urlTree = this.router.createUrlTree(url);
     this.location.replaceState(this.router.serializeUrl(urlTree));
-    this.showOverview = true;
   }
 
   receiveSentStatus(answer: Answer, index: number) {
@@ -296,7 +302,7 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
     if (index === this.contents.length -1) {
       this.hasAnsweredLastContent = this.alreadySent.get(index);
     }
-    this.checkIfFinished();
+    this.checkState();
     this.answers[this.getIndexOfContentById(answer.contentId)] = answer;
     if (!this.guided) {
       if (this.started === this.status.NORMAL) {

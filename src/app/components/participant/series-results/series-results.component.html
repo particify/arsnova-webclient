@@ -12,9 +12,11 @@
       </div>
       <div fxLayout="column" fxLayoutAlign="space-between">
         <div>
-          <span class="header-text">{{ 'content.thanks-for-participation' | translate }}</span>
+          <span class="header-text">
+            {{ getHeaderText() | translate }}
+          </span>
           <div>
-            <p>{{ 'content.all-contents-answered' | translate }}</p>
+            <p>{{ getSubHeaderText() | translate }}</p>
           </div>
         </div>
         <div class="button-container">
