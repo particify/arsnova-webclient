@@ -30,7 +30,7 @@ export class AnnouncementService extends AbstractHttpService<Announcement> {
   }
 
   update(roomId: string, id: string, title: string, body: string): Observable<Announcement> {
-    const url = this.buildUri(`/${id}/`, roomId);
+    const url = this.buildUri(`/${id}`, roomId);
     const changes = {
       title: title,
       body: body
@@ -41,7 +41,7 @@ export class AnnouncementService extends AbstractHttpService<Announcement> {
   }
 
   delete(roomId: string, id: string): Observable<Announcement> {
-    const url = this.buildUri(`/${id}/`, roomId);
+    const url = this.buildUri(`/${id}`, roomId);
     return this.http.delete<Announcement>(url).pipe(
       catchError(this.handleError<Announcement>(`Delete announcement with id: ${id}`))
     )
@@ -56,7 +56,7 @@ export class AnnouncementService extends AbstractHttpService<Announcement> {
   }
 
   getByUserId(userId: string): Observable<UserAnnouncement[]> {
-    const url = this.buildForeignUri(`/user/${userId}${this.uriPrefix}/`);
+    const url = this.buildForeignUri(`/user/${userId}${this.uriPrefix}`);
     return this.http.post<UserAnnouncement[]>(url, null).pipe(
       first(),
       catchError(this.handleError<UserAnnouncement[]>('Get announcements by user id'))
