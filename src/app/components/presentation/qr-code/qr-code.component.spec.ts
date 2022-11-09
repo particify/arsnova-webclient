@@ -5,8 +5,12 @@ import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import {
   JsonTranslationLoader,
   MockEventService,
-  MockMatDialog, MockMatDialogData, MockMatDialogRef,
-  MockNotificationService, MockThemeService
+  MockMatDialog,
+  MockMatDialogData,
+  MockMatDialogRef,
+  MockNotificationService,
+  MockThemeService,
+  ActivatedRouteStub
 } from '@arsnova/testing/test-helpers';
 import { NotificationService } from '@arsnova/app/services/util/notification.service';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
@@ -16,6 +20,7 @@ import { ApiConfigService } from '@arsnova/app/services/http/api-config.service'
 import { SplitShortIdPipe } from '@arsnova/app/pipes/split-short-id.pipe';
 import { of } from 'rxjs';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
 
 class MockApiConfigService {
   getApiConfig$() {
@@ -28,6 +33,18 @@ describe('QrCodeComponent', () => {
   let fixture: ComponentFixture<QrCodeComponent>;
 
   const splitShortIdPipe = new SplitShortIdPipe();
+
+  const snapshot = new ActivatedRouteSnapshot();
+
+  snapshot.data = {
+    room: {
+      id: '1234',
+      shortId: '12345678',
+      passwordProtected: true
+    }
+  }
+
+  const activatedRouteStub = new ActivatedRouteStub(null, null, snapshot);
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
@@ -76,6 +93,10 @@ describe('QrCodeComponent', () => {
         {
           provide: MAT_DIALOG_DATA,
           useClass: MockMatDialogData
+        },
+        {
+          provide: ActivatedRoute,
+          useValue: activatedRouteStub
         }
       ],
       schemas: [

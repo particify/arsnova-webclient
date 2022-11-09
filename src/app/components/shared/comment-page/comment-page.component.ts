@@ -21,7 +21,7 @@ import { CommentListComponent } from '../comment-list/comment-list.component';
 })
 export class CommentPageComponent implements OnInit, OnDestroy, AfterContentInit {
 
-  @Input() isPresentation = false;
+  isPresentation = false;
 
   @ViewChild(CommentListComponent) commentList: CommentListComponent;
   @ViewChild('commentList') commentListRef: ElementRef;
@@ -47,7 +47,9 @@ export class CommentPageComponent implements OnInit, OnDestroy, AfterContentInit
   ngOnInit(): void {
     this.authenticationService.getCurrentAuthentication()
         .subscribe(auth => this.auth = auth);
-    this.isModeration = this.route.snapshot.data.isModeration;
+    const routeData = this.route.snapshot.data;
+    this.isPresentation = routeData.isPresentation;
+    this.isModeration = routeData.isModeration;
   }
 
   ngOnDestroy() {

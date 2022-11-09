@@ -1,10 +1,11 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AdvancedSnackBarTypes, NotificationService } from '../../../services/util/notification.service';
 import { TranslateService } from '@ngx-translate/core';
 import { ThemeService } from '../../../../theme/theme.service';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { ApiConfigService } from '../../../services/http/api-config.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-qr-code',
@@ -14,9 +15,9 @@ import { ApiConfigService } from '../../../services/http/api-config.service';
 
 export class QrCodeComponent implements OnInit, OnDestroy {
 
-  @Input() shortId: string;
-  @Input() roomId: string;
-  @Input() passwordProtected: boolean;
+  shortId: string;
+  roomId: string;
+  passwordProtected: boolean;
 
   qrWidth: number;
   bgColor: string;
@@ -30,10 +31,15 @@ export class QrCodeComponent implements OnInit, OnDestroy {
   constructor(protected notification: NotificationService,
               protected translateService: TranslateService,
               private themeService: ThemeService,
-              private apiConfigService: ApiConfigService
+              private apiConfigService: ApiConfigService,
+              private route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
+    const room = this.route.snapshot.data.room;
+    this.shortId = room.shortId;
+    this.roomId = room.id;
+    this.passwordProtected = room.passwordProtected;
     this.initQrCode();
   }
 

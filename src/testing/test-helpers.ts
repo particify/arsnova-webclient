@@ -103,7 +103,7 @@ export class ActivatedRouteStub {
   snapshot: ActivatedRouteSnapshot;
   params: Observable<Params>;
 
-  constructor(initialParams?: Params, data?: any, snapshot: ActivatedRouteSnapshot = new ActivatedRouteSnapshot()) {
+  constructor(initialParams?: Params, data?: any, snapshot?: ActivatedRouteSnapshot) {
     this.setParamMap(initialParams);
     this.setData(data);
     this.setSnapshot(snapshot);

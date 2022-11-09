@@ -1,12 +1,5 @@
 <app-control-bar [shortId]="shortId" (activeFeature)="updateFeature($event)" (activeGroup)="updateUrl($event)"></app-control-bar>
 <div tabindex="-1" id="welcome-message" class="visually-hidden">{{ 'presentation.a11y-welcome' | translate }}</div>
-<div [ngSwitch]="featureString" fxFill>
-  <div *ngSwitchCase="undefined" fxFill>
-    <app-qr-code [shortId]="shortId" [roomId]="roomId" [passwordProtected]="passwordProtected"></app-qr-code>
-  </div>
-  <app-comment-page *ngSwitchCase="'comments'" [isPresentation]="true"></app-comment-page>
-  <div *ngSwitchCase="'series'" fxLayout="column" fxLayoutAlign="start center">
-    <app-content-presentation [isPresentation]="true" [groupChanged]="groupChanged"></app-content-presentation>
-  </div>
-  <app-survey-page *ngSwitchCase="'feedback'" [isPresentation]="true"></app-survey-page>
+<div fxFill>
+  <router-outlet></router-outlet>
 </div>

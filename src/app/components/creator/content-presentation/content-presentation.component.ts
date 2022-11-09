@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, EventEmitter, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ContentService } from '../../../services/http/content.service';
 import { TranslateService } from '@ngx-translate/core';
@@ -30,11 +30,9 @@ import { UserSettings } from '../../../models/user-settings';
 })
 export class ContentPresentationComponent implements OnInit, OnDestroy {
 
-  @Input() isPresentation = false;
-  @Input() groupChanged: EventEmitter<string> = new EventEmitter<string>();
-
   @ViewChild(StepperComponent) stepper: StepperComponent;
 
+  isPresentation = false;
   contents: Content[];
   isLoading = true;
   entryIndex = 0;
@@ -48,6 +46,7 @@ export class ContentPresentationComponent implements OnInit, OnDestroy {
   indexChanged: EventEmitter<number> = new EventEmitter<number>();
   contentGroup: ContentGroup;
   remoteSubscription: Subscription;
+  groupSubscription: Subscription;
   canAnswerContent = false;
   settings: UserSettings;
 
@@ -72,12 +71,12 @@ export class ContentPresentationComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    window.scroll(0, 0);
     this.translateService.use(this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE));
-    const routeContentIndex = this.route.snapshot.params['contentIndex'];
+    this.isPresentation = this.route.snapshot.data.isPresentation;
     const routeSeriesName = this.route.snapshot.params['seriesName'];
+    const routeContentIndex = this.route.snapshot.params['contentIndex'];
     const lastIndex = this.globalStorageService.getItem(STORAGE_KEYS.LAST_INDEX);
-    this.entryIndex = (this.isPresentation && lastIndex > -1 ? lastIndex : routeContentIndex - 1) || 0;
+    this.entryIndex = (lastIndex > -1 ? lastIndex : routeContentIndex - 1) || 0;
     this.contentGroupName = this.globalStorageService.getItem(STORAGE_KEYS.LAST_GROUP) || routeSeriesName;
     this.globalStorageService.setItem(STORAGE_KEYS.LAST_GROUP, this.contentGroupName);
     const loginId = this.globalStorageService.getItem(STORAGE_KEYS.USER).loginId;
@@ -96,6 +95,9 @@ export class ContentPresentationComponent implements OnInit, OnDestroy {
     if (this.remoteSubscription) {
       this.remoteSubscription.unsubscribe();
     }
+    if (this.groupSubscription) {
+      this.groupSubscription.unsubscribe();
+    }
   }
 
   initScale() {
@@ -109,7 +111,7 @@ export class ContentPresentationComponent implements OnInit, OnDestroy {
 
   initPresentation() {
     if (this.isPresentation) {
-      this.groupChanged.subscribe(group => {
+      this.groupSubscription = this.presentationService.getCurrentGroup().subscribe(group => {
         this.isLoading = true;
         this.contentGroupName = group;
         this.initGroup();
@@ -142,22 +144,18 @@ export class ContentPresentationComponent implements OnInit, OnDestroy {
       if (this.contentGroup.contentIds) {
         this.contentService.getContentsByIds(this.contentGroup.roomId, this.contentGroup.contentIds, true).subscribe(contents => {
           this.contents = this.contentService.getSupportedContents(contents);
-          this.isLoading = false;
-          this.initScale();
-          if (initial) {
-            this.initPresentation();
-          }
+          this.finishInit(initial);
           if (this.entryIndex > -1) {
             this.contentIndex = initial ? this.entryIndex : 0;
             this.currentStep = this.contentIndex;
             setTimeout(() => {
               this.stepper.init(this.contentIndex, this.contents.length);
-              this.updateURL(this.contentIndex);
+              this.updateURL(this.contentIndex, true);
               if (this.isPresentation && !initial) {
                 const remoteState = new ContentFocusState(this.contents[this.currentStep].id, this.contentGroup.id, false, false);
                 this.eventService.broadcast(RemoteMessage.CHANGE_CONTENTS_STATE, remoteState);
               }
-            }, 100);
+            }, 0);
           }
           if (this.infoBarItems.length === 0) {
             this.infoBarItems.push(new InfoBarItem('content-counter', 'people', this.getStepString()));
@@ -171,14 +169,18 @@ export class ContentPresentationComponent implements OnInit, OnDestroy {
           }, 700);
         });
       } else {
-        this.isLoading = false;
-        this.initScale();
-        if (initial) {
-          this.initPresentation();
-        }
+        this.finishInit(initial);
         this.sendContentStepState(true);
       }
     });
+  }
+
+  finishInit(initial: boolean) {
+    this.isLoading = false;
+    if (initial) {
+      this.initScale();
+      this.initPresentation();
+    }
   }
 
   getStepString(): string {
@@ -190,7 +192,10 @@ export class ContentPresentationComponent implements OnInit, OnDestroy {
     this.location.replaceState(this.router.serializeUrl(urlTree));
   }
 
-  updateURL(index: number) {
+  updateURL(index: number, initial = false) {
+    if (this.currentStep === index && !initial) {
+      return;
+    }
     this.currentStep = index;
     const urlIndex = index + 1;
     if (this.isPresentation) {
