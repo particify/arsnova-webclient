@@ -27,7 +27,7 @@
     "@fontsource/roboto": "4.5.8",
     "@ngx-translate/core": "14.0.0",
     "@ngx-translate/http-loader": "7.0.0",
-    "@stomp/rx-stomp": "1.1.4",
+    "@stomp/rx-stomp": "1.2.0",
     "@stomp/stompjs": "6.1.2",
     "@types/lru-cache": "5.1.1",
     "backoff-rxjs": "7.0.0",
