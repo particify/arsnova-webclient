@@ -109,7 +109,7 @@ export class ControlBarComponent extends NavBarComponent implements OnInit, OnDe
   barVisible = false;
   HotkeyAction = HotkeyAction;
 
-  private hotkeyRefs: Symbol[] = [];
+  private hotkeyRefs: symbol[] = [];
 
   multipleRounds = false;
   contentRounds = new Map<string, number>();

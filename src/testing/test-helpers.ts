@@ -20,7 +20,7 @@ const TRANSLATIONS = {
 };
 
 export class JsonTranslationLoader implements TranslateLoader {
-  getTranslation(code: string = ''): Observable<object> {
+  getTranslation(code = ''): Observable<object> {
     const uppercased = code.toUpperCase();
 
     return of(TRANSLATIONS[uppercased]);

@@ -13,7 +13,7 @@ export class DragDropBaseComponent {
   selectedSortItem: number;
 
 
-  drop(event: CdkDragDrop<String[]>) {
+  drop(event: CdkDragDrop<string[]>) {
     this.moveItem(event.previousIndex, event.currentIndex);
   }
 

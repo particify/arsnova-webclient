@@ -50,7 +50,7 @@ export class ContentPresentationComponent implements OnInit, OnDestroy {
   canAnswerContent = false;
   settings: UserSettings;
 
-  private hotkeyRefs: Symbol[] = [];
+  private hotkeyRefs: symbol[] = [];
 
   constructor(
     protected route: ActivatedRoute,

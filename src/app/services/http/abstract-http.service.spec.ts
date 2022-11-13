@@ -21,7 +21,7 @@ class MockNotificationService {
 
 @Injectable()
 class MockTranslateService {
-  public get(key: string): Observable<String> {
+  public get(key: string): Observable<string> {
     return of (key);
   }
 }

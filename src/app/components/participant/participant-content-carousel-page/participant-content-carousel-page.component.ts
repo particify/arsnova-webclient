@@ -216,7 +216,7 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
     }
   }
 
-  initStepper(index: number, delay: number = 0) {
+  initStepper(index: number, delay = 0) {
     setTimeout(() => {
       this.currentStep = index;
       this.stepper.init(index, this.contents.length);

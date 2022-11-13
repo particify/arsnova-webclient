@@ -131,7 +131,7 @@ export class CommentSettingsComponent implements OnInit {
   updateCommentExtensions(enableTreshold?: boolean, directSend?: boolean) {
     this.enableThreshold = enableTreshold ?? this.enableThreshold;
     this.directSend = directSend ?? this.directSend;
-    let commentExtension: CommentExtensions = new CommentExtensions();
+    const commentExtension: CommentExtensions = new CommentExtensions();
     commentExtension.enableThreshold = this.enableThreshold;
     commentExtension.commentThreshold = this.threshold;
     commentExtension.enableTags = this.enableTags;

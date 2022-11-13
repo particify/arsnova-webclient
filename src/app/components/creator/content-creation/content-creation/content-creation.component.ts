@@ -179,7 +179,7 @@ export class ContentCreationComponent extends DragDropBaseComponent implements O
     (this.content as ContentChoice).options = answerLabels;
     if (checkForEmpty) {
       let valid = true;
-      let labels = answerLabels.map(a => a.label);
+      const labels = answerLabels.map(a => a.label);
       if (labels.includes('')) {
         this.translationService.get('content.no-empty2').subscribe(message => {
           this.notificationService.showAdvanced(message, AdvancedSnackBarTypes.FAILED);

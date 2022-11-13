@@ -19,9 +19,9 @@ describe('ContentPriorizationCreationComponent', () => {
 
   const mockCreateEvent = new Subject<any>();
 
-  let mockContentService = jasmine.createSpyObj('ContentService', ['']);
-  let mockRoomService = jasmine.createSpyObj('RoomService', ['']);
-  let mockContentGroupService = jasmine.createSpyObj('ContentGroupService', ['']);
+  const mockContentService = jasmine.createSpyObj('ContentService', ['']);
+  const mockRoomService = jasmine.createSpyObj('RoomService', ['']);
+  const mockContentGroupService = jasmine.createSpyObj('ContentGroupService', ['']);
 
   const data = {
     room: {

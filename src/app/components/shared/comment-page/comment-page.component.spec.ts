@@ -25,7 +25,7 @@ import { A11yIntroPipe } from '@arsnova/app/pipes/a11y-intro.pipe';
 @Component({ selector: 'app-comment-list', template: '' })
 class CommentListStubComponent {
   @Input() auth: ClientAuthentication;
-  @Input() roomId: String;
+  @Input() roomId: string;
 }
 
 describe('CommentPageComponent', () => {

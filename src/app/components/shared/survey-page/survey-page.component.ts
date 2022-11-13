@@ -55,7 +55,7 @@ export class SurveyPageComponent implements OnInit, OnDestroy, AfterContentInit 
   voteKeys = ["1", "2", "3", "4"];
   hotkeyAction = HotkeyAction.FOCUS;
 
-  private hotkeyRefs: Symbol[] = [];
+  private hotkeyRefs: symbol[] = [];
 
   constructor(
     private authenticationService: AuthenticationService,

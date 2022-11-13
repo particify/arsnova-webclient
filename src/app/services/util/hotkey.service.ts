@@ -54,7 +54,7 @@ const excludedElementTypes = new Map<string, (el: Element) => boolean>([
 
 @Injectable()
 export class HotkeyService {
-  hotkeyRegistrations: Map<Symbol, Hotkey> = new Map();
+  hotkeyRegistrations: Map<symbol, Hotkey> = new Map();
   unregisterHandler: Function;
 
   private dialogRef: MatDialogRef<HotkeysComponent>;
@@ -69,7 +69,7 @@ export class HotkeyService {
   }
 
   static getKeyDisplayInfo(key: string): HotkeyDisplayInfo {
-    let keyName = key === ' ' ? 'space' : key.toLowerCase();
+    const keyName = key === ' ' ? 'space' : key.toLowerCase();
     return {
       keyName: keyName,
       keySymbol: KEY_SYMBOLS.get(key) ?? key.toUpperCase(),
@@ -77,7 +77,7 @@ export class HotkeyService {
     }
   }
 
-  registerHotkey(hotkey: Hotkey, localHotkeyRegistrations?: Symbol[]): Symbol {
+  registerHotkey(hotkey: Hotkey, localHotkeyRegistrations?: symbol[]): symbol {
     const registrationRef = Symbol(hotkey.key);
     const modifiers = hotkey.modifiers ?? [];
     const actionType = hotkey.actionType ?? HotkeyActionType.DEFAULT;
@@ -88,11 +88,11 @@ export class HotkeyService {
     return registrationRef;
   }
 
-  unregisterHotkey(registrationRef: Symbol) {
+  unregisterHotkey(registrationRef: symbol) {
     this.hotkeyRegistrations.delete(registrationRef);
   }
 
-  updateHotkey(registrationRef: Symbol, hotkey: Hotkey) {
+  updateHotkey(registrationRef: symbol, hotkey: Hotkey) {
     this.hotkeyRegistrations.set(registrationRef, hotkey);
   }
 

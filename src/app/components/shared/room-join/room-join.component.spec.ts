@@ -39,8 +39,8 @@ describe('RoomJoinComponent', () => {
   let component: RoomJoinComponent;
   let fixture: ComponentFixture<RoomJoinComponent>;
   const activatedRoute = new ActivatedRouteStub();
-  let notificationService = jasmine.createSpyObj('NotificationService', ['showAdvanced']);
-  let router = jasmine.createSpyObj('Router', ['navigate']);
+  const notificationService = jasmine.createSpyObj('NotificationService', ['showAdvanced']);
+  const router = jasmine.createSpyObj('Router', ['navigate']);
   let loader: HarnessLoader;
   let joinButton: MatButtonHarness;
   let inputField: MatInputHarness;

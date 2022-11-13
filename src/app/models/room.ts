@@ -14,12 +14,12 @@ export class Room {
   extensions: { [key: string ]: object };
 
   constructor(
-    ownerId: string = '',
-    shortId: string = '',
-    abbreviation: string = '',
-    name: string = '',
-    description: string = '',
-    closed: boolean = false,
+    ownerId = '',
+    shortId = '',
+    abbreviation = '',
+    name = '',
+    description = '',
+    closed = false,
     extensions: { [key: string ]: object } = {}
   ) {
     this.id = '';

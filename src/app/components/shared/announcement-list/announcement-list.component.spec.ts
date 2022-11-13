@@ -18,10 +18,10 @@ describe('AnnouncementListComponent', () => {
     state: new AnnouncementState()
   };
 
-  let authService = jasmine.createSpyObj('AuthenticationService', ['getCurrentAuthentication']);
+  const authService = jasmine.createSpyObj('AuthenticationService', ['getCurrentAuthentication']);
   authService.getCurrentAuthentication.and.returnValue(of({}));
 
-  let announcementService = jasmine.createSpyObj('AnnouncementService', ['getByUserId']);
+  const announcementService = jasmine.createSpyObj('AnnouncementService', ['getByUserId']);
   announcementService.getByUserId.and.returnValue(of([]));
 
   beforeEach(async () => {

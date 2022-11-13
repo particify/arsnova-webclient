@@ -77,13 +77,13 @@ describe('HeaderComponent', () => {
   let component: HeaderComponent;
   let fixture: ComponentFixture<HeaderComponent>;
   const activatedRoute = new ActivatedRouteStub(null, { apiConfig: { ui: { demo: '27273589' } } });
-  let notificationService = jasmine.createSpyObj('NotificationService', ['showAdvanced']);
+  const notificationService = jasmine.createSpyObj('NotificationService', ['showAdvanced']);
 
   let routerSpy = jasmine.createSpyObj('MockRouter', ['navigate', 'navigateByUrl']);
-  let userService = jasmine.createSpyObj('UserService', ['delete']);
-  let dialogService = jasmine.createSpyObj('DialogService', ['openUpdateInfoDialog', 'openDeleteDialog']);
+  const userService = jasmine.createSpyObj('UserService', ['delete']);
+  const dialogService = jasmine.createSpyObj('DialogService', ['openUpdateInfoDialog', 'openDeleteDialog']);
   const consentService = jasmine.createSpyObj('ConsentService', ['openDialog']);
-  let announcementService = jasmine.createSpyObj('AnnouncementService', ['getStateByUserId']);
+  const announcementService = jasmine.createSpyObj('AnnouncementService', ['getStateByUserId']);
   announcementService.getStateByUserId.and.returnValue(of({}));
   let loader: HarnessLoader;
   let userButton: MatButtonHarness;

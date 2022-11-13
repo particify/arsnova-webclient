@@ -21,7 +21,7 @@ export class HotkeyDirective implements OnDestroy, OnChanges {
   @Input() appHotkeyTitle: string;
   @Input() matTooltip: string;
 
-  private hotkeyRef: Symbol;
+  private hotkeyRef: symbol;
 
   constructor(
     private elementRef: ElementRef<HTMLElement>,
