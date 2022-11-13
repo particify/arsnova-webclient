@@ -12,7 +12,8 @@
       "command": "yarn start",
       "name": "Run Webclient",
       "request": "launch",
-      "type": "node-terminal"
+      "type": "node-terminal",
+      "preLaunchTask": "Install dependencies"
     }
   ]
 }
