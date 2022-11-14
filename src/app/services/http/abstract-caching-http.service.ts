@@ -11,7 +11,7 @@ import { AbstractHttpService } from './abstract-http.service';
 export abstract class AbstractCachingHttpService<T> extends AbstractHttpService<T> {
   protected cacheName = 'http';
   protected stompSubscription: Subscription;
-  protected cache: Cache;
+  protected cache: Cache<T>;
 
   constructor(
     uriPrefix: string,
@@ -24,7 +24,7 @@ export abstract class AbstractCachingHttpService<T> extends AbstractHttpService<
     useSharedCache = false
   ) {
     super(uriPrefix, httpClient, eventService, translateService, notificationService);
-    this.cache = cachingService.getCache(useSharedCache ? DefaultCache.SHARED : DefaultCache.CURRENT_ROOM);
+    this.cache = cachingService.getCache<T>(useSharedCache ? DefaultCache.SHARED : DefaultCache.CURRENT_ROOM);
   }
 
   protected fetch(uri: string): Observable<T> {

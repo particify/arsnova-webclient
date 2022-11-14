@@ -6,7 +6,7 @@ import { WsConnectorService } from "../websockets/ws-connector.service";
 
 const LRU_OPTIONS: LRU.Options<string, any> = {
   max: 30,
-  maxAge: 15 * 60 * 1000,
+  ttl: 15 * 60 * 1000,
   noDisposeOnSet: true,
   updateAgeOnGet: true
 };
@@ -25,20 +25,20 @@ export interface CacheKey {
 
 @Injectable()
 export class CachingService {
-  private caches: Map<string | number, Cache> = new Map();
+  private caches: Map<string | number, Cache<unknown>> = new Map();
   private wsDisconnectionTimestamp: Date = new Date();
 
   constructor(ws: WsConnectorService) {
     ws.getConnectionState().subscribe(state => this.handleWsStateChange(state));
   }
 
-  getCache(cacheId: string | number) {
+  getCache<T>(cacheId: string | number) {
     let cache = this.caches.get(cacheId);
     if (!cache) {
       cache = new Cache();
       this.caches.set(cacheId, cache);
     }
-    return cache;
+    return cache as Cache<T>;
   }
 
   private handleWsStateChange(state: RxStompState) {
@@ -60,39 +60,41 @@ export class CachingService {
   }
 }
 
-export class Cache {
-  private cache: LRU<string, any>;
-  private disposeHandlers: { type: string, handler: (id: string, value: object) => void }[] = [];
+export class Cache<T> {
+  private cache: LRU<string, T>;
+  private disposeHandlers: { type: string, handler: (id: string, value: T) => void }[] = [];
 
   constructor() {
-    const lruOptions = { dispose: (key, value) => this.dispatchDispose(key, value) };
-    Object.assign(lruOptions, LRU_OPTIONS);
+    const lruOptions: LRU.Options<string, T> = {
+      ...LRU_OPTIONS,
+      dispose: (value, key) => this.dispatchDispose(key, value)
+    };
     this.cache = new LRU(lruOptions);
     /* Explicitly prune the cache so the disponse handlers are called early. */
-    interval(PRUNE_INTERVAL_MS).subscribe(() => this.cache.prune());
+    interval(PRUNE_INTERVAL_MS).subscribe(() => this.cache.purgeStale());
   }
 
-  get(key: CacheKey): any {
+  get(key: CacheKey): T {
     return this.cache.get(this.keyToString(key));
   }
 
-  put(key: CacheKey, value: any) {
+  put(key: CacheKey, value: T) {
     this.cache.set(this.keyToString(key), value);
   }
 
   remove(key: CacheKey) {
-    this.cache.del(this.keyToString(key));
+    this.cache.delete(this.keyToString(key));
   }
 
   clear() {
-    this.cache.reset();
+    this.cache.clear();
   }
 
-  registerDisposeHandler(type: string, handler: (id: string, value: object) => void) {
+  registerDisposeHandler(type: string, handler: (id: string, value: T) => void) {
     this.disposeHandlers.push({ type: type, handler: handler });
   }
 
-  private dispatchDispose(key: string, value: object) {
+  private dispatchDispose(key: string, value: T) {
     const [type, id] = key.split('__', 2);
     this.disposeHandlers
       .filter(handlerConfig => handlerConfig.type === type)
