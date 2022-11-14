@@ -60,7 +60,7 @@ lint:
   stage: test
   needs:
     - yarn_install
-  allow_failure: false
+  allow_failure: true
   script:
     - yarn lint
 
