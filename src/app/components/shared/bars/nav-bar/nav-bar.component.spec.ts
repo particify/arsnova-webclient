@@ -40,8 +40,9 @@ describe('NavBarComponent', () => {
   const mockFeedbackService = jasmine.createSpyObj(['startSub']);
   mockFeedbackService.messageEvent = new EventEmitter<Message>();
 
-  const mockContentGroupService = jasmine.createSpyObj(['getById']);
+  const mockContentGroupService = jasmine.createSpyObj(['getById', 'sortContentGroupsByName']);
   mockContentGroupService.getById.and.returnValue(of(new ContentGroup('id', 'rev', 'roomId', 'name')));
+  mockContentGroupService.sortContentGroupsByName.and.returnValue([]);
 
   const body = {
     UserCountChanged: {
@@ -376,6 +377,8 @@ describe('NavBarComponent', () => {
       ]
     };
     mockRoomStatsService.getStats.and.returnValue(of(stats));
+    mockContentGroupService.getById.and.returnValue(of(new ContentGroup('id-1', 'rev-1', 'room-id-1', 'Test')));
+    mockContentGroupService.sortContentGroupsByName.and.returnValue([new ContentGroup('id-1', 'rev-1', 'room-id-1', 'Test')]);
     fixture.detectChanges();
     overviewButton = await loader.getHarness(MatButtonHarness.with({selector: '#series-button'}));
     await overviewButton.click();
@@ -408,6 +411,8 @@ describe('NavBarComponent', () => {
       ]
     };
     mockRoomStatsService.getStats.and.returnValue(of(stats));
+    mockContentGroupService.getById.and.returnValue(of(new ContentGroup('id-1', 'rev-1', 'room-id-1', 'Test')));
+    mockContentGroupService.sortContentGroupsByName.and.returnValue([new ContentGroup('id-1', 'rev-1', 'room-id-1', 'Test'), new ContentGroup('id-1', 'rev-1', 'room-id-1', 'Test')]);
     fixture.detectChanges();
     seriesButton = await loader.getHarness(MatButtonHarness.with({selector: '#series-button'}));
     await seriesButton.click();
@@ -433,17 +438,18 @@ describe('NavBarComponent', () => {
         {
           contentCount: 1,
           groupName: 'Test',
-          id: 'series-id-1111'
+          id: 'id-1'
         },
         {
           contentCount: 1,
           groupName: 'Quiz',
-          id: 'series-id-2222'
+          id: 'id-2'
         }
       ]
     };
     mockRoomStatsService.getStats.and.returnValue(of(stats));
-    mockContentGroupService.getById.and.returnValue(of(new ContentGroup('id-1234', 'rev-1234', 'room-id-1234', 'Test')));
+    mockContentGroupService.getById.and.returnValue(of(new ContentGroup('id-1', 'rev-1', 'room-id-1', 'Test')));
+    mockContentGroupService.sortContentGroupsByName.and.returnValue([new ContentGroup('id-1', 'rev-1', 'room-id-1', 'Test'), new ContentGroup('id-1', 'rev-1', 'room-id-1', 'Test')]);
     fixture.detectChanges();
     seriesButton = await loader.getHarness(MatButtonHarness.with({selector: '#series-button'}));
     await seriesButton.click();
