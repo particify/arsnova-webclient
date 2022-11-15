@@ -26,7 +26,7 @@ import { A11yIntroPipe } from '@arsnova/app/pipes/a11y-intro.pipe';
 describe('UserProfileComponent', () => {
   let component: UserProfileComponent;
   let fixture: ComponentFixture<UserProfileComponent>;
-  let notificationService = jasmine.createSpyObj('NotificationService', ['showAdvanced']);
+  const notificationService = jasmine.createSpyObj('NotificationService', ['showAdvanced']);
 
   const mockDialogService = jasmine.createSpyObj(['openDeleteDialog']);
 

@@ -51,10 +51,10 @@ export class SystemInfoService extends AbstractHttpService<void> {
     );
   }
 
-  getServiceStats(): Observable<Map<String, any>> {
+  getServiceStats(): Observable<Map<string, any>> {
     const connectionUrl = this.apiUrl.base + this.serviceApiUrl.serviceStats;
-    return this.http.get<Map<String, any>>(connectionUrl, httpOptions).pipe(
-      catchError(this.handleError<Map<String, any>>('getServiceStats'))
+    return this.http.get<Map<string, any>>(connectionUrl, httpOptions).pipe(
+      catchError(this.handleError<Map<string, any>>('getServiceStats'))
     );
   }
 }

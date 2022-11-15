@@ -66,7 +66,7 @@ export class GroupContentComponent extends DragDropBaseComponent implements OnIn
   contentHotkeysRegistered = false;
   markdownFeatureset = MarkdownFeatureset.MINIMUM;
 
-  private hotkeyRefs: Symbol[] = [];
+  private hotkeyRefs: symbol[] = [];
 
   ContentType: typeof ContentType = ContentType;
   resetAnswerEvent: Subject<string> = new Subject<string>();
@@ -470,7 +470,7 @@ export class GroupContentComponent extends DragDropBaseComponent implements OnIn
     });
   }
 
-  dropContent(event: CdkDragDrop<String[]>) {
+  dropContent(event: CdkDragDrop<string[]>) {
     const current = event.currentIndex;
     const prev = event.previousIndex;
     this.moveItem(current, prev);

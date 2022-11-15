@@ -85,7 +85,7 @@ export class PasswordEntryComponent implements AfterViewInit {
 
   getPasswordStrength(password: string): number {
     let strength = 0;
-    for (let pattern of PATTERNS) {
+    for (const pattern of PATTERNS) {
       if (pattern.test(password)) {
         strength++;
       }

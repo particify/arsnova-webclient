@@ -37,7 +37,7 @@ export class HeaderComponent implements OnInit {
   role: UserRole;
   UserRole: typeof UserRole = UserRole;
 
-  themeClass: String;
+  themeClass: string;
   themes: Theme[];
   deviceWidth = innerWidth;
   helpUrl: string;

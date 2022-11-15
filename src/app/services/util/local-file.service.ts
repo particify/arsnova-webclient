@@ -29,7 +29,7 @@ export class LocalFileService {
       map(e => (e.target as HTMLInputElement).files[0]));
   }
 
-  generateFilename(nameParts: string[], appendTimestamp: boolean = false) {
+  generateFilename(nameParts: string[], appendTimestamp = false) {
     const timestampSuffix = appendTimestamp
         ? '_' + new Date().toISOString()
             .replace(/[:-]/g, '').replace('T', '-').substr(0, 13)

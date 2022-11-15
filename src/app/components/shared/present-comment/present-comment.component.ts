@@ -16,7 +16,7 @@ export class PresentCommentComponent implements OnInit {
 
   currentZoom = 1;
 
-  private hotkeyRefs: Symbol[] = [];
+  private hotkeyRefs: symbol[] = [];
 
   constructor(
     private translateService: TranslateService,

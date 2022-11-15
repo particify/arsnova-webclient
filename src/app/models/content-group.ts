@@ -11,16 +11,16 @@ export class ContentGroup {
   correctOptionsPublished: boolean;
 
   constructor(
-    id: string = '',
-    revision: string = '',
-    roomId: string = '',
-    name: string = '',
+    id = '',
+    revision = '',
+    roomId = '',
+    name = '',
     contentIds: string[] = [],
-    published: boolean = false,
-    firstPublishedIndex: number = 0,
-    lastPublishedIndex: number = -1,
-    statisticsPublished: boolean = true,
-    correctOptionsPublished: boolean = true,
+    published = false,
+    firstPublishedIndex = 0,
+    lastPublishedIndex = -1,
+    statisticsPublished = true,
+    correctOptionsPublished = true,
   ) {
     this.id = id;
     this.revision = revision;

@@ -14,10 +14,10 @@ describe('AnnouncementSettingsComponent', () => {
   let component: AnnouncementSettingsComponent;
   let fixture: ComponentFixture<AnnouncementSettingsComponent>;
 
-  let announcementService = jasmine.createSpyObj('AnnouncementService', ['getByRoomId', 'delete', 'update', 'add']);
+  const announcementService = jasmine.createSpyObj('AnnouncementService', ['getByRoomId', 'delete', 'update', 'add']);
   announcementService.getByRoomId.and.returnValue(of([]));
 
-  let dialogService = jasmine.createSpyObj('DialogService', ['openDeleteDialog'])
+  const dialogService = jasmine.createSpyObj('DialogService', ['openDeleteDialog'])
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({

@@ -1,6 +1,7 @@
 {
   "root": true,
   "ignorePatterns": [
+    "*.d.ts",
     "projects/**/*"
   ],
   "overrides": [
@@ -10,16 +11,17 @@
       ],
       "parserOptions": {
         "project": [
-          "tsconfig.json",
-          "e2e/tsconfig.e2e.json"
-        ],
-        "createDefaultProgram": true
+          "tsconfig.json"
+        ]
       },
       "extends": [
+        "eslint:recommended",
+        "plugin:@typescript-eslint/recommended",
         "plugin:@angular-eslint/recommended",
         "plugin:@angular-eslint/template/process-inline-templates"
       ],
       "rules": {
+        "complexity": ["error", 10],
         "@angular-eslint/component-selector": [
           "error",
           {
@@ -35,22 +37,7 @@
             "prefix": "app",
             "style": "camelCase"
           }
-        ],
-        "@typescript-eslint/consistent-type-definitions": "error",
-        "@typescript-eslint/dot-notation": "off",
-        "@typescript-eslint/explicit-member-accessibility": [
-          "off",
-          {
-            "accessibility": "explicit"
-          }
-        ],
-        "brace-style": [
-          "error",
-          "1tbs"
-        ],
-        "id-blacklist": "off",
-        "id-match": "off",
-        "no-underscore-dangle": "off"
+        ]
       }
     },
     {

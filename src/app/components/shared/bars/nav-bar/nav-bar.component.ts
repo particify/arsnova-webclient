@@ -107,7 +107,7 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
       this.statsChangesSubscription.unsubscribe();
     }
     if (this.groupSubscriptions) {
-      for (let subscription of this.groupSubscriptions) {
+      for (const subscription of this.groupSubscriptions) {
         subscription.unsubscribe();
       }
     }
@@ -256,7 +256,7 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
 
   getItems() {
     for (const feature of this.features) {
-      let url = this.getBaseUrl() + this.getFeatureUrl(feature.name);
+      const url = this.getBaseUrl() + this.getFeatureUrl(feature.name);
       const index = this.activeFeatures.indexOf(feature.name);
       const barIndex = this.barItems.map(b => b.name).indexOf(feature.name)
       if (index > -1) {

@@ -6,8 +6,8 @@ export class Moderator {
   role: UserRole;
 
   constructor(
-    userId: string = '',
-    loginId: string = '',
+    userId = '',
+    loginId = '',
     role: UserRole = UserRole.EXECUTIVE_MODERATOR
   ) {
     this.userId = userId;

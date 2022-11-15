@@ -33,7 +33,6 @@ export class WsRoomEventDispatcherService {
       const role$ = this.roomMembershipService.getPrimaryRoleByRoom(room.shortId);
       this.registerChangesMetaListener(room);
       role$.subscribe(role => this.registerDataChangeListener(room, role));
-      ;
     }
   }
 

@@ -17,19 +17,19 @@ export class Comment {
   tag: string;
   answer: string;
 
-  constructor(roomId: string = '',
-              creatorId: string = '',
-              body: string = '',
-              read: boolean = false,
+  constructor(roomId = '',
+              creatorId = '',
+              body = '',
+              read = false,
               correct: CorrectWrong = CorrectWrong.NULL,
-              favorite: boolean = false,
+              favorite = false,
               creationTimestamp: Date = null,
-              score: number = 0,
+              score = 0,
               createdFromLecturer = false,
-              highlighted: boolean = false,
-              ack: boolean = true,
-              tag: string = '',
-              answer: string = '') {
+              highlighted = false,
+              ack = true,
+              tag = '',
+              answer = '') {
     this.id = '';
     this.roomId = roomId;
     this.creatorId = creatorId;

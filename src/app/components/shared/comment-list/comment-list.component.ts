@@ -127,7 +127,7 @@ export class CommentListComponent implements OnInit, OnDestroy {
 
   navBarStateSubscription: Subscription;
 
-  private hotkeyRefs: Symbol[] = [];
+  private hotkeyRefs: symbol[] = [];
 
   constructor(
     private commentService: CommentService,

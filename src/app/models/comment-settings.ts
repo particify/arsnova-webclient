@@ -3,7 +3,7 @@ export class CommentSettings {
   directSend: boolean;
   fileUploadEnabled: boolean;
 
-  constructor(roomId: string = '', directSend: boolean = true, fileUploadEnabled = false) {
+  constructor(roomId = '', directSend = true, fileUploadEnabled = false) {
     this.roomId = roomId;
     this.directSend = directSend;
     this.fileUploadEnabled = fileUploadEnabled;

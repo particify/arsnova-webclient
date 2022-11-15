@@ -50,7 +50,7 @@ export class StepperComponent extends CdkStepper implements OnInit, OnDestroy {
   swipeXLocation?: number;
   swipeTime?: number;
 
-  private hotkeyRefs: Symbol[] = [];
+  private hotkeyRefs: symbol[] = [];
 
   constructor(private announceService: AnnounceService,
               private hotkeyService: HotkeyService,

@@ -19,7 +19,7 @@ const TRANSLATIONS = {
 };
 
 class JsonTranslationLoader implements TranslateLoader {
-  getTranslation(code: string = ''): Observable<object> {
+  getTranslation(code = ''): Observable<object> {
     if (code !== null) {
       const uppercased = code.toUpperCase();
 

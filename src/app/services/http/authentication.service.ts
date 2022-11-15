@@ -126,7 +126,7 @@ export class AuthenticationService extends AbstractHttpService<ClientAuthenticat
   /**
    * Authenticates a user using loginId (username or email) and password.
    */
-  login(loginId: string, password: string, providerId: string = 'user-db'): Observable<ClientAuthenticationResult> {
+  login(loginId: string, password: string, providerId = 'user-db'): Observable<ClientAuthenticationResult> {
     const providerPath = providerId === 'user-db' ? this.serviceApiUrl.registered : '/' + providerId;
     const connectionUrl: string = this.buildUri(this.serviceApiUrl.login + providerPath);
 

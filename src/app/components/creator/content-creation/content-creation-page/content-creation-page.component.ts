@@ -63,7 +63,7 @@ export class ContentCreationPageComponent implements OnInit, AfterContentInit {
 
   ngOnInit() {
     const iconList = this.contentService.getTypeIcons();
-    for (let type of this.contentTypes) {
+    for (const type of this.contentTypes) {
       this.formats.push({name: type.toLowerCase(), icon: iconList.get(type)})
     }
     this.selectedFormat = this.formats[0];
