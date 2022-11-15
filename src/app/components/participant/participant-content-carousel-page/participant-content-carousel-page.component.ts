@@ -19,9 +19,9 @@ import { EntityChanged } from '../../../models/events/entity-changed';
 import { Subscription } from 'rxjs';
 import { ContentFocusState } from '../../../models/events/remote/content-focus-state';
 import { RemoteMessage } from '../../../models/events/remote/remote-message.enum';
-import { UiState } from '../../../models/events/ui/ui-state.enum';
 import { UserService } from '../../../services/http/user.service';
 import { UserSettings } from '../../../models/user-settings';
+import { RoutingService } from '../../../services/util/routing.service';
 
 @Component({
   selector: 'app-participant-content-carousel-page',
@@ -39,7 +39,7 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
   contentGroupName: string;
   shortId: string;
   isLoading = true;
-  alreadySent = new Map<number, boolean>();
+  alreadySent: Map<number, boolean>;
   status = {
     LAST_CONTENT: 'LAST_CONTENT',
     FIRST_UNANSWERED: 'FIRST_UNANSWERED',
@@ -56,7 +56,7 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
   changesSubscription: Subscription;
   remoteSubscription: Subscription;
   focusStateSubscription: Subscription;
-  groupChangedSubscription: Subscription;
+  routeChangedSubscription: Subscription;
 
   isFinished = false;
   isPureInfoSeries = false;
@@ -78,7 +78,8 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
     private notificationService: NotificationService,
     private eventService: EventService,
     private router: Router,
-    private userService: UserService
+    private userService: UserService,
+    private routingService: RoutingService
   ) {
   }
 
@@ -99,8 +100,8 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
     if (this.focusStateSubscription) {
       this.focusStateSubscription.unsubscribe();
     }
-    if (this.groupChangedSubscription) {
-      this.groupChangedSubscription.unsubscribe();
+    if (this.routeChangedSubscription) {
+      this.routeChangedSubscription.unsubscribe();
     }
   }
 
@@ -153,13 +154,16 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
     this.focusStateSubscription = this.eventService.on<boolean>(RemoteMessage.FOCUS_STATE_CHANGED).subscribe(guided => {
       this.guided = guided;
     });
-    this.groupChangedSubscription = this.eventService.on<string>(UiState.NEW_GROUP_SELECTED).subscribe(newGroup => {
-      this.contentgroupService.getByRoomIdAndName(this.contentGroup.roomId, newGroup).subscribe(group => {
-        this.contentGroupName = group.name;
-        this.contentGroup = group;
-        this.isReloading = true;
-        this.getContents(null);
-      });
+    this.routeChangedSubscription = this.routingService.getRouteChanges().subscribe(route => {
+      const newGroup = route.params['seriesName'];
+      if (newGroup && newGroup !== this.contentGroupName) {
+        this.contentgroupService.getByRoomIdAndName(this.contentGroup.roomId, newGroup).subscribe(group => {
+          this.contentGroupName = group.name;
+          this.contentGroup = group;
+          this.isReloading = true;
+          this.getContents(null);
+        });
+      }
     });
   }
 
@@ -187,7 +191,7 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
               this.lockedContentId = null;
             }
           }
-          this.updateURL(lastContentIndex);
+          this.updateContentIndexUrl(lastContentIndex);
         }
         this.getAnswers(lastContentIndex);
       });
@@ -210,9 +214,10 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
     this.announceService.announce(key);
   }
 
-  checkIfLastContentExists(contentIndex: number) {
+  checkIfLastContentExists(contentIndex?: number) {
     this.checkState();
-    if (contentIndex >= 0) {
+    // Since `null >= 0` is `true` trough a type coercion with `ToPrimitive() this muste be checked seperately
+    if (contentIndex === 0 || contentIndex > 0) {
       this.initStepper(contentIndex);
     } else {
       if (!this.guided) {
@@ -232,11 +237,11 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
   goToContent(index: number) {
     this.stepper.setHeaderPosition(index);
     this.stepper.onClick(index);
-    this.updateURL(index);
+    this.updateContentIndexUrl(index);
   }
 
-  updateURL(index?: number) {
-    if (this.currentStep !== index || !this.isReloading) {
+  updateContentIndexUrl(index?: number) {
+    if (!!index && this.currentStep !== index || !this.isReloading) {
       this.currentStep = index || 0;
       this.replaceUrl(['p', this.shortId, 'series', this.contentGroupName, index + 1]);
     }
@@ -245,8 +250,9 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
   getInitialStep() {
     const firstIndex = this.getFirstUnansweredContentIndex();
     if (firstIndex === 0 && !this.isPureInfoSeries) {
+      this.showOverview = false;
       this.initStepper(0);
-      this.updateURL(0);
+      this.updateContentIndexUrl(0);
     } else {
       this.showOverview = true;
     }
@@ -275,15 +281,11 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
   }
 
   nextContent(finish?: boolean) {
-    if (finish !== null) {
-      if (!finish) {
-      this.stepper.next();
-      } else {
-        this.stepper.headerPos = 0;
-        this.stepper.onClick(0);
-      }
+    if (!finish) {
+    this.stepper.next();
     } else {
-      this.goToOverview();
+      this.stepper.headerPos = 0;
+      this.stepper.onClick(0);
     }
   }
 
@@ -327,6 +329,7 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
         .map(c => c.id)).subscribe(answers => {
           let answersAdded = 0;
           this.answers = [];
+          this.alreadySent = new Map<number, boolean>();
           for (const [index, content] of this.contents.entries()) {
             if (answersAdded < answers.length) {
               for (const answer of answers) {

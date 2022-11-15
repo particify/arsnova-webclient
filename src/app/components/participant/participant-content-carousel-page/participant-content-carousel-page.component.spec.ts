@@ -28,6 +28,7 @@ import { UserService } from '@arsnova/app/services/http/user.service';
 import { STORAGE_KEYS } from '@arsnova/app/services/util/global-storage.service';
 import { ClientAuthentication } from '@arsnova/app/models/client-authentication';
 import { AuthProvider } from '@arsnova/app/models/auth-provider';
+import { RoutingService } from '@arsnova/app/services/util/routing.service';
 
 describe('ParticipantContentCarouselPageComponent', () => {
   let component: ParticipantContentCarouselPageComponent;
@@ -50,6 +51,7 @@ describe('ParticipantContentCarouselPageComponent', () => {
   mockGlobalStorageService.getItem.withArgs(STORAGE_KEYS.LANGUAGE).and.returnValue('de');
   mockGlobalStorageService.getItem.withArgs(STORAGE_KEYS.USER).and.returnValue(new ClientAuthentication('1234', 'a@b.cd', AuthProvider.ARSNOVA, 'token'));
 
+  const mockRoutingService = jasmine.createSpyObj('RoutingService', ['getRouteChanges']);
 
   const data = {
     room: new Room()
@@ -63,13 +65,17 @@ describe('ParticipantContentCarouselPageComponent', () => {
   snapshot.params = of([params]);
 
   const activatedRouteStub = new ActivatedRouteStub(null, data, snapshot);
+  const route = {
+    params: params
+  }
+  mockRoutingService.getRouteChanges.and.returnValue(of(route));
 
   let translateService: TranslateService;
   const a11yIntroPipe = new A11yIntroPipe(translateService);
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ 
+      declarations: [
         ParticipantContentCarouselPageComponent,
         A11yIntroPipe
       ],
@@ -134,6 +140,10 @@ describe('ParticipantContentCarouselPageComponent', () => {
         {
           provide: UserService,
           useValue: mockUserService
+        },
+        {
+          provide: RoutingService,
+          useValue: mockRoutingService
         }
       ],
       schemas: [

@@ -4,7 +4,7 @@
     <div id="live-announcer-button" class="visually-hidden" tabindex="-1">
       {{ 'answer.a11y-message' | a11yIntro: { group: contentGroupName } | async }}
     </div>
-    <app-stepper *ngIf="contents.length > 0 && !this.showOverview" (newIndex)="updateURL($event)" [listLength]="contents.length"
+    <app-stepper *ngIf="contents.length > 0 && !this.showOverview" (newIndex)="updateContentIndexUrl($event)" [listLength]="contents.length"
                  [completed]="alreadySent" [disabled]="guided" [finished]="isFinished" i18nPrefix="content">
       <cdk-step *ngFor="let content of contents; let i = index">
         <div tabindex="0" id="step" *ngIf="currentStep >= i - 1 && currentStep <= i + 1"

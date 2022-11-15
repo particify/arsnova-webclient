@@ -120,9 +120,6 @@ export class GroupContentComponent extends DragDropBaseComponent implements OnIn
       content.state.round = 1;
       this.resetAnswerEvent.next(content.id);
     });
-    this.eventService.on<string>(UiState.NEW_GROUP_SELECTED).subscribe(newGroup => {
-      this.setContentGroup(newGroup);
-    });
   }
 
   ngOnDestroy() {
