@@ -78,6 +78,10 @@ export class SeriesResultsComponent implements OnInit {
       if (this.hasScore) {
         this.updateChart();
       }
+    }, err => {
+      this.getContentResultView();
+      this.isLoading = false;
+      this.isLoadingLastContent = false;
     });
   }
 
@@ -113,7 +117,7 @@ export class SeriesResultsComponent implements OnInit {
     this.contents.forEach((val, i) => {
       this.contentsWithResults.push({
         body: val.renderedBody,
-        state: this.resultOverview.answerResults[i].state
+        state: this.resultOverview?.answerResults[i].state
       });
     });
   }
