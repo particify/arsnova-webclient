@@ -147,6 +147,10 @@ export class ContentGroupService extends AbstractEntityService<ContentGroup> {
     return contentGroup.contentIds?.filter(id => this.isContentPublished(contentGroup, id)) || [];
   }
 
+  sortContentGroupsByName(contentGroups: ContentGroup[]): ContentGroup[] {
+    return contentGroups.sort((a, b) => a.name.localeCompare(b.name));
+  }
+
   import(roomId: string, groupId: string, blob: Blob) {
     const connectionUrl = this.buildUri(`/${groupId}/import`, roomId);
     const formData = new FormData();
