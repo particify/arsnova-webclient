@@ -46,7 +46,7 @@ export class StatisticContentComponent implements OnInit {
   @Input() useCustomFlipAction = false;
   @Output() updatedCounter: EventEmitter<number> = new EventEmitter<number>();
   @Output() customFlipEvent = new EventEmitter();
-  @Input() settings: UserSettings;
+  @Input() settings = new UserSettings();
 
   attachmentData: any;
   answersVisible = false;
