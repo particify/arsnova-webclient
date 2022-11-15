@@ -63,9 +63,7 @@
     "all-contents-answered": "Du hast alle Inhalte dieser Serie beantwortet. Schaue dir deine Antworten noch einmal an oder kehre zur Raumübersicht zurück.",
     "continue-where-you-stopped": "Mach da weiter, wo du aufgehört hast",
     "some-contents-answered": "Schaue dir deine Antworten noch einmal an, springe zum nächsten Inhalt oder kehre zur Raumübersicht zurück.",
-    "pure-info-contents": "Springe zu einem beliebigen Inhalt oder kehre zur Raumübersicht zurück.",
-    "go-to-room-overview": "Zur Raumübersicht",
-    "go-to-overview": "Zur Übersicht"
+    "pure-info-contents": "Springe zu einem beliebigen Inhalt oder kehre zur Raumübersicht zurück."
   },
   "comment-list": {
     "a11y-search-list": "Durchsuche die Beiträge",

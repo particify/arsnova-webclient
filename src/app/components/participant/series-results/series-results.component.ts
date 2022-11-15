@@ -11,6 +11,7 @@ import { AnswerResultOverview, AnswerResultType } from '../../../models/answer-r
 import { UserRole } from '../../../models/user-roles.enum';
 import { ClientAuthentication } from '../../../models/client-authentication';
 import { Router } from '@angular/router';
+import { Features } from '../../../models/features.enum';
 
 // Max time for updating db (5000) - navigation delay (500) / 2
 const RELOAD_INTERVAL = 2250;
@@ -211,11 +212,7 @@ export class SeriesResultsComponent implements OnInit {
   }
 
   goToContent(index: number) {
-    this.router.navigate([this.routingService.getRoleString(UserRole.PARTICIPANT), this.routingService.getShortId(), 'series', this.group.name, index + 1]);
-  }
-
-  goToRoomOverview() {
-    this.router.navigate([this.routingService.getRoleString(UserRole.PARTICIPANT), this.routingService.getShortId()]);
+    this.router.navigate([this.routingService.getRoleString(UserRole.PARTICIPANT), this.routingService.getShortId(), Features.CONTENTS, this.group.name, index + 1]);
   }
 
   getHeaderText(): string {

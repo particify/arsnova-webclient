@@ -109,10 +109,6 @@ export class ContentParticipantComponent implements OnInit {
     this.next.emit(last);
   }
 
-  goToOverview() {
-    this.goToNextContent(null);
-  }
-
   getA11yMessage(): string {
     let msg = 'answer.a11y-';
     if (this.alreadySent) {

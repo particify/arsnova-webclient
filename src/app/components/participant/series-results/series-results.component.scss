@@ -1,5 +1,4 @@
-$graphic-size: 140px;
-$graphic-size-sm: 80px;
+$graphic-size: 80px;
 $icon-container-size: 40px;
 
 .mat-card {
@@ -14,8 +13,20 @@ $icon-container-size: 40px;
   font-weight: bold;
 }
 
+.score-text {
+  @include header-text-base;
+  font-size: 18px;
+}
+
 .canvas-container {
+  width: $graphic-size;
+  height: $graphic-size;
   position: relative;
+}
+
+.graphic {
+  width: $graphic-size;
+  height: $graphic-size;
 }
 
 @media(max-width: 767px) {
@@ -25,7 +36,6 @@ $icon-container-size: 40px;
 
   .header-text {
     @include header-text-base;
-    padding-top: 8px;
     font-size: 18px;
   }
 
@@ -34,28 +44,13 @@ $icon-container-size: 40px;
   }
 
   .canvas-container {
-    height: $graphic-size-sm;
-    width: $graphic-size-sm;
     margin: 1em 1em 1em 0.5em;
-  }
-
-  .button-container-sm {
-    margin-bottom: 1em;
-  }
-
-  .button-container {
-    display: none;
-  }
-
-  .graphic {
-    width: $graphic-size-sm;
-    height: $graphic-size-sm;
   }
 }
 
 @media(min-width: 768px) {
   .mat-card {
-    padding-top: 3em;
+    padding-top: 2em;
   }
 
   .header-text {
@@ -68,22 +63,11 @@ $icon-container-size: 40px;
   }
 
   .canvas-container {
-    height: $graphic-size;
-    width: $graphic-size;
-    margin-right: 2.5em;
-  }
-
-  .graphic {
-    width: $graphic-size;
-    height: $graphic-size;
+    margin-right: 2em;
   }
 
   .header-container {
-    margin: 0 2em 2.5em;
-  }
-
-  .button-container-sm {
-    display: none;
+    margin: 0 1em 1em;
   }
 }
 
