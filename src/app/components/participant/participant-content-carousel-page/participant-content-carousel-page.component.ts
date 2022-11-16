@@ -19,8 +19,6 @@ import { EntityChanged } from '../../../models/events/entity-changed';
 import { Subscription } from 'rxjs';
 import { ContentFocusState } from '../../../models/events/remote/content-focus-state';
 import { RemoteMessage } from '../../../models/events/remote/remote-message.enum';
-import { UserService } from '../../../services/http/user.service';
-import { UserSettings } from '../../../models/user-settings';
 import { RoutingService } from '../../../services/util/routing.service';
 
 @Component({
@@ -63,8 +61,6 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
   hasAnsweredLastContent = false;
   showOverview = false;
 
-  settings: UserSettings;
-
   constructor(
     private contentService: ContentService,
     protected translateService: TranslateService,
@@ -78,7 +74,6 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
     private notificationService: NotificationService,
     private eventService: EventService,
     private router: Router,
-    private userService: UserService,
     private routingService: RoutingService
   ) {
   }
@@ -110,19 +105,15 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
     const params = this.route.snapshot.params;
     const lastContentIndex = params['contentIndex'] - 1;
     this.contentGroupName = params['seriesName'];
-    const loginId = this.globalStorageService.getItem(STORAGE_KEYS.USER).loginId;
-    this.userService.getUserSettingsByLoginId(loginId).subscribe(settings => {
-      this.settings = settings || new UserSettings();
-      this.route.data.subscribe(data => {
-        this.shortId = data.room.shortId;
-        this.contentgroupService.getByRoomIdAndName(data.room.id, this.contentGroupName).subscribe(contentGroup => {
-          this.contentGroup = contentGroup;
-          this.getContents(lastContentIndex);
-        },
-          error => {
-          this.finishLoading()
-          });
-      });
+    this.route.data.subscribe(data => {
+      this.shortId = data.room.shortId;
+      this.contentgroupService.getByRoomIdAndName(data.room.id, this.contentGroupName).subscribe(contentGroup => {
+        this.contentGroup = contentGroup;
+        this.getContents(lastContentIndex);
+      },
+        error => {
+        this.finishLoading()
+        });
     });
     this.changesSubscription = this.eventService.on('EntityChanged').subscribe(changes => {
       this.handleStateEvent(changes);

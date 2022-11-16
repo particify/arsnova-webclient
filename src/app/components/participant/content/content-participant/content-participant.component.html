@@ -79,7 +79,7 @@
         <div class="back side" [ngClass]="{'invisible-card-content': !flipped}">
           <div *ngIf="flipped" class="back-container">
             <app-statistic-content *ngIf="content.format !== ContentType.FLASHCARD && flipped" [content]="content" [active]="true"
-                                   [directShow]="true" [correctOptionsPublished]="correctOptionsPublished" [useCustomFlipAction]="true" [settings]="settings"
+                                   [directShow]="true" [correctOptionsPublished]="correctOptionsPublished" [useCustomFlipAction]="true"
                                    (customFlipEvent)="goToStats()"></app-statistic-content>
             <div *ngIf="content.format === ContentType.FLASHCARD && flipped">
               <app-rendered-text [rawText]="content.additionalText" [renderedText]="content.renderedAdditionalText"
