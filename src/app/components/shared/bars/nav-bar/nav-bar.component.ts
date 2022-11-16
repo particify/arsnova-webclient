@@ -369,6 +369,7 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
             new PublishedContentsState(group.name, group.firstPublishedIndex, group.lastPublishedIndex)
           );
           if (this.contentGroups.length === groupCount) {
+            this.contentGroups = this.contentGroupService.sortContentGroupsByName(this.contentGroups);
             if (alreadySet) {
               if (this.groupName === group.name || !this.groupName) {
                 this.setGroup(group);

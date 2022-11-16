@@ -131,6 +131,7 @@ export class RoomOverviewComponent implements OnDestroy {
       this.contentGroupService.getById(this.roomStats.groupStats[i].id, { roomId: this.room.id }).subscribe(group => {
         this.contentGroups.push(group);
         if (this.contentGroups.length === this.roomStats.groupStats.length) {
+          this.contentGroups = this.contentGroupService.sortContentGroupsByName(this.contentGroups);
           this.afterGroupsLoadHook();
         }
       });
