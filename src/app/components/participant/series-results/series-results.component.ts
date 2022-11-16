@@ -2,7 +2,6 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Content } from '../../../models/content';
 import { ArcElement, Chart, DoughnutController, PieController } from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
-import { TranslateService } from '@ngx-translate/core';
 import { RoutingService } from '../../../services/util/routing.service';
 import { ContentGroupService } from '../../../services/http/content-group.service';
 import { ThemeService } from '../../../../theme/theme.service';
@@ -11,6 +10,8 @@ import { ContentGroup } from '../../../models/content-group';
 import { AnswerResultOverview, AnswerResultType } from '../../../models/answer-result';
 import { UserRole } from '../../../models/user-roles.enum';
 import { ClientAuthentication } from '../../../models/client-authentication';
+import { Router } from '@angular/router';
+import { Features } from '../../../models/features.enum';
 
 // Max time for updating db (5000) - navigation delay (500) / 2
 const RELOAD_INTERVAL = 2250;
@@ -31,6 +32,8 @@ export class SeriesResultsComponent implements OnInit {
   @Input() group: ContentGroup;
   @Input() contents: Content[];
   @Input() hasAnsweredLastContent: boolean;
+  @Input() finished: boolean;
+  @Input() isPureInfoSeries: boolean;
   @Output() newContentIndex = new EventEmitter<number>();
 
   private chart: Chart;
@@ -52,11 +55,11 @@ export class SeriesResultsComponent implements OnInit {
   score: number;
 
   constructor(
-    private translateService: TranslateService,
     private routingService: RoutingService,
     private authService: AuthenticationService,
     private contentGroupService: ContentGroupService,
-    private themeService: ThemeService) { }
+    private themeService: ThemeService,
+    private router: Router) { }
 
   ngOnInit(): void {
     this.getColors();
@@ -75,6 +78,10 @@ export class SeriesResultsComponent implements OnInit {
       if (this.hasScore) {
         this.updateChart();
       }
+    }, err => {
+      this.getContentResultView();
+      this.isLoading = false;
+      this.isLoadingLastContent = false;
     });
   }
 
@@ -110,7 +117,7 @@ export class SeriesResultsComponent implements OnInit {
     this.contents.forEach((val, i) => {
       this.contentsWithResults.push({
         body: val.renderedBody,
-        state: this.resultOverview.answerResults[i].state
+        state: this.resultOverview?.answerResults[i].state
       });
     });
   }
@@ -158,7 +165,7 @@ export class SeriesResultsComponent implements OnInit {
       }, 300)
     }
   }
-    
+
   private createChart() {
     const dataSets = [
       {
@@ -209,10 +216,22 @@ export class SeriesResultsComponent implements OnInit {
   }
 
   goToContent(index: number) {
-    this.newContentIndex.emit(index);
+    this.router.navigate([this.routingService.getRoleString(UserRole.PARTICIPANT), this.routingService.getShortId(), Features.CONTENTS, this.group.name, index + 1]);
   }
 
-  goToRoomOverview() {
-    this.routingService.navigate(`${this.routingService.getRoleString(UserRole.PARTICIPANT)}/${this.routingService.getShortId()}`);
+  getHeaderText(): string {
+    if (this.isPureInfoSeries) {
+      return this.group.name;
+    } else {
+      return this.finished ? 'content.thanks-for-participation' : 'content.continue-where-you-stopped';
+    }
+  }
+
+  getSubHeaderText(): string {
+    if (this.isPureInfoSeries) {
+      return 'content.pure-info-contents';
+    } else {
+      return this.finished ? 'content.all-contents-answered' : 'content.some-contents-answered';
+    }
   }
 }

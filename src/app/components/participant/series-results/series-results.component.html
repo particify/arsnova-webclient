@@ -6,24 +6,20 @@
         <app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
         <canvas id="chart" *ngIf="!isLoading && hasScore"></canvas>
         <div id="score" *ngIf="!isLoading && hasScore" class="score-container">
-          <span class="header-text">{{score + '%'}}</span>
+          <span class="score-text">{{score + '%'}}</span>
         </div>
         <img id="clipart" *ngIf="!isLoading && !hasScore" class="graphic" src="assets/icons/result_overview.svg">
       </div>
       <div fxLayout="column" fxLayoutAlign="space-between">
         <div>
-          <span class="header-text">{{ 'content.thanks-for-participation' | translate }}</span>
+          <span class="header-text">
+            {{ getHeaderText() | translate }}
+          </span>
           <div>
-            <p>{{ 'content.all-contents-answered' | translate }}</p>
+            <p>{{ getSubHeaderText() | translate }}</p>
           </div>
         </div>
-        <div class="button-container">
-          <ng-template [ngTemplateOutlet]="backButton"></ng-template>
-        </div>
       </div>
-    </div>
-    <div class="button-container-sm">
-      <ng-template [ngTemplateOutlet]="backButton"></ng-template>
     </div>
     <app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
     <mat-list *ngIf="!isLoading">
@@ -45,7 +41,3 @@
     </mat-list>
   </mat-card>
 </div>
-
-<ng-template #backButton>
-  <button mat-raised-button class="button-primary" (click)="goToRoomOverview()">{{ 'content.go-to-room-overview' | translate }}</button>
-</ng-template>

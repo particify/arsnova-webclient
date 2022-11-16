@@ -330,7 +330,6 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
     const item = this.barItems[index];
     if (newGroup) {
       this.setGroup(newGroup);
-      this.eventService.broadcast(UiState.NEW_GROUP_SELECTED, this.groupName);
     } else {
       if (item.name === Features.CONTENTS && this.contentGroups.length > 1) {
         return;

@@ -54,7 +54,6 @@
               <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="1em" [ngClass]="{'visible' : alreadySent, 'invisible': !alreadySent}" class="text">
                 <p *ngIf="!hasAbstained">{{'answer.has-voted' | translate}}</p>
                 <p *ngIf="hasAbstained">{{'answer.has-abstained' | translate}}</p>
-                <button *ngIf="finished" type="button" mat-raised-button class="button-primary" (click)="goToOverview()">{{ 'content.go-to-overview' | translate }}</button>
               </div>
               <div [ngClass]="{'invisible' : alreadySent}">
                 <div fxLayoutAlign="center" fxLayoutGap="10px">

@@ -61,9 +61,9 @@
     "description": "Content description",
     "thanks-for-participation": "Thanks for your participation!",
     "all-contents-answered": "You have answered all contents in this series. Review your answers or return to the room overview.",
-    "body-label": "Content {{index}}: No preview available",
-    "go-to-room-overview": "Go to room overview",
-    "go-to-overview": "Go to overview"
+    "continue-where-you-stopped": "Continue where you left off",
+    "some-contents-answered": "Look at your answers again, jump to the next content or return to the room overview.",
+    "pure-info-contents": "Jump to any content or return to the room overview."
   },
   "comment-list": {
     "a11y-search-list": "Search for posts",

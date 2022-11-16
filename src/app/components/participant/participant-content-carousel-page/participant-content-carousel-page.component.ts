@@ -19,9 +19,9 @@ import { EntityChanged } from '../../../models/events/entity-changed';
 import { Subscription } from 'rxjs';
 import { ContentFocusState } from '../../../models/events/remote/content-focus-state';
 import { RemoteMessage } from '../../../models/events/remote/remote-message.enum';
-import { UiState } from '../../../models/events/ui/ui-state.enum';
 import { UserService } from '../../../services/http/user.service';
 import { UserSettings } from '../../../models/user-settings';
+import { RoutingService } from '../../../services/util/routing.service';
 
 @Component({
   selector: 'app-participant-content-carousel-page',
@@ -39,7 +39,7 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
   contentGroupName: string;
   shortId: string;
   isLoading = true;
-  alreadySent = new Map<number, boolean>();
+  alreadySent: Map<number, boolean>;
   status = {
     LAST_CONTENT: 'LAST_CONTENT',
     FIRST_UNANSWERED: 'FIRST_UNANSWERED',
@@ -56,10 +56,12 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
   changesSubscription: Subscription;
   remoteSubscription: Subscription;
   focusStateSubscription: Subscription;
+  routeChangedSubscription: Subscription;
 
-  additionalSteps = 1;
-  finished = false;
+  isFinished = false;
+  isPureInfoSeries = false;
   hasAnsweredLastContent = false;
+  showOverview = false;
 
   settings: UserSettings;
 
@@ -76,7 +78,8 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
     private notificationService: NotificationService,
     private eventService: EventService,
     private router: Router,
-    private userService: UserService
+    private userService: UserService,
+    private routingService: RoutingService
   ) {
   }
 
@@ -96,6 +99,9 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
     }
     if (this.focusStateSubscription) {
       this.focusStateSubscription.unsubscribe();
+    }
+    if (this.routeChangedSubscription) {
+      this.routeChangedSubscription.unsubscribe();
     }
   }
 
@@ -148,13 +154,16 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
     this.focusStateSubscription = this.eventService.on<boolean>(RemoteMessage.FOCUS_STATE_CHANGED).subscribe(guided => {
       this.guided = guided;
     });
-    this.eventService.on<string>(UiState.NEW_GROUP_SELECTED).subscribe(newGroup => {
-      this.contentgroupService.getByRoomIdAndName(this.contentGroup.roomId, newGroup).subscribe(group => {
-        this.contentGroupName = group.name;
-        this.contentGroup = group;
-        this.isReloading = true;
-        this.getContents(null);
-      });
+    this.routeChangedSubscription = this.routingService.getRouteChanges().subscribe(route => {
+      const newGroup = route.params['seriesName'];
+      if (newGroup && newGroup !== this.contentGroupName) {
+        this.contentgroupService.getByRoomIdAndName(this.contentGroup.roomId, newGroup).subscribe(group => {
+          this.contentGroupName = group.name;
+          this.contentGroup = group;
+          this.isReloading = true;
+          this.getContents(null);
+        });
+      }
     });
   }
 
@@ -171,7 +180,7 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
         if (nextContentId) {
           lastContentIndex = this.getIndexOfContentById(nextContentId);
         }
-        if (lastContentIndex >= this.contents.length + this.additionalSteps) {
+        if (lastContentIndex >= this.contents.length) {
           lastContentIndex = this.contents.length - 1;
         }
         if (this.isReloading) {
@@ -182,7 +191,7 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
               this.lockedContentId = null;
             }
           }
-          this.updateURL(lastContentIndex);
+          this.updateContentIndexUrl(lastContentIndex);
         }
         this.getAnswers(lastContentIndex);
       });
@@ -205,13 +214,14 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
     this.announceService.announce(key);
   }
 
-  checkIfLastContentExists(contentIndex: number) {
-    this.checkIfFinished();
-    if (contentIndex >= 0) {
+  checkIfLastContentExists(contentIndex?: number) {
+    this.checkState();
+    // Since `null >= 0` is `true` trough a type coercion with `ToPrimitive() this muste be checked seperately
+    if (contentIndex === 0 || contentIndex > 0) {
       this.initStepper(contentIndex);
     } else {
       if (!this.guided) {
-        this.getFirstUnansweredContent();
+        this.getInitialStep();
       }
     }
   }
@@ -227,59 +237,66 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
   goToContent(index: number) {
     this.stepper.setHeaderPosition(index);
     this.stepper.onClick(index);
-    this.updateURL(index);
+    this.updateContentIndexUrl(index);
   }
 
-  updateURL(index?: number) {
-    if (this.currentStep !== index || !this.isReloading) {
+  updateContentIndexUrl(index?: number) {
+    if (!!index && this.currentStep !== index || !this.isReloading) {
       this.currentStep = index || 0;
-      const urlTree = this.router.createUrlTree(['p', this.shortId, 'series', this.contentGroupName, index + 1]);
-      this.location.replaceState(this.router.serializeUrl(urlTree));
+      this.replaceUrl(['p', this.shortId, 'series', this.contentGroupName, index + 1]);
     }
   }
 
-  getFirstUnansweredContent() {
-    let isInitialized = false;
+  getInitialStep() {
     const firstIndex = this.getFirstUnansweredContentIndex();
-    if (firstIndex !== null) {
-      this.initStepper(firstIndex, 200);
-      isInitialized = true;
+    if (firstIndex === 0 && !this.isPureInfoSeries) {
+      this.showOverview = false;
+      this.initStepper(0);
+      this.updateContentIndexUrl(0);
+    } else {
+      this.showOverview = true;
     }
-    if (!isInitialized) {
-      this.initStepper(this.contents.length);
-    }
-    if (!this.currentStep && this.answers.length === 0 || this.contents.length === 1) {
-      this.updateURL(0);
-    }
+  }
+
+  checkIfPureInfoSeries(): boolean {
+    return this.contents.every(c => this.isInfoContent(c));
+  }
+
+  isInfoContent(content: Content): boolean {
+    return [ContentType.SLIDE, ContentType.FLASHCARD].includes(content.format);
   }
 
   getFirstUnansweredContentIndex(): number {
     for (let i = 0; i < this.alreadySent.size; i++) {
-      if (this.alreadySent.get(i) === false && ![ContentType.SLIDE, ContentType.FLASHCARD].includes(this.contents[i].format)) {
+      if (this.alreadySent.get(i) === false && !this.isInfoContent(this.contents[i])) {
         return i;
       }
     }
     return null;
   }
 
-  checkIfFinished() {
-    this.finished = this.getFirstUnansweredContentIndex() === null;
+  checkState() {
+    this.isFinished = this.getFirstUnansweredContentIndex() === null;
+    this.isPureInfoSeries = this.checkIfPureInfoSeries();
   }
 
   nextContent(finish?: boolean) {
-    if (finish !== null) {
-      if (!finish) {
-      this.stepper.next();
-      } else {
-        this.stepper.headerPos = 0;
-        this.stepper.onClick(0);
-      }
+    if (!finish) {
+    this.stepper.next();
     } else {
-      if (this.contents.length > 5) {
-        this.stepper.headerPos = this.contents.length - 4;
-      }
-      this.stepper.onClick(this.contents.length);
+      this.stepper.headerPos = 0;
+      this.stepper.onClick(0);
     }
+  }
+
+  goToOverview() {
+    this.showOverview = true;
+    this.replaceUrl(['p', this.shortId, 'series', this.contentGroupName]);
+  }
+
+  replaceUrl(url) {
+    const urlTree = this.router.createUrlTree(url);
+    this.location.replaceState(this.router.serializeUrl(urlTree));
   }
 
   receiveSentStatus(answer: Answer, index: number) {
@@ -287,24 +304,21 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
     if (index === this.contents.length -1) {
       this.hasAnsweredLastContent = this.alreadySent.get(index);
     }
-    this.checkIfFinished();
+    this.checkState();
     this.answers[this.getIndexOfContentById(answer.contentId)] = answer;
     if (!this.guided) {
       if (this.started === this.status.NORMAL) {
-        if (index < this.contents.length - 1 + this.additionalSteps) {
-          let wait = 400;
-          if (this.contents[index].state.answersPublished) {
-            wait += 600;
-          }
-          setTimeout(() => {
+        const wait = this.contents[index].state.answersPublished ? 1000 : 400;
+        setTimeout(() => {
+          if (index < this.contents.length - 1) {
             this.nextContent();
             setTimeout(() => {
               document.getElementById('step').focus();
             }, 200);
-          }, wait);
-        } else {
-          this.announce('answer.a11y-last-content');
-        }
+          } else {
+            this.goToOverview();
+          }
+        }, wait);
       }
     }
   }
@@ -315,6 +329,7 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
         .map(c => c.id)).subscribe(answers => {
           let answersAdded = 0;
           this.answers = [];
+          this.alreadySent = new Map<number, boolean>();
           for (const [index, content] of this.contents.entries()) {
             if (answersAdded < answers.length) {
               for (const answer of answers) {

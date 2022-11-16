@@ -1,6 +1,6 @@
 <div tabindex="-1" class="container" [ngClass]="{'presentation-step': isPresentation}" (touchstart)="swipe($event, 'start')" (touchend)="swipe($event, 'end')">
   <div fxLayout="row" class="inner-container" *ngIf="!isPresentation && !disabled">
-    <button tabindex="-1" mat-icon-button *ngIf="listLength > 5 - additionalSteps" disableRipple [disabled]="headerPos < 1"
+    <button tabindex="-1" mat-icon-button *ngIf="listLength > 5" disableRipple [disabled]="headerPos < 1"
             (click)="moveHeaderRight(true)">
       <mat-icon class="arrow" [ngClass]="{'disabled': headerPos < 1}">keyboard_arrow_left</mat-icon>
     </button>
@@ -8,17 +8,16 @@
       <div class="stepper-navigation-bar" [@slideHeader]="{value: headerAnimationState,
           params: { position: headerPos * -20 }}" (@slideHeader.done)="headerAnimationDone()">
         <span class="fill-remaining-space"></span>
-        <div class="step-container" *ngFor="let step of steps; let i = index;" [ngClass]="{'disabled':  i === listLength && !finished}" (click)="onClick(i)">
+        <div class="step-container" *ngFor="let step of steps; let i = index;" (click)="onClick(i)">
           <button class="step" tabindex="-1"
                   [ngClass]="{'active': selectedIndex === i, 'sent': completed.get(i), 'last': i === listLength}">
-            <span *ngIf="i < listLength">{{i + 1}}</span>
-            <mat-icon class="flag-icon" *ngIf="i === listLength">outlined_flag</mat-icon>
+            <span>{{i + 1}}</span>
           </button>
         </div>
         <span class="fill-remaining-space"></span>
       </div>
     </div>
-    <button mat-icon-button tabindex="-1" *ngIf="listLength > 5 - additionalSteps" disableRipple [disabled]="headerPos >= listLength"
+    <button mat-icon-button tabindex="-1" *ngIf="listLength > 5" disableRipple [disabled]="headerPos >= listLength"
             (click)="moveHeaderLeft(true)">
       <mat-icon class="arrow" [ngClass]="{'disabled': headerPos >= listLength-5}">keyboard_arrow_right</mat-icon>
     </button>
