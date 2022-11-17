@@ -43,25 +43,6 @@
   position: relative;
 }
 
-@keyframes active {
-  0% {
-    transform: scale(1);
-  }
-
-  50% {
-    transform: scale(0.95);
-  }
-
-  70% {
-    transform: scale(1.01);
-  }
-
-  100% {
-    transform: scale(1);
-  }
-
-}
-
 @media(max-width: 500px) {
   .item span {
     display: flex;
