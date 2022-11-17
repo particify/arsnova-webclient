@@ -4,14 +4,14 @@ import { ContentChoiceCreationComponent } from './content-choice-creation.compon
 import { Component, NO_ERRORS_SCHEMA, Injectable, Input } from '@angular/core';
 import { ContentService } from '../../../../services/http/content.service';
 import { NotificationService } from '../../../../services/util/notification.service';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { EventService } from '../../../../services/util/event.service';
 import { RoomService } from '../../../../services/http/room.service';
 import { of, Subject } from 'rxjs';
 import { DialogService } from '../../../../services/util/dialog.service';
 import { ContentGroupService } from '../../../../services/http/content-group.service';
-import { MatButtonModule } from '@angular/material/button';
+import { MatLegacyButtonModule as MatButtonModule } from '@angular/material/legacy-button';
 import { AnnounceService } from '@arsnova/app/services/util/announce.service';
 import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
 import { ActivatedRouteStub, JsonTranslationLoader } from '@arsnova/testing/test-helpers';

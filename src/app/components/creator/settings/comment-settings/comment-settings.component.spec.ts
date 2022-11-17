@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { CommentSettingsComponent } from './comment-settings.component';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import {
   JsonTranslationLoader, MockEventService, MockGlobalStorageService,
   MockMatDialog,

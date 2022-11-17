@@ -20,7 +20,7 @@ import { RemoteMessage } from '../../../../models/events/remote/remote-message.e
 import { UiState } from '../../../../models/events/ui/ui-state.enum';
 import { SeriesCreated } from '../../../../models/events/series-created';
 import { SeriesDeleted } from '../../../../models/events/series-deleted';
-import { MatMenuTrigger } from '@angular/material/menu';
+import { MatLegacyMenuTrigger as MatMenuTrigger } from '@angular/material/legacy-menu';
 import { RoomService } from '../../../../services/http/room.service';
 import { IMessage } from '@stomp/stompjs';
 

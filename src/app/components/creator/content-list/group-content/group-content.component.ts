@@ -17,7 +17,7 @@ import { Observable, Subject, Subscription } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 import { RoomStatsService } from '../../../../services/http/room-stats.service';
 import { HotkeyService } from '../../../../services/util/hotkey.service';
-import { MatButton } from '@angular/material/button';
+import { MatLegacyButton as MatButton } from '@angular/material/legacy-button';
 import { ContentType } from '../../../../models/content-type.enum';
 import { ContentMessages } from '../../../../models/events/content-messages.enum';
 import { UiState } from '../../../../models/events/ui/ui-state.enum';

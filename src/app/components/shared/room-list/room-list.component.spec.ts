@@ -20,7 +20,7 @@ import { AuthenticationService } from '@arsnova/app/services/http/authentication
 import { SplitShortIdPipe } from '@arsnova/app/pipes/split-short-id.pipe';
 import { ClientAuthentication } from '@arsnova/app/models/client-authentication';
 import { AuthProvider } from '@arsnova/app/models/auth-provider';
-import { MatMenuModule } from '@angular/material/menu';
+import { MatLegacyMenuModule as MatMenuModule } from '@angular/material/legacy-menu';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 describe('RoomListComponent', () => {

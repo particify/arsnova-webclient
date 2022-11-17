@@ -1,13 +1,13 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { CommentAnswerComponent } from './comment-answer.component';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA } from '@angular/material/legacy-dialog';
 import { CommentService } from '@arsnova/app/services/http/comment.service';
 import { DialogService } from '@arsnova/app/services/util/dialog.service';
 import { NotificationService } from '@arsnova/app/services/util/notification.service';
 import { A11yIntroPipe } from '@arsnova/app/pipes/a11y-intro.pipe';
 import { JsonTranslationLoader, MockMatDialogRef, MockNotificationService } from '@arsnova/testing/test-helpers';
 import { TranslateLoader, TranslateModule, TranslateService } from '@ngx-translate/core';
-import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatLegacyTooltipModule as MatTooltipModule } from '@angular/material/legacy-tooltip';
 import { Comment } from '@arsnova/app/models/comment';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 

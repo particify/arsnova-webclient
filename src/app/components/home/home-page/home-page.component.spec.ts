@@ -15,7 +15,7 @@ import {
   MockGlobalStorageService, MockRenderer2
 } from '../../../../testing/test-helpers';
 import { HarnessLoader } from '@angular/cdk/testing';
-import { MatButtonHarness } from '@angular/material/button/testing';
+import { MatLegacyButtonHarness as MatButtonHarness } from '@angular/material/legacy-button/testing';
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 import { Observable, of } from 'rxjs';
 import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
