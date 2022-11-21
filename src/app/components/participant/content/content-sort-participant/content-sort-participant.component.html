@@ -1,4 +1,5 @@
-<div class="answer-container">
+<app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
+<div *ngIf="!isLoading" class="answer-container">
   <app-content-sort-answer [answerOptions]="answerOptions" [disabled]="alreadySent"></app-content-sort-answer>
   <div *ngIf="!hasAbstained && statsPublished && correctOptionsPublished"
        class="solution invisible" [ngClass]="{'visible' : alreadySent}">

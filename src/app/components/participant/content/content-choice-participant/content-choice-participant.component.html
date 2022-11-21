@@ -1,3 +1,4 @@
+<app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
 <app-content-choice-answer *ngIf="!isLoading" [answer]="answer" [selectableAnswers]="selectableAnswers"
                            [isDisabled]="alreadySent" [multipleAnswersAllowed]="content.multiple"
                            [hasAbstained]="hasAbstained" [hasCorrectAnswer]="isChoice"
