@@ -42,7 +42,6 @@ describe('NavBarComponent', () => {
 
   const mockContentGroupService = jasmine.createSpyObj(['getById', 'sortContentGroupsByName']);
   mockContentGroupService.getById.and.returnValue(of(new ContentGroup('id', 'rev', 'roomId', 'name')));
-  mockContentGroupService.sortContentGroupsByName.and.returnValue([]);
 
   const body = {
     UserCountChanged: {
