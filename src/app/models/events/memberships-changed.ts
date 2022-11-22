@@ -1,7 +1,6 @@
 export class MembershipsChanged {
   type: string;
-  payload: {
-  };
+  payload: Record<string, never>;
 
   constructor() {
     this.type = 'MembershipsChanged';

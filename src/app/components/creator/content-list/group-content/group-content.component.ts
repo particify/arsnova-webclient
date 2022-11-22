@@ -12,7 +12,7 @@ import { ContentGroup } from '../../../../models/content-group';
 import { AnnounceService } from '../../../../services/util/announce.service';
 import { EventService } from '../../../../services/util/event.service';
 import { LocalFileService } from '../../../../services/util/local-file.service';
-import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { Observable, Subject, Subscription } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 import { RoomStatsService } from '../../../../services/http/room-stats.service';
@@ -476,46 +476,74 @@ export class GroupContentComponent extends DragDropBaseComponent implements OnIn
 
   sortPublishedIndexes(prev: number, current: number) {
     if (this.firstPublishedIndex !== -1 && this.lastPublishedIndex !== -1) {
-      if (prev !== current && !(this.isAboveRange(prev) && this.isAboveRange(current)
-        || this.isBelowRange(prev) && this.isBelowRange(current))) {
-        if (this.firstPublishedIndex === this.lastPublishedIndex) {
-          const publishedIndex = this.firstPublishedIndex;
-          if (prev === publishedIndex) {
-            this.setTempRange(current, current);
-          } else {
-            const newPublishedIndex = prev < publishedIndex ? publishedIndex - 1 : publishedIndex + 1;
-            this.setTempRange(newPublishedIndex, newPublishedIndex);
-          }
-        } else {
-          if (this.isInRange(prev)) {
-            if (!this.isInRangeExclusive(current)) {
-              if (this.isAboveRange(current)) {
-                this.setTempRange(this.firstPublishedIndex, this.lastPublishedIndex - 1);
-              } else if (this.isBelowRange(current)) {
-                this.setTempRange(this.firstPublishedIndex + 1, this.lastPublishedIndex);
-              }
-            }
-          } else {
-            if (this.isInRangeExclusive(current) || (this.isAboveRange(prev) && this.isEnd(current))
-              || (this.isBelowRange(prev) && this.isStart(current))) {
-              if (this.isBelowRange(prev)) {
-                this.setTempRange(this.firstPublishedIndex - 1, this.lastPublishedIndex);
-              } else if (this.isAboveRange(prev)) {
-                this.setTempRange(this.firstPublishedIndex, this.lastPublishedIndex + 1);
-              }
-            } else {
-              if (current <= this.firstPublishedIndex || current >= this.lastPublishedIndex) {
-                const adjustment = this.isBelowRange(prev) ? -1 : 1;
-                this.setTempRange(this.firstPublishedIndex + adjustment, this.lastPublishedIndex + adjustment);
-              }
-            }
-          }
+      if (this.publishedRangeHasChanged(prev, current)) {
+        this.setNewRange(prev, current);
+      }
+    }
+  }
+
+  setNewRange(prev, current: number) {
+    if (this.firstPublishedIndex === this.lastPublishedIndex) {
+      this.setRangeForSingleContent(prev, current);
+    } else {
+      this.setRangeForMultipleContents(prev, current);
+    }
+  }
+
+  setRangeForSingleContent(prev, current: number) {
+    const publishedIndex = this.firstPublishedIndex;
+    if (prev === publishedIndex) {
+      this.setTempRange(current, current);
+    } else {
+      const newPublishedIndex = prev < publishedIndex ? publishedIndex - 1 : publishedIndex + 1;
+      this.setTempRange(newPublishedIndex, newPublishedIndex);
+    }
+  }
+
+  setRangeForMultipleContents(prev, current: number) {
+    if (this.isInCurrentRange(prev)) {
+      this.setNewRangeInCurrentRange(current);
+    } else {
+      if (this.isOutsideOfCurrentRange(prev, current)) {
+        this.setNewRangeOutsideOfCurrentRange(prev);
+      } else {
+        if (current <= this.firstPublishedIndex || current >= this.lastPublishedIndex) {
+          const adjustment = this.isBelowRange(prev) ? -1 : 1;
+          this.setTempRange(this.firstPublishedIndex + adjustment, this.lastPublishedIndex + adjustment);
         }
       }
     }
   }
 
-  isInRange(index: number): boolean {
+  isOutsideOfCurrentRange(prev, current: number) {
+    return this.isInRangeExclusive(current) || (this.isAboveRange(prev) && this.isEnd(current))
+      || (this.isBelowRange(prev) && this.isStart(current))
+  }
+
+  setNewRangeInCurrentRange(current: number) {
+    if (!this.isInRangeExclusive(current)) {
+      if (this.isAboveRange(current)) {
+        this.setTempRange(this.firstPublishedIndex, this.lastPublishedIndex - 1);
+      } else if (this.isBelowRange(current)) {
+        this.setTempRange(this.firstPublishedIndex + 1, this.lastPublishedIndex);
+      }
+    }
+  }
+
+  setNewRangeOutsideOfCurrentRange(prev: number) {
+    if (this.isBelowRange(prev)) {
+      this.setTempRange(this.firstPublishedIndex - 1, this.lastPublishedIndex);
+    } else if (this.isAboveRange(prev)) {
+      this.setTempRange(this.firstPublishedIndex, this.lastPublishedIndex + 1);
+    }
+  }
+
+  publishedRangeHasChanged(prev, current: number): boolean {
+    return prev !== current && !(this.isAboveRange(prev) && this.isAboveRange(current)
+      || this.isBelowRange(prev) && this.isBelowRange(current))
+  }
+
+  isInCurrentRange(index: number): boolean {
     return index <= this.lastPublishedIndex && index >= this.firstPublishedIndex;
   }
 

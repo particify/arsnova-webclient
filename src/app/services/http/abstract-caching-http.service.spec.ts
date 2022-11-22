@@ -17,7 +17,8 @@ class MockWsConnectorService {
 
 @Injectable()
 class MockCachingService {
-  getCache(){}
+  getCache(){
+  }
 }
 
 

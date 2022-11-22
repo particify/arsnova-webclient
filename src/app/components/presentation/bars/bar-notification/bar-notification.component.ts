@@ -11,7 +11,4 @@ export class BarNotificationComponent {
   @Input() icon: string;
   @Input() expanded = false;
   @Input() hidden = true;
-
-  constructor() { }
-
 }

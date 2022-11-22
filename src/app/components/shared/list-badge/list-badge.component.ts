@@ -8,7 +8,4 @@ import { Component, Input } from '@angular/core';
 export class ListBadgeComponent {
 
   @Input() count: number;
-
-  constructor() { }
-
 }

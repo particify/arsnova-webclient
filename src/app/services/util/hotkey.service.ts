@@ -12,7 +12,7 @@ export interface Hotkey {
   key: string;
   modifiers?: HotkeyModifier[];
   actionTitle: string;
-  action: Function;
+  action: () => void;
   actionType?: HotkeyActionType;
 }
 
@@ -55,7 +55,7 @@ const excludedElementTypes = new Map<string, (el: Element) => boolean>([
 @Injectable()
 export class HotkeyService {
   hotkeyRegistrations: Map<symbol, Hotkey> = new Map();
-  unregisterHandler: Function;
+  unregisterHandler: () => void;
 
   private dialogRef: MatDialogRef<HotkeysComponent>;
 
@@ -140,31 +140,38 @@ export class HotkeyService {
           return;
         }
       }
-      const activeElement = this.document.activeElement;
-      if (excludedElementTypes.has(activeElement.nodeName)
-          && excludedElementTypes.get(activeElement.nodeName)(activeElement)) {
+      if (this.checkIfExcludedElement()) {
         if (!environment.production) {
           console.log('Registered hotkey detected but ignored.', hotkey, event);
         }
         return;
       }
       if (this.dialogRef && event.key !== HELP_KEY) {
-        this.dialogRef.close();
-        // Explicitly reset dialogRef because we cannot rely on MatDialogState here.
-        // The dialog is closed before this handler is called when pressing Escape.
-        this.dialogRef = null;
-        if (event.key === 'Escape') {
-          if (!environment.production) {
-            console.log('Registered hotkey detected but ignored.', hotkey, event);
-          }
-          return;
-        }
+        this.closeHelpDialog(event, hotkey);
       }
       if (!environment.production) {
         console.log('Registered hotkey detected.', hotkey, event);
       }
       event.preventDefault();
       hotkey.action();
+    }
+  }
+
+  private checkIfExcludedElement() {
+    const activeElement = this.document.activeElement;
+    return excludedElementTypes.has(activeElement.nodeName) && excludedElementTypes.get(activeElement.nodeName)(activeElement);
+  }
+
+  private closeHelpDialog(event: KeyboardEvent, hotkey: Hotkey) {
+    this.dialogRef.close();
+    // Explicitly reset dialogRef because we cannot rely on MatDialogState here.
+    // The dialog is closed before this handler is called when pressing Escape.
+    this.dialogRef = null;
+    if (event.key === 'Escape') {
+      if (!environment.production) {
+        console.log('Registered hotkey detected but ignored.', hotkey, event);
+      }
+      return;
     }
   }
 

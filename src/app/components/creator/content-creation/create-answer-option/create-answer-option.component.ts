@@ -11,8 +11,6 @@ export class CreateAnswerOptionComponent implements OnInit {
   @Output() answerCreated: EventEmitter<string> = new EventEmitter<string>();
   newAnswer = '';
 
-  constructor() { }
-
   ngOnInit(): void {
     this.resetEvent.subscribe(() => {
       this.newAnswer = '';

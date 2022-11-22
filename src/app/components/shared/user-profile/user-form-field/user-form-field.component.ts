@@ -14,8 +14,6 @@ export class UserFormFieldComponent {
 
   beforeEdit: string;
 
-  constructor() { }
-
   goIntoEdit() {
     this.beforeEdit = this.formField.value;
   }

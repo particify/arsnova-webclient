@@ -1,6 +1,6 @@
 export class SurveyStarted {
   type: string;
-  payload: {};
+  payload: Record<string, never>;
 
   constructor() {
     this.type = 'SurveyStarted';

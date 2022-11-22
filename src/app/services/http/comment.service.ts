@@ -172,8 +172,7 @@ export class CommentService extends AbstractEntityService<Comment> {
     let valueFields = '';
     exportComments.forEach(element => {
       valueFields += this.filterNotSupportedCharacters(element['body']) + delimiter;
-      let time;
-      time = element['timestamp'];
+      const time = element['timestamp'];
       valueFields += time.slice(0, 10) + '-' + time.slice(11, 16) + delimiter;
       const answer = element['answer'];
       valueFields += (answer ? this.filterNotSupportedCharacters(answer) : '') + delimiter;

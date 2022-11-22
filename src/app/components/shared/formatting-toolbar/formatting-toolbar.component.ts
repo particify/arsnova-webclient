@@ -22,8 +22,6 @@ export class FormattingToolbarComponent {
     new FormattingOption('image', 'image', '![alt text](', ')', 'https://')
   ];
 
-  constructor() {}
-
   addFormatting(option: FormattingOption) {
     const startPos = this.inputElement.selectionStart;
     const endPos = this.inputElement.selectionEnd;
@@ -62,14 +60,27 @@ export class FormattingToolbarComponent {
     let lineStartPos: number;
 
     if (option.hasClosingTag()) {
-      formattedText = text.substring(0, cursorStart) || '';
+      formattedText = this.getFormattedTextWithClosingTag(text, cursorStart, cursorEnd, option, reverse);
+    } else {
+      lineStartPos = this.getLineStartPos(text, cursorStart);
+      formattedText = this.getFormattedTextWithoutClosingTag(text, lineStartPos, option, reverse);
+    }
+    // Add rest of text
+    if (lineStartPos === undefined) {
+      const restStart = reverse && option.hasClosingTag() ? cursorEnd + option.closingTag.length : cursorEnd;
+      formattedText += text.substring(restStart, text.length);
+    }
+    return formattedText;
+  }
+
+  private getFormattedTextWithClosingTag(text: string, cursorStart: number, cursorEnd: number, option: FormattingOption, reverse: boolean): string {
+    let formattedText = text.substring(0, cursorStart) || '';
       if (reverse) {
         formattedText = formattedText.substring(0, formattedText.length - option.openingTag.length);
       } else {
         // Add formatting sign to cursor position or start of selected text
         formattedText += option.openingTag;
       }
-
       // Check if text is selected
       if (cursorStart !== cursorEnd) {
         // Add selected text
@@ -83,22 +94,20 @@ export class FormattingToolbarComponent {
         // Add closing tag if exists
         formattedText += option.closingTag ?? '';
       }
-    } else {
-      // Insert formatting sign at line start if no text is selected and formatting option has no closing tag
-      lineStartPos = text.substring(0, cursorStart).lastIndexOf('\n') + 1;
-      if (reverse) {
-        formattedText = text.slice(0, lineStartPos)+ text.slice(lineStartPos + option.openingTag.length);
-      } else {
-        formattedText = text.slice(0, lineStartPos) + option.openingTag + text.slice(lineStartPos);
-      }
-    }
+      return formattedText;
+  }
 
-    // Add rest of text
-    if (lineStartPos === undefined) {
-      const restStart = reverse && option.hasClosingTag() ? cursorEnd + option.closingTag.length : cursorEnd;
-      formattedText += text.substring(restStart, text.length);
+  private getFormattedTextWithoutClosingTag(text: string, lineStartPos: number, option: FormattingOption, reverse: boolean): string {
+    // Insert formatting sign at line start if no text is selected and formatting option has no closing tag
+    if (reverse) {
+      return text.slice(0, lineStartPos)+ text.slice(lineStartPos + option.openingTag.length);
+    } else {
+      return text.slice(0, lineStartPos) + option.openingTag + text.slice(lineStartPos);
     }
-    return formattedText;
+  }
+
+  private getLineStartPos(text: string, cursorStart: number): number {
+    return text.substring(0, cursorStart).lastIndexOf('\n') + 1;
   }
 
   private setNewValueAndFocusInput(value: string) {

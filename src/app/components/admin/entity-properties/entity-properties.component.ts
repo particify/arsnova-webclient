@@ -13,8 +13,6 @@ export class EntityPropertiesComponent implements OnChanges {
   dataSource = new MatTreeNestedDataSource<object>();
 
   ngOnChanges() {
-    if (typeof this.entity === 'object') {
-    }
     this.dataSource.data = this.toNode(this.entity);
   }
 

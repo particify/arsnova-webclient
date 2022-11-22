@@ -25,11 +25,6 @@ class MockNotificationService {
 }
 
 @Injectable()
-class MockMatDialiog {
-  afterClosed() {}
-}
-
-@Injectable()
 class MockEventService {
 }
 
@@ -40,17 +35,6 @@ class MockRoomService {
 @Injectable()
 class MockContentGroupService {
 }
-
-@Injectable()
-class MockGlobalStorageService {
-  getItem(key: string) {
-    return undefined;
-  }
-
-  setItem(key: string, value: any) {
-  }
-}
-
 @Injectable()
 class MockAnnouncer {
 }

@@ -88,7 +88,9 @@ export class ContentCreationComponent extends DragDropBaseComponent implements O
     this.createEventSubscription.unsubscribe();
   }
 
-  initContentCreation() {}
+  initContentCreation() {
+    // Implementation in extended classes
+  }
 
   initTemplateAnswers() {
     this.translationService.get(this.answerLabels).subscribe(msgs => {
@@ -100,7 +102,9 @@ export class ContentCreationComponent extends DragDropBaseComponent implements O
     });
   }
 
-  initContentForEditing() {}
+  initContentForEditing() {
+    // Implementation in extended classes
+  }
 
   checkIfAnswersExist() {
     this.contentService.getAnswer(this.content.roomId, this.content.id).subscribe(answer => {
@@ -214,6 +218,7 @@ export class ContentCreationComponent extends DragDropBaseComponent implements O
   }
 
   resetAnswers() {
+    // Implementation in extended classes
   }
 
   submitContent(): void {

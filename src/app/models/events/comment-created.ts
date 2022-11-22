@@ -1,6 +1,6 @@
 export class CommentCreated {
   type: string;
-  payload: {};
+  payload: Record<string, never>;
 
   constructor() {
     this.type = 'CommentCreated';

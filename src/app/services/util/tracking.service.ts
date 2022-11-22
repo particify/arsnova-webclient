@@ -236,7 +236,7 @@ export class TrackingService {
         .replace(/\/~.*?(\/|\?|$)/, '/__ALIAS__$1')
         .replace(/\/[0-9a-f]{32}(\/|\?|$)/, '/__ID__$1')
         .replace(/\/[0-9]{1,4}(\/|\?|$)/, '/__INDEX__$1')
-        .replace(/\/series\/[^\/]+/, '/series/__SERIES__')
+        .replace(/\/series\/[^/]+/, '/series/__SERIES__')
         .replace(/\/present\/[0-9]+(\/|\?|$)/, '/present/__ROOM_SHORT_ID__$1')
         .replace(/\/[^/?]+@[^/?]+/, '/__MAIL__');
   }

@@ -18,7 +18,7 @@ export class ThemeTranslationList {
 
   constructor(private name, translation: object) {
     for (const k in translation) {
-      if (translation.hasOwnProperty(k)) {
+      if (Object.prototype.hasOwnProperty.call(translation, k)) {
         this.map.push([k, translation[k]]);
       }
     }
@@ -96,8 +96,8 @@ export class Theme {
 
   constructor(
     public key: string,
-    public palette: Object,
-    public meta: Object
+    public palette: object,
+    public meta: object
   ) {
 
     /*Init order*/
@@ -118,7 +118,7 @@ export class Theme {
     this.colors = [];
     this.main = [];
     for (const k in palette) {
-      if (palette.hasOwnProperty(k)) {
+      if (Object.prototype.hasOwnProperty.call(palette, k)) {
         if (k !== 'name') {
           this.colors.push(new ColorElem(
             k.slice(2, k.length),

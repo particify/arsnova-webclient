@@ -59,11 +59,8 @@ export class StatisticSortComponent extends StatisticContentBaseComponent implem
     this.destroyed$.complete();
   }
 
-  init(): void {
+  init(stats: AnswerStatistics) {
     this.chartId = 'chart-' + this.content.id;
-  }
-
-  initData(stats: AnswerStatistics) {
     this.updateData(stats);
   }
 

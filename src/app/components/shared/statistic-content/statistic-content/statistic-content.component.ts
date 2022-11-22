@@ -135,6 +135,14 @@ export class StatisticContentComponent implements OnInit {
     if (this.correctVisible) {
       this.toggleCorrect(false);
     }
+    this.toggleAnswersInChildComponents();
+    this.announceAnswers();
+    if (this.isPresentation && sendState) {
+      this.sendUiState();
+    }
+  }
+
+  toggleAnswersInChildComponents() {
     switch (this.format) {
       case ContentType.SCALE:
         this.answersVisible = this.scaleStatistic.toggleAnswers();
@@ -156,10 +164,6 @@ export class StatisticContentComponent implements OnInit {
         break;
       default:
         this.answersVisible = this.choiceStatistic.toggleAnswers();
-    }
-    this.announceAnswers();
-    if (this.isPresentation && sendState) {
-      this.sendUiState();
     }
   }
 

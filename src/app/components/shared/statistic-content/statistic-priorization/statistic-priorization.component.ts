@@ -54,7 +54,7 @@ export class StatisticPriorizationComponent extends StatisticChoiceComponent imp
     }
   }
 
-  init() {
+  init(stats: AnswerStatistics) {
     this.chartId = 'chart-' + this.content.id;
     if (this.content.options) {
       this.options = [...this.content.options];
@@ -71,9 +71,6 @@ export class StatisticPriorizationComponent extends StatisticChoiceComponent imp
         }, 0);
       }
     });
-  }
-
-  initData(stats: AnswerStatistics) {
     this.updateData(stats);
   }
 

@@ -220,8 +220,7 @@ export class RoomService extends AbstractEntityService<Room> {
 
   parseExtensions(room: Room): Room {
     if (room.extensions) {
-      let extensions: { [key: string ]: object };
-      extensions = room.extensions;
+      const extensions: { [key: string ]: object } = room.extensions;
       room.extensions = extensions;
     }
     return room;

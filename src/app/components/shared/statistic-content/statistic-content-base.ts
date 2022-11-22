@@ -5,6 +5,7 @@ import { Content } from '../../../models/content';
 import { AnswerStatistics } from '../../../models/answer-statistics';
 import { EventService } from '../../../services/util/event.service';
 import { ContentMessages } from '../../../models/events/content-messages.enum';
+import { TextAnswer } from '../../../models/text-answer';
 
 @Component({
   template: ''
@@ -28,9 +29,8 @@ export abstract class StatisticContentBaseComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.init();
     this.loadData().subscribe(stats => {
-      this.initData(stats);
+      this.init(stats);
       this.isLoading = false;
       this.toggleAnswers(this.directShow);
     });
@@ -42,17 +42,11 @@ export abstract class StatisticContentBaseComponent implements OnInit {
     });
   }
 
-  init() {
-  }
+  abstract init(stats: any);
 
-  initData(stats: any) {
-  }
+  abstract afterInit();
 
-  afterInit() {
-  }
-
-  deleteAnswers() {
-  }
+  abstract deleteAnswers();
 
   toggleAnswers(visible?: boolean): boolean {
     this.answersVisible = visible ?? !this.answersVisible;
@@ -63,8 +57,7 @@ export abstract class StatisticContentBaseComponent implements OnInit {
     return this.contentService.getAnswer(this.content.roomId, this.content.id);
   }
 
-  updateData(stats: AnswerStatistics) {
-  }
+  abstract updateData(stats: AnswerStatistics | TextAnswer[]);
 
   getSum(list: number[]): number {
     if (list.length > 0) {

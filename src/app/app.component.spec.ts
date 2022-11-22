@@ -1,9 +1,9 @@
-import { TranslateService } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { TestBed, ComponentFixture, waitForAsync, fakeAsync } from '@angular/core/testing';
 import { AppComponent } from './app.component';
 import { ApiConfigService } from './services/http/api-config.service';
 import { RouterTestingModule } from '@angular/router/testing';
-import { Component, Injectable, EventEmitter, NO_ERRORS_SCHEMA } from '@angular/core';
+import { Component, NO_ERRORS_SCHEMA } from '@angular/core';
 import { of } from 'rxjs';
 import { TrackingService } from './services/util/tracking.service';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
@@ -14,6 +14,8 @@ import { UpdateImportance } from './models/version-info';
 import { LanguageService } from '@arsnova/app/services/util/language.service';
 import { RoutingService } from '@arsnova/app/services/util/routing.service';
 import { MockTranslateService } from '@arsnova/testing/test-helpers';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { JsonTranslationLoader } from '../testing/test-helpers';
 
 // Stub for downstream template
 @Component({selector: 'app-header', template: ''})
@@ -30,15 +32,12 @@ describe('AppComponent', () => {
   // let's you access the debug elements to gain control over injected services etc.
   let fixture: ComponentFixture<AppComponent>;
 
-  const customIconService = jasmine.createSpyObj('CustomIconService', ['init']);
   const updateService = jasmine.createSpyObj('UpdateService', ['handleUpdate']);
   const trackingService = jasmine.createSpyObj('TrackingService', ['init']);
   const apiConfigService = jasmine.createSpyObj('ApiConfigService', ['getApiConfig$']);
   const consentService = jasmine.createSpyObj('ConsentService', ['setConfig']);
   const routingService = jasmine.createSpyObj('RoutingService', ['subscribeActivatedRoute']);
   const languageService = jasmine.createSpyObj('LanguageService', ['init']);
-
-  let translateService: TranslateService;
 
   let getApiConfig$Spy: jasmine.Spy;
   let testApiConfig: ApiConfig;
@@ -118,6 +117,13 @@ describe('AppComponent', () => {
         }
       ],
       imports: [
+        TranslateModule.forRoot({
+          loader: {
+            provide: TranslateHttpLoader,
+            useClass: JsonTranslationLoader
+          },
+          isolate: true
+        }),
         RouterTestingModule,
         HttpClientTestingModule
       ],
@@ -127,7 +133,6 @@ describe('AppComponent', () => {
     });
     fixture = TestBed.createComponent(AppComponent);
     appComponent = fixture.componentInstance;
-    translateService = TestBed.inject(TranslateService);
   }));
 
   it('should create the app', () => {

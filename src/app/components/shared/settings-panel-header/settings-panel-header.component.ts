@@ -9,6 +9,4 @@ export class SettingsPanelHeaderComponent {
 
   @Input() text;
   @Input() icon;
-
-  constructor() { }
 }

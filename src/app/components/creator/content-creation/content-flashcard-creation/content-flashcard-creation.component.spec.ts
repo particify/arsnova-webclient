@@ -37,16 +37,6 @@ class MockContentGroupService {
 }
 
 @Injectable()
-class MockGlobalStorageService {
-  getItem(key: string) {
-    return undefined;
-  }
-
-  setItem(key: string, value: any) {
-  }
-}
-
-@Injectable()
 class MockAnnouncer {
 }
 

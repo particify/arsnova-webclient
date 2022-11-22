@@ -14,15 +14,12 @@ import {
 import { EventService } from '@arsnova/app/services/util/event.service';
 import { RoomService } from '@arsnova/app/services/http/room.service';
 import { ContentGroupService } from '@arsnova/app/services/http/content-group.service';
-import { AnnounceService } from '@arsnova/app/services/util/announce.service';
 import { ActivatedRoute, ActivatedRouteSnapshot, Router } from '@angular/router';
 import { DialogService } from '@arsnova/app/services/util/dialog.service';
 import { GlobalStorageService } from '@arsnova/app/services/util/global-storage.service';
 import { LanguageService } from '@arsnova/app/services/util/language.service';
 import { Location } from '@angular/common';
 import { MockLocationStrategy } from '@angular/common/testing';
-import { LocalFileService } from '@arsnova/app/services/util/local-file.service';
-import { HotkeyService } from '@arsnova/app/services/util/hotkey.service';
 import { A11yIntroPipe } from '@arsnova/app/pipes/a11y-intro.pipe';
 import { NO_ERRORS_SCHEMA, Injectable } from '@angular/core';
 import { of } from 'rxjs';
@@ -76,13 +73,6 @@ class MockContentGroupService {
     return true;
   }
 }
-
-@Injectable()
-class MockAnnouncer {
-  announce(){
-  }
-}
-
 @Injectable()
 class MockRoomStatsService {
   getStats(){
@@ -93,17 +83,6 @@ class MockRoomStatsService {
 @Injectable()
 class MockDialogService {
 }
-
-@Injectable()
-class MockLocalFileService {
-}
-
-@Injectable()
-class MockHotykeyService {
-  registerHotkey() {
-  }
-}
-
 @Injectable()
 class MockWsCommentService {
   getCommentStream() {
@@ -172,10 +151,6 @@ describe('CreatorOverviewComponent', () => {
           useClass: MockContentGroupService
         },
         {
-          provide: AnnounceService,
-          useClass: MockAnnouncer
-        },
-        {
           provide: ActivatedRoute,
           useValue: activatedRouteStub
         },
@@ -200,16 +175,8 @@ describe('CreatorOverviewComponent', () => {
           useClass: MockLocationStrategy
         },
         {
-          provide: LocalFileService,
-          useClass: MockLocalFileService
-        },
-        {
           provide: Router,
           useClass: MockRouter
-        },
-        {
-          provide: HotkeyService,
-          useClass: MockHotykeyService
         },
         {
           provide: A11yIntroPipe,

@@ -20,7 +20,8 @@ const TEST_TRACK_NAME = 'test-track-name';
 class TestComponent {
   @ViewChild('button') button: ElementRef<HTMLButtonElement>;
 
-  click() { }
+  click() {
+  }
 }
 
 describe('TrackInteractionDirective', () => {
