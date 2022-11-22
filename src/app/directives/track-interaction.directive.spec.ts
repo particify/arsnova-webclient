@@ -1,5 +1,3 @@
-import { HarnessLoader } from '@angular/cdk/testing';
-import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { EventCategory, TrackingService } from '../services/util/tracking.service';
@@ -27,7 +25,6 @@ class TestComponent {
 describe('TrackInteractionDirective', () => {
   let fixture: ComponentFixture<TestComponent>;
   let component: TestComponent;
-  let _loader: HarnessLoader;
   const trackingService = jasmine.createSpyObj('TrackingService', ['addEvent']);
 
   beforeEach(() => {
@@ -40,7 +37,6 @@ describe('TrackInteractionDirective', () => {
         }
       ]
     }).createComponent(TestComponent);
-    _loader = TestbedHarnessEnvironment.loader(fixture);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
