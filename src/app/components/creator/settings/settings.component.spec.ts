@@ -19,7 +19,6 @@ import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { Location } from '@angular/common';
 import { MockLocationStrategy } from '@angular/common/testing';
 import { of } from 'rxjs';
-import { RoomComponent } from '@arsnova/app/components/creator/settings/room/room.component';
 
 @Injectable()
 class MockRoomService {

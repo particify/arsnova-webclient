@@ -49,7 +49,7 @@ export class RoomManagementComponent {
 
   transferRoom(newOwnerId: string) {
     this.adminService.transferRoom(this.room.id, newOwnerId)
-        .subscribe(result =>
+        .subscribe(() =>
             this.translateService.get('admin-area.room-transferred').subscribe(message =>
                 this.notificationService.showAdvanced(message, AdvancedSnackBarTypes.SUCCESS)));
   }

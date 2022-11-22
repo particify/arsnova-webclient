@@ -7,14 +7,12 @@ import { MockAnnounceService } from '@arsnova/testing/test-helpers';
 import { HotkeyService } from '@arsnova/app/services/util/hotkey.service';
 import { Directionality } from '@angular/cdk/bidi';
 import { ChangeDetectorRef, NO_ERRORS_SCHEMA, ElementRef } from '@angular/core';
-import { DOCUMENT } from '@angular/common';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 describe('StepperComponent', () => {
   let component: StepperComponent;
   let fixture: ComponentFixture<StepperComponent>;
 
-  let document: Document;
   let dir: Directionality;
   let elementRef: ElementRef;
   let changeDetectorRef: ChangeDetectorRef;
@@ -66,7 +64,6 @@ describe('StepperComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(StepperComponent);
     component = fixture.componentInstance;
-    document = TestBed.inject(DOCUMENT);
     setTimeout(() => {
       fixture.detectChanges();
     }, 1000);

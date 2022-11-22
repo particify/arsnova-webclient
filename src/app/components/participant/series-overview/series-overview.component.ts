@@ -78,7 +78,7 @@ export class SeriesOverviewComponent implements OnInit {
       if (this.hasScore) {
         this.updateChart();
       }
-    }, err => {
+    }, () => {
       this.getContentResultView();
       this.isLoading = false;
       this.isLoadingLastContent = false;

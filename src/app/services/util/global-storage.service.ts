@@ -1,7 +1,7 @@
 import { Inject, Injectable, InjectionToken, Provider } from '@angular/core';
 import { StorageBackend, StorageItem, StorageItemCategory } from '../../models/storage';
 import { EventService } from './event.service';
-import { ConsentChangedEvent, ConsentChangedEventPayload } from '../../models/events/consent-changed';
+import { ConsentChangedEventPayload } from '../../models/events/consent-changed';
 
 export const STORAGECONFIG_PROVIDER_TOKEN: InjectionToken<StorageItem> = new InjectionToken('STORAGECONFIG_PROVIDER_TOKEN');
 
@@ -293,7 +293,6 @@ export class GlobalStorageService {
     }
     const prefix = config.prefix ?? APP_PREFIX;
     const name = `${prefix}_${config.name}`;
-    const backend = this.backendOverrides.get(config.category) ?? config.backend;
     switch (this.getBackendFor(config)) {
       case StorageBackend.MEMORY:
         this.memory.set(key, value);

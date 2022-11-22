@@ -5,6 +5,7 @@ import { AdvancedSnackBarTypes, NotificationService } from '../util/notification
 import { EventService } from '../util/event.service';
 import { HttpRequestFailed } from '../../models/events/http-request-failed';
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export abstract class AbstractHttpService<T> {
   protected apiUrl = {
     base: '/api',
@@ -20,6 +21,7 @@ export abstract class AbstractHttpService<T> {
     protected notificationService: NotificationService) {
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
       console.error(error);

@@ -16,7 +16,6 @@ import { UserManagementComponent } from './user-management/user-management.compo
 import { TRANSLATION_MODULE_NAME } from '../../translate-module-name-token';
 import { TranslateHttpLoaderFactory } from '../../translate-http-loader-factory';
 import { AdminService } from '../../services/http/admin.service';
-import { MatSidenavModule } from '@angular/material/sidenav';
 import { ExtensionPointModule } from '../../../../projects/extension-point/src/lib/extension-point.module';
 
 @NgModule({

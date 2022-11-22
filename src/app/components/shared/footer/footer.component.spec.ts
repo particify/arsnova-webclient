@@ -41,7 +41,6 @@ describe('FooterComponent', () => {
   };
 
   const activatedRoute = new ActivatedRouteStub(null, config);
-  let routerSpy = jasmine.createSpyObj('MockRouter', ['navigate']);
   const consentService = jasmine.createSpyObj('ConsentService', ['consentRequired', 'openDialog']);
 
   beforeEach(waitForAsync(() => {
@@ -89,7 +88,6 @@ describe('FooterComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(FooterComponent);
     component = fixture.componentInstance;
-    routerSpy = TestBed.inject(Router);
     fixture.detectChanges();
   });
 

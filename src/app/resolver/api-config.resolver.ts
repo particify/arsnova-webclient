@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { MatLegacySnackBarRef as MatSnackBarRef } from '@angular/material/legacy-snack-bar';
-import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/router';
+import { Resolve } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { Observable, timer } from 'rxjs';
 import { takeUntil, tap } from 'rxjs/operators';
@@ -18,7 +18,7 @@ export class ApiConfigResolver implements Resolve<ApiConfig> {
   ) {
   }
 
-  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<ApiConfig> {
+  resolve(): Observable<ApiConfig> {
     let snackbarRef: MatSnackBarRef<SnackBarAdvancedComponent>;
     const config$ = this.apiConfigService.getApiConfig$().pipe(
       tap(() => snackbarRef?.dismiss()));

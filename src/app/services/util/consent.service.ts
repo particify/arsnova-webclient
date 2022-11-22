@@ -155,7 +155,7 @@ export class ConsentService extends AbstractHttpService<ConsentSettings> {
     this.consentSettings.timestamp = new Date();
     this.consentSettings.consentGiven = consentGiven;
     if (this.consentRecording?.enabled) {
-      this.recordConsentSettings(this.consentSettings).subscribe((persistedConsentSettings) => {
+      this.recordConsentSettings(this.consentSettings).subscribe(() => {
         const event = new ConsentChangedEvent(this.categories, this.consentSettings);
         this.eventService.broadcast(event.type, event.payload);
       });

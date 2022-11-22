@@ -66,8 +66,7 @@ export class ImportComponent implements OnInit, AfterContentInit {
         });
       });
       this.router.navigate(['edit', room.shortId]);
-    },
-        error => {
+    }, () => {
       this.translateService.get('import.error').subscribe(msg => {
         this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.FAILED);
       });

@@ -13,8 +13,6 @@ class MockDemoService {}
 @Injectable()
 class MockAuthenticationGuard {}
 
-@Injectable()
-class MockRoutingService {}
 describe('DemoRoomGuard', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({

@@ -7,7 +7,6 @@ import { Component, NO_ERRORS_SCHEMA } from '@angular/core';
 import { of } from 'rxjs';
 import { TrackingService } from './services/util/tracking.service';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { ApiConfig } from './models/api-config';
 import { ConsentService } from './services/util/consent.service';
 import { UpdateService } from './services/util/update.service';
 import { UpdateImportance } from './models/version-info';
@@ -39,12 +38,9 @@ describe('AppComponent', () => {
   const routingService = jasmine.createSpyObj('RoutingService', ['subscribeActivatedRoute']);
   const languageService = jasmine.createSpyObj('LanguageService', ['init']);
 
-  let getApiConfig$Spy: jasmine.Spy;
-  let testApiConfig: ApiConfig;
-
   beforeEach(waitForAsync(() => {
 
-    testApiConfig = {
+    const testApiConfig = {
       ui: {
         tracking: {
           url: 'mock-tracker',
@@ -77,7 +73,7 @@ describe('AppComponent', () => {
       features: {}
     };
 
-    getApiConfig$Spy = apiConfigService.getApiConfig$.and.returnValue(of(testApiConfig));
+    apiConfigService.getApiConfig$.and.returnValue(of(testApiConfig));
 
     TestBed.configureTestingModule({
       declarations: [

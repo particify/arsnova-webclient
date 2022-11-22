@@ -358,8 +358,7 @@ export class GroupContentComponent extends DragDropBaseComponent implements OnIn
           this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.SUCCESS);
         });
         this.leaveSortingMode();
-      },
-        error => {
+      }, () => {
         this.setPublishedIndexesToBackup()
       });
     }

@@ -34,8 +34,7 @@ export class UserActivationComponent {
       activationKey = activationKey.trim();
       this.userService.activate(this.data, activationKey).subscribe(() => {
           this.dialogRef.close({ success: true });
-        },
-        err => {
+        }, () => {
           this.translationService.get('user-activation.key-incorrect').subscribe(msg => {
             this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.FAILED);
           });

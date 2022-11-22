@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { HomePageComponent } from './home-page.component';
-import { Component, NO_ERRORS_SCHEMA, Input, Pipe, PipeTransform, Renderer2 } from '@angular/core';
+import { Component, NO_ERRORS_SCHEMA, Input, Renderer2 } from '@angular/core';
 import { EventService } from '../../../services/util/event.service';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { DialogService } from '../../../services/util/dialog.service';
@@ -17,8 +17,8 @@ import {
 import { HarnessLoader } from '@angular/cdk/testing';
 import { MatLegacyButtonHarness as MatButtonHarness } from '@angular/material/legacy-button/testing';
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
-import { Observable, of } from 'rxjs';
 import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
+import { A11yIntroPipe } from '@arsnova/app/pipes/a11y-intro.pipe';
 
 @Component({ selector: 'app-room-join', template: '' })
 class RoomJoinStubComponent {
@@ -32,13 +32,6 @@ class RoomJoinStubComponent {
 })
 class LibExtensionPointStubComponent {
   @Input() extensionId: string;
-}
-
-@Pipe({name: 'a11yIntro'})
-class MockA11yIntroPipe implements PipeTransform {
-  transform(i18nKey: string, args?: object): Observable<string> {
-    return of(i18nKey);
-  }
 }
 
 describe('HomePageComponent', () => {
@@ -74,7 +67,7 @@ describe('HomePageComponent', () => {
         HomePageComponent,
         RoomJoinStubComponent,
         LibExtensionPointStubComponent,
-        MockA11yIntroPipe
+        A11yIntroPipe
       ],
       imports: [
         TranslateModule.forRoot({

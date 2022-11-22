@@ -44,13 +44,12 @@ export class RegisterComponent implements OnInit {
     if (!this.usernameFormControl.hasError('required') && !this.usernameFormControl.hasError('email')
         && password) {
       if (this.acceptToS) {
-        this.userService.register(username, password).subscribe(result => {
+        this.userService.register(username, password).subscribe(() => {
             this.router.navigateByUrl('login', { state: { data: { username: username, password: password } } });
             this.translationService.get('register.register-successful').subscribe(message => {
               this.notificationService.showAdvanced(message, AdvancedSnackBarTypes.SUCCESS);
             });
-          },
-          err => {
+          }, () => {
             this.translationService.get('register.register-request-error').subscribe(message => {
               this.notificationService.showAdvanced(message, AdvancedSnackBarTypes.FAILED);
             });

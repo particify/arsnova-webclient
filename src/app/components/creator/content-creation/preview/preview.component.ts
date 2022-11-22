@@ -47,7 +47,7 @@ export class PreviewComponent implements OnInit {
       this.answerOptions = format === ContentType.SORT ? this.answerService.shuffleAnswerOptions(options) : options;
       this.multipleAnswers = (this.content as ContentChoice).multiple;
       if (format === ContentType.PRIORIZATION) {
-        options.forEach((option, index) => {
+        options.forEach((option) => {
           this.answerOptionsWithPoints.push(new AnswerWithPoints(option, 0));
         });
       }

@@ -27,7 +27,7 @@ class TestComponent {
 describe('TrackInteractionDirective', () => {
   let fixture: ComponentFixture<TestComponent>;
   let component: TestComponent;
-  let loader: HarnessLoader;
+  let _loader: HarnessLoader;
   const trackingService = jasmine.createSpyObj('TrackingService', ['addEvent']);
 
   beforeEach(() => {
@@ -40,7 +40,7 @@ describe('TrackInteractionDirective', () => {
         }
       ]
     }).createComponent(TestComponent);
-    loader = TestbedHarnessEnvironment.loader(fixture);
+    _loader = TestbedHarnessEnvironment.loader(fixture);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

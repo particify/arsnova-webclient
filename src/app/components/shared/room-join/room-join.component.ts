@@ -1,7 +1,6 @@
 import { Component, ElementRef, Input, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { Room } from '../../../models/room';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormErrorStateMatcher } from '../../home/form-error-state-matcher/form-error-state-matcher';
 import { UntypedFormControl, Validators } from '@angular/forms';

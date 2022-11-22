@@ -57,7 +57,7 @@ export class AuthenticationGuard implements CanActivate {
               if (viewRole === UserRole.PARTICIPANT) {
                 /* First time access / not a member yet -> request membership */
                 return this.roomMembershipService.requestMembership(route.params.shortId).pipe(
-                    map(room => true),
+                    map(() => true),
                     catchError(e => {
                       if (e instanceof HttpErrorResponse) {
                         if (e.status === 403) {
