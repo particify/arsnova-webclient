@@ -8,7 +8,7 @@ import { GlobalStorageService } from '@arsnova/app/services/util/global-storage.
 import { EventService } from '@arsnova/app/services/util/event.service';
 import { ContentGroupService } from '@arsnova/app/services/http/content-group.service';
 import { Room } from '@arsnova/app/models/room';
-import { NO_ERRORS_SCHEMA, EventEmitter } from '@angular/core';
+import { NO_ERRORS_SCHEMA, EventEmitter, Injectable } from '@angular/core';
 import { FeedbackService } from '@arsnova/app/services/http/feedback.service';
 import { Message } from '@stomp/stompjs';
 import { RoutingService } from '@arsnova/app/services/util/routing.service';
@@ -27,6 +27,17 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FeedbackMessageType } from '@arsnova/app/models/messages/feedback-message-type';
 
+@Injectable()
+class MockContentGroupService {
+  getById(id) {
+    return of(new ContentGroup('id', 'rev', 'roomId', 'Test'));
+  }
+
+  sortContentGroupsByName(groups) {
+    return groups;
+  }
+}
+
 describe('NavBarComponent', () => {
   let component: NavBarComponent;
   let fixture: ComponentFixture<NavBarComponent>;
@@ -39,9 +50,6 @@ describe('NavBarComponent', () => {
 
   const mockFeedbackService = jasmine.createSpyObj(['startSub']);
   mockFeedbackService.messageEvent = new EventEmitter<Message>();
-
-  const mockContentGroupService = jasmine.createSpyObj(['getById', 'sortContentGroupsByName']);
-  mockContentGroupService.getById.and.returnValue(of(new ContentGroup('id', 'rev', 'roomId', 'name')));
 
   const body = {
     UserCountChanged: {
@@ -105,7 +113,7 @@ describe('NavBarComponent', () => {
         },
         {
           provide: ContentGroupService,
-          useValue: mockContentGroupService
+          useClass: MockContentGroupService
         },
         {
           provide: GlobalStorageService,
@@ -376,8 +384,6 @@ describe('NavBarComponent', () => {
       ]
     };
     mockRoomStatsService.getStats.and.returnValue(of(stats));
-    mockContentGroupService.getById.and.returnValue(of(new ContentGroup('id-1', 'rev-1', 'room-id-1', 'Test')));
-    mockContentGroupService.sortContentGroupsByName.and.returnValue([new ContentGroup('id-1', 'rev-1', 'room-id-1', 'Test')]);
     fixture.detectChanges();
     overviewButton = await loader.getHarness(MatButtonHarness.with({selector: '#series-button'}));
     await overviewButton.click();
@@ -410,8 +416,6 @@ describe('NavBarComponent', () => {
       ]
     };
     mockRoomStatsService.getStats.and.returnValue(of(stats));
-    mockContentGroupService.getById.and.returnValue(of(new ContentGroup('id-1', 'rev-1', 'room-id-1', 'Test')));
-    mockContentGroupService.sortContentGroupsByName.and.returnValue([new ContentGroup('id-1', 'rev-1', 'room-id-1', 'Test'), new ContentGroup('id-1', 'rev-1', 'room-id-1', 'Test')]);
     fixture.detectChanges();
     seriesButton = await loader.getHarness(MatButtonHarness.with({selector: '#series-button'}));
     await seriesButton.click();
@@ -447,8 +451,6 @@ describe('NavBarComponent', () => {
       ]
     };
     mockRoomStatsService.getStats.and.returnValue(of(stats));
-    mockContentGroupService.getById.and.returnValue(of(new ContentGroup('id-1', 'rev-1', 'room-id-1', 'Test')));
-    mockContentGroupService.sortContentGroupsByName.and.returnValue([new ContentGroup('id-1', 'rev-1', 'room-id-1', 'Test'), new ContentGroup('id-1', 'rev-1', 'room-id-1', 'Test')]);
     fixture.detectChanges();
     seriesButton = await loader.getHarness(MatButtonHarness.with({selector: '#series-button'}));
     await seriesButton.click();
@@ -480,7 +482,6 @@ describe('NavBarComponent', () => {
       ]
     };
     mockRoomStatsService.getStats.and.returnValue(of(stats));
-    mockContentGroupService.getById.and.returnValue(of(new ContentGroup('id-1111', 'rev-1111', 'room-id-1111', 'Test')));
     const newStats = {
       groupStats: [
         {
@@ -529,7 +530,6 @@ describe('NavBarComponent', () => {
       ]
     };
     mockRoomStatsService.getStats.and.returnValue(of(stats));
-    mockContentGroupService.getById.and.returnValue(of(new ContentGroup('id-1111', 'rev-1111', 'room-id-1111', 'Test', ['1', '2'], true, 0, 0)));
     fixture.detectChanges();
     const entity = new ContentGroup('id-1111', 'rev-1111', 'room-id-1111', 'Test', ['1', '2'], true, 0, 1);
     const changedProperties = ['revision', 'lastPublishedIndex'];
