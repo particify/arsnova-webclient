@@ -434,8 +434,8 @@ describe('HeaderComponent', () => {
     userButton = await loader.getHarness(MatButtonHarness.with({selector: '#menu-button'}));
     await userButton.click();
     userMenu = await loader.getHarness(MatMenuHarness.with({selector: '#menu-button'}));
-    loginButton = await userMenu.getHarness(MatMenuItemHarness.with({selector: '#login-button'}));
-    await loginButton.click();
+    userMenuItems = await userMenu.getItems({selector: '#login-button'});
+    await userMenuItems[0].click();
     expect(routerSpy.navigateByUrl).toHaveBeenCalledWith('login');
   });
 });
