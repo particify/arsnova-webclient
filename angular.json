@@ -144,8 +144,7 @@
           "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
             "tsConfig": "projects/extension-point/tsconfig.lib.json",
-            "polyfills": "zone.js",
-            "project": "projects/extension-point/ng-package.json"
+            "polyfills": "zone.js"
           },
           "configurations": {
             "production": {
