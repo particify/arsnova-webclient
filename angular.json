@@ -15,10 +15,7 @@
             "index": "src/index.html",
             "main": "src/main.ts",
             "tsConfig": "src/tsconfig.app.json",
-            "polyfills": [
-              "src/polyfills.ts",
-              "zone.js"
-            ],
+            "polyfills": "zone.js",
             "assets": [
               "src/assets",
               "src/favicon.ico",
@@ -88,8 +85,7 @@
             "tsConfig": "src/tsconfig.spec.json",
             "polyfills": [
               "zone.js",
-              "zone.js/testing",
-              "src/polyfills.ts"
+              "zone.js/testing"
             ],
             "scripts": [],
             "inlineStyleLanguage": "scss",
@@ -148,10 +144,7 @@
           "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
             "tsConfig": "projects/extension-point/tsconfig.lib.json",
-            "polyfills": [
-              "src/polyfills.ts",
-              "zone.js"
-            ],
+            "polyfills": "zone.js",
             "project": "projects/extension-point/ng-package.json"
           },
           "configurations": {
@@ -167,8 +160,7 @@
             "karmaConfig": "./karma.conf.js",
             "polyfills": [
               "zone.js",
-              "zone.js/testing",
-              "src/polyfills.ts"
+              "zone.js/testing"
             ]
           }
         },

@@ -9,9 +9,6 @@
       "karma-viewport"
     ]
   },
-  "files": [
-    "polyfills.ts"
-  ],
   "include": [
     "**/*.spec.ts",
     "**/*.d.ts"
