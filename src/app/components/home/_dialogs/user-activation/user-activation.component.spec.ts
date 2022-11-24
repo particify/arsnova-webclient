@@ -9,7 +9,7 @@ import {
   ActivatedRouteStub,
   MockEventService
 } from '@arsnova/testing/test-helpers';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA } from '@angular/material/legacy-dialog';
 import { ActivatedRoute } from '@angular/router';
 import { NotificationService } from '@arsnova/app/services/util/notification.service';
 import { EventService } from '@arsnova/app/services/util/event.service';

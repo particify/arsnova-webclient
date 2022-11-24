@@ -5,7 +5,7 @@ import { MarkdownFeatureset } from '@arsnova/app/services/http/formatting.servic
 import { TranslateService } from '@ngx-translate/core';
 import { AdvancedSnackBarTypes, NotificationService } from '@arsnova/app/services/util/notification.service';
 import { AnnouncementService } from '@arsnova/app/services/http/announcement.service';
-import { MatTabGroup } from '@angular/material/tabs';
+import { MatLegacyTabGroup as MatTabGroup } from '@angular/material/legacy-tabs';
 import { DialogService } from '@arsnova/app/services/util/dialog.service';
 
 @Component({

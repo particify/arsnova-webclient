@@ -15,7 +15,7 @@
             "index": "src/index.html",
             "main": "src/main.ts",
             "tsConfig": "src/tsconfig.app.json",
-            "polyfills": "src/polyfills.ts",
+            "polyfills": "zone.js",
             "assets": [
               "src/assets",
               "src/favicon.ico",
@@ -81,11 +81,14 @@
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "main": "src/test.ts",
             "karmaConfig": "./karma.conf.js",
-            "polyfills": "src/polyfills.ts",
             "tsConfig": "src/tsconfig.spec.json",
+            "polyfills": [
+              "zone.js",
+              "zone.js/testing"
+            ],
             "scripts": [],
+            "inlineStyleLanguage": "scss",
             "styles": [
               "src/fonts.scss",
               "src/styles.scss"
@@ -141,6 +144,7 @@
           "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
             "tsConfig": "projects/extension-point/tsconfig.lib.json",
+            "polyfills": "zone.js",
             "project": "projects/extension-point/ng-package.json"
           },
           "configurations": {
@@ -152,9 +156,12 @@
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "main": "projects/extension-point/src/test.ts",
             "tsConfig": "projects/extension-point/tsconfig.spec.json",
-            "karmaConfig": "projects/extension-point/karma.conf.js"
+            "karmaConfig": "./karma.conf.js",
+            "polyfills": [
+              "zone.js",
+              "zone.js/testing"
+            ]
           }
         },
         "lint": {

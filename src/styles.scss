@@ -2,12 +2,13 @@
 @import 'theme/dark-theme/dark-theme';
 @import 'theme/arsnova-theme/arsnova-theme';
 
-@include mat.core();
+@include mat.all-legacy-component-typographies();
+@include mat.legacy-core();
 
-@include mat.all-component-themes($arsnova-theme);
+@include mat.all-legacy-component-themes($arsnova-theme);
 
 .dark {
-  @include mat.all-component-themes($dark-theme);
+  @include mat.all-legacy-component-themes($dark-theme);
 }
 
 @import 'theme/theme';
@@ -951,7 +952,7 @@ button.mat-menu-item:hover {
     border-color: var(--primary)!important;
     border-right-style: none!important;
   }
-  
+
   .mat-form-field-outline-end {
     border-color: var(--primary)!important;
     border-left-style: none!important;

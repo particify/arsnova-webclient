@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { ExportComponent } from './export.component';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MatLegacyDialogRef as MatDialogRef } from '@angular/material/legacy-dialog';
 import { JsonTranslationLoader, MockMatDialogRef } from '@arsnova/testing/test-helpers';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 

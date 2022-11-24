@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { MatSnackBar, MatSnackBarConfig, MatSnackBarRef } from '@angular/material/snack-bar';
+import { MatLegacySnackBar as MatSnackBar, MatLegacySnackBarConfig as MatSnackBarConfig, MatLegacySnackBarRef as MatSnackBarRef } from '@angular/material/legacy-snack-bar';
 import { LOADING_ICON, SnackBarAdvancedComponent } from '../../components/shared/snack-bar-advanced/snack-bar-advanced.component';
 import { Router } from '@angular/router';
 import { RoutingService } from './routing.service';

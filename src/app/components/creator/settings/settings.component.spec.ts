@@ -15,7 +15,7 @@ import { RoomService } from '@arsnova/app/services/http/room.service';
 import { NO_ERRORS_SCHEMA, Injectable } from '@angular/core';
 import { ActivatedRoute, ActivatedRouteSnapshot, Router } from '@angular/router';
 import { EventService } from '@arsnova/app/services/util/event.service';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { Location } from '@angular/common';
 import { MockLocationStrategy } from '@angular/common/testing';
 import { of } from 'rxjs';

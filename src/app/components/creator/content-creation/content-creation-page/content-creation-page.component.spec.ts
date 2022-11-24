@@ -4,7 +4,7 @@ import { ContentCreationPageComponent } from './content-creation-page.component'
 import { NO_ERRORS_SCHEMA, Injectable } from '@angular/core';
 import { ContentService } from '../../../../services/http/content.service';
 import { NotificationService } from '../../../../services/util/notification.service';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { TranslateLoader, TranslateModule, TranslateService } from '@ngx-translate/core';
 import { EventService } from '../../../../services/util/event.service';
 import { RoomService } from '../../../../services/http/room.service';
@@ -18,7 +18,7 @@ import { GlobalStorageService } from '@arsnova/app/services/util/global-storage.
 import { RoomStatsService } from '@arsnova/app/services/http/room-stats.service';
 import { FormattingService } from '@arsnova/app/services/http/formatting.service';
 import { A11yIntroPipe } from '@arsnova/app/pipes/a11y-intro.pipe';
-import { MatMenuModule } from '@angular/material/menu';
+import { MatLegacyMenuModule as MatMenuModule } from '@angular/material/legacy-menu';
 import { of } from 'rxjs';
 import { ContentType } from '@arsnova/app/models/content-type.enum';
 

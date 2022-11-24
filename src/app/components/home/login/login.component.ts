@@ -2,7 +2,7 @@ import { AfterContentInit, Component, OnChanges, OnInit, SimpleChanges, ViewChil
 import { AuthenticationService } from '../../../services/http/authentication.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AdvancedSnackBarTypes, NotificationService } from '../../../services/util/notification.service';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { UntypedFormControl, Validators } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
 import { EventService } from '../../../services/util/event.service';

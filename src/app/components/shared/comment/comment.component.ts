@@ -15,7 +15,7 @@ import { GlobalStorageService, STORAGE_KEYS } from '../../../services/util/globa
 import { AnnounceService } from '../../../services/util/announce.service';
 import { VoteService } from '../../../services/http/vote.service';
 import { Observable, Subject } from 'rxjs';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { CommentAnswerComponent } from '@arsnova/app/components/shared/_dialogs/comment-answer/comment-answer.component';
 import { RoutingService } from '@arsnova/app/services/util/routing.service';
 

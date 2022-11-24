@@ -4,7 +4,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { RoomService } from '../../../services/http/room.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EventService } from '../../../services/util/event.service';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { Room } from '../../../models/room';
 import { Settings } from '../settings-page/settings-page.component';
 import { Location } from '@angular/common';

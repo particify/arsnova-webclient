@@ -32,11 +32,11 @@ import { ContentState } from '@arsnova/app/models/content-state';
 import { ContentGroup } from '@arsnova/app/models/content-group';
 import { Room } from '@arsnova/app/models/room';
 import { TranslateLoader, TranslateModule, TranslateService } from '@ngx-translate/core';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { WsCommentService } from '@arsnova/app/services/websockets/ws-comment.service';
 import { CommentService } from '@arsnova/app/services/http/comment.service';
 import { SplitShortIdPipe } from '@arsnova/app/pipes/split-short-id.pipe';
-import { MatMenuModule } from '@angular/material/menu';
+import { MatLegacyMenuModule as MatMenuModule } from '@angular/material/legacy-menu';
 import { RoomSummary, RoomSummaryStats } from '@arsnova/app/models/room-summary';
 
 @Injectable()

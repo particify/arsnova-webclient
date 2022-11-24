@@ -3,7 +3,7 @@ import { AppComponent } from './app.component';
 import { RegisterComponent } from './components/home/register/register.component';
 import { PasswordResetComponent } from './components/home/password-reset/password-reset.component';
 import { AppRoutingModule } from './app-routing.module';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA, MatLegacyDialogRef as MatDialogRef } from '@angular/material/legacy-dialog';
 import { HTTP_INTERCEPTORS, HttpClient, HttpClientModule } from '@angular/common/http';
 import { UserService } from './services/http/user.service';
 import { NotificationService } from './services/util/notification.service';

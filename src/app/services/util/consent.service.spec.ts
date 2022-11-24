@@ -7,7 +7,7 @@ import { MockEventService, MockGlobalStorageService, MockNotificationService, Mo
 import { TranslateService } from '@ngx-translate/core';
 import { NotificationService } from '@arsnova/app/services/util/notification.service';
 import { GlobalStorageService } from '@arsnova/app/services/util/global-storage.service';
-import { MatDialogModule } from '@angular/material/dialog';
+import { MatLegacyDialogModule as MatDialogModule } from '@angular/material/legacy-dialog';
 
 describe('ConsentService', () => {
   beforeEach(() => {
