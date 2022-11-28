@@ -62,9 +62,9 @@
                       [directShow]="directShow" (updateCounterEvent)="updateCounter($event)" [active]="active"></app-statistic-sort>
   <app-statistic-wordcloud *ngIf="format === ContentType.WORDCLOUD" [content]="content" [showModeration]="showWordcloudModeration"
                            [directShow]="directShow" (updateCounterEvent)="updateCounter($event)"></app-statistic-wordcloud>
-  <app-statistic-priorization *ngIf="format === ContentType.PRIORIZATION" [content]="content" [directShow]="directShow" [settings]="settings"
+  <app-statistic-prioritization *ngIf="format === ContentType.PRIORITIZATION" [content]="content" [directShow]="directShow" [settings]="settings"
                               [indexChanged]="indexChanged" [isPresentation]="isPresentation" [active]="active" (updateCounterEvent)="updateCounter($event)"
-                              [isCreator]="!isParticipant"></app-statistic-priorization>
+                              [isCreator]="!isParticipant"></app-statistic-prioritization>
 </div>
 <div *ngIf="content.format === ContentType.FLASHCARD && answersVisible">
   <div class="divider-space"></div>

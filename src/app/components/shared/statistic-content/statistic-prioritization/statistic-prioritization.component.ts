@@ -8,16 +8,16 @@ import { AnswerStatistics } from '@arsnova/app/models/answer-statistics';
 import { takeUntil } from 'rxjs/operators';
 import { EventService } from '@arsnova/app/services/util/event.service';
 import { PresentationService } from '@arsnova/app/services/util/presentation.service';
-import { ContentPriorization } from '@arsnova/app/models/content-priorization';
-import { PriorizationRoundStatistics } from '@arsnova/app/models/round-statistics';
+import { ContentPrioritization } from '@arsnova/app/models/content-prioritization';
+import { PrioritizationRoundStatistics } from '@arsnova/app/models/round-statistics';
 import { StatisticChoiceComponent } from '../statistic-choice/statistic-choice.component';
 
 @Component({
-  selector: 'app-statistic-priorization',
-  templateUrl: './statistic-priorization.component.html',
-  styleUrls: ['./statistic-priorization.component.scss']
+  selector: 'app-statistic-prioritization',
+  templateUrl: './statistic-prioritization.component.html',
+  styleUrls: ['./statistic-prioritization.component.scss']
 })
-export class StatisticPriorizationComponent extends StatisticChoiceComponent implements OnInit, OnDestroy {
+export class StatisticPrioritizationComponent extends StatisticChoiceComponent implements OnInit, OnDestroy {
 
   readonly padding = {
     label: 8,
@@ -25,7 +25,7 @@ export class StatisticPriorizationComponent extends StatisticChoiceComponent imp
     left: 30
   };
 
-  @Input() content: ContentPriorization;
+  @Input() content: ContentPrioritization;
   @Input() indexChanged: EventEmitter<number> = new EventEmitter<number>();
   @Input() isCreator = true;
 
@@ -255,7 +255,7 @@ export class StatisticPriorizationComponent extends StatisticChoiceComponent imp
   }
 
   setData(stats: AnswerStatistics) {
-    this.chartData = (stats.roundStatistics[0] as PriorizationRoundStatistics).assignedPoints;
+    this.chartData = (stats.roundStatistics[0] as PrioritizationRoundStatistics).assignedPoints;
     this.emptyData = this.chartData.map(() => 0);
     this.abstentionCount = stats.roundStatistics[0].abstentionCount;
   }

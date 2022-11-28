@@ -3,7 +3,7 @@ import { ContentChoice } from './content-choice';
 import { ContentState } from './content-state';
 import { ContentType } from './content-type.enum';
 
-export class ContentPriorization extends ContentChoice {
+export class ContentPrioritization extends ContentChoice {
   assignablePoints: number;
 
   constructor(id: string,

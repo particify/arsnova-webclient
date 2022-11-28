@@ -1,5 +1,5 @@
 import { Answer } from './answer';
 
-export class PriorizationAnswer extends Answer {
+export class PrioritizationAnswer extends Answer {
   assignedPoints: number[];
 }

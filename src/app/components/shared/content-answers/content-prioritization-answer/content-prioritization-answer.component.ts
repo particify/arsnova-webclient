@@ -2,11 +2,11 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { AnswerWithPoints } from '@arsnova/app/models/answer-with-points';
 
 @Component({
-  selector: 'app-content-priorization-answer',
-  templateUrl: './content-priorization-answer.component.html',
-  styleUrls: ['./content-priorization-answer.component.scss']
+  selector: 'app-content-prioritization-answer',
+  templateUrl: './content-prioritization-answer.component.html',
+  styleUrls: ['./content-prioritization-answer.component.scss']
 })
-export class ContentPriorizationAnswerComponent implements OnInit {
+export class ContentPrioritizationAnswerComponent implements OnInit {
 
   readonly STEP_SIZE = 10;
 

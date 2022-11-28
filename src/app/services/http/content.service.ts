@@ -42,7 +42,7 @@ export class ContentService extends AbstractEntityService<Content> {
     [ContentType.TEXT, 'description'],
     [ContentType.WORDCLOUD, 'cloud'],
     [ContentType.SORT, 'move_up'],
-    [ContentType.PRIORIZATION, 'sort'],
+    [ContentType.PRIORITIZATION, 'sort'],
     [ContentType.SLIDE, 'info'],
     [ContentType.FLASHCARD, 'school']
   ]);

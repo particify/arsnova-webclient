@@ -2,27 +2,27 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AnswerWithPoints } from '@arsnova/app/models/answer-with-points';
 import { ContentType } from '@arsnova/app/models/content-type.enum';
-import { PriorizationAnswer } from '@arsnova/app/models/priorization-answer';
+import { PrioritizationAnswer } from '@arsnova/app/models/prioritization-answer';
 import { ContentAnswerService } from '@arsnova/app/services/http/content-answer.service';
 import { GlobalStorageService } from '@arsnova/app/services/util/global-storage.service';
 import { LanguageService } from '@arsnova/app/services/util/language.service';
 import { AdvancedSnackBarTypes, NotificationService } from '@arsnova/app/services/util/notification.service';
-import { ContentPriorization } from '@arsnova/app/models/content-priorization';
+import { ContentPrioritization } from '@arsnova/app/models/content-prioritization';
 import { TranslateService } from '@ngx-translate/core';
 import { ContentParticipantBaseComponent } from '../content-participant-base.component';
 
 @Component({
-  selector: 'app-content-priorization-participant',
-  templateUrl: './content-priorization-participant.component.html',
-  styleUrls: ['./content-priorization-participant.component.scss']
+  selector: 'app-content-prioritization-participant',
+  templateUrl: './content-prioritization-participant.component.html',
+  styleUrls: ['./content-prioritization-participant.component.scss']
 })
-export class ContentPriorizationParticipantComponent  extends ContentParticipantBaseComponent {
+export class ContentPrioritizationParticipantComponent  extends ContentParticipantBaseComponent {
 
-  @Input() content: ContentPriorization;
-  @Input() answer: PriorizationAnswer;
+  @Input() content: ContentPrioritization;
+  @Input() answer: PrioritizationAnswer;
   @Input() alreadySent: boolean;
   @Input() sendEvent: EventEmitter<string>;
-  @Output() answerChanged = new EventEmitter<PriorizationAnswer>();
+  @Output() answerChanged = new EventEmitter<PrioritizationAnswer>();
 
   isLoading = true;
   hasAbstained = false;
@@ -80,15 +80,15 @@ export class ContentPriorizationParticipantComponent  extends ContentParticipant
       this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
       return;
     }
-    this.answerService.addAnswerPriorization(this.content.roomId, {
+    this.answerService.addAnswerPrioritization(this.content.roomId, {
       id: null,
       revision: null,
       contentId: this.content.id,
       round: this.content.state.round,
       assignedPoints: this.assignedPoints,
       creationTimestamp: null,
-      format: ContentType.PRIORIZATION
-    } as PriorizationAnswer).subscribe(answer  => {
+      format: ContentType.PRIORITIZATION
+    } as PrioritizationAnswer).subscribe(answer  => {
       this.answer = answer;
       this.translateService.get('answer.sent').subscribe(msg => {
         this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.SUCCESS);
@@ -98,15 +98,15 @@ export class ContentPriorizationParticipantComponent  extends ContentParticipant
   }
 
   abstain() {
-    this.answerService.addAnswerPriorization(this.content.roomId, {
+    this.answerService.addAnswerPrioritization(this.content.roomId, {
       id: null,
       revision: null,
       contentId: this.content.id,
       round: this.content.state.round,
       assignedPoints: [],
       creationTimestamp: null,
-      format: ContentType.PRIORIZATION
-    } as PriorizationAnswer).subscribe(answer => {
+      format: ContentType.PRIORITIZATION
+    } as PrioritizationAnswer).subscribe(answer => {
       this.hasAbstained = true;
       this.sendStatusToParent(answer);
     });

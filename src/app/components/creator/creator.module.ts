@@ -35,7 +35,7 @@ import { PublishContentComponent } from './_dialogs/publish-content/publish-cont
 import { CreatorOverviewComponent } from './creator-overview/creator-overview.component';
 import { AnnouncementSettingsComponent } from './settings/announcement-settings/announcement-settings.component';
 import { CreateAnswerOptionComponent } from './content-creation/create-answer-option/create-answer-option.component';
-import { ContentPriorizationCreationComponent } from './content-creation/content-priorization-creation/content-priorization-creation.component';
+import { ContentPrioritizationCreationComponent } from './content-creation/content-prioritization-creation/content-prioritization-creation.component';
 
 @NgModule({
   imports: [
@@ -83,7 +83,7 @@ import { ContentPriorizationCreationComponent } from './content-creation/content
     PublishContentComponent,
     AnnouncementSettingsComponent,
     CreateAnswerOptionComponent,
-    ContentPriorizationCreationComponent,
+    ContentPrioritizationCreationComponent,
   ],
   exports: [
     ContentPresentationComponent

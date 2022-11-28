@@ -46,9 +46,9 @@
                                             (answerChanged)="forwardAnswerMessage($event)" [statsPublished]="statsPublished"
                                             [correctOptionsPublished]="correctOptionsPublished">
               </app-content-wordcloud-participant>
-              <app-content-priorization-participant *ngIf="content.format === ContentType.PRIORIZATION" [answer]="answer"
+              <app-content-prioritization-participant *ngIf="content.format === ContentType.PRIORITIZATION" [answer]="answer"
               [content]="content" [alreadySent]="alreadySent" [sendEvent]="sendEvent" (answerChanged)="forwardAnswerMessage($event)" [statsPublished]="statsPublished">
-            </app-content-priorization-participant>
+            </app-content-prioritization-participant>
             </div>
             <div *ngIf="[ContentType.SLIDE, ContentType.FLASHCARD].indexOf(content.format) === -1">
               <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="1em" [ngClass]="{'visible' : alreadySent, 'invisible': !alreadySent}" class="text">

@@ -12,7 +12,7 @@ import { Answer } from '@arsnova/app/models/answer';
 import { CachingService } from '../util/caching.service';
 import { WsConnectorService } from '../websockets/ws-connector.service';
 import { AnswerOption } from '@arsnova/app/models/answer-option';
-import { PriorizationAnswer } from '../../models/priorization-answer';
+import { PrioritizationAnswer } from '../../models/prioritization-answer';
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -102,10 +102,10 @@ export class ContentAnswerService extends AbstractEntityService<Answer> {
     );
   }
 
-  addAnswerPriorization(roomId: string, answer: PriorizationAnswer): Observable<PriorizationAnswer> {
+  addAnswerPrioritization(roomId: string, answer: PrioritizationAnswer): Observable<PrioritizationAnswer> {
     const url = this.buildUri('/', roomId);
-    return this.http.post<PriorizationAnswer>(url, answer, httpOptions).pipe(
-      catchError(this.handleError<PriorizationAnswer>('addAnswerPriorization'))
+    return this.http.post<PrioritizationAnswer>(url, answer, httpOptions).pipe(
+      catchError(this.handleError<PrioritizationAnswer>('addAnswerPrioritization'))
     );
   }
 

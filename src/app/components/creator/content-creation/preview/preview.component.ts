@@ -42,11 +42,11 @@ export class PreviewComponent implements OnInit {
 
   ngOnInit(): void {
     const format = this.content.format;
-    if ([ContentType.CHOICE, ContentType.BINARY, ContentType.SORT, ContentType.PRIORIZATION].indexOf(format) > -1) {
+    if ([ContentType.CHOICE, ContentType.BINARY, ContentType.SORT, ContentType.PRIORITIZATION].indexOf(format) > -1) {
       const options = (this.content as ContentChoice).options;
       this.answerOptions = format === ContentType.SORT ? this.answerService.shuffleAnswerOptions(options) : options;
       this.multipleAnswers = (this.content as ContentChoice).multiple;
-      if (format === ContentType.PRIORIZATION) {
+      if (format === ContentType.PRIORITIZATION) {
         options.forEach((option) => {
           this.answerOptionsWithPoints.push(new AnswerWithPoints(option, 0));
         });
