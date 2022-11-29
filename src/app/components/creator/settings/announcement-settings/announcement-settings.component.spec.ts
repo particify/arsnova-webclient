@@ -3,8 +3,8 @@ import { AnnouncementService } from '@arsnova/app/services/http/announcement.ser
 import { DialogService } from '@arsnova/app/services/util/dialog.service';
 import { NotificationService } from '@arsnova/app/services/util/notification.service';
 import { Room } from '@arsnova/app/models/room';
-import { MockNotificationService, MockTranslateService, JsonTranslationLoader } from '@arsnova/testing/test-helpers';
-import { TranslateLoader, TranslateModule, TranslateService } from '@ngx-translate/core';
+import { MockNotificationService, JsonTranslationLoader } from '@arsnova/testing/test-helpers';
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 
 import { AnnouncementSettingsComponent } from './announcement-settings.component';
 import { of } from 'rxjs';

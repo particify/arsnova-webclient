@@ -12,7 +12,13 @@ import { DialogService } from '../../../../services/util/dialog.service';
 import { ContentGroupService } from '../../../../services/http/content-group.service';
 import { AnnounceService } from '@arsnova/app/services/util/announce.service';
 import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
-import { ActivatedRouteStub, JsonTranslationLoader, MockLangService } from '@arsnova/testing/test-helpers';
+import {
+  ActivatedRouteStub,
+  JsonTranslationLoader,
+  MockLangService,
+  MockGlobalStorageService,
+  MockMatDialog
+} from '@arsnova/testing/test-helpers';
 import { LanguageService } from '@arsnova/app/services/util/language.service';
 import { GlobalStorageService } from '@arsnova/app/services/util/global-storage.service';
 import { RoomStatsService } from '@arsnova/app/services/http/room-stats.service';
@@ -34,11 +40,6 @@ class MockNotificationService {
 }
 
 @Injectable()
-class MockMatDialiog {
-  afterClosed() {}
-}
-
-@Injectable()
 class MockEventService {
 }
 
@@ -57,17 +58,6 @@ class MockContentGroupService {
 @Injectable()
 class MockRoomStatsService {
 }
-
-@Injectable()
-class MockGlobalStorageService {
-  getItem(key: string) {
-    return undefined;
-  }
-
-  setItem(key: string, value: any) {
-  }
-}
-
 @Injectable()
 class MockAnnouncer {
 }
@@ -117,7 +107,7 @@ describe('ContentCreationPageComponent', () => {
         },
         {
           provide: MatDialog,
-          useClass: MockMatDialiog
+          useClass: MockMatDialog
         },
         {
           provide: EventService,

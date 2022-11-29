@@ -102,14 +102,8 @@ export class LoginComponent implements AfterContentInit, OnChanges, OnInit {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    let u, p = false;
     if (changes.loginid) {
       this.loginIdFormControl.setValue(changes.loginid.currentValue);
-      u = true;
-    }
-    if (u && p && !changes.loginid.isFirstChange() && !changes.loginid.isFirstChange()) {
-      // TODO: this throws an Exception because data and UI are inconsistent
-      this.activateUser();
     }
   }
 

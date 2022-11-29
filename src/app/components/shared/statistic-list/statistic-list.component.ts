@@ -237,7 +237,6 @@ export class StatisticListComponent implements OnInit {
     if (combCounts && this.checkIfSurvey(correctOptionIndexes)) {
       let correctCounts = 0;
       let totalCounts = 0;
-      let res: number;
       for (let i = 0; i < combCounts.length; i++) {
         const counts = combCounts[i].count;
         if (correctOptionIndexes.sort().toString() === combCounts[i].selectedChoiceIndexes.sort().toString()) {
@@ -245,9 +244,8 @@ export class StatisticListComponent implements OnInit {
         }
         totalCounts += counts;
       }
-      res = ((correctCounts / totalCounts) * 100);
       this.contentCounter++;
-      return res;
+      return (correctCounts / totalCounts) * 100;
     } else {
       return this.status.empty;
     }

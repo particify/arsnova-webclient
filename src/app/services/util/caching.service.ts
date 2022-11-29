@@ -48,7 +48,7 @@ export class CachingService {
           this.wsDisconnectionTimestamp = new Date();
         }
         break;
-      case RxStompState.OPEN:
+      case RxStompState.OPEN: {
         const currentTimestamp = new Date();
         if (this.wsDisconnectionTimestamp
             && currentTimestamp.getTime() - this.wsDisconnectionTimestamp.getTime() > WS_DISCONNECT_GRACE_PERIOD_MS) {
@@ -56,6 +56,7 @@ export class CachingService {
           this.caches.forEach(c => c.clear());
           this.wsDisconnectionTimestamp = currentTimestamp;
         }
+      }
     }
   }
 }

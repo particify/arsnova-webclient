@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, ActivationEnd, NavigationEnd, Router } from '@angular/router';
+import { ActivatedRouteSnapshot, ActivationEnd, Router } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { ConsentService } from './consent.service';
 import { StorageItemCategory } from '../../models/storage';
@@ -164,22 +164,22 @@ export class TrackingService {
     this.eventService.on<any>('HttpRequestFailed')
         .subscribe(e => this.addEvent(EventCategory.ERROR, 'HTTP request failed', `Status code ${e.status}`, undefined, e.url));
     this.eventService.on<any>('AccountCreated')
-        .subscribe(e => this.addEvent(EventCategory.ACCOUNT, 'Account created'));
+        .subscribe(() => this.addEvent(EventCategory.ACCOUNT, 'Account created'));
     this.eventService.on<any>('AccountDeleted')
-        .subscribe(e => this.addEvent(EventCategory.ACCOUNT, 'Account deleted'));
+        .subscribe(() => this.addEvent(EventCategory.ACCOUNT, 'Account deleted'));
     this.eventService.on<any>('RoomCreated')
-        .subscribe(e => this.addEvent(EventCategory.USER_DATA_ROOM, 'Room created'));
+        .subscribe(() => this.addEvent(EventCategory.USER_DATA_ROOM, 'Room created'));
     this.eventService.on<any>('DemoRoomCreated')
         .subscribe(e => {
           this.addEvent(EventCategory.USER_DATA_ROOM, 'Demo room created');
           this.specialRooms.set(e.shortId, 'Demo')
         });
     this.eventService.on<any>('CommentCreated')
-        .subscribe(e => this.addEvent(EventCategory.USER_DATA_COMMENT, 'Comment created'));
+        .subscribe(() => this.addEvent(EventCategory.USER_DATA_COMMENT, 'Comment created'));
     this.eventService.on<any>('ContentCreated')
         .subscribe(e => this.addEvent(EventCategory.USER_DATA_CONTENT, 'Content created', e.format.toString().toLowerCase()));
     this.eventService.on<any>('SurveyStarted')
-        .subscribe(e => this.addEvent(EventCategory.FEATURE_USAGE_SURVEY, 'Survey started'));
+        .subscribe(() => this.addEvent(EventCategory.FEATURE_USAGE_SURVEY, 'Survey started'));
   }
 
   setVisitDimension(dimension: VisitDimension, value: string) {
@@ -236,7 +236,7 @@ export class TrackingService {
         .replace(/\/~.*?(\/|\?|$)/, '/__ALIAS__$1')
         .replace(/\/[0-9a-f]{32}(\/|\?|$)/, '/__ID__$1')
         .replace(/\/[0-9]{1,4}(\/|\?|$)/, '/__INDEX__$1')
-        .replace(/\/series\/[^\/]+/, '/series/__SERIES__')
+        .replace(/\/series\/[^/]+/, '/series/__SERIES__')
         .replace(/\/present\/[0-9]+(\/|\?|$)/, '/present/__ROOM_SHORT_ID__$1')
         .replace(/\/[^/?]+@[^/?]+/, '/__MAIL__');
   }

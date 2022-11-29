@@ -15,11 +15,6 @@ class MockWsConnectorService {
 }
 
 @Injectable()
-class MockFeedbackService {
-}
-
-
-@Injectable()
 class MockCachingService {
   getCache() {
     return new Cache();

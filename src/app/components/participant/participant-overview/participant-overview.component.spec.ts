@@ -12,7 +12,7 @@ import {
   MockEventService,
   MockAnnounceService
 } from '@arsnova/testing/test-helpers';
-import { Observable, of } from 'rxjs';
+import { of } from 'rxjs';
 import { GlobalStorageService } from '@arsnova/app/services/util/global-storage.service';
 import { EventService } from '@arsnova/app/services/util/event.service';
 import { ContentGroupService } from '@arsnova/app/services/http/content-group.service';
@@ -20,7 +20,7 @@ import { AnnounceService } from '@arsnova/app/services/util/announce.service';
 import { MockLocationStrategy } from '@angular/common/testing';
 import { AuthenticationService } from '@arsnova/app/services/http/authentication.service';
 import { Room } from '@arsnova/app/models/room';
-import { NO_ERRORS_SCHEMA, EventEmitter, Pipe, PipeTransform } from '@angular/core';
+import { NO_ERRORS_SCHEMA, EventEmitter } from '@angular/core';
 import { UserRole } from '@arsnova/app/models/user-roles.enum';
 import { SplitShortIdPipe } from '@arsnova/app/pipes/split-short-id.pipe';
 import { RoomService } from '@arsnova/app/services/http/room.service';
@@ -31,13 +31,8 @@ import { WsCommentService } from '@arsnova/app/services/websockets/ws-comment.se
 import { CommentService } from '@arsnova/app/services/http/comment.service';
 import { FeedbackService } from '@arsnova/app/services/http/feedback.service';
 import { Message } from '@stomp/stompjs';
+import { A11yIntroPipe } from '@arsnova/app/pipes/a11y-intro.pipe';
 
-@Pipe({name: 'a11yIntro'})
-class MockA11yIntroPipe implements PipeTransform {
-  transform(i18nKey: string, args?: object): Observable<string> {
-    return of(i18nKey);
-  }
-}
 
 describe('ParticipantOverviewComponent', () => {
   let component: ParticipantOverviewComponent;
@@ -82,7 +77,7 @@ describe('ParticipantOverviewComponent', () => {
     TestBed.configureTestingModule({
       declarations: [
         ParticipantOverviewComponent,
-        MockA11yIntroPipe,
+        A11yIntroPipe,
         SplitShortIdPipe
        ],
       imports: [

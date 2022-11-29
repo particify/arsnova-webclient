@@ -3,7 +3,7 @@ import { Room } from '../../models/room';
 import { RoomSummary } from '../../models/room-summary';
 import { SurveyStarted } from '../../models/events/survey-started';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { BehaviorSubject, Observable, of, Subscription } from 'rxjs';
+import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { catchError, map, tap, switchMap } from 'rxjs/operators';
 import { AuthenticationService, AUTH_HEADER_KEY, AUTH_SCHEME } from './authentication.service';
 import { AbstractEntityService } from './abstract-entity.service';
@@ -220,8 +220,7 @@ export class RoomService extends AbstractEntityService<Room> {
 
   parseExtensions(room: Room): Room {
     if (room.extensions) {
-      let extensions: { [key: string ]: object };
-      extensions = room.extensions;
+      const extensions: { [key: string ]: object } = room.extensions;
       room.extensions = extensions;
     }
     return room;

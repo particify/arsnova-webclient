@@ -1,7 +1,7 @@
-import { Injectable, Component, EventEmitter, Inject, NO_ERRORS_SCHEMA } from '@angular/core';
+import { Injectable, Component, NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
-import { Observable, of } from 'rxjs';
+import { of } from 'rxjs';
 import { AuthenticationService } from '../../../services/http/authentication.service';
 import { ImportComponent } from './import.component';
 import { RoomService } from '../../../services/http/room.service';
@@ -9,26 +9,7 @@ import { NotificationService } from '../../../services/util/notification.service
 import { Router } from '@angular/router';
 import { LanguageService } from '../../../services/util/language.service';
 import { RoutingService } from '../../../services/util/routing.service';
-
-const TRANSLATION_DE = require('../../../../assets/i18n/home/de.json');
-const TRANSLATION_EN = require('../../../../assets/i18n/home/en.json');
-
-const TRANSLATIONS = {
-  DE: TRANSLATION_DE,
-  EN: TRANSLATION_EN
-};
-
-class JsonTranslationLoader implements TranslateLoader {
-  getTranslation(code = ''): Observable<object> {
-    if (code !== null) {
-      const uppercased = code.toUpperCase();
-
-      return of(TRANSLATIONS[uppercased]);
-    } else {
-      return of({});
-    }
-  }
-}
+import { JsonTranslationLoader, MockLangService, MockNotificationService } from '@arsnova/testing/test-helpers';
 
 @Injectable()
 class MockRouter {
@@ -45,16 +26,6 @@ class MockAuthenticationService {
   isLoggedIn() {
     return of(true);
   }
-}
-
-@Injectable()
-class MockNotificationService {
-
-}
-
-@Injectable()
-class MockLanguageService {
-  public readonly langEmitter = new EventEmitter<string>();
 }
 
 @Injectable()
@@ -106,7 +77,7 @@ describe('ImportComponent', () => {
         },
         {
           provide: LanguageService,
-          useClass: MockLanguageService
+          useClass: MockLangService
         },
         {
           provide: RoutingService,

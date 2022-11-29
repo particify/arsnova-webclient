@@ -261,20 +261,28 @@ export class CommentListComponent implements OnInit, OnDestroy {
 
   checkScroll(scrollPosition?: number, scrollHeight?: number): void {
     const currentScroll = scrollPosition || document.getElementById('routing-content').scrollTop;
-    const additionalSpace = this.deviceType === 'mobile' ? 70 + innerWidth * 0.04 : 0;
-    this.scroll = currentScroll > (this.scrollMax + additionalSpace) || currentScroll > this.scrollMax && currentScroll < this.lastScroll;
+    this.scroll = this.isScrollPosition(currentScroll);
     this.scrollActive = this.scroll && currentScroll < this.lastScroll;
     this.scrollExtended = currentScroll >= this.scrollExtendedMax;
     this.isScrollStart = currentScroll >= this.scrollStart && currentScroll <= (this.scrollStart + 200);
+    this.showCommentsForScrollPosition(currentScroll, scrollHeight);
+    this.lastScroll = currentScroll;
+  }
+
+  isScrollPosition(scrollPosition: number): boolean {
+    const additionalSpace = this.deviceType === 'mobile' ? 70 + innerWidth * 0.04 : 0;
+    return scrollPosition > (this.scrollMax + additionalSpace) || scrollPosition > this.scrollMax && scrollPosition < this.lastScroll;
+  }
+
+  showCommentsForScrollPosition(scrollPosition: number, scrollHeight: number) {
     const length = this.hideCommentsList ? this.filteredComments.length : this.commentsFilteredByTime.length;
     if (this.displayComments.length !== length) {
       const height = scrollHeight || document.body.scrollHeight;
-      if (((window.innerHeight * 2) + currentScroll) >= height) {
+      if (((window.innerHeight * 2) + scrollPosition) >= height) {
         this.commentCounter += itemRenderNumber / 2;
         this.getDisplayComments();
       }
     }
-    this.lastScroll = currentScroll;
   }
 
   reduceCommentCounter() {
@@ -413,6 +421,7 @@ export class CommentListComponent implements OnInit, OnDestroy {
     let highlightEvent = false;
     const msg = JSON.parse(message.body);
     const payload = msg.payload;
+    const commentIndex = this.comments.map(c => c.id).indexOf(payload.id);
     switch (msg.type) {
       case 'CommentCreated':
         if (!this.isModerator) {
@@ -421,75 +430,17 @@ export class CommentListComponent implements OnInit, OnDestroy {
         this.publicCounter++;
         break;
       case 'CommentPatched':
-        // ToDo: Use a map for comments w/ key = commentId
-        for (let i = 0; i < this.comments.length; i++) {
-          if (payload.id === this.comments[i].id) {
-            for (const [key, value] of Object.entries(payload.changes)) {
-              switch (key) {
-                case this.filtering.CORRECT:
-                  this.comments[i].correct = <CorrectWrong>value;
-                  break;
-                case this.filtering.FAVORITE:
-                  this.comments[i].favorite = <boolean>value;
-                  break;
-                case 'score':
-                  this.comments[i].score = <number>value;
-                  this.getComments();
-                  break;
-                case this.filtering.ACK:
-                  updateList = true;
-                  const isNowAck = this.isModerator ? !value : <boolean>value;
-                  if (!isNowAck) {
-                    this.comments = this.comments.filter(function (el) {
-                      return el.id !== payload.id;
-                    });
-                    this.reduceCommentCounter();
-                    this.checkIfActiveComment(payload.id);
-                    if (this.isModerator) {
-                      this.moderationCounter--;
-                    } else {
-                      this.publicCounter--;
-                    }
-                  } else {
-                    if (!this.isModerator) {
-                      this.moderationCounter--;
-                    }
-                  }
-                  break;
-                case this.filtering.TAG:
-                  this.comments[i].tag = <string>value;
-                  break;
-                case this.filtering.ANSWER:
-                  this.comments[i].answer = <string>value;
-                  break;
-              }
-            }
-          }
-        }
+        updateList = this.handleCommentPatch(payload.changes, payload.id, commentIndex);
         break;
       case 'CommentHighlighted':
         highlightEvent = true;
-        // ToDo: Use a map for comments w/ key = commentId
-        for (let i = 0; i < this.comments.length; i++) {
-          if (payload.id === this.comments[i].id) {
-            this.comments[i].highlighted = <boolean>payload.lights;
-          }
+        if (commentIndex > -1) {
+          this.comments[commentIndex].highlighted = <boolean>payload.lights;
         }
         break;
       case 'CommentDeleted':
         updateList = true;
-        for (let i = 0; i < this.comments.length; i++) {
-          this.comments = this.comments.filter(function (el) {
-            return el.id !== payload.id;
-          });
-        }
-        if (this.isModerator) {
-          this.moderationCounter--
-        } else {
-          this.publicCounter--;
-        }
-        this.reduceCommentCounter();
-        this.checkIfActiveComment(payload.id);
+        this.handleCommentDelete(payload.id);
         break;
       default:
         this.referenceEvent.next(payload.id);
@@ -497,6 +448,51 @@ export class CommentListComponent implements OnInit, OnDestroy {
     if (!highlightEvent && (!this.freeze || updateList)) {
       this.afterIncomingMessage();
     }
+  }
+
+  handleCommentPatch(changes: object, id: string, index: number): boolean {
+    for (const [key, value] of Object.entries(changes)) {
+      if (key === Filter.ACK) {
+        const isNowAck = this.isModerator ? !value : <boolean>value;
+        if (!isNowAck) {
+          this.removeCommentFromList(id)
+          this.reduceCommentCounter();
+          this.checkIfActiveComment(id);
+          if (this.isModerator) {
+            this.moderationCounter--;
+          } else {
+            this.publicCounter--;
+          }
+        } else {
+          if (!this.isModerator) {
+            this.moderationCounter--;
+          }
+        }
+        return true;
+      } else {
+        if (index > -1) {
+          this.comments[index][key] = value;
+        }
+        return false;
+      }
+    }
+  }
+
+  removeCommentFromList(id: string) {
+    this.comments = this.comments.filter(function (el) {
+      return el.id !== id;
+    });
+  }
+
+  handleCommentDelete(id: string) {
+    this.removeCommentFromList(id);
+    if (this.isModerator) {
+      this.moderationCounter--
+    } else {
+      this.publicCounter--;
+    }
+    this.reduceCommentCounter();
+    this.checkIfActiveComment(id);
   }
 
   parseIncomingModeratorMessage(message: Message) {

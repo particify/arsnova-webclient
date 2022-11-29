@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/router';
+import { ActivatedRouteSnapshot, Resolve } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { UserRole } from '../models/user-roles.enum';
 import { RoomMembershipService } from '../services/room-membership.service';
@@ -16,7 +16,7 @@ export class RoomViewUserRoleResolver implements Resolve<UserRole> {
   ) {
   }
 
-  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<UserRole> {
+  resolve(route: ActivatedRouteSnapshot): Observable<UserRole> {
     const viewRole = route.data['requiredRole'] as UserRole;
 
     /* Ignore the user's real role, always use PARTICIPANT role for view. */

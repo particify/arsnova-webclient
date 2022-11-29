@@ -16,7 +16,8 @@ import { HotkeyDirective } from './hotkey.directive';
 class TestComponent {
   @ViewChild('button') button: HTMLButtonElement;
 
-  click() { }
+  click() {
+  }
 }
 
 describe('HotkeyDirective', () => {

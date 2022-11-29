@@ -10,8 +10,6 @@ export class PresentationService {
 
   currentGroup$ = new Subject<string>();
 
-  constructor() {}
-
   getScale() {
     return Math.min(Math.max((innerWidth / SCALE_FACTOR), MIN_SCALE), MAX_SCALE);
   }

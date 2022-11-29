@@ -21,12 +21,11 @@ export abstract class BarBaseComponent implements OnInit {
 
   info: BarItem[] = [];
 
-  protected constructor() { }
-
   ngOnInit(): void {
     this.initItems();
   }
 
   initItems() {
+    // Implementation in extended classes
   }
 }

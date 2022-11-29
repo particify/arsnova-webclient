@@ -6,7 +6,6 @@ import { AdminService } from '../../../services/http/admin.service';
 import { AdvancedSnackBarTypes, NotificationService } from '../../../services/util/notification.service';
 import { TranslateService } from '@ngx-translate/core';
 import { ApiConfigService } from '../../../services/http/api-config.service';
-import { AuthenticationProviderType } from '../../../models/api-config';
 
 @Component({
   selector: 'app-user-management',
@@ -59,7 +58,7 @@ export class UserManagementComponent implements OnInit {
 
   activateUser() {
     this.adminService.activateUser(this.user.id)
-        .subscribe(result =>
+        .subscribe(() =>
             this.translateService.get('admin-area.user-activated').subscribe(message =>
                 this.notificationService.showAdvanced(message, AdvancedSnackBarTypes.SUCCESS)));
   }

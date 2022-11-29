@@ -30,8 +30,6 @@ export class HintComponent implements OnInit {
 
   hint: Hint;
 
-  constructor() { }
-
   ngOnInit(): void {
     this.getHintType();
   }

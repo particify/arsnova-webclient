@@ -1,5 +1,3 @@
-import { HarnessLoader } from '@angular/cdk/testing';
-import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { EventCategory, TrackingService } from '../services/util/tracking.service';
@@ -20,13 +18,13 @@ const TEST_TRACK_NAME = 'test-track-name';
 class TestComponent {
   @ViewChild('button') button: ElementRef<HTMLButtonElement>;
 
-  click() { }
+  click() {
+  }
 }
 
 describe('TrackInteractionDirective', () => {
   let fixture: ComponentFixture<TestComponent>;
   let component: TestComponent;
-  let loader: HarnessLoader;
   const trackingService = jasmine.createSpyObj('TrackingService', ['addEvent']);
 
   beforeEach(() => {
@@ -39,7 +37,6 @@ describe('TrackInteractionDirective', () => {
         }
       ]
     }).createComponent(TestComponent);
-    loader = TestbedHarnessEnvironment.loader(fixture);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

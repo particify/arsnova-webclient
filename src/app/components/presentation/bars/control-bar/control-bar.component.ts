@@ -488,7 +488,7 @@ export class ControlBarComponent extends NavBarComponent implements OnInit, OnDe
   }
 
   deleteContentAnswers() {
-    this.eventService.on<string>(ContentMessages.ANSWERS_DELETED).subscribe(contentId => {
+    this.eventService.on<string>(ContentMessages.ANSWERS_DELETED).subscribe(() => {
       this.content.state.round = 1;
       this.resetAnswerEvent.next(this.content.id);
       this.changeRound(0);

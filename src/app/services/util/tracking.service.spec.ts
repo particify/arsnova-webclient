@@ -13,7 +13,8 @@ import { GlobalStorageService } from './global-storage.service';
 
 @Injectable()
 class MockConsentService {
-  consentGiven() {}
+  consentGiven() {
+  }
 }
 
 @Injectable()

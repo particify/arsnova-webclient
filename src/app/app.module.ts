@@ -1,9 +1,9 @@
-import { NgModule, APP_INITIALIZER, InjectionToken } from '@angular/core';
+import { NgModule, APP_INITIALIZER } from '@angular/core';
 import { AppComponent } from './app.component';
 import { RegisterComponent } from './components/home/register/register.component';
 import { PasswordResetComponent } from './components/home/password-reset/password-reset.component';
 import { AppRoutingModule } from './app-routing.module';
-import { MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA, MatLegacyDialogRef as MatDialogRef } from '@angular/material/legacy-dialog';
+import { MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA } from '@angular/material/legacy-dialog';
 import { HTTP_INTERCEPTORS, HttpClient, HttpClientModule } from '@angular/common/http';
 import { UserService } from './services/http/user.service';
 import { NotificationService } from './services/util/notification.service';
@@ -77,9 +77,6 @@ import { WsCommentService } from './services/websockets/ws-comment.service';
 import { PresentationService } from './services/util/presentation.service';
 import { AccessTokenService } from './services/http/access-token.service';
 import { RedeemTokenComponent } from './components/home/redeem-token/redeem-token.component';
-
-export function dialogClose(dialogResult: any) {
-}
 
 export function initializeApp(appConfig: AppConfig) {
   return () => appConfig.load();
@@ -200,12 +197,6 @@ export function initializeApp(appConfig: AppConfig) {
     AccessTokenService,
     { provide: Window,  useValue: window },
     STORAGE_CONFIG_PROVIDERS,
-    {
-      provide: MatDialogRef,
-      useValue: {
-        dialogClose
-      }
-    },
     {
       provide: MAT_DIALOG_DATA,
       useValue: []

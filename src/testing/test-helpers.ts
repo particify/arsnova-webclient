@@ -6,13 +6,12 @@ import { ActivatedRouteSnapshot, convertToParamMap, Event, ParamMap, Params, Url
 import { Theme } from '@arsnova/theme/Theme';
 import { EventEmitter } from '@angular/core';
 import { arsnova, arsnova_meta } from '../theme/arsnova-theme/arsnova-theme.const';
+import * as TRANSLATION_DE from '../assets/i18n/home/de.json';
+import * as TRANSLATION_EN from '../assets/i18n/home/en.json';
 
 // SERVICES - UTIL
 
 // TranslateModule
-
-const TRANSLATION_DE = require('../assets/i18n/home/de.json');
-const TRANSLATION_EN = require('../assets/i18n/home/en.json');
 
 const TRANSLATIONS = {
   DE: TRANSLATION_DE,
@@ -87,7 +86,8 @@ export class MockGlobalStorageService {
   removeItem(key: symbol) {
   }
 
-  handleConsentChange() {}
+  handleConsentChange() {
+  }
 }
 
 // Renderer
@@ -220,7 +220,8 @@ export class MockThemeService {
 // MatDialog
 
 export class MockMatDialog {
-  afterClosed() {}
+  afterClosed() {
+  }
 }
 
 export class MockMatDialogRef {
@@ -228,7 +229,8 @@ export class MockMatDialogRef {
     return of({});
   }
 
-  close() {}
+  close() {
+  }
 }
 
 export class MockMatDialogData {

@@ -40,7 +40,7 @@ export class StatisticWordcloudComponent extends StatisticContentBaseComponent i
     this.destroyed$.complete();
   }
 
-  initData(stats: AnswerStatistics) {
+  init(stats: AnswerStatistics) {
     this.updateData(stats);
   }
 

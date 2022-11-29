@@ -11,13 +11,13 @@ import {
   MockEventService,
   MockAnnounceService
 } from '@arsnova/testing/test-helpers';
-import { Observable, of } from 'rxjs';
+import { of } from 'rxjs';
 import { GlobalStorageService } from '@arsnova/app/services/util/global-storage.service';
 import { EventService } from '@arsnova/app/services/util/event.service';
 import { AnnounceService } from '@arsnova/app/services/util/announce.service';
 import { AuthenticationService } from '@arsnova/app/services/http/authentication.service';
 import { Room } from '@arsnova/app/models/room';
-import { NO_ERRORS_SCHEMA, EventEmitter, Pipe, PipeTransform, Renderer2 } from '@angular/core';
+import { NO_ERRORS_SCHEMA, EventEmitter } from '@angular/core';
 import { UserRole } from '@arsnova/app/models/user-roles.enum';
 import { RoomService } from '@arsnova/app/services/http/room.service';
 import { MockLangService } from '@arsnova/testing/test-helpers';
@@ -26,10 +26,8 @@ import { FeedbackService } from '@arsnova/app/services/http/feedback.service';
 import { Message } from '@stomp/stompjs';
 import { WsFeedbackService } from '@arsnova/app/services/websockets/ws-feedback.service';
 import { HotkeyService } from '@arsnova/app/services/util/hotkey.service';
-import { MockRenderer2 } from '@arsnova/testing/test-helpers';
 import { ClientAuthentication } from '@arsnova/app/models/client-authentication';
 import { AuthProvider } from '@arsnova/app/models/auth-provider';
-import { FeedbackMessageType } from '@arsnova/app/models/messages/feedback-message-type';
 import { A11yIntroPipe } from '@arsnova/app/pipes/a11y-intro.pipe';
 
 describe('SurveyPageComponent', () => {
@@ -99,10 +97,6 @@ describe('SurveyPageComponent', () => {
         {
           provide: WsFeedbackService,
           useValue: mockWsFeedbackService
-        },
-        {
-          provide: Renderer2,
-          useClass: MockRenderer2
         },
         {
           provide: FeedbackService,

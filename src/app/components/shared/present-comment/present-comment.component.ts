@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { HotkeyService } from '../../../services/util/hotkey.service';
 import { TranslateService } from '@ngx-translate/core';
 import { Comment } from '../../../models/comment';
@@ -9,7 +9,7 @@ import { EventService } from '../../../services/util/event.service';
   templateUrl: './present-comment.component.html',
   styleUrls: ['./present-comment.component.scss']
 })
-export class PresentCommentComponent implements OnInit {
+export class PresentCommentComponent implements OnInit, OnDestroy {
 
   @Input() isPresentation = false;
   @Input() comment: Comment;

@@ -14,8 +14,6 @@ export class ContentWordcloudAnswerComponent {
   @Input() givenAnswer: MultipleTextsAnswer;
   currentInputIndex: number;
 
-  constructor() { }
-
   trackByIndex(index: number) {
     return index;
   }

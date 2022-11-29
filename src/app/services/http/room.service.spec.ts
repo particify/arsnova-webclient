@@ -19,7 +19,8 @@ class MockWsConnectorService {
 
 @Injectable()
 class MockAuthenticationService {
-  getCurrentAuthentication(){}
+  getCurrentAuthentication(){
+  }
 }
 
 @Injectable()

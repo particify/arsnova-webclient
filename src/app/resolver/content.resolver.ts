@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/router';
+import { ActivatedRouteSnapshot, Resolve } from '@angular/router';
 import { Observable } from 'rxjs';
 import { Content } from '../models/content';
 import { ContentService } from '../services/http/content.service';
@@ -12,7 +12,7 @@ export class ContentResolver implements Resolve<Content> {
   ) {
   }
 
-  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<Content> {
+  resolve(route: ActivatedRouteSnapshot): Observable<Content> {
     return this.contentService.getContent(route.data.room.id, route.params['contentId']);
   }
 }

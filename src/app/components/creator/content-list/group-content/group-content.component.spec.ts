@@ -40,7 +40,7 @@ class MockContentService {
   getContentsByIds() {
     return of([new Content('1234', '0', '1', 'subject', 'body', [], ContentType.CHOICE, {}, new ContentState(1, new Date(), true))]);
   }
-  
+
   getTypeIcons() {
     return new Map<ContentType, string>();
   }
@@ -112,7 +112,7 @@ describe('GroupContentComponent', () => {
   let translateService: TranslateService;
 
   const a11yIntroPipe = new A11yIntroPipe(translateService);
-  
+
   const a11yRenderedBodyPipe = new A11yRenderedBodyPipe();
 
   beforeEach(waitForAsync(() => {

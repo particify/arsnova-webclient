@@ -6,11 +6,6 @@ import { EventService } from '@arsnova/app/services/util/event.service';
 import { MockEventService, MockNotificationService, MockTranslateService } from '@arsnova/testing/test-helpers';
 import { TranslateService } from '@ngx-translate/core';
 import { NotificationService } from '@arsnova/app/services/util/notification.service';
-import { Injectable } from '@angular/core';
-
-@Injectable()
-class MockWsVoteService {
-}
 
 describe('VoteService', () => {
   beforeEach(() => {

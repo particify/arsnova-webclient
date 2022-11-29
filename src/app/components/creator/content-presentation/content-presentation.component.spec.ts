@@ -15,7 +15,7 @@ import {
   MockLangService,
   MockRouter
 } from '@arsnova/testing/test-helpers';
-import { DOCUMENT, Location } from '@angular/common';
+import { Location } from '@angular/common';
 import { MockLocationStrategy } from '@angular/common/testing';
 import { HotkeyService } from '@arsnova/app/services/util/hotkey.service';
 import { NO_ERRORS_SCHEMA, Injectable } from '@angular/core';
@@ -28,9 +28,7 @@ import { ContentType } from '@arsnova/app/models/content-type.enum';
 import { ContentState } from '@arsnova/app/models/content-state';
 import { PresentationService } from '@arsnova/app/services/util/presentation.service';
 import { UserService } from '@arsnova/app/services/http/user.service';
-import { User } from '@arsnova/app/models/user';
 import { AuthProvider } from '@arsnova/app/models/auth-provider';
-import { Person } from '@arsnova/app/models/person';
 import { ClientAuthentication } from '@arsnova/app/models/client-authentication';
 import { STORAGE_KEYS } from '@arsnova/app/services/util/global-storage.service';
 import { UserSettings } from '@arsnova/app/models/user-settings';

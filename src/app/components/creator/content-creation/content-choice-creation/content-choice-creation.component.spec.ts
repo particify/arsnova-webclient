@@ -14,7 +14,7 @@ import { ContentGroupService } from '../../../../services/http/content-group.ser
 import { MatLegacyButtonModule as MatButtonModule } from '@angular/material/legacy-button';
 import { AnnounceService } from '@arsnova/app/services/util/announce.service';
 import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
-import { ActivatedRouteStub, JsonTranslationLoader } from '@arsnova/testing/test-helpers';
+import { ActivatedRouteStub, JsonTranslationLoader, MockMatDialog } from '@arsnova/testing/test-helpers';
 
 const mockCreateEvent = new Subject<any>();
 
@@ -25,11 +25,6 @@ class MockContentService {
 @Injectable()
 class MockNotificationService {
 
-}
-
-@Injectable()
-class MockMatDialiog {
-  afterClosed() {}
 }
 
 @Injectable()
@@ -46,16 +41,6 @@ class MockDialogService {
 
 @Injectable()
 class MockContentGroupService {
-}
-
-@Injectable()
-class MockGlobalStorageService {
-  getItem(key: string) {
-    return undefined;
-  }
-
-  setItem(key: string, value: any) {
-  }
 }
 
 @Injectable()
@@ -161,7 +146,7 @@ describe('ContentChoiceCreationComponent', () => {
         },
         {
           provide: MatDialog,
-          useClass: MockMatDialiog
+          useClass: MockMatDialog
         },
         {
           provide: EventService,

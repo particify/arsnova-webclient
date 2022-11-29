@@ -110,8 +110,7 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
       this.contentgroupService.getByRoomIdAndName(data.room.id, this.contentGroupName).subscribe(contentGroup => {
         this.contentGroup = contentGroup;
         this.getContents(lastContentIndex);
-      },
-        error => {
+      }, () => {
         this.finishLoading()
         });
     });
@@ -334,8 +333,7 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
           }
           this.finishLoading();
           this.checkIfLastContentExists(lastContentIndex);
-        },
-        error => {
+        }, () => {
           this.finishLoading();
           const msg = this.translateService.instant('answer.group-not-available');
           this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);

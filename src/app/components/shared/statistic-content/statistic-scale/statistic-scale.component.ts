@@ -8,6 +8,7 @@ import { LikertScaleService } from '../../../../services/util/likert-scale.servi
 import { StatisticChoiceComponent } from '../statistic-choice/statistic-choice.component';
 import { EventService } from '../../../../services/util/event.service';
 import { PresentationService } from '../../../../services/util/presentation.service';
+import { AnswerStatistics } from '../../../../models/answer-statistics';
 
 @Component({
   selector: 'app-statistic-scale',
@@ -25,7 +26,7 @@ export class StatisticScaleComponent extends StatisticChoiceComponent {
     super(contentService, translateService, themeService, eventService, presentationService);
   }
 
-  init() {
+  init(stats: AnswerStatistics) {
     const scaleContent = this.content as ContentScale
     const optionLabels$ = this.likertScaleService.getOptionLabels(
         scaleContent.optionTemplate,
@@ -33,6 +34,6 @@ export class StatisticScaleComponent extends StatisticChoiceComponent {
         .map(l => this.translateService.get(l) as Observable<string>);
     forkJoin(optionLabels$).subscribe(labels => this.options = labels.map(l => ({ label: l })));
     this.correctOptionIndexes = [];
-    super.init();
+    super.init(stats);
   }
 }

@@ -40,8 +40,6 @@ export class ContentParticipantComponent implements OnInit {
   HotkeyAction = HotkeyAction;
   a11yMsg: string;
 
-  constructor() { }
-
   ngOnInit(): void {
     this.setExtensionData(this.content.roomId, this.content.id);
     if (this.answer) {

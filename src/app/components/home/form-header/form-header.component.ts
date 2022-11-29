@@ -9,6 +9,4 @@ export class FormHeaderComponent {
 
   @Input() text: string;
 
-  constructor() { }
-
 }

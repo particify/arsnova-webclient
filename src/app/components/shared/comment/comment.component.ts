@@ -207,7 +207,7 @@ export class CommentComponent implements OnInit, OnDestroy {
   }
 
   delete(): void {
-    this.commentService.deleteComment(this.comment).subscribe(room => {
+    this.commentService.deleteComment(this.comment).subscribe(() => {
       this.translateService.get('comment-list.comment-deleted').subscribe(msg => {
         this.notification.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
       });

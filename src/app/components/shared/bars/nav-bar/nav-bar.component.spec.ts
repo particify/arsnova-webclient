@@ -30,7 +30,7 @@ import { FeedbackMessageType } from '@arsnova/app/models/messages/feedback-messa
 @Injectable()
 class MockContentGroupService {
   getById(id) {
-    return of(new ContentGroup('id', 'rev', 'roomId', 'Test'));
+    return of(new ContentGroup(id, 'rev', 'roomId', 'Test'));
   }
 
   sortContentGroupsByName(groups) {

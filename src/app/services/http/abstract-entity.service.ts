@@ -12,8 +12,6 @@ import { Entity } from '../../models/entity';
 import { EntityChanged } from '../../models/events/entity-changed';
 import { ChangeType, EntityChangeNotification } from '../../models/events/entity-change-notification';
 
-const WS_DISCONNECT_GRACE_PERIOD_MS = 10 * 1000;
-
 /**
  * A specialized version of BaseHttpService which manages persistent data which
  * can be referenced through an ID.
@@ -35,8 +33,8 @@ export abstract class AbstractEntityService<T extends Entity> extends AbstractCa
     useSharedCache = true
   ) {
     super(uriPrefix, httpClient, wsConnector, eventService, translateService, notificationService, cachingService, useSharedCache);
-    this.cache.registerDisposeHandler(this.cacheName, (id, value) =>
-      this.handleCacheDisposeEvent(id, value));
+    this.cache.registerDisposeHandler(this.cacheName, (id) =>
+      this.handleCacheDisposeEvent(id));
     this.eventService.on<EntityChangeNotification>('EntityChangeNotification')
       .subscribe(event => this.handleEntityChangeNotificationEvent(event));
   }
@@ -148,7 +146,7 @@ export abstract class AbstractEntityService<T extends Entity> extends AbstractCa
     return { type: `${this.cacheName}-${this.entityType}`, id: id };
   }
 
-  private handleCacheDisposeEvent(id: string, value: object) {
+  private handleCacheDisposeEvent(id: string) {
     const subscription = this.stompSubscriptions.get(id);
     if (subscription) {
       this.stompSubscriptions.get(id).unsubscribe();

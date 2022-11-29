@@ -1,91 +1,19 @@
-import { Injectable, Renderer2, Component, EventEmitter, Input, NO_ERRORS_SCHEMA } from '@angular/core';
+import { Injectable, Component, Input, NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
-import { Observable, of } from 'rxjs';
+import { of } from 'rxjs';
 import { UserHomeComponent } from './user-home.component';
-import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 
-import { EventService } from '../../../services/util/event.service';
 import { LanguageService } from '../../../services/util/language.service';
 import { AuthenticationService } from '../../../services/http/authentication.service';
 import { ClientAuthentication } from '../../../models/client-authentication';
-import { DialogService } from '../../../services/util/dialog.service';
-import { GlobalStorageService } from '../../../services/util/global-storage.service';
-import { AnnounceService } from '../../../services/util/announce.service';
-import { HotkeyService } from '../../../services/util/hotkey.service';
-
-const TRANSLATION_DE = require('../../../../assets/i18n/home/de.json');
-const TRANSLATION_EN = require('../../../../assets/i18n/home/en.json');
-
-const TRANSLATIONS = {
-  DE: TRANSLATION_DE,
-  EN: TRANSLATION_EN
-};
-
-class JsonTranslationLoader implements TranslateLoader {
-  getTranslation(code = ''): Observable<object> {
-    if (code !== null) {
-      const uppercased = code.toUpperCase();
-
-      return of(TRANSLATIONS[uppercased]);
-    } else {
-      return of({});
-    }
-  }
-}
-
-@Injectable()
-class MockMatDialog {
-
-}
-
-@Injectable()
-class MockDialogService {
-
-}
-
-@Injectable()
-class MockLanguageService {
-  public readonly langEmitter = new EventEmitter<string>();
-}
+import { JsonTranslationLoader, MockLangService } from '@arsnova/testing/test-helpers';
 
 @Injectable()
 class MockAuthenticationService {
   getCurrentAuthentication() {
     return of(null);
   }
-}
-
-@Injectable()
-class MockEventService {
-}
-
-@Injectable()
-class MockAnnouncer {
-
-}
-
-@Injectable()
-class MockRenderer2 {
-
-}
-
-@Injectable()
-class MockGlobalStorageService {
-  getItem(key: symbol) {
-    return undefined;
-  }
-
-  setItem(key: symbol, value: any) {
-  }
-
-  removeItem(key: symbol) {
-  }
-}
-
-@Injectable()
-class MockHotkeyService {
-  registerHotkey() { }
 }
 
 @Component({ selector: 'app-room-join', template: '' })
@@ -126,40 +54,12 @@ describe('UserHomeComponent', () => {
       ],
       providers: [
         {
-          provide: DialogService,
-          useClass: MockDialogService
-        },
-        {
-          provide: MatDialog,
-          useClass: MockMatDialog
-        },
-        {
           provide: LanguageService,
-          useClass: MockLanguageService
+          useClass: MockLangService
         },
         {
           provide: AuthenticationService,
           useClass: MockAuthenticationService
-        },
-        {
-          provide: EventService,
-          useClass: MockEventService
-        },
-        {
-          provide: AnnounceService,
-          useClass: MockAnnouncer
-        },
-        {
-          provide: Renderer2,
-          useClass: MockRenderer2
-        },
-        {
-          provide: GlobalStorageService,
-          useClass: MockGlobalStorageService
-        },
-        {
-          provide: HotkeyService,
-          useClass: MockHotkeyService
         }
       ],
       schemas: [

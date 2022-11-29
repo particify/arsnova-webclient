@@ -58,15 +58,15 @@ export class RoomOverviewComponent implements OnDestroy {
   }
 
   protected unsubscribe() {
-
+    // Implementation in extended classes
   }
 
   protected afterRoomLoadHook() {
-
+    // Implementation in extended classes
   }
 
   protected afterGroupsLoadHook() {
-
+    // Implementation in extended classes
   }
 
   subscribeCommentStream() {
@@ -87,8 +87,7 @@ export class RoomOverviewComponent implements OnDestroy {
           for (const [key, value] of Object.entries(payload.changes)) {
             switch (key) {
               case 'ack':
-                const isNowAck = <boolean>value;
-                if (!isNowAck) {
+                if (!<boolean>value) {
                   this.commentCounter = this.commentCounter - 1;
                 }
                 break;

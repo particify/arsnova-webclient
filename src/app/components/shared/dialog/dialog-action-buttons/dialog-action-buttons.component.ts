@@ -37,13 +37,13 @@ export class DialogActionButtonsComponent {
   /**
    * A callback which will be executed if the confirm button was clicked.
    */
-  @Input() confirmButtonClickAction: (Function | undefined);
+  @Input() confirmButtonClickAction: (() => void | undefined);
 
 
   /**
    * A callback which will be executed if the cancel button was clicked.
    */
-  @Input() cancelButtonClickAction: (Function | undefined);
+  @Input() cancelButtonClickAction: (() => void | undefined);
 
 
   /**

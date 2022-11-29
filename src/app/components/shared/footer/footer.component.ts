@@ -73,6 +73,6 @@ export class FooterComponent implements OnInit {
   }
 
   checkToolbarCondition(url: string) {
-    this.showToolbar = this.viewWidth > 1000 || !url.match(/\/[0-9]+\/[^\/]+/);
+    this.showToolbar = this.viewWidth > 1000 || !url.match(/\/[0-9]+\/[^/]+/);
   }
 }

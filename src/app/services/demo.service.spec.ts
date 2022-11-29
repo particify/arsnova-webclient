@@ -9,9 +9,6 @@ import { TranslateService } from '@ngx-translate/core';
 import { ApiConfigService } from '@arsnova/app/services/http/api-config.service';
 
 @Injectable()
-class MockWsConnectorService {}
-
-@Injectable()
 class MockApiConfigService {}
 
 @Injectable()

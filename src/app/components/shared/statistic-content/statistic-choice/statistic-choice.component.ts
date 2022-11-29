@@ -1,5 +1,5 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { BarController, BarControllerDatasetOptions, BarElement, CategoryScale, Chart, LinearScale } from 'chart.js';
+import { BarController, BarControllerDatasetOptions, BarElement, CategoryScale, Chart, ChartDataset, GridLineOptions, LinearScale } from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { ContentService } from '../../../../services/http/content.service';
 import { ContentChoice } from '../../../../models/content-choice';
@@ -66,7 +66,7 @@ export class StatisticChoiceComponent extends StatisticContentBaseComponent impl
     }
   }
 
-  init() {
+  init(stats: AnswerStatistics) {
     this.rounds = this.content.state.round;
     this.roundsToDisplay = this.rounds - 1;
     this.chartId = 'chart-' + this.content.id;
@@ -75,9 +75,6 @@ export class StatisticChoiceComponent extends StatisticContentBaseComponent impl
     }
     this.correctOptionIndexes = this.content.correctOptionIndexes;
     this.initChart();
-  }
-
-  initData(stats: AnswerStatistics) {
     this.updateData(stats);
   }
 
@@ -105,7 +102,7 @@ export class StatisticChoiceComponent extends StatisticContentBaseComponent impl
     this.updateChart();
   }
 
-  createChart(colors: Array<string[]>) {
+  prepareDataAndCreateChart(colors: Array<string[]>) {
     Chart.defaults.color = this.colorStrings.onBackground;
     Chart.defaults.font.size = this.isPresentation ? 14 : 16;
     Chart.register(BarController, BarElement, CategoryScale, LinearScale, ChartDataLabels);
@@ -138,6 +135,10 @@ export class StatisticChoiceComponent extends StatisticContentBaseComponent impl
       const label = this.translateService.instant('statistic.abstentions');
       labels.push(label);
     }
+    this.createChart(labels, dataSets, scale, gridConfig as GridLineOptions);
+  }
+
+  createChart(labels: string[], dataSets: ChartDataset[], scale: number, gridConfig: GridLineOptions) {
     this.chart = new Chart(this.chartId, {
       type: 'bar',
       data: {
@@ -371,7 +372,7 @@ export class StatisticChoiceComponent extends StatisticContentBaseComponent impl
     } else if (this.active) {
       /* Wait for flip animation */
       setTimeout(() => {
-        this.createChart(this.colors);
+        this.prepareDataAndCreateChart(this.colors);
       }, 300);
     }
     this.roundsDisplayed = this.roundsToDisplay;

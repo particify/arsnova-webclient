@@ -112,7 +112,7 @@ export class RoutingService {
       if (this.isTranslatedTitle) {
         this.translateService.use(lang);
         this.translateService.get('title.' + this.titleKey).subscribe(msg => {
-          this.updateTitle(msg);
+          this.updateDocumentTitle(msg);
         });
       }
     });
@@ -158,7 +158,7 @@ export class RoutingService {
     } else if (this.routeExistsInArray(this.seriesChildRoutes)) {
       backRoute = [this.getRoleString(role), this.shortId, 'series', series];
     }
-    // Set back route if not set yet, parent route is a room route or if current route is no room route at all 
+    // Set back route if not set yet, parent route is a room route or if current route is no room route at all
     if (!this.backRouteIsSet || parentRoute === roomRoute || this.currentRoute !== roomRoute) {
       this.backRoute = backRoute;
       this.backRouteIsSet = true;
@@ -221,15 +221,12 @@ export class RoutingService {
   }
 
   setTitle(route?: ActivatedRouteSnapshot) {
-    if (!this.homeTitle) {
-      this.homeTitle = document.title;
-      this.suffix = ' | ' + (this.homeTitle.split('|')[0] || this.homeTitle);
-    }
+    this.setHomeTitle();
     this.isTranslatedTitle = true;
-    let newTitle: string;
+    let newTitle;
     if (route.data.isPresentation) {
       this.titleKey = 'presentation-mode';
-    } else if (route['_routerState'].url === '/')  {
+    } else if (this.checkIfHomeRoute(route))  {
       newTitle = this.homeTitle;
       this.isTranslatedTitle = false;
     } else {
@@ -237,40 +234,61 @@ export class RoutingService {
         this.titleKey = TITLES[route.routeConfig.path];
       }
       if (!newTitle) {
-        switch(this.titleKey) {
-        case 'room':
-          if (route.data.room) {
-            newTitle = route.data.room.name;
-            this.isTranslatedTitle = false;
-          } else {
-            this.titleKey = TITLES['admin'];
-          }
-          break;
-        case 'series':
-          newTitle = route.params.seriesName;
-          this.isTranslatedTitle = false;
-          break;
-        case undefined:
-          newTitle = this.homeTitle;
-          break;
-        default:
-      }
+        newTitle = this.getNewTitleFromTitleKey(route);
       }
 
     }
     if (this.title !== newTitle && newTitle) {
       this.title = newTitle;
     }
-    if (this.isTranslatedTitle) {
-      this.translateService.get('title.' + this.titleKey).subscribe(msg => {
-        this.updateTitle(msg);
-      });
-    } else {
-      this.updateTitle(this.title);
+    this.updateTitle();
+  }
+
+  private getNewTitleFromTitleKey(route: ActivatedRouteSnapshot) {
+    let newTitle;
+    switch(this.titleKey) {
+      case 'room':
+        if (route.data.room) {
+          newTitle = route.data.room.name;
+          this.isTranslatedTitle = false;
+        } else {
+          this.titleKey = TITLES['admin'];
+        }
+        break;
+      case 'series':
+        newTitle = route.params.seriesName;
+        this.isTranslatedTitle = false;
+        break;
+      case undefined:
+        newTitle = this.homeTitle;
+        break;
+      default:
+    }
+    return newTitle;
+  }
+
+  private setHomeTitle() {
+    if (!this.homeTitle) {
+      this.homeTitle = document.title;
+      this.suffix = ' | ' + (this.homeTitle.split('|')[0] || this.homeTitle);
     }
   }
 
-  updateTitle(title: string) {
+  private checkIfHomeRoute(route: ActivatedRouteSnapshot) {
+    return route['_routerState'].url === '/';
+  }
+
+  private updateTitle() {
+    if (this.isTranslatedTitle) {
+      this.translateService.get('title.' + this.titleKey).subscribe(msg => {
+        this.updateDocumentTitle(msg);
+      });
+    } else {
+      this.updateDocumentTitle(this.title);
+    }
+  }
+
+  updateDocumentTitle(title: string) {
     if (title !== this.homeTitle) {
       title = title + this.suffix;
     }
@@ -321,7 +339,7 @@ export class RoutingService {
   }
 
   replaceRoleInUrl(url, oldRole, newRole): string {
-    const reg = new RegExp(`\/${oldRole}+(\|$)`);
+    const reg = new RegExp(`/${oldRole}+(|$)`);
     return url.replace(reg, newRole);
   }
 

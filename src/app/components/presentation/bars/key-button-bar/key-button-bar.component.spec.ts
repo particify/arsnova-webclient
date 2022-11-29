@@ -8,7 +8,6 @@ import { NO_ERRORS_SCHEMA } from '@angular/core';
 describe('KeyButtonBarComponent', () => {
   let component: KeyButtonBarComponent;
   let fixture: ComponentFixture<KeyButtonBarComponent>;
-  let document: Document;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
@@ -24,6 +23,12 @@ describe('KeyButtonBarComponent', () => {
       ],
       schemas: [
         NO_ERRORS_SCHEMA
+      ],
+      providers: [
+        {
+          provide: Document,
+          useExisting: DOCUMENT
+        }
       ]
     })
     .compileComponents();
@@ -33,7 +38,6 @@ describe('KeyButtonBarComponent', () => {
     fixture = TestBed.createComponent(KeyButtonBarComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
-    document = TestBed.inject(DOCUMENT);
   });
 
   it('should create', () => {

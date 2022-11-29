@@ -1,4 +1,4 @@
-import { AfterContentInit, Component, Input, OnDestroy, OnInit, Renderer2 } from '@angular/core';
+import { AfterContentInit, Component, OnDestroy, OnInit } from '@angular/core';
 import { AuthenticationService } from '../../../services/http/authentication.service';
 import { RoomService } from '../../../services/http/room.service';
 import { UserRole } from '../../../models/user-roles.enum';
@@ -66,7 +66,6 @@ export class SurveyPageComponent implements OnInit, OnDestroy, AfterContentInit 
     protected translateService: TranslateService,
     protected langService: LanguageService,
     private announceService: AnnounceService,
-    private _r: Renderer2,
     private globalStorageService: GlobalStorageService,
     protected route: ActivatedRoute,
     private eventService: EventService,

@@ -40,8 +40,7 @@ export class RequestPasswordResetComponent implements OnInit {
             this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.SUCCESS);
           });
           this.router.navigate(['password-reset', this.username]);
-        },
-        err => {
+        }, () => {
           this.translationService.get('password-reset.request-failed').subscribe(msg => {
             this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.FAILED);
           });

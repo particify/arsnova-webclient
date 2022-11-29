@@ -1,6 +1,6 @@
 export class AccountCreated {
   type: string;
-  payload: {};
+  payload: Record<string, never>;
 
   constructor() {
     this.type = 'AccountCreated';

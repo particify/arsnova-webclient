@@ -46,6 +46,7 @@ export abstract class ContentParticipantBaseComponent implements OnInit {
   }
 
   init() {
+    // Implementation in extended classes
   }
 
   sendStatusToParent(answer: Answer) {
@@ -53,8 +54,10 @@ export abstract class ContentParticipantBaseComponent implements OnInit {
   }
 
   submitAnswer() {
+    // Implementation in extended classes
   }
 
   abstain() {
+    // Implementation in extended classes
   }
 }

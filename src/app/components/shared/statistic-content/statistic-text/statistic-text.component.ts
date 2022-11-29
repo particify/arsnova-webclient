@@ -35,8 +35,8 @@ export class StatisticTextComponent extends StatisticContentBaseComponent implem
     return this.contentAnswerService.getAnswers(this.content.roomId, this.content.id);
   }
 
-  initData(answers: TextAnswer[]) {
-    this.initAnswers(answers);
+  init(answers: TextAnswer[]) {
+    this.updateData(answers);
     this.getData();
   }
 
@@ -60,7 +60,7 @@ export class StatisticTextComponent extends StatisticContentBaseComponent implem
     this.getData();
   }
 
-  initAnswers(answers: TextAnswer[]) {
+  updateData(answers: TextAnswer[]) {
     answers.forEach(answer => {
       this.answers.push(answer);
     });

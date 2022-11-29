@@ -291,18 +291,18 @@ export class RoomListComponent implements OnInit, OnDestroy {
   transferRoomFromGuest(roomDataView: RoomDataView) {
     this.guestAuth$.pipe(
         switchMap(auth => this.roomService.transferRoomThroughToken(roomDataView.membership.roomId, auth.token)),
-        tap(r => this.translateService.get('room-list.transferred-successfully').subscribe(msg =>
+        tap(() => this.translateService.get('room-list.transferred-successfully').subscribe(msg =>
             this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.SUCCESS)))
-    ).subscribe(r => {
+    ).subscribe(() => {
       this.emitTransferChanges(roomDataView);
     });
   }
 
   addRoomFromGuest(roomDataView: RoomDataView) {
     this.roomMembershipService.requestMembership(roomDataView.membership.roomShortId).pipe(
-      tap(r => this.translateService.get('room-list.added-successfully').subscribe(msg =>
+      tap(() => this.translateService.get('room-list.added-successfully').subscribe(msg =>
          this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.SUCCESS)))
-    ).subscribe(r => {
+    ).subscribe(() => {
       this.emitTransferChanges(roomDataView);
     });
   }

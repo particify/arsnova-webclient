@@ -13,8 +13,8 @@ import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
 import {
   MockEventService,
   MockNotificationService,
-  MockMatDialog,
-  JsonTranslationLoader, ActivatedRouteStub
+  JsonTranslationLoader,
+  ActivatedRouteStub
 } from '@arsnova/testing/test-helpers';
 import { ContentGroupService } from '@arsnova/app/services/http/content-group.service';
 
