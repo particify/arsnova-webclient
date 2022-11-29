@@ -1,32 +1,36 @@
 = ARSnova
-Particify <arsnova@particify.de>
 
 ARSnova is a modern, web-based approach to Audience Response Systems (ARS).
 It is the basis for the https://particify.de[online service Particify] and released under an open-source license.
 
 image::https://gitlab.com/particify/dev/foss/arsnova/-/raw/master/assets/showcase.png[A showcase of ARSnova's quiz feature,700]
 
-The ARSnova software is composed of multiple components:
-the https://gitlab.com/particify/dev/foss/arsnova-webclient[web client] and multiple backend services.
-This repository contains the web client, a single component of the ARSnova software, and is mainly of interest to developers.
-Information about the software in general is available in the https://gitlab.com/particify/dev/foss/arsnova[ARSnova repository].
+The ARSnova software is composed of multiple modules:
+the web client and multiple https://gitlab.com/particify/dev/foss/arsnova-server[backend services].
+This repository contains the web client.
 
 
-== Get started
+== Getting started
 
-A good starting point to run ARSnova yourself is the https://gitlab.com/particify/dev/foss/docker-orchestration[Docker Orchestration repository].
+If you are new to ARSnova, you might first want to have a look at our
+https://particify.de/en/features/[feature overview] and
+https://particify.de/manual/[end-user documentation (German only, an English version is planned)].
 
-Documentation for end-users, administrators and developers is available:
+For development, you do not need to clone this repository individually.
+You can clone the https://gitlab.com/particify/dev/foss/arsnova-server[arsnova-server repository] instead and follow the instructions there.
 
-* https://particify.de/manual/[End-user documentation] (German only, an English version is planned)
-* https://gitlab.com/particify/dev/foss/docker-orchestration[Installation guide]
-* link:development.md[Developer documentation]
+
+== Technology
+
+The web client is written in TypeScript and uses the
+https://angular.io/[Angular] framework,
+https://material.angular.io/[Angular Material components] and
+https://rxjs.dev/[RxJS].
 
 
 == Releases
 
-Starting from version 3, we are using a rolling release model for ARSnova development.
-We provide container images for all services which are continuously updated.
+We provide container images with a Docker Compose configuration for our https://github.com/particify/arsnova-server/releases[software releases].
 
 
 == Support
@@ -42,8 +46,9 @@ Discuss ARSnova-related questions with other ARSnova users:
 === Commercial support
 
 If you need professional support with quick response times, we've got you covered.
-We offer https://particify.de/arsnova/dienstleistungen[support services around ARSnova] (German website) through Particify which include:
+We offer https://particify.de/dienstleistungen[support services around ARSnova] (German website) through Particify which include:
 
+* general technical support
 * installation and integration
 * updates and data migration
 * customization
