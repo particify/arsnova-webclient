@@ -3,15 +3,15 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { JsonTranslationLoader } from '@arsnova/testing/test-helpers';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 
-import { ContentPriorizationAnswerComponent } from './content-priorization-answer.component';
+import { ContentPrioritizationAnswerComponent } from './content-prioritization-answer.component';
 
-describe('ContentPriorizationAnswerComponent', () => {
-  let component: ContentPriorizationAnswerComponent;
-  let fixture: ComponentFixture<ContentPriorizationAnswerComponent>;
+describe('ContentPrioritizationAnswerComponent', () => {
+  let component: ContentPrioritizationAnswerComponent;
+  let fixture: ComponentFixture<ContentPrioritizationAnswerComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ContentPriorizationAnswerComponent ],
+      declarations: [ ContentPrioritizationAnswerComponent ],
       imports: [
         TranslateModule.forRoot({
           loader: {
@@ -27,7 +27,7 @@ describe('ContentPriorizationAnswerComponent', () => {
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(ContentPriorizationAnswerComponent);
+    fixture = TestBed.createComponent(ContentPrioritizationAnswerComponent);
     component = fixture.componentInstance;
     component.answerOptions = [];
     component.assignablePoints = 100;

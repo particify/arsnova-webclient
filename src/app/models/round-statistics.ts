@@ -15,6 +15,6 @@ export class TextRoundStatistics extends RoundStatistics {
   texts: string[];
 }
 
-export class PriorizationRoundStatistics extends RoundStatistics {
+export class PrioritizationRoundStatistics extends RoundStatistics {
   assignedPoints: number[];
 }

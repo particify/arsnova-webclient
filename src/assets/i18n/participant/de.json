@@ -7,7 +7,7 @@
     "a11y-current-slide": "Inhalt {{index}}. Dies ist eine Folie. Drücke die Tab-Taste zum Inhalt zu gelangen.",
     "a11y-current-flashcard": "Inhalt {{index}}. Dies ist eine Lernkarte. Drücke die Tab-Taste zum Inhalt zu gelangen und die Leertaste um die Rückseite anzuzeigen.",
     "a11y-current-sort": "Inhalt {{index}}. Dies ist eine Sortierfrage. Drücke die Tab-Taste, um zum Inhalt und den Antworten zu gelangen und nutze die Pfeiltasten, um sie hoch und runter zu verschieben.",
-    "a11y-current-priorization": "Inhalt {{index}}. Dies ist eine Priorisierungsfrage. Drücke die Tab-Taste, um zum Inhalt und den Antworten zu gelangen.",
+    "a11y-current-prioritization": "Inhalt {{index}}. Dies ist eine Priorisierungsfrage. Drücke die Tab-Taste, um zum Inhalt und den Antworten zu gelangen.",
     "a11y-current-binary": "Inhalt {{index}}. Dies ist ein Ja/Nein-Frage. Drücke die Tab-Taste, um zum Inhalt und den Antworten zu gelangen und navigiere mit den Pfeiltasten, um eine Antwort auszuwählen.",
     "a11y-current-scale": "Inhalt {{index}}. Dies ist ein Likert-Inhalt. Drücke die Tab-Taste, um zum Inhalt und den Antworten zu gelangen und navigiere mit den Pfeiltasten, um eine Antwort auszuwählen.",
     "a11y-current-wordcloud": "Inhalt {{index}}. Dies ist ein Wortwolken-Inhalt. Drücke die Tab-Taste, um zum Inhalt und zur Eingabe der Antworten zu gelangen.",

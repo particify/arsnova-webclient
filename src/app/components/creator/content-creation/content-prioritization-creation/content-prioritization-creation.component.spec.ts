@@ -11,11 +11,11 @@ import { ActivatedRouteStub, JsonTranslationLoader, MockAnnounceService, MockEve
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { of, Subject } from 'rxjs';
 
-import { ContentPriorizationCreationComponent } from './content-priorization-creation.component';
+import { ContentPrioritizationCreationComponent } from './content-prioritization-creation.component';
 
-describe('ContentPriorizationCreationComponent', () => {
-  let component: ContentPriorizationCreationComponent;
-  let fixture: ComponentFixture<ContentPriorizationCreationComponent>;
+describe('ContentPrioritizationCreationComponent', () => {
+  let component: ContentPrioritizationCreationComponent;
+  let fixture: ComponentFixture<ContentPrioritizationCreationComponent>;
 
   const mockCreateEvent = new Subject<any>();
 
@@ -37,7 +37,7 @@ describe('ContentPriorizationCreationComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ContentPriorizationCreationComponent ],
+      declarations: [ ContentPrioritizationCreationComponent ],
       providers: [
         {
           provide: NotificationService,
@@ -83,7 +83,7 @@ describe('ContentPriorizationCreationComponent', () => {
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(ContentPriorizationCreationComponent);
+    fixture = TestBed.createComponent(ContentPrioritizationCreationComponent);
     component = fixture.componentInstance;
     component.createEvent = mockCreateEvent;
     fixture.detectChanges();

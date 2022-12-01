@@ -7,7 +7,7 @@
     "a11y-current-slide": "Content {{index}}}. This is a slide. Navigate with tab to the content.",
     "a11y-current-flashcard": "Content {{index}}}. This is a flashcard. Navigate with tab to the content and press the space key to show back.",
     "a11y-current-sort": "Content {{index}}. This is a sort content. To go to content and the answers press the tab key and move up and down with arrow keys.",
-    "a11y-current-priorization": "Content {{index}}. This is a priorization content. To go to the content and the answer options press the tab key.",
+    "a11y-current-prioritization": "Content {{index}}. This is a prioritization content. To go to the content and the answer options press the tab key.",
     "a11y-current-binary": "Content {{index}}. This is a yes/no content. To go to the content and the answers press the tab key select an answer press the arrow keys.",
     "a11y-current-scale": "Content {{index}}. This is a likert content. To go to the content and the answers press the tab key select an answer press the arrow keys.",
     "a11y-current-wordcloud": "Content {{index}}. This is a wordcloud content. To go to the content and the answer inputs press the tab key.",

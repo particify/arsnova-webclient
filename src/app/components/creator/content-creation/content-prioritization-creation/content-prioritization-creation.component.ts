@@ -9,15 +9,15 @@ import { AnswerOption } from '@arsnova/app/models/answer-option';
 import { AdvancedSnackBarTypes } from '@arsnova/app/services/util/notification.service';
 import { TranslateService } from '@ngx-translate/core';
 import { ContentCreationComponent, DisplayAnswer } from '../content-creation/content-creation.component';
-import { ContentPriorization } from '@arsnova/app/models/content-priorization';
-import { PriorizationRoundStatistics } from '@arsnova/app/models/round-statistics';
+import { ContentPrioritization } from '@arsnova/app/models/content-prioritization';
+import { PrioritizationRoundStatistics } from '@arsnova/app/models/round-statistics';
 
 @Component({
-  selector: 'app-content-priorization-creation',
-  templateUrl: './content-priorization-creation.component.html',
-  styleUrls: ['./content-priorization-creation.component.scss']
+  selector: 'app-content-prioritization-creation',
+  templateUrl: './content-prioritization-creation.component.html',
+  styleUrls: ['./content-prioritization-creation.component.scss']
 })
-export class ContentPriorizationCreationComponent extends ContentCreationComponent implements OnInit {
+export class ContentPrioritizationCreationComponent extends ContentCreationComponent implements OnInit {
 
   isAnswerEdit = -1;
   resetAnswerInputEvent: EventEmitter<boolean> = new EventEmitter<boolean>();
@@ -34,7 +34,7 @@ export class ContentPriorizationCreationComponent extends ContentCreationCompone
   }
 
   initContentCreation() {
-    this.content = new ContentPriorization(
+    this.content = new ContentPrioritization(
       null,
       null,
       '',
@@ -42,7 +42,7 @@ export class ContentPriorizationCreationComponent extends ContentCreationCompone
       '',
       [],
       [],
-      ContentType.PRIORIZATION,
+      ContentType.PRIORITIZATION,
       null,
       100
     );
@@ -68,7 +68,7 @@ export class ContentPriorizationCreationComponent extends ContentCreationCompone
 
   checkIfAnswersExist() {
     this.contentService.getAnswer(this.content.roomId, this.content.id).subscribe(answer => {
-      this.noAnswersYet = !!(answer.roundStatistics[0] as PriorizationRoundStatistics).assignedPoints;
+      this.noAnswersYet = !!(answer.roundStatistics[0] as PrioritizationRoundStatistics).assignedPoints;
       this.isLoading = false;
     });
   }

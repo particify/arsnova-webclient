@@ -19,7 +19,7 @@ import { ContentService } from '../../../../services/http/content.service';
 import { ActivatedRoute } from '@angular/router';
 import { UserRole } from '../../../../models/user-roles.enum';
 import { UserSettings } from '../../../../models/user-settings';
-import { StatisticPriorizationComponent } from '../statistic-priorization/statistic-priorization.component';
+import { StatisticPrioritizationComponent } from '../statistic-prioritization/statistic-prioritization.component';
 
 @Component({
   selector: 'app-statistic-content',
@@ -33,7 +33,7 @@ export class StatisticContentComponent implements OnInit {
   @ViewChild(StatisticTextComponent) textStatistic: StatisticTextComponent;
   @ViewChild(StatisticSortComponent) sortStatistic: StatisticSortComponent;
   @ViewChild(StatisticWordcloudComponent) wordcloudStatistic: StatisticWordcloudComponent;
-  @ViewChild(StatisticPriorizationComponent) priorizationStatistic: StatisticPriorizationComponent;
+  @ViewChild(StatisticPrioritizationComponent) prioritizationStatistic: StatisticPrioritizationComponent;
 
   @Input() content: ContentText;
   @Input() directShow: boolean;
@@ -159,8 +159,8 @@ export class StatisticContentComponent implements OnInit {
       case ContentType.WORDCLOUD:
         this.answersVisible = this.wordcloudStatistic.toggleAnswers();
         break;
-      case ContentType.PRIORIZATION:
-        this.answersVisible = this.priorizationStatistic.toggleAnswers();
+      case ContentType.PRIORITIZATION:
+        this.answersVisible = this.prioritizationStatistic.toggleAnswers();
         break;
       default:
         this.answersVisible = this.choiceStatistic.toggleAnswers();
@@ -187,7 +187,7 @@ export class StatisticContentComponent implements OnInit {
 
   checkIfSurvey() {
     let noCorrect = false;
-    if ([ContentType.TEXT, ContentType.SCALE, ContentType.WORDCLOUD, ContentType.PRIORIZATION].includes(this.format)) {
+    if ([ContentType.TEXT, ContentType.SCALE, ContentType.WORDCLOUD, ContentType.PRIORITIZATION].includes(this.format)) {
       noCorrect = true;
     } else if ([ContentType.BINARY, ContentType.CHOICE].includes(this.format)) {
       const correctOptions = (this.content as ContentChoice).correctOptionIndexes;

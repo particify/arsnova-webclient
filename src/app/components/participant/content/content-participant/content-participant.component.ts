@@ -8,7 +8,7 @@ import { ChoiceAnswer } from '../../../../models/choice-answer';
 import { MarkdownFeatureset } from '../../../../services/http/formatting.service';
 import { MultipleTextsAnswer } from '../../../../models/multiple-texts-answer';
 import { HotkeyAction } from '../../../../directives/hotkey.directive';
-import { PriorizationAnswer } from '../../../../models/priorization-answer';
+import { PrioritizationAnswer } from '../../../../models/prioritization-answer';
 
 @Component({
   selector: 'app-content-participant',
@@ -74,8 +74,8 @@ export class ContentParticipantComponent implements OnInit {
       this.hasAbstained = !(answer as TextAnswer).body;
     } else if (answer.format === ContentType.WORDCLOUD) {
       this.hasAbstained = !((answer as MultipleTextsAnswer).texts?.length > 0);
-    } else if(answer.format === ContentType.PRIORIZATION) {
-      this.hasAbstained = !(answer as PriorizationAnswer).assignedPoints;
+    } else if(answer.format === ContentType.PRIORITIZATION) {
+      this.hasAbstained = !(answer as PrioritizationAnswer).assignedPoints;
     } else {
       this.hasAbstained = !(answer as ChoiceAnswer).selectedChoiceIndexes;
     }

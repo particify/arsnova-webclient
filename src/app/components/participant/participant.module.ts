@@ -20,7 +20,7 @@ import { ContentWordcloudParticipantComponent } from './content/content-wordclou
 import { ContentScaleParticipantComponent } from './content/content-scale-participant/content-scale-participant.component';
 import { SeriesOverviewComponent } from './series-overview/series-overview.component';
 import { ParticipantOverviewComponent } from './participant-overview/participant-overview.component';
-import { ContentPriorizationParticipantComponent } from './content/content-priorization-participant/content-priorization-participant.component';
+import { ContentPrioritizationParticipantComponent } from './content/content-prioritization-participant/content-prioritization-participant.component';
 
 @NgModule({
   imports: [
@@ -54,7 +54,7 @@ import { ContentPriorizationParticipantComponent } from './content/content-prior
     ContentWordcloudParticipantComponent,
     SeriesOverviewComponent,
     ParticipantOverviewComponent,
-    ContentPriorizationParticipantComponent
+    ContentPrioritizationParticipantComponent
 
   ],
   providers: [
