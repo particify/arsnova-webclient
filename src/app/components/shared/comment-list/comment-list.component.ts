@@ -124,6 +124,8 @@ export class CommentListComponent implements OnInit, OnDestroy {
   publicCounter = 0;
   moderationCounter = 0;
   onInit = false;
+  readTimestamp: Date;
+  unreadCommentCount: number;
 
   navBarStateSubscription: Subscription;
 
@@ -151,6 +153,7 @@ export class CommentListComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.resetReadTimestamp();
     this.navBarStateSubscription = this.eventService.on<boolean>(UiState.NAV_BAR_VISIBLE).subscribe(isVisible => {
       this.navBarExists = isVisible;
     });
@@ -264,6 +267,7 @@ export class CommentListComponent implements OnInit, OnDestroy {
     this.scroll = this.isScrollPosition(currentScroll);
     this.scrollActive = this.scroll && currentScroll < this.lastScroll;
     this.scrollExtended = currentScroll >= this.scrollExtendedMax;
+    this.checkFreeze();
     this.isScrollStart = currentScroll >= this.scrollStart && currentScroll <= (this.scrollStart + 200);
     this.showCommentsForScrollPosition(currentScroll, scrollHeight);
     this.lastScroll = currentScroll;
@@ -282,6 +286,15 @@ export class CommentListComponent implements OnInit, OnDestroy {
         this.commentCounter += itemRenderNumber / 2;
         this.getDisplayComments();
       }
+    }
+  }
+
+  checkFreeze() {
+    if (this.scrollExtended && !this.freeze) {
+      this.pauseCommentStream();
+    }
+    if (this.freeze && !this.scrollExtended && this.scrollActive) {
+      this.playCommentStream();
     }
   }
 
@@ -401,6 +414,19 @@ export class CommentListComponent implements OnInit, OnDestroy {
     }
   }
 
+  getUnreadCommentCount() {
+    this.unreadCommentCount = this.comments.filter(c => c.timestamp > this.readTimestamp).length;
+  }
+
+  loadAndScroll() {
+    this.scrollTop(true);
+  }
+
+  resetReadTimestamp() {
+    this.readTimestamp = new Date();
+    this.unreadCommentCount = 0;
+  }
+
   addNewComment(comment: Comment) {
     const c = new Comment();
     c.roomId = this.roomId;
@@ -414,6 +440,9 @@ export class CommentListComponent implements OnInit, OnDestroy {
     this.announceNewComment(c);
     this.comments = this.comments.concat(c);
     this.commentCounter++;
+    if (this.scrollExtended) {
+      this.getUnreadCommentCount();
+    }
   }
 
   parseIncomingMessage(message: Message) {
@@ -504,7 +533,9 @@ export class CommentListComponent implements OnInit, OnDestroy {
       }
       this.moderationCounter++;
     }
-    this.afterIncomingMessage();
+    if (!this.freeze) {
+      this.afterIncomingMessage();
+    }
   }
 
   afterIncomingMessage() {
@@ -599,17 +630,12 @@ export class CommentListComponent implements OnInit, OnDestroy {
 
   pauseCommentStream() {
     this.freeze = true;
-    const msg = this.translateService.instant('comment-list.comment-stream-stopped');
-    this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
-    document.getElementById('start-button').focus();
   }
 
   playCommentStream() {
     this.freeze = false;
-    this.getComments(true);
-    const msg = this.translateService.instant('comment-list.comment-stream-started');
-    this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
-    document.getElementById('pause-button').focus();
+    this.resetReadTimestamp();
+    this.getComments();
   }
 
   subscribeCommentStream() {

@@ -29,7 +29,7 @@
       <div class="button-bar" fxLayoutAlign="center center" fxLayoutGap="1em">
         <div class="counter-container" *ngIf="!isLoading && comments && !search && (scroll && (deviceType === 'desktop' || scrollActive) || hideCommentsList || viewRole === 'PARTICIPANT' || deviceWidth < 1000)">
           <h3 class="counter">
-            {{ filteredComments && hideCommentsList ? filteredComments.length : commentsFilteredByTime.length }}
+            {{ filteredComments && hideCommentsList ? filteredComments.length : commentsFilteredByTime.length + unreadCommentCount }}
           </h3>
         </div>
 
@@ -217,6 +217,13 @@
                       'desktop-scroll-position': deviceType === 'desktop' || isModerator,
                       'above-nav': viewRole === 'CREATOR' && isModerator && navBarExists && deviceType === 'mobile'}">
     <mat-icon>arrow_upward</mat-icon>
+  </button>
+
+  <button mat-stroked-button class="stroked-primary scroll-to-new-posts" (click)="loadAndScroll()"
+          [ngClass]="{'scroll-to-new-posts-visible': scrollExtended && unreadCommentCount > 0,
+                      'above-bar': navBarExists && deviceType === 'mobile'}">
+    <mat-icon>arrow_upward</mat-icon>
+    {{ 'comment-list.there-are-new-posts' | translate }}
   </button>
 
   <div [ngClass]="{'comments-container': !isPresentation}" *ngIf="!isLoading" tabindex="-1"

@@ -240,6 +240,24 @@ button.selected {
   opacity: 1;
 }
 
+.scroll-to-new-posts {
+  position: fixed;
+  bottom: -4vw;
+  right: 50%;
+  transform: translateX(50%);
+  z-index: 1;
+  background: var(--surface);
+  transition: bottom 400ms;
+}
+
+.scroll-to-new-posts-visible {
+  // Additional 10px to align with add/scroll button vertically
+  bottom: calc(4vw + 10px);
+  &.above-bar {
+    bottom: calc($mobile-bar-height + 4vw + 10px);
+  }
+}
+
 .visible {
   right: 4vw;
 }
