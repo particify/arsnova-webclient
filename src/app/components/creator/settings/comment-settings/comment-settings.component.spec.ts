@@ -5,7 +5,6 @@ import { MatDialog } from '@angular/material/dialog';
 import {
   JsonTranslationLoader,
   MockEventService,
-  MockGlobalStorageService,
   MockMatDialog,
   MockNotificationService,
   MockRouter,
@@ -17,8 +16,6 @@ import { NO_ERRORS_SCHEMA, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommentService } from '@arsnova/app/services/http/comment.service';
 import { CommentSettingsService } from '@arsnova/app/services/http/comment-settings.service';
-import { DialogService } from '@arsnova/app/services/util/dialog.service';
-import { GlobalStorageService } from '@arsnova/app/services/util/global-storage.service';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { EventService } from '@arsnova/app/services/util/event.service';
 import { Room } from '@arsnova/app/models/room';
@@ -37,9 +34,6 @@ class MockCommentSettingsService {
     return of(new CommentSettings());
   }
 }
-
-@Injectable()
-class MockDialogService {}
 
 @Injectable()
 class MockLiveAnnouncer {}
@@ -75,14 +69,6 @@ describe('CommentSettingsComponent', () => {
         {
           provide: CommentSettingsService,
           useClass: MockCommentSettingsService,
-        },
-        {
-          provide: DialogService,
-          useClass: MockDialogService,
-        },
-        {
-          provide: GlobalStorageService,
-          useClass: MockGlobalStorageService,
         },
         {
           provide: LiveAnnouncer,

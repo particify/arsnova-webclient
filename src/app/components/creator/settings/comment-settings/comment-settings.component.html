@@ -5,9 +5,15 @@
     </div>
     <div fxLayout="column">
       <app-settings-slide-toggle
+        label="settings.enable-comments"
+        [isChecked]="!disabled"
+        (toggleEvent)="updateCommentSettings({ disabled: !$event })"
+      ></app-settings-slide-toggle>
+      <app-settings-slide-toggle
         label="settings.threshold"
         [isChecked]="enableThreshold"
         (toggleEvent)="updateCommentExtensions($event)"
+        [disabled]="disabled"
       ></app-settings-slide-toggle>
       <div
         fxLayout="row"
@@ -20,6 +26,7 @@
             matSliderThumb
             [(ngModel)]="threshold"
             (change)="updateCommentExtensions(); announceThreshold()"
+            [disabled]="disabled"
         /></mat-slider>
         <p class="threshold-value">&nbsp;{{ threshold }}</p>
       </div>
@@ -27,15 +34,15 @@
     <app-settings-slide-toggle
       label="settings.direct-send"
       [isChecked]="directSend"
-      (toggleEvent)="updateCommentSettings($event)"
+      (toggleEvent)="updateCommentSettings({ directSend: $event })"
+      [disabled]="disabled"
     ></app-settings-slide-toggle>
     <lib-extension-point
       *ngIf="!isLoading"
       extensionId="comment-image-settings"
       [extensionData]="{ fileUploadEnabled: fileUploadEnabled }"
       (extensionEvent)="updateFileUploadEnabled($event)"
-    >
-    </lib-extension-point>
+    ></lib-extension-point>
   </div>
   <div>
     <div tabindex="0" id="tags-settings" class="visually-hidden">
@@ -44,7 +51,7 @@
     <form>
       <mat-form-field class="full-width no-field-hint" appearance="outline">
         <mat-label>{{ 'settings.tags' | translate }}</mat-label>
-        <mat-chip-grid #tagList>
+        <mat-chip-grid #tagList [disabled]="disabled">
           <mat-chip-row
             *ngFor="let tag of tags"
             [removable]="true"
@@ -68,6 +75,7 @@
             name="taginput"
             maxlength="15"
             placeholder="{{ 'settings.new-tag' | translate }}"
+            [disabled]="disabled"
           />
         </mat-chip-grid>
       </mat-form-field>

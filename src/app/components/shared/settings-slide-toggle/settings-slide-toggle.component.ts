@@ -8,6 +8,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 export class SettingsSlideToggleComponent {
   @Input() isChecked: boolean;
   @Input() label: string;
+  @Input() disabled = false;
   @Output() toggleEvent = new EventEmitter<boolean>();
 
   toggle(event) {
