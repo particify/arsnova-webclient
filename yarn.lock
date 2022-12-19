@@ -6838,12 +6838,12 @@ ng-packagr@14.2.2:
   optionalDependencies:
     esbuild "^0.15.0"
 
-ng-qrcode@7.0.0:
-  version "7.0.0"
-  resolved "https://registry.yarnpkg.com/ng-qrcode/-/ng-qrcode-7.0.0.tgz#3f20299cb34b7f4c7d9b643357e127dbb451ceff"
-  integrity sha512-Mx7nf8rtGMVYxGe2qfy8/JNiCnxKD7uFsqpP2Hm5eJSQrOEapQl9FR0yuK0I4MMQorJ7s8mZZDxmszQiH8R2Kg==
+ng-qrcode@8.0.1:
+  version "8.0.1"
+  resolved "https://registry.yarnpkg.com/ng-qrcode/-/ng-qrcode-8.0.1.tgz#014cab95518af9d5e08bcbcdc5df871ee5528d5a"
+  integrity sha512-hU9JVgfZFMQFVLSp/brMw0O0ClKR3tXFiY/6tztUeRW6Xzl2qSJyoYYNWTzzx7v/6P8OIuAIpiPs+kQylniPMg==
   dependencies:
-    qrcode "^1.5.0"
+    qrcode "^1.5.1"
     tslib "^2.4.0"
 
 nice-napi@^1.0.2:
@@ -7786,7 +7786,7 @@ qjobs@^1.2.0:
   resolved "https://registry.yarnpkg.com/qjobs/-/qjobs-1.2.0.tgz#c45e9c61800bd087ef88d7e256423bdd49e5d071"
   integrity sha512-8YOJEHtxpySA3fFDyCRxA+UUV+fA+rTWnuWvylOK/NCjhY+b4ocCtmu8TtsWb+mYeU+GCHf/S66KZF/AsteKHg==
 
-qrcode@^1.5.0:
+qrcode@^1.5.1:
   version "1.5.1"
   resolved "https://registry.yarnpkg.com/qrcode/-/qrcode-1.5.1.tgz#0103f97317409f7bc91772ef30793a54cd59f0cb"
   integrity sha512-nS8NJ1Z3md8uTjKtP+SGGhfqmTCs5flU/xR623oI0JX+Wepz9R8UrRVCTBTJm3qGw3rH6jJ6MUHjkDx15cxSSg==
