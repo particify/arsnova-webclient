@@ -1,6 +1,7 @@
 .mat-card {
   box-shadow: none;
   border: 1px solid var(--grey-light);
+
   // 100% - padding - border width
   width: calc(100% - 2em - 2px);
 }

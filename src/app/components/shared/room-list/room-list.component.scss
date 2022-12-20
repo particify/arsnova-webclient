@@ -75,6 +75,7 @@
   border: 1px solid var(--grey);
   background-color: var(--surface);
   border-radius: 4px;
+
   &::placeholder {
     color: var(--on-surface);
   }
@@ -115,6 +116,7 @@
   .mobile-buttons {
     display: none;
   }
+
   .search-input {
     font-size: 14px;
     width: 150px;
@@ -136,11 +138,13 @@
     border-width: 2px;
     border-style: solid;
     color: var(--primary);
+
     span {
       text-transform: uppercase;
       font-size: 12px;
       font-weight: $font-weight-bold;
     }
+
     animation: activeRoom 2s infinite;
   }
 }
@@ -155,9 +159,11 @@
   0% {
     border-color: var(--primary);
   }
+
   50% {
     border-color: var(--primary-variant);
   }
+
   100% {
     border-color: var(--primary);
   }

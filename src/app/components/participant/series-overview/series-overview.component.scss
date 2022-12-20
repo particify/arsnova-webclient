@@ -15,6 +15,7 @@ $icon-container-size: 40px;
 
 .score-text {
   @include header-text-base;
+
   font-size: 18px;
 }
 
@@ -36,6 +37,7 @@ $icon-container-size: 40px;
 
   .header-text {
     @include header-text-base;
+
     font-size: 18px;
   }
 
@@ -55,6 +57,7 @@ $icon-container-size: 40px;
 
   .header-text {
     @include header-text-base;
+
     font-size: 24px;
   }
 
@@ -97,9 +100,11 @@ $icon-container-size: 40px;
   transition: all 150ms;
   border-radius: 4px;
   border: 1px solid var(--border);
+
   &:not(:last-of-type) {
     margin-bottom: 8px;
   }
+
   &:hover {
     cursor: pointer;
     box-shadow: 0 0 3px var(--grey);

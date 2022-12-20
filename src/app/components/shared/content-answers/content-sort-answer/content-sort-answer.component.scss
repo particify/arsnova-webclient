@@ -16,9 +16,11 @@ $option-padding: 0;
   padding: $option-padding $option-padding-full;
   border: 2px solid var(--grey-light);
   border-radius: 4px;
+
   &:first-of-type {
     margin-top: 8px;
   }
+
   &:focus {
     @include selected;
   }

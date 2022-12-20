@@ -3,7 +3,6 @@
 $arsnova-primary: mat.define-palette(mat.$deep-purple-palette, 600);
 $arsnova-accent: mat.define-palette(mat.$green-palette, 800);
 $arsnova-warn: mat.define-palette(mat.$red-palette, 600);
-
 $arsnova-theme: mat.define-light-theme(
   $arsnova-primary,
   $arsnova-accent,

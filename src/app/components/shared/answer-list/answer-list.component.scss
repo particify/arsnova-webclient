@@ -30,6 +30,7 @@
 .moderation.mat-list-item:focus-within {
   background-color: var(--surface);
   filter: brightness(97%);
+
   .delete-button {
     @include show-delete-button;
   }

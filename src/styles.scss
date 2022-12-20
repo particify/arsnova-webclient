@@ -1,10 +1,8 @@
 @use '@angular/material' as mat;
 @import 'theme/dark-theme/dark-theme';
 @import 'theme/arsnova-theme/arsnova-theme';
-
-@include mat.all-legacy-component-typographies();
-@include mat.legacy-core();
-
+@include mat.all-legacy-component-typographies;
+@include mat.legacy-core;
 @include mat.all-legacy-component-themes($arsnova-theme);
 
 .dark {
@@ -128,7 +126,7 @@ ul {
 }
 
 .ellipsis {
-  @include ellipsis-mixin();
+  @include ellipsis-mixin;
 }
 
 @mixin hint-base {
@@ -139,11 +137,13 @@ ul {
 
 .hint {
   @include hint-base;
+
   margin: 3em 0 2em;
 }
 
 .hint-sm {
   @include hint-base;
+
   margin: 1.5em 0;
 }
 
@@ -218,6 +218,7 @@ textarea {
   max-width: 100%;
   height: 100%;
   margin: 0;
+
   .mat-dialog-container {
     padding: min(4vw, 24px);
   }
@@ -383,17 +384,17 @@ div {
   width: 50px;
 }
 
-/*.activeInput:not(:hover) .mat-form-field-flex {
+/* .activeInput:not(:hover) .mat-form-field-flex {
   padding: 0!important;
 }
 
 .activeInput:not(:hover) .mat-form-field-outline > * {
   border: none!important;
-}*/
+} */
 
 .big-input {
   .mat-form-field-infix {
-    padding: 0.4em 0 0.8em 0;
+    padding: 0.4em 0 0.8em;
   }
 
   .mat-form-field-suffix .mat-icon-button .mat-icon {
@@ -654,8 +655,9 @@ div {
   opacity: 0.6;
 }
 
-.mat-button:not([disabled]):not(.nav-button) {
+.mat-button:not([disabled], .nav-button) {
   opacity: 0.8;
+
   &:hover {
     opacity: 1;
   }
@@ -704,6 +706,7 @@ button {
   &:focus-visible {
     outline: 2px solid var(--secondary) !important;
   }
+
   &:focus:not(:focus-visible) {
     outline: none;
   }
@@ -781,6 +784,7 @@ button {
 .icon-warn-soft {
   color: var(--warn-soft);
 }
+
 // Card
 
 .mat-card {
@@ -851,6 +855,7 @@ button {
   width: 400px;
   max-width: 100%;
   padding: 2em !important;
+
   @media (max-width: 500px) {
     padding: 1.5em !important;
   }
@@ -910,6 +915,7 @@ button {
 
 .mat-menu-item {
   color: var(--on-dialog);
+
   .mat-icon {
     margin-bottom: 2px;
   }
@@ -976,6 +982,7 @@ button.mat-menu-item:hover {
 
   .mat-select-arrow-wrapper {
     transform: translateX(0) !important;
+
     .mat-select-arrow {
       color: var(--primary) !important;
     }
@@ -989,6 +996,7 @@ button.mat-menu-item:hover {
 .mat-form-field-appearance-outline.smaller-select {
   .mat-select-arrow-wrapper {
     transform: translateX(0) !important;
+
     .mat-select-arrow {
       color: var(--on-surface) !important;
     }
@@ -1001,9 +1009,11 @@ button.mat-menu-item:hover {
 
 .mat-menu-panel.wider-panel {
   max-width: 500px;
+
   @media (max-width: 520px) {
     // full width - app padding
     max-width: 92%;
+
     // app padding
     margin-left: 4%;
   }
@@ -1045,7 +1055,7 @@ button.mat-menu-item:hover {
   }
 }
 
-app-rendered-text:not(.rendered-list-preview-container):not(.no-full-width) {
+app-rendered-text:not(.rendered-list-preview-container, .no-full-width) {
   width: 100%;
 }
 
@@ -1057,7 +1067,9 @@ app-rendered-text:not(.rendered-list-preview-container):not(.no-full-width) {
 
 .rendered-list-preview-container {
   position: relative;
-  @include ellipsis-mixin();
+
+  @include ellipsis-mixin;
+
   // 2 * margin (1em) + text height (19px)
   max-height: calc(2em + 19px);
 }
@@ -1072,7 +1084,7 @@ app-rendered-text:not(.rendered-list-preview-container):not(.no-full-width) {
   }
 
   & > p {
-    @include ellipsis-mixin();
+    @include ellipsis-mixin;
   }
 }
 
@@ -1096,13 +1108,15 @@ app-rendered-text:not(.rendered-list-preview-container):not(.no-full-width) {
   height: 16px;
 }
 
-.rendered-list-preview-container:not(.bg-unlocked):after {
-  @include bottom-fade-out();
+.rendered-list-preview-container:not(.bg-unlocked)::after {
+  @include bottom-fade-out;
+
   background-image: linear-gradient(to bottom, transparent, var(--surface));
 }
 
-.rendered-list-preview-container.bg-unlocked:after {
-  @include bottom-fade-out();
+.rendered-list-preview-container.bg-unlocked::after {
+  @include bottom-fade-out;
+
   background-image: linear-gradient(to bottom, transparent, var(--unlocked));
 }
 

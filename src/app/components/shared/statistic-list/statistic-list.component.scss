@@ -57,6 +57,7 @@ table {
 .mat-row {
   background-color: var(--table-a);
   border-style: none;
+
   &:nth-child(even) {
     background-color: var(--table-b);
   }

@@ -3,5 +3,4 @@
 $dark-primary: mat.define-palette(mat.$green-palette, 500);
 $dark-accent: mat.define-palette(mat.$amber-palette, 400);
 $dark-warn: mat.define-palette(mat.$red-palette, 900);
-
 $dark-theme: mat.define-dark-theme($dark-primary, $dark-accent, $dark-warn);
