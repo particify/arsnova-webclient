@@ -89,8 +89,6 @@
     "pause-comments": "Pause the post stream",
     "play-comments": "Start the post stream",
     "comment-got-favorited": "A post of yours got favorited.",
-    "comment-stream-stopped": "The post stream has been stopped.",
-    "comment-stream-started": "The post stream has been started.",
     "comment-sent": "Your post has been published.",
     "comment-sent-to-moderator": "Your post will be reviewed by a moderator.",
     "comment-deleted": "The post has been deleted.",
@@ -114,7 +112,8 @@
     "sort-votedesc": "Best rating",
     "sort-voteasc": "Worst rating",
     "sort-time": "Last created",
-    "list": "Post list"
+    "list": "Post list",
+    "there-are-new-posts": "There are new posts"
   },
   "comment-page": {
     "a11y-message": "You are now on the Q&A page.",

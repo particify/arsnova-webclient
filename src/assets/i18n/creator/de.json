@@ -17,8 +17,6 @@
     "add-comment": "Beitrag verfassen",
     "pause-comments": "Pausiere den Beitrag-Stream",
     "play-comments": "Starte den Beitrag-Stream",
-    "comment-stream-stopped": "Der Beitrag-Stream wurde gestoppt.",
-    "comment-stream-started": "Der Beitrag-Stream wurde gestartet.",
     "comment-deleted": "Der Beitrag wurde gelöscht.",
     "filter-comments": "Beiträge filtern und sortieren",
     "filter-favorite": "Favorisiert",
@@ -52,7 +50,8 @@
     "next": "Nächster Beitrag",
     "previous": "Vorheriger Beitrag",
     "list": "Beitragsliste",
-    "archive": "Archiv"
+    "archive": "Archiv",
+    "there-are-new-posts": "Es gibt neue Beiträge"
   },
   "comment-page": {
     "a11y-message": "Du befindest dich jetzt auf der Q&A-Seite.",

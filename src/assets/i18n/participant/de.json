@@ -89,8 +89,6 @@
     "pause-comments": "Pausiere den Beitrag-Stream",
     "play-comments": "Starte den Beitrag-Stream",
     "comment-got-favorited": "Ein Beitrag von dir wurde favorisiert.",
-    "comment-stream-stopped": "Der Beitrag-Stream wurde gestoppt.",
-    "comment-stream-started": "Der Beitrag-Stream wurde gestartet.",
     "comment-sent": "Dein Beitrag wurde veröffentlicht.",
     "comment-sent-to-moderator": "Dein Beitrag wird nun von einer moderierenden Person überprüft.",
     "comment-deleted": "Der Beitrag wurde gelöscht.",
@@ -114,7 +112,8 @@
     "sort-votedesc": "Positivste Bewertung",
     "sort-voteasc": "Negativste Bewertung",
     "sort-time": "Zuletzt erstellt",
-    "list": "Beitragsliste"
+    "list": "Beitragsliste",
+    "there-are-new-posts": "Es gibt neue Beiträge"
   },
   "comment-page": {
     "a11y-message": "Du befindest dich jetzt auf der Q&A-Seite.",

@@ -17,8 +17,6 @@
     "add-comment": "Leave a post",
     "pause-comments": "Pause the post stream",
     "play-comments": "Start the post stream",
-    "comment-stream-stopped": "The post stream has been stopped.",
-    "comment-stream-started": "The post stream has been started.",
     "comment-deleted": "The post has been deleted.",
     "filter-comments": "Filter and sort posts",
     "filter-favorite": "Favorite",
@@ -52,7 +50,8 @@
     "next": "Next post",
     "previous": "Previous post",
     "list": "Post list",
-    "archive": "Archive"
+    "archive": "Archive",
+    "there-are-new-posts": "There are new posts"
   },
   "comment-page": {
     "a11y-message": "You are now on the posts page.",
