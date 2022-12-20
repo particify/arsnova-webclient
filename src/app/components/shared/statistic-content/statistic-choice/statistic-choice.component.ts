@@ -178,6 +178,9 @@ export class StatisticChoiceComponent extends StatisticContentBaseComponent impl
               display: !this.settings.contentAnswersDirectlyBelowChart || !this.isPresentation
             },
             grid: gridConfig,
+            border: {
+              color: this.colorStrings.onBackground
+            },
             display: true
           }
         },

@@ -190,7 +190,6 @@ export class StatisticSortComponent extends StatisticContentBaseComponent implem
     Chart.defaults.font.size = this.isPresentation ? 14 : 16;
     Chart.register(BarController, BarElement, CategoryScale, LinearScale, ChartDataLabels);
     const gridConfig = {
-      borderColor: this.onSurface,
       tickColor: this.isPresentation ? this.surface : this.onSurface,
       drawOnChartArea: !this.isPresentation,
       z: 1
@@ -231,7 +230,10 @@ export class StatisticSortComponent extends StatisticContentBaseComponent implem
           },
           x: {
             type: 'category',
-            grid: gridConfig
+            grid: gridConfig,
+            border: {
+              color: this.onSurface
+            }
           }
         },
         plugins: {
