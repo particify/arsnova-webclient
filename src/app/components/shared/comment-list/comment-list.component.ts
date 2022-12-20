@@ -161,7 +161,7 @@ export class CommentListComponent implements OnInit, OnDestroy {
     const userId = this.auth?.userId;
     const lastSort = this.globalStorageService.getItem(STORAGE_KEYS.COMMENT_SORT);
     this.currentSort = this.isPresentation ? (lastSort && lastSort !== this.sorting.VOTEASC ? lastSort : this.sorting.TIME)
-      : lastSort || this.sorting.VOTEDESC;
+      : lastSort || this.sorting.TIME;
     this.period = this.globalStorageService.getItem(STORAGE_KEYS.COMMENT_TIME_FILTER) || Period.ALL;
     this.currentFilter = '';
     this.translateService.use(this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE));
