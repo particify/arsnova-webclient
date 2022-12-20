@@ -7,7 +7,6 @@
       </div>
     </div>
     <mat-card>
-      <lib-extension-point extensionId="remote" [extensionData]="{remoteFeature: 'series'}"></lib-extension-point>
       <div fxLayout="row" fxLayoutAlign="space-between">
         <div class="cardTitle" fxLayout="row" fxLayoutAlign="start center">
           <mat-form-field class="activeInput no-field-hint" [ngClass]="{'hideEditing': !isInTitleEditMode && !inputFocus}" appearance="outline">
@@ -132,7 +131,7 @@
                 </div>
                 <div fxLayout="row" fxLayoutAlign="center center" [ngClass]="{'show-bar': i === activeMenuIndex || content.id === activeContentId, 'button-bar': i !== activeMenuIndex && content.id !== activeContentId}">
                   <div fxLayout="row" *ngIf="contentTypes.indexOf(content.format) > -1">
-                    <lib-extension-point extensionId="content-focus" [extensionData]="{contentId: content.id, contentGroupId: contentGroup.id, contents: contents}" (extensionEvent)="updateActive($event)"></lib-extension-point>
+                    <lib-extension-point *ngIf="isPublished(i)" extensionId="content-focus" [extensionData]="{contentId: content.id, contentGroup: contentGroup, contents: contents}" (extensionEvent)="updateActive($event)"></lib-extension-point>
                     <button mat-icon-button *ngIf="content.format === 'TEXT' && content.state.answersPublished && !isModerator"
                             (click)="toggleAnswersPublished(content);$event.stopPropagation()"
                             attr.aria-label="{{ 'content.a11y-dont-publish-answers' | translate }}"

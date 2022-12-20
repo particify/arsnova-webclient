@@ -19,7 +19,6 @@ import { RoomStatsService } from '../../../../services/http/room-stats.service';
 import { HotkeyService } from '../../../../services/util/hotkey.service';
 import { MatLegacyButton as MatButton } from '@angular/material/legacy-button';
 import { ContentType } from '../../../../models/content-type.enum';
-import { ContentMessages } from '../../../../models/events/content-messages.enum';
 import { UiState } from '../../../../models/events/ui/ui-state.enum';
 import { RoutingService } from '../../../../services/util/routing.service';
 import { Room } from '../../../../models/room';
@@ -27,6 +26,7 @@ import { ContentGroupStatistics } from '../../../../models/content-group-statist
 import { MarkdownFeatureset } from '../../../../services/http/formatting.service';
 import { DragDropBaseComponent } from '../../../shared/drag-drop-base/drag-drop-base.component';
 import { UserRole } from '../../../../models/user-roles.enum';
+import { PresentationEvent } from '../../../../models/events/presentation-events.enum';
 
 @Component({
   selector: 'app-group-content',
@@ -115,7 +115,7 @@ export class GroupContentComponent extends DragDropBaseComponent implements OnIn
       });
     });
     this.translateService.use(this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE));
-    this.eventService.on(ContentMessages.ANSWERS_DELETED).subscribe(contentId => {
+    this.eventService.on(PresentationEvent.CONTENT_ANSWERS_DELETED).subscribe(contentId => {
       const content = this.contents.find(c => c.id === contentId);
       content.state.round = 1;
       this.resetAnswerEvent.next(content.id);

@@ -1,5 +1,4 @@
-<lib-extension-point *ngIf="viewRole === 'CREATOR' && !isLoading" extensionId="focus-mode-control" [extensionData]="guidedModeExtensionData"></lib-extension-point>
-<div *ngIf="!tooFewFeatures && !hideBarForParticipants" class="list nav {{position}}" fxLayout="column" fxLayoutAlign="space-between center">
+<div class="list nav {{position}}" fxLayout="column" fxLayoutAlign="space-between center">
   <div class="icon-container">
     <button *ngFor="let barItem of barItems; let i = index" fxLayoutAlign="center center" class="item nav-button" mat-button [id]="barItem.name + '-button'"
          [ngClass]="{'current': i === currentRouteIndex }" (click)="navToUrl(i)"

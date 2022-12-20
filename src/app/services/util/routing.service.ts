@@ -154,9 +154,9 @@ export class RoutingService {
     } else if (this.routeExistsInArray(this.loginChildRoutes)) {
       backRoute = [this.parentRoute.login];
     } else if (this.routeExistsInArray(this.roomChildRoutes)) {
-      backRoute = [this.getRoleString(role), this.shortId];
+      backRoute = [this.getRoleRoute(role), this.shortId];
     } else if (this.routeExistsInArray(this.seriesChildRoutes)) {
-      backRoute = [this.getRoleString(role), this.shortId, 'series', series];
+      backRoute = [this.getRoleRoute(role), this.shortId, 'series', series];
     }
     // Set back route if not set yet, parent route is a room route or if current route is no room route at all
     if (!this.backRouteIsSet || parentRoute === roomRoute || this.currentRoute !== roomRoute) {
@@ -216,7 +216,14 @@ export class RoutingService {
     this.globalStorageService.removeItem(STORAGE_KEYS.REDIRECT_URL);
   }
 
-  getRoleString(role: string): string {
+  getRoleRoute(role?: string): string {
+    if (!role) {
+      if (this.role) {
+        role = this.role;
+      } else {
+        return RoutePrefix.PRESENTATION;
+      }
+    }
     return role === UserRole.PARTICIPANT ? RoutePrefix.PARTICIPANT : RoutePrefix.CREATOR;
   }
 
@@ -329,11 +336,11 @@ export class RoutingService {
   }
 
   getPresentationUrl(url: string): string {
-    return this.replaceRoleInUrl(url, this.getRoleString(this.viewRole), RoutePrefix.PRESENTATION);
+    return this.replaceRoleInUrl(url, this.getRoleRoute(this.viewRole), RoutePrefix.PRESENTATION);
   }
 
   switchRole() {
-    const currentRoleString = this.getRoleString(this.role);
+    const currentRoleString = this.getRoleRoute(this.role);
     const url = '/' + (this.fullCurrentRoute.includes(currentRoleString) ? RoutePrefix.PARTICIPANT : currentRoleString) + '/' + this.shortId;
     this.router.navigateByUrl(url);
   }

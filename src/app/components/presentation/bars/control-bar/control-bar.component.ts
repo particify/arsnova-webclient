@@ -17,15 +17,15 @@ import { AnnounceService } from '../../../../services/util/announce.service';
 import { Hotkey, HotkeyService } from '../../../../services/util/hotkey.service';
 import { HotkeyAction } from '../../../../directives/hotkey.directive';
 import { TranslateService } from '@ngx-translate/core';
-import { RemoteMessage } from '../../../../models/events/remote/remote-message.enum';
 import { Features } from '../../../../models/features.enum';
 import { ContentService } from '../../../../services/http/content.service';
 import { Content } from '../../../../models/content';
 import { DialogService } from '../../../../services/util/dialog.service';
-import { ContentMessages } from '../../../../models/events/content-messages.enum';
 import { ContentType } from '../../../../models/content-type.enum';
 import { AdvancedSnackBarTypes, NotificationService } from '../../../../services/util/notification.service';
 import { RoomService } from '../../../../services/http/room.service';
+import { RemoteService } from '../../../../services/util/remote.service';
+import { PresentationEvent } from '../../../../models/events/presentation-events.enum';
 
 export class KeyNavBarItem extends NavBarItem {
   key: string;
@@ -131,7 +131,8 @@ export class ControlBarComponent extends NavBarComponent implements OnInit, OnDe
     private translateService: TranslateService,
     private contentService: ContentService,
     private dialogService: DialogService,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private remoteService: RemoteService
   ) {
     super(router, routingService, route, globalStorageService,
       roomStatsService, feedbackService, contentGroupService, eventService, roomService);
@@ -154,13 +155,10 @@ export class ControlBarComponent extends NavBarComponent implements OnInit, OnDe
     return this.barItems.map(b => b.name).indexOf(feature) === this.currentRouteIndex;
   }
 
-  beforeInit() {
-    this.subscribeFullscreen();
-    this.registerHotkeys();
-  }
-
   afterInit() {
     const lastSort = this.globalStorageService.getItem(STORAGE_KEYS.COMMENT_SORT);
+    this.subscribeFullscreen();
+    this.registerHotkeys();
     this.currentCommentSort = lastSort && lastSort !== Sort.VOTEASC ? lastSort : Sort.TIME;
     this.route.data.subscribe(data => {
       this.surveyStarted = !data.room.settings.feedbackLocked;
@@ -215,11 +213,11 @@ export class ControlBarComponent extends NavBarComponent implements OnInit, OnDe
 
   subscribeToEvents() {
     this.barItems.map(b => b.key = this.getFeatureKey(b.name));
-    this.eventService.on(RemoteMessage.SURVEY_STATE_CHANGED).subscribe(state => {
-      this.surveyStarted = state === 'started';
+    this.remoteService.getFeedbackState().pipe(takeUntil(this.destroyed$)).subscribe(state => {
+      this.surveyStarted = state.started;
       this.setSurveyState();
     });
-    this.eventService.on<any>(ContentMessages.STEP_STATE_CHANGED).subscribe(state => {
+    this.eventService.on<any>(PresentationEvent.CONTENT_STATE_UPDATED).subscribe(state => {
       this.contentStepState = state.position;
       this.contentIndex = state.index;
       this.content = state.content;
@@ -234,25 +232,21 @@ export class ControlBarComponent extends NavBarComponent implements OnInit, OnDe
       this.setArrowsState(this.contentStepState);
       this.checkIfContentLocked();
     });
-    this.eventService.on<CommentPresentationState>(RemoteMessage.UPDATE_COMMENT_STATE).subscribe(state => {
+    this.eventService.on<CommentPresentationState>(PresentationEvent.COMMENT_STATE_UPDATED).pipe(takeUntil(this.destroyed$)).subscribe(state => {
       this.commentStepState = state.stepState;
       if (this.isActiveFeature(Features.COMMENTS)) {
         this.setArrowsState(this.commentStepState);
       }
     });
-    this.eventService.on<number>('CommentZoomChanged').subscribe(zoom => {
+    this.eventService.on<number>(PresentationEvent.COMMENT_ZOOM_UPDATED).subscribe(zoom => {
       this.currentCommentZoom = Math.round(zoom);
       this.announceService.announce('presentation.a11y-comment-zoom-changed', { zoom: this.currentCommentZoom })
     });
-    this.eventService.on<ContentGroup>('ContentGroupStateChanged').subscribe(updatedContentGroup => {
+    this.eventService.on<ContentGroup>(PresentationEvent.CONTENT_GROUP_UPDATED).subscribe(updatedContentGroup => {
       this.group = updatedContentGroup;
       this.checkIfContentLocked();
     });
-    this.eventService.on<string>(RemoteMessage.CONTENT_GROUP_UPDATED).subscribe(contentGroupId => {
-      this.changeGroup(this.contentGroups.filter(cg => cg.id === contentGroupId)[0]);
-    });
-    this.eventService.on<string>(RemoteMessage.CHANGE_FEATURE_ROUTE).subscribe(feature => this.updateFeature(feature));
-    this.eventService.on<boolean>(ContentMessages.MULTIPLE_ROUNDS).subscribe(multipleRounds => {
+    this.eventService.on<boolean>(PresentationEvent.MULTIPLE_CONTENT_ROUNDS_EXIST).subscribe(multipleRounds => {
       this.multipleRounds = multipleRounds;
     })
   }
@@ -455,7 +449,7 @@ export class ControlBarComponent extends NavBarComponent implements OnInit, OnDe
 
   changeCommentSort(sort: Sort) {
     this.currentCommentSort = sort;
-    this.eventService.broadcast('CommentSortingChanged', this.currentCommentSort);
+    this.eventService.broadcast(PresentationEvent.COMMENT_SORTING_UPDATED, this.currentCommentSort);
   }
 
   private registerHotkeys() {
@@ -488,7 +482,7 @@ export class ControlBarComponent extends NavBarComponent implements OnInit, OnDe
   }
 
   deleteContentAnswers() {
-    this.eventService.on<string>(ContentMessages.ANSWERS_DELETED).subscribe(() => {
+    this.eventService.on<string>(PresentationEvent.CONTENT_ANSWERS_DELETED).subscribe(() => {
       this.content.state.round = 1;
       this.resetAnswerEvent.next(this.content.id);
       this.changeRound(0);
@@ -508,7 +502,7 @@ export class ControlBarComponent extends NavBarComponent implements OnInit, OnDe
       contentIndex: this.contentIndex,
       round: round
     };
-    this.eventService.broadcast(ContentMessages.ROUND_CHANGED, body);
+    this.eventService.broadcast(PresentationEvent.CONTENT_ROUND_UPDATED, body);
   }
 
   afterRoundStarted(content: Content) {

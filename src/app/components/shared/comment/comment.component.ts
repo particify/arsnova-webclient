@@ -118,7 +118,7 @@ export class CommentComponent implements OnInit, OnDestroy {
   }
 
   getRole() {
-    this.roleString = this.routingService.getRoleString(this.viewRole);
+    this.roleString = this.routingService.getRoleRoute(this.viewRole);
     switch (this.viewRole) {
       case UserRole.PARTICIPANT:
         this.isParticipant = true;

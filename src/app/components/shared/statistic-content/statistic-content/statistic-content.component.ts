@@ -11,15 +11,14 @@ import { StatisticWordcloudComponent } from '../statistic-wordcloud/statistic-wo
 import { StatisticScaleComponent } from '../statistic-scale/statistic-scale.component';
 import { HotkeyAction } from '../../../../directives/hotkey.directive';
 import { EventService } from '../../../../services/util/event.service';
-import { RemoteMessage } from '../../../../models/events/remote/remote-message.enum';
-import { UiState } from '../../../../models/events/remote/ui-state-changed-event';
-import { ContentFocusState } from '../../../../models/events/remote/content-focus-state';
-import { ContentMessages } from '../../../../models/events/content-messages.enum';
 import { ContentService } from '../../../../services/http/content.service';
 import { ActivatedRoute } from '@angular/router';
 import { UserRole } from '../../../../models/user-roles.enum';
 import { UserSettings } from '../../../../models/user-settings';
 import { StatisticPrioritizationComponent } from '../statistic-prioritization/statistic-prioritization.component';
+import { ContentGroup } from '../../../../models/content-group';
+import { RemoteService } from '../../../../services/util/remote.service';
+import { PresentationEvent } from '../../../../models/events/presentation-events.enum';
 
 @Component({
   selector: 'app-statistic-content',
@@ -42,7 +41,7 @@ export class StatisticContentComponent implements OnInit {
   @Input() correctOptionsPublished: boolean;
   @Input() isPresentation = false;
   @Input() indexChanged: EventEmitter<number> = new EventEmitter<number>();
-  @Input() contentGroupId: string;
+  @Input() contentGroup: ContentGroup;
   @Input() useCustomFlipAction = false;
   @Output() updatedCounter: EventEmitter<number> = new EventEmitter<number>();
   @Output() customFlipEvent = new EventEmitter();
@@ -65,8 +64,8 @@ export class StatisticContentComponent implements OnInit {
 
   constructor(private announceService: AnnounceService,
               private eventService: EventService,
-              private contentService: ContentService,
-              private route: ActivatedRoute) { }
+              private route: ActivatedRoute,
+              private remoteService: RemoteService) { }
 
   ngOnInit(): void {
     this.attachmentData = {
@@ -91,13 +90,13 @@ export class StatisticContentComponent implements OnInit {
       }
     });
     this.broadcastRoundState();
-    this.eventService.on<any>(ContentMessages.ROUND_CHANGED).subscribe(roundData => {
+    this.eventService.on<any>(PresentationEvent.CONTENT_ROUND_UPDATED).subscribe(roundData => {
       if (this.index === roundData.contentIndex) {
         this.changeRound(roundData.round);
       }
     });
     if (this.isPresentation) {
-      this.eventService.on<UiState>(RemoteMessage.UI_STATE_CHANGED).subscribe(state => {
+      this.remoteService.getUiState().subscribe(state => {
         if (this.content.id === state.contentId) {
           if (state.resultsVisible !== this.answersVisible) {
             this.toggleAnswers(false);
@@ -111,21 +110,19 @@ export class StatisticContentComponent implements OnInit {
         }
       });
       if (this.active) {
-        const remoteState = new ContentFocusState(this.content.id, this.contentGroupId, false, false);
-        this.eventService.broadcast(RemoteMessage.CHANGE_CONTENTS_STATE, remoteState);
+        this.sendUiState(false, false);
       }
     }
   }
 
   broadcastRoundState() {
     if (this.active) {
-      this.eventService.broadcast(ContentMessages.MULTIPLE_ROUNDS, this.multipleRounds);
+      this.eventService.broadcast(PresentationEvent.MULTIPLE_CONTENT_ROUNDS_EXIST, this.multipleRounds);
     }
   }
 
-  sendUiState() {
-    const remoteState = new ContentFocusState(this.content.id, this.contentGroupId, this.answersVisible, this.correctVisible);
-    this.eventService.broadcast(RemoteMessage.CHANGE_CONTENTS_STATE, remoteState);
+  sendUiState(answersVisible = this.answersVisible, correctVisible = this.correctVisible) {
+    this.remoteService.updateContentStateChange(this.content.id, this.index, this.contentGroup.id, this.contentGroup.name, answersVisible, correctVisible);
   }
 
   toggleAnswers(sendState = true) {

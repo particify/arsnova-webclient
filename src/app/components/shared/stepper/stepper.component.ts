@@ -5,6 +5,8 @@ import { Directionality } from '@angular/cdk/bidi';
 import { AnnounceService } from '@arsnova/app/services/util/announce.service';
 import { HotkeyService } from '../../../services/util/hotkey.service';
 import { TranslateService } from '@ngx-translate/core';
+import { RemoteService } from '@arsnova/app/services/util/remote.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-stepper',
@@ -38,8 +40,8 @@ export class StepperComponent extends CdkStepper implements OnInit, OnDestroy {
   @Input() listLength: number;
   @Input() completed: Map<number, boolean> = new Map<number, boolean>();
   @Input() isPresentation = false;
+  @Input() isParticipant = false;
   @Input() i18nPrefix: string;
-  @Input() disabled = false;
   @Input() finished = false;
   @Input() overviewIndex: number;
   headerPos = 0;
@@ -49,6 +51,9 @@ export class StepperComponent extends CdkStepper implements OnInit, OnDestroy {
   swipeXLocation?: number;
   swipeTime?: number;
 
+  focusStateSubscription: Subscription;
+  isGuided = false;
+
   private hotkeyRefs: symbol[] = [];
 
   constructor(private announceService: AnnounceService,
@@ -56,11 +61,18 @@ export class StepperComponent extends CdkStepper implements OnInit, OnDestroy {
               private translateService: TranslateService,
               dir: Directionality,
               changeDetectorRef: ChangeDetectorRef,
-              elementRef: ElementRef<HTMLElement>) {
+              elementRef: ElementRef<HTMLElement>,
+              private remoteService: RemoteService) {
     super(dir, changeDetectorRef, elementRef);
   }
 
   ngOnInit() {
+    if (this.isParticipant) {
+      this.isGuided = this.remoteService.isGuided;
+      this.focusStateSubscription = this.remoteService.getFocusModeState().subscribe(isGuided => {
+        this.isGuided = isGuided;
+      });
+    }
     this.translateService.get(this.i18nPrefix + '.previous').subscribe(t =>
       this.hotkeyService.registerHotkey({
         key: 'ArrowLeft',
@@ -79,6 +91,9 @@ export class StepperComponent extends CdkStepper implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.hotkeyRefs.forEach(h => this.hotkeyService.unregisterHotkey(h));
+    if (this.focusStateSubscription) {
+      this.focusStateSubscription.unsubscribe();
+    }
   }
 
   init(index: number, length: number) {
@@ -117,7 +132,7 @@ export class StepperComponent extends CdkStepper implements OnInit, OnDestroy {
   }
 
   next(): void {
-    if (!this.disabled) {
+    if (!this.isGuided) {
       if (this.selectedIndex < this.listLength - 1) {
         if ((this.selectedIndex < this.listLength - 1) || this.finished) {
           this.onClick(this.selectedIndex + 1);
@@ -134,7 +149,7 @@ export class StepperComponent extends CdkStepper implements OnInit, OnDestroy {
   }
 
   previous(): void {
-    if (!this.disabled) {
+    if (!this.isGuided) {
       if (this.selectedIndex > 0) {
         this.onClick(this.selectedIndex - 1);
         setTimeout(() => {

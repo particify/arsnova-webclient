@@ -29,6 +29,7 @@ import { HotkeyService } from '@arsnova/app/services/util/hotkey.service';
 import { ClientAuthentication } from '@arsnova/app/models/client-authentication';
 import { AuthProvider } from '@arsnova/app/models/auth-provider';
 import { A11yIntroPipe } from '@arsnova/app/pipes/a11y-intro.pipe';
+import { RemoteService } from '@arsnova/app/services/util/remote.service';
 
 describe('SurveyPageComponent', () => {
   let component: SurveyPageComponent;
@@ -65,6 +66,8 @@ describe('SurveyPageComponent', () => {
   const activatedRouteStub = new ActivatedRouteStub(null, data, snapshot);
   let translateService: TranslateService;
   const mockA11yIntroPipe = new A11yIntroPipe(translateService);
+
+  const mockRemoteService = jasmine.createSpyObj(['getCommentState']);
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
@@ -129,6 +132,10 @@ describe('SurveyPageComponent', () => {
         {
           provide: A11yIntroPipe,
           useValue: mockA11yIntroPipe
+        },
+        {
+          provide: RemoteService,
+          useValue: mockRemoteService
         }
       ],
       schemas: [

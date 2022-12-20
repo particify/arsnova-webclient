@@ -21,10 +21,10 @@ import { AnnounceService } from '../../../services/util/announce.service';
 import { CommentSettingsService } from '../../../services/http/comment-settings.service';
 import { Location } from '@angular/common';
 import { HotkeyService } from '../../../services/util/hotkey.service';
-import { RemoteMessage } from '../../../models/events/remote/remote-message.enum';
-import { CommentFocusState } from '../../../models/events/remote/comment-focus-state';
 import { RoutingService } from '../../../services/util/routing.service';
 import { UiState } from '../../../models/events/ui/ui-state.enum';
+import { RemoteService } from '../../../services/util/remote.service';
+import { PresentationEvent } from '../../../models/events/presentation-events.enum';
 
 // Using lowercase letters in enums because they we're also used for parsing incoming WS-messages
 
@@ -147,7 +147,8 @@ export class CommentListComponent implements OnInit, OnDestroy {
     private commentSettingsService: CommentSettingsService,
     private location: Location,
     private hotkeyService: HotkeyService,
-    private routingService: RoutingService
+    private routingService: RoutingService,
+    private remoteService: RemoteService
   ) {
     langService.langEmitter.subscribe(lang => translateService.use(lang));
   }
@@ -227,7 +228,7 @@ export class CommentListComponent implements OnInit, OnDestroy {
       this.comments = comments;
       this.initRoom(reload);
       if (this.isPresentation && this.comments.length === 0) {
-        this.sendCommentStateChange('NO_COMMENTS_YET');
+        this.remoteService.updateCommentStateChange('NO_COMMENTS_YET');
       }
     });
   }
@@ -367,9 +368,13 @@ export class CommentListComponent implements OnInit, OnDestroy {
   initSubscriptions() {
     if (this.isPresentation) {
       if (this.displayComments.length > 0) {
-        this.goToFirstComment();
+        setTimeout(() => {
+          if (!this.activeComment) {
+            this.goToFirstComment();
+          }
+        }, 300);
       }
-      this.eventService.on<string>('CommentSortingChanged').subscribe(sort => {
+      this.eventService.on<string>(PresentationEvent.COMMENT_SORTING_UPDATED).subscribe(sort => {
         this.sortComments(sort);
         setTimeout(() => {
           this.goToFirstComment();
@@ -377,7 +382,8 @@ export class CommentListComponent implements OnInit, OnDestroy {
       });
     }
     let comment;
-    this.eventService.on<string>(RemoteMessage.COMMENT_ID_CHANGED).subscribe(commentId => {
+    this.remoteService.getCommentState().subscribe(state => {
+      const commentId = state.commentId;
       if (this.activeComment?.id !== commentId && comment?.id !== commentId) {
         comment = this.displayComments.find(c => c.id === commentId);
         let timeout = 0;
@@ -739,9 +745,9 @@ export class CommentListComponent implements OnInit, OnDestroy {
     }
     this.updateActiveComment.emit(comment);
     const index = this.getIndexOfComment(comment);
-    const stepState = new CommentPresentationState(this.getStepState(index),comment.id);
-    this.eventService.broadcast(RemoteMessage.UPDATE_COMMENT_STATE, stepState);
-    this.sendCommentStateChange(comment.id);
+    const commentPresentationState = new CommentPresentationState(this.getStepState(index), comment.id);
+    this.eventService.broadcast(PresentationEvent.COMMENT_STATE_UPDATED, commentPresentationState);
+    this.remoteService.updateCommentStateChange(comment.id);
     if (!this.isLoading && this.isPresentation) {
       this.scrollToComment(index);
       this.announceCommentPresentation(index);
@@ -778,11 +784,6 @@ export class CommentListComponent implements OnInit, OnDestroy {
     );
   }
 
-  sendCommentStateChange(commentId: string) {
-    const remoteState = new CommentFocusState(commentId);
-    this.eventService.broadcast(RemoteMessage.CHANGE_COMMENTS_STATE, remoteState);
-  }
-
   announceCommentPresentation(index: number) {
     this.announceService.announce('presentation.a11y-present-comment', { comment: this.displayComments[index].body });
   }
@@ -804,7 +805,7 @@ export class CommentListComponent implements OnInit, OnDestroy {
   }
 
   updateUrl() {
-    const role = this.routingService.getRoleString(this.viewRole);
+    const role = this.routingService.getRoleRoute(this.viewRole);
     const url = [role, this.room.shortId, 'comments'];
     if (this.isModerator) {
       url.push('moderation');
