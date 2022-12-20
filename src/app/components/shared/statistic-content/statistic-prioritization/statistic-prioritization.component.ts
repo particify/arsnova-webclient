@@ -97,7 +97,6 @@ export class StatisticPrioritizationComponent extends StatisticChoiceComponent i
 
   createHorizontalChart(colors: string[]) {
     const gridConfig = {
-      borderColor: this.colorStrings.onBackground,
       tickColor: this.colorStrings.background,
       drawOnChartArea: false,
       z: 1
@@ -139,8 +138,10 @@ export class StatisticPrioritizationComponent extends StatisticChoiceComponent i
             },
             grid: {
               drawOnChartArea: false,
-              tickColor: this.colorStrings.background,
-              borderWidth: 0
+              tickColor: this.colorStrings.background
+            },
+            border: {
+              width: 0
             }
           },
           y: {
@@ -155,6 +156,9 @@ export class StatisticPrioritizationComponent extends StatisticChoiceComponent i
               }
             },
             grid: gridConfig,
+            border: {
+              color: this.colorStrings.onBackground
+            },
             display: true
           }
         },

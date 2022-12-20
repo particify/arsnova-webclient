@@ -107,7 +107,6 @@ export class StatisticChoiceComponent extends StatisticContentBaseComponent impl
     Chart.defaults.font.size = this.isPresentation ? 14 : 16;
     Chart.register(BarController, BarElement, CategoryScale, LinearScale, ChartDataLabels);
     const gridConfig = {
-      borderColor: this.colorStrings.onBackground,
       tickColor: this.isPresentation ? this.colorStrings.background : this.colorStrings.onBackground,
       drawOnChartArea: !this.isPresentation,
       z: 1
@@ -164,10 +163,12 @@ export class StatisticChoiceComponent extends StatisticContentBaseComponent impl
               color: this.isPresentation ? this.colorStrings.background : this.colorStrings.onBackground
             },
             grid: {
-              borderWidth: this.isPresentation ? 0 : 1,
-              borderColor: this.colorStrings.onBackground,
               tickColor: this.isPresentation ? this.colorStrings.background : this.colorStrings.onBackground,
               drawOnChartArea: !this.isPresentation
+            },
+            border: {
+              width: this.isPresentation ? 0 : 1,
+              color: this.colorStrings.onBackground
             }
           },
           x: {
@@ -176,6 +177,9 @@ export class StatisticChoiceComponent extends StatisticContentBaseComponent impl
               display: !this.settings.contentAnswersDirectlyBelowChart || !this.isPresentation
             },
             grid: gridConfig,
+            border: {
+              color: this.colorStrings.onBackground
+            },
             display: true
           }
         },
