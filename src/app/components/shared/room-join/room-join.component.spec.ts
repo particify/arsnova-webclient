@@ -10,7 +10,8 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import {
   ActivatedRouteStub,
   JsonTranslationLoader,
-  MockEventService, MockGlobalStorageService
+  MockEventService,
+  MockGlobalStorageService,
 } from '@arsnova/testing/test-helpers';
 import { HarnessLoader } from '@angular/cdk/testing';
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
@@ -39,7 +40,9 @@ describe('RoomJoinComponent', () => {
   let component: RoomJoinComponent;
   let fixture: ComponentFixture<RoomJoinComponent>;
   const activatedRoute = new ActivatedRouteStub();
-  const notificationService = jasmine.createSpyObj('NotificationService', ['showAdvanced']);
+  const notificationService = jasmine.createSpyObj('NotificationService', [
+    'showAdvanced',
+  ]);
   const router = jasmine.createSpyObj('Router', ['navigate']);
   let loader: HarnessLoader;
   let joinButton: MatButtonHarness;
@@ -47,15 +50,11 @@ describe('RoomJoinComponent', () => {
   const splitShortIdPipe = new SplitShortIdPipe();
 
   beforeEach(async () => {
-
     router.navigate.calls.reset();
     notificationService.showAdvanced.calls.reset();
 
     TestBed.configureTestingModule({
-      declarations: [
-        RoomJoinComponent,
-        SplitShortIdPipe
-      ],
+      declarations: [RoomJoinComponent, SplitShortIdPipe],
       imports: [
         BrowserAnimationsModule,
         ReactiveFormsModule,
@@ -67,53 +66,55 @@ describe('RoomJoinComponent', () => {
         TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
-            useClass: JsonTranslationLoader
+            useClass: JsonTranslationLoader,
           },
-          isolate: true
+          isolate: true,
         }),
-        HttpClientTestingModule
+        HttpClientTestingModule,
       ],
       providers: [
         {
           provide: Router,
-          useValue: router
+          useValue: router,
         },
         {
           provide: NotificationService,
-          useValue: notificationService
+          useValue: notificationService,
         },
         {
           provide: EventService,
-          useClass: MockEventService
+          useClass: MockEventService,
         },
         {
           provide: GlobalStorageService,
-          useClass: MockGlobalStorageService
+          useClass: MockGlobalStorageService,
         },
         {
           provide: AuthenticationService,
-          useClass: MockAuthenticationService
+          useClass: MockAuthenticationService,
         },
         {
           provide: ActivatedRoute,
-          useValue: activatedRoute
+          useValue: activatedRoute,
         },
         {
           provide: SplitShortIdPipe,
-          useValue: splitShortIdPipe
-        }
+          useValue: splitShortIdPipe,
+        },
       ],
-      schemas: [
-        NO_ERRORS_SCHEMA
-      ]
+      schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
 
-      fixture = TestBed.createComponent(RoomJoinComponent);
-      component = fixture.componentInstance;
-      fixture.detectChanges();
-      loader = TestbedHarnessEnvironment.loader(fixture);
-      inputField = await loader.getHarness(MatInputHarness.with({selector: '#room-id-input'}));
-      joinButton = await loader.getHarness(MatButtonHarness.with({selector: '#join-button'}));
+    fixture = TestBed.createComponent(RoomJoinComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+    loader = TestbedHarnessEnvironment.loader(fixture);
+    inputField = await loader.getHarness(
+      MatInputHarness.with({ selector: '#room-id-input' })
+    );
+    joinButton = await loader.getHarness(
+      MatButtonHarness.with({ selector: '#join-button' })
+    );
   });
 
   it('should create', () => {
@@ -131,20 +132,29 @@ describe('RoomJoinComponent', () => {
   it('should be display warning notification if the entered room code is shorter than 8 digits', async () => {
     await inputField.setValue('1');
     await joinButton.click();
-    expect(notificationService.showAdvanced).toHaveBeenCalledWith('home-page.exactly-8', 'WARNING');
+    expect(notificationService.showAdvanced).toHaveBeenCalledWith(
+      'home-page.exactly-8',
+      'WARNING'
+    );
     expect(router.navigate).not.toHaveBeenCalled();
   });
 
   it('should be display warning notification if the entered room code is longer than 8 digits', async () => {
     await inputField.setValue('1111111111');
     await joinButton.click();
-    expect(notificationService.showAdvanced).toHaveBeenCalledWith('home-page.exactly-8', 'WARNING');
+    expect(notificationService.showAdvanced).toHaveBeenCalledWith(
+      'home-page.exactly-8',
+      'WARNING'
+    );
     expect(router.navigate).not.toHaveBeenCalled();
   });
 
   it('should be display warning notification if the entered input not only contains numbers', async () => {
     await inputField.setValue('A');
-    expect(notificationService.showAdvanced).toHaveBeenCalledWith('home-page.only-numbers', 'WARNING');
+    expect(notificationService.showAdvanced).toHaveBeenCalledWith(
+      'home-page.only-numbers',
+      'WARNING'
+    );
   });
 
   it('should be route to room view if entered a 8 digit room number', async () => {

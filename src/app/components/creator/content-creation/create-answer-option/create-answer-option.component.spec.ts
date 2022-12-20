@@ -13,21 +13,18 @@ describe('CreateAnswerOptionComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ CreateAnswerOptionComponent ],
+      declarations: [CreateAnswerOptionComponent],
       imports: [
         TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
-            useClass: JsonTranslationLoader
+            useClass: JsonTranslationLoader,
           },
-          isolate: true
-        })
+          isolate: true,
+        }),
       ],
-      schemas: [
-        NO_ERRORS_SCHEMA
-      ]
-    })
-    .compileComponents();
+      schemas: [NO_ERRORS_SCHEMA],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(CreateAnswerOptionComponent);
     component = fixture.componentInstance;

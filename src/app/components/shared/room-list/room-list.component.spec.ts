@@ -6,7 +6,7 @@ import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import {
   JsonTranslationLoader,
   MockNotificationService,
-  MockGlobalStorageService
+  MockGlobalStorageService,
 } from '@arsnova/testing/test-helpers';
 import { GlobalStorageService } from '@arsnova/app/services/util/global-storage.service';
 import { RoutingService } from '@arsnova/app/services/util/routing.service';
@@ -29,89 +29,110 @@ describe('RoomListComponent', () => {
 
   const mockRoutingService = jasmine.createSpyObj(['getRoleString']);
 
-  const mockRoomService = jasmine.createSpyObj(['getRoom', 'deleteRoom', 'transferRoom']);
+  const mockRoomService = jasmine.createSpyObj([
+    'getRoom',
+    'deleteRoom',
+    'transferRoom',
+  ]);
 
-  const mockRoomMembershipService = jasmine.createSpyObj(['getMembershipChanges', 'getMembershipsForAuthentication', 'cancelMembership', 'requestMembership']);
+  const mockRoomMembershipService = jasmine.createSpyObj([
+    'getMembershipChanges',
+    'getMembershipsForAuthentication',
+    'cancelMembership',
+    'requestMembership',
+  ]);
   mockRoomMembershipService.getMembershipChanges.and.returnValue(of([]));
-  mockRoomMembershipService.getMembershipsForAuthentication.and.returnValue(of([]));
+  mockRoomMembershipService.getMembershipsForAuthentication.and.returnValue(
+    of([])
+  );
 
-  const mockAuthenticationService = jasmine.createSpyObj(['fetchGuestAuthentication', 'getGuestToken']);
-  const auth = new ClientAuthentication('1234', 'guest1234', AuthProvider.ARSNOVA_GUEST, 'token');
+  const mockAuthenticationService = jasmine.createSpyObj([
+    'fetchGuestAuthentication',
+    'getGuestToken',
+  ]);
+  const auth = new ClientAuthentication(
+    '1234',
+    'guest1234',
+    AuthProvider.ARSNOVA_GUEST,
+    'token'
+  );
   mockAuthenticationService.fetchGuestAuthentication.and.returnValue(of(auth));
 
-  const mockDialogService = jasmine.createSpyObj(['openRoomCreateDialog', 'openDeleteDialog']);
+  const mockDialogService = jasmine.createSpyObj([
+    'openRoomCreateDialog',
+    'openDeleteDialog',
+  ]);
 
   const mockSplitShortId = new SplitShortIdPipe();
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [
-        RoomListComponent,
-        SplitShortIdPipe
-      ],
+      declarations: [RoomListComponent, SplitShortIdPipe],
       imports: [
         TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
-            useClass: JsonTranslationLoader
+            useClass: JsonTranslationLoader,
           },
-          isolate: true
+          isolate: true,
         }),
-        MatMenuModule
+        MatMenuModule,
       ],
       providers: [
         {
           provide: RoomService,
-          useValue: mockRoomService
+          useValue: mockRoomService,
         },
         {
           provide: RoomMembershipService,
-          useValue: mockRoomMembershipService
+          useValue: mockRoomMembershipService,
         },
         {
           provide: AuthenticationService,
-          useValue: mockAuthenticationService
+          useValue: mockAuthenticationService,
         },
         {
           provide: EventService,
-          useClass: MockEventService
+          useClass: MockEventService,
         },
         {
           provide: NotificationService,
-          useClass: MockNotificationService
+          useClass: MockNotificationService,
         },
         {
           provide: GlobalStorageService,
-          useClass: MockGlobalStorageService
+          useClass: MockGlobalStorageService,
         },
         {
           provide: RoutingService,
-          useValue: mockRoutingService
+          useValue: mockRoutingService,
         },
         {
           provide: DialogService,
-          useValue: mockDialogService
+          useValue: mockDialogService,
         },
         {
           provide: Router,
-          useClass: MockRouter
+          useClass: MockRouter,
         },
         {
           provide: SplitShortIdPipe,
-          useValue: mockSplitShortId
-        }
+          useValue: mockSplitShortId,
+        },
       ],
-      schemas: [
-        NO_ERRORS_SCHEMA
-      ]
-    })
-    .compileComponents();
+      schemas: [NO_ERRORS_SCHEMA],
+    }).compileComponents();
   }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(RoomListComponent);
     component = fixture.componentInstance;
-    component.auth = new ClientAuthentication('1234', 'a@b.cd', AuthProvider.ARSNOVA, 'token');
+    component.auth = new ClientAuthentication(
+      '1234',
+      'a@b.cd',
+      AuthProvider.ARSNOVA,
+      'token'
+    );
     fixture.detectChanges();
   });
 

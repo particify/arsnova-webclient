@@ -5,7 +5,7 @@ import {
   ActivatedRouteStub,
   JsonTranslationLoader,
   MockLangService,
-  MockRouter
+  MockRouter,
 } from '@arsnova/testing/test-helpers';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LanguageService } from '@arsnova/app/services/util/language.service';
@@ -27,25 +27,28 @@ describe('FooterComponent', () => {
       ui: {
         links: {
           privacy: {
-            url: 'privacy'
+            url: 'privacy',
           },
           imprint: {
-            url: 'imprint'
+            url: 'imprint',
           },
           feedback: {
-            url: 'feedback'
-          }
-        }
-      }
-    }
+            url: 'feedback',
+          },
+        },
+      },
+    },
   };
 
   const activatedRoute = new ActivatedRouteStub(null, config);
-  const consentService = jasmine.createSpyObj('ConsentService', ['consentRequired', 'openDialog']);
+  const consentService = jasmine.createSpyObj('ConsentService', [
+    'consentRequired',
+    'openDialog',
+  ]);
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ FooterComponent ],
+      declarations: [FooterComponent],
       imports: [
         BrowserAnimationsModule,
         ReactiveFormsModule,
@@ -53,36 +56,33 @@ describe('FooterComponent', () => {
         TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
-            useClass: JsonTranslationLoader
+            useClass: JsonTranslationLoader,
           },
-          isolate: true
+          isolate: true,
         }),
-        ExtensionPointModule
+        ExtensionPointModule,
       ],
       providers: [
         FooterComponent,
         {
           provide: LanguageService,
-          useClass: MockLangService
+          useClass: MockLangService,
         },
         {
           provide: Router,
-          useClass: MockRouter
+          useClass: MockRouter,
         },
         {
           provide: ActivatedRoute,
-          useValue: activatedRoute
+          useValue: activatedRoute,
         },
         {
           provide: ConsentService,
-          useValue: consentService
-        }
+          useValue: consentService,
+        },
       ],
-      schemas: [
-        NO_ERRORS_SCHEMA
-      ]
-    })
-    .compileComponents();
+      schemas: [NO_ERRORS_SCHEMA],
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -100,7 +100,9 @@ describe('FooterComponent', () => {
     fixture.detectChanges();
     component.checkToolbarCondition('');
     fixture.detectChanges();
-    const footerContainer = fixture.debugElement.query(By.css('#footer-toolbar'));
+    const footerContainer = fixture.debugElement.query(
+      By.css('#footer-toolbar')
+    );
     expect(footerContainer).not.toBeNull();
   });
 
@@ -109,7 +111,9 @@ describe('FooterComponent', () => {
     fixture.detectChanges();
     component.checkToolbarCondition('');
     fixture.detectChanges();
-    const footerContainer = fixture.debugElement.query(By.css('#footer-toolbar'));
+    const footerContainer = fixture.debugElement.query(
+      By.css('#footer-toolbar')
+    );
     expect(footerContainer).not.toBeNull();
   });
 
@@ -118,7 +122,9 @@ describe('FooterComponent', () => {
     fixture.detectChanges();
     component.checkToolbarCondition('/edit/12345678/comments');
     fixture.detectChanges();
-    const footerContainer = fixture.debugElement.query(By.css('#footer-toolbar'));
+    const footerContainer = fixture.debugElement.query(
+      By.css('#footer-toolbar')
+    );
     expect(footerContainer).toBeNull();
   });
 
@@ -127,8 +133,9 @@ describe('FooterComponent', () => {
     fixture.detectChanges();
     component.checkToolbarCondition('/edit/12345678/comments');
     fixture.detectChanges();
-    const footerContainer = fixture.debugElement.query(By.css('#footer-toolbar'));
+    const footerContainer = fixture.debugElement.query(
+      By.css('#footer-toolbar')
+    );
     expect(footerContainer).not.toBeNull();
   });
-
 });

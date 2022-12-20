@@ -5,10 +5,17 @@ import { SurveyStarted } from '../../models/events/survey-started';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { catchError, map, tap, switchMap } from 'rxjs/operators';
-import { AuthenticationService, AUTH_HEADER_KEY, AUTH_SCHEME } from './authentication.service';
+import {
+  AuthenticationService,
+  AUTH_HEADER_KEY,
+  AUTH_SCHEME,
+} from './authentication.service';
 import { AbstractEntityService } from './abstract-entity.service';
 import { EventService } from '../util/event.service';
-import { GlobalStorageService, STORAGE_KEYS } from '../util/global-storage.service';
+import {
+  GlobalStorageService,
+  STORAGE_KEYS,
+} from '../util/global-storage.service';
 import { WsConnectorService } from '../websockets/ws-connector.service';
 import { IMessage } from '@stomp/stompjs';
 import { TranslateService } from '@ngx-translate/core';
@@ -17,18 +24,17 @@ import { FeedbackService } from '@arsnova/app/services/http/feedback.service';
 import { CachingService, DefaultCache } from '../util/caching.service';
 
 const httpOptions = {
-  headers: new HttpHeaders({})
+  headers: new HttpHeaders({}),
 };
 
 @Injectable()
 export class RoomService extends AbstractEntityService<Room> {
-
   serviceApiUrl = {
     duplicate: '/duplicate',
     generateRandomData: '/generate-random-data',
     transfer: '/transfer',
     v2Import: '/import/v2/room',
-    summary: '/_view/room/summary'
+    summary: '/_view/room/summary',
   };
 
   private currentRoom: Room;
@@ -47,7 +53,16 @@ export class RoomService extends AbstractEntityService<Room> {
     private feedbackService: FeedbackService,
     protected cachingService: CachingService
   ) {
-    super('Room', '/room', http, ws, eventService, translateService, notificationService, cachingService);
+    super(
+      'Room',
+      '/room',
+      http,
+      ws,
+      eventService,
+      translateService,
+      notificationService,
+      cachingService
+    );
   }
 
   /**
@@ -95,22 +110,22 @@ export class RoomService extends AbstractEntityService<Room> {
 
   getCreatorRooms(userId: string): Observable<Room[]> {
     const connectionUrl = this.buildUri(this.apiUrl.find);
-    return this.http.post<Room[]>(connectionUrl, {
-      properties: { ownerId: userId },
-      externalFilters: {}
-    }).pipe(
-      catchError(this.handleError('getCreatorRooms', []))
-    );
+    return this.http
+      .post<Room[]>(connectionUrl, {
+        properties: { ownerId: userId },
+        externalFilters: {},
+      })
+      .pipe(catchError(this.handleError('getCreatorRooms', [])));
   }
 
   getParticipantRooms(userId: string): Observable<Room[]> {
     const connectionUrl = this.buildUri(this.apiUrl.find);
-    return this.http.post<Room[]>(connectionUrl, {
-      properties: {},
-      externalFilters: { inHistoryOfUserId: userId }
-    }).pipe(
-      catchError(this.handleError('getParticipantRooms', []))
-    );
+    return this.http
+      .post<Room[]>(connectionUrl, {
+        properties: {},
+        externalFilters: { inHistoryOfUserId: userId },
+      })
+      .pipe(catchError(this.handleError('getParticipantRooms', [])));
   }
 
   addRoom(room: Room): Observable<Room> {
@@ -123,17 +138,19 @@ export class RoomService extends AbstractEntityService<Room> {
 
   getRoom(id: string): Observable<Room> {
     return this.getById(id).pipe(
-      map(room => this.parseExtensions(room)),
-      tap(room => this.setRoomId(room)),
+      map((room) => this.parseExtensions(room)),
+      tap((room) => this.setRoomId(room)),
       catchError(this.handleError<Room>(`getRoom keyword=${id}`))
     );
   }
 
   getRoomSummaries(ids: string[]): Observable<RoomSummary[]> {
-    const connectionUrl = this.buildForeignUri(`${this.serviceApiUrl.summary}?ids=${ids.join(',')}`);
-    return this.http.get<RoomSummary[]>(connectionUrl).pipe(
-      catchError(this.handleError<RoomSummary[]>(`getRoomSummaries`))
+    const connectionUrl = this.buildForeignUri(
+      `${this.serviceApiUrl.summary}?ids=${ids.join(',')}`
     );
+    return this.http
+      .get<RoomSummary[]>(connectionUrl)
+      .pipe(catchError(this.handleError<RoomSummary[]>(`getRoomSummaries`)));
   }
 
   getRoomByShortId(shortId: string): Observable<Room> {
@@ -157,44 +174,64 @@ export class RoomService extends AbstractEntityService<Room> {
     );
   }
 
-  duplicateRoom(roomId: string, temporary = false, name?: string): Observable<Room> {
-    const connectionUrl = this.buildForeignUri(this.serviceApiUrl.duplicate, roomId)
-        + (temporary ? '?temporary=true' : '') + (name ? `?name=${name}` : '');
-    return this.http.post<Room>(connectionUrl, null).pipe(
-      catchError(this.handleError<Room>(`duplicateRoom`))
-    );
+  duplicateRoom(
+    roomId: string,
+    temporary = false,
+    name?: string
+  ): Observable<Room> {
+    const connectionUrl =
+      this.buildForeignUri(this.serviceApiUrl.duplicate, roomId) +
+      (temporary ? '?temporary=true' : '') +
+      (name ? `?name=${name}` : '');
+    return this.http
+      .post<Room>(connectionUrl, null)
+      .pipe(catchError(this.handleError<Room>(`duplicateRoom`)));
   }
 
   generateRandomData(roomId: string): Observable<void> {
-    const connectionUrl = this.buildForeignUri(this.serviceApiUrl.generateRandomData, roomId);
-    return this.http.post<void>(connectionUrl, null).pipe(
-      catchError(this.handleError<void>(`generateRandomData`))
+    const connectionUrl = this.buildForeignUri(
+      this.serviceApiUrl.generateRandomData,
+      roomId
     );
+    return this.http
+      .post<void>(connectionUrl, null)
+      .pipe(catchError(this.handleError<void>(`generateRandomData`)));
   }
 
   importv2Room(json: JSON): Observable<Room> {
     const connectionUrl = this.buildForeignUri(this.serviceApiUrl.v2Import);
-    return this.http.post<Room>(connectionUrl, json, httpOptions).pipe(
-      catchError(this.handleError<Room>(`importv2Room, json: ${json}`))
-    );
+    return this.http
+      .post<Room>(connectionUrl, json, httpOptions)
+      .pipe(catchError(this.handleError<Room>(`importv2Room, json: ${json}`)));
   }
 
   transferRoomThroughToken(id: string, authToken: string): Observable<Room> {
     const auth$ = this.authService.getCurrentAuthentication();
-    const httpHeaders = new HttpHeaders().set(AUTH_HEADER_KEY, `${AUTH_SCHEME} ${authToken}`);
+    const httpHeaders = new HttpHeaders().set(
+      AUTH_HEADER_KEY,
+      `${AUTH_SCHEME} ${authToken}`
+    );
     return auth$.pipe(
-        switchMap(auth => {
-          const connectionUrl = this.buildForeignUri(`${this.serviceApiUrl.transfer}?newOwnerToken=${auth.token}`, id);
-          return this.http.post<Room>(connectionUrl, {}, { headers: httpHeaders }).pipe(
-             catchError(this.handleError<Room>(`transferRoomFromGuest ${id}`))
+      switchMap((auth) => {
+        const connectionUrl = this.buildForeignUri(
+          `${this.serviceApiUrl.transfer}?newOwnerToken=${auth.token}`,
+          id
+        );
+        return this.http
+          .post<Room>(connectionUrl, {}, { headers: httpHeaders })
+          .pipe(
+            catchError(this.handleError<Room>(`transferRoomFromGuest ${id}`))
           );
-        })
+      })
     );
   }
 
   changeFeedbackLock(roomId: string, isFeedbackLocked: boolean) {
-    this.getRoom(roomId).subscribe(room => {
-      const changes: { feedbackLocked: boolean, settings: object } = { feedbackLocked: isFeedbackLocked, settings: room.settings };
+    this.getRoom(roomId).subscribe((room) => {
+      const changes: { feedbackLocked: boolean; settings: object } = {
+        feedbackLocked: isFeedbackLocked,
+        settings: room.settings,
+      };
       room.settings['feedbackLocked'] = isFeedbackLocked;
       this.patchRoom(roomId, changes);
       if (!isFeedbackLocked) {
@@ -205,7 +242,7 @@ export class RoomService extends AbstractEntityService<Room> {
   }
 
   changeFeedbackType(roomId: string, feedbackType: string) {
-    this.getRoom(roomId).subscribe(room => {
+    this.getRoom(roomId).subscribe((room) => {
       const feedbackExtension: { type: string } = { type: feedbackType };
       if (!room.extensions) {
         room.extensions = {};
@@ -220,7 +257,7 @@ export class RoomService extends AbstractEntityService<Room> {
 
   parseExtensions(room: Room): Room {
     if (room.extensions) {
-      const extensions: { [key: string ]: object } = room.extensions;
+      const extensions: { [key: string]: object } = room.extensions;
       room.extensions = extensions;
     }
     return room;

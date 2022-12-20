@@ -3,18 +3,49 @@
     {{ 'admin-area.user-management' | translate }}
   </mat-card-title>
   <mat-card-content fxLayout="column" fxLayoutGap="10px">
-    <div *ngIf="showAccountAdding" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="10px">
-      <mat-form-field appearance="outline" floatLabel="always" fxFlex="auto" class="no-field-hint">
+    <div
+      *ngIf="showAccountAdding"
+      fxLayout="row"
+      fxLayoutAlign="start center"
+      fxLayoutGap="10px"
+    >
+      <mat-form-field
+        appearance="outline"
+        floatLabel="always"
+        fxFlex="auto"
+        class="no-field-hint"
+      >
         <mat-label>{{ 'admin-area.new-account' | translate }}</mat-label>
-        <input matNativeControl [(ngModel)]="newLoginId" placeholder="{{ 'admin-area.enter-email' | translate }}">
+        <input
+          matNativeControl
+          [(ngModel)]="newLoginId"
+          placeholder="{{ 'admin-area.enter-email' | translate }}"
+        />
       </mat-form-field>
-      <button mat-raised-button class="button-primary" (click)=addAccount()>{{ 'admin-area.add' | translate }}</button>
+      <button mat-raised-button class="button-primary" (click)="addAccount()">
+        {{ 'admin-area.add' | translate }}
+      </button>
     </div>
     <div fxLayout="row" fxLayoutGap="10px">
-      <app-user-search-field label="{{ 'admin-area.user-id' | translate }}" (submitted)="loadEntity($event)" fxFlex="auto" class="no-field-hint"></app-user-search-field>
-      <mat-form-field appearance="outline" floatLabel="always" fxFlex="auto" class="no-field-hint">
+      <app-user-search-field
+        label="{{ 'admin-area.user-id' | translate }}"
+        (submitted)="loadEntity($event)"
+        fxFlex="auto"
+        class="no-field-hint"
+      ></app-user-search-field>
+      <mat-form-field
+        appearance="outline"
+        floatLabel="always"
+        fxFlex="auto"
+        class="no-field-hint"
+      >
         <mat-label>{{ 'admin-area.user-login-id' | translate }}</mat-label>
-        <input matNativeControl disabled="disabled" [value]="user?.loginId" placeholder="{{ 'admin-area.no-user-selected' | translate }}">
+        <input
+          matNativeControl
+          disabled="disabled"
+          [value]="user?.loginId"
+          placeholder="{{ 'admin-area.no-user-selected' | translate }}"
+        />
         <mat-icon matPrefix>assignment_ind</mat-icon>
       </mat-form-field>
       <button mat-button (click)="clear()" fxFlex="64px">
@@ -22,11 +53,17 @@
       </button>
     </div>
     <mat-expansion-panel *ngIf="user">
-      <mat-expansion-panel-header>{{ 'admin-area.properties' | translate }}</mat-expansion-panel-header>
+      <mat-expansion-panel-header>{{
+        'admin-area.properties' | translate
+      }}</mat-expansion-panel-header>
       <app-entity-properties [entity]="user"></app-entity-properties>
     </mat-expansion-panel>
     <div *ngIf="user">
-      <button mat-button (click)="activateUser()" [disabled]="user.account?.activated">
+      <button
+        mat-button
+        (click)="activateUser()"
+        [disabled]="user.account?.activated"
+      >
         <mat-icon aria-hidden="false">lock_open</mat-icon>
         {{ 'admin-area.activate-user' | translate }}
       </button>

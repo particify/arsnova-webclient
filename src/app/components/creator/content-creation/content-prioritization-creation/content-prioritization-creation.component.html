@@ -1,18 +1,39 @@
 <div *ngIf="displayAnswers.length > 0">
   <app-divider></app-divider>
   <mat-list>
-    <mat-list-item fxLayout="column" fxLayoutAlign="center" *ngFor="let answer of displayAnswers; let i = index">
+    <mat-list-item
+      fxLayout="column"
+      fxLayoutAlign="center"
+      *ngFor="let answer of displayAnswers; let i = index"
+    >
       <div fxLayout="row" fxLayoutAlign="center center" class="full-width">
         <form fxLayout="row" class="form full-width">
-          <mat-form-field class="editInput full-width no-field-hint" appearance="standard">
-            <input id="answerEdit-{{i}}" name="answerEdit" matInput [(ngModel)]="answer.answerOption.label"
-                   (focus)="goInEditMode(i)" (blur)="leaveEditMode()" autocomplete="off">
+          <mat-form-field
+            class="editInput full-width no-field-hint"
+            appearance="standard"
+          >
+            <input
+              id="answerEdit-{{ i }}"
+              name="answerEdit"
+              matInput
+              [(ngModel)]="answer.answerOption.label"
+              (focus)="goInEditMode(i)"
+              (blur)="leaveEditMode()"
+              autocomplete="off"
+            />
           </mat-form-field>
         </form>
-        <button mat-icon-button *ngIf="!isEditMode || noAnswersYet"
-                attr.aria-label="{{ 'content.a11y-delete-answer' | translate: {answer: answer.answerOption.label} }}"
-                class="delete" (click)="deleteAnswer(i)"
-                matTooltip="{{ 'content.delete-answer' | translate }}">
+        <button
+          mat-icon-button
+          *ngIf="!isEditMode || noAnswersYet"
+          attr.aria-label="{{
+            'content.a11y-delete-answer'
+              | translate : { answer: answer.answerOption.label }
+          }}"
+          class="delete"
+          (click)="deleteAnswer(i)"
+          matTooltip="{{ 'content.delete-answer' | translate }}"
+        >
           <mat-icon>clear</mat-icon>
         </button>
       </div>
@@ -20,5 +41,8 @@
   </mat-list>
 </div>
 
-<app-create-answer-option *ngIf="(!isEditMode || noAnswersYet)" (answerCreated)="addAnswer($event)"
-[resetEvent]="resetAnswerInputEvent"></app-create-answer-option>
+<app-create-answer-option
+  *ngIf="!isEditMode || noAnswersYet"
+  (answerCreated)="addAnswer($event)"
+  [resetEvent]="resetAnswerInputEvent"
+></app-create-answer-option>

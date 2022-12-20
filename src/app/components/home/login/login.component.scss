@@ -4,13 +4,13 @@
 }
 
 .mat-divider {
-  width: 95%!important;
-  max-width: 350px!important;
-  position: static!important;
+  width: 95% !important;
+  max-width: 350px !important;
+  position: static !important;
   margin: 10px 0 20px 0;
 }
 
-input:-webkit-autofill  {
+input:-webkit-autofill {
   -webkit-box-shadow: 0 0 0 30px var(--surface) inset;
   -webkit-text-fill-color: var(--on-surface);
 }

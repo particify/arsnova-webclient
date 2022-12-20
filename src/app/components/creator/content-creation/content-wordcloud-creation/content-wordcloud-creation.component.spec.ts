@@ -13,27 +13,24 @@ import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
 import {
   MockEventService,
   MockNotificationService,
-  JsonTranslationLoader, ActivatedRouteStub
+  JsonTranslationLoader,
+  ActivatedRouteStub,
 } from '@arsnova/testing/test-helpers';
 import { ContentGroupService } from '@arsnova/app/services/http/content-group.service';
 
 const mockCreateEvent = new Subject<any>();
 
 @Injectable()
-class MockContentService {
-}
+class MockContentService {}
 
 @Injectable()
-class MockRoomService {
-}
+class MockRoomService {}
 
 @Injectable()
-class MockContentGroupService {
-}
+class MockContentGroupService {}
 
 @Injectable()
-class MockAnnouncer {
-}
+class MockAnnouncer {}
 
 describe('ContentWordcloudCreationComponent', () => {
   let component: ContentWordcloudCreationComponent;
@@ -41,62 +38,58 @@ describe('ContentWordcloudCreationComponent', () => {
 
   const data = {
     room: {
-      id: '1234'
-    }
-  }
+      id: '1234',
+    },
+  };
 
   const snapshot = new ActivatedRouteSnapshot();
 
-  snapshot.params = of([{seriesName: 'SERIES'}]);
+  snapshot.params = of([{ seriesName: 'SERIES' }]);
 
   const activatedRouteStub = new ActivatedRouteStub(null, data, snapshot);
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [
-        ContentWordcloudCreationComponent
-      ],
+      declarations: [ContentWordcloudCreationComponent],
       providers: [
         {
           provide: ContentService,
-          useClass: MockContentService
+          useClass: MockContentService,
         },
         {
           provide: NotificationService,
-          useClass: MockNotificationService
+          useClass: MockNotificationService,
         },
         {
           provide: EventService,
-          useClass: MockEventService
+          useClass: MockEventService,
         },
         {
           provide: RoomService,
-          useClass: MockRoomService
+          useClass: MockRoomService,
         },
         {
           provide: ContentGroupService,
-          useClass: MockContentGroupService
+          useClass: MockContentGroupService,
         },
         {
           provide: AnnounceService,
-          useClass: MockAnnouncer
+          useClass: MockAnnouncer,
         },
         {
           provide: ActivatedRoute,
-          useValue: activatedRouteStub
-        }
+          useValue: activatedRouteStub,
+        },
       ],
       imports: [
         TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
-            useClass: JsonTranslationLoader
+            useClass: JsonTranslationLoader,
           },
-          isolate: true
-        })
+          isolate: true,
+        }),
       ],
-      schemas: [
-        NO_ERRORS_SCHEMA
-      ]
+      schemas: [NO_ERRORS_SCHEMA],
     })
       .compileComponents()
       .then(() => {

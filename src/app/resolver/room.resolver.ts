@@ -7,15 +7,11 @@ import { tap } from 'rxjs/operators';
 
 @Injectable()
 export class RoomResolver implements Resolve<Room> {
-
-  constructor(
-    private roomService: RoomService
-  ) {
-  }
+  constructor(private roomService: RoomService) {}
 
   resolve(route: ActivatedRouteSnapshot): Observable<Room> {
-    return this.roomService.getRoomByShortId(route.params['shortId']).pipe(
-        tap(room => this.roomService.joinRoom(room))
-    );
+    return this.roomService
+      .getRoomByShortId(route.params['shortId'])
+      .pipe(tap((room) => this.roomService.joinRoom(room)));
   }
 }

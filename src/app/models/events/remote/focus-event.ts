@@ -7,8 +7,12 @@ export class FocusEvent {
   focusState: ContentFocusState | CommentFocusState | FeedbackFocusState;
   guided: boolean;
 
-  constructor(feature: string, focusState: ContentFocusState | CommentFocusState | FeedbackFocusState, guided: boolean) {
-    this.feature = feature || "UNSET";
+  constructor(
+    feature: string,
+    focusState: ContentFocusState | CommentFocusState | FeedbackFocusState,
+    guided: boolean
+  ) {
+    this.feature = feature || 'UNSET';
     this.focusState = focusState;
     this.guided = guided;
   }

@@ -1,37 +1,37 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
- import { OverlayComponent } from './overlay.component';
- import { MockMatDialogRef, JsonTranslationLoader } from '@arsnova/testing/test-helpers';
+import { OverlayComponent } from './overlay.component';
+import {
+  MockMatDialogRef,
+  JsonTranslationLoader,
+} from '@arsnova/testing/test-helpers';
 import { MatLegacyDialogRef as MatDialogRef } from '@angular/material/legacy-dialog';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 
- describe('OverlayComponent', () => {
+describe('OverlayComponent', () => {
   let component: OverlayComponent;
   let fixture: ComponentFixture<OverlayComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ OverlayComponent ],
+      declarations: [OverlayComponent],
       imports: [
         TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
-            useClass: JsonTranslationLoader
+            useClass: JsonTranslationLoader,
           },
-          isolate: true
-        })
+          isolate: true,
+        }),
       ],
       providers: [
         {
           provide: MatDialogRef,
-          useClass: MockMatDialogRef
+          useClass: MockMatDialogRef,
         },
       ],
-      schemas: [
-        NO_ERRORS_SCHEMA
-      ]
-    })
-    .compileComponents();
+      schemas: [NO_ERRORS_SCHEMA],
+    }).compileComponents();
   }));
 
   beforeEach(() => {

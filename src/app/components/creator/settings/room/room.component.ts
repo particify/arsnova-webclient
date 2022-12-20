@@ -1,6 +1,9 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Room } from '../../../../models/room';
-import { AdvancedSnackBarTypes, NotificationService } from '../../../../services/util/notification.service';
+import {
+  AdvancedSnackBarTypes,
+  NotificationService,
+} from '../../../../services/util/notification.service';
 import { TranslateService } from '@ngx-translate/core';
 import { RoomService } from '../../../../services/http/room.service';
 import { Router } from '@angular/router';
@@ -9,18 +12,21 @@ import { RoomDeleted } from '../../../../models/events/room-deleted';
 import { LanguageService } from '../../../../services/util/language.service';
 import { DialogService } from '../../../../services/util/dialog.service';
 import { GlobalStorageService } from '../../../../services/util/global-storage.service';
-import { FormattingService, MarkdownFeatureset } from '../../../../services/http/formatting.service';
+import {
+  FormattingService,
+  MarkdownFeatureset,
+} from '../../../../services/http/formatting.service';
 import { UpdateEvent } from '../settings.component';
 import { HINT_TYPES } from '../../../shared/hint/hint.component';
 
 @Component({
   selector: 'app-room-edit',
   templateUrl: './room.component.html',
-  styleUrls: ['./room.component.scss']
+  styleUrls: ['./room.component.scss'],
 })
 export class RoomComponent {
-
-  @Output() saveEvent: EventEmitter<UpdateEvent> = new EventEmitter<UpdateEvent>();
+  @Output() saveEvent: EventEmitter<UpdateEvent> =
+    new EventEmitter<UpdateEvent>();
 
   @Input() editRoom: Room;
   @Input() name: string;
@@ -42,22 +48,29 @@ export class RoomComponent {
     private globalStorageService: GlobalStorageService,
     private formattingService: FormattingService
   ) {
-    langService.langEmitter.subscribe(lang => translateService.use(lang));
+    langService.langEmitter.subscribe((lang) => translateService.use(lang));
   }
 
   openDeleteRoomDialog(): void {
-    const dialogRef = this.dialogService.openDeleteDialog('room', 'really-delete-room', this.editRoom.name);
-    dialogRef.afterClosed().subscribe(result => {
-        if (result === 'delete') {
-          this.deleteRoom(this.editRoom);
-        }
-      });
+    const dialogRef = this.dialogService.openDeleteDialog(
+      'room',
+      'really-delete-room',
+      this.editRoom.name
+    );
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result === 'delete') {
+        this.deleteRoom(this.editRoom);
+      }
+    });
   }
 
   deleteRoom(room: Room): void {
     this.roomService.deleteRoom(room.id).subscribe(() => {
-      this.translationService.get('settings.deleted').subscribe(msg => {
-        this.notificationService.showAdvanced(room.name + msg, AdvancedSnackBarTypes.WARNING);
+      this.translationService.get('settings.deleted').subscribe((msg) => {
+        this.notificationService.showAdvanced(
+          room.name + msg,
+          AdvancedSnackBarTypes.WARNING
+        );
       });
       const event = new RoomDeleted(room.id);
       this.eventService.broadcast(event.type, event.payload);

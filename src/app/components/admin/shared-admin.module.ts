@@ -6,20 +6,8 @@ import { EntityPropertiesComponent } from './entity-properties/entity-properties
 import { UserSearchFieldComponent } from './user-search-field/user-search-field.component';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    EssentialsModule,
-    MatTreeModule
-  ],
-  declarations: [
-    EntityPropertiesComponent,
-    UserSearchFieldComponent
-  ],
-  exports: [
-    EntityPropertiesComponent,
-    UserSearchFieldComponent
-  ]
+  imports: [CommonModule, EssentialsModule, MatTreeModule],
+  declarations: [EntityPropertiesComponent, UserSearchFieldComponent],
+  exports: [EntityPropertiesComponent, UserSearchFieldComponent],
 })
-export class SharedAdminModule {
-
-}
+export class SharedAdminModule {}

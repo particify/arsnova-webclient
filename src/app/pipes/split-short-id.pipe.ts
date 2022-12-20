@@ -1,7 +1,7 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import { NBSP, THINSP } from '../utils/html-entities';
 
-@Pipe({name: 'splitShortId'})
+@Pipe({ name: 'splitShortId' })
 export class SplitShortIdPipe implements PipeTransform {
   transform(shortId: string, smaller = true): any {
     if (!shortId) return shortId;

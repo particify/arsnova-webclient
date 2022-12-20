@@ -12,10 +12,12 @@ import { TextStatistic } from '../../../../models/text-statistic';
 @Component({
   selector: 'app-statistic-text',
   templateUrl: './statistic-text.component.html',
-  styleUrls: ['../text-statistic-content.scss']
+  styleUrls: ['../text-statistic-content.scss'],
 })
-export class StatisticTextComponent extends StatisticContentBaseComponent implements OnInit, OnDestroy {
-
+export class StatisticTextComponent
+  extends StatisticContentBaseComponent
+  implements OnInit, OnDestroy
+{
   @Input() content: ContentText;
   @Input() directShow: boolean;
 
@@ -27,12 +29,16 @@ export class StatisticTextComponent extends StatisticContentBaseComponent implem
     protected contentService: ContentService,
     private contentAnswerService: ContentAnswerService,
     private translateService: TranslateService,
-    protected eventService: EventService) {
+    protected eventService: EventService
+  ) {
     super(contentService, eventService);
   }
 
   loadData(): Observable<TextAnswer[]> {
-    return this.contentAnswerService.getAnswers(this.content.roomId, this.content.id);
+    return this.contentAnswerService.getAnswers(
+      this.content.roomId,
+      this.content.id
+    );
   }
 
   init(answers: TextAnswer[]) {
@@ -41,13 +47,14 @@ export class StatisticTextComponent extends StatisticContentBaseComponent implem
   }
 
   afterInit() {
-    this.contentService.getTextAnswerCreatedStream(this.content.roomId, this.content.id).pipe(
-      takeUntil(this.destroyed$)
-    ).subscribe(msg => {
-      const answer = JSON.parse(msg.body).payload as TextAnswer;
-      answer.contentId = this.content.id;
-      this.addAnswerToList(answer);
-    });
+    this.contentService
+      .getTextAnswerCreatedStream(this.content.roomId, this.content.id)
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((msg) => {
+        const answer = JSON.parse(msg.body).payload as TextAnswer;
+        answer.contentId = this.content.id;
+        this.addAnswerToList(answer);
+      });
   }
 
   ngOnDestroy() {
@@ -61,14 +68,14 @@ export class StatisticTextComponent extends StatisticContentBaseComponent implem
   }
 
   updateData(answers: TextAnswer[]) {
-    answers.forEach(answer => {
+    answers.forEach((answer) => {
       this.answers.push(answer);
     });
   }
 
   getData() {
     this.getAnswerStats();
-    this.updateCounter(this.answerStats.map(a => a.count));
+    this.updateCounter(this.answerStats.map((a) => a.count));
   }
 
   getAnswerStats() {
@@ -77,26 +84,39 @@ export class StatisticTextComponent extends StatisticContentBaseComponent implem
     for (const answer of this.answers) {
       if (answer.body) {
         const answerBody = answer.body.toLowerCase();
-        const count = answersMap.has(answerBody) ? answersMap.get(answerBody).count + 1 : 1;
-        answersMap.set(answerBody, new TextStatistic(answer.body, count, answer.id));
+        const count = answersMap.has(answerBody)
+          ? answersMap.get(answerBody).count + 1
+          : 1;
+        answersMap.set(
+          answerBody,
+          new TextStatistic(answer.body, count, answer.id)
+        );
       } else {
         this.abstentionCount++;
       }
     }
     answersMap.forEach((value: TextStatistic) => {
-      this.answerStats.push(new TextStatistic(value.answer, value.count, value.id));
+      this.answerStats.push(
+        new TextStatistic(value.answer, value.count, value.id)
+      );
     });
     this.answerStats.sort((a, b) => {
       return a.count > b.count ? -1 : 1;
     });
     if (this.abstentionCount > 0) {
-      const abstentionString = this.translateService.instant(this.abstentionCount === 1 ? 'statistic.abstention' : 'statistic.abstentions');
-      this.answerStats.push(new TextStatistic(abstentionString, this.abstentionCount));
+      const abstentionString = this.translateService.instant(
+        this.abstentionCount === 1
+          ? 'statistic.abstention'
+          : 'statistic.abstentions'
+      );
+      this.answerStats.push(
+        new TextStatistic(abstentionString, this.abstentionCount)
+      );
     }
   }
 
   filterAnswers(answerId: string) {
-    this.answerStats = this.answerStats.filter(a => a.id !== answerId);
+    this.answerStats = this.answerStats.filter((a) => a.id !== answerId);
   }
 
   addAnswerToList(answer: TextAnswer) {

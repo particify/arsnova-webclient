@@ -10,7 +10,10 @@ import { AuthenticationService } from '../../../services/http/authentication.ser
 import { EventService } from '../../../services/util/event.service';
 import { Message } from '@stomp/stompjs';
 import { Subscription } from 'rxjs';
-import { GlobalStorageService, STORAGE_KEYS } from '../../../services/util/global-storage.service';
+import {
+  GlobalStorageService,
+  STORAGE_KEYS,
+} from '../../../services/util/global-storage.service';
 import { UserRole } from '../../../models/user-roles.enum';
 import { FeedbackMessageType } from '../../../models/messages/feedback-message-type';
 import { FeedbackService } from '../../../services/http/feedback.service';
@@ -21,10 +24,12 @@ import { RoomStatsService } from '../../../services/http/room-stats.service';
 @Component({
   selector: 'app-participant-overview',
   templateUrl: './participant-overview.component.html',
-  styleUrls: ['./participant-overview.component.scss']
+  styleUrls: ['./participant-overview.component.scss'],
 })
-export class ParticipantOverviewComponent extends RoomOverviewComponent implements OnInit, AfterContentInit {
-
+export class ParticipantOverviewComponent
+  extends RoomOverviewComponent
+  implements OnInit, AfterContentInit
+{
   room: Room;
   protected surveySub: Subscription;
   surveyEnabled = false;
@@ -42,9 +47,17 @@ export class ParticipantOverviewComponent extends RoomOverviewComponent implemen
     protected globalStorageService: GlobalStorageService,
     private feedbackService: FeedbackService
   ) {
-    super(roomStatsService, contentGroupService, route, wsCommentService,
-      commentService, eventService, translateService, globalStorageService);
-    langService.langEmitter.subscribe(lang => translateService.use(lang));
+    super(
+      roomStatsService,
+      contentGroupService,
+      route,
+      wsCommentService,
+      commentService,
+      eventService,
+      translateService,
+      globalStorageService
+    );
+    langService.langEmitter.subscribe((lang) => translateService.use(lang));
   }
 
   ngAfterContentInit(): void {
@@ -55,10 +68,12 @@ export class ParticipantOverviewComponent extends RoomOverviewComponent implemen
 
   ngOnInit() {
     window.scroll(0, 0);
-    this.route.data.subscribe(data => {
+    this.route.data.subscribe((data) => {
       this.initializeRoom(data.room, data.userRole, data.viewRole);
     });
-    this.translateService.use(this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE));
+    this.translateService.use(
+      this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE)
+    );
   }
 
   unsubscribe() {
@@ -70,9 +85,11 @@ export class ParticipantOverviewComponent extends RoomOverviewComponent implemen
   getFeedback() {
     this.surveyEnabled = !this.room.settings['feedbackLocked'];
     this.feedbackService.startSub(this.room.id);
-    this.surveySub = this.feedbackService.messageEvent.subscribe((message: Message) => {
-      this.parseFeedbackMessage(message);
-    });
+    this.surveySub = this.feedbackService.messageEvent.subscribe(
+      (message: Message) => {
+        this.parseFeedbackMessage(message);
+      }
+    );
   }
 
   afterRoomLoadHook() {
@@ -87,8 +104,14 @@ export class ParticipantOverviewComponent extends RoomOverviewComponent implemen
 
   afterGroupsLoadHook() {
     this.isLoading = false;
-    if (this.contentGroups.length > 0 && this.globalStorageService.getItem(STORAGE_KEYS.LAST_GROUP) === '') {
-      this.globalStorageService.setItem(STORAGE_KEYS.LAST_GROUP, this.contentGroups[0].name);
+    if (
+      this.contentGroups.length > 0 &&
+      this.globalStorageService.getItem(STORAGE_KEYS.LAST_GROUP) === ''
+    ) {
+      this.globalStorageService.setItem(
+        STORAGE_KEYS.LAST_GROUP,
+        this.contentGroups[0].name
+      );
     } else {
       if (this.contentGroups.length === 0) {
         this.globalStorageService.setItem(STORAGE_KEYS.LAST_GROUP, '');

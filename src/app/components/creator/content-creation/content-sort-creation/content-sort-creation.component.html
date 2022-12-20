@@ -1,33 +1,79 @@
 <div fxLayout="column" fxLayoutGap="10px">
-    <div cdkDropList [cdkDropListData]="displayAnswers" (cdkDropListDropped)="drop($event)"
-         [cdkDropListDisabled]="isEditMode && !noAnswersYet">
-      <mat-list>
-        <app-divider *ngIf="displayAnswers.length  > 0"></app-divider>
-        <mat-list-item cdkDrag fxLayout="column" fxLayoutAlign="center" *ngFor="let answer of displayAnswers; let i = index">
-            <div fxLayout="row" fxLayoutAlign="center center" class="full-width">
-              <div cdkDragHandle tabindex="0" (keyup)="moveAnswer($event, i)" #sortListItem
-                   [attr.aria-label]="'content.a11y-sort-answer' | translate : {index: i+1, length: displayAnswers.length, answer: answer.answerOption.label}">
-                <mat-icon *ngIf="!isAnswerEdit > -1 && (!isEditMode || noAnswersYet)" class="drag-icon">
-                  drag_handle
-                </mat-icon>
-              </div>
-                <form fxLayout="row" class="full-width">
-                  <mat-form-field class="editInput full-width no-field-hint" appearance="standard">
-                    <input id="answerEdit-{{i}}" name="answerEdit" matInput [(ngModel)]="answer.answerOption.label"
-                         (focus)="goInEditMode(i)" (blur)="leaveEditMode()" class="full-width" autocomplete="off">
-                  </mat-form-field>
-                </form>
-                <span class="fill-remaining-space"></span>
-                <button mat-icon-button *ngIf="!isEditMode || noAnswersYet"
-                        attr.aria-label="{{ 'content.a11y-delete-answer' | translate: {answer: answer.answerOption.label} }}"
-                        class="delete" (click)="deleteAnswer(i)"
-                        matTooltip="{{ 'content.delete-answer' | translate }}">
-                  <mat-icon>clear</mat-icon>
-                </button>
-            </div>
-        </mat-list-item>
-      </mat-list>
-    </div>
-    <app-create-answer-option *ngIf="(!isEditMode || noAnswersYet)" (answerCreated)="addAnswer($event)"
-                              [resetEvent]="resetAnswerInputEvent"></app-create-answer-option>
+  <div
+    cdkDropList
+    [cdkDropListData]="displayAnswers"
+    (cdkDropListDropped)="drop($event)"
+    [cdkDropListDisabled]="isEditMode && !noAnswersYet"
+  >
+    <mat-list>
+      <app-divider *ngIf="displayAnswers.length > 0"></app-divider>
+      <mat-list-item
+        cdkDrag
+        fxLayout="column"
+        fxLayoutAlign="center"
+        *ngFor="let answer of displayAnswers; let i = index"
+      >
+        <div fxLayout="row" fxLayoutAlign="center center" class="full-width">
+          <div
+            cdkDragHandle
+            tabindex="0"
+            (keyup)="moveAnswer($event, i)"
+            #sortListItem
+            [attr.aria-label]="
+              'content.a11y-sort-answer'
+                | translate
+                  : {
+                      index: i + 1,
+                      length: displayAnswers.length,
+                      answer: answer.answerOption.label
+                    }
+            "
+          >
+            <mat-icon
+              *ngIf="!isAnswerEdit > -1 && (!isEditMode || noAnswersYet)"
+              class="drag-icon"
+            >
+              drag_handle
+            </mat-icon>
+          </div>
+          <form fxLayout="row" class="full-width">
+            <mat-form-field
+              class="editInput full-width no-field-hint"
+              appearance="standard"
+            >
+              <input
+                id="answerEdit-{{ i }}"
+                name="answerEdit"
+                matInput
+                [(ngModel)]="answer.answerOption.label"
+                (focus)="goInEditMode(i)"
+                (blur)="leaveEditMode()"
+                class="full-width"
+                autocomplete="off"
+              />
+            </mat-form-field>
+          </form>
+          <span class="fill-remaining-space"></span>
+          <button
+            mat-icon-button
+            *ngIf="!isEditMode || noAnswersYet"
+            attr.aria-label="{{
+              'content.a11y-delete-answer'
+                | translate : { answer: answer.answerOption.label }
+            }}"
+            class="delete"
+            (click)="deleteAnswer(i)"
+            matTooltip="{{ 'content.delete-answer' | translate }}"
+          >
+            <mat-icon>clear</mat-icon>
+          </button>
+        </div>
+      </mat-list-item>
+    </mat-list>
+  </div>
+  <app-create-answer-option
+    *ngIf="!isEditMode || noAnswersYet"
+    (answerCreated)="addAnswer($event)"
+    [resetEvent]="resetAnswerInputEvent"
+  ></app-create-answer-option>
 </div>

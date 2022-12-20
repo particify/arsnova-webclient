@@ -26,7 +26,7 @@
   }
 }
 
-@media(min-width: 701px) {
+@media (min-width: 701px) {
   .header {
     flex-direction: row;
     justify-content: space-between;
@@ -50,7 +50,7 @@
   }
 }
 
-@media(max-width: 700px) {
+@media (max-width: 700px) {
   .header {
     flex-direction: column;
     justify-content: center;
@@ -93,7 +93,6 @@
 .action-button-item {
   width: 50%;
 }
-
 
 .group-container {
   align-items: flex-end;

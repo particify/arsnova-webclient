@@ -1,5 +1,8 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { AdvancedSnackBarTypes, NotificationService } from '../../../services/util/notification.service';
+import {
+  AdvancedSnackBarTypes,
+  NotificationService,
+} from '../../../services/util/notification.service';
 import { TranslateService } from '@ngx-translate/core';
 import { RoomService } from '../../../services/http/room.service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -25,10 +28,9 @@ export class UpdateEvent {
 @Component({
   selector: 'app-settings',
   templateUrl: './settings.component.html',
-  styleUrls: ['./settings.component.scss']
+  styleUrls: ['./settings.component.scss'],
 })
 export class SettingsComponent implements OnInit {
-
   @Output() updateEvent: EventEmitter<Room> = new EventEmitter<Room>();
 
   @Input() settings: Settings;
@@ -38,23 +40,27 @@ export class SettingsComponent implements OnInit {
   contentExpanded = false;
   HotkeyAction = HotkeyAction;
 
-  constructor(public dialog: MatDialog,
-              public notificationService: NotificationService,
-              protected roomService: RoomService,
-              public router: Router,
-              public eventService: EventService,
-              protected translateService: TranslateService,
-              private location: Location,
-              private route: ActivatedRoute) {
-  }
+  constructor(
+    public dialog: MatDialog,
+    public notificationService: NotificationService,
+    protected roomService: RoomService,
+    public router: Router,
+    public eventService: EventService,
+    protected translateService: TranslateService,
+    private location: Location,
+    private route: ActivatedRoute
+  ) {}
 
   ngOnInit() {
     const settingsRoute = this.route.snapshot.params['settingsName'];
-    if (this.settings.componentName === settingsRoute || !settingsRoute && this.settings.componentName === 'general') {
+    if (
+      this.settings.componentName === settingsRoute ||
+      (!settingsRoute && this.settings.componentName === 'general')
+    ) {
       this.expanded = true;
       this.contentExpanded = true;
     }
-    this.eventService.on<any>('SettingsExpanded').subscribe(event => {
+    this.eventService.on<any>('SettingsExpanded').subscribe((event) => {
       if (this.expanded && event !== this.settings.componentName) {
         this.expanded = false;
         this.collapse();
@@ -70,42 +76,56 @@ export class SettingsComponent implements OnInit {
       this.collapse();
     }
     setTimeout(() => {
-      document.getElementById((this.settings.componentName + '-settings')).focus();
+      document
+        .getElementById(this.settings.componentName + '-settings')
+        .focus();
     }, 100);
   }
 
   updateURL() {
-    const urlTree = this.router.createUrlTree(['edit', this.room.shortId, 'settings', this.settings.componentName]);
+    const urlTree = this.router.createUrlTree([
+      'edit',
+      this.room.shortId,
+      'settings',
+      this.settings.componentName,
+    ]);
     this.location.replaceState(this.router.serializeUrl(urlTree));
   }
 
   expand() {
     this.contentExpanded = true;
-    this.eventService.broadcast('SettingsExpanded', this.settings.componentName);
+    this.eventService.broadcast(
+      'SettingsExpanded',
+      this.settings.componentName
+    );
     this.updateURL();
   }
 
   collapse() {
     setTimeout(() => {
       this.contentExpanded = false;
-    }, 400)
+    }, 400);
   }
 
   saveRoom(updateEvent: UpdateEvent) {
     if (!updateEvent.loadRoom) {
-      this.roomService.updateRoom(updateEvent.room)
-        .subscribe((room) => {
-          this.updateEvent.emit(room);
-          if (updateEvent.showSuccessInfo) {
-            this.translateService.get('settings.changes-successful').subscribe(msg => {
-              this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.SUCCESS);
+      this.roomService.updateRoom(updateEvent.room).subscribe((room) => {
+        this.updateEvent.emit(room);
+        if (updateEvent.showSuccessInfo) {
+          this.translateService
+            .get('settings.changes-successful')
+            .subscribe((msg) => {
+              this.notificationService.showAdvanced(
+                msg,
+                AdvancedSnackBarTypes.SUCCESS
+              );
             });
-          }
-        });
+        }
+      });
     } else {
-     this.roomService.getRoom(this.room.id).subscribe(room => {
-       this.updateEvent.emit(room);
-     });
+      this.roomService.getRoom(this.room.id).subscribe((room) => {
+        this.updateEvent.emit(room);
+      });
     }
   }
 }

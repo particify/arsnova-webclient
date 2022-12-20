@@ -1,57 +1,110 @@
 <div *ngIf="editRoom">
   <div fxLayout="column">
-    <div tabindex="0" id="room-settings" class="visually-hidden">{{ 'settings.a11y-room' | translate }}</div>
+    <div tabindex="0" id="room-settings" class="visually-hidden">
+      {{ 'settings.a11y-room' | translate }}
+    </div>
     <mat-form-field class="input-block" appearance="outline">
       <mat-label>{{ 'room.room-name' | translate }}</mat-label>
-      <input [(ngModel)]="name" matInput placeholder="{{ 'settings.enter-room-name' | translate }}"
-             name="room-name" maxlength="30" aria-labelledby="room-name"/>
-      <mat-hint align="end"><span aria-hidden="true">{{ name.length }} / 30</span></mat-hint>
+      <input
+        [(ngModel)]="name"
+        matInput
+        placeholder="{{ 'settings.enter-room-name' | translate }}"
+        name="room-name"
+        maxlength="30"
+        aria-labelledby="room-name"
+      />
+      <mat-hint align="end"
+        ><span aria-hidden="true">{{ name.length }} / 30</span></mat-hint
+      >
     </mat-form-field>
     <div class="relative">
-      <mat-tab-group [dynamicHeight]=true animationDuration="0" (selectedTabChange)="descriptionTabChanged($event)">
-        <mat-tab label="{{'settings.description' | translate}}">
+      <mat-tab-group
+        [dynamicHeight]="true"
+        animationDuration="0"
+        (selectedTabChange)="descriptionTabChanged($event)"
+      >
+        <mat-tab label="{{ 'settings.description' | translate }}">
           <mat-form-field class="input-block" appearance="outline">
-        <textarea #descriptionInput
-          (input)="updateTextContainsImage(descriptionInput.value)"
-          [(ngModel)]="description" matInput cdkTextareaAutosize cdkAutosizeMinRows="3" cdkAutosizeMaxRows="5"
-          maxlength="500" name="description" aria-labelledby="room-description"
-          placeholder="{{ 'settings.enter-room-description' | translate }}"></textarea>
+            <textarea
+              #descriptionInput
+              (input)="updateTextContainsImage(descriptionInput.value)"
+              [(ngModel)]="description"
+              matInput
+              cdkTextareaAutosize
+              cdkAutosizeMinRows="3"
+              cdkAutosizeMaxRows="5"
+              maxlength="500"
+              name="description"
+              aria-labelledby="room-description"
+              placeholder="{{ 'settings.enter-room-description' | translate }}"
+            ></textarea>
             <mat-hint align="end">
               <span aria-hidden="true">
                 {{ description ? description.length : 0 }} / 500
               </span>
             </mat-hint>
           </mat-form-field>
-          <app-hint *ngIf="textContainsImage" text="utils.formatting-image-hint" [type]="warningType"></app-hint>
+          <app-hint
+            *ngIf="textContainsImage"
+            text="utils.formatting-image-hint"
+            [type]="warningType"
+          ></app-hint>
         </mat-tab>
-        <mat-tab label="{{'room.preview' | translate}}" [disabled]="!description">
+        <mat-tab
+          label="{{ 'room.preview' | translate }}"
+          [disabled]="!description"
+        >
           <div class="preview-container">
-            <app-rendered-text [rawText]="description" [dynamic]="renderPreview" [markdownFeatureset]="markdownFeatureset">
+            <app-rendered-text
+              [rawText]="description"
+              [dynamic]="renderPreview"
+              [markdownFeatureset]="markdownFeatureset"
+            >
             </app-rendered-text>
           </div>
         </mat-tab>
       </mat-tab-group>
-      <app-formatting-toolbar *ngIf="!renderPreview" class="tab-group-formatting-bar" [inputElement]="descriptionInput" (valueChanged)="description = $event"></app-formatting-toolbar>
+      <app-formatting-toolbar
+        *ngIf="!renderPreview"
+        class="tab-group-formatting-bar"
+        [inputElement]="descriptionInput"
+        (valueChanged)="description = $event"
+      ></app-formatting-toolbar>
     </div>
   </div>
   <lib-extension-point extensionId="focus-mode-control"></lib-extension-point>
   <div fxLayout="row">
-    <button mat-stroked-button class="delete" (click)="openDeleteRoomDialog()" aria-labelledby="delete-room">
+    <button
+      mat-stroked-button
+      class="delete"
+      (click)="openDeleteRoomDialog()"
+      aria-labelledby="delete-room"
+    >
       <mat-icon>delete</mat-icon>
       {{ 'settings.delete-room' | translate }}
     </button>
     <span class="fill-remaining-space"></span>
-    <button mat-raised-button [disabled]="name === editRoom.name &&
-    (description === editRoom.description || description === '' && editRoom.description === undefined)"
-            class="button-primary update" (click)="saveChanges()" aria-labelledby="save">
-      {{ 'settings.update' | translate }}</button>
+    <button
+      mat-raised-button
+      [disabled]="
+        name === editRoom.name &&
+        (description === editRoom.description ||
+          (description === '' && editRoom.description === undefined))
+      "
+      class="button-primary update"
+      (click)="saveChanges()"
+      aria-labelledby="save"
+    >
+      {{ 'settings.update' | translate }}
+    </button>
   </div>
 </div>
 
 <div class="visually-hidden">
   <div id="room-name">{{ 'settings.a11y-room-name' | translate }}</div>
-  <div id="room-description">{{ 'settings.a11y-room-description' | translate }}</div>
+  <div id="room-description">
+    {{ 'settings.a11y-room-description' | translate }}
+  </div>
   <div id="delete-room">{{ 'settings.a11y-delete-room' | translate }}</div>
   <div id="save">{{ 'settings.a11y-save-changes' | translate }}</div>
 </div>
-

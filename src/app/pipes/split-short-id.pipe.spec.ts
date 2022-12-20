@@ -12,4 +12,3 @@ describe('SplitShortId', () => {
     expect(pipe.transform('12345678', false)).toBe('1234' + NBSP + '5678');
   });
 });
-

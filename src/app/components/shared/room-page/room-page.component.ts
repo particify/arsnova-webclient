@@ -8,10 +8,9 @@ import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-room-page',
   templateUrl: './room-page.component.html',
-  styleUrls: ['./room-page.component.scss']
+  styleUrls: ['./room-page.component.scss'],
 })
 export class RoomPageComponent implements OnInit, OnDestroy {
-
   isCreator: boolean;
   roomId: string;
   hideNavigation = false;
@@ -20,15 +19,18 @@ export class RoomPageComponent implements OnInit, OnDestroy {
 
   constructor(
     private route: ActivatedRoute,
-    private eventService: EventService) {}
+    private eventService: EventService
+  ) {}
 
   ngOnInit(): void {
-    this.route.data.subscribe(data => {
+    this.route.data.subscribe((data) => {
       this.isCreator = data.userRole === UserRole.CREATOR;
       this.roomId = data.room.id;
-      this.navBarStateSubscription = this.eventService.on<boolean>(UiState.NAV_BAR_VISIBLE).subscribe(isVisible => {
-        this.hideNavigation = !isVisible && !this.isCreator;
-      });
+      this.navBarStateSubscription = this.eventService
+        .on<boolean>(UiState.NAV_BAR_VISIBLE)
+        .subscribe((isVisible) => {
+          this.hideNavigation = !isVisible && !this.isCreator;
+        });
     });
   }
 

@@ -1,14 +1,30 @@
-import { AfterContentInit, Component, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import {
+  AfterContentInit,
+  Component,
+  OnChanges,
+  OnInit,
+  SimpleChanges,
+  ViewChild,
+} from '@angular/core';
 import { AuthenticationService } from '../../../services/http/authentication.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AdvancedSnackBarTypes, NotificationService } from '../../../services/util/notification.service';
+import {
+  AdvancedSnackBarTypes,
+  NotificationService,
+} from '../../../services/util/notification.service';
 import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { UntypedFormControl, Validators } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
 import { EventService } from '../../../services/util/event.service';
-import { AuthenticationProvider, AuthenticationProviderType } from '../../../models/api-config';
+import {
+  AuthenticationProvider,
+  AuthenticationProviderType,
+} from '../../../models/api-config';
 import { DialogService } from '../../../services/util/dialog.service';
-import { AuthenticationStatus, ClientAuthenticationResult } from '../../../models/client-authentication-result';
+import {
+  AuthenticationStatus,
+  ClientAuthenticationResult,
+} from '../../../models/client-authentication-result';
 import { AuthProvider } from '../../../models/auth-provider';
 import { RoutingService } from '../../../services/util/routing.service';
 import { PasswordEntryComponent } from '../password-entry/password-entry.component';
@@ -17,10 +33,9 @@ import { FormErrorStateMatcher } from '../form-error-state-matcher/form-error-st
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss']
+  styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent implements AfterContentInit, OnChanges, OnInit {
-
   @ViewChild(PasswordEntryComponent) passwordEntry: PasswordEntryComponent;
 
   isStandard = true;
@@ -40,50 +55,67 @@ export class LoginComponent implements AfterContentInit, OnChanges, OnInit {
 
   matcher = new FormErrorStateMatcher();
 
-  constructor(public authenticationService: AuthenticationService,
-              public router: Router,
-              private translationService: TranslateService,
-              public notificationService: NotificationService,
-              public dialog: MatDialog,
-              public eventService: EventService,
-              private dialogService: DialogService,
-              private route: ActivatedRoute,
-              private routingService: RoutingService) {
-  }
+  constructor(
+    public authenticationService: AuthenticationService,
+    public router: Router,
+    private translationService: TranslateService,
+    public notificationService: NotificationService,
+    public dialog: MatDialog,
+    public eventService: EventService,
+    private dialogService: DialogService,
+    private route: ActivatedRoute,
+    private routingService: RoutingService
+  ) {}
 
   ngOnInit() {
-    this.route.data.subscribe(data => this.authProviders = data.apiConfig.authenticationProviders);
+    this.route.data.subscribe(
+      (data) => (this.authProviders = data.apiConfig.authenticationProviders)
+    );
   }
 
   ngAfterContentInit() {
-    this.authenticationService.getCurrentAuthentication().subscribe(auth => {
-      if (this.authenticationService.isLoggedIn() && auth?.authProvider !== AuthProvider.ARSNOVA_GUEST) {
+    this.authenticationService.getCurrentAuthentication().subscribe((auth) => {
+      if (
+        this.authenticationService.isLoggedIn() &&
+        auth?.authProvider !== AuthProvider.ARSNOVA_GUEST
+      ) {
         this.router.navigateByUrl('user');
       } else {
-        this.usernamePasswordProviders = this.authProviders.filter((p) => p.type === AuthenticationProviderType.USERNAME_PASSWORD);
+        this.usernamePasswordProviders = this.authProviders.filter(
+          (p) => p.type === AuthenticationProviderType.USERNAME_PASSWORD
+        );
         if (this.usernamePasswordProviders.length > 0) {
           this.passwordLoginEnabled = true;
-          if (this.usernamePasswordProviders.some(p => p.id === 'user-db')) {
+          if (this.usernamePasswordProviders.some((p) => p.id === 'user-db')) {
             this.dbLoginEnabled = true;
             if (this.usernamePasswordProviders.length === 1) {
               this.loginIdIsEmail = true;
-              this.loginIdFormControl.setValidators([Validators.required, Validators.email]);
+              this.loginIdFormControl.setValidators([
+                Validators.required,
+                Validators.email,
+              ]);
             } else {
               this.loginIdFormControl.setValidators([Validators.required]);
             }
           }
         }
-        this.ssoProviders = this.authProviders.filter((p) => p.type === AuthenticationProviderType.SSO);
+        this.ssoProviders = this.authProviders.filter(
+          (p) => p.type === AuthenticationProviderType.SSO
+        );
         this.isLoading = false;
 
         // Automatically initiate SSO login if there are no other providers
-        const loginProviders = this.authProviders.filter((p) => p.type !== AuthenticationProviderType.ANONYMOUS);
+        const loginProviders = this.authProviders.filter(
+          (p) => p.type !== AuthenticationProviderType.ANONYMOUS
+        );
         if (loginProviders.length === 1 && this.ssoProviders.length === 1) {
           this.loginViaSso(this.ssoProviders[0].id);
         } else {
           if (this.ssoProviders.length > 0) {
             setTimeout(() => {
-              document.getElementById(this.ssoProviders[0].title + '-button').focus();
+              document
+                .getElementById(this.ssoProviders[0].title + '-button')
+                .focus();
             }, 700);
           } else {
             setTimeout(() => {
@@ -94,11 +126,15 @@ export class LoginComponent implements AfterContentInit, OnChanges, OnInit {
       }
     });
     const registeredUserData = history.state?.data;
-      if (registeredUserData && registeredUserData.username && registeredUserData.password) {
-        this.loginIdFormControl.setValue(registeredUserData.username);
-        this.username = registeredUserData.username;
-        this.password = registeredUserData.password;
-      }
+    if (
+      registeredUserData &&
+      registeredUserData.username &&
+      registeredUserData.password
+    ) {
+      this.loginIdFormControl.setValue(registeredUserData.username);
+      this.username = registeredUserData.username;
+      this.password = registeredUserData.password;
+    }
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -108,14 +144,16 @@ export class LoginComponent implements AfterContentInit, OnChanges, OnInit {
   }
 
   providers(type?: AuthenticationProviderType) {
-    return (type != null)
+    return type != null
       ? this.authProviders.filter((p) => p.type === type)
       : this.authProviders;
   }
 
   activateUser(): void {
-    const dialogRef = this.dialogService.openUserActivationDialog(this.username);
-    dialogRef.afterClosed().subscribe(result => {
+    const dialogRef = this.dialogService.openUserActivationDialog(
+      this.username
+    );
+    dialogRef.afterClosed().subscribe((result) => {
       if (result && result.success) {
         this.loginWithUsernamePassword();
       }
@@ -125,25 +163,39 @@ export class LoginComponent implements AfterContentInit, OnChanges, OnInit {
   loginWithUsernamePassword(providerId = 'user-db'): void {
     const password = this.passwordEntry.getPassword();
     if (this.loginIdFormControl.valid && password) {
-      this.authenticationService.login(this.username, password, providerId).subscribe(loginSuccessful => {
-        this.checkLogin(loginSuccessful);
-      });
+      this.authenticationService
+        .login(this.username, password, providerId)
+        .subscribe((loginSuccessful) => {
+          this.checkLogin(loginSuccessful);
+        });
     } else {
-      this.translationService.get('login.input-incorrect').subscribe(message => {
-        this.notificationService.showAdvanced(message, AdvancedSnackBarTypes.WARNING);
-      });
+      this.translationService
+        .get('login.input-incorrect')
+        .subscribe((message) => {
+          this.notificationService.showAdvanced(
+            message,
+            AdvancedSnackBarTypes.WARNING
+          );
+        });
     }
   }
 
   loginViaSso(providerId: string): void {
-    this.authenticationService.loginViaSso(providerId).subscribe(loginSuccessful => this.checkLogin(loginSuccessful));
+    this.authenticationService
+      .loginViaSso(providerId)
+      .subscribe((loginSuccessful) => this.checkLogin(loginSuccessful));
   }
 
   private checkLogin(result: ClientAuthenticationResult) {
     if (result.status === AuthenticationStatus.SUCCESS) {
-      this.translationService.get('login.login-successful').subscribe(message => {
-        this.notificationService.showAdvanced(message, AdvancedSnackBarTypes.SUCCESS);
-      });
+      this.translationService
+        .get('login.login-successful')
+        .subscribe((message) => {
+          this.notificationService.showAdvanced(
+            message,
+            AdvancedSnackBarTypes.SUCCESS
+          );
+        });
       this.dialog.closeAll();
       if (this.isStandard) {
         if (!this.routingService.redirect()) {
@@ -153,9 +205,14 @@ export class LoginComponent implements AfterContentInit, OnChanges, OnInit {
     } else if (result.status === AuthenticationStatus.ACTIVATION_PENDING) {
       this.activateUser();
     } else {
-      this.translationService.get('login.login-data-incorrect').subscribe(message => {
-        this.notificationService.showAdvanced(message, AdvancedSnackBarTypes.FAILED);
-      });
+      this.translationService
+        .get('login.login-data-incorrect')
+        .subscribe((message) => {
+          this.notificationService.showAdvanced(
+            message,
+            AdvancedSnackBarTypes.FAILED
+          );
+        });
     }
   }
 
@@ -165,9 +222,9 @@ export class LoginComponent implements AfterContentInit, OnChanges, OnInit {
       state = {
         state: {
           data: {
-            username: this.username
-          }
-        }
+            username: this.username,
+          },
+        },
       };
     }
     this.router.navigateByUrl('request-password-reset', state);

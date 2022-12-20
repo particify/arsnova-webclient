@@ -4,13 +4,13 @@ import { FormField } from '../user-profile.component';
 @Component({
   selector: 'app-user-form-field',
   templateUrl: './user-form-field.component.html',
-  styleUrls: ['./user-form-field.component.scss']
+  styleUrls: ['./user-form-field.component.scss'],
 })
 export class UserFormFieldComponent {
-
   @Input() formField: FormField;
   @Input() disabled = false;
-  @Output() fieldUpdated: EventEmitter<FormField> = new EventEmitter<FormField>();
+  @Output() fieldUpdated: EventEmitter<FormField> =
+    new EventEmitter<FormField>();
 
   beforeEdit: string;
 
@@ -24,5 +24,4 @@ export class UserFormFieldComponent {
     }
     this.beforeEdit = null;
   }
-
 }

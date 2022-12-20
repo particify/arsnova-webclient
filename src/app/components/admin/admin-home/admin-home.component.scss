@@ -12,7 +12,7 @@ $header-height: 64px;
 .mat-drawer-container {
   background-color: var(--surface);
   margin-left: -$app-padding;
-  width: calc(100vw + #{$app-padding})!important;
+  width: calc(100vw + #{$app-padding}) !important;
   height: 100%;
 }
 

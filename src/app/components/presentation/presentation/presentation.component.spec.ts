@@ -1,13 +1,17 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { PresentationComponent } from './presentation.component';
-import { ActivatedRoute, ActivatedRouteSnapshot, Router } from '@angular/router';
+import {
+  ActivatedRoute,
+  ActivatedRouteSnapshot,
+  Router,
+} from '@angular/router';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import {
   JsonTranslationLoader,
   ActivatedRouteStub,
   MockGlobalStorageService,
   MockRouter,
-  MockLangService
+  MockLangService,
 } from '@arsnova/testing/test-helpers';
 import { of } from 'rxjs';
 import { GlobalStorageService } from '@arsnova/app/services/util/global-storage.service';
@@ -29,73 +33,70 @@ describe('PresentationComponent', () => {
 
   const snapshot = new ActivatedRouteSnapshot();
   snapshot.params = {
-      shortId: '12345678',
-      seriesName: 'Quiz'
+    shortId: '12345678',
+    seriesName: 'Quiz',
   };
   const firstChild = {
     url: [
       {
-        path: 'path'
-      }
-    ]
-  }
+        path: 'path',
+      },
+    ],
+  };
 
   Object.defineProperty(snapshot, 'firstChild', { value: firstChild });
 
   const room = new Room();
   room.settings = {};
   const data = {
-    room: room
-  }
+    room: room,
+  };
   const activatedRouteStub = new ActivatedRouteStub(null, data, snapshot);
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ PresentationComponent ],
+      declarations: [PresentationComponent],
       imports: [
         TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
-            useClass: JsonTranslationLoader
+            useClass: JsonTranslationLoader,
           },
-          isolate: true
-        })
+          isolate: true,
+        }),
       ],
       providers: [
         {
           provide: RoomStatsService,
-          useValue: mockRoomStatsService
+          useValue: mockRoomStatsService,
         },
         {
           provide: Location,
-          useClass: MockLocationStrategy
+          useClass: MockLocationStrategy,
         },
         {
           provide: ActivatedRoute,
-          useValue: activatedRouteStub
+          useValue: activatedRouteStub,
         },
         {
           provide: GlobalStorageService,
-          useClass: MockGlobalStorageService
+          useClass: MockGlobalStorageService,
         },
         {
           provide: Router,
-          useClass: MockRouter
+          useClass: MockRouter,
         },
         {
           provide: LanguageService,
-          useClass: MockLangService
+          useClass: MockLangService,
         },
         {
           provide: PresentationService,
-          useValue: mockPresentationService
-        }
+          useValue: mockPresentationService,
+        },
       ],
-      schemas: [
-        NO_ERRORS_SCHEMA
-      ]
-    })
-    .compileComponents();
+      schemas: [NO_ERRORS_SCHEMA],
+    }).compileComponents();
   }));
 
   beforeEach(() => {

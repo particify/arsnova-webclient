@@ -1,7 +1,14 @@
 <div fxLayout="column" fxLayoutGap="20px" fxFill>
   <div fxLayout="row" fxLayoutAlign="center">
     <div id="live-announcer-button" tabIndex="-1" class="visually-hidden">
-      {{ (isModerator ? 'room-page.a11y-moderator-message' : 'room-page.a11y-room-message') | a11yIntro: {room: room.name, key: room.shortId} | async }}
+      {{
+        (isModerator
+          ? 'room-page.a11y-moderator-message'
+          : 'room-page.a11y-room-message'
+        )
+          | a11yIntro : { room: room.name, key: room.shortId }
+          | async
+      }}
     </div>
     <app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
     <mat-card *ngIf="!isLoading && room">
@@ -11,74 +18,139 @@
             <span class="room-name">
               {{ room.name }}
             </span>
-            <span class="room-short-id">{{room.shortId | splitShortId}}</span>
+            <span class="room-short-id">{{ room.shortId | splitShortId }}</span>
           </div>
         </div>
         <div *ngIf="room.description" fxLayoutAlign="center">
-          <app-rendered-text [rawText]="room.description.trim()" [renderedText]="room.renderedDescription"></app-rendered-text>
+          <app-rendered-text
+            [rawText]="room.description.trim()"
+            [renderedText]="room.renderedDescription"
+          ></app-rendered-text>
         </div>
       </mat-card-content>
       <app-divider></app-divider>
       <div fxLayout="column" fxLayoutAlign="center">
-        <div class="action-button-container" fxLayout="row" fxLayoutAlign="center" [ngClass]="{'moderator-container': isModerator}">
+        <div
+          class="action-button-container"
+          fxLayout="row"
+          fxLayoutAlign="center"
+          [ngClass]="{ 'moderator-container': isModerator }"
+        >
           <div class="action-button-item" fxLayoutAlign="center center">
-            <button id="comments-button" mat-icon-button class="main-button" [disableRipple]="true"
-                    [routerLink]="['comments']" aria-labelledby="comments"
-                    appHotkey="1" [appHotkeyTitle]="'room-page.comments' | translate">
-              <mat-icon matBadge="{{commentCounter}}" class="main-icon">
+            <button
+              id="comments-button"
+              mat-icon-button
+              class="main-button"
+              [disableRipple]="true"
+              [routerLink]="['comments']"
+              aria-labelledby="comments"
+              appHotkey="1"
+              [appHotkeyTitle]="'room-page.comments' | translate"
+            >
+              <mat-icon matBadge="{{ commentCounter }}" class="main-icon">
                 question_answer
               </mat-icon>
               <p class="button-text">
-                {{ 'room-page.comments' | translate}}</p>
+                {{ 'room-page.comments' | translate }}
+              </p>
             </button>
           </div>
           <div class="action-button-item" fxLayoutAlign="center center">
-            <button mat-icon-button class="main-button" id="live-survey-button" aria-labelledby="live-survey"
-                    [disableRipple]="true" [routerLink]="['feedback']"
-                    appHotkey="2" [appHotkeyTitle]="'room-page.live-survey' | translate">
-              <mat-icon class="main-icon">
-                thumbs_up_down
-              </mat-icon>
+            <button
+              mat-icon-button
+              class="main-button"
+              id="live-survey-button"
+              aria-labelledby="live-survey"
+              [disableRipple]="true"
+              [routerLink]="['feedback']"
+              appHotkey="2"
+              [appHotkeyTitle]="'room-page.live-survey' | translate"
+            >
+              <mat-icon class="main-icon"> thumbs_up_down </mat-icon>
               <p class="button-text">
-                {{ 'room-page.live-survey' | translate}}</p>
+                {{ 'room-page.live-survey' | translate }}
+              </p>
             </button>
           </div>
         </div>
       </div>
       <div>
         <app-divider></app-divider>
-        <div fxLayout="column" [ngClass]="{'group-container': contentGroups.length > 0, 'empty-group-container': contentGroups.length === 0}">
+        <div
+          fxLayout="column"
+          [ngClass]="{
+            'group-container': contentGroups.length > 0,
+            'empty-group-container': contentGroups.length === 0
+          }"
+        >
           <ng-container *ngIf="contentGroups?.length === 0">
-            <p class="hint-sm">{{ 'room-page.no-content-groups' | translate }}</p>
-            <p tabindex="-1" id="no-content-groups" class="visually-hidden" appHotkey="4" [appHotkeyTitle]="'content.groups' | translate">
-              {{ 'room-page.a11y-no-content-groups' | translate }}</p>
+            <p class="hint-sm">
+              {{ 'room-page.no-content-groups' | translate }}
+            </p>
+            <p
+              tabindex="-1"
+              id="no-content-groups"
+              class="visually-hidden"
+              appHotkey="4"
+              [appHotkeyTitle]="'content.groups' | translate"
+            >
+              {{ 'room-page.a11y-no-content-groups' | translate }}
+            </p>
           </ng-container>
-          <button *ngIf="!isModerator" id="content-group-create-button" mat-stroked-button class="stroked-primary add-group" aria-labelledby="create-content-group"
-                  (click)="openCreateContentGroupDialog()"
-                  appHotkey="3" [appHotkeyTitle]="'room-page.create-content-group' | translate">
+          <button
+            *ngIf="!isModerator"
+            id="content-group-create-button"
+            mat-stroked-button
+            class="stroked-primary add-group"
+            aria-labelledby="create-content-group"
+            (click)="openCreateContentGroupDialog()"
+            appHotkey="3"
+            [appHotkeyTitle]="'room-page.create-content-group' | translate"
+          >
             <mat-icon>playlist_add</mat-icon>
             {{ 'room-page.create-content-group' | translate }}
           </button>
           <ng-container *ngIf="contentGroups?.length > 0">
-            <p tabindex="-1" id="content-groups" class="visually-hidden" appHotkey="4" [appHotkeyTitle]="'content.groups' | translate">
-              {{ 'room-page.a11y-content-groups' | translate: {count: contentGroups.length} }}</p>
-            </ng-container>
+            <p
+              tabindex="-1"
+              id="content-groups"
+              class="visually-hidden"
+              appHotkey="4"
+              [appHotkeyTitle]="'content.groups' | translate"
+            >
+              {{
+                'room-page.a11y-content-groups'
+                  | translate : { count: contentGroups.length }
+              }}
+            </p>
+          </ng-container>
           <div *ngIf="room && contentGroups">
-            <app-content-groups *ngFor="let contentGroup of contentGroups" [contentGroupName]="contentGroup.name"
-                                [length]="contentGroup.contentIds?.length" [isLocked]="!contentGroup.published"></app-content-groups>
+            <app-content-groups
+              *ngFor="let contentGroup of contentGroups"
+              [contentGroupName]="contentGroup.name"
+              [length]="contentGroup.contentIds?.length"
+              [isLocked]="!contentGroup.published"
+            ></app-content-groups>
           </div>
         </div>
       </div>
 
-      <lib-extension-point *ngIf="!isModerator" extensionId="attachment-list" [extensionData]="attachmentData"></lib-extension-point>
-
+      <lib-extension-point
+        *ngIf="!isModerator"
+        extensionId="attachment-list"
+        [extensionData]="attachmentData"
+      ></lib-extension-point>
     </mat-card>
-    <app-room-not-found *ngIf="!isLoading && errorOnLoading"></app-room-not-found>
+    <app-room-not-found
+      *ngIf="!isLoading && errorOnLoading"
+    ></app-room-not-found>
   </div>
 </div>
 
 <div class="visually-hidden" *ngIf="!isLoading">
-  <div id="comments">{{'room-page.a11y-comments' | translate}}</div>
-  <div id="create-content-group">{{'room-page.a11y-create-content-group' | translate}}</div>
-  <div id="live-survey">{{'room-page.a11y-live-survey' | translate}}</div>
+  <div id="comments">{{ 'room-page.a11y-comments' | translate }}</div>
+  <div id="create-content-group">
+    {{ 'room-page.a11y-create-content-group' | translate }}
+  </div>
+  <div id="live-survey">{{ 'room-page.a11y-live-survey' | translate }}</div>
 </div>

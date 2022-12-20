@@ -1,8 +1,13 @@
 <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="16px">
   <div>
     <p class="slide-toggle-header">{{ label | translate }}</p>
-    <p id="toggle-{{label}}-description" class="slide-toggle-description">{{ (label + '-info') | translate }}</p>
+    <p id="toggle-{{ label }}-description" class="slide-toggle-description">
+      {{ label + '-info' | translate }}
+    </p>
   </div>
-  <mat-slide-toggle [(ngModel)]="isChecked" (change)="toggle($event)"
-                      aria-labelledby="toggle-{{label}}-description"></mat-slide-toggle>
+  <mat-slide-toggle
+    [(ngModel)]="isChecked"
+    (change)="toggle($event)"
+    aria-labelledby="toggle-{{ label }}-description"
+  ></mat-slide-toggle>
 </div>

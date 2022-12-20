@@ -16,35 +16,28 @@ describe('DateComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [
-        DateComponent,
-        DateFromNowPipe,
-        DateFormatPipe
-      ],
+      declarations: [DateComponent, DateFromNowPipe, DateFormatPipe],
       imports: [
         TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
-            useClass: JsonTranslationLoader
+            useClass: JsonTranslationLoader,
           },
-          isolate: true
-        })
+          isolate: true,
+        }),
       ],
       providers: [
         {
           provide: DateFromNowPipe,
-          useValue: dateFromNowPipeStub
+          useValue: dateFromNowPipeStub,
         },
         {
           provide: DateFormatPipe,
-          useValue: dateFormatPipeStub
-        }
+          useValue: dateFormatPipeStub,
+        },
       ],
-      schemas: [
-        NO_ERRORS_SCHEMA
-      ]
-    })
-    .compileComponents();
+      schemas: [NO_ERRORS_SCHEMA],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(DateComponent);
     component = fixture.componentInstance;

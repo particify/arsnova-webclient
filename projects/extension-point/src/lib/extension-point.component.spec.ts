@@ -9,10 +9,9 @@ describe('ExtensionPointComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ ExtensionPointComponent ],
-      providers: [ ExtensionFactory ]
-    })
-    .compileComponents();
+      declarations: [ExtensionPointComponent],
+      providers: [ExtensionFactory],
+    }).compileComponents();
   }));
 
   beforeEach(() => {

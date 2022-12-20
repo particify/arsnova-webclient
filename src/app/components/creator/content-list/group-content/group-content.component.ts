@@ -1,12 +1,26 @@
-import { Component, ElementRef, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  OnDestroy,
+  OnInit,
+  QueryList,
+  ViewChild,
+  ViewChildren,
+} from '@angular/core';
 import { Content } from '../../../../models/content';
 import { ContentService } from '../../../../services/http/content.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AdvancedSnackBarTypes, NotificationService } from '../../../../services/util/notification.service';
+import {
+  AdvancedSnackBarTypes,
+  NotificationService,
+} from '../../../../services/util/notification.service';
 import { TranslateService } from '@ngx-translate/core';
 import { LanguageService } from '../../../../services/util/language.service';
 import { DialogService } from '../../../../services/util/dialog.service';
-import { GlobalStorageService, STORAGE_KEYS } from '../../../../services/util/global-storage.service';
+import {
+  GlobalStorageService,
+  STORAGE_KEYS,
+} from '../../../../services/util/global-storage.service';
 import { ContentGroupService } from '../../../../services/http/content-group.service';
 import { ContentGroup } from '../../../../models/content-group';
 import { AnnounceService } from '../../../../services/util/announce.service';
@@ -31,10 +45,12 @@ import { PresentationEvent } from '../../../../models/events/presentation-events
 @Component({
   selector: 'app-group-content',
   templateUrl: './group-content.component.html',
-  styleUrls: ['./group-content.component.scss']
+  styleUrls: ['./group-content.component.scss'],
 })
-export class GroupContentComponent extends DragDropBaseComponent implements OnInit, OnDestroy {
-
+export class GroupContentComponent
+  extends DragDropBaseComponent
+  implements OnInit, OnDestroy
+{
   @ViewChild('nameInput') nameInput: ElementRef;
   @ViewChildren('lockMenu') lockMenus: QueryList<MatButton>;
 
@@ -98,28 +114,34 @@ export class GroupContentComponent extends DragDropBaseComponent implements OnIn
     private routingService: RoutingService
   ) {
     super();
-    langService.langEmitter.subscribe(lang => translateService.use(lang));
+    langService.langEmitter.subscribe((lang) => translateService.use(lang));
   }
 
   ngOnInit() {
-    this.navBarStateSubscription = this.eventService.on<boolean>(UiState.NAV_BAR_VISIBLE).subscribe(isVisible => {
-      this.navBarExists = isVisible;
-    });
+    this.navBarStateSubscription = this.eventService
+      .on<boolean>(UiState.NAV_BAR_VISIBLE)
+      .subscribe((isVisible) => {
+        this.navBarExists = isVisible;
+      });
     this.onInit = true;
     this.iconList = this.contentService.getTypeIcons();
-    this.route.data.subscribe(data => {
+    this.route.data.subscribe((data) => {
       this.isModerator = data.userRole === UserRole.EXECUTIVE_MODERATOR;
       this.room = data.room;
-      this.route.params.subscribe(params => {
+      this.route.params.subscribe((params) => {
         this.setContentGroup(params['seriesName']);
       });
     });
-    this.translateService.use(this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE));
-    this.eventService.on(PresentationEvent.CONTENT_ANSWERS_DELETED).subscribe(contentId => {
-      const content = this.contents.find(c => c.id === contentId);
-      content.state.round = 1;
-      this.resetAnswerEvent.next(content.id);
-    });
+    this.translateService.use(
+      this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE)
+    );
+    this.eventService
+      .on(PresentationEvent.CONTENT_ANSWERS_DELETED)
+      .subscribe((contentId) => {
+        const content = this.contents.find((c) => c.id === contentId);
+        content.state.round = 1;
+        this.resetAnswerEvent.next(content.id);
+      });
   }
 
   ngOnDestroy() {
@@ -129,39 +151,55 @@ export class GroupContentComponent extends DragDropBaseComponent implements OnIn
   setContentGroup(groupName: string) {
     if (groupName !== this.groupName) {
       this.groupName = groupName;
-      this.globalStorageService.setItem(STORAGE_KEYS.LAST_GROUP, this.groupName);
+      this.globalStorageService.setItem(
+        STORAGE_KEYS.LAST_GROUP,
+        this.groupName
+      );
       this.reloadContentGroup();
     }
   }
 
   registerHotkeys() {
-    this.translateService.get('control-bar.publish-or-lock-content').subscribe(t =>
-      this.hotkeyService.registerHotkey({
-        key: 'l',
-        action: () => {
-          const activeIndex = this.contents.map(c => c.id).indexOf(this.activeContentId);
-          this.lockMenus.toArray()[activeIndex].focus();
-        },
-        actionTitle: t
-      }, this.hotkeyRefs)
-    );
+    this.translateService
+      .get('control-bar.publish-or-lock-content')
+      .subscribe((t) =>
+        this.hotkeyService.registerHotkey(
+          {
+            key: 'l',
+            action: () => {
+              const activeIndex = this.contents
+                .map((c) => c.id)
+                .indexOf(this.activeContentId);
+              this.lockMenus.toArray()[activeIndex].focus();
+            },
+            actionTitle: t,
+          },
+          this.hotkeyRefs
+        )
+      );
   }
 
   unregisterHotkeys() {
-    this.hotkeyRefs.forEach(h => this.hotkeyService.unregisterHotkey(h));
+    this.hotkeyRefs.forEach((h) => this.hotkeyService.unregisterHotkey(h));
   }
 
   getGroups(): void {
-    this.roomStatsService.getStats(this.room.id, true).subscribe(roomStats => {
-      if (roomStats.groupStats) {
-        this.contentGroupStats = roomStats.groupStats;
-        this.getCurrentGroupIndex();
-      }
-    });
+    this.roomStatsService
+      .getStats(this.room.id, true)
+      .subscribe((roomStats) => {
+        if (roomStats.groupStats) {
+          this.contentGroupStats = roomStats.groupStats;
+          this.getCurrentGroupIndex();
+        }
+      });
   }
 
   getCurrentGroupIndex() {
-    if (this.contentGroupStats && this.contentGroup && this.contentGroupStats.length > 0) {
+    if (
+      this.contentGroupStats &&
+      this.contentGroup &&
+      this.contentGroupStats.length > 0
+    ) {
       for (let i = 0; i < this.contentGroupStats.length; i++) {
         if (this.contentGroupStats[i].groupName === this.contentGroup.name) {
           this.currentGroupIndex = i;
@@ -171,13 +209,17 @@ export class GroupContentComponent extends DragDropBaseComponent implements OnIn
   }
 
   findIndexOfId(id: string): number {
-    return this.contents.map(c => c.id).indexOf(id);
+    return this.contents.map((c) => c.id).indexOf(id);
   }
 
   deleteContent(delContent: Content) {
     const index = this.findIndexOfId(delContent.id);
-    const dialogRef = this.dialogService.openDeleteDialog('content', 'really-delete-content', this.contents[index].body);
-    dialogRef.afterClosed().subscribe(result => {
+    const dialogRef = this.dialogService.openDeleteDialog(
+      'content',
+      'really-delete-content',
+      this.contents[index].body
+    );
+    dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         this.updateContentChanges(index);
       }
@@ -188,47 +230,72 @@ export class GroupContentComponent extends DragDropBaseComponent implements OnIn
     this.contentService.goToEdit(content.id, this.room.shortId, group);
   }
 
-
   updateContentChanges(index: number) {
-    this.contentService.deleteContent(this.room.id, this.contents[index].id).subscribe(() => {
-      this.removeContentFromList(index);
-      this.translateService.get('content.content-deleted').subscribe(message => {
-        this.notificationService.showAdvanced(message, AdvancedSnackBarTypes.WARNING);
+    this.contentService
+      .deleteContent(this.room.id, this.contents[index].id)
+      .subscribe(() => {
+        this.removeContentFromList(index);
+        this.translateService
+          .get('content.content-deleted')
+          .subscribe((message) => {
+            this.notificationService.showAdvanced(
+              message,
+              AdvancedSnackBarTypes.WARNING
+            );
+          });
       });
-    });
   }
 
   removeContentFromList(index: number) {
     this.contents.splice(index, 1);
   }
 
-  useContentInOtherGroup(contentId: string, groupStats: ContentGroupStatistics, action: 'move' | 'copy'): void {
+  useContentInOtherGroup(
+    contentId: string,
+    groupStats: ContentGroupStatistics,
+    action: 'move' | 'copy'
+  ): void {
     this.duplicateContent$(contentId, groupStats.id).subscribe(() => {
       if (action === 'move') {
-        this.contentService.deleteContent(this.room.id, contentId).subscribe(() => {
-          this.contents = this.contents.filter(c => c.id !== contentId);
-          this.showSuccessNotification('moved', groupStats);
-        });
+        this.contentService
+          .deleteContent(this.room.id, contentId)
+          .subscribe(() => {
+            this.contents = this.contents.filter((c) => c.id !== contentId);
+            this.showSuccessNotification('moved', groupStats);
+          });
       } else if (action === 'copy') {
         this.showSuccessNotification('copied', groupStats);
       }
     });
   }
 
-  showSuccessNotification(actionString: string, groupStats: ContentGroupStatistics) {
-    const msg = this.translateService.instant(`content.${actionString}-to-content-group`, {series: groupStats.groupName});
+  showSuccessNotification(
+    actionString: string,
+    groupStats: ContentGroupStatistics
+  ) {
+    const msg = this.translateService.instant(
+      `content.${actionString}-to-content-group`,
+      { series: groupStats.groupName }
+    );
     this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.SUCCESS);
   }
 
-  showContentGroupCreationDialog(contentId: string, action: 'move' | 'copy'): void {
+  showContentGroupCreationDialog(
+    contentId: string,
+    action: 'move' | 'copy'
+  ): void {
     const dialogRef = this.dialogService.openContentGroupCreationDialog();
-    dialogRef.afterClosed().subscribe(groupName => {
+    dialogRef.afterClosed().subscribe((groupName) => {
       if (groupName) {
         const newGroup = new ContentGroup();
         newGroup.roomId = this.room.id;
         newGroup.name = groupName;
-        this.contentGroupService.post(newGroup).subscribe(group => {
-          const groupStats = new ContentGroupStatistics(group.id, group.name, 0);
+        this.contentGroupService.post(newGroup).subscribe((group) => {
+          const groupStats = new ContentGroupStatistics(
+            group.id,
+            group.name,
+            0
+          );
           this.contentGroupStats.push(groupStats);
           this.useContentInOtherGroup(contentId, groupStats, action);
         });
@@ -246,27 +313,39 @@ export class GroupContentComponent extends DragDropBaseComponent implements OnIn
 
   reloadContentGroup(imported = false) {
     this.isLoading = true;
-    this.contentGroupService.getByRoomIdAndName(this.room.id, this.groupName, true).subscribe(group => {
-      this.contentGroup = group;
-      this.getGroups();
-      this.setSettings();
-      this.updatedName = this.contentGroup.name;
-      this.setRange();
-      if (this.contentGroup.contentIds) {
-        this.contentService.getContentsByIds(this.contentGroup.roomId, this.contentGroup.contentIds, true)
-          .subscribe(contents => {
-            this.initContentList(contents);
-            if (imported) {
-              const msg = this.translateService.instant('content.import-successful');
-              this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.SUCCESS);
-            }
-            this.isLoading = false;
-          });
-      } else {
-        this.initContentList([]);
-        this.isLoading = false;
-      }
-    });
+    this.contentGroupService
+      .getByRoomIdAndName(this.room.id, this.groupName, true)
+      .subscribe((group) => {
+        this.contentGroup = group;
+        this.getGroups();
+        this.setSettings();
+        this.updatedName = this.contentGroup.name;
+        this.setRange();
+        if (this.contentGroup.contentIds) {
+          this.contentService
+            .getContentsByIds(
+              this.contentGroup.roomId,
+              this.contentGroup.contentIds,
+              true
+            )
+            .subscribe((contents) => {
+              this.initContentList(contents);
+              if (imported) {
+                const msg = this.translateService.instant(
+                  'content.import-successful'
+                );
+                this.notificationService.showAdvanced(
+                  msg,
+                  AdvancedSnackBarTypes.SUCCESS
+                );
+              }
+              this.isLoading = false;
+            });
+        } else {
+          this.initContentList([]);
+          this.isLoading = false;
+        }
+      });
   }
 
   setSettings() {
@@ -276,7 +355,14 @@ export class GroupContentComponent extends DragDropBaseComponent implements OnIn
   }
 
   goToEdit(content: Content) {
-    this.router.navigate(['edit', this.room.shortId, 'series', this.contentGroup.name, 'edit', content.id]);
+    this.router.navigate([
+      'edit',
+      this.room.shortId,
+      'series',
+      this.contentGroup.name,
+      'edit',
+      content.id,
+    ]);
   }
 
   announce() {
@@ -290,7 +376,6 @@ export class GroupContentComponent extends DragDropBaseComponent implements OnIn
       document.getElementById('nameInput').focus();
       this.nameInput.nativeElement.selectionStart = this.updatedName.length;
     }, 100);
-
   }
 
   leaveTitleEditMode(): void {
@@ -303,26 +388,39 @@ export class GroupContentComponent extends DragDropBaseComponent implements OnIn
   }
 
   updateURL(): void {
-    this.router.navigate([this.baseURL, this.room.shortId, 'series', this.groupName]);
+    this.router.navigate([
+      this.baseURL,
+      this.room.shortId,
+      'series',
+      this.groupName,
+    ]);
   }
 
   saveGroupName(): void {
     if (this.updatedName !== this.groupName) {
       const changes: { name: string } = { name: this.updatedName };
-      this.updateContentGroup(changes).subscribe(updatedGroup => {
-          this.contentGroup = updatedGroup;
-          this.contentGroupService.updateGroupInMemoryStorage(this.groupName, this.updatedName);
-          this.groupName = this.contentGroup.name;
-          this.translateService.get('content.updated-content-group').subscribe(msg => {
-            this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.SUCCESS);
+      this.updateContentGroup(changes).subscribe((updatedGroup) => {
+        this.contentGroup = updatedGroup;
+        this.contentGroupService.updateGroupInMemoryStorage(
+          this.groupName,
+          this.updatedName
+        );
+        this.groupName = this.contentGroup.name;
+        this.translateService
+          .get('content.updated-content-group')
+          .subscribe((msg) => {
+            this.notificationService.showAdvanced(
+              msg,
+              AdvancedSnackBarTypes.SUCCESS
+            );
           });
-          this.updateURL();
-        });
+        this.updateURL();
+      });
     }
   }
 
   createCopy() {
-    this.copiedContents = this.contents.map(content => ({ ...content }));
+    this.copiedContents = this.contents.map((content) => ({ ...content }));
     this.dragDroplist = this.copiedContents;
     this.firstPublishedIndexBackup = this.firstPublishedIndex;
     this.lastPublishedIndexBackup = this.lastPublishedIndex;
@@ -346,31 +444,51 @@ export class GroupContentComponent extends DragDropBaseComponent implements OnIn
   }
 
   saveSorting(): void {
-    const newContentIdOrder = this.copiedContents.map(c => c.id);
+    const newContentIdOrder = this.copiedContents.map((c) => c.id);
     if (this.contentGroup.contentIds !== newContentIdOrder) {
-      const changes: { contentIds: string[], firstPublishedIndex: number, lastPublishedIndex: number } =
-        { contentIds: newContentIdOrder, firstPublishedIndex: this.firstPublishedIndex, lastPublishedIndex: this.lastPublishedIndex };
-      this.updateContentGroup(changes).subscribe(updatedContentGroup => {
-        this.contentGroup = updatedContentGroup;
-        this.contents = this.copiedContents;
-        this.initContentList(this.contents);
-        this.translateService.get('content.updated-sorting').subscribe(msg => {
-          this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.SUCCESS);
-        });
-        this.leaveSortingMode();
-      }, () => {
-        this.setPublishedIndexesToBackup()
-      });
+      const changes: {
+        contentIds: string[];
+        firstPublishedIndex: number;
+        lastPublishedIndex: number;
+      } = {
+        contentIds: newContentIdOrder,
+        firstPublishedIndex: this.firstPublishedIndex,
+        lastPublishedIndex: this.lastPublishedIndex,
+      };
+      this.updateContentGroup(changes).subscribe(
+        (updatedContentGroup) => {
+          this.contentGroup = updatedContentGroup;
+          this.contents = this.copiedContents;
+          this.initContentList(this.contents);
+          this.translateService
+            .get('content.updated-sorting')
+            .subscribe((msg) => {
+              this.notificationService.showAdvanced(
+                msg,
+                AdvancedSnackBarTypes.SUCCESS
+              );
+            });
+          this.leaveSortingMode();
+        },
+        () => {
+          this.setPublishedIndexesToBackup();
+        }
+      );
     }
   }
 
   updateContentGroup(changes: object): Observable<ContentGroup> {
-    return this.contentGroupService.patchContentGroup(this.contentGroup, changes);
+    return this.contentGroupService.patchContentGroup(
+      this.contentGroup,
+      changes
+    );
   }
 
   publishContents() {
-    const changes: { published: boolean } = { published: !this.contentGroup.published };
-    this.updateContentGroup(changes).subscribe(updatedContentGroup => {
+    const changes: { published: boolean } = {
+      published: !this.contentGroup.published,
+    };
+    this.updateContentGroup(changes).subscribe((updatedContentGroup) => {
       this.contentGroup = updatedContentGroup;
       this.published = this.contentGroup.published;
     });
@@ -381,7 +499,7 @@ export class GroupContentComponent extends DragDropBaseComponent implements OnIn
       this.updatePublishedIndexes(index, index);
     } else {
       if (this.lastPublishedIndex === this.firstPublishedIndex) {
-        this.resetPublishing()
+        this.resetPublishing();
       } else {
         if (index === this.firstPublishedIndex) {
           this.updatePublishedIndexes(index + 1, this.lastPublishedIndex);
@@ -394,13 +512,19 @@ export class GroupContentComponent extends DragDropBaseComponent implements OnIn
 
   publishContentFrom(index: number, publish: boolean) {
     if (publish) {
-      const last = this.lastPublishedIndex === -1 || this.lastPublishedIndex < index ? this.contents.length - 1 : this.lastPublishedIndex;
+      const last =
+        this.lastPublishedIndex === -1 || this.lastPublishedIndex < index
+          ? this.contents.length - 1
+          : this.lastPublishedIndex;
       this.updatePublishedIndexes(index, last);
     } else {
       if (index === this.firstPublishedIndex) {
         this.resetPublishing();
       } else {
-        const first = this.firstPublishedIndex === -1 || this.firstPublishedIndex > index ? 0 : this.firstPublishedIndex;
+        const first =
+          this.firstPublishedIndex === -1 || this.firstPublishedIndex > index
+            ? 0
+            : this.firstPublishedIndex;
         this.updatePublishedIndexes(first, index - 1);
       }
     }
@@ -408,13 +532,19 @@ export class GroupContentComponent extends DragDropBaseComponent implements OnIn
 
   publishContentUpTo(index: number, publish: boolean) {
     if (publish) {
-      const first = (this.firstPublishedIndex === -1 || this.firstPublishedIndex > index) ? 0 : this.firstPublishedIndex;
+      const first =
+        this.firstPublishedIndex === -1 || this.firstPublishedIndex > index
+          ? 0
+          : this.firstPublishedIndex;
       this.updatePublishedIndexes(first, index);
     } else {
       if (index === this.lastPublishedIndex) {
         this.resetPublishing();
       } else {
-        const last = this.lastPublishedIndex === -1 || this.lastPublishedIndex < index ? this.contents.length - 1 : this.lastPublishedIndex;
+        const last =
+          this.lastPublishedIndex === -1 || this.lastPublishedIndex < index
+            ? this.contents.length - 1
+            : this.lastPublishedIndex;
         this.updatePublishedIndexes(index + 1, last);
       }
     }
@@ -425,8 +555,11 @@ export class GroupContentComponent extends DragDropBaseComponent implements OnIn
   }
 
   deleteAnswers(content: Content) {
-    const dialogRef = this.dialogService.openDeleteDialog('content-answers', 'really-delete-answers');
-    dialogRef.afterClosed().subscribe(result => {
+    const dialogRef = this.dialogService.openDeleteDialog(
+      'content-answers',
+      'really-delete-answers'
+    );
+    dialogRef.afterClosed().subscribe((result) => {
       if (result === 'delete') {
         this.contentService.deleteAnswersOfContent(content.id, this.room.id);
       }
@@ -434,11 +567,18 @@ export class GroupContentComponent extends DragDropBaseComponent implements OnIn
   }
 
   deleteAllAnswers() {
-    this.contentService.showDeleteAllAnswersDialog(this.contentGroup).subscribe(() => {
-      this.translateService.get('content.all-answers-deleted').subscribe(msg => {
-        this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
+    this.contentService
+      .showDeleteAllAnswersDialog(this.contentGroup)
+      .subscribe(() => {
+        this.translateService
+          .get('content.all-answers-deleted')
+          .subscribe((msg) => {
+            this.notificationService.showAdvanced(
+              msg,
+              AdvancedSnackBarTypes.WARNING
+            );
+          });
       });
-    });
   }
 
   toggleAnswersPublished(content: Content, answersPublished?: boolean) {
@@ -447,20 +587,26 @@ export class GroupContentComponent extends DragDropBaseComponent implements OnIn
     } else {
       content.state.answersPublished = !content.state.answersPublished;
     }
-    this.contentService.changeState(content).subscribe(updatedContent => content = updatedContent);
+    this.contentService
+      .changeState(content)
+      .subscribe((updatedContent) => (content = updatedContent));
   }
 
   toggleStatisticsPublished() {
-    const changes: { statisticsPublished: boolean } = { statisticsPublished: !this.contentGroup.statisticsPublished };
-    this.updateContentGroup(changes).subscribe(updatedContentGroup => {
+    const changes: { statisticsPublished: boolean } = {
+      statisticsPublished: !this.contentGroup.statisticsPublished,
+    };
+    this.updateContentGroup(changes).subscribe((updatedContentGroup) => {
       this.contentGroup = updatedContentGroup;
       this.statisticsPublished = this.contentGroup.statisticsPublished;
     });
   }
 
   toggleCorrectOptionsPublished() {
-    const changes: { correctOptionsPublished: boolean } = { correctOptionsPublished: !this.contentGroup.correctOptionsPublished };
-    this.updateContentGroup(changes).subscribe(updatedContentGroup => {
+    const changes: { correctOptionsPublished: boolean } = {
+      correctOptionsPublished: !this.contentGroup.correctOptionsPublished,
+    };
+    this.updateContentGroup(changes).subscribe((updatedContentGroup) => {
       this.contentGroup = updatedContentGroup;
       this.correctOptionsPublished = this.contentGroup.correctOptionsPublished;
     });
@@ -494,7 +640,8 @@ export class GroupContentComponent extends DragDropBaseComponent implements OnIn
     if (prev === publishedIndex) {
       this.setTempRange(current, current);
     } else {
-      const newPublishedIndex = prev < publishedIndex ? publishedIndex - 1 : publishedIndex + 1;
+      const newPublishedIndex =
+        prev < publishedIndex ? publishedIndex - 1 : publishedIndex + 1;
       this.setTempRange(newPublishedIndex, newPublishedIndex);
     }
   }
@@ -506,25 +653,40 @@ export class GroupContentComponent extends DragDropBaseComponent implements OnIn
       if (this.isOutsideOfCurrentRange(prev, current)) {
         this.setNewRangeOutsideOfCurrentRange(prev);
       } else {
-        if (current <= this.firstPublishedIndex || current >= this.lastPublishedIndex) {
+        if (
+          current <= this.firstPublishedIndex ||
+          current >= this.lastPublishedIndex
+        ) {
           const adjustment = this.isBelowRange(prev) ? -1 : 1;
-          this.setTempRange(this.firstPublishedIndex + adjustment, this.lastPublishedIndex + adjustment);
+          this.setTempRange(
+            this.firstPublishedIndex + adjustment,
+            this.lastPublishedIndex + adjustment
+          );
         }
       }
     }
   }
 
   isOutsideOfCurrentRange(prev, current: number) {
-    return this.isInRangeExclusive(current) || (this.isAboveRange(prev) && this.isEnd(current))
-      || (this.isBelowRange(prev) && this.isStart(current))
+    return (
+      this.isInRangeExclusive(current) ||
+      (this.isAboveRange(prev) && this.isEnd(current)) ||
+      (this.isBelowRange(prev) && this.isStart(current))
+    );
   }
 
   setNewRangeInCurrentRange(current: number) {
     if (!this.isInRangeExclusive(current)) {
       if (this.isAboveRange(current)) {
-        this.setTempRange(this.firstPublishedIndex, this.lastPublishedIndex - 1);
+        this.setTempRange(
+          this.firstPublishedIndex,
+          this.lastPublishedIndex - 1
+        );
       } else if (this.isBelowRange(current)) {
-        this.setTempRange(this.firstPublishedIndex + 1, this.lastPublishedIndex);
+        this.setTempRange(
+          this.firstPublishedIndex + 1,
+          this.lastPublishedIndex
+        );
       }
     }
   }
@@ -538,12 +700,19 @@ export class GroupContentComponent extends DragDropBaseComponent implements OnIn
   }
 
   publishedRangeHasChanged(prev, current: number): boolean {
-    return prev !== current && !(this.isAboveRange(prev) && this.isAboveRange(current)
-      || this.isBelowRange(prev) && this.isBelowRange(current))
+    return (
+      prev !== current &&
+      !(
+        (this.isAboveRange(prev) && this.isAboveRange(current)) ||
+        (this.isBelowRange(prev) && this.isBelowRange(current))
+      )
+    );
   }
 
   isInCurrentRange(index: number): boolean {
-    return index <= this.lastPublishedIndex && index >= this.firstPublishedIndex;
+    return (
+      index <= this.lastPublishedIndex && index >= this.firstPublishedIndex
+    );
   }
 
   isInRangeExclusive(index: number): boolean {
@@ -551,20 +720,29 @@ export class GroupContentComponent extends DragDropBaseComponent implements OnIn
   }
 
   navigateToSubroute(subRoute: string) {
-    this.router.navigate(['edit', this.room.shortId, 'series', this.contentGroup.name, subRoute]);
+    this.router.navigate([
+      'edit',
+      this.room.shortId,
+      'series',
+      this.contentGroup.name,
+      subRoute,
+    ]);
   }
 
   navigateToContentStats(content: Content) {
-    const index = this.contents.filter(c => this.contentTypes.indexOf(c.format) > -1).
-    map(co => co.id).indexOf(content.id);
+    const index = this.contents
+      .filter((c) => this.contentTypes.indexOf(c.format) > -1)
+      .map((co) => co.id)
+      .indexOf(content.id);
     if (index > -1) {
       this.navigateToSubroute((index + 1).toString());
     }
   }
 
   updatePublishedIndexes(first: number, last: number) {
-    const changes: { firstPublishedIndex: number, lastPublishedIndex: number } = { firstPublishedIndex: first, lastPublishedIndex: last };
-    this.updateContentGroup(changes).subscribe(updatedContentGroup => {
+    const changes: { firstPublishedIndex: number; lastPublishedIndex: number } =
+      { firstPublishedIndex: first, lastPublishedIndex: last };
+    this.updateContentGroup(changes).subscribe((updatedContentGroup) => {
       this.contentGroup = updatedContentGroup;
       this.setRange();
     });
@@ -573,10 +751,18 @@ export class GroupContentComponent extends DragDropBaseComponent implements OnIn
   setRange() {
     this.firstPublishedIndex = this.contentGroup.firstPublishedIndex;
     this.lastPublishedIndex = this.contentGroup.lastPublishedIndex;
-    const key = this.firstPublishedIndex === - 1 ? 'no' : this.lastPublishedIndex === -1 ? 'all'
-      : this.firstPublishedIndex === this.lastPublishedIndex ? 'single' : 'range';
-    const msg = this.translateService.instant('content.a11y-' + key + '-published',
-      { first: this.firstPublishedIndex + 1, last: this.lastPublishedIndex + 1 });
+    const key =
+      this.firstPublishedIndex === -1
+        ? 'no'
+        : this.lastPublishedIndex === -1
+        ? 'all'
+        : this.firstPublishedIndex === this.lastPublishedIndex
+        ? 'single'
+        : 'range';
+    const msg = this.translateService.instant(
+      'content.a11y-' + key + '-published',
+      { first: this.firstPublishedIndex + 1, last: this.lastPublishedIndex + 1 }
+    );
     this.announceService.announce(msg);
   }
 
@@ -598,37 +784,58 @@ export class GroupContentComponent extends DragDropBaseComponent implements OnIn
   }
 
   isEnd(index: number): boolean {
-    return index === this.lastPublishedIndex || (this.lastPublishedIndex === -1 && index === this.contents.length -1);
+    return (
+      index === this.lastPublishedIndex ||
+      (this.lastPublishedIndex === -1 && index === this.contents.length - 1)
+    );
   }
 
   isPublished(index: number): boolean {
-    return this.contentGroupService.isIndexPublished(this.firstPublishedIndex, this.lastPublishedIndex, index);
+    return this.contentGroupService.isIndexPublished(
+      this.firstPublishedIndex,
+      this.lastPublishedIndex,
+      index
+    );
   }
 
   exportToCsv() {
     const dialogRef = this.dialogService.openExportDialog();
-    dialogRef.afterClosed().subscribe(options => {
+    dialogRef.afterClosed().subscribe((options) => {
       const blob$ = this.contentService.export(
-          options.exportType,
-          this.room.id,
-          this.contentGroup.contentIds,
-          options.charset);
+        options.exportType,
+        this.room.id,
+        this.contentGroup.contentIds,
+        options.charset
+      );
       this.localFileService.download(blob$, this.generateExportFilename('csv'));
     });
   }
 
   importFromCsv() {
     const blob$ = this.localFileService.upload([
-        'text/csv',
-        'text/tab-separated-values']);
-    blob$.pipe(mergeMap(blob => this.contentGroupService.import(this.room.id, this.contentGroup.id, blob)))
-        .subscribe(() => {
-          this.reloadContentGroup(true);
-        });
+      'text/csv',
+      'text/tab-separated-values',
+    ]);
+    blob$
+      .pipe(
+        mergeMap((blob) =>
+          this.contentGroupService.import(
+            this.room.id,
+            this.contentGroup.id,
+            blob
+          )
+        )
+      )
+      .subscribe(() => {
+        this.reloadContentGroup(true);
+      });
   }
 
   generateExportFilename(extension: string): string {
-    const name = this.localFileService.generateFilename([this.contentGroup.name, this.room.shortId], true);
+    const name = this.localFileService.generateFilename(
+      [this.contentGroup.name, this.room.shortId],
+      true
+    );
     return `${name}.${extension}`;
   }
 
@@ -641,16 +848,26 @@ export class GroupContentComponent extends DragDropBaseComponent implements OnIn
   }
 
   deleteGroup() {
-    const dialogRef = this.dialogService.openDeleteDialog('content-group', 'really-delete-content-group', this.contentGroup.name, 'delete');
-    dialogRef.afterClosed().subscribe(result => {
+    const dialogRef = this.dialogService.openDeleteDialog(
+      'content-group',
+      'really-delete-content-group',
+      this.contentGroup.name,
+      'delete'
+    );
+    dialogRef.afterClosed().subscribe((result) => {
       if (result === 'delete') {
         this.contentGroupService.delete(this.contentGroup).subscribe(() => {
           this.routingService.goBack();
           this.globalStorageService.removeItem(STORAGE_KEYS.LAST_GROUP);
-          this.translateService.get('content.content-group-deleted').subscribe(msg => {
-            this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
-          });
-        })
+          this.translateService
+            .get('content.content-group-deleted')
+            .subscribe((msg) => {
+              this.notificationService.showAdvanced(
+                msg,
+                AdvancedSnackBarTypes.WARNING
+              );
+            });
+        });
       }
     });
   }
@@ -669,21 +886,34 @@ export class GroupContentComponent extends DragDropBaseComponent implements OnIn
   }
 
   duplicate(contentId: string) {
-    this.duplicateContent$(contentId).subscribe(content => {
+    this.duplicateContent$(contentId).subscribe((content) => {
       this.contents.push(content);
-      const msg = this.translateService.instant('content.content-has-been-duplicated');
+      const msg = this.translateService.instant(
+        'content.content-has-been-duplicated'
+      );
       this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.SUCCESS);
     });
   }
 
   duplicateContent$(contentId: string, contentGroupId = this.contentGroup.id) {
-    return this.contentService.duplicateContent(this.room.id, contentGroupId, contentId);
+    return this.contentService.duplicateContent(
+      this.room.id,
+      contentGroupId,
+      contentId
+    );
   }
 
   resetBannedAnswers(contentId: string) {
-    this.contentService.resetBannedKeywords(this.room.id, contentId).subscribe(() => {
-      const msg = this.translateService.instant('content.banned-keywords-reset');
-      this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
-    });
+    this.contentService
+      .resetBannedKeywords(this.room.id, contentId)
+      .subscribe(() => {
+        const msg = this.translateService.instant(
+          'content.banned-keywords-reset'
+        );
+        this.notificationService.showAdvanced(
+          msg,
+          AdvancedSnackBarTypes.WARNING
+        );
+      });
   }
 }

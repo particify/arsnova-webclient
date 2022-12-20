@@ -5,7 +5,11 @@ import { NO_ERRORS_SCHEMA, Injectable } from '@angular/core';
 import { ContentService } from '../../../../services/http/content.service';
 import { NotificationService } from '../../../../services/util/notification.service';
 import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
-import { TranslateLoader, TranslateModule, TranslateService } from '@ngx-translate/core';
+import {
+  TranslateLoader,
+  TranslateModule,
+  TranslateService,
+} from '@ngx-translate/core';
 import { EventService } from '../../../../services/util/event.service';
 import { RoomService } from '../../../../services/http/room.service';
 import { DialogService } from '../../../../services/util/dialog.service';
@@ -17,7 +21,7 @@ import {
   JsonTranslationLoader,
   MockLangService,
   MockGlobalStorageService,
-  MockMatDialog
+  MockMatDialog,
 } from '@arsnova/testing/test-helpers';
 import { LanguageService } from '@arsnova/app/services/util/language.service';
 import { GlobalStorageService } from '@arsnova/app/services/util/global-storage.service';
@@ -36,35 +40,27 @@ class MockContentService {
 }
 
 @Injectable()
-class MockNotificationService {
-}
+class MockNotificationService {}
 
 @Injectable()
-class MockEventService {
-}
+class MockEventService {}
 
 @Injectable()
-class MockRoomService {
-}
+class MockRoomService {}
 
 @Injectable()
-class MockDialogService {
-}
+class MockDialogService {}
 
 @Injectable()
-class MockContentGroupService {
-}
+class MockContentGroupService {}
 
 @Injectable()
-class MockRoomStatsService {
-}
+class MockRoomStatsService {}
 @Injectable()
-class MockAnnouncer {
-}
+class MockAnnouncer {}
 
 @Injectable()
-class MockFormattingService{
-}
+class MockFormattingService {}
 
 describe('ContentCreationPageComponent', () => {
   let component: ContentCreationPageComponent;
@@ -72,13 +68,13 @@ describe('ContentCreationPageComponent', () => {
 
   const data = {
     room: {
-      id: '1234'
-    }
-  }
+      id: '1234',
+    },
+  };
 
   const snapshot = new ActivatedRouteSnapshot();
 
-  snapshot.params = of([{seriesName: 'SERIES'}]);
+  snapshot.params = of([{ seriesName: 'SERIES' }]);
 
   const activatedRouteStub = new ActivatedRouteStub(null, data, snapshot);
 
@@ -88,81 +84,76 @@ describe('ContentCreationPageComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [
-        ContentCreationPageComponent,
-        A11yIntroPipe
-      ],
+      declarations: [ContentCreationPageComponent, A11yIntroPipe],
       providers: [
         {
           provide: DialogService,
-          useClass: MockDialogService
+          useClass: MockDialogService,
         },
         {
           provide: ContentService,
-          useClass: MockContentService
+          useClass: MockContentService,
         },
         {
           provide: NotificationService,
-          useClass: MockNotificationService
+          useClass: MockNotificationService,
         },
         {
           provide: MatDialog,
-          useClass: MockMatDialog
+          useClass: MockMatDialog,
         },
         {
           provide: EventService,
-          useClass: MockEventService
+          useClass: MockEventService,
         },
         {
           provide: RoomService,
-          useClass: MockRoomService
+          useClass: MockRoomService,
         },
         {
           provide: ContentGroupService,
-          useClass: MockContentGroupService
+          useClass: MockContentGroupService,
         },
         {
           provide: AnnounceService,
-          useClass: MockAnnouncer
+          useClass: MockAnnouncer,
         },
         {
           provide: ActivatedRoute,
-          useValue: activatedRouteStub
+          useValue: activatedRouteStub,
         },
         {
           provide: LanguageService,
-          useClass: MockLangService
+          useClass: MockLangService,
         },
         {
           provide: GlobalStorageService,
-          useClass: MockGlobalStorageService
+          useClass: MockGlobalStorageService,
         },
         {
           provide: RoomStatsService,
-          useClass: MockRoomStatsService
+          useClass: MockRoomStatsService,
         },
         {
           provide: FormattingService,
-          useClass: MockFormattingService
+          useClass: MockFormattingService,
         },
         {
           provide: A11yIntroPipe,
-          useValue: a11yIntroPipe
-        }
+          useValue: a11yIntroPipe,
+        },
       ],
       imports: [
         TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
-            useClass: JsonTranslationLoader
+            useClass: JsonTranslationLoader,
           },
-          isolate: true
+          isolate: true,
         }),
-        MatMenuModule
+        MatMenuModule,
       ],
-      schemas: [
-        NO_ERRORS_SCHEMA
-      ]
+      schemas: [NO_ERRORS_SCHEMA],
     })
       .compileComponents()
       .then(() => {

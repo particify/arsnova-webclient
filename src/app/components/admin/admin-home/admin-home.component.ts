@@ -1,13 +1,16 @@
 import { Component, EventEmitter, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { LanguageService } from '../../../services/util/language.service';
-import { GlobalStorageService, STORAGE_KEYS } from '../../../services/util/global-storage.service';
+import {
+  GlobalStorageService,
+  STORAGE_KEYS,
+} from '../../../services/util/global-storage.service';
 import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-admin-home',
   templateUrl: './admin-home.component.html',
-  styleUrls: ['./admin-home.component.scss']
+  styleUrls: ['./admin-home.component.scss'],
 })
 export class AdminHomeComponent implements OnInit {
   routePrefix = '/admin/';
@@ -20,11 +23,13 @@ export class AdminHomeComponent implements OnInit {
     protected globalStorageService: GlobalStorageService,
     protected router: Router
   ) {
-    langService.langEmitter.subscribe(lang => translateService.use(lang));
+    langService.langEmitter.subscribe((lang) => translateService.use(lang));
   }
 
   ngOnInit() {
-    this.translateService.use(this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE));
+    this.translateService.use(
+      this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE)
+    );
     const url = this.router.url;
     this.currentPage = url.slice(this.routePrefix.length, url.length);
     setTimeout(() => {

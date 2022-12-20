@@ -9,7 +9,14 @@ export class User {
   person: Person;
   settings: UserSettings;
 
-  constructor(id: string, loginId: string, authProvider: string, revision: string, person: Person, settings: UserSettings = new UserSettings()) {
+  constructor(
+    id: string,
+    loginId: string,
+    authProvider: string,
+    revision: string,
+    person: Person,
+    settings: UserSettings = new UserSettings()
+  ) {
     this.id = id;
     this.loginId = loginId;
     this.authProvider = authProvider;

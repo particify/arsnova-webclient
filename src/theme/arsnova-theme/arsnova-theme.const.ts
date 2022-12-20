@@ -1,5 +1,4 @@
 export const arsnova = {
-
   '--primary': '#5e35b1',
   '--primary-variant': '#ebe5f7',
 
@@ -56,22 +55,20 @@ export const arsnova = {
   '--likert-agree': '#7986cb',
   '--likert-neither': '#e0e0e0',
   '--likert-disagree': '#ff8a65',
-  '--likert-strongly-disagree': '#ff5722'
+  '--likert-strongly-disagree': '#ff5722',
 };
 
 export const arsnova_meta = {
-
   translation: {
     name: {
       en: 'ARSnova',
-      de: 'ARSnova'
+      de: 'ARSnova',
     },
     description: {
       en: 'Optimized for presentation',
-      de: 'Für die Präsentation optimiert'
-    }
+      de: 'Für die Präsentation optimiert',
+    },
   },
   order: 1,
-  previewColor: 'background'
-
+  previewColor: 'background',
 };

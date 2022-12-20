@@ -10,30 +10,31 @@ import { Message } from '@stomp/stompjs';
 import { WsFeedbackService } from '../../services/websockets/ws-feedback.service';
 
 const httpOptions = {
-  headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+  headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
 };
 
 @Injectable()
 export class FeedbackService extends AbstractHttpService<number[]> {
-
   public messageEvent = new EventEmitter<Message>();
   sub: Subscription;
 
   constructor(
-      private http: HttpClient,
-      protected eventService: EventService,
-      protected translateService: TranslateService,
-      protected notificationService: NotificationService,
-      protected wsFeedbackService: WsFeedbackService
+    private http: HttpClient,
+    protected eventService: EventService,
+    protected translateService: TranslateService,
+    protected notificationService: NotificationService,
+    protected wsFeedbackService: WsFeedbackService
   ) {
     super('/survey', http, eventService, translateService, notificationService);
   }
 
   startSub(roomId: string) {
     if (!this.sub) {
-      this.sub = this.wsFeedbackService.getFeedbackStream(roomId).subscribe((message: Message) => {
-        this.emitMessage(message);
-      });
+      this.sub = this.wsFeedbackService
+        .getFeedbackStream(roomId)
+        .subscribe((message: Message) => {
+          this.emitMessage(message);
+        });
     }
   }
 
@@ -46,9 +47,9 @@ export class FeedbackService extends AbstractHttpService<number[]> {
 
   get(roomId: string): Observable<number[]> {
     const connectionUrl = this.buildUri('', roomId);
-    return this.http.get<number[]>(connectionUrl, httpOptions).pipe(
-      catchError(this.handleError<number[]>('get survey'))
-    );
+    return this.http
+      .get<number[]>(connectionUrl, httpOptions)
+      .pipe(catchError(this.handleError<number[]>('get survey')));
   }
 
   emitMessage(message) {

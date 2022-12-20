@@ -9,15 +9,25 @@ export class FormattingOption {
   placeholder: string;
   pattern: RegExp;
 
-  constructor(name: string, icon: string, openingTag: string, closingTag?: string, placeholder?: string) {
+  constructor(
+    name: string,
+    icon: string,
+    openingTag: string,
+    closingTag?: string,
+    placeholder?: string
+  ) {
     this.name = name;
     this.icon = icon;
     this.openingTag = openingTag;
     this.closingTag = closingTag;
     this.placeholder = placeholder;
     this.pattern = closingTag
-        ? new RegExp(`${this.escapeTag(openingTag)}${PATTERN_PLACEHOLDER}${this.escapeTag(closingTag)}`)
-        : new RegExp(`^${this.escapeTag(openingTag)}`);
+      ? new RegExp(
+          `${this.escapeTag(openingTag)}${PATTERN_PLACEHOLDER}${this.escapeTag(
+            closingTag
+          )}`
+        )
+      : new RegExp(`^${this.escapeTag(openingTag)}`);
   }
 
   hasClosingTag() {

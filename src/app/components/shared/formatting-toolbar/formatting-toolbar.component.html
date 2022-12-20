@@ -1,6 +1,11 @@
 <div fxLayout="row wrap" fxLayoutGap="4px">
-  <button mat-icon-button *ngFor="let option of formattingOptions" (click)="addFormatting(option)"
-          [matTooltip]="('formatting.' + option.name) | translate" tabindex="-1">
-    <mat-icon>{{option.icon}}</mat-icon>
+  <button
+    mat-icon-button
+    *ngFor="let option of formattingOptions"
+    (click)="addFormatting(option)"
+    [matTooltip]="'formatting.' + option.name | translate"
+    tabindex="-1"
+  >
+    <mat-icon>{{ option.icon }}</mat-icon>
   </button>
 </div>

@@ -3,10 +3,12 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { CommentSettingsComponent } from './comment-settings.component';
 import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import {
-  JsonTranslationLoader, MockEventService, MockGlobalStorageService,
+  JsonTranslationLoader,
+  MockEventService,
+  MockGlobalStorageService,
   MockMatDialog,
   MockNotificationService,
-  MockRouter
+  MockRouter,
 } from '@arsnova/testing/test-helpers';
 import { NotificationService } from '@arsnova/app/services/util/notification.service';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
@@ -24,28 +26,23 @@ import { CommentSettings } from '@arsnova/app/models/comment-settings';
 import { of } from 'rxjs';
 
 @Injectable()
-class MockRoomService {
-}
+class MockRoomService {}
 
 @Injectable()
-class MockCommentService {
-}
+class MockCommentService {}
 
 @Injectable()
 class MockCommentSettingsService {
   get() {
-    return of(new CommentSettings())
+    return of(new CommentSettings());
   }
 }
 
 @Injectable()
-class MockDialogService {
-}
+class MockDialogService {}
 
 @Injectable()
-class MockLiveAnnouncer {
-}
-
+class MockLiveAnnouncer {}
 
 describe('CommentSettingsComponent', () => {
   let component: CommentSettingsComponent;
@@ -53,73 +50,76 @@ describe('CommentSettingsComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ CommentSettingsComponent ],
+      declarations: [CommentSettingsComponent],
       providers: [
         {
           provide: MatDialog,
-          useClass: MockMatDialog
+          useClass: MockMatDialog,
         },
         {
           provide: NotificationService,
-          useClass: MockNotificationService
+          useClass: MockNotificationService,
         },
         {
           provide: RoomService,
-          useClass: MockRoomService
+          useClass: MockRoomService,
         },
         {
           provide: Router,
-          useClass: MockRouter
+          useClass: MockRouter,
         },
         {
           provide: CommentService,
-          useClass: MockCommentService
+          useClass: MockCommentService,
         },
         {
           provide: CommentSettingsService,
-          useClass: MockCommentSettingsService
+          useClass: MockCommentSettingsService,
         },
         {
           provide: DialogService,
-          useClass: MockDialogService
+          useClass: MockDialogService,
         },
         {
           provide: GlobalStorageService,
-          useClass: MockGlobalStorageService
+          useClass: MockGlobalStorageService,
         },
         {
           provide: LiveAnnouncer,
-          useClass: MockLiveAnnouncer
+          useClass: MockLiveAnnouncer,
         },
         {
           provide: EventService,
-          useClass: MockEventService
-        }
+          useClass: MockEventService,
+        },
       ],
       imports: [
         TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
-            useClass: JsonTranslationLoader
+            useClass: JsonTranslationLoader,
           },
-          isolate: true
-        })
+          isolate: true,
+        }),
       ],
-      schemas: [
-        NO_ERRORS_SCHEMA
-      ]
-    })
-    .compileComponents();
+      schemas: [NO_ERRORS_SCHEMA],
+    }).compileComponents();
   }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(CommentSettingsComponent);
     component = fixture.componentInstance;
-    component.room = new Room('1234', 'shortId', 'abbreviation', 'name', 'description');
+    component.room = new Room(
+      '1234',
+      'shortId',
+      'abbreviation',
+      'name',
+      'description'
+    );
     fixture.detectChanges();
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
   });
-})
+});

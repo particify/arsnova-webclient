@@ -4,7 +4,6 @@ export class MembershipsChanged {
 
   constructor() {
     this.type = 'MembershipsChanged';
-    this.payload = {
-    };
+    this.payload = {};
   }
 }

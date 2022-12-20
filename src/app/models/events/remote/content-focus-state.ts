@@ -6,7 +6,14 @@ export class ContentFocusState {
   resultsVisible: boolean;
   correctAnswersVisible: boolean;
 
-  constructor(contentId, contentIndex, contentGroupId, contentGroupName, resultsVisible, correctAnswersVisible) {
+  constructor(
+    contentId,
+    contentIndex,
+    contentGroupId,
+    contentGroupName,
+    resultsVisible,
+    correctAnswersVisible
+  ) {
     this.contentId = contentId;
     this.contentIndex = contentIndex;
     this.contentGroupId = contentGroupId;

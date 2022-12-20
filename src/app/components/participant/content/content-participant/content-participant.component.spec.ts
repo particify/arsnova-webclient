@@ -16,36 +16,40 @@ describe('ContentParticipantComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [
-        ContentParticipantComponent,
-        A11yRenderedBodyPipe
-      ],
+      declarations: [ContentParticipantComponent, A11yRenderedBodyPipe],
       imports: [
         TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
-            useClass: JsonTranslationLoader
+            useClass: JsonTranslationLoader,
           },
-          isolate: true
-        })
+          isolate: true,
+        }),
       ],
       providers: [
         {
           provide: A11yRenderedBodyPipe,
-          useValue: a11yRenderedBodyPipe
-        }
+          useValue: a11yRenderedBodyPipe,
+        },
       ],
-      schemas: [
-        NO_ERRORS_SCHEMA
-      ]
-    })
-    .compileComponents();
+      schemas: [NO_ERRORS_SCHEMA],
+    }).compileComponents();
   }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(ContentParticipantComponent);
     component = fixture.componentInstance;
-    component.content = new Content('1234', '1', '1234', 'subject', 'body', [], ContentType.CHOICE, {}, new ContentState(1, new Date(), false));
+    component.content = new Content(
+      '1234',
+      '1',
+      '1234',
+      'subject',
+      'body',
+      [],
+      ContentType.CHOICE,
+      {},
+      new ContentState(1, new Date(), false)
+    );
     fixture.detectChanges();
   });
 

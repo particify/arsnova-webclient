@@ -7,5 +7,5 @@ export enum ContentType {
   SORT = 'SORT',
   PRIORITIZATION = 'PRIORITIZATION',
   SLIDE = 'SLIDE',
-  FLASHCARD = 'FLASHCARD'
+  FLASHCARD = 'FLASHCARD',
 }

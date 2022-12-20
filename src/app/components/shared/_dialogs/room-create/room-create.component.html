@@ -1,16 +1,34 @@
 <form (ngSubmit)="checkLogin()">
   <div fxLayout="column" fxLayoutAlign="center" fxLayoutGap="10px">
-    <lib-extension-point extensionId="lms-course-autocomplete" [extensionData]="{ userId: auth?.userId, room: newRoom }">
+    <lib-extension-point
+      extensionId="lms-course-autocomplete"
+      [extensionData]="{ userId: auth?.userId, room: newRoom }"
+    >
       <mat-form-field appearance="outline" fxFill>
         <mat-label>{{ 'dialog.room-name' | translate }}</mat-label>
-        <input (keypress)="resetEmptyInputs()" matInput #roomName class="input-block" type="text" autocomplete="off"
-               maxlength="30" [(ngModel)]="newRoom.name" name="roomName"/>
-        <mat-hint align="end" *ngIf="!emptyInputs"><span aria-hidden="true">{{roomName.value.length}}
-          / 30</span></mat-hint>
+        <input
+          (keypress)="resetEmptyInputs()"
+          matInput
+          #roomName
+          class="input-block"
+          type="text"
+          autocomplete="off"
+          maxlength="30"
+          [(ngModel)]="newRoom.name"
+          name="roomName"
+        />
+        <mat-hint align="end" *ngIf="!emptyInputs"
+          ><span aria-hidden="true"
+            >{{ roomName.value.length }} / 30</span
+          ></mat-hint
+        >
       </mat-form-field>
     </lib-extension-point>
-    <app-hint *ngIf="!auth || auth.authProvider === 'ARSNOVA_GUEST'"
-              [type]="warningType" text="dialog.not-logged-in"></app-hint>
+    <app-hint
+      *ngIf="!auth || auth.authProvider === 'ARSNOVA_GUEST'"
+      [type]="warningType"
+      text="dialog.not-logged-in"
+    ></app-hint>
   </div>
 </form>
 <app-dialog-action-buttons

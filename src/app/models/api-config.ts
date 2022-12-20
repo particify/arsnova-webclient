@@ -1,12 +1,12 @@
 export enum AuthenticationProviderType {
   ANONYMOUS = 'ANONYMOUS',
   USERNAME_PASSWORD = 'USERNAME_PASSWORD',
-  SSO = 'SSO'
+  SSO = 'SSO',
 }
 
 export enum AuthenticationProviderRole {
   MODERATOR = 'MODERATOR',
-  PARTICIPANT = 'PARTICIPANT'
+  PARTICIPANT = 'PARTICIPANT',
 }
 
 export interface AuthenticationProvider {
@@ -29,6 +29,6 @@ export class ApiConfig {
   constructor(
     public authenticationProviders: AuthenticationProvider[],
     public features: { [featureName: string]: Feature },
-    public ui: UiConfig) {
-  }
+    public ui: UiConfig
+  ) {}
 }

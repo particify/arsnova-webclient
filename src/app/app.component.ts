@@ -11,19 +11,19 @@ import { filter } from 'rxjs/operators';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit {
-
-  constructor(private languageService: LanguageService,
-              private apiConfigService: ApiConfigService,
-              private trackingService: TrackingService,
-              private consentService: ConsentService,
-              private updateService: UpdateService,
-              private routingService: RoutingService,
-              public route: ActivatedRoute,
-              private router: Router) {
-  }
+  constructor(
+    private languageService: LanguageService,
+    private apiConfigService: ApiConfigService,
+    private trackingService: TrackingService,
+    private consentService: ConsentService,
+    private updateService: UpdateService,
+    private routingService: RoutingService,
+    public route: ActivatedRoute,
+    private router: Router
+  ) {}
 
   title = 'ARSnova';
   isPresentation = false;
@@ -32,14 +32,17 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     this.languageService.init();
-    this.router.events.pipe(
-      filter(event => event instanceof NavigationEnd)
-    ).subscribe((event: NavigationEnd) => {
+    this.router.events
+      .pipe(filter((event) => event instanceof NavigationEnd))
+      .subscribe((event: NavigationEnd) => {
         this.checkRoute(event.url);
       });
     this.routingService.subscribeActivatedRoute();
-    this.apiConfigService.getApiConfig$().subscribe(config => {
-      if (config.ui.tracking?.url && config.ui.tracking?.provider === 'matomo') {
+    this.apiConfigService.getApiConfig$().subscribe((config) => {
+      if (
+        config.ui.tracking?.url &&
+        config.ui.tracking?.provider === 'matomo'
+      ) {
         this.trackingService.init(config.ui);
       }
       this.consentService.setConfig(config);

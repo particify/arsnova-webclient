@@ -24,13 +24,13 @@
   opacity: 0.6;
 }
 
-@media(hover: none) {
+@media (hover: none) {
   .delete {
     @include button-hover;
   }
 }
 
-.delete:hover, .delete:focus-within {
+.delete:hover,
+.delete:focus-within {
   @include button-hover;
 }
-

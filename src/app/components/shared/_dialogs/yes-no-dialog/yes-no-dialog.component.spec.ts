@@ -1,7 +1,13 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { YesNoDialogComponent } from './yes-no-dialog.component';
-import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA } from '@angular/material/legacy-dialog';
-import { JsonTranslationLoader, MockMatDialogRef } from '@arsnova/testing/test-helpers';
+import {
+  MatLegacyDialogRef as MatDialogRef,
+  MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA,
+} from '@angular/material/legacy-dialog';
+import {
+  JsonTranslationLoader,
+  MockMatDialogRef,
+} from '@arsnova/testing/test-helpers';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 
@@ -10,38 +16,33 @@ describe('YesNoDialogComponent', () => {
   let fixture: ComponentFixture<YesNoDialogComponent>;
 
   const mockMatDialogData = {
-    section: 'section'
-  }
+    section: 'section',
+  };
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [
-        YesNoDialogComponent
-      ],
+      declarations: [YesNoDialogComponent],
       imports: [
         TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
-            useClass: JsonTranslationLoader
+            useClass: JsonTranslationLoader,
           },
-          isolate: true
-        })
+          isolate: true,
+        }),
       ],
       providers: [
         {
           provide: MatDialogRef,
-          useClass: MockMatDialogRef
+          useClass: MockMatDialogRef,
         },
         {
           provide: MAT_DIALOG_DATA,
-          useValue: mockMatDialogData
-        }
+          useValue: mockMatDialogData,
+        },
       ],
-      schemas: [
-        NO_ERRORS_SCHEMA
-      ]
-    })
-    .compileComponents();
+      schemas: [NO_ERRORS_SCHEMA],
+    }).compileComponents();
   }));
 
   beforeEach(() => {

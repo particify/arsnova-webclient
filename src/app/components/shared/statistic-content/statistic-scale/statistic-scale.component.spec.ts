@@ -3,7 +3,11 @@ import { StatisticScaleComponent } from './statistic-scale.component';
 import { EventService } from '@arsnova/app/services/util/event.service';
 import { ContentService } from '@arsnova/app/services/http/content.service';
 import { ThemeService } from '@arsnova/theme/theme.service';
-import { JsonTranslationLoader, MockEventService, MockThemeService } from '@arsnova/testing/test-helpers';
+import {
+  JsonTranslationLoader,
+  MockEventService,
+  MockThemeService,
+} from '@arsnova/testing/test-helpers';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { ContentChoice } from '@arsnova/app/models/content-choice';
 import { ContentType } from '@arsnova/app/models/content-type.enum';
@@ -22,7 +26,10 @@ describe('StatisticScaleComponent', () => {
   let component: StatisticScaleComponent;
   let fixture: ComponentFixture<StatisticScaleComponent>;
 
-  const mockContentService = jasmine.createSpyObj(['getAnswersChangedStream', 'getAnswer']);
+  const mockContentService = jasmine.createSpyObj([
+    'getAnswersChangedStream',
+    'getAnswer',
+  ]);
   const roundStatistics = new RoundStatistics();
   roundStatistics.abstentionCount = 0;
   roundStatistics.answerCount = 0;
@@ -30,73 +37,87 @@ describe('StatisticScaleComponent', () => {
   roundStatistics.independentCounts = [];
   roundStatistics.round = 1;
   const stats = new AnswerStatistics();
-  stats.contentId = '1234',
-  stats.roundStatistics = [roundStatistics];
+  (stats.contentId = '1234'), (stats.roundStatistics = [roundStatistics]);
   const body = {
     payload: {
-      stats: stats
-    }
-  }
+      stats: stats,
+    },
+  };
   const message = {
-    body: JSON.stringify(body)
-  }
+    body: JSON.stringify(body),
+  };
   mockContentService.getAnswer.and.returnValue(of(stats));
   mockContentService.getAnswersChangedStream.and.returnValue(of(message));
 
   const mockLikertScaleService = jasmine.createSpyObj(['getOptionLabels']);
-  mockLikertScaleService.getOptionLabels.and.returnValue(['5', '4', '3', '2', '1']);
+  mockLikertScaleService.getOptionLabels.and.returnValue([
+    '5',
+    '4',
+    '3',
+    '2',
+    '1',
+  ]);
 
   const mockPresentationService = jasmine.createSpyObj(['getScale']);
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ StatisticScaleComponent ],
+      declarations: [StatisticScaleComponent],
       imports: [
         TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
-            useClass: JsonTranslationLoader
+            useClass: JsonTranslationLoader,
           },
-          isolate: true
-        })
+          isolate: true,
+        }),
       ],
       providers: [
         {
           provide: EventService,
-          useClass: MockEventService
+          useClass: MockEventService,
         },
         {
           provide: ContentService,
-          useValue: mockContentService
+          useValue: mockContentService,
         },
         {
           provide: ThemeService,
-          useClass: MockThemeService
+          useClass: MockThemeService,
         },
         {
           provide: LikertScaleService,
-          useValue: mockLikertScaleService
+          useValue: mockLikertScaleService,
         },
         {
           provide: PresentationService,
-          useValue: mockPresentationService
+          useValue: mockPresentationService,
         },
         {
           provide: GlobalStorageService,
-          useClass: MockGlobalStorageService
-        }
+          useClass: MockGlobalStorageService,
+        },
       ],
-      schemas: [
-        NO_ERRORS_SCHEMA
-      ]
-    })
-    .compileComponents();
+      schemas: [NO_ERRORS_SCHEMA],
+    }).compileComponents();
   }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(StatisticScaleComponent);
     component = fixture.componentInstance;
-    component.content = new ContentChoice('1234', '0', 'room1234', 'subject', 'body', [], [], [], false, ContentType.SCALE, new ContentState(1, new Date(), false));
+    component.content = new ContentChoice(
+      '1234',
+      '0',
+      'room1234',
+      'subject',
+      'body',
+      [],
+      [],
+      [],
+      false,
+      ContentType.SCALE,
+      new ContentState(1, new Date(), false)
+    );
     component.settings = new UserSettings();
     fixture.detectChanges();
   });

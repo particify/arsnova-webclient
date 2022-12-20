@@ -11,10 +11,7 @@ import { environment } from '../../environments/environment';
  */
 @Injectable()
 export class RoomViewUserRoleResolver implements Resolve<UserRole> {
-  constructor(
-    private roomMembershipService: RoomMembershipService
-  ) {
-  }
+  constructor(private roomMembershipService: RoomMembershipService) {}
 
   resolve(route: ActivatedRouteSnapshot): Observable<UserRole> {
     const viewRole = route.data['requiredRole'] as UserRole;
@@ -30,8 +27,15 @@ export class RoomViewUserRoleResolver implements Resolve<UserRole> {
     }
 
     /* Use the user's real role for moderation. */
-    if (this.roomMembershipService.isRoleSubstitutable(viewRole, UserRole.EXECUTIVE_MODERATOR)) {
-      return this.roomMembershipService.getPrimaryRoleByRoom(route.params['shortId']);
+    if (
+      this.roomMembershipService.isRoleSubstitutable(
+        viewRole,
+        UserRole.EXECUTIVE_MODERATOR
+      )
+    ) {
+      return this.roomMembershipService.getPrimaryRoleByRoom(
+        route.params['shortId']
+      );
     }
 
     throw Error(`No room view found for '${route.data['requiredRole']}'.`);

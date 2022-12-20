@@ -20,17 +20,17 @@ describe('DemoRoomGuard', () => {
         DemoRoomGuard,
         {
           provide: DemoService,
-          useClass: MockDemoService
+          useClass: MockDemoService,
         },
         {
           provide: AuthenticationGuard,
-          useClass: MockAuthenticationGuard
+          useClass: MockAuthenticationGuard,
         },
         {
           provide: Router,
-          useClass: MockRouter
-        }
-      ]
+          useClass: MockRouter,
+        },
+      ],
     });
   });
 

@@ -3,12 +3,15 @@ import { Room } from '../../../models/room';
 import { RoomService } from '../../../services/http/room.service';
 import { DialogService } from '../../../services/util/dialog.service';
 import { AdminService } from '../../../services/http/admin.service';
-import { AdvancedSnackBarTypes, NotificationService } from '../../../services/util/notification.service';
+import {
+  AdvancedSnackBarTypes,
+  NotificationService,
+} from '../../../services/util/notification.service';
 import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-room-management',
-  templateUrl: './room-management.component.html'
+  templateUrl: './room-management.component.html',
 })
 export class RoomManagementComponent {
   room: Room;
@@ -18,8 +21,8 @@ export class RoomManagementComponent {
     protected roomService: RoomService,
     protected dialogService: DialogService,
     protected notificationService: NotificationService,
-    protected translateService: TranslateService) {
-  }
+    protected translateService: TranslateService
+  ) {}
 
   async loadEntity(id: string) {
     id = id.replace(' ', '');
@@ -34,23 +37,39 @@ export class RoomManagementComponent {
   }
 
   deleteEntity() {
-    const dialogRef = this.dialogService.openDeleteDialog('room-as-admin', 'really-delete-room');
-    dialogRef.afterClosed().subscribe(closeAction => {
-      if (closeAction === 'delete')  {
-        this.roomService.deleteRoom(this.room.id)
-            .subscribe(() => {
-              this.translateService.get('admin-area.room-deleted').subscribe(message =>
-                  this.notificationService.showAdvanced(message, AdvancedSnackBarTypes.WARNING));
-              this.room = null;
-            });
+    const dialogRef = this.dialogService.openDeleteDialog(
+      'room-as-admin',
+      'really-delete-room'
+    );
+    dialogRef.afterClosed().subscribe((closeAction) => {
+      if (closeAction === 'delete') {
+        this.roomService.deleteRoom(this.room.id).subscribe(() => {
+          this.translateService
+            .get('admin-area.room-deleted')
+            .subscribe((message) =>
+              this.notificationService.showAdvanced(
+                message,
+                AdvancedSnackBarTypes.WARNING
+              )
+            );
+          this.room = null;
+        });
       }
     });
   }
 
   transferRoom(newOwnerId: string) {
-    this.adminService.transferRoom(this.room.id, newOwnerId)
-        .subscribe(() =>
-            this.translateService.get('admin-area.room-transferred').subscribe(message =>
-                this.notificationService.showAdvanced(message, AdvancedSnackBarTypes.SUCCESS)));
+    this.adminService
+      .transferRoom(this.room.id, newOwnerId)
+      .subscribe(() =>
+        this.translateService
+          .get('admin-area.room-transferred')
+          .subscribe((message) =>
+            this.notificationService.showAdvanced(
+              message,
+              AdvancedSnackBarTypes.SUCCESS
+            )
+          )
+      );
   }
 }

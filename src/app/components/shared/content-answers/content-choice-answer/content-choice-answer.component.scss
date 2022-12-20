@@ -38,15 +38,15 @@
   border-color: var(--primary);
 }
 
-.mat-radio-button, .mat-checkbox {
+.mat-radio-button,
+.mat-checkbox {
   width: 100%;
 }
 
 .mat-checkbox .mat-checkbox-label {
-  margin: 0!important;
+  margin: 0 !important;
 }
 
 .answer-indicator {
   margin-right: $option-padding-full;
 }
-

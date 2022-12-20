@@ -1,9 +1,23 @@
-<div class="text-answer-container" [ngClass]="{'answers-visible': answersVisible}">
+<div
+  class="text-answer-container"
+  [ngClass]="{ 'answers-visible': answersVisible }"
+>
   <div fxLayoutAlign="center">
-    <p *ngIf="wordWeights.length === 0" class="hint-sm">{{ 'statistic.no-answers' | translate }}</p>
+    <p *ngIf="wordWeights.length === 0" class="hint-sm">
+      {{ 'statistic.no-answers' | translate }}
+    </p>
   </div>
   <div *ngIf="answersVisible">
-    <app-wordcloud *ngIf="!showModeration" [wordWeights]="wordWeights"></app-wordcloud>
-    <app-answer-list *ngIf="showModeration" [answers]="answerList" [roomId]="content.roomId" [contentId]="content.id" (answerBanned)="filterAnswers($event)"></app-answer-list>
+    <app-wordcloud
+      *ngIf="!showModeration"
+      [wordWeights]="wordWeights"
+    ></app-wordcloud>
+    <app-answer-list
+      *ngIf="showModeration"
+      [answers]="answerList"
+      [roomId]="content.roomId"
+      [contentId]="content.id"
+      (answerBanned)="filterAnswers($event)"
+    ></app-answer-list>
   </div>
 </div>

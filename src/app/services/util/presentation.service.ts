@@ -7,11 +7,10 @@ const MAX_SCALE = 1.9;
 
 @Injectable()
 export class PresentationService {
-
   currentGroup$ = new Subject<string>();
 
   getScale() {
-    return Math.min(Math.max((innerWidth / SCALE_FACTOR), MIN_SCALE), MAX_SCALE);
+    return Math.min(Math.max(innerWidth / SCALE_FACTOR, MIN_SCALE), MAX_SCALE);
   }
 
   getCurrentGroup(): Observable<string> {

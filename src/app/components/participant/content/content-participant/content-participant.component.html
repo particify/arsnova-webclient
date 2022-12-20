@@ -1,97 +1,241 @@
-<div id="content-message" tabindex="-1" attr.aria-label="{{ a11yMsg | translate: {index: index+1} }}">
+<div
+  id="content-message"
+  tabindex="-1"
+  attr.aria-label="{{ a11yMsg | translate : { index: index + 1 } }}"
+>
   <app-loading-indicator *ngIf="isLoading" [size]="80"></app-loading-indicator>
   <section class="card-container with-margin" *ngIf="!isLoading">
-    <div class="card" [ngClass]="{'flipped': flipped}">
+    <div class="card" [ngClass]="{ flipped: flipped }">
       <mat-card>
-        <div class="side" [ngClass]="{'invisible-card-content': flipped}">
+        <div class="side" [ngClass]="{ 'invisible-card-content': flipped }">
           <div fxLayout="row">
-            <app-rendered-text tabindex="0" [rawText]="content.body" [renderedText]="content.renderedBody"></app-rendered-text>
-            <div tabindex="0" class="visually-hidden"
-                 *ngIf="alreadySent">{{ hasAbstained ? ('answer.a11y-has-abstained' | translate) : content.format !== ContentType.TEXT ? (
-              ('answer.a11y-already-answered-' + (isMultiple ? 'multiple' : 'single')) | translate: {
-                  answers: answersString
-                }) : ('answer.a11y-already-answered-text' | translate: {answer: answer.body}) }}</div>
+            <app-rendered-text
+              tabindex="0"
+              [rawText]="content.body"
+              [renderedText]="content.renderedBody"
+            ></app-rendered-text>
+            <div tabindex="0" class="visually-hidden" *ngIf="alreadySent">
+              {{
+                hasAbstained
+                  ? ('answer.a11y-has-abstained' | translate)
+                  : content.format !== ContentType.TEXT
+                  ? ('answer.a11y-already-answered-' +
+                      (isMultiple ? 'multiple' : 'single')
+                    | translate
+                      : {
+                          answers: answersString
+                        })
+                  : ('answer.a11y-already-answered-text'
+                    | translate : { answer: answer.body })
+              }}
+            </div>
             <span class="fill-remaining-space"></span>
-            <button id="go-to-stats" *ngIf="!flipped && alreadySent && (statsPublished || content.format === ContentType.TEXT)
-                    && [ContentType.SLIDE, ContentType.FLASHCARD].indexOf(content.format) === -1" mat-icon-button
-                    (click)="goToStats()" matTooltip="{{'answer.go-to-stats' | translate}}" aria-labelledby="flip-to-stats"
-                    appHotkey=" " [appHotkeyAction]="HotkeyAction.CLICK" [appHotkeyDisabled]="!active">
-              <mat-icon class="icon-primary">
-                insert_chart
-              </mat-icon>
+            <button
+              id="go-to-stats"
+              *ngIf="
+                !flipped &&
+                alreadySent &&
+                (statsPublished || content.format === ContentType.TEXT) &&
+                [ContentType.SLIDE, ContentType.FLASHCARD].indexOf(
+                  content.format
+                ) === -1
+              "
+              mat-icon-button
+              (click)="goToStats()"
+              matTooltip="{{ 'answer.go-to-stats' | translate }}"
+              aria-labelledby="flip-to-stats"
+              appHotkey=" "
+              [appHotkeyAction]="HotkeyAction.CLICK"
+              [appHotkeyDisabled]="!active"
+            >
+              <mat-icon class="icon-primary"> insert_chart </mat-icon>
             </button>
           </div>
-          <lib-extension-point extensionId="attachment-list" [extensionData]="extensionData"></lib-extension-point>
-          <form (ngSubmit)="submitAnswerEvent($event,'answer')" id="answerForm">
+          <lib-extension-point
+            extensionId="attachment-list"
+            [extensionData]="extensionData"
+          ></lib-extension-point>
+          <form
+            (ngSubmit)="submitAnswerEvent($event, 'answer')"
+            id="answerForm"
+          >
             <div *ngIf="!flipped">
-              <app-content-choice-participant *ngIf="content.format === ContentType.CHOICE || content.format === ContentType.BINARY" [answer]="answer"
-                                              [content]="content" [alreadySent]="alreadySent" (answerChanged)="forwardAnswerMessage($event)"
-                                              [sendEvent]="sendEvent" [statsPublished]="statsPublished" [correctOptionsPublished]="correctOptionsPublished">
+              <app-content-choice-participant
+                *ngIf="
+                  content.format === ContentType.CHOICE ||
+                  content.format === ContentType.BINARY
+                "
+                [answer]="answer"
+                [content]="content"
+                [alreadySent]="alreadySent"
+                (answerChanged)="forwardAnswerMessage($event)"
+                [sendEvent]="sendEvent"
+                [statsPublished]="statsPublished"
+                [correctOptionsPublished]="correctOptionsPublished"
+              >
               </app-content-choice-participant>
-              <app-content-scale-participant *ngIf="content.format === ContentType.SCALE" [answer]="answer"
-                                              [content]="content" [alreadySent]="alreadySent" (answerChanged)="forwardAnswerMessage($event)"
-                                              [sendEvent]="sendEvent" [statsPublished]="statsPublished">
+              <app-content-scale-participant
+                *ngIf="content.format === ContentType.SCALE"
+                [answer]="answer"
+                [content]="content"
+                [alreadySent]="alreadySent"
+                (answerChanged)="forwardAnswerMessage($event)"
+                [sendEvent]="sendEvent"
+                [statsPublished]="statsPublished"
+              >
               </app-content-scale-participant>
-              <app-content-text-participant *ngIf="content.format === ContentType.TEXT" [answer]="answer"
-                                            [content]="content" [alreadySent]="alreadySent" [sendEvent]="sendEvent"
-                                            (answerChanged)="forwardAnswerMessage($event)"
+              <app-content-text-participant
+                *ngIf="content.format === ContentType.TEXT"
+                [answer]="answer"
+                [content]="content"
+                [alreadySent]="alreadySent"
+                [sendEvent]="sendEvent"
+                (answerChanged)="forwardAnswerMessage($event)"
               ></app-content-text-participant>
-              <app-content-sort-participant *ngIf="content.format === ContentType.SORT" [answer]="answer"
-                                            [content]="content" [alreadySent]="alreadySent" [sendEvent]="sendEvent"
-                                            (answerChanged)="forwardAnswerMessage($event)" [statsPublished]="statsPublished"
-                                            [correctOptionsPublished]="correctOptionsPublished">
+              <app-content-sort-participant
+                *ngIf="content.format === ContentType.SORT"
+                [answer]="answer"
+                [content]="content"
+                [alreadySent]="alreadySent"
+                [sendEvent]="sendEvent"
+                (answerChanged)="forwardAnswerMessage($event)"
+                [statsPublished]="statsPublished"
+                [correctOptionsPublished]="correctOptionsPublished"
+              >
               </app-content-sort-participant>
-              <app-content-wordcloud-participant *ngIf="content.format === ContentType.WORDCLOUD" [answer]="answer"
-                                            [content]="content" [alreadySent]="alreadySent" [sendEvent]="sendEvent"
-                                            (answerChanged)="forwardAnswerMessage($event)" [statsPublished]="statsPublished"
-                                            [correctOptionsPublished]="correctOptionsPublished">
+              <app-content-wordcloud-participant
+                *ngIf="content.format === ContentType.WORDCLOUD"
+                [answer]="answer"
+                [content]="content"
+                [alreadySent]="alreadySent"
+                [sendEvent]="sendEvent"
+                (answerChanged)="forwardAnswerMessage($event)"
+                [statsPublished]="statsPublished"
+                [correctOptionsPublished]="correctOptionsPublished"
+              >
               </app-content-wordcloud-participant>
-              <app-content-prioritization-participant *ngIf="content.format === ContentType.PRIORITIZATION" [answer]="answer"
-              [content]="content" [alreadySent]="alreadySent" [sendEvent]="sendEvent" (answerChanged)="forwardAnswerMessage($event)" [statsPublished]="statsPublished">
-            </app-content-prioritization-participant>
+              <app-content-prioritization-participant
+                *ngIf="content.format === ContentType.PRIORITIZATION"
+                [answer]="answer"
+                [content]="content"
+                [alreadySent]="alreadySent"
+                [sendEvent]="sendEvent"
+                (answerChanged)="forwardAnswerMessage($event)"
+                [statsPublished]="statsPublished"
+              >
+              </app-content-prioritization-participant>
             </div>
-            <div *ngIf="[ContentType.SLIDE, ContentType.FLASHCARD].indexOf(content.format) === -1">
-              <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="1em" [ngClass]="{'visible' : alreadySent, 'invisible': !alreadySent}" class="text">
-                <p *ngIf="!hasAbstained">{{'answer.has-voted' | translate}}</p>
-                <p *ngIf="hasAbstained">{{'answer.has-abstained' | translate}}</p>
+            <div
+              *ngIf="
+                [ContentType.SLIDE, ContentType.FLASHCARD].indexOf(
+                  content.format
+                ) === -1
+              "
+            >
+              <div
+                fxLayout="row"
+                fxLayoutAlign="center center"
+                fxLayoutGap="1em"
+                [ngClass]="{ visible: alreadySent, invisible: !alreadySent }"
+                class="text"
+              >
+                <p *ngIf="!hasAbstained">
+                  {{ 'answer.has-voted' | translate }}
+                </p>
+                <p *ngIf="hasAbstained">
+                  {{ 'answer.has-abstained' | translate }}
+                </p>
               </div>
-              <div [ngClass]="{'invisible' : alreadySent}">
+              <div [ngClass]="{ invisible: alreadySent }">
                 <div fxLayoutAlign="center" fxLayoutGap="10px">
-                  <button tabindex="{{alreadySent ? '-1' : '0'}}" mat-button *ngIf="content.abstentionsAllowed"
-                          class="abstain"
-                          [ngClass]="{'disabled' : alreadySent}" type="button" (click)="submitAnswerEvent($event, 'abstention')" aria-labelledby="abstain">
-                    {{ 'answer.abstain' | translate }}</button>
-                  <button tabindex="{{alreadySent ? '-1' : '0'}}" mat-raised-button class="button-primary"
-                          [ngClass]="{'disabled' : alreadySent}" type="submit"
-                          aria-labelledby="submit">
-                    {{ 'answer.submit' | translate }}</button>
+                  <button
+                    tabindex="{{ alreadySent ? '-1' : '0' }}"
+                    mat-button
+                    *ngIf="content.abstentionsAllowed"
+                    class="abstain"
+                    [ngClass]="{ disabled: alreadySent }"
+                    type="button"
+                    (click)="submitAnswerEvent($event, 'abstention')"
+                    aria-labelledby="abstain"
+                  >
+                    {{ 'answer.abstain' | translate }}
+                  </button>
+                  <button
+                    tabindex="{{ alreadySent ? '-1' : '0' }}"
+                    mat-raised-button
+                    class="button-primary"
+                    [ngClass]="{ disabled: alreadySent }"
+                    type="submit"
+                    aria-labelledby="submit"
+                  >
+                    {{ 'answer.submit' | translate }}
+                  </button>
                 </div>
               </div>
             </div>
-            <div *ngIf="content.format === ContentType.FLASHCARD" fxLayoutAlign="center">
-              <button mat-raised-button class="button-primary" (click)="goToStats()" aria-labelledby="show-front"
-                      appHotkey=" " [appHotkeyAction]="HotkeyAction.CLICK" [appHotkeyDisabled]="!active">
+            <div
+              *ngIf="content.format === ContentType.FLASHCARD"
+              fxLayoutAlign="center"
+            >
+              <button
+                mat-raised-button
+                class="button-primary"
+                (click)="goToStats()"
+                aria-labelledby="show-front"
+                appHotkey=" "
+                [appHotkeyAction]="HotkeyAction.CLICK"
+                [appHotkeyDisabled]="!active"
+              >
                 {{ 'answer.show-back' | translate }}
               </button>
             </div>
           </form>
         </div>
-        <div class="back side" [ngClass]="{'invisible-card-content': !flipped}">
+        <div
+          class="back side"
+          [ngClass]="{ 'invisible-card-content': !flipped }"
+        >
           <div *ngIf="flipped" class="back-container">
-            <app-statistic-content *ngIf="content.format !== ContentType.FLASHCARD && flipped" [content]="content" [active]="true"
-                                   [directShow]="true" [correctOptionsPublished]="correctOptionsPublished" [useCustomFlipAction]="true"
-                                   (customFlipEvent)="goToStats()"></app-statistic-content>
+            <app-statistic-content
+              *ngIf="content.format !== ContentType.FLASHCARD && flipped"
+              [content]="content"
+              [active]="true"
+              [directShow]="true"
+              [correctOptionsPublished]="correctOptionsPublished"
+              [useCustomFlipAction]="true"
+              (customFlipEvent)="goToStats()"
+            ></app-statistic-content>
             <div *ngIf="content.format === ContentType.FLASHCARD && flipped">
-              <app-rendered-text [rawText]="content.additionalText" [renderedText]="content.renderedAdditionalText"
-                                 [markdownFeatureset]="flashcardMarkdownFeatures" (rendered)="isLoading = false;"></app-rendered-text>
+              <app-rendered-text
+                [rawText]="content.additionalText"
+                [renderedText]="content.renderedAdditionalText"
+                [markdownFeatureset]="flashcardMarkdownFeatures"
+                (rendered)="isLoading = false"
+              ></app-rendered-text>
               <div fxLayoutAlign="center" fxLayoutGap="10px">
-                <button mat-stroked-button class="button-abort" (click)="goToStats()" aria-labelledby="show-front"
-                        appHotkey=" " [appHotkeyAction]="HotkeyAction.CLICK" [appHotkeyDisabled]="!active">
+                <button
+                  mat-stroked-button
+                  class="button-abort"
+                  (click)="goToStats()"
+                  aria-labelledby="show-front"
+                  appHotkey=" "
+                  [appHotkeyAction]="HotkeyAction.CLICK"
+                  [appHotkeyDisabled]="!active"
+                >
                   {{ 'answer.show-front' | translate }}
                 </button>
-                <button mat-raised-button class="button-primary"
-                        (click)="goToNextContent(lastContent)" aria-labelledby="next-content">
-                  {{ (lastContent ? 'answer.first-content' : 'answer.next-content') | translate }}
+                <button
+                  mat-raised-button
+                  class="button-primary"
+                  (click)="goToNextContent(lastContent)"
+                  aria-labelledby="next-content"
+                >
+                  {{
+                    (lastContent
+                      ? 'answer.first-content'
+                      : 'answer.next-content'
+                    ) | translate
+                  }}
                 </button>
               </div>
             </div>
@@ -99,7 +243,6 @@
         </div>
       </mat-card>
     </div>
-
   </section>
   <div tabindex="-1" class="visually-hidden">
     <div id="submit">{{ 'answer.a11y-submit' | translate }}</div>

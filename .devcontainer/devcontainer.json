@@ -1,9 +1,7 @@
 {
   "name": "Webclient",
   "service": "arsnova-webclient",
-  "dockerComposeFile": [
-    "${localEnv:PDK_COMPOSE_FILE}"
-  ],
+  "dockerComposeFile": ["${localEnv:PDK_COMPOSE_FILE}"],
   "workspaceFolder": "/workspace/webclient",
   "forwardPorts": [4200],
   "customizations": {

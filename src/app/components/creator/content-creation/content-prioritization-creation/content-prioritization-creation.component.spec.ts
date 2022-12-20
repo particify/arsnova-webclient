@@ -7,7 +7,13 @@ import { RoomService } from '@arsnova/app/services/http/room.service';
 import { AnnounceService } from '@arsnova/app/services/util/announce.service';
 import { EventService } from '@arsnova/app/services/util/event.service';
 import { NotificationService } from '@arsnova/app/services/util/notification.service';
-import { ActivatedRouteStub, JsonTranslationLoader, MockAnnounceService, MockEventService, MockNotificationService } from '@arsnova/testing/test-helpers';
+import {
+  ActivatedRouteStub,
+  JsonTranslationLoader,
+  MockAnnounceService,
+  MockEventService,
+  MockNotificationService,
+} from '@arsnova/testing/test-helpers';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { of, Subject } from 'rxjs';
 
@@ -21,67 +27,66 @@ describe('ContentPrioritizationCreationComponent', () => {
 
   const mockContentService = jasmine.createSpyObj('ContentService', ['']);
   const mockRoomService = jasmine.createSpyObj('RoomService', ['']);
-  const mockContentGroupService = jasmine.createSpyObj('ContentGroupService', ['']);
+  const mockContentGroupService = jasmine.createSpyObj('ContentGroupService', [
+    '',
+  ]);
 
   const data = {
     room: {
-      id: '1234'
-    }
-  }
+      id: '1234',
+    },
+  };
 
   const snapshot = new ActivatedRouteSnapshot();
 
-  snapshot.params = of([{seriesName: 'SERIES'}]);
+  snapshot.params = of([{ seriesName: 'SERIES' }]);
 
   const activatedRouteStub = new ActivatedRouteStub(null, data, snapshot);
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ContentPrioritizationCreationComponent ],
+      declarations: [ContentPrioritizationCreationComponent],
       providers: [
         {
           provide: NotificationService,
-          useClass: MockNotificationService
+          useClass: MockNotificationService,
         },
         {
           provide: EventService,
-          useClass: MockEventService
+          useClass: MockEventService,
         },
         {
           provide: AnnounceService,
-          useClass: MockAnnounceService
+          useClass: MockAnnounceService,
         },
         {
           provide: ActivatedRoute,
-          useValue: activatedRouteStub
+          useValue: activatedRouteStub,
         },
         {
           provide: ContentService,
-          useValue: mockContentService
+          useValue: mockContentService,
         },
         {
           provide: RoomService,
-          useValue: mockRoomService
+          useValue: mockRoomService,
         },
         {
           provide: ContentGroupService,
-          useValue: mockContentGroupService
-        }
+          useValue: mockContentGroupService,
+        },
       ],
       imports: [
         TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
-            useClass: JsonTranslationLoader
+            useClass: JsonTranslationLoader,
           },
-          isolate: true
-        })
+          isolate: true,
+        }),
       ],
-      schemas: [
-        NO_ERRORS_SCHEMA
-      ]
-    })
-    .compileComponents();
+      schemas: [NO_ERRORS_SCHEMA],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(ContentPrioritizationCreationComponent);
     component = fixture.componentInstance;

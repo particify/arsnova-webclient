@@ -3,14 +3,16 @@ import { NotificationService } from '../../../services/util/notification.service
 import { TranslateService } from '@ngx-translate/core';
 import { LanguageService } from '../../../services/util/language.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { GlobalStorageService, STORAGE_KEYS } from '../../../services/util/global-storage.service';
+import {
+  GlobalStorageService,
+  STORAGE_KEYS,
+} from '../../../services/util/global-storage.service';
 import { Answer } from '../../../models/answer';
 
 @Component({
-  template: ''
+  template: '',
 })
 export abstract class ContentParticipantBaseComponent implements OnInit {
-
   @Output() answerChanged = new EventEmitter<Answer>();
   @Input() alreadySent: boolean;
   @Input() sendEvent: EventEmitter<string>;
@@ -27,16 +29,18 @@ export abstract class ContentParticipantBaseComponent implements OnInit {
     protected globalStorageService: GlobalStorageService,
     protected router: Router
   ) {
-    langService.langEmitter.subscribe(lang => translateService.use(lang));
+    langService.langEmitter.subscribe((lang) => translateService.use(lang));
   }
 
   ngOnInit() {
-    this.translateService.use(this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE));
+    this.translateService.use(
+      this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE)
+    );
     this.init();
     const params = this.route.snapshot.params;
     this.shortId = params['shortId'];
     this.contentGroupName = params['seriesName'];
-    this.sendEvent.subscribe(send => {
+    this.sendEvent.subscribe((send) => {
       if (send === 'answer') {
         this.submitAnswer();
       } else {

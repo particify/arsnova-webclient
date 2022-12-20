@@ -1,10 +1,19 @@
-<form (ngSubmit)="login(userActivationKey.value)" fxLayout="column" fxLayoutAlign="space-around"
-      fxLayoutGap="10px">
+<form
+  (ngSubmit)="login(userActivationKey.value)"
+  fxLayout="column"
+  fxLayoutAlign="space-around"
+  fxLayoutGap="10px"
+>
   <mat-form-field class="input-block" appearance="outline">
     <mat-label>{{ 'user-activation.key' | translate }}</mat-label>
-    <input matInput #userActivationKey type="text"
-           [formControl]="activationKeyFormControl" name="activation-key"
-           aria-labelledby="key-input"/>
+    <input
+      matInput
+      #userActivationKey
+      type="text"
+      [formControl]="activationKeyFormControl"
+      name="activation-key"
+      aria-labelledby="key-input"
+    />
   </mat-form-field>
 </form>
 <p tabindex="0">
@@ -12,12 +21,27 @@
 </p>
 <div fxLayout="row" class="register">
   <p>{{ 'user-activation.didnt-get' | translate }}</p>
-  <button mat-button class="reset" (click)="resetActivation(); $event.preventDefault(); $event.stopPropagation();">
-    {{ 'user-activation.reset-button' | translate }}</button>
+  <button
+    mat-button
+    class="reset"
+    (click)="
+      resetActivation(); $event.preventDefault(); $event.stopPropagation()
+    "
+  >
+    {{ 'user-activation.reset-button' | translate }}
+  </button>
 </div>
 <div fxLayout="row-reverse" fxLayoutGap="10px" class="button-container">
-  <button mat-flat-button class="button-primary" (click)="login(userActivationKey.value)">{{'user-activation.activate' | translate }}</button>
-  <button mat-button class="button-abort" (click)="cancel()">{{'user-activation.cancel' | translate }}</button>
+  <button
+    mat-flat-button
+    class="button-primary"
+    (click)="login(userActivationKey.value)"
+  >
+    {{ 'user-activation.activate' | translate }}
+  </button>
+  <button mat-button class="button-abort" (click)="cancel()">
+    {{ 'user-activation.cancel' | translate }}
+  </button>
 </div>
 
 <div class="visually-hidden">

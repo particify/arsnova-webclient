@@ -1,14 +1,21 @@
 <div fxLayout="column" fxLayoutAlign="start center">
   <mat-card fxLayout="column">
-    <span class="header-text small">{{ 'content.thanks-for-participation' | translate }}</span>
+    <span class="header-text small">{{
+      'content.thanks-for-participation' | translate
+    }}</span>
     <div class="header-container" fxLayout="row">
       <div class="canvas-container">
         <app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
         <canvas id="chart" *ngIf="!isLoading && hasScore"></canvas>
         <div id="score" *ngIf="!isLoading && hasScore" class="score-container">
-          <span class="score-text">{{score + '%'}}</span>
+          <span class="score-text">{{ score + '%' }}</span>
         </div>
-        <img id="clipart" *ngIf="!isLoading && !hasScore" class="graphic" src="assets/icons/result_overview.svg">
+        <img
+          id="clipart"
+          *ngIf="!isLoading && !hasScore"
+          class="graphic"
+          src="assets/icons/result_overview.svg"
+        />
       </div>
       <div fxLayout="column" fxLayoutAlign="space-between">
         <div>
@@ -23,19 +30,52 @@
     </div>
     <app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
     <mat-list *ngIf="!isLoading">
-      <mat-list-item *ngFor="let content of contentsWithResults; let i = index" fxLayout="column" fxLayoutAlign="center" class="full-border" (click)="goToContent(i)">
-        <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="16px" fxFill>
+      <mat-list-item
+        *ngFor="let content of contentsWithResults; let i = index"
+        fxLayout="column"
+        fxLayoutAlign="center"
+        class="full-border"
+        (click)="goToContent(i)"
+      >
+        <div
+          fxLayout="row"
+          fxLayoutAlign="start center"
+          fxLayoutGap="16px"
+          fxFill
+        >
           <div fxLayoutAlign="center center" class="icon-container">
-            <mat-icon *ngIf="!(isLoadingLastContent && i === contentsWithResults.length - 1)" [ngClass]="{'correct': content.state === resultTypes.CORRECT,
-                                  'wrong': content.state === resultTypes.WRONG,
-                                  'answered': ![resultTypes.CORRECT, resultTypes.WRONG].includes(content.state) || !group.correctOptionsPublished,
-                                  'icon-primary': hasAnsweredState(content.state)}">
-              {{getIcon(content.state)}}
+            <mat-icon
+              *ngIf="
+                !(isLoadingLastContent && i === contentsWithResults.length - 1)
+              "
+              [ngClass]="{
+                correct: content.state === resultTypes.CORRECT,
+                wrong: content.state === resultTypes.WRONG,
+                answered:
+                  ![resultTypes.CORRECT, resultTypes.WRONG].includes(
+                    content.state
+                  ) || !group.correctOptionsPublished,
+                'icon-primary': hasAnsweredState(content.state)
+              }"
+            >
+              {{ getIcon(content.state) }}
             </mat-icon>
-            <app-loading-indicator *ngIf="isLoadingLastContent && i === contentsWithResults.length - 1" [size]="20"></app-loading-indicator>
+            <app-loading-indicator
+              *ngIf="
+                isLoadingLastContent && i === contentsWithResults.length - 1
+              "
+              [size]="20"
+            ></app-loading-indicator>
           </div>
-          <app-rendered-text class="ellipsis body rendered-list-preview-container" [renderedText]="content.body" [markdownFeatureset]="markdownFeatureset" [listPreview]="true"
-                                     tabindex="0" role="button" (keyup.enter)="navigateToContentStats(content)"></app-rendered-text>
+          <app-rendered-text
+            class="ellipsis body rendered-list-preview-container"
+            [renderedText]="content.body"
+            [markdownFeatureset]="markdownFeatureset"
+            [listPreview]="true"
+            tabindex="0"
+            role="button"
+            (keyup.enter)="navigateToContentStats(content)"
+          ></app-rendered-text>
         </div>
       </mat-list-item>
     </mat-list>

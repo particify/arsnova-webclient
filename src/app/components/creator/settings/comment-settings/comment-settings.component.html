@@ -1,38 +1,79 @@
 <div fxLayout="column" fxLayoutGap="16px">
   <div>
-    <div tabindex="0" id="comments-settings" class="visually-hidden">{{ 'settings.a11y-comments' | translate }}</div>
+    <div tabindex="0" id="comments-settings" class="visually-hidden">
+      {{ 'settings.a11y-comments' | translate }}
+    </div>
     <div fxLayout="column">
-      <app-settings-slide-toggle label="settings.threshold" [isChecked]="enableThreshold" (toggleEvent)="updateCommentExtensions($event)"></app-settings-slide-toggle>
+      <app-settings-slide-toggle
+        label="settings.threshold"
+        [isChecked]="enableThreshold"
+        (toggleEvent)="updateCommentExtensions($event)"
+      ></app-settings-slide-toggle>
       <div fxLayout="row" fxLayoutAlign="center center" *ngIf="enableThreshold">
-        <mat-slider id="commentSlider" min="-50" max="-5" step="5" [(ngModel)]="threshold"
-                    (input)="onSliderChange($event)" (change)="updateCommentExtensions(); announceThreshold();"></mat-slider>
+        <mat-slider
+          id="commentSlider"
+          min="-50"
+          max="-5"
+          step="5"
+          [(ngModel)]="threshold"
+          (input)="onSliderChange($event)"
+          (change)="updateCommentExtensions(); announceThreshold()"
+        ></mat-slider>
         <h2>&nbsp;{{ threshold | number }}</h2>
       </div>
     </div>
-    <app-settings-slide-toggle label="settings.direct-send" [isChecked]="directSend" (toggleEvent)="updateCommentSettings($event)"></app-settings-slide-toggle>
-    <lib-extension-point *ngIf="!isLoading" extensionId="comment-image-settings"
-                         [extensionData]="{fileUploadEnabled: fileUploadEnabled}"
-                         (extensionEvent)="updateFileUploadEnabled($event)">
+    <app-settings-slide-toggle
+      label="settings.direct-send"
+      [isChecked]="directSend"
+      (toggleEvent)="updateCommentSettings($event)"
+    ></app-settings-slide-toggle>
+    <lib-extension-point
+      *ngIf="!isLoading"
+      extensionId="comment-image-settings"
+      [extensionData]="{ fileUploadEnabled: fileUploadEnabled }"
+      (extensionEvent)="updateFileUploadEnabled($event)"
+    >
     </lib-extension-point>
   </div>
   <div>
-    <div tabindex="0" id="tags-settings" class="visually-hidden">{{ 'settings.a11y-categories' | translate }}</div>
+    <div tabindex="0" id="tags-settings" class="visually-hidden">
+      {{ 'settings.a11y-categories' | translate }}
+    </div>
     <div>
       <mat-form-field class="input-block no-field-hint" appearance="outline">
         <mat-label>{{ 'settings.tags' | translate }}</mat-label>
         <mat-chip-list #tagList>
-          <mat-chip *ngFor="let tag of tags" [removable]="true" (removed)="deleteTag(tag)">
-            {{tag}}
-            <mat-icon matChipRemove attr.aria-label="{{ 'settings.a11y-remove-tag' | translate: { name: tag } }}">cancel</mat-icon>
+          <mat-chip
+            *ngFor="let tag of tags"
+            [removable]="true"
+            (removed)="deleteTag(tag)"
+          >
+            {{ tag }}
+            <mat-icon
+              matChipRemove
+              attr.aria-label="{{
+                'settings.a11y-remove-tag' | translate : { name: tag }
+              }}"
+              >cancel</mat-icon
+            >
           </mat-chip>
-          <input [matChipInputFor]="tagList" (matChipInputTokenEnd)="addTag()"
-                 [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-                 type="text" [(ngModel)]="tagName" name="taginput" maxlength="15"
-          placeholder="{{ 'settings.new-tag' | translate }}"/>
+          <input
+            [matChipInputFor]="tagList"
+            (matChipInputTokenEnd)="addTag()"
+            [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+            type="text"
+            [(ngModel)]="tagName"
+            name="taginput"
+            maxlength="15"
+            placeholder="{{ 'settings.new-tag' | translate }}"
+          />
         </mat-chip-list>
       </mat-form-field>
     </div>
   </div>
 </div>
 
-<lib-extension-point extensionId="archive-list" [extensionData]="{room: room}"></lib-extension-point>
+<lib-extension-point
+  extensionId="archive-list"
+  [extensionData]="{ room: room }"
+></lib-extension-point>

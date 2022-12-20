@@ -12,15 +12,14 @@ import { AnnounceService } from '../../../../services/util/announce.service';
 @Component({
   selector: 'app-content-yes-no-creation',
   templateUrl: './content-yes-no-creation.component.html',
-  styleUrls: ['./content-yes-no-creation.component.scss']
+  styleUrls: ['./content-yes-no-creation.component.scss'],
 })
-export class ContentYesNoCreationComponent extends ContentCreationComponent implements OnInit {
-
+export class ContentYesNoCreationComponent
+  extends ContentCreationComponent
+  implements OnInit
+{
   yesno = -1;
-  answerLabels = [
-    'content.yes',
-    'content.no'
-  ];
+  answerLabels = ['content.yes', 'content.no'];
 
   constructor(
     protected contentService: ContentService,
@@ -30,7 +29,14 @@ export class ContentYesNoCreationComponent extends ContentCreationComponent impl
     protected contentGroupService: ContentGroupService,
     protected announceService: AnnounceService
   ) {
-    super(contentService, notificationService, translationService, route, contentGroupService, announceService);
+    super(
+      contentService,
+      notificationService,
+      translationService,
+      route,
+      contentGroupService,
+      announceService
+    );
   }
 
   initContentCreation() {

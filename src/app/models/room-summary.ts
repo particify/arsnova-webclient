@@ -10,9 +10,7 @@ export class RoomSummaryStats {
   ackCommentCount: number;
 }
 
-export class RoomSummaryFeatures {
-
-}
+export class RoomSummaryFeatures {}
 
 export class RoomSummary {
   id: string;

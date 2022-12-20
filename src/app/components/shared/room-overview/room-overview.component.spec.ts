@@ -5,7 +5,7 @@ import {
   MockGlobalStorageService,
   MockEventService,
   ActivatedRouteStub,
-  JsonTranslationLoader
+  JsonTranslationLoader,
 } from '@arsnova/testing/test-helpers';
 import { GlobalStorageService } from '@arsnova/app/services/util/global-storage.service';
 import { EventService } from '@arsnova/app/services/util/event.service';
@@ -30,54 +30,50 @@ describe('RoomOverviewComponent', () => {
 
   const activatedRouteStub = new ActivatedRouteStub();
 
-
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ RoomOverviewComponent ],
+      declarations: [RoomOverviewComponent],
       imports: [
         TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
-            useClass: JsonTranslationLoader
+            useClass: JsonTranslationLoader,
           },
-          isolate: true
-        })
+          isolate: true,
+        }),
       ],
       providers: [
         {
           provide: RoomStatsService,
-          useValue: mockRoomStatsService
+          useValue: mockRoomStatsService,
         },
         {
           provide: WsCommentService,
-          useValue: mockWsCommentService
+          useValue: mockWsCommentService,
         },
         {
           provide: CommentService,
-          useValue: mockCommentService
+          useValue: mockCommentService,
         },
         {
           provide: ContentGroupService,
-          useValue: mockContentGroupService
+          useValue: mockContentGroupService,
         },
         {
           provide: ActivatedRoute,
-          useValue: activatedRouteStub
+          useValue: activatedRouteStub,
         },
         {
           provide: GlobalStorageService,
-          useClass: MockGlobalStorageService
+          useClass: MockGlobalStorageService,
         },
         {
           provide: EventService,
-          useClass: MockEventService
-        }
+          useClass: MockEventService,
+        },
       ],
-      schemas: [
-        NO_ERRORS_SCHEMA
-      ]
-    })
-    .compileComponents();
+      schemas: [NO_ERRORS_SCHEMA],
+    }).compileComponents();
   }));
 
   beforeEach(() => {

@@ -15,7 +15,7 @@ $logo-width: 120px;
 }
 
 .bar-expanded {
-  margin-top: $bar-container-height - $bar-height - ($bar-padding * 2)!important;
+  margin-top: $bar-container-height - $bar-height - ($bar-padding * 2) !important;
 }
 
 .bar-hidden {
@@ -62,12 +62,13 @@ $logo-width: 120px;
   min-height: $bar-height;
   .action-button {
     padding: 14px;
-  };
+  }
 }
 
 @mixin smaller-container {
   min-height: 52px;
-  .action-button, .nav-button {
+  .action-button,
+  .nav-button {
     min-width: 0;
     padding: 14px;
     > .text {
@@ -90,12 +91,13 @@ $logo-width: 120px;
   padding: 0;
 }
 
-@media(max-width: 1200px) {
+@media (max-width: 1200px) {
   .nav-container {
     @include smaller-container;
   }
-  @media(max-width: 1100px) {
-    .feature-container, .icon-container {
+  @media (max-width: 1100px) {
+    .feature-container,
+    .icon-container {
       @include smaller-container;
     }
   }
@@ -190,5 +192,5 @@ $logo-width: 120px;
   font-size: 18px;
   width: 18px;
   height: 18px;
-  margin: 0 0 0 8px!important;
+  margin: 0 0 0 8px !important;
 }

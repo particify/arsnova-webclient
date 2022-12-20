@@ -1,7 +1,10 @@
 import { AfterContentInit, Component, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { LanguageService } from '../../../../services/util/language.service';
-import { GlobalStorageService, STORAGE_KEYS } from '../../../../services/util/global-storage.service';
+import {
+  GlobalStorageService,
+  STORAGE_KEYS,
+} from '../../../../services/util/global-storage.service';
 import { ActivatedRoute } from '@angular/router';
 import { AnnounceService } from '../../../../services/util/announce.service';
 import { Subject } from 'rxjs';
@@ -20,11 +23,9 @@ class ContentFormat {
 @Component({
   selector: 'app-content-create-page',
   templateUrl: './content-creation-page.component.html',
-  styleUrls: ['./content-creation-page.component.scss']
+  styleUrls: ['./content-creation-page.component.scss'],
 })
-
 export class ContentCreationPageComponent implements OnInit, AfterContentInit {
-
   createEventSubject: Subject<boolean> = new Subject<boolean>();
   question: string;
   contentTypes: ContentType[] = Object.values(ContentType);
@@ -51,8 +52,9 @@ export class ContentCreationPageComponent implements OnInit, AfterContentInit {
     private globalStorageService: GlobalStorageService,
     protected route: ActivatedRoute,
     private formattingService: FormattingService,
-    private contentService: ContentService) {
-    langService.langEmitter.subscribe(lang => translateService.use(lang));
+    private contentService: ContentService
+  ) {
+    langService.langEmitter.subscribe((lang) => translateService.use(lang));
   }
 
   ngAfterContentInit() {
@@ -64,26 +66,32 @@ export class ContentCreationPageComponent implements OnInit, AfterContentInit {
   ngOnInit() {
     const iconList = this.contentService.getTypeIcons();
     for (const type of this.contentTypes) {
-      this.formats.push({name: type.toLowerCase(), icon: iconList.get(type)})
+      this.formats.push({ name: type.toLowerCase(), icon: iconList.get(type) });
     }
     this.selectedFormat = this.formats[0];
-    this.route.data.subscribe(data => {
+    this.route.data.subscribe((data) => {
       if (data.isEditMode) {
-        this.contentService.getContent(data.room.id, this.route.snapshot.params['contentId']).subscribe(content => {
-          this.content = content;
-          this.question = this.content.body;
-          this.abstentionsAllowed = this.content.abstentionsAllowed;
-          this.isEditMode = true;
-          this.selectedFormat = this.formats.find(c => c.name === this.content.format.toLowerCase());
-          this.prepareAttachmentData();
-          this.isLoading = false;
-        });
+        this.contentService
+          .getContent(data.room.id, this.route.snapshot.params['contentId'])
+          .subscribe((content) => {
+            this.content = content;
+            this.question = this.content.body;
+            this.abstentionsAllowed = this.content.abstentionsAllowed;
+            this.isEditMode = true;
+            this.selectedFormat = this.formats.find(
+              (c) => c.name === this.content.format.toLowerCase()
+            );
+            this.prepareAttachmentData();
+            this.isLoading = false;
+          });
       } else {
         this.prepareAttachmentData();
         this.isLoading = false;
       }
     });
-    this.translateService.use(this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE));
+    this.translateService.use(
+      this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE)
+    );
   }
 
   reset() {
@@ -140,7 +148,7 @@ export class ContentCreationPageComponent implements OnInit, AfterContentInit {
       refType: 'content',
       detailedView: false,
       refId: this.isEditMode ? this.content.id : null,
-      role: UserRole.CREATOR
+      role: UserRole.CREATOR,
     };
   }
 }

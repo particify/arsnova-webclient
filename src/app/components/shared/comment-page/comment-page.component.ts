@@ -4,7 +4,7 @@ import {
   ElementRef,
   OnDestroy,
   OnInit,
-  ViewChild
+  ViewChild,
 } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ClientAuthentication } from '../../../models/client-authentication';
@@ -16,10 +16,11 @@ import { CommentListComponent } from '../comment-list/comment-list.component';
 @Component({
   selector: 'app-comment-page',
   templateUrl: './comment-page.component.html',
-  styleUrls: ['./comment-page.component.scss']
+  styleUrls: ['./comment-page.component.scss'],
 })
-export class CommentPageComponent implements OnInit, OnDestroy, AfterContentInit {
-
+export class CommentPageComponent
+  implements OnInit, OnDestroy, AfterContentInit
+{
   isPresentation = false;
 
   @ViewChild(CommentListComponent) commentList: CommentListComponent;
@@ -33,19 +34,21 @@ export class CommentPageComponent implements OnInit, OnDestroy, AfterContentInit
     private route: ActivatedRoute,
     private authenticationService: AuthenticationService,
     private commentService: CommentService
-  ) {
-  }
+  ) {}
 
   ngAfterContentInit(): void {
     setTimeout(() => {
-      const id = this.isPresentation ? 'presentation-button' : 'live-announcer-button';
+      const id = this.isPresentation
+        ? 'presentation-button'
+        : 'live-announcer-button';
       document.getElementById(id).focus();
     }, 800);
   }
 
   ngOnInit(): void {
-    this.authenticationService.getCurrentAuthentication()
-        .subscribe(auth => this.auth = auth);
+    this.authenticationService
+      .getCurrentAuthentication()
+      .subscribe((auth) => (this.auth = auth));
     const routeData = this.route.snapshot.data;
     this.isPresentation = routeData.isPresentation;
     this.isModeration = routeData.isModeration;
@@ -72,5 +75,4 @@ export class CommentPageComponent implements OnInit, OnDestroy, AfterContentInit
     const scrollHeight = nativeCommentList.scrollHeight;
     this.commentList.checkScroll(scrollTop, scrollHeight);
   }
-
 }

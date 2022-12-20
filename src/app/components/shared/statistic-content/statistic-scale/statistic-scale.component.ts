@@ -13,7 +13,7 @@ import { AnswerStatistics } from '../../../../models/answer-statistics';
 @Component({
   selector: 'app-statistic-scale',
   templateUrl: '../statistic-choice/statistic-choice.component.html',
-  styleUrls: ['../statistic-choice/statistic-choice.component.scss']
+  styleUrls: ['../statistic-choice/statistic-choice.component.scss'],
 })
 export class StatisticScaleComponent extends StatisticChoiceComponent {
   constructor(
@@ -22,17 +22,25 @@ export class StatisticScaleComponent extends StatisticChoiceComponent {
     protected themeService: ThemeService,
     protected eventService: EventService,
     protected presentationService: PresentationService,
-    private likertScaleService: LikertScaleService) {
-    super(contentService, translateService, themeService, eventService, presentationService);
+    private likertScaleService: LikertScaleService
+  ) {
+    super(
+      contentService,
+      translateService,
+      themeService,
+      eventService,
+      presentationService
+    );
   }
 
   init(stats: AnswerStatistics) {
-    const scaleContent = this.content as ContentScale
-    const optionLabels$ = this.likertScaleService.getOptionLabels(
-        scaleContent.optionTemplate,
-        scaleContent.optionCount)
-        .map(l => this.translateService.get(l) as Observable<string>);
-    forkJoin(optionLabels$).subscribe(labels => this.options = labels.map(l => ({ label: l })));
+    const scaleContent = this.content as ContentScale;
+    const optionLabels$ = this.likertScaleService
+      .getOptionLabels(scaleContent.optionTemplate, scaleContent.optionCount)
+      .map((l) => this.translateService.get(l) as Observable<string>);
+    forkJoin(optionLabels$).subscribe(
+      (labels) => (this.options = labels.map((l) => ({ label: l })))
+    );
     this.correctOptionIndexes = [];
     super.init(stats);
   }

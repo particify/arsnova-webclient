@@ -1,5 +1,14 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { BarController, BarControllerDatasetOptions, BarElement, CategoryScale, Chart, ChartDataset, GridLineOptions, LinearScale } from 'chart.js';
+import {
+  BarController,
+  BarControllerDatasetOptions,
+  BarElement,
+  CategoryScale,
+  Chart,
+  ChartDataset,
+  GridLineOptions,
+  LinearScale,
+} from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { ContentService } from '../../../../services/http/content.service';
 import { ContentChoice } from '../../../../models/content-choice';
@@ -20,10 +29,12 @@ import { UserSettings } from '../../../../models/user-settings';
 @Component({
   selector: 'app-statistic-choice',
   templateUrl: './statistic-choice.component.html',
-  styleUrls: ['./statistic-choice.component.scss']
+  styleUrls: ['./statistic-choice.component.scss'],
 })
-export class StatisticChoiceComponent extends StatisticContentBaseComponent implements OnInit, OnDestroy {
-
+export class StatisticChoiceComponent
+  extends StatisticContentBaseComponent
+  implements OnInit, OnDestroy
+{
   @Input() content: ContentChoice;
   @Input() directShow: boolean;
   @Input() isSurvey: boolean;
@@ -43,18 +54,20 @@ export class StatisticChoiceComponent extends StatisticContentBaseComponent impl
     onBackground: '',
     background: '',
     correct: '',
-    abstention: ''
+    abstention: '',
   };
   rounds: number;
   roundsToDisplay = 0;
   roundsDisplayed: number;
   independentAnswerCount = [[], [], []];
 
-  constructor(protected contentService: ContentService,
-              protected translateService: TranslateService,
-              protected themeService: ThemeService,
-              protected eventService: EventService,
-              protected presentationService: PresentationService) {
+  constructor(
+    protected contentService: ContentService,
+    protected translateService: TranslateService,
+    protected themeService: ThemeService,
+    protected eventService: EventService,
+    protected presentationService: PresentationService
+  ) {
     super(contentService, eventService);
   }
 
@@ -79,13 +92,14 @@ export class StatisticChoiceComponent extends StatisticContentBaseComponent impl
   }
 
   afterInit() {
-    this.contentService.getAnswersChangedStream(this.content.roomId, this.content.id).pipe(
-      takeUntil(this.destroyed$)
-    ).subscribe(msg => {
-      const stats = JSON.parse(msg.body).payload.stats;
-      this.updateData(stats);
-      this.updateChart();
-    });
+    this.contentService
+      .getAnswersChangedStream(this.content.roomId, this.content.id)
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((msg) => {
+        const stats = JSON.parse(msg.body).payload.stats;
+        this.updateData(stats);
+        this.updateChart();
+      });
   }
 
   toggleAnswers(visible?: boolean): boolean {
@@ -105,29 +119,35 @@ export class StatisticChoiceComponent extends StatisticContentBaseComponent impl
   prepareDataAndCreateChart(colors: Array<string[]>) {
     Chart.defaults.color = this.colorStrings.onBackground;
     Chart.defaults.font.size = this.isPresentation ? 14 : 16;
-    Chart.register(BarController, BarElement, CategoryScale, LinearScale, ChartDataLabels);
+    Chart.register(
+      BarController,
+      BarElement,
+      CategoryScale,
+      LinearScale,
+      ChartDataLabels
+    );
 
     const gridConfig = {
-      tickColor: this.isPresentation ? this.colorStrings.background : this.colorStrings.onBackground,
+      tickColor: this.isPresentation
+        ? this.colorStrings.background
+        : this.colorStrings.onBackground,
       drawOnChartArea: !this.isPresentation,
-      z: 1
+      z: 1,
     };
     const barThickness = this.isPresentation ? 80 : null;
     const dataSets = [
       {
         data: this.data[this.roundsToDisplay],
         backgroundColor: colors[this.roundsToDisplay],
-        barThickness: barThickness
-      }
+        barThickness: barThickness,
+      },
     ];
     if (this.roundsToDisplay > 1) {
-      dataSets.push(
-        {
-          data: this.data[1],
-          backgroundColor: colors[1],
-          barThickness: barThickness
-        }
-      )
+      dataSets.push({
+        data: this.data[1],
+        backgroundColor: colors[1],
+        barThickness: barThickness,
+      });
     }
     const scale = this.presentationService.getScale();
     const labels = Array.from(this.labelLetters).slice(0, this.options.length);
@@ -138,12 +158,17 @@ export class StatisticChoiceComponent extends StatisticContentBaseComponent impl
     this.createChart(labels, dataSets, scale, gridConfig as GridLineOptions);
   }
 
-  createChart(labels: string[], dataSets: ChartDataset[], scale: number, gridConfig: GridLineOptions) {
+  createChart(
+    labels: string[],
+    dataSets: ChartDataset[],
+    scale: number,
+    gridConfig: GridLineOptions
+  ) {
     this.chart = new Chart(this.chartId, {
       type: 'bar',
       data: {
         labels: labels,
-        datasets: dataSets
+        datasets: dataSets,
       },
       options: {
         responsive: true,
@@ -152,8 +177,8 @@ export class StatisticChoiceComponent extends StatisticContentBaseComponent impl
         layout: {
           padding: {
             top: 25,
-            left: this.isPresentation ? -10 : 0
-          }
+            left: this.isPresentation ? -10 : 0,
+          },
         },
         scales: {
           y: {
@@ -161,54 +186,60 @@ export class StatisticChoiceComponent extends StatisticContentBaseComponent impl
             ticks: {
               display: !this.isPresentation,
               precision: 0,
-              color: this.isPresentation ? this.colorStrings.background : this.colorStrings.onBackground
+              color: this.isPresentation
+                ? this.colorStrings.background
+                : this.colorStrings.onBackground,
             },
             grid: {
-              tickColor: this.isPresentation ? this.colorStrings.background : this.colorStrings.onBackground,
-              drawOnChartArea: !this.isPresentation
+              tickColor: this.isPresentation
+                ? this.colorStrings.background
+                : this.colorStrings.onBackground,
+              drawOnChartArea: !this.isPresentation,
             },
             border: {
               width: this.isPresentation ? 0 : 1,
-              color: this.colorStrings.onBackground
-            }
+              color: this.colorStrings.onBackground,
+            },
           },
           x: {
             type: 'category',
             ticks: {
-              display: !this.settings.contentAnswersDirectlyBelowChart || !this.isPresentation
+              display:
+                !this.settings.contentAnswersDirectlyBelowChart ||
+                !this.isPresentation,
             },
             grid: gridConfig,
             border: {
-              color: this.colorStrings.onBackground
+              color: this.colorStrings.onBackground,
             },
-            display: true
-          }
+            display: true,
+          },
         },
         plugins: {
           legend: {
-            display: false
+            display: false,
           },
           datalabels: {
             formatter: (value, context) => {
               return this.getDataLabel(context.dataset.data[context.dataIndex]);
             },
-            display: context => {
+            display: (context) => {
               return context.dataset.data[context.dataIndex] > 0;
             },
             color: this.colorStrings.onBackground,
             anchor: 'end',
             align: 'end',
-            offset: 0
-          }
-        }
-      }
+            offset: 0,
+          },
+        },
+      },
     });
   }
 
   getDataLabel(value): string {
     let label: string;
     if (this.settings.contentVisualizationUnitPercent) {
-      label = (value / this.answerCount * 100).toFixed(0) + '%';
+      label = ((value / this.answerCount) * 100).toFixed(0) + '%';
     } else {
       label = value;
     }
@@ -228,8 +259,12 @@ export class StatisticChoiceComponent extends StatisticContentBaseComponent impl
   }
 
   toggleChartColor(dataSetIndex: number, roundIndex: number) {
-    const dataset = this.chart.config.data.datasets[dataSetIndex] as BarControllerDatasetOptions;
-    dataset.backgroundColor = this.colorLabel ? this.colors[roundIndex] : this.indicationColors[roundIndex];
+    const dataset = this.chart.config.data.datasets[
+      dataSetIndex
+    ] as BarControllerDatasetOptions;
+    dataset.backgroundColor = this.colorLabel
+      ? this.colors[roundIndex]
+      : this.indicationColors[roundIndex];
   }
 
   checkIfCorrect(index: number): boolean {
@@ -238,7 +273,7 @@ export class StatisticChoiceComponent extends StatisticContentBaseComponent impl
 
   getBarColors(): ColorElem[] {
     let colors;
-    switch(this.content.format) {
+    switch (this.content.format) {
       case ContentType.SCALE:
         colors = this.themeService.getLikertColors();
         if ((this.content as ContentScale).optionCount === 4) {
@@ -264,10 +299,14 @@ export class StatisticChoiceComponent extends StatisticContentBaseComponent impl
   initRoundAnswerOptions(answerIndex: number, length: number) {
     const barColors = this.getBarColors();
     for (let j = 0; j < this.rounds; j++) {
-      this.colors[j][answerIndex] = barColors[answerIndex % barColors.length].color;
+      this.colors[j][answerIndex] =
+        barColors[answerIndex % barColors.length].color;
       if (!this.survey) {
         if (this.checkIfCorrect(answerIndex)) {
-          this.indicationColors[j][answerIndex] = this.content.correctOptionIndexes?.length === 1 ? this.colors[j][answerIndex] : this.colorStrings.correct;
+          this.indicationColors[j][answerIndex] =
+            this.content.correctOptionIndexes?.length === 1
+              ? this.colors[j][answerIndex]
+              : this.colorStrings.correct;
         } else {
           this.indicationColors[j][answerIndex] = this.colorStrings.abstention;
         }
@@ -316,14 +355,23 @@ export class StatisticChoiceComponent extends StatisticContentBaseComponent impl
     this.updateIndependentAnswerCounts(stats, roundIndex, abstentionCount);
   }
 
-  updateIndependentAnswerCounts(stats: AnswerStatistics, round: number, abstentions: number) {
-    this.independentAnswerCount[round] = stats.roundStatistics[round].combinatedCounts?.map(a => a.count) || [];
-    this.independentAnswerCount[2] = this.independentAnswerCount[this.getMaxCountIndex()];
+  updateIndependentAnswerCounts(
+    stats: AnswerStatistics,
+    round: number,
+    abstentions: number
+  ) {
+    this.independentAnswerCount[round] =
+      stats.roundStatistics[round].combinatedCounts?.map((a) => a.count) || [];
+    this.independentAnswerCount[2] =
+      this.independentAnswerCount[this.getMaxCountIndex()];
     this.independentAnswerCount[round].push(abstentions);
   }
 
   getMaxCountIndex() {
-    return this.getSum(this.independentAnswerCount[0]) > this.getSum(this.independentAnswerCount[1]) ? 0 : 1;
+    return this.getSum(this.independentAnswerCount[0]) >
+      this.getSum(this.independentAnswerCount[1])
+      ? 0
+      : 1;
   }
 
   updateCounterForRound() {
@@ -335,7 +383,9 @@ export class StatisticChoiceComponent extends StatisticContentBaseComponent impl
       if (resetChart) {
         this.chart.data.datasets.push({
           data: this.data[i],
-          backgroundColor: this.colorLabel ? this.indicationColors[i] : this.colors[i]
+          backgroundColor: this.colorLabel
+            ? this.indicationColors[i]
+            : this.colors[i],
         });
       } else {
         this.chart.data.datasets[i].data = this.data[i];
@@ -345,11 +395,13 @@ export class StatisticChoiceComponent extends StatisticContentBaseComponent impl
 
   prepareChartForSingleRound(resetChart: boolean) {
     const data = this.data[this.roundsToDisplay];
-    const colors = this.colorLabel ? this.indicationColors[this.roundsToDisplay] : this.colors[this.roundsToDisplay];
+    const colors = this.colorLabel
+      ? this.indicationColors[this.roundsToDisplay]
+      : this.colors[this.roundsToDisplay];
     if (resetChart) {
       this.chart.data.datasets.push({
         data: data,
-        backgroundColor: colors
+        backgroundColor: colors,
       });
     } else {
       this.chart.data.datasets[0].data = data;

@@ -6,7 +6,10 @@ import { catchError, map, mergeMap, tap } from 'rxjs/operators';
 import { AuthenticationService } from './authentication.service';
 import { AbstractEntityService } from './abstract-entity.service';
 import { EventService } from '../util/event.service';
-import { GlobalStorageService, STORAGE_KEYS } from '../util/global-storage.service';
+import {
+  GlobalStorageService,
+  STORAGE_KEYS,
+} from '../util/global-storage.service';
 import { TranslateService } from '@ngx-translate/core';
 import { NotificationService } from '../util/notification.service';
 import { RoomStatsService } from './room-stats.service';
@@ -18,7 +21,7 @@ import { SeriesCreated } from '../../models/events/series-created';
 import { SeriesDeleted } from '../../models/events/series-deleted';
 
 const httpOptions = {
-  headers: new HttpHeaders({})
+  headers: new HttpHeaders({}),
 };
 
 @Injectable()
@@ -32,30 +35,60 @@ export class ContentGroupService extends AbstractEntityService<ContentGroup> {
     protected translateService: TranslateService,
     protected notificationService: NotificationService,
     private roomStatsService: RoomStatsService,
-    cachingService: CachingService) {
-    super('ContentGroup', '/contentgroup', http, ws, eventService, translateService, notificationService, cachingService);
+    cachingService: CachingService
+  ) {
+    super(
+      'ContentGroup',
+      '/contentgroup',
+      http,
+      ws,
+      eventService,
+      translateService,
+      notificationService,
+      cachingService
+    );
   }
 
-  getStatsByRoomIdAndName(roomId: string, name: string, extendedView = false): Observable<ContentGroupStatistics> {
-    return this.roomStatsService.getStats(roomId, extendedView).pipe(
-      map(stats => stats.groupStats.find(groupStats => groupStats.groupName === name)));
+  getStatsByRoomIdAndName(
+    roomId: string,
+    name: string,
+    extendedView = false
+  ): Observable<ContentGroupStatistics> {
+    return this.roomStatsService
+      .getStats(roomId, extendedView)
+      .pipe(
+        map((stats) =>
+          stats.groupStats.find((groupStats) => groupStats.groupName === name)
+        )
+      );
   }
 
-  getByRoomIdAndName(roomId: string, name: string, extendedView = false): Observable<ContentGroup> {
+  getByRoomIdAndName(
+    roomId: string,
+    name: string,
+    extendedView = false
+  ): Observable<ContentGroup> {
     return this.roomStatsService.getStats(roomId, extendedView).pipe(
-      map(stats => stats.groupStats.find(groupStats => groupStats.groupName === name).id),
-      mergeMap(id => this.getById(id, { roomId: roomId })));
+      map(
+        (stats) =>
+          stats.groupStats.find((groupStats) => groupStats.groupName === name)
+            .id
+      ),
+      mergeMap((id) => this.getById(id, { roomId: roomId }))
+    );
   }
 
   post(entity: ContentGroup): Observable<ContentGroup> {
     delete entity.id;
     delete entity.revision;
     return this.postEntity(entity, entity.roomId).pipe(
-      tap(group => {
+      tap((group) => {
         this.roomStatsService.removeCacheEntry(entity.roomId);
         this.sendCreatedEvent(group);
       }),
-      catchError(this.handleError<ContentGroup>(`post, ${entity.roomId}, ${entity.name}`))
+      catchError(
+        this.handleError<ContentGroup>(`post, ${entity.roomId}, ${entity.name}`)
+      )
     );
   }
 
@@ -66,11 +99,15 @@ export class ContentGroupService extends AbstractEntityService<ContentGroup> {
 
   delete(contentGroup: ContentGroup): Observable<ContentGroup> {
     return this.deleteEntity(contentGroup.id, contentGroup.roomId).pipe(
-      tap(() =>  {
+      tap(() => {
         this.roomStatsService.removeCacheEntry(contentGroup.roomId);
         this.sendDeletedEvent(contentGroup);
       }),
-      catchError(this.handleError<ContentGroup>(`Delete, ${contentGroup.roomId}, ${contentGroup.name}`))
+      catchError(
+        this.handleError<ContentGroup>(
+          `Delete, ${contentGroup.roomId}, ${contentGroup.name}`
+        )
+      )
     );
   }
 
@@ -79,22 +116,41 @@ export class ContentGroupService extends AbstractEntityService<ContentGroup> {
     this.eventService.broadcast(event.type, event.payload);
   }
 
-  addContentToGroup(roomId: string, name: string, contentId: string): Observable<void> {
+  addContentToGroup(
+    roomId: string,
+    name: string,
+    contentId: string
+  ): Observable<void> {
     const connectionUrl = this.buildUri('/-/content/', roomId);
-    return this.http.post<void>(connectionUrl,
-      { roomId: roomId, contentGroupName: name, contentId: contentId },
-      httpOptions).pipe(
-        catchError(this.handleError<void>(`addContentToGroup, ${roomId}, ${name}, ${contentId}`))
-    );
+    return this.http
+      .post<void>(
+        connectionUrl,
+        { roomId: roomId, contentGroupName: name, contentId: contentId },
+        httpOptions
+      )
+      .pipe(
+        catchError(
+          this.handleError<void>(
+            `addContentToGroup, ${roomId}, ${name}, ${contentId}`
+          )
+        )
+      );
   }
 
   updateGroup(contentGroup: ContentGroup): Observable<ContentGroup> {
     return this.putEntity(contentGroup, contentGroup.roomId).pipe(
-      catchError(this.handleError<ContentGroup>(`updateGroup, ${ contentGroup.roomId }, ${ contentGroup.name }, ${ ContentGroup }`))
+      catchError(
+        this.handleError<ContentGroup>(
+          `updateGroup, ${contentGroup.roomId}, ${contentGroup.name}, ${ContentGroup}`
+        )
+      )
     );
   }
 
-  patchContentGroup(group: ContentGroup, changes: object): Observable<ContentGroup> {
+  patchContentGroup(
+    group: ContentGroup,
+    changes: object
+  ): Observable<ContentGroup> {
     return this.patchEntity(group.id, changes, group.roomId).pipe(
       catchError(this.handleError<any>('patchContentGroup'))
     );
@@ -103,7 +159,8 @@ export class ContentGroupService extends AbstractEntityService<ContentGroup> {
   saveGroupInMemoryStorage(newGroup: string): boolean {
     if (newGroup !== '') {
       this.globalStorageService.setItem(STORAGE_KEYS.LAST_GROUP, newGroup);
-      const groups: string [] = this.globalStorageService.getItem(STORAGE_KEYS.CONTENT_GROUPS) || [];
+      const groups: string[] =
+        this.globalStorageService.getItem(STORAGE_KEYS.CONTENT_GROUPS) || [];
       if (groups) {
         for (let i = 0; i < groups.length; i++) {
           if (newGroup === groups[i]) {
@@ -118,7 +175,9 @@ export class ContentGroupService extends AbstractEntityService<ContentGroup> {
   }
 
   updateGroupInMemoryStorage(oldName: string, newName: string) {
-    const groups: string[] = this.globalStorageService.getItem(STORAGE_KEYS.CONTENT_GROUPS);
+    const groups: string[] = this.globalStorageService.getItem(
+      STORAGE_KEYS.CONTENT_GROUPS
+    );
     if (groups) {
       for (let i = 0; i < groups.length; i++) {
         if (groups[i] === oldName) {
@@ -135,16 +194,32 @@ export class ContentGroupService extends AbstractEntityService<ContentGroup> {
 
   isContentPublished(contentGroup: ContentGroup, contentId: string) {
     const i = contentGroup.contentIds.indexOf(contentId);
-		return this.isIndexPublished(contentGroup.firstPublishedIndex, contentGroup.lastPublishedIndex, i);
+    return this.isIndexPublished(
+      contentGroup.firstPublishedIndex,
+      contentGroup.lastPublishedIndex,
+      i
+    );
   }
 
-  isIndexPublished(firstIndex: number, lastIndex: number, contentIndex): boolean {
-    return contentIndex > -1 && firstIndex > -1 && contentIndex >= firstIndex
-      && (lastIndex === -1 || contentIndex <= lastIndex);
+  isIndexPublished(
+    firstIndex: number,
+    lastIndex: number,
+    contentIndex
+  ): boolean {
+    return (
+      contentIndex > -1 &&
+      firstIndex > -1 &&
+      contentIndex >= firstIndex &&
+      (lastIndex === -1 || contentIndex <= lastIndex)
+    );
   }
 
   filterPublishedIds(contentGroup: ContentGroup): string[] {
-    return contentGroup.contentIds?.filter(id => this.isContentPublished(contentGroup, id)) || [];
+    return (
+      contentGroup.contentIds?.filter((id) =>
+        this.isContentPublished(contentGroup, id)
+      ) || []
+    );
   }
 
   sortContentGroupsByName(contentGroups: ContentGroup[]): ContentGroup[] {
@@ -158,10 +233,21 @@ export class ContentGroupService extends AbstractEntityService<ContentGroup> {
     return this.httpClient.post(connectionUrl, formData);
   }
 
-  getAnswerStats(roomId: string, groupId: string, userId: string): Observable<AnswerResultOverview> {
-    const connectionUrl = this.buildUri(`/${groupId}/stats/user/${userId}`, roomId);
-    return this.http.get<AnswerResultOverview>(connectionUrl, httpOptions).pipe(
-      catchError(this.handleError<AnswerResultOverview>('getAnswerResultOverview'))
+  getAnswerStats(
+    roomId: string,
+    groupId: string,
+    userId: string
+  ): Observable<AnswerResultOverview> {
+    const connectionUrl = this.buildUri(
+      `/${groupId}/stats/user/${userId}`,
+      roomId
     );
+    return this.http
+      .get<AnswerResultOverview>(connectionUrl, httpOptions)
+      .pipe(
+        catchError(
+          this.handleError<AnswerResultOverview>('getAnswerResultOverview')
+        )
+      );
   }
 }

@@ -3,7 +3,10 @@ import { Inject, Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { themes, themes_meta } from './themes.const';
 import { Theme } from './Theme';
-import { GlobalStorageService, STORAGE_KEYS } from '../app/services/util/global-storage.service';
+import {
+  GlobalStorageService,
+  STORAGE_KEYS,
+} from '../app/services/util/global-storage.service';
 
 @Injectable()
 export class ThemeService {
@@ -11,13 +14,29 @@ export class ThemeService {
   private themeName: string;
   private activeTheme = new BehaviorSubject(null);
   private themes: Theme[] = [];
-  private barColors = ['blue', 'yellow', 'teal', 'red', 'purple', 'brown', 'green', 'pink'];
-  private likertColors = ['strongly-agree', 'agree', 'neither', 'disagree', 'strongly-disagree'];
+  private barColors = [
+    'blue',
+    'yellow',
+    'teal',
+    'red',
+    'purple',
+    'brown',
+    'green',
+    'pink',
+  ];
+  private likertColors = [
+    'strongly-agree',
+    'agree',
+    'neither',
+    'disagree',
+    'strongly-disagree',
+  ];
   private binaryColors = ['strongly-agree', 'strongly-disagree'];
 
   constructor(
-      private globalStorageService: GlobalStorageService,
-      @Inject(DOCUMENT) document: Document) {
+    private globalStorageService: GlobalStorageService,
+    @Inject(DOCUMENT) document: Document
+  ) {
     this.bodyClassList = document.body.classList;
     let currentTheme = this.globalStorageService.getItem(STORAGE_KEYS.THEME);
     if (!currentTheme) {
@@ -27,11 +46,7 @@ export class ThemeService {
     this.activate(this.themeName);
     // eslint-disable-next-line guard-for-in
     for (const k in themes) {
-      this.themes.push(new Theme(
-        k,
-        themes[k],
-        themes_meta[k])
-      );
+      this.themes.push(new Theme(k, themes[k], themes_meta[k]));
     }
     this.themes.sort((a, b) => {
       if (a.order < b.order) {
@@ -76,7 +91,7 @@ export class ThemeService {
 
   getColorArray(names: string[], prefix: string) {
     const currentTheme = this.getThemeByKey(this.themeName);
-    return names.map(c => currentTheme.get(prefix + '-' + c));
+    return names.map((c) => currentTheme.get(prefix + '-' + c));
   }
 
   public getBarColors() {
@@ -90,5 +105,4 @@ export class ThemeService {
   getBinaryColors() {
     return this.getColorArray(this.binaryColors, 'likert');
   }
-
 }

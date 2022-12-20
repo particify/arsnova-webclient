@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { fromEvent, Observable } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 
-
 @Injectable()
 export class LocalFileService {
   save(blob: Blob, filename: string) {
@@ -13,7 +12,7 @@ export class LocalFileService {
   }
 
   download(data: Observable<Blob>, filename: string) {
-    data.subscribe(blob => this.save(blob, filename));
+    data.subscribe((blob) => this.save(blob, filename));
   }
 
   upload(accept?: string[]): Observable<Blob> {
@@ -25,16 +24,23 @@ export class LocalFileService {
     input.click();
     const fileChanged = fromEvent(input, 'change');
     return fileChanged.pipe(
-      filter(e => (e.target as HTMLInputElement).files.length > 0),
-      map(e => (e.target as HTMLInputElement).files[0]));
+      filter((e) => (e.target as HTMLInputElement).files.length > 0),
+      map((e) => (e.target as HTMLInputElement).files[0])
+    );
   }
 
   generateFilename(nameParts: string[], appendTimestamp = false) {
     const timestampSuffix = appendTimestamp
-        ? '_' + new Date().toISOString()
-            .replace(/[:-]/g, '').replace('T', '-').substr(0, 13)
-        : '';
-    const sanitizedTitle = nameParts.map(t => t.replace(/[\s\p{P}]/gu, '-').replace(/-+/g, '-')).join('_');
+      ? '_' +
+        new Date()
+          .toISOString()
+          .replace(/[:-]/g, '')
+          .replace('T', '-')
+          .substr(0, 13)
+      : '';
+    const sanitizedTitle = nameParts
+      .map((t) => t.replace(/[\s\p{P}]/gu, '-').replace(/-+/g, '-'))
+      .join('_');
     return `${sanitizedTitle}${timestampSuffix}`;
   }
 }

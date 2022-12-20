@@ -2,13 +2,20 @@ import { HttpClient } from '@angular/common/http';
 import { TranslateService } from '@ngx-translate/core';
 import { Observable, of, Subscription } from 'rxjs';
 import { tap } from 'rxjs/operators';
-import { Cache, CacheKey, CachingService, DefaultCache } from '../util/caching.service';
+import {
+  Cache,
+  CacheKey,
+  CachingService,
+  DefaultCache,
+} from '../util/caching.service';
 import { EventService } from '../util/event.service';
 import { NotificationService } from '../util/notification.service';
 import { WsConnectorService } from '../websockets/ws-connector.service';
 import { AbstractHttpService } from './abstract-http.service';
 
-export abstract class AbstractCachingHttpService<T> extends AbstractHttpService<T> {
+export abstract class AbstractCachingHttpService<
+  T
+> extends AbstractHttpService<T> {
   protected cacheName = 'http';
   protected stompSubscription: Subscription;
   protected cache: Cache<T>;
@@ -23,8 +30,16 @@ export abstract class AbstractCachingHttpService<T> extends AbstractHttpService<
     protected cachingService: CachingService,
     useSharedCache = false
   ) {
-    super(uriPrefix, httpClient, eventService, translateService, notificationService);
-    this.cache = cachingService.getCache<T>(useSharedCache ? DefaultCache.SHARED : DefaultCache.CURRENT_ROOM);
+    super(
+      uriPrefix,
+      httpClient,
+      eventService,
+      translateService,
+      notificationService
+    );
+    this.cache = cachingService.getCache<T>(
+      useSharedCache ? DefaultCache.SHARED : DefaultCache.CURRENT_ROOM
+    );
   }
 
   protected fetch(uri: string): Observable<T> {
@@ -32,8 +47,9 @@ export abstract class AbstractCachingHttpService<T> extends AbstractHttpService<
     if (cachedObject) {
       return of(cachedObject);
     }
-    return this.httpClient.get<T>(uri).pipe(
-        tap(object => this.handleObjectCaching(uri, object)));
+    return this.httpClient
+      .get<T>(uri)
+      .pipe(tap((object) => this.handleObjectCaching(uri, object)));
   }
 
   protected generateCacheKey(id: string): CacheKey {

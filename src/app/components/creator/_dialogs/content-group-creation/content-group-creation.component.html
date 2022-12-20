@@ -2,16 +2,30 @@
   <div fxLayout="column" fxLayoutAlign="center" fxLayoutGap="10px">
     <mat-form-field appearance="outline">
       <mat-label>{{ 'dialog.content-group-name' | translate }}</mat-label>
-      <input matInput id="name-input" class="input-block" type="text" maxlength="25" [(ngModel)]="name"
-             name="contentGroupName" autocomplete="off"
-             [placeholder]="'dialog.content-group-example' | translate"/>
+      <input
+        matInput
+        id="name-input"
+        class="input-block"
+        type="text"
+        maxlength="25"
+        [(ngModel)]="name"
+        name="contentGroupName"
+        autocomplete="off"
+        [placeholder]="'dialog.content-group-example' | translate"
+      />
     </mat-form-field>
   </div>
   <div fxLayout="row-reverse" fxLayoutGap="10px">
-    <button (click)="addContentGroup()" mat-flat-button  class="button-primary" >
+    <button (click)="addContentGroup()" mat-flat-button class="button-primary">
       {{ 'dialog.create-content-group' | translate }}
     </button>
-    <button (click)="closeDialog()" aria-labelledby="cancel" mat-button class="button-abort" type="button">
+    <button
+      (click)="closeDialog()"
+      aria-labelledby="cancel"
+      mat-button
+      class="button-abort"
+      type="button"
+    >
       {{ 'dialog.cancel' | translate }}
     </button>
   </div>

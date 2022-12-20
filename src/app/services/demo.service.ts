@@ -19,26 +19,29 @@ export class DemoService {
 
   createDemoRoom(): Observable<Room> {
     return this.getLocalizedDemoRoomId().pipe(
-        mergeMap(shortId => {
-          return this.roomService.duplicateRoom(`~${shortId}`, true);
-        }),
-        tap(room => this.roomService.generateRandomData(room.id).subscribe()),
-        tap(room => {
-          const event = new DemoRoomCreated(room.id, room.shortId);
-          this.eventService.broadcast(event.type, event.payload);
-        }));
+      mergeMap((shortId) => {
+        return this.roomService.duplicateRoom(`~${shortId}`, true);
+      }),
+      tap((room) => this.roomService.generateRandomData(room.id).subscribe()),
+      tap((room) => {
+        const event = new DemoRoomCreated(room.id, room.shortId);
+        this.eventService.broadcast(event.type, event.payload);
+      })
+    );
   }
 
   getLocalizedDemoRoomId(): Observable<string> {
     const lang = this.translateService.currentLang;
     const fallbackLang = this.translateService.defaultLang;
-    return this.apiConfigService.getApiConfig$().pipe(map(config => {
-      let id = config.ui.demo?.[lang];
-      id = id ?? config.ui.demo?.[fallbackLang];
-      if (!id) {
-        throw new Error('Demo room ID is not set.');
-      }
-      return id;
-    }));
+    return this.apiConfigService.getApiConfig$().pipe(
+      map((config) => {
+        let id = config.ui.demo?.[lang];
+        id = id ?? config.ui.demo?.[fallbackLang];
+        if (!id) {
+          throw new Error('Demo room ID is not set.');
+        }
+        return id;
+      })
+    );
   }
 }

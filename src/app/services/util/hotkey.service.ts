@@ -1,6 +1,9 @@
 import { DOCUMENT } from '@angular/common';
 import { Inject, Injectable } from '@angular/core';
-import { MatLegacyDialogRef as MatDialogRef, MatLegacyDialogState as MatDialogState } from '@angular/material/legacy-dialog';
+import {
+  MatLegacyDialogRef as MatDialogRef,
+  MatLegacyDialogState as MatDialogState,
+} from '@angular/material/legacy-dialog';
 import { EventManager } from '@angular/platform-browser';
 import { environment } from '../../../environments/environment';
 import { HotkeysComponent } from '../../components/shared/_dialogs/hotkeys/hotkeys.component';
@@ -19,12 +22,12 @@ export interface Hotkey {
 export enum HotkeyModifier {
   CONTROL = 'Control',
   ALT = 'Alt',
-  SHIFT = 'Shift'
+  SHIFT = 'Shift',
 }
 
 export enum HotkeyActionType {
   DEFAULT,
-  INPUT
+  INPUT,
 }
 
 export interface HotkeyDisplayInfo {
@@ -41,7 +44,7 @@ export interface HotkeyInfo extends HotkeyDisplayInfo {
 
 export const KEY_SYMBOLS = new Map<string, string>([
   ['ArrowLeft', '⬅'],
-  ['ArrowRight', '➡']
+  ['ArrowRight', '➡'],
 ]);
 
 const includedInputTypes = ['button', 'checkbox', 'radio'];
@@ -49,7 +52,7 @@ const includedInputTypes = ['button', 'checkbox', 'radio'];
 const excludedElementTypes = new Map<string, (el: Element) => boolean>([
   ['INPUT', (el: HTMLInputElement) => !includedInputTypes.includes(el.type)],
   ['TEXTAREA', () => true],
-  ['SELECT', () => true]
+  ['SELECT', () => true],
 ]);
 
 @Injectable()
@@ -73,15 +76,19 @@ export class HotkeyService {
     return {
       keyName: keyName,
       keySymbol: KEY_SYMBOLS.get(key) ?? key.toUpperCase(),
-      translateKeyName: keyName.length > 1 && !KEY_SYMBOLS.has(key)
-    }
+      translateKeyName: keyName.length > 1 && !KEY_SYMBOLS.has(key),
+    };
   }
 
   registerHotkey(hotkey: Hotkey, localHotkeyRegistrations?: symbol[]): symbol {
     const registrationRef = Symbol(hotkey.key);
     const modifiers = hotkey.modifiers ?? [];
     const actionType = hotkey.actionType ?? HotkeyActionType.DEFAULT;
-    this.hotkeyRegistrations.set(registrationRef, { ...hotkey, modifiers: modifiers, actionType: actionType });
+    this.hotkeyRegistrations.set(registrationRef, {
+      ...hotkey,
+      modifiers: modifiers,
+      actionType: actionType,
+    });
     if (localHotkeyRegistrations) {
       localHotkeyRegistrations.push(registrationRef);
     }
@@ -100,7 +107,7 @@ export class HotkeyService {
     this.registerHotkey({
       key: HELP_KEY,
       action: () => this.showDialog(),
-      actionTitle: 'hotkeys.display-overview'
+      actionTitle: 'hotkeys.display-overview',
     });
   }
 
@@ -112,22 +119,27 @@ export class HotkeyService {
     (this.document.activeElement as HTMLElement).blur();
     this.dialogRef = this.dialogService.openDialog(HotkeysComponent, {
       data: this.getHotkeyInfos(),
-      width: '500px'
+      width: '500px',
     });
   }
 
   private getHotkeyInfos(): HotkeyInfo[] {
-    return this.sortHotkeys(Array.from(this.hotkeyRegistrations.values()))
-        .map(h => ({
-          ...HotkeyService.getKeyDisplayInfo(h.key),
-          modifiers: h.modifiers,
-          actionTitle: h.actionTitle,
-          actionType: h.actionType
-        }));
+    return this.sortHotkeys(Array.from(this.hotkeyRegistrations.values())).map(
+      (h) => ({
+        ...HotkeyService.getKeyDisplayInfo(h.key),
+        modifiers: h.modifiers,
+        actionTitle: h.actionTitle,
+        actionType: h.actionType,
+      })
+    );
   }
 
   private sortHotkeys(hotkeys: Hotkey[]) {
-    return hotkeys.sort((a, b) => a.key.length === b.key.length ? a.key.localeCompare(b.key) : b.key.length - a.key.length);
+    return hotkeys.sort((a, b) =>
+      a.key.length === b.key.length
+        ? a.key.localeCompare(b.key)
+        : b.key.length - a.key.length
+    );
   }
 
   private handleKeyboardEvent(event: KeyboardEvent) {
@@ -135,8 +147,15 @@ export class HotkeyService {
       if (event.key !== hotkey.key) {
         continue;
       }
-      for (const modifier of [HotkeyModifier.CONTROL, HotkeyModifier.ALT, HotkeyModifier.SHIFT]) {
-        if (event.getModifierState(modifier) !== hotkey.modifiers.includes(modifier)) {
+      for (const modifier of [
+        HotkeyModifier.CONTROL,
+        HotkeyModifier.ALT,
+        HotkeyModifier.SHIFT,
+      ]) {
+        if (
+          event.getModifierState(modifier) !==
+          hotkey.modifiers.includes(modifier)
+        ) {
           return;
         }
       }
@@ -159,7 +178,10 @@ export class HotkeyService {
 
   private checkIfExcludedElement() {
     const activeElement = this.document.activeElement;
-    return excludedElementTypes.has(activeElement.nodeName) && excludedElementTypes.get(activeElement.nodeName)(activeElement);
+    return (
+      excludedElementTypes.has(activeElement.nodeName) &&
+      excludedElementTypes.get(activeElement.nodeName)(activeElement)
+    );
   }
 
   private closeHelpDialog(event: KeyboardEvent, hotkey: Hotkey) {
@@ -177,10 +199,13 @@ export class HotkeyService {
 
   private registerHandler() {
     this.eventManager.addEventListener(
-        this.document.documentElement, 'keydown', (e: KeyboardEvent) => {
-          if (!e.repeat) {
-            this.handleKeyboardEvent(e)
-          }
-        });
+      this.document.documentElement,
+      'keydown',
+      (e: KeyboardEvent) => {
+        if (!e.repeat) {
+          this.handleKeyboardEvent(e);
+        }
+      }
+    );
   }
 }

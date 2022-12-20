@@ -12,7 +12,7 @@ import {
   JsonTranslationLoader,
   MockEventService,
   MockGlobalStorageService,
-  MockThemeService
+  MockThemeService,
 } from '@arsnova/testing/test-helpers';
 import { ThemeService } from '@arsnova/theme/theme.service';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
@@ -25,23 +25,25 @@ describe('StatisticPrioritizationComponent', () => {
   let component: StatisticPrioritizationComponent;
   let fixture: ComponentFixture<StatisticPrioritizationComponent>;
 
-  const mockContentService = jasmine.createSpyObj(['getAnswersChangedStream', 'getAnswer']);
+  const mockContentService = jasmine.createSpyObj([
+    'getAnswersChangedStream',
+    'getAnswer',
+  ]);
   const roundStatistics = new PrioritizationRoundStatistics();
   roundStatistics.abstentionCount = 0;
   roundStatistics.answerCount = 0;
   roundStatistics.assignedPoints = [];
   roundStatistics.round = 1;
   const stats = new AnswerStatistics();
-  stats.contentId = '1234',
-  stats.roundStatistics = [roundStatistics];
+  (stats.contentId = '1234'), (stats.roundStatistics = [roundStatistics]);
   const body = {
     payload: {
-      stats: stats
-    }
-  }
+      stats: stats,
+    },
+  };
   const message = {
-    body: JSON.stringify(body)
-  }
+    body: JSON.stringify(body),
+  };
   mockContentService.getAnswer.and.returnValue(of(stats));
   mockContentService.getAnswersChangedStream.and.returnValue(of(message));
 
@@ -49,47 +51,55 @@ describe('StatisticPrioritizationComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ StatisticPrioritizationComponent ],
+      declarations: [StatisticPrioritizationComponent],
       imports: [
         TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
-            useClass: JsonTranslationLoader
+            useClass: JsonTranslationLoader,
           },
-          isolate: true
-        })
+          isolate: true,
+        }),
       ],
       providers: [
         {
           provide: EventService,
-          useClass: MockEventService
+          useClass: MockEventService,
         },
         {
           provide: ContentService,
-          useValue: mockContentService
+          useValue: mockContentService,
         },
         {
           provide: ThemeService,
-          useClass: MockThemeService
+          useClass: MockThemeService,
         },
         {
           provide: PresentationService,
-          useValue: mockPresentationService
+          useValue: mockPresentationService,
         },
         {
           provide: GlobalStorageService,
-          useClass: MockGlobalStorageService
-        }
+          useClass: MockGlobalStorageService,
+        },
       ],
-      schemas: [
-        NO_ERRORS_SCHEMA
-      ]
-    })
-    .compileComponents();
+      schemas: [NO_ERRORS_SCHEMA],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(StatisticPrioritizationComponent);
     component = fixture.componentInstance;
-    component.content = new ContentPrioritization('1234', '0', 'room1234', 'subject', 'body', [], [], ContentType.PRIORITIZATION, new ContentState(1, new Date(), false), 0);
+    component.content = new ContentPrioritization(
+      '1234',
+      '0',
+      'room1234',
+      'subject',
+      'body',
+      [],
+      [],
+      ContentType.PRIORITIZATION,
+      new ContentState(1, new Date(), false),
+      0
+    );
     fixture.detectChanges();
   });
 

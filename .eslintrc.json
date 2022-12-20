@@ -1,18 +1,11 @@
 {
   "root": true,
-  "ignorePatterns": [
-    "*.d.ts",
-    "projects/**/*"
-  ],
+  "ignorePatterns": ["*.d.ts", "projects/**/*"],
   "overrides": [
     {
-      "files": [
-        "*.ts"
-      ],
+      "files": ["*.ts"],
       "parserOptions": {
-        "project": [
-          "tsconfig.json"
-        ]
+        "project": ["tsconfig.json"]
       },
       "extends": [
         "eslint:recommended",
@@ -41,24 +34,16 @@
       }
     },
     {
-      "files": [
-        "*.html"
-      ],
-      "extends": [
-        "plugin:@angular-eslint/template/recommended"
-      ],
+      "files": ["*.html"],
+      "extends": ["plugin:@angular-eslint/template/recommended"],
       "rules": {}
     },
     {
-      "files": [
-        "*.spec.ts",
-        "test-helpers.ts"
-      ],
+      "files": ["*.spec.ts", "test-helpers.ts"],
       "rules": {
         "@typescript-eslint/no-empty-function": "off",
-        "@typescript-eslint/no-unused-vars": ["warn", {"args": "none"}]
+        "@typescript-eslint/no-unused-vars": ["warn", { "args": "none" }]
       }
     }
-
   ]
 }

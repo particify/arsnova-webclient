@@ -1,14 +1,30 @@
-import { AfterViewInit, Component, ElementRef, OnInit, ViewChild, Inject } from '@angular/core';
-import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA } from '@angular/material/legacy-dialog';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  OnInit,
+  ViewChild,
+  Inject,
+} from '@angular/core';
+import {
+  MatLegacyDialogRef as MatDialogRef,
+  MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA,
+} from '@angular/material/legacy-dialog';
 import { ActivatedRoute } from '@angular/router';
-import { ConsentGiven, CookieCategory } from '../../../../services/util/consent.service';
+import {
+  ConsentGiven,
+  CookieCategory,
+} from '../../../../services/util/consent.service';
 import { TranslateService } from '@ngx-translate/core';
-import { AdvancedSnackBarTypes, NotificationService } from '../../../../services/util/notification.service';
+import {
+  AdvancedSnackBarTypes,
+  NotificationService,
+} from '../../../../services/util/notification.service';
 
 @Component({
   selector: 'app-cookies',
   templateUrl: './cookies.component.html',
-  styleUrls: ['./cookies.component.scss']
+  styleUrls: ['./cookies.component.scss'],
 })
 export class CookiesComponent implements OnInit, AfterViewInit {
   readonly dialogId = 'cookie-settings';
@@ -20,7 +36,8 @@ export class CookiesComponent implements OnInit, AfterViewInit {
   inputFocus: boolean;
 
   constructor(
-    @Inject(MAT_DIALOG_DATA) data: { categories: CookieCategory[], privacyUrl: string },
+    @Inject(MAT_DIALOG_DATA)
+    data: { categories: CookieCategory[]; privacyUrl: string },
     private dialogRef: MatDialogRef<CookiesComponent>,
     protected route: ActivatedRoute,
     private translateService: TranslateService,
@@ -55,9 +72,9 @@ export class CookiesComponent implements OnInit, AfterViewInit {
   handleCookieSelection() {
     console.log('Accepted cookie categories: ', this.categories);
     const consentGiven: ConsentGiven = this.categories.reduce((map, item) => {
-        map[item.id] = item.consent;
-        return map;
-      }, {});
+      map[item.id] = item.consent;
+      return map;
+    }, {});
     this.dialogRef.close(consentGiven);
     const msg = this.translateService.instant('cookies.settings-saved');
     this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.SUCCESS);

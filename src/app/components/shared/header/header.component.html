@@ -1,126 +1,273 @@
 <mat-toolbar class="mat-elevation-z2">
-  <lib-extension-point *ngIf="isRoom && hasRole(UserRole.PARTICIPANT)" extensionId="participant-header"></lib-extension-point>
+  <lib-extension-point
+    *ngIf="isRoom && hasRole(UserRole.PARTICIPANT)"
+    extensionId="participant-header"
+  ></lib-extension-point>
   <mat-toolbar-row>
-    <button id="back-button" mat-icon-button aria-labelledby="back-label" *ngIf="router.url !== '/'"
-            (click)="goBack()"
-            appHotkey="0"
-            matTooltip="{{'header.back' | translate}}">
+    <button
+      id="back-button"
+      mat-icon-button
+      aria-labelledby="back-label"
+      *ngIf="router.url !== '/'"
+      (click)="goBack()"
+      appHotkey="0"
+      matTooltip="{{ 'header.back' | translate }}"
+    >
       <mat-icon class="header-icons">arrow_back</mat-icon>
     </button>
-    <lib-extension-point extensionId="header-logo" *ngIf="router.url === '/'"></lib-extension-point>
+    <lib-extension-point
+      extensionId="header-logo"
+      *ngIf="router.url === '/'"
+    ></lib-extension-point>
     <span class="fill-remaining-space"></span>
 
-    <mat-menu id="user-menu" #userMenu="matMenu" [overlapTrigger]="false" xPosition="before">
-      <button id="my-rooms-button" mat-menu-item *ngIf="auth" (click)="navToUserHome()" tabindex="0">
+    <mat-menu
+      id="user-menu"
+      #userMenu="matMenu"
+      [overlapTrigger]="false"
+      xPosition="before"
+    >
+      <button
+        id="my-rooms-button"
+        mat-menu-item
+        *ngIf="auth"
+        (click)="navToUserHome()"
+        tabindex="0"
+      >
         <mat-icon class="icon-primary">home</mat-icon>
-        <span>{{'header.my-rooms' | translate}}</span>
+        <span>{{ 'header.my-rooms' | translate }}</span>
       </button>
-      <button id="login-button" *ngIf="isGuest()" mat-menu-item (click)="navToLogin()">
+      <button
+        id="login-button"
+        *ngIf="isGuest()"
+        mat-menu-item
+        (click)="navToLogin()"
+      >
         <mat-icon class="icon-primary">exit_to_app</mat-icon>
         <span>{{ 'header.login' | translate }}</span>
       </button>
-      <a id="help-button" *ngIf="helpUrl" [attr.href]="helpUrl" target="_blank" mat-menu-item>
+      <a
+        id="help-button"
+        *ngIf="helpUrl"
+        [attr.href]="helpUrl"
+        target="_blank"
+        mat-menu-item
+      >
         <mat-icon>help</mat-icon>
-        <span>{{'header.help' | translate}}</span>
+        <span>{{ 'header.help' | translate }}</span>
       </a>
       <button id="theme-menu" mat-menu-item [matMenuTriggerFor]="themeMenu">
         <mat-icon>palette</mat-icon>
-        <span>{{'header.style' | translate}}</span>
+        <span>{{ 'header.style' | translate }}</span>
       </button>
       <button id="language-menu" mat-menu-item [matMenuTriggerFor]="langMenu">
         <mat-icon>language</mat-icon>
-        <span>{{'header.language' | translate}}</span>
+        <span>{{ 'header.language' | translate }}</span>
       </button>
       <div *ngIf="deviceWidth < 1000">
-        <button id="privacy-button" mat-menu-item [matMenuTriggerFor]="privacyMenu">
+        <button
+          id="privacy-button"
+          mat-menu-item
+          [matMenuTriggerFor]="privacyMenu"
+        >
           <mat-icon>security</mat-icon>
-          <span>{{'footer.dsgvo' | translate}}</span>
+          <span>{{ 'footer.dsgvo' | translate }}</span>
         </button>
-        <a id="imprint-button" *ngIf="imprintUrl" [attr.href]="imprintUrl" target="_blank" mat-menu-item>
+        <a
+          id="imprint-button"
+          *ngIf="imprintUrl"
+          [attr.href]="imprintUrl"
+          target="_blank"
+          mat-menu-item
+        >
           <mat-icon>contact_mail</mat-icon>
-          <span>{{'footer.imprint' | translate}}</span>
+          <span>{{ 'footer.imprint' | translate }}</span>
         </a>
       </div>
-      <button id="admin-button" mat-menu-item *ngIf="isAdmin()" routerLink="/admin">
+      <button
+        id="admin-button"
+        mat-menu-item
+        *ngIf="isAdmin()"
+        routerLink="/admin"
+      >
         <mat-icon>build</mat-icon>
-        <span>{{'header.admin-area' | translate}}</span>
+        <span>{{ 'header.admin-area' | translate }}</span>
       </button>
-      <button id="user-profile-button" mat-menu-item *ngIf="auth && !isGuest()" (click)="navToProfile()">
+      <button
+        id="user-profile-button"
+        mat-menu-item
+        *ngIf="auth && !isGuest()"
+        (click)="navToProfile()"
+      >
         <mat-icon>account_box</mat-icon>
-        <span>{{'header.user-profile' | translate}}</span>
+        <span>{{ 'header.user-profile' | translate }}</span>
       </button>
-      <button id="logout-button" *ngIf="auth && !isGuest()" mat-menu-item (click)="logout()">
+      <button
+        id="logout-button"
+        *ngIf="auth && !isGuest()"
+        mat-menu-item
+        (click)="logout()"
+      >
         <mat-icon class="icon-warn">exit_to_app</mat-icon>
         <span>{{ 'header.logout' | translate }}</span>
       </button>
     </mat-menu>
 
-    <mat-menu class="wider-panel" #themeMenu="matMenu" xPosition="before" [overlapTrigger]="false">
-      <button mat-menu-item *ngFor="let theme of themes" (click)="changeTheme(theme)"
-              title="{{theme.toString(lang)}}" appTrackInteraction="Theme switched" [appTrackName]="theme.key">
+    <mat-menu
+      class="wider-panel"
+      #themeMenu="matMenu"
+      xPosition="before"
+      [overlapTrigger]="false"
+    >
+      <button
+        mat-menu-item
+        *ngFor="let theme of themes"
+        (click)="changeTheme(theme)"
+        title="{{ theme.toString(lang) }}"
+        appTrackInteraction="Theme switched"
+        [appTrackName]="theme.key"
+      >
         <div fxLayout="row">
-          <mat-icon class="color" [ngStyle]="{'color':theme.getPreviewColor()}">lens</mat-icon>
-          <mat-icon class="checked" *ngIf="theme.key === themeClass" [ngStyle]="{'color':theme.getOnPreviewColor()}">
+          <mat-icon class="color" [ngStyle]="{ color: theme.getPreviewColor() }"
+            >lens</mat-icon
+          >
+          <mat-icon
+            class="checked"
+            *ngIf="theme.key === themeClass"
+            [ngStyle]="{ color: theme.getOnPreviewColor() }"
+          >
             checked
           </mat-icon>
-          <div fxLayout="column" fxLayoutAlign="center" class="color-text-container">
-            <span class="item-title color-title">{{theme.getName(lang)}}</span>
-            <span class="color-description"
-                  *ngIf="deviceWidth > 600">{{theme.getDescription(lang)}}</span>
+          <div
+            fxLayout="column"
+            fxLayoutAlign="center"
+            class="color-text-container"
+          >
+            <span class="item-title color-title">{{
+              theme.getName(lang)
+            }}</span>
+            <span class="color-description" *ngIf="deviceWidth > 600">{{
+              theme.getDescription(lang)
+            }}</span>
           </div>
         </div>
       </button>
     </mat-menu>
 
-    <mat-menu #langMenu="matMenu" [dir]="" xPosition="before" [overlapTrigger]="false">
-      <button class="item-title lang-title" mat-menu-item (click)="changeLanguage('de')"
-              appTrackInteraction="Language switched" appTrackName="de">
-        {{ 'header.german' | translate }}</button>
-      <button class="item-title lang-title" mat-menu-item (click)="changeLanguage('en')"
-              appTrackInteraction="Language switched" appTrackName="en">
-        {{ 'header.english' | translate }}</button>
+    <mat-menu
+      #langMenu="matMenu"
+      [dir]=""
+      xPosition="before"
+      [overlapTrigger]="false"
+    >
+      <button
+        class="item-title lang-title"
+        mat-menu-item
+        (click)="changeLanguage('de')"
+        appTrackInteraction="Language switched"
+        appTrackName="de"
+      >
+        {{ 'header.german' | translate }}
+      </button>
+      <button
+        class="item-title lang-title"
+        mat-menu-item
+        (click)="changeLanguage('en')"
+        appTrackInteraction="Language switched"
+        appTrackName="en"
+      >
+        {{ 'header.english' | translate }}
+      </button>
     </mat-menu>
 
     <mat-menu #privacyMenu="matMenu" [overlapTrigger]="false">
-      <a *ngIf="privacyUrl" [attr.href]="privacyUrl" target="_blank" mat-menu-item>
-        {{ 'footer.privacy-policy' | translate }}</a>
+      <a
+        *ngIf="privacyUrl"
+        [attr.href]="privacyUrl"
+        target="_blank"
+        mat-menu-item
+      >
+        {{ 'footer.privacy-policy' | translate }}</a
+      >
       <button class="item-title" mat-menu-item (click)="showCookieSettings()">
-        {{ 'footer.cookie-settings' | translate }}</button>
+        {{ 'footer.cookie-settings' | translate }}
+      </button>
     </mat-menu>
 
     <div fxLayout="row" fxLayoutAlign="start center">
       <div *ngIf="isRoom && !hasRole(UserRole.PARTICIPANT)">
         <div fxLayout="row" fxLayoutGap="10px" class="desktop-action-container">
-          <button mat-button class="preview-button" (click)="switchRole()" aria-labelledby="switch-role"
-          [ngClass]="{'back-to-edit nav-button': isPreview}">
+          <button
+            mat-button
+            class="preview-button"
+            (click)="switchRole()"
+            aria-labelledby="switch-role"
+            [ngClass]="{ 'back-to-edit nav-button': isPreview }"
+          >
             <mat-icon>{{ isPreview ? 'edit' : 'preview' }}</mat-icon>
-            {{ (isPreview ? 'header.editing-view' : 'header.preview') | translate }}
+            {{
+              (isPreview ? 'header.editing-view' : 'header.preview') | translate
+            }}
           </button>
-          <button *ngIf="hasRole(UserRole.CREATOR)" [disabled]="isPreview" mat-button class="preview-button" (click)="goToSettings()">
+          <button
+            *ngIf="hasRole(UserRole.CREATOR)"
+            [disabled]="isPreview"
+            mat-button
+            class="preview-button"
+            (click)="goToSettings()"
+          >
             <mat-icon>settings</mat-icon>
             {{ 'header.room-settings' | translate }}
           </button>
-          <button *ngIf="hasRole(UserRole.CREATOR)" [disabled]="isPreview" mat-raised-button class="button-primary" [matMenuTriggerFor]="openPresentationDirectly ? hideMenu : presentationMenu"
-                  (click)="presentCurrentView()">
+          <button
+            *ngIf="hasRole(UserRole.CREATOR)"
+            [disabled]="isPreview"
+            mat-raised-button
+            class="button-primary"
+            [matMenuTriggerFor]="
+              openPresentationDirectly ? hideMenu : presentationMenu
+            "
+            (click)="presentCurrentView()"
+          >
             <mat-icon>present_to_all</mat-icon>
             {{ 'header.present' | translate }}
           </button>
           <mat-menu class="visually-hidden" #hideMenu="matMenu"></mat-menu>
         </div>
         <div class="mobile-action-container">
-          <button *ngIf="!isPreview" mat-icon-button [matMenuTriggerFor]="roomMenu">
+          <button
+            *ngIf="!isPreview"
+            mat-icon-button
+            [matMenuTriggerFor]="roomMenu"
+          >
             <mat-icon>more_vert</mat-icon>
           </button>
-          <button *ngIf="isPreview" mat-icon-button class="icon-primary" (click)="switchRole()" aria-labelledby="switch-role">
+          <button
+            *ngIf="isPreview"
+            mat-icon-button
+            class="icon-primary"
+            (click)="switchRole()"
+            aria-labelledby="switch-role"
+          >
             <mat-icon>edit</mat-icon>
           </button>
         </div>
         <mat-menu #roomMenu="matMenu">
-          <button mat-menu-item tabindex="0" (click)="switchRole()" aria-labelledby="switch-role">
+          <button
+            mat-menu-item
+            tabindex="0"
+            (click)="switchRole()"
+            aria-labelledby="switch-role"
+          >
             <mat-icon>preview</mat-icon>
             {{ 'header.preview' | translate }}
           </button>
-          <button *ngIf="hasRole(UserRole.CREATOR)" mat-menu-item tabindex="0" (click)="goToSettings()">
+          <button
+            *ngIf="hasRole(UserRole.CREATOR)"
+            mat-menu-item
+            tabindex="0"
+            (click)="goToSettings()"
+          >
             <mat-icon>settings</mat-icon>
             <span>{{ 'header.room-settings' | translate }}</span>
           </button>
@@ -131,30 +278,54 @@
           <mat-icon class="menu-icon">personal_video</mat-icon>
           <span>{{ 'header.presentation-mode' | translate }}</span>
         </button>
-        <lib-extension-point extensionId="present-in-new-tab" (extensionEvent)="checkIfOpenPresentationDirectly($event)"></lib-extension-point>
+        <lib-extension-point
+          extensionId="present-in-new-tab"
+          (extensionEvent)="checkIfOpenPresentationDirectly($event)"
+        ></lib-extension-point>
       </mat-menu>
       <div fxLayoutGap="16px">
-        <button *ngIf="announcementState" mat-icon-button (click)="showNews()" class="icon-badge"
-                [matTooltip]="(announcementState.new > 0 ? 'announcement.new-announcements' : 'announcement.announcements') | translate"
-                matBadge="{{announcementState.new}}" [matBadgeHidden]="announcementState.new === 0"
-                appHotkey="a">
-          <mat-icon>
-            notifications
-          </mat-icon>
+        <button
+          *ngIf="announcementState"
+          mat-icon-button
+          (click)="showNews()"
+          class="icon-badge"
+          [matTooltip]="
+            (announcementState.new > 0
+              ? 'announcement.new-announcements'
+              : 'announcement.announcements'
+            ) | translate
+          "
+          matBadge="{{ announcementState.new }}"
+          [matBadgeHidden]="announcementState.new === 0"
+          appHotkey="a"
+        >
+          <mat-icon> notifications </mat-icon>
         </button>
-        <button mat-icon-button class="user-button" [matMenuTriggerFor]="userMenu" aria-labelledby="room-label"
-                id="menu-button" appHotkey="9" [appHotkeyTitle]="'header.menu' | translate" [ngClass]="{'guest': isGuest()}">
+        <button
+          mat-icon-button
+          class="user-button"
+          [matMenuTriggerFor]="userMenu"
+          aria-labelledby="room-label"
+          id="menu-button"
+          appHotkey="9"
+          [appHotkeyTitle]="'header.menu' | translate"
+          [ngClass]="{ guest: isGuest() }"
+        >
           <mat-icon *ngIf="isGuest()">person_outline</mat-icon>
-          <span *ngIf="!isGuest()">{{userCharacter}}</span>
+          <span *ngIf="!isGuest()">{{ userCharacter }}</span>
         </button>
       </div>
     </div>
-
   </mat-toolbar-row>
 </mat-toolbar>
 
 <div class="visually-hidden">
-  <div id="back-label">{{'header.a11y-back' | translate}}</div>
-  <div id="room-label">{{'header.a11y-room' | translate}}</div>
-  <div id="switch-role">{{ (isPreview ? 'header.a11y-switch-back' : 'header.a11y-switch-role') | translate}}</div>
+  <div id="back-label">{{ 'header.a11y-back' | translate }}</div>
+  <div id="room-label">{{ 'header.a11y-room' | translate }}</div>
+  <div id="switch-role">
+    {{
+      (isPreview ? 'header.a11y-switch-back' : 'header.a11y-switch-role')
+        | translate
+    }}
+  </div>
 </div>

@@ -10,19 +10,21 @@ export class Content {
   renderedBody: string;
   groups: string[];
   format: ContentType;
-  formatAttributes: { [key: string ]: string };
+  formatAttributes: { [key: string]: string };
   abstentionsAllowed: boolean;
   state: ContentState;
 
-  constructor(id: string,
-              revision: string,
-              roomId: string,
-              subject: string,
-              body: string,
-              groups: string[],
-              format: ContentType,
-              formatAttributes: { [key: string ]: string },
-              state: ContentState) {
+  constructor(
+    id: string,
+    revision: string,
+    roomId: string,
+    subject: string,
+    body: string,
+    groups: string[],
+    format: ContentType,
+    formatAttributes: { [key: string]: string },
+    state: ContentState
+  ) {
     this.id = id;
     this.revision = revision;
     this.roomId = roomId;

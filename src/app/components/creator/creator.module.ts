@@ -48,16 +48,13 @@ import { ContentPrioritizationCreationComponent } from './content-creation/conte
     TranslateModule.forChild({
       loader: {
         provide: TranslateLoader,
-        useFactory: (TranslateHttpLoaderFactory),
-        deps: [
-          HttpClient,
-          TRANSLATION_MODULE_NAME
-        ]
+        useFactory: TranslateHttpLoaderFactory,
+        deps: [HttpClient, TRANSLATION_MODULE_NAME],
       },
-      isolate: true
+      isolate: true,
     }),
     CdkStepperModule,
-    ExtensionPointModule
+    ExtensionPointModule,
   ],
   declarations: [
     ContentChoiceCreationComponent,
@@ -85,13 +82,10 @@ import { ContentPrioritizationCreationComponent } from './content-creation/conte
     CreateAnswerOptionComponent,
     ContentPrioritizationCreationComponent,
   ],
-  exports: [
-    ContentPresentationComponent
-  ],
+  exports: [ContentPresentationComponent],
   providers: [
     { provide: TRANSLATION_MODULE_NAME, useValue: 'creator' },
-    DialogService
-  ]
+    DialogService,
+  ],
 })
-export class CreatorModule {
-}
+export class CreatorModule {}

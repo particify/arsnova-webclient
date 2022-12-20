@@ -1,6 +1,10 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { PasswordResetComponent } from './password-reset.component';
-import { ActivatedRoute, ActivatedRouteSnapshot, Router } from '@angular/router';
+import {
+  ActivatedRoute,
+  ActivatedRouteSnapshot,
+  Router,
+} from '@angular/router';
 import { EventService } from '@arsnova/app/services/util/event.service';
 import { NotificationService } from '@arsnova/app/services/util/notification.service';
 import {
@@ -8,7 +12,7 @@ import {
   MockEventService,
   MockNotificationService,
   MockRouter,
-  JsonTranslationLoader
+  JsonTranslationLoader,
 } from '@arsnova/testing/test-helpers';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { UserService } from '@arsnova/app/services/http/user.service';
@@ -23,49 +27,46 @@ describe('PasswordResetComponent', () => {
 
   const snapshot = new ActivatedRouteSnapshot();
 
-  snapshot.params = of([{email: 'a@b.cd'}]);
+  snapshot.params = of([{ email: 'a@b.cd' }]);
 
   const activatedRouteStub = new ActivatedRouteStub(null, null, snapshot);
 
-  beforeEach(async() => {
+  beforeEach(async () => {
     TestBed.configureTestingModule({
-      declarations: [ PasswordResetComponent ],
+      declarations: [PasswordResetComponent],
       imports: [
         TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
-            useClass: JsonTranslationLoader
+            useClass: JsonTranslationLoader,
           },
-          isolate: true
-        })
+          isolate: true,
+        }),
       ],
       providers: [
         {
           provide: UserService,
-          useValue: mockUserService
+          useValue: mockUserService,
         },
         {
           provide: Router,
-          useClass: MockRouter
+          useClass: MockRouter,
         },
         {
           provide: NotificationService,
-          useClass: MockNotificationService
+          useClass: MockNotificationService,
         },
         {
           provide: EventService,
-          useClass: MockEventService
+          useClass: MockEventService,
         },
         {
           provide: ActivatedRoute,
-          useValue: activatedRouteStub
-        }
+          useValue: activatedRouteStub,
+        },
       ],
-      schemas: [
-        NO_ERRORS_SCHEMA
-      ]
-    })
-    .compileComponents();
+      schemas: [NO_ERRORS_SCHEMA],
+    }).compileComponents();
     fixture = TestBed.createComponent(PasswordResetComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

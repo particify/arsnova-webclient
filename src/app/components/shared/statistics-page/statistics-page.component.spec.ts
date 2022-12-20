@@ -1,7 +1,15 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { StatisticsPageComponent } from './statistics-page.component';
-import { ActivatedRoute, ActivatedRouteSnapshot, Router } from '@angular/router';
-import { MockRouter, ActivatedRouteStub, JsonTranslationLoader } from '@arsnova/testing/test-helpers';
+import {
+  ActivatedRoute,
+  ActivatedRouteSnapshot,
+  Router,
+} from '@angular/router';
+import {
+  MockRouter,
+  ActivatedRouteStub,
+  JsonTranslationLoader,
+} from '@arsnova/testing/test-helpers';
 import { ContentGroupService } from '@arsnova/app/services/http/content-group.service';
 import { RoomStatsService } from '@arsnova/app/services/http/room-stats.service';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
@@ -16,56 +24,52 @@ describe('StatisticsPageComponent', () => {
 
   const mockRoomStatsService = jasmine.createSpyObj(['getStats']);
   const stats = new RoomStats([], 0, 0, 0, 0);
-  mockRoomStatsService.getStats.and.returnValue(of(stats))
+  mockRoomStatsService.getStats.and.returnValue(of(stats));
 
   const mockContentGroupService = jasmine.createSpyObj(['getById']);
   mockContentGroupService.getById.and.returnValue(of({}));
 
   const data = {
-    room: new Room()
-  }
+    room: new Room(),
+  };
   const snapshot = new ActivatedRouteSnapshot();
   snapshot.params = {
-    seriesName: 'Quiz'
-  }
+    seriesName: 'Quiz',
+  };
   const activatedRouteStub = new ActivatedRouteStub(null, data, snapshot);
-
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ StatisticsPageComponent ],
+      declarations: [StatisticsPageComponent],
       imports: [
         TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
-            useClass: JsonTranslationLoader
+            useClass: JsonTranslationLoader,
           },
-          isolate: true
-        })
+          isolate: true,
+        }),
       ],
       providers: [
         {
           provide: RoomStatsService,
-          useValue: mockRoomStatsService
+          useValue: mockRoomStatsService,
         },
         {
           provide: ContentGroupService,
-          useValue: mockContentGroupService
+          useValue: mockContentGroupService,
         },
         {
           provide: ActivatedRoute,
-          useValue: activatedRouteStub
+          useValue: activatedRouteStub,
         },
         {
           provide: Router,
-          useClass: MockRouter
-        }
+          useClass: MockRouter,
+        },
       ],
-      schemas: [
-        NO_ERRORS_SCHEMA
-      ]
-    })
-    .compileComponents();
+      schemas: [NO_ERRORS_SCHEMA],
+    }).compileComponents();
   }));
 
   beforeEach(() => {

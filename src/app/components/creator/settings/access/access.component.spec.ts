@@ -4,7 +4,7 @@ import { AccessComponent } from './access.component';
 import {
   JsonTranslationLoader,
   MockEventService,
-  MockLangService
+  MockLangService,
 } from '@arsnova/testing/test-helpers';
 import { NotificationService } from '@arsnova/app/services/util/notification.service';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
@@ -33,23 +33,47 @@ describe('AccessComponent', () => {
   let component: AccessComponent;
   let fixture: ComponentFixture<AccessComponent>;
 
-  const mockDialogService = jasmine.createSpyObj('DialogService', ['openDeleteDialog']);
+  const mockDialogService = jasmine.createSpyObj('DialogService', [
+    'openDeleteDialog',
+  ]);
 
-  const mockModeratorService = jasmine.createSpyObj('ModeratorService', ['get', 'add', 'delete']);
-  mockModeratorService.get.and.returnValue(of([new Moderator('1111', 'a@b.cd', UserRole.CREATOR)]));
+  const mockModeratorService = jasmine.createSpyObj('ModeratorService', [
+    'get',
+    'add',
+    'delete',
+  ]);
+  mockModeratorService.get.and.returnValue(
+    of([new Moderator('1111', 'a@b.cd', UserRole.CREATOR)])
+  );
   mockModeratorService.add.and.returnValue(of({}));
 
-  const mockUserService = jasmine.createSpyObj('UserService', ['getUserData', 'getUserByLoginId']);
-  mockUserService.getUserData.and.returnValue(of([new User('1111', 'a@b.cd', AuthProvider.ARSNOVA, '0', new Person())]));
+  const mockUserService = jasmine.createSpyObj('UserService', [
+    'getUserData',
+    'getUserByLoginId',
+  ]);
+  mockUserService.getUserData.and.returnValue(
+    of([new User('1111', 'a@b.cd', AuthProvider.ARSNOVA, '0', new Person())])
+  );
 
-  const mockAuthenticationService = jasmine.createSpyObj('AuthenticationService', ['getCurrentAuthentication', 'isLoginIdEmailAddress']);
-  mockAuthenticationService.getCurrentAuthentication.and.returnValue(of(new ClientAuthentication('1111', 'a@b.cd', AuthProvider.ARSNOVA, 'token')));
+  const mockAuthenticationService = jasmine.createSpyObj(
+    'AuthenticationService',
+    ['getCurrentAuthentication', 'isLoginIdEmailAddress']
+  );
+  mockAuthenticationService.getCurrentAuthentication.and.returnValue(
+    of(
+      new ClientAuthentication('1111', 'a@b.cd', AuthProvider.ARSNOVA, 'token')
+    )
+  );
   mockAuthenticationService.isLoginIdEmailAddress.and.returnValue(of(true));
 
-  const mockAccessTokenService = jasmine.createSpyObj('AccessTokenService', ['invite']);
+  const mockAccessTokenService = jasmine.createSpyObj('AccessTokenService', [
+    'invite',
+  ]);
   mockAccessTokenService.invite.and.returnValue(of({}));
 
-  const mockNotificationService = jasmine.createSpyObj('NotificationService', ['showAdvanced']);
+  const mockNotificationService = jasmine.createSpyObj('NotificationService', [
+    'showAdvanced',
+  ]);
 
   let loader: HarnessLoader;
 
@@ -57,83 +81,106 @@ describe('AccessComponent', () => {
 
   beforeEach(async () => {
     TestBed.configureTestingModule({
-      declarations: [ AccessComponent ],
+      declarations: [AccessComponent],
       providers: [
         {
           provide: NotificationService,
-          useValue: mockNotificationService
+          useValue: mockNotificationService,
         },
         {
           provide: ModeratorService,
-          useValue: mockModeratorService
+          useValue: mockModeratorService,
         },
         {
           provide: DialogService,
-          useValue: mockDialogService
+          useValue: mockDialogService,
         },
         {
           provide: EventService,
-          useClass: MockEventService
+          useClass: MockEventService,
         },
         {
           provide: UserService,
-          useValue: mockUserService
+          useValue: mockUserService,
         },
         {
           provide: AuthenticationService,
-          useValue: mockAuthenticationService
+          useValue: mockAuthenticationService,
         },
         {
           provide: LanguageService,
-          useClass: MockLangService
+          useClass: MockLangService,
         },
         {
           provide: AccessTokenService,
-          useValue: mockAccessTokenService
-        }
+          useValue: mockAccessTokenService,
+        },
       ],
       imports: [
         TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
-            useClass: JsonTranslationLoader
+            useClass: JsonTranslationLoader,
           },
-          isolate: true
-        })
+          isolate: true,
+        }),
       ],
-      schemas: [
-        NO_ERRORS_SCHEMA
-      ]
-    })
-    .compileComponents();
+      schemas: [NO_ERRORS_SCHEMA],
+    }).compileComponents();
   });
 
   it('should create', async () => {
     fixture = TestBed.createComponent(AccessComponent);
     component = fixture.componentInstance;
-    component.room = new Room('1234', 'shortId', 'abbreviation', 'name', 'description');
+    component.room = new Room(
+      '1234',
+      'shortId',
+      'abbreviation',
+      'name',
+      'description'
+    );
     loader = TestbedHarnessEnvironment.loader(fixture);
-    addButton = await loader.getHarness(MatButtonHarness.with({selector: '#add-button'}));
+    addButton = await loader.getHarness(
+      MatButtonHarness.with({ selector: '#add-button' })
+    );
     expect(component).toBeTruthy();
   });
 
   it('should be able to load add button', async () => {
     fixture = TestBed.createComponent(AccessComponent);
     component = fixture.componentInstance;
-    component.room = new Room('1234', 'shortId', 'abbreviation', 'name', 'description');
+    component.room = new Room(
+      '1234',
+      'shortId',
+      'abbreviation',
+      'name',
+      'description'
+    );
     loader = TestbedHarnessEnvironment.loader(fixture);
-    addButton = await loader.getHarness(MatButtonHarness.with({selector: '#add-button'}));
+    addButton = await loader.getHarness(
+      MatButtonHarness.with({ selector: '#add-button' })
+    );
     expect(addButton).not.toBeNull();
   });
 
   it('should add moderator to room if user was found with entered login id', async () => {
     mockAuthenticationService.isLoginIdEmailAddress.and.returnValue(of(true));
-    mockUserService.getUserByLoginId.and.returnValue(of([new User('2222', 'b@b.cd', AuthProvider.ARSNOVA, '0', new Person())]));
+    mockUserService.getUserByLoginId.and.returnValue(
+      of([new User('2222', 'b@b.cd', AuthProvider.ARSNOVA, '0', new Person())])
+    );
     fixture = TestBed.createComponent(AccessComponent);
     component = fixture.componentInstance;
-    component.room = new Room('1234', 'shortId', 'abbreviation', 'name', 'description');
+    component.room = new Room(
+      '1234',
+      'shortId',
+      'abbreviation',
+      'name',
+      'description'
+    );
     loader = TestbedHarnessEnvironment.loader(fixture);
-    addButton = await loader.getHarness(MatButtonHarness.with({selector: '#add-button'}));
+    addButton = await loader.getHarness(
+      MatButtonHarness.with({ selector: '#add-button' })
+    );
     component.loginId = 'b@a.cd';
     component.getUser();
     fixture.detectChanges();
@@ -146,9 +193,17 @@ describe('AccessComponent', () => {
     mockUserService.getUserByLoginId.and.returnValue(of([]));
     fixture = TestBed.createComponent(AccessComponent);
     component = fixture.componentInstance;
-    component.room = new Room('1234', 'shortId', 'abbreviation', 'name', 'description');
+    component.room = new Room(
+      '1234',
+      'shortId',
+      'abbreviation',
+      'name',
+      'description'
+    );
     loader = TestbedHarnessEnvironment.loader(fixture);
-    addButton = await loader.getHarness(MatButtonHarness.with({selector: '#add-button'}));
+    addButton = await loader.getHarness(
+      MatButtonHarness.with({ selector: '#add-button' })
+    );
     component.loginId = 'b@a.cd';
     component.getUser();
     fixture.detectChanges();
@@ -158,12 +213,22 @@ describe('AccessComponent', () => {
 
   it('should invite moderator to room if user was not found with entered login id after another user was added', async () => {
     mockAuthenticationService.isLoginIdEmailAddress.and.returnValue(of(true));
-    mockUserService.getUserByLoginId.and.returnValue(of([new User('2222', 'b@b.cd', AuthProvider.ARSNOVA, '0', new Person())]));
+    mockUserService.getUserByLoginId.and.returnValue(
+      of([new User('2222', 'b@b.cd', AuthProvider.ARSNOVA, '0', new Person())])
+    );
     fixture = TestBed.createComponent(AccessComponent);
     component = fixture.componentInstance;
-    component.room = new Room('1234', 'shortId', 'abbreviation', 'name', 'description');
+    component.room = new Room(
+      '1234',
+      'shortId',
+      'abbreviation',
+      'name',
+      'description'
+    );
     loader = TestbedHarnessEnvironment.loader(fixture);
-    addButton = await loader.getHarness(MatButtonHarness.with({selector: '#add-button'}));
+    addButton = await loader.getHarness(
+      MatButtonHarness.with({ selector: '#add-button' })
+    );
     component.loginId = 'b@a.cd';
     component.getUser();
     fixture.detectChanges();
@@ -181,12 +246,22 @@ describe('AccessComponent', () => {
 
   it('should show error notification if SSO is used and user was not found with entered login id after another user was added', async () => {
     mockAuthenticationService.isLoginIdEmailAddress.and.returnValue(of(false));
-    mockUserService.getUserByLoginId.and.returnValue(of([new User('2222', 'b@b.cd', AuthProvider.ARSNOVA, '0', new Person())]));
+    mockUserService.getUserByLoginId.and.returnValue(
+      of([new User('2222', 'b@b.cd', AuthProvider.ARSNOVA, '0', new Person())])
+    );
     fixture = TestBed.createComponent(AccessComponent);
     component = fixture.componentInstance;
-    component.room = new Room('1234', 'shortId', 'abbreviation', 'name', 'description');
+    component.room = new Room(
+      '1234',
+      'shortId',
+      'abbreviation',
+      'name',
+      'description'
+    );
     loader = TestbedHarnessEnvironment.loader(fixture);
-    addButton = await loader.getHarness(MatButtonHarness.with({selector: '#add-button'}));
+    addButton = await loader.getHarness(
+      MatButtonHarness.with({ selector: '#add-button' })
+    );
     component.loginId = 'b@a.cd';
     component.getUser();
     fixture.detectChanges();
@@ -199,17 +274,32 @@ describe('AccessComponent', () => {
     fixture.detectChanges();
     component.getUser();
     await addButton.click();
-    expect(mockNotificationService.showAdvanced).toHaveBeenCalledWith(jasmine.any(String), AdvancedSnackBarTypes.FAILED);
+    expect(mockNotificationService.showAdvanced).toHaveBeenCalledWith(
+      jasmine.any(String),
+      AdvancedSnackBarTypes.FAILED
+    );
   });
 
   it('should add moderator to room if SSO is used and user was found with entered username', async () => {
     mockAuthenticationService.isLoginIdEmailAddress.and.returnValue(of(false));
-    mockUserService.getUserByLoginId.and.returnValue(of([new User('3333', 'username', AuthProvider.ARSNOVA, '0', new Person())]));
+    mockUserService.getUserByLoginId.and.returnValue(
+      of([
+        new User('3333', 'username', AuthProvider.ARSNOVA, '0', new Person()),
+      ])
+    );
     fixture = TestBed.createComponent(AccessComponent);
     component = fixture.componentInstance;
-    component.room = new Room('1234', 'shortId', 'abbreviation', 'name', 'description');
+    component.room = new Room(
+      '1234',
+      'shortId',
+      'abbreviation',
+      'name',
+      'description'
+    );
     loader = TestbedHarnessEnvironment.loader(fixture);
-    addButton = await loader.getHarness(MatButtonHarness.with({selector: '#add-button'}));
+    addButton = await loader.getHarness(
+      MatButtonHarness.with({ selector: '#add-button' })
+    );
     component.loginId = 'username';
     component.getUser();
     fixture.detectChanges();
@@ -222,13 +312,24 @@ describe('AccessComponent', () => {
     mockUserService.getUserByLoginId.and.returnValue(of([]));
     fixture = TestBed.createComponent(AccessComponent);
     component = fixture.componentInstance;
-    component.room = new Room('1234', 'shortId', 'abbreviation', 'name', 'description');
+    component.room = new Room(
+      '1234',
+      'shortId',
+      'abbreviation',
+      'name',
+      'description'
+    );
     loader = TestbedHarnessEnvironment.loader(fixture);
-    addButton = await loader.getHarness(MatButtonHarness.with({selector: '#add-button'}));
+    addButton = await loader.getHarness(
+      MatButtonHarness.with({ selector: '#add-button' })
+    );
     component.loginId = 'username';
     component.getUser();
     fixture.detectChanges();
     await addButton.click();
-    expect(mockNotificationService.showAdvanced).toHaveBeenCalledWith(jasmine.any(String), AdvancedSnackBarTypes.FAILED);
+    expect(mockNotificationService.showAdvanced).toHaveBeenCalledWith(
+      jasmine.any(String),
+      AdvancedSnackBarTypes.FAILED
+    );
   });
 });

@@ -7,7 +7,7 @@ import * as localizedFormat from 'dayjs/plugin/localizedFormat';
 export class DateFormatPipe implements PipeTransform {
   transform(date: Date, lang: string): string {
     dayjs.locale(lang);
-    dayjs.extend(localizedFormat)
+    dayjs.extend(localizedFormat);
     return dayjs(date).format('LLLL');
   }
 }

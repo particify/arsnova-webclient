@@ -10,15 +10,21 @@ import { TranslateService } from '@ngx-translate/core';
 import { LanguageService } from '../../../services/util/language.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ContentAnswerService } from '../../../services/http/content-answer.service';
-import { GlobalStorageService, STORAGE_KEYS } from '../../../services/util/global-storage.service';
-import { AdvancedSnackBarTypes, NotificationService } from '../../../services/util/notification.service';
+import {
+  GlobalStorageService,
+  STORAGE_KEYS,
+} from '../../../services/util/global-storage.service';
+import {
+  AdvancedSnackBarTypes,
+  NotificationService,
+} from '../../../services/util/notification.service';
 
 export enum StatisticType {
   CHOICE = 'C',
   SURVEY = 'S',
   TEXT = 'T',
   SLIDE = 'I',
-  FLASHCARD = 'F'
+  FLASHCARD = 'F',
 }
 
 export class ContentStatistic {
@@ -29,7 +35,14 @@ export class ContentStatistic {
   abstentions: number;
   round: number;
 
-  constructor(content: Content, type: StatisticType, percent: number, counts: number, abstentions: number, round: number) {
+  constructor(
+    content: Content,
+    type: StatisticType,
+    percent: number,
+    counts: number,
+    abstentions: number,
+    round: number
+  ) {
     this.content = content;
     this.type = type;
     this.percent = percent;
@@ -42,18 +55,16 @@ export class ContentStatistic {
 @Component({
   selector: 'app-list-statistic',
   templateUrl: './statistic-list.component.html',
-  styleUrls: ['./statistic-list.component.scss']
+  styleUrls: ['./statistic-list.component.scss'],
 })
-
 export class StatisticListComponent implements OnInit {
-
   @Input() contentGroup: ContentGroup;
   displayedColumns: string[] = [];
   status = {
     good: 85,
     okay: 50,
     zero: 0,
-    empty: -1
+    empty: -1,
   };
   types: typeof StatisticType = StatisticType;
   dataSource: ContentStatistic[];
@@ -77,27 +88,46 @@ export class StatisticListComponent implements OnInit {
     private globalStorageService: GlobalStorageService,
     private notificationService: NotificationService
   ) {
-    this.deviceType = this.globalStorageService.getItem(STORAGE_KEYS.DEVICE_TYPE);
-    langService.langEmitter.subscribe(lang => translateService.use(lang));
+    this.deviceType = this.globalStorageService.getItem(
+      STORAGE_KEYS.DEVICE_TYPE
+    );
+    langService.langEmitter.subscribe((lang) => translateService.use(lang));
   }
 
   ngOnInit() {
     this.shortId = this.route.snapshot.params['shortId'];
-    this.translateService.use(this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE));
+    this.translateService.use(
+      this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE)
+    );
     this.getContents();
   }
 
   public getContents() {
     this.isLoading = true;
-    this.contentService.getContentsByIds(this.contentGroup.roomId, this.contentGroup.contentIds, true).subscribe(contents => {
-      this.getData(this.contentService.getSupportedContents(contents));
-    });
+    this.contentService
+      .getContentsByIds(
+        this.contentGroup.roomId,
+        this.contentGroup.contentIds,
+        true
+      )
+      .subscribe((contents) => {
+        this.getData(this.contentService.getSupportedContents(contents));
+      });
   }
 
   goToStats(id: string) {
-    const contentIndex = this.dataSource.map(d => d.content.id).indexOf(id);
-    this.router.navigate(['edit', this.shortId, 'series', this.contentGroup.name, contentIndex + 1]);
-    this.globalStorageService.setItem(STORAGE_KEYS.LAST_GROUP, this.contentGroup.name);
+    const contentIndex = this.dataSource.map((d) => d.content.id).indexOf(id);
+    this.router.navigate([
+      'edit',
+      this.shortId,
+      'series',
+      this.contentGroup.name,
+      contentIndex + 1,
+    ]);
+    this.globalStorageService.setItem(
+      STORAGE_KEYS.LAST_GROUP,
+      this.contentGroup.name
+    );
   }
 
   getData(contents: Content[]) {
@@ -113,49 +143,109 @@ export class StatisticListComponent implements OnInit {
       let type: StatisticType;
       switch (content.format) {
         case ContentType.TEXT:
-          this.contentAnswerService.getAnswers(this.contentGroup.roomId, content.id).subscribe(answers => {
-            abstentions = answers.filter(a => a.body === undefined).length;
-            count = answers.length - abstentions;
-            type = StatisticType.TEXT;
-            this.addNewStatistic(i, new ContentStatistic(content, type, percent, count, abstentions, round));
-          });
+          this.contentAnswerService
+            .getAnswers(this.contentGroup.roomId, content.id)
+            .subscribe((answers) => {
+              abstentions = answers.filter((a) => a.body === undefined).length;
+              count = answers.length - abstentions;
+              type = StatisticType.TEXT;
+              this.addNewStatistic(
+                i,
+                new ContentStatistic(
+                  content,
+                  type,
+                  percent,
+                  count,
+                  abstentions,
+                  round
+                )
+              );
+            });
           break;
         case ContentType.SLIDE:
           abstentions = this.status.empty;
           count = this.status.empty;
           type = StatisticType.SLIDE;
-          this.addNewStatistic(i, new ContentStatistic(content, type, percent, count, abstentions, round));
+          this.addNewStatistic(
+            i,
+            new ContentStatistic(
+              content,
+              type,
+              percent,
+              count,
+              abstentions,
+              round
+            )
+          );
           break;
         case ContentType.FLASHCARD:
           abstentions = this.status.empty;
           count = this.status.empty;
           type = StatisticType.FLASHCARD;
-          this.addNewStatistic(i, new ContentStatistic(content, type, percent, count, abstentions, round));
+          this.addNewStatistic(
+            i,
+            new ContentStatistic(
+              content,
+              type,
+              percent,
+              count,
+              abstentions,
+              round
+            )
+          );
           break;
         default:
-          this.contentService.getAnswer(this.contentGroup.roomId, content.id).subscribe(answer => {
-            if (content.format === ContentType.CHOICE) {
-              percent = this.evaluateMultiple((content as ContentChoice).correctOptionIndexes, answer.roundStatistics[round - 1].combinatedCounts);
-              count = this.getMultipleCounts(answer.roundStatistics[round - 1].combinatedCounts);
-            } else if (content.format === ContentType.SORT) {
-              count = this.getMultipleCounts(answer.roundStatistics[round - 1].combinatedCounts);
-              percent = this.evaluateSort((content as ContentChoice).options, answer.roundStatistics[round - 1].combinatedCounts, count);
-            } else {
-              if (content.format === ContentType.BINARY) {
-                percent = this.evaluateSingle((content as ContentChoice).correctOptionIndexes, answer.roundStatistics[round - 1].independentCounts);
+          this.contentService
+            .getAnswer(this.contentGroup.roomId, content.id)
+            .subscribe((answer) => {
+              if (content.format === ContentType.CHOICE) {
+                percent = this.evaluateMultiple(
+                  (content as ContentChoice).correctOptionIndexes,
+                  answer.roundStatistics[round - 1].combinatedCounts
+                );
+                count = this.getMultipleCounts(
+                  answer.roundStatistics[round - 1].combinatedCounts
+                );
+              } else if (content.format === ContentType.SORT) {
+                count = this.getMultipleCounts(
+                  answer.roundStatistics[round - 1].combinatedCounts
+                );
+                percent = this.evaluateSort(
+                  (content as ContentChoice).options,
+                  answer.roundStatistics[round - 1].combinatedCounts,
+                  count
+                );
+              } else {
+                if (content.format === ContentType.BINARY) {
+                  percent = this.evaluateSingle(
+                    (content as ContentChoice).correctOptionIndexes,
+                    answer.roundStatistics[round - 1].independentCounts
+                  );
+                }
+                count = this.getSingleCounts(
+                  answer.roundStatistics[round - 1].independentCounts
+                );
               }
-              count = this.getSingleCounts(answer.roundStatistics[round - 1].independentCounts);
-            }
-            abstentions = answer.roundStatistics[round - 1].abstentionCount;
-            if (percent > this.status.empty) {
-              type = StatisticType.CHOICE;
-              this.totalP += percent;
-              this.total = this.totalP / this.contentCounter;
-            } else {
-              type = StatisticType.SURVEY;
-            }
-            this.addNewStatistic(i, new ContentStatistic(content, type, percent, count, abstentions, round));
-          });
+              abstentions = answer.roundStatistics[round - 1].abstentionCount;
+              if (percent > this.status.empty) {
+                type = StatisticType.CHOICE;
+                this.totalP += percent;
+                this.total = this.totalP / this.contentCounter;
+              } else {
+                type = StatisticType.SURVEY;
+              }
+              this.addNewStatistic(
+                i,
+                new ContentStatistic(
+                  content,
+                  type,
+                  percent,
+                  count,
+                  abstentions,
+                  round
+                )
+              );
+            });
       }
       if (round > 1) {
         this.multipleRounds = true;
@@ -171,15 +261,28 @@ export class StatisticListComponent implements OnInit {
   checkIfLoadingFinished() {
     this.statisticsAdded++;
     if (this.statisticsAdded === this.statsLength) {
-      this.displayedColumns = ['content', 'round', 'counts', 'abstentions', 'percentage'];
+      this.displayedColumns = [
+        'content',
+        'round',
+        'counts',
+        'abstentions',
+        'percentage',
+      ];
       if (this.total < this.status.zero) {
         this.displayedColumns.pop();
       }
       if (!this.multipleRounds || this.deviceType !== 'desktop') {
-        this.displayedColumns = this.displayedColumns.filter(d => d !== 'round');
+        this.displayedColumns = this.displayedColumns.filter(
+          (d) => d !== 'round'
+        );
       }
-      if (this.dataSource.filter(d => d.abstentions > 0).length === 0 || this.deviceType !== 'desktop') {
-        this.displayedColumns = this.displayedColumns.filter(d => d !== 'abstentions');
+      if (
+        this.dataSource.filter((d) => d.abstentions > 0).length === 0 ||
+        this.deviceType !== 'desktop'
+      ) {
+        this.displayedColumns = this.displayedColumns.filter(
+          (d) => d !== 'abstentions'
+        );
       }
       this.isLoading = false;
     }
@@ -210,7 +313,6 @@ export class StatisticListComponent implements OnInit {
   }
 
   evaluateSingle(correctOptionIndexes: number[], indCounts: number[]): number {
-
     if (this.checkIfSurvey(correctOptionIndexes)) {
       let correctCounts = 0;
       let totalCounts = 0;
@@ -222,7 +324,7 @@ export class StatisticListComponent implements OnInit {
         totalCounts += indCounts[i];
       }
       if (totalCounts) {
-        res = ((correctCounts / totalCounts) * 100);
+        res = (correctCounts / totalCounts) * 100;
         this.contentCounter++;
       } else {
         res = this.status.empty;
@@ -233,13 +335,19 @@ export class StatisticListComponent implements OnInit {
     }
   }
 
-  evaluateMultiple(correctOptionIndexes: number[], combCounts?: Combination[]): number {
+  evaluateMultiple(
+    correctOptionIndexes: number[],
+    combCounts?: Combination[]
+  ): number {
     if (combCounts && this.checkIfSurvey(correctOptionIndexes)) {
       let correctCounts = 0;
       let totalCounts = 0;
       for (let i = 0; i < combCounts.length; i++) {
         const counts = combCounts[i].count;
-        if (correctOptionIndexes.sort().toString() === combCounts[i].selectedChoiceIndexes.sort().toString()) {
+        if (
+          correctOptionIndexes.sort().toString() ===
+          combCounts[i].selectedChoiceIndexes.sort().toString()
+        ) {
           correctCounts = counts;
         }
         totalCounts += counts;
@@ -251,10 +359,18 @@ export class StatisticListComponent implements OnInit {
     }
   }
 
-  evaluateSort(options: AnswerOption[], combCounts: Combination[], total: number): number {
+  evaluateSort(
+    options: AnswerOption[],
+    combCounts: Combination[],
+    total: number
+  ): number {
     if (combCounts) {
-      const correctIndexes = options.map(o => o.label).map(l => options.map(o => o.label).indexOf(l));
-      const answeredCorrect = combCounts.filter(c => c.selectedChoiceIndexes.toString() === correctIndexes.toString());
+      const correctIndexes = options
+        .map((o) => o.label)
+        .map((l) => options.map((o) => o.label).indexOf(l));
+      const answeredCorrect = combCounts.filter(
+        (c) => c.selectedChoiceIndexes.toString() === correctIndexes.toString()
+      );
       let correctCount = 0;
       if (answeredCorrect.length > 0) {
         correctCount = answeredCorrect[0].count;
@@ -280,11 +396,18 @@ export class StatisticListComponent implements OnInit {
   }
 
   deleteAllAnswers() {
-    this.contentService.showDeleteAllAnswersDialog(this.contentGroup).subscribe(() => {
-      this.resetAllAnswers();
-      this.translateService.get('content.all-answers-deleted').subscribe(msg => {
-        this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
+    this.contentService
+      .showDeleteAllAnswersDialog(this.contentGroup)
+      .subscribe(() => {
+        this.resetAllAnswers();
+        this.translateService
+          .get('content.all-answers-deleted')
+          .subscribe((msg) => {
+            this.notificationService.showAdvanced(
+              msg,
+              AdvancedSnackBarTypes.WARNING
+            );
+          });
       });
-    });
   }
 }

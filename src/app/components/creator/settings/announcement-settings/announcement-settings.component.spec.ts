@@ -3,7 +3,10 @@ import { AnnouncementService } from '@arsnova/app/services/http/announcement.ser
 import { DialogService } from '@arsnova/app/services/util/dialog.service';
 import { NotificationService } from '@arsnova/app/services/util/notification.service';
 import { Room } from '@arsnova/app/models/room';
-import { MockNotificationService, JsonTranslationLoader } from '@arsnova/testing/test-helpers';
+import {
+  MockNotificationService,
+  JsonTranslationLoader,
+} from '@arsnova/testing/test-helpers';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 
 import { AnnouncementSettingsComponent } from './announcement-settings.component';
@@ -14,42 +17,46 @@ describe('AnnouncementSettingsComponent', () => {
   let component: AnnouncementSettingsComponent;
   let fixture: ComponentFixture<AnnouncementSettingsComponent>;
 
-  const announcementService = jasmine.createSpyObj('AnnouncementService', ['getByRoomId', 'delete', 'update', 'add']);
+  const announcementService = jasmine.createSpyObj('AnnouncementService', [
+    'getByRoomId',
+    'delete',
+    'update',
+    'add',
+  ]);
   announcementService.getByRoomId.and.returnValue(of([]));
 
-  const dialogService = jasmine.createSpyObj('DialogService', ['openDeleteDialog'])
+  const dialogService = jasmine.createSpyObj('DialogService', [
+    'openDeleteDialog',
+  ]);
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ AnnouncementSettingsComponent ],
+      declarations: [AnnouncementSettingsComponent],
       providers: [
         {
           provide: NotificationService,
-          useClass: MockNotificationService
+          useClass: MockNotificationService,
         },
         {
           provide: AnnouncementService,
-          useValue: announcementService
+          useValue: announcementService,
         },
         {
           provide: DialogService,
-          useValue: dialogService
-        }
+          useValue: dialogService,
+        },
       ],
       imports: [
         TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
-            useClass: JsonTranslationLoader
+            useClass: JsonTranslationLoader,
           },
-          isolate: true
-        })
+          isolate: true,
+        }),
       ],
-      schemas: [
-        NO_ERRORS_SCHEMA
-      ]
-    })
-    .compileComponents();
+      schemas: [NO_ERRORS_SCHEMA],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(AnnouncementSettingsComponent);
     component = fixture.componentInstance;

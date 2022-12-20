@@ -7,19 +7,21 @@ import {
   MockEventService,
   MockNotificationService,
   MockRouter,
-  MockTranslateService
+  MockTranslateService,
 } from '@arsnova/testing/test-helpers';
 import { TranslateService } from '@ngx-translate/core';
 import { NotificationService } from '@arsnova/app/services/util/notification.service';
 import { WsConnectorService } from '@arsnova/app/services/websockets/ws-connector.service';
-import { Cache, CachingService } from '@arsnova/app/services/util/caching.service';
+import {
+  Cache,
+  CachingService,
+} from '@arsnova/app/services/util/caching.service';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { DialogService } from '@arsnova/app/services/util/dialog.service';
 
 @Injectable()
-class MockWsConnectorService {
-}
+class MockWsConnectorService {}
 
 @Injectable()
 class MockCachingService {
@@ -29,8 +31,7 @@ class MockCachingService {
 }
 
 @Injectable()
-class MockDialogService {
-}
+class MockDialogService {}
 
 describe('ContentService', () => {
   beforeEach(() => {
@@ -39,40 +40,41 @@ describe('ContentService', () => {
         ContentService,
         {
           provide: EventService,
-          useClass: MockEventService
+          useClass: MockEventService,
         },
         {
           provide: TranslateService,
-          useClass: MockTranslateService
+          useClass: MockTranslateService,
         },
         {
           provide: NotificationService,
-          useClass: MockNotificationService
+          useClass: MockNotificationService,
         },
         {
           provide: WsConnectorService,
-          useClass: MockWsConnectorService
+          useClass: MockWsConnectorService,
         },
         {
           provide: CachingService,
-          useClass: MockCachingService
+          useClass: MockCachingService,
         },
         {
           provide: Router,
-          useClass: MockRouter
+          useClass: MockRouter,
         },
         {
           provide: DialogService,
-          useClass: MockDialogService
-        }
+          useClass: MockDialogService,
+        },
       ],
-      imports: [
-        HttpClientTestingModule
-      ]
+      imports: [HttpClientTestingModule],
     });
   });
 
-  it('should be created', inject([ContentService], (service: ContentService) => {
-    expect(service).toBeTruthy();
-  }));
+  it('should be created', inject(
+    [ContentService],
+    (service: ContentService) => {
+      expect(service).toBeTruthy();
+    }
+  ));
 });

@@ -6,13 +6,26 @@ import { EventService } from '../../../services/util/event.service';
 import { RoomMembershipService } from '../../../services/room-membership.service';
 import { AuthenticationService } from '../../../services/http/authentication.service';
 import { Observable, of, Subject, Subscription, zip } from 'rxjs';
-import { AdvancedSnackBarTypes, NotificationService } from '../../../services/util/notification.service';
+import {
+  AdvancedSnackBarTypes,
+  NotificationService,
+} from '../../../services/util/notification.service';
 import { TranslateService } from '@ngx-translate/core';
 import { Router } from '@angular/router';
 import { DialogService } from '../../../services/util/dialog.service';
-import { GlobalStorageService, STORAGE_KEYS } from '../../../services/util/global-storage.service';
+import {
+  GlobalStorageService,
+  STORAGE_KEYS,
+} from '../../../services/util/global-storage.service';
 import { Membership } from '../../../models/membership';
-import { filter, map, shareReplay, switchMap, takeUntil, tap } from 'rxjs/operators';
+import {
+  filter,
+  map,
+  shareReplay,
+  switchMap,
+  takeUntil,
+  tap,
+} from 'rxjs/operators';
 import { RoomSummary } from '../../../models/room-summary';
 import { RoomDeleted } from '../../../models/events/room-deleted';
 import { AuthProvider } from '../../../models/auth-provider';
@@ -32,7 +45,7 @@ interface RoomDataView {
 @Component({
   selector: 'app-room-list',
   templateUrl: './room-list.component.html',
-  styleUrls: ['./room-list.component.scss']
+  styleUrls: ['./room-list.component.scss'],
 })
 export class RoomListComponent implements OnInit, OnDestroy {
   @Input() auth: ClientAuthentication;
@@ -67,22 +80,28 @@ export class RoomListComponent implements OnInit, OnDestroy {
     private globalStorageService: GlobalStorageService,
     private extensionFactory: ExtensionFactory,
     private routingService: RoutingService
-  ) {
-  }
+  ) {}
 
   ngOnInit() {
-    this.guestAuth$ = this.authenticationService.fetchGuestAuthentication().pipe(shareReplay());
+    this.guestAuth$ = this.authenticationService
+      .fetchGuestAuthentication()
+      .pipe(shareReplay());
     this.loadRoomDataViews();
     if (this.auth.authProvider === AuthProvider.ARSNOVA_GUEST) {
       this.isGuest = true;
     } else {
-      this.showGuestAccountControls = !!this.authenticationService.getGuestToken();
+      this.showGuestAccountControls =
+        !!this.authenticationService.getGuestToken();
     }
-    this.showImportMenu = this.showGuestAccountControls || !!this.extensionFactory.getExtension('import-token');
-    this.sub = this.eventService.on<any>('RoomDeleted').subscribe(payload => {
-      this.rooms = this.rooms.filter(r => r.summary.id !== payload.id);
+    this.showImportMenu =
+      this.showGuestAccountControls ||
+      !!this.extensionFactory.getExtension('import-token');
+    this.sub = this.eventService.on<any>('RoomDeleted').subscribe((payload) => {
+      this.rooms = this.rooms.filter((r) => r.summary.id !== payload.id);
     });
-    this.deviceType = this.globalStorageService.getItem(STORAGE_KEYS.DEVICE_TYPE);
+    this.deviceType = this.globalStorageService.getItem(
+      STORAGE_KEYS.DEVICE_TYPE
+    );
     const roleKeys = [
       'room-list.a11y-participant-role',
       'room-list.a11y-executive-moderator-role',
@@ -93,7 +112,7 @@ export class RoomListComponent implements OnInit, OnDestroy {
       UserRole.PARTICIPANT,
       UserRole.EXECUTIVE_MODERATOR,
       UserRole.EDITING_MODERATOR,
-      UserRole.CREATOR
+      UserRole.CREATOR,
     ];
     this.translateService.get(roleKeys).subscribe(() => {
       for (let i = 0; i < roleKeys.length; i++) {
@@ -111,68 +130,86 @@ export class RoomListComponent implements OnInit, OnDestroy {
   }
 
   loadRoomDataViews() {
-    this.getRoomDataViews().pipe(takeUntil(this.unsubscribe$)).subscribe(roomDataViews => this.updateRoomList(roomDataViews));
+    this.getRoomDataViews()
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((roomDataViews) => this.updateRoomList(roomDataViews));
   }
 
   getRoomDataViews(): Observable<RoomDataView[]> {
-    const memberships$ = this.roomMembershipService.getMembershipChanges().pipe(filter(m => m !== null));
+    const memberships$ = this.roomMembershipService
+      .getMembershipChanges()
+      .pipe(filter((m) => m !== null));
     return this.createRoomDataViewsFromMemberships(memberships$);
   }
 
   getGuestRooms() {
-    this.getRoomDataViewsForGuest().subscribe(guestRooms => {
+    this.getRoomDataViewsForGuest().subscribe((guestRooms) => {
       if (guestRooms && guestRooms.length > 0) {
         this.roomsFromGuest = guestRooms;
         this.showRoomsFromGuest = true;
         setTimeout(() => {
-          document.getElementById('guest-rooms').scrollIntoView({ behavior: 'smooth' });
+          document
+            .getElementById('guest-rooms')
+            .scrollIntoView({ behavior: 'smooth' });
         }, 50);
       } else if (this.isLoading) {
-        this.translateService.get('room-list.transfer-no-rooms').subscribe(msg => {
-          this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
-        });
+        this.translateService
+          .get('room-list.transfer-no-rooms')
+          .subscribe((msg) => {
+            this.notificationService.showAdvanced(
+              msg,
+              AdvancedSnackBarTypes.WARNING
+            );
+          });
       }
     });
   }
 
   getRoomDataViewsForGuest(): Observable<RoomDataView[]> {
     const memberships$ = this.guestAuth$.pipe(
-        switchMap(auth => {
-          return this.roomMembershipService.getMembershipsForAuthentication(auth);
-        }),
-        map(memberships => {
-          const ids = this.rooms.map(r => r.membership.roomId);
-          return memberships.filter(m => ids.indexOf(m.roomId) === -1);
-        }),
-        shareReplay()
+      switchMap((auth) => {
+        return this.roomMembershipService.getMembershipsForAuthentication(auth);
+      }),
+      map((memberships) => {
+        const ids = this.rooms.map((r) => r.membership.roomId);
+        return memberships.filter((m) => ids.indexOf(m.roomId) === -1);
+      }),
+      shareReplay()
     );
 
     return this.createRoomDataViewsFromMemberships(memberships$);
   }
 
-  private createRoomDataViewsFromMemberships(memberships$: Observable<Membership[]>) {
+  private createRoomDataViewsFromMemberships(
+    memberships$: Observable<Membership[]>
+  ) {
     const roomIds$ = memberships$.pipe(
-        map(memberships => memberships.map(membership => membership.roomId))
+      map((memberships) => memberships.map((membership) => membership.roomId))
     );
     const roomSummaries$ = roomIds$.pipe(
-        switchMap(ids => ids.length > 0 ? this.roomService.getRoomSummaries(ids) : of([]))
+      switchMap((ids) =>
+        ids.length > 0 ? this.roomService.getRoomSummaries(ids) : of([])
+      )
     );
 
     return zip(memberships$, roomSummaries$).pipe(
-        map((result) => {
-          return result[0].map(membership => {
-            return {
-              membership: membership,
-              summary: result[1].filter(summary => summary.id === membership.roomId)[0],
-              transferred: false
-            };
-          });
-        }));
+      map((result) => {
+        return result[0].map((membership) => {
+          return {
+            membership: membership,
+            summary: result[1].filter(
+              (summary) => summary.id === membership.roomId
+            )[0],
+            transferred: false,
+          };
+        });
+      })
+    );
   }
 
   updateRoomList(rooms: RoomDataView[]) {
     this.rooms = rooms;
-    this.roomIds = rooms.map(r => r.summary.id);
+    this.roomIds = rooms.map((r) => r.summary.id);
     this.setDisplayedRooms(this.rooms);
     this.showGuestRooms();
     this.isLoading = false;
@@ -197,8 +234,12 @@ export class RoomListComponent implements OnInit, OnDestroy {
 
   openDeleteRoomDialog(room: RoomDataView) {
     if (room.membership.roles.indexOf(UserRole.CREATOR) === -1) {
-      const dialogRef = this.dialogService.openDeleteDialog('room-membership', 'really-cancel-room-membership', room.summary.name);
-      dialogRef.afterClosed().subscribe(result => {
+      const dialogRef = this.dialogService.openDeleteDialog(
+        'room-membership',
+        'really-cancel-room-membership',
+        room.summary.name
+      );
+      dialogRef.afterClosed().subscribe((result) => {
         if (result === 'delete') {
           this.cancelMembership(room);
         } else {
@@ -206,25 +247,29 @@ export class RoomListComponent implements OnInit, OnDestroy {
         }
       });
     } else {
-      const dialogRef = this.dialogService.openDeleteDialog('room', 'really-delete-room', room.summary.name);
-      dialogRef.afterClosed().subscribe(result => {
+      const dialogRef = this.dialogService.openDeleteDialog(
+        'room',
+        'really-delete-room',
+        room.summary.name
+      );
+      dialogRef.afterClosed().subscribe((result) => {
         if (result === 'delete') {
           this.deleteRoom(room);
         } else {
           this.roomDeletionCanceled();
         }
       });
-      }
+    }
   }
 
   roomDeletionCanceled() {
-    this.translateService.get('room-list.canceled-remove').subscribe(msg => {
+    this.translateService.get('room-list.canceled-remove').subscribe((msg) => {
       this.notificationService.show(msg);
     });
   }
 
   removeRoomFromList(room: RoomDataView) {
-    this.rooms = this.rooms.filter(r => r.summary.id !== room.summary.id);
+    this.rooms = this.rooms.filter((r) => r.summary.id !== room.summary.id);
     this.setDisplayedRooms(this.rooms);
   }
 
@@ -244,14 +289,22 @@ export class RoomListComponent implements OnInit, OnDestroy {
   }
 
   private sortByTime(a: RoomDataView, b: RoomDataView) {
-    return new Date(b.membership.lastVisit).getTime() - new Date(a.membership.lastVisit).getTime()
+    return (
+      new Date(b.membership.lastVisit).getTime() -
+      new Date(a.membership.lastVisit).getTime()
+    );
   }
 
   deleteRoom(room: RoomDataView) {
     this.roomService.deleteRoom(room.summary.id).subscribe(() => {
-      this.translateService.get('room-list.room-successfully-deleted').subscribe(msg => {
-        this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
-      });
+      this.translateService
+        .get('room-list.room-successfully-deleted')
+        .subscribe((msg) => {
+          this.notificationService.showAdvanced(
+            msg,
+            AdvancedSnackBarTypes.WARNING
+          );
+        });
       const event = new RoomDeleted(room.summary.id);
       this.eventService.broadcast(event.type, event.payload);
       this.removeRoomFromList(room);
@@ -259,12 +312,19 @@ export class RoomListComponent implements OnInit, OnDestroy {
   }
 
   cancelMembership(room: RoomDataView) {
-    this.roomMembershipService.cancelMembership(room.summary.shortId).subscribe(() => {
-      this.translateService.get('room-list.room-successfully-removed').subscribe(msg => {
-        this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
+    this.roomMembershipService
+      .cancelMembership(room.summary.shortId)
+      .subscribe(() => {
+        this.translateService
+          .get('room-list.room-successfully-removed')
+          .subscribe((msg) => {
+            this.notificationService.showAdvanced(
+              msg,
+              AdvancedSnackBarTypes.WARNING
+            );
+          });
+        this.removeRoomFromList(room);
       });
-      this.removeRoomFromList(room);
-    });
   }
 
   roleToString(role: UserRole): string {
@@ -273,7 +333,11 @@ export class RoomListComponent implements OnInit, OnDestroy {
 
   filterRooms(search: string) {
     if (search.length > 0) {
-      this.setDisplayedRooms(this.rooms.filter(room => room.summary.name.toLowerCase().includes(search.toLowerCase())));
+      this.setDisplayedRooms(
+        this.rooms.filter((room) =>
+          room.summary.name.toLowerCase().includes(search.toLowerCase())
+        )
+      );
     } else {
       this.setDisplayedRooms(this.rooms);
     }
@@ -283,32 +347,60 @@ export class RoomListComponent implements OnInit, OnDestroy {
     roomDataView.transferred = true;
     const event = new MembershipsChanged();
     this.eventService.broadcast(event.type, event.payload);
-    if (this.roomsFromGuest.filter(room => !room.transferred).length === 0) {
+    if (this.roomsFromGuest.filter((room) => !room.transferred).length === 0) {
       this.showRoomsFromGuest = false;
     }
   }
 
   transferRoomFromGuest(roomDataView: RoomDataView) {
-    this.guestAuth$.pipe(
-        switchMap(auth => this.roomService.transferRoomThroughToken(roomDataView.membership.roomId, auth.token)),
-        tap(() => this.translateService.get('room-list.transferred-successfully').subscribe(msg =>
-            this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.SUCCESS)))
-    ).subscribe(() => {
-      this.emitTransferChanges(roomDataView);
-    });
+    this.guestAuth$
+      .pipe(
+        switchMap((auth) =>
+          this.roomService.transferRoomThroughToken(
+            roomDataView.membership.roomId,
+            auth.token
+          )
+        ),
+        tap(() =>
+          this.translateService
+            .get('room-list.transferred-successfully')
+            .subscribe((msg) =>
+              this.notificationService.showAdvanced(
+                msg,
+                AdvancedSnackBarTypes.SUCCESS
+              )
+            )
+        )
+      )
+      .subscribe(() => {
+        this.emitTransferChanges(roomDataView);
+      });
   }
 
   addRoomFromGuest(roomDataView: RoomDataView) {
-    this.roomMembershipService.requestMembership(roomDataView.membership.roomShortId).pipe(
-      tap(() => this.translateService.get('room-list.added-successfully').subscribe(msg =>
-         this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.SUCCESS)))
-    ).subscribe(() => {
-      this.emitTransferChanges(roomDataView);
-    });
+    this.roomMembershipService
+      .requestMembership(roomDataView.membership.roomShortId)
+      .pipe(
+        tap(() =>
+          this.translateService
+            .get('room-list.added-successfully')
+            .subscribe((msg) =>
+              this.notificationService.showAdvanced(
+                msg,
+                AdvancedSnackBarTypes.SUCCESS
+              )
+            )
+        )
+      )
+      .subscribe(() => {
+        this.emitTransferChanges(roomDataView);
+      });
   }
 
   updateLastAccess(shortId: string) {
-    this.rooms.find(r => r.membership.roomShortId === shortId).membership.lastVisit = new Date().toISOString();
+    this.rooms.find(
+      (r) => r.membership.roomShortId === shortId
+    ).membership.lastVisit = new Date().toISOString();
   }
 
   openCreateRoomDialog(): void {
@@ -321,15 +413,22 @@ export class RoomListComponent implements OnInit, OnDestroy {
 
   duplicateRoom(roomId: string, roomName: string) {
     const dialogRef = this.dialogService.openRoomCreateDialog(roomName);
-    dialogRef.afterClosed().subscribe(name => {
+    dialogRef.afterClosed().subscribe((name) => {
       if (name) {
-        this.roomService.duplicateRoom(roomId, false, name).subscribe(room => {
-          const event = new RoomCreated(room.id, room.shortId);
-          this.eventService.broadcast(event.type, event.payload);
-          this.loadRoomDataViews();
-          const msg = this.translateService.instant('room-list.room-duplicated');
-          this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.SUCCESS);
-        });
+        this.roomService
+          .duplicateRoom(roomId, false, name)
+          .subscribe((room) => {
+            const event = new RoomCreated(room.id, room.shortId);
+            this.eventService.broadcast(event.type, event.payload);
+            this.loadRoomDataViews();
+            const msg = this.translateService.instant(
+              'room-list.room-duplicated'
+            );
+            this.notificationService.showAdvanced(
+              msg,
+              AdvancedSnackBarTypes.SUCCESS
+            );
+          });
       }
     });
   }

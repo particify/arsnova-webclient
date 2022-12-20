@@ -4,7 +4,7 @@ import { DialogService } from './dialog.service';
 import { MatLegacyDialogModule as MatDialogModule } from '@angular/material/legacy-dialog';
 import { TrackingService } from './tracking.service';
 
-class MockTrackingService { }
+class MockTrackingService {}
 
 describe('DialogService', () => {
   beforeEach(() => {
@@ -14,9 +14,9 @@ describe('DialogService', () => {
         DialogService,
         {
           provide: TrackingService,
-          useClass: MockTrackingService
-        }
-      ]
+          useClass: MockTrackingService,
+        },
+      ],
     });
   });
 

@@ -9,23 +9,25 @@ import { NotificationService } from '../util/notification.service';
 import { EventService } from '../util/event.service';
 
 const httpOptions = {
-  headers: new HttpHeaders({})
+  headers: new HttpHeaders({}),
 };
 
 @Injectable()
 export class VoteService extends AbstractHttpService<Vote> {
-  constructor(private http: HttpClient,
-              protected eventService: EventService,
-              protected translateService: TranslateService,
-              protected notificationService: NotificationService) {
+  constructor(
+    private http: HttpClient,
+    protected eventService: EventService,
+    protected translateService: TranslateService,
+    protected notificationService: NotificationService
+  ) {
     super('/vote', http, eventService, translateService, notificationService);
   }
 
   add(roomId: string, vote: Vote): Observable<Vote> {
     const connectionUrl = this.buildUri('/', roomId);
-    return this.http.post<Vote>(connectionUrl, vote, httpOptions).pipe(
-      catchError(this.handleError<Vote>('add vote'))
-    );
+    return this.http
+      .post<Vote>(connectionUrl, vote, httpOptions)
+      .pipe(catchError(this.handleError<Vote>('add vote')));
   }
 
   voteUp(roomId: string, commentId: string, userId: string) {
@@ -38,24 +40,30 @@ export class VoteService extends AbstractHttpService<Vote> {
     return this.add(roomId, v);
   }
 
-  deleteVote(roomId: string, commentId: string, userId: string): Observable<Vote> {
+  deleteVote(
+    roomId: string,
+    commentId: string,
+    userId: string
+  ): Observable<Vote> {
     const connectionUrl = this.buildUri(`/${commentId}/${userId}`, roomId);
-    return this.http.delete<Vote>(connectionUrl, httpOptions).pipe(
-      catchError(this.handleError<Vote>('delete Vote'))
-    );
+    return this.http
+      .delete<Vote>(connectionUrl, httpOptions)
+      .pipe(catchError(this.handleError<Vote>('delete Vote')));
   }
 
   getByRoomIdAndUserID(roomId: string, userId: string): Observable<Vote[]> {
     const connectionUrl = this.buildUri(this.apiUrl.find, roomId);
-    return this.http.post<Vote[]>(connectionUrl, {
-      properties: {
-        userId: userId
-      },
-      externalFilters: {
-        roomId: roomId
-      }
-    }).pipe(
-      catchError(this.handleError<Vote[]>(`get votes by roomid = ${roomId}`))
-    );
+    return this.http
+      .post<Vote[]>(connectionUrl, {
+        properties: {
+          userId: userId,
+        },
+        externalFilters: {
+          roomId: roomId,
+        },
+      })
+      .pipe(
+        catchError(this.handleError<Vote[]>(`get votes by roomid = ${roomId}`))
+      );
   }
 }

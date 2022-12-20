@@ -6,5 +6,5 @@ export enum AuthProvider {
   CAS = 'CAS',
   GOOGLE = 'GOOGLE',
   FACEBOOK = 'FACEBOOK',
-  TWITTER = 'TWITTER'
+  TWITTER = 'TWITTER',
 }

@@ -19,14 +19,16 @@ describe('WsConnectorService', () => {
         WsConnectorService,
         {
           provide: AuthenticationService,
-          useClass: MockAuthenticationService
-        }
-      ]
+          useClass: MockAuthenticationService,
+        },
+      ],
     });
   });
 
-  it('should be created', inject([WsConnectorService], (service: WsConnectorService) => {
-    expect(service).toBeTruthy();
-  }));
+  it('should be created', inject(
+    [WsConnectorService],
+    (service: WsConnectorService) => {
+      expect(service).toBeTruthy();
+    }
+  ));
 });
-

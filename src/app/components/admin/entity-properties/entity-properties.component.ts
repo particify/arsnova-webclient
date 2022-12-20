@@ -5,11 +5,13 @@ import { MatTreeNestedDataSource } from '@angular/material/tree';
 @Component({
   selector: 'app-entity-properties',
   templateUrl: './entity-properties.component.html',
-  styleUrls: ['./entity-properties.component.scss']
+  styleUrls: ['./entity-properties.component.scss'],
 })
 export class EntityPropertiesComponent implements OnChanges {
   @Input() entity: object;
-  treeControl: NestedTreeControl<any> = new NestedTreeControl(obj => obj.value);
+  treeControl: NestedTreeControl<any> = new NestedTreeControl(
+    (obj) => obj.value
+  );
   dataSource = new MatTreeNestedDataSource<object>();
 
   ngOnChanges() {
@@ -18,9 +20,11 @@ export class EntityPropertiesComponent implements OnChanges {
 
   toNode(object: object) {
     if (typeof object === 'object') {
-      return object ? Object.entries(object).map(item => {
-        return { key: item[0], value: this.toNode(item[1]) };
-      }) : null;
+      return object
+        ? Object.entries(object).map((item) => {
+            return { key: item[0], value: this.toNode(item[1]) };
+          })
+        : null;
     }
 
     return object;

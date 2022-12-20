@@ -15,27 +15,24 @@ import {
   MockEventService,
   MockNotificationService,
   MockMatDialog,
-  JsonTranslationLoader, ActivatedRouteStub
+  JsonTranslationLoader,
+  ActivatedRouteStub,
 } from '@arsnova/testing/test-helpers';
 import { ContentGroupService } from '@arsnova/app/services/http/content-group.service';
 
 const mockCreateEvent = new Subject<any>();
 
 @Injectable()
-class MockContentService {
-}
+class MockContentService {}
 
 @Injectable()
-class MockRoomService {
-}
+class MockRoomService {}
 
 @Injectable()
-class MockContentGroupService {
-}
+class MockContentGroupService {}
 
 @Injectable()
-class MockAnnouncer {
-}
+class MockAnnouncer {}
 
 describe('ContentChoiceCreationComponent', () => {
   let component: ContentCreationComponent;
@@ -43,75 +40,71 @@ describe('ContentChoiceCreationComponent', () => {
 
   const data = {
     room: {
-      id: '1234'
-    }
-  }
+      id: '1234',
+    },
+  };
 
   const snapshot = new ActivatedRouteSnapshot();
 
-  snapshot.params = of([{seriesName: 'SERIES'}]);
+  snapshot.params = of([{ seriesName: 'SERIES' }]);
 
   const activatedRouteStub = new ActivatedRouteStub(null, data, snapshot);
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [
-        ContentCreationComponent
-      ],
+      declarations: [ContentCreationComponent],
       providers: [
         {
           provide: ContentService,
-          useClass: MockContentService
+          useClass: MockContentService,
         },
         {
           provide: NotificationService,
-          useClass: MockNotificationService
+          useClass: MockNotificationService,
         },
         {
           provide: MatDialog,
-          useClass: MockMatDialog
+          useClass: MockMatDialog,
         },
         {
           provide: EventService,
-          useClass: MockEventService
+          useClass: MockEventService,
         },
         {
           provide: RoomService,
-          useClass: MockRoomService
+          useClass: MockRoomService,
         },
         {
           provide: ContentGroupService,
-          useClass: MockContentGroupService
+          useClass: MockContentGroupService,
         },
         {
           provide: AnnounceService,
-          useClass: MockAnnouncer
+          useClass: MockAnnouncer,
         },
         {
           provide: ActivatedRoute,
-          useValue: activatedRouteStub
-        }
+          useValue: activatedRouteStub,
+        },
       ],
       imports: [
         TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
-            useClass: JsonTranslationLoader
+            useClass: JsonTranslationLoader,
           },
-          isolate: true
-        })
+          isolate: true,
+        }),
       ],
-      schemas: [
-        NO_ERRORS_SCHEMA
-      ]
+      schemas: [NO_ERRORS_SCHEMA],
     })
-    .compileComponents()
-    .then(() => {
-      fixture = TestBed.createComponent(ContentCreationComponent);
-      component = fixture.componentInstance;
-      component.createEvent = mockCreateEvent;
-      fixture.detectChanges();
-    });
+      .compileComponents()
+      .then(() => {
+        fixture = TestBed.createComponent(ContentCreationComponent);
+        component = fixture.componentInstance;
+        component.createEvent = mockCreateEvent;
+        fixture.detectChanges();
+      });
   }));
 
   it('should create', () => {

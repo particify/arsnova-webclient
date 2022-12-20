@@ -14,14 +14,16 @@ describe('WsFeedbackService', () => {
         WsFeedbackService,
         {
           provide: WsConnectorService,
-          useClass: MockWsConnectorService
-        }
-      ]
+          useClass: MockWsConnectorService,
+        },
+      ],
     });
   });
 
-  it('should be created', inject([WsFeedbackService], (service: WsFeedbackService) => {
-    expect(service).toBeTruthy();
-  }));
+  it('should be created', inject(
+    [WsFeedbackService],
+    (service: WsFeedbackService) => {
+      expect(service).toBeTruthy();
+    }
+  ));
 });
-

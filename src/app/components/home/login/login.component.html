@@ -2,9 +2,17 @@
   <mat-card class="login-card" fxLayout="column" fxLayoutAlign="center center">
     <app-form-header [text]="'login.welcome' | translate"></app-form-header>
     <div *ngIf="ssoProviders.length > 0" fxLayout="column" fxLayoutGap="10px">
-      <button *ngFor="let provider of ssoProviders" (click)="loginViaSso(provider.id)" class="button-primary"
-              id="{{provider.title}}-button" mat-raised-button type="button"
-              attr.aria-label="{{ 'login.a11y-sso-login' | translate:{provider: provider.title} }}">
+      <button
+        *ngFor="let provider of ssoProviders"
+        (click)="loginViaSso(provider.id)"
+        class="button-primary"
+        id="{{ provider.title }}-button"
+        mat-raised-button
+        type="button"
+        attr.aria-label="{{
+          'login.a11y-sso-login' | translate : { provider: provider.title }
+        }}"
+      >
         {{ 'login.login-with' | translate }} {{ provider.title }}
       </button>
     </div>
@@ -14,36 +22,79 @@
         <mat-divider></mat-divider>
       </ng-container>
       <form class="full-width" fxLayout="column" fxLayoutGap="10px">
-        <mat-form-field *ngIf="loginIdIsEmail; else loginIdIsUsername" class="input-block" appearance="outline">
+        <mat-form-field
+          *ngIf="loginIdIsEmail; else loginIdIsUsername"
+          class="input-block"
+          appearance="outline"
+        >
           <mat-label>{{ 'login.email' | translate }}</mat-label>
-          <input [(ngModel)]="username" [errorStateMatcher]="matcher" [formControl]="loginIdFormControl" matInput
-                 id="loginid-input" name="loginid"/>
+          <input
+            [(ngModel)]="username"
+            [errorStateMatcher]="matcher"
+            [formControl]="loginIdFormControl"
+            matInput
+            id="loginid-input"
+            name="loginid"
+          />
         </mat-form-field>
         <ng-template #loginIdIsUsername>
           <mat-form-field class="input-block" appearance="outline">
-          <mat-label>{{ 'login.username' | translate }}</mat-label>
-          <input [(ngModel)]="username" [errorStateMatcher]="matcher" [formControl]="loginIdFormControl" matInput
-                 id="loginid-input" name="loginid"/>
+            <mat-label>{{ 'login.username' | translate }}</mat-label>
+            <input
+              [(ngModel)]="username"
+              [errorStateMatcher]="matcher"
+              [formControl]="loginIdFormControl"
+              matInput
+              id="loginid-input"
+              name="loginid"
+            />
           </mat-form-field>
         </ng-template>
         <app-password-entry [preFill]="password"></app-password-entry>
         <div *ngIf="dbLoginEnabled" fxLayout="row">
-          <a class="action-link forgot-pw" [routerLink]="[]" (click)="navToPasswordReset(); $event.preventDefault();
-      $event.stopPropagation();" aria-labelledby="forgot-pw">
+          <a
+            class="action-link forgot-pw"
+            [routerLink]="[]"
+            (click)="
+              navToPasswordReset();
+              $event.preventDefault();
+              $event.stopPropagation()
+            "
+            aria-labelledby="forgot-pw"
+          >
             {{ 'login.password-reset' | translate }}
           </a>
         </div>
         <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="5px">
-          <button *ngFor="let provider of usernamePasswordProviders" class="button-primary login-button" mat-raised-button (click)="loginWithUsernamePassword(provider.id)"
-                  aria-labelledby="login-description">
-            <ng-container *ngIf="usernamePasswordProviders.length === 1; else multipleUsernamePasswordLogins">{{ 'login.login' | translate }}</ng-container>
-            <ng-template #multipleUsernamePasswordLogins>{{ 'login.login-with' | translate }} {{ provider.title }}</ng-template>
+          <button
+            *ngFor="let provider of usernamePasswordProviders"
+            class="button-primary login-button"
+            mat-raised-button
+            (click)="loginWithUsernamePassword(provider.id)"
+            aria-labelledby="login-description"
+          >
+            <ng-container
+              *ngIf="
+                usernamePasswordProviders.length === 1;
+                else multipleUsernamePasswordLogins
+              "
+              >{{ 'login.login' | translate }}</ng-container
+            >
+            <ng-template #multipleUsernamePasswordLogins
+              >{{ 'login.login-with' | translate }}
+              {{ provider.title }}</ng-template
+            >
           </button>
         </div>
         <div *ngIf="dbLoginEnabled" fxLayout="row" fxLayoutAlign="center">
           <p class="smaller-text">{{ 'login.not-registered' | translate }}</p>
-          <a class="action-link after-text-link" [routerLink]="'/register'" aria-labelledby="register">
-            {{ 'login.register' | translate }}</a>
+          <a
+            class="action-link after-text-link"
+            [routerLink]="'/register'"
+            aria-labelledby="register"
+          >
+            {{ 'login.register' | translate }}</a
+          >
         </div>
       </form>
     </ng-container>

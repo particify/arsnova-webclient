@@ -11,27 +11,24 @@ describe('KeyButtonBarComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ KeyButtonBarComponent ],
+      declarations: [KeyButtonBarComponent],
       imports: [
         TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
-            useClass: JsonTranslationLoader
+            useClass: JsonTranslationLoader,
           },
-          isolate: true
-        })
+          isolate: true,
+        }),
       ],
-      schemas: [
-        NO_ERRORS_SCHEMA
-      ],
+      schemas: [NO_ERRORS_SCHEMA],
       providers: [
         {
           provide: Document,
-          useExisting: DOCUMENT
-        }
-      ]
-    })
-    .compileComponents();
+          useExisting: DOCUMENT,
+        },
+      ],
+    }).compileComponents();
   }));
 
   beforeEach(() => {

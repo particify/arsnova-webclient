@@ -12,7 +12,7 @@
   }
 }
 
-@media(min-width: 768px) {
+@media (min-width: 768px) {
   .answer-text {
     // 170px = button + input field width
     max-width: calc(100% - 170px - 1em);

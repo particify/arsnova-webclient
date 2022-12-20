@@ -12,17 +12,16 @@ import { UserService } from './user.service';
 import { AuthProvider } from '../../models/auth-provider';
 
 const httpOptions = {
-  headers: new HttpHeaders({})
+  headers: new HttpHeaders({}),
 };
 
 @Injectable()
 export class AdminService extends AbstractHttpService<void> {
-
   serviceApiUrl = {
     adminView: 'view=admin',
     user: '/user',
     transfer: '/transfer',
-    activate: '/activate'
+    activate: '/activate',
   };
 
   constructor(
@@ -30,40 +29,51 @@ export class AdminService extends AbstractHttpService<void> {
     protected eventService: EventService,
     protected translateService: TranslateService,
     protected notificationService: NotificationService,
-    protected userService: UserService) {
+    protected userService: UserService
+  ) {
     super('', http, eventService, translateService, notificationService);
   }
 
   getUser(id: string) {
-    const connectionUrl = this.buildForeignUri(`${this.serviceApiUrl.user}/${id}?${this.serviceApiUrl.adminView}`);
+    const connectionUrl = this.buildForeignUri(
+      `${this.serviceApiUrl.user}/${id}?${this.serviceApiUrl.adminView}`
+    );
     return this.http.get<User>(connectionUrl);
   }
 
   getRoom(id: string): Observable<Room> {
-    const connectionUrl = this.buildForeignUri(`?${this.serviceApiUrl.adminView}`, id);
+    const connectionUrl = this.buildForeignUri(
+      `?${this.serviceApiUrl.adminView}`,
+      id
+    );
     return this.http.get<Room>(connectionUrl);
   }
 
   activateUser(userId: string) {
-    const connectionUrl = this.userService.buildForeignUri(`${this.serviceApiUrl.user}/${userId}${this.serviceApiUrl.activate}`);
+    const connectionUrl = this.userService.buildForeignUri(
+      `${this.serviceApiUrl.user}/${userId}${this.serviceApiUrl.activate}`
+    );
     return this.http.post<string>(connectionUrl, {}, httpOptions);
   }
 
   transferRoom(roomId: string, newOwnerId: string) {
-    const connectionUrl = this.userService.buildForeignUri(`/${this.serviceApiUrl.transfer}?newOwnerId=${newOwnerId}`, roomId);
-    return this.http.post(connectionUrl, {}, httpOptions).pipe(
-      catchError(this.handleError<any>('transferRoom'))
+    const connectionUrl = this.userService.buildForeignUri(
+      `/${this.serviceApiUrl.transfer}?newOwnerId=${newOwnerId}`,
+      roomId
     );
+    return this.http
+      .post(connectionUrl, {}, httpOptions)
+      .pipe(catchError(this.handleError<any>('transferRoom')));
   }
 
   addAccount(loginId: string) {
     const connectionUrl = this.userService.buildUri('/');
     const body = {
       loginId: loginId,
-      authProvider: AuthProvider.ARSNOVA
-    }
-    return this.http.post<User>(connectionUrl, body, httpOptions).pipe(
-      catchError(this.handleError<User>('addAccount'))
-    );
+      authProvider: AuthProvider.ARSNOVA,
+    };
+    return this.http
+      .post<User>(connectionUrl, body, httpOptions)
+      .pipe(catchError(this.handleError<User>('addAccount')));
   }
 }

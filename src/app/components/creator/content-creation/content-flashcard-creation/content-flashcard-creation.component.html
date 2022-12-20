@@ -1,16 +1,26 @@
 <form>
   <mat-form-field appearance="outline" class="input-block no-field-hint">
     <mat-label>{{ 'content.answer' | translate }}</mat-label>
-    <textarea #answerInput
-              (input)="updateTextContainsImage(answerInput.value)"
-              [(ngModel)]="answer"
-              [placeholder]="'content.enter-answer' | translate"
-              aria-labelledby="answer" id="body-input"
-              cdkAutosizeMaxRows="8"
-              cdkAutosizeMinRows="3"
-              matInput cdkTextareaAutosize maxlength="2000" name="questionInput"></textarea>
+    <textarea
+      #answerInput
+      (input)="updateTextContainsImage(answerInput.value)"
+      [(ngModel)]="answer"
+      [placeholder]="'content.enter-answer' | translate"
+      aria-labelledby="answer"
+      id="body-input"
+      cdkAutosizeMaxRows="8"
+      cdkAutosizeMinRows="3"
+      matInput
+      cdkTextareaAutosize
+      maxlength="2000"
+      name="questionInput"
+    ></textarea>
   </mat-form-field>
-  <app-hint *ngIf="textContainsImage" text="utils.formatting-image-hint" [type]="warningType"></app-hint>
+  <app-hint
+    *ngIf="textContainsImage"
+    text="utils.formatting-image-hint"
+    [type]="warningType"
+  ></app-hint>
   <div class="form-spacer"></div>
 </form>
 

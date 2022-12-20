@@ -6,5 +6,5 @@ export enum PresentationEvent {
   CONTENT_ANSWERS_DELETED = 'ContentAnswersDeleted',
   CONTENT_STATE_UPDATED = 'ContentStepStateUpdated',
   MULTIPLE_CONTENT_ROUNDS_EXIST = 'MultipleContentRoundsExist',
-  CONTENT_ROUND_UPDATED = 'ContentRoundUpdated'
+  CONTENT_ROUND_UPDATED = 'ContentRoundUpdated',
 }

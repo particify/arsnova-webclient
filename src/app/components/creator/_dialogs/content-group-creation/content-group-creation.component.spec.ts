@@ -4,7 +4,10 @@ import { ContentGroupCreationComponent } from './content-group-creation.componen
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { NO_ERRORS_SCHEMA, Injectable } from '@angular/core';
 import { NotificationService } from '@arsnova/app/services/util/notification.service';
-import { MatLegacyDialog as MatDialog, MatLegacyDialogRef as MatDialogRef } from '@angular/material/legacy-dialog';
+import {
+  MatLegacyDialog as MatDialog,
+  MatLegacyDialogRef as MatDialogRef,
+} from '@angular/material/legacy-dialog';
 import { EventService } from '@arsnova/app/services/util/event.service';
 import { ContentGroupService } from '@arsnova/app/services/http/content-group.service';
 import {
@@ -12,12 +15,11 @@ import {
   MockEventService,
   MockNotificationService,
   MockMatDialog,
-  MockMatDialogRef
+  MockMatDialogRef,
 } from '@arsnova/testing/test-helpers';
 
 @Injectable()
-class MockContentGroupService {
-}
+class MockContentGroupService {}
 
 describe('ContentGroupCreationComponent', () => {
   let component: ContentGroupCreationComponent;
@@ -25,43 +27,40 @@ describe('ContentGroupCreationComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ ContentGroupCreationComponent ],
+      declarations: [ContentGroupCreationComponent],
       imports: [
         TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
-            useClass: JsonTranslationLoader
+            useClass: JsonTranslationLoader,
           },
-          isolate: true
-        })
+          isolate: true,
+        }),
       ],
       providers: [
         {
           provide: NotificationService,
-          useClass: MockNotificationService
+          useClass: MockNotificationService,
         },
         {
           provide: MatDialog,
-          useClass: MockMatDialog
+          useClass: MockMatDialog,
         },
         {
           provide: EventService,
-          useClass: MockEventService
+          useClass: MockEventService,
         },
         {
           provide: ContentGroupService,
-          useClass: MockContentGroupService
+          useClass: MockContentGroupService,
         },
         {
           provide: MatDialogRef,
-          useClass: MockMatDialogRef
-        }
+          useClass: MockMatDialogRef,
+        },
       ],
-      schemas: [
-        NO_ERRORS_SCHEMA
-      ]
-    })
-    .compileComponents();
+      schemas: [NO_ERRORS_SCHEMA],
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -74,4 +73,3 @@ describe('ContentGroupCreationComponent', () => {
     expect(component).toBeTruthy();
   });
 });
-

@@ -1,21 +1,21 @@
-import { Injectable } from "@angular/core";
+import { Injectable } from '@angular/core';
 import { RxStompState } from '@stomp/rx-stomp';
-import { interval } from "rxjs";
-import * as LRU from "lru-cache";
-import { WsConnectorService } from "../websockets/ws-connector.service";
+import { interval } from 'rxjs';
+import * as LRU from 'lru-cache';
+import { WsConnectorService } from '../websockets/ws-connector.service';
 
 const LRU_OPTIONS: LRU.Options<string, any> = {
   max: 30,
   ttl: 15 * 60 * 1000,
   noDisposeOnSet: true,
-  updateAgeOnGet: true
+  updateAgeOnGet: true,
 };
 const PRUNE_INTERVAL_MS = 60 * 1000;
 const WS_DISCONNECT_GRACE_PERIOD_MS = 10 * 1000;
 
 export enum DefaultCache {
   SHARED,
-  CURRENT_ROOM
+  CURRENT_ROOM,
 }
 
 export interface CacheKey {
@@ -29,7 +29,9 @@ export class CachingService {
   private wsDisconnectionTimestamp: Date = new Date();
 
   constructor(ws: WsConnectorService) {
-    ws.getConnectionState().subscribe(state => this.handleWsStateChange(state));
+    ws.getConnectionState().subscribe((state) =>
+      this.handleWsStateChange(state)
+    );
   }
 
   getCache<T>(cacheId: string | number) {
@@ -50,10 +52,15 @@ export class CachingService {
         break;
       case RxStompState.OPEN: {
         const currentTimestamp = new Date();
-        if (this.wsDisconnectionTimestamp
-            && currentTimestamp.getTime() - this.wsDisconnectionTimestamp.getTime() > WS_DISCONNECT_GRACE_PERIOD_MS) {
-          console.log('WebSocket disconnection grace period exceeded. Clearing cache.');
-          this.caches.forEach(c => c.clear());
+        if (
+          this.wsDisconnectionTimestamp &&
+          currentTimestamp.getTime() - this.wsDisconnectionTimestamp.getTime() >
+            WS_DISCONNECT_GRACE_PERIOD_MS
+        ) {
+          console.log(
+            'WebSocket disconnection grace period exceeded. Clearing cache.'
+          );
+          this.caches.forEach((c) => c.clear());
           this.wsDisconnectionTimestamp = currentTimestamp;
         }
       }
@@ -63,12 +70,15 @@ export class CachingService {
 
 export class Cache<T> {
   private cache: LRU<string, T>;
-  private disposeHandlers: { type: string, handler: (id: string, value: T) => void }[] = [];
+  private disposeHandlers: {
+    type: string;
+    handler: (id: string, value: T) => void;
+  }[] = [];
 
   constructor() {
     const lruOptions: LRU.Options<string, T> = {
       ...LRU_OPTIONS,
-      dispose: (value, key) => this.dispatchDispose(key, value)
+      dispose: (value, key) => this.dispatchDispose(key, value),
     };
     this.cache = new LRU(lruOptions);
     /* Explicitly prune the cache so the disponse handlers are called early. */
@@ -91,14 +101,17 @@ export class Cache<T> {
     this.cache.clear();
   }
 
-  registerDisposeHandler(type: string, handler: (id: string, value: T) => void) {
+  registerDisposeHandler(
+    type: string,
+    handler: (id: string, value: T) => void
+  ) {
     this.disposeHandlers.push({ type: type, handler: handler });
   }
 
   private dispatchDispose(key: string, value: T) {
     const [type, id] = key.split('__', 2);
     this.disposeHandlers
-      .filter(handlerConfig => handlerConfig.type === type)
+      .filter((handlerConfig) => handlerConfig.type === type)
       .forEach((handlerConfig) => handlerConfig.handler(id, value));
   }
 

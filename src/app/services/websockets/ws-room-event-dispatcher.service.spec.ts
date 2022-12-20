@@ -24,26 +24,28 @@ describe('WsRoomEventDispatcherService', () => {
         WsRoomEventDispatcherService,
         {
           provide: WsConnectorService,
-          useClass: MockWsConnectorService
+          useClass: MockWsConnectorService,
         },
         {
           provide: EventService,
-          useClass: MockEventService
+          useClass: MockEventService,
         },
         {
           provide: RoomMembershipService,
-          useClass: MockRoomMembershipService
+          useClass: MockRoomMembershipService,
         },
         {
           provide: RoomService,
-          useClass: MockRoomService
-        }
-      ]
+          useClass: MockRoomService,
+        },
+      ],
     });
   });
 
-  it('should be created', inject([WsRoomEventDispatcherService], (service: WsRoomEventDispatcherService) => {
-    expect(service).toBeTruthy();
-  }));
+  it('should be created', inject(
+    [WsRoomEventDispatcherService],
+    (service: WsRoomEventDispatcherService) => {
+      expect(service).toBeTruthy();
+    }
+  ));
 });
-

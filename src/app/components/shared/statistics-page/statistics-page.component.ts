@@ -5,15 +5,12 @@ import { ContentGroup } from '../../../models/content-group';
 import { StatisticListComponent } from '../statistic-list/statistic-list.component';
 import { ContentGroupService } from '../../../services/http/content-group.service';
 
-
 @Component({
   selector: 'app-statistics',
   templateUrl: './statistics-page.component.html',
-  styleUrls: ['./statistics-page.component.scss']
+  styleUrls: ['./statistics-page.component.scss'],
 })
-
 export class StatisticsPageComponent implements OnInit {
-
   shortId: string;
   contentGroups: ContentGroup[] = [];
   isLoading = true;
@@ -21,32 +18,39 @@ export class StatisticsPageComponent implements OnInit {
 
   @ViewChild(StatisticListComponent) statisticList: StatisticListComponent;
 
-  constructor(private route: ActivatedRoute,
-              private roomStatsService: RoomStatsService,
-              private contentGroupService: ContentGroupService,
-              private router: Router
-  ) {
-  }
+  constructor(
+    private route: ActivatedRoute,
+    private roomStatsService: RoomStatsService,
+    private contentGroupService: ContentGroupService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
-    this.route.data.subscribe(data => {
+    this.route.data.subscribe((data) => {
       this.shortId = data.room.shortId;
-      this.getContentGroups(data.room.id, this.route.snapshot.params['seriesName']);
+      this.getContentGroups(
+        data.room.id,
+        this.route.snapshot.params['seriesName']
+      );
     });
   }
 
   getContentGroups(id: string, groupName: string): void {
-    this.roomStatsService.getStats(id, true).subscribe(roomStats => {
+    this.roomStatsService.getStats(id, true).subscribe((roomStats) => {
       const contentGroupsLength = roomStats.groupStats.length;
       for (let i = 0; i < contentGroupsLength; i++) {
-        this.contentGroupService.getById(roomStats.groupStats[i].id, { roomId: id}).subscribe(group => {
-          this.contentGroups.push(group);
-          if (this.contentGroups.length === contentGroupsLength) {
-            this.contentGroups = this.contentGroups.filter(cg => cg.contentIds?.length > 0);
-            this.initCurrentGroup(groupName);
-            this.isLoading = false;
-          }
-        });
+        this.contentGroupService
+          .getById(roomStats.groupStats[i].id, { roomId: id })
+          .subscribe((group) => {
+            this.contentGroups.push(group);
+            if (this.contentGroups.length === contentGroupsLength) {
+              this.contentGroups = this.contentGroups.filter(
+                (cg) => cg.contentIds?.length > 0
+              );
+              this.initCurrentGroup(groupName);
+              this.isLoading = false;
+            }
+          });
       }
       setTimeout(() => {
         document.getElementById('message-button').focus();
@@ -63,7 +67,7 @@ export class StatisticsPageComponent implements OnInit {
   }
 
   setCurrentGroupByName(name: string) {
-    this.currentGroup = this.contentGroups.find(cg => cg.name === name);
+    this.currentGroup = this.contentGroups.find((cg) => cg.name === name);
   }
 
   updateCollection() {
@@ -76,7 +80,13 @@ export class StatisticsPageComponent implements OnInit {
   }
 
   updateUrl() {
-    const urlList = ['edit', this.shortId, 'series', this.currentGroup.name, 'statistics'];
+    const urlList = [
+      'edit',
+      this.shortId,
+      'series',
+      this.currentGroup.name,
+      'statistics',
+    ];
     this.router.navigate(urlList);
   }
 

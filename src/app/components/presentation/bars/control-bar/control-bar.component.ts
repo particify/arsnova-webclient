@@ -1,8 +1,21 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
-import { NavBarComponent, NavBarItem } from '../../../shared/bars/nav-bar/nav-bar.component';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+} from '@angular/core';
+import {
+  NavBarComponent,
+  NavBarItem,
+} from '../../../shared/bars/nav-bar/nav-bar.component';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RoutingService } from '../../../../services/util/routing.service';
-import { GlobalStorageService, STORAGE_KEYS } from '../../../../services/util/global-storage.service';
+import {
+  GlobalStorageService,
+  STORAGE_KEYS,
+} from '../../../../services/util/global-storage.service';
 import { RoomStatsService } from '../../../../services/http/room-stats.service';
 import { FeedbackService } from '../../../../services/http/feedback.service';
 import { ContentGroupService } from '../../../../services/http/content-group.service';
@@ -12,9 +25,15 @@ import { ContentGroup } from '../../../../models/content-group';
 import { map, takeUntil } from 'rxjs/operators';
 import { ApiConfigService } from '../../../../services/http/api-config.service';
 import { Subject } from 'rxjs';
-import { CommentPresentationState, Sort } from '../../../shared/comment-list/comment-list.component';
+import {
+  CommentPresentationState,
+  Sort,
+} from '../../../shared/comment-list/comment-list.component';
 import { AnnounceService } from '../../../../services/util/announce.service';
-import { Hotkey, HotkeyService } from '../../../../services/util/hotkey.service';
+import {
+  Hotkey,
+  HotkeyService,
+} from '../../../../services/util/hotkey.service';
 import { HotkeyAction } from '../../../../directives/hotkey.directive';
 import { TranslateService } from '@ngx-translate/core';
 import { Features } from '../../../../models/features.enum';
@@ -22,7 +41,10 @@ import { ContentService } from '../../../../services/http/content.service';
 import { Content } from '../../../../models/content';
 import { DialogService } from '../../../../services/util/dialog.service';
 import { ContentType } from '../../../../models/content-type.enum';
-import { AdvancedSnackBarTypes, NotificationService } from '../../../../services/util/notification.service';
+import {
+  AdvancedSnackBarTypes,
+  NotificationService,
+} from '../../../../services/util/notification.service';
 import { RoomService } from '../../../../services/http/room.service';
 import { RemoteService } from '../../../../services/util/remote.service';
 import { PresentationEvent } from '../../../../models/events/presentation-events.enum';
@@ -32,11 +54,19 @@ export class KeyNavBarItem extends NavBarItem {
   displayKey: string;
   disabled: boolean;
 
-  constructor(name: string, icon: string, url: string, key: string, disabled = false) {
+  constructor(
+    name: string,
+    icon: string,
+    url: string,
+    key: string,
+    disabled = false
+  ) {
     super(name, icon, url, false);
     const keyInfo = HotkeyService.getKeyDisplayInfo(key);
     this.key = key;
-    this.displayKey = keyInfo.translateKeyName ? 'control-bar.' + keyInfo.keyName : keyInfo.keySymbol;
+    this.displayKey = keyInfo.translateKeyName
+      ? 'control-bar.' + keyInfo.keyName
+      : keyInfo.keySymbol;
     this.disabled = disabled;
   }
 }
@@ -44,10 +74,12 @@ export class KeyNavBarItem extends NavBarItem {
 @Component({
   selector: 'app-control-bar',
   templateUrl: './control-bar.component.html',
-  styleUrls: ['./control-bar.component.scss']
+  styleUrls: ['./control-bar.component.scss'],
 })
-export class ControlBarComponent extends NavBarComponent implements OnInit, OnDestroy {
-
+export class ControlBarComponent
+  extends NavBarComponent
+  implements OnInit, OnDestroy
+{
   @Input() shortId: string;
   @Output() activeFeature: EventEmitter<string> = new EventEmitter<string>();
   @Output() activeGroup: EventEmitter<string> = new EventEmitter<string>();
@@ -77,7 +109,7 @@ export class ControlBarComponent extends NavBarComponent implements OnInit, OnDe
   features: BarItem[] = [
     new BarItem(Features.COMMENTS, 'question_answer'),
     new BarItem(Features.CONTENTS, 'equalizer'),
-    new BarItem(Features.FEEDBACK, 'thumbs_up_down')
+    new BarItem(Features.FEEDBACK, 'thumbs_up_down'),
   ];
   groupItems: KeyNavBarItem[] = [
     new KeyNavBarItem('results', 'insert_chart', '', ' '),
@@ -86,7 +118,7 @@ export class ControlBarComponent extends NavBarComponent implements OnInit, OnDe
   ];
   surveyItems: KeyNavBarItem[] = [
     new KeyNavBarItem('start', 'play_arrow', '', ' '),
-    new KeyNavBarItem('change-type', 'swap_horiz', '', 'c')
+    new KeyNavBarItem('change-type', 'swap_horiz', '', 'c'),
   ];
   arrowItems: KeyNavBarItem[] = [
     new KeyNavBarItem('left', 'arrow_back', '', 'ArrowLeft', true),
@@ -99,7 +131,7 @@ export class ControlBarComponent extends NavBarComponent implements OnInit, OnDe
   ];
   zoomItems: KeyNavBarItem[] = [
     new KeyNavBarItem('zoom-in', 'zoom_in', '', '+'),
-    new KeyNavBarItem('zoom-out', 'zoom_out', '', '-')
+    new KeyNavBarItem('zoom-out', 'zoom_out', '', '-'),
   ];
   moreItem: KeyNavBarItem = new KeyNavBarItem('more', 'more_horiz', '', 'm');
 
@@ -134,8 +166,17 @@ export class ControlBarComponent extends NavBarComponent implements OnInit, OnDe
     private notificationService: NotificationService,
     private remoteService: RemoteService
   ) {
-    super(router, routingService, route, globalStorageService,
-      roomStatsService, feedbackService, contentGroupService, eventService, roomService);
+    super(
+      router,
+      routingService,
+      route,
+      globalStorageService,
+      roomStatsService,
+      feedbackService,
+      contentGroupService,
+      eventService,
+      roomService
+    );
   }
 
   ngOnDestroy() {
@@ -144,7 +185,7 @@ export class ControlBarComponent extends NavBarComponent implements OnInit, OnDe
     this.destroyed = true;
     this.showCursor();
     clearTimeout(this.cursorTimer);
-    this.hotkeyRefs.forEach(h => this.hotkeyService.unregisterHotkey(h));
+    this.hotkeyRefs.forEach((h) => this.hotkeyService.unregisterHotkey(h));
   }
 
   sendControlBarState() {
@@ -152,22 +193,28 @@ export class ControlBarComponent extends NavBarComponent implements OnInit, OnDe
   }
 
   isActiveFeature(feature: string): boolean {
-    return this.barItems.map(b => b.name).indexOf(feature) === this.currentRouteIndex;
+    return (
+      this.barItems.map((b) => b.name).indexOf(feature) ===
+      this.currentRouteIndex
+    );
   }
 
   afterInit() {
-    const lastSort = this.globalStorageService.getItem(STORAGE_KEYS.COMMENT_SORT);
+    const lastSort = this.globalStorageService.getItem(
+      STORAGE_KEYS.COMMENT_SORT
+    );
     this.subscribeFullscreen();
     this.registerHotkeys();
-    this.currentCommentSort = lastSort && lastSort !== Sort.VOTEASC ? lastSort : Sort.TIME;
-    this.route.data.subscribe(data => {
+    this.currentCommentSort =
+      lastSort && lastSort !== Sort.VOTEASC ? lastSort : Sort.TIME;
+    this.route.data.subscribe((data) => {
       this.surveyStarted = !data.room.settings.feedbackLocked;
       this.setSurveyState();
       if (this.groupName && this.contentGroups.length > 0) {
-        this.group = this.contentGroups.find(g => g.name === this.groupName);
+        this.group = this.contentGroups.find((g) => g.name === this.groupName);
         this.checkIfContentLocked();
         if (this.isActiveFeature(Features.CONTENTS) && !this.group.published) {
-          this.publishContentGroup()
+          this.publishContentGroup();
         }
       }
     });
@@ -175,11 +222,16 @@ export class ControlBarComponent extends NavBarComponent implements OnInit, OnDe
     setTimeout(() => {
       this.sendControlBarState();
     }, 300);
-    this.apiConfigService.getApiConfig$().pipe(takeUntil(this.destroyed$)).subscribe(config => {
-      if (config.ui.links?.join) {
-        this.joinUrl = this.removeProtocolFromString(config.ui.links.join.url) + this.shortId;
-      }
-    });
+    this.apiConfigService
+      .getApiConfig$()
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((config) => {
+        if (config.ui.links?.join) {
+          this.joinUrl =
+            this.removeProtocolFromString(config.ui.links.join.url) +
+            this.shortId;
+        }
+      });
     this.isLoading = false;
     document.onmousemove = () => {
       if (!this.destroyed) {
@@ -212,50 +264,79 @@ export class ControlBarComponent extends NavBarComponent implements OnInit, OnDe
   }
 
   subscribeToEvents() {
-    this.barItems.map(b => b.key = this.getFeatureKey(b.name));
-    this.remoteService.getFeedbackState().pipe(takeUntil(this.destroyed$)).subscribe(state => {
-      this.surveyStarted = state.started;
-      this.setSurveyState();
-    });
-    this.eventService.on<any>(PresentationEvent.CONTENT_STATE_UPDATED).subscribe(state => {
-      this.contentStepState = state.position;
-      this.contentIndex = state.index;
-      this.content = state.content;
-      this.contentLoaded = false;
-      if (!this.contentRounds.get(this.content.id)) {
-        this.contentRounds.set(this.content.id, this.content.state.round - 1);
-      }
-      setTimeout(() => {
-        this.contentLoaded = true;
-      },0);
-      this.globalStorageService.setItem(STORAGE_KEYS.LAST_INDEX, this.contentIndex);
-      this.setArrowsState(this.contentStepState);
-      this.checkIfContentLocked();
-    });
-    this.eventService.on<CommentPresentationState>(PresentationEvent.COMMENT_STATE_UPDATED).pipe(takeUntil(this.destroyed$)).subscribe(state => {
-      this.commentStepState = state.stepState;
-      if (this.isActiveFeature(Features.COMMENTS)) {
-        this.setArrowsState(this.commentStepState);
-      }
-    });
-    this.eventService.on<number>(PresentationEvent.COMMENT_ZOOM_UPDATED).subscribe(zoom => {
-      this.currentCommentZoom = Math.round(zoom);
-      this.announceService.announce('presentation.a11y-comment-zoom-changed', { zoom: this.currentCommentZoom })
-    });
-    this.eventService.on<ContentGroup>(PresentationEvent.CONTENT_GROUP_UPDATED).subscribe(updatedContentGroup => {
-      this.group = updatedContentGroup;
-      this.checkIfContentLocked();
-    });
-    this.eventService.on<boolean>(PresentationEvent.MULTIPLE_CONTENT_ROUNDS_EXIST).subscribe(multipleRounds => {
-      this.multipleRounds = multipleRounds;
-    })
+    this.barItems.map((b) => (b.key = this.getFeatureKey(b.name)));
+    this.remoteService
+      .getFeedbackState()
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((state) => {
+        this.surveyStarted = state.started;
+        this.setSurveyState();
+      });
+    this.eventService
+      .on<any>(PresentationEvent.CONTENT_STATE_UPDATED)
+      .subscribe((state) => {
+        this.contentStepState = state.position;
+        this.contentIndex = state.index;
+        this.content = state.content;
+        this.contentLoaded = false;
+        if (!this.contentRounds.get(this.content.id)) {
+          this.contentRounds.set(this.content.id, this.content.state.round - 1);
+        }
+        setTimeout(() => {
+          this.contentLoaded = true;
+        }, 0);
+        this.globalStorageService.setItem(
+          STORAGE_KEYS.LAST_INDEX,
+          this.contentIndex
+        );
+        this.setArrowsState(this.contentStepState);
+        this.checkIfContentLocked();
+      });
+    this.eventService
+      .on<CommentPresentationState>(PresentationEvent.COMMENT_STATE_UPDATED)
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((state) => {
+        this.commentStepState = state.stepState;
+        if (this.isActiveFeature(Features.COMMENTS)) {
+          this.setArrowsState(this.commentStepState);
+        }
+      });
+    this.eventService
+      .on<number>(PresentationEvent.COMMENT_ZOOM_UPDATED)
+      .subscribe((zoom) => {
+        this.currentCommentZoom = Math.round(zoom);
+        this.announceService.announce(
+          'presentation.a11y-comment-zoom-changed',
+          { zoom: this.currentCommentZoom }
+        );
+      });
+    this.eventService
+      .on<ContentGroup>(PresentationEvent.CONTENT_GROUP_UPDATED)
+      .subscribe((updatedContentGroup) => {
+        this.group = updatedContentGroup;
+        this.checkIfContentLocked();
+      });
+    this.eventService
+      .on<boolean>(PresentationEvent.MULTIPLE_CONTENT_ROUNDS_EXIST)
+      .subscribe((multipleRounds) => {
+        this.multipleRounds = multipleRounds;
+      });
   }
 
   checkIfContentLocked() {
     if (this.contentIndex !== undefined) {
-      this.isCurrentContentPublished = this.contentGroupService.isIndexPublished(this.group.firstPublishedIndex, this.group.lastPublishedIndex, this.contentIndex);
-      this.groupItems[2].icon = this.isCurrentContentPublished ? 'lock' : 'lock_open';
-      this.groupItems[2].name = this.isCurrentContentPublished ? 'lock' : 'publish';
+      this.isCurrentContentPublished =
+        this.contentGroupService.isIndexPublished(
+          this.group.firstPublishedIndex,
+          this.group.lastPublishedIndex,
+          this.contentIndex
+        );
+      this.groupItems[2].icon = this.isCurrentContentPublished
+        ? 'lock'
+        : 'lock_open';
+      this.groupItems[2].name = this.isCurrentContentPublished
+        ? 'lock'
+        : 'publish';
       if (!this.isCurrentContentPublished) {
         if (!this.showNotification) {
           this.notificationMessage = 'control-bar.content-locked';
@@ -265,7 +346,7 @@ export class ControlBarComponent extends NavBarComponent implements OnInit, OnDe
         }
       } else if (this.showNotification) {
         this.showNotification = false;
-        this.announceService.announce('control-bar.content-published')
+        this.announceService.announce('control-bar.content-published');
       }
     }
   }
@@ -299,11 +380,14 @@ export class ControlBarComponent extends NavBarComponent implements OnInit, OnDe
   }
 
   getFeatureKey(name: string): string {
-    return (this.features.map(f => f.name).indexOf(name) + 1).toString();
+    return (this.features.map((f) => f.name).indexOf(name) + 1).toString();
   }
 
   updateFeature(feature: string) {
-    if (this.currentRouteIndex !== this.barItems.map(i => i.name).indexOf(feature)) {
+    if (
+      this.currentRouteIndex !==
+      this.barItems.map((i) => i.name).indexOf(feature)
+    ) {
       if (feature) {
         this.getCurrentRouteIndex(feature);
       } else {
@@ -327,11 +411,13 @@ export class ControlBarComponent extends NavBarComponent implements OnInit, OnDe
   getCurrentRouteIndex(feature?: string) {
     let index;
     if (feature) {
-      index = this.barItems.map(s => s.name).indexOf(feature);
+      index = this.barItems.map((s) => s.name).indexOf(feature);
     } else {
-      const matchingRoutes = this.barItems.filter(s => this.isRouteMatching(s));
+      const matchingRoutes = this.barItems.filter((s) =>
+        this.isRouteMatching(s)
+      );
       if (matchingRoutes.length > 0) {
-        index = this.barItems.map(s => s.url).indexOf(matchingRoutes[0].url);
+        index = this.barItems.map((s) => s.url).indexOf(matchingRoutes[0].url);
       }
     }
     this.currentRouteIndex = index;
@@ -348,7 +434,9 @@ export class ControlBarComponent extends NavBarComponent implements OnInit, OnDe
   }
 
   getFeatureUrl(feature: string): string {
-    return this.groupName && feature === Features.CONTENTS ? feature + this.getGroupUrl() : feature;
+    return this.groupName && feature === Features.CONTENTS
+      ? feature + this.getGroupUrl()
+      : feature;
   }
 
   navToUrl(index: number) {
@@ -363,7 +451,7 @@ export class ControlBarComponent extends NavBarComponent implements OnInit, OnDe
     if (this.inFullscreen) {
       this.exitFullscreen();
     } else {
-      this.requestFullscreen()
+      this.requestFullscreen();
     }
   }
 
@@ -402,15 +490,24 @@ export class ControlBarComponent extends NavBarComponent implements OnInit, OnDe
   }
 
   publishContentGroup(contentGroup: ContentGroup = this.group) {
-    const dialogRef = this.dialogService.openPublishGroupDialog(contentGroup.name);
-    dialogRef.afterClosed().subscribe(result => {
+    const dialogRef = this.dialogService.openPublishGroupDialog(
+      contentGroup.name
+    );
+    dialogRef.afterClosed().subscribe((result) => {
       if (result === 'publish') {
         const changes = { published: true };
-        this.contentGroupService.patchContentGroup(contentGroup, changes).subscribe(updatedGroup => {
-          const msg = this.translateService.instant('content.group-published');
-          this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.SUCCESS);
-          this.updateGroup(updatedGroup);
-        });
+        this.contentGroupService
+          .patchContentGroup(contentGroup, changes)
+          .subscribe((updatedGroup) => {
+            const msg = this.translateService.instant(
+              'content.group-published'
+            );
+            this.notificationService.showAdvanced(
+              msg,
+              AdvancedSnackBarTypes.SUCCESS
+            );
+            this.updateGroup(updatedGroup);
+          });
       }
     });
   }
@@ -449,23 +546,34 @@ export class ControlBarComponent extends NavBarComponent implements OnInit, OnDe
 
   changeCommentSort(sort: Sort) {
     this.currentCommentSort = sort;
-    this.eventService.broadcast(PresentationEvent.COMMENT_SORTING_UPDATED, this.currentCommentSort);
+    this.eventService.broadcast(
+      PresentationEvent.COMMENT_SORTING_UPDATED,
+      this.currentCommentSort
+    );
   }
 
   private registerHotkeys() {
     const actions = {
-      'share': () => this.updateFeature(undefined),
-      'fullscreen': () => this.toggleFullscreen(),
-      'exit': () => this.exitPresentation()
+      share: () => this.updateFeature(undefined),
+      fullscreen: () => this.toggleFullscreen(),
+      exit: () => this.exitPresentation(),
     };
-    this.generalItems.forEach(item =>
-      this.translateService.get('control-bar.' + item.name).pipe(
-        map(t => ({
-          key: item.key,
-          action: actions[item.name],
-          actionTitle: t
-        } as Hotkey))
-      ).subscribe((h: Hotkey) => this.hotkeyService.registerHotkey(h, this.hotkeyRefs))
+    this.generalItems.forEach((item) =>
+      this.translateService
+        .get('control-bar.' + item.name)
+        .pipe(
+          map(
+            (t) =>
+              ({
+                key: item.key,
+                action: actions[item.name],
+                actionTitle: t,
+              } as Hotkey)
+          )
+        )
+        .subscribe((h: Hotkey) =>
+          this.hotkeyService.registerHotkey(h, this.hotkeyRefs)
+        )
     );
   }
 
@@ -474,24 +582,38 @@ export class ControlBarComponent extends NavBarComponent implements OnInit, OnDe
   }
 
   hasFormatRounds(format: ContentType): boolean {
-    return [ContentType.CHOICE, ContentType.SCALE, ContentType.BINARY].includes(format);
+    return [ContentType.CHOICE, ContentType.SCALE, ContentType.BINARY].includes(
+      format
+    );
   }
 
   editContent() {
-    this.contentService.goToEdit(this.content.id, this.shortId, this.group.name);
+    this.contentService.goToEdit(
+      this.content.id,
+      this.shortId,
+      this.group.name
+    );
   }
 
   deleteContentAnswers() {
-    this.eventService.on<string>(PresentationEvent.CONTENT_ANSWERS_DELETED).subscribe(() => {
-      this.content.state.round = 1;
-      this.resetAnswerEvent.next(this.content.id);
-      this.changeRound(0);
-      this.multipleRounds = false;
-    });
-    const dialogRef = this.dialogService.openDeleteDialog('content-answers', 'really-delete-answers');
-    dialogRef.afterClosed().subscribe(result => {
+    this.eventService
+      .on<string>(PresentationEvent.CONTENT_ANSWERS_DELETED)
+      .subscribe(() => {
+        this.content.state.round = 1;
+        this.resetAnswerEvent.next(this.content.id);
+        this.changeRound(0);
+        this.multipleRounds = false;
+      });
+    const dialogRef = this.dialogService.openDeleteDialog(
+      'content-answers',
+      'really-delete-answers'
+    );
+    dialogRef.afterClosed().subscribe((result) => {
       if (result === 'delete') {
-        this.contentService.deleteAnswersOfContent(this.content.id, this.roomId);
+        this.contentService.deleteAnswersOfContent(
+          this.content.id,
+          this.roomId
+        );
       }
     });
   }
@@ -500,7 +622,7 @@ export class ControlBarComponent extends NavBarComponent implements OnInit, OnDe
     this.contentRounds.set(this.content.id, round);
     const body = {
       contentIndex: this.contentIndex,
-      round: round
+      round: round,
     };
     this.eventService.broadcast(PresentationEvent.CONTENT_ROUND_UPDATED, body);
   }

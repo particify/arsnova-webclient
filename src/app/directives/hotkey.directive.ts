@@ -1,15 +1,26 @@
-import { Directive, ElementRef, Input, OnChanges, OnDestroy } from '@angular/core';
-import { Hotkey, HotkeyActionType, HotkeyModifier, HotkeyService } from '../services/util/hotkey.service';
+import {
+  Directive,
+  ElementRef,
+  Input,
+  OnChanges,
+  OnDestroy,
+} from '@angular/core';
+import {
+  Hotkey,
+  HotkeyActionType,
+  HotkeyModifier,
+  HotkeyService,
+} from '../services/util/hotkey.service';
 
 export enum HotkeyAction {
   FOCUS,
-  CLICK
+  CLICK,
 }
 
 const NON_TEXT_INPUT_TYPES = ['button', 'checkbox', 'radio'];
 
 @Directive({
-  selector: '[appHotkey]'
+  selector: '[appHotkey]',
 })
 export class HotkeyDirective implements OnDestroy, OnChanges {
   @Input() appHotkey: string;
@@ -26,7 +37,7 @@ export class HotkeyDirective implements OnDestroy, OnChanges {
   constructor(
     private elementRef: ElementRef<HTMLElement>,
     private hotkeyService: HotkeyService
-  ) { }
+  ) {}
 
   ngOnDestroy(): void {
     this.hotkeyService.unregisterHotkey(this.hotkeyRef);
@@ -46,7 +57,8 @@ export class HotkeyDirective implements OnDestroy, OnChanges {
 
   private buildHotkey(): Hotkey {
     const title = this.appHotkeyTitle ?? this.matTooltip;
-    const action = this.appHotkeyAction === HotkeyAction.CLICK
+    const action =
+      this.appHotkeyAction === HotkeyAction.CLICK
         ? () => this.elementRef.nativeElement.click()
         : () => this.elementRef.nativeElement.focus();
     return {
@@ -54,7 +66,7 @@ export class HotkeyDirective implements OnDestroy, OnChanges {
       modifiers: this.buildModifierList(),
       actionTitle: title,
       action: action,
-      actionType: this.determineActionType(this.elementRef.nativeElement)
+      actionType: this.determineActionType(this.elementRef.nativeElement),
     };
   }
 
@@ -74,8 +86,11 @@ export class HotkeyDirective implements OnDestroy, OnChanges {
   }
 
   private determineActionType(element: HTMLElement): HotkeyActionType {
-    if (element.nodeName === 'INPUT' && !NON_TEXT_INPUT_TYPES.includes((element as HTMLInputElement).type)
-        || element.nodeName === 'TEXTAREA') {
+    if (
+      (element.nodeName === 'INPUT' &&
+        !NON_TEXT_INPUT_TYPES.includes((element as HTMLInputElement).type)) ||
+      element.nodeName === 'TEXTAREA'
+    ) {
       return HotkeyActionType.INPUT;
     }
     return HotkeyActionType.DEFAULT;

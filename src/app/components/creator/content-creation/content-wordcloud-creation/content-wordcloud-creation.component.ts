@@ -1,6 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ContentService } from '../../../../services/http/content.service';
-import { AdvancedSnackBarTypes, NotificationService } from '../../../../services/util/notification.service';
+import {
+  AdvancedSnackBarTypes,
+  NotificationService,
+} from '../../../../services/util/notification.service';
 import { TranslateService } from '@ngx-translate/core';
 import { ActivatedRoute } from '@angular/router';
 import { ContentGroupService } from '../../../../services/http/content-group.service';
@@ -15,10 +18,12 @@ const MAX_KEYWORDS = 10;
 @Component({
   selector: 'app-content-wordcloud-creation',
   templateUrl: './content-wordcloud-creation.component.html',
-  styleUrls: ['./content-wordcloud-creation.component.scss']
+  styleUrls: ['./content-wordcloud-creation.component.scss'],
 })
-export class ContentWordcloudCreationComponent extends ContentCreationComponent implements OnInit {
-
+export class ContentWordcloudCreationComponent
+  extends ContentCreationComponent
+  implements OnInit
+{
   @Input() format: ContentType;
 
   maxAnswers = 3;
@@ -32,7 +37,14 @@ export class ContentWordcloudCreationComponent extends ContentCreationComponent 
     protected contentGroupService: ContentGroupService,
     protected announceService: AnnounceService
   ) {
-    super(contentService, notificationService, translationService, route, contentGroupService, announceService);
+    super(
+      contentService,
+      notificationService,
+      translationService,
+      route,
+      contentGroupService,
+      announceService
+    );
   }
 
   initContentCreation() {
@@ -59,7 +71,10 @@ export class ContentWordcloudCreationComponent extends ContentCreationComponent 
       (this.content as ContentWordcloud).maxAnswers = this.maxAnswers;
       return true;
     } else {
-      const msg = this.translationService.instant('content.max-keywords-out-of-range', { min: 1, max: MAX_KEYWORDS });
+      const msg = this.translationService.instant(
+        'content.max-keywords-out-of-range',
+        { min: 1, max: MAX_KEYWORDS }
+      );
       this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
       return false;
     }

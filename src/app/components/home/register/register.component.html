@@ -1,33 +1,72 @@
 <div fxLayout="column" fxLayoutAlign="center center" fxFill>
   <mat-card class="login-card" fxLayout="column" fxLayoutAlign="center center">
-    <app-form-header [text]="'register.info' | translate  : { accountService: accountServiceTitle }"></app-form-header>
-    <form class="full-width" fxLayout="column"
-          fxLayoutAlign="space-around" fxLayoutGap="10px">
+    <app-form-header
+      [text]="
+        'register.info' | translate : { accountService: accountServiceTitle }
+      "
+    ></app-form-header>
+    <form
+      class="full-width"
+      fxLayout="column"
+      fxLayoutAlign="space-around"
+      fxLayoutGap="10px"
+    >
       <mat-form-field class="input-block" appearance="outline">
         <mat-label>{{ 'login.email' | translate }}</mat-label>
-        <input id="email-input" matInput type="email" #userName [formControl]="usernameFormControl" [errorStateMatcher]="matcher"/>
-        <mat-error *ngIf="usernameFormControl.hasError('email') && !usernameFormControl.hasError('required')">
+        <input
+          id="email-input"
+          matInput
+          type="email"
+          #userName
+          [formControl]="usernameFormControl"
+          [errorStateMatcher]="matcher"
+        />
+        <mat-error
+          *ngIf="
+            usernameFormControl.hasError('email') &&
+            !usernameFormControl.hasError('required')
+          "
+        >
           {{ 'login.email-invalid' | translate }}
         </mat-error>
         <mat-error *ngIf="usernameFormControl.hasError('required')">
-          {{ 'login.email-required' |translate }}
+          {{ 'login.email-required' | translate }}
         </mat-error>
       </mat-form-field>
 
-      <app-password-entry [checkStrength]="true" [isNew]="true"></app-password-entry>
+      <app-password-entry
+        [checkStrength]="true"
+        [isNew]="true"
+      ></app-password-entry>
 
       <mat-checkbox [(ngModel)]="acceptToS" name="accept">
-        {{ 'register.accept' | translate }}<a href="{{linkOfToS}}" target="_blank">{{ 'register.terms' | translate }}</a>{{ 'register.accept-2' | translate }}
+        {{ 'register.accept' | translate
+        }}<a href="{{ linkOfToS }}" target="_blank">{{
+          'register.terms' | translate
+        }}</a
+        >{{ 'register.accept-2' | translate }}
       </mat-checkbox>
       <div fxLayout="column" fxLayoutAlign="center center">
-        <button class="button-primary login-button" mat-raised-button type="submit" (click)="register(userName.value)">
+        <button
+          class="button-primary login-button"
+          mat-raised-button
+          type="submit"
+          (click)="register(userName.value)"
+        >
           {{ 'register.register' | translate }}
         </button>
       </div>
       <div fxLayout="row" fxLayoutAlign="center">
-        <p class="smaller-text">{{ 'register.already-registered' | translate }}</p>
-        <a class="action-link after-text-link" [routerLink]="'/login'" aria-labelledby="register">
-          {{ 'login.login' | translate }}</a>
+        <p class="smaller-text">
+          {{ 'register.already-registered' | translate }}
+        </p>
+        <a
+          class="action-link after-text-link"
+          [routerLink]="'/login'"
+          aria-labelledby="register"
+        >
+          {{ 'login.login' | translate }}</a
+        >
       </div>
     </form>
   </mat-card>

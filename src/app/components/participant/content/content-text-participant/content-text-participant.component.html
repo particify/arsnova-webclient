@@ -2,11 +2,18 @@
   <form *ngIf="!givenAnswer">
     <mat-form-field appearance="outline">
       <mat-label>{{ 'answer.your-answer' | translate }}</mat-label>
-      <textarea matInput [(ngModel)]="textAnswer" name="answer"
-                cdkTextareaAutosize cdkAutosizeMinRows="3" cdkAutosizeMaxRows="8" maxLength="500"></textarea>
+      <textarea
+        matInput
+        [(ngModel)]="textAnswer"
+        name="answer"
+        cdkTextareaAutosize
+        cdkAutosizeMinRows="3"
+        cdkAutosizeMaxRows="8"
+        maxLength="500"
+      ></textarea>
     </mat-form-field>
   </form>
   <div *ngIf="givenAnswer && givenAnswer.body">
-    <p class="answer">{{givenAnswer.body}}</p>
+    <p class="answer">{{ givenAnswer.body }}</p>
   </div>
 </div>

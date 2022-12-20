@@ -1,6 +1,9 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ContentAnswerService } from '../../../../services/http/content-answer.service';
-import { AdvancedSnackBarTypes, NotificationService } from '../../../../services/util/notification.service';
+import {
+  AdvancedSnackBarTypes,
+  NotificationService,
+} from '../../../../services/util/notification.service';
 import { TranslateService } from '@ngx-translate/core';
 import { LanguageService } from '../../../../services/util/language.service';
 import { ContentType } from '../../../../models/content-type.enum';
@@ -14,10 +17,9 @@ import { ContentWordcloud } from '../../../../models/content-wordcloud';
 @Component({
   selector: 'app-content-wordcloud-participant',
   templateUrl: './content-wordcloud-participant.component.html',
-  styleUrls: ['./content-wordcloud-participant.component.scss']
+  styleUrls: ['./content-wordcloud-participant.component.scss'],
 })
 export class ContentWordcloudParticipantComponent extends ContentParticipantBaseComponent {
-
   @Input() content: ContentWordcloud;
   @Input() answer: MultipleTextsAnswer;
   @Input() alreadySent: boolean;
@@ -38,7 +40,14 @@ export class ContentWordcloudParticipantComponent extends ContentParticipantBase
     protected globalStorageService: GlobalStorageService,
     protected router: Router
   ) {
-    super(notificationService, translateService, langService, route, globalStorageService, router);
+    super(
+      notificationService,
+      translateService,
+      langService,
+      route,
+      globalStorageService,
+      router
+    );
   }
 
   init() {
@@ -59,43 +68,53 @@ export class ContentWordcloudParticipantComponent extends ContentParticipantBase
   }
 
   submitAnswer() {
-    const words = this.words.filter(w => w);
+    const words = this.words.filter((w) => w);
     if (words.length === 0) {
-      this.translateService.get('answer.please-answer').subscribe(message => {
-        this.notificationService.showAdvanced(message, AdvancedSnackBarTypes.WARNING);
+      this.translateService.get('answer.please-answer').subscribe((message) => {
+        this.notificationService.showAdvanced(
+          message,
+          AdvancedSnackBarTypes.WARNING
+        );
       });
       return;
     }
-    this.answerService.addAnswer(this.content.roomId, {
-      id: null,
-      revision: null,
-      contentId: this.content.id,
-      round: this.content.state.round,
-      texts: words,
-      creationTimestamp: null,
-      format: ContentType.WORDCLOUD
-    }).subscribe(answer => {
-      this.createAnswer(words);
-      this.translateService.get('answer.sent').subscribe(msg => {
-        this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.SUCCESS);
+    this.answerService
+      .addAnswer(this.content.roomId, {
+        id: null,
+        revision: null,
+        contentId: this.content.id,
+        round: this.content.state.round,
+        texts: words,
+        creationTimestamp: null,
+        format: ContentType.WORDCLOUD,
+      })
+      .subscribe((answer) => {
+        this.createAnswer(words);
+        this.translateService.get('answer.sent').subscribe((msg) => {
+          this.notificationService.showAdvanced(
+            msg,
+            AdvancedSnackBarTypes.SUCCESS
+          );
+        });
+        this.sendStatusToParent(answer);
       });
-      this.sendStatusToParent(answer);
-    });
   }
 
   abstain() {
     this.words = [];
-    this.answerService.addAnswer(this.content.roomId, {
-      id: null,
-      revision: null,
-      contentId: this.content.id,
-      round: this.content.state.round,
-      texts: [],
-      creationTimestamp: null,
-      format: ContentType.WORDCLOUD
-    }).subscribe(answer => {
-      this.createAnswer();
-      this.sendStatusToParent(answer);
-    });
+    this.answerService
+      .addAnswer(this.content.roomId, {
+        id: null,
+        revision: null,
+        contentId: this.content.id,
+        round: this.content.state.round,
+        texts: [],
+        creationTimestamp: null,
+        format: ContentType.WORDCLOUD,
+      })
+      .subscribe((answer) => {
+        this.createAnswer();
+        this.sendStatusToParent(answer);
+      });
   }
 }

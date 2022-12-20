@@ -1,6 +1,10 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
-import { MockEventService, MockNotificationService, MockTranslateService } from '@arsnova/testing/test-helpers';
+import {
+  MockEventService,
+  MockNotificationService,
+  MockTranslateService,
+} from '@arsnova/testing/test-helpers';
 import { TranslateService } from '@ngx-translate/core';
 import { EventService } from '../util/event.service';
 import { NotificationService } from '../util/notification.service';
@@ -16,20 +20,18 @@ describe('AnnouncementService', () => {
         AnnouncementService,
         {
           provide: EventService,
-          useClass: MockEventService
+          useClass: MockEventService,
         },
         {
           provide: TranslateService,
-          useClass: MockTranslateService
+          useClass: MockTranslateService,
         },
         {
           provide: NotificationService,
-          useClass: MockNotificationService
-        }
+          useClass: MockNotificationService,
+        },
       ],
-      imports: [
-        HttpClientTestingModule
-      ]
+      imports: [HttpClientTestingModule],
     });
     service = TestBed.inject(AnnouncementService);
   });

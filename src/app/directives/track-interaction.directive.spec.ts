@@ -1,25 +1,28 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { EventCategory, TrackingService } from '../services/util/tracking.service';
+import {
+  EventCategory,
+  TrackingService,
+} from '../services/util/tracking.service';
 import { TrackInteractionDirective } from './track-interaction.directive';
 
 const TEST_TRACK_INTERACTION = 'UI action performed';
 const TEST_TRACK_NAME = 'test-track-name';
 
 @Component({
-  template: `
-  <button #button
+  template: ` <button
+    #button
     appTrackInteraction="${TEST_TRACK_INTERACTION}"
     appTrackName="${TEST_TRACK_NAME}"
-    (click)="click()">
+    (click)="click()"
+  >
     Tracked Button
-  </button>`
+  </button>`,
 })
 class TestComponent {
   @ViewChild('button') button: ElementRef<HTMLButtonElement>;
 
-  click() {
-  }
+  click() {}
 }
 
 describe('TrackInteractionDirective', () => {
@@ -29,13 +32,13 @@ describe('TrackInteractionDirective', () => {
 
   beforeEach(() => {
     fixture = TestBed.configureTestingModule({
-      declarations: [ TrackInteractionDirective, TestComponent ],
+      declarations: [TrackInteractionDirective, TestComponent],
       providers: [
         {
           provide: TrackingService,
-          useValue: trackingService
-        }
-      ]
+          useValue: trackingService,
+        },
+      ],
     }).createComponent(TestComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
@@ -46,6 +49,7 @@ describe('TrackInteractionDirective', () => {
     expect(trackingService.addEvent).toHaveBeenCalledWith(
       EventCategory.UI_INTERACTION,
       TEST_TRACK_INTERACTION,
-      TEST_TRACK_NAME);
+      TEST_TRACK_NAME
+    );
   });
 });

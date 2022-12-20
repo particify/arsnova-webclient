@@ -1,13 +1,17 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { CreateCommentComponent } from './create-comment.component';
-import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA } from '@angular/material/legacy-dialog';
+import {
+  MatLegacyDialogRef as MatDialogRef,
+  MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA,
+} from '@angular/material/legacy-dialog';
 import { CommentService } from '@arsnova/app/services/http/comment.service';
 import { NotificationService } from '@arsnova/app/services/util/notification.service';
-import { JsonTranslationLoader,
+import {
+  JsonTranslationLoader,
   MockMatDialogRef,
   MockNotificationService,
   MockGlobalStorageService,
-  MockLangService
+  MockLangService,
 } from '@arsnova/testing/test-helpers';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { MatLegacyTooltipModule as MatTooltipModule } from '@angular/material/legacy-tooltip';
@@ -24,56 +28,51 @@ describe('CreateCommentComponent', () => {
   const mockDialogData = {
     roomId: '1234',
     auth: {
-      userId: 'user1234'
-    }
+      userId: 'user1234',
+    },
   };
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [
-        CreateCommentComponent
-      ],
+      declarations: [CreateCommentComponent],
       imports: [
         TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
-            useClass: JsonTranslationLoader
+            useClass: JsonTranslationLoader,
           },
-          isolate: true
+          isolate: true,
         }),
-        MatTooltipModule
+        MatTooltipModule,
       ],
       providers: [
         {
           provide: NotificationService,
-          useValue: MockNotificationService
+          useValue: MockNotificationService,
         },
         {
           provide: CommentService,
-          useValue: mockCommentService
+          useValue: mockCommentService,
         },
         {
           provide: GlobalStorageService,
-          useClass: MockGlobalStorageService
+          useClass: MockGlobalStorageService,
         },
         {
           provide: LanguageService,
-          useClass: MockLangService
+          useClass: MockLangService,
         },
         {
           provide: MatDialogRef,
-          useClass: MockMatDialogRef
+          useClass: MockMatDialogRef,
         },
         {
           provide: MAT_DIALOG_DATA,
-          useValue: mockDialogData
-        }
+          useValue: mockDialogData,
+        },
       ],
-      schemas: [
-        NO_ERRORS_SCHEMA
-      ]
-    })
-    .compileComponents();
+      schemas: [NO_ERRORS_SCHEMA],
+    }).compileComponents();
   }));
 
   beforeEach(() => {

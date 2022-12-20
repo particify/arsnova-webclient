@@ -1,6 +1,10 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { ContentGroupsComponent } from './content-groups.component';
-import { ActivatedRoute, ActivatedRouteSnapshot, Router } from '@angular/router';
+import {
+  ActivatedRoute,
+  ActivatedRouteSnapshot,
+  Router,
+} from '@angular/router';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import {
   JsonTranslationLoader,
@@ -18,47 +22,42 @@ describe('ContentGroupsComponent', () => {
 
   const snapshot = new ActivatedRouteSnapshot();
   snapshot.params = {
-    shortId: '12345678'
-  }
+    shortId: '12345678',
+  };
 
   const data = {
-    viewRole: UserRole.PARTICIPANT
-  }
+    viewRole: UserRole.PARTICIPANT,
+  };
   const activatedRouteStub = new ActivatedRouteStub(null, data, snapshot);
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [
-        ContentGroupsComponent
-       ],
+      declarations: [ContentGroupsComponent],
       imports: [
         TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
-            useClass: JsonTranslationLoader
+            useClass: JsonTranslationLoader,
           },
-          isolate: true
-        })
+          isolate: true,
+        }),
       ],
       providers: [
         {
           provide: ActivatedRoute,
-          useValue: activatedRouteStub
+          useValue: activatedRouteStub,
         },
         {
           provide: GlobalStorageService,
-          useClass: MockGlobalStorageService
+          useClass: MockGlobalStorageService,
         },
         {
           provide: Router,
-          useClass: MockRouter
-        }
+          useClass: MockRouter,
+        },
       ],
-      schemas: [
-        NO_ERRORS_SCHEMA
-      ]
-    })
-    .compileComponents();
+      schemas: [NO_ERRORS_SCHEMA],
+    }).compileComponents();
   }));
 
   beforeEach(() => {

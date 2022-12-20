@@ -15,22 +15,19 @@ describe('RenderedTextComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ RenderedTextComponent ],
+      declarations: [RenderedTextComponent],
       providers: [
         {
           provide: FormattingService,
-          useValue: mockFormattingService
+          useValue: mockFormattingService,
         },
         {
           provide: DomSanitizer,
-          useValue: mockDomSanitizer
-        }
+          useValue: mockDomSanitizer,
+        },
       ],
-      schemas: [
-        NO_ERRORS_SCHEMA
-      ]
-    })
-    .compileComponents();
+      schemas: [NO_ERRORS_SCHEMA],
+    }).compileComponents();
   }));
 
   beforeEach(() => {

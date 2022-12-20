@@ -2,7 +2,11 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { CommentPageComponent } from './comment-page.component';
 import { Renderer2, Component, Input, NO_ERRORS_SCHEMA } from '@angular/core';
 import { of } from 'rxjs';
-import { TranslateModule, TranslateLoader, TranslateService } from '@ngx-translate/core';
+import {
+  TranslateModule,
+  TranslateLoader,
+  TranslateService,
+} from '@ngx-translate/core';
 import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
 import { NotificationService } from '../../../services/util/notification.service';
 import { AuthenticationService } from '../../../services/http/authentication.service';
@@ -12,13 +16,14 @@ import { GlobalStorageService } from '../../../services/util/global-storage.serv
 import { AnnounceService } from '../../../services/util/announce.service';
 import { CommentService } from '../../../services/http/comment.service';
 import { HotkeyService } from '../../../services/util/hotkey.service';
-import { ActivatedRouteStub,
+import {
+  ActivatedRouteStub,
   JsonTranslationLoader,
   MockGlobalStorageService,
   MockNotificationService,
   MockEventService,
   MockAnnounceService,
-  MockRenderer2
+  MockRenderer2,
 } from '@arsnova/testing/test-helpers';
 import { A11yIntroPipe } from '@arsnova/app/pipes/a11y-intro.pipe';
 
@@ -33,15 +38,17 @@ describe('CommentPageComponent', () => {
   let fixture: ComponentFixture<CommentPageComponent>;
 
   const data = {
-    isModeration: false
-  }
+    isModeration: false,
+  };
   const snapshot = new ActivatedRouteSnapshot();
   snapshot.data = data;
   const activatedRouteStub = new ActivatedRouteStub(null, null, snapshot);
 
-  const mockCommentService = jasmine.createSpyObj(['lowlight'])
+  const mockCommentService = jasmine.createSpyObj(['lowlight']);
 
-  const mockAuthenticationService = jasmine.createSpyObj(['getCurrentAuthentication']);
+  const mockAuthenticationService = jasmine.createSpyObj([
+    'getCurrentAuthentication',
+  ]);
   mockAuthenticationService.getCurrentAuthentication.and.returnValue(of({}));
 
   const mockHotkeyService = jasmine.createSpyObj(['registerHotkey']);
@@ -54,66 +61,64 @@ describe('CommentPageComponent', () => {
       declarations: [
         CommentPageComponent,
         CommentListStubComponent,
-        A11yIntroPipe
+        A11yIntroPipe,
       ],
       imports: [
         TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
-            useClass: JsonTranslationLoader
+            useClass: JsonTranslationLoader,
           },
-          isolate: true
-        })
+          isolate: true,
+        }),
       ],
       providers: [
         {
           provide: ActivatedRoute,
-          useValue: activatedRouteStub
+          useValue: activatedRouteStub,
         },
         {
           provide: NotificationService,
-          useClass: MockNotificationService
+          useClass: MockNotificationService,
         },
         {
           provide: CommentService,
-          useValue: mockCommentService
+          useValue: mockCommentService,
         },
         {
           provide: AuthenticationService,
-          useValue: mockAuthenticationService
+          useValue: mockAuthenticationService,
         },
         {
           provide: NotificationService,
-          useClass: MockNotificationService
+          useClass: MockNotificationService,
         },
         {
           provide: EventService,
-          useClass: MockEventService
+          useClass: MockEventService,
         },
         {
           provide: AnnounceService,
-          useClass: MockAnnounceService
+          useClass: MockAnnounceService,
         },
         {
           provide: Renderer2,
-          useClass: MockRenderer2
+          useClass: MockRenderer2,
         },
         {
           provide: GlobalStorageService,
-          useClass: MockGlobalStorageService
+          useClass: MockGlobalStorageService,
         },
         {
           provide: HotkeyService,
-          useValue: mockHotkeyService
+          useValue: mockHotkeyService,
         },
         {
           provide: A11yIntroPipe,
-          useValue: mockA11yIntroPipe
-        }
+          useValue: mockA11yIntroPipe,
+        },
       ],
-      schemas: [
-        NO_ERRORS_SCHEMA
-      ]
+      schemas: [NO_ERRORS_SCHEMA],
     })
       .compileComponents()
       .then(() => {

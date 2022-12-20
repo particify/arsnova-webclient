@@ -33,20 +33,36 @@ export interface ConsentSettings {
 }
 
 const httpOptions = {
-  headers: new HttpHeaders({})
+  headers: new HttpHeaders({}),
 };
 
 @Injectable()
 export class ConsentService extends AbstractHttpService<ConsentSettings> {
   private readonly categories: CookieCategory[] = [
-    { key: StorageItemCategory.REQUIRED, id: 'essential', consent: true, required: true },
-    { key: StorageItemCategory.FUNCTIONAL, id: 'functional', consent: false, required: false },
-    { key: StorageItemCategory.STATISTICS, id: 'statistics', consent: false, required: false }
+    {
+      key: StorageItemCategory.REQUIRED,
+      id: 'essential',
+      consent: true,
+      required: true,
+    },
+    {
+      key: StorageItemCategory.FUNCTIONAL,
+      id: 'functional',
+      consent: false,
+      required: false,
+    },
+    {
+      key: StorageItemCategory.STATISTICS,
+      id: 'statistics',
+      consent: false,
+      required: false,
+    },
   ];
-  private readonly categoryMap: Map<StorageItemCategory, CookieCategory> = this.categories.reduce((map, category) => {
-    map.set(category.key, category);
-    return map;
-  }, new Map());
+  private readonly categoryMap: Map<StorageItemCategory, CookieCategory> =
+    this.categories.reduce((map, category) => {
+      map.set(category.key, category);
+      return map;
+    }, new Map());
   private consentSettings: ConsentSettings;
   private privacyUrl: string;
   private consentRecording;
@@ -59,7 +75,13 @@ export class ConsentService extends AbstractHttpService<ConsentSettings> {
     protected translateService: TranslateService,
     protected notificationService: NotificationService
   ) {
-    super('/consent', http, eventService, translateService, notificationService);
+    super(
+      '/consent',
+      http,
+      eventService,
+      translateService,
+      notificationService
+    );
     const settings = globalStorageService.getItem(STORAGE_KEYS.COOKIE_CONSENT);
     this.init(settings);
   }
@@ -69,7 +91,9 @@ export class ConsentService extends AbstractHttpService<ConsentSettings> {
       this.consentSettings = consentSettings;
     }
     this.loadLocalSettings();
-    this.globalStorageService.handleConsentChange({ categoriesSettings: this.categories });
+    this.globalStorageService.handleConsentChange({
+      categoriesSettings: this.categories,
+    });
   }
 
   setConfig(apiConfig: ApiConfig) {
@@ -82,7 +106,7 @@ export class ConsentService extends AbstractHttpService<ConsentSettings> {
    */
   loadLocalSettings() {
     const consentGiven = this.getConsentSettings().consentGiven;
-    this.categories.forEach(item => {
+    this.categories.forEach((item) => {
       item.consent = consentGiven[item.id] ?? item.consent;
     });
   }
@@ -91,7 +115,9 @@ export class ConsentService extends AbstractHttpService<ConsentSettings> {
    * Tells if the user still needs to give their consent.
    */
   consentRequired() {
-    return !this.consentSettings || this.consentSettings.version !== CONSENT_VERSION ;
+    return (
+      !this.consentSettings || this.consentSettings.version !== CONSENT_VERSION
+    );
   }
 
   /**
@@ -120,7 +146,7 @@ export class ConsentService extends AbstractHttpService<ConsentSettings> {
       width: '90%',
       maxWidth: '600px',
       autoFocus: true,
-      data: { categories: this.categories, privacyUrl: this.privacyUrl }
+      data: { categories: this.categories, privacyUrl: this.privacyUrl },
     });
     dialogRef.disableClose = true;
     dialogRef.afterClosed().subscribe((res: ConsentGiven) => {
@@ -132,11 +158,13 @@ export class ConsentService extends AbstractHttpService<ConsentSettings> {
    * Returns the current consent settings.
    */
   getConsentSettings(): ConsentSettings {
-    return this.consentSettings || {
-      version: CONSENT_VERSION,
-      timestamp: new Date(),
-      consentGiven: {}
-    };
+    return (
+      this.consentSettings || {
+        version: CONSENT_VERSION,
+        timestamp: new Date(),
+        consentGiven: {},
+      }
+    );
   }
 
   getInternalSettings(): CookieCategory[] {
@@ -156,11 +184,17 @@ export class ConsentService extends AbstractHttpService<ConsentSettings> {
     this.consentSettings.consentGiven = consentGiven;
     if (this.consentRecording?.enabled) {
       this.recordConsentSettings(this.consentSettings).subscribe(() => {
-        const event = new ConsentChangedEvent(this.categories, this.consentSettings);
+        const event = new ConsentChangedEvent(
+          this.categories,
+          this.consentSettings
+        );
         this.eventService.broadcast(event.type, event.payload);
       });
     } else {
-      const event = new ConsentChangedEvent(this.categories, this.consentSettings);
+      const event = new ConsentChangedEvent(
+        this.categories,
+        this.consentSettings
+      );
       this.eventService.broadcast(event.type, event.payload);
     }
   }
@@ -172,8 +206,10 @@ export class ConsentService extends AbstractHttpService<ConsentSettings> {
    */
   recordConsentSettings(consentSettings: ConsentSettings) {
     const connectionUrl = this.buildUri('');
-    return this.http.post<ConsentSettings>(connectionUrl, consentSettings, httpOptions).pipe(
-      catchError(this.handleError<ConsentSettings>('recordConsentSettings'))
-    );
+    return this.http
+      .post<ConsentSettings>(connectionUrl, consentSettings, httpOptions)
+      .pipe(
+        catchError(this.handleError<ConsentSettings>('recordConsentSettings'))
+      );
   }
 }

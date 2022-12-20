@@ -8,15 +8,24 @@
         </div>
         <div fxLayout="row wrap" fxLayoutAlign="space-between">
           <mat-form-field appearance="outline" class="no-field-hint">
-            <mat-label>{{ 'statistic.select-content-group' | translate }}</mat-label>
+            <mat-label>{{
+              'statistic.select-content-group' | translate
+            }}</mat-label>
             <mat-select [(ngModel)]="currentGroup">
-              <mat-option *ngFor="let contentGroup of contentGroups;" (click)="updateCollection()" [value]="contentGroup">
+              <mat-option
+                *ngFor="let contentGroup of contentGroups"
+                (click)="updateCollection()"
+                [value]="contentGroup"
+              >
                 {{ contentGroup.name }}
               </mat-option>
             </mat-select>
           </mat-form-field>
-          <button mat-stroked-button (click)="showDeleteDialog()"
-                  aria-labelledby="delete-answers">
+          <button
+            mat-stroked-button
+            (click)="showDeleteDialog()"
+            aria-labelledby="delete-answers"
+          >
             {{ 'content.delete-answers' | translate }}
           </button>
         </div>
@@ -27,5 +36,7 @@
 </div>
 
 <div class="visually-hidden">
-  <div id="delete-answers">{{ 'content.a11y-delete-all-answers' | translate }}</div>
+  <div id="delete-answers">
+    {{ 'content.a11y-delete-all-answers' | translate }}
+  </div>
 </div>

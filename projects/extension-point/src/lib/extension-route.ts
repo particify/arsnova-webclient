@@ -9,7 +9,7 @@ export enum RouteMountPoint {
   MODERATOR,
   PARTICIPANT,
   PRESENTATION,
-  ADMIN
+  ADMIN,
 }
 
 /**
@@ -43,12 +43,14 @@ export class ExtensionRouteProvider {
   constructor(
     public readonly mountPoint: RouteMountPoint,
     public readonly routes: Route[]
-  ) { }
+  ) {}
 
   static extractRoutesForMountPoint(
     mountPoint: RouteMountPoint,
     extensionRouteProviders: ExtensionRouteProvider[]
   ): Route[] {
-    return extensionRouteProviders.filter(p => p.mountPoint === mountPoint).reduce((acc, cur) => acc.concat(cur.routes), <Route[]>[]);
+    return extensionRouteProviders
+      .filter((p) => p.mountPoint === mountPoint)
+      .reduce((acc, cur) => acc.concat(cur.routes), <Route[]>[]);
   }
 }

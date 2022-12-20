@@ -5,16 +5,22 @@ import { ContentService } from '@arsnova/app/services/http/content.service';
 import { RoomStatsService } from '@arsnova/app/services/http/room-stats.service';
 import { NotificationService } from '@arsnova/app/services/util/notification.service';
 import {
-  ActivatedRouteStub, JsonTranslationLoader,
+  ActivatedRouteStub,
+  JsonTranslationLoader,
   MockGlobalStorageService,
-  MockLangService, MockMatDialog,
+  MockLangService,
+  MockMatDialog,
   MockNotificationService,
-  MockRouter
+  MockRouter,
 } from '@arsnova/testing/test-helpers';
 import { EventService } from '@arsnova/app/services/util/event.service';
 import { RoomService } from '@arsnova/app/services/http/room.service';
 import { ContentGroupService } from '@arsnova/app/services/http/content-group.service';
-import { ActivatedRoute, ActivatedRouteSnapshot, Router } from '@angular/router';
+import {
+  ActivatedRoute,
+  ActivatedRouteSnapshot,
+  Router,
+} from '@angular/router';
 import { DialogService } from '@arsnova/app/services/util/dialog.service';
 import { GlobalStorageService } from '@arsnova/app/services/util/global-storage.service';
 import { LanguageService } from '@arsnova/app/services/util/language.service';
@@ -28,18 +34,37 @@ import { ContentType } from '@arsnova/app/models/content-type.enum';
 import { ContentState } from '@arsnova/app/models/content-state';
 import { ContentGroup } from '@arsnova/app/models/content-group';
 import { Room } from '@arsnova/app/models/room';
-import { TranslateLoader, TranslateModule, TranslateService } from '@ngx-translate/core';
+import {
+  TranslateLoader,
+  TranslateModule,
+  TranslateService,
+} from '@ngx-translate/core';
 import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { WsCommentService } from '@arsnova/app/services/websockets/ws-comment.service';
 import { CommentService } from '@arsnova/app/services/http/comment.service';
 import { SplitShortIdPipe } from '@arsnova/app/pipes/split-short-id.pipe';
 import { MatLegacyMenuModule as MatMenuModule } from '@angular/material/legacy-menu';
-import { RoomSummary, RoomSummaryStats } from '@arsnova/app/models/room-summary';
+import {
+  RoomSummary,
+  RoomSummaryStats,
+} from '@arsnova/app/models/room-summary';
 
 @Injectable()
 class MockContentService {
   getContentsByIds() {
-    return of([new Content('1234', '0', '1', 'subject', 'body', [], ContentType.CHOICE, {}, new ContentState(1, new Date(), true))]);
+    return of([
+      new Content(
+        '1234',
+        '0',
+        '1',
+        'subject',
+        'body',
+        [],
+        ContentType.CHOICE,
+        {},
+        new ContentState(1, new Date(), true)
+      ),
+    ]);
   }
 }
 
@@ -53,7 +78,7 @@ class MockEventService {
 @Injectable()
 class MockRoomService {
   getCurrentRoomsMessageStream() {
-    return of({body: '{ "UserCountChanged": { "userCount": 0} }'})
+    return of({ body: '{ "UserCountChanged": { "userCount": 0} }' });
   }
 
   getRoomSummaries() {
@@ -66,7 +91,7 @@ class MockRoomService {
 
 @Injectable()
 class MockContentGroupService {
-  getByRoomIdAndName(){
+  getByRoomIdAndName() {
     return of(new ContentGroup('1234', '0', 'roomId', 'name', [], true));
   }
   isIndexPublished() {
@@ -75,19 +100,18 @@ class MockContentGroupService {
 }
 @Injectable()
 class MockRoomStatsService {
-  getStats(){
+  getStats() {
     return of({});
   }
 }
 
 @Injectable()
-class MockDialogService {
-}
+class MockDialogService {}
 @Injectable()
 class MockWsCommentService {
   getCommentStream() {
     const body = '{ "payload": {} }';
-    return of({ body: body})
+    return of({ body: body });
   }
 }
 
@@ -103,12 +127,12 @@ describe('CreatorOverviewComponent', () => {
   let fixture: ComponentFixture<CreatorOverviewComponent>;
 
   const data = {
-    room: new Room('1234', 'shortId', 'abbreviation', 'name', 'description')
-  }
+    room: new Room('1234', 'shortId', 'abbreviation', 'name', 'description'),
+  };
 
   const snapshot = new ActivatedRouteSnapshot();
 
-  snapshot.params = of([{seriesName: 'SERIES'}]);
+  snapshot.params = of([{ seriesName: 'SERIES' }]);
 
   const activatedRouteStub = new ActivatedRouteStub(null, data, snapshot);
 
@@ -120,96 +144,89 @@ describe('CreatorOverviewComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [
-        CreatorOverviewComponent,
-        A11yIntroPipe,
-        SplitShortIdPipe
-      ],
+      declarations: [CreatorOverviewComponent, A11yIntroPipe, SplitShortIdPipe],
       providers: [
         {
           provide: ContentService,
-          useClass: MockContentService
+          useClass: MockContentService,
         },
         {
           provide: RoomStatsService,
-          useClass: MockRoomStatsService
+          useClass: MockRoomStatsService,
         },
         {
           provide: NotificationService,
-          useClass: MockNotificationService
+          useClass: MockNotificationService,
         },
         {
           provide: EventService,
-          useClass: MockEventService
+          useClass: MockEventService,
         },
         {
           provide: RoomService,
-          useClass: MockRoomService
+          useClass: MockRoomService,
         },
         {
           provide: ContentGroupService,
-          useClass: MockContentGroupService
+          useClass: MockContentGroupService,
         },
         {
           provide: ActivatedRoute,
-          useValue: activatedRouteStub
+          useValue: activatedRouteStub,
         },
         {
           provide: MatDialog,
-          useClass: MockMatDialog
+          useClass: MockMatDialog,
         },
         {
           provide: DialogService,
-          useClass: MockDialogService
+          useClass: MockDialogService,
         },
         {
           provide: GlobalStorageService,
-          useClass: MockGlobalStorageService
+          useClass: MockGlobalStorageService,
         },
         {
           provide: LanguageService,
-          useClass: MockLangService
+          useClass: MockLangService,
         },
         {
           provide: Location,
-          useClass: MockLocationStrategy
+          useClass: MockLocationStrategy,
         },
         {
           provide: Router,
-          useClass: MockRouter
+          useClass: MockRouter,
         },
         {
           provide: A11yIntroPipe,
-          useValue: a11yIntroPipe
+          useValue: a11yIntroPipe,
         },
         {
           provide: WsCommentService,
-          useClass: MockWsCommentService
+          useClass: MockWsCommentService,
         },
         {
           provide: CommentService,
-          useClass: MockCommentService
+          useClass: MockCommentService,
         },
         {
           provide: SplitShortIdPipe,
-          useValue: splitShortIdPipe
-        }
+          useValue: splitShortIdPipe,
+        },
       ],
       imports: [
         TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
-            useClass: JsonTranslationLoader
+            useClass: JsonTranslationLoader,
           },
-          isolate: true
+          isolate: true,
         }),
-        MatMenuModule
+        MatMenuModule,
       ],
-      schemas: [
-        NO_ERRORS_SCHEMA
-      ]
-    })
-    .compileComponents();
+      schemas: [NO_ERRORS_SCHEMA],
+    }).compileComponents();
   }));
 
   beforeEach(() => {

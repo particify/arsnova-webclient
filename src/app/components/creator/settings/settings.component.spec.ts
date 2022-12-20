@@ -7,13 +7,17 @@ import {
   MockEventService,
   MockMatDialog,
   MockNotificationService,
-  MockRouter
+  MockRouter,
 } from '@arsnova/testing/test-helpers';
 import { NotificationService } from '@arsnova/app/services/util/notification.service';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { RoomService } from '@arsnova/app/services/http/room.service';
 import { NO_ERRORS_SCHEMA, Injectable } from '@angular/core';
-import { ActivatedRoute, ActivatedRouteSnapshot, Router } from '@angular/router';
+import {
+  ActivatedRoute,
+  ActivatedRouteSnapshot,
+  Router,
+} from '@angular/router';
 import { EventService } from '@arsnova/app/services/util/event.service';
 import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { Location } from '@angular/common';
@@ -21,8 +25,7 @@ import { MockLocationStrategy } from '@angular/common/testing';
 import { of } from 'rxjs';
 
 @Injectable()
-class MockRoomService {
-}
+class MockRoomService {}
 
 describe('SettingsComponent', () => {
   let component: SettingsComponent;
@@ -30,67 +33,69 @@ describe('SettingsComponent', () => {
 
   const snapshot = new ActivatedRouteSnapshot();
 
-  snapshot.params = of([{settingsName: 'general'}]);
+  snapshot.params = of([{ settingsName: 'general' }]);
 
   const activatedRouteStub = new ActivatedRouteStub(null, null, snapshot);
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ SettingsComponent ],
+      declarations: [SettingsComponent],
       providers: [
         {
           provide: MatDialog,
-          useClass: MockMatDialog
+          useClass: MockMatDialog,
         },
         {
           provide: NotificationService,
-          useClass: MockNotificationService
+          useClass: MockNotificationService,
         },
         {
           provide: RoomService,
-          useClass: MockRoomService
+          useClass: MockRoomService,
         },
         {
           provide: Router,
-          useClass: MockRouter
+          useClass: MockRouter,
         },
         {
           provide: Location,
-          useClass: MockLocationStrategy
+          useClass: MockLocationStrategy,
         },
         {
           provide: EventService,
-          useClass: MockEventService
+          useClass: MockEventService,
         },
         {
           provide: ActivatedRoute,
-          useValue: activatedRouteStub
-        }
+          useValue: activatedRouteStub,
+        },
       ],
       imports: [
         TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
-            useClass: JsonTranslationLoader
+            useClass: JsonTranslationLoader,
           },
-          isolate: true
-        })
+          isolate: true,
+        }),
       ],
-      schemas: [
-        NO_ERRORS_SCHEMA
-      ]
-    })
-      .compileComponents();
+      schemas: [NO_ERRORS_SCHEMA],
+    }).compileComponents();
   }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(SettingsComponent);
     component = fixture.componentInstance;
-    component.settings = {headerName: 'general', iconName: 'settings', componentName: 'RoomComponent', hotkey: '1'};
+    component.settings = {
+      headerName: 'general',
+      iconName: 'settings',
+      componentName: 'RoomComponent',
+      hotkey: '1',
+    };
     fixture.detectChanges();
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
   });
-})
+});

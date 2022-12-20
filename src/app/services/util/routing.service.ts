@@ -11,7 +11,7 @@ export enum RoutePrefix {
   CREATOR = 'edit',
   PARTICIPANT = 'p',
   MODERATOR = 'moderator',
-  PRESENTATION = 'present'
+  PRESENTATION = 'present',
 }
 
 export const TITLES: { [key: string]: string } = {
@@ -38,32 +38,25 @@ export const TITLES: { [key: string]: string } = {
   stats: 'admin',
   users: 'admin',
   rooms: 'admin',
-  'account/:accountSettingsName': 'account'
+  'account/:accountSettingsName': 'account',
 };
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class RoutingService {
-
   seriesChildRoutes = [
     'series/:seriesName/create',
-    'series/:seriesName/statistics'
+    'series/:seriesName/statistics',
   ];
   roomChildRoutes = [
     'feedback',
     'comments',
     'comments/moderation',
-    'series/:seriesName'
+    'series/:seriesName',
   ];
-  homeChildRoutes = [
-    'user',
-    'login'
-  ];
-  loginChildRoutes = [
-    'register',
-    'request-password-reset'
-  ];
+  homeChildRoutes = ['user', 'login'];
+  loginChildRoutes = ['register', 'request-password-reset'];
   parentRoute = {
     home: '',
     login: 'login',
@@ -95,23 +88,27 @@ export class RoutingService {
     private location: Location,
     private translateService: TranslateService,
     private langService: LanguageService,
-    private globalStorageService: GlobalStorageService) {
-  }
+    private globalStorageService: GlobalStorageService
+  ) {}
 
   subscribeActivatedRoute() {
-    this.router.events.pipe(
-        filter(event => (event instanceof ActivationEnd)),
-        filter(event => (event as ActivationEnd).snapshot.outlet === 'primary')
-    ).subscribe((activationEndEvent: ActivationEnd) => {
-      if (activationEndEvent.snapshot.component) {
-        this.getRoomUrlData(activationEndEvent.snapshot);
-        this.getRoutes(activationEndEvent.snapshot);
-      }
-    });
-    this.langService.langEmitter.subscribe(lang => {
+    this.router.events
+      .pipe(
+        filter((event) => event instanceof ActivationEnd),
+        filter(
+          (event) => (event as ActivationEnd).snapshot.outlet === 'primary'
+        )
+      )
+      .subscribe((activationEndEvent: ActivationEnd) => {
+        if (activationEndEvent.snapshot.component) {
+          this.getRoomUrlData(activationEndEvent.snapshot);
+          this.getRoutes(activationEndEvent.snapshot);
+        }
+      });
+    this.langService.langEmitter.subscribe((lang) => {
       if (this.isTranslatedTitle) {
         this.translateService.use(lang);
-        this.translateService.get('title.' + this.titleKey).subscribe(msg => {
+        this.translateService.get('title.' + this.titleKey).subscribe((msg) => {
           this.updateDocumentTitle(msg);
         });
       }
@@ -135,7 +132,7 @@ export class RoutingService {
   }
 
   getRoutes(route: ActivatedRouteSnapshot) {
-    const series  = route.paramMap.get('seriesName') || '';
+    const series = route.paramMap.get('seriesName') || '';
     const role = route.data.requiredRole || '';
     this.fullCurrentRoute = this.location.path();
     this.currentRoute = route.routeConfig.path;
@@ -159,7 +156,11 @@ export class RoutingService {
       backRoute = [this.getRoleRoute(role), this.shortId, 'series', series];
     }
     // Set back route if not set yet, parent route is a room route or if current route is no room route at all
-    if (!this.backRouteIsSet || parentRoute === roomRoute || this.currentRoute !== roomRoute) {
+    if (
+      !this.backRouteIsSet ||
+      parentRoute === roomRoute ||
+      this.currentRoute !== roomRoute
+    ) {
       this.backRoute = backRoute;
       this.backRouteIsSet = true;
     } else {
@@ -186,7 +187,7 @@ export class RoutingService {
   setRedirect(url?: string, checkIfAlreadyOnLogin = false) {
     const redirectRoute = this.getRedirectUrl();
     if (!redirectRoute) {
-      if (!url && (checkIfAlreadyOnLogin && this.location.path() !== '/login')) {
+      if (!url && checkIfAlreadyOnLogin && this.location.path() !== '/login') {
         url = this.fullCurrentRoute ?? this.location.path();
       }
       this.setRedirectUrl(url);
@@ -224,7 +225,9 @@ export class RoutingService {
         return RoutePrefix.PRESENTATION;
       }
     }
-    return role === UserRole.PARTICIPANT ? RoutePrefix.PARTICIPANT : RoutePrefix.CREATOR;
+    return role === UserRole.PARTICIPANT
+      ? RoutePrefix.PARTICIPANT
+      : RoutePrefix.CREATOR;
   }
 
   setTitle(route?: ActivatedRouteSnapshot) {
@@ -233,7 +236,7 @@ export class RoutingService {
     let newTitle;
     if (route.data.isPresentation) {
       this.titleKey = 'presentation-mode';
-    } else if (this.checkIfHomeRoute(route))  {
+    } else if (this.checkIfHomeRoute(route)) {
       newTitle = this.homeTitle;
       this.isTranslatedTitle = false;
     } else {
@@ -243,7 +246,6 @@ export class RoutingService {
       if (!newTitle) {
         newTitle = this.getNewTitleFromTitleKey(route);
       }
-
     }
     if (this.title !== newTitle && newTitle) {
       this.title = newTitle;
@@ -253,7 +255,7 @@ export class RoutingService {
 
   private getNewTitleFromTitleKey(route: ActivatedRouteSnapshot) {
     let newTitle;
-    switch(this.titleKey) {
+    switch (this.titleKey) {
       case 'room':
         if (route.data.room) {
           newTitle = route.data.room.name;
@@ -287,7 +289,7 @@ export class RoutingService {
 
   private updateTitle() {
     if (this.isTranslatedTitle) {
-      this.translateService.get('title.' + this.titleKey).subscribe(msg => {
+      this.translateService.get('title.' + this.titleKey).subscribe((msg) => {
         this.updateDocumentTitle(msg);
       });
     } else {
@@ -323,7 +325,9 @@ export class RoutingService {
   }
 
   navToPresentation(newTab = false) {
-    const url = this.fullCurrentRoute.includes('/settings') ? this.getPresentationHomeUrl() : this.getPresentationUrl(this.fullCurrentRoute);
+    const url = this.fullCurrentRoute.includes('/settings')
+      ? this.getPresentationHomeUrl()
+      : this.getPresentationUrl(this.fullCurrentRoute);
     if (newTab) {
       window.open(url, '_blank');
     } else {
@@ -336,12 +340,22 @@ export class RoutingService {
   }
 
   getPresentationUrl(url: string): string {
-    return this.replaceRoleInUrl(url, this.getRoleRoute(this.viewRole), RoutePrefix.PRESENTATION);
+    return this.replaceRoleInUrl(
+      url,
+      this.getRoleRoute(this.viewRole),
+      RoutePrefix.PRESENTATION
+    );
   }
 
   switchRole() {
     const currentRoleString = this.getRoleRoute(this.role);
-    const url = '/' + (this.fullCurrentRoute.includes(currentRoleString) ? RoutePrefix.PARTICIPANT : currentRoleString) + '/' + this.shortId;
+    const url =
+      '/' +
+      (this.fullCurrentRoute.includes(currentRoleString)
+        ? RoutePrefix.PARTICIPANT
+        : currentRoleString) +
+      '/' +
+      this.shortId;
     this.router.navigateByUrl(url);
   }
 

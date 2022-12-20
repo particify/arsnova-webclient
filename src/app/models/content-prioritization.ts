@@ -6,7 +6,8 @@ import { ContentType } from './content-type.enum';
 export class ContentPrioritization extends ContentChoice {
   assignablePoints: number;
 
-  constructor(id: string,
+  constructor(
+    id: string,
     revision: string,
     roomId: string,
     subject: string,
@@ -15,8 +16,9 @@ export class ContentPrioritization extends ContentChoice {
     options: AnswerOption[],
     format: ContentType,
     state: ContentState,
-    assignablePoints: number) {
-  super(
+    assignablePoints: number
+  ) {
+    super(
       id,
       revision,
       roomId,
@@ -27,7 +29,8 @@ export class ContentPrioritization extends ContentChoice {
       [],
       false,
       format,
-      state);
-  this.assignablePoints = assignablePoints;
-}
+      state
+    );
+    this.assignablePoints = assignablePoints;
+  }
 }

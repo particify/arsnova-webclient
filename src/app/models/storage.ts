@@ -3,14 +3,14 @@ export enum StorageItemCategory {
   REQUIRED,
   FUNCTIONAL,
   STATISTICS,
-  MARKETING
+  MARKETING,
 }
 
 export enum StorageBackend {
   MEMORY,
   SESSIONSTORAGE,
   LOCALSTORAGE,
-  COOKIE
+  COOKIE,
 }
 
 export interface StorageItem {

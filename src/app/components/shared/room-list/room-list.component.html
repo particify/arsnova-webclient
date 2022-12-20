@@ -1,100 +1,236 @@
 <app-loading-indicator *ngIf="isLoading" [size]="80"></app-loading-indicator>
 
 <div *ngIf="!isLoading" fxLayout="column" fxLayoutGap="10px">
-  <lib-extension-point extensionId="lms-course-room-list" [extensionData]="{ userId: auth.userId, excludeRoomIds: roomIds }"></lib-extension-point>
+  <lib-extension-point
+    extensionId="lms-course-room-list"
+    [extensionData]="{ userId: auth.userId, excludeRoomIds: roomIds }"
+  ></lib-extension-point>
   <div>
     <mat-card class="account-memberships">
-      <div fxFill fxLayout="row wrap" fxLayoutAlign="space-between center" class="header-container">
+      <div
+        fxFill
+        fxLayout="row wrap"
+        fxLayoutAlign="space-between center"
+        class="header-container"
+      >
         <div fxLayout="row" fxLayoutGap="10px" class="button-container">
-          <button mat-raised-button class="button-primary  desktop-buttons" (click)="openCreateRoomDialog()" id="create-room-button"
-                  appHotkey="2" [appHotkeyTitle]="'home-page.create-room' | translate">
+          <button
+            mat-raised-button
+            class="button-primary desktop-buttons"
+            (click)="openCreateRoomDialog()"
+            id="create-room-button"
+            appHotkey="2"
+            [appHotkeyTitle]="'home-page.create-room' | translate"
+          >
             <mat-icon class="add-icon">add</mat-icon>
             <span>{{ 'home-page.create-room' | translate }}</span>
           </button>
-          <button *ngIf="showImportMenu" mat-button [matMenuTriggerFor]="more" aria-labelledby="import-options">
+          <button
+            *ngIf="showImportMenu"
+            mat-button
+            [matMenuTriggerFor]="more"
+            aria-labelledby="import-options"
+          >
             <mat-icon class="add-icon">file_upload</mat-icon>
             <span>{{ 'room-list.import' | translate }}</span>
           </button>
         </div>
-        <div class="search-container" [ngClass]="{'full-width-container': !showImportMenu}">
+        <div
+          class="search-container"
+          [ngClass]="{ 'full-width-container': !showImportMenu }"
+        >
           <mat-icon matPrefix class="search-icon">search</mat-icon>
-          <input [disabled]="rooms?.length === 0" matInput class="search-input"  [ngClass]="{'full-width-search': !showImportMenu}"
-                 #search (keyup)="filterRooms(search.value)"
-                 placeholder="{{'room-list.filter-message' | translate }}" aria-labelledby="filter-rooms"/>
+          <input
+            [disabled]="rooms?.length === 0"
+            matInput
+            class="search-input"
+            [ngClass]="{ 'full-width-search': !showImportMenu }"
+            #search
+            (keyup)="filterRooms(search.value)"
+            placeholder="{{ 'room-list.filter-message' | translate }}"
+            aria-labelledby="filter-rooms"
+          />
         </div>
       </div>
-      <button mat-fab class="button-primary add-mobile mobile-buttons" aria-labelledby="add-room" (click)="openCreateRoomDialog()">
+      <button
+        mat-fab
+        class="button-primary add-mobile mobile-buttons"
+        aria-labelledby="add-room"
+        (click)="openCreateRoomDialog()"
+      >
         <mat-icon class="add-icon">add</mat-icon>
       </button>
       <mat-menu #more="matMenu" xPosition="before">
-        <button *ngIf="showGuestAccountControls" mat-menu-item (click)="getGuestRooms()">
+        <button
+          *ngIf="showGuestAccountControls"
+          mat-menu-item
+          (click)="getGuestRooms()"
+        >
           <mat-icon class="icon-primary">swap_horiz</mat-icon>
           <span>{{ 'room-list.rooms-from-guest' | translate }}</span>
         </button>
         <lib-extension-point extensionId="import-token"></lib-extension-point>
       </mat-menu>
-      <div *ngIf="!isLoading" fxFill fxLayout="column" fxLayoutAlign="center center" tabindex="0" id="room-list"
-           [ngClass]="{'visually-hidden': rooms.length > 0}">
-        <h3 class="hint">{{ rooms.length === 0 ? ('room-list.no-rooms' | translate) :
-          'room-list.a11y-list-summary' | translate:{count: rooms.length} }}</h3>
+      <div
+        *ngIf="!isLoading"
+        fxFill
+        fxLayout="column"
+        fxLayoutAlign="center center"
+        tabindex="0"
+        id="room-list"
+        [ngClass]="{ 'visually-hidden': rooms.length > 0 }"
+      >
+        <h3 class="hint">
+          {{
+            rooms.length === 0
+              ? ('room-list.no-rooms' | translate)
+              : ('room-list.a11y-list-summary'
+                | translate : { count: rooms.length })
+          }}
+        </h3>
       </div>
-      <div *ngIf="displayRooms.length === 0 && rooms.length > 0" fxLayout="column" fxLayoutAlign="center center">
+      <div
+        *ngIf="displayRooms.length === 0 && rooms.length > 0"
+        fxLayout="column"
+        fxLayoutAlign="center center"
+      >
         <h3 class="hint">{{ 'room-list.no-rooms-found' | translate }}</h3>
-        <button mat-stroked-button class="stroked-primary alt-button" routerLink="">{{ 'room-list.join-room' | translate }}</button>
+        <button
+          mat-stroked-button
+          class="stroked-primary alt-button"
+          routerLink=""
+        >
+          {{ 'room-list.join-room' | translate }}
+        </button>
       </div>
       <mat-list *ngIf="rooms?.length > 0">
-        <mat-list-item fxLayout="column" fxLayoutAlign="center" class="bottom-border full-width-list-item"
-                       *ngFor="let room of displayRooms; let i = index" [ngSwitch]="room.membership.primaryRole">
+        <mat-list-item
+          fxLayout="column"
+          fxLayoutAlign="center"
+          class="bottom-border full-width-list-item"
+          *ngFor="let room of displayRooms; let i = index"
+          [ngSwitch]="room.membership.primaryRole"
+        >
           <div fxLayout="row" fxFill class="outer">
-            <div tabindex="0" role="button" fxLayout="row" fxLayoutAlign="space-between center" class="inner container"
-                 attr.aria-label="{{ 'room-list.a11y-join-room' | translate:
-                        {room: room.summary.name, id: room.summary.shortId, role: roles.get(room.membership.primaryRole)} }}"
-                 (click)="setCurrentRoom(room.summary.shortId, room.membership.primaryRole)"
-            (keyup.enter)="setCurrentRoom(room.summary.shortId, room.membership.primaryRole)">
+            <div
+              tabindex="0"
+              role="button"
+              fxLayout="row"
+              fxLayoutAlign="space-between center"
+              class="inner container"
+              attr.aria-label="{{
+                'room-list.a11y-join-room'
+                  | translate
+                    : {
+                        room: room.summary.name,
+                        id: room.summary.shortId,
+                        role: roles.get(room.membership.primaryRole)
+                      }
+              }}"
+              (click)="
+                setCurrentRoom(
+                  room.summary.shortId,
+                  room.membership.primaryRole
+                )
+              "
+              (keyup.enter)="
+                setCurrentRoom(
+                  room.summary.shortId,
+                  room.membership.primaryRole
+                )
+              "
+            >
               <p class="ellipsis">
-                {{room.summary.name}}</p>
-              <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="1em">
-                <div *ngIf="isRoomActive(room.summary.stats.roomUserCount)" fxLayoutAlign="center" class="active-label"
-                [matTooltip]="'room-list.active-info' | translate: {userCount: room.summary.stats.roomUserCount}">
+                {{ room.summary.name }}
+              </p>
+              <div
+                fxLayout="row"
+                fxLayoutAlign="center center"
+                fxLayoutGap="1em"
+              >
+                <div
+                  *ngIf="isRoomActive(room.summary.stats.roomUserCount)"
+                  fxLayoutAlign="center"
+                  class="active-label"
+                  [matTooltip]="
+                    'room-list.active-info'
+                      | translate
+                        : { userCount: room.summary.stats.roomUserCount }
+                  "
+                >
                   <span>{{ 'room-list.active' | translate }}</span>
                 </div>
-                <app-list-badge *ngIf="room.summary.stats.ackCommentCount" [count]="room.summary.stats.ackCommentCount"></app-list-badge>
-                <p class="short-id">{{room.summary.shortId | splitShortId}}</p>
-                <mat-icon mat-list-icon *ngSwitchCase="creatorRole"
-                          matTooltip="{{ 'room-list.creator-role' | translate }}"
-                          title="{{ 'room-list.creator-role' | translate }}">
+                <app-list-badge
+                  *ngIf="room.summary.stats.ackCommentCount"
+                  [count]="room.summary.stats.ackCommentCount"
+                ></app-list-badge>
+                <p class="short-id">
+                  {{ room.summary.shortId | splitShortId }}
+                </p>
+                <mat-icon
+                  mat-list-icon
+                  *ngSwitchCase="creatorRole"
+                  matTooltip="{{ 'room-list.creator-role' | translate }}"
+                  title="{{ 'room-list.creator-role' | translate }}"
+                >
                   record_voice_over
                 </mat-icon>
-                <mat-icon mat-list-icon *ngSwitchCase="participantRole"
-                          matTooltip="{{ 'room-list.participant-role' | translate }}"
-                          title="{{ 'room-list.participant-role' | translate }}">
+                <mat-icon
+                  mat-list-icon
+                  *ngSwitchCase="participantRole"
+                  matTooltip="{{ 'room-list.participant-role' | translate }}"
+                  title="{{ 'room-list.participant-role' | translate }}"
+                >
                   people
                 </mat-icon>
-                <mat-icon mat-list-icon *ngSwitchCase="executiveModeratorRole"
-                          matTooltip="{{ 'room-list.executive-moderator-role' | translate }}"
-                          title="{{ 'room-list.executive-moderator-role' | translate }}">
+                <mat-icon
+                  mat-list-icon
+                  *ngSwitchCase="executiveModeratorRole"
+                  matTooltip="{{
+                    'room-list.executive-moderator-role' | translate
+                  }}"
+                  title="{{ 'room-list.executive-moderator-role' | translate }}"
+                >
                   gavel
                 </mat-icon>
               </div>
             </div>
             <div fxLayout="row" fxLayoutAlign="center center">
-              <button mat-icon-button [matMenuTriggerFor]="moreActions" aria-labelledby="more-options"
-                      matTooltip="{{ 'room-list.more-options' | translate }}">
+              <button
+                mat-icon-button
+                [matMenuTriggerFor]="moreActions"
+                aria-labelledby="more-options"
+                matTooltip="{{ 'room-list.more-options' | translate }}"
+              >
                 <mat-icon>more_vert</mat-icon>
               </button>
               <mat-menu #moreActions="matMenu" xPosition="before">
-                <button mat-menu-item *ngIf="room.membership.primaryRole === creatorRole" (click)="navToSettings(room.summary.shortId)">
+                <button
+                  mat-menu-item
+                  *ngIf="room.membership.primaryRole === creatorRole"
+                  (click)="navToSettings(room.summary.shortId)"
+                >
                   <mat-icon>settings</mat-icon>
                   <span> {{ 'room-list.room-settings' | translate }}</span>
                 </button>
-                <button mat-menu-item *ngIf="room.membership.primaryRole === creatorRole" (click)="duplicateRoom(room.summary.id, room.summary.name)">
+                <button
+                  mat-menu-item
+                  *ngIf="room.membership.primaryRole === creatorRole"
+                  (click)="duplicateRoom(room.summary.id, room.summary.name)"
+                >
                   <mat-icon>dynamic_feed</mat-icon>
                   <span> {{ 'room-list.duplicate-room' | translate }}</span>
                 </button>
                 <button mat-menu-item (click)="openDeleteRoomDialog(room)">
                   <mat-icon class="icon-warn">delete_forever</mat-icon>
-                  <span> {{ (room.membership.primaryRole !== creatorRole ? 'room-list.panel-remove-room' :
-                    'room-list.panel-delete-room') | translate}}</span>
+                  <span>
+                    {{
+                      (room.membership.primaryRole !== creatorRole
+                        ? 'room-list.panel-remove-room'
+                        : 'room-list.panel-delete-room'
+                      ) | translate
+                    }}</span
+                  >
                 </button>
               </mat-menu>
             </div>
@@ -104,7 +240,11 @@
     </mat-card>
   </div>
 
-  <mat-card *ngIf="showRoomsFromGuest" id="guest-rooms" class="account-memberships">
+  <mat-card
+    *ngIf="showRoomsFromGuest"
+    id="guest-rooms"
+    class="account-memberships"
+  >
     <div fxLayout="row" fxLayoutAlign="space-between">
       <h3>{{ 'room-list.rooms-from-guest' | translate }}</h3>
       <button mat-stroked-button (click)="showRoomsFromGuest = false">
@@ -114,40 +254,87 @@
     <p>{{ 'room-list.transfer-rooms-from-guest' | translate }}</p>
     <mat-card-content>
       <mat-list class="rooms-from-guest" *ngIf="roomsFromGuest">
-        <ng-container *ngFor="let room of roomsFromGuest; let i = index"
-            [ngSwitch]="room.membership.primaryRole">
-          <mat-list-item fxLayout="column" fxLayoutAlign="center" *ngIf="!room.transferred"
-                         class="bottom-border full-width-list-item">
+        <ng-container
+          *ngFor="let room of roomsFromGuest; let i = index"
+          [ngSwitch]="room.membership.primaryRole"
+        >
+          <mat-list-item
+            fxLayout="column"
+            fxLayoutAlign="center"
+            *ngIf="!room.transferred"
+            class="bottom-border full-width-list-item"
+          >
             <div fxLayout="row" fxFill>
-              <div tabindex="0" role="button" fxLayout="row" fxLayoutAlign="center center" class="container inner">
-                <p matBadge="{{ room.summary.stats.ackCommentCount > 0 && deviceType === 'desktop' ? room.summary.stats.ackCommentCount : null }}"
-                  matBadgeOverlap="false">{{room.summary.name}}</p>
+              <div
+                tabindex="0"
+                role="button"
+                fxLayout="row"
+                fxLayoutAlign="center center"
+                class="container inner"
+              >
+                <p
+                  matBadge="{{
+                    room.summary.stats.ackCommentCount > 0 &&
+                    deviceType === 'desktop'
+                      ? room.summary.stats.ackCommentCount
+                      : null
+                  }}"
+                  matBadgeOverlap="false"
+                >
+                  {{ room.summary.name }}
+                </p>
                 <span class="fill-remaining-space"></span>
-                <p class="short-id">{{room.summary.shortId}}</p>
-                <mat-icon mat-list-icon *ngSwitchCase="creatorRole" class="role"
-                          matTooltip="{{ 'room-list.creator-role' | translate }}"
-                          title="{{ 'room-list.creator-role' | translate }}">
+                <p class="short-id">{{ room.summary.shortId }}</p>
+                <mat-icon
+                  mat-list-icon
+                  *ngSwitchCase="creatorRole"
+                  class="role"
+                  matTooltip="{{ 'room-list.creator-role' | translate }}"
+                  title="{{ 'room-list.creator-role' | translate }}"
+                >
                   record_voice_over
                 </mat-icon>
-                <mat-icon mat-list-icon *ngSwitchCase="participantRole" class="role"
-                          matTooltip="{{ 'room-list.participant-role' | translate }}"
-                          title="{{ 'room-list.participant-role' | translate }}">
+                <mat-icon
+                  mat-list-icon
+                  *ngSwitchCase="participantRole"
+                  class="role"
+                  matTooltip="{{ 'room-list.participant-role' | translate }}"
+                  title="{{ 'room-list.participant-role' | translate }}"
+                >
                   people
                 </mat-icon>
-                <mat-icon mat-list-icon *ngSwitchCase="executiveModeratorRole" class="role"
-                          matTooltip="{{ 'room-list.executive-moderator-role' | translate }}"
-                          title="{{ 'room-list.executive-moderator-role' | translate }}">
+                <mat-icon
+                  mat-list-icon
+                  *ngSwitchCase="executiveModeratorRole"
+                  class="role"
+                  matTooltip="{{
+                    'room-list.executive-moderator-role' | translate
+                  }}"
+                  title="{{ 'room-list.executive-moderator-role' | translate }}"
+                >
                   gavel
                 </mat-icon>
               </div>
               <div fxLayout="row" fxLayoutAlign="center center">
-                <button mat-button (click)="transferRoomFromGuest(room)" [hidden]="" *ngIf="room.membership.primaryRole === creatorRole"
-                        appTrackInteraction="Room transferred from guest" appTrackName="owner">
+                <button
+                  mat-button
+                  (click)="transferRoomFromGuest(room)"
+                  [hidden]=""
+                  *ngIf="room.membership.primaryRole === creatorRole"
+                  appTrackInteraction="Room transferred from guest"
+                  appTrackName="owner"
+                >
                   <mat-icon>swap_horiz</mat-icon>
                   {{ 'room-list.transfer' | translate }}
                 </button>
-                <button mat-button (click)="addRoomFromGuest(room)" [hidden]="room.transferred" *ngIf="room.membership.primaryRole !== creatorRole"
-                        appTrackInteraction="Room transferred from guest" appTrackName="participant">
+                <button
+                  mat-button
+                  (click)="addRoomFromGuest(room)"
+                  [hidden]="room.transferred"
+                  *ngIf="room.membership.primaryRole !== creatorRole"
+                  appTrackInteraction="Room transferred from guest"
+                  appTrackName="participant"
+                >
                   <mat-icon>add</mat-icon>
                   {{ 'room-list.add' | translate }}
                 </button>
@@ -162,6 +349,8 @@
 
 <div class="visually-hidden">
   <div id="filter-rooms">{{ 'room-list.filter' | translate }}</div>
-  <div id="import-options">{{ 'room-list.a11y-import-options' | translate }}</div>
+  <div id="import-options">
+    {{ 'room-list.a11y-import-options' | translate }}
+  </div>
   <div id="more-options">{{ 'room-list.a11y-more-options' | translate }}</div>
 </div>

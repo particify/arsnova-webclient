@@ -6,7 +6,12 @@ export class ClientAuthentication {
   authProvider: AuthProvider;
   token: string;
 
-  constructor(userId: string, loginId: string, authProvider: AuthProvider, token: string) {
+  constructor(
+    userId: string,
+    loginId: string,
+    authProvider: AuthProvider,
+    token: string
+  ) {
     this.userId = userId;
     this.loginId = loginId;
     this.authProvider = authProvider;

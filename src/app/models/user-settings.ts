@@ -3,7 +3,11 @@ export class UserSettings {
   contentVisualizationUnitPercent: boolean;
   showContentResultsDirectly: boolean;
 
-  constructor(contentAnswersDirectlyBelowChart = false, contentVisualizationUnitPercent = false, showContentResultsDirectly = false) {
+  constructor(
+    contentAnswersDirectlyBelowChart = false,
+    contentVisualizationUnitPercent = false,
+    showContentResultsDirectly = false
+  ) {
     this.contentAnswersDirectlyBelowChart = contentAnswersDirectlyBelowChart;
     this.contentVisualizationUnitPercent = contentVisualizationUnitPercent;
     this.showContentResultsDirectly = showContentResultsDirectly;

@@ -18,54 +18,54 @@ describe('StepperComponent', () => {
   let elementRef: ElementRef;
   let changeDetectorRef: ChangeDetectorRef;
 
-  const mockHotkeyService = jasmine.createSpyObj(['registerHotkey', 'unregisterHotkey']);
+  const mockHotkeyService = jasmine.createSpyObj([
+    'registerHotkey',
+    'unregisterHotkey',
+  ]);
 
   const mockRemoteService = jasmine.createSpyObj(['getFocusModeState']);
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ StepperComponent ],
+      declarations: [StepperComponent],
       imports: [
         TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
-            useClass: JsonTranslationLoader
+            useClass: JsonTranslationLoader,
           },
-          isolate: true
+          isolate: true,
         }),
-        BrowserAnimationsModule
+        BrowserAnimationsModule,
       ],
       providers: [
         {
           provide: AnnounceService,
-          useClass: MockAnnounceService
+          useClass: MockAnnounceService,
         },
         {
           provide: HotkeyService,
-          useValue: mockHotkeyService
+          useValue: mockHotkeyService,
         },
         {
           provide: Directionality,
-          useValue: dir
+          useValue: dir,
         },
         {
           provide: ChangeDetectorRef,
-          useValue: changeDetectorRef
+          useValue: changeDetectorRef,
         },
         {
           provide: ElementRef,
-          useValue: elementRef
+          useValue: elementRef,
         },
         {
           provide: RemoteService,
-          useValue: mockRemoteService
-        }
+          useValue: mockRemoteService,
+        },
       ],
-      schemas: [
-        NO_ERRORS_SCHEMA
-      ]
-    })
-    .compileComponents();
+      schemas: [NO_ERRORS_SCHEMA],
+    }).compileComponents();
   }));
 
   beforeEach(() => {

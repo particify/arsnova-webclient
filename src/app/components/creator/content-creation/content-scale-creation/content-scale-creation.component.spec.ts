@@ -11,38 +11,34 @@ import { of, Subject } from 'rxjs';
 import { ContentGroupService } from '../../../../services/http/content-group.service';
 import { AnnounceService } from '@arsnova/app/services/util/announce.service';
 import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
-import { ActivatedRouteStub, JsonTranslationLoader } from '@arsnova/testing/test-helpers';
+import {
+  ActivatedRouteStub,
+  JsonTranslationLoader,
+} from '@arsnova/testing/test-helpers';
 import { LikertScaleService } from '@arsnova/app/services/util/likert-scale.service';
 
 const mockCreateEvent = new Subject<any>();
 
 @Injectable()
-class MockContentService {
-}
+class MockContentService {}
 
 @Injectable()
-class MockNotificationService {
-}
+class MockNotificationService {}
 
 @Injectable()
-class MockEventService {
-}
+class MockEventService {}
 
 @Injectable()
-class MockRoomService {
-}
+class MockRoomService {}
 
 @Injectable()
-class MockContentGroupService {
-}
+class MockContentGroupService {}
 @Injectable()
-class MockAnnouncer {
-}
+class MockAnnouncer {}
 
 @Injectable()
 class MockLikertScaleService {
-  getOptionLabels(){
-  }
+  getOptionLabels() {}
 }
 
 describe('ContentScaleCreationComponent', () => {
@@ -51,66 +47,62 @@ describe('ContentScaleCreationComponent', () => {
 
   const data = {
     room: {
-      id: '1234'
-    }
-  }
+      id: '1234',
+    },
+  };
 
   const snapshot = new ActivatedRouteSnapshot();
 
-  snapshot.params = of([{seriesName: 'SERIES'}]);
+  snapshot.params = of([{ seriesName: 'SERIES' }]);
 
   const activatedRouteStub = new ActivatedRouteStub(null, data, snapshot);
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [
-        ContentScaleCreationComponent
-      ],
+      declarations: [ContentScaleCreationComponent],
       providers: [
         {
           provide: ContentService,
-          useClass: MockContentService
+          useClass: MockContentService,
         },
         {
           provide: NotificationService,
-          useClass: MockNotificationService
+          useClass: MockNotificationService,
         },
         {
           provide: EventService,
-          useClass: MockEventService
+          useClass: MockEventService,
         },
         {
           provide: RoomService,
-          useClass: MockRoomService
+          useClass: MockRoomService,
         },
         {
           provide: ContentGroupService,
-          useClass: MockContentGroupService
+          useClass: MockContentGroupService,
         },
         {
           provide: AnnounceService,
-          useClass: MockAnnouncer
+          useClass: MockAnnouncer,
         },
         {
           provide: ActivatedRoute,
-          useValue: activatedRouteStub
+          useValue: activatedRouteStub,
         },
         {
           provide: LikertScaleService,
-          useClass: MockLikertScaleService
-        }
+          useClass: MockLikertScaleService,
+        },
       ],
       imports: [
         TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
-            useClass: JsonTranslationLoader
+            useClass: JsonTranslationLoader,
           },
-          isolate: true
-        })
+          isolate: true,
+        }),
       ],
-      schemas: [
-        NO_ERRORS_SCHEMA
-      ]
+      schemas: [NO_ERRORS_SCHEMA],
     })
       .compileComponents()
       .then(() => {

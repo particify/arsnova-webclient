@@ -10,7 +10,7 @@ import {
   MockGlobalStorageService,
   MockRouter,
   MockEventService,
-  MockAnnounceService
+  MockAnnounceService,
 } from '@arsnova/testing/test-helpers';
 import { of } from 'rxjs';
 import { GlobalStorageService } from '@arsnova/app/services/util/global-storage.service';
@@ -33,19 +33,22 @@ import { FeedbackService } from '@arsnova/app/services/http/feedback.service';
 import { Message } from '@stomp/stompjs';
 import { A11yIntroPipe } from '@arsnova/app/pipes/a11y-intro.pipe';
 
-
 describe('ParticipantOverviewComponent', () => {
   let component: ParticipantOverviewComponent;
   let fixture: ComponentFixture<ParticipantOverviewComponent>;
 
-  const mockRoomService = jasmine.createSpyObj(['getCurrentRoomsMessageStream', 'getRoomSummaries', 'deleteRoom']);
+  const mockRoomService = jasmine.createSpyObj([
+    'getCurrentRoomsMessageStream',
+    'getRoomSummaries',
+    'deleteRoom',
+  ]);
 
   const mockRoomStatsService = jasmine.createSpyObj(['getStats']);
   mockRoomStatsService.getStats.and.returnValue(of({}));
 
   const mockWsCommentService = jasmine.createSpyObj(['getCommentStream']);
   const message = {
-    body: '{ "payload": {} }'
+    body: '{ "payload": {} }',
   };
   mockWsCommentService.getCommentStream.and.returnValue(of(message));
 
@@ -55,19 +58,25 @@ describe('ParticipantOverviewComponent', () => {
   const mockFeedbackService = jasmine.createSpyObj(['startSub']);
   mockFeedbackService.messageEvent = new EventEmitter<Message>();
 
-  const mockContentGroupService = jasmine.createSpyObj(['getByRoomIdAndName', 'getById', 'filterPublishedIds']);
+  const mockContentGroupService = jasmine.createSpyObj([
+    'getByRoomIdAndName',
+    'getById',
+    'filterPublishedIds',
+  ]);
   mockContentGroupService.getByRoomIdAndName.and.returnValue(of({}));
   mockContentGroupService.filterPublishedIds.and.returnValue([]);
 
-  const mockAuthenticationService = jasmine.createSpyObj(['getCurrentAuthentication']);
+  const mockAuthenticationService = jasmine.createSpyObj([
+    'getCurrentAuthentication',
+  ]);
 
   const room = new Room();
   room.settings = {};
   const data = {
     room: room,
     userRole: UserRole.PARTICIPANT,
-    viewRole: UserRole.PARTICIPANT
-  }
+    viewRole: UserRole.PARTICIPANT,
+  };
 
   const activatedRouteStub = new ActivatedRouteStub(null, data);
 
@@ -78,88 +87,85 @@ describe('ParticipantOverviewComponent', () => {
       declarations: [
         ParticipantOverviewComponent,
         A11yIntroPipe,
-        SplitShortIdPipe
-       ],
+        SplitShortIdPipe,
+      ],
       imports: [
         TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
-            useClass: JsonTranslationLoader
+            useClass: JsonTranslationLoader,
           },
-          isolate: true
-        })
+          isolate: true,
+        }),
       ],
       providers: [
         {
           provide: RoomService,
-          useValue: mockRoomService
+          useValue: mockRoomService,
         },
         {
           provide: RoomStatsService,
-          useValue: mockRoomStatsService
+          useValue: mockRoomStatsService,
         },
         {
           provide: LanguageService,
-          useClass: MockLangService
+          useClass: MockLangService,
         },
         {
           provide: WsCommentService,
-          useValue: mockWsCommentService
+          useValue: mockWsCommentService,
         },
         {
           provide: CommentService,
-          useValue: mockCommentService
+          useValue: mockCommentService,
         },
         {
           provide: FeedbackService,
-          useValue: mockFeedbackService
+          useValue: mockFeedbackService,
         },
         {
           provide: ContentGroupService,
-          useValue: mockContentGroupService
+          useValue: mockContentGroupService,
         },
         {
           provide: AnnounceService,
-          useClass: MockAnnounceService
+          useClass: MockAnnounceService,
         },
         {
           provide: Location,
-          useClass: MockLocationStrategy
+          useClass: MockLocationStrategy,
         },
         {
           provide: AuthenticationService,
-          useValue: mockAuthenticationService
+          useValue: mockAuthenticationService,
         },
         {
           provide: NotificationService,
-          useClass: MockNotificationService
+          useClass: MockNotificationService,
         },
         {
           provide: ActivatedRoute,
-          useValue: activatedRouteStub
+          useValue: activatedRouteStub,
         },
         {
           provide: GlobalStorageService,
-          useClass: MockGlobalStorageService
+          useClass: MockGlobalStorageService,
         },
         {
           provide: Router,
-          useClass: MockRouter
+          useClass: MockRouter,
         },
         {
           provide: EventService,
-          useClass: MockEventService
+          useClass: MockEventService,
         },
         {
           provide: SplitShortIdPipe,
-          useValue: splitShortIdPipe
-        }
+          useValue: splitShortIdPipe,
+        },
       ],
-      schemas: [
-        NO_ERRORS_SCHEMA
-      ]
-    })
-    .compileComponents();
+      schemas: [NO_ERRORS_SCHEMA],
+    }).compileComponents();
   }));
 
   beforeEach(() => {

@@ -1,8 +1,19 @@
-<div class="text-answer-container" [ngClass]="{'answers-visible': answersVisible}">
-  <app-answer-list *ngIf="!isLoading && answersVisible" [answers]="answerStats" [roomId]="content.roomId"
-                   [banMode]="false" [isPresentation]="isPresentation" (answerDeleted)="filterAnswers($event)"></app-answer-list>
+<div
+  class="text-answer-container"
+  [ngClass]="{ 'answers-visible': answersVisible }"
+>
+  <app-answer-list
+    *ngIf="!isLoading && answersVisible"
+    [answers]="answerStats"
+    [roomId]="content.roomId"
+    [banMode]="false"
+    [isPresentation]="isPresentation"
+    (answerDeleted)="filterAnswers($event)"
+  ></app-answer-list>
   <div fxLayoutAlign="center">
     <app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
-    <p *ngIf="!isLoading && answerStats.length === 0" class="hint">{{ 'statistic.no-answers' | translate }}</p>
+    <p *ngIf="!isLoading && answerStats.length === 0" class="hint">
+      {{ 'statistic.no-answers' | translate }}
+    </p>
   </div>
 </div>

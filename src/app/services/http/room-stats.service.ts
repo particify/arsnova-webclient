@@ -3,7 +3,11 @@ import { Injectable } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { Observable } from 'rxjs';
 import { catchError, filter } from 'rxjs/operators';
-import { DataChanged, ModeratorDataChanged, PublicDataChanged } from '../../models/events/data-changed';
+import {
+  DataChanged,
+  ModeratorDataChanged,
+  PublicDataChanged,
+} from '../../models/events/data-changed';
 import { RoomStats } from '../../models/room-stats';
 import { CachingService } from '../util/caching.service';
 import { EventService } from '../util/event.service';
@@ -21,13 +25,23 @@ export class RoomStatsService extends AbstractCachingHttpService<RoomStats> {
     notificationService: NotificationService,
     cachingService: CachingService
   ) {
-    super('/stats', http, ws, eventService, translateService, notificationService, cachingService);
-    eventService.on<PublicDataChanged<RoomStats>>('PublicDataChanged')
-        .pipe(filter(e => e.payload.dataType === 'RoomStatistics'))
-        .subscribe(e => this.handlePublicDataChanged(e))
-    eventService.on<ModeratorDataChanged<RoomStats>>('ModeratorDataChanged')
-        .pipe(filter(e => e.payload.dataType === 'RoomStatistics'))
-        .subscribe(e => this.handleModeratorDataChanged(e))
+    super(
+      '/stats',
+      http,
+      ws,
+      eventService,
+      translateService,
+      notificationService,
+      cachingService
+    );
+    eventService
+      .on<PublicDataChanged<RoomStats>>('PublicDataChanged')
+      .pipe(filter((e) => e.payload.dataType === 'RoomStatistics'))
+      .subscribe((e) => this.handlePublicDataChanged(e));
+    eventService
+      .on<ModeratorDataChanged<RoomStats>>('ModeratorDataChanged')
+      .pipe(filter((e) => e.payload.dataType === 'RoomStatistics'))
+      .subscribe((e) => this.handleModeratorDataChanged(e));
   }
 
   getStats(roomId: string, extendedView = false): Observable<RoomStats> {
@@ -44,15 +58,22 @@ export class RoomStatsService extends AbstractCachingHttpService<RoomStats> {
   }
 
   private handlePublicDataChanged(e: DataChanged<RoomStats>) {
-    this.cache.put(this.generateStatsCacheKey(e.payload.roomId), e.payload.data);
+    this.cache.put(
+      this.generateStatsCacheKey(e.payload.roomId),
+      e.payload.data
+    );
   }
 
   private handleModeratorDataChanged(e: DataChanged<RoomStats>) {
-    this.cache.put(this.generateStatsCacheKey(e.payload.roomId, true), e.payload.data);
+    this.cache.put(
+      this.generateStatsCacheKey(e.payload.roomId, true),
+      e.payload.data
+    );
   }
 
   private generateStatsCacheKey(roomId: string, moderator = false) {
-    const uri = this.buildUri('', roomId) + (moderator ? '?view=read-extended' : '');
-    return this.generateCacheKey(uri)
+    const uri =
+      this.buildUri('', roomId) + (moderator ? '?view=read-extended' : '');
+    return this.generateCacheKey(uri);
   }
 }

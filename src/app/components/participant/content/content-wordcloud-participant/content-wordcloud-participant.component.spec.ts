@@ -1,6 +1,10 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { ContentWordcloudParticipantComponent } from './content-wordcloud-participant.component';
-import { ActivatedRoute, ActivatedRouteSnapshot, Router } from '@angular/router';
+import {
+  ActivatedRoute,
+  ActivatedRouteSnapshot,
+  Router,
+} from '@angular/router';
 import { NotificationService } from '@arsnova/app/services/util/notification.service';
 import { LanguageService } from '@arsnova/app/services/util/language.service';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
@@ -11,7 +15,7 @@ import {
   ActivatedRouteStub,
   MockGlobalStorageService,
   MockRouter,
-  MockEventService
+  MockEventService,
 } from '@arsnova/testing/test-helpers';
 import { of } from 'rxjs';
 import { GlobalStorageService } from '@arsnova/app/services/util/global-storage.service';
@@ -21,7 +25,6 @@ import { ContentWordcloud } from '@arsnova/app/models/content-wordcloud';
 import { ContentType } from '@arsnova/app/models/content-type.enum';
 import { ContentState } from '@arsnova/app/models/content-state';
 import { EventService } from '@arsnova/app/services/util/event.service';
-
 
 describe('ContentWordcloudParticipantComponent', () => {
   let component: ContentWordcloudParticipantComponent;
@@ -33,8 +36,8 @@ describe('ContentWordcloudParticipantComponent', () => {
 
   const params = {
     shortId: '12345678',
-    seriesName: 'Quiz'
-  }
+    seriesName: 'Quiz',
+  };
 
   snapshot.params = of([params]);
 
@@ -42,57 +45,64 @@ describe('ContentWordcloudParticipantComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ ContentWordcloudParticipantComponent ],
+      declarations: [ContentWordcloudParticipantComponent],
       imports: [
         TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
-            useClass: JsonTranslationLoader
+            useClass: JsonTranslationLoader,
           },
-          isolate: true
-        })
+          isolate: true,
+        }),
       ],
       providers: [
         {
           provide: ContentAnswerService,
-          useValue: mockContentAnswerService
+          useValue: mockContentAnswerService,
         },
         {
           provide: NotificationService,
-          useClass: MockNotificationService
+          useClass: MockNotificationService,
         },
         {
           provide: LanguageService,
-          useClass: MockLangService
+          useClass: MockLangService,
         },
         {
           provide: ActivatedRoute,
-          useValue: activatedRouteStub
+          useValue: activatedRouteStub,
         },
         {
           provide: GlobalStorageService,
-          useClass: MockGlobalStorageService
+          useClass: MockGlobalStorageService,
         },
         {
           provide: Router,
-          useClass: MockRouter
+          useClass: MockRouter,
         },
         {
           provide: EventService,
-          useClass: MockEventService
-        }
+          useClass: MockEventService,
+        },
       ],
-      schemas: [
-        NO_ERRORS_SCHEMA
-      ]
-    })
-    .compileComponents();
+      schemas: [NO_ERRORS_SCHEMA],
+    }).compileComponents();
   }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(ContentWordcloudParticipantComponent);
     component = fixture.componentInstance;
-    component.content = new ContentWordcloud('1234', '1', '1234', 'subject', 'body', [], ContentType.WORDCLOUD, new ContentState(1, new Date(), false), 3);
+    component.content = new ContentWordcloud(
+      '1234',
+      '1',
+      '1234',
+      'subject',
+      'body',
+      [],
+      ContentType.WORDCLOUD,
+      new ContentState(1, new Date(), false),
+      3
+    );
     component.sendEvent = new EventEmitter<string>();
     fixture.detectChanges();
   });

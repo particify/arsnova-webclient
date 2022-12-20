@@ -13,7 +13,7 @@ export class CreateComment {
       roomId: roomId,
       creatorId: creatorId,
       body: body,
-      tag: tag
+      tag: tag,
     };
   }
 }

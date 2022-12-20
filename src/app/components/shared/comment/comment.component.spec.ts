@@ -10,7 +10,7 @@ import {
   MockGlobalStorageService,
   MockAnnounceService,
   MockLangService,
-  MockMatDialog
+  MockMatDialog,
 } from '@arsnova/testing/test-helpers';
 import { GlobalStorageService } from '@arsnova/app/services/util/global-storage.service';
 import { AnnounceService } from '@arsnova/app/services/util/announce.service';
@@ -32,92 +32,101 @@ describe('CommentComponent', () => {
   let component: CommentComponent;
   let fixture: ComponentFixture<CommentComponent>;
 
-  const mockAuthenticationService = jasmine.createSpyObj(['getCurrentAuthentication']);
+  const mockAuthenticationService = jasmine.createSpyObj([
+    'getCurrentAuthentication',
+  ]);
   const auth = {
-    userId: 'user1234'
-  }
+    userId: 'user1234',
+  };
   mockAuthenticationService.getCurrentAuthentication.and.returnValue(of(auth));
 
   const mockRoutingService = jasmine.createSpyObj(['getRoleString']);
 
-  const mockCommentService = jasmine.createSpyObj(['markCorrect', 'toggleFavorite', 'deleteComment', 'toggleAck']);
+  const mockCommentService = jasmine.createSpyObj([
+    'markCorrect',
+    'toggleFavorite',
+    'deleteComment',
+    'toggleAck',
+  ]);
 
-  const mockVoteService = jasmine.createSpyObj(['voteUp', 'voteDown', 'deleteVote']);
+  const mockVoteService = jasmine.createSpyObj([
+    'voteUp',
+    'voteDown',
+    'deleteVote',
+  ]);
 
-  const mockDialogService = jasmine.createSpyObj(['openPublishGroupDialog', 'openDeleteDialog']);
+  const mockDialogService = jasmine.createSpyObj([
+    'openPublishGroupDialog',
+    'openDeleteDialog',
+  ]);
 
   const data = {
-    viewRole: UserRole.PARTICIPANT
-  }
+    viewRole: UserRole.PARTICIPANT,
+  };
   const activatedRouteStub = new ActivatedRouteStub(null, data);
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [
-        CommentComponent
-      ],
+      declarations: [CommentComponent],
       imports: [
         TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
-            useClass: JsonTranslationLoader
+            useClass: JsonTranslationLoader,
           },
-          isolate: true
+          isolate: true,
         }),
         BrowserAnimationsModule,
-        MatMenuModule
+        MatMenuModule,
       ],
       providers: [
         {
           provide: AuthenticationService,
-          useValue: mockAuthenticationService
+          useValue: mockAuthenticationService,
         },
         {
           provide: CommentService,
-          useValue: mockCommentService
+          useValue: mockCommentService,
         },
         {
           provide: VoteService,
-          useValue: mockVoteService
+          useValue: mockVoteService,
         },
         {
           provide: LanguageService,
-          useClass: MockLangService
+          useClass: MockLangService,
         },
         {
           provide: AnnounceService,
-          useClass: MockAnnounceService
+          useClass: MockAnnounceService,
         },
         {
           provide: NotificationService,
-          useClass: MockNotificationService
+          useClass: MockNotificationService,
         },
         {
           provide: ActivatedRoute,
-          useValue: activatedRouteStub
+          useValue: activatedRouteStub,
         },
         {
           provide: GlobalStorageService,
-          useClass: MockGlobalStorageService
+          useClass: MockGlobalStorageService,
         },
         {
           provide: RoutingService,
-          useValue: mockRoutingService
+          useValue: mockRoutingService,
         },
         {
           provide: DialogService,
-          useValue: mockDialogService
+          useValue: mockDialogService,
         },
         {
           provide: MatDialog,
-          useClass: MockMatDialog
-        }
+          useClass: MockMatDialog,
+        },
       ],
-      schemas: [
-        NO_ERRORS_SCHEMA
-      ]
-    })
-    .compileComponents();
+      schemas: [NO_ERRORS_SCHEMA],
+    }).compileComponents();
   }));
 
   beforeEach(() => {

@@ -9,23 +9,20 @@ describe('SnackBarAdvancedComponent', () => {
 
   const mockMatSnackBarData = {
     message: 'hi',
-    icon: 'check'
-  }
+    icon: 'check',
+  };
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ SnackBarAdvancedComponent ],
+      declarations: [SnackBarAdvancedComponent],
       providers: [
         {
           provide: MAT_SNACK_BAR_DATA,
-          useValue: mockMatSnackBarData
-        }
+          useValue: mockMatSnackBarData,
+        },
       ],
-      schemas: [
-        NO_ERRORS_SCHEMA
-      ]
-    })
-    .compileComponents();
+      schemas: [NO_ERRORS_SCHEMA],
+    }).compileComponents();
   }));
 
   beforeEach(() => {

@@ -2,13 +2,18 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { GroupContentComponent } from './group-content.component';
 import { NO_ERRORS_SCHEMA, Injectable } from '@angular/core';
-import { TranslateLoader, TranslateModule, TranslateService } from '@ngx-translate/core';
+import {
+  TranslateLoader,
+  TranslateModule,
+  TranslateService,
+} from '@ngx-translate/core';
 import {
   ActivatedRouteStub,
-  JsonTranslationLoader, MockGlobalStorageService,
+  JsonTranslationLoader,
+  MockGlobalStorageService,
   MockLangService,
   MockNotificationService,
-  MockRouter
+  MockRouter,
 } from '@arsnova/testing/test-helpers';
 import { ContentService } from '@arsnova/app/services/http/content.service';
 import { NotificationService } from '@arsnova/app/services/util/notification.service';
@@ -16,7 +21,11 @@ import { EventService } from '@arsnova/app/services/util/event.service';
 import { RoomService } from '@arsnova/app/services/http/room.service';
 import { ContentGroupService } from '@arsnova/app/services/http/content-group.service';
 import { AnnounceService } from '@arsnova/app/services/util/announce.service';
-import { ActivatedRoute, ActivatedRouteSnapshot, Router } from '@angular/router';
+import {
+  ActivatedRoute,
+  ActivatedRouteSnapshot,
+  Router,
+} from '@angular/router';
 import { RoomStatsService } from '@arsnova/app/services/http/room-stats.service';
 import { DialogService } from '@arsnova/app/services/util/dialog.service';
 import { LanguageService } from '@arsnova/app/services/util/language.service';
@@ -38,7 +47,19 @@ import { A11yRenderedBodyPipe } from '@arsnova/app/pipes/a11y-rendered-body.pipe
 @Injectable()
 class MockContentService {
   getContentsByIds() {
-    return of([new Content('1234', '0', '1', 'subject', 'body', [], ContentType.CHOICE, {}, new ContentState(1, new Date(), true))]);
+    return of([
+      new Content(
+        '1234',
+        '0',
+        '1',
+        'subject',
+        'body',
+        [],
+        ContentType.CHOICE,
+        {},
+        new ContentState(1, new Date(), true)
+      ),
+    ]);
   }
 
   getTypeIcons() {
@@ -54,12 +75,11 @@ class MockEventService {
 }
 
 @Injectable()
-class MockRoomService {
-}
+class MockRoomService {}
 
 @Injectable()
 class MockContentGroupService {
-  getByRoomIdAndName(){
+  getByRoomIdAndName() {
     return of(new ContentGroup('1234', '0', 'roomId', 'name', [], true));
   }
   isIndexPublished() {
@@ -69,40 +89,36 @@ class MockContentGroupService {
 
 @Injectable()
 class MockAnnouncer {
-  announce(){
-  }
+  announce() {}
 }
 
 @Injectable()
 class MockRoomStatsService {
-  getStats(){
+  getStats() {
     return of({});
   }
 }
 
 @Injectable()
-class MockDialogService {
-}
+class MockDialogService {}
 
 @Injectable()
-class MockLocalFileService {
-}
+class MockLocalFileService {}
 
 @Injectable()
-class MockHotykeyService {
-}
+class MockHotykeyService {}
 
 describe('GroupContentComponent', () => {
   let component: GroupContentComponent;
   let fixture: ComponentFixture<GroupContentComponent>;
 
   const data = {
-    room: new Room('1234', 'shortId', 'abbreviation', 'name', 'description')
-  }
+    room: new Room('1234', 'shortId', 'abbreviation', 'name', 'description'),
+  };
 
   const snapshot = new ActivatedRouteSnapshot();
-  const params =  {
-    seriesName: 'SERIES'
+  const params = {
+    seriesName: 'SERIES',
   };
 
   snapshot.params = params;
@@ -120,98 +136,96 @@ describe('GroupContentComponent', () => {
       declarations: [
         GroupContentComponent,
         A11yIntroPipe,
-        A11yRenderedBodyPipe
+        A11yRenderedBodyPipe,
       ],
       providers: [
         {
           provide: ContentService,
-          useClass: MockContentService
+          useClass: MockContentService,
         },
         {
           provide: RoomStatsService,
-          useClass: MockRoomStatsService
+          useClass: MockRoomStatsService,
         },
         {
           provide: NotificationService,
-          useClass: MockNotificationService
+          useClass: MockNotificationService,
         },
         {
           provide: EventService,
-          useClass: MockEventService
+          useClass: MockEventService,
         },
         {
           provide: RoomService,
-          useClass: MockRoomService
+          useClass: MockRoomService,
         },
         {
           provide: ContentGroupService,
-          useClass: MockContentGroupService
+          useClass: MockContentGroupService,
         },
         {
           provide: AnnounceService,
-          useClass: MockAnnouncer
+          useClass: MockAnnouncer,
         },
         {
           provide: ActivatedRoute,
-          useValue: activatedRouteStub
+          useValue: activatedRouteStub,
         },
         {
           provide: DialogService,
-          useClass: MockDialogService
+          useClass: MockDialogService,
         },
         {
           provide: GlobalStorageService,
-          useClass: MockGlobalStorageService
+          useClass: MockGlobalStorageService,
         },
         {
           provide: LanguageService,
-          useClass: MockLangService
+          useClass: MockLangService,
         },
         {
           provide: Location,
-          useClass: MockLocationStrategy
+          useClass: MockLocationStrategy,
         },
         {
           provide: LocalFileService,
-          useClass: MockLocalFileService
+          useClass: MockLocalFileService,
         },
         {
           provide: Router,
-          useClass: MockRouter
+          useClass: MockRouter,
         },
         {
           provide: HotkeyService,
-          useClass: MockHotykeyService
+          useClass: MockHotykeyService,
         },
         {
           provide: A11yIntroPipe,
-          useValue: a11yIntroPipe
+          useValue: a11yIntroPipe,
         },
         {
           provide: A11yRenderedBodyPipe,
-          useValue: a11yRenderedBodyPipe
-        }
+          useValue: a11yRenderedBodyPipe,
+        },
       ],
       imports: [
         TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
-            useClass: JsonTranslationLoader
+            useClass: JsonTranslationLoader,
           },
-          isolate: true
+          isolate: true,
         }),
-        MatMenuModule
+        MatMenuModule,
       ],
-      schemas: [
-        NO_ERRORS_SCHEMA
-      ]
+      schemas: [NO_ERRORS_SCHEMA],
     })
-    .compileComponents()
-    .then(() => {
-      fixture = TestBed.createComponent(GroupContentComponent);
-      component = fixture.componentInstance;
-      fixture.detectChanges();
-    });
+      .compileComponents()
+      .then(() => {
+        fixture = TestBed.createComponent(GroupContentComponent);
+        component = fixture.componentInstance;
+        fixture.detectChanges();
+      });
   }));
 
   it('should create', () => {

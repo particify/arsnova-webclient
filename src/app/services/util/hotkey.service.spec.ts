@@ -5,8 +5,7 @@ import { Injectable } from '@angular/core';
 import { DialogService } from '@arsnova/app/services/util/dialog.service';
 
 @Injectable()
-class MockDialogService {
-}
+class MockDialogService {}
 
 describe('HotkeyService', () => {
   beforeEach(() => {
@@ -15,9 +14,9 @@ describe('HotkeyService', () => {
         HotkeyService,
         {
           provide: DialogService,
-          useClass: MockDialogService
-        }
-      ]
+          useClass: MockDialogService,
+        },
+      ],
     });
   });
 

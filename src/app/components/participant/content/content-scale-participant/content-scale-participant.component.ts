@@ -8,14 +8,17 @@ import { ContentAnswerService } from '../../../../services/http/content-answer.s
 import { GlobalStorageService } from '../../../../services/util/global-storage.service';
 import { LanguageService } from '../../../../services/util/language.service';
 import { LikertScaleService } from '../../../../services/util/likert-scale.service';
-import { AdvancedSnackBarTypes, NotificationService } from '../../../../services/util/notification.service';
+import {
+  AdvancedSnackBarTypes,
+  NotificationService,
+} from '../../../../services/util/notification.service';
 import { ContentParticipantBaseComponent } from '../content-participant-base.component';
 import { AnswerOption } from '../../../../models/answer-option';
 import { SelectableAnswer } from '../../../../models/selectable-answer';
 
 @Component({
   selector: 'app-content-scale-participant',
-  templateUrl: './content-scale-participant.component.html'
+  templateUrl: './content-scale-participant.component.html',
 })
 export class ContentScaleParticipantComponent extends ContentParticipantBaseComponent {
   @Input() content: ContentScale;
@@ -39,12 +42,20 @@ export class ContentScaleParticipantComponent extends ContentParticipantBaseComp
     protected router: Router,
     private likertScaleService: LikertScaleService
   ) {
-    super(notificationService, translateService, langService, route, globalStorageService, router);
+    super(
+      notificationService,
+      translateService,
+      langService,
+      route,
+      globalStorageService,
+      router
+    );
   }
 
   init() {
-    this.selectableAnswers = this.likertScaleService.getOptionLabels(this.content.optionTemplate, this.content.optionCount)
-      .map(label => new SelectableAnswer(new AnswerOption(label), false));
+    this.selectableAnswers = this.likertScaleService
+      .getOptionLabels(this.content.optionTemplate, this.content.optionCount)
+      .map((label) => new SelectableAnswer(new AnswerOption(label), false));
     if (this.answer) {
       if (this.answer.selectedChoiceIndexes?.length > 0) {
         this.selectedAnswerIndex = this.answer.selectedChoiceIndexes[0];
@@ -61,33 +72,43 @@ export class ContentScaleParticipantComponent extends ContentParticipantBaseComp
 
   submitAnswer(): void {
     if (this.selectedAnswerIndex === undefined) {
-      this.translateService.get('answer.please-one').subscribe(message => {
-        this.notificationService.showAdvanced(message, AdvancedSnackBarTypes.WARNING);
+      this.translateService.get('answer.please-one').subscribe((message) => {
+        this.notificationService.showAdvanced(
+          message,
+          AdvancedSnackBarTypes.WARNING
+        );
       });
       return;
     }
-    this.answerService.addAnswerChoice(this.content.roomId, {
-      contentId: this.content.id,
-      round: this.content.state.round,
-      selectedChoiceIndexes: [this.selectedAnswerIndex],
-      format: ContentType.SCALE
-    } as ChoiceAnswer).subscribe(answer => {
-      this.answer = answer;
-      this.translateService.get('answer.sent').subscribe(msg => {
-        this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.SUCCESS);
+    this.answerService
+      .addAnswerChoice(this.content.roomId, {
+        contentId: this.content.id,
+        round: this.content.state.round,
+        selectedChoiceIndexes: [this.selectedAnswerIndex],
+        format: ContentType.SCALE,
+      } as ChoiceAnswer)
+      .subscribe((answer) => {
+        this.answer = answer;
+        this.translateService.get('answer.sent').subscribe((msg) => {
+          this.notificationService.showAdvanced(
+            msg,
+            AdvancedSnackBarTypes.SUCCESS
+          );
+        });
+        this.sendStatusToParent(answer);
       });
-      this.sendStatusToParent(answer);
-    });
   }
 
   abstain() {
-    this.answerService.addAnswerChoice(this.content.roomId, {
-      contentId: this.content.id,
-      round: this.content.state.round,
-      format: ContentType.SCALE
-    } as ChoiceAnswer).subscribe(answer => {
-      this.hasAbstained = true;
-      this.sendStatusToParent(answer);
-    });
+    this.answerService
+      .addAnswerChoice(this.content.roomId, {
+        contentId: this.content.id,
+        round: this.content.state.round,
+        format: ContentType.SCALE,
+      } as ChoiceAnswer)
+      .subscribe((answer) => {
+        this.hasAbstained = true;
+        this.sendStatusToParent(answer);
+      });
   }
 }

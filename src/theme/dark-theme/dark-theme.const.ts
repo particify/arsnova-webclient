@@ -1,5 +1,4 @@
 export const dark = {
-
   '--primary': '#4caf50',
   '--primary-variant': '#a5d6a7',
 
@@ -56,22 +55,20 @@ export const dark = {
   '--likert-agree': '#7986cb',
   '--likert-neither': '#e0e0e0',
   '--likert-disagree': '#ff8a65',
-  '--likert-strongly-disagree': '#ff5722'
+  '--likert-strongly-disagree': '#ff5722',
 };
 
 export const dark_meta = {
-
   translation: {
     name: {
       en: 'Dark Mode',
-      de: 'Dark Mode'
+      de: 'Dark Mode',
     },
     description: {
       en: 'Optimized for low-light settings',
-      de: 'Für dunkle Lichtverhältnisse optimiert'
-    }
+      de: 'Für dunkle Lichtverhältnisse optimiert',
+    },
   },
   order: 3,
-  previewColor: 'background'
-
+  previewColor: 'background',
 };

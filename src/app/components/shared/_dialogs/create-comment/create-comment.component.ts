@@ -1,12 +1,21 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { Comment } from '../../../../models/comment';
-import { AdvancedSnackBarTypes, NotificationService } from '../../../../services/util/notification.service';
-import { MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA, MatLegacyDialogRef as MatDialogRef } from '@angular/material/legacy-dialog';
+import {
+  AdvancedSnackBarTypes,
+  NotificationService,
+} from '../../../../services/util/notification.service';
+import {
+  MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA,
+  MatLegacyDialogRef as MatDialogRef,
+} from '@angular/material/legacy-dialog';
 import { TranslateService } from '@ngx-translate/core';
 import { UntypedFormControl, Validators } from '@angular/forms';
 import { ClientAuthentication } from '../../../../models/client-authentication';
 import { CommentListComponent } from '../../comment-list/comment-list.component';
-import { GlobalStorageService, STORAGE_KEYS } from '../../../../services/util/global-storage.service';
+import {
+  GlobalStorageService,
+  STORAGE_KEYS,
+} from '../../../../services/util/global-storage.service';
 import { Subject } from 'rxjs';
 import { CommentService } from '../../../../services/http/comment.service';
 import { LanguageService } from '../../../../services/util/language.service';
@@ -24,9 +33,8 @@ export interface DialogData {
 @Component({
   selector: 'app-submit-comment',
   templateUrl: './create-comment.component.html',
-  styleUrls: ['./create-comment.component.scss']
+  styleUrls: ['./create-comment.component.scss'],
 })
-
 export class CreateCommentComponent implements OnInit {
   readonly dialogId = 'create-comment';
 
@@ -46,15 +54,17 @@ export class CreateCommentComponent implements OnInit {
     private notificationService: NotificationService,
     protected langService: LanguageService
   ) {
-    langService.langEmitter.subscribe(lang => translateService.use(lang));
+    langService.langEmitter.subscribe((lang) => translateService.use(lang));
   }
 
   ngOnInit() {
-    this.translateService.use(this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE));
+    this.translateService.use(
+      this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE)
+    );
     this.eventsWrapper = {
       eventsSubject: this.eventsSubject,
       role: this.data.role,
-      userId: this.data.auth.userId
+      userId: this.data.auth.userId,
     };
   }
 
@@ -66,8 +76,11 @@ export class CreateCommentComponent implements OnInit {
   checkInputData(body: string): boolean {
     body = body.trim();
     if (!body) {
-      this.translateService.get('dialog.error-comment').subscribe(message => {
-        this.notificationService.showAdvanced(message, AdvancedSnackBarTypes.WARNING);
+      this.translateService.get('dialog.error-comment').subscribe((message) => {
+        this.notificationService.showAdvanced(
+          message,
+          AdvancedSnackBarTypes.WARNING
+        );
       });
       return false;
     }
@@ -80,19 +93,24 @@ export class CreateCommentComponent implements OnInit {
 
   send(comment: Comment): void {
     let message;
-    this.commentService.addComment(comment).subscribe(newComment => {
+    this.commentService.addComment(comment).subscribe((newComment) => {
       this.eventsSubject.next(newComment.id);
       if (this.data.directSend) {
-        this.translateService.get('dialog.comment-sent').subscribe(msg => {
+        this.translateService.get('dialog.comment-sent').subscribe((msg) => {
           message = msg;
         });
         comment.ack = true;
       } else {
-        this.translateService.get('dialog.comment-sent-to-moderator').subscribe(msg => {
-          message = msg;
-        });
+        this.translateService
+          .get('dialog.comment-sent-to-moderator')
+          .subscribe((msg) => {
+            message = msg;
+          });
       }
-      this.notificationService.showAdvanced(message, AdvancedSnackBarTypes.SUCCESS);
+      this.notificationService.showAdvanced(
+        message,
+        AdvancedSnackBarTypes.SUCCESS
+      );
       this.dialogRef.close(true);
     });
   }
@@ -116,7 +134,6 @@ export class CreateCommentComponent implements OnInit {
   buildCloseDialogActionCallback(): () => void {
     return () => this.onNoClick();
   }
-
 
   /**
    * Returns a lambda which executes the dialog dedicated action on call.

@@ -9,8 +9,8 @@ import { EventService } from '../util/event.service';
 
 const httpOptions = {
   headers: new HttpHeaders({
-    Accept: 'application/vnd.spring-boot.actuator.v2+json,application/json'
-  })
+    Accept: 'application/vnd.spring-boot.actuator.v2+json,application/json',
+  }),
 };
 
 export interface SummarizedStats {
@@ -23,38 +23,44 @@ export interface SummarizedStats {
 
 @Injectable()
 export class SystemInfoService extends AbstractHttpService<void> {
-
   serviceApiUrl = {
     health: '/health',
     management: '/management/core',
     summarizedStats: '/_system/summarizedstats',
-    serviceStats: '/_system/servicestats'
+    serviceStats: '/_system/servicestats',
   };
 
-  constructor(private http: HttpClient,
-              protected eventService: EventService,
-              protected translateService: TranslateService,
-              protected notificationService: NotificationService) {
+  constructor(
+    private http: HttpClient,
+    protected eventService: EventService,
+    protected translateService: TranslateService,
+    protected notificationService: NotificationService
+  ) {
     super('', http, eventService, translateService, notificationService);
   }
 
   getHealthInfo(): Observable<any> {
-    const connectionUrl = this.apiUrl.base + this.serviceApiUrl.management + this.serviceApiUrl.health;
+    const connectionUrl =
+      this.apiUrl.base +
+      this.serviceApiUrl.management +
+      this.serviceApiUrl.health;
     /* Do not use default error handling here - 503 is expected if system health is not OK. */
     return this.http.get<any>(connectionUrl, httpOptions);
   }
 
   getSummarizedStats(): Observable<SummarizedStats> {
     const connectionUrl = this.apiUrl.base + this.serviceApiUrl.summarizedStats;
-    return this.http.get<SummarizedStats>(connectionUrl, httpOptions).pipe(
-      catchError(this.handleError<SummarizedStats>('getSummarizedStats'))
-    );
+    return this.http
+      .get<SummarizedStats>(connectionUrl, httpOptions)
+      .pipe(
+        catchError(this.handleError<SummarizedStats>('getSummarizedStats'))
+      );
   }
 
   getServiceStats(): Observable<Map<string, any>> {
     const connectionUrl = this.apiUrl.base + this.serviceApiUrl.serviceStats;
-    return this.http.get<Map<string, any>>(connectionUrl, httpOptions).pipe(
-      catchError(this.handleError<Map<string, any>>('getServiceStats'))
-    );
+    return this.http
+      .get<Map<string, any>>(connectionUrl, httpOptions)
+      .pipe(catchError(this.handleError<Map<string, any>>('getServiceStats')));
   }
 }

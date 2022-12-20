@@ -4,7 +4,7 @@ import { MatLegacyDialogRef as MatDialogRef } from '@angular/material/legacy-dia
 @Component({
   selector: 'app-publish-content',
   templateUrl: './publish-content.component.html',
-  styleUrls: ['./publish-content.component.scss']
+  styleUrls: ['./publish-content.component.scss'],
 })
 export class PublishContentComponent {
   readonly dialogId = 'publish-content';
@@ -17,5 +17,4 @@ export class PublishContentComponent {
     const result = submit ? this.publishSingle : undefined;
     this.dialogRef.close(result);
   }
-
 }
