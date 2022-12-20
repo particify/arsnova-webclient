@@ -221,10 +221,12 @@ export class StatisticSortComponent extends StatisticContentBaseComponent implem
               color: this.isPresentation ? this.surface : this.onSurface
             },
             grid: {
-              borderWidth: this.isPresentation ? 0 : 1,
-              borderColor: this.onSurface,
               tickColor: this.isPresentation ? this.surface : this.onSurface,
               drawOnChartArea: !this.isPresentation
+            },
+            border: {
+              width: this.isPresentation ? 0 : 1,
+              color: this.onSurface
             }
           },
           x: {

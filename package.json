@@ -32,7 +32,7 @@
     "@stomp/stompjs": "6.1.2",
     "@types/lru-cache": "7.10.9",
     "backoff-rxjs": "7.0.0",
-    "chart.js": "3.9.1",
+    "chart.js": "4.1.1",
     "chartjs-plugin-datalabels": "2.2.0",
     "d3-cloud": "1.2.5",
     "dayjs": "1.11.7",
