@@ -139,8 +139,10 @@ export class StatisticPrioritizationComponent extends StatisticChoiceComponent i
             },
             grid: {
               drawOnChartArea: false,
-              tickColor: this.colorStrings.background,
-              borderWidth: 0
+              tickColor: this.colorStrings.background
+            },
+            border: {
+              width: 0
             }
           },
           y: {
