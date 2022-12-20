@@ -85,6 +85,7 @@ import { PresentationService } from './services/util/presentation.service';
 import { AccessTokenService } from './services/http/access-token.service';
 import { RedeemTokenComponent } from './components/home/redeem-token/redeem-token.component';
 import { RemoteService } from './services/util/remote.service';
+import { CommentSettingsResolver } from './resolver/comment-settings.resolver';
 
 export function initializeApp(appConfig: AppConfig) {
   return () => appConfig.load();
@@ -204,6 +205,7 @@ export function initializeApp(appConfig: AppConfig) {
     PresentationService,
     AccessTokenService,
     RemoteService,
+    CommentSettingsResolver,
     { provide: Window, useValue: window },
     STORAGE_CONFIG_PROVIDERS,
     {

@@ -18,6 +18,7 @@ import { RoomViewUserRoleResolver } from '../../resolver/room-view-user-role.res
 import { GroupContentComponent } from './content-list/group-content/group-content.component';
 import { RoomUserRoleResolver } from '../../resolver/room-user-role.resolver';
 import { CreatorOverviewComponent } from './creator-overview/creator-overview.component';
+import { CommentSettingsResolver } from '../../resolver/comment-settings.resolver';
 
 const routes: Routes = [
   {
@@ -62,12 +63,18 @@ const routes: Routes = [
   {
     path: 'comments',
     component: CommentPageComponent,
+    resolve: {
+      commentSettings: CommentSettingsResolver,
+    },
   },
   {
     path: 'comments/moderation',
     component: CommentPageComponent,
     data: {
       isModeration: true,
+    },
+    resolve: {
+      commentSettings: CommentSettingsResolver,
     },
   },
   {

@@ -40,6 +40,7 @@ import { RoutingService } from '../../../services/util/routing.service';
 import { UiState } from '../../../models/events/ui/ui-state.enum';
 import { RemoteService } from '../../../services/util/remote.service';
 import { PresentationEvent } from '../../../models/events/presentation-events.enum';
+import { CommentSettings } from '../../../models/comment-settings';
 
 // Using lowercase letters in enums because they we're also used for parsing incoming WS-messages
 
@@ -142,6 +143,8 @@ export class CommentListComponent implements OnInit, OnDestroy {
   readTimestamp: Date;
   unreadCommentCount: number;
 
+  disabled: boolean;
+
   navBarStateSubscription: Subscription;
 
   private hotkeyRefs: symbol[] = [];
@@ -206,7 +209,6 @@ export class CommentListComponent implements OnInit, OnDestroy {
           ? this.moderationComments$
           : this.publicComments$;
       }
-      this.initCounter();
       this.init();
       this.viewRole = data.viewRole;
       if (this.viewRole === UserRole.PARTICIPANT) {
@@ -272,6 +274,11 @@ export class CommentListComponent implements OnInit, OnDestroy {
   }
 
   init(reload = false) {
+    if (this.disabled) {
+      this.isLoading = false;
+      return;
+    }
+    this.initCounter();
     this.activeComments$.subscribe((comments) => {
       this.comments = comments;
       this.initRoom(reload);
@@ -295,12 +302,12 @@ export class CommentListComponent implements OnInit, OnDestroy {
   }
 
   initRoom(reload = false) {
-    this.commentSettingsService
-      .get(this.roomId)
-      .subscribe((commentSettings) => {
-        this.directSend = commentSettings.directSend;
-        this.fileUploadEnabled = commentSettings.fileUploadEnabled;
-      });
+    if (!reload) {
+      const commentSettings = this.route.snapshot.data.commentSettings;
+      this.directSend = commentSettings.directSend;
+      this.fileUploadEnabled = commentSettings.fileUploadEnabled;
+      this.disabled = commentSettings.disabled;
+    }
     this.getComments();
     if (reload && this.search) {
       this.searchComments();
@@ -970,5 +977,25 @@ export class CommentListComponent implements OnInit, OnDestroy {
     }
     this.init(true);
     this.updateUrl();
+  }
+
+  updateSettings(settings: CommentSettings) {
+    this.commentSettingsService
+      .update(settings)
+      .subscribe((updatedSettings) => {
+        this.disabled = updatedSettings.disabled;
+        this.isLoading = true;
+        this.init(true);
+      });
+  }
+
+  activateComments() {
+    const settings = new CommentSettings(
+      this.roomId,
+      this.directSend,
+      this.fileUploadEnabled,
+      false
+    );
+    this.updateSettings(settings);
   }
 }

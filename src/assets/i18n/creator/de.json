@@ -51,7 +51,9 @@
     "previous": "Vorheriger Beitrag",
     "list": "Beitragsliste",
     "archive": "Archiv",
-    "there-are-new-posts": "Es gibt neue Beiträge"
+    "there-are-new-posts": "Es gibt neue Beiträge",
+    "comments-are-not-enabled": "Der Q&A-Bereich ist nicht aktiviert.",
+    "activate-q-and-a": "Q&A aktivieren"
   },
   "comment-page": {
     "a11y-message": "Du befindest dich jetzt auf der Q&A-Seite.",

@@ -6,7 +6,8 @@
     deviceType !== 'desktop' &&
     !isPresentation &&
     !isArchive &&
-    !isModerator
+    !isModerator &&
+    !disabled
   "
   (click)="openCreateDialog()"
   [ngClass]="{
@@ -32,12 +33,14 @@
     >
       <mat-tab
         *ngIf="!isArchive"
+        [disabled]="disabled"
         label="{{ 'comment-list.public-list' | translate }} {{
           publicCounter | counterBraces
         }}"
       ></mat-tab>
       <mat-tab
         *ngIf="!isArchive"
+        [disabled]="disabled"
         label="{{ 'comment-list.moderation' | translate }} {{
           moderationCounter | counterBraces
         }}"
@@ -48,7 +51,7 @@
       ></mat-tab>
     </mat-tab-group>
     <div
-      *ngIf="!isPresentation"
+      *ngIf="!isPresentation && !disabled"
       fxLayout="row"
       fxLayoutAlign="center center"
       class="search-container"
@@ -455,7 +458,7 @@
 
   <div
     [ngClass]="{ 'comments-container': !isPresentation }"
-    *ngIf="!isLoading"
+    *ngIf="!isLoading && !disabled"
     tabindex="-1"
     appHotkey="7"
     [appHotkeyTitle]="'comment-list.list' | translate"
@@ -477,7 +480,11 @@
     </app-comment>
   </div>
 
-  <div *ngIf="!isLoading" fxLayout="row" fxLayoutAlign="center center">
+  <div
+    *ngIf="!isLoading && !disabled"
+    fxLayout="row"
+    fxLayoutAlign="center center"
+  >
     <p *ngIf="comments.length < 1" class="hint">
       {{ 'comment-page.no-comments' | translate }}
     </p>
@@ -503,7 +510,8 @@
       !search &&
       !isModerator &&
       !isPresentation &&
-      !isArchive
+      !isArchive &&
+      !disabled
     "
   >
     <button
@@ -514,6 +522,21 @@
     >
       <mat-icon class="add">add</mat-icon>
       <span>{{ 'comment-list.add-comment' | translate }}</span>
+    </button>
+  </div>
+
+  <div fxLayout="column" fxLayoutAlign="start center" *ngIf="disabled">
+    <p class="hint">
+      {{ 'comment-list.comments-are-not-enabled' | translate }}
+    </p>
+    <button
+      *ngIf="viewRole !== 'PARTICIPANT'"
+      mat-raised-button
+      class="button-primary"
+      (click)="activateComments()"
+    >
+      <mat-icon>question_answer</mat-icon>
+      <span>{{ 'comment-list.activate-q-and-a' | translate }}</span>
     </button>
   </div>
 
