@@ -216,7 +216,7 @@ export class SeriesOverviewComponent implements OnInit {
   }
 
   goToContent(index: number) {
-    this.router.navigate([this.routingService.getRoleString(UserRole.PARTICIPANT), this.routingService.getShortId(), Features.CONTENTS, this.group.name, index + 1]);
+    this.router.navigate([this.routingService.getRoleRoute(UserRole.PARTICIPANT), this.routingService.getShortId(), Features.CONTENTS, this.group.name, index + 1]);
   }
 
   getHeaderText(): string {

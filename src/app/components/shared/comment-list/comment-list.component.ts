@@ -779,7 +779,7 @@ export class CommentListComponent implements OnInit, OnDestroy {
   }
 
   updateUrl() {
-    const role = this.routingService.getRoleString(this.viewRole);
+    const role = this.routingService.getRoleRoute(this.viewRole);
     const url = [role, this.room.shortId, 'comments'];
     if (this.isModerator) {
       url.push('moderation');

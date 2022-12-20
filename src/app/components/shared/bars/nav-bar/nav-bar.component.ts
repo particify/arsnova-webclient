@@ -279,7 +279,7 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
   }
 
   getBaseUrl(): string {
-    return `/${this.routingService.getRoleString(this.viewRole)}/${this.shortId}`;
+    return `/${this.routingService.getRoleRoute(this.viewRole)}/${this.shortId}`;
   }
 
   getGroupUrl() {
@@ -295,7 +295,7 @@ export class NavBarComponent extends BarBaseComponent implements OnInit, OnDestr
         return;
       }
     }
-    const route = [this.routingService.getRoleString(this.viewRole), this.shortId];
+    const route = [this.routingService.getRoleRoute(this.viewRole), this.shortId];
     if (item.name !== Features.OVERVIEW) {
       route.push(item.name);
       if (item.name === Features.CONTENTS) {

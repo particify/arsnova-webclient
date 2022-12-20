@@ -268,7 +268,7 @@ export class RoomListComponent implements OnInit, OnDestroy {
   }
 
   roleToString(role: UserRole): string {
-    return this.routingService.getRoleString(role);
+    return this.routingService.getRoleRoute(role);
   }
 
   filterRooms(search: string) {
