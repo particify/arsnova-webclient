@@ -13,7 +13,8 @@
         "asciidoctor.asciidoctor-vscode",
         "dbaeumer.vscode-eslint",
         "eamodio.gitlens",
-        "editorconfig.editorconfig"
+        "editorconfig.editorconfig",
+        "esbenp.prettier-vscode"
       ]
     }
   },

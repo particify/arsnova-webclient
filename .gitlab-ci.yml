@@ -64,6 +64,14 @@ lint:
   script:
     - yarn lint
 
+prettier:
+  stage: test
+  needs:
+    - yarn_install
+  allow_failure: false
+  script:
+    - yarn prettier --check .
+
 unit_tests:
   stage: test
   needs:
