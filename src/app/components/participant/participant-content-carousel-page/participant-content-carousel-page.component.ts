@@ -36,7 +36,6 @@ import { RemoteService } from '../../../services/util/remote.service';
 @Component({
   selector: 'app-participant-content-carousel-page',
   templateUrl: './participant-content-carousel-page.component.html',
-  styleUrls: ['./participant-content-carousel-page.component.scss'],
 })
 export class ParticipantContentCarouselPageComponent
   implements OnInit, AfterContentInit, OnDestroy

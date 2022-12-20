@@ -17,7 +17,6 @@ import { ContentParticipantBaseComponent } from '../content-participant-base.com
 @Component({
   selector: 'app-content-prioritization-participant',
   templateUrl: './content-prioritization-participant.component.html',
-  styleUrls: ['./content-prioritization-participant.component.scss'],
 })
 export class ContentPrioritizationParticipantComponent extends ContentParticipantBaseComponent {
   @Input() content: ContentPrioritization;

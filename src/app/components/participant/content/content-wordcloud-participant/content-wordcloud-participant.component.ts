@@ -17,7 +17,6 @@ import { ContentWordcloud } from '../../../../models/content-wordcloud';
 @Component({
   selector: 'app-content-wordcloud-participant',
   templateUrl: './content-wordcloud-participant.component.html',
-  styleUrls: ['./content-wordcloud-participant.component.scss'],
 })
 export class ContentWordcloudParticipantComponent extends ContentParticipantBaseComponent {
   @Input() content: ContentWordcloud;

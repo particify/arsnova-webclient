@@ -1,6 +1,8 @@
 @use '@angular/material' as mat;
 @import 'theme/dark-theme/dark-theme';
 @import 'theme/arsnova-theme/arsnova-theme';
+@import 'theme/theme';
+@import 'variables';
 @include mat.all-legacy-component-typographies;
 @include mat.legacy-core;
 @include mat.all-legacy-component-themes($arsnova-theme);
@@ -8,9 +10,6 @@
 .dark {
   @include mat.all-legacy-component-themes($dark-theme);
 }
-
-@import 'theme/theme';
-@import 'variables';
 
 body {
   background-color: var(--background);

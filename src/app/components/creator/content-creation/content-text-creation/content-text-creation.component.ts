@@ -12,7 +12,6 @@ import { AnnounceService } from '../../../../services/util/announce.service';
 @Component({
   selector: 'app-content-text-creation',
   templateUrl: './content-text-creation.component.html',
-  styleUrls: ['./content-text-creation.component.scss'],
 })
 export class ContentTextCreationComponent
   extends ContentCreationComponent
