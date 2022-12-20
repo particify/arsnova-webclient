@@ -802,8 +802,6 @@ button {
   width: 100%;
   max-width: 832px;
   position: relative;
-  -webkit-perspective: 3000px;
-  -moz-perspective: 3000px;
   perspective: 3000px;
 }
 
@@ -811,11 +809,8 @@ button {
   width: 100%;
   height: 100%;
   position: relative;
-  -webkit-transition: -webkit-transform 500ms;
-  -moz-transition: -moz-transform 500ms;
-  -o-transition: -o-transform 500ms;
   transition: all 500ms;
-  -webkit-transform-origin: 50% 50%;
+  transform-origin: 50% 50%;
 }
 
 .side {
@@ -825,16 +820,10 @@ button {
 
 .card .back {
   background-color: var(--surface);
-  -webkit-transform: rotateY(180deg);
-  -moz-transform: rotateY(180deg);
-  -o-transform: rotateY(180deg);
   transform: rotateY(180deg);
 }
 
 .card.flipped {
-  -webkit-transform: rotateY(180deg);
-  -moz-transform: rotateY(180deg);
-  -o-transform: rotateY(180deg);
   transform: rotateY(180deg);
 }
 
