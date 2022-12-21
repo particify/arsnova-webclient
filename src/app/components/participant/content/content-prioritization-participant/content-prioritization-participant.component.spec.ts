@@ -1,6 +1,10 @@
 import { EventEmitter, NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ActivatedRoute, ActivatedRouteSnapshot, Router } from '@angular/router';
+import {
+  ActivatedRoute,
+  ActivatedRouteSnapshot,
+  Router,
+} from '@angular/router';
 import { ContentPrioritization } from '@arsnova/app/models/content-prioritization';
 import { ContentAnswerService } from '@arsnova/app/services/http/content-answer.service';
 import { GlobalStorageService } from '@arsnova/app/services/util/global-storage.service';
@@ -13,7 +17,7 @@ import {
   MockGlobalStorageService,
   MockLangService,
   MockNotificationService,
-  MockRouter
+  MockRouter,
 } from '@arsnova/testing/test-helpers';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { of } from 'rxjs';
@@ -31,8 +35,8 @@ describe('ContentPrioritizationParticipantComponent', () => {
 
   const params = {
     shortId: '12345678',
-    seriesName: 'Quiz'
-  }
+    seriesName: 'Quiz',
+  };
 
   snapshot.params = of([params]);
 
@@ -40,51 +44,61 @@ describe('ContentPrioritizationParticipantComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ContentPrioritizationParticipantComponent ],
+      declarations: [ContentPrioritizationParticipantComponent],
       imports: [
         TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
-            useClass: JsonTranslationLoader
+            useClass: JsonTranslationLoader,
           },
-          isolate: true
-        })
+          isolate: true,
+        }),
       ],
       providers: [
         {
           provide: ContentAnswerService,
-          useValue: mockContentAnswerService
+          useValue: mockContentAnswerService,
         },
         {
           provide: NotificationService,
-          useClass: MockNotificationService
+          useClass: MockNotificationService,
         },
         {
           provide: LanguageService,
-          useClass: MockLangService
+          useClass: MockLangService,
         },
         {
           provide: ActivatedRoute,
-          useValue: activatedRouteStub
+          useValue: activatedRouteStub,
         },
         {
           provide: GlobalStorageService,
-          useClass: MockGlobalStorageService
+          useClass: MockGlobalStorageService,
         },
         {
           provide: Router,
-          useClass: MockRouter
-        }
+          useClass: MockRouter,
+        },
       ],
-      schemas: [
-        NO_ERRORS_SCHEMA
-      ]
-    })
-    .compileComponents();
+      schemas: [NO_ERRORS_SCHEMA],
+    }).compileComponents();
 
-    fixture = TestBed.createComponent(ContentPrioritizationParticipantComponent);
+    fixture = TestBed.createComponent(
+      ContentPrioritizationParticipantComponent
+    );
     component = fixture.componentInstance;
-    component.content = new ContentPrioritization('1234', '1', '1234', 'subject', 'body', [], [], ContentType.PRIORITIZATION, new ContentState(1, new Date(), false), 100);
+    component.content = new ContentPrioritization(
+      '1234',
+      '1',
+      '1234',
+      'subject',
+      'body',
+      [],
+      [],
+      ContentType.PRIORITIZATION,
+      new ContentState(1, new Date(), false),
+      100
+    );
     component.sendEvent = new EventEmitter<string>();
     fixture.detectChanges();
   });

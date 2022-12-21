@@ -10,10 +10,14 @@ import {
   MockMatDialogRef,
   MockNotificationService,
   MockThemeService,
-  ActivatedRouteStub
+  ActivatedRouteStub,
 } from '@arsnova/testing/test-helpers';
 import { NotificationService } from '@arsnova/app/services/util/notification.service';
-import { MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA, MatLegacyDialog as MatDialog, MatLegacyDialogRef as MatDialogRef } from '@angular/material/legacy-dialog';
+import {
+  MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA,
+  MatLegacyDialog as MatDialog,
+  MatLegacyDialogRef as MatDialogRef,
+} from '@angular/material/legacy-dialog';
 import { EventService } from '@arsnova/app/services/util/event.service';
 import { ThemeService } from '@arsnova/theme/theme.service';
 import { ApiConfigService } from '@arsnova/app/services/http/api-config.service';
@@ -24,7 +28,7 @@ import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
 
 class MockApiConfigService {
   getApiConfig$() {
-    return of({ui: {}});
+    return of({ ui: {} });
   }
 }
 
@@ -40,70 +44,64 @@ describe('QrCodeComponent', () => {
     room: {
       id: '1234',
       shortId: '12345678',
-      passwordProtected: true
-    }
-  }
+      passwordProtected: true,
+    },
+  };
 
   const activatedRouteStub = new ActivatedRouteStub(null, null, snapshot);
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [
-        QrCodeComponent,
-        SplitShortIdPipe
-      ],
+      declarations: [QrCodeComponent, SplitShortIdPipe],
       imports: [
         TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
-            useClass: JsonTranslationLoader
+            useClass: JsonTranslationLoader,
           },
-          isolate: true
-        })
+          isolate: true,
+        }),
       ],
       providers: [
         {
           provide: SplitShortIdPipe,
-          useValue: splitShortIdPipe
+          useValue: splitShortIdPipe,
         },
         {
           provide: ApiConfigService,
-          useClass: MockApiConfigService
+          useClass: MockApiConfigService,
         },
         {
           provide: NotificationService,
-          useClass: MockNotificationService
+          useClass: MockNotificationService,
         },
         {
           provide: MatDialog,
-          useClass: MockMatDialog
+          useClass: MockMatDialog,
         },
         {
           provide: EventService,
-          useClass: MockEventService
+          useClass: MockEventService,
         },
         {
           provide: MatDialogRef,
-          useClass: MockMatDialogRef
+          useClass: MockMatDialogRef,
         },
         {
           provide: ThemeService,
-          useClass: MockThemeService
+          useClass: MockThemeService,
         },
         {
           provide: MAT_DIALOG_DATA,
-          useClass: MockMatDialogData
+          useClass: MockMatDialogData,
         },
         {
           provide: ActivatedRoute,
-          useValue: activatedRouteStub
-        }
+          useValue: activatedRouteStub,
+        },
       ],
-      schemas: [
-        NO_ERRORS_SCHEMA
-      ]
-    })
-    .compileComponents();
+      schemas: [NO_ERRORS_SCHEMA],
+    }).compileComponents();
   }));
 
   beforeEach(() => {

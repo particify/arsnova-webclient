@@ -6,14 +6,17 @@ import {
   JsonTranslationLoader,
   MockNotificationService,
   MockMatDialogRef,
-  ActivatedRouteStub
+  ActivatedRouteStub,
 } from '@arsnova/testing/test-helpers';
-import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA } from '@angular/material/legacy-dialog';
+import {
+  MatLegacyDialogRef as MatDialogRef,
+  MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA,
+} from '@angular/material/legacy-dialog';
 import { ActivatedRoute } from '@angular/router';
 import { NotificationService } from '@arsnova/app/services/util/notification.service';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 
- describe('CookiesComponent', () => {
+describe('CookiesComponent', () => {
   let component: CookiesComponent;
   let fixture: ComponentFixture<CookiesComponent>;
 
@@ -25,58 +28,53 @@ import { NO_ERRORS_SCHEMA } from '@angular/core';
         key: 'cat-1',
         id: '1',
         required: true,
-        consent: false
+        consent: false,
       },
       {
         key: 'cat-2',
         id: '2',
         required: false,
-        consent: false
+        consent: false,
       },
       {
         key: 'cat-3',
         id: '3',
         required: false,
-        consent: false
-      }
+        consent: false,
+      },
     ],
-    privacyUrl: 'privacy'
+    privacyUrl: 'privacy',
   };
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ CookiesComponent ],
+      declarations: [CookiesComponent],
       imports: [
         TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
-            useClass: JsonTranslationLoader
+            useClass: JsonTranslationLoader,
           },
-          isolate: true
-        })
+          isolate: true,
+        }),
       ],
       providers: [
-        { provide: MAT_DIALOG_DATA,
-          useValue: dialogData
-        },
+        { provide: MAT_DIALOG_DATA, useValue: dialogData },
         {
           provide: MatDialogRef,
-          useClass: MockMatDialogRef
+          useClass: MockMatDialogRef,
         },
         {
           provide: ActivatedRoute,
-          useValue: activatedRouteStub 
+          useValue: activatedRouteStub,
         },
         {
           provide: NotificationService,
-          useClass: MockNotificationService
-        }
+          useClass: MockNotificationService,
+        },
       ],
-      schemas: [
-        NO_ERRORS_SCHEMA
-      ]
-    })
-    .compileComponents();
+      schemas: [NO_ERRORS_SCHEMA],
+    }).compileComponents();
   }));
 
   beforeEach(() => {

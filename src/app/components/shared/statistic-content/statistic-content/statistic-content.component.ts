@@ -1,4 +1,11 @@
-import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  ViewChild,
+} from '@angular/core';
 import { ContentText } from '@arsnova/app/models/content-text';
 import { StatisticChoiceComponent } from '@arsnova/app/components/shared/statistic-content/statistic-choice/statistic-choice.component';
 import { StatisticTextComponent } from '@arsnova/app/components/shared/statistic-content/statistic-text/statistic-text.component';
@@ -23,16 +30,18 @@ import { PresentationEvent } from '../../../../models/events/presentation-events
 @Component({
   selector: 'app-statistic-content',
   templateUrl: './statistic-content.component.html',
-  styleUrls: ['./statistic-content.component.scss']
+  styleUrls: ['./statistic-content.component.scss'],
 })
 export class StatisticContentComponent implements OnInit {
-
-  @ViewChild(StatisticChoiceComponent) choiceStatistic: StatisticChoiceComponent;
+  @ViewChild(StatisticChoiceComponent)
+  choiceStatistic: StatisticChoiceComponent;
   @ViewChild(StatisticScaleComponent) scaleStatistic: StatisticScaleComponent;
   @ViewChild(StatisticTextComponent) textStatistic: StatisticTextComponent;
   @ViewChild(StatisticSortComponent) sortStatistic: StatisticSortComponent;
-  @ViewChild(StatisticWordcloudComponent) wordcloudStatistic: StatisticWordcloudComponent;
-  @ViewChild(StatisticPrioritizationComponent) prioritizationStatistic: StatisticPrioritizationComponent;
+  @ViewChild(StatisticWordcloudComponent)
+  wordcloudStatistic: StatisticWordcloudComponent;
+  @ViewChild(StatisticPrioritizationComponent)
+  prioritizationStatistic: StatisticPrioritizationComponent;
 
   @Input() content: ContentText;
   @Input() directShow: boolean;
@@ -62,16 +71,18 @@ export class StatisticContentComponent implements OnInit {
   showWordcloudModeration = false;
   isParticipant = true;
 
-  constructor(private announceService: AnnounceService,
-              private eventService: EventService,
-              private route: ActivatedRoute,
-              private remoteService: RemoteService) { }
+  constructor(
+    private announceService: AnnounceService,
+    private eventService: EventService,
+    private route: ActivatedRoute,
+    private remoteService: RemoteService
+  ) {}
 
   ngOnInit(): void {
     this.attachmentData = {
       refType: 'content',
       refId: this.content.id,
-      detailedView: false
+      detailedView: false,
     };
     this.format = this.content.format;
     this.checkIfSurvey();
@@ -80,23 +91,30 @@ export class StatisticContentComponent implements OnInit {
     }
     this.roundsToDisplay = this.content.state.round - 1;
     this.multipleRounds = this.roundsToDisplay > 0;
-    this.isParticipant = this.route.snapshot.data.viewRole === UserRole.PARTICIPANT;
+    this.isParticipant =
+      this.route.snapshot.data.viewRole === UserRole.PARTICIPANT;
     this.isLoading = false;
-    this.indexChanged.subscribe(index => {
+    this.indexChanged.subscribe((index) => {
       this.updateCounter(this.answerCount);
       this.broadcastRoundState();
-      if (this.settings.showContentResultsDirectly && index === this.index && !this.answersVisible) {
+      if (
+        this.settings.showContentResultsDirectly &&
+        index === this.index &&
+        !this.answersVisible
+      ) {
         this.toggleAnswers();
       }
     });
     this.broadcastRoundState();
-    this.eventService.on<any>(PresentationEvent.CONTENT_ROUND_UPDATED).subscribe(roundData => {
-      if (this.index === roundData.contentIndex) {
-        this.changeRound(roundData.round);
-      }
-    });
+    this.eventService
+      .on<any>(PresentationEvent.CONTENT_ROUND_UPDATED)
+      .subscribe((roundData) => {
+        if (this.index === roundData.contentIndex) {
+          this.changeRound(roundData.round);
+        }
+      });
     if (this.isPresentation) {
-      this.remoteService.getUiState().subscribe(state => {
+      this.remoteService.getUiState().subscribe((state) => {
         if (this.content.id === state.contentId) {
           if (state.resultsVisible !== this.answersVisible) {
             this.toggleAnswers(false);
@@ -117,12 +135,25 @@ export class StatisticContentComponent implements OnInit {
 
   broadcastRoundState() {
     if (this.active) {
-      this.eventService.broadcast(PresentationEvent.MULTIPLE_CONTENT_ROUNDS_EXIST, this.multipleRounds);
+      this.eventService.broadcast(
+        PresentationEvent.MULTIPLE_CONTENT_ROUNDS_EXIST,
+        this.multipleRounds
+      );
     }
   }
 
-  sendUiState(answersVisible = this.answersVisible, correctVisible = this.correctVisible) {
-    this.remoteService.updateContentStateChange(this.content.id, this.index, this.contentGroup.id, this.contentGroup.name, answersVisible, correctVisible);
+  sendUiState(
+    answersVisible = this.answersVisible,
+    correctVisible = this.correctVisible
+  ) {
+    this.remoteService.updateContentStateChange(
+      this.content.id,
+      this.index,
+      this.contentGroup.id,
+      this.contentGroup.name,
+      answersVisible,
+      correctVisible
+    );
   }
 
   toggleAnswers(sendState = true) {
@@ -168,7 +199,9 @@ export class StatisticContentComponent implements OnInit {
     if (this.answersVisible && !this.survey) {
       if (this.format === ContentType.SORT) {
         this.sortStatistic.toggleCorrect();
-      } else if ([ContentType.CHOICE, ContentType.BINARY].includes(this.format)) {
+      } else if (
+        [ContentType.CHOICE, ContentType.BINARY].includes(this.format)
+      ) {
         this.choiceStatistic.toggleCorrect();
       }
       this.correctVisible = !this.correctVisible;
@@ -184,10 +217,18 @@ export class StatisticContentComponent implements OnInit {
 
   checkIfSurvey() {
     let noCorrect = false;
-    if ([ContentType.TEXT, ContentType.SCALE, ContentType.WORDCLOUD, ContentType.PRIORITIZATION].includes(this.format)) {
+    if (
+      [
+        ContentType.TEXT,
+        ContentType.SCALE,
+        ContentType.WORDCLOUD,
+        ContentType.PRIORITIZATION,
+      ].includes(this.format)
+    ) {
       noCorrect = true;
     } else if ([ContentType.BINARY, ContentType.CHOICE].includes(this.format)) {
-      const correctOptions = (this.content as ContentChoice).correctOptionIndexes;
+      const correctOptions = (this.content as ContentChoice)
+        .correctOptionIndexes;
       noCorrect = !correctOptions || correctOptions.length === 0;
     }
     this.survey = noCorrect;
@@ -204,7 +245,8 @@ export class StatisticContentComponent implements OnInit {
     const isText = this.content.format === ContentType.TEXT;
     if (!isText || this.answerCount > 0) {
       const action = this.answersVisible ? 'expanded' : 'collapsed';
-      const msg = 'statistic.a11y-' + action + '-answers' + (isText ? '-text' : '');
+      const msg =
+        'statistic.a11y-' + action + '-answers' + (isText ? '-text' : '');
       this.announceService.announce(msg);
     } else {
       this.announceService.announce('statistic.a11y-no-answers-yet');
@@ -212,7 +254,10 @@ export class StatisticContentComponent implements OnInit {
   }
 
   changeRound(round: number) {
-    const chartComponent: StatisticChoiceComponent | StatisticScaleComponent = this.content.format === ContentType.SCALE ? this.scaleStatistic : this.choiceStatistic;
+    const chartComponent: StatisticChoiceComponent | StatisticScaleComponent =
+      this.content.format === ContentType.SCALE
+        ? this.scaleStatistic
+        : this.choiceStatistic;
     chartComponent.roundsToDisplay = round;
     chartComponent.rounds = round + 1;
     chartComponent.updateCounterForRound();

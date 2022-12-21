@@ -10,7 +10,7 @@ export enum LikertScaleTemplate {
   PACE = 'PACE',
   EMOJI = 'EMOJI',
   PLUS_MINUS = 'PLUS_MINUS',
-  POINTS = 'POINTS'
+  POINTS = 'POINTS',
 }
 
 export const LIKERT_SCALE_TEMPLATES = [
@@ -25,5 +25,5 @@ export const LIKERT_SCALE_TEMPLATES = [
   LikertScaleTemplate.PACE,
   LikertScaleTemplate.EMOJI,
   LikertScaleTemplate.PLUS_MINUS,
-  LikertScaleTemplate.POINTS
+  LikertScaleTemplate.POINTS,
 ];

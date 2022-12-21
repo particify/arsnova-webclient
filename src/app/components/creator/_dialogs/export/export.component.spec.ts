@@ -3,9 +3,11 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { ExportComponent } from './export.component';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { MatLegacyDialogRef as MatDialogRef } from '@angular/material/legacy-dialog';
-import { JsonTranslationLoader, MockMatDialogRef } from '@arsnova/testing/test-helpers';
+import {
+  JsonTranslationLoader,
+  MockMatDialogRef,
+} from '@arsnova/testing/test-helpers';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-
 
 describe('ExportComponent', () => {
   let component: ExportComponent;
@@ -13,27 +15,24 @@ describe('ExportComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ ExportComponent ],
+      declarations: [ExportComponent],
       imports: [
         TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
-            useClass: JsonTranslationLoader
+            useClass: JsonTranslationLoader,
           },
-          isolate: true
-        })
+          isolate: true,
+        }),
       ],
       providers: [
         {
           provide: MatDialogRef,
-          useClass: MockMatDialogRef
-        }
+          useClass: MockMatDialogRef,
+        },
       ],
-      schemas: [
-        NO_ERRORS_SCHEMA
-      ]
-    })
-    .compileComponents();
+      schemas: [NO_ERRORS_SCHEMA],
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -46,4 +45,3 @@ describe('ExportComponent', () => {
     expect(component).toBeTruthy();
   });
 });
-

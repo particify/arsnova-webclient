@@ -10,7 +10,7 @@ import { EventService } from '../util/event.service';
 export enum MarkdownFeatureset {
   MINIMUM = 'MINIMUM',
   SIMPLE = 'SIMPLE',
-  EXTENDED = 'EXTENDED'
+  EXTENDED = 'EXTENDED',
 }
 
 export interface FormattingOptions {
@@ -23,16 +23,23 @@ export interface FormattingOptions {
 
 @Injectable()
 export class FormattingService extends AbstractHttpService<void> {
-
   serviceApiUrl = {
-    render: '/render'
+    render: '/render',
   };
 
-  constructor(private http: HttpClient,
-              protected eventService: EventService,
-              protected translateService: TranslateService,
-              protected notificationService: NotificationService) {
-    super('/_util/formatting', http, eventService, translateService, notificationService);
+  constructor(
+    private http: HttpClient,
+    protected eventService: EventService,
+    protected translateService: TranslateService,
+    protected notificationService: NotificationService
+  ) {
+    super(
+      '/_util/formatting',
+      http,
+      eventService,
+      translateService,
+      notificationService
+    );
   }
 
   postString(text: string, options?: FormattingOptions): Observable<any> {
@@ -41,16 +48,16 @@ export class FormattingService extends AbstractHttpService<void> {
       latex: false,
       syntaxHighlighting: false,
       markdownFeatureset: MarkdownFeatureset.EXTENDED,
-      linebreaks: true
+      linebreaks: true,
     };
     const url = this.buildUri(this.serviceApiUrl.render);
     const body = {
       text: text,
-      options: options
+      options: options,
     };
-    return this.http.post<any>(url, body).pipe(
-      catchError(this.handleError('postString', body))
-    );
+    return this.http
+      .post<any>(url, body)
+      .pipe(catchError(this.handleError('postString', body)));
   }
 
   containsTextAnImage(text: string): boolean {

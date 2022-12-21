@@ -9,7 +9,7 @@ export class ResetVote {
     this.type = 'ResetVote';
     this.payload = {
       userId: userId,
-      commentId: commentId
+      commentId: commentId,
     };
   }
 }

@@ -1,6 +1,9 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, ROUTES, Routes } from '@angular/router';
-import { ExtensionRouteProvider, RouteMountPoint } from '../../../../projects/extension-point/src/lib/extension-route';
+import {
+  ExtensionRouteProvider,
+  RouteMountPoint,
+} from '../../../../projects/extension-point/src/lib/extension-route';
 import { AuthenticationGuard } from '../../guards/authentication.guard';
 import { UserRole } from '../../models/user-roles.enum';
 import { RoomPageComponent } from '../shared/room-page/room-page.component';
@@ -19,62 +22,62 @@ import { CreatorOverviewComponent } from './creator-overview/creator-overview.co
 const routes: Routes = [
   {
     path: 'group',
-    redirectTo: 'series'
+    redirectTo: 'series',
   },
   {
     path: 'survey',
-    redirectTo: 'feedback'
+    redirectTo: 'feedback',
   },
   {
     path: '',
-    component: CreatorOverviewComponent
+    component: CreatorOverviewComponent,
   },
   {
     path: 'settings',
-    component: SettingsPageComponent
+    component: SettingsPageComponent,
   },
   {
     path: 'settings/:settingsName',
-    component: SettingsPageComponent
+    component: SettingsPageComponent,
   },
   {
     path: 'series/:seriesName/create',
-    component: ContentCreationPageComponent
+    component: ContentCreationPageComponent,
   },
   {
     path: 'series/:seriesName/edit/:contentId',
     component: ContentCreationPageComponent,
     data: {
-      isEditMode: true
-    }
+      isEditMode: true,
+    },
   },
   {
     path: 'series/:seriesName/statistics',
-    component: StatisticsPageComponent
+    component: StatisticsPageComponent,
   },
   {
     path: 'series/:seriesName/:contentIndex',
-    component: ContentPresentationComponent
+    component: ContentPresentationComponent,
   },
   {
     path: 'comments',
-    component: CommentPageComponent
+    component: CommentPageComponent,
   },
   {
     path: 'comments/moderation',
     component: CommentPageComponent,
     data: {
-      isModeration: true
-    }
+      isModeration: true,
+    },
   },
   {
     path: 'feedback',
-    component: SurveyPageComponent
+    component: SurveyPageComponent,
   },
   {
     path: 'series/:seriesName',
-    component: GroupContentComponent
-  }
+    component: GroupContentComponent,
+  },
 ];
 
 @NgModule({
@@ -86,7 +89,7 @@ const routes: Routes = [
       useFactory: (extensionRouteProviders: ExtensionRouteProvider[]) => [
         {
           path: 'room/:shortId',
-          redirectTo: ':shortId'
+          redirectTo: ':shortId',
         },
         {
           path: ':shortId',
@@ -96,20 +99,21 @@ const routes: Routes = [
           resolve: {
             room: RoomResolver,
             viewRole: RoomViewUserRoleResolver,
-            userRole: RoomUserRoleResolver
+            userRole: RoomUserRoleResolver,
           },
           runGuardsAndResolvers: 'always',
           children: [
             ...routes,
             ...ExtensionRouteProvider.extractRoutesForMountPoint(
-                RouteMountPoint.CREATOR, extensionRouteProviders)
-          ]
-        }
+              RouteMountPoint.CREATOR,
+              extensionRouteProviders
+            ),
+          ],
+        },
       ],
       deps: [ExtensionRouteProvider],
-      multi: true
-    }
-  ]
+      multi: true,
+    },
+  ],
 })
-export class CreatorRoutingModule {
-}
+export class CreatorRoutingModule {}

@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { ContentType } from '../../../../models/content-type.enum';
 import { ContentService } from '../../../../services/http/content.service';
-import { AdvancedSnackBarTypes, NotificationService } from '../../../../services/util/notification.service';
+import {
+  AdvancedSnackBarTypes,
+  NotificationService,
+} from '../../../../services/util/notification.service';
 import { TranslateService } from '@ngx-translate/core';
 import { ActivatedRoute } from '@angular/router';
 import { ContentGroupService } from '../../../../services/http/content-group.service';
@@ -15,10 +18,12 @@ import { AnnounceService } from '../../../../services/util/announce.service';
 @Component({
   selector: 'app-content-flashcard-creation',
   templateUrl: './content-flashcard-creation.component.html',
-  styleUrls: ['./content-flashcard-creation.component.scss']
+  styleUrls: ['./content-flashcard-creation.component.scss'],
 })
-export class ContentFlashcardCreationComponent extends ContentCreationComponent implements OnInit {
-
+export class ContentFlashcardCreationComponent
+  extends ContentCreationComponent
+  implements OnInit
+{
   answer: string;
   textContainsImage: boolean;
   warningType = HINT_TYPES.WARNING;
@@ -33,7 +38,14 @@ export class ContentFlashcardCreationComponent extends ContentCreationComponent 
     public eventService: EventService,
     private formattingService: FormattingService
   ) {
-    super(contentService, notificationService, translationService, route, contentGroupService, announceService);
+    super(
+      contentService,
+      notificationService,
+      translationService,
+      route,
+      contentGroupService,
+      announceService
+    );
   }
 
   initContentCreation() {

@@ -1,52 +1,107 @@
-<div fxLayout="row" fxLayoutAlign="center center" *ngIf="!isLoading && total >= status.zero" class="progress-container"
-  attr.aria-label="{{ 'statistic.a11y-group-progress' | translate:
-    { group: contentGroup.name, percent: total.toFixed()} }}">
-  <mat-progress-bar mode="determinate" value="{{total}}" [ngClass]="{'statistic-status-good': total >= status.good,
-                            'statistic-status-okay': total < status.good && total >= status.okay,
-                            'statistic-status-bad': total < status.okay && total !== status.empty}"></mat-progress-bar>
+<div
+  fxLayout="row"
+  fxLayoutAlign="center center"
+  *ngIf="!isLoading && total >= status.zero"
+  class="progress-container"
+  attr.aria-label="{{
+    'statistic.a11y-group-progress'
+      | translate : { group: contentGroup.name, percent: total.toFixed() }
+  }}"
+>
+  <mat-progress-bar
+    mode="determinate"
+    value="{{ total }}"
+    [ngClass]="{
+      'statistic-status-good': total >= status.good,
+      'statistic-status-okay': total < status.good && total >= status.okay,
+      'statistic-status-bad': total < status.okay && total !== status.empty
+    }"
+  ></mat-progress-bar>
   <span class="fill-remaining-space"></span>
-  <span class="percent">{{total.toFixed() + ' %'}}</span>
+  <span class="percent">{{ total.toFixed() + ' %' }}</span>
 </div>
 <mat-toolbar *ngIf="!isLoading && total < status.zero"></mat-toolbar>
 
-<table mat-table *ngIf="!isLoading  && dataSource.length > 0" [dataSource]="dataSource">
-
+<table
+  mat-table
+  *ngIf="!isLoading && dataSource.length > 0"
+  [dataSource]="dataSource"
+>
   <ng-container matColumnDef="content">
-    <mat-header-cell *matHeaderCellDef> {{'statistic.content' | translate}} </mat-header-cell>
-    <mat-cell tabindex="0" *matCellDef="let cp" (click)="goToStats(cp.content.id)"
-              attr.aria-label="{{ ('statistic.a11y-content-result' | translate: {
-              content: cp.content.renderedBody | a11yRenderedBody, count: cp.counts > -1 ? cp.counts : 0, abstentions: cp.abstentions > -1 ? cp.abstentions : 0 }) +
-              (cp.percent >= status.zero ? ('statistic.a11y-choice-result' | translate: { percent: cp.percent.toFixed() }) : '') +
-              ('statistic.a11y-go-to-statistic' | translate) }}" (keyup.enter)="goToStats(cp.content.id)">
-      {{cp.content.body.length > 80 ? cp.content.body.substr(0, 80) + '…' : cp.content.body}}
+    <mat-header-cell *matHeaderCellDef>
+      {{ 'statistic.content' | translate }}
+    </mat-header-cell>
+    <mat-cell
+      tabindex="0"
+      *matCellDef="let cp"
+      (click)="goToStats(cp.content.id)"
+      attr.aria-label="{{
+        ('statistic.a11y-content-result'
+          | translate
+            : {
+                content: cp.content.renderedBody | a11yRenderedBody,
+                count: cp.counts > -1 ? cp.counts : 0,
+                abstentions: cp.abstentions > -1 ? cp.abstentions : 0
+              }) +
+          (cp.percent >= status.zero
+            ? ('statistic.a11y-choice-result'
+              | translate : { percent: cp.percent.toFixed() })
+            : '') +
+          ('statistic.a11y-go-to-statistic' | translate)
+      }}"
+      (keyup.enter)="goToStats(cp.content.id)"
+    >
+      {{
+        cp.content.body.length > 80
+          ? cp.content.body.substr(0, 80) + '…'
+          : cp.content.body
+      }}
     </mat-cell>
   </ng-container>
 
   <ng-container matColumnDef="round">
-    <mat-header-cell *matHeaderCellDef> {{'statistic.round' | translate}} </mat-header-cell>
+    <mat-header-cell *matHeaderCellDef>
+      {{ 'statistic.round' | translate }}
+    </mat-header-cell>
     <mat-cell *matCellDef="let cp" (click)="goToStats(cp.content.id)">
-      {{cp.round}}
+      {{ cp.round }}
     </mat-cell>
   </ng-container>
 
   <ng-container matColumnDef="counts">
-    <mat-header-cell *matHeaderCellDef> {{'statistic.answers' | translate}} </mat-header-cell>
+    <mat-header-cell *matHeaderCellDef>
+      {{ 'statistic.answers' | translate }}
+    </mat-header-cell>
     <mat-cell *matCellDef="let cp" (click)="goToStats(cp.content.id)">
-      {{[types.SLIDE, types.FLASHCARD].indexOf(cp.type) > -1 ? '-' : cp.counts}}
+      {{
+        [types.SLIDE, types.FLASHCARD].indexOf(cp.type) > -1 ? '-' : cp.counts
+      }}
     </mat-cell>
   </ng-container>
 
   <ng-container matColumnDef="abstentions">
-    <mat-header-cell *matHeaderCellDef> {{'statistic.abstentions' | translate}} </mat-header-cell>
+    <mat-header-cell *matHeaderCellDef>
+      {{ 'statistic.abstentions' | translate }}
+    </mat-header-cell>
     <mat-cell *matCellDef="let cp" (click)="goToStats(cp.content.id)">
-      {{[types.SLIDE, types.FLASHCARD].indexOf(cp.type) > -1 ? '-' : cp.abstentions}}
+      {{
+        [types.SLIDE, types.FLASHCARD].indexOf(cp.type) > -1
+          ? '-'
+          : cp.abstentions
+      }}
     </mat-cell>
   </ng-container>
 
   <ng-container matColumnDef="percentage">
-    <mat-header-cell *matHeaderCellDef> {{'statistic.correct' | translate }} </mat-header-cell>
+    <mat-header-cell *matHeaderCellDef>
+      {{ 'statistic.correct' | translate }}
+    </mat-header-cell>
     <mat-cell *matCellDef="let cp" (click)="goToStats(cp.content.id)">
-      {{cp.type === types.CHOICE && cp.percent > -1 ? (cp.percent.toFixed() +' %') : '-' }}
+      {{
+        cp.type === types.CHOICE && cp.percent > -1
+          ? cp.percent.toFixed() + ' %'
+          : '-'
+      }}
     </mat-cell>
   </ng-container>
 
@@ -54,6 +109,8 @@
   <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
 </table>
 
-<h3 *ngIf="!isLoading && this.dataSource.length === 0">{{ 'statistic.no-contents' | translate }}</h3>
+<h3 *ngIf="!isLoading && this.dataSource.length === 0">
+  {{ 'statistic.no-contents' | translate }}
+</h3>
 
 <app-loading-indicator *ngIf="isLoading" [size]="50"></app-loading-indicator>

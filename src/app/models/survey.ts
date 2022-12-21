@@ -5,7 +5,13 @@ export class Survey {
   a11y: string;
   count: number;
 
-  constructor(state: number, name: string, label: string, a11y: string, count: number) {
+  constructor(
+    state: number,
+    name: string,
+    label: string,
+    a11y: string,
+    count: number
+  ) {
     this.state = state;
     this.name = name;
     this.label = label;

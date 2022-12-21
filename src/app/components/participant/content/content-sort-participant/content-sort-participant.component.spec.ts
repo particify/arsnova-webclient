@@ -1,6 +1,10 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { ContentSortParticipantComponent } from './content-sort-participant.component';
-import { ActivatedRoute, ActivatedRouteSnapshot, Router } from '@angular/router';
+import {
+  ActivatedRoute,
+  ActivatedRouteSnapshot,
+  Router,
+} from '@angular/router';
 import { NotificationService } from '@arsnova/app/services/util/notification.service';
 import { LanguageService } from '@arsnova/app/services/util/language.service';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
@@ -10,7 +14,7 @@ import {
   MockNotificationService,
   ActivatedRouteStub,
   MockGlobalStorageService,
-  MockRouter
+  MockRouter,
 } from '@arsnova/testing/test-helpers';
 import { of } from 'rxjs';
 import { GlobalStorageService } from '@arsnova/app/services/util/global-storage.service';
@@ -21,12 +25,14 @@ import { ContentChoice } from '@arsnova/app/models/content-choice';
 import { ContentType } from '@arsnova/app/models/content-type.enum';
 import { ContentState } from '@arsnova/app/models/content-state';
 
-
 describe('ContentSortParticipantComponent', () => {
   let component: ContentSortParticipantComponent;
   let fixture: ComponentFixture<ContentSortParticipantComponent>;
 
-  const mockContentAnswerService = jasmine.createSpyObj(['addAnswerChoice', 'shuffleAnswerOptions']);
+  const mockContentAnswerService = jasmine.createSpyObj([
+    'addAnswerChoice',
+    'shuffleAnswerOptions',
+  ]);
 
   const mockContentService = jasmine.createSpyObj(['getCorrectChoiceIndexes']);
 
@@ -34,8 +40,8 @@ describe('ContentSortParticipantComponent', () => {
 
   const params = {
     shortId: '12345678',
-    seriesName: 'Quiz'
-  }
+    seriesName: 'Quiz',
+  };
 
   snapshot.params = of([params]);
 
@@ -43,57 +49,66 @@ describe('ContentSortParticipantComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ ContentSortParticipantComponent ],
+      declarations: [ContentSortParticipantComponent],
       imports: [
         TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
-            useClass: JsonTranslationLoader
+            useClass: JsonTranslationLoader,
           },
-          isolate: true
-        })
+          isolate: true,
+        }),
       ],
       providers: [
         {
           provide: ContentAnswerService,
-          useValue: mockContentAnswerService
+          useValue: mockContentAnswerService,
         },
         {
           provide: NotificationService,
-          useClass: MockNotificationService
+          useClass: MockNotificationService,
         },
         {
           provide: LanguageService,
-          useClass: MockLangService
+          useClass: MockLangService,
         },
         {
           provide: ActivatedRoute,
-          useValue: activatedRouteStub
+          useValue: activatedRouteStub,
         },
         {
           provide: GlobalStorageService,
-          useClass: MockGlobalStorageService
+          useClass: MockGlobalStorageService,
         },
         {
           provide: Router,
-          useClass: MockRouter
+          useClass: MockRouter,
         },
         {
           provide: ContentService,
-          useValue: mockContentService
-        }
+          useValue: mockContentService,
+        },
       ],
-      schemas: [
-        NO_ERRORS_SCHEMA
-      ]
-    })
-    .compileComponents();
+      schemas: [NO_ERRORS_SCHEMA],
+    }).compileComponents();
   }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(ContentSortParticipantComponent);
     component = fixture.componentInstance;
-    component.content = new ContentChoice('1234', '1', '1234', 'subject', 'body', [], [], [], false, ContentType.SORT, new ContentState(1, new Date(), false));
+    component.content = new ContentChoice(
+      '1234',
+      '1',
+      '1234',
+      'subject',
+      'body',
+      [],
+      [],
+      [],
+      false,
+      ContentType.SORT,
+      new ContentState(1, new Date(), false)
+    );
     component.sendEvent = new EventEmitter<string>();
     fixture.detectChanges();
   });

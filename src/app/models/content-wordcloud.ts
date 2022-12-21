@@ -6,25 +6,17 @@ export class ContentWordcloud extends Content {
   maxAnswers: number;
 
   constructor(
-      id: string,
-      revision: string,
-      roomId: string,
-      subject: string,
-      body: string,
-      groups: string[],
-      format: ContentType,
-      state: ContentState,
-      maxAnswers: number) {
-    super(
-        id,
-        revision,
-        roomId,
-        subject,
-        body,
-        groups,
-        format,
-        {},
-        state);
+    id: string,
+    revision: string,
+    roomId: string,
+    subject: string,
+    body: string,
+    groups: string[],
+    format: ContentType,
+    state: ContentState,
+    maxAnswers: number
+  ) {
+    super(id, revision, roomId, subject, body, groups, format, {}, state);
     this.maxAnswers = maxAnswers;
   }
 }

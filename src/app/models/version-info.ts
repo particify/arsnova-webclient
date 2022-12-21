@@ -8,5 +8,5 @@ export interface VersionInfo {
 export enum UpdateImportance {
   OPTIONAL = 'OPTIONAL',
   RECOMMENDED = 'RECOMMENDED',
-  MANDATORY = 'MANDATORY'
+  MANDATORY = 'MANDATORY',
 }

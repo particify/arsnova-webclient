@@ -7,18 +7,17 @@ import { AuthenticationService } from '../../../services/http/authentication.ser
 @Component({
   selector: 'app-user-home',
   templateUrl: './user-home.component.html',
-  styleUrls: ['./user-home.component.scss']
+  styleUrls: ['./user-home.component.scss'],
 })
 export class UserHomeComponent implements OnInit, AfterContentInit {
-
   auth: ClientAuthentication;
 
   constructor(
     private translateService: TranslateService,
     protected langService: LanguageService,
-    private authenticationService: AuthenticationService,
+    private authenticationService: AuthenticationService
   ) {
-    langService.langEmitter.subscribe(lang => translateService.use(lang));
+    langService.langEmitter.subscribe((lang) => translateService.use(lang));
   }
 
   ngAfterContentInit(): void {
@@ -28,7 +27,8 @@ export class UserHomeComponent implements OnInit, AfterContentInit {
   }
 
   ngOnInit() {
-    this.authenticationService.getCurrentAuthentication()
-        .subscribe(auth => this.auth = auth);
+    this.authenticationService
+      .getCurrentAuthentication()
+      .subscribe((auth) => (this.auth = auth));
   }
 }

@@ -1,7 +1,10 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ContentChoice } from '../../../../models/content-choice';
 import { ContentAnswerService } from '../../../../services/http/content-answer.service';
-import { AdvancedSnackBarTypes, NotificationService } from '../../../../services/util/notification.service';
+import {
+  AdvancedSnackBarTypes,
+  NotificationService,
+} from '../../../../services/util/notification.service';
 import { ChoiceAnswer } from '../../../../models/choice-answer';
 import { ContentType } from '../../../../models/content-type.enum';
 import { TranslateService } from '@ngx-translate/core';
@@ -14,10 +17,9 @@ import { SelectableAnswer } from '../../../../models/selectable-answer';
 
 @Component({
   selector: 'app-content-choice-participant',
-  templateUrl: './content-choice-participant.component.html'
+  templateUrl: './content-choice-participant.component.html',
 })
 export class ContentChoiceParticipantComponent extends ContentParticipantBaseComponent {
-
   @Input() content: ContentChoice;
   @Input() answer: ChoiceAnswer;
   @Input() alreadySent: boolean;
@@ -48,7 +50,14 @@ export class ContentChoiceParticipantComponent extends ContentParticipantBaseCom
     protected router: Router,
     private contentService: ContentService
   ) {
-    super(notificationService, translateService, langService, route, globalStorageService, router);
+    super(
+      notificationService,
+      translateService,
+      langService,
+      route,
+      globalStorageService,
+      router
+    );
   }
 
   init() {
@@ -56,10 +65,14 @@ export class ContentChoiceParticipantComponent extends ContentParticipantBaseCom
       this.selectableAnswers.push(new SelectableAnswer(answerOption, false));
     }
     if (this.answer) {
-      if (this.answer.selectedChoiceIndexes && this.answer.selectedChoiceIndexes.length > 0) {
+      if (
+        this.answer.selectedChoiceIndexes &&
+        this.answer.selectedChoiceIndexes.length > 0
+      ) {
         for (const i of this.answer.selectedChoiceIndexes) {
           this.selectableAnswers[i].checked = true;
-          this.multipleAlreadyAnswered += this.selectableAnswers[i].answerOption.label + '&';
+          this.multipleAlreadyAnswered +=
+            this.selectableAnswers[i].answerOption.label + '&';
           if (!this.content.multiple) {
             this.selectedAnswerIndex = this.answer.selectedChoiceIndexes[0];
           }
@@ -78,19 +91,22 @@ export class ContentChoiceParticipantComponent extends ContentParticipantBaseCom
 
   getCorrectAnswerOptions() {
     if (this.correctOptionsPublished) {
-      this.contentService.getCorrectChoiceIndexes(this.content.roomId, this.content.id).subscribe(correctOptions => {
-        this.correctOptionIndexes = correctOptions.sort((a, b) => {
-          return a < b ? -1 : 1;
+      this.contentService
+        .getCorrectChoiceIndexes(this.content.roomId, this.content.id)
+        .subscribe((correctOptions) => {
+          this.correctOptionIndexes = correctOptions.sort((a, b) => {
+            return a < b ? -1 : 1;
+          });
+          (this.content as ContentChoice).correctOptionIndexes =
+            this.correctOptionIndexes;
+          this.getCorrectAnswer();
+          if (this.isChoice) {
+            this.checkAnswer(this.answer.selectedChoiceIndexes);
+            this.isLoading = false;
+          } else {
+            this.isLoading = false;
+          }
         });
-        (this.content as ContentChoice).correctOptionIndexes = this.correctOptionIndexes;
-        this.getCorrectAnswer();
-        if (this.isChoice) {
-          this.checkAnswer(this.answer.selectedChoiceIndexes);
-          this.isLoading = false;
-        } else {
-          this.isLoading = false;
-        }
-      });
     } else {
       this.isLoading = false;
     }
@@ -116,8 +132,12 @@ export class ContentChoiceParticipantComponent extends ContentParticipantBaseCom
   }
 
   checkAnswer(selectedAnswers: number[]) {
-    if (this.correctOptionIndexes.length === selectedAnswers.length &&
-      this.correctOptionIndexes.every((value, index) => value === selectedAnswers[index])) {
+    if (
+      this.correctOptionIndexes.length === selectedAnswers.length &&
+      this.correctOptionIndexes.every(
+        (value, index) => value === selectedAnswers[index]
+      )
+    ) {
       this.isCorrect = true;
     }
   }
@@ -151,47 +171,62 @@ export class ContentChoiceParticipantComponent extends ContentParticipantBaseCom
     }
     if (selectedAnswers.length === 0) {
       if (this.content.multiple) {
-        this.translateService.get('answer.at-least-one').subscribe(message => {
-          this.notificationService.showAdvanced(message, AdvancedSnackBarTypes.WARNING);
-        });
+        this.translateService
+          .get('answer.at-least-one')
+          .subscribe((message) => {
+            this.notificationService.showAdvanced(
+              message,
+              AdvancedSnackBarTypes.WARNING
+            );
+          });
       } else {
-        this.translateService.get('answer.please-one').subscribe(message => {
-          this.notificationService.showAdvanced(message, AdvancedSnackBarTypes.WARNING);
+        this.translateService.get('answer.please-one').subscribe((message) => {
+          this.notificationService.showAdvanced(
+            message,
+            AdvancedSnackBarTypes.WARNING
+          );
         });
       }
       return;
     }
-    this.answerService.addAnswerChoice(this.content.roomId, {
-      id: null,
-      revision: null,
-      contentId: this.content.id,
-      round: this.content.state.round,
-      selectedChoiceIndexes: selectedAnswers,
-      creationTimestamp: null,
-      format: ContentType.CHOICE
-    } as ChoiceAnswer).subscribe(answer => {
-      this.answer = answer;
-      this.getCorrectAnswerOptions();
-      this.translateService.get('answer.sent').subscribe(msg => {
-        this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.SUCCESS);
+    this.answerService
+      .addAnswerChoice(this.content.roomId, {
+        id: null,
+        revision: null,
+        contentId: this.content.id,
+        round: this.content.state.round,
+        selectedChoiceIndexes: selectedAnswers,
+        creationTimestamp: null,
+        format: ContentType.CHOICE,
+      } as ChoiceAnswer)
+      .subscribe((answer) => {
+        this.answer = answer;
+        this.getCorrectAnswerOptions();
+        this.translateService.get('answer.sent').subscribe((msg) => {
+          this.notificationService.showAdvanced(
+            msg,
+            AdvancedSnackBarTypes.SUCCESS
+          );
+        });
+        this.sendStatusToParent(answer);
       });
-      this.sendStatusToParent(answer);
-    });
   }
 
   abstain() {
-    this.answerService.addAnswerChoice(this.content.roomId, {
-      id: null,
-      revision: null,
-      contentId: this.content.id,
-      round: this.content.state.round,
-      selectedChoiceIndexes: [],
-      creationTimestamp: null,
-      format: ContentType.CHOICE
-    } as ChoiceAnswer).subscribe(answer => {
-      this.resetCheckedAnswers();
-      this.hasAbstained = true;
-      this.sendStatusToParent(answer);
-    });
+    this.answerService
+      .addAnswerChoice(this.content.roomId, {
+        id: null,
+        revision: null,
+        contentId: this.content.id,
+        round: this.content.state.round,
+        selectedChoiceIndexes: [],
+        creationTimestamp: null,
+        format: ContentType.CHOICE,
+      } as ChoiceAnswer)
+      .subscribe((answer) => {
+        this.resetCheckedAnswers();
+        this.hasAbstained = true;
+        this.sendStatusToParent(answer);
+      });
   }
 }

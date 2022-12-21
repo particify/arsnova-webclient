@@ -11,7 +11,7 @@ export class Room {
   closed: boolean;
   settings: object;
   lmsCourseId: string;
-  extensions: { [key: string ]: object };
+  extensions: { [key: string]: object };
 
   constructor(
     ownerId = '',
@@ -20,7 +20,7 @@ export class Room {
     name = '',
     description = '',
     closed = false,
-    extensions: { [key: string ]: object } = {}
+    extensions: { [key: string]: object } = {}
   ) {
     this.id = '';
     this.ownerId = ownerId;

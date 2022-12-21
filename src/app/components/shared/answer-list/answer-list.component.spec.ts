@@ -5,7 +5,11 @@ import { ContentService } from '@arsnova/app/services/http/content.service';
 import { DialogService } from '@arsnova/app/services/util/dialog.service';
 import { NotificationService } from '@arsnova/app/services/util/notification.service';
 import { UserRole } from '@arsnova/app/models/user-roles.enum';
-import { ActivatedRouteStub, JsonTranslationLoader, MockNotificationService } from '@arsnova/testing/test-helpers';
+import {
+  ActivatedRouteStub,
+  JsonTranslationLoader,
+  MockNotificationService,
+} from '@arsnova/testing/test-helpers';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 
 import { AnswerListComponent } from './answer-list.component';
@@ -15,55 +19,58 @@ describe('AnswerListComponent', () => {
   let component: AnswerListComponent;
   let fixture: ComponentFixture<AnswerListComponent>;
 
-  const contentAnswerService = jasmine.createSpyObj('ContentAnswerService', ['hideAnswerText']);
-  const contentService = jasmine.createSpyObj('ContentService', ['banKeywordForContent']);
-  const dialogService = jasmine.createSpyObj('DialogService', ['openDeleteDialog']);
+  const contentAnswerService = jasmine.createSpyObj('ContentAnswerService', [
+    'hideAnswerText',
+  ]);
+  const contentService = jasmine.createSpyObj('ContentService', [
+    'banKeywordForContent',
+  ]);
+  const dialogService = jasmine.createSpyObj('DialogService', [
+    'openDeleteDialog',
+  ]);
 
   const snapshot = new ActivatedRouteSnapshot();
   snapshot.data = {
-    viewRole: UserRole.CREATOR
-  }
+    viewRole: UserRole.CREATOR,
+  };
   const activatedRouteStub = new ActivatedRouteStub(null, null, snapshot);
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ AnswerListComponent ],
+      declarations: [AnswerListComponent],
       imports: [
         TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
-            useClass: JsonTranslationLoader
+            useClass: JsonTranslationLoader,
           },
-          isolate: true
-        })
+          isolate: true,
+        }),
       ],
       providers: [
         {
           provide: ActivatedRoute,
-          useValue: activatedRouteStub
+          useValue: activatedRouteStub,
         },
         {
           provide: NotificationService,
-          useClass: MockNotificationService
+          useClass: MockNotificationService,
         },
         {
           provide: ContentAnswerService,
-          useValue: contentAnswerService
+          useValue: contentAnswerService,
         },
         {
           provide: ContentService,
-          useValue: contentService
+          useValue: contentService,
         },
         {
           provide: DialogService,
-          useValue: dialogService
-        }
+          useValue: dialogService,
+        },
       ],
-      schemas: [
-        NO_ERRORS_SCHEMA
-      ]
-    })
-    .compileComponents();
+      schemas: [NO_ERRORS_SCHEMA],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(AnswerListComponent);
     component = fixture.componentInstance;

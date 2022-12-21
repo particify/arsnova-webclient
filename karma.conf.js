@@ -6,12 +6,12 @@ const isDocker = require('is-docker')();
 module.exports = function (config) {
   config.set({
     basePath: '',
-    browsers : ['ChromeHeadlessCustom'],
+    browsers: ['ChromeHeadlessCustom'],
     customLaunchers: {
       ChromeHeadlessCustom: {
         base: 'ChromeHeadless',
-        flags: isDocker ? ['--no-sandbox'] : []
-      }
+        flags: isDocker ? ['--no-sandbox'] : [],
+      },
     },
     frameworks: ['jasmine', '@angular-devkit/build-angular', 'viewport'],
     viewport: {
@@ -20,24 +20,24 @@ module.exports = function (config) {
           name: 'mobile',
           size: {
             width: 375,
-            height: 667
-          }
+            height: 667,
+          },
         },
         {
           name: 'tablet',
           size: {
             width: 768,
-            height: 1024
-          }
+            height: 1024,
+          },
         },
         {
           name: 'desktop',
           size: {
             width: 1280,
-            height: 800
-          }
-        }
-      ]
+            height: 800,
+          },
+        },
+      ],
     },
     plugins: [
       require('karma-jasmine'),
@@ -45,14 +45,15 @@ module.exports = function (config) {
       require('karma-jasmine-html-reporter'),
       require('karma-coverage-istanbul-reporter'),
       require('@angular-devkit/build-angular/plugins/karma'),
-      require('karma-viewport')
+      require('karma-viewport'),
     ],
-    client:{
-      clearContext: false // leave Jasmine Spec Runner output visible in browser
+    client: {
+      clearContext: false, // leave Jasmine Spec Runner output visible in browser
     },
     coverageIstanbulReporter: {
-      dir: require('path').join(__dirname, 'coverage'), reports: [ 'html', 'lcovonly' ],
-      fixWebpackSourcePaths: true
+      dir: require('path').join(__dirname, 'coverage'),
+      reports: ['html', 'lcovonly'],
+      fixWebpackSourcePaths: true,
     },
 
     reporters: ['progress', 'kjhtml'],
@@ -61,6 +62,6 @@ module.exports = function (config) {
     logLevel: config.LOG_INFO,
     autoWatch: true,
     browsers: ['Chrome'],
-    singleRun: false
+    singleRun: false,
   });
 };

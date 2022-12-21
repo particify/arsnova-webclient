@@ -10,28 +10,26 @@ import { Observable, of } from 'rxjs';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 @Injectable()
-class MockEventService {
-
-}
+class MockEventService {}
 
 @Injectable()
-class MockNotificationService {
-
-}
+class MockNotificationService {}
 
 @Injectable()
 class MockTranslateService {
   public get(key: string): Observable<string> {
-    return of (key);
+    return of(key);
   }
 }
 
 @Injectable()
 class TestHttpService extends AbstractHttpService<object> {
-  constructor(http: HttpClient,
+  constructor(
+    http: HttpClient,
     protected eventService: EventService,
     protected translateService: TranslateService,
-    protected notificationService: NotificationService) {
+    protected notificationService: NotificationService
+  ) {
     super('/test', http, eventService, translateService, notificationService);
   }
 }
@@ -43,24 +41,25 @@ describe('AbstractHttpService', () => {
         TestHttpService,
         {
           provide: EventService,
-          useClass: MockEventService
+          useClass: MockEventService,
         },
         {
           provide: NotificationService,
-          useClass: MockNotificationService
+          useClass: MockNotificationService,
         },
         {
           provide: TranslateService,
-          useClass: MockTranslateService
-        }
+          useClass: MockTranslateService,
+        },
       ],
-      imports: [
-        HttpClientTestingModule
-      ]
+      imports: [HttpClientTestingModule],
     });
   });
 
-  it('should be created', inject([TestHttpService], (service: TestHttpService) => {
-    expect(service).toBeTruthy();
-  }));
+  it('should be created', inject(
+    [TestHttpService],
+    (service: TestHttpService) => {
+      expect(service).toBeTruthy();
+    }
+  ));
 });

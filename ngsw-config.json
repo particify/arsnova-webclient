@@ -48,11 +48,7 @@
       "installMode": "lazy",
       "updateMode": "lazy",
       "resources": {
-        "files": [
-          "/assets/**",
-          "/roboto-*",
-          "/KaTeX_*"
-        ]
+        "files": ["/assets/**", "/roboto-*", "/KaTeX_*"]
       }
     }
   ]

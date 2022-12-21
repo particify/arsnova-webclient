@@ -1,7 +1,17 @@
-<div fxLayout="row" fxLayoutAlign="space-around" fxLayoutGap="10px" class="summary-container">
+<div
+  fxLayout="row"
+  fxLayoutAlign="space-around"
+  fxLayoutGap="10px"
+  class="summary-container"
+>
   <div fxLayout="column" fxLayoutAlign="center center">
     <div fxLayout="column" fxLayoutAlign="center">
-      <div class="system-health system-health-{{ (healthInfo | async)?.status | lowercase }}" ngSwitch="{{ (healthInfo | async)?.status }}">
+      <div
+        class="system-health system-health-{{
+          (healthInfo | async)?.status | lowercase
+        }}"
+        ngSwitch="{{ (healthInfo | async)?.status }}"
+      >
         <mat-icon *ngSwitchCase="STATUS_UP">check</mat-icon>
         <mat-icon *ngSwitchCase="STATUS_DOWN">warning</mat-icon>
         <b *ngSwitchDefault>?</b>

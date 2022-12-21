@@ -4,10 +4,12 @@ import { DragDropBaseComponent } from '../../drag-drop-base/drag-drop-base.compo
 @Component({
   selector: 'app-content-sort-answer',
   templateUrl: './content-sort-answer.component.html',
-  styleUrls: ['./content-sort-answer.component.scss']
+  styleUrls: ['./content-sort-answer.component.scss'],
 })
-export class ContentSortAnswerComponent extends DragDropBaseComponent implements OnInit {
-
+export class ContentSortAnswerComponent
+  extends DragDropBaseComponent
+  implements OnInit
+{
   @Input() answerOptions: AnswerOption[];
   @Input() disabled: boolean;
   @Input() dynamicRendering: boolean;

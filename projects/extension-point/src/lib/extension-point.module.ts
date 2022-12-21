@@ -5,15 +5,9 @@ import { ExtensionFactory } from './extension-factory';
 import { ExtensionRouteProvider, RouteMountPoint } from './extension-route';
 
 @NgModule({
-  imports: [
-    CommonModule
-  ],
-  declarations: [
-    ExtensionPointComponent
-  ],
-  exports: [
-    ExtensionPointComponent
-  ]
+  imports: [CommonModule],
+  declarations: [ExtensionPointComponent],
+  exports: [ExtensionPointComponent],
 })
 export class ExtensionPointModule {
   static forRoot() {
@@ -23,10 +17,11 @@ export class ExtensionPointModule {
         ExtensionFactory,
         {
           provide: ExtensionRouteProvider,
-          useFactory: () => new ExtensionRouteProvider(RouteMountPoint.ROOT, []),
-          multi: true
-        }
-      ]
+          useFactory: () =>
+            new ExtensionRouteProvider(RouteMountPoint.ROOT, []),
+          multi: true,
+        },
+      ],
     };
   }
 }

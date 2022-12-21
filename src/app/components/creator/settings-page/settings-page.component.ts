@@ -5,7 +5,10 @@ import { ActivatedRoute } from '@angular/router';
 import { EventService } from '../../../services/util/event.service';
 import { LanguageService } from '../../../services/util/language.service';
 import { TranslateService } from '@ngx-translate/core';
-import { GlobalStorageService, STORAGE_KEYS } from '../../../services/util/global-storage.service';
+import {
+  GlobalStorageService,
+  STORAGE_KEYS,
+} from '../../../services/util/global-storage.service';
 
 export interface Settings {
   headerName: string;
@@ -17,15 +20,34 @@ export interface Settings {
 @Component({
   selector: 'app-settings-page',
   templateUrl: './settings-page.component.html',
-  styleUrls: ['./settings-page.component.css']
+  styleUrls: ['./settings-page.component.css'],
 })
 export class SettingsPageComponent implements OnInit {
-
   settings: Settings[] = [
-    { headerName: 'general', iconName: 'settings', componentName: 'general', hotkey: '1' },
-    { headerName: 'comments', iconName: 'comment', componentName: 'comments', hotkey: '2' },
-    { headerName: 'access', iconName: 'admin_panel_settings', componentName: 'access', hotkey: '3' },
-    { headerName: 'announcements', iconName: 'newspaper', componentName: 'announcements', hotkey: '4' }
+    {
+      headerName: 'general',
+      iconName: 'settings',
+      componentName: 'general',
+      hotkey: '1',
+    },
+    {
+      headerName: 'comments',
+      iconName: 'comment',
+      componentName: 'comments',
+      hotkey: '2',
+    },
+    {
+      headerName: 'access',
+      iconName: 'admin_panel_settings',
+      componentName: 'access',
+      hotkey: '3',
+    },
+    {
+      headerName: 'announcements',
+      iconName: 'newspaper',
+      componentName: 'announcements',
+      hotkey: '4',
+    },
   ];
 
   room: Room;
@@ -40,12 +62,14 @@ export class SettingsPageComponent implements OnInit {
     protected translateService: TranslateService,
     private globalStorageService: GlobalStorageService
   ) {
-    langService.langEmitter.subscribe(lang => translateService.use(lang));
+    langService.langEmitter.subscribe((lang) => translateService.use(lang));
   }
 
   ngOnInit(): void {
-    this.translateService.use(this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE));
-    this.route.data.subscribe(data => {
+    this.translateService.use(
+      this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE)
+    );
+    this.route.data.subscribe((data) => {
       this.room = data.room;
       this.isLoading = false;
       setTimeout(() => {
@@ -57,5 +81,4 @@ export class SettingsPageComponent implements OnInit {
   updateRoom(room: Room) {
     this.room = room;
   }
-
 }

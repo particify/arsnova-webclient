@@ -3,7 +3,7 @@ export enum AnswerResultType {
   ABSTAINED = 'ABSTAINED',
   CORRECT = 'CORRECT',
   WRONG = 'WRONG',
-  NEUTRAL = 'NEUTRAL'
+  NEUTRAL = 'NEUTRAL',
 }
 
 export interface AnswerResult {

@@ -3,30 +3,34 @@ import { TestBed, inject } from '@angular/core/testing';
 import { RoomService } from '@arsnova/app/services/http/room.service';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { EventService } from '@arsnova/app/services/util/event.service';
-import { MockEventService, MockGlobalStorageService, MockNotificationService, MockTranslateService } from '@arsnova/testing/test-helpers';
+import {
+  MockEventService,
+  MockGlobalStorageService,
+  MockNotificationService,
+  MockTranslateService,
+} from '@arsnova/testing/test-helpers';
 import { TranslateService } from '@ngx-translate/core';
 import { NotificationService } from '@arsnova/app/services/util/notification.service';
 import { WsConnectorService } from '@arsnova/app/services/websockets/ws-connector.service';
-import { Cache, CachingService } from '@arsnova/app/services/util/caching.service';
+import {
+  Cache,
+  CachingService,
+} from '@arsnova/app/services/util/caching.service';
 import { Injectable } from '@angular/core';
 import { AuthenticationService } from '@arsnova/app/services/http/authentication.service';
 import { GlobalStorageService } from '@arsnova/app/services/util/global-storage.service';
 import { FeedbackService } from '@arsnova/app/services/http/feedback.service';
 
 @Injectable()
-class MockWsConnectorService {
-}
+class MockWsConnectorService {}
 
 @Injectable()
 class MockAuthenticationService {
-  getCurrentAuthentication(){
-  }
+  getCurrentAuthentication() {}
 }
 
 @Injectable()
-class MockFeedbackService {
-}
-
+class MockFeedbackService {}
 
 @Injectable()
 class MockCachingService {
@@ -42,40 +46,38 @@ describe('RoomService', () => {
         RoomService,
         {
           provide: EventService,
-          useClass: MockEventService
+          useClass: MockEventService,
         },
         {
           provide: TranslateService,
-          useClass: MockTranslateService
+          useClass: MockTranslateService,
         },
         {
           provide: NotificationService,
-          useClass: MockNotificationService
+          useClass: MockNotificationService,
         },
         {
           provide: WsConnectorService,
-          useClass: MockWsConnectorService
+          useClass: MockWsConnectorService,
         },
         {
           provide: AuthenticationService,
-          useClass: MockAuthenticationService
+          useClass: MockAuthenticationService,
         },
         {
           provide: GlobalStorageService,
-          useClass: MockGlobalStorageService
+          useClass: MockGlobalStorageService,
         },
         {
           provide: FeedbackService,
-          useClass: MockFeedbackService
+          useClass: MockFeedbackService,
         },
         {
           provide: CachingService,
-          useClass: MockCachingService
-        }
+          useClass: MockCachingService,
+        },
       ],
-      imports: [
-        HttpClientTestingModule
-      ]
+      imports: [HttpClientTestingModule],
     });
   });
 

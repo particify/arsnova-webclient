@@ -8,31 +8,38 @@ import { EventService } from '../util/event.service';
 import { UserRole } from '../../models/user-roles.enum';
 
 const httpOptions = {
-  headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+  headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
 };
 
 @Injectable()
 export class AccessTokenService extends AbstractHttpService<void> {
-
   serviceApiUrl = {
-    invite: '/invite'
+    invite: '/invite',
   };
 
-  constructor(private http: HttpClient,
-              protected eventService: EventService,
-              protected translateService: TranslateService,
-              protected notificationService: NotificationService) {
-    super('/access-token', http, eventService, translateService, notificationService);
+  constructor(
+    private http: HttpClient,
+    protected eventService: EventService,
+    protected translateService: TranslateService,
+    protected notificationService: NotificationService
+  ) {
+    super(
+      '/access-token',
+      http,
+      eventService,
+      translateService,
+      notificationService
+    );
   }
 
   invite(roomId: string, role: UserRole, loginId: string) {
     const url = this.buildUri(this.serviceApiUrl.invite, roomId);
     const body = {
       role: role,
-      emailAddress: loginId
+      emailAddress: loginId,
     };
-    return this.http.post<any>(url, body, httpOptions).pipe(
-      catchError(this.handleError<any>('invite'))
-    );
+    return this.http
+      .post<any>(url, body, httpOptions)
+      .pipe(catchError(this.handleError<any>('invite')));
   }
 }

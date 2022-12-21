@@ -5,7 +5,11 @@ import { AuthenticationService } from '@arsnova/app/services/http/authentication
 import { RoomMembershipService } from '@arsnova/app/services/room-membership.service';
 import { RoomService } from '@arsnova/app/services/http/room.service';
 import { NotificationService } from '@arsnova/app/services/util/notification.service';
-import { MockNotificationService, MockRouter, MockTranslateService } from '@arsnova/testing/test-helpers';
+import {
+  MockNotificationService,
+  MockRouter,
+  MockTranslateService,
+} from '@arsnova/testing/test-helpers';
 import { TranslateService } from '@ngx-translate/core';
 import { RoutingService } from '@arsnova/app/services/util/routing.service';
 import { Router } from '@angular/router';
@@ -29,37 +33,40 @@ describe('AuthenticationGuard', () => {
         AuthenticationGuard,
         {
           provide: AuthenticationService,
-          useClass: MockAuthenticationService
+          useClass: MockAuthenticationService,
         },
         {
           provide: RoomMembershipService,
-          useClass: MockRoomMembershipService
+          useClass: MockRoomMembershipService,
         },
         {
           provide: RoomService,
-          useClass: MockRoomService
+          useClass: MockRoomService,
         },
         {
           provide: NotificationService,
-          useClass: MockNotificationService
+          useClass: MockNotificationService,
         },
         {
           provide: TranslateService,
-          useClass: MockTranslateService
+          useClass: MockTranslateService,
         },
         {
           provide: RoutingService,
-          useClass: MockRoutingService
+          useClass: MockRoutingService,
         },
         {
           provide: Router,
-          useClass: MockRouter
-        }
-      ]
+          useClass: MockRouter,
+        },
+      ],
     });
   });
 
-  it('should be created', inject([AuthenticationGuard], (guard: AuthenticationGuard) => {
-    expect(guard).toBeTruthy();
-  }));
+  it('should be created', inject(
+    [AuthenticationGuard],
+    (guard: AuthenticationGuard) => {
+      expect(guard).toBeTruthy();
+    }
+  ));
 });

@@ -10,13 +10,18 @@ import { CacheKey, CachingService } from '../util/caching.service';
 import { WsConnectorService } from '../websockets/ws-connector.service';
 import { Entity } from '../../models/entity';
 import { EntityChanged } from '../../models/events/entity-changed';
-import { ChangeType, EntityChangeNotification } from '../../models/events/entity-change-notification';
+import {
+  ChangeType,
+  EntityChangeNotification,
+} from '../../models/events/entity-change-notification';
 
 /**
  * A specialized version of BaseHttpService which manages persistent data which
  * can be referenced through an ID.
  */
-export abstract class AbstractEntityService<T extends Entity> extends AbstractCachingHttpService<T> {
+export abstract class AbstractEntityService<
+  T extends Entity
+> extends AbstractCachingHttpService<T> {
   private aliasIdMapping: Map<string, string> = new Map<string, string>();
   private stompSubscriptions = new Map<string, Subscription>();
   protected cacheName = 'entity';
@@ -32,11 +37,22 @@ export abstract class AbstractEntityService<T extends Entity> extends AbstractCa
     cachingService: CachingService,
     useSharedCache = true
   ) {
-    super(uriPrefix, httpClient, wsConnector, eventService, translateService, notificationService, cachingService, useSharedCache);
+    super(
+      uriPrefix,
+      httpClient,
+      wsConnector,
+      eventService,
+      translateService,
+      notificationService,
+      cachingService,
+      useSharedCache
+    );
     this.cache.registerDisposeHandler(this.cacheName, (id) =>
-      this.handleCacheDisposeEvent(id));
-    this.eventService.on<EntityChangeNotification>('EntityChangeNotification')
-      .subscribe(event => this.handleEntityChangeNotificationEvent(event));
+      this.handleCacheDisposeEvent(id)
+    );
+    this.eventService
+      .on<EntityChangeNotification>('EntityChangeNotification')
+      .subscribe((event) => this.handleEntityChangeNotificationEvent(event));
   }
 
   /**
@@ -56,8 +72,9 @@ export abstract class AbstractEntityService<T extends Entity> extends AbstractCa
       }
     }
     const uri = this.buildUri(`/${id}`, roomId);
-    return this.httpClient.get<T>(uri, { params: new HttpParams(queryParams) }).pipe(
-      tap(entity => cachable && this.handleEntityCaching(id, entity)));
+    return this.httpClient
+      .get<T>(uri, { params: new HttpParams(queryParams) })
+      .pipe(tap((entity) => cachable && this.handleEntityCaching(id, entity)));
   }
 
   /**
@@ -69,7 +86,9 @@ export abstract class AbstractEntityService<T extends Entity> extends AbstractCa
   getByIds(ids: string[], params: { roomId?: string } = {}): Observable<T[]> {
     const { roomId, ...queryParams } = params;
     const uri = this.buildUri(`/?ids=${ids.join(',')}`, roomId);
-    return this.httpClient.get<T[]>(uri, { params: new HttpParams(queryParams) })
+    return this.httpClient.get<T[]>(uri, {
+      params: new HttpParams(queryParams),
+    });
   }
 
   /**
@@ -83,8 +102,13 @@ export abstract class AbstractEntityService<T extends Entity> extends AbstractCa
       throw new Error('Entity property "id" must not be set for new entities.');
     }
     const uri = this.buildUri('/', roomId);
-    return this.httpClient.post<T>(uri, entity).pipe(
-      tap(updatedEntity => this.handleEntityCaching(updatedEntity.id, updatedEntity)));
+    return this.httpClient
+      .post<T>(uri, entity)
+      .pipe(
+        tap((updatedEntity) =>
+          this.handleEntityCaching(updatedEntity.id, updatedEntity)
+        )
+      );
   }
 
   /**
@@ -98,8 +122,13 @@ export abstract class AbstractEntityService<T extends Entity> extends AbstractCa
       throw new Error('Required entity property "id" is missing.');
     }
     const uri = this.buildUri(`/${entity.id}`, roomId);
-    return this.httpClient.put<T>(uri, entity).pipe(
-      tap(updatedEntity => this.handleEntityCaching(updatedEntity.id, updatedEntity)));
+    return this.httpClient
+      .put<T>(uri, entity)
+      .pipe(
+        tap((updatedEntity) =>
+          this.handleEntityCaching(updatedEntity.id, updatedEntity)
+        )
+      );
   }
 
   /**
@@ -109,10 +138,15 @@ export abstract class AbstractEntityService<T extends Entity> extends AbstractCa
    * @param changes An object with the requested property changes
    * @param roomId The entity's room ID
    */
-  patchEntity(idOrAlias: string, changes: { [key: string]: any }, roomId?: string): Observable<T> {
+  patchEntity(
+    idOrAlias: string,
+    changes: { [key: string]: any },
+    roomId?: string
+  ): Observable<T> {
     const uri = this.buildUri(`/${idOrAlias}`, roomId);
-    return this.httpClient.patch<T>(uri, changes).pipe(
-      tap(entity => this.handleEntityCaching(idOrAlias, entity)));
+    return this.httpClient
+      .patch<T>(uri, changes)
+      .pipe(tap((entity) => this.handleEntityCaching(idOrAlias, entity)));
   }
 
   /**
@@ -123,8 +157,9 @@ export abstract class AbstractEntityService<T extends Entity> extends AbstractCa
    */
   deleteEntity(id: string, roomId?: string): Observable<T> {
     const uri = this.buildUri(`/${id}`, roomId);
-    return this.httpClient.delete<T>(uri).pipe(
-      tap(() => this.cache.remove(this.generateCacheKey(id))));
+    return this.httpClient
+      .delete<T>(uri)
+      .pipe(tap(() => this.cache.remove(this.generateCacheKey(id))));
   }
 
   protected handleEntityCaching(idOrAlias: string, entity: T) {
@@ -135,11 +170,16 @@ export abstract class AbstractEntityService<T extends Entity> extends AbstractCa
     const roomId = entityType === 'room' ? entity.id : entity['roomId'];
     if (!this.stompSubscriptions.has(entity.id)) {
       const entityChanges$ = this.wsConnector.getWatcher(
-        `/topic/${roomId}.${entityType}-${entity.id}.changes.stream`);
-      this.stompSubscriptions.set(entity.id,
-        entityChanges$.subscribe((msg) => this.handleEntityChangeEvent(entity.id, msg)));
+        `/topic/${roomId}.${entityType}-${entity.id}.changes.stream`
+      );
+      this.stompSubscriptions.set(
+        entity.id,
+        entityChanges$.subscribe((msg) =>
+          this.handleEntityChangeEvent(entity.id, msg)
+        )
+      );
     }
-    this.cache.put(this.generateCacheKey(entity.id), entity)
+    this.cache.put(this.generateCacheKey(entity.id), entity);
   }
 
   protected generateCacheKey(id: string): CacheKey {
@@ -158,7 +198,11 @@ export abstract class AbstractEntityService<T extends Entity> extends AbstractCa
     const changes: object = JSON.parse(msg.body);
     const entity = this.cache.get(this.generateCacheKey(id));
     this.mergeChangesRecursively(entity, changes);
-    const event = new EntityChanged<T>(this.entityType, entity, Object.keys(changes));
+    const event = new EntityChanged<T>(
+      this.entityType,
+      entity,
+      Object.keys(changes)
+    );
     this.eventService.broadcast(event.type, event.payload);
   }
 

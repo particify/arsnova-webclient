@@ -1,18 +1,37 @@
 <div>
-  <mat-checkbox [(ngModel)]="neutralOption" [disabled]="isEditMode && !noAnswersYet">{{ 'content.offer-neutral-option' | translate }}</mat-checkbox>
+  <mat-checkbox
+    [(ngModel)]="neutralOption"
+    [disabled]="isEditMode && !noAnswersYet"
+    >{{ 'content.offer-neutral-option' | translate }}</mat-checkbox
+  >
   <div style="padding: 0 16px">
     <div>
-      <mat-form-field appearance="outline" class="no-field-hint" style="margin-top: 10px">
+      <mat-form-field
+        appearance="outline"
+        class="no-field-hint"
+        style="margin-top: 10px"
+      >
         <mat-label>{{ 'content.answer-template' | translate }}</mat-label>
-        <mat-select [(value)]="selectedTemplate" [disabled]="isEditMode && !noAnswersYet">
-          <mat-option *ngFor="let template of templates; let i = index" [value]="template">{{ templateLabels[i] | translate }}</mat-option>
+        <mat-select
+          [(value)]="selectedTemplate"
+          [disabled]="isEditMode && !noAnswersYet"
+        >
+          <mat-option
+            *ngFor="let template of templates; let i = index"
+            [value]="template"
+            >{{ templateLabels[i] | translate }}</mat-option
+          >
         </mat-select>
       </mat-form-field>
     </div>
     <div *ngIf="!isLoading">
       <mat-list>
-        <mat-list-item fxLayout="column" fxLayoutAlign="center" class="bottom-border"
-                       *ngFor="let answerLabel of answerLabels">
+        <mat-list-item
+          fxLayout="column"
+          fxLayoutAlign="center"
+          class="bottom-border"
+          *ngFor="let answerLabel of answerLabels"
+        >
           <div fxLayout="row">
             <p>{{ answerLabel | translate }}</p>
           </div>

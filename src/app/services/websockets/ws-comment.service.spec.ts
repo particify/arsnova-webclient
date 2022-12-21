@@ -14,14 +14,16 @@ describe('WsCommentService', () => {
         WsCommentService,
         {
           provide: WsConnectorService,
-          useClass: MockWsConnectorService
-        }
-      ]
+          useClass: MockWsConnectorService,
+        },
+      ],
     });
   });
 
-  it('should be created', inject([WsCommentService], (service: WsCommentService) => {
-    expect(service).toBeTruthy();
-  }));
+  it('should be created', inject(
+    [WsCommentService],
+    (service: WsCommentService) => {
+      expect(service).toBeTruthy();
+    }
+  ));
 });
-

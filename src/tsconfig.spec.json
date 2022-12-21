@@ -3,15 +3,8 @@
   "compilerOptions": {
     "outDir": "../out-tsc/spec",
     "baseUrl": "./",
-    "types": [
-      "jasmine",
-      "node",
-      "karma-viewport"
-    ],
-    "resolveJsonModule" : true
+    "types": ["jasmine", "node", "karma-viewport"],
+    "resolveJsonModule": true
   },
-  "include": [
-    "**/*.spec.ts",
-    "**/*.d.ts"
-  ]
+  "include": ["**/*.spec.ts", "**/*.d.ts"]
 }

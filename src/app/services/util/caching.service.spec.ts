@@ -19,13 +19,16 @@ describe('CachingService', () => {
         CachingService,
         {
           provide: WsConnectorService,
-          useClass: MockWsConnectorService
-        }
-      ]
+          useClass: MockWsConnectorService,
+        },
+      ],
     });
   });
 
-  it('should be created', inject([CachingService], (service: CachingService) => {
-    expect(service).toBeTruthy();
-  }));
+  it('should be created', inject(
+    [CachingService],
+    (service: CachingService) => {
+      expect(service).toBeTruthy();
+    }
+  ));
 });

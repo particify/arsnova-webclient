@@ -3,7 +3,11 @@ import { StatisticSortComponent } from './statistic-sort.component';
 import { EventService } from '@arsnova/app/services/util/event.service';
 import { ContentService } from '@arsnova/app/services/http/content.service';
 import { ThemeService } from '@arsnova/theme/theme.service';
-import { JsonTranslationLoader, MockEventService, MockThemeService } from '@arsnova/testing/test-helpers';
+import {
+  JsonTranslationLoader,
+  MockEventService,
+  MockThemeService,
+} from '@arsnova/testing/test-helpers';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { ContentChoice } from '@arsnova/app/models/content-choice';
 import { ContentType } from '@arsnova/app/models/content-type.enum';
@@ -18,7 +22,10 @@ describe('StatisticSortComponent', () => {
   let component: StatisticSortComponent;
   let fixture: ComponentFixture<StatisticSortComponent>;
 
-  const mockContentService = jasmine.createSpyObj(['getAnswersChangedStream', 'getAnswer']);
+  const mockContentService = jasmine.createSpyObj([
+    'getAnswersChangedStream',
+    'getAnswer',
+  ]);
   const roundStatistics = new RoundStatistics();
   roundStatistics.abstentionCount = 0;
   roundStatistics.answerCount = 0;
@@ -26,16 +33,15 @@ describe('StatisticSortComponent', () => {
   roundStatistics.independentCounts = [];
   roundStatistics.round = 1;
   const stats = new AnswerStatistics();
-  stats.contentId = '1234',
-  stats.roundStatistics = [roundStatistics];
+  (stats.contentId = '1234'), (stats.roundStatistics = [roundStatistics]);
   const body = {
     payload: {
-      stats: stats
-    }
-  }
+      stats: stats,
+    },
+  };
   const message = {
-    body: JSON.stringify(body)
-  }
+    body: JSON.stringify(body),
+  };
   mockContentService.getAnswer.and.returnValue(of(stats));
   mockContentService.getAnswersChangedStream.and.returnValue(of(message));
 
@@ -43,45 +49,54 @@ describe('StatisticSortComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ StatisticSortComponent ],
+      declarations: [StatisticSortComponent],
       imports: [
         TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
-            useClass: JsonTranslationLoader
+            useClass: JsonTranslationLoader,
           },
-          isolate: true
-        })
+          isolate: true,
+        }),
       ],
       providers: [
         {
           provide: EventService,
-          useClass: MockEventService
+          useClass: MockEventService,
         },
         {
           provide: ContentService,
-          useValue: mockContentService
+          useValue: mockContentService,
         },
         {
           provide: ThemeService,
-          useClass: MockThemeService
+          useClass: MockThemeService,
         },
         {
           provide: PresentationService,
-          useValue: mockPresentationService
-        }
+          useValue: mockPresentationService,
+        },
       ],
-      schemas: [
-        NO_ERRORS_SCHEMA
-      ]
-    })
-    .compileComponents();
+      schemas: [NO_ERRORS_SCHEMA],
+    }).compileComponents();
   }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(StatisticSortComponent);
     component = fixture.componentInstance;
-    component.content = new ContentChoice('1234', '0', 'room1234', 'subject', 'body', [], [], [], false, ContentType.SORT, new ContentState(1, new Date(), false));
+    component.content = new ContentChoice(
+      '1234',
+      '0',
+      'room1234',
+      'subject',
+      'body',
+      [],
+      [],
+      [],
+      false,
+      ContentType.SORT,
+      new ContentState(1, new Date(), false)
+    );
     fixture.detectChanges();
   });
 

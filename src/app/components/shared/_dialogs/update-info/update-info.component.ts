@@ -1,10 +1,16 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA, MatLegacyDialogRef as MatDialogRef } from '@angular/material/legacy-dialog';
+import {
+  MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA,
+  MatLegacyDialogRef as MatDialogRef,
+} from '@angular/material/legacy-dialog';
 import { UpdateAvailableEvent } from '@angular/service-worker';
 import { Observable } from 'rxjs';
 import { VersionInfo } from '../../../../models/version-info';
 import { ApiConfigService } from '../../../../services/http/api-config.service';
-import { GlobalStorageService, STORAGE_KEYS } from '../../../../services/util/global-storage.service';
+import {
+  GlobalStorageService,
+  STORAGE_KEYS,
+} from '../../../../services/util/global-storage.service';
 
 interface DialogData {
   afterUpdate: boolean;
@@ -16,7 +22,7 @@ interface DialogData {
 @Component({
   selector: 'app-update-info',
   templateUrl: './update-info.component.html',
-  styleUrls: ['./update-info.component.scss']
+  styleUrls: ['./update-info.component.scss'],
 })
 export class UpdateInfoComponent implements OnInit {
   readonly dialogId = 'update-info';
@@ -29,25 +35,30 @@ export class UpdateInfoComponent implements OnInit {
   updateReady = false;
   inputFocus: boolean;
 
-  constructor(public dialogRef: MatDialogRef<UpdateInfoComponent>,
-              @Inject(MAT_DIALOG_DATA) private data: DialogData,
-              private apiConfigService: ApiConfigService,
-              private globalStorageService: GlobalStorageService) {
+  constructor(
+    public dialogRef: MatDialogRef<UpdateInfoComponent>,
+    @Inject(MAT_DIALOG_DATA) private data: DialogData,
+    private apiConfigService: ApiConfigService,
+    private globalStorageService: GlobalStorageService
+  ) {
     this.afterUpdate = data.afterUpdate;
     this.versions = data.versions;
   }
 
   ngOnInit(): void {
     const lang = this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE);
-    this.changes = this.versions.filter(v => v.changes?.[lang]?.length > 0)
-        .reduce((acc, cur) => cur.id > (acc?.id ?? 0) ? cur : acc, null)
-        ?.changes[lang];
+    this.changes = this.versions
+      .filter((v) => v.changes?.[lang]?.length > 0)
+      .reduce(
+        (acc, cur) => (cur.id > (acc?.id ?? 0) ? cur : acc),
+        null
+      )?.changes[lang];
     if (this.data.updateAvailable) {
-      this.data.updateAvailable.subscribe(() => this.updateReady = true);
+      this.data.updateAvailable.subscribe(() => (this.updateReady = true));
     } else {
       this.updateReady = true;
     }
-    this.apiConfigService.getApiConfig$().subscribe(config => {
+    this.apiConfigService.getApiConfig$().subscribe((config) => {
       this.newsUrl = config.ui.links?.news?.url;
       this.isLoading = false;
     });
@@ -56,5 +67,4 @@ export class UpdateInfoComponent implements OnInit {
   close() {
     this.dialogRef.close(true);
   }
-
 }

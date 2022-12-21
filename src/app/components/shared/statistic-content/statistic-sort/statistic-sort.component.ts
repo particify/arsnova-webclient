@@ -9,7 +9,7 @@ import {
   CategoryScale,
   Chart,
   ChartDataset,
-  LinearScale
+  LinearScale,
 } from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { StatisticContentBaseComponent } from '../statistic-content-base';
@@ -25,10 +25,12 @@ export const MAX_COMBINATIONS = 4;
 @Component({
   selector: 'app-statistic-sort',
   templateUrl: './statistic-sort.component.html',
-  styleUrls: ['./statistic-sort.component.scss']
+  styleUrls: ['./statistic-sort.component.scss'],
 })
-export class StatisticSortComponent extends StatisticContentBaseComponent implements OnInit, OnDestroy {
-
+export class StatisticSortComponent
+  extends StatisticContentBaseComponent
+  implements OnInit, OnDestroy
+{
   @Input() content: ContentChoice;
   @Input() directShow: boolean;
 
@@ -46,11 +48,13 @@ export class StatisticSortComponent extends StatisticContentBaseComponent implem
   green: string;
   grey: string;
 
-  constructor(protected contentService: ContentService,
-              private themeService: ThemeService,
-              private translateService: TranslateService,
-              protected eventService: EventService,
-              private presentationService: PresentationService) {
+  constructor(
+    protected contentService: ContentService,
+    private themeService: ThemeService,
+    private translateService: TranslateService,
+    protected eventService: EventService,
+    private presentationService: PresentationService
+  ) {
     super(contentService, eventService);
   }
 
@@ -65,13 +69,14 @@ export class StatisticSortComponent extends StatisticContentBaseComponent implem
   }
 
   afterInit() {
-    this.contentService.getAnswersChangedStream(this.content.roomId, this.content.id).pipe(
-      takeUntil(this.destroyed$)
-    ).subscribe(msg => {
-      const stats = JSON.parse(msg.body).payload.stats;
-      this.updateData(stats);
-      this.updateChart();
-    });
+    this.contentService
+      .getAnswersChangedStream(this.content.roomId, this.content.id)
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((msg) => {
+        const stats = JSON.parse(msg.body).payload.stats;
+        this.updateData(stats);
+        this.updateChart();
+      });
   }
 
   updateData(stats: AnswerStatistics) {
@@ -80,32 +85,44 @@ export class StatisticSortComponent extends StatisticContentBaseComponent implem
       this.data = [];
       this.labels = [];
       this.answerIndexes = [];
-      const combinedCounts = this.checkIfTooMany(roundStatistics.combinatedCounts ?? []);
-      this.data.push(
-        {
-          data: combinedCounts.map(c => c.count),
-          backgroundColor: this.showCorrect ? this.indicationColors : this.colors
-        }
+      const combinedCounts = this.checkIfTooMany(
+        roundStatistics.combinatedCounts ?? []
       );
+      this.data.push({
+        data: combinedCounts.map((c) => c.count),
+        backgroundColor: this.showCorrect ? this.indicationColors : this.colors,
+      });
       let abstentionCount = 0;
       if (this.content.abstentionsAllowed) {
         abstentionCount = roundStatistics.abstentionCount;
         this.data[0].data.push(abstentionCount);
       }
-      this.answerIndexes = combinedCounts.map(c => c.selectedChoiceIndexes);
+      this.answerIndexes = combinedCounts.map((c) => c.selectedChoiceIndexes);
       for (let i = 0; i < this.answerIndexes.length; i++) {
-        if (i < this.answerIndexes.length - 1 || this.answerIndexes.length < MAX_COMBINATIONS) {
-          this.labels.push(this.answerIndexes[i].map(a => a + 1).toString().replace(/,/g, '-'));
+        if (
+          i < this.answerIndexes.length - 1 ||
+          this.answerIndexes.length < MAX_COMBINATIONS
+        ) {
+          this.labels.push(
+            this.answerIndexes[i]
+              .map((a) => a + 1)
+              .toString()
+              .replace(/,/g, '-')
+          );
         } else {
-          this.labels.push(this.translateService.instant('statistic.other-combinations'));
+          this.labels.push(
+            this.translateService.instant('statistic.other-combinations')
+          );
         }
       }
       if (this.content.abstentionsAllowed) {
-        this.translateService.get('statistic.abstentions').subscribe(label => {
-          this.labels.push(label);
-        });
+        this.translateService
+          .get('statistic.abstentions')
+          .subscribe((label) => {
+            this.labels.push(label);
+          });
       }
-      const listToCount = combinedCounts.map(c => c.count);
+      const listToCount = combinedCounts.map((c) => c.count);
       listToCount.push(abstentionCount);
       this.updateCounter(listToCount);
       this.setColors();
@@ -121,13 +138,14 @@ export class StatisticSortComponent extends StatisticContentBaseComponent implem
     const shortenedList = sortedList.slice(0, MAX_COMBINATIONS);
     const length = sortedList.length;
     if (length > 5) {
-      const otherCount = sortedList.slice(MAX_COMBINATIONS, length).map(c => c.count).reduce((a, b) => a + b, 0);
-      shortenedList.push(
-        {
-          selectedChoiceIndexes: [],
-          count: otherCount
-        }
-      );
+      const otherCount = sortedList
+        .slice(MAX_COMBINATIONS, length)
+        .map((c) => c.count)
+        .reduce((a, b) => a + b, 0);
+      shortenedList.push({
+        selectedChoiceIndexes: [],
+        count: otherCount,
+      });
     }
     return shortenedList;
   }
@@ -148,14 +166,19 @@ export class StatisticSortComponent extends StatisticContentBaseComponent implem
   }
 
   toggleCorrect() {
-    const dataset = this.chart.config.data.datasets[0] as BarControllerDatasetOptions;
-    dataset.backgroundColor = this.showCorrect ? this.colors : this.indicationColors;
+    const dataset = this.chart.config.data
+      .datasets[0] as BarControllerDatasetOptions;
+    dataset.backgroundColor = this.showCorrect
+      ? this.colors
+      : this.indicationColors;
     this.chart.update();
     this.showCorrect = !this.showCorrect;
   }
 
   checkIfCorrect(index: number): boolean {
-    const correct = this.content.options.map(o => this.content.options.map(a => a.label).indexOf(o.label)).toString();
+    const correct = this.content.options
+      .map((o) => this.content.options.map((a) => a.label).indexOf(o.label))
+      .toString();
     const toCheck = this.answerIndexes[index].toString();
     return toCheck === correct;
   }
@@ -165,8 +188,9 @@ export class StatisticSortComponent extends StatisticContentBaseComponent implem
     const length = this.answerIndexes.length;
     for (let i = 0; i < length; i++) {
       this.colors[i] = barColors[i % barColors.length].color;
-      this.indicationColors[i] = this.checkIfCorrect(i) ? this.colors[i] : this.grey;
-
+      this.indicationColors[i] = this.checkIfCorrect(i)
+        ? this.colors[i]
+        : this.grey;
     }
     if (this.content.abstentionsAllowed) {
       this.colors.splice(length, 1, this.grey);
@@ -175,24 +199,33 @@ export class StatisticSortComponent extends StatisticContentBaseComponent implem
   }
 
   initChart() {
-    this.themeService.getTheme().pipe(takeUntil(this.destroyed$)).subscribe(theme => {
-      const currentTheme = this.themeService.getThemeByKey(theme);
-      this.onSurface = currentTheme.get('on-surface').color;
-      this.surface = currentTheme.get('surface').color;
-      this.green = currentTheme.get('green').color;
-      this.grey = currentTheme.get('grey').color;
-      this.setColors();
-    });
+    this.themeService
+      .getTheme()
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((theme) => {
+        const currentTheme = this.themeService.getThemeByKey(theme);
+        this.onSurface = currentTheme.get('on-surface').color;
+        this.surface = currentTheme.get('surface').color;
+        this.green = currentTheme.get('green').color;
+        this.grey = currentTheme.get('grey').color;
+        this.setColors();
+      });
   }
 
   createChart() {
     Chart.defaults.color = this.onSurface;
     Chart.defaults.font.size = this.isPresentation ? 14 : 16;
-    Chart.register(BarController, BarElement, CategoryScale, LinearScale, ChartDataLabels);
+    Chart.register(
+      BarController,
+      BarElement,
+      CategoryScale,
+      LinearScale,
+      ChartDataLabels
+    );
     const gridConfig = {
       tickColor: this.isPresentation ? this.surface : this.onSurface,
       drawOnChartArea: !this.isPresentation,
-      z: 1
+      z: 1,
     };
     const scale = this.presentationService.getScale();
     this.data[0].barThickness = this.isPresentation ? 80 : 100;
@@ -200,7 +233,7 @@ export class StatisticSortComponent extends StatisticContentBaseComponent implem
       type: 'bar',
       data: {
         labels: this.labels,
-        datasets: this.data
+        datasets: this.data,
       },
       options: {
         responsive: true,
@@ -208,8 +241,8 @@ export class StatisticSortComponent extends StatisticContentBaseComponent implem
         devicePixelRatio: window.devicePixelRatio * scale,
         layout: {
           padding: {
-            top: 25
-          }
+            top: 25,
+          },
         },
         scales: {
           y: {
@@ -217,40 +250,40 @@ export class StatisticSortComponent extends StatisticContentBaseComponent implem
             ticks: {
               display: !this.isPresentation,
               precision: 0,
-              color: this.isPresentation ? this.surface : this.onSurface
+              color: this.isPresentation ? this.surface : this.onSurface,
             },
             grid: {
               tickColor: this.isPresentation ? this.surface : this.onSurface,
-              drawOnChartArea: !this.isPresentation
+              drawOnChartArea: !this.isPresentation,
             },
             border: {
               width: this.isPresentation ? 0 : 1,
-              color: this.onSurface
-            }
+              color: this.onSurface,
+            },
           },
           x: {
             type: 'category',
             grid: gridConfig,
             border: {
-              color: this.onSurface
-            }
-          }
+              color: this.onSurface,
+            },
+          },
         },
         plugins: {
           legend: {
-            display: false
+            display: false,
           },
           datalabels: {
-            display: context => {
+            display: (context) => {
               return context.dataset.data[context.dataIndex] > 0;
             },
             color: this.onSurface,
             anchor: 'end',
             align: 'end',
-            offset: 0
-          }
-        }
-      }
+            offset: 0,
+          },
+        },
+      },
     });
   }
 

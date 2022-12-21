@@ -1,4 +1,7 @@
-import { ConsentSettings, CookieCategory } from '../../services/util/consent.service';
+import {
+  ConsentSettings,
+  CookieCategory,
+} from '../../services/util/consent.service';
 
 export interface ConsentChangedEventPayload {
   categoriesSettings: CookieCategory[];
@@ -7,13 +10,15 @@ export interface ConsentChangedEventPayload {
 
 export class ConsentChangedEvent {
   type = 'ConsentChangedEvent';
-  payload: ConsentChangedEventPayload
+  payload: ConsentChangedEventPayload;
 
-  constructor(categoriesSettings: CookieCategory[], consentSettings?: ConsentSettings) {
+  constructor(
+    categoriesSettings: CookieCategory[],
+    consentSettings?: ConsentSettings
+  ) {
     this.payload = {
       categoriesSettings: categoriesSettings,
-      consentSettings: consentSettings
-    }
+      consentSettings: consentSettings,
+    };
   }
 }
-  

@@ -1,4 +1,10 @@
-import { AfterContentInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import {
+  AfterContentInit,
+  Component,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { ContentType } from '../../../models/content-type.enum';
 import { ContentService } from '../../../services/http/content.service';
 import { Content } from '../../../models/content';
@@ -6,13 +12,19 @@ import { ContentGroup } from '../../../models/content-group';
 import { TranslateService } from '@ngx-translate/core';
 import { StepperComponent } from '../../shared/stepper/stepper.component';
 import { ActivatedRoute, Router } from '@angular/router';
-import { GlobalStorageService, STORAGE_KEYS } from '../../../services/util/global-storage.service';
+import {
+  GlobalStorageService,
+  STORAGE_KEYS,
+} from '../../../services/util/global-storage.service';
 import { AnnounceService } from '../../../services/util/announce.service';
 import { Location } from '@angular/common';
 import { ContentAnswerService } from '../../../services/http/content-answer.service';
 import { AuthenticationService } from '../../../services/http/authentication.service';
 import { Answer } from '../../../models/answer';
-import { AdvancedSnackBarTypes, NotificationService } from '../../../services/util/notification.service';
+import {
+  AdvancedSnackBarTypes,
+  NotificationService,
+} from '../../../services/util/notification.service';
 import { ContentGroupService } from '../../../services/http/content-group.service';
 import { EventService } from '../../../services/util/event.service';
 import { EntityChanged } from '../../../models/events/entity-changed';
@@ -24,10 +36,11 @@ import { RemoteService } from '../../../services/util/remote.service';
 @Component({
   selector: 'app-participant-content-carousel-page',
   templateUrl: './participant-content-carousel-page.component.html',
-  styleUrls: ['./participant-content-carousel-page.component.scss']
+  styleUrls: ['./participant-content-carousel-page.component.scss'],
 })
-export class ParticipantContentCarouselPageComponent implements OnInit, AfterContentInit, OnDestroy {
-
+export class ParticipantContentCarouselPageComponent
+  implements OnInit, AfterContentInit, OnDestroy
+{
   @ViewChild(StepperComponent) stepper: StepperComponent;
 
   ContentType: typeof ContentType = ContentType;
@@ -42,7 +55,7 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
     LAST_CONTENT: 'LAST_CONTENT',
     FIRST_UNANSWERED: 'FIRST_UNANSWERED',
     NORMAL: 'NORMAL',
-    PRE_START: 'PRE_START'
+    PRE_START: 'PRE_START',
   };
   started: string;
   answers: Answer[];
@@ -76,15 +89,13 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
     private router: Router,
     private routingService: RoutingService,
     private remoteService: RemoteService
-  ) {
-  }
+  ) {}
 
   ngAfterContentInit() {
     setTimeout(() => {
       document.getElementById('live-announcer-button').focus();
     }, 700);
   }
-
 
   ngOnDestroy(): void {
     if (this.changesSubscription) {
@@ -102,66 +113,93 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
   }
 
   ngOnInit() {
-    this.focusStateSubscription = this.remoteService.getFocusModeState().subscribe(isGuided => {
-      this.isGuided = isGuided;
-    });
-    this.translateService.use(this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE));
+    this.focusStateSubscription = this.remoteService
+      .getFocusModeState()
+      .subscribe((isGuided) => {
+        this.isGuided = isGuided;
+      });
+    this.translateService.use(
+      this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE)
+    );
     const params = this.route.snapshot.params;
     const lastContentIndex = params['contentIndex'] - 1;
     this.contentGroupName = params['seriesName'];
-    this.route.data.subscribe(data => {
+    this.route.data.subscribe((data) => {
       this.shortId = data.room.shortId;
-      this.contentgroupService.getByRoomIdAndName(data.room.id, this.contentGroupName).subscribe(contentGroup => {
-        this.contentGroup = contentGroup;
-        this.getContents(lastContentIndex);
-      }, () => {
-        this.finishLoading()
-        });
-    });
-    this.changesSubscription = this.eventService.on('EntityChanged').subscribe(changes => {
-      this.handleStateEvent(changes);
-    });
-    this.remoteSubscription = this.remoteService.getContentState().subscribe(state => {
-      if (this.contentGroup.id === state.contentGroupId) {
-        if (!this.currentStep || this.contents[this.currentStep]?.id !== state.contentId) {
-          const newIndex = this.getIndexOfContentById(state.contentId);
-          if (newIndex > -1) {
-            if (this.started === this.status.NORMAL) {
-              this.stepper.onClick(newIndex);
-            } else {
-              this.showOverview = false;
-              this.initStepper(newIndex, 0);
-            }
-          } else {
-            this.lockedContentId = state.contentId;
+      this.contentgroupService
+        .getByRoomIdAndName(data.room.id, this.contentGroupName)
+        .subscribe(
+          (contentGroup) => {
+            this.contentGroup = contentGroup;
+            this.getContents(lastContentIndex);
+          },
+          () => {
+            this.finishLoading();
           }
+        );
+    });
+    this.changesSubscription = this.eventService
+      .on('EntityChanged')
+      .subscribe((changes) => {
+        this.handleStateEvent(changes);
+      });
+    this.remoteSubscription = this.remoteService
+      .getContentState()
+      .subscribe((state) => {
+        if (this.contentGroup.id === state.contentGroupId) {
+          if (
+            !this.currentStep ||
+            this.contents[this.currentStep]?.id !== state.contentId
+          ) {
+            const newIndex = this.getIndexOfContentById(state.contentId);
+            if (newIndex > -1) {
+              if (this.started === this.status.NORMAL) {
+                this.stepper.onClick(newIndex);
+              } else {
+                this.showOverview = false;
+                this.initStepper(newIndex, 0);
+              }
+            } else {
+              this.lockedContentId = state.contentId;
+            }
+          }
+        } else {
+          this.contentgroupService
+            .getById(state.contentGroupId)
+            .subscribe((group) => {
+              this.router
+                .navigate(['p', 'room', this.shortId, 'group', group.name])
+                .then(() => {
+                  this.contentGroup = group;
+                  this.isReloading = true;
+                  this.getContents(null, state.contentId);
+                });
+            });
         }
-      } else {
-        this.contentgroupService.getById(state.contentGroupId).subscribe(group => {
-          this.router.navigate(['p', 'room', this.shortId, 'group', group.name]).then(() => {
-            this.contentGroup = group;
-            this.isReloading = true;
-            this.getContents(null, state.contentId);
-          });
-        });
-      }
-    });
-    this.routeChangedSubscription = this.routingService.getRouteChanges().subscribe(route => {
-      const newGroup = route.params['seriesName'];
-      if (newGroup && newGroup !== this.contentGroupName) {
-        this.contentgroupService.getByRoomIdAndName(this.contentGroup.roomId, newGroup).subscribe(group => {
-          this.contentGroupName = group.name;
-          this.contentGroup = group;
-          this.isReloading = true;
-          this.getContents(null);
-        });
-      }
-    });
+      });
+    this.routeChangedSubscription = this.routingService
+      .getRouteChanges()
+      .subscribe((route) => {
+        const newGroup = route.params['seriesName'];
+        if (newGroup && newGroup !== this.contentGroupName) {
+          this.contentgroupService
+            .getByRoomIdAndName(this.contentGroup.roomId, newGroup)
+            .subscribe((group) => {
+              this.contentGroupName = group.name;
+              this.contentGroup = group;
+              this.isReloading = true;
+              this.getContents(null);
+            });
+        }
+      });
   }
 
   evaluateNewContentState(state: ContentFocusState) {
     if (this.contentGroup.id === state.contentGroupId) {
-      if (!this.currentStep || this.contents[this.currentStep]?.id !== state.contentId) {
+      if (
+        !this.currentStep ||
+        this.contents[this.currentStep]?.id !== state.contentId
+      ) {
         const newIndex = this.getIndexOfContentById(state.contentId);
         if (newIndex > -1) {
           if (this.started === this.status.NORMAL) {
@@ -174,44 +212,52 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
         }
       }
     } else {
-      this.contentgroupService.getById(state.contentGroupId).subscribe(group => {
-        this.router.navigate(['p', 'room', this.shortId, 'group', group.name]).then(() => {
-          this.contentGroup = group;
-          this.isReloading = true;
-          this.getContents(null, state.contentId);
+      this.contentgroupService
+        .getById(state.contentGroupId)
+        .subscribe((group) => {
+          this.router
+            .navigate(['p', 'room', this.shortId, 'group', group.name])
+            .then(() => {
+              this.contentGroup = group;
+              this.isReloading = true;
+              this.getContents(null, state.contentId);
+            });
         });
-      });
     }
   }
 
   getIndexOfContentById(id: string): number {
-    return this.contents.map(c => c.id).indexOf(id);
+    return this.contents.map((c) => c.id).indexOf(id);
   }
 
   getContents(lastContentIndex, nextContentId?: string) {
     this.contents = [];
-    const publishedIds = this.contentgroupService.filterPublishedIds(this.contentGroup);
+    const publishedIds = this.contentgroupService.filterPublishedIds(
+      this.contentGroup
+    );
     if (publishedIds.length > 0 && this.contentGroup.published) {
-      this.contentService.getContentsByIds(this.contentGroup.roomId, publishedIds).subscribe(contents => {
-        this.contents = this.contentService.getSupportedContents(contents);
-        if (nextContentId) {
-          lastContentIndex = this.getIndexOfContentById(nextContentId);
-        }
-        if (lastContentIndex >= this.contents.length) {
-          lastContentIndex = this.contents.length - 1;
-        }
-        if (this.isReloading) {
-          if (this.lockedContentId) {
-            const newIndex = this.getIndexOfContentById(this.lockedContentId);
-            if (newIndex) {
-              lastContentIndex = newIndex;
-              this.lockedContentId = null;
-            }
+      this.contentService
+        .getContentsByIds(this.contentGroup.roomId, publishedIds)
+        .subscribe((contents) => {
+          this.contents = this.contentService.getSupportedContents(contents);
+          if (nextContentId) {
+            lastContentIndex = this.getIndexOfContentById(nextContentId);
           }
-          this.updateContentIndexUrl(lastContentIndex);
-        }
-        this.getAnswers(lastContentIndex);
-      });
+          if (lastContentIndex >= this.contents.length) {
+            lastContentIndex = this.contents.length - 1;
+          }
+          if (this.isReloading) {
+            if (this.lockedContentId) {
+              const newIndex = this.getIndexOfContentById(this.lockedContentId);
+              if (newIndex) {
+                lastContentIndex = newIndex;
+                this.lockedContentId = null;
+              }
+            }
+            this.updateContentIndexUrl(lastContentIndex);
+          }
+          this.getAnswers(lastContentIndex);
+        });
     } else {
       this.finishLoading();
     }
@@ -258,9 +304,15 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
   }
 
   updateContentIndexUrl(index?: number) {
-    if (!!index && this.currentStep !== index || !this.isReloading) {
+    if ((!!index && this.currentStep !== index) || !this.isReloading) {
       this.currentStep = index || 0;
-      this.replaceUrl(['p', this.shortId, 'series', this.contentGroupName, index + 1]);
+      this.replaceUrl([
+        'p',
+        this.shortId,
+        'series',
+        this.contentGroupName,
+        index + 1,
+      ]);
     }
   }
 
@@ -276,7 +328,7 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
   }
 
   checkIfPureInfoSeries(): boolean {
-    return this.contents.every(c => this.isInfoContent(c));
+    return this.contents.every((c) => this.isInfoContent(c));
   }
 
   isInfoContent(content: Content): boolean {
@@ -285,7 +337,10 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
 
   getFirstUnansweredContentIndex(): number {
     for (let i = 0; i < this.alreadySent.size; i++) {
-      if (this.alreadySent.get(i) === false && !this.isInfoContent(this.contents[i])) {
+      if (
+        this.alreadySent.get(i) === false &&
+        !this.isInfoContent(this.contents[i])
+      ) {
         return i;
       }
     }
@@ -299,7 +354,7 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
 
   nextContent(finish?: boolean) {
     if (!finish) {
-    this.stepper.next();
+      this.stepper.next();
     } else {
       this.stepper.headerPos = 0;
       this.stepper.onClick(0);
@@ -318,7 +373,7 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
 
   receiveSentStatus(answer: Answer, index: number) {
     this.alreadySent.set(index, !!answer);
-    if (index === this.contents.length -1) {
+    if (index === this.contents.length - 1) {
       this.hasAnsweredLastContent = this.alreadySent.get(index);
     }
     this.checkState();
@@ -341,54 +396,78 @@ export class ParticipantContentCarouselPageComponent implements OnInit, AfterCon
   }
 
   getAnswers(lastContentIndex: number) {
-    this.authenticationService.getCurrentAuthentication().subscribe(auth => {
-      this.answerService.getAnswersByUserIdContentIds(this.contentGroup.roomId, auth.userId, this.contents
-        .map(c => c.id)).subscribe(answers => {
-          let answersAdded = 0;
-          this.answers = [];
-          this.alreadySent = new Map<number, boolean>();
-          for (const [index, content] of this.contents.entries()) {
-            if (answersAdded < answers.length) {
-              for (const answer of answers) {
-                if (content.id === answer.contentId) {
-                  this.answers[index] = answer;
-                  answersAdded++;
+    this.authenticationService.getCurrentAuthentication().subscribe((auth) => {
+      this.answerService
+        .getAnswersByUserIdContentIds(
+          this.contentGroup.roomId,
+          auth.userId,
+          this.contents.map((c) => c.id)
+        )
+        .subscribe(
+          (answers) => {
+            let answersAdded = 0;
+            this.answers = [];
+            this.alreadySent = new Map<number, boolean>();
+            for (const [index, content] of this.contents.entries()) {
+              if (answersAdded < answers.length) {
+                for (const answer of answers) {
+                  if (content.id === answer.contentId) {
+                    this.answers[index] = answer;
+                    answersAdded++;
+                  }
                 }
               }
+              this.alreadySent.set(index, !!this.answers[index]);
             }
-            this.alreadySent.set(index, !!this.answers[index]);
+            this.finishLoading();
+            this.checkIfLastContentExists(lastContentIndex);
+          },
+          () => {
+            this.finishLoading();
+            const msg = this.translateService.instant(
+              'answer.group-not-available'
+            );
+            this.notificationService.showAdvanced(
+              msg,
+              AdvancedSnackBarTypes.WARNING
+            );
           }
-          this.finishLoading();
-          this.checkIfLastContentExists(lastContentIndex);
-        }, () => {
-          this.finishLoading();
-          const msg = this.translateService.instant('answer.group-not-available');
-          this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
-        });
+        );
     });
   }
 
   handleStateEvent(changes) {
     if (changes.entity.id === this.contentGroup.id) {
       this.contentGroup = changes.entity;
-      const changedEvent = new EntityChanged('ContentGroup', changes.entity, changes.changedProperties);
-      if (changedEvent.hasPropertyChanged('firstPublishedIndex') || changedEvent.hasPropertyChanged('lastPublishedIndex')
-        || changedEvent.hasPropertyChanged('published')) {
+      const changedEvent = new EntityChanged(
+        'ContentGroup',
+        changes.entity,
+        changes.changedProperties
+      );
+      if (
+        changedEvent.hasPropertyChanged('firstPublishedIndex') ||
+        changedEvent.hasPropertyChanged('lastPublishedIndex') ||
+        changedEvent.hasPropertyChanged('published')
+      ) {
         if (this.isGuided) {
           this.reloadContents();
         } else {
           if (!this.displaySnackBar) {
             this.displaySnackBar = true;
-            const contentsChangedMessage = this.translateService.instant('answer.state-changed');
+            const contentsChangedMessage = this.translateService.instant(
+              'answer.state-changed'
+            );
             const loadString = this.translateService.instant('answer.load');
-            this.notificationService.show(contentsChangedMessage, loadString, { duration: 5000 });
+            this.notificationService.show(contentsChangedMessage, loadString, {
+              duration: 5000,
+            });
             this.notificationService.snackRef.onAction().subscribe(() => {
               this.displaySnackBar = false;
               this.reloadContents();
             });
             this.notificationService.snackRef.afterDismissed().subscribe(() => {
               this.displaySnackBar = false;
-            })
+            });
           }
         }
       }

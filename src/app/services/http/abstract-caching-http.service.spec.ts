@@ -8,29 +8,40 @@ import { EventService } from '@arsnova/app/services/util/event.service';
 import { TranslateService } from '@ngx-translate/core';
 import { NotificationService } from '@arsnova/app/services/util/notification.service';
 import { CachingService } from '@arsnova/app/services/util/caching.service';
-import { MockEventService, MockNotificationService, MockTranslateService } from '@arsnova/testing/test-helpers';
+import {
+  MockEventService,
+  MockNotificationService,
+  MockTranslateService,
+} from '@arsnova/testing/test-helpers';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 @Injectable()
-class MockWsConnectorService {
-}
+class MockWsConnectorService {}
 
 @Injectable()
 class MockCachingService {
-  getCache(){
-  }
+  getCache() {}
 }
-
 
 @Injectable()
 class TestCachingHttpService extends AbstractCachingHttpService<object> {
-  constructor(httpClient: HttpClient,
-              protected wsConnector: WsConnectorService,
-              eventService: EventService,
-              translateService: TranslateService,
-              notificationService: NotificationService,
-              protected cachingService: CachingService) {
-    super('/test', httpClient, wsConnector, eventService, translateService, notificationService, cachingService);
+  constructor(
+    httpClient: HttpClient,
+    protected wsConnector: WsConnectorService,
+    eventService: EventService,
+    translateService: TranslateService,
+    notificationService: NotificationService,
+    protected cachingService: CachingService
+  ) {
+    super(
+      '/test',
+      httpClient,
+      wsConnector,
+      eventService,
+      translateService,
+      notificationService,
+      cachingService
+    );
   }
 }
 
@@ -41,33 +52,33 @@ describe('AbstractCachingHttpService', () => {
         TestCachingHttpService,
         {
           provide: EventService,
-          useClass: MockEventService
+          useClass: MockEventService,
         },
         {
           provide: NotificationService,
-          useClass: MockNotificationService
+          useClass: MockNotificationService,
         },
         {
           provide: TranslateService,
-          useClass: MockTranslateService
+          useClass: MockTranslateService,
         },
         {
           provide: WsConnectorService,
-          useClass: MockWsConnectorService
+          useClass: MockWsConnectorService,
         },
         {
           provide: CachingService,
-          useClass: MockCachingService
-        }
+          useClass: MockCachingService,
+        },
       ],
-      imports: [
-        HttpClientTestingModule
-      ]
+      imports: [HttpClientTestingModule],
     });
   });
 
-  it('should be created', inject([TestCachingHttpService], (service: TestCachingHttpService) => {
-    expect(service).toBeTruthy();
-  }));
+  it('should be created', inject(
+    [TestCachingHttpService],
+    (service: TestCachingHttpService) => {
+      expect(service).toBeTruthy();
+    }
+  ));
 });
-

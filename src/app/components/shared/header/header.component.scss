@@ -1,4 +1,4 @@
-@import "../../../../variables";
+@import '../../../../variables';
 
 .mat-toolbar {
   background-color: var(--surface);
@@ -80,13 +80,13 @@
   margin-right: 8px;
 }
 
-@media(max-width: 1000px) {
+@media (max-width: 1000px) {
   .desktop-action-container {
-    display: none!important;
+    display: none !important;
   }
 }
 
-@media(min-width: 1001px) {
+@media (min-width: 1001px) {
   .mobile-action-container {
     display: none;
   }

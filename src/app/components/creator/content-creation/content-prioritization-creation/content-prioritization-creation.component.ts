@@ -8,17 +8,22 @@ import { NotificationService } from '@arsnova/app/services/util/notification.ser
 import { AnswerOption } from '@arsnova/app/models/answer-option';
 import { AdvancedSnackBarTypes } from '@arsnova/app/services/util/notification.service';
 import { TranslateService } from '@ngx-translate/core';
-import { ContentCreationComponent, DisplayAnswer } from '../content-creation/content-creation.component';
+import {
+  ContentCreationComponent,
+  DisplayAnswer,
+} from '../content-creation/content-creation.component';
 import { ContentPrioritization } from '@arsnova/app/models/content-prioritization';
 import { PrioritizationRoundStatistics } from '@arsnova/app/models/round-statistics';
 
 @Component({
   selector: 'app-content-prioritization-creation',
   templateUrl: './content-prioritization-creation.component.html',
-  styleUrls: ['./content-prioritization-creation.component.scss']
+  styleUrls: ['./content-prioritization-creation.component.scss'],
 })
-export class ContentPrioritizationCreationComponent extends ContentCreationComponent implements OnInit {
-
+export class ContentPrioritizationCreationComponent
+  extends ContentCreationComponent
+  implements OnInit
+{
   isAnswerEdit = -1;
   resetAnswerInputEvent: EventEmitter<boolean> = new EventEmitter<boolean>();
 
@@ -30,7 +35,14 @@ export class ContentPrioritizationCreationComponent extends ContentCreationCompo
     protected contentGroupService: ContentGroupService,
     protected announceService: AnnounceService
   ) {
-    super(contentService, notificationService, translationService, route, contentGroupService, announceService);
+    super(
+      contentService,
+      notificationService,
+      translationService,
+      route,
+      contentGroupService,
+      announceService
+    );
   }
 
   initContentCreation() {
@@ -67,20 +79,29 @@ export class ContentPrioritizationCreationComponent extends ContentCreationCompo
   }
 
   checkIfAnswersExist() {
-    this.contentService.getAnswer(this.content.roomId, this.content.id).subscribe(answer => {
-      this.noAnswersYet = !!(answer.roundStatistics[0] as PrioritizationRoundStatistics).assignedPoints;
-      this.isLoading = false;
-    });
+    this.contentService
+      .getAnswer(this.content.roomId, this.content.id)
+      .subscribe((answer) => {
+        this.noAnswersYet = !!(
+          answer.roundStatistics[0] as PrioritizationRoundStatistics
+        ).assignedPoints;
+        this.isLoading = false;
+      });
   }
 
   addAnswer(answer: string) {
     if (this.answerInputCheck(answer)) {
       if (this.displayAnswers.length < 8) {
-        this.displayAnswers.push(new DisplayAnswer(new AnswerOption(answer), true));
+        this.displayAnswers.push(
+          new DisplayAnswer(new AnswerOption(answer), true)
+        );
         this.resetAnswerInputEvent.emit(true);
       } else {
         const msg = this.translationService.instant('content.max-answers');
-        this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
+        this.notificationService.showAdvanced(
+          msg,
+          AdvancedSnackBarTypes.WARNING
+        );
       }
     }
   }

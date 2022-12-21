@@ -20,13 +20,14 @@
   opacity: 1;
 }
 
-@media(hover: none) {
+@media (hover: none) {
   .moderation .delete-button {
     @include show-delete-button;
   }
 }
 
-.moderation.mat-list-item:hover, .moderation.mat-list-item:focus-within {
+.moderation.mat-list-item:hover,
+.moderation.mat-list-item:focus-within {
   background-color: var(--surface);
   filter: brightness(97%);
   .delete-button {

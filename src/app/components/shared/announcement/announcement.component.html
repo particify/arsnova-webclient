@@ -1,10 +1,22 @@
-<mat-card [ngClass]="{'disabled': editMode}">
+<mat-card [ngClass]="{ disabled: editMode }">
   <div fxLayout="row" fxLayoutAlign="space-between start">
     <h3 class="title">{{ announcement.title }}</h3>
-    <div fxLayoutAlign="center center" *ngIf="!!label" class="label-container new-container">
-      <span class="label-text new-label">{{ ('announcement.' + label) | translate }}</span>
+    <div
+      fxLayoutAlign="center center"
+      *ngIf="!!label"
+      class="label-container new-container"
+    >
+      <span class="label-text new-label">{{
+        'announcement.' + label | translate
+      }}</span>
     </div>
-    <button mat-icon-button *ngIf="role === 'CREATOR'" [matMenuTriggerFor]="moreMenu" [disabled]="editMode" [matTooltip]="'announcement.options' | translate">
+    <button
+      mat-icon-button
+      *ngIf="role === 'CREATOR'"
+      [matMenuTriggerFor]="moreMenu"
+      [disabled]="editMode"
+      [matTooltip]="'announcement.options' | translate"
+    >
       <mat-icon>more_vert</mat-icon>
     </button>
     <mat-menu #moreMenu>
@@ -19,14 +31,28 @@
     </mat-menu>
   </div>
   <mat-card-subtitle>
-    <app-date [timestamp]="announcement.updateTimestamp || announcement.creationTimestamp" [responsive]="true"></app-date>
-    <span *ngIf="announcement.updateTimestamp">&nbsp;({{ 'announcement.edited' | translate }})</span>
+    <app-date
+      [timestamp]="
+        announcement.updateTimestamp || announcement.creationTimestamp
+      "
+      [responsive]="true"
+    ></app-date>
+    <span *ngIf="announcement.updateTimestamp"
+      >&nbsp;({{ 'announcement.edited' | translate }})</span
+    >
   </mat-card-subtitle>
   <div>
-    <app-rendered-text [rawText]="announcement.renderedBody" [markdownFeatureset]="markdownFeatureset"></app-rendered-text>
+    <app-rendered-text
+      [rawText]="announcement.renderedBody"
+      [markdownFeatureset]="markdownFeatureset"
+    ></app-rendered-text>
   </div>
   <div fxLayoutAlign="start">
-    <div fxLayoutAlign="center center" *ngIf="role !== 'CREATOR'" class="label-container room-container">
+    <div
+      fxLayoutAlign="center center"
+      *ngIf="role !== 'CREATOR'"
+      class="label-container room-container"
+    >
       <span class="label-text room-label">{{ announcement.roomName }}</span>
     </div>
   </div>

@@ -1,9 +1,14 @@
 import { Inject, Injectable, InjectionToken, Provider } from '@angular/core';
-import { StorageBackend, StorageItem, StorageItemCategory } from '../../models/storage';
+import {
+  StorageBackend,
+  StorageItem,
+  StorageItemCategory,
+} from '../../models/storage';
 import { EventService } from './event.service';
 import { ConsentChangedEventPayload } from '../../models/events/consent-changed';
 
-export const STORAGECONFIG_PROVIDER_TOKEN: InjectionToken<StorageItem> = new InjectionToken('STORAGECONFIG_PROVIDER_TOKEN');
+export const STORAGECONFIG_PROVIDER_TOKEN: InjectionToken<StorageItem> =
+  new InjectionToken('STORAGECONFIG_PROVIDER_TOKEN');
 
 /**
  * Provides {@link Symbol}s for referencing {@link StorageItem} configurations.
@@ -29,7 +34,7 @@ export const STORAGE_KEYS: { [key: string]: symbol } = {
   IMPORT_TOKEN: Symbol(),
   COMMENT_TIME_FILTER: Symbol(),
   BROWSER_SESSION_INITIALIZED: Symbol(),
-  REDIRECT_URL: Symbol()
+  REDIRECT_URL: Symbol(),
 };
 
 /**
@@ -40,124 +45,126 @@ export const STORAGE_CONFIG: StorageItem[] = [
     key: STORAGE_KEYS.USER,
     name: 'USER',
     category: StorageItemCategory.REQUIRED,
-    backend: StorageBackend.LOCALSTORAGE
+    backend: StorageBackend.LOCALSTORAGE,
   },
   {
     key: STORAGE_KEYS.COOKIE_CONSENT,
     name: 'COOKIE_CONSENT',
     category: StorageItemCategory.REQUIRED,
-    backend: StorageBackend.LOCALSTORAGE
+    backend: StorageBackend.LOCALSTORAGE,
   },
   {
     key: STORAGE_KEYS.GUEST_TOKEN,
     name: 'GUEST_TOKEN',
     category: StorageItemCategory.REQUIRED,
-    backend: StorageBackend.LOCALSTORAGE
+    backend: StorageBackend.LOCALSTORAGE,
   },
   {
     key: STORAGE_KEYS.ROOM_ID,
     name: 'ROOM_ID',
     category: StorageItemCategory.REQUIRED,
-    backend: StorageBackend.MEMORY
+    backend: StorageBackend.MEMORY,
   },
   {
     key: STORAGE_KEYS.SHORT_ID,
     name: 'SHORT_ID',
     category: StorageItemCategory.REQUIRED,
-    backend: StorageBackend.MEMORY
+    backend: StorageBackend.MEMORY,
   },
   {
     key: STORAGE_KEYS.DEVICE_TYPE,
     name: 'DEVICE_TYPE',
     category: StorageItemCategory.REQUIRED,
-    backend: StorageBackend.MEMORY
+    backend: StorageBackend.MEMORY,
   },
   {
     key: STORAGE_KEYS.CONTENT_GROUPS,
     name: 'CONTENT_GROUPS',
     category: StorageItemCategory.REQUIRED,
-    backend: StorageBackend.MEMORY
+    backend: StorageBackend.MEMORY,
   },
   {
     key: STORAGE_KEYS.LAST_GROUP,
     name: 'LAST_GROUP',
     category: StorageItemCategory.REQUIRED,
-    backend: StorageBackend.MEMORY
+    backend: StorageBackend.MEMORY,
   },
   {
     key: STORAGE_KEYS.LAST_INDEX,
     name: 'LAST_INDEX',
     category: StorageItemCategory.REQUIRED,
-    backend: StorageBackend.MEMORY
+    backend: StorageBackend.MEMORY,
   },
   {
     key: STORAGE_KEYS.THEME,
     name: 'THEME',
     category: StorageItemCategory.FUNCTIONAL,
-    backend: StorageBackend.LOCALSTORAGE
+    backend: StorageBackend.LOCALSTORAGE,
   },
   {
     key: STORAGE_KEYS.LANGUAGE,
     name: 'LANGUAGE',
     category: StorageItemCategory.FUNCTIONAL,
-    backend: StorageBackend.LOCALSTORAGE
+    backend: StorageBackend.LOCALSTORAGE,
   },
   {
     key: STORAGE_KEYS.COMMENT_SORT,
     name: 'COMMENT_SORT',
     category: StorageItemCategory.FUNCTIONAL,
-    backend: StorageBackend.SESSIONSTORAGE
+    backend: StorageBackend.SESSIONSTORAGE,
   },
   {
     key: STORAGE_KEYS.UPDATED,
     name: 'UPDATED',
     category: StorageItemCategory.FUNCTIONAL,
-    backend: StorageBackend.LOCALSTORAGE
+    backend: StorageBackend.LOCALSTORAGE,
   },
   {
     key: STORAGE_KEYS.LATEST_ANNOUNCED_VERSION,
     name: 'LATEST_ANNOUNCED_VERSION',
     category: StorageItemCategory.REQUIRED,
-    backend: StorageBackend.SESSIONSTORAGE
+    backend: StorageBackend.SESSIONSTORAGE,
   },
   {
     key: STORAGE_KEYS.BROWSER_SESSION_INITIALIZED,
     name: 'BROWSER_SESSION_INITIALIZED',
     category: StorageItemCategory.STATISTICS,
-    backend: StorageBackend.SESSIONSTORAGE
+    backend: StorageBackend.SESSIONSTORAGE,
   },
   // Used by extensions
   {
     key: STORAGE_KEYS.IMPORT_TOKEN,
     name: 'IMPORT_TOKEN',
     category: StorageItemCategory.REQUIRED,
-    backend: StorageBackend.SESSIONSTORAGE
+    backend: StorageBackend.SESSIONSTORAGE,
   },
   {
     key: STORAGE_KEYS.COMMENT_TIME_FILTER,
     name: 'COMMENT_TIME_FILTER',
     category: StorageItemCategory.FUNCTIONAL,
-    backend: StorageBackend.SESSIONSTORAGE
+    backend: StorageBackend.SESSIONSTORAGE,
   },
   {
     key: STORAGE_KEYS.REDIRECT_URL,
     name: 'REDIRECT_URL',
     category: StorageItemCategory.FUNCTIONAL,
-    backend: StorageBackend.SESSIONSTORAGE
-  }
+    backend: StorageBackend.SESSIONSTORAGE,
+  },
 ];
 
 /**
  * Contains dependency injection {@link Provider}s for {@link StorageItem} in
  * {@link STORAGE_CONFIG}.
  */
-export const STORAGE_CONFIG_PROVIDERS: Provider[] = STORAGE_CONFIG.map((config) => {
-  return {
-    provide: STORAGECONFIG_PROVIDER_TOKEN,
-    useValue: config,
-    multi: true
-  };
-});
+export const STORAGE_CONFIG_PROVIDERS: Provider[] = STORAGE_CONFIG.map(
+  (config) => {
+    return {
+      provide: STORAGECONFIG_PROVIDER_TOKEN,
+      useValue: config,
+      multi: true,
+    };
+  }
+);
 
 const APP_PREFIX = 'ARS';
 
@@ -169,7 +176,8 @@ export class GlobalStorageService {
   memory: Map<symbol, any> = new Map();
   shortId: string;
   readonly storageConfig: Map<symbol, StorageItem> = new Map();
-  readonly backendOverrides: Map<StorageItemCategory, StorageBackend> = new Map();
+  readonly backendOverrides: Map<StorageItemCategory, StorageBackend> =
+    new Map();
 
   constructor(
     @Inject(STORAGECONFIG_PROVIDER_TOKEN) storageConfigItems: StorageItem[],
@@ -178,13 +186,19 @@ export class GlobalStorageService {
     storageConfigItems.forEach((item) => {
       this.storageConfig.set(item.key, item);
     });
-    this.eventService.on<ConsentChangedEventPayload>('ConsentChangedEvent').subscribe(e => this.handleConsentChange(e))
+    this.eventService
+      .on<ConsentChangedEventPayload>('ConsentChangedEvent')
+      .subscribe((e) => this.handleConsentChange(e));
 
     // Memory setup
     const userAgent = navigator.userAgent;
     let deviceType = 'desktop';
     // Check if mobile device
-    if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(userAgent)) {
+    if (
+      /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+        userAgent
+      )
+    ) {
       deviceType = 'mobile';
     }
     this.setItem(STORAGE_KEYS.DEVICE_TYPE, deviceType);
@@ -203,7 +217,7 @@ export class GlobalStorageService {
 
     /* Backup and remove items from old backend */
     const map: Map<symbol, any> = new Map();
-    STORAGE_CONFIG.filter(i => i.category === category).forEach(config => {
+    STORAGE_CONFIG.filter((i) => i.category === category).forEach((config) => {
       const value = this.getItem(config.key);
       if (value !== null) {
         map.set(config.key, value);
@@ -232,7 +246,7 @@ export class GlobalStorageService {
 
     /* Backup and remove items from old backend */
     const map: Map<symbol, any> = new Map();
-    STORAGE_CONFIG.filter(i => i.category === category).forEach(config => {
+    STORAGE_CONFIG.filter((i) => i.category === category).forEach((config) => {
       const value = this.getItem(config.key);
       if (value !== null) {
         map.set(config.key, value);
@@ -337,7 +351,7 @@ export class GlobalStorageService {
     if (event.consentSettings) {
       this.setItem(STORAGE_KEYS.COOKIE_CONSENT, event.consentSettings);
     }
-    event.categoriesSettings.forEach(c => {
+    event.categoriesSettings.forEach((c) => {
       if (c.consent) {
         this.resetBackendFor(c.key);
       } else {

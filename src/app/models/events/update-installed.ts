@@ -11,7 +11,14 @@ export class UpdateInstalled {
     loadTime: number;
   };
 
-  constructor(newId: string, newHash: string, oldId: string, oldHash: string, importance: UpdateImportance, loadTime: number) {
+  constructor(
+    newId: string,
+    newHash: string,
+    oldId: string,
+    oldHash: string,
+    importance: UpdateImportance,
+    loadTime: number
+  ) {
     this.type = 'UpdateInstalled';
     if (newHash === oldHash && newId === oldId) {
       newHash = '';
@@ -23,7 +30,7 @@ export class UpdateInstalled {
       oldId: oldId,
       oldHash: oldHash,
       importance: importance,
-      loadTime: loadTime
+      loadTime: loadTime,
     };
   }
 }

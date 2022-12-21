@@ -6,13 +6,12 @@ import { ContentService } from '../services/http/content.service';
 
 @Injectable()
 export class ContentResolver implements Resolve<Content> {
-
-  constructor(
-    private contentService: ContentService
-  ) {
-  }
+  constructor(private contentService: ContentService) {}
 
   resolve(route: ActivatedRouteSnapshot): Observable<Content> {
-    return this.contentService.getContent(route.data.room.id, route.params['contentId']);
+    return this.contentService.getContent(
+      route.data.room.id,
+      route.params['contentId']
+    );
   }
 }

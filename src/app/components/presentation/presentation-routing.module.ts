@@ -1,6 +1,9 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, ROUTES, Routes } from '@angular/router';
-import { ExtensionRouteProvider, RouteMountPoint } from '../../../../projects/extension-point/src/lib/extension-route';
+import {
+  ExtensionRouteProvider,
+  RouteMountPoint,
+} from '../../../../projects/extension-point/src/lib/extension-route';
 import { AuthenticationGuard } from '../../guards/authentication.guard';
 import { UserRole } from '../../models/user-roles.enum';
 import { RoomResolver } from '../../resolver/room.resolver';
@@ -14,24 +17,24 @@ import { QrCodeComponent } from './qr-code/qr-code.component';
 const routes: Routes = [
   {
     path: '',
-    component: QrCodeComponent
+    component: QrCodeComponent,
   },
   {
     path: 'comments',
-    component: CommentPageComponent
+    component: CommentPageComponent,
   },
   {
     path: 'feedback',
-    component: SurveyPageComponent
+    component: SurveyPageComponent,
   },
   {
     path: 'series/:seriesName',
-    component: ContentPresentationComponent
+    component: ContentPresentationComponent,
   },
   {
     path: 'series/:seriesName/:contentIndex',
-    component: ContentPresentationComponent
-  }
+    component: ContentPresentationComponent,
+  },
 ];
 
 @NgModule({
@@ -47,23 +50,25 @@ const routes: Routes = [
           canActivate: [AuthenticationGuard],
           data: {
             requiredRole: UserRole.CREATOR,
-            isPresentation: true
+            isPresentation: true,
           },
           resolve: {
             room: RoomResolver,
-            viewRole: RoomViewUserRoleResolver
+            viewRole: RoomViewUserRoleResolver,
           },
           runGuardsAndResolvers: 'always',
           children: [
             ...routes,
             ...ExtensionRouteProvider.extractRoutesForMountPoint(
-              RouteMountPoint.PRESENTATION, extensionRouteProviders)
-          ]
-        }
+              RouteMountPoint.PRESENTATION,
+              extensionRouteProviders
+            ),
+          ],
+        },
       ],
       deps: [ExtensionRouteProvider],
-      multi: true
-    }
-  ]
+      multi: true,
+    },
+  ],
 })
-export class PresentationRoutingModule { }
+export class PresentationRoutingModule {}

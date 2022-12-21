@@ -10,7 +10,7 @@ import {
   MockGlobalStorageService,
   MockAnnounceService,
   MockLangService,
-  MockMatDialog
+  MockMatDialog,
 } from '@arsnova/testing/test-helpers';
 import { GlobalStorageService } from '@arsnova/app/services/util/global-storage.service';
 import { AnnounceService } from '@arsnova/app/services/util/announce.service';
@@ -38,16 +38,26 @@ describe('CommentListComponent', () => {
   let component: CommentListComponent;
   let fixture: ComponentFixture<CommentListComponent>;
 
-  const mockWsCommentService = jasmine.createSpyObj(['getCommentStream', 'getModeratorCommentStream']);
+  const mockWsCommentService = jasmine.createSpyObj([
+    'getCommentStream',
+    'getModeratorCommentStream',
+  ]);
   const message = {
-    body: '{ "payload": {} }'
+    body: '{ "payload": {} }',
   };
   mockWsCommentService.getCommentStream.and.returnValue(of(message));
   mockWsCommentService.getModeratorCommentStream.and.returnValue(of(message));
 
   const mockRoutingService = jasmine.createSpyObj(['getRoleString']);
 
-  const mockCommentService = jasmine.createSpyObj(['getAckComments', 'getRejectedComments', 'countByRoomId', 'deleteComments', 'export', 'lowlight']);
+  const mockCommentService = jasmine.createSpyObj([
+    'getAckComments',
+    'getRejectedComments',
+    'countByRoomId',
+    'deleteComments',
+    'export',
+    'lowlight',
+  ]);
   mockCommentService.countByRoomId.and.returnValue(of({}));
   mockCommentService.getAckComments.and.returnValue(of([]));
   mockCommentService.getRejectedComments.and.returnValue(of([]));
@@ -58,14 +68,20 @@ describe('CommentListComponent', () => {
   const mockCommentSettingsService = jasmine.createSpyObj(['get']);
   mockCommentSettingsService.get.and.returnValue(of({}));
 
-  const mockDialogService = jasmine.createSpyObj(['openCreateCommentDialog', 'openDeleteDialog']);
+  const mockDialogService = jasmine.createSpyObj([
+    'openCreateCommentDialog',
+    'openDeleteDialog',
+  ]);
 
-  const mockHotkeyService = jasmine.createSpyObj(['registerHotkey', 'unregisterHotkey']);
+  const mockHotkeyService = jasmine.createSpyObj([
+    'registerHotkey',
+    'unregisterHotkey',
+  ]);
 
   const room = new Room();
   const data = {
-    room: room
-  }
+    room: room,
+  };
   const activatedRouteStub = new ActivatedRouteStub(null, data);
 
   const mockCounterBracesPipe = new CounterBracesPipe();
@@ -74,100 +90,94 @@ describe('CommentListComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [
-        CommentListComponent,
-        CounterBracesPipe
-      ],
+      declarations: [CommentListComponent, CounterBracesPipe],
       imports: [
         TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
-            useClass: JsonTranslationLoader
+            useClass: JsonTranslationLoader,
           },
-          isolate: true
+          isolate: true,
         }),
         BrowserAnimationsModule,
-        MatMenuModule
+        MatMenuModule,
       ],
       providers: [
         {
           provide: CommentService,
-          useValue: mockCommentService
+          useValue: mockCommentService,
         },
         {
           provide: WsCommentService,
-          useValue: mockWsCommentService
+          useValue: mockWsCommentService,
         },
         {
           provide: VoteService,
-          useValue: mockVoteService
+          useValue: mockVoteService,
         },
         {
           provide: CommentSettingsService,
-          useValue: mockCommentSettingsService
+          useValue: mockCommentSettingsService,
         },
         {
           provide: EventService,
-          useClass: MockEventService
+          useClass: MockEventService,
         },
         {
           provide: LanguageService,
-          useClass: MockLangService
+          useClass: MockLangService,
         },
         {
           provide: AnnounceService,
-          useClass: MockAnnounceService
+          useClass: MockAnnounceService,
         },
         {
           provide: NotificationService,
-          useClass: MockNotificationService
+          useClass: MockNotificationService,
         },
         {
           provide: ActivatedRoute,
-          useValue: activatedRouteStub
+          useValue: activatedRouteStub,
         },
         {
           provide: GlobalStorageService,
-          useClass: MockGlobalStorageService
+          useClass: MockGlobalStorageService,
         },
         {
           provide: RoutingService,
-          useValue: mockRoutingService
+          useValue: mockRoutingService,
         },
         {
           provide: DialogService,
-          useValue: mockDialogService
+          useValue: mockDialogService,
         },
         {
           provide: MatDialog,
-          useClass: MockMatDialog
+          useClass: MockMatDialog,
         },
         {
           provide: Router,
-          useClass: MockRouter
+          useClass: MockRouter,
         },
         {
           provide: Location,
-          useClass: MockLocationStrategy
+          useClass: MockLocationStrategy,
         },
         {
           provide: HotkeyService,
-          useValue: mockHotkeyService
+          useValue: mockHotkeyService,
         },
         {
           provide: CounterBracesPipe,
-          useValue: mockCounterBracesPipe
+          useValue: mockCounterBracesPipe,
         },
         {
           provide: RemoteService,
-          useValue: mockRemoteService
-        }
+          useValue: mockRemoteService,
+        },
       ],
-      schemas: [
-        NO_ERRORS_SCHEMA
-      ]
-    })
-    .compileComponents();
+      schemas: [NO_ERRORS_SCHEMA],
+    }).compileComponents();
   }));
 
   beforeEach(() => {

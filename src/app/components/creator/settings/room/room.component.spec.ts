@@ -7,7 +7,7 @@ import {
   MockGlobalStorageService,
   MockLangService,
   MockNotificationService,
-  MockRouter
+  MockRouter,
 } from '@arsnova/testing/test-helpers';
 import { NotificationService } from '@arsnova/app/services/util/notification.service';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
@@ -21,16 +21,13 @@ import { LanguageService } from '@arsnova/app/services/util/language.service';
 import { FormattingService } from '@arsnova/app/services/http/formatting.service';
 
 @Injectable()
-class MockRoomService {
-}
+class MockRoomService {}
 
 @Injectable()
-class MockDialogService {
-}
+class MockDialogService {}
 
 @Injectable()
-class MockFormattingService {
-}
+class MockFormattingService {}
 
 describe('RoomComponent', () => {
   let component: RoomComponent;
@@ -38,55 +35,52 @@ describe('RoomComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ RoomComponent ],
+      declarations: [RoomComponent],
       providers: [
         {
           provide: NotificationService,
-          useClass: MockNotificationService
+          useClass: MockNotificationService,
         },
         {
           provide: RoomService,
-          useClass: MockRoomService
+          useClass: MockRoomService,
         },
         {
           provide: Router,
-          useClass: MockRouter
+          useClass: MockRouter,
         },
         {
           provide: DialogService,
-          useClass: MockDialogService
+          useClass: MockDialogService,
         },
         {
           provide: GlobalStorageService,
-          useClass: MockGlobalStorageService
+          useClass: MockGlobalStorageService,
         },
         {
           provide: EventService,
-          useClass: MockEventService
+          useClass: MockEventService,
         },
         {
           provide: FormattingService,
-          useClass: MockFormattingService
+          useClass: MockFormattingService,
         },
         {
           provide: LanguageService,
-          useClass: MockLangService
-        }
+          useClass: MockLangService,
+        },
       ],
       imports: [
         TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
-            useClass: JsonTranslationLoader
+            useClass: JsonTranslationLoader,
           },
-          isolate: true
-        })
+          isolate: true,
+        }),
       ],
-      schemas: [
-        NO_ERRORS_SCHEMA
-      ]
-    })
-    .compileComponents();
+      schemas: [NO_ERRORS_SCHEMA],
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -98,4 +92,4 @@ describe('RoomComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
-})
+});

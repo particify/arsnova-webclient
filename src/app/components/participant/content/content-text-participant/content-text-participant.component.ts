@@ -2,7 +2,10 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ContentText } from '../../../../models/content-text';
 import { ContentAnswerService } from '../../../../services/http/content-answer.service';
 import { TextAnswer } from '../../../../models/text-answer';
-import { AdvancedSnackBarTypes, NotificationService } from '../../../../services/util/notification.service';
+import {
+  AdvancedSnackBarTypes,
+  NotificationService,
+} from '../../../../services/util/notification.service';
 import { TranslateService } from '@ngx-translate/core';
 import { LanguageService } from '../../../../services/util/language.service';
 import { ContentType } from '../../../../models/content-type.enum';
@@ -14,10 +17,9 @@ import { ContentParticipantBaseComponent } from '../content-participant-base.com
 @Component({
   selector: 'app-content-text-participant',
   templateUrl: './content-text-participant.component.html',
-  styleUrls: ['./content-text-participant.component.scss']
+  styleUrls: ['./content-text-participant.component.scss'],
 })
 export class ContentTextParticipantComponent extends ContentParticipantBaseComponent {
-
   @Input() content: ContentText;
   @Input() answer: TextAnswer;
   @Input() alreadySent: boolean;
@@ -38,7 +40,14 @@ export class ContentTextParticipantComponent extends ContentParticipantBaseCompo
     protected globalStorageService: GlobalStorageService,
     protected router: Router
   ) {
-    super(notificationService, translateService, langService, route, globalStorageService, router);
+    super(
+      notificationService,
+      translateService,
+      langService,
+      route,
+      globalStorageService,
+      router
+    );
   }
 
   init() {
@@ -57,43 +66,53 @@ export class ContentTextParticipantComponent extends ContentParticipantBaseCompo
 
   submitAnswer() {
     if (this.textAnswer.trim().valueOf() === '') {
-      this.translateService.get('answer.please-answer').subscribe(message => {
-        this.notificationService.showAdvanced(message, AdvancedSnackBarTypes.WARNING);
+      this.translateService.get('answer.please-answer').subscribe((message) => {
+        this.notificationService.showAdvanced(
+          message,
+          AdvancedSnackBarTypes.WARNING
+        );
       });
       this.textAnswer = '';
       return;
     }
-    this.answerService.addAnswerText(this.content.roomId, {
-      id: null,
-      revision: null,
-      contentId: this.content.id,
-      round: this.content.state.round,
-      subject: this.content.subject,
-      body: this.textAnswer,
-      read: 'false',
-      creationTimestamp: null,
-      format: ContentType.TEXT
-    } as TextAnswer).subscribe(answer => {
-      this.createAnswer(this.textAnswer);
-      this.translateService.get('answer.sent').subscribe(msg => {
-        this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.SUCCESS);
+    this.answerService
+      .addAnswerText(this.content.roomId, {
+        id: null,
+        revision: null,
+        contentId: this.content.id,
+        round: this.content.state.round,
+        subject: this.content.subject,
+        body: this.textAnswer,
+        read: 'false',
+        creationTimestamp: null,
+        format: ContentType.TEXT,
+      } as TextAnswer)
+      .subscribe((answer) => {
+        this.createAnswer(this.textAnswer);
+        this.translateService.get('answer.sent').subscribe((msg) => {
+          this.notificationService.showAdvanced(
+            msg,
+            AdvancedSnackBarTypes.SUCCESS
+          );
+        });
+        this.sendStatusToParent(answer);
       });
-      this.sendStatusToParent(answer);
-    });
   }
 
   abstain() {
-    this.answerService.addAnswerText(this.content.roomId, {
-      id: null,
-      revision: null,
-      contentId: this.content.id,
-      round: this.content.state.round,
-      body: null,
-      creationTimestamp: null,
-      format: ContentType.TEXT
-    } as TextAnswer).subscribe(answer => {
-      this.createAnswer();
-      this.sendStatusToParent(answer);
-    });
+    this.answerService
+      .addAnswerText(this.content.roomId, {
+        id: null,
+        revision: null,
+        contentId: this.content.id,
+        round: this.content.state.round,
+        body: null,
+        creationTimestamp: null,
+        format: ContentType.TEXT,
+      } as TextAnswer)
+      .subscribe((answer) => {
+        this.createAnswer();
+        this.sendStatusToParent(answer);
+      });
   }
 }

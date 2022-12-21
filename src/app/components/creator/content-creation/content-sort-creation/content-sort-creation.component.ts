@@ -1,7 +1,10 @@
 import { Component, EventEmitter, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { ContentService } from '../../../../services/http/content.service';
-import { AdvancedSnackBarTypes, NotificationService } from '../../../../services/util/notification.service';
+import {
+  AdvancedSnackBarTypes,
+  NotificationService,
+} from '../../../../services/util/notification.service';
 import { ActivatedRoute } from '@angular/router';
 import { ContentType } from '../../../../models/content-type.enum';
 import { ContentGroupService } from '../../../../services/http/content-group.service';
@@ -9,17 +12,19 @@ import { ContentChoice } from '../../../../models/content-choice';
 import { AnswerOption } from '../../../../models/answer-option';
 import {
   ContentCreationComponent,
-  DisplayAnswer
+  DisplayAnswer,
 } from '../content-creation/content-creation.component';
 import { AnnounceService } from '../../../../services/util/announce.service';
 
 @Component({
   selector: 'app-content-sort-creation',
   templateUrl: './content-sort-creation.component.html',
-  styleUrls: ['./content-sort-creation.component.scss']
+  styleUrls: ['./content-sort-creation.component.scss'],
 })
-export class ContentSortCreationComponent extends ContentCreationComponent implements OnInit {
-
+export class ContentSortCreationComponent
+  extends ContentCreationComponent
+  implements OnInit
+{
   isAnswerEdit = -1;
   resetAnswerInputEvent: EventEmitter<boolean> = new EventEmitter<boolean>();
 
@@ -31,7 +36,14 @@ export class ContentSortCreationComponent extends ContentCreationComponent imple
     protected contentGroupService: ContentGroupService,
     protected announceService: AnnounceService
   ) {
-    super(contentService, notificationService, translationService, route, contentGroupService, announceService);
+    super(
+      contentService,
+      notificationService,
+      translationService,
+      route,
+      contentGroupService,
+      announceService
+    );
   }
 
   initContentCreation() {
@@ -72,12 +84,17 @@ export class ContentSortCreationComponent extends ContentCreationComponent imple
   addAnswer(answer: string) {
     if (this.answerInputCheck(answer)) {
       if (this.displayAnswers.length < 8) {
-        this.displayAnswers.push(new DisplayAnswer(new AnswerOption(answer), true));
+        this.displayAnswers.push(
+          new DisplayAnswer(new AnswerOption(answer), true)
+        );
         this.updateDragDropList();
         this.resetAnswerInputEvent.emit(true);
       } else {
         const msg = this.translationService.instant('content.max-answers');
-        this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
+        this.notificationService.showAdvanced(
+          msg,
+          AdvancedSnackBarTypes.WARNING
+        );
       }
     }
   }
@@ -106,8 +123,9 @@ export class ContentSortCreationComponent extends ContentCreationComponent imple
       return;
     }
     if (this.displayAnswers.length >= 2) {
-      (this.content as ContentChoice).correctOptionIndexes = Object.keys(this.displayAnswers.map(a => a.answerOption))
-        .map(index => parseInt(index, 10));
+      (this.content as ContentChoice).correctOptionIndexes = Object.keys(
+        this.displayAnswers.map((a) => a.answerOption)
+      ).map((index) => parseInt(index, 10));
       return true;
     } else {
       const msg = this.translationService.instant('content.need-answers');
@@ -118,5 +136,4 @@ export class ContentSortCreationComponent extends ContentCreationComponent imple
   updateDragDropList() {
     this.dragDroplist = this.displayAnswers;
   }
-
 }

@@ -3,7 +3,10 @@ import { inject, TestBed } from '@angular/core/testing';
 import { DemoService } from 'app/services/demo.service';
 import { Injectable } from '@angular/core';
 import { EventService } from '@arsnova/app/services/util/event.service';
-import { MockEventService, MockTranslateService } from '@arsnova/testing/test-helpers';
+import {
+  MockEventService,
+  MockTranslateService,
+} from '@arsnova/testing/test-helpers';
 import { RoomService } from '@arsnova/app/services/http/room.service';
 import { TranslateService } from '@ngx-translate/core';
 import { ApiConfigService } from '@arsnova/app/services/http/api-config.service';
@@ -21,21 +24,21 @@ describe('DemoService', () => {
         DemoService,
         {
           provide: TranslateService,
-          useClass: MockTranslateService
+          useClass: MockTranslateService,
         },
         {
           provide: EventService,
-          useClass: MockEventService
+          useClass: MockEventService,
         },
         {
           provide: ApiConfigService,
-          useClass: MockApiConfigService
+          useClass: MockApiConfigService,
         },
         {
           provide: RoomService,
-          useClass: MockRoomService
-        }
-      ]
+          useClass: MockRoomService,
+        },
+      ],
     });
   });
 
@@ -43,4 +46,3 @@ describe('DemoService', () => {
     expect(service).toBeTruthy();
   }));
 });
-

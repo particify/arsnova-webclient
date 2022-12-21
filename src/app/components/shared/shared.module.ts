@@ -76,7 +76,7 @@ import { StatisticPrioritizationComponent } from './statistic-content/statistic-
     MatRippleModule,
     CdkStepperModule,
     ExtensionPointModule,
-    DragDropModule
+    DragDropModule,
   ],
   declarations: [
     RoomJoinComponent,
@@ -139,7 +139,7 @@ import { StatisticPrioritizationComponent } from './statistic-content/statistic-
     A11yRenderedBodyPipe,
     SettingsPanelHeaderComponent,
     ContentPrioritizationAnswerComponent,
-    StatisticPrioritizationComponent
+    StatisticPrioritizationComponent,
   ],
   exports: [
     RoomJoinComponent,
@@ -188,8 +188,7 @@ import { StatisticPrioritizationComponent } from './statistic-content/statistic-
     ContentWordcloudAnswerComponent,
     A11yRenderedBodyPipe,
     SettingsPanelHeaderComponent,
-    ContentPrioritizationAnswerComponent
-  ]
+    ContentPrioritizationAnswerComponent,
+  ],
 })
-export class SharedModule {
-}
+export class SharedModule {}

@@ -1,25 +1,62 @@
 <app-loading-indicator *ngIf="isLoading || isReloading"></app-loading-indicator>
 <div>
-  <div *ngIf="!isLoading && !isReloading" fxLayout="column" fxLayoutAlign="start center">
+  <div
+    *ngIf="!isLoading && !isReloading"
+    fxLayout="column"
+    fxLayoutAlign="start center"
+  >
     <div id="live-announcer-button" class="visually-hidden" tabindex="-1">
-      {{ 'answer.a11y-message' | a11yIntro: { group: contentGroupName } | async }}
+      {{
+        'answer.a11y-message' | a11yIntro : { group: contentGroupName } | async
+      }}
     </div>
-    <app-stepper *ngIf="contents.length > 0 && !this.showOverview" (newIndex)="updateContentIndexUrl($event)" [listLength]="contents.length"
-                 [completed]="alreadySent" [finished]="isFinished" [isParticipant]="true" i18nPrefix="content">
+    <app-stepper
+      *ngIf="contents.length > 0 && !this.showOverview"
+      (newIndex)="updateContentIndexUrl($event)"
+      [listLength]="contents.length"
+      [completed]="alreadySent"
+      [finished]="isFinished"
+      [isParticipant]="true"
+      i18nPrefix="content"
+    >
       <cdk-step *ngFor="let content of contents; let i = index">
-        <div tabindex="0" id="step" *ngIf="currentStep >= i - 1 && currentStep <= i + 1"
-             appHotkey="1" [appHotkeyDisabled]="currentStep !== i" [appHotkeyTitle]="'content.description' | translate">
-          <app-content-participant (answerChanged)="receiveSentStatus($event, i)" (next)="nextContent($event)"
-                                   [content]="content" [answer]="answers[i]" [lastContent]="i === contents.length - 1"
-                                   [active]="currentStep === i" [index]="i" [statsPublished]="contentGroup.statisticsPublished"
-                                   [correctOptionsPublished]="contentGroup.correctOptionsPublished">
+        <div
+          tabindex="0"
+          id="step"
+          *ngIf="currentStep >= i - 1 && currentStep <= i + 1"
+          appHotkey="1"
+          [appHotkeyDisabled]="currentStep !== i"
+          [appHotkeyTitle]="'content.description' | translate"
+        >
+          <app-content-participant
+            (answerChanged)="receiveSentStatus($event, i)"
+            (next)="nextContent($event)"
+            [content]="content"
+            [answer]="answers[i]"
+            [lastContent]="i === contents.length - 1"
+            [active]="currentStep === i"
+            [index]="i"
+            [statsPublished]="contentGroup.statisticsPublished"
+            [correctOptionsPublished]="contentGroup.correctOptionsPublished"
+          >
           </app-content-participant>
         </div>
       </cdk-step>
     </app-stepper>
-    <app-series-overview *ngIf="showOverview" [group]="contentGroup" [contents]="contents" [finished]="isFinished" [isPureInfoSeries]="isPureInfoSeries"
-                        [hasAnsweredLastContent]="hasAnsweredLastContent" (newContentIndex)="goToContent($event)">
+    <app-series-overview
+      *ngIf="showOverview"
+      [group]="contentGroup"
+      [contents]="contents"
+      [finished]="isFinished"
+      [isPureInfoSeries]="isPureInfoSeries"
+      [hasAnsweredLastContent]="hasAnsweredLastContent"
+      (newContentIndex)="goToContent($event)"
+    >
     </app-series-overview>
-    <span *ngIf="!isLoading && !isReloading && contents.length === 0" class="hint">{{ 'answer.no-contents-published' | translate }}</span>
+    <span
+      *ngIf="!isLoading && !isReloading && contents.length === 0"
+      class="hint"
+      >{{ 'answer.no-contents-published' | translate }}</span
+    >
   </div>
 </div>

@@ -5,24 +5,48 @@
         <h2 class="title">{{ 'admin-area.title' | translate }}</h2>
         <p class="section-header">{{ 'admin-area.general' | translate }}</p>
         <div class="button-container" fxLayout="column" fxLayoutGap="8px">
-          <button mat-button class="nav-button" (click)="changePage('status')" [ngClass]="{'active-page': currentPage === 'status'}">
+          <button
+            mat-button
+            class="nav-button"
+            (click)="changePage('status')"
+            [ngClass]="{ 'active-page': currentPage === 'status' }"
+          >
             <mat-icon>dns</mat-icon>
             {{ 'admin-area.status-details' | translate }}
           </button>
-          <button mat-button class="nav-button" (click)="changePage('stats')" [ngClass]="{'active-page': currentPage === 'stats'}">
+          <button
+            mat-button
+            class="nav-button"
+            (click)="changePage('stats')"
+            [ngClass]="{ 'active-page': currentPage === 'stats' }"
+          >
             <mat-icon>insights</mat-icon>
             {{ 'admin-area.system-stats' | translate }}
           </button>
-          <button mat-button class="nav-button" (click)="changePage('users')" [ngClass]="{'active-page': currentPage === 'users'}">
+          <button
+            mat-button
+            class="nav-button"
+            (click)="changePage('users')"
+            [ngClass]="{ 'active-page': currentPage === 'users' }"
+          >
             <mat-icon>people</mat-icon>
             {{ 'admin-area.manage-accounts' | translate }}
           </button>
-          <button mat-button class="nav-button" (click)="changePage('rooms')" [ngClass]="{'active-page': currentPage === 'rooms'}">
+          <button
+            mat-button
+            class="nav-button"
+            (click)="changePage('rooms')"
+            [ngClass]="{ 'active-page': currentPage === 'rooms' }"
+          >
             <mat-icon>room_preferences</mat-icon>
             {{ 'admin-area.manage-rooms' | translate }}
           </button>
         </div>
-        <lib-extension-point extensionId="premium-admin" [extensionData]="{pageChanged: pageChanged}" (extensionEvent)="changePage($event)"></lib-extension-point>
+        <lib-extension-point
+          extensionId="premium-admin"
+          [extensionData]="{ pageChanged: pageChanged }"
+          (extensionEvent)="changePage($event)"
+        ></lib-extension-point>
       </mat-drawer>
       <mat-drawer-content fxLayout="column">
         <app-admin-summary-bar></app-admin-summary-bar>

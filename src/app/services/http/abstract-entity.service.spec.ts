@@ -6,13 +6,19 @@ import { WsConnectorService } from '@arsnova/app/services/websockets/ws-connecto
 import { EventService } from '@arsnova/app/services/util/event.service';
 import { TranslateService } from '@ngx-translate/core';
 import { NotificationService } from '@arsnova/app/services/util/notification.service';
-import { Cache, CachingService } from '@arsnova/app/services/util/caching.service';
-import { MockEventService, MockNotificationService, MockTranslateService } from '@arsnova/testing/test-helpers';
+import {
+  Cache,
+  CachingService,
+} from '@arsnova/app/services/util/caching.service';
+import {
+  MockEventService,
+  MockNotificationService,
+  MockTranslateService,
+} from '@arsnova/testing/test-helpers';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 @Injectable()
-class MockWsConnectorService {
-}
+class MockWsConnectorService {}
 
 @Injectable()
 class MockCachingService {
@@ -23,13 +29,24 @@ class MockCachingService {
 
 @Injectable()
 class TestEntityService extends AbstractEntityService<object> {
-  constructor(protected httpClient: HttpClient,
-              protected wsConnector: WsConnectorService,
-              protected eventService: EventService,
-              protected translateService: TranslateService,
-              protected notificationService: NotificationService,
-              cachingService: CachingService) {
-    super('Test', '/test', httpClient, wsConnector, eventService, translateService, notificationService, cachingService);
+  constructor(
+    protected httpClient: HttpClient,
+    protected wsConnector: WsConnectorService,
+    protected eventService: EventService,
+    protected translateService: TranslateService,
+    protected notificationService: NotificationService,
+    cachingService: CachingService
+  ) {
+    super(
+      'Test',
+      '/test',
+      httpClient,
+      wsConnector,
+      eventService,
+      translateService,
+      notificationService,
+      cachingService
+    );
   }
 }
 
@@ -40,32 +57,33 @@ describe('AbstractEntityService', () => {
         TestEntityService,
         {
           provide: EventService,
-          useClass: MockEventService
+          useClass: MockEventService,
         },
         {
           provide: NotificationService,
-          useClass: MockNotificationService
+          useClass: MockNotificationService,
         },
         {
           provide: TranslateService,
-          useClass: MockTranslateService
+          useClass: MockTranslateService,
         },
         {
           provide: WsConnectorService,
-          useClass: MockWsConnectorService
+          useClass: MockWsConnectorService,
         },
         {
           provide: CachingService,
-          useClass: MockCachingService
-        }
+          useClass: MockCachingService,
+        },
       ],
-      imports: [
-        HttpClientTestingModule
-      ]
+      imports: [HttpClientTestingModule],
     });
   });
 
-  it('should be created', inject([TestEntityService], (service: TestEntityService) => {
-    expect(service).toBeTruthy();
-  }));
+  it('should be created', inject(
+    [TestEntityService],
+    (service: TestEntityService) => {
+      expect(service).toBeTruthy();
+    }
+  ));
 });

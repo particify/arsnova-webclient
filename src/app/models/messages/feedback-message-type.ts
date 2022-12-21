@@ -3,5 +3,5 @@ export enum FeedbackMessageType {
   STARTED = 'FeedbackStarted',
   STOPPED = 'FeedbackStopped',
   STATUS = 'FeedbackStatus',
-  RESET = 'FeedbackReset'
+  RESET = 'FeedbackReset',
 }

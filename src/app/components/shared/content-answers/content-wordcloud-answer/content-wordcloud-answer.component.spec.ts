@@ -9,12 +9,9 @@ describe('ContentWordcloudAnswerComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ContentWordcloudAnswerComponent ],
-      schemas: [
-        NO_ERRORS_SCHEMA
-      ]
-    })
-    .compileComponents();
+      declarations: [ContentWordcloudAnswerComponent],
+      schemas: [NO_ERRORS_SCHEMA],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(ContentWordcloudAnswerComponent);
     component = fixture.componentInstance;

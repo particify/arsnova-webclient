@@ -20,7 +20,7 @@ export class ContentGroup {
     firstPublishedIndex = 0,
     lastPublishedIndex = -1,
     statisticsPublished = true,
-    correctOptionsPublished = true,
+    correctOptionsPublished = true
   ) {
     this.id = id;
     this.revision = revision;

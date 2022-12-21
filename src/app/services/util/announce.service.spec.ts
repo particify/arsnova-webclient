@@ -16,17 +16,20 @@ describe('AnnounceService', () => {
         AnnounceService,
         {
           provide: TranslateService,
-          useClass: MockTranslateService
+          useClass: MockTranslateService,
         },
         {
           provide: LiveAnnouncer,
-          useClass: MockLiveAnnouncer
-        }
-      ]
+          useClass: MockLiveAnnouncer,
+        },
+      ],
     });
   });
 
-  it('should be created', inject([AnnounceService], (service: AnnounceService) => {
-    expect(service).toBeTruthy();
-  }));
+  it('should be created', inject(
+    [AnnounceService],
+    (service: AnnounceService) => {
+      expect(service).toBeTruthy();
+    }
+  ));
 });

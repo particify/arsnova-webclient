@@ -1,5 +1,15 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
-import { AdvancedSnackBarTypes, NotificationService } from '../../../../services/util/notification.service';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+} from '@angular/core';
+import {
+  AdvancedSnackBarTypes,
+  NotificationService,
+} from '../../../../services/util/notification.service';
 import { TranslateService } from '@ngx-translate/core';
 import { ModeratorService } from '../../../../services/http/moderator.service';
 import { LanguageService } from '../../../../services/util/language.service';
@@ -24,11 +34,11 @@ export interface Role {
 @Component({
   selector: 'app-access',
   templateUrl: './access.component.html',
-  styleUrls: ['./access.component.scss']
+  styleUrls: ['./access.component.scss'],
 })
 export class AccessComponent implements OnInit, OnDestroy {
-
-  @Output() saveEvent: EventEmitter<UpdateEvent> = new EventEmitter<UpdateEvent>();
+  @Output() saveEvent: EventEmitter<UpdateEvent> =
+    new EventEmitter<UpdateEvent>();
 
   @Input() room: Room;
   moderators: Moderator[] = [];
@@ -41,9 +51,9 @@ export class AccessComponent implements OnInit, OnDestroy {
   roles: Role[] = [
     {
       name: 'executive_moderator',
-      value: UserRole.EXECUTIVE_MODERATOR
-    }
-   ];
+      value: UserRole.EXECUTIVE_MODERATOR,
+    },
+  ];
   isGuest = false;
   loginIdIsEmail = false;
 
@@ -51,31 +61,40 @@ export class AccessComponent implements OnInit, OnDestroy {
   formSubscription = new Subject<void>();
   currentInputIsChecked = true;
 
-
-  constructor(private dialogService: DialogService,
-              public notificationService: NotificationService,
-              public translationService: TranslateService,
-              protected moderatorService: ModeratorService,
-              protected userService: UserService,
-              protected langService: LanguageService,
-              public eventService: EventService,
-              private authenticationService: AuthenticationService,
-              private accessTokenService: AccessTokenService) {
-    langService.langEmitter.subscribe(lang => translationService.use(lang));
+  constructor(
+    private dialogService: DialogService,
+    public notificationService: NotificationService,
+    public translationService: TranslateService,
+    protected moderatorService: ModeratorService,
+    protected userService: UserService,
+    protected langService: LanguageService,
+    public eventService: EventService,
+    private authenticationService: AuthenticationService,
+    private accessTokenService: AccessTokenService
+  ) {
+    langService.langEmitter.subscribe((lang) => translationService.use(lang));
   }
 
   ngOnInit() {
     this.selectedRole = this.roles[0];
     this.getModerators();
-    this.authenticationService.isLoginIdEmailAddress().subscribe(loginIdIsEmail => {
-      this.loginIdIsEmail = loginIdIsEmail;
-      this.usernameFormControl.valueChanges.pipe(map(() => this.changesMade()), debounceTime(500), takeUntil(this.formSubscription)).subscribe(() => {
-        this.newModeratorId = null;
-        if (this.loginIdIsEmail) {
-          this.getUser();
-        }
+    this.authenticationService
+      .isLoginIdEmailAddress()
+      .subscribe((loginIdIsEmail) => {
+        this.loginIdIsEmail = loginIdIsEmail;
+        this.usernameFormControl.valueChanges
+          .pipe(
+            map(() => this.changesMade()),
+            debounceTime(500),
+            takeUntil(this.formSubscription)
+          )
+          .subscribe(() => {
+            this.newModeratorId = null;
+            if (this.loginIdIsEmail) {
+              this.getUser();
+            }
+          });
       });
-    });
   }
 
   ngOnDestroy() {
@@ -90,22 +109,28 @@ export class AccessComponent implements OnInit, OnDestroy {
   }
 
   getModerators() {
-    this.authenticationService.getCurrentAuthentication().subscribe(auth => {
+    this.authenticationService.getCurrentAuthentication().subscribe((auth) => {
       this.isGuest = auth.authProvider === AuthProvider.ARSNOVA_GUEST;
-      this.moderatorService.get(this.room.id).subscribe(moderators => {
+      this.moderatorService.get(this.room.id).subscribe((moderators) => {
         moderators.forEach((moderator) => {
           this.userIds.push(moderator.userId);
         });
-        this.userService.getUserData(this.userIds).subscribe(users => {
+        this.userService.getUserData(this.userIds).subscribe((users) => {
           users.forEach((user) => {
-            this.moderators.push(new Moderator(user.id, user.loginId, moderators.find(m => m.userId === user.id).role));
+            this.moderators.push(
+              new Moderator(
+                user.id,
+                user.loginId,
+                moderators.find((m) => m.userId === user.id).role
+              )
+            );
           });
           if (this.isGuest) {
-            this.translationService.get('settings.you').subscribe(msg => {
+            this.translationService.get('settings.you').subscribe((msg) => {
               this.moderators[0].loginId = msg;
             });
           }
-          this.moderators = this.moderators.sort(a => {
+          this.moderators = this.moderators.sort((a) => {
             return a.role === UserRole.CREATOR ? -1 : 1;
           });
           this.isLoading = false;
@@ -115,7 +140,7 @@ export class AccessComponent implements OnInit, OnDestroy {
   }
 
   getUser() {
-    this.userService.getUserByLoginId(this.loginId).subscribe(list => {
+    this.userService.getUserByLoginId(this.loginId).subscribe((list) => {
       const userFound = list.length > 0;
       this.currentInputIsChecked = true;
       if (userFound) {
@@ -123,9 +148,12 @@ export class AccessComponent implements OnInit, OnDestroy {
         if (!this.loginIdIsEmail) {
           this.addModerator();
         }
-      } else if(!this.loginIdIsEmail) {
+      } else if (!this.loginIdIsEmail) {
         const msg = this.translationService.instant('settings.user-not-found');
-        this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.FAILED);
+        this.notificationService.showAdvanced(
+          msg,
+          AdvancedSnackBarTypes.FAILED
+        );
       }
     });
   }
@@ -136,31 +164,55 @@ export class AccessComponent implements OnInit, OnDestroy {
       return;
     }
     if (this.newModeratorId) {
-      this.moderatorService.add(this.room.id, this.newModeratorId).subscribe(() => {
-        this.saveEvent.emit(new UpdateEvent(null, false, true));
-        this.moderators.push(new Moderator(this.newModeratorId, this.loginId, UserRole.EXECUTIVE_MODERATOR));
-        const msg = this.translationService.instant('settings.user-added');
-        this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.SUCCESS);
-        this.loginId = '';
-      });
+      this.moderatorService
+        .add(this.room.id, this.newModeratorId)
+        .subscribe(() => {
+          this.saveEvent.emit(new UpdateEvent(null, false, true));
+          this.moderators.push(
+            new Moderator(
+              this.newModeratorId,
+              this.loginId,
+              UserRole.EXECUTIVE_MODERATOR
+            )
+          );
+          const msg = this.translationService.instant('settings.user-added');
+          this.notificationService.showAdvanced(
+            msg,
+            AdvancedSnackBarTypes.SUCCESS
+          );
+          this.loginId = '';
+        });
     } else {
       this.inviteModerator();
     }
   }
 
   inviteModerator() {
-    this.accessTokenService.invite(this.room.id, UserRole.EXECUTIVE_MODERATOR, this.loginId).subscribe(() => {
-      const msg = this.translationService.instant('settings.user-invited');
-      this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.SUCCESS);
-      this.loginId = '';
-    });
+    this.accessTokenService
+      .invite(this.room.id, UserRole.EXECUTIVE_MODERATOR, this.loginId)
+      .subscribe(() => {
+        const msg = this.translationService.instant('settings.user-invited');
+        this.notificationService.showAdvanced(
+          msg,
+          AdvancedSnackBarTypes.SUCCESS
+        );
+        this.loginId = '';
+      });
   }
 
   openDeleteRoomDialog(moderator: Moderator): void {
-    const dialogRef = this.dialogService.openDeleteDialog('room-moderator', 'really-delete-user-rights', moderator.loginId, 'remove');
-    dialogRef.afterClosed().subscribe(result => {
+    const dialogRef = this.dialogService.openDeleteDialog(
+      'room-moderator',
+      'really-delete-user-rights',
+      moderator.loginId,
+      'remove'
+    );
+    dialogRef.afterClosed().subscribe((result) => {
       if (result === 'remove') {
-        this.removeModerator(moderator.userId, this.moderators.indexOf(moderator));
+        this.removeModerator(
+          moderator.userId,
+          this.moderators.indexOf(moderator)
+        );
       }
     });
   }

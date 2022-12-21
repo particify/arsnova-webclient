@@ -7,19 +7,23 @@ import {
   ActivatedRouteStub,
   JsonTranslationLoader,
   MockEventService,
-  MockGlobalStorageService, MockLangService,
-  MockRouter
+  MockGlobalStorageService,
+  MockLangService,
+  MockRouter,
 } from '@arsnova/testing/test-helpers';
 import { EventService } from '@arsnova/app/services/util/event.service';
-import { TranslateLoader, TranslateModule, TranslateService } from '@ngx-translate/core';
+import {
+  TranslateLoader,
+  TranslateModule,
+  TranslateService,
+} from '@ngx-translate/core';
 import { NO_ERRORS_SCHEMA, Injectable } from '@angular/core';
 import { GlobalStorageService } from '@arsnova/app/services/util/global-storage.service';
 import { LanguageService } from '@arsnova/app/services/util/language.service';
 import { A11yIntroPipe } from '@arsnova/app/pipes/a11y-intro.pipe';
 
 @Injectable()
-class MockRoomService {
-}
+class MockRoomService {}
 
 describe('SettingsPageComponent', () => {
   let component: SettingsPageComponent;
@@ -27,9 +31,9 @@ describe('SettingsPageComponent', () => {
 
   const data = {
     room: {
-      id: '1234'
-    }
-  }
+      id: '1234',
+    },
+  };
 
   const activatedRouteStub = new ActivatedRouteStub(null, data);
 
@@ -39,54 +43,48 @@ describe('SettingsPageComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [
-        SettingsPageComponent,
-        A11yIntroPipe
-      ],
+      declarations: [SettingsPageComponent, A11yIntroPipe],
       providers: [
         {
           provide: RoomService,
-          useClass: MockRoomService
+          useClass: MockRoomService,
         },
         {
           provide: Router,
-          useClass: MockRouter
+          useClass: MockRouter,
         },
         {
           provide: EventService,
-          useClass: MockEventService
+          useClass: MockEventService,
         },
         {
           provide: ActivatedRoute,
-          useValue: activatedRouteStub
+          useValue: activatedRouteStub,
         },
         {
           provide: GlobalStorageService,
-          useClass: MockGlobalStorageService
+          useClass: MockGlobalStorageService,
         },
         {
           provide: LanguageService,
-          useClass: MockLangService
+          useClass: MockLangService,
         },
         {
           provide: A11yIntroPipe,
-          useValue: a11yIntroPipe
-        }
+          useValue: a11yIntroPipe,
+        },
       ],
       imports: [
         TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
-            useClass: JsonTranslationLoader
+            useClass: JsonTranslationLoader,
           },
-          isolate: true
-        })
+          isolate: true,
+        }),
       ],
-      schemas: [
-        NO_ERRORS_SCHEMA
-      ]
-    })
-    .compileComponents();
+      schemas: [NO_ERRORS_SCHEMA],
+    }).compileComponents();
   }));
 
   beforeEach(() => {

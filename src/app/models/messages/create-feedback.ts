@@ -11,7 +11,7 @@ export class CreateFeedback {
     this.payload = {
       roomId: roomId,
       userId: userId,
-      value: val
+      value: val,
     };
   }
 }

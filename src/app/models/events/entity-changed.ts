@@ -1,13 +1,13 @@
-import { Entity } from "../entity";
+import { Entity } from '../entity';
 
 export class EntityChanged<T extends Entity> {
   type: string;
   payload: {
-    entityType: string,
-    id: string,
-    roomId: string,
-    entity: T,
-    changedProperties: string[]
+    entityType: string;
+    id: string;
+    roomId: string;
+    entity: T;
+    changedProperties: string[];
   };
 
   constructor(entityType: string, entity: T, changedProperties: string[]) {
@@ -18,7 +18,7 @@ export class EntityChanged<T extends Entity> {
       id: entity.id,
       roomId: roomId,
       entity: entity,
-      changedProperties: changedProperties
+      changedProperties: changedProperties,
     };
   }
 

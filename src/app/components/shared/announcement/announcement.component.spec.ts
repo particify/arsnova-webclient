@@ -1,7 +1,10 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { LanguageService } from '@arsnova/app/services/util/language.service';
 import { DateFormatPipe } from '@arsnova/app/pipes/date-format.pipe';
-import { JsonTranslationLoader, MockLangService } from '@arsnova/testing/test-helpers';
+import {
+  JsonTranslationLoader,
+  MockLangService,
+} from '@arsnova/testing/test-helpers';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 
 import { AnnouncementComponent } from './announcement.component';
@@ -14,30 +17,24 @@ describe('AnnouncementComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [
-        AnnouncementComponent,
-        DateFormatPipe
-      ],
+      declarations: [AnnouncementComponent, DateFormatPipe],
       providers: [
         {
           provide: LanguageService,
-          useClass: MockLangService
-        }
+          useClass: MockLangService,
+        },
       ],
       imports: [
         TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
-            useClass: JsonTranslationLoader
+            useClass: JsonTranslationLoader,
           },
-          isolate: true
-        })
+          isolate: true,
+        }),
       ],
-      schemas: [
-        NO_ERRORS_SCHEMA
-      ]
-    })
-    .compileComponents();
+      schemas: [NO_ERRORS_SCHEMA],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(AnnouncementComponent);
     component = fixture.componentInstance;

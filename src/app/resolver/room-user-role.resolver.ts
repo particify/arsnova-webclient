@@ -7,15 +7,14 @@ import { environment } from '../../environments/environment.prod';
 
 @Injectable()
 export class RoomUserRoleResolver implements Resolve<UserRole> {
-  constructor(
-    private roomMembershipService: RoomMembershipService
-  ) {
-  }
+  constructor(private roomMembershipService: RoomMembershipService) {}
 
   resolve(route: ActivatedRouteSnapshot): Observable<UserRole> {
     return environment.debugOverrideRoomRole
-      /* DEBUG: Override role handling */
-      ? of(UserRole.CREATOR)
-      : this.roomMembershipService.getPrimaryRoleByRoom(route.params['shortId']);
+      ? /* DEBUG: Override role handling */
+        of(UserRole.CREATOR)
+      : this.roomMembershipService.getPrimaryRoleByRoom(
+          route.params['shortId']
+        );
   }
 }

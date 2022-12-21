@@ -7,7 +7,7 @@ import {
   MockEventService,
   MockNotificationService,
   MockRouter,
-  JsonTranslationLoader
+  JsonTranslationLoader,
 } from '@arsnova/testing/test-helpers';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { UserService } from '@arsnova/app/services/http/user.service';
@@ -19,43 +19,40 @@ describe('RequestPasswordResetComponent', () => {
 
   const mockUserService = jasmine.createSpyObj(['setNewPassword']);
 
-  window.history.pushState({data: 'a@b.cd'}, '', '');
+  window.history.pushState({ data: 'a@b.cd' }, '', '');
 
-  beforeEach(async() => {
+  beforeEach(async () => {
     TestBed.configureTestingModule({
-      declarations: [ RequestPasswordResetComponent ],
+      declarations: [RequestPasswordResetComponent],
       imports: [
         TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
-            useClass: JsonTranslationLoader
+            useClass: JsonTranslationLoader,
           },
-          isolate: true
-        })
+          isolate: true,
+        }),
       ],
       providers: [
         {
           provide: UserService,
-          useValue: mockUserService
+          useValue: mockUserService,
         },
         {
           provide: Router,
-          useClass: MockRouter
+          useClass: MockRouter,
         },
         {
           provide: NotificationService,
-          useClass: MockNotificationService
+          useClass: MockNotificationService,
         },
         {
           provide: EventService,
-          useClass: MockEventService
-        }
+          useClass: MockEventService,
+        },
       ],
-      schemas: [
-        NO_ERRORS_SCHEMA
-      ]
-    })
-    .compileComponents();
+      schemas: [NO_ERRORS_SCHEMA],
+    }).compileComponents();
     fixture = TestBed.createComponent(RequestPasswordResetComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

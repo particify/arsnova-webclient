@@ -1,6 +1,9 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, ROUTES, Routes } from '@angular/router';
-import { ExtensionRouteProvider, RouteMountPoint } from '../../../../projects/extension-point/src/lib/extension-route';
+import {
+  ExtensionRouteProvider,
+  RouteMountPoint,
+} from '../../../../projects/extension-point/src/lib/extension-route';
 import { UserRole } from '../../models/user-roles.enum';
 import { SurveyPageComponent } from '../shared/survey-page/survey-page.component';
 import { ParticipantContentCarouselPageComponent } from './participant-content-carousel-page/participant-content-carousel-page.component';
@@ -16,45 +19,45 @@ import { ParticipantOverviewComponent } from './participant-overview/participant
 const routes: Routes = [
   {
     path: 'group',
-    redirectTo: 'series'
+    redirectTo: 'series',
   },
   {
     path: 'survey',
     redirectTo: 'feedback',
-    pathMatch: 'full'
+    pathMatch: 'full',
   },
   {
     path: '',
-    component: ParticipantOverviewComponent
+    component: ParticipantOverviewComponent,
   },
   {
     path: 'comments',
     component: CommentPageComponent,
     data: {
-      feature: Features.COMMENTS
-    }
+      feature: Features.COMMENTS,
+    },
   },
   {
     path: 'feedback',
     component: SurveyPageComponent,
     data: {
-      feature: Features.FEEDBACK
-    }
+      feature: Features.FEEDBACK,
+    },
   },
   {
     path: 'series/:seriesName',
     component: ParticipantContentCarouselPageComponent,
     data: {
-      feature: Features.CONTENTS
-    }
+      feature: Features.CONTENTS,
+    },
   },
   {
     path: 'series/:seriesName/:contentIndex',
     component: ParticipantContentCarouselPageComponent,
     data: {
-      feature: Features.CONTENTS
-    }
-  }
+      feature: Features.CONTENTS,
+    },
+  },
 ];
 
 @NgModule({
@@ -66,7 +69,7 @@ const routes: Routes = [
       useFactory: (extensionRouteProviders: ExtensionRouteProvider[]) => [
         {
           path: 'room/:shortId',
-          redirectTo: ':shortId'
+          redirectTo: ':shortId',
         },
         {
           path: ':shortId',
@@ -76,20 +79,21 @@ const routes: Routes = [
           resolve: {
             room: RoomResolver,
             viewRole: RoomViewUserRoleResolver,
-            userRole: RoomUserRoleResolver
+            userRole: RoomUserRoleResolver,
           },
           runGuardsAndResolvers: 'always',
           children: [
             ...routes,
             ...ExtensionRouteProvider.extractRoutesForMountPoint(
-                RouteMountPoint.PARTICIPANT, extensionRouteProviders)
-          ]
-        }
+              RouteMountPoint.PARTICIPANT,
+              extensionRouteProviders
+            ),
+          ],
+        },
       ],
       deps: [ExtensionRouteProvider],
-      multi: true
-    }
-  ]
+      multi: true,
+    },
+  ],
 })
-export class ParticipantRoutingModule {
-}
+export class ParticipantRoutingModule {}

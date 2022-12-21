@@ -3,11 +3,7 @@
   "compilerOptions": {
     "outDir": "../out-tsc/app",
     "baseUrl": "./",
-    "types": [
-      "node"
-    ]
+    "types": ["node"]
   },
-  "files": [
-    "main.ts"
-  ]
+  "files": ["main.ts"]
 }

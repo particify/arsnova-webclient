@@ -10,34 +10,29 @@ describe('HotkeysComponent', () => {
   let fixture: ComponentFixture<HotkeysComponent>;
 
   const mockDialogData = {
-    hotkeys: []
+    hotkeys: [],
   };
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [
-        HotkeysComponent
-      ],
+      declarations: [HotkeysComponent],
       imports: [
         TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
-            useClass: JsonTranslationLoader
+            useClass: JsonTranslationLoader,
           },
-          isolate: true
-        })
+          isolate: true,
+        }),
       ],
       providers: [
         {
           provide: MAT_DIALOG_DATA,
-          useValue: mockDialogData
-        }
+          useValue: mockDialogData,
+        },
       ],
-      schemas: [
-        NO_ERRORS_SCHEMA
-      ]
-    })
-    .compileComponents();
+      schemas: [NO_ERRORS_SCHEMA],
+    }).compileComponents();
   }));
 
   beforeEach(() => {

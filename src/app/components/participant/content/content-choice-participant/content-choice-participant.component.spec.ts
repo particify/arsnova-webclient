@@ -1,11 +1,22 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { ContentChoiceParticipantComponent } from './content-choice-participant.component';
-import { ActivatedRoute, ActivatedRouteSnapshot, Router } from '@angular/router';
+import {
+  ActivatedRoute,
+  ActivatedRouteSnapshot,
+  Router,
+} from '@angular/router';
 import { NotificationService } from '@arsnova/app/services/util/notification.service';
 import { LanguageService } from '@arsnova/app/services/util/language.service';
-import { JsonTranslationLoader, MockLangService } from '@arsnova/testing/test-helpers';
+import {
+  JsonTranslationLoader,
+  MockLangService,
+} from '@arsnova/testing/test-helpers';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
-import { ActivatedRouteStub, MockGlobalStorageService, MockRouter } from '@arsnova/testing/test-helpers';
+import {
+  ActivatedRouteStub,
+  MockGlobalStorageService,
+  MockRouter,
+} from '@arsnova/testing/test-helpers';
 import { of } from 'rxjs';
 import { GlobalStorageService } from '@arsnova/app/services/util/global-storage.service';
 import { ContentAnswerService } from '@arsnova/app/services/http/content-answer.service';
@@ -15,7 +26,6 @@ import { ContentChoice } from '@arsnova/app/models/content-choice';
 import { ContentType } from '@arsnova/app/models/content-type.enum';
 import { ContentState } from '@arsnova/app/models/content-state';
 import { NO_ERRORS_SCHEMA, EventEmitter } from '@angular/core';
-
 
 describe('ContentChoiceParticipantComponent', () => {
   let component: ContentChoiceParticipantComponent;
@@ -29,8 +39,8 @@ describe('ContentChoiceParticipantComponent', () => {
 
   const params = {
     shortId: '12345678',
-    seriesName: 'Quiz'
-  }
+    seriesName: 'Quiz',
+  };
 
   snapshot.params = of([params]);
 
@@ -38,57 +48,66 @@ describe('ContentChoiceParticipantComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ ContentChoiceParticipantComponent ],
+      declarations: [ContentChoiceParticipantComponent],
       imports: [
         TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
-            useClass: JsonTranslationLoader
+            useClass: JsonTranslationLoader,
           },
-          isolate: true
-        })
+          isolate: true,
+        }),
       ],
       providers: [
         {
           provide: ContentAnswerService,
-          useValue: mockContentAnswerService
+          useValue: mockContentAnswerService,
         },
         {
           provide: NotificationService,
-          useClass: MockNotificationService
+          useClass: MockNotificationService,
         },
         {
           provide: LanguageService,
-          useClass: MockLangService
+          useClass: MockLangService,
         },
         {
           provide: ActivatedRoute,
-          useValue: activatedRouteStub
+          useValue: activatedRouteStub,
         },
         {
           provide: GlobalStorageService,
-          useClass: MockGlobalStorageService
+          useClass: MockGlobalStorageService,
         },
         {
           provide: Router,
-          useClass: MockRouter
+          useClass: MockRouter,
         },
         {
           provide: ContentService,
-          useValue: mockContentService
+          useValue: mockContentService,
         },
       ],
-      schemas: [
-        NO_ERRORS_SCHEMA
-      ]
-    })
-    .compileComponents();
+      schemas: [NO_ERRORS_SCHEMA],
+    }).compileComponents();
   }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(ContentChoiceParticipantComponent);
     component = fixture.componentInstance;
-    component.content = new ContentChoice('1234', '1', '1234', 'subject', 'body', [], [], [], false, ContentType.CHOICE, new ContentState(1, new Date(), false));
+    component.content = new ContentChoice(
+      '1234',
+      '1',
+      '1234',
+      'subject',
+      'body',
+      [],
+      [],
+      [],
+      false,
+      ContentType.CHOICE,
+      new ContentState(1, new Date(), false)
+    );
     component.sendEvent = new EventEmitter<string>();
     fixture.detectChanges();
   });

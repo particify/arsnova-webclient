@@ -1,5 +1,10 @@
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
-import { TestBed, ComponentFixture, waitForAsync, fakeAsync } from '@angular/core/testing';
+import {
+  TestBed,
+  ComponentFixture,
+  waitForAsync,
+  fakeAsync,
+} from '@angular/core/testing';
 import { AppComponent } from './app.component';
 import { ApiConfigService } from './services/http/api-config.service';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -17,14 +22,12 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { JsonTranslationLoader } from '../testing/test-helpers';
 
 // Stub for downstream template
-@Component({selector: 'app-header', template: ''})
-class HeaderStubComponent {
-}
+@Component({ selector: 'app-header', template: '' })
+class HeaderStubComponent {}
 
 // Stub for downstream template
-@Component({selector: 'app-footer', template: ''})
-class FooterStubComponent {
-}
+@Component({ selector: 'app-footer', template: '' })
+class FooterStubComponent {}
 
 describe('AppComponent', () => {
   let appComponent: AppComponent;
@@ -33,18 +36,21 @@ describe('AppComponent', () => {
 
   const updateService = jasmine.createSpyObj('UpdateService', ['handleUpdate']);
   const trackingService = jasmine.createSpyObj('TrackingService', ['init']);
-  const apiConfigService = jasmine.createSpyObj('ApiConfigService', ['getApiConfig$']);
+  const apiConfigService = jasmine.createSpyObj('ApiConfigService', [
+    'getApiConfig$',
+  ]);
   const consentService = jasmine.createSpyObj('ConsentService', ['setConfig']);
-  const routingService = jasmine.createSpyObj('RoutingService', ['subscribeActivatedRoute']);
+  const routingService = jasmine.createSpyObj('RoutingService', [
+    'subscribeActivatedRoute',
+  ]);
   const languageService = jasmine.createSpyObj('LanguageService', ['init']);
 
   beforeEach(waitForAsync(() => {
-
     const testApiConfig = {
       ui: {
         tracking: {
           url: 'mock-tracker',
-          provider: 'matomo'
+          provider: 'matomo',
         },
         versions: [
           {
@@ -52,80 +58,70 @@ describe('AppComponent', () => {
             commitHash: '1111111111111111111111111111111111111111',
             importance: UpdateImportance.RECOMMENDED,
             changes: {
-              en: [
-                'a change entry'
-              ]
-            }
+              en: ['a change entry'],
+            },
           },
           {
             id: 100000,
             commitHash: '0000000000000000000000000000000000000000',
             importance: UpdateImportance.RECOMMENDED,
             changes: {
-              en: [
-                'a change entry'
-              ]
-            }
-          }
-        ]
+              en: ['a change entry'],
+            },
+          },
+        ],
       },
       authenticationProviders: [],
-      features: {}
+      features: {},
     };
 
     apiConfigService.getApiConfig$.and.returnValue(of(testApiConfig));
 
     TestBed.configureTestingModule({
-      declarations: [
-        AppComponent,
-        HeaderStubComponent,
-        FooterStubComponent
-      ],
+      declarations: [AppComponent, HeaderStubComponent, FooterStubComponent],
       providers: [
         AppComponent,
         {
           provide: TranslateService,
-          useClass: MockTranslateService
+          useClass: MockTranslateService,
         },
         {
           provide: ApiConfigService,
-          useValue: apiConfigService
+          useValue: apiConfigService,
         },
         {
           provide: TrackingService,
-          useValue: trackingService
+          useValue: trackingService,
         },
         {
           provide: ConsentService,
-          useValue: consentService
+          useValue: consentService,
         },
         {
           provide: UpdateService,
-          useValue: updateService
+          useValue: updateService,
         },
         {
           provide: RoutingService,
-          useValue: routingService
+          useValue: routingService,
         },
         {
           provide: LanguageService,
-          useValue: languageService
-        }
+          useValue: languageService,
+        },
       ],
       imports: [
         TranslateModule.forRoot({
           loader: {
             provide: TranslateHttpLoader,
-            useClass: JsonTranslationLoader
+            useClass: JsonTranslationLoader,
           },
-          isolate: true
+          isolate: true,
         }),
         RouterTestingModule,
-        HttpClientTestingModule
+        HttpClientTestingModule,
       ],
-      schemas: [
-        NO_ERRORS_SCHEMA
-      ]
+      schemas: [NO_ERRORS_SCHEMA],
     });
     fixture = TestBed.createComponent(AppComponent);
     appComponent = fixture.componentInstance;

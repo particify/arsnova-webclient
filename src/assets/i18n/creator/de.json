@@ -352,7 +352,7 @@
     "a11y-categories": "Du befindest dich jetzt in der Kategorie-Verwaltung. Hier kannst du Kategorien hinzufügen oder entfernen.",
     "a11y-threshold-changed": "Du hast den Schwellenwert auf {{value}} gesetzt.",
     "a11y-delete-moderator": "Löscht die moderierende Person {{loginId}}.",
-    "a11y-delete-room" : "Löscht deinen Raum.",
+    "a11y-delete-room": "Löscht deinen Raum.",
     "a11y-room-name": "Vergebe dem Raum hier einen neuen Namen.",
     "a11y-room-description": "Gib eine Beschreibung für den Raum ein.",
     "a11y-announcement-description": "Gib hier deine Ankündigung ein.",

@@ -8,10 +8,9 @@ const TIME_UPDATE_INTERVAL = 60000;
 @Component({
   selector: 'app-date',
   templateUrl: './date.component.html',
-  styleUrls: ['./date.component.scss']
+  styleUrls: ['./date.component.scss'],
 })
 export class DateComponent implements OnInit, OnDestroy {
-
   @Input() timestamp: Date;
   @Input() responsive = false;
 
@@ -24,17 +23,16 @@ export class DateComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.language = this.translateService.currentLang;
-    this.translateService.onLangChange.subscribe(language => {
+    this.translateService.onLangChange.subscribe((language) => {
       this.language = language.lang;
-    })
+    });
     timer(TIME_UPDATE_INTERVAL, TIME_UPDATE_INTERVAL)
-        .pipe(takeUntil(this.destroyed$))
-        .subscribe(() => this.refreshCounter++);
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe(() => this.refreshCounter++);
   }
 
   ngOnDestroy() {
     this.destroyed$.next();
     this.destroyed$.complete();
   }
-
 }

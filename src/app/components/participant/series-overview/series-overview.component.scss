@@ -29,7 +29,7 @@ $icon-container-size: 40px;
   height: $graphic-size;
 }
 
-@media(max-width: 767px) {
+@media (max-width: 767px) {
   .header-container {
     align-items: center;
   }
@@ -48,7 +48,7 @@ $icon-container-size: 40px;
   }
 }
 
-@media(min-width: 768px) {
+@media (min-width: 768px) {
   .mat-card {
     padding-top: 2em;
   }
@@ -113,5 +113,5 @@ $icon-container-size: 40px;
 }
 
 .body {
-  max-width: calc(100% - (#{$icon-container-size} + 16px));;
+  max-width: calc(100% - (#{$icon-container-size} + 16px));
 }

@@ -6,21 +6,26 @@ import { Observable } from 'rxjs';
 import { IMessage } from '@stomp/stompjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class WsFeedbackService {
-  constructor(private wsConnector: WsConnectorService) {
-  }
+  constructor(private wsConnector: WsConnectorService) {}
 
   send(userId: string, feedback: number, roomId: string) {
     const createFeedback = new CreateFeedback(roomId, userId, feedback);
-    this.wsConnector.send(`/queue/feedback.command`, JSON.stringify(createFeedback));
+    this.wsConnector.send(
+      `/queue/feedback.command`,
+      JSON.stringify(createFeedback)
+    );
   }
 
   reset(roomId: string) {
     const getFeedback = new ResetFeedback(roomId);
 
-    this.wsConnector.send(`/queue/feedback.command.reset`, JSON.stringify(getFeedback));
+    this.wsConnector.send(
+      `/queue/feedback.command.reset`,
+      JSON.stringify(getFeedback)
+    );
   }
 
   getFeedbackStream(roomId: string): Observable<IMessage> {

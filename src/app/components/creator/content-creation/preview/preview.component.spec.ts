@@ -11,12 +11,10 @@ import { ContentType } from '@arsnova/app/models/content-type.enum';
 import { ContentState } from '@arsnova/app/models/content-state';
 
 @Injectable()
-class MockContentAnswerService {
-}
+class MockContentAnswerService {}
 
 @Injectable()
-class MockLikertScaleService {
-}
+class MockLikertScaleService {}
 
 describe('PreviewComponent', () => {
   let component: PreviewComponent;
@@ -24,37 +22,43 @@ describe('PreviewComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [
-        PreviewComponent
-      ],
+      declarations: [PreviewComponent],
       providers: [
         {
           provide: ContentAnswerService,
-          useClass: MockContentAnswerService
+          useClass: MockContentAnswerService,
         },
         {
           provide: LikertScaleService,
-          useClass: MockLikertScaleService
-        }
+          useClass: MockLikertScaleService,
+        },
       ],
       imports: [
         TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
-            useClass: JsonTranslationLoader
+            useClass: JsonTranslationLoader,
           },
-          isolate: true
-        })
+          isolate: true,
+        }),
       ],
-      schemas: [
-        NO_ERRORS_SCHEMA
-      ]
+      schemas: [NO_ERRORS_SCHEMA],
     })
       .compileComponents()
       .then(() => {
         fixture = TestBed.createComponent(PreviewComponent);
         component = fixture.componentInstance;
-        component.content = new Content('1234', '0', '1', 'subject', 'body', [], ContentType.CHOICE, {}, new ContentState(1, new Date(), true));
+        component.content = new Content(
+          '1234',
+          '0',
+          '1',
+          'subject',
+          'body',
+          [],
+          ContentType.CHOICE,
+          {},
+          new ContentState(1, new Date(), true)
+        );
         fixture.detectChanges();
       });
   }));

@@ -7,7 +7,7 @@ import {
   MockGlobalStorageService,
   MockNotificationService,
   MockRouter,
-  MockTranslateService
+  MockTranslateService,
 } from '@arsnova/testing/test-helpers';
 import { TranslateService } from '@ngx-translate/core';
 import { NotificationService } from '@arsnova/app/services/util/notification.service';
@@ -17,11 +17,9 @@ import { RoutingService } from '@arsnova/app/services/util/routing.service';
 import { Router } from '@angular/router';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 
-class MockApiConfigService {
-}
+class MockApiConfigService {}
 
-class MockRoutingService {
-}
+class MockRoutingService {}
 
 describe('AuthenticationService', () => {
   beforeEach(() => {
@@ -30,40 +28,41 @@ describe('AuthenticationService', () => {
         AuthenticationService,
         {
           provide: EventService,
-          useClass: MockEventService
+          useClass: MockEventService,
         },
         {
           provide: TranslateService,
-          useClass: MockTranslateService
+          useClass: MockTranslateService,
         },
         {
           provide: NotificationService,
-          useClass: MockNotificationService
+          useClass: MockNotificationService,
         },
         {
           provide: GlobalStorageService,
-          useClass: MockGlobalStorageService
+          useClass: MockGlobalStorageService,
         },
         {
           provide: ApiConfigService,
-          useClass: MockApiConfigService
+          useClass: MockApiConfigService,
         },
         {
           provide: RoutingService,
-          useClass: MockRoutingService
+          useClass: MockRoutingService,
         },
         {
           provide: Router,
-          useClass: MockRouter
-        }
+          useClass: MockRouter,
+        },
       ],
-      imports: [
-        HttpClientTestingModule
-      ]
+      imports: [HttpClientTestingModule],
     });
   });
 
-  it('should be created', inject([AuthenticationService], (service: AuthenticationService) => {
-    expect(service).toBeTruthy();
-  }));
+  it('should be created', inject(
+    [AuthenticationService],
+    (service: AuthenticationService) => {
+      expect(service).toBeTruthy();
+    }
+  ));
 });

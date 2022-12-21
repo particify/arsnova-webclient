@@ -5,15 +5,20 @@ import { ContentService } from '@arsnova/app/services/http/content.service';
 import { EventService } from '@arsnova/app/services/util/event.service';
 import { RoomService } from '@arsnova/app/services/http/room.service';
 import { ContentGroupService } from '@arsnova/app/services/http/content-group.service';
-import { ActivatedRoute, ActivatedRouteSnapshot, Router } from '@angular/router';
+import {
+  ActivatedRoute,
+  ActivatedRouteSnapshot,
+  Router,
+} from '@angular/router';
 import { DialogService } from '@arsnova/app/services/util/dialog.service';
 import { GlobalStorageService } from '@arsnova/app/services/util/global-storage.service';
 import { LanguageService } from '@arsnova/app/services/util/language.service';
 import {
-  ActivatedRouteStub, JsonTranslationLoader,
+  ActivatedRouteStub,
+  JsonTranslationLoader,
   MockEventService,
   MockLangService,
-  MockRouter
+  MockRouter,
 } from '@arsnova/testing/test-helpers';
 import { Location } from '@angular/common';
 import { MockLocationStrategy } from '@angular/common/testing';
@@ -35,21 +40,31 @@ import { UserSettings } from '@arsnova/app/models/user-settings';
 import { StepperComponent } from '../../shared/stepper/stepper.component';
 import { RemoteService } from '@arsnova/app/services/util/remote.service';
 
-
 @Injectable()
 class MockContentService {
   getContentsByIds() {
-    return of([new Content('1234', '0', '1', 'subject', 'body', [], ContentType.CHOICE, {}, new ContentState(1, new Date(), true))]);
+    return of([
+      new Content(
+        '1234',
+        '0',
+        '1',
+        'subject',
+        'body',
+        [],
+        ContentType.CHOICE,
+        {},
+        new ContentState(1, new Date(), true)
+      ),
+    ]);
   }
 
-  getSupportedContents(){
+  getSupportedContents() {
     return [];
   }
 }
 
 @Injectable()
-class MockRoomService {
-}
+class MockRoomService {}
 
 @Injectable()
 class MockContentGroupService {
@@ -59,121 +74,130 @@ class MockContentGroupService {
 }
 
 @Injectable()
-class MockDialogService {
-}
+class MockDialogService {}
 
 @Injectable()
-class MockHotykeyService {
-}
+class MockHotykeyService {}
 
 describe('ContentPresentationComponent', () => {
   let component: ContentPresentationComponent;
   let fixture: ComponentFixture<ContentPresentationComponent>;
 
   const data = {
-    room: new Room('1234', 'shortId', 'abbreviation', 'name', 'description')
-  }
+    room: new Room('1234', 'shortId', 'abbreviation', 'name', 'description'),
+  };
 
   const snapshot = new ActivatedRouteSnapshot();
   snapshot.data = {
-    isPresentation: false
-  }
+    isPresentation: false,
+  };
 
-  snapshot.params = of([{seriesName: 'SERIES'}]);
+  snapshot.params = of([{ seriesName: 'SERIES' }]);
 
-  const activatedRouteStub = new ActivatedRouteStub(null,data, snapshot);
+  const activatedRouteStub = new ActivatedRouteStub(null, data, snapshot);
 
   const mockPresentationService = jasmine.createSpyObj(['getScale']);
 
-  const mockUserService = jasmine.createSpyObj('UserService', ['getUserSettingsByLoginId']);
-  mockUserService.getUserSettingsByLoginId.and.returnValue(of(new UserSettings()));
+  const mockUserService = jasmine.createSpyObj('UserService', [
+    'getUserSettingsByLoginId',
+  ]);
+  mockUserService.getUserSettingsByLoginId.and.returnValue(
+    of(new UserSettings())
+  );
 
-  const mockGlobalStorageService = jasmine.createSpyObj('GlobalStorageService', ['getItem', 'setItem']);
-  mockGlobalStorageService.getItem.withArgs(STORAGE_KEYS.LANGUAGE).and.returnValue('de');
-  mockGlobalStorageService.getItem.withArgs(STORAGE_KEYS.LAST_INDEX).and.returnValue(null);
-  mockGlobalStorageService.getItem.withArgs(STORAGE_KEYS.LAST_GROUP).and.returnValue('series');
-  mockGlobalStorageService.getItem.withArgs(STORAGE_KEYS.USER).and.returnValue(new ClientAuthentication('1234', 'a@b.cd', AuthProvider.ARSNOVA, 'token'));
+  const mockGlobalStorageService = jasmine.createSpyObj(
+    'GlobalStorageService',
+    ['getItem', 'setItem']
+  );
+  mockGlobalStorageService.getItem
+    .withArgs(STORAGE_KEYS.LANGUAGE)
+    .and.returnValue('de');
+  mockGlobalStorageService.getItem
+    .withArgs(STORAGE_KEYS.LAST_INDEX)
+    .and.returnValue(null);
+  mockGlobalStorageService.getItem
+    .withArgs(STORAGE_KEYS.LAST_GROUP)
+    .and.returnValue('series');
+  mockGlobalStorageService.getItem
+    .withArgs(STORAGE_KEYS.USER)
+    .and.returnValue(
+      new ClientAuthentication('1234', 'a@b.cd', AuthProvider.ARSNOVA, 'token')
+    );
 
   const mockRemoteService = jasmine.createSpyObj(['getContentState']);
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [
-        ContentPresentationComponent,
-        StepperComponent
-      ],
+      declarations: [ContentPresentationComponent, StepperComponent],
       providers: [
         {
           provide: ContentService,
-          useClass: MockContentService
+          useClass: MockContentService,
         },
         {
           provide: EventService,
-          useClass: MockEventService
+          useClass: MockEventService,
         },
         {
           provide: RoomService,
-          useClass: MockRoomService
+          useClass: MockRoomService,
         },
         {
           provide: ContentGroupService,
-          useClass: MockContentGroupService
+          useClass: MockContentGroupService,
         },
         {
           provide: ActivatedRoute,
-          useValue: activatedRouteStub
+          useValue: activatedRouteStub,
         },
         {
           provide: DialogService,
-          useClass: MockDialogService
+          useClass: MockDialogService,
         },
         {
           provide: GlobalStorageService,
-          useValue: mockGlobalStorageService
+          useValue: mockGlobalStorageService,
         },
         {
           provide: LanguageService,
-          useClass: MockLangService
+          useClass: MockLangService,
         },
         {
           provide: Location,
-          useClass: MockLocationStrategy
+          useClass: MockLocationStrategy,
         },
         {
           provide: Router,
-          useClass: MockRouter
+          useClass: MockRouter,
         },
         {
           provide: HotkeyService,
-          useClass: MockHotykeyService
+          useClass: MockHotykeyService,
         },
         {
           provide: PresentationService,
-          useValue: mockPresentationService
+          useValue: mockPresentationService,
         },
         {
           provide: UserService,
-          useValue: mockUserService
+          useValue: mockUserService,
         },
         {
           provide: RemoteService,
-          useValue: mockRemoteService
-        }
+          useValue: mockRemoteService,
+        },
       ],
       imports: [
         TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
-            useClass: JsonTranslationLoader
+            useClass: JsonTranslationLoader,
           },
-          isolate: true
-        })
+          isolate: true,
+        }),
       ],
-      schemas: [
-        NO_ERRORS_SCHEMA
-      ]
-    })
-    .compileComponents();
+      schemas: [NO_ERRORS_SCHEMA],
+    }).compileComponents();
   }));
 
   beforeEach(() => {

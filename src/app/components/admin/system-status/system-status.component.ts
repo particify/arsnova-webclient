@@ -6,15 +6,12 @@ import { of } from 'rxjs';
 @Component({
   selector: 'app-system-status',
   templateUrl: './system-status.component.html',
-  styleUrls: ['./system-status.component.scss']
+  styleUrls: ['./system-status.component.scss'],
 })
 export class SystemStatusComponent implements OnInit {
   healthInfo: any;
 
-  constructor(
-    protected systemInfoService: SystemInfoService
-  ) {
-  }
+  constructor(protected systemInfoService: SystemInfoService) {}
 
   ngOnInit() {
     this.healthInfo = this.getHealthInfo();

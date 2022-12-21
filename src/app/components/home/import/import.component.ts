@@ -3,27 +3,30 @@ import { RoomService } from '../../../services/http/room.service';
 import { Router } from '@angular/router';
 import { AuthenticationService } from '../../../services/http/authentication.service';
 import { TranslateService } from '@ngx-translate/core';
-import { AdvancedSnackBarTypes, NotificationService } from '../../../services/util/notification.service';
+import {
+  AdvancedSnackBarTypes,
+  NotificationService,
+} from '../../../services/util/notification.service';
 import { RoutingService } from '../../../services/util/routing.service';
 
 @Component({
   selector: 'app-import',
   templateUrl: './import.component.html',
-  styleUrls: ['./import.component.scss']
+  styleUrls: ['./import.component.scss'],
 })
 export class ImportComponent implements OnInit, AfterContentInit {
-
   selectedFile: File;
   jsonToUpload: JSON;
   isLoggedIn = false;
 
-  constructor(private roomService: RoomService,
-              private router: Router,
-              private authenticationService: AuthenticationService,
-              private translateService: TranslateService,
-              private notificationService: NotificationService,
-              private routingService: RoutingService) {
-  }
+  constructor(
+    private roomService: RoomService,
+    private router: Router,
+    private authenticationService: AuthenticationService,
+    private translateService: TranslateService,
+    private notificationService: NotificationService,
+    private routingService: RoutingService
+  ) {}
 
   ngAfterContentInit(): void {
     setTimeout(() => {
@@ -59,18 +62,26 @@ export class ImportComponent implements OnInit, AfterContentInit {
   }
 
   onUpload() {
-    this.roomService.importv2Room(this.jsonToUpload).subscribe(room => {
-      this.translateService.get('home-page.created-1').subscribe(msg1 => {
-        this.translateService.get('home-page.created-2').subscribe(msg2 => {
-          this.notificationService.showAdvanced(msg1 + room.name + msg2, AdvancedSnackBarTypes.SUCCESS);
+    this.roomService.importv2Room(this.jsonToUpload).subscribe(
+      (room) => {
+        this.translateService.get('home-page.created-1').subscribe((msg1) => {
+          this.translateService.get('home-page.created-2').subscribe((msg2) => {
+            this.notificationService.showAdvanced(
+              msg1 + room.name + msg2,
+              AdvancedSnackBarTypes.SUCCESS
+            );
+          });
         });
-      });
-      this.router.navigate(['edit', room.shortId]);
-    }, () => {
-      this.translateService.get('import.error').subscribe(msg => {
-        this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.FAILED);
-      });
-    });
+        this.router.navigate(['edit', room.shortId]);
+      },
+      () => {
+        this.translateService.get('import.error').subscribe((msg) => {
+          this.notificationService.showAdvanced(
+            msg,
+            AdvancedSnackBarTypes.FAILED
+          );
+        });
+      }
+    );
   }
-
 }

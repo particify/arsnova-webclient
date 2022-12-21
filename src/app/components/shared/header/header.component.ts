@@ -1,6 +1,9 @@
 import { Component, OnInit, Renderer2 } from '@angular/core';
 import { AuthenticationService } from '../../../services/http/authentication.service';
-import { AdvancedSnackBarTypes, NotificationService } from '../../../services/util/notification.service';
+import {
+  AdvancedSnackBarTypes,
+  NotificationService,
+} from '../../../services/util/notification.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ClientAuthentication } from '../../../models/client-authentication';
 import { AuthProvider } from '../../../models/auth-provider';
@@ -9,7 +12,10 @@ import { TranslateService } from '@ngx-translate/core';
 import { UserService } from '../../../services/http/user.service';
 import { EventService } from '../../../services/util/event.service';
 import { DialogService } from '../../../services/util/dialog.service';
-import { GlobalStorageService, STORAGE_KEYS } from '../../../services/util/global-storage.service';
+import {
+  GlobalStorageService,
+  STORAGE_KEYS,
+} from '../../../services/util/global-storage.service';
 import { Theme } from '../../../../theme/Theme';
 import { ThemeService } from '../../../../theme/theme.service';
 import { LanguageService } from '../../../services/util/language.service';
@@ -28,7 +34,7 @@ import { ChangeType } from '@arsnova/app/models/events/entity-change-notificatio
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
-  styleUrls: ['./header.component.scss']
+  styleUrls: ['./header.component.scss'],
 })
 export class HeaderComponent implements OnInit {
   auth: ClientAuthentication;
@@ -71,55 +77,65 @@ export class HeaderComponent implements OnInit {
     private dialog: MatDialog,
     private announcementService: AnnouncementService
   ) {
-    this.deviceType = this.globalStorageService.getItem(STORAGE_KEYS.DEVICE_TYPE);
+    this.deviceType = this.globalStorageService.getItem(
+      STORAGE_KEYS.DEVICE_TYPE
+    );
     this.lang = this.translationService.currentLang;
   }
 
   ngOnInit() {
-    this.authenticationService.getAuthenticationChanges().subscribe(auth => {
+    this.authenticationService.getAuthenticationChanges().subscribe((auth) => {
       this.auth = auth;
       this.userCharacter = this.auth?.loginId.slice(0, 1).toLocaleUpperCase();
       this.getAnnouncementState();
     });
-    this.eventService.on('EntityChangeNotification').subscribe((notification: EntityChangeNotification) => {
-      if (this.role !== UserRole.CREATOR) {
-        const entityType = notification.payload.entityType;
-        const changeType = notification.payload.changeType;
-        if(entityType === 'Announcement' && [ChangeType.CREATE, ChangeType.UPDATE].includes(changeType)) {
-          this.getAnnouncementState();
+    this.eventService
+      .on('EntityChangeNotification')
+      .subscribe((notification: EntityChangeNotification) => {
+        if (this.role !== UserRole.CREATOR) {
+          const entityType = notification.payload.entityType;
+          const changeType = notification.payload.changeType;
+          if (
+            entityType === 'Announcement' &&
+            [ChangeType.CREATE, ChangeType.UPDATE].includes(changeType)
+          ) {
+            this.getAnnouncementState();
+          }
         }
-      }
-    });
-    this.themeService.getTheme().subscribe(theme => {
+      });
+    this.themeService.getTheme().subscribe((theme) => {
       this.themeClass = theme;
     });
     this.themes = this.themeService.getThemes();
-    this.route.data.subscribe(data => {
+    this.route.data.subscribe((data) => {
       this.helpUrl = data.apiConfig.ui.links?.help?.url;
       this.privacyUrl = data.apiConfig.ui.links?.privacy?.url;
-      this.imprintUrl = data.apiConfig.ui.links?.imprint?.url ;
+      this.imprintUrl = data.apiConfig.ui.links?.imprint?.url;
     });
-    this.translationService.onLangChange.subscribe(e => this.lang = e.lang);
+    this.translationService.onLangChange.subscribe((e) => (this.lang = e.lang));
     this.isRoom = this.routingService.isRoom;
-    this.routingService.getIsRoom().subscribe(isRoom => {
+    this.routingService.getIsRoom().subscribe((isRoom) => {
       this.isRoom = isRoom;
     });
     this.isPreview = this.routingService.isPreview;
-    this.routingService.getIsPreview().subscribe(isPreview => {
+    this.routingService.getIsPreview().subscribe((isPreview) => {
       this.isPreview = isPreview;
     });
     this.role = this.routingService.role;
-    this.routingService.getRole().subscribe(role => {
+    this.routingService.getRole().subscribe((role) => {
       this.role = role;
     });
-    this.openPresentationDirectly = !this.extensionFactory.getExtension('present-in-new-tab');
+    this.openPresentationDirectly =
+      !this.extensionFactory.getExtension('present-in-new-tab');
   }
 
   getAnnouncementState() {
     if (this.auth) {
-      this.announcementService.getStateByUserId(this.auth.userId).subscribe(state => {
-        this.announcementState = state;
-      });
+      this.announcementService
+        .getStateByUserId(this.auth.userId)
+        .subscribe((state) => {
+          this.announcementState = state;
+        });
     } else {
       this.announcementState = null;
     }
@@ -171,15 +187,18 @@ export class HeaderComponent implements OnInit {
   deleteAccount(id: string) {
     this.userService.delete(id).subscribe();
     this.authenticationService.logout();
-    this.translationService.get('header.account-deleted').subscribe(msg => {
+    this.translationService.get('header.account-deleted').subscribe((msg) => {
       this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
     });
     this.navToHome();
   }
 
   openDeleteUserDialog() {
-    const dialogRef = this.dialogService.openDeleteDialog('account', 'really-delete-account');
-    dialogRef.afterClosed().subscribe(result => {
+    const dialogRef = this.dialogService.openDeleteDialog(
+      'account',
+      'really-delete-account'
+    );
+    dialogRef.afterClosed().subscribe((result) => {
       if (result === 'abort') {
         return;
       } else if (result === 'delete') {
@@ -221,10 +240,10 @@ export class HeaderComponent implements OnInit {
       width: '90%',
       maxWidth: '872px',
       data: {
-        state: this.announcementState
-      }
+        state: this.announcementState,
+      },
     });
-    dialogRef.afterClosed().subscribe(newReadTimestamp => {
+    dialogRef.afterClosed().subscribe((newReadTimestamp) => {
       this.announcementState.readTimestamp = newReadTimestamp;
     });
   }

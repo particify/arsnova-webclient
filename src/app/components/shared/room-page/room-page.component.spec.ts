@@ -1,6 +1,9 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
-import { ActivatedRouteStub, MockEventService } from '../../../../testing/test-helpers';
+import {
+  ActivatedRouteStub,
+  MockEventService,
+} from '../../../../testing/test-helpers';
 import { RoomPageComponent } from './room-page.component';
 import { UserRole } from '../../../models/user-roles.enum';
 import { of } from 'rxjs';
@@ -13,31 +16,34 @@ describe('RoomPageComponent', () => {
 
   const body = {
     UserCountChanged: {
-      userCount: 42
-    }
+      userCount: 42,
+    },
   };
   const message = {
-    body: JSON.stringify(body)
-  }
+    body: JSON.stringify(body),
+  };
 
   const summaries = [
     {
       stats: {
-        roomUserCount: 24
-      }
-    }
-  ]
+        roomUserCount: 24,
+      },
+    },
+  ];
 
-  const mockRoomService = jasmine.createSpyObj(['getCurrentRoomsMessageStream', 'getRoomSummaries']);
+  const mockRoomService = jasmine.createSpyObj([
+    'getCurrentRoomsMessageStream',
+    'getRoomSummaries',
+  ]);
   mockRoomService.getCurrentRoomsMessageStream.and.returnValue(of(message));
   mockRoomService.getRoomSummaries.and.returnValue(of(summaries));
 
   const data = {
     room: {
-      id: '1234'
+      id: '1234',
     },
-    viewRole: UserRole.CREATOR
-  }
+    viewRole: UserRole.CREATOR,
+  };
 
   const activatedRouteStub = new ActivatedRouteStub(null, data);
 
@@ -47,18 +53,15 @@ describe('RoomPageComponent', () => {
       providers: [
         {
           provide: ActivatedRoute,
-          useValue: activatedRouteStub
+          useValue: activatedRouteStub,
         },
         {
           provide: EventService,
-          useClass: MockEventService
-        }
+          useClass: MockEventService,
+        },
       ],
-      schemas: [
-        NO_ERRORS_SCHEMA
-      ]
-    })
-    .compileComponents();
+      schemas: [NO_ERRORS_SCHEMA],
+    }).compileComponents();
   }));
 
   beforeEach(() => {

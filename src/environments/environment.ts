@@ -10,6 +10,6 @@ export const environment = {
   debugOverrideRoomRole: false,
   version: {
     commitHash: '0000000000000000000000000000000000000000',
-    commitDate: ''
-  }
+    commitDate: '',
+  },
 };

@@ -5,6 +5,6 @@ export const environment = {
   debugOverrideRoomRole: false,
   version: {
     commitHash: '$VERSION_COMMIT_HASH',
-    commitDate: '$VERSION_COMMIT_DATE'
-  }
+    commitDate: '$VERSION_COMMIT_DATE',
+  },
 };

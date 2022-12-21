@@ -1,16 +1,16 @@
 export abstract class DataChanged<T> {
   type: string;
   payload: {
-    dataType: string,
-    roomId: string,
-    data: T
+    dataType: string;
+    roomId: string;
+    data: T;
   };
 
   constructor(dataType: string, roomId: string, data: T) {
     this.payload = {
       dataType: dataType,
       roomId: roomId,
-      data: data
+      data: data,
     };
   }
 }

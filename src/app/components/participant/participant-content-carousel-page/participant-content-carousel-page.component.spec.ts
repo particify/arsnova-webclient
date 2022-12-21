@@ -1,15 +1,23 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { ParticipantContentCarouselPageComponent } from './participant-content-carousel-page.component';
-import { ActivatedRoute, ActivatedRouteSnapshot, Router } from '@angular/router';
+import {
+  ActivatedRoute,
+  ActivatedRouteSnapshot,
+  Router,
+} from '@angular/router';
 import { NotificationService } from '@arsnova/app/services/util/notification.service';
-import { TranslateLoader, TranslateModule, TranslateService } from '@ngx-translate/core';
+import {
+  TranslateLoader,
+  TranslateModule,
+  TranslateService,
+} from '@ngx-translate/core';
 import {
   JsonTranslationLoader,
   MockNotificationService,
   ActivatedRouteStub,
   MockRouter,
   MockEventService,
-  MockAnnounceService
+  MockAnnounceService,
 } from '@arsnova/testing/test-helpers';
 import { of } from 'rxjs';
 import { GlobalStorageService } from '@arsnova/app/services/util/global-storage.service';
@@ -35,131 +43,155 @@ describe('ParticipantContentCarouselPageComponent', () => {
   let component: ParticipantContentCarouselPageComponent;
   let fixture: ComponentFixture<ParticipantContentCarouselPageComponent>;
 
-  const mockContentAnswerService = jasmine.createSpyObj(['getAnswersByUserIdContentIds']);
+  const mockContentAnswerService = jasmine.createSpyObj([
+    'getAnswersByUserIdContentIds',
+  ]);
 
-  const mockContentService = jasmine.createSpyObj(['getContentsByIds', 'getSupportedContents', '']);
+  const mockContentService = jasmine.createSpyObj([
+    'getContentsByIds',
+    'getSupportedContents',
+    '',
+  ]);
 
-  const mockContentGroupService = jasmine.createSpyObj(['getByRoomIdAndName', 'getById', 'filterPublishedIds']);
+  const mockContentGroupService = jasmine.createSpyObj([
+    'getByRoomIdAndName',
+    'getById',
+    'filterPublishedIds',
+  ]);
   mockContentGroupService.getByRoomIdAndName.and.returnValue(of({}));
   mockContentGroupService.filterPublishedIds.and.returnValue([]);
 
-  const mockAuthenticationService = jasmine.createSpyObj(['getCurrentAuthentication']);
+  const mockAuthenticationService = jasmine.createSpyObj([
+    'getCurrentAuthentication',
+  ]);
 
-  const mockUserService = jasmine.createSpyObj('UserService', ['getUserSettingsByLoginId']);
-  mockUserService.getUserSettingsByLoginId.and.returnValue(of(new UserSettings()));
+  const mockUserService = jasmine.createSpyObj('UserService', [
+    'getUserSettingsByLoginId',
+  ]);
+  mockUserService.getUserSettingsByLoginId.and.returnValue(
+    of(new UserSettings())
+  );
 
-  const mockGlobalStorageService = jasmine.createSpyObj('GlobalStorageService', ['getItem']);
-  mockGlobalStorageService.getItem.withArgs(STORAGE_KEYS.LANGUAGE).and.returnValue('de');
-  mockGlobalStorageService.getItem.withArgs(STORAGE_KEYS.USER).and.returnValue(new ClientAuthentication('1234', 'a@b.cd', AuthProvider.ARSNOVA, 'token'));
+  const mockGlobalStorageService = jasmine.createSpyObj(
+    'GlobalStorageService',
+    ['getItem']
+  );
+  mockGlobalStorageService.getItem
+    .withArgs(STORAGE_KEYS.LANGUAGE)
+    .and.returnValue('de');
+  mockGlobalStorageService.getItem
+    .withArgs(STORAGE_KEYS.USER)
+    .and.returnValue(
+      new ClientAuthentication('1234', 'a@b.cd', AuthProvider.ARSNOVA, 'token')
+    );
 
-  const mockRoutingService = jasmine.createSpyObj('RoutingService', ['getRouteChanges']);
+  const mockRoutingService = jasmine.createSpyObj('RoutingService', [
+    'getRouteChanges',
+  ]);
 
   const data = {
-    room: new Room()
-  }
+    room: new Room(),
+  };
   const snapshot = new ActivatedRouteSnapshot();
   const params = {
     shortId: '12345678',
-    seriesName: 'Quiz'
-  }
+    seriesName: 'Quiz',
+  };
 
   snapshot.params = of([params]);
 
   const activatedRouteStub = new ActivatedRouteStub(null, data, snapshot);
   const route = {
-    params: params
-  }
+    params: params,
+  };
   mockRoutingService.getRouteChanges.and.returnValue(of(route));
 
   let translateService: TranslateService;
   const a11yIntroPipe = new A11yIntroPipe(translateService);
 
-  const mockRemoteService = jasmine.createSpyObj(['getFocusModeState', 'getContentState']);
+  const mockRemoteService = jasmine.createSpyObj([
+    'getFocusModeState',
+    'getContentState',
+  ]);
   mockRemoteService.getFocusModeState.and.returnValue(of(true));
   mockRemoteService.getContentState.and.returnValue(of({}));
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [
-        ParticipantContentCarouselPageComponent,
-        A11yIntroPipe
-      ],
+      declarations: [ParticipantContentCarouselPageComponent, A11yIntroPipe],
       imports: [
         TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
-            useClass: JsonTranslationLoader
+            useClass: JsonTranslationLoader,
           },
-          isolate: true
-        })
+          isolate: true,
+        }),
       ],
       providers: [
         {
           provide: ContentService,
-          useValue: mockContentService
+          useValue: mockContentService,
         },
         {
           provide: ContentGroupService,
-          useValue: mockContentGroupService
+          useValue: mockContentGroupService,
         },
         {
           provide: AnnounceService,
-          useClass: MockAnnounceService
+          useClass: MockAnnounceService,
         },
         {
           provide: Location,
-          useClass: MockLocationStrategy
+          useClass: MockLocationStrategy,
         },
         {
           provide: ContentAnswerService,
-          useValue: mockContentAnswerService
+          useValue: mockContentAnswerService,
         },
         {
           provide: AuthenticationService,
-          useValue: mockAuthenticationService
+          useValue: mockAuthenticationService,
         },
         {
           provide: NotificationService,
-          useClass: MockNotificationService
+          useClass: MockNotificationService,
         },
         {
           provide: ActivatedRoute,
-          useValue: activatedRouteStub
+          useValue: activatedRouteStub,
         },
         {
           provide: GlobalStorageService,
-          useValue: mockGlobalStorageService
+          useValue: mockGlobalStorageService,
         },
         {
           provide: Router,
-          useClass: MockRouter
+          useClass: MockRouter,
         },
         {
           provide: EventService,
-          useClass: MockEventService
+          useClass: MockEventService,
         },
         {
           provide: A11yIntroPipe,
-          useValue: a11yIntroPipe
+          useValue: a11yIntroPipe,
         },
         {
           provide: UserService,
-          useValue: mockUserService
+          useValue: mockUserService,
         },
         {
           provide: RoutingService,
-          useValue: mockRoutingService
+          useValue: mockRoutingService,
         },
         {
           provide: RemoteService,
-          useValue: mockRemoteService
-        }
+          useValue: mockRemoteService,
+        },
       ],
-      schemas: [
-        NO_ERRORS_SCHEMA
-      ]
-    })
-    .compileComponents();
+      schemas: [NO_ERRORS_SCHEMA],
+    }).compileComponents();
   }));
 
   beforeEach(() => {

@@ -15,11 +15,19 @@ export class ApiConfigService extends AbstractHttpService<ApiConfig> {
   private config$: Observable<ApiConfig>;
   private cacheExpiry: dayjs.Dayjs = dayjs();
 
-  constructor(private http: HttpClient,
-              protected eventService: EventService,
-              protected translateService: TranslateService,
-              protected notificationService: NotificationService) {
-    super('/configuration', http, eventService, translateService, notificationService);
+  constructor(
+    private http: HttpClient,
+    protected eventService: EventService,
+    protected translateService: TranslateService,
+    protected notificationService: NotificationService
+  ) {
+    super(
+      '/configuration',
+      http,
+      eventService,
+      translateService,
+      notificationService
+    );
   }
 
   getApiConfig$(): Observable<ApiConfig> {
@@ -33,23 +41,23 @@ export class ApiConfigService extends AbstractHttpService<ApiConfig> {
   private load$() {
     console.log('Loading API configuration...');
     return this.http.get<ApiConfig>(this.buildUri('')).pipe(
-        retryBackoff({
-          initialInterval: 1000,
-          maxInterval: 60000,
-          resetOnSuccess: true
-        }),
-        tap(() => console.log('API configuration loaded.')),
-        map((config) => {
-          config.authenticationProviders.sort((p1, p2) => {
-            return p1.order < p2.order ? -1 : p1.order > p2.order ? 1 : 0;
-          });
-          /* Lists in the UI config are currently serialized as objects instead of arrays,
-           * so they are converted here for easier handling. */
-          this.convertNestedListObjectsToArrays(config.ui);
-          this.freezeRecursively(config);
-          return config;
-        }),
-        shareReplay()
+      retryBackoff({
+        initialInterval: 1000,
+        maxInterval: 60000,
+        resetOnSuccess: true,
+      }),
+      tap(() => console.log('API configuration loaded.')),
+      map((config) => {
+        config.authenticationProviders.sort((p1, p2) => {
+          return p1.order < p2.order ? -1 : p1.order > p2.order ? 1 : 0;
+        });
+        /* Lists in the UI config are currently serialized as objects instead of arrays,
+         * so they are converted here for easier handling. */
+        this.convertNestedListObjectsToArrays(config.ui);
+        this.freezeRecursively(config);
+        return config;
+      }),
+      shareReplay()
     );
   }
 
@@ -60,7 +68,7 @@ export class ApiConfigService extends AbstractHttpService<ApiConfig> {
   private convertNestedListObjectsToArrays(value: any): any {
     if (Array.isArray(value)) {
       const arr = value as any[];
-      return arr.map(item => this.convertNestedListObjectsToArrays(item));
+      return arr.map((item) => this.convertNestedListObjectsToArrays(item));
     } else if (typeof value === 'object') {
       const obj = value as object;
       for (const [name, objValue] of Object.entries(obj)) {
@@ -73,10 +81,10 @@ export class ApiConfigService extends AbstractHttpService<ApiConfig> {
     return value;
   }
 
-  private convertListObjectToArray(obj: object): object|any[] {
-    return Object.keys(obj).some(k => parseInt(k, 10).toString() !== k)
-        ? obj
-        : Object.values(obj);
+  private convertListObjectToArray(obj: object): object | any[] {
+    return Object.keys(obj).some((k) => parseInt(k, 10).toString() !== k)
+      ? obj
+      : Object.values(obj);
   }
 
   private freezeRecursively(obj: object) {
@@ -87,8 +95,10 @@ export class ApiConfigService extends AbstractHttpService<ApiConfig> {
       /* Freeze properties before freezing self */
       for (const name of propNames) {
         const value = obj[name];
-        obj[name] = value && typeof value === 'object'
-          ? this.freezeRecursively(value) : value;
+        obj[name] =
+          value && typeof value === 'object'
+            ? this.freezeRecursively(value)
+            : value;
       }
     }
 

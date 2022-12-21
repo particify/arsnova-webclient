@@ -11,10 +11,9 @@ export class BarItem {
 }
 
 @Component({
-  template: ''
+  template: '',
 })
 export abstract class BarBaseComponent implements OnInit {
-
   @Input() barItems: BarItem[] = [];
   @Input() position = 'left';
   @Input() isPresentation = false;

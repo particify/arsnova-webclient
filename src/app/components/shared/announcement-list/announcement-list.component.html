@@ -3,20 +3,38 @@
     <h2 tabindex="0">{{ 'announcement.announcements' | translate }}</h2>
     <mat-form-field appearance="outline" class="no-field-hint smaller-select">
       <mat-label>{{ 'announcement.filter' | translate }}</mat-label>
-      <mat-select [(value)]="selectedRoomId" (selectionChange)="filter()" [disabled]="announcements.length === 0">
-        <mat-option value="">{{ 'announcement.all-rooms' | translate }}</mat-option>
+      <mat-select
+        [(value)]="selectedRoomId"
+        (selectionChange)="filter()"
+        [disabled]="announcements.length === 0"
+      >
+        <mat-option value="">{{
+          'announcement.all-rooms' | translate
+        }}</mat-option>
         <mat-divider></mat-divider>
-        <mat-option *ngFor="let room of announcementRooms | keyvalue" value="{{room.key}}">{{ room.value }}</mat-option>
+        <mat-option
+          *ngFor="let room of announcementRooms | keyvalue"
+          value="{{ room.key }}"
+          >{{ room.value }}</mat-option
+        >
       </mat-select>
     </mat-form-field>
   </div>
   <mat-dialog-content *ngIf="!isLoading" fxLayout="column" fxLayoutGap="10px">
-    <p *ngIf="announcements.length === 0" class="hint-sm">{{ 'announcement.no-announcements' | translate }}</p>
-    <app-announcement *ngFor="let announcement of displayAnnouncements" [announcement]="announcement"
-                      [label]="getLabel(announcement)" tabindex="0"></app-announcement>
+    <p *ngIf="announcements.length === 0" class="hint-sm">
+      {{ 'announcement.no-announcements' | translate }}
+    </p>
+    <app-announcement
+      *ngFor="let announcement of displayAnnouncements"
+      [announcement]="announcement"
+      [label]="getLabel(announcement)"
+      tabindex="0"
+    ></app-announcement>
   </mat-dialog-content>
   <app-loading-indicator *ngIf="isLoading" [size]="60"></app-loading-indicator>
   <div fxLayout="row" fxLayoutAlign="end" class="bottom-buttons">
-    <button mat-flat-button class="button-primary" (click)="close()">{{ 'announcement.close' | translate }}</button>
+    <button mat-flat-button class="button-primary" (click)="close()">
+      {{ 'announcement.close' | translate }}
+    </button>
   </div>
 </div>

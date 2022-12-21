@@ -11,12 +11,12 @@
 
 .left {
   left: 0;
-  border-left: none!important;
+  border-left: none !important;
 }
 
 .right {
   right: 0;
-  border-right: none!important;
+  border-right: none !important;
 }
 
 .hidden {
@@ -33,7 +33,7 @@
   border: 2px solid var(--grey);
 }
 
-@media(min-width: 1001px) {
+@media (min-width: 1001px) {
   .icon-container {
     flex-direction: column;
   }

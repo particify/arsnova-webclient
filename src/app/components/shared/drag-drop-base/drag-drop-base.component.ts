@@ -6,19 +6,17 @@ import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
   template: '',
 })
 export class DragDropBaseComponent {
-
   @ViewChildren('sortListItem') listItems: QueryList<ElementRef>;
 
   dragDroplist = [];
   selectedSortItem: number;
-
 
   drop(event: CdkDragDrop<string[]>) {
     this.moveItem(event.previousIndex, event.currentIndex);
   }
 
   moveAnswer(event: KeyboardEvent, answerIndex: number) {
-    let nextIndex = answerIndex
+    let nextIndex = answerIndex;
     if (event.key === 'ArrowDown' && nextIndex < this.dragDroplist.length - 1) {
       nextIndex += 1;
     }

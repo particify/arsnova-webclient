@@ -1,13 +1,17 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { StatisticListComponent } from './statistic-list.component';
-import { ActivatedRoute, ActivatedRouteSnapshot, Router } from '@angular/router';
+import {
+  ActivatedRoute,
+  ActivatedRouteSnapshot,
+  Router,
+} from '@angular/router';
 import {
   MockGlobalStorageService,
   ActivatedRouteStub,
   JsonTranslationLoader,
   MockLangService,
   MockRouter,
-  MockNotificationService
+  MockNotificationService,
 } from '@arsnova/testing/test-helpers';
 import { GlobalStorageService } from '@arsnova/app/services/util/global-storage.service';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
@@ -24,7 +28,12 @@ describe('StatisticListComponent', () => {
   let component: StatisticListComponent;
   let fixture: ComponentFixture<StatisticListComponent>;
 
-  const mockContentService = jasmine.createSpyObj(['getContentsByIds', 'getSupportedContents', 'getAnswer', 'showDeleteAllAnswersDialog']);
+  const mockContentService = jasmine.createSpyObj([
+    'getContentsByIds',
+    'getSupportedContents',
+    'getAnswer',
+    'showDeleteAllAnswersDialog',
+  ]);
   mockContentService.getContentsByIds.and.returnValue(of({}));
   mockContentService.getSupportedContents.and.returnValue([]);
 
@@ -33,66 +42,60 @@ describe('StatisticListComponent', () => {
 
   const snapshot = new ActivatedRouteSnapshot();
   snapshot.params = {
-    shortId: '12345678'
-  }
+    shortId: '12345678',
+  };
   const activatedRouteStub = new ActivatedRouteStub(null, null, snapshot);
 
   const a11yRenderedBodyPipe = new A11yRenderedBodyPipe();
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [
-        StatisticListComponent,
-        A11yRenderedBodyPipe
-      ],
+      declarations: [StatisticListComponent, A11yRenderedBodyPipe],
       imports: [
         TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
-            useClass: JsonTranslationLoader
+            useClass: JsonTranslationLoader,
           },
-          isolate: true
-        })
+          isolate: true,
+        }),
       ],
       providers: [
         {
           provide: ContentService,
-          useValue: mockContentService
+          useValue: mockContentService,
         },
         {
           provide: ContentAnswerService,
-          useValue: mockContentAnswerService
+          useValue: mockContentAnswerService,
         },
         {
           provide: Router,
-          useClass: MockRouter
+          useClass: MockRouter,
         },
         {
           provide: LanguageService,
-          useClass: MockLangService
+          useClass: MockLangService,
         },
         {
           provide: ActivatedRoute,
-          useValue: activatedRouteStub
+          useValue: activatedRouteStub,
         },
         {
           provide: GlobalStorageService,
-          useClass: MockGlobalStorageService
+          useClass: MockGlobalStorageService,
         },
         {
           provide: NotificationService,
-          useClass: MockNotificationService
+          useClass: MockNotificationService,
         },
         {
           provide: A11yRenderedBodyPipe,
-          useValue: a11yRenderedBodyPipe
-        }
+          useValue: a11yRenderedBodyPipe,
+        },
       ],
-      schemas: [
-        NO_ERRORS_SCHEMA
-      ]
-    })
-    .compileComponents();
+      schemas: [NO_ERRORS_SCHEMA],
+    }).compileComponents();
   }));
 
   beforeEach(() => {

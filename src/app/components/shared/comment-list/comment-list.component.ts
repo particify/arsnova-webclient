@@ -1,4 +1,13 @@
-import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+  ViewChild,
+} from '@angular/core';
 import { Comment } from '../../../models/comment';
 import { CommentService } from '../../../services/http/comment.service';
 import { TranslateService } from '@ngx-translate/core';
@@ -10,13 +19,19 @@ import { Vote } from '../../../models/vote';
 import { UserRole } from '../../../models/user-roles.enum';
 import { Room } from '../../../models/room';
 import { VoteService } from '../../../services/http/vote.service';
-import { AdvancedSnackBarTypes, NotificationService } from '../../../services/util/notification.service';
+import {
+  AdvancedSnackBarTypes,
+  NotificationService,
+} from '../../../services/util/notification.service';
 import { CorrectWrong } from '../../../models/correct-wrong.enum';
 import { EventService } from '../../../services/util/event.service';
 import { Observable, Subject, Subscription } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DialogService } from '../../../services/util/dialog.service';
-import { GlobalStorageService, STORAGE_KEYS } from '../../../services/util/global-storage.service';
+import {
+  GlobalStorageService,
+  STORAGE_KEYS,
+} from '../../../services/util/global-storage.service';
 import { AnnounceService } from '../../../services/util/announce.service';
 import { CommentSettingsService } from '../../../services/http/comment-settings.service';
 import { Location } from '@angular/common';
@@ -31,7 +46,7 @@ import { PresentationEvent } from '../../../models/events/presentation-events.en
 export enum Sort {
   VOTEASC = 'voteasc',
   VOTEDESC = 'votedesc',
-  TIME = 'time'
+  TIME = 'time',
 }
 
 enum Filter {
@@ -40,7 +55,7 @@ enum Filter {
   WRONG = 'wrong',
   ACK = 'ack',
   TAG = 'tag',
-  ANSWER = 'answer'
+  ANSWER = 'answer',
 }
 
 enum Period {
@@ -48,7 +63,7 @@ enum Period {
   THREEHOURS = 'time-3h',
   ONEDAY = 'time-1d',
   ONEWEEK = 'time-1w',
-  ALL = 'time-all'
+  ALL = 'time-all',
 }
 
 export const itemRenderNumber = 20;
@@ -66,7 +81,7 @@ export class CommentPresentationState {
 @Component({
   selector: 'app-comment-list',
   templateUrl: './comment-list.component.html',
-  styleUrls: ['./comment-list.component.scss']
+  styleUrls: ['./comment-list.component.scss'],
 })
 export class CommentListComponent implements OnInit, OnDestroy {
   @ViewChild('searchBox') searchField: ElementRef;
@@ -150,44 +165,61 @@ export class CommentListComponent implements OnInit, OnDestroy {
     private routingService: RoutingService,
     private remoteService: RemoteService
   ) {
-    langService.langEmitter.subscribe(lang => translateService.use(lang));
+    langService.langEmitter.subscribe((lang) => translateService.use(lang));
   }
 
   ngOnInit() {
     this.resetReadTimestamp();
-    this.navBarStateSubscription = this.eventService.on<boolean>(UiState.NAV_BAR_VISIBLE).subscribe(isVisible => {
-      this.navBarExists = isVisible;
-    });
+    this.navBarStateSubscription = this.eventService
+      .on<boolean>(UiState.NAV_BAR_VISIBLE)
+      .subscribe((isVisible) => {
+        this.navBarExists = isVisible;
+      });
     this.onInit = true;
     const userId = this.auth?.userId;
-    const lastSort = this.globalStorageService.getItem(STORAGE_KEYS.COMMENT_SORT);
-    this.currentSort = this.isPresentation ? (lastSort && lastSort !== this.sorting.VOTEASC ? lastSort : this.sorting.TIME)
+    const lastSort = this.globalStorageService.getItem(
+      STORAGE_KEYS.COMMENT_SORT
+    );
+    this.currentSort = this.isPresentation
+      ? lastSort && lastSort !== this.sorting.VOTEASC
+        ? lastSort
+        : this.sorting.TIME
       : lastSort || this.sorting.TIME;
-    this.period = this.globalStorageService.getItem(STORAGE_KEYS.COMMENT_TIME_FILTER) || Period.ALL;
+    this.period =
+      this.globalStorageService.getItem(STORAGE_KEYS.COMMENT_TIME_FILTER) ||
+      Period.ALL;
     this.currentFilter = '';
-    this.translateService.use(this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE));
-    this.route.data.subscribe(data => {
+    this.translateService.use(
+      this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE)
+    );
+    this.route.data.subscribe((data) => {
       this.room = data.room;
       this.roomId = this.room.id;
       if (this.isArchive) {
         this.activeComments$ = this.archivedComments$;
       } else {
         this.publicComments$ = this.commentService.getAckComments(this.room.id);
-        this.moderationComments$ = this.commentService.getRejectedComments(this.room.id);
-        this.activeComments$ = this.isModerator ? this.moderationComments$ : this.publicComments$;
+        this.moderationComments$ = this.commentService.getRejectedComments(
+          this.room.id
+        );
+        this.activeComments$ = this.isModerator
+          ? this.moderationComments$
+          : this.publicComments$;
       }
       this.initCounter();
       this.init();
       this.viewRole = data.viewRole;
       if (this.viewRole === UserRole.PARTICIPANT) {
-        this.voteService.getByRoomIdAndUserID(this.roomId, userId).subscribe(votes => {
-          for (const v of votes) {
-            this.commentVoteMap.set(v.commentId, v);
-          }
-        });
+        this.voteService
+          .getByRoomIdAndUserID(this.roomId, userId)
+          .subscribe((votes) => {
+            for (const v of votes) {
+              this.commentVoteMap.set(v.commentId, v);
+            }
+          });
       }
     });
-    this.translateService.get('comment-list.search').subscribe(msg => {
+    this.translateService.get('comment-list.search').subscribe((msg) => {
       this.searchPlaceholder = msg;
     });
     this.deviceType = innerWidth > 1000 ? 'desktop' : 'mobile';
@@ -196,35 +228,51 @@ export class CommentListComponent implements OnInit, OnDestroy {
       this.scrollStart = this.scrollMax;
     }
     if (this.isPresentation) {
-      this.translateService.get(['comment-list.next', 'comment-list.previous']).subscribe(t => {
-        this.hotkeyService.registerHotkey({
-          key: 'ArrowRight',
-          action: () => this.nextComment(),
-          actionTitle: t['comment-list.next']
-        }, this.hotkeyRefs);
-        this.hotkeyService.registerHotkey({
-          key: 'ArrowLeft',
-          action: () => this.prevComment(),
-          actionTitle: t['comment-list.previous']
-        }, this.hotkeyRefs);
-      });
+      this.translateService
+        .get(['comment-list.next', 'comment-list.previous'])
+        .subscribe((t) => {
+          this.hotkeyService.registerHotkey(
+            {
+              key: 'ArrowRight',
+              action: () => this.nextComment(),
+              actionTitle: t['comment-list.next'],
+            },
+            this.hotkeyRefs
+          );
+          this.hotkeyService.registerHotkey(
+            {
+              key: 'ArrowLeft',
+              action: () => this.prevComment(),
+              actionTitle: t['comment-list.previous'],
+            },
+            this.hotkeyRefs
+          );
+        });
     }
-    document.getElementById('routing-content')?.addEventListener('scroll', () => {
+    document.getElementById('routing-content')?.addEventListener(
+      'scroll',
+      () => {
         this.checkScroll();
-    }, true);
+      },
+      true
+    );
   }
 
   initCounter() {
-    this.commentService.countByRoomId(this.room.id, true).subscribe(commentCounter => {
-      this.publicCounter = commentCounter;
-    });
-    this.commentService.countByRoomId(this.room.id, false).subscribe(commentCounter => {
-      this.moderationCounter = commentCounter;
-    });
+    this.commentService
+      .countByRoomId(this.room.id, true)
+      .subscribe((commentCounter) => {
+        this.publicCounter = commentCounter;
+      });
+    this.commentService
+      .countByRoomId(this.room.id, false)
+      .subscribe((commentCounter) => {
+        this.moderationCounter = commentCounter;
+      });
   }
 
   init(reload = false) {
-    this.activeComments$.subscribe(comments => {
+    this.activeComments$.subscribe((comments) => {
       this.comments = comments;
       this.initRoom(reload);
       if (this.isPresentation && this.comments.length === 0) {
@@ -243,14 +291,16 @@ export class CommentListComponent implements OnInit, OnDestroy {
     if (this.navBarStateSubscription) {
       this.navBarStateSubscription.unsubscribe();
     }
-    this.hotkeyRefs.forEach(h => this.hotkeyService.unregisterHotkey(h));
+    this.hotkeyRefs.forEach((h) => this.hotkeyService.unregisterHotkey(h));
   }
 
   initRoom(reload = false) {
-    this.commentSettingsService.get(this.roomId).subscribe(commentSettings => {
-      this.directSend = commentSettings.directSend;
-      this.fileUploadEnabled = commentSettings.fileUploadEnabled;
-    });
+    this.commentSettingsService
+      .get(this.roomId)
+      .subscribe((commentSettings) => {
+        this.directSend = commentSettings.directSend;
+        this.fileUploadEnabled = commentSettings.fileUploadEnabled;
+      });
     this.getComments();
     if (reload && this.search) {
       this.searchComments();
@@ -264,26 +314,35 @@ export class CommentListComponent implements OnInit, OnDestroy {
   }
 
   checkScroll(scrollPosition?: number, scrollHeight?: number): void {
-    const currentScroll = scrollPosition || document.getElementById('routing-content').scrollTop;
+    const currentScroll =
+      scrollPosition || document.getElementById('routing-content').scrollTop;
     this.scroll = this.isScrollPosition(currentScroll);
     this.scrollActive = this.scroll && currentScroll < this.lastScroll;
     this.scrollExtended = currentScroll >= this.scrollExtendedMax;
     this.checkFreeze();
-    this.isScrollStart = currentScroll >= this.scrollStart && currentScroll <= (this.scrollStart + 200);
+    this.isScrollStart =
+      currentScroll >= this.scrollStart &&
+      currentScroll <= this.scrollStart + 200;
     this.showCommentsForScrollPosition(currentScroll, scrollHeight);
     this.lastScroll = currentScroll;
   }
 
   isScrollPosition(scrollPosition: number): boolean {
-    const additionalSpace = this.deviceType === 'mobile' ? 70 + innerWidth * 0.04 : 0;
-    return scrollPosition > (this.scrollMax + additionalSpace) || scrollPosition > this.scrollMax && scrollPosition < this.lastScroll;
+    const additionalSpace =
+      this.deviceType === 'mobile' ? 70 + innerWidth * 0.04 : 0;
+    return (
+      scrollPosition > this.scrollMax + additionalSpace ||
+      (scrollPosition > this.scrollMax && scrollPosition < this.lastScroll)
+    );
   }
 
   showCommentsForScrollPosition(scrollPosition: number, scrollHeight: number) {
-    const length = this.hideCommentsList ? this.filteredComments.length : this.commentsFilteredByTime.length;
+    const length = this.hideCommentsList
+      ? this.filteredComments.length
+      : this.commentsFilteredByTime.length;
     if (this.displayComments.length !== length) {
       const height = scrollHeight || document.body.scrollHeight;
-      if (((window.innerHeight * 2) + scrollPosition) >= height) {
+      if (window.innerHeight * 2 + scrollPosition >= height) {
         this.commentCounter += itemRenderNumber / 2;
         this.getDisplayComments();
       }
@@ -306,16 +365,22 @@ export class CommentListComponent implements OnInit, OnDestroy {
   }
 
   scrollTop(smooth?: boolean) {
-    const behavior = this.displayComments.length <= itemRenderNumber || smooth ? 'smooth' : 'auto';
-    document.getElementById('routing-content').scrollTo({top: 0, behavior: behavior});
+    const behavior =
+      this.displayComments.length <= itemRenderNumber || smooth
+        ? 'smooth'
+        : 'auto';
+    document
+      .getElementById('routing-content')
+      .scrollTo({ top: 0, behavior: behavior });
   }
 
   searchComments(): void {
     if (this.searchInput) {
       if (this.searchInput.length > 0) {
         this.hideCommentsList = true;
-        this.filteredComments = this.commentsFilteredByTime
-          .filter(c => c.body.toLowerCase().includes(this.searchInput.toLowerCase()));
+        this.filteredComments = this.commentsFilteredByTime.filter((c) =>
+          c.body.toLowerCase().includes(this.searchInput.toLowerCase())
+        );
         this.getDisplayComments();
       }
     } else if (this.searchInput.length === 0 && this.currentFilter === '') {
@@ -325,7 +390,7 @@ export class CommentListComponent implements OnInit, OnDestroy {
   }
 
   activateSearch() {
-    this.translateService.get('comment-list.search').subscribe(msg => {
+    this.translateService.get('comment-list.search').subscribe((msg) => {
       this.searchPlaceholder = msg;
     });
     this.search = true;
@@ -353,9 +418,13 @@ export class CommentListComponent implements OnInit, OnDestroy {
     if (this.thresholdEnabled) {
       commentThreshold = this.room.extensions.comments['commentThreshold'];
       if (this.hideCommentsList) {
-        this.filteredComments = this.filteredComments.filter(x => x.score >= commentThreshold);
+        this.filteredComments = this.filteredComments.filter(
+          (x) => x.score >= commentThreshold
+        );
       } else {
-        this.comments = this.comments.filter(x => x.score >= commentThreshold);
+        this.comments = this.comments.filter(
+          (x) => x.score >= commentThreshold
+        );
       }
     }
     this.setTimePeriod(this.period);
@@ -374,24 +443,28 @@ export class CommentListComponent implements OnInit, OnDestroy {
           }
         }, 300);
       }
-      this.eventService.on<string>(PresentationEvent.COMMENT_SORTING_UPDATED).subscribe(sort => {
-        this.sortComments(sort);
-        setTimeout(() => {
-          this.goToFirstComment();
-        }, 300);
-      });
+      this.eventService
+        .on<string>(PresentationEvent.COMMENT_SORTING_UPDATED)
+        .subscribe((sort) => {
+          this.sortComments(sort);
+          setTimeout(() => {
+            this.goToFirstComment();
+          }, 300);
+        });
     }
     let comment;
-    this.remoteService.getCommentState().subscribe(state => {
+    this.remoteService.getCommentState().subscribe((state) => {
       const commentId = state.commentId;
       if (this.activeComment?.id !== commentId && comment?.id !== commentId) {
-        comment = this.displayComments.find(c => c.id === commentId);
+        comment = this.displayComments.find((c) => c.id === commentId);
         let timeout = 0;
         if (!comment) {
           timeout = 500;
-          this.commentCounter = this.hideCommentsList ? this.filteredComments.length : this.commentsFilteredByTime.length;
+          this.commentCounter = this.hideCommentsList
+            ? this.filteredComments.length
+            : this.commentsFilteredByTime.length;
           this.getDisplayComments();
-          comment = this.displayComments.find(c => c.id === commentId);
+          comment = this.displayComments.find((c) => c.id === commentId);
         }
         if (comment) {
           comment.highlighted = true;
@@ -410,8 +483,13 @@ export class CommentListComponent implements OnInit, OnDestroy {
   }
 
   getDisplayComments() {
-    const commentList = this.hideCommentsList ? this.filteredComments : this.commentsFilteredByTime;
-    this.displayComments = commentList.slice(0, Math.min(this.commentCounter, this.commentsFilteredByTime.length));
+    const commentList = this.hideCommentsList
+      ? this.filteredComments
+      : this.commentsFilteredByTime;
+    this.displayComments = commentList.slice(
+      0,
+      Math.min(this.commentCounter, this.commentsFilteredByTime.length)
+    );
   }
 
   getVote(comment: Comment): Vote {
@@ -421,7 +499,9 @@ export class CommentListComponent implements OnInit, OnDestroy {
   }
 
   getUnreadCommentCount() {
-    this.unreadCommentCount = this.comments.filter(c => c.timestamp > this.readTimestamp).length;
+    this.unreadCommentCount = this.comments.filter(
+      (c) => c.timestamp > this.readTimestamp
+    ).length;
   }
 
   loadAndScroll() {
@@ -456,7 +536,7 @@ export class CommentListComponent implements OnInit, OnDestroy {
     let highlightEvent = false;
     const msg = JSON.parse(message.body);
     const payload = msg.payload;
-    const commentIndex = this.comments.map(c => c.id).indexOf(payload.id);
+    const commentIndex = this.comments.map((c) => c.id).indexOf(payload.id);
     switch (msg.type) {
       case 'CommentCreated':
         if (!this.isModerator) {
@@ -465,7 +545,11 @@ export class CommentListComponent implements OnInit, OnDestroy {
         this.publicCounter++;
         break;
       case 'CommentPatched':
-        updateList = this.handleCommentPatch(payload.changes, payload.id, commentIndex);
+        updateList = this.handleCommentPatch(
+          payload.changes,
+          payload.id,
+          commentIndex
+        );
         break;
       case 'CommentHighlighted':
         highlightEvent = true;
@@ -490,7 +574,7 @@ export class CommentListComponent implements OnInit, OnDestroy {
       if (key === Filter.ACK) {
         const isNowAck = this.isModerator ? !value : <boolean>value;
         if (!isNowAck) {
-          this.removeCommentFromList(id)
+          this.removeCommentFromList(id);
           this.reduceCommentCounter();
           this.checkIfActiveComment(id);
           if (this.isModerator) {
@@ -522,7 +606,7 @@ export class CommentListComponent implements OnInit, OnDestroy {
   handleCommentDelete(id: string) {
     this.removeCommentFromList(id);
     if (this.isModerator) {
-      this.moderationCounter--
+      this.moderationCounter--;
     } else {
       this.publicCounter--;
     }
@@ -563,21 +647,35 @@ export class CommentListComponent implements OnInit, OnDestroy {
 
   openCreateDialog(): void {
     let tags;
-    if (this.room.extensions && this.room.extensions.tags && this.room.extensions.tags['tags']) {
+    if (
+      this.room.extensions &&
+      this.room.extensions.tags &&
+      this.room.extensions.tags['tags']
+    ) {
       tags = this.room.extensions.tags['tags'];
     }
-    this.dialogService.openCreateCommentDialog(this.auth, tags, this.roomId, this.directSend, this.fileUploadEnabled, this.viewRole);
+    this.dialogService.openCreateCommentDialog(
+      this.auth,
+      tags,
+      this.roomId,
+      this.directSend,
+      this.fileUploadEnabled,
+      this.viewRole
+    );
   }
 
   filterComments(type: string, tag?: string): void {
-    if (type === '' || (this.currentFilter === this.filtering.TAG && type === this.filtering.TAG)) {
+    if (
+      type === '' ||
+      (this.currentFilter === this.filtering.TAG && type === this.filtering.TAG)
+    ) {
       this.filteredComments = this.commentsFilteredByTime;
       this.hideCommentsList = false;
       this.currentFilter = '';
       this.sortComments(this.currentSort);
       return;
     }
-    this.filteredComments = this.commentsFilteredByTime.filter(c => {
+    this.filteredComments = this.commentsFilteredByTime.filter((c) => {
       switch (type) {
         case this.filtering.CORRECT:
           return c.correct === CorrectWrong.CORRECT ? 1 : 0;
@@ -599,12 +697,13 @@ export class CommentListComponent implements OnInit, OnDestroy {
   sort(array: any[], type: string): any[] {
     return array.sort((a, b) => {
       if (type === this.sorting.VOTEASC) {
-        return (a.score > b.score) ? 1 : (b.score > a.score) ? -1 : 0;
+        return a.score > b.score ? 1 : b.score > a.score ? -1 : 0;
       } else if (type === this.sorting.VOTEDESC) {
-        return (b.score > a.score) ? 1 : (a.score > b.score) ? -1 : 0;
+        return b.score > a.score ? 1 : a.score > b.score ? -1 : 0;
       } else if (type === this.sorting.TIME) {
-        const dateA = new Date(a.timestamp), dateB = new Date(b.timestamp);
-        return (+dateB > +dateA) ? 1 : (+dateA > +dateB) ? -1 : 0;
+        const dateA = new Date(a.timestamp),
+          dateB = new Date(b.timestamp);
+        return +dateB > +dateA ? 1 : +dateA > +dateB ? -1 : 0;
       }
     });
   }
@@ -618,10 +717,16 @@ export class CommentListComponent implements OnInit, OnDestroy {
     if (this.hideCommentsList === true) {
       this.filteredComments = this.sort(this.filteredComments, type);
     } else {
-      this.commentsFilteredByTime = this.sort(this.commentsFilteredByTime, type);
+      this.commentsFilteredByTime = this.sort(
+        this.commentsFilteredByTime,
+        type
+      );
     }
     this.currentSort = type;
-    this.globalStorageService.setItem(STORAGE_KEYS.COMMENT_SORT, this.currentSort);
+    this.globalStorageService.setItem(
+      STORAGE_KEYS.COMMENT_SORT,
+      this.currentSort
+    );
     if (this.scrollToTop) {
       this.commentCounter = itemRenderNumber;
       this.scrollTop();
@@ -645,15 +750,19 @@ export class CommentListComponent implements OnInit, OnDestroy {
   }
 
   subscribeCommentStream() {
-    this.commentStream = this.wsCommentService.getCommentStream(this.roomId).subscribe((message: Message) => {
-      this.parseIncomingMessage(message);
-    });
+    this.commentStream = this.wsCommentService
+      .getCommentStream(this.roomId)
+      .subscribe((message: Message) => {
+        this.parseIncomingMessage(message);
+      });
   }
 
   subscribeModeratorStream() {
-    this.moderatorStream = this.wsCommentService.getModeratorCommentStream(this.roomId).subscribe((message: Message) => {
-      this.parseIncomingModeratorMessage(message);
-    });
+    this.moderatorStream = this.wsCommentService
+      .getModeratorCommentStream(this.roomId)
+      .subscribe((message: Message) => {
+        this.parseIncomingModeratorMessage(message);
+      });
   }
 
   /**
@@ -662,7 +771,8 @@ export class CommentListComponent implements OnInit, OnDestroy {
   public announceNewComment(comment: Comment) {
     this.newestComment = comment;
     setTimeout(() => {
-      const newCommentText: string = document.getElementById('new-comment').innerText;
+      const newCommentText: string =
+        document.getElementById('new-comment').innerText;
       this.announceService.announce(newCommentText);
     }, 450);
   }
@@ -686,18 +796,29 @@ export class CommentListComponent implements OnInit, OnDestroy {
         case Period.ONEWEEK:
           periodInSeconds = hourInSeconds * 168;
       }
-      this.commentsFilteredByTime = this.comments
-        .filter(c => new Date(c.timestamp).getTime() >= (currentTime.getTime() - periodInSeconds));
+      this.commentsFilteredByTime = this.comments.filter(
+        (c) =>
+          new Date(c.timestamp).getTime() >=
+          currentTime.getTime() - periodInSeconds
+      );
     } else {
       this.commentsFilteredByTime = this.comments;
     }
     this.filterComments(this.currentFilter);
-    this.globalStorageService.setItem(STORAGE_KEYS.COMMENT_TIME_FILTER, this.period);
+    this.globalStorageService.setItem(
+      STORAGE_KEYS.COMMENT_TIME_FILTER,
+      this.period
+    );
   }
 
   openDeleteCommentsDialog(): void {
-    const dialogRef = this.dialogService.openDeleteDialog('comments', this.isModerator ? 'really-delete-banned-comments' : 'really-delete-comments');
-    dialogRef.afterClosed().subscribe(result => {
+    const dialogRef = this.dialogService.openDeleteDialog(
+      'comments',
+      this.isModerator
+        ? 'really-delete-banned-comments'
+        : 'really-delete-comments'
+    );
+    dialogRef.afterClosed().subscribe((result) => {
       if (result === 'delete') {
         this.deleteComments();
       }
@@ -706,14 +827,29 @@ export class CommentListComponent implements OnInit, OnDestroy {
 
   deleteComments(): void {
     if (this.isModerator) {
-      this.commentService.deleteCommentsById(this.roomId, this.comments.map(c => c.id)).subscribe(() => {
-        const msg = this.translateService.instant('comment-list.banned-comments-deleted');
-        this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
-      });
+      this.commentService
+        .deleteCommentsById(
+          this.roomId,
+          this.comments.map((c) => c.id)
+        )
+        .subscribe(() => {
+          const msg = this.translateService.instant(
+            'comment-list.banned-comments-deleted'
+          );
+          this.notificationService.showAdvanced(
+            msg,
+            AdvancedSnackBarTypes.WARNING
+          );
+        });
     } else {
       this.commentService.deleteCommentsByRoomId(this.roomId).subscribe(() => {
-        const msg = this.translateService.instant('comment-list.all-comments-deleted');
-        this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
+        const msg = this.translateService.instant(
+          'comment-list.all-comments-deleted'
+        );
+        this.notificationService.showAdvanced(
+          msg,
+          AdvancedSnackBarTypes.WARNING
+        );
       });
     }
   }
@@ -736,7 +872,9 @@ export class CommentListComponent implements OnInit, OnDestroy {
       if (comment.highlighted) {
         this.commentService.lowlight(comment).subscribe();
       } else {
-        const highlightedComment = this.comments.filter(c => c.highlighted)[0];
+        const highlightedComment = this.comments.filter(
+          (c) => c.highlighted
+        )[0];
         if (highlightedComment) {
           this.commentService.lowlight(highlightedComment).subscribe();
         }
@@ -745,8 +883,14 @@ export class CommentListComponent implements OnInit, OnDestroy {
     }
     this.updateActiveComment.emit(comment);
     const index = this.getIndexOfComment(comment);
-    const commentPresentationState = new CommentPresentationState(this.getStepState(index), comment.id);
-    this.eventService.broadcast(PresentationEvent.COMMENT_STATE_UPDATED, commentPresentationState);
+    const commentPresentationState = new CommentPresentationState(
+      this.getStepState(index),
+      comment.id
+    );
+    this.eventService.broadcast(
+      PresentationEvent.COMMENT_STATE_UPDATED,
+      commentPresentationState
+    );
     this.remoteService.updateCommentStateChange(comment.id);
     if (!this.isLoading && this.isPresentation) {
       this.scrollToComment(index);
@@ -778,14 +922,15 @@ export class CommentListComponent implements OnInit, OnDestroy {
 
   scrollToComment(index) {
     this.getCommentElements()[index].scrollIntoView({
-        behavior: 'smooth',
-        block: 'center'
-      }
-    );
+      behavior: 'smooth',
+      block: 'center',
+    });
   }
 
   announceCommentPresentation(index: number) {
-    this.announceService.announce('presentation.a11y-present-comment', { comment: this.displayComments[index].body });
+    this.announceService.announce('presentation.a11y-present-comment', {
+      comment: this.displayComments[index].body,
+    });
   }
 
   nextComment() {
@@ -799,7 +944,7 @@ export class CommentListComponent implements OnInit, OnDestroy {
   prevComment() {
     const index = this.getCurrentIndex();
     if (index > 0) {
-      const prevComment = this.displayComments[index -1];
+      const prevComment = this.displayComments[index - 1];
       this.updateCurrentComment(prevComment);
     }
   }

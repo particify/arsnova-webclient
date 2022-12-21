@@ -8,17 +8,18 @@ import { RoomService } from '../services/http/room.service';
 
 @Injectable()
 export class CommentResolver implements Resolve<Comment> {
-
   constructor(
     private roomService: RoomService,
     private commentService: CommentService
-  ) {
-  }
+  ) {}
 
   resolve(route: ActivatedRouteSnapshot): Observable<Comment> {
     return this.roomService.getRoomByShortId(route.params['shortId']).pipe(
-      mergeMap(room => {
-        return this.commentService.getComment(route.params['commentId'], room.id);
+      mergeMap((room) => {
+        return this.commentService.getComment(
+          route.params['commentId'],
+          room.id
+        );
       })
     );
   }

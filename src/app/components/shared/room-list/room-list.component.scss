@@ -42,7 +42,8 @@
 
 @media (max-width: 500px) {
   .rooms-from-guest {
-    .role, .short-id{
+    .role,
+    .short-id {
       display: none;
     }
   }
@@ -87,13 +88,13 @@
   z-index: 3;
 }
 
-@media(max-width: 599px) {
+@media (max-width: 599px) {
   .desktop-buttons {
     display: none;
   }
 
   .header-container {
-    flex-direction: row-reverse!important;
+    flex-direction: row-reverse !important;
   }
 
   .search-input {
@@ -110,7 +111,7 @@
   }
 }
 
-@media(min-width: 600px) {
+@media (min-width: 600px) {
   .mobile-buttons {
     display: none;
   }
@@ -118,7 +119,6 @@
     font-size: 14px;
     width: 150px;
   }
-
 }
 
 .button-container {
@@ -129,8 +129,7 @@
   height: 36px;
 }
 
-
-@media(min-width: 600px) {
+@media (min-width: 600px) {
   .active-label {
     padding: 2px 6px;
     border-radius: 4px;
@@ -146,15 +145,20 @@
   }
 }
 
-@media(max-width: 599px) {
+@media (max-width: 599px) {
   .active-label * {
     display: none;
   }
 }
 
-
 @keyframes activeRoom {
-  0% {border-color: var(--primary);}
-  50% {border-color: var(--primary-variant);}
-  100% {border-color: var(--primary);}
+  0% {
+    border-color: var(--primary);
+  }
+  50% {
+    border-color: var(--primary-variant);
+  }
+  100% {
+    border-color: var(--primary);
+  }
 }

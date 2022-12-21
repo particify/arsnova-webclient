@@ -14,45 +14,41 @@ import { ContentGroupService } from '../../../../services/http/content-group.ser
 import { MatLegacyButtonModule as MatButtonModule } from '@angular/material/legacy-button';
 import { AnnounceService } from '@arsnova/app/services/util/announce.service';
 import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
-import { ActivatedRouteStub, JsonTranslationLoader, MockMatDialog } from '@arsnova/testing/test-helpers';
+import {
+  ActivatedRouteStub,
+  JsonTranslationLoader,
+  MockMatDialog,
+} from '@arsnova/testing/test-helpers';
 
 const mockCreateEvent = new Subject<any>();
 
 @Injectable()
-class MockContentService {
-}
+class MockContentService {}
 
 @Injectable()
-class MockNotificationService {
-
-}
+class MockNotificationService {}
 
 @Injectable()
-class MockEventService {
-}
+class MockEventService {}
 
 @Injectable()
-class MockRoomService {
-}
+class MockRoomService {}
 
 @Injectable()
-class MockDialogService {
-}
+class MockDialogService {}
 
 @Injectable()
-class MockContentGroupService {
-}
+class MockContentGroupService {}
 
 @Injectable()
-class MockAnnouncer {
-}
+class MockAnnouncer {}
 
 /* eslint-disable @angular-eslint/component-selector */
 @Component({ selector: 'mat-icon', template: '' })
-class MatIconStubComponent { }
+class MatIconStubComponent {}
 
 @Component({ selector: 'mat-form-field', template: '' })
-class MatFormFieldStubComponent { }
+class MatFormFieldStubComponent {}
 
 @Component({ selector: 'mat-checkbox', template: '' })
 class MatCheckboxStubComponent {
@@ -63,10 +59,10 @@ class MatCheckboxStubComponent {
 }
 
 @Component({ selector: 'mat-list', template: '' })
-class MatListStubComponent { }
+class MatListStubComponent {}
 
 @Component({ selector: 'mat-list-item', template: '' })
-class MatListItemStubComponent { }
+class MatListItemStubComponent {}
 
 @Component({ selector: 'mat-radio-group', template: '' })
 class MatRadioGroupStubComponent {
@@ -81,16 +77,16 @@ class MatRadioButtonStubComponent {
 }
 
 @Component({ selector: 'mat-divider', template: '' })
-class MatDividerStubComponent { }
+class MatDividerStubComponent {}
 
 @Component({ selector: 'mat-label', template: '' })
-class MatLabelStubComponent { }
+class MatLabelStubComponent {}
 
 @Component({ selector: 'mat-card', template: '' })
-class MatCardStubComponent { }
+class MatCardStubComponent {}
 
 @Component({ selector: 'mat-placeholder', template: '' })
-class MatPlaceholderStubComponent { }
+class MatPlaceholderStubComponent {}
 
 @Component({ selector: 'input', template: '' })
 class InputStubComponent {
@@ -104,13 +100,13 @@ describe('ContentChoiceCreationComponent', () => {
 
   const data = {
     room: {
-      id: '1234'
-    }
-  }
+      id: '1234',
+    },
+  };
 
   const snapshot = new ActivatedRouteSnapshot();
 
-  snapshot.params = of([{seriesName: 'SERIES'}]);
+  snapshot.params = of([{ seriesName: 'SERIES' }]);
 
   const activatedRouteStub = new ActivatedRouteStub(null, data, snapshot);
 
@@ -129,67 +125,65 @@ describe('ContentChoiceCreationComponent', () => {
         MatLabelStubComponent,
         MatCardStubComponent,
         MatPlaceholderStubComponent,
-        InputStubComponent
+        InputStubComponent,
       ],
       providers: [
         {
           provide: DialogService,
-          useClass: MockDialogService
+          useClass: MockDialogService,
         },
         {
           provide: ContentService,
-          useClass: MockContentService
+          useClass: MockContentService,
         },
         {
           provide: NotificationService,
-          useClass: MockNotificationService
+          useClass: MockNotificationService,
         },
         {
           provide: MatDialog,
-          useClass: MockMatDialog
+          useClass: MockMatDialog,
         },
         {
           provide: EventService,
-          useClass: MockEventService
+          useClass: MockEventService,
         },
         {
           provide: RoomService,
-          useClass: MockRoomService
+          useClass: MockRoomService,
         },
         {
           provide: ContentGroupService,
-          useClass: MockContentGroupService
+          useClass: MockContentGroupService,
         },
         {
           provide: AnnounceService,
-          useClass: MockAnnouncer
+          useClass: MockAnnouncer,
         },
         {
           provide: ActivatedRoute,
-          useValue: activatedRouteStub
-        }
+          useValue: activatedRouteStub,
+        },
       ],
       imports: [
         TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
-            useClass: JsonTranslationLoader
+            useClass: JsonTranslationLoader,
           },
-          isolate: true
+          isolate: true,
         }),
-        MatButtonModule
+        MatButtonModule,
       ],
-      schemas: [
-        NO_ERRORS_SCHEMA
-      ]
+      schemas: [NO_ERRORS_SCHEMA],
     })
-    .compileComponents()
-    .then(() => {
-      fixture = TestBed.createComponent(ContentChoiceCreationComponent);
-      component = fixture.componentInstance;
-      component.createEvent = mockCreateEvent;
-      fixture.detectChanges();
-    });
+      .compileComponents()
+      .then(() => {
+        fixture = TestBed.createComponent(ContentChoiceCreationComponent);
+        component = fixture.componentInstance;
+        component.createEvent = mockCreateEvent;
+        fixture.detectChanges();
+      });
   }));
 
   it('should create', () => {

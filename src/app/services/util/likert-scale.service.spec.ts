@@ -5,11 +5,14 @@ import { LikertScaleService } from '@arsnova/app/services/util/likert-scale.serv
 describe('LikertScaleService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [LikertScaleService]
+      providers: [LikertScaleService],
     });
   });
 
-  it('should be created', inject([LikertScaleService], (service: LikertScaleService) => {
-    expect(service).toBeTruthy();
-  }));
+  it('should be created', inject(
+    [LikertScaleService],
+    (service: LikertScaleService) => {
+      expect(service).toBeTruthy();
+    }
+  ));
 });

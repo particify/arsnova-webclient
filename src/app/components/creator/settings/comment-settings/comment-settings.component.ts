@@ -1,6 +1,9 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
-import { AdvancedSnackBarTypes, NotificationService } from '../../../../services/util/notification.service';
+import {
+  AdvancedSnackBarTypes,
+  NotificationService,
+} from '../../../../services/util/notification.service';
 import { TranslateService } from '@ngx-translate/core';
 import { RoomService } from '../../../../services/http/room.service';
 import { Router } from '@angular/router';
@@ -25,11 +28,11 @@ export class CommentExtensions {
 @Component({
   selector: 'app-comment-settings',
   templateUrl: './comment-settings.component.html',
-  styleUrls: ['./comment-settings.component.scss']
+  styleUrls: ['./comment-settings.component.scss'],
 })
 export class CommentSettingsComponent implements OnInit {
-
-  @Output() saveEvent: EventEmitter<UpdateEvent> = new EventEmitter<UpdateEvent>();
+  @Output() saveEvent: EventEmitter<UpdateEvent> =
+    new EventEmitter<UpdateEvent>();
 
   @Input() room: Room;
   @Input() roomId: string;
@@ -59,8 +62,7 @@ export class CommentSettingsComponent implements OnInit {
     private globalStorageService: GlobalStorageService,
     private liveAnnouncer: LiveAnnouncer,
     public eventService: EventService
-  ) {
-  }
+  ) {}
 
   ngOnInit() {
     if (!this.room.extensions) {
@@ -71,13 +73,14 @@ export class CommentSettingsComponent implements OnInit {
     }
     this.commentExtension = this.room.extensions.comments;
     if (this.commentExtension.enableThreshold !== null) {
-      this.commentExtension.commentThreshold !== undefined ?
-        this.threshold = this.commentExtension.commentThreshold : this.threshold = -100;
+      this.commentExtension.commentThreshold !== undefined
+        ? (this.threshold = this.commentExtension.commentThreshold)
+        : (this.threshold = -100);
       this.enableThreshold = this.commentExtension.enableThreshold;
     }
 
     this.initTags();
-    this.commentSettingsService.get(this.roomId).subscribe(settings => {
+    this.commentSettingsService.get(this.roomId).subscribe((settings) => {
       this.directSend = settings.directSend;
       this.fileUploadEnabled = settings.fileUploadEnabled;
       this.isLoading = false;
@@ -99,7 +102,10 @@ export class CommentSettingsComponent implements OnInit {
     if (this.tagName.length > 0) {
       if (this.checkIfTagExists()) {
         const msg = this.translationService.instant('settings.tag-error');
-        this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
+        this.notificationService.showAdvanced(
+          msg,
+          AdvancedSnackBarTypes.WARNING
+        );
       } else {
         this.tags.push(this.tagName);
         this.tagName = '';
@@ -114,7 +120,7 @@ export class CommentSettingsComponent implements OnInit {
   }
 
   deleteTag(tag: string) {
-    this.tags = this.tags.filter(o => o !== tag);
+    this.tags = this.tags.filter((o) => o !== tag);
     this.tagExtension['tags'] = this.tags;
     this.room.extensions.tags = this.tagExtension;
     this.saveChanges(false);
@@ -142,7 +148,11 @@ export class CommentSettingsComponent implements OnInit {
 
   updateCommentSettings(directSend?: boolean) {
     this.directSend = directSend ?? this.directSend;
-    const commentSettings = new CommentSettings(this.roomId, this.directSend, this.fileUploadEnabled);
+    const commentSettings = new CommentSettings(
+      this.roomId,
+      this.directSend,
+      this.fileUploadEnabled
+    );
     this.commentSettingsService.update(commentSettings).subscribe();
   }
 
@@ -154,15 +164,22 @@ export class CommentSettingsComponent implements OnInit {
   saveChanges(addedTag?: boolean) {
     this.saveEvent.emit(new UpdateEvent(this.room, false));
     if (addedTag !== undefined) {
-      const msg = this.translationService.instant(addedTag ? 'settings.tag-added' : 'settings.tag-removed');
-      this.notificationService.showAdvanced(msg, addedTag ? AdvancedSnackBarTypes.SUCCESS : AdvancedSnackBarTypes.WARNING);
+      const msg = this.translationService.instant(
+        addedTag ? 'settings.tag-added' : 'settings.tag-removed'
+      );
+      this.notificationService.showAdvanced(
+        msg,
+        addedTag ? AdvancedSnackBarTypes.SUCCESS : AdvancedSnackBarTypes.WARNING
+      );
     }
   }
 
   announceThreshold() {
-    this.translationService.get('settings.a11y-threshold-changed', { value: this.threshold }).subscribe(msg => {
-      this.liveAnnouncer.clear();
-      this.liveAnnouncer.announce(msg);
-    });
+    this.translationService
+      .get('settings.a11y-threshold-changed', { value: this.threshold })
+      .subscribe((msg) => {
+        this.liveAnnouncer.clear();
+        this.liveAnnouncer.announce(msg);
+      });
   }
 }

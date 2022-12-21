@@ -1,9 +1,14 @@
 <div fxLayout="column" fxFill>
   <div fxLayout="row" fxLayoutAlign="end">
-    <button mat-button class="copy-url" (click)="copyShortId()" aria-labelledby="copy-url"
-            appTrackInteraction="Copied room URL">
+    <button
+      mat-button
+      class="copy-url"
+      (click)="copyShortId()"
+      aria-labelledby="copy-url"
+      appTrackInteraction="Copied room URL"
+    >
       <mat-icon>content_copy</mat-icon>
-      {{ 'dialog.copy-url' | translate}}
+      {{ 'dialog.copy-url' | translate }}
     </button>
   </div>
   <div fxFill fxLayout="row" fxLayoutAlign="center center">
@@ -13,16 +18,28 @@
           <mat-icon class="web-icon disabled">language</mat-icon>
         </lib-extension-point>
         <span *ngIf="!useJoinUrl" class="url">{{ displayUrl }}</span>
-        <span class="url">{{useJoinUrl ? displayUrl : (shortId | splitShortId: false)}}</span>
-        <lib-extension-point *ngIf="passwordProtected" extensionId="share-room-password"></lib-extension-point>
+        <span class="url">{{
+          useJoinUrl ? displayUrl : (shortId | splitShortId : false)
+        }}</span>
+        <lib-extension-point
+          *ngIf="passwordProtected"
+          extensionId="share-room-password"
+        ></lib-extension-point>
       </h1>
       <mat-divider vertical></mat-divider>
-      <qr-code fxLayout="column" fxLayoutAlign="center center" [value]="qrUrl"
-              [size]="qrWidth" [lightColor]="bgColor" [darkColor]="fgColor" [errorCorrectionLevel]="'M'"
-              [margin]="0"></qr-code>
+      <qr-code
+        fxLayout="column"
+        fxLayoutAlign="center center"
+        [value]="qrUrl"
+        [size]="qrWidth"
+        [lightColor]="bgColor"
+        [darkColor]="fgColor"
+        [errorCorrectionLevel]="'M'"
+        [margin]="0"
+      ></qr-code>
     </div>
   </div>
 </div>
 <div class="visually-hidden">
-  <div id="copy-url">{{ 'dialog.a11y-copy-url' | translate}}</div>
+  <div id="copy-url">{{ 'dialog.a11y-copy-url' | translate }}</div>
 </div>

@@ -13,7 +13,7 @@ import {
   MockMatDialog,
   MockNotificationService,
   MockRouter,
-  JsonTranslationLoader
+  JsonTranslationLoader,
 } from '@arsnova/testing/test-helpers';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { of } from 'rxjs';
@@ -23,7 +23,12 @@ describe('LoginComponent', () => {
   let component: LoginComponent;
   let fixture: ComponentFixture<LoginComponent>;
 
-  const mockAuthenticationService = jasmine.createSpyObj(['getCurrentAuthentication', 'isLoggedIn', 'login', 'loginViaSso']);
+  const mockAuthenticationService = jasmine.createSpyObj([
+    'getCurrentAuthentication',
+    'isLoggedIn',
+    'login',
+    'loginViaSso',
+  ]);
   mockAuthenticationService.getCurrentAuthentication.and.returnValue(of({}));
 
   const mockDialogService = jasmine.createSpyObj(['openUserActivationDialog']);
@@ -32,63 +37,60 @@ describe('LoginComponent', () => {
 
   const data = {
     apiConfig: {
-      authenticationProviders: []
-    }
+      authenticationProviders: [],
+    },
   };
 
   const activatedRouteStub = new ActivatedRouteStub(null, data);
 
-  beforeEach(async() => {
+  beforeEach(async () => {
     TestBed.configureTestingModule({
-      declarations: [ LoginComponent ],
+      declarations: [LoginComponent],
       imports: [
         TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
-            useClass: JsonTranslationLoader
+            useClass: JsonTranslationLoader,
           },
-          isolate: true
-        })
+          isolate: true,
+        }),
       ],
       providers: [
         {
           provide: AuthenticationService,
-          useValue: mockAuthenticationService
+          useValue: mockAuthenticationService,
         },
         {
           provide: Router,
-          useClass: MockRouter
+          useClass: MockRouter,
         },
         {
           provide: NotificationService,
-          useClass: MockNotificationService
+          useClass: MockNotificationService,
         },
         {
           provide: MatDialog,
-          useClass: MockMatDialog
+          useClass: MockMatDialog,
         },
         {
           provide: EventService,
-          useClass: MockEventService
+          useClass: MockEventService,
         },
         {
           provide: DialogService,
-          useValue: mockDialogService
+          useValue: mockDialogService,
         },
         {
           provide: ActivatedRoute,
-          useValue: activatedRouteStub
+          useValue: activatedRouteStub,
         },
         {
           provide: RoutingService,
-          useValue: mockRoutingService
-        }
+          useValue: mockRoutingService,
+        },
       ],
-      schemas: [
-        NO_ERRORS_SCHEMA
-      ]
-    })
-    .compileComponents();
+      schemas: [NO_ERRORS_SCHEMA],
+    }).compileComponents();
     fixture = TestBed.createComponent(LoginComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

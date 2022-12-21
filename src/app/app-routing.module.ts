@@ -1,6 +1,9 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, ROUTES, Routes } from '@angular/router';
-import { ExtensionRouteProvider, RouteMountPoint } from '../../projects/extension-point/src/lib/extension-route';
+import {
+  ExtensionRouteProvider,
+  RouteMountPoint,
+} from '../../projects/extension-point/src/lib/extension-route';
 import { PageNotFoundComponent } from './components/shared/page-not-found/page-not-found.component';
 import { HomePageComponent } from './components/home/home-page/home-page.component';
 import { UserHomeComponent } from './components/home/user-home/user-home.component';
@@ -21,88 +24,98 @@ const routes: Routes = [
   {
     path: 'home',
     redirectTo: '',
-    pathMatch: 'full'
+    pathMatch: 'full',
   },
   {
     path: '',
-    component: HomePageComponent
+    component: HomePageComponent,
   },
   {
     path: 'login',
-    component: LoginComponent
+    component: LoginComponent,
   },
   {
     path: 'register',
-    component: RegisterComponent
+    component: RegisterComponent,
   },
   {
     path: 'password-reset/:email',
-    component: PasswordResetComponent
+    component: PasswordResetComponent,
   },
   {
     path: 'request-password-reset',
-    component: RequestPasswordResetComponent
+    component: RequestPasswordResetComponent,
   },
   {
     path: 'user',
     canActivate: [AuthenticationGuard],
-    component: UserHomeComponent
+    component: UserHomeComponent,
   },
   {
     path: 'join/:shortId',
-    redirectTo: 'p/:shortId'
+    redirectTo: 'p/:shortId',
   },
   {
     path: 'import',
     canActivate: [AuthenticationGuard],
-    component: ImportComponent
+    component: ImportComponent,
   },
   {
     path: 'account/:accountSettingsName',
-    component: UserProfileComponent
+    component: UserProfileComponent,
   },
   {
     path: 'redeem-token/:roomId/token/:token',
     canActivate: [AuthenticationGuard],
-    component: RedeemTokenComponent
+    component: RedeemTokenComponent,
   },
   {
     path: 'demo',
     canActivate: [DemoRoomGuard],
-    component: UserHomeComponent
+    component: UserHomeComponent,
   },
   {
     path: 'participant',
-    redirectTo: 'p'
+    redirectTo: 'p',
   },
   {
     path: 'creator',
-    redirectTo: 'edit'
+    redirectTo: 'edit',
   },
   {
     path: 'presentation',
-    redirectTo: 'present'
+    redirectTo: 'present',
   },
   {
     path: 'admin',
-    loadChildren: () => import('./components/admin/admin.module').then(m => m.AdminModule)
+    loadChildren: () =>
+      import('./components/admin/admin.module').then((m) => m.AdminModule),
   },
   {
     path: 'edit',
-    loadChildren: () => import('./components/creator/creator.module').then(m => m.CreatorModule)
+    loadChildren: () =>
+      import('./components/creator/creator.module').then(
+        (m) => m.CreatorModule
+      ),
   },
   {
     path: 'p',
-    loadChildren: () => import('./components/participant/participant.module').then(m => m.ParticipantModule)
+    loadChildren: () =>
+      import('./components/participant/participant.module').then(
+        (m) => m.ParticipantModule
+      ),
   },
   {
     path: 'moderator',
-    redirectTo: 'edit'
+    redirectTo: 'edit',
   },
   {
     path: 'present',
-    loadChildren: () => import('./components/presentation/presentation.module').then(m => m.PresentationModule)
-  }
+    loadChildren: () =>
+      import('./components/presentation/presentation.module').then(
+        (m) => m.PresentationModule
+      ),
+  },
 ];
 
 @NgModule({
@@ -115,39 +128,40 @@ const routes: Routes = [
         {
           path: '',
           resolve: {
-            apiConfig: ApiConfigResolver
+            apiConfig: ApiConfigResolver,
           },
           outlet: 'header',
-          component: HeaderComponent
+          component: HeaderComponent,
         },
         {
           path: '',
           resolve: {
-            apiConfig: ApiConfigResolver
+            apiConfig: ApiConfigResolver,
           },
           outlet: 'footer',
-          component: FooterComponent
+          component: FooterComponent,
         },
         {
           path: '',
           resolve: {
-            apiConfig: ApiConfigResolver
+            apiConfig: ApiConfigResolver,
           },
           children: [
             ...routes,
             ...ExtensionRouteProvider.extractRoutesForMountPoint(
-                RouteMountPoint.ROOT, extensionRouteProviders),
+              RouteMountPoint.ROOT,
+              extensionRouteProviders
+            ),
             {
               path: '**',
-              component: PageNotFoundComponent
-            }
-          ]
-        }
+              component: PageNotFoundComponent,
+            },
+          ],
+        },
       ],
       deps: [ExtensionRouteProvider],
-      multi: true
-    }
-  ]
+      multi: true,
+    },
+  ],
 })
-export class AppRoutingModule {
-}
+export class AppRoutingModule {}

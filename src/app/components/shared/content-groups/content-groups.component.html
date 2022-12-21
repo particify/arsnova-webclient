@@ -1,14 +1,31 @@
-<mat-card tabindex="0" role=button id="contentGroup" fxLayoutAlign="start center" (click)="viewContents()"
-          attr.aria-label="{{ 'room-page.a11y-enter-content-group' | translate:{name: contentGroupName,
-          locked: 'room-page.' + (isLocked ? 'locked' : 'unlocked') | translate} }}"
-          (keyup.enter)="viewContents()">
+<mat-card
+  tabindex="0"
+  role="button"
+  id="contentGroup"
+  fxLayoutAlign="start center"
+  (click)="viewContents()"
+  attr.aria-label="{{
+    'room-page.a11y-enter-content-group'
+      | translate
+        : {
+            name: contentGroupName,
+            locked:
+              'room-page.' + (isLocked ? 'locked' : 'unlocked') | translate
+          }
+  }}"
+  (keyup.enter)="viewContents()"
+>
   <div fxLayout="row" fxLayoutAlign="start center" class="container">
     <h3 class="ellipsis">
-      {{contentGroupName}}
+      {{ contentGroupName }}
     </h3>
     <app-list-badge class="badge" [count]="length"></app-list-badge>
     <span class="fill-remaining-space"></span>
-    <mat-icon *ngIf="isLocked" class="locked" [matTooltip]="'room-page.group-locked' | translate">locked</mat-icon>
+    <mat-icon
+      *ngIf="isLocked"
+      class="locked"
+      [matTooltip]="'room-page.group-locked' | translate"
+      >locked</mat-icon
+    >
   </div>
-
 </mat-card>

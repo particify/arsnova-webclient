@@ -13,10 +13,9 @@ import { PrioritizationAnswer } from '../../../../models/prioritization-answer';
 @Component({
   selector: 'app-content-participant',
   templateUrl: './content-participant.component.html',
-  styleUrls: ['./content-participant.component.scss']
+  styleUrls: ['./content-participant.component.scss'],
 })
 export class ContentParticipantComponent implements OnInit {
-
   @Input() content: Content;
   @Input() answer: Answer;
   @Input() lastContent: boolean;
@@ -45,9 +44,16 @@ export class ContentParticipantComponent implements OnInit {
     if (this.answer) {
       this.alreadySent = true;
       this.checkIfAbstention(this.answer);
-      if ([ContentType.CHOICE, ContentType.BINARY, ContentType.SORT].includes(this.content.format)) {
-        for (const option of (this.answer as ChoiceAnswer).selectedChoiceIndexes ?? []) {
-          this.answersString = this.answersString.concat((this.content as ContentChoice).options[option].label + ',');
+      if (
+        [ContentType.CHOICE, ContentType.BINARY, ContentType.SORT].includes(
+          this.content.format
+        )
+      ) {
+        for (const option of (this.answer as ChoiceAnswer)
+          .selectedChoiceIndexes ?? []) {
+          this.answersString = this.answersString.concat(
+            (this.content as ContentChoice).options[option].label + ','
+          );
         }
       } else if (this.content.format === ContentType.WORDCLOUD) {
         for (const text of (this.answer as MultipleTextsAnswer).texts ?? []) {
@@ -65,7 +71,7 @@ export class ContentParticipantComponent implements OnInit {
       roomId: roomId,
       refType: 'content',
       refId: refId,
-      detailedView: false
+      detailedView: false,
     };
   }
 
@@ -74,7 +80,7 @@ export class ContentParticipantComponent implements OnInit {
       this.hasAbstained = !(answer as TextAnswer).body;
     } else if (answer.format === ContentType.WORDCLOUD) {
       this.hasAbstained = !((answer as MultipleTextsAnswer).texts?.length > 0);
-    } else if(answer.format === ContentType.PRIORITIZATION) {
+    } else if (answer.format === ContentType.PRIORITIZATION) {
       this.hasAbstained = !(answer as PrioritizationAnswer).assignedPoints;
     } else {
       this.hasAbstained = !(answer as ChoiceAnswer).selectedChoiceIndexes;
@@ -97,7 +103,9 @@ export class ContentParticipantComponent implements OnInit {
   goToStats() {
     this.flipped = !this.flipped;
     setTimeout(() => {
-      document.getElementById((this.flipped ? 'message-button' : 'content-message')).focus();
+      document
+        .getElementById(this.flipped ? 'message-button' : 'content-message')
+        .focus();
     }, 500);
   }
 
@@ -115,7 +123,9 @@ export class ContentParticipantComponent implements OnInit {
       if (this.content.format !== ContentType.CHOICE) {
         format = this.content.format.toLowerCase();
       } else {
-        format = (this.content as ContentChoice).multiple ? 'multiple' : 'single';
+        format = (this.content as ContentChoice).multiple
+          ? 'multiple'
+          : 'single';
       }
       msg += format;
     }

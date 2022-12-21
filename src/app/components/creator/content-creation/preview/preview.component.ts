@@ -16,10 +16,9 @@ import { AnswerWithPoints } from '@arsnova/app/models/answer-with-points';
 @Component({
   selector: 'app-preview',
   templateUrl: './preview.component.html',
-  styleUrls: ['./preview.component.scss']
+  styleUrls: ['./preview.component.scss'],
 })
 export class PreviewComponent implements OnInit {
-
   @Input() content: Content;
   @Input() isEditMode: boolean;
   @Output() flipEvent = new EventEmitter<boolean>();
@@ -38,13 +37,23 @@ export class PreviewComponent implements OnInit {
     private answerService: ContentAnswerService,
     private likertScaleService: LikertScaleService,
     private translateService: TranslateService
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     const format = this.content.format;
-    if ([ContentType.CHOICE, ContentType.BINARY, ContentType.SORT, ContentType.PRIORITIZATION].indexOf(format) > -1) {
+    if (
+      [
+        ContentType.CHOICE,
+        ContentType.BINARY,
+        ContentType.SORT,
+        ContentType.PRIORITIZATION,
+      ].indexOf(format) > -1
+    ) {
       const options = (this.content as ContentChoice).options;
-      this.answerOptions = format === ContentType.SORT ? this.answerService.shuffleAnswerOptions(options) : options;
+      this.answerOptions =
+        format === ContentType.SORT
+          ? this.answerService.shuffleAnswerOptions(options)
+          : options;
       this.multipleAnswers = (this.content as ContentChoice).multiple;
       if (format === ContentType.PRIORITIZATION) {
         options.forEach((option) => {
@@ -52,22 +61,31 @@ export class PreviewComponent implements OnInit {
         });
       }
     } else if (format === ContentType.SCALE) {
-      const scaleContent = this.content as ContentScale
-      const optionLabels$ = this.likertScaleService.getOptionLabels(
-          scaleContent.optionTemplate,
-          scaleContent.optionCount)
-          .map(l => <Observable<string>>this.translateService.get(l));
-      forkJoin(optionLabels$).subscribe(labels =>
-          this.answerOptions = labels.map(l =>
-              ({ label: l, renderedLabel: l })));
+      const scaleContent = this.content as ContentScale;
+      const optionLabels$ = this.likertScaleService
+        .getOptionLabels(scaleContent.optionTemplate, scaleContent.optionCount)
+        .map((l) => <Observable<string>>this.translateService.get(l));
+      forkJoin(optionLabels$).subscribe(
+        (labels) =>
+          (this.answerOptions = labels.map((l) => ({
+            label: l,
+            renderedLabel: l,
+          })))
+      );
     } else if (format === ContentType.WORDCLOUD) {
-      this.words = new Array<string>((this.content as ContentWordcloud).maxAnswers).fill('');
+      this.words = new Array<string>(
+        (this.content as ContentWordcloud).maxAnswers
+      ).fill('');
     }
     if (this.answerOptions) {
-      this.answerOptions.map(o => this.selectableAnswers.push(new SelectableAnswer(o, false)));
+      this.answerOptions.map((o) =>
+        this.selectableAnswers.push(new SelectableAnswer(o, false))
+      );
     }
-    this.markdownFeatureset = [ContentType.SLIDE, ContentType.FLASHCARD].indexOf(format) > -1 ? MarkdownFeatureset.EXTENDED
-      : MarkdownFeatureset.SIMPLE;
+    this.markdownFeatureset =
+      [ContentType.SLIDE, ContentType.FLASHCARD].indexOf(format) > -1
+        ? MarkdownFeatureset.EXTENDED
+        : MarkdownFeatureset.SIMPLE;
     this.prepareAttachmentData();
   }
 
@@ -83,7 +101,7 @@ export class PreviewComponent implements OnInit {
     this.attachmentData = {
       refType: 'content',
       detailedView: false,
-      useTempAttachments: true
+      useTempAttachments: true,
     };
   }
 }

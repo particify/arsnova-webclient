@@ -1,6 +1,10 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { ContentScaleParticipantComponent } from './content-scale-participant.component';
-import { ActivatedRoute, ActivatedRouteSnapshot, Router } from '@angular/router';
+import {
+  ActivatedRoute,
+  ActivatedRouteSnapshot,
+  Router,
+} from '@angular/router';
 import { NotificationService } from '@arsnova/app/services/util/notification.service';
 import { LanguageService } from '@arsnova/app/services/util/language.service';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
@@ -10,7 +14,7 @@ import {
   MockNotificationService,
   ActivatedRouteStub,
   MockGlobalStorageService,
-  MockRouter
+  MockRouter,
 } from '@arsnova/testing/test-helpers';
 import { of } from 'rxjs';
 import { GlobalStorageService } from '@arsnova/app/services/util/global-storage.service';
@@ -20,7 +24,6 @@ import { NO_ERRORS_SCHEMA, EventEmitter } from '@angular/core';
 import { LikertScaleService } from '@arsnova/app/services/util/likert-scale.service';
 import { ContentScale } from '@arsnova/app/models/content-scale';
 import { LikertScaleTemplate } from '@arsnova/app/models/likert-scale-template.enum';
-
 
 describe('ContentScaleParticipantComponent', () => {
   let component: ContentScaleParticipantComponent;
@@ -37,8 +40,8 @@ describe('ContentScaleParticipantComponent', () => {
 
   const params = {
     shortId: '12345678',
-    seriesName: 'Quiz'
-  }
+    seriesName: 'Quiz',
+  };
 
   snapshot.params = of([params]);
 
@@ -46,55 +49,52 @@ describe('ContentScaleParticipantComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ ContentScaleParticipantComponent ],
+      declarations: [ContentScaleParticipantComponent],
       imports: [
         TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
-            useClass: JsonTranslationLoader
+            useClass: JsonTranslationLoader,
           },
-          isolate: true
-        })
+          isolate: true,
+        }),
       ],
       providers: [
         {
           provide: ContentAnswerService,
-          useValue: mockContentAnswerService
+          useValue: mockContentAnswerService,
         },
         {
           provide: NotificationService,
-          useClass: MockNotificationService
+          useClass: MockNotificationService,
         },
         {
           provide: LanguageService,
-          useClass: MockLangService
+          useClass: MockLangService,
         },
         {
           provide: ActivatedRoute,
-          useValue: activatedRouteStub
+          useValue: activatedRouteStub,
         },
         {
           provide: GlobalStorageService,
-          useClass: MockGlobalStorageService
+          useClass: MockGlobalStorageService,
         },
         {
           provide: Router,
-          useClass: MockRouter
+          useClass: MockRouter,
         },
         {
           provide: ContentService,
-          useValue: mockContentService
+          useValue: mockContentService,
         },
         {
           provide: LikertScaleService,
-          useValue: mockLikertScaleService
-        }
+          useValue: mockLikertScaleService,
+        },
       ],
-      schemas: [
-        NO_ERRORS_SCHEMA
-      ]
-    })
-    .compileComponents();
+      schemas: [NO_ERRORS_SCHEMA],
+    }).compileComponents();
   }));
 
   beforeEach(() => {

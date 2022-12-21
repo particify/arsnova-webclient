@@ -25,14 +25,13 @@ import { KeyButtonBarComponent } from './bars/key-button-bar/key-button-bar.comp
 import { BarNotificationComponent } from './bars/bar-notification/bar-notification.component';
 import { QrCodeComponent } from './qr-code/qr-code.component';
 
-
 @NgModule({
   declarations: [
     ControlBarComponent,
     PresentationComponent,
     KeyButtonBarComponent,
     BarNotificationComponent,
-    QrCodeComponent
+    QrCodeComponent,
   ],
   imports: [
     extensions,
@@ -48,13 +47,10 @@ import { QrCodeComponent } from './qr-code/qr-code.component';
     TranslateModule.forChild({
       loader: {
         provide: TranslateLoader,
-        useFactory: (TranslateHttpLoaderFactory),
-        deps: [
-          HttpClient,
-          TRANSLATION_MODULE_NAME
-        ]
+        useFactory: TranslateHttpLoaderFactory,
+        deps: [HttpClient, TRANSLATION_MODULE_NAME],
       },
-      isolate: true
+      isolate: true,
     }),
     MatRippleModule,
     MatSelectModule,
@@ -62,6 +58,6 @@ import { QrCodeComponent } from './qr-code/qr-code.component';
     MatMenuModule,
     MatTooltipModule,
     QrCodeModule,
-  ]
+  ],
 })
-export class PresentationModule { }
+export class PresentationModule {}

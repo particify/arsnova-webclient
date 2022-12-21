@@ -29,15 +29,12 @@ import { ExtensionPointModule } from '../../../../projects/extension-point/src/l
     TranslateModule.forChild({
       loader: {
         provide: TranslateLoader,
-        useFactory: (TranslateHttpLoaderFactory),
-        deps: [
-          HttpClient,
-          TRANSLATION_MODULE_NAME
-        ]
+        useFactory: TranslateHttpLoaderFactory,
+        deps: [HttpClient, TRANSLATION_MODULE_NAME],
       },
-      isolate: true
+      isolate: true,
     }),
-    ExtensionPointModule
+    ExtensionPointModule,
   ],
   declarations: [
     AdminHomeComponent,
@@ -49,9 +46,7 @@ import { ExtensionPointModule } from '../../../../projects/extension-point/src/l
   ],
   providers: [
     { provide: TRANSLATION_MODULE_NAME, useValue: 'admin' },
-    AdminService
-  ]
+    AdminService,
+  ],
 })
-export class AdminModule {
-
-}
+export class AdminModule {}

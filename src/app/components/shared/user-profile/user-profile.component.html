@@ -3,38 +3,81 @@
 </div>
 <div fxLayoutAlign="center">
   <mat-accordion>
-    <mat-expansion-panel class="settings-panel" [expanded]="page === 'user'" (afterExpand)="updatePage('user')">
+    <mat-expansion-panel
+      class="settings-panel"
+      [expanded]="page === 'user'"
+      (afterExpand)="updatePage('user')"
+    >
       <mat-expansion-panel-header>
-        <app-settings-panel-header [text]="'user-profile.account-settings'" [icon]="'manage_accounts'"></app-settings-panel-header>
+        <app-settings-panel-header
+          [text]="'user-profile.account-settings'"
+          [icon]="'manage_accounts'"
+        ></app-settings-panel-header>
       </mat-expansion-panel-header>
-      <app-loading-indicator [size]="50" *ngIf="isLoading"></app-loading-indicator>
+      <app-loading-indicator
+        [size]="50"
+        *ngIf="isLoading"
+      ></app-loading-indicator>
       <div *ngIf="!isLoading">
-        <lib-extension-point extensionId="profile-subscription"></lib-extension-point>
-        <p class="username">{{ ('user-profile.username' | translate) + ': ' + auth.loginId }}</p>
+        <lib-extension-point
+          extensionId="profile-subscription"
+        ></lib-extension-point>
+        <p class="username">
+          {{ ('user-profile.username' | translate) + ': ' + auth.loginId }}
+        </p>
         <div fxLayout="column" fxLayoutGap="16px">
           <div fxLayout="row wrap" class="container">
             <mat-icon class="type-icon">person</mat-icon>
             <ng-container *ngFor="let formField of formFields; let i = index">
-              <app-user-form-field *ngIf="i < 2" class="input-field" [disabled]="isSso" [formField]="formField" (fieldUpdated)="updatePerson($event)"></app-user-form-field>
+              <app-user-form-field
+                *ngIf="i < 2"
+                class="input-field"
+                [disabled]="isSso"
+                [formField]="formField"
+                (fieldUpdated)="updatePerson($event)"
+              ></app-user-form-field>
             </ng-container>
           </div>
-          <div *ngIf="isSso" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="16px">
+          <div
+            *ngIf="isSso"
+            fxLayout="row"
+            fxLayoutAlign="start center"
+            fxLayoutGap="16px"
+          >
             <mat-icon class="type-icon">mail</mat-icon>
-            <app-user-form-field class="full-width" [disabled]="true" [formField]="formFields[4]"></app-user-form-field>
+            <app-user-form-field
+              class="full-width"
+              [disabled]="true"
+              [formField]="formFields[4]"
+            ></app-user-form-field>
           </div>
           <div *ngIf="!isSso" fxLayout="row wrap" class="container">
             <mat-icon class="type-icon">business</mat-icon>
             <ng-container *ngFor="let formField of formFields; let i = index">
-              <app-user-form-field *ngIf="i >= 2 && i < 4" class="input-field" [formField]="formField" (fieldUpdated)="updatePerson($event)"></app-user-form-field>
+              <app-user-form-field
+                *ngIf="i >= 2 && i < 4"
+                class="input-field"
+                [formField]="formField"
+                (fieldUpdated)="updatePerson($event)"
+              ></app-user-form-field>
             </ng-container>
           </div>
         </div>
         <div>
-          <div fxLayout="row wrap" class="delete-container" fxLayoutAlign="space-between center" fxLayoutGap="16px">
+          <div
+            fxLayout="row wrap"
+            class="delete-container"
+            fxLayoutAlign="space-between center"
+            fxLayoutGap="16px"
+          >
             <div>
               <span>{{ 'user-profile.delete-account-info' | translate }}</span>
             </div>
-            <button mat-stroked-button class="delete" (click)="openDeleteUserDialog()">
+            <button
+              mat-stroked-button
+              class="delete"
+              (click)="openDeleteUserDialog()"
+            >
               <mat-icon>delete</mat-icon>
               {{ 'user-profile.delete-account' | translate }}
             </button>
@@ -42,16 +85,42 @@
         </div>
       </div>
     </mat-expansion-panel>
-    <mat-expansion-panel class="settings-panel" [expanded]="page === 'preferences'" (afterExpand)="updatePage('preferences')">
+    <mat-expansion-panel
+      class="settings-panel"
+      [expanded]="page === 'preferences'"
+      (afterExpand)="updatePage('preferences')"
+    >
       <mat-expansion-panel-header>
-        <app-settings-panel-header [text]="'user-profile.preferences'" [icon]="'settings_suggest'"></app-settings-panel-header>
+        <app-settings-panel-header
+          [text]="'user-profile.preferences'"
+          [icon]="'settings_suggest'"
+        ></app-settings-panel-header>
       </mat-expansion-panel-header>
-      <app-loading-indicator [size]="50" *ngIf="isLoading"></app-loading-indicator>
+      <app-loading-indicator
+        [size]="50"
+        *ngIf="isLoading"
+      ></app-loading-indicator>
       <div *ngIf="!isLoading">
         <span>{{ 'user-profile.preferences-description' | translate }}</span>
-        <app-settings-slide-toggle label="user-profile.visualization-unit-percent" [isChecked]="settings.contentVisualizationUnitPercent" (toggleEvent)="updateSettings($event, 'contentVisualizationUnitPercent')"></app-settings-slide-toggle>
-        <app-settings-slide-toggle label="user-profile.answers-below-chart" [isChecked]="settings.contentAnswersDirectlyBelowChart" (toggleEvent)="updateSettings($event, 'contentAnswersDirectlyBelowChart')"></app-settings-slide-toggle>
-        <app-settings-slide-toggle label="user-profile.show-results-directly" [isChecked]="settings.showContentResultsDirectly" (toggleEvent)="updateSettings($event, 'showContentResultsDirectly')"></app-settings-slide-toggle>
+        <app-settings-slide-toggle
+          label="user-profile.visualization-unit-percent"
+          [isChecked]="settings.contentVisualizationUnitPercent"
+          (toggleEvent)="
+            updateSettings($event, 'contentVisualizationUnitPercent')
+          "
+        ></app-settings-slide-toggle>
+        <app-settings-slide-toggle
+          label="user-profile.answers-below-chart"
+          [isChecked]="settings.contentAnswersDirectlyBelowChart"
+          (toggleEvent)="
+            updateSettings($event, 'contentAnswersDirectlyBelowChart')
+          "
+        ></app-settings-slide-toggle>
+        <app-settings-slide-toggle
+          label="user-profile.show-results-directly"
+          [isChecked]="settings.showContentResultsDirectly"
+          (toggleEvent)="updateSettings($event, 'showContentResultsDirectly')"
+        ></app-settings-slide-toggle>
         <lib-extension-point extensionId="user-quota"></lib-extension-point>
       </div>
     </mat-expansion-panel>

@@ -2,15 +2,38 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { BehaviorSubject, Observable, of, timer } from 'rxjs';
-import { catchError, concatMap, filter, first, map, switchAll, switchMap, shareReplay, take, tap } from 'rxjs/operators';
+import {
+  catchError,
+  concatMap,
+  filter,
+  first,
+  map,
+  switchAll,
+  switchMap,
+  shareReplay,
+  take,
+  tap,
+} from 'rxjs/operators';
 import { AbstractHttpService } from './abstract-http.service';
-import { GlobalStorageService, STORAGE_KEYS } from '../util/global-storage.service';
-import { ClientAuthentication, TransientClientAuthentication } from '../../models/client-authentication';
-import { AuthenticationStatus, ClientAuthenticationResult } from '../../models/client-authentication-result';
+import {
+  GlobalStorageService,
+  STORAGE_KEYS,
+} from '../util/global-storage.service';
+import {
+  ClientAuthentication,
+  TransientClientAuthentication,
+} from '../../models/client-authentication';
+import {
+  AuthenticationStatus,
+  ClientAuthenticationResult,
+} from '../../models/client-authentication-result';
 import { EventService } from '../util/event.service';
 import JwtDecode from 'jwt-decode';
 import { TranslateService } from '@ngx-translate/core';
-import { AdvancedSnackBarTypes, NotificationService } from '../util/notification.service';
+import {
+  AdvancedSnackBarTypes,
+  NotificationService,
+} from '../util/notification.service';
 import { ApiConfigService } from './api-config.service';
 import { RoutingService } from '../util/routing.service';
 import { environment } from '../../../environments/environment';
@@ -21,7 +44,7 @@ const REFRESH_INTERVAL_MINUTES = 30;
 const REFRESH_INTERVAL_MAX_OFFSET_MINUTES = 2;
 
 interface Jwt {
-  roles: string[]
+  roles: string[];
 }
 
 /**
@@ -39,7 +62,7 @@ export class AuthenticationService extends AbstractHttpService<ClientAuthenticat
   private auth$$: BehaviorSubject<Observable<ClientAuthentication>>;
 
   private httpOptions = {
-    headers: new HttpHeaders({})
+    headers: new HttpHeaders({}),
   };
 
   private redirect: string;
@@ -48,7 +71,7 @@ export class AuthenticationService extends AbstractHttpService<ClientAuthenticat
     guest: '/guest',
     login: '/login',
     registered: '/registered',
-    sso: '/sso'
+    sso: '/sso',
   };
 
   constructor(
@@ -59,10 +82,15 @@ export class AuthenticationService extends AbstractHttpService<ClientAuthenticat
     protected notificationService: NotificationService,
     private apiConfigService: ApiConfigService,
     private routingService: RoutingService,
-    private router: Router) {
+    private router: Router
+  ) {
     super('/auth', http, eventService, translateService, notificationService);
-    const savedAuth: ClientAuthentication = this.globalStorageService.getItem(STORAGE_KEYS.USER);
-    const transientAuth = savedAuth ? new TransientClientAuthentication(savedAuth) : null;
+    const savedAuth: ClientAuthentication = this.globalStorageService.getItem(
+      STORAGE_KEYS.USER
+    );
+    const transientAuth = savedAuth
+      ? new TransientClientAuthentication(savedAuth)
+      : null;
     this.auth$$ = new BehaviorSubject(new BehaviorSubject(transientAuth));
   }
 
@@ -75,19 +103,22 @@ export class AuthenticationService extends AbstractHttpService<ClientAuthenticat
     }
 
     if (!environment.production) {
-      this.getAuthenticationChanges().subscribe(auth => {
+      this.getAuthenticationChanges().subscribe((auth) => {
         console.log('Authentication changed', auth);
       });
     }
 
-    this.apiConfigService.getApiConfig$().subscribe(config => {
-      const popupDimensions = /^([0-9]+)x([0-9]+)$/.exec(config.ui.sso?.popup?.dimensions || '');
+    this.apiConfigService.getApiConfig$().subscribe((config) => {
+      const popupDimensions = /^([0-9]+)x([0-9]+)$/.exec(
+        config.ui.sso?.popup?.dimensions || ''
+      );
       if (popupDimensions) {
         this.popupDimensions = [+popupDimensions[1], +popupDimensions[2]];
       }
     });
-    const interval = REFRESH_INTERVAL_MINUTES * 60 * 1000
-        + REFRESH_INTERVAL_MAX_OFFSET_MINUTES * Math.random() * 60 * 1000;
+    const interval =
+      REFRESH_INTERVAL_MINUTES * 60 * 1000 +
+      REFRESH_INTERVAL_MAX_OFFSET_MINUTES * Math.random() * 60 * 1000;
     setInterval(() => {
       if (this.getCurrentAuthentication() != null) {
         this.refreshLogin();
@@ -114,26 +145,46 @@ export class AuthenticationService extends AbstractHttpService<ClientAuthenticat
    * login as guest is performed.
    */
   requireAuthentication(): Observable<ClientAuthentication> {
-    return this.auth$$.pipe(switchAll(), first(), switchMap(auth => {
-      if (auth) {
-        return of(auth);
-      }
+    return this.auth$$.pipe(
+      switchAll(),
+      first(),
+      switchMap((auth) => {
+        if (auth) {
+          return of(auth);
+        }
 
-      return this.loginGuest().pipe(map(result => result.authentication));
-    }));
+        return this.loginGuest().pipe(map((result) => result.authentication));
+      })
+    );
   }
 
   /**
    * Authenticates a user using loginId (username or email) and password.
    */
-  login(loginId: string, password: string, providerId = 'user-db'): Observable<ClientAuthenticationResult> {
-    const providerPath = providerId === 'user-db' ? this.serviceApiUrl.registered : '/' + providerId;
-    const connectionUrl: string = this.buildUri(this.serviceApiUrl.login + providerPath);
+  login(
+    loginId: string,
+    password: string,
+    providerId = 'user-db'
+  ): Observable<ClientAuthenticationResult> {
+    const providerPath =
+      providerId === 'user-db'
+        ? this.serviceApiUrl.registered
+        : '/' + providerId;
+    const connectionUrl: string = this.buildUri(
+      this.serviceApiUrl.login + providerPath
+    );
 
-    return this.handleLoginResponse(this.http.post<ClientAuthentication>(connectionUrl, {
-      loginId: loginId,
-      password: password
-    }, this.httpOptions), this.isLoggedIn());
+    return this.handleLoginResponse(
+      this.http.post<ClientAuthentication>(
+        connectionUrl,
+        {
+          loginId: loginId,
+          password: password,
+        },
+        this.httpOptions
+      ),
+      this.isLoggedIn()
+    );
   }
 
   /**
@@ -142,33 +193,49 @@ export class AuthenticationService extends AbstractHttpService<ClientAuthenticat
    */
   refreshLogin(): Observable<ClientAuthenticationResult | null> {
     // Load user authentication from local data store if available
-    const savedAuth: ClientAuthentication = this.globalStorageService.getItem(STORAGE_KEYS.USER);
-    const guestToken: string = this.globalStorageService.getItem(STORAGE_KEYS.GUEST_TOKEN);
+    const savedAuth: ClientAuthentication = this.globalStorageService.getItem(
+      STORAGE_KEYS.USER
+    );
+    const guestToken: string = this.globalStorageService.getItem(
+      STORAGE_KEYS.GUEST_TOKEN
+    );
     const token: string = savedAuth?.token || guestToken;
     const guest = token === guestToken;
     if (!token) {
       return of(null);
     }
 
-    const connectionUrl: string = this.buildUri(this.serviceApiUrl.login + '?refresh=true');
-    const loginHttpHeaders = this.httpOptions.headers.set(AUTH_HEADER_KEY, `${AUTH_SCHEME} ${token}`);
-    const auth$ = this.http.post<ClientAuthentication>(connectionUrl, {}, { headers: loginHttpHeaders });
+    const connectionUrl: string = this.buildUri(
+      this.serviceApiUrl.login + '?refresh=true'
+    );
+    const loginHttpHeaders = this.httpOptions.headers.set(
+      AUTH_HEADER_KEY,
+      `${AUTH_SCHEME} ${token}`
+    );
+    const auth$ = this.http.post<ClientAuthentication>(
+      connectionUrl,
+      {},
+      { headers: loginHttpHeaders }
+    );
     return this.handleLoginResponse(auth$).pipe(
-        tap(result => {
-          if (result.status === AuthenticationStatus.INVALID_CREDENTIALS) {
-            console.error('Could not refresh authentication (expired).');
-            if (!guest) {
-              this.handleUnauthorizedError();
-            }
-          } else if (result.status === AuthenticationStatus.UNKNOWN_ERROR) {
-            console.error('Could not refresh authentication.');
-            // Restore authentication from existing credentials if refreshing
-            // fails. It does not matter here that the token might have expired.
-            this.auth$$.next(of(savedAuth));
-          } else if (result.status === AuthenticationStatus.SUCCESS && guest) {
-            this.globalStorageService.setItem(STORAGE_KEYS.GUEST_TOKEN, result.authentication.token);
+      tap((result) => {
+        if (result.status === AuthenticationStatus.INVALID_CREDENTIALS) {
+          console.error('Could not refresh authentication (expired).');
+          if (!guest) {
+            this.handleUnauthorizedError();
           }
-        })
+        } else if (result.status === AuthenticationStatus.UNKNOWN_ERROR) {
+          console.error('Could not refresh authentication.');
+          // Restore authentication from existing credentials if refreshing
+          // fails. It does not matter here that the token might have expired.
+          this.auth$$.next(of(savedAuth));
+        } else if (result.status === AuthenticationStatus.SUCCESS && guest) {
+          this.globalStorageService.setItem(
+            STORAGE_KEYS.GUEST_TOKEN,
+            result.authentication.token
+          );
+        }
+      })
     );
   }
 
@@ -178,9 +245,16 @@ export class AuthenticationService extends AbstractHttpService<ClientAuthenticat
    */
   fetchGuestAuthentication(): Observable<ClientAuthentication> {
     const token = this.getGuestToken();
-    const httpHeaders = this.httpOptions.headers.set(AUTH_HEADER_KEY, `${AUTH_SCHEME} ${token}`);
-    const connectionUrl: string = this.buildUri(this.serviceApiUrl.login + this.serviceApiUrl.guest);
-    return this.http.post<ClientAuthentication>(connectionUrl, null, { headers: httpHeaders });
+    const httpHeaders = this.httpOptions.headers.set(
+      AUTH_HEADER_KEY,
+      `${AUTH_SCHEME} ${token}`
+    );
+    const connectionUrl: string = this.buildUri(
+      this.serviceApiUrl.login + this.serviceApiUrl.guest
+    );
+    return this.http.post<ClientAuthentication>(connectionUrl, null, {
+      headers: httpHeaders,
+    });
   }
 
   getGuestToken(): string {
@@ -192,28 +266,44 @@ export class AuthenticationService extends AbstractHttpService<ClientAuthenticat
    * guest account.
    */
   loginGuest(): Observable<ClientAuthenticationResult> {
-    const connectionUrl: string = this.buildUri(this.serviceApiUrl.login + this.serviceApiUrl.guest);
+    const connectionUrl: string = this.buildUri(
+      this.serviceApiUrl.login + this.serviceApiUrl.guest
+    );
     /* The global storage service is not used for guestToken because it is a legacy item. */
     const guestLoginId = localStorage.getItem('guestToken');
     const payload = guestLoginId ? { loginId: guestLoginId } : null;
-    return this.refreshLogin().pipe(switchMap(result => {
-      localStorage.removeItem('guestToken');
-      if (!result || result.status === AuthenticationStatus.INVALID_CREDENTIALS) {
-        /* Create new guest account */
-        const loginResult$ = this.handleLoginResponse(
-            this.http.post<ClientAuthentication>(connectionUrl, payload, this.httpOptions)).pipe(tap(loginResult => {
+    return this.refreshLogin().pipe(
+      switchMap((result) => {
+        localStorage.removeItem('guestToken');
+        if (
+          !result ||
+          result.status === AuthenticationStatus.INVALID_CREDENTIALS
+        ) {
+          /* Create new guest account */
+          const loginResult$ = this.handleLoginResponse(
+            this.http.post<ClientAuthentication>(
+              connectionUrl,
+              payload,
+              this.httpOptions
+            )
+          ).pipe(
+            tap((loginResult) => {
               if (loginResult.status === AuthenticationStatus.SUCCESS) {
-                this.globalStorageService.setItem(STORAGE_KEYS.GUEST_TOKEN, loginResult.authentication.token);
+                this.globalStorageService.setItem(
+                  STORAGE_KEYS.GUEST_TOKEN,
+                  loginResult.authentication.token
+                );
               }
             })
-        );
+          );
 
-        return loginResult$;
-      }
+          return loginResult$;
+        }
 
-      /* Return existing account */
-      return of(result);
-    }));
+        /* Return existing account */
+        return of(result);
+      })
+    );
   }
 
   /**
@@ -228,13 +318,21 @@ export class AuthenticationService extends AbstractHttpService<ClientAuthenticat
     const [popupW, popupH] = this.popupDimensions;
     const popupX = window.top.screenX + window.top.outerWidth / 2 - popupW / 2;
     const popupY = window.top.screenY + window.top.outerHeight / 2 - popupH / 2;
-    const popup = window.open(ssoUrl, 'auth_popup',
-      `left=${popupX},top=${popupY},width=${popupW},height=${popupH},resizable`);
+    const popup = window.open(
+      ssoUrl,
+      'auth_popup',
+      `left=${popupX},top=${popupY},width=${popupW},height=${popupH},resizable`
+    );
     const auth$ = timer(0, 500).pipe(
       map(() => popup.closed),
       filter((closed) => closed),
-      concatMap(() => this.http.post<ClientAuthentication>(loginUrl, null, { withCredentials: true })),
-      take(1));
+      concatMap(() =>
+        this.http.post<ClientAuthentication>(loginUrl, null, {
+          withCredentials: true,
+        })
+      ),
+      take(1)
+    );
 
     return this.handleLoginResponse(auth$, this.isLoggedIn());
   }
@@ -256,14 +354,21 @@ export class AuthenticationService extends AbstractHttpService<ClientAuthenticat
 
   hasAdminRole(auth: ClientAuthentication) {
     const decodedToken = JwtDecode<Jwt>(auth.token);
-    return decodedToken.roles.some(role => role === this.ADMIN_ROLE);
+    return decodedToken.roles.some((role) => role === this.ADMIN_ROLE);
   }
 
   isLoginIdEmailAddress(): Observable<boolean> {
     // While other authentication providers might also use an e-mail address,
     // we only consider this to be the case for internal accounts.
-    return this.apiConfigService.getApiConfig$().pipe(
-      map(config => config.authenticationProviders.every(p => ['user-db', 'guest'].includes(p.id))));
+    return this.apiConfigService
+      .getApiConfig$()
+      .pipe(
+        map((config) =>
+          config.authenticationProviders.every((p) =>
+            ['user-db', 'guest'].includes(p.id)
+          )
+        )
+      );
   }
 
   /**
@@ -275,44 +380,69 @@ export class AuthenticationService extends AbstractHttpService<ClientAuthenticat
     this.logout();
     this.routingService.setRedirect(null, true);
     this.router.navigateByUrl('login');
-    this.translateService.get('login.authentication-expired').subscribe(msg => {
-      this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
-    });
+    this.translateService
+      .get('login.authentication-expired')
+      .subscribe((msg) => {
+        this.notificationService.showAdvanced(
+          msg,
+          AdvancedSnackBarTypes.WARNING
+        );
+      });
   }
 
   /**
    * Updates the local authentication state based on the server response.
    */
   private handleLoginResponse(
-      clientAuthentication$: Observable<ClientAuthentication>,
-      restoreGuestOnFailure?: boolean
+    clientAuthentication$: Observable<ClientAuthentication>,
+    restoreGuestOnFailure?: boolean
   ): Observable<ClientAuthenticationResult> {
     const auth$ = clientAuthentication$.pipe(
-        map(auth => {
-          if (auth) {
-            this.globalStorageService.setItem(STORAGE_KEYS.USER, auth);
+      map((auth) => {
+        if (auth) {
+          this.globalStorageService.setItem(STORAGE_KEYS.USER, auth);
 
-            return new ClientAuthenticationResult(auth);
-          } else {
-            return new ClientAuthenticationResult(null, AuthenticationStatus.UNKNOWN_ERROR);
-          }
-        }),
-        shareReplay(),
-        catchError((e) => {
-          // check if user needs activation
-          if (e.error?.errorType === 'DisabledException') {
-            return of(new ClientAuthenticationResult(null, AuthenticationStatus.ACTIVATION_PENDING));
-          } else if (e.status === 401 || e.status === 403) {
-            return of(new ClientAuthenticationResult(null, AuthenticationStatus.INVALID_CREDENTIALS));
-          }
-          return of(new ClientAuthenticationResult(null, AuthenticationStatus.UNKNOWN_ERROR));
-        })
+          return new ClientAuthenticationResult(auth);
+        } else {
+          return new ClientAuthenticationResult(
+            null,
+            AuthenticationStatus.UNKNOWN_ERROR
+          );
+        }
+      }),
+      shareReplay(),
+      catchError((e) => {
+        // check if user needs activation
+        if (e.error?.errorType === 'DisabledException') {
+          return of(
+            new ClientAuthenticationResult(
+              null,
+              AuthenticationStatus.ACTIVATION_PENDING
+            )
+          );
+        } else if (e.status === 401 || e.status === 403) {
+          return of(
+            new ClientAuthenticationResult(
+              null,
+              AuthenticationStatus.INVALID_CREDENTIALS
+            )
+          );
+        }
+        return of(
+          new ClientAuthenticationResult(
+            null,
+            AuthenticationStatus.UNKNOWN_ERROR
+          )
+        );
+      })
     );
     /* Publish authentication (w/o result meta data) */
-    this.auth$$.next(auth$.pipe(
-        map(result => result.authentication),
-        tap(auth => restoreGuestOnFailure && !auth && this.loginGuest())
-    ));
+    this.auth$$.next(
+      auth$.pipe(
+        map((result) => result.authentication),
+        tap((auth) => restoreGuestOnFailure && !auth && this.loginGuest())
+      )
+    );
 
     return auth$;
   }

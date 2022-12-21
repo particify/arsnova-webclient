@@ -8,26 +8,20 @@ export class ContentChoice extends Content {
   correctOptionIndexes: number[];
   multiple: boolean;
 
-  constructor(id: string,
-              revision: string,
-              roomId: string,
-              subject: string,
-              body: string,
-              groups: string[],
-              options: AnswerOption[],
-              correctOptionIndexes: number[],
-              multiple: boolean,
-              format: ContentType,
-              state: ContentState) {
-    super(id,
-      revision,
-      roomId,
-      subject,
-      body,
-      groups,
-      format,
-      {},
-      state);
+  constructor(
+    id: string,
+    revision: string,
+    roomId: string,
+    subject: string,
+    body: string,
+    groups: string[],
+    options: AnswerOption[],
+    correctOptionIndexes: number[],
+    multiple: boolean,
+    format: ContentType,
+    state: ContentState
+  ) {
+    super(id, revision, roomId, subject, body, groups, format, {}, state);
     this.options = options;
     this.correctOptionIndexes = correctOptionIndexes;
     this.multiple = multiple;

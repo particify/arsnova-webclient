@@ -1,8 +1,13 @@
 import { TestBed, inject } from '@angular/core/testing';
 
 import { TrackingService } from '@arsnova/app/services/util/tracking.service';
-import { MockEventService, MockRouter, MockThemeService, MockTranslateService } from '@arsnova/testing/test-helpers';
-import { TranslateService } from '@ngx-translate/core'
+import {
+  MockEventService,
+  MockRouter,
+  MockThemeService,
+  MockTranslateService,
+} from '@arsnova/testing/test-helpers';
+import { TranslateService } from '@ngx-translate/core';
 import { Router } from '@angular/router';
 import { EventService } from '@arsnova/app/services/util/event.service';
 import { ThemeService } from '@arsnova/theme/theme.service';
@@ -13,8 +18,7 @@ import { GlobalStorageService } from './global-storage.service';
 
 @Injectable()
 class MockConsentService {
-  consentGiven() {
-  }
+  consentGiven() {}
 }
 
 @Injectable()
@@ -30,37 +34,40 @@ describe('TrackingService', () => {
         TrackingService,
         {
           provide: Router,
-          useClass: MockRouter
+          useClass: MockRouter,
         },
         {
           provide: EventService,
-          useClass: MockEventService
+          useClass: MockEventService,
         },
         {
           provide: TranslateService,
-          useClass: MockTranslateService
+          useClass: MockTranslateService,
         },
         {
           provide: ThemeService,
-          useClass: MockThemeService
+          useClass: MockThemeService,
         },
         {
           provide: ConsentService,
-          useClass: MockConsentService
+          useClass: MockConsentService,
         },
         {
           provide: AuthenticationService,
-          useClass: MockAuthenticationService
+          useClass: MockAuthenticationService,
         },
         {
           provide: GlobalStorageService,
-          useClass: MockGlobalStorageService
-        }
-      ]
+          useClass: MockGlobalStorageService,
+        },
+      ],
     });
   });
 
-  it('should be created', inject([TrackingService], (service: TrackingService) => {
-    expect(service).toBeTruthy();
-  }));
+  it('should be created', inject(
+    [TrackingService],
+    (service: TrackingService) => {
+      expect(service).toBeTruthy();
+    }
+  ));
 });

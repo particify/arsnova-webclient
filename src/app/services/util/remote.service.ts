@@ -6,15 +6,20 @@ import { FeedbackFocusState } from '../../models/events/remote/feedback-focus-st
 import { UiState } from '../../models/events/remote/ui-state';
 @Injectable()
 export class RemoteService {
-
   isGuided = false;
 
-  private updateContentState$: EventEmitter<ContentFocusState> = new EventEmitter();
-  private contentStateUpdated$: EventEmitter<ContentFocusState> = new EventEmitter();
-  private updateCommentState$: EventEmitter<CommentFocusState> = new EventEmitter();
-  private commentStateUpdated$: EventEmitter<CommentFocusState> = new EventEmitter();
-  private updateFeedbackState$: EventEmitter<FeedbackFocusState> = new EventEmitter();
-  private feedbackStateUpdated$: EventEmitter<FeedbackFocusState> = new EventEmitter();
+  private updateContentState$: EventEmitter<ContentFocusState> =
+    new EventEmitter();
+  private contentStateUpdated$: EventEmitter<ContentFocusState> =
+    new EventEmitter();
+  private updateCommentState$: EventEmitter<CommentFocusState> =
+    new EventEmitter();
+  private commentStateUpdated$: EventEmitter<CommentFocusState> =
+    new EventEmitter();
+  private updateFeedbackState$: EventEmitter<FeedbackFocusState> =
+    new EventEmitter();
+  private feedbackStateUpdated$: EventEmitter<FeedbackFocusState> =
+    new EventEmitter();
   private focusModeStateUpdated$: EventEmitter<boolean> = new EventEmitter();
   private uiStateUpdated$: EventEmitter<UiState> = new EventEmitter();
 
@@ -26,8 +31,22 @@ export class RemoteService {
     this.updateContentState$.emit(state);
   }
 
-  updateContentStateChange(contentId: string, contentIndex: number, contentGroupId: string, contentGroupName: string, resultsVisible: boolean, correctAnswersVisible: boolean) {
-    const contentState = new ContentFocusState(contentId, contentIndex, contentGroupId, contentGroupName, resultsVisible, correctAnswersVisible);
+  updateContentStateChange(
+    contentId: string,
+    contentIndex: number,
+    contentGroupId: string,
+    contentGroupName: string,
+    resultsVisible: boolean,
+    correctAnswersVisible: boolean
+  ) {
+    const contentState = new ContentFocusState(
+      contentId,
+      contentIndex,
+      contentGroupId,
+      contentGroupName,
+      resultsVisible,
+      correctAnswersVisible
+    );
     this.updateContentState$.emit(contentState);
   }
 
@@ -39,8 +58,22 @@ export class RemoteService {
   updateContentStateWithObject(state: ContentFocusState) {
     this.contentStateUpdated$.emit(state);
   }
-  updateContentState(contentId: string, contentIndex: number, contentGroupId: string, contentGroupName: string, resultsVisible: boolean, correctAnswersVisible: boolean) {
-    const contentState = new ContentFocusState(contentId, contentIndex, contentGroupId, contentGroupName, resultsVisible, correctAnswersVisible);
+  updateContentState(
+    contentId: string,
+    contentIndex: number,
+    contentGroupId: string,
+    contentGroupName: string,
+    resultsVisible: boolean,
+    correctAnswersVisible: boolean
+  ) {
+    const contentState = new ContentFocusState(
+      contentId,
+      contentIndex,
+      contentGroupId,
+      contentGroupName,
+      resultsVisible,
+      correctAnswersVisible
+    );
     this.contentStateUpdated$.emit(contentState);
   }
 
@@ -51,7 +84,7 @@ export class RemoteService {
   // COMMENTS
   // Update comment state
   updateCommentStateChange(commentId: string) {
-    this.updateCommentState$.emit(new CommentFocusState(commentId))
+    this.updateCommentState$.emit(new CommentFocusState(commentId));
   }
 
   getCommentStateChange(): Observable<CommentFocusState> {
@@ -60,7 +93,7 @@ export class RemoteService {
 
   // Comment state updated
   updateCommentState(commentId: string) {
-    this.commentStateUpdated$.emit(new CommentFocusState(commentId))
+    this.commentStateUpdated$.emit(new CommentFocusState(commentId));
   }
 
   getCommentState(): Observable<CommentFocusState> {
@@ -98,12 +131,16 @@ export class RemoteService {
 
   // Content UI State
   updateUiState(state: ContentFocusState) {
-    const uiState = new UiState(state.contentId, state.resultsVisible, state.correctAnswersVisible, false);
+    const uiState = new UiState(
+      state.contentId,
+      state.resultsVisible,
+      state.correctAnswersVisible,
+      false
+    );
     this.uiStateUpdated$.emit(uiState);
   }
 
   getUiState(): Observable<UiState> {
     return this.uiStateUpdated$;
   }
-
 }

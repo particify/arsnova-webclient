@@ -64,6 +64,14 @@ lint:
   script:
     - yarn lint
 
+prettier:
+  stage: test
+  needs:
+    - yarn_install
+  allow_failure: false
+  script:
+    - yarn prettier --check .
+
 unit_tests:
   stage: test
   needs:
@@ -83,7 +91,7 @@ ngbuild:
   artifacts:
     expire_in: 2 days
     paths:
-      - "$BUILD_DIR"
+      - '$BUILD_DIR'
   script:
     - sed -i "s/\$VERSION_COMMIT_HASH/$CI_COMMIT_SHA/" src/environments/environment.prod.ts
     - sed -i "s/\$VERSION_COMMIT_DATE/$CI_COMMIT_TIMESTAMP/" src/environments/environment.prod.ts
@@ -95,7 +103,7 @@ docker_image:
     - ngbuild
   image:
     name: gcr.io/kaniko-project/executor:debug
-    entrypoint: [""]
+    entrypoint: ['']
   rules:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
       when: on_success

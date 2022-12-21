@@ -1,13 +1,15 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { FormattingOption, PATTERN_PLACEHOLDER } from '../../../models/formatting-option';
+import {
+  FormattingOption,
+  PATTERN_PLACEHOLDER,
+} from '../../../models/formatting-option';
 
 @Component({
   selector: 'app-formatting-toolbar',
   templateUrl: './formatting-toolbar.component.html',
-  styleUrls: ['./formatting-toolbar.component.scss']
+  styleUrls: ['./formatting-toolbar.component.scss'],
 })
 export class FormattingToolbarComponent {
-
   @Input() inputElement: HTMLTextAreaElement;
   @Output() valueChanged = new EventEmitter<string>();
 
@@ -19,29 +21,57 @@ export class FormattingToolbarComponent {
     new FormattingOption('code', 'code', '`', '`'),
     new FormattingOption('formula', 'functions', '$', '$', '\\LaTeX'),
     new FormattingOption('link', 'link', '[url text](', ')', 'https://'),
-    new FormattingOption('image', 'image', '![alt text](', ')', 'https://')
+    new FormattingOption('image', 'image', '![alt text](', ')', 'https://'),
   ];
 
   addFormatting(option: FormattingOption) {
     const startPos = this.inputElement.selectionStart;
     const endPos = this.inputElement.selectionEnd;
-    const reverse = this.isSelectionFormatted(this.inputElement.value, startPos, endPos, option);
+    const reverse = this.isSelectionFormatted(
+      this.inputElement.value,
+      startPos,
+      endPos,
+      option
+    );
     // Get formatted text for formatting option, current input and cursor position
-    const formattedText = this.getFormattedText(this.inputElement.value, startPos, endPos, option, reverse);
+    const formattedText = this.getFormattedText(
+      this.inputElement.value,
+      startPos,
+      endPos,
+      option,
+      reverse
+    );
     // Set new input value and focus input element
     this.setNewValueAndFocusInput(formattedText);
     // Set new cursor position
     this.setNewCursorPosition(startPos, endPos, option, reverse);
   }
 
-  private isSelectionFormatted(text: string, cursorStart: number, cursorEnd: number, option: FormattingOption): boolean {
-    return option.getPattern().test(option.hasClosingTag()
-        ? this.replaceSelection(text, cursorStart, cursorEnd)
-        : this.extractFromCurrentLine(text, cursorStart));
+  private isSelectionFormatted(
+    text: string,
+    cursorStart: number,
+    cursorEnd: number,
+    option: FormattingOption
+  ): boolean {
+    return option
+      .getPattern()
+      .test(
+        option.hasClosingTag()
+          ? this.replaceSelection(text, cursorStart, cursorEnd)
+          : this.extractFromCurrentLine(text, cursorStart)
+      );
   }
 
-  private replaceSelection(text: string, cursorStart: number, cursorEnd: number): string {
-    return text.substring(0, cursorStart) + PATTERN_PLACEHOLDER + text.substring(cursorEnd);
+  private replaceSelection(
+    text: string,
+    cursorStart: number,
+    cursorEnd: number
+  ): string {
+    return (
+      text.substring(0, cursorStart) +
+      PATTERN_PLACEHOLDER +
+      text.substring(cursorEnd)
+    );
   }
 
   private extractFromCurrentLine(text: string, cursorStart: number) {
@@ -51,58 +81,99 @@ export class FormattingToolbarComponent {
       // Add 1 to start after the line break and at 0 for the first line
       lineStart = pos + 1;
       pos = text.indexOf('\n', lineStart);
-    } while (pos !== -1 && pos < cursorStart)
+    } while (pos !== -1 && pos < cursorStart);
     return text.substring(lineStart);
   }
 
-  private getFormattedText(text: string, cursorStart: number, cursorEnd: number, option: FormattingOption, reverse: boolean): string {
+  private getFormattedText(
+    text: string,
+    cursorStart: number,
+    cursorEnd: number,
+    option: FormattingOption,
+    reverse: boolean
+  ): string {
     let formattedText: string;
     let lineStartPos: number;
 
     if (option.hasClosingTag()) {
-      formattedText = this.getFormattedTextWithClosingTag(text, cursorStart, cursorEnd, option, reverse);
+      formattedText = this.getFormattedTextWithClosingTag(
+        text,
+        cursorStart,
+        cursorEnd,
+        option,
+        reverse
+      );
     } else {
       lineStartPos = this.getLineStartPos(text, cursorStart);
-      formattedText = this.getFormattedTextWithoutClosingTag(text, lineStartPos, option, reverse);
+      formattedText = this.getFormattedTextWithoutClosingTag(
+        text,
+        lineStartPos,
+        option,
+        reverse
+      );
     }
     // Add rest of text
     if (lineStartPos === undefined) {
-      const restStart = reverse && option.hasClosingTag() ? cursorEnd + option.closingTag.length : cursorEnd;
+      const restStart =
+        reverse && option.hasClosingTag()
+          ? cursorEnd + option.closingTag.length
+          : cursorEnd;
       formattedText += text.substring(restStart, text.length);
     }
     return formattedText;
   }
 
-  private getFormattedTextWithClosingTag(text: string, cursorStart: number, cursorEnd: number, option: FormattingOption, reverse: boolean): string {
+  private getFormattedTextWithClosingTag(
+    text: string,
+    cursorStart: number,
+    cursorEnd: number,
+    option: FormattingOption,
+    reverse: boolean
+  ): string {
     let formattedText = text.substring(0, cursorStart) || '';
-      if (reverse) {
-        formattedText = formattedText.substring(0, formattedText.length - option.openingTag.length);
-      } else {
-        // Add formatting sign to cursor position or start of selected text
-        formattedText += option.openingTag;
-      }
-      // Check if text is selected
-      if (cursorStart !== cursorEnd) {
-        // Add selected text
-        formattedText += text.substring(cursorStart, cursorEnd);
-      } else if (option.placeholder && !reverse) {
-        // Add placeholder if exists for formatting option
-        formattedText += option.placeholder;
-      }
+    if (reverse) {
+      formattedText = formattedText.substring(
+        0,
+        formattedText.length - option.openingTag.length
+      );
+    } else {
+      // Add formatting sign to cursor position or start of selected text
+      formattedText += option.openingTag;
+    }
+    // Check if text is selected
+    if (cursorStart !== cursorEnd) {
+      // Add selected text
+      formattedText += text.substring(cursorStart, cursorEnd);
+    } else if (option.placeholder && !reverse) {
+      // Add placeholder if exists for formatting option
+      formattedText += option.placeholder;
+    }
 
-      if (!reverse) {
-        // Add closing tag if exists
-        formattedText += option.closingTag ?? '';
-      }
-      return formattedText;
+    if (!reverse) {
+      // Add closing tag if exists
+      formattedText += option.closingTag ?? '';
+    }
+    return formattedText;
   }
 
-  private getFormattedTextWithoutClosingTag(text: string, lineStartPos: number, option: FormattingOption, reverse: boolean): string {
+  private getFormattedTextWithoutClosingTag(
+    text: string,
+    lineStartPos: number,
+    option: FormattingOption,
+    reverse: boolean
+  ): string {
     // Insert formatting sign at line start if no text is selected and formatting option has no closing tag
     if (reverse) {
-      return text.slice(0, lineStartPos)+ text.slice(lineStartPos + option.openingTag.length);
+      return (
+        text.slice(0, lineStartPos) +
+        text.slice(lineStartPos + option.openingTag.length)
+      );
     } else {
-      return text.slice(0, lineStartPos) + option.openingTag + text.slice(lineStartPos);
+      return (
+        text.slice(0, lineStartPos) +
+        option.openingTag +
+        text.slice(lineStartPos)
+      );
     }
   }
 
@@ -116,7 +187,12 @@ export class FormattingToolbarComponent {
     this.inputElement.focus();
   }
 
-  private setNewCursorPosition(cursorStart: number, cursorEnd: number, option: FormattingOption, reverse: boolean) {
+  private setNewCursorPosition(
+    cursorStart: number,
+    cursorEnd: number,
+    option: FormattingOption,
+    reverse: boolean
+  ) {
     const startPosDiff = option.openingTag.length;
     let endPosDiff = startPosDiff;
     if (option.placeholder && cursorStart === cursorEnd && !reverse) {
@@ -124,8 +200,9 @@ export class FormattingToolbarComponent {
       endPosDiff += option.placeholder.length;
     }
     // Add or substract the difference to the selection positions
-    this.inputElement.selectionStart = cursorStart + (reverse ? -1 : 1) * startPosDiff;
-    this.inputElement.selectionEnd = cursorEnd + (reverse ? -1 : 1) * endPosDiff;
+    this.inputElement.selectionStart =
+      cursorStart + (reverse ? -1 : 1) * startPosDiff;
+    this.inputElement.selectionEnd =
+      cursorEnd + (reverse ? -1 : 1) * endPosDiff;
   }
-
 }

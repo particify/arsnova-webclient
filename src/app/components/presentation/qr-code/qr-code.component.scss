@@ -14,19 +14,19 @@
   }
 }
 
-@media(max-width: 1279px){
+@media (max-width: 1279px) {
   .url {
     font-size: calc(32px + 1vw);
   }
 }
 
-@media(min-width: 1280px){
+@media (min-width: 1280px) {
   .url {
     font-size: calc(32px + 1.3vw);
   }
 }
 
-@media(min-width: 1920px){
+@media (min-width: 1920px) {
   .url {
     font-size: calc(32px + 1.8vw);
   }
@@ -45,7 +45,6 @@ $icon-size: calc(32px + 6vw);
   margin: 16px;
   opacity: 0.5;
   color: var(--primary);
-
 }
 
 .mat-divider {

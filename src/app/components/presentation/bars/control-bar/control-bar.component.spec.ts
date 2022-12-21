@@ -1,6 +1,10 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { ControlBarComponent } from './control-bar.component';
-import { ActivatedRoute, ActivatedRouteSnapshot, Router } from '@angular/router';
+import {
+  ActivatedRoute,
+  ActivatedRouteSnapshot,
+  Router,
+} from '@angular/router';
 import { NotificationService } from '@arsnova/app/services/util/notification.service';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import {
@@ -10,7 +14,7 @@ import {
   MockGlobalStorageService,
   MockRouter,
   MockEventService,
-  MockAnnounceService
+  MockAnnounceService,
 } from '@arsnova/testing/test-helpers';
 import { of } from 'rxjs';
 import { GlobalStorageService } from '@arsnova/app/services/util/global-storage.service';
@@ -47,58 +51,74 @@ describe('ControlBarComponent', () => {
     ui: {
       links: {
         join: {
-          url: 'joinUrl'
-        }
-      }
-    }
-  }
+          url: 'joinUrl',
+        },
+      },
+    },
+  };
   mockApiConfigService.getApiConfig$.and.returnValue(of(config));
 
-  const mockHotkeyService = jasmine.createSpyObj(['registerHotkey', 'unregisterHotkey']);
+  const mockHotkeyService = jasmine.createSpyObj([
+    'registerHotkey',
+    'unregisterHotkey',
+  ]);
 
   const mockFeedbackService = jasmine.createSpyObj(['startSub']);
   mockFeedbackService.messageEvent = new EventEmitter<Message>();
 
-  const mockContentGroupService = jasmine.createSpyObj(['isIndexPublished', 'patchContentGroup', 'getById']);
+  const mockContentGroupService = jasmine.createSpyObj([
+    'isIndexPublished',
+    'patchContentGroup',
+    'getById',
+  ]);
   mockContentGroupService.getById.and.returnValue(of(new ContentGroup()));
 
-  const mockDialogService = jasmine.createSpyObj(['openPublishGroupDialog', 'openDeleteDialog']);
+  const mockDialogService = jasmine.createSpyObj([
+    'openPublishGroupDialog',
+    'openDeleteDialog',
+  ]);
 
   const snapshot = new ActivatedRouteSnapshot();
   snapshot.params = {
-    seriesName: 'Quiz'
-  }
+    seriesName: 'Quiz',
+  };
 
   const room = new Room();
   room.settings = {};
   const data = {
-    room: room
-  }
+    room: room,
+  };
   const activatedRouteStub = new ActivatedRouteStub(null, data, snapshot);
 
   const splitShortIdPipe = new SplitShortIdPipe();
 
-  const mockRoutingService = jasmine.createSpyObj(['getRoleString', 'getRouteChanges']);
+  const mockRoutingService = jasmine.createSpyObj([
+    'getRoleString',
+    'getRouteChanges',
+  ]);
   mockRoutingService.getRouteChanges.and.returnValue(of(snapshot));
 
   const body = {
     UserCountChanged: {
-      userCount: 42
-    }
+      userCount: 42,
+    },
   };
   const message = {
-    body: JSON.stringify(body)
-  }
+    body: JSON.stringify(body),
+  };
 
   const summaries = [
     {
       stats: {
-        roomUserCount: 24
-      }
-    }
-  ]
+        roomUserCount: 24,
+      },
+    },
+  ];
 
-  const mockRoomService = jasmine.createSpyObj(['getCurrentRoomsMessageStream', 'getRoomSummaries']);
+  const mockRoomService = jasmine.createSpyObj([
+    'getCurrentRoomsMessageStream',
+    'getRoomSummaries',
+  ]);
   mockRoomService.getCurrentRoomsMessageStream.and.returnValue(of(message));
   mockRoomService.getRoomSummaries.and.returnValue(of(summaries));
 
@@ -106,98 +126,92 @@ describe('ControlBarComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [
-        ControlBarComponent,
-        SplitShortIdPipe
-       ],
+      declarations: [ControlBarComponent, SplitShortIdPipe],
       imports: [
         TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
-            useClass: JsonTranslationLoader
+            useClass: JsonTranslationLoader,
           },
-          isolate: true
-        })
+          isolate: true,
+        }),
       ],
       providers: [
         {
           provide: RoomStatsService,
-          useValue: mockRoomStatsService
+          useValue: mockRoomStatsService,
         },
         {
           provide: FeedbackService,
-          useValue: mockFeedbackService
+          useValue: mockFeedbackService,
         },
         {
           provide: ContentService,
-          useValue: mockContentService
+          useValue: mockContentService,
         },
         {
           provide: ContentGroupService,
-          useValue: mockContentGroupService
+          useValue: mockContentGroupService,
         },
         {
           provide: AnnounceService,
-          useClass: MockAnnounceService
+          useClass: MockAnnounceService,
         },
         {
           provide: Location,
-          useClass: MockLocationStrategy
+          useClass: MockLocationStrategy,
         },
         {
           provide: NotificationService,
-          useClass: MockNotificationService
+          useClass: MockNotificationService,
         },
         {
           provide: ActivatedRoute,
-          useValue: activatedRouteStub
+          useValue: activatedRouteStub,
         },
         {
           provide: GlobalStorageService,
-          useClass: MockGlobalStorageService
+          useClass: MockGlobalStorageService,
         },
         {
           provide: Router,
-          useClass: MockRouter
+          useClass: MockRouter,
         },
         {
           provide: EventService,
-          useClass: MockEventService
+          useClass: MockEventService,
         },
         {
           provide: SplitShortIdPipe,
-          useValue: splitShortIdPipe
+          useValue: splitShortIdPipe,
         },
         {
           provide: RoutingService,
-          useValue: mockRoutingService
+          useValue: mockRoutingService,
         },
         {
           provide: ApiConfigService,
-          useValue: mockApiConfigService
+          useValue: mockApiConfigService,
         },
         {
           provide: HotkeyService,
-          useValue: mockHotkeyService
+          useValue: mockHotkeyService,
         },
         {
           provide: DialogService,
-          useValue: mockDialogService
+          useValue: mockDialogService,
         },
         {
           provide: RoomService,
-          useValue: mockRoomService
+          useValue: mockRoomService,
         },
         {
           provide: RemoteService,
-          useValue: mockRemoteService
-        }
+          useValue: mockRemoteService,
+        },
       ],
-      schemas: [
-        NO_ERRORS_SCHEMA
-      ]
-    })
-    .compileComponents();
+      schemas: [NO_ERRORS_SCHEMA],
+    }).compileComponents();
   }));
 
   beforeEach(() => {

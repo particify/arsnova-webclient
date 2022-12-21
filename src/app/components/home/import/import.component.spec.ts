@@ -9,17 +9,17 @@ import { NotificationService } from '../../../services/util/notification.service
 import { Router } from '@angular/router';
 import { LanguageService } from '../../../services/util/language.service';
 import { RoutingService } from '../../../services/util/routing.service';
-import { JsonTranslationLoader, MockLangService, MockNotificationService } from '@arsnova/testing/test-helpers';
+import {
+  JsonTranslationLoader,
+  MockLangService,
+  MockNotificationService,
+} from '@arsnova/testing/test-helpers';
 
 @Injectable()
-class MockRouter {
-
-}
+class MockRouter {}
 
 @Injectable()
-class MockRoomService {
-
-}
+class MockRoomService {}
 
 @Injectable()
 class MockAuthenticationService {
@@ -30,8 +30,7 @@ class MockAuthenticationService {
 
 @Injectable()
 class MockRoutingServie {
-  setRedirect() {
-  }
+  setRedirect() {}
 }
 
 /* eslint-disable @angular-eslint/component-selector */
@@ -45,49 +44,45 @@ describe('ImportComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [
-        ImportComponent,
-        MatCardStubComponent
-      ],
+      declarations: [ImportComponent, MatCardStubComponent],
       imports: [
         TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
-            useClass: JsonTranslationLoader
+            useClass: JsonTranslationLoader,
           },
-          isolate: true
-        })
+          isolate: true,
+        }),
       ],
       providers: [
         {
           provide: Router,
-          useClass: MockRouter
+          useClass: MockRouter,
         },
         {
           provide: NotificationService,
-          useClass: MockNotificationService
+          useClass: MockNotificationService,
         },
         {
           provide: RoomService,
-          useClass: MockRoomService
+          useClass: MockRoomService,
         },
         {
           provide: AuthenticationService,
-          useClass: MockAuthenticationService
+          useClass: MockAuthenticationService,
         },
         {
           provide: LanguageService,
-          useClass: MockLangService
+          useClass: MockLangService,
         },
         {
           provide: RoutingService,
-          useClass: MockRoutingServie
-        }
+          useClass: MockRoutingServie,
+        },
       ],
-      schemas: [
-        NO_ERRORS_SCHEMA
-      ]
-    }).compileComponents()
+      schemas: [NO_ERRORS_SCHEMA],
+    })
+      .compileComponents()
       .then(() => {
         fixture = TestBed.createComponent(ImportComponent);
         component = fixture.componentInstance;

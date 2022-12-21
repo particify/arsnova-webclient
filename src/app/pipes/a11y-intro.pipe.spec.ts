@@ -12,9 +12,9 @@ describe('A11yIntroPipe', () => {
       providers: [
         {
           provide: TranslateService,
-          useClass: MockTranslateService
-        }
-      ]
+          useClass: MockTranslateService,
+        },
+      ],
     });
     translateService = TestBed.inject(TranslateService);
     pipe = new A11yIntroPipe(translateService);
@@ -24,4 +24,3 @@ describe('A11yIntroPipe', () => {
     expect(pipe).toBeTruthy();
   });
 });
-

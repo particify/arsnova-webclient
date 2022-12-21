@@ -12,7 +12,8 @@ import {
   JsonTranslationLoader,
   MockAnnounceService,
   MockEventService,
-  MockGlobalStorageService, MockRenderer2
+  MockGlobalStorageService,
+  MockRenderer2,
 } from '../../../../testing/test-helpers';
 import { HarnessLoader } from '@angular/cdk/testing';
 import { MatLegacyButtonHarness as MatButtonHarness } from '@angular/material/legacy-button/testing';
@@ -26,9 +27,9 @@ class RoomJoinStubComponent {
 }
 
 @Component({
-// eslint-disable-next-line @angular-eslint/component-selector
+  // eslint-disable-next-line @angular-eslint/component-selector
   selector: 'lib-extension-point',
-  template: '<svg>Particify</svg>'
+  template: '<svg>Particify</svg>',
 })
 class LibExtensionPointStubComponent {
   @Input() extensionId: string;
@@ -38,7 +39,9 @@ describe('HomePageComponent', () => {
   let component: HomePageComponent;
   let fixture: ComponentFixture<HomePageComponent>;
 
-  let dialogService = jasmine.createSpyObj('DialogService', ['openRoomCreateDialog']);
+  let dialogService = jasmine.createSpyObj('DialogService', [
+    'openRoomCreateDialog',
+  ]);
 
   let logo: HTMLElement;
   let header: HTMLElement;
@@ -50,10 +53,10 @@ describe('HomePageComponent', () => {
     apiConfig: {
       ui: {
         registration: {
-          service: 'ARSnova'
-        }
-      }
-    }
+          service: 'ARSnova',
+        },
+      },
+    },
   };
 
   const snapshot = new ActivatedRouteSnapshot();
@@ -67,46 +70,44 @@ describe('HomePageComponent', () => {
         HomePageComponent,
         RoomJoinStubComponent,
         LibExtensionPointStubComponent,
-        A11yIntroPipe
+        A11yIntroPipe,
       ],
       imports: [
         TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
-            useClass: JsonTranslationLoader
+            useClass: JsonTranslationLoader,
           },
-          isolate: true
-        })
+          isolate: true,
+        }),
       ],
       providers: [
         {
           provide: EventService,
-          useClass: MockEventService
+          useClass: MockEventService,
         },
         {
           provide: AnnounceService,
-          useClass: MockAnnounceService
+          useClass: MockAnnounceService,
         },
         {
           provide: Renderer2,
-          useClass: MockRenderer2
+          useClass: MockRenderer2,
         },
         {
           provide: DialogService,
-          useValue: dialogService
+          useValue: dialogService,
         },
         {
           provide: GlobalStorageService,
-          useClass: MockGlobalStorageService
+          useClass: MockGlobalStorageService,
         },
         {
           provide: ActivatedRoute,
-          useValue: activatedRouteStub
-        }
+          useValue: activatedRouteStub,
+        },
       ],
-      schemas: [
-        NO_ERRORS_SCHEMA
-      ]
+      schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
 
     fixture = TestBed.createComponent(HomePageComponent);
@@ -116,7 +117,9 @@ describe('HomePageComponent', () => {
     fixture.detectChanges();
     logo = fixture.nativeElement.querySelector('svg');
     header = fixture.nativeElement.querySelector('h1');
-    newRoomButton = await loader.getHarness(MatButtonHarness.with({selector: '#new-room-button'}));
+    newRoomButton = await loader.getHarness(
+      MatButtonHarness.with({ selector: '#new-room-button' })
+    );
   });
 
   it('should create', () => {
@@ -128,7 +131,7 @@ describe('HomePageComponent', () => {
     expect(expected).toBe(true);
   });
 
-  it('should open room creation dialog after clicking button', async() => {
+  it('should open room creation dialog after clicking button', async () => {
     expect(dialogService.openRoomCreateDialog).not.toHaveBeenCalled();
     await newRoomButton.click();
     expect(dialogService.openRoomCreateDialog).toHaveBeenCalled();

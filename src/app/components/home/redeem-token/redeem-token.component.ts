@@ -7,10 +7,9 @@ import { RoomMembershipService } from '../../../services/room-membership.service
 import { Subject, takeUntil } from 'rxjs';
 
 @Component({
-  template: ''
+  template: '',
 })
 export class RedeemTokenComponent implements OnInit, OnDestroy {
-
   destroyed$ = new Subject<void>();
 
   constructor(
@@ -18,8 +17,8 @@ export class RedeemTokenComponent implements OnInit, OnDestroy {
     private router: Router,
     private routingService: RoutingService,
     private authenticationService: AuthenticationService,
-    private roomMembershipService: RoomMembershipService) { }
-
+    private roomMembershipService: RoomMembershipService
+  ) {}
 
   ngOnDestroy(): void {
     this.destroyed$.next();
@@ -27,18 +26,22 @@ export class RedeemTokenComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.authenticationService.getAuthenticationChanges().pipe(takeUntil(this.destroyed$)).subscribe(auth => {
-      if(!!auth && auth.authProvider !== AuthProvider.ARSNOVA_GUEST) {
-        const roomId = this.route.snapshot.params.roomId;
-        const token = this.route.snapshot.params.token;
-        this.roomMembershipService.requestMembership(roomId, token).subscribe(() => {
-          this.router.navigate(['user']);
-        });
-      } else {
-        this.routingService.setRedirect(this.router.url);
-        this.router.navigate(['login']);
-      }
-    });
+    this.authenticationService
+      .getAuthenticationChanges()
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((auth) => {
+        if (!!auth && auth.authProvider !== AuthProvider.ARSNOVA_GUEST) {
+          const roomId = this.route.snapshot.params.roomId;
+          const token = this.route.snapshot.params.token;
+          this.roomMembershipService
+            .requestMembership(roomId, token)
+            .subscribe(() => {
+              this.router.navigate(['user']);
+            });
+        } else {
+          this.routingService.setRedirect(this.router.url);
+          this.router.navigate(['login']);
+        }
+      });
   }
-
 }

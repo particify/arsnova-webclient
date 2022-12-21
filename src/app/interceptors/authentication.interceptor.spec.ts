@@ -19,14 +19,16 @@ describe('AuthenticationInterceptor', () => {
         AuthenticationInterceptor,
         {
           provide: AuthenticationService,
-         useClass: MockAuthenticationService
-        }
-      ]
+          useClass: MockAuthenticationService,
+        },
+      ],
     });
   });
 
-  it('should be created', inject([AuthenticationInterceptor], (interceptor: AuthenticationInterceptor) => {
-    expect(interceptor).toBeTruthy();
-  }));
+  it('should be created', inject(
+    [AuthenticationInterceptor],
+    (interceptor: AuthenticationInterceptor) => {
+      expect(interceptor).toBeTruthy();
+    }
+  ));
 });
-

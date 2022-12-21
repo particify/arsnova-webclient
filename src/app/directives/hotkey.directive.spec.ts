@@ -1,38 +1,45 @@
 import { Component, ViewChild } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { HotkeyActionType, HotkeyModifier, HotkeyService } from '../services/util/hotkey.service';
+import {
+  HotkeyActionType,
+  HotkeyModifier,
+  HotkeyService,
+} from '../services/util/hotkey.service';
 import { HotkeyDirective } from './hotkey.directive';
 
 @Component({
-  template: `
-  <button #button
+  template: ` <button
+    #button
     appHotkey="a"
     [appHotkeyControl]="true"
     appHotkeyTitle="title"
-    (click)="click()">
+    (click)="click()"
+  >
     Hotkey Button
-  </button>`
+  </button>`,
 })
 class TestComponent {
   @ViewChild('button') button: HTMLButtonElement;
 
-  click() {
-  }
+  click() {}
 }
 
 describe('HotkeyDirective', () => {
   let fixture: ComponentFixture<TestComponent>;
-  const hotkeyService = jasmine.createSpyObj('HotkeyService', ['registerHotkey', 'unregisterHotkey']);
+  const hotkeyService = jasmine.createSpyObj('HotkeyService', [
+    'registerHotkey',
+    'unregisterHotkey',
+  ]);
 
   beforeEach(() => {
     fixture = TestBed.configureTestingModule({
-      declarations: [ HotkeyDirective, TestComponent ],
+      declarations: [HotkeyDirective, TestComponent],
       providers: [
         {
           provide: HotkeyService,
-          useValue: hotkeyService
-        }
-      ]
+          useValue: hotkeyService,
+        },
+      ],
     }).createComponent(TestComponent);
     fixture.detectChanges();
   });
@@ -43,7 +50,7 @@ describe('HotkeyDirective', () => {
       modifiers: [HotkeyModifier.CONTROL],
       action: jasmine.any(Function),
       actionTitle: 'title',
-      actionType: HotkeyActionType.DEFAULT
+      actionType: HotkeyActionType.DEFAULT,
     });
   });
 });

@@ -5,10 +5,9 @@ import { SelectableAnswer } from '../../../../models/selectable-answer';
 @Component({
   selector: 'app-content-choice-answer',
   templateUrl: './content-choice-answer.component.html',
-  styleUrls: ['./content-choice-answer.component.scss']
+  styleUrls: ['./content-choice-answer.component.scss'],
 })
 export class ContentChoiceAnswerComponent {
-
   @Input() answer: ChoiceAnswer;
   @Input() selectableAnswers: SelectableAnswer[] = [];
   @Input() isDisabled: boolean;
@@ -27,15 +26,23 @@ export class ContentChoiceAnswerComponent {
   }
 
   isCorrectOptionVisible(index: number): boolean {
-    return this.isAnsweredWithOption() && this.hasCorrectAnswer && this.isCorrectAnswerPublished && this.isCorrectOrSelectedOption(index);
+    return (
+      this.isAnsweredWithOption() &&
+      this.hasCorrectAnswer &&
+      this.isCorrectAnswerPublished &&
+      this.isCorrectOrSelectedOption(index)
+    );
   }
 
   isAnsweredWithOption(): boolean {
-    return this.isDisabled && !this.hasAbstained
+    return this.isDisabled && !this.hasAbstained;
   }
 
   isCorrectOrSelectedOption(index: number): boolean {
-    return this.isAnswerOptionSelected(index) || this.correctOptionIndexes.includes(index);
+    return (
+      this.isAnswerOptionSelected(index) ||
+      this.correctOptionIndexes.includes(index)
+    );
   }
 
   checkOption(index: number, checkCorrect: boolean) {
@@ -55,5 +62,4 @@ export class ContentChoiceAnswerComponent {
   isAnswerOptionCorrect(index: number): boolean {
     return this.correctOptionIndexes.includes(index);
   }
-
 }

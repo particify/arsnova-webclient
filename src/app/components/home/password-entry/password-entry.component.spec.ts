@@ -1,7 +1,10 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { PasswordEntryComponent } from './password-entry.component';
 import { NotificationService } from '@arsnova/app/services/util/notification.service';
-import { MockNotificationService, JsonTranslationLoader } from '@arsnova/testing/test-helpers';
+import {
+  MockNotificationService,
+  JsonTranslationLoader,
+} from '@arsnova/testing/test-helpers';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 
@@ -9,29 +12,26 @@ describe('PasswordEntryComponent', () => {
   let component: PasswordEntryComponent;
   let fixture: ComponentFixture<PasswordEntryComponent>;
 
-  beforeEach(async() => {
+  beforeEach(async () => {
     TestBed.configureTestingModule({
-      declarations: [ PasswordEntryComponent ],
+      declarations: [PasswordEntryComponent],
       imports: [
         TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
-            useClass: JsonTranslationLoader
+            useClass: JsonTranslationLoader,
           },
-          isolate: true
-        })
+          isolate: true,
+        }),
       ],
       providers: [
         {
           provide: NotificationService,
-          useClass: MockNotificationService
-        }
+          useClass: MockNotificationService,
+        },
       ],
-      schemas: [
-        NO_ERRORS_SCHEMA
-      ]  
-    })
-    .compileComponents();
+      schemas: [NO_ERRORS_SCHEMA],
+    }).compileComponents();
     fixture = TestBed.createComponent(PasswordEntryComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

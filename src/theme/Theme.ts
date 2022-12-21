@@ -1,19 +1,11 @@
 export class ColorElem {
-
   public on: ColorElem;
   public variant: ColorElem;
 
-  constructor(
-    public name: string,
-    public attr: string,
-    public color: string
-  ) {
-  }
-
+  constructor(public name: string, public attr: string, public color: string) {}
 }
 
 export class ThemeTranslationList {
-
   map: string[][] = [];
 
   constructor(private name, translation: object) {
@@ -30,14 +22,14 @@ export class ThemeTranslationList {
         return this.map[i][1];
       }
     }
-    console.error('ThemeTranslationList: Translation Error, Unknown Language: ' + language);
+    console.error(
+      'ThemeTranslationList: Translation Error, Unknown Language: ' + language
+    );
     return 'unknown';
   }
-
 }
 
 export class Theme {
-
   /**
    * Colors with on-color
    * Example:
@@ -47,7 +39,7 @@ export class Theme {
     'primary',
     'secondary',
     'background',
-    'surface'
+    'surface',
   ];
 
   /**
@@ -55,10 +47,7 @@ export class Theme {
    * Example:
    * primary -> '--primary' and 'primary-variant'
    */
-  public static variantColors: string[] = [
-    'primary',
-    'secondary'
-  ];
+  public static variantColors: string[] = ['primary', 'secondary'];
 
   /**
    * All Colors
@@ -94,23 +83,20 @@ export class Theme {
    */
   public previewColor: ColorElem;
 
-  constructor(
-    public key: string,
-    public palette: object,
-    public meta: object
-  ) {
-
+  constructor(public key: string, public palette: object, public meta: object) {
     /*Init order*/
     this.order = meta['order'];
 
     /*Init name*/
     this.name = new ThemeTranslationList(
-      'name', this.meta['translation']['name']
+      'name',
+      this.meta['translation']['name']
     );
 
     /*Init description*/
     this.description = new ThemeTranslationList(
-      'description', this.meta['translation']['description']
+      'description',
+      this.meta['translation']['description']
     );
 
     /*Init all ColorElem*/
@@ -120,21 +106,17 @@ export class Theme {
     for (const k in palette) {
       if (Object.prototype.hasOwnProperty.call(palette, k)) {
         if (k !== 'name') {
-          this.colors.push(new ColorElem(
-            k.slice(2, k.length),
-            k,
-            palette[k]
-          ));
+          this.colors.push(new ColorElem(k.slice(2, k.length), k, palette[k]));
         }
       }
     }
 
-    Theme.mainColors.forEach(e => {
+    Theme.mainColors.forEach((e) => {
       this.get(e).on = this.get('on-' + e);
       this.main.push(this.get(e));
     });
 
-    Theme.variantColors.forEach(e => {
+    Theme.variantColors.forEach((e) => {
       this.get(e).variant = this.get(e + '-variant');
     });
     this.previewColor = this.get(this.meta['previewColor']);

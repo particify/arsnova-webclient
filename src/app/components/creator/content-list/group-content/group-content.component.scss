@@ -28,13 +28,15 @@
   @include show-button-bar;
 }
 
-.mat-list-item:hover, .mat-list-item:focus-within {
+.mat-list-item:hover,
+.mat-list-item:focus-within {
   * > .button-bar {
     @include show-button-bar;
   }
 }
 
-.content-box:hover, .content-box:focus-within {
+.content-box:hover,
+.content-box:focus-within {
   * > .sort-icon {
     @include show-sort-icon;
   }
@@ -55,7 +57,7 @@
   @include show-button-bar;
 }
 
-@media(hover: none) {
+@media (hover: none) {
   .button-bar {
     @include show-button-bar;
   }
@@ -66,7 +68,7 @@
 }
 
 .moreButton {
-  color: var(--primary)
+  color: var(--primary);
 }
 
 .mat-tooltip-component {
@@ -80,8 +82,7 @@
   align-items: center;
 }
 
-
-@media(max-width: 500px) {
+@media (max-width: 500px) {
   .cardTitle {
     margin: 0;
   }
@@ -173,7 +174,7 @@
 }
 
 .unlocked-content {
-  background-color: var(--unlocked)!important;
+  background-color: var(--unlocked) !important;
   & p {
     color: var(--on-surface);
   }
@@ -218,8 +219,7 @@
   box-sizing: border-box;
   border-radius: 4px;
   box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
-              0 8px 10px 1px rgba(0, 0, 0, 0.14),
-              0 3px 14px 2px rgba(0, 0, 0, 0.12);
+    0 8px 10px 1px rgba(0, 0, 0, 0.14), 0 3px 14px 2px rgba(0, 0, 0, 0.12);
 }
 
 .cdk-drag-placeholder {
@@ -238,7 +238,7 @@
   cursor: initial;
 }
 
-@media(max-width: 500px) {
+@media (max-width: 500px) {
   .add-desktop {
     display: none;
   }
@@ -252,7 +252,7 @@
   }
 }
 
-@media(min-width: 501px) {
+@media (min-width: 501px) {
   .mobile-add {
     display: none;
   }

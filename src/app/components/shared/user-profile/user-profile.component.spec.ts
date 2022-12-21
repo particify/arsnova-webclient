@@ -1,20 +1,29 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { UserProfileComponent } from './user-profile.component';
-import { ActivatedRoute, ActivatedRouteSnapshot, Router } from '@angular/router';
+import {
+  ActivatedRoute,
+  ActivatedRouteSnapshot,
+  Router,
+} from '@angular/router';
 import { NotificationService } from '@arsnova/app/services/util/notification.service';
 import { EventService } from '@arsnova/app/services/util/event.service';
-import { JsonTranslationLoader,
+import {
+  JsonTranslationLoader,
   MockEventService,
   MockGlobalStorageService,
   MockRouter,
-  ActivatedRouteStub
+  ActivatedRouteStub,
 } from '@arsnova/testing/test-helpers';
 import { GlobalStorageService } from '@arsnova/app/services/util/global-storage.service';
 import { AuthenticationService } from '@arsnova/app/services/http/authentication.service';
 import { of } from 'rxjs';
 import { UserService } from '@arsnova/app/services/http/user.service';
-import { TranslateLoader, TranslateModule, TranslateService } from '@ngx-translate/core';
+import {
+  TranslateLoader,
+  TranslateModule,
+  TranslateService,
+} from '@ngx-translate/core';
 import { DialogService } from '@arsnova/app/services/util/dialog.service';
 import { ClientAuthentication } from '@arsnova/app/models/client-authentication';
 import { AuthProvider } from '@arsnova/app/models/auth-provider';
@@ -26,16 +35,36 @@ import { A11yIntroPipe } from '@arsnova/app/pipes/a11y-intro.pipe';
 describe('UserProfileComponent', () => {
   let component: UserProfileComponent;
   let fixture: ComponentFixture<UserProfileComponent>;
-  const notificationService = jasmine.createSpyObj('NotificationService', ['showAdvanced']);
+  const notificationService = jasmine.createSpyObj('NotificationService', [
+    'showAdvanced',
+  ]);
 
   const mockDialogService = jasmine.createSpyObj(['openDeleteDialog']);
 
-  const mockUserService = jasmine.createSpyObj(['getUserByLoginId', 'delete', 'updateUser']);
-  const user = new User('1', 'a@b.cd', AuthProvider.ARSNOVA, 'revision', new Person());
+  const mockUserService = jasmine.createSpyObj([
+    'getUserByLoginId',
+    'delete',
+    'updateUser',
+  ]);
+  const user = new User(
+    '1',
+    'a@b.cd',
+    AuthProvider.ARSNOVA,
+    'revision',
+    new Person()
+  );
   mockUserService.getUserByLoginId.and.returnValue(of([user]));
 
-  const mockAuthenticationService = jasmine.createSpyObj(['getCurrentAuthentication', 'logout']);
-  const auth = new ClientAuthentication('1', 'a@b.cd', AuthProvider.ARSNOVA, 'token');
+  const mockAuthenticationService = jasmine.createSpyObj([
+    'getCurrentAuthentication',
+    'logout',
+  ]);
+  const auth = new ClientAuthentication(
+    '1',
+    'a@b.cd',
+    AuthProvider.ARSNOVA,
+    'token'
+  );
   mockAuthenticationService.getCurrentAuthentication.and.returnValue(of(auth));
 
   let translateService: TranslateService;
@@ -43,68 +72,62 @@ describe('UserProfileComponent', () => {
 
   const snapshot = new ActivatedRouteSnapshot();
 
-  snapshot.params = of([{accountSettingsName: null}]);
+  snapshot.params = of([{ accountSettingsName: null }]);
 
   const activatedRouteStub = new ActivatedRouteStub(null, null, snapshot);
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [
-        UserProfileComponent,
-        A11yIntroPipe
-      ],
+      declarations: [UserProfileComponent, A11yIntroPipe],
       imports: [
         TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
-            useClass: JsonTranslationLoader
+            useClass: JsonTranslationLoader,
           },
-          isolate: true
-        })
+          isolate: true,
+        }),
       ],
       providers: [
         {
           provide: Router,
-          useClass: MockRouter
+          useClass: MockRouter,
         },
         {
           provide: NotificationService,
-          useValue: notificationService
+          useValue: notificationService,
         },
         {
           provide: UserService,
-          useValue: mockUserService
+          useValue: mockUserService,
         },
         {
           provide: EventService,
-          useClass: MockEventService
+          useClass: MockEventService,
         },
         {
           provide: GlobalStorageService,
-          useClass: MockGlobalStorageService
+          useClass: MockGlobalStorageService,
         },
         {
           provide: AuthenticationService,
-          useValue: mockAuthenticationService
+          useValue: mockAuthenticationService,
         },
         {
           provide: DialogService,
-          useValue: mockDialogService
+          useValue: mockDialogService,
         },
         {
           provide: A11yIntroPipe,
-          useValue: a11yIntroPipe
+          useValue: a11yIntroPipe,
         },
         {
           provide: ActivatedRoute,
-          useValue: activatedRouteStub
-        }
+          useValue: activatedRouteStub,
+        },
       ],
-      schemas: [
-        NO_ERRORS_SCHEMA
-      ]
-    })
-    .compileComponents();
+      schemas: [NO_ERRORS_SCHEMA],
+    }).compileComponents();
   });
 
   beforeEach(() => {

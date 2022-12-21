@@ -1,5 +1,17 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit } from '@angular/core';
-import { BarController, BarElement, CategoryScale, Chart, LinearScale } from 'chart.js';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+} from '@angular/core';
+import {
+  BarController,
+  BarElement,
+  CategoryScale,
+  Chart,
+  LinearScale,
+} from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { ContentService } from '@arsnova/app/services/http/content.service';
 import { TranslateService } from '@ngx-translate/core';
@@ -15,14 +27,16 @@ import { StatisticChoiceComponent } from '../statistic-choice/statistic-choice.c
 @Component({
   selector: 'app-statistic-prioritization',
   templateUrl: './statistic-prioritization.component.html',
-  styleUrls: ['./statistic-prioritization.component.scss']
+  styleUrls: ['./statistic-prioritization.component.scss'],
 })
-export class StatisticPrioritizationComponent extends StatisticChoiceComponent implements OnInit, OnDestroy {
-
+export class StatisticPrioritizationComponent
+  extends StatisticChoiceComponent
+  implements OnInit, OnDestroy
+{
   readonly padding = {
     label: 8,
     top: 25,
-    left: 30
+    left: 30,
   };
 
   @Input() content: ContentPrioritization;
@@ -38,12 +52,20 @@ export class StatisticPrioritizationComponent extends StatisticChoiceComponent i
   scale: number;
   fontSize: number;
 
-  constructor(protected contentService: ContentService,
-              protected translateService: TranslateService,
-              protected themeService: ThemeService,
-              protected eventService: EventService,
-              protected presentationService: PresentationService) {
-    super(contentService, translateService, themeService, eventService, presentationService);
+  constructor(
+    protected contentService: ContentService,
+    protected translateService: TranslateService,
+    protected themeService: ThemeService,
+    protected eventService: EventService,
+    protected presentationService: PresentationService
+  ) {
+    super(
+      contentService,
+      translateService,
+      themeService,
+      eventService,
+      presentationService
+    );
   }
 
   ngOnDestroy() {
@@ -59,7 +81,7 @@ export class StatisticPrioritizationComponent extends StatisticChoiceComponent i
     if (this.content.options) {
       this.options = [...this.content.options];
     }
-    this.scale = Math.min(1, 1 - 0.06  * (this.options.length - 4));
+    this.scale = Math.min(1, 1 - 0.06 * (this.options.length - 4));
     const chartScale = Math.min(1, 1 - 0.1 * (this.options.length - 4));
     this.chartHeight = 80 * this.options.length * chartScale;
     this.fontSize = this.isPresentation ? 14 * this.scale : 12;
@@ -75,13 +97,14 @@ export class StatisticPrioritizationComponent extends StatisticChoiceComponent i
   }
 
   afterInit() {
-    this.contentService.getAnswersChangedStream(this.content.roomId, this.content.id).pipe(
-      takeUntil(this.destroyed$)
-    ).subscribe(msg => {
-      const stats = JSON.parse(msg.body).payload.stats;
-      this.updateData(stats);
-      this.updateChart();
-    });
+    this.contentService
+      .getAnswersChangedStream(this.content.roomId, this.content.id)
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((msg) => {
+        const stats = JSON.parse(msg.body).payload.stats;
+        this.updateData(stats);
+        this.updateChart();
+      });
   }
 
   deleteAnswers() {
@@ -99,7 +122,7 @@ export class StatisticPrioritizationComponent extends StatisticChoiceComponent i
     const gridConfig = {
       tickColor: this.colorStrings.background,
       drawOnChartArea: false,
-      z: 1
+      z: 1,
     };
     const barThickness = 18 * this.scale;
     const dataSets = [
@@ -107,18 +130,24 @@ export class StatisticPrioritizationComponent extends StatisticChoiceComponent i
         data: this.answersVisible ? this.chartData : this.emptyData,
         backgroundColor: colors,
         barThickness: barThickness,
-        minBarLength: 5
-      }
+        minBarLength: 5,
+      },
     ];
     const scale = this.presentationService.getScale();
-    const labels = this.options.map(a => this.getLabel(a.label));
+    const labels = this.options.map((a) => this.getLabel(a.label));
     Chart.defaults.color = this.colorStrings.onBackground;
-    Chart.register(BarController, BarElement, CategoryScale, LinearScale, ChartDataLabels);
+    Chart.register(
+      BarController,
+      BarElement,
+      CategoryScale,
+      LinearScale,
+      ChartDataLabels
+    );
     this.chart = new Chart(this.chartId, {
       type: 'bar',
       data: {
         labels: labels,
-        datasets: dataSets
+        datasets: dataSets,
       },
       options: {
         indexAxis: 'y',
@@ -127,59 +156,59 @@ export class StatisticPrioritizationComponent extends StatisticChoiceComponent i
         layout: {
           padding: {
             top: this.padding.top,
-            left: this.padding.left
-          }
+            left: this.padding.left,
+          },
         },
         scales: {
           x: {
             type: 'linear',
             ticks: {
-              display: false
+              display: false,
             },
             grid: {
               drawOnChartArea: false,
-              tickColor: this.colorStrings.background
+              tickColor: this.colorStrings.background,
             },
             border: {
-              width: 0
-            }
+              width: 0,
+            },
           },
           y: {
             type: 'category',
             ticks: {
               display: true,
               mirror: true,
-              labelOffset: - (this.fontSize + 4),
+              labelOffset: -(this.fontSize + 4),
               padding: this.padding.label,
               font: {
-                size: this.fontSize
-              }
+                size: this.fontSize,
+              },
             },
             grid: gridConfig,
             border: {
-              color: this.colorStrings.onBackground
+              color: this.colorStrings.onBackground,
             },
-            display: true
-          }
+            display: true,
+          },
         },
         plugins: {
           legend: {
-            display: false
+            display: false,
           },
           datalabels: {
             formatter: (value, context) => {
               return this.getDataLabel(context.dataset.data[context.dataIndex]);
             },
-            display: context => {
+            display: (context) => {
               return context.dataset.data[context.dataIndex] > 0;
             },
             color: this.colorStrings.onBackground,
             anchor: 'start',
             align: 'start',
-            offset: this.padding.label
-          }
-        }
-      }
+            offset: this.padding.label,
+          },
+        },
+      },
     });
   }
 
@@ -189,7 +218,11 @@ export class StatisticPrioritizationComponent extends StatisticChoiceComponent i
       beforeUpdate: (chart) => {
         if (this.active) {
           // Get data from chart
-          const data = JSON.parse(JSON.stringify(this.answersVisible ? this.chartData : this.emptyData));
+          const data = JSON.parse(
+            JSON.stringify(
+              this.answersVisible ? this.chartData : this.emptyData
+            )
+          );
           // Get array with indexes
           const indexes = data.map((d, i) => i);
           // Sort indexes descending according to data values
@@ -200,7 +233,9 @@ export class StatisticPrioritizationComponent extends StatisticChoiceComponent i
           // Get current meta data, labels and colors
           const meta = chart.getDatasetMeta(0);
           const newMeta = [];
-          const labels = JSON.parse(JSON.stringify(this.options.map(o => this.getLabel(o.label))));
+          const labels = JSON.parse(
+            JSON.stringify(this.options.map((o) => this.getLabel(o.label)))
+          );
           const newLabels = [];
           const newColors = [];
 
@@ -219,7 +254,7 @@ export class StatisticPrioritizationComponent extends StatisticChoiceComponent i
           chart.data.datasets[0].backgroundColor = newColors;
           Chart.unregister(reorderBar);
         }
-      }
+      },
     };
     return reorderBar;
   }
@@ -227,7 +262,8 @@ export class StatisticPrioritizationComponent extends StatisticChoiceComponent i
   getDataLabel(value): string {
     let label: string;
     if (this.settings.contentVisualizationUnitPercent) {
-      label = (value / (this.answerCount - this.abstentionCount)).toFixed(0) + '%';
+      label =
+        (value / (this.answerCount - this.abstentionCount)).toFixed(0) + '%';
     } else {
       label = value;
     }
@@ -236,7 +272,8 @@ export class StatisticPrioritizationComponent extends StatisticChoiceComponent i
 
   initAnswerOptions(answerIndex: number) {
     const barColors = this.themeService.getBarColors();
-    this.chartColors[answerIndex] = barColors[answerIndex % barColors.length].color;
+    this.chartColors[answerIndex] =
+      barColors[answerIndex % barColors.length].color;
   }
 
   initChart() {
@@ -251,7 +288,7 @@ export class StatisticPrioritizationComponent extends StatisticChoiceComponent i
 
   updateData(stats: AnswerStatistics) {
     if (stats) {
-        this.setData(stats);
+      this.setData(stats);
     } else {
       this.answerCount = 0;
     }
@@ -259,7 +296,9 @@ export class StatisticPrioritizationComponent extends StatisticChoiceComponent i
   }
 
   setData(stats: AnswerStatistics) {
-    this.chartData = (stats.roundStatistics[0] as PrioritizationRoundStatistics).assignedPoints;
+    this.chartData = (
+      stats.roundStatistics[0] as PrioritizationRoundStatistics
+    ).assignedPoints;
     this.emptyData = this.chartData.map(() => 0);
     this.abstentionCount = stats.roundStatistics[0].abstentionCount;
   }
@@ -270,8 +309,13 @@ export class StatisticPrioritizationComponent extends StatisticChoiceComponent i
       a11yMsg = this.translateService.instant('statistic.no-answers');
     } else {
       this.options.forEach((option, i) => {
-        a11yMsg += this.chartData[i] + ' ' + this.translateService.instant('statistic.points') + ': ';
-        a11yMsg += this.translateService.instant('statistic.answer') + (i + 1) + ': ';
+        a11yMsg +=
+          this.chartData[i] +
+          ' ' +
+          this.translateService.instant('statistic.points') +
+          ': ';
+        a11yMsg +=
+          this.translateService.instant('statistic.answer') + (i + 1) + ': ';
         a11yMsg += option.label + ', ';
       });
     }
@@ -279,7 +323,9 @@ export class StatisticPrioritizationComponent extends StatisticChoiceComponent i
   }
 
   prepareChart() {
-    this.chart.data.datasets[0].data = this.answersVisible ? this.chartData : this.emptyData;
+    this.chart.data.datasets[0].data = this.answersVisible
+      ? this.chartData
+      : this.emptyData;
     this.chart.data.datasets[0].backgroundColor = this.chartColors;
   }
 
@@ -298,9 +344,12 @@ export class StatisticPrioritizationComponent extends StatisticChoiceComponent i
   }
 
   getLabel(label: string): string {
-    const chartWidth = document.getElementById('container-' + this.chartId).clientWidth;
+    const chartWidth = document.getElementById(
+      'container-' + this.chartId
+    ).clientWidth;
     const width = this.getTextWidth(label);
-    const diff = chartWidth - width - this.padding.label * 4 - this.padding.left;
+    const diff =
+      chartWidth - width - this.padding.label * 4 - this.padding.left;
     if (diff >= 0) {
       return label;
     } else {

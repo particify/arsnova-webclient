@@ -1,4 +1,10 @@
-import { Component, ElementRef, Input, OnChanges, ViewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  Input,
+  OnChanges,
+  ViewChild,
+} from '@angular/core';
 import * as Wordcloud from 'd3-cloud';
 import { Subscription, timer } from 'rxjs';
 
@@ -13,8 +19,12 @@ const ZOOM_EFFECT = 'zoom-effect';
   templateUrl: './wordcloud.component.svg',
   styles: [
     'svg text { transition: all 0.5s ease-in-out }',
-    `svg g.${ZOOM_EFFECT} { transition: all 0.5s ease-in-out }`
-  ]
+    `
+      svg g.${ZOOM_EFFECT} {
+        transition: all 0.5s ease-in-out;
+      }
+    `,
+  ],
 })
 export class WordcloudComponent implements OnChanges {
   @Input() wordWeights: [string, number][];
@@ -51,28 +61,30 @@ export class WordcloudComponent implements OnChanges {
    * existing color index assignments for words do not change.
    */
   updateColorIndex() {
-    const updatedWords = this.wordWeights.map(ww => ww[0]);
-    const newWords = updatedWords.filter(word => !this.wordColorIndexes.includes(word));
+    const updatedWords = this.wordWeights.map((ww) => ww[0]);
+    const newWords = updatedWords.filter(
+      (word) => !this.wordColorIndexes.includes(word)
+    );
     this.wordColorIndexes = this.wordColorIndexes
-        .map(word => updatedWords.includes(word) ? word : newWords.pop())
-        .concat(newWords);
+      .map((word) => (updatedWords.includes(word) ? word : newWords.pop()))
+      .concat(newWords);
   }
 
   updateWordcloud() {
     const max = this.max();
     Wordcloud()
-        .size([this.width, this.height])
-        .canvas(this.canvas)
-        .words(this.wordWeights.map(d => ({ text: d[0], size: d[1] })))
-        .padding(4)
-        .rotate(d => (d.size === max) ? 0 : ~~(Math.random() * 2) * 90)
-        .font(this.fontFamily)
-        .fontSize(d => this.fontSize(d))
-        .on('end', d => {
-          this.determineScaling();
-          return this.renderedWords = d;
-        })
-        .start();
+      .size([this.width, this.height])
+      .canvas(this.canvas)
+      .words(this.wordWeights.map((d) => ({ text: d[0], size: d[1] })))
+      .padding(4)
+      .rotate((d) => (d.size === max ? 0 : ~~(Math.random() * 2) * 90))
+      .font(this.fontFamily)
+      .fontSize((d) => this.fontSize(d))
+      .on('end', (d) => {
+        this.determineScaling();
+        return (this.renderedWords = d);
+      })
+      .start();
   }
 
   wordIdentity(index: number, word: any) {
@@ -81,7 +93,15 @@ export class WordcloudComponent implements OnChanges {
 
   color(word: string) {
     // TODO: Move color palette to theme service.
-    const colors = ['#027db9', '#eb0054', '#4d8076', '#9f6b3f', '#8e79ab', '#e64a19', '#787b1d'];
+    const colors = [
+      '#027db9',
+      '#eb0054',
+      '#4d8076',
+      '#9f6b3f',
+      '#8e79ab',
+      '#e64a19',
+      '#787b1d',
+    ];
     const index = this.wordColorIndexes.indexOf(word);
     return colors[index % colors.length];
   }
@@ -113,11 +133,16 @@ export class WordcloudComponent implements OnChanges {
    * rendered with a large font size to ensure they will fit the canvas. */
   private fontSize(word: any) {
     let factor = Math.log2(word.size + 1) / Math.log2(this.max() + 1);
-    factor *= factor > 0.9 && word.text.length > 20 ? Math.pow(0.95, word.text.length - 20) : 1;
+    factor *=
+      factor > 0.9 && word.text.length > 20
+        ? Math.pow(0.95, word.text.length - 20)
+        : 1;
     return TARGET_FONT_SIZE * factor;
   }
 
   private max() {
-    return this.wordWeights.map(w => w[1]).reduce((a, b) => Math.max(a, b), 0);
+    return this.wordWeights
+      .map((w) => w[1])
+      .reduce((a, b) => Math.max(a, b), 0);
   }
 }

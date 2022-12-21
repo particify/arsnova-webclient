@@ -1,7 +1,9 @@
-<div [ngClass]="{
-  'dialog-action-buttons': true,
-  'no-spacing': (spacing === false)
-}">
+<div
+  [ngClass]="{
+    'dialog-action-buttons': true,
+    'no-spacing': spacing === false
+  }"
+>
   <div fxLayoutAlign="end">
     <div fxLayout="row-reverse" fxLayoutGap="10px" class="buttons">
       <button
@@ -11,7 +13,9 @@
         class="mat-flat-button {{ confirmButtonType }}-confirm-button"
         attr.aria-labelledby="{{ ariaPrefix + 'confirm' | translate }}"
         (click)="performConfirmButtonClickAction()"
-      >{{ buttonsLabelSection + '.' + confirmButtonLabel | translate}}</button>
+      >
+        {{ buttonsLabelSection + '.' + confirmButtonLabel | translate }}
+      </button>
       <button
         *ngIf="cancelButtonClickAction !== undefined"
         type="button"
@@ -19,7 +23,9 @@
         class="button-abort"
         attr.aria-labelledby="{{ ariaPrefix + 'cancel' | translate }}"
         (click)="performCancelButtonClickAction()"
-      >{{ buttonsLabelSection + '.cancel' | translate}}</button>
+      >
+        {{ buttonsLabelSection + '.cancel' | translate }}
+      </button>
     </div>
   </div>
   <!--Hidden Div's for a11y-Descriptions-->

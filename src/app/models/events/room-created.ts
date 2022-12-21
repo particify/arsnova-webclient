@@ -9,7 +9,7 @@ export class RoomCreated {
     this.type = 'RoomCreated';
     this.payload = {
       id: id,
-      shortId: shortId
+      shortId: shortId,
     };
   }
 }

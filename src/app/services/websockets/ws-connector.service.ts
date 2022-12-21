@@ -4,42 +4,44 @@ import { AuthenticationService } from '../http/authentication.service';
 import { ARSRxStompConfig } from '../../rx-stomp.config';
 import { Observable } from 'rxjs';
 import { IMessage } from '@stomp/stompjs';
-import { ClientAuthentication, TransientClientAuthentication } from '../../models/client-authentication';
+import {
+  ClientAuthentication,
+  TransientClientAuthentication,
+} from '../../models/client-authentication';
 import { filter } from 'rxjs/operators';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class WsConnectorService {
   private client: RxStomp;
 
   private headers = {
     'content-type': 'application/json',
-    'ars-user-id': ''
+    'ars-user-id': '',
   };
 
-  constructor(
-    private authService: AuthenticationService
-  ) {
+  constructor(private authService: AuthenticationService) {
     this.client = new RxStomp();
-    authService.getAuthenticationChanges()
-        .pipe(filter(auth => !(auth instanceof TransientClientAuthentication)))
-        .subscribe(async (auth: ClientAuthentication) => {
-      if (this.client.connected) {
-        await this.client.deactivate();
-      }
+    authService
+      .getAuthenticationChanges()
+      .pipe(filter((auth) => !(auth instanceof TransientClientAuthentication)))
+      .subscribe(async (auth: ClientAuthentication) => {
+        if (this.client.connected) {
+          await this.client.deactivate();
+        }
 
-      if (auth && auth.userId) {
-        const copiedConf = ARSRxStompConfig;
-        copiedConf.connectHeaders.token = auth.token;
-        this.headers = {
-          'content-type': 'application/json',
-          'ars-user-id': '' + auth.userId
-        };
-        this.client.configure(copiedConf);
-        this.client.activate();
-      }
-    });
+        if (auth && auth.userId) {
+          const copiedConf = ARSRxStompConfig;
+          copiedConf.connectHeaders.token = auth.token;
+          this.headers = {
+            'content-type': 'application/json',
+            'ars-user-id': '' + auth.userId,
+          };
+          this.client.configure(copiedConf);
+          this.client.activate();
+        }
+      });
   }
 
   public send(destination: string, body: string): void {
@@ -47,7 +49,7 @@ export class WsConnectorService {
       this.client.publish({
         destination: destination,
         body: body,
-        headers: this.headers
+        headers: this.headers,
       });
     }
   }

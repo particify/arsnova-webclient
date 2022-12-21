@@ -2,10 +2,20 @@ import { TranslateLoader } from '@ngx-translate/core';
 import { BehaviorSubject, Observable, of, ReplaySubject, Subject } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 import { BroadcastEvent } from '@arsnova/app/services/util/event.service';
-import { ActivatedRouteSnapshot, convertToParamMap, Event, ParamMap, Params, UrlTree } from '@angular/router';
+import {
+  ActivatedRouteSnapshot,
+  convertToParamMap,
+  Event,
+  ParamMap,
+  Params,
+  UrlTree,
+} from '@angular/router';
 import { Theme } from '@arsnova/theme/Theme';
 import { EventEmitter } from '@angular/core';
-import { arsnova, arsnova_meta } from '../theme/arsnova-theme/arsnova-theme.const';
+import {
+  arsnova,
+  arsnova_meta,
+} from '../theme/arsnova-theme/arsnova-theme.const';
 import * as TRANSLATION_DE from '../assets/i18n/home/de.json';
 import * as TRANSLATION_EN from '../assets/i18n/home/en.json';
 
@@ -15,7 +25,7 @@ import * as TRANSLATION_EN from '../assets/i18n/home/en.json';
 
 const TRANSLATIONS = {
   DE: TRANSLATION_DE,
-  EN: TRANSLATION_EN
+  EN: TRANSLATION_EN,
 };
 
 export class JsonTranslationLoader implements TranslateLoader {
@@ -60,8 +70,8 @@ export class MockEventService {
 
   on<T>(key: any): Observable<T> {
     return this._eventBus.asObservable().pipe(
-      filter(event => event.key === key),
-      map(event => <T>event.data)
+      filter((event) => event.key === key),
+      map((event) => <T>event.data)
     );
   }
 }
@@ -69,8 +79,7 @@ export class MockEventService {
 // AnnounceService
 
 export class MockAnnounceService {
-  announce(key: string, args?: any) {
-  }
+  announce(key: string, args?: any) {}
 }
 
 // GlobalStorageService
@@ -80,20 +89,16 @@ export class MockGlobalStorageService {
     return undefined;
   }
 
-  setItem(key: symbol, value: any) {
-  }
+  setItem(key: symbol, value: any) {}
 
-  removeItem(key: symbol) {
-  }
+  removeItem(key: symbol) {}
 
-  handleConsentChange() {
-  }
+  handleConsentChange() {}
 }
 
 // Renderer
 
-export class MockRenderer2 {
-}
+export class MockRenderer2 {}
 
 // ActivatedRoute
 
@@ -103,7 +108,11 @@ export class ActivatedRouteStub {
   snapshot: ActivatedRouteSnapshot;
   params: Observable<Params>;
 
-  constructor(initialParams?: Params, data?: any, snapshot?: ActivatedRouteSnapshot) {
+  constructor(
+    initialParams?: Params,
+    data?: any,
+    snapshot?: ActivatedRouteSnapshot
+  ) {
     this.setParamMap(initialParams);
     this.setData(data);
     this.setSnapshot(snapshot);
@@ -146,22 +155,17 @@ export class MockRouter {
     this.currentUrl = url;
   }
 
-  createUrlTree(params: string[]) {
-  }
+  createUrlTree(params: string[]) {}
 
-  serializeUrl(urlTree: UrlTree) {
-  }
-
+  serializeUrl(urlTree: UrlTree) {}
 }
 
 // NotificationService
 
 export class MockNotificationService {
-  show() {
-  }
+  show() {}
 
-  showAdvanced() {
-  }
+  showAdvanced() {}
 }
 
 // LangService
@@ -201,8 +205,8 @@ export class MockThemeService {
       {
         color: '#FFFFFFF',
         name: 'test',
-        attr: 'attr'
-      }
+        attr: 'attr',
+      },
     ];
   }
 
@@ -211,8 +215,8 @@ export class MockThemeService {
       {
         color: '#FFFFFFF',
         name: 'test',
-        attr: 'attr'
-      }
+        attr: 'attr',
+      },
     ];
   }
 }
@@ -220,8 +224,7 @@ export class MockThemeService {
 // MatDialog
 
 export class MockMatDialog {
-  afterClosed() {
-  }
+  afterClosed() {}
 }
 
 export class MockMatDialogRef {
@@ -229,9 +232,7 @@ export class MockMatDialogRef {
     return of({});
   }
 
-  close() {
-  }
+  close() {}
 }
 
-export class MockMatDialogData {
-}
+export class MockMatDialogData {}

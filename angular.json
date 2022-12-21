@@ -22,10 +22,7 @@
               "src/manifest.webmanifest",
               "src/robots.txt"
             ],
-            "styles": [
-              "src/fonts.scss",
-              "src/styles.scss"
-            ],
+            "styles": ["src/fonts.scss", "src/styles.scss"],
             "scripts": [],
             "vendorChunk": true,
             "extractLicenses": false,
@@ -83,16 +80,10 @@
           "options": {
             "karmaConfig": "./karma.conf.js",
             "tsConfig": "src/tsconfig.spec.json",
-            "polyfills": [
-              "zone.js",
-              "zone.js/testing"
-            ],
+            "polyfills": ["zone.js", "zone.js/testing"],
             "scripts": [],
             "inlineStyleLanguage": "scss",
-            "styles": [
-              "src/fonts.scss",
-              "src/styles.scss"
-            ],
+            "styles": ["src/fonts.scss", "src/styles.scss"],
             "assets": [
               "src/assets",
               "src/favicon.ico",
@@ -103,10 +94,7 @@
         "lint": {
           "builder": "@angular-eslint/builder:lint",
           "options": {
-            "lintFilePatterns": [
-              "src/**/*.ts",
-              "src/**/*.html"
-            ]
+            "lintFilePatterns": ["src/**/*.ts", "src/**/*.html"]
           }
         }
       }
@@ -134,10 +122,7 @@
           "options": {
             "tsConfig": "projects/extension-point/tsconfig.spec.json",
             "karmaConfig": "./karma.conf.js",
-            "polyfills": [
-              "zone.js",
-              "zone.js/testing"
-            ]
+            "polyfills": ["zone.js", "zone.js/testing"]
           }
         },
         "lint": {

@@ -7,4 +7,3 @@ describe('CounterBraces', () => {
     expect(pipe.transform(42)).toBe('(42)');
   });
 });
-

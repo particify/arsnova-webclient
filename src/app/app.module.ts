@@ -4,7 +4,11 @@ import { RegisterComponent } from './components/home/register/register.component
 import { PasswordResetComponent } from './components/home/password-reset/password-reset.component';
 import { AppRoutingModule } from './app-routing.module';
 import { MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA } from '@angular/material/legacy-dialog';
-import { HTTP_INTERCEPTORS, HttpClient, HttpClientModule } from '@angular/common/http';
+import {
+  HTTP_INTERCEPTORS,
+  HttpClient,
+  HttpClientModule,
+} from '@angular/common/http';
 import { UserService } from './services/http/user.service';
 import { NotificationService } from './services/util/notification.service';
 import { AuthenticationService } from './services/http/authentication.service';
@@ -43,7 +47,10 @@ import { DialogService } from './services/util/dialog.service';
 import { ExtensionPointModule } from '../../projects/extension-point/src/lib/extension-point.module';
 import { TrackingService } from './services/util/tracking.service';
 import { ImportComponent } from './components/home/import/import.component';
-import { GlobalStorageService, STORAGE_CONFIG_PROVIDERS } from './services/util/global-storage.service';
+import {
+  GlobalStorageService,
+  STORAGE_CONFIG_PROVIDERS,
+} from './services/util/global-storage.service';
 import { ConsentService } from './services/util/consent.service';
 import { ThemeService } from '../theme/theme.service';
 import { ApiConfigResolver } from './resolver/api-config.resolver';
@@ -99,7 +106,7 @@ export function initializeApp(appConfig: AppConfig) {
     SnackBarAdvancedComponent,
     PasswordEntryComponent,
     FormHeaderComponent,
-    RedeemTokenComponent
+    RedeemTokenComponent,
   ],
   imports: [
     extensions,
@@ -112,18 +119,17 @@ export function initializeApp(appConfig: AppConfig) {
     ThemeModule,
     MatIconModule,
     HttpClientModule,
-    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
+    ServiceWorkerModule.register('ngsw-worker.js', {
+      enabled: environment.production,
+    }),
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
-        useFactory: (TranslateHttpLoaderFactory),
-        deps: [
-          HttpClient,
-          TRANSLATION_MODULE_NAME
-        ]
+        useFactory: TranslateHttpLoaderFactory,
+        deps: [HttpClient, TRANSLATION_MODULE_NAME],
       },
-      isolate: true
-    })
+      isolate: true,
+    }),
   ],
   providers: [
     /*AppConfig,
@@ -135,21 +141,22 @@ export function initializeApp(appConfig: AppConfig) {
       provide: APP_INITIALIZER,
       useFactory: initAuthenticationService,
       deps: [AuthenticationService],
-      multi: true
+      multi: true,
     },
     {
       provide: APP_INITIALIZER,
       useFactory: initWsRoomEventDispatcherService,
       deps: [WsRoomEventDispatcherService],
-      multi: true
+      multi: true,
     },
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthenticationInterceptor,
-      multi: true
+      multi: true,
     },
     {
-      provide: TRANSLATION_MODULE_NAME, useValue: 'home'
+      provide: TRANSLATION_MODULE_NAME,
+      useValue: 'home',
     },
     UpdateService,
     WsConnectorService,
@@ -197,22 +204,25 @@ export function initializeApp(appConfig: AppConfig) {
     PresentationService,
     AccessTokenService,
     RemoteService,
-    { provide: Window,  useValue: window },
+    { provide: Window, useValue: window },
     STORAGE_CONFIG_PROVIDERS,
     {
       provide: MAT_DIALOG_DATA,
-      useValue: []
-    }
+      useValue: [],
+    },
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule {
-}
+export class AppModule {}
 
-export function initAuthenticationService(authenticationService: AuthenticationService) {
+export function initAuthenticationService(
+  authenticationService: AuthenticationService
+) {
   return () => authenticationService.init();
 }
 
-export function initWsRoomEventDispatcherService(wsRoomEventDispatcherService: WsRoomEventDispatcherService) {
+export function initWsRoomEventDispatcherService(
+  wsRoomEventDispatcherService: WsRoomEventDispatcherService
+) {
   return () => wsRoomEventDispatcherService.init();
 }

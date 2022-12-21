@@ -1,5 +1,8 @@
 import { Component, Inject } from '@angular/core';
-import { MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA, MatLegacyDialogRef as MatDialogRef } from '@angular/material/legacy-dialog';
+import {
+  MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA,
+  MatLegacyDialogRef as MatDialogRef,
+} from '@angular/material/legacy-dialog';
 
 export interface DialogData {
   dialogId: string;
@@ -15,14 +18,15 @@ export interface DialogData {
 @Component({
   selector: 'app-yes-no-dialog',
   templateUrl: './yes-no-dialog.component.html',
-  styleUrls: ['./yes-no-dialog.component.scss']
+  styleUrls: ['./yes-no-dialog.component.scss'],
 })
 export class YesNoDialogComponent {
   readonly dialogId: string;
 
   constructor(
     public dialogRef: MatDialogRef<YesNoDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: DialogData) {
+    @Inject(MAT_DIALOG_DATA) public data: DialogData
+  ) {
     data.section = data.section + '.';
     this.dialogId = data.dialogId;
   }
@@ -30,5 +34,4 @@ export class YesNoDialogComponent {
   closeDialog(action: string): void {
     this.dialogRef.close(action);
   }
-
 }

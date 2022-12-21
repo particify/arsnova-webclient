@@ -9,40 +9,46 @@ import { NotificationService } from '../util/notification.service';
 import { EventService } from '../util/event.service';
 
 const httpOptions = {
-  headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+  headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
 };
 
 @Injectable()
 export class CommentSettingsService extends AbstractHttpService<CommentSettings> {
-  constructor(private http: HttpClient,
-              protected eventService: EventService,
-              protected translateService: TranslateService,
-              protected notificationService: NotificationService) {
-    super('/settings', http, eventService, translateService, notificationService);
+  constructor(
+    private http: HttpClient,
+    protected eventService: EventService,
+    protected translateService: TranslateService,
+    protected notificationService: NotificationService
+  ) {
+    super(
+      '/settings',
+      http,
+      eventService,
+      translateService,
+      notificationService
+    );
   }
 
   get(id: string): Observable<CommentSettings> {
     const connectionUrl = this.buildUri(`/${id}`, id);
-    return this.http.get<CommentSettings>(connectionUrl, httpOptions).pipe(
-      catchError(this.handleError<CommentSettings>('addComment'))
-    );
+    return this.http
+      .get<CommentSettings>(connectionUrl, httpOptions)
+      .pipe(catchError(this.handleError<CommentSettings>('addComment')));
   }
 
   add(settings: CommentSettings): Observable<CommentSettings> {
     const connectionUrl = this.buildUri('/', settings.roomId);
-    return this.http.post<CommentSettings>(
-      connectionUrl,
-      settings,
-      httpOptions
-    ).pipe(
-      catchError(this.handleError<CommentSettings>('addCommentSettings'))
-    );
+    return this.http
+      .post<CommentSettings>(connectionUrl, settings, httpOptions)
+      .pipe(
+        catchError(this.handleError<CommentSettings>('addCommentSettings'))
+      );
   }
 
   update(settings: CommentSettings): Observable<CommentSettings> {
     const connectionUrl = this.buildUri(`/${settings.roomId}`, settings.roomId);
-    return this.http.put(connectionUrl, settings, httpOptions).pipe(
-      catchError(this.handleError<any>('updateCommentSettings'))
-    );
+    return this.http
+      .put(connectionUrl, settings, httpOptions)
+      .pipe(catchError(this.handleError<any>('updateCommentSettings')));
   }
 }

@@ -32,17 +32,14 @@ import { ContentPrioritizationParticipantComponent } from './content/content-pri
     TranslateModule.forChild({
       loader: {
         provide: TranslateLoader,
-        useFactory: (TranslateHttpLoaderFactory),
-        deps: [
-          HttpClient,
-          TRANSLATION_MODULE_NAME
-        ]
+        useFactory: TranslateHttpLoaderFactory,
+        deps: [HttpClient, TRANSLATION_MODULE_NAME],
       },
-      isolate: true
+      isolate: true,
     }),
     CdkStepperModule,
     MatRippleModule,
-    ExtensionPointModule
+    ExtensionPointModule,
   ],
   declarations: [
     ContentChoiceParticipantComponent,
@@ -54,12 +51,8 @@ import { ContentPrioritizationParticipantComponent } from './content/content-pri
     ContentWordcloudParticipantComponent,
     SeriesOverviewComponent,
     ParticipantOverviewComponent,
-    ContentPrioritizationParticipantComponent
-
+    ContentPrioritizationParticipantComponent,
   ],
-  providers: [
-    { provide: TRANSLATION_MODULE_NAME, useValue: 'participant' }
-  ]
+  providers: [{ provide: TRANSLATION_MODULE_NAME, useValue: 'participant' }],
 })
-export class ParticipantModule {
-}
+export class ParticipantModule {}

@@ -5,57 +5,50 @@ import { Component, Input } from '@angular/core';
  */
 export enum DialogConfirmActionButtonType {
   Primary = 'primary',
-  Alert = 'alert'
+  Alert = 'alert',
 }
-
 
 @Component({
   selector: 'app-dialog-action-buttons',
   templateUrl: './dialog-action-buttons.component.html',
-  styleUrls: ['./dialog-action-buttons.component.scss']
+  styleUrls: ['./dialog-action-buttons.component.scss'],
 })
 export class DialogActionButtonsComponent {
-
   /**
    * The button labels section.
    */
   @Input() buttonsLabelSection: string;
-
 
   /**
    * The i18n label identifier of the confirm button.
    */
   @Input() confirmButtonLabel: string;
 
-
   /**
    * The confirm button type.
    */
-  @Input() confirmButtonType: DialogConfirmActionButtonType = DialogConfirmActionButtonType.Primary;
-
+  @Input() confirmButtonType: DialogConfirmActionButtonType =
+    DialogConfirmActionButtonType.Primary;
 
   /**
    * A callback which will be executed if the confirm button was clicked.
    */
-  @Input() confirmButtonClickAction: (() => void | undefined);
-
+  @Input() confirmButtonClickAction: () => void | undefined;
 
   /**
    * A callback which will be executed if the cancel button was clicked.
    */
-  @Input() cancelButtonClickAction: (() => void | undefined);
-
+  @Input() cancelButtonClickAction: () => void | undefined;
 
   /**
    * TRUE if some spacing will be rendered above the action buttons.
    */
   @Input() spacing = true;
 
-
   /**
    * The ARIA identifier prefix.
    */
-  private ariaPrefix: string = (new Date().getTime().toString());
+  private ariaPrefix: string = new Date().getTime().toString();
 
   /**
    * Performs the confirm button click action.
@@ -65,7 +58,6 @@ export class DialogActionButtonsComponent {
       this.confirmButtonClickAction();
     }
   }
-
 
   /**
    * Performs the cancel button click action.

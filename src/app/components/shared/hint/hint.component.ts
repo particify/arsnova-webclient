@@ -7,24 +7,23 @@ export interface Hint {
 }
 
 export enum HINT_TYPES {
-  WARNING = 'WARNING'
+  WARNING = 'WARNING',
 }
 
 export const HINTS: Hint[] = [
   {
     type: HINT_TYPES.WARNING,
     icon: 'warning',
-    class: 'warning'
-  }
+    class: 'warning',
+  },
 ];
 
 @Component({
   selector: 'app-hint',
   templateUrl: './hint.component.html',
-  styleUrls: ['./hint.component.scss']
+  styleUrls: ['./hint.component.scss'],
 })
 export class HintComponent implements OnInit {
-
   @Input() text: string;
   @Input() type: HINT_TYPES = HINT_TYPES.WARNING;
 
@@ -35,7 +34,6 @@ export class HintComponent implements OnInit {
   }
 
   getHintType() {
-    this.hint = HINTS.find(hint => hint.type === this.type);
+    this.hint = HINTS.find((hint) => hint.type === this.type);
   }
-
 }

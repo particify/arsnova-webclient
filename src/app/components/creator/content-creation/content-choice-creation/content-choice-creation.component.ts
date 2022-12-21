@@ -2,23 +2,32 @@ import { Component, EventEmitter, OnInit, ViewChild } from '@angular/core';
 import { AnswerOption } from '../../../../models/answer-option';
 import { ContentChoice } from '../../../../models/content-choice';
 import { ContentService } from '../../../../services/http/content.service';
-import { AdvancedSnackBarTypes, NotificationService } from '../../../../services/util/notification.service';
+import {
+  AdvancedSnackBarTypes,
+  NotificationService,
+} from '../../../../services/util/notification.service';
 import { ContentType } from '../../../../models/content-type.enum';
 import { TranslateService } from '@ngx-translate/core';
 import { ContentGroupService } from '../../../../services/http/content-group.service';
-import { ContentCreationComponent, DisplayAnswer } from '../content-creation/content-creation.component';
-import { AnnounceService  } from '../../../../services/util/announce.service';
+import {
+  ContentCreationComponent,
+  DisplayAnswer,
+} from '../content-creation/content-creation.component';
+import { AnnounceService } from '../../../../services/util/announce.service';
 import { ActivatedRoute } from '@angular/router';
 import { CreateAnswerOptionComponent } from '../create-answer-option/create-answer-option.component';
 
 @Component({
   selector: 'app-content-choice-creation',
   templateUrl: './content-choice-creation.component.html',
-  styleUrls: ['./content-choice-creation.component.scss']
+  styleUrls: ['./content-choice-creation.component.scss'],
 })
-export class ContentChoiceCreationComponent extends ContentCreationComponent implements OnInit {
-
-  @ViewChild(CreateAnswerOptionComponent) createAnswerOptionComponent: CreateAnswerOptionComponent;
+export class ContentChoiceCreationComponent
+  extends ContentCreationComponent
+  implements OnInit
+{
+  @ViewChild(CreateAnswerOptionComponent)
+  createAnswerOptionComponent: CreateAnswerOptionComponent;
 
   multipleCorrectAnswers = false;
   noCorrectAnswers = false;
@@ -34,7 +43,14 @@ export class ContentChoiceCreationComponent extends ContentCreationComponent imp
     protected route: ActivatedRoute,
     protected announceService: AnnounceService
   ) {
-    super(contentService, notificationService, translationService, route, contentGroupService, announceService);
+    super(
+      contentService,
+      notificationService,
+      translationService,
+      route,
+      contentGroupService,
+      announceService
+    );
   }
 
   initContentCreation() {
@@ -57,22 +73,33 @@ export class ContentChoiceCreationComponent extends ContentCreationComponent imp
   initContentForEditing() {
     this.displayAnswers = this.initContentChoiceEditBase();
     this.multipleCorrectAnswers = (this.content as ContentChoice).multiple;
-    this.noCorrectAnswers = !(this.content as ContentChoice).correctOptionIndexes;
+    this.noCorrectAnswers = !(this.content as ContentChoice)
+      .correctOptionIndexes;
     this.checkIfAnswersExist();
   }
 
   addAnswer(answer: string) {
     if (answer === '') {
-      this.translationService.get('content.no-empty2').subscribe(message => {
-        this.notificationService.showAdvanced(message, AdvancedSnackBarTypes.FAILED);
+      this.translationService.get('content.no-empty2').subscribe((message) => {
+        this.notificationService.showAdvanced(
+          message,
+          AdvancedSnackBarTypes.FAILED
+        );
       });
       this.newAnswerOptionChecked = false;
       this.resetAnswerInputEvent.emit(true);
       return;
     }
-    if ((!this.multipleCorrectAnswers) && (this.content as ContentChoice).correctOptionIndexes.length > 0 && this.newAnswerOptionChecked) {
-      this.translationService.get('content.only-one').subscribe(message => {
-        this.notificationService.showAdvanced(message, AdvancedSnackBarTypes.FAILED);
+    if (
+      !this.multipleCorrectAnswers &&
+      (this.content as ContentChoice).correctOptionIndexes.length > 0 &&
+      this.newAnswerOptionChecked
+    ) {
+      this.translationService.get('content.only-one').subscribe((message) => {
+        this.notificationService.showAdvanced(
+          message,
+          AdvancedSnackBarTypes.FAILED
+        );
       });
       this.newAnswerOptionChecked = false;
       this.resetAnswerInputEvent.emit(true);
@@ -105,12 +132,17 @@ export class ContentChoiceCreationComponent extends ContentCreationComponent imp
 
   deleteAnswer(index: number) {
     (this.content as ContentChoice).options.splice(index, 1);
-    for (let j = 0; j < (this.content as ContentChoice).correctOptionIndexes.length; j++) {
+    for (
+      let j = 0;
+      j < (this.content as ContentChoice).correctOptionIndexes.length;
+      j++
+    ) {
       if ((this.content as ContentChoice).correctOptionIndexes[j] === index) {
         (this.content as ContentChoice).correctOptionIndexes.splice(j, 1);
       }
       if ((this.content as ContentChoice).correctOptionIndexes[j] > index) {
-        (this.content as ContentChoice).correctOptionIndexes[j] = (this.content as ContentChoice).correctOptionIndexes[j] - 1;
+        (this.content as ContentChoice).correctOptionIndexes[j] =
+          (this.content as ContentChoice).correctOptionIndexes[j] - 1;
       }
     }
     this.fillCorrectAnswers();
@@ -118,11 +150,14 @@ export class ContentChoiceCreationComponent extends ContentCreationComponent imp
   }
 
   saveChanges(index: number, answer: DisplayAnswer) {
-    (this.content as ContentChoice).options[index].label = answer.answerOption.label;
+    (this.content as ContentChoice).options[index].label =
+      answer.answerOption.label;
     if (!(this.content as ContentChoice).correctOptionIndexes) {
       (this.content as ContentChoice).correctOptionIndexes = [];
     }
-    const indexInCorrectOptionIndexes = (this.content as ContentChoice).correctOptionIndexes.indexOf(index);
+    const indexInCorrectOptionIndexes = (
+      this.content as ContentChoice
+    ).correctOptionIndexes.indexOf(index);
     if (indexInCorrectOptionIndexes === -1 && answer.correct) {
       if (!this.multipleCorrectAnswers) {
         (this.content as ContentChoice).correctOptionIndexes = [index];
@@ -132,23 +167,26 @@ export class ContentChoiceCreationComponent extends ContentCreationComponent imp
       (this.content as ContentChoice).correctOptionIndexes.push(index);
     }
     if (indexInCorrectOptionIndexes !== -1 && !answer.correct) {
-      (this.content as ContentChoice).correctOptionIndexes.splice(indexInCorrectOptionIndexes, 1);
+      (this.content as ContentChoice).correctOptionIndexes.splice(
+        indexInCorrectOptionIndexes,
+        1
+      );
     }
     this.fillCorrectAnswers();
   }
 
   switchValue(label: string, index: number) {
     const answer = new DisplayAnswer(
-      new AnswerOption(
-        this.displayAnswers[index].answerOption.label),
-      !this.displayAnswers[index].correct);
+      new AnswerOption(this.displayAnswers[index].answerOption.label),
+      !this.displayAnswers[index].correct
+    );
     this.saveChanges(index, answer);
     const state = answer.correct ? 'correct' : 'wrong';
     this.announceService.announce('content.a11y-answer-marked-' + state);
   }
 
   removeCorrectAnswers() {
-     for (let i = 0; i < this.displayAnswers.length; i++) {
+    for (let i = 0; i < this.displayAnswers.length; i++) {
       this.displayAnswers[i].correct = false;
       this.saveChanges(i, this.displayAnswers[i]);
     }
@@ -160,12 +198,20 @@ export class ContentChoiceCreationComponent extends ContentCreationComponent imp
       this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
       return;
     }
-    if ((!this.multipleCorrectAnswers) && (!this.noCorrectAnswers) && (this.content as ContentChoice).correctOptionIndexes.length !== 1) {
+    if (
+      !this.multipleCorrectAnswers &&
+      !this.noCorrectAnswers &&
+      (this.content as ContentChoice).correctOptionIndexes.length !== 1
+    ) {
       const msg = this.translationService.instant('content.select-one');
       this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
       return;
     }
-    if (this.multipleCorrectAnswers && (!this.noCorrectAnswers) && (this.content as ContentChoice).correctOptionIndexes.length < 1) {
+    if (
+      this.multipleCorrectAnswers &&
+      !this.noCorrectAnswers &&
+      (this.content as ContentChoice).correctOptionIndexes.length < 1
+    ) {
       const msg = this.translationService.instant('content.at-least-one');
       this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
       return;

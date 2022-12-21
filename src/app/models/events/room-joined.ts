@@ -7,7 +7,7 @@ export class RoomJoined {
   constructor(id: string) {
     this.type = 'RoomJoined';
     this.payload = {
-      id: id
+      id: id,
     };
   }
 }

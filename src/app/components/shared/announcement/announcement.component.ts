@@ -9,10 +9,9 @@ import { UserAnnouncement } from '@arsnova/app/models/user-announcement';
 @Component({
   selector: 'app-announcement',
   templateUrl: './announcement.component.html',
-  styleUrls: ['./announcement.component.scss']
+  styleUrls: ['./announcement.component.scss'],
 })
 export class AnnouncementComponent implements OnInit {
-
   @Input() announcement: UserAnnouncement;
   @Input() role: UserRole;
   @Input() editMode = false;
@@ -26,12 +25,12 @@ export class AnnouncementComponent implements OnInit {
   constructor(
     private langService: LanguageService,
     private translateService: TranslateService
-    ) {
-      langService.langEmitter.subscribe(lang => {
-        translateService.use(lang);
-        this.lang = lang;
-      });
-    }
+  ) {
+    langService.langEmitter.subscribe((lang) => {
+      translateService.use(lang);
+      this.lang = lang;
+    });
+  }
 
   ngOnInit(): void {
     this.lang = this.translateService.currentLang;
@@ -44,5 +43,4 @@ export class AnnouncementComponent implements OnInit {
   edit() {
     this.editEvent.emit(this.announcement);
   }
-
 }

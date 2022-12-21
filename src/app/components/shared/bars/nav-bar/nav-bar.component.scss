@@ -43,7 +43,7 @@
   position: relative;
 }
 
-@media(max-width: 500px) {
+@media (max-width: 500px) {
   .item span {
     display: flex;
     flex-direction: column;
@@ -54,7 +54,7 @@
   }
 }
 
-@media(min-width: 1001px) {
+@media (min-width: 1001px) {
   .text {
     display: none;
   }
@@ -68,7 +68,7 @@
     height: calc(100vh - $bar-height);
     top: 0;
     border-radius: 0;
-    border-right: 1px solid var(--grey-light);;
+    border-right: 1px solid var(--grey-light);
   }
 
   .badge {
@@ -80,7 +80,7 @@
   }
 }
 
-@media(max-width: 1000px) {
+@media (max-width: 1000px) {
   .nav {
     bottom: 0;
     width: 100vw;
@@ -108,10 +108,10 @@
   }
 
   #user-count-container {
-    display: none!important;
+    display: none !important;
   }
 
-  @media(min-width: 501px) {
+  @media (min-width: 501px) {
     .item {
       flex-direction: row;
       padding: 16px 12px;

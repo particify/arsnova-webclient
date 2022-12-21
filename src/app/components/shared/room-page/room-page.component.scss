@@ -17,7 +17,7 @@ $content-padding: 2em;
   border-radius: 10px;
 }
 
-@media(max-width: 1000px) {
+@media (max-width: 1000px) {
   #routing-content.scrollbar-bottom-margin::-webkit-scrollbar-track {
     margin-bottom: $mobile-bar-height + 8px;
   }
@@ -38,7 +38,7 @@ $content-padding: 2em;
 .mat-drawer-container {
   background-color: var(--background);
   margin-left: -$app-padding;
-  width: calc(100vw + #{$app-padding})!important;
+  width: calc(100vw + #{$app-padding}) !important;
 }
 
 .mat-drawer {
@@ -46,19 +46,19 @@ $content-padding: 2em;
   background-color: var(--background);
 }
 
-@media(max-width: 599px) {
+@media (max-width: 599px) {
   .mat-drawer-container {
     height: calc(100vh - $mobile-bar-height);
   }
 }
 
-@media(min-width: 600px) {
+@media (min-width: 600px) {
   .mat-drawer-container {
     height: calc(100vh - $bar-height);
   }
 }
 
-@media(min-width: 1001px) {
+@media (min-width: 1001px) {
   .mat-drawer {
     width: $drawer-width;
   }
@@ -68,7 +68,7 @@ $content-padding: 2em;
   }
 }
 
-@media(max-width: 1000px) {
+@media (max-width: 1000px) {
   .mat-drawer {
     width: 100vw;
     height: $mobile-bar-height;
@@ -82,7 +82,7 @@ $content-padding: 2em;
 
   .mat-drawer-content {
     height: calc(100vh - $mobile-bar-height);
-    margin-left: 0!important;
+    margin-left: 0 !important;
     margin-bottom: -$mobile-bar-height;
     padding-bottom: $mobile-bar-height;
   }

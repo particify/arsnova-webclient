@@ -7,7 +7,7 @@ export class ResetFeedback {
   constructor(roomId: string) {
     this.type = 'ResetFeedback';
     this.payload = {
-      roomId: roomId
+      roomId: roomId,
     };
   }
 }

@@ -1,17 +1,16 @@
-
-
 [TOC]
-
-
-
-
 
 # Making HTML elements a11y
 
 ### Example (meeting_room) for Buttons
 
 ```html
-<button mat-button *ngIf="user && deviceType === 'desktop'" [matMenuTriggerFor]="userMenu" aria-labelledby="meeting_room"></button>
+<button
+  mat-button
+  *ngIf="user && deviceType === 'desktop'"
+  [matMenuTriggerFor]="userMenu"
+  aria-labelledby="meeting_room"
+></button>
 
 <!--Hidden Div's for a11y-Descriptions-->
 <div class="visually-hidden">
@@ -29,12 +28,11 @@
   overflow: hidden;
   left: -10000px;
 }
-
 ```
 
 ### Dynamic ARIA labels
 
-Dynamic Aria labels like used in generic components are also possible! 
+Dynamic Aria labels like used in generic components are also possible!
 
 For usage only the `attr.` tag prefix must be added like in following code example:
 
@@ -47,21 +45,20 @@ For usage only the `attr.` tag prefix must be added like in following code examp
 <div id="{{ ariaPrefix + 'cancel'}}">{{ buttonsLabelSection + '.cancel-description' | translate }}</div>
 ```
 
-
 @see: [Accessible components: #2 dynamic ARIA labels](https://blog.prototypr.io/accessible-components-2-dynamic-aria-labels-6bf281f26d17)
-
 
 ### Live Announcer
 
 #### To Add Live Announcer you need to import:
 
-``import { LiveAnnouncer } from '@angular/cdk/a11y';``
+`import { LiveAnnouncer } from '@angular/cdk/a11y';`
 
 ##### And add to the constructor:
+
 ```typescript
 constructor(
     ...
-    private liveAnnouncer: LiveAnnouncer) { 
+    private liveAnnouncer: LiveAnnouncer) {
     ...
 }
 ```
@@ -83,15 +80,11 @@ public announce() {
 }
 ```
 
-
-
 #### Problems with JAWS and Microsoft Speech
 
 JAWS and Microsoft Speech cannot play the "title" attributes. Only NVDA plays the "title" attribute.
 Attribute "aria-label" does not work with multi-language titles, voice output reads registered string directly 1 to 1.
 `aria-labelledby` works finde with Microsoft Speech, JAWS and NVDA. If "title" attribute is additionally set, NVDA plays the text twice.
-
-
 
 ### Keyboard Shortcut
 
@@ -101,10 +94,10 @@ Keyboard shortcuts can be added to any DOM element by using the `appHotkey` dire
 This directive automatically registers and unregisters hotkeys which can either focus the element or trigger its click handler.
 The following additional attributes can be set:
 
-* `appHotkeyCtrl`, `appHotkeyAlt` and `appHotkeyShift`: Sets modifier keys which need to be pressed to trigger the hotkey.
-* `appHotkeyAction`: `HotkeyAction.FOCUS` (default) or `HotkeyAction.CLICK`
-* `appHotkeyTitle`: Sets the title for a11y. If not set, `matTooltip` will be used as a fallback.
-* `appHotkeyDisabled`: Disables the hotkey. This is useful if a the element is rendered but currently not visible.
+- `appHotkeyCtrl`, `appHotkeyAlt` and `appHotkeyShift`: Sets modifier keys which need to be pressed to trigger the hotkey.
+- `appHotkeyAction`: `HotkeyAction.FOCUS` (default) or `HotkeyAction.CLICK`
+- `appHotkeyTitle`: Sets the title for a11y. If not set, `matTooltip` will be used as a fallback.
+- `appHotkeyDisabled`: Disables the hotkey. This is useful if a the element is rendered but currently not visible.
 
 ##### Example
 
@@ -118,7 +111,9 @@ The following additional attributes can be set:
   appHotkeyTitle="Optional hotkey action description"
   [appHotkeyDisabled]="!hotkeyCondition"
   (click)="doSomething()"
->Do something!</button>
+>
+  Do something!
+</button>
 ```
 
 #### Manual registration
@@ -152,4 +147,3 @@ ngOnDestroy() {
 A page about `aria-hidden` and `role="presentation"` attribute usage tests:
 
 Source: [HTML5 Accessibility: aria-hidden and role=”presentation”](http://john.foliot.ca/aria-hidden/)
-

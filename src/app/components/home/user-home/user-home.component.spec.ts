@@ -7,7 +7,10 @@ import { UserHomeComponent } from './user-home.component';
 import { LanguageService } from '../../../services/util/language.service';
 import { AuthenticationService } from '../../../services/http/authentication.service';
 import { ClientAuthentication } from '../../../models/client-authentication';
-import { JsonTranslationLoader, MockLangService } from '@arsnova/testing/test-helpers';
+import {
+  JsonTranslationLoader,
+  MockLangService,
+} from '@arsnova/testing/test-helpers';
 
 @Injectable()
 class MockAuthenticationService {
@@ -28,7 +31,7 @@ class RoomListStubComponent {
 
 /* eslint-disable @angular-eslint/component-selector */
 @Component({ selector: 'mat-icon', template: '' })
-class MatIconStubComponent { }
+class MatIconStubComponent {}
 /* eslint-enable @angular-eslint/component-selector */
 
 describe('UserHomeComponent', () => {
@@ -41,31 +44,30 @@ describe('UserHomeComponent', () => {
         UserHomeComponent,
         RoomJoinStubComponent,
         RoomListStubComponent,
-        MatIconStubComponent
+        MatIconStubComponent,
       ],
       imports: [
         TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
-            useClass: JsonTranslationLoader
+            useClass: JsonTranslationLoader,
           },
-          isolate: true
-        })
+          isolate: true,
+        }),
       ],
       providers: [
         {
           provide: LanguageService,
-          useClass: MockLangService
+          useClass: MockLangService,
         },
         {
           provide: AuthenticationService,
-          useClass: MockAuthenticationService
-        }
+          useClass: MockAuthenticationService,
+        },
       ],
-      schemas: [
-        NO_ERRORS_SCHEMA
-      ]
-    }).compileComponents()
+      schemas: [NO_ERRORS_SCHEMA],
+    })
+      .compileComponents()
       .then(() => {
         fixture = TestBed.createComponent(UserHomeComponent);
         component = fixture.componentInstance;

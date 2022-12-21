@@ -18,17 +18,20 @@ describe('NotificationService', () => {
         NotificationService,
         {
           provide: Router,
-          useClass: MockRouter
+          useClass: MockRouter,
         },
         {
           provide: RoutingService,
-          useClass: MockRoutingService
-        }
-      ]
+          useClass: MockRoutingService,
+        },
+      ],
     });
   });
 
-  it('should be created', inject([NotificationService], (service: NotificationService) => {
-    expect(service).toBeTruthy();
-  }));
+  it('should be created', inject(
+    [NotificationService],
+    (service: NotificationService) => {
+      expect(service).toBeTruthy();
+    }
+  ));
 });

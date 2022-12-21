@@ -1,19 +1,21 @@
-import { Component, Input, OnDestroy, OnInit } from "@angular/core";
-import { takeUntil } from "rxjs/operators";
-import { AnswerStatistics } from "../../../../models/answer-statistics";
-import { TextRoundStatistics } from "../../../../models/round-statistics";
-import { ContentService } from "../../../../services/http/content.service";
-import { StatisticContentBaseComponent } from "../statistic-content-base";
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { takeUntil } from 'rxjs/operators';
+import { AnswerStatistics } from '../../../../models/answer-statistics';
+import { TextRoundStatistics } from '../../../../models/round-statistics';
+import { ContentService } from '../../../../services/http/content.service';
+import { StatisticContentBaseComponent } from '../statistic-content-base';
 import { EventService } from '../../../../services/util/event.service';
 import { TextStatistic } from '../../../../models/text-statistic';
 
 @Component({
   selector: 'app-statistic-wordcloud',
   templateUrl: './statistic-wordcloud.component.html',
-  styleUrls: ['../text-statistic-content.scss']
+  styleUrls: ['../text-statistic-content.scss'],
 })
-export class StatisticWordcloudComponent extends StatisticContentBaseComponent implements OnInit, OnDestroy {
-
+export class StatisticWordcloudComponent
+  extends StatisticContentBaseComponent
+  implements OnInit, OnDestroy
+{
   @Input() showModeration = false;
 
   wordWeights: [string, number][] = [];
@@ -21,18 +23,20 @@ export class StatisticWordcloudComponent extends StatisticContentBaseComponent i
   answerList: TextStatistic[] = [];
 
   constructor(
-      protected contentService: ContentService,
-      protected eventService: EventService) {
+    protected contentService: ContentService,
+    protected eventService: EventService
+  ) {
     super(contentService, eventService);
   }
 
   afterInit() {
-    this.contentService.getAnswersChangedStream(this.content.roomId, this.content.id).pipe(
-      takeUntil(this.destroyed$)
-    ).subscribe(msg => {
-      const stats = JSON.parse(msg.body).payload.stats;
-      this.updateData(stats);
-    });
+    this.contentService
+      .getAnswersChangedStream(this.content.roomId, this.content.id)
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((msg) => {
+        const stats = JSON.parse(msg.body).payload.stats;
+        this.updateData(stats);
+      });
   }
 
   ngOnDestroy() {
@@ -56,13 +60,18 @@ export class StatisticWordcloudComponent extends StatisticContentBaseComponent i
       if (!texts) {
         return;
       }
-      this.wordWeights = stats.roundStatistics[0].independentCounts.map((count, i) => [texts[i], count]);
-      this.answerList = Array.from(this.wordWeights, ([answer, count]) => new TextStatistic(answer, count));
+      this.wordWeights = stats.roundStatistics[0].independentCounts.map(
+        (count, i) => [texts[i], count]
+      );
+      this.answerList = Array.from(
+        this.wordWeights,
+        ([answer, count]) => new TextStatistic(answer, count)
+      );
     }
   }
 
   filterAnswers(keyword: string) {
-    this.wordWeights = this.wordWeights.filter(w => w[0] !== keyword);
-    this.answerList = this.answerList.filter(a => a.answer !== keyword);
+    this.wordWeights = this.wordWeights.filter((w) => w[0] !== keyword);
+    this.answerList = this.answerList.filter((a) => a.answer !== keyword);
   }
 }

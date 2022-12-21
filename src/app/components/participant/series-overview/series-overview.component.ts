@@ -7,7 +7,10 @@ import { ContentGroupService } from '../../../services/http/content-group.servic
 import { ThemeService } from '../../../../theme/theme.service';
 import { AuthenticationService } from '../../../services/http/authentication.service';
 import { ContentGroup } from '../../../models/content-group';
-import { AnswerResultOverview, AnswerResultType } from '../../../models/answer-result';
+import {
+  AnswerResultOverview,
+  AnswerResultType,
+} from '../../../models/answer-result';
 import { UserRole } from '../../../models/user-roles.enum';
 import { ClientAuthentication } from '../../../models/client-authentication';
 import { Router } from '@angular/router';
@@ -25,10 +28,9 @@ interface ContentResultView {
 @Component({
   selector: 'app-series-overview',
   templateUrl: './series-overview.component.html',
-  styleUrls: ['./series-overview.component.scss']
+  styleUrls: ['./series-overview.component.scss'],
 })
 export class SeriesOverviewComponent implements OnInit {
-
   @Input() group: ContentGroup;
   @Input() contents: Content[];
   @Input() hasAnsweredLastContent: boolean;
@@ -39,7 +41,7 @@ export class SeriesOverviewComponent implements OnInit {
   private chart: Chart;
   private colors = {
     chart: '',
-    background: ''
+    background: '',
   };
   private auth: ClientAuthentication;
   private resultOverview: AnswerResultOverview;
@@ -59,30 +61,36 @@ export class SeriesOverviewComponent implements OnInit {
     private authService: AuthenticationService,
     private contentGroupService: ContentGroupService,
     private themeService: ThemeService,
-    private router: Router) { }
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
     this.getColors();
-    this.authService.getCurrentAuthentication().subscribe(auth => {
+    this.authService.getCurrentAuthentication().subscribe((auth) => {
       this.auth = auth;
       this.init();
     });
   }
 
   private init() {
-    this.contentGroupService.getAnswerStats(this.group.roomId, this.group.id, this.auth.userId).subscribe(resultOverview => {
-      this.setResultOverview(resultOverview);
-      this.setViewData();
-      this.checkIfLastContentIsLoaded();
-      this.isLoading = false;
-      if (this.hasScore) {
-        this.updateChart();
-      }
-    }, () => {
-      this.getContentResultView();
-      this.isLoading = false;
-      this.isLoadingLastContent = false;
-    });
+    this.contentGroupService
+      .getAnswerStats(this.group.roomId, this.group.id, this.auth.userId)
+      .subscribe(
+        (resultOverview) => {
+          this.setResultOverview(resultOverview);
+          this.setViewData();
+          this.checkIfLastContentIsLoaded();
+          this.isLoading = false;
+          if (this.hasScore) {
+            this.updateChart();
+          }
+        },
+        () => {
+          this.getContentResultView();
+          this.isLoading = false;
+          this.isLoadingLastContent = false;
+        }
+      );
   }
 
   private setResultOverview(resultOverview: AnswerResultOverview) {
@@ -91,11 +99,14 @@ export class SeriesOverviewComponent implements OnInit {
   }
 
   private setAnswerResultsForPublishedContents() {
-    this.resultOverview.answerResults = this.resultOverview.answerResults.filter(a => this.checkIfContentIsPublished(a.contentId));
+    this.resultOverview.answerResults =
+      this.resultOverview.answerResults.filter((a) =>
+        this.checkIfContentIsPublished(a.contentId)
+      );
   }
 
   private checkIfContentIsPublished(contentId: string) {
-    return this.contents.map(c => c.id).includes(contentId);
+    return this.contents.map((c) => c.id).includes(contentId);
   }
 
   private setViewData() {
@@ -105,11 +116,15 @@ export class SeriesOverviewComponent implements OnInit {
   }
 
   private getScore(): number {
-    return Math.round(this.resultOverview.achievedScore / this.resultOverview.maxScore * 100);
+    return Math.round(
+      (this.resultOverview.achievedScore / this.resultOverview.maxScore) * 100
+    );
   }
 
   private checkIfHasScore(): boolean {
-    return this.resultOverview.maxScore > 0 && this.group.correctOptionsPublished;
+    return (
+      this.resultOverview.maxScore > 0 && this.group.correctOptionsPublished
+    );
   }
 
   private getContentResultView() {
@@ -117,14 +132,15 @@ export class SeriesOverviewComponent implements OnInit {
     this.contents.forEach((val, i) => {
       this.contentsWithResults.push({
         body: val.renderedBody,
-        state: this.resultOverview?.answerResults[i].state
+        state: this.resultOverview?.answerResults[i].state,
       });
     });
   }
 
-
   private getColors() {
-    const theme = this.themeService.getThemeByKey(this.themeService.getCurrentThemeName());
+    const theme = this.themeService.getThemeByKey(
+      this.themeService.getCurrentThemeName()
+    );
     this.colors.background = theme.get('background').color;
     this.colors.chart = theme.get('green').color;
   }
@@ -133,11 +149,13 @@ export class SeriesOverviewComponent implements OnInit {
     this.checkIfLastAnswerHasAnswered();
     if (this.isLoadingLastContent && this.retryCount < RETRY_LIMIT) {
       setTimeout(() => {
-        this.contentGroupService.getAnswerStats(this.group.roomId, this.group.id, this.auth.userId).subscribe(resultOverview => {
-          this.setResultOverview(resultOverview);
-          this.checkIfLastContentIsLoaded();
-          this.retryCount++;
-        });
+        this.contentGroupService
+          .getAnswerStats(this.group.roomId, this.group.id, this.auth.userId)
+          .subscribe((resultOverview) => {
+            this.setResultOverview(resultOverview);
+            this.checkIfLastContentIsLoaded();
+            this.retryCount++;
+          });
       }, RELOAD_INTERVAL);
     } else if (!this.isLoading) {
       this.setViewData();
@@ -148,21 +166,26 @@ export class SeriesOverviewComponent implements OnInit {
   }
 
   private checkIfLastAnswerHasAnswered() {
-    const lastResultState = this.resultOverview.answerResults[this.resultOverview.answerResults.length - 1].state;
-    this.isLoadingLastContent = lastResultState === AnswerResultType.UNANSWERED && this.hasAnsweredLastContent;
+    const lastResultState =
+      this.resultOverview.answerResults[
+        this.resultOverview.answerResults.length - 1
+      ].state;
+    this.isLoadingLastContent =
+      lastResultState === AnswerResultType.UNANSWERED &&
+      this.hasAnsweredLastContent;
   }
   private getScoreData(): number[] {
-    return [this.score, (100 - this.score)]
+    return [this.score, 100 - this.score];
   }
 
   private updateChart() {
     if (this.chart) {
-      this.chart.data.datasets[0].data = this.getScoreData(),
-      this.chart.update();
+      (this.chart.data.datasets[0].data = this.getScoreData()),
+        this.chart.update();
     } else {
       setTimeout(() => {
         this.createChart();
-      }, 300)
+      }, 300);
     }
   }
 
@@ -172,28 +195,33 @@ export class SeriesOverviewComponent implements OnInit {
         data: this.getScoreData(),
         borderWidth: 0,
         backgroundColor: [this.colors.chart, this.colors.background],
-        cutout: '90%'
-      }
+        cutout: '90%',
+      },
     ];
 
-    Chart.register(PieController, DoughnutController, ArcElement, ChartDataLabels);
+    Chart.register(
+      PieController,
+      DoughnutController,
+      ArcElement,
+      ChartDataLabels
+    );
     this.chart = new Chart('chart', {
       type: 'doughnut',
       data: {
-        datasets: dataSets
+        datasets: dataSets,
       },
       options: {
         responsive: true,
         maintainAspectRatio: false,
         plugins: {
           legend: {
-            display: false
+            display: false,
           },
           datalabels: {
-            display: false
-          }
-        }
-      }
+            display: false,
+          },
+        },
+      },
     });
   }
 
@@ -201,7 +229,7 @@ export class SeriesOverviewComponent implements OnInit {
     if (!this.group.correctOptionsPublished) {
       state = AnswerResultType.NEUTRAL;
     }
-    switch(state) {
+    switch (state) {
       case AnswerResultType.CORRECT:
         return 'check';
       case AnswerResultType.WRONG:
@@ -212,18 +240,30 @@ export class SeriesOverviewComponent implements OnInit {
   }
 
   hasAnsweredState(state: AnswerResultType): boolean {
-    return state === AnswerResultType.NEUTRAL || (!this.group.correctOptionsPublished && this.quizAnswerTypes.includes(state));
+    return (
+      state === AnswerResultType.NEUTRAL ||
+      (!this.group.correctOptionsPublished &&
+        this.quizAnswerTypes.includes(state))
+    );
   }
 
   goToContent(index: number) {
-    this.router.navigate([this.routingService.getRoleRoute(UserRole.PARTICIPANT), this.routingService.getShortId(), Features.CONTENTS, this.group.name, index + 1]);
+    this.router.navigate([
+      this.routingService.getRoleRoute(UserRole.PARTICIPANT),
+      this.routingService.getShortId(),
+      Features.CONTENTS,
+      this.group.name,
+      index + 1,
+    ]);
   }
 
   getHeaderText(): string {
     if (this.isPureInfoSeries) {
       return this.group.name;
     } else {
-      return this.finished ? 'content.thanks-for-participation' : 'content.continue-where-you-stopped';
+      return this.finished
+        ? 'content.thanks-for-participation'
+        : 'content.continue-where-you-stopped';
     }
   }
 
@@ -231,7 +271,9 @@ export class SeriesOverviewComponent implements OnInit {
     if (this.isPureInfoSeries) {
       return 'content.pure-info-contents';
     } else {
-      return this.finished ? 'content.all-contents-answered' : 'content.some-contents-answered';
+      return this.finished
+        ? 'content.all-contents-answered'
+        : 'content.some-contents-answered';
     }
   }
 }

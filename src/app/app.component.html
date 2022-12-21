@@ -1,7 +1,15 @@
 <div fxLayout="column" fxFill appTheme>
   <router-outlet *ngIf="!isPresentation" name="header"></router-outlet>
-  <div fxFlex class="app-component" id="scroll_container" [ngClass]="{'presentation-mode': isPresentation || isAdmin}">
+  <div
+    fxFlex
+    class="app-component"
+    id="scroll_container"
+    [ngClass]="{ 'presentation-mode': isPresentation || isAdmin }"
+  >
     <router-outlet></router-outlet>
   </div>
-  <router-outlet *ngIf="!isPresentation && !isAdmin && !isRoom" name="footer"></router-outlet>
+  <router-outlet
+    *ngIf="!isPresentation && !isAdmin && !isRoom"
+    name="footer"
+  ></router-outlet>
 </div>

@@ -1,6 +1,21 @@
-import { ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+} from '@angular/core';
 import { CdkStepper } from '@angular/cdk/stepper';
-import { animate, state, style, transition, trigger } from '@angular/animations';
+import {
+  animate,
+  state,
+  style,
+  transition,
+  trigger,
+} from '@angular/animations';
 import { Directionality } from '@angular/cdk/bidi';
 import { AnnounceService } from '@arsnova/app/services/util/announce.service';
 import { HotkeyService } from '../../../services/util/hotkey.service';
@@ -24,18 +39,20 @@ import { Subscription } from 'rxjs';
       transition('* => current', animate('150ms ease-out')),
     ]),
     trigger('slideHeader', [
-      state('left', style({ transform: `translateX({{position}}%)` }),
-        { params: { position: '0' } }),
-      state('init', style({ transform: `translateX({{position}}%)` }),
-        { params: { position: '0' } }),
-      state('right', style({ transform: `translateX({{position}}%)` }),
-        { params: { position: '0' } }),
+      state('left', style({ transform: `translateX({{position}}%)` }), {
+        params: { position: '0' },
+      }),
+      state('init', style({ transform: `translateX({{position}}%)` }), {
+        params: { position: '0' },
+      }),
+      state('right', style({ transform: `translateX({{position}}%)` }), {
+        params: { position: '0' },
+      }),
       transition('* => *', animate('400ms ease-out')),
-    ])
-  ]
+    ]),
+  ],
 })
 export class StepperComponent extends CdkStepper implements OnInit, OnDestroy {
-
   @Output() newIndex = new EventEmitter<number>();
   @Input() listLength: number;
   @Input() completed: Map<number, boolean> = new Map<number, boolean>();
@@ -56,41 +73,51 @@ export class StepperComponent extends CdkStepper implements OnInit, OnDestroy {
 
   private hotkeyRefs: symbol[] = [];
 
-  constructor(private announceService: AnnounceService,
-              private hotkeyService: HotkeyService,
-              private translateService: TranslateService,
-              dir: Directionality,
-              changeDetectorRef: ChangeDetectorRef,
-              elementRef: ElementRef<HTMLElement>,
-              private remoteService: RemoteService) {
+  constructor(
+    private announceService: AnnounceService,
+    private hotkeyService: HotkeyService,
+    private translateService: TranslateService,
+    dir: Directionality,
+    changeDetectorRef: ChangeDetectorRef,
+    elementRef: ElementRef<HTMLElement>,
+    private remoteService: RemoteService
+  ) {
     super(dir, changeDetectorRef, elementRef);
   }
 
   ngOnInit() {
     if (this.isParticipant) {
       this.isGuided = this.remoteService.isGuided;
-      this.focusStateSubscription = this.remoteService.getFocusModeState().subscribe(isGuided => {
-        this.isGuided = isGuided;
-      });
+      this.focusStateSubscription = this.remoteService
+        .getFocusModeState()
+        .subscribe((isGuided) => {
+          this.isGuided = isGuided;
+        });
     }
-    this.translateService.get(this.i18nPrefix + '.previous').subscribe(t =>
-      this.hotkeyService.registerHotkey({
-        key: 'ArrowLeft',
-        action: () => this.previous(),
-        actionTitle: t
-      }, this.hotkeyRefs)
+    this.translateService.get(this.i18nPrefix + '.previous').subscribe((t) =>
+      this.hotkeyService.registerHotkey(
+        {
+          key: 'ArrowLeft',
+          action: () => this.previous(),
+          actionTitle: t,
+        },
+        this.hotkeyRefs
+      )
     );
-    this.translateService.get(this.i18nPrefix + '.next').subscribe(t =>
-      this.hotkeyService.registerHotkey({
-        key: 'ArrowRight',
-        action: () => this.next(),
-        actionTitle: t
-      }, this.hotkeyRefs)
+    this.translateService.get(this.i18nPrefix + '.next').subscribe((t) =>
+      this.hotkeyService.registerHotkey(
+        {
+          key: 'ArrowRight',
+          action: () => this.next(),
+          actionTitle: t,
+        },
+        this.hotkeyRefs
+      )
     );
   }
 
   ngOnDestroy() {
-    this.hotkeyRefs.forEach(h => this.hotkeyService.unregisterHotkey(h));
+    this.hotkeyRefs.forEach((h) => this.hotkeyService.unregisterHotkey(h));
     if (this.focusStateSubscription) {
       this.focusStateSubscription.unsubscribe();
     }
@@ -99,14 +126,14 @@ export class StepperComponent extends CdkStepper implements OnInit, OnDestroy {
   init(index: number, length: number) {
     this.onClick(index);
     if (index > 2 && length > 5) {
-      const diff = index < (length - 3) ? 2 : 5 - (length - 1 - index);
+      const diff = index < length - 3 ? 2 : 5 - (length - 1 - index);
       this.headerPos = index - diff;
       this.moveHeaderRight();
     }
   }
 
   setHeaderPosition(stepIndex: number) {
-    if ((this.listLength) > 5) {
+    if (this.listLength > 5) {
       const lastHeaderPos = this.listLength - 5;
       this.headerPos = stepIndex < lastHeaderPos ? stepIndex : lastHeaderPos;
     }
@@ -120,7 +147,11 @@ export class StepperComponent extends CdkStepper implements OnInit, OnDestroy {
       this.swipeTime = time;
     } else if (when === 'end') {
       const duration = time - this.swipeTime;
-      if (duration < 1000 && Math.abs(this.swipeXLocation - xPos) > Math.min(window.innerWidth / 3, 150)) {
+      if (
+        duration < 1000 &&
+        Math.abs(this.swipeXLocation - xPos) >
+          Math.min(window.innerWidth / 3, 150)
+      ) {
         const direction = this.swipeXLocation > xPos ? 'next' : 'previous';
         if (direction === 'next') {
           this.next();
@@ -134,7 +165,7 @@ export class StepperComponent extends CdkStepper implements OnInit, OnDestroy {
   next(): void {
     if (!this.isGuided) {
       if (this.selectedIndex < this.listLength - 1) {
-        if ((this.selectedIndex < this.listLength - 1) || this.finished) {
+        if (this.selectedIndex < this.listLength - 1 || this.finished) {
           this.onClick(this.selectedIndex + 1);
           setTimeout(() => {
             document.getElementById('step').focus();
@@ -180,9 +211,15 @@ export class StepperComponent extends CdkStepper implements OnInit, OnDestroy {
   }
 
   moveHeaderRight(clicked?: boolean) {
-    if (this.headerPos > 0 && ((this.nextIndex < this.listLength - 3) || clicked)) {
-      if (Math.abs(this.nextIndex - this.selectedIndex) > 1 && (Math.abs(this.headerPos - this.nextIndex) < 1)
-        && (this.headerPos > 1)) {
+    if (
+      this.headerPos > 0 &&
+      (this.nextIndex < this.listLength - 3 || clicked)
+    ) {
+      if (
+        Math.abs(this.nextIndex - this.selectedIndex) > 1 &&
+        Math.abs(this.headerPos - this.nextIndex) < 1 &&
+        this.headerPos > 1
+      ) {
         this.headerPos -= 2;
       } else {
         this.headerPos--;
@@ -192,9 +229,15 @@ export class StepperComponent extends CdkStepper implements OnInit, OnDestroy {
   }
 
   moveHeaderLeft(clicked?: boolean) {
-    if (this.headerPos  < this.listLength - 5 && (this.nextIndex > 2 || clicked)) {
-      if ((Math.abs(this.nextIndex - this.selectedIndex) > 1) && (Math.abs(this.headerPos - this.nextIndex) > 3)
-        && (this.headerPos < this.listLength - 6)) {
+    if (
+      this.headerPos < this.listLength - 5 &&
+      (this.nextIndex > 2 || clicked)
+    ) {
+      if (
+        Math.abs(this.nextIndex - this.selectedIndex) > 1 &&
+        Math.abs(this.headerPos - this.nextIndex) > 3 &&
+        this.headerPos < this.listLength - 6
+      ) {
         this.headerPos += 2;
       } else {
         this.headerPos++;

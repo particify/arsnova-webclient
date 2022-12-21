@@ -23,13 +23,13 @@ enum VisitDimension {
   THEME = 2,
   AUTH_PROVIDER = 5,
   APP_VERSION = 6,
-  ENTRY = 7
+  ENTRY = 7,
 }
 
 /* This enum maps to Matomo dimension IDs for actions. */
 enum ActionDimension {
   ROOM_ROLE = 3,
-  SPECIAL_ROOM = 4
+  SPECIAL_ROOM = 4,
 }
 
 export enum EventCategory {
@@ -42,12 +42,11 @@ export enum EventCategory {
   USER_DATA_ROOM = 'User data - Room',
   USER_DATA_COMMENT = 'User data - Comment',
   USER_DATA_CONTENT = 'User data - Content',
-  FEATURE_USAGE_SURVEY = 'Feature usage - Survey'
+  FEATURE_USAGE_SURVEY = 'Feature usage - Survey',
 }
 
 @Injectable()
 export class TrackingService {
-
   _paq: any[];
   loaded: boolean;
   consentGiven: boolean;
@@ -64,18 +63,22 @@ export class TrackingService {
     private authenticationService: AuthenticationService,
     private translateService: TranslateService,
     private themeService: ThemeService,
-    private globalStorageService: GlobalStorageService,
+    private globalStorageService: GlobalStorageService
   ) {
     window['_paq'] = window['_paq'] || [];
     this._paq = window['_paq'];
-    this.consentGiven = this.consentService.consentGiven(StorageItemCategory.STATISTICS);
+    this.consentGiven = this.consentService.consentGiven(
+      StorageItemCategory.STATISTICS
+    );
   }
 
   init(uiConfig: any) {
     this.uiConfig = uiConfig;
 
-    const feedbackRoomShortId = uiConfig.links?.feedback?.url?.match(/\/([0-9]{8})$/)?.[1];
-    feedbackRoomShortId && this.specialRooms.set(feedbackRoomShortId, 'Feedback');
+    const feedbackRoomShortId =
+      uiConfig.links?.feedback?.url?.match(/\/([0-9]{8})$/)?.[1];
+    feedbackRoomShortId &&
+      this.specialRooms.set(feedbackRoomShortId, 'Feedback');
 
     if (uiConfig.tracking.heartbeat) {
       this._paq.push(['enableHeartBeatTimer']);
@@ -94,24 +97,48 @@ export class TrackingService {
       this.loadTrackerScript();
     }
     /* Defer loading of tracking script if consent have not been given (yet). */
-    this.eventService.on<ConsentChangedEvent>('ConsentChangedEvent').subscribe(() => {
-      this.consentGiven = this.consentService.consentGiven(StorageItemCategory.STATISTICS);
-      if (this.consentGiven) {
-        this.loadTrackerScript();
-      }
-    });
-    this.router.events.pipe(
-        filter(event => (event instanceof ActivationEnd && !!event.snapshot.component)),
-        filter(event => (event as ActivationEnd).snapshot.outlet === 'primary'),
-        filter(event => !(event as ActivationEnd).snapshot.routeConfig.children))
-        .subscribe((event: ActivationEnd) => {
-          this.addRoute(this.router.url, event.snapshot)
-        });
-    this.translateService.onLangChange
-        .subscribe((event: LangChangeEvent) => this.setVisitDimension(VisitDimension.UI_LANGUAGE, event.lang));
-    this.themeService.getTheme().subscribe((themeName) => this.setVisitDimension(VisitDimension.THEME, themeName));
-    this.setVisitDimension(VisitDimension.UI_LANGUAGE, this.translateService.currentLang);
-    this.setVisitDimension(VisitDimension.APP_VERSION, environment.version.commitHash);
+    this.eventService
+      .on<ConsentChangedEvent>('ConsentChangedEvent')
+      .subscribe(() => {
+        this.consentGiven = this.consentService.consentGiven(
+          StorageItemCategory.STATISTICS
+        );
+        if (this.consentGiven) {
+          this.loadTrackerScript();
+        }
+      });
+    this.router.events
+      .pipe(
+        filter(
+          (event) =>
+            event instanceof ActivationEnd && !!event.snapshot.component
+        ),
+        filter(
+          (event) => (event as ActivationEnd).snapshot.outlet === 'primary'
+        ),
+        filter(
+          (event) => !(event as ActivationEnd).snapshot.routeConfig.children
+        )
+      )
+      .subscribe((event: ActivationEnd) => {
+        this.addRoute(this.router.url, event.snapshot);
+      });
+    this.translateService.onLangChange.subscribe((event: LangChangeEvent) =>
+      this.setVisitDimension(VisitDimension.UI_LANGUAGE, event.lang)
+    );
+    this.themeService
+      .getTheme()
+      .subscribe((themeName) =>
+        this.setVisitDimension(VisitDimension.THEME, themeName)
+      );
+    this.setVisitDimension(
+      VisitDimension.UI_LANGUAGE,
+      this.translateService.currentLang
+    );
+    this.setVisitDimension(
+      VisitDimension.APP_VERSION,
+      environment.version.commitHash
+    );
     this.setupTrackingSubscriptions();
   }
 
@@ -124,7 +151,7 @@ export class TrackingService {
     trackerScript.src = this.uiConfig.tracking.url + 'matomo.js';
     trackerScript.async = true;
     trackerScript.defer = true;
-    trackerScript.onload = () => this._paq = window['_paq'];
+    trackerScript.onload = () => (this._paq = window['_paq']);
     document.body.appendChild(trackerScript);
 
     this.loaded = true;
@@ -132,16 +159,26 @@ export class TrackingService {
 
   setupPingSubscription() {
     this.pingSubscription?.unsubscribe();
-    this.pingSubscription = timer((45 + 45 * Math.random()) * 1000, HEARTBEAT_INVERVAL * 1000).subscribe(() => this.sendPing());
+    this.pingSubscription = timer(
+      (45 + 45 * Math.random()) * 1000,
+      HEARTBEAT_INVERVAL * 1000
+    ).subscribe(() => this.sendPing());
   }
 
   setupTrackingSubscriptions() {
-    this.authenticationService.getAuthenticationChanges().subscribe(auth => {
+    this.authenticationService.getAuthenticationChanges().subscribe((auth) => {
       if (auth) {
         if (!this.previousAuth || auth.userId !== this.previousAuth.userId) {
-          this.setVisitDimension(VisitDimension.AUTH_PROVIDER, auth.authProvider.toString().toLowerCase());
+          this.setVisitDimension(
+            VisitDimension.AUTH_PROVIDER,
+            auth.authProvider.toString().toLowerCase()
+          );
           if (!this.firstAuth) {
-            this.addEvent(EventCategory.ACCOUNT, 'User logged in', auth.authProvider.toString().toLowerCase());
+            this.addEvent(
+              EventCategory.ACCOUNT,
+              'User logged in',
+              auth.authProvider.toString().toLowerCase()
+            );
           }
         }
       } else {
@@ -152,34 +189,72 @@ export class TrackingService {
       this.previousAuth = auth;
       this.firstAuth = false;
     });
-    this.eventService.on<any>('UpdateInstalled')
-        .subscribe(e => {
-          if (e.oldHash) {
-            const updateTo = e.newHash ? ` to ${e.newId}-${e.newHash} (${e.importance.toString().toLowerCase()})` : '';
-            this.addEvent(EventCategory.APP_UPDATE, 'Update loading finished', `Update from ${e.oldId}-${e.oldHash}${updateTo}`, e.loadTime);
-          } else {
-            this.addEvent(EventCategory.APP_UPDATE, 'Update activated', `Update to ${e.newId}-${e.newHash}`);
-          }
-        });
-    this.eventService.on<any>('HttpRequestFailed')
-        .subscribe(e => this.addEvent(EventCategory.ERROR, 'HTTP request failed', `Status code ${e.status}`, undefined, e.url));
-    this.eventService.on<any>('AccountCreated')
-        .subscribe(() => this.addEvent(EventCategory.ACCOUNT, 'Account created'));
-    this.eventService.on<any>('AccountDeleted')
-        .subscribe(() => this.addEvent(EventCategory.ACCOUNT, 'Account deleted'));
-    this.eventService.on<any>('RoomCreated')
-        .subscribe(() => this.addEvent(EventCategory.USER_DATA_ROOM, 'Room created'));
-    this.eventService.on<any>('DemoRoomCreated')
-        .subscribe(e => {
-          this.addEvent(EventCategory.USER_DATA_ROOM, 'Demo room created');
-          this.specialRooms.set(e.shortId, 'Demo')
-        });
-    this.eventService.on<any>('CommentCreated')
-        .subscribe(() => this.addEvent(EventCategory.USER_DATA_COMMENT, 'Comment created'));
-    this.eventService.on<any>('ContentCreated')
-        .subscribe(e => this.addEvent(EventCategory.USER_DATA_CONTENT, 'Content created', e.format.toString().toLowerCase()));
-    this.eventService.on<any>('SurveyStarted')
-        .subscribe(() => this.addEvent(EventCategory.FEATURE_USAGE_SURVEY, 'Survey started'));
+    this.eventService.on<any>('UpdateInstalled').subscribe((e) => {
+      if (e.oldHash) {
+        const updateTo = e.newHash
+          ? ` to ${e.newId}-${e.newHash} (${e.importance
+              .toString()
+              .toLowerCase()})`
+          : '';
+        this.addEvent(
+          EventCategory.APP_UPDATE,
+          'Update loading finished',
+          `Update from ${e.oldId}-${e.oldHash}${updateTo}`,
+          e.loadTime
+        );
+      } else {
+        this.addEvent(
+          EventCategory.APP_UPDATE,
+          'Update activated',
+          `Update to ${e.newId}-${e.newHash}`
+        );
+      }
+    });
+    this.eventService
+      .on<any>('HttpRequestFailed')
+      .subscribe((e) =>
+        this.addEvent(
+          EventCategory.ERROR,
+          'HTTP request failed',
+          `Status code ${e.status}`,
+          undefined,
+          e.url
+        )
+      );
+    this.eventService
+      .on<any>('AccountCreated')
+      .subscribe(() => this.addEvent(EventCategory.ACCOUNT, 'Account created'));
+    this.eventService
+      .on<any>('AccountDeleted')
+      .subscribe(() => this.addEvent(EventCategory.ACCOUNT, 'Account deleted'));
+    this.eventService
+      .on<any>('RoomCreated')
+      .subscribe(() =>
+        this.addEvent(EventCategory.USER_DATA_ROOM, 'Room created')
+      );
+    this.eventService.on<any>('DemoRoomCreated').subscribe((e) => {
+      this.addEvent(EventCategory.USER_DATA_ROOM, 'Demo room created');
+      this.specialRooms.set(e.shortId, 'Demo');
+    });
+    this.eventService
+      .on<any>('CommentCreated')
+      .subscribe(() =>
+        this.addEvent(EventCategory.USER_DATA_COMMENT, 'Comment created')
+      );
+    this.eventService
+      .on<any>('ContentCreated')
+      .subscribe((e) =>
+        this.addEvent(
+          EventCategory.USER_DATA_CONTENT,
+          'Content created',
+          e.format.toString().toLowerCase()
+        )
+      );
+    this.eventService
+      .on<any>('SurveyStarted')
+      .subscribe(() =>
+        this.addEvent(EventCategory.FEATURE_USAGE_SURVEY, 'Survey started')
+      );
   }
 
   setVisitDimension(dimension: VisitDimension, value: string) {
@@ -195,9 +270,12 @@ export class TrackingService {
       const shortId = route.paramMap.get('shortId');
       const role: UserRole = route.data.viewRole;
       if (role) {
-        dimensions['dimension' + ActionDimension.ROOM_ROLE] = role.toString().toLowerCase();
+        dimensions['dimension' + ActionDimension.ROOM_ROLE] = role
+          .toString()
+          .toLowerCase();
         if (this.specialRooms.has(shortId)) {
-          dimensions['dimension' + ActionDimension.SPECIAL_ROOM] = this.specialRooms.get(shortId);
+          dimensions['dimension' + ActionDimension.SPECIAL_ROOM] =
+            this.specialRooms.get(shortId);
         }
       }
     }
@@ -206,12 +284,23 @@ export class TrackingService {
     this.setupPingSubscription();
   }
 
-  addEvent(category: EventCategory, action: string, name?: string, value?: number, url?: string) {
+  addEvent(
+    category: EventCategory,
+    action: string,
+    name?: string,
+    value?: number,
+    url?: string
+  ) {
     if (!environment.production) {
-      console.log(`Tracking: addEvent(category=${category}, action=${action}, name=${name}, value=${value}, url=${url})`);
+      console.log(
+        `Tracking: addEvent(category=${category}, action=${action}, name=${name}, value=${value}, url=${url})`
+      );
     }
-    this._paq.push(['setCustomUrl', this.stripIdsFromUri(url ?? this.router.url)]);
-    const event: (string|number)[] = ['trackEvent', category, action];
+    this._paq.push([
+      'setCustomUrl',
+      this.stripIdsFromUri(url ?? this.router.url),
+    ]);
+    const event: (string | number)[] = ['trackEvent', category, action];
     /* Check for undefined explicitly because 0 is a valid value */
     if (name || typeof value !== 'undefined') {
       event.push(name);
@@ -232,23 +321,31 @@ export class TrackingService {
    * Replaces IDs in a URI to protect the user's privacy.
    */
   stripIdsFromUri(uri: string) {
-    return uri.replace(/\/[0-9]+(\/|\?|$)/, '/__ROOM_SHORT_ID__$1')
-        .replace(/\/~.*?(\/|\?|$)/, '/__ALIAS__$1')
-        .replace(/\/[0-9a-f]{32}(\/|\?|$)/, '/__ID__$1')
-        .replace(/\/[0-9]{1,4}(\/|\?|$)/, '/__INDEX__$1')
-        .replace(/\/series\/[^/]+/, '/series/__SERIES__')
-        .replace(/\/present\/[0-9]+(\/|\?|$)/, '/present/__ROOM_SHORT_ID__$1')
-        .replace(/\/[^/?]+@[^/?]+/, '/__MAIL__');
+    return uri
+      .replace(/\/[0-9]+(\/|\?|$)/, '/__ROOM_SHORT_ID__$1')
+      .replace(/\/~.*?(\/|\?|$)/, '/__ALIAS__$1')
+      .replace(/\/[0-9a-f]{32}(\/|\?|$)/, '/__ID__$1')
+      .replace(/\/[0-9]{1,4}(\/|\?|$)/, '/__INDEX__$1')
+      .replace(/\/series\/[^/]+/, '/series/__SERIES__')
+      .replace(/\/present\/[0-9]+(\/|\?|$)/, '/present/__ROOM_SHORT_ID__$1')
+      .replace(/\/[^/?]+@[^/?]+/, '/__MAIL__');
   }
 
   private trackEntryOrReload() {
     const queryParams = new URL(document.location.href).searchParams;
     const entry = queryParams.get('entry');
-    if (this.globalStorageService.getItem(STORAGE_KEYS.BROWSER_SESSION_INITIALIZED)) {
+    if (
+      this.globalStorageService.getItem(
+        STORAGE_KEYS.BROWSER_SESSION_INITIALIZED
+      )
+    ) {
       this.addEvent(EventCategory.BROSWER, 'App reinitialized');
     } else if (entry) {
       this.setVisitDimension(VisitDimension.ENTRY, entry);
     }
-    this.globalStorageService.setItem(STORAGE_KEYS.BROWSER_SESSION_INITIALIZED, true);
+    this.globalStorageService.setItem(
+      STORAGE_KEYS.BROWSER_SESSION_INITIALIZED,
+      true
+    );
   }
 }

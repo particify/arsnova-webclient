@@ -1,14 +1,18 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { RoomCreateComponent } from './room-create.component';
-import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA } from '@angular/material/legacy-dialog';
+import {
+  MatLegacyDialogRef as MatDialogRef,
+  MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA,
+} from '@angular/material/legacy-dialog';
 import { NotificationService } from '@arsnova/app/services/util/notification.service';
-import { JsonTranslationLoader,
+import {
+  JsonTranslationLoader,
   MockMatDialogRef,
   MockNotificationService,
   MockGlobalStorageService,
   MockLangService,
   MockEventService,
-  MockRouter
+  MockRouter,
 } from '@arsnova/testing/test-helpers';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { GlobalStorageService } from '@arsnova/app/services/util/global-storage.service';
@@ -28,76 +32,73 @@ describe('RoomCreateComponent', () => {
 
   const mockRoomService = jasmine.createSpyObj(['addRoom']);
 
-  const mockAuthenticationService = jasmine.createSpyObj(['getCurrentAuthentication']);
+  const mockAuthenticationService = jasmine.createSpyObj([
+    'getCurrentAuthentication',
+  ]);
   mockAuthenticationService.getCurrentAuthentication.and.returnValue(of({}));
 
   const mockApiConfigService = jasmine.createSpyObj(['getApiConfig$']);
   const config = {
-    authenticationProviders: []
-  }
+    authenticationProviders: [],
+  };
   mockApiConfigService.getApiConfig$.and.returnValue(of(config));
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [
-        RoomCreateComponent
-      ],
+      declarations: [RoomCreateComponent],
       imports: [
         TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
-            useClass: JsonTranslationLoader
+            useClass: JsonTranslationLoader,
           },
-          isolate: true
-        })
+          isolate: true,
+        }),
       ],
       providers: [
         {
           provide: NotificationService,
-          useClass: MockNotificationService
+          useClass: MockNotificationService,
         },
         {
           provide: Router,
-          useClass: MockRouter
+          useClass: MockRouter,
         },
         {
           provide: AuthenticationService,
-          useValue: mockAuthenticationService
+          useValue: mockAuthenticationService,
         },
         {
           provide: RoomService,
-          useValue: mockRoomService
+          useValue: mockRoomService,
         },
         {
           provide: GlobalStorageService,
-          useClass: MockGlobalStorageService
+          useClass: MockGlobalStorageService,
         },
         {
           provide: LanguageService,
-          useClass: MockLangService
+          useClass: MockLangService,
         },
         {
           provide: MatDialogRef,
-          useClass: MockMatDialogRef
+          useClass: MockMatDialogRef,
         },
         {
           provide: EventService,
-          useClass: MockEventService
+          useClass: MockEventService,
         },
         {
           provide: ApiConfigService,
-          useValue: mockApiConfigService
+          useValue: mockApiConfigService,
         },
         {
           provide: MAT_DIALOG_DATA,
-          useClass: MockMatDialogData
-        }
+          useClass: MockMatDialogData,
+        },
       ],
-      schemas: [
-        NO_ERRORS_SCHEMA
-      ]
-    })
-    .compileComponents();
+      schemas: [NO_ERRORS_SCHEMA],
+    }).compileComponents();
   }));
 
   beforeEach(() => {
