@@ -89,7 +89,7 @@ export class GroupContentComponent
 
   iconList: Map<ContentType, string>;
 
-  navBarExists = false;
+  navBarExists = true;
   onInit = false;
 
   navBarStateSubscription: Subscription;
