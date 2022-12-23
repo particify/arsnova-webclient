@@ -43,11 +43,13 @@ $header-height: 64px;
 .mat-button {
   text-align: start;
   width: 100%;
+
   &:not(.active-page) {
     .mat-icon {
       opacity: 0.6;
     }
   }
+
   .mat-icon {
     margin-right: 8px;
   }

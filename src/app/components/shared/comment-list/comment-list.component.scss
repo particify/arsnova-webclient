@@ -104,6 +104,7 @@ $search-bar-height: 70px;
   .five-buttons {
     max-width: 340px;
   }
+
   .four-buttons {
     max-width: 286px;
   }
@@ -114,6 +115,7 @@ $search-bar-height: 70px;
     right: calc(50% - 205px);
     max-width: 410px;
   }
+
   .four-buttons {
     max-width: 356px;
   }
@@ -152,6 +154,7 @@ $search-bar-height: 70px;
   background-color: var(--surface);
   color: var(--on-surface);
   opacity: 0.8;
+
   &:last-of-type {
     margin: 0;
   }
@@ -252,6 +255,7 @@ button.selected {
 .scroll-to-new-posts-visible {
   // Additional 10px to align with add/scroll button vertically
   bottom: calc(4vw + 10px);
+
   &.above-bar {
     bottom: calc($mobile-bar-height + 4vw + 10px);
   }

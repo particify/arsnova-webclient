@@ -1,4 +1,4 @@
-@import '../../../../_variables.scss';
+@import '../../../../variables';
 
 .container {
   margin: 8px 0;
@@ -36,15 +36,18 @@
   right: 4px;
   margin: 0;
   padding: 0 1em;
+
   .counter-text {
     font-weight: $font-weight-bold;
     font-size: 20px;
     line-height: 33px;
   }
+
   .counter {
     font-size: 28px;
     color: var(--primary);
   }
+
   transition: bottom 300ms;
 }
 

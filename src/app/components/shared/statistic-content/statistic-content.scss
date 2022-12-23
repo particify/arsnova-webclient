@@ -2,6 +2,7 @@
 
 .chart-container {
   transition: all 300ms;
+
   &:not(.no-bottom-margin) {
     margin-bottom: 1em;
   }
@@ -47,6 +48,7 @@
   font-weight: $font-weight-bold;
   min-height: 0;
   font-size: 12px;
+
   .mat-icon {
     font-size: 18px;
     width: 18px;
@@ -56,6 +58,7 @@
 
 .no-background.mat-list-item {
   margin-bottom: 4px;
+
   &:first-of-type {
     margin-top: 4px;
   }

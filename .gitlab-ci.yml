@@ -72,6 +72,14 @@ prettier:
   script:
     - yarn prettier --check .
 
+styelint:
+  stage: test
+  needs:
+    - yarn_install
+  allow_failure: true
+  script:
+    - yarn stylelint "**/*.scss"
+
 unit_tests:
   stage: test
   needs:

@@ -6,9 +6,11 @@
 
 .url {
   margin: 16px 0;
+
   &:first-of-type {
     margin: 32px 0;
   }
+
   &:only-of-type {
     margin-bottom: 16px;
   }
@@ -56,6 +58,7 @@ $icon-size: calc(32px + 6vw);
   top: 1em;
   right: 1em;
   opacity: 0.5;
+
   &:hover {
     opacity: 0.7;
   }

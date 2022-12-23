@@ -33,7 +33,6 @@ export interface DialogData {
 @Component({
   selector: 'app-submit-comment',
   templateUrl: './create-comment.component.html',
-  styleUrls: ['./create-comment.component.scss'],
 })
 export class CreateCommentComponent implements OnInit {
   readonly dialogId = 'create-comment';

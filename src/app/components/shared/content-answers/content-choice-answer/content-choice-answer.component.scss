@@ -15,12 +15,15 @@
   border-style: solid;
   border-radius: 5px;
   transition: border-color 300ms;
-  &:not(.correct-answer):not(.wrong-answer):not(.selected) {
+
+  &:not(.correct-answer, .wrong-answer, .selected) {
     border-color: var(--grey-light);
   }
+
   &:last-of-type {
     margin-bottom: 16px;
   }
+
   &:first-of-type {
     margin-top: 8px;
   }

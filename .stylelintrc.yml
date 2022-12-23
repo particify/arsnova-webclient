@@ -1,0 +1,7 @@
+---
+extends:
+  - stylelint-config-standard-scss
+  - stylelint-config-prettier-scss
+rules:
+  # The following rule can cause issues with SCSS vars used with calc function
+  length-zero-no-unit: null

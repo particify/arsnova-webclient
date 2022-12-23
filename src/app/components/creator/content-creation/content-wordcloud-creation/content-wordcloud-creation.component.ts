@@ -18,7 +18,6 @@ const MAX_KEYWORDS = 10;
 @Component({
   selector: 'app-content-wordcloud-creation',
   templateUrl: './content-wordcloud-creation.component.html',
-  styleUrls: ['./content-wordcloud-creation.component.scss'],
 })
 export class ContentWordcloudCreationComponent
   extends ContentCreationComponent

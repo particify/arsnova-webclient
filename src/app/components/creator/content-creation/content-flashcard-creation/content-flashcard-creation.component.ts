@@ -18,7 +18,6 @@ import { AnnounceService } from '../../../../services/util/announce.service';
 @Component({
   selector: 'app-content-flashcard-creation',
   templateUrl: './content-flashcard-creation.component.html',
-  styleUrls: ['./content-flashcard-creation.component.scss'],
 })
 export class ContentFlashcardCreationComponent
   extends ContentCreationComponent
