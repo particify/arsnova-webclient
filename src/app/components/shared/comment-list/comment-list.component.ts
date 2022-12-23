@@ -133,7 +133,7 @@ export class CommentListComponent implements OnInit, OnDestroy {
   periodsList = Object.values(Period);
   period: Period;
   scrollToTop = false;
-  navBarExists = false;
+  navBarExists = true;
   lastScroll = 0;
   scrollActive = false;
   publicCounter = 0;
