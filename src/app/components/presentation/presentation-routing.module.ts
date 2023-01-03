@@ -13,6 +13,7 @@ import { CommentPageComponent } from '../shared/comment-page/comment-page.compon
 import { SurveyPageComponent } from '../shared/survey-page/survey-page.component';
 import { ContentPresentationComponent } from '../creator/content-presentation/content-presentation.component';
 import { QrCodeComponent } from './qr-code/qr-code.component';
+import { CommentSettingsResolver } from '../../resolver/comment-settings.resolver';
 
 const routes: Routes = [
   {
@@ -58,11 +59,19 @@ const routes: Routes = [
           },
           runGuardsAndResolvers: 'always',
           children: [
-            ...routes,
-            ...ExtensionRouteProvider.extractRoutesForMountPoint(
-              RouteMountPoint.PRESENTATION,
-              extensionRouteProviders
-            ),
+            {
+              path: '',
+              resolve: {
+                commentSettings: CommentSettingsResolver,
+              },
+              children: [
+                ...routes,
+                ...ExtensionRouteProvider.extractRoutesForMountPoint(
+                  RouteMountPoint.PRESENTATION,
+                  extensionRouteProviders
+                ),
+              ],
+            },
           ],
         },
       ],

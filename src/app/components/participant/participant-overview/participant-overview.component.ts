@@ -33,6 +33,7 @@ export class ParticipantOverviewComponent
   room: Room;
   protected surveySub: Subscription;
   surveyEnabled = false;
+  commentsEnabled = false;
 
   constructor(
     protected roomStatsService: RoomStatsService,
@@ -70,6 +71,7 @@ export class ParticipantOverviewComponent
     window.scroll(0, 0);
     this.route.data.subscribe((data) => {
       this.initializeRoom(data.room, data.userRole, data.viewRole);
+      this.commentsEnabled = !data.commentSettings.disabled;
     });
     this.translateService.use(
       this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE)

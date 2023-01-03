@@ -74,7 +74,7 @@ export class NavBarComponent
     new BarItem(Features.FEEDBACK, 'thumbs_up_down'),
   ];
   currentRouteIndex: number;
-  activeFeatures: string[] = [Features.OVERVIEW, Features.COMMENTS];
+  activeFeatures: string[] = [Features.OVERVIEW];
   group: ContentGroup;
   groupName: string;
   role: UserRole;
@@ -158,6 +158,12 @@ export class NavBarComponent
         this.viewRole !== UserRole.PARTICIPANT
       ) {
         this.activeFeatures.splice(2, 0, Features.FEEDBACK);
+      }
+      if (
+        !this.route.children[0]?.snapshot.data.commentSettings?.disabled ||
+        this.viewRole !== UserRole.PARTICIPANT
+      ) {
+        this.activeFeatures.splice(1, 0, Features.COMMENTS);
       }
       this.feedbackService.startSub(this.roomId);
       let group = this.routingService.seriesName;
