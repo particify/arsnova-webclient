@@ -282,7 +282,8 @@
     "points-left": "Punkte übrig",
     "points-too-much": "Punkte zu viel vergeben",
     "add-points": "10 Punkte hinzufügen",
-    "remove-points": "10 Punkte entfernen"
+    "remove-points": "10 Punkte entfernen",
+    "your-answer": "Deine Antwort"
   },
   "survey": {
     "a11y-message": "Du befindest dich jetzt im Live Feedback.",
