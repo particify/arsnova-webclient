@@ -1,0 +1,13 @@
+<mat-form-field appearance="outline">
+  <mat-label>{{ 'answer.your-answer' | translate }}</mat-label>
+  <textarea
+    #answer
+    matInput
+    (input)="inputEvent.emit(answer.value)"
+    name="answer"
+    cdkTextareaAutosize
+    cdkAutosizeMinRows="3"
+    cdkAutosizeMaxRows="8"
+    maxLength="500"
+  ></textarea>
+</mat-form-field>
