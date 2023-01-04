@@ -4,7 +4,8 @@ import {
   MockMatDialogRef,
   JsonTranslationLoader,
 } from '@arsnova/testing/test-helpers';
-import { MatLegacyDialogRef as MatDialogRef } from '@angular/material/legacy-dialog';
+import { MatDialogRef } from '@angular/material/dialog';
+
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 

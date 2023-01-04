@@ -18,18 +18,18 @@ import { Message } from '@stomp/stompjs';
 import { RoutingService } from '@arsnova/app/services/util/routing.service';
 import { RoomStatsService } from '@arsnova/app/services/http/room-stats.service';
 import { ContentGroup } from '@arsnova/app/models/content-group';
-import { MatLegacyMenuModule as MatMenuModule } from '@angular/material/legacy-menu';
+import { MatMenuModule } from '@angular/material/menu';
 import { RoomService } from '@arsnova/app/services/http/room.service';
-import { MatLegacyButtonHarness as MatButtonHarness } from '@angular/material/legacy-button/testing';
+import { MatButtonHarness } from '@angular/material/button/testing';
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 import { HarnessLoader } from '@angular/cdk/testing';
 import { UserRole } from '@arsnova/app/models/user-roles.enum';
 import { RouterTestingModule } from '@angular/router/testing';
 import { LanguageService } from '@arsnova/app/services/util/language.service';
 import {
-  MatLegacyMenuHarness as MatMenuHarness,
-  MatLegacyMenuItemHarness as MatMenuItemHarness,
-} from '@angular/material/legacy-menu/testing';
+  MatMenuHarness,
+  MatMenuItemHarness,
+} from '@angular/material/menu/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FeedbackMessageType } from '@arsnova/app/models/messages/feedback-message-type';

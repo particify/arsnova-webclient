@@ -21,7 +21,7 @@ import { RoomStats } from '../../../../models/room-stats';
 import { Features } from '../../../../models/features.enum';
 import { SeriesCreated } from '../../../../models/events/series-created';
 import { SeriesDeleted } from '../../../../models/events/series-deleted';
-import { MatLegacyMenuTrigger as MatMenuTrigger } from '@angular/material/legacy-menu';
+import { MatMenuTrigger } from '@angular/material/menu';
 import { RoomService } from '../../../../services/http/room.service';
 import { IMessage } from '@stomp/stompjs';
 

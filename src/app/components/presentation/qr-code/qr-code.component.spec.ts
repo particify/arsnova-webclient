@@ -14,10 +14,10 @@ import {
 } from '@arsnova/testing/test-helpers';
 import { NotificationService } from '@arsnova/app/services/util/notification.service';
 import {
-  MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA,
-  MatLegacyDialog as MatDialog,
-  MatLegacyDialogRef as MatDialogRef,
-} from '@angular/material/legacy-dialog';
+  MAT_DIALOG_DATA,
+  MatDialog,
+  MatDialogRef,
+} from '@angular/material/dialog';
 import { EventService } from '@arsnova/app/services/util/event.service';
 import { ThemeService } from '@arsnova/theme/theme.service';
 import { ApiConfigService } from '@arsnova/app/services/http/api-config.service';

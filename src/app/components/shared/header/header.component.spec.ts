@@ -30,20 +30,20 @@ import { NO_ERRORS_SCHEMA, Renderer2 } from '@angular/core';
 import { ThemeService } from '@arsnova/theme/theme.service';
 import { RoutingService } from '@arsnova/app/services/util/routing.service';
 import { ConsentService } from '@arsnova/app/services/util/consent.service';
-import { MatLegacyMenuModule as MatMenuModule } from '@angular/material/legacy-menu';
+import { MatMenuModule } from '@angular/material/menu';
 import {
-  MatLegacyMenuHarness as MatMenuHarness,
-  MatLegacyMenuItemHarness as MatMenuItemHarness,
-} from '@angular/material/legacy-menu/testing';
+  MatMenuHarness,
+  MatMenuItemHarness,
+} from '@angular/material/menu/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ReactiveFormsModule } from '@angular/forms';
-import { MatLegacyButtonModule as MatButtonModule } from '@angular/material/legacy-button';
-import { MatLegacyButtonHarness as MatButtonHarness } from '@angular/material/legacy-button/testing';
+import { MatButtonModule } from '@angular/material/button';
+import { MatButtonHarness } from '@angular/material/button/testing';
 import { ClientAuthentication } from '@arsnova/app/models/client-authentication';
 import { AuthProvider } from '@arsnova/app/models/auth-provider';
-import { MatLegacySelectModule as MatSelectModule } from '@angular/material/legacy-select';
+import { MatSelectModule } from '@angular/material/select';
 import { BehaviorSubject, of } from 'rxjs';
-import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { AnnounceService } from '@arsnova/app/services/util/announce.service';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 

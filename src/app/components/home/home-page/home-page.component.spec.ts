@@ -16,7 +16,7 @@ import {
   MockRenderer2,
 } from '../../../../testing/test-helpers';
 import { HarnessLoader } from '@angular/cdk/testing';
-import { MatLegacyButtonHarness as MatButtonHarness } from '@angular/material/legacy-button/testing';
+import { MatButtonHarness } from '@angular/material/button/testing';
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
 import { A11yIntroPipe } from '@arsnova/app/pipes/a11y-intro.pipe';

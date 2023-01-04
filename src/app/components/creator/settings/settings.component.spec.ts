@@ -19,7 +19,7 @@ import {
   Router,
 } from '@angular/router';
 import { EventService } from '@arsnova/app/services/util/event.service';
-import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { Location } from '@angular/common';
 import { MockLocationStrategy } from '@angular/common/testing';
 import { of } from 'rxjs';

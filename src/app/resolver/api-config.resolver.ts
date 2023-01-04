@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { MatLegacySnackBarRef as MatSnackBarRef } from '@angular/material/legacy-snack-bar';
+import { MatSnackBarRef } from '@angular/material/snack-bar';
 import { Resolve } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { Observable, timer } from 'rxjs';

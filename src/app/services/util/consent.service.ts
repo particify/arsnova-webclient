@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { AbstractHttpService } from '../http/abstract-http.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError } from 'rxjs/operators';
-import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { CookiesComponent } from '../../components/home/_dialogs/cookies/cookies.component';
 import { StorageItemCategory } from '../../models/storage';
 import { TranslateService } from '@ngx-translate/core';

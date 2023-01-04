@@ -25,7 +25,7 @@ import { Person } from '@arsnova/app/models/person';
 import { AccessTokenService } from '@arsnova/app/services/http/access-token.service';
 import { HarnessLoader } from '@angular/cdk/testing';
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
-import { MatLegacyButtonHarness as MatButtonHarness } from '@angular/material/legacy-button/testing';
+import { MatButtonHarness } from '@angular/material/button/testing';
 import { AdvancedSnackBarTypes } from '@arsnova/app/services/util/notification.service';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 

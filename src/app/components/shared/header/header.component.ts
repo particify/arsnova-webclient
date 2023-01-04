@@ -24,7 +24,7 @@ import { ConsentService } from '../../../services/util/consent.service';
 import { HotkeyAction } from '../../../directives/hotkey.directive';
 import { UserRole } from '../../../models/user-roles.enum';
 import { ExtensionFactory } from '../../../../../projects/extension-point/src/public-api';
-import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { AnnouncementListComponent } from '../announcement-list/announcement-list.component';
 import { AnnouncementService } from '@arsnova/app/services/http/announcement.service';
 import { AnnouncementState } from '@arsnova/app/models/announcement-state';

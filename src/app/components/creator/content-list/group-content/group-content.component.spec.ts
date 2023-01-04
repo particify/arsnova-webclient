@@ -36,7 +36,7 @@ import { HotkeyService } from '@arsnova/app/services/util/hotkey.service';
 import { GlobalStorageService } from '@arsnova/app/services/util/global-storage.service';
 import { of } from 'rxjs';
 import { A11yIntroPipe } from '@arsnova/app/pipes/a11y-intro.pipe';
-import { MatLegacyMenuModule as MatMenuModule } from '@angular/material/legacy-menu';
+import { MatMenuModule } from '@angular/material/menu';
 import { Content } from '@arsnova/app/models/content';
 import { ContentType } from '@arsnova/app/models/content-type.enum';
 import { ContentState } from '@arsnova/app/models/content-state';

@@ -3,12 +3,12 @@
 @import 'theme/arsnova-theme/arsnova-theme';
 @import 'theme/theme';
 @import 'variables';
-@include mat.all-legacy-component-typographies;
-@include mat.legacy-core;
-@include mat.all-legacy-component-themes($arsnova-theme);
+@include mat.all-component-typographies;
+@include mat.core;
+@include mat.all-component-themes($arsnova-theme);
 
 .dark {
-  @include mat.all-legacy-component-themes($dark-theme);
+  @include mat.all-component-themes($dark-theme);
 }
 
 body {

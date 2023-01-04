@@ -7,7 +7,7 @@ import {
   AdvancedSnackBarTypes,
   NotificationService,
 } from '../../../services/util/notification.service';
-import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
 import { LanguageService } from '../../../services/util/language.service';
 import { WsCommentService } from '../../../services/websockets/ws-comment.service';
