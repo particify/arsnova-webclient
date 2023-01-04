@@ -9,6 +9,7 @@
         aria-labelledby="answer"
         [(ngModel)]="newAnswer"
         autocomplete="off"
+        placeholder="{{ 'content.answer' | translate }}"
       />
       <button
         class="add-button"
@@ -18,7 +19,6 @@
       >
         <mat-icon class="add-icon">add_circle</mat-icon>
       </button>
-      <mat-placeholder>{{ 'content.answer' | translate }}</mat-placeholder>
     </mat-form-field>
   </form>
 </div>

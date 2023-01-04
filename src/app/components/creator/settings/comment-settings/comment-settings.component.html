@@ -42,7 +42,7 @@
     <div>
       <mat-form-field class="input-block no-field-hint" appearance="outline">
         <mat-label>{{ 'settings.tags' | translate }}</mat-label>
-        <mat-chip-list #tagList>
+        <mat-chip-listbox #tagList>
           <mat-chip
             *ngFor="let tag of tags"
             [removable]="true"
@@ -67,7 +67,7 @@
             maxlength="15"
             placeholder="{{ 'settings.new-tag' | translate }}"
           />
-        </mat-chip-list>
+        </mat-chip-listbox>
       </mat-form-field>
     </div>
   </div>
