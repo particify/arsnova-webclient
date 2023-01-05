@@ -16,9 +16,7 @@
           max="-5"
           step="5"
           [(ngModel)]="threshold"
-          (input)="onSliderChange($event)"
-          (change)="updateCommentExtensions(); announceThreshold()"
-        ></mat-slider>
+         #ngSlider><input matSliderThumb (input)="onSliderChange({source: ngSliderThumb, parent: ngSlider, value: ngSliderThumb.value})" #ngSliderThumb="matSliderThumb" (change)="updateCommentExtensions(); announceThreshold()" /></mat-slider>
         <h2>&nbsp;{{ threshold | number }}</h2>
       </div>
     </div>
@@ -43,7 +41,7 @@
       <mat-form-field class="input-block no-field-hint" appearance="outline">
         <mat-label>{{ 'settings.tags' | translate }}</mat-label>
         <mat-chip-listbox #tagList>
-          <mat-chip
+          <mat-chip-option
             *ngFor="let tag of tags"
             [removable]="true"
             (removed)="deleteTag(tag)"
@@ -56,7 +54,7 @@
               }}"
               >cancel</mat-icon
             >
-          </mat-chip>
+          </mat-chip-option>
           <input
             [matChipInputFor]="tagList"
             (matChipInputTokenEnd)="addTag()"

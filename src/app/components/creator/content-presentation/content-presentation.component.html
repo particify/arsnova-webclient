@@ -55,7 +55,7 @@
             (currentStep >= i - 1 && currentStep <= i + 1) || isPresentation
           "
         >
-          <mat-card [ngClass]="{ 'presentation-card': isPresentation }">
+          <mat-card appearance="outlined" [ngClass]="{ 'presentation-card': isPresentation }">
             <app-statistic-content
               [content]="content"
               [directShow]="

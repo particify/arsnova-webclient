@@ -6,7 +6,7 @@
     [extensionData]="{ userId: auth.userId, excludeRoomIds: roomIds }"
   ></lib-extension-point>
   <div>
-    <mat-card class="account-memberships">
+    <mat-card appearance="outlined" class="account-memberships">
       <div
         fxFill
         fxLayout="row wrap"
@@ -241,6 +241,7 @@
   </div>
 
   <mat-card
+    appearance="outlined"
     *ngIf="showRoomsFromGuest"
     id="guest-rooms"
     class="account-memberships"

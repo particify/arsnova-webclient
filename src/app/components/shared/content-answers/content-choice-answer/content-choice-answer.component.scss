@@ -5,11 +5,11 @@
   pointer-events: none;
 }
 
-.mat-list {
+.mat-mdc-list {
   position: relative;
 }
 
-.mat-list-item {
+.mat-mdc-list-item {
   margin-top: $option-padding-full;
   border-width: 2px;
   border-style: solid;
@@ -41,12 +41,13 @@
   border-color: var(--primary);
 }
 
-.mat-radio-button,
-.mat-checkbox {
+.mat-mdc-radio-button,
+.mat-mdc-checkbox {
   width: 100%;
 }
 
-.mat-checkbox .mat-checkbox-label {
+/* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
+.mat-mdc-checkbox .mat-checkbox-label {
   margin: 0 !important;
 }
 

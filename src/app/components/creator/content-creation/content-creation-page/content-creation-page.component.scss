@@ -4,7 +4,7 @@ form {
   width: 100%;
 }
 
-.mat-menu-item {
+.mat-mdc-menu-item {
   height: auto;
 }
 
@@ -30,11 +30,12 @@ form {
   align-self: center;
 }
 
+/* TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version. */
 .format-button-icon {
   margin-bottom: 2px;
 }
 
-.mat-card {
+.mat-mdc-card {
   overflow: hidden;
 }
 

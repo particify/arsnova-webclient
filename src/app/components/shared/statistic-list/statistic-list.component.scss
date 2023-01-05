@@ -33,12 +33,12 @@ table {
   max-width: 80px;
 }
 
-.mat-header-cell {
+.mat-mdc-header-cell {
   color: var(--on-surface);
   background-color: var(--table-b);
 }
 
-.mat-cell {
+.mat-mdc-cell {
   color: var(--on-surface);
   padding-top: 8px;
   padding-bottom: 8px;
@@ -50,11 +50,11 @@ table {
   background-color: var(--surface);
 }
 
-.mat-progress-bar {
+.mat-mdc-progress-bar {
   height: 8px;
 }
 
-.mat-row {
+.mat-mdc-row {
   background-color: var(--table-a);
   border-style: none;
 

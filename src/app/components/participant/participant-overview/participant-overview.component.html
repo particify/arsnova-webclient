@@ -6,7 +6,7 @@
       }}
     </div>
     <app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
-    <mat-card *ngIf="!isLoading && room">
+    <mat-card appearance="outlined" *ngIf="!isLoading && room">
       <mat-card-content>
         <div fxLayout="row" fxLayoutAlign="space-between">
           <div class="header">

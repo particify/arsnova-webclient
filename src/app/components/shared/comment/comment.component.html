@@ -1,4 +1,5 @@
 <mat-card
+  appearance="outlined"
   name="comment"
   fxLayout="row"
   fxLayoutAlign="space-between"
@@ -198,15 +199,15 @@
           *ngIf="comment.tag && comment.tag !== ''"
           class="comment-tags light"
         >
-          <mat-chip-list>
-            <mat-chip
+          <mat-chip-listbox>
+            <mat-chip-option
               (click)="this.clickedOnTag.emit(comment.tag)"
               appTrackInteraction="Comments filtered"
               appTrackName="toggle-category"
             >
               {{ comment.tag }}
-            </mat-chip>
-          </mat-chip-list>
+            </mat-chip-option>
+          </mat-chip-listbox>
         </div>
         <lib-extension-point
           *ngIf="fileUploadEnabled"

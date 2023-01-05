@@ -1,8 +1,8 @@
-.mat-card {
+.mat-mdc-card {
   width: 100%;
 }
 
-.mat-stroked-button {
+.mat-mdc-outlined-button {
   width: 150px;
 
   // height of form field ..
@@ -11,7 +11,7 @@
 }
 
 @media (max-width: 420px) {
-  .mat-stroked-button {
+  .mat-mdc-outlined-button {
     margin-top: 1em;
   }
 }

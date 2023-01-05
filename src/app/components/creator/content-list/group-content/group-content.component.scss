@@ -1,12 +1,12 @@
-.mat-card {
+.mat-mdc-card {
   width: 92%;
 }
 
-.mat-list {
+.mat-mdc-list {
   background-color: var(--surface);
 }
 
-.mat-list-item {
+.mat-mdc-list-item {
   cursor: pointer;
   transition-property: background-color, color;
   transition-duration: 300ms;
@@ -28,7 +28,7 @@
   @include show-button-bar;
 }
 
-.mat-list-item:hover,
+.mat-mdc-list-item:hover,
 .mat-list-item:focus-within {
   * > .button-bar {
     @include show-button-bar;
@@ -71,6 +71,7 @@
   color: var(--primary);
 }
 
+/* TODO(mdc-migration): The following rule targets internal classes of tooltip that may no longer apply for the MDC version. */
 .mat-tooltip-component {
   position: relative;
 }
@@ -152,7 +153,7 @@
   font-weight: 500;
 }
 
-.mat-slide-toggle {
+.mat-mdc-slide-toggle {
   font-size: 16px;
   margin: 12px;
 }
@@ -246,7 +247,7 @@
     display: none;
   }
 
-  .mat-card {
+  .mat-mdc-card {
     margin-bottom: 4vw;
   }
 

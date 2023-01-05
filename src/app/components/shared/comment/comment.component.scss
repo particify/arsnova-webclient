@@ -23,7 +23,7 @@
   box-shadow: 0 0 5px var(--primary);
 }
 
-.mat-card-content > :first-child {
+.mat-mdc-card-content > :first-child {
   margin-top: 20px;
 }
 
@@ -46,7 +46,7 @@
 }
 
 .light-buttons {
-  .mat-icon-button {
+  .mat-mdc-icon-button {
     opacity: 0.8;
   }
 }
@@ -152,7 +152,7 @@
   margin-top: 12px;
 }
 
-.mat-chip {
+.mat-mdc-chip {
   cursor: pointer;
 }
 
