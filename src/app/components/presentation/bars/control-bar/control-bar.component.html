@@ -89,14 +89,14 @@
         <mat-menu #groupMenu="matMenu">
           <button
             mat-menu-item
-            fxLayout="row"
             fxLayoutAlign="space-between center"
             *ngFor="let contentGroup of contentGroups"
             [value]="contentGroup.name"
             [disabled]="contentGroup.contentIds?.length < 1"
             (click)="changeGroup(contentGroup)"
             [ngClass]="{
-              'selected-menu-item': contentGroup.name === groupName
+              'selected-menu-item': contentGroup.name === groupName,
+              'locked-group': !contentGroup.published
             }"
           >
             <span>{{ contentGroup.name }}</span>

@@ -8,6 +8,10 @@
   &:not(.presentation-comment) {
     max-width: 832px;
   }
+
+  &:not(.highlighted) {
+    background-color: var(--surface);
+  }
 }
 
 #comment-entry {
@@ -28,11 +32,11 @@
 }
 
 .voting-icon {
-  height: 40px;
   width: 40px;
+  height: 40px;
   font-size: 40px;
 
-  &:not(.upVoted, .downVoted) {
+  &:not(.green, .red) {
     opacity: 0.6;
   }
 }
@@ -49,30 +53,6 @@
   .mat-mdc-icon-button {
     opacity: 0.8;
   }
-}
-
-.upVoted {
-  color: var(--green);
-}
-
-.downVoted {
-  color: var(--red);
-}
-
-.answered-icon {
-  color: var(--blue);
-}
-
-.correct-icon {
-  color: var(--green);
-}
-
-.favorite-icon {
-  color: var(--yellow);
-}
-
-.wrong-icon {
-  color: var(--red);
 }
 
 .score {
@@ -144,7 +124,7 @@
 }
 
 .highlighted * {
-  color: var(--on-secondary) !important;
+  color: var(--on-secondary);
 }
 
 .comment-tags {
@@ -173,6 +153,10 @@
 
 .vote-container {
   margin-left: 8px;
+
+  & > button {
+    padding: 0 !important;
+  }
 }
 
 .voteUp {

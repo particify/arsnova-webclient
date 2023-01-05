@@ -1,5 +1,4 @@
 <mat-card
-  appearance="outlined"
   name="comment"
   fxLayout="row"
   fxLayoutAlign="space-between"
@@ -70,7 +69,7 @@
         (click)="markCorrect(1)"
         [matTooltip]="'comment-page.mark-not-correct' | translate"
       >
-        <mat-icon class="correct-icon">check_circle </mat-icon>
+        <mat-icon class="green">check_circle </mat-icon>
       </button>
       <button
         mat-icon-button
@@ -79,7 +78,7 @@
         (click)="markCorrect(2)"
         [matTooltip]="'comment-page.mark-not-wrong' | translate"
       >
-        <mat-icon class="wrong-icon">cancel </mat-icon>
+        <mat-icon class="red">cancel </mat-icon>
       </button>
       <button
         mat-icon-button
@@ -88,7 +87,7 @@
         (click)="setFavorite()"
         [matTooltip]="'comment-page.mark-not-favorite' | translate"
       >
-        <mat-icon class="favorite-icon">grade </mat-icon>
+        <mat-icon class="yellow">grade </mat-icon>
       </button>
       <button
         mat-icon-button
@@ -96,7 +95,7 @@
         (click)="answerComment()"
         [matTooltip]="'comment-page.go-to-answer' | translate"
       >
-        <mat-icon class="answered-icon">comment </mat-icon>
+        <mat-icon class="blue">comment </mat-icon>
       </button>
       <button
         *ngIf="isModeratorView"
@@ -129,7 +128,7 @@
       </button>
       <mat-menu #actionsMenu="matMenu" xPosition="before">
         <button mat-menu-item (click)="answerComment()">
-          <mat-icon class="answered-icon icon-important">comment</mat-icon>
+          <mat-icon class="blue icon-important">comment</mat-icon>
           <span>{{
             (!comment.answer
               ? 'comment-page.answer'
@@ -139,7 +138,7 @@
         </button>
 
         <button mat-menu-item (click)="markCorrect(1)">
-          <mat-icon class="correct-icon icon-important">check_circle</mat-icon>
+          <mat-icon class="green icon-important">check_circle</mat-icon>
           <span>{{
             (comment.correct !== 1
               ? 'comment-page.mark-correct'
@@ -149,7 +148,7 @@
         </button>
 
         <button mat-menu-item (click)="markCorrect(2)">
-          <mat-icon class="wrong-icon icon-important">cancel</mat-icon>
+          <mat-icon class="red icon-important">cancel</mat-icon>
           <span>{{
             (comment.correct !== 2
               ? 'comment-page.mark-wrong'
@@ -158,7 +157,7 @@
           }}</span>
         </button>
         <button mat-menu-item (click)="setFavorite()">
-          <mat-icon class="favorite-icon icon-important">grade</mat-icon>
+          <mat-icon class="yellow icon-important">grade</mat-icon>
           <span>{{
             (!comment.favorite
               ? 'comment-page.mark-favorite'
@@ -237,7 +236,7 @@
       (click)="vote(1)"
       [matTooltip]="'comment-page.vote-up' | translate"
     >
-      <mat-icon class="voting-icon" [ngClass]="{ upVoted: hasVoted === 1 }"
+      <mat-icon class="voting-icon" [ngClass]="{ green: hasVoted === 1 }"
         >keyboard_arrow_up</mat-icon
       >
     </button>
@@ -247,7 +246,7 @@
       (click)="vote(-1)"
       [matTooltip]="'comment-page.vote-down' | translate"
     >
-      <mat-icon class="voting-icon" [ngClass]="{ downVoted: hasVoted === -1 }"
+      <mat-icon class="voting-icon" [ngClass]="{ red: hasVoted === -1 }"
         >keyboard_arrow_down</mat-icon
       >
     </button>

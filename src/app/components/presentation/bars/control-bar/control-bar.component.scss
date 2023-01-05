@@ -204,3 +204,7 @@ $logo-width: 120px;
   height: 18px;
   margin: 0 0 0 8px !important;
 }
+
+.locked-group {
+  flex-direction: row-reverse !important;
+}

@@ -6,7 +6,7 @@
   <app-loading-indicator *ngIf="isLoading" [size]="80"></app-loading-indicator>
   <section class="card-container with-margin" *ngIf="!isLoading">
     <div class="card" [ngClass]="{ flipped: flipped }">
-      <mat-card appearance="outlined">
+      <mat-card>
         <div class="side" [ngClass]="{ 'invisible-card-content': flipped }">
           <div fxLayout="row">
             <app-rendered-text
@@ -215,7 +215,6 @@
               <div fxLayoutAlign="center" fxLayoutGap="10px">
                 <button
                   mat-stroked-button
-                  class="button-abort"
                   (click)="goToStats()"
                   aria-labelledby="show-front"
                   appHotkey=" "

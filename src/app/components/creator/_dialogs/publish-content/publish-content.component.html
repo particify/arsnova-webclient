@@ -14,12 +14,7 @@
     }}</mat-radio-button>
   </mat-radio-group>
   <div fxLayout="row" fxLayoutAlign="end" fxLayoutGap="10px">
-    <button
-      mat-button
-      type="button"
-      class="button-abort"
-      (click)="close(false)"
-    >
+    <button mat-button type="button" (click)="close(false)">
       {{ 'dialog.cancel' | translate }}
     </button>
     <button mat-flat-button class="button-primary">

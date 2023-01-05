@@ -1,5 +1,5 @@
 <div fxLayout="column" fxLayoutAlign="start center">
-  <mat-card appearance="outlined" fxLayout="column">
+  <mat-card fxLayout="column">
     <span class="header-text small">{{
       'content.thanks-for-participation' | translate
     }}</span>
@@ -32,8 +32,6 @@
     <mat-list *ngIf="!isLoading">
       <mat-list-item
         *ngFor="let content of contentsWithResults; let i = index"
-        fxLayout="column"
-        fxLayoutAlign="center"
         class="full-border"
         (click)="goToContent(i)"
       >

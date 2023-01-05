@@ -1,10 +1,23 @@
 @use '@angular/material' as mat;
+@import '../../variables';
 
 $arsnova-primary: mat.define-palette(mat.$deep-purple-palette, 600);
 $arsnova-accent: mat.define-palette(mat.$green-palette, 800);
 $arsnova-warn: mat.define-palette(mat.$red-palette, 600);
+$custom-typography: mat.define-typography-config(
+  $font-family: $font-family,
+  $button:
+    mat.define-typography-level(14px, 100%, $font-weight-bold, $font-family, 0),
+  $body-1: mat.define-typography-level(16px, 100%, normal, $font-family, 0),
+  $body-2: mat.define-typography-level(16px, 100%, normal, $font-family, 0),
+);
 $arsnova-theme: mat.define-light-theme(
-  $arsnova-primary,
-  $arsnova-accent,
-  $arsnova-warn
+  (
+    color: (
+      primary: $arsnova-primary,
+      accent: $arsnova-accent,
+      warn: $arsnova-warn,
+    ),
+    typography: $custom-typography,
+  )
 );

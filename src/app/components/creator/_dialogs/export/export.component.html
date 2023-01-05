@@ -17,8 +17,13 @@
   </mat-form-field>
 </mat-dialog-content>
 
-<div fxLayout="row wrap" fxLayoutAlign="end" fxLayoutGap="5px">
-  <button mat-button class="button-abort" (click)="cancel()">
+<div
+  mat-dialog-actions
+  fxLayout="row wrap"
+  fxLayoutAlign="end"
+  fxLayoutGap="5px"
+>
+  <button mat-button (click)="cancel()">
     {{ 'dialog.cancel' | translate }}
   </button>
   <button

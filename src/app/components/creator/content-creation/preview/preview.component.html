@@ -6,7 +6,7 @@
     ) | translate
   }}
 </h3>
-<mat-card appearance="outlined" class="mat-elevation-z2">
+<mat-card class="mat-elevation-z2">
   <app-loading-indicator [size]="80" *ngIf="isLoading"></app-loading-indicator>
   <app-rendered-text
     tabindex="0"
@@ -46,7 +46,7 @@
 </mat-card>
 <div *ngIf="content.format === 'FLASHCARD'">
   <h3 aria-labelledby="back">{{ 'content.flashcard-back' | translate }}</h3>
-  <mat-card appearance="outlined" class="mat-elevation-z2">
+  <mat-card class="mat-elevation-z2">
     <app-loading-indicator
       [size]="80"
       *ngIf="isLoading"
@@ -64,7 +64,6 @@
   <button
     (click)="emitFlipEvent(false)"
     attr.aria-label="{{ 'content.a11y-leave-preview' | translate }}"
-    class="button-abort"
     mat-stroked-button
   >
     {{ 'content.back' | translate }}

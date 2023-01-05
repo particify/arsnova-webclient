@@ -4,12 +4,13 @@
       <mat-form-field
         (keyup.enter)="onEnter(roomCode.value)"
         appearance="outline"
-        class="no-field-hint big-input"
+        class="no-field-hint"
         floatLabel="always"
       >
         <mat-label>{{ 'home-page.room-id' | translate }}</mat-label>
         <input
           id="room-id-input"
+          class="join-input"
           matInput
           #roomCode
           type="text"
@@ -28,15 +29,15 @@
         />
         <button
           id="join-button"
-          mat-icon-button
-          class="mat-primary"
+          mat-mini-fab
+          class="join-button button-primary"
           type="submit"
           role="button"
           (click)="joinRoom(roomCode.value)"
           aria-labelledby="join-button-label"
           matSuffix
         >
-          <mat-icon class="button-primary">keyboard_arrow_right</mat-icon>
+          <mat-icon>arrow_forward</mat-icon>
         </button>
       </mat-form-field>
     </div>

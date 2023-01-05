@@ -1,6 +1,6 @@
 <div fxLayout="row" fxLayoutAlign="center" fxLayoutGap="20px">
   <form class="full-width answer-form" fxLayout="row">
-    <mat-form-field class="full-width" appearance="fill">
+    <mat-form-field appearance="fill">
       <mat-label>{{ 'content.add-answer' | translate }}</mat-label>
       <input
         matInput
@@ -9,7 +9,6 @@
         aria-labelledby="answer"
         [(ngModel)]="newAnswer"
         autocomplete="off"
-        placeholder="{{ 'content.answer' | translate }}"
       />
       <button
         class="add-button"

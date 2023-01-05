@@ -6,23 +6,21 @@
       }}
     </div>
     <app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
-    <mat-card appearance="outlined" *ngIf="!isLoading && room">
-      <mat-card-content>
-        <div fxLayout="row" fxLayoutAlign="space-between">
-          <div class="header">
-            <span class="room-name">
-              {{ room.name }}
-            </span>
-            <span class="room-short-id">{{ room.shortId | splitShortId }}</span>
-          </div>
+    <mat-card *ngIf="!isLoading && room">
+      <div fxLayout="row" fxLayoutAlign="space-between">
+        <div class="header">
+          <span class="room-name">
+            {{ room.name }}
+          </span>
+          <span class="room-short-id">{{ room.shortId | splitShortId }}</span>
         </div>
-        <div *ngIf="room.description" fxLayoutAlign="center">
-          <app-rendered-text
-            [rawText]="room.description.trim()"
-            [renderedText]="room.renderedDescription"
-          ></app-rendered-text>
-        </div>
-      </mat-card-content>
+      </div>
+      <div *ngIf="room.description" fxLayoutAlign="center">
+        <app-rendered-text
+          [rawText]="room.description.trim()"
+          [renderedText]="room.renderedDescription"
+        ></app-rendered-text>
+      </div>
       <div fxLayout="column" fxLayoutAlign="center">
         <div
           class="action-button-container"
@@ -33,7 +31,7 @@
             <button
               id="comments-button"
               mat-icon-button
-              class="main-button"
+              class="main-button no-ripple"
               [disableRipple]="true"
               [routerLink]="['comments']"
               aria-labelledby="comments"
@@ -55,7 +53,7 @@
           >
             <button
               mat-icon-button
-              class="main-button"
+              class="main-button no-ripple"
               id="live-survey-button"
               aria-labelledby="live-survey"
               [disableRipple]="true"

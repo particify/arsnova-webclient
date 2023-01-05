@@ -9,8 +9,6 @@
       <app-divider *ngIf="displayAnswers.length > 0"></app-divider>
       <mat-list-item
         cdkDrag
-        fxLayout="column"
-        fxLayoutAlign="center"
         *ngFor="let answer of displayAnswers; let i = index"
       >
         <div fxLayout="row" fxLayoutAlign="center center" class="full-width">
@@ -37,9 +35,7 @@
             </mat-icon>
           </div>
           <form fxLayout="row" class="full-width">
-            <mat-form-field
-              class="editInput full-width no-field-hint"
-            >
+            <mat-form-field class="editInput surface-input no-field-hint">
               <input
                 id="answerEdit-{{ i }}"
                 name="answerEdit"
@@ -47,7 +43,6 @@
                 [(ngModel)]="answer.answerOption.label"
                 (focus)="goInEditMode(i)"
                 (blur)="leaveEditMode()"
-                class="full-width"
                 autocomplete="off"
               />
             </mat-form-field>

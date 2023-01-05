@@ -283,7 +283,7 @@
           (extensionEvent)="checkIfOpenPresentationDirectly($event)"
         ></lib-extension-point>
       </mat-menu>
-      <div fxLayoutGap="16px">
+      <div fxLayoutGap="16px" fxLayoutAlign="center center">
         <button
           *ngIf="announcementState"
           mat-icon-button
@@ -310,6 +310,7 @@
           appHotkey="9"
           [appHotkeyTitle]="'header.menu' | translate"
           [ngClass]="{ guest: isGuest() }"
+          fxLayoutAlign="center center"
         >
           <mat-icon *ngIf="isGuest()">person_outline</mat-icon>
           <span *ngIf="!isGuest()">{{ userCharacter }}</span>

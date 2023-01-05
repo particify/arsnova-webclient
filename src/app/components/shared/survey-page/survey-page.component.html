@@ -11,7 +11,6 @@
     </div>
     <div fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="center">
       <mat-card
-        appearance="outlined"
         id="survey-card"
         [ngClass]="{ 'presentation-card': isPresentation }"
       >
@@ -103,7 +102,6 @@
             mat-raised-button
             id="toggle-button"
             class="button-primary bottom-button"
-            fxLayoutAlign="center"
             (click)="toggle()"
             aria-labelledby="toggle"
             [appHotkey]="toggleKey"

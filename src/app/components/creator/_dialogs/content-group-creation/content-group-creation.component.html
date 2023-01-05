@@ -1,5 +1,10 @@
 <form>
-  <div fxLayout="column" fxLayoutAlign="center" fxLayoutGap="10px">
+  <div
+    mat-dialog-content
+    fxLayout="column"
+    fxLayoutAlign="center"
+    fxLayoutGap="10px"
+  >
     <mat-form-field appearance="outline">
       <mat-label>{{ 'dialog.content-group-name' | translate }}</mat-label>
       <input
@@ -15,18 +20,28 @@
       />
     </mat-form-field>
   </div>
-  <div fxLayout="row-reverse" fxLayoutGap="10px">
-    <button (click)="addContentGroup()" mat-flat-button class="button-primary">
-      {{ 'dialog.create-content-group' | translate }}
-    </button>
-    <button
-      (click)="closeDialog()"
-      aria-labelledby="cancel"
-      mat-button
-      class="button-abort"
-      type="button"
+  <div fxLayoutAlign="end">
+    <div
+      mat-dialog-actions
+      fxLayout="row-reverse"
+      fxLayoutAling="end"
+      fxLayoutGap="10px"
     >
-      {{ 'dialog.cancel' | translate }}
-    </button>
+      <button
+        (click)="addContentGroup()"
+        mat-flat-button
+        class="button-primary"
+      >
+        {{ 'dialog.create-content-group' | translate }}
+      </button>
+      <button
+        (click)="closeDialog()"
+        aria-labelledby="cancel"
+        mat-button
+        type="button"
+      >
+        {{ 'dialog.cancel' | translate }}
+      </button>
+    </div>
   </div>
 </form>

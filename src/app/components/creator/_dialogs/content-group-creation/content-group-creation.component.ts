@@ -12,7 +12,6 @@ import { GroupContentComponent } from '../../content-list/group-content/group-co
 @Component({
   selector: 'app-content-group-creation',
   templateUrl: './content-group-creation.component.html',
-  styleUrls: ['./content-group-creation.component.scss'],
 })
 export class ContentGroupCreationComponent {
   readonly dialogId = 'create-content-group';

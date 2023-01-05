@@ -3,7 +3,7 @@
 }
 
 .card-closed {
-  max-height: 40px;
+  max-height: calc(40px + 2 * 16px);
 }
 
 .card-expanded {

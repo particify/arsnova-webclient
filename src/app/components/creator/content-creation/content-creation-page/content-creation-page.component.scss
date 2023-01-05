@@ -4,10 +4,6 @@ form {
   width: 100%;
 }
 
-.mat-mdc-menu-item {
-  height: auto;
-}
-
 .format-name {
   line-height: 100%;
   font-weight: $font-weight-bold;
@@ -30,7 +26,6 @@ form {
   align-self: center;
 }
 
-/* TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version. */
 .format-button-icon {
   margin-bottom: 2px;
 }
@@ -39,11 +34,10 @@ form {
   overflow: hidden;
 }
 
-.abstentions {
-  margin-left: 16px;
-  margin-bottom: 10px;
-}
-
 .top-space {
   margin-top: 16px;
+}
+
+.header-container {
+  padding-bottom: 0.5em;
 }

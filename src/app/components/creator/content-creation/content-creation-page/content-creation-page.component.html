@@ -2,7 +2,7 @@
   <div fxLayout="row" fxLayoutAlign="center">
     <section class="card-container">
       <div class="card" [ngClass]="{ flipped: flipped }">
-        <mat-card appearance="outlined">
+        <mat-card>
           <div class="side" [ngClass]="{ 'invisible-card-content': flipped }">
             <div class="visually-hidden">
               <div id="message-announcer-button" tabIndex="-1">
@@ -18,13 +18,14 @@
             </div>
             <form fxLayout="column" fxLayoutGap="12px">
               <div
+                class="header-container"
                 fxLayout="row wrap"
                 fxLayoutAlign="space-between center"
                 fxLayoutGap="1em"
               >
                 <mat-form-field
                   appearance="outline"
-                  class="no-field-hint primary-form-field"
+                  class="no-field-hint primary-form-field smaller-select-input"
                   tabindex="{{ isEditMode ? '-1' : '0' }}"
                 >
                   <mat-select
@@ -123,7 +124,7 @@
               ></lib-extension-point>
               <div class="form-spacer"></div>
             </form>
-            <div class="abstentions">
+            <div>
               <mat-checkbox
                 *ngIf="
                   ['slide', 'flashcard'].indexOf(selectedFormat.name) === -1

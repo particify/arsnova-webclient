@@ -1,7 +1,9 @@
 <div>
   <div fxLayout="row wrap" fxLayoutAlign="space-between">
-    <h2 tabindex="0">{{ 'announcement.announcements' | translate }}</h2>
-    <mat-form-field appearance="outline" class="no-field-hint smaller-select">
+    <h2 mat-dialog-title tabindex="0">
+      {{ 'announcement.announcements' | translate }}
+    </h2>
+    <mat-form-field appearance="outline" class="no-field-hint">
       <mat-label>{{ 'announcement.filter' | translate }}</mat-label>
       <mat-select
         [(value)]="selectedRoomId"
@@ -32,7 +34,12 @@
     ></app-announcement>
   </mat-dialog-content>
   <app-loading-indicator *ngIf="isLoading" [size]="60"></app-loading-indicator>
-  <div fxLayout="row" fxLayoutAlign="end" class="bottom-buttons">
+  <div
+    mat-dialog-actions
+    fxLayout="row"
+    fxLayoutAlign="end"
+    class="bottom-buttons"
+  >
     <button mat-flat-button class="button-primary" (click)="close()">
       {{ 'announcement.close' | translate }}
     </button>

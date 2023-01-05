@@ -1,14 +1,13 @@
-<div tabindex="0">
+<div mat-dialog-content tabindex="0">
   <h3>{{ data.section + data.headerLabel | translate }}</h3>
   <p>{{ data.section + data.body | translate }}</p>
   <p *ngIf="data.bodyElement">
     <strong>{{ data.bodyElement }}</strong>
   </p>
 </div>
-<div fxLayout="row" fxLayoutAlign="end" fxLayoutGap="10px">
+<div mat-dialog-actions fxLayout="row" fxLayoutAlign="end">
   <button
     mat-button
-    class="button-abort"
     aria-labelledby="cancel"
     (click)="closeDialog(data.abortLabel)"
   >
@@ -22,13 +21,12 @@
   >
     {{ data.section + data.confirmLabel | translate }}
   </button>
-</div>
-
-<div class="visually-hidden">
-  <div id="cancel">
-    {{ data.section + 'a11y-' + data.abortLabel | translate }}
-  </div>
-  <div id="submit">
-    {{ data.section + 'a11y-' + data.confirmLabel | translate }}
+  <div class="visually-hidden">
+    <div id="cancel">
+      {{ data.section + 'a11y-' + data.abortLabel | translate }}
+    </div>
+    <div id="submit">
+      {{ data.section + 'a11y-' + data.confirmLabel | translate }}
+    </div>
   </div>
 </div>

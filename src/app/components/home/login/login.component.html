@@ -1,5 +1,5 @@
 <div *ngIf="!isLoading" fxLayout="column" fxLayoutAlign="center center" fxFill>
-  <mat-card appearance="outlined" class="login-card" fxLayout="column" fxLayoutAlign="center center">
+  <mat-card class="login-card" fxLayout="column" fxLayoutAlign="center center">
     <app-form-header [text]="'login.welcome' | translate"></app-form-header>
     <div *ngIf="ssoProviders.length > 0" fxLayout="column" fxLayoutGap="10px">
       <button

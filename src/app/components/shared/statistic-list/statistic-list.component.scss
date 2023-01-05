@@ -35,7 +35,7 @@ table {
 
 .mat-mdc-header-cell {
   color: var(--on-surface);
-  background-color: var(--table-b);
+  background-color: var(--table-b) !important;
 }
 
 .mat-mdc-cell {
@@ -55,11 +55,11 @@ table {
 }
 
 .mat-mdc-row {
-  background-color: var(--table-a);
+  background-color: var(--table-a) !important;
   border-style: none;
 
   &:nth-child(even) {
-    background-color: var(--table-b);
+    background-color: var(--table-b) !important;
   }
 }
 

@@ -3,11 +3,9 @@
 }
 
 .mat-mdc-outlined-button {
-  width: 150px;
-
   // height of form field ..
-  height: 59px;
-  color: var(--warn);
+  height: 59px !important;
+  color: var(--warn) !important;
 }
 
 @media (max-width: 420px) {
