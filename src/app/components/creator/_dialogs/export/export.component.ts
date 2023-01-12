@@ -5,7 +5,7 @@ import { ExportFileType } from '../../../../models/export-file-type';
 
 const charsets = ['UTF-8', 'UTF-16LE'] as const;
 
-type Charset = typeof charsets[number];
+type Charset = (typeof charsets)[number];
 
 export interface ExportOptions {
   exportType: ExportFileType;
