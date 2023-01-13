@@ -3,14 +3,14 @@
 }
 
 .card-closed {
-  max-height: 40px;
+  max-height: calc(40px + 2 * 16px);
 }
 
 .card-expanded {
   max-height: 1000px;
 }
 
-.mat-card {
+.mat-mdc-card {
   margin-bottom: 10px;
   width: 100%;
   max-width: 800px;

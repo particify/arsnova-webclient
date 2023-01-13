@@ -12,7 +12,7 @@ import {
 import { TranslateService } from '@ngx-translate/core';
 import { NotificationService } from '@arsnova/app/services/util/notification.service';
 import { GlobalStorageService } from '@arsnova/app/services/util/global-storage.service';
-import { MatLegacyDialogModule as MatDialogModule } from '@angular/material/legacy-dialog';
+import { MatDialogModule } from '@angular/material/dialog';
 
 describe('ConsentService', () => {
   beforeEach(() => {

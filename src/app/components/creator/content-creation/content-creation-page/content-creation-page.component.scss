@@ -4,10 +4,6 @@ form {
   width: 100%;
 }
 
-.mat-menu-item {
-  height: auto;
-}
-
 .format-name {
   line-height: 100%;
   font-weight: $font-weight-bold;
@@ -34,15 +30,14 @@ form {
   margin-bottom: 2px;
 }
 
-.mat-card {
+.mat-mdc-card {
   overflow: hidden;
-}
-
-.abstentions {
-  margin-left: 16px;
-  margin-bottom: 10px;
 }
 
 .top-space {
   margin-top: 16px;
+}
+
+.header-container {
+  padding-bottom: 0.5em;
 }

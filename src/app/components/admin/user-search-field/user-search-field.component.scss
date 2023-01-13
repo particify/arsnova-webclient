@@ -1,4 +1,4 @@
-.mat-option {
+.mat-mdc-option {
   line-height: 24px;
 }
 
@@ -6,7 +6,7 @@
   color: var(--grey);
 }
 
-:host-context([fxflex]) .mat-form-field,
+:host-context([fxflex]) .mat-mdc-form-field,
 :host-context([fxflexfill]) .mat-form-field {
   width: 100%;
   min-width: 100%;

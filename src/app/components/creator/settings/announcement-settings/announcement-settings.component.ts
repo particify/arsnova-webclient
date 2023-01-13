@@ -8,7 +8,7 @@ import {
   NotificationService,
 } from '@arsnova/app/services/util/notification.service';
 import { AnnouncementService } from '@arsnova/app/services/http/announcement.service';
-import { MatLegacyTabGroup as MatTabGroup } from '@angular/material/legacy-tabs';
+import { MatTabGroup } from '@angular/material/tabs';
 import { DialogService } from '@arsnova/app/services/util/dialog.service';
 
 @Component({

@@ -1,9 +1,6 @@
 import { DOCUMENT } from '@angular/common';
 import { Inject, Injectable } from '@angular/core';
-import {
-  MatLegacyDialogRef as MatDialogRef,
-  MatLegacyDialogState as MatDialogState,
-} from '@angular/material/legacy-dialog';
+import { MatDialogRef, MatDialogState } from '@angular/material/dialog';
 import { EventManager } from '@angular/platform-browser';
 import { environment } from '../../../environments/environment';
 import { HotkeysComponent } from '../../components/shared/_dialogs/hotkeys/hotkeys.component';

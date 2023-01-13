@@ -1,4 +1,9 @@
-<div fxLayout="column" fxLayoutAlign="center" fxLayoutGap="20px">
+<div
+  mat-dialog-content
+  fxLayout="column"
+  fxLayoutAlign="center"
+  fxLayoutGap="20px"
+>
   <mat-form-field appearance="outline">
     <mat-label>{{ 'dialog.your-comment' | translate }}</mat-label>
     <textarea
@@ -8,7 +13,6 @@
       cdkAutosizeMinRows="5"
       cdkAutosizeMaxRows="10"
       maxlength="500"
-      [formControl]="bodyForm"
     ></textarea>
     <mat-hint align="end"
       ><span aria-hidden="true"
@@ -42,7 +46,7 @@
     </mat-select>
   </mat-form-field>
 </div>
-<div>
+<div mat-dialog-actions fxLayoutAlign="end">
   <lib-extension-point
     *ngIf="data.fileUploadEnabled"
     extensionId="image-upload"
@@ -54,8 +58,7 @@
     [cancelButtonClickAction]="buildCloseDialogActionCallback()"
     [confirmButtonClickAction]="buildCreateCommentActionCallback(commentBody)"
   ></app-dialog-action-buttons>
-</div>
-
-<div class="visually-hidden">
-  <div id="category">{{ 'dialog.a11y-tag' | translate }}</div>
+  <div class="visually-hidden">
+    <div id="category">{{ 'dialog.a11y-tag' | translate }}</div>
+  </div>
 </div>

@@ -1,29 +1,25 @@
 <div *ngIf="!isLoading" fxLayout="column" fxLayoutGap="10px">
-  <mat-checkbox
-    class="loose-checkbox"
-    [checked]="multipleCorrectAnswers"
-    [(ngModel)]="multipleCorrectAnswers"
-    name="multiple"
-  >
-    <span>{{ 'content.multiple-answers-allowed' | translate }}</span>
-  </mat-checkbox>
-  <mat-checkbox
-    class="loose-checkbox"
-    [checked]="noCorrectAnswers"
-    [(ngModel)]="noCorrectAnswers"
-    (ngModelChange)="removeCorrectAnswers()"
-    name="noCorrect"
-  >
-    <span>{{ 'content.no-correct-answer' | translate }}</span>
-  </mat-checkbox>
+  <div fxLayout="column">
+    <mat-checkbox
+      [checked]="multipleCorrectAnswers"
+      [(ngModel)]="multipleCorrectAnswers"
+      name="multiple"
+    >
+      <span>{{ 'content.multiple-answers-allowed' | translate }}</span>
+    </mat-checkbox>
+    <mat-checkbox
+      [checked]="noCorrectAnswers"
+      [(ngModel)]="noCorrectAnswers"
+      (ngModelChange)="removeCorrectAnswers()"
+      name="noCorrect"
+    >
+      <span>{{ 'content.no-correct-answer' | translate }}</span>
+    </mat-checkbox>
+  </div>
   <div *ngIf="displayAnswers.length > 0">
     <app-divider></app-divider>
     <mat-list>
-      <mat-list-item
-        fxLayout="column"
-        fxLayoutAlign="center"
-        *ngFor="let answer of displayAnswers; let i = index"
-      >
+      <mat-list-item *ngFor="let answer of displayAnswers; let i = index">
         <div fxLayout="row" fxLayoutAlign="center center" class="full-width">
           <mat-checkbox
             id="answer-{{ i }}"
@@ -38,11 +34,8 @@
             }}"
           >
           </mat-checkbox>
-          <form fxLayout="row" class="form full-width">
-            <mat-form-field
-              class="editInput full-width no-field-hint"
-              appearance="standard"
-            >
+          <form fxLayout="row" class="full-width">
+            <mat-form-field class="editInput surface-input no-field-hint">
               <input
                 id="answerEdit-{{ i }}"
                 name="answerEdit"

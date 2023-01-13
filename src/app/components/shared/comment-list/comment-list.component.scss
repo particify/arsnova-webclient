@@ -2,7 +2,7 @@
 
 $search-bar-height: 70px;
 
-.mat-form-field {
+.mat-mdc-form-field {
   float: left;
   padding-left: 10px;
 }
@@ -176,28 +176,8 @@ $search-bar-height: 70px;
   margin-top: 0.5em;
 }
 
-button.selected {
-  font-weight: $font-weight-bold;
-
-  &.period {
-    color: var(--primary);
-  }
-}
-
-.correct-icon {
-  color: var(--green);
-}
-
-.wrong-icon {
-  color: var(--red);
-}
-
-.blue-icon {
-  color: var(--blue);
-}
-
-.favorite-icon {
-  color: var(--yellow);
+.selected.period {
+  --mdc-theme-text-primary-on-background: var(--primary);
 }
 
 .counter {
@@ -205,14 +185,6 @@ button.selected {
   text-align: center;
   font-size: 1.5em !important;
   margin: 0;
-}
-
-.up {
-  color: var(--green);
-}
-
-.down {
-  color: var(--red);
 }
 
 ::placeholder {

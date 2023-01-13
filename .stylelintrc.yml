@@ -5,3 +5,7 @@ extends:
 rules:
   # The following rule can cause issues with SCSS vars used with calc function
   length-zero-no-unit: null
+  # Adjust kebab-case class selector pattern to also allow pattern used by MDC
+  selector-class-pattern:
+    - ^(([a-z][a-z0-9]*)(-[a-z0-9]+)*|mdc-([a-z][a-z0-9]*)((-|--|__)[a-z0-9]+)*)$
+    - message: Expected class selector "%s" to be kebab-case

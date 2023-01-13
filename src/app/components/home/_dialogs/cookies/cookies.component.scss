@@ -7,11 +7,6 @@
   font-size: 24px;
 }
 
-.header-container {
-  display: flex;
-  align-items: center;
-}
-
 .cookie-cat {
   margin-top: 10px;
   margin-bottom: 10px;
@@ -21,7 +16,10 @@
   }
 }
 
-.mat-dialog-content {
-  max-height: 55vh;
-  margin-bottom: 10px;
+.mat-mdc-dialog-content {
+  max-height: 60vh;
+}
+
+.slide-label {
+  font-size: 16px;
 }

@@ -1,8 +1,5 @@
 import { Component } from '@angular/core';
-import {
-  MatLegacyDialog as MatDialog,
-  MatLegacyDialogRef as MatDialogRef,
-} from '@angular/material/legacy-dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import {
   AdvancedSnackBarTypes,
   NotificationService,
@@ -15,7 +12,6 @@ import { GroupContentComponent } from '../../content-list/group-content/group-co
 @Component({
   selector: 'app-content-group-creation',
   templateUrl: './content-group-creation.component.html',
-  styleUrls: ['./content-group-creation.component.scss'],
 })
 export class ContentGroupCreationComponent {
   readonly dialogId = 'create-content-group';

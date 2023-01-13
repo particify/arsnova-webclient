@@ -57,6 +57,7 @@ $card-padding: min(4vw, 16px);
 }
 
 .answer-button {
+  height: auto !important;
   width: calc(50% - $card-padding / 2);
 }
 

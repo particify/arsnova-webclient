@@ -1,9 +1,6 @@
-<div class="header-container">
-  <h2 mat-dialog-title tabindex="0" id="cookie-header">
-    {{ 'cookies.title' | translate }}
-  </h2>
-</div>
-
+<h2 mat-dialog-title tabindex="0" id="cookie-header">
+  {{ 'cookies.title' | translate }}
+</h2>
 <mat-dialog-content tabindex="-1">
   <div>
     <p tabindex="0">
@@ -21,7 +18,10 @@
           [(ngModel)]="category.consent"
           [disabled]="category.required"
         >
-          <div [attr.aria-label]="'cookies.a11y-' + category.id | translate">
+          <div
+            class="slide-label"
+            [attr.aria-label]="'cookies.a11y-' + category.id | translate"
+          >
             {{ 'cookies.category-' + category.id | translate }}
           </div>
         </mat-slide-toggle>
@@ -35,7 +35,7 @@
     {{ 'cookies.update-later' | translate }}
   </p>
 </mat-dialog-content>
-<div fxLayout="row wrap" fxLayoutAlign="end" fxLayoutGap="10px">
+<div mat-dialog-actions fxLayout="row wrap" fxLayoutAlign="end">
   <button
     mat-stroked-button
     (click)="acceptSelectedCookies()"

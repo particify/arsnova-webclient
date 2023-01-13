@@ -1,5 +1,6 @@
-.mat-icon-button {
+.mat-mdc-icon-button {
   background-color: var(--background);
+  color: var(--on-background);
 }
 
 .list-item {
@@ -19,5 +20,11 @@
     // 170px = button + input field width
     max-width: calc(100% - 170px - 1em);
     margin-right: 1em;
+  }
+}
+
+@media (max-width: 767px) {
+  .list-item {
+    place-content: center;
   }
 }

@@ -1,7 +1,7 @@
 $graphic-size: 80px;
 $icon-container-size: 40px;
 
-.mat-card {
+.mat-mdc-card {
   width: calc(92vw - 10px);
   max-width: 832px;
   margin-bottom: 4px;
@@ -51,7 +51,7 @@ $icon-container-size: 40px;
 }
 
 @media (min-width: 768px) {
-  .mat-card {
+  .mat-mdc-card {
     padding-top: 2em;
   }
 

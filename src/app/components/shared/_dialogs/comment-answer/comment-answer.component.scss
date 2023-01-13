@@ -1,12 +1,11 @@
 .answer {
   width: 100%;
-  max-width: 800px;
   background-color: var(--alt-surface);
   color: var(--on-surface);
 }
 
-.mat-raised-button,
-.mat-stroked-button {
+.mat-mdc-raised-button,
+.mat-mdc-outlined-button {
   margin-top: 3%;
 }
 
@@ -24,7 +23,7 @@
   margin-right: 5px;
 }
 
-.mat-form-field {
+.mat-mdc-form-field {
   margin-top: 1em;
 }
 

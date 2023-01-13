@@ -227,7 +227,7 @@
             <button
               *ngIf="isInSortingMode"
               mat-button
-              class="abort button-abort"
+              class="abort"
               (click)="leaveSortingMode(true)"
               (keyup.enter)="leaveTitleEditMode()"
               aria-labelledby="discard-changes"
@@ -283,11 +283,9 @@
           <p class="hint" *ngIf="contents.length === 0">
             {{ 'content.no-contents-yet' | translate }}
           </p>
-          <mat-list *ngIf="!isInSortingMode" fxFill>
+          <mat-list *ngIf="!isInSortingMode && contents.length > 0" fxFill>
             <mat-list-item
               *ngFor="let content of contents; index as i"
-              fxLayout="column"
-              fxLayoutAlign="center"
               attr.aria-label="{{
                 'content.a11y-content-item-selected'
                   | translate
@@ -297,7 +295,7 @@
                         body: content.renderedBody | a11yRenderedBody
                       }
               }}"
-              class="bottom-border"
+              class="bottom-border list-item"
               (click)="navigateToContentStats(content)"
               (keyup.enter)="navigateToContentStats(content)"
               tabindex="0"

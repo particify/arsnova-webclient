@@ -4,7 +4,7 @@ import { ContentCreationComponent } from './content-creation.component';
 import { NO_ERRORS_SCHEMA, Injectable } from '@angular/core';
 import { ContentService } from '../../../../services/http/content.service';
 import { NotificationService } from '../../../../services/util/notification.service';
-import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { EventService } from '../../../../services/util/event.service';
 import { RoomService } from '../../../../services/http/room.service';

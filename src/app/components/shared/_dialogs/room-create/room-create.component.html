@@ -1,4 +1,4 @@
-<form (ngSubmit)="checkLogin()">
+<form mat-dialog-content (ngSubmit)="checkLogin()">
   <div fxLayout="column" fxLayoutAlign="center" fxLayoutGap="10px">
     <lib-extension-point
       extensionId="lms-course-autocomplete"
@@ -31,9 +31,11 @@
     ></app-hint>
   </div>
 </form>
-<app-dialog-action-buttons
-  buttonsLabelSection="dialog"
-  confirmButtonLabel="create-room"
-  [cancelButtonClickAction]="buildCloseDialogActionCallback()"
-  [confirmButtonClickAction]="buildRoomCreateActionCallback()"
-></app-dialog-action-buttons>
+<div mat-dialog-actions fxLayoutAlign="end">
+  <app-dialog-action-buttons
+    buttonsLabelSection="dialog"
+    confirmButtonLabel="create-room"
+    [cancelButtonClickAction]="buildCloseDialogActionCallback()"
+    [confirmButtonClickAction]="buildRoomCreateActionCallback()"
+  ></app-dialog-action-buttons>
+</div>

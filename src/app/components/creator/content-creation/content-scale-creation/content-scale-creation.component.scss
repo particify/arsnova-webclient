@@ -2,15 +2,14 @@ form > button {
   margin: 20px 0;
 }
 
-.mat-checkbox {
-  padding-left: 16px;
+.mat-mdc-checkbox {
   margin-bottom: 12px;
 }
 
-.mat-list {
+.mat-mdc-list {
   margin: 12px 0 20px;
 }
 
-.mat-list-item:last-of-type {
+.mat-mdc-list-item:last-of-type {
   border-bottom: solid 1px var(--border);
 }

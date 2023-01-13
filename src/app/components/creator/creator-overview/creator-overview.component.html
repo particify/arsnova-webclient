@@ -12,22 +12,20 @@
     </div>
     <app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
     <mat-card *ngIf="!isLoading && room">
-      <mat-card-content>
-        <div fxLayout="row">
-          <div class="header">
-            <span class="room-name">
-              {{ room.name }}
-            </span>
-            <span class="room-short-id">{{ room.shortId | splitShortId }}</span>
-          </div>
+      <div fxLayout="row">
+        <div class="header">
+          <span class="room-name">
+            {{ room.name }}
+          </span>
+          <span class="room-short-id">{{ room.shortId | splitShortId }}</span>
         </div>
-        <div *ngIf="room.description" fxLayoutAlign="center">
-          <app-rendered-text
-            [rawText]="room.description.trim()"
-            [renderedText]="room.renderedDescription"
-          ></app-rendered-text>
-        </div>
-      </mat-card-content>
+      </div>
+      <div *ngIf="room.description" fxLayoutAlign="center">
+        <app-rendered-text
+          [rawText]="room.description.trim()"
+          [renderedText]="room.renderedDescription"
+        ></app-rendered-text>
+      </div>
       <app-divider></app-divider>
       <div fxLayout="column" fxLayoutAlign="center">
         <div
@@ -40,7 +38,7 @@
             <button
               id="comments-button"
               mat-icon-button
-              class="main-button"
+              class="main-button no-ripple"
               [disableRipple]="true"
               [routerLink]="['comments']"
               aria-labelledby="comments"
@@ -58,7 +56,7 @@
           <div class="action-button-item" fxLayoutAlign="center center">
             <button
               mat-icon-button
-              class="main-button"
+              class="main-button no-ripple"
               id="live-survey-button"
               aria-labelledby="live-survey"
               [disableRipple]="true"
@@ -124,14 +122,14 @@
               }}
             </p>
           </ng-container>
-          <div *ngIf="room && contentGroups">
-            <app-content-groups
-              *ngFor="let contentGroup of contentGroups"
-              [contentGroupName]="contentGroup.name"
-              [length]="contentGroup.contentIds?.length"
-              [isLocked]="!contentGroup.published"
-            ></app-content-groups>
-          </div>
+        </div>
+        <div *ngIf="room && contentGroups">
+          <app-content-groups
+            *ngFor="let contentGroup of contentGroups"
+            [contentGroupName]="contentGroup.name"
+            [length]="contentGroup.contentIds?.length"
+            [isLocked]="!contentGroup.published"
+          ></app-content-groups>
         </div>
       </div>
 

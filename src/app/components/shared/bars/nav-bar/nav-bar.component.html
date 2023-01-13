@@ -40,12 +40,14 @@
             mat-menu-item
             *ngFor="let group of contentGroups"
             [id]="group.name + '-series-button'"
-            [ngClass]="{
-              current: group.name === groupName && i === currentRouteIndex
-            }"
             (click)="navToUrl(i, group)"
           >
-            <span>{{ group.name }}</span>
+            <span
+              [ngClass]="{
+                current: group.name === groupName && i === currentRouteIndex
+              }"
+              >{{ group.name }}</span
+            >
           </button>
         </mat-menu>
         <mat-menu class="visually-hidden" #hideMenu="matMenu"></mat-menu>
@@ -53,6 +55,7 @@
     </button>
   </div>
   <div
+    style="color: var(--on-surface)"
     *ngIf="viewRole === 'CREATOR'"
     fxLayout="row"
     fxLayoutAlign="center center"

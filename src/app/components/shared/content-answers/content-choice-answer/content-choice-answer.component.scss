@@ -5,11 +5,11 @@
   pointer-events: none;
 }
 
-.mat-list {
+.mat-mdc-list {
   position: relative;
 }
 
-.mat-list-item {
+.list-item {
   margin-top: $option-padding-full;
   border-width: 2px;
   border-style: solid;
@@ -41,13 +41,9 @@
   border-color: var(--primary);
 }
 
-.mat-radio-button,
-.mat-checkbox {
+.mat-mdc-radio-button,
+.mat-mdc-checkbox {
   width: 100%;
-}
-
-.mat-checkbox .mat-checkbox-label {
-  margin: 0 !important;
 }
 
 .answer-indicator {

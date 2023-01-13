@@ -12,7 +12,7 @@ import {
   AdvancedSnackBarTypes,
   NotificationService,
 } from '../../../services/util/notification.service';
-import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { UntypedFormControl, Validators } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
 import { EventService } from '../../../services/util/event.service';

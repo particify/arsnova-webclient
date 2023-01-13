@@ -1,11 +1,9 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import {
-  MatLegacyDialogRef as MatDialogRef,
-  MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA,
-} from '@angular/material/legacy-dialog';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { AnnouncementService } from '@arsnova/app/services/http/announcement.service';
 import { AuthenticationService } from '@arsnova/app/services/http/authentication.service';
 import { UserAnnouncement } from '@arsnova/app/models/user-announcement';
+import { take } from 'rxjs';
 
 @Component({
   selector: 'app-announcement-list',
@@ -42,7 +40,10 @@ export class AnnouncementListComponent implements OnInit {
           this.isLoading = false;
         });
     });
-    this.dialogRef.beforeClosed().subscribe(() => this.close());
+    this.dialogRef
+      .beforeClosed()
+      .pipe(take(1))
+      .subscribe(() => this.close());
   }
 
   filter() {

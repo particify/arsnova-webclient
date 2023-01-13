@@ -40,7 +40,11 @@
     </mat-form-field>
     <mat-form-field class="no-field-hint" appearance="outline" fxFlex>
       <mat-label>{{ 'settings.role' | translate }}</mat-label>
-      <mat-select [value]="selectedRole" [disabled]="roles.length === 1">
+      <mat-select
+        *ngIf="!isLoading"
+        [value]="selectedRole"
+        [disabled]="roles.length === 1"
+      >
         <mat-option *ngFor="let role of roles" [value]="role">
           {{ 'settings.' + role.name | translate }}
         </mat-option>
@@ -48,8 +52,8 @@
     </mat-form-field>
     <button
       mat-stroked-button
-      class="add-user-button"
-      [ngClass]="{ 'btn-animated': canBeAdded() }"
+      class="stroked-primary add-user-button"
+      [ngClass]="{ 'btn-animated button-primary': canBeAdded() }"
       (click)="addModerator()"
       fxFlex
       [disabled]="isGuest || !currentInputIsChecked || loginId.length === 0"
@@ -92,13 +96,13 @@
             <p class="login-id" tabindex="0">
               {{ moderator.loginId }}
             </p>
-            <mat-chip-list class="role-chip">
-              <mat-chip>{{
+            <mat-chip-listbox class="role-chip">
+              <mat-chip-option selectable="false">{{
                 'settings.' +
                   moderator.role.toLocaleString().toLocaleLowerCase()
                   | translate
-              }}</mat-chip>
-            </mat-chip-list>
+              }}</mat-chip-option>
+            </mat-chip-listbox>
           </div>
         </div>
         <div fxLayout="row" fxLayoutAlign="center center">

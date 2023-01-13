@@ -1,4 +1,4 @@
-<mat-card [ngClass]="{ disabled: editMode }">
+<mat-card [ngClass]="{ disabled: editMode }" appearance="outlined">
   <div fxLayout="row" fxLayoutAlign="space-between start">
     <h3 class="title">{{ announcement.title }}</h3>
     <div
@@ -30,7 +30,7 @@
       </button>
     </mat-menu>
   </div>
-  <mat-card-subtitle>
+  <p class="subtitle">
     <app-date
       [timestamp]="
         announcement.updateTimestamp || announcement.creationTimestamp
@@ -40,7 +40,7 @@
     <span *ngIf="announcement.updateTimestamp"
       >&nbsp;({{ 'announcement.edited' | translate }})</span
     >
-  </mat-card-subtitle>
+  </p>
   <div>
     <app-rendered-text
       [rawText]="announcement.renderedBody"

@@ -105,8 +105,6 @@
       </div>
       <mat-list *ngIf="rooms?.length > 0">
         <mat-list-item
-          fxLayout="column"
-          fxLayoutAlign="center"
           class="bottom-border full-width-list-item"
           *ngFor="let room of displayRooms; let i = index"
           [ngSwitch]="room.membership.primaryRole"
@@ -259,8 +257,6 @@
           [ngSwitch]="room.membership.primaryRole"
         >
           <mat-list-item
-            fxLayout="column"
-            fxLayoutAlign="center"
             *ngIf="!room.transferred"
             class="bottom-border full-width-list-item"
           >

@@ -217,7 +217,7 @@
           appTrackInteraction="Sort comments"
           appTrackName="time"
         >
-          <mat-icon [ngClass]="{ time: 'blue-icon' }[currentSort]"
+          <mat-icon [ngClass]="{ time: 'blue' }[currentSort]"
             >access_time</mat-icon
           >
           <span>{{ 'comment-list.sort-time' | translate }}</span>
@@ -231,7 +231,7 @@
           appTrackInteraction="Sort comments"
           appTrackName="vote-desc"
         >
-          <mat-icon [ngClass]="{ votedesc: 'up' }[currentSort]"
+          <mat-icon [ngClass]="{ votedesc: 'green' }[currentSort]"
             >keyboard_arrow_up</mat-icon
           >
           <span>{{ 'comment-list.sort-votedesc' | translate }}</span>
@@ -245,7 +245,7 @@
           appTrackInteraction="Sort comments"
           appTrackName="vote-asc"
         >
-          <mat-icon [ngClass]="{ voteasc: 'down' }[currentSort]"
+          <mat-icon [ngClass]="{ voteasc: 'red' }[currentSort]"
             >keyboard_arrow_down</mat-icon
           >
           <span>{{ 'comment-list.sort-voteasc' | translate }}</span>
@@ -264,7 +264,7 @@
           appTrackInteraction="Comments filtered"
           appTrackName="favorite"
         >
-          <mat-icon [ngClass]="{ favorite: 'favorite-icon' }[currentFilter]"
+          <mat-icon [ngClass]="{ favorite: 'yellow' }[currentFilter]"
             >grade</mat-icon
           >
           <span>{{ 'comment-list.filter-favorite' | translate }}</span>
@@ -279,7 +279,7 @@
           appTrackInteraction="Comments filtered"
           appTrackName="answer"
         >
-          <mat-icon [ngClass]="{ answer: 'blue-icon' }[currentFilter]"
+          <mat-icon [ngClass]="{ answer: 'blue' }[currentFilter]"
             >comment</mat-icon
           >
           <span>{{ 'comment-list.filter-answered' | translate }}</span>
@@ -297,8 +297,8 @@
         >
           <mat-icon
             [ngClass]="{
-              'correct-icon': currentFilter === filtering.CORRECT,
-              'wrong-icon': currentFilter === filtering.WRONG
+              green: currentFilter === filtering.CORRECT,
+              red: currentFilter === filtering.WRONG
             }"
             >tune</mat-icon
           >
@@ -326,7 +326,7 @@
           appTrackInteraction="Comments filtered"
           appTrackName="correct"
         >
-          <mat-icon [ngClass]="{ correct: 'correct-icon' }[currentFilter]"
+          <mat-icon [ngClass]="{ correct: 'green' }[currentFilter]"
             >check_circle</mat-icon
           >
           <span>{{ 'comment-list.filter-correct' | translate }}</span>
@@ -341,7 +341,7 @@
           appTrackInteraction="Comments filtered"
           appTrackName="wrong"
         >
-          <mat-icon [ngClass]="{ wrong: 'wrong-icon' }[currentFilter]"
+          <mat-icon [ngClass]="{ wrong: 'red' }[currentFilter]"
             >cancel</mat-icon
           >
           <span>{{ 'comment-list.filter-wrong' | translate }}</span>

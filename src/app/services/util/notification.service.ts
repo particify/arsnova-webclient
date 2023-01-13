@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import {
-  MatLegacySnackBar as MatSnackBar,
-  MatLegacySnackBarConfig as MatSnackBarConfig,
-  MatLegacySnackBarRef as MatSnackBarRef,
-} from '@angular/material/legacy-snack-bar';
+  MatSnackBar,
+  MatSnackBarConfig,
+  MatSnackBarRef,
+} from '@angular/material/snack-bar';
 import {
   LOADING_ICON,
   SnackBarAdvancedComponent,

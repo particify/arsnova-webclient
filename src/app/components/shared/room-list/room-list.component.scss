@@ -1,6 +1,6 @@
 @import '../../../../variables';
 
-.mat-icon-button {
+.mat-mdc-icon-button {
   color: var(--primary);
 }
 
@@ -8,7 +8,7 @@
   width: 100%;
 }
 
-.mat-list {
+.mat-mdc-list {
   background-color: var(--surface);
 }
 
@@ -127,7 +127,7 @@
   height: 36px;
 }
 
-.mat-stroked-button {
+.mat-mdc-outlined-button {
   height: 36px;
 }
 

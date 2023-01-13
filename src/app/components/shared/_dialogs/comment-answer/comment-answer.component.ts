@@ -9,10 +9,7 @@ import {
 } from '../../../../services/util/notification.service';
 import { DialogService } from '../../../../services/util/dialog.service';
 import { MarkdownFeatureset } from '../../../../services/http/formatting.service';
-import {
-  MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA,
-  MatLegacyDialogRef as MatDialogRef,
-} from '@angular/material/legacy-dialog';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-comment-answer',

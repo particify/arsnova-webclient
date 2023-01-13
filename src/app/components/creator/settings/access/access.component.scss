@@ -18,12 +18,7 @@
   transition: 0.3s;
   box-shadow: inset 0 0 0 0 var(--primary);
   max-width: 140px;
-  height: 59px;
-
-  &:not(.mat-button-disabled, .btn-animated) {
-    color: var(--primary);
-    border-color: var(--primary);
-  }
+  height: 56px !important;
 }
 
 .user-character-container {
@@ -56,7 +51,7 @@
 .role-chip {
   opacity: 0.8;
 
-  .mat-chip {
+  .mat-mdc-chip {
     font-size: 12px;
     border-radius: 8px;
   }
@@ -69,10 +64,5 @@
 .btn-animated {
   box-shadow: inset 140px 0 0 0 var(--primary);
   border: none;
-  color: var(--on-primary);
-
-  &.mat-button-disabled {
-    color: var(--on-primary);
-    opacity: 0.5;
-  }
+  color: var(--on-primary) !important;
 }

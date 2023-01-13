@@ -39,11 +39,11 @@ import {
   TranslateModule,
   TranslateService,
 } from '@ngx-translate/core';
-import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { WsCommentService } from '@arsnova/app/services/websockets/ws-comment.service';
 import { CommentService } from '@arsnova/app/services/http/comment.service';
 import { SplitShortIdPipe } from '@arsnova/app/pipes/split-short-id.pipe';
-import { MatLegacyMenuModule as MatMenuModule } from '@angular/material/legacy-menu';
+import { MatMenuModule } from '@angular/material/menu';
 import {
   RoomSummary,
   RoomSummaryStats,

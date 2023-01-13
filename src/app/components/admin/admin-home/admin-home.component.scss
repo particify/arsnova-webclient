@@ -40,8 +40,8 @@ $header-height: 64px;
   padding: 0 0.5em;
 }
 
-.mat-button {
-  text-align: start;
+.mat-mdc-button {
+  place-content: start;
   width: 100%;
 
   &:not(.active-page) {
@@ -56,7 +56,7 @@ $header-height: 64px;
 }
 
 .active-page {
-  color: var(--primary);
+  color: var(--primary) !important;
   background-color: var(--primary-variant);
 }
 

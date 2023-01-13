@@ -1,17 +1,15 @@
-.mat-card {
+.mat-mdc-card {
   width: 100%;
 }
 
-.mat-stroked-button {
-  width: 150px;
-
+.mat-mdc-outlined-button {
   // height of form field ..
-  height: 59px;
-  color: var(--warn);
+  height: 59px !important;
+  color: var(--warn) !important;
 }
 
 @media (max-width: 420px) {
-  .mat-stroked-button {
+  .mat-mdc-outlined-button {
     margin-top: 1em;
   }
 }
