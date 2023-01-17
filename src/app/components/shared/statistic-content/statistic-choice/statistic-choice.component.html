@@ -22,7 +22,7 @@
   >
     <p
       *ngFor="let a of options; let i = index"
-      class="chartAnswerLabel"
+      class="chart-answer-label"
       [ngClass]="{ 'not-correct': colorLabel && !checkIfCorrect(i) }"
     >
       <app-rendered-text
@@ -32,7 +32,7 @@
     </p>
     <p
       *ngIf="content.abstentionsAllowed"
-      class="chartAnswerLabel abstention-label"
+      class="chart-answer-label abstention-label"
       [ngClass]="{ 'not-correct': colorLabel }"
     >
       {{ 'statistic.abstentions' | translate }}

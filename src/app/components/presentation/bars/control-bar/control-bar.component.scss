@@ -44,6 +44,26 @@ $logo-width: 120px;
   background-color: var(--surface);
 }
 
+.active-nav-button {
+  color: var(--primary);
+
+  > * {
+    font-weight: $font-weight-bold;
+    color: var(--primary);
+  }
+}
+
+.nav-button {
+  user-select: none;
+  cursor: pointer;
+  padding: 8px;
+  min-width: 100px;
+}
+
+.nav-button:not(.active-nav-button) {
+  opacity: 0.7;
+}
+
 .feature-container {
   min-height: $bar-height;
   border-radius: 8px;
@@ -57,6 +77,12 @@ $logo-width: 120px;
 .feature-container.icon-container {
   margin-right: 0.5em;
   padding: 0;
+}
+
+.action-button {
+  user-select: none;
+  cursor: pointer;
+  padding: 8px 16px;
 }
 
 .icon-container {
@@ -112,13 +138,6 @@ $logo-width: 120px;
   }
 }
 
-.nav-button {
-  user-select: none;
-  cursor: pointer;
-  padding: 8px;
-  min-width: 100px;
-}
-
 .nav-icon {
   font-size: 20px;
   width: 20px;
@@ -128,12 +147,6 @@ $logo-width: 120px;
 .text {
   font-size: 12px;
   margin: 2px 0 0;
-}
-
-.action-button {
-  user-select: none;
-  cursor: pointer;
-  padding: 8px 16px;
 }
 
 .group-button {
@@ -150,19 +163,6 @@ $logo-width: 120px;
 .selected-menu-item {
   color: var(--primary);
   font-weight: $font-weight-bold;
-}
-
-.nav-button:not(.active-nav-button) {
-  opacity: 0.7;
-}
-
-.active-nav-button {
-  color: var(--primary);
-
-  > * {
-    font-weight: $font-weight-bold;
-    color: var(--primary);
-  }
 }
 
 .bar-divider {

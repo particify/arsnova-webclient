@@ -171,6 +171,11 @@ textarea {
 
 .mat-mdc-form-field {
   color: var(--on-surface);
+
+  ::placeholder {
+    color: var(--on-surface);
+    opacity: 0.5;
+  }
 }
 
 .mat-mdc-form-field-type-mat-input:not(.initial-width) {
@@ -202,13 +207,6 @@ textarea {
   width: 100%;
 }
 
-.mat-mdc-form-field {
-  ::placeholder {
-    color: var(--on-surface);
-    opacity: 0.5;
-  }
-}
-
 // Dialogs
 
 .mat-mdc-dialog-surface {
@@ -223,7 +221,7 @@ textarea {
   margin-left: 10px !important;
 }
 
-.screenDialog {
+.screen-dialog {
   width: 100%;
   min-width: 100%;
   max-width: 100%;
@@ -351,35 +349,40 @@ div {
   width: 42px;
 }
 
-.activeInput .mdc-text-field--outlined {
+.smaller-select-input .mat-mdc-form-field-infix {
+  padding: 12px 0 !important;
+  min-height: unset;
+}
+
+.active-input .mdc-text-field--outlined {
   margin: 4px 0 6px;
   transition: padding-left 0.5s;
 }
 
-.activeInput .mat-mdc-form-field-infix {
+.active-input .mat-mdc-form-field-infix {
   min-height: unset;
 }
 
-.activeInput
+.active-input
   .mat-mdc-text-field-wrapper.mdc-text-field--outlined
   .mat-mdc-form-field-infix {
   padding: 10px 0;
   border: none;
 }
 
-.activeInput
+.active-input
   .mat-mdc-text-field-wrapper.mdc-text-field--outlined
   .mat-mdc-form-field-infix
   input {
   padding-top: 0;
 }
 
-.hideEditing .mdc-text-field--outlined {
+.hide-editing .mdc-text-field--outlined {
   padding-left: 0;
 }
 
-.hideEditing .mdc-notched-outline__leading,
-.hideEditing .mdc-notched-outline__trailing {
+.hide-editing .mdc-notched-outline__leading,
+.hide-editing .mdc-notched-outline__trailing {
   border: none !important;
 }
 
@@ -395,11 +398,6 @@ div {
 
 .surface-input .mdc-text-field--no-label {
   padding: 5px 0 0;
-}
-
-.smaller-select-input .mat-mdc-form-field-infix {
-  padding: 12px 0 !important;
-  min-height: unset;
 }
 
 // Choice answer buttons
@@ -471,6 +469,11 @@ div {
 
 // Mat List
 
+.mat-mdc-list-item {
+  height: auto;
+  outline: none;
+}
+
 .mat-mdc-list-base .mat-mdc-list-item {
   min-height: 48px;
   height: auto !important;
@@ -484,11 +487,6 @@ div {
   padding: 0;
   outline: none;
   border-radius: 4px;
-}
-
-.mat-mdc-list-item {
-  height: auto;
-  outline: none;
 }
 
 .bottom-border {
@@ -534,12 +532,14 @@ div {
   opacity: 0.6;
 }
 
-.mat-mdc-button:not([disabled], .nav-button) {
-  color: var(--on-surface) !important;
-  opacity: 0.8;
-
-  &:hover {
-    opacity: 1;
+.mat-mdc-button,
+.mat-mdc-raised-button,
+.mat-mdc-outlined-button {
+  .mat-icon {
+    height: 20px;
+    width: 20px;
+    font-size: 20px;
+    margin-bottom: 2px;
   }
 }
 
@@ -547,6 +547,15 @@ div {
 .mat-mdc-icon-button:disabled {
   color: var(--on-surface) !important;
   opacity: 0.5 !important;
+}
+
+.mat-mdc-button:not([disabled], .nav-button) {
+  color: var(--on-surface) !important;
+  opacity: 0.8;
+
+  &:hover {
+    opacity: 1;
+  }
 }
 
 .button-primary {
@@ -594,17 +603,6 @@ button {
 
 .stroked-warn.mat-mdc-outlined-button {
   color: var(--warn) !important;
-}
-
-.mat-mdc-button,
-.mat-mdc-raised-button,
-.mat-mdc-outlined-button {
-  .mat-icon {
-    height: 20px;
-    width: 20px;
-    font-size: 20px;
-    margin-bottom: 2px;
-  }
 }
 
 .mobile-add-hide {
@@ -723,7 +721,6 @@ button {
   height: 0;
   opacity: 0;
   pointer-events: none;
-  tab-index: -1;
   display: none;
 }
 
@@ -843,6 +840,12 @@ button {
 
 // RenderedTextComponent
 // This cannot be handled in the component itself because of custom rendering of the text-container's content.
+
+.rendered-list-preview > * > img {
+  height: 40px;
+  margin: 0;
+}
+
 .rendered-text.text-container {
   img {
     max-width: 100%;
@@ -885,11 +888,6 @@ app-rendered-text:not(.rendered-list-preview-container, .no-full-width) {
 
 .rendered-list-preview > .katex-block {
   height: 100%;
-  margin: 0;
-}
-
-.rendered-list-preview > * > img {
-  height: 40px;
   margin: 0;
 }
 

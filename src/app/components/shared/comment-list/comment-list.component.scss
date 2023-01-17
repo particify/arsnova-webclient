@@ -7,7 +7,7 @@ $search-bar-height: 70px;
   padding-left: 10px;
 }
 
-#searchBox {
+#search-box {
   box-sizing: border-box;
   padding: 0 10px 0 5px;
   background-color: var(--background);
@@ -206,7 +206,7 @@ $search-bar-height: 70px;
   bottom: 4vw;
 }
 
-.scrollTop {
+.scroll-top {
   position: fixed;
   right: -64px;
   z-index: 1;

@@ -67,8 +67,7 @@
     >
       <input
         tabindex="-1"
-        #searchBox
-        id="searchBox"
+        id="search-box"
         [ngClass]="{ 'search-input-hidden': !search, 'search-input': search }"
         (input)="searchComments()"
         (keyup.escape)="resetSearch()"
@@ -430,7 +429,7 @@
 
   <button
     mat-fab
-    class="bar-icon scrollTop"
+    class="bar-icon scroll-top"
     tabindex="-1"
     (click)="scrollTop(true)"
     *ngIf="!isPresentation"

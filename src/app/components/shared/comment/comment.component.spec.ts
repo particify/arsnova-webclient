@@ -50,8 +50,8 @@ describe('CommentComponent', () => {
   ]);
 
   const mockVoteService = jasmine.createSpyObj([
-    'voteUp',
-    'voteDown',
+    'vote-up',
+    'vote-down',
     'deleteVote',
   ]);
 
