@@ -28,11 +28,36 @@
   @include show-button-bar;
 }
 
+.button-bar {
+  pointer-events: none;
+  opacity: 0;
+  max-width: 0;
+}
+
 .mat-mdc-list-item:hover,
 .mat-list-item:focus-within {
   * > .button-bar {
     @include show-button-bar;
   }
+}
+
+.content-box {
+  padding: 0 1em;
+  cursor: move;
+  background: var(--surface);
+
+  &:not(.cdk-drag-preview) {
+    border: 2px solid var(--surface);
+  }
+
+  &:focus {
+    border-color: var(--grey-light);
+  }
+}
+
+.sort-icon {
+  opacity: 0;
+  max-width: 0;
 }
 
 .content-box:hover,
@@ -42,15 +67,9 @@
   }
 }
 
-.button-bar {
-  pointer-events: none;
-  opacity: 0;
-  max-width: 0;
-}
-
-.sort-icon {
-  opacity: 0;
-  max-width: 0;
+.active {
+  animation: activate 400ms;
+  color: var(--green);
 }
 
 .button-bar .active {
@@ -67,11 +86,11 @@
   }
 }
 
-.moreButton {
+.more-button {
   color: var(--primary);
 }
 
-.cardTitle {
+.card-title {
   margin-top: -5px;
   min-width: 240px;
   width: 50%;
@@ -79,7 +98,7 @@
 }
 
 @media (max-width: 500px) {
-  .cardTitle {
+  .card-title {
     margin: 0;
   }
 
@@ -94,11 +113,6 @@
 
 .status-bar {
   opacity: 0.8;
-}
-
-.active {
-  animation: activate 400ms;
-  color: var(--green);
 }
 
 .inactive {
@@ -142,7 +156,7 @@
   }
 }
 
-.activeInput {
+.active-input {
   width: 100%;
   font-size: larger;
   font-weight: 500;
@@ -197,20 +211,6 @@
   background: var(--surface);
   border-radius: 4px;
   overflow: hidden;
-}
-
-.content-box {
-  padding: 0 1em;
-  cursor: move;
-  background: var(--surface);
-
-  &:not(.cdk-drag-preview) {
-    border: 2px solid var(--surface);
-  }
-
-  &:focus {
-    border-color: var(--grey-light);
-  }
 }
 
 .cdk-drag-preview {

@@ -61,7 +61,7 @@
   opacity: 0.8;
 }
 
-.scoreCreator {
+.score-creator {
   color: var(--on-surface);
   margin: 0 8px;
   opacity: 0.8;
@@ -159,19 +159,19 @@
   }
 }
 
-.voteUp {
-  animation: upVote 800ms;
+.vote-up {
+  animation: up-vote 800ms;
 }
 
-.voteDown {
-  animation: downVote 800ms;
+.vote-down {
+  animation: down-vote 800ms;
 }
 
 .reset {
   animation: rubber 800ms;
 }
 
-@keyframes upVote {
+@keyframes up-vote {
   0% {
     transform: scale3d(1, 1, 1);
   }
@@ -201,7 +201,7 @@
   }
 }
 
-@keyframes downVote {
+@keyframes down-vote {
   0% {
     transform: scale3d(1, 1, 1);
   }

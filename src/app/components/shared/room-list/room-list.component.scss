@@ -4,10 +4,6 @@
   color: var(--primary);
 }
 
-.filterWrapper {
-  width: 100%;
-}
-
 .mat-mdc-list {
   background-color: var(--surface);
 }
@@ -145,7 +141,7 @@
       font-weight: $font-weight-bold;
     }
 
-    animation: activeRoom 2s infinite;
+    animation: active-room 2s infinite;
   }
 }
 
@@ -155,7 +151,7 @@
   }
 }
 
-@keyframes activeRoom {
+@keyframes active-room {
   0% {
     border-color: var(--primary);
   }

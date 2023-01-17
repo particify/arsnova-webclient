@@ -44,14 +44,14 @@ $header-height: 64px;
   place-content: start;
   width: 100%;
 
+  .mat-icon {
+    margin-right: 8px;
+  }
+
   &:not(.active-page) {
     .mat-icon {
       opacity: 0.6;
     }
-  }
-
-  .mat-icon {
-    margin-right: 8px;
   }
 }
 

@@ -12,7 +12,7 @@
   text-align: center;
   letter-spacing: 7px;
   color: var(--secondary);
-  animation: moveInLeft 2s ease-out;
+  animation: move-in-left 2s ease-out;
   padding-top: 10px;
 }
 
@@ -22,10 +22,10 @@
   font-size: 60%;
   text-align: center;
   color: var(--on-background);
-  animation: moveInRight 1s ease-out;
+  animation: move-in-right 1s ease-out;
 }
 
-@keyframes moveInLeft {
+@keyframes move-in-left {
   0% {
     opacity: 0;
     transform: translateX(-100px);
@@ -41,7 +41,7 @@
   }
 }
 
-@keyframes moveInRight {
+@keyframes move-in-right {
   0% {
     opacity: 0;
     transform: translateX(100px);

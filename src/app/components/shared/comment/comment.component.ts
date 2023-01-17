@@ -236,7 +236,7 @@ export class CommentComponent implements OnInit, OnDestroy {
   answerComment() {
     if (!this.inAnswerView) {
       this.dialog.open(CommentAnswerComponent, {
-        panelClass: 'screenDialog',
+        panelClass: 'screen-dialog',
         data: {
           comment: this.comment,
           role: this.viewRole,

@@ -17,10 +17,10 @@
     </div>
     <mat-card>
       <div fxLayout="row" fxLayoutAlign="space-between">
-        <div class="cardTitle" fxLayout="row" fxLayoutAlign="start center">
+        <div class="card-title" fxLayout="row" fxLayoutAlign="start center">
           <mat-form-field
-            class="activeInput no-field-hint"
-            [ngClass]="{ hideEditing: !isInTitleEditMode && !inputFocus }"
+            class="active-input no-field-hint"
+            [ngClass]="{ 'hide-editing': !isInTitleEditMode && !inputFocus }"
             appearance="outline"
           >
             <input
@@ -498,7 +498,7 @@
                       [matMenuTriggerFor]="moreActions"
                       (click)="$event.stopPropagation()"
                       (menuOpened)="openedMenu(i)"
-                      class="moreButton"
+                      class="more-button"
                       matTooltip="{{ 'content.more-options' | translate }}"
                     >
                       <mat-icon>more_vert</mat-icon>
