@@ -1,17 +1,8 @@
 <div fxLayout="column" fxLayoutAlign="space-between" class="answer-container">
   <form *ngIf="!givenAnswer">
-    <mat-form-field appearance="outline">
-      <mat-label>{{ 'answer.your-answer' | translate }}</mat-label>
-      <textarea
-        matInput
-        [(ngModel)]="textAnswer"
-        name="answer"
-        cdkTextareaAutosize
-        cdkAutosizeMinRows="3"
-        cdkAutosizeMaxRows="8"
-        maxLength="500"
-      ></textarea>
-    </mat-form-field>
+    <app-content-text-answer
+      (inputEvent)="textAnswer = $event"
+    ></app-content-text-answer>
   </form>
   <div *ngIf="givenAnswer && givenAnswer.body">
     <p class="answer">{{ givenAnswer.body }}</p>

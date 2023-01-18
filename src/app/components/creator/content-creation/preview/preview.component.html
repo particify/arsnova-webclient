@@ -43,6 +43,9 @@
     [answerOptions]="answerOptionsWithPoints"
     [assignablePoints]="content.assignablePoints"
   ></app-content-prioritization-answer>
+  <app-content-text-answer
+    *ngIf="content.format === 'TEXT'"
+  ></app-content-text-answer>
 </mat-card>
 <div *ngIf="content.format === 'FLASHCARD'">
   <h3 aria-labelledby="back">{{ 'content.flashcard-back' | translate }}</h3>

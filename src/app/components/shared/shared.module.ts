@@ -67,6 +67,7 @@ import { A11yRenderedBodyPipe } from '../../pipes/a11y-rendered-body.pipe';
 import { SettingsPanelHeaderComponent } from './settings-panel-header/settings-panel-header.component';
 import { ContentPrioritizationAnswerComponent } from './content-answers/content-prioritization-answer/content-prioritization-answer.component';
 import { StatisticPrioritizationComponent } from './statistic-content/statistic-prioritization/statistic-prioritization.component';
+import { ContentTextAnswerComponent } from './content-answers/content-text-answer/content-text-answer.component';
 
 @NgModule({
   imports: [
@@ -140,6 +141,7 @@ import { StatisticPrioritizationComponent } from './statistic-content/statistic-
     SettingsPanelHeaderComponent,
     ContentPrioritizationAnswerComponent,
     StatisticPrioritizationComponent,
+    ContentTextAnswerComponent,
   ],
   exports: [
     RoomJoinComponent,
@@ -189,6 +191,7 @@ import { StatisticPrioritizationComponent } from './statistic-content/statistic-
     A11yRenderedBodyPipe,
     SettingsPanelHeaderComponent,
     ContentPrioritizationAnswerComponent,
+    ContentTextAnswerComponent,
   ],
 })
 export class SharedModule {}
