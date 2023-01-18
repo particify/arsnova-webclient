@@ -58,6 +58,8 @@ export class ContentYesNoCreationComponent
 
   initContentForEditing() {
     this.displayAnswers = this.initContentChoiceEditBase();
+    const correctOptions = (this.content as ContentChoice).correctOptionIndexes;
+    this.yesno = correctOptions ? correctOptions[0] : -1;
     this.isLoading = false;
   }
 
