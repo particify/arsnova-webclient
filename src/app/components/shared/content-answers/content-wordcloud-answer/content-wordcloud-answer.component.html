@@ -13,7 +13,7 @@
       (focus)="currentInputIndex = i"
       (blur)="currentInputIndex = null"
     />
-    <mat-hint matSuffix *ngIf="currentInputIndex === i">{{
+    <mat-hint matTextSuffix *ngIf="currentInputIndex === i">{{
       word.length + ' / ' + maxLength
     }}</mat-hint>
   </mat-form-field>
