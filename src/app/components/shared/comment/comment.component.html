@@ -229,7 +229,7 @@
     fxLayoutAlign="center"
     *ngIf="isParticipant"
     class="vote-container"
-    [ngClass]="{ '1': 'voteUp', '-1': 'voteDown', '0': 'reset' }[currentVote]"
+    [ngClass]="{ '1': 'vote-up', '-1': 'vote-down', '0': 'reset' }[currentVote]"
   >
     <button
       mat-icon-button
