@@ -597,9 +597,17 @@ button {
   transform: translateY(calc(4vw + 56px)) !important;
 }
 
-.mobile-add {
-  background-color: var(--primary) !important;
-  color: var(--on-primary) !important;
+.mobile-add.mat-mdc-fab {
+  &:disabled {
+    background-color: var(--cancel);
+    pointer-events: initial;
+  }
+
+  &:not(:disabled) {
+    background-color: var(--primary);
+  }
+
+  color: var(--on-primary);
   position: fixed !important;
   transition: transform 100ms ease-out !important;
   right: 4vw;

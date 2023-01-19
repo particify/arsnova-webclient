@@ -145,6 +145,7 @@ export class CommentListComponent implements OnInit, OnDestroy {
   unreadCommentCount: number;
 
   disabled: boolean;
+  readonly: boolean;
 
   navBarStateSubscription: Subscription;
 
@@ -316,6 +317,16 @@ export class CommentListComponent implements OnInit, OnDestroy {
       this.directSend = commentSettings.directSend;
       this.fileUploadEnabled = commentSettings.fileUploadEnabled;
       this.disabled = commentSettings.disabled;
+      this.readonly = commentSettings.readonly;
+      if (this.readonly) {
+        const msg = this.translateService.instant(
+          'comment-list.creation-currently-not-allowed'
+        );
+        this.notificationService.showAdvanced(
+          msg,
+          AdvancedSnackBarTypes.WARNING
+        );
+      }
     }
     this.getComments();
     if (reload && this.search) {
@@ -773,6 +784,24 @@ export class CommentListComponent implements OnInit, OnDestroy {
     this.getComments();
   }
 
+  toggleReadonly() {
+    const commentSettings = new CommentSettings(
+      this.roomId,
+      this.directSend,
+      this.fileUploadEnabled,
+      this.disabled,
+      !this.readonly
+    );
+    this.commentSettingsService.update(commentSettings).subscribe(() => {
+      this.readonly = !this.readonly;
+      const state = this.readonly ? 'not-allowed' : 'allowed';
+      const msg = this.translateService.instant(
+        'comment-list.creation-' + state
+      );
+      this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
+    });
+  }
+
   subscribeCommentStream() {
     this.commentStream = this.wsCommentService
       .getCommentStream(this.roomId)
@@ -996,7 +1025,14 @@ export class CommentListComponent implements OnInit, OnDestroy {
     this.updateUrl();
   }
 
-  updateSettings(settings: CommentSettings) {
+  activateComments() {
+    const settings = new CommentSettings(
+      this.roomId,
+      this.directSend,
+      this.fileUploadEnabled,
+      false,
+      this.readonly
+    );
     this.commentSettingsService
       .update(settings)
       .subscribe((updatedSettings) => {
@@ -1004,15 +1040,5 @@ export class CommentListComponent implements OnInit, OnDestroy {
         this.isLoading = true;
         this.init(true);
       });
-  }
-
-  activateComments() {
-    const settings = new CommentSettings(
-      this.roomId,
-      this.directSend,
-      this.fileUploadEnabled,
-      false
-    );
-    this.updateSettings(settings);
   }
 }
