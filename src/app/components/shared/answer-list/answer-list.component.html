@@ -13,7 +13,7 @@
       <div fxLayout="row" fxLayoutAlign="start center">
         <span *ngIf="answer.count > 1" class="count">x {{ answer.count }}</span>
         <button
-          *ngIf="isModerator && answer.id"
+          *ngIf="isModerator && (answer.id || banMode)"
           mat-icon-button
           class="delete-button"
           (click)="addToModerationList(answer)"
