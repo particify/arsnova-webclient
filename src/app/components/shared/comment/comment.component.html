@@ -220,7 +220,7 @@
       ></span>
       <div *ngIf="!isParticipant" fxLayout="row" fxLayoutAlign="start end">
         <mat-icon class="vote-icon">thumb_up</mat-icon>
-        <span class="scoreCreator">{{ comment.score }}</span>
+        <span class="score-creator">{{ comment.score }}</span>
       </div>
     </div>
   </div>
@@ -229,7 +229,7 @@
     fxLayoutAlign="center"
     *ngIf="isParticipant"
     class="vote-container"
-    [ngClass]="{ '1': 'voteUp', '-1': 'voteDown', '0': 'reset' }[currentVote]"
+    [ngClass]="{ '1': 'vote-up', '-1': 'vote-down', '0': 'reset' }[currentVote]"
   >
     <button
       mat-icon-button
