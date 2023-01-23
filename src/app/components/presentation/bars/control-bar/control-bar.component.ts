@@ -266,7 +266,7 @@ export class ControlBarComponent
   subscribeToEvents() {
     this.barItems.map((b) => (b.key = this.getFeatureKey(b.name)));
     this.remoteService
-      .getFeedbackState()
+      .getFeedbackStateChange()
       .pipe(takeUntil(this.destroyed$))
       .subscribe((state) => {
         this.surveyStarted = state.started;
