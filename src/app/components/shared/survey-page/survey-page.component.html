@@ -22,6 +22,7 @@
             *ngFor="let state of survey; let i = index"
           >
             <mat-icon
+              fxFlex="noshrink"
               *ngIf="type === typeFeedback"
               [ngClass]="{
                 'label-icon': role === userRole.PARTICIPANT,
