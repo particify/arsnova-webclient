@@ -132,7 +132,6 @@ export class StatisticChoiceComponent
         ? this.colorStrings.background
         : this.colorStrings.onBackground,
       drawOnChartArea: !this.isPresentation,
-      z: 1,
     };
     const barThickness = this.isPresentation ? 80 : null;
     const dataSets = [
@@ -211,6 +210,7 @@ export class StatisticChoiceComponent
             grid: gridConfig,
             border: {
               color: this.colorStrings.onBackground,
+              z: 1,
             },
             display: true,
           },

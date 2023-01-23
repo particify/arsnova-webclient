@@ -122,7 +122,6 @@ export class StatisticPrioritizationComponent
     const gridConfig = {
       tickColor: this.colorStrings.background,
       drawOnChartArea: false,
-      z: 1,
     };
     const barThickness = 18 * this.scale;
     const dataSets = [
@@ -187,6 +186,7 @@ export class StatisticPrioritizationComponent
             grid: gridConfig,
             border: {
               color: this.colorStrings.onBackground,
+              z: 1,
             },
             display: true,
           },
