@@ -225,7 +225,6 @@ export class StatisticSortComponent
     const gridConfig = {
       tickColor: this.isPresentation ? this.surface : this.onSurface,
       drawOnChartArea: !this.isPresentation,
-      z: 1,
     };
     const scale = this.presentationService.getScale();
     this.data[0].barThickness = this.isPresentation ? 80 : 100;
@@ -266,6 +265,7 @@ export class StatisticSortComponent
             grid: gridConfig,
             border: {
               color: this.onSurface,
+              z: 1,
             },
           },
         },
