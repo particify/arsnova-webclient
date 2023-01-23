@@ -32,6 +32,7 @@ import { Subscription } from 'rxjs';
 import { ContentFocusState } from '../../../models/events/remote/content-focus-state';
 import { RoutingService } from '../../../services/util/routing.service';
 import { RemoteService } from '../../../services/util/remote.service';
+import { ContentCarouselService } from '../../../services/util/content-carousel.service';
 
 @Component({
   selector: 'app-participant-content-carousel-page',
@@ -87,7 +88,8 @@ export class ParticipantContentCarouselPageComponent
     private eventService: EventService,
     private router: Router,
     private routingService: RoutingService,
-    private remoteService: RemoteService
+    private remoteService: RemoteService,
+    private contentCarouselService: ContentCarouselService
   ) {}
 
   ngAfterContentInit() {
@@ -362,7 +364,7 @@ export class ParticipantContentCarouselPageComponent
 
   goToOverview() {
     this.showOverview = true;
-    this.replaceUrl(['p', this.shortId, 'series', this.contentGroupName]);
+    this.router.navigate(['p', this.shortId, 'series', this.contentGroupName]);
   }
 
   replaceUrl(url) {
@@ -375,6 +377,9 @@ export class ParticipantContentCarouselPageComponent
     if (index === this.contents.length - 1) {
       this.hasAnsweredLastContent = this.alreadySent.get(index);
     }
+    this.contentCarouselService.setLastContentAnswered(
+      this.hasAnsweredLastContent
+    );
     this.checkState();
     this.answers[this.getIndexOfContentById(answer.contentId)] = answer;
     if (!this.isGuided) {

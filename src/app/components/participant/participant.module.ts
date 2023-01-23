@@ -21,6 +21,7 @@ import { ContentScaleParticipantComponent } from './content/content-scale-partic
 import { SeriesOverviewComponent } from './series-overview/series-overview.component';
 import { ParticipantOverviewComponent } from './participant-overview/participant-overview.component';
 import { ContentPrioritizationParticipantComponent } from './content/content-prioritization-participant/content-prioritization-participant.component';
+import { ContentCarouselService } from '@arsnova/app/services/util/content-carousel.service';
 
 @NgModule({
   imports: [
@@ -53,6 +54,9 @@ import { ContentPrioritizationParticipantComponent } from './content/content-pri
     ParticipantOverviewComponent,
     ContentPrioritizationParticipantComponent,
   ],
-  providers: [{ provide: TRANSLATION_MODULE_NAME, useValue: 'participant' }],
+  providers: [
+    { provide: TRANSLATION_MODULE_NAME, useValue: 'participant' },
+    ContentCarouselService,
+  ],
 })
 export class ParticipantModule {}

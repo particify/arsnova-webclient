@@ -18,6 +18,7 @@ import { Content } from '@arsnova/app/models/content';
 import { ContentType } from '@arsnova/app/models/content-type.enum';
 import { ContentState } from '@arsnova/app/models/content-state';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { ContentCarouselService } from '@arsnova/app/services/util/content-carousel.service';
 
 class MockAuthenticationService {
   getCurrentAuthentication() {
@@ -55,6 +56,12 @@ describe('SeriesOverviewComponent', () => {
   const mockContentGroupService = jasmine.createSpyObj(['getAnswerStats']);
   mockContentGroupService.getAnswerStats.and.returnValue(of(resultOverview));
 
+  const mockContentCarouselService = jasmine.createSpyObj([
+    'isLastContentAnswered',
+  ]);
+
+  mockContentCarouselService.isLastContentAnswered.and.returnValue(false);
+
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [SeriesOverviewComponent],
@@ -83,6 +90,10 @@ describe('SeriesOverviewComponent', () => {
         {
           provide: ContentGroupService,
           useValue: mockContentGroupService,
+        },
+        {
+          provide: ContentCarouselService,
+          useValue: mockContentCarouselService,
         },
       ],
       schemas: [NO_ERRORS_SCHEMA],
@@ -272,7 +283,7 @@ describe('SeriesOverviewComponent', () => {
   });
 
   it('should not finish content loading if last content result is not received yet', async () => {
-    component.hasAnsweredLastContent = true;
+    mockContentCarouselService.isLastContentAnswered.and.returnValue(true);
     const resultOverview = {
       correctAnswerCount: 0,
       scorableContentCount: 0,

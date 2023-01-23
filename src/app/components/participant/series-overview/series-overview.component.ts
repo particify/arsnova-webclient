@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Content } from '../../../models/content';
 import { ArcElement, Chart, DoughnutController, PieController } from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
@@ -15,6 +15,7 @@ import { UserRole } from '../../../models/user-roles.enum';
 import { ClientAuthentication } from '../../../models/client-authentication';
 import { Router } from '@angular/router';
 import { Features } from '../../../models/features.enum';
+import { ContentCarouselService } from '../../../services/util/content-carousel.service';
 
 // Max time for updating db (5000) - navigation delay (500) / 2
 const RELOAD_INTERVAL = 2250;
@@ -33,11 +34,10 @@ interface ContentResultView {
 export class SeriesOverviewComponent implements OnInit {
   @Input() group: ContentGroup;
   @Input() contents: Content[];
-  @Input() hasAnsweredLastContent: boolean;
   @Input() finished: boolean;
   @Input() isPureInfoSeries: boolean;
-  @Output() newContentIndex = new EventEmitter<number>();
 
+  hasAnsweredLastContent: boolean;
   private chart: Chart;
   private colors = {
     chart: '',
@@ -61,10 +61,13 @@ export class SeriesOverviewComponent implements OnInit {
     private authService: AuthenticationService,
     private contentGroupService: ContentGroupService,
     private themeService: ThemeService,
-    private router: Router
+    private router: Router,
+    private contentCarouselService: ContentCarouselService
   ) {}
 
   ngOnInit(): void {
+    this.hasAnsweredLastContent =
+      this.contentCarouselService.isLastContentAnswered();
     this.getColors();
     this.authService.getCurrentAuthentication().subscribe((auth) => {
       this.auth = auth;
