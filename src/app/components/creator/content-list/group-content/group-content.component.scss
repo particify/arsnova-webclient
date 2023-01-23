@@ -11,7 +11,9 @@
 
 @mixin show-button-bar {
   opacity: 1;
-  max-width: 200px;
+
+  // This needs to contain extension buttons as well
+  max-width: 280px;
   pointer-events: initial;
 }
 

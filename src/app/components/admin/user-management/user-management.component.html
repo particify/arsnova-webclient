@@ -2,7 +2,7 @@
   <mat-card-title>
     {{ 'admin-area.user-management' | translate }}
   </mat-card-title>
-  <mat-card-content fxLayout="column" fxLayoutGap="10px">
+  <div fxLayout="column" fxLayoutGap="10px">
     <div
       *ngIf="showAccountAdding"
       fxLayout="row"
@@ -72,5 +72,5 @@
         {{ 'admin-area.delete-user' | translate }}
       </button>
     </div>
-  </mat-card-content>
+  </div>
 </mat-card>

@@ -13,7 +13,7 @@ import { ApiConfigService } from '../../../services/http/api-config.service';
 @Component({
   selector: 'app-user-management',
   templateUrl: './user-management.component.html',
-  styles: ['.mat-mdc-raised-button {height: 50px;}'],
+  styles: ['.mat-mdc-raised-button {height: 56px;}'],
 })
 export class UserManagementComponent implements OnInit {
   user: User;
