@@ -82,6 +82,7 @@
   <div fxLayout="row">
     <button
       mat-stroked-button
+      [disabled]="!isCreator"
       color="warn"
       (click)="openDeleteRoomDialog()"
       aria-labelledby="delete-room"

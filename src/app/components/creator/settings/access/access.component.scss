@@ -32,6 +32,15 @@
   font-size: 18px;
 }
 
+.role-moderator {
+  background-color: var(--grey-light);
+
+  > * {
+    opacity: 0.8;
+    color: var(--on-surface);
+  }
+}
+
 .role-chip {
   opacity: 0.8;
 

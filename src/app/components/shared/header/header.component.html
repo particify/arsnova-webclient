@@ -179,7 +179,7 @@
             }}
           </button>
           <button
-            *ngIf="hasRole(UserRole.CREATOR)"
+            *ngIf="hasRole(UserRole.CREATOR) || hasRole(UserRole.EDITOR)"
             [disabled]="isPreview"
             mat-button
             (click)="goToSettings()"
@@ -188,7 +188,7 @@
             {{ 'header.room-settings' | translate }}
           </button>
           <button
-            *ngIf="hasRole(UserRole.CREATOR)"
+            *ngIf="hasRole(UserRole.CREATOR) || hasRole(UserRole.EDITOR)"
             [disabled]="isPreview"
             mat-raised-button
             color="primary"

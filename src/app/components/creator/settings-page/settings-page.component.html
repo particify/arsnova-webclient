@@ -8,6 +8,7 @@
   <mat-accordion *ngIf="!isLoading">
     <mat-expansion-panel
       *ngFor="let setting of settings"
+      [disabled]="setting.name === 'access' && !isCreator"
       class="settings-panel"
       [expanded]="currentRoute === setting.name"
       (afterExpand)="updateUrl(setting.name)"

@@ -67,6 +67,7 @@ export class RoomListComponent implements OnInit, OnDestroy {
   creatorRole = UserRole.CREATOR;
   participantRole = UserRole.PARTICIPANT;
   executiveModeratorRole = UserRole.EXECUTIVE_MODERATOR;
+  editorRole = UserRole.EDITOR;
 
   constructor(
     private roomService: RoomService,
@@ -105,13 +106,13 @@ export class RoomListComponent implements OnInit, OnDestroy {
     const roleKeys = [
       'room-list.a11y-participant-role',
       'room-list.a11y-executive-moderator-role',
-      'room-list.a11y-editing-moderator-role',
+      'room-list.a11y-editor-role',
       'room-list.a11y-creator-role',
     ];
     const roles = [
       UserRole.PARTICIPANT,
       UserRole.EXECUTIVE_MODERATOR,
-      UserRole.EDITING_MODERATOR,
+      UserRole.EDITOR,
       UserRole.CREATOR,
     ];
     this.translateService.get(roleKeys).subscribe(() => {

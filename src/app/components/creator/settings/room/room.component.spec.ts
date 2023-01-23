@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { RoomComponent } from './room.component';
 import {
+  ActivatedRouteStub,
   JsonTranslationLoader,
   MockEventService,
   MockGlobalStorageService,
@@ -13,12 +14,17 @@ import { NotificationService } from '@arsnova/app/services/util/notification.ser
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { RoomService } from '@arsnova/app/services/http/room.service';
 import { NO_ERRORS_SCHEMA, Injectable } from '@angular/core';
-import { Router } from '@angular/router';
+import {
+  ActivatedRoute,
+  ActivatedRouteSnapshot,
+  Router,
+} from '@angular/router';
 import { DialogService } from '@arsnova/app/services/util/dialog.service';
 import { GlobalStorageService } from '@arsnova/app/services/util/global-storage.service';
 import { EventService } from '@arsnova/app/services/util/event.service';
 import { LanguageService } from '@arsnova/app/services/util/language.service';
 import { FormattingService } from '@arsnova/app/services/http/formatting.service';
+import { UserRole } from '@arsnova/app/models/user-roles.enum';
 
 @Injectable()
 class MockRoomService {}
@@ -32,6 +38,14 @@ class MockFormattingService {}
 describe('RoomComponent', () => {
   let component: RoomComponent;
   let fixture: ComponentFixture<RoomComponent>;
+
+  const snapshot = new ActivatedRouteSnapshot();
+
+  snapshot.data = {
+    userRole: UserRole.CREATOR,
+  };
+
+  const activatedRouteStub = new ActivatedRouteStub(null, null, snapshot);
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
@@ -68,6 +82,10 @@ describe('RoomComponent', () => {
         {
           provide: LanguageService,
           useClass: MockLangService,
+        },
+        {
+          provide: ActivatedRoute,
+          useValue: activatedRouteStub,
         },
       ],
       imports: [

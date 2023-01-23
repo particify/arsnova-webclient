@@ -194,6 +194,14 @@
                 >
                   gavel
                 </mat-icon>
+                <mat-icon
+                  mat-list-icon
+                  *ngSwitchCase="editorRole"
+                  matTooltip="{{ 'room-list.editor-role' | translate }}"
+                  title="{{ 'room-list.editor-role' | translate }}"
+                >
+                  edit
+                </mat-icon>
               </div>
             </div>
             <div fxLayout="row" fxLayoutAlign="center center">
@@ -209,7 +217,11 @@
               <mat-menu #moreActions="matMenu" xPosition="before">
                 <button
                   mat-menu-item
-                  *ngIf="room.membership.primaryRole === creatorRole"
+                  *ngIf="
+                    [creatorRole, editorRole].includes(
+                      room.membership.primaryRole
+                    )
+                  "
                   (click)="navToSettings(room.summary.shortId)"
                 >
                   <mat-icon>settings</mat-icon>

@@ -46,14 +46,9 @@ export class AccessComponent implements OnInit, OnDestroy {
   newModeratorId: string;
   loginId = '';
   isLoading = true;
-  selectedRole: Role;
+  selectedRole: UserRole;
   UserRole: typeof UserRole = UserRole;
-  roles: Role[] = [
-    {
-      name: 'executive_moderator',
-      value: UserRole.EXECUTIVE_MODERATOR,
-    },
-  ];
+  roles: UserRole[] = [UserRole.EXECUTIVE_MODERATOR];
   isGuest = false;
   loginIdIsEmail = false;
 
@@ -168,15 +163,11 @@ export class AccessComponent implements OnInit, OnDestroy {
     }
     if (this.newModeratorId) {
       this.moderatorService
-        .add(this.room.id, this.newModeratorId)
+        .add(this.room.id, this.newModeratorId, this.selectedRole)
         .subscribe(() => {
           this.saveEvent.emit(new UpdateEvent(null, false, true));
           this.moderators.push(
-            new Moderator(
-              this.newModeratorId,
-              this.loginId,
-              UserRole.EXECUTIVE_MODERATOR
-            )
+            new Moderator(this.newModeratorId, this.loginId, this.selectedRole)
           );
           const msg = this.translationService.instant('settings.user-added');
           this.notificationService.showAdvanced(
@@ -192,7 +183,7 @@ export class AccessComponent implements OnInit, OnDestroy {
 
   inviteModerator() {
     this.accessTokenService
-      .invite(this.room.id, UserRole.EXECUTIVE_MODERATOR, this.loginId)
+      .invite(this.room.id, this.selectedRole, this.loginId)
       .subscribe(() => {
         const msg = this.translationService.instant('settings.user-invited');
         this.notificationService.showAdvanced(
@@ -231,5 +222,9 @@ export class AccessComponent implements OnInit, OnDestroy {
 
   canBeAdded(): boolean {
     return !!this.newModeratorId || !this.loginIdIsEmail;
+  }
+
+  updateSelectedRole(role: UserRole) {
+    this.selectedRole = role;
   }
 }

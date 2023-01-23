@@ -7,6 +7,7 @@ import { AbstractHttpService } from './abstract-http.service';
 import { TranslateService } from '@ngx-translate/core';
 import { NotificationService } from '../util/notification.service';
 import { EventService } from '../util/event.service';
+import { UserRole } from '@arsnova/app/models/user-roles.enum';
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
@@ -36,10 +37,10 @@ export class ModeratorService extends AbstractHttpService<Moderator> {
       .pipe(catchError(this.handleError<any>('getModerator')));
   }
 
-  add(roomId: string, userId: string) {
-    const url = this.buildUri(`/${userId}`, roomId);
+  add(roomId: string, userId: string, role: UserRole) {
+    const url = this.buildUri(`/${userId}?role=${role}`, roomId);
     return this.http
-      .put(url, httpOptions)
+      .put(url, {}, httpOptions)
       .pipe(catchError(this.handleError<any>('addModerator')));
   }
 
