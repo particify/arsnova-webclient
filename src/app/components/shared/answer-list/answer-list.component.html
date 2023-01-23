@@ -8,19 +8,23 @@
         | translate : { count: answer.count, answer: answer.answer }
     }}"
   >
-    <span class="answer">{{ answer.answer }}</span>
-    <span *ngIf="answer.count > 1" class="count">x {{ answer.count }}</span>
-    <button
-      *ngIf="isModerator && answer.id"
-      mat-icon-button
-      class="delete-button"
-      (click)="addToModerationList(answer)"
-      [matTooltip]="
-        'statistic.' + (banMode ? 'ban' : 'delete') + '-answer' | translate
-      "
-    >
-      <mat-icon class="icon-warn">close</mat-icon>
-    </button>
+    <div fxLayout="row" fxLayoutAlign="space-between center" fxFill>
+      <span class="answer">{{ answer.answer }}</span>
+      <div fxLayout="row" fxLayoutAlign="start center">
+        <span *ngIf="answer.count > 1" class="count">x {{ answer.count }}</span>
+        <button
+          *ngIf="isModerator && (answer.id || banMode)"
+          mat-icon-button
+          class="delete-button"
+          (click)="addToModerationList(answer)"
+          [matTooltip]="
+            'statistic.' + (banMode ? 'ban' : 'delete') + '-answer' | translate
+          "
+        >
+          <mat-icon class="icon-warn">close</mat-icon>
+        </button>
+      </div>
+    </div>
     <mat-divider *ngIf="i < answers.length - 1"></mat-divider>
   </mat-list-item>
 </mat-list>
