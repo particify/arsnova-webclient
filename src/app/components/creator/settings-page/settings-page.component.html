@@ -1,16 +1,51 @@
-<div *ngIf="!isLoading && !errorOnLoading">
-  <div class="visually-hidden">
-    <div tabindex="-1" id="message-button">
-      {{ 'settings.a11y-message' | a11yIntro | async }}
-    </div>
-  </div>
-  <div *ngFor="let setting of settings">
-    <app-settings
-      [settings]="setting"
-      [room]="room"
-      (updateEvent)="updateRoom($event)"
-    ></app-settings>
+<div class="visually-hidden">
+  <div tabindex="-1" id="message-button">
+    {{ 'settings.a11y-message' | a11yIntro | async }}
   </div>
 </div>
-<app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
-<app-room-not-found *ngIf="!isLoading && errorOnLoading"></app-room-not-found>
+<div fxLayout="column" fxLayoutAlign="start center">
+  <app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
+  <mat-accordion *ngIf="!isLoading">
+    <mat-expansion-panel
+      *ngFor="let setting of settings"
+      class="settings-panel"
+      [expanded]="currentRoute === setting.name"
+      (afterExpand)="updateUrl(setting.name)"
+    >
+      <mat-expansion-panel-header
+        [appHotkey]="setting.hotkey"
+        [appHotkeyAction]="HotkeyAction.CLICK"
+        [appHotkeyTitle]="'settings.hotkey-' + setting.name | translate"
+      >
+        <app-settings-panel-header
+          [text]="'settings.' + setting.name"
+          [icon]="setting.icon"
+        ></app-settings-panel-header>
+      </mat-expansion-panel-header>
+      <div [ngSwitch]="setting.name">
+        <app-room-edit
+          [editRoom]="room"
+          [name]="room.name"
+          [description]="room.description"
+          *ngSwitchCase="'general'"
+          (saveEvent)="saveRoom($event)"
+        ></app-room-edit>
+        <app-comment-settings
+          [room]="room"
+          [roomId]="room.id"
+          *ngSwitchCase="'comments'"
+          (saveEvent)="saveRoom($event)"
+        ></app-comment-settings>
+        <app-access
+          [room]="room"
+          *ngSwitchCase="'access'"
+          (saveEvent)="saveRoom($event)"
+        ></app-access>
+        <app-announcement-settings
+          *ngSwitchCase="'announcements'"
+          [room]="room"
+        ></app-announcement-settings>
+      </div>
+    </mat-expansion-panel>
+  </mat-accordion>
+</div>

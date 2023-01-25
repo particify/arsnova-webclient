@@ -17,7 +17,6 @@ import { Moderator } from '../../../../models/moderator';
 import { UntypedFormControl, Validators } from '@angular/forms';
 import { EventService } from '../../../../services/util/event.service';
 import { DialogService } from '../../../../services/util/dialog.service';
-import { UpdateEvent } from '../settings.component';
 import { UserService } from '../../../../services/http/user.service';
 import { Room } from '../../../../models/room';
 import { UserRole } from '../../../../models/user-roles.enum';
@@ -25,6 +24,7 @@ import { AuthenticationService } from '../../../../services/http/authentication.
 import { AuthProvider } from '../../../../models/auth-provider';
 import { debounceTime, map, Subject, takeUntil } from 'rxjs';
 import { AccessTokenService } from '../../../../services/http/access-token.service';
+import { UpdateEvent } from '../../settings-page/settings-page.component';
 
 export interface Role {
   name: string;
