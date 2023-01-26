@@ -40,21 +40,6 @@ body {
   position: relative;
 }
 
-// Scrollbar
-
-body::-webkit-scrollbar {
-  width: 10px;
-}
-
-body::-webkit-scrollbar-track {
-  background: var(--background);
-}
-
-body::-webkit-scrollbar-thumb {
-  background: var(--surface);
-  border-radius: 10px;
-}
-
 // States
 
 .visually-hidden {
