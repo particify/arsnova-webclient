@@ -68,7 +68,7 @@
       }}
     </button>
   </div>
-  <app-loading-indicator *ngIf="isLoading" [size]="40"></app-loading-indicator>
+  <app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
   <p *ngIf="!isLoading && moderators.length === 0">
     {{ 'settings.no-users' | translate }}
   </p>

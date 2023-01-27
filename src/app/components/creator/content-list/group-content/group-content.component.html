@@ -86,10 +86,7 @@
         </div>
       </div>
       <div fxLayout="column">
-        <app-loading-indicator
-          *ngIf="isLoading"
-          [size]="50"
-        ></app-loading-indicator>
+        <app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
         <div
           *ngIf="!isLoading && !isModerator"
           fxLayout="row wrap"

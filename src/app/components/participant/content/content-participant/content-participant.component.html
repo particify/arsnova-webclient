@@ -3,7 +3,7 @@
   tabindex="-1"
   attr.aria-label="{{ a11yMsg | translate : { index: index + 1 } }}"
 >
-  <app-loading-indicator *ngIf="isLoading" [size]="80"></app-loading-indicator>
+  <app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
   <section class="card-container with-margin" *ngIf="!isLoading">
     <div class="card" [ngClass]="{ flipped: flipped }">
       <mat-card>

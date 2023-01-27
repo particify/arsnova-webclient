@@ -14,10 +14,7 @@
           [icon]="'manage_accounts'"
         ></app-settings-panel-header>
       </mat-expansion-panel-header>
-      <app-loading-indicator
-        [size]="50"
-        *ngIf="isLoading"
-      ></app-loading-indicator>
+      <app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
       <div *ngIf="!isLoading">
         <lib-extension-point
           extensionId="profile-subscription"
@@ -96,10 +93,7 @@
           [icon]="'settings_suggest'"
         ></app-settings-panel-header>
       </mat-expansion-panel-header>
-      <app-loading-indicator
-        [size]="50"
-        *ngIf="isLoading"
-      ></app-loading-indicator>
+      <app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
       <div *ngIf="!isLoading">
         <span>{{ 'user-profile.preferences-description' | translate }}</span>
         <app-settings-slide-toggle

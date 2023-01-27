@@ -5,7 +5,7 @@ import { Component, Input, OnInit } from '@angular/core';
   templateUrl: './loading-indicator.component.html',
 })
 export class LoadingIndicatorComponent implements OnInit {
-  @Input() size = 100;
+  @Input() size = 40;
   @Input() height;
 
   ngOnInit(): void {
