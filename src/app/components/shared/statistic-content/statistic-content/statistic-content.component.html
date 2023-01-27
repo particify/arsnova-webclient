@@ -118,8 +118,12 @@
     [rawText]="content.body"
     [renderedText]="content.renderedBody"
   ></app-rendered-text>
-  <div *ngIf="format === ContentType.FLASHCARD && !isPresentation">
+  <div *ngIf="format === ContentType.FLASHCARD">
     <button
+      [attr.hidden]="isPresentation"
+      appHotkey=" "
+      [appHotkeyAction]="HotkeyAction.CLICK"
+      [appHotkeyDisabled]="!active"
       mat-icon-button
       (click)="toggleAnswers()"
       [matTooltip]="
