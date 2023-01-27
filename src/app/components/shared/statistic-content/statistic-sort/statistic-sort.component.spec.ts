@@ -17,6 +17,7 @@ import { RoundStatistics } from '@arsnova/app/models/round-statistics';
 import { AnswerStatistics } from '@arsnova/app/models/answer-statistics';
 import { PresentationService } from '@arsnova/app/services/util/presentation.service';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { ContentAnswerService } from '@arsnova/app/services/http/content-answer.service';
 
 describe('StatisticSortComponent', () => {
   let component: StatisticSortComponent;
@@ -47,6 +48,10 @@ describe('StatisticSortComponent', () => {
 
   const mockPresentationService = jasmine.createSpyObj(['getScale']);
 
+  const mockContentAnswerService = jasmine.createSpyObj([
+    'shuffleAnswerOptions',
+  ]);
+
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [StatisticSortComponent],
@@ -75,6 +80,10 @@ describe('StatisticSortComponent', () => {
         {
           provide: PresentationService,
           useValue: mockPresentationService,
+        },
+        {
+          provide: ContentAnswerService,
+          useValue: mockContentAnswerService,
         },
       ],
       schemas: [NO_ERRORS_SCHEMA],

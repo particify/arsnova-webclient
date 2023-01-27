@@ -19,6 +19,8 @@ import { TranslateService } from '@ngx-translate/core';
 import { Combination } from '../../../../models/round-statistics';
 import { EventService } from '../../../../services/util/event.service';
 import { PresentationService } from '../../../../services/util/presentation.service';
+import { AnswerOption } from '../../../../models/answer-option';
+import { ContentAnswerService } from '../../../../services/http/content-answer.service';
 
 export const MAX_COMBINATIONS = 4;
 
@@ -42,6 +44,7 @@ export class StatisticSortComponent
   labels: string[] = [];
   colors: string[] = [];
   indicationColors: string[] = [];
+  answerOptions: AnswerOption[];
   showCorrect = false;
   onSurface: string;
   surface: string;
@@ -53,7 +56,8 @@ export class StatisticSortComponent
     private themeService: ThemeService,
     private translateService: TranslateService,
     protected eventService: EventService,
-    private presentationService: PresentationService
+    private presentationService: PresentationService,
+    private contentAnswerService: ContentAnswerService
   ) {
     super(contentService, eventService);
   }
@@ -65,6 +69,7 @@ export class StatisticSortComponent
 
   init(stats: AnswerStatistics) {
     this.chartId = 'chart-' + this.content.id;
+    this.shuffleAnswerOptions();
     this.updateData(stats);
   }
 
@@ -98,30 +103,7 @@ export class StatisticSortComponent
         this.data[0].data.push(abstentionCount);
       }
       this.answerIndexes = combinedCounts.map((c) => c.selectedChoiceIndexes);
-      for (let i = 0; i < this.answerIndexes.length; i++) {
-        if (
-          i < this.answerIndexes.length - 1 ||
-          this.answerIndexes.length < MAX_COMBINATIONS
-        ) {
-          this.labels.push(
-            this.answerIndexes[i]
-              .map((a) => a + 1)
-              .toString()
-              .replace(/,/g, '-')
-          );
-        } else {
-          this.labels.push(
-            this.translateService.instant('statistic.other-combinations')
-          );
-        }
-      }
-      if (this.content.abstentionsAllowed) {
-        this.translateService
-          .get('statistic.abstentions')
-          .subscribe((label) => {
-            this.labels.push(label);
-          });
-      }
+      this.initLabels();
       const listToCount = combinedCounts.map((c) => c.count);
       listToCount.push(abstentionCount);
       this.updateCounter(listToCount);
@@ -129,6 +111,42 @@ export class StatisticSortComponent
     } else {
       this.updateCounter([0]);
     }
+  }
+
+  initLabels() {
+    this.labels = [];
+    for (let i = 0; i < this.answerIndexes.length; i++) {
+      if (
+        i < this.answerIndexes.length - 1 ||
+        this.answerIndexes.length < MAX_COMBINATIONS
+      ) {
+        this.labels.push(
+          this.answerIndexes[i]
+            .map((a) => (this.showCorrect ? a : this.getShuffledIndex(a)) + 1)
+            .toString()
+            .replace(/,/g, '-')
+        );
+      } else {
+        this.labels.push(
+          this.translateService.instant('statistic.other-combinations')
+        );
+      }
+    }
+    if (this.content.abstentionsAllowed) {
+      this.labels.push(this.translateService.instant('statistic.abstentions'));
+    }
+  }
+
+  getShuffledIndex(index: number) {
+    return this.answerOptions
+      .map((a) => a.label)
+      .indexOf(this.content.options[index].label);
+  }
+
+  shuffleAnswerOptions() {
+    this.answerOptions = this.contentAnswerService.shuffleAnswerOptions(
+      JSON.parse(JSON.stringify(this.content.options))
+    );
   }
 
   checkIfTooMany(combinations: Combination[]): Combination[] {
@@ -166,13 +184,20 @@ export class StatisticSortComponent
   }
 
   toggleCorrect() {
+    this.showCorrect = !this.showCorrect;
+    if (this.showCorrect) {
+      this.answerOptions = this.content.options;
+    } else {
+      this.shuffleAnswerOptions();
+    }
+    this.initLabels();
     const dataset = this.chart.config.data
       .datasets[0] as BarControllerDatasetOptions;
     dataset.backgroundColor = this.showCorrect
-      ? this.colors
-      : this.indicationColors;
+      ? this.indicationColors
+      : this.colors;
+    this.chart.data.labels = this.labels;
     this.chart.update();
-    this.showCorrect = !this.showCorrect;
   }
 
   checkIfCorrect(index: number): boolean {
