@@ -416,16 +416,7 @@
     </button>
   </mat-menu>
 
-  <div
-    *ngIf="isLoading"
-    class="loading"
-    fxLayout="column"
-    fxLayoutAlign="center"
-  >
-    <div fxLayout="row" fxLayoutAlign="center">
-      <app-loading-indicator [size]="100"></app-loading-indicator>
-    </div>
-  </div>
+  <app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
 
   <button
     mat-fab
