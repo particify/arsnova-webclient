@@ -16,7 +16,6 @@ import { ContentPresentationComponent } from './content-presentation/content-pre
 import { AccessComponent } from './settings/access/access.component';
 import { CommentSettingsComponent } from './settings/comment-settings/comment-settings.component';
 import { ContentGroupCreationComponent } from './_dialogs/content-group-creation/content-group-creation.component';
-import { SettingsComponent } from './settings/settings.component';
 import { SettingsPageComponent } from './settings-page/settings-page.component';
 import { GroupContentComponent } from './content-list/group-content/group-content.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
@@ -68,7 +67,6 @@ import { ContentPrioritizationCreationComponent } from './content-creation/conte
     AccessComponent,
     CommentSettingsComponent,
     ContentGroupCreationComponent,
-    SettingsComponent,
     SettingsPageComponent,
     GroupContentComponent,
     ContentCreationComponent,

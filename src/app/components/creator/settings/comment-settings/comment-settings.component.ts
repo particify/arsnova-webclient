@@ -11,12 +11,10 @@ import { CommentService } from '../../../../services/http/comment.service';
 import { CommentSettingsService } from '../../../../services/http/comment-settings.service';
 import { Room } from '../../../../models/room';
 import { CommentSettings } from '../../../../models/comment-settings';
-import { DialogService } from '../../../../services/util/dialog.service';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
-import { GlobalStorageService } from '../../../../services/util/global-storage.service';
-import { UpdateEvent } from '../settings.component';
 import { EventService } from '../../../../services/util/event.service';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
+import { UpdateEvent } from '../../settings-page/settings-page.component';
 
 export class CommentExtensions {
   enableThreshold: boolean;
@@ -58,8 +56,6 @@ export class CommentSettingsComponent implements OnInit {
     public router: Router,
     public commentService: CommentService,
     public commentSettingsService: CommentSettingsService,
-    private dialogService: DialogService,
-    private globalStorageService: GlobalStorageService,
     private liveAnnouncer: LiveAnnouncer,
     public eventService: EventService
   ) {}

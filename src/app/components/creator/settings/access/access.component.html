@@ -38,13 +38,14 @@
         name="username"
       />
     </mat-form-field>
-    <mat-form-field class="no-field-hint" appearance="outline" fxFlex>
+    <mat-form-field
+      *ngIf="!isLoading"
+      class="no-field-hint"
+      appearance="outline"
+      fxFlex
+    >
       <mat-label>{{ 'settings.role' | translate }}</mat-label>
-      <mat-select
-        *ngIf="!isLoading"
-        [value]="selectedRole"
-        [disabled]="roles.length === 1"
-      >
+      <mat-select [value]="selectedRole" [disabled]="roles.length === 1">
         <mat-option *ngFor="let role of roles" [value]="role">
           {{ 'settings.' + role.name | translate }}
         </mat-option>

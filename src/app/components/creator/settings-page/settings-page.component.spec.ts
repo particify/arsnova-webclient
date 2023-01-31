@@ -9,6 +9,7 @@ import {
   MockEventService,
   MockGlobalStorageService,
   MockLangService,
+  MockNotificationService,
   MockRouter,
 } from '@arsnova/testing/test-helpers';
 import { EventService } from '@arsnova/app/services/util/event.service';
@@ -21,6 +22,7 @@ import { NO_ERRORS_SCHEMA, Injectable } from '@angular/core';
 import { GlobalStorageService } from '@arsnova/app/services/util/global-storage.service';
 import { LanguageService } from '@arsnova/app/services/util/language.service';
 import { A11yIntroPipe } from '@arsnova/app/pipes/a11y-intro.pipe';
+import { NotificationService } from '@arsnova/app/services/util/notification.service';
 
 @Injectable()
 class MockRoomService {}
@@ -72,6 +74,10 @@ describe('SettingsPageComponent', () => {
         {
           provide: A11yIntroPipe,
           useValue: a11yIntroPipe,
+        },
+        {
+          provide: NotificationService,
+          useClass: MockNotificationService,
         },
       ],
       imports: [

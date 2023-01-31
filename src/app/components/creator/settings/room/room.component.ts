@@ -11,13 +11,12 @@ import { EventService } from '../../../../services/util/event.service';
 import { RoomDeleted } from '../../../../models/events/room-deleted';
 import { LanguageService } from '../../../../services/util/language.service';
 import { DialogService } from '../../../../services/util/dialog.service';
-import { GlobalStorageService } from '../../../../services/util/global-storage.service';
 import {
   FormattingService,
   MarkdownFeatureset,
 } from '../../../../services/http/formatting.service';
-import { UpdateEvent } from '../settings.component';
 import { HINT_TYPES } from '../../../shared/hint/hint.component';
+import { UpdateEvent } from '../../settings-page/settings-page.component';
 
 @Component({
   selector: 'app-room-edit',
@@ -45,7 +44,6 @@ export class RoomComponent {
     protected translateService: TranslateService,
     protected langService: LanguageService,
     private dialogService: DialogService,
-    private globalStorageService: GlobalStorageService,
     private formattingService: FormattingService
   ) {
     langService.langEmitter.subscribe((lang) => translateService.use(lang));
