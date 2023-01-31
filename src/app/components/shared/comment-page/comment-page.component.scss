@@ -16,19 +16,6 @@ app-comment-list {
   margin-bottom: 2em;
 }
 
-.list-container::-webkit-scrollbar {
-  width: 8px;
-}
-
-.list-container::-webkit-scrollbar-track {
-  background: var(--background);
-}
-
-.list-container::-webkit-scrollbar-thumb {
-  background: var(--surface);
-  border-radius: 4px;
-}
-
 .presentation-container {
   position: absolute;
   top: 4vw;
