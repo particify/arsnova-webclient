@@ -122,14 +122,6 @@ export class CommentSettingsComponent implements OnInit {
     this.saveChanges(false);
   }
 
-  onSliderChange(event: any) {
-    if (event.value) {
-      this.threshold = event.value;
-    } else {
-      this.threshold = 0;
-    }
-  }
-
   updateCommentExtensions(enableTreshold?: boolean, directSend?: boolean) {
     this.enableThreshold = enableTreshold ?? this.enableThreshold;
     this.directSend = directSend ?? this.directSend;
