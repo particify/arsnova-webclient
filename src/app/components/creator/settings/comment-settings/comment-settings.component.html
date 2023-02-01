@@ -10,26 +10,13 @@
         (toggleEvent)="updateCommentExtensions($event)"
       ></app-settings-slide-toggle>
       <div fxLayout="row" fxLayoutAlign="center center" *ngIf="enableThreshold">
-        <mat-slider
-          id="comment-slider"
-          min="-50"
-          max="-5"
-          step="5"
-          [(ngModel)]="threshold"
-          #ngSlider
+        <mat-slider id="comment-slider" min="-50" max="-5" step="5"
           ><input
             matSliderThumb
-            (input)="
-              onSliderChange({
-                source: ngSliderThumb,
-                parent: ngSlider,
-                value: ngSliderThumb.value
-              })
-            "
-            #ngSliderThumb="matSliderThumb"
+            [(ngModel)]="threshold"
             (change)="updateCommentExtensions(); announceThreshold()"
         /></mat-slider>
-        <h2>&nbsp;{{ threshold | number }}</h2>
+        <h2>&nbsp;{{ threshold }}</h2>
       </div>
     </div>
     <app-settings-slide-toggle
