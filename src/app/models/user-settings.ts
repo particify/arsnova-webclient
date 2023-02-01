@@ -5,7 +5,7 @@ export class UserSettings {
 
   constructor(
     contentAnswersDirectlyBelowChart = false,
-    contentVisualizationUnitPercent = false,
+    contentVisualizationUnitPercent = true,
     showContentResultsDirectly = false
   ) {
     this.contentAnswersDirectlyBelowChart = contentAnswersDirectlyBelowChart;
