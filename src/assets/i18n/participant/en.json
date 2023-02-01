@@ -207,6 +207,8 @@
     "show-answers": "Show answers",
     "hide-chart": "Hide chart",
     "show-correct": "Show correct answers",
+    "show-absolute": "Show absolute results",
+    "show-percentage": "Show results in percent",
     "answer": "Answer",
     "other-combinations": "Other",
     "no-answers": "There are no answers.",

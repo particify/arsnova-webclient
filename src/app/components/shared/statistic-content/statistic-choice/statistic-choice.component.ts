@@ -24,7 +24,6 @@ import { ContentScale } from '@arsnova/app/models/content-scale';
 import { EventService } from '../../../../services/util/event.service';
 import { PresentationService } from '../../../../services/util/presentation.service';
 import { AnswerOption } from '../../../../models/answer-option';
-import { UserSettings } from '../../../../models/user-settings';
 
 @Component({
   selector: 'app-statistic-choice',
@@ -38,7 +37,6 @@ export class StatisticChoiceComponent
   @Input() content: ContentChoice;
   @Input() directShow: boolean;
   @Input() isSurvey: boolean;
-  @Input() settings: UserSettings;
 
   chart: Chart;
   chartId: string;
@@ -89,6 +87,10 @@ export class StatisticChoiceComponent
     this.correctOptionIndexes = this.content.correctOptionIndexes;
     this.initChart();
     this.updateData(stats);
+    this.visualizationUnitChanged.subscribe((isUnitPercent) => {
+      this.settings.contentVisualizationUnitPercent = isUnitPercent;
+      this.chart.update();
+    });
   }
 
   afterInit() {
@@ -100,6 +102,10 @@ export class StatisticChoiceComponent
         this.updateData(stats);
         this.updateChart();
       });
+    this.visualizationUnitChanged.subscribe((isUnitPercent) => {
+      this.settings.contentVisualizationUnitPercent = isUnitPercent;
+      this.chart.update();
+    });
   }
 
   toggleAnswers(visible?: boolean): boolean {
@@ -234,16 +240,6 @@ export class StatisticChoiceComponent
         },
       },
     });
-  }
-
-  getDataLabel(value): string {
-    let label: string;
-    if (this.settings.contentVisualizationUnitPercent) {
-      label = ((value / this.answerCount) * 100).toFixed(0) + '%';
-    } else {
-      label = value;
-    }
-    return label;
   }
 
   toggleCorrect() {

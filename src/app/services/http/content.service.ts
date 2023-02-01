@@ -380,18 +380,4 @@ export class ContentService extends AbstractEntityService<Content> {
   getTypeIcons(): Map<ContentType, string> {
     return this.typeIcons;
   }
-
-  allowsUnitChange(content: Content): boolean {
-    return (
-      [ContentType.BINARY, ContentType.SCALE, ContentType.CHOICE].includes(
-        content.format
-      ) && !(content as ContentChoice).multiple
-    );
-  }
-
-  allowsListChange(content: Content): boolean {
-    return [ContentType.BINARY, ContentType.SCALE, ContentType.CHOICE].includes(
-      content.format
-    );
-  }
 }

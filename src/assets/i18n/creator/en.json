@@ -452,6 +452,8 @@
     "show-results": "Show results",
     "hide-results": "Hide results",
     "show-correct": "Show correct answers",
+    "show-absolute": "Show absolute results",
+    "show-percentage": "Show results in percent",
     "no-contents": "There are no contents.",
     "select-content-group": "Select question series",
     "answer": "Answer",
