@@ -207,6 +207,8 @@
     "show-answers": "Zeige die Antworten",
     "hide-chart": "Verstecke das Diagramm",
     "show-correct": "Richtige Antworten anzeigen",
+    "show-absolute": "Absolute Ergebnisse anzeigen",
+    "show-percentage": "Ergebnisse in Prozent anzeigen",
     "answer": "Antwort",
     "other-combinations": "Andere",
     "no-answers": "Es sind keine Antworten vorhanden.",

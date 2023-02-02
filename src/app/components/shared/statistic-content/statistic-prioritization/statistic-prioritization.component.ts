@@ -96,17 +96,6 @@ export class StatisticPrioritizationComponent
     this.updateData(stats);
   }
 
-  afterInit() {
-    this.contentService
-      .getAnswersChangedStream(this.content.roomId, this.content.id)
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe((msg) => {
-        const stats = JSON.parse(msg.body).payload.stats;
-        this.updateData(stats);
-        this.updateChart();
-      });
-  }
-
   deleteAnswers() {
     this.chartData = [];
     this.updateChart();

@@ -47,6 +47,24 @@
         >
           <button
             mat-icon-button
+            *ngIf="answersVisible && allowingUnitChange"
+            (click)="toggleVisualizationUnit()"
+            [matTooltip]="
+              'statistic.' +
+                (settings.contentVisualizationUnitPercent
+                  ? 'show-absolute'
+                  : 'show-percentage') | translate
+            "
+            appHotkey="v"
+            [appHotkeyAction]="HotkeyAction.CLICK"
+            [appHotkeyDisabled]="!active"
+            appTrackInteraction="showingPercentageAsVisualizationUnit"
+            [appTrackName]="settings.contentVisualizationUnitPercent"
+          >
+            <mat-icon class="icon-primary">percent</mat-icon>
+          </button>
+          <button
+            mat-icon-button
             *ngIf="answersVisible && !survey && correctOptionsPublished"
             disableRipple
             (click)="toggleCorrect()"
@@ -151,6 +169,7 @@
     [isPresentation]="isPresentation"
     [active]="active"
     [settings]="settings"
+    [visualizationUnitChanged]="visualizationUnitChanged"
   ></app-statistic-choice>
   <app-statistic-scale
     *ngIf="format === ContentType.SCALE"
@@ -161,6 +180,7 @@
     [isPresentation]="isPresentation"
     [active]="active"
     [settings]="settings"
+    [visualizationUnitChanged]="visualizationUnitChanged"
   ></app-statistic-scale>
   <app-statistic-text
     *ngIf="format === ContentType.TEXT"
@@ -176,6 +196,8 @@
     [directShow]="directShow"
     (updateCounterEvent)="updateCounter($event)"
     [active]="active"
+    [settings]="settings"
+    [visualizationUnitChanged]="visualizationUnitChanged"
   ></app-statistic-sort>
   <app-statistic-wordcloud
     *ngIf="format === ContentType.WORDCLOUD"
@@ -194,6 +216,7 @@
     [active]="active"
     (updateCounterEvent)="updateCounter($event)"
     [isCreator]="!isParticipant"
+    [visualizationUnitChanged]="visualizationUnitChanged"
   ></app-statistic-prioritization>
 </div>
 <div *ngIf="content.format === ContentType.FLASHCARD && answersVisible">

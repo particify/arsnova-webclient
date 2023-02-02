@@ -70,6 +70,9 @@ export class StatisticContentComponent implements OnInit {
   roundsToDisplay = 0;
   showWordcloudModeration = false;
   isParticipant = true;
+  allowingUnitChange = false;
+
+  visualizationUnitChanged = new EventEmitter<boolean>();
 
   constructor(
     private announceService: AnnounceService,
@@ -131,6 +134,13 @@ export class StatisticContentComponent implements OnInit {
         this.sendUiState(false, false);
       }
     }
+    this.allowingUnitChange = [
+      ContentType.BINARY,
+      ContentType.SCALE,
+      ContentType.CHOICE,
+      ContentType.PRIORITIZATION,
+      ContentType.SORT,
+    ].includes(this.content.format);
   }
 
   broadcastRoundState() {
@@ -209,6 +219,14 @@ export class StatisticContentComponent implements OnInit {
         this.sendUiState();
       }
     }
+  }
+
+  toggleVisualizationUnit() {
+    this.settings.contentVisualizationUnitPercent =
+      !this.settings.contentVisualizationUnitPercent;
+    this.visualizationUnitChanged.emit(
+      this.settings.contentVisualizationUnitPercent
+    );
   }
 
   toggleWordcloudView() {

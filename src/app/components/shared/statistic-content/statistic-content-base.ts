@@ -6,6 +6,7 @@ import { AnswerStatistics } from '../../../models/answer-statistics';
 import { EventService } from '../../../services/util/event.service';
 import { TextAnswer } from '../../../models/text-answer';
 import { PresentationEvent } from '../../../models/events/presentation-events.enum';
+import { UserSettings } from '../../../models/user-settings';
 
 @Component({
   template: '',
@@ -17,6 +18,8 @@ export abstract class StatisticContentBaseComponent implements OnInit {
     new EventEmitter<number>();
   @Input() isPresentation = false;
   @Input() active: boolean;
+  @Input() visualizationUnitChanged = new EventEmitter<boolean>();
+  @Input() settings: UserSettings;
 
   destroyed$ = new Subject<void>();
   contentId: string;
@@ -77,5 +80,15 @@ export abstract class StatisticContentBaseComponent implements OnInit {
       this.answerCount = 0;
     }
     this.updateCounterEvent.emit(this.answerCount);
+  }
+
+  getDataLabel(value): string {
+    let label: string;
+    if (this.settings.contentVisualizationUnitPercent) {
+      label = ((value / this.answerCount) * 100).toFixed(0) + '%';
+    } else {
+      label = value;
+    }
+    return label;
   }
 }

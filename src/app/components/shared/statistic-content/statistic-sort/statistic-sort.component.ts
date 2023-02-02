@@ -82,6 +82,10 @@ export class StatisticSortComponent
         this.updateData(stats);
         this.updateChart();
       });
+    this.visualizationUnitChanged.subscribe((isUnitPercent) => {
+      this.settings.contentVisualizationUnitPercent = isUnitPercent;
+      this.chart.update();
+    });
   }
 
   updateData(stats: AnswerStatistics) {
@@ -299,6 +303,9 @@ export class StatisticSortComponent
             display: false,
           },
           datalabels: {
+            formatter: (value, context) => {
+              return this.getDataLabel(context.dataset.data[context.dataIndex]);
+            },
             display: (context) => {
               return context.dataset.data[context.dataIndex] > 0;
             },
