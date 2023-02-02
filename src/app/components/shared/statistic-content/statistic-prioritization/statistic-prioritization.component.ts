@@ -17,7 +17,6 @@ import { ContentService } from '@arsnova/app/services/http/content.service';
 import { TranslateService } from '@ngx-translate/core';
 import { ThemeService } from '@arsnova/theme/theme.service';
 import { AnswerStatistics } from '@arsnova/app/models/answer-statistics';
-import { takeUntil } from 'rxjs/operators';
 import { EventService } from '@arsnova/app/services/util/event.service';
 import { PresentationService } from '@arsnova/app/services/util/presentation.service';
 import { ContentPrioritization } from '@arsnova/app/models/content-prioritization';
@@ -86,14 +85,19 @@ export class StatisticPrioritizationComponent
     this.chartHeight = 80 * this.options.length * chartScale;
     this.fontSize = this.isPresentation ? 14 * this.scale : 12;
     this.initChart();
-    this.indexChanged.subscribe(() => {
-      if (this.active) {
-        setTimeout(() => {
-          this.updateChart();
-        }, 0);
-      }
-    });
+    this.showChart(300);
     this.updateData(stats);
+    this.indexChanged.subscribe(() => {
+      this.showChart();
+    });
+  }
+
+  showChart(timeout = 0) {
+    if (this.active) {
+      setTimeout(() => {
+        this.updateChart();
+      }, timeout);
+    }
   }
 
   deleteAnswers() {
