@@ -50,6 +50,7 @@ export class StatisticPrioritizationComponent
   chartHeight: number;
   scale: number;
   fontSize: number;
+  indexes: number[];
 
   constructor(
     protected contentService: ContentService,
@@ -217,9 +218,14 @@ export class StatisticPrioritizationComponent
             )
           );
           // Get array with indexes
-          const indexes = data.map((d, i) => i);
+          if (!this.indexes) {
+            this.indexes = data.map((d, i) => i);
+          }
+          // Create copy of current indexes
+          const copy = [...this.indexes];
           // Sort indexes descending according to data values
-          indexes.sort((a, b) => data[b] - data[a]);
+          this.indexes.sort((a, b) => data[b] - data[a]);
+
           // Sort data as well
           data.sort((a, b) => b - a);
 
@@ -234,17 +240,20 @@ export class StatisticPrioritizationComponent
 
           // Set new data according to sorted indexes
           meta.data.forEach((data, index) => {
-            const newIndex = indexes.indexOf(index);
+            const newIndex = this.indexes.indexOf(index);
             newMeta[newIndex] = data;
             newLabels[newIndex] = labels[index];
             newColors[newIndex] = this.chartColors[index];
           });
 
           // Apply sorted data to chart
-          meta.data = newMeta;
-          chart.data.labels = newLabels;
           chart.data.datasets[0].data = data;
           chart.data.datasets[0].backgroundColor = newColors;
+          // Check if order has changed
+          if (JSON.stringify(copy) !== JSON.stringify(this.indexes)) {
+            meta.data = newMeta;
+            chart.data.labels = newLabels;
+          }
           Chart.unregister(reorderBar);
         }
       },
