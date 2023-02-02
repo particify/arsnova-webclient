@@ -1,23 +1,14 @@
+@import '../../../../../variables';
+
 #comment-slider {
   width: 100%;
 }
 
-.delete {
-  color: var(--warn);
-}
+.threshold-value {
+  font-weight: $font-weight-bold;
+  text-align: center;
 
-.update {
-  transition: 500ms;
-}
-
-.export-icon {
-  margin-right: 2px;
-}
-
-.add-icon {
-  color: var(--primary);
-  line-height: 28px;
-  font-size: 28px;
-  height: 28px !important;
-  width: 28px;
+  // Align with slide toogles and prevent slider from with change
+  width: 40px;
+  padding-right: 4px;
 }
