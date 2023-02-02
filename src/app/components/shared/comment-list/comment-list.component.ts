@@ -602,6 +602,11 @@ export class CommentListComponent implements OnInit, OnDestroy {
     if (disabled !== this.disabled) {
       this.disabled = disabled;
     }
+    const readonly = msg.payload.readonly;
+    if (readonly !== this.readonly) {
+      this.readonly = msg.payload.readonly;
+      this.showReadonlyStateNotification();
+    }
   }
 
   handleCommentPatch(changes: object, id: string, index: number): boolean {
@@ -794,12 +799,14 @@ export class CommentListComponent implements OnInit, OnDestroy {
     );
     this.commentSettingsService.update(commentSettings).subscribe(() => {
       this.readonly = !this.readonly;
-      const state = this.readonly ? 'not-allowed' : 'allowed';
-      const msg = this.translateService.instant(
-        'comment-list.creation-' + state
-      );
-      this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
+      this.showReadonlyStateNotification();
     });
+  }
+
+  showReadonlyStateNotification() {
+    const state = this.readonly ? 'not-allowed' : 'allowed';
+    const msg = this.translateService.instant('comment-list.creation-' + state);
+    this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
   }
 
   subscribeCommentStream() {

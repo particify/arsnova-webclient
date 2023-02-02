@@ -84,6 +84,8 @@
     "a11y-select-time-1w": "Zeige alle Beiträge der letzten 7 Tage an",
     "a11y-select-time-all": "Zeige alle Beiträge an",
     "add-comment": "Beitrag verfassen",
+    "creation-allowed": "Das Erstellen von Beiträgen ist jetzt erlaubt.",
+    "creation-not-allowed": "Das Erstellen von Beiträgen ist jetzt nicht mehr möglich.",
     "creation-currently-not-allowed": "Das Erstellen neuer Beiträge ist zurzeit nicht erlaubt.",
     "comment-got-favorited": "Ein Beitrag von dir wurde favorisiert.",
     "comment-sent": "Dein Beitrag wurde veröffentlicht.",

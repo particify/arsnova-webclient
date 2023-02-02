@@ -84,6 +84,8 @@
     "a11y-select-time-1w": "Show all posts of the last week",
     "a11y-select-time-all": "Show all posts",
     "add-comment": "Leave a post",
+    "creation-allowed": "Creating posts is now allowed.",
+    "creation-not-allowed": "Creating posts is now no longer possible.",
     "creation-currently-not-allowed": "The creation of posts is currently not allowed.",
     "comment-got-favorited": "A post of yours got favorited.",
     "comment-sent": "Your post has been published.",
