@@ -128,7 +128,10 @@
         [appTrackName]="theme.key"
       >
         <div fxLayout="row">
-          <mat-icon class="color" [ngStyle]="{ color: theme.getPreviewColor() }"
+          <mat-icon
+            fxFlex="noshrink"
+            class="color"
+            [ngStyle]="{ color: theme.getPreviewColor() }"
             >lens</mat-icon
           >
           <mat-icon
