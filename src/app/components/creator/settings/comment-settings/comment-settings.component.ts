@@ -135,12 +135,12 @@ export class CommentSettingsComponent implements OnInit {
     this.saveChanges();
   }
 
-  updateCommentSettings(change?: Partial<CommentExtensions>) {
+  updateCommentSettings(change: Partial<CommentSettings> = {}) {
     const commentSettings = new CommentSettings(
       this.roomId,
-      change['directSend'] ?? this.directSend,
+      change.directSend ?? this.directSend,
       this.fileUploadEnabled,
-      change['disabled'] ?? this.disabled
+      change.disabled ?? this.disabled
     );
     this.commentSettingsService
       .update(commentSettings)
