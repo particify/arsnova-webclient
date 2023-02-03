@@ -17,7 +17,6 @@ import { ContentService } from '@arsnova/app/services/http/content.service';
 import { TranslateService } from '@ngx-translate/core';
 import { ThemeService } from '@arsnova/theme/theme.service';
 import { AnswerStatistics } from '@arsnova/app/models/answer-statistics';
-import { takeUntil } from 'rxjs/operators';
 import { EventService } from '@arsnova/app/services/util/event.service';
 import { PresentationService } from '@arsnova/app/services/util/presentation.service';
 import { ContentPrioritization } from '@arsnova/app/models/content-prioritization';
@@ -51,6 +50,7 @@ export class StatisticPrioritizationComponent
   chartHeight: number;
   scale: number;
   fontSize: number;
+  indexes: number[];
 
   constructor(
     protected contentService: ContentService,
@@ -86,14 +86,19 @@ export class StatisticPrioritizationComponent
     this.chartHeight = 80 * this.options.length * chartScale;
     this.fontSize = this.isPresentation ? 14 * this.scale : 12;
     this.initChart();
-    this.indexChanged.subscribe(() => {
-      if (this.active) {
-        setTimeout(() => {
-          this.updateChart();
-        }, 0);
-      }
-    });
+    this.showChart(300);
     this.updateData(stats);
+    this.indexChanged.subscribe(() => {
+      this.showChart();
+    });
+  }
+
+  showChart(timeout = 0) {
+    if (this.active) {
+      setTimeout(() => {
+        this.updateChart();
+      }, timeout);
+    }
   }
 
   deleteAnswers() {
@@ -213,9 +218,14 @@ export class StatisticPrioritizationComponent
             )
           );
           // Get array with indexes
-          const indexes = data.map((d, i) => i);
+          if (!this.indexes) {
+            this.indexes = data.map((d, i) => i);
+          }
+          // Create copy of current indexes
+          const copy = [...this.indexes];
           // Sort indexes descending according to data values
-          indexes.sort((a, b) => data[b] - data[a]);
+          this.indexes.sort((a, b) => data[b] - data[a]);
+
           // Sort data as well
           data.sort((a, b) => b - a);
 
@@ -230,17 +240,20 @@ export class StatisticPrioritizationComponent
 
           // Set new data according to sorted indexes
           meta.data.forEach((data, index) => {
-            const newIndex = indexes.indexOf(index);
+            const newIndex = this.indexes.indexOf(index);
             newMeta[newIndex] = data;
             newLabels[newIndex] = labels[index];
             newColors[newIndex] = this.chartColors[index];
           });
 
           // Apply sorted data to chart
-          meta.data = newMeta;
-          chart.data.labels = newLabels;
           chart.data.datasets[0].data = data;
           chart.data.datasets[0].backgroundColor = newColors;
+          // Check if order has changed
+          if (JSON.stringify(copy) !== JSON.stringify(this.indexes)) {
+            meta.data = newMeta;
+            chart.data.labels = newLabels;
+          }
           Chart.unregister(reorderBar);
         }
       },
