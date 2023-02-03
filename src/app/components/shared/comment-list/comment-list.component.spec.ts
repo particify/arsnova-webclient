@@ -41,12 +41,14 @@ describe('CommentListComponent', () => {
   const mockWsCommentService = jasmine.createSpyObj([
     'getCommentStream',
     'getModeratorCommentStream',
+    'getCommentSettingsStream',
   ]);
   const message = {
     body: '{ "payload": {} }',
   };
   mockWsCommentService.getCommentStream.and.returnValue(of(message));
   mockWsCommentService.getModeratorCommentStream.and.returnValue(of(message));
+  mockWsCommentService.getCommentSettingsStream.and.returnValue(of(message));
 
   const mockRoutingService = jasmine.createSpyObj(['getRoleString']);
 

@@ -46,11 +46,15 @@ describe('ParticipantOverviewComponent', () => {
   const mockRoomStatsService = jasmine.createSpyObj(['getStats']);
   mockRoomStatsService.getStats.and.returnValue(of({}));
 
-  const mockWsCommentService = jasmine.createSpyObj(['getCommentStream']);
+  const mockWsCommentService = jasmine.createSpyObj([
+    'getCommentStream',
+    'getCommentSettingsStream',
+  ]);
   const message = {
     body: '{ "payload": {} }',
   };
   mockWsCommentService.getCommentStream.and.returnValue(of(message));
+  mockWsCommentService.getCommentSettingsStream.and.returnValue(of(message));
 
   const mockCommentService = jasmine.createSpyObj(['countByRoomId']);
   mockCommentService.countByRoomId.and.returnValue(of({}));

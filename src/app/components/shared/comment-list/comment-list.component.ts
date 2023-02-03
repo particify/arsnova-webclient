@@ -127,6 +127,7 @@ export class CommentListComponent implements OnInit, OnDestroy {
   freeze = false;
   commentStream: Subscription;
   moderatorStream: Subscription;
+  settingsSteam: Subscription;
   commentsFilteredByTime: Comment[] = [];
   displayComments: Comment[] = [];
   commentCounter = itemRenderNumber;
@@ -219,6 +220,11 @@ export class CommentListComponent implements OnInit, OnDestroy {
               this.commentVoteMap.set(v.commentId, v);
             }
           });
+        this.settingsSteam = this.wsCommentService
+          .getCommentSettingsStream(this.roomId)
+          .subscribe((message: Message) => {
+            this.parseSettingsMessage(message);
+          });
       }
     });
     this.translateService.get('comment-list.search').subscribe((msg) => {
@@ -297,6 +303,9 @@ export class CommentListComponent implements OnInit, OnDestroy {
     }
     if (this.navBarStateSubscription) {
       this.navBarStateSubscription.unsubscribe();
+    }
+    if (this.settingsSteam) {
+      this.settingsSteam.unsubscribe();
     }
     this.hotkeyRefs.forEach((h) => this.hotkeyService.unregisterHotkey(h));
   }
@@ -573,6 +582,14 @@ export class CommentListComponent implements OnInit, OnDestroy {
     }
     if (!highlightEvent && (!this.freeze || updateList)) {
       this.afterIncomingMessage();
+    }
+  }
+
+  parseSettingsMessage(message: Message) {
+    const msg = JSON.parse(message.body);
+    const disabled = msg.payload.disabled;
+    if (disabled !== this.disabled) {
+      this.disabled = disabled;
     }
   }
 
