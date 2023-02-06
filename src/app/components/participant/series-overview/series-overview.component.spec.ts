@@ -58,6 +58,7 @@ describe('SeriesOverviewComponent', () => {
 
   const mockContentCarouselService = jasmine.createSpyObj([
     'isLastContentAnswered',
+    'setLastContentAnswered',
   ]);
 
   mockContentCarouselService.isLastContentAnswered.and.returnValue(false);

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Content } from '../../../models/content';
 import { ArcElement, Chart, DoughnutController, PieController } from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
@@ -31,7 +31,7 @@ interface ContentResultView {
   templateUrl: './series-overview.component.html',
   styleUrls: ['./series-overview.component.scss'],
 })
-export class SeriesOverviewComponent implements OnInit {
+export class SeriesOverviewComponent implements OnInit, OnDestroy {
   @Input() group: ContentGroup;
   @Input() contents: Content[];
   @Input() finished: boolean;
@@ -64,6 +64,10 @@ export class SeriesOverviewComponent implements OnInit {
     private router: Router,
     private contentCarouselService: ContentCarouselService
   ) {}
+
+  ngOnDestroy(): void {
+    this.contentCarouselService.setLastContentAnswered(false);
+  }
 
   ngOnInit(): void {
     this.hasAnsweredLastContent =
