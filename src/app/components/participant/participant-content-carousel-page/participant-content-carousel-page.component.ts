@@ -319,7 +319,11 @@ export class ParticipantContentCarouselPageComponent
 
   getInitialStep() {
     const firstIndex = this.getFirstUnansweredContentIndex();
-    if (firstIndex === 0 && !this.isPureInfoSeries) {
+    if (
+      firstIndex === 0 &&
+      !this.isPureInfoSeries &&
+      !this.contentCarouselService.isLastContentAnswered()
+    ) {
       this.showOverview = false;
       this.initStepper(0);
       this.updateContentIndexUrl(0);
@@ -349,8 +353,10 @@ export class ParticipantContentCarouselPageComponent
   }
 
   checkState() {
-    this.isFinished = this.getFirstUnansweredContentIndex() === null;
     this.isPureInfoSeries = this.checkIfPureInfoSeries();
+    this.isFinished =
+      this.getFirstUnansweredContentIndex() === null ||
+      this.contentCarouselService.isLastContentAnswered();
   }
 
   nextContent(finish?: boolean) {
