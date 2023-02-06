@@ -1,4 +1,5 @@
-<div fxLayout="column" fxLayoutGap="16px">
+<app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
+<div *ngIf="!isLoading" fxLayout="column" fxLayoutGap="16px">
   <div>
     <div tabindex="0" id="comments-settings" class="visually-hidden">
       {{ 'settings.a11y-comments' | translate }}
