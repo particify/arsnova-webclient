@@ -36,7 +36,7 @@ export class CommentSettingsComponent implements OnInit {
   @Input() roomId: string;
 
   commentExtension: CommentExtensions;
-  threshold: number;
+  threshold = -50;
   enableThreshold = false;
   enableTags = false;
   settings: CommentSettings;
@@ -67,12 +67,9 @@ export class CommentSettingsComponent implements OnInit {
       this.room.extensions.comments = {};
     }
     this.commentExtension = this.room.extensions.comments as CommentExtensions;
-    if (this.commentExtension.enableThreshold !== null) {
-      this.commentExtension.commentThreshold !== undefined
-        ? (this.threshold = this.commentExtension.commentThreshold)
-        : (this.threshold = -100);
-      this.enableThreshold = this.commentExtension.enableThreshold;
-    }
+    this.threshold = this.commentExtension.commentThreshold ?? this.threshold;
+    this.enableThreshold =
+      this.commentExtension.enableThreshold ?? this.enableThreshold;
 
     this.initTags();
     this.commentSettingsService.get(this.roomId).subscribe((settings) => {
@@ -82,7 +79,7 @@ export class CommentSettingsComponent implements OnInit {
   }
 
   initTags() {
-    this.enableTags = this.commentExtension.enableTags;
+    this.enableTags = this.commentExtension.enableTags ?? this.enableTags;
     if (this.room.extensions.tags) {
       this.tagExtension = this.room.extensions.tags;
       this.tags = this.room.extensions.tags['tags'] || [];
