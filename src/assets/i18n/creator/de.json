@@ -51,7 +51,9 @@
     "previous": "Vorheriger Beitrag",
     "list": "Beitragsliste",
     "archive": "Archiv",
-    "there-are-new-posts": "Es gibt neue Beiträge"
+    "there-are-new-posts": "Es gibt neue Beiträge",
+    "comments-are-not-enabled": "Der Q&A-Bereich ist nicht aktiviert.",
+    "activate-q-and-a": "Q&A aktivieren"
   },
   "comment-page": {
     "a11y-message": "Du befindest dich jetzt auf der Q&A-Seite.",
@@ -406,6 +408,8 @@
     "enter-room-description": "Gib hier eine Beschreibung ein",
     "changes-successful": "Deine Änderungen wurden gespeichert.",
     "comments": "Q&A",
+    "enable-comments": "Q&A-Bereich aktivieren",
+    "enable-comments-info": "Aktivieren Sie den Q&A-Bereich, um den Teilnehmenden einen Ort für anonyme Beiträge zur Verfügung zu stellen.",
     "threshold-info": "Wird ein Schwellenwert gesetzt, werden nur Beiträge angezeigt, welche eine höhere Bewertung erhalten haben.",
     "direct-send-info": "Wenn diese Einstellung deaktiviert ist, muss eine moderierende Person bzw. die vortragende Person neue Beiträge erst freischalten bevor diese öffentlich sichtbar werden.",
     "announcements": "Ankündigungen",

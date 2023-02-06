@@ -15,6 +15,7 @@ import { RoomUserRoleResolver } from '../../resolver/room-user-role.resolver';
 import { Features } from '../../models/features.enum';
 import { RoomPageComponent } from '../shared/room-page/room-page.component';
 import { ParticipantOverviewComponent } from './participant-overview/participant-overview.component';
+import { CommentSettingsResolver } from '../../resolver/comment-settings.resolver';
 
 const routes: Routes = [
   {
@@ -83,11 +84,19 @@ const routes: Routes = [
           },
           runGuardsAndResolvers: 'always',
           children: [
-            ...routes,
-            ...ExtensionRouteProvider.extractRoutesForMountPoint(
-              RouteMountPoint.PARTICIPANT,
-              extensionRouteProviders
-            ),
+            {
+              path: '',
+              resolve: {
+                commentSettings: CommentSettingsResolver,
+              },
+              children: [
+                ...routes,
+                ...ExtensionRouteProvider.extractRoutesForMountPoint(
+                  RouteMountPoint.PARTICIPANT,
+                  extensionRouteProviders
+                ),
+              ],
+            },
           ],
         },
       ],

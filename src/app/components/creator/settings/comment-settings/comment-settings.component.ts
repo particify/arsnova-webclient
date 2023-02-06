@@ -35,12 +35,13 @@ export class CommentSettingsComponent implements OnInit {
   @Input() room: Room;
   @Input() roomId: string;
 
-  commentExtension: any;
+  commentExtension: CommentExtensions;
   threshold: number;
   enableThreshold = false;
   directSend = true;
   fileUploadEnabled = false;
   enableTags = false;
+  disabled = false;
   tags: string[] = [];
   timestamp = new Date();
   tagExtension: object;
@@ -67,7 +68,7 @@ export class CommentSettingsComponent implements OnInit {
     if (!this.room.extensions.comments) {
       this.room.extensions.comments = {};
     }
-    this.commentExtension = this.room.extensions.comments;
+    this.commentExtension = this.room.extensions.comments as CommentExtensions;
     if (this.commentExtension.enableThreshold !== null) {
       this.commentExtension.commentThreshold !== undefined
         ? (this.threshold = this.commentExtension.commentThreshold)
@@ -79,6 +80,7 @@ export class CommentSettingsComponent implements OnInit {
     this.commentSettingsService.get(this.roomId).subscribe((settings) => {
       this.directSend = settings.directSend;
       this.fileUploadEnabled = settings.fileUploadEnabled;
+      this.disabled = settings.disabled;
       this.isLoading = false;
     });
   }
@@ -122,9 +124,8 @@ export class CommentSettingsComponent implements OnInit {
     this.saveChanges(false);
   }
 
-  updateCommentExtensions(enableTreshold?: boolean, directSend?: boolean) {
+  updateCommentExtensions(enableTreshold?: boolean) {
     this.enableThreshold = enableTreshold ?? this.enableThreshold;
-    this.directSend = directSend ?? this.directSend;
     const commentExtension: CommentExtensions = new CommentExtensions();
     commentExtension.enableThreshold = this.enableThreshold;
     commentExtension.commentThreshold = this.threshold;
@@ -134,14 +135,20 @@ export class CommentSettingsComponent implements OnInit {
     this.saveChanges();
   }
 
-  updateCommentSettings(directSend?: boolean) {
-    this.directSend = directSend ?? this.directSend;
+  updateCommentSettings(change: Partial<CommentSettings> = {}) {
     const commentSettings = new CommentSettings(
       this.roomId,
-      this.directSend,
-      this.fileUploadEnabled
+      change.directSend ?? this.directSend,
+      this.fileUploadEnabled,
+      change.disabled ?? this.disabled
     );
-    this.commentSettingsService.update(commentSettings).subscribe();
+    this.commentSettingsService
+      .update(commentSettings)
+      .subscribe((settings) => {
+        this.directSend = settings.directSend;
+        this.fileUploadEnabled = settings.fileUploadEnabled;
+        this.disabled = settings.disabled;
+      });
   }
 
   updateFileUploadEnabled(fileUploadEnabled: boolean) {

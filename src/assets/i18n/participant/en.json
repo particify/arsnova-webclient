@@ -113,7 +113,8 @@
     "sort-voteasc": "Worst rating",
     "sort-time": "Last created",
     "list": "Post list",
-    "there-are-new-posts": "There are new posts"
+    "there-are-new-posts": "There are new posts",
+    "comments-are-not-enabled": "The Q&A section is not enabled."
   },
   "comment-page": {
     "a11y-message": "You are now on the Q&A page.",

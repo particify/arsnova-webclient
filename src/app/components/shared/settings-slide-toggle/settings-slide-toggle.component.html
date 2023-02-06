@@ -13,6 +13,7 @@
   <mat-slide-toggle
     [(ngModel)]="isChecked"
     (change)="toggle($event)"
+    [disabled]="disabled"
     aria-labelledby="toggle-{{ label }}-description"
   ></mat-slide-toggle>
 </div>

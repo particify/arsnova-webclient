@@ -23,7 +23,8 @@ import { SeriesCreated } from '../../../../models/events/series-created';
 import { SeriesDeleted } from '../../../../models/events/series-deleted';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { RoomService } from '../../../../services/http/room.service';
-import { IMessage } from '@stomp/stompjs';
+import { IMessage, Message } from '@stomp/stompjs';
+import { WsCommentService } from '../../../../services/websockets/ws-comment.service';
 
 export class NavBarItem extends BarItem {
   url: string;
@@ -74,7 +75,7 @@ export class NavBarComponent
     new BarItem(Features.FEEDBACK, 'thumbs_up_down'),
   ];
   currentRouteIndex: number;
-  activeFeatures: string[] = [Features.OVERVIEW, Features.COMMENTS];
+  activeFeatures: string[] = [Features.OVERVIEW];
   group: ContentGroup;
   groupName: string;
   role: UserRole;
@@ -85,6 +86,7 @@ export class NavBarComponent
   statsChangesSubscription: Subscription;
   groupSubscriptions: Subscription[];
   feedbackSubscription: Subscription;
+  commentSettingsSubscription: Subscription;
   contentGroups: ContentGroup[] = [];
   publishedStates: PublishedContentsState[] = [];
   focusStateSubscription: Subscription;
@@ -103,7 +105,8 @@ export class NavBarComponent
     protected feedbackService: FeedbackService,
     protected contentGroupService: ContentGroupService,
     protected eventService: EventService,
-    protected roomService: RoomService
+    protected roomService: RoomService,
+    protected wsCommentService: WsCommentService
   ) {
     super();
   }
@@ -122,6 +125,9 @@ export class NavBarComponent
     }
     if (this.feedbackSubscription) {
       this.feedbackSubscription.unsubscribe();
+    }
+    if (this.commentSettingsSubscription) {
+      this.commentSettingsSubscription.unsubscribe();
     }
     if (this.focusStateSubscription) {
       this.focusStateSubscription.unsubscribe();
@@ -159,6 +165,12 @@ export class NavBarComponent
       ) {
         this.activeFeatures.splice(2, 0, Features.FEEDBACK);
       }
+      if (
+        !this.route.children[0]?.snapshot.data.commentSettings?.disabled ||
+        this.viewRole !== UserRole.PARTICIPANT
+      ) {
+        this.activeFeatures.splice(1, 0, Features.COMMENTS);
+      }
       this.feedbackService.startSub(this.roomId);
       let group = this.routingService.seriesName;
       if (group === undefined) {
@@ -177,7 +189,7 @@ export class NavBarComponent
           this.getItems();
           this.updateGroups(stats.groupStats ?? [], !!group);
         });
-      this.subscribeToFeedbackEvent();
+      this.subscribeToParticipantEvents();
       this.subscribeToRouteChanges();
     });
   }
@@ -194,7 +206,7 @@ export class NavBarComponent
     this.globalStorageService.removeItem(STORAGE_KEYS.LAST_GROUP);
   }
 
-  subscribeToFeedbackEvent() {
+  subscribeToParticipantEvents() {
     if (this.viewRole === UserRole.PARTICIPANT) {
       this.feedbackSubscription = this.feedbackService.messageEvent.subscribe(
         (message) => {
@@ -210,6 +222,25 @@ export class NavBarComponent
           }
         }
       );
+      this.commentSettingsSubscription = this.wsCommentService
+        .getCommentSettingsStream(this.roomId)
+        .subscribe((message: Message) => {
+          const commentsDisabled = JSON.parse(message.body).payload.disabled;
+          const isCommentFeatureActive = this.activeFeatures.includes(
+            Features.COMMENTS
+          );
+          // Remove comment feature if disabled now enabled before
+          if (commentsDisabled && isCommentFeatureActive) {
+            const index = this.activeFeatures.indexOf(Features.COMMENTS);
+            this.activeFeatures.splice(index, 1);
+            this.getItems();
+            // Add comment feature if enabled now and disabled before
+          } else if (!commentsDisabled && !isCommentFeatureActive) {
+            this.activeFeatures.splice(1, 0, Features.COMMENTS);
+            this.getItems();
+            this.toggleNews(Features.COMMENTS);
+          }
+        });
     }
   }
 

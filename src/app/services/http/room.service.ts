@@ -164,8 +164,8 @@ export class RoomService extends AbstractEntityService<Room> {
     );
   }
 
-  patchRoom(roomId: string, changes: object): void {
-    this.patchEntity(roomId, changes).subscribe();
+  patchRoom(roomId: string, changes: object): Observable<Room> {
+    return this.patchEntity(roomId, changes);
   }
 
   deleteRoom(roomId: string): Observable<Room> {
@@ -233,11 +233,12 @@ export class RoomService extends AbstractEntityService<Room> {
         settings: room.settings,
       };
       room.settings['feedbackLocked'] = isFeedbackLocked;
-      this.patchRoom(roomId, changes);
-      if (!isFeedbackLocked) {
-        const event = new SurveyStarted();
-        this.eventService.broadcast(event.type);
-      }
+      this.patchRoom(roomId, changes).subscribe(() => {
+        if (!isFeedbackLocked) {
+          const event = new SurveyStarted();
+          this.eventService.broadcast(event.type);
+        }
+      });
     });
   }
 
@@ -251,7 +252,7 @@ export class RoomService extends AbstractEntityService<Room> {
         room.extensions.feedback = feedbackExtension;
       }
       const changes: { extensions: object } = { extensions: room.extensions };
-      this.patchRoom(roomId, changes);
+      this.patchRoom(roomId, changes).subscribe();
     });
   }
 

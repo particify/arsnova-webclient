@@ -113,7 +113,8 @@
     "sort-voteasc": "Negativste Bewertung",
     "sort-time": "Zuletzt erstellt",
     "list": "Beitragsliste",
-    "there-are-new-posts": "Es gibt neue Beiträge"
+    "there-are-new-posts": "Es gibt neue Beiträge",
+    "comments-are-not-enabled": "Der Q&A-Bereich ist nicht aktiviert."
   },
   "comment-page": {
     "a11y-message": "Du befindest dich jetzt auf der Q&A-Seite.",

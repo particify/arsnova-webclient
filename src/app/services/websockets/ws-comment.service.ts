@@ -18,4 +18,10 @@ export class WsCommentService {
       `/topic/${roomId}.comment.moderator.stream`
     );
   }
+
+  getCommentSettingsStream(roomId: string): Observable<IMessage> {
+    return this.wsConnector.getWatcher(
+      `/topic/${roomId}.comment.settings.stream`
+    );
+  }
 }

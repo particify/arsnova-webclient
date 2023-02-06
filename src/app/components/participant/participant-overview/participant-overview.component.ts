@@ -32,7 +32,9 @@ export class ParticipantOverviewComponent
 {
   room: Room;
   protected surveySub: Subscription;
+  protected commentSettingsSub: Subscription;
   surveyEnabled = false;
+  commentsEnabled = false;
 
   constructor(
     protected roomStatsService: RoomStatsService,
@@ -70,15 +72,30 @@ export class ParticipantOverviewComponent
     window.scroll(0, 0);
     this.route.data.subscribe((data) => {
       this.initializeRoom(data.room, data.userRole, data.viewRole);
+      this.commentsEnabled = !data.commentSettings.disabled;
     });
     this.translateService.use(
       this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE)
     );
+    this.commentSettingsSub = this.wsCommentService
+      .getCommentSettingsStream(this.room.id)
+      .subscribe((message: Message) => {
+        this.parseCommentSettingsMessage(message);
+      });
+  }
+
+  parseCommentSettingsMessage(message: Message) {
+    const msg = JSON.parse(message.body);
+    const disabled = msg.payload.disabled;
+    this.commentsEnabled = !disabled;
   }
 
   unsubscribe() {
     if (this.surveySub) {
       this.surveySub.unsubscribe();
+    }
+    if (this.commentSettingsSub) {
+      this.commentSettingsSub.unsubscribe();
     }
   }
 

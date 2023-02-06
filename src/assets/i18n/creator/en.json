@@ -51,7 +51,9 @@
     "previous": "Previous post",
     "list": "Post list",
     "archive": "Archive",
-    "there-are-new-posts": "There are new posts"
+    "there-are-new-posts": "There are new posts",
+    "comments-are-not-enabled": "The Q&A section is not enabled.",
+    "activate-q-and-a": "Enable Q&A"
   },
   "comment-page": {
     "a11y-message": "You are now on the posts page.",
@@ -406,6 +408,8 @@
     "enter-room-description": "Enter a description here",
     "changes-successful": "Your changes have been saved.",
     "comments": "Q&A",
+    "enable-comments": "Enable Q&A section",
+    "enable-comments-info": "Enable the Q&A section to provide a place for participants to post anonymously.",
     "threshold-info": "If a threshold value is set, only posts that have received a higher rating are displayed.",
     "direct-send-info": "If this setting is deactivated, a moderator or the lecturer must activate new posts before they become publicly visible.",
     "announcements": "Announcements",

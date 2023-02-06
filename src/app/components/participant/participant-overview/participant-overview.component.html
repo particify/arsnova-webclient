@@ -23,11 +23,16 @@
       </div>
       <div fxLayout="column" fxLayoutAlign="center">
         <div
+          *ngIf="commentsEnabled || surveyEnabled"
           class="action-button-container"
           fxLayout="row"
           fxLayoutAlign="center"
         >
-          <div class="action-button-item" fxLayoutAlign="center center">
+          <div
+            *ngIf="commentsEnabled"
+            class="action-button-item"
+            fxLayoutAlign="center center"
+          >
             <button
               id="comments-button"
               mat-icon-button
