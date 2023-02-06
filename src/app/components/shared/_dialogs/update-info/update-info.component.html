@@ -23,7 +23,7 @@
     </p>
   </div>
 </div>
-<div class="dialog-footer" fxLayoutAlign="end center" fxLayoutGap="10px">
+<div mat-dialog-actions fxLayoutAlign="end center">
   <app-loading-indicator
     *ngIf="!afterUpdate && !updateReady"
     size="24"
@@ -38,16 +38,15 @@
   >
     {{ (afterUpdate ? 'dialog.close' : 'home-page.update') | translate }}
   </button>
-</div>
-
-<div class="visually-hidden">
-  <div id="update-header">
-    {{
-      'home-page.a11y-update-' + (afterUpdate ? 'made' : 'available')
-        | translate
-    }}
-  </div>
-  <div id="update-button">
-    {{ 'home-page.a11y-' + (afterUpdate ? 'close' : 'update') | translate }}
+  <div class="visually-hidden">
+    <div id="update-header">
+      {{
+        'home-page.a11y-update-' + (afterUpdate ? 'made' : 'available')
+          | translate
+      }}
+    </div>
+    <div id="update-button">
+      {{ 'home-page.a11y-' + (afterUpdate ? 'close' : 'update') | translate }}
+    </div>
   </div>
 </div>
