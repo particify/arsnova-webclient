@@ -160,14 +160,6 @@ $search-bar-height: 70px;
   }
 }
 
-.locked {
-  box-shadow: 0 0 5px 2px var(--warn) !important;
-
-  .mat-icon {
-    color: var(--warn);
-  }
-}
-
 .add-btn {
   background-color: var(--primary);
   color: var(--on-primary);
@@ -273,4 +265,8 @@ $search-bar-height: 70px;
   height: $search-bar-height;
   display: flex;
   flex-direction: row;
+}
+
+.bottom-margin {
+  margin-bottom: 3em;
 }

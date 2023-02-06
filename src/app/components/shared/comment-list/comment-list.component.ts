@@ -281,10 +281,6 @@ export class CommentListComponent implements OnInit, OnDestroy {
   }
 
   init(reload = false) {
-    if (this.disabled) {
-      this.isLoading = false;
-      return;
-    }
     this.initCounter();
     this.activeComments$.subscribe((comments) => {
       this.comments = comments;
@@ -318,15 +314,6 @@ export class CommentListComponent implements OnInit, OnDestroy {
       this.fileUploadEnabled = commentSettings.fileUploadEnabled;
       this.disabled = commentSettings.disabled;
       this.readonly = commentSettings.readonly;
-      if (this.readonly) {
-        const msg = this.translateService.instant(
-          'comment-list.creation-currently-not-allowed'
-        );
-        this.notificationService.showAdvanced(
-          msg,
-          AdvancedSnackBarTypes.WARNING
-        );
-      }
     }
     this.getComments();
     if (reload && this.search) {
@@ -805,8 +792,11 @@ export class CommentListComponent implements OnInit, OnDestroy {
 
   showReadonlyStateNotification() {
     const state = this.readonly ? 'not-allowed' : 'allowed';
+    const type = this.readonly
+      ? AdvancedSnackBarTypes.WARNING
+      : AdvancedSnackBarTypes.SUCCESS;
     const msg = this.translateService.instant('comment-list.creation-' + state);
-    this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
+    this.notificationService.showAdvanced(msg, type);
   }
 
   subscribeCommentStream() {
@@ -1046,6 +1036,13 @@ export class CommentListComponent implements OnInit, OnDestroy {
         this.disabled = updatedSettings.disabled;
         this.isLoading = true;
         this.init(true);
+        const msg = this.translateService.instant(
+          'comment-list.q-and-a-enabled'
+        );
+        this.notificationService.showAdvanced(
+          msg,
+          AdvancedSnackBarTypes.SUCCESS
+        );
       });
   }
 }

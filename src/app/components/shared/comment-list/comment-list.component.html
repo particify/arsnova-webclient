@@ -34,14 +34,12 @@
     >
       <mat-tab
         *ngIf="!isArchive"
-        [disabled]="disabled"
         label="{{ 'comment-list.public-list' | translate }} {{
           publicCounter | counterBraces
         }}"
       ></mat-tab>
       <mat-tab
         *ngIf="!isArchive"
-        [disabled]="disabled"
         label="{{ 'comment-list.moderation' | translate }} {{
           moderationCounter | counterBraces
         }}"
@@ -52,7 +50,7 @@
       ></mat-tab>
     </mat-tab-group>
     <div
-      *ngIf="!isPresentation && !disabled"
+      *ngIf="!isPresentation && (!disabled || viewRole !== 'PARTICIPANT')"
       fxLayout="row"
       fxLayoutAlign="center center"
       class="search-container"
@@ -153,7 +151,6 @@
           id="readonly-button"
           mat-mini-fab
           class="bar-icon"
-          [ngClass]="{ locked: readonly }"
           *ngIf="!search && !isArchive && viewRole !== 'PARTICIPANT'"
           (click)="toggleReadonly()"
           matTooltip="{{
@@ -182,7 +179,7 @@
           id="add-comment-small-button"
           class="add-btn"
           mat-mini-fab
-          [ngClass]="{ disabled: isModerator || readonly }"
+          [ngClass]="{ disabled: isModerator || readonly || disabled }"
           *ngIf="!search && deviceType === 'desktop' && !isArchive"
           (click)="openCreateDialog()"
           matTooltip="{{ 'comment-list.add-comment' | translate }}"
@@ -408,8 +405,6 @@
     </button>
   </mat-menu>
 
-  <app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
-
   <button
     mat-fab
     class="bar-icon scroll-top"
@@ -446,8 +441,40 @@
   </button>
 
   <div
+    fxLayout="column"
+    fxLayoutAlign="start center"
+    [ngClass]="{ 'bottom-margin': viewRole !== 'PARTICIPANT' }"
+    *ngIf="disabled || readonly"
+  >
+    <p class="hint">
+      {{
+        (disabled
+          ? 'comment-list.comments-are-not-enabled'
+          : 'comment-list.creation-currently-not-allowed'
+        ) | translate
+      }}
+    </p>
+    <button
+      *ngIf="(disabled || readonly) && viewRole !== 'PARTICIPANT'"
+      mat-raised-button
+      class="button-primary"
+      (click)="disabled ? activateComments() : toggleReadonly()"
+    >
+      <mat-icon>{{ disabled ? 'question_answer' : 'lock_open' }}</mat-icon>
+      <span>{{
+        (disabled
+          ? 'comment-list.activate-q-and-a'
+          : 'comment-list.unlock-creation'
+        ) | translate
+      }}</span>
+    </button>
+  </div>
+
+  <app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
+
+  <div
     [ngClass]="{ 'comments-container': !isPresentation }"
-    *ngIf="!isLoading && !disabled"
+    *ngIf="!isLoading && (!disabled || viewRole !== 'PARTICIPANT')"
     tabindex="-1"
     appHotkey="7"
     [appHotkeyTitle]="'comment-list.list' | translate"
@@ -512,21 +539,6 @@
     >
       <mat-icon class="add">add</mat-icon>
       <span>{{ 'comment-list.add-comment' | translate }}</span>
-    </button>
-  </div>
-
-  <div fxLayout="column" fxLayoutAlign="start center" *ngIf="disabled">
-    <p class="hint">
-      {{ 'comment-list.comments-are-not-enabled' | translate }}
-    </p>
-    <button
-      *ngIf="viewRole !== 'PARTICIPANT'"
-      mat-raised-button
-      class="button-primary"
-      (click)="activateComments()"
-    >
-      <mat-icon>question_answer</mat-icon>
-      <span>{{ 'comment-list.activate-q-and-a' | translate }}</span>
     </button>
   </div>
 
