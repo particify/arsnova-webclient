@@ -56,7 +56,9 @@
     "archive": "Archive",
     "there-are-new-posts": "There are new posts",
     "comments-are-not-enabled": "The Q&A section is not enabled.",
-    "activate-q-and-a": "Enable Q&A"
+    "q-and-a-enabled": "The Q&A section has been enabled.",
+    "activate-q-and-a": "Enable Q&A",
+    "unlock-creation": "Unlock creation"
   },
   "comment-page": {
     "a11y-message": "You are now on the posts page.",

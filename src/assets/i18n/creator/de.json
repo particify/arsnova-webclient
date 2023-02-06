@@ -56,7 +56,9 @@
     "archive": "Archiv",
     "there-are-new-posts": "Es gibt neue Beiträge",
     "comments-are-not-enabled": "Der Q&A-Bereich ist nicht aktiviert.",
-    "activate-q-and-a": "Q&A aktivieren"
+    "q-and-a-enabled": "Der Q&A-Bereich wurde aktiviert.",
+    "activate-q-and-a": "Q&A aktivieren",
+    "unlock-creation": "Erstellung freigeben"
   },
   "comment-page": {
     "a11y-message": "Du befindest dich jetzt auf der Q&A-Seite.",
