@@ -6,14 +6,14 @@
     <div fxLayout="column">
       <app-settings-slide-toggle
         label="settings.enable-comments"
-        [isChecked]="!disabled"
+        [isChecked]="!settings.disabled"
         (toggleEvent)="updateCommentSettings({ disabled: !$event })"
       ></app-settings-slide-toggle>
       <app-settings-slide-toggle
         label="settings.threshold"
         [isChecked]="enableThreshold"
         (toggleEvent)="updateCommentExtensions($event)"
-        [disabled]="disabled"
+        [disabled]="settings.disabled"
       ></app-settings-slide-toggle>
       <div
         fxLayout="row"
@@ -33,9 +33,9 @@
     </div>
     <app-settings-slide-toggle
       label="settings.direct-send"
-      [isChecked]="directSend"
+      [isChecked]="settings.directSend"
       (toggleEvent)="updateCommentSettings({ directSend: $event })"
-      [disabled]="disabled"
+      [disabled]="settings.disabled"
     ></app-settings-slide-toggle>
     <lib-extension-point
       *ngIf="!isLoading"
@@ -51,7 +51,7 @@
     <form>
       <mat-form-field class="full-width no-field-hint" appearance="outline">
         <mat-label>{{ 'settings.tags' | translate }}</mat-label>
-        <mat-chip-grid #tagList [disabled]="disabled">
+        <mat-chip-grid #tagList [disabled]="settings.disabled">
           <mat-chip-row
             *ngFor="let tag of tags"
             [removable]="true"
@@ -75,7 +75,7 @@
             name="taginput"
             maxlength="15"
             placeholder="{{ 'settings.new-tag' | translate }}"
-            [disabled]="disabled"
+            [disabled]="settings.disabled"
           />
         </mat-chip-grid>
       </mat-form-field>

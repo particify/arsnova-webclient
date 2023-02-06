@@ -38,10 +38,8 @@ export class CommentSettingsComponent implements OnInit {
   commentExtension: CommentExtensions;
   threshold: number;
   enableThreshold = false;
-  directSend = true;
-  fileUploadEnabled = false;
   enableTags = false;
-  disabled = false;
+  settings: CommentSettings;
   tags: string[] = [];
   timestamp = new Date();
   tagExtension: object;
@@ -78,9 +76,7 @@ export class CommentSettingsComponent implements OnInit {
 
     this.initTags();
     this.commentSettingsService.get(this.roomId).subscribe((settings) => {
-      this.directSend = settings.directSend;
-      this.fileUploadEnabled = settings.fileUploadEnabled;
-      this.disabled = settings.disabled;
+      this.settings = settings;
       this.isLoading = false;
     });
   }
@@ -138,21 +134,20 @@ export class CommentSettingsComponent implements OnInit {
   updateCommentSettings(change: Partial<CommentSettings> = {}) {
     const commentSettings = new CommentSettings(
       this.roomId,
-      change.directSend ?? this.directSend,
-      this.fileUploadEnabled,
-      change.disabled ?? this.disabled
+      change.directSend ?? this.settings.directSend,
+      this.settings.fileUploadEnabled,
+      change.disabled ?? this.settings.disabled,
+      this.settings.readonly
     );
     this.commentSettingsService
       .update(commentSettings)
       .subscribe((settings) => {
-        this.directSend = settings.directSend;
-        this.fileUploadEnabled = settings.fileUploadEnabled;
-        this.disabled = settings.disabled;
+        this.settings = settings;
       });
   }
 
   updateFileUploadEnabled(fileUploadEnabled: boolean) {
-    this.fileUploadEnabled = fileUploadEnabled;
+    this.settings.fileUploadEnabled = fileUploadEnabled;
     this.updateCommentSettings();
   }
 

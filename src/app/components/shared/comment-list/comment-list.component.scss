@@ -105,8 +105,8 @@ $search-bar-height: 70px;
     max-width: 340px;
   }
 
-  .four-buttons {
-    max-width: 286px;
+  .three-buttons {
+    max-width: 246px;
   }
 }
 
@@ -116,8 +116,8 @@ $search-bar-height: 70px;
     max-width: 410px;
   }
 
-  .four-buttons {
-    max-width: 356px;
+  .three-buttons {
+    max-width: 316px;
   }
 }
 
@@ -160,11 +160,12 @@ $search-bar-height: 70px;
   }
 }
 
-.bigger-icon {
-  height: 24px;
-  width: 24px;
-  font-size: 24px;
-  margin-top: -2px;
+.locked {
+  box-shadow: 0 0 5px 2px var(--warn) !important;
+
+  .mat-icon {
+    color: var(--warn);
+  }
 }
 
 .add-btn {

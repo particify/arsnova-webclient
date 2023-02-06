@@ -14,9 +14,10 @@
     'mobile-add-above-nav': navBarExists,
     'mobile-add-hide': !onInit
   }"
+  [disabled]="readonly"
   matTooltip="{{ 'comment-list.add-comment' | translate }}"
 >
-  <mat-icon class="bigger-icon">add</mat-icon>
+  <mat-icon>add</mat-icon>
 </button>
 <div>
   <div
@@ -64,7 +65,7 @@
           scroll && (deviceType === 'desktop' || scrollActive),
         'search-container-archive': scroll && isArchive,
         'fixed-start-position': isScrollStart && deviceType === 'desktop',
-        'four-buttons': viewRole === 'PARTICIPANT',
+        'three-buttons': viewRole === 'PARTICIPANT',
         'five-buttons': viewRole !== 'PARTICIPANT'
       }"
     >
@@ -145,37 +146,25 @@
           matTooltip="{{ 'comment-list.select-time' | translate }}"
           appHotkey="5"
         >
-          <mat-icon class="bigger-icon">access_time</mat-icon>
+          <mat-icon>access_time</mat-icon>
         </button>
 
         <button
-          id="pause-button"
+          id="readonly-button"
           mat-mini-fab
           class="bar-icon"
-          [ngClass]="{ disabled: isModerator }"
-          *ngIf="!search && !freeze && !isArchive"
-          (click)="pauseCommentStream()"
-          matTooltip="{{ 'comment-list.pause-comments' | translate }}"
+          [ngClass]="{ locked: readonly }"
+          *ngIf="!search && !isArchive && viewRole !== 'PARTICIPANT'"
+          (click)="toggleReadonly()"
+          matTooltip="{{
+            'comment-list.' +
+              (readonly ? 'allow-creation' : 'dont-allow-creation') | translate
+          }}"
           appHotkey="6"
-          appTrackInteraction="Comments (un)paused"
-          appTrackName="stop"
+          appTrackInteraction="Comments readonly: {{ readonly }}"
+          appTrackName="readonly"
         >
-          <mat-icon>pause</mat-icon>
-        </button>
-
-        <button
-          id="start-button"
-          mat-mini-fab
-          class="bar-icon"
-          [ngClass]="{ disabled: isModerator }"
-          *ngIf="!search && freeze && !isArchive"
-          (click)="playCommentStream()"
-          matTooltip="{{ 'comment-list.play-comments' | translate }}"
-          appHotkey="6"
-          appTrackInteraction="Comments (un)paused"
-          appTrackName="start"
-        >
-          <mat-icon>play_arrow</mat-icon>
+          <mat-icon>{{ readonly ? 'lock_open' : 'lock' }}</mat-icon>
         </button>
 
         <button
@@ -193,13 +182,13 @@
           id="add-comment-small-button"
           class="add-btn"
           mat-mini-fab
-          [ngClass]="{ disabled: isModerator }"
+          [ngClass]="{ disabled: isModerator || readonly }"
           *ngIf="!search && deviceType === 'desktop' && !isArchive"
           (click)="openCreateDialog()"
           matTooltip="{{ 'comment-list.add-comment' | translate }}"
           appHotkey="1"
         >
-          <mat-icon class="bigger-icon">add</mat-icon>
+          <mat-icon>add</mat-icon>
         </button>
       </div>
 
@@ -517,6 +506,7 @@
     <button
       id="add-comment-button"
       mat-stroked-button
+      [disabled]="readonly"
       class="stroked-primary add-big"
       (click)="openCreateDialog()"
     >
