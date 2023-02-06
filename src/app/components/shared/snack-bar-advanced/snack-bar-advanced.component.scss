@@ -17,3 +17,9 @@ span {
 .warning {
   color: var(--warn-soft);
 }
+
+.mat-mdc-progress-spinner {
+  --mdc-circular-progress-active-indicator-color: var(
+    --mdc-snackbar-supporting-text-color
+  );
+}
