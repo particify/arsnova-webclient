@@ -77,14 +77,6 @@
   }
 }
 
-.add-mobile {
-  background-color: var(--primary);
-  position: fixed;
-  bottom: 4vw;
-  right: 4vw;
-  z-index: 3;
-}
-
 @media (max-width: 599px) {
   .desktop-buttons {
     display: none;
