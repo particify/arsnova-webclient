@@ -538,8 +538,9 @@ div {
 }
 
 .mat-mdc-button:not([disabled], .nav-button) {
-  color: var(--on-surface) !important;
   opacity: 0.8;
+
+  --mdc-text-button-label-text-color: var(--on-surface);
 
   &:hover {
     opacity: 1;
@@ -823,6 +824,10 @@ button {
 }
 
 // Snackbar
+
+.mat-mdc-snack-bar-container {
+  --mat-mdc-snack-bar-button-color: var(--surface);
+}
 
 .presentation-snack-bar {
   padding-bottom: 70px;
