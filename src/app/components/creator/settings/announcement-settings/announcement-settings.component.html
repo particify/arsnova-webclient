@@ -15,6 +15,12 @@
         (selectedTabChange)="tabChanged($event)"
       >
         <mat-tab label="{{ 'announcement.body' | translate }}">
+          <app-formatting-toolbar
+            *ngIf="!renderPreview"
+            class="tab-group-formatting-bar-mobile"
+            [inputElement]="descriptionInput"
+            (valueChanged)="description = $event"
+          ></app-formatting-toolbar>
           <mat-form-field
             id="body-input"
             class="input-block no-field-hint"
