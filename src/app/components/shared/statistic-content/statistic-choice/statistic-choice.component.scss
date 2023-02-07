@@ -20,11 +20,11 @@
   width: 80px;
 }
 
-.chart-answer-label {
-  &:not(.abstention-label) {
-    margin: 0;
-  }
+.no-margin {
+  margin: 0;
+}
 
+.chart-answer-label {
   font-size: 10px;
   width: 100px;
   text-align: center;

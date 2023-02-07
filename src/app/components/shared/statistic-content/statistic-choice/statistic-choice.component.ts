@@ -58,6 +58,7 @@ export class StatisticChoiceComponent
   roundsToDisplay = 0;
   roundsDisplayed: number;
   independentAnswerCount = [[], [], []];
+  ContentType: typeof ContentType = ContentType;
 
   constructor(
     protected contentService: ContentService,
