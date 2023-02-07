@@ -3,13 +3,13 @@
     {{ 'admin-area.room-management' | translate }}
   </mat-card-title>
   <div fxLayout="column" fxLayoutGap="10px">
-    <div fxLayout="row" fxLayoutGap="10px">
-      <mat-form-field appearance="outline" fxFlex="auto" class="no-field-hint">
+    <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="16px">
+      <mat-form-field appearance="outline" class="no-field-hint">
         <mat-label>{{ 'admin-area.room-id' | translate }}</mat-label>
         <input matInput #idField />
-        <button mat-button matSuffix (click)="loadEntity(idField.value)">
+        <button mat-icon-button matSuffix (click)="loadEntity(idField.value)">
           <mat-icon
-            class="icon-secondary"
+            class="icon-primary"
             aria-hidden="false"
             attr.aria-label="{{ 'admin-area.find' | translate }}"
             >search</mat-icon
@@ -31,7 +31,7 @@
         />
         <mat-icon matPrefix>info</mat-icon>
       </mat-form-field>
-      <button mat-button (click)="clear()" fxFlex="64px">
+      <button mat-icon-button (click)="clear()">
         <mat-icon>clear</mat-icon>
       </button>
     </div>
@@ -46,7 +46,6 @@
         <app-user-search-field
           label="{{ 'admin-area.room-new-owner-id' | translate }}"
           #newOwnerIdField
-          fxFlex="auto"
           class="no-field-hint"
         ></app-user-search-field>
         <button
