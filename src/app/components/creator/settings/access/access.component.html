@@ -54,7 +54,7 @@
     <button
       mat-stroked-button
       class="stroked-primary add-user-button"
-      [ngClass]="{ 'btn-animated button-primary': canBeAdded() }"
+      [ngClass]="{ 'btn-animated': canBeAdded() }"
       (click)="addModerator()"
       [disabled]="isGuest || !currentInputIsChecked || loginId.length === 0"
       id="add-button"

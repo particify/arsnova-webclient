@@ -68,8 +68,8 @@
   margin-top: 1em;
 }
 
-.btn-animated {
+.btn-animated:not([disabled]) {
   box-shadow: inset 140px 0 0 0 var(--primary);
   border: none;
-  color: var(--on-primary) !important;
+  color: var(--on-primary);
 }
