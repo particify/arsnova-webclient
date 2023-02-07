@@ -163,7 +163,7 @@ export class NavBarComponent
         !data.room.settings['feedbackLocked'] ||
         this.viewRole !== UserRole.PARTICIPANT
       ) {
-        this.activeFeatures.splice(2, 0, Features.FEEDBACK);
+        this.activeFeatures.splice(1, 0, Features.FEEDBACK);
       }
       if (
         !this.route.children[0]?.snapshot.data.commentSettings?.disabled ||
@@ -184,7 +184,7 @@ export class NavBarComponent
           if (stats.groupStats) {
             this.groupName = group || stats.groupStats[0].groupName;
             this.setGroupInSessionStorage(this.groupName);
-            this.activeFeatures.splice(2, 0, Features.CONTENTS);
+            this.addContentFeatureItem(false);
           }
           this.getItems();
           this.updateGroups(stats.groupStats ?? [], !!group);
@@ -264,8 +264,7 @@ export class NavBarComponent
       .subscribe((group) => {
         this.roomStatsService.getStats(this.roomId, true).subscribe((stats) => {
           this.groupName = group.name;
-          this.activeFeatures.splice(2, 0, Features.CONTENTS);
-          this.getItems();
+          this.addContentFeatureItem();
           this.updateGroups(stats.groupStats, true);
         });
       });
@@ -427,10 +426,13 @@ export class NavBarComponent
     }
   }
 
-  addContentFeatureItem() {
+  addContentFeatureItem(getItemsAfterAdding = true) {
     if (this.getBarIndexOfFeature(Features.CONTENTS) === -1) {
-      this.activeFeatures.splice(2, 0, Features.CONTENTS);
-      this.getItems();
+      const newIndex = this.activeFeatures.includes(Features.COMMENTS) ? 2 : 1;
+      this.activeFeatures.splice(newIndex, 0, Features.CONTENTS);
+      if (getItemsAfterAdding) {
+        this.getItems();
+      }
     }
   }
 
