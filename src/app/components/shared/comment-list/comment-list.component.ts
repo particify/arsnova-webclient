@@ -221,10 +221,10 @@ export class CommentListComponent implements OnInit, OnDestroy {
               this.commentVoteMap.set(v.commentId, v);
             }
           });
-        this.settingsSteam = this.wsCommentService
-          .getCommentSettingsStream(this.roomId)
-          .subscribe((message: Message) => {
-            this.parseSettingsMessage(message);
+        this.settingsSteam = this.commentSettingsService
+          .getSettingsStream()
+          .subscribe((settings) => {
+            this.handleSettings(settings);
           });
       }
     });
@@ -583,15 +583,12 @@ export class CommentListComponent implements OnInit, OnDestroy {
     }
   }
 
-  parseSettingsMessage(message: Message) {
-    const msg = JSON.parse(message.body);
-    const disabled = msg.payload.disabled;
-    if (disabled !== this.disabled) {
-      this.disabled = disabled;
+  handleSettings(settings: CommentSettings) {
+    if (settings.disabled !== this.disabled) {
+      this.disabled = settings.disabled;
     }
-    const readonly = msg.payload.readonly;
-    if (readonly !== this.readonly) {
-      this.readonly = msg.payload.readonly;
+    if (settings.readonly !== this.readonly) {
+      this.readonly = settings.readonly;
       this.showReadonlyStateNotification();
     }
   }

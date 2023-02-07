@@ -32,6 +32,7 @@ import { CommentService } from '@arsnova/app/services/http/comment.service';
 import { FeedbackService } from '@arsnova/app/services/http/feedback.service';
 import { Message } from '@stomp/stompjs';
 import { A11yIntroPipe } from '@arsnova/app/pipes/a11y-intro.pipe';
+import { CommentSettingsService } from '@arsnova/app/services/http/comment-settings.service';
 
 describe('ParticipantOverviewComponent', () => {
   let component: ParticipantOverviewComponent;
@@ -46,15 +47,11 @@ describe('ParticipantOverviewComponent', () => {
   const mockRoomStatsService = jasmine.createSpyObj(['getStats']);
   mockRoomStatsService.getStats.and.returnValue(of({}));
 
-  const mockWsCommentService = jasmine.createSpyObj([
-    'getCommentStream',
-    'getCommentSettingsStream',
-  ]);
+  const mockWsCommentService = jasmine.createSpyObj(['getCommentStream']);
   const message = {
     body: '{ "payload": {} }',
   };
   mockWsCommentService.getCommentStream.and.returnValue(of(message));
-  mockWsCommentService.getCommentSettingsStream.and.returnValue(of(message));
 
   const mockCommentService = jasmine.createSpyObj(['countByRoomId']);
   mockCommentService.countByRoomId.and.returnValue(of({}));
@@ -81,6 +78,12 @@ describe('ParticipantOverviewComponent', () => {
     userRole: UserRole.PARTICIPANT,
     viewRole: UserRole.PARTICIPANT,
   };
+
+  const mockCommentSettingsService = jasmine.createSpyObj([
+    'getSettingsStream',
+  ]);
+
+  mockCommentSettingsService.getSettingsStream.and.returnValue(of({}));
 
   const activatedRouteStub = new ActivatedRouteStub(null, data);
 
@@ -166,6 +169,10 @@ describe('ParticipantOverviewComponent', () => {
         {
           provide: SplitShortIdPipe,
           useValue: splitShortIdPipe,
+        },
+        {
+          provide: CommentSettingsService,
+          useValue: mockCommentSettingsService,
         },
       ],
       schemas: [NO_ERRORS_SCHEMA],

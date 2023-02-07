@@ -89,6 +89,7 @@ const routes: Routes = [
               resolve: {
                 commentSettings: CommentSettingsResolver,
               },
+              runGuardsAndResolvers: 'always',
               children: [
                 ...routes,
                 ...ExtensionRouteProvider.extractRoutesForMountPoint(

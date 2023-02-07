@@ -33,7 +33,7 @@ import {
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FeedbackMessageType } from '@arsnova/app/models/messages/feedback-message-type';
-import { WsCommentService } from '@arsnova/app/services/websockets/ws-comment.service';
+import { CommentSettingsService } from '@arsnova/app/services/http/comment-settings.service';
 
 @Injectable()
 class MockContentGroupService {
@@ -83,15 +83,10 @@ describe('NavBarComponent', () => {
   mockRoomService.getCurrentRoomsMessageStream.and.returnValue(of(message));
   mockRoomService.getRoomSummaries.and.returnValue(of(summaries));
 
-  const mockWsCommentService = jasmine.createSpyObj([
-    'getCommentSettingsStream',
+  const mockCommentSettingsService = jasmine.createSpyObj([
+    'getSettingsStream',
   ]);
-  const commentSettingsMessage = {
-    body: '{ "payload": {} }',
-  };
-  mockWsCommentService.getCommentSettingsStream.and.returnValue(
-    of(commentSettingsMessage)
-  );
+  mockCommentSettingsService.getSettingsStream.and.returnValue(of({}));
 
   let loader: HarnessLoader;
   let overviewButton: MatButtonHarness;
@@ -147,8 +142,8 @@ describe('NavBarComponent', () => {
           useValue: mockRoomService,
         },
         {
-          provide: WsCommentService,
-          useValue: mockWsCommentService,
+          provide: CommentSettingsService,
+          useValue: mockCommentSettingsService,
         },
       ],
       schemas: [NO_ERRORS_SCHEMA],
