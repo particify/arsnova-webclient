@@ -306,6 +306,20 @@ div {
     top: 4px;
     right: 0;
   }
+
+  .tab-group-formatting-bar-mobile {
+    display: none;
+  }
+}
+
+@media (max-width: 767px) {
+  .tab-group-formatting-bar {
+    display: none;
+  }
+
+  .tab-group-formatting-bar-mobile div {
+    margin-top: 0.5em;
+  }
 }
 
 .mat-mdc-tab-list {

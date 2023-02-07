@@ -60,6 +60,12 @@
             (selectedTabChange)="tabChanged($event)"
           >
             <mat-tab label="{{ 'comment-page.your-answer' | translate }}">
+              <app-formatting-toolbar
+                *ngIf="!renderPreview"
+                class="tab-group-formatting-bar-mobile"
+                [inputElement]="descriptionInput"
+                (valueChanged)="description = $event"
+              ></app-formatting-toolbar>
               <mat-form-field class="input-block" appearance="outline">
                 <textarea
                   #answerInput
