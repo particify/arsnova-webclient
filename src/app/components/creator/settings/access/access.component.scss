@@ -10,8 +10,15 @@
   color: var(--warn);
 }
 
-.form-container {
-  margin-top: 1em;
+.form-container > * {
+  margin-top: 16px;
+}
+
+// This is needed to prevent trailing space when row wrap
+@media (max-width: 600px) {
+  .email-input {
+    margin-right: 0 !important;
+  }
 }
 
 .add-user-button {
@@ -61,8 +68,8 @@
   margin-top: 1em;
 }
 
-.btn-animated {
+.btn-animated:not([disabled]) {
   box-shadow: inset 140px 0 0 0 var(--primary);
   border: none;
-  color: var(--on-primary) !important;
+  color: var(--on-primary);
 }
