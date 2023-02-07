@@ -23,8 +23,8 @@ import { SeriesCreated } from '../../../../models/events/series-created';
 import { SeriesDeleted } from '../../../../models/events/series-deleted';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { RoomService } from '../../../../services/http/room.service';
-import { IMessage, Message } from '@stomp/stompjs';
-import { WsCommentService } from '../../../../services/websockets/ws-comment.service';
+import { IMessage } from '@stomp/stompjs';
+import { CommentSettingsService } from '../../../../services/http/comment-settings.service';
 
 export class NavBarItem extends BarItem {
   url: string;
@@ -106,7 +106,7 @@ export class NavBarComponent
     protected contentGroupService: ContentGroupService,
     protected eventService: EventService,
     protected roomService: RoomService,
-    protected wsCommentService: WsCommentService
+    protected commentSettingsService: CommentSettingsService
   ) {
     super();
   }
@@ -222,10 +222,10 @@ export class NavBarComponent
           }
         }
       );
-      this.commentSettingsSubscription = this.wsCommentService
-        .getCommentSettingsStream(this.roomId)
-        .subscribe((message: Message) => {
-          const commentsDisabled = JSON.parse(message.body).payload.disabled;
+      this.commentSettingsSubscription = this.commentSettingsService
+        .getSettingsStream()
+        .subscribe((settings) => {
+          const commentsDisabled = settings.disabled;
           const isCommentFeatureActive = this.activeFeatures.includes(
             Features.COMMENTS
           );

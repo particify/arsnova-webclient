@@ -48,7 +48,7 @@ import {
 import { RoomService } from '../../../../services/http/room.service';
 import { RemoteService } from '../../../../services/util/remote.service';
 import { PresentationEvent } from '../../../../models/events/presentation-events.enum';
-import { WsCommentService } from '../../../../services/websockets/ws-comment.service';
+import { CommentSettingsService } from '../../../../services/http/comment-settings.service';
 
 export class KeyNavBarItem extends NavBarItem {
   key: string;
@@ -159,7 +159,7 @@ export class ControlBarComponent
     protected eventService: EventService,
     protected apiConfigService: ApiConfigService,
     protected roomService: RoomService,
-    protected wsCommentService: WsCommentService,
+    protected commentSettingsService: CommentSettingsService,
     private announceService: AnnounceService,
     private hotkeyService: HotkeyService,
     private translateService: TranslateService,
@@ -178,7 +178,7 @@ export class ControlBarComponent
       contentGroupService,
       eventService,
       roomService,
-      wsCommentService
+      commentSettingsService
     );
   }
 

@@ -20,6 +20,7 @@ import { FeedbackService } from '../../../services/http/feedback.service';
 import { ContentGroupService } from '../../../services/http/content-group.service';
 import { ContentGroup } from '../../../models/content-group';
 import { RoomStatsService } from '../../../services/http/room-stats.service';
+import { CommentSettingsService } from '../../../services/http/comment-settings.service';
 
 @Component({
   selector: 'app-participant-overview',
@@ -47,7 +48,8 @@ export class ParticipantOverviewComponent
     protected authenticationService: AuthenticationService,
     public eventService: EventService,
     protected globalStorageService: GlobalStorageService,
-    private feedbackService: FeedbackService
+    private feedbackService: FeedbackService,
+    private commentSettingsService: CommentSettingsService
   ) {
     super(
       roomStatsService,
@@ -77,17 +79,11 @@ export class ParticipantOverviewComponent
     this.translateService.use(
       this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE)
     );
-    this.commentSettingsSub = this.wsCommentService
-      .getCommentSettingsStream(this.room.id)
-      .subscribe((message: Message) => {
-        this.parseCommentSettingsMessage(message);
+    this.commentSettingsSub = this.commentSettingsService
+      .getSettingsStream()
+      .subscribe((settings) => {
+        this.commentsEnabled = !settings.disabled;
       });
-  }
-
-  parseCommentSettingsMessage(message: Message) {
-    const msg = JSON.parse(message.body);
-    const disabled = msg.payload.disabled;
-    this.commentsEnabled = !disabled;
   }
 
   unsubscribe() {

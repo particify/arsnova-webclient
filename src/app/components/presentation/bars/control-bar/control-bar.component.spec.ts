@@ -36,7 +36,7 @@ import { RoomStatsService } from '@arsnova/app/services/http/room-stats.service'
 import { ContentGroup } from '@arsnova/app/models/content-group';
 import { RoomService } from '@arsnova/app/services/http/room.service';
 import { RemoteService } from '@arsnova/app/services/util/remote.service';
-import { WsCommentService } from '@arsnova/app/services/websockets/ws-comment.service';
+import { CommentSettingsService } from '@arsnova/app/services/http/comment-settings.service';
 
 describe('ControlBarComponent', () => {
   let component: ControlBarComponent;
@@ -125,16 +125,10 @@ describe('ControlBarComponent', () => {
 
   const mockRemoteService = jasmine.createSpyObj(['getFeedbackState']);
 
-  const mockWsCommentService = jasmine.createSpyObj([
-    'getCommentSettingsStream',
+  const mockCommentSettingsService = jasmine.createSpyObj([
+    'getSettingsStream',
   ]);
-  const settingsMessage = {
-    body: '{ "payload": {} }',
-  };
-
-  mockWsCommentService.getCommentSettingsStream.and.returnValue(
-    of(settingsMessage)
-  );
+  mockCommentSettingsService.getSettingsStream.and.returnValue(of({}));
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
@@ -222,8 +216,8 @@ describe('ControlBarComponent', () => {
           useValue: mockRemoteService,
         },
         {
-          provide: WsCommentService,
-          useValue: mockWsCommentService,
+          provide: CommentSettingsService,
+          useValue: mockCommentSettingsService,
         },
       ],
       schemas: [NO_ERRORS_SCHEMA],
