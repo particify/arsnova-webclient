@@ -2,7 +2,7 @@
   <mat-card-title>
     {{ 'admin-area.user-management' | translate }}
   </mat-card-title>
-  <div fxLayout="column" fxLayoutGap="10px">
+  <div fxLayout="column" fxLayoutGap="16px">
     <div
       *ngIf="showAccountAdding"
       fxLayout="row"
@@ -26,17 +26,16 @@
         {{ 'admin-area.add' | translate }}
       </button>
     </div>
-    <div fxLayout="row" fxLayoutGap="10px">
+    <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="16px">
       <app-user-search-field
         label="{{ 'admin-area.user-id' | translate }}"
         (submitted)="loadEntity($event)"
-        fxFlex="auto"
+        fxFlex="50"
         class="no-field-hint"
       ></app-user-search-field>
       <mat-form-field
         appearance="outline"
         floatLabel="always"
-        fxFlex="auto"
         class="no-field-hint"
       >
         <mat-label>{{ 'admin-area.user-login-id' | translate }}</mat-label>
@@ -48,7 +47,7 @@
         />
         <mat-icon matPrefix>assignment_ind</mat-icon>
       </mat-form-field>
-      <button mat-button (click)="clear()" fxFlex="64px">
+      <button mat-icon-button (click)="clear()">
         <mat-icon>clear</mat-icon>
       </button>
     </div>

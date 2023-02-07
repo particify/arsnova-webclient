@@ -4,7 +4,6 @@
     matInput
     [formControl]="formControl"
     [matAutocomplete]="auto"
-    size="80"
     #idSearchField
   />
   <mat-autocomplete
@@ -12,23 +11,18 @@
     [displayWith]="displayFn"
     panelWidth="350px"
   >
-    <mat-option
-      *ngFor="let user of users"
-      [value]="user"
-      class="user-search-option"
-    >
+    <mat-option *ngFor="let user of users" [value]="user">
       <span>{{ user.loginId }}</span
       >&nbsp;<span class="user-auth-provider">({{ user.authProvider }})</span
       ><br />
       <small class="user-id">{{ user.id }}</small>
     </mat-option>
   </mat-autocomplete>
-  <button mat-button matSuffix>
+  <button mat-icon-button matSuffix (click)="submitUserId(idSearchField.value)">
     <mat-icon
-      class="icon-secondary"
+      class="icon-primary"
       aria-hidden="false"
       attr.aria-label="{{ 'admin-area.find' | translate }}"
-      (click)="submitUserId(idSearchField.value)"
       *ngIf="submittable"
       >search</mat-icon
     >
