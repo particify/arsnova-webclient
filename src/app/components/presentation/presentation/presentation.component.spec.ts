@@ -37,11 +37,13 @@ describe('PresentationComponent', () => {
     seriesName: 'Quiz',
   };
   const firstChild = {
-    url: [
-      {
-        path: 'path',
-      },
-    ],
+    firstChild: {
+      url: [
+        {
+          path: 'path',
+        },
+      ],
+    },
   };
 
   Object.defineProperty(snapshot, 'firstChild', { value: firstChild });
