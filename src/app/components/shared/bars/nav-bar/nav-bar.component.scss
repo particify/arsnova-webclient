@@ -36,6 +36,10 @@
     opacity: 0.7 !important;
     color: var(--on-surface);
   }
+
+  .mat-icon {
+    margin-right: 0;
+  }
 }
 
 .show-news {
@@ -73,10 +77,6 @@
 
   #user-count-container {
     opacity: 0.65;
-  }
-
-  .button-icon {
-    margin-right: 0 !important;
   }
 }
 
