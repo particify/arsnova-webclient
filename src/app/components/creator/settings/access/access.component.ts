@@ -111,6 +111,9 @@ export class AccessComponent implements OnInit, OnDestroy {
   getModerators() {
     this.authenticationService.getCurrentAuthentication().subscribe((auth) => {
       this.isGuest = auth.authProvider === AuthProvider.ARSNOVA_GUEST;
+      if (this.isGuest) {
+        this.usernameFormControl.disable();
+      }
       this.moderatorService.get(this.room.id).subscribe((moderators) => {
         moderators.forEach((moderator) => {
           this.userIds.push(moderator.userId);
