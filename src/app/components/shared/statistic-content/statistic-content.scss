@@ -45,9 +45,7 @@
 .no-background > * {
   transition: box-shadow 300ms;
   background: transparent;
-  font-weight: $font-weight-bold;
   min-height: 0;
-  font-size: 12px;
 
   .mat-icon {
     font-size: 18px;
