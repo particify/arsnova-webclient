@@ -38,7 +38,7 @@ export class UserProfileComponent implements OnInit {
   auth: ClientAuthentication;
   user: User;
   formFields: FormField[] = [];
-  isSso = true;
+  isGuest = false;
   isLoading = true;
 
   settings: UserSettings;
@@ -59,7 +59,7 @@ export class UserProfileComponent implements OnInit {
     this.page = this.route.snapshot.params['accountSettingsName'];
     this.authenticationService.getCurrentAuthentication().subscribe((auth) => {
       this.auth = auth;
-      this.isSso = this.auth.authProvider !== AuthProvider.ARSNOVA;
+      this.isGuest = auth.authProvider === AuthProvider.ARSNOVA_GUEST;
       this.userService
         .getUserByLoginId(this.auth.loginId, true)
         .subscribe((user) => {

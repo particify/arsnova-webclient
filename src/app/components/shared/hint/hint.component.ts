@@ -8,6 +8,7 @@ export interface Hint {
 
 export enum HINT_TYPES {
   WARNING = 'WARNING',
+  INFO = 'INFO',
 }
 
 export const HINTS: Hint[] = [
@@ -15,6 +16,11 @@ export const HINTS: Hint[] = [
     type: HINT_TYPES.WARNING,
     icon: 'warning',
     class: 'warning',
+  },
+  {
+    type: HINT_TYPES.INFO,
+    icon: 'info',
+    class: 'info',
   },
 ];
 
