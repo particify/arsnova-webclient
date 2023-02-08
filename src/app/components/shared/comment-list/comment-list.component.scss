@@ -195,34 +195,42 @@ $search-bar-height: 70px;
 }
 
 .scroll-top {
+  visibility: hidden;
+  opacity: 0;
   position: fixed;
   right: -64px;
   z-index: 1;
-  transition: right 400ms;
-  opacity: 1;
+  transition: right 400ms, visibility 200ms, opacity 200ms;
+
+  &.visible {
+    visibility: visible;
+    opacity: 1;
+    right: 4vw;
+  }
 }
 
 .scroll-to-new-posts {
+  visibility: hidden;
+  opacity: 0;
   position: fixed;
   bottom: -4vw;
   right: 50%;
   transform: translateX(50%);
   z-index: 1;
   background: var(--surface);
-  transition: bottom 400ms;
+  transition: bottom 400ms, visibility 200ms, opacity 200ms;
 }
 
 .scroll-to-new-posts-visible {
+  visibility: visible;
+  opacity: 1;
+
   // Additional 10px to align with add/scroll button vertically
   bottom: calc(4vw + 10px);
 
   &.above-bar {
     bottom: calc($mobile-bar-height + 4vw + 10px);
   }
-}
-
-.visible {
-  right: 4vw;
 }
 
 .comments-container {
