@@ -138,6 +138,10 @@ export class NavBarComponent
   }
 
   afterInit() {
+    // This function is implemented and used different in presentation control bar so this check is needed for now
+    if (!this.isLoading) {
+      return;
+    }
     if (this.role === UserRole.PARTICIPANT) {
       this.subscribeToContentGroups();
     } else {
@@ -421,8 +425,8 @@ export class NavBarComponent
           });
       }
     } else {
-      this.removeContentFeatureItem();
       this.afterInit();
+      this.removeContentFeatureItem();
     }
   }
 
