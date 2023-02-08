@@ -16,10 +16,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./request-password-reset.component.scss'],
 })
 export class RequestPasswordResetComponent implements OnInit {
-  usernameFormControl = new UntypedFormControl('', [
-    Validators.required,
-    Validators.email,
-  ]);
+  usernameFormControl = new UntypedFormControl();
   matcher = new PasswordResetErrorStateMatcher();
   deviceWidth = innerWidth;
   username: string;
@@ -33,6 +30,7 @@ export class RequestPasswordResetComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.usernameFormControl.clearValidators();
     const userData = history.state.data;
     if (userData && userData.username) {
       this.username = userData.username;
@@ -40,6 +38,11 @@ export class RequestPasswordResetComponent implements OnInit {
   }
 
   resetPassword(): void {
+    this.usernameFormControl.setValidators([
+      Validators.required,
+      Validators.email,
+    ]);
+    this.usernameFormControl.updateValueAndValidity();
     if (
       this.username &&
       !this.usernameFormControl.hasError('required') &&

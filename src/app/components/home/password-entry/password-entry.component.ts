@@ -47,11 +47,7 @@ export class PasswordEntryComponent implements AfterViewInit {
   @Input() isNew = false;
 
   password: string;
-  passwordFormControl = new UntypedFormControl('', [
-    Validators.required,
-    Validators.minLength(8),
-    this.validatePasswordStrength(),
-  ]);
+  passwordFormControl = new UntypedFormControl();
   matcher = new FormErrorStateMatcher();
   strength = 0;
   strengthLevels: typeof Strength = Strength;
@@ -67,6 +63,7 @@ export class PasswordEntryComponent implements AfterViewInit {
   ) {}
 
   ngAfterViewInit(): void {
+    this.passwordFormControl.clearValidators();
     this._autofill.monitor(this.passwordInput).subscribe((p) => {
       this.autofilled = p.isAutofilled;
       if (this.showPwButton) {
@@ -92,6 +89,14 @@ export class PasswordEntryComponent implements AfterViewInit {
   }
 
   getPassword(): string {
+    if (this.checkStrength) {
+      this.passwordFormControl.setValidators([
+        Validators.required,
+        Validators.minLength(8),
+        this.validatePasswordStrength(),
+      ]);
+      this.passwordFormControl.updateValueAndValidity();
+    }
     if (this.strength >= Strength.OKAY || !this.checkStrength) {
       return this.password;
     } else {

@@ -19,10 +19,7 @@ import { FormErrorStateMatcher } from '../form-error-state-matcher/form-error-st
 export class RegisterComponent implements OnInit {
   @ViewChild(PasswordEntryComponent) passwordEntry: PasswordEntryComponent;
 
-  usernameFormControl = new UntypedFormControl('', [
-    Validators.required,
-    Validators.email,
-  ]);
+  usernameFormControl = new UntypedFormControl();
   matcher = new FormErrorStateMatcher();
   deviceWidth = innerWidth;
   acceptToS = false;
@@ -39,6 +36,7 @@ export class RegisterComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.usernameFormControl.clearValidators();
     const data = this.route.snapshot.data;
     this.accountServiceTitle =
       data.apiConfig.ui.registration?.service || 'ARSnova';
@@ -48,6 +46,11 @@ export class RegisterComponent implements OnInit {
 
   register(username: string): void {
     const password = this.passwordEntry.getPassword();
+    this.usernameFormControl.setValidators([
+      Validators.required,
+      Validators.email,
+    ]);
+    this.usernameFormControl.updateValueAndValidity();
     if (
       !this.usernameFormControl.hasError('required') &&
       !this.usernameFormControl.hasError('email') &&

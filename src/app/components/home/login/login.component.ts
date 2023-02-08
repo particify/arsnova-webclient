@@ -51,7 +51,7 @@ export class LoginComponent implements AfterContentInit, OnChanges, OnInit {
   authProviders: AuthenticationProvider[];
   loginIdIsEmail = false;
 
-  loginIdFormControl = new UntypedFormControl('', [Validators.required]);
+  loginIdFormControl = new UntypedFormControl();
 
   matcher = new FormErrorStateMatcher();
 
@@ -68,6 +68,7 @@ export class LoginComponent implements AfterContentInit, OnChanges, OnInit {
   ) {}
 
   ngOnInit() {
+    this.loginIdFormControl.clearValidators();
     this.route.data.subscribe(
       (data) => (this.authProviders = data.apiConfig.authenticationProviders)
     );
@@ -90,10 +91,6 @@ export class LoginComponent implements AfterContentInit, OnChanges, OnInit {
             this.dbLoginEnabled = true;
             if (this.usernamePasswordProviders.length === 1) {
               this.loginIdIsEmail = true;
-              this.loginIdFormControl.setValidators([
-                Validators.required,
-                Validators.email,
-              ]);
             } else {
               this.loginIdFormControl.setValidators([Validators.required]);
             }
@@ -162,6 +159,11 @@ export class LoginComponent implements AfterContentInit, OnChanges, OnInit {
 
   loginWithUsernamePassword(providerId = 'user-db'): void {
     const password = this.passwordEntry.getPassword();
+    this.loginIdFormControl.setValidators([
+      Validators.required,
+      Validators.email,
+    ]);
+    this.loginIdFormControl.updateValueAndValidity();
     if (this.loginIdFormControl.valid && password) {
       this.authenticationService
         .login(this.username, password, providerId)
