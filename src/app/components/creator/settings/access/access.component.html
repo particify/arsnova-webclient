@@ -1,10 +1,9 @@
-<div *ngIf="isGuest" class="guest-hint">
+<div fxLayout="column" fxLayoutGap="16px">
   <app-hint
+    *ngIf="isGuest"
     [text]="'settings.disabled-for-guests'"
     [type]="'WARNING'"
   ></app-hint>
-</div>
-<div fxLayout="column" fxLayoutGap="16px">
   <div tabindex="0" id="access-settings" class="visually-hidden">
     {{ 'settings.a11y-access' | translate }}
   </div>
@@ -28,8 +27,6 @@
         }}</ng-template>
       </mat-label>
       <input
-        [disabled]="isGuest"
-        [readonly]="isGuest"
         matInput
         type="email"
         autocomplete="disabled"
