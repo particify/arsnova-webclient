@@ -13,6 +13,7 @@
   </div>
   <mat-list *ngIf="!isLoading">
     <mat-list-item
+      class="answer-list-item"
       *ngFor="let answer of answerOptions; let i = index"
       [ngClass]="{
         correct: showCorrect,
