@@ -96,7 +96,7 @@
       <button
         id="user-profile-button"
         mat-menu-item
-        *ngIf="auth && !isGuest()"
+        *ngIf="auth"
         (click)="navToProfile()"
       >
         <mat-icon>account_box</mat-icon>

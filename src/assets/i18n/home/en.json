@@ -160,6 +160,7 @@
     "a11y-message": "You are now in the account page.",
     "account-settings": "Account settings",
     "username": "Username",
+    "guest-hint": "You are not logged in and use a guest account.",
     "first-name": "First name",
     "last-name": "Last name",
     "mail": "E-mail",

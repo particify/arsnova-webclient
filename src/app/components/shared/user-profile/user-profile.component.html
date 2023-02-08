@@ -19,9 +19,17 @@
         <lib-extension-point
           extensionId="profile-subscription"
         ></lib-extension-point>
-        <p class="username">
-          {{ ('user-profile.username' | translate) + ': ' + auth.loginId }}
-        </p>
+        <ng-container *ngIf="!isGuest; else guestHint">
+          <p class="username">
+            {{ ('user-profile.username' | translate) + ': ' + auth.loginId }}
+          </p>
+        </ng-container>
+        <ng-template #guestHint>
+          <app-hint
+            [text]="'user-profile.guest-hint'"
+            [type]="'INFO'"
+          ></app-hint>
+        </ng-template>
         <div>
           <div
             fxLayout="row wrap"
