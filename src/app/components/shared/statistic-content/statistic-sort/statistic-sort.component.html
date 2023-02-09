@@ -17,7 +17,7 @@
       *ngFor="let answer of answerOptions; let i = index"
       [ngClass]="{
         correct: showCorrect,
-        'no-background': isPresentation,
+        'no-background answer-list-item': isPresentation,
         'all-animations': !isPresentation
       }"
     >
