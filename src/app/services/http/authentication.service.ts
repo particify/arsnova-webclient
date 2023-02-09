@@ -316,8 +316,8 @@ export class AuthenticationService extends AbstractHttpService<ClientAuthenticat
     const ssoUrl = this.buildUri(this.serviceApiUrl.sso + '/' + providerId);
     const loginUrl = this.buildUri(this.serviceApiUrl.login + '?refresh=true');
     const [popupW, popupH] = this.popupDimensions;
-    const popupX = window.top.screenX + window.top.outerWidth / 2 - popupW / 2;
-    const popupY = window.top.screenY + window.top.outerHeight / 2 - popupH / 2;
+    const popupX = window.screenX + window.outerWidth / 2 - popupW / 2;
+    const popupY = window.screenY + window.outerHeight / 2 - popupH / 2;
     const popup = window.open(
       ssoUrl,
       'auth_popup',
