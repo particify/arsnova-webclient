@@ -1,9 +1,9 @@
 user-agent: *
+disallow: /account
 disallow: /admin
-disallow: /api/auth
-disallow: /creator
+disallow: /api/auth/
 disallow: /demo
-disallow: /moderator
-disallow: /participant
-disallow: /presentation
+disallow: /edit/
+disallow: /p/
+disallow: /present/
 disallow: /user
