@@ -157,13 +157,16 @@ export class LoginComponent implements AfterContentInit, OnChanges, OnInit {
     });
   }
 
-  loginWithUsernamePassword(providerId = 'user-db'): void {
-    const password = this.passwordEntry.getPassword();
+  activateValidators() {
     this.loginIdFormControl.setValidators([
       Validators.required,
       Validators.email,
     ]);
     this.loginIdFormControl.updateValueAndValidity();
+  }
+
+  loginWithUsernamePassword(providerId = 'user-db'): void {
+    const password = this.passwordEntry.getPassword();
     if (this.loginIdFormControl.valid && password) {
       this.authenticationService
         .login(this.username, password, providerId)

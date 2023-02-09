@@ -44,13 +44,16 @@ export class RegisterComponent implements OnInit {
     document.getElementById('email-input').focus();
   }
 
-  register(username: string): void {
-    const password = this.passwordEntry.getPassword();
+  activateValidators() {
     this.usernameFormControl.setValidators([
       Validators.required,
       Validators.email,
     ]);
     this.usernameFormControl.updateValueAndValidity();
+  }
+
+  register(username: string): void {
+    const password = this.passwordEntry.getPassword();
     if (
       !this.usernameFormControl.hasError('required') &&
       !this.usernameFormControl.hasError('email') &&

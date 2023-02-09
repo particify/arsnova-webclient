@@ -37,12 +37,15 @@ export class RequestPasswordResetComponent implements OnInit {
     }
   }
 
-  resetPassword(): void {
+  activateValidators() {
     this.usernameFormControl.setValidators([
       Validators.required,
       Validators.email,
     ]);
     this.usernameFormControl.updateValueAndValidity();
+  }
+
+  resetPassword(): void {
     if (
       this.username &&
       !this.usernameFormControl.hasError('required') &&

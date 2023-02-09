@@ -5,7 +5,13 @@ import {
   Input,
   ViewChild,
 } from '@angular/core';
-import { UntypedFormControl, Validators } from '@angular/forms';
+import {
+  FormControl,
+  UntypedFormControl,
+  ValidationErrors,
+  ValidatorFn,
+  Validators,
+} from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
 import {
   AdvancedSnackBarTypes,
@@ -88,7 +94,7 @@ export class PasswordEntryComponent implements AfterViewInit {
     this.lastInput = this.password;
   }
 
-  getPassword(): string {
+  activateValidators() {
     if (this.checkStrength) {
       this.passwordFormControl.setValidators([
         Validators.required,
@@ -97,6 +103,9 @@ export class PasswordEntryComponent implements AfterViewInit {
       ]);
       this.passwordFormControl.updateValueAndValidity();
     }
+  }
+
+  getPassword(): string {
     if (this.strength >= Strength.OKAY || !this.checkStrength) {
       return this.password;
     } else {
@@ -105,10 +114,12 @@ export class PasswordEntryComponent implements AfterViewInit {
     }
   }
 
-  validatePasswordStrength() {
-    return (formControl: UntypedFormControl) => {
+  validatePasswordStrength(): ValidatorFn {
+    return (formControl: FormControl): ValidationErrors | null => {
       this.strength = this.getPasswordStrength(formControl.value);
-      return null;
+      return this.strength >= Strength.OKAY
+        ? null
+        : { validatePasswordStrength: { value: formControl.value } };
     };
   }
 

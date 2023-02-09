@@ -36,6 +36,7 @@
             type="email"
             id="loginid-input"
             name="loginid"
+            (blur)="activateValidators()"
           />
           <mat-error
             *ngIf="
