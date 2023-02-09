@@ -5,7 +5,13 @@ import {
   Input,
   ViewChild,
 } from '@angular/core';
-import { UntypedFormControl, Validators } from '@angular/forms';
+import {
+  FormControl,
+  UntypedFormControl,
+  ValidationErrors,
+  ValidatorFn,
+  Validators,
+} from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
 import {
   AdvancedSnackBarTypes,
@@ -47,11 +53,7 @@ export class PasswordEntryComponent implements AfterViewInit {
   @Input() isNew = false;
 
   password: string;
-  passwordFormControl = new UntypedFormControl('', [
-    Validators.required,
-    Validators.minLength(8),
-    this.validatePasswordStrength(),
-  ]);
+  passwordFormControl = new UntypedFormControl();
   matcher = new FormErrorStateMatcher();
   strength = 0;
   strengthLevels: typeof Strength = Strength;
@@ -67,6 +69,7 @@ export class PasswordEntryComponent implements AfterViewInit {
   ) {}
 
   ngAfterViewInit(): void {
+    this.passwordFormControl.clearValidators();
     this._autofill.monitor(this.passwordInput).subscribe((p) => {
       this.autofilled = p.isAutofilled;
       if (this.showPwButton) {
@@ -91,6 +94,17 @@ export class PasswordEntryComponent implements AfterViewInit {
     this.lastInput = this.password;
   }
 
+  activateValidators() {
+    if (this.checkStrength) {
+      this.passwordFormControl.setValidators([
+        Validators.required,
+        Validators.minLength(8),
+        this.validatePasswordStrength(),
+      ]);
+      this.passwordFormControl.updateValueAndValidity();
+    }
+  }
+
   getPassword(): string {
     if (this.strength >= Strength.OKAY || !this.checkStrength) {
       return this.password;
@@ -100,10 +114,12 @@ export class PasswordEntryComponent implements AfterViewInit {
     }
   }
 
-  validatePasswordStrength() {
-    return (formControl: UntypedFormControl) => {
+  validatePasswordStrength(): ValidatorFn {
+    return (formControl: FormControl): ValidationErrors | null => {
       this.strength = this.getPasswordStrength(formControl.value);
-      return null;
+      return this.strength >= Strength.OKAY
+        ? null
+        : { validatePasswordStrength: { value: formControl.value } };
     };
   }
 

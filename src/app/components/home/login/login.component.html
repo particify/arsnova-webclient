@@ -33,9 +33,22 @@
             [errorStateMatcher]="matcher"
             [formControl]="loginIdFormControl"
             matInput
+            type="email"
             id="loginid-input"
             name="loginid"
+            (blur)="activateValidators()"
           />
+          <mat-error
+            *ngIf="
+              loginIdFormControl.hasError('email') &&
+              !loginIdFormControl.hasError('required')
+            "
+          >
+            {{ 'login.email-invalid' | translate }}
+          </mat-error>
+          <mat-error *ngIf="loginIdFormControl.hasError('required')">
+            {{ 'login.email-required' | translate }}
+          </mat-error>
         </mat-form-field>
         <ng-template #loginIdIsUsername>
           <mat-form-field class="input-block" appearance="outline">

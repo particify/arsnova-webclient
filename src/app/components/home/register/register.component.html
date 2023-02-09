@@ -20,6 +20,7 @@
           #userName
           [formControl]="usernameFormControl"
           [errorStateMatcher]="matcher"
+          (blur)="activateValidators()"
         />
         <mat-error
           *ngIf="
