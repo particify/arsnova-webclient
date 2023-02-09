@@ -138,6 +138,10 @@ export class NavBarComponent
   }
 
   afterInit() {
+    // This function is implemented and used different in presentation control bar so this check is needed for now
+    if (!this.isLoading) {
+      return;
+    }
     if (this.role === UserRole.PARTICIPANT) {
       this.subscribeToContentGroups();
     } else {
@@ -383,7 +387,7 @@ export class NavBarComponent
       }
       this.resetGroups();
     }
-    const groupCount = groupStats.length;
+    const groupCount = groupStats?.length ?? 0;
     if (groupCount > 0) {
       this.groupSubscriptions = [];
       for (let i = 0; i < groupCount; i++) {
@@ -404,7 +408,7 @@ export class NavBarComponent
                   this.contentGroups
                 );
               if (alreadySet) {
-                if (this.groupName === group.name || !this.groupName) {
+                if (this.groupName !== group.name || !this.groupName) {
                   this.setGroup(group);
                 }
                 this.addContentFeatureItem();
@@ -421,8 +425,8 @@ export class NavBarComponent
           });
       }
     } else {
-      this.removeContentFeatureItem();
       this.afterInit();
+      this.removeContentFeatureItem();
     }
   }
 
@@ -628,8 +632,8 @@ export class NavBarComponent
 
   private listObjectIdsEquals(obj1: { id: string }[], obj2: { id: string }[]) {
     return (
-      JSON.stringify(obj1.map((cg) => cg.id)) ===
-      JSON.stringify(obj2.map((cg) => cg.id))
+      JSON.stringify(obj1?.map((cg) => cg.id)) ===
+      JSON.stringify(obj2?.map((cg) => cg.id))
     );
   }
 
