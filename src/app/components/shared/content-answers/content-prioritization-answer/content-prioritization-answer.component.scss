@@ -18,6 +18,15 @@
   }
 }
 
+input[type='number'] {
+  appearance: textfield;
+  text-align: center;
+}
+
+input[type='number']::-webkit-inner-spin-button {
+  appearance: none;
+}
+
 @media (min-width: 768px) {
   .answer-text {
     // 170px = button + input field width
