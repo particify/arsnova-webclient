@@ -387,7 +387,7 @@ export class NavBarComponent
       }
       this.resetGroups();
     }
-    const groupCount = groupStats.length;
+    const groupCount = groupStats?.length ?? 0;
     if (groupCount > 0) {
       this.groupSubscriptions = [];
       for (let i = 0; i < groupCount; i++) {
@@ -632,8 +632,8 @@ export class NavBarComponent
 
   private listObjectIdsEquals(obj1: { id: string }[], obj2: { id: string }[]) {
     return (
-      JSON.stringify(obj1.map((cg) => cg.id)) ===
-      JSON.stringify(obj2.map((cg) => cg.id))
+      JSON.stringify(obj1?.map((cg) => cg.id)) ===
+      JSON.stringify(obj2?.map((cg) => cg.id))
     );
   }
 
