@@ -408,7 +408,7 @@ export class NavBarComponent
                   this.contentGroups
                 );
               if (alreadySet) {
-                if (this.groupName === group.name || !this.groupName) {
+                if (this.groupName !== group.name || !this.groupName) {
                   this.setGroup(group);
                 }
                 this.addContentFeatureItem();
