@@ -534,11 +534,6 @@ div {
   width: 40px !important;
 }
 
-.mat-mdc-raised-button[disabled] {
-  color: var(--on-surface) !important;
-  opacity: 0.6;
-}
-
 .mat-mdc-button,
 .mat-mdc-raised-button,
 .mat-mdc-outlined-button {
@@ -548,12 +543,6 @@ div {
     font-size: 20px;
     margin-bottom: 2px;
   }
-}
-
-.mat-mdc-button:disabled,
-.mat-mdc-icon-button:disabled {
-  color: var(--on-surface) !important;
-  opacity: 0.5 !important;
 }
 
 .mat-mdc-button:not([disabled], .nav-button) {
@@ -566,14 +555,9 @@ div {
   }
 }
 
-.button-primary {
+.button-primary:not([disabled]) {
   background-color: var(--primary) !important;
   color: var(--on-primary) !important;
-}
-
-.button-primary.mat-mdc-raised-button[disabled] {
-  background-color: var(--cancel) !important;
-  color: var(--on-surface) !important;
 }
 
 .button-warn {
