@@ -33,7 +33,7 @@ export class ContentGroupCreationComponent {
         this.closeDialog(this.name);
       } else {
         this.translateService
-          .get('dialog.content-group-already-exists')
+          .get('content.duplicate-series-name')
           .subscribe((msg) => {
             this.notificationService.showAdvanced(
               msg,

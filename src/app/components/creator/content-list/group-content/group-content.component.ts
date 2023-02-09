@@ -397,7 +397,7 @@ export class GroupContentComponent
   }
 
   saveGroupName(): void {
-    if (this.updatedName !== this.groupName) {
+    if (this.updatedName !== this.groupName && this.isNoDuplicateName()) {
       const changes: { name: string } = { name: this.updatedName };
       this.updateContentGroup(changes).subscribe((updatedGroup) => {
         this.contentGroup = updatedGroup;
@@ -406,6 +406,9 @@ export class GroupContentComponent
           this.updatedName
         );
         this.groupName = this.contentGroup.name;
+        this.contentGroupStats.find(
+          (s) => s.id === this.contentGroup.id
+        ).groupName = this.groupName;
         this.translateService
           .get('content.updated-content-group')
           .subscribe((msg) => {
@@ -416,6 +419,20 @@ export class GroupContentComponent
           });
         this.updateURL();
       });
+    }
+  }
+
+  isNoDuplicateName() {
+    const groupNames = this.contentGroupStats.map((s) => s.groupName);
+    if (groupNames.includes(this.updatedName)) {
+      this.updatedName = this.groupName;
+      const msg = this.translateService.instant(
+        'content.duplicate-series-name'
+      );
+      this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.FAILED);
+      return false;
+    } else {
+      return true;
     }
   }
 
