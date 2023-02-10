@@ -160,7 +160,7 @@ $logo-width: 120px;
   height: $bar-height;
 }
 
-.selected-menu-item {
+.selected-menu-item span {
   color: var(--primary);
   font-weight: $font-weight-bold;
 }
