@@ -1,6 +1,9 @@
 .mat-mdc-icon-button {
   background-color: var(--background);
-  color: var(--on-background);
+
+  &:not([disabled]) {
+    color: var(--on-background);
+  }
 }
 
 .list-item {
@@ -13,6 +16,15 @@
   &:last-of-type {
     margin-bottom: 1em;
   }
+}
+
+input[type='number'] {
+  appearance: textfield;
+  text-align: center;
+}
+
+input[type='number']::-webkit-inner-spin-button {
+  appearance: none;
 }
 
 @media (min-width: 768px) {
