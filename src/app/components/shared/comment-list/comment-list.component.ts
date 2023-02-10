@@ -404,9 +404,9 @@ export class CommentListComponent implements OnInit, OnDestroy {
   }
 
   activateSearch() {
-    this.translateService.get('comment-list.search').subscribe((msg) => {
-      this.searchPlaceholder = msg;
-    });
+    this.searchPlaceholder = this.translateService.instant(
+      'comment-list.search-placeholder'
+    );
     this.search = true;
     this.searchField.nativeElement.focus();
   }

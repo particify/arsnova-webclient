@@ -3,7 +3,6 @@
   mat-fab
   color="primary"
   *ngIf="
-    !search &&
     deviceType !== 'desktop' &&
     !isPresentation &&
     !isArchive &&
@@ -70,6 +69,7 @@
     >
       <input
         tabindex="-1"
+        #searchBox
         id="search-box"
         [ngClass]="{ 'search-input-hidden': !search, 'search-input': search }"
         (input)="searchComments()"
