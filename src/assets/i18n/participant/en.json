@@ -100,6 +100,7 @@
     "filter-reset": "Reset",
     "filter-search": "Search posts",
     "search": "Search posts",
+    "search-placeholder": "Search",
     "select-time": "Select a time period",
     "select-time-1h": "Last hour",
     "select-time-3h": "Last 3 hours",
