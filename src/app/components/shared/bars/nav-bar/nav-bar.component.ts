@@ -408,9 +408,10 @@ export class NavBarComponent
                   this.contentGroups
                 );
               if (alreadySet) {
-                if (this.groupName !== group.name || !this.groupName) {
-                  this.setGroup(group);
-                }
+                const currentGroup =
+                  this.contentGroups.find((c) => c.name === this.groupName) ||
+                  this.contentGroups[0];
+                this.setGroup(currentGroup);
                 this.addContentFeatureItem();
                 // route data's `userRole` is used here to prevent showing notification indicator in creators room preview
                 if (this.role === UserRole.PARTICIPANT) {
