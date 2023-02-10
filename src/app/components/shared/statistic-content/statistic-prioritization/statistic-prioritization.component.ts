@@ -22,6 +22,7 @@ import { PresentationService } from '@arsnova/app/services/util/presentation.ser
 import { ContentPrioritization } from '@arsnova/app/models/content-prioritization';
 import { PrioritizationRoundStatistics } from '@arsnova/app/models/round-statistics';
 import { StatisticChoiceComponent } from '../statistic-choice/statistic-choice.component';
+import { takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-statistic-prioritization',
@@ -88,7 +89,7 @@ export class StatisticPrioritizationComponent
     this.initChart();
     this.showChart(300);
     this.updateData(stats);
-    this.indexChanged.subscribe(() => {
+    this.indexChanged.pipe(takeUntil(this.destroyed$)).subscribe(() => {
       this.showChart();
     });
   }
