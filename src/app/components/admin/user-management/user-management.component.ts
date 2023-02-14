@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { User } from '../../../models/user';
 import { UserService } from '../../../services/http/user.service';
 import { DialogService } from '../../../services/util/dialog.service';
 import { AdminService } from '../../../services/http/admin.service';
@@ -9,17 +8,21 @@ import {
 } from '../../../services/util/notification.service';
 import { TranslateService } from '@ngx-translate/core';
 import { ApiConfigService } from '../../../services/http/api-config.service';
+import { InputDialogComponent } from '../_dialogs/input-dialog/input-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
+import { UserSearchComponent } from '../user-search/user-search.component';
 
 @Component({
   selector: 'app-user-management',
   templateUrl: './user-management.component.html',
-  styles: ['.mat-mdc-raised-button {height: 56px;}'],
+  styleUrls: ['../admin-styles.scss'],
 })
-export class UserManagementComponent implements OnInit {
-  user: User;
-
-  showAccountAdding = false;
-  newLoginId = '';
+export class UserManagementComponent
+  extends UserSearchComponent
+  implements OnInit
+{
+  addButtonText: string;
+  isLoading = false;
 
   constructor(
     protected adminService: AdminService,
@@ -27,24 +30,28 @@ export class UserManagementComponent implements OnInit {
     protected dialogService: DialogService,
     protected notificationService: NotificationService,
     protected translateService: TranslateService,
-    protected apiConfigService: ApiConfigService
-  ) {}
+    protected apiConfigService: ApiConfigService,
+    protected dialog: MatDialog
+  ) {
+    super(userService);
+  }
 
   ngOnInit(): void {
     this.apiConfigService.getApiConfig$().subscribe((config) => {
-      this.showAccountAdding = config.authenticationProviders
-        .map((p) => p.id)
-        .includes('user-db');
+      if (config.authenticationProviders.map((p) => p.id).includes('user-db')) {
+        this.addButtonText = 'add-account';
+      }
     });
   }
 
-  loadEntity(id: string) {
-    id = id.replace(' ', '');
-    this.adminService.getUser(id).subscribe((user) => (this.user = user));
-  }
-
-  clear() {
-    this.user = null;
+  getUser(searchResult: string) {
+    this.isLoading = true;
+    const index = this.searchResults.indexOf(searchResult);
+    const id = this.users[index].id.replace(' ', '');
+    this.adminService.getUser(id).subscribe((user) => {
+      this.user = user;
+      this.isLoading = false;
+    });
   }
 
   deleteEntity() {
@@ -55,15 +62,12 @@ export class UserManagementComponent implements OnInit {
     dialogRef.afterClosed().subscribe((closeAction) => {
       if (closeAction === 'delete') {
         this.userService.delete(this.user.id).subscribe(() => {
-          this.translateService
-            .get('admin-area.user-deleted')
-            .subscribe((message) =>
-              this.notificationService.showAdvanced(
-                message,
-                AdvancedSnackBarTypes.WARNING
-              )
-            );
-          this.user = null;
+          const msg = this.translateService.instant('admin-area.user-deleted');
+          this.notificationService.showAdvanced(
+            msg,
+            AdvancedSnackBarTypes.WARNING
+          );
+          this.clear();
         });
       }
     });
@@ -85,15 +89,26 @@ export class UserManagementComponent implements OnInit {
   }
 
   addAccount() {
-    this.adminService.addAccount(this.newLoginId).subscribe(() => {
-      this.translateService
-        .get('admin-area.account-added')
-        .subscribe((message) =>
-          this.notificationService.showAdvanced(
-            message,
-            AdvancedSnackBarTypes.SUCCESS
-          )
-        );
+    const dialogRef = this.dialog.open(InputDialogComponent, {
+      data: {
+        inputName: 'login-id',
+        primaryAction: 'add-account',
+      },
+    });
+    dialogRef.afterClosed().subscribe((loginId) => {
+      if (!loginId) {
+        return;
+      }
+      this.adminService.addAccount(loginId).subscribe(() => {
+        this.translateService
+          .get('admin-area.account-added')
+          .subscribe((message) =>
+            this.notificationService.showAdvanced(
+              message,
+              AdvancedSnackBarTypes.SUCCESS
+            )
+          );
+      });
     });
   }
 }

@@ -1,0 +1,32 @@
+<mat-form-field appearance="outline">
+  <mat-label>{{ label }}</mat-label>
+  <input
+    matInput
+    [formControl]="formControl"
+    [matAutocomplete]="auto"
+    #searchField
+  />
+  <mat-icon
+    [ngClass]="showSuccessIndicator ? 'check-icon' : 'search-icon'"
+    matIconPrefix
+    >{{ showSuccessIndicator ? 'check' : 'search' }}</mat-icon
+  >
+  <button
+    *ngIf="searchField.value"
+    matSuffix
+    mat-icon-button
+    class="clear-button"
+    (click)="clear()"
+  >
+    <mat-icon>close</mat-icon>
+  </button>
+  <mat-autocomplete
+    (optionSelected)="selectItem($event.option.value)"
+    #auto="matAutocomplete"
+    panelWidth="350px"
+  >
+    <mat-option *ngFor="let result of results" [value]="result">
+      {{ result }}
+    </mat-option>
+  </mat-autocomplete>
+</mat-form-field>

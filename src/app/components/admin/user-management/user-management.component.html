@@ -1,75 +1,40 @@
-<mat-card>
-  <mat-card-title>
-    {{ 'admin-area.user-management' | translate }}
-  </mat-card-title>
-  <div fxLayout="column" fxLayoutGap="16px">
-    <div
-      *ngIf="showAccountAdding"
-      fxLayout="row"
-      fxLayoutAlign="start center"
-      fxLayoutGap="10px"
+<app-admin-page-header
+  headerText="user-management"
+  [buttonText]="addButtonText"
+  buttonIcon="add"
+  (buttonClicked)="addAccount()"
+>
+</app-admin-page-header>
+
+<app-search-bar
+  label="{{ 'admin-area.search-account-with-id' | translate }}"
+  [results]="searchResults"
+  (inputChanged)="search($event)"
+  (inputCleared)="clear()"
+  (itemSelected)="getUser($event)"
+></app-search-bar>
+
+<app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
+<mat-card
+  appearance="outlined"
+  *ngIf="user && !isLoading"
+  fxLayout="column"
+  fxLayoutGap="16px"
+>
+  <app-entity-properties [entity]="user"></app-entity-properties>
+  <div fxLayoutAlign="space-between">
+    <button mat-stroked-button color="warn" (click)="deleteEntity()">
+      <mat-icon>delete</mat-icon>
+      {{ 'admin-area.delete-user' | translate }}
+    </button>
+    <button
+      mat-raised-button
+      color="primary"
+      [disabled]="user.account?.activated"
+      (click)="activateUser()"
     >
-      <mat-form-field
-        appearance="outline"
-        floatLabel="always"
-        fxFlex="auto"
-        class="no-field-hint"
-      >
-        <mat-label>{{ 'admin-area.new-account' | translate }}</mat-label>
-        <input
-          matNativeControl
-          [(ngModel)]="newLoginId"
-          placeholder="{{ 'admin-area.enter-email' | translate }}"
-        />
-      </mat-form-field>
-      <button mat-raised-button color="primary" (click)="addAccount()">
-        {{ 'admin-area.add' | translate }}
-      </button>
-    </div>
-    <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="16px">
-      <app-user-search-field
-        label="{{ 'admin-area.user-id' | translate }}"
-        (submitted)="loadEntity($event)"
-        fxFlex="50"
-        class="no-field-hint"
-      ></app-user-search-field>
-      <mat-form-field
-        appearance="outline"
-        floatLabel="always"
-        class="no-field-hint"
-      >
-        <mat-label>{{ 'admin-area.user-login-id' | translate }}</mat-label>
-        <input
-          matNativeControl
-          disabled="disabled"
-          [value]="user?.loginId"
-          placeholder="{{ 'admin-area.no-user-selected' | translate }}"
-        />
-        <mat-icon matPrefix>assignment_ind</mat-icon>
-      </mat-form-field>
-      <button mat-icon-button (click)="clear()">
-        <mat-icon>clear</mat-icon>
-      </button>
-    </div>
-    <mat-expansion-panel *ngIf="user">
-      <mat-expansion-panel-header>{{
-        'admin-area.properties' | translate
-      }}</mat-expansion-panel-header>
-      <app-entity-properties [entity]="user"></app-entity-properties>
-    </mat-expansion-panel>
-    <div *ngIf="user">
-      <button
-        mat-button
-        (click)="activateUser()"
-        [disabled]="user.account?.activated"
-      >
-        <mat-icon aria-hidden="false">lock_open</mat-icon>
-        {{ 'admin-area.activate-user' | translate }}
-      </button>
-      <button mat-button (click)="deleteEntity()">
-        <mat-icon aria-hidden="false">delete</mat-icon>
-        {{ 'admin-area.delete-user' | translate }}
-      </button>
-    </div>
+      <mat-icon>lock_open</mat-icon>
+      {{ 'admin-area.activate-user' | translate }}
+    </button>
   </div>
 </mat-card>

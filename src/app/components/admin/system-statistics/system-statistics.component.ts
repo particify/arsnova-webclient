@@ -1,21 +1,21 @@
 import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
 import { SystemInfoService } from '../../../services/http/system-info.service';
 
 @Component({
   selector: 'app-system-statistics',
   templateUrl: './system-statistics.component.html',
+  styleUrls: ['../admin-styles.scss'],
 })
 export class SystemStatisticsComponent implements OnInit {
-  stats: Observable<any>;
+  stats: object;
+  isLoading = true;
 
   constructor(protected systemInfoService: SystemInfoService) {}
 
   ngOnInit() {
-    this.stats = this.getStats();
-  }
-
-  getStats() {
-    return this.systemInfoService.getServiceStats();
+    this.systemInfoService.getServiceStats().subscribe((stats) => {
+      this.stats = stats;
+      this.isLoading = false;
+    });
   }
 }

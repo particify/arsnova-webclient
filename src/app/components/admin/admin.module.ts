@@ -17,6 +17,11 @@ import { TRANSLATION_MODULE_NAME } from '../../translate-module-name-token';
 import { TranslateHttpLoaderFactory } from '../../translate-http-loader-factory';
 import { AdminService } from '../../services/http/admin.service';
 import { ExtensionPointModule } from '../../../../projects/extension-point/src/lib/extension-point.module';
+import { AdminPageHeaderComponent } from './admin-page-header/admin-page-header.component';
+import { SearchBarComponent } from './search-bar/search-bar.component';
+import { InputDialogComponent } from './_dialogs/input-dialog/input-dialog.component';
+import { HealthStatusComponent } from './health-status/health-status.component';
+import { UserSearchComponent } from './user-search/user-search.component';
 
 @NgModule({
   imports: [
@@ -43,6 +48,11 @@ import { ExtensionPointModule } from '../../../../projects/extension-point/src/l
     SystemStatisticsComponent,
     RoomManagementComponent,
     UserManagementComponent,
+    AdminPageHeaderComponent,
+    SearchBarComponent,
+    InputDialogComponent,
+    HealthStatusComponent,
+    UserSearchComponent,
   ],
   providers: [
     { provide: TRANSLATION_MODULE_NAME, useValue: 'admin' },

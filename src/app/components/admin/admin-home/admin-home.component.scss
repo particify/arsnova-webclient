@@ -1,6 +1,7 @@
 $drawer-width: 256px;
 $app-padding: 4vw;
 $header-height: 64px;
+$container-padding: 2em;
 
 .admin-container {
   margin-top: -$app-padding;
@@ -25,8 +26,12 @@ $header-height: 64px;
   width: calc(100% - #{$drawer-width});
 }
 
+h2 {
+  margin: 0;
+}
+
 .title {
-  padding: 16px 24px;
+  padding: 36px 24px;
 }
 
 .section-header {
@@ -56,9 +61,10 @@ $header-height: 64px;
 }
 
 .routing-container {
-  width: calc(100% - 4em);
+  width: calc(100% - $container-padding * 2);
+  max-width: 1600px;
   height: 100%;
-  background: var(--background);
-  padding: 2em;
+  background: var(--surface);
+  padding: $container-padding;
   overflow-y: auto;
 }

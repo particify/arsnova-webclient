@@ -1,8 +1,6 @@
-<mat-card>
-  <mat-card-title>
-    {{ 'admin-area.system-stats' | translate }}
-  </mat-card-title>
-  <div>
-    <app-entity-properties [entity]="stats | async"></app-entity-properties>
-  </div>
+<app-admin-page-header headerText="system-stats"> </app-admin-page-header>
+
+<app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
+<mat-card appearance="outlined" *ngIf="!isLoading">
+  <app-entity-properties [entity]="stats"></app-entity-properties>
 </mat-card>

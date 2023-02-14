@@ -1,11 +1,10 @@
-.system-health-up {
-  color: var(--green);
-}
-
-.system-health-down {
-  color: var(--red);
-}
+@import '../admin-styles';
 
 .system-health-details {
+  color: var(--grey);
   cursor: help;
+}
+
+.icon-column {
+  text-align: center;
 }

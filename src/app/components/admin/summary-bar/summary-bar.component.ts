@@ -12,8 +12,6 @@ import { Observable, of } from 'rxjs';
   styleUrls: ['./summary-bar.component.scss'],
 })
 export class SummaryBarComponent implements OnInit {
-  readonly STATUS_UP = 'UP';
-  readonly STATUS_DOWN = 'DOWN';
   healthInfo: Observable<any>;
   stats: Observable<SummarizedStats>;
 
