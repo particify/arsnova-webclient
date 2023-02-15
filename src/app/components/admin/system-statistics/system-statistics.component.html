@@ -1,6 +1,24 @@
 <app-admin-page-header headerText="system-stats"> </app-admin-page-header>
 
 <app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
-<mat-card appearance="outlined" *ngIf="!isLoading">
-  <app-entity-properties [entity]="stats"></app-entity-properties>
-</mat-card>
+
+<div *ngIf="!isLoading" fxLayout="column" fxLayoutGap="16px">
+  <mat-tab-group
+    (selectedTabChange)="selectedTab = $event.index"
+    [selectedIndex]="selectedTab"
+    [dynamicHeight]="true"
+  >
+    <mat-tab
+      *ngFor="let tab of tabs"
+      [label]="'admin-area.' + tab | translate"
+    ></mat-tab>
+  </mat-tab-group>
+
+  <mat-card appearance="outlined">
+    <app-entity-properties
+      [entity]="stats[tabs[selectedTab]]"
+      [translateKeys]="true"
+      [expandOnInit]="tabs[selectedTab] !== 'summary'"
+    ></app-entity-properties>
+  </mat-card>
+</div>
