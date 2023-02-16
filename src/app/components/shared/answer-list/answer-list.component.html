@@ -16,7 +16,7 @@
           >x {{ answer.count }}</span
         >
         <button
-          *ngIf="isModerator && (answer.id || banMode)"
+          *ngIf="isModerator && (answer.id || banMode) && !isPresentation"
           mat-icon-button
           class="delete-button"
           (click)="addToModerationList(answer)"
