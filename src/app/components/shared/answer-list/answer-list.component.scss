@@ -1,10 +1,13 @@
+.list-item {
+  &:not(:first-of-type) {
+    border-top: 1px solid var(--border);
+  }
+
+  padding: 12px 16px;
+}
+
 .answer {
-  color: var(--on-surface);
-  flex: 1;
-  min-height: 48px;
-  display: inline-flex;
-  align-items: center;
-  margin: 8px 0;
+  word-break: break-word;
 }
 
 .count {
@@ -26,8 +29,8 @@
   }
 }
 
-.moderation.mat-mdc-list-item:hover,
-.moderation.mat-list-item:focus-within {
+.moderation:hover,
+.moderation:focus-within {
   background-color: var(--surface);
   filter: brightness(97%);
 
