@@ -23,6 +23,9 @@
               "src/robots.txt"
             ],
             "styles": ["src/fonts.scss", "src/styles.scss"],
+            "stylePreprocessorOptions": {
+              "includePaths": ["src/theme/arsnova-theme/default/"]
+            },
             "scripts": [],
             "vendorChunk": true,
             "extractLicenses": false,
@@ -84,6 +87,9 @@
             "scripts": [],
             "inlineStyleLanguage": "scss",
             "styles": ["src/fonts.scss", "src/styles.scss"],
+            "stylePreprocessorOptions": {
+              "includePaths": ["src/theme/arsnova-theme/default/"]
+            },
             "assets": [
               "src/assets",
               "src/favicon.ico",
