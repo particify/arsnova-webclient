@@ -1,12 +1,7 @@
 @use '@angular/material' as mat;
 @use 'sass:color';
 @import '../../variables';
-
-$primary: #5e35b1 !default;
-$on-primary: #fff !default;
-
-$accent: #2e7d32 !default;
-$on-accent: #fff !default;
+@import 'theme-variables';
 
 $primary-palette: (
   50: color.adjust($primary, $lightness: 90%),
