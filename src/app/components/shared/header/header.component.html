@@ -34,7 +34,7 @@
         (click)="navToUserHome()"
         tabindex="0"
       >
-        <mat-icon class="icon-primary">home</mat-icon>
+        <mat-icon color="primary">home</mat-icon>
         <span>{{ 'header.my-rooms' | translate }}</span>
       </button>
       <button
@@ -43,7 +43,7 @@
         mat-menu-item
         (click)="navToLogin()"
       >
-        <mat-icon class="icon-primary">exit_to_app</mat-icon>
+        <mat-icon color="primary">exit_to_app</mat-icon>
         <span>{{ 'header.login' | translate }}</span>
       </button>
       <a
@@ -108,7 +108,7 @@
         mat-menu-item
         (click)="logout()"
       >
-        <mat-icon class="icon-warn">exit_to_app</mat-icon>
+        <mat-icon color="warn">exit_to_app</mat-icon>
         <span>{{ 'header.logout' | translate }}</span>
       </button>
     </mat-menu>
@@ -125,32 +125,27 @@
         (click)="changeTheme(theme)"
         title="{{ theme.toString(lang) }}"
         appTrackInteraction="Theme switched"
-        [appTrackName]="theme.key"
+        [appTrackName]="theme"
       >
-        <div fxLayout="row">
-          <mat-icon
-            fxFlex="noshrink"
-            class="color"
-            [ngStyle]="{ color: theme.getPreviewColor() }"
-            >lens</mat-icon
-          >
-          <mat-icon
-            class="checked"
-            *ngIf="theme.key === themeClass"
-            [ngStyle]="{ color: theme.getOnPreviewColor() }"
-          >
-            checked
-          </mat-icon>
+        <div fxLayout="row" fxLayoutGap="16px">
+          <div fxLayoutAlign="center center" class="color color-{{ theme }}">
+            <mat-icon
+              class="checked checked-{{ theme }}"
+              *ngIf="theme === currentTheme"
+            >
+              checked
+            </mat-icon>
+          </div>
           <div
             fxLayout="column"
             fxLayoutAlign="center"
             class="color-text-container"
           >
+            <!-- Name below can be loaded from config later -->
             <span class="item-title color-title">{{
-              theme.getName(lang)
-            }}</span>
-            <span class="color-description" *ngIf="deviceWidth > 600">{{
-              theme.getDescription(lang)
+              theme === 'arsnova'
+                ? 'ARSnova'
+                : ('header.dark-theme' | translate)
             }}</span>
           </div>
         </div>
@@ -202,10 +197,9 @@
         <div fxLayout="row" fxLayoutGap="10px" class="desktop-action-container">
           <button
             mat-button
-            class="preview-button"
+            color="{{ isPreview ? 'primary' : '' }}"
             (click)="switchRole()"
             aria-labelledby="switch-role"
-            [ngClass]="{ 'back-to-edit nav-button': isPreview }"
           >
             <mat-icon>{{ isPreview ? 'edit' : 'preview' }}</mat-icon>
             {{
@@ -216,7 +210,6 @@
             *ngIf="hasRole(UserRole.CREATOR)"
             [disabled]="isPreview"
             mat-button
-            class="preview-button"
             (click)="goToSettings()"
           >
             <mat-icon>settings</mat-icon>
@@ -226,7 +219,7 @@
             *ngIf="hasRole(UserRole.CREATOR)"
             [disabled]="isPreview"
             mat-raised-button
-            class="button-primary"
+            color="primary"
             [matMenuTriggerFor]="
               openPresentationDirectly ? hideMenu : presentationMenu
             "
@@ -248,7 +241,7 @@
           <button
             *ngIf="isPreview"
             mat-icon-button
-            class="icon-primary"
+            color="primary"
             (click)="switchRole()"
             aria-labelledby="switch-role"
           >
@@ -299,6 +292,7 @@
             ) | translate
           "
           matBadge="{{ announcementState.new }}"
+          matBadgeColor="accent"
           [matBadgeHidden]="announcementState.new === 0"
           appHotkey="a"
         >
@@ -306,7 +300,7 @@
         </button>
         <button
           mat-icon-button
-          class="user-button"
+          class="user-button primary-variant"
           [matMenuTriggerFor]="userMenu"
           aria-labelledby="room-label"
           id="menu-button"

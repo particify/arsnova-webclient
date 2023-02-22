@@ -49,20 +49,32 @@
       </mat-select>
     </mat-form-field>
     <button
+      [hidden]="canBeAdded()"
       mat-stroked-button
-      class="stroked-primary add-user-button"
-      [ngClass]="{ 'btn-animated': canBeAdded() }"
+      color="primary"
+      class="add-user-button"
       (click)="addModerator()"
       [disabled]="isGuest || !currentInputIsChecked || loginId.length === 0"
       id="add-button"
+      appTrackInteraction="Room member role invited"
+      [appTrackName]="selectedRole.name"
+    >
+      <mat-icon>mail</mat-icon>
+      {{ 'settings.invite-user' | translate }}
+    </button>
+    <button
+      [hidden]="!canBeAdded()"
+      mat-raised-button
+      color="primary"
+      class="add-user-button"
+      (click)="addModerator()"
+      [disabled]="isGuest || !currentInputIsChecked || loginId.length === 0"
+      id="invite-button"
       appTrackInteraction="Room member role assigned"
       [appTrackName]="selectedRole.name"
     >
-      <mat-icon>{{ canBeAdded() ? 'add' : 'mail' }}</mat-icon>
-      {{
-        (canBeAdded() ? 'settings.add-user' : 'settings.invite-user')
-          | translate
-      }}
+      <mat-icon>add</mat-icon>
+      {{ 'settings.add-user' | translate }}
     </button>
   </div>
   <app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
@@ -80,8 +92,9 @@
             class="user-character-container"
             fxLayoutAlign="center center"
             [ngClass]="{
-              'role-moderator': moderator.role === UserRole.EXECUTIVE_MODERATOR,
-              'role-creator': moderator.role === UserRole.CREATOR,
+              'secondary secondary-variant':
+                moderator.role === UserRole.EXECUTIVE_MODERATOR,
+              'primary primary-variant': moderator.role === UserRole.CREATOR,
               'role-participant': moderator.role === UserRole.PARTICIPANT
             }"
           >
@@ -105,6 +118,7 @@
         <div fxLayout="row" fxLayoutAlign="center center">
           <button
             mat-icon-button
+            color="warn"
             *ngIf="moderator.role !== UserRole.CREATOR"
             class="close"
             (click)="openDeleteRoomDialog(moderator)"
@@ -114,7 +128,7 @@
                 | translate : { loginId: moderator.loginId }
             }}"
           >
-            <mat-icon class="close-icon">close</mat-icon>
+            <mat-icon>close</mat-icon>
           </button>
         </div>
       </div>

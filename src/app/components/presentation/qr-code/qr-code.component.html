@@ -15,7 +15,9 @@
     <div class="qr-container">
       <h1 class="text" fxLayout="column" fxLayoutAlign="center center">
         <lib-extension-point extensionId="branding-logo">
-          <mat-icon class="web-icon disabled">language</mat-icon>
+          <mat-icon color="primary" class="web-icon disabled"
+            >language</mat-icon
+          >
         </lib-extension-point>
         <span *ngIf="!useJoinUrl" class="url">{{ displayUrl }}</span>
         <span class="url">{{

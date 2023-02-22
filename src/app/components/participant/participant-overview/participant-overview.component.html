@@ -36,6 +36,7 @@
             <button
               id="comments-button"
               mat-icon-button
+              color="primary"
               class="main-button no-ripple"
               [disableRipple]="true"
               [routerLink]="['comments']"
@@ -43,7 +44,11 @@
               appHotkey="1"
               [appHotkeyTitle]="'room-page.comments' | translate"
             >
-              <mat-icon matBadge="{{ commentCounter }}" class="main-icon">
+              <mat-icon
+                matBadge="{{ commentCounter }}"
+                matBadgeColor="accent"
+                class="main-icon"
+              >
                 question_answer
               </mat-icon>
               <p class="button-text">
@@ -58,6 +63,7 @@
           >
             <button
               mat-icon-button
+              color="primary"
               class="main-button no-ripple"
               id="live-survey-button"
               aria-labelledby="live-survey"

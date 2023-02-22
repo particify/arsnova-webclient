@@ -9,6 +9,7 @@
       fxLayoutAlign="center center"
       class="item nav-button"
       mat-button
+      color="{{ i === currentRouteIndex ? 'primary' : '' }}"
       [id]="barItem.name + '-button'"
       [ngClass]="{ current: i === currentRouteIndex }"
       (click)="navToUrl(i)"
@@ -44,7 +45,8 @@
           >
             <span
               [ngClass]="{
-                current: group.name === groupName && i === currentRouteIndex
+                'current primary':
+                  group.name === groupName && i === currentRouteIndex
               }"
               >{{ group.name }}</span
             >

@@ -6,10 +6,6 @@
   margin: 1.5em 0;
 }
 
-.close-icon {
-  color: var(--warn);
-}
-
 .form-container > * {
   margin-top: 16px;
 }
@@ -22,9 +18,6 @@
 }
 
 .add-user-button {
-  transition: 0.3s;
-  box-shadow: inset 0 0 0 0 var(--primary);
-  max-width: 140px;
   height: 56px !important;
 }
 
@@ -39,22 +32,6 @@
   font-size: 18px;
 }
 
-.role-moderator {
-  background-color: var(--secondary-variant);
-
-  > * {
-    color: var(--secondary);
-  }
-}
-
-.role-creator {
-  background-color: var(--primary-variant);
-
-  > * {
-    color: var(--primary);
-  }
-}
-
 .role-chip {
   opacity: 0.8;
 
@@ -66,10 +43,4 @@
 
 .guest-hint {
   margin-top: 1em;
-}
-
-.btn-animated:not([disabled]) {
-  box-shadow: inset 140px 0 0 0 var(--primary);
-  border: none;
-  color: var(--on-primary);
 }

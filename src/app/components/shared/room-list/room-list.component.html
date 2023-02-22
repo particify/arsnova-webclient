@@ -16,7 +16,8 @@
         <div fxLayout="row" fxLayoutGap="10px" class="button-container">
           <button
             mat-raised-button
-            class="button-primary desktop-buttons"
+            color="primary"
+            class="desktop-buttons"
             (click)="openCreateRoomDialog()"
             id="create-room-button"
             appHotkey="2"
@@ -67,7 +68,7 @@
           mat-menu-item
           (click)="getGuestRooms()"
         >
-          <mat-icon class="icon-primary">swap_horiz</mat-icon>
+          <mat-icon color="primary">swap_horiz</mat-icon>
           <span>{{ 'room-list.rooms-from-guest' | translate }}</span>
         </button>
         <lib-extension-point extensionId="import-token"></lib-extension-point>
@@ -98,7 +99,8 @@
         <h3 class="hint">{{ 'room-list.no-rooms-found' | translate }}</h3>
         <button
           mat-stroked-button
-          class="stroked-primary alt-button"
+          color="primary"
+          class="alt-button"
           routerLink=""
         >
           {{ 'room-list.join-room' | translate }}
@@ -150,7 +152,7 @@
                 <div
                   *ngIf="isRoomActive(room.summary.stats.roomUserCount)"
                   fxLayoutAlign="center"
-                  class="active-label"
+                  class="active-label primary"
                   [matTooltip]="
                     'room-list.active-info'
                       | translate
@@ -197,6 +199,7 @@
             <div fxLayout="row" fxLayoutAlign="center center">
               <button
                 mat-icon-button
+                color="primary"
                 [matMenuTriggerFor]="moreActions"
                 aria-labelledby="more-options"
                 matTooltip="{{ 'room-list.more-options' | translate }}"
@@ -221,7 +224,7 @@
                   <span> {{ 'room-list.duplicate-room' | translate }}</span>
                 </button>
                 <button mat-menu-item (click)="openDeleteRoomDialog(room)">
-                  <mat-icon class="icon-warn">delete_forever</mat-icon>
+                  <mat-icon color="warn">delete_forever</mat-icon>
                   <span>
                     {{
                       (room.membership.primaryRole !== creatorRole
@@ -277,6 +280,7 @@
                       : null
                   }}"
                   matBadgeOverlap="false"
+                  matBadgeColor="accent"
                 >
                   {{ room.summary.name }}
                 </p>

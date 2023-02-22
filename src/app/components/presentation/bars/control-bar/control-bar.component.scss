@@ -44,13 +44,8 @@ $logo-width: 120px;
   background-color: var(--surface);
 }
 
-.active-nav-button {
-  color: var(--primary);
-
-  > * {
-    font-weight: $font-weight-bold;
-    color: var(--primary);
-  }
+.active-nav-button > * {
+  font-weight: $font-weight-bold;
 }
 
 .nav-button {
@@ -160,8 +155,7 @@ $logo-width: 120px;
   height: $bar-height;
 }
 
-.selected-menu-item span {
-  color: var(--primary);
+.selected-menu-item {
   font-weight: $font-weight-bold;
 }
 

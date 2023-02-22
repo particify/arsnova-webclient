@@ -34,35 +34,28 @@
   min-width: 30px;
   height: 30px;
   font-size: 16px;
-  background-color: var(--surface);
-  color: var(--on-surface);
-  border: 1px solid var(--surface);
   outline: 0;
   border-radius: 50%;
   padding: 6px;
   margin: 10px;
   cursor: pointer;
-}
 
-.step.active {
-  color: var(--on-primary);
-  background-color: var(--primary);
-  border: 1px solid var(--primary);
-}
+  &:not(.primary-border) {
+    border: 1px solid var(--surface);
+  }
 
-.sent {
-  color: var(--primary);
-  border: 1px solid var(--primary);
+  &:not(.primary-background) {
+    background-color: var(--surface);
+  }
+
+  &:not(.primary, .primary-background) {
+    color: var(--on-surface);
+  }
 }
 
 .mat-mdc-icon-button {
   align-self: center;
   width: max(calc(20px + 3%), 40px);
-}
-
-.arrow {
-  transition: 500ms;
-  color: var(--primary);
 }
 
 .disabled {

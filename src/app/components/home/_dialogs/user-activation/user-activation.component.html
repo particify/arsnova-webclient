@@ -24,6 +24,7 @@
     <p>{{ 'user-activation.didnt-get' | translate }}</p>
     <button
       mat-button
+      color="accent"
       class="reset"
       (click)="
         resetActivation(); $event.preventDefault(); $event.stopPropagation()
@@ -41,7 +42,7 @@
 >
   <button
     mat-flat-button
-    class="button-primary"
+    color="primary"
     (click)="login(userActivationKey.value)"
   >
     {{ 'user-activation.activate' | translate }}

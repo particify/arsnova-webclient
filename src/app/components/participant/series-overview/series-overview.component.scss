@@ -91,7 +91,10 @@ $icon-container-size: 40px;
   width: 16px;
   height: 16px;
   font-size: 16px;
-  color: var(--grey);
+
+  &:not(.primary) {
+    color: var(--grey);
+  }
 }
 
 .full-border {

@@ -40,7 +40,7 @@
                         fxLayout="row"
                         fxLayoutAlign="start center"
                         fxLayoutGap="10px"
-                        style="color: var(--primary)"
+                        class="primary"
                       >
                         <mat-icon class="format-button-icon">{{
                           selectedFormat.icon
@@ -250,7 +250,7 @@
                 <button
                   (click)="emitCreateEvent(true)"
                   attr.aria-label="{{ 'content.a11y-submit' | translate }}"
-                  class="button-primary"
+                  color="primary"
                   mat-raised-button
                 >
                   {{

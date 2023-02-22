@@ -7,12 +7,13 @@
     [ngClass]="{
       'correct-answer': checkOption(i, true),
       'wrong-answer': checkOption(i, false),
-      selected: checkedAnswer.checked && !isDisabled
+      'primary-border-color': checkedAnswer.checked && !isDisabled
     }"
   >
     <mat-checkbox
       [disabled]="true"
       *ngIf="isDisabled"
+      color="primary"
       [checked]="checkedAnswer.checked"
       name="answer"
       class="answer-checkbox choice-answer"
@@ -24,6 +25,7 @@
     </mat-checkbox>
     <mat-checkbox
       *ngIf="!isDisabled"
+      color="primary"
       [(ngModel)]="checkedAnswer.checked"
       name="answer"
       class="answer-checkbox choice-answer"
@@ -60,11 +62,12 @@
       [ngClass]="{
         'correct-answer': checkOption(i, true),
         'wrong-answer': checkOption(i, false),
-        selected: selectedAnswerIndex === i && !isDisabled
+        'primary-border-color': selectedAnswerIndex === i && !isDisabled
       }"
     >
       <mat-radio-button
         (change)="selectSingleAnswer(i)"
+        color="primary"
         class="answer-radio-button choice-answer"
         [ngClass]="{ 'answer-radio-checked': selectedAnswerIndex === i }"
         aria-label="{{ checkedAnswer.answerOption.label | translate }}"

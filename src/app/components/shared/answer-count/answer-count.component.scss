@@ -22,7 +22,6 @@
   font-size: 24px;
   font-weight: $font-weight-bold;
   margin: 0;
-  color: var(--secondary);
 }
 
 .counter-text {
@@ -45,7 +44,6 @@
 
   .counter {
     font-size: 28px;
-    color: var(--primary);
   }
 
   transition: bottom 300ms;

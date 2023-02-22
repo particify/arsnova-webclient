@@ -102,7 +102,8 @@
             <button
               mat-raised-button
               id="content-create-button"
-              class="button-primary add-desktop"
+              color="primary"
+              class="add-desktop"
               (click)="navigateToSubroute('create')"
               appHotkey="1"
               [appHotkeyTitle]="'room-page.create-content' | translate"
@@ -216,7 +217,7 @@
                 <span>{{ 'content.delete-answers' | translate }}</span>
               </button>
               <button mat-menu-item (click)="deleteGroup()">
-                <mat-icon class="icon-warn">delete_forever</mat-icon>
+                <mat-icon color="warn">delete_forever</mat-icon>
                 {{ 'content.delete-content-group' | translate }}
               </button>
             </mat-menu>
@@ -237,7 +238,7 @@
             <button
               *ngIf="isInSortingMode"
               mat-raised-button
-              class="button-primary"
+              color="primary"
               (keyup.enter)="saveSorting()"
               (click)="saveSorting()"
               appTrackInteraction="Content group sorting finished"
@@ -369,6 +370,7 @@
                     </button>
                     <button
                       mat-icon-button
+                      color="primary"
                       *ngIf="
                         content.format === 'TEXT' &&
                         !content.state.answersPublished &&
@@ -385,13 +387,12 @@
                       appTrackInteraction="Content publish text answers toggled"
                       appTrackName="on"
                     >
-                      <mat-icon class="lock-icon locked"
-                        >visibility_off</mat-icon
-                      >
+                      <mat-icon class="lock-icon">visibility_off</mat-icon>
                     </button>
                     <button
                       *ngIf="!isModerator"
                       mat-icon-button
+                      color="primary"
                       (click)="$event.stopPropagation()"
                       #publishTrigger="matMenuTrigger"
                       [matMenuTriggerFor]="publishActions"
@@ -399,7 +400,7 @@
                       [matTooltip]="'content.unlock' | translate"
                       #lockMenu
                     >
-                      <mat-icon class="lock-icon locked">lock_open</mat-icon>
+                      <mat-icon class="lock-icon">lock_open</mat-icon>
                     </button>
                     <mat-menu
                       #publishActions="matMenu"
@@ -491,12 +492,12 @@
                     <button
                       *ngIf="!isModerator"
                       mat-icon-button
+                      color="primary"
                       (keyup.enter)="menuTrigger.openMenu()"
                       #menuTrigger="matMenuTrigger"
                       [matMenuTriggerFor]="moreActions"
                       (click)="$event.stopPropagation()"
                       (menuOpened)="openedMenu(i)"
-                      class="more-button"
                       matTooltip="{{ 'content.more-options' | translate }}"
                     >
                       <mat-icon>more_vert</mat-icon>
@@ -570,7 +571,7 @@
                         }"
                       ></lib-extension-point>
                       <button mat-menu-item (click)="deleteContent(content)">
-                        <mat-icon class="icon-warn">delete_forever</mat-icon>
+                        <mat-icon color="warn">delete_forever</mat-icon>
                         <span>{{ 'content.delete-content' | translate }}</span>
                       </button>
                     </mat-menu>
