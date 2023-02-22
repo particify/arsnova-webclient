@@ -127,7 +127,7 @@ export class TrackingService {
       this.setVisitDimension(VisitDimension.UI_LANGUAGE, event.lang)
     );
     this.themeService
-      .getTheme()
+      .getCurrentTheme$()
       .subscribe((themeName) =>
         this.setVisitDimension(VisitDimension.THEME, themeName)
       );

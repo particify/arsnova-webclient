@@ -1,19 +1,22 @@
 import { DOCUMENT } from '@angular/common';
 import { Inject, Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
-import { themes, themes_meta } from './themes.const';
-import { Theme } from './Theme';
+import { BehaviorSubject, Observable } from 'rxjs';
 import {
   GlobalStorageService,
   STORAGE_KEYS,
 } from '../app/services/util/global-storage.service';
 
+export enum Theme {
+  ARSNOVA = 'arsnova',
+  DARK = 'dark',
+}
+
 @Injectable()
 export class ThemeService {
   private bodyClassList: DOMTokenList;
-  private themeName: string;
-  private activeTheme = new BehaviorSubject(null);
-  private themes: Theme[] = [];
+  private currentTheme: string;
+  private currentTheme$ = new BehaviorSubject(null);
+  private themes = [Theme.ARSNOVA, Theme.DARK];
   private barColors = [
     'blue',
     'yellow',
@@ -38,71 +41,53 @@ export class ThemeService {
     @Inject(DOCUMENT) document: Document
   ) {
     this.bodyClassList = document.body.classList;
-    let currentTheme = this.globalStorageService.getItem(STORAGE_KEYS.THEME);
-    if (!currentTheme) {
-      currentTheme = 'arsnova';
-    }
-    this.themeName = currentTheme;
-    this.activate(this.themeName);
-    // eslint-disable-next-line guard-for-in
-    for (const k in themes) {
-      this.themes.push(new Theme(k, themes[k], themes_meta[k]));
-    }
-    this.themes.sort((a, b) => {
-      if (a.order < b.order) {
-        return -1;
-      } else if (a.order > b.order) {
-        return 1;
-      }
-      return 0;
-    });
+    this.currentTheme =
+      this.globalStorageService.getItem(STORAGE_KEYS.THEME) || Theme.ARSNOVA;
+    this.activate(this.currentTheme);
   }
 
-  public getTheme() {
-    return this.activeTheme.asObservable();
+  getCurrentTheme$(): Observable<Theme> {
+    return this.currentTheme$;
   }
 
-  public getCurrentThemeName() {
-    return this.themeName;
+  getCurrentTheme(): string {
+    return this.currentTheme;
   }
 
-  public activate(name) {
-    this.activeTheme.next(name);
-    this.themeName = name;
-    this.globalStorageService.setItem(STORAGE_KEYS.THEME, name);
-    for (const theme of this.themes) {
-      this.bodyClassList.remove(`theme-${theme.key}`);
-    }
-    this.bodyClassList.add(`theme-${name}`);
+  activate(theme: string) {
+    this.bodyClassList.remove(`theme-${this.currentTheme}`);
+    this.bodyClassList.add(`theme-${theme}`);
+    this.globalStorageService.setItem(STORAGE_KEYS.THEME, theme);
+    this.currentTheme$.next(theme);
+    this.currentTheme = theme;
   }
 
-  public getThemes(): Theme[] {
+  getThemes(): Theme[] {
     return this.themes;
   }
 
-  public getThemeByKey(key: string): Theme {
-    for (let i = 0; i < this.themes.length; i++) {
-      if (this.themes[i].key === key) {
-        return this.themes[i];
-      }
-    }
-    return null;
+  getCssVariable(name: string) {
+    const computedStyle = getComputedStyle(document.body);
+    return computedStyle.getPropertyValue(name).trim();
   }
 
-  getColorArray(names: string[], prefix: string) {
-    const currentTheme = this.getThemeByKey(this.themeName);
-    return names.map((c) => currentTheme.get(prefix + '-' + c));
+  getColor(name: string) {
+    return this.getCssVariable(`--${name}`);
   }
 
-  public getBarColors() {
+  getColorArray(names: string[], prefix: string): string[] {
+    return names.map((name) => this.getCssVariable(`--${prefix}-${name}`));
+  }
+
+  getBarColors(): string[] {
     return this.getColorArray(this.barColors, 'bar');
   }
 
-  public getLikertColors() {
+  getLikertColors(): string[] {
     return this.getColorArray(this.likertColors, 'likert');
   }
 
-  getBinaryColors() {
+  getBinaryColors(): string[] {
     return this.getColorArray(this.binaryColors, 'likert');
   }
 }

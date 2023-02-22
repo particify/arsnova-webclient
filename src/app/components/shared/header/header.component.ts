@@ -16,8 +16,7 @@ import {
   GlobalStorageService,
   STORAGE_KEYS,
 } from '../../../services/util/global-storage.service';
-import { Theme } from '../../../../theme/Theme';
-import { ThemeService } from '../../../../theme/theme.service';
+import { Theme, ThemeService } from '../../../../theme/theme.service';
 import { LanguageService } from '../../../services/util/language.service';
 import { RoutingService } from '../../../services/util/routing.service';
 import { ConsentService } from '../../../services/util/consent.service';
@@ -43,8 +42,8 @@ export class HeaderComponent implements OnInit {
   role: UserRole;
   UserRole: typeof UserRole = UserRole;
 
-  themeClass: string;
-  themes: Theme[];
+  currentTheme: string;
+  themes: string[];
   deviceWidth = innerWidth;
   helpUrl: string;
   privacyUrl: string;
@@ -103,8 +102,9 @@ export class HeaderComponent implements OnInit {
           }
         }
       });
-    this.themeService.getTheme().subscribe((theme) => {
-      this.themeClass = theme;
+    this.currentTheme = this.themeService.getCurrentTheme();
+    this.themeService.getCurrentTheme$().subscribe((theme) => {
+      this.currentTheme = theme;
     });
     this.themes = this.themeService.getThemes();
     this.route.data.subscribe((data) => {
@@ -208,8 +208,8 @@ export class HeaderComponent implements OnInit {
   }
 
   changeTheme(theme: Theme) {
-    this.themeClass = theme.key;
-    this.themeService.activate(theme.key);
+    this.currentTheme = theme;
+    this.themeService.activate(theme);
   }
 
   showCookieSettings() {

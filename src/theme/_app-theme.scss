@@ -1,0 +1,75 @@
+@use '@angular/material' as mat;
+@use 'sass:map';
+
+@mixin theme($theme) {
+  $primary-palette: map.get($theme, primary);
+  $secondary-palette: map.get($theme, accent);
+  $primary: mat.get-color-from-palette($primary-palette, 600);
+  $primary-variant: mat.get-color-from-palette($primary-palette, 200);
+  $on-primary: mat.get-color-from-palette($primary-palette, default-contrast);
+  $secondary: mat.get-color-from-palette($secondary-palette, 600);
+  $on-secondary: mat.get-color-from-palette(
+    $secondary-palette,
+    default-contrast
+  );
+
+  // Primary
+
+  %primary {
+    color: $primary;
+  }
+
+  %primary-variant {
+    background-color: $primary-variant;
+  }
+
+  %primary-background {
+    background-color: $primary;
+    color: $on-primary;
+  }
+
+  %primary-border {
+    border: 1px solid $primary;
+  }
+
+  %primary-border-color {
+    border-color: $primary;
+  }
+
+  %primary-shadow {
+    box-shadow: 0 0 3px $primary;
+  }
+
+  @keyframes primary-border-lightning {
+    0% {
+      border-color: $primary;
+    }
+
+    50% {
+      border-color: $primary-variant;
+    }
+
+    100% {
+      border-color: $primary;
+    }
+  }
+
+  // Secondary
+
+  %secondary {
+    color: $secondary;
+  }
+
+  %secondary-variant {
+    background-color: mat.get-color-from-palette($secondary-palette, 100);
+  }
+
+  %secondary-background {
+    background-color: $secondary;
+    color: $on-secondary;
+  }
+
+  %on-secondary {
+    color: $on-secondary;
+  }
+}

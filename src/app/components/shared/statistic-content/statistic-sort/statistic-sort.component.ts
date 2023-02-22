@@ -216,7 +216,7 @@ export class StatisticSortComponent
     const barColors = this.themeService.getBarColors();
     const length = this.answerIndexes.length;
     for (let i = 0; i < length; i++) {
-      this.colors[i] = barColors[i % barColors.length].color;
+      this.colors[i] = barColors[i % barColors.length];
       this.indicationColors[i] = this.checkIfCorrect(i)
         ? this.colors[i]
         : this.grey;
@@ -228,17 +228,11 @@ export class StatisticSortComponent
   }
 
   initChart() {
-    this.themeService
-      .getTheme()
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe((theme) => {
-        const currentTheme = this.themeService.getThemeByKey(theme);
-        this.onSurface = currentTheme.get('on-surface').color;
-        this.surface = currentTheme.get('surface').color;
-        this.green = currentTheme.get('green').color;
-        this.grey = currentTheme.get('grey').color;
-        this.setColors();
-      });
+    this.onSurface = this.themeService.getColor('on-surface');
+    this.surface = this.themeService.getColor('surface');
+    this.green = this.themeService.getColor('green');
+    this.grey = this.themeService.getColor('grey');
+    this.setColors();
   }
 
   createChart() {

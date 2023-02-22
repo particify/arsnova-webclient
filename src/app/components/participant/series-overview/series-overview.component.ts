@@ -72,7 +72,7 @@ export class SeriesOverviewComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.hasAnsweredLastContent =
       this.contentCarouselService.isLastContentAnswered();
-    this.getColors();
+    this.updateColors();
     this.authService.getCurrentAuthentication().subscribe((auth) => {
       this.auth = auth;
       this.init();
@@ -144,12 +144,9 @@ export class SeriesOverviewComponent implements OnInit, OnDestroy {
     });
   }
 
-  private getColors() {
-    const theme = this.themeService.getThemeByKey(
-      this.themeService.getCurrentThemeName()
-    );
-    this.colors.background = theme.get('background').color;
-    this.colors.chart = theme.get('green').color;
+  private updateColors() {
+    this.colors.background = this.themeService.getColor('background');
+    this.colors.chart = this.themeService.getColor('green');
   }
 
   private checkIfLastContentIsLoaded() {

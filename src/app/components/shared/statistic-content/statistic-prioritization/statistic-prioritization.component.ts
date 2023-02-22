@@ -275,15 +275,12 @@ export class StatisticPrioritizationComponent
 
   initAnswerOptions(answerIndex: number) {
     const barColors = this.themeService.getBarColors();
-    this.chartColors[answerIndex] =
-      barColors[answerIndex % barColors.length].color;
+    this.chartColors[answerIndex] = barColors[answerIndex % barColors.length];
   }
 
   initChart() {
     const length = this.options.length;
-    const theme = this.themeService.getCurrentThemeName();
-    const currentTheme = this.themeService.getThemeByKey(theme);
-    this.getColors(currentTheme);
+    this.getColors();
     for (let i = 0; i < length; i++) {
       this.initAnswerOptions(i);
     }

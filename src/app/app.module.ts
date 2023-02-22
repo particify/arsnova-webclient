@@ -31,7 +31,6 @@ import { LanguageService } from './services/util/language.service';
 import { HomePageComponent } from './components/home/home-page/home-page.component';
 import { UserHomeComponent } from './components/home/user-home/user-home.component';
 import { AppConfig } from './app.config';
-import { ThemeModule } from '../theme/theme.module';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 import { extensions } from '../environments/extensions';
@@ -117,7 +116,6 @@ export function initializeApp(appConfig: AppConfig) {
     BrowserAnimationsModule,
     EssentialsModule,
     SharedModule,
-    ThemeModule,
     MatIconModule,
     HttpClientModule,
     ServiceWorkerModule.register('ngsw-worker.js', {
