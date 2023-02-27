@@ -10,14 +10,10 @@ import {
   Params,
   UrlTree,
 } from '@angular/router';
-import { Theme } from '@arsnova/theme/Theme';
 import { EventEmitter } from '@angular/core';
-import {
-  arsnova,
-  arsnova_meta,
-} from '../theme/arsnova-theme/arsnova-theme.const';
 import * as TRANSLATION_DE from '../assets/i18n/home/de.json';
 import * as TRANSLATION_EN from '../assets/i18n/home/en.json';
+import { Theme } from '@arsnova/theme/theme.service';
 
 // SERVICES - UTIL
 
@@ -177,47 +173,35 @@ export class MockLangService {
 // ThemeService
 
 export class MockThemeService {
-  private activeTheme = new BehaviorSubject(null);
-  private themes: Theme[];
+  private currentTheme$ = new BehaviorSubject(null);
+  private themes: string[];
 
-  getTheme(): Observable<any> {
-    return this.activeTheme.asObservable();
+  getCurrentTheme$(): Observable<Theme> {
+    return this.currentTheme$;
   }
 
-  public getThemes(): Theme[] {
+  getThemes(): string[] {
     return this.themes;
   }
 
-  public activate(name) {
-    this.activeTheme.next(name);
+  activate(name) {
+    this.currentTheme$.next(name);
   }
 
-  getCurrentThemeName() {
-    return 'ARSnova';
+  getColor(name: string) {
+    return '#FFFFFF';
   }
 
-  getThemeByKey(key: string) {
-    return new Theme(key, arsnova, arsnova_meta);
+  getCurrentTheme() {
+    return 'arsnova';
   }
 
   getBarColors() {
-    return [
-      {
-        color: '#FFFFFFF',
-        name: 'test',
-        attr: 'attr',
-      },
-    ];
+    return ['#FFFFFFF'];
   }
 
   getLikertColors() {
-    return [
-      {
-        color: '#FFFFFFF',
-        name: 'test',
-        attr: 'attr',
-      },
-    ];
+    return ['#FFFFFFF'];
   }
 }
 

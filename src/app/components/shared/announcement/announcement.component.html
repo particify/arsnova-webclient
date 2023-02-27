@@ -4,7 +4,7 @@
     <div
       fxLayoutAlign="center center"
       *ngIf="!!label"
-      class="label-container new-container"
+      class="label-container secondary-background"
     >
       <span class="label-text new-label">{{
         'announcement.' + label | translate
@@ -25,7 +25,7 @@
         {{ 'announcement.edit' | translate }}
       </button>
       <button mat-menu-item (click)="delete()">
-        <mat-icon class="icon-warn">delete</mat-icon>
+        <mat-icon color="warn">delete</mat-icon>
         {{ 'announcement.delete' | translate }}
       </button>
     </mat-menu>

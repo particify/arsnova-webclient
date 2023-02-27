@@ -48,16 +48,11 @@ $header-height: 64px;
     margin-right: 8px;
   }
 
-  &:not(.active-page) {
+  &:not(.primary-variant) {
     .mat-icon {
       opacity: 0.6;
     }
   }
-}
-
-.active-page {
-  color: var(--primary) !important;
-  background-color: var(--primary-variant);
 }
 
 .routing-container {

@@ -9,7 +9,8 @@
             mat-button
             class="nav-button"
             (click)="changePage('status')"
-            [ngClass]="{ 'active-page': currentPage === 'status' }"
+            color="{{ currentPage === 'status' ? 'primary' : '' }}"
+            [ngClass]="{ 'primary-variant': currentPage === 'status' }"
           >
             <mat-icon>dns</mat-icon>
             {{ 'admin-area.status-details' | translate }}
@@ -18,7 +19,8 @@
             mat-button
             class="nav-button"
             (click)="changePage('stats')"
-            [ngClass]="{ 'active-page': currentPage === 'stats' }"
+            color="{{ currentPage === 'stats' ? 'primary' : '' }}"
+            [ngClass]="{ 'primary-variant': currentPage === 'stats' }"
           >
             <mat-icon>insights</mat-icon>
             {{ 'admin-area.system-stats' | translate }}
@@ -27,7 +29,8 @@
             mat-button
             class="nav-button"
             (click)="changePage('users')"
-            [ngClass]="{ 'active-page': currentPage === 'users' }"
+            color="{{ currentPage === 'users' ? 'primary' : '' }}"
+            [ngClass]="{ 'primary-variant': currentPage === 'users' }"
           >
             <mat-icon>people</mat-icon>
             {{ 'admin-area.manage-accounts' | translate }}
@@ -36,7 +39,8 @@
             mat-button
             class="nav-button"
             (click)="changePage('rooms')"
-            [ngClass]="{ 'active-page': currentPage === 'rooms' }"
+            color="{{ currentPage === 'rooms' ? 'primary' : '' }}"
+            [ngClass]="{ 'primary-variant': currentPage === 'rooms' }"
           >
             <mat-icon>room_preferences</mat-icon>
             {{ 'admin-area.manage-rooms' | translate }}

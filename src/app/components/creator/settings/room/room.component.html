@@ -82,7 +82,7 @@
   <div fxLayout="row">
     <button
       mat-stroked-button
-      class="stroked-warn"
+      color="warn"
       (click)="openDeleteRoomDialog()"
       aria-labelledby="delete-room"
     >
@@ -97,7 +97,8 @@
         (description === editRoom.description ||
           (description === '' && editRoom.description === undefined))
       "
-      class="button-primary update"
+      color="primary"
+      class="update"
       (click)="saveChanges()"
       aria-labelledby="save"
     >

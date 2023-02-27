@@ -50,7 +50,7 @@
           class="nav-button"
           *ngFor="let barItem of barItems; let i = index"
           (click)="updateFeature(barItem.name)"
-          [ngClass]="{ 'active-nav-button': i === currentRouteIndex }"
+          [ngClass]="{ 'active-nav-button primary': i === currentRouteIndex }"
           fxLayout="column"
           fxLayoutAlign="center center"
           [matTooltip]="
@@ -95,11 +95,15 @@
             [disabled]="contentGroup.contentIds?.length < 1"
             (click)="changeGroup(contentGroup)"
             [ngClass]="{
-              'selected-menu-item': contentGroup.name === groupName,
               'locked-group': !contentGroup.published
             }"
           >
-            <span>{{ contentGroup.name }}</span>
+            <span
+              [ngClass]="{
+                'selected-menu-item primary': contentGroup.name === groupName
+              }"
+              >{{ contentGroup.name }}</span
+            >
             <mat-icon *ngIf="!contentGroup.published" class="locked-icon"
               >locked</mat-icon
             >

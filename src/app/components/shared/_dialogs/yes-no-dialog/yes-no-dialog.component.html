@@ -15,7 +15,7 @@
   </button>
   <button
     mat-flat-button
-    class="{{ data.type }}"
+    color="{{ data.type === 'button-primary' ? 'primary' : 'warn' }}"
     aria-labelledby="submit"
     (click)="closeDialog(data.confirmLabel)"
   >

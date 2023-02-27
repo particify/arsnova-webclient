@@ -4,10 +4,11 @@
   fxLayoutAlign="space-between"
   id="comment-card"
   [ngClass]="{
-    highlighted: comment.highlighted && !isPresentation,
+    'highlighted secondary-background on-secondary':
+      comment.highlighted && !isPresentation,
     'mat-elevation-z2': inAnswerView,
     'presentation-comment': isPresentation,
-    active: comment.highlighted && isPresentation
+    'primary-shadow-always': comment.highlighted && isPresentation
   }"
   [@slide]="isNew ? slideAnimationState : null"
   (@slide.done)="changeSlideState()"
@@ -100,10 +101,11 @@
       <button
         *ngIf="isModeratorView"
         mat-icon-button
+        color="primary"
         (click)="setAck()"
         [matTooltip]="'comment-page.reject' | translate"
       >
-        <mat-icon class="icon-primary">lock_open</mat-icon>
+        <mat-icon>lock_open</mat-icon>
       </button>
       <button
         mat-icon-button
@@ -120,11 +122,12 @@
       </button>
       <button
         mat-icon-button
+        color="warn"
         *ngIf="(isCreator || isModerator) && archived"
         (click)="openDeleteCommentDialog()"
         [matTooltip]="'comment-page.delete' | translate"
       >
-        <mat-icon class="icon-warn">delete </mat-icon>
+        <mat-icon>delete </mat-icon>
       </button>
       <mat-menu #actionsMenu="matMenu" xPosition="before">
         <button mat-menu-item (click)="answerComment()">
@@ -170,11 +173,11 @@
           mat-menu-item
           (click)="openDeleteCommentDialog()"
         >
-          <mat-icon class="icon-warn">delete</mat-icon>
+          <mat-icon color="warn">delete</mat-icon>
           <span>{{ 'comment-page.delete' | translate }}</span>
         </button>
         <button *ngIf="!isModeratorView" mat-menu-item (click)="setAck()">
-          <mat-icon class="icon-primary">{{
+          <mat-icon color="primary">{{
             comment.ack ? 'gavel' : 'lock_open'
           }}</mat-icon>
           <span>{{
@@ -220,7 +223,11 @@
       ></span>
       <div *ngIf="!isParticipant" fxLayout="row" fxLayoutAlign="start end">
         <mat-icon class="vote-icon">thumb_up</mat-icon>
-        <span class="score-creator">{{ comment.score }}</span>
+        <span
+          class="score-creator"
+          [ngClass]="{ 'on-secondary': comment.highlighted }"
+          >{{ comment.score }}</span
+        >
       </div>
     </div>
   </div>

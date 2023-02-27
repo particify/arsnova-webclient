@@ -1,13 +1,5 @@
 @import '../../../../variables';
 
-.mat-mdc-icon-button {
-  color: var(--primary);
-}
-
-.mat-mdc-list {
-  background-color: var(--surface);
-}
-
 .container {
   height: 100%;
   width: calc(100% - 40px);
@@ -125,7 +117,6 @@
     border-radius: 4px;
     border-width: 2px;
     border-style: solid;
-    color: var(--primary);
 
     span {
       text-transform: uppercase;
@@ -133,26 +124,12 @@
       font-weight: $font-weight-bold;
     }
 
-    animation: active-room 2s infinite;
+    animation: primary-border-lightning 2s infinite;
   }
 }
 
 @media (max-width: 599px) {
   .active-label * {
     display: none;
-  }
-}
-
-@keyframes active-room {
-  0% {
-    border-color: var(--primary);
-  }
-
-  50% {
-    border-color: var(--primary-variant);
-  }
-
-  100% {
-    border-color: var(--primary);
   }
 }

@@ -10,7 +10,7 @@
         *ngIf="confirmButtonClickAction !== undefined"
         type="button"
         mat-flat-button
-        class="mat-flat-button {{ confirmButtonType }}-confirm-button"
+        color="{{ confirmButtonType === 'primary' ? 'primary' : 'warn' }}"
         attr.aria-labelledby="{{ ariaPrefix + 'confirm' | translate }}"
         (click)="performConfirmButtonClickAction()"
       >

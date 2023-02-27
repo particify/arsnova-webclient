@@ -19,12 +19,11 @@
 }
 
 .presentation-comment {
-  box-shadow: none;
-  max-width: 100%;
-}
+  &:not(.primary-shadow-always) {
+    box-shadow: none;
+  }
 
-.presentation-comment.active {
-  box-shadow: 0 0 5px var(--primary);
+  max-width: 100%;
 }
 
 .mat-mdc-card-content > :first-child {
@@ -62,7 +61,10 @@
 }
 
 .score-creator {
-  color: var(--on-surface);
+  &:not(.on-secondary) {
+    color: var(--on-surface);
+  }
+
   margin: 0 8px;
   opacity: 0.8;
 
@@ -119,12 +121,7 @@
 }
 
 .highlighted {
-  background-color: var(--secondary) !important;
   transition: background-color 1s linear;
-}
-
-.highlighted * {
-  color: var(--on-secondary);
 }
 
 .comment-tags {

@@ -14,12 +14,10 @@ import { ContentService } from '../../../../services/http/content.service';
 import { ContentChoice } from '../../../../models/content-choice';
 import { TranslateService } from '@ngx-translate/core';
 import { ThemeService } from '../../../../../theme/theme.service';
-import { Theme } from '../../../../../theme/Theme';
 import { AnswerStatistics } from '../../../../models/answer-statistics';
 import { takeUntil } from 'rxjs/operators';
 import { StatisticContentBaseComponent } from '../statistic-content-base';
 import { ContentType } from '../../../../models/content-type.enum';
-import { ColorElem } from '@arsnova/theme/Theme';
 import { ContentScale } from '@arsnova/app/models/content-scale';
 import { EventService } from '../../../../services/util/event.service';
 import { PresentationService } from '../../../../services/util/presentation.service';
@@ -268,7 +266,7 @@ export class StatisticChoiceComponent
     return this.correctOptionIndexes?.indexOf(index) > -1;
   }
 
-  getBarColors(): ColorElem[] {
+  getBarColors(): string[] {
     let colors;
     switch (this.content.format) {
       case ContentType.SCALE:
@@ -286,18 +284,17 @@ export class StatisticChoiceComponent
     return colors;
   }
 
-  getColors(theme: Theme) {
-    this.colorStrings.onBackground = theme.get('on-surface').color;
-    this.colorStrings.background = theme.get('surface').color;
-    this.colorStrings.correct = theme.get('green').color;
-    this.colorStrings.abstention = theme.get('grey').color;
+  getColors() {
+    this.colorStrings.onBackground = this.themeService.getColor('on-surface');
+    this.colorStrings.background = this.themeService.getColor('surface');
+    this.colorStrings.correct = this.themeService.getColor('green');
+    this.colorStrings.abstention = this.themeService.getColor('grey');
   }
 
   initRoundAnswerOptions(answerIndex: number, length: number) {
     const barColors = this.getBarColors();
     for (let j = 0; j < this.rounds; j++) {
-      this.colors[j][answerIndex] =
-        barColors[answerIndex % barColors.length].color;
+      this.colors[j][answerIndex] = barColors[answerIndex % barColors.length];
       if (!this.survey) {
         if (this.checkIfCorrect(answerIndex)) {
           this.indicationColors[j][answerIndex] =
@@ -317,9 +314,7 @@ export class StatisticChoiceComponent
 
   initChart() {
     const length = this.options.length;
-    const theme = this.themeService.getCurrentThemeName();
-    const currentTheme = this.themeService.getThemeByKey(theme);
-    this.getColors(currentTheme);
+    this.getColors();
     for (let i = 0; i < length; i++) {
       this.initRoundAnswerOptions(i, length);
     }

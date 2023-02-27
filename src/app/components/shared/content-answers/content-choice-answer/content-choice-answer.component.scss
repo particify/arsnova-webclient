@@ -16,7 +16,7 @@
   border-radius: 5px;
   transition: border-color 300ms;
 
-  &:not(.correct-answer, .wrong-answer, .selected) {
+  &:not(.correct-answer, .wrong-answer, .primary-border-color) {
     border-color: var(--grey-light);
   }
 
@@ -35,10 +35,6 @@
 
 .wrong-answer {
   border-color: var(--red);
-}
-
-.selected {
-  border-color: var(--primary);
 }
 
 .mat-mdc-radio-button,

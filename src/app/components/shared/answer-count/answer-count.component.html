@@ -3,7 +3,12 @@
   fxLayout="{{ size !== 'medium' ? 'row' : 'column' }}"
   [ngClass]="{ 'over-control-bar': controlBar }"
 >
-  <p class="counter">{{ count }}</p>
+  <p
+    class="counter"
+    [ngClass]="size === 'presentation' ? 'primary' : 'secondary'"
+  >
+    {{ count }}
+  </p>
   <p class="counter-text">
     {{ (count === 1 ? 'statistic.answer' : 'statistic.answers') | translate }}
   </p>

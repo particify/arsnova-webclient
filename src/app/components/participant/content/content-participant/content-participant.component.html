@@ -41,6 +41,7 @@
                 ) === -1
               "
               mat-icon-button
+              color="primary"
               (click)="goToStats()"
               matTooltip="{{ 'answer.go-to-stats' | translate }}"
               aria-labelledby="flip-to-stats"
@@ -48,7 +49,7 @@
               [appHotkeyAction]="HotkeyAction.CLICK"
               [appHotkeyDisabled]="!active"
             >
-              <mat-icon class="icon-primary"> insert_chart </mat-icon>
+              <mat-icon> insert_chart </mat-icon>
             </button>
           </div>
           <lib-extension-point
@@ -139,10 +140,10 @@
                 [ngClass]="{ visible: alreadySent, invisible: !alreadySent }"
                 class="text"
               >
-                <p *ngIf="!hasAbstained">
+                <p class="primary" *ngIf="!hasAbstained">
                   {{ 'answer.has-voted' | translate }}
                 </p>
-                <p *ngIf="hasAbstained">
+                <p class="primary" *ngIf="hasAbstained">
                   {{ 'answer.has-abstained' | translate }}
                 </p>
               </div>
@@ -163,7 +164,7 @@
                   <button
                     tabindex="{{ alreadySent ? '-1' : '0' }}"
                     mat-raised-button
-                    class="button-primary"
+                    color="primary"
                     [ngClass]="{ disabled: alreadySent }"
                     type="submit"
                     aria-labelledby="submit"
@@ -179,7 +180,7 @@
             >
               <button
                 mat-raised-button
-                class="button-primary"
+                color="primary"
                 (click)="goToStats()"
                 aria-labelledby="show-front"
                 appHotkey=" "
@@ -225,7 +226,7 @@
                 </button>
                 <button
                   mat-raised-button
-                  class="button-primary"
+                  color="primary"
                   (click)="goToNextContent(lastContent)"
                   aria-labelledby="next-content"
                 >

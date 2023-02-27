@@ -11,7 +11,6 @@
 }
 
 .user-button {
-  background: var(--primary-variant);
   color: var(--black);
   margin-right: 0;
 
@@ -32,19 +31,29 @@
 }
 
 .color {
-  font-size: 44px;
-  width: 44px;
-  height: 44px;
-  position: relative;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+}
+
+.color-arsnova {
+  background-color: var(--light-theme-preview);
+}
+
+.color-dark {
+  background-color: var(--dark-theme-preview);
 }
 
 .checked {
-  position: absolute;
-  left: 26px;
-  top: 12px;
-  font-size: 24px;
-  width: 24px;
-  height: 24px;
+  margin: 0 !important;
+}
+
+.checked-arsnova {
+  color: black;
+}
+
+.checked-dark {
+  color: white;
 }
 
 .item-title {
@@ -56,14 +65,6 @@
   font-size: 14px;
   color: var(--on-dialog);
   font-weight: $font-weight-bold;
-}
-
-.color-description {
-  height: 14px;
-  font-size: 14px;
-  line-height: 14px;
-  margin-top: 5px;
-  color: var(--on-dialog);
 }
 
 .lang-title {
@@ -97,7 +98,6 @@
 
 .back-to-edit {
   opacity: 1;
-  color: var(--primary) !important;
 }
 
 .mat-mdc-icon-button .mat-icon {

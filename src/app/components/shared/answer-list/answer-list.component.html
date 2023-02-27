@@ -18,13 +18,14 @@
         <button
           *ngIf="isModerator && (answer.id || banMode) && !isPresentation"
           mat-icon-button
+          color="warn"
           class="delete-button"
           (click)="addToModerationList(answer)"
           [matTooltip]="
             'statistic.' + (banMode ? 'ban' : 'delete') + '-answer' | translate
           "
         >
-          <mat-icon class="icon-warn">close</mat-icon>
+          <mat-icon>close</mat-icon>
         </button>
       </div>
     </div>

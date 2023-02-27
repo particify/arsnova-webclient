@@ -38,6 +38,7 @@
             <button
               id="comments-button"
               mat-icon-button
+              color="primary"
               class="main-button no-ripple"
               [disableRipple]="true"
               [routerLink]="['comments']"
@@ -45,7 +46,11 @@
               appHotkey="1"
               [appHotkeyTitle]="'room-page.comments' | translate"
             >
-              <mat-icon matBadge="{{ commentCounter }}" class="main-icon">
+              <mat-icon
+                matBadge="{{ commentCounter }}"
+                matBadgeColor="accent"
+                class="main-icon"
+              >
                 question_answer
               </mat-icon>
               <p class="button-text">
@@ -56,6 +61,7 @@
           <div class="action-button-item" fxLayoutAlign="center center">
             <button
               mat-icon-button
+              color="primary"
               class="main-button no-ripple"
               id="live-survey-button"
               aria-labelledby="live-survey"
@@ -99,7 +105,8 @@
             *ngIf="!isModerator"
             id="content-group-create-button"
             mat-stroked-button
-            class="stroked-primary add-group"
+            color="primary"
+            class="add-group"
             aria-labelledby="create-content-group"
             (click)="openCreateContentGroupDialog()"
             appHotkey="3"

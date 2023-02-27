@@ -4,10 +4,11 @@
   [cdkDropListDisabled]="disabled"
 >
   <div
-    class="answer"
+    class="answer primary-shadow-focus"
     *ngFor="let answer of answerOptions; let i = index"
     cdkDrag
     [cdkDragStartDelay]="50"
+    [cdkDragPreviewClass]="'primary-shadow-always'"
     [ngClass]="{ 'no-grab': disabled }"
     tabindex="0"
     [attr.aria-label]="

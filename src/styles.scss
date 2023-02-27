@@ -1,14 +1,22 @@
 @use '@angular/material' as mat;
 @import 'theme/dark-theme/dark-theme';
 @import 'theme/arsnova-theme/arsnova-theme';
-@import 'theme/theme';
 @import 'variables';
+@import 'util';
 @include mat.core;
 
 @include mat.all-component-themes($arsnova-theme);
 
 .theme-dark {
   @include mat.all-component-colors($dark-theme);
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
 }
 
 body {
@@ -91,7 +99,7 @@ address {
 }
 
 a {
-  color: var(--secondary);
+  @extend %secondary;
 }
 
 strong,
@@ -172,20 +180,12 @@ textarea {
   color: var(--on-surface) !important;
 }
 
-.mat-mdc-form-field-hint.warn {
-  color: var(--warn) !important;
-}
-
 .mat-mdc-form-field-hint.warn-soft {
   color: var(--warn-soft) !important;
 }
 
 .mat-mdc-form-field-hint.success {
   color: var(--green) !important;
-}
-
-.mat-mdc-form-field-error {
-  color: var(--warn) !important;
 }
 
 .full-width {
@@ -254,7 +254,7 @@ div {
 }
 
 .survey-progress .mdc-linear-progress__bar-inner {
-  background-color: var(--secondary);
+  @extend %secondary-background;
 }
 
 .survey-progress .mdc-linear-progress__buffer-bar {
@@ -283,14 +283,6 @@ div {
 
 .statistic-status-bad .mdc-linear-progress__buffer-bar {
   background-color: var(--red-light);
-}
-
-.progress-primary .mdc-linear-progress__bar-inner {
-  background-color: var(--primary);
-}
-
-.progress-primary .mdc-linear-progress__buffer-bar {
-  background-color: var(--primary-variant);
 }
 
 // Mat Tab
@@ -402,16 +394,10 @@ div {
 // Choice answer buttons
 
 .answer-radio-button .mdc-radio {
-  --mdc-radio-selected-hover-icon-color: var(--primary);
-  --mdc-radio-selected-icon-color: var(--primary);
-  --mdc-radio-selected-pressed-icon-color: var(--primary);
   --mat-mdc-radio-checked-ripple-color: transparent;
   --mdc-radio-disabled-selected-icon-color: var(--grey);
   --mdc-radio-disabled-unselected-icon-color: var(--grey);
-  --mdc-radio-unselected-focus-icon-color: var(--primary);
-  --mdc-radio-unselected-hover-icon-color: var(--primary);
   --mdc-radio-unselected-icon-color: var(--grey);
-  --mdc-radio-unselected-pressed-icon-color: var(--primary);
   --mat-mdc-radio-ripple-color: transparent;
 }
 
@@ -438,17 +424,9 @@ div {
 }
 
 .answer-checkbox .mdc-checkbox {
-  --mdc-checkbox-selected-checkmark-color: var(--on-primary);
-  --mdc-checkbox-selected-focus-icon-color: var(--primary);
-  --mdc-checkbox-selected-hover-icon-color: var(--primary);
-  --mdc-checkbox-selected-icon-color: var(--primary);
-  --mdc-checkbox-selected-pressed-icon-color: var(--primary);
-  --mdc-checkbox-unselected-focus-icon-color: var(--primary);
-  --mdc-checkbox-unselected-hover-icon-color: var(--primary);
   --mdc-checkbox-disabled-selected-icon-color: var(--grey);
   --mdc-checkbox-disabled-unselected-icon-color: var(--grey-light);
   --mdc-checkbox-unselected-icon-color: var(--grey);
-  --mdc-checkbox-unselected-pressed-icon-color: var(--primary);
 }
 
 // Mat Select
@@ -508,6 +486,22 @@ div {
   font-weight: $font-weight-bold;
 }
 
+.primary-shadow-hover:hover {
+  border-color: transparent;
+  @extend %primary-shadow;
+}
+
+.primary-shadow-focus:focus {
+  border-color: transparent;
+  @extend %primary-shadow;
+}
+
+.primary-shadow-always {
+  box-sizing: border-box;
+  border: none !important;
+  @extend %primary-shadow;
+}
+
 // Mat Table
 
 .mat-mdc-table {
@@ -526,7 +520,9 @@ div {
   width: 40px !important;
   padding: 8px !important;
 
-  --mdc-icon-button-icon-color: var(--on-surface);
+  &:not(.mat-primary, .mat-accent, .mat-warn) {
+    --mdc-icon-button-icon-color: var(--on-surface);
+  }
 }
 
 .mat-mdc-icon-button .mat-mdc-button-touch-target {
@@ -545,7 +541,13 @@ div {
   }
 }
 
-.mat-mdc-button:not([disabled], .nav-button) {
+.mat-mdc-button:not(
+    [disabled],
+    .nav-button,
+    .mat-primary,
+    .mat-accent,
+    .mat-warn
+  ) {
   opacity: 0.8;
 
   --mdc-text-button-label-text-color: var(--on-surface);
@@ -553,16 +555,6 @@ div {
   &:hover {
     opacity: 1;
   }
-}
-
-.button-primary:not([disabled]) {
-  background-color: var(--primary) !important;
-  color: var(--on-primary) !important;
-}
-
-.button-warn {
-  background-color: var(--warn) !important;
-  color: var(--on-warn) !important;
 }
 
 .button-text {
@@ -574,27 +566,6 @@ div {
 .login-button {
   width: 100%;
   margin: 5px 0;
-}
-
-[role='button'],
-[role='listitem'],
-button {
-  &:focus-visible {
-    outline: 2px solid var(--secondary) !important;
-  }
-
-  &:focus:not(:focus-visible) {
-    outline: none;
-  }
-}
-
-.stroked-primary.mat-mdc-outlined-button:not([disabled], .btn-animated) {
-  color: var(--primary) !important;
-  border-color: var(--primary) !important;
-}
-
-.stroked-warn.mat-mdc-outlined-button {
-  color: var(--warn) !important;
 }
 
 .mobile-add-hide {
@@ -629,24 +600,61 @@ button {
 .after-text-link {
   padding-left: 10px;
   margin-top: 1em;
-  color: var(--secondary);
 }
 
 // Icons
-
-.icon-primary {
-  color: var(--primary) !important;
-}
-
-.icon-warn {
-  color: var(--warn) !important;
-}
 
 .icon-warn-soft {
   color: var(--warn-soft);
 }
 
 // Colors
+
+.primary,
+.primary p {
+  @extend %primary;
+}
+
+.primary-variant,
+.primary-variant.mdc-icon-button,
+.primary-variant.mdc-button {
+  @extend %primary-variant;
+}
+
+.primary-background {
+  @extend %primary-background;
+}
+
+.primary-border {
+  @extend %primary-border;
+}
+
+.primary-border-color {
+  @extend %primary-border-color;
+}
+
+.primary-shadow {
+  @extend %primary-shadow;
+}
+
+.secondary,
+.secondary p {
+  @extend %secondary;
+}
+
+.secondary-variant,
+.secondary-variant.mdc-icon-button,
+.secondary-variant.mdc-button {
+  @extend %secondary-variant;
+}
+
+.secondary-background {
+  @extend %secondary-background;
+}
+
+.on-secondary * {
+  @extend %on-secondary;
+}
 
 .blue {
   color: var(--blue) !important;
@@ -671,7 +679,10 @@ button {
   max-width: 832px;
   padding: 1em;
   color: var(--on-surface);
-  background-color: var(--surface) !important;
+
+  &:not(.secondary-background) {
+    background-color: var(--surface) !important;
+  }
 }
 
 .mat-mdc-card-title {
@@ -737,11 +748,6 @@ button {
 }
 
 // Badge
-
-.mat-badge-content {
-  background: var(--secondary) !important;
-  color: var(--on-secondary) !important;
-}
 
 .icon-badge .mat-badge-content {
   top: -2px !important;
@@ -817,8 +823,7 @@ button {
 }
 
 .mat-mdc-menu-item:not([disabled])
-  .mat-icon:not(.icon-primary, .icon-warn, .icon-important) {
-  color: var(--on-surface);
+  > .mat-icon:not(.mat-primary, .mat-warn, .icon-important) {
   opacity: 0.7;
 }
 

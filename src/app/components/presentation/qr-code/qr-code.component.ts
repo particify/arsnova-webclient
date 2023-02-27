@@ -48,14 +48,8 @@ export class QrCodeComponent implements OnInit, OnDestroy {
   initQrCode() {
     const minSize = Math.min(innerWidth, innerHeight);
     this.qrWidth = minSize * (innerWidth > 1279 ? 0.5 : 0.35);
-    this.themeService
-      .getTheme()
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe((theme) => {
-        const currentTheme = this.themeService.getThemeByKey(theme);
-        this.bgColor = currentTheme.get('surface').color;
-        this.fgColor = currentTheme.get('on-surface').color;
-      });
+    this.bgColor = this.themeService.getColor('surface');
+    this.fgColor = this.themeService.getColor('on-surface');
     this.apiConfigService
       .getApiConfig$()
       .pipe(takeUntil(this.destroyed$))

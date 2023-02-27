@@ -1,12 +1,13 @@
 @use '@angular/material' as mat;
 @use 'sass:color';
+@use '../app-theme';
 @import '../../variables';
 @import 'theme-variables';
 
 $primary-palette: (
   50: color.adjust($primary, $lightness: 90%),
-  100: color.adjust($primary, $lightness: 72%),
-  200: color.adjust($primary, $lightness: 54%),
+  100: color.adjust($primary, $lightness: 62%),
+  200: color.adjust($primary, $lightness: 48%),
   300: color.adjust($primary, $lightness: 36%),
   400: color.adjust($primary, $lightness: 24%),
   500: color.adjust($primary, $lightness: 8%),
@@ -29,8 +30,8 @@ $primary-palette: (
 );
 $accent-palette: (
   50: color.adjust($accent, $lightness: 90%),
-  100: color.adjust($accent, $lightness: 72%),
-  200: color.adjust($accent, $lightness: 54%),
+  100: color.adjust($accent, $lightness: 62%),
+  200: color.adjust($accent, $lightness: 48%),
   300: color.adjust($accent, $lightness: 36%),
   400: color.adjust($accent, $lightness: 24%),
   500: color.adjust($accent, $lightness: 8%),
@@ -53,7 +54,7 @@ $accent-palette: (
 );
 $arsnova-primary: mat.define-palette($primary-palette, 600);
 $arsnova-accent: mat.define-palette($accent-palette, 600);
-$arsnova-warn: mat.define-palette(mat.$red-palette, 600);
+$arsnova-warn: mat.define-palette(mat.$red-palette, 800);
 $custom-typography: mat.define-typography-config(
   $font-family: $font-family,
   $button:
@@ -71,3 +72,48 @@ $arsnova-theme: mat.define-light-theme(
     typography: $custom-typography,
   )
 );
+
+.theme-arsnova {
+  @include app-theme.theme($arsnova-theme);
+
+  --primary-logo: #5e35b1;
+  --secondary-logo: #2e7d32;
+  --logo-font: #474747;
+  --warn: #c62828;
+  --warn-soft: #ffa726;
+  --background: #f5f5f5;
+  --surface: #fdfdfd;
+  --dialog: #fcfcfc;
+  --alt-surface: #eee;
+  --on-background: #212121;
+  --on-surface: #212121;
+  --table-a: #e0e0e0;
+  --table-b: #eee;
+  --border: #e0e0e0;
+  --unlocked: #ecf7ed;
+  --green: #43a047;
+  --green-light: #e8f5e9;
+  --red: #ff5722;
+  --red-light: #ffccbc;
+  --yellow: #fdd835;
+  --yellow-light: #fff9c4;
+  --blue: #3f51b5;
+  --grey: #9e9e9e;
+  --grey-light: #e0e0e0;
+  --black: #212121;
+  --bar-blue: #027db9;
+  --bar-yellow: #ffca28;
+  --bar-teal: #4d8076;
+  --bar-red: #e64a19;
+  --bar-purple: #8e79ab;
+  --bar-brown: #9f6b3f;
+  --bar-green: #787b1d;
+  --bar-pink: #eb0054;
+  --likert-strongly-agree: #3f51b5;
+  --likert-agree: #7986cb;
+  --likert-neither: #e0e0e0;
+  --likert-disagree: #ff8a65;
+  --likert-strongly-disagree: #ff5722;
+  --light-theme-preview: #eee;
+  --dark-theme-preview: #616161;
+}

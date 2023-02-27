@@ -18,7 +18,7 @@
       [disabled]="headerPos < 1"
       (click)="moveHeaderRight(true)"
     >
-      <mat-icon class="arrow" [ngClass]="{ disabled: headerPos < 1 }"
+      <mat-icon color="primary" [ngClass]="{ disabled: headerPos < 1 }"
         >keyboard_arrow_left</mat-icon
       >
     </button>
@@ -46,8 +46,8 @@
             class="step"
             tabindex="-1"
             [ngClass]="{
-              active: selectedIndex === i,
-              sent: completed.get(i),
+              'primary-background primary-border': selectedIndex === i,
+              'primary primary-border': completed.get(i) && selectedIndex !== i,
               last: i === listLength
             }"
           >
@@ -66,7 +66,7 @@
       (click)="moveHeaderLeft(true)"
     >
       <mat-icon
-        class="arrow"
+        color="primary"
         [ngClass]="{ disabled: headerPos >= listLength - 5 }"
         >keyboard_arrow_right</mat-icon
       >

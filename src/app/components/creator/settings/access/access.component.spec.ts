@@ -78,6 +78,7 @@ describe('AccessComponent', () => {
   let loader: HarnessLoader;
 
   let addButton: MatButtonHarness;
+  let inviteButton: MatButtonHarness;
 
   beforeEach(async () => {
     TestBed.configureTestingModule({
@@ -201,13 +202,13 @@ describe('AccessComponent', () => {
       'description'
     );
     loader = TestbedHarnessEnvironment.loader(fixture);
-    addButton = await loader.getHarness(
-      MatButtonHarness.with({ selector: '#add-button' })
+    inviteButton = await loader.getHarness(
+      MatButtonHarness.with({ selector: '#invite-button' })
     );
     component.loginId = 'b@a.cd';
     component.getUser();
     fixture.detectChanges();
-    await addButton.click();
+    await inviteButton.click();
     expect(mockAccessTokenService.invite).toHaveBeenCalled();
   });
 
@@ -226,13 +227,13 @@ describe('AccessComponent', () => {
       'description'
     );
     loader = TestbedHarnessEnvironment.loader(fixture);
-    addButton = await loader.getHarness(
-      MatButtonHarness.with({ selector: '#add-button' })
+    inviteButton = await loader.getHarness(
+      MatButtonHarness.with({ selector: '#invite-button' })
     );
     component.loginId = 'b@a.cd';
     component.getUser();
     fixture.detectChanges();
-    await addButton.click();
+    await inviteButton.click();
     expect(mockModeratorService.add).toHaveBeenCalled();
     component.newModeratorId = null;
     mockUserService.getUserByLoginId.and.returnValue(of([]));
@@ -240,7 +241,7 @@ describe('AccessComponent', () => {
     component.loginId = 'c@d.cd';
     fixture.detectChanges();
     component.getUser();
-    await addButton.click();
+    await inviteButton.click();
     expect(mockAccessTokenService.invite).toHaveBeenCalled();
   });
 

@@ -5,7 +5,7 @@
       <button
         *ngFor="let provider of ssoProviders"
         (click)="loginViaSso(provider.id)"
-        class="button-primary"
+        color="primary"
         id="{{ provider.title }}-button"
         mat-raised-button
         type="button"
@@ -81,7 +81,8 @@
         <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="5px">
           <button
             *ngFor="let provider of usernamePasswordProviders"
-            class="button-primary login-button"
+            color="primary"
+            class="login-button"
             mat-raised-button
             (click)="loginWithUsernamePassword(provider.id)"
             aria-labelledby="login-description"
