@@ -8,38 +8,65 @@ import {
   NotificationService,
 } from '../../../services/util/notification.service';
 import { TranslateService } from '@ngx-translate/core';
+import { InputDialogComponent } from '../_dialogs/input-dialog/input-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
+import { UserService } from '../../../services/http/user.service';
 
 @Component({
   selector: 'app-room-management',
   templateUrl: './room-management.component.html',
+  styleUrls: ['../admin-styles.scss'],
 })
 export class RoomManagementComponent {
   room: Room;
+  rooms: Room[];
+  searchResults: string[];
 
   constructor(
     protected adminService: AdminService,
     protected roomService: RoomService,
     protected dialogService: DialogService,
     protected notificationService: NotificationService,
-    protected translateService: TranslateService
+    protected translateService: TranslateService,
+    protected dialog: MatDialog,
+    protected userService: UserService
   ) {}
 
-  async loadEntity(id: string) {
+  showRoom(searchResult: string) {
+    const index = this.searchResults.indexOf(searchResult);
+    this.room = this.rooms[index];
+  }
+
+  search(id: string) {
+    this.searchResults = [];
+    if (!id || this.room) {
+      return;
+    }
     id = id.replace(' ', '');
     if (id.match(/^[0-9]{8}$/)) {
       id = '~' + id;
     }
-    this.room = await this.adminService.getRoom(id).toPromise();
+    this.searchResults = [];
+    this.adminService.getRoom(id).subscribe((room) => {
+      this.rooms = [];
+      if (room) {
+        this.rooms.push(room);
+        this.searchResults.push(`${room.name} (${room.shortId})`);
+      }
+    });
   }
 
   clear() {
+    this.rooms = [];
+    this.searchResults = [];
     this.room = null;
   }
 
   deleteEntity() {
     const dialogRef = this.dialogService.openDeleteDialog(
       'room-as-admin',
-      'really-delete-room'
+      'really-delete-room',
+      this.room.name
     );
     dialogRef.afterClosed().subscribe((closeAction) => {
       if (closeAction === 'delete') {
@@ -58,18 +85,27 @@ export class RoomManagementComponent {
     });
   }
 
-  transferRoom(newOwnerId: string) {
-    this.adminService
-      .transferRoom(this.room.id, newOwnerId)
-      .subscribe(() =>
-        this.translateService
-          .get('admin-area.room-transferred')
-          .subscribe((message) =>
-            this.notificationService.showAdvanced(
-              message,
-              AdvancedSnackBarTypes.SUCCESS
-            )
-          )
-      );
+  transferRoom() {
+    const dialogRef = this.dialog.open(InputDialogComponent, {
+      data: {
+        inputName: 'room-new-owner-id',
+        primaryAction: 'transfer-room',
+        useUserSearch: true,
+      },
+    });
+    dialogRef.afterClosed().subscribe((userId) => {
+      if (!userId) {
+        return;
+      }
+      this.adminService.transferRoom(this.room.id, userId).subscribe(() => {
+        const msg = this.translateService.instant(
+          'admin-area.room-transferred'
+        );
+        this.notificationService.showAdvanced(
+          msg,
+          AdvancedSnackBarTypes.SUCCESS
+        );
+      });
+    });
   }
 }

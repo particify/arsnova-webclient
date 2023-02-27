@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { catchError, of, share } from 'rxjs';
 import { SystemInfoService } from '../../../services/http/system-info.service';
-import { catchError, share } from 'rxjs/operators';
-import { of } from 'rxjs';
 
 @Component({
   selector: 'app-system-status',
@@ -9,18 +8,21 @@ import { of } from 'rxjs';
   styleUrls: ['./system-status.component.scss'],
 })
 export class SystemStatusComponent implements OnInit {
-  healthInfo: any;
+  dataSource: object;
+  isLoading = true;
 
   constructor(protected systemInfoService: SystemInfoService) {}
 
   ngOnInit() {
-    this.healthInfo = this.getHealthInfo();
-  }
-
-  getHealthInfo() {
-    return this.systemInfoService.getHealthInfo().pipe(
-      catchError((response) => of(response.error)),
-      share()
-    );
+    this.systemInfoService
+      .getHealthInfo()
+      .pipe(
+        catchError((response) => of(response.error)),
+        share()
+      )
+      .subscribe((healthInfo) => {
+        this.dataSource = healthInfo?.details;
+        this.isLoading = false;
+      });
   }
 }

@@ -1,41 +1,31 @@
-<mat-card>
-  <mat-card-title>
-    {{ 'admin-area.system-health' | translate }}
-  </mat-card-title>
-  <div>
-    <table>
-      <tr>
-        <td>
-          <strong>{{ 'admin-area.status-summary' | translate }}</strong>
-        </td>
-        <td
-          class="system-health system-health-{{
-            (healthInfo | async)?.status | lowercase
-          }}"
+<app-admin-page-header headerText="status-details"> </app-admin-page-header>
+
+<app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
+<mat-card appearance="outlined" *ngIf="!isLoading">
+  <table mat-table [dataSource]="dataSource | keyvalue">
+    <ng-container matColumnDef="statusKey">
+      <td mat-cell *matCellDef="let element">
+        {{ 'admin-area.status-' + (element.key | lowercase) | translate }}
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="statusValue">
+      <td mat-cell class="icon-column" *matCellDef="let element">
+        <app-health-status [status]="element.value.status"></app-health-status>
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="statusHint">
+      <td mat-cell class="icon-column" *matCellDef="let element">
+        <mat-icon
+          *ngIf="element.value.details"
+          matTooltip="{{ element.value.details | json }}"
+          class="system-health-details"
+          >info</mat-icon
         >
-          {{ (healthInfo | async)?.status }}
-        </td>
-      </tr>
-      <tr *ngFor="let component of (healthInfo | async)?.details | keyvalue">
-        <td>
-          {{ 'admin-area.status-' + (component.key | lowercase) | translate }}
-        </td>
-        <td
-          class="system-health system-health-{{
-            component.value.status | lowercase
-          }}"
-        >
-          {{ component.value.status }}
-        </td>
-        <td>
-          <mat-icon
-            *ngIf="component.value.details"
-            matTooltip="{{ component.value.details | json }}"
-            class="system-health-details"
-            >info</mat-icon
-          >
-        </td>
-      </tr>
-    </table>
-  </div>
+      </td>
+    </ng-container>
+    <tr
+      mat-row
+      *matRowDef="let row; columns: ['statusKey', 'statusValue', 'statusHint']"
+    ></tr>
+  </table>
 </mat-card>

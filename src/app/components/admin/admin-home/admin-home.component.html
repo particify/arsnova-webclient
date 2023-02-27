@@ -2,7 +2,14 @@
   <div fxLayout="row" fxFill>
     <mat-drawer-container fxFill>
       <mat-drawer mode="side" opened>
-        <h2 class="title">{{ 'admin-area.title' | translate }}</h2>
+        <div fxLayout="row" fxLayoutAlign="start" class="title">
+          <lib-extension-point
+            extensionId="app-logo"
+            [extensionData]="{ height: '36px' }"
+          >
+            <h2>{{ 'admin-area.title' | translate }}</h2>
+          </lib-extension-point>
+        </div>
         <p class="section-header">{{ 'admin-area.general' | translate }}</p>
         <div class="button-container" fxLayout="column" fxLayoutGap="8px">
           <button
@@ -33,7 +40,7 @@
             [ngClass]="{ 'primary-variant': currentPage === 'users' }"
           >
             <mat-icon>people</mat-icon>
-            {{ 'admin-area.manage-accounts' | translate }}
+            {{ 'admin-area.user-management' | translate }}
           </button>
           <button
             mat-button
@@ -43,7 +50,7 @@
             [ngClass]="{ 'primary-variant': currentPage === 'rooms' }"
           >
             <mat-icon>room_preferences</mat-icon>
-            {{ 'admin-area.manage-rooms' | translate }}
+            {{ 'admin-area.room-management' | translate }}
           </button>
         </div>
         <lib-extension-point

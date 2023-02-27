@@ -1,0 +1,16 @@
+<div
+  fxLayout="row"
+  fxLayoutAlign="space-between center"
+  class="header-container"
+>
+  <h2 class="title">{{ 'admin-area.' + headerText | translate }}</h2>
+  <button
+    mat-raised-button
+    *ngIf="buttonText"
+    color="primary"
+    (click)="click()"
+  >
+    <mat-icon>{{ buttonIcon }}</mat-icon>
+    {{ 'admin-area.' + buttonText | translate }}
+  </button>
+</div>

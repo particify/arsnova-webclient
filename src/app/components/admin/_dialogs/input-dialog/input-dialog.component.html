@@ -1,0 +1,44 @@
+<form>
+  <div mat-dialog-content>
+    <app-search-bar
+      *ngIf="useUserSearch; else standardSearch"
+      label="{{ 'admin-area.' + inputName | translate }}"
+      [results]="searchResults"
+      [showSuccessIndicator]="!!user"
+      (inputChanged)="search($event)"
+      (inputCleared)="clear()"
+      (itemSelected)="selectUser($event)"
+    ></app-search-bar>
+    <ng-template #standardSearch>
+      <mat-form-field appearance="outline">
+        <mat-label>{{ 'admin-area.' + inputName | translate }}</mat-label>
+        <input
+          matInput
+          [(ngModel)]="input"
+          [formControl]="formControl"
+          autocomplete="off"
+        />
+      </mat-form-field>
+    </ng-template>
+  </div>
+  <div fxLayoutAlign="end">
+    <div
+      mat-dialog-actions
+      fxLayout="row-reverse"
+      fxLayoutAling="end"
+      fxLayoutGap="10px"
+    >
+      <button (click)="submit()" mat-flat-button color="primary">
+        {{ 'admin-area.' + primaryAction | translate }}
+      </button>
+      <button
+        (click)="close()"
+        aria-labelledby="cancel"
+        mat-button
+        type="button"
+      >
+        {{ 'admin-area.cancel' | translate }}
+      </button>
+    </div>
+  </div>
+</form>
