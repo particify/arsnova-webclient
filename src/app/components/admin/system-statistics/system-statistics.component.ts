@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { SystemInfoService } from '../../../services/http/system-info.service';
+import { ActivatedRoute } from '@angular/router';
 
 export class AdminStats {
   userProfile: object;
@@ -39,15 +40,30 @@ export class AdminStats {
 })
 export class SystemStatisticsComponent implements OnInit {
   stats: AdminStats;
-  isLoading = true;
+  isLoading: boolean;
   showDetails = false;
   selectedTab = 0;
   tabs: string[] = [];
 
-  constructor(protected systemInfoService: SystemInfoService) {}
+  constructor(
+    protected systemInfoService: SystemInfoService,
+    private route: ActivatedRoute
+  ) {}
 
   ngOnInit() {
-    this.systemInfoService.getServiceStats().subscribe((stats) => {
+    const tenantId = this.route.snapshot.params['tenantId'];
+    this.loadStats(tenantId);
+    this.route.params.subscribe((params) => {
+      const newTenantId = params.tenantId;
+      if (newTenantId !== tenantId) {
+        this.loadStats(newTenantId);
+      }
+    });
+  }
+
+  loadStats(tenantId: string) {
+    this.isLoading = true;
+    this.systemInfoService.getServiceStats(tenantId).subscribe((stats) => {
       const coreStats = stats['coreServiceStats'];
       this.stats = new AdminStats(
         coreStats?.userProfile,

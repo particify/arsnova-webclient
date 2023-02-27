@@ -57,8 +57,11 @@ export class SystemInfoService extends AbstractHttpService<void> {
       );
   }
 
-  getServiceStats(): Observable<Map<string, any>> {
-    const connectionUrl = this.apiUrl.base + this.serviceApiUrl.serviceStats;
+  getServiceStats(tenantId?: string): Observable<Map<string, any>> {
+    let connectionUrl = this.apiUrl.base + this.serviceApiUrl.serviceStats;
+    if (tenantId) {
+      connectionUrl += '?tenantId=' + tenantId;
+    }
     return this.http
       .get<Map<string, any>>(connectionUrl, httpOptions)
       .pipe(catchError(this.handleError<Map<string, any>>('getServiceStats')));
