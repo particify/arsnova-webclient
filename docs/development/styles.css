@@ -1,0 +1,47 @@
+@import 'https://cdn.jsdelivr.net/gh/asciidoctor/asciidoctor@2.0/data/stylesheets/asciidoctor-default.css';
+
+:root {
+  /* Colors */
+  --background: #ffffff;
+  --on-background: #212121;
+  --primary: #5e35b1;
+  --on-primary: #ffffff;
+  --secondary: #2e7d32;
+  /* Font   */
+  --font: Roboto, 'Helvetica Neue';
+}
+
+body {
+  color: var(--on-background);
+  background-color: var(--background);
+  font-family: var(--font);
+}
+
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.title {
+  color: var(--on-background) !important;
+  font-family: var(--font) !important;
+}
+
+p {
+  font-size: 16px;
+}
+
+a {
+  color: var(--primary);
+  font-family: var(--font);
+}
+
+a:hover {
+  color: var(--on-background);
+}
+
+ul.sectlevel1 > li > a {
+  font-weight: 600;
+}
