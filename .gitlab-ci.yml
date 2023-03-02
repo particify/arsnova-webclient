@@ -5,9 +5,10 @@ variables:
 workflow:
   rules:
     # Create pipeline for either the MR or the branch/tag but not both
-    - if: '$CI_MERGE_REQUEST_ID && ($CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH || $CI_COMMIT_TAG =~ /^v[0-9]+/ || $CI_COMMIT_BRANCH =~ /^[0-9]+\.[0-9]+$/ || $CI_COMMIT_BRANCH =~ /^renovate\//)'
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_COMMIT_BRANCH && $CI_OPEN_MERGE_REQUESTS
       when: never
-    - if: '$CI_MERGE_REQUEST_ID || $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH || $CI_COMMIT_TAG =~ /^v[0-9]+/ || $CI_COMMIT_BRANCH =~ /^[0-9]+\.[0-9]+$/ || $CI_COMMIT_BRANCH =~ /^renovate\//'
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH || $CI_COMMIT_TAG =~ /^v[0-9]+/ || $CI_COMMIT_BRANCH =~ /^[0-9]+\.[0-9]+$/ || $CI_COMMIT_BRANCH =~ /^renovate\//
 
 default:
   image: node:18.14-alpine
