@@ -3,6 +3,7 @@
   "version": "1.4.0-SNAPSHOT",
   "license": "MIT",
   "scripts": {
+    "postinstall": "if [ -z \"$CI\" ]; then pip install pre-commit && pre-commit install; fi",
     "ng": "ng",
     "start": "ng serve --proxy-config proxy.conf.json",
     "build": "ng build --configuration production",
