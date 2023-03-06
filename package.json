@@ -59,7 +59,7 @@
     "@angular/language-service": "15.1.5",
     "@types/jasmine": "4.3.1",
     "@types/jasminewd2": "2.0.10",
-    "@types/node": "18.14.4",
+    "@types/node": "18.14.6",
     "@types/wordcloud": "1.2.0",
     "@typescript-eslint/eslint-plugin": "5.54.0",
     "@typescript-eslint/parser": "5.54.0",
