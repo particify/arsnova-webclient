@@ -43,7 +43,7 @@ export class SystemStatisticsComponent implements OnInit {
   isLoading: boolean;
   showDetails = false;
   selectedTab = 0;
-  tabs: string[] = [];
+  tabs: string[];
 
   constructor(
     protected systemInfoService: SystemInfoService,
@@ -51,12 +51,13 @@ export class SystemStatisticsComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    const tenantId = this.route.snapshot.params['tenantId'];
+    let tenantId = this.route.snapshot.params['tenantId'];
     this.loadStats(tenantId);
     this.route.params.subscribe((params) => {
       const newTenantId = params.tenantId;
       if (newTenantId !== tenantId) {
-        this.loadStats(newTenantId);
+        tenantId = newTenantId;
+        this.loadStats(tenantId);
       }
     });
   }
@@ -81,6 +82,7 @@ export class SystemStatisticsComponent implements OnInit {
   }
 
   initTabs() {
+    this.tabs = [];
     Object.keys(this.stats).forEach((key) => {
       if (this.stats[key]) {
         this.tabs.push(key);

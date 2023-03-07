@@ -6,6 +6,8 @@ import {
   STORAGE_KEYS,
 } from '../../../services/util/global-storage.service';
 import { Router } from '@angular/router';
+import { SystemInfoService } from '@arsnova/app/services/http/system-info.service';
+import { catchError, Observable, of, shareReplay } from 'rxjs';
 
 @Component({
   selector: 'app-admin-home',
@@ -17,11 +19,14 @@ export class AdminHomeComponent implements OnInit {
   currentPage: string;
   pageChanged = new EventEmitter<string>();
 
+  healthInfo: Observable<object>;
+
   constructor(
     protected langService: LanguageService,
     protected translateService: TranslateService,
     protected globalStorageService: GlobalStorageService,
-    protected router: Router
+    protected router: Router,
+    protected systemInfoService: SystemInfoService
   ) {
     langService.langEmitter.subscribe((lang) => translateService.use(lang));
   }
@@ -30,11 +35,19 @@ export class AdminHomeComponent implements OnInit {
     this.translateService.use(
       this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE)
     );
+    this.healthInfo = this.getHealthInfo();
     const url = this.router.url;
     this.currentPage = url.slice(this.routePrefix.length, url.length);
     setTimeout(() => {
       this.emitPageChange();
     }, 0);
+  }
+
+  getHealthInfo() {
+    return this.systemInfoService.getHealthInfo().pipe(
+      catchError((response) => of(response.error)),
+      shareReplay()
+    );
   }
 
   changePage(page: string) {

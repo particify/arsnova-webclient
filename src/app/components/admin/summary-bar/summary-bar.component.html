@@ -1,4 +1,5 @@
 <div
+  *ngIf="(healthInfo | async)?.details"
   fxLayout="row"
   fxLayoutAlign="space-around"
   fxLayoutGap="10px"
