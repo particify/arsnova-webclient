@@ -99,6 +99,7 @@ import { RoomCreateComponent } from '@app/core/components/_dialogs/room-create/r
 import { HintComponent } from '@app/standalone/hint/hint.component';
 import { TitleStrategy } from '@angular/router';
 import { CustomPageTitleStrategy } from '@app/core/custom-title-strategy';
+import { MaterialCssVarsModule } from 'angular-material-css-vars';
 
 export function initializeApp(appConfig: AppConfig) {
   return () => appConfig.load();
@@ -153,6 +154,11 @@ export function initializeApp(appConfig: AppConfig) {
         deps: [HttpClient, TRANSLATION_MODULE_NAME],
       },
       isolate: true,
+    }),
+    MaterialCssVarsModule.forRoot({
+      isAutoContrast: true,
+      darkThemeClass: 'theme-dark',
+      lightThemeClass: 'theme-light',
     }),
   ],
   providers: [
