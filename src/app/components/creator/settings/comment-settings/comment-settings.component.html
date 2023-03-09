@@ -27,7 +27,7 @@
             matSliderThumb
             [(ngModel)]="threshold"
             (change)="updateCommentExtensions(); announceThreshold()"
-            [disabled]="disabled"
+            [disabled]="settings.disabled"
         /></mat-slider>
         <p class="threshold-value">&nbsp;{{ threshold }}</p>
       </div>
