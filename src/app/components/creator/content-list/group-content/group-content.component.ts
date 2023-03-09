@@ -220,7 +220,7 @@ export class GroupContentComponent
       this.contents[index].body
     );
     dialogRef.afterClosed().subscribe((result) => {
-      if (result) {
+      if (result === 'delete') {
         this.updateContentChanges(index);
       }
     });
