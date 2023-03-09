@@ -30,6 +30,8 @@ import { UserService } from '../../../services/http/user.service';
 import { UserSettings } from '../../../models/user-settings';
 import { RemoteService } from '../../../services/util/remote.service';
 import { PresentationEvent } from '../../../models/events/presentation-events.enum';
+import { ContentPublishActionType } from '../../../models/content-publish-action.enum';
+import { ContentPublishService } from '../../../services/util/content-publish.service';
 
 @Component({
   selector: 'app-content-presentation',
@@ -73,7 +75,8 @@ export class ContentPresentationComponent implements OnInit, OnDestroy {
     private hotkeyService: HotkeyService,
     private presentationService: PresentationService,
     private userService: UserService,
-    private remoteService: RemoteService
+    private remoteService: RemoteService,
+    private contentPublishService: ContentPublishService
   ) {
     langService.langEmitter.subscribe((lang) => translateService.use(lang));
   }
@@ -163,7 +166,7 @@ export class ContentPresentationComponent implements OnInit, OnDestroy {
           this.hotkeyService.registerHotkey(
             {
               key: 'l',
-              action: () => this.updatePublishedIndexes(),
+              action: () => this.updatePublishedState(),
               actionTitle: t,
             },
             this.hotkeyRefs
@@ -321,69 +324,123 @@ export class ContentPresentationComponent implements OnInit, OnDestroy {
     this.eventService.broadcast(PresentationEvent.CONTENT_STATE_UPDATED, state);
   }
 
-  areContentsPublished() {
-    return this.contentGroup.firstPublishedIndex > -1;
-  }
-
-  isContentAfterPublished() {
-    return this.contentGroup.firstPublishedIndex < this.currentStep;
-  }
-
-  areContentsBetween() {
-    return this.contentGroup.lastPublishedIndex + 1 < this.currentStep;
-  }
-
-  isFirstPublished() {
-    return this.contentGroup.firstPublishedIndex === this.currentStep;
-  }
-
-  isLastPublished() {
-    return this.contentGroup.lastPublishedIndex === this.currentStep;
-  }
-
-  isOutOfScope() {
-    return this.contentGroup.lastPublishedIndex > this.currentStep;
-  }
-
-  updatePublishedIndexes() {
-    let firstIndex = this.currentStep;
-    let lastIndex = this.currentStep;
-    if (this.areContentsPublished()) {
-      if (this.isContentAfterPublished()) {
-        if (this.areContentsBetween()) {
-          const dialogRef = this.dialogService.openDialog(
-            PublishContentComponent
-          );
-          dialogRef.afterClosed().subscribe((result) => {
-            if (result === true) {
-              this.updateContentGroup(firstIndex, lastIndex);
-            } else if (result === false) {
-              firstIndex = this.contentGroup.firstPublishedIndex;
-              this.updateContentGroup(firstIndex, lastIndex);
-            }
-          });
-          return;
-        } else {
-          firstIndex = this.contentGroup.firstPublishedIndex;
-          if (this.isLastPublished()) {
-            lastIndex = this.currentStep - 1;
-          }
-          if (this.isOutOfScope()) {
-            firstIndex = -1;
-          }
+  lockContent() {
+    // Check if current content is the only one which is published
+    if (
+      this.contentPublishService.isSingleContentPublished(this.contentGroup)
+    ) {
+      // Lock all contents
+      this.updateContentGroup(-1, -1);
+      return;
+    }
+    let firstIndex = this.contentGroup.firstPublishedIndex;
+    let lastIndex = this.contentGroup.lastPublishedIndex;
+    // Check if current content is first one of range
+    if (
+      this.contentPublishService.isFirstPublished(
+        this.contentGroup,
+        this.currentStep
+      )
+    ) {
+      // Reduce the range to the next content
+      firstIndex = this.currentStep + 1;
+      this.updateContentGroup(firstIndex, lastIndex);
+      return;
+    }
+    // Check if current content is last one of range
+    if (
+      this.contentPublishService.isLastPublished(
+        this.contentGroup,
+        this.currentStep
+      )
+    ) {
+      // Reduce the range to the previous content
+      lastIndex = this.currentStep - 1;
+      this.updateContentGroup(firstIndex, lastIndex);
+      return;
+    }
+    // If current content is in the middle of the range, open dialog to choose new range
+    const dialogRef = this.dialogService.openDialog(PublishContentComponent, {
+      data: 'lock',
+    });
+    dialogRef.afterClosed().subscribe((action) => {
+      if (action === ContentPublishActionType.UP_TO_HERE) {
+        firstIndex = this.currentStep + 1;
+        if (lastIndex === -1) {
+          lastIndex = this.contentGroup.contentIds.length - 1;
         }
-      } else {
-        lastIndex = this.contentGroup.lastPublishedIndex;
-        if (this.isFirstPublished()) {
-          if (this.isLastPublished()) {
-            firstIndex = -1;
-          } else {
-            firstIndex = this.contentGroup.firstPublishedIndex + 1;
-          }
-        }
+      } else if (action === ContentPublishActionType.FROM_HERE) {
+        lastIndex = this.currentStep - 1;
       }
+      this.updateContentGroup(firstIndex, lastIndex);
+    });
+  }
+
+  publishContent() {
+    let firstIndex = this.contentGroup.firstPublishedIndex;
+    let lastIndex = this.contentGroup.lastPublishedIndex;
+    // Check if current content is not before range
+    if (
+      !this.contentPublishService.isBeforeRange(
+        this.contentGroup,
+        this.currentStep
+      ) &&
+      !this.contentPublishService.isDirectlyAfterRange(
+        this.contentGroup,
+        this.currentStep
+      )
+    ) {
+      // Open dialog to choose new range
+      const dialogRef = this.dialogService.openDialog(PublishContentComponent, {
+        data: 'publish',
+      });
+      dialogRef.afterClosed().subscribe((action) => {
+        if (action === ContentPublishActionType.SINGLE) {
+          this.updateContentGroup(this.currentStep, this.currentStep);
+        } else if (action === ContentPublishActionType.UP_TO_HERE) {
+          this.updateContentGroup(firstIndex, this.currentStep);
+        }
+      });
+      return;
+    }
+    // Check if current content is directly after range
+    if (
+      this.contentPublishService.isDirectlyAfterRange(
+        this.contentGroup,
+        this.currentStep
+      )
+    ) {
+      // Increase range upwards to current content
+      lastIndex = this.currentStep;
+    }
+    // Check if current content is before range no matter if directly next to range
+    if (
+      this.contentPublishService.isBeforeRange(
+        this.contentGroup,
+        this.currentStep
+      )
+    ) {
+      // Increase range downwards to current content
+      firstIndex = this.currentStep;
     }
     this.updateContentGroup(firstIndex, lastIndex);
+  }
+
+  updatePublishedState() {
+    if (!this.contentPublishService.areContentsPublished(this.contentGroup)) {
+      this.updateContentGroup(this.currentStep, this.currentStep);
+      return;
+    }
+    if (
+      this.contentPublishService.isIndexPublished(
+        this.contentGroup,
+        this.currentStep
+      )
+    ) {
+      this.lockContent();
+    } else {
+      this.publishContent();
+    }
   }
 
   updateContentGroup(firstIndex: number, lastIndex: number) {

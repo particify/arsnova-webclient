@@ -33,6 +33,7 @@ import { ContentFocusState } from '../../../models/events/remote/content-focus-s
 import { RoutingService } from '../../../services/util/routing.service';
 import { RemoteService } from '../../../services/util/remote.service';
 import { ContentCarouselService } from '../../../services/util/content-carousel.service';
+import { ContentPublishService } from '../../../services/util/content-publish.service';
 
 @Component({
   selector: 'app-participant-content-carousel-page',
@@ -89,7 +90,8 @@ export class ParticipantContentCarouselPageComponent
     private router: Router,
     private routingService: RoutingService,
     private remoteService: RemoteService,
-    private contentCarouselService: ContentCarouselService
+    private contentCarouselService: ContentCarouselService,
+    private contentPublishService: ContentPublishService
   ) {}
 
   ngAfterContentInit() {
@@ -233,7 +235,7 @@ export class ParticipantContentCarouselPageComponent
 
   getContents(lastContentIndex, nextContentId?: string) {
     this.contents = [];
-    const publishedIds = this.contentgroupService.filterPublishedIds(
+    const publishedIds = this.contentPublishService.filterPublishedIds(
       this.contentGroup
     );
     if (publishedIds.length > 0 && this.contentGroup.published) {

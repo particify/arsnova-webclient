@@ -39,6 +39,7 @@ import { AuthProvider } from '@arsnova/app/models/auth-provider';
 import { RoutingService } from '@arsnova/app/services/util/routing.service';
 import { RemoteService } from '@arsnova/app/services/util/remote.service';
 import { ContentCarouselService } from '@arsnova/app/services/util/content-carousel.service';
+import { ContentPublishService } from '@arsnova/app/services/util/content-publish.service';
 
 describe('ParticipantContentCarouselPageComponent', () => {
   let component: ParticipantContentCarouselPageComponent;
@@ -197,6 +198,10 @@ describe('ParticipantContentCarouselPageComponent', () => {
         {
           provide: ContentCarouselService,
           useValue: mockContentCarouselService,
+        },
+        {
+          provide: ContentPublishService,
+          useClass: ContentPublishService,
         },
       ],
       schemas: [NO_ERRORS_SCHEMA],

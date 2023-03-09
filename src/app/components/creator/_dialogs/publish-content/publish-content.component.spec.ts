@@ -5,13 +5,15 @@ import {
   MockMatDialogRef,
 } from '@arsnova/testing/test-helpers';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 describe('PublishContentComponent', () => {
   let component: PublishContentComponent;
   let fixture: ComponentFixture<PublishContentComponent>;
+
+  const dialogData = 'publish';
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
@@ -30,6 +32,7 @@ describe('PublishContentComponent', () => {
           provide: MatDialogRef,
           useClass: MockMatDialogRef,
         },
+        { provide: MAT_DIALOG_DATA, useValue: dialogData },
       ],
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();

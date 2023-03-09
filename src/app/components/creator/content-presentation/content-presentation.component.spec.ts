@@ -39,6 +39,7 @@ import { STORAGE_KEYS } from '@arsnova/app/services/util/global-storage.service'
 import { UserSettings } from '@arsnova/app/models/user-settings';
 import { StepperComponent } from '../../shared/stepper/stepper.component';
 import { RemoteService } from '@arsnova/app/services/util/remote.service';
+import { ContentPublishService } from '@arsnova/app/services/util/content-publish.service';
 
 @Injectable()
 class MockContentService {
@@ -185,6 +186,10 @@ describe('ContentPresentationComponent', () => {
         {
           provide: RemoteService,
           useValue: mockRemoteService,
+        },
+        {
+          provide: ContentPublishService,
+          useValue: ContentPublishService,
         },
       ],
       imports: [
