@@ -3,7 +3,6 @@ import { ContentGroup } from '../../models/content-group';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { catchError, map, mergeMap, tap } from 'rxjs/operators';
-import { AuthenticationService } from './authentication.service';
 import { AbstractEntityService } from './abstract-entity.service';
 import { EventService } from '../util/event.service';
 import {
@@ -29,7 +28,6 @@ export class ContentGroupService extends AbstractEntityService<ContentGroup> {
   constructor(
     private http: HttpClient,
     protected ws: WsConnectorService,
-    private authService: AuthenticationService,
     private globalStorageService: GlobalStorageService,
     protected eventService: EventService,
     protected translateService: TranslateService,
@@ -190,36 +188,6 @@ export class ContentGroupService extends AbstractEntityService<ContentGroup> {
       this.globalStorageService.setItem(STORAGE_KEYS.LAST_GROUP, newName);
     }
     this.globalStorageService.setItem(STORAGE_KEYS.CONTENT_GROUPS, groups);
-  }
-
-  isContentPublished(contentGroup: ContentGroup, contentId: string) {
-    const i = contentGroup.contentIds.indexOf(contentId);
-    return this.isIndexPublished(
-      contentGroup.firstPublishedIndex,
-      contentGroup.lastPublishedIndex,
-      i
-    );
-  }
-
-  isIndexPublished(
-    firstIndex: number,
-    lastIndex: number,
-    contentIndex
-  ): boolean {
-    return (
-      contentIndex > -1 &&
-      firstIndex > -1 &&
-      contentIndex >= firstIndex &&
-      (lastIndex === -1 || contentIndex <= lastIndex)
-    );
-  }
-
-  filterPublishedIds(contentGroup: ContentGroup): string[] {
-    return (
-      contentGroup.contentIds?.filter((id) =>
-        this.isContentPublished(contentGroup, id)
-      ) || []
-    );
   }
 
   sortContentGroupsByName(contentGroups: ContentGroup[]): ContentGroup[] {

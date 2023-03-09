@@ -33,6 +33,7 @@ import { FeedbackService } from '@arsnova/app/services/http/feedback.service';
 import { Message } from '@stomp/stompjs';
 import { A11yIntroPipe } from '@arsnova/app/pipes/a11y-intro.pipe';
 import { CommentSettingsService } from '@arsnova/app/services/http/comment-settings.service';
+import { ContentPublishService } from '@arsnova/app/services/util/content-publish.service';
 
 describe('ParticipantOverviewComponent', () => {
   let component: ParticipantOverviewComponent;
@@ -173,6 +174,10 @@ describe('ParticipantOverviewComponent', () => {
         {
           provide: CommentSettingsService,
           useValue: mockCommentSettingsService,
+        },
+        {
+          provide: ContentPublishService,
+          useClass: ContentPublishService,
         },
       ],
       schemas: [NO_ERRORS_SCHEMA],

@@ -49,6 +49,7 @@ import { RoomService } from '../../../../services/http/room.service';
 import { RemoteService } from '../../../../services/util/remote.service';
 import { PresentationEvent } from '../../../../models/events/presentation-events.enum';
 import { CommentSettingsService } from '../../../../services/http/comment-settings.service';
+import { ContentPublishService } from '@arsnova/app/services/util/content-publish.service';
 
 export class KeyNavBarItem extends NavBarItem {
   key: string;
@@ -166,7 +167,8 @@ export class ControlBarComponent
     private contentService: ContentService,
     private dialogService: DialogService,
     private notificationService: NotificationService,
-    private remoteService: RemoteService
+    private remoteService: RemoteService,
+    private contentPublishService: ContentPublishService
   ) {
     super(
       router,
@@ -331,9 +333,8 @@ export class ControlBarComponent
   checkIfContentLocked() {
     if (this.contentIndex !== undefined) {
       this.isCurrentContentPublished =
-        this.contentGroupService.isIndexPublished(
-          this.group.firstPublishedIndex,
-          this.group.lastPublishedIndex,
+        this.contentPublishService.isIndexPublished(
+          this.group,
           this.contentIndex
         );
       this.groupItems[2].icon = this.isCurrentContentPublished

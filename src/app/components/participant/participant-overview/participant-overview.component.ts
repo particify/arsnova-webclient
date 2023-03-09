@@ -21,6 +21,7 @@ import { ContentGroupService } from '../../../services/http/content-group.servic
 import { ContentGroup } from '../../../models/content-group';
 import { RoomStatsService } from '../../../services/http/room-stats.service';
 import { CommentSettingsService } from '../../../services/http/comment-settings.service';
+import { ContentPublishService } from '../../../services/util/content-publish.service';
 
 @Component({
   selector: 'app-participant-overview',
@@ -49,7 +50,8 @@ export class ParticipantOverviewComponent
     public eventService: EventService,
     protected globalStorageService: GlobalStorageService,
     private feedbackService: FeedbackService,
-    private commentSettingsService: CommentSettingsService
+    private commentSettingsService: CommentSettingsService,
+    private contentPublishService: ContentPublishService
   ) {
     super(
       roomStatsService,
@@ -142,6 +144,6 @@ export class ParticipantOverviewComponent
   }
 
   calcContentsInGroup(group: ContentGroup): number {
-    return this.contentGroupService.filterPublishedIds(group).length;
+    return this.contentPublishService.filterPublishedIds(group).length;
   }
 }
