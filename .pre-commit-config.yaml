@@ -17,6 +17,7 @@ repos:
     hooks:
       - id: prettier
         name: Prettier
+        files: \.(cjs|css|html?|js|json|md|mjs|sass|scss|svg|ts|xml|ya?ml)$
         language: system
         entry: yarn
         args: [prettier, --write]
