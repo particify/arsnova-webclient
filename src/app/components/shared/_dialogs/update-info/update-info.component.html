@@ -31,7 +31,7 @@
   ></app-loading-indicator>
   <button
     mat-flat-button
-    [ngClass]="{ 'button-primary': !afterUpdate }"
+    color="primary"
     aria-labelledby="update-button"
     [disabled]="!afterUpdate && !updateReady"
     (click)="close()"
