@@ -52,9 +52,9 @@ $accent-palette: (
     900: $on-accent,
   ),
 );
-$arsnova-primary: mat.define-palette($primary-palette, 600);
-$arsnova-accent: mat.define-palette($accent-palette, 600);
-$arsnova-warn: mat.define-palette(mat.$red-palette, 800);
+$light-primary: mat.define-palette($primary-palette, 600);
+$light-accent: mat.define-palette($accent-palette, 600);
+$light-warn: mat.define-palette(mat.$red-palette, 800);
 $custom-typography: mat.define-typography-config(
   $font-family: $font-family,
   $button:
@@ -62,19 +62,19 @@ $custom-typography: mat.define-typography-config(
   $body-1: mat.define-typography-level(16px, 100%, normal, $font-family, 0),
   $body-2: mat.define-typography-level(16px, 100%, normal, $font-family, 0),
 );
-$arsnova-theme: mat.define-light-theme(
+$light-theme: mat.define-light-theme(
   (
     color: (
-      primary: $arsnova-primary,
-      accent: $arsnova-accent,
-      warn: $arsnova-warn,
+      primary: $light-primary,
+      accent: $light-accent,
+      warn: $light-warn,
     ),
     typography: $custom-typography,
   )
 );
 
-.theme-arsnova {
-  @include app-theme.theme($arsnova-theme);
+.theme-light {
+  @include app-theme.theme($light-theme);
 
   --primary-logo: #5e35b1;
   --secondary-logo: #2e7d32;
@@ -114,6 +114,4 @@ $arsnova-theme: mat.define-light-theme(
   --likert-neither: #e0e0e0;
   --likert-disagree: #ff8a65;
   --likert-strongly-disagree: #ff5722;
-  --light-theme-preview: #eee;
-  --dark-theme-preview: #616161;
 }

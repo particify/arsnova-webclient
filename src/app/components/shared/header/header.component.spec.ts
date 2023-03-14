@@ -261,9 +261,11 @@ describe('HeaderComponent', () => {
         'Header should contain item "My Rooms"'
       );
       const theme = await userMenu.getHarness(
-        MatMenuItemHarness.with({ selector: '#theme-menu' })
+        MatMenuItemHarness.with({ selector: '#theme-switcher' })
       );
-      expect(theme).not.toBeUndefined('Header should contain item "Theme"');
+      expect(theme).not.toBeUndefined(
+        'Header should contain item "Dark mode"/"Light mode"'
+      );
       const language = await userMenu.getHarness(
         MatMenuItemHarness.with({ selector: '#language-menu' })
       );
@@ -309,9 +311,11 @@ describe('HeaderComponent', () => {
     );
     expect(help).not.toBeUndefined('Header should contain item "Help"');
     const theme = await userMenu.getHarness(
-      MatMenuItemHarness.with({ selector: '#theme-menu' })
+      MatMenuItemHarness.with({ selector: '#theme-switcher' })
     );
-    expect(theme).not.toBeUndefined('Header should contain item "Theme"');
+    expect(theme).not.toBeUndefined(
+      'Header should contain item "Dark mode"/"Light mode"'
+    );
     const language = await userMenu.getHarness(
       MatMenuItemHarness.with({ selector: '#language-menu' })
     );
@@ -354,9 +358,11 @@ describe('HeaderComponent', () => {
     );
     expect(help).not.toBeUndefined('Header should contain item "Help"');
     const theme = await userMenu.getHarness(
-      MatMenuItemHarness.with({ selector: '#theme-menu' })
+      MatMenuItemHarness.with({ selector: '#theme-switcher' })
     );
-    expect(theme).not.toBeUndefined('Header should contain item "Theme"');
+    expect(theme).not.toBeUndefined(
+      'Header should contain item "Dark mode"/"Light mode"'
+    );
     const language = await userMenu.getHarness(
       MatMenuItemHarness.with({ selector: '#language-menu' })
     );
@@ -415,9 +421,11 @@ describe('HeaderComponent', () => {
     );
     expect(imprint).not.toBeUndefined('Header should contain item "Imprint"');
     const theme = await userMenu.getHarness(
-      MatMenuItemHarness.with({ selector: '#theme-menu' })
+      MatMenuItemHarness.with({ selector: '#theme-switcher' })
     );
-    expect(theme).not.toBeUndefined('Header should contain item "Theme"');
+    expect(theme).not.toBeUndefined(
+      'Header should contain item "Dark mode"/"Light mode"'
+    );
     const language = await userMenu.getHarness(
       MatMenuItemHarness.with({ selector: '#language-menu' })
     );
@@ -476,9 +484,11 @@ describe('HeaderComponent', () => {
     );
     expect(imprint).not.toBeUndefined('Header should contain item "Imprint"');
     const theme = await userMenu.getHarness(
-      MatMenuItemHarness.with({ selector: '#theme-menu' })
+      MatMenuItemHarness.with({ selector: '#theme-switcher' })
     );
-    expect(theme).not.toBeUndefined('Header should contain item "Theme"');
+    expect(theme).not.toBeUndefined(
+      'Header should contain item "Dark mode"/"Light mode"'
+    );
     const language = await userMenu.getHarness(
       MatMenuItemHarness.with({ selector: '#language-menu' })
     );
@@ -527,9 +537,11 @@ describe('HeaderComponent', () => {
       );
       expect(login).not.toBeUndefined('Header should contain item "Login"');
       const theme = await userMenu.getHarness(
-        MatMenuItemHarness.with({ selector: '#theme-menu' })
+        MatMenuItemHarness.with({ selector: '#theme-switcher' })
       );
-      expect(theme).not.toBeUndefined('Header should contain item "Theme"');
+      expect(theme).not.toBeUndefined(
+        'Header should contain item "Dark mode"/"Light mode"'
+      );
       const language = await userMenu.getHarness(
         MatMenuItemHarness.with({ selector: '#language-menu' })
       );
@@ -569,9 +581,11 @@ describe('HeaderComponent', () => {
     );
     expect(help).not.toBeUndefined('Header should contain item "Help"');
     const theme = await userMenu.getHarness(
-      MatMenuItemHarness.with({ selector: '#theme-menu' })
+      MatMenuItemHarness.with({ selector: '#theme-switcher' })
     );
-    expect(theme).not.toBeUndefined('Header should contain item "Theme"');
+    expect(theme).not.toBeUndefined(
+      'Header should contain item "Dark mode"/"Light mode"'
+    );
     const language = await userMenu.getHarness(
       MatMenuItemHarness.with({ selector: '#language-menu' })
     );
@@ -618,9 +632,11 @@ describe('HeaderComponent', () => {
     );
     expect(imprint).not.toBeUndefined('Header should contain item "Imprint"');
     const theme = await userMenu.getHarness(
-      MatMenuItemHarness.with({ selector: '#theme-menu' })
+      MatMenuItemHarness.with({ selector: '#theme-switcher' })
     );
-    expect(theme).not.toBeUndefined('Header should contain item "Theme"');
+    expect(theme).not.toBeUndefined(
+      'Header should contain item "Dark mode"/"Light mode"'
+    );
     const language = await userMenu.getHarness(
       MatMenuItemHarness.with({ selector: '#language-menu' })
     );

@@ -16,7 +16,7 @@ import {
   GlobalStorageService,
   STORAGE_KEYS,
 } from '../../../services/util/global-storage.service';
-import { Theme, ThemeService } from '../../../../theme/theme.service';
+import { ThemeService } from '../../../../theme/theme.service';
 import { LanguageService } from '../../../services/util/language.service';
 import { RoutingService } from '../../../services/util/routing.service';
 import { ConsentService } from '../../../services/util/consent.service';
@@ -207,9 +207,9 @@ export class HeaderComponent implements OnInit {
     });
   }
 
-  changeTheme(theme: Theme) {
-    this.currentTheme = theme;
-    this.themeService.activate(theme);
+  toggleTheme() {
+    this.themeService.toggleTheme();
+    this.currentTheme = this.themeService.getCurrentTheme();
   }
 
   showCookieSettings() {

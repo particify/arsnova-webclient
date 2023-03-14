@@ -56,9 +56,20 @@
         <mat-icon>help</mat-icon>
         <span>{{ 'header.help' | translate }}</span>
       </a>
-      <button id="theme-menu" mat-menu-item [matMenuTriggerFor]="themeMenu">
-        <mat-icon>palette</mat-icon>
-        <span>{{ 'header.style' | translate }}</span>
+      <button
+        id="theme-switcher"
+        mat-menu-item
+        (click)="toggleTheme()"
+        appTrackInteraction="Theme switched"
+        [appTrackName]="currentTheme"
+      >
+        <mat-icon>{{
+          currentTheme === 'light' ? 'dark_mode' : 'light_mode'
+        }}</mat-icon>
+        <span>{{
+          (currentTheme === 'light' ? 'header.dark-mode' : 'header.light-mode')
+            | translate
+        }}</span>
       </button>
       <button id="language-menu" mat-menu-item [matMenuTriggerFor]="langMenu">
         <mat-icon>language</mat-icon>
@@ -110,45 +121,6 @@
       >
         <mat-icon color="warn">exit_to_app</mat-icon>
         <span>{{ 'header.logout' | translate }}</span>
-      </button>
-    </mat-menu>
-
-    <mat-menu
-      class="wider-panel"
-      #themeMenu="matMenu"
-      xPosition="before"
-      [overlapTrigger]="false"
-    >
-      <button
-        mat-menu-item
-        *ngFor="let theme of themes"
-        (click)="changeTheme(theme)"
-        title="{{ theme.toString(lang) }}"
-        appTrackInteraction="Theme switched"
-        [appTrackName]="theme"
-      >
-        <div fxLayout="row" fxLayoutGap="16px">
-          <div fxLayoutAlign="center center" class="color color-{{ theme }}">
-            <mat-icon
-              class="checked checked-{{ theme }}"
-              *ngIf="theme === currentTheme"
-            >
-              checked
-            </mat-icon>
-          </div>
-          <div
-            fxLayout="column"
-            fxLayoutAlign="center"
-            class="color-text-container"
-          >
-            <!-- Name below can be loaded from config later -->
-            <span class="item-title color-title">{{
-              theme === 'arsnova'
-                ? 'ARSnova'
-                : ('header.dark-theme' | translate)
-            }}</span>
-          </div>
-        </div>
       </button>
     </mat-menu>
 

@@ -7,16 +7,16 @@ import {
 } from '../app/services/util/global-storage.service';
 
 export enum Theme {
-  ARSNOVA = 'arsnova',
+  LIGHT = 'light',
   DARK = 'dark',
 }
 
 @Injectable()
 export class ThemeService {
   private bodyClassList: DOMTokenList;
-  private currentTheme: string;
+  private currentTheme: Theme;
   private currentTheme$ = new BehaviorSubject(null);
-  private themes = [Theme.ARSNOVA, Theme.DARK];
+  private themes = [Theme.LIGHT, Theme.DARK];
   private barColors = [
     'blue',
     'yellow',
@@ -41,8 +41,10 @@ export class ThemeService {
     @Inject(DOCUMENT) document: Document
   ) {
     this.bodyClassList = document.body.classList;
-    this.currentTheme =
-      this.globalStorageService.getItem(STORAGE_KEYS.THEME) || Theme.ARSNOVA;
+    this.currentTheme = this.globalStorageService.getItem(STORAGE_KEYS.THEME);
+    if (!this.themes.includes(this.currentTheme)) {
+      this.currentTheme = Theme.LIGHT;
+    }
     this.activate(this.currentTheme);
   }
 
@@ -54,7 +56,13 @@ export class ThemeService {
     return this.currentTheme;
   }
 
-  activate(theme: string) {
+  toggleTheme() {
+    const newTheme =
+      this.currentTheme === Theme.LIGHT ? Theme.DARK : Theme.LIGHT;
+    this.activate(newTheme);
+  }
+
+  activate(theme: Theme) {
     this.bodyClassList.remove(`theme-${this.currentTheme}`);
     this.bodyClassList.add(`theme-${theme}`);
     this.globalStorageService.setItem(STORAGE_KEYS.THEME, theme);
