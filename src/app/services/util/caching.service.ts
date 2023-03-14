@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { RxStompState } from '@stomp/rx-stomp';
 import { interval } from 'rxjs';
-import * as LRU from 'lru-cache';
+import { LRUCache } from 'lru-cache';
 import { WsConnectorService } from '../websockets/ws-connector.service';
 
-const LRU_OPTIONS: LRU.Options<string, any> = {
+const LRU_OPTIONS: LRUCache.Options<string, any, unknown> = {
   max: 30,
   ttl: 15 * 60 * 1000,
   noDisposeOnSet: true,
@@ -69,18 +69,18 @@ export class CachingService {
 }
 
 export class Cache<T> {
-  private cache: LRU<string, T>;
+  private cache: LRUCache<string, T>;
   private disposeHandlers: {
     type: string;
     handler: (id: string, value: T) => void;
   }[] = [];
 
   constructor() {
-    const lruOptions: LRU.Options<string, T> = {
+    const lruOptions: LRUCache.Options<string, T, unknown> = {
       ...LRU_OPTIONS,
       dispose: (value, key) => this.dispatchDispose(key, value),
     };
-    this.cache = new LRU(lruOptions);
+    this.cache = new LRUCache(lruOptions);
     /* Explicitly prune the cache so the disponse handlers are called early. */
     interval(PRUNE_INTERVAL_MS).subscribe(() => this.cache.purgeStale());
   }
