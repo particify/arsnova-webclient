@@ -1,0 +1,1242 @@
+= Design Guidelines
+v1.0, 2023-03-06
+:toc: left
+:toc-title:
+:toclevels: 2
+:stylesheet: styles.css
+:imagesdir: images
+:nofooter:
+
+// Variables
+:app-padding: 4vw
+
+:x-small-spacer: 4px
+:small-spacer: 8px
+:smaller-spacer: 12px
+:base-spacer: 16px
+:larger-spacer: 24px
+:large-spacer: 32px
+:x-large-spacer: 48px
+
+:base-font-size: 16px
+:font-size-h1: 32px
+:font-size-h2: 24px
+:font-size-h3: 20px
+:font-size-h4: 16px
+:font-size-smaller: 14px
+
+:font-weight-normal: normal
+:font-weight-bold: bold
+
+This document is intended for developers who are modifying or extending ARSnova's user interface. The guidelines specific requirements and recommendations for accessibility, layout, styles, and components used in ARSnova's user interface. By following these guidelines, developers can ensure that ARSnova remains consistent and easy to use.
+
+== Foundations
+Foundations inform the basis for a great user interface, from accessibility standards to essential patterns for layout.
+
+=== Accessibility
+We committed to making our user interface accessible to everyone, including users with disabilities based on the requirements defined in WCAG 2.1. Developers should follow accessibility best practices to ensure that ARSnova is usable with assistive technologies, such as screen readers and keyboard-only navigation. This includes providing text alternatives for non-text content, ensuring that all functionality is available using the keyboard, and ensuring that color is not the only means of conveying information.
+
+Accessibility requirements are specified across all sections. Besides there is a https://gitlab.com/particify/dev/foss/arsnova-webclient/-/blob/master/docs/a11y/Making_html_elements_a11y.md[guide for making HTML elements accessible].
+
+=== Layout
+ARSnova's layout should be clear and easy to understand for all users. Developers should use a consistent layout across all pages and ensure that important information is prominently displayed. The layout should also be flexible enough to accommodate different screen sizes and resolutions.
+
+==== Overview
+The layout should be clear and easy to understand for all users. In this section, we provide an overview of the key principles that should guide the layout of ARSnova's pages.
+
+ARSnova's responsive design to screen size and orientation, ensuring consistency across layouts and good user experience for all common devices.
+
+.Room view on desktop device (left) and mobile device (right)
+image:room_view_desktop.png[Room view on desktop device, 73.3%]
+image:room_view_mobile.png[Room view on mobile device, 25.7%]
+
+
+==== Anatomy
+In this section, we provide guidelines for the different parts of ARSnova's interface, such as header, footerm content area and the key elements that make up our layout and their relationships to one another.
+
+===== Header
+The app header contains navigation and interaction elements which can vary depending on location (see room list vs room overview).
+
+image:room_list_header.png[Header in room list, 49.5%]
+image:room_overview_header.png[Header in room overview, 49.5%]
+
+The header has the highest elevation and is fixed to the top on every view and screen size. For detailed specs of the headere see the <<_top_app_bar>> section.
+
+===== Content area
+The apps content are is placed between header and footer and is centered horizontally.
+
+Content is placed as column horizontally centered with a max width of 832px (800px + padding).
+
+For detailed specs see <<_content_area_padding>>.
+
+===== Footer
+The app footer contains navigation elements and (optional) information. No material buttons or similar should be used here to keep the footer simple and rather unobtrusive. The footers position is always at the bottom of the content area and can be hidden on smaller devices were the <<_navigation_bar>> is used.
+
+===== Navigation
+The navigation in a room varies depending on screen size and context. So the different components <<_navigation_bar>>, <<_navigation_rail>> and <<_navigation_drawer>> are used.
+
+
+==== Spacing
+Proper spacing is essential to ensure that ARSnova's pages are easy to read and understand. In this section, we provide guidelines for the spacing between different elements on ARSnova's pages, such as text, buttons and other components.
+
+[cols="2,1"]
+|===
+|Layout attribute | Value
+
+|Small spacer
+|Small spacer ({small-spacer})
+
+|Smaller spacer
+|Smaller spacer ({smaller-spacer})
+
+|Base spacer
+|Base spacer ({base-spacer})
+
+|Larger spacer
+|Larger spacer ({larger-spacer})
+
+|Large spacer
+|Large spacer ({large-spacer})
+
+|X-Large spacer
+|X-Large spacer ({x-large-spacer})
+
+|===
+
+===== Content area padding
+The content area has a padding of {app-padding}. This results in the actual available space (on smaller devices).
+
+image:app_padding.png[Content area padding, 20%]
+
+===== Lists
+====== Card lists
+Card lists have a spacing of Small spacer ({small-spacer}) between items.
+
+====== Interaction lists
+Interaction list like in content answering has a space of Smaller spacer (Smaller spacer ({smaller-spacer})) to ensure that the correct item is selected.
+
+===== Card content
+Content in a card has a space of Smaller spacer ({smaller-spacer}) between items.
+
+===== Button row
+Space between 2 or more buttons in a row is Small spacer ({small-spacer}).
+
+===== Input row
+A row of inputs has a space between items of Smaller spacer ({smaller-spacer}).
+
+===== Link row
+A row of links has a space between items of Smaller spacer ({smaller-spacer}).
+
+===== Home view
+Elements in home view should use large and x-large paddings/margins for consistent spacing.
+
+== Styles
+ARSnova's visual style should be consistent, modern, and professional. Developers should follow ARSnova's style guide, which includes guidelines for typography, colors, and imagery. All text should be readable and contrast with the background. Icons should be clear and understandable. Images and graphics should be used sparingly and appropriately.
+
+=== Colors
+In ARSnova we use a custom color palette, which defines, next to primary, secondary and warn, a lot of other colors as well.
+
+==== Background
+Background color is used for the app background.
+
+==== Surface
+Surface color is used for most elements on the app background. So it's used for the <<_header>>, navigation bars or cards in the content area.
+
+==== Primary
+Primary color is used for most interactive elements like buttons of all kinds or tabs.
+
+==== Secondary
+Secondary color is used for displaying information like in badges or other non-interactive elements. Also the color is used for less prominent interactive elements like checkboxes, radio buttons and switches.
+
+==== Warn
+Warn color is used for errors and interaction elements like delete.
+
+==== Product speficic colors
+Beside the colors of the https://m2.material.io/design/color/the-color-system.html#color-theme-creation[baseline Material color theme] we have a lot of product specific colors like indicators for correct or wrong answers, different chart colors and logo colors.
+
+=== Icons
+Icons are used to represent common actions. We are using the https://fonts.google.com/icons[Material icons] from Google and using them filled.
+
+Default icon size is 24px which can vary depending on content.
+
+=== Motion
+There are some places in ARSnova were we use transitions or other animations to provide a better UX. For material components we use their default animations like in dialogs, checkboxes, expansion panels etc. Defaults for custom animations still need to be specified.
+
+=== Shape
+For the shape in ARSnova we are using the https://m2.material.io/design/shape/about-shape.html#shaping-material[default of the material design version 2].
+
+=== Typography
+Currently we are using a custom typography in ARSnova. Base font size is {base-font-size}, but not all components and text elements are oriented to this.
+
+HTML-Headlines should be used semantically correct and can have custom font size and weight.
+
+We need to implement a https://m2.material.io/design/typography/the-type-system.html#type-scale[type scale] to ensure more clear and consistent fonts across our app.
+
+Until then the following font specs are used:
+
+[cols="2,1, 1"]
+|===
+|Type | Size | Weight
+
+|Paragraph
+|{base-font-size}
+|{font-weight-normal}
+
+|Title
+|{font-size-h2}
+|{font-weight-bold}
+
+|Subtitle
+|{base-font-size}
+|{font-weight-normal}
+
+|Captions
+|{font-size-smaller}
+|{font-weight-normal}
+
+|Button
+|{font-size-smaller}
+|{font-weight-bold}
+
+|Headline 1
+|{font-size-h1}
+|{font-weight-bold}
+
+|Headline 2
+|{font-size-h2}
+|{font-weight-bold}
+
+|Headline 3
+|{font-size-h3}
+|{font-weight-bold}
+
+|Headline 4
+|{font-size-h4}
+|{font-weight-bold}
+
+|===
+
+== Components
+
+ARSnova is using https://material.angular.io/components/categories[Material Design Components (MDC)] for its user interface, such as buttons, forms, and menus, to ensure consistency and familiarity for users. Developers should follow ARSnova's component guidelines, which include specifications for size, spacing, and behavior. Custom components should be used sparingly and only when necessary to meet specific requirements.
+
+=== Badges
+https://material.angular.io/components/badge/overview[Badges] convey dynamic information, such as counts or status. We use two different types of them:
+
+Counter badges can be placed in the upper right corner of icons or next to a text element.
+
+.Badge of an icon (left) and beside text (right)
+image:icon_badge.png[Content area padding, 20%]
+image:text_badge.png[Content area padding, 21.8%]
+
+Simple small circle badge is used to indicate unread content and can be placed in the upper right corner of an icon.
+
+.Simple badge that indicates new contents in nav bar
+image:simple_badge.png[Content area padding, 20%]
+
+
+[cols="2,1"]
+|===
+|Layout attribute | Value
+
+|Counter badge size (HxW)
+|22px
+
+|Counter badge shape
+|50% corner radius
+
+|Counter badge color
+|Secondary (custom)
+
+|Counter badge margin to text
+|10px (custom)
+
+|Simple badge size (HxW)
+|12px (custom)
+
+|Simple badge shape
+|50% corner radius
+
+|Simple badge color
+|Warn
+
+|===
+
+=== Buttons
+
+There are several diffent button types used across the app.
+
+==== Raised button
+https://m2.material.io/components/buttons[Raised buttons] are used for the primary, most important or most common action(s) on a screen.
+
+[cols="2,1"]
+|===
+|Layout attribute | Value
+
+|Raised button height
+|36px
+
+|Raised button min width
+|64px
+
+|Raised button shape
+|4px corner radius
+
+|Raised button x-padding
+|16px
+
+|Raised button icon size
+|18px
+
+|Raised button with icon x-padding
+|12px left, 16px right
+
+|Raised button icon margin
+|8px
+
+|Raised button color
+|Primary
+
+|===
+
+==== Outlined button
+https://m2.material.io/components/buttons[Outline buttons] are used for second important action on a screen.
+
+[cols="2,1"]
+|===
+|Layout attribute | Value
+
+|Outlined button height
+|36px
+
+|Outlined button min width
+|64px
+
+|Outlined button shape
+|4px corner radius
+
+|Outlined button x-padding
+|16px
+
+|Outlined button icon size
+|18px
+
+|Outlined button with icon x-padding
+|12px left, 16px right
+
+|Outlined button icon margin
+|8px
+
+|Outlined button color
+|Transparent
+
+|Outlined button text color
+|Primary/On-Surface (custom)
+
+|===
+
+==== Flat button
+https://m2.material.io/components/buttons[Flat buttons] are used for primary action in dialogs.
+
+[cols="2,1"]
+|===
+|Layout attribute | Value
+
+|Flat button height
+|36px
+
+|Flat button min width
+|64px
+
+|Flat button shape
+|4px corner radius
+
+|Flat button x-padding
+|16px
+
+|Flat button color
+|Primary
+
+|===
+
+==== Text button
+https://m2.material.io/components/buttons[Text buttons] are used for secondary actions on a screen next to a primary action or for less important action next to primary action.
+
+[cols="2,1"]
+|===
+|Layout attribute | Value
+
+|Text button height
+|36px
+
+|Text button min width
+|64px
+
+|Text button shape
+|4px corner radius
+
+|Text button x-padding
+|8px
+
+|Text button icon size
+|18px
+
+|Text button icon margin
+|8px
+
+|Text button color
+|On-Surface/Primary (custom)
+
+|Text button opacity if color is not primary
+|0.8 (custom)
+
+|===
+
+
+==== Icon button
+https://m2.material.io/components/buttons[Icon buttons] are used for several kind of actions.
+
+[cols="2,1"]
+|===
+|Layout attribute | Value
+
+|Icon button size (HxW)
+|40px (custom)
+
+|Icon button shape
+|50% corner radius
+
+|Icon button padding
+|8px
+
+|Icon button icon size
+|24px
+
+|Icon button color
+|Transparent
+
+|Icon button icon color
+|On-Surface/Primary (custom)
+
+|Icon button icon opacity if color is not primary
+|0.8 (custom)
+
+|===
+
+==== FAB
+https://m2.material.io/components/buttons-floating-action-button#specs[FAB] are used for primary action on mobile devices. Mini FAB are used for primary and secondary actions.
+
+[cols="2,1"]
+|===
+|Layout attribute | Value
+
+|FAB size (HxW)
+|56px
+
+|FAB shape
+|50% corner radius
+
+|FAB padding
+|16px
+
+|FAB icon size
+|24px
+
+|FAB color
+|Primary
+
+|Mini FAB size (HxW)
+|40px
+
+|Mini FAB shape
+|50% corner radius
+
+|Mini FAB padding
+|8px
+
+|Mini FAB icon size
+|24px
+
+|Mini FAB color
+|Primary/On-Surface (custom)
+
+|===
+
+=== Cards
+https://m2.material.io/components/cards[Cards] are used for the main content in the content area in most views. They contain lists, mixed content or are used for single items like in the Q&A view.
+
+We are using two types of cards: Elevated and outlined. If the card is used on background, we use elevated cards, if used on surface color, the outlined one. Outline cards can have a hover/active indication for which a shadow is used. The grey shadow is used when primary could lead to confusion because of content in primary color.
+
+[cols="2,1"]
+|===
+|Layout attribute | Value
+
+|Card shape
+|4px corner radius
+
+|Card padding
+|16px
+
+|Card color
+|Surface
+
+|Card content color
+|On-Surface
+
+|Card elevation
+|Level 1
+
+|Outlined card border color
+|Grey (custom)
+
+|Outlined card border width
+|1px
+
+|Outlined card hover effect
+|3px box shadow primary/grey (custom)
+
+|===
+
+=== Checkbox
+
+https://m2.material.io/components/checkboxes[Checkboxes] are used to select one or more items. Currently there are used for content creation (creator) and content answering (participant). All checkboxes are used together with a label.
+
+As default we use the checkboxes with default material styling and secondary color. Only for participants content answering, the checkboxes have been customized and use primary color for better UX.
+
+[cols="2,1"]
+|===
+|Layout attribute | Value
+
+|Checkbox size (HxW)
+|18px
+
+|Checkbox input size (HxW)
+|40px
+
+|Checkbox shape
+|2px corner radius
+
+|Checkbox border width
+|2px
+
+|Checkbox ripple shape
+|50% corner radius
+
+|Checkbox unchecked color
+|Transparent
+
+|Checkbox checked color
+|Primary/Secondary (custom)
+
+|Checkbox label padding
+|4px
+
+|===
+
+=== Chips
+https://m2.material.io/components/chips[Chips] are used to seperate input data in form fields. Currently they are only used for managing comment kategories in settings.
+
+[cols="2,1"]
+|===
+|Layout attribute | Value
+
+|Chip height
+|32px
+
+|Chip left padding
+|12px
+
+|Chip left margin
+|8px
+
+|Chip y-margin
+|4px
+
+|Chip shape
+|16px corner radius
+
+|Chip remove icon size
+|18px
+
+|Chip remove icon x-padding
+|8px
+
+|===
+
+=== Dialogs
+https://m2.material.io/components/dialogs[Dialogs] are used to perform or confirm an action or displaying content.
+
+For confirmation or creation with input we use small dialogs with a width of 400px. For displaying technical content or information we use a width of 600px, for feature content we use the max card width of 832px. For comment answering we use a fullscreen dialog.
+
+For primary action, a flat button and for cancel action a text button is used. Closing on backdrop click is enabled by default and only disabled in exceptions like the consent dialog.
+
+[cols="2,1"]
+|===
+|Layout attribute | Value
+
+|Dialog width
+|400px/600px/832px/100% (custom)
+
+|Dialog height
+|auto
+
+|Dialog max height
+|65vh (custom)
+
+|Dialog shape
+|4px corner radius
+
+|Dialog content x-padding
+|24px
+
+|Dialog content y-padding
+|20px
+
+|Dialog actions x-padding
+|24px
+
+|Dialog actions bottom padding
+|24px
+
+|Dialog actions top padding
+|10px
+
+|Dialog actions button alignment
+|End (custom)
+
+|===
+
+=== Divider
+https://m2.material.io/components/dividers[Dividers] are used to seperate and group content.
+
+[cols="2,1"]
+|===
+|Layout attribute | Value
+
+|Divider width
+|100%
+
+|Divider height
+|1px
+
+|Divider y-margin
+|16px (custom)
+
+|===
+
+=== Lists
+https://m2.material.io/components/lists#specs[Lists] are used to display items of different types.
+
+[cols="2,1"]
+|===
+|Layout attribute | Value
+
+|List item width
+|100%
+
+|List item height
+|48px/60px (custom)
+
+|List item x-padding
+|16px
+
+|List item bottom border width (except last)
+|1px
+
+|List item leading icon size
+|24px
+
+|List item leading icon right margin
+|12px
+
+|List item leading icon opacity
+|0.5 (custom)
+
+|List item trailing icon size
+|24px
+
+|List item trailing icon left margin
+|16px
+
+|List item text x-overflow
+|ellipsis (custom)
+
+|List item text y-overflow
+|bottom fade out (custom)
+
+|List item trailing icon button color
+|Primary (custom)
+
+|===
+
+=== Menus
+https://m2.material.io/components/menus[Menus] are used to hide more options of a view and prevent overloading the UI.
+
+They are typically triggered by a button or a select form field.
+
+Menu items contain plain text or leading icon. Leading icons use on surface color by default with an opacity. Primary and warm actions are indicated by icon color. Selected menu items have a slightly different background color and content has primary color.
+
+[cols="2,1"]
+|===
+|Layout attribute | Value
+
+|Menu min width
+|112px
+
+|Menu y-padding
+|8px
+
+|Menu item height
+|48px
+
+|Menu item x-padding
+|16px
+
+|Menu item font size
+|14px (custom)
+
+|Menu item leading icon size
+|24px
+
+|Menu item leading icon color
+|On-Surface/Primary/Warn (custom)
+
+|Menu item leading icon opacity
+|1/0.7 (custom)
+
+|Menu item leading icon right margin
+|16px
+
+|Menu item active background color
+|4% darken
+
+|Menu item active color
+|Primary (custom)
+
+|Menu item title font weight
+|Bold (custom)
+
+|Menu item description font weight
+|Normal (custom)
+
+|Menu item disabled opacity
+|0.38
+
+|===
+
+=== Navigation bar
+https://m2.material.io/components/bottom-navigation[Navigation bar] is used for feature navigation on non-desktop-devices (width <1000px) in a room and items are added dynamically.
+
+Icons and text are positioned as column on smartphones (width <600px) or as row on landscape mode or tablet devices (width 600-1000px).
+
+Active item is inticated with primary color and items can use a notification badge or a menu to show furhter navigation options.
+
+[cols="2,1"]
+|===
+|Layout attribute | Value
+
+|Navigation bar height
+|56px
+
+|Navigation bar width
+|100%
+
+|Navigation bar item x-padding
+|12px
+
+|Navigation bar item y-padding
+|8px
+
+|Navigation bar item color
+|On-Surface/Primary (custom)
+
+|Navigation bar item opacity
+|0.7 (custom)
+
+|Navigation bar item active opacity
+|1
+
+|Navigation bar item icon size
+|24px
+
+|Navigation bar item font size
+|12px (custom)
+
+|Navigation bar item right margin on landscape
+|16px (custom)
+
+|===
+
+=== Navigation drawer
+https://m2.material.io/components/navigation-drawer[Navigation drawer] is used for navigation in admin interface and is always opened.
+
+The active navigation item is indicated with primary color.
+
+[cols="2,1"]
+|===
+|Layout attribute | Value
+
+|Navigation drawer width
+|256px
+
+|Navigation drawer color
+|Surface (custom)
+
+|Navigation drawer border right width
+|1px
+
+|Navigation drawer title type
+|h2 (custom)
+
+|Navigation drawer title padding
+|16px
+
+|Navigation drawer section title font size
+|14px
+
+|Navigation drawer section title opacity
+|0.7 (custom)
+
+|Navigation drawer section title x-padding
+|16px
+
+|Navigation drawer section title bottom margin
+|18px
+
+|Navigation drawer item container x-padding
+|8px
+
+|Navigation drawer item height
+|48px
+
+|Navigation drawer item width
+|100%
+
+|Navigation drawer item x-padding
+|8px
+
+|Navigation drawer item bottom margin
+|8px
+
+|Navigation drawer item background color
+|Surface (custom)
+
+|Navigation drawer item color
+|On-Surface
+
+|Navigation drawer item active background color
+|Primary-Variant (custom)
+
+|Navigation drawer item active color
+|Primary
+
+|Navigation drawer item icon size
+|18px
+
+|Navigation drawer item icon right margin
+|8px
+
+|===
+
+=== Navigation rail
+https://m2.material.io/components/navigation-rail[Navigation rail] is used for navigation in a room on desktop devices (width >1000px).
+
+Active item is inticated with primary color and items can use a notification badge or a menu to show furhter navigation options as in navigation bar.
+
+[cols="2,1"]
+|===
+|Layout attribute | Value
+
+|Navigation rail height
+|100%
+
+|Navigation rail width
+|72px
+
+|Navigation rail top padding
+|8px
+
+|Navigation rail bottom padding
+|16px
+
+|Navigation rail background color
+|Surface
+
+|Navigation rail right border width
+|1px
+
+|Navigation rail item alignment
+|Start (custom)
+
+|Navigation rail item padding
+|24px
+
+|Navigation rail item color
+|On-Surface/Primary (custom)
+
+|Navigation rail item opacity
+|0.7 (custom)
+
+|Navigation rail item active opacity
+|1 (custom)
+
+|Navigation rail item icon size
+|24px
+
+|Navigation rail info alignment
+|End (custom)
+
+|Navigation rail info color
+|On-Surface (custom)
+
+|Navigation rail info opacity
+|0.7 (custom)
+
+|Navigation rail info icon size
+|24px
+
+|Navigation rail info icon right margin
+|4px (custom)
+
+|Navigation rail info fonz size
+|16px (custom)
+
+|===
+
+=== Progress indicators
+https://m2.material.io/components/progress-indicators#specs[Progress indicator] is used for indicate loading on several views.
+
+For this the circular progress indicator is used with indeterminate animation since we have no option to detect the process completion rate or time.
+
+[cols="2,1"]
+|===
+|Layout attribute | Value
+
+|Progress indicator size (HxW)
+|40px
+
+|Progress indicator stroke width
+|4px
+
+|Progress indicator color
+|Primary
+
+|Progress indicator padding
+|20px (custom)
+
+|===
+
+=== Radio button
+https://m2.material.io/components/radio-buttons#circular-progress-indicators[Radio buttons] are used to select one option from a set.
+
+Like checkboxes, radio buttons are used for content creation and content answering.
+
+For content answering the default style has been customized for better UX.
+
+[cols="2,1"]
+|===
+|Layout attribute | Value
+
+|Radio button circle size (HxW)
+|20px
+
+|Radio button input size (HxW)
+|40px
+
+|Radio button shape
+|50% corner radius
+
+|Radio button ripple shape
+|50% corner radius
+
+|Radio button border width
+|2px
+
+|Radio button border color
+|rgba(0, 0, 0, .54)
+
+|Radio button active border color
+|Secondary/Primary (custom)
+
+|Radio button unselected color
+|Transparent
+
+|Radio button selected color
+|Secondary/Primary (custom)
+
+|Radio button label padding
+|4px
+
+|===
+
+=== Sliders
+https://m2.material.io/components/sliders[Sliders] are used to select from a range of values.
+
+Currently this component is used in Q&A settings to select vote treshold.
+
+[cols="2,1"]
+|===
+|Layout attribute | Value
+
+|Slider height
+|48px
+
+|Slider color
+|Primary
+
+|Slider track left margin
+|8px
+
+|Slider track right margin
+|16px
+
+|Slider track inactive height
+|4px
+
+|Slider track active height
+|6px
+
+|Slider thumb size (HxW)
+|20px
+
+|Slider thumb shape
+|50% corner radius
+
+|Slider value label right padding
+|4px (custom)
+
+|Slider value label font size
+|16px (custom)
+
+|Slider value label font weight
+|Bold (custom)
+
+|===
+
+=== Snackbar
+https://m2.material.io/components/snackbars#specs[Snackbars] are used to inform the user about processes and give feedback for actions made.
+
+Snackbars can contain different content like plain text, text with trailing icon, text with trailing progress indicator or text with a trailing action button.
+
+Snackbar icons can have different colors according to text message:
+1. Success: Green
+2. Failed: Red
+3. Warning: Warn-Soft
+4. Loading: Primary
+
+[cols="2,1"]
+|===
+|Layout attribute | Value
+
+|Snackbar container margin
+|8px
+
+|Snackbar height
+|48px
+
+|Snackbar min width
+|344px
+
+|Snackbar max width
+|672px
+
+|Snackbar shape
+|4px corner radius
+
+|Snackbar background color
+|#333333/#D9D9D9
+
+|Snackbar right padding
+|8px
+
+|Snackbar content left padding
+|16px
+
+|Snackbar content y-padding
+|14px
+
+|Snackbar content right padding
+|8px
+
+|Snackbar content font size
+|14px
+
+|Snackbar content icon size
+|24px
+
+|Snackbar content icon left margin
+|8px
+
+|===
+
+=== Switch
+https://m2.material.io/components/switches[Switches] are used to toggle the state of a single item.
+
+[cols="2,1"]
+|===
+|Layout attribute | Value
+
+|Switch color palette
+|Secondary
+
+|Switch track width
+|36px
+
+|Switch track height
+|14px
+
+|Switch track shape
+|7px corner radius
+
+|Switch handle ripple size (HxW)
+|40px
+
+|Switch handle size (HxW)
+|20px
+
+|Switch handle icon size
+|18px
+
+|Switch label right padding
+|4px (custom)
+
+|===
+
+=== Tables
+https://m2.material.io/components/data-tables[Tables] are used to list data in rows and columns.
+
+[cols="2,1"]
+|===
+|Layout attribute | Value
+
+|Row left padding
+|12px (custom)
+
+|Row right padding
+|24px (custom)
+
+|Header row height
+|56px
+
+|Data row height
+|48px
+
+|===
+
+
+=== Tabs
+https://m2.material.io/components/tabs[Tabs] are used for navigating between content without switching the view.
+
+The tab labels contain text with optional includes a counter in braces.
+
+[cols="2,1"]
+|===
+|Layout attribute | Value
+
+|Tab height
+|48px
+
+|Tab min width
+|90px
+
+|Tab x-padding
+|24px
+
+|Tab active indicator color
+|Primary
+
+|Tab active indicator width
+|2px
+
+|===
+
+=== Text fields
+https://m2.material.io/components/text-fields[Text fields] are used to enter and edit text.
+
+Default appearance is "outline" which is used for most text fields. Only for lists of inputs, we are using "filled" appearance with transparent background for list items and grey background for input for adding new items.
+
+For an search input positioned in a row with buttons or other elements we use a completely custom text field.
+
+Text fields can have a trailing icon button for action like creating an element with the input value or clearing the input.
+
+Text fields can have a hint or error message below. Inputs were the input length is limited should always show the current count and limit.
+
+Placeholders are only used for concrete input examples or if no floating label is used.
+
+[cols="2,1"]
+|===
+|Layout attribute | Value
+
+|Text field min height
+|56px
+
+|Text field shape
+|4px corner radius
+
+|Text field x-padding
+|16px
+
+|Text field wrapper y-padding
+|16px
+
+|Text field input top padding
+|4px
+
+|Text field trailing icon size
+|24px
+
+|Text field trailing icon color
+|Primary/On-Surface (custom)
+
+|Text field hint/error x-padding
+|16px
+
+|Text field hint/error font size
+|12px
+
+|Text field hint/error icon size
+|12px
+
+|Text field hint/error icon right margin
+|5px
+
+|Text field error color
+|Warn
+
+|Outline text field border width
+|1px
+
+|Outline text field border color
+|Grey
+
+|Outline text field active border width
+|2px
+
+|Outline text field active border color
+|Primary
+
+|Outline text field floating label x-padding
+|4px
+
+|===
+
+=== Top app bar
+https://material.angular.io/components/toolbar/overview[Top app bar] is used for application <<_header>>.
+
+[cols="2,1"]
+|===
+|Layout attribute | Value
+
+|Top app bar mobile height
+|56px
+
+|Top app bar desktop height
+|64px
+
+|Top app bar x-padding
+|16px
+
+|Top app bar color
+|Surface (custom)
+
+|===
