@@ -1,6 +1,5 @@
 variables:
   BUILD_DIR: dist
-  YARN_CACHE_FOLDER: .yarn-cache
 
 workflow:
   rules:
@@ -16,76 +15,30 @@ default:
   before_script:
     - date
     - corepack enable
+    - yarn install --immutable
   after_script:
     - date
 
-.yarn_cache: &yarn_cache
-  key: yarn-cache
-  paths:
-    - node_modules
-    - $YARN_CACHE_FOLDER
-
-yarn_populate_cache:
-  stage: .pre
-  rules:
-    - if: '$CI_COMMIT_BRANCH != "master" || $CI_MERGE_REQUEST_ID'
-      when: never
-    - changes:
-        - package.json
-        - yarn.lock
-      when: always
-    - when: manual
-  # allow_failure: Do not block pipeline if job is created but not run.
-  allow_failure: true
-  cache:
-    <<: *yarn_cache
-    policy: pull-push
-  script:
-    - echo Populating cache...
-    - umask 0000
-    - yarn --frozen-lockfile
-
-yarn_install:
-  stage: .pre
-  artifacts:
-    expire_in: 2 hours
-    paths:
-      - node_modules
-  cache:
-    <<: *yarn_cache
-    policy: pull
-  script:
-    - umask 0000
-    - yarn --frozen-lockfile
-
 lint:
   stage: test
-  needs:
-    - yarn_install
   allow_failure: false
   script:
     - yarn lint
 
 prettier:
   stage: test
-  needs:
-    - yarn_install
   allow_failure: false
   script:
     - yarn prettier --check .
 
 stylelint:
   stage: test
-  needs:
-    - yarn_install
   allow_failure: false
   script:
     - yarn stylelint "**/*.scss"
 
 unit_tests:
   stage: test
-  needs:
-    - yarn_install
   image: particifydev/chromebrowser-nodejs:111.0.5563.64-1-nodejs-18.15.0
   allow_failure: false
   variables:
@@ -95,8 +48,6 @@ unit_tests:
 
 ngbuild:
   stage: build
-  needs:
-    - yarn_install
   allow_failure: false
   artifacts:
     expire_in: 2 days
