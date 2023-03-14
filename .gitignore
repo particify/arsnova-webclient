@@ -8,6 +8,10 @@
 /dist/
 
 # Node.js/NPM/Yarn
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/versions
 node_modules/
 npm-debug.log*
 yarn-debug.log*

@@ -15,6 +15,7 @@ default:
   interruptible: true
   before_script:
     - date
+    - corepack enable
   after_script:
     - date
 
