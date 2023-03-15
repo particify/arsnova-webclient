@@ -85,7 +85,7 @@ unit_tests:
   stage: test
   needs:
     - yarn_install
-  image: particifydev/chromebrowser-nodejs:107.0.5304.87-1-nodejs-18.12.0
+  image: particifydev/chromebrowser-nodejs:111.0.5563.64-1-nodejs-18.15.0
   allow_failure: false
   variables:
     CHROME_BIN: /usr/bin/google-chrome
