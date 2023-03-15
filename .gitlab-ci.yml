@@ -1,16 +1,18 @@
 variables:
   BUILD_DIR: dist
+  CHROME_IMAGE_TAG: 111.0.5563.64-1-nodejs-18.15.0
+  DEPENDENCY_CACHE_IMAGE: $CI_REGISTRY/particify/dev/foss/arsnova-webclient/dependency-cache-chromebrowser-nodejs
 
 workflow:
   rules:
     # Create pipeline for either the MR or the branch/tag but not both
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_PIPELINE_SOURCE == "schedule"
     - if: $CI_COMMIT_BRANCH && $CI_OPEN_MERGE_REQUESTS
       when: never
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH || $CI_COMMIT_TAG =~ /^v[0-9]+/ || $CI_COMMIT_BRANCH =~ /^[0-9]+\.[0-9]+$/ || $CI_COMMIT_BRANCH =~ /^renovate\//
 
 default:
-  image: node:18.15-alpine
+  image: $DEPENDENCY_CACHE_IMAGE:$CHROME_IMAGE_TAG
   interruptible: true
   before_script:
     - date
@@ -21,25 +23,32 @@ default:
 
 lint:
   stage: test
+  rules:
+    - if: $CI_PIPELINE_SOURCE != "schedule"
   allow_failure: false
   script:
     - yarn lint
 
 prettier:
   stage: test
+  rules:
+    - if: $CI_PIPELINE_SOURCE != "schedule"
   allow_failure: false
   script:
     - yarn prettier --check .
 
 stylelint:
   stage: test
+  rules:
+    - if: $CI_PIPELINE_SOURCE != "schedule"
   allow_failure: false
   script:
     - yarn stylelint "**/*.scss"
 
 unit_tests:
   stage: test
-  image: particifydev/chromebrowser-nodejs:111.0.5563.64-1-nodejs-18.15.0
+  rules:
+    - if: $CI_PIPELINE_SOURCE != "schedule"
   allow_failure: false
   variables:
     CHROME_BIN: /usr/bin/google-chrome
@@ -48,6 +57,8 @@ unit_tests:
 
 ngbuild:
   stage: build
+  rules:
+    - if: $CI_PIPELINE_SOURCE != "schedule"
   allow_failure: false
   artifacts:
     expire_in: 2 days
@@ -66,6 +77,8 @@ docker_image:
     name: gcr.io/kaniko-project/executor:debug
     entrypoint: ['']
   rules:
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+      when: never
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
       when: on_success
       variables:
@@ -89,3 +102,46 @@ docker_image:
       --dockerfile "$KANIKO_DOCKERFILE"
       --destination "$DOCKER_IMAGE:$DOCKER_TAG"
       --build-arg "ARSNOVA_BUILD_DIR=`echo $BUILD_DIR`"
+
+prepare_dependency_cache:
+  stage: .pre
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+  variables:
+    YARN_GLOBAL_FOLDER: .yarn-global
+  artifacts:
+    expire_in: 2 hours
+    paths:
+      - .yarn-global
+  script:
+    # NOOP
+    - ':'
+
+dependency_cache:
+  stage: build
+  needs:
+    - prepare_dependency_cache
+  image:
+    name: gcr.io/kaniko-project/executor:debug
+    entrypoint: ['']
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+  variables:
+    DOCKER_IMAGE: $DEPENDENCY_CACHE_IMAGE
+    DOCKER_TAG: $CHROME_IMAGE_TAG
+    KANIKO_CONTEXT: $CI_PROJECT_DIR
+    KANIKO_DOCKERFILE: $CI_PROJECT_DIR/docker/dependency-cache.Dockerfile
+    YARN_GLOBAL_FOLDER: .yarn-global
+  allow_failure: true
+  interruptible: false
+  before_script:
+    - date
+  script:
+    - mkdir -p /kaniko/.docker
+    - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
+    - /kaniko/executor
+      --context "$KANIKO_CONTEXT"
+      --dockerfile "$KANIKO_DOCKERFILE"
+      --destination "$DOCKER_IMAGE:$DOCKER_TAG"
+      --build-arg "BASE_TAG=`echo $DOCKER_TAG`"
+      --build-arg "YARN_GLOBAL_FOLDER=`echo $YARN_GLOBAL_FOLDER`"
