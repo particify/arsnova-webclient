@@ -30,6 +30,7 @@
       }
     }
   },
+  "postCreateCommand": "sudo chown -fR $USER:$USER $HOME/.yarn",
   "postStartCommand": "yarn",
   "shutdownAction": "none",
   "remoteUser": "dev"
