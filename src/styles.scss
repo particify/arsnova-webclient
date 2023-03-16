@@ -1,11 +1,11 @@
 @use '@angular/material' as mat;
 @import 'theme/dark-theme/dark-theme';
-@import 'theme/arsnova-theme/arsnova-theme';
+@import 'theme/light-theme/light-theme';
 @import 'variables';
 @import 'util';
 @include mat.core;
 
-@include mat.all-component-themes($arsnova-theme);
+@include mat.all-component-themes($light-theme);
 
 .theme-dark {
   @include mat.all-component-colors($dark-theme);

@@ -30,49 +30,12 @@
   background-color: var(--grey-light);
 }
 
-.color {
-  border-radius: 50%;
-  width: 36px;
-  height: 36px;
-}
-
-.color-arsnova {
-  background-color: var(--light-theme-preview);
-}
-
-.color-dark {
-  background-color: var(--dark-theme-preview);
-}
-
-.checked {
-  margin: 0 !important;
-}
-
-.checked-arsnova {
-  color: black;
-}
-
-.checked-dark {
-  color: white;
-}
-
 .item-title {
   line-height: 100%;
 }
 
-.color-title {
-  height: 14px;
-  font-size: 14px;
-  color: var(--on-dialog);
-  font-weight: $font-weight-bold;
-}
-
 .lang-title {
   text-align: center;
-}
-
-.color-text-container {
-  padding-right: 16px;
 }
 
 .desktop-action-container {
