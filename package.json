@@ -1,17 +1,23 @@
 {
-  "name": "arsnova-lite",
-  "version": "1.4.0-SNAPSHOT",
+  "name": "arsnova-webclient",
+  "private": true,
   "license": "MIT",
+  "packageManager": "yarn@3.4.1",
+  "engines": {
+    "yarn": "3.4.1"
+  },
   "scripts": {
-    "postinstall": "if [ -z \"$CI\" ]; then pip install pre-commit && pre-commit install; fi",
-    "ng": "ng",
+    "postinstall": "sh -c 'if [ -z \"$CI\" ]; then pip install pre-commit && pre-commit install; fi'",
+    "g:ng": "cd $INIT_CWD && ng",
+    "g:eslint": "cd $INIT_CWD && eslint",
+    "g:prettier": "cd $INIT_CWD && prettier",
+    "g:stylelint": "cd $INIT_CWD && stylelint",
     "start": "ng serve --proxy-config proxy.conf.json",
     "build": "ng build --configuration production",
     "test": "ng test --watch=false --browsers=ChromeHeadlessCustom",
     "lint": "ng lint",
     "e2e": "ng e2e"
   },
-  "private": true,
   "dependencies": {
     "@angular/animations": "15.1.5",
     "@angular/cdk": "15.1.6",

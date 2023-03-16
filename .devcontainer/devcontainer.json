@@ -8,6 +8,7 @@
     "vscode": {
       "extensions": [
         "angular.ng-template",
+        "arcanis.vscode-zipfs",
         "asciidoctor.asciidoctor-vscode",
         "dbaeumer.vscode-eslint",
         "eamodio.gitlens",
@@ -18,7 +19,9 @@
         "editor.defaultFormatter": "esbenp.prettier-vscode",
         "editor.formatOnSave": true,
         "files.exclude": {
-          ".angular": true
+          ".angular": true,
+          ".pnp.*": true,
+          ".yarn": true
         },
         "search.exclude": {
           "**/node_modules": true,
