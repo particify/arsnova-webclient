@@ -37,6 +37,7 @@ import { ContentGroup } from '@arsnova/app/models/content-group';
 import { RoomService } from '@arsnova/app/services/http/room.service';
 import { RemoteService } from '@arsnova/app/services/util/remote.service';
 import { CommentSettingsService } from '@arsnova/app/services/http/comment-settings.service';
+import { ContentPublishService } from '@arsnova/app/services/util/content-publish.service';
 
 describe('ControlBarComponent', () => {
   let component: ControlBarComponent;
@@ -218,6 +219,10 @@ describe('ControlBarComponent', () => {
         {
           provide: CommentSettingsService,
           useValue: mockCommentSettingsService,
+        },
+        {
+          provide: ContentPublishService,
+          useClass: ContentPublishService,
         },
       ],
       schemas: [NO_ERRORS_SCHEMA],

@@ -43,6 +43,7 @@ import { ContentState } from '@arsnova/app/models/content-state';
 import { ContentGroup } from '@arsnova/app/models/content-group';
 import { Room } from '@arsnova/app/models/room';
 import { A11yRenderedBodyPipe } from '@arsnova/app/pipes/a11y-rendered-body.pipe';
+import { ContentPublishService } from '@arsnova/app/services/util/content-publish.service';
 
 @Injectable()
 class MockContentService {
@@ -81,9 +82,6 @@ class MockRoomService {}
 class MockContentGroupService {
   getByRoomIdAndName() {
     return of(new ContentGroup('1234', '0', 'roomId', 'name', [], true));
-  }
-  isIndexPublished() {
-    return true;
   }
 }
 
@@ -206,6 +204,10 @@ describe('GroupContentComponent', () => {
         {
           provide: A11yRenderedBodyPipe,
           useValue: a11yRenderedBodyPipe,
+        },
+        {
+          provide: ContentPublishService,
+          useClass: ContentPublishService,
         },
       ],
       imports: [

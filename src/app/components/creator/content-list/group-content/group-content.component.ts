@@ -41,6 +41,7 @@ import { MarkdownFeatureset } from '../../../../services/http/formatting.service
 import { DragDropBaseComponent } from '../../../shared/drag-drop-base/drag-drop-base.component';
 import { UserRole } from '../../../../models/user-roles.enum';
 import { PresentationEvent } from '../../../../models/events/presentation-events.enum';
+import { ContentPublishService } from '../../../../services/util/content-publish.service';
 
 @Component({
   selector: 'app-group-content',
@@ -111,7 +112,8 @@ export class GroupContentComponent
     protected localFileService: LocalFileService,
     protected router: Router,
     private hotkeyService: HotkeyService,
-    private routingService: RoutingService
+    private routingService: RoutingService,
+    private contentPublishService: ContentPublishService
   ) {
     super();
     langService.langEmitter.subscribe((lang) => translateService.use(lang));
@@ -808,9 +810,8 @@ export class GroupContentComponent
   }
 
   isPublished(index: number): boolean {
-    return this.contentGroupService.isIndexPublished(
-      this.firstPublishedIndex,
-      this.lastPublishedIndex,
+    return this.contentPublishService.isIndexPublished(
+      this.contentGroup,
       index
     );
   }

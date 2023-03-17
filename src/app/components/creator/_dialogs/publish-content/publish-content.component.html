@@ -1,26 +1,27 @@
-<form fxLayout="column" (ngSubmit)="close(true)">
+<form fxLayout="column">
   <div mat-dialog-content>
     <h3>{{ 'dialog.how-to-proceed' | translate }}</h3>
     <mat-radio-group
-      [(ngModel)]="publishSingle"
+      [(ngModel)]="selectedAction"
       [ngModelOptions]="{ standalone: true }"
       fxLayout="column"
       fxLayoutGap="8px"
     >
-      <mat-radio-button [value]="true">{{
-        'dialog.publish-this-content' | translate
-      }}</mat-radio-button>
-      <mat-radio-button [value]="false">{{
-        'dialog.publish-contents-up-to-here' | translate
-      }}</mat-radio-button>
+      <mat-radio-button
+        *ngFor="let action of actions[actionType]"
+        [value]="action"
+        >{{
+          'dialog.' + actionType + '-' + action | translate
+        }}</mat-radio-button
+      >
     </mat-radio-group>
   </div>
   <div mat-dialog-actions fxLayout="row" fxLayoutAlign="end" fxLayoutGap="10px">
-    <button mat-button type="button" (click)="close(false)">
+    <button mat-button type="button" (click)="close()">
       {{ 'dialog.cancel' | translate }}
     </button>
-    <button mat-flat-button color="primary">
-      {{ 'dialog.publish' | translate }}
+    <button mat-flat-button color="primary" (click)="close(selectedAction)">
+      {{ 'dialog.' + actionType | translate }}
     </button>
   </div>
 </form>
