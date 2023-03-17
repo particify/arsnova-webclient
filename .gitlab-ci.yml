@@ -87,7 +87,7 @@ docker_image:
       variables:
         DOCKER_TAG: dev-$CI_COMMIT_REF_SLUG
   variables:
-    DOCKER_IMAGE: $CI_REGISTRY/$CI_PROJECT_PATH/$PROJECT
+    DOCKER_IMAGE: $CI_REGISTRY/$CI_PROJECT_PATH
     KANIKO_CONTEXT: $CI_PROJECT_DIR
     KANIKO_DOCKERFILE: $CI_PROJECT_DIR/docker/Dockerfile
   allow_failure: true
