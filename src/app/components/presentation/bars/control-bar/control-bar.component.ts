@@ -180,6 +180,8 @@ export class ControlBarComponent
       roomService,
       commentSettingsService
     );
+    this.showBar();
+    this.setBarTimer(3000);
   }
 
   ngOnDestroy() {
@@ -524,9 +526,7 @@ export class ControlBarComponent
           this.showBar();
         }
       } else {
-        this.barTimer = setTimeout(() => {
-          this.hideBar();
-        }, 1000);
+        this.setBarTimer(1000);
       }
     }
   }
@@ -540,6 +540,12 @@ export class ControlBarComponent
     this.barTimer = null;
     this.barVisible = false;
     this.sendControlBarState();
+  }
+
+  setBarTimer(millis: number) {
+    this.barTimer = setTimeout(() => {
+      this.hideBar();
+    }, millis);
   }
 
   menuClosed() {
