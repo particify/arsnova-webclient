@@ -283,7 +283,13 @@
     "group-published": "The question series has been published.",
     "preferences": "Display settings",
     "reset-banned-answers": "Reset banned keywords",
-    "banned-keywords-reset": "Banned keywords have been reset."
+    "banned-keywords-reset": "Banned keywords have been reset.",
+    "start-new-round": "Start new round",
+    "started-new-round": "New round has been started.",
+    "canceled": "You've cancelled the process.",
+    "round": "Round",
+    "round-displayed": "Round {{rounds}} is displayed",
+    "rounds-displayed": "Round {{rounds}} are displayed"
   },
   "answer": {
     "word": "Keyword",
@@ -443,7 +449,9 @@
     "a11y-type-choice": "Choice",
     "a11y-type-likert": "Likert",
     "a11y-type-text": "Text",
-    "a11y-choice-evaluation": "{{count}} persons have selected the answer {{answer}}.",
+    "a11y-choice-evaluation": "Answer {{label}}: {{answer}}.",
+    "a11y-multiple-round-counts": "{{countRoundA}} answers in round 1, {{countRoundB}} answers in round 2",
+    "a11y-single-round-count": "{{count}} answers",
     "a11y-text-evaluation": "{{count}} persons have answered with {{answer}}.",
     "a11y-no-more-answers": "There are no more answers. Press the right arrow key to go to the next one.",
     "a11y-correct": "The answer is correct.",
@@ -534,7 +542,9 @@
     "really-discard-announcement": "Do you really want to discard your input?",
     "discard": "Discard",
     "ban": "Ban",
-    "really-ban-answer": "Do you really want to ban the keyword?"
+    "really-ban-answer": "Do you really want to ban the keyword?",
+    "really-start-new-round": "Do you really want to start a new round?",
+    "start": "Start"
   },
   "utils": {
     "formatting-image-hint": "Please note that images with a large file size can affect loading times."

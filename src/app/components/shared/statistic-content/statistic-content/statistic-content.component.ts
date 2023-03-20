@@ -276,6 +276,7 @@ export class StatisticContentComponent implements OnInit {
       this.content.format === ContentType.SCALE
         ? this.scaleStatistic
         : this.choiceStatistic;
+    this.roundsToDisplay = round;
     chartComponent.roundsToDisplay = round;
     chartComponent.rounds = round + 1;
     chartComponent.updateCounterForRound();

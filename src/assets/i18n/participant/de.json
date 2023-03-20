@@ -63,7 +63,10 @@
     "all-contents-answered": "Du hast alle Inhalte dieser Serie beantwortet. Schaue dir deine Antworten noch einmal an oder kehre zur Raumübersicht zurück.",
     "continue-where-you-stopped": "Mach da weiter, wo du aufgehört hast",
     "some-contents-answered": "Schaue dir deine Antworten noch einmal an, springe zum nächsten Inhalt oder kehre zur Raumübersicht zurück.",
-    "pure-info-contents": "Springe zu einem beliebigen Inhalt oder kehre zur Raumübersicht zurück."
+    "pure-info-contents": "Springe zu einem beliebigen Inhalt oder kehre zur Raumübersicht zurück.",
+    "round": "Runde",
+    "round-displayed": "Die Runde {{rounds}} wird zurzeit angezeigt",
+    "rounds-displayed": "Die Runden {{rounds}} werden zurzeit angezeigt"
   },
   "comment-list": {
     "a11y-search-list": "Durchsuche die Beiträge",
@@ -189,7 +192,9 @@
     "a11y-type-choice": "Choice",
     "a11y-type-likert": "Likert",
     "a11y-type-text": "Text",
-    "a11y-choice-evaluation": "{{count}} Personen haben die Antwort {{answer}} ausgewählt.",
+    "a11y-choice-evaluation": "Antwort {{label}}: {{answer}}.",
+    "a11y-multiple-round-counts": "{{countRoundA}} Antworten in Runde 1, {{countRoundB}} Antworten in Runde 2",
+    "a11y-single-round-count": "{{count}} Antworten",
     "a11y-text-evaluation": "{{count}} Personen haben mit {{answer}} geantwortet.",
     "a11y-no-more-answers": "Es sind keine weiteren Antworten vorhanden. Drücke die rechte Pfeiltaste um zum nächsten Inhalt zu gelangen.",
     "a11y-correct": "Die Antwort ist richtig.",

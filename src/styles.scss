@@ -823,6 +823,12 @@ div {
   opacity: 0.7;
 }
 
+.selected-menu-item {
+  @extend %primary;
+
+  font-weight: $font-weight-bold;
+}
+
 // Snackbar
 
 .mat-mdc-snack-bar-container {

@@ -57,16 +57,21 @@
         'all-animations': !isPresentation
       }"
       tabindex="0"
-      attr.aria-label="{{
+      [attr.aria-label]="
         ('statistic.a11y-choice-evaluation'
-          | translate : { count: data[roundsToDisplay][i], answer: a.label }) +
-          (isSurvey
-            ? ''
-            : ((checkIfCorrect(i)
-                ? 'statistic.a11y-correct'
-                : 'statistic.a11y-wrong'
-              ) | translate))
-      }}"
+          | translate : { label: labelLetters[i], answer: a.label }) +
+        (rounds > 1
+          ? ('statistic.a11y-multiple-round-counts'
+            | translate : { countRoundA: data[0][i], countRoundB: data[1][i] })
+          : ('statistic.a11y-single-round-count'
+            | translate : { count: data[0][i] })) +
+        (isSurvey
+          ? ''
+          : ((checkIfCorrect(i)
+              ? 'statistic.a11y-correct'
+              : 'statistic.a11y-wrong'
+            ) | translate))
+      "
       *ngFor="let a of options; let i = index"
     >
       <div fxFill fxLayoutAlign="space-between center">

@@ -33,18 +33,13 @@
         [count]="answerCount"
       ></app-answer-count>
       <div fxLayout="row">
-        <lib-extension-point
-          *ngIf="multipleRounds && answersVisible"
-          extensionId="round-selection"
-          (extensionEvent)="changeRound($event)"
-          [extensionData]="{ round: roundsToDisplay }"
-        ></lib-extension-point>
-        <div
-          fxLayout="row"
-          fxLayoutAlign="end"
-          [ngClass]="{ 'fix-width': !survey }"
-          fxLayoutGap="8px"
-        >
+        <div fxLayout="row" fxLayoutAlign="end" fxLayoutGap="8px">
+          <app-multiple-round-selection
+            *ngIf="multipleRounds && answersVisible"
+            [round]="roundsToDisplay"
+            (roundChanged)="changeRound($event)"
+          >
+          </app-multiple-round-selection>
           <button
             mat-icon-button
             color="primary"

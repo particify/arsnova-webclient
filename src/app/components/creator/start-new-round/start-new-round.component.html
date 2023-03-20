@@ -1,0 +1,8 @@
+<button
+  mat-menu-item
+  (click)="showNewRoundDialog()"
+  [disabled]="content.state.round > 1"
+>
+  <mat-icon>replay</mat-icon>
+  {{ 'content.start-new-round' | translate }}
+</button>
