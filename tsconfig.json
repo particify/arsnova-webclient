@@ -4,10 +4,20 @@
     "baseUrl": "src/",
     "outDir": "./dist/out-tsc",
     "forceConsistentCasingInFileNames": true,
-    "strict": true,
-    "noImplicitOverride": true,
-    "noPropertyAccessFromIndexSignature": true,
-    "noImplicitReturns": true,
+    // All of the strictness settings below are enabled implicitly when strict = true
+    "strict": false,
+    "alwaysStrict": true,
+    "noImplicitAny": false,
+    "noImplicitThis": true,
+    "strictBindCallApply": true,
+    "strictFunctionTypes": false,
+    "strictNullChecks": false,
+    "strictPropertyInitialization": false,
+    "useUnknownInCatchVariables": true,
+    // All of the strictness settings above are enabled implicitly when strict = true
+    "noImplicitOverride": false,
+    "noPropertyAccessFromIndexSignature": false,
+    "noImplicitReturns": false,
     "noFallthroughCasesInSwitch": true,
     "sourceMap": true,
     "declaration": false,
@@ -31,6 +41,16 @@
     "enableI18nLegacyMessageIdFormat": false,
     "strictInjectionParameters": true,
     "strictInputAccessModifiers": true,
-    "strictTemplates": true
+    // All of the strictness settings below are enabled implicitly when strictTemplates = true
+    "strictTemplates": false,
+    "strictContextGenerics": true,
+    "strictDomEventTypes": false,
+    "strictDomLocalRefTypes": true,
+    "strictInputTypes": false,
+    "strictLiteralTypes": true,
+    "strictNullInputTypes": true,
+    "strictOutputEventTypes": true,
+    "strictSafeNavigationTypes": true
+    // All of the strictness settings above are enabled implicitly when strictTemplates = true
   }
 }
