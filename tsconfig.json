@@ -1,18 +1,34 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
-    "downlevelIteration": true,
-    "importHelpers": true,
+    "baseUrl": "src/",
     "outDir": "./dist/out-tsc",
+    "forceConsistentCasingInFileNames": true,
+    // All of the strictness settings below are enabled implicitly when strict = true
+    "strict": false,
+    "alwaysStrict": true,
+    "noImplicitAny": false,
+    "noImplicitThis": true,
+    "strictBindCallApply": true,
+    "strictFunctionTypes": false,
+    "strictNullChecks": false,
+    "strictPropertyInitialization": false,
+    "useUnknownInCatchVariables": true,
+    // All of the strictness settings above are enabled implicitly when strict = true
+    "noImplicitOverride": false,
+    "noPropertyAccessFromIndexSignature": false,
+    "noImplicitReturns": false,
+    "noFallthroughCasesInSwitch": true,
     "sourceMap": true,
     "declaration": false,
-    "moduleResolution": "node",
+    "downlevelIteration": true,
     "experimentalDecorators": true,
-    "target": "es2020",
-    "typeRoots": ["node_modules/@types"],
-    "lib": ["es2017", "dom"],
-    "module": "esnext",
-    "baseUrl": "src/",
+    "moduleResolution": "node",
+    "importHelpers": true,
+    "target": "ES2022",
+    "module": "ES2022",
+    "useDefineForClassFields": false,
+    "lib": ["ES2022", "dom"],
     "paths": {
       "@arsnova/*": ["./*"],
       "extension-point": [
@@ -20,5 +36,21 @@
         "dist/extension-point"
       ]
     }
+  },
+  "angularCompilerOptions": {
+    "enableI18nLegacyMessageIdFormat": false,
+    "strictInjectionParameters": true,
+    "strictInputAccessModifiers": true,
+    // All of the strictness settings below are enabled implicitly when strictTemplates = true
+    "strictTemplates": false,
+    "strictContextGenerics": true,
+    "strictDomEventTypes": false,
+    "strictDomLocalRefTypes": true,
+    "strictInputTypes": false,
+    "strictLiteralTypes": true,
+    "strictNullInputTypes": true,
+    "strictOutputEventTypes": true,
+    "strictSafeNavigationTypes": true
+    // All of the strictness settings above are enabled implicitly when strictTemplates = true
   }
 }
