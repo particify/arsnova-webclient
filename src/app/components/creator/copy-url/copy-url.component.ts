@@ -18,20 +18,14 @@ export class CopyUrlComponent {
     private notificationService: NotificationService
   ) {}
 
-  copyRoomUrl(): void {
-    const selBox = document.createElement('textarea');
-    selBox.style.position = 'fixed';
-    selBox.style.left = '0';
-    selBox.style.top = '0';
-    selBox.style.opacity = '0';
-    selBox.value = this.url;
-    document.body.appendChild(selBox);
-    selBox.focus();
-    selBox.select();
-    document.execCommand('copy');
-    document.body.removeChild(selBox);
-    this.translateService.get('dialog.url-copied').subscribe((msg) => {
-      this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.SUCCESS);
-    });
+  showNotification(success: boolean): void {
+    if (success) {
+      this.translateService.get('dialog.url-copied').subscribe((msg) => {
+        this.notificationService.showAdvanced(
+          msg,
+          AdvancedSnackBarTypes.SUCCESS
+        );
+      });
+    }
   }
 }

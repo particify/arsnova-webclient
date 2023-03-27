@@ -3,7 +3,8 @@
     mat-button
     *ngIf="!customButton.children.length"
     class="copy-url"
-    (click)="copyRoomUrl()"
+    [cdkCopyToClipboard]="url"
+    (cdkCopyToClipboardCopied)="showNotification($event)"
     [attr.aria-label]="'dialog.a11y-copy-url' | translate"
     appTrackInteraction="Copied room URL"
   >
@@ -15,7 +16,8 @@
     class="custom-button"
     role="button"
     [matTooltip]="'dialog.copy-url' | translate"
-    (click)="copyRoomUrl()"
+    [cdkCopyToClipboard]="url"
+    (cdkCopyToClipboardCopied)="showNotification($event)"
   >
     <ng-content></ng-content>
   </div>

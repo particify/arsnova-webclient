@@ -36,6 +36,7 @@ import { AnnouncementSettingsComponent } from './settings/announcement-settings/
 import { CreateAnswerOptionComponent } from './content-creation/create-answer-option/create-answer-option.component';
 import { ContentPrioritizationCreationComponent } from './content-creation/content-prioritization-creation/content-prioritization-creation.component';
 import { CopyUrlComponent } from './copy-url/copy-url.component';
+import { ClipboardModule } from '@angular/cdk/clipboard';
 
 @NgModule({
   imports: [
@@ -55,6 +56,7 @@ import { CopyUrlComponent } from './copy-url/copy-url.component';
     }),
     CdkStepperModule,
     ExtensionPointModule,
+    ClipboardModule,
   ],
   declarations: [
     ContentChoiceCreationComponent,
