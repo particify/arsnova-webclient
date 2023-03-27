@@ -159,8 +159,8 @@
               (readonly ? 'allow-creation' : 'dont-allow-creation') | translate
           }}"
           appHotkey="6"
-          appTrackInteraction="Comments readonly: {{ readonly }}"
-          appTrackName="readonly"
+          appTrackInteraction="Toggle comments readonly state"
+          appTrackName="{{ readonly ? 'off' : 'on' }}"
         >
           <mat-icon>{{ readonly ? 'lock_open' : 'lock' }}</mat-icon>
         </button>
