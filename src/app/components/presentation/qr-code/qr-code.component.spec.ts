@@ -1,36 +1,25 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { QrCodeComponent } from './qr-code.component';
-import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import {
-  JsonTranslationLoader,
-  MockEventService,
-  MockMatDialog,
-  MockMatDialogData,
-  MockMatDialogRef,
-  MockNotificationService,
   MockThemeService,
   ActivatedRouteStub,
 } from '@arsnova/testing/test-helpers';
-import { NotificationService } from '@arsnova/app/services/util/notification.service';
-import {
-  MAT_DIALOG_DATA,
-  MatDialog,
-  MatDialogRef,
-} from '@angular/material/dialog';
-import { EventService } from '@arsnova/app/services/util/event.service';
 import { ThemeService } from '@arsnova/theme/theme.service';
 import { ApiConfigService } from '@arsnova/app/services/http/api-config.service';
 import { SplitShortIdPipe } from '@arsnova/app/pipes/split-short-id.pipe';
 import { of } from 'rxjs';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
+import { RoutingService } from '@arsnova/app/services/util/routing.service';
 
 class MockApiConfigService {
   getApiConfig$() {
     return of({ ui: {} });
   }
 }
+
+class MockRoutingService {}
 
 describe('QrCodeComponent', () => {
   let component: QrCodeComponent;
@@ -53,15 +42,6 @@ describe('QrCodeComponent', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [QrCodeComponent, SplitShortIdPipe],
-      imports: [
-        TranslateModule.forRoot({
-          loader: {
-            provide: TranslateLoader,
-            useClass: JsonTranslationLoader,
-          },
-          isolate: true,
-        }),
-      ],
       providers: [
         {
           provide: SplitShortIdPipe,
@@ -72,32 +52,16 @@ describe('QrCodeComponent', () => {
           useClass: MockApiConfigService,
         },
         {
-          provide: NotificationService,
-          useClass: MockNotificationService,
-        },
-        {
-          provide: MatDialog,
-          useClass: MockMatDialog,
-        },
-        {
-          provide: EventService,
-          useClass: MockEventService,
-        },
-        {
-          provide: MatDialogRef,
-          useClass: MockMatDialogRef,
-        },
-        {
           provide: ThemeService,
           useClass: MockThemeService,
         },
         {
-          provide: MAT_DIALOG_DATA,
-          useClass: MockMatDialogData,
-        },
-        {
           provide: ActivatedRoute,
           useValue: activatedRouteStub,
+        },
+        {
+          provide: RoutingService,
+          useClass: MockRoutingService,
         },
       ],
       schemas: [NO_ERRORS_SCHEMA],

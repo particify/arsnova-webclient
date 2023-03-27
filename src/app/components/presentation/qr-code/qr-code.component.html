@@ -1,15 +1,6 @@
 <div fxLayout="column" fxFill>
   <div fxLayout="row" fxLayoutAlign="end">
-    <button
-      mat-button
-      class="copy-url"
-      (click)="copyShortId()"
-      aria-labelledby="copy-url"
-      appTrackInteraction="Copied room URL"
-    >
-      <mat-icon>content_copy</mat-icon>
-      {{ 'dialog.copy-url' | translate }}
-    </button>
+    <app-copy-room-url class="copy-url" [url]="url"></app-copy-room-url>
   </div>
   <div fxFill fxLayout="row" fxLayoutAlign="center center">
     <div class="qr-container">
@@ -41,7 +32,4 @@
       ></qr-code>
     </div>
   </div>
-</div>
-<div class="visually-hidden">
-  <div id="copy-url">{{ 'dialog.a11y-copy-url' | translate }}</div>
 </div>
