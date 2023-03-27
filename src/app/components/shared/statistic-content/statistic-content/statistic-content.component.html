@@ -58,8 +58,10 @@
             appHotkey="v"
             [appHotkeyAction]="HotkeyAction.CLICK"
             [appHotkeyDisabled]="!active"
-            appTrackInteraction="showingPercentageAsVisualizationUnit"
-            [appTrackName]="settings.contentVisualizationUnitPercent"
+            appTrackInteraction="Percentage as chart visualization unit toggled"
+            [appTrackName]="
+              settings.contentVisualizationUnitPercent ? 'on' : 'off'
+            "
           >
             <mat-icon class="icon-primary">percent</mat-icon>
           </button>
