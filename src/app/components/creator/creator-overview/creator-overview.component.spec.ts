@@ -48,6 +48,7 @@ import {
   RoomSummary,
   RoomSummaryStats,
 } from '@arsnova/app/models/room-summary';
+import { RoutingService } from '@arsnova/app/services/util/routing.service';
 
 @Injectable()
 class MockContentService {
@@ -121,6 +122,8 @@ class MockCommentService {
     return of(0);
   }
 }
+
+class MockRoutingService {}
 
 describe('CreatorOverviewComponent', () => {
   let component: CreatorOverviewComponent;
@@ -213,6 +216,10 @@ describe('CreatorOverviewComponent', () => {
         {
           provide: SplitShortIdPipe,
           useValue: splitShortIdPipe,
+        },
+        {
+          provide: RoutingService,
+          useClass: MockRoutingService,
         },
       ],
       imports: [

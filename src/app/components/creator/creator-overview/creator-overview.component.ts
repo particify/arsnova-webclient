@@ -23,6 +23,7 @@ import { UserRole } from '../../../models/user-roles.enum';
 import { ContentGroupService } from '../../../services/http/content-group.service';
 import { ContentGroup } from '../../../models/content-group';
 import { RoomStatsService } from '../../../services/http/room-stats.service';
+import { RoutingService } from '../../../services/util/routing.service';
 @Component({
   selector: 'app-creator-overview',
   templateUrl: './creator-overview.component.html',
@@ -34,6 +35,7 @@ export class CreatorOverviewComponent
 {
   target: Window;
   isModerator = false;
+  roomJoinUrl: string;
 
   constructor(
     protected roomService: RoomService,
@@ -51,7 +53,8 @@ export class CreatorOverviewComponent
     public eventService: EventService,
     protected contentService: ContentService,
     private dialogService: DialogService,
-    protected globalStorageService: GlobalStorageService
+    protected globalStorageService: GlobalStorageService,
+    protected routingService: RoutingService
   ) {
     super(
       roomStatsService,
@@ -80,6 +83,9 @@ export class CreatorOverviewComponent
     this.route.data.subscribe((data) => {
       this.initializeRoom(data.room, data.userRole, data.viewRole);
       this.isModerator = data.userRole === UserRole.EXECUTIVE_MODERATOR;
+      this.roomJoinUrl = this.routingService.getRoomJoinUrl(
+        data.apiConfig.ui.links?.join
+      );
     });
   }
 

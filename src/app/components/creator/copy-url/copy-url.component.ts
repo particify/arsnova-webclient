@@ -6,11 +6,12 @@ import {
 import { TranslateService } from '@ngx-translate/core';
 
 @Component({
-  selector: 'app-copy-room-url',
-  templateUrl: './copy-room-url.component.html',
+  selector: 'app-copy-url',
+  templateUrl: './copy-url.component.html',
+  styleUrls: ['./copy-url.component.scss'],
 })
-export class CopyRoomUrlComponent {
-  @Input() url;
+export class CopyUrlComponent {
+  @Input() url: string;
 
   constructor(
     private translateService: TranslateService,

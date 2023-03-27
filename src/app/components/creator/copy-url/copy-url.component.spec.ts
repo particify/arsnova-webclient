@@ -7,15 +7,15 @@ import {
 } from '@arsnova/testing/test-helpers';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 
-import { CopyRoomUrlComponent } from './copy-room-url.component';
+import { CopyUrlComponent } from './copy-url.component';
 
 describe('CopyRoomUrlComponent', () => {
-  let component: CopyRoomUrlComponent;
-  let fixture: ComponentFixture<CopyRoomUrlComponent>;
+  let component: CopyUrlComponent;
+  let fixture: ComponentFixture<CopyUrlComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [CopyRoomUrlComponent],
+      declarations: [CopyUrlComponent],
       imports: [
         TranslateModule.forRoot({
           loader: {
@@ -34,7 +34,7 @@ describe('CopyRoomUrlComponent', () => {
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(CopyRoomUrlComponent);
+    fixture = TestBed.createComponent(CopyUrlComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -35,7 +35,7 @@ import { CreatorOverviewComponent } from './creator-overview/creator-overview.co
 import { AnnouncementSettingsComponent } from './settings/announcement-settings/announcement-settings.component';
 import { CreateAnswerOptionComponent } from './content-creation/create-answer-option/create-answer-option.component';
 import { ContentPrioritizationCreationComponent } from './content-creation/content-prioritization-creation/content-prioritization-creation.component';
-import { CopyRoomUrlComponent } from './copy-room-url/copy-room-url.component';
+import { CopyUrlComponent } from './copy-url/copy-url.component';
 
 @NgModule({
   imports: [
@@ -80,9 +80,9 @@ import { CopyRoomUrlComponent } from './copy-room-url/copy-room-url.component';
     AnnouncementSettingsComponent,
     CreateAnswerOptionComponent,
     ContentPrioritizationCreationComponent,
-    CopyRoomUrlComponent,
+    CopyUrlComponent,
   ],
-  exports: [ContentPresentationComponent, CopyRoomUrlComponent],
+  exports: [ContentPresentationComponent, CopyUrlComponent],
   providers: [
     { provide: TRANSLATION_MODULE_NAME, useValue: 'creator' },
     DialogService,
