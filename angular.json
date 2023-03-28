@@ -24,7 +24,7 @@
             ],
             "styles": ["src/fonts.scss", "src/styles.scss"],
             "stylePreprocessorOptions": {
-              "includePaths": ["src/theme/light-theme/default/"]
+              "includePaths": ["src/app/core/theme/light-theme/default/"]
             },
             "scripts": [],
             "vendorChunk": true,
@@ -88,7 +88,7 @@
             "inlineStyleLanguage": "scss",
             "styles": ["src/fonts.scss", "src/styles.scss"],
             "stylePreprocessorOptions": {
-              "includePaths": ["src/theme/light-theme/default/"]
+              "includePaths": ["src/app/core/theme/light-theme/default/"]
             },
             "assets": [
               "src/assets",

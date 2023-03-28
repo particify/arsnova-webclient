@@ -1,7 +1,7 @@
 import { TranslateLoader } from '@ngx-translate/core';
 import { BehaviorSubject, Observable, of, ReplaySubject, Subject } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
-import { BroadcastEvent } from '@arsnova/app/services/util/event.service';
+import { BroadcastEvent } from '@core/services/util/event.service';
 import {
   ActivatedRouteSnapshot,
   convertToParamMap,
@@ -13,7 +13,7 @@ import {
 import { EventEmitter } from '@angular/core';
 import * as TRANSLATION_DE from '../assets/i18n/home/de.json';
 import * as TRANSLATION_EN from '../assets/i18n/home/en.json';
-import { Theme } from '@arsnova/theme/theme.service';
+import { Theme } from '@core/theme/theme.service';
 
 // SERVICES - UTIL
 

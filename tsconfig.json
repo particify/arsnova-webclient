@@ -30,7 +30,16 @@
     "useDefineForClassFields": false,
     "lib": ["ES2022", "dom"],
     "paths": {
-      "@arsnova/*": ["./*"],
+      "@app/*": ["./app/*"],
+      "@core/*": ["./app/core/*"],
+      "@creator/*": ["./app/creator/*"],
+      "@participant/*": ["./app/participant/*"],
+      "@admin/*": ["./app/admin/*"],
+      "@presentation/*": ["./app/presentation/*"],
+      "@shared/*": ["./app/shared/*"],
+      "@testing/*": ["./testing/*"],
+      "@environments/*": ["./environments/*"],
+      "@projects/*": ["../projects/*"],
       "extension-point": [
         "dist/extension-point/extension-point",
         "dist/extension-point"

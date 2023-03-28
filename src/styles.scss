@@ -1,6 +1,6 @@
 @use '@angular/material' as mat;
-@import 'theme/dark-theme/dark-theme';
-@import 'theme/light-theme/light-theme';
+@import 'app/core/theme/dark-theme/dark-theme';
+@import 'app/core/theme/light-theme/light-theme';
 @import 'variables';
 @import 'util';
 @include mat.core;

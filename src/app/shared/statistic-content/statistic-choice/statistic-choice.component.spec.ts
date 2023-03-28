@@ -1,0 +1,114 @@
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { StatisticChoiceComponent } from './statistic-choice.component';
+import { EventService } from '@core/services/util/event.service';
+import { ContentService } from '@core/services/http/content.service';
+import { ThemeService } from '@core/theme/theme.service';
+import {
+  JsonTranslationLoader,
+  MockEventService,
+  MockThemeService,
+} from '@testing/test-helpers';
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { ContentChoice } from '@core/models/content-choice';
+import { ContentType } from '@core/models/content-type.enum';
+import { ContentState } from '@core/models/content-state';
+import { of } from 'rxjs';
+import { RoundStatistics } from '@core/models/round-statistics';
+import { AnswerStatistics } from '@core/models/answer-statistics';
+import { PresentationService } from '@core/services/util/presentation.service';
+import { GlobalStorageService } from '@core/services/util/global-storage.service';
+import { MockGlobalStorageService } from '@testing/test-helpers';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { UserSettings } from '@core/models/user-settings';
+
+describe('StatisticChoiceComponent', () => {
+  let component: StatisticChoiceComponent;
+  let fixture: ComponentFixture<StatisticChoiceComponent>;
+
+  const mockContentService = jasmine.createSpyObj([
+    'getAnswersChangedStream',
+    'getAnswer',
+  ]);
+  const roundStatistics = new RoundStatistics();
+  roundStatistics.abstentionCount = 0;
+  roundStatistics.answerCount = 0;
+  roundStatistics.combinatedCounts = [];
+  roundStatistics.independentCounts = [];
+  roundStatistics.round = 1;
+  const stats = new AnswerStatistics();
+  (stats.contentId = '1234'), (stats.roundStatistics = [roundStatistics]);
+  const body = {
+    payload: {
+      stats: stats,
+    },
+  };
+  const message = {
+    body: JSON.stringify(body),
+  };
+  mockContentService.getAnswer.and.returnValue(of(stats));
+  mockContentService.getAnswersChangedStream.and.returnValue(of(message));
+
+  const mockPresentationService = jasmine.createSpyObj(['getScale']);
+
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      declarations: [StatisticChoiceComponent],
+      imports: [
+        TranslateModule.forRoot({
+          loader: {
+            provide: TranslateLoader,
+            useClass: JsonTranslationLoader,
+          },
+          isolate: true,
+        }),
+      ],
+      providers: [
+        {
+          provide: EventService,
+          useClass: MockEventService,
+        },
+        {
+          provide: ContentService,
+          useValue: mockContentService,
+        },
+        {
+          provide: ThemeService,
+          useClass: MockThemeService,
+        },
+        {
+          provide: PresentationService,
+          useValue: mockPresentationService,
+        },
+        {
+          provide: GlobalStorageService,
+          useClass: MockGlobalStorageService,
+        },
+      ],
+      schemas: [NO_ERRORS_SCHEMA],
+    }).compileComponents();
+  }));
+
+  beforeEach(() => {
+    fixture = TestBed.createComponent(StatisticChoiceComponent);
+    component = fixture.componentInstance;
+    component.content = new ContentChoice(
+      '1234',
+      '0',
+      'room1234',
+      'subject',
+      'body',
+      [],
+      [],
+      [],
+      false,
+      ContentType.CHOICE,
+      new ContentState(1, new Date(), false)
+    );
+    component.settings = new UserSettings();
+    fixture.detectChanges();
+  });
+
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
+});

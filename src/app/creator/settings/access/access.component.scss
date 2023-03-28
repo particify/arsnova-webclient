@@ -1,0 +1,55 @@
+@import '../../../../variables';
+
+.login-id {
+  font-weight: $font-weight-bold;
+  font-size: medium;
+  margin: 1.5em 0;
+}
+
+.form-container > * {
+  margin-top: 16px;
+}
+
+// This is needed to prevent trailing space when row wrap
+@media (max-width: 600px) {
+  .email-input {
+    margin-right: 0 !important;
+  }
+}
+
+.add-user-button {
+  height: 56px !important;
+}
+
+.user-character-container {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+
+.user-character {
+  font-weight: $font-weight-bold;
+  font-size: 18px;
+}
+
+.role-moderator {
+  background-color: var(--grey-light);
+
+  > * {
+    opacity: 0.8;
+    color: var(--on-surface);
+  }
+}
+
+.role-chip {
+  opacity: 0.8;
+
+  .mat-mdc-chip {
+    font-size: 12px;
+    border-radius: 8px;
+  }
+}
+
+.guest-hint {
+  margin-top: 1em;
+}

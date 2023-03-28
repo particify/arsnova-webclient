@@ -1,7 +1,7 @@
 import { NgModule, APP_INITIALIZER } from '@angular/core';
 import { AppComponent } from './app.component';
-import { RegisterComponent } from './components/home/register/register.component';
-import { PasswordResetComponent } from './components/home/password-reset/password-reset.component';
+import { RegisterComponent } from '@core/components/register/register.component';
+import { PasswordResetComponent } from '@core/components/password-reset/password-reset.component';
 import { AppRoutingModule } from './app-routing.module';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import {
@@ -9,83 +9,83 @@ import {
   HttpClient,
   HttpClientModule,
 } from '@angular/common/http';
-import { UserService } from './services/http/user.service';
-import { NotificationService } from './services/util/notification.service';
-import { AuthenticationService } from './services/http/authentication.service';
-import { AuthenticationGuard } from './guards/authentication.guard';
-import { RoomMembershipService } from './services/room-membership.service';
-import { RoomService } from './services/http/room.service';
-import { CommentService } from './services/http/comment.service';
-import { EventService } from './services/util/event.service';
-import { ContentService } from './services/http/content.service';
-import { ContentAnswerService } from './services/http/content-answer.service';
-import { VoteService } from './services/http/vote.service';
-import { WsConnectorService } from './services/websockets/ws-connector.service';
-import { UserActivationComponent } from './components/home/_dialogs/user-activation/user-activation.component';
-import { AuthenticationInterceptor } from './interceptors/authentication.interceptor';
-import { EssentialsModule } from './components/essentials/essentials.module';
-import { SharedModule } from './components/shared/shared.module';
+import { UserService } from './core/services/http/user.service';
+import { NotificationService } from './core/services/util/notification.service';
+import { AuthenticationService } from './core/services/http/authentication.service';
+import { AuthenticationGuard } from './core/guards/authentication.guard';
+import { RoomMembershipService } from './core/services/room-membership.service';
+import { RoomService } from './core/services/http/room.service';
+import { CommentService } from './core/services/http/comment.service';
+import { EventService } from './core/services/util/event.service';
+import { ContentService } from './core/services/http/content.service';
+import { ContentAnswerService } from './core/services/http/content-answer.service';
+import { VoteService } from './core/services/http/vote.service';
+import { WsConnectorService } from './core/services/websockets/ws-connector.service';
+import { UserActivationComponent } from '@core/components//_dialogs/user-activation/user-activation.component';
+import { AuthenticationInterceptor } from './core/interceptors/authentication.interceptor';
+import { CoreModule } from './core/core.module';
+import { SharedModule } from '@shared/shared.module';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { LanguageService } from './services/util/language.service';
-import { HomePageComponent } from './components/home/home-page/home-page.component';
-import { UserHomeComponent } from './components/home/user-home/user-home.component';
+import { LanguageService } from './core/services/util/language.service';
+import { HomePageComponent } from '@core/components/home-page/home-page.component';
+import { UserHomeComponent } from '@core/components/user-home/user-home.component';
 import { AppConfig } from './app.config';
 import { ServiceWorkerModule } from '@angular/service-worker';
-import { environment } from '../environments/environment';
-import { extensions } from '../environments/extensions';
-import { ModeratorService } from './services/http/moderator.service';
+import { environment } from '@environments/environment';
+import { extensions } from '@environments/extensions';
+import { ModeratorService } from './core/services/http/moderator.service';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
-import { CommentSettingsService } from './services/http/comment-settings.service';
-import { ApiConfigService } from './services/http/api-config.service';
-import { CookiesComponent } from './components/home/_dialogs/cookies/cookies.component';
-import { OverlayComponent } from './components/home/_dialogs/overlay/overlay.component';
+import { CommentSettingsService } from './core/services/http/comment-settings.service';
+import { ApiConfigService } from './core/services/http/api-config.service';
+import { CookiesComponent } from '@core/components//_dialogs/cookies/cookies.component';
+import { OverlayComponent } from '@core/components//_dialogs/overlay/overlay.component';
 import { MatIconModule } from '@angular/material/icon';
-import { LoginComponent } from './components/home/login/login.component';
-import { DialogService } from './services/util/dialog.service';
-import { ExtensionPointModule } from '../../projects/extension-point/src/lib/extension-point.module';
-import { TrackingService } from './services/util/tracking.service';
-import { ImportComponent } from './components/home/import/import.component';
+import { LoginComponent } from '@core/components/login/login.component';
+import { DialogService } from './core/services/util/dialog.service';
+import { ExtensionPointModule } from '@projects/extension-point/src/lib/extension-point.module';
+import { TrackingService } from './core/services/util/tracking.service';
+import { ImportComponent } from '@core/components/import/import.component';
 import {
   GlobalStorageService,
   STORAGE_CONFIG_PROVIDERS,
-} from './services/util/global-storage.service';
-import { ConsentService } from './services/util/consent.service';
-import { ThemeService } from '../theme/theme.service';
-import { ApiConfigResolver } from './resolver/api-config.resolver';
-import { RoomResolver } from './resolver/room.resolver';
-import { ContentResolver } from './resolver/content.resolver';
-import { CommentResolver } from './resolver/comment.resolver';
-import { RoomViewUserRoleResolver } from './resolver/room-view-user-role.resolver';
-import { ContentGroupService } from './services/http/content-group.service';
-import { AnnounceService } from './services/util/announce.service';
-import { SystemInfoService } from './services/http/system-info.service';
-import { RequestPasswordResetComponent } from './components/home/request-password-reset/request-password-reset.component';
-import { FormattingService } from './services/http/formatting.service';
-import { SnackBarAdvancedComponent } from './components/shared/snack-bar-advanced/snack-bar-advanced.component';
-import { RoomUserRoleResolver } from './resolver/room-user-role.resolver';
-import { RoutingService } from './services/util/routing.service';
+} from './core/services/util/global-storage.service';
+import { ConsentService } from './core/services/util/consent.service';
+import { ThemeService } from './core/theme/theme.service';
+import { ApiConfigResolver } from './core/resolver/api-config.resolver';
+import { RoomResolver } from './core/resolver/room.resolver';
+import { ContentResolver } from './core/resolver/content.resolver';
+import { CommentResolver } from './core/resolver/comment.resolver';
+import { RoomViewUserRoleResolver } from './core/resolver/room-view-user-role.resolver';
+import { ContentGroupService } from './core/services/http/content-group.service';
+import { AnnounceService } from './core/services/util/announce.service';
+import { SystemInfoService } from './core/services/http/system-info.service';
+import { RequestPasswordResetComponent } from '@core/components/request-password-reset/request-password-reset.component';
+import { FormattingService } from './core/services/http/formatting.service';
+import { SnackBarAdvancedComponent } from '@shared/snack-bar-advanced/snack-bar-advanced.component';
+import { RoomUserRoleResolver } from './core/resolver/room-user-role.resolver';
+import { RoutingService } from './core/services/util/routing.service';
 import { TranslateHttpLoaderFactory } from './translate-http-loader-factory';
 import { TRANSLATION_MODULE_NAME } from './translate-module-name-token';
-import { FeedbackService } from './services/http/feedback.service';
-import { UpdateService } from './services/util/update.service';
-import { CachingService } from './services/util/caching.service';
-import { LocalFileService } from './services/util/local-file.service';
-import { LikertScaleService } from './services/util/likert-scale.service';
-import { RoomStatsService } from './services/http/room-stats.service';
-import { WsRoomEventDispatcherService } from './services/websockets/ws-room-event-dispatcher.service';
-import { DemoService } from './services/demo.service';
-import { DemoRoomGuard } from './guards/demo-room.guard';
-import { HotkeyService } from './services/util/hotkey.service';
-import { PasswordEntryComponent } from './components/home/password-entry/password-entry.component';
-import { FormHeaderComponent } from './components/home/form-header/form-header.component';
-import { WsCommentService } from './services/websockets/ws-comment.service';
-import { PresentationService } from './services/util/presentation.service';
-import { AccessTokenService } from './services/http/access-token.service';
-import { RedeemTokenComponent } from './components/home/redeem-token/redeem-token.component';
-import { RemoteService } from './services/util/remote.service';
-import { CommentSettingsResolver } from './resolver/comment-settings.resolver';
-import { ContentPublishService } from './services/util/content-publish.service';
+import { FeedbackService } from './core/services/http/feedback.service';
+import { UpdateService } from './core/services/util/update.service';
+import { CachingService } from './core/services/util/caching.service';
+import { LocalFileService } from './core/services/util/local-file.service';
+import { LikertScaleService } from './core/services/util/likert-scale.service';
+import { RoomStatsService } from './core/services/http/room-stats.service';
+import { WsRoomEventDispatcherService } from './core/services/websockets/ws-room-event-dispatcher.service';
+import { DemoService } from './core/services/demo.service';
+import { DemoRoomGuard } from './core/guards/demo-room.guard';
+import { HotkeyService } from './core/services/util/hotkey.service';
+import { PasswordEntryComponent } from '@core/components/password-entry/password-entry.component';
+import { FormHeaderComponent } from '@core/components/form-header/form-header.component';
+import { WsCommentService } from './core/services/websockets/ws-comment.service';
+import { PresentationService } from './core/services/util/presentation.service';
+import { AccessTokenService } from './core/services/http/access-token.service';
+import { RedeemTokenComponent } from '@core/components/redeem-token/redeem-token.component';
+import { RemoteService } from './core/services/util/remote.service';
+import { CommentSettingsResolver } from './core/resolver/comment-settings.resolver';
+import { ContentPublishService } from './core/services/util/content-publish.service';
 
 export function initializeApp(appConfig: AppConfig) {
   return () => appConfig.load();
@@ -115,7 +115,7 @@ export function initializeApp(appConfig: AppConfig) {
     AppRoutingModule,
     BrowserModule,
     BrowserAnimationsModule,
-    EssentialsModule,
+    CoreModule,
     SharedModule,
     MatIconModule,
     HttpClientModule,

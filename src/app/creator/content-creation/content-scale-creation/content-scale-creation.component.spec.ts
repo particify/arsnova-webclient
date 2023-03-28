@@ -1,0 +1,119 @@
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+
+import { ContentScaleCreationComponent } from './content-scale-creation.component';
+import { NO_ERRORS_SCHEMA, Injectable } from '@angular/core';
+import { ContentService } from '@core/services/http/content.service';
+import { NotificationService } from '@core/services/util/notification.service';
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { EventService } from '@core/services/util/event.service';
+import { RoomService } from '@core/services/http/room.service';
+import { of, Subject } from 'rxjs';
+import { ContentGroupService } from '@core/services/http/content-group.service';
+import { AnnounceService } from '@core/services/util/announce.service';
+import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
+import {
+  ActivatedRouteStub,
+  JsonTranslationLoader,
+} from '@testing/test-helpers';
+import { LikertScaleService } from '@core/services/util/likert-scale.service';
+
+const mockCreateEvent = new Subject<any>();
+
+@Injectable()
+class MockContentService {}
+
+@Injectable()
+class MockNotificationService {}
+
+@Injectable()
+class MockEventService {}
+
+@Injectable()
+class MockRoomService {}
+
+@Injectable()
+class MockContentGroupService {}
+@Injectable()
+class MockAnnouncer {}
+
+@Injectable()
+class MockLikertScaleService {
+  getOptionLabels() {}
+}
+
+describe('ContentScaleCreationComponent', () => {
+  let component: ContentScaleCreationComponent;
+  let fixture: ComponentFixture<ContentScaleCreationComponent>;
+
+  const data = {
+    room: {
+      id: '1234',
+    },
+  };
+
+  const snapshot = new ActivatedRouteSnapshot();
+
+  snapshot.params = of([{ seriesName: 'SERIES' }]);
+
+  const activatedRouteStub = new ActivatedRouteStub(null, data, snapshot);
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      declarations: [ContentScaleCreationComponent],
+      providers: [
+        {
+          provide: ContentService,
+          useClass: MockContentService,
+        },
+        {
+          provide: NotificationService,
+          useClass: MockNotificationService,
+        },
+        {
+          provide: EventService,
+          useClass: MockEventService,
+        },
+        {
+          provide: RoomService,
+          useClass: MockRoomService,
+        },
+        {
+          provide: ContentGroupService,
+          useClass: MockContentGroupService,
+        },
+        {
+          provide: AnnounceService,
+          useClass: MockAnnouncer,
+        },
+        {
+          provide: ActivatedRoute,
+          useValue: activatedRouteStub,
+        },
+        {
+          provide: LikertScaleService,
+          useClass: MockLikertScaleService,
+        },
+      ],
+      imports: [
+        TranslateModule.forRoot({
+          loader: {
+            provide: TranslateLoader,
+            useClass: JsonTranslationLoader,
+          },
+          isolate: true,
+        }),
+      ],
+      schemas: [NO_ERRORS_SCHEMA],
+    })
+      .compileComponents()
+      .then(() => {
+        fixture = TestBed.createComponent(ContentScaleCreationComponent);
+        component = fixture.componentInstance;
+        component.createEvent = mockCreateEvent;
+        fixture.detectChanges();
+      });
+  }));
+
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
+});

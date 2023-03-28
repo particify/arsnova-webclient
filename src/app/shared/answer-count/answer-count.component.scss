@@ -1,0 +1,54 @@
+@import '../../../variables';
+
+.container {
+  margin: 8px 0;
+  text-align: center;
+}
+
+.container:not(.medium-container) > :first-child {
+  margin-right: 8px;
+}
+
+.medium-container {
+  width: 120px;
+  margin: 8px 0 0;
+}
+
+.small-container {
+  margin: 8px 0 0;
+}
+
+.counter {
+  font-size: 24px;
+  font-weight: $font-weight-bold;
+  margin: 0;
+}
+
+.counter-text {
+  line-height: 28px;
+  margin: 0;
+}
+
+.presentation-container {
+  position: fixed;
+  bottom: 1em;
+  right: 4px;
+  margin: 0;
+  padding: 0 1em;
+
+  .counter-text {
+    font-weight: $font-weight-bold;
+    font-size: 20px;
+    line-height: 33px;
+  }
+
+  .counter {
+    font-size: 28px;
+  }
+
+  transition: bottom 300ms;
+}
+
+.over-control-bar {
+  bottom: calc(1em + 70px);
+}

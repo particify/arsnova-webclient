@@ -3,22 +3,22 @@ import { RouterModule, ROUTES, Routes } from '@angular/router';
 import {
   ExtensionRouteProvider,
   RouteMountPoint,
-} from '../../projects/extension-point/src/lib/extension-route';
-import { PageNotFoundComponent } from './components/shared/page-not-found/page-not-found.component';
-import { HomePageComponent } from './components/home/home-page/home-page.component';
-import { UserHomeComponent } from './components/home/user-home/user-home.component';
-import { LoginComponent } from './components/home/login/login.component';
-import { ImportComponent } from './components/home/import/import.component';
-import { AuthenticationGuard } from './guards/authentication.guard';
-import { RegisterComponent } from './components/home/register/register.component';
-import { PasswordResetComponent } from './components/home/password-reset/password-reset.component';
-import { RequestPasswordResetComponent } from './components/home/request-password-reset/request-password-reset.component';
-import { ApiConfigResolver } from './resolver/api-config.resolver';
-import { HeaderComponent } from './components/shared/header/header.component';
-import { FooterComponent } from './components/shared/footer/footer.component';
-import { DemoRoomGuard } from './guards/demo-room.guard';
-import { UserProfileComponent } from './components/shared/user-profile/user-profile.component';
-import { RedeemTokenComponent } from './components/home/redeem-token/redeem-token.component';
+} from '@projects/extension-point/src/lib/extension-route';
+import { PageNotFoundComponent } from '@shared/page-not-found/page-not-found.component';
+import { HomePageComponent } from '@core/components/home-page/home-page.component';
+import { UserHomeComponent } from '@core/components/user-home/user-home.component';
+import { LoginComponent } from '@core/components/login/login.component';
+import { ImportComponent } from '@core/components/import/import.component';
+import { AuthenticationGuard } from './core/guards/authentication.guard';
+import { RegisterComponent } from '@core/components/register/register.component';
+import { PasswordResetComponent } from '@core/components/password-reset/password-reset.component';
+import { RequestPasswordResetComponent } from '@core/components/request-password-reset/request-password-reset.component';
+import { ApiConfigResolver } from './core/resolver/api-config.resolver';
+import { HeaderComponent } from '@shared/header/header.component';
+import { FooterComponent } from '@shared/footer/footer.component';
+import { DemoRoomGuard } from './core/guards/demo-room.guard';
+import { UserProfileComponent } from '@shared/user-profile/user-profile.component';
+import { RedeemTokenComponent } from '@core/components/redeem-token/redeem-token.component';
 
 const routes: Routes = [
   {
@@ -89,19 +89,17 @@ const routes: Routes = [
   {
     path: 'admin',
     loadChildren: () =>
-      import('./components/admin/admin.module').then((m) => m.AdminModule),
+      import('./admin/admin.module').then((m) => m.AdminModule),
   },
   {
     path: 'edit',
     loadChildren: () =>
-      import('./components/creator/creator.module').then(
-        (m) => m.CreatorModule
-      ),
+      import('./creator/creator.module').then((m) => m.CreatorModule),
   },
   {
     path: 'p',
     loadChildren: () =>
-      import('./components/participant/participant.module').then(
+      import('./participant/participant.module').then(
         (m) => m.ParticipantModule
       ),
   },
@@ -112,7 +110,7 @@ const routes: Routes = [
   {
     path: 'present',
     loadChildren: () =>
-      import('./components/presentation/presentation.module').then(
+      import('./presentation/presentation.module').then(
         (m) => m.PresentationModule
       ),
   },
