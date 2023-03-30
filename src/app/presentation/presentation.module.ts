@@ -1,29 +1,20 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { PresentationRoutingModule } from './presentation-routing.module';
 import { extensions } from './presentation.extensions';
-import { FlexModule } from '@angular/flex-layout';
-import { CreatorModule } from '../creator/creator.module';
 import { ControlBarComponent } from './bars/control-bar/control-bar.component';
-import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
 import { ExtensionPointModule } from '@projects/extension-point/src/lib/extension-point.module';
 import { PresentationComponent } from './presentation/presentation.component';
 import { SharedModule } from '@shared/shared.module';
-import { MatDividerModule } from '@angular/material/divider';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoaderFactory } from '@app/translate-http-loader-factory';
 import { HttpClient } from '@angular/common/http';
 import { TRANSLATION_MODULE_NAME } from '@app/translate-module-name-token';
-import { MatRippleModule } from '@angular/material/core';
-import { MatSelectModule } from '@angular/material/select';
-import { FormsModule } from '@angular/forms';
-import { MatMenuModule } from '@angular/material/menu';
-import { MatTooltipModule } from '@angular/material/tooltip';
 import { QrCodeModule } from 'ng-qrcode';
 import { KeyButtonBarComponent } from './bars/key-button-bar/key-button-bar.component';
 import { BarNotificationComponent } from './bars/bar-notification/bar-notification.component';
 import { QrCodeComponent } from './qr-code/qr-code.component';
+import { CreatorModule } from '@app/creator/creator.module';
+import { CoreModule } from '@app/core/core.module';
 
 @NgModule({
   declarations: [
@@ -35,15 +26,11 @@ import { QrCodeComponent } from './qr-code/qr-code.component';
   ],
   imports: [
     extensions,
-    CommonModule,
-    PresentationRoutingModule,
-    FlexModule,
+    CoreModule,
     CreatorModule,
-    MatButtonModule,
-    MatIconModule,
+    PresentationRoutingModule,
     ExtensionPointModule,
     SharedModule,
-    MatDividerModule,
     TranslateModule.forChild({
       loader: {
         provide: TranslateLoader,
@@ -52,11 +39,6 @@ import { QrCodeComponent } from './qr-code/qr-code.component';
       },
       isolate: true,
     }),
-    MatRippleModule,
-    MatSelectModule,
-    FormsModule,
-    MatMenuModule,
-    MatTooltipModule,
     QrCodeModule,
   ],
 })

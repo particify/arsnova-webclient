@@ -5,9 +5,8 @@ import {
   ActivatedRouteStub,
   JsonTranslationLoader,
   MockLangService,
-  MockRouter,
 } from '@testing/test-helpers';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { LanguageService } from '@core/services/util/language.service';
 import { ConsentService } from '@core/services/util/consent.service';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
@@ -17,6 +16,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { By } from '@angular/platform-browser';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ExtensionPointModule } from '@projects/extension-point/src/lib/extension-point.module';
+import { RouterTestingModule } from '@angular/router/testing';
 
 describe('FooterComponent', () => {
   let component: FooterComponent;
@@ -48,8 +48,8 @@ describe('FooterComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [FooterComponent],
       imports: [
+        FooterComponent,
         BrowserAnimationsModule,
         ReactiveFormsModule,
         MatMenuModule,
@@ -61,16 +61,13 @@ describe('FooterComponent', () => {
           isolate: true,
         }),
         ExtensionPointModule,
+        RouterLink,
+        RouterTestingModule,
       ],
       providers: [
-        FooterComponent,
         {
           provide: LanguageService,
           useClass: MockLangService,
-        },
-        {
-          provide: Router,
-          useClass: MockRouter,
         },
         {
           provide: ActivatedRoute,

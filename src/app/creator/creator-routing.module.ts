@@ -8,7 +8,7 @@ import { AuthenticationGuard } from '@core/guards/authentication.guard';
 import { UserRole } from '@core/models/user-roles.enum';
 import { RoomPageComponent } from '@shared/room-page/room-page.component';
 import { ContentCreationPageComponent } from './content-creation/content-creation-page/content-creation-page.component';
-import { StatisticsPageComponent } from '@shared/statistics-page/statistics-page.component';
+import { StatisticsPageComponent } from './statistics-page/statistics-page.component';
 import { SurveyPageComponent } from '@shared/survey-page/survey-page.component';
 import { ContentPresentationComponent } from './content-presentation/content-presentation.component';
 import { CommentPageComponent } from '@shared/comment-page/comment-page.component';

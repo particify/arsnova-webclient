@@ -1,5 +1,4 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { AdminRoutingModule } from './admin-routing.module';
 import { extensions } from './admin.extensions';
 import { SharedAdminModule } from './shared-admin.module';
@@ -26,7 +25,6 @@ import { UserSearchComponent } from './user-search/user-search.component';
 @NgModule({
   imports: [
     extensions,
-    CommonModule,
     AdminRoutingModule,
     CoreModule,
     SharedModule,

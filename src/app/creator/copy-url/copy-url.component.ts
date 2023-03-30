@@ -2,7 +2,7 @@ import { Component, Input } from '@angular/core';
 import {
   AdvancedSnackBarTypes,
   NotificationService,
-} from '@arsnova/app/services/util/notification.service';
+} from '@core/services/util/notification.service';
 import { TranslateService } from '@ngx-translate/core';
 
 @Component({

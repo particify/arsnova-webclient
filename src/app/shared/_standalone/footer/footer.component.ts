@@ -1,12 +1,30 @@
 import { LanguageService } from '@core/services/util/language.service';
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, ActivationEnd, Router } from '@angular/router';
-import { TranslateService } from '@ngx-translate/core';
+import {
+  ActivatedRoute,
+  ActivationEnd,
+  Router,
+  RouterModule,
+} from '@angular/router';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { Room } from '@core/models/room';
 import { ConsentService } from '@core/services/util/consent.service';
 import { filter } from 'rxjs/operators';
+import { CommonModule } from '@angular/common';
+import { MatMenuModule } from '@angular/material/menu';
+import { ExtensionPointModule } from '@projects/extension-point/src/public-api';
+import { FlexModule } from '@angular/flex-layout';
 
 @Component({
+  standalone: true,
+  imports: [
+    CommonModule,
+    TranslateModule,
+    MatMenuModule,
+    ExtensionPointModule,
+    FlexModule,
+    RouterModule,
+  ],
   selector: 'app-footer',
   templateUrl: './footer.component.html',
   styleUrls: ['./footer.component.scss'],

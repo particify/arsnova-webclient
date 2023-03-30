@@ -3,7 +3,7 @@ import { Inject, Injectable } from '@angular/core';
 import { MatDialogRef, MatDialogState } from '@angular/material/dialog';
 import { EventManager } from '@angular/platform-browser';
 import { environment } from '@environments/environment';
-import { HotkeysComponent } from '@shared/_dialogs/hotkeys/hotkeys.component';
+import { HotkeysComponent } from '@app/core/components/_dialogs/hotkeys/hotkeys.component';
 import { DialogService } from './dialog.service';
 
 export const HELP_KEY = 'h';

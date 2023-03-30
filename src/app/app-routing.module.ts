@@ -4,20 +4,20 @@ import {
   ExtensionRouteProvider,
   RouteMountPoint,
 } from '@projects/extension-point/src/lib/extension-route';
-import { PageNotFoundComponent } from '@shared/page-not-found/page-not-found.component';
+import { PageNotFoundComponent } from '@core/components/page-not-found/page-not-found.component';
 import { HomePageComponent } from '@core/components/home-page/home-page.component';
 import { UserHomeComponent } from '@core/components/user-home/user-home.component';
 import { LoginComponent } from '@core/components/login/login.component';
 import { ImportComponent } from '@core/components/import/import.component';
-import { AuthenticationGuard } from './core/guards/authentication.guard';
+import { AuthenticationGuard } from '@core/guards/authentication.guard';
 import { RegisterComponent } from '@core/components/register/register.component';
 import { PasswordResetComponent } from '@core/components/password-reset/password-reset.component';
 import { RequestPasswordResetComponent } from '@core/components/request-password-reset/request-password-reset.component';
-import { ApiConfigResolver } from './core/resolver/api-config.resolver';
-import { HeaderComponent } from '@shared/header/header.component';
-import { FooterComponent } from '@shared/footer/footer.component';
-import { DemoRoomGuard } from './core/guards/demo-room.guard';
-import { UserProfileComponent } from '@shared/user-profile/user-profile.component';
+import { ApiConfigResolver } from '@core/resolver/api-config.resolver';
+import { HeaderComponent } from '@core/components/header/header.component';
+import { FooterComponent } from '@app/shared/_standalone/footer/footer.component';
+import { DemoRoomGuard } from '@core/guards/demo-room.guard';
+import { UserProfileComponent } from '@core/components/user-profile/user-profile.component';
 import { RedeemTokenComponent } from '@core/components/redeem-token/redeem-token.component';
 
 const routes: Routes = [

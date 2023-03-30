@@ -1,5 +1,4 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { ParticipantRoutingModule } from './participant-routing.module';
 import { extensions } from './participant.extensions';
 import { CoreModule } from '@core/core.module';
@@ -10,7 +9,6 @@ import { ParticipantContentCarouselPageComponent } from './participant-content-c
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { HttpClient } from '@angular/common/http';
 import { CdkStepperModule } from '@angular/cdk/stepper';
-import { MatRippleModule } from '@angular/material/core';
 import { TRANSLATION_MODULE_NAME } from '@app/translate-module-name-token';
 import { TranslateHttpLoaderFactory } from '@app/translate-http-loader-factory';
 import { ExtensionPointModule } from '@projects/extension-point/src/lib/extension-point.module';
@@ -26,7 +24,6 @@ import { ContentCarouselService } from '@core/services/util/content-carousel.ser
 @NgModule({
   imports: [
     extensions,
-    CommonModule,
     ParticipantRoutingModule,
     CoreModule,
     SharedModule,
@@ -39,7 +36,6 @@ import { ContentCarouselService } from '@core/services/util/content-carousel.ser
       isolate: true,
     }),
     CdkStepperModule,
-    MatRippleModule,
     ExtensionPointModule,
   ],
   declarations: [

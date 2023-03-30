@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RoomStatsService } from '@core/services/http/room-stats.service';
 import { ContentGroup } from '@core/models/content-group';
-import { StatisticListComponent } from '@shared/statistic-list/statistic-list.component';
+import { StatisticListComponent } from '@app/creator/statistic-list/statistic-list.component';
 import { ContentGroupService } from '@core/services/http/content-group.service';
 
 @Component({

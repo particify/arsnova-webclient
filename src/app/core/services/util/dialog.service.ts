@@ -12,9 +12,8 @@ import { ContentGroupCreationComponent } from '@creator/_dialogs/content-group-c
 import { ClientAuthentication } from '@core/models/client-authentication';
 import { CreateCommentComponent } from '@shared/_dialogs/create-comment/create-comment.component';
 import { RoomCreateComponent } from '@shared/_dialogs/room-create/room-create.component';
-import { OverlayComponent } from '@core/components//_dialogs/overlay/overlay.component';
 import { UserActivationComponent } from '@core/components//_dialogs/user-activation/user-activation.component';
-import { UpdateInfoComponent } from '@shared/_dialogs/update-info/update-info.component';
+import { UpdateInfoComponent } from '@app/core/components/update-info/update-info.component';
 import { UserRole } from '@core/models/user-roles.enum';
 import { VersionInfo } from '@core/models/version-info';
 import {
@@ -129,10 +128,6 @@ export class DialogService {
         duplicatedName: duplicatedName,
       },
     });
-  }
-
-  openOverlayDialog(): MatDialogRef<OverlayComponent> {
-    return this.openDialog(OverlayComponent);
   }
 
   openUserActivationDialog(

@@ -4,7 +4,7 @@ import { Resolve } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { Observable, timer } from 'rxjs';
 import { takeUntil, tap } from 'rxjs/operators';
-import { SnackBarAdvancedComponent } from '@shared/snack-bar-advanced/snack-bar-advanced.component';
+import { SnackBarAdvancedComponent } from '@core/components/snack-bar-advanced/snack-bar-advanced.component';
 import { ApiConfig } from '@core/models/api-config';
 import { ApiConfigService } from '@core/services/http/api-config.service';
 import {

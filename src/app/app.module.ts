@@ -24,7 +24,6 @@ import { WsConnectorService } from './core/services/websockets/ws-connector.serv
 import { UserActivationComponent } from '@core/components//_dialogs/user-activation/user-activation.component';
 import { AuthenticationInterceptor } from './core/interceptors/authentication.interceptor';
 import { CoreModule } from './core/core.module';
-import { SharedModule } from '@shared/shared.module';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LanguageService } from './core/services/util/language.service';
@@ -39,8 +38,6 @@ import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { CommentSettingsService } from './core/services/http/comment-settings.service';
 import { ApiConfigService } from './core/services/http/api-config.service';
 import { CookiesComponent } from '@core/components//_dialogs/cookies/cookies.component';
-import { OverlayComponent } from '@core/components//_dialogs/overlay/overlay.component';
-import { MatIconModule } from '@angular/material/icon';
 import { LoginComponent } from '@core/components/login/login.component';
 import { DialogService } from './core/services/util/dialog.service';
 import { ExtensionPointModule } from '@projects/extension-point/src/lib/extension-point.module';
@@ -62,7 +59,7 @@ import { AnnounceService } from './core/services/util/announce.service';
 import { SystemInfoService } from './core/services/http/system-info.service';
 import { RequestPasswordResetComponent } from '@core/components/request-password-reset/request-password-reset.component';
 import { FormattingService } from './core/services/http/formatting.service';
-import { SnackBarAdvancedComponent } from '@shared/snack-bar-advanced/snack-bar-advanced.component';
+import { SnackBarAdvancedComponent } from './core/components/snack-bar-advanced/snack-bar-advanced.component';
 import { RoomUserRoleResolver } from './core/resolver/room-user-role.resolver';
 import { RoutingService } from './core/services/util/routing.service';
 import { TranslateHttpLoaderFactory } from './translate-http-loader-factory';
@@ -86,6 +83,17 @@ import { RedeemTokenComponent } from '@core/components/redeem-token/redeem-token
 import { RemoteService } from './core/services/util/remote.service';
 import { CommentSettingsResolver } from './core/resolver/comment-settings.resolver';
 import { ContentPublishService } from './core/services/util/content-publish.service';
+import { RoomJoinComponent } from './core/components/room-join/room-join.component';
+import { RoomListComponent } from './core/components/room-list/room-list.component';
+import { HotkeysComponent } from './core/components/_dialogs/hotkeys/hotkeys.component';
+import { HeaderComponent } from './core/components/header/header.component';
+import { FooterComponent } from './shared/_standalone/footer/footer.component';
+import { UserProfileComponent } from './core/components/user-profile/user-profile.component';
+import { PageNotFoundComponent } from './core/components/page-not-found/page-not-found.component';
+import { UserFormFieldComponent } from './core/components/user-profile/user-form-field/user-form-field.component';
+import { SettingsPanelHeaderComponent } from './core/components/settings-panel-header/settings-panel-header.component';
+import { SettingsSlideToggleComponent } from './core/components/settings-slide-toggle/settings-slide-toggle.component';
+import { LoadingIndicatorComponent } from './shared/_standalone/loading-indicator/loading-indicator.component';
 
 export function initializeApp(appConfig: AppConfig) {
   return () => appConfig.load();
@@ -101,13 +109,21 @@ export function initializeApp(appConfig: AppConfig) {
     HomePageComponent,
     UserHomeComponent,
     CookiesComponent,
-    OverlayComponent,
     ImportComponent,
     RequestPasswordResetComponent,
     SnackBarAdvancedComponent,
     PasswordEntryComponent,
     FormHeaderComponent,
     RedeemTokenComponent,
+    RoomJoinComponent,
+    RoomListComponent,
+    HotkeysComponent,
+    HeaderComponent,
+    UserProfileComponent,
+    UserFormFieldComponent,
+    PageNotFoundComponent,
+    SettingsPanelHeaderComponent,
+    SettingsSlideToggleComponent,
   ],
   imports: [
     extensions,
@@ -116,8 +132,8 @@ export function initializeApp(appConfig: AppConfig) {
     BrowserModule,
     BrowserAnimationsModule,
     CoreModule,
-    SharedModule,
-    MatIconModule,
+    FooterComponent,
+    LoadingIndicatorComponent,
     HttpClientModule,
     ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: environment.production,
@@ -132,11 +148,6 @@ export function initializeApp(appConfig: AppConfig) {
     }),
   ],
   providers: [
-    /*AppConfig,
-    { provide: APP_INITIALIZER,
-      useFactory: initializeApp,
-      deps: [AppConfig], multi: true
-    },*/
     {
       provide: APP_INITIALIZER,
       useFactory: initAuthenticationService,

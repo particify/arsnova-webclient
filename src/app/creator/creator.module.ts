@@ -1,5 +1,4 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { CreatorRoutingModule } from './creator-routing.module';
 import { extensions } from './creator.extensions';
 import { ContentChoiceCreationComponent } from './content-creation/content-choice-creation/content-choice-creation.component';
@@ -42,7 +41,6 @@ import { StartNewRoundComponent } from './start-new-round/start-new-round.compon
 @NgModule({
   imports: [
     extensions,
-    CommonModule,
     CreatorRoutingModule,
     CoreModule,
     SharedModule,
