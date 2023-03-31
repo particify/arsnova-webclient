@@ -200,6 +200,7 @@
         >
           <mat-chip-listbox>
             <mat-chip-option
+              [selectable]="false"
               (click)="this.clickedOnTag.emit(comment.tag)"
               appTrackInteraction="Comments filtered"
               appTrackName="toggle-category"
