@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { catchError, of, share } from 'rxjs';
+import { catchError, of, shareReplay } from 'rxjs';
 import { SystemInfoService } from '../../../services/http/system-info.service';
 
 @Component({
@@ -18,7 +18,7 @@ export class SystemStatusComponent implements OnInit {
       .getHealthInfo()
       .pipe(
         catchError((response) => of(response.error)),
-        share()
+        shareReplay()
       )
       .subscribe((healthInfo) => {
         this.dataSource = healthInfo?.details;

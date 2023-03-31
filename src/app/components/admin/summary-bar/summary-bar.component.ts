@@ -1,10 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import {
   SummarizedStats,
   SystemInfoService,
 } from '../../../services/http/system-info.service';
-import { catchError, share } from 'rxjs/operators';
-import { Observable, of } from 'rxjs';
+import { share } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-admin-summary-bar',
@@ -12,21 +12,13 @@ import { Observable, of } from 'rxjs';
   styleUrls: ['./summary-bar.component.scss'],
 })
 export class SummaryBarComponent implements OnInit {
-  healthInfo: Observable<any>;
+  @Input() healthInfo: Observable<object>;
   stats: Observable<SummarizedStats>;
 
   constructor(protected systemInfoService: SystemInfoService) {}
 
   ngOnInit() {
-    this.healthInfo = this.getHealthInfo();
     this.stats = this.getStats();
-  }
-
-  getHealthInfo() {
-    return this.systemInfoService.getHealthInfo().pipe(
-      catchError((response) => of(response.error)),
-      share()
-    );
   }
 
   getStats() {

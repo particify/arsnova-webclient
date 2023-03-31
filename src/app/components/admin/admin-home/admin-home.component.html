@@ -15,16 +15,6 @@
           <button
             mat-button
             class="nav-button"
-            (click)="changePage('status')"
-            color="{{ currentPage === 'status' ? 'primary' : '' }}"
-            [ngClass]="{ 'primary-variant': currentPage === 'status' }"
-          >
-            <mat-icon>dns</mat-icon>
-            {{ 'admin-area.status-details' | translate }}
-          </button>
-          <button
-            mat-button
-            class="nav-button"
             (click)="changePage('stats')"
             color="{{ currentPage === 'stats' ? 'primary' : '' }}"
             [ngClass]="{ 'primary-variant': currentPage === 'stats' }"
@@ -52,6 +42,17 @@
             <mat-icon>room_preferences</mat-icon>
             {{ 'admin-area.room-management' | translate }}
           </button>
+          <button
+            *ngIf="(healthInfo | async)?.details"
+            mat-button
+            class="nav-button"
+            (click)="changePage('status')"
+            color="{{ currentPage === 'status' ? 'primary' : '' }}"
+            [ngClass]="{ 'primary-variant': currentPage === 'status' }"
+          >
+            <mat-icon>dns</mat-icon>
+            {{ 'admin-area.status-details' | translate }}
+          </button>
         </div>
         <lib-extension-point
           extensionId="premium-admin"
@@ -60,7 +61,9 @@
         ></lib-extension-point>
       </mat-drawer>
       <mat-drawer-content fxLayout="column">
-        <app-admin-summary-bar></app-admin-summary-bar>
+        <app-admin-summary-bar
+          [healthInfo]="healthInfo"
+        ></app-admin-summary-bar>
         <div class="routing-container">
           <router-outlet></router-outlet>
         </div>

@@ -1,4 +1,7 @@
-<app-admin-page-header headerText="system-stats"> </app-admin-page-header>
+<div fxLayout="row" fxLayoutAlign="space-between">
+  <app-admin-page-header headerText="system-stats"> </app-admin-page-header>
+  <lib-extension-point extensionId="tenant-selection"></lib-extension-point>
+</div>
 
 <app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
 
