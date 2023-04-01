@@ -119,7 +119,7 @@
           *ngIf="!search"
           matTooltip="{{ 'comment-list.filter-search' | translate }}"
           appHotkey="2"
-          appTrackInteraction="Search comments"
+          appTrackInteraction="Comment search opened"
         >
           <mat-icon>search</mat-icon>
         </button>
@@ -159,8 +159,8 @@
               (readonly ? 'allow-creation' : 'dont-allow-creation') | translate
           }}"
           appHotkey="6"
-          appTrackInteraction="Comments readonly: {{ readonly }}"
-          appTrackName="readonly"
+          appTrackInteraction="Comments readonly state toggled"
+          appTrackName="{{ readonly ? 'off' : 'on' }}"
         >
           <mat-icon>{{ readonly ? 'lock_open' : 'lock' }}</mat-icon>
         </button>
@@ -192,7 +192,7 @@
 
       <mat-menu
         #filterMenu="matMenu"
-        appTrackInteraction="Open comment sort/filter menu"
+        appTrackInteraction="Comment sort/filter menu opened"
       >
         <div class="divider-container">
           <mat-divider></mat-divider>
@@ -203,7 +203,7 @@
           (click)="sortCommentsManually(sorting.TIME)"
           [ngClass]="{ time: 'selected' }[currentSort]"
           aria-labelledby="sort-time"
-          appTrackInteraction="Sort comments"
+          appTrackInteraction="Comments sorted"
           appTrackName="time"
         >
           <mat-icon [ngClass]="{ time: 'blue' }[currentSort]"
@@ -217,7 +217,7 @@
           (click)="sortCommentsManually(sorting.VOTEDESC)"
           [ngClass]="{ votedesc: 'selected' }[currentSort]"
           aria-labelledby="sort-up"
-          appTrackInteraction="Sort comments"
+          appTrackInteraction="Comments sorted"
           appTrackName="vote-desc"
         >
           <mat-icon [ngClass]="{ votedesc: 'green' }[currentSort]"
@@ -231,7 +231,7 @@
           (click)="sortCommentsManually(sorting.VOTEASC)"
           [ngClass]="{ voteasc: 'selected' }[currentSort]"
           aria-labelledby="sort-down"
-          appTrackInteraction="Sort comments"
+          appTrackInteraction="Comments sorted"
           appTrackName="vote-asc"
         >
           <mat-icon [ngClass]="{ voteasc: 'red' }[currentSort]"
@@ -387,7 +387,7 @@
       [disabled]="comments.length === 0"
       mat-menu-item
       (click)="onExport()"
-      appTrackInteraction="Export comments"
+      appTrackInteraction="Comments exported"
     >
       <mat-icon class="settings-icon">save</mat-icon>
       <span>{{ 'comment-list.export-comments' | translate }}</span>
