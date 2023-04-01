@@ -1,14 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import {
-  AdvancedSnackBarTypes,
-  NotificationService,
-} from '../../../services/util/notification.service';
-import { TranslateService } from '@ngx-translate/core';
 import { ThemeService } from '../../../../theme/theme.service';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { ApiConfigService } from '../../../services/http/api-config.service';
 import { ActivatedRoute } from '@angular/router';
+import { RoutingService } from '../../../services/util/routing.service';
 
 @Component({
   selector: 'app-qr-code',
@@ -30,11 +26,10 @@ export class QrCodeComponent implements OnInit, OnDestroy {
   useJoinUrl = false;
 
   constructor(
-    protected notification: NotificationService,
-    protected translateService: TranslateService,
     private themeService: ThemeService,
     private apiConfigService: ApiConfigService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private routingService: RoutingService
   ) {}
 
   ngOnInit(): void {
@@ -54,18 +49,16 @@ export class QrCodeComponent implements OnInit, OnDestroy {
       .getApiConfig$()
       .pipe(takeUntil(this.destroyed$))
       .subscribe((config) => {
-        let url;
+        this.url = this.routingService.getRoomJoinUrl(config.ui.links?.join);
         if (config.ui.links?.join) {
-          url = config.ui.links.join.url;
-          this.displayUrl = url.replace(/^https?:\/\//, '') + this.shortId;
           this.useJoinUrl = true;
+          this.displayUrl = this.url;
         } else {
-          url = document.baseURI + 'p/';
-          this.displayUrl = document.baseURI
-            .replace(/^https?:\/\//, '')
-            .replace(/\/$/, '');
+          this.displayUrl = document.baseURI.replace(/\/$/, '');
         }
-        this.url = url + this.shortId;
+        this.displayUrl = this.routingService.removeProtocolFromUrl(
+          this.displayUrl
+        );
         this.qrUrl = this.url + '?entry=qr';
       });
   }
@@ -73,22 +66,5 @@ export class QrCodeComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.destroyed$.next();
     this.destroyed$.complete();
-  }
-
-  copyShortId(): void {
-    const selBox = document.createElement('textarea');
-    selBox.style.position = 'fixed';
-    selBox.style.left = '0';
-    selBox.style.top = '0';
-    selBox.style.opacity = '0';
-    selBox.value = this.url;
-    document.body.appendChild(selBox);
-    selBox.focus();
-    selBox.select();
-    document.execCommand('copy');
-    document.body.removeChild(selBox);
-    this.translateService.get('dialog.url-copied').subscribe((msg) => {
-      this.notification.showAdvanced(msg, AdvancedSnackBarTypes.SUCCESS);
-    });
   }
 }

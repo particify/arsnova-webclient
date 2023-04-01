@@ -17,7 +17,9 @@
           <span class="room-name">
             {{ room.name }}
           </span>
-          <span class="room-short-id">{{ room.shortId | splitShortId }}</span>
+          <app-copy-url [url]="roomJoinUrl">
+            <span class="room-short-id">{{ room.shortId | splitShortId }}</span>
+          </app-copy-url>
         </div>
       </div>
       <div *ngIf="room.description" fxLayoutAlign="center">

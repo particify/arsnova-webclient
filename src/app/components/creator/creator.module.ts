@@ -35,6 +35,8 @@ import { CreatorOverviewComponent } from './creator-overview/creator-overview.co
 import { AnnouncementSettingsComponent } from './settings/announcement-settings/announcement-settings.component';
 import { CreateAnswerOptionComponent } from './content-creation/create-answer-option/create-answer-option.component';
 import { ContentPrioritizationCreationComponent } from './content-creation/content-prioritization-creation/content-prioritization-creation.component';
+import { CopyUrlComponent } from './copy-url/copy-url.component';
+import { ClipboardModule } from '@angular/cdk/clipboard';
 
 @NgModule({
   imports: [
@@ -54,6 +56,7 @@ import { ContentPrioritizationCreationComponent } from './content-creation/conte
     }),
     CdkStepperModule,
     ExtensionPointModule,
+    ClipboardModule,
   ],
   declarations: [
     ContentChoiceCreationComponent,
@@ -79,8 +82,9 @@ import { ContentPrioritizationCreationComponent } from './content-creation/conte
     AnnouncementSettingsComponent,
     CreateAnswerOptionComponent,
     ContentPrioritizationCreationComponent,
+    CopyUrlComponent,
   ],
-  exports: [ContentPresentationComponent],
+  exports: [ContentPresentationComponent, CopyUrlComponent],
   providers: [
     { provide: TRANSLATION_MODULE_NAME, useValue: 'creator' },
     DialogService,

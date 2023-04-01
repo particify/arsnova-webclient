@@ -19,6 +19,7 @@ import { GroupContentComponent } from './content-list/group-content/group-conten
 import { RoomUserRoleResolver } from '../../resolver/room-user-role.resolver';
 import { CreatorOverviewComponent } from './creator-overview/creator-overview.component';
 import { CommentSettingsResolver } from '../../resolver/comment-settings.resolver';
+import { ApiConfigResolver } from '../../resolver/api-config.resolver';
 
 const routes: Routes = [
   {
@@ -32,6 +33,9 @@ const routes: Routes = [
   {
     path: '',
     component: CreatorOverviewComponent,
+    resolve: {
+      apiConfig: ApiConfigResolver,
+    },
   },
   {
     path: 'settings',

@@ -380,4 +380,12 @@ export class RoutingService {
   getRouteChanges(): EventEmitter<ActivatedRouteSnapshot> {
     return this.routeEvent;
   }
+
+  getRoomJoinUrl(joinUrl?: string): string {
+    return (joinUrl || document.baseURI + 'p/') + this.shortId;
+  }
+
+  removeProtocolFromUrl(url: string): string {
+    return url.replace(/^https?:\/\//, '');
+  }
 }

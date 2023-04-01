@@ -1,0 +1,24 @@
+<div>
+  <button
+    mat-button
+    *ngIf="!customButton.children.length"
+    class="copy-url"
+    [cdkCopyToClipboard]="url"
+    (cdkCopyToClipboardCopied)="showNotification($event)"
+    [attr.aria-label]="'dialog.a11y-copy-url' | translate"
+    appTrackInteraction="Copied room URL"
+  >
+    <mat-icon>content_copy</mat-icon>
+    {{ 'dialog.copy-url' | translate }}
+  </button>
+  <div
+    #customButton
+    class="custom-button"
+    role="button"
+    [matTooltip]="'dialog.copy-url' | translate"
+    [cdkCopyToClipboard]="url"
+    (cdkCopyToClipboardCopied)="showNotification($event)"
+  >
+    <ng-content></ng-content>
+  </div>
+</div>
