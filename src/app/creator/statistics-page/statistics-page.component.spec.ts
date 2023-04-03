@@ -10,12 +10,12 @@ import {
   ActivatedRouteStub,
   JsonTranslationLoader,
 } from '@testing/test-helpers';
-import { ContentGroupService } from '@core/services/http/content-group.service';
-import { RoomStatsService } from '@core/services/http/room-stats.service';
+import { ContentGroupService } from '@app/core/services/http/content-group.service';
+import { RoomStatsService } from '@app/core/services/http/room-stats.service';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
-import { Room } from '@core/models/room';
+import { Room } from '@app/core/models/room';
 import { of } from 'rxjs';
-import { RoomStats } from '@core/models/room-stats';
+import { RoomStats } from '@app/core/models/room-stats';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 describe('StatisticsPageComponent', () => {

@@ -1,25 +1,25 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { RoomListComponent } from './room-list.component';
 import { Router } from '@angular/router';
-import { NotificationService } from '@core/services/util/notification.service';
+import { NotificationService } from '@app/core/services/util/notification.service';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import {
   JsonTranslationLoader,
   MockNotificationService,
   MockGlobalStorageService,
 } from '@testing/test-helpers';
-import { GlobalStorageService } from '@core/services/util/global-storage.service';
-import { RoutingService } from '@core/services/util/routing.service';
-import { DialogService } from '@core/services/util/dialog.service';
-import { EventService } from '@core/services/util/event.service';
+import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
+import { RoutingService } from '@app/core/services/util/routing.service';
+import { DialogService } from '@app/core/services/util/dialog.service';
+import { EventService } from '@app/core/services/util/event.service';
 import { MockEventService, MockRouter } from '@testing/test-helpers';
 import { of } from 'rxjs';
-import { RoomService } from '@core/services/http/room.service';
-import { RoomMembershipService } from '@core/services/room-membership.service';
-import { AuthenticationService } from '@core/services/http/authentication.service';
-import { SplitShortIdPipe } from '@core/pipes/split-short-id.pipe';
-import { ClientAuthentication } from '@core/models/client-authentication';
-import { AuthProvider } from '@core/models/auth-provider';
+import { RoomService } from '@app/core/services/http/room.service';
+import { RoomMembershipService } from '@app/core/services/room-membership.service';
+import { AuthenticationService } from '@app/core/services/http/authentication.service';
+import { SplitShortIdPipe } from '@app/core/pipes/split-short-id.pipe';
+import { ClientAuthentication } from '@app/core/models/client-authentication';
+import { AuthProvider } from '@app/core/models/auth-provider';
 import { MatMenuModule } from '@angular/material/menu';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 

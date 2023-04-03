@@ -5,12 +5,12 @@ import {
   ActivatedRouteSnapshot,
   Router,
 } from '@angular/router';
-import { ContentPrioritization } from '@core/models/content-prioritization';
-import { ContentAnswerService } from '@core/services/http/content-answer.service';
-import { GlobalStorageService } from '@core/services/util/global-storage.service';
-import { LanguageService } from '@core/services/util/language.service';
-import { NotificationService } from '@core/services/util/notification.service';
-import { ContentType } from '@core/models/content-type.enum';
+import { ContentPrioritization } from '@app/core/models/content-prioritization';
+import { ContentAnswerService } from '@app/core/services/http/content-answer.service';
+import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
+import { LanguageService } from '@app/core/services/util/language.service';
+import { NotificationService } from '@app/core/services/util/notification.service';
+import { ContentType } from '@app/core/models/content-type.enum';
 import {
   ActivatedRouteStub,
   JsonTranslationLoader,
@@ -23,7 +23,7 @@ import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { of } from 'rxjs';
 
 import { ContentPrioritizationParticipantComponent } from './content-prioritization-participant.component';
-import { ContentState } from '@core/models/content-state';
+import { ContentState } from '@app/core/models/content-state';
 
 describe('ContentPrioritizationParticipantComponent', () => {
   let component: ContentPrioritizationParticipantComponent;

@@ -6,17 +6,17 @@ import {
   OnInit,
   Output,
 } from '@angular/core';
-import { Comment } from '@core/models/comment';
-import { Vote } from '@core/models/vote';
-import { AuthenticationService } from '@core/services/http/authentication.service';
+import { Comment } from '@app/core/models/comment';
+import { Vote } from '@app/core/models/vote';
+import { AuthenticationService } from '@app/core/services/http/authentication.service';
 import { ActivatedRoute } from '@angular/router';
-import { CommentService } from '@core/services/http/comment.service';
+import { CommentService } from '@app/core/services/http/comment.service';
 import {
   AdvancedSnackBarTypes,
   NotificationService,
-} from '@core/services/util/notification.service';
+} from '@app/core/services/util/notification.service';
 import { TranslateService } from '@ngx-translate/core';
-import { LanguageService } from '@core/services/util/language.service';
+import { LanguageService } from '@app/core/services/util/language.service';
 import {
   animate,
   state,
@@ -24,19 +24,19 @@ import {
   transition,
   trigger,
 } from '@angular/animations';
-import { CorrectWrong } from '@core/models/correct-wrong.enum';
-import { UserRole } from '@core/models/user-roles.enum';
-import { DialogService } from '@core/services/util/dialog.service';
+import { CorrectWrong } from '@app/core/models/correct-wrong.enum';
+import { UserRole } from '@app/core/models/user-roles.enum';
+import { DialogService } from '@app/core/services/util/dialog.service';
 import {
   GlobalStorageService,
   STORAGE_KEYS,
-} from '@core/services/util/global-storage.service';
-import { AnnounceService } from '@core/services/util/announce.service';
-import { VoteService } from '@core/services/http/vote.service';
+} from '@app/core/services/util/global-storage.service';
+import { AnnounceService } from '@app/core/services/util/announce.service';
+import { VoteService } from '@app/core/services/http/vote.service';
 import { Observable, Subject } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
-import { CommentAnswerComponent } from '@shared/_dialogs/comment-answer/comment-answer.component';
-import { RoutingService } from '@core/services/util/routing.service';
+import { CommentAnswerComponent } from '@app/shared/_dialogs/comment-answer/comment-answer.component';
+import { RoutingService } from '@app/core/services/util/routing.service';
 
 @Component({
   selector: 'app-comment',

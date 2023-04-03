@@ -1,8 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { UiState } from '@core/models/events/ui/ui-state.enum';
-import { EventService } from '@core/services/util/event.service';
-import { UserRole } from '@core/models/user-roles.enum';
+import { UiState } from '@app/core/models/events/ui/ui-state.enum';
+import { EventService } from '@app/core/services/util/event.service';
+import { UserRole } from '@app/core/models/user-roles.enum';
 import { Subscription } from 'rxjs';
 
 @Component({

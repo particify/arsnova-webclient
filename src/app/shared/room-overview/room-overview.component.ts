@@ -1,22 +1,22 @@
 import { Component, OnDestroy } from '@angular/core';
-import { Room } from '@core/models/room';
-import { ContentGroup } from '@core/models/content-group';
-import { RoomStats } from '@core/models/room-stats';
+import { Room } from '@app/core/models/room';
+import { ContentGroup } from '@app/core/models/content-group';
+import { RoomStats } from '@app/core/models/room-stats';
 import { ActivatedRoute } from '@angular/router';
-import { WsCommentService } from '@core/services/websockets/ws-comment.service';
-import { CommentService } from '@core/services/http/comment.service';
-import { EventService } from '@core/services/util/event.service';
+import { WsCommentService } from '@app/core/services/websockets/ws-comment.service';
+import { CommentService } from '@app/core/services/http/comment.service';
+import { EventService } from '@app/core/services/util/event.service';
 import { IMessage, Message } from '@stomp/stompjs';
 import { Observable, Subscription } from 'rxjs';
 import { TranslateService } from '@ngx-translate/core';
 import {
   GlobalStorageService,
   STORAGE_KEYS,
-} from '@core/services/util/global-storage.service';
-import { UserRole } from '@core/models/user-roles.enum';
-import { ContentGroupService } from '@core/services/http/content-group.service';
-import { RoomStatsService } from '@core/services/http/room-stats.service';
-import { DataChanged } from '@core/models/events/data-changed';
+} from '@app/core/services/util/global-storage.service';
+import { UserRole } from '@app/core/models/user-roles.enum';
+import { ContentGroupService } from '@app/core/services/http/content-group.service';
+import { RoomStatsService } from '@app/core/services/http/room-stats.service';
+import { DataChanged } from '@app/core/models/events/data-changed';
 
 @Component({
   selector: 'app-room-overview',

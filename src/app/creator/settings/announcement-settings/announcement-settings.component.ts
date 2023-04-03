@@ -1,15 +1,15 @@
 import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
-import { Room } from '@core/models/room';
-import { Announcement } from '@core/models/announcement';
-import { MarkdownFeatureset } from '@core/services/http/formatting.service';
+import { Room } from '@app/core/models/room';
+import { Announcement } from '@app/core/models/announcement';
+import { MarkdownFeatureset } from '@app/core/services/http/formatting.service';
 import { TranslateService } from '@ngx-translate/core';
 import {
   AdvancedSnackBarTypes,
   NotificationService,
-} from '@core/services/util/notification.service';
-import { AnnouncementService } from '@core/services/http/announcement.service';
+} from '@app/core/services/util/notification.service';
+import { AnnouncementService } from '@app/core/services/http/announcement.service';
 import { MatTabGroup } from '@angular/material/tabs';
-import { DialogService } from '@core/services/util/dialog.service';
+import { DialogService } from '@app/core/services/util/dialog.service';
 
 @Component({
   selector: 'app-announcement-settings',

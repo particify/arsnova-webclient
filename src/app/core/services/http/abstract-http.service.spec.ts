@@ -2,8 +2,8 @@ import { inject, TestBed } from '@angular/core/testing';
 
 import { AbstractHttpService } from './abstract-http.service';
 import { TranslateService } from '@ngx-translate/core';
-import { NotificationService } from '../util/notification.service';
-import { EventService } from '../util/event.service';
+import { NotificationService } from '@app/core/services/util/notification.service';
+import { EventService } from '@app/core/services/util/event.service';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';

@@ -1,21 +1,21 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { Comment } from '@core/models/comment';
+import { Comment } from '@app/core/models/comment';
 import {
   AdvancedSnackBarTypes,
   NotificationService,
-} from '@core/services/util/notification.service';
+} from '@app/core/services/util/notification.service';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
-import { ClientAuthentication } from '@core/models/client-authentication';
-import { CommentListComponent } from '@shared/comment-list/comment-list.component';
+import { ClientAuthentication } from '@app/core/models/client-authentication';
+import { CommentListComponent } from '@app/shared/comment-list/comment-list.component';
 import {
   GlobalStorageService,
   STORAGE_KEYS,
-} from '@core/services/util/global-storage.service';
+} from '@app/core/services/util/global-storage.service';
 import { Subject } from 'rxjs';
-import { CommentService } from '@core/services/http/comment.service';
-import { LanguageService } from '@core/services/util/language.service';
-import { UserRole } from '@core/models/user-roles.enum';
+import { CommentService } from '@app/core/services/http/comment.service';
+import { LanguageService } from '@app/core/services/util/language.service';
+import { UserRole } from '@app/core/models/user-roles.enum';
 
 export interface DialogData {
   auth: ClientAuthentication;

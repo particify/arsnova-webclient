@@ -1,16 +1,16 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Comment } from '@core/models/comment';
+import { Comment } from '@app/core/models/comment';
 import { catchError, tap } from 'rxjs/operators';
 import { AbstractEntityService } from './abstract-entity.service';
 import { TranslateService } from '@ngx-translate/core';
-import { NotificationService } from '../util/notification.service';
-import { EventService } from '../util/event.service';
-import { CommentCreated } from '@core/models/events/comment-created';
-import { WsConnectorService } from '../websockets/ws-connector.service';
-import { Room } from '@core/models/room';
-import { CachingService } from '@core/services/util/caching.service';
+import { NotificationService } from '@app/core/services/util/notification.service';
+import { EventService } from '@app/core/services/util/event.service';
+import { CommentCreated } from '@app/core/models/events/comment-created';
+import { WsConnectorService } from '@app/core/services/websockets/ws-connector.service';
+import { Room } from '@app/core/models/room';
+import { CachingService } from '@app/core/services/util/caching.service';
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' }),

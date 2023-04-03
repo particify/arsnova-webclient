@@ -2,11 +2,11 @@ import { inject, TestBed } from '@angular/core/testing';
 import { AbstractEntityService } from './abstract-entity.service';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { WsConnectorService } from '@core/services/websockets/ws-connector.service';
-import { EventService } from '@core/services/util/event.service';
+import { WsConnectorService } from '@app/core/services/websockets/ws-connector.service';
+import { EventService } from '@app/core/services/util/event.service';
 import { TranslateService } from '@ngx-translate/core';
-import { NotificationService } from '@core/services/util/notification.service';
-import { Cache, CachingService } from '@core/services/util/caching.service';
+import { NotificationService } from '@app/core/services/util/notification.service';
+import { Cache, CachingService } from '@app/core/services/util/caching.service';
 import {
   MockEventService,
   MockNotificationService,

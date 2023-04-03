@@ -1,8 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { AnnouncementService } from '@core/services/http/announcement.service';
-import { DialogService } from '@core/services/util/dialog.service';
-import { NotificationService } from '@core/services/util/notification.service';
-import { Room } from '@core/models/room';
+import { AnnouncementService } from '@app/core/services/http/announcement.service';
+import { DialogService } from '@app/core/services/util/dialog.service';
+import { NotificationService } from '@app/core/services/util/notification.service';
+import { Room } from '@app/core/models/room';
 import {
   MockNotificationService,
   JsonTranslationLoader,

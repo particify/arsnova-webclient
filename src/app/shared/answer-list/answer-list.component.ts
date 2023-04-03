@@ -1,15 +1,15 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { TextStatistic } from '@core/models/text-statistic';
-import { UserRole } from '@core/models/user-roles.enum';
+import { TextStatistic } from '@app/core/models/text-statistic';
+import { UserRole } from '@app/core/models/user-roles.enum';
 import {
   AdvancedSnackBarTypes,
   NotificationService,
-} from '@core/services/util/notification.service';
-import { ContentAnswerService } from '@core/services/http/content-answer.service';
+} from '@app/core/services/util/notification.service';
+import { ContentAnswerService } from '@app/core/services/http/content-answer.service';
 import { TranslateService } from '@ngx-translate/core';
-import { ContentService } from '@core/services/http/content.service';
-import { DialogService } from '@core/services/util/dialog.service';
+import { ContentService } from '@app/core/services/http/content.service';
+import { DialogService } from '@app/core/services/util/dialog.service';
 
 @Component({
   selector: 'app-answer-list',

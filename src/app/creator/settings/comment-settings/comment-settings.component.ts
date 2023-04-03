@@ -3,18 +3,18 @@ import { MatDialog } from '@angular/material/dialog';
 import {
   AdvancedSnackBarTypes,
   NotificationService,
-} from '@core/services/util/notification.service';
+} from '@app/core/services/util/notification.service';
 import { TranslateService } from '@ngx-translate/core';
-import { RoomService } from '@core/services/http/room.service';
+import { RoomService } from '@app/core/services/http/room.service';
 import { Router } from '@angular/router';
-import { CommentService } from '@core/services/http/comment.service';
-import { CommentSettingsService } from '@core/services/http/comment-settings.service';
-import { Room } from '@core/models/room';
-import { CommentSettings } from '@core/models/comment-settings';
+import { CommentService } from '@app/core/services/http/comment.service';
+import { CommentSettingsService } from '@app/core/services/http/comment-settings.service';
+import { Room } from '@app/core/models/room';
+import { CommentSettings } from '@app/core/models/comment-settings';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
-import { EventService } from '@core/services/util/event.service';
+import { EventService } from '@app/core/services/util/event.service';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
-import { UpdateEvent } from '@creator/settings-page/settings-page.component';
+import { UpdateEvent } from '@app/creator/settings-page/settings-page.component';
 
 export class CommentExtensions {
   enableThreshold: boolean;

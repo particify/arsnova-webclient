@@ -6,17 +6,17 @@ import {
   fakeAsync,
 } from '@angular/core/testing';
 import { AppComponent } from './app.component';
-import { ApiConfigService } from './core/services/http/api-config.service';
+import { ApiConfigService } from '@app/core/services/http/api-config.service';
 import { RouterTestingModule } from '@angular/router/testing';
 import { Component, NO_ERRORS_SCHEMA } from '@angular/core';
 import { of } from 'rxjs';
-import { TrackingService } from './core/services/util/tracking.service';
+import { TrackingService } from '@app/core/services/util/tracking.service';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { ConsentService } from './core/services/util/consent.service';
-import { UpdateService } from './core/services/util/update.service';
-import { UpdateImportance } from './core/models/version-info';
-import { LanguageService } from '@core/services/util/language.service';
-import { RoutingService } from '@core/services/util/routing.service';
+import { ConsentService } from '@app/core/services/util/consent.service';
+import { UpdateService } from '@app/core/services/util/update.service';
+import { UpdateImportance } from '@app/core/models/version-info';
+import { LanguageService } from '@app/core/services/util/language.service';
+import { RoutingService } from '@app/core/services/util/routing.service';
 import { MockTranslateService } from '@testing/test-helpers';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { JsonTranslationLoader } from '@testing/test-helpers';

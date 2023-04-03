@@ -3,9 +3,9 @@ import {
   StorageBackend,
   StorageItem,
   StorageItemCategory,
-} from '@core/models/storage';
+} from '@app/core/models/storage';
 import { EventService } from './event.service';
-import { ConsentChangedEventPayload } from '@core/models/events/consent-changed';
+import { ConsentChangedEventPayload } from '@app/core/models/events/consent-changed';
 
 export const STORAGECONFIG_PROVIDER_TOKEN: InjectionToken<StorageItem> =
   new InjectionToken('STORAGECONFIG_PROVIDER_TOKEN');

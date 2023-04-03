@@ -1,11 +1,11 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { RoutingService } from '@core/services/util/routing.service';
-import { UserRole } from '@core/models/user-roles.enum';
+import { UserRole } from '@app/core/models/user-roles.enum';
 import {
   GlobalStorageService,
   STORAGE_KEYS,
-} from '@core/services/util/global-storage.service';
+} from '@app/core/services/util/global-storage.service';
+import { RoutingService } from '@app/core/services/util/routing.service';
 
 @Component({
   selector: 'app-content-groups',

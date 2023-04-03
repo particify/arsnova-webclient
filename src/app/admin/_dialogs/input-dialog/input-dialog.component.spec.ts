@@ -1,8 +1,8 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { UserService } from '@core/services/http/user.service';
-import { NotificationService } from '@core/services/util/notification.service';
+import { UserService } from '@app/core/services/http/user.service';
+import { NotificationService } from '@app/core/services/util/notification.service';
 import {
   JsonTranslationLoader,
   MockMatDialogRef,

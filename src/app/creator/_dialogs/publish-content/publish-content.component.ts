@@ -1,6 +1,6 @@
 import { Component, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { ContentPublishActionType } from '@core/models/content-publish-action.enum';
+import { ContentPublishActionType } from '@app/core/models/content-publish-action.enum';
 
 type ActionType = 'lock' | 'publish';
 

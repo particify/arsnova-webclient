@@ -6,15 +6,15 @@ import {
   Validators,
 } from '@angular/forms';
 import { ErrorStateMatcher } from '@angular/material/core';
-import { UserService } from '@core/services/http/user.service';
+import { UserService } from '@app/core/services/http/user.service';
 import {
   AdvancedSnackBarTypes,
   NotificationService,
-} from '@core/services/util/notification.service';
+} from '@app/core/services/util/notification.service';
 import { TranslateService } from '@ngx-translate/core';
-import { EventService } from '@core/services/util/event.service';
+import { EventService } from '@app/core/services/util/event.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { PasswordEntryComponent } from '@core/components/password-entry/password-entry.component';
+import { PasswordEntryComponent } from '@app/core/components/password-entry/password-entry.component';
 
 export class PasswordResetErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(

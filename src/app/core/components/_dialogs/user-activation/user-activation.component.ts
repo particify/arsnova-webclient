@@ -2,12 +2,12 @@ import { Component, Inject } from '@angular/core';
 import {
   AdvancedSnackBarTypes,
   NotificationService,
-} from '@core/services/util/notification.service';
-import { UserService } from '@core/services/http/user.service';
+} from '@app/core/services/util/notification.service';
+import { UserService } from '@app/core/services/http/user.service';
 import { UntypedFormControl, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
-import { EventService } from '@core/services/util/event.service';
+import { EventService } from '@app/core/services/util/event.service';
 
 @Component({
   selector: 'app-user-activation',

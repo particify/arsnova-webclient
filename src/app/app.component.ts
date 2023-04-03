@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { ApiConfigService } from './core/services/http/api-config.service';
-import { TrackingService } from './core/services/util/tracking.service';
-import { ConsentService } from './core/services/util/consent.service';
-import { UpdateService } from './core/services/util/update.service';
-import { RoutingService } from './core/services/util/routing.service';
-import { LanguageService } from './core/services/util/language.service';
+import { ApiConfigService } from '@app/core/services/http/api-config.service';
+import { TrackingService } from '@app/core/services/util/tracking.service';
+import { ConsentService } from '@app/core/services/util/consent.service';
+import { UpdateService } from '@app/core/services/util/update.service';
+import { RoutingService } from '@app/core/services/util/routing.service';
+import { LanguageService } from '@app/core/services/util/language.service';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { filter } from 'rxjs/operators';
 

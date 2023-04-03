@@ -1,9 +1,9 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { CommentFocusState } from '@core/models/events/remote/comment-focus-state';
-import { ContentFocusState } from '@core/models/events/remote/content-focus-state';
-import { FeedbackFocusState } from '@core/models/events/remote/feedback-focus-state';
-import { UiState } from '@core/models/events/remote/ui-state';
+import { CommentFocusState } from '@app/core/models/events/remote/comment-focus-state';
+import { ContentFocusState } from '@app/core/models/events/remote/content-focus-state';
+import { FeedbackFocusState } from '@app/core/models/events/remote/feedback-focus-state';
+import { UiState } from '@app/core/models/events/remote/ui-state';
 @Injectable()
 export class RemoteService {
   isGuided = false;

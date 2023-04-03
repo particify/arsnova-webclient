@@ -1,8 +1,8 @@
 import { inject, TestBed } from '@angular/core/testing';
 
-import { WsConnectorService } from '@core/services/websockets/ws-connector.service';
+import { WsConnectorService } from '@app/core/services/websockets/ws-connector.service';
 import { Injectable } from '@angular/core';
-import { AuthenticationService } from '@core/services/http/authentication.service';
+import { AuthenticationService } from '@app/core/services/http/authentication.service';
 import { of } from 'rxjs';
 
 @Injectable()

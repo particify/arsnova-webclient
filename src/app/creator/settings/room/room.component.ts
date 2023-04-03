@@ -1,23 +1,23 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { Room } from '@core/models/room';
+import { Room } from '@app/core/models/room';
 import {
   AdvancedSnackBarTypes,
   NotificationService,
-} from '@core/services/util/notification.service';
+} from '@app/core/services/util/notification.service';
 import { TranslateService } from '@ngx-translate/core';
-import { RoomService } from '@core/services/http/room.service';
+import { RoomService } from '@app/core/services/http/room.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { EventService } from '@core/services/util/event.service';
-import { RoomDeleted } from '@core/models/events/room-deleted';
-import { LanguageService } from '@core/services/util/language.service';
-import { DialogService } from '@core/services/util/dialog.service';
+import { EventService } from '@app/core/services/util/event.service';
+import { RoomDeleted } from '@app/core/models/events/room-deleted';
+import { LanguageService } from '@app/core/services/util/language.service';
+import { DialogService } from '@app/core/services/util/dialog.service';
 import {
   FormattingService,
   MarkdownFeatureset,
-} from '@core/services/http/formatting.service';
-import { HINT_TYPES } from '@shared/hint/hint.component';
-import { UpdateEvent } from '@creator/settings-page/settings-page.component';
-import { UserRole } from '@core/models/user-roles.enum';
+} from '@app/core/services/http/formatting.service';
+import { HINT_TYPES } from '@app/shared/hint/hint.component';
+import { UpdateEvent } from '@app/creator/settings-page/settings-page.component';
+import { UserRole } from '@app/core/models/user-roles.enum';
 
 @Component({
   selector: 'app-room-edit',

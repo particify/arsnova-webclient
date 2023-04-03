@@ -5,7 +5,7 @@ import {
   ActivatedRouteSnapshot,
   Router,
 } from '@angular/router';
-import { NotificationService } from '@core/services/util/notification.service';
+import { NotificationService } from '@app/core/services/util/notification.service';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import {
   JsonTranslationLoader,
@@ -17,27 +17,27 @@ import {
   MockAnnounceService,
 } from '@testing/test-helpers';
 import { of } from 'rxjs';
-import { GlobalStorageService } from '@core/services/util/global-storage.service';
-import { EventService } from '@core/services/util/event.service';
-import { ContentService } from '@core/services/http/content.service';
-import { ContentGroupService } from '@core/services/http/content-group.service';
-import { AnnounceService } from '@core/services/util/announce.service';
+import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
+import { EventService } from '@app/core/services/util/event.service';
+import { ContentService } from '@app/core/services/http/content.service';
+import { ContentGroupService } from '@app/core/services/http/content-group.service';
+import { AnnounceService } from '@app/core/services/util/announce.service';
 import { SpyLocation } from '@angular/common/testing';
-import { Room } from '@core/models/room';
+import { Room } from '@app/core/models/room';
 import { NO_ERRORS_SCHEMA, EventEmitter } from '@angular/core';
-import { SplitShortIdPipe } from '@core/pipes/split-short-id.pipe';
-import { FeedbackService } from '@core/services/http/feedback.service';
+import { SplitShortIdPipe } from '@app/core/pipes/split-short-id.pipe';
+import { FeedbackService } from '@app/core/services/http/feedback.service';
 import { Message } from '@stomp/stompjs';
-import { RoutingService } from '@core/services/util/routing.service';
-import { ApiConfigService } from '@core/services/http/api-config.service';
-import { HotkeyService } from '@core/services/util/hotkey.service';
-import { DialogService } from '@core/services/util/dialog.service';
-import { RoomStatsService } from '@core/services/http/room-stats.service';
-import { ContentGroup } from '@core/models/content-group';
-import { RoomService } from '@core/services/http/room.service';
-import { RemoteService } from '@core/services/util/remote.service';
-import { CommentSettingsService } from '@core/services/http/comment-settings.service';
-import { ContentPublishService } from '@core/services/util/content-publish.service';
+import { RoutingService } from '@app/core/services/util/routing.service';
+import { ApiConfigService } from '@app/core/services/http/api-config.service';
+import { HotkeyService } from '@app/core/services/util/hotkey.service';
+import { DialogService } from '@app/core/services/util/dialog.service';
+import { RoomStatsService } from '@app/core/services/http/room-stats.service';
+import { ContentGroup } from '@app/core/models/content-group';
+import { RoomService } from '@app/core/services/http/room.service';
+import { RemoteService } from '@app/core/services/util/remote.service';
+import { CommentSettingsService } from '@app/core/services/http/comment-settings.service';
+import { ContentPublishService } from '@app/core/services/util/content-publish.service';
 
 describe('ControlBarComponent', () => {
   let component: ControlBarComponent;

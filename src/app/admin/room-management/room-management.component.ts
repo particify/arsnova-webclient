@@ -1,16 +1,16 @@
 import { Component } from '@angular/core';
-import { Room } from '@core/models/room';
-import { RoomService } from '@core/services/http/room.service';
-import { DialogService } from '@core/services/util/dialog.service';
-import { AdminService } from '@core/services/http/admin.service';
+import { Room } from '@app/core/models/room';
+import { RoomService } from '@app/core/services/http/room.service';
+import { DialogService } from '@app/core/services/util/dialog.service';
+import { AdminService } from '@app/core/services/http/admin.service';
 import {
   AdvancedSnackBarTypes,
   NotificationService,
-} from '@core/services/util/notification.service';
+} from '@app/core/services/util/notification.service';
 import { TranslateService } from '@ngx-translate/core';
-import { InputDialogComponent } from '@admin/_dialogs/input-dialog/input-dialog.component';
+import { InputDialogComponent } from '@app/admin/_dialogs/input-dialog/input-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
-import { UserService } from '@core/services/http/user.service';
+import { UserService } from '@app/core/services/http/user.service';
 
 @Component({
   selector: 'app-room-management',

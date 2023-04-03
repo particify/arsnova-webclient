@@ -2,11 +2,11 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { LoginComponent } from './login.component';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AuthenticationService } from '@core/services/http/authentication.service';
-import { DialogService } from '@core/services/util/dialog.service';
-import { EventService } from '@core/services/util/event.service';
-import { NotificationService } from '@core/services/util/notification.service';
-import { RoutingService } from '@core/services/util/routing.service';
+import { AuthenticationService } from '@app/core/services/http/authentication.service';
+import { DialogService } from '@app/core/services/util/dialog.service';
+import { EventService } from '@app/core/services/util/event.service';
+import { NotificationService } from '@app/core/services/util/notification.service';
+import { RoutingService } from '@app/core/services/util/routing.service';
 import {
   ActivatedRouteStub,
   MockEventService,

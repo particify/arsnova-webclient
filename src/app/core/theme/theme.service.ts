@@ -4,7 +4,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import {
   GlobalStorageService,
   STORAGE_KEYS,
-} from '@core/services/util/global-storage.service';
+} from '@app/core/services/util/global-storage.service';
 
 export enum Theme {
   LIGHT = 'light',

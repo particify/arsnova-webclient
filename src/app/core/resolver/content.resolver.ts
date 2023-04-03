@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve } from '@angular/router';
 import { Observable } from 'rxjs';
-import { Content } from '@core/models/content';
-import { ContentService } from '@core/services/http/content.service';
+import { Content } from '@app/core/models/content';
+import { ContentService } from '@app/core/services/http/content.service';
 
 @Injectable()
 export class ContentResolver implements Resolve<Content> {

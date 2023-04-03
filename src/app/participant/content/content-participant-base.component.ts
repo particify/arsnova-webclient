@@ -1,13 +1,13 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { NotificationService } from '@core/services/util/notification.service';
+import { NotificationService } from '@app/core/services/util/notification.service';
 import { TranslateService } from '@ngx-translate/core';
-import { LanguageService } from '@core/services/util/language.service';
+import { LanguageService } from '@app/core/services/util/language.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
   GlobalStorageService,
   STORAGE_KEYS,
-} from '@core/services/util/global-storage.service';
-import { Answer } from '@core/models/answer';
+} from '@app/core/services/util/global-storage.service';
+import { Answer } from '@app/core/models/answer';
 
 @Component({
   template: '',

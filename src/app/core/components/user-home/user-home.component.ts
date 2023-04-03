@@ -1,8 +1,8 @@
 import { AfterContentInit, Component, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { LanguageService } from '@core/services/util/language.service';
-import { ClientAuthentication } from '@core/models/client-authentication';
-import { AuthenticationService } from '@core/services/http/authentication.service';
+import { LanguageService } from '@app/core/services/util/language.service';
+import { ClientAuthentication } from '@app/core/models/client-authentication';
+import { AuthenticationService } from '@app/core/services/http/authentication.service';
 
 @Component({
   selector: 'app-user-home',

@@ -9,7 +9,7 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import {
   FormattingService,
   MarkdownFeatureset,
-} from '@core/services/http/formatting.service';
+} from '@app/core/services/http/formatting.service';
 
 @Component({
   selector: 'app-rendered-text',

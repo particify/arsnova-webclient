@@ -14,13 +14,13 @@ import {
   MockLangService,
 } from '@testing/test-helpers';
 import { of } from 'rxjs';
-import { GlobalStorageService } from '@core/services/util/global-storage.service';
+import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
 import { SpyLocation } from '@angular/common/testing';
-import { Room } from '@core/models/room';
-import { RoomStatsService } from '@core/services/http/room-stats.service';
-import { LanguageService } from '@core/services/util/language.service';
+import { Room } from '@app/core/models/room';
+import { RoomStatsService } from '@app/core/services/http/room-stats.service';
+import { LanguageService } from '@app/core/services/util/language.service';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { PresentationService } from '@core/services/util/presentation.service';
+import { PresentationService } from '@app/core/services/util/presentation.service';
 
 describe('PresentationComponent', () => {
   let component: PresentationComponent;

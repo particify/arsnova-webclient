@@ -6,29 +6,29 @@ import {
   SimpleChanges,
   ViewChild,
 } from '@angular/core';
-import { AuthenticationService } from '@core/services/http/authentication.service';
+import { AuthenticationService } from '@app/core/services/http/authentication.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
   AdvancedSnackBarTypes,
   NotificationService,
-} from '@core/services/util/notification.service';
+} from '@app/core/services/util/notification.service';
 import { MatDialog } from '@angular/material/dialog';
 import { UntypedFormControl, Validators } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
-import { EventService } from '@core/services/util/event.service';
+import { EventService } from '@app/core/services/util/event.service';
 import {
   AuthenticationProvider,
   AuthenticationProviderType,
-} from '@core/models/api-config';
-import { DialogService } from '@core/services/util/dialog.service';
+} from '@app/core/models/api-config';
+import { DialogService } from '@app/core/services/util/dialog.service';
 import {
   AuthenticationStatus,
   ClientAuthenticationResult,
-} from '@core/models/client-authentication-result';
-import { AuthProvider } from '@core/models/auth-provider';
-import { RoutingService } from '@core/services/util/routing.service';
-import { PasswordEntryComponent } from '@core/components/password-entry/password-entry.component';
-import { FormErrorStateMatcher } from '@core/components/form-error-state-matcher/form-error-state-matcher';
+} from '@app/core/models/client-authentication-result';
+import { AuthProvider } from '@app/core/models/auth-provider';
+import { RoutingService } from '@app/core/services/util/routing.service';
+import { PasswordEntryComponent } from '@app/core/components/password-entry/password-entry.component';
+import { FormErrorStateMatcher } from '@app/core/components/form-error-state-matcher/form-error-state-matcher';
 
 @Component({
   selector: 'app-login',

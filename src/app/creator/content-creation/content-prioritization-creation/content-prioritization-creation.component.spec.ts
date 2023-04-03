@@ -1,12 +1,12 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
-import { ContentGroupService } from '@core/services/http/content-group.service';
-import { ContentService } from '@core/services/http/content.service';
-import { RoomService } from '@core/services/http/room.service';
-import { AnnounceService } from '@core/services/util/announce.service';
-import { EventService } from '@core/services/util/event.service';
-import { NotificationService } from '@core/services/util/notification.service';
+import { ContentGroupService } from '@app/core/services/http/content-group.service';
+import { ContentService } from '@app/core/services/http/content.service';
+import { RoomService } from '@app/core/services/http/room.service';
+import { AnnounceService } from '@app/core/services/util/announce.service';
+import { EventService } from '@app/core/services/util/event.service';
+import { NotificationService } from '@app/core/services/util/notification.service';
 import {
   ActivatedRouteStub,
   JsonTranslationLoader,

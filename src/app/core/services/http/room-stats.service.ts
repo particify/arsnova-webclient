@@ -7,12 +7,12 @@ import {
   DataChanged,
   ModeratorDataChanged,
   PublicDataChanged,
-} from '@core/models/events/data-changed';
-import { RoomStats } from '@core/models/room-stats';
-import { CachingService } from '../util/caching.service';
-import { EventService } from '../util/event.service';
-import { NotificationService } from '../util/notification.service';
-import { WsConnectorService } from '../websockets/ws-connector.service';
+} from '@app/core/models/events/data-changed';
+import { RoomStats } from '@app/core/models/room-stats';
+import { CachingService } from '@app/core/services/util/caching.service';
+import { EventService } from '@app/core/services/util/event.service';
+import { NotificationService } from '@app/core/services/util/notification.service';
+import { WsConnectorService } from '@app/core/services/websockets/ws-connector.service';
 import { AbstractCachingHttpService } from './abstract-caching-http.service';
 
 @Injectable()

@@ -1,15 +1,15 @@
 import { Injectable } from '@angular/core';
-import { AbstractHttpService } from '../http/abstract-http.service';
+import { AbstractHttpService } from '@app/core/services/http/abstract-http.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError } from 'rxjs/operators';
 import { MatDialog } from '@angular/material/dialog';
-import { CookiesComponent } from '@core/components//_dialogs/cookies/cookies.component';
-import { StorageItemCategory } from '@core/models/storage';
+import { CookiesComponent } from '@app/core/components//_dialogs/cookies/cookies.component';
+import { StorageItemCategory } from '@app/core/models/storage';
 import { TranslateService } from '@ngx-translate/core';
 import { NotificationService } from './notification.service';
 import { EventService } from './event.service';
-import { ApiConfig } from '@core/models/api-config';
-import { ConsentChangedEvent } from '@core/models/events/consent-changed';
+import { ApiConfig } from '@app/core/models/api-config';
+import { ConsentChangedEvent } from '@app/core/models/events/consent-changed';
 import { GlobalStorageService, STORAGE_KEYS } from './global-storage.service';
 
 export const CONSENT_VERSION = 1;

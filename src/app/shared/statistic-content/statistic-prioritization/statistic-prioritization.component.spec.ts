@@ -1,25 +1,25 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { AnswerStatistics } from '@core/models/answer-statistics';
-import { ContentService } from '@core/services/http/content.service';
-import { EventService } from '@core/services/util/event.service';
-import { GlobalStorageService } from '@core/services/util/global-storage.service';
-import { PresentationService } from '@core/services/util/presentation.service';
-import { ContentPrioritization } from '@core/models/content-prioritization';
-import { ContentState } from '@core/models/content-state';
-import { ContentType } from '@core/models/content-type.enum';
+import { AnswerStatistics } from '@app/core/models/answer-statistics';
+import { ContentService } from '@app/core/services/http/content.service';
+import { EventService } from '@app/core/services/util/event.service';
+import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
+import { PresentationService } from '@app/core/services/util/presentation.service';
+import { ContentPrioritization } from '@app/core/models/content-prioritization';
+import { ContentState } from '@app/core/models/content-state';
+import { ContentType } from '@app/core/models/content-type.enum';
 import {
   JsonTranslationLoader,
   MockEventService,
   MockGlobalStorageService,
   MockThemeService,
 } from '@testing/test-helpers';
-import { ThemeService } from '@core/theme/theme.service';
+import { ThemeService } from '@app/core/theme/theme.service';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { of } from 'rxjs';
 
 import { StatisticPrioritizationComponent } from './statistic-prioritization.component';
-import { PrioritizationRoundStatistics } from '@core/models/round-statistics';
+import { PrioritizationRoundStatistics } from '@app/core/models/round-statistics';
 
 describe('StatisticPrioritizationComponent', () => {
   let component: StatisticPrioritizationComponent;

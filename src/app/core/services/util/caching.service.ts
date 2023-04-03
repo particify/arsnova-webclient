@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { RxStompState } from '@stomp/rx-stomp';
 import { interval } from 'rxjs';
 import { LRUCache } from 'lru-cache';
-import { WsConnectorService } from '../websockets/ws-connector.service';
+import { WsConnectorService } from '@app/core/services/websockets/ws-connector.service';
 
 const LRU_OPTIONS: LRUCache.Options<string, any, unknown> = {
   max: 30,

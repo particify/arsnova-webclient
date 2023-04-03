@@ -7,10 +7,10 @@ import {
   CacheKey,
   CachingService,
   DefaultCache,
-} from '../util/caching.service';
-import { EventService } from '../util/event.service';
-import { NotificationService } from '../util/notification.service';
-import { WsConnectorService } from '../websockets/ws-connector.service';
+} from '@app/core/services/util/caching.service';
+import { EventService } from '@app/core/services/util/event.service';
+import { NotificationService } from '@app/core/services/util/notification.service';
+import { WsConnectorService } from '@app/core/services/websockets/ws-connector.service';
 import { AbstractHttpService } from './abstract-http.service';
 
 export abstract class AbstractCachingHttpService<

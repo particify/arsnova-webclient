@@ -5,8 +5,8 @@ import {
   ActivatedRouteSnapshot,
   Router,
 } from '@angular/router';
-import { NotificationService } from '@core/services/util/notification.service';
-import { LanguageService } from '@core/services/util/language.service';
+import { NotificationService } from '@app/core/services/util/notification.service';
+import { LanguageService } from '@app/core/services/util/language.service';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import {
   JsonTranslationLoader,
@@ -17,13 +17,13 @@ import {
   MockRouter,
 } from '@testing/test-helpers';
 import { of } from 'rxjs';
-import { GlobalStorageService } from '@core/services/util/global-storage.service';
-import { ContentAnswerService } from '@core/services/http/content-answer.service';
-import { ContentService } from '@core/services/http/content.service';
+import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
+import { ContentAnswerService } from '@app/core/services/http/content-answer.service';
+import { ContentService } from '@app/core/services/http/content.service';
 import { NO_ERRORS_SCHEMA, EventEmitter } from '@angular/core';
-import { LikertScaleService } from '@core/services/util/likert-scale.service';
-import { ContentScale } from '@core/models/content-scale';
-import { LikertScaleTemplate } from '@core/models/likert-scale-template.enum';
+import { LikertScaleService } from '@app/core/services/util/likert-scale.service';
+import { ContentScale } from '@app/core/models/content-scale';
+import { LikertScaleTemplate } from '@app/core/models/likert-scale-template.enum';
 
 describe('ContentScaleParticipantComponent', () => {
   let component: ContentScaleParticipantComponent;

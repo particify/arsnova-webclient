@@ -2,7 +2,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { HELP_KEY } from '@core/services/util/hotkey.service';
+import { HELP_KEY } from '@app/core/services/util/hotkey.service';
 
 @Pipe({ name: 'a11yIntro' })
 export class A11yIntroPipe implements PipeTransform {

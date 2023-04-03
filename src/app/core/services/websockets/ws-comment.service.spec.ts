@@ -1,8 +1,8 @@
 import { inject, TestBed } from '@angular/core/testing';
 
-import { WsCommentService } from '@core/services/websockets/ws-comment.service';
+import { WsCommentService } from '@app/core/services/websockets/ws-comment.service';
 import { Injectable } from '@angular/core';
-import { WsConnectorService } from '@core/services/websockets/ws-connector.service';
+import { WsConnectorService } from '@app/core/services/websockets/ws-connector.service';
 
 @Injectable()
 class MockWsConnectorService {}

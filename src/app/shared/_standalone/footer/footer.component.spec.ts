@@ -7,8 +7,8 @@ import {
   MockLangService,
 } from '@testing/test-helpers';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import { LanguageService } from '@core/services/util/language.service';
-import { ConsentService } from '@core/services/util/consent.service';
+import { LanguageService } from '@app/core/services/util/language.service';
+import { ConsentService } from '@app/core/services/util/consent.service';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ReactiveFormsModule } from '@angular/forms';

@@ -1,11 +1,11 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { takeUntil } from 'rxjs/operators';
-import { AnswerStatistics } from '@core/models/answer-statistics';
-import { TextRoundStatistics } from '@core/models/round-statistics';
-import { ContentService } from '@core/services/http/content.service';
-import { StatisticContentBaseComponent } from '@shared/statistic-content/statistic-content-base';
-import { EventService } from '@core/services/util/event.service';
-import { TextStatistic } from '@core/models/text-statistic';
+import { AnswerStatistics } from '@app/core/models/answer-statistics';
+import { TextRoundStatistics } from '@app/core/models/round-statistics';
+import { ContentService } from '@app/core/services/http/content.service';
+import { StatisticContentBaseComponent } from '@app/shared/statistic-content/statistic-content-base';
+import { EventService } from '@app/core/services/util/event.service';
+import { TextStatistic } from '@app/core/models/text-statistic';
 
 @Component({
   selector: 'app-statistic-wordcloud',

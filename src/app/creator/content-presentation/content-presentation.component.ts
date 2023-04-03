@@ -6,32 +6,32 @@ import {
   ViewChild,
 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ContentService } from '@core/services/http/content.service';
+import { ContentService } from '@app/core/services/http/content.service';
 import { TranslateService } from '@ngx-translate/core';
-import { LanguageService } from '@core/services/util/language.service';
-import { Content } from '@core/models/content';
+import { LanguageService } from '@app/core/services/util/language.service';
+import { Content } from '@app/core/models/content';
 import {
   GlobalStorageService,
   STORAGE_KEYS,
-} from '@core/services/util/global-storage.service';
-import { StepperComponent } from '@shared/stepper/stepper.component';
+} from '@app/core/services/util/global-storage.service';
+import { StepperComponent } from '@app/shared/stepper/stepper.component';
 import { Location } from '@angular/common';
-import { ContentGroupService } from '@core/services/http/content-group.service';
-import { InfoBarItem } from '@shared/bars/info-bar/info-bar.component';
-import { EventService } from '@core/services/util/event.service';
-import { ContentGroup } from '@core/models/content-group';
-import { DialogService } from '@core/services/util/dialog.service';
-import { PublishContentComponent } from '@creator/_dialogs/publish-content/publish-content.component';
-import { ContentType } from '@core/models/content-type.enum';
-import { HotkeyService } from '@core/services/util/hotkey.service';
+import { ContentGroupService } from '@app/core/services/http/content-group.service';
+import { InfoBarItem } from '@app/shared/bars/info-bar/info-bar.component';
+import { EventService } from '@app/core/services/util/event.service';
+import { ContentGroup } from '@app/core/models/content-group';
+import { DialogService } from '@app/core/services/util/dialog.service';
+import { PublishContentComponent } from '@app/creator/_dialogs/publish-content/publish-content.component';
+import { ContentType } from '@app/core/models/content-type.enum';
+import { HotkeyService } from '@app/core/services/util/hotkey.service';
 import { Subscription } from 'rxjs';
-import { PresentationService } from '@core/services/util/presentation.service';
-import { UserService } from '@core/services/http/user.service';
-import { UserSettings } from '@core/models/user-settings';
-import { RemoteService } from '@core/services/util/remote.service';
-import { PresentationEvent } from '@core/models/events/presentation-events.enum';
-import { ContentPublishActionType } from '@core/models/content-publish-action.enum';
-import { ContentPublishService } from '@core/services/util/content-publish.service';
+import { PresentationService } from '@app/core/services/util/presentation.service';
+import { UserService } from '@app/core/services/http/user.service';
+import { UserSettings } from '@app/core/models/user-settings';
+import { RemoteService } from '@app/core/services/util/remote.service';
+import { PresentationEvent } from '@app/core/models/events/presentation-events.enum';
+import { ContentPublishActionType } from '@app/core/models/content-publish-action.enum';
+import { ContentPublishService } from '@app/core/services/util/content-publish.service';
 
 @Component({
   selector: 'app-content-presentation',

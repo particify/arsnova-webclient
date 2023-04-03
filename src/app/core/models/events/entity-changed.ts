@@ -1,4 +1,4 @@
-import { Entity } from '../entity';
+import { Entity } from '@app/core/models/entity';
 
 export class EntityChanged<T extends Entity> {
   type: string;

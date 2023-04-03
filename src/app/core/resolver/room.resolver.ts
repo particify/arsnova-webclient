@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve } from '@angular/router';
 import { Observable } from 'rxjs';
-import { Room } from '@core/models/room';
-import { RoomService } from '@core/services/http/room.service';
+import { Room } from '@app/core/models/room';
+import { RoomService } from '@app/core/services/http/room.service';
 import { tap } from 'rxjs/operators';
 
 @Injectable()

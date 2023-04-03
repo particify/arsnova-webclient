@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { WsConnectorService } from '@core/services/websockets/ws-connector.service';
+import { WsConnectorService } from '@app/core/services/websockets/ws-connector.service';
 import { Observable } from 'rxjs';
 import { IMessage } from '@stomp/stompjs';
 

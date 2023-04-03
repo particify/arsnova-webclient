@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { AnswerOption } from '@core/models/answer-option';
-import { DragDropBaseComponent } from '@shared/drag-drop-base/drag-drop-base.component';
+import { AnswerOption } from '@app/core/models/answer-option';
+import { DragDropBaseComponent } from '@app/shared/drag-drop-base/drag-drop-base.component';
 @Component({
   selector: 'app-content-sort-answer',
   templateUrl: './content-sort-answer.component.html',

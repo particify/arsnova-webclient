@@ -1,7 +1,7 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { EventService } from '@core/services/util/event.service';
-import { HotkeyService } from '@core/services/util/hotkey.service';
+import { EventService } from '@app/core/services/util/event.service';
+import { HotkeyService } from '@app/core/services/util/hotkey.service';
 import { JsonTranslationLoader, MockEventService } from '@testing/test-helpers';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { PresentCommentComponent } from './present-comment.component';

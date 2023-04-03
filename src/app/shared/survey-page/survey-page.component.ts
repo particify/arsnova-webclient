@@ -1,29 +1,29 @@
 import { AfterContentInit, Component, OnDestroy, OnInit } from '@angular/core';
-import { AuthenticationService } from '@core/services/http/authentication.service';
-import { RoomService } from '@core/services/http/room.service';
-import { UserRole } from '@core/models/user-roles.enum';
-import { Room } from '@core/models/room';
+import { AuthenticationService } from '@app/core/services/http/authentication.service';
+import { RoomService } from '@app/core/services/http/room.service';
+import { UserRole } from '@app/core/models/user-roles.enum';
+import { Room } from '@app/core/models/room';
 import {
   AdvancedSnackBarTypes,
   NotificationService,
-} from '@core/services/util/notification.service';
+} from '@app/core/services/util/notification.service';
 import { Message } from '@stomp/stompjs';
-import { WsFeedbackService } from '@core/services/websockets/ws-feedback.service';
+import { WsFeedbackService } from '@app/core/services/websockets/ws-feedback.service';
 import { Subscription } from 'rxjs';
 import { TranslateService } from '@ngx-translate/core';
-import { LanguageService } from '@core/services/util/language.service';
-import { Survey } from '@core/models/survey';
+import { LanguageService } from '@app/core/services/util/language.service';
+import { Survey } from '@app/core/models/survey';
 import {
   GlobalStorageService,
   STORAGE_KEYS,
-} from '@core/services/util/global-storage.service';
+} from '@app/core/services/util/global-storage.service';
 import { ActivatedRoute } from '@angular/router';
-import { AnnounceService } from '@core/services/util/announce.service';
-import { FeedbackService } from '@core/services/http/feedback.service';
-import { FeedbackMessageType } from '@core/models/messages/feedback-message-type';
-import { HotkeyAction } from '@core/directives/hotkey.directive';
-import { HotkeyService } from '@core/services/util/hotkey.service';
-import { RemoteService } from '@core/services/util/remote.service';
+import { AnnounceService } from '@app/core/services/util/announce.service';
+import { FeedbackService } from '@app/core/services/http/feedback.service';
+import { FeedbackMessageType } from '@app/core/models/messages/feedback-message-type';
+import { HotkeyAction } from '@app/core/directives/hotkey.directive';
+import { HotkeyService } from '@app/core/services/util/hotkey.service';
+import { RemoteService } from '@app/core/services/util/remote.service';
 
 @Component({
   selector: 'app-survey-page',

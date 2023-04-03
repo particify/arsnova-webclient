@@ -7,41 +7,41 @@ import {
   ViewChild,
   ViewChildren,
 } from '@angular/core';
-import { Content } from '@core/models/content';
-import { ContentService } from '@core/services/http/content.service';
+import { Content } from '@app/core/models/content';
+import { ContentService } from '@app/core/services/http/content.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
   AdvancedSnackBarTypes,
   NotificationService,
-} from '@core/services/util/notification.service';
+} from '@app/core/services/util/notification.service';
 import { TranslateService } from '@ngx-translate/core';
-import { LanguageService } from '@core/services/util/language.service';
-import { DialogService } from '@core/services/util/dialog.service';
+import { LanguageService } from '@app/core/services/util/language.service';
+import { DialogService } from '@app/core/services/util/dialog.service';
 import {
   GlobalStorageService,
   STORAGE_KEYS,
-} from '@core/services/util/global-storage.service';
-import { ContentGroupService } from '@core/services/http/content-group.service';
-import { ContentGroup } from '@core/models/content-group';
-import { AnnounceService } from '@core/services/util/announce.service';
-import { EventService } from '@core/services/util/event.service';
-import { LocalFileService } from '@core/services/util/local-file.service';
+} from '@app/core/services/util/global-storage.service';
+import { ContentGroupService } from '@app/core/services/http/content-group.service';
+import { ContentGroup } from '@app/core/models/content-group';
+import { AnnounceService } from '@app/core/services/util/announce.service';
+import { EventService } from '@app/core/services/util/event.service';
+import { LocalFileService } from '@app/core/services/util/local-file.service';
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { Observable, Subject, Subscription } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
-import { RoomStatsService } from '@core/services/http/room-stats.service';
-import { HotkeyService } from '@core/services/util/hotkey.service';
+import { RoomStatsService } from '@app/core/services/http/room-stats.service';
+import { HotkeyService } from '@app/core/services/util/hotkey.service';
 import { MatButton } from '@angular/material/button';
-import { ContentType } from '@core/models/content-type.enum';
-import { UiState } from '@core/models/events/ui/ui-state.enum';
-import { RoutingService } from '@core/services/util/routing.service';
-import { Room } from '@core/models/room';
-import { ContentGroupStatistics } from '@core/models/content-group-statistics';
-import { MarkdownFeatureset } from '@core/services/http/formatting.service';
-import { DragDropBaseComponent } from '@shared/drag-drop-base/drag-drop-base.component';
-import { UserRole } from '@core/models/user-roles.enum';
-import { PresentationEvent } from '@core/models/events/presentation-events.enum';
-import { ContentPublishService } from '@core/services/util/content-publish.service';
+import { ContentType } from '@app/core/models/content-type.enum';
+import { UiState } from '@app/core/models/events/ui/ui-state.enum';
+import { RoutingService } from '@app/core/services/util/routing.service';
+import { Room } from '@app/core/models/room';
+import { ContentGroupStatistics } from '@app/core/models/content-group-statistics';
+import { MarkdownFeatureset } from '@app/core/services/http/formatting.service';
+import { DragDropBaseComponent } from '@app/shared/drag-drop-base/drag-drop-base.component';
+import { UserRole } from '@app/core/models/user-roles.enum';
+import { PresentationEvent } from '@app/core/models/events/presentation-events.enum';
+import { ContentPublishService } from '@app/core/services/util/content-publish.service';
 
 @Component({
   selector: 'app-group-content',

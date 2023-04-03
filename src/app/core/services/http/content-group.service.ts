@@ -1,23 +1,23 @@
 import { Injectable } from '@angular/core';
-import { ContentGroup } from '@core/models/content-group';
+import { ContentGroup } from '@app/core/models/content-group';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { catchError, map, mergeMap, tap } from 'rxjs/operators';
 import { AbstractEntityService } from './abstract-entity.service';
-import { EventService } from '../util/event.service';
+import { EventService } from '@app/core/services/util/event.service';
 import {
   GlobalStorageService,
   STORAGE_KEYS,
-} from '../util/global-storage.service';
+} from '@app/core/services/util/global-storage.service';
 import { TranslateService } from '@ngx-translate/core';
-import { NotificationService } from '../util/notification.service';
+import { NotificationService } from '@app/core/services/util/notification.service';
 import { RoomStatsService } from './room-stats.service';
-import { ContentGroupStatistics } from '@core/models/content-group-statistics';
-import { CachingService } from '../util/caching.service';
-import { WsConnectorService } from '../websockets/ws-connector.service';
-import { AnswerResultOverview } from '@core/models/answer-result';
-import { SeriesCreated } from '@core/models/events/series-created';
-import { SeriesDeleted } from '@core/models/events/series-deleted';
+import { ContentGroupStatistics } from '@app/core/models/content-group-statistics';
+import { CachingService } from '@app/core/services/util/caching.service';
+import { WsConnectorService } from '@app/core/services/websockets/ws-connector.service';
+import { AnswerResultOverview } from '@app/core/models/answer-result';
+import { SeriesCreated } from '@app/core/models/events/series-created';
+import { SeriesDeleted } from '@app/core/models/events/series-deleted';
 
 const httpOptions = {
   headers: new HttpHeaders({}),

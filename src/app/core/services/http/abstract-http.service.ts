@@ -4,9 +4,9 @@ import { TranslateService } from '@ngx-translate/core';
 import {
   AdvancedSnackBarTypes,
   NotificationService,
-} from '../util/notification.service';
-import { EventService } from '../util/event.service';
-import { HttpRequestFailed } from '@core/models/events/http-request-failed';
+} from '@app/core/services/util/notification.service';
+import { EventService } from '@app/core/services/util/event.service';
+import { HttpRequestFailed } from '@app/core/models/events/http-request-failed';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export abstract class AbstractHttpService<T> {

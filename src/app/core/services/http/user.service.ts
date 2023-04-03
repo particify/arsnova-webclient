@@ -2,16 +2,16 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { AbstractEntityService } from './abstract-entity.service';
-import { User } from '@core/models/user';
-import { AccountCreated } from '@core/models/events/account-created';
-import { AccountDeleted } from '@core/models/events/account-deleted';
+import { User } from '@app/core/models/user';
+import { AccountCreated } from '@app/core/models/events/account-created';
+import { AccountDeleted } from '@app/core/models/events/account-deleted';
 import { catchError, map, tap } from 'rxjs/operators';
-import { EventService } from '../util/event.service';
+import { EventService } from '@app/core/services/util/event.service';
 import { TranslateService } from '@ngx-translate/core';
-import { NotificationService } from '../util/notification.service';
-import { CachingService } from '../util/caching.service';
-import { WsConnectorService } from '../websockets/ws-connector.service';
-import { UserSettings } from '@core/models/user-settings';
+import { NotificationService } from '@app/core/services/util/notification.service';
+import { CachingService } from '@app/core/services/util/caching.service';
+import { WsConnectorService } from '@app/core/services/websockets/ws-connector.service';
+import { UserSettings } from '@app/core/models/user-settings';
 
 const httpOptions = {
   headers: new HttpHeaders({}),

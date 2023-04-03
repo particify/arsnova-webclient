@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { Room } from '@core/models/room';
-import { RoomSummary } from '@core/models/room-summary';
-import { SurveyStarted } from '@core/models/events/survey-started';
+import { Room } from '@app/core/models/room';
+import { RoomSummary } from '@app/core/models/room-summary';
+import { SurveyStarted } from '@app/core/models/events/survey-started';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { catchError, map, tap, switchMap } from 'rxjs/operators';
@@ -11,17 +11,20 @@ import {
   AUTH_SCHEME,
 } from './authentication.service';
 import { AbstractEntityService } from './abstract-entity.service';
-import { EventService } from '../util/event.service';
+import { EventService } from '@app/core/services/util/event.service';
 import {
   GlobalStorageService,
   STORAGE_KEYS,
-} from '../util/global-storage.service';
-import { WsConnectorService } from '../websockets/ws-connector.service';
+} from '@app/core/services/util/global-storage.service';
+import { WsConnectorService } from '@app/core/services/websockets/ws-connector.service';
 import { IMessage } from '@stomp/stompjs';
 import { TranslateService } from '@ngx-translate/core';
-import { NotificationService } from '../util/notification.service';
-import { FeedbackService } from '@core/services/http/feedback.service';
-import { CachingService, DefaultCache } from '../util/caching.service';
+import { NotificationService } from '@app/core/services/util/notification.service';
+import { FeedbackService } from '@app/core/services/http/feedback.service';
+import {
+  CachingService,
+  DefaultCache,
+} from '@app/core/services/util/caching.service';
 
 const httpOptions = {
   headers: new HttpHeaders({}),

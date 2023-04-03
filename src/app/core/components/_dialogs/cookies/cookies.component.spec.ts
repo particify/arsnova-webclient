@@ -10,7 +10,7 @@ import {
 } from '@testing/test-helpers';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
-import { NotificationService } from '@core/services/util/notification.service';
+import { NotificationService } from '@app/core/services/util/notification.service';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 describe('CookiesComponent', () => {

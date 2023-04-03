@@ -1,13 +1,13 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { ContentText } from '@core/models/content-text';
-import { ContentService } from '@core/services/http/content.service';
-import { NotificationService } from '@core/services/util/notification.service';
+import { ContentText } from '@app/core/models/content-text';
+import { ContentService } from '@app/core/services/http/content.service';
+import { NotificationService } from '@app/core/services/util/notification.service';
 import { TranslateService } from '@ngx-translate/core';
 import { ActivatedRoute } from '@angular/router';
-import { ContentGroupService } from '@core/services/http/content-group.service';
-import { ContentCreationComponent } from '@creator/content-creation/content-creation/content-creation.component';
-import { ContentType } from '@core/models/content-type.enum';
-import { AnnounceService } from '@core/services/util/announce.service';
+import { ContentGroupService } from '@app/core/services/http/content-group.service';
+import { ContentCreationComponent } from '@app/creator/content-creation/content-creation/content-creation.component';
+import { ContentType } from '@app/core/models/content-type.enum';
+import { AnnounceService } from '@app/core/services/util/announce.service';
 
 @Component({
   selector: 'app-content-text-creation',

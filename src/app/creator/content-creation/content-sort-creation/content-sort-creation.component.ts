@@ -1,20 +1,20 @@
 import { Component, EventEmitter, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { ContentService } from '@core/services/http/content.service';
+import { ContentService } from '@app/core/services/http/content.service';
 import {
   AdvancedSnackBarTypes,
   NotificationService,
-} from '@core/services/util/notification.service';
+} from '@app/core/services/util/notification.service';
 import { ActivatedRoute } from '@angular/router';
-import { ContentType } from '@core/models/content-type.enum';
-import { ContentGroupService } from '@core/services/http/content-group.service';
-import { ContentChoice } from '@core/models/content-choice';
-import { AnswerOption } from '@core/models/answer-option';
+import { ContentType } from '@app/core/models/content-type.enum';
+import { ContentGroupService } from '@app/core/services/http/content-group.service';
+import { ContentChoice } from '@app/core/models/content-choice';
+import { AnswerOption } from '@app/core/models/answer-option';
 import {
   ContentCreationComponent,
   DisplayAnswer,
-} from '@creator/content-creation/content-creation/content-creation.component';
-import { AnnounceService } from '@core/services/util/announce.service';
+} from '@app/creator/content-creation/content-creation/content-creation.component';
+import { AnnounceService } from '@app/core/services/util/announce.service';
 
 @Component({
   selector: 'app-content-sort-creation',

@@ -5,35 +5,35 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
-import { ContentType } from '@core/models/content-type.enum';
-import { ContentService } from '@core/services/http/content.service';
-import { Content } from '@core/models/content';
-import { ContentGroup } from '@core/models/content-group';
+import { ContentType } from '@app/core/models/content-type.enum';
+import { ContentService } from '@app/core/services/http/content.service';
+import { Content } from '@app/core/models/content';
+import { ContentGroup } from '@app/core/models/content-group';
 import { TranslateService } from '@ngx-translate/core';
-import { StepperComponent } from '@shared/stepper/stepper.component';
+import { StepperComponent } from '@app/shared/stepper/stepper.component';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
   GlobalStorageService,
   STORAGE_KEYS,
-} from '@core/services/util/global-storage.service';
-import { AnnounceService } from '@core/services/util/announce.service';
+} from '@app/core/services/util/global-storage.service';
+import { AnnounceService } from '@app/core/services/util/announce.service';
 import { Location } from '@angular/common';
-import { ContentAnswerService } from '@core/services/http/content-answer.service';
-import { AuthenticationService } from '@core/services/http/authentication.service';
-import { Answer } from '@core/models/answer';
+import { ContentAnswerService } from '@app/core/services/http/content-answer.service';
+import { AuthenticationService } from '@app/core/services/http/authentication.service';
+import { Answer } from '@app/core/models/answer';
 import {
   AdvancedSnackBarTypes,
   NotificationService,
-} from '@core/services/util/notification.service';
-import { ContentGroupService } from '@core/services/http/content-group.service';
-import { EventService } from '@core/services/util/event.service';
-import { EntityChanged } from '@core/models/events/entity-changed';
+} from '@app/core/services/util/notification.service';
+import { ContentGroupService } from '@app/core/services/http/content-group.service';
+import { EventService } from '@app/core/services/util/event.service';
+import { EntityChanged } from '@app/core/models/events/entity-changed';
 import { Subscription } from 'rxjs';
-import { ContentFocusState } from '@core/models/events/remote/content-focus-state';
-import { RoutingService } from '@core/services/util/routing.service';
-import { RemoteService } from '@core/services/util/remote.service';
-import { ContentCarouselService } from '@core/services/util/content-carousel.service';
-import { ContentPublishService } from '@core/services/util/content-publish.service';
+import { ContentFocusState } from '@app/core/models/events/remote/content-focus-state';
+import { RoutingService } from '@app/core/services/util/routing.service';
+import { RemoteService } from '@app/core/services/util/remote.service';
+import { ContentCarouselService } from '@app/core/services/util/content-carousel.service';
+import { ContentPublishService } from '@app/core/services/util/content-publish.service';
 
 @Component({
   selector: 'app-participant-content-carousel-page',

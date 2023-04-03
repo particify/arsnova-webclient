@@ -1,14 +1,14 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { ContentType } from '@core/models/content-type.enum';
-import { Answer } from '@core/models/answer';
-import { Content } from '@core/models/content';
-import { ContentChoice } from '@core/models/content-choice';
-import { TextAnswer } from '@core/models/text-answer';
-import { ChoiceAnswer } from '@core/models/choice-answer';
-import { MarkdownFeatureset } from '@core/services/http/formatting.service';
-import { MultipleTextsAnswer } from '@core/models/multiple-texts-answer';
-import { HotkeyAction } from '@core/directives/hotkey.directive';
-import { PrioritizationAnswer } from '@core/models/prioritization-answer';
+import { ContentType } from '@app/core/models/content-type.enum';
+import { Answer } from '@app/core/models/answer';
+import { Content } from '@app/core/models/content';
+import { ContentChoice } from '@app/core/models/content-choice';
+import { TextAnswer } from '@app/core/models/text-answer';
+import { ChoiceAnswer } from '@app/core/models/choice-answer';
+import { MarkdownFeatureset } from '@app/core/services/http/formatting.service';
+import { MultipleTextsAnswer } from '@app/core/models/multiple-texts-answer';
+import { HotkeyAction } from '@app/core/directives/hotkey.directive';
+import { PrioritizationAnswer } from '@app/core/models/prioritization-answer';
 
 @Component({
   selector: 'app-content-participant',

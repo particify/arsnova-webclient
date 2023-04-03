@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
 import { RxStomp, RxStompState } from '@stomp/rx-stomp';
-import { AuthenticationService } from '../http/authentication.service';
+import { AuthenticationService } from '@app/core/services/http/authentication.service';
 import { ARSRxStompConfig } from '@app/rx-stomp.config';
 import { Observable } from 'rxjs';
 import { IMessage } from '@stomp/stompjs';
 import {
   ClientAuthentication,
   TransientClientAuthentication,
-} from '@core/models/client-authentication';
+} from '@app/core/models/client-authentication';
 import { filter } from 'rxjs/operators';
 
 @Injectable({

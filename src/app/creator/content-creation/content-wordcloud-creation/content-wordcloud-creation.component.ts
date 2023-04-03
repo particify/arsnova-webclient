@@ -1,17 +1,17 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { ContentService } from '@core/services/http/content.service';
+import { ContentService } from '@app/core/services/http/content.service';
 import {
   AdvancedSnackBarTypes,
   NotificationService,
-} from '@core/services/util/notification.service';
+} from '@app/core/services/util/notification.service';
 import { TranslateService } from '@ngx-translate/core';
 import { ActivatedRoute } from '@angular/router';
-import { ContentGroupService } from '@core/services/http/content-group.service';
-import { ContentCreationComponent } from '@creator/content-creation/content-creation/content-creation.component';
-import { ContentType } from '@core/models/content-type.enum';
-import { ContentWordcloud } from '@core/models/content-wordcloud';
-import { EventService } from '@core/services/util/event.service';
-import { AnnounceService } from '@core/services/util/announce.service';
+import { ContentGroupService } from '@app/core/services/http/content-group.service';
+import { ContentCreationComponent } from '@app/creator/content-creation/content-creation/content-creation.component';
+import { ContentType } from '@app/core/models/content-type.enum';
+import { ContentWordcloud } from '@app/core/models/content-wordcloud';
+import { EventService } from '@app/core/services/util/event.service';
+import { AnnounceService } from '@app/core/services/util/announce.service';
 
 const MAX_KEYWORDS = 10;
 

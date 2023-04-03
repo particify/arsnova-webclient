@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve } from '@angular/router';
 import { Observable } from 'rxjs';
-import { CommentSettings } from '@core/models/comment-settings';
-import { CommentSettingsService } from '@core/services/http/comment-settings.service';
+import { CommentSettings } from '@app/core/models/comment-settings';
+import { CommentSettingsService } from '@app/core/services/http/comment-settings.service';
 
 @Injectable()
 export class CommentSettingsResolver implements Resolve<CommentSettings> {

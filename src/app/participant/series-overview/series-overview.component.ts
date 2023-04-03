@@ -1,21 +1,21 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { Content } from '@core/models/content';
+import { Content } from '@app/core/models/content';
 import { ArcElement, Chart, DoughnutController, PieController } from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
-import { RoutingService } from '@core/services/util/routing.service';
-import { ContentGroupService } from '@core/services/http/content-group.service';
-import { ThemeService } from '@core/theme/theme.service';
-import { AuthenticationService } from '@core/services/http/authentication.service';
-import { ContentGroup } from '@core/models/content-group';
+import { RoutingService } from '@app/core/services/util/routing.service';
+import { ContentGroupService } from '@app/core/services/http/content-group.service';
+import { ThemeService } from '@app/core/theme/theme.service';
+import { AuthenticationService } from '@app/core/services/http/authentication.service';
+import { ContentGroup } from '@app/core/models/content-group';
 import {
   AnswerResultOverview,
   AnswerResultType,
-} from '@core/models/answer-result';
-import { UserRole } from '@core/models/user-roles.enum';
-import { ClientAuthentication } from '@core/models/client-authentication';
+} from '@app/core/models/answer-result';
+import { UserRole } from '@app/core/models/user-roles.enum';
+import { ClientAuthentication } from '@app/core/models/client-authentication';
 import { Router } from '@angular/router';
-import { Features } from '@core/models/features.enum';
-import { ContentCarouselService } from '@core/services/util/content-carousel.service';
+import { Features } from '@app/core/models/features.enum';
+import { ContentCarouselService } from '@app/core/services/util/content-carousel.service';
 
 // Max time for updating db (5000) - navigation delay (500) / 2
 const RELOAD_INTERVAL = 2250;

@@ -1,4 +1,4 @@
-import { LanguageService } from '@core/services/util/language.service';
+import { LanguageService } from '@app/core/services/util/language.service';
 import { Component, OnInit } from '@angular/core';
 import {
   ActivatedRoute,
@@ -7,8 +7,8 @@ import {
   RouterModule,
 } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
-import { Room } from '@core/models/room';
-import { ConsentService } from '@core/services/util/consent.service';
+import { Room } from '@app/core/models/room';
+import { ConsentService } from '@app/core/services/util/consent.service';
 import { filter } from 'rxjs/operators';
 import { CommonModule } from '@angular/common';
 import { MatMenuModule } from '@angular/material/menu';

@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { CommentListComponent } from './comment-list.component';
 import { ActivatedRoute, Router } from '@angular/router';
-import { NotificationService } from '@core/services/util/notification.service';
+import { NotificationService } from '@app/core/services/util/notification.service';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import {
   JsonTranslationLoader,
@@ -11,28 +11,29 @@ import {
   MockAnnounceService,
   MockLangService,
   MockMatDialog,
+  MockEventService,
+  MockRouter,
 } from '@testing/test-helpers';
-import { GlobalStorageService } from '@core/services/util/global-storage.service';
-import { AnnounceService } from '@core/services/util/announce.service';
-import { RoutingService } from '@core/services/util/routing.service';
-import { DialogService } from '@core/services/util/dialog.service';
-import { CommentService } from '@core/services/http/comment.service';
-import { VoteService } from '@core/services/http/vote.service';
-import { LanguageService } from '@core/services/util/language.service';
+import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
+import { AnnounceService } from '@app/core/services/util/announce.service';
+import { RoutingService } from '@app/core/services/util/routing.service';
+import { DialogService } from '@app/core/services/util/dialog.service';
+import { CommentService } from '@app/core/services/http/comment.service';
+import { VoteService } from '@app/core/services/http/vote.service';
+import { LanguageService } from '@app/core/services/util/language.service';
 import { MatDialog } from '@angular/material/dialog';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatMenuModule } from '@angular/material/menu';
-import { WsCommentService } from '@core/services/websockets/ws-comment.service';
-import { EventService } from '@core/services/util/event.service';
-import { MockEventService, MockRouter } from '@testing/test-helpers';
-import { CommentSettingsService } from '@core/services/http/comment-settings.service';
+import { WsCommentService } from '@app/core/services/websockets/ws-comment.service';
+import { EventService } from '@app/core/services/util/event.service';
+import { CommentSettingsService } from '@app/core/services/http/comment-settings.service';
 import { SpyLocation } from '@angular/common/testing';
-import { HotkeyService } from '@core/services/util/hotkey.service';
-import { Room } from '@core/models/room';
-import { CounterBracesPipe } from '@core/pipes/counter-braces.pipe';
+import { HotkeyService } from '@app/core/services/util/hotkey.service';
+import { Room } from '@app/core/models/room';
+import { CounterBracesPipe } from '@app/core/pipes/counter-braces.pipe';
 import { of } from 'rxjs';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { RemoteService } from '@core/services/util/remote.service';
+import { RemoteService } from '@app/core/services/util/remote.service';
 
 describe('CommentListComponent', () => {
   let component: CommentListComponent;

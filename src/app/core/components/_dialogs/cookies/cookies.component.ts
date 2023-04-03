@@ -11,12 +11,12 @@ import { ActivatedRoute } from '@angular/router';
 import {
   ConsentGiven,
   CookieCategory,
-} from '@core/services/util/consent.service';
+} from '@app/core/services/util/consent.service';
 import { TranslateService } from '@ngx-translate/core';
 import {
   AdvancedSnackBarTypes,
   NotificationService,
-} from '@core/services/util/notification.service';
+} from '@app/core/services/util/notification.service';
 
 @Component({
   selector: 'app-cookies',

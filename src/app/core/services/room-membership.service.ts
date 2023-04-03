@@ -19,13 +19,13 @@ import {
   AUTH_SCHEME,
 } from './http/authentication.service';
 import { EventService } from './util/event.service';
-import { Membership } from '@core/models/membership';
-import { UserRole } from '@core/models/user-roles.enum';
+import { Membership } from '@app/core/models/membership';
+import { UserRole } from '@app/core/models/user-roles.enum';
 import { TranslateService } from '@ngx-translate/core';
 import { NotificationService } from './util/notification.service';
-import { ClientAuthentication } from '@core/models/client-authentication';
-import { Room } from '@core/models/room';
-import { MembershipsChanged } from '@core/models/events/memberships-changed';
+import { ClientAuthentication } from '@app/core/models/client-authentication';
+import { Room } from '@app/core/models/room';
+import { MembershipsChanged } from '@app/core/models/events/memberships-changed';
 
 /**
  * This service provides utility methods which handle or provide information

@@ -6,8 +6,8 @@ import {
   MockTranslateService,
 } from '@testing/test-helpers';
 import { TranslateService } from '@ngx-translate/core';
-import { EventService } from '../util/event.service';
-import { NotificationService } from '../util/notification.service';
+import { EventService } from '@app/core/services/util/event.service';
+import { NotificationService } from '@app/core/services/util/notification.service';
 
 import { AnnouncementService } from './announcement.service';
 

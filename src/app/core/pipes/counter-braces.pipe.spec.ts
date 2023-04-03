@@ -1,4 +1,4 @@
-import { CounterBracesPipe } from '@core/pipes/counter-braces.pipe';
+import { CounterBracesPipe } from '@app/core/pipes/counter-braces.pipe';
 
 describe('CounterBraces', () => {
   const pipe = new CounterBracesPipe();

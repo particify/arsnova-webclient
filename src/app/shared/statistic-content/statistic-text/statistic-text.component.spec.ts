@@ -1,21 +1,21 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { StatisticTextComponent } from './statistic-text.component';
-import { EventService } from '@core/services/util/event.service';
-import { ContentService } from '@core/services/http/content.service';
-import { ThemeService } from '@core/theme/theme.service';
+import { EventService } from '@app/core/services/util/event.service';
+import { ContentService } from '@app/core/services/http/content.service';
+import { ThemeService } from '@app/core/theme/theme.service';
 import {
   JsonTranslationLoader,
   MockEventService,
   MockThemeService,
 } from '@testing/test-helpers';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
-import { ContentType } from '@core/models/content-type.enum';
-import { ContentState } from '@core/models/content-state';
+import { ContentType } from '@app/core/models/content-type.enum';
+import { ContentState } from '@app/core/models/content-state';
 import { of } from 'rxjs';
-import { RoundStatistics } from '@core/models/round-statistics';
-import { AnswerStatistics } from '@core/models/answer-statistics';
-import { ContentAnswerService } from '@core/services/http/content-answer.service';
-import { ContentText } from '@core/models/content-text';
+import { RoundStatistics } from '@app/core/models/round-statistics';
+import { AnswerStatistics } from '@app/core/models/answer-statistics';
+import { ContentAnswerService } from '@app/core/services/http/content-answer.service';
+import { ContentText } from '@app/core/models/content-text';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 describe('StatisticTextComponent', () => {

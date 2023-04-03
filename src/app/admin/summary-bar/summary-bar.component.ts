@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import {
   SummarizedStats,
   SystemInfoService,
-} from '@core/services/http/system-info.service';
+} from '@app/core/services/http/system-info.service';
 import { share } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 

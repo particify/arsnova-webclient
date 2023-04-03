@@ -9,22 +9,22 @@ import {
 import {
   AdvancedSnackBarTypes,
   NotificationService,
-} from '@core/services/util/notification.service';
+} from '@app/core/services/util/notification.service';
 import { TranslateService } from '@ngx-translate/core';
-import { ModeratorService } from '@core/services/http/moderator.service';
-import { LanguageService } from '@core/services/util/language.service';
-import { Moderator } from '@core/models/moderator';
+import { ModeratorService } from '@app/core/services/http/moderator.service';
+import { LanguageService } from '@app/core/services/util/language.service';
+import { Moderator } from '@app/core/models/moderator';
 import { UntypedFormControl, Validators } from '@angular/forms';
-import { EventService } from '@core/services/util/event.service';
-import { DialogService } from '@core/services/util/dialog.service';
-import { UserService } from '@core/services/http/user.service';
-import { Room } from '@core/models/room';
-import { UserRole } from '@core/models/user-roles.enum';
-import { AuthenticationService } from '@core/services/http/authentication.service';
-import { AuthProvider } from '@core/models/auth-provider';
+import { EventService } from '@app/core/services/util/event.service';
+import { DialogService } from '@app/core/services/util/dialog.service';
+import { UserService } from '@app/core/services/http/user.service';
+import { Room } from '@app/core/models/room';
+import { UserRole } from '@app/core/models/user-roles.enum';
+import { AuthenticationService } from '@app/core/services/http/authentication.service';
+import { AuthProvider } from '@app/core/models/auth-provider';
 import { debounceTime, map, Subject, takeUntil } from 'rxjs';
-import { AccessTokenService } from '@core/services/http/access-token.service';
-import { UpdateEvent } from '@creator/settings-page/settings-page.component';
+import { AccessTokenService } from '@app/core/services/http/access-token.service';
+import { UpdateEvent } from '@app/creator/settings-page/settings-page.component';
 
 export interface Role {
   name: string;

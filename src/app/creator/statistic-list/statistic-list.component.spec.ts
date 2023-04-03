@@ -13,15 +13,15 @@ import {
   MockRouter,
   MockNotificationService,
 } from '@testing/test-helpers';
-import { GlobalStorageService } from '@core/services/util/global-storage.service';
+import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
-import { ContentService } from '@core/services/http/content.service';
-import { ContentAnswerService } from '@core/services/http/content-answer.service';
-import { LanguageService } from '@core/services/util/language.service';
-import { NotificationService } from '@core/services/util/notification.service';
+import { ContentService } from '@app/core/services/http/content.service';
+import { ContentAnswerService } from '@app/core/services/http/content-answer.service';
+import { LanguageService } from '@app/core/services/util/language.service';
+import { NotificationService } from '@app/core/services/util/notification.service';
 import { of } from 'rxjs';
-import { ContentGroup } from '@core/models/content-group';
-import { A11yRenderedBodyPipe } from '@core/pipes/a11y-rendered-body.pipe';
+import { ContentGroup } from '@app/core/models/content-group';
+import { A11yRenderedBodyPipe } from '@app/core/pipes/a11y-rendered-body.pipe';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 describe('StatisticListComponent', () => {

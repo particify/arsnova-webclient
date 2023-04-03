@@ -1,6 +1,9 @@
 import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Hotkey, HotkeyActionType } from '@core/services/util/hotkey.service';
+import {
+  Hotkey,
+  HotkeyActionType,
+} from '@app/core/services/util/hotkey.service';
 
 @Component({
   selector: 'app-hotkeys',

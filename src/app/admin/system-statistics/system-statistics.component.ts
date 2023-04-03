@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { SystemInfoService } from '@core/services/http/system-info.service';
+import { SystemInfoService } from '@app/core/services/http/system-info.service';
 import { ActivatedRoute } from '@angular/router';
 
 export class AdminStats {

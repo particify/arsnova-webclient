@@ -1,7 +1,7 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { DateFormatPipe } from '@core/pipes/date-format.pipe';
-import { DateFromNowPipe } from '@core/pipes/date-from-now.pipe';
+import { DateFormatPipe } from '@app/core/pipes/date-format.pipe';
+import { DateFromNowPipe } from '@app/core/pipes/date-from-now.pipe';
 import { JsonTranslationLoader } from '@testing/test-helpers';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 

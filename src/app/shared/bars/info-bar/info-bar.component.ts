@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { BarBaseComponent, BarItem } from '@shared/bars/bar-base';
+import { BarBaseComponent, BarItem } from '@app/shared/bars/bar-base';
 
 export class InfoBarItem extends BarItem {
   count;

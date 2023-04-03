@@ -1,8 +1,8 @@
 import { TestBed, inject } from '@angular/core/testing';
 
-import { ConsentService } from '@core/services/util/consent.service';
+import { ConsentService } from '@app/core/services/util/consent.service';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { EventService } from '@core/services/util/event.service';
+import { EventService } from '@app/core/services/util/event.service';
 import {
   MockEventService,
   MockGlobalStorageService,
@@ -10,8 +10,8 @@ import {
   MockTranslateService,
 } from '@testing/test-helpers';
 import { TranslateService } from '@ngx-translate/core';
-import { NotificationService } from '@core/services/util/notification.service';
-import { GlobalStorageService } from '@core/services/util/global-storage.service';
+import { NotificationService } from '@app/core/services/util/notification.service';
+import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
 import { MatDialogModule } from '@angular/material/dialog';
 
 describe('ConsentService', () => {

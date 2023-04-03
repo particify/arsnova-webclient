@@ -9,21 +9,21 @@ import {
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormErrorStateMatcher } from '@core/components/form-error-state-matcher/form-error-state-matcher';
+import { FormErrorStateMatcher } from '@app/core/components/form-error-state-matcher/form-error-state-matcher';
 import { UntypedFormControl, Validators } from '@angular/forms';
 import {
   AdvancedSnackBarTypes,
   NotificationService,
-} from '@core/services/util/notification.service';
+} from '@app/core/services/util/notification.service';
 import { TranslateService } from '@ngx-translate/core';
-import { AuthenticationService } from '@core/services/http/authentication.service';
-import { ClientAuthentication } from '@core/models/client-authentication';
-import { EventService } from '@core/services/util/event.service';
+import { AuthenticationService } from '@app/core/services/http/authentication.service';
+import { ClientAuthentication } from '@app/core/models/client-authentication';
+import { EventService } from '@app/core/services/util/event.service';
 import {
   GlobalStorageService,
   STORAGE_KEYS,
-} from '@core/services/util/global-storage.service';
-import { THINSP } from '@core/utils/html-entities';
+} from '@app/core/services/util/global-storage.service';
+import { THINSP } from '@app/core/utils/html-entities';
 
 @Component({
   selector: 'app-room-join',

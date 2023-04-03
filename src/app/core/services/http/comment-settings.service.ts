@@ -1,15 +1,15 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { CommentSettings } from '@core/models/comment-settings';
+import { CommentSettings } from '@app/core/models/comment-settings';
 import { catchError, map, shareReplay, tap } from 'rxjs/operators';
 import { TranslateService } from '@ngx-translate/core';
-import { NotificationService } from '../util/notification.service';
-import { EventService } from '../util/event.service';
+import { NotificationService } from '@app/core/services/util/notification.service';
+import { EventService } from '@app/core/services/util/event.service';
 import { AbstractCachingHttpService } from './abstract-caching-http.service';
-import { CachingService } from '../util/caching.service';
-import { WsConnectorService } from '../websockets/ws-connector.service';
-import { WsCommentService } from '../websockets/ws-comment.service';
+import { CachingService } from '@app/core/services/util/caching.service';
+import { WsConnectorService } from '@app/core/services/websockets/ws-connector.service';
+import { WsCommentService } from '@app/core/services/websockets/ws-comment.service';
 import { RoomService } from './room.service';
 
 const httpOptions = {

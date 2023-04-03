@@ -1,13 +1,13 @@
 import { AfterContentInit, Component, OnInit } from '@angular/core';
-import { RoomService } from '@core/services/http/room.service';
+import { RoomService } from '@app/core/services/http/room.service';
 import { Router } from '@angular/router';
-import { AuthenticationService } from '@core/services/http/authentication.service';
+import { AuthenticationService } from '@app/core/services/http/authentication.service';
 import { TranslateService } from '@ngx-translate/core';
 import {
   AdvancedSnackBarTypes,
   NotificationService,
-} from '@core/services/util/notification.service';
-import { RoutingService } from '@core/services/util/routing.service';
+} from '@app/core/services/util/notification.service';
+import { RoutingService } from '@app/core/services/util/routing.service';
 
 @Component({
   selector: 'app-import',

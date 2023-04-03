@@ -1,13 +1,13 @@
 import { Component, Inject } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { UserService } from '@core/services/http/user.service';
+import { UserService } from '@app/core/services/http/user.service';
 import {
   AdvancedSnackBarTypes,
   NotificationService,
-} from '@core/services/util/notification.service';
+} from '@app/core/services/util/notification.service';
 import { TranslateService } from '@ngx-translate/core';
-import { UserSearchComponent } from '@admin/user-search/user-search.component';
+import { UserSearchComponent } from '@app/admin/user-search/user-search.component';
 
 export interface DialogData {
   inputName: string;

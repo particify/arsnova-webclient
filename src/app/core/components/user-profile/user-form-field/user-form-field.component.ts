@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { FormField } from '../user-profile.component';
+import { FormField } from '@app/core/components/user-profile/user-profile.component';
 
 @Component({
   selector: 'app-user-form-field',

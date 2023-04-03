@@ -5,13 +5,13 @@ import { takeUntil } from 'rxjs/operators';
 import {
   ModeratorDataChanged,
   PublicDataChanged,
-} from '@core/models/events/data-changed';
-import { EntityChangeNotification } from '@core/models/events/entity-change-notification';
-import { Room } from '@core/models/room';
-import { UserRole } from '@core/models/user-roles.enum';
-import { RoomService } from '../http/room.service';
-import { RoomMembershipService } from '../room-membership.service';
-import { EventService } from '../util/event.service';
+} from '@app/core/models/events/data-changed';
+import { EntityChangeNotification } from '@app/core/models/events/entity-change-notification';
+import { Room } from '@app/core/models/room';
+import { UserRole } from '@app/core/models/user-roles.enum';
+import { RoomService } from '@app/core/services/http/room.service';
+import { RoomMembershipService } from '@app/core/services/room-membership.service';
+import { EventService } from '@app/core/services/util/event.service';
 import { WsConnectorService } from './ws-connector.service';
 
 @Injectable()

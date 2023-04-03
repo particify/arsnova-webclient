@@ -1,20 +1,20 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
-import { ChoiceAnswer } from '@core/models/choice-answer';
-import { ContentScale } from '@core/models/content-scale';
-import { ContentType } from '@core/models/content-type.enum';
-import { ContentAnswerService } from '@core/services/http/content-answer.service';
-import { GlobalStorageService } from '@core/services/util/global-storage.service';
-import { LanguageService } from '@core/services/util/language.service';
-import { LikertScaleService } from '@core/services/util/likert-scale.service';
+import { ChoiceAnswer } from '@app/core/models/choice-answer';
+import { ContentScale } from '@app/core/models/content-scale';
+import { ContentType } from '@app/core/models/content-type.enum';
+import { ContentAnswerService } from '@app/core/services/http/content-answer.service';
+import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
+import { LanguageService } from '@app/core/services/util/language.service';
+import { LikertScaleService } from '@app/core/services/util/likert-scale.service';
 import {
   AdvancedSnackBarTypes,
   NotificationService,
-} from '@core/services/util/notification.service';
-import { ContentParticipantBaseComponent } from '@participant/content/content-participant-base.component';
-import { AnswerOption } from '@core/models/answer-option';
-import { SelectableAnswer } from '@core/models/selectable-answer';
+} from '@app/core/services/util/notification.service';
+import { ContentParticipantBaseComponent } from '@app/participant/content/content-participant-base.component';
+import { AnswerOption } from '@app/core/models/answer-option';
+import { SelectableAnswer } from '@app/core/models/selectable-answer';
 
 @Component({
   selector: 'app-content-scale-participant',

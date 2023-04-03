@@ -1,18 +1,21 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { ContentPresentationComponent } from './content-presentation.component';
-import { ContentService } from '@core/services/http/content.service';
-import { EventService } from '@core/services/util/event.service';
-import { RoomService } from '@core/services/http/room.service';
-import { ContentGroupService } from '@core/services/http/content-group.service';
+import { ContentService } from '@app/core/services/http/content.service';
+import { EventService } from '@app/core/services/util/event.service';
+import { RoomService } from '@app/core/services/http/room.service';
+import { ContentGroupService } from '@app/core/services/http/content-group.service';
 import {
   ActivatedRoute,
   ActivatedRouteSnapshot,
   Router,
 } from '@angular/router';
-import { DialogService } from '@core/services/util/dialog.service';
-import { GlobalStorageService } from '@core/services/util/global-storage.service';
-import { LanguageService } from '@core/services/util/language.service';
+import { DialogService } from '@app/core/services/util/dialog.service';
+import {
+  GlobalStorageService,
+  STORAGE_KEYS,
+} from '@app/core/services/util/global-storage.service';
+import { LanguageService } from '@app/core/services/util/language.service';
 import {
   ActivatedRouteStub,
   JsonTranslationLoader,
@@ -22,26 +25,25 @@ import {
 } from '@testing/test-helpers';
 import { Location } from '@angular/common';
 import { SpyLocation } from '@angular/common/testing';
-import { HotkeyService } from '@core/services/util/hotkey.service';
+import { HotkeyService } from '@app/core/services/util/hotkey.service';
 import { NO_ERRORS_SCHEMA, Injectable } from '@angular/core';
-import { Room } from '@core/models/room';
+import { Room } from '@app/core/models/room';
 import { of } from 'rxjs';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
-import { ContentGroup } from '@core/models/content-group';
-import { Content } from '@core/models/content';
-import { ContentType } from '@core/models/content-type.enum';
-import { ContentState } from '@core/models/content-state';
-import { PresentationService } from '@core/services/util/presentation.service';
-import { UserService } from '@core/services/http/user.service';
-import { AuthProvider } from '@core/models/auth-provider';
-import { ClientAuthentication } from '@core/models/client-authentication';
-import { STORAGE_KEYS } from '@core/services/util/global-storage.service';
-import { UserSettings } from '@core/models/user-settings';
-import { StepperComponent } from '@shared/stepper/stepper.component';
-import { RemoteService } from '@core/services/util/remote.service';
-import { ContentPublishService } from '@core/services/util/content-publish.service';
-import { PublishContentComponent } from '@creator/_dialogs/publish-content/publish-content.component';
-import { ContentPublishActionType } from '@core/models/content-publish-action.enum';
+import { ContentGroup } from '@app/core/models/content-group';
+import { Content } from '@app/core/models/content';
+import { ContentType } from '@app/core/models/content-type.enum';
+import { ContentState } from '@app/core/models/content-state';
+import { PresentationService } from '@app/core/services/util/presentation.service';
+import { UserService } from '@app/core/services/http/user.service';
+import { AuthProvider } from '@app/core/models/auth-provider';
+import { ClientAuthentication } from '@app/core/models/client-authentication';
+import { UserSettings } from '@app/core/models/user-settings';
+import { StepperComponent } from '@app/shared/stepper/stepper.component';
+import { RemoteService } from '@app/core/services/util/remote.service';
+import { ContentPublishService } from '@app/core/services/util/content-publish.service';
+import { PublishContentComponent } from '@app/creator/_dialogs/publish-content/publish-content.component';
+import { ContentPublishActionType } from '@app/core/models/content-publish-action.enum';
 
 @Injectable()
 class MockContentService {

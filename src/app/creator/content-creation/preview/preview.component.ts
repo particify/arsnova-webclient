@@ -1,17 +1,17 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { Content } from '@core/models/content';
-import { ContentType } from '@core/models/content-type.enum';
-import { ContentChoice } from '@core/models/content-choice';
-import { MarkdownFeatureset } from '@core/services/http/formatting.service';
-import { AnswerOption } from '@core/models/answer-option';
-import { ContentAnswerService } from '@core/services/http/content-answer.service';
-import { ContentScale } from '@core/models/content-scale';
-import { LikertScaleService } from '@core/services/util/likert-scale.service';
+import { Content } from '@app/core/models/content';
+import { ContentType } from '@app/core/models/content-type.enum';
+import { ContentChoice } from '@app/core/models/content-choice';
+import { MarkdownFeatureset } from '@app/core/services/http/formatting.service';
+import { AnswerOption } from '@app/core/models/answer-option';
+import { ContentAnswerService } from '@app/core/services/http/content-answer.service';
+import { ContentScale } from '@app/core/models/content-scale';
+import { LikertScaleService } from '@app/core/services/util/likert-scale.service';
 import { TranslateService } from '@ngx-translate/core';
 import { forkJoin, Observable } from 'rxjs';
-import { SelectableAnswer } from '@core/models/selectable-answer';
-import { ContentWordcloud } from '@core/models/content-wordcloud';
-import { AnswerWithPoints } from '@core/models/answer-with-points';
+import { SelectableAnswer } from '@app/core/models/selectable-answer';
+import { ContentWordcloud } from '@app/core/models/content-wordcloud';
+import { AnswerWithPoints } from '@app/core/models/answer-with-points';
 
 @Component({
   selector: 'app-preview',

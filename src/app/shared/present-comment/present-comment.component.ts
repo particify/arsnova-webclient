@@ -1,9 +1,9 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { HotkeyService } from '@core/services/util/hotkey.service';
+import { HotkeyService } from '@app/core/services/util/hotkey.service';
 import { TranslateService } from '@ngx-translate/core';
-import { Comment } from '@core/models/comment';
-import { EventService } from '@core/services/util/event.service';
-import { PresentationEvent } from '@core/models/events/presentation-events.enum';
+import { Comment } from '@app/core/models/comment';
+import { EventService } from '@app/core/services/util/event.service';
+import { PresentationEvent } from '@app/core/models/events/presentation-events.enum';
 
 @Component({
   selector: 'app-present-comment',

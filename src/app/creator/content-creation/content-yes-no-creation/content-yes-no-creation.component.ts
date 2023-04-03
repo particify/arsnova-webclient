@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { ContentChoice } from '@core/models/content-choice';
-import { NotificationService } from '@core/services/util/notification.service';
-import { ContentType } from '@core/models/content-type.enum';
-import { ContentService } from '@core/services/http/content.service';
+import { ContentChoice } from '@app/core/models/content-choice';
+import { NotificationService } from '@app/core/services/util/notification.service';
+import { ContentType } from '@app/core/models/content-type.enum';
+import { ContentService } from '@app/core/services/http/content.service';
 import { ActivatedRoute } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
-import { ContentGroupService } from '@core/services/http/content-group.service';
-import { ContentCreationComponent } from '@creator/content-creation/content-creation/content-creation.component';
-import { AnnounceService } from '@core/services/util/announce.service';
+import { ContentGroupService } from '@app/core/services/http/content-group.service';
+import { ContentCreationComponent } from '@app/creator/content-creation/content-creation/content-creation.component';
+import { AnnounceService } from '@app/core/services/util/announce.service';
 
 @Component({
   selector: 'app-content-yes-no-creation',

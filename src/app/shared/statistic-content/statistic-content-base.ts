@@ -1,12 +1,12 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
-import { ContentService } from '@core/services/http/content.service';
-import { Content } from '@core/models/content';
-import { AnswerStatistics } from '@core/models/answer-statistics';
-import { EventService } from '@core/services/util/event.service';
-import { TextAnswer } from '@core/models/text-answer';
-import { PresentationEvent } from '@core/models/events/presentation-events.enum';
-import { UserSettings } from '@core/models/user-settings';
+import { ContentService } from '@app/core/services/http/content.service';
+import { Content } from '@app/core/models/content';
+import { AnswerStatistics } from '@app/core/models/answer-statistics';
+import { EventService } from '@app/core/services/util/event.service';
+import { TextAnswer } from '@app/core/models/text-answer';
+import { PresentationEvent } from '@app/core/models/events/presentation-events.enum';
+import { UserSettings } from '@app/core/models/user-settings';
 
 @Component({
   template: '',

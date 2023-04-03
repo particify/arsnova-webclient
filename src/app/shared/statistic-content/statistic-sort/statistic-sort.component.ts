@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, OnDestroy } from '@angular/core';
-import { ContentChoice } from '@core/models/content-choice';
-import { ContentService } from '@core/services/http/content.service';
-import { AnswerStatistics } from '@core/models/answer-statistics';
+import { ContentChoice } from '@app/core/models/content-choice';
+import { ContentService } from '@app/core/services/http/content.service';
+import { AnswerStatistics } from '@app/core/models/answer-statistics';
 import {
   BarController,
   BarControllerDatasetOptions,
@@ -12,15 +12,15 @@ import {
   LinearScale,
 } from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
-import { StatisticContentBaseComponent } from '@shared/statistic-content/statistic-content-base';
+import { StatisticContentBaseComponent } from '@app/shared/statistic-content/statistic-content-base';
 import { takeUntil } from 'rxjs/operators';
-import { ThemeService } from '@core/theme/theme.service';
+import { ThemeService } from '@app/core/theme/theme.service';
 import { TranslateService } from '@ngx-translate/core';
-import { Combination } from '@core/models/round-statistics';
-import { EventService } from '@core/services/util/event.service';
-import { PresentationService } from '@core/services/util/presentation.service';
-import { AnswerOption } from '@core/models/answer-option';
-import { ContentAnswerService } from '@core/services/http/content-answer.service';
+import { Combination } from '@app/core/models/round-statistics';
+import { EventService } from '@app/core/services/util/event.service';
+import { PresentationService } from '@app/core/services/util/presentation.service';
+import { AnswerOption } from '@app/core/models/answer-option';
+import { ContentAnswerService } from '@app/core/services/http/content-answer.service';
 
 export const MAX_COMBINATIONS = 4;
 

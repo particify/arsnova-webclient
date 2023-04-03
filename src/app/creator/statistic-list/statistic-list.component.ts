@@ -1,23 +1,23 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { ContentGroup } from '@core/models/content-group';
-import { ContentService } from '@core/services/http/content.service';
-import { Content } from '@core/models/content';
-import { ContentType } from '@core/models/content-type.enum';
-import { AnswerOption } from '@core/models/answer-option';
-import { ContentChoice } from '@core/models/content-choice';
-import { Combination } from '@core/models/round-statistics';
+import { ContentGroup } from '@app/core/models/content-group';
+import { ContentService } from '@app/core/services/http/content.service';
+import { Content } from '@app/core/models/content';
+import { ContentType } from '@app/core/models/content-type.enum';
+import { AnswerOption } from '@app/core/models/answer-option';
+import { ContentChoice } from '@app/core/models/content-choice';
+import { Combination } from '@app/core/models/round-statistics';
 import { TranslateService } from '@ngx-translate/core';
-import { LanguageService } from '@core/services/util/language.service';
+import { LanguageService } from '@app/core/services/util/language.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ContentAnswerService } from '@core/services/http/content-answer.service';
+import { ContentAnswerService } from '@app/core/services/http/content-answer.service';
 import {
   GlobalStorageService,
   STORAGE_KEYS,
-} from '@core/services/util/global-storage.service';
+} from '@app/core/services/util/global-storage.service';
 import {
   AdvancedSnackBarTypes,
   NotificationService,
-} from '@core/services/util/notification.service';
+} from '@app/core/services/util/notification.service';
 
 export enum StatisticType {
   CHOICE = 'C',

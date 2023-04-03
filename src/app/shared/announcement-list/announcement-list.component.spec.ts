@@ -1,9 +1,9 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { AnnouncementState } from '@core/models/announcement-state';
-import { AnnouncementService } from '@core/services/http/announcement.service';
-import { AuthenticationService } from '@core/services/http/authentication.service';
+import { AnnouncementState } from '@app/core/models/announcement-state';
+import { AnnouncementService } from '@app/core/services/http/announcement.service';
+import { AuthenticationService } from '@app/core/services/http/authentication.service';
 import { JsonTranslationLoader, MockMatDialogRef } from '@testing/test-helpers';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { of } from 'rxjs';

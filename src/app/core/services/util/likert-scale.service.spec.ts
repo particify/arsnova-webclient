@@ -1,6 +1,6 @@
 import { TestBed, inject } from '@angular/core/testing';
 
-import { LikertScaleService } from '@core/services/util/likert-scale.service';
+import { LikertScaleService } from '@app/core/services/util/likert-scale.service';
 
 describe('LikertScaleService', () => {
   beforeEach(() => {

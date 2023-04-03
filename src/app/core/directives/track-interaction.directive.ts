@@ -2,7 +2,7 @@ import { Directive, ElementRef, Input, OnDestroy, OnInit } from '@angular/core';
 import {
   EventCategory,
   TrackingService,
-} from '@core/services/util/tracking.service';
+} from '@app/core/services/util/tracking.service';
 
 @Directive({
   selector: '[appTrackInteraction]',

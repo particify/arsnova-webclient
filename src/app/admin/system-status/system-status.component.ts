@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { catchError, of, shareReplay } from 'rxjs';
-import { SystemInfoService } from '@core/services/http/system-info.service';
+import { SystemInfoService } from '@app/core/services/http/system-info.service';
 
 @Component({
   selector: 'app-system-status',

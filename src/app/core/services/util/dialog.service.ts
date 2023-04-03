@@ -7,19 +7,19 @@ import {
 } from '@angular/material/dialog';
 import { UpdateAvailableEvent } from '@angular/service-worker';
 import { Observable } from 'rxjs';
-import { YesNoDialogComponent } from '@shared/_dialogs/yes-no-dialog/yes-no-dialog.component';
-import { ContentGroupCreationComponent } from '@creator/_dialogs/content-group-creation/content-group-creation.component';
-import { ClientAuthentication } from '@core/models/client-authentication';
-import { CreateCommentComponent } from '@shared/_dialogs/create-comment/create-comment.component';
-import { RoomCreateComponent } from '@shared/_dialogs/room-create/room-create.component';
-import { UserActivationComponent } from '@core/components//_dialogs/user-activation/user-activation.component';
+import { YesNoDialogComponent } from '@app/shared/_dialogs/yes-no-dialog/yes-no-dialog.component';
+import { ContentGroupCreationComponent } from '@app/creator/_dialogs/content-group-creation/content-group-creation.component';
+import { ClientAuthentication } from '@app/core/models/client-authentication';
+import { CreateCommentComponent } from '@app/shared/_dialogs/create-comment/create-comment.component';
+import { RoomCreateComponent } from '@app/shared/_dialogs/room-create/room-create.component';
+import { UserActivationComponent } from '@app/core/components//_dialogs/user-activation/user-activation.component';
 import { UpdateInfoComponent } from '@app/core/components/update-info/update-info.component';
-import { UserRole } from '@core/models/user-roles.enum';
-import { VersionInfo } from '@core/models/version-info';
+import { UserRole } from '@app/core/models/user-roles.enum';
+import { VersionInfo } from '@app/core/models/version-info';
 import {
   ExportComponent,
   ExportOptions,
-} from '@creator/_dialogs/export/export.component';
+} from '@app/creator/_dialogs/export/export.component';
 import { EventCategory, TrackingService } from './tracking.service';
 
 @Injectable()

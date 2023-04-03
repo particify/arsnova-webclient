@@ -17,10 +17,10 @@ import {
   trigger,
 } from '@angular/animations';
 import { Directionality } from '@angular/cdk/bidi';
-import { AnnounceService } from '@core/services/util/announce.service';
-import { HotkeyService } from '@core/services/util/hotkey.service';
+import { AnnounceService } from '@app/core/services/util/announce.service';
+import { HotkeyService } from '@app/core/services/util/hotkey.service';
 import { TranslateService } from '@ngx-translate/core';
-import { RemoteService } from '@core/services/util/remote.service';
+import { RemoteService } from '@app/core/services/util/remote.service';
 import { Subscription } from 'rxjs';
 
 @Component({

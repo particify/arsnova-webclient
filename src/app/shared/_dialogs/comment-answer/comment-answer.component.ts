@@ -1,14 +1,14 @@
 import { AfterContentInit, Component, Inject, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { CommentService } from '@core/services/http/comment.service';
-import { Comment } from '@core/models/comment';
-import { UserRole } from '@core/models/user-roles.enum';
+import { CommentService } from '@app/core/services/http/comment.service';
+import { Comment } from '@app/core/models/comment';
+import { UserRole } from '@app/core/models/user-roles.enum';
 import {
   AdvancedSnackBarTypes,
   NotificationService,
-} from '@core/services/util/notification.service';
-import { DialogService } from '@core/services/util/dialog.service';
-import { MarkdownFeatureset } from '@core/services/http/formatting.service';
+} from '@app/core/services/util/notification.service';
+import { DialogService } from '@app/core/services/util/dialog.service';
+import { MarkdownFeatureset } from '@app/core/services/http/formatting.service';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 @Component({

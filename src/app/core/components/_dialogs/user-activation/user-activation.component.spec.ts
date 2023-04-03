@@ -11,9 +11,9 @@ import {
 } from '@testing/test-helpers';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
-import { NotificationService } from '@core/services/util/notification.service';
-import { EventService } from '@core/services/util/event.service';
-import { UserService } from '@core/services/http/user.service';
+import { NotificationService } from '@app/core/services/util/notification.service';
+import { EventService } from '@app/core/services/util/event.service';
+import { UserService } from '@app/core/services/http/user.service';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 describe('UserActivationComponent', () => {

@@ -1,14 +1,14 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { Content } from '@arsnova/app/models/content';
-import { ContentService } from '@arsnova/app/services/http/content.service';
+import { Content } from '@app/core/models/content';
+import { ContentService } from '@app/core/services/http/content.service';
 import {
   AdvancedSnackBarTypes,
   NotificationService,
-} from '@arsnova/app/services/util/notification.service';
+} from '@app/core/services/util/notification.service';
 import { TranslateService } from '@ngx-translate/core';
 import { Subject } from 'rxjs';
-import { YesNoDialogComponent } from '../../shared/_dialogs/yes-no-dialog/yes-no-dialog.component';
+import { YesNoDialogComponent } from '@app/shared/_dialogs/yes-no-dialog/yes-no-dialog.component';
 
 @Component({
   selector: 'app-start-new-round',

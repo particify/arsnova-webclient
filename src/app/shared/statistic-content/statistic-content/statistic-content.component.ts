@@ -6,26 +6,26 @@ import {
   Output,
   ViewChild,
 } from '@angular/core';
-import { ContentText } from '@core/models/content-text';
-import { StatisticChoiceComponent } from '@shared/statistic-content/statistic-choice/statistic-choice.component';
-import { StatisticTextComponent } from '@shared/statistic-content/statistic-text/statistic-text.component';
-import { ContentType } from '@core/models/content-type.enum';
-import { ContentChoice } from '@core/models/content-choice';
-import { StatisticSortComponent } from '@shared/statistic-content/statistic-sort/statistic-sort.component';
-import { MarkdownFeatureset } from '@core/services/http/formatting.service';
-import { AnnounceService } from '@core/services/util/announce.service';
-import { StatisticWordcloudComponent } from '@shared/statistic-content/statistic-wordcloud/statistic-wordcloud.component';
-import { StatisticScaleComponent } from '@shared/statistic-content/statistic-scale/statistic-scale.component';
-import { HotkeyAction } from '@core/directives/hotkey.directive';
-import { EventService } from '@core/services/util/event.service';
-import { ContentService } from '@core/services/http/content.service';
+import { ContentText } from '@app/core/models/content-text';
+import { StatisticChoiceComponent } from '@app/shared/statistic-content/statistic-choice/statistic-choice.component';
+import { StatisticTextComponent } from '@app/shared/statistic-content/statistic-text/statistic-text.component';
+import { ContentType } from '@app/core/models/content-type.enum';
+import { ContentChoice } from '@app/core/models/content-choice';
+import { StatisticSortComponent } from '@app/shared/statistic-content/statistic-sort/statistic-sort.component';
+import { MarkdownFeatureset } from '@app/core/services/http/formatting.service';
+import { AnnounceService } from '@app/core/services/util/announce.service';
+import { StatisticWordcloudComponent } from '@app/shared/statistic-content/statistic-wordcloud/statistic-wordcloud.component';
+import { StatisticScaleComponent } from '@app/shared/statistic-content/statistic-scale/statistic-scale.component';
+import { HotkeyAction } from '@app/core/directives/hotkey.directive';
+import { EventService } from '@app/core/services/util/event.service';
+import { ContentService } from '@app/core/services/http/content.service';
 import { ActivatedRoute } from '@angular/router';
-import { UserRole } from '@core/models/user-roles.enum';
-import { UserSettings } from '@core/models/user-settings';
-import { StatisticPrioritizationComponent } from '@shared/statistic-content/statistic-prioritization/statistic-prioritization.component';
-import { ContentGroup } from '@core/models/content-group';
-import { RemoteService } from '@core/services/util/remote.service';
-import { PresentationEvent } from '@core/models/events/presentation-events.enum';
+import { UserRole } from '@app/core/models/user-roles.enum';
+import { UserSettings } from '@app/core/models/user-settings';
+import { StatisticPrioritizationComponent } from '@app/shared/statistic-content/statistic-prioritization/statistic-prioritization.component';
+import { ContentGroup } from '@app/core/models/content-group';
+import { RemoteService } from '@app/core/services/util/remote.service';
+import { PresentationEvent } from '@app/core/models/events/presentation-events.enum';
 
 @Component({
   selector: 'app-statistic-content',

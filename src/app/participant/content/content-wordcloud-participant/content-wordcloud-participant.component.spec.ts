@@ -5,8 +5,8 @@ import {
   ActivatedRouteSnapshot,
   Router,
 } from '@angular/router';
-import { NotificationService } from '@core/services/util/notification.service';
-import { LanguageService } from '@core/services/util/language.service';
+import { NotificationService } from '@app/core/services/util/notification.service';
+import { LanguageService } from '@app/core/services/util/language.service';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import {
   JsonTranslationLoader,
@@ -18,13 +18,13 @@ import {
   MockEventService,
 } from '@testing/test-helpers';
 import { of } from 'rxjs';
-import { GlobalStorageService } from '@core/services/util/global-storage.service';
-import { ContentAnswerService } from '@core/services/http/content-answer.service';
+import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
+import { ContentAnswerService } from '@app/core/services/http/content-answer.service';
 import { NO_ERRORS_SCHEMA, EventEmitter } from '@angular/core';
-import { ContentWordcloud } from '@core/models/content-wordcloud';
-import { ContentType } from '@core/models/content-type.enum';
-import { ContentState } from '@core/models/content-state';
-import { EventService } from '@core/services/util/event.service';
+import { ContentWordcloud } from '@app/core/models/content-wordcloud';
+import { ContentType } from '@app/core/models/content-type.enum';
+import { ContentState } from '@app/core/models/content-state';
+import { EventService } from '@app/core/services/util/event.service';
 
 describe('ContentWordcloudParticipantComponent', () => {
   let component: ContentWordcloudParticipantComponent;

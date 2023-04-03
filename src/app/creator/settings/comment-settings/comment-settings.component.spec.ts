@@ -9,17 +9,17 @@ import {
   MockNotificationService,
   MockRouter,
 } from '@testing/test-helpers';
-import { NotificationService } from '@core/services/util/notification.service';
+import { NotificationService } from '@app/core/services/util/notification.service';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
-import { RoomService } from '@core/services/http/room.service';
+import { RoomService } from '@app/core/services/http/room.service';
 import { NO_ERRORS_SCHEMA, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { CommentService } from '@core/services/http/comment.service';
-import { CommentSettingsService } from '@core/services/http/comment-settings.service';
+import { CommentService } from '@app/core/services/http/comment.service';
+import { CommentSettingsService } from '@app/core/services/http/comment-settings.service';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
-import { EventService } from '@core/services/util/event.service';
-import { Room } from '@core/models/room';
-import { CommentSettings } from '@core/models/comment-settings';
+import { EventService } from '@app/core/services/util/event.service';
+import { Room } from '@app/core/models/room';
+import { CommentSettings } from '@app/core/models/comment-settings';
 import { of } from 'rxjs';
 
 @Injectable()

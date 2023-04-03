@@ -7,12 +7,12 @@ import {
   ActivatedRouteStub,
   JsonTranslationLoader,
 } from '@testing/test-helpers';
-import { GlobalStorageService } from '@core/services/util/global-storage.service';
-import { EventService } from '@core/services/util/event.service';
-import { ContentGroupService } from '@core/services/http/content-group.service';
-import { RoomStatsService } from '@core/services/http/room-stats.service';
-import { WsCommentService } from '@core/services/websockets/ws-comment.service';
-import { CommentService } from '@core/services/http/comment.service';
+import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
+import { EventService } from '@app/core/services/util/event.service';
+import { ContentGroupService } from '@app/core/services/http/content-group.service';
+import { RoomStatsService } from '@app/core/services/http/room-stats.service';
+import { WsCommentService } from '@app/core/services/websockets/ws-comment.service';
+import { CommentService } from '@app/core/services/http/comment.service';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 

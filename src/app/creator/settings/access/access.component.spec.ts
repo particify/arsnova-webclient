@@ -6,27 +6,27 @@ import {
   MockEventService,
   MockLangService,
 } from '@testing/test-helpers';
-import { NotificationService } from '@core/services/util/notification.service';
+import { NotificationService } from '@app/core/services/util/notification.service';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
-import { DialogService } from '@core/services/util/dialog.service';
-import { EventService } from '@core/services/util/event.service';
-import { Room } from '@core/models/room';
-import { ModeratorService } from '@core/services/http/moderator.service';
-import { UserService } from '@core/services/http/user.service';
-import { AuthenticationService } from '@core/services/http/authentication.service';
-import { LanguageService } from '@core/services/util/language.service';
-import { ClientAuthentication } from '@core/models/client-authentication';
-import { AuthProvider } from '@core/models/auth-provider';
+import { DialogService } from '@app/core/services/util/dialog.service';
+import { EventService } from '@app/core/services/util/event.service';
+import { Room } from '@app/core/models/room';
+import { ModeratorService } from '@app/core/services/http/moderator.service';
+import { UserService } from '@app/core/services/http/user.service';
+import { AuthenticationService } from '@app/core/services/http/authentication.service';
+import { LanguageService } from '@app/core/services/util/language.service';
+import { ClientAuthentication } from '@app/core/models/client-authentication';
+import { AuthProvider } from '@app/core/models/auth-provider';
 import { of } from 'rxjs';
-import { Moderator } from '@core/models/moderator';
-import { UserRole } from '@core/models/user-roles.enum';
-import { User } from '@core/models/user';
-import { Person } from '@core/models/person';
-import { AccessTokenService } from '@core/services/http/access-token.service';
+import { Moderator } from '@app/core/models/moderator';
+import { UserRole } from '@app/core/models/user-roles.enum';
+import { User } from '@app/core/models/user';
+import { Person } from '@app/core/models/person';
+import { AccessTokenService } from '@app/core/services/http/access-token.service';
 import { HarnessLoader } from '@angular/cdk/testing';
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 import { MatButtonHarness } from '@angular/material/button/testing';
-import { AdvancedSnackBarTypes } from '@core/services/util/notification.service';
+import { AdvancedSnackBarTypes } from '@app/core/services/util/notification.service';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 describe('AccessComponent', () => {

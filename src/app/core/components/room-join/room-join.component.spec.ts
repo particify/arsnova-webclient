@@ -2,10 +2,10 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RoomJoinComponent } from './room-join.component';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { NotificationService } from '@core/services/util/notification.service';
-import { AuthenticationService } from '@core/services/http/authentication.service';
-import { EventService } from '@core/services/util/event.service';
-import { GlobalStorageService } from '@core/services/util/global-storage.service';
+import { NotificationService } from '@app/core/services/util/notification.service';
+import { AuthenticationService } from '@app/core/services/http/authentication.service';
+import { EventService } from '@app/core/services/util/event.service';
+import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import {
   ActivatedRouteStub,
@@ -25,7 +25,7 @@ import { MatInputHarness } from '@angular/material/input/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { BehaviorSubject } from 'rxjs';
 import { FormsModule } from '@angular/forms';
-import { SplitShortIdPipe } from '@core/pipes/split-short-id.pipe';
+import { SplitShortIdPipe } from '@app/core/pipes/split-short-id.pipe';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 export class MockAuthenticationService {

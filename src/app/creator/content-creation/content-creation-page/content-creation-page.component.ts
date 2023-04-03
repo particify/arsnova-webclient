@@ -1,19 +1,19 @@
 import { AfterContentInit, Component, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { LanguageService } from '@core/services/util/language.service';
+import { LanguageService } from '@app/core/services/util/language.service';
 import {
   GlobalStorageService,
   STORAGE_KEYS,
-} from '@core/services/util/global-storage.service';
+} from '@app/core/services/util/global-storage.service';
 import { ActivatedRoute } from '@angular/router';
-import { AnnounceService } from '@core/services/util/announce.service';
+import { AnnounceService } from '@app/core/services/util/announce.service';
 import { Subject } from 'rxjs';
-import { Content } from '@core/models/content';
-import { FormattingService } from '@core/services/http/formatting.service';
-import { HINT_TYPES } from '@shared/hint/hint.component';
-import { UserRole } from '@core/models/user-roles.enum';
-import { ContentService } from '@core/services/http/content.service';
-import { ContentType } from '@core/models/content-type.enum';
+import { Content } from '@app/core/models/content';
+import { FormattingService } from '@app/core/services/http/formatting.service';
+import { HINT_TYPES } from '@app/shared/hint/hint.component';
+import { UserRole } from '@app/core/models/user-roles.enum';
+import { ContentService } from '@app/core/services/http/content.service';
+import { ContentType } from '@app/core/models/content-type.enum';
 
 class ContentFormat {
   name: string;

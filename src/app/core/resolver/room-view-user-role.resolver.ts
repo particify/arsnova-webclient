@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve } from '@angular/router';
 import { Observable, of } from 'rxjs';
-import { UserRole } from '@core/models/user-roles.enum';
-import { RoomMembershipService } from '@core/services/room-membership.service';
+import { UserRole } from '@app/core/models/user-roles.enum';
+import { RoomMembershipService } from '@app/core/services/room-membership.service';
 import { environment } from '@environments/environment';
 
 /**

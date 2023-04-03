@@ -3,7 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import {
   EventCategory,
   TrackingService,
-} from '@core/services/util/tracking.service';
+} from '@app/core/services/util/tracking.service';
 import { TrackInteractionDirective } from './track-interaction.directive';
 
 const TEST_TRACK_INTERACTION = 'UI action performed';

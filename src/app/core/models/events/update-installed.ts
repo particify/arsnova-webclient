@@ -1,4 +1,4 @@
-import { UpdateImportance } from '../version-info';
+import { UpdateImportance } from '@app/core/models/version-info';
 
 export class UpdateInstalled {
   type: string;

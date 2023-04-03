@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { CommentComponent } from './comment.component';
 import { ActivatedRoute } from '@angular/router';
-import { NotificationService } from '@core/services/util/notification.service';
+import { NotificationService } from '@app/core/services/util/notification.service';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import {
   JsonTranslationLoader,
@@ -12,20 +12,20 @@ import {
   MockLangService,
   MockMatDialog,
 } from '@testing/test-helpers';
-import { GlobalStorageService } from '@core/services/util/global-storage.service';
-import { AnnounceService } from '@core/services/util/announce.service';
-import { RoutingService } from '@core/services/util/routing.service';
-import { DialogService } from '@core/services/util/dialog.service';
-import { AuthenticationService } from '@core/services/http/authentication.service';
-import { CommentService } from '@core/services/http/comment.service';
-import { VoteService } from '@core/services/http/vote.service';
-import { LanguageService } from '@core/services/util/language.service';
-import { UserRole } from '@core/models/user-roles.enum';
+import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
+import { AnnounceService } from '@app/core/services/util/announce.service';
+import { RoutingService } from '@app/core/services/util/routing.service';
+import { DialogService } from '@app/core/services/util/dialog.service';
+import { AuthenticationService } from '@app/core/services/http/authentication.service';
+import { CommentService } from '@app/core/services/http/comment.service';
+import { VoteService } from '@app/core/services/http/vote.service';
+import { LanguageService } from '@app/core/services/util/language.service';
+import { UserRole } from '@app/core/models/user-roles.enum';
 import { MatDialog } from '@angular/material/dialog';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatMenuModule } from '@angular/material/menu';
 import { of } from 'rxjs';
-import { Comment } from '@core/models/comment';
+import { Comment } from '@app/core/models/comment';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 describe('CommentComponent', () => {

@@ -1,18 +1,18 @@
 import { TestBed, inject } from '@angular/core/testing';
 
-import { RoomMembershipService } from '@core/services/room-membership.service';
+import { RoomMembershipService } from '@app/core/services/room-membership.service';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { EventService } from '@core/services/util/event.service';
+import { EventService } from '@app/core/services/util/event.service';
 import {
   MockEventService,
   MockNotificationService,
   MockTranslateService,
 } from '@testing/test-helpers';
 import { TranslateService } from '@ngx-translate/core';
-import { NotificationService } from '@core/services/util/notification.service';
-import { WsConnectorService } from '@core/services/websockets/ws-connector.service';
+import { NotificationService } from '@app/core/services/util/notification.service';
+import { WsConnectorService } from '@app/core/services/websockets/ws-connector.service';
 import { Injectable } from '@angular/core';
-import { AuthenticationService } from '@core/services/http/authentication.service';
+import { AuthenticationService } from '@app/core/services/http/authentication.service';
 import { of } from 'rxjs';
 
 @Injectable()

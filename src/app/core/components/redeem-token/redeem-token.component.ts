@@ -1,9 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { RoutingService } from '@core/services/util/routing.service';
-import { AuthProvider } from '@core/models/auth-provider';
-import { AuthenticationService } from '@core/services/http/authentication.service';
-import { RoomMembershipService } from '@core/services/room-membership.service';
+import { RoutingService } from '@app/core/services/util/routing.service';
+import { AuthProvider } from '@app/core/models/auth-provider';
+import { AuthenticationService } from '@app/core/services/http/authentication.service';
+import { RoomMembershipService } from '@app/core/services/room-membership.service';
 import { Subject, takeUntil } from 'rxjs';
 
 @Component({

@@ -1,19 +1,19 @@
 import { Component, OnInit } from '@angular/core';
-import { ContentType } from '@core/models/content-type.enum';
-import { ContentService } from '@core/services/http/content.service';
+import { ContentType } from '@app/core/models/content-type.enum';
+import { ContentService } from '@app/core/services/http/content.service';
 import {
   AdvancedSnackBarTypes,
   NotificationService,
-} from '@core/services/util/notification.service';
+} from '@app/core/services/util/notification.service';
 import { TranslateService } from '@ngx-translate/core';
 import { ActivatedRoute } from '@angular/router';
-import { ContentGroupService } from '@core/services/http/content-group.service';
-import { ContentCreationComponent } from '@creator/content-creation/content-creation/content-creation.component';
-import { ContentFlashcard } from '@core/models/content-flashcard';
-import { EventService } from '@core/services/util/event.service';
-import { FormattingService } from '@core/services/http/formatting.service';
-import { HINT_TYPES } from '@shared/hint/hint.component';
-import { AnnounceService } from '@core/services/util/announce.service';
+import { ContentGroupService } from '@app/core/services/http/content-group.service';
+import { ContentCreationComponent } from '@app/creator/content-creation/content-creation/content-creation.component';
+import { ContentFlashcard } from '@app/core/models/content-flashcard';
+import { EventService } from '@app/core/services/util/event.service';
+import { FormattingService } from '@app/core/services/http/formatting.service';
+import { HINT_TYPES } from '@app/shared/hint/hint.component';
+import { AnnounceService } from '@app/core/services/util/announce.service';
 
 @Component({
   selector: 'app-content-flashcard-creation',

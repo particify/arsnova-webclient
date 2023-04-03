@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { NBSP, THINSP } from '../utils/html-entities';
+import { NBSP, THINSP } from '@app/core/utils/html-entities';
 
 @Pipe({ name: 'splitShortId' })
 export class SplitShortIdPipe implements PipeTransform {

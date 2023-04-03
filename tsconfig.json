@@ -31,12 +31,6 @@
     "lib": ["ES2022", "dom"],
     "paths": {
       "@app/*": ["./app/*"],
-      "@core/*": ["./app/core/*"],
-      "@creator/*": ["./app/creator/*"],
-      "@participant/*": ["./app/participant/*"],
-      "@admin/*": ["./app/admin/*"],
-      "@presentation/*": ["./app/presentation/*"],
-      "@shared/*": ["./app/shared/*"],
       "@testing/*": ["./testing/*"],
       "@environments/*": ["./environments/*"],
       "@projects/*": ["../projects/*"],

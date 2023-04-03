@@ -1,8 +1,8 @@
 import { TestBed, inject } from '@angular/core/testing';
 
-import { HotkeyService } from '@core/services/util/hotkey.service';
+import { HotkeyService } from '@app/core/services/util/hotkey.service';
 import { Injectable } from '@angular/core';
-import { DialogService } from '@core/services/util/dialog.service';
+import { DialogService } from '@app/core/services/util/dialog.service';
 
 @Injectable()
 class MockDialogService {}

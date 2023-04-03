@@ -5,11 +5,11 @@ import {
   ActivatedRouteSnapshot,
   Router,
 } from '@angular/router';
-import { AuthProvider } from '@core/models/auth-provider';
-import { ClientAuthentication } from '@core/models/client-authentication';
-import { RoomMembershipService } from '@core/services/room-membership.service';
-import { AuthenticationService } from '@core/services/http/authentication.service';
-import { RoutingService } from '@core/services/util/routing.service';
+import { AuthProvider } from '@app/core/models/auth-provider';
+import { ClientAuthentication } from '@app/core/models/client-authentication';
+import { RoomMembershipService } from '@app/core/services/room-membership.service';
+import { AuthenticationService } from '@app/core/services/http/authentication.service';
+import { RoutingService } from '@app/core/services/util/routing.service';
 import { ActivatedRouteStub, MockRouter } from '@testing/test-helpers';
 import { of } from 'rxjs';
 import { RedeemTokenComponent } from './redeem-token.component';

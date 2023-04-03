@@ -1,7 +1,7 @@
 import { TestBed, inject } from '@angular/core/testing';
 
 import { AuthenticationInterceptor } from './authentication.interceptor';
-import { AuthenticationService } from '@core/services/http/authentication.service';
+import { AuthenticationService } from '@app/core/services/http/authentication.service';
 import { Injectable } from '@angular/core';
 import { of } from 'rxjs';
 

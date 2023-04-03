@@ -3,13 +3,13 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError } from 'rxjs/operators';
 import { AbstractHttpService } from './abstract-http.service';
 import { Observable } from 'rxjs';
-import { Room } from '@core/models/room';
-import { User } from '@core/models/user';
+import { Room } from '@app/core/models/room';
+import { User } from '@app/core/models/user';
 import { TranslateService } from '@ngx-translate/core';
-import { NotificationService } from '../util/notification.service';
-import { EventService } from '../util/event.service';
+import { NotificationService } from '@app/core/services/util/notification.service';
+import { EventService } from '@app/core/services/util/event.service';
 import { UserService } from './user.service';
-import { AuthProvider } from '@core/models/auth-provider';
+import { AuthProvider } from '@app/core/models/auth-provider';
 
 const httpOptions = {
   headers: new HttpHeaders({}),

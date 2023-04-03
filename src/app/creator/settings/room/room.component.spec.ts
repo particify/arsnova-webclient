@@ -10,21 +10,21 @@ import {
   MockNotificationService,
   MockRouter,
 } from '@testing/test-helpers';
-import { NotificationService } from '@core/services/util/notification.service';
+import { NotificationService } from '@app/core/services/util/notification.service';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
-import { RoomService } from '@core/services/http/room.service';
+import { RoomService } from '@app/core/services/http/room.service';
 import { NO_ERRORS_SCHEMA, Injectable } from '@angular/core';
 import {
   ActivatedRoute,
   ActivatedRouteSnapshot,
   Router,
 } from '@angular/router';
-import { DialogService } from '@core/services/util/dialog.service';
-import { GlobalStorageService } from '@core/services/util/global-storage.service';
-import { EventService } from '@core/services/util/event.service';
-import { LanguageService } from '@core/services/util/language.service';
-import { FormattingService } from '@core/services/http/formatting.service';
-import { UserRole } from '@core/models/user-roles.enum';
+import { DialogService } from '@app/core/services/util/dialog.service';
+import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
+import { EventService } from '@app/core/services/util/event.service';
+import { LanguageService } from '@app/core/services/util/language.service';
+import { FormattingService } from '@app/core/services/http/formatting.service';
+import { UserRole } from '@app/core/models/user-roles.enum';
 
 @Injectable()
 class MockRoomService {}

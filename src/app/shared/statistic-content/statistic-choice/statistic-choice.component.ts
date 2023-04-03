@@ -10,18 +10,18 @@ import {
   LinearScale,
 } from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
-import { ContentService } from '@core/services/http/content.service';
-import { ContentChoice } from '@core/models/content-choice';
+import { ContentService } from '@app/core/services/http/content.service';
+import { ContentChoice } from '@app/core/models/content-choice';
 import { TranslateService } from '@ngx-translate/core';
-import { ThemeService } from '@core/theme/theme.service';
-import { AnswerStatistics } from '@core/models/answer-statistics';
+import { ThemeService } from '@app/core/theme/theme.service';
+import { AnswerStatistics } from '@app/core/models/answer-statistics';
 import { takeUntil } from 'rxjs/operators';
-import { StatisticContentBaseComponent } from '@shared/statistic-content/statistic-content-base';
-import { ContentType } from '@core/models/content-type.enum';
-import { ContentScale } from '@core/models/content-scale';
-import { EventService } from '@core/services/util/event.service';
-import { PresentationService } from '@core/services/util/presentation.service';
-import { AnswerOption } from '@core/models/answer-option';
+import { StatisticContentBaseComponent } from '@app/shared/statistic-content/statistic-content-base';
+import { ContentType } from '@app/core/models/content-type.enum';
+import { ContentScale } from '@app/core/models/content-scale';
+import { EventService } from '@app/core/services/util/event.service';
+import { PresentationService } from '@app/core/services/util/presentation.service';
+import { AnswerOption } from '@app/core/models/answer-option';
 
 @Component({
   selector: 'app-statistic-choice',

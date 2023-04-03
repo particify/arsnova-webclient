@@ -1,21 +1,21 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { SeriesOverviewComponent } from './series-overview.component';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
-import { ThemeService } from '@core/theme/theme.service';
-import { AuthenticationService } from '@core/services/http/authentication.service';
-import { RoutingService } from '@core/services/util/routing.service';
-import { ContentGroupService } from '@core/services/http/content-group.service';
+import { ThemeService } from '@app/core/theme/theme.service';
+import { AuthenticationService } from '@app/core/services/http/authentication.service';
+import { RoutingService } from '@app/core/services/util/routing.service';
+import { ContentGroupService } from '@app/core/services/http/content-group.service';
 import { MockThemeService, JsonTranslationLoader } from '@testing/test-helpers';
 import { of } from 'rxjs';
-import { UserRole } from '@core/models/user-roles.enum';
-import { ContentGroup } from '@core/models/content-group';
-import { AnswerResultType } from '@core/models/answer-result';
+import { UserRole } from '@app/core/models/user-roles.enum';
+import { ContentGroup } from '@app/core/models/content-group';
+import { AnswerResultType } from '@app/core/models/answer-result';
 import { By } from '@angular/platform-browser';
-import { Content } from '@core/models/content';
-import { ContentType } from '@core/models/content-type.enum';
-import { ContentState } from '@core/models/content-state';
+import { Content } from '@app/core/models/content';
+import { ContentType } from '@app/core/models/content-type.enum';
+import { ContentState } from '@app/core/models/content-state';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { ContentCarouselService } from '@core/services/util/content-carousel.service';
+import { ContentCarouselService } from '@app/core/services/util/content-carousel.service';
 
 class MockAuthenticationService {
   getCurrentAuthentication() {

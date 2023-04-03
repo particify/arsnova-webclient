@@ -5,7 +5,7 @@ import {
   STORAGE_CONFIG,
   STORAGECONFIG_PROVIDER_TOKEN,
 } from './global-storage.service';
-import { EventService } from '@core/services/util/event.service';
+import { EventService } from '@app/core/services/util/event.service';
 import { MockEventService } from '@testing/test-helpers';
 
 describe('GlobalStorageService', () => {

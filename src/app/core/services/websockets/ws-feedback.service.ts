@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { WsConnectorService } from '@core/services/websockets/ws-connector.service';
-import { CreateFeedback } from '@core/models/messages/create-feedback';
-import { ResetFeedback } from '@core/models/messages/reset-feedback';
+import { WsConnectorService } from '@app/core/services/websockets/ws-connector.service';
+import { CreateFeedback } from '@app/core/models/messages/create-feedback';
+import { ResetFeedback } from '@app/core/models/messages/reset-feedback';
 import { Observable } from 'rxjs';
 import { IMessage } from '@stomp/stompjs';
 

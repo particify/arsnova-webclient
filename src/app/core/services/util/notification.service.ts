@@ -7,7 +7,7 @@ import {
 import {
   LOADING_ICON,
   SnackBarAdvancedComponent,
-} from '@core/components/snack-bar-advanced/snack-bar-advanced.component';
+} from '@app/core/components/snack-bar-advanced/snack-bar-advanced.component';
 import { Router } from '@angular/router';
 import { RoutingService } from './routing.service';
 

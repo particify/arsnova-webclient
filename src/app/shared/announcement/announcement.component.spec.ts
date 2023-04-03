@@ -1,11 +1,11 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { LanguageService } from '@core/services/util/language.service';
-import { DateFormatPipe } from '@core/pipes/date-format.pipe';
+import { LanguageService } from '@app/core/services/util/language.service';
+import { DateFormatPipe } from '@app/core/pipes/date-format.pipe';
 import { JsonTranslationLoader, MockLangService } from '@testing/test-helpers';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 
 import { AnnouncementComponent } from './announcement.component';
-import { UserAnnouncement } from '@core/models/user-announcement';
+import { UserAnnouncement } from '@app/core/models/user-announcement';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 describe('AnnouncementComponent', () => {

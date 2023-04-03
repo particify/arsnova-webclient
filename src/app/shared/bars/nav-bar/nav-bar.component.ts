@@ -1,30 +1,30 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { BarBaseComponent, BarItem } from '@shared/bars/bar-base';
+import { BarBaseComponent, BarItem } from '@app/shared/bars/bar-base';
 import { ActivatedRoute, Router } from '@angular/router';
-import { RoutingService } from '@core/services/util/routing.service';
+import { RoutingService } from '@app/core/services/util/routing.service';
 import {
   GlobalStorageService,
   STORAGE_KEYS,
-} from '@core/services/util/global-storage.service';
-import { UserRole } from '@core/models/user-roles.enum';
-import { RoomStatsService } from '@core/services/http/room-stats.service';
-import { FeedbackService } from '@core/services/http/feedback.service';
-import { FeedbackMessageType } from '@core/models/messages/feedback-message-type';
-import { ContentGroupService } from '@core/services/http/content-group.service';
-import { ContentGroup } from '@core/models/content-group';
-import { EventService } from '@core/services/util/event.service';
+} from '@app/core/services/util/global-storage.service';
+import { UserRole } from '@app/core/models/user-roles.enum';
+import { RoomStatsService } from '@app/core/services/http/room-stats.service';
+import { FeedbackService } from '@app/core/services/http/feedback.service';
+import { FeedbackMessageType } from '@app/core/models/messages/feedback-message-type';
+import { ContentGroupService } from '@app/core/services/http/content-group.service';
+import { ContentGroup } from '@app/core/models/content-group';
+import { EventService } from '@app/core/services/util/event.service';
 import { Observable, Subscription } from 'rxjs';
-import { EntityChanged } from '@core/models/events/entity-changed';
-import { ContentGroupStatistics } from '@core/models/content-group-statistics';
-import { DataChanged } from '@core/models/events/data-changed';
-import { RoomStats } from '@core/models/room-stats';
-import { Features } from '@core/models/features.enum';
-import { SeriesCreated } from '@core/models/events/series-created';
-import { SeriesDeleted } from '@core/models/events/series-deleted';
+import { EntityChanged } from '@app/core/models/events/entity-changed';
+import { ContentGroupStatistics } from '@app/core/models/content-group-statistics';
+import { DataChanged } from '@app/core/models/events/data-changed';
+import { RoomStats } from '@app/core/models/room-stats';
+import { Features } from '@app/core/models/features.enum';
+import { SeriesCreated } from '@app/core/models/events/series-created';
+import { SeriesDeleted } from '@app/core/models/events/series-deleted';
 import { MatMenuTrigger } from '@angular/material/menu';
-import { RoomService } from '@core/services/http/room.service';
+import { RoomService } from '@app/core/services/http/room.service';
 import { IMessage } from '@stomp/stompjs';
-import { CommentSettingsService } from '@core/services/http/comment-settings.service';
+import { CommentSettingsService } from '@app/core/services/http/comment-settings.service';
 
 export class NavBarItem extends BarItem {
   url: string;

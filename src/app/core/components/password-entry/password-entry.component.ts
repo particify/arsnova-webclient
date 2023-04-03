@@ -16,8 +16,8 @@ import { TranslateService } from '@ngx-translate/core';
 import {
   AdvancedSnackBarTypes,
   NotificationService,
-} from '@core/services/util/notification.service';
-import { FormErrorStateMatcher } from '@core/components/form-error-state-matcher/form-error-state-matcher';
+} from '@app/core/services/util/notification.service';
+import { FormErrorStateMatcher } from '@app/core/components/form-error-state-matcher/form-error-state-matcher';
 import { AutofillMonitor } from '@angular/cdk/text-field';
 
 enum Strength {

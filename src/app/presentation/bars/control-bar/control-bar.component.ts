@@ -9,44 +9,44 @@ import {
 import {
   NavBarComponent,
   NavBarItem,
-} from '@shared/bars/nav-bar/nav-bar.component';
+} from '@app/shared/bars/nav-bar/nav-bar.component';
 import { ActivatedRoute, Router } from '@angular/router';
-import { RoutingService } from '@core/services/util/routing.service';
+import { RoutingService } from '@app/core/services/util/routing.service';
 import {
   GlobalStorageService,
   STORAGE_KEYS,
-} from '@core/services/util/global-storage.service';
-import { RoomStatsService } from '@core/services/http/room-stats.service';
-import { FeedbackService } from '@core/services/http/feedback.service';
-import { ContentGroupService } from '@core/services/http/content-group.service';
-import { EventService } from '@core/services/util/event.service';
-import { BarItem } from '@shared/bars/bar-base';
-import { ContentGroup } from '@core/models/content-group';
+} from '@app/core/services/util/global-storage.service';
+import { RoomStatsService } from '@app/core/services/http/room-stats.service';
+import { FeedbackService } from '@app/core/services/http/feedback.service';
+import { ContentGroupService } from '@app/core/services/http/content-group.service';
+import { EventService } from '@app/core/services/util/event.service';
+import { BarItem } from '@app/shared/bars/bar-base';
+import { ContentGroup } from '@app/core/models/content-group';
 import { map, takeUntil } from 'rxjs/operators';
-import { ApiConfigService } from '@core/services/http/api-config.service';
+import { ApiConfigService } from '@app/core/services/http/api-config.service';
 import { Subject } from 'rxjs';
 import {
   CommentPresentationState,
   Sort,
-} from '@shared/comment-list/comment-list.component';
-import { AnnounceService } from '@core/services/util/announce.service';
-import { Hotkey, HotkeyService } from '@core/services/util/hotkey.service';
-import { HotkeyAction } from '@core/directives/hotkey.directive';
+} from '@app/shared/comment-list/comment-list.component';
+import { AnnounceService } from '@app/core/services/util/announce.service';
+import { Hotkey, HotkeyService } from '@app/core/services/util/hotkey.service';
+import { HotkeyAction } from '@app/core/directives/hotkey.directive';
 import { TranslateService } from '@ngx-translate/core';
-import { Features } from '@core/models/features.enum';
-import { ContentService } from '@core/services/http/content.service';
-import { Content } from '@core/models/content';
-import { DialogService } from '@core/services/util/dialog.service';
-import { ContentType } from '@core/models/content-type.enum';
+import { Features } from '@app/core/models/features.enum';
+import { ContentService } from '@app/core/services/http/content.service';
+import { Content } from '@app/core/models/content';
+import { DialogService } from '@app/core/services/util/dialog.service';
+import { ContentType } from '@app/core/models/content-type.enum';
 import {
   AdvancedSnackBarTypes,
   NotificationService,
-} from '@core/services/util/notification.service';
-import { RoomService } from '@core/services/http/room.service';
-import { RemoteService } from '@core/services/util/remote.service';
-import { PresentationEvent } from '@core/models/events/presentation-events.enum';
-import { CommentSettingsService } from '@core/services/http/comment-settings.service';
-import { ContentPublishService } from '@core/services/util/content-publish.service';
+} from '@app/core/services/util/notification.service';
+import { RoomService } from '@app/core/services/http/room.service';
+import { RemoteService } from '@app/core/services/util/remote.service';
+import { PresentationEvent } from '@app/core/models/events/presentation-events.enum';
+import { CommentSettingsService } from '@app/core/services/http/comment-settings.service';
+import { ContentPublishService } from '@app/core/services/util/content-publish.service';
 
 export class KeyNavBarItem extends NavBarItem {
   key: string;

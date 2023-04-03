@@ -2,10 +2,10 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { ContentParticipantComponent } from './content-participant.component';
 import { JsonTranslationLoader } from '@testing/test-helpers';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
-import { ContentType } from '@core/models/content-type.enum';
-import { ContentState } from '@core/models/content-state';
-import { Content } from '@core/models/content';
-import { A11yRenderedBodyPipe } from '@core/pipes/a11y-rendered-body.pipe';
+import { ContentType } from '@app/core/models/content-type.enum';
+import { ContentState } from '@app/core/models/content-state';
+import { Content } from '@app/core/models/content';
+import { A11yRenderedBodyPipe } from '@app/core/pipes/a11y-rendered-body.pipe';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 describe('ContentParticipantComponent', () => {

@@ -1,5 +1,5 @@
-import { SplitShortIdPipe } from '@core/pipes/split-short-id.pipe';
-import { NBSP, THINSP } from '../utils/html-entities';
+import { SplitShortIdPipe } from '@app/core/pipes/split-short-id.pipe';
+import { NBSP, THINSP } from '@app/core/utils/html-entities';
 
 describe('SplitShortId', () => {
   const pipe = new SplitShortIdPipe();

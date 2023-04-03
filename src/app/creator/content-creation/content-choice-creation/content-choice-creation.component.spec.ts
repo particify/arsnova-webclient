@@ -2,17 +2,17 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { ContentChoiceCreationComponent } from './content-choice-creation.component';
 import { Component, NO_ERRORS_SCHEMA, Injectable, Input } from '@angular/core';
-import { ContentService } from '@core/services/http/content.service';
-import { NotificationService } from '@core/services/util/notification.service';
+import { ContentService } from '@app/core/services/http/content.service';
+import { NotificationService } from '@app/core/services/util/notification.service';
 import { MatDialog } from '@angular/material/dialog';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
-import { EventService } from '@core/services/util/event.service';
-import { RoomService } from '@core/services/http/room.service';
+import { EventService } from '@app/core/services/util/event.service';
+import { RoomService } from '@app/core/services/http/room.service';
 import { of, Subject } from 'rxjs';
-import { DialogService } from '@core/services/util/dialog.service';
-import { ContentGroupService } from '@core/services/http/content-group.service';
+import { DialogService } from '@app/core/services/util/dialog.service';
+import { ContentGroupService } from '@app/core/services/http/content-group.service';
 import { MatButtonModule } from '@angular/material/button';
-import { AnnounceService } from '@core/services/util/announce.service';
+import { AnnounceService } from '@app/core/services/util/announce.service';
 import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
 import {
   ActivatedRouteStub,

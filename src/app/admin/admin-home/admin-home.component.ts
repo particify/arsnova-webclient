@@ -1,12 +1,12 @@
 import { Component, EventEmitter, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { LanguageService } from '@core/services/util/language.service';
+import { LanguageService } from '@app/core/services/util/language.service';
 import {
   GlobalStorageService,
   STORAGE_KEYS,
-} from '@core/services/util/global-storage.service';
+} from '@app/core/services/util/global-storage.service';
 import { Router } from '@angular/router';
-import { SystemInfoService } from '@arsnova/app/services/http/system-info.service';
+import { SystemInfoService } from '@app/core/services/http/system-info.service';
 import { catchError, Observable, of, shareReplay } from 'rxjs';
 
 @Component({

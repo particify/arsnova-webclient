@@ -1,16 +1,16 @@
 import { Component, OnInit } from '@angular/core';
-import { UserService } from '@core/services/http/user.service';
-import { DialogService } from '@core/services/util/dialog.service';
-import { AdminService } from '@core/services/http/admin.service';
+import { UserService } from '@app/core/services/http/user.service';
+import { DialogService } from '@app/core/services/util/dialog.service';
+import { AdminService } from '@app/core/services/http/admin.service';
 import {
   AdvancedSnackBarTypes,
   NotificationService,
-} from '@core/services/util/notification.service';
+} from '@app/core/services/util/notification.service';
 import { TranslateService } from '@ngx-translate/core';
-import { ApiConfigService } from '@core/services/http/api-config.service';
-import { InputDialogComponent } from '@admin/_dialogs/input-dialog/input-dialog.component';
+import { ApiConfigService } from '@app/core/services/http/api-config.service';
+import { InputDialogComponent } from '@app/admin/_dialogs/input-dialog/input-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
-import { UserSearchComponent } from '@admin/user-search/user-search.component';
+import { UserSearchComponent } from '@app/admin/user-search/user-search.component';
 
 @Component({
   selector: 'app-user-management',

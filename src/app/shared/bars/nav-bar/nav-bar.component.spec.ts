@@ -8,32 +8,32 @@ import {
   MockLangService,
 } from '@testing/test-helpers';
 import { of } from 'rxjs';
-import { GlobalStorageService } from '@core/services/util/global-storage.service';
-import { EventService } from '@core/services/util/event.service';
-import { ContentGroupService } from '@core/services/http/content-group.service';
-import { Room } from '@core/models/room';
+import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
+import { EventService } from '@app/core/services/util/event.service';
+import { ContentGroupService } from '@app/core/services/http/content-group.service';
+import { Room } from '@app/core/models/room';
 import { NO_ERRORS_SCHEMA, EventEmitter, Injectable } from '@angular/core';
-import { FeedbackService } from '@core/services/http/feedback.service';
+import { FeedbackService } from '@app/core/services/http/feedback.service';
 import { Message } from '@stomp/stompjs';
-import { RoutingService } from '@core/services/util/routing.service';
-import { RoomStatsService } from '@core/services/http/room-stats.service';
-import { ContentGroup } from '@core/models/content-group';
+import { RoutingService } from '@app/core/services/util/routing.service';
+import { RoomStatsService } from '@app/core/services/http/room-stats.service';
+import { ContentGroup } from '@app/core/models/content-group';
 import { MatMenuModule } from '@angular/material/menu';
-import { RoomService } from '@core/services/http/room.service';
+import { RoomService } from '@app/core/services/http/room.service';
 import { MatButtonHarness } from '@angular/material/button/testing';
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 import { HarnessLoader } from '@angular/cdk/testing';
-import { UserRole } from '@core/models/user-roles.enum';
+import { UserRole } from '@app/core/models/user-roles.enum';
 import { RouterTestingModule } from '@angular/router/testing';
-import { LanguageService } from '@core/services/util/language.service';
+import { LanguageService } from '@app/core/services/util/language.service';
 import {
   MatMenuHarness,
   MatMenuItemHarness,
 } from '@angular/material/menu/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ReactiveFormsModule } from '@angular/forms';
-import { FeedbackMessageType } from '@core/models/messages/feedback-message-type';
-import { CommentSettingsService } from '@core/services/http/comment-settings.service';
+import { FeedbackMessageType } from '@app/core/models/messages/feedback-message-type';
+import { CommentSettingsService } from '@app/core/services/http/comment-settings.service';
 
 @Injectable()
 class MockContentGroupService {

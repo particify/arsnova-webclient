@@ -1,4 +1,4 @@
-import { ContentGroup } from '../content-group';
+import { ContentGroup } from '@app/core/models/content-group';
 
 export class SeriesDeleted {
   type: string;

@@ -1,6 +1,6 @@
 import { TestBed, inject } from '@angular/core/testing';
 
-import { LocalFileService } from '@core/services/util/local-file.service';
+import { LocalFileService } from '@app/core/services/util/local-file.service';
 
 describe('LocalFileService', () => {
   beforeEach(() => {

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ContentGroup } from '@core/models/content-group';
+import { ContentGroup } from '@app/core/models/content-group';
 
 @Injectable()
 export class ContentPublishService {

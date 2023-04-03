@@ -1,8 +1,8 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { AnnouncementService } from '@core/services/http/announcement.service';
-import { AuthenticationService } from '@core/services/http/authentication.service';
-import { UserAnnouncement } from '@core/models/user-announcement';
+import { AnnouncementService } from '@app/core/services/http/announcement.service';
+import { AuthenticationService } from '@app/core/services/http/authentication.service';
+import { UserAnnouncement } from '@app/core/models/user-announcement';
 import { take } from 'rxjs';
 
 @Component({

@@ -3,10 +3,10 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { ContentGroupCreationComponent } from './content-group-creation.component';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { NO_ERRORS_SCHEMA, Injectable } from '@angular/core';
-import { NotificationService } from '@core/services/util/notification.service';
+import { NotificationService } from '@app/core/services/util/notification.service';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { EventService } from '@core/services/util/event.service';
-import { ContentGroupService } from '@core/services/http/content-group.service';
+import { EventService } from '@app/core/services/util/event.service';
+import { ContentGroupService } from '@app/core/services/http/content-group.service';
 import {
   JsonTranslationLoader,
   MockEventService,

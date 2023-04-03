@@ -18,24 +18,24 @@ import { AbstractHttpService } from './abstract-http.service';
 import {
   GlobalStorageService,
   STORAGE_KEYS,
-} from '../util/global-storage.service';
+} from '@app/core/services/util/global-storage.service';
 import {
   ClientAuthentication,
   TransientClientAuthentication,
-} from '@core/models/client-authentication';
+} from '@app/core/models/client-authentication';
 import {
   AuthenticationStatus,
   ClientAuthenticationResult,
-} from '@core/models/client-authentication-result';
-import { EventService } from '../util/event.service';
+} from '@app/core/models/client-authentication-result';
+import { EventService } from '@app/core/services/util/event.service';
 import JwtDecode from 'jwt-decode';
 import { TranslateService } from '@ngx-translate/core';
 import {
   AdvancedSnackBarTypes,
   NotificationService,
-} from '../util/notification.service';
+} from '@app/core/services/util/notification.service';
 import { ApiConfigService } from './api-config.service';
-import { RoutingService } from '../util/routing.service';
+import { RoutingService } from '@app/core/services/util/routing.service';
 import { environment } from '@environments/environment';
 
 export const AUTH_HEADER_KEY = 'Authorization';

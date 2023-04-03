@@ -5,8 +5,8 @@ import {
   ActivatedRouteSnapshot,
   Router,
 } from '@angular/router';
-import { NotificationService } from '@core/services/util/notification.service';
-import { LanguageService } from '@core/services/util/language.service';
+import { NotificationService } from '@app/core/services/util/notification.service';
+import { LanguageService } from '@app/core/services/util/language.service';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import {
   JsonTranslationLoader,
@@ -17,13 +17,13 @@ import {
   MockRouter,
 } from '@testing/test-helpers';
 import { of } from 'rxjs';
-import { GlobalStorageService } from '@core/services/util/global-storage.service';
-import { ContentAnswerService } from '@core/services/http/content-answer.service';
-import { ContentService } from '@core/services/http/content.service';
+import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
+import { ContentAnswerService } from '@app/core/services/http/content-answer.service';
+import { ContentService } from '@app/core/services/http/content.service';
 import { NO_ERRORS_SCHEMA, EventEmitter } from '@angular/core';
-import { ContentChoice } from '@core/models/content-choice';
-import { ContentType } from '@core/models/content-type.enum';
-import { ContentState } from '@core/models/content-state';
+import { ContentChoice } from '@app/core/models/content-choice';
+import { ContentType } from '@app/core/models/content-type.enum';
+import { ContentState } from '@app/core/models/content-state';
 
 describe('ContentSortParticipantComponent', () => {
   let component: ContentSortParticipantComponent;

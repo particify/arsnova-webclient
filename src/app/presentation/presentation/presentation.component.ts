@@ -3,12 +3,12 @@ import { ActivatedRoute, Router } from '@angular/router';
 import {
   GlobalStorageService,
   STORAGE_KEYS,
-} from '@core/services/util/global-storage.service';
-import { RoomStatsService } from '@core/services/http/room-stats.service';
-import { LanguageService } from '@core/services/util/language.service';
+} from '@app/core/services/util/global-storage.service';
+import { RoomStatsService } from '@app/core/services/http/room-stats.service';
+import { LanguageService } from '@app/core/services/util/language.service';
 import { TranslateService } from '@ngx-translate/core';
-import { Features } from '@core/models/features.enum';
-import { PresentationService } from '@core/services/util/presentation.service';
+import { Features } from '@app/core/models/features.enum';
+import { PresentationService } from '@app/core/services/util/presentation.service';
 
 @Component({
   selector: 'app-presentation',

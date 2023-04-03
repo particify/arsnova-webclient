@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { AnswerWithPoints } from '@core/models/answer-with-points';
+import { AnswerWithPoints } from '@app/core/models/answer-with-points';
 
 @Component({
   selector: 'app-content-prioritization-answer',

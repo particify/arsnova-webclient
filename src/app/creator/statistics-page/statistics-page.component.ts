@@ -1,9 +1,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { RoomStatsService } from '@core/services/http/room-stats.service';
-import { ContentGroup } from '@core/models/content-group';
+import { RoomStatsService } from '@app/core/services/http/room-stats.service';
+import { ContentGroup } from '@app/core/models/content-group';
 import { StatisticListComponent } from '@app/creator/statistic-list/statistic-list.component';
-import { ContentGroupService } from '@core/services/http/content-group.service';
+import { ContentGroupService } from '@app/core/services/http/content-group.service';
 
 @Component({
   selector: 'app-statistics',

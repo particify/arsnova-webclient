@@ -2,13 +2,13 @@ import { Injectable, Component, NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { of } from 'rxjs';
-import { AuthenticationService } from '@core/services/http/authentication.service';
+import { AuthenticationService } from '@app/core/services/http/authentication.service';
 import { ImportComponent } from './import.component';
-import { RoomService } from '@core/services/http/room.service';
-import { NotificationService } from '@core/services/util/notification.service';
+import { RoomService } from '@app/core/services/http/room.service';
+import { NotificationService } from '@app/core/services/util/notification.service';
 import { Router } from '@angular/router';
-import { LanguageService } from '@core/services/util/language.service';
-import { RoutingService } from '@core/services/util/routing.service';
+import { LanguageService } from '@app/core/services/util/language.service';
+import { RoutingService } from '@app/core/services/util/routing.service';
 import {
   JsonTranslationLoader,
   MockLangService,

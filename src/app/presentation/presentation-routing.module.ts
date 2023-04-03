@@ -4,16 +4,16 @@ import {
   ExtensionRouteProvider,
   RouteMountPoint,
 } from '@projects/extension-point/src/lib/extension-route';
-import { AuthenticationGuard } from '@core/guards/authentication.guard';
-import { UserRole } from '@core/models/user-roles.enum';
-import { RoomResolver } from '@core/resolver/room.resolver';
-import { RoomViewUserRoleResolver } from '@core/resolver/room-view-user-role.resolver';
+import { AuthenticationGuard } from '@app/core/guards/authentication.guard';
+import { UserRole } from '@app/core/models/user-roles.enum';
+import { RoomResolver } from '@app/core/resolver/room.resolver';
+import { RoomViewUserRoleResolver } from '@app/core/resolver/room-view-user-role.resolver';
 import { PresentationComponent } from './presentation/presentation.component';
-import { CommentPageComponent } from '@shared/comment-page/comment-page.component';
-import { SurveyPageComponent } from '@shared/survey-page/survey-page.component';
-import { ContentPresentationComponent } from '../creator/content-presentation/content-presentation.component';
+import { CommentPageComponent } from '@app/shared/comment-page/comment-page.component';
+import { SurveyPageComponent } from '@app/shared/survey-page/survey-page.component';
+import { ContentPresentationComponent } from '@app/creator/content-presentation/content-presentation.component';
 import { QrCodeComponent } from './qr-code/qr-code.component';
-import { CommentSettingsResolver } from '@core/resolver/comment-settings.resolver';
+import { CommentSettingsResolver } from '@app/core/resolver/comment-settings.resolver';
 
 const routes: Routes = [
   {

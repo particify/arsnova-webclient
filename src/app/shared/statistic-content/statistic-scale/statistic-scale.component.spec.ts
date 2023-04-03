@@ -1,26 +1,26 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { StatisticScaleComponent } from './statistic-scale.component';
-import { EventService } from '@core/services/util/event.service';
-import { ContentService } from '@core/services/http/content.service';
-import { ThemeService } from '@core/theme/theme.service';
+import { EventService } from '@app/core/services/util/event.service';
+import { ContentService } from '@app/core/services/http/content.service';
+import { ThemeService } from '@app/core/theme/theme.service';
 import {
   JsonTranslationLoader,
   MockEventService,
   MockThemeService,
 } from '@testing/test-helpers';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
-import { ContentChoice } from '@core/models/content-choice';
-import { ContentType } from '@core/models/content-type.enum';
-import { ContentState } from '@core/models/content-state';
+import { ContentChoice } from '@app/core/models/content-choice';
+import { ContentType } from '@app/core/models/content-type.enum';
+import { ContentState } from '@app/core/models/content-state';
 import { of } from 'rxjs';
-import { LikertScaleService } from '@core/services/util/likert-scale.service';
-import { RoundStatistics } from '@core/models/round-statistics';
-import { AnswerStatistics } from '@core/models/answer-statistics';
-import { PresentationService } from '@core/services/util/presentation.service';
-import { GlobalStorageService } from '@core/services/util/global-storage.service';
+import { LikertScaleService } from '@app/core/services/util/likert-scale.service';
+import { RoundStatistics } from '@app/core/models/round-statistics';
+import { AnswerStatistics } from '@app/core/models/answer-statistics';
+import { PresentationService } from '@app/core/services/util/presentation.service';
+import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
 import { MockGlobalStorageService } from '@testing/test-helpers';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { UserSettings } from '@core/models/user-settings';
+import { UserSettings } from '@app/core/models/user-settings';
 
 describe('StatisticScaleComponent', () => {
   let component: StatisticScaleComponent;

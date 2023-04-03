@@ -1,29 +1,29 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { RoomService } from '@core/services/http/room.service';
-import { Room } from '@core/models/room';
-import { RoomCreated } from '@core/models/events/room-created';
+import { RoomService } from '@app/core/services/http/room.service';
+import { Room } from '@app/core/models/room';
+import { RoomCreated } from '@app/core/models/events/room-created';
 import { Router } from '@angular/router';
 import {
   AdvancedSnackBarTypes,
   NotificationService,
-} from '@core/services/util/notification.service';
+} from '@app/core/services/util/notification.service';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { AuthenticationService } from '@core/services/http/authentication.service';
+import { AuthenticationService } from '@app/core/services/http/authentication.service';
 import { TranslateService } from '@ngx-translate/core';
-import { EventService } from '@core/services/util/event.service';
+import { EventService } from '@app/core/services/util/event.service';
 import {
   GlobalStorageService,
   STORAGE_KEYS,
-} from '@core/services/util/global-storage.service';
-import { ClientAuthentication } from '@core/models/client-authentication';
-import { HINT_TYPES } from '@shared/hint/hint.component';
-import { AuthProvider } from '@core/models/auth-provider';
-import { ApiConfigService } from '@core/services/http/api-config.service';
+} from '@app/core/services/util/global-storage.service';
+import { ClientAuthentication } from '@app/core/models/client-authentication';
+import { HINT_TYPES } from '@app/shared/hint/hint.component';
+import { AuthProvider } from '@app/core/models/auth-provider';
+import { ApiConfigService } from '@app/core/services/http/api-config.service';
 import {
   AuthenticationProvider,
   AuthenticationProviderRole,
   AuthenticationProviderType,
-} from '@core/models/api-config';
+} from '@app/core/models/api-config';
 
 @Component({
   selector: 'app-room-create',

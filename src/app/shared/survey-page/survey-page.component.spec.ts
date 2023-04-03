@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { SurveyPageComponent } from './survey-page.component';
 import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
-import { NotificationService } from '@core/services/util/notification.service';
+import { NotificationService } from '@app/core/services/util/notification.service';
 import {
   TranslateLoader,
   TranslateModule,
@@ -16,24 +16,24 @@ import {
   MockAnnounceService,
 } from '@testing/test-helpers';
 import { of } from 'rxjs';
-import { GlobalStorageService } from '@core/services/util/global-storage.service';
-import { EventService } from '@core/services/util/event.service';
-import { AnnounceService } from '@core/services/util/announce.service';
-import { AuthenticationService } from '@core/services/http/authentication.service';
-import { Room } from '@core/models/room';
+import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
+import { EventService } from '@app/core/services/util/event.service';
+import { AnnounceService } from '@app/core/services/util/announce.service';
+import { AuthenticationService } from '@app/core/services/http/authentication.service';
+import { Room } from '@app/core/models/room';
 import { NO_ERRORS_SCHEMA, EventEmitter } from '@angular/core';
-import { UserRole } from '@core/models/user-roles.enum';
-import { RoomService } from '@core/services/http/room.service';
+import { UserRole } from '@app/core/models/user-roles.enum';
+import { RoomService } from '@app/core/services/http/room.service';
 import { MockLangService } from '@testing/test-helpers';
-import { LanguageService } from '@core/services/util/language.service';
-import { FeedbackService } from '@core/services/http/feedback.service';
+import { LanguageService } from '@app/core/services/util/language.service';
+import { FeedbackService } from '@app/core/services/http/feedback.service';
 import { Message } from '@stomp/stompjs';
-import { WsFeedbackService } from '@core/services/websockets/ws-feedback.service';
-import { HotkeyService } from '@core/services/util/hotkey.service';
-import { ClientAuthentication } from '@core/models/client-authentication';
-import { AuthProvider } from '@core/models/auth-provider';
-import { A11yIntroPipe } from '@core/pipes/a11y-intro.pipe';
-import { RemoteService } from '@core/services/util/remote.service';
+import { WsFeedbackService } from '@app/core/services/websockets/ws-feedback.service';
+import { HotkeyService } from '@app/core/services/util/hotkey.service';
+import { ClientAuthentication } from '@app/core/models/client-authentication';
+import { AuthProvider } from '@app/core/models/auth-provider';
+import { A11yIntroPipe } from '@app/core/pipes/a11y-intro.pipe';
+import { RemoteService } from '@app/core/services/util/remote.service';
 
 describe('SurveyPageComponent', () => {
   let component: SurveyPageComponent;

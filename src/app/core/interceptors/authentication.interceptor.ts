@@ -12,7 +12,7 @@ import {
   AuthenticationService,
   AUTH_HEADER_KEY,
   AUTH_SCHEME,
-} from '@core/services/http/authentication.service';
+} from '@app/core/services/http/authentication.service';
 import { Observable } from 'rxjs';
 
 const API_LOGIN_URI_PATTERN = /^\/api\/auth\/login\/[^?].*/;

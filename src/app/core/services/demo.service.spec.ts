@@ -1,12 +1,12 @@
 import { inject, TestBed } from '@angular/core/testing';
 
-import { DemoService } from '@core/services/demo.service';
+import { DemoService } from '@app/core/services/demo.service';
 import { Injectable } from '@angular/core';
-import { EventService } from '@core/services/util/event.service';
+import { EventService } from '@app/core/services/util/event.service';
 import { MockEventService, MockTranslateService } from '@testing/test-helpers';
-import { RoomService } from '@core/services/http/room.service';
+import { RoomService } from '@app/core/services/http/room.service';
 import { TranslateService } from '@ngx-translate/core';
-import { ApiConfigService } from '@core/services/http/api-config.service';
+import { ApiConfigService } from '@app/core/services/http/api-config.service';
 
 @Injectable()
 class MockApiConfigService {}

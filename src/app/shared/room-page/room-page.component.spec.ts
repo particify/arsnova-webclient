@@ -2,9 +2,9 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
 import { ActivatedRouteStub, MockEventService } from '@testing/test-helpers';
 import { RoomPageComponent } from './room-page.component';
-import { UserRole } from '@core/models/user-roles.enum';
+import { UserRole } from '@app/core/models/user-roles.enum';
 import { of } from 'rxjs';
-import { EventService } from '@core/services/util/event.service';
+import { EventService } from '@app/core/services/util/event.service';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 describe('RoomPageComponent', () => {

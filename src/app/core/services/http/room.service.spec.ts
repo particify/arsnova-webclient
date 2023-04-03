@@ -1,8 +1,8 @@
 import { TestBed, inject } from '@angular/core/testing';
 
-import { RoomService } from '@core/services/http/room.service';
+import { RoomService } from '@app/core/services/http/room.service';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { EventService } from '@core/services/util/event.service';
+import { EventService } from '@app/core/services/util/event.service';
 import {
   MockEventService,
   MockGlobalStorageService,
@@ -10,13 +10,13 @@ import {
   MockTranslateService,
 } from '@testing/test-helpers';
 import { TranslateService } from '@ngx-translate/core';
-import { NotificationService } from '@core/services/util/notification.service';
-import { WsConnectorService } from '@core/services/websockets/ws-connector.service';
-import { Cache, CachingService } from '@core/services/util/caching.service';
+import { NotificationService } from '@app/core/services/util/notification.service';
+import { WsConnectorService } from '@app/core/services/websockets/ws-connector.service';
+import { Cache, CachingService } from '@app/core/services/util/caching.service';
 import { Injectable } from '@angular/core';
-import { AuthenticationService } from '@core/services/http/authentication.service';
-import { GlobalStorageService } from '@core/services/util/global-storage.service';
-import { FeedbackService } from '@core/services/http/feedback.service';
+import { AuthenticationService } from '@app/core/services/http/authentication.service';
+import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
+import { FeedbackService } from '@app/core/services/http/feedback.service';
 
 @Injectable()
 class MockWsConnectorService {}

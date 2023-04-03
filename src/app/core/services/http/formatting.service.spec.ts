@@ -1,15 +1,15 @@
 import { TestBed, inject } from '@angular/core/testing';
 
-import { FormattingService } from '@core/services/http/formatting.service';
+import { FormattingService } from '@app/core/services/http/formatting.service';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { EventService } from '@core/services/util/event.service';
+import { EventService } from '@app/core/services/util/event.service';
 import {
   MockEventService,
   MockNotificationService,
   MockTranslateService,
 } from '@testing/test-helpers';
 import { TranslateService } from '@ngx-translate/core';
-import { NotificationService } from '@core/services/util/notification.service';
+import { NotificationService } from '@app/core/services/util/notification.service';
 
 describe('FormattingService', () => {
   beforeEach(() => {

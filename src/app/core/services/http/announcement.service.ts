@@ -2,11 +2,11 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { catchError, first, Observable } from 'rxjs';
-import { Announcement } from '@core/models/announcement';
-import { AnnouncementState } from '@core/models/announcement-state';
-import { UserAnnouncement } from '@core/models/user-announcement';
-import { EventService } from '../util/event.service';
-import { NotificationService } from '../util/notification.service';
+import { Announcement } from '@app/core/models/announcement';
+import { AnnouncementState } from '@app/core/models/announcement-state';
+import { UserAnnouncement } from '@app/core/models/user-announcement';
+import { EventService } from '@app/core/services/util/event.service';
+import { NotificationService } from '@app/core/services/util/notification.service';
 import { AbstractHttpService } from './abstract-http.service';
 
 @Injectable({

@@ -12,10 +12,10 @@ import {
   MockGlobalStorageService,
   MockRouter,
 } from '@testing/test-helpers';
-import { GlobalStorageService } from '@core/services/util/global-storage.service';
-import { UserRole } from '@core/models/user-roles.enum';
+import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
+import { UserRole } from '@app/core/models/user-roles.enum';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { RoutingService } from '@arsnova/app/services/util/routing.service';
+import { RoutingService } from '@app/core/services/util/routing.service';
 
 describe('ContentGroupsComponent', () => {
   let component: ContentGroupsComponent;

@@ -1,17 +1,17 @@
 import { TestBed, inject } from '@angular/core/testing';
 
-import { UserService } from '@core/services/http/user.service';
+import { UserService } from '@app/core/services/http/user.service';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { EventService } from '@core/services/util/event.service';
+import { EventService } from '@app/core/services/util/event.service';
 import {
   MockEventService,
   MockNotificationService,
   MockTranslateService,
 } from '@testing/test-helpers';
 import { TranslateService } from '@ngx-translate/core';
-import { NotificationService } from '@core/services/util/notification.service';
-import { WsConnectorService } from '@core/services/websockets/ws-connector.service';
-import { Cache, CachingService } from '@core/services/util/caching.service';
+import { NotificationService } from '@app/core/services/util/notification.service';
+import { WsConnectorService } from '@app/core/services/websockets/ws-connector.service';
+import { Cache, CachingService } from '@app/core/services/util/caching.service';
 import { Injectable } from '@angular/core';
 
 @Injectable()

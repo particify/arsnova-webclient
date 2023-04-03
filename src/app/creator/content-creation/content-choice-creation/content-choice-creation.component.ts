@@ -1,21 +1,21 @@
 import { Component, EventEmitter, OnInit, ViewChild } from '@angular/core';
-import { AnswerOption } from '@core/models/answer-option';
-import { ContentChoice } from '@core/models/content-choice';
-import { ContentService } from '@core/services/http/content.service';
+import { AnswerOption } from '@app/core/models/answer-option';
+import { ContentChoice } from '@app/core/models/content-choice';
+import { ContentService } from '@app/core/services/http/content.service';
 import {
   AdvancedSnackBarTypes,
   NotificationService,
-} from '@core/services/util/notification.service';
-import { ContentType } from '@core/models/content-type.enum';
+} from '@app/core/services/util/notification.service';
+import { ContentType } from '@app/core/models/content-type.enum';
 import { TranslateService } from '@ngx-translate/core';
-import { ContentGroupService } from '@core/services/http/content-group.service';
+import { ContentGroupService } from '@app/core/services/http/content-group.service';
 import {
   ContentCreationComponent,
   DisplayAnswer,
-} from '@creator/content-creation/content-creation/content-creation.component';
-import { AnnounceService } from '@core/services/util/announce.service';
+} from '@app/creator/content-creation/content-creation/content-creation.component';
+import { AnnounceService } from '@app/core/services/util/announce.service';
 import { ActivatedRoute } from '@angular/router';
-import { CreateAnswerOptionComponent } from '@creator/content-creation/create-answer-option/create-answer-option.component';
+import { CreateAnswerOptionComponent } from '@app/creator/content-creation/create-answer-option/create-answer-option.component';
 
 @Component({
   selector: 'app-content-choice-creation',

@@ -2,19 +2,19 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { ContentCreationPageComponent } from './content-creation-page.component';
 import { NO_ERRORS_SCHEMA, Injectable } from '@angular/core';
-import { ContentService } from '@core/services/http/content.service';
-import { NotificationService } from '@core/services/util/notification.service';
+import { ContentService } from '@app/core/services/http/content.service';
+import { NotificationService } from '@app/core/services/util/notification.service';
 import { MatDialog } from '@angular/material/dialog';
 import {
   TranslateLoader,
   TranslateModule,
   TranslateService,
 } from '@ngx-translate/core';
-import { EventService } from '@core/services/util/event.service';
-import { RoomService } from '@core/services/http/room.service';
-import { DialogService } from '@core/services/util/dialog.service';
-import { ContentGroupService } from '@core/services/http/content-group.service';
-import { AnnounceService } from '@core/services/util/announce.service';
+import { EventService } from '@app/core/services/util/event.service';
+import { RoomService } from '@app/core/services/http/room.service';
+import { DialogService } from '@app/core/services/util/dialog.service';
+import { ContentGroupService } from '@app/core/services/http/content-group.service';
+import { AnnounceService } from '@app/core/services/util/announce.service';
 import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
 import {
   ActivatedRouteStub,
@@ -23,14 +23,14 @@ import {
   MockGlobalStorageService,
   MockMatDialog,
 } from '@testing/test-helpers';
-import { LanguageService } from '@core/services/util/language.service';
-import { GlobalStorageService } from '@core/services/util/global-storage.service';
-import { RoomStatsService } from '@core/services/http/room-stats.service';
-import { FormattingService } from '@core/services/http/formatting.service';
-import { A11yIntroPipe } from '@core/pipes/a11y-intro.pipe';
+import { LanguageService } from '@app/core/services/util/language.service';
+import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
+import { RoomStatsService } from '@app/core/services/http/room-stats.service';
+import { FormattingService } from '@app/core/services/http/formatting.service';
+import { A11yIntroPipe } from '@app/core/pipes/a11y-intro.pipe';
 import { MatMenuModule } from '@angular/material/menu';
 import { of } from 'rxjs';
-import { ContentType } from '@core/models/content-type.enum';
+import { ContentType } from '@app/core/models/content-type.enum';
 
 @Injectable()
 class MockContentService {

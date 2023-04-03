@@ -1,29 +1,29 @@
 import { AfterContentInit, Component, OnDestroy, OnInit } from '@angular/core';
-import { RoomService } from '@core/services/http/room.service';
+import { RoomService } from '@app/core/services/http/room.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { RoomOverviewComponent } from '@shared/room-overview/room-overview.component';
+import { RoomOverviewComponent } from '@app/shared/room-overview/room-overview.component';
 import { Location } from '@angular/common';
 import {
   AdvancedSnackBarTypes,
   NotificationService,
-} from '@core/services/util/notification.service';
+} from '@app/core/services/util/notification.service';
 import { MatDialog } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
-import { LanguageService } from '@core/services/util/language.service';
-import { WsCommentService } from '@core/services/websockets/ws-comment.service';
-import { CommentService } from '@core/services/http/comment.service';
-import { EventService } from '@core/services/util/event.service';
-import { ContentService } from '@core/services/http/content.service';
-import { DialogService } from '@core/services/util/dialog.service';
+import { LanguageService } from '@app/core/services/util/language.service';
+import { WsCommentService } from '@app/core/services/websockets/ws-comment.service';
+import { CommentService } from '@app/core/services/http/comment.service';
+import { EventService } from '@app/core/services/util/event.service';
+import { ContentService } from '@app/core/services/http/content.service';
+import { DialogService } from '@app/core/services/util/dialog.service';
 import {
   GlobalStorageService,
   STORAGE_KEYS,
-} from '@core/services/util/global-storage.service';
-import { UserRole } from '@core/models/user-roles.enum';
-import { ContentGroupService } from '@core/services/http/content-group.service';
-import { ContentGroup } from '@core/models/content-group';
-import { RoomStatsService } from '@core/services/http/room-stats.service';
-import { RoutingService } from '@core/services/util/routing.service';
+} from '@app/core/services/util/global-storage.service';
+import { UserRole } from '@app/core/models/user-roles.enum';
+import { ContentGroupService } from '@app/core/services/http/content-group.service';
+import { ContentGroup } from '@app/core/models/content-group';
+import { RoomStatsService } from '@app/core/services/http/room-stats.service';
+import { RoutingService } from '@app/core/services/util/routing.service';
 @Component({
   selector: 'app-creator-overview',
   templateUrl: './creator-overview.component.html',

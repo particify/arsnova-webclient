@@ -4,16 +4,19 @@ import { tap } from 'rxjs/operators';
 import { IMessage } from '@stomp/stompjs';
 import { TranslateService } from '@ngx-translate/core';
 import { AbstractCachingHttpService } from './abstract-caching-http.service';
-import { EventService } from '../util/event.service';
-import { NotificationService } from '../util/notification.service';
-import { CacheKey, CachingService } from '../util/caching.service';
-import { WsConnectorService } from '../websockets/ws-connector.service';
-import { Entity } from '@core/models/entity';
-import { EntityChanged } from '@core/models/events/entity-changed';
+import { EventService } from '@app/core/services/util/event.service';
+import { NotificationService } from '@app/core/services/util/notification.service';
+import {
+  CacheKey,
+  CachingService,
+} from '@app/core/services/util/caching.service';
+import { WsConnectorService } from '@app/core/services/websockets/ws-connector.service';
+import { Entity } from '@app/core/models/entity';
+import { EntityChanged } from '@app/core/models/events/entity-changed';
 import {
   ChangeType,
   EntityChangeNotification,
-} from '@core/models/events/entity-change-notification';
+} from '@app/core/models/events/entity-change-notification';
 
 /**
  * A specialized version of BaseHttpService which manages persistent data which

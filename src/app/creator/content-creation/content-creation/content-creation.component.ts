@@ -6,23 +6,23 @@ import {
   OnInit,
   Output,
 } from '@angular/core';
-import { ContentService } from '@core/services/http/content.service';
+import { ContentService } from '@app/core/services/http/content.service';
 import {
   AdvancedSnackBarTypes,
   NotificationService,
-} from '@core/services/util/notification.service';
+} from '@app/core/services/util/notification.service';
 import { TranslateService } from '@ngx-translate/core';
-import { ContentGroupService } from '@core/services/http/content-group.service';
-import { Content } from '@core/models/content';
-import { ContentChoice } from '@core/models/content-choice';
-import { ContentType } from '@core/models/content-type.enum';
-import { AnswerOption } from '@core/models/answer-option';
+import { ContentGroupService } from '@app/core/services/http/content-group.service';
+import { Content } from '@app/core/models/content';
+import { ContentChoice } from '@app/core/models/content-choice';
+import { ContentType } from '@app/core/models/content-type.enum';
+import { AnswerOption } from '@app/core/models/answer-option';
 import { Observable, Subscription } from 'rxjs';
-import { ContentText } from '@core/models/content-text';
-import { ContentFlashcard } from '@core/models/content-flashcard';
-import { AnnounceService } from '@core/services/util/announce.service';
+import { ContentText } from '@app/core/models/content-text';
+import { ContentFlashcard } from '@app/core/models/content-flashcard';
+import { AnnounceService } from '@app/core/services/util/announce.service';
 import { ActivatedRoute } from '@angular/router';
-import { DragDropBaseComponent } from '@shared/drag-drop-base/drag-drop-base.component';
+import { DragDropBaseComponent } from '@app/shared/drag-drop-base/drag-drop-base.component';
 
 export class DisplayAnswer {
   answerOption: AnswerOption;

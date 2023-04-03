@@ -1,16 +1,16 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatDialog } from '@angular/material/dialog';
-import { Content } from '@arsnova/app/models/content';
-import { ContentState } from '@arsnova/app/models/content-state';
-import { ContentType } from '@arsnova/app/models/content-type.enum';
-import { ContentService } from '@arsnova/app/services/http/content.service';
-import { NotificationService } from '@arsnova/app/services/util/notification.service';
+import { Content } from '@app/core/models/content';
+import { ContentState } from '@app/core/models/content-state';
+import { ContentType } from '@app/core/models/content-type.enum';
+import { ContentService } from '@app/core/services/http/content.service';
+import { NotificationService } from '@app/core/services/util/notification.service';
 import {
   JsonTranslationLoader,
   MockMatDialog,
   MockNotificationService,
-} from '@arsnova/testing/test-helpers';
+} from '@testing/test-helpers';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 
 import { StartNewRoundComponent } from './start-new-round.component';

@@ -1,18 +1,18 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { AuthenticationService } from '@core/services/http/authentication.service';
+import { AuthenticationService } from '@app/core/services/http/authentication.service';
 import {
   AdvancedSnackBarTypes,
   NotificationService,
-} from '@core/services/util/notification.service';
-import { UserService } from '@core/services/http/user.service';
+} from '@app/core/services/util/notification.service';
+import { UserService } from '@app/core/services/http/user.service';
 import { TranslateService } from '@ngx-translate/core';
-import { DialogService } from '@core/services/util/dialog.service';
-import { ClientAuthentication } from '@core/models/client-authentication';
+import { DialogService } from '@app/core/services/util/dialog.service';
+import { ClientAuthentication } from '@app/core/models/client-authentication';
 import { ActivatedRoute, Router } from '@angular/router';
-import { User } from '@core/models/user';
-import { Person } from '@core/models/person';
-import { AuthProvider } from '@core/models/auth-provider';
-import { UserSettings } from '@core/models/user-settings';
+import { User } from '@app/core/models/user';
+import { Person } from '@app/core/models/person';
+import { AuthProvider } from '@app/core/models/auth-provider';
+import { UserSettings } from '@app/core/models/user-settings';
 import { Location } from '@angular/common';
 
 export class FormField {

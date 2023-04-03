@@ -5,7 +5,7 @@ import {
   ActivatedRouteSnapshot,
   Router,
 } from '@angular/router';
-import { NotificationService } from '@core/services/util/notification.service';
+import { NotificationService } from '@app/core/services/util/notification.service';
 import {
   TranslateLoader,
   TranslateModule,
@@ -20,26 +20,28 @@ import {
   MockAnnounceService,
 } from '@testing/test-helpers';
 import { of } from 'rxjs';
-import { GlobalStorageService } from '@core/services/util/global-storage.service';
-import { ContentAnswerService } from '@core/services/http/content-answer.service';
-import { EventService } from '@core/services/util/event.service';
-import { ContentService } from '@core/services/http/content.service';
-import { ContentGroupService } from '@core/services/http/content-group.service';
-import { AnnounceService } from '@core/services/util/announce.service';
+import {
+  GlobalStorageService,
+  STORAGE_KEYS,
+} from '@app/core/services/util/global-storage.service';
+import { ContentAnswerService } from '@app/core/services/http/content-answer.service';
+import { EventService } from '@app/core/services/util/event.service';
+import { ContentService } from '@app/core/services/http/content.service';
+import { ContentGroupService } from '@app/core/services/http/content-group.service';
+import { AnnounceService } from '@app/core/services/util/announce.service';
 import { SpyLocation } from '@angular/common/testing';
-import { AuthenticationService } from '@core/services/http/authentication.service';
-import { Room } from '@core/models/room';
-import { A11yIntroPipe } from '@core/pipes/a11y-intro.pipe';
+import { AuthenticationService } from '@app/core/services/http/authentication.service';
+import { Room } from '@app/core/models/room';
+import { A11yIntroPipe } from '@app/core/pipes/a11y-intro.pipe';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { UserSettings } from '@core/models/user-settings';
-import { UserService } from '@core/services/http/user.service';
-import { STORAGE_KEYS } from '@core/services/util/global-storage.service';
-import { ClientAuthentication } from '@core/models/client-authentication';
-import { AuthProvider } from '@core/models/auth-provider';
-import { RoutingService } from '@core/services/util/routing.service';
-import { RemoteService } from '@core/services/util/remote.service';
-import { ContentCarouselService } from '@core/services/util/content-carousel.service';
-import { ContentPublishService } from '@core/services/util/content-publish.service';
+import { UserSettings } from '@app/core/models/user-settings';
+import { UserService } from '@app/core/services/http/user.service';
+import { ClientAuthentication } from '@app/core/models/client-authentication';
+import { AuthProvider } from '@app/core/models/auth-provider';
+import { RoutingService } from '@app/core/services/util/routing.service';
+import { RemoteService } from '@app/core/services/util/remote.service';
+import { ContentCarouselService } from '@app/core/services/util/content-carousel.service';
+import { ContentPublishService } from '@app/core/services/util/content-publish.service';
 
 describe('ParticipantContentCarouselPageComponent', () => {
   let component: ParticipantContentCarouselPageComponent;

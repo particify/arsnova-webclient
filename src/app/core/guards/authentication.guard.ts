@@ -7,20 +7,20 @@ import {
 } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { catchError, map, switchMap } from 'rxjs/operators';
-import { AuthenticationService } from '@core/services/http/authentication.service';
+import { AuthenticationService } from '@app/core/services/http/authentication.service';
 import {
   AdvancedSnackBarTypes,
   NotificationService,
-} from '@core/services/util/notification.service';
-import { UserRole } from '@core/models/user-roles.enum';
+} from '@app/core/services/util/notification.service';
+import { UserRole } from '@app/core/models/user-roles.enum';
 import { TranslateService } from '@ngx-translate/core';
-import { RoomService } from '@core/services/http/room.service';
-import { RoomMembershipService } from '@core/services/room-membership.service';
+import { RoomService } from '@app/core/services/http/room.service';
+import { RoomMembershipService } from '@app/core/services/room-membership.service';
 import { environment } from '@environments/environment';
 import { HttpErrorResponse } from '@angular/common/http';
-import { AuthProvider } from '@core/models/auth-provider';
-import { RoutingService } from '@core/services/util/routing.service';
-import { ClientAuthentication } from '@core/models/client-authentication';
+import { AuthProvider } from '@app/core/models/auth-provider';
+import { RoutingService } from '@app/core/services/util/routing.service';
+import { ClientAuthentication } from '@app/core/models/client-authentication';
 
 @Injectable()
 export class AuthenticationGuard implements CanActivate {

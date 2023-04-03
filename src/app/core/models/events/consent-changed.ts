@@ -1,7 +1,7 @@
 import {
   ConsentSettings,
   CookieCategory,
-} from '@core/services/util/consent.service';
+} from '@app/core/services/util/consent.service';
 
 export interface ConsentChangedEventPayload {
   categoriesSettings: CookieCategory[];

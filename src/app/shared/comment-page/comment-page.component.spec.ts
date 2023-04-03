@@ -8,14 +8,14 @@ import {
   TranslateService,
 } from '@ngx-translate/core';
 import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
-import { NotificationService } from '@core/services/util/notification.service';
-import { AuthenticationService } from '@core/services/http/authentication.service';
-import { EventService } from '@core/services/util/event.service';
-import { ClientAuthentication } from '@core/models/client-authentication';
-import { GlobalStorageService } from '@core/services/util/global-storage.service';
-import { AnnounceService } from '@core/services/util/announce.service';
-import { CommentService } from '@core/services/http/comment.service';
-import { HotkeyService } from '@core/services/util/hotkey.service';
+import { NotificationService } from '@app/core/services/util/notification.service';
+import { AuthenticationService } from '@app/core/services/http/authentication.service';
+import { EventService } from '@app/core/services/util/event.service';
+import { ClientAuthentication } from '@app/core/models/client-authentication';
+import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
+import { AnnounceService } from '@app/core/services/util/announce.service';
+import { CommentService } from '@app/core/services/http/comment.service';
+import { HotkeyService } from '@app/core/services/util/hotkey.service';
 import {
   ActivatedRouteStub,
   JsonTranslationLoader,
@@ -25,7 +25,7 @@ import {
   MockAnnounceService,
   MockRenderer2,
 } from '@testing/test-helpers';
-import { A11yIntroPipe } from '@core/pipes/a11y-intro.pipe';
+import { A11yIntroPipe } from '@app/core/pipes/a11y-intro.pipe';
 
 @Component({ selector: 'app-comment-list', template: '' })
 class CommentListStubComponent {

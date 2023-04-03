@@ -7,8 +7,8 @@ import {
   MockGlobalStorageService,
 } from '@testing/test-helpers';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
-import { GlobalStorageService } from '@core/services/util/global-storage.service';
-import { ApiConfigService } from '@core/services/http/api-config.service';
+import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
+import { ApiConfigService } from '@app/core/services/http/api-config.service';
 import { of } from 'rxjs';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 

@@ -1,18 +1,18 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { ContentAnswerService } from '@core/services/http/content-answer.service';
+import { ContentAnswerService } from '@app/core/services/http/content-answer.service';
 import {
   AdvancedSnackBarTypes,
   NotificationService,
-} from '@core/services/util/notification.service';
+} from '@app/core/services/util/notification.service';
 import { TranslateService } from '@ngx-translate/core';
-import { LanguageService } from '@core/services/util/language.service';
-import { ContentType } from '@core/models/content-type.enum';
-import { EventService } from '@core/services/util/event.service';
+import { LanguageService } from '@app/core/services/util/language.service';
+import { ContentType } from '@app/core/models/content-type.enum';
+import { EventService } from '@app/core/services/util/event.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { GlobalStorageService } from '@core/services/util/global-storage.service';
-import { ContentParticipantBaseComponent } from '@participant/content/content-participant-base.component';
-import { MultipleTextsAnswer } from '@core/models/multiple-texts-answer';
-import { ContentWordcloud } from '@core/models/content-wordcloud';
+import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
+import { ContentParticipantBaseComponent } from '@app/participant/content/content-participant-base.component';
+import { MultipleTextsAnswer } from '@app/core/models/multiple-texts-answer';
+import { ContentWordcloud } from '@app/core/models/content-wordcloud';
 
 @Component({
   selector: 'app-content-wordcloud-participant',

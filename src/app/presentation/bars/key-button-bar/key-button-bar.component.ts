@@ -1,6 +1,6 @@
 import { DOCUMENT } from '@angular/common';
 import { Component, Inject, Input } from '@angular/core';
-import { KeyNavBarItem } from '../control-bar/control-bar.component';
+import { KeyNavBarItem } from '@app/presentation/bars/control-bar/control-bar.component';
 
 @Component({
   selector: 'app-key-button-bar',

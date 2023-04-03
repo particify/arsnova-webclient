@@ -1,14 +1,14 @@
 import { Component } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { forkJoin, Observable } from 'rxjs';
-import { ThemeService } from '@core/theme/theme.service';
-import { ContentScale } from '@core/models/content-scale';
-import { ContentService } from '@core/services/http/content.service';
-import { LikertScaleService } from '@core/services/util/likert-scale.service';
-import { StatisticChoiceComponent } from '@shared/statistic-content/statistic-choice/statistic-choice.component';
-import { EventService } from '@core/services/util/event.service';
-import { PresentationService } from '@core/services/util/presentation.service';
-import { AnswerStatistics } from '@core/models/answer-statistics';
+import { ThemeService } from '@app/core/theme/theme.service';
+import { ContentScale } from '@app/core/models/content-scale';
+import { ContentService } from '@app/core/services/http/content.service';
+import { LikertScaleService } from '@app/core/services/util/likert-scale.service';
+import { StatisticChoiceComponent } from '@app/shared/statistic-content/statistic-choice/statistic-choice.component';
+import { EventService } from '@app/core/services/util/event.service';
+import { PresentationService } from '@app/core/services/util/presentation.service';
+import { AnswerStatistics } from '@app/core/models/answer-statistics';
 
 @Component({
   selector: 'app-statistic-scale',

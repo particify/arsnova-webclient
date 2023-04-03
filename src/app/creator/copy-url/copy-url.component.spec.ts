@@ -1,10 +1,10 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { NotificationService } from '@arsnova/app/services/util/notification.service';
+import { NotificationService } from '@app/core/services/util/notification.service';
 import {
   JsonTranslationLoader,
   MockNotificationService,
-} from '@arsnova/testing/test-helpers';
+} from '@testing/test-helpers';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 
 import { CopyUrlComponent } from './copy-url.component';

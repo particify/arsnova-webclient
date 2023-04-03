@@ -1,6 +1,6 @@
 import { TestBed, inject } from '@angular/core/testing';
 
-import { TrackingService } from '@core/services/util/tracking.service';
+import { TrackingService } from '@app/core/services/util/tracking.service';
 import {
   MockEventService,
   MockRouter,
@@ -9,10 +9,10 @@ import {
 } from '@testing/test-helpers';
 import { TranslateService } from '@ngx-translate/core';
 import { Router } from '@angular/router';
-import { EventService } from '@core/services/util/event.service';
-import { ThemeService } from '@core/theme/theme.service';
-import { ConsentService } from '@core/services/util/consent.service';
-import { AuthenticationService } from '@core/services/http/authentication.service';
+import { EventService } from '@app/core/services/util/event.service';
+import { ThemeService } from '@app/core/theme/theme.service';
+import { ConsentService } from '@app/core/services/util/consent.service';
+import { AuthenticationService } from '@app/core/services/http/authentication.service';
 import { Injectable } from '@angular/core';
 import { GlobalStorageService } from './global-storage.service';
 

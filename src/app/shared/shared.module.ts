@@ -1,10 +1,9 @@
 import { NgModule } from '@angular/core';
-import { CommentListComponent } from './comment-list/comment-list.component';
 import { ContentGroupsComponent } from './content-groups/content-groups.component';
 import { SurveyPageComponent } from './survey-page/survey-page.component';
 import { RoomOverviewComponent } from './room-overview/room-overview.component';
 import { CommentPageComponent } from './comment-page/comment-page.component';
-import { CoreModule } from '@core/core.module';
+import { CoreModule } from '@app/core/core.module';
 import { RoomCreateComponent } from './_dialogs/room-create/room-create.component';
 import { CommentComponent } from './comment/comment.component';
 import { CreateCommentComponent } from './_dialogs/create-comment/create-comment.component';
@@ -17,7 +16,6 @@ import { YesNoDialogComponent } from './_dialogs/yes-no-dialog/yes-no-dialog.com
 import { StepperComponent } from './stepper/stepper.component';
 import { CdkStepperModule } from '@angular/cdk/stepper';
 import { RenderedTextComponent } from './rendered-text/rendered-text.component';
-import { UpdateInfoComponent } from '../core/components/update-info/update-info.component';
 import { HintComponent } from './hint/hint.component';
 import { ExtensionPointModule } from '@projects/extension-point/src/lib/extension-point.module';
 import { AnswerCountComponent } from './answer-count/answer-count.component';
@@ -48,6 +46,7 @@ import { ContentTextAnswerComponent } from './content-answers/content-text-answe
 import { MultipleRoundSelectionComponent } from './multiple-round-selection/multiple-round-selection.component';
 import { RouterModule } from '@angular/router';
 import { FooterComponent } from '@app/shared/_standalone/footer/footer.component';
+import { CommentListComponent } from './comment-list/comment-list.component';
 
 @NgModule({
   imports: [
@@ -78,7 +77,6 @@ import { FooterComponent } from '@app/shared/_standalone/footer/footer.component
     YesNoDialogComponent,
     StepperComponent,
     RenderedTextComponent,
-    UpdateInfoComponent,
     HintComponent,
     AnswerCountComponent,
     StatisticContentComponent,

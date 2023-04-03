@@ -4,8 +4,8 @@ import { DemoRoomGuard } from './demo-room.guard';
 import { MockRouter } from '@testing/test-helpers';
 import { Router } from '@angular/router';
 import { Injectable } from '@angular/core';
-import { DemoService } from '@core/services/demo.service';
-import { AuthenticationGuard } from '@core/guards/authentication.guard';
+import { DemoService } from '@app/core/services/demo.service';
+import { AuthenticationGuard } from '@app/core/guards/authentication.guard';
 
 @Injectable()
 class MockDemoService {}

@@ -1,17 +1,17 @@
 import { Component, OnChanges, OnInit } from '@angular/core';
-import { ContentService } from '@core/services/http/content.service';
-import { NotificationService } from '@core/services/util/notification.service';
+import { ContentService } from '@app/core/services/http/content.service';
+import { NotificationService } from '@app/core/services/util/notification.service';
 import { TranslateService } from '@ngx-translate/core';
 import { ActivatedRoute } from '@angular/router';
-import { ContentGroupService } from '@core/services/http/content-group.service';
-import { ContentCreationComponent } from '@creator/content-creation/content-creation/content-creation.component';
+import { ContentGroupService } from '@app/core/services/http/content-group.service';
+import { ContentCreationComponent } from '@app/creator/content-creation/content-creation/content-creation.component';
 import {
   LikertScaleTemplate,
   LIKERT_SCALE_TEMPLATES,
-} from '@core/models/likert-scale-template.enum';
-import { LikertScaleService } from '@core/services/util/likert-scale.service';
-import { ContentScale } from '@core/models/content-scale';
-import { AnnounceService } from '@core/services/util/announce.service';
+} from '@app/core/models/likert-scale-template.enum';
+import { LikertScaleService } from '@app/core/services/util/likert-scale.service';
+import { ContentScale } from '@app/core/models/content-scale';
+import { AnnounceService } from '@app/core/services/util/announce.service';
 
 @Component({
   selector: 'app-content-scale-creation',

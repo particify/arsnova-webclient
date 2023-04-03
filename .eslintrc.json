@@ -5,13 +5,15 @@
     {
       "files": ["*.ts"],
       "parserOptions": {
-        "project": ["tsconfig.json"]
+        "project": ["./tsconfig.json"]
       },
       "extends": [
         "eslint:recommended",
         "plugin:@typescript-eslint/recommended",
         "plugin:@angular-eslint/recommended",
-        "plugin:@angular-eslint/template/process-inline-templates"
+        "plugin:@angular-eslint/template/process-inline-templates",
+        "plugin:import/recommended",
+        "plugin:import/typescript"
       ],
       "rules": {
         "complexity": ["error", 10],
@@ -30,7 +32,18 @@
             "prefix": "app",
             "style": "camelCase"
           }
+        ],
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": ["../*"]
+          }
         ]
+      },
+      "settings": {
+        "import/resolver": {
+          "typescript": {}
+        }
       }
     },
     {

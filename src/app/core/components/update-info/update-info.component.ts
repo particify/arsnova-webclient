@@ -2,12 +2,12 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { UpdateAvailableEvent } from '@angular/service-worker';
 import { Observable } from 'rxjs';
-import { VersionInfo } from '@core/models/version-info';
-import { ApiConfigService } from '@core/services/http/api-config.service';
+import { VersionInfo } from '@app/core/models/version-info';
+import { ApiConfigService } from '@app/core/services/http/api-config.service';
 import {
   GlobalStorageService,
   STORAGE_KEYS,
-} from '@core/services/util/global-storage.service';
+} from '@app/core/services/util/global-storage.service';
 
 interface DialogData {
   afterUpdate: boolean;

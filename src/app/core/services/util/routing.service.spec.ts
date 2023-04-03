@@ -1,6 +1,6 @@
 import { TestBed, inject } from '@angular/core/testing';
 
-import { RoutingService } from '@core/services/util/routing.service';
+import { RoutingService } from '@app/core/services/util/routing.service';
 import {
   MockLangService,
   MockRouter,
@@ -11,10 +11,10 @@ import { TranslateService } from '@ngx-translate/core';
 import { ActivatedRouteSnapshot, Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { SpyLocation } from '@angular/common/testing';
-import { LanguageService } from '@core/services/util/language.service';
-import { GlobalStorageService } from '@core/services/util/global-storage.service';
-import { UserRole } from '@core/models/user-roles.enum';
-import { Room } from '@core/models/room';
+import { LanguageService } from '@app/core/services/util/language.service';
+import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
+import { UserRole } from '@app/core/models/user-roles.enum';
+import { Room } from '@app/core/models/room';
 
 describe('RoutingService', () => {
   beforeEach(() => {

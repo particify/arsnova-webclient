@@ -7,7 +7,7 @@ import {
 } from '@angular/router';
 import { Observable } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
-import { DemoService } from '@core/services/demo.service';
+import { DemoService } from '@app/core/services/demo.service';
 import { AuthenticationGuard } from './authentication.guard';
 
 @Injectable()

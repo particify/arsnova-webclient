@@ -1,14 +1,14 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { QrCodeComponent } from './qr-code.component';
-import { MockThemeService, ActivatedRouteStub } from '@testing/test-helpers';
-import { ThemeService } from '@core/theme/theme.service';
-import { ApiConfigService } from '@core/services/http/api-config.service';
-import { SplitShortIdPipe } from '@core/pipes/split-short-id.pipe';
+import { ThemeService } from '@app/core/theme/theme.service';
+import { ApiConfigService } from '@app/core/services/http/api-config.service';
+import { SplitShortIdPipe } from '@app/core/pipes/split-short-id.pipe';
 import { of } from 'rxjs';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
-import { RoutingService } from '@core/services/util/routing.service';
+import { RoutingService } from '@app/core/services/util/routing.service';
+import { ActivatedRouteStub, MockThemeService } from '@testing/test-helpers';
 
 describe('QrCodeComponent', () => {
   let component: QrCodeComponent;

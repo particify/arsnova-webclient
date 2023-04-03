@@ -1,18 +1,18 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AnswerWithPoints } from '@core/models/answer-with-points';
-import { ContentType } from '@core/models/content-type.enum';
-import { PrioritizationAnswer } from '@core/models/prioritization-answer';
-import { ContentAnswerService } from '@core/services/http/content-answer.service';
-import { GlobalStorageService } from '@core/services/util/global-storage.service';
-import { LanguageService } from '@core/services/util/language.service';
+import { AnswerWithPoints } from '@app/core/models/answer-with-points';
+import { ContentType } from '@app/core/models/content-type.enum';
+import { PrioritizationAnswer } from '@app/core/models/prioritization-answer';
+import { ContentAnswerService } from '@app/core/services/http/content-answer.service';
+import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
+import { LanguageService } from '@app/core/services/util/language.service';
 import {
   AdvancedSnackBarTypes,
   NotificationService,
-} from '@core/services/util/notification.service';
-import { ContentPrioritization } from '@core/models/content-prioritization';
+} from '@app/core/services/util/notification.service';
+import { ContentPrioritization } from '@app/core/models/content-prioritization';
 import { TranslateService } from '@ngx-translate/core';
-import { ContentParticipantBaseComponent } from '@participant/content/content-participant-base.component';
+import { ContentParticipantBaseComponent } from '@app/participant/content/content-participant-base.component';
 
 @Component({
   selector: 'app-content-prioritization-participant',

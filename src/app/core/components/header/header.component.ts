@@ -1,34 +1,34 @@
 import { Component, OnInit, Renderer2 } from '@angular/core';
-import { AuthenticationService } from '@core/services/http/authentication.service';
+import { AuthenticationService } from '@app/core/services/http/authentication.service';
 import {
   AdvancedSnackBarTypes,
   NotificationService,
-} from '@core/services/util/notification.service';
+} from '@app/core/services/util/notification.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ClientAuthentication } from '@core/models/client-authentication';
-import { AuthProvider } from '@core/models/auth-provider';
+import { ClientAuthentication } from '@app/core/models/client-authentication';
+import { AuthProvider } from '@app/core/models/auth-provider';
 import { Location } from '@angular/common';
 import { TranslateService } from '@ngx-translate/core';
-import { UserService } from '@core/services/http/user.service';
-import { EventService } from '@core/services/util/event.service';
-import { DialogService } from '@core/services/util/dialog.service';
+import { UserService } from '@app/core/services/http/user.service';
+import { EventService } from '@app/core/services/util/event.service';
+import { DialogService } from '@app/core/services/util/dialog.service';
 import {
   GlobalStorageService,
   STORAGE_KEYS,
-} from '@core/services/util/global-storage.service';
-import { ThemeService } from '@core/theme/theme.service';
-import { LanguageService } from '@core/services/util/language.service';
-import { RoutingService } from '@core/services/util/routing.service';
-import { ConsentService } from '@core/services/util/consent.service';
-import { HotkeyAction } from '@core/directives/hotkey.directive';
-import { UserRole } from '@core/models/user-roles.enum';
+} from '@app/core/services/util/global-storage.service';
+import { ThemeService } from '@app/core/theme/theme.service';
+import { LanguageService } from '@app/core/services/util/language.service';
+import { RoutingService } from '@app/core/services/util/routing.service';
+import { ConsentService } from '@app/core/services/util/consent.service';
+import { HotkeyAction } from '@app/core/directives/hotkey.directive';
+import { UserRole } from '@app/core/models/user-roles.enum';
 import { ExtensionFactory } from '@projects/extension-point/src/public-api';
 import { MatDialog } from '@angular/material/dialog';
-import { AnnouncementListComponent } from '@shared/announcement-list/announcement-list.component';
-import { AnnouncementService } from '@core/services/http/announcement.service';
-import { AnnouncementState } from '@core/models/announcement-state';
-import { EntityChangeNotification } from '@core/models/events/entity-change-notification';
-import { ChangeType } from '@core/models/events/entity-change-notification';
+import { AnnouncementListComponent } from '@app/shared/announcement-list/announcement-list.component';
+import { AnnouncementService } from '@app/core/services/http/announcement.service';
+import { AnnouncementState } from '@app/core/models/announcement-state';
+import { EntityChangeNotification } from '@app/core/models/events/entity-change-notification';
+import { ChangeType } from '@app/core/models/events/entity-change-notification';
 
 @Component({
   selector: 'app-header',

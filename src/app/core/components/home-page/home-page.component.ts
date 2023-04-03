@@ -1,10 +1,10 @@
 import { AfterContentInit, Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { DialogService } from '@core/services/util/dialog.service';
+import { DialogService } from '@app/core/services/util/dialog.service';
 import {
   GlobalStorageService,
   STORAGE_KEYS,
-} from '@core/services/util/global-storage.service';
+} from '@app/core/services/util/global-storage.service';
 
 @Component({
   selector: 'app-home-page',

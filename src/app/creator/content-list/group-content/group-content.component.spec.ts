@@ -15,33 +15,33 @@ import {
   MockNotificationService,
   MockRouter,
 } from '@testing/test-helpers';
-import { ContentService } from '@core/services/http/content.service';
-import { NotificationService } from '@core/services/util/notification.service';
-import { EventService } from '@core/services/util/event.service';
-import { RoomService } from '@core/services/http/room.service';
-import { ContentGroupService } from '@core/services/http/content-group.service';
-import { AnnounceService } from '@core/services/util/announce.service';
+import { ContentService } from '@app/core/services/http/content.service';
+import { NotificationService } from '@app/core/services/util/notification.service';
+import { EventService } from '@app/core/services/util/event.service';
+import { RoomService } from '@app/core/services/http/room.service';
+import { ContentGroupService } from '@app/core/services/http/content-group.service';
+import { AnnounceService } from '@app/core/services/util/announce.service';
 import {
   ActivatedRoute,
   ActivatedRouteSnapshot,
   Router,
 } from '@angular/router';
-import { RoomStatsService } from '@core/services/http/room-stats.service';
-import { DialogService } from '@core/services/util/dialog.service';
-import { LanguageService } from '@core/services/util/language.service';
-import { LocalFileService } from '@core/services/util/local-file.service';
-import { HotkeyService } from '@core/services/util/hotkey.service';
-import { GlobalStorageService } from '@core/services/util/global-storage.service';
+import { RoomStatsService } from '@app/core/services/http/room-stats.service';
+import { DialogService } from '@app/core/services/util/dialog.service';
+import { LanguageService } from '@app/core/services/util/language.service';
+import { LocalFileService } from '@app/core/services/util/local-file.service';
+import { HotkeyService } from '@app/core/services/util/hotkey.service';
+import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
 import { of } from 'rxjs';
-import { A11yIntroPipe } from '@core/pipes/a11y-intro.pipe';
+import { A11yIntroPipe } from '@app/core/pipes/a11y-intro.pipe';
 import { MatMenuModule } from '@angular/material/menu';
-import { Content } from '@core/models/content';
-import { ContentType } from '@core/models/content-type.enum';
-import { ContentState } from '@core/models/content-state';
-import { ContentGroup } from '@core/models/content-group';
-import { Room } from '@core/models/room';
-import { A11yRenderedBodyPipe } from '@core/pipes/a11y-rendered-body.pipe';
-import { ContentPublishService } from '@core/services/util/content-publish.service';
+import { Content } from '@app/core/models/content';
+import { ContentType } from '@app/core/models/content-type.enum';
+import { ContentState } from '@app/core/models/content-state';
+import { ContentGroup } from '@app/core/models/content-group';
+import { Room } from '@app/core/models/room';
+import { A11yRenderedBodyPipe } from '@app/core/pipes/a11y-rendered-body.pipe';
+import { ContentPublishService } from '@app/core/services/util/content-publish.service';
 
 @Injectable()
 class MockContentService {

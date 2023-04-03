@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { UntypedFormControl, Validators } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
-import { UserService } from '@core/services/http/user.service';
+import { UserService } from '@app/core/services/http/user.service';
 import {
   AdvancedSnackBarTypes,
   NotificationService,
-} from '@core/services/util/notification.service';
-import { EventService } from '@core/services/util/event.service';
-import { PasswordResetErrorStateMatcher } from '@core/components/password-reset/password-reset.component';
+} from '@app/core/services/util/notification.service';
+import { EventService } from '@app/core/services/util/event.service';
+import { PasswordResetErrorStateMatcher } from '@app/core/components/password-reset/password-reset.component';
 import { Router } from '@angular/router';
 
 @Component({

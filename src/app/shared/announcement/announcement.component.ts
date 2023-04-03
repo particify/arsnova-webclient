@@ -1,10 +1,10 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { Announcement } from '@core/models/announcement';
-import { UserRole } from '@core/models/user-roles.enum';
-import { LanguageService } from '@core/services/util/language.service';
-import { MarkdownFeatureset } from '@core/services/http/formatting.service';
+import { Announcement } from '@app/core/models/announcement';
+import { UserRole } from '@app/core/models/user-roles.enum';
+import { LanguageService } from '@app/core/services/util/language.service';
+import { MarkdownFeatureset } from '@app/core/services/http/formatting.service';
 import { TranslateService } from '@ngx-translate/core';
-import { UserAnnouncement } from '@core/models/user-announcement';
+import { UserAnnouncement } from '@app/core/models/user-announcement';
 
 @Component({
   selector: 'app-announcement',

@@ -3,11 +3,11 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import {
   AdvancedSnackBarTypes,
   NotificationService,
-} from '@core/services/util/notification.service';
+} from '@app/core/services/util/notification.service';
 import { TranslateService } from '@ngx-translate/core';
-import { ContentGroupService } from '@core/services/http/content-group.service';
-import { EventService } from '@core/services/util/event.service';
-import { GroupContentComponent } from '@creator/content-list/group-content/group-content.component';
+import { ContentGroupService } from '@app/core/services/http/content-group.service';
+import { EventService } from '@app/core/services/util/event.service';
+import { GroupContentComponent } from '@app/creator/content-list/group-content/group-content.component';
 
 @Component({
   selector: 'app-content-group-creation',

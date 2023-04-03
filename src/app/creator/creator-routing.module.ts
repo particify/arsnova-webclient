@@ -4,22 +4,22 @@ import {
   ExtensionRouteProvider,
   RouteMountPoint,
 } from '@projects/extension-point/src/lib/extension-route';
-import { AuthenticationGuard } from '@core/guards/authentication.guard';
-import { UserRole } from '@core/models/user-roles.enum';
-import { RoomPageComponent } from '@shared/room-page/room-page.component';
+import { AuthenticationGuard } from '@app/core/guards/authentication.guard';
+import { UserRole } from '@app/core/models/user-roles.enum';
+import { RoomPageComponent } from '@app/shared/room-page/room-page.component';
 import { ContentCreationPageComponent } from './content-creation/content-creation-page/content-creation-page.component';
 import { StatisticsPageComponent } from './statistics-page/statistics-page.component';
-import { SurveyPageComponent } from '@shared/survey-page/survey-page.component';
+import { SurveyPageComponent } from '@app/shared/survey-page/survey-page.component';
 import { ContentPresentationComponent } from './content-presentation/content-presentation.component';
-import { CommentPageComponent } from '@shared/comment-page/comment-page.component';
+import { CommentPageComponent } from '@app/shared/comment-page/comment-page.component';
 import { SettingsPageComponent } from './settings-page/settings-page.component';
-import { RoomResolver } from '@core/resolver/room.resolver';
-import { RoomViewUserRoleResolver } from '@core/resolver/room-view-user-role.resolver';
+import { RoomResolver } from '@app/core/resolver/room.resolver';
+import { RoomViewUserRoleResolver } from '@app/core/resolver/room-view-user-role.resolver';
 import { GroupContentComponent } from './content-list/group-content/group-content.component';
-import { RoomUserRoleResolver } from '@core/resolver/room-user-role.resolver';
+import { RoomUserRoleResolver } from '@app/core/resolver/room-user-role.resolver';
 import { CreatorOverviewComponent } from './creator-overview/creator-overview.component';
-import { CommentSettingsResolver } from '@core/resolver/comment-settings.resolver';
-import { ApiConfigResolver } from '@core/resolver/api-config.resolver';
+import { CommentSettingsResolver } from '@app/core/resolver/comment-settings.resolver';
+import { ApiConfigResolver } from '@app/core/resolver/api-config.resolver';
 
 const routes: Routes = [
   {

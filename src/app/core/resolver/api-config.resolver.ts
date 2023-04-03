@@ -4,13 +4,13 @@ import { Resolve } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { Observable, timer } from 'rxjs';
 import { takeUntil, tap } from 'rxjs/operators';
-import { SnackBarAdvancedComponent } from '@core/components/snack-bar-advanced/snack-bar-advanced.component';
-import { ApiConfig } from '@core/models/api-config';
-import { ApiConfigService } from '@core/services/http/api-config.service';
+import { SnackBarAdvancedComponent } from '@app/core/components/snack-bar-advanced/snack-bar-advanced.component';
+import { ApiConfig } from '@app/core/models/api-config';
+import { ApiConfigService } from '@app/core/services/http/api-config.service';
 import {
   AdvancedSnackBarTypes,
   NotificationService,
-} from '@core/services/util/notification.service';
+} from '@app/core/services/util/notification.service';
 
 @Injectable()
 export class ApiConfigResolver implements Resolve<ApiConfig> {

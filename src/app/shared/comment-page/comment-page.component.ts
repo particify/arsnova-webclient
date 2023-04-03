@@ -7,11 +7,11 @@ import {
   ViewChild,
 } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { ClientAuthentication } from '@core/models/client-authentication';
-import { AuthenticationService } from '@core/services/http/authentication.service';
-import { CommentService } from '@core/services/http/comment.service';
-import { Comment } from '@core/models/comment';
-import { CommentListComponent } from '@shared/comment-list/comment-list.component';
+import { ClientAuthentication } from '@app/core/models/client-authentication';
+import { AuthenticationService } from '@app/core/services/http/authentication.service';
+import { CommentService } from '@app/core/services/http/comment.service';
+import { Comment } from '@app/core/models/comment';
+import { CommentListComponent } from '@app/shared/comment-list/comment-list.component';
 
 @Component({
   selector: 'app-comment-page',

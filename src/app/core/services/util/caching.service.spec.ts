@@ -2,7 +2,7 @@ import { TestBed, inject } from '@angular/core/testing';
 
 import { CachingService } from './caching.service';
 import { Injectable } from '@angular/core';
-import { WsConnectorService } from '@core/services/websockets/ws-connector.service';
+import { WsConnectorService } from '@app/core/services/websockets/ws-connector.service';
 import { of } from 'rxjs';
 
 @Injectable()

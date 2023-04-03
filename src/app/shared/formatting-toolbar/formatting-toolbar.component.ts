@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import {
   FormattingOption,
   PATTERN_PLACEHOLDER,
-} from '@core/models/formatting-option';
+} from '@app/core/models/formatting-option';
 
 @Component({
   selector: 'app-formatting-toolbar',

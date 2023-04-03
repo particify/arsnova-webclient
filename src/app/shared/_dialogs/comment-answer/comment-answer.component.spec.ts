@@ -1,10 +1,10 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { CommentAnswerComponent } from './comment-answer.component';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { CommentService } from '@core/services/http/comment.service';
-import { DialogService } from '@core/services/util/dialog.service';
-import { NotificationService } from '@core/services/util/notification.service';
-import { A11yIntroPipe } from '@core/pipes/a11y-intro.pipe';
+import { CommentService } from '@app/core/services/http/comment.service';
+import { DialogService } from '@app/core/services/util/dialog.service';
+import { NotificationService } from '@app/core/services/util/notification.service';
+import { A11yIntroPipe } from '@app/core/pipes/a11y-intro.pipe';
 import {
   JsonTranslationLoader,
   MockMatDialogRef,
@@ -16,7 +16,7 @@ import {
   TranslateService,
 } from '@ngx-translate/core';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { Comment } from '@core/models/comment';
+import { Comment } from '@app/core/models/comment';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 describe('CommentAnswerComponent', () => {

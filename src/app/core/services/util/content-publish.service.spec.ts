@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { ContentGroup } from '@core/models/content-group';
+import { ContentGroup } from '@app/core/models/content-group';
 import { ContentPublishService } from './content-publish.service';
 
 describe('PublishContentService', () => {

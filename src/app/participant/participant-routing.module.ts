@@ -4,18 +4,18 @@ import {
   ExtensionRouteProvider,
   RouteMountPoint,
 } from '@projects/extension-point/src/lib/extension-route';
-import { UserRole } from '@core/models/user-roles.enum';
-import { SurveyPageComponent } from '@shared/survey-page/survey-page.component';
+import { UserRole } from '@app/core/models/user-roles.enum';
+import { SurveyPageComponent } from '@app/shared/survey-page/survey-page.component';
 import { ParticipantContentCarouselPageComponent } from './participant-content-carousel-page/participant-content-carousel-page.component';
-import { CommentPageComponent } from '@shared/comment-page/comment-page.component';
-import { RoomResolver } from '@core/resolver/room.resolver';
-import { RoomViewUserRoleResolver } from '@core/resolver/room-view-user-role.resolver';
-import { AuthenticationGuard } from '@core/guards/authentication.guard';
-import { RoomUserRoleResolver } from '@core/resolver/room-user-role.resolver';
-import { Features } from '@core/models/features.enum';
-import { RoomPageComponent } from '@shared/room-page/room-page.component';
+import { CommentPageComponent } from '@app/shared/comment-page/comment-page.component';
+import { RoomResolver } from '@app/core/resolver/room.resolver';
+import { RoomViewUserRoleResolver } from '@app/core/resolver/room-view-user-role.resolver';
+import { AuthenticationGuard } from '@app/core/guards/authentication.guard';
+import { RoomUserRoleResolver } from '@app/core/resolver/room-user-role.resolver';
+import { Features } from '@app/core/models/features.enum';
+import { RoomPageComponent } from '@app/shared/room-page/room-page.component';
 import { ParticipantOverviewComponent } from './participant-overview/participant-overview.component';
-import { CommentSettingsResolver } from '@core/resolver/comment-settings.resolver';
+import { CommentSettingsResolver } from '@app/core/resolver/comment-settings.resolver';
 
 const routes: Routes = [
   {

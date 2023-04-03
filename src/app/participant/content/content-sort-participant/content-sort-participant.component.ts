@@ -1,19 +1,19 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { ChoiceAnswer } from '@core/models/choice-answer';
+import { ChoiceAnswer } from '@app/core/models/choice-answer';
 import {
   AdvancedSnackBarTypes,
   NotificationService,
-} from '@core/services/util/notification.service';
-import { ContentAnswerService } from '@core/services/http/content-answer.service';
-import { ContentType } from '@core/models/content-type.enum';
+} from '@app/core/services/util/notification.service';
+import { ContentAnswerService } from '@app/core/services/http/content-answer.service';
+import { ContentType } from '@app/core/models/content-type.enum';
 import { TranslateService } from '@ngx-translate/core';
-import { AnswerOption } from '@core/models/answer-option';
-import { ContentChoice } from '@core/models/content-choice';
-import { ContentParticipantBaseComponent } from '@participant/content/content-participant-base.component';
-import { LanguageService } from '@core/services/util/language.service';
+import { AnswerOption } from '@app/core/models/answer-option';
+import { ContentChoice } from '@app/core/models/content-choice';
+import { ContentParticipantBaseComponent } from '@app/participant/content/content-participant-base.component';
+import { LanguageService } from '@app/core/services/util/language.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { GlobalStorageService } from '@core/services/util/global-storage.service';
-import { ContentService } from '@core/services/http/content.service';
+import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
+import { ContentService } from '@app/core/services/http/content.service';
 
 @Component({
   selector: 'app-content-sort-participant',

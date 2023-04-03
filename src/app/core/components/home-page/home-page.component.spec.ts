@@ -2,11 +2,11 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { HomePageComponent } from './home-page.component';
 import { Component, NO_ERRORS_SCHEMA, Input, Renderer2 } from '@angular/core';
-import { EventService } from '@core/services/util/event.service';
+import { EventService } from '@app/core/services/util/event.service';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
-import { DialogService } from '@core/services/util/dialog.service';
-import { GlobalStorageService } from '@core/services/util/global-storage.service';
-import { AnnounceService } from '@core/services/util/announce.service';
+import { DialogService } from '@app/core/services/util/dialog.service';
+import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
+import { AnnounceService } from '@app/core/services/util/announce.service';
 import {
   ActivatedRouteStub,
   JsonTranslationLoader,
@@ -19,7 +19,7 @@ import { HarnessLoader } from '@angular/cdk/testing';
 import { MatButtonHarness } from '@angular/material/button/testing';
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
-import { A11yIntroPipe } from '@core/pipes/a11y-intro.pipe';
+import { A11yIntroPipe } from '@app/core/pipes/a11y-intro.pipe';
 
 @Component({ selector: 'app-room-join', template: '' })
 class RoomJoinStubComponent {

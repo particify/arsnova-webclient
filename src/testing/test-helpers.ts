@@ -1,7 +1,7 @@
 import { TranslateLoader } from '@ngx-translate/core';
 import { BehaviorSubject, Observable, of, ReplaySubject, Subject } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
-import { BroadcastEvent } from '@core/services/util/event.service';
+import { BroadcastEvent } from '@app/core/services/util/event.service';
 import {
   ActivatedRouteSnapshot,
   convertToParamMap,
@@ -11,17 +11,15 @@ import {
   UrlTree,
 } from '@angular/router';
 import { EventEmitter } from '@angular/core';
-import * as TRANSLATION_DE from '../assets/i18n/home/de.json';
-import * as TRANSLATION_EN from '../assets/i18n/home/en.json';
-import { Theme } from '@core/theme/theme.service';
+import { Theme } from '@app/core/theme/theme.service';
 
 // SERVICES - UTIL
 
 // TranslateModule
 
 const TRANSLATIONS = {
-  DE: TRANSLATION_DE,
-  EN: TRANSLATION_EN,
+  DE: {},
+  EN: {},
 };
 
 export class JsonTranslationLoader implements TranslateLoader {

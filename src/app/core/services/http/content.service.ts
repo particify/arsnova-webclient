@@ -1,27 +1,27 @@
 import { Injectable } from '@angular/core';
-import { Content } from '@core/models/content';
+import { Content } from '@app/core/models/content';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { forkJoin, Observable } from 'rxjs';
 import { catchError, map, switchMap, tap } from 'rxjs/operators';
 import { AbstractEntityService } from './abstract-entity.service';
-import { AnswerStatistics } from '@core/models/answer-statistics';
-import { ContentChoice } from '@core/models/content-choice';
-import { WsConnectorService } from '../websockets/ws-connector.service';
+import { AnswerStatistics } from '@app/core/models/answer-statistics';
+import { ContentChoice } from '@app/core/models/content-choice';
+import { WsConnectorService } from '@app/core/services/websockets/ws-connector.service';
 import { IMessage } from '@stomp/stompjs';
 import { TranslateService } from '@ngx-translate/core';
 import {
   AdvancedSnackBarTypes,
   NotificationService,
-} from '../util/notification.service';
-import { ContentType } from '@core/models/content-type.enum';
-import { EventService } from '../util/event.service';
-import { ContentCreated } from '@core/models/events/content-created';
-import { CachingService } from '../util/caching.service';
-import { ExportFileType } from '@core/models/export-file-type';
+} from '@app/core/services/util/notification.service';
+import { ContentType } from '@app/core/models/content-type.enum';
+import { EventService } from '@app/core/services/util/event.service';
+import { ContentCreated } from '@app/core/models/events/content-created';
+import { CachingService } from '@app/core/services/util/caching.service';
+import { ExportFileType } from '@app/core/models/export-file-type';
 import { Router } from '@angular/router';
-import { ContentGroup } from '@core/models/content-group';
-import { DialogService } from '@core/services/util/dialog.service';
-import { PresentationEvent } from '@core/models/events/presentation-events.enum';
+import { ContentGroup } from '@app/core/models/content-group';
+import { DialogService } from '@app/core/services/util/dialog.service';
+import { PresentationEvent } from '@app/core/models/events/presentation-events.enum';
 
 const PARTITION_SIZE = 50;
 

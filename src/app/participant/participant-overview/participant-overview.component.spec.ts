@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { ParticipantOverviewComponent } from './participant-overview.component';
 import { ActivatedRoute, Router } from '@angular/router';
-import { NotificationService } from '@core/services/util/notification.service';
+import { NotificationService } from '@app/core/services/util/notification.service';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import {
   JsonTranslationLoader,
@@ -11,29 +11,29 @@ import {
   MockRouter,
   MockEventService,
   MockAnnounceService,
+  MockLangService,
 } from '@testing/test-helpers';
 import { of } from 'rxjs';
-import { GlobalStorageService } from '@core/services/util/global-storage.service';
-import { EventService } from '@core/services/util/event.service';
-import { ContentGroupService } from '@core/services/http/content-group.service';
-import { AnnounceService } from '@core/services/util/announce.service';
+import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
+import { EventService } from '@app/core/services/util/event.service';
+import { ContentGroupService } from '@app/core/services/http/content-group.service';
+import { AnnounceService } from '@app/core/services/util/announce.service';
 import { SpyLocation } from '@angular/common/testing';
-import { AuthenticationService } from '@core/services/http/authentication.service';
-import { Room } from '@core/models/room';
+import { AuthenticationService } from '@app/core/services/http/authentication.service';
+import { Room } from '@app/core/models/room';
 import { NO_ERRORS_SCHEMA, EventEmitter } from '@angular/core';
-import { UserRole } from '@core/models/user-roles.enum';
-import { SplitShortIdPipe } from '@core/pipes/split-short-id.pipe';
-import { RoomService } from '@core/services/http/room.service';
-import { MockLangService } from '@testing/test-helpers';
-import { RoomStatsService } from '@core/services/http/room-stats.service';
-import { LanguageService } from '@core/services/util/language.service';
-import { WsCommentService } from '@core/services/websockets/ws-comment.service';
-import { CommentService } from '@core/services/http/comment.service';
-import { FeedbackService } from '@core/services/http/feedback.service';
+import { UserRole } from '@app/core/models/user-roles.enum';
+import { SplitShortIdPipe } from '@app/core/pipes/split-short-id.pipe';
+import { RoomService } from '@app/core/services/http/room.service';
+import { RoomStatsService } from '@app/core/services/http/room-stats.service';
+import { LanguageService } from '@app/core/services/util/language.service';
+import { WsCommentService } from '@app/core/services/websockets/ws-comment.service';
+import { CommentService } from '@app/core/services/http/comment.service';
+import { FeedbackService } from '@app/core/services/http/feedback.service';
 import { Message } from '@stomp/stompjs';
-import { A11yIntroPipe } from '@core/pipes/a11y-intro.pipe';
-import { CommentSettingsService } from '@core/services/http/comment-settings.service';
-import { ContentPublishService } from '@core/services/util/content-publish.service';
+import { A11yIntroPipe } from '@app/core/pipes/a11y-intro.pipe';
+import { CommentSettingsService } from '@app/core/services/http/comment-settings.service';
+import { ContentPublishService } from '@app/core/services/util/content-publish.service';
 
 describe('ParticipantOverviewComponent', () => {
   let component: ParticipantOverviewComponent;

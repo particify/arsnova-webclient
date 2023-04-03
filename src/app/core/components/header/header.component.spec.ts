@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { HeaderComponent } from './header.component';
-import { AuthenticationService } from '@core/services/http/authentication.service';
+import { AuthenticationService } from '@app/core/services/http/authentication.service';
 import {
   ActivatedRouteStub,
   JsonTranslationLoader,
@@ -16,20 +16,20 @@ import {
 import {
   AdvancedSnackBarTypes,
   NotificationService,
-} from '@core/services/util/notification.service';
+} from '@app/core/services/util/notification.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { EventService } from '@core/services/util/event.service';
-import { GlobalStorageService } from '@core/services/util/global-storage.service';
+import { EventService } from '@app/core/services/util/event.service';
+import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
 import { HarnessLoader } from '@angular/cdk/testing';
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
-import { LanguageService } from '@core/services/util/language.service';
-import { UserService } from '@core/services/http/user.service';
-import { DialogService } from '@core/services/util/dialog.service';
+import { LanguageService } from '@app/core/services/util/language.service';
+import { UserService } from '@app/core/services/http/user.service';
+import { DialogService } from '@app/core/services/util/dialog.service';
 import { NO_ERRORS_SCHEMA, Renderer2 } from '@angular/core';
-import { ThemeService } from '@core/theme/theme.service';
-import { RoutingService } from '@core/services/util/routing.service';
-import { ConsentService } from '@core/services/util/consent.service';
+import { ThemeService } from '@app/core/theme/theme.service';
+import { RoutingService } from '@app/core/services/util/routing.service';
+import { ConsentService } from '@app/core/services/util/consent.service';
 import { MatMenuModule } from '@angular/material/menu';
 import {
   MatMenuHarness,
@@ -39,12 +39,12 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatButtonHarness } from '@angular/material/button/testing';
-import { ClientAuthentication } from '@core/models/client-authentication';
-import { AuthProvider } from '@core/models/auth-provider';
+import { ClientAuthentication } from '@app/core/models/client-authentication';
+import { AuthProvider } from '@app/core/models/auth-provider';
 import { MatSelectModule } from '@angular/material/select';
 import { BehaviorSubject, of } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
-import { AnnounceService } from '@core/services/util/announce.service';
+import { AnnounceService } from '@app/core/services/util/announce.service';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 export class MockAuthenticationService {

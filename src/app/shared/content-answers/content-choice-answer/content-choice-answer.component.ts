@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { ChoiceAnswer } from '@core/models/choice-answer';
-import { SelectableAnswer } from '@core/models/selectable-answer';
+import { ChoiceAnswer } from '@app/core/models/choice-answer';
+import { SelectableAnswer } from '@app/core/models/selectable-answer';
 
 @Component({
   selector: 'app-content-choice-answer',

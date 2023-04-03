@@ -1,13 +1,13 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { ContentService } from '@core/services/http/content.service';
+import { ContentService } from '@app/core/services/http/content.service';
 import { TranslateService } from '@ngx-translate/core';
-import { ContentText } from '@core/models/content-text';
-import { ContentAnswerService } from '@core/services/http/content-answer.service';
-import { TextAnswer } from '@core/models/text-answer';
-import { StatisticContentBaseComponent } from '@shared/statistic-content/statistic-content-base';
+import { ContentText } from '@app/core/models/content-text';
+import { ContentAnswerService } from '@app/core/services/http/content-answer.service';
+import { TextAnswer } from '@app/core/models/text-answer';
+import { StatisticContentBaseComponent } from '@app/shared/statistic-content/statistic-content-base';
 import { Observable, takeUntil } from 'rxjs';
-import { EventService } from '@core/services/util/event.service';
-import { TextStatistic } from '@core/models/text-statistic';
+import { EventService } from '@app/core/services/util/event.service';
+import { TextStatistic } from '@app/core/models/text-statistic';
 
 @Component({
   selector: 'app-statistic-text',

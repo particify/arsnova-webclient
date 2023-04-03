@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { SettingsPageComponent } from './settings-page.component';
-import { RoomService } from '@core/services/http/room.service';
+import { RoomService } from '@app/core/services/http/room.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
   ActivatedRouteStub,
@@ -12,17 +12,17 @@ import {
   MockNotificationService,
   MockRouter,
 } from '@testing/test-helpers';
-import { EventService } from '@core/services/util/event.service';
+import { EventService } from '@app/core/services/util/event.service';
 import {
   TranslateLoader,
   TranslateModule,
   TranslateService,
 } from '@ngx-translate/core';
 import { NO_ERRORS_SCHEMA, Injectable } from '@angular/core';
-import { GlobalStorageService } from '@core/services/util/global-storage.service';
-import { LanguageService } from '@core/services/util/language.service';
-import { A11yIntroPipe } from '@core/pipes/a11y-intro.pipe';
-import { NotificationService } from '@core/services/util/notification.service';
+import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
+import { LanguageService } from '@app/core/services/util/language.service';
+import { A11yIntroPipe } from '@app/core/pipes/a11y-intro.pipe';
+import { NotificationService } from '@app/core/services/util/notification.service';
 
 @Injectable()
 class MockRoomService {}

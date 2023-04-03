@@ -1,8 +1,8 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { CreateCommentComponent } from './create-comment.component';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { CommentService } from '@core/services/http/comment.service';
-import { NotificationService } from '@core/services/util/notification.service';
+import { CommentService } from '@app/core/services/http/comment.service';
+import { NotificationService } from '@app/core/services/util/notification.service';
 import {
   JsonTranslationLoader,
   MockMatDialogRef,
@@ -12,8 +12,8 @@ import {
 } from '@testing/test-helpers';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { GlobalStorageService } from '@core/services/util/global-storage.service';
-import { LanguageService } from '@core/services/util/language.service';
+import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
+import { LanguageService } from '@app/core/services/util/language.service';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 describe('CreateCommentComponent', () => {

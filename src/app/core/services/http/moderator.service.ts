@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Moderator } from '@core/models/moderator';
+import { Moderator } from '@app/core/models/moderator';
 import { catchError } from 'rxjs/operators';
 import { AbstractHttpService } from './abstract-http.service';
 import { TranslateService } from '@ngx-translate/core';
-import { NotificationService } from '../util/notification.service';
-import { EventService } from '../util/event.service';
-import { UserRole } from '@arsnova/app/models/user-roles.enum';
+import { NotificationService } from '@app/core/services/util/notification.service';
+import { EventService } from '@app/core/services/util/event.service';
+import { UserRole } from '@app/core/models/user-roles.enum';
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' }),

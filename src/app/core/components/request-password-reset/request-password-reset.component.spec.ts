@@ -1,8 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RequestPasswordResetComponent } from './request-password-reset.component';
 import { Router } from '@angular/router';
-import { EventService } from '@core/services/util/event.service';
-import { NotificationService } from '@core/services/util/notification.service';
+import { EventService } from '@app/core/services/util/event.service';
+import { NotificationService } from '@app/core/services/util/notification.service';
 import {
   MockEventService,
   MockNotificationService,
@@ -10,7 +10,7 @@ import {
   JsonTranslationLoader,
 } from '@testing/test-helpers';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
-import { UserService } from '@core/services/http/user.service';
+import { UserService } from '@app/core/services/http/user.service';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 describe('RequestPasswordResetComponent', () => {

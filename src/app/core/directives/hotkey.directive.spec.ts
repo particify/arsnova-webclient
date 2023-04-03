@@ -4,7 +4,7 @@ import {
   HotkeyActionType,
   HotkeyModifier,
   HotkeyService,
-} from '@core/services/util/hotkey.service';
+} from '@app/core/services/util/hotkey.service';
 import { HotkeyDirective } from './hotkey.directive';
 
 @Component({

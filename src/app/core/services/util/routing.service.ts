@@ -4,7 +4,7 @@ import { Location } from '@angular/common';
 import { filter } from 'rxjs/operators';
 import { TranslateService } from '@ngx-translate/core';
 import { LanguageService } from './language.service';
-import { UserRole } from '@core/models/user-roles.enum';
+import { UserRole } from '@app/core/models/user-roles.enum';
 import { GlobalStorageService, STORAGE_KEYS } from './global-storage.service';
 
 export enum RoutePrefix {

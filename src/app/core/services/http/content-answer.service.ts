@@ -1,18 +1,18 @@
 import { Injectable } from '@angular/core';
-import { TextAnswer } from '@core/models/text-answer';
+import { TextAnswer } from '@app/core/models/text-answer';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { AbstractEntityService } from './abstract-entity.service';
-import { ChoiceAnswer } from '@core/models/choice-answer';
+import { ChoiceAnswer } from '@app/core/models/choice-answer';
 import { TranslateService } from '@ngx-translate/core';
-import { NotificationService } from '../util/notification.service';
-import { EventService } from '../util/event.service';
-import { Answer } from '@core/models/answer';
-import { CachingService } from '../util/caching.service';
-import { WsConnectorService } from '../websockets/ws-connector.service';
-import { AnswerOption } from '@core/models/answer-option';
-import { PrioritizationAnswer } from '@core/models/prioritization-answer';
+import { NotificationService } from '@app/core/services/util/notification.service';
+import { EventService } from '@app/core/services/util/event.service';
+import { Answer } from '@app/core/models/answer';
+import { CachingService } from '@app/core/services/util/caching.service';
+import { WsConnectorService } from '@app/core/services/websockets/ws-connector.service';
+import { AnswerOption } from '@app/core/models/answer-option';
+import { PrioritizationAnswer } from '@app/core/models/prioritization-answer';
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' }),

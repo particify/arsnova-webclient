@@ -4,11 +4,11 @@ import { PreviewComponent } from './preview.component';
 import { NO_ERRORS_SCHEMA, Injectable } from '@angular/core';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { JsonTranslationLoader } from '@testing/test-helpers';
-import { ContentAnswerService } from '@core/services/http/content-answer.service';
-import { LikertScaleService } from '@core/services/util/likert-scale.service';
-import { Content } from '@core/models/content';
-import { ContentType } from '@core/models/content-type.enum';
-import { ContentState } from '@core/models/content-state';
+import { ContentAnswerService } from '@app/core/services/http/content-answer.service';
+import { LikertScaleService } from '@app/core/services/util/likert-scale.service';
+import { Content } from '@app/core/models/content';
+import { ContentType } from '@app/core/models/content-type.enum';
+import { ContentState } from '@app/core/models/content-state';
 
 @Injectable()
 class MockContentAnswerService {}

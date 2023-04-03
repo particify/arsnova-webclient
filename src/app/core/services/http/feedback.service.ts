@@ -1,13 +1,13 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import { AbstractHttpService } from './abstract-http.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { EventService } from '../util/event.service';
+import { EventService } from '@app/core/services/util/event.service';
 import { TranslateService } from '@ngx-translate/core';
-import { NotificationService } from '../util/notification.service';
+import { NotificationService } from '@app/core/services/util/notification.service';
 import { Observable, Subscription } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { Message } from '@stomp/stompjs';
-import { WsFeedbackService } from '@core/services/websockets/ws-feedback.service';
+import { WsFeedbackService } from '@app/core/services/websockets/ws-feedback.service';
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' }),

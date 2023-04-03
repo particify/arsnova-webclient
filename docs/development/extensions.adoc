@@ -29,7 +29,7 @@ This examples shows the creation of a simple proof of concept component which de
 [source,typescript]
 ....
 import { Component, ComponentFactoryResolver, EventEmitter, Injectable, Input, OnInit, Output, Type, ViewChild, ViewContainerRef } from '@angular/core';
-import { Extension } from '@arsnova-ext-point/extension';
+import { Extension } from '@ext-point/extension';
 
 @Component({
   selector: 'app-poc-extension',
@@ -70,7 +70,7 @@ export class ProofOfConceptComponent extends Extension implements OnInit {
 ....
 import { NgModule } from '@angular/core';
 import { ProofOfConceptComponent } from './proof-of-concept.component';
-import { Extension } from '@arsnova-ext-point/extension';
+import { Extension } from '@ext-point/extension';
 
 @NgModule({
   declarations: [

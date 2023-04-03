@@ -1,19 +1,19 @@
 import { Component, EventEmitter, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { ContentType } from '@core/models/content-type.enum';
-import { ContentGroupService } from '@core/services/http/content-group.service';
-import { ContentService } from '@core/services/http/content.service';
-import { AnnounceService } from '@core/services/util/announce.service';
-import { NotificationService } from '@core/services/util/notification.service';
-import { AnswerOption } from '@core/models/answer-option';
-import { AdvancedSnackBarTypes } from '@core/services/util/notification.service';
+import { ContentType } from '@app/core/models/content-type.enum';
+import { ContentGroupService } from '@app/core/services/http/content-group.service';
+import { ContentService } from '@app/core/services/http/content.service';
+import { AnnounceService } from '@app/core/services/util/announce.service';
+import { NotificationService } from '@app/core/services/util/notification.service';
+import { AnswerOption } from '@app/core/models/answer-option';
+import { AdvancedSnackBarTypes } from '@app/core/services/util/notification.service';
 import { TranslateService } from '@ngx-translate/core';
 import {
   ContentCreationComponent,
   DisplayAnswer,
-} from '@creator/content-creation/content-creation/content-creation.component';
-import { ContentPrioritization } from '@core/models/content-prioritization';
-import { PrioritizationRoundStatistics } from '@core/models/round-statistics';
+} from '@app/creator/content-creation/content-creation/content-creation.component';
+import { ContentPrioritization } from '@app/core/models/content-prioritization';
+import { PrioritizationRoundStatistics } from '@app/core/models/round-statistics';
 
 @Component({
   selector: 'app-content-prioritization-creation',

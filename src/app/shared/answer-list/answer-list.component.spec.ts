@@ -1,10 +1,10 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
-import { ContentAnswerService } from '@core/services/http/content-answer.service';
-import { ContentService } from '@core/services/http/content.service';
-import { DialogService } from '@core/services/util/dialog.service';
-import { NotificationService } from '@core/services/util/notification.service';
-import { UserRole } from '@core/models/user-roles.enum';
+import { ContentAnswerService } from '@app/core/services/http/content-answer.service';
+import { ContentService } from '@app/core/services/http/content.service';
+import { DialogService } from '@app/core/services/util/dialog.service';
+import { NotificationService } from '@app/core/services/util/notification.service';
+import { UserRole } from '@app/core/models/user-roles.enum';
 import {
   ActivatedRouteStub,
   JsonTranslationLoader,

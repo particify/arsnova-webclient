@@ -8,39 +8,39 @@ import {
   Output,
   ViewChild,
 } from '@angular/core';
-import { Comment } from '@core/models/comment';
-import { CommentService } from '@core/services/http/comment.service';
+import { Comment } from '@app/core/models/comment';
+import { CommentService } from '@app/core/services/http/comment.service';
 import { TranslateService } from '@ngx-translate/core';
-import { LanguageService } from '@core/services/util/language.service';
+import { LanguageService } from '@app/core/services/util/language.service';
 import { Message } from '@stomp/stompjs';
-import { WsCommentService } from '@core/services/websockets/ws-comment.service';
-import { ClientAuthentication } from '@core/models/client-authentication';
-import { Vote } from '@core/models/vote';
-import { UserRole } from '@core/models/user-roles.enum';
-import { Room } from '@core/models/room';
-import { VoteService } from '@core/services/http/vote.service';
+import { WsCommentService } from '@app/core/services/websockets/ws-comment.service';
+import { ClientAuthentication } from '@app/core/models/client-authentication';
+import { Vote } from '@app/core/models/vote';
+import { UserRole } from '@app/core/models/user-roles.enum';
+import { Room } from '@app/core/models/room';
+import { VoteService } from '@app/core/services/http/vote.service';
 import {
   AdvancedSnackBarTypes,
   NotificationService,
-} from '@core/services/util/notification.service';
-import { CorrectWrong } from '@core/models/correct-wrong.enum';
-import { EventService } from '@core/services/util/event.service';
+} from '@app/core/services/util/notification.service';
+import { CorrectWrong } from '@app/core/models/correct-wrong.enum';
+import { EventService } from '@app/core/services/util/event.service';
 import { Observable, Subject, Subscription } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
-import { DialogService } from '@core/services/util/dialog.service';
+import { DialogService } from '@app/core/services/util/dialog.service';
 import {
   GlobalStorageService,
   STORAGE_KEYS,
-} from '@core/services/util/global-storage.service';
-import { AnnounceService } from '@core/services/util/announce.service';
-import { CommentSettingsService } from '@core/services/http/comment-settings.service';
+} from '@app/core/services/util/global-storage.service';
+import { AnnounceService } from '@app/core/services/util/announce.service';
+import { CommentSettingsService } from '@app/core/services/http/comment-settings.service';
 import { Location } from '@angular/common';
-import { HotkeyService } from '@core/services/util/hotkey.service';
-import { RoutingService } from '@core/services/util/routing.service';
-import { UiState } from '@core/models/events/ui/ui-state.enum';
-import { RemoteService } from '@core/services/util/remote.service';
-import { PresentationEvent } from '@core/models/events/presentation-events.enum';
-import { CommentSettings } from '@core/models/comment-settings';
+import { HotkeyService } from '@app/core/services/util/hotkey.service';
+import { RoutingService } from '@app/core/services/util/routing.service';
+import { UiState } from '@app/core/models/events/ui/ui-state.enum';
+import { RemoteService } from '@app/core/services/util/remote.service';
+import { PresentationEvent } from '@app/core/models/events/presentation-events.enum';
+import { CommentSettings } from '@app/core/models/comment-settings';
 
 // Using lowercase letters in enums because they we're also used for parsing incoming WS-messages
 

@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 
 import { TranslateService } from '@ngx-translate/core';
-import { ExportFileType } from '@core/models/export-file-type';
+import { ExportFileType } from '@app/core/models/export-file-type';
 
 const charsets = ['UTF-8', 'UTF-16LE'] as const;
 

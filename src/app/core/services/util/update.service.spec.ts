@@ -6,12 +6,12 @@ import {
   SwUpdate,
   UpdateAvailableEvent,
 } from '@angular/service-worker';
-import { GlobalStorageService } from '@core/services/util/global-storage.service';
-import { EventService } from '@core/services/util/event.service';
-import { DialogService } from '@core/services/util/dialog.service';
-import { NotificationService } from '@core/services/util/notification.service';
+import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
+import { EventService } from '@app/core/services/util/event.service';
+import { DialogService } from '@app/core/services/util/dialog.service';
+import { NotificationService } from '@app/core/services/util/notification.service';
 import { TranslateService } from '@ngx-translate/core';
-import { UpdateImportance, VersionInfo } from '@core/models/version-info';
+import { UpdateImportance, VersionInfo } from '@app/core/models/version-info';
 import { Injectable } from '@angular/core';
 import { MockEventService } from '@testing/test-helpers';
 

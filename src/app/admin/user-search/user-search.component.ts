@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { User } from '@core/models/user';
-import { UserService } from '@core/services/http/user.service';
+import { User } from '@app/core/models/user';
+import { UserService } from '@app/core/services/http/user.service';
 
 @Component({
   selector: 'app-user-search',

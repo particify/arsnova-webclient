@@ -1,10 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ThemeService } from '@core/theme/theme.service';
+import { ThemeService } from '@app/core/theme/theme.service';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
-import { ApiConfigService } from '@core/services/http/api-config.service';
+import { ApiConfigService } from '@app/core/services/http/api-config.service';
 import { ActivatedRoute } from '@angular/router';
-import { RoutingService } from '@core/services/util/routing.service';
+import { RoutingService } from '@app/core/services/util/routing.service';
 
 @Component({
   selector: 'app-qr-code',

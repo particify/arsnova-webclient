@@ -4,7 +4,7 @@ import { extensions } from './presentation.extensions';
 import { ControlBarComponent } from './bars/control-bar/control-bar.component';
 import { ExtensionPointModule } from '@projects/extension-point/src/lib/extension-point.module';
 import { PresentationComponent } from './presentation/presentation.component';
-import { SharedModule } from '@shared/shared.module';
+import { SharedModule } from '@app/shared/shared.module';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoaderFactory } from '@app/translate-http-loader-factory';
 import { HttpClient } from '@angular/common/http';
@@ -26,9 +26,9 @@ import { CoreModule } from '@app/core/core.module';
   ],
   imports: [
     extensions,
+    PresentationRoutingModule,
     CoreModule,
     CreatorModule,
-    PresentationRoutingModule,
     ExtensionPointModule,
     SharedModule,
     TranslateModule.forChild({

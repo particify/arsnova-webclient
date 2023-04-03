@@ -2,11 +2,11 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { AbstractHttpService } from './abstract-http.service';
-import { ApiConfig } from '@core/models/api-config';
+import { ApiConfig } from '@app/core/models/api-config';
 import { TranslateService } from '@ngx-translate/core';
-import { NotificationService } from '../util/notification.service';
+import { NotificationService } from '@app/core/services/util/notification.service';
 import { map, shareReplay, tap } from 'rxjs/operators';
-import { EventService } from '../util/event.service';
+import { EventService } from '@app/core/services/util/event.service';
 import { retryBackoff } from 'backoff-rxjs';
 import * as dayjs from 'dayjs';
 

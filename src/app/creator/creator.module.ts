@@ -6,9 +6,9 @@ import { ContentCreationPageComponent } from './content-creation/content-creatio
 import { ContentScaleCreationComponent } from './content-creation/content-scale-creation/content-scale-creation.component';
 import { ContentTextCreationComponent } from './content-creation/content-text-creation/content-text-creation.component';
 import { ContentYesNoCreationComponent } from './content-creation/content-yes-no-creation/content-yes-no-creation.component';
-import { CoreModule } from '@core/core.module';
+import { CoreModule } from '@app/core/core.module';
 import { RoomComponent } from './settings/room/room.component';
-import { SharedModule } from '@shared/shared.module';
+import { SharedModule } from '@app/shared/shared.module';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { HttpClient } from '@angular/common/http';
 import { ContentPresentationComponent } from './content-presentation/content-presentation.component';
@@ -28,7 +28,7 @@ import { ContentSortCreationComponent } from './content-creation/content-sort-cr
 import { ContentFlashcardCreationComponent } from './content-creation/content-flashcard-creation/content-flashcard-creation.component';
 import { ContentWordcloudCreationComponent } from './content-creation/content-wordcloud-creation/content-wordcloud-creation.component';
 import { ExportComponent } from './_dialogs/export/export.component';
-import { DialogService } from '@core/services/util/dialog.service';
+import { DialogService } from '@app/core/services/util/dialog.service';
 import { PublishContentComponent } from './_dialogs/publish-content/publish-content.component';
 import { CreatorOverviewComponent } from './creator-overview/creator-overview.component';
 import { AnnouncementSettingsComponent } from './settings/announcement-settings/announcement-settings.component';
@@ -37,6 +37,8 @@ import { ContentPrioritizationCreationComponent } from './content-creation/conte
 import { CopyUrlComponent } from './copy-url/copy-url.component';
 import { ClipboardModule } from '@angular/cdk/clipboard';
 import { StartNewRoundComponent } from './start-new-round/start-new-round.component';
+import { StatisticListComponent } from '@app/creator/statistic-list/statistic-list.component';
+import { StatisticsPageComponent } from '@app/creator/statistics-page/statistics-page.component';
 
 @NgModule({
   imports: [
@@ -82,6 +84,8 @@ import { StartNewRoundComponent } from './start-new-round/start-new-round.compon
     CreateAnswerOptionComponent,
     ContentPrioritizationCreationComponent,
     CopyUrlComponent,
+    StatisticListComponent,
+    StatisticsPageComponent,
     StartNewRoundComponent,
   ],
   exports: [

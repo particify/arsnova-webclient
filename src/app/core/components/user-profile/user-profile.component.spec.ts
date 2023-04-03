@@ -6,8 +6,8 @@ import {
   ActivatedRouteSnapshot,
   Router,
 } from '@angular/router';
-import { NotificationService } from '@core/services/util/notification.service';
-import { EventService } from '@core/services/util/event.service';
+import { NotificationService } from '@app/core/services/util/notification.service';
+import { EventService } from '@app/core/services/util/event.service';
 import {
   JsonTranslationLoader,
   MockEventService,
@@ -15,22 +15,22 @@ import {
   MockRouter,
   ActivatedRouteStub,
 } from '@testing/test-helpers';
-import { GlobalStorageService } from '@core/services/util/global-storage.service';
-import { AuthenticationService } from '@core/services/http/authentication.service';
+import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
+import { AuthenticationService } from '@app/core/services/http/authentication.service';
 import { of } from 'rxjs';
-import { UserService } from '@core/services/http/user.service';
+import { UserService } from '@app/core/services/http/user.service';
 import {
   TranslateLoader,
   TranslateModule,
   TranslateService,
 } from '@ngx-translate/core';
-import { DialogService } from '@core/services/util/dialog.service';
-import { ClientAuthentication } from '@core/models/client-authentication';
-import { AuthProvider } from '@core/models/auth-provider';
-import { User } from '@core/models/user';
-import { Person } from '@core/models/person';
+import { DialogService } from '@app/core/services/util/dialog.service';
+import { ClientAuthentication } from '@app/core/models/client-authentication';
+import { AuthProvider } from '@app/core/models/auth-provider';
+import { User } from '@app/core/models/user';
+import { Person } from '@app/core/models/person';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { A11yIntroPipe } from '@core/pipes/a11y-intro.pipe';
+import { A11yIntroPipe } from '@app/core/pipes/a11y-intro.pipe';
 
 describe('UserProfileComponent', () => {
   let component: UserProfileComponent;

@@ -1,7 +1,7 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { DomSanitizer } from '@angular/platform-browser';
-import { FormattingService } from '@core/services/http/formatting.service';
+import { FormattingService } from '@app/core/services/http/formatting.service';
 
 import { RenderedTextComponent } from './rendered-text.component';
 

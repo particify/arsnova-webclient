@@ -1,4 +1,4 @@
-import { LikertScaleTemplate } from '@core/models/likert-scale-template.enum';
+import { LikertScaleTemplate } from '@app/core/models/likert-scale-template.enum';
 
 const scaleOptions = new Map([
   [4, ['positive-2', 'positive-1', 'negative-1', 'negative-2']],

@@ -1,10 +1,10 @@
 import { NgModule } from '@angular/core';
 import { ParticipantRoutingModule } from './participant-routing.module';
 import { extensions } from './participant.extensions';
-import { CoreModule } from '@core/core.module';
+import { CoreModule } from '@app/core/core.module';
 import { ContentChoiceParticipantComponent } from './content/content-choice-participant/content-choice-participant.component';
 import { ContentTextParticipantComponent } from './content/content-text-participant/content-text-participant.component';
-import { SharedModule } from '@shared/shared.module';
+import { SharedModule } from '@app/shared/shared.module';
 import { ParticipantContentCarouselPageComponent } from './participant-content-carousel-page/participant-content-carousel-page.component';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { HttpClient } from '@angular/common/http';
@@ -19,7 +19,7 @@ import { ContentScaleParticipantComponent } from './content/content-scale-partic
 import { SeriesOverviewComponent } from './series-overview/series-overview.component';
 import { ParticipantOverviewComponent } from './participant-overview/participant-overview.component';
 import { ContentPrioritizationParticipantComponent } from './content/content-prioritization-participant/content-prioritization-participant.component';
-import { ContentCarouselService } from '@core/services/util/content-carousel.service';
+import { ContentCarouselService } from '@app/core/services/util/content-carousel.service';
 
 @NgModule({
   imports: [

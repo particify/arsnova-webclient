@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { MultipleTextsAnswer } from '@core/models/multiple-texts-answer';
+import { MultipleTextsAnswer } from '@app/core/models/multiple-texts-answer';
 
 @Component({
   selector: 'app-content-wordcloud-answer',

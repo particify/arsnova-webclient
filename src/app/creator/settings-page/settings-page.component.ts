@@ -1,21 +1,21 @@
 import { Component, OnInit } from '@angular/core';
-import { RoomService } from '@core/services/http/room.service';
-import { Room } from '@core/models/room';
+import { RoomService } from '@app/core/services/http/room.service';
+import { Room } from '@app/core/models/room';
 import { ActivatedRoute, Router } from '@angular/router';
-import { EventService } from '@core/services/util/event.service';
-import { LanguageService } from '@core/services/util/language.service';
+import { EventService } from '@app/core/services/util/event.service';
+import { LanguageService } from '@app/core/services/util/language.service';
 import { TranslateService } from '@ngx-translate/core';
 import {
   GlobalStorageService,
   STORAGE_KEYS,
-} from '@core/services/util/global-storage.service';
+} from '@app/core/services/util/global-storage.service';
 import { Location } from '@angular/common';
 import {
   AdvancedSnackBarTypes,
   NotificationService,
-} from '@core/services/util/notification.service';
-import { HotkeyAction } from '@core/directives/hotkey.directive';
-import { UserRole } from '@core/models/user-roles.enum';
+} from '@app/core/services/util/notification.service';
+import { HotkeyAction } from '@app/core/directives/hotkey.directive';
+import { UserRole } from '@app/core/models/user-roles.enum';
 
 export interface Settings {
   name: string;

@@ -1,4 +1,4 @@
-import { ContentType } from '../content-type.enum';
+import { ContentType } from '@app/core/models/content-type.enum';
 
 export class ContentCreated {
   type: string;

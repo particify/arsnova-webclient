@@ -1,23 +1,23 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { ClientAuthentication } from '@core/models/client-authentication';
-import { UserRole } from '@core/models/user-roles.enum';
-import { RoomService } from '@core/services/http/room.service';
-import { EventService } from '@core/services/util/event.service';
-import { RoomMembershipService } from '@core/services/room-membership.service';
-import { AuthenticationService } from '@core/services/http/authentication.service';
+import { ClientAuthentication } from '@app/core/models/client-authentication';
+import { UserRole } from '@app/core/models/user-roles.enum';
+import { RoomService } from '@app/core/services/http/room.service';
+import { EventService } from '@app/core/services/util/event.service';
+import { RoomMembershipService } from '@app/core/services/room-membership.service';
+import { AuthenticationService } from '@app/core/services/http/authentication.service';
 import { Observable, of, Subject, Subscription, zip } from 'rxjs';
 import {
   AdvancedSnackBarTypes,
   NotificationService,
-} from '@core/services/util/notification.service';
+} from '@app/core/services/util/notification.service';
 import { TranslateService } from '@ngx-translate/core';
 import { Router } from '@angular/router';
-import { DialogService } from '@core/services/util/dialog.service';
+import { DialogService } from '@app/core/services/util/dialog.service';
 import {
   GlobalStorageService,
   STORAGE_KEYS,
-} from '@core/services/util/global-storage.service';
-import { Membership } from '@core/models/membership';
+} from '@app/core/services/util/global-storage.service';
+import { Membership } from '@app/core/models/membership';
 import {
   filter,
   map,
@@ -26,13 +26,13 @@ import {
   takeUntil,
   tap,
 } from 'rxjs/operators';
-import { RoomSummary } from '@core/models/room-summary';
-import { RoomDeleted } from '@core/models/events/room-deleted';
-import { AuthProvider } from '@core/models/auth-provider';
-import { MembershipsChanged } from '@core/models/events/memberships-changed';
+import { RoomSummary } from '@app/core/models/room-summary';
+import { RoomDeleted } from '@app/core/models/events/room-deleted';
+import { AuthProvider } from '@app/core/models/auth-provider';
+import { MembershipsChanged } from '@app/core/models/events/memberships-changed';
 import { ExtensionFactory } from '@projects/extension-point/src/lib/extension-factory';
-import { RoutingService } from '@core/services/util/routing.service';
-import { RoomCreated } from '@core/models/events/room-created';
+import { RoutingService } from '@app/core/services/util/routing.service';
+import { RoomCreated } from '@app/core/models/events/room-created';
 
 const ACTIVE_ROOM_THRESHOLD = 15;
 
