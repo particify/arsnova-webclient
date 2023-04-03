@@ -634,7 +634,7 @@ export class GroupContentComponent
   dropContent(event: CdkDragDrop<string[]>) {
     const current = event.currentIndex;
     const prev = event.previousIndex;
-    this.moveItem(current, prev);
+    this.moveItem(prev, current);
     this.sortPublishedIndexes(prev, current);
   }
 
@@ -810,10 +810,11 @@ export class GroupContentComponent
   }
 
   isPublished(index: number): boolean {
-    return this.contentPublishService.isIndexPublished(
-      this.contentGroup,
-      index
-    );
+    // Using this.firstPublishedIndex and this.lastPublishedIndex here to show correct state for sorting mode as well
+    const group = this.contentGroup;
+    group.firstPublishedIndex = this.firstPublishedIndex;
+    group.lastPublishedIndex = this.lastPublishedIndex;
+    return this.contentPublishService.isIndexPublished(group, index);
   }
 
   exportToCsv() {
