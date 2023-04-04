@@ -11,13 +11,14 @@
   >
     <canvas class="chart" id="{{ chartId }}"></canvas>
   </div>
-  <mat-list *ngIf="!isLoading">
-    <mat-list-item
-      class="answer-list-item"
+  <div role="list" *ngIf="!isLoading">
+    <div
+      class="answer-item"
+      role="listitem"
       *ngFor="let answer of answerOptions; let i = index"
       [ngClass]="{
         correct: showCorrect,
-        'no-background answer-list-item': isPresentation,
+        'no-background answer-text': isPresentation,
         'all-animations': !isPresentation
       }"
     >
@@ -28,6 +29,6 @@
           [renderedText]="answer.renderedLabel"
         ></app-rendered-text>
       </div>
-    </mat-list-item>
-  </mat-list>
+    </div>
+  </div>
 </div>
