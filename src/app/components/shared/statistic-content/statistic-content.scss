@@ -13,12 +13,13 @@
   max-height: 500px;
 }
 
-.mat-mdc-list-item {
+.answer-item {
   background-color: var(--background);
   margin-bottom: 10px;
-  border-radius: 5px;
+  border-radius: 4px;
   align-items: center;
   color: var(--on-surface);
+  padding: 0 16px;
 }
 
 .all-animations {
@@ -29,6 +30,11 @@
   font-size: 18px;
   font-weight: $font-weight-bold;
   margin-right: 12px;
+}
+
+.answer-text {
+  font-size: 12px;
+  font-weight: $font-weight-bold;
 }
 
 .correct {
