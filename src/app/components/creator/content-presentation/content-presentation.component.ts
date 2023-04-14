@@ -87,11 +87,12 @@ export class ContentPresentationComponent implements OnInit, OnDestroy {
     );
     this.isPresentation = this.route.snapshot.data.isPresentation;
     const routeSeriesName = this.route.snapshot.params['seriesName'];
-    const routeContentIndex = this.route.snapshot.params['contentIndex'];
-    const lastIndex = this.globalStorageService.getItem(
-      STORAGE_KEYS.LAST_INDEX
-    );
-    this.entryIndex = (lastIndex > -1 ? lastIndex : routeContentIndex - 1) || 0;
+    // Use index from route if available. Otherwise use the stored index or 0 as fallback.
+    const routeContentIndex =
+      (this.route.snapshot.params['contentIndex'] ?? 0) - 1;
+    const lastIndex =
+      this.globalStorageService.getItem(STORAGE_KEYS.LAST_INDEX) ?? 0;
+    this.entryIndex = routeContentIndex > -1 ? routeContentIndex : lastIndex;
     this.contentGroupName =
       this.globalStorageService.getItem(STORAGE_KEYS.LAST_GROUP) ||
       routeSeriesName;
