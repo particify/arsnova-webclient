@@ -33,7 +33,7 @@
 }
 
 .mat-mdc-list-item:hover,
-.mat-list-item:focus-within {
+.mat-mdc-list-item:focus-within {
   * > .button-bar {
     @include show-button-bar;
   }
