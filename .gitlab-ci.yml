@@ -105,6 +105,7 @@ docker_image:
 
 prepare_dependency_cache:
   stage: .pre
+  image: particifydev/chromebrowser-nodejs:$CHROME_IMAGE_TAG
   rules:
     - if: $CI_PIPELINE_SOURCE == "schedule"
   variables:
