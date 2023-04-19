@@ -34,7 +34,7 @@ export class ContentGroupsComponent implements OnInit {
     if (this.role === UserRole.PARTICIPANT) {
       role = UserRole.PARTICIPANT.toLowerCase();
     } else {
-      role = UserRole.CREATOR.toLowerCase();
+      role = UserRole.OWNER.toLowerCase();
     }
     this.router.navigate([
       role,

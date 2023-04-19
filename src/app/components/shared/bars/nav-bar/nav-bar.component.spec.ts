@@ -213,7 +213,7 @@ describe('NavBarComponent', () => {
     expect(feedbackButtonElement).toBeNull('Feedback button should be null.');
   });
 
-  it('should HAVE navigation button for feedback if locked in role CREATOR', async () => {
+  it('should HAVE navigation button for feedback if locked in role OWNER', async () => {
     const room = new Room();
     room.settings = {
       feedbackLocked: true,
@@ -221,8 +221,8 @@ describe('NavBarComponent', () => {
     room.shortId = '12345678';
     const data = {
       room: room,
-      userRole: UserRole.CREATOR,
-      viewRole: UserRole.CREATOR,
+      userRole: UserRole.OWNER,
+      viewRole: UserRole.OWNER,
     };
     route.data = of(data);
     fixture.detectChanges();
@@ -240,8 +240,8 @@ describe('NavBarComponent', () => {
     room.shortId = '12345678';
     const data = {
       room: room,
-      userRole: UserRole.CREATOR,
-      viewRole: UserRole.CREATOR,
+      userRole: UserRole.OWNER,
+      viewRole: UserRole.OWNER,
     };
     route.data = of(data);
     const stats = {
@@ -269,7 +269,7 @@ describe('NavBarComponent', () => {
     room.shortId = '12345678';
     const data = {
       room: room,
-      viewRole: UserRole.CREATOR,
+      viewRole: UserRole.OWNER,
     };
     route.data = of(data);
     fixture.detectChanges();
@@ -287,7 +287,7 @@ describe('NavBarComponent', () => {
     room.shortId = '12345678';
     const data = {
       room: room,
-      viewRole: UserRole.CREATOR,
+      viewRole: UserRole.OWNER,
     };
     route.data = of(data);
     fixture.detectChanges();
@@ -311,7 +311,7 @@ describe('NavBarComponent', () => {
     room.shortId = '12345678';
     const data = {
       room: room,
-      viewRole: UserRole.CREATOR,
+      viewRole: UserRole.OWNER,
     };
     route.data = of(data);
     fixture.detectChanges();
@@ -348,7 +348,7 @@ describe('NavBarComponent', () => {
     room.shortId = '12345678';
     const data = {
       room: room,
-      viewRole: UserRole.CREATOR,
+      viewRole: UserRole.OWNER,
     };
     route.data = of(data);
     fixture.detectChanges();
@@ -368,7 +368,7 @@ describe('NavBarComponent', () => {
     room.shortId = '12345678';
     const data = {
       room: room,
-      viewRole: UserRole.CREATOR,
+      viewRole: UserRole.OWNER,
     };
     route.data = of(data);
     fixture.detectChanges();
@@ -392,7 +392,7 @@ describe('NavBarComponent', () => {
     room.shortId = '12345678';
     const data = {
       room: room,
-      viewRole: UserRole.CREATOR,
+      viewRole: UserRole.OWNER,
     };
     route.data = of(data);
     fixture.detectChanges();
@@ -416,7 +416,7 @@ describe('NavBarComponent', () => {
     room.shortId = '12345678';
     const data = {
       room: room,
-      viewRole: UserRole.CREATOR,
+      viewRole: UserRole.OWNER,
     };
     route.data = of(data);
     const stats = {
@@ -450,7 +450,7 @@ describe('NavBarComponent', () => {
     room.shortId = '12345678';
     const data = {
       room: room,
-      viewRole: UserRole.CREATOR,
+      viewRole: UserRole.OWNER,
     };
     route.data = of(data);
     const stats = {
@@ -489,7 +489,7 @@ describe('NavBarComponent', () => {
     room.shortId = '12345678';
     const data = {
       room: room,
-      viewRole: UserRole.CREATOR,
+      viewRole: UserRole.OWNER,
     };
     route.data = of(data);
     const stats = {

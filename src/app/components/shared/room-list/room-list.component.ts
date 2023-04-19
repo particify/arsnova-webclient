@@ -64,9 +64,9 @@ export class RoomListComponent implements OnInit, OnDestroy {
   roles: Map<UserRole, string> = new Map<UserRole, string>();
   showImportMenu = false;
 
-  creatorRole = UserRole.CREATOR;
+  creatorRole = UserRole.OWNER;
   participantRole = UserRole.PARTICIPANT;
-  executiveModeratorRole = UserRole.EXECUTIVE_MODERATOR;
+  executiveModeratorRole = UserRole.MODERATOR;
   editorRole = UserRole.EDITOR;
 
   constructor(
@@ -111,9 +111,9 @@ export class RoomListComponent implements OnInit, OnDestroy {
     ];
     const roles = [
       UserRole.PARTICIPANT,
-      UserRole.EXECUTIVE_MODERATOR,
+      UserRole.MODERATOR,
       UserRole.EDITOR,
-      UserRole.CREATOR,
+      UserRole.OWNER,
     ];
     this.translateService.get(roleKeys).subscribe(() => {
       for (let i = 0; i < roleKeys.length; i++) {
@@ -234,7 +234,7 @@ export class RoomListComponent implements OnInit, OnDestroy {
   }
 
   openDeleteRoomDialog(room: RoomDataView) {
-    if (room.membership.roles.indexOf(UserRole.CREATOR) === -1) {
+    if (room.membership.roles.indexOf(UserRole.OWNER) === -1) {
       const dialogRef = this.dialogService.openDeleteDialog(
         'room-membership',
         'really-cancel-room-membership',

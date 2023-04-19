@@ -199,7 +199,7 @@ export class SurveyPageComponent
     ) {
       this.type = this.room.extensions.feedback['type'];
     } else {
-      if (this.role === UserRole.CREATOR) {
+      if (this.role === UserRole.OWNER) {
         this.roomService.changeFeedbackType(this.roomId, this.type);
       }
     }
@@ -299,14 +299,14 @@ export class SurveyPageComponent
           this.loadConfig(room);
           this.isClosed = false;
         });
-        if (this.role === UserRole.CREATOR) {
+        if (this.role === UserRole.OWNER) {
           this.remoteService.updateFeedbackStateChange(true);
         }
         break;
       case FeedbackMessageType.STOPPED:
         this.room.settings['feedbackLocked'] = true;
         this.isClosed = true;
-        if (this.role === UserRole.CREATOR) {
+        if (this.role === UserRole.OWNER) {
           this.remoteService.updateFeedbackStateChange(false);
         }
         break;

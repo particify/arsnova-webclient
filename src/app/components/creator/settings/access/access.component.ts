@@ -48,7 +48,7 @@ export class AccessComponent implements OnInit, OnDestroy {
   isLoading = true;
   selectedRole: UserRole;
   UserRole: typeof UserRole = UserRole;
-  roles: UserRole[] = [UserRole.EXECUTIVE_MODERATOR];
+  roles: UserRole[] = [UserRole.MODERATOR];
   isGuest = false;
   loginIdIsEmail = false;
 
@@ -129,7 +129,7 @@ export class AccessComponent implements OnInit, OnDestroy {
             });
           }
           this.moderators = this.moderators.sort((a) => {
-            return a.role === UserRole.CREATOR ? -1 : 1;
+            return a.role === UserRole.OWNER ? -1 : 1;
           });
           this.isLoading = false;
         });

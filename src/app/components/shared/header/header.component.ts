@@ -91,7 +91,7 @@ export class HeaderComponent implements OnInit {
     this.eventService
       .on('EntityChangeNotification')
       .subscribe((notification: EntityChangeNotification) => {
-        if (this.role !== UserRole.CREATOR) {
+        if (this.role !== UserRole.OWNER) {
           const entityType = notification.payload.entityType;
           const changeType = notification.payload.changeType;
           if (

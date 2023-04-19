@@ -144,10 +144,10 @@ export class CommentComponent implements OnInit, OnDestroy {
       case UserRole.PARTICIPANT:
         this.isParticipant = true;
         break;
-      case UserRole.CREATOR:
+      case UserRole.OWNER:
         this.isCreator = true;
         break;
-      case UserRole.EXECUTIVE_MODERATOR:
+      case UserRole.MODERATOR:
       /* fall through */
       case UserRole.EDITOR:
         this.isModerator = true;

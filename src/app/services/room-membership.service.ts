@@ -134,8 +134,8 @@ export class RoomMembershipService extends AbstractHttpService<Membership> {
     const membership = new Membership();
     membership.roomId = roomId;
     membership.roomShortId = roomShortId;
-    membership.roles = [UserRole.CREATOR];
-    membership.primaryRole = UserRole.CREATOR;
+    membership.roles = [UserRole.OWNER];
+    membership.primaryRole = UserRole.OWNER;
     this.newOwnerships.unshift(membership);
   }
 
@@ -230,15 +230,14 @@ export class RoomMembershipService extends AbstractHttpService<Membership> {
       return true;
     }
     switch (checkedRole) {
-      case UserRole.CREATOR:
+      case UserRole.OWNER:
         return true;
       case UserRole.EDITOR:
         return (
-          [UserRole.EXECUTIVE_MODERATOR, UserRole.PARTICIPANT].indexOf(
-            substitution
-          ) !== -1
+          [UserRole.MODERATOR, UserRole.PARTICIPANT].indexOf(substitution) !==
+          -1
         );
-      case UserRole.EXECUTIVE_MODERATOR:
+      case UserRole.MODERATOR:
         return substitution === UserRole.PARTICIPANT;
       default:
         return false;

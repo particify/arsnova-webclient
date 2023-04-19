@@ -85,7 +85,7 @@ describe('RoutingService', () => {
     [RoutingService],
     (service: RoutingService) => {
       service.currentRoute = '';
-      service.getBackRoute(UserRole.EXECUTIVE_MODERATOR, '', ':shortId');
+      service.getBackRoute(UserRole.MODERATOR, '', ':shortId');
       expect(service.backRoute).toEqual(['user']);
     }
   ));
@@ -96,13 +96,13 @@ describe('RoutingService', () => {
       const snapshot = new ActivatedRouteSnapshot();
       snapshot.params = { shortId: '12345678' };
       snapshot.data = {
-        userRole: UserRole.CREATOR,
+        userRole: UserRole.OWNER,
         room: new Room(),
-        viewRole: UserRole.EXECUTIVE_MODERATOR,
+        viewRole: UserRole.MODERATOR,
       };
       service.getRoomUrlData(snapshot);
       service.currentRoute = 'comments';
-      service.getBackRoute(UserRole.EXECUTIVE_MODERATOR, '', ':shortId');
+      service.getBackRoute(UserRole.MODERATOR, '', ':shortId');
       expect(service.backRoute).toEqual(['edit', '12345678']);
     }
   ));

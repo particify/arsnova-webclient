@@ -52,7 +52,7 @@ export class RoomComponent implements OnInit {
     langService.langEmitter.subscribe((lang) => translateService.use(lang));
   }
   ngOnInit(): void {
-    this.isCreator = this.route.snapshot.data.userRole === UserRole.CREATOR;
+    this.isCreator = this.route.snapshot.data.userRole === UserRole.OWNER;
   }
 
   openDeleteRoomDialog(): void {

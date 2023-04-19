@@ -42,7 +42,7 @@ describe('RoomPageComponent', () => {
     room: {
       id: '1234',
     },
-    viewRole: UserRole.CREATOR,
+    viewRole: UserRole.OWNER,
   };
 
   const activatedRouteStub = new ActivatedRouteStub(null, data);

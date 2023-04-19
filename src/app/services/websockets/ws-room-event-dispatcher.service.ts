@@ -58,13 +58,7 @@ export class WsRoomEventDispatcherService {
       .subscribe((msg) => {
         this.dispatchDataChangeEvents(msg, room, false);
       });
-    if (
-      [
-        UserRole.CREATOR,
-        UserRole.EDITOR,
-        UserRole.EXECUTIVE_MODERATOR,
-      ].includes(role)
-    ) {
+    if ([UserRole.OWNER, UserRole.EDITOR, UserRole.MODERATOR].includes(role)) {
       this.wsConnector
         .getWatcher(`/topic/${room.id}.moderator.changes.stream`)
         .pipe(takeUntil(this.roomChanged$))
