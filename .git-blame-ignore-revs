@@ -1,0 +1,11 @@
+# Add commits which apply new formatting on a large scale to this file.
+# Do not add commits which contain any code changes even if they are minor.
+
+# 2020-01-13 - Fix codestyle in several components
+67bab1641e674338a650912b780a537216ce7a66
+
+# 2022-12-20 - Apply Prettier auto formatting
+008eab9ddf62ce28578362ab975dcc2c7ebca5ae
+
+# 2022-12-20 - Apply Stylelint auto fixing
+d4b080738e4c8d1e60c3ce53121a8dc4b3427639

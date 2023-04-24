@@ -1,3 +1,4 @@
 .angular
+.git-blame-ignore-revs
 .pnp.*
 dist
