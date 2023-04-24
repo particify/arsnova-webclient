@@ -232,7 +232,7 @@ export class RoomMembershipService extends AbstractHttpService<Membership> {
     switch (checkedRole) {
       case UserRole.CREATOR:
         return true;
-      case UserRole.EDITING_MODERATOR:
+      case UserRole.EDITOR:
         return (
           [UserRole.EXECUTIVE_MODERATOR, UserRole.PARTICIPANT].indexOf(
             substitution

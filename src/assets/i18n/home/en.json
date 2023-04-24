@@ -189,7 +189,7 @@
     "a11y-editing-moderator-role": "Moderator",
     "creator-role": "Room creator",
     "executive-moderator-role": "Moderator",
-    "editing-moderator-role": "Moderator",
+    "editor-role": "Editor",
     "filter": "Here you can filter the list of rooms.",
     "filter-message": "Search rooms",
     "no-rooms-found": "No rooms found.",

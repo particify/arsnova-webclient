@@ -61,7 +61,7 @@ export class WsRoomEventDispatcherService {
     if (
       [
         UserRole.CREATOR,
-        UserRole.EDITING_MODERATOR,
+        UserRole.EDITOR,
         UserRole.EXECUTIVE_MODERATOR,
       ].includes(role)
     ) {

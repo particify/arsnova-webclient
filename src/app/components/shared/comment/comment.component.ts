@@ -149,7 +149,7 @@ export class CommentComponent implements OnInit, OnDestroy {
         break;
       case UserRole.EXECUTIVE_MODERATOR:
       /* fall through */
-      case UserRole.EDITING_MODERATOR:
+      case UserRole.EDITOR:
         this.isModerator = true;
     }
   }

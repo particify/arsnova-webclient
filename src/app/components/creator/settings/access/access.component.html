@@ -29,25 +29,37 @@
       <input
         matInput
         type="email"
-        autocomplete="disabled"
         [(ngModel)]="loginId"
         [formControl]="usernameFormControl"
-        name="username"
       />
     </mat-form-field>
-    <mat-form-field
-      *ngIf="!isLoading"
-      class="no-field-hint"
-      appearance="outline"
-      fxFlex
-    >
-      <mat-label>{{ 'settings.role' | translate }}</mat-label>
-      <mat-select [value]="selectedRole" [disabled]="roles.length === 1">
-        <mat-option *ngFor="let role of roles" [value]="role">
-          {{ 'settings.' + role.name | translate }}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
+
+    <div fxFlex>
+      <lib-extension-point
+        *ngIf="!isLoading"
+        extensionId="role-selection"
+        [extensionData]="{ disabled: isGuest }"
+        (extensionEvent)="updateSelectedRole($event)"
+      >
+        <mat-form-field
+          class="role-select no-field-hint"
+          appearance="outline"
+          fxFill
+        >
+          <mat-label>{{ 'settings.role' | translate }}</mat-label>
+
+          <mat-select
+            [(ngModel)]="selectedRole"
+            [disabled]="isGuest || roles.length === 1"
+          >
+            <mat-option *ngFor="let role of roles" [value]="role">
+              {{ 'settings.' + role.toLowerCase() | translate }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </lib-extension-point>
+    </div>
+
     <button
       [hidden]="canBeAdded()"
       mat-stroked-button
@@ -57,7 +69,7 @@
       [disabled]="isGuest || !currentInputIsChecked || loginId.length === 0"
       id="add-button"
       appTrackInteraction="Room member role invited"
-      [appTrackName]="selectedRole.name"
+      [appTrackName]="selectedRole"
     >
       <mat-icon>mail</mat-icon>
       {{ 'settings.invite-user' | translate }}
@@ -71,7 +83,7 @@
       [disabled]="isGuest || !currentInputIsChecked || loginId.length === 0"
       id="invite-button"
       appTrackInteraction="Room member role assigned"
-      [appTrackName]="selectedRole.name"
+      [appTrackName]="selectedRole"
     >
       <mat-icon>add</mat-icon>
       {{ 'settings.add-user' | translate }}
@@ -92,10 +104,9 @@
             class="user-character-container"
             fxLayoutAlign="center center"
             [ngClass]="{
-              'secondary secondary-variant':
-                moderator.role === UserRole.EXECUTIVE_MODERATOR,
+              'role-moderator': moderator.role === UserRole.EXECUTIVE_MODERATOR,
               'primary primary-variant': moderator.role === UserRole.CREATOR,
-              'role-participant': moderator.role === UserRole.PARTICIPANT
+              'secondary secondary-variant': moderator.role === UserRole.EDITOR
             }"
           >
             <p class="user-character">

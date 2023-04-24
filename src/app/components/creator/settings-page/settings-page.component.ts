@@ -15,6 +15,7 @@ import {
   NotificationService,
 } from '../../../services/util/notification.service';
 import { HotkeyAction } from '../../../directives/hotkey.directive';
+import { UserRole } from '@arsnova/app/models/user-roles.enum';
 
 export interface Settings {
   name: string;
@@ -44,6 +45,7 @@ export class SettingsPageComponent implements OnInit {
   room: Room;
   isLoading = true;
   currentRoute: string;
+  isCreator = false;
 
   HotkeyAction = HotkeyAction;
 
@@ -88,6 +90,7 @@ export class SettingsPageComponent implements OnInit {
       },
     ];
     setTimeout(() => {
+      this.isCreator = this.route.snapshot.data.userRole === UserRole.CREATOR;
       this.currentRoute =
         this.route.snapshot.params['settingsName'] || this.settings[0].name;
       this.route.data.subscribe((data) => {

@@ -121,7 +121,7 @@ export class RoomOverviewComponent implements OnDestroy {
   initializeStats(viewRole: UserRole) {
     const extendedView = [
       UserRole.CREATOR,
-      UserRole.EDITING_MODERATOR,
+      UserRole.EDITOR,
       UserRole.EXECUTIVE_MODERATOR,
     ].includes(viewRole);
     this.roomStatsService

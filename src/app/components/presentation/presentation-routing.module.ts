@@ -50,7 +50,7 @@ const routes: Routes = [
           component: PresentationComponent,
           canActivate: [AuthenticationGuard],
           data: {
-            requiredRole: UserRole.CREATOR,
+            requiredRole: UserRole.EDITOR,
             isPresentation: true,
           },
           resolve: {

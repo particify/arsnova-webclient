@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Room } from '../../../../models/room';
 import {
   AdvancedSnackBarTypes,
@@ -6,7 +6,7 @@ import {
 } from '../../../../services/util/notification.service';
 import { TranslateService } from '@ngx-translate/core';
 import { RoomService } from '../../../../services/http/room.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { EventService } from '../../../../services/util/event.service';
 import { RoomDeleted } from '../../../../models/events/room-deleted';
 import { LanguageService } from '../../../../services/util/language.service';
@@ -17,13 +17,14 @@ import {
 } from '../../../../services/http/formatting.service';
 import { HINT_TYPES } from '../../../shared/hint/hint.component';
 import { UpdateEvent } from '../../settings-page/settings-page.component';
+import { UserRole } from '../../../../models/user-roles.enum';
 
 @Component({
   selector: 'app-room-edit',
   templateUrl: './room.component.html',
   styleUrls: ['./room.component.scss'],
 })
-export class RoomComponent {
+export class RoomComponent implements OnInit {
   @Output() saveEvent: EventEmitter<UpdateEvent> =
     new EventEmitter<UpdateEvent>();
 
@@ -34,6 +35,7 @@ export class RoomComponent {
   renderPreview = false;
   textContainsImage = false;
   warningType = HINT_TYPES.WARNING;
+  isCreator = false;
 
   constructor(
     public notificationService: NotificationService,
@@ -44,9 +46,13 @@ export class RoomComponent {
     protected translateService: TranslateService,
     protected langService: LanguageService,
     private dialogService: DialogService,
+    private route: ActivatedRoute,
     private formattingService: FormattingService
   ) {
     langService.langEmitter.subscribe((lang) => translateService.use(lang));
+  }
+  ngOnInit(): void {
+    this.isCreator = this.route.snapshot.data.userRole === UserRole.CREATOR;
   }
 
   openDeleteRoomDialog(): void {
