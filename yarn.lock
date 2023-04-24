@@ -4575,7 +4575,7 @@ __metadata:
     karma-jasmine-html-reporter: 2.0.0
     karma-viewport: 1.0.9
     katex: 0.16.6
-    lru-cache: 9.1.0
+    lru-cache: 9.1.1
     material-design-icons-iconfont: 6.7.0
     ng-packagr: 15.1.2
     ng-qrcode: 8.0.1
@@ -8572,10 +8572,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lru-cache@npm:9.1.0":
-  version: 9.1.0
-  resolution: "lru-cache@npm:9.1.0"
-  checksum: 97b46faa2e8195b75b1c48a5515f8e458b8f6a0d0933c0484a4e45b6aa67406dcc5f6c8774fef206fd918dce6a4b4a6f627541fbdf74f8e6b3c71f688f43041e
+"lru-cache@npm:9.1.1":
+  version: 9.1.1
+  resolution: "lru-cache@npm:9.1.1"
+  checksum: 4d703bb9b66216bbee55ead82a9682820a2b6acbdfca491b235390b1ef1056000a032d56dfb373fdf9ad4492f1fa9d04cc9a05a77f25bd7ce6901d21ad9b68b7
   languageName: node
   linkType: hard
 
