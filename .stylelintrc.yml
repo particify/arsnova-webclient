@@ -10,4 +10,6 @@ rules:
     - message: Expected class selector "%s" to be kebab-case
   # The following rules conflict with Prettier
   at-rule-empty-line-before: null
+  # Browsers with feature range notation support have not enough adoption yet
+  media-feature-range-notation: null
   scss/operator-no-newline-after: null
