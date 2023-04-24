@@ -12,7 +12,7 @@ export class RoomUserRoleResolver implements Resolve<UserRole> {
   resolve(route: ActivatedRouteSnapshot): Observable<UserRole> {
     return environment.debugOverrideRoomRole
       ? /* DEBUG: Override role handling */
-        of(UserRole.CREATOR)
+        of(UserRole.OWNER)
       : this.roomMembershipService.getPrimaryRoleByRoom(
           route.params['shortId']
         );

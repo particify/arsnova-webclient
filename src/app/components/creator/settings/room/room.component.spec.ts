@@ -42,7 +42,7 @@ describe('RoomComponent', () => {
   const snapshot = new ActivatedRouteSnapshot();
 
   snapshot.data = {
-    userRole: UserRole.CREATOR,
+    userRole: UserRole.OWNER,
   };
 
   const activatedRouteStub = new ActivatedRouteStub(null, null, snapshot);

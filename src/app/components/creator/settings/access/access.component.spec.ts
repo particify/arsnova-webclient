@@ -43,7 +43,7 @@ describe('AccessComponent', () => {
     'delete',
   ]);
   mockModeratorService.get.and.returnValue(
-    of([new Moderator('1111', 'a@b.cd', UserRole.CREATOR)])
+    of([new Moderator('1111', 'a@b.cd', UserRole.OWNER)])
   );
   mockModeratorService.add.and.returnValue(of({}));
 

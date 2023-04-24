@@ -148,7 +148,7 @@ export class ContentCreationPageComponent implements OnInit, AfterContentInit {
       refType: 'content',
       detailedView: false,
       refId: this.isEditMode ? this.content.id : null,
-      role: UserRole.CREATOR,
+      role: UserRole.OWNER,
     };
   }
 }

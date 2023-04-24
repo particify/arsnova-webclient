@@ -104,8 +104,8 @@
             class="user-character-container"
             fxLayoutAlign="center center"
             [ngClass]="{
-              'role-moderator': moderator.role === UserRole.EXECUTIVE_MODERATOR,
-              'primary primary-variant': moderator.role === UserRole.CREATOR,
+              'role-moderator': moderator.role === UserRole.MODERATOR,
+              'primary primary-variant': moderator.role === UserRole.OWNER,
               'secondary secondary-variant': moderator.role === UserRole.EDITOR
             }"
           >
@@ -130,7 +130,7 @@
           <button
             mat-icon-button
             color="warn"
-            *ngIf="moderator.role !== UserRole.CREATOR"
+            *ngIf="moderator.role !== UserRole.OWNER"
             class="close"
             (click)="openDeleteRoomDialog(moderator)"
             fxFlex

@@ -128,7 +128,7 @@ export class GroupContentComponent
     this.onInit = true;
     this.iconList = this.contentService.getTypeIcons();
     this.route.data.subscribe((data) => {
-      this.isModerator = data.userRole === UserRole.EXECUTIVE_MODERATOR;
+      this.isModerator = data.userRole === UserRole.MODERATOR;
       this.room = data.room;
       this.route.params.subscribe((params) => {
         this.setContentGroup(params['seriesName']);

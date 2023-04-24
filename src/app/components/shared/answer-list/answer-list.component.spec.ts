@@ -31,7 +31,7 @@ describe('AnswerListComponent', () => {
 
   const snapshot = new ActivatedRouteSnapshot();
   snapshot.data = {
-    viewRole: UserRole.CREATOR,
+    viewRole: UserRole.OWNER,
   };
   const activatedRouteStub = new ActivatedRouteStub(null, null, snapshot);
 

@@ -179,7 +179,7 @@
             }}
           </button>
           <button
-            *ngIf="hasRole(UserRole.CREATOR) || hasRole(UserRole.EDITOR)"
+            *ngIf="hasRole(UserRole.OWNER) || hasRole(UserRole.EDITOR)"
             [disabled]="isPreview"
             mat-button
             (click)="goToSettings()"
@@ -188,7 +188,7 @@
             {{ 'header.room-settings' | translate }}
           </button>
           <button
-            *ngIf="hasRole(UserRole.CREATOR) || hasRole(UserRole.EDITOR)"
+            *ngIf="hasRole(UserRole.OWNER) || hasRole(UserRole.EDITOR)"
             [disabled]="isPreview"
             mat-raised-button
             color="primary"
@@ -231,7 +231,7 @@
             {{ 'header.preview' | translate }}
           </button>
           <button
-            *ngIf="hasRole(UserRole.CREATOR)"
+            *ngIf="hasRole(UserRole.OWNER)"
             mat-menu-item
             tabindex="0"
             (click)="goToSettings()"

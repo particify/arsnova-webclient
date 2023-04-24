@@ -482,7 +482,7 @@ export class CommentListComponent implements OnInit, OnDestroy {
         }
         if (comment) {
           comment.highlighted = true;
-          if (this.viewRole === UserRole.CREATOR) {
+          if (this.viewRole === UserRole.OWNER) {
             setTimeout(() => {
               this.updateCurrentComment(comment, true);
             }, timeout);

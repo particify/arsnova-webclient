@@ -370,7 +370,7 @@
     <button
       mat-menu-item
       (click)="navToSettings()"
-      *ngIf="viewRole === 'CREATOR'"
+      *ngIf="viewRole === 'OWNER'"
     >
       <mat-icon class="settings-icon">settings</mat-icon>
       <span>{{ 'comment-list.settings' | translate }}</span>
@@ -394,7 +394,7 @@
     </button>
 
     <button
-      *ngIf="viewRole === 'CREATOR'"
+      *ngIf="viewRole === 'OWNER'"
       [disabled]="comments.length === 0"
       mat-menu-item
       (click)="openDeleteCommentsDialog()"
@@ -420,7 +420,7 @@
         !navBarExists && deviceType === 'mobile' && !isModerator,
       'desktop-scroll-position': deviceType === 'desktop' || isModerator,
       'above-nav':
-        viewRole === 'CREATOR' &&
+        viewRole === 'OWNER' &&
         isModerator &&
         navBarExists &&
         deviceType === 'mobile'

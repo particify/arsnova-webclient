@@ -24,7 +24,7 @@ export class RoomPageComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.route.data.subscribe((data) => {
-      this.isCreator = data.userRole === UserRole.CREATOR;
+      this.isCreator = data.userRole === UserRole.OWNER;
       this.roomId = data.room.id;
       this.navBarStateSubscription = this.eventService
         .on<boolean>(UiState.NAV_BAR_VISIBLE)

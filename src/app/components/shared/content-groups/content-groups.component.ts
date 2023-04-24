@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { RoutingService } from '@arsnova/app/services/util/routing.service';
 import { UserRole } from '../../../models/user-roles.enum';
 import {
   GlobalStorageService,
@@ -21,7 +22,8 @@ export class ContentGroupsComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private globalStorageService: GlobalStorageService
+    private globalStorageService: GlobalStorageService,
+    private routingService: RoutingService
   ) {}
 
   ngOnInit() {
@@ -30,14 +32,8 @@ export class ContentGroupsComponent implements OnInit {
   }
 
   viewContents() {
-    let role: string;
-    if (this.role === UserRole.PARTICIPANT) {
-      role = UserRole.PARTICIPANT.toLowerCase();
-    } else {
-      role = UserRole.CREATOR.toLowerCase();
-    }
     this.router.navigate([
-      role,
+      this.routingService.getRoleRoute(this.role),
       this.roomShortId,
       'series',
       this.contentGroupName,

@@ -23,14 +23,14 @@ export class RoomViewUserRoleResolver implements Resolve<UserRole> {
 
     if (environment.debugOverrideRoomRole) {
       /* DEBUG: Override role handling */
-      return of(UserRole.CREATOR);
+      return of(UserRole.OWNER);
     }
 
     /* Use the user's real role for moderation. */
     if (
       this.roomMembershipService.isRoleSubstitutable(
         viewRole,
-        UserRole.EXECUTIVE_MODERATOR
+        UserRole.MODERATOR
       )
     ) {
       return this.roomMembershipService.getPrimaryRoleByRoom(

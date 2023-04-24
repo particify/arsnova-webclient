@@ -82,7 +82,7 @@ export class CreatorOverviewComponent
     );
     this.route.data.subscribe((data) => {
       this.initializeRoom(data.room, data.userRole, data.viewRole);
-      this.isModerator = data.userRole === UserRole.EXECUTIVE_MODERATOR;
+      this.isModerator = data.userRole === UserRole.MODERATOR;
       this.roomJoinUrl = this.routingService.getRoomJoinUrl(
         data.apiConfig.ui.links?.join
       );
@@ -98,7 +98,7 @@ export class CreatorOverviewComponent
   }
 
   afterGroupsLoadHook() {
-    this.prepareAttachmentData(UserRole.CREATOR);
+    this.prepareAttachmentData(UserRole.OWNER);
     this.isLoading = false;
     this.globalStorageService.setItem(
       STORAGE_KEYS.CONTENT_GROUPS,

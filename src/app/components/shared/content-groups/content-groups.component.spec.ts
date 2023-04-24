@@ -15,6 +15,7 @@ import {
 import { GlobalStorageService } from '@arsnova/app/services/util/global-storage.service';
 import { UserRole } from '@arsnova/app/models/user-roles.enum';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { RoutingService } from '@arsnova/app/services/util/routing.service';
 
 describe('ContentGroupsComponent', () => {
   let component: ContentGroupsComponent;
@@ -29,6 +30,10 @@ describe('ContentGroupsComponent', () => {
     viewRole: UserRole.PARTICIPANT,
   };
   const activatedRouteStub = new ActivatedRouteStub(null, data, snapshot);
+
+  const mockRoutingService = jasmine.createSpyObj('RoutingService', [
+    'getRoleRoute',
+  ]);
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
@@ -54,6 +59,10 @@ describe('ContentGroupsComponent', () => {
         {
           provide: Router,
           useClass: MockRouter,
+        },
+        {
+          provide: RoutingService,
+          useValue: mockRoutingService,
         },
       ],
       schemas: [NO_ERRORS_SCHEMA],

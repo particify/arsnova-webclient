@@ -106,7 +106,7 @@ const routes: Routes = [
           path: ':shortId',
           component: RoomPageComponent,
           canActivate: [AuthenticationGuard],
-          data: { requiredRole: UserRole.EXECUTIVE_MODERATOR },
+          data: { requiredRole: UserRole.MODERATOR },
           resolve: {
             room: RoomResolver,
             viewRole: RoomViewUserRoleResolver,
