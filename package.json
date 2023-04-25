@@ -82,7 +82,7 @@
     "karma-jasmine-html-reporter": "2.0.0",
     "karma-viewport": "1.0.9",
     "ng-packagr": "15.1.2",
-    "prettier": "2.8.7",
+    "prettier": "2.8.8",
     "stylelint": "15.5.0",
     "stylelint-config-standard-scss": "8.0.0",
     "ts-node": "10.9.1",
