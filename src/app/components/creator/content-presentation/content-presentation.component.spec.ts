@@ -21,7 +21,7 @@ import {
   MockRouter,
 } from '@arsnova/testing/test-helpers';
 import { Location } from '@angular/common';
-import { MockLocationStrategy } from '@angular/common/testing';
+import { SpyLocation } from '@angular/common/testing';
 import { HotkeyService } from '@arsnova/app/services/util/hotkey.service';
 import { NO_ERRORS_SCHEMA, Injectable } from '@angular/core';
 import { Room } from '@arsnova/app/models/room';
@@ -169,7 +169,7 @@ describe('ContentPresentationComponent', () => {
         },
         {
           provide: Location,
-          useClass: MockLocationStrategy,
+          useClass: SpyLocation,
         },
         {
           provide: Router,

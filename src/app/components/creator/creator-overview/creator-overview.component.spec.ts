@@ -25,7 +25,7 @@ import { DialogService } from '@arsnova/app/services/util/dialog.service';
 import { GlobalStorageService } from '@arsnova/app/services/util/global-storage.service';
 import { LanguageService } from '@arsnova/app/services/util/language.service';
 import { Location } from '@angular/common';
-import { MockLocationStrategy } from '@angular/common/testing';
+import { SpyLocation } from '@angular/common/testing';
 import { A11yIntroPipe } from '@arsnova/app/pipes/a11y-intro.pipe';
 import { NO_ERRORS_SCHEMA, Injectable } from '@angular/core';
 import { of } from 'rxjs';
@@ -195,7 +195,7 @@ describe('CreatorOverviewComponent', () => {
         },
         {
           provide: Location,
-          useClass: MockLocationStrategy,
+          useClass: SpyLocation,
         },
         {
           provide: Router,

@@ -29,8 +29,6 @@ import {
 import { RoomStatsService } from '@arsnova/app/services/http/room-stats.service';
 import { DialogService } from '@arsnova/app/services/util/dialog.service';
 import { LanguageService } from '@arsnova/app/services/util/language.service';
-import { Location } from '@angular/common';
-import { MockLocationStrategy } from '@angular/common/testing';
 import { LocalFileService } from '@arsnova/app/services/util/local-file.service';
 import { HotkeyService } from '@arsnova/app/services/util/hotkey.service';
 import { GlobalStorageService } from '@arsnova/app/services/util/global-storage.service';
@@ -180,10 +178,6 @@ describe('GroupContentComponent', () => {
         {
           provide: LanguageService,
           useClass: MockLangService,
-        },
-        {
-          provide: Location,
-          useClass: MockLocationStrategy,
         },
         {
           provide: LocalFileService,
