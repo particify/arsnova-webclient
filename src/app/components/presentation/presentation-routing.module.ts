@@ -21,6 +21,10 @@ const routes: Routes = [
     component: QrCodeComponent,
   },
   {
+    path: 'comments/moderation',
+    redirectTo: 'comments',
+  },
+  {
     path: 'comments',
     component: CommentPageComponent,
   },
