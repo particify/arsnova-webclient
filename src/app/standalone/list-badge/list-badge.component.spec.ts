@@ -8,7 +8,7 @@ describe('ListBadgeComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ListBadgeComponent],
+      imports: [ListBadgeComponent],
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
   }));

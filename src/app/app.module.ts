@@ -87,14 +87,15 @@ import { RoomJoinComponent } from '@app/core/components/room-join/room-join.comp
 import { RoomListComponent } from '@app/core/components/room-list/room-list.component';
 import { HotkeysComponent } from '@app/core/components/_dialogs/hotkeys/hotkeys.component';
 import { HeaderComponent } from '@app/core/components/header/header.component';
-import { FooterComponent } from './shared/_standalone/footer/footer.component';
+import { FooterComponent } from './standalone/footer/footer.component';
 import { UserProfileComponent } from '@app/core/components/user-profile/user-profile.component';
 import { PageNotFoundComponent } from '@app/core/components/page-not-found/page-not-found.component';
 import { UserFormFieldComponent } from '@app/core/components/user-profile/user-form-field/user-form-field.component';
-import { SettingsPanelHeaderComponent } from '@app/core/components/settings-panel-header/settings-panel-header.component';
-import { SettingsSlideToggleComponent } from '@app/core/components/settings-slide-toggle/settings-slide-toggle.component';
-import { LoadingIndicatorComponent } from '@app/shared/_standalone/loading-indicator/loading-indicator.component';
+import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
 import { UpdateInfoComponent } from '@app/core/components/update-info/update-info.component';
+import { SettingsPanelHeaderComponent } from '@app/standalone/settings-panel-header/settings-panel-header.component';
+import { SettingsSlideToggleComponent } from '@app/standalone/settings-slide-toggle/settings-slide-toggle.component';
+import { ListBadgeComponent } from '@app/standalone/list-badge/list-badge.component';
 
 export function initializeApp(appConfig: AppConfig) {
   return () => appConfig.load();
@@ -123,8 +124,6 @@ export function initializeApp(appConfig: AppConfig) {
     UserProfileComponent,
     UserFormFieldComponent,
     PageNotFoundComponent,
-    SettingsPanelHeaderComponent,
-    SettingsSlideToggleComponent,
     UpdateInfoComponent,
   ],
   imports: [
@@ -136,6 +135,9 @@ export function initializeApp(appConfig: AppConfig) {
     CoreModule,
     FooterComponent,
     LoadingIndicatorComponent,
+    SettingsPanelHeaderComponent,
+    SettingsSlideToggleComponent,
+    ListBadgeComponent,
     HttpClientModule,
     ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: environment.production,

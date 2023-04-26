@@ -15,7 +15,7 @@ import { PasswordResetComponent } from '@app/core/components/password-reset/pass
 import { RequestPasswordResetComponent } from '@app/core/components/request-password-reset/request-password-reset.component';
 import { ApiConfigResolver } from '@app/core/resolver/api-config.resolver';
 import { HeaderComponent } from '@app/core/components/header/header.component';
-import { FooterComponent } from '@app/shared/_standalone/footer/footer.component';
+import { FooterComponent } from '@app/standalone/footer/footer.component';
 import { DemoRoomGuard } from '@app/core/guards/demo-room.guard';
 import { UserProfileComponent } from '@app/core/components/user-profile/user-profile.component';
 import { RedeemTokenComponent } from '@app/core/components/redeem-token/redeem-token.component';

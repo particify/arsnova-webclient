@@ -39,6 +39,8 @@ import { ClipboardModule } from '@angular/cdk/clipboard';
 import { StartNewRoundComponent } from './start-new-round/start-new-round.component';
 import { StatisticListComponent } from '@app/creator/statistic-list/statistic-list.component';
 import { StatisticsPageComponent } from '@app/creator/statistics-page/statistics-page.component';
+import { SettingsPanelHeaderComponent } from '@app/standalone/settings-panel-header/settings-panel-header.component';
+import { SettingsSlideToggleComponent } from '@app/standalone/settings-slide-toggle/settings-slide-toggle.component';
 
 @NgModule({
   imports: [
@@ -58,6 +60,8 @@ import { StatisticsPageComponent } from '@app/creator/statistics-page/statistics
     CdkStepperModule,
     ExtensionPointModule,
     ClipboardModule,
+    SettingsPanelHeaderComponent,
+    SettingsSlideToggleComponent,
   ],
   declarations: [
     ContentChoiceCreationComponent,

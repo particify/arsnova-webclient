@@ -3,16 +3,16 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { JsonTranslationLoader } from '@testing/test-helpers';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 
-import { SettingsPanelHeaderComponent } from './settings-panel-header.component';
+import { SettingsSlideToggleComponent } from './settings-slide-toggle.component';
 
-describe('SettingsPanelHeaderComponent', () => {
-  let component: SettingsPanelHeaderComponent;
-  let fixture: ComponentFixture<SettingsPanelHeaderComponent>;
+describe('SettingsSlideToggleComponent', () => {
+  let component: SettingsSlideToggleComponent;
+  let fixture: ComponentFixture<SettingsSlideToggleComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [SettingsPanelHeaderComponent],
       imports: [
+        SettingsSlideToggleComponent,
         TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
@@ -23,8 +23,10 @@ describe('SettingsPanelHeaderComponent', () => {
       ],
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
+  });
 
-    fixture = TestBed.createComponent(SettingsPanelHeaderComponent);
+  beforeEach(() => {
+    fixture = TestBed.createComponent(SettingsSlideToggleComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

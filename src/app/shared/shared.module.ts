@@ -11,7 +11,7 @@ import { PresentCommentComponent } from './present-comment/present-comment.compo
 import { DialogActionButtonsComponent } from './dialog/dialog-action-buttons/dialog-action-buttons.component';
 import { StatisticTextComponent } from './statistic-content/statistic-text/statistic-text.component';
 import { StatisticChoiceComponent } from './statistic-content/statistic-choice/statistic-choice.component';
-import { LoadingIndicatorComponent } from './_standalone/loading-indicator/loading-indicator.component';
+import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
 import { YesNoDialogComponent } from './_dialogs/yes-no-dialog/yes-no-dialog.component';
 import { StepperComponent } from './stepper/stepper.component';
 import { CdkStepperModule } from '@angular/cdk/stepper';
@@ -30,7 +30,7 @@ import { StatisticWordcloudComponent } from './statistic-content/statistic-wordc
 import { WordcloudComponent } from './wordcloud/wordcloud.component';
 import { CommentAnswerComponent } from './_dialogs/comment-answer/comment-answer.component';
 import { StatisticScaleComponent } from './statistic-content/statistic-scale/statistic-scale.component';
-import { ListBadgeComponent } from './list-badge/list-badge.component';
+import { ListBadgeComponent } from '@app/standalone/list-badge/list-badge.component';
 import { ContentChoiceAnswerComponent } from './content-answers/content-choice-answer/content-choice-answer.component';
 import { RoomPageComponent } from './room-page/room-page.component';
 import { FormattingToolbarComponent } from './formatting-toolbar/formatting-toolbar.component';
@@ -45,7 +45,7 @@ import { StatisticPrioritizationComponent } from './statistic-content/statistic-
 import { ContentTextAnswerComponent } from './content-answers/content-text-answer/content-text-answer.component';
 import { MultipleRoundSelectionComponent } from './multiple-round-selection/multiple-round-selection.component';
 import { RouterModule } from '@angular/router';
-import { FooterComponent } from '@app/shared/_standalone/footer/footer.component';
+import { FooterComponent } from '@app/standalone/footer/footer.component';
 import { CommentListComponent } from './comment-list/comment-list.component';
 
 @NgModule({
@@ -57,6 +57,7 @@ import { CommentListComponent } from './comment-list/comment-list.component';
     DragDropModule,
     FooterComponent,
     LoadingIndicatorComponent,
+    ListBadgeComponent,
   ],
   declarations: [
     RoomOverviewComponent,
@@ -87,7 +88,6 @@ import { CommentListComponent } from './comment-list/comment-list.component';
     DividerComponent,
     WordcloudComponent,
     CommentAnswerComponent,
-    ListBadgeComponent,
     ContentChoiceAnswerComponent,
     FormattingToolbarComponent,
     AnnouncementComponent,
