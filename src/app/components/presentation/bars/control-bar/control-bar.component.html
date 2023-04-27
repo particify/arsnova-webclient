@@ -159,24 +159,20 @@
               <mat-icon>settings_suggest</mat-icon>
               <span>{{ 'content.preferences' | translate }}</span>
             </button>
-            <lib-extension-point
+            <app-multiple-round-selection
               *ngIf="multipleRounds && contentLoaded"
-              extensionId="round-selection"
-              [extensionData]="{
-                standalone: false,
-                round: this.contentRounds.get(content.id)
-              }"
-              (extensionEvent)="changeRound($event)"
-            ></lib-extension-point>
-            <lib-extension-point
+              [standalone]="false"
+              [round]="this.contentRounds.get(content.id)"
+              (roundChanged)="changeRound($event)"
+            >
+            </app-multiple-round-selection>
+            <app-start-new-round
               *ngIf="contentLoaded && hasFormatRounds(content.format)"
-              extensionId="start-new-round"
-              [extensionData]="{
-                content: content,
-                resetEvent: resetAnswerEvent
-              }"
-              (extensionEvent)="afterRoundStarted($event)"
-            ></lib-extension-point>
+              [content]="content"
+              [resetEvent]="resetAnswerEvent"
+              (roundStarted)="afterRoundStarted($event)"
+            >
+            </app-start-new-round>
           </ng-container>
         </mat-menu>
         <div class="bar-divider"></div>

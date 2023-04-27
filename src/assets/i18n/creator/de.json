@@ -283,7 +283,13 @@
     "group-published": "Die Fragenserie wurde freigegeben.",
     "preferences": "Anzeigeeinstellungen",
     "reset-banned-answers": "Gebannte Wörter zurücksetzen",
-    "banned-keywords-reset": "Gebannte Schlagwörter wurden zurückgesetzt."
+    "banned-keywords-reset": "Gebannte Schlagwörter wurden zurückgesetzt.",
+    "start-new-round": "Neue Runde starten",
+    "started-new-round": "Neue Runde wurde gestartet.",
+    "canceled": "Du hast den Vorgang abgebrochen.",
+    "round": "Runde",
+    "round-displayed": "Die Runde {{rounds}} wird zurzeit angezeigt",
+    "rounds-displayed": "Die Runden {{rounds}} werden zurzeit angezeigt"
   },
   "answer": {
     "word": "Schlagwort",
@@ -443,7 +449,9 @@
     "a11y-type-choice": "Choice",
     "a11y-type-likert": "Likert",
     "a11y-type-text": "Text",
-    "a11y-choice-evaluation": "{{count}} Personen haben die Antwort {{answer}} ausgewählt.",
+    "a11y-choice-evaluation": "Antwort {{label}}: {{answer}}.",
+    "a11y-multiple-round-counts": "{{countRoundA}} Antworten in Runde 1, {{countRoundB}} Antworten in Runde 2",
+    "a11y-single-round-count": "{{count}} Antworten",
     "a11y-text-evaluation": "{{count}} Personen haben mit {{answer}} geantwortet.",
     "a11y-no-more-answers": "Es sind keine weiteren Antworten vorhanden. Drücke die rechte Pfeiltaste um zum nächsten Inhalt zu gelangen.",
     "a11y-correct": "Die Antwort ist richtig.",
@@ -533,7 +541,9 @@
     "really-discard-announcement": "Willst du deine Eingaben wirklich verwerfen?",
     "discard": "Verwefen",
     "ban": "Verbannen",
-    "really-ban-answer": "Willst du das Schlagwort wirklich verbannen?"
+    "really-ban-answer": "Willst du das Schlagwort wirklich verbannen?",
+    "really-start-new-round": "Willst du wirklich eine neue Runde starten?",
+    "start": "Starten"
   },
   "utils": {
     "formatting-image-hint": "Bitte beachte, dass Bilder mit hoher Dateigröße die Ladezeiten beeinträchtigen können."

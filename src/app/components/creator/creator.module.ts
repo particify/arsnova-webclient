@@ -37,6 +37,7 @@ import { CreateAnswerOptionComponent } from './content-creation/create-answer-op
 import { ContentPrioritizationCreationComponent } from './content-creation/content-prioritization-creation/content-prioritization-creation.component';
 import { CopyUrlComponent } from './copy-url/copy-url.component';
 import { ClipboardModule } from '@angular/cdk/clipboard';
+import { StartNewRoundComponent } from './start-new-round/start-new-round.component';
 
 @NgModule({
   imports: [
@@ -83,8 +84,13 @@ import { ClipboardModule } from '@angular/cdk/clipboard';
     CreateAnswerOptionComponent,
     ContentPrioritizationCreationComponent,
     CopyUrlComponent,
+    StartNewRoundComponent,
   ],
-  exports: [ContentPresentationComponent, CopyUrlComponent],
+  exports: [
+    ContentPresentationComponent,
+    CopyUrlComponent,
+    StartNewRoundComponent,
+  ],
   providers: [
     { provide: TRANSLATION_MODULE_NAME, useValue: 'creator' },
     DialogService,

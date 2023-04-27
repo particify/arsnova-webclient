@@ -371,7 +371,7 @@ export class StatisticChoiceComponent
   }
 
   prepareChartForRoundCompare(resetChart: boolean) {
-    for (let i = 0; i < this.rounds; i++) {
+    for (let i = 0; i < this.rounds - 1; i++) {
       if (resetChart) {
         this.chart.data.datasets.push({
           data: this.data[i],

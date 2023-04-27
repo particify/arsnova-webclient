@@ -68,6 +68,7 @@ import { SettingsPanelHeaderComponent } from './settings-panel-header/settings-p
 import { ContentPrioritizationAnswerComponent } from './content-answers/content-prioritization-answer/content-prioritization-answer.component';
 import { StatisticPrioritizationComponent } from './statistic-content/statistic-prioritization/statistic-prioritization.component';
 import { ContentTextAnswerComponent } from './content-answers/content-text-answer/content-text-answer.component';
+import { MultipleRoundSelectionComponent } from './multiple-round-selection/multiple-round-selection.component';
 
 @NgModule({
   imports: [
@@ -142,6 +143,7 @@ import { ContentTextAnswerComponent } from './content-answers/content-text-answe
     ContentPrioritizationAnswerComponent,
     StatisticPrioritizationComponent,
     ContentTextAnswerComponent,
+    MultipleRoundSelectionComponent,
   ],
   exports: [
     RoomJoinComponent,
@@ -192,6 +194,7 @@ import { ContentTextAnswerComponent } from './content-answers/content-text-answe
     SettingsPanelHeaderComponent,
     ContentPrioritizationAnswerComponent,
     ContentTextAnswerComponent,
+    MultipleRoundSelectionComponent,
   ],
 })
 export class SharedModule {}

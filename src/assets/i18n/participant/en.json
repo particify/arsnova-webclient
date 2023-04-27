@@ -63,7 +63,10 @@
     "all-contents-answered": "You have answered all contents in this series. Review your answers or return to the room overview.",
     "continue-where-you-stopped": "Continue where you left off",
     "some-contents-answered": "Look at your answers again, jump to the next content or return to the room overview.",
-    "pure-info-contents": "Jump to any content or return to the room overview."
+    "pure-info-contents": "Jump to any content or return to the room overview.",
+    "round": "Round",
+    "round-displayed": "Round {{rounds}} is displayed",
+    "rounds-displayed": "Round {{rounds}} are displayed"
   },
   "comment-list": {
     "a11y-search-list": "Search for posts",
@@ -189,7 +192,9 @@
     "a11y-type-choice": "Choice",
     "a11y-type-likert": "Likert",
     "a11y-type-text": "Text",
-    "a11y-choice-evaluation": "{{count}} persons have selected the answer {{answer}}.",
+    "a11y-choice-evaluation": "Answer {{label}}: {{answer}}.",
+    "a11y-multiple-round-counts": "{{countRoundA}} answers in round 1, {{countRoundB}} answers in round 2",
+    "a11y-single-round-count": "{{count}} answers",
     "a11y-text-evaluation": "{{count}} persons have answered with {{answer}}.",
     "a11y-no-more-answers": "There are no more answers. Press the right arrow key to go to the next one.",
     "a11y-correct": "The answer is correct.",
