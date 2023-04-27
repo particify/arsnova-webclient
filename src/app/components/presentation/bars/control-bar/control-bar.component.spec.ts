@@ -22,7 +22,7 @@ import { EventService } from '@arsnova/app/services/util/event.service';
 import { ContentService } from '@arsnova/app/services/http/content.service';
 import { ContentGroupService } from '@arsnova/app/services/http/content-group.service';
 import { AnnounceService } from '@arsnova/app/services/util/announce.service';
-import { MockLocationStrategy } from '@angular/common/testing';
+import { SpyLocation } from '@angular/common/testing';
 import { Room } from '@arsnova/app/models/room';
 import { NO_ERRORS_SCHEMA, EventEmitter } from '@angular/core';
 import { SplitShortIdPipe } from '@arsnova/app/pipes/split-short-id.pipe';
@@ -166,7 +166,7 @@ describe('ControlBarComponent', () => {
         },
         {
           provide: Location,
-          useClass: MockLocationStrategy,
+          useClass: SpyLocation,
         },
         {
           provide: NotificationService,

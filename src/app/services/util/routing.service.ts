@@ -89,7 +89,11 @@ export class RoutingService {
     private translateService: TranslateService,
     private langService: LanguageService,
     private globalStorageService: GlobalStorageService
-  ) {}
+  ) {
+    this.location.onUrlChange((url) => {
+      this.fullCurrentRoute = url;
+    });
+  }
 
   subscribeActivatedRoute() {
     this.router.events
@@ -134,7 +138,6 @@ export class RoutingService {
   getRoutes(route: ActivatedRouteSnapshot) {
     const series = route.paramMap.get('seriesName') || '';
     const role = route.data.requiredRole || '';
-    this.fullCurrentRoute = this.location.path();
     this.currentRoute = route.routeConfig.path;
     this.routeEvent.emit(route);
     this.getBackRoute(role, series, route.parent.routeConfig['path']);

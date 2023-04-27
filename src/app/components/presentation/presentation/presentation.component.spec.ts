@@ -15,7 +15,7 @@ import {
 } from '@arsnova/testing/test-helpers';
 import { of } from 'rxjs';
 import { GlobalStorageService } from '@arsnova/app/services/util/global-storage.service';
-import { MockLocationStrategy } from '@angular/common/testing';
+import { SpyLocation } from '@angular/common/testing';
 import { Room } from '@arsnova/app/models/room';
 import { RoomStatsService } from '@arsnova/app/services/http/room-stats.service';
 import { LanguageService } from '@arsnova/app/services/util/language.service';
@@ -74,7 +74,7 @@ describe('PresentationComponent', () => {
         },
         {
           provide: Location,
-          useClass: MockLocationStrategy,
+          useClass: SpyLocation,
         },
         {
           provide: ActivatedRoute,

@@ -10,11 +10,11 @@ import {
 import { TranslateService } from '@ngx-translate/core';
 import { ActivatedRouteSnapshot, Router } from '@angular/router';
 import { Location } from '@angular/common';
-import { MockLocationStrategy } from '@angular/common/testing';
 import { LanguageService } from '@arsnova/app/services/util/language.service';
 import { GlobalStorageService } from '@arsnova/app/services/util/global-storage.service';
 import { UserRole } from '../../models/user-roles.enum';
 import { Room } from '../../models/room';
+import { SpyLocation } from '@angular/common/testing';
 
 describe('RoutingService', () => {
   beforeEach(() => {
@@ -27,7 +27,7 @@ describe('RoutingService', () => {
         },
         {
           provide: Location,
-          useClass: MockLocationStrategy,
+          useClass: SpyLocation,
         },
         {
           provide: TranslateService,

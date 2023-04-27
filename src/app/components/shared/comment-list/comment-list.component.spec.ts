@@ -26,7 +26,7 @@ import { WsCommentService } from '@arsnova/app/services/websockets/ws-comment.se
 import { EventService } from '@arsnova/app/services/util/event.service';
 import { MockEventService, MockRouter } from '@arsnova/testing/test-helpers';
 import { CommentSettingsService } from '@arsnova/app/services/http/comment-settings.service';
-import { MockLocationStrategy } from '@angular/common/testing';
+import { SpyLocation } from '@angular/common/testing';
 import { HotkeyService } from '@arsnova/app/services/util/hotkey.service';
 import { Room } from '@arsnova/app/models/room';
 import { CounterBracesPipe } from '@arsnova/app/pipes/counter-braces.pipe';
@@ -163,7 +163,7 @@ describe('CommentListComponent', () => {
         },
         {
           provide: Location,
-          useClass: MockLocationStrategy,
+          useClass: SpyLocation,
         },
         {
           provide: HotkeyService,

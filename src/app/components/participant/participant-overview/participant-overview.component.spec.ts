@@ -17,7 +17,7 @@ import { GlobalStorageService } from '@arsnova/app/services/util/global-storage.
 import { EventService } from '@arsnova/app/services/util/event.service';
 import { ContentGroupService } from '@arsnova/app/services/http/content-group.service';
 import { AnnounceService } from '@arsnova/app/services/util/announce.service';
-import { MockLocationStrategy } from '@angular/common/testing';
+import { SpyLocation } from '@angular/common/testing';
 import { AuthenticationService } from '@arsnova/app/services/http/authentication.service';
 import { Room } from '@arsnova/app/models/room';
 import { NO_ERRORS_SCHEMA, EventEmitter } from '@angular/core';
@@ -141,7 +141,7 @@ describe('ParticipantOverviewComponent', () => {
         },
         {
           provide: Location,
-          useClass: MockLocationStrategy,
+          useClass: SpyLocation,
         },
         {
           provide: AuthenticationService,
