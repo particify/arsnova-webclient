@@ -30,7 +30,10 @@
     "useDefineForClassFields": false,
     "lib": ["ES2022", "dom"],
     "paths": {
-      "@arsnova/*": ["./*"],
+      "@app/*": ["./app/*"],
+      "@testing/*": ["./testing/*"],
+      "@environments/*": ["./environments/*"],
+      "@projects/*": ["../projects/*"],
       "extension-point": [
         "dist/extension-point/extension-point",
         "dist/extension-point"

@@ -4,7 +4,13 @@
     "outDir": "../out-tsc/spec",
     "baseUrl": "./",
     "types": ["jasmine", "node", "karma-viewport"],
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "paths": {
+      "@app/*": ["./app/*"],
+      "@testing/*": ["./testing/*"],
+      "@environments/*": ["./environments/*"],
+      "@projects/*": ["../projects/*"]
+    }
   },
   "include": ["**/*.spec.ts", "**/*.d.ts"]
 }
