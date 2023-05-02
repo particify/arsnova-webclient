@@ -84,7 +84,7 @@ export class CreatorOverviewComponent
       this.initializeRoom(data.room, data.userRole, data.viewRole);
       this.isModerator = data.userRole === UserRole.MODERATOR;
       this.roomJoinUrl = this.routingService.getRoomJoinUrl(
-        data.apiConfig.ui.links?.join
+        data.apiConfig.ui.links.join?.url
       );
     });
   }

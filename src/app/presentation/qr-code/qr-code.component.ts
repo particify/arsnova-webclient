@@ -49,7 +49,9 @@ export class QrCodeComponent implements OnInit, OnDestroy {
       .getApiConfig$()
       .pipe(takeUntil(this.destroyed$))
       .subscribe((config) => {
-        this.url = this.routingService.getRoomJoinUrl(config.ui.links?.join);
+        this.url = this.routingService.getRoomJoinUrl(
+          config.ui.links?.join?.url
+        );
         if (config.ui.links?.join) {
           this.useJoinUrl = true;
           this.displayUrl = this.url;
