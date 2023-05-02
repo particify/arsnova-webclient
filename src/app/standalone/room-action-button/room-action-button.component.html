@@ -1,0 +1,24 @@
+<div fxLayoutAlign="center center" fxFlex>
+  <button
+    id="{{ feature }}-button"
+    mat-icon-button
+    color="primary"
+    class="main-button no-ripple"
+    [disableRipple]="true"
+    [routerLink]="[url ?? feature]"
+    [attr.aria-label]="'room-page.a11y-' + feature | translate"
+    [appHotkey]="hotkey"
+    [appHotkeyTitle]="'room-page.' + feature | translate"
+  >
+    <mat-icon
+      matBadge="{{ badgeCounter }}"
+      matBadgeColor="accent"
+      class="main-icon"
+    >
+      {{ icon }}
+    </mat-icon>
+    <p class="button-text">
+      {{ 'room-page.' + feature | translate }}
+    </p>
+  </button>
+</div>

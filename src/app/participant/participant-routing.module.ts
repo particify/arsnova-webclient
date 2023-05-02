@@ -13,9 +13,8 @@ import { RoomViewUserRoleResolver } from '@app/core/resolver/room-view-user-role
 import { AuthenticationGuard } from '@app/core/guards/authentication.guard';
 import { RoomUserRoleResolver } from '@app/core/resolver/room-user-role.resolver';
 import { Features } from '@app/core/models/features.enum';
-import { RoomPageComponent } from '@app/shared/room-page/room-page.component';
-import { ParticipantOverviewComponent } from './participant-overview/participant-overview.component';
 import { CommentSettingsResolver } from '@app/core/resolver/comment-settings.resolver';
+import { ParticipantPageComponent } from '@app/participant/participant-page.component';
 
 const routes: Routes = [
   {
@@ -29,7 +28,10 @@ const routes: Routes = [
   },
   {
     path: '',
-    component: ParticipantOverviewComponent,
+    loadChildren: () =>
+      import('./room-overview/room-overview.module').then(
+        (m) => m.RoomOverviewModule
+      ),
   },
   {
     path: 'comments',
@@ -74,7 +76,7 @@ const routes: Routes = [
         },
         {
           path: ':shortId',
-          component: RoomPageComponent,
+          component: ParticipantPageComponent,
           canActivate: [AuthenticationGuard],
           data: { requiredRole: UserRole.PARTICIPANT },
           resolve: {

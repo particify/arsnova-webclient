@@ -172,15 +172,18 @@
     "a11y-room-message": "Du befindest dich jetzt in dem Raum {{name}}.",
     "a11y-comments": "Öffnet die Q&A-Liste und bietet dir die Möglichkeit, Beiträge zu erstellen.",
     "a11y-statistics": "Öffnet die Statistiken zu den Fragenserie.",
-    "a11y-live-survey": "Öffnet das Live Feedback.",
+    "a11y-live-feedback": "Öffnet das Live Feedback.",
     "a11y-content-groups": "In diesem Raum gibt es {{count}} Fragenserien. Navigiere mit Tab zwischen ihnen und drücke Enter, um die Inhalte der Fragenserie zu beantworten.",
     "a11y-no-content-groups": "In diesem Raum sind noch keine Inhalte vorhanden.",
     "a11y-enter-content-group": "Öffnet die Fragenserie {{name}}.",
-    "a11y-live-survey-disabled": "Das Live Feedback ist derzeit nicht aktiv.",
+    "a11y-live-feedback-disabled": "Das Live Feedback ist derzeit nicht aktiv.",
+    "a11y-copy-url": "Direktlink zu dem Raum in die Zwischenablage kopieren",
     "answer-statistics": "Statistiken",
     "comments": "Q&A",
-    "live-survey": "Live Feedback",
-    "no-contents": "Keine Inhalte vorhanden."
+    "live-feedback": "Live Feedback",
+    "no-contents": "Keine Inhalte vorhanden.",
+    "copy-url": "Link kopieren",
+    "url-copied": "Direktlink wurde in die Zwischenablage kopiert."
   },
   "statistic": {
     "a11y-message-overview": "Du befindest dich jetzt auf der Statistikübersicht.",

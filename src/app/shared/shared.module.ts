@@ -1,7 +1,5 @@
 import { NgModule } from '@angular/core';
-import { ContentGroupsComponent } from './content-groups/content-groups.component';
 import { SurveyPageComponent } from './survey-page/survey-page.component';
-import { RoomOverviewComponent } from './room-overview/room-overview.component';
 import { CommentPageComponent } from './comment-page/comment-page.component';
 import { CoreModule } from '@app/core/core.module';
 import { CommentComponent } from './comment/comment.component';
@@ -14,7 +12,6 @@ import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loa
 import { YesNoDialogComponent } from './_dialogs/yes-no-dialog/yes-no-dialog.component';
 import { StepperComponent } from './stepper/stepper.component';
 import { CdkStepperModule } from '@angular/cdk/stepper';
-import { RenderedTextComponent } from './rendered-text/rendered-text.component';
 import { ExtensionPointModule } from '@projects/extension-point/src/lib/extension-point.module';
 import { AnswerCountComponent } from './answer-count/answer-count.component';
 import { StatisticContentComponent } from './statistic-content/statistic-content/statistic-content.component';
@@ -23,14 +20,12 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 import { StatisticSortComponent } from './statistic-content/statistic-sort/statistic-sort.component';
 import { NavBarComponent } from './bars/nav-bar/nav-bar.component';
 import { InfoBarComponent } from './bars/info-bar/info-bar.component';
-import { DividerComponent } from './divider/divider.component';
 import { StatisticWordcloudComponent } from './statistic-content/statistic-wordcloud/statistic-wordcloud.component';
 import { WordcloudComponent } from './wordcloud/wordcloud.component';
 import { CommentAnswerComponent } from './_dialogs/comment-answer/comment-answer.component';
 import { StatisticScaleComponent } from './statistic-content/statistic-scale/statistic-scale.component';
 import { ListBadgeComponent } from '@app/standalone/list-badge/list-badge.component';
 import { ContentChoiceAnswerComponent } from './content-answers/content-choice-answer/content-choice-answer.component';
-import { RoomPageComponent } from './room-page/room-page.component';
 import { FormattingToolbarComponent } from './formatting-toolbar/formatting-toolbar.component';
 import { AnnouncementComponent } from './announcement/announcement.component';
 import { DateComponent } from './date/date.component';
@@ -45,6 +40,8 @@ import { MultipleRoundSelectionComponent } from './multiple-round-selection/mult
 import { RouterModule } from '@angular/router';
 import { FooterComponent } from '@app/standalone/footer/footer.component';
 import { CommentListComponent } from './comment-list/comment-list.component';
+import { DividerComponent } from '@app/standalone/divider/divider.component';
+import { RenderedTextComponent } from '@app/standalone/rendered-text/rendered-text.component';
 
 @NgModule({
   imports: [
@@ -56,11 +53,10 @@ import { CommentListComponent } from './comment-list/comment-list.component';
     FooterComponent,
     LoadingIndicatorComponent,
     ListBadgeComponent,
+    DividerComponent,
+    RenderedTextComponent,
   ],
   declarations: [
-    RoomOverviewComponent,
-    RoomPageComponent,
-    ContentGroupsComponent,
     SurveyPageComponent,
     CommentPageComponent,
     CommentListComponent,
@@ -74,14 +70,12 @@ import { CommentListComponent } from './comment-list/comment-list.component';
     StatisticWordcloudComponent,
     YesNoDialogComponent,
     StepperComponent,
-    RenderedTextComponent,
     AnswerCountComponent,
     StatisticContentComponent,
     ContentSortAnswerComponent,
     StatisticSortComponent,
     NavBarComponent,
     InfoBarComponent,
-    DividerComponent,
     WordcloudComponent,
     CommentAnswerComponent,
     ContentChoiceAnswerComponent,
@@ -98,8 +92,6 @@ import { CommentListComponent } from './comment-list/comment-list.component';
     MultipleRoundSelectionComponent,
   ],
   exports: [
-    RoomOverviewComponent,
-    ContentGroupsComponent,
     SurveyPageComponent,
     CommentPageComponent,
     CommentListComponent,
@@ -113,7 +105,6 @@ import { CommentListComponent } from './comment-list/comment-list.component';
     StatisticScaleComponent,
     StatisticTextComponent,
     StatisticWordcloudComponent,
-    RenderedTextComponent,
     StatisticContentComponent,
     ContentSortAnswerComponent,
     StatisticSortComponent,
@@ -130,7 +121,6 @@ import { CommentListComponent } from './comment-list/comment-list.component';
     ContentPrioritizationAnswerComponent,
     ContentTextAnswerComponent,
     MultipleRoundSelectionComponent,
-    LoadingIndicatorComponent,
   ],
 })
 export class SharedModule {}
