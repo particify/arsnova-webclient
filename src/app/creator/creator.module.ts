@@ -43,6 +43,7 @@ import { CreatorPageComponent } from './creator-page.component';
 import { FooterComponent } from '@app/standalone/footer/footer.component';
 import { DividerComponent } from '@app/standalone/divider/divider.component';
 import { RenderedTextComponent } from '@app/standalone/rendered-text/rendered-text.component';
+import { AnswerCountComponent } from '@app/standalone/answer-count/answer-count.component';
 
 @NgModule({
   imports: [
@@ -67,6 +68,7 @@ import { RenderedTextComponent } from '@app/standalone/rendered-text/rendered-te
     FooterComponent,
     DividerComponent,
     RenderedTextComponent,
+    AnswerCountComponent,
   ],
   declarations: [
     ContentChoiceCreationComponent,

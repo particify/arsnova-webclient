@@ -295,7 +295,7 @@
   },
   "survey": {
     "a11y-message": "Ahora estás en modo de retroalimentación en vivo.",
-    "a11y-status": "Actualmente, la retroalimentación en vivo está {{status}}. {{answers}} participantes ya han respondido. {{state0}} por ciento ha seleccionado la respuesta {{answer0}}, {{state1}} por ciento ha seleccionado la respuesta {{answer1}}, {{state2}} por ciento ha seleccionado la respuesta {{answer2}}, {{state3}} por ciento ha seleccionado la respuesta {{answer3}}.",
+    "a11y-status": "Actualmente, la retroalimentación en vivo está {{status}}. {{state0}} por ciento ha seleccionado la respuesta {{answer0}}, {{state1}} por ciento ha seleccionado la respuesta {{answer1}}, {{state2}} por ciento ha seleccionado la respuesta {{answer2}}, {{state3}} por ciento ha seleccionado la respuesta {{answer3}}.",
     "a11y-stop-survey": "Detiene la retroalimentación en vivo.",
     "a11y-start-survey": "Inicia la retroalimentación en vivo.",
     "a11y-stopped": "detenido",
@@ -316,10 +316,10 @@
     "feeling-good": "Bien",
     "feeling-not-so-good": "No tan bien",
     "feeling-bad": "Mal",
-    "survey-a": "A",
-    "survey-b": "B",
-    "survey-c": "C",
-    "survey-d": "D",
+    "A": "A",
+    "B": "B",
+    "C": "C",
+    "D": "D",
     "change-type": "Cambiar tipo",
     "status-summary": "Resumen del estado"
   },

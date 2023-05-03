@@ -1,43 +1,34 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { SurveyPageComponent } from './survey-page.component';
-import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
-import { NotificationService } from '@app/core/services/util/notification.service';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+
+import { LiveFeedbackPageComponent } from './live-feedback-page.component';
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import {
-  TranslateLoader,
-  TranslateModule,
-  TranslateService,
-} from '@ngx-translate/core';
-import {
-  JsonTranslationLoader,
-  MockNotificationService,
   ActivatedRouteStub,
-  MockGlobalStorageService,
-  MockEventService,
+  JsonTranslationLoader,
   MockAnnounceService,
+  MockGlobalStorageService,
 } from '@testing/test-helpers';
 import { of } from 'rxjs';
-import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
-import { EventService } from '@app/core/services/util/event.service';
-import { AnnounceService } from '@app/core/services/util/announce.service';
-import { AuthenticationService } from '@app/core/services/http/authentication.service';
-import { Room } from '@app/core/models/room';
-import { NO_ERRORS_SCHEMA, EventEmitter } from '@angular/core';
-import { UserRole } from '@app/core/models/user-roles.enum';
-import { RoomService } from '@app/core/services/http/room.service';
-import { MockLangService } from '@testing/test-helpers';
-import { LanguageService } from '@app/core/services/util/language.service';
-import { FeedbackService } from '@app/core/services/http/feedback.service';
 import { Message } from '@stomp/stompjs';
-import { WsFeedbackService } from '@app/core/services/websockets/ws-feedback.service';
-import { HotkeyService } from '@app/core/services/util/hotkey.service';
 import { ClientAuthentication } from '@app/core/models/client-authentication';
 import { AuthProvider } from '@app/core/models/auth-provider';
-import { A11yIntroPipe } from '@app/core/pipes/a11y-intro.pipe';
-import { RemoteService } from '@app/core/services/util/remote.service';
+import { Room } from '@app/core/models/room';
+import { UserRole } from '@app/core/models/user-roles.enum';
+import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
+import { RoomService } from '@app/core/services/http/room.service';
+import { WsFeedbackService } from '@app/core/services/websockets/ws-feedback.service';
+import { FeedbackService } from '@app/core/services/http/feedback.service';
+import { AnnounceService } from '@app/core/services/util/announce.service';
+import { AuthenticationService } from '@app/core/services/http/authentication.service';
+import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
+import { EventEmitter } from '@angular/core';
+import { CoreModule } from '@app/core/core.module';
+import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
+import { HotkeyService } from '@app/core/services/util/hotkey.service';
 
-describe('SurveyPageComponent', () => {
-  let component: SurveyPageComponent;
-  let fixture: ComponentFixture<SurveyPageComponent>;
+describe('LiveFeedbackPageComponent', () => {
+  let component: LiveFeedbackPageComponent;
+  let fixture: ComponentFixture<LiveFeedbackPageComponent>;
 
   const mockRoomService = jasmine.createSpyObj([
     'getRoom',
@@ -49,11 +40,6 @@ describe('SurveyPageComponent', () => {
   mockRoomStatsService.getStats.and.returnValue(of({}));
 
   const mockWsFeedbackService = jasmine.createSpyObj(['send', 'reset']);
-
-  const mockHotkeyService = jasmine.createSpyObj([
-    'registerHotkey',
-    'unregisterHotkey',
-  ]);
 
   const mockFeedbackService = jasmine.createSpyObj(['startSub', 'get']);
   mockFeedbackService.messageEvent = new EventEmitter<Message>();
@@ -81,15 +67,18 @@ describe('SurveyPageComponent', () => {
     isPresentation: false,
   };
   const activatedRouteStub = new ActivatedRouteStub(null, data, snapshot);
-  let translateService: TranslateService;
-  const mockA11yIntroPipe = new A11yIntroPipe(translateService);
 
-  const mockRemoteService = jasmine.createSpyObj(['getCommentState']);
+  const mockHotkeyService = jasmine.createSpyObj([
+    'registerHotkey',
+    'unregisterHotkey',
+  ]);
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      declarations: [SurveyPageComponent, A11yIntroPipe],
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      declarations: [LiveFeedbackPageComponent],
       imports: [
+        CoreModule,
+        LoadingIndicatorComponent,
         TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
@@ -107,10 +96,7 @@ describe('SurveyPageComponent', () => {
           provide: HotkeyService,
           useValue: mockHotkeyService,
         },
-        {
-          provide: LanguageService,
-          useClass: MockLangService,
-        },
+
         {
           provide: WsFeedbackService,
           useValue: mockWsFeedbackService,
@@ -128,10 +114,6 @@ describe('SurveyPageComponent', () => {
           useValue: mockAuthenticationService,
         },
         {
-          provide: NotificationService,
-          useClass: MockNotificationService,
-        },
-        {
           provide: ActivatedRoute,
           useValue: activatedRouteStub,
         },
@@ -139,25 +121,10 @@ describe('SurveyPageComponent', () => {
           provide: GlobalStorageService,
           useClass: MockGlobalStorageService,
         },
-        {
-          provide: EventService,
-          useClass: MockEventService,
-        },
-        {
-          provide: A11yIntroPipe,
-          useValue: mockA11yIntroPipe,
-        },
-        {
-          provide: RemoteService,
-          useValue: mockRemoteService,
-        },
       ],
-      schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
-  }));
 
-  beforeEach(() => {
-    fixture = TestBed.createComponent(SurveyPageComponent);
+    fixture = TestBed.createComponent(LiveFeedbackPageComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -8,7 +8,6 @@ import { AuthenticationGuard } from '@app/core/guards/authentication.guard';
 import { UserRole } from '@app/core/models/user-roles.enum';
 import { ContentCreationPageComponent } from './content-creation/content-creation-page/content-creation-page.component';
 import { StatisticsPageComponent } from './statistics-page/statistics-page.component';
-import { SurveyPageComponent } from '@app/shared/survey-page/survey-page.component';
 import { ContentPresentationComponent } from './content-presentation/content-presentation.component';
 import { CommentPageComponent } from '@app/shared/comment-page/comment-page.component';
 import { SettingsPageComponent } from './settings-page/settings-page.component';
@@ -85,7 +84,10 @@ const routes: Routes = [
   },
   {
     path: 'feedback',
-    component: SurveyPageComponent,
+    loadChildren: () =>
+      import('./live-feedback/live-feedback.module').then(
+        (m) => m.LiveFeedbackModule
+      ),
   },
   {
     path: 'series/:seriesName',

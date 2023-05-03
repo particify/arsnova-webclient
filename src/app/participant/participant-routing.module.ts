@@ -5,7 +5,6 @@ import {
   RouteMountPoint,
 } from '@projects/extension-point/src/lib/extension-route';
 import { UserRole } from '@app/core/models/user-roles.enum';
-import { SurveyPageComponent } from '@app/shared/survey-page/survey-page.component';
 import { ParticipantContentCarouselPageComponent } from './participant-content-carousel-page/participant-content-carousel-page.component';
 import { CommentPageComponent } from '@app/shared/comment-page/comment-page.component';
 import { RoomResolver } from '@app/core/resolver/room.resolver';
@@ -42,10 +41,10 @@ const routes: Routes = [
   },
   {
     path: 'feedback',
-    component: SurveyPageComponent,
-    data: {
-      feature: Features.FEEDBACK,
-    },
+    loadChildren: () =>
+      import('./live-feedback/live-feedback.module').then(
+        (m) => m.LiveFeedbackModule
+      ),
   },
   {
     path: 'series/:seriesName',

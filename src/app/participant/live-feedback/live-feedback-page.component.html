@@ -1,0 +1,63 @@
+<div class="visually-hidden" id="message-announcer-button" tabIndex="-1">
+  {{ 'survey.a11y-message' | a11yIntro | async }}
+</div>
+<app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
+<app-base-card *ngIf="!isLoading">
+  <app-live-feedback
+    [data]="data"
+    [dataChanged]="dataChanged"
+    [fixedSize]="false"
+    [isClosed]="isClosed"
+    [type]="type"
+  ></app-live-feedback>
+  <div fxLayout="row" fxLayoutAlign="center">
+    <app-answer-count [count]="answerCount" [size]="'small'"></app-answer-count>
+  </div>
+</app-base-card>
+<div
+  [ngClass]="{ faded: isClosed }"
+  fxLayout="column"
+  fxLayoutAlign="start center"
+  class="answer-container"
+>
+  <div fxLayout="row wrap" class="card-row">
+    <button
+      *ngFor="let key of voteKeys; let i = index"
+      mat-raised-button
+      id="survey-button-{{ i }}"
+      fxLayout="row"
+      fxLayoutAlign="center center"
+      color="primary"
+      class="answer-button"
+      [attr.aria-label]="
+        'survey.a11y-' +
+          (type === LiveFeedbackType.SURVEY
+            ? surveyLabels[i]
+            : feedbackLabels[i]) | translate
+      "
+      (click)="submitAnswer(i)"
+      tabIndex="0"
+      [appHotkey]="key"
+      [appHotkeyTitle]="
+        'survey.a11y-' +
+          (type === LiveFeedbackType.SURVEY
+            ? surveyLabels[i]
+            : feedbackLabels[i]) | translate
+      "
+    >
+      <span
+        *ngIf="type === LiveFeedbackType.SURVEY"
+        class="answer-button-label"
+      >
+        {{ surveyLabels[i] }}
+      </span>
+      <mat-icon
+        *ngIf="type === LiveFeedbackType.FEEDBACK"
+        class="button-label-icon"
+        [matTooltip]="'survey.' + feedbackLabels[i] | translate"
+      >
+        {{ feedbackIcons[i] }}</mat-icon
+      >
+    </button>
+  </div>
+</div>

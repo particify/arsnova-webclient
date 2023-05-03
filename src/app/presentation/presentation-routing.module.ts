@@ -10,7 +10,6 @@ import { RoomResolver } from '@app/core/resolver/room.resolver';
 import { RoomViewUserRoleResolver } from '@app/core/resolver/room-view-user-role.resolver';
 import { PresentationComponent } from './presentation/presentation.component';
 import { CommentPageComponent } from '@app/shared/comment-page/comment-page.component';
-import { SurveyPageComponent } from '@app/shared/survey-page/survey-page.component';
 import { ContentPresentationComponent } from '@app/creator/content-presentation/content-presentation.component';
 import { QrCodeComponent } from './qr-code/qr-code.component';
 import { CommentSettingsResolver } from '@app/core/resolver/comment-settings.resolver';
@@ -30,7 +29,10 @@ const routes: Routes = [
   },
   {
     path: 'feedback',
-    component: SurveyPageComponent,
+    loadChildren: () =>
+      import('./live-feedback/live-feedback.module').then(
+        (m) => m.LiveFeedbackModule
+      ),
   },
   {
     path: 'series/:seriesName',

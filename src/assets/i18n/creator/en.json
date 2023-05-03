@@ -301,7 +301,7 @@
   },
   "survey": {
     "a11y-message": "You are now in live feedback mode.",
-    "a11y-status": "Currently the live feedback is {{status}}. {{answers}} participants have answered yet. {{state0}} percent have selected answer {{answer0}}, {{state1}} percent have selected answer {{answer1}}, {{state2}} percent have selected answer {{answer2}}, {{state3}} percent have selected answer {{answer3}}.",
+    "a11y-status": "Currently the live feedback is {{status}}. {{state0}} percent have selected answer {{answer0}}, {{state1}} percent have selected answer {{answer1}}, {{state2}} percent have selected answer {{answer2}}, {{state3}} percent have selected answer {{answer3}}.",
     "a11y-stop-survey": "Stops the live feedback.",
     "a11y-start-survey": "Starts the live feedback.",
     "a11y-stopped": "stopped",
@@ -322,10 +322,10 @@
     "feeling-good": "Good",
     "feeling-not-so-good": "Not that good",
     "feeling-bad": "Bad",
-    "survey-a": "A",
-    "survey-b": "B",
-    "survey-c": "C",
-    "survey-d": "D",
+    "A": "A",
+    "B": "B",
+    "C": "C",
+    "D": "D",
     "change-type": "Change type",
     "status-summary": "Status summary"
   },
