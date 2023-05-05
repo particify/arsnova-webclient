@@ -1,0 +1,64 @@
+@import '../../../variables';
+
+@media (min-width: 1001px) {
+  .add-button {
+    visibility: hidden;
+  }
+
+  .scroll-top {
+    bottom: 4vw;
+  }
+}
+
+.scroll-top {
+  background-color: var(--surface);
+  color: var(--on-surface);
+  visibility: hidden;
+  opacity: 0;
+  position: fixed;
+  right: -64px;
+  z-index: 1;
+  transition: right 400ms, visibility 200ms, opacity 200ms;
+
+  &.visible {
+    visibility: visible;
+    opacity: 1;
+    right: 4vw;
+  }
+}
+
+.scroll-to-new-posts {
+  visibility: hidden;
+  opacity: 0;
+  position: fixed;
+  bottom: -4vw;
+  right: 50%;
+  transform: translateX(50%);
+  z-index: 1;
+  background: var(--surface);
+  transition: bottom 400ms, visibility 200ms, opacity 200ms;
+}
+
+.scroll-to-new-posts-visible {
+  visibility: visible;
+  opacity: 1;
+
+  // Additional 10px to align with add/scroll button vertically
+  bottom: calc(4vw + 10px);
+}
+
+@media (max-width: 1000px) {
+  .scroll-to-new-posts-visible.above-bar {
+    bottom: calc($mobile-bar-height + 4vw + 10px);
+  }
+
+  // 2 x padding (8vw) + fab height (56px) + nav bar height (56px)
+  .above-add {
+    bottom: calc(8vw + 112px);
+  }
+
+  // 2 x padding (8vw) + fab height (56px)
+  .no-nav-bar {
+    bottom: calc(8vw + 56px);
+  }
+}

@@ -1,0 +1,29 @@
+<div
+  fxLayout="column"
+  fxLayoutAlign="start center"
+  [ngClass]="{ 'bottom-margin': showToggleButton }"
+  *ngIf="disabled || readonly"
+>
+  <p class="hint">
+    {{
+      (disabled
+        ? 'comment-list.comments-are-not-enabled'
+        : 'comment-list.creation-currently-not-allowed'
+      ) | translate
+    }}
+  </p>
+  <button
+    *ngIf="(disabled || readonly) && showToggleButton"
+    mat-raised-button
+    color="primary"
+    (click)="toggleSettings()"
+  >
+    <mat-icon>{{ disabled ? 'question_answer' : 'lock_open' }}</mat-icon>
+    <span>{{
+      (disabled
+        ? 'comment-list.activate-q-and-a'
+        : 'comment-list.unlock-creation'
+      ) | translate
+    }}</span>
+  </button>
+</div>

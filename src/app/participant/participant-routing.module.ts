@@ -6,7 +6,6 @@ import {
 } from '@projects/extension-point/src/lib/extension-route';
 import { UserRole } from '@app/core/models/user-roles.enum';
 import { ParticipantContentCarouselPageComponent } from './participant-content-carousel-page/participant-content-carousel-page.component';
-import { CommentPageComponent } from '@app/shared/comment-page/comment-page.component';
 import { RoomResolver } from '@app/core/resolver/room.resolver';
 import { RoomViewUserRoleResolver } from '@app/core/resolver/room-view-user-role.resolver';
 import { AuthenticationGuard } from '@app/core/guards/authentication.guard';
@@ -34,10 +33,8 @@ const routes: Routes = [
   },
   {
     path: 'comments',
-    component: CommentPageComponent,
-    data: {
-      feature: Features.COMMENTS,
-    },
+    loadChildren: () =>
+      import('./comments/comments.module').then((m) => m.CommentsModule),
   },
   {
     path: 'feedback',

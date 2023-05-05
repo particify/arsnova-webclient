@@ -1,11 +1,10 @@
-import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { CoreModule } from '@app/core/core.module';
 
 @Component({
   standalone: true,
-  imports: [CommonModule, CoreModule, RouterModule],
+  imports: [CoreModule, RouterModule],
   selector: 'app-room-action-button',
   templateUrl: './room-action-button.component.html',
   styleUrls: ['./room-action-button.component.scss'],

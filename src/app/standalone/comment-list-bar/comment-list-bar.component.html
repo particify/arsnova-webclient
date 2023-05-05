@@ -1,0 +1,224 @@
+<div
+  fxLayout="row"
+  fxLayoutAlign="center center"
+  class="bar-container"
+  [ngClass]="{
+    'bar-container-fixed': scroll,
+    'visible-on-scrolling-up': scrollActive,
+    'fixed-hidden': isScrollStart,
+    'always-fixed': showAlways
+  }"
+>
+  <input
+    tabindex="-1"
+    #searchInput
+    class="search-input"
+    [ngClass]="{
+      'search-hidden': !searchActive
+    }"
+    (input)="search()"
+    (keyup.escape)="resetSearch()"
+    [(ngModel)]="searchData"
+    [placeholder]="'comment-list.search-placeholder' | translate"
+  />
+  <button
+    id="search-close-button"
+    mat-icon-button
+    *ngIf="searchData !== '' || searchActive"
+    (click)="resetSearch()"
+    [attr.aria-label]="'comment-list.a11y-close-search' | translate"
+  >
+    <mat-icon>close</mat-icon>
+  </button>
+
+  <div class="button-bar" fxLayoutAlign="center center" fxLayoutGap="14px">
+    <h3
+      *ngIf="
+        (!searchActive && commentCounter) || currentFilter !== filtering.NONE
+      "
+      [ngClass]="{
+        'show-counter': scroll || showAlways
+      }"
+      class="counter"
+    >
+      {{ commentCounter }}
+    </h3>
+
+    <button
+      id="search-button"
+      mat-mini-fab
+      (click)="activateSearch(); filter(filtering.NONE)"
+      class="bar-icon"
+      *ngIf="!searchActive"
+      matTooltip="{{ 'comment-list.filter-search' | translate }}"
+      appHotkey="2"
+      appTrackInteraction="Comment search opened"
+    >
+      <mat-icon>search</mat-icon>
+    </button>
+
+    <button
+      id="filter-button"
+      mat-mini-fab
+      class="bar-icon"
+      *ngIf="!searchActive"
+      [matMenuTriggerFor]="filterMenu"
+      matTooltip="{{ 'comment-list.filter-comments' | translate }}"
+      appHotkey="4"
+    >
+      <mat-icon>filter_list</mat-icon>
+    </button>
+
+    <button
+      id="select-time-button"
+      mat-mini-fab
+      class="bar-icon"
+      *ngIf="!searchActive"
+      [matMenuTriggerFor]="timeMenu"
+      matTooltip="{{ 'comment-list.select-time' | translate }}"
+      appHotkey="5"
+    >
+      <mat-icon>access_time</mat-icon>
+    </button>
+
+    <ng-content *ngIf="!searchActive"></ng-content>
+
+    <button
+      id="add-comment-button"
+      mat-mini-fab
+      color="primary"
+      [disabled]="isAddButtonDisabled"
+      *ngIf="!searchActive"
+      (click)="create()"
+      matTooltip="{{ 'comment-list.add-comment' | translate }}"
+      appHotkey="1"
+    >
+      <mat-icon>add</mat-icon>
+    </button>
+  </div>
+
+  <mat-menu
+    #filterMenu="matMenu"
+    appTrackInteraction="Comment sort/filter menu opened"
+  >
+    <app-menu-divider label="comment-list.sort"></app-menu-divider>
+    <button
+      *ngFor="let sortItem of sortItems"
+      mat-menu-item
+      (click)="sort(sortItem.name)"
+      [ngClass]="{ selected: currentSort === sortItem.name }"
+      [attr.aria-label]="'comment-list.a11y-sort-' + sortItem.name | translate"
+      appTrackInteraction="Comments sorted"
+      [appTrackName]="sortItem.name"
+    >
+      <mat-icon
+        [ngClass]="currentSort === sortItem.name ? sortItem.activeClass : ''"
+        >{{ sortItem.icon }}</mat-icon
+      >
+      <span>{{ 'comment-list.sort-' + sortItem.name | translate }}</span>
+    </button>
+    <app-menu-divider label="comment-list.filter"></app-menu-divider>
+
+    <button
+      mat-menu-item
+      (click)="filter(filtering.FAVORITE)"
+      [ngClass]="{ favorite: 'selected' }[currentFilter]"
+      [attr.aria-label]="'comment-list.a11y-filter-favorite' | translate"
+      appTrackInteraction="Comments filtered"
+      appTrackName="favorite"
+    >
+      <mat-icon [ngClass]="{ favorite: 'yellow' }[currentFilter]"
+        >grade</mat-icon
+      >
+      <span>{{ 'comment-list.filter-favorite' | translate }}</span>
+    </button>
+
+    <button
+      mat-menu-item
+      (click)="filter(filtering.ANSWER)"
+      [ngClass]="{ answer: 'selected' }[currentFilter]"
+      [attr.aria-label]="'comment-list.a11y-filter-answer' | translate"
+      appTrackInteraction="Comments filtered"
+      appTrackName="answer"
+    >
+      <mat-icon [ngClass]="{ answer: 'blue' }[currentFilter]">comment</mat-icon>
+      <span>{{ 'comment-list.filter-answered' | translate }}</span>
+    </button>
+
+    <button
+      mat-menu-item
+      [matMenuTriggerFor]="moreFilterMenu"
+      [ngClass]="{
+        selected:
+          currentFilter === filtering.CORRECT ||
+          currentFilter === filtering.WRONG
+      }"
+      [attr.aria-label]="'comment-list.a11y-filter-more' | translate"
+    >
+      <mat-icon
+        [ngClass]="{
+          green: currentFilter === filtering.CORRECT,
+          red: currentFilter === filtering.WRONG
+        }"
+        >tune</mat-icon
+      >
+      <span>{{ 'comment-list.filter-more' | translate }}</span>
+    </button>
+
+    <button
+      mat-menu-item
+      (focus)="filter(filtering.NONE)"
+      [attr.aria-label]="'comment-list.a11y-filter-close' | translate"
+      appTrackInteraction="Comments filtered"
+      appTrackName="reset"
+    >
+      <mat-icon>close</mat-icon>
+      <span>{{ 'comment-list.filter-reset' | translate }}</span>
+    </button>
+  </mat-menu>
+
+  <mat-menu #moreFilterMenu="matMenu">
+    <button
+      mat-menu-item
+      (click)="filter(filtering.CORRECT)"
+      [ngClass]="{ correct: 'selected' }[currentFilter]"
+      [attr.aria-label]="'comment-list.a11y-filter-correct' | translate"
+      appTrackInteraction="Comments filtered"
+      appTrackName="correct"
+    >
+      <mat-icon [ngClass]="{ correct: 'green' }[currentFilter]"
+        >check_circle</mat-icon
+      >
+      <span>{{ 'comment-list.filter-correct' | translate }}</span>
+    </button>
+
+    <button
+      mat-menu-item
+      (click)="filter(filtering.WRONG)"
+      [ngClass]="{ wrong: 'selected' }[currentFilter]"
+      [attr.aria-label]="'comment-list.a11y-filter-wrong' | translate"
+      appTrackInteraction="Comments filtered"
+      appTrackName="wrong"
+    >
+      <mat-icon [ngClass]="{ wrong: 'red' }[currentFilter]">cancel</mat-icon>
+      <span>{{ 'comment-list.filter-wrong' | translate }}</span>
+    </button>
+  </mat-menu>
+
+  <mat-menu #timeMenu="matMenu">
+    <div *ngFor="let periodItem of periodsList">
+      <button
+        mat-menu-item
+        (click)="setTimePeriod(periodItem)"
+        [ngClass]="{ selected: periodItem === period }"
+        [attr.aria-label]="'comment-list.a11y-select-' + periodItem | translate"
+        appTrackInteraction="Comments filtered (period)"
+        [appTrackName]="periodItem"
+      >
+        <span [ngClass]="{ primary: periodItem === period }">{{
+          'comment-list.select-' + periodItem | translate
+        }}</span>
+      </button>
+    </div>
+  </mat-menu>
+</div>

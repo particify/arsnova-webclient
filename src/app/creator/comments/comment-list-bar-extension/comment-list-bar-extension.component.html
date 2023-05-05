@@ -1,0 +1,74 @@
+<div fxLayout="row" fxLayoutGap="14px">
+  <button
+    id="readonly-button"
+    mat-mini-fab
+    class="bar-icon"
+    (click)="toggleReadonly()"
+    matTooltip="{{
+      'comment-list.' + (readonly ? 'allow-creation' : 'dont-allow-creation')
+        | translate
+    }}"
+    appHotkey="6"
+    appTrackInteraction="Comments readonly state toggled"
+    appTrackName="{{ readonly ? 'off' : 'on' }}"
+  >
+    <mat-icon>{{ readonly ? 'lock_open' : 'lock' }}</mat-icon>
+  </button>
+
+  <button
+    id="more-button"
+    mat-mini-fab
+    class="bar-icon"
+    [matMenuTriggerFor]="moreMenu"
+    matTooltip="{{ 'comment-list.more-options' | translate }}"
+  >
+    <mat-icon>construction</mat-icon>
+  </button>
+</div>
+
+<mat-menu #moreMenu="matMenu">
+  <button mat-menu-item (click)="switchList(isModeration ? 0 : 1)">
+    <mat-icon color="primary">{{
+      isModeration ? 'question_answer' : 'gavel'
+    }}</mat-icon>
+    <span>{{
+      'comment-list.' + (isModeration ? 'public-list' : 'moderation')
+        | translate
+    }}</span>
+  </button>
+
+  <button mat-menu-item (click)="navToSettings()" *ngIf="viewRole === 'OWNER'">
+    <mat-icon class="settings-icon">settings</mat-icon>
+    <span>{{ 'comment-list.settings' | translate }}</span>
+  </button>
+
+  <mat-divider></mat-divider>
+
+  <lib-extension-point
+    extensionId="add-archive"
+    (extensionEvent)="resetComments()"
+  ></lib-extension-point>
+
+  <button
+    [disabled]="comments.length === 0"
+    mat-menu-item
+    (click)="onExport()"
+    appTrackInteraction="Comments exported"
+  >
+    <mat-icon class="settings-icon">save</mat-icon>
+    <span>{{ 'comment-list.export-comments' | translate }}</span>
+  </button>
+
+  <button
+    *ngIf="viewRole === 'OWNER'"
+    [disabled]="comments.length === 0"
+    mat-menu-item
+    (click)="openDeleteCommentsDialog()"
+  >
+    <mat-icon color="warn">delete_outline</mat-icon>
+    <span>{{
+      'comment-list.delete-' + (isModeration ? 'banned' : 'all') + '-comments'
+        | translate
+    }}</span>
+  </button>
+</mat-menu>
