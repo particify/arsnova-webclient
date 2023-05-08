@@ -35,13 +35,17 @@ describe('QrCodeComponent', () => {
   const configWithJoinLink = {
     ui: {
       links: {
-        join: 'https://partici.fi/',
+        join: {
+          url: 'https://partici.fi/',
+        },
       },
     },
   };
 
   const configWithoutJoinLink = {
-    ui: {},
+    ui: {
+      links: {},
+    },
   };
 
   const mockRoutingService = jasmine.createSpyObj(RoutingService, [
