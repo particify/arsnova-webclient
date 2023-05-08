@@ -37,7 +37,6 @@
     "@ngx-translate/http-loader": "7.0.0",
     "@stomp/rx-stomp": "2.0.0",
     "@stomp/stompjs": "7.0.0",
-    "@types/lru-cache": "7.10.9",
     "backoff-rxjs": "7.0.0",
     "chart.js": "4.2.1",
     "chartjs-plugin-datalabels": "2.2.0",

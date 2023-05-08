@@ -3692,15 +3692,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/lru-cache@npm:7.10.9":
-  version: 7.10.9
-  resolution: "@types/lru-cache@npm:7.10.9"
-  dependencies:
-    lru-cache: "*"
-  checksum: 480fe7e96f515c252df70f8297e45e9afef49f7dc44d7dd2ee3518d2e6d8145a22668b4d9e63a66f5e1aa1671583bc5fd3140ce1d60a06172e3136cecb824a5a
-  languageName: node
-  linkType: hard
-
 "@types/mime@npm:*":
   version: 3.0.1
   resolution: "@types/mime@npm:3.0.1"
@@ -4564,7 +4555,6 @@ __metadata:
     "@stomp/stompjs": 7.0.0
     "@types/jasmine": 4.3.1
     "@types/jasminewd2": 2.0.10
-    "@types/lru-cache": 7.10.9
     "@types/node": 18.16.5
     "@types/wordcloud": 1.2.0
     "@typescript-eslint/eslint-plugin": 5.59.2
@@ -8637,13 +8627,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lru-cache@npm:*, lru-cache@npm:^7.4.4, lru-cache@npm:^7.5.1, lru-cache@npm:^7.7.1":
-  version: 7.16.0
-  resolution: "lru-cache@npm:7.16.0"
-  checksum: 1a5511a0e695154c37f443c495ebcf3170ec8c291df62e140329cf0c48e2549db836e69371853a28286dc9de73a98f486a7566c64246249a6041c43d4a28bc60
-  languageName: node
-  linkType: hard
-
 "lru-cache@npm:9.1.1":
   version: 9.1.1
   resolution: "lru-cache@npm:9.1.1"
@@ -8666,6 +8649,13 @@ __metadata:
   dependencies:
     yallist: ^4.0.0
   checksum: f97f499f898f23e4585742138a22f22526254fdba6d75d41a1c2526b3b6cc5747ef59c5612ba7375f42aca4f8461950e925ba08c991ead0651b4918b7c978297
+  languageName: node
+  linkType: hard
+
+"lru-cache@npm:^7.4.4, lru-cache@npm:^7.5.1, lru-cache@npm:^7.7.1":
+  version: 7.16.0
+  resolution: "lru-cache@npm:7.16.0"
+  checksum: 1a5511a0e695154c37f443c495ebcf3170ec8c291df62e140329cf0c48e2549db836e69371853a28286dc9de73a98f486a7566c64246249a6041c43d4a28bc60
   languageName: node
   linkType: hard
 
