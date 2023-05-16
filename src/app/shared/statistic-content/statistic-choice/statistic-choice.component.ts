@@ -229,7 +229,7 @@ export class StatisticChoiceComponent
               return this.getDataLabel(context.dataset.data[context.dataIndex]);
             },
             display: (context) => {
-              return context.dataset.data[context.dataIndex] > 0;
+              return (context.dataset.data[context.dataIndex] as number) > 0;
             },
             color: this.colorStrings.onBackground,
             anchor: 'end',

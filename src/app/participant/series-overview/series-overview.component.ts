@@ -1,6 +1,12 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Content } from '@app/core/models/content';
-import { ArcElement, Chart, DoughnutController, PieController } from 'chart.js';
+import {
+  ArcElement,
+  Chart,
+  ChartType,
+  DoughnutController,
+  PieController,
+} from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { RoutingService } from '@app/core/services/util/routing.service';
 import { ContentGroupService } from '@app/core/services/http/content-group.service';
@@ -210,7 +216,7 @@ export class SeriesOverviewComponent implements OnInit, OnDestroy {
       ChartDataLabels
     );
     this.chart = new Chart('chart', {
-      type: 'doughnut',
+      type: 'doughnut' as ChartType,
       data: {
         datasets: dataSets,
       },
