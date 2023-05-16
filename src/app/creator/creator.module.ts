@@ -41,6 +41,7 @@ import { StatisticListComponent } from '@app/creator/statistic-list/statistic-li
 import { StatisticsPageComponent } from '@app/creator/statistics-page/statistics-page.component';
 import { SettingsPanelHeaderComponent } from '@app/standalone/settings-panel-header/settings-panel-header.component';
 import { SettingsSlideToggleComponent } from '@app/standalone/settings-slide-toggle/settings-slide-toggle.component';
+import { HintComponent } from '@app/standalone/hint/hint.component';
 
 @NgModule({
   imports: [
@@ -62,6 +63,7 @@ import { SettingsSlideToggleComponent } from '@app/standalone/settings-slide-tog
     ClipboardModule,
     SettingsPanelHeaderComponent,
     SettingsSlideToggleComponent,
+    HintComponent,
   ],
   declarations: [
     ContentChoiceCreationComponent,

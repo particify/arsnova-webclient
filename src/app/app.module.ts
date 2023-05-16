@@ -97,6 +97,7 @@ import { SettingsPanelHeaderComponent } from '@app/standalone/settings-panel-hea
 import { SettingsSlideToggleComponent } from '@app/standalone/settings-slide-toggle/settings-slide-toggle.component';
 import { ListBadgeComponent } from '@app/standalone/list-badge/list-badge.component';
 import { RoomCreateComponent } from '@app/core/components/_dialogs/room-create/room-create.component';
+import { HintComponent } from '@app/standalone/hint/hint.component';
 
 export function initializeApp(appConfig: AppConfig) {
   return () => appConfig.load();
@@ -140,6 +141,7 @@ export function initializeApp(appConfig: AppConfig) {
     SettingsPanelHeaderComponent,
     SettingsSlideToggleComponent,
     ListBadgeComponent,
+    HintComponent,
     HttpClientModule,
     ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: environment.production,

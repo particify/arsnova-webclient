@@ -12,7 +12,7 @@ import { ContentCreationComponent } from '@app/creator/content-creation/content-
 import { ContentFlashcard } from '@app/core/models/content-flashcard';
 import { EventService } from '@app/core/services/util/event.service';
 import { FormattingService } from '@app/core/services/http/formatting.service';
-import { HINT_TYPES } from '@app/shared/hint/hint.component';
+import { HINT_TYPES } from '@app/standalone/hint/hint.component';
 import { AnnounceService } from '@app/core/services/util/announce.service';
 
 @Component({

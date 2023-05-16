@@ -16,7 +16,7 @@ import {
   STORAGE_KEYS,
 } from '@app/core/services/util/global-storage.service';
 import { ClientAuthentication } from '@app/core/models/client-authentication';
-import { HINT_TYPES } from '@app/shared/hint/hint.component';
+import { HINT_TYPES } from '@app/standalone/hint/hint.component';
 import { AuthProvider } from '@app/core/models/auth-provider';
 import { ApiConfigService } from '@app/core/services/http/api-config.service';
 import {

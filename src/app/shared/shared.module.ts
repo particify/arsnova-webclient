@@ -15,7 +15,6 @@ import { YesNoDialogComponent } from './_dialogs/yes-no-dialog/yes-no-dialog.com
 import { StepperComponent } from './stepper/stepper.component';
 import { CdkStepperModule } from '@angular/cdk/stepper';
 import { RenderedTextComponent } from './rendered-text/rendered-text.component';
-import { HintComponent } from './hint/hint.component';
 import { ExtensionPointModule } from '@projects/extension-point/src/lib/extension-point.module';
 import { AnswerCountComponent } from './answer-count/answer-count.component';
 import { StatisticContentComponent } from './statistic-content/statistic-content/statistic-content.component';
@@ -76,7 +75,6 @@ import { CommentListComponent } from './comment-list/comment-list.component';
     YesNoDialogComponent,
     StepperComponent,
     RenderedTextComponent,
-    HintComponent,
     AnswerCountComponent,
     StatisticContentComponent,
     ContentSortAnswerComponent,
@@ -116,9 +114,7 @@ import { CommentListComponent } from './comment-list/comment-list.component';
     StatisticTextComponent,
     StatisticWordcloudComponent,
     RenderedTextComponent,
-    HintComponent,
     StatisticContentComponent,
-    HintComponent,
     ContentSortAnswerComponent,
     StatisticSortComponent,
     NavBarComponent,
