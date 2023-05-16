@@ -11,7 +11,7 @@ import { YesNoDialogComponent } from '@app/shared/_dialogs/yes-no-dialog/yes-no-
 import { ContentGroupCreationComponent } from '@app/creator/_dialogs/content-group-creation/content-group-creation.component';
 import { ClientAuthentication } from '@app/core/models/client-authentication';
 import { CreateCommentComponent } from '@app/shared/_dialogs/create-comment/create-comment.component';
-import { RoomCreateComponent } from '@app/shared/_dialogs/room-create/room-create.component';
+import { RoomCreateComponent } from '@app/core/components/_dialogs/room-create/room-create.component';
 import { UserActivationComponent } from '@app/core/components//_dialogs/user-activation/user-activation.component';
 import { UpdateInfoComponent } from '@app/core/components/update-info/update-info.component';
 import { UserRole } from '@app/core/models/user-roles.enum';

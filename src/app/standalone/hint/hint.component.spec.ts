@@ -10,8 +10,8 @@ describe('HintComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [HintComponent],
       imports: [
+        HintComponent,
         TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,

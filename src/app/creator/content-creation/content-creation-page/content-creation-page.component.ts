@@ -10,7 +10,7 @@ import { AnnounceService } from '@app/core/services/util/announce.service';
 import { Subject } from 'rxjs';
 import { Content } from '@app/core/models/content';
 import { FormattingService } from '@app/core/services/http/formatting.service';
-import { HINT_TYPES } from '@app/shared/hint/hint.component';
+import { HINT_TYPES } from '@app/standalone/hint/hint.component';
 import { UserRole } from '@app/core/models/user-roles.enum';
 import { ContentService } from '@app/core/services/http/content.service';
 import { ContentType } from '@app/core/models/content-type.enum';

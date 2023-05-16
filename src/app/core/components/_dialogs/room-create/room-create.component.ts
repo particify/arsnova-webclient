@@ -16,7 +16,7 @@ import {
   STORAGE_KEYS,
 } from '@app/core/services/util/global-storage.service';
 import { ClientAuthentication } from '@app/core/models/client-authentication';
-import { HINT_TYPES } from '@app/shared/hint/hint.component';
+import { HINT_TYPES } from '@app/standalone/hint/hint.component';
 import { AuthProvider } from '@app/core/models/auth-provider';
 import { ApiConfigService } from '@app/core/services/http/api-config.service';
 import {
@@ -141,23 +141,6 @@ export class RoomCreateComponent implements OnInit {
     });
   }
 
-  /**
-   * Returns a lambda which closes the dialog on call.
-   */
-  buildCloseDialogActionCallback(): () => void {
-    return () => this.closeDialog();
-  }
-
-  /**
-   * Returns a lambda which executes the dialog dedicated action on call.
-   */
-  buildRoomCreateActionCallback(): () => void {
-    return () => this.checkLogin();
-  }
-
-  /**
-   * Closes the room create dialog on call.
-   */
   closeDialog(result?: boolean): void {
     this.dialogRef.close(result);
   }

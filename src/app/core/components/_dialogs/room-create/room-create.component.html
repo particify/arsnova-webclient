@@ -31,11 +31,23 @@
     ></app-hint>
   </div>
 </form>
-<div mat-dialog-actions fxLayoutAlign="end">
-  <app-dialog-action-buttons
-    buttonsLabelSection="dialog"
-    confirmButtonLabel="create-room"
-    [cancelButtonClickAction]="buildCloseDialogActionCallback()"
-    [confirmButtonClickAction]="buildRoomCreateActionCallback()"
-  ></app-dialog-action-buttons>
+<div fxLayoutAlign="end">
+  <div
+    mat-dialog-actions
+    fxLayout="row-reverse"
+    fxLayoutAling="end"
+    fxLayoutGap="10px"
+  >
+    <button (click)="checkLogin()" mat-flat-button color="primary">
+      {{ 'dialog.create-room' | translate }}
+    </button>
+    <button
+      (click)="closeDialog()"
+      aria-labelledby="cancel"
+      mat-button
+      type="button"
+    >
+      {{ 'dialog.cancel' | translate }}
+    </button>
+  </div>
 </div>

@@ -1,4 +1,8 @@
+import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
+import { FlexModule } from '@angular/flex-layout';
+import { MatIconModule } from '@angular/material/icon';
+import { TranslateModule } from '@ngx-translate/core';
 
 export interface Hint {
   type: string;
@@ -25,6 +29,8 @@ export const HINTS: Hint[] = [
 ];
 
 @Component({
+  standalone: true,
+  imports: [CommonModule, FlexModule, MatIconModule, TranslateModule],
   selector: 'app-hint',
   templateUrl: './hint.component.html',
   styleUrls: ['./hint.component.scss'],

@@ -15,7 +15,7 @@ import {
   FormattingService,
   MarkdownFeatureset,
 } from '@app/core/services/http/formatting.service';
-import { HINT_TYPES } from '@app/shared/hint/hint.component';
+import { HINT_TYPES } from '@app/standalone/hint/hint.component';
 import { UpdateEvent } from '@app/creator/settings-page/settings-page.component';
 import { UserRole } from '@app/core/models/user-roles.enum';
 
