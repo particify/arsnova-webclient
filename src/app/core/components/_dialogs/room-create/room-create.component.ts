@@ -141,23 +141,6 @@ export class RoomCreateComponent implements OnInit {
     });
   }
 
-  /**
-   * Returns a lambda which closes the dialog on call.
-   */
-  buildCloseDialogActionCallback(): () => void {
-    return () => this.closeDialog();
-  }
-
-  /**
-   * Returns a lambda which executes the dialog dedicated action on call.
-   */
-  buildRoomCreateActionCallback(): () => void {
-    return () => this.checkLogin();
-  }
-
-  /**
-   * Closes the room create dialog on call.
-   */
   closeDialog(result?: boolean): void {
     this.dialogRef.close(result);
   }

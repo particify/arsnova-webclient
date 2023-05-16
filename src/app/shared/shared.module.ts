@@ -4,7 +4,6 @@ import { SurveyPageComponent } from './survey-page/survey-page.component';
 import { RoomOverviewComponent } from './room-overview/room-overview.component';
 import { CommentPageComponent } from './comment-page/comment-page.component';
 import { CoreModule } from '@app/core/core.module';
-import { RoomCreateComponent } from './_dialogs/room-create/room-create.component';
 import { CommentComponent } from './comment/comment.component';
 import { CreateCommentComponent } from './_dialogs/create-comment/create-comment.component';
 import { PresentCommentComponent } from './present-comment/present-comment.component';
@@ -66,7 +65,6 @@ import { CommentListComponent } from './comment-list/comment-list.component';
     SurveyPageComponent,
     CommentPageComponent,
     CommentListComponent,
-    RoomCreateComponent,
     CommentComponent,
     CreateCommentComponent,
     PresentCommentComponent,
