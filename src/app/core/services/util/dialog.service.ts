@@ -9,12 +9,9 @@ import { UpdateAvailableEvent } from '@angular/service-worker';
 import { Observable } from 'rxjs';
 import { YesNoDialogComponent } from '@app/shared/_dialogs/yes-no-dialog/yes-no-dialog.component';
 import { ContentGroupCreationComponent } from '@app/creator/_dialogs/content-group-creation/content-group-creation.component';
-import { ClientAuthentication } from '@app/core/models/client-authentication';
-import { CreateCommentComponent } from '@app/shared/_dialogs/create-comment/create-comment.component';
 import { RoomCreateComponent } from '@app/core/components/_dialogs/room-create/room-create.component';
 import { UserActivationComponent } from '@app/core/components//_dialogs/user-activation/user-activation.component';
 import { UpdateInfoComponent } from '@app/core/components/update-info/update-info.component';
-import { UserRole } from '@app/core/models/user-roles.enum';
 import { VersionInfo } from '@app/core/models/version-info';
 import {
   ExportComponent,
@@ -97,27 +94,6 @@ export class DialogService {
   }
 
   // Shared dialogs
-
-  openCreateCommentDialog(
-    auth: ClientAuthentication,
-    tags: string[],
-    roomId: string,
-    directSend: boolean,
-    fileUploadEnabled: boolean,
-    role: UserRole
-  ): MatDialogRef<CreateCommentComponent> {
-    return this.openDialog(CreateCommentComponent, {
-      width: this.size.small,
-      data: {
-        auth: auth,
-        tags: tags,
-        roomId: roomId,
-        directSend: directSend,
-        fileUploadEnabled: fileUploadEnabled,
-        role: role,
-      },
-    });
-  }
 
   openRoomCreateDialog(
     duplicatedName?: string

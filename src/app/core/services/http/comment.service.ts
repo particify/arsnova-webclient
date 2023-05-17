@@ -13,6 +13,10 @@ import { Room } from '@app/core/models/room';
 import { CachingService } from '@app/core/services/util/caching.service';
 import { WsCommentService } from '@app/core/services/websockets/ws-comment.service';
 import { Message } from '@stomp/stompjs';
+import { CommentFilter } from '@app/core/models/comment-filter.enum';
+import { CorrectWrong } from '@app/core/models/correct-wrong.enum';
+import { CommentSort } from '@app/core/models/comment-sort.enum';
+import { CommentPeriod } from '@app/core/models/comment-period.enum';
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
@@ -305,5 +309,66 @@ export class CommentService extends AbstractEntityService<Comment> {
       }
     }
     return count;
+  }
+
+  filterComments(comments: Comment[], type: CommentFilter, tag?: string) {
+    return comments.filter((c) => {
+      switch (type) {
+        case CommentFilter.CORRECT:
+          return c.correct === CorrectWrong.CORRECT ? 1 : 0;
+        case CommentFilter.WRONG:
+          return c.correct === CorrectWrong.WRONG ? 1 : 0;
+        case CommentFilter.FAVORITE:
+          return c.favorite;
+        case CommentFilter.TAG:
+          return c.tag === tag;
+        case CommentFilter.ANSWER:
+          return c.answer;
+      }
+    });
+  }
+
+  sortComments(comments: Comment[], type: CommentSort): Comment[] {
+    return comments.sort((a, b) => {
+      if (type === CommentSort.VOTEASC) {
+        return a.score > b.score ? 1 : b.score > a.score ? -1 : 0;
+      } else if (type === CommentSort.VOTEDESC) {
+        return b.score > a.score ? 1 : a.score > b.score ? -1 : 0;
+      } else if (type === CommentSort.TIME) {
+        const dateA = new Date(a.timestamp),
+          dateB = new Date(b.timestamp);
+        return +dateB > +dateA ? 1 : +dateA > +dateB ? -1 : 0;
+      }
+    });
+  }
+
+  filterCommentsByTimePeriod(
+    comments: Comment[],
+    period: CommentPeriod
+  ): Comment[] {
+    const currentTime = new Date();
+    const hourInSeconds = 3600000;
+    let periodInSeconds;
+    if (period !== CommentPeriod.ALL) {
+      switch (period) {
+        case CommentPeriod.ONEHOUR:
+          periodInSeconds = hourInSeconds;
+          break;
+        case CommentPeriod.THREEHOURS:
+          periodInSeconds = hourInSeconds * 3;
+          break;
+        case CommentPeriod.ONEDAY:
+          periodInSeconds = hourInSeconds * 24;
+          break;
+        case CommentPeriod.ONEWEEK:
+          periodInSeconds = hourInSeconds * 168;
+      }
+      comments = comments.filter(
+        (c) =>
+          new Date(c.timestamp).getTime() >=
+          currentTime.getTime() - periodInSeconds
+      );
+    }
+    return comments;
   }
 }

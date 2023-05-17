@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CoreModule } from '@app/core/core.module';
@@ -8,7 +7,7 @@ import { RenderedTextComponent } from '@app/standalone/rendered-text/rendered-te
 
 @Component({
   standalone: true,
-  imports: [CommonModule, CoreModule, CopyUrlComponent, RenderedTextComponent],
+  imports: [CoreModule, CopyUrlComponent, RenderedTextComponent],
   selector: 'app-room-overview-header',
   templateUrl: './room-overview-header.component.html',
   styleUrls: ['./room-overview-header.component.scss'],

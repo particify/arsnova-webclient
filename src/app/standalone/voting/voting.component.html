@@ -1,0 +1,26 @@
+<div
+  fxLayout="column"
+  fxLayoutAlign="center"
+  class="vote-container"
+  [ngClass]="{ '1': 'vote-up', '-1': 'vote-down', '0': 'reset' }[currentVote]"
+>
+  <button
+    mat-icon-button
+    (click)="vote(1)"
+    [matTooltip]="'comment-page.vote-up' | translate"
+  >
+    <mat-icon class="voting-icon" [ngClass]="{ green: hasVoted === 1 }"
+      >keyboard_arrow_up</mat-icon
+    >
+  </button>
+  <span class="score">{{ score }}</span>
+  <button
+    mat-icon-button
+    (click)="vote(-1)"
+    [matTooltip]="'comment-page.vote-down' | translate"
+  >
+    <mat-icon class="voting-icon" [ngClass]="{ red: hasVoted === -1 }"
+      >keyboard_arrow_down</mat-icon
+    >
+  </button>
+</div>

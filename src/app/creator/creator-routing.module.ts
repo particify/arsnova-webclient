@@ -9,7 +9,6 @@ import { UserRole } from '@app/core/models/user-roles.enum';
 import { ContentCreationPageComponent } from './content-creation/content-creation-page/content-creation-page.component';
 import { StatisticsPageComponent } from './statistics-page/statistics-page.component';
 import { ContentPresentationComponent } from './content-presentation/content-presentation.component';
-import { CommentPageComponent } from '@app/shared/comment-page/comment-page.component';
 import { SettingsPageComponent } from './settings-page/settings-page.component';
 import { RoomResolver } from '@app/core/resolver/room.resolver';
 import { RoomViewUserRoleResolver } from '@app/core/resolver/room-view-user-role.resolver';
@@ -67,17 +66,8 @@ const routes: Routes = [
   },
   {
     path: 'comments',
-    component: CommentPageComponent,
-    resolve: {
-      commentSettings: CommentSettingsResolver,
-    },
-  },
-  {
-    path: 'comments/moderation',
-    component: CommentPageComponent,
-    data: {
-      isModeration: true,
-    },
+    loadChildren: () =>
+      import('./comments/comments.module').then((m) => m.CommentsModule),
     resolve: {
       commentSettings: CommentSettingsResolver,
     },

@@ -25,10 +25,6 @@ import { ContentGroup } from '@app/core/models/content-group';
 import { map, takeUntil } from 'rxjs/operators';
 import { ApiConfigService } from '@app/core/services/http/api-config.service';
 import { Subject } from 'rxjs';
-import {
-  CommentPresentationState,
-  Sort,
-} from '@app/shared/comment-list/comment-list.component';
 import { AnnounceService } from '@app/core/services/util/announce.service';
 import { Hotkey, HotkeyService } from '@app/core/services/util/hotkey.service';
 import { HotkeyAction } from '@app/core/directives/hotkey.directive';
@@ -47,6 +43,8 @@ import { RemoteService } from '@app/core/services/util/remote.service';
 import { PresentationEvent } from '@app/core/models/events/presentation-events.enum';
 import { CommentSettingsService } from '@app/core/services/http/comment-settings.service';
 import { ContentPublishService } from '@app/core/services/util/content-publish.service';
+import { CommentSort } from '@app/core/models/comment-sort.enum';
+import { CommentPresentationState } from '@app/presentation/comments/comments-page.component';
 
 export class KeyNavBarItem extends NavBarItem {
   key: string;
@@ -94,8 +92,8 @@ export class ControlBarComponent
   menuOpen = false;
   joinUrl: string;
   currentCommentZoom = 100;
-  currentCommentSort: Sort;
-  commentSortTypes = [Sort.TIME, Sort.VOTEDESC];
+  currentCommentSort: CommentSort;
+  commentSortTypes = [CommentSort.TIME, CommentSort.VOTEDESC];
   isCurrentContentPublished = false;
   contentIndex = 0;
   content: Content;
@@ -210,7 +208,9 @@ export class ControlBarComponent
     this.subscribeFullscreen();
     this.registerHotkeys();
     this.currentCommentSort =
-      lastSort && lastSort !== Sort.VOTEASC ? lastSort : Sort.TIME;
+      lastSort && lastSort !== CommentSort.VOTEASC
+        ? lastSort
+        : CommentSort.TIME;
     this.route.data.subscribe((data) => {
       this.surveyStarted = !data.room.settings.feedbackLocked;
       this.setSurveyState();
@@ -551,7 +551,7 @@ export class ControlBarComponent
     this.toggleBarVisibility(false);
   }
 
-  changeCommentSort(sort: Sort) {
+  changeCommentSort(sort: CommentSort) {
     this.currentCommentSort = sort;
     this.eventService.broadcast(
       PresentationEvent.COMMENT_SORTING_UPDATED,

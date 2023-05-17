@@ -1,0 +1,116 @@
+<div fxLayout="row" fxLayoutAlign="center">
+  <div class="page-container">
+    <div fxLayout="row" class="header-container">
+      <mat-tab-group
+        class="tab-group"
+        (selectedTabChange)="switchList($event.index)"
+        [selectedIndex]="isModeration ? 1 : 0"
+      >
+        <mat-tab
+          *ngIf="!isArchive"
+          label="{{ 'comment-list.public-list' | translate }} {{
+            publicCounter | counterBraces
+          }}"
+        ></mat-tab>
+        <mat-tab
+          *ngIf="!isArchive"
+          label="{{ 'comment-list.moderation' | translate }} {{
+            moderationCounter | counterBraces
+          }}"
+        ></mat-tab>
+        <mat-tab
+          *ngIf="isArchive"
+          label="{{ 'comment-list.archive' | translate }}"
+        ></mat-tab>
+      </mat-tab-group>
+      <app-comment-list-bar
+        [scroll]="scroll"
+        [scrollActive]="scrollActive"
+        [isScrollStart]="isScrollStart"
+        [viewRole]="viewRole"
+        [commentCounter]="
+          filteredComments && hideCommentsList
+            ? filteredComments.length
+            : commentsFilteredByTime.length + unreadCommentCount
+        "
+        [isAddButtonDisabled]="isModeration || readonly || disabled"
+        [currentFilter]="currentFilter"
+        [currentSort]="currentSort"
+        [period]="period"
+        (searchInputChanged)="searchComments($event)"
+        (createCommentClicked)="openCreateDialog()"
+        (filterSelected)="filterComments($event)"
+        (sortingSelected)="sortCommentsManually($event)"
+        (periodSelected)="setTimePeriod($event)"
+      >
+        <app-comment-list-bar-extension
+          [room]="room"
+          [isModeration]="isModeration"
+          [comments]="comments"
+          [readonly]="readonly"
+          [viewRole]="viewRole"
+          (switchListClicked)="switchList($event)"
+          (toggleReadonlyClicked)="toggleReadonly()"
+          (resetCommentsClicked)="resetComments()"
+        ></app-comment-list-bar-extension>
+      </app-comment-list-bar>
+    </div>
+    <app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
+    <app-comment-list-hint
+      *ngIf="!isLoading && !disabled"
+      [isListEmpty]="comments.length < 1"
+      [noPostsFound]="
+        (hideCommentsList && filteredComments.length < 1) ||
+        (!hideCommentsList && commentsFilteredByTime.length < 1)
+      "
+    ></app-comment-list-hint>
+    <app-comment-settings-hint
+      [disabled]="disabled"
+      [readonly]="readonly"
+      [showToggleButton]="true"
+      (toggleButtonClicked)="disabled ? activateComments() : toggleReadonly()"
+    ></app-comment-settings-hint>
+    <div
+      *ngIf="!isLoading"
+      class="comments-container"
+      tabindex="-1"
+      appHotkey="7"
+      [appHotkeyTitle]="'comment-list.list' | translate"
+      [attr.aria-label]="'comment-list.list' | translate"
+    >
+      <app-comment
+        *ngFor="let comment of displayComments"
+        [comment]="comment"
+        [isEditor]="true"
+        [archived]="isArchive"
+        [isModeration]="isModeration"
+        [referenceEvent]="referenceEvent.asObservable()"
+        [isNew]="comment.id === newestComment.id"
+        [fileUploadEnabled]="fileUploadEnabled"
+        (activeComment)="updateCurrentComment($event)"
+        (clickedOnTag)="clickedOnTag($event)"
+      >
+      </app-comment>
+    </div>
+    <app-comment-list-add-button
+      [showButton]="
+        comments.length < 3 &&
+        !isLoading &&
+        !isModeration &&
+        !isArchive &&
+        !disabled
+      "
+      (buttonClicked)="openCreateDialog()"
+    ></app-comment-list-add-button>
+    <app-comment-list-floating-buttons
+      [showAddButton]="!isArchive && !isModeration && !disabled"
+      [addButtonDisabled]="readonly"
+      [showScrollButton]="scrollExtended && scrollActive"
+      [showScrollToNewPostsButton]="scrollExtended && unreadCommentCount > 0"
+      [navBarExists]="navBarExists"
+      (scrollTopClicked)="scrollTop(true)"
+      (loadAndScrollClicked)="loadAndScroll()"
+      (createClicked)="openCreateDialog()"
+    ></app-comment-list-floating-buttons>
+  </div>
+</div>

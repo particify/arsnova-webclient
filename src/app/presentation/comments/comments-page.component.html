@@ -1,0 +1,31 @@
+<div fxLayout="row" fxLayoutAlign="start">
+  <div id="presentation-button" tabIndex="-1" class="visually-hidden">
+    {{ 'presentation.a11y-comment-message' | translate }}
+  </div>
+  <div class="presentation-container">
+    <app-present-comment
+      fxFill
+      [isPresentation]="true"
+      [comment]="activeComment"
+    ></app-present-comment>
+  </div>
+  <div #commentList (scroll)="onScroll()" class="list-container">
+    <div
+      *ngIf="!isLoading"
+      tabindex="-1"
+      appHotkey="7"
+      [appHotkeyTitle]="'comment-list.list' | translate"
+      [attr.aria-label]="'comment-list.list' | translate"
+    >
+      <app-comment
+        *ngFor="let comment of displayComments"
+        [comment]="comment"
+        [isEditor]="true"
+        [isSimpleView]="true"
+        [isNew]="comment.id === newestComment.id"
+        (activeComment)="updateCurrentComment($event)"
+      >
+      </app-comment>
+    </div>
+  </div>
+</div>

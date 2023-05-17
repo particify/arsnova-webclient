@@ -9,7 +9,6 @@ import { UserRole } from '@app/core/models/user-roles.enum';
 import { RoomResolver } from '@app/core/resolver/room.resolver';
 import { RoomViewUserRoleResolver } from '@app/core/resolver/room-view-user-role.resolver';
 import { PresentationComponent } from './presentation/presentation.component';
-import { CommentPageComponent } from '@app/shared/comment-page/comment-page.component';
 import { ContentPresentationComponent } from '@app/creator/content-presentation/content-presentation.component';
 import { QrCodeComponent } from './qr-code/qr-code.component';
 import { CommentSettingsResolver } from '@app/core/resolver/comment-settings.resolver';
@@ -25,7 +24,8 @@ const routes: Routes = [
   },
   {
     path: 'comments',
-    component: CommentPageComponent,
+    loadChildren: () =>
+      import('./comments/comments.module').then((m) => m.CommentsModule),
   },
   {
     path: 'feedback',

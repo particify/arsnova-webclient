@@ -1,0 +1,8 @@
+<div fxLayout="row" fxLayoutAlign="center center" tabindex="0">
+  <p *ngIf="isListEmpty" class="hint">
+    {{ 'comment-page.no-comments' | translate }}
+  </p>
+  <p *ngIf="!isListEmpty && noPostsFound" class="hint">
+    {{ 'comment-page.no-comments-found' | translate }}
+  </p>
+</div>
