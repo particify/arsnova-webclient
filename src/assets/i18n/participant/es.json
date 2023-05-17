@@ -169,15 +169,18 @@
     "a11y-room-message": "Ahora estás en la sala {{name}}.",
     "a11y-comments": "Abre la página donde puedes crear publicaciones y votar a favor o en contra de otras publicaciones.",
     "a11y-statistics": "Abre las estadísticas de la serie de preguntas.",
-    "a11y-live-survey": "Abre la retroalimentación en vivo.",
+    "a11y-live-feedback": "Abre la retroalimentación en vivo.",
     "a11y-content-groups": "En esta sala hay {{count}} series de preguntas. Cambia entre ellas y presiona Enter para responder a los contenidos de la serie de preguntas.",
     "a11y-no-content-groups": "Aún no hay contenidos en esta sala.",
     "a11y-enter-content-group": "Abre el grupo de contenido {{name}}.",
-    "a11y-live-survey-disabled": "La retroalimentación en vivo no está activa actualmente.",
+    "a11y-live-feedback-disabled": "La retroalimentación en vivo no está activa actualmente.",
+    "a11y-copy-url": "Copia el enlace de la sala al portapapeles",
     "answer-statistics": "Estadísticas",
     "comments": "Preguntas y respuestas",
-    "live-survey": "Retroalimentación en vivo",
-    "no-contents": "Aún no hay contenidos."
+    "live-feedback": "Retroalimentación en vivo",
+    "no-contents": "Aún no hay contenidos.",
+    "copy-url": "Copiar dirección",
+    "url-copied": "El enlace de la sala se ha copiado al portapapeles."
   },
   "statistic": {
     "a11y-message-overview": "Ahora estás en la vista general de estadísticas.",

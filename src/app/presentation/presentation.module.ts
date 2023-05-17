@@ -15,6 +15,7 @@ import { BarNotificationComponent } from './bars/bar-notification/bar-notificati
 import { QrCodeComponent } from './qr-code/qr-code.component';
 import { CreatorModule } from '@app/creator/creator.module';
 import { CoreModule } from '@app/core/core.module';
+import { CopyUrlComponent } from '@app/standalone/copy-url/copy-url.component';
 
 @NgModule({
   declarations: [
@@ -40,6 +41,7 @@ import { CoreModule } from '@app/core/core.module';
       isolate: true,
     }),
     QrCodeModule,
+    CopyUrlComponent,
   ],
 })
 export class PresentationModule {}

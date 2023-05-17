@@ -17,9 +17,11 @@ import { ContentSortParticipantComponent } from './content/content-sort-particip
 import { ContentWordcloudParticipantComponent } from './content/content-wordcloud-participant/content-wordcloud-participant.component';
 import { ContentScaleParticipantComponent } from './content/content-scale-participant/content-scale-participant.component';
 import { SeriesOverviewComponent } from './series-overview/series-overview.component';
-import { ParticipantOverviewComponent } from './participant-overview/participant-overview.component';
 import { ContentPrioritizationParticipantComponent } from './content/content-prioritization-participant/content-prioritization-participant.component';
 import { ContentCarouselService } from '@app/core/services/util/content-carousel.service';
+import { ParticipantPageComponent } from './participant-page.component';
+import { FooterComponent } from '@app/standalone/footer/footer.component';
+import { RenderedTextComponent } from '@app/standalone/rendered-text/rendered-text.component';
 
 @NgModule({
   imports: [
@@ -37,6 +39,8 @@ import { ContentCarouselService } from '@app/core/services/util/content-carousel
     }),
     CdkStepperModule,
     ExtensionPointModule,
+    FooterComponent,
+    RenderedTextComponent,
   ],
   declarations: [
     ContentChoiceParticipantComponent,
@@ -47,8 +51,8 @@ import { ContentCarouselService } from '@app/core/services/util/content-carousel
     ContentSortParticipantComponent,
     ContentWordcloudParticipantComponent,
     SeriesOverviewComponent,
-    ParticipantOverviewComponent,
     ContentPrioritizationParticipantComponent,
+    ParticipantPageComponent,
   ],
   providers: [
     { provide: TRANSLATION_MODULE_NAME, useValue: 'participant' },

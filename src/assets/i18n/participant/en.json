@@ -172,15 +172,18 @@
     "a11y-room-message": "You're in the room {{name}} now.",
     "a11y-comments": "Opens the page where you can create posts and vote up or down other posts.",
     "a11y-statistics": "Opens the statistics for the question series.",
-    "a11y-live-survey": "Opens the live feedback.",
+    "a11y-live-feedback": "Opens the live feedback.",
     "a11y-content-groups": "In this room there are {{count}} question series. Tab between them and press Enter to answer the contents of the question series.",
     "a11y-no-content-groups": "There are no contents in this room yet.",
     "a11y-enter-content-group": "Opens the content group {{name}}.",
-    "a11y-live-survey-disabled": "The live feedback is currently not active.",
+    "a11y-live-feedback-disabled": "The live feedback is currently not active.",
+    "a11y-copy-url": "Copy link to room to the clipboard",
     "answer-statistics": "Statistics",
     "comments": "Q&A",
-    "live-survey": "Live Feedback",
-    "no-contents": "There are no contents yet."
+    "live-feedback": "Live Feedback",
+    "no-contents": "There are no contents yet.",
+    "copy-url": "Copy address",
+    "url-copied": "Room link was copied to the clipboard."
   },
   "statistic": {
     "a11y-message-overview": "You are now on the statistics overview.",

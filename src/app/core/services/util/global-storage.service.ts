@@ -66,12 +66,6 @@ export const STORAGE_CONFIG: StorageItem[] = [
     backend: StorageBackend.MEMORY,
   },
   {
-    key: STORAGE_KEYS.SHORT_ID,
-    name: 'SHORT_ID',
-    category: StorageItemCategory.REQUIRED,
-    backend: StorageBackend.MEMORY,
-  },
-  {
     key: STORAGE_KEYS.DEVICE_TYPE,
     name: 'DEVICE_TYPE',
     category: StorageItemCategory.REQUIRED,

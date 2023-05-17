@@ -30,18 +30,19 @@ import { ContentWordcloudCreationComponent } from './content-creation/content-wo
 import { ExportComponent } from './_dialogs/export/export.component';
 import { DialogService } from '@app/core/services/util/dialog.service';
 import { PublishContentComponent } from './_dialogs/publish-content/publish-content.component';
-import { CreatorOverviewComponent } from './creator-overview/creator-overview.component';
 import { AnnouncementSettingsComponent } from './settings/announcement-settings/announcement-settings.component';
 import { CreateAnswerOptionComponent } from './content-creation/create-answer-option/create-answer-option.component';
 import { ContentPrioritizationCreationComponent } from './content-creation/content-prioritization-creation/content-prioritization-creation.component';
-import { CopyUrlComponent } from './copy-url/copy-url.component';
-import { ClipboardModule } from '@angular/cdk/clipboard';
 import { StartNewRoundComponent } from './start-new-round/start-new-round.component';
 import { StatisticListComponent } from '@app/creator/statistic-list/statistic-list.component';
 import { StatisticsPageComponent } from '@app/creator/statistics-page/statistics-page.component';
 import { SettingsPanelHeaderComponent } from '@app/standalone/settings-panel-header/settings-panel-header.component';
 import { SettingsSlideToggleComponent } from '@app/standalone/settings-slide-toggle/settings-slide-toggle.component';
 import { HintComponent } from '@app/standalone/hint/hint.component';
+import { CreatorPageComponent } from './creator-page.component';
+import { FooterComponent } from '@app/standalone/footer/footer.component';
+import { DividerComponent } from '@app/standalone/divider/divider.component';
+import { RenderedTextComponent } from '@app/standalone/rendered-text/rendered-text.component';
 
 @NgModule({
   imports: [
@@ -60,10 +61,12 @@ import { HintComponent } from '@app/standalone/hint/hint.component';
     }),
     CdkStepperModule,
     ExtensionPointModule,
-    ClipboardModule,
     SettingsPanelHeaderComponent,
     SettingsSlideToggleComponent,
     HintComponent,
+    FooterComponent,
+    DividerComponent,
+    RenderedTextComponent,
   ],
   declarations: [
     ContentChoiceCreationComponent,
@@ -71,7 +74,6 @@ import { HintComponent } from '@app/standalone/hint/hint.component';
     ContentScaleCreationComponent,
     ContentTextCreationComponent,
     ContentYesNoCreationComponent,
-    CreatorOverviewComponent,
     RoomComponent,
     ContentPresentationComponent,
     AccessComponent,
@@ -89,16 +91,12 @@ import { HintComponent } from '@app/standalone/hint/hint.component';
     AnnouncementSettingsComponent,
     CreateAnswerOptionComponent,
     ContentPrioritizationCreationComponent,
-    CopyUrlComponent,
     StatisticListComponent,
     StatisticsPageComponent,
     StartNewRoundComponent,
+    CreatorPageComponent,
   ],
-  exports: [
-    ContentPresentationComponent,
-    CopyUrlComponent,
-    StartNewRoundComponent,
-  ],
+  exports: [ContentPresentationComponent, StartNewRoundComponent],
   providers: [
     { provide: TRANSLATION_MODULE_NAME, useValue: 'creator' },
     DialogService,

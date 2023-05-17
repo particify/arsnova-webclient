@@ -1,0 +1,25 @@
+<div fxLayout="column" class="room-container">
+  <div fxLayout="row" fxFill>
+    <mat-drawer-container>
+      <lib-extension-point
+        extensionId="remote"
+        [extensionData]="{ isParticipant: false }"
+      ></lib-extension-point>
+      <mat-drawer mode="side" opened [disableClose]="true">
+        <div fxLayout="column" fxLayoutAlign="space-between" fxFill>
+          <app-nav-bar></app-nav-bar>
+        </div>
+      </mat-drawer>
+      <mat-drawer-content
+        fxLayout="column"
+        fxLayoutAlign="space-between"
+        id="routing-content"
+      >
+        <div class="routing-container">
+          <router-outlet></router-outlet>
+        </div>
+        <app-footer class="footer"></app-footer>
+      </mat-drawer-content>
+    </mat-drawer-container>
+  </div>
+</div>

@@ -6,7 +6,6 @@ import {
 } from '@projects/extension-point/src/lib/extension-route';
 import { AuthenticationGuard } from '@app/core/guards/authentication.guard';
 import { UserRole } from '@app/core/models/user-roles.enum';
-import { RoomPageComponent } from '@app/shared/room-page/room-page.component';
 import { ContentCreationPageComponent } from './content-creation/content-creation-page/content-creation-page.component';
 import { StatisticsPageComponent } from './statistics-page/statistics-page.component';
 import { SurveyPageComponent } from '@app/shared/survey-page/survey-page.component';
@@ -17,9 +16,9 @@ import { RoomResolver } from '@app/core/resolver/room.resolver';
 import { RoomViewUserRoleResolver } from '@app/core/resolver/room-view-user-role.resolver';
 import { GroupContentComponent } from './content-list/group-content/group-content.component';
 import { RoomUserRoleResolver } from '@app/core/resolver/room-user-role.resolver';
-import { CreatorOverviewComponent } from './creator-overview/creator-overview.component';
 import { CommentSettingsResolver } from '@app/core/resolver/comment-settings.resolver';
 import { ApiConfigResolver } from '@app/core/resolver/api-config.resolver';
+import { CreatorPageComponent } from '@app/creator/creator-page.component';
 
 const routes: Routes = [
   {
@@ -32,7 +31,10 @@ const routes: Routes = [
   },
   {
     path: '',
-    component: CreatorOverviewComponent,
+    loadChildren: () =>
+      import('./room-overview/room-overview.module').then(
+        (m) => m.RoomOverviewModule
+      ),
     resolve: {
       apiConfig: ApiConfigResolver,
     },
@@ -104,7 +106,7 @@ const routes: Routes = [
         },
         {
           path: ':shortId',
-          component: RoomPageComponent,
+          component: CreatorPageComponent,
           canActivate: [AuthenticationGuard],
           data: { requiredRole: UserRole.MODERATOR },
           resolve: {

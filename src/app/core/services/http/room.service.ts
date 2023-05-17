@@ -269,6 +269,5 @@ export class RoomService extends AbstractEntityService<Room> {
 
   setRoomId(room: Room): void {
     this.globalStorageService.setItem(STORAGE_KEYS.ROOM_ID, room.id);
-    this.globalStorageService.setItem(STORAGE_KEYS.SHORT_ID, room.shortId);
   }
 }

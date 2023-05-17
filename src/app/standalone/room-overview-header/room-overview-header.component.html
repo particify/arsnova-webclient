@@ -1,0 +1,16 @@
+<div>
+  <div class="header">
+    <span class="room-name">
+      {{ name }}
+    </span>
+    <app-copy-url [url]="roomJoinUrl">
+      <span class="room-short-id">{{ shortId | splitShortId }}</span>
+    </app-copy-url>
+  </div>
+  <div *ngIf="description">
+    <app-rendered-text
+      [rawText]="description.trim()"
+      [renderedText]="renderedDescription"
+    ></app-rendered-text>
+  </div>
+</div>

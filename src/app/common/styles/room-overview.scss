@@ -1,0 +1,11 @@
+@media (min-width: 701px) {
+  .action-button-container {
+    min-height: 160px;
+  }
+}
+
+@media (max-width: 700px) {
+  .action-button-container {
+    min-height: 140px;
+  }
+}

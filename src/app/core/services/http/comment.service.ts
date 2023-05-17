@@ -11,6 +11,8 @@ import { CommentCreated } from '@app/core/models/events/comment-created';
 import { WsConnectorService } from '@app/core/services/websockets/ws-connector.service';
 import { Room } from '@app/core/models/room';
 import { CachingService } from '@app/core/services/util/caching.service';
+import { WsCommentService } from '@app/core/services/websockets/ws-comment.service';
+import { Message } from '@stomp/stompjs';
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
@@ -31,7 +33,8 @@ export class CommentService extends AbstractEntityService<Comment> {
     protected eventService: EventService,
     protected translateService: TranslateService,
     protected notificationService: NotificationService,
-    cachingService: CachingService
+    cachingService: CachingService,
+    protected wsCommentService: WsCommentService
   ) {
     super(
       'Comment',
@@ -281,5 +284,26 @@ export class CommentService extends AbstractEntityService<Comment> {
       link.href = window.URL.createObjectURL(myBlob);
       link.click();
     });
+  }
+
+  getUpdatedCommentCountWithMessage(count: number, message: Message): number {
+    const msg = JSON.parse(message.body);
+    const payload = msg.payload;
+    if (msg.type === 'CommentCreated') {
+      count++;
+    } else if (msg.type === 'CommentDeleted') {
+      count--;
+    } else if (msg.type === 'CommentPatched') {
+      for (const [key, value] of Object.entries(payload.changes)) {
+        switch (key) {
+          case 'ack':
+            if (!(<boolean>value)) {
+              count--;
+            }
+            break;
+        }
+      }
+    }
+    return count;
   }
 }
