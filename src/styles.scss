@@ -144,6 +144,70 @@ ul {
   margin: 1.5em 0;
 }
 
+// Colors
+
+.primary,
+.primary p {
+  @extend %primary;
+}
+
+.primary-variant,
+.primary-variant.mdc-icon-button,
+.primary-variant.mdc-button {
+  @extend %primary-variant;
+}
+
+.primary-background {
+  @extend %primary-background;
+}
+
+.primary-border {
+  @extend %primary-border;
+}
+
+.primary-border-color {
+  @extend %primary-border-color;
+}
+
+.primary-shadow {
+  @extend %primary-shadow;
+}
+
+.secondary,
+.secondary p {
+  @extend %secondary;
+}
+
+.secondary-variant,
+.secondary-variant.mdc-icon-button,
+.secondary-variant.mdc-button {
+  @extend %secondary-variant;
+}
+
+.secondary-background {
+  @extend %secondary-background;
+}
+
+.on-secondary * {
+  @extend %on-secondary;
+}
+
+.blue {
+  color: var(--blue) !important;
+}
+
+.green {
+  color: var(--green) !important;
+}
+
+.red {
+  color: var(--red) !important;
+}
+
+.yellow {
+  color: var(--yellow) !important;
+}
+
 // Inputs
 
 input,
@@ -250,6 +314,14 @@ div {
 
 .mdc-linear-progress__bar-inner {
   border: none !important;
+  height: 100%;
+}
+
+.survey-progress .mdc-linear-progress__bar {
+  height: 100%;
+}
+
+.survey-progress .mdc-linear-progress__buffer {
   height: 100%;
 }
 
@@ -394,11 +466,11 @@ div {
 // Choice answer buttons
 
 .answer-radio-button .mdc-radio {
-  --mat-mdc-radio-checked-ripple-color: transparent;
   --mdc-radio-disabled-selected-icon-color: var(--grey);
   --mdc-radio-disabled-unselected-icon-color: var(--grey);
   --mdc-radio-unselected-icon-color: var(--grey);
-  --mat-mdc-radio-ripple-color: transparent;
+  --mat-radio-ripple-color: transparent;
+  --mat-radio-checked-ripple-color: transparent;
 }
 
 .choice-answer {
@@ -428,6 +500,8 @@ div {
   --mdc-checkbox-disabled-selected-icon-color: var(--grey);
   --mdc-checkbox-disabled-unselected-icon-color: var(--grey-light);
   --mdc-checkbox-unselected-icon-color: var(--grey);
+  --mdc-checkbox-unselected-hover-state-layer-color: transparent;
+  --mdc-checkbox-unselected-pressed-state-layer-color: transparent;
 }
 
 // Mat Select
@@ -585,6 +659,10 @@ div {
   display: none;
 }
 
+.no-ripple .mat-mdc-button-ripple * {
+  display: none;
+}
+
 // Links
 
 .action-link {
@@ -602,70 +680,6 @@ div {
 
 .icon-warn-soft {
   color: var(--warn-soft);
-}
-
-// Colors
-
-.primary,
-.primary p {
-  @extend %primary;
-}
-
-.primary-variant,
-.primary-variant.mdc-icon-button,
-.primary-variant.mdc-button {
-  @extend %primary-variant;
-}
-
-.primary-background {
-  @extend %primary-background;
-}
-
-.primary-border {
-  @extend %primary-border;
-}
-
-.primary-border-color {
-  @extend %primary-border-color;
-}
-
-.primary-shadow {
-  @extend %primary-shadow;
-}
-
-.secondary,
-.secondary p {
-  @extend %secondary;
-}
-
-.secondary-variant,
-.secondary-variant.mdc-icon-button,
-.secondary-variant.mdc-button {
-  @extend %secondary-variant;
-}
-
-.secondary-background {
-  @extend %secondary-background;
-}
-
-.on-secondary * {
-  @extend %on-secondary;
-}
-
-.blue {
-  color: var(--blue) !important;
-}
-
-.green {
-  color: var(--green) !important;
-}
-
-.red {
-  color: var(--red) !important;
-}
-
-.yellow {
-  color: var(--yellow) !important;
 }
 
 // Card
