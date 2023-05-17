@@ -11,8 +11,8 @@ describe('AnswerCountComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [AnswerCountComponent],
       imports: [
+        AnswerCountComponent,
         TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,

@@ -3,11 +3,16 @@ import { AbstractHttpService } from './abstract-http.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { EventService } from '@app/core/services/util/event.service';
 import { TranslateService } from '@ngx-translate/core';
-import { NotificationService } from '@app/core/services/util/notification.service';
+import {
+  AdvancedSnackBarTypes,
+  NotificationService,
+} from '@app/core/services/util/notification.service';
 import { Observable, Subscription } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { Message } from '@stomp/stompjs';
 import { WsFeedbackService } from '@app/core/services/websockets/ws-feedback.service';
+import { Room } from '@app/core/models/room';
+import { LiveFeedbackType } from '@app/core/models/live-feedback-type.enum';
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
@@ -52,7 +57,25 @@ export class FeedbackService extends AbstractHttpService<number[]> {
       .pipe(catchError(this.handleError<number[]>('get survey')));
   }
 
+  getType(room: Room): LiveFeedbackType {
+    if (room.extensions?.feedback && room.extensions.feedback['type']) {
+      return room.extensions.feedback['type'];
+    } else {
+      return LiveFeedbackType.FEEDBACK;
+    }
+  }
+
   emitMessage(message) {
     this.messageEvent.emit(message);
+  }
+
+  getAnswerSum(data: number[]): number {
+    return data.reduce(
+      (accumulator, currentValue) => accumulator + currentValue
+    );
+  }
+
+  getBarData(data: number[], sum: number): number[] {
+    return data.map((d) => (d / sum) * 100);
   }
 }

@@ -25,6 +25,7 @@ import {
   CachingService,
   DefaultCache,
 } from '@app/core/services/util/caching.service';
+import { LiveFeedbackType } from '@app/core/models/live-feedback-type.enum';
 
 const httpOptions = {
   headers: new HttpHeaders({}),
@@ -245,9 +246,13 @@ export class RoomService extends AbstractEntityService<Room> {
     });
   }
 
-  changeFeedbackType(roomId: string, feedbackType: string) {
+  changeFeedbackType(roomId: string, feedbackType: LiveFeedbackType) {
+    const newType =
+      feedbackType === LiveFeedbackType.FEEDBACK
+        ? LiveFeedbackType.SURVEY
+        : LiveFeedbackType.FEEDBACK;
     this.getRoom(roomId).subscribe((room) => {
-      const feedbackExtension: { type: string } = { type: feedbackType };
+      const feedbackExtension: { type: string } = { type: newType };
       if (!room.extensions) {
         room.extensions = {};
         room.extensions.feedback = feedbackExtension;
@@ -257,6 +262,7 @@ export class RoomService extends AbstractEntityService<Room> {
       const changes: { extensions: object } = { extensions: room.extensions };
       this.patchRoom(roomId, changes).subscribe();
     });
+    return newType;
   }
 
   parseExtensions(room: Room): Room {

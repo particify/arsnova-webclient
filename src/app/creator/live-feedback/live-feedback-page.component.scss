@@ -1,0 +1,28 @@
+.bottom-button {
+  height: 36px;
+  transition: 300ms;
+  margin: 16px 0 8px;
+}
+
+.button-container {
+  transition: 300ms ease-out;
+}
+
+.invisible-button {
+  position: relative;
+  width: 0;
+  margin: 0 !important;
+  left: 100px;
+  opacity: 0;
+  overflow: hidden;
+}
+
+.visible-button {
+  position: relative;
+  left: 0;
+  top: 0;
+  opacity: 1;
+  width: auto;
+  overflow: auto;
+  margin-right: 10px !important;
+}

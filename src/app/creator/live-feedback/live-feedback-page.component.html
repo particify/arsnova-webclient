@@ -1,0 +1,73 @@
+<div class="visually-hidden" id="message-announcer-button" tabIndex="-1">
+  {{ 'survey.a11y-message' | a11yIntro | async }}
+</div>
+<app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
+<app-base-card *ngIf="!isLoading">
+  <app-live-feedback
+    [data]="data"
+    [dataChanged]="dataChanged"
+    [fixedSize]="true"
+    [isClosed]="isClosed"
+    [type]="type"
+  ></app-live-feedback>
+  <div fxLayoutAlign="center center" fxLayoutGap="20px">
+    <div
+      class="invisible-button button-container"
+      [ngClass]="{ 'visible-button': isClosed }"
+    >
+      <button
+        *ngIf="isClosed; else noSwitching"
+        id="switch-button"
+        tabindex="{{ isClosed ? '0' : '-1' }}"
+        mat-stroked-button
+        class="bottom-button"
+        (click)="changeType()"
+        aria-labelledby="change-type"
+        [appHotkey]="changeKey"
+        [appHotkeyTitle]="'survey.change-type' | translate"
+        [appHotkeyAction]="hotkeyAction"
+        appTrackInteraction="Survey type toggled"
+        [appTrackName]="type.toLowerCase()"
+      >
+        {{ 'survey.change-type' | translate }}
+      </button>
+      <ng-template #noSwitching>
+        <div
+          tabindex="-1"
+          class="visually-hidden"
+          [appHotkey]="changeKey"
+          [appHotkeyTitle]="'survey.change-type' | translate"
+        >
+          {{ 'survey.a11y-first-stop-survey' | translate }}
+        </div>
+      </ng-template>
+    </div>
+    <div
+      class="invisible-button button-container"
+      [ngClass]="{ 'visible-button': !isClosed }"
+    >
+      <app-answer-count
+        id="answer-count"
+        tabindex="{{ !isClosed ? '0' : '-1' }}"
+        [count]="answerCount"
+        [size]="'medium'"
+      ></app-answer-count>
+    </div>
+    <button
+      tabindex="0"
+      mat-raised-button
+      id="toggle-button"
+      color="primary"
+      class="bottom-button"
+      (click)="toggle()"
+      aria-labelledby="toggle"
+      [appHotkey]="toggleKey"
+      [appHotkeyTitle]="(isClosed ? 'survey.start' : 'survey.stop') | translate"
+      [appHotkeyAction]="hotkeyAction"
+      appTrackInteraction="Survey toggled"
+      [appTrackName]="isClosed ? 'on' : 'off'"
+    >
+      {{ (isClosed ? 'survey.start' : 'survey.stop') | translate }}
+    </button>
+  </div>
+</app-base-card>

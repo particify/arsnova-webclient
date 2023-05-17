@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { SurveyPageComponent } from './survey-page/survey-page.component';
+import { ContentGroupsComponent } from '@app/standalone/content-groups/content-groups.component';
 import { CommentPageComponent } from './comment-page/comment-page.component';
 import { CoreModule } from '@app/core/core.module';
 import { CommentComponent } from './comment/comment.component';
@@ -13,7 +13,6 @@ import { YesNoDialogComponent } from './_dialogs/yes-no-dialog/yes-no-dialog.com
 import { StepperComponent } from './stepper/stepper.component';
 import { CdkStepperModule } from '@angular/cdk/stepper';
 import { ExtensionPointModule } from '@projects/extension-point/src/lib/extension-point.module';
-import { AnswerCountComponent } from './answer-count/answer-count.component';
 import { StatisticContentComponent } from './statistic-content/statistic-content/statistic-content.component';
 import { ContentSortAnswerComponent } from './content-answers/content-sort-answer/content-sort-answer.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
@@ -55,9 +54,9 @@ import { RenderedTextComponent } from '@app/standalone/rendered-text/rendered-te
     ListBadgeComponent,
     DividerComponent,
     RenderedTextComponent,
+    ContentGroupsComponent,
   ],
   declarations: [
-    SurveyPageComponent,
     CommentPageComponent,
     CommentListComponent,
     CommentComponent,
@@ -70,7 +69,6 @@ import { RenderedTextComponent } from '@app/standalone/rendered-text/rendered-te
     StatisticWordcloudComponent,
     YesNoDialogComponent,
     StepperComponent,
-    AnswerCountComponent,
     StatisticContentComponent,
     ContentSortAnswerComponent,
     StatisticSortComponent,
@@ -92,7 +90,6 @@ import { RenderedTextComponent } from '@app/standalone/rendered-text/rendered-te
     MultipleRoundSelectionComponent,
   ],
   exports: [
-    SurveyPageComponent,
     CommentPageComponent,
     CommentListComponent,
     CreateCommentComponent,
@@ -111,7 +108,6 @@ import { RenderedTextComponent } from '@app/standalone/rendered-text/rendered-te
     NavBarComponent,
     InfoBarComponent,
     DividerComponent,
-    AnswerCountComponent,
     WordcloudComponent,
     ContentChoiceAnswerComponent,
     FormattingToolbarComponent,
