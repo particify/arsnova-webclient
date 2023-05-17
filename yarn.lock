@@ -5074,7 +5074,7 @@ __metadata:
     lru-cache: 9.1.1
     material-design-icons-iconfont: 6.7.0
     ng-packagr: 16.0.1
-    ng-qrcode: 8.0.1
+    ng-qrcode: 16.0.0
     prettier: 2.8.8
     prismjs: 1.29.0
     rxjs: 7.8.1
@@ -9964,16 +9964,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ng-qrcode@npm:8.0.1":
-  version: 8.0.1
-  resolution: "ng-qrcode@npm:8.0.1"
+"ng-qrcode@npm:16.0.0":
+  version: 16.0.0
+  resolution: "ng-qrcode@npm:16.0.0"
   dependencies:
     qrcode: ^1.5.1
     tslib: ^2.4.0
   peerDependencies:
-    "@angular/common": ">=15 <16"
-    "@angular/core": ">=15 <16"
-  checksum: 8a6b1ed579d25d0d44cfa2d4d18a794f4357d974cb51ade8ad933052519569060639429bf02f17bf89e06e77c53ee98d7b2d24413b3d5aed5ca9334b29bfcb01
+    "@angular/common": ">=16 <17"
+    "@angular/core": ">=16 <17"
+  checksum: d0d04aaf3db42e694d84d9898c7e2006fc2966b239863ae71013e3f444af5664ed7ee5607ad275262dde391c0e6d74e10da8fe9ca615a27b514936068f4a5348
   languageName: node
   linkType: hard
 
