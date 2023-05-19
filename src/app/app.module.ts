@@ -98,6 +98,8 @@ import { SettingsSlideToggleComponent } from '@app/standalone/settings-slide-tog
 import { ListBadgeComponent } from '@app/standalone/list-badge/list-badge.component';
 import { RoomCreateComponent } from '@app/core/components/_dialogs/room-create/room-create.component';
 import { HintComponent } from '@app/standalone/hint/hint.component';
+import { TitleStrategy } from '@angular/router';
+import { CustomPageTitleStrategy } from '@app/core/custom-title-strategy';
 
 export function initializeApp(appConfig: AppConfig) {
   return () => appConfig.load();
@@ -231,6 +233,7 @@ export function initializeApp(appConfig: AppConfig) {
       provide: MAT_DIALOG_DATA,
       useValue: [],
     },
+    { provide: TitleStrategy, useClass: CustomPageTitleStrategy },
   ],
   bootstrap: [AppComponent],
 })

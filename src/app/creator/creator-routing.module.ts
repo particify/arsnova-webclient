@@ -36,18 +36,22 @@ const routes: Routes = [
     resolve: {
       apiConfig: ApiConfigResolver,
     },
+    title: 'room',
   },
   {
     path: 'settings',
     component: SettingsPageComponent,
+    title: 'settings',
   },
   {
     path: 'settings/:settingsName',
     component: SettingsPageComponent,
+    title: 'settings',
   },
   {
     path: 'series/:seriesName/create',
     component: ContentCreationPageComponent,
+    title: 'content-creation',
   },
   {
     path: 'series/:seriesName/edit/:contentId',
@@ -55,14 +59,17 @@ const routes: Routes = [
     data: {
       isEditMode: true,
     },
+    title: 'content-edit',
   },
   {
     path: 'series/:seriesName/statistics',
     component: StatisticsPageComponent,
+    title: 'series',
   },
   {
     path: 'series/:seriesName/:contentIndex',
     component: ContentPresentationComponent,
+    title: 'series',
   },
   {
     path: 'comments',
@@ -71,6 +78,7 @@ const routes: Routes = [
     resolve: {
       commentSettings: CommentSettingsResolver,
     },
+    title: 'comments',
   },
   {
     path: 'feedback',
@@ -78,10 +86,12 @@ const routes: Routes = [
       import('./live-feedback/live-feedback.module').then(
         (m) => m.LiveFeedbackModule
       ),
+    title: 'live-feedback',
   },
   {
     path: 'series/:seriesName',
     component: GroupContentComponent,
+    title: 'series',
   },
 ];
 

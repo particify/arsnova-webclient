@@ -2,8 +2,6 @@ import { EventEmitter, Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, ActivationEnd, Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { filter } from 'rxjs/operators';
-import { TranslateService } from '@ngx-translate/core';
-import { LanguageService } from './language.service';
 import { UserRole } from '@app/core/models/user-roles.enum';
 import { GlobalStorageService, STORAGE_KEYS } from './global-storage.service';
 
@@ -13,33 +11,6 @@ export enum RoutePrefix {
   MODERATOR = 'moderator',
   PRESENTATION = 'present',
 }
-
-export const TITLES: { [key: string]: string } = {
-  home: 'home',
-  login: 'login',
-  register: 'register',
-  'request-password-reset': 'request-pw-reset',
-  'password-reset/:email': 'pw-reset',
-  user: 'user',
-  '': 'room',
-  import: 'import',
-  comments: 'comments',
-  'comments/moderation': 'comments',
-  feedback: 'live-feedback',
-  'series/:seriesName/statistics': 'series',
-  'series/:seriesName': 'series',
-  'series/:seriesName/:contentIndex': 'series',
-  'series/:seriesName/edit/:contentId': 'content-edit',
-  'series/:seriesName/create': 'content-creation',
-  settings: 'settings',
-  'settings/:settingsName': 'settings',
-  admin: 'admin',
-  status: 'admin',
-  stats: 'admin',
-  users: 'admin',
-  rooms: 'admin',
-  'account/:accountSettingsName': 'account',
-};
 
 @Injectable({
   providedIn: 'root',
@@ -66,11 +37,6 @@ export class RoutingService {
   backRoute: string[];
   backRouteIsSet = false;
   fullCurrentRoute: string;
-  homeTitle: string;
-  suffix: string;
-  private title: string;
-  private titleKey: string;
-  private isTranslatedTitle: boolean;
   private viewRole: UserRole;
   private shortId: string;
   private roomId: string;
@@ -86,8 +52,6 @@ export class RoutingService {
   constructor(
     private router: Router,
     private location: Location,
-    private translateService: TranslateService,
-    private langService: LanguageService,
     private globalStorageService: GlobalStorageService
   ) {
     this.location.onUrlChange((url) => {
@@ -109,14 +73,6 @@ export class RoutingService {
           this.getRoutes(activationEndEvent.snapshot);
         }
       });
-    this.langService.langEmitter.subscribe((lang) => {
-      if (this.isTranslatedTitle) {
-        this.translateService.use(lang);
-        this.translateService.get('title.' + this.titleKey).subscribe((msg) => {
-          this.updateDocumentTitle(msg);
-        });
-      }
-    });
   }
 
   getRoomUrlData(route: ActivatedRouteSnapshot) {
@@ -141,7 +97,6 @@ export class RoutingService {
     this.currentRoute = route.routeConfig.path;
     this.routeEvent.emit(route);
     this.getBackRoute(role, series, route.parent.routeConfig['path']);
-    this.setTitle(route);
   }
 
   getBackRoute(role: string, series: string, parentRoute?: string) {
@@ -231,80 +186,6 @@ export class RoutingService {
     return role === UserRole.PARTICIPANT
       ? RoutePrefix.PARTICIPANT
       : RoutePrefix.CREATOR;
-  }
-
-  setTitle(route?: ActivatedRouteSnapshot) {
-    this.setHomeTitle();
-    this.isTranslatedTitle = true;
-    let newTitle;
-    if (route.data.isPresentation) {
-      this.titleKey = 'presentation-mode';
-    } else if (this.checkIfHomeRoute(route)) {
-      newTitle = this.homeTitle;
-      this.isTranslatedTitle = false;
-    } else {
-      if (TITLES[route.routeConfig.path]) {
-        this.titleKey = TITLES[route.routeConfig.path];
-      }
-      if (!newTitle) {
-        newTitle = this.getNewTitleFromTitleKey(route);
-      }
-    }
-    if (this.title !== newTitle && newTitle) {
-      this.title = newTitle;
-    }
-    this.updateTitle();
-  }
-
-  private getNewTitleFromTitleKey(route: ActivatedRouteSnapshot) {
-    let newTitle;
-    switch (this.titleKey) {
-      case 'room':
-        if (route.data.room) {
-          newTitle = route.data.room.name;
-          this.isTranslatedTitle = false;
-        } else {
-          this.titleKey = TITLES['admin'];
-        }
-        break;
-      case 'series':
-        newTitle = route.params.seriesName;
-        this.isTranslatedTitle = false;
-        break;
-      case undefined:
-        newTitle = this.homeTitle;
-        break;
-      default:
-    }
-    return newTitle;
-  }
-
-  private setHomeTitle() {
-    if (!this.homeTitle) {
-      this.homeTitle = document.title;
-      this.suffix = ' | ' + (this.homeTitle.split('|')[0] || this.homeTitle);
-    }
-  }
-
-  private checkIfHomeRoute(route: ActivatedRouteSnapshot) {
-    return route['_routerState'].url === '/';
-  }
-
-  private updateTitle() {
-    if (this.isTranslatedTitle) {
-      this.translateService.get('title.' + this.titleKey).subscribe((msg) => {
-        this.updateDocumentTitle(msg);
-      });
-    } else {
-      this.updateDocumentTitle(this.title);
-    }
-  }
-
-  updateDocumentTitle(title: string) {
-    if (title !== this.homeTitle) {
-      title = title + this.suffix;
-    }
-    document.title = title;
   }
 
   isPresentation(url: string): boolean {

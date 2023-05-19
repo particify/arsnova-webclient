@@ -30,11 +30,13 @@ const routes: Routes = [
       import('./room-overview/room-overview.module').then(
         (m) => m.RoomOverviewModule
       ),
+    title: 'room',
   },
   {
     path: 'comments',
     loadChildren: () =>
       import('./comments/comments.module').then((m) => m.CommentsModule),
+    title: 'comments',
   },
   {
     path: 'feedback',
@@ -42,6 +44,7 @@ const routes: Routes = [
       import('./live-feedback/live-feedback.module').then(
         (m) => m.LiveFeedbackModule
       ),
+    title: 'live-feedback',
   },
   {
     path: 'series/:seriesName',
@@ -49,6 +52,7 @@ const routes: Routes = [
     data: {
       feature: Features.CONTENTS,
     },
+    title: 'series',
   },
   {
     path: 'series/:seriesName/:contentIndex',
@@ -56,6 +60,7 @@ const routes: Routes = [
     data: {
       feature: Features.CONTENTS,
     },
+    title: 'series',
   },
 ];
 

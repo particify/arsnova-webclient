@@ -6,7 +6,6 @@ import { StorageItemCategory } from '@app/core/models/storage';
 import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
 import { EventService } from './event.service';
-import { TITLES } from './routing.service';
 import { ThemeService } from '@app/core/theme/theme.service';
 import { UserRole } from '@app/core/models/user-roles.enum';
 import { ClientAuthentication } from '@app/core/models/client-authentication';
@@ -266,7 +265,7 @@ export class TrackingService {
     let title = titleMatches ? titleMatches[1] : '';
     const dimensions = {};
     if (route) {
-      title = TITLES[route.routeConfig.path] ?? title;
+      title = route.title;
       const shortId = route.paramMap.get('shortId');
       const role: UserRole = route.data.viewRole;
       if (role) {

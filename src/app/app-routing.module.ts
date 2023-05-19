@@ -29,27 +29,33 @@ const routes: Routes = [
   {
     path: '',
     component: HomePageComponent,
+    title: 'home',
   },
   {
     path: 'login',
     component: LoginComponent,
+    title: 'login',
   },
   {
     path: 'register',
     component: RegisterComponent,
+    title: 'register',
   },
   {
     path: 'password-reset/:email',
     component: PasswordResetComponent,
+    title: 'pw-reset',
   },
   {
     path: 'request-password-reset',
     component: RequestPasswordResetComponent,
+    title: 'request-pw-reset',
   },
   {
     path: 'user',
     canActivate: [AuthenticationGuard],
     component: UserHomeComponent,
+    title: 'user',
   },
   {
     path: 'join/:shortId',
@@ -59,15 +65,18 @@ const routes: Routes = [
     path: 'import',
     canActivate: [AuthenticationGuard],
     component: ImportComponent,
+    title: 'import',
   },
   {
     path: 'account/:accountSettingsName',
     component: UserProfileComponent,
+    title: 'account',
   },
   {
     path: 'redeem-token/:roomId/token/:token',
     canActivate: [AuthenticationGuard],
     component: RedeemTokenComponent,
+    title: 'redeem-token',
   },
   {
     path: 'demo',
@@ -90,6 +99,7 @@ const routes: Routes = [
     path: 'admin',
     loadChildren: () =>
       import('./admin/admin.module').then((m) => m.AdminModule),
+    title: 'admin',
   },
   {
     path: 'edit',
@@ -113,6 +123,7 @@ const routes: Routes = [
       import('./presentation/presentation.module').then(
         (m) => m.PresentationModule
       ),
+    title: 'presentation-mode',
   },
 ];
 
