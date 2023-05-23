@@ -1,35 +1,37 @@
 import { TestBed, inject } from '@angular/core/testing';
 
 import { RoutingService } from '@app/core/services/util/routing.service';
-import {
-  MockRouter,
-  MockTranslateService,
-  MockGlobalStorageService,
-} from '@testing/test-helpers';
-import { TranslateService } from '@ngx-translate/core';
+import { MockGlobalStorageService } from '@testing/test-helpers';
 import { ActivatedRouteSnapshot, Router } from '@angular/router';
 import { Location } from '@angular/common';
-import { SpyLocation } from '@angular/common/testing';
 import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
 import { UserRole } from '@app/core/models/user-roles.enum';
 import { Room } from '@app/core/models/room';
+import { ParentRoute } from '@app/core/models/parent-route';
+
+class MockLocation {
+  back = jasmine.createSpy('BackSpy');
+  onUrlChange = jasmine.createSpy('OnUrlChangeSpy').and.returnValue('');
+}
 
 describe('RoutingService', () => {
+  let location: Location;
+  const routerSpy = jasmine.createSpyObj('MockRouter', [
+    'navigate',
+    'navigateByUrl',
+  ]);
+
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
         RoutingService,
         {
           provide: Router,
-          useClass: MockRouter,
+          useValue: routerSpy,
         },
         {
           provide: Location,
-          useClass: SpyLocation,
-        },
-        {
-          provide: TranslateService,
-          useClass: MockTranslateService,
+          useClass: MockLocation,
         },
         {
           provide: GlobalStorageService,
@@ -37,6 +39,7 @@ describe('RoutingService', () => {
         },
       ],
     });
+    location = TestBed.inject(Location);
   });
 
   it('should be created', inject(
@@ -46,45 +49,63 @@ describe('RoutingService', () => {
     }
   ));
 
-  it('should get correct back route on user page when back route is undefined', inject(
+  it('should get correct back route on user page', inject(
     [RoutingService],
     (service: RoutingService) => {
-      service.backRoute = undefined;
-      service.currentRoute = 'user';
-      service.getBackRoute('', '', '');
-      expect(service.backRoute).toEqual(['']);
-    }
-  ));
-
-  it('should get correct back route on user page when back route is set to user', inject(
-    [RoutingService],
-    (service: RoutingService) => {
-      service.backRoute = ['user'];
-      service.currentRoute = 'user';
-      service.getBackRoute('', '', '');
-      expect(service.backRoute).toEqual(['']);
+      const snapshot = new ActivatedRouteSnapshot();
+      snapshot.data = {
+        parentRoute: ParentRoute.HOME,
+      };
+      Object.defineProperty(snapshot, 'title', { value: 'user' });
+      service.getBackRoute(snapshot, null);
+      service.goBack();
+      expect(routerSpy.navigate).toHaveBeenCalledWith(['']);
     }
   ));
 
   it('should get correct back route on login page', inject(
     [RoutingService],
     (service: RoutingService) => {
-      service.currentRoute = 'login';
-      service.getBackRoute('', '', '');
-      expect(service.backRoute).toEqual(['']);
+      const snapshot = new ActivatedRouteSnapshot();
+      snapshot.data = {
+        parentRoute: ParentRoute.HOME,
+      };
+      Object.defineProperty(snapshot, 'title', { value: 'login' });
+      service.getBackRoute(snapshot, null);
+      service.goBack();
+      expect(routerSpy.navigate).toHaveBeenCalledWith(['']);
     }
   ));
 
-  it('should get correct back route on room page', inject(
+  it('should get correct back route on register page', inject(
     [RoutingService],
     (service: RoutingService) => {
-      service.currentRoute = '';
-      service.getBackRoute(UserRole.MODERATOR, '', ':shortId');
-      expect(service.backRoute).toEqual(['user']);
+      const snapshot = new ActivatedRouteSnapshot();
+      snapshot.data = {
+        parentRoute: ParentRoute.LOGIN,
+      };
+      Object.defineProperty(snapshot, 'title', { value: 'register' });
+      service.getBackRoute(snapshot, null);
+      service.goBack();
+      expect(routerSpy.navigate).toHaveBeenCalledWith(['login']);
     }
   ));
 
-  it('should get correct back route on room comments page', inject(
+  it('should get correct back route on room overview page', inject(
+    [RoutingService],
+    (service: RoutingService) => {
+      const snapshot = new ActivatedRouteSnapshot();
+      snapshot.data = {
+        parentRoute: ParentRoute.USER,
+      };
+      Object.defineProperty(snapshot, 'title', { value: 'room' });
+      service.getBackRoute(snapshot, null);
+      service.goBack();
+      expect(routerSpy.navigate).toHaveBeenCalledWith(['user']);
+    }
+  ));
+
+  it('should get correct back route on comments page', inject(
     [RoutingService],
     (service: RoutingService) => {
       const snapshot = new ActivatedRouteSnapshot();
@@ -93,11 +114,25 @@ describe('RoutingService', () => {
         userRole: UserRole.OWNER,
         room: new Room(),
         viewRole: UserRole.MODERATOR,
+        parentRoute: ParentRoute.ROOM,
       };
+      Object.defineProperty(snapshot, 'title', { value: 'comments' });
       service.getRoomUrlData(snapshot);
-      service.currentRoute = 'comments';
-      service.getBackRoute(UserRole.MODERATOR, '', ':shortId');
-      expect(service.backRoute).toEqual(['edit', '12345678']);
+      service.getBackRoute(snapshot, null);
+      service.goBack();
+      expect(routerSpy.navigate).toHaveBeenCalledWith(['edit', '12345678']);
+    }
+  ));
+
+  it('should use location back navigation if parent route is not defined', inject(
+    [RoutingService],
+    (service: RoutingService) => {
+      const snapshot = new ActivatedRouteSnapshot();
+      snapshot.data = {};
+      Object.defineProperty(snapshot, 'title', { value: 'room' });
+      service.getBackRoute(snapshot, null);
+      service.goBack();
+      expect(location.back).toHaveBeenCalled();
     }
   ));
 });

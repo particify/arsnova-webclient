@@ -13,6 +13,7 @@ import { RoomUserRoleResolver } from '@app/core/resolver/room-user-role.resolver
 import { RoutingFeature } from '@app/core/models/routing-feature.enum';
 import { CommentSettingsResolver } from '@app/core/resolver/comment-settings.resolver';
 import { ParticipantPageComponent } from '@app/participant/participant-page.component';
+import { ParentRoute } from '@app/core/models/parent-route';
 
 const routes: Routes = [
   {
@@ -31,12 +32,18 @@ const routes: Routes = [
         (m) => m.RoomOverviewModule
       ),
     title: 'room',
+    data: {
+      parentRoute: ParentRoute.USER,
+    },
   },
   {
     path: 'comments',
     loadChildren: () =>
       import('./comments/comments.module').then((m) => m.CommentsModule),
     title: 'comments',
+    data: {
+      parentRoute: ParentRoute.ROOM,
+    },
   },
   {
     path: 'feedback',
@@ -45,6 +52,9 @@ const routes: Routes = [
         (m) => m.LiveFeedbackModule
       ),
     title: 'live-feedback',
+    data: {
+      parentRoute: ParentRoute.ROOM,
+    },
   },
   {
     path: 'series/:seriesName',
