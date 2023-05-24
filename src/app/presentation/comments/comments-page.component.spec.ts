@@ -105,10 +105,6 @@ describe('CommentsPageComponent', () => {
           useClass: MockEventService,
         },
         {
-          provide: LanguageService,
-          useClass: MockLangService,
-        },
-        {
           provide: AnnounceService,
           useClass: MockAnnounceService,
         },

@@ -12,7 +12,6 @@ import {
 } from '@app/core/services/util/notification.service';
 import { TranslateService } from '@ngx-translate/core';
 import { ModeratorService } from '@app/core/services/http/moderator.service';
-import { LanguageService } from '@app/core/services/util/language.service';
 import { Moderator } from '@app/core/models/moderator';
 import { UntypedFormControl, Validators } from '@angular/forms';
 import { EventService } from '@app/core/services/util/event.service';
@@ -62,13 +61,10 @@ export class AccessComponent implements OnInit, OnDestroy {
     public translationService: TranslateService,
     protected moderatorService: ModeratorService,
     protected userService: UserService,
-    protected langService: LanguageService,
     public eventService: EventService,
     private authenticationService: AuthenticationService,
     private accessTokenService: AccessTokenService
-  ) {
-    langService.langEmitter.subscribe((lang) => translationService.use(lang));
-  }
+  ) {}
 
   ngOnInit() {
     this.selectedRole = this.roles[0];

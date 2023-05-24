@@ -9,7 +9,6 @@ import {
   MockAnnounceService,
   MockEventService,
   MockGlobalStorageService,
-  MockLangService,
   MockMatDialog,
   MockNotificationService,
 } from '@testing/test-helpers';
@@ -18,7 +17,6 @@ import { WsCommentService } from '@app/core/services/websockets/ws-comment.servi
 import { VoteService } from '@app/core/services/http/vote.service';
 import { CommentSettingsService } from '@app/core/services/http/comment-settings.service';
 import { EventService } from '@app/core/services/util/event.service';
-import { LanguageService } from '@app/core/services/util/language.service';
 import { AnnounceService } from '@app/core/services/util/announce.service';
 import { NotificationService } from '@app/core/services/util/notification.service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -106,10 +104,6 @@ describe('CommentsPageComponent', () => {
         {
           provide: EventService,
           useClass: MockEventService,
-        },
-        {
-          provide: LanguageService,
-          useClass: MockLangService,
         },
         {
           provide: AnnounceService,

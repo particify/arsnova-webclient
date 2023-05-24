@@ -6,7 +6,6 @@ import {
   JsonTranslationLoader,
   MockEventService,
   MockGlobalStorageService,
-  MockLangService,
   MockNotificationService,
   MockRouter,
 } from '@testing/test-helpers';
@@ -22,7 +21,6 @@ import {
 import { DialogService } from '@app/core/services/util/dialog.service';
 import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
 import { EventService } from '@app/core/services/util/event.service';
-import { LanguageService } from '@app/core/services/util/language.service';
 import { FormattingService } from '@app/core/services/http/formatting.service';
 import { UserRole } from '@app/core/models/user-roles.enum';
 
@@ -78,10 +76,6 @@ describe('RoomComponent', () => {
         {
           provide: FormattingService,
           useClass: MockFormattingService,
-        },
-        {
-          provide: LanguageService,
-          useClass: MockLangService,
         },
         {
           provide: ActivatedRoute,

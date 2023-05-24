@@ -7,11 +7,9 @@ import { ImportComponent } from './import.component';
 import { RoomService } from '@app/core/services/http/room.service';
 import { NotificationService } from '@app/core/services/util/notification.service';
 import { Router } from '@angular/router';
-import { LanguageService } from '@app/core/services/util/language.service';
 import { RoutingService } from '@app/core/services/util/routing.service';
 import {
   JsonTranslationLoader,
-  MockLangService,
   MockNotificationService,
 } from '@testing/test-helpers';
 
@@ -70,10 +68,6 @@ describe('ImportComponent', () => {
         {
           provide: AuthenticationService,
           useClass: MockAuthenticationService,
-        },
-        {
-          provide: LanguageService,
-          useClass: MockLangService,
         },
         {
           provide: RoutingService,

@@ -8,7 +8,6 @@ import {
   JsonTranslationLoader,
   MockEventService,
   MockGlobalStorageService,
-  MockLangService,
   MockNotificationService,
   MockRouter,
 } from '@testing/test-helpers';
@@ -20,7 +19,6 @@ import {
 } from '@ngx-translate/core';
 import { NO_ERRORS_SCHEMA, Injectable } from '@angular/core';
 import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
-import { LanguageService } from '@app/core/services/util/language.service';
 import { A11yIntroPipe } from '@app/core/pipes/a11y-intro.pipe';
 import { NotificationService } from '@app/core/services/util/notification.service';
 
@@ -66,10 +64,6 @@ describe('SettingsPageComponent', () => {
         {
           provide: GlobalStorageService,
           useClass: MockGlobalStorageService,
-        },
-        {
-          provide: LanguageService,
-          useClass: MockLangService,
         },
         {
           provide: A11yIntroPipe,

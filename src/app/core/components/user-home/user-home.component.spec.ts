@@ -4,10 +4,9 @@ import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { of } from 'rxjs';
 import { UserHomeComponent } from './user-home.component';
 
-import { LanguageService } from '@app/core/services/util/language.service';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
 import { ClientAuthentication } from '@app/core/models/client-authentication';
-import { JsonTranslationLoader, MockLangService } from '@testing/test-helpers';
+import { JsonTranslationLoader } from '@testing/test-helpers';
 
 @Injectable()
 class MockAuthenticationService {
@@ -53,10 +52,6 @@ describe('UserHomeComponent', () => {
         }),
       ],
       providers: [
-        {
-          provide: LanguageService,
-          useClass: MockLangService,
-        },
         {
           provide: AuthenticationService,
           useClass: MockAuthenticationService,

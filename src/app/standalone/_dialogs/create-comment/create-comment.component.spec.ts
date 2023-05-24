@@ -8,12 +8,10 @@ import {
   MockMatDialogRef,
   MockNotificationService,
   MockGlobalStorageService,
-  MockLangService,
 } from '@testing/test-helpers';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
-import { LanguageService } from '@app/core/services/util/language.service';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
@@ -56,10 +54,6 @@ describe('CreateCommentComponent', () => {
         {
           provide: GlobalStorageService,
           useClass: MockGlobalStorageService,
-        },
-        {
-          provide: LanguageService,
-          useClass: MockLangService,
         },
         {
           provide: MatDialogRef,

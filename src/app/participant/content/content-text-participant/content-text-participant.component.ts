@@ -7,7 +7,6 @@ import {
   NotificationService,
 } from '@app/core/services/util/notification.service';
 import { TranslateService } from '@ngx-translate/core';
-import { LanguageService } from '@app/core/services/util/language.service';
 import { ContentType } from '@app/core/models/content-type.enum';
 import { EventService } from '@app/core/services/util/event.service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -34,7 +33,6 @@ export class ContentTextParticipantComponent extends ContentParticipantBaseCompo
     protected answerService: ContentAnswerService,
     protected notificationService: NotificationService,
     protected translateService: TranslateService,
-    protected langService: LanguageService,
     protected eventService: EventService,
     protected route: ActivatedRoute,
     protected globalStorageService: GlobalStorageService,
@@ -43,7 +41,6 @@ export class ContentTextParticipantComponent extends ContentParticipantBaseCompo
     super(
       notificationService,
       translateService,
-      langService,
       route,
       globalStorageService,
       router

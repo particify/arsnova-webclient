@@ -3,7 +3,6 @@ import { RoomService } from '@app/core/services/http/room.service';
 import { Room } from '@app/core/models/room';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EventService } from '@app/core/services/util/event.service';
-import { LanguageService } from '@app/core/services/util/language.service';
 import { TranslateService } from '@ngx-translate/core';
 import {
   GlobalStorageService,
@@ -53,15 +52,12 @@ export class SettingsPageComponent implements OnInit {
     protected roomService: RoomService,
     protected route: ActivatedRoute,
     protected eventService: EventService,
-    protected langService: LanguageService,
     protected translateService: TranslateService,
     private globalStorageService: GlobalStorageService,
     private router: Router,
     private location: Location,
     private notificationService: NotificationService
-  ) {
-    langService.langEmitter.subscribe((lang) => translateService.use(lang));
-  }
+  ) {}
 
   ngOnInit(): void {
     this.translateService.use(

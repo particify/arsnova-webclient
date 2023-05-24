@@ -6,7 +6,6 @@ import { GlobalStorageService, STORAGE_KEYS } from './global-storage.service';
 @Injectable()
 export class LanguageService {
   public readonly langEmitter = new EventEmitter<string>();
-  private lang: string;
 
   constructor(
     private translateService: TranslateService,
@@ -33,7 +32,6 @@ export class LanguageService {
 
   private useLanguage(language: string) {
     this.translateService.use(language);
-    this.lang = language;
     this.globalStorageService.setItem(STORAGE_KEYS.LANGUAGE, language);
     this.document.documentElement.lang = language;
     this.langEmitter.emit(language);

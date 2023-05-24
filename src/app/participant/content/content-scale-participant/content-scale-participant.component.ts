@@ -6,7 +6,6 @@ import { ContentScale } from '@app/core/models/content-scale';
 import { ContentType } from '@app/core/models/content-type.enum';
 import { ContentAnswerService } from '@app/core/services/http/content-answer.service';
 import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
-import { LanguageService } from '@app/core/services/util/language.service';
 import { LikertScaleService } from '@app/core/services/util/likert-scale.service';
 import {
   AdvancedSnackBarTypes,
@@ -36,7 +35,6 @@ export class ContentScaleParticipantComponent extends ContentParticipantBaseComp
     protected answerService: ContentAnswerService,
     protected notificationService: NotificationService,
     protected translateService: TranslateService,
-    protected langService: LanguageService,
     protected route: ActivatedRoute,
     protected globalStorageService: GlobalStorageService,
     protected router: Router,
@@ -45,7 +43,6 @@ export class ContentScaleParticipantComponent extends ContentParticipantBaseComp
     super(
       notificationService,
       translateService,
-      langService,
       route,
       globalStorageService,
       router

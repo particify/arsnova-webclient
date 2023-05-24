@@ -15,12 +15,10 @@ import {
   GlobalStorageService,
   STORAGE_KEYS,
 } from '@app/core/services/util/global-storage.service';
-import { LanguageService } from '@app/core/services/util/language.service';
 import {
   ActivatedRouteStub,
   JsonTranslationLoader,
   MockEventService,
-  MockLangService,
   MockRouter,
 } from '@testing/test-helpers';
 import { Location } from '@angular/common';
@@ -164,10 +162,6 @@ describe('ContentPresentationComponent', () => {
         {
           provide: GlobalStorageService,
           useValue: mockGlobalStorageService,
-        },
-        {
-          provide: LanguageService,
-          useClass: MockLangService,
         },
         {
           provide: Location,

@@ -11,14 +11,12 @@ import {
   ActivatedRouteStub,
   MockGlobalStorageService,
   MockRouter,
-  MockLangService,
 } from '@testing/test-helpers';
 import { of } from 'rxjs';
 import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
 import { SpyLocation } from '@angular/common/testing';
 import { Room } from '@app/core/models/room';
 import { RoomStatsService } from '@app/core/services/http/room-stats.service';
-import { LanguageService } from '@app/core/services/util/language.service';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { PresentationService } from '@app/core/services/util/presentation.service';
 
@@ -87,10 +85,6 @@ describe('PresentationComponent', () => {
         {
           provide: Router,
           useClass: MockRouter,
-        },
-        {
-          provide: LanguageService,
-          useClass: MockLangService,
         },
         {
           provide: PresentationService,

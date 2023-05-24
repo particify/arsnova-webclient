@@ -8,14 +8,12 @@ import {
 import { ContentPrioritization } from '@app/core/models/content-prioritization';
 import { ContentAnswerService } from '@app/core/services/http/content-answer.service';
 import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
-import { LanguageService } from '@app/core/services/util/language.service';
 import { NotificationService } from '@app/core/services/util/notification.service';
 import { ContentType } from '@app/core/models/content-type.enum';
 import {
   ActivatedRouteStub,
   JsonTranslationLoader,
   MockGlobalStorageService,
-  MockLangService,
   MockNotificationService,
   MockRouter,
 } from '@testing/test-helpers';
@@ -62,10 +60,6 @@ describe('ContentPrioritizationParticipantComponent', () => {
         {
           provide: NotificationService,
           useClass: MockNotificationService,
-        },
-        {
-          provide: LanguageService,
-          useClass: MockLangService,
         },
         {
           provide: ActivatedRoute,

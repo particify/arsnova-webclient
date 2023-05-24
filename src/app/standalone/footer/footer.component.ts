@@ -1,4 +1,3 @@
-import { LanguageService } from '@app/core/services/util/language.service';
 import { Component, OnInit } from '@angular/core';
 import {
   ActivatedRoute,
@@ -6,7 +5,7 @@ import {
   Router,
   RouterModule,
 } from '@angular/router';
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { TranslateModule } from '@ngx-translate/core';
 import { Room } from '@app/core/models/room';
 import { ConsentService } from '@app/core/services/util/consent.service';
 import { filter } from 'rxjs/operators';
@@ -41,17 +40,12 @@ export class FooterComponent implements OnInit {
 
   constructor(
     public router: Router,
-    private translateService: TranslateService,
-    private langService: LanguageService,
     private consentService: ConsentService,
     private route: ActivatedRoute
   ) {}
 
   ngOnInit() {
     this.viewWidth = innerWidth;
-    this.langService.langEmitter.subscribe((lang) =>
-      this.translateService.use(lang)
-    );
     if (this.consentService.consentRequired()) {
       this.consentService.openDialog();
     }

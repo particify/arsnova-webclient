@@ -19,11 +19,9 @@ import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
 import {
   ActivatedRouteStub,
   JsonTranslationLoader,
-  MockLangService,
   MockGlobalStorageService,
   MockMatDialog,
 } from '@testing/test-helpers';
-import { LanguageService } from '@app/core/services/util/language.service';
 import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
 import { RoomStatsService } from '@app/core/services/http/room-stats.service';
 import { FormattingService } from '@app/core/services/http/formatting.service';
@@ -121,10 +119,6 @@ describe('ContentCreationPageComponent', () => {
         {
           provide: ActivatedRoute,
           useValue: activatedRouteStub,
-        },
-        {
-          provide: LanguageService,
-          useClass: MockLangService,
         },
         {
           provide: GlobalStorageService,

@@ -11,7 +11,6 @@ import {
   ActivatedRouteStub,
   JsonTranslationLoader,
   MockGlobalStorageService,
-  MockLangService,
   MockNotificationService,
   MockRouter,
 } from '@testing/test-helpers';
@@ -28,7 +27,6 @@ import {
 } from '@angular/router';
 import { RoomStatsService } from '@app/core/services/http/room-stats.service';
 import { DialogService } from '@app/core/services/util/dialog.service';
-import { LanguageService } from '@app/core/services/util/language.service';
 import { LocalFileService } from '@app/core/services/util/local-file.service';
 import { HotkeyService } from '@app/core/services/util/hotkey.service';
 import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
@@ -174,10 +172,6 @@ describe('GroupContentComponent', () => {
         {
           provide: GlobalStorageService,
           useClass: MockGlobalStorageService,
-        },
-        {
-          provide: LanguageService,
-          useClass: MockLangService,
         },
         {
           provide: LocalFileService,

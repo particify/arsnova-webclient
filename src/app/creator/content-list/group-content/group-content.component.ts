@@ -15,7 +15,6 @@ import {
   NotificationService,
 } from '@app/core/services/util/notification.service';
 import { TranslateService } from '@ngx-translate/core';
-import { LanguageService } from '@app/core/services/util/language.service';
 import { DialogService } from '@app/core/services/util/dialog.service';
 import {
   GlobalStorageService,
@@ -103,7 +102,6 @@ export class GroupContentComponent
     protected route: ActivatedRoute,
     protected notificationService: NotificationService,
     protected translateService: TranslateService,
-    protected langService: LanguageService,
     protected dialogService: DialogService,
     protected globalStorageService: GlobalStorageService,
     protected contentGroupService: ContentGroupService,
@@ -116,7 +114,6 @@ export class GroupContentComponent
     private contentPublishService: ContentPublishService
   ) {
     super();
-    langService.langEmitter.subscribe((lang) => translateService.use(lang));
   }
 
   ngOnInit() {

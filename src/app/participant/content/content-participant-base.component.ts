@@ -1,7 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { NotificationService } from '@app/core/services/util/notification.service';
 import { TranslateService } from '@ngx-translate/core';
-import { LanguageService } from '@app/core/services/util/language.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
   GlobalStorageService,
@@ -24,13 +23,10 @@ export abstract class ContentParticipantBaseComponent implements OnInit {
   protected constructor(
     protected notificationService: NotificationService,
     protected translateService: TranslateService,
-    protected langService: LanguageService,
     protected route: ActivatedRoute,
     protected globalStorageService: GlobalStorageService,
     protected router: Router
-  ) {
-    langService.langEmitter.subscribe((lang) => translateService.use(lang));
-  }
+  ) {}
 
   ngOnInit() {
     this.translateService.use(

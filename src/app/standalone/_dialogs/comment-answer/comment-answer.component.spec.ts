@@ -8,7 +8,6 @@ import {
   JsonTranslationLoader,
   MockAnnounceService,
   MockGlobalStorageService,
-  MockLangService,
   MockMatDialogRef,
   MockNotificationService,
 } from '@testing/test-helpers';
@@ -19,7 +18,6 @@ import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { CoreModule } from '@angular/flex-layout';
 import { CommentComponent } from '@app/standalone/comment/comment.component';
 import { VoteService } from '@app/core/services/http/vote.service';
-import { LanguageService } from '@app/core/services/util/language.service';
 import { AnnounceService } from '@app/core/services/util/announce.service';
 import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -78,10 +76,6 @@ describe('CommentAnswerComponent', () => {
         {
           provide: VoteService,
           useClass: MockVoteService,
-        },
-        {
-          provide: LanguageService,
-          useClass: MockLangService,
         },
         {
           provide: AnnounceService,

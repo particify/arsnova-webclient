@@ -1,11 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { AccessComponent } from './access.component';
-import {
-  JsonTranslationLoader,
-  MockEventService,
-  MockLangService,
-} from '@testing/test-helpers';
+import { JsonTranslationLoader, MockEventService } from '@testing/test-helpers';
 import { NotificationService } from '@app/core/services/util/notification.service';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { DialogService } from '@app/core/services/util/dialog.service';
@@ -14,7 +10,6 @@ import { Room } from '@app/core/models/room';
 import { ModeratorService } from '@app/core/services/http/moderator.service';
 import { UserService } from '@app/core/services/http/user.service';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
-import { LanguageService } from '@app/core/services/util/language.service';
 import { ClientAuthentication } from '@app/core/models/client-authentication';
 import { AuthProvider } from '@app/core/models/auth-provider';
 import { of } from 'rxjs';
@@ -107,10 +102,6 @@ describe('AccessComponent', () => {
         {
           provide: AuthenticationService,
           useValue: mockAuthenticationService,
-        },
-        {
-          provide: LanguageService,
-          useClass: MockLangService,
         },
         {
           provide: AccessTokenService,
