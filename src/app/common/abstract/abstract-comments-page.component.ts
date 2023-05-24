@@ -315,6 +315,8 @@ export class AbstractCommentsPageComponent {
     this.commentCounter++;
     if (this.scrollExtended) {
       this.getUnreadCommentCount();
+    } else {
+      this.resetReadTimestamp();
     }
   }
 
