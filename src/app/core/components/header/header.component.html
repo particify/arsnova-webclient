@@ -124,12 +124,7 @@
       </button>
     </mat-menu>
 
-    <mat-menu
-      #langMenu="matMenu"
-      [dir]=""
-      xPosition="before"
-      [overlapTrigger]="false"
-    >
+    <mat-menu #langMenu="matMenu" xPosition="before" [overlapTrigger]="false">
       <button
         *ngFor="let lang of langs"
         mat-menu-item
@@ -137,7 +132,9 @@
         appTrackInteraction="Language switched"
         [appTrackName]="lang.key"
       >
-        {{ 'header.' + lang.key | translate }}
+        <span [ngClass]="{ 'selected-menu-item': currentLang === lang.key }">{{
+          'header.' + lang.key | translate
+        }}</span>
       </button>
     </mat-menu>
 
