@@ -287,7 +287,7 @@ export class AbstractCommentsPageComponent {
 
   getUnreadCommentCount() {
     this.unreadCommentCount = this.comments.filter(
-      (c) => c.timestamp > this.readTimestamp
+      (c) => new Date(c.timestamp) > this.readTimestamp
     ).length;
   }
 
