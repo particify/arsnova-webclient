@@ -7,7 +7,7 @@ import {
 } from '@angular/material/dialog';
 import { UpdateAvailableEvent } from '@angular/service-worker';
 import { Observable } from 'rxjs';
-import { YesNoDialogComponent } from '@app/shared/_dialogs/yes-no-dialog/yes-no-dialog.component';
+import { BaseDialogComponent } from '@app/shared/_dialogs/base-dialog/base-dialog.component';
 import { ContentGroupCreationComponent } from '@app/creator/_dialogs/content-group-creation/content-group-creation.component';
 import { RoomCreateComponent } from '@app/core/components/_dialogs/room-create/room-create.component';
 import { UserActivationComponent } from '@app/core/components//_dialogs/user-activation/user-activation.component';
@@ -71,8 +71,8 @@ export class DialogService {
     body: string,
     bodyElement?: string,
     confirmLabel?: string
-  ): MatDialogRef<YesNoDialogComponent> {
-    return this.openDialog(YesNoDialogComponent, {
+  ): MatDialogRef<BaseDialogComponent> {
+    return this.openDialog(BaseDialogComponent, {
       width: this.size.small,
       data: {
         dialogId: 'delete-' + dialogIdSuffix,
@@ -135,10 +135,8 @@ export class DialogService {
     return this.openDialog(ExportComponent);
   }
 
-  openPublishGroupDialog(
-    groupName: string
-  ): MatDialogRef<YesNoDialogComponent> {
-    return this.openDialog(YesNoDialogComponent, {
+  openPublishGroupDialog(groupName: string): MatDialogRef<BaseDialogComponent> {
+    return this.openDialog(BaseDialogComponent, {
       width: this.size.small,
       data: {
         dialogId: 'publish-content-group',

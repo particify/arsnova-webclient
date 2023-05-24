@@ -9,7 +9,6 @@ import {
   MockAnnounceService,
   MockEventService,
   MockGlobalStorageService,
-  MockLangService,
   MockMatDialog,
   MockNotificationService,
 } from '@testing/test-helpers';
@@ -17,7 +16,6 @@ import { CommentService } from '@app/core/services/http/comment.service';
 import { WsCommentService } from '@app/core/services/websockets/ws-comment.service';
 import { CommentSettingsService } from '@app/core/services/http/comment-settings.service';
 import { EventService } from '@app/core/services/util/event.service';
-import { LanguageService } from '@app/core/services/util/language.service';
 import { AnnounceService } from '@app/core/services/util/announce.service';
 import { NotificationService } from '@app/core/services/util/notification.service';
 import { ActivatedRoute, Router } from '@angular/router';

@@ -8,7 +8,7 @@ import {
 } from '@app/core/services/util/notification.service';
 import { TranslateService } from '@ngx-translate/core';
 import { Subject } from 'rxjs';
-import { YesNoDialogComponent } from '@app/shared/_dialogs/yes-no-dialog/yes-no-dialog.component';
+import { BaseDialogComponent } from '@app/shared/_dialogs/base-dialog/base-dialog.component';
 
 @Component({
   selector: 'app-start-new-round',
@@ -27,7 +27,7 @@ export class StartNewRoundComponent {
   ) {}
 
   showNewRoundDialog(): void {
-    const dialogRef = this.dialog.open(YesNoDialogComponent, {
+    const dialogRef = this.dialog.open(BaseDialogComponent, {
       data: {
         section: 'dialog',
         headerLabel: 'sure',

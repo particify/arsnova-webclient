@@ -27,8 +27,13 @@ import { MatDialog } from '@angular/material/dialog';
 import { AnnouncementListComponent } from '@app/shared/announcement-list/announcement-list.component';
 import { AnnouncementService } from '@app/core/services/http/announcement.service';
 import { AnnouncementState } from '@app/core/models/announcement-state';
-import { EntityChangeNotification } from '@app/core/models/events/entity-change-notification';
-import { ChangeType } from '@app/core/models/events/entity-change-notification';
+import {
+  ChangeType,
+  EntityChangeNotification,
+} from '@app/core/models/events/entity-change-notification';
+import { Language } from '@app/core/models/language';
+import { LanguageCategory } from '@app/core/models/language-category.enum';
+import { BaseDialogComponent } from '@app/shared/_dialogs/base-dialog/base-dialog.component';
 
 @Component({
   selector: 'app-header',
@@ -48,7 +53,8 @@ export class HeaderComponent implements OnInit {
   helpUrl: string;
   privacyUrl: string;
   imprintUrl: string;
-  lang: string;
+  currentLang: string;
+  langs: Language[];
   HotkeyAction = HotkeyAction;
   isRoom: boolean;
   isPreview: boolean;
@@ -79,7 +85,7 @@ export class HeaderComponent implements OnInit {
     this.deviceType = this.globalStorageService.getItem(
       STORAGE_KEYS.DEVICE_TYPE
     );
-    this.lang = this.translationService.currentLang;
+    this.currentLang = this.translationService.currentLang;
   }
 
   ngOnInit() {
@@ -107,12 +113,12 @@ export class HeaderComponent implements OnInit {
       this.currentTheme = theme;
     });
     this.themes = this.themeService.getThemes();
+    this.langs = this.langService.getLangs();
     this.route.data.subscribe((data) => {
       this.helpUrl = data.apiConfig.ui.links?.help?.url;
       this.privacyUrl = data.apiConfig.ui.links?.privacy?.url;
       this.imprintUrl = data.apiConfig.ui.links?.imprint?.url;
     });
-    this.translationService.onLangChange.subscribe((e) => (this.lang = e.lang));
     this.isRoom = this.routingService.isRoom;
     this.routingService.getIsRoom().subscribe((isRoom) => {
       this.isRoom = isRoom;
@@ -141,8 +147,22 @@ export class HeaderComponent implements OnInit {
     }
   }
 
-  changeLanguage(lang: string) {
-    this.langService.setLang(lang);
+  changeLanguage(lang: Language) {
+    this.langService.setLang(lang.key);
+    this.currentLang = lang.key;
+    if (lang.category === LanguageCategory.COMMUNITY) {
+      this.dialog.open(BaseDialogComponent, {
+        width: '400px',
+        data: {
+          dialogId: 'community-lang',
+          section: 'dialog',
+          headerLabel: 'you-are-using-community-lang',
+          body: 'community-lang',
+          confirmLabel: 'close',
+          type: 'button-primary',
+        },
+      });
+    }
   }
 
   hasRole(role: UserRole): boolean {

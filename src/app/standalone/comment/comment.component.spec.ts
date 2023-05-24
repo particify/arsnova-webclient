@@ -9,13 +9,11 @@ import {
   ActivatedRouteStub,
   MockGlobalStorageService,
   MockAnnounceService,
-  MockLangService,
 } from '@testing/test-helpers';
 import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
 import { AnnounceService } from '@app/core/services/util/announce.service';
 import { DialogService } from '@app/core/services/util/dialog.service';
 import { CommentService } from '@app/core/services/http/comment.service';
-import { LanguageService } from '@app/core/services/util/language.service';
 import { UserRole } from '@app/core/models/user-roles.enum';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatMenuModule } from '@angular/material/menu';
@@ -61,10 +59,6 @@ describe('CommentComponent', () => {
         {
           provide: CommentService,
           useValue: mockCommentService,
-        },
-        {
-          provide: LanguageService,
-          useClass: MockLangService,
         },
         {
           provide: AnnounceService,

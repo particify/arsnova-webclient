@@ -131,22 +131,13 @@
       [overlapTrigger]="false"
     >
       <button
-        class="item-title lang-title"
+        *ngFor="let lang of langs"
         mat-menu-item
-        (click)="changeLanguage('de')"
+        (click)="changeLanguage(lang)"
         appTrackInteraction="Language switched"
-        appTrackName="de"
+        [appTrackName]="lang.key"
       >
-        {{ 'header.german' | translate }}
-      </button>
-      <button
-        class="item-title lang-title"
-        mat-menu-item
-        (click)="changeLanguage('en')"
-        appTrackInteraction="Language switched"
-        appTrackName="en"
-      >
-        {{ 'header.english' | translate }}
+        {{ 'header.' + lang.key | translate }}
       </button>
     </mat-menu>
 
@@ -159,7 +150,7 @@
       >
         {{ 'footer.privacy-policy' | translate }}</a
       >
-      <button class="item-title" mat-menu-item (click)="showCookieSettings()">
+      <button mat-menu-item (click)="showCookieSettings()">
         {{ 'footer.cookie-settings' | translate }}
       </button>
     </mat-menu>
