@@ -3,10 +3,7 @@ import { AbstractHttpService } from './abstract-http.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { EventService } from '@app/core/services/util/event.service';
 import { TranslateService } from '@ngx-translate/core';
-import {
-  AdvancedSnackBarTypes,
-  NotificationService,
-} from '@app/core/services/util/notification.service';
+import { NotificationService } from '@app/core/services/util/notification.service';
 import { Observable, Subscription } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { Message } from '@stomp/stompjs';

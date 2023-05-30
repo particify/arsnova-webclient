@@ -80,17 +80,17 @@ export class LiveFeedbackComponent implements OnInit, OnDestroy {
     );
   }
 
-  setData(data: number[]) {
+  ngOnDestroy() {
+    this.hotkeyRefs.forEach((h) => this.hotkeyService.unregisterHotkey(h));
+  }
+
+  private setData(data: number[]) {
     data.forEach((v, i) => {
       this.displayData[i].count = v;
     });
   }
 
-  ngOnDestroy() {
-    this.hotkeyRefs.forEach((h) => this.hotkeyService.unregisterHotkey(h));
-  }
-
-  announceStatus() {
+  private announceStatus() {
     const typeLabels = (
       this.type === LiveFeedbackType.FEEDBACK
         ? this.feedbackLabels
