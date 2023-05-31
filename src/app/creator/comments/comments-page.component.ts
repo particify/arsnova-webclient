@@ -74,6 +74,7 @@ export class CommentsPageComponent
       if (this.isArchive) {
         this.activeComments$ = this.archivedComments$;
       } else {
+        this.isModeration = data.isModeration;
         this.publicComments$ = this.commentService.getAckComments(this.room.id);
         this.moderationComments$ = this.commentService.getRejectedComments(
           this.room.id
