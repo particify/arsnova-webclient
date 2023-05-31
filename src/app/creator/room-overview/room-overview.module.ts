@@ -8,6 +8,7 @@ import { CoreModule } from '@app/core/core.module';
 import { DividerComponent } from '@app/standalone/divider/divider.component';
 import { RoomOverviewHeaderComponent } from '@app/standalone/room-overview-header/room-overview-header.component';
 import { ContentGroupsComponent } from '@app/standalone/content-groups/content-groups.component';
+import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
 
 @NgModule({
   declarations: [RoomOverviewPageComponent],
@@ -19,6 +20,7 @@ import { ContentGroupsComponent } from '@app/standalone/content-groups/content-g
     RoomActionButtonComponent,
     DividerComponent,
     ContentGroupsComponent,
+    LoadingIndicatorComponent,
   ],
 })
 export class RoomOverviewModule {}
