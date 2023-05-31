@@ -116,10 +116,11 @@ export class AbstractCommentsPageComponent {
       .subscribe((auth) => {
         this.userId = auth.userId;
       });
-    document.getElementById('routing-content')?.addEventListener(
+    const scrollContainer = document.getElementById('routing-content');
+    scrollContainer?.addEventListener(
       'scroll',
       () => {
-        this.checkScroll();
+        this.checkScroll(scrollContainer);
       },
       true
     );
@@ -160,9 +161,8 @@ export class AbstractCommentsPageComponent {
     this.subscribeCommentStream();
   }
 
-  checkScroll(scrollPosition?: number, scrollHeight?: number): void {
-    const currentScroll =
-      scrollPosition || document.getElementById('routing-content').scrollTop;
+  checkScroll(scrollElement: HTMLElement): void {
+    const currentScroll = scrollElement.scrollTop;
     this.scroll = this.isScrollPosition(currentScroll);
     this.scrollActive = this.scroll && currentScroll < this.lastScroll;
     this.scrollExtended = currentScroll >= this.scrollExtendedMax;
@@ -170,7 +170,10 @@ export class AbstractCommentsPageComponent {
     this.isScrollStart =
       currentScroll >= this.scrollStart &&
       currentScroll <= this.scrollStart + 200;
-    this.showCommentsForScrollPosition(currentScroll, scrollHeight);
+    this.showCommentsForScrollPosition(
+      currentScroll,
+      scrollElement.scrollHeight
+    );
     this.lastScroll = currentScroll;
   }
 
@@ -187,8 +190,7 @@ export class AbstractCommentsPageComponent {
       ? this.filteredComments.length
       : this.commentsFilteredByTime.length;
     if (this.displayComments.length !== length) {
-      const height = scrollHeight || document.body.scrollHeight;
-      if (window.innerHeight * 2 + scrollPosition >= height) {
+      if (window.innerHeight * 2 + scrollPosition >= scrollHeight) {
         this.commentCounter += itemRenderNumber / 2;
         this.getDisplayComments();
       }

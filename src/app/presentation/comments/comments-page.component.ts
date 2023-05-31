@@ -152,10 +152,7 @@ export class CommentsPageComponent
   }
 
   onScroll() {
-    const nativeCommentList = this.commentListRef.nativeElement;
-    const scrollTop = nativeCommentList.scrollTop;
-    const scrollHeight = nativeCommentList.scrollHeight;
-    this.checkScroll(scrollTop, scrollHeight);
+    this.checkScroll(this.commentListRef.nativeElement);
   }
 
   getIndexOfComment(comment: Comment): number {
