@@ -21,35 +21,41 @@ import { FeedbackService } from '@app/core/services/http/feedback.service';
 import { AnnounceService } from '@app/core/services/util/announce.service';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
 import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
-import { EventEmitter } from '@angular/core';
+import { EventEmitter, NO_ERRORS_SCHEMA } from '@angular/core';
 import { CoreModule } from '@app/core/core.module';
 import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
 import { HotkeyService } from '@app/core/services/util/hotkey.service';
+import { HarnessLoader } from '@angular/cdk/testing';
+import { MatButtonHarness } from '@angular/material/button/testing';
+import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
+import { LiveFeedbackType } from '@app/core/models/live-feedback-type.enum';
+import { MatIconHarness } from '@angular/material/icon/testing';
 
 describe('LiveFeedbackPageComponent', () => {
   let component: LiveFeedbackPageComponent;
   let fixture: ComponentFixture<LiveFeedbackPageComponent>;
 
-  const mockRoomService = jasmine.createSpyObj([
-    'getRoom',
-    'changeFeedbackType',
-    'changeFeedbackLocked',
+  const mockRoomService = jasmine.createSpyObj('RoomService', ['getRoom']);
+
+  const mockWsFeedbackService = jasmine.createSpyObj('WsFeedbackService', [
+    'send',
   ]);
-
-  const mockRoomStatsService = jasmine.createSpyObj(['getStats']);
-  mockRoomStatsService.getStats.and.returnValue(of({}));
-
-  const mockWsFeedbackService = jasmine.createSpyObj(['send', 'reset']);
-
-  const mockFeedbackService = jasmine.createSpyObj(['startSub', 'get']);
+  const mockFeedbackService = jasmine.createSpyObj([
+    'startSub',
+    'get',
+    'getType',
+    'getAnswerSum',
+    'getBarData',
+  ]);
   mockFeedbackService.messageEvent = new EventEmitter<Message>();
   mockFeedbackService.get.and.returnValue(of([0, 0, 0, 0]));
+  mockFeedbackService.getType.and.returnValue(LiveFeedbackType.FEEDBACK);
 
   const mockAuthenticationService = jasmine.createSpyObj([
     'getCurrentAuthentication',
   ]);
   const auth = new ClientAuthentication(
-    '1234',
+    'userId',
     'a@b.cd',
     AuthProvider.ARSNOVA,
     'token'
@@ -57,6 +63,7 @@ describe('LiveFeedbackPageComponent', () => {
   mockAuthenticationService.getCurrentAuthentication.and.returnValue(of(auth));
 
   const room = new Room();
+  room.id = 'roomId';
   room.settings = {};
   const data = {
     room: room,
@@ -72,6 +79,12 @@ describe('LiveFeedbackPageComponent', () => {
     'registerHotkey',
     'unregisterHotkey',
   ]);
+
+  let loader: HarnessLoader;
+  let answerButton1: MatButtonHarness;
+  let answerButton2: MatButtonHarness;
+  let answerButton3: MatButtonHarness;
+  let answerButton4: MatButtonHarness;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -122,14 +135,68 @@ describe('LiveFeedbackPageComponent', () => {
           useClass: MockGlobalStorageService,
         },
       ],
+      schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
 
     fixture = TestBed.createComponent(LiveFeedbackPageComponent);
     component = fixture.componentInstance;
+    loader = TestbedHarnessEnvironment.loader(fixture);
     fixture.detectChanges();
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should display 4 answer buttons', async () => {
+    answerButton1 = await loader.getHarness(
+      MatButtonHarness.with({ selector: '#survey-button-0' })
+    );
+    answerButton2 = await loader.getHarness(
+      MatButtonHarness.with({ selector: '#survey-button-1' })
+    );
+    answerButton3 = await loader.getHarness(
+      MatButtonHarness.with({ selector: '#survey-button-2' })
+    );
+    answerButton4 = await loader.getHarness(
+      MatButtonHarness.with({ selector: '#survey-button-3' })
+    );
+    expect(answerButton1).not.toBeNull('Answer button 1 should exist');
+    expect(answerButton2).not.toBeNull('Answer button 2 should exist');
+    expect(answerButton3).not.toBeNull('Answer button 3 should exist');
+    expect(answerButton4).not.toBeNull('Answer button 4 should exist');
+  });
+
+  it('should send answer when button clicked', async () => {
+    answerButton1 = await loader.getHarness(
+      MatButtonHarness.with({ selector: '#survey-button-0' })
+    );
+    await answerButton1.click();
+    expect(mockWsFeedbackService.send).toHaveBeenCalledWith(
+      'userId',
+      0,
+      'roomId'
+    );
+  });
+
+  it('should use answer labels if type is survey', async () => {
+    component.type = LiveFeedbackType.SURVEY;
+    fixture.detectChanges();
+    answerButton1 = await loader.getHarness(
+      MatButtonHarness.with({ selector: '#survey-button-0' })
+    );
+    const text = await answerButton1.getText();
+    expect(text).toBe('A');
+  });
+
+  it('should use icons as answer labels if type is feedback', async () => {
+    component.type = LiveFeedbackType.FEEDBACK;
+    fixture.detectChanges();
+    answerButton1 = await loader.getHarness(
+      MatButtonHarness.with({ selector: '#survey-button-0' })
+    );
+    const icons = await answerButton1.getAllHarnesses(MatIconHarness);
+    const iconName = await icons[0].getName();
+    expect(iconName).toBe('sentiment_very_satisfied');
   });
 });
