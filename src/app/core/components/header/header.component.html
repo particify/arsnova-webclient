@@ -133,7 +133,7 @@
         [appTrackName]="lang.key"
       >
         <span [ngClass]="{ 'selected-menu-item': currentLang === lang.key }">{{
-          'header.' + lang.key | translate
+          lang.name
         }}</span>
       </button>
     </mat-menu>

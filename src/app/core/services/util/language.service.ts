@@ -13,14 +13,17 @@ export class LanguageService {
   private langs: Language[] = [
     {
       key: 'de',
+      name: 'Deutsch',
       category: LanguageCategory.OFFICIAL,
     },
     {
       key: 'en',
+      name: 'English',
       category: LanguageCategory.OFFICIAL,
     },
     {
       key: 'es',
+      name: 'Español',
       category: LanguageCategory.COMMUNITY,
     },
   ];
