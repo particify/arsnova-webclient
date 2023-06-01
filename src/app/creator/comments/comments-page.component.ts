@@ -154,6 +154,17 @@ export class CommentsPageComponent
     }
   }
 
+  handleCommentDelete(id: string) {
+    this.removeCommentFromList(id);
+    if (this.isModeration) {
+      this.moderationCounter--;
+    } else {
+      this.publicCounter--;
+      this.reduceCommentCounter();
+      this.checkIfActiveComment(id);
+    }
+  }
+
   toggleReadonly() {
     const commentSettings = new CommentSettings(
       this.roomId,
