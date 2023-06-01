@@ -124,29 +124,17 @@
       </button>
     </mat-menu>
 
-    <mat-menu
-      #langMenu="matMenu"
-      [dir]=""
-      xPosition="before"
-      [overlapTrigger]="false"
-    >
+    <mat-menu #langMenu="matMenu" xPosition="before" [overlapTrigger]="false">
       <button
-        class="item-title lang-title"
+        *ngFor="let lang of langs"
         mat-menu-item
-        (click)="changeLanguage('de')"
+        (click)="changeLanguage(lang)"
         appTrackInteraction="Language switched"
-        appTrackName="de"
+        [appTrackName]="lang.key"
       >
-        {{ 'header.german' | translate }}
-      </button>
-      <button
-        class="item-title lang-title"
-        mat-menu-item
-        (click)="changeLanguage('en')"
-        appTrackInteraction="Language switched"
-        appTrackName="en"
-      >
-        {{ 'header.english' | translate }}
+        <span [ngClass]="{ 'selected-menu-item': currentLang === lang.key }">{{
+          lang.name
+        }}</span>
       </button>
     </mat-menu>
 
@@ -159,7 +147,7 @@
       >
         {{ 'footer.privacy-policy' | translate }}</a
       >
-      <button class="item-title" mat-menu-item (click)="showCookieSettings()">
+      <button mat-menu-item (click)="showCookieSettings()">
         {{ 'footer.cookie-settings' | translate }}
       </button>
     </mat-menu>

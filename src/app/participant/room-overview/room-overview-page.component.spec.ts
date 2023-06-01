@@ -11,7 +11,6 @@ import {
   MockRouter,
   MockEventService,
   MockAnnounceService,
-  MockLangService,
 } from '@testing/test-helpers';
 import { of } from 'rxjs';
 import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
@@ -26,7 +25,6 @@ import { UserRole } from '@app/core/models/user-roles.enum';
 import { SplitShortIdPipe } from '@app/core/pipes/split-short-id.pipe';
 import { RoomService } from '@app/core/services/http/room.service';
 import { RoomStatsService } from '@app/core/services/http/room-stats.service';
-import { LanguageService } from '@app/core/services/util/language.service';
 import { WsCommentService } from '@app/core/services/websockets/ws-comment.service';
 import { CommentService } from '@app/core/services/http/comment.service';
 import { FeedbackService } from '@app/core/services/http/feedback.service';
@@ -114,10 +112,6 @@ describe('RoomOverviewPageComponent', () => {
         {
           provide: RoomStatsService,
           useValue: mockRoomStatsService,
-        },
-        {
-          provide: LanguageService,
-          useClass: MockLangService,
         },
         {
           provide: WsCommentService,

@@ -5,7 +5,6 @@ import {
   STORAGE_KEYS,
 } from '@app/core/services/util/global-storage.service';
 import { RoomStatsService } from '@app/core/services/http/room-stats.service';
-import { LanguageService } from '@app/core/services/util/language.service';
 import { TranslateService } from '@ngx-translate/core';
 import { Features } from '@app/core/models/features.enum';
 import { PresentationService } from '@app/core/services/util/presentation.service';
@@ -26,12 +25,9 @@ export class PresentationComponent implements OnInit, OnDestroy {
     public router: Router,
     private globalStorageService: GlobalStorageService,
     private roomStatsService: RoomStatsService,
-    protected langService: LanguageService,
     private translateService: TranslateService,
     private presentationService: PresentationService
-  ) {
-    langService.langEmitter.subscribe((lang) => translateService.use(lang));
-  }
+  ) {}
 
   ngOnInit(): void {
     document.body.style.background = 'var(--surface)';

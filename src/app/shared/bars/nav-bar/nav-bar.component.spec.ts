@@ -5,7 +5,6 @@ import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import {
   JsonTranslationLoader,
   MockGlobalStorageService,
-  MockLangService,
 } from '@testing/test-helpers';
 import { of } from 'rxjs';
 import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
@@ -25,7 +24,6 @@ import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 import { HarnessLoader } from '@angular/cdk/testing';
 import { UserRole } from '@app/core/models/user-roles.enum';
 import { RouterTestingModule } from '@angular/router/testing';
-import { LanguageService } from '@app/core/services/util/language.service';
 import {
   MatMenuHarness,
   MatMenuItemHarness,
@@ -132,10 +130,6 @@ describe('NavBarComponent', () => {
         {
           provide: GlobalStorageService,
           useClass: MockGlobalStorageService,
-        },
-        {
-          provide: LanguageService,
-          useClass: MockLangService,
         },
         {
           provide: RoomService,

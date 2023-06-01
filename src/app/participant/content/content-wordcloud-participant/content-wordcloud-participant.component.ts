@@ -5,7 +5,6 @@ import {
   NotificationService,
 } from '@app/core/services/util/notification.service';
 import { TranslateService } from '@ngx-translate/core';
-import { LanguageService } from '@app/core/services/util/language.service';
 import { ContentType } from '@app/core/models/content-type.enum';
 import { EventService } from '@app/core/services/util/event.service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -33,7 +32,6 @@ export class ContentWordcloudParticipantComponent extends ContentParticipantBase
     protected answerService: ContentAnswerService,
     protected notificationService: NotificationService,
     protected translateService: TranslateService,
-    protected langService: LanguageService,
     public eventService: EventService,
     protected route: ActivatedRoute,
     protected globalStorageService: GlobalStorageService,
@@ -42,7 +40,6 @@ export class ContentWordcloudParticipantComponent extends ContentParticipantBase
     super(
       notificationService,
       translateService,
-      langService,
       route,
       globalStorageService,
       router

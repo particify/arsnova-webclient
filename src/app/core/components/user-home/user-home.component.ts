@@ -1,6 +1,4 @@
 import { AfterContentInit, Component, OnInit } from '@angular/core';
-import { TranslateService } from '@ngx-translate/core';
-import { LanguageService } from '@app/core/services/util/language.service';
 import { ClientAuthentication } from '@app/core/models/client-authentication';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
 
@@ -12,13 +10,7 @@ import { AuthenticationService } from '@app/core/services/http/authentication.se
 export class UserHomeComponent implements OnInit, AfterContentInit {
   auth: ClientAuthentication;
 
-  constructor(
-    private translateService: TranslateService,
-    protected langService: LanguageService,
-    private authenticationService: AuthenticationService
-  ) {
-    langService.langEmitter.subscribe((lang) => translateService.use(lang));
-  }
+  constructor(private authenticationService: AuthenticationService) {}
 
   ngAfterContentInit(): void {
     setTimeout(() => {

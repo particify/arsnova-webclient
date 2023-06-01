@@ -1,26 +1,26 @@
 import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
-export interface DialogData {
+interface DialogData {
   dialogId: string;
   section: string;
   headerLabel: string;
   body: string;
   confirmLabel: string;
-  abortLabel: string;
+  abortLabel?: string;
   type: string;
   bodyElement?: string;
 }
 
 @Component({
-  selector: 'app-yes-no-dialog',
-  templateUrl: './yes-no-dialog.component.html',
+  selector: 'app-base-dialog',
+  templateUrl: './base-dialog.component.html',
 })
-export class YesNoDialogComponent {
+export class BaseDialogComponent {
   readonly dialogId: string;
 
   constructor(
-    public dialogRef: MatDialogRef<YesNoDialogComponent>,
+    public dialogRef: MatDialogRef<BaseDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData
   ) {
     data.section = data.section + '.';

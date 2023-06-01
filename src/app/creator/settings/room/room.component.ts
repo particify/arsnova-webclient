@@ -9,7 +9,6 @@ import { RoomService } from '@app/core/services/http/room.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EventService } from '@app/core/services/util/event.service';
 import { RoomDeleted } from '@app/core/models/events/room-deleted';
-import { LanguageService } from '@app/core/services/util/language.service';
 import { DialogService } from '@app/core/services/util/dialog.service';
 import {
   FormattingService,
@@ -44,13 +43,10 @@ export class RoomComponent implements OnInit {
     public router: Router,
     public eventService: EventService,
     protected translateService: TranslateService,
-    protected langService: LanguageService,
     private dialogService: DialogService,
     private route: ActivatedRoute,
     private formattingService: FormattingService
-  ) {
-    langService.langEmitter.subscribe((lang) => translateService.use(lang));
-  }
+  ) {}
   ngOnInit(): void {
     this.isCreator = this.route.snapshot.data.userRole === UserRole.OWNER;
   }

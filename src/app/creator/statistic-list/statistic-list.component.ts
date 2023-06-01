@@ -7,7 +7,6 @@ import { AnswerOption } from '@app/core/models/answer-option';
 import { ContentChoice } from '@app/core/models/content-choice';
 import { Combination } from '@app/core/models/round-statistics';
 import { TranslateService } from '@ngx-translate/core';
-import { LanguageService } from '@app/core/services/util/language.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ContentAnswerService } from '@app/core/services/http/content-answer.service';
 import {
@@ -83,7 +82,6 @@ export class StatisticListComponent implements OnInit {
     private contentAnswerService: ContentAnswerService,
     private translateService: TranslateService,
     private router: Router,
-    protected langService: LanguageService,
     protected route: ActivatedRoute,
     private globalStorageService: GlobalStorageService,
     private notificationService: NotificationService
@@ -91,7 +89,6 @@ export class StatisticListComponent implements OnInit {
     this.deviceType = this.globalStorageService.getItem(
       STORAGE_KEYS.DEVICE_TYPE
     );
-    langService.langEmitter.subscribe((lang) => translateService.use(lang));
   }
 
   ngOnInit() {

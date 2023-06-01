@@ -10,7 +10,6 @@ import { TranslateService } from '@ngx-translate/core';
 import { AnswerOption } from '@app/core/models/answer-option';
 import { ContentChoice } from '@app/core/models/content-choice';
 import { ContentParticipantBaseComponent } from '@app/participant/content/content-participant-base.component';
-import { LanguageService } from '@app/core/services/util/language.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
 import { ContentService } from '@app/core/services/http/content.service';
@@ -39,7 +38,6 @@ export class ContentSortParticipantComponent extends ContentParticipantBaseCompo
     protected answerService: ContentAnswerService,
     protected notificationService: NotificationService,
     protected translateService: TranslateService,
-    protected langService: LanguageService,
     protected route: ActivatedRoute,
     protected globalStorageService: GlobalStorageService,
     protected router: Router,
@@ -48,7 +46,6 @@ export class ContentSortParticipantComponent extends ContentParticipantBaseCompo
     super(
       notificationService,
       translateService,
-      langService,
       route,
       globalStorageService,
       router

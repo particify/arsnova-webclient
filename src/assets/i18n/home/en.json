@@ -39,8 +39,6 @@
     "back": "Back",
     "admin-area": "Administration",
     "user-profile": "My account",
-    "english": "English",
-    "german": "German",
     "help": "Help",
     "language": "Language",
     "logged-out": "You have been logged out.",
@@ -254,7 +252,9 @@
     "really-delete-account-admin": "Do you want to irrevocably delete this account with all rooms?",
     "really-delete-answers": "Do you really want to delete the answers to this question?",
     "answers-deleted": "Answers to this question has been deleted.",
-    "really-delete-all-answers": "Do you really want to delete all answers of this question series?"
+    "really-delete-all-answers": "Do you really want to delete all answers of this question series?",
+    "you-are-using-community-lang": "You're using a community translation",
+    "community-lang": "This language is maintained by the community and therefore may be incomplete or outdated."
   },
   "errors": {
     "not-authorized": "You're not authorized to view this page.",

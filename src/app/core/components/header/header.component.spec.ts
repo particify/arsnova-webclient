@@ -7,7 +7,6 @@ import {
   JsonTranslationLoader,
   MockEventService,
   MockGlobalStorageService,
-  MockLangService,
   MockRenderer2,
   MockRouter,
   MockThemeService,
@@ -23,7 +22,6 @@ import { GlobalStorageService } from '@app/core/services/util/global-storage.ser
 import { HarnessLoader } from '@angular/cdk/testing';
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
-import { LanguageService } from '@app/core/services/util/language.service';
 import { UserService } from '@app/core/services/http/user.service';
 import { DialogService } from '@app/core/services/util/dialog.service';
 import { NO_ERRORS_SCHEMA, Renderer2 } from '@angular/core';
@@ -133,10 +131,6 @@ describe('HeaderComponent', () => {
         {
           provide: GlobalStorageService,
           useClass: MockGlobalStorageService,
-        },
-        {
-          provide: LanguageService,
-          useClass: MockLangService,
         },
         {
           provide: Renderer2,

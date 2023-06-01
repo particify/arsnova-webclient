@@ -8,7 +8,6 @@ import {
 import { ActivatedRoute, Router } from '@angular/router';
 import { ContentService } from '@app/core/services/http/content.service';
 import { TranslateService } from '@ngx-translate/core';
-import { LanguageService } from '@app/core/services/util/language.service';
 import { Content } from '@app/core/models/content';
 import {
   GlobalStorageService,
@@ -66,7 +65,6 @@ export class ContentPresentationComponent implements OnInit, OnDestroy {
     private contentService: ContentService,
     private contentGroupService: ContentGroupService,
     private translateService: TranslateService,
-    protected langService: LanguageService,
     private globalStorageService: GlobalStorageService,
     private location: Location,
     private router: Router,
@@ -77,9 +75,7 @@ export class ContentPresentationComponent implements OnInit, OnDestroy {
     private userService: UserService,
     private remoteService: RemoteService,
     private contentPublishService: ContentPublishService
-  ) {
-    langService.langEmitter.subscribe((lang) => translateService.use(lang));
-  }
+  ) {}
 
   ngOnInit() {
     this.translateService.use(

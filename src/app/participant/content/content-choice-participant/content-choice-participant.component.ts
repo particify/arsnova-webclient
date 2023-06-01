@@ -8,7 +8,6 @@ import {
 import { ChoiceAnswer } from '@app/core/models/choice-answer';
 import { ContentType } from '@app/core/models/content-type.enum';
 import { TranslateService } from '@ngx-translate/core';
-import { LanguageService } from '@app/core/services/util/language.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
 import { ContentParticipantBaseComponent } from '@app/participant/content/content-participant-base.component';
@@ -44,7 +43,6 @@ export class ContentChoiceParticipantComponent extends ContentParticipantBaseCom
     protected answerService: ContentAnswerService,
     protected notificationService: NotificationService,
     protected translateService: TranslateService,
-    protected langService: LanguageService,
     protected route: ActivatedRoute,
     protected globalStorageService: GlobalStorageService,
     protected router: Router,
@@ -53,7 +51,6 @@ export class ContentChoiceParticipantComponent extends ContentParticipantBaseCom
     super(
       notificationService,
       translateService,
-      langService,
       route,
       globalStorageService,
       router

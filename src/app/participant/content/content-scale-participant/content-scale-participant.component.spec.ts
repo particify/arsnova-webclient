@@ -6,11 +6,9 @@ import {
   Router,
 } from '@angular/router';
 import { NotificationService } from '@app/core/services/util/notification.service';
-import { LanguageService } from '@app/core/services/util/language.service';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import {
   JsonTranslationLoader,
-  MockLangService,
   MockNotificationService,
   ActivatedRouteStub,
   MockGlobalStorageService,
@@ -67,10 +65,6 @@ describe('ContentScaleParticipantComponent', () => {
         {
           provide: NotificationService,
           useClass: MockNotificationService,
-        },
-        {
-          provide: LanguageService,
-          useClass: MockLangService,
         },
         {
           provide: ActivatedRoute,

@@ -1,7 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { LanguageService } from '@app/core/services/util/language.service';
 import { DateFormatPipe } from '@app/core/pipes/date-format.pipe';
-import { JsonTranslationLoader, MockLangService } from '@testing/test-helpers';
+import { JsonTranslationLoader } from '@testing/test-helpers';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 
 import { AnnouncementComponent } from './announcement.component';
@@ -15,12 +14,6 @@ describe('AnnouncementComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [AnnouncementComponent, DateFormatPipe],
-      providers: [
-        {
-          provide: LanguageService,
-          useClass: MockLangService,
-        },
-      ],
       imports: [
         TranslateModule.forRoot({
           loader: {

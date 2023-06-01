@@ -1,6 +1,5 @@
 import { Component, EventEmitter, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { LanguageService } from '@app/core/services/util/language.service';
 import {
   GlobalStorageService,
   STORAGE_KEYS,
@@ -8,6 +7,7 @@ import {
 import { Router } from '@angular/router';
 import { SystemInfoService } from '@app/core/services/http/system-info.service';
 import { catchError, Observable, of, shareReplay } from 'rxjs';
+import { LanguageService } from '@app/core/services/util/language.service';
 
 @Component({
   selector: 'app-admin-home',
@@ -28,7 +28,9 @@ export class AdminHomeComponent implements OnInit {
     protected router: Router,
     protected systemInfoService: SystemInfoService
   ) {
-    langService.langEmitter.subscribe((lang) => translateService.use(lang));
+    langService.langEmitter.subscribe((lang) => {
+      translateService.use(lang);
+    });
   }
 
   ngOnInit() {

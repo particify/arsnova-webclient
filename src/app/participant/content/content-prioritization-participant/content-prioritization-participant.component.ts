@@ -5,7 +5,6 @@ import { ContentType } from '@app/core/models/content-type.enum';
 import { PrioritizationAnswer } from '@app/core/models/prioritization-answer';
 import { ContentAnswerService } from '@app/core/services/http/content-answer.service';
 import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
-import { LanguageService } from '@app/core/services/util/language.service';
 import {
   AdvancedSnackBarTypes,
   NotificationService,
@@ -36,7 +35,6 @@ export class ContentPrioritizationParticipantComponent extends ContentParticipan
     protected answerService: ContentAnswerService,
     protected notificationService: NotificationService,
     protected translateService: TranslateService,
-    protected langService: LanguageService,
     protected route: ActivatedRoute,
     protected globalStorageService: GlobalStorageService,
     protected router: Router
@@ -44,7 +42,6 @@ export class ContentPrioritizationParticipantComponent extends ContentParticipan
     super(
       notificationService,
       translateService,
-      langService,
       route,
       globalStorageService,
       router

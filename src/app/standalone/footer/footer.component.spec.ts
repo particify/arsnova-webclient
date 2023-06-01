@@ -4,10 +4,8 @@ import { FooterComponent } from './footer.component';
 import {
   ActivatedRouteStub,
   JsonTranslationLoader,
-  MockLangService,
 } from '@testing/test-helpers';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import { LanguageService } from '@app/core/services/util/language.service';
 import { ConsentService } from '@app/core/services/util/consent.service';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -65,10 +63,6 @@ describe('FooterComponent', () => {
         RouterTestingModule,
       ],
       providers: [
-        {
-          provide: LanguageService,
-          useClass: MockLangService,
-        },
         {
           provide: ActivatedRoute,
           useValue: activatedRoute,

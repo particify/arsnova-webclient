@@ -3,7 +3,7 @@ import { CoreModule } from '@app/core/core.module';
 import { StatisticTextComponent } from './statistic-content/statistic-text/statistic-text.component';
 import { StatisticChoiceComponent } from './statistic-content/statistic-choice/statistic-choice.component';
 import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
-import { YesNoDialogComponent } from './_dialogs/yes-no-dialog/yes-no-dialog.component';
+import { BaseDialogComponent } from './_dialogs/base-dialog/base-dialog.component';
 import { StepperComponent } from './stepper/stepper.component';
 import { CdkStepperModule } from '@angular/cdk/stepper';
 import { ExtensionPointModule } from '@projects/extension-point/src/lib/extension-point.module';
@@ -55,7 +55,7 @@ import { AnswerCountComponent } from '@app/standalone/answer-count/answer-count.
     StatisticScaleComponent,
     StatisticTextComponent,
     StatisticWordcloudComponent,
-    YesNoDialogComponent,
+    BaseDialogComponent,
     StepperComponent,
     StatisticContentComponent,
     ContentSortAnswerComponent,

@@ -162,12 +162,6 @@ export class MockNotificationService {
   showAdvanced() {}
 }
 
-// LangService
-
-export class MockLangService {
-  langEmitter = new EventEmitter<string>();
-}
-
 // ThemeService
 
 export class MockThemeService {

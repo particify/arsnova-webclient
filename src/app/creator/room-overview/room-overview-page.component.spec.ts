@@ -8,7 +8,6 @@ import {
   ActivatedRouteStub,
   JsonTranslationLoader,
   MockGlobalStorageService,
-  MockLangService,
   MockMatDialog,
   MockNotificationService,
   MockRouter,
@@ -23,7 +22,6 @@ import {
 } from '@angular/router';
 import { DialogService } from '@app/core/services/util/dialog.service';
 import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
-import { LanguageService } from '@app/core/services/util/language.service';
 import { Location } from '@angular/common';
 import { SpyLocation } from '@angular/common/testing';
 import { A11yIntroPipe } from '@app/core/pipes/a11y-intro.pipe';
@@ -189,10 +187,6 @@ describe('RoomOverviewPageComponent', () => {
         {
           provide: GlobalStorageService,
           useClass: MockGlobalStorageService,
-        },
-        {
-          provide: LanguageService,
-          useClass: MockLangService,
         },
         {
           provide: Location,

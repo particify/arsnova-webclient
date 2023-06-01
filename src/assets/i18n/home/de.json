@@ -39,8 +39,6 @@
     "back": "Zurück",
     "admin-area": "Administration",
     "user-profile": "Mein Account",
-    "english": "Englisch",
-    "german": "Deutsch",
     "help": "Hilfe",
     "language": "Sprache",
     "logged-out": "Du hast dich abgemeldet.",
@@ -254,7 +252,9 @@
     "really-delete-account-admin": "Willst du das Konto mit allen Räumen unwiderruflich löschen?",
     "really-delete-answers": "Willst du wirklich die Antworten auf diese Frage löschen?",
     "answers-deleted": "Antworten auf diese Frage wurden gelöscht.",
-    "really-delete-all-answers": "Willst du wirklich alle Antworten dieser Fragenserie löschen?"
+    "really-delete-all-answers": "Willst du wirklich alle Antworten dieser Fragenserie löschen?",
+    "you-are-using-community-lang": "Du nutzt eine Community-Übersetzung",
+    "community-lang": "Diese Sprache wird von der Community gepflegt und kann daher unvollständig oder veraltet sein."
   },
   "errors": {
     "not-authorized": "Du bist nicht autorisiert diese Seite zu sehen.",

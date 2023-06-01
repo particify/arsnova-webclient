@@ -9,7 +9,6 @@ import {
   MockGlobalStorageService,
   ActivatedRouteStub,
   JsonTranslationLoader,
-  MockLangService,
   MockRouter,
   MockNotificationService,
 } from '@testing/test-helpers';
@@ -17,7 +16,6 @@ import { GlobalStorageService } from '@app/core/services/util/global-storage.ser
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { ContentService } from '@app/core/services/http/content.service';
 import { ContentAnswerService } from '@app/core/services/http/content-answer.service';
-import { LanguageService } from '@app/core/services/util/language.service';
 import { NotificationService } from '@app/core/services/util/notification.service';
 import { of } from 'rxjs';
 import { ContentGroup } from '@app/core/models/content-group';
@@ -72,10 +70,6 @@ describe('StatisticListComponent', () => {
         {
           provide: Router,
           useClass: MockRouter,
-        },
-        {
-          provide: LanguageService,
-          useClass: MockLangService,
         },
         {
           provide: ActivatedRoute,

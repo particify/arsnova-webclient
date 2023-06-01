@@ -1,13 +1,13 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { YesNoDialogComponent } from './yes-no-dialog.component';
+import { BaseDialogComponent } from './base-dialog.component';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { JsonTranslationLoader, MockMatDialogRef } from '@testing/test-helpers';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 
-describe('YesNoDialogComponent', () => {
-  let component: YesNoDialogComponent;
-  let fixture: ComponentFixture<YesNoDialogComponent>;
+describe('BaseDialogComponent', () => {
+  let component: BaseDialogComponent;
+  let fixture: ComponentFixture<BaseDialogComponent>;
 
   const mockMatDialogData = {
     section: 'section',
@@ -15,7 +15,7 @@ describe('YesNoDialogComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [YesNoDialogComponent],
+      declarations: [BaseDialogComponent],
       imports: [
         TranslateModule.forRoot({
           loader: {
@@ -40,7 +40,7 @@ describe('YesNoDialogComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(YesNoDialogComponent);
+    fixture = TestBed.createComponent(BaseDialogComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

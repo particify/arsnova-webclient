@@ -7,8 +7,9 @@
 </div>
 <div mat-dialog-actions fxLayout="row" fxLayoutAlign="end">
   <button
+    *ngIf="data.abortLabel"
     mat-button
-    aria-labelledby="cancel"
+    [attr.aria-label]="data.section + 'a11y-' + data.abortLabel | translate"
     (click)="closeDialog(data.abortLabel)"
   >
     {{ data.section + data.abortLabel | translate }}
@@ -16,17 +17,9 @@
   <button
     mat-flat-button
     color="{{ data.type === 'button-primary' ? 'primary' : 'warn' }}"
-    aria-labelledby="submit"
+    [attr.aria-label]="data.section + 'a11y-' + data.confirmLabel | translate"
     (click)="closeDialog(data.confirmLabel)"
   >
     {{ data.section + data.confirmLabel | translate }}
   </button>
-  <div class="visually-hidden">
-    <div id="cancel">
-      {{ data.section + 'a11y-' + data.abortLabel | translate }}
-    </div>
-    <div id="submit">
-      {{ data.section + 'a11y-' + data.confirmLabel | translate }}
-    </div>
-  </div>
 </div>

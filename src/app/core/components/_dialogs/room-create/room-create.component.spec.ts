@@ -7,13 +7,11 @@ import {
   MockMatDialogRef,
   MockNotificationService,
   MockGlobalStorageService,
-  MockLangService,
   MockEventService,
   MockRouter,
 } from '@testing/test-helpers';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
-import { LanguageService } from '@app/core/services/util/language.service';
 import { RoomService } from '@app/core/services/http/room.service';
 import { Router } from '@angular/router';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
@@ -72,10 +70,6 @@ describe('RoomCreateComponent', () => {
         {
           provide: GlobalStorageService,
           useClass: MockGlobalStorageService,
-        },
-        {
-          provide: LanguageService,
-          useClass: MockLangService,
         },
         {
           provide: MatDialogRef,

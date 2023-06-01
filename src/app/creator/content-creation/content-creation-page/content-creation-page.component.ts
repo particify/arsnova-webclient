@@ -1,6 +1,5 @@
 import { AfterContentInit, Component, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { LanguageService } from '@app/core/services/util/language.service';
 import {
   GlobalStorageService,
   STORAGE_KEYS,
@@ -47,15 +46,12 @@ export class ContentCreationPageComponent implements OnInit, AfterContentInit {
 
   constructor(
     private translateService: TranslateService,
-    protected langService: LanguageService,
     private announceService: AnnounceService,
     private globalStorageService: GlobalStorageService,
     protected route: ActivatedRoute,
     private formattingService: FormattingService,
     private contentService: ContentService
-  ) {
-    langService.langEmitter.subscribe((lang) => translateService.use(lang));
-  }
+  ) {}
 
   ngAfterContentInit() {
     setTimeout(() => {
