@@ -42,6 +42,7 @@ import { CounterBracesPipe } from './pipes/counter-braces.pipe';
 import { DateFormatPipe } from './pipes/date-format.pipe';
 import { DateFromNowPipe } from './pipes/date-from-now.pipe';
 import { SplitShortIdPipe } from './pipes/split-short-id.pipe';
+import { FeatureFlagDirective } from '@app/core/directives/feature-flag.directive';
 
 @NgModule({
   declarations: [
@@ -56,6 +57,7 @@ import { SplitShortIdPipe } from './pipes/split-short-id.pipe';
     // Directives
     HotkeyDirective,
     TrackInteractionDirective,
+    FeatureFlagDirective,
   ],
   exports: [
     // Angular
@@ -105,6 +107,7 @@ import { SplitShortIdPipe } from './pipes/split-short-id.pipe';
     // Directives
     HotkeyDirective,
     TrackInteractionDirective,
+    FeatureFlagDirective,
 
     // 3rd party
     TranslateModule,
