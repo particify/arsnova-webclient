@@ -20,7 +20,7 @@ import {
 import { UserRole } from '@app/core/models/user-roles.enum';
 import { ClientAuthentication } from '@app/core/models/client-authentication';
 import { Router } from '@angular/router';
-import { Features } from '@app/core/models/features.enum';
+import { RoutingFeature } from '@app/core/models/routing-feature.enum';
 import { ContentCarouselService } from '@app/core/services/util/content-carousel.service';
 
 // Max time for updating db (5000) - navigation delay (500) / 2
@@ -261,7 +261,7 @@ export class SeriesOverviewComponent implements OnInit, OnDestroy {
     this.router.navigate([
       this.routingService.getRoleRoute(UserRole.PARTICIPANT),
       this.routingService.getShortId(),
-      Features.CONTENTS,
+      RoutingFeature.CONTENTS,
       this.group.name,
       index + 1,
     ]);

@@ -18,7 +18,7 @@ import { EntityChanged } from '@app/core/models/events/entity-changed';
 import { ContentGroupStatistics } from '@app/core/models/content-group-statistics';
 import { DataChanged } from '@app/core/models/events/data-changed';
 import { RoomStats } from '@app/core/models/room-stats';
-import { Features } from '@app/core/models/features.enum';
+import { RoutingFeature } from '@app/core/models/routing-feature.enum';
 import { SeriesCreated } from '@app/core/models/events/series-created';
 import { SeriesDeleted } from '@app/core/models/events/series-deleted';
 import { MatMenuTrigger } from '@angular/material/menu';
@@ -69,13 +69,13 @@ export class NavBarComponent
 {
   barItems: NavBarItem[] = [];
   features: BarItem[] = [
-    new BarItem(Features.OVERVIEW, 'home'),
-    new BarItem(Features.COMMENTS, 'question_answer'),
-    new BarItem(Features.CONTENTS, 'equalizer'),
-    new BarItem(Features.FEEDBACK, 'thumbs_up_down'),
+    new BarItem(RoutingFeature.OVERVIEW, 'home'),
+    new BarItem(RoutingFeature.COMMENTS, 'question_answer'),
+    new BarItem(RoutingFeature.CONTENTS, 'equalizer'),
+    new BarItem(RoutingFeature.FEEDBACK, 'thumbs_up_down'),
   ];
   currentRouteIndex: number;
-  activeFeatures: string[] = [Features.OVERVIEW];
+  activeFeatures: string[] = [RoutingFeature.OVERVIEW];
   group: ContentGroup;
   groupName: string;
   role: UserRole;
@@ -167,13 +167,13 @@ export class NavBarComponent
         !data.room.settings['feedbackLocked'] ||
         this.viewRole !== UserRole.PARTICIPANT
       ) {
-        this.activeFeatures.splice(1, 0, Features.FEEDBACK);
+        this.activeFeatures.splice(1, 0, RoutingFeature.FEEDBACK);
       }
       if (
         !this.route.children[0]?.snapshot.data.commentSettings?.disabled ||
         this.viewRole !== UserRole.PARTICIPANT
       ) {
-        this.activeFeatures.splice(1, 0, Features.COMMENTS);
+        this.activeFeatures.splice(1, 0, RoutingFeature.COMMENTS);
       }
       this.feedbackService.startSub(this.roomId);
       let group = this.routingService.seriesName;
@@ -216,11 +216,11 @@ export class NavBarComponent
         (message) => {
           const type = JSON.parse(message.body).type;
           if (type === FeedbackMessageType.STARTED) {
-            this.activeFeatures.push(Features.FEEDBACK);
+            this.activeFeatures.push(RoutingFeature.FEEDBACK);
             this.getItems();
-            this.toggleNews(Features.FEEDBACK);
+            this.toggleNews(RoutingFeature.FEEDBACK);
           } else if (type === FeedbackMessageType.STOPPED) {
-            const index = this.activeFeatures.indexOf(Features.FEEDBACK);
+            const index = this.activeFeatures.indexOf(RoutingFeature.FEEDBACK);
             this.activeFeatures.splice(index, 1);
             this.getItems();
           }
@@ -231,18 +231,18 @@ export class NavBarComponent
         .subscribe((settings) => {
           const commentsDisabled = settings.disabled;
           const isCommentFeatureActive = this.activeFeatures.includes(
-            Features.COMMENTS
+            RoutingFeature.COMMENTS
           );
           // Remove comment feature if disabled now enabled before
           if (commentsDisabled && isCommentFeatureActive) {
-            const index = this.activeFeatures.indexOf(Features.COMMENTS);
+            const index = this.activeFeatures.indexOf(RoutingFeature.COMMENTS);
             this.activeFeatures.splice(index, 1);
             this.getItems();
             // Add comment feature if enabled now and disabled before
           } else if (!commentsDisabled && !isCommentFeatureActive) {
-            this.activeFeatures.splice(1, 0, Features.COMMENTS);
+            this.activeFeatures.splice(1, 0, RoutingFeature.COMMENTS);
             this.getItems();
-            this.toggleNews(Features.COMMENTS);
+            this.toggleNews(RoutingFeature.COMMENTS);
           }
         });
     }
@@ -320,7 +320,7 @@ export class NavBarComponent
 
   isRouteMatching(barItem: NavBarItem): boolean {
     if (
-      barItem.name === Features.OVERVIEW &&
+      barItem.name === RoutingFeature.OVERVIEW &&
       this.router.url === this.getBaseUrl()
     ) {
       return true;
@@ -332,7 +332,7 @@ export class NavBarComponent
   getFeatureUrl(feature: string): string {
     if (feature) {
       let url = '/' + feature;
-      if (this.groupName && feature === Features.CONTENTS) {
+      if (this.groupName && feature === RoutingFeature.CONTENTS) {
         url += this.getGroupUrl();
       }
       return url;
@@ -364,9 +364,9 @@ export class NavBarComponent
       this.routingService.getRoleRoute(this.viewRole),
       this.shortId,
     ];
-    if (item.name !== Features.OVERVIEW) {
+    if (item.name !== RoutingFeature.OVERVIEW) {
       route.push(item.name);
-      if (item.name === Features.CONTENTS) {
+      if (item.name === RoutingFeature.CONTENTS) {
         route.push(this.groupName);
         if (this.isPresentation) {
           route.push('1');
@@ -415,7 +415,7 @@ export class NavBarComponent
                 this.addContentFeatureItem();
                 // route data's `userRole` is used here to prevent showing notification indicator in creators room preview
                 if (this.role === UserRole.PARTICIPANT) {
-                  this.toggleNews(Features.CONTENTS);
+                  this.toggleNews(RoutingFeature.CONTENTS);
                 }
                 this.afterInit();
               } else {
@@ -432,9 +432,11 @@ export class NavBarComponent
   }
 
   addContentFeatureItem(getItemsAfterAdding = true) {
-    if (this.getBarIndexOfFeature(Features.CONTENTS) === -1) {
-      const newIndex = this.activeFeatures.includes(Features.COMMENTS) ? 2 : 1;
-      this.activeFeatures.splice(newIndex, 0, Features.CONTENTS);
+    if (this.getBarIndexOfFeature(RoutingFeature.CONTENTS) === -1) {
+      const newIndex = this.activeFeatures.includes(RoutingFeature.COMMENTS)
+        ? 2
+        : 1;
+      this.activeFeatures.splice(newIndex, 0, RoutingFeature.CONTENTS);
       if (getItemsAfterAdding) {
         this.getItems();
       }
@@ -442,7 +444,7 @@ export class NavBarComponent
   }
 
   removeContentFeatureItem() {
-    const index = this.activeFeatures.indexOf(Features.CONTENTS);
+    const index = this.activeFeatures.indexOf(RoutingFeature.CONTENTS);
     if (index > -1) {
       this.activeFeatures.splice(index, 1);
       this.getItems();
@@ -521,10 +523,10 @@ export class NavBarComponent
 
   updateGroupName(name: string) {
     this.groupName = name;
-    const groupBarIndex = this.getBarIndexOfFeature(Features.CONTENTS);
+    const groupBarIndex = this.getBarIndexOfFeature(RoutingFeature.CONTENTS);
     if (this.barItems[groupBarIndex]) {
       this.barItems[groupBarIndex].url = `${this.getBaseUrl()}/${
-        Features.CONTENTS
+        RoutingFeature.CONTENTS
       }/${this.groupName}`;
     }
     this.setGroupInSessionStorage(this.groupName);
@@ -560,7 +562,7 @@ export class NavBarComponent
       (!this.noContentsPublished(first, last) &&
         !this.isAlreadyPublished(first, last))
     ) {
-      this.toggleNews(Features.CONTENTS);
+      this.toggleNews(RoutingFeature.CONTENTS);
     }
     if (setNewState) {
       this.setPublishedState(first, last);
@@ -626,7 +628,7 @@ export class NavBarComponent
         }
       } else {
         this.addContentFeatureItem();
-        this.toggleNews(Features.CONTENTS);
+        this.toggleNews(RoutingFeature.CONTENTS);
       }
     }
   }
@@ -638,14 +640,15 @@ export class NavBarComponent
     );
   }
 
-  getFeatureText(feature: Features) {
-    return feature === Features.CONTENTS && this.contentGroups.length === 1
+  getFeatureText(feature: RoutingFeature) {
+    return feature === RoutingFeature.CONTENTS &&
+      this.contentGroups.length === 1
       ? this.groupName
       : 'sidebar.' + feature;
   }
 
   isMenuActive(feature: string): boolean {
-    return feature === Features.CONTENTS && this.contentGroups.length > 1;
+    return feature === RoutingFeature.CONTENTS && this.contentGroups.length > 1;
   }
 
   checkMenu(feature: string, trigger: MatMenuTrigger) {

@@ -29,7 +29,7 @@ import { AnnounceService } from '@app/core/services/util/announce.service';
 import { Hotkey, HotkeyService } from '@app/core/services/util/hotkey.service';
 import { HotkeyAction } from '@app/core/directives/hotkey.directive';
 import { TranslateService } from '@ngx-translate/core';
-import { Features } from '@app/core/models/features.enum';
+import { RoutingFeature } from '@app/core/models/routing-feature.enum';
 import { ContentService } from '@app/core/services/http/content.service';
 import { Content } from '@app/core/models/content';
 import { DialogService } from '@app/core/services/util/dialog.service';
@@ -104,9 +104,9 @@ export class ControlBarComponent
   showNotification = false;
 
   features: BarItem[] = [
-    new BarItem(Features.COMMENTS, 'question_answer'),
-    new BarItem(Features.CONTENTS, 'equalizer'),
-    new BarItem(Features.FEEDBACK, 'thumbs_up_down'),
+    new BarItem(RoutingFeature.COMMENTS, 'question_answer'),
+    new BarItem(RoutingFeature.CONTENTS, 'equalizer'),
+    new BarItem(RoutingFeature.FEEDBACK, 'thumbs_up_down'),
   ];
   groupItems: KeyNavBarItem[] = [
     new KeyNavBarItem('results', 'insert_chart', '', ' '),
@@ -217,7 +217,10 @@ export class ControlBarComponent
       if (this.groupName && this.contentGroups.length > 0) {
         this.group = this.contentGroups.find((g) => g.name === this.groupName);
         this.checkIfContentLocked();
-        if (this.isActiveFeature(Features.CONTENTS) && !this.group.published) {
+        if (
+          this.isActiveFeature(RoutingFeature.CONTENTS) &&
+          !this.group.published
+        ) {
           this.publishContentGroup();
         }
       }
@@ -301,7 +304,7 @@ export class ControlBarComponent
       .pipe(takeUntil(this.destroyed$))
       .subscribe((state) => {
         this.commentStepState = state.stepState;
-        if (this.isActiveFeature(Features.COMMENTS)) {
+        if (this.isActiveFeature(RoutingFeature.COMMENTS)) {
           this.setArrowsState(this.commentStepState);
         }
       });
@@ -397,12 +400,12 @@ export class ControlBarComponent
         this.currentRouteIndex = undefined;
       }
       this.activeFeature.emit(feature);
-      if (feature === Features.CONTENTS) {
+      if (feature === RoutingFeature.CONTENTS) {
         this.setArrowsState(this.contentStepState);
         if (!this.group.published) {
           this.publishContentGroup();
         }
-      } else if (feature === Features.COMMENTS) {
+      } else if (feature === RoutingFeature.COMMENTS) {
         this.setArrowsState(this.commentStepState);
       }
       setTimeout(() => {
@@ -437,7 +440,7 @@ export class ControlBarComponent
   }
 
   getFeatureUrl(feature: string): string {
-    return this.groupName && feature === Features.CONTENTS
+    return this.groupName && feature === RoutingFeature.CONTENTS
       ? feature + this.getGroupUrl()
       : feature;
   }

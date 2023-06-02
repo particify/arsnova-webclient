@@ -6,7 +6,7 @@ import {
 } from '@app/core/services/util/global-storage.service';
 import { RoomStatsService } from '@app/core/services/http/room-stats.service';
 import { TranslateService } from '@ngx-translate/core';
-import { Features } from '@app/core/models/features.enum';
+import { RoutingFeature } from '@app/core/models/routing-feature.enum';
 import { PresentationService } from '@app/core/services/util/presentation.service';
 
 @Component({
@@ -72,7 +72,7 @@ export class PresentationComponent implements OnInit, OnDestroy {
   }
 
   updateUrl(group?: string) {
-    const isGroup = this.featureString === Features.CONTENTS;
+    const isGroup = this.featureString === RoutingFeature.CONTENTS;
     if (group) {
       this.lastGroup = group;
       this.presentationService.updateCurrentGroup(group);
