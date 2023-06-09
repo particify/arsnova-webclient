@@ -83,7 +83,7 @@
     "karma-viewport": "1.0.9",
     "ng-packagr": "16.0.1",
     "prettier": "2.8.8",
-    "stylelint": "15.6.3",
+    "stylelint": "15.7.0",
     "stylelint-config-standard-scss": "9.0.0",
     "ts-node": "10.9.1",
     "typescript": "5.0.4"
