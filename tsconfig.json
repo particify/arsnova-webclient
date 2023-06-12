@@ -44,16 +44,6 @@
     "enableI18nLegacyMessageIdFormat": false,
     "strictInjectionParameters": true,
     "strictInputAccessModifiers": true,
-    // All of the strictness settings below are enabled implicitly when strictTemplates = true
-    "strictTemplates": false,
-    "strictContextGenerics": true,
-    "strictDomEventTypes": false,
-    "strictDomLocalRefTypes": true,
-    "strictInputTypes": false,
-    "strictLiteralTypes": true,
-    "strictNullInputTypes": true,
-    "strictOutputEventTypes": true,
-    "strictSafeNavigationTypes": true
-    // All of the strictness settings above are enabled implicitly when strictTemplates = true
+    "strictTemplates": true
   }
 }
