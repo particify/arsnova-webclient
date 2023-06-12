@@ -109,8 +109,8 @@ export class CommentsPageComponent
     }
     this.eventService
       .on<string>(PresentationEvent.COMMENT_SORTING_UPDATED)
-      .subscribe((sort: CommentSort) => {
-        this.sortComments(sort);
+      .subscribe((sort) => {
+        this.sortComments(sort as CommentSort);
         setTimeout(() => {
           this.goToFirstComment();
         }, 300);

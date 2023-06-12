@@ -91,7 +91,7 @@ export class AuthenticationService extends AbstractHttpService<ClientAuthenticat
     const transientAuth = savedAuth
       ? new TransientClientAuthentication(savedAuth)
       : null;
-    this.auth$$ = new BehaviorSubject(new BehaviorSubject(transientAuth));
+    this.auth$$ = new BehaviorSubject(of(transientAuth));
   }
 
   /**

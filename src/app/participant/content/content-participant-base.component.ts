@@ -12,7 +12,7 @@ import { Answer } from '@app/core/models/answer';
   template: '',
 })
 export abstract class ContentParticipantBaseComponent implements OnInit {
-  @Output() answerChanged = new EventEmitter<Answer>();
+  @Output() answerChanged = new EventEmitter();
   @Input() alreadySent: boolean;
   @Input() sendEvent: EventEmitter<string>;
 

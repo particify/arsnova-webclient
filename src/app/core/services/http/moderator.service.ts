@@ -33,21 +33,21 @@ export class ModeratorService extends AbstractHttpService<Moderator> {
   get(roomId: string): Observable<Moderator[]> {
     const url = this.buildUri('', roomId);
     return this.http
-      .get(url, httpOptions)
-      .pipe(catchError(this.handleError<any>('getModerator')));
+      .get<Moderator[]>(url, httpOptions)
+      .pipe(catchError(this.handleError<Moderator[]>('getModerator')));
   }
 
   add(roomId: string, userId: string, role: UserRole) {
     const url = this.buildUri(`/${userId}?role=${role}`, roomId);
     return this.http
       .put(url, {}, httpOptions)
-      .pipe(catchError(this.handleError<any>('addModerator')));
+      .pipe(catchError(this.handleError('addModerator')));
   }
 
   delete(roomId: string, userId: string) {
     const url = this.buildUri(`/${userId}`, roomId);
     return this.http
       .delete(url, httpOptions)
-      .pipe(catchError(this.handleError<any>('deleteModerator')));
+      .pipe(catchError(this.handleError('deleteModerator')));
   }
 }

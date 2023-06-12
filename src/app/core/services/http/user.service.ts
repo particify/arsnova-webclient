@@ -113,8 +113,8 @@ export class UserService extends AbstractEntityService<User> {
   updateUser(userId: string, changes: object): Observable<User> {
     const connectionUrl = this.buildUri('/' + userId) + '?view=owner';
     return this.http
-      .patch(connectionUrl, changes, httpOptions)
-      .pipe(catchError(this.handleError<any>('updateUser')));
+      .patch<User>(connectionUrl, changes, httpOptions)
+      .pipe(catchError(this.handleError<User>('updateUser')));
   }
 
   delete(id: string): Observable<User> {
@@ -142,7 +142,7 @@ export class UserService extends AbstractEntityService<User> {
   getUserSettingsByLoginId(loginId: string): Observable<UserSettings> {
     const url = this.buildUri(this.apiUrl.find) + '?view=owner';
     return this.http
-      .post(url, {
+      .post<UserSettings>(url, {
         properties: { loginId: loginId },
         externalFilters: {},
       })
@@ -150,7 +150,7 @@ export class UserService extends AbstractEntityService<User> {
         map((users) => {
           return users[0].settings;
         }),
-        catchError(this.handleError('getUserSettingsByLoginId', []))
+        catchError(this.handleError<UserSettings>('getUserSettingsByLoginId'))
       );
   }
 

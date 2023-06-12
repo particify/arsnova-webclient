@@ -115,7 +115,7 @@ export class PasswordEntryComponent implements AfterViewInit {
   }
 
   validatePasswordStrength(): ValidatorFn {
-    return (formControl: FormControl): ValidationErrors | null => {
+    return (formControl) => {
       this.strength = this.getPasswordStrength(formControl.value);
       return this.strength >= Strength.OKAY
         ? null

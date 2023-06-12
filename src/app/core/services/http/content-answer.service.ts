@@ -206,8 +206,8 @@ export class ContentAnswerService extends AbstractEntityService<Answer> {
       roomId
     );
     return this.http
-      .put(connectionUrl, updatedAnswerText, httpOptions)
-      .pipe(catchError(this.handleError<any>('updateTextAnswer')));
+      .put<TextAnswer>(connectionUrl, updatedAnswerText, httpOptions)
+      .pipe(catchError(this.handleError<TextAnswer>('updateTextAnswer')));
   }
 
   updateAnswerChoice(
@@ -219,8 +219,8 @@ export class ContentAnswerService extends AbstractEntityService<Answer> {
       roomId
     );
     return this.http
-      .put(connectionUrl, updatedAnswerChoice, httpOptions)
-      .pipe(catchError(this.handleError<any>('updateChoiceAnswer')));
+      .put<ChoiceAnswer>(connectionUrl, updatedAnswerChoice, httpOptions)
+      .pipe(catchError(this.handleError<ChoiceAnswer>('updateChoiceAnswer')));
   }
 
   deleteAnswerText(roomId: string, id: string): Observable<TextAnswer> {

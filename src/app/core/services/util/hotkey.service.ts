@@ -47,7 +47,10 @@ export const KEY_SYMBOLS = new Map<string, string>([
 const includedInputTypes = ['button', 'checkbox', 'radio'];
 
 const excludedElementTypes = new Map<string, (el: Element) => boolean>([
-  ['INPUT', (el: HTMLInputElement) => !includedInputTypes.includes(el.type)],
+  [
+    'INPUT',
+    (el) => !includedInputTypes.includes((el as HTMLInputElement).type),
+  ],
   ['TEXTAREA', () => true],
   ['SELECT', () => true],
 ]);
