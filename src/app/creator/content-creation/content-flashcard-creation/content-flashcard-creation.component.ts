@@ -12,8 +12,8 @@ import { ContentCreationComponent } from '@app/creator/content-creation/content-
 import { ContentFlashcard } from '@app/core/models/content-flashcard';
 import { EventService } from '@app/core/services/util/event.service';
 import { FormattingService } from '@app/core/services/http/formatting.service';
-import { HINT_TYPES } from '@app/standalone/hint/hint.component';
 import { AnnounceService } from '@app/core/services/util/announce.service';
+import { HintType } from '@app/core/models/hint-type.enum';
 
 @Component({
   selector: 'app-content-flashcard-creation',
@@ -25,7 +25,7 @@ export class ContentFlashcardCreationComponent
 {
   answer: string;
   textContainsImage: boolean;
-  warningType = HINT_TYPES.WARNING;
+  HintType = HintType;
 
   constructor(
     protected contentService: ContentService,

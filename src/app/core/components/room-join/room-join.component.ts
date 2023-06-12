@@ -98,12 +98,13 @@ export class RoomJoinComponent implements OnInit, OnDestroy {
    * Sanitizes the room code input element which. All non-numeric chars are
    * removed. Furthermore, a space is inserted after a block of 4 digits.
    */
-  handleInput(event: InputEvent): void {
+  handleInput(event: Event): void {
+    // `Event` is used here because `(input)` returns this type
     const inputField = event.target as HTMLInputElement;
     const rawShortId = inputField.value;
     const pos = inputField.selectionStart;
-    const ins = event.inputType?.startsWith('insert');
-    const del = event.inputType === 'deleteContentForward';
+    const ins = (event as InputEvent).inputType?.startsWith('insert');
+    const del = (event as InputEvent).inputType === 'deleteContentForward';
     const spaceOffset =
       (ins && inputField.selectionStart === 5) ||
       (del && inputField.selectionStart === 4)

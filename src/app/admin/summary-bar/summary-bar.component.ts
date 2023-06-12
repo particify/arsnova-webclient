@@ -5,6 +5,7 @@ import {
 } from '@app/core/services/http/system-info.service';
 import { share } from 'rxjs/operators';
 import { Observable } from 'rxjs';
+import { SystemHealth } from '@app/admin/_models/system-health';
 
 @Component({
   selector: 'app-admin-summary-bar',
@@ -12,7 +13,7 @@ import { Observable } from 'rxjs';
   styleUrls: ['./summary-bar.component.scss'],
 })
 export class SummaryBarComponent implements OnInit {
-  @Input() healthInfo: Observable<object>;
+  @Input() healthInfo: Observable<SystemHealth>;
   stats: Observable<SummarizedStats>;
 
   constructor(protected systemInfoService: SystemInfoService) {}

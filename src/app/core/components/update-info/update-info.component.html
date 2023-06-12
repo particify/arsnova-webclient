@@ -26,7 +26,7 @@
 <div mat-dialog-actions fxLayoutAlign="end center">
   <app-loading-indicator
     *ngIf="!afterUpdate && !updateReady"
-    size="24"
+    [size]="24"
     height="auto"
   ></app-loading-indicator>
   <button

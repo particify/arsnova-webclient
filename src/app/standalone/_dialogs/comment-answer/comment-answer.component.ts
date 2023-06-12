@@ -12,10 +12,16 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { CoreModule } from '@app/core/core.module';
 import { RenderedTextComponent } from '@app/standalone/rendered-text/rendered-text.component';
 import { DateComponent } from '@app/standalone/date/date.component';
+import { FormattingToolbarComponent } from '@app/standalone/formatting-toolbar/formatting-toolbar.component';
 
 @Component({
   standalone: true,
-  imports: [CoreModule, RenderedTextComponent, DateComponent],
+  imports: [
+    CoreModule,
+    RenderedTextComponent,
+    DateComponent,
+    FormattingToolbarComponent,
+  ],
   selector: 'app-comment-answer',
   templateUrl: './comment-answer.component.html',
   styleUrls: ['./comment-answer.component.scss'],

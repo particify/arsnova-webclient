@@ -8,6 +8,7 @@ import { RoomOverviewHeaderComponent } from '@app/standalone/room-overview-heade
 import { RoomActionButtonComponent } from '@app/standalone/room-action-button/room-action-button.component';
 import { ContentGroupsComponent } from '@app/standalone/content-groups/content-groups.component';
 import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
+import { ExtensionPointModule } from '@projects/extension-point/src/public-api';
 
 @NgModule({
   declarations: [RoomOverviewPageComponent],
@@ -19,6 +20,7 @@ import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loa
     RoomActionButtonComponent,
     ContentGroupsComponent,
     LoadingIndicatorComponent,
+    ExtensionPointModule,
   ],
 })
 export class RoomOverviewModule {}

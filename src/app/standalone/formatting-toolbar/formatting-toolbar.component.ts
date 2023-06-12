@@ -1,10 +1,16 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { FlexModule } from '@angular/flex-layout';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { CoreModule } from '@app/core/core.module';
 import {
   FormattingOption,
   PATTERN_PLACEHOLDER,
 } from '@app/core/models/formatting-option';
 
 @Component({
+  standalone: true,
+  imports: [CoreModule, FlexModule, MatButtonModule, MatIconModule],
   selector: 'app-formatting-toolbar',
   templateUrl: './formatting-toolbar.component.html',
   styleUrls: ['./formatting-toolbar.component.scss'],

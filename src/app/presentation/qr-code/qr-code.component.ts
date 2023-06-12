@@ -17,8 +17,8 @@ export class QrCodeComponent implements OnInit, OnDestroy {
   passwordProtected: boolean;
 
   qrWidth: number;
-  bgColor: string;
-  fgColor: string;
+  bgColor: `#${string}`;
+  fgColor: `#${string}`;
   destroyed$ = new Subject<void>();
   url: string;
   qrUrl: string;
@@ -43,8 +43,8 @@ export class QrCodeComponent implements OnInit, OnDestroy {
   initQrCode() {
     const minSize = Math.min(innerWidth, innerHeight);
     this.qrWidth = minSize * (innerWidth > 1279 ? 0.5 : 0.35);
-    this.bgColor = this.themeService.getColor('surface');
-    this.fgColor = this.themeService.getColor('on-surface');
+    this.bgColor = this.themeService.getColor('surface') as `#${string}`;
+    this.fgColor = this.themeService.getColor('on-surface') as `#${string}`;
     this.apiConfigService
       .getApiConfig$()
       .pipe(takeUntil(this.destroyed$))

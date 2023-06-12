@@ -165,7 +165,7 @@
 <div [ngClass]="{ 'presentation-space': isPresentation }">
   <app-statistic-choice
     *ngIf="[ContentType.CHOICE, ContentType.BINARY].indexOf(format) !== -1"
-    [content]="content"
+    [content]="choiceContent"
     [directShow]="directShow"
     (updateCounterEvent)="updateCounter($event)"
     [isSurvey]="survey"
@@ -176,7 +176,7 @@
   ></app-statistic-choice>
   <app-statistic-scale
     *ngIf="format === ContentType.SCALE"
-    [content]="content"
+    [content]="choiceContent"
     [directShow]="directShow"
     (updateCounterEvent)="updateCounter($event)"
     [isSurvey]="survey"
@@ -194,7 +194,7 @@
   ></app-statistic-text>
   <app-statistic-sort
     *ngIf="format === ContentType.SORT"
-    [content]="content"
+    [content]="choiceContent"
     [isPresentation]="isPresentation"
     [directShow]="directShow"
     (updateCounterEvent)="updateCounter($event)"
@@ -211,7 +211,7 @@
   ></app-statistic-wordcloud>
   <app-statistic-prioritization
     *ngIf="format === ContentType.PRIORITIZATION"
-    [content]="content"
+    [content]="prioritizationContent"
     [directShow]="directShow"
     [settings]="settings"
     [indexChanged]="indexChanged"
@@ -227,7 +227,7 @@
   <mat-divider></mat-divider>
   <div class="divider-space"></div>
   <app-rendered-text
-    [rawText]="content.additionalText"
+    [rawText]="flashcardContent.additionalText"
     [dynamic]="true"
     [markdownFeatureset]="flashcardMarkdownFeatures"
   ></app-rendered-text>

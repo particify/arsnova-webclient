@@ -1,7 +1,7 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { ContentService } from '@app/core/services/http/content.service';
 import { TranslateService } from '@ngx-translate/core';
-import { ContentText } from '@app/core/models/content-text';
+import { Content } from '@app/core/models/content';
 import { ContentAnswerService } from '@app/core/services/http/content-answer.service';
 import { TextAnswer } from '@app/core/models/text-answer';
 import { StatisticContentBaseComponent } from '@app/shared/statistic-content/statistic-content-base';
@@ -18,7 +18,7 @@ export class StatisticTextComponent
   extends StatisticContentBaseComponent
   implements OnInit, OnDestroy
 {
-  @Input() content: ContentText;
+  @Input() content: Content;
   @Input() directShow: boolean;
 
   answerStats: TextStatistic[] = [];

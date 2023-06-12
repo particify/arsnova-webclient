@@ -6,7 +6,6 @@ import {
   Output,
   ViewChild,
 } from '@angular/core';
-import { ContentText } from '@app/core/models/content-text';
 import { StatisticChoiceComponent } from '@app/shared/statistic-content/statistic-choice/statistic-choice.component';
 import { StatisticTextComponent } from '@app/shared/statistic-content/statistic-text/statistic-text.component';
 import { ContentType } from '@app/core/models/content-type.enum';
@@ -18,7 +17,6 @@ import { StatisticWordcloudComponent } from '@app/shared/statistic-content/stati
 import { StatisticScaleComponent } from '@app/shared/statistic-content/statistic-scale/statistic-scale.component';
 import { HotkeyAction } from '@app/core/directives/hotkey.directive';
 import { EventService } from '@app/core/services/util/event.service';
-import { ContentService } from '@app/core/services/http/content.service';
 import { ActivatedRoute } from '@angular/router';
 import { UserRole } from '@app/core/models/user-roles.enum';
 import { UserSettings } from '@app/core/models/user-settings';
@@ -26,6 +24,9 @@ import { StatisticPrioritizationComponent } from '@app/shared/statistic-content/
 import { ContentGroup } from '@app/core/models/content-group';
 import { RemoteService } from '@app/core/services/util/remote.service';
 import { PresentationEvent } from '@app/core/models/events/presentation-events.enum';
+import { Content } from '@app/core/models/content';
+import { ContentFlashcard } from '@app/core/models/content-flashcard';
+import { ContentPrioritization } from '@app/core/models/content-prioritization';
 
 @Component({
   selector: 'app-statistic-content',
@@ -43,7 +44,7 @@ export class StatisticContentComponent implements OnInit {
   @ViewChild(StatisticPrioritizationComponent)
   prioritizationStatistic: StatisticPrioritizationComponent;
 
-  @Input() content: ContentText;
+  @Input() content: Content;
   @Input() directShow: boolean;
   @Input() active: boolean;
   @Input() index: number;
@@ -73,6 +74,10 @@ export class StatisticContentComponent implements OnInit {
   allowingUnitChange = false;
 
   visualizationUnitChanged = new EventEmitter<boolean>();
+
+  choiceContent: ContentChoice;
+  prioritizationContent: ContentPrioritization;
+  flashcardContent: ContentFlashcard;
 
   constructor(
     private announceService: AnnounceService,
@@ -141,6 +146,21 @@ export class StatisticContentComponent implements OnInit {
       ContentType.PRIORITIZATION,
       ContentType.SORT,
     ].includes(this.content.format);
+    this.initContentTypeObjects();
+  }
+
+  initContentTypeObjects() {
+    if (
+      [ContentType.CHOICE, ContentType.BINARY, ContentType.SORT].includes(
+        this.content.format
+      )
+    ) {
+      this.choiceContent = this.content as ContentChoice;
+    } else if (this.content.format === ContentType.PRIORITIZATION) {
+      this.prioritizationContent = this.content as ContentPrioritization;
+    } else if (this.content.format === ContentType.FLASHCARD) {
+      this.flashcardContent = this.content as ContentFlashcard;
+    }
   }
 
   broadcastRoundState() {

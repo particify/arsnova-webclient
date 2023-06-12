@@ -6,6 +6,7 @@ import { AbstractHttpService } from './abstract-http.service';
 import { TranslateService } from '@ngx-translate/core';
 import { NotificationService } from '@app/core/services/util/notification.service';
 import { EventService } from '@app/core/services/util/event.service';
+import { SystemHealth } from '@app/admin/_models/system-health';
 
 const httpOptions = {
   headers: new HttpHeaders({
@@ -39,13 +40,13 @@ export class SystemInfoService extends AbstractHttpService<void> {
     super('', http, eventService, translateService, notificationService);
   }
 
-  getHealthInfo(): Observable<any> {
+  getHealthInfo(): Observable<SystemHealth> {
     const connectionUrl =
       this.apiUrl.base +
       this.serviceApiUrl.management +
       this.serviceApiUrl.health;
     /* Do not use default error handling here - 503 is expected if system health is not OK. */
-    return this.http.get<any>(connectionUrl, httpOptions);
+    return this.http.get<SystemHealth>(connectionUrl, httpOptions);
   }
 
   getSummarizedStats(): Observable<SummarizedStats> {

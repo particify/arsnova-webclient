@@ -15,8 +15,8 @@ import { of } from 'rxjs';
 import { RoundStatistics } from '@app/core/models/round-statistics';
 import { AnswerStatistics } from '@app/core/models/answer-statistics';
 import { ContentAnswerService } from '@app/core/services/http/content-answer.service';
-import { ContentText } from '@app/core/models/content-text';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { Content } from '@app/core/models/content';
 
 describe('StatisticTextComponent', () => {
   let component: StatisticTextComponent;
@@ -86,7 +86,7 @@ describe('StatisticTextComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(StatisticTextComponent);
     component = fixture.componentInstance;
-    component.content = new ContentText(
+    component.content = new Content(
       '1234',
       '0',
       'room1234',
@@ -94,6 +94,7 @@ describe('StatisticTextComponent', () => {
       'body',
       [],
       ContentType.TEXT,
+      {},
       new ContentState(1, new Date(), false)
     );
     fixture.detectChanges();

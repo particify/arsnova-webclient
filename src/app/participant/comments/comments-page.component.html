@@ -47,7 +47,6 @@
         [referenceEvent]="referenceEvent.asObservable()"
         [isNew]="comment.id === newestComment.id"
         [fileUploadEnabled]="fileUploadEnabled"
-        (activeComment)="updateCurrentComment($event)"
         (clickedOnTag)="clickedOnTag($event)"
       >
         <app-voting

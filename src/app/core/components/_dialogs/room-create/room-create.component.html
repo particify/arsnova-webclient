@@ -26,7 +26,7 @@
     </lib-extension-point>
     <app-hint
       *ngIf="!auth || auth.authProvider === 'ARSNOVA_GUEST'"
-      [type]="warningType"
+      [type]="HintType.WARNING"
       text="dialog.not-logged-in"
     ></app-hint>
   </div>

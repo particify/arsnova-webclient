@@ -1,6 +1,6 @@
 <div
   cdkDropList
-  (cdkDropListDropped)="drop($event)"
+  (cdkDropListDropped)="drop($event.previousIndex, $event.currentIndex)"
   [cdkDropListDisabled]="disabled"
 >
   <div

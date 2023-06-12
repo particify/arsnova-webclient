@@ -11,8 +11,8 @@ describe('FormattingToolbarComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [FormattingToolbarComponent],
       imports: [
+        FormattingToolbarComponent,
         TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,

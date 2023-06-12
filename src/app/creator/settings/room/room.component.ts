@@ -14,9 +14,9 @@ import {
   FormattingService,
   MarkdownFeatureset,
 } from '@app/core/services/http/formatting.service';
-import { HINT_TYPES } from '@app/standalone/hint/hint.component';
 import { UpdateEvent } from '@app/creator/settings-page/settings-page.component';
 import { UserRole } from '@app/core/models/user-roles.enum';
+import { HintType } from '@app/core/models/hint-type.enum';
 
 @Component({
   selector: 'app-room-edit',
@@ -33,7 +33,7 @@ export class RoomComponent implements OnInit {
   markdownFeatureset = MarkdownFeatureset.EXTENDED;
   renderPreview = false;
   textContainsImage = false;
-  warningType = HINT_TYPES.WARNING;
+  HintType = HintType;
   isCreator = false;
 
   constructor(

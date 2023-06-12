@@ -54,12 +54,12 @@
                 (statisticsPublished ? '' : '-not') +
                 '-published' | translate
             "
-            aria-labelledby="{{
+            [attr.aria-labelledby]="
               ('content.a11y-statistics-are' + statisticsPublished
                 ? ''
                 : '-not' + '-published'
               ) | translate
-            }}"
+            "
           >
             bar_chart
           </mat-icon>
@@ -74,12 +74,12 @@
                 (correctOptionsPublished ? '' : '-not') +
                 '-published' | translate
             "
-            aria-labelledby="{{
+            [attr.aria-labelledby]="
               ('content.a11y-correct-options-are' + correctOptionsPublished
                 ? ''
                 : '-not' + '-published'
               ) | translate
-            }}"
+            "
           >
             done_all
           </mat-icon>

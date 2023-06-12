@@ -74,7 +74,7 @@
     <app-announcement
       *ngFor="let announcement of announcements"
       [announcement]="announcement"
-      [role]="'OWNER'"
+      [role]="UserRole.OWNER"
       [editMode]="editId === announcement.id"
       (deleteEvent)="delete($event)"
       (editEvent)="edit($event)"

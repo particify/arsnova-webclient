@@ -41,7 +41,7 @@
   <app-content-prioritization-answer
     *ngIf="content.format === 'PRIORITIZATION'"
     [answerOptions]="answerOptionsWithPoints"
-    [assignablePoints]="content.assignablePoints"
+    [assignablePoints]="assignablePoints"
   ></app-content-prioritization-answer>
   <app-content-text-answer
     *ngIf="content.format === 'TEXT'"
@@ -52,7 +52,7 @@
   <mat-card class="mat-elevation-z2">
     <app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
     <app-rendered-text
-      [rawText]="content.additionalText"
+      [rawText]="additionalText"
       [dynamic]="true"
       [markdownFeatureset]="markdownFeatureset"
       (rendered)="renderingFinished()"

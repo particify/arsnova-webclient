@@ -24,6 +24,7 @@ import { AuthProvider } from '@app/core/models/auth-provider';
 import { debounceTime, map, Subject, takeUntil } from 'rxjs';
 import { AccessTokenService } from '@app/core/services/http/access-token.service';
 import { UpdateEvent } from '@app/creator/settings-page/settings-page.component';
+import { HintType } from '@app/core/models/hint-type.enum';
 
 export interface Role {
   name: string;
@@ -54,6 +55,8 @@ export class AccessComponent implements OnInit, OnDestroy {
   usernameFormControl = new UntypedFormControl('', [Validators.email]);
   formSubscription = new Subject<void>();
   currentInputIsChecked = true;
+
+  HintType = HintType;
 
   constructor(
     private dialogService: DialogService,

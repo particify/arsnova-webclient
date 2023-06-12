@@ -14,6 +14,7 @@ import { Person } from '@app/core/models/person';
 import { AuthProvider } from '@app/core/models/auth-provider';
 import { UserSettings } from '@app/core/models/user-settings';
 import { Location } from '@angular/common';
+import { HintType } from '@app/core/models/hint-type.enum';
 
 export class FormField {
   value: string;
@@ -43,6 +44,8 @@ export class UserProfileComponent implements OnInit {
 
   settings: UserSettings;
   page: string;
+
+  HintType = HintType;
 
   constructor(
     private authenticationService: AuthenticationService,

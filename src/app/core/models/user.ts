@@ -8,6 +8,7 @@ export class User {
   revision: string;
   person: Person;
   settings: UserSettings;
+  account: UserAccount;
 
   constructor(
     id: string,
@@ -24,4 +25,9 @@ export class User {
     this.person = person;
     this.settings = settings;
   }
+}
+
+class UserAccount {
+  activated: boolean;
+  passwortResetTime: Date;
 }

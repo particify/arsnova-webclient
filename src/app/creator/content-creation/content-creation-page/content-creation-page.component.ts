@@ -9,12 +9,13 @@ import { AnnounceService } from '@app/core/services/util/announce.service';
 import { Subject } from 'rxjs';
 import { Content } from '@app/core/models/content';
 import { FormattingService } from '@app/core/services/http/formatting.service';
-import { HINT_TYPES } from '@app/standalone/hint/hint.component';
 import { UserRole } from '@app/core/models/user-roles.enum';
 import { ContentService } from '@app/core/services/http/content.service';
 import { ContentType } from '@app/core/models/content-type.enum';
+import { HintType } from '@app/core/models/hint-type.enum';
 
 class ContentFormat {
+  type: ContentType;
   name: string;
   icon: string;
 }
@@ -27,7 +28,7 @@ class ContentFormat {
 export class ContentCreationPageComponent implements OnInit, AfterContentInit {
   createEventSubject: Subject<boolean> = new Subject<boolean>();
   question: string;
-  contentTypes: ContentType[] = Object.values(ContentType);
+  ContentType = ContentType;
   formats: ContentFormat[] = [];
   selectedFormat: ContentFormat;
 
@@ -38,7 +39,7 @@ export class ContentCreationPageComponent implements OnInit, AfterContentInit {
 
   content: Content;
   textContainsImage = false;
-  warningType = HINT_TYPES.WARNING;
+  HintType = HintType;
   abstentionsAllowed = true;
   isEditMode = false;
   isLoading = true;
@@ -61,8 +62,12 @@ export class ContentCreationPageComponent implements OnInit, AfterContentInit {
 
   ngOnInit() {
     const iconList = this.contentService.getTypeIcons();
-    for (const type of this.contentTypes) {
-      this.formats.push({ name: type.toLowerCase(), icon: iconList.get(type) });
+    for (const type of Object.values(ContentType)) {
+      this.formats.push({
+        type: type,
+        name: type.toLowerCase(),
+        icon: iconList.get(type),
+      });
     }
     this.selectedFormat = this.formats[0];
     this.route.data.subscribe((data) => {

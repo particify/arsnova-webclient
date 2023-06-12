@@ -2,7 +2,7 @@
   <app-hint
     *ngIf="isGuest"
     [text]="'settings.disabled-for-guests'"
-    [type]="'WARNING'"
+    [type]="HintType.WARNING"
   ></app-hint>
   <div tabindex="0" id="access-settings" class="visually-hidden">
     {{ 'settings.a11y-access' | translate }}

@@ -18,7 +18,6 @@ import { ContentChoice } from '@app/core/models/content-choice';
 import { ContentType } from '@app/core/models/content-type.enum';
 import { AnswerOption } from '@app/core/models/answer-option';
 import { Observable, Subscription } from 'rxjs';
-import { ContentText } from '@app/core/models/content-text';
 import { ContentFlashcard } from '@app/core/models/content-flashcard';
 import { AnnounceService } from '@app/core/services/util/announce.service';
 import { ActivatedRoute } from '@angular/router';
@@ -142,7 +141,7 @@ export class ContentCreationComponent
   }
 
   initContentTextEditBase() {
-    this.content = this.editContent as ContentText;
+    this.content = this.editContent;
   }
 
   initContentFlashcardEditBase() {

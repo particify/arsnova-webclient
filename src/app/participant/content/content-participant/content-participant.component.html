@@ -26,7 +26,7 @@
                           answers: answersString
                         })
                   : ('answer.a11y-already-answered-text'
-                    | translate : { answer: answer.body })
+                    | translate : { answer: answersString })
               }}
             </div>
             <span class="fill-remaining-space"></span>
@@ -66,8 +66,8 @@
                   content.format === ContentType.CHOICE ||
                   content.format === ContentType.BINARY
                 "
-                [answer]="answer"
-                [content]="content"
+                [answer]="choiceAnswer"
+                [content]="choiceContent"
                 [alreadySent]="alreadySent"
                 (answerChanged)="forwardAnswerMessage($event)"
                 [sendEvent]="sendEvent"
@@ -77,8 +77,8 @@
               </app-content-choice-participant>
               <app-content-scale-participant
                 *ngIf="content.format === ContentType.SCALE"
-                [answer]="answer"
-                [content]="content"
+                [answer]="choiceAnswer"
+                [content]="scaleContent"
                 [alreadySent]="alreadySent"
                 (answerChanged)="forwardAnswerMessage($event)"
                 [sendEvent]="sendEvent"
@@ -87,7 +87,7 @@
               </app-content-scale-participant>
               <app-content-text-participant
                 *ngIf="content.format === ContentType.TEXT"
-                [answer]="answer"
+                [answer]="textAnswer"
                 [content]="content"
                 [alreadySent]="alreadySent"
                 [sendEvent]="sendEvent"
@@ -95,8 +95,8 @@
               ></app-content-text-participant>
               <app-content-sort-participant
                 *ngIf="content.format === ContentType.SORT"
-                [answer]="answer"
-                [content]="content"
+                [answer]="choiceAnswer"
+                [content]="choiceContent"
                 [alreadySent]="alreadySent"
                 [sendEvent]="sendEvent"
                 (answerChanged)="forwardAnswerMessage($event)"
@@ -106,23 +106,20 @@
               </app-content-sort-participant>
               <app-content-wordcloud-participant
                 *ngIf="content.format === ContentType.WORDCLOUD"
-                [answer]="answer"
-                [content]="content"
+                [answer]="wordcloudAnswer"
+                [content]="wordloudContent"
                 [alreadySent]="alreadySent"
                 [sendEvent]="sendEvent"
                 (answerChanged)="forwardAnswerMessage($event)"
-                [statsPublished]="statsPublished"
-                [correctOptionsPublished]="correctOptionsPublished"
               >
               </app-content-wordcloud-participant>
               <app-content-prioritization-participant
                 *ngIf="content.format === ContentType.PRIORITIZATION"
-                [answer]="answer"
-                [content]="content"
+                [answer]="prioritizationAnswer"
+                [content]="prioritizationContent"
                 [alreadySent]="alreadySent"
                 [sendEvent]="sendEvent"
                 (answerChanged)="forwardAnswerMessage($event)"
-                [statsPublished]="statsPublished"
               >
               </app-content-prioritization-participant>
             </div>
@@ -208,8 +205,8 @@
             ></app-statistic-content>
             <div *ngIf="content.format === ContentType.FLASHCARD && flipped">
               <app-rendered-text
-                [rawText]="content.additionalText"
-                [renderedText]="content.renderedAdditionalText"
+                [rawText]="flashcardContent.additionalText"
+                [renderedText]="flashcardContent.renderedAdditionalText"
                 [markdownFeatureset]="flashcardMarkdownFeatures"
                 (rendered)="isLoading = false"
               ></app-rendered-text>

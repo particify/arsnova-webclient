@@ -12,6 +12,8 @@ import { forkJoin, Observable } from 'rxjs';
 import { SelectableAnswer } from '@app/core/models/selectable-answer';
 import { ContentWordcloud } from '@app/core/models/content-wordcloud';
 import { AnswerWithPoints } from '@app/core/models/answer-with-points';
+import { ContentFlashcard } from '@app/core/models/content-flashcard';
+import { ContentPrioritization } from '@app/core/models/content-prioritization';
 
 @Component({
   selector: 'app-preview',
@@ -32,6 +34,8 @@ export class PreviewComponent implements OnInit {
   markdownFeatureset: MarkdownFeatureset;
   attachmentData: any;
   words: string[];
+  additionalText: string;
+  assignablePoints: number;
 
   constructor(
     private answerService: ContentAnswerService,
@@ -59,6 +63,9 @@ export class PreviewComponent implements OnInit {
         options.forEach((option) => {
           this.answerOptionsWithPoints.push(new AnswerWithPoints(option, 0));
         });
+        this.assignablePoints = (
+          this.content as ContentPrioritization
+        ).assignablePoints;
       }
     } else if (format === ContentType.SCALE) {
       const scaleContent = this.content as ContentScale;
@@ -76,6 +83,8 @@ export class PreviewComponent implements OnInit {
       this.words = new Array<string>(
         (this.content as ContentWordcloud).maxAnswers
       ).fill('');
+    } else if (format === ContentType.FLASHCARD) {
+      this.additionalText = (this.content as ContentFlashcard).additionalText;
     }
     if (this.answerOptions) {
       this.answerOptions.map((o) =>

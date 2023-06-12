@@ -4,6 +4,7 @@ import { FlexModule } from '@angular/flex-layout';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { TranslateModule } from '@ngx-translate/core';
+import { ExtensionPointModule } from '@projects/extension-point/src/lib/extension-point.module';
 
 @Component({
   standalone: true,
@@ -13,6 +14,7 @@ import { TranslateModule } from '@ngx-translate/core';
     TranslateModule,
     MatButtonModule,
     MatIconModule,
+    ExtensionPointModule,
   ],
   selector: 'app-comment-list-add-button',
   templateUrl: './comment-list-add-button.component.html',
