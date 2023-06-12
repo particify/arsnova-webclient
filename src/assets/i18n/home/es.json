@@ -85,19 +85,6 @@
     "example": "por ejemplo, ",
     "enter-room-number": "Ingresa el número de sala"
   },
-  "import": {
-    "a11y-select-file": "Selecciona un archivo para importar.",
-    "a11y-create": "Crea la sala importada {{room}}.",
-    "a11y-login": "Ir al inicio de sesión.",
-    "header": "Importar desde ARSnova Versión 2",
-    "description": "Aquí puedes importar salas que hayas creado en la versión 2. Selecciona una sala exportada y créala.",
-    "hint": "Consejo: Actualmente solo se pueden mostrar contenidos de los siguientes formatos: 'Opción única/Opción múltiple', 'Likert', 'Sí/No' y 'Texto'.",
-    "please-login": "Por favor, inicia sesión primero para vincular tus salas permanentemente a tu nueva cuenta de ARSnova.",
-    "go-to-login": "Continuar al inicio de sesión",
-    "select-file": "Seleccionar archivo",
-    "create": "Crear",
-    "error": "Eso no funcionó. Por favor, verifica el formato."
-  },
   "password": {
     "password": "Contraseña",
     "new-password": "Nueva contraseña",
@@ -275,7 +262,6 @@
     "content-edit": "Editar contenido",
     "live-feedback": "Comentarios en vivo",
     "settings": "Configuración",
-    "import": "Importar salas",
     "admin": "Administración",
     "presentation-mode": "Modo de presentación",
     "account": "Mi cuenta"

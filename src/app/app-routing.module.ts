@@ -8,7 +8,6 @@ import { PageNotFoundComponent } from '@app/core/components/page-not-found/page-
 import { HomePageComponent } from '@app/core/components/home-page/home-page.component';
 import { UserHomeComponent } from '@app/core/components/user-home/user-home.component';
 import { LoginComponent } from '@app/core/components/login/login.component';
-import { ImportComponent } from '@app/core/components/import/import.component';
 import { AuthenticationGuard } from '@app/core/guards/authentication.guard';
 import { RegisterComponent } from '@app/core/components/register/register.component';
 import { PasswordResetComponent } from '@app/core/components/password-reset/password-reset.component';
@@ -60,12 +59,6 @@ const routes: Routes = [
   {
     path: 'join/:shortId',
     redirectTo: 'p/:shortId',
-  },
-  {
-    path: 'import',
-    canActivate: [AuthenticationGuard],
-    component: ImportComponent,
-    title: 'import',
   },
   {
     path: 'account/:accountSettingsName',
