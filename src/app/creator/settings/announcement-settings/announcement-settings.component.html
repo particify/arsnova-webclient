@@ -18,8 +18,8 @@
           <app-formatting-toolbar
             *ngIf="!renderPreview"
             class="tab-group-formatting-bar-mobile"
-            [inputElement]="descriptionInput"
-            (valueChanged)="description = $event"
+            [inputElement]="bodyInput"
+            (valueChanged)="body = $event"
           ></app-formatting-toolbar>
           <mat-form-field
             id="body-input"
