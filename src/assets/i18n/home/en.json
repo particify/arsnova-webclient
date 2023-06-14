@@ -85,19 +85,6 @@
     "example": "e.g. ",
     "enter-room-number": "Enter room number"
   },
-  "import": {
-    "a11y-select-file": "Select a file to import.",
-    "a11y-create": "Create the imported room {{room}}.",
-    "a11y-login": "Navigate to login.",
-    "header": "Import from ARSnova Version 2",
-    "description": "Here you can import rooms you have created in version 2. Select an exported room and create it!",
-    "hint": "Hint: Currently only contents of the following formats can be displayed: “Single-/Multiple-Choice”, “Likert”, “Yes/No” and “Text”.",
-    "please-login": "Please log in first to permanently bind your rooms to your new ARSnova account.",
-    "go-to-login": "Continue to Login",
-    "select-file": "Select file",
-    "create": "Create",
-    "error": "That didn't work. Please check the format."
-  },
   "password": {
     "password": "Password",
     "new-password": "New password",
@@ -275,7 +262,6 @@
     "content-edit": "Edit content",
     "live-feedback": "Live Feedback",
     "settings": "Settings",
-    "import": "Import rooms",
     "admin": "Administration",
     "presentation-mode": "Presentation",
     "account": "My account"

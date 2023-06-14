@@ -42,7 +42,6 @@ import { LoginComponent } from '@app/core/components/login/login.component';
 import { DialogService } from '@app/core/services/util/dialog.service';
 import { ExtensionPointModule } from '@projects/extension-point/src/lib/extension-point.module';
 import { TrackingService } from '@app/core/services/util/tracking.service';
-import { ImportComponent } from '@app/core/components/import/import.component';
 import {
   GlobalStorageService,
   STORAGE_CONFIG_PROVIDERS,
@@ -115,7 +114,6 @@ export function initializeApp(appConfig: AppConfig) {
     HomePageComponent,
     UserHomeComponent,
     CookiesComponent,
-    ImportComponent,
     RequestPasswordResetComponent,
     SnackBarAdvancedComponent,
     PasswordEntryComponent,
