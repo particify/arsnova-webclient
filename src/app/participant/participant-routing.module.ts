@@ -10,7 +10,7 @@ import { RoomResolver } from '@app/core/resolver/room.resolver';
 import { RoomViewUserRoleResolver } from '@app/core/resolver/room-view-user-role.resolver';
 import { AuthenticationGuard } from '@app/core/guards/authentication.guard';
 import { RoomUserRoleResolver } from '@app/core/resolver/room-user-role.resolver';
-import { Features } from '@app/core/models/features.enum';
+import { RoutingFeature } from '@app/core/models/routing-feature.enum';
 import { CommentSettingsResolver } from '@app/core/resolver/comment-settings.resolver';
 import { ParticipantPageComponent } from '@app/participant/participant-page.component';
 
@@ -50,7 +50,7 @@ const routes: Routes = [
     path: 'series/:seriesName',
     component: ParticipantContentCarouselPageComponent,
     data: {
-      feature: Features.CONTENTS,
+      feature: RoutingFeature.CONTENTS,
     },
     title: 'series',
   },
@@ -58,7 +58,7 @@ const routes: Routes = [
     path: 'series/:seriesName/:contentIndex',
     component: ParticipantContentCarouselPageComponent,
     data: {
-      feature: Features.CONTENTS,
+      feature: RoutingFeature.CONTENTS,
     },
     title: 'series',
   },

@@ -1,4 +1,4 @@
-export enum Features {
+export enum RoutingFeature {
   COMMENTS = 'comments',
   CONTENTS = 'series',
   FEEDBACK = 'feedback',
