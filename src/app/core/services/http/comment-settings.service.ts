@@ -81,7 +81,9 @@ export class CommentSettingsService extends AbstractCachingHttpService<CommentSe
   update(settings: CommentSettings): Observable<CommentSettings> {
     const connectionUrl = this.buildUri(`/${settings.roomId}`, settings.roomId);
     return this.http
-      .put(connectionUrl, settings, httpOptions)
-      .pipe(catchError(this.handleError<any>('updateCommentSettings')));
+      .put<CommentSettings>(connectionUrl, settings, httpOptions)
+      .pipe(
+        catchError(this.handleError<CommentSettings>('updateCommentSettings'))
+      );
   }
 }

@@ -1,6 +1,7 @@
 import { AfterContentInit, Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { AbstractLiveFeedbackPage } from '@app/common/abstract/abstract-live-feedback-page';
+import { HotkeyAction } from '@app/core/directives/hotkey.directive';
 import { FeedbackMessageType } from '@app/core/models/messages/feedback-message-type';
 import { FeedbackService } from '@app/core/services/http/feedback.service';
 import { RoomService } from '@app/core/services/http/room.service';
@@ -26,6 +27,8 @@ export class LiveFeedbackPageComponent
 {
   toggleKey = '1';
   changeKey = '2';
+
+  HotkeyAction = HotkeyAction;
 
   constructor(
     protected notificationService: NotificationService,

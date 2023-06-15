@@ -9,6 +9,10 @@ import { MarkdownFeatureset } from '@app/core/services/http/formatting.service';
 import { MultipleTextsAnswer } from '@app/core/models/multiple-texts-answer';
 import { HotkeyAction } from '@app/core/directives/hotkey.directive';
 import { PrioritizationAnswer } from '@app/core/models/prioritization-answer';
+import { ContentPrioritization } from '@app/core/models/content-prioritization';
+import { ContentFlashcard } from '@app/core/models/content-flashcard';
+import { ContentScale } from '@app/core/models/content-scale';
+import { ContentWordcloud } from '@app/core/models/content-wordcloud';
 
 @Component({
   selector: 'app-content-participant',
@@ -39,31 +43,72 @@ export class ContentParticipantComponent implements OnInit {
   HotkeyAction = HotkeyAction;
   a11yMsg: string;
 
+  choiceContent: ContentChoice;
+  prioritizationContent: ContentPrioritization;
+  flashcardContent: ContentFlashcard;
+  scaleContent: ContentScale;
+  wordloudContent: ContentWordcloud;
+
+  choiceAnswer: ChoiceAnswer;
+  prioritizationAnswer: PrioritizationAnswer;
+  wordcloudAnswer: MultipleTextsAnswer;
+  textAnswer: TextAnswer;
+
   ngOnInit(): void {
     this.setExtensionData(this.content.roomId, this.content.id);
     if (this.answer) {
       this.alreadySent = true;
       this.checkIfAbstention(this.answer);
-      if (
-        [ContentType.CHOICE, ContentType.BINARY, ContentType.SORT].includes(
-          this.content.format
-        )
-      ) {
-        for (const option of (this.answer as ChoiceAnswer)
-          .selectedChoiceIndexes ?? []) {
-          this.answersString = this.answersString.concat(
-            (this.content as ContentChoice).options[option].label + ','
-          );
-        }
-      } else if (this.content.format === ContentType.WORDCLOUD) {
-        for (const text of (this.answer as MultipleTextsAnswer).texts ?? []) {
-          this.answersString = this.answersString.concat(text + ',');
-        }
-      }
+      this.initAnswerData();
     }
+    this.initContentData();
     this.isMultiple = (this.content as ContentChoice).multiple;
     this.a11yMsg = this.getA11yMessage();
     this.isLoading = false;
+  }
+
+  initAnswerData() {
+    if (
+      [ContentType.CHOICE, ContentType.BINARY, ContentType.SORT].includes(
+        this.content.format
+      )
+    ) {
+      this.choiceAnswer = this.answer as ChoiceAnswer;
+      for (const option of (this.answer as ChoiceAnswer)
+        .selectedChoiceIndexes ?? []) {
+        this.answersString = this.answersString.concat(
+          (this.content as ContentChoice).options[option].label + ','
+        );
+      }
+    } else if (this.content.format === ContentType.WORDCLOUD) {
+      this.wordcloudAnswer = this.answer as MultipleTextsAnswer;
+      for (const text of (this.answer as MultipleTextsAnswer).texts ?? []) {
+        this.answersString = this.answersString.concat(text + ',');
+      }
+    } else if (this.content.format === ContentType.TEXT) {
+      this.textAnswer = this.answer as TextAnswer;
+      this.answersString = (this.answer as TextAnswer).body;
+    } else if (this.content.format === ContentType.PRIORITIZATION) {
+      this.prioritizationAnswer = this.answer as PrioritizationAnswer;
+    } else if (this.content.format === ContentType.SCALE) {
+      this.choiceAnswer = this.answer as ChoiceAnswer;
+    }
+  }
+
+  initContentData() {
+    if (
+      [ContentType.CHOICE, ContentType.BINARY, ContentType.SORT].includes(
+        this.content.format
+      )
+    ) {
+      this.choiceContent = this.content as ContentChoice;
+    } else if (this.content.format === ContentType.WORDCLOUD) {
+      this.wordloudContent = this.content as ContentWordcloud;
+    } else if (this.content.format === ContentType.PRIORITIZATION) {
+      this.prioritizationContent = this.content as ContentPrioritization;
+    } else if (this.content.format === ContentType.SCALE) {
+      this.scaleContent = this.content as ContentScale;
+    }
   }
 
   setExtensionData(roomId: string, refId: string) {

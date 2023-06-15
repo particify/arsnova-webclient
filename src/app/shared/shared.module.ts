@@ -18,7 +18,6 @@ import { WordcloudComponent } from './wordcloud/wordcloud.component';
 import { StatisticScaleComponent } from './statistic-content/statistic-scale/statistic-scale.component';
 import { ListBadgeComponent } from '@app/standalone/list-badge/list-badge.component';
 import { ContentChoiceAnswerComponent } from './content-answers/content-choice-answer/content-choice-answer.component';
-import { FormattingToolbarComponent } from './formatting-toolbar/formatting-toolbar.component';
 import { AnnouncementComponent } from './announcement/announcement.component';
 import { AnswerListComponent } from './answer-list/answer-list.component';
 import { AnnouncementListComponent } from './announcement-list/announcement-list.component';
@@ -64,7 +63,6 @@ import { AnswerCountComponent } from '@app/standalone/answer-count/answer-count.
     InfoBarComponent,
     WordcloudComponent,
     ContentChoiceAnswerComponent,
-    FormattingToolbarComponent,
     AnnouncementComponent,
     AnswerListComponent,
     AnnouncementListComponent,
@@ -90,7 +88,6 @@ import { AnswerCountComponent } from '@app/standalone/answer-count/answer-count.
     DividerComponent,
     WordcloudComponent,
     ContentChoiceAnswerComponent,
-    FormattingToolbarComponent,
     AnnouncementComponent,
     AnswerListComponent,
     ContentWordcloudAnswerComponent,

@@ -1,7 +1,7 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, ActivationEnd, Router } from '@angular/router';
 import { Location } from '@angular/common';
-import { filter } from 'rxjs/operators';
+import { filter, map } from 'rxjs/operators';
 import { UserRole } from '@app/core/models/user-roles.enum';
 import { GlobalStorageService, STORAGE_KEYS } from './global-storage.service';
 
@@ -63,14 +63,14 @@ export class RoutingService {
     this.router.events
       .pipe(
         filter((event) => event instanceof ActivationEnd),
-        filter(
-          (event) => (event as ActivationEnd).snapshot.outlet === 'primary'
-        )
+        map((event) => event as ActivationEnd),
+        filter((event) => event.snapshot.outlet === 'primary')
       )
-      .subscribe((activationEndEvent: ActivationEnd) => {
-        if (activationEndEvent.snapshot.component) {
-          this.getRoomUrlData(activationEndEvent.snapshot);
-          this.getRoutes(activationEndEvent.snapshot);
+      .subscribe((event) => {
+        const snapshot = event.snapshot;
+        if (snapshot.component) {
+          this.getRoomUrlData(snapshot);
+          this.getRoutes(snapshot);
         }
       });
   }

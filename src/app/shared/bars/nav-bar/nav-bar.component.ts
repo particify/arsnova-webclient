@@ -640,7 +640,7 @@ export class NavBarComponent
     );
   }
 
-  getFeatureText(feature: RoutingFeature) {
+  getFeatureText(feature: string) {
     return feature === RoutingFeature.CONTENTS &&
       this.contentGroups.length === 1
       ? this.groupName

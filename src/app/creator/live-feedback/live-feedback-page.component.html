@@ -25,7 +25,7 @@
         aria-labelledby="change-type"
         [appHotkey]="changeKey"
         [appHotkeyTitle]="'survey.change-type' | translate"
-        [appHotkeyAction]="hotkeyAction"
+        [appHotkeyAction]="HotkeyAction.FOCUS"
         appTrackInteraction="Survey type toggled"
         [appTrackName]="type.toLowerCase()"
       >
@@ -63,7 +63,7 @@
       aria-labelledby="toggle"
       [appHotkey]="toggleKey"
       [appHotkeyTitle]="(isClosed ? 'survey.start' : 'survey.stop') | translate"
-      [appHotkeyAction]="hotkeyAction"
+      [appHotkeyAction]="HotkeyAction.FOCUS"
       appTrackInteraction="Survey toggled"
       [appTrackName]="isClosed ? 'on' : 'off'"
     >

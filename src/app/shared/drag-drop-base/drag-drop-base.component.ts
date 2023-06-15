@@ -1,5 +1,5 @@
 import { Component, ElementRef, QueryList, ViewChildren } from '@angular/core';
-import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { moveItemInArray } from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'app-drag-drop-base',
@@ -11,8 +11,8 @@ export class DragDropBaseComponent {
   dragDroplist = [];
   selectedSortItem: number;
 
-  drop(event: CdkDragDrop<string[]>) {
-    this.moveItem(event.previousIndex, event.currentIndex);
+  drop(previousIndex: number, currentIndex: number) {
+    this.moveItem(previousIndex, currentIndex);
   }
 
   moveAnswer(event: KeyboardEvent, answerIndex: number) {

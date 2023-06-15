@@ -10,6 +10,7 @@ import {
 import { AnnouncementService } from '@app/core/services/http/announcement.service';
 import { MatTabGroup } from '@angular/material/tabs';
 import { DialogService } from '@app/core/services/util/dialog.service';
+import { UserRole } from '@app/core/models/user-roles.enum';
 
 @Component({
   selector: 'app-announcement-settings',
@@ -30,6 +31,8 @@ export class AnnouncementSettingsComponent implements OnInit {
   renderPreview = false;
   markdownFeatureset = MarkdownFeatureset.SIMPLE;
   isLoading = true;
+
+  UserRole = UserRole;
 
   constructor(
     private translateService: TranslateService,

@@ -14,6 +14,7 @@ import { Subject } from 'rxjs';
 import { CommentService } from '@app/core/services/http/comment.service';
 import { UserRole } from '@app/core/models/user-roles.enum';
 import { CoreModule } from '@app/core/core.module';
+import { ExtensionPointModule } from '@projects/extension-point/src/lib/extension-point.module';
 
 export interface DialogData {
   userId: string;
@@ -26,7 +27,7 @@ export interface DialogData {
 
 @Component({
   standalone: true,
-  imports: [CoreModule],
+  imports: [CoreModule, ExtensionPointModule],
   selector: 'app-submit-comment',
   templateUrl: './create-comment.component.html',
 })

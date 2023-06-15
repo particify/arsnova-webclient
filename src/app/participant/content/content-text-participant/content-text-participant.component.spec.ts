@@ -19,10 +19,10 @@ import { of } from 'rxjs';
 import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
 import { ContentAnswerService } from '@app/core/services/http/content-answer.service';
 import { NO_ERRORS_SCHEMA, EventEmitter } from '@angular/core';
-import { ContentText } from '@app/core/models/content-text';
 import { ContentType } from '@app/core/models/content-type.enum';
 import { ContentState } from '@app/core/models/content-state';
 import { EventService } from '@app/core/services/util/event.service';
+import { Content } from '@app/core/models/content';
 
 describe('ContentTextParticipantComponent', () => {
   let component: ContentTextParticipantComponent;
@@ -86,7 +86,7 @@ describe('ContentTextParticipantComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(ContentTextParticipantComponent);
     component = fixture.componentInstance;
-    component.content = new ContentText(
+    component.content = new Content(
       '1234',
       '1',
       '1234',
@@ -94,6 +94,7 @@ describe('ContentTextParticipantComponent', () => {
       'body',
       [],
       ContentType.TEXT,
+      {},
       new ContentState(1, new Date(), false)
     );
     component.sendEvent = new EventEmitter<string>();

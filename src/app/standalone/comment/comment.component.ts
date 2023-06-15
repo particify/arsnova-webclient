@@ -33,10 +33,11 @@ import { CoreModule } from '@app/core/core.module';
 import { DateComponent } from '@app/standalone/date/date.component';
 import { MatDialog } from '@angular/material/dialog';
 import { CommentAnswerComponent } from '@app/standalone/_dialogs/comment-answer/comment-answer.component';
+import { ExtensionPointModule } from '@projects/extension-point/src/lib/extension-point.module';
 
 @Component({
   standalone: true,
-  imports: [CoreModule, DateComponent],
+  imports: [CoreModule, DateComponent, ExtensionPointModule],
   selector: 'app-comment',
   templateUrl: './comment.component.html',
   styleUrls: ['./comment.component.scss'],

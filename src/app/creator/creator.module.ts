@@ -44,6 +44,7 @@ import { FooterComponent } from '@app/standalone/footer/footer.component';
 import { DividerComponent } from '@app/standalone/divider/divider.component';
 import { RenderedTextComponent } from '@app/standalone/rendered-text/rendered-text.component';
 import { AnswerCountComponent } from '@app/standalone/answer-count/answer-count.component';
+import { FormattingToolbarComponent } from '@app/standalone/formatting-toolbar/formatting-toolbar.component';
 
 @NgModule({
   imports: [
@@ -69,6 +70,7 @@ import { AnswerCountComponent } from '@app/standalone/answer-count/answer-count.
     DividerComponent,
     RenderedTextComponent,
     AnswerCountComponent,
+    FormattingToolbarComponent,
   ],
   declarations: [
     ContentChoiceCreationComponent,

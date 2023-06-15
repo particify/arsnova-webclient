@@ -1,5 +1,4 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { ContentText } from '@app/core/models/content-text';
 import { ContentService } from '@app/core/services/http/content.service';
 import { NotificationService } from '@app/core/services/util/notification.service';
 import { TranslateService } from '@ngx-translate/core';
@@ -8,6 +7,7 @@ import { ContentGroupService } from '@app/core/services/http/content-group.servi
 import { ContentCreationComponent } from '@app/creator/content-creation/content-creation/content-creation.component';
 import { ContentType } from '@app/core/models/content-type.enum';
 import { AnnounceService } from '@app/core/services/util/announce.service';
+import { Content } from '@app/core/models/content';
 
 @Component({
   selector: 'app-content-text-creation',
@@ -38,7 +38,7 @@ export class ContentTextCreationComponent
   }
 
   initContentCreation() {
-    this.content = new ContentText(
+    this.content = new Content(
       null,
       null,
       '',
@@ -46,6 +46,7 @@ export class ContentTextCreationComponent
       '',
       [],
       this.format,
+      null,
       null
     );
   }

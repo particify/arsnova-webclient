@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, ActivationEnd, Router } from '@angular/router';
-import { filter } from 'rxjs/operators';
+import { filter, map } from 'rxjs/operators';
 import { ConsentService } from './consent.service';
 import { StorageItemCategory } from '@app/core/models/storage';
 import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
@@ -112,14 +112,11 @@ export class TrackingService {
           (event) =>
             event instanceof ActivationEnd && !!event.snapshot.component
         ),
-        filter(
-          (event) => (event as ActivationEnd).snapshot.outlet === 'primary'
-        ),
-        filter(
-          (event) => !(event as ActivationEnd).snapshot.routeConfig.children
-        )
+        map((event) => event as ActivationEnd),
+        filter((event) => event.snapshot.outlet === 'primary'),
+        filter((event) => !event.snapshot.routeConfig.children)
       )
-      .subscribe((event: ActivationEnd) => {
+      .subscribe((event) => {
         this.addRoute(this.router.url, event.snapshot);
       });
     this.translateService.onLangChange.subscribe((event: LangChangeEvent) =>

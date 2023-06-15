@@ -8,6 +8,7 @@ import { Router } from '@angular/router';
 import { SystemInfoService } from '@app/core/services/http/system-info.service';
 import { catchError, Observable, of, shareReplay } from 'rxjs';
 import { LanguageService } from '@app/core/services/util/language.service';
+import { SystemHealth } from '@app/admin/_models/system-health';
 
 @Component({
   selector: 'app-admin-home',
@@ -19,7 +20,7 @@ export class AdminHomeComponent implements OnInit {
   currentPage: string;
   pageChanged = new EventEmitter<string>();
 
-  healthInfo: Observable<object>;
+  healthInfo: Observable<SystemHealth>;
 
   constructor(
     protected langService: LanguageService,

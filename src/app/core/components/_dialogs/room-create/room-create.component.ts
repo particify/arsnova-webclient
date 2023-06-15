@@ -16,7 +16,6 @@ import {
   STORAGE_KEYS,
 } from '@app/core/services/util/global-storage.service';
 import { ClientAuthentication } from '@app/core/models/client-authentication';
-import { HINT_TYPES } from '@app/standalone/hint/hint.component';
 import { AuthProvider } from '@app/core/models/auth-provider';
 import { ApiConfigService } from '@app/core/services/http/api-config.service';
 import {
@@ -24,6 +23,7 @@ import {
   AuthenticationProviderRole,
   AuthenticationProviderType,
 } from '@app/core/models/api-config';
+import { HintType } from '@app/core/models/hint-type.enum';
 
 @Component({
   selector: 'app-room-create',
@@ -36,7 +36,7 @@ export class RoomCreateComponent implements OnInit {
   newRoom = new Room();
   roomId: string;
   auth: ClientAuthentication;
-  warningType = HINT_TYPES.WARNING;
+  HintType = HintType;
   anonymousProvider: AuthenticationProvider;
   createDuplication: boolean;
 

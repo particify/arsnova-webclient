@@ -2,7 +2,7 @@
   <div
     cdkDropList
     [cdkDropListData]="displayAnswers"
-    (cdkDropListDropped)="drop($event)"
+    (cdkDropListDropped)="drop($event.previousIndex, $event.currentIndex)"
     [cdkDropListDisabled]="isEditMode && !noAnswersYet"
   >
     <mat-list>
@@ -27,10 +27,7 @@
                     }
             "
           >
-            <mat-icon
-              *ngIf="!isAnswerEdit > -1 && (!isEditMode || noAnswersYet)"
-              class="drag-icon"
-            >
+            <mat-icon *ngIf="!isEditMode || noAnswersYet" class="drag-icon">
               drag_handle
             </mat-icon>
           </div>

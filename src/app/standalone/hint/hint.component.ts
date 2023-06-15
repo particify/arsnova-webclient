@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import { FlexModule } from '@angular/flex-layout';
 import { MatIconModule } from '@angular/material/icon';
+import { HintType } from '@app/core/models/hint-type.enum';
 import { TranslateModule } from '@ngx-translate/core';
 
 export interface Hint {
@@ -10,19 +11,14 @@ export interface Hint {
   class: string;
 }
 
-export enum HINT_TYPES {
-  WARNING = 'WARNING',
-  INFO = 'INFO',
-}
-
 export const HINTS: Hint[] = [
   {
-    type: HINT_TYPES.WARNING,
+    type: HintType.WARNING,
     icon: 'warning',
     class: 'warning',
   },
   {
-    type: HINT_TYPES.INFO,
+    type: HintType.INFO,
     icon: 'info',
     class: 'info',
   },
@@ -37,7 +33,7 @@ export const HINTS: Hint[] = [
 })
 export class HintComponent implements OnInit {
   @Input() text: string;
-  @Input() type: HINT_TYPES = HINT_TYPES.WARNING;
+  @Input() type: HintType = HintType.WARNING;
 
   hint: Hint;
 

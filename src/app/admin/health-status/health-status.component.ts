@@ -1,9 +1,5 @@
 import { Component, Input } from '@angular/core';
-
-enum HealthStatus {
-  UP = 'UP',
-  DOWN = 'DOWN',
-}
+import { HealthStatus } from '@app/admin/_models/health-status.enum';
 
 @Component({
   selector: 'app-health-status',

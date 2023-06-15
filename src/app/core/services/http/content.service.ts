@@ -197,15 +197,15 @@ export class ContentService extends AbstractEntityService<Content> {
       updatedContent.roomId
     );
     return this.http
-      .put(connectionUrl, updatedContent, httpOptions)
-      .pipe(catchError(this.handleError<any>('updateContent')));
+      .put<Content>(connectionUrl, updatedContent, httpOptions)
+      .pipe(catchError(this.handleError<Content>('updateContent')));
   }
 
   patchContent(content: Content, changes: object): Observable<Content> {
     const connectionUrl = this.buildUri('/' + content.id, content.roomId);
     return this.http
-      .patch(connectionUrl, changes, httpOptions)
-      .pipe(catchError(this.handleError<any>('patchContent')));
+      .patch<Content>(connectionUrl, changes, httpOptions)
+      .pipe(catchError(this.handleError<Content>('patchContent')));
   }
 
   changeState(content: Content): Observable<Content> {
@@ -221,8 +221,8 @@ export class ContentService extends AbstractEntityService<Content> {
       updatedContent.roomId
     );
     return this.http
-      .put(connectionUrl, updatedContent, httpOptions)
-      .pipe(catchError(this.handleError<any>('updateContentChoice')));
+      .put<ContentChoice>(connectionUrl, updatedContent, httpOptions)
+      .pipe(catchError(this.handleError<ContentChoice>('updateContentChoice')));
   }
 
   deleteContent(roomId: string, contentId: string): Observable<Content> {

@@ -62,8 +62,8 @@ export class FooterComponent implements OnInit {
           (event) => (event as ActivationEnd).snapshot.outlet === 'primary'
         )
       )
-      .subscribe((activationEndEvent: ActivationEnd) => {
-        if (activationEndEvent.snapshot.component) {
+      .subscribe((activationEndEvent) => {
+        if ((<ActivationEnd>activationEndEvent).snapshot.component) {
           this.checkToolbarCondition(this.router.url);
         }
       });

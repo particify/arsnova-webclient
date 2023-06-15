@@ -34,8 +34,8 @@ export class AppComponent implements OnInit {
     this.languageService.init();
     this.router.events
       .pipe(filter((event) => event instanceof NavigationEnd))
-      .subscribe((event: NavigationEnd) => {
-        this.checkRoute(event.url);
+      .subscribe((event) => {
+        this.checkRoute((event as NavigationEnd).url);
       });
     this.routingService.subscribeActivatedRoute();
     this.apiConfigService.getApiConfig$().subscribe((config) => {

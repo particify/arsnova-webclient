@@ -13,10 +13,10 @@ export class AppConfig {
     const jsonFile = `assets/config/config.${environment.name}.json`;
     return new Promise<void>((resolve, reject) => {
       this.http
-        .get(jsonFile)
+        .get<IAppConfig>(jsonFile)
         .toPromise()
-        .then((response: IAppConfig) => {
-          AppConfig.settings = <IAppConfig>response;
+        .then((response) => {
+          AppConfig.settings = response;
           resolve();
         })
         .catch((response: any) => {
