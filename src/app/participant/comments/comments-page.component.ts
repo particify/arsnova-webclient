@@ -5,10 +5,12 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AbstractCommentsPageComponent } from '@app/common/abstract/abstract-comments-page.component';
 import { Comment } from '@app/core/models/comment';
 import { CommentSettings } from '@app/core/models/comment-settings';
+import { Room } from '@app/core/models/room';
 import { Vote } from '@app/core/models/vote';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
 import { CommentSettingsService } from '@app/core/services/http/comment-settings.service';
 import { CommentService } from '@app/core/services/http/comment.service';
+import { RoomService } from '@app/core/services/http/room.service';
 import { VoteService } from '@app/core/services/http/vote.service';
 import { AnnounceService } from '@app/core/services/util/announce.service';
 import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
@@ -28,6 +30,8 @@ export class CommentsPageComponent
 {
   commentVoteMap = new Map<string, Vote>();
 
+  room: Room;
+
   constructor(
     protected commentService: CommentService,
     protected translateService: TranslateService,
@@ -41,7 +45,8 @@ export class CommentsPageComponent
     protected commentSettingsService: CommentSettingsService,
     protected authenticationService: AuthenticationService,
     protected location: Location,
-    private voteService: VoteService
+    private voteService: VoteService,
+    private roomService: RoomService
   ) {
     super(
       commentService,
@@ -70,6 +75,10 @@ export class CommentsPageComponent
       this.initPublicCounter();
       this.init();
     });
+    this.roomService
+      .getCurrentRoomStream()
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((room) => (this.room = room));
   }
 
   ngOnDestroy(): void {

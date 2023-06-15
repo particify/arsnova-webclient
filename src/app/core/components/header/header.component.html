@@ -1,9 +1,28 @@
 <mat-toolbar class="mat-elevation-z2">
   <lib-extension-point
-    *ngIf="isRoom && hasRole(UserRole.PARTICIPANT)"
+    *ngIf="!!room && hasRole(UserRole.PARTICIPANT)"
     extensionId="participant-header"
   ></lib-extension-point>
-  <mat-toolbar-row>
+  <ng-template #focusModeHeader>
+    <mat-toolbar-row fxLayout="row" fxLayoutAlign="space-between center">
+      <span class="focus-mode-hint">{{
+        'focus-mode.presenter-controls-app' | translate
+      }}</span>
+      <button
+        mat-icon-button
+        (click)="leaveRoom()"
+        [matTooltip]="'focus-mode.leave-room' | translate"
+      >
+        <mat-icon color="warn">exit_to_app</mat-icon>
+      </button>
+    </mat-toolbar-row>
+  </ng-template>
+  <mat-toolbar-row
+    *ngIf="
+      !room?.focusModeEnabled || !hasRole(UserRole.PARTICIPANT);
+      else focusModeHeader
+    "
+  >
     <button
       id="back-button"
       mat-icon-button
@@ -153,7 +172,7 @@
     </mat-menu>
 
     <div fxLayout="row" fxLayoutAlign="start center">
-      <div *ngIf="isRoom && !hasRole(UserRole.PARTICIPANT)">
+      <div *ngIf="!!room && !hasRole(UserRole.PARTICIPANT)">
         <div fxLayout="row" fxLayoutGap="10px" class="desktop-action-container">
           <button
             mat-button

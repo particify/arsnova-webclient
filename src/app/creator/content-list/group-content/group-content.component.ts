@@ -27,12 +27,11 @@ import { EventService } from '@app/core/services/util/event.service';
 import { LocalFileService } from '@app/core/services/util/local-file.service';
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { Observable, Subject, Subscription } from 'rxjs';
-import { mergeMap } from 'rxjs/operators';
+import { mergeMap, takeUntil } from 'rxjs/operators';
 import { RoomStatsService } from '@app/core/services/http/room-stats.service';
 import { HotkeyService } from '@app/core/services/util/hotkey.service';
 import { MatButton } from '@angular/material/button';
 import { ContentType } from '@app/core/models/content-type.enum';
-import { UiState } from '@app/core/models/events/ui/ui-state.enum';
 import { RoutingService } from '@app/core/services/util/routing.service';
 import { Room } from '@app/core/models/room';
 import { ContentGroupStatistics } from '@app/core/models/content-group-statistics';
@@ -51,6 +50,8 @@ export class GroupContentComponent
   extends DragDropBaseComponent
   implements OnInit, OnDestroy
 {
+  destroyed$ = new Subject<void>();
+
   @ViewChild('nameInput') nameInput: ElementRef;
   @ViewChildren('lockMenu') lockMenus: QueryList<MatButton>;
 
@@ -89,10 +90,7 @@ export class GroupContentComponent
 
   iconList: Map<ContentType, string>;
 
-  navBarExists = true;
   onInit = false;
-
-  navBarStateSubscription: Subscription;
 
   isModerator = false;
 
@@ -120,11 +118,9 @@ export class GroupContentComponent
   }
 
   ngOnInit() {
-    this.navBarStateSubscription = this.eventService
-      .on<boolean>(UiState.NAV_BAR_VISIBLE)
-      .subscribe((isVisible) => {
-        this.navBarExists = isVisible;
-      });
+    // this.roomService.getCurrentRoomStream().pipe(takeUntil(this.destroyed$)).subscribe(room => {
+    //   this.navBarExists = !room?.focusModeEnabled;
+    // })
     this.onInit = true;
     this.iconList = this.contentService.getTypeIcons();
     this.route.data.subscribe((data) => {
@@ -153,6 +149,8 @@ export class GroupContentComponent
 
   ngOnDestroy() {
     this.unregisterHotkeys();
+    this.destroyed$.next();
+    this.destroyed$.complete();
   }
 
   setContentGroup(groupName: string) {

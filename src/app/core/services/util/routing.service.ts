@@ -24,8 +24,6 @@ export class RoutingService {
   private roomId: string;
   role: UserRole;
   role$ = new EventEmitter<UserRole>();
-  isRoom: boolean;
-  isRoom$ = new EventEmitter<boolean>();
   isPreview: boolean;
   isPreview$ = new EventEmitter<boolean>();
   routeEvent = new EventEmitter<ActivatedRouteSnapshot>();
@@ -69,8 +67,6 @@ export class RoutingService {
     this.shortId = route.params['shortId'];
     this.isPreview = this.role !== this.viewRole;
     this.isPreview$.emit(this.isPreview);
-    this.isRoom = !!this.shortId;
-    this.isRoom$.emit(this.isRoom);
   }
 
   getRoutes(route: ActivatedRouteSnapshot) {
@@ -162,10 +158,6 @@ export class RoutingService {
 
   getRole(): EventEmitter<UserRole> {
     return this.role$;
-  }
-
-  getIsRoom(): EventEmitter<boolean> {
-    return this.isRoom$;
   }
 
   getIsPreview(): EventEmitter<boolean> {

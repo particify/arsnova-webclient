@@ -191,7 +191,7 @@ export class NavBarComponent
             this.addContentFeatureItem(false);
           }
           this.getItems();
-          this.updateGroups(stats.groupStats ?? [], !!group);
+          this.updateGroups(stats.groupStats ?? [], !!group, false);
         });
       this.subscribeToParticipantEvents();
       this.subscribeToRouteChanges();
@@ -380,7 +380,11 @@ export class NavBarComponent
     this.barItems[this.currentRouteIndex].changeIndicator = false;
   }
 
-  updateGroups(groupStats: ContentGroupStatistics[], alreadySet: boolean) {
+  updateGroups(
+    groupStats: ContentGroupStatistics[],
+    alreadySet: boolean,
+    showNews = true
+  ) {
     if (this.contentGroups.length > 0) {
       if (this.listObjectIdsEquals(this.contentGroups, groupStats)) {
         return;
@@ -414,7 +418,7 @@ export class NavBarComponent
                 this.setGroup(currentGroup);
                 this.addContentFeatureItem();
                 // route data's `userRole` is used here to prevent showing notification indicator in creators room preview
-                if (this.role === UserRole.PARTICIPANT) {
+                if (this.role === UserRole.PARTICIPANT && showNews) {
                   this.toggleNews(RoutingFeature.CONTENTS);
                 }
                 this.afterInit();

@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { UiState } from '@app/core/models/events/ui/ui-state.enum';
-import { EventService } from '@app/core/services/util/event.service';
+import { Room } from '@app/core/models/room';
+import { RoomService } from '@app/core/services/http/room.service';
 import { LanguageService } from '@app/core/services/util/language.service';
 import { TranslateService } from '@ngx-translate/core';
 import { Subject, takeUntil } from 'rxjs';
@@ -13,10 +13,10 @@ import { Subject, takeUntil } from 'rxjs';
 export class ParticipantPageComponent implements OnInit, OnDestroy {
   destroyed$ = new Subject<void>();
 
-  hideNavigation = false;
+  room: Room;
 
   constructor(
-    private eventService: EventService,
+    private roomService: RoomService,
     protected translateService: TranslateService,
     protected langService: LanguageService
   ) {
@@ -26,12 +26,10 @@ export class ParticipantPageComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.eventService
-      .on<boolean>(UiState.NAV_BAR_VISIBLE)
+    this.roomService
+      .getCurrentRoomStream()
       .pipe(takeUntil(this.destroyed$))
-      .subscribe((isVisible) => {
-        this.hideNavigation = !isVisible;
-      });
+      .subscribe((room) => (this.room = room));
   }
 
   ngOnDestroy(): void {

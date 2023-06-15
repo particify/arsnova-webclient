@@ -7,6 +7,7 @@ import { RoutingService } from '@app/core/services/util/routing.service';
 import { LanguageService } from '@app/core/services/util/language.service';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { filter } from 'rxjs/operators';
+import { RoomService } from '@app/core/services/http/room.service';
 
 @Component({
   selector: 'app-root',
@@ -22,7 +23,8 @@ export class AppComponent implements OnInit {
     private updateService: UpdateService,
     private routingService: RoutingService,
     public route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private roomService: RoomService
   ) {}
 
   title = 'ARSnova';
@@ -48,11 +50,13 @@ export class AppComponent implements OnInit {
       this.consentService.setConfig(config);
       this.updateService.handleUpdate(config.ui.versions);
     });
+    this.roomService.getCurrentRoomStream().subscribe((room) => {
+      this.isRoom = !!room;
+    });
   }
 
   checkRoute(url: string) {
     this.isPresentation = this.routingService.isPresentation(url);
     this.isAdmin = this.routingService.isAdminView(url);
-    this.isRoom = this.routingService.isRoom;
   }
 }
