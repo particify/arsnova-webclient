@@ -30,9 +30,7 @@ export class CommentsPageComponent
   implements OnInit, OnDestroy
 {
   private moderationComments$: Observable<Comment[]>;
-  private archivedComments$: Observable<Comment[]>;
 
-  isArchive = false;
   isModeration = false;
   moderationCounter = 0;
 
@@ -71,18 +69,14 @@ export class CommentsPageComponent
       this.room = data.room;
       this.roomId = this.room.id;
       this.viewRole = data.viewRole;
-      if (this.isArchive) {
-        this.activeComments$ = this.archivedComments$;
-      } else {
-        this.isModeration = data.isModeration;
-        this.publicComments$ = this.commentService.getAckComments(this.room.id);
-        this.moderationComments$ = this.commentService.getRejectedComments(
-          this.room.id
-        );
-        this.activeComments$ = this.isModeration
-          ? this.moderationComments$
-          : this.publicComments$;
-      }
+      this.isModeration = data.isModeration;
+      this.publicComments$ = this.commentService.getAckComments(this.room.id);
+      this.moderationComments$ = this.commentService.getRejectedComments(
+        this.room.id
+      );
+      this.activeComments$ = this.isModeration
+        ? this.moderationComments$
+        : this.publicComments$;
       this.initPublicCounter();
       this.initModerationCounter();
       this.init();
@@ -107,10 +101,8 @@ export class CommentsPageComponent
   }
 
   subscribeToStreams() {
-    if (!this.isArchive) {
-      this.subscribeCommentStream();
-      this.subscribeModeratorStream();
-    }
+    this.subscribeCommentStream();
+    this.subscribeModeratorStream();
   }
 
   subscribeModeratorStream() {
