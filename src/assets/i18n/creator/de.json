@@ -444,7 +444,9 @@
     "hotkey-general": "Raumeinstellungen",
     "hotkey-comments": "Q&A-Einstellungen",
     "hotkey-access": "Verwaltung von Zugriffsrechten",
-    "hotkey-announcements": "Verwaltung von Ankündigungen"
+    "hotkey-announcements": "Verwaltung von Ankündigungen",
+    "focus-mode": "Fokus-Modus",
+    "focus-mode-info": "Führe deine Teilnehmenden in Echtzeit durch den Raum. Deine Steuerung im Präsentationsmodus wird mit den Geräten der Teilnehmenden synchronisiert."
   },
   "room": {
     "room-name": "Name des Raums",

@@ -35,6 +35,7 @@ export class RoomComponent implements OnInit {
   textContainsImage = false;
   HintType = HintType;
   isCreator = false;
+  focusModeEnabled = false;
 
   constructor(
     public notificationService: NotificationService,
@@ -49,6 +50,7 @@ export class RoomComponent implements OnInit {
   ) {}
   ngOnInit(): void {
     this.isCreator = this.route.snapshot.data.userRole === UserRole.OWNER;
+    this.focusModeEnabled = this.editRoom.focusModeEnabled;
   }
 
   openDeleteRoomDialog(): void {
@@ -90,5 +92,14 @@ export class RoomComponent implements OnInit {
 
   updateTextContainsImage(text: string) {
     this.textContainsImage = this.formattingService.containsTextAnImage(text);
+  }
+
+  toggleFocusMode(focusModeEnabled: boolean) {
+    const changes: { focusModeEnabled: boolean } = {
+      focusModeEnabled: focusModeEnabled,
+    };
+    this.roomService.patchRoom(this.editRoom.id, changes).subscribe((room) => {
+      this.editRoom.focusModeEnabled = room.focusModeEnabled;
+    });
   }
 }
