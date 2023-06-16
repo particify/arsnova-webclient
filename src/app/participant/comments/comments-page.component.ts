@@ -5,12 +5,11 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AbstractCommentsPageComponent } from '@app/common/abstract/abstract-comments-page.component';
 import { Comment } from '@app/core/models/comment';
 import { CommentSettings } from '@app/core/models/comment-settings';
-import { Room } from '@app/core/models/room';
 import { Vote } from '@app/core/models/vote';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
 import { CommentSettingsService } from '@app/core/services/http/comment-settings.service';
 import { CommentService } from '@app/core/services/http/comment.service';
-import { RoomService } from '@app/core/services/http/room.service';
+import { FocusModeService } from '@app/participant/_services/focus-mode.service';
 import { VoteService } from '@app/core/services/http/vote.service';
 import { AnnounceService } from '@app/core/services/util/announce.service';
 import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
@@ -30,7 +29,7 @@ export class CommentsPageComponent
 {
   commentVoteMap = new Map<string, Vote>();
 
-  room: Room;
+  focusModeEnabled: boolean;
 
   constructor(
     protected commentService: CommentService,
@@ -46,7 +45,7 @@ export class CommentsPageComponent
     protected authenticationService: AuthenticationService,
     protected location: Location,
     private voteService: VoteService,
-    private roomService: RoomService
+    private focusModeService: FocusModeService
   ) {
     super(
       commentService,
@@ -67,6 +66,7 @@ export class CommentsPageComponent
     this.route.data.subscribe((data) => {
       this.room = data.room;
       this.roomId = this.room.id;
+      this.focusModeEnabled = this.room.focusModeEnabled;
       this.viewRole = data.viewRole;
       this.publicComments$ = this.commentService
         .getAckComments(this.room.id)
@@ -75,10 +75,16 @@ export class CommentsPageComponent
       this.initPublicCounter();
       this.init();
     });
-    this.roomService
-      .getCurrentRoomStream()
+    this.focusModeService
+      .getFocusModeEnabled()
       .pipe(takeUntil(this.destroyed$))
-      .subscribe((room) => (this.room = room));
+      .subscribe((focusModeEnabled) => {
+        this.focusModeEnabled = focusModeEnabled;
+      });
+    this.focusModeService
+      .getCommentState()
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((state) => this.highlightFocusedComment(state.commentId));
   }
 
   ngOnDestroy(): void {
@@ -113,6 +119,13 @@ export class CommentsPageComponent
     if (settings.readonly !== this.readonly) {
       this.readonly = settings.readonly;
       this.showReadonlyStateNotification();
+    }
+  }
+
+  highlightFocusedComment(commentId: string) {
+    const comment = this.displayComments.find((c) => c.id === commentId);
+    if (comment) {
+      comment.highlighted = true;
     }
   }
 }

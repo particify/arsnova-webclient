@@ -31,10 +31,10 @@ import { EntityChanged } from '@app/core/models/events/entity-changed';
 import { Subject, Subscription, takeUntil } from 'rxjs';
 import { ContentFocusState } from '@app/core/models/events/remote/content-focus-state';
 import { RoutingService } from '@app/core/services/util/routing.service';
-import { RemoteService } from '@app/core/services/util/remote.service';
 import { ContentCarouselService } from '@app/core/services/util/content-carousel.service';
 import { ContentPublishService } from '@app/core/services/util/content-publish.service';
 import { EntityChangeNotification } from '@app/core/models/events/entity-change-notification';
+import { FocusModeService } from '@app/participant/_services/focus-mode.service';
 
 @Component({
   selector: 'app-participant-content-carousel-page',
@@ -67,11 +67,9 @@ export class ParticipantContentCarouselPageComponent
   isReloading = false;
   isReloadingCurrentContent = false;
   displaySnackBar = false;
-  isGuided = false;
+  focusModeEnabled = false;
   lockedContentId: string;
   changesSubscription: Subscription;
-  remoteSubscription: Subscription;
-  focusStateSubscription: Subscription;
   routeChangedSubscription: Subscription;
 
   isFinished = false;
@@ -93,9 +91,9 @@ export class ParticipantContentCarouselPageComponent
     private eventService: EventService,
     private router: Router,
     private routingService: RoutingService,
-    private remoteService: RemoteService,
     private contentCarouselService: ContentCarouselService,
-    private contentPublishService: ContentPublishService
+    private contentPublishService: ContentPublishService,
+    private focusModeService: FocusModeService
   ) {}
 
   ngAfterContentInit() {
@@ -105,14 +103,10 @@ export class ParticipantContentCarouselPageComponent
   }
 
   ngOnDestroy(): void {
+    this.destroyed$.next(null);
+    this.destroyed$.complete();
     if (this.changesSubscription) {
       this.changesSubscription.unsubscribe();
-    }
-    if (this.remoteSubscription) {
-      this.remoteSubscription.unsubscribe();
-    }
-    if (this.focusStateSubscription) {
-      this.focusStateSubscription.unsubscribe();
     }
     if (this.routeChangedSubscription) {
       this.routeChangedSubscription.unsubscribe();
@@ -122,10 +116,11 @@ export class ParticipantContentCarouselPageComponent
   }
 
   ngOnInit() {
-    this.focusStateSubscription = this.remoteService
-      .getFocusModeState()
-      .subscribe((isGuided) => {
-        this.isGuided = isGuided;
+    this.focusModeService
+      .getFocusModeEnabled()
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((focusModeEnabled) => {
+        this.focusModeEnabled = focusModeEnabled;
       });
     this.translateService.use(
       this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE)
@@ -160,39 +155,11 @@ export class ParticipantContentCarouselPageComponent
           this.reloadCurrentContent();
         }
       });
-    this.remoteSubscription = this.remoteService
+    this.focusModeService
       .getContentState()
+      .pipe(takeUntil(this.destroyed$))
       .subscribe((state) => {
-        if (this.contentGroup.id === state.contentGroupId) {
-          if (
-            !this.currentStep ||
-            this.contents[this.currentStep]?.id !== state.contentId
-          ) {
-            const newIndex = this.getIndexOfContentById(state.contentId);
-            if (newIndex > -1) {
-              if (this.started === this.status.NORMAL) {
-                this.stepper.onClick(newIndex);
-              } else {
-                this.showOverview = false;
-                this.initStepper(newIndex, 0);
-              }
-            } else {
-              this.lockedContentId = state.contentId;
-            }
-          }
-        } else {
-          this.contentgroupService
-            .getById(state.contentGroupId)
-            .subscribe((group) => {
-              this.router
-                .navigate(['p', 'room', this.shortId, 'group', group.name])
-                .then(() => {
-                  this.contentGroup = group;
-                  this.isReloading = true;
-                  this.getContents(null, state.contentId);
-                });
-            });
-        }
+        this.evaluateNewContentState(state);
       });
     this.routeChangedSubscription = this.routingService
       .getRouteChanges()
@@ -230,7 +197,7 @@ export class ParticipantContentCarouselPageComponent
       }
     } else {
       this.contentgroupService
-        .getById(state.contentGroupId)
+        .getById(state.contentGroupId, { roomId: this.contentGroup.roomId })
         .subscribe((group) => {
           this.router
             .navigate(['p', 'room', this.shortId, 'group', group.name])
@@ -323,7 +290,7 @@ export class ParticipantContentCarouselPageComponent
     if (contentIndex === 0 || contentIndex > 0) {
       this.initStepper(contentIndex);
     } else {
-      if (!this.isGuided) {
+      if (!this.focusModeEnabled) {
         this.getInitialStep();
       }
     }
@@ -427,7 +394,7 @@ export class ParticipantContentCarouselPageComponent
     );
     this.checkState();
     this.answers[this.getIndexOfContentById(answer.contentId)] = answer;
-    if (!this.isGuided) {
+    if (!this.focusModeEnabled) {
       if (this.started === this.status.NORMAL) {
         setTimeout(() => {
           if (index < this.contents.length - 1) {
@@ -497,7 +464,7 @@ export class ParticipantContentCarouselPageComponent
         changedEvent.hasPropertyChanged('lastPublishedIndex') ||
         changedEvent.hasPropertyChanged('published')
       ) {
-        if (this.isGuided) {
+        if (this.focusModeEnabled) {
           this.reloadContents();
         } else {
           if (!this.displaySnackBar) {

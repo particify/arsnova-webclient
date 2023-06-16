@@ -16,6 +16,7 @@ import { CommentPresentationState } from '@app/core/models/events/comment-presen
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
 import { CommentSettingsService } from '@app/core/services/http/comment-settings.service';
 import { CommentService } from '@app/core/services/http/comment.service';
+import { FocusModeService } from '@app/creator/_services/focus-mode.service';
 import { AnnounceService } from '@app/core/services/util/announce.service';
 import { EventService } from '@app/core/services/util/event.service';
 import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
@@ -25,7 +26,6 @@ import {
   NotificationService,
 } from '@app/core/services/util/notification.service';
 import { PresentationService } from '@app/core/services/util/presentation.service';
-import { RemoteService } from '@app/core/services/util/remote.service';
 import { RoutingService } from '@app/core/services/util/routing.service';
 import { WsCommentService } from '@app/core/services/websockets/ws-comment.service';
 import { TranslateService } from '@ngx-translate/core';
@@ -60,8 +60,8 @@ export class CommentsPageComponent
     protected location: Location,
     protected routingService: RoutingService,
     protected eventService: EventService,
-    protected remoteService: RemoteService,
-    private presentationService: PresentationService
+    private presentationService: PresentationService,
+    protected focusModeService: FocusModeService
   ) {
     super(
       commentService,
@@ -121,7 +121,7 @@ export class CommentsPageComponent
 
   afterCommentsLoadedHook(): void {
     if (this.comments.length === 0) {
-      this.remoteService.updateCommentStateChange('NO_COMMENTS_YET');
+      this.focusModeService.updateCommentState(this.room, 'NO_COMMENTS_YET');
     }
     this.subscribeToPresentationEvents();
   }
@@ -185,7 +185,7 @@ export class CommentsPageComponent
       comment.id
     );
     this.presentationService.updateCommentState(commentPresentationState);
-    this.remoteService.updateCommentStateChange(comment.id);
+    this.focusModeService.updateCommentState(this.room, comment.id);
     if (!this.isLoading) {
       this.scrollToComment(index);
       this.announceCommentPresentation(index);

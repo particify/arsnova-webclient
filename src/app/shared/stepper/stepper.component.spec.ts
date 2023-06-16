@@ -1,14 +1,16 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { StepperComponent } from './stepper.component';
-import { JsonTranslationLoader } from '@testing/test-helpers';
+import {
+  MockAnnounceService,
+  JsonTranslationLoader,
+} from '@testing/test-helpers';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { AnnounceService } from '@app/core/services/util/announce.service';
-import { MockAnnounceService } from '@testing/test-helpers';
 import { HotkeyService } from '@app/core/services/util/hotkey.service';
 import { Directionality } from '@angular/cdk/bidi';
 import { ChangeDetectorRef, NO_ERRORS_SCHEMA, ElementRef } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { RemoteService } from '@app/core/services/util/remote.service';
+import { FocusModeService } from '@app/creator/_services/focus-mode.service';
 
 describe('StepperComponent', () => {
   let component: StepperComponent;
@@ -23,7 +25,7 @@ describe('StepperComponent', () => {
     'unregisterHotkey',
   ]);
 
-  const mockRemoteService = jasmine.createSpyObj(['getFocusModeState']);
+  const mockFocusModeService = jasmine.createSpyObj(['getFocusModeEnabled']);
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
@@ -60,8 +62,8 @@ describe('StepperComponent', () => {
           useValue: elementRef,
         },
         {
-          provide: RemoteService,
-          useValue: mockRemoteService,
+          provide: FocusModeService,
+          useValue: mockFocusModeService,
         },
       ],
       schemas: [NO_ERRORS_SCHEMA],

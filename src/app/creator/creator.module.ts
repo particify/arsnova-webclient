@@ -45,6 +45,7 @@ import { DividerComponent } from '@app/standalone/divider/divider.component';
 import { RenderedTextComponent } from '@app/standalone/rendered-text/rendered-text.component';
 import { AnswerCountComponent } from '@app/standalone/answer-count/answer-count.component';
 import { FormattingToolbarComponent } from '@app/standalone/formatting-toolbar/formatting-toolbar.component';
+import { FocusModeService } from '@app/creator/_services/focus-mode.service';
 
 @NgModule({
   imports: [
@@ -104,6 +105,7 @@ import { FormattingToolbarComponent } from '@app/standalone/formatting-toolbar/f
   providers: [
     { provide: TRANSLATION_MODULE_NAME, useValue: 'creator' },
     DialogService,
+    FocusModeService,
   ],
 })
 export class CreatorModule {}

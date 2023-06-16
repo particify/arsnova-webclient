@@ -39,9 +39,9 @@ import { UserService } from '@app/core/services/http/user.service';
 import { ClientAuthentication } from '@app/core/models/client-authentication';
 import { AuthProvider } from '@app/core/models/auth-provider';
 import { RoutingService } from '@app/core/services/util/routing.service';
-import { RemoteService } from '@app/core/services/util/remote.service';
 import { ContentCarouselService } from '@app/core/services/util/content-carousel.service';
 import { ContentPublishService } from '@app/core/services/util/content-publish.service';
+import { FocusModeService } from '@app/participant/_services/focus-mode.service';
 
 describe('ParticipantContentCarouselPageComponent', () => {
   let component: ParticipantContentCarouselPageComponent;
@@ -113,12 +113,12 @@ describe('ParticipantContentCarouselPageComponent', () => {
   let translateService: TranslateService;
   const a11yIntroPipe = new A11yIntroPipe(translateService);
 
-  const mockRemoteService = jasmine.createSpyObj([
-    'getFocusModeState',
+  const mockFocusModeService = jasmine.createSpyObj([
+    'getFocusModeEnabled',
     'getContentState',
   ]);
-  mockRemoteService.getFocusModeState.and.returnValue(of(true));
-  mockRemoteService.getContentState.and.returnValue(of({}));
+  mockFocusModeService.getFocusModeEnabled.and.returnValue(of(true));
+  mockFocusModeService.getContentState.and.returnValue(of({}));
 
   const mockContentCarouselService = jasmine.createSpyObj([
     'setLastContentAnswered',
@@ -194,8 +194,8 @@ describe('ParticipantContentCarouselPageComponent', () => {
           useValue: mockRoutingService,
         },
         {
-          provide: RemoteService,
-          useValue: mockRemoteService,
+          provide: FocusModeService,
+          useValue: mockFocusModeService,
         },
         {
           provide: ContentCarouselService,

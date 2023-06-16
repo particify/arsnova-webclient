@@ -20,6 +20,8 @@ import { RoutingService } from '@app/core/services/util/routing.service';
 import { MockTranslateService } from '@testing/test-helpers';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { JsonTranslationLoader } from '@testing/test-helpers';
+import { Room } from '@app/core/models/room';
+import { RoomService } from '@app/core/services/http/room.service';
 
 // Stub for downstream template
 @Component({ selector: 'app-header', template: '' })
@@ -77,6 +79,11 @@ describe('AppComponent', () => {
 
     apiConfigService.getApiConfig$.and.returnValue(of(testApiConfig));
 
+    const roomService = jasmine.createSpyObj('RoomService', [
+      'getCurrentRoomStream',
+    ]);
+    roomService.getCurrentRoomStream.and.returnValue(of(new Room()));
+
     TestBed.configureTestingModule({
       declarations: [AppComponent, HeaderStubComponent, FooterStubComponent],
       providers: [
@@ -108,6 +115,10 @@ describe('AppComponent', () => {
         {
           provide: LanguageService,
           useValue: languageService,
+        },
+        {
+          provide: RoomService,
+          useValue: roomService,
         },
       ],
       imports: [

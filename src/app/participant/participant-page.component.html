@@ -6,7 +6,7 @@
         [extensionData]="{ isParticipant: true }"
       ></lib-extension-point>
       <mat-drawer
-        *ngIf="!room.focusModeEnabled"
+        *ngIf="!focusModeEnabled"
         mode="side"
         opened
         [disableClose]="true"
@@ -19,7 +19,7 @@
         fxLayout="column"
         fxLayoutAlign="space-between"
         id="routing-content"
-        [ngClass]="{ 'full-width': room.focusModeEnabled }"
+        [ngClass]="{ 'no-navigation': focusModeEnabled }"
       >
         <div class="routing-container">
           <router-outlet></router-outlet>

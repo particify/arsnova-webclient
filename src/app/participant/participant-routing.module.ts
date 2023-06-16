@@ -31,19 +31,21 @@ const routes: Routes = [
       import('./room-overview/room-overview.module').then(
         (m) => m.RoomOverviewModule
       ),
-    title: 'room',
     data: {
       parentRoute: ParentRoute.USER,
+      feature: RoutingFeature.OVERVIEW,
     },
+    title: 'room',
   },
   {
     path: 'comments',
     loadChildren: () =>
       import('./comments/comments.module').then((m) => m.CommentsModule),
-    title: 'comments',
     data: {
       parentRoute: ParentRoute.ROOM,
+      feature: RoutingFeature.COMMENTS,
     },
+    title: 'comments',
   },
   {
     path: 'feedback',
@@ -51,10 +53,11 @@ const routes: Routes = [
       import('./live-feedback/live-feedback.module').then(
         (m) => m.LiveFeedbackModule
       ),
-    title: 'live-feedback',
     data: {
       parentRoute: ParentRoute.ROOM,
+      feature: RoutingFeature.FEEDBACK,
     },
+    title: 'live-feedback',
   },
   {
     path: 'series/:seriesName',

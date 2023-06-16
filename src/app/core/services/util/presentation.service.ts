@@ -14,6 +14,7 @@ const MAX_SCALE = 1.9;
 @Injectable()
 export class PresentationService {
   private currentGroup$ = new Subject<string>();
+  private feedbackStarted$ = new Subject<boolean>();
   private contentState$ = new BehaviorSubject<ContentPresentationState>(null);
   private conmmentState$ = new BehaviorSubject<CommentPresentationState>(null);
   private multipleRoundState$ = new BehaviorSubject<boolean>(null);
@@ -103,5 +104,13 @@ export class PresentationService {
 
   getRoundStateChanges(): Observable<RoundState> {
     return this.roundStateChanged;
+  }
+
+  getFeedbackStarted(): Observable<boolean> {
+    return this.feedbackStarted$;
+  }
+
+  updateFeedbackStarted(started: boolean) {
+    this.feedbackStarted$.next(started);
   }
 }

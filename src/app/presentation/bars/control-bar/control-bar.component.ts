@@ -39,7 +39,6 @@ import {
   NotificationService,
 } from '@app/core/services/util/notification.service';
 import { RoomService } from '@app/core/services/http/room.service';
-import { RemoteService } from '@app/core/services/util/remote.service';
 import { CommentSettingsService } from '@app/core/services/http/comment-settings.service';
 import { ContentPublishService } from '@app/core/services/util/content-publish.service';
 import { CommentSort } from '@app/core/models/comment-sort.enum';
@@ -164,7 +163,6 @@ export class ControlBarComponent
     private contentService: ContentService,
     private dialogService: DialogService,
     private notificationService: NotificationService,
-    private remoteService: RemoteService,
     private contentPublishService: ContentPublishService,
     private presentationService: PresentationService
   ) {
@@ -295,11 +293,11 @@ export class ControlBarComponent
 
   subscribeToEvents() {
     this.barItems.map((b) => (b.key = this.getFeatureKey(b.name)));
-    this.remoteService
-      .getFeedbackStateChange()
+    this.presentationService
+      .getFeedbackStarted()
       .pipe(takeUntil(this.destroyed$))
-      .subscribe((state) => {
-        this.surveyStarted = state.started;
+      .subscribe((started) => {
+        this.surveyStarted = started;
         this.setSurveyState();
       });
     this.presentationService

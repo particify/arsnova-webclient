@@ -22,7 +22,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
 import { Location } from '@angular/common';
 import { HotkeyService } from '@app/core/services/util/hotkey.service';
-import { RemoteService } from '@app/core/services/util/remote.service';
 import { Room } from '@app/core/models/room';
 import { RouterTestingModule } from '@angular/router/testing';
 import { SpyLocation } from '@angular/common/testing';
@@ -31,6 +30,7 @@ import { AuthenticationService } from '@app/core/services/http/authentication.se
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatDialog } from '@angular/material/dialog';
 import { PresentationService } from '@app/core/services/util/presentation.service';
+import { FocusModeService } from '@app/creator/_services/focus-mode.service';
 
 describe('CommentsPageComponent', () => {
   let component: CommentsPageComponent;
@@ -71,7 +71,7 @@ describe('CommentsPageComponent', () => {
   };
   const activatedRouteStub = new ActivatedRouteStub(null, data);
 
-  const mockRemoteService = jasmine.createSpyObj(['getCommentState']);
+  const mockFocusModeService = jasmine.createSpyObj(['updateCommentState']);
 
   const mockPresentationService = jasmine.createSpyObj('PresentationService', [
     'getCommentSortChanges',
@@ -142,8 +142,8 @@ describe('CommentsPageComponent', () => {
           useValue: mockHotkeyService,
         },
         {
-          provide: RemoteService,
-          useValue: mockRemoteService,
+          provide: FocusModeService,
+          useValue: mockFocusModeService,
         },
         {
           provide: AuthenticationService,

@@ -11,6 +11,7 @@ import {
   ActivatedRouteStub,
   MockGlobalStorageService,
   MockRouter,
+  MockNotificationService,
 } from '@testing/test-helpers';
 import { of } from 'rxjs';
 import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
@@ -19,6 +20,7 @@ import { Room } from '@app/core/models/room';
 import { RoomStatsService } from '@app/core/services/http/room-stats.service';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { PresentationService } from '@app/core/services/util/presentation.service';
+import { NotificationService } from '@app/core/services/util/notification.service';
 
 describe('PresentationComponent', () => {
   let component: PresentationComponent;
@@ -52,6 +54,7 @@ describe('PresentationComponent', () => {
     room: room,
   };
   const activatedRouteStub = new ActivatedRouteStub(null, data, snapshot);
+  const focusModeService = jasmine.createSpyObj('FocusModeService', ['init']);
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
@@ -89,6 +92,10 @@ describe('PresentationComponent', () => {
         {
           provide: PresentationService,
           useValue: mockPresentationService,
+        },
+        {
+          provide: NotificationService,
+          useClass: MockNotificationService,
         },
       ],
       schemas: [NO_ERRORS_SCHEMA],

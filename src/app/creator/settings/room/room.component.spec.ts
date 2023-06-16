@@ -23,6 +23,7 @@ import { GlobalStorageService } from '@app/core/services/util/global-storage.ser
 import { EventService } from '@app/core/services/util/event.service';
 import { FormattingService } from '@app/core/services/http/formatting.service';
 import { UserRole } from '@app/core/models/user-roles.enum';
+import { Room } from '@app/core/models/room';
 
 @Injectable()
 class MockRoomService {}
@@ -98,6 +99,8 @@ describe('RoomComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(RoomComponent);
     component = fixture.componentInstance;
+    component.editRoom = new Room();
+    component.name = 'Test room';
     fixture.detectChanges();
   });
 

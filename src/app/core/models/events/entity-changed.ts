@@ -1,14 +1,9 @@
 import { Entity } from '@app/core/models/entity';
+import { EntityChangedPayload } from '@app/core/models/events/entity-changed-payload';
 
 export class EntityChanged<T extends Entity> {
   type: string;
-  payload: {
-    entityType: string;
-    id: string;
-    roomId: string;
-    entity: T;
-    changedProperties: string[];
-  };
+  payload: EntityChangedPayload<T>;
 
   constructor(entityType: string, entity: T, changedProperties: string[]) {
     const roomId = entity['roomId'] ?? entity.id;

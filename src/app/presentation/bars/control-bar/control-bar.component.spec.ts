@@ -35,7 +35,6 @@ import { DialogService } from '@app/core/services/util/dialog.service';
 import { RoomStatsService } from '@app/core/services/http/room-stats.service';
 import { ContentGroup } from '@app/core/models/content-group';
 import { RoomService } from '@app/core/services/http/room.service';
-import { RemoteService } from '@app/core/services/util/remote.service';
 import { CommentSettingsService } from '@app/core/services/http/comment-settings.service';
 import { ContentPublishService } from '@app/core/services/util/content-publish.service';
 import { PresentationService } from '@app/core/services/util/presentation.service';
@@ -128,7 +127,9 @@ describe('ControlBarComponent', () => {
   mockRoomService.getCurrentRoomsMessageStream.and.returnValue(of(message));
   mockRoomService.getRoomSummaries.and.returnValue(of(summaries));
 
-  const mockRemoteService = jasmine.createSpyObj(['getFeedbackState']);
+  const mockPresentationService = jasmine.createSpyObj('PresentationService', [
+    'getFeedbackStarted',
+  ]);
 
   const mockCommentSettingsService = jasmine.createSpyObj([
     'getSettingsStream',
@@ -225,8 +226,8 @@ describe('ControlBarComponent', () => {
           useValue: mockRoomService,
         },
         {
-          provide: RemoteService,
-          useValue: mockRemoteService,
+          provide: PresentationService,
+          useValue: mockPresentationService,
         },
         {
           provide: CommentSettingsService,

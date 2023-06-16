@@ -76,7 +76,7 @@
       [addButtonDisabled]="readonly"
       [showScrollButton]="scrollExtended && scrollActive"
       [showScrollToNewPostsButton]="scrollExtended && unreadCommentCount > 0"
-      [navBarExists]="!room.focusModeEnabled"
+      [navBarExists]="!focusModeEnabled"
       (scrollTopClicked)="scrollTop(true)"
       (loadAndScrollClicked)="loadAndScroll()"
       (createClicked)="openCreateDialog()"

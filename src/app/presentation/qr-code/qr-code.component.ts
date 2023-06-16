@@ -6,6 +6,7 @@ import { ApiConfigService } from '@app/core/services/http/api-config.service';
 import { ActivatedRoute } from '@angular/router';
 import { RoutingService } from '@app/core/services/util/routing.service';
 import { RoomService } from '@app/core/services/http/room.service';
+import { FocusModeService } from '@app/creator/_services/focus-mode.service';
 
 @Component({
   selector: 'app-qr-code',
@@ -32,7 +33,8 @@ export class QrCodeComponent implements OnInit, OnDestroy {
     private apiConfigService: ApiConfigService,
     private route: ActivatedRoute,
     private routingService: RoutingService,
-    private roomService: RoomService
+    private roomService: RoomService,
+    private focusModeService: FocusModeService
   ) {}
 
   ngOnInit(): void {
@@ -50,6 +52,7 @@ export class QrCodeComponent implements OnInit, OnDestroy {
     this.roomService.getCurrentRoomsMessageStream().subscribe((msg) => {
       this.userCount = JSON.parse(msg.body).UserCountChanged.userCount;
     });
+    this.focusModeService.updateOverviewState(room);
   }
 
   initQrCode() {

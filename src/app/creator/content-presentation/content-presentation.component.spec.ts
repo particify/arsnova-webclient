@@ -38,10 +38,10 @@ import { AuthProvider } from '@app/core/models/auth-provider';
 import { ClientAuthentication } from '@app/core/models/client-authentication';
 import { UserSettings } from '@app/core/models/user-settings';
 import { StepperComponent } from '@app/shared/stepper/stepper.component';
-import { RemoteService } from '@app/core/services/util/remote.service';
 import { ContentPublishService } from '@app/core/services/util/content-publish.service';
 import { PublishContentComponent } from '@app/creator/_dialogs/publish-content/publish-content.component';
 import { ContentPublishActionType } from '@app/core/models/content-publish-action.enum';
+import { FocusModeService } from '@app/creator/_services/focus-mode.service';
 
 @Injectable()
 class MockContentService {
@@ -130,7 +130,7 @@ describe('ContentPresentationComponent', () => {
       new ClientAuthentication('1234', 'a@b.cd', AuthProvider.ARSNOVA, 'token')
     );
 
-  const mockRemoteService = jasmine.createSpyObj(['getContentState']);
+  const mockFocusModeService = jasmine.createSpyObj(['getContentState']);
 
   const dialogService = jasmine.createSpyObj('DialogService', ['openDialog']);
 
@@ -187,8 +187,8 @@ describe('ContentPresentationComponent', () => {
           useValue: mockUserService,
         },
         {
-          provide: RemoteService,
-          useValue: mockRemoteService,
+          provide: FocusModeService,
+          useValue: mockFocusModeService,
         },
         {
           provide: ContentPublishService,

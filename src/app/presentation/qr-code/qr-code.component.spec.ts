@@ -11,6 +11,7 @@ import { RoutingService } from '@app/core/services/util/routing.service';
 import { ActivatedRouteStub, MockThemeService } from '@testing/test-helpers';
 import { RoomService } from '@app/core/services/http/room.service';
 import { RoomSummary, RoomSummaryStats } from '@app/core/models/room-summary';
+import { FocusModeService } from '@app/creator/_services/focus-mode.service';
 
 describe('QrCodeComponent', () => {
   let component: QrCodeComponent;
@@ -88,6 +89,9 @@ describe('QrCodeComponent', () => {
   mockRoomService.getCurrentRoomsMessageStream.and.returnValue(
     of(currentRoomMessage)
   );
+  const mockFocusModeService = jasmine.createSpyObj('FocusModeSercice', [
+    'updateOverviewState',
+  ]);
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
@@ -116,6 +120,10 @@ describe('QrCodeComponent', () => {
         {
           provide: RoomService,
           useValue: mockRoomService,
+        },
+        {
+          provide: FocusModeService,
+          useValue: mockFocusModeService,
         },
       ],
       schemas: [NO_ERRORS_SCHEMA],
