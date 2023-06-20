@@ -14,7 +14,7 @@
     ></app-room-overview-header>
     <div fxLayout="column" fxLayoutAlign="center">
       <div
-        *ngIf="commentsEnabled || surveyEnabled"
+        *ngIf="(commentsEnabled || surveyEnabled) && !focusModeEnabled"
         class="action-button-container"
         fxLayout="row"
         fxLayoutAlign="center"
@@ -72,7 +72,7 @@
         {{ 'room-page.a11y-no-content-groups' | translate }}
       </p>
     </ng-template>
-    <div *ngIf="room && contentGroups">
+    <div *ngIf="room && contentGroups && !focusModeEnabled">
       <app-content-groups
         *ngFor="let contentGroup of contentGroups"
         [contentGroupName]="contentGroup.name"
@@ -80,6 +80,13 @@
         [role]="role"
         [shortId]="room.shortId"
       ></app-content-groups>
+    </div>
+    <div fxLayout="column" *ngIf="focusModeEnabled">
+      <app-hint
+        style="margin-top: 1em"
+        text="room-page.focus-mode-enabled"
+        [type]="HintType.INFO"
+      ></app-hint>
     </div>
 
     <lib-extension-point
