@@ -8,6 +8,10 @@ import { RoomStatsService } from '@app/core/services/http/room-stats.service';
 import { TranslateService } from '@ngx-translate/core';
 import { RoutingFeature } from '@app/core/models/routing-feature.enum';
 import { PresentationService } from '@app/core/services/util/presentation.service';
+import {
+  AdvancedSnackBarTypes,
+  NotificationService,
+} from '@app/core/services/util/notification.service';
 
 @Component({
   selector: 'app-presentation',
@@ -26,7 +30,8 @@ export class PresentationComponent implements OnInit, OnDestroy {
     private globalStorageService: GlobalStorageService,
     private roomStatsService: RoomStatsService,
     private translateService: TranslateService,
-    private presentationService: PresentationService
+    private presentationService: PresentationService,
+    private notificationService: NotificationService
   ) {}
 
   ngOnInit(): void {
@@ -55,6 +60,16 @@ export class PresentationComponent implements OnInit, OnDestroy {
               }
             });
         }
+      }
+      if (data.room.focusModeEnabled) {
+        this.translateService
+          .get('presentation.focus-mode-enabled-info')
+          .subscribe((msg) => {
+            this.notificationService.showAdvanced(
+              msg,
+              AdvancedSnackBarTypes.INFO
+            );
+          });
       }
       setTimeout(() => {
         document.getElementById('welcome-message').focus();

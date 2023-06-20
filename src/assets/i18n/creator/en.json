@@ -612,7 +612,8 @@
     "a11y-leaved-fullscreen": "You have left fullscreen mode.",
     "a11y-present": "Go into presentation mode",
     "presentation-mode": "Presentation mode",
-    "present": "Go into presentation mode"
+    "present": "Go into presentation mode",
+    "focus-mode-enabled-info": "You guide the participants through the room."
   },
   "option-template": {
     "agreement": "Agreement",
