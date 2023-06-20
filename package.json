@@ -62,7 +62,7 @@
     "@angular-eslint/template-parser": "16.0.3",
     "@angular/compiler-cli": "16.0.6",
     "@angular/language-service": "16.0.6",
-    "@types/jasmine": "4.3.3",
+    "@types/jasmine": "4.3.4",
     "@types/jasminewd2": "2.0.10",
     "@types/node": "18.16.18",
     "@types/wordcloud": "1.2.0",
