@@ -313,5 +313,8 @@
     "accessibility": "Accessibility",
     "powered-by": "Audience Response System by ",
     "by": "powered by "
+  },
+  "focus-mode": {
+    "stopped": "You can now move freely around the room."
   }
 }

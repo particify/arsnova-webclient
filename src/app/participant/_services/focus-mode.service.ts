@@ -15,6 +15,11 @@ import { EventService } from '@app/core/services/util/event.service';
 import { BehaviorSubject, Subject, filter, map, takeUntil } from 'rxjs';
 import { EntityChanged } from '@app/core/models/events/entity-changed';
 import { EntityChangedPayload } from '@app/core/models/events/entity-changed-payload';
+import { TranslateService } from '@ngx-translate/core';
+import {
+  AdvancedSnackBarTypes,
+  NotificationService,
+} from '@app/core/services/util/notification.service';
 
 // Delay for event sending after switching between features
 const DELAY_AFTER_NAVIGATION = 500;
@@ -38,7 +43,9 @@ export class FocusModeService implements OnDestroy {
     private http: HttpClient,
     private router: Router,
     private routingService: RoutingService,
-    private eventService: EventService
+    private eventService: EventService,
+    private translateService: TranslateService,
+    private notificationService: NotificationService
   ) {}
 
   ngOnDestroy(): void {
@@ -74,6 +81,12 @@ export class FocusModeService implements OnDestroy {
           this.focusModeEnabled$.next(focusModeEnabled);
           if (focusModeEnabled) {
             this.evaluateNewState();
+          } else {
+            const msg = this.translateService.instant('focus-mode.stopped');
+            this.notificationService.showAdvanced(
+              msg,
+              AdvancedSnackBarTypes.INFO
+            );
           }
         }
       });

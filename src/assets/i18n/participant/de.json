@@ -312,5 +312,8 @@
     "accessibility": "Barrierefreiheit",
     "powered-by": "Audience Response System by ",
     "by": "powered by "
+  },
+  "focus-mode": {
+    "stopped": "Du kannst dich jetzt selbst im Raum bewegen."
   }
 }
