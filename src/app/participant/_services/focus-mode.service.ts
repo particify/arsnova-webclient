@@ -20,6 +20,7 @@ import {
   AdvancedSnackBarTypes,
   NotificationService,
 } from '@app/core/services/util/notification.service';
+import { FeatureFlagService } from '@app/core/services/util/feature-flag.service';
 
 // Delay for event sending after switching between features
 const DELAY_AFTER_NAVIGATION = 500;
@@ -45,7 +46,8 @@ export class FocusModeService implements OnDestroy {
     private routingService: RoutingService,
     private eventService: EventService,
     private translateService: TranslateService,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private featureFlagService: FeatureFlagService
   ) {}
 
   ngOnDestroy(): void {
@@ -54,6 +56,9 @@ export class FocusModeService implements OnDestroy {
   }
 
   init(room: Room, currentFeature: RoutingFeature) {
+    if (!this.featureFlagService.isEnabled('FOCUS_MODE')) {
+      return;
+    }
     this.currentRoom = room;
     this.focusModeEnabled$.next(room.focusModeEnabled);
     this.currentFeature = currentFeature;

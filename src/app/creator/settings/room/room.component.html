@@ -79,6 +79,7 @@
     </div>
   </div>
   <app-settings-slide-toggle
+    *appFeatureFlag="'FOCUS_MODE'"
     label="settings.focus-mode"
     [isChecked]="focusModeEnabled"
     (toggleEvent)="toggleFocusMode($event)"

@@ -6,10 +6,14 @@ import { FocusEvent } from '@app/core/models/events/remote/focus-event';
 import { RoutingFeature } from '@app/core/models/routing-feature.enum';
 import { HttpClient } from '@angular/common/http';
 import { Room } from '@app/core/models/room';
+import { FeatureFlagService } from '@app/core/services/util/feature-flag.service';
 
 @Injectable()
 export class FocusModeService {
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private featureFlagService: FeatureFlagService
+  ) {}
 
   updateContentState(
     room: Room,
@@ -52,7 +56,10 @@ export class FocusModeService {
     feature: RoutingFeature,
     state?: ContentFocusState | CommentFocusState | FeedbackFocusState
   ) {
-    if (room.focusModeEnabled) {
+    if (
+      this.featureFlagService.isEnabled('FOCUS_MODE') &&
+      room.focusModeEnabled
+    ) {
       const newState = new FocusEvent(this.getFeatureKey(feature), state);
       this.sendState(room.id, newState);
     }
