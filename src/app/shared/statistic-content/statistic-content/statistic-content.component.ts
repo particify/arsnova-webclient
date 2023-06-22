@@ -151,9 +151,12 @@ export class StatisticContentComponent implements OnInit {
 
   initContentTypeObjects() {
     if (
-      [ContentType.CHOICE, ContentType.BINARY, ContentType.SORT].includes(
-        this.content.format
-      )
+      [
+        ContentType.CHOICE,
+        ContentType.BINARY,
+        ContentType.SORT,
+        ContentType.SCALE,
+      ].includes(this.content.format)
     ) {
       this.choiceContent = this.content as ContentChoice;
     } else if (this.content.format === ContentType.PRIORITIZATION) {
