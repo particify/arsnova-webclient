@@ -5215,7 +5215,7 @@ __metadata:
     eslint: 8.43.0
     eslint-import-resolver-typescript: 3.5.5
     eslint-plugin-import: 2.27.5
-    eslint-plugin-jsdoc: 46.3.0
+    eslint-plugin-jsdoc: 46.4.0
     eslint-plugin-prefer-arrow: 1.2.3
     is-docker: 3.0.0
     jasmine-core: 5.0.1
@@ -7258,9 +7258,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-jsdoc@npm:46.3.0":
-  version: 46.3.0
-  resolution: "eslint-plugin-jsdoc@npm:46.3.0"
+"eslint-plugin-jsdoc@npm:46.4.0":
+  version: 46.4.0
+  resolution: "eslint-plugin-jsdoc@npm:46.4.0"
   dependencies:
     "@es-joy/jsdoccomment": ~0.39.4
     are-docs-informative: ^0.0.2
@@ -7273,7 +7273,7 @@ __metadata:
     spdx-expression-parse: ^3.0.1
   peerDependencies:
     eslint: ^7.0.0 || ^8.0.0
-  checksum: 1c59aef78a20d273a3b759498bca87da85ff4a495110a6b28035aa5572962856e651d51887df2ed7873b3c8f967ac27fcf742ab5ef3a95cb24691774a33dba26
+  checksum: fd24c8d783001b53e4b09b44afc39f67be0827a4309694bc3b346d17ef7498ea3d4858bdb85475c58721e0504609a66ca3aabc7245579c83c113db915a8d25f0
   languageName: node
   linkType: hard
 
