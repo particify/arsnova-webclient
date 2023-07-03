@@ -36,8 +36,10 @@ export class CustomPageTitleStrategy extends TitleStrategy {
     }
     switch (this.title) {
       case 'home':
-        // Use home title
-        this.setDocumentTitle(this.homeTitle, false);
+        // Use home title if not already set dynamically from elsewhere
+        if (!document.title.includes(this.titleSuffix)) {
+          this.setDocumentTitle(this.homeTitle, false);
+        }
         break;
       case 'room':
         // Use room name as title
@@ -77,7 +79,7 @@ export class CustomPageTitleStrategy extends TitleStrategy {
 
   private setDocumentTitle(title: string, addSuffix = true) {
     if (addSuffix) {
-      title += this.titleSuffix;
+      title += ' | ' + this.titleSuffix;
     }
     this.titleService.setTitle(title);
   }
@@ -85,8 +87,7 @@ export class CustomPageTitleStrategy extends TitleStrategy {
   private setHomeTitle() {
     if (!this.homeTitle) {
       this.homeTitle = document.title;
-      this.titleSuffix =
-        ' | ' + (this.homeTitle.split('|')[0] || this.homeTitle);
+      this.titleSuffix = this.homeTitle.split('|')[0] || this.homeTitle;
     }
   }
 }
