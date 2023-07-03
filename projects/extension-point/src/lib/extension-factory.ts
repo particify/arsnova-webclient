@@ -9,6 +9,7 @@ import {
 } from '@angular/core';
 import { environment } from '@environments/environment';
 import { Extension } from './extension';
+import { FeatureFlagService } from '@app/core/services/util/feature-flag.service';
 
 @Injectable({
   providedIn: 'root',
@@ -18,9 +19,13 @@ export class ExtensionFactory {
 
   constructor(
     @Inject(Extension) @Optional() extensions: Extension[],
-    private resolver: ComponentFactoryResolver
+    private resolver: ComponentFactoryResolver,
+    private featureFlagService: FeatureFlagService
   ) {
     if (extensions) {
+      extensions = extensions.filter((e) =>
+        featureFlagService.isEnabled('extension-' + e.getId())
+      );
       extensions.forEach((e) => {
         if (!environment.production) {
           console.log(`Extension registered: ${e.getId()}`);
