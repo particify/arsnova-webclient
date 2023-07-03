@@ -37,6 +37,7 @@
     "@ngx-translate/http-loader": "8.0.0",
     "@stomp/rx-stomp": "2.0.0",
     "@stomp/stompjs": "7.0.0",
+    "angular-material-css-vars": "5.0.2",
     "backoff-rxjs": "7.0.0",
     "chart.js": "4.3.0",
     "chartjs-plugin-datalabels": "2.2.0",

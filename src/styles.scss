@@ -1,14 +1,23 @@
+@use 'angular-material-css-vars' as mat-css-vars;
 @use '@angular/material' as mat;
+@use 'app/core/theme/app-theme';
 @import 'app/core/theme/dark-theme/dark-theme';
 @import 'app/core/theme/light-theme/light-theme';
 @import 'variables';
 @import 'util';
-@include mat.core;
 
-@include mat.all-component-themes($light-theme);
+@include mat-css-vars.init-material-css-vars(
+    $typography-config: $custom-typography
+  )
+  using($light-theme) {
+  .theme-light {
+    @include app-theme.theme($light-theme);
+  }
+}
 
 .theme-dark {
   @include mat.all-component-colors($dark-theme);
+  @include app-theme.theme($dark-theme);
 }
 
 html,

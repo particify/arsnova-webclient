@@ -1,5 +1,4 @@
 @use '@angular/material' as mat;
-@use '../app-theme';
 
 $dark-primary: mat.define-palette(mat.$green-palette, 500);
 $dark-accent: mat.define-palette(mat.$amber-palette, 400);
@@ -16,8 +15,6 @@ $dark-theme: mat.define-dark-theme(
 );
 
 .theme-dark {
-  @include app-theme.theme($dark-theme);
-
   --primary-logo: #825df6;
   --secondary-logo: #4caf50;
   --logo-font: #ddd;
