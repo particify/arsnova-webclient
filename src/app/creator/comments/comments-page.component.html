@@ -7,20 +7,14 @@
         [selectedIndex]="isModeration ? 1 : 0"
       >
         <mat-tab
-          *ngIf="!isArchive"
           label="{{ 'comment-list.public-list' | translate }} {{
             publicCounter | counterBraces
           }}"
         ></mat-tab>
         <mat-tab
-          *ngIf="!isArchive"
           label="{{ 'comment-list.moderation' | translate }} {{
             moderationCounter | counterBraces
           }}"
-        ></mat-tab>
-        <mat-tab
-          *ngIf="isArchive"
-          label="{{ 'comment-list.archive' | translate }}"
         ></mat-tab>
       </mat-tab-group>
       <app-comment-list-bar
@@ -82,7 +76,6 @@
         *ngFor="let comment of displayComments"
         [comment]="comment"
         [isEditor]="true"
-        [archived]="isArchive"
         [isModeration]="isModeration"
         [referenceEvent]="referenceEvent.asObservable()"
         [isNew]="comment.id === newestComment.id"
@@ -94,16 +87,12 @@
     </div>
     <app-comment-list-add-button
       [showButton]="
-        comments.length < 3 &&
-        !isLoading &&
-        !isModeration &&
-        !isArchive &&
-        !disabled
+        comments.length < 3 && !isLoading && !isModeration && !disabled
       "
       (buttonClicked)="openCreateDialog()"
     ></app-comment-list-add-button>
     <app-comment-list-floating-buttons
-      [showAddButton]="!isArchive && !isModeration && !disabled"
+      [showAddButton]="!isModeration && !disabled"
       [addButtonDisabled]="readonly"
       [showScrollButton]="scrollExtended && scrollActive"
       [showScrollToNewPostsButton]="scrollExtended && unreadCommentCount > 0"
