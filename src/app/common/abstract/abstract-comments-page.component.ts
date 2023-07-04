@@ -359,16 +359,6 @@ export class AbstractCommentsPageComponent {
     }
   }
 
-  handleSettings(settings: CommentSettings) {
-    if (settings.disabled !== this.disabled) {
-      this.disabled = settings.disabled;
-    }
-    if (settings.readonly !== this.readonly) {
-      this.readonly = settings.readonly;
-      this.showReadonlyStateNotification();
-    }
-  }
-
   handleCommentPatch(changes: object, id: string, index: number): boolean {
     for (const [key, value] of Object.entries(changes)) {
       if (key === CommentFilter.ACK) {
