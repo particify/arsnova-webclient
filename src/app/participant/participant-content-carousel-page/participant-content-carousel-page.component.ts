@@ -392,7 +392,6 @@ export class ParticipantContentCarouselPageComponent
     this.answers[this.getIndexOfContentById(answer.contentId)] = answer;
     if (!this.isGuided) {
       if (this.started === this.status.NORMAL) {
-        const wait = this.contents[index].state.answersPublished ? 1000 : 400;
         setTimeout(() => {
           if (index < this.contents.length - 1) {
             this.nextContent();
@@ -402,7 +401,7 @@ export class ParticipantContentCarouselPageComponent
           } else {
             this.goToOverview();
           }
-        }, wait);
+        }, 1000);
       }
     }
   }
