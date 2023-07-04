@@ -10,6 +10,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AbstractCommentsPageComponent } from '@app/common/abstract/abstract-comments-page.component';
 import { Comment } from '@app/core/models/comment';
+import { CommentSettings } from '@app/core/models/comment-settings';
 import { CommentSort } from '@app/core/models/comment-sort.enum';
 import { PresentationEvent } from '@app/core/models/events/presentation-events.enum';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
@@ -19,7 +20,10 @@ import { AnnounceService } from '@app/core/services/util/announce.service';
 import { EventService } from '@app/core/services/util/event.service';
 import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
 import { HotkeyService } from '@app/core/services/util/hotkey.service';
-import { NotificationService } from '@app/core/services/util/notification.service';
+import {
+  AdvancedSnackBarTypes,
+  NotificationService,
+} from '@app/core/services/util/notification.service';
 import { RemoteService } from '@app/core/services/util/remote.service';
 import { RoutingService } from '@app/core/services/util/routing.service';
 import { WsCommentService } from '@app/core/services/websockets/ws-comment.service';
@@ -238,5 +242,43 @@ export class CommentsPageComponent
       const prevComment = this.displayComments[index - 1];
       this.updateCurrentComment(prevComment);
     }
+  }
+
+  activateComments() {
+    const settings = new CommentSettings(
+      this.roomId,
+      this.directSend,
+      this.fileUploadEnabled,
+      false,
+      this.readonly
+    );
+    this.commentSettingsService
+      .update(settings)
+      .subscribe((updatedSettings) => {
+        this.disabled = updatedSettings.disabled;
+        this.isLoading = true;
+        this.init(true);
+        const msg = this.translateService.instant(
+          'comment-list.q-and-a-enabled'
+        );
+        this.notificationService.showAdvanced(
+          msg,
+          AdvancedSnackBarTypes.SUCCESS
+        );
+      });
+  }
+
+  toggleReadonly() {
+    const commentSettings = new CommentSettings(
+      this.roomId,
+      this.directSend,
+      this.fileUploadEnabled,
+      this.disabled,
+      !this.readonly
+    );
+    this.commentSettingsService.update(commentSettings).subscribe(() => {
+      this.readonly = !this.readonly;
+      this.showReadonlyStateNotification();
+    });
   }
 }

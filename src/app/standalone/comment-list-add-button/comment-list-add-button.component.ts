@@ -21,7 +21,7 @@ import { ExtensionPointModule } from '@projects/extension-point/src/lib/extensio
   styleUrls: ['./comment-list-add-button.component.scss'],
 })
 export class CommentListAddButtonComponent {
-  @Input() showButton = false;
+  @Input() disabled = false;
 
   @Output() buttonClicked = new EventEmitter<void>();
 

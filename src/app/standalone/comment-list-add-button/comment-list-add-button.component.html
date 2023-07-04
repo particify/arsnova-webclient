@@ -1,5 +1,6 @@
-<div fxLayout="row" fxLayoutAlign="center" *ngIf="showButton">
+<div fxLayout="row" fxLayoutAlign="center">
   <button
+    [disabled]="disabled"
     id="add-comment-button"
     mat-stroked-button
     color="primary"
