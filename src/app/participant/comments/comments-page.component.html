@@ -1,6 +1,11 @@
 <div fxLayout="row" fxLayoutAlign="center">
   <div class="page-container">
-    <div fxLayout="row" fxLayoutAlign="center center" class="header-container">
+    <div
+      *ngIf="!disabled"
+      fxLayout="row"
+      fxLayoutAlign="center center"
+      class="header-container"
+    >
       <app-comment-list-bar
         [scroll]="scroll"
         [scrollActive]="scrollActive"
@@ -12,7 +17,7 @@
             : commentsFilteredByTime.length + unreadCommentCount
         "
         [showAlways]="true"
-        [isAddButtonDisabled]="readonly || disabled"
+        [isAddButtonDisabled]="readonly"
         [currentFilter]="currentFilter"
         [currentSort]="currentSort"
         [period]="period"
@@ -33,8 +38,12 @@
         (!hideCommentsList && commentsFilteredByTime.length < 1)
       "
     ></app-comment-list-hint>
+    <app-comment-settings-hint
+      [disabled]="disabled"
+      [readonly]="readonly"
+    ></app-comment-settings-hint>
     <div
-      *ngIf="!isLoading"
+      *ngIf="!isLoading && !disabled"
       class="comments-container"
       tabindex="-1"
       appHotkey="7"
