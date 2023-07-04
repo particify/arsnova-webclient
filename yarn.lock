@@ -2749,10 +2749,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@fontsource/roboto@npm:5.0.3":
-  version: 5.0.3
-  resolution: "@fontsource/roboto@npm:5.0.3"
-  checksum: 70302e1165cb1acb409e0eae92d6772e98467019b96f80be1034a4a79853af0f49d60826de68e0624f5b028a327830bf1ccb1d9f48dd695d3302816679416228
+"@fontsource/roboto@npm:5.0.4":
+  version: 5.0.4
+  resolution: "@fontsource/roboto@npm:5.0.4"
+  checksum: e86f6b92df4d79c1917b50ae75d431e770970f56ae203e3f579630a77e78985b23f179a5292284657ada8a5da071f3e2c539cf36d4b50f4abac13289860879f9
   languageName: node
   linkType: hard
 
@@ -5217,7 +5217,7 @@ __metadata:
     "@angular/platform-browser-dynamic": 16.0.6
     "@angular/router": 16.0.6
     "@angular/service-worker": 16.0.6
-    "@fontsource/roboto": 5.0.3
+    "@fontsource/roboto": 5.0.4
     "@ngx-translate/core": 15.0.0
     "@ngx-translate/http-loader": 8.0.0
     "@stomp/rx-stomp": 2.0.0
