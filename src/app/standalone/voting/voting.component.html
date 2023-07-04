@@ -7,7 +7,10 @@
   <button
     mat-icon-button
     (click)="vote(1)"
-    [matTooltip]="'comment-page.vote-up' | translate"
+    [matTooltip]="
+      (hasVoted === 1 ? 'comment-page.withdraw-upvote' : 'comment-page.vote-up')
+        | translate
+    "
   >
     <mat-icon class="voting-icon" [ngClass]="{ green: hasVoted === 1 }"
       >keyboard_arrow_up</mat-icon
@@ -17,7 +20,12 @@
   <button
     mat-icon-button
     (click)="vote(-1)"
-    [matTooltip]="'comment-page.vote-down' | translate"
+    [matTooltip]="
+      (hasVoted === -1
+        ? 'comment-page.withdraw-downvote'
+        : 'comment-page.vote-down'
+      ) | translate
+    "
   >
     <mat-icon class="voting-icon" [ngClass]="{ red: hasVoted === -1 }"
       >keyboard_arrow_down</mat-icon
