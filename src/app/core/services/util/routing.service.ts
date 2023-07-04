@@ -4,8 +4,9 @@ import { Location } from '@angular/common';
 import { filter, map } from 'rxjs/operators';
 import { UserRole } from '@app/core/models/user-roles.enum';
 import { GlobalStorageService, STORAGE_KEYS } from './global-storage.service';
+import { ParentRoute } from '@app/core/models/parent-route';
 
-export enum RoutePrefix {
+enum RoutePrefix {
   CREATOR = 'edit',
   PARTICIPANT = 'p',
   MODERATOR = 'moderator',
@@ -16,27 +17,8 @@ export enum RoutePrefix {
   providedIn: 'root',
 })
 export class RoutingService {
-  seriesChildRoutes = [
-    'series/:seriesName/create',
-    'series/:seriesName/statistics',
-  ];
-  roomChildRoutes = [
-    'feedback',
-    'comments',
-    'comments/moderation',
-    'series/:seriesName',
-  ];
-  homeChildRoutes = ['user', 'login'];
-  loginChildRoutes = ['register', 'request-password-reset'];
-  parentRoute = {
-    home: '',
-    login: 'login',
-    user: 'user',
-  };
-  currentRoute: string;
-  backRoute: string[];
-  backRouteIsSet = false;
-  fullCurrentRoute: string;
+  private backRoute: string[];
+  private fullCurrentRoute: string;
   private viewRole: UserRole;
   private shortId: string;
   private roomId: string;
@@ -92,42 +74,24 @@ export class RoutingService {
   }
 
   getRoutes(route: ActivatedRouteSnapshot) {
-    const series = route.paramMap.get('seriesName') || '';
-    const role = route.data.requiredRole || '';
-    this.currentRoute = route.routeConfig.path;
     this.routeEvent.emit(route);
-    this.getBackRoute(role, series, route.parent.routeConfig['path']);
+    this.getBackRoute(route, route.data.requiredRole || null);
   }
 
-  getBackRoute(role: string, series: string, parentRoute?: string) {
-    const roomRoute = ':shortId';
-    let backRoute: string[];
-    if (this.currentRoute === '') {
-      backRoute = [this.parentRoute.user];
-    } else if (this.routeExistsInArray(this.homeChildRoutes)) {
-      backRoute = [this.parentRoute.home];
-    } else if (this.routeExistsInArray(this.loginChildRoutes)) {
-      backRoute = [this.parentRoute.login];
-    } else if (this.routeExistsInArray(this.roomChildRoutes)) {
-      backRoute = [this.getRoleRoute(role), this.shortId];
-    } else if (this.routeExistsInArray(this.seriesChildRoutes)) {
-      backRoute = [this.getRoleRoute(role), this.shortId, 'series', series];
+  getBackRoute(route: ActivatedRouteSnapshot, role: UserRole) {
+    if (!route.title) {
+      return;
     }
-    // Set back route if not set yet, parent route is a room route or if current route is no room route at all
-    if (
-      !this.backRouteIsSet ||
-      parentRoute === roomRoute ||
-      this.currentRoute !== roomRoute
-    ) {
-      this.backRoute = backRoute;
-      this.backRouteIsSet = true;
+    const parentRoute = route.data.parentRoute;
+    if (parentRoute !== undefined) {
+      if (parentRoute === ParentRoute.ROOM) {
+        this.backRoute = [this.getRoleRoute(role), this.shortId];
+      } else {
+        this.backRoute = [parentRoute];
+      }
     } else {
-      this.backRouteIsSet = false;
+      this.backRoute = null;
     }
-  }
-
-  routeExistsInArray(routeList: string[]) {
-    return routeList.includes(this.currentRoute);
   }
 
   goBack() {

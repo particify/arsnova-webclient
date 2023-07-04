@@ -18,6 +18,7 @@ import { FooterComponent } from '@app/standalone/footer/footer.component';
 import { DemoRoomGuard } from '@app/core/guards/demo-room.guard';
 import { UserProfileComponent } from '@app/core/components/user-profile/user-profile.component';
 import { RedeemTokenComponent } from '@app/core/components/redeem-token/redeem-token.component';
+import { ParentRoute } from '@app/core/models/parent-route';
 
 const routes: Routes = [
   {
@@ -34,11 +35,17 @@ const routes: Routes = [
     path: 'login',
     component: LoginComponent,
     title: 'login',
+    data: {
+      parentRoute: ParentRoute.HOME,
+    },
   },
   {
     path: 'register',
     component: RegisterComponent,
     title: 'register',
+    data: {
+      parentRoute: ParentRoute.LOGIN,
+    },
   },
   {
     path: 'password-reset/:email',
@@ -49,12 +56,18 @@ const routes: Routes = [
     path: 'request-password-reset',
     component: RequestPasswordResetComponent,
     title: 'request-pw-reset',
+    data: {
+      parentRoute: ParentRoute.LOGIN,
+    },
   },
   {
     path: 'user',
     canActivate: [AuthenticationGuard],
     component: UserHomeComponent,
     title: 'user',
+    data: {
+      parentRoute: ParentRoute.HOME,
+    },
   },
   {
     path: 'join/:shortId',

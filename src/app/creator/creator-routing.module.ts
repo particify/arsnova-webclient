@@ -17,6 +17,7 @@ import { RoomUserRoleResolver } from '@app/core/resolver/room-user-role.resolver
 import { CommentSettingsResolver } from '@app/core/resolver/comment-settings.resolver';
 import { ApiConfigResolver } from '@app/core/resolver/api-config.resolver';
 import { CreatorPageComponent } from '@app/creator/creator-page.component';
+import { ParentRoute } from '@app/core/models/parent-route';
 
 const routes: Routes = [
   {
@@ -37,6 +38,9 @@ const routes: Routes = [
       apiConfig: ApiConfigResolver,
     },
     title: 'room',
+    data: {
+      parentRoute: ParentRoute.USER,
+    },
   },
   {
     path: 'settings',
@@ -79,6 +83,9 @@ const routes: Routes = [
       commentSettings: CommentSettingsResolver,
     },
     title: 'comments',
+    data: {
+      parentRoute: ParentRoute.ROOM,
+    },
   },
   {
     path: 'feedback',
@@ -87,11 +94,17 @@ const routes: Routes = [
         (m) => m.LiveFeedbackModule
       ),
     title: 'live-feedback',
+    data: {
+      parentRoute: ParentRoute.ROOM,
+    },
   },
   {
     path: 'series/:seriesName',
     component: GroupContentComponent,
     title: 'series',
+    data: {
+      parentRoute: ParentRoute.ROOM,
+    },
   },
 ];
 
