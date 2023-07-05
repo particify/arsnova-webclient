@@ -9,6 +9,8 @@ import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
 import { RoutingService } from '@app/core/services/util/routing.service';
 import { ActivatedRouteStub, MockThemeService } from '@testing/test-helpers';
+import { RoomService } from '@app/core/services/http/room.service';
+import { RoomSummary, RoomSummaryStats } from '@app/core/models/room-summary';
 
 describe('QrCodeComponent', () => {
   let component: QrCodeComponent;
@@ -70,6 +72,23 @@ describe('QrCodeComponent', () => {
     .withArgs('https://partici.fi/12345678')
     .and.returnValue('partici.fi/12345678');
 
+  const roomSummary = new RoomSummary();
+  roomSummary.stats = new RoomSummaryStats();
+  roomSummary.stats.roomUserCount = 0;
+
+  const currentRoomMessage = {
+    body: '{ "UserCountChanged": { "userCount": 42 } }',
+  };
+
+  const mockRoomService = jasmine.createSpyObj(RoomService, [
+    'getRoomSummaries',
+    'getCurrentRoomsMessageStream',
+  ]);
+  mockRoomService.getRoomSummaries.and.returnValue(of(roomSummary));
+  mockRoomService.getCurrentRoomsMessageStream.and.returnValue(
+    of(currentRoomMessage)
+  );
+
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [QrCodeComponent, SplitShortIdPipe],
@@ -93,6 +112,10 @@ describe('QrCodeComponent', () => {
         {
           provide: RoutingService,
           useValue: mockRoutingService,
+        },
+        {
+          provide: RoomService,
+          useValue: mockRoomService,
         },
       ],
       schemas: [NO_ERRORS_SCHEMA],

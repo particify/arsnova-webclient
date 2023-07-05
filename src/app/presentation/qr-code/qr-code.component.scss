@@ -1,10 +1,7 @@
-.qr-container {
-  height: 80%;
-  display: flex;
-  flex-direction: row;
-}
+@import '../../../variables';
 
 .url {
+  font-weight: $font-weight-bold;
   margin: 16px 0;
 
   &:first-of-type {
@@ -16,26 +13,54 @@
   }
 }
 
+.text {
+  color: var(--on-surface);
+}
+
+@function get-icon-size($font-size) {
+  @return calc($font-size * 1.5);
+}
+
+@mixin user-icon-size($size) {
+  width: $size;
+  height: $size;
+  font-size: $size;
+}
+
 @media (max-width: 1279px) {
-  .url {
-    font-size: calc(32px + 1vw);
+  $size: calc(32px + 1vw);
+
+  .text {
+    font-size: $size;
+  }
+
+  .user-icon {
+    @include user-icon-size(get-icon-size($size));
   }
 }
 
 @media (min-width: 1280px) {
-  .url {
-    font-size: calc(32px + 1.3vw);
+  $size: calc(32px + 1.3vw);
+
+  .text {
+    font-size: $size;
+  }
+
+  .user-icon {
+    @include user-icon-size(get-icon-size($size));
   }
 }
 
 @media (min-width: 1920px) {
-  .url {
-    font-size: calc(32px + 1.8vw);
-  }
-}
+  $size: calc(32px + 1.8vw);
 
-.text {
-  color: var(--on-surface);
+  .text {
+    font-size: $size;
+  }
+
+  .user-icon {
+    @include user-icon-size(get-icon-size($size));
+  }
 }
 
 $icon-size: calc(32px + 6vw);
@@ -45,11 +70,6 @@ $icon-size: calc(32px + 6vw);
   height: $icon-size;
   font-size: $icon-size;
   margin: 16px;
-  opacity: 0.5;
-}
-
-.mat-divider {
-  margin: 0 6vw;
 }
 
 .copy-url {
