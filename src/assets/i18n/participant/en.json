@@ -142,6 +142,8 @@
     "search-box-input-description": "Here you can search for posts.",
     "vote-down": "Vote down",
     "vote-up": "Vote up",
+    "withdraw-downvote": "Withdraw downvote",
+    "withdraw-upvote": "Withdraw upvote",
     "zoom-in": "Zoom in",
     "zoom-out": "Zoom out",
     "send": "Send",

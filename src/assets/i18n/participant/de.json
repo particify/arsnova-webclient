@@ -142,6 +142,8 @@
     "search-box-input-description": "Hier kannst du nach Beiträgen suchen.",
     "vote-down": "Beitrag abwerten",
     "vote-up": "Beitrag aufwerten",
+    "withdraw-downvote": "Abwertung zurücknehmen",
+    "withdraw-upvote": "Aufwertung zurücknehmen",
     "zoom-in": "Vergrößern",
     "zoom-out": "Verkleinern",
     "send": "Senden",
