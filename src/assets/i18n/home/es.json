@@ -174,7 +174,6 @@
     "a11y-editing-moderator-role": "Moderador",
     "creator-role": "Creador de sala",
     "executive-moderator-role": "Moderador",
-    "editing-moderator-role": "Moderador",
     "filter": "Aquí puedes filtrar la lista de salas.",
     "filter-message": "Buscar salas",
     "no-rooms-found": "No se encontraron salas.",
@@ -202,7 +201,8 @@
     "active": "Activa",
     "active-info": "Actualmente hay {{userCount}} personas en esta sala.",
     "duplicate-room": "Duplicar sala",
-    "room-duplicated": "Tu sala se ha duplicado."
+    "room-duplicated": "Tu sala se ha duplicado.",
+    "editor-role": ""
   },
   "user-activation": {
     "a11y-key-input": "Ingresa el código de verificación que recibiste por correo electrónico.",
