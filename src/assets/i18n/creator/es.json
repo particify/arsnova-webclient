@@ -391,7 +391,6 @@
     "access": "Derechos de acceso",
     "role": "Rol",
     "participant": "Participante",
-    "executive_moderator": "Moderador",
     "creator": "Administrador",
     "you": "Tú",
     "disabled-for-guests": "No puedes asignar derechos de acceso con una cuenta de invitado.",
