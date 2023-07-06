@@ -28,7 +28,7 @@
     "privacy-policy": "Política de privacidad",
     "accessibility": "Accesibilidad",
     "powered-by": "Sistema de respuesta de audiencia por ",
-    "by": "desarrollado por "
+    "by": "powered by "
   },
   "header": {
     "a11y-back": "Volver a la página anterior.",
@@ -69,11 +69,11 @@
     "a11y-close": "Cierra el diálogo y regresa a la última página.",
     "create-room": "Crear sala",
     "created-1": "Se ha creado la sala ”",
-    "created-2": "”ha sido creada",
+    "created-2": "” ha sido creada.",
     "exactly-8": "Un número de sala tiene exactamente 8 dígitos.",
     "only-numbers": "Un número de sala solo contiene dígitos.",
     "room-id": "Número de sala",
-    "update-available": "¡Actualización disponible!",
+    "update-available": "Actualización disponible",
     "update-made": "¡Nueva versión!",
     "see-news": "Puedes encontrar una lista detallada de los cambios en nuestras ",
     "news": "noticias",
@@ -164,7 +164,7 @@
     "show-results-directly-info": "Los resultados del contenido se muestran directamente al presentarlo."
   },
   "room-list": {
-    "a11y-join-room": "Ingresa a la sala {{room}} con el número {{id}} en el rol {{role}}",
+    "a11y-join-room": "Ingresa a la sala {{room}} con el número {{id}} en el rol {{role}}.",
     "a11y-list-summary": "Tu lista de salas contiene {{count}} salas. Busca en la lista o navega por tus salas con la tecla Tab.",
     "a11y-more-options": "Mostrar más opciones para esta sala",
     "a11y-import-options": "Abre un menú en el que puedes transferir salas creadas como invitado o importar salas desde otro sistema ARSnova.",
@@ -202,7 +202,7 @@
     "active-info": "Actualmente hay {{userCount}} personas en esta sala.",
     "duplicate-room": "Duplicar sala",
     "room-duplicated": "Tu sala se ha duplicado.",
-    "editor-role": ""
+    "editor-role": "Editor"
   },
   "user-activation": {
     "a11y-key-input": "Ingresa el código de verificación que recibiste por correo electrónico.",
@@ -248,7 +248,7 @@
     "room-not-found": "No se encontró ninguna sala con este número.",
     "something-went-wrong": "Algo salió mal.",
     "http-too-many-requests": "Demasiadas solicitudes desde tu red.",
-    "establishing-connection": "Estableciendo conexión..."
+    "establishing-connection": "Estableciendo conexión …"
   },
   "title": {
     "register": "Registrarse",

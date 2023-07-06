@@ -202,7 +202,7 @@
     "a11y-type-choice": "Opción",
     "a11y-type-likert": "Likert",
     "a11y-type-text": "Texto",
-    "a11y-choice-evaluation": "{{count}} personas han seleccionado la respuesta {{answer}}.",
+    "a11y-choice-evaluation": "Respuesta {{label}}: {{answer}}.",
     "a11y-text-evaluation": "{{count}} personas han respondido con {{answer}}.",
     "a11y-no-more-answers": "No hay más respuestas. Presiona la tecla de flecha derecha para ir a la siguiente.",
     "a11y-correct": "La respuesta es correcta.",
@@ -297,6 +297,6 @@
     "privacy-policy": "Política de privacidad",
     "accessibility": "Accesibilidad",
     "powered-by": "Sistema de respuesta de audiencia por ",
-    "by": "desarrollado por "
+    "by": "powered by "
   }
 }

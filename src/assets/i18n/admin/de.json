@@ -73,6 +73,6 @@
     "a11y-help-key-announcement": "Drücke {{helpKey}} für eine Auflistung von Tastaturbefehlen."
   },
   "errors": {
-    "something-went-wrong": "Es ist etwas schief gelaufen."
+    "something-went-wrong": "Es ist etwas schief gegangen."
   }
 }

@@ -32,7 +32,7 @@
   },
   "header": {
     "a11y-back": "Führt zur vorherigen Seite.",
-    "a11y-room": "Öffnet das Nutzer-Menü. Hier kannst du deine besuchten Räume einsehen oder dich von deinem Konto abmelden. Auch findest du einen Link zu einer Hilfe-Seite und Einstellungsmöglichkeiten für Sprache und Anzeige. ",
+    "a11y-room": "Öffnet das Nutzer-Menü. Hier kannst du deine besuchten Räume einsehen oder dich von deinem Konto abmelden. Auch findest du einen Link zu einer Hilfe-Seite und Einstellungsmöglichkeiten für Sprache und Anzeige.",
     "a11y-switch-role": "Wechsel die Rolle um die Ansicht der Teilnehmenden zu sehen.",
     "a11y-switch-back": "Wechsel zurück zur Adminansicht.",
     "account-deleted": "Dein Konto wurde gelöscht.",
@@ -64,7 +64,7 @@
     "a11y-user-message": "Du befindest dich jetzt auf der Benutzer-Seite.",
     "a11y-room-join": "Gib jetzt die Raumnummer von dem Raum, welchem du beitreten möchtest, ein.",
     "a11y-update-available": "Eine neue Version ist verfügbar. Um zu den Änderungen zu gelangen drücke die Tab-Taste. Um das Update durchzuführen drücke erneut die Tab-Taste.",
-    "a11y-update-made": "Du nutzt die neuste Version von {{title}}. Drücke die Tab-Taste um zu den letzten Änderungen zu gelangen. Um den Dialog zu schließen drücke erneut die Tab-Taste",
+    "a11y-update-made": "Du nutzt die neuste Version von {{title}}. Drücke die Tab-Taste um zu den letzten Änderungen zu gelangen. Um den Dialog zu schließen drücke erneut die Tab-Taste.",
     "a11y-update": "Führt das Update durch und schließt den Dialog. Anschließend wird die Seite neu geladen.",
     "a11y-close": "Schließt den Dialog und kehrt zur letzten Ansicht zurück.",
     "create-room": "Raum erstellen",

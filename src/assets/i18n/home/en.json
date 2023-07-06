@@ -69,11 +69,11 @@
     "a11y-close": "Closes the dialog and gos back to last page.",
     "create-room": "Create room",
     "created-1": "The room “",
-    "created-2": "” has been created",
+    "created-2": "” has been created.",
     "exactly-8": "A room number has exactly 8 digits.",
     "only-numbers": "A room number only contains digits.",
     "room-id": "Room-No.",
-    "update-available": "Update available!",
+    "update-available": "Update available",
     "update-made": "New Version!",
     "see-news": "A detailed list of the changes can be found in our ",
     "news": "news",
@@ -164,7 +164,7 @@
     "show-results-directly-info": "Content results are displayed directly when presented."
   },
   "room-list": {
-    "a11y-join-room": "Enter the room {{room}} with the number {{id}} in the role {{role}}",
+    "a11y-join-room": "Enter the room {{room}} with the number {{id}} in the role {{role}}.",
     "a11y-list-summary": "Your room list contains {{count}} rooms. Search the list or navigate through your rooms with Tab.",
     "a11y-more-options": "Show more options for this room",
     "a11y-import-options": "Opens a menu in which you can transfer rooms created as a guest or import rooms from another ARSnova system.",
