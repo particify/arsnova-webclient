@@ -25,6 +25,9 @@ import { Message } from '@stomp/stompjs';
 import { A11yIntroPipe } from '@app/core/pipes/a11y-intro.pipe';
 import { CommentSettingsService } from '@app/core/services/http/comment-settings.service';
 import { ContentPublishService } from '@app/core/services/util/content-publish.service';
+import { ContentGroupStatistics } from '@app/core/models/content-group-statistics';
+import { RoomStats } from '@app/core/models/room-stats';
+import { ContentGroup } from '@app/core/models/content-group';
 
 describe('RoomOverviewPageComponent', () => {
   let component: RoomOverviewPageComponent;
@@ -49,9 +52,18 @@ describe('RoomOverviewPageComponent', () => {
     'getByRoomIdAndName',
     'getById',
     'filterPublishedIds',
+    'sortContentGroupsByName',
   ]);
-  mockContentGroupService.getByRoomIdAndName.and.returnValue(of({}));
+  mockContentGroupService.getByRoomIdAndName.and.returnValue(
+    of(new ContentGroup('1234', '0', 'roomId', 'name', [], true))
+  );
+  mockContentGroupService.getById.and.returnValue(
+    of(new ContentGroup('1234', '0', 'roomId', 'name', [], true))
+  );
   mockContentGroupService.filterPublishedIds.and.returnValue([]);
+  mockContentGroupService.sortContentGroupsByName.and.returnValue([
+    new ContentGroup('1234', '0', 'roomId', 'name', [], true),
+  ]);
 
   const room = new Room();
   room.settings = {};
@@ -144,10 +156,59 @@ describe('RoomOverviewPageComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(RoomOverviewPageComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
   });
 
   it('should create', () => {
+    fixture.detectChanges();
     expect(component).toBeTruthy();
+  });
+
+  it('should initialize stats', () => {
+    const initializeStatsSpy = spyOn(component, 'initializeStats');
+    fixture.detectChanges();
+    expect(initializeStatsSpy).toHaveBeenCalled();
+  });
+
+  it('should initialize feedback status', () => {
+    const getFeedbackSpy = spyOn(component, 'getFeedback');
+    fixture.detectChanges();
+    expect(getFeedbackSpy).toHaveBeenCalled();
+  });
+
+  it('should load content groups if there are group stats in room stats', () => {
+    const groupStats = [new ContentGroupStatistics('groupId', 'groupName', 5)];
+    const roomStats = new RoomStats(groupStats, 0, 0, 0, 0);
+    mockRoomStatsService.getStats.and.returnValue(of(roomStats));
+    fixture.detectChanges();
+    expect(mockContentGroupService.getById).toHaveBeenCalled();
+  });
+
+  it('should call afterGroupsLoadHook if content groups exist', () => {
+    const afterGroupsLoadHookSpy = spyOn(component, 'afterGroupsLoadHook');
+    const groupStats = [new ContentGroupStatistics('groupId', 'groupName', 5)];
+    const roomStats = new RoomStats(groupStats, 0, 0, 0, 0);
+    mockRoomStatsService.getStats.and.returnValue(of(roomStats));
+    fixture.detectChanges();
+    expect(afterGroupsLoadHookSpy).toHaveBeenCalled();
+  });
+
+  it('should call afterGroupsLoadHook also if no content groups exist', () => {
+    const afterGroupsLoadHookSpy = spyOn(component, 'afterGroupsLoadHook');
+    const roomStats = new RoomStats([], 0, 0, 0, 0);
+    mockRoomStatsService.getStats.and.returnValue(of(roomStats));
+    fixture.detectChanges();
+    expect(afterGroupsLoadHookSpy).toHaveBeenCalled();
+  });
+
+  it('should subscribe to comment counter', () => {
+    fixture.detectChanges();
+    expect(mockCommentService.countByRoomId).toHaveBeenCalled();
+    expect(mockWsCommentService.getCommentStream).toHaveBeenCalled();
+  });
+
+  it('should prepare attachment data', () => {
+    const prepareAttachmentDataSpy = spyOn(component, 'prepareAttachmentData');
+    fixture.detectChanges();
+    expect(prepareAttachmentDataSpy).toHaveBeenCalled();
   });
 });

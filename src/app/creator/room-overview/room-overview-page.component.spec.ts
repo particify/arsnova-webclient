@@ -30,6 +30,8 @@ import { WsCommentService } from '@app/core/services/websockets/ws-comment.servi
 import { CommentService } from '@app/core/services/http/comment.service';
 import { SplitShortIdPipe } from '@app/core/pipes/split-short-id.pipe';
 import { RoutingService } from '@app/core/services/util/routing.service';
+import { RoomStats } from '@app/core/models/room-stats';
+import { ContentGroupStatistics } from '@app/core/models/content-group-statistics';
 
 class MockRoutingService {}
 
@@ -37,10 +39,14 @@ describe('RoomOverviewPageComponent', () => {
   let component: RoomOverviewPageComponent;
   let fixture: ComponentFixture<RoomOverviewPageComponent>;
 
-  const mockRoomStatsService = jasmine.createSpyObj(['getStats']);
+  const mockRoomStatsService = jasmine.createSpyObj('RoomStatsService', [
+    'getStats',
+  ]);
   mockRoomStatsService.getStats.and.returnValue(of({}));
 
-  const mockWsCommentService = jasmine.createSpyObj(['getCommentStream']);
+  const mockWsCommentService = jasmine.createSpyObj('WsCommentService', [
+    'getCommentStream',
+  ]);
   const message = {
     body: '{ "payload": {} }',
   };
@@ -49,14 +55,22 @@ describe('RoomOverviewPageComponent', () => {
   const mockCommentService = jasmine.createSpyObj(['countByRoomId']);
   mockCommentService.countByRoomId.and.returnValue(of({}));
 
-  const mockContentGroupService = jasmine.createSpyObj([
+  const mockContentGroupService = jasmine.createSpyObj('ContentGroupService', [
     'getByRoomIdAndName',
+    'getById',
     'isIndexPublished',
+    'sortContentGroupsByName',
   ]);
   mockContentGroupService.getByRoomIdAndName.and.returnValue(
     of(new ContentGroup('1234', '0', 'roomId', 'name', [], true))
   );
+  mockContentGroupService.getById.and.returnValue(
+    of(new ContentGroup('1234', '0', 'roomId', 'name', [], true))
+  );
   mockContentGroupService.isIndexPublished.and.returnValue(true);
+  mockContentGroupService.sortContentGroupsByName.and.returnValue([
+    new ContentGroup('1234', '0', 'roomId', 'name', [], true),
+  ]);
 
   const mockDialogService = jasmine.createSpyObj('DialogService', [
     'openContentGroupCreationDialog',
@@ -147,10 +161,53 @@ describe('RoomOverviewPageComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(RoomOverviewPageComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
   });
 
   it('should create', () => {
+    fixture.detectChanges();
     expect(component).toBeTruthy();
+  });
+
+  it('should initialize stats', () => {
+    const initializeStatsSpy = spyOn(component, 'initializeStats');
+    fixture.detectChanges();
+    expect(initializeStatsSpy).toHaveBeenCalled();
+  });
+
+  it('should load content groups if there are group stats in room stats', () => {
+    const groupStats = [new ContentGroupStatistics('groupId', 'groupName', 5)];
+    const roomStats = new RoomStats(groupStats, 0, 0, 0, 0);
+    mockRoomStatsService.getStats.and.returnValue(of(roomStats));
+    fixture.detectChanges();
+    expect(mockContentGroupService.getById).toHaveBeenCalled();
+  });
+
+  it('should call afterGroupsLoadHook if content groups exist', () => {
+    const afterGroupsLoadHookSpy = spyOn(component, 'afterGroupsLoadHook');
+    const groupStats = [new ContentGroupStatistics('groupId', 'groupName', 5)];
+    const roomStats = new RoomStats(groupStats, 0, 0, 0, 0);
+    mockRoomStatsService.getStats.and.returnValue(of(roomStats));
+    fixture.detectChanges();
+    expect(afterGroupsLoadHookSpy).toHaveBeenCalled();
+  });
+
+  it('should call afterGroupsLoadHook also if no content groups exist', () => {
+    const afterGroupsLoadHookSpy = spyOn(component, 'afterGroupsLoadHook');
+    const roomStats = new RoomStats([], 0, 0, 0, 0);
+    mockRoomStatsService.getStats.and.returnValue(of(roomStats));
+    fixture.detectChanges();
+    expect(afterGroupsLoadHookSpy).toHaveBeenCalled();
+  });
+
+  it('should subscribe to comment counter', () => {
+    fixture.detectChanges();
+    expect(mockCommentService.countByRoomId).toHaveBeenCalled();
+    expect(mockWsCommentService.getCommentStream).toHaveBeenCalled();
+  });
+
+  it('should prepare attachment data', () => {
+    const prepareAttachmentDataSpy = spyOn(component, 'prepareAttachmentData');
+    fixture.detectChanges();
+    expect(prepareAttachmentDataSpy).toHaveBeenCalled();
   });
 });
