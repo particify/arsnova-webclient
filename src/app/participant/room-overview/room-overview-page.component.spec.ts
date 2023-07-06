@@ -1,29 +1,22 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { RoomOverviewPageComponent } from './room-overview-page.component';
 import { ActivatedRoute, Router } from '@angular/router';
-import { NotificationService } from '@app/core/services/util/notification.service';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import {
   JsonTranslationLoader,
-  MockNotificationService,
   ActivatedRouteStub,
   MockGlobalStorageService,
   MockRouter,
   MockEventService,
-  MockAnnounceService,
 } from '@testing/test-helpers';
 import { of } from 'rxjs';
 import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
 import { EventService } from '@app/core/services/util/event.service';
 import { ContentGroupService } from '@app/core/services/http/content-group.service';
-import { AnnounceService } from '@app/core/services/util/announce.service';
-import { SpyLocation } from '@angular/common/testing';
-import { AuthenticationService } from '@app/core/services/http/authentication.service';
 import { Room } from '@app/core/models/room';
 import { NO_ERRORS_SCHEMA, EventEmitter } from '@angular/core';
 import { UserRole } from '@app/core/models/user-roles.enum';
 import { SplitShortIdPipe } from '@app/core/pipes/split-short-id.pipe';
-import { RoomService } from '@app/core/services/http/room.service';
 import { RoomStatsService } from '@app/core/services/http/room-stats.service';
 import { WsCommentService } from '@app/core/services/websockets/ws-comment.service';
 import { CommentService } from '@app/core/services/http/comment.service';
@@ -36,12 +29,6 @@ import { ContentPublishService } from '@app/core/services/util/content-publish.s
 describe('RoomOverviewPageComponent', () => {
   let component: RoomOverviewPageComponent;
   let fixture: ComponentFixture<RoomOverviewPageComponent>;
-
-  const mockRoomService = jasmine.createSpyObj([
-    'getCurrentRoomsMessageStream',
-    'getRoomSummaries',
-    'deleteRoom',
-  ]);
 
   const mockRoomStatsService = jasmine.createSpyObj(['getStats']);
   mockRoomStatsService.getStats.and.returnValue(of({}));
@@ -65,10 +52,6 @@ describe('RoomOverviewPageComponent', () => {
   ]);
   mockContentGroupService.getByRoomIdAndName.and.returnValue(of({}));
   mockContentGroupService.filterPublishedIds.and.returnValue([]);
-
-  const mockAuthenticationService = jasmine.createSpyObj([
-    'getCurrentAuthentication',
-  ]);
 
   const room = new Room();
   room.settings = {};
@@ -106,10 +89,6 @@ describe('RoomOverviewPageComponent', () => {
       ],
       providers: [
         {
-          provide: RoomService,
-          useValue: mockRoomService,
-        },
-        {
           provide: RoomStatsService,
           useValue: mockRoomStatsService,
         },
@@ -128,22 +107,6 @@ describe('RoomOverviewPageComponent', () => {
         {
           provide: ContentGroupService,
           useValue: mockContentGroupService,
-        },
-        {
-          provide: AnnounceService,
-          useClass: MockAnnounceService,
-        },
-        {
-          provide: Location,
-          useClass: SpyLocation,
-        },
-        {
-          provide: AuthenticationService,
-          useValue: mockAuthenticationService,
-        },
-        {
-          provide: NotificationService,
-          useClass: MockNotificationService,
         },
         {
           provide: ActivatedRoute,
