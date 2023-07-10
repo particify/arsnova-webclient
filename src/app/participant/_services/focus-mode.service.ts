@@ -21,6 +21,7 @@ import {
   NotificationService,
 } from '@app/core/services/util/notification.service';
 import { FeatureFlagService } from '@app/core/services/util/feature-flag.service';
+import { RxStompState } from '@stomp/rx-stomp';
 
 // Delay for event sending after switching between features
 const DELAY_AFTER_NAVIGATION = 500;
@@ -38,6 +39,7 @@ export class FocusModeService implements OnDestroy {
 
   private currentRoom: Room;
   private currentFeature: RoutingFeature;
+  private wsConnectionState: RxStompState;
 
   constructor(
     private wsConnector: WsConnectorService,
@@ -65,6 +67,7 @@ export class FocusModeService implements OnDestroy {
     this.getState();
     this.subscribeToState();
     this.subscribeToRoomChanges();
+    this.subscribeToWsConnectionState();
   }
 
   private subscribeToRoomChanges() {
@@ -93,6 +96,26 @@ export class FocusModeService implements OnDestroy {
               AdvancedSnackBarTypes.INFO
             );
           }
+        }
+      });
+  }
+
+  private subscribeToWsConnectionState() {
+    this.wsConnector
+      .getConnectionState()
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((state) => {
+        switch (state) {
+          case RxStompState.CLOSED:
+            this.wsConnectionState = state;
+            break;
+          case RxStompState.OPEN:
+            if (this.wsConnectionState === RxStompState.CLOSED) {
+              // Reload current state from backend if ws has been reconnected
+              this.getState();
+              this.wsConnectionState = state;
+            }
+            break;
         }
       });
   }
