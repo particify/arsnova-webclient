@@ -6,12 +6,10 @@
 >
   <lib-extension-point extensionId="footer-reference">
     <div fxLayout="row" fxLayoutAlign="center center" fxFill>
-      <a [attr.href]="referenceUrl" target="_blank" class="slogan">
-        <span class="powered-by text">{{
-          'footer.powered-by' | translate
-        }}</span>
-        <span class="by text">{{ 'footer.by' | translate }}</span>
-        <span class="name">Particify</span>
+      <a [attr.href]="referenceUrl" target="_blank" class="slogan text">
+        <span class="powered-by">{{ 'footer.powered-by' | translate }}</span>
+        <span class="by">{{ 'footer.by' | translate }}</span>
+        <span>Particify</span>
       </a>
     </div>
   </lib-extension-point>
