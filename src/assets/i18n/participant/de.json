@@ -66,7 +66,9 @@
     "pure-info-contents": "Springe zu einem beliebigen Inhalt oder kehre zur Raumübersicht zurück.",
     "round": "Runde",
     "round-displayed": "Die Runde {{rounds}} wird zurzeit angezeigt",
-    "rounds-displayed": "Die Runden {{rounds}} werden zurzeit angezeigt"
+    "rounds-displayed": "Die Runden {{rounds}} werden zurzeit angezeigt",
+    "new-round-started": "Es wurde eine neue Runde gestartet.",
+    "answers-reset": "Die Antworten wurden zurückgesetzt."
   },
   "comment-list": {
     "a11y-search-list": "Durchsuche die Beiträge",

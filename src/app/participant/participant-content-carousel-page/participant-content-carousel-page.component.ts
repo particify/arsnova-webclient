@@ -28,12 +28,13 @@ import {
 import { ContentGroupService } from '@app/core/services/http/content-group.service';
 import { EventService } from '@app/core/services/util/event.service';
 import { EntityChanged } from '@app/core/models/events/entity-changed';
-import { Subscription } from 'rxjs';
+import { Subject, Subscription, takeUntil } from 'rxjs';
 import { ContentFocusState } from '@app/core/models/events/remote/content-focus-state';
 import { RoutingService } from '@app/core/services/util/routing.service';
 import { RemoteService } from '@app/core/services/util/remote.service';
 import { ContentCarouselService } from '@app/core/services/util/content-carousel.service';
 import { ContentPublishService } from '@app/core/services/util/content-publish.service';
+import { EntityChangeNotification } from '@app/core/models/events/entity-change-notification';
 
 @Component({
   selector: 'app-participant-content-carousel-page',
@@ -43,6 +44,8 @@ export class ParticipantContentCarouselPageComponent
   implements OnInit, AfterContentInit, OnDestroy
 {
   @ViewChild(StepperComponent) stepper: StepperComponent;
+
+  private destroyed$ = new Subject<void>();
 
   ContentType: typeof ContentType = ContentType;
 
@@ -62,6 +65,7 @@ export class ParticipantContentCarouselPageComponent
   answers: Answer[];
   currentStep: number;
   isReloading = false;
+  isReloadingCurrentContent = false;
   displaySnackBar = false;
   isGuided = false;
   lockedContentId: string;
@@ -113,6 +117,8 @@ export class ParticipantContentCarouselPageComponent
     if (this.routeChangedSubscription) {
       this.routeChangedSubscription.unsubscribe();
     }
+    this.destroyed$.next();
+    this.destroyed$.complete();
   }
 
   ngOnInit() {
@@ -145,6 +151,14 @@ export class ParticipantContentCarouselPageComponent
       .on('EntityChanged')
       .subscribe((changes) => {
         this.handleStateEvent(changes);
+      });
+    this.eventService
+      .on<EntityChangeNotification>('EntityChangeNotification')
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((notification) => {
+        if (notification.payload.id === this.contents[this.currentStep].id) {
+          this.reloadCurrentContent();
+        }
       });
     this.remoteSubscription = this.remoteService
       .getContentState()
@@ -269,6 +283,29 @@ export class ParticipantContentCarouselPageComponent
   reloadContents() {
     this.isReloading = true;
     this.getContents(this.currentStep);
+  }
+
+  reloadCurrentContent() {
+    this.isReloadingCurrentContent = true;
+    const currentContent = this.contents[this.currentStep];
+    this.contentService
+      .getContent(this.contentGroup.roomId, currentContent.id, false)
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((content) => {
+        const newRound = content.state.round;
+        if (currentContent.state.round !== newRound) {
+          currentContent.state.round = newRound;
+          this.answers[this.currentStep] = null;
+          this.alreadySent.set(this.currentStep, false);
+          const msg = this.translateService.instant(
+            content.state.round === 1
+              ? 'content.answers-reset'
+              : 'content.new-round-started'
+          );
+          this.notificationService.show(msg);
+        }
+        this.isReloadingCurrentContent = false;
+      });
   }
 
   finishLoading() {

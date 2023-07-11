@@ -104,9 +104,13 @@ export class ContentService extends AbstractEntityService<Content> {
       .pipe(catchError(this.handleError('getContents', [])));
   }
 
-  getContent(roomId: string, contentId: string): Observable<Content> {
+  getContent(
+    roomId: string,
+    contentId: string,
+    extendedView = true
+  ): Observable<Content> {
     const connectionUrl = this.buildUri(
-      '/' + contentId + '?view=extended',
+      '/' + contentId + (extendedView ? '?view=extended' : ''),
       roomId
     );
     return this.http
