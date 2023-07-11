@@ -936,3 +936,17 @@ app-rendered-text:not(.rendered-list-preview-container, .no-full-width) {
 
   background-image: linear-gradient(to bottom, transparent, var(--unlocked));
 }
+
+@keyframes border-lightning {
+  0% {
+    border-color: inherit;
+  }
+
+  50% {
+    border-color: var(--grey-light);
+  }
+
+  100% {
+    border-color: inherit;
+  }
+}
