@@ -160,8 +160,9 @@
               <span>{{ 'content.preferences' | translate }}</span>
             </button>
             <app-multiple-round-selection
-              *ngIf="multipleRounds && content"
+              *ngIf="content && hasFormatRounds(content.format)"
               [standalone]="false"
+              [disabled]="!multipleRounds"
               [round]="this.contentRounds.get(content.id)"
               (roundChanged)="changeRound($event)"
             >
