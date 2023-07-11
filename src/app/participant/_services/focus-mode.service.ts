@@ -1,4 +1,4 @@
-import { EventEmitter, Injectable, OnDestroy } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { CommentFocusState } from '@app/core/models/events/remote/comment-focus-state';
 import { ContentFocusState } from '@app/core/models/events/remote/content-focus-state';
 import { FeedbackFocusState } from '@app/core/models/events/remote/feedback-focus-state';
@@ -7,14 +7,11 @@ import { RoutingFeature } from '@app/core/models/routing-feature.enum';
 import { WsConnectorService } from '@app/core/services/websockets/ws-connector.service';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { Message } from '@stomp/stompjs';
 import { RoutingService } from '@app/core/services/util/routing.service';
 import { UserRole } from '@app/core/models/user-roles.enum';
 import { Room } from '@app/core/models/room';
 import { EventService } from '@app/core/services/util/event.service';
-import { BehaviorSubject, Subject, filter, map, takeUntil } from 'rxjs';
-import { EntityChanged } from '@app/core/models/events/entity-changed';
-import { EntityChangedPayload } from '@app/core/models/events/entity-changed-payload';
+import { Observable, Subject, takeUntil } from 'rxjs';
 import { TranslateService } from '@ngx-translate/core';
 import {
   AdvancedSnackBarTypes,
@@ -22,39 +19,31 @@ import {
 } from '@app/core/services/util/notification.service';
 import { FeatureFlagService } from '@app/core/services/util/feature-flag.service';
 import { RxStompState } from '@stomp/rx-stomp';
+import { AbstractFocusModeService } from '@app/common/abstract/abstract-focus-mode.service';
 
 // Delay for event sending after switching between features
 const DELAY_AFTER_NAVIGATION = 500;
 
 @Injectable()
-export class FocusModeService implements OnDestroy {
-  destroyed$ = new Subject<void>();
-  private focusModeEnabled$: BehaviorSubject<boolean> = new BehaviorSubject(
-    null
-  );
-  private contentStateUpdated$: EventEmitter<ContentFocusState> =
-    new EventEmitter();
-  private commentStateUpdated$: EventEmitter<CommentFocusState> =
-    new EventEmitter();
+export class FocusModeService extends AbstractFocusModeService {
+  private contentStateUpdated$ = new Subject<ContentFocusState>();
+  private commentStateUpdated$ = new Subject<CommentFocusState>();
+  private focusModeEnabled = false;
 
-  private currentRoom: Room;
   private currentFeature: RoutingFeature;
   private wsConnectionState: RxStompState;
 
   constructor(
-    private wsConnector: WsConnectorService,
-    private http: HttpClient,
+    protected wsConnector: WsConnectorService,
+    protected http: HttpClient,
+    protected featureFlagService: FeatureFlagService,
+    protected eventService: EventService,
     private router: Router,
     private routingService: RoutingService,
-    private eventService: EventService,
     private translateService: TranslateService,
-    private notificationService: NotificationService,
-    private featureFlagService: FeatureFlagService
-  ) {}
-
-  ngOnDestroy(): void {
-    this.destroyed$.next(null);
-    this.destroyed$.complete();
+    private notificationService: NotificationService
+  ) {
+    super(wsConnector, http, eventService, featureFlagService);
   }
 
   init(room: Room, currentFeature: RoutingFeature) {
@@ -62,40 +51,28 @@ export class FocusModeService implements OnDestroy {
       return;
     }
     this.currentRoom = room;
-    this.focusModeEnabled$.next(room.focusModeEnabled);
+    this.focusModeEnabled = this.currentRoom.focusModeEnabled;
+    this.focusModeEnabled$.next(this.focusModeEnabled);
     this.currentFeature = currentFeature;
-    this.getState();
+    this.loadState();
     this.subscribeToState();
     this.subscribeToRoomChanges();
     this.subscribeToWsConnectionState();
-  }
-
-  private subscribeToRoomChanges() {
-    this.eventService
-      .on('EntityChanged')
-      .pipe(
-        takeUntil(this.destroyed$),
-        map((changes) => changes as EntityChangedPayload<Room>),
-        filter((changes) => changes.entityType === 'Room')
-      )
-      .subscribe((changes) => {
-        const changedEvent = new EntityChanged(
-          'Room',
-          changes.entity,
-          changes.changedProperties
-        );
-        if (changedEvent.hasPropertyChanged('focusModeEnabled')) {
-          const focusModeEnabled = changes.entity.focusModeEnabled;
-          this.focusModeEnabled$.next(focusModeEnabled);
-          if (focusModeEnabled) {
-            this.evaluateNewState();
-          } else {
-            const msg = this.translateService.instant('focus-mode.stopped');
-            this.notificationService.showAdvanced(
-              msg,
-              AdvancedSnackBarTypes.INFO
-            );
-          }
+    this.focusModeEnabled$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((focusModeEnabled) => {
+        if (this.focusModeEnabled === focusModeEnabled) {
+          return;
+        }
+        this.focusModeEnabled = focusModeEnabled;
+        if (focusModeEnabled) {
+          this.evaluateNewState();
+        } else {
+          const msg = this.translateService.instant('focus-mode.stopped');
+          this.notificationService.showAdvanced(
+            msg,
+            AdvancedSnackBarTypes.INFO
+          );
         }
       });
   }
@@ -112,7 +89,7 @@ export class FocusModeService implements OnDestroy {
           case RxStompState.OPEN:
             if (this.wsConnectionState === RxStompState.CLOSED) {
               // Reload current state from backend if ws has been reconnected
-              this.getState();
+              this.loadState();
               this.wsConnectionState = state;
             }
             break;
@@ -120,11 +97,11 @@ export class FocusModeService implements OnDestroy {
       });
   }
 
-  getContentState(): EventEmitter<ContentFocusState> {
+  getContentState(): Observable<ContentFocusState> {
     return this.contentStateUpdated$;
   }
 
-  getCommentState(): EventEmitter<CommentFocusState> {
+  getCommentState(): Observable<CommentFocusState> {
     return this.commentStateUpdated$;
   }
 
@@ -132,32 +109,15 @@ export class FocusModeService implements OnDestroy {
     return this.focusModeEnabled$;
   }
 
-  private getState() {
-    this.http
-      .get<FocusEvent>(`api/room/${this.currentRoom.id}/focus-event`)
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe((state) => {
-        this.evaluateNewState(state, true);
-      });
-  }
-
-  private subscribeToState() {
-    this.wsConnector
-      .getWatcher(`/topic/${this.currentRoom.id}.focus.state.stream`)
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe((msg: Message) => {
-        this.parseMsg(msg);
-      });
-  }
-
-  private parseMsg(message: Message) {
-    const state = JSON.parse(message.body);
-    this.evaluateNewState(state);
+  protected handleState(state?: FocusEvent, initial = false) {
+    if (this.currentRoom.focusModeEnabled) {
+      this.evaluateNewState(state, initial);
+    }
   }
 
   private evaluateNewState(state?: FocusEvent, initial = false) {
     if (!state) {
-      this.navigateToFeature();
+      this.navigateToFeature(RoutingFeature.OVERVIEW);
       return;
     }
     let timeout = initial ? DELAY_AFTER_NAVIGATION : 0;
@@ -186,15 +146,15 @@ export class FocusModeService implements OnDestroy {
   ) {
     setTimeout(() => {
       if (feature === RoutingFeature.CONTENTS) {
-        this.contentStateUpdated$.emit(state as ContentFocusState);
+        this.contentStateUpdated$.next(state as ContentFocusState);
       } else if (feature === RoutingFeature.COMMENTS) {
-        this.commentStateUpdated$.emit(state as CommentFocusState);
+        this.commentStateUpdated$.next(state as CommentFocusState);
       }
     }, timeout);
   }
 
   private navigateToFeature(
-    routingFeature?: RoutingFeature,
+    routingFeature: RoutingFeature,
     series?: string,
     index?: number
   ) {
@@ -202,7 +162,7 @@ export class FocusModeService implements OnDestroy {
       this.routingService.getRoleRoute(UserRole.PARTICIPANT),
       this.routingService.getShortId(),
     ];
-    if (routingFeature) {
+    if (routingFeature !== RoutingFeature.OVERVIEW) {
       route.push(routingFeature);
     }
     if (series) {

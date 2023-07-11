@@ -6,14 +6,23 @@
   <div class="icon-container">
     <button
       *ngFor="let barItem of barItems; let i = index"
+      fxLayout="column"
       fxLayoutAlign="center center"
       class="item nav-button"
       mat-button
       color="{{ i === currentRouteIndex ? 'primary' : '' }}"
       [id]="barItem.name + '-button'"
-      [ngClass]="{ current: i === currentRouteIndex }"
+      [ngClass]="{
+        current: i === currentRouteIndex,
+        'reduce-bottom-padding':
+          focusModeEnabled && barItem.name === focusFeature
+      }"
       (click)="navToUrl(i)"
-      [matTooltip]="getFeatureText(barItem.name) | translate"
+      [matTooltip]="
+        (getFeatureText(barItem.name) | translate) +
+        ' ' +
+        (getFocusInfo(barItem.name) | translate)
+      "
       #menuTrigger="matMenuTrigger"
       matTooltipPosition="right"
       matTooltipClass="hide-lg"
@@ -32,6 +41,10 @@
           class="badge"
         ></div>
       </mat-icon>
+      <div
+        *ngIf="focusModeEnabled && barItem.name === focusFeature"
+        class="focus-indicator"
+      ></div>
       <span class="text ellipsis">{{
         getFeatureText(barItem.name) | translate
       }}</span>

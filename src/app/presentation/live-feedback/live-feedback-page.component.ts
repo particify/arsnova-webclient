@@ -91,9 +91,7 @@ export class LiveFeedbackPageComponent
   }
 
   afterInitHook() {
-    if (!this.isClosed) {
-      this.focusModeService.updateFeedbackState(this.room, true);
-    }
+    this.focusModeService.updateFeedbackState(this.room, !this.isClosed);
     setTimeout(() => {
       const scale = Math.max(Math.min(innerWidth, 2100) / 1500, 1);
       document.getElementById(

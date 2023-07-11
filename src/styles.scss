@@ -937,6 +937,8 @@ app-rendered-text:not(.rendered-list-preview-container, .no-full-width) {
   margin: 0;
 }
 
+// Animations
+
 @mixin bottom-fade-out {
   content: '';
   position: absolute;

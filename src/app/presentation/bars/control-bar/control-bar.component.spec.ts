@@ -38,6 +38,7 @@ import { RoomService } from '@app/core/services/http/room.service';
 import { CommentSettingsService } from '@app/core/services/http/comment-settings.service';
 import { ContentPublishService } from '@app/core/services/util/content-publish.service';
 import { PresentationService } from '@app/core/services/util/presentation.service';
+import { FocusModeService } from '@app/creator/_services/focus-mode.service';
 
 describe('ControlBarComponent', () => {
   let component: ControlBarComponent;
@@ -127,22 +128,28 @@ describe('ControlBarComponent', () => {
   mockRoomService.getCurrentRoomsMessageStream.and.returnValue(of(message));
   mockRoomService.getRoomSummaries.and.returnValue(of(summaries));
 
-  const mockPresentationService = jasmine.createSpyObj('PresentationService', [
-    'getFeedbackStarted',
-  ]);
-
   const mockCommentSettingsService = jasmine.createSpyObj([
     'getSettingsStream',
   ]);
   mockCommentSettingsService.getSettingsStream.and.returnValue(of({}));
 
   const mockPresentationService = jasmine.createSpyObj('PresentationService', [
+    'getFeedbackStarted',
     'getContentState',
     'getCommentState',
     'getMultipleRoundState',
     'getCommentZoomChanges',
     'getContentGroupChanges',
   ]);
+
+  const mockFocusModeService = jasmine.createSpyObj('FocusModeService', [
+    'init',
+    'getState',
+    'getFocusModeEnabled',
+  ]);
+
+  mockFocusModeService.getState.and.returnValue(of({}));
+  mockFocusModeService.getFocusModeEnabled.and.returnValue(of(true));
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
@@ -240,6 +247,10 @@ describe('ControlBarComponent', () => {
         {
           provide: PresentationService,
           useValue: mockPresentationService,
+        },
+        {
+          provide: FocusModeService,
+          useValue: mockFocusModeService,
         },
       ],
       schemas: [NO_ERRORS_SCHEMA],

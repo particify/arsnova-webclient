@@ -32,6 +32,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FeedbackMessageType } from '@app/core/models/messages/feedback-message-type';
 import { CommentSettingsService } from '@app/core/services/http/comment-settings.service';
+import { FocusModeService } from '@app/creator/_services/focus-mode.service';
 
 @Injectable()
 class MockContentGroupService {
@@ -96,6 +97,15 @@ describe('NavBarComponent', () => {
 
   const badgeVisibleMatrix = 'matrix(1, 0, 0, 1, 0, 0)';
 
+  const mockFocusModeService = jasmine.createSpyObj('FocusModeService', [
+    'init',
+    'getState',
+    'getFocusModeEnabled',
+  ]);
+
+  mockFocusModeService.getState.and.returnValue(of({}));
+  mockFocusModeService.getFocusModeEnabled.and.returnValue(of(true));
+
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [NavBarComponent],
@@ -145,6 +155,9 @@ describe('NavBarComponent', () => {
   }));
 
   beforeEach(() => {
+    TestBed.overrideProvider(FocusModeService, {
+      useValue: mockFocusModeService,
+    });
     viewport.set('desktop');
     fixture = TestBed.createComponent(NavBarComponent);
     component = fixture.componentInstance;

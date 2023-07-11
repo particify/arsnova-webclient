@@ -77,6 +77,17 @@
   #user-count-container {
     opacity: 0.65;
   }
+
+  .focus-indicator {
+    border-radius: 50%;
+    border-width: 3px;
+    border-style: solid;
+    animation: border-lightning 3s infinite;
+  }
+
+  .reduce-bottom-padding {
+    padding-bottom: 18px;
+  }
 }
 
 @media (max-width: 1000px) {

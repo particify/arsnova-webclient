@@ -7,13 +7,49 @@ import { RoutingFeature } from '@app/core/models/routing-feature.enum';
 import { HttpClient } from '@angular/common/http';
 import { Room } from '@app/core/models/room';
 import { FeatureFlagService } from '@app/core/services/util/feature-flag.service';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { AbstractFocusModeService } from '@app/common/abstract/abstract-focus-mode.service';
+import { WsConnectorService } from '@app/core/services/websockets/ws-connector.service';
+import { EventService } from '@app/core/services/util/event.service';
 
 @Injectable()
-export class FocusModeService {
+export class FocusModeService extends AbstractFocusModeService {
+  state$: BehaviorSubject<FocusEvent> = new BehaviorSubject(null);
+
   constructor(
-    private http: HttpClient,
-    private featureFlagService: FeatureFlagService
-  ) {}
+    protected wsConnector: WsConnectorService,
+    protected http: HttpClient,
+    protected eventService: EventService,
+    protected featureFlagService: FeatureFlagService
+  ) {
+    super(wsConnector, http, eventService, featureFlagService);
+  }
+
+  protected handleState(state: FocusEvent) {
+    this.state$.next(state);
+  }
+
+  private getFeatureKey(feature: RoutingFeature): string {
+    return Object.keys(RoutingFeature)[
+      Object.values(RoutingFeature).indexOf(feature)
+    ];
+  }
+
+  private sendState(room: string, newState: FocusEvent) {
+    this.http.post(`api/room/${room}/focus-event`, newState).subscribe();
+  }
+
+  init(room: Room) {
+    this.currentRoom = room;
+    this.focusModeEnabled$.next(room.focusModeEnabled);
+    this.loadState();
+    this.subscribeToState();
+    this.subscribeToRoomChanges();
+  }
+
+  getState(): Observable<FocusEvent> {
+    return this.state$;
+  }
 
   updateContentState(
     room: Room,
@@ -63,15 +99,5 @@ export class FocusModeService {
       const newState = new FocusEvent(this.getFeatureKey(feature), state);
       this.sendState(room.id, newState);
     }
-  }
-
-  private getFeatureKey(feature: RoutingFeature): string {
-    return Object.keys(RoutingFeature)[
-      Object.values(RoutingFeature).indexOf(feature)
-    ];
-  }
-
-  private sendState(room: string, newState: FocusEvent) {
-    this.http.post(`api/room/${room}/focus-event`, newState).subscribe();
   }
 }

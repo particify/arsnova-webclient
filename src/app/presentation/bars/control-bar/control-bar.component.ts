@@ -47,6 +47,7 @@ import { ContentPresentationState } from '@app/core/models/events/content-presen
 import { PresentationStepPosition } from '@app/core/models/events/presentation-step-position.enum';
 import { CommentPresentationState } from '@app/core/models/events/comment-presentation-state';
 import { RoundState } from '@app/core/models/events/round-state';
+import { FocusModeService } from '@app/creator/_services/focus-mode.service';
 
 export class KeyNavBarItem extends NavBarItem {
   key: string;
@@ -157,6 +158,7 @@ export class ControlBarComponent
     protected apiConfigService: ApiConfigService,
     protected roomService: RoomService,
     protected commentSettingsService: CommentSettingsService,
+    protected focusModeService: FocusModeService,
     private announceService: AnnounceService,
     private hotkeyService: HotkeyService,
     private translateService: TranslateService,
@@ -176,7 +178,8 @@ export class ControlBarComponent
       contentGroupService,
       eventService,
       roomService,
-      commentSettingsService
+      commentSettingsService,
+      focusModeService
     );
     this.showBar();
     this.setBarTimer(3000);

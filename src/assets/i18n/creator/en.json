@@ -563,7 +563,8 @@
     "feedback": "Live Feedback",
     "moderation": "Moderation",
     "content-counter": "Current position in question series",
-    "overview": "Overview"
+    "overview": "Overview",
+    "focus-feature": "(Current focus)"
   },
   "export": {
     "export-series": "Export series",
