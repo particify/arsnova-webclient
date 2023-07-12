@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Content } from '@app/core/models/content';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { forkJoin, Observable } from 'rxjs';
+import { BehaviorSubject, forkJoin, Observable } from 'rxjs';
 import { catchError, map, switchMap, tap } from 'rxjs/operators';
 import { AbstractEntityService } from './abstract-entity.service';
 import { AnswerStatistics } from '@app/core/models/answer-statistics';
@@ -21,7 +21,6 @@ import { ExportFileType } from '@app/core/models/export-file-type';
 import { Router } from '@angular/router';
 import { ContentGroup } from '@app/core/models/content-group';
 import { DialogService } from '@app/core/services/util/dialog.service';
-import { PresentationEvent } from '@app/core/models/events/presentation-events.enum';
 
 const PARTITION_SIZE = 50;
 
@@ -31,6 +30,8 @@ const httpOptions = {
 
 @Injectable()
 export class ContentService extends AbstractEntityService<Content> {
+  answersDeleted = new BehaviorSubject<string>(null);
+
   serviceApiUrl = {
     answer: '/answer',
     duplicate: '/duplicate',
@@ -369,12 +370,13 @@ export class ContentService extends AbstractEntityService<Content> {
           msg,
           AdvancedSnackBarTypes.WARNING
         );
-        this.eventService.broadcast(
-          PresentationEvent.CONTENT_ANSWERS_DELETED,
-          contentId
-        );
+        this.answersDeleted.next(contentId);
       });
     });
+  }
+
+  getAnswersDeleted(): Observable<string> {
+    return this.answersDeleted;
   }
 
   getTypeIcons(): Map<ContentType, string> {

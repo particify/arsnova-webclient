@@ -40,11 +40,14 @@ import {
 } from '@app/core/services/util/notification.service';
 import { RoomService } from '@app/core/services/http/room.service';
 import { RemoteService } from '@app/core/services/util/remote.service';
-import { PresentationEvent } from '@app/core/models/events/presentation-events.enum';
 import { CommentSettingsService } from '@app/core/services/http/comment-settings.service';
 import { ContentPublishService } from '@app/core/services/util/content-publish.service';
 import { CommentSort } from '@app/core/models/comment-sort.enum';
-import { CommentPresentationState } from '@app/presentation/comments/comments-page.component';
+import { PresentationService } from '@app/core/services/util/presentation.service';
+import { ContentPresentationState } from '@app/core/models/events/content-presentation-state';
+import { PresentationStepPosition } from '@app/core/models/events/presentation-step-position.enum';
+import { CommentPresentationState } from '@app/core/models/events/comment-presentation-state';
+import { RoundState } from '@app/core/models/events/round-state';
 
 export class KeyNavBarItem extends NavBarItem {
   key: string;
@@ -87,8 +90,8 @@ export class ControlBarComponent
   inFullscreen = false;
   barItems: KeyNavBarItem[] = [];
   surveyStarted = false;
-  contentStepState = 'START';
-  commentStepState = 'START';
+  contentStepState = PresentationStepPosition.START;
+  commentStepState = PresentationStepPosition.START;
   menuOpen = false;
   joinUrl: string;
   currentCommentZoom = 100;
@@ -97,7 +100,6 @@ export class ControlBarComponent
   isCurrentContentPublished = false;
   contentIndex = 0;
   content: Content;
-  contentLoaded = false;
   resetAnswerEvent: Subject<string> = new Subject<string>();
   notificationMessage: string;
   notificationIcon: string;
@@ -163,7 +165,8 @@ export class ControlBarComponent
     private dialogService: DialogService,
     private notificationService: NotificationService,
     private remoteService: RemoteService,
-    private contentPublishService: ContentPublishService
+    private contentPublishService: ContentPublishService,
+    private presentationService: PresentationService
   ) {
     super(
       router,
@@ -225,6 +228,7 @@ export class ControlBarComponent
         }
       }
     });
+    this.subscribeToStates();
     this.subscribeToEvents();
     setTimeout(() => {
       this.sendControlBarState();
@@ -270,6 +274,25 @@ export class ControlBarComponent
     }, 3000);
   }
 
+  subscribeToStates() {
+    this.presentationService
+      .getContentState()
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((state) => {
+        this.evaluateContentState(state);
+      });
+    this.presentationService
+      .getCommentState()
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((state) => {
+        this.evaluateCommentState(state);
+      });
+    this.presentationService
+      .getMultipleRoundState()
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((multipleRounds) => (this.multipleRounds = multipleRounds));
+  }
+
   subscribeToEvents() {
     this.barItems.map((b) => (b.key = this.getFeatureKey(b.name)));
     this.remoteService
@@ -279,37 +302,9 @@ export class ControlBarComponent
         this.surveyStarted = state.started;
         this.setSurveyState();
       });
-    this.eventService
-      .on<any>(PresentationEvent.CONTENT_STATE_UPDATED)
-      .subscribe((state) => {
-        this.contentStepState = state.position;
-        this.contentIndex = state.index;
-        this.content = state.content;
-        this.contentLoaded = false;
-        if (!this.contentRounds.get(this.content.id)) {
-          this.contentRounds.set(this.content.id, this.content.state.round - 1);
-        }
-        setTimeout(() => {
-          this.contentLoaded = true;
-        }, 0);
-        this.globalStorageService.setItem(
-          STORAGE_KEYS.LAST_INDEX,
-          this.contentIndex
-        );
-        this.setArrowsState(this.contentStepState);
-        this.checkIfContentLocked();
-      });
-    this.eventService
-      .on<CommentPresentationState>(PresentationEvent.COMMENT_STATE_UPDATED)
+    this.presentationService
+      .getCommentZoomChanges()
       .pipe(takeUntil(this.destroyed$))
-      .subscribe((state) => {
-        this.commentStepState = state.stepState;
-        if (this.isActiveFeature(RoutingFeature.COMMENTS)) {
-          this.setArrowsState(this.commentStepState);
-        }
-      });
-    this.eventService
-      .on<number>(PresentationEvent.COMMENT_ZOOM_UPDATED)
       .subscribe((zoom) => {
         this.currentCommentZoom = Math.round(zoom);
         this.announceService.announce(
@@ -317,17 +312,50 @@ export class ControlBarComponent
           { zoom: this.currentCommentZoom }
         );
       });
-    this.eventService
-      .on<ContentGroup>(PresentationEvent.CONTENT_GROUP_UPDATED)
-      .subscribe((updatedContentGroup) => {
-        this.group = updatedContentGroup;
+    this.presentationService
+      .getContentGroupChanges()
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((group) => {
+        this.group = group;
         this.checkIfContentLocked();
       });
-    this.eventService
-      .on<boolean>(PresentationEvent.MULTIPLE_CONTENT_ROUNDS_EXIST)
-      .subscribe((multipleRounds) => {
-        this.multipleRounds = multipleRounds;
+    this.contentService
+      .getAnswersDeleted()
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((contentId) => {
+        if (contentId === this.content.id) {
+          this.content.state.round = 1;
+          this.resetAnswerEvent.next(this.content.id);
+          this.changeRound(0);
+          this.multipleRounds = false;
+        }
       });
+  }
+
+  evaluateContentState(state: ContentPresentationState) {
+    if (state) {
+      this.contentStepState = state.position;
+      this.contentIndex = state.index;
+      this.content = state.content;
+      if (!this.contentRounds.get(this.content.id)) {
+        this.contentRounds.set(this.content.id, this.content.state.round - 1);
+      }
+      this.globalStorageService.setItem(
+        STORAGE_KEYS.LAST_INDEX,
+        this.contentIndex
+      );
+      this.setArrowsState(this.contentStepState);
+      this.checkIfContentLocked();
+    }
+  }
+
+  evaluateCommentState(state: CommentPresentationState) {
+    if (state) {
+      this.commentStepState = state.stepState;
+      if (this.isActiveFeature(RoutingFeature.COMMENTS)) {
+        this.setArrowsState(this.commentStepState);
+      }
+    }
   }
 
   checkIfContentLocked() {
@@ -367,12 +395,12 @@ export class ControlBarComponent
     this.surveyItems[1].disabled = this.surveyStarted;
   }
 
-  setArrowsState(state: string) {
+  setArrowsState(state: PresentationStepPosition) {
     switch (state) {
-      case 'START':
+      case PresentationStepPosition.START:
         this.setArrowItemsState(true, false);
         break;
-      case 'END':
+      case PresentationStepPosition.END:
         this.setArrowItemsState(false, true);
         break;
       default:
@@ -556,10 +584,7 @@ export class ControlBarComponent
 
   changeCommentSort(sort: CommentSort) {
     this.currentCommentSort = sort;
-    this.eventService.broadcast(
-      PresentationEvent.COMMENT_SORTING_UPDATED,
-      this.currentCommentSort
-    );
+    this.presentationService.updateCommentSort(this.currentCommentSort);
   }
 
   private registerHotkeys() {
@@ -606,14 +631,6 @@ export class ControlBarComponent
   }
 
   deleteContentAnswers() {
-    this.eventService
-      .on<string>(PresentationEvent.CONTENT_ANSWERS_DELETED)
-      .subscribe(() => {
-        this.content.state.round = 1;
-        this.resetAnswerEvent.next(this.content.id);
-        this.changeRound(0);
-        this.multipleRounds = false;
-      });
     const dialogRef = this.dialogService.openDeleteDialog(
       'content-answers',
       'really-delete-answers'
@@ -630,11 +647,8 @@ export class ControlBarComponent
 
   changeRound(round: number) {
     this.contentRounds.set(this.content.id, round);
-    const body = {
-      contentIndex: this.contentIndex,
-      round: round,
-    };
-    this.eventService.broadcast(PresentationEvent.CONTENT_ROUND_UPDATED, body);
+    const roundState = new RoundState(this.contentIndex, round);
+    this.presentationService.updateRoundState(roundState);
   }
 
   afterRoundStarted(content: Content) {

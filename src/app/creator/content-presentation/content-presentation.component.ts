@@ -17,7 +17,6 @@ import { StepperComponent } from '@app/shared/stepper/stepper.component';
 import { Location } from '@angular/common';
 import { ContentGroupService } from '@app/core/services/http/content-group.service';
 import { InfoBarItem } from '@app/shared/bars/info-bar/info-bar.component';
-import { EventService } from '@app/core/services/util/event.service';
 import { ContentGroup } from '@app/core/models/content-group';
 import { DialogService } from '@app/core/services/util/dialog.service';
 import { PublishContentComponent } from '@app/creator/_dialogs/publish-content/publish-content.component';
@@ -28,9 +27,9 @@ import { PresentationService } from '@app/core/services/util/presentation.servic
 import { UserService } from '@app/core/services/http/user.service';
 import { UserSettings } from '@app/core/models/user-settings';
 import { RemoteService } from '@app/core/services/util/remote.service';
-import { PresentationEvent } from '@app/core/models/events/presentation-events.enum';
 import { ContentPublishActionType } from '@app/core/models/content-publish-action.enum';
 import { ContentPublishService } from '@app/core/services/util/content-publish.service';
+import { ContentPresentationState } from '@app/core/models/events/content-presentation-state';
 
 @Component({
   selector: 'app-content-presentation',
@@ -49,7 +48,9 @@ export class ContentPresentationComponent implements OnInit, OnDestroy {
   roomId: string;
   contentGroupName: string;
   currentStep = 0;
-  infoBarItems: InfoBarItem[] = [];
+  infoBarItems: InfoBarItem[] = [
+    new InfoBarItem('content-counter', 'people', ''),
+  ];
   answerCount;
   indexChanged: EventEmitter<number> = new EventEmitter<number>();
   contentGroup: ContentGroup;
@@ -68,7 +69,6 @@ export class ContentPresentationComponent implements OnInit, OnDestroy {
     private globalStorageService: GlobalStorageService,
     private location: Location,
     private router: Router,
-    private eventService: EventService,
     private dialogService: DialogService,
     private hotkeyService: HotkeyService,
     private presentationService: PresentationService,
@@ -199,18 +199,7 @@ export class ContentPresentationComponent implements OnInit, OnDestroy {
                   }
                 }, 0);
               }
-              if (this.infoBarItems.length === 0) {
-                this.infoBarItems.push(
-                  new InfoBarItem(
-                    'content-counter',
-                    'people',
-                    this.getStepString()
-                  )
-                );
-                this.sendContentStepState();
-              } else {
-                this.updateInfoBar();
-              }
+              this.updateInfoBar();
               setTimeout(() => {
                 const id = this.isPresentation
                   ? 'presentation-mode-message'
@@ -304,21 +293,20 @@ export class ContentPresentationComponent implements OnInit, OnDestroy {
 
   sendContentStepState(emptyList = false) {
     let position;
-    let step;
+    let index;
     if (!emptyList) {
-      step = this.currentStep;
-      if (this.currentStep === 0) {
-        position = 'START';
-      } else if (this.currentStep === this.contents.length - 1) {
-        position = 'END';
-      }
+      index = this.currentStep;
+      position = this.presentationService.getStepState(
+        this.currentStep,
+        this.contents.length
+      );
     }
-    const state = {
-      position: position,
-      index: step,
-      content: this.contents[this.currentStep],
-    };
-    this.eventService.broadcast(PresentationEvent.CONTENT_STATE_UPDATED, state);
+    const state = new ContentPresentationState(
+      position,
+      index,
+      this.contents[this.currentStep]
+    );
+    this.presentationService.updateContentState(state);
   }
 
   lockContent() {
@@ -447,10 +435,7 @@ export class ContentPresentationComponent implements OnInit, OnDestroy {
       .patchContentGroup(this.contentGroup, changes)
       .subscribe((updatedContentGroup) => {
         this.contentGroup = updatedContentGroup;
-        this.eventService.broadcast(
-          PresentationEvent.CONTENT_GROUP_UPDATED,
-          this.contentGroup
-        );
+        this.presentationService.updateContentGroup(this.contentGroup);
       });
   }
 }

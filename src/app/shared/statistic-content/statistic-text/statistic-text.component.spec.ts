@@ -25,6 +25,7 @@ describe('StatisticTextComponent', () => {
   const mockContentService = jasmine.createSpyObj([
     'getTextAnswerCreatedStream',
     'getAnswers',
+    'getAnswersDeleted',
   ]);
   const roundStatistics = new RoundStatistics();
   roundStatistics.abstentionCount = 0;
@@ -45,6 +46,7 @@ describe('StatisticTextComponent', () => {
   };
   mockContentService.getAnswers.and.returnValue(of(stats));
   mockContentService.getTextAnswerCreatedStream.and.returnValue(of(message));
+  mockContentService.getAnswersDeleted.and.returnValue(of({}));
 
   const mockContentAnswerService = jasmine.createSpyObj(['getAnswers']);
   mockContentAnswerService.getAnswers.and.returnValue(of([]));

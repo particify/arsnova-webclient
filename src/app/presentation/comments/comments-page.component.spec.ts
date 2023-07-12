@@ -30,6 +30,7 @@ import { of } from 'rxjs';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatDialog } from '@angular/material/dialog';
+import { PresentationService } from '@app/core/services/util/presentation.service';
 
 describe('CommentsPageComponent', () => {
   let component: CommentsPageComponent;
@@ -71,6 +72,12 @@ describe('CommentsPageComponent', () => {
   const activatedRouteStub = new ActivatedRouteStub(null, data);
 
   const mockRemoteService = jasmine.createSpyObj(['getCommentState']);
+
+  const mockPresentationService = jasmine.createSpyObj('PresentationService', [
+    'getCommentSortChanges',
+    'getStepState',
+    'updateCommentState',
+  ]);
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -141,6 +148,10 @@ describe('CommentsPageComponent', () => {
         {
           provide: AuthenticationService,
           useValue: mockAuthenticationService,
+        },
+        {
+          provide: PresentationService,
+          useValue: mockPresentationService,
         },
       ],
       schemas: [NO_ERRORS_SCHEMA],

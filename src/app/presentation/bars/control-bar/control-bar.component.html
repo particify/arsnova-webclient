@@ -144,11 +144,11 @@
               <span> {{ 'content.edit-content' | translate }}</span>
             </button>
             <mat-divider
-              *ngIf="contentLoaded && hasFormatAnswer(content.format)"
+              *ngIf="content && hasFormatAnswer(content.format)"
             ></mat-divider>
             <button
               mat-menu-item
-              *ngIf="contentLoaded && hasFormatAnswer(content.format)"
+              *ngIf="content && hasFormatAnswer(content.format)"
               (click)="deleteContentAnswers()"
               attr.aria-label="{{ 'content.a11y-delete-answers' | translate }}"
             >
@@ -160,14 +160,14 @@
               <span>{{ 'content.preferences' | translate }}</span>
             </button>
             <app-multiple-round-selection
-              *ngIf="multipleRounds && contentLoaded"
+              *ngIf="multipleRounds && content"
               [standalone]="false"
               [round]="this.contentRounds.get(content.id)"
               (roundChanged)="changeRound($event)"
             >
             </app-multiple-round-selection>
             <app-start-new-round
-              *ngIf="contentLoaded && hasFormatRounds(content.format)"
+              *ngIf="content && hasFormatRounds(content.format)"
               [content]="content"
               [resetEvent]="resetAnswerEvent"
               (roundStarted)="afterRoundStarted($event)"

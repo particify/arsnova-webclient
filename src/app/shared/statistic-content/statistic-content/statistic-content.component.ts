@@ -2,6 +2,7 @@ import {
   Component,
   EventEmitter,
   Input,
+  OnDestroy,
   OnInit,
   Output,
   ViewChild,
@@ -16,24 +17,24 @@ import { AnnounceService } from '@app/core/services/util/announce.service';
 import { StatisticWordcloudComponent } from '@app/shared/statistic-content/statistic-wordcloud/statistic-wordcloud.component';
 import { StatisticScaleComponent } from '@app/shared/statistic-content/statistic-scale/statistic-scale.component';
 import { HotkeyAction } from '@app/core/directives/hotkey.directive';
-import { EventService } from '@app/core/services/util/event.service';
 import { ActivatedRoute } from '@angular/router';
 import { UserRole } from '@app/core/models/user-roles.enum';
 import { UserSettings } from '@app/core/models/user-settings';
 import { StatisticPrioritizationComponent } from '@app/shared/statistic-content/statistic-prioritization/statistic-prioritization.component';
 import { ContentGroup } from '@app/core/models/content-group';
 import { RemoteService } from '@app/core/services/util/remote.service';
-import { PresentationEvent } from '@app/core/models/events/presentation-events.enum';
 import { Content } from '@app/core/models/content';
 import { ContentFlashcard } from '@app/core/models/content-flashcard';
 import { ContentPrioritization } from '@app/core/models/content-prioritization';
+import { PresentationService } from '@app/core/services/util/presentation.service';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-statistic-content',
   templateUrl: './statistic-content.component.html',
   styleUrls: ['./statistic-content.component.scss'],
 })
-export class StatisticContentComponent implements OnInit {
+export class StatisticContentComponent implements OnInit, OnDestroy {
   @ViewChild(StatisticChoiceComponent)
   choiceStatistic: StatisticChoiceComponent;
   @ViewChild(StatisticScaleComponent) scaleStatistic: StatisticScaleComponent;
@@ -43,6 +44,8 @@ export class StatisticContentComponent implements OnInit {
   wordcloudStatistic: StatisticWordcloudComponent;
   @ViewChild(StatisticPrioritizationComponent)
   prioritizationStatistic: StatisticPrioritizationComponent;
+
+  destroyed$: Subject<void> = new Subject();
 
   @Input() content: Content;
   @Input() directShow: boolean;
@@ -81,10 +84,15 @@ export class StatisticContentComponent implements OnInit {
 
   constructor(
     private announceService: AnnounceService,
-    private eventService: EventService,
     private route: ActivatedRoute,
-    private remoteService: RemoteService
+    private remoteService: RemoteService,
+    private presentationService: PresentationService
   ) {}
+
+  ngOnDestroy(): void {
+    this.destroyed$.next();
+    this.destroyed$.complete();
+  }
 
   ngOnInit(): void {
     this.attachmentData = {
@@ -114,8 +122,9 @@ export class StatisticContentComponent implements OnInit {
       }
     });
     this.broadcastRoundState();
-    this.eventService
-      .on<any>(PresentationEvent.CONTENT_ROUND_UPDATED)
+    this.presentationService
+      .getRoundStateChanges()
+      .pipe(takeUntil(this.destroyed$))
       .subscribe((roundData) => {
         if (this.index === roundData.contentIndex) {
           this.changeRound(roundData.round);
@@ -168,10 +177,7 @@ export class StatisticContentComponent implements OnInit {
 
   broadcastRoundState() {
     if (this.active) {
-      this.eventService.broadcast(
-        PresentationEvent.MULTIPLE_CONTENT_ROUNDS_EXIST,
-        this.multipleRounds
-      );
+      this.presentationService.updateMultipleRoundState(this.multipleRounds);
     }
   }
 

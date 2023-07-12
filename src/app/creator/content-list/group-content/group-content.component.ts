@@ -39,7 +39,6 @@ import { ContentGroupStatistics } from '@app/core/models/content-group-statistic
 import { MarkdownFeatureset } from '@app/core/services/http/formatting.service';
 import { DragDropBaseComponent } from '@app/shared/drag-drop-base/drag-drop-base.component';
 import { UserRole } from '@app/core/models/user-roles.enum';
-import { PresentationEvent } from '@app/core/models/events/presentation-events.enum';
 import { ContentPublishService } from '@app/core/services/util/content-publish.service';
 
 @Component({
@@ -134,13 +133,15 @@ export class GroupContentComponent
     this.translateService.use(
       this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE)
     );
-    this.eventService
-      .on(PresentationEvent.CONTENT_ANSWERS_DELETED)
-      .subscribe((contentId) => {
+    this.contentService.getAnswersDeleted().subscribe((contentId) => {
+      if (contentId) {
         const content = this.contents.find((c) => c.id === contentId);
-        content.state.round = 1;
-        this.resetAnswerEvent.next(content.id);
-      });
+        if (content) {
+          content.state.round = 1;
+          this.resetAnswerEvent.next(content.id);
+        }
+      }
+    });
   }
 
   ngOnDestroy() {

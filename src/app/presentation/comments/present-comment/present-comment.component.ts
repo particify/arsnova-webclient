@@ -2,8 +2,7 @@ import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { HotkeyService } from '@app/core/services/util/hotkey.service';
 import { TranslateService } from '@ngx-translate/core';
 import { Comment } from '@app/core/models/comment';
-import { EventService } from '@app/core/services/util/event.service';
-import { PresentationEvent } from '@app/core/models/events/presentation-events.enum';
+import { PresentationService } from '@app/core/services/util/presentation.service';
 
 @Component({
   selector: 'app-present-comment',
@@ -20,7 +19,7 @@ export class PresentCommentComponent implements OnInit, OnDestroy {
 
   constructor(
     private translateService: TranslateService,
-    private eventService: EventService,
+    private presentationService: PresentationService,
     private hotkeyService: HotkeyService
   ) {}
 
@@ -63,10 +62,7 @@ export class PresentCommentComponent implements OnInit, OnDestroy {
   updateFontSize(): void {
     document.getElementById('comment').style.fontSize =
       'calc(' + this.currentZoom * 18 + 'px + 1.5vw)';
-    this.eventService.broadcast(
-      PresentationEvent.COMMENT_ZOOM_UPDATED,
-      this.currentZoom * 100
-    );
+    this.presentationService.updateCommentZoom(this.currentZoom * 100);
   }
 
   updateZoom(adjustment: number) {

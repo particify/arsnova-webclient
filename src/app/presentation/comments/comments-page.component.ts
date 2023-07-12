@@ -12,7 +12,7 @@ import { AbstractCommentsPageComponent } from '@app/common/abstract/abstract-com
 import { Comment } from '@app/core/models/comment';
 import { CommentSettings } from '@app/core/models/comment-settings';
 import { CommentSort } from '@app/core/models/comment-sort.enum';
-import { PresentationEvent } from '@app/core/models/events/presentation-events.enum';
+import { CommentPresentationState } from '@app/core/models/events/comment-presentation-state';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
 import { CommentSettingsService } from '@app/core/services/http/comment-settings.service';
 import { CommentService } from '@app/core/services/http/comment.service';
@@ -24,20 +24,12 @@ import {
   AdvancedSnackBarTypes,
   NotificationService,
 } from '@app/core/services/util/notification.service';
+import { PresentationService } from '@app/core/services/util/presentation.service';
 import { RemoteService } from '@app/core/services/util/remote.service';
 import { RoutingService } from '@app/core/services/util/routing.service';
 import { WsCommentService } from '@app/core/services/websockets/ws-comment.service';
 import { TranslateService } from '@ngx-translate/core';
-
-export class CommentPresentationState {
-  stepState: string;
-  commentId: string;
-
-  constructor(step: string, commentId: string) {
-    this.stepState = step;
-    this.commentId = commentId;
-  }
-}
+import { takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-comments-page',
@@ -68,7 +60,8 @@ export class CommentsPageComponent
     protected location: Location,
     protected routingService: RoutingService,
     protected eventService: EventService,
-    protected remoteService: RemoteService
+    protected remoteService: RemoteService,
+    private presentationService: PresentationService
   ) {
     super(
       commentService,
@@ -111,8 +104,9 @@ export class CommentsPageComponent
         }
       }, 300);
     }
-    this.eventService
-      .on<string>(PresentationEvent.COMMENT_SORTING_UPDATED)
+    this.presentationService
+      .getCommentSortChanges()
+      .pipe(takeUntil(this.destroyed$))
       .subscribe((sort) => {
         this.sortComments(sort as CommentSort);
         setTimeout(() => {
@@ -167,16 +161,6 @@ export class CommentsPageComponent
     return this.getIndexOfComment(this.activeComment);
   }
 
-  getStepState(index) {
-    let state;
-    if (index === 0) {
-      state = 'START';
-    } else if (index === this.comments.length - 1) {
-      state = 'END';
-    }
-    return state;
-  }
-
   updateCurrentComment(comment: Comment, idChanged = false) {
     if (!idChanged) {
       if (comment.highlighted) {
@@ -197,13 +181,10 @@ export class CommentsPageComponent
     this.activeComment = comment;
     const index = this.getIndexOfComment(comment);
     const commentPresentationState = new CommentPresentationState(
-      this.getStepState(index),
+      this.presentationService.getStepState(index, this.comments.length),
       comment.id
     );
-    this.eventService.broadcast(
-      PresentationEvent.COMMENT_STATE_UPDATED,
-      commentPresentationState
-    );
+    this.presentationService.updateCommentState(commentPresentationState);
     this.remoteService.updateCommentStateChange(comment.id);
     if (!this.isLoading) {
       this.scrollToComment(index);
