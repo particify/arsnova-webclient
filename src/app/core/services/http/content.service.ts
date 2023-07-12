@@ -386,4 +386,10 @@ export class ContentService extends AbstractEntityService<Content> {
   getTypeIcons(): Map<ContentType, string> {
     return this.typeIcons;
   }
+
+  hasFormatRounds(format: ContentType): boolean {
+    return [ContentType.CHOICE, ContentType.SCALE, ContentType.BINARY].includes(
+      format
+    );
+  }
 }
