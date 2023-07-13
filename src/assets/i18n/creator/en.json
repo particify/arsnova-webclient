@@ -251,6 +251,7 @@
     "content-group-name-restriction": "This name is not available.",
     "content-group-name": "Name of the question series",
     "sort-content-group": "Sort the question series",
+    "import-export-content-group": "Import/Export",
     "updated-sorting": "Your sorting has been saved.",
     "format": "Format",
     "format-choice": "Multiple-Choice",
@@ -562,6 +563,7 @@
     "overview": "Overview"
   },
   "export": {
+    "export-series": "Export series",
     "export": "Export",
     "tsv": "Tab-separated values",
     "csv": "Comma-separated values",
@@ -569,6 +571,7 @@
     "charset": "Charset"
   },
   "import": {
+    "import-series": "Import series",
     "import": "Import"
   },
   "control-bar": {

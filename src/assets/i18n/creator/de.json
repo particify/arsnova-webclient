@@ -251,6 +251,7 @@
     "content-group-name-restriction": "Dieser Name ist nicht verfügbar.",
     "content-group-name": "Name der Fragenserie",
     "sort-content-group": "Sortieren",
+    "import-export-content-group": "Import/Export",
     "updated-sorting": "Deine Sortierung wurde gespeichert.",
     "format": "Format",
     "format-choice": "Multiple-Choice",
@@ -561,6 +562,7 @@
     "overview": "Übersicht"
   },
   "export": {
+    "export-series": "Fragenserie exportieren",
     "export": "Exportieren",
     "tsv": "Tabulator-separierte Werte",
     "csv": "Komma-separierte Werte",
@@ -568,6 +570,7 @@
     "charset": "Zeichensatz"
   },
   "import": {
+    "import-series": "Fragenserie importieren",
     "import": "Importieren"
   },
   "control-bar": {

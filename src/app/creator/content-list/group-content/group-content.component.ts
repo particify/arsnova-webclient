@@ -40,6 +40,7 @@ import { MarkdownFeatureset } from '@app/core/services/http/formatting.service';
 import { DragDropBaseComponent } from '@app/shared/drag-drop-base/drag-drop-base.component';
 import { UserRole } from '@app/core/models/user-roles.enum';
 import { ContentPublishService } from '@app/core/services/util/content-publish.service';
+import { ExtensionFactory } from '@projects/extension-point/src/public-api';
 
 @Component({
   selector: 'app-group-content',
@@ -95,6 +96,8 @@ export class GroupContentComponent
 
   isModerator = false;
 
+  hasSeriesExportExtension = false;
+
   constructor(
     protected contentService: ContentService,
     protected roomStatsService: RoomStatsService,
@@ -110,7 +113,8 @@ export class GroupContentComponent
     protected router: Router,
     private hotkeyService: HotkeyService,
     private routingService: RoutingService,
-    private contentPublishService: ContentPublishService
+    private contentPublishService: ContentPublishService,
+    private extensionFactory: ExtensionFactory
   ) {
     super();
   }
@@ -142,6 +146,9 @@ export class GroupContentComponent
         }
       }
     });
+    this.hasSeriesExportExtension = !!this.extensionFactory.getExtension(
+      'series-results-export'
+    );
   }
 
   ngOnDestroy() {
