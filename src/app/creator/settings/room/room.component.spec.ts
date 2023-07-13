@@ -24,6 +24,7 @@ import { EventService } from '@app/core/services/util/event.service';
 import { FormattingService } from '@app/core/services/http/formatting.service';
 import { UserRole } from '@app/core/models/user-roles.enum';
 import { Room } from '@app/core/models/room';
+import { FocusModeService } from '@app/creator/_services/focus-mode.service';
 
 @Injectable()
 class MockRoomService {}
@@ -45,6 +46,10 @@ describe('RoomComponent', () => {
   };
 
   const activatedRouteStub = new ActivatedRouteStub(null, null, snapshot);
+
+  const mockFocusModeService = jasmine.createSpyObj('FocusModeService', [
+    'updateOverviewState',
+  ]);
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
@@ -81,6 +86,10 @@ describe('RoomComponent', () => {
         {
           provide: ActivatedRoute,
           useValue: activatedRouteStub,
+        },
+        {
+          provide: FocusModeService,
+          useValue: mockFocusModeService,
         },
       ],
       imports: [
