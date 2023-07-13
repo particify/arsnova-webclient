@@ -2,34 +2,47 @@
   <div fxLayout="row" fxLayoutAlign="end">
     <app-copy-url class="copy-url" [url]="url"></app-copy-url>
   </div>
-  <div fxFill fxLayout="row" fxLayoutAlign="center center">
-    <div class="qr-container">
-      <h1 class="text" fxLayout="column" fxLayoutAlign="center center">
+  <div fxFill fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="8vw">
+    <div
+      class="qr-container"
+      fxLayout="row"
+      fxLayoutAlign="center center"
+      fxLayoutGap="8vw"
+    >
+      <div fxLayout="column" fxLayoutAlign="center center">
         <lib-extension-point extensionId="branding-logo">
           <mat-icon color="primary" class="web-icon disabled"
             >language</mat-icon
           >
         </lib-extension-point>
-        <span *ngIf="!useJoinUrl" class="url">{{ displayUrl }}</span>
-        <span class="url">{{
+        <span *ngIf="!useJoinUrl" class="url text">{{ displayUrl }}</span>
+        <span class="url text">{{
           useJoinUrl ? displayUrl : (shortId | splitShortId : false)
         }}</span>
         <lib-extension-point
           *ngIf="passwordProtected"
           extensionId="share-room-password"
         ></lib-extension-point>
-      </h1>
-      <mat-divider vertical></mat-divider>
+      </div>
       <qr-code
         fxLayout="column"
         fxLayoutAlign="center center"
         [value]="qrUrl"
-        [size]="qrWidth"
+        [size]="qrSize"
         [lightColor]="bgColor"
         [darkColor]="fgColor"
         [errorCorrectionLevel]="'M'"
         [margin]="0"
       ></qr-code>
+    </div>
+    <div
+      *ngIf="!!userCount"
+      class="disabled"
+      fxLayoutAlign="center center"
+      fxLayoutGap="12px"
+    >
+      <span class="text">{{ userCount - 1 }}</span>
+      <mat-icon class="user-icon">people</mat-icon>
     </div>
   </div>
 </div>
