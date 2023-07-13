@@ -1,6 +1,11 @@
 <div fxLayout="row" fxLayoutAlign="center">
   <div class="page-container">
-    <div fxLayout="row" fxLayoutAlign="center center" class="header-container">
+    <div
+      *ngIf="!disabled"
+      fxLayout="row"
+      fxLayoutAlign="center center"
+      class="header-container"
+    >
       <app-comment-list-bar
         [scroll]="scroll"
         [scrollActive]="scrollActive"
@@ -12,7 +17,7 @@
             : commentsFilteredByTime.length + unreadCommentCount
         "
         [showAlways]="true"
-        [isAddButtonDisabled]="readonly || disabled"
+        [isAddButtonDisabled]="readonly"
         [currentFilter]="currentFilter"
         [currentSort]="currentSort"
         [period]="period"
@@ -25,6 +30,10 @@
       </app-comment-list-bar>
     </div>
     <app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
+    <app-comment-settings-hint
+      [disabled]="disabled"
+      [readonly]="readonly"
+    ></app-comment-settings-hint>
     <app-comment-list-hint
       *ngIf="!isLoading && !disabled"
       [isListEmpty]="comments.length < 1"
@@ -34,7 +43,7 @@
       "
     ></app-comment-list-hint>
     <div
-      *ngIf="!isLoading"
+      *ngIf="!isLoading && !disabled"
       class="comments-container"
       tabindex="-1"
       appHotkey="7"
@@ -59,7 +68,7 @@
       </app-comment>
     </div>
     <app-comment-list-add-button
-      [showButton]="comments.length < 3 && !isLoading && !disabled"
+      *ngIf="comments.length < 3 && !isLoading && !disabled"
       (buttonClicked)="openCreateDialog()"
     ></app-comment-list-add-button>
     <app-comment-list-floating-buttons

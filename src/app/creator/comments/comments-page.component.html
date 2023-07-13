@@ -50,6 +50,12 @@
       </app-comment-list-bar>
     </div>
     <app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
+    <app-comment-settings-hint
+      [disabled]="disabled"
+      [readonly]="readonly"
+      [showToggleButton]="true"
+      (toggleButtonClicked)="disabled ? activateComments() : toggleReadonly()"
+    ></app-comment-settings-hint>
     <app-comment-list-hint
       *ngIf="!isLoading && !disabled"
       [isListEmpty]="comments.length < 1"
@@ -58,12 +64,6 @@
         (!hideCommentsList && commentsFilteredByTime.length < 1)
       "
     ></app-comment-list-hint>
-    <app-comment-settings-hint
-      [disabled]="disabled"
-      [readonly]="readonly"
-      [showToggleButton]="true"
-      (toggleButtonClicked)="disabled ? activateComments() : toggleReadonly()"
-    ></app-comment-settings-hint>
     <div
       *ngIf="!isLoading"
       class="comments-container"
@@ -86,9 +86,8 @@
       </app-comment>
     </div>
     <app-comment-list-add-button
-      [showButton]="
-        comments.length < 3 && !isLoading && !isModeration && !disabled
-      "
+      *ngIf="comments.length < 3 && !isLoading && !isModeration && !disabled"
+      [disabled]="readonly"
       (buttonClicked)="openCreateDialog()"
     ></app-comment-list-add-button>
     <app-comment-list-floating-buttons

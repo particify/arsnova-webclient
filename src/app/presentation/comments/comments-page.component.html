@@ -10,6 +10,21 @@
     ></app-present-comment>
   </div>
   <div #commentList (scroll)="onScroll()" class="list-container">
+    <app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
+    <app-comment-settings-hint
+      [disabled]="disabled"
+      [readonly]="readonly"
+      [showToggleButton]="true"
+      (toggleButtonClicked)="disabled ? activateComments() : toggleReadonly()"
+    ></app-comment-settings-hint>
+    <app-comment-list-hint
+      *ngIf="!isLoading && !disabled"
+      [isListEmpty]="comments.length < 1"
+      [noPostsFound]="
+        (hideCommentsList && filteredComments.length < 1) ||
+        (!hideCommentsList && commentsFilteredByTime.length < 1)
+      "
+    ></app-comment-list-hint>
     <div
       *ngIf="!isLoading"
       tabindex="-1"

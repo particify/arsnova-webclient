@@ -4,6 +4,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AbstractCommentsPageComponent } from '@app/common/abstract/abstract-comments-page.component';
 import { Comment } from '@app/core/models/comment';
+import { CommentSettings } from '@app/core/models/comment-settings';
 import { Vote } from '@app/core/models/vote';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
 import { CommentSettingsService } from '@app/core/services/http/comment-settings.service';
@@ -84,9 +85,25 @@ export class CommentsPageComponent
           this.commentVoteMap.set(v.commentId, v);
         }
       });
+    this.commentSettingsService
+      .getSettingsStream()
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((settings) => {
+        this.handleSettings(settings);
+      });
   }
 
   getVote(comment: Comment): Vote {
     return this.commentVoteMap.get(comment.id);
+  }
+
+  handleSettings(settings: CommentSettings) {
+    if (settings.disabled !== this.disabled) {
+      this.disabled = settings.disabled;
+    }
+    if (settings.readonly !== this.readonly) {
+      this.readonly = settings.readonly;
+      this.showReadonlyStateNotification();
+    }
   }
 }
