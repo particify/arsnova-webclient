@@ -1,29 +1,22 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { RoomOverviewPageComponent } from './room-overview-page.component';
 import { ActivatedRoute, Router } from '@angular/router';
-import { NotificationService } from '@app/core/services/util/notification.service';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import {
   JsonTranslationLoader,
-  MockNotificationService,
   ActivatedRouteStub,
   MockGlobalStorageService,
   MockRouter,
   MockEventService,
-  MockAnnounceService,
 } from '@testing/test-helpers';
 import { of } from 'rxjs';
 import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
 import { EventService } from '@app/core/services/util/event.service';
 import { ContentGroupService } from '@app/core/services/http/content-group.service';
-import { AnnounceService } from '@app/core/services/util/announce.service';
-import { SpyLocation } from '@angular/common/testing';
-import { AuthenticationService } from '@app/core/services/http/authentication.service';
 import { Room } from '@app/core/models/room';
 import { NO_ERRORS_SCHEMA, EventEmitter } from '@angular/core';
 import { UserRole } from '@app/core/models/user-roles.enum';
 import { SplitShortIdPipe } from '@app/core/pipes/split-short-id.pipe';
-import { RoomService } from '@app/core/services/http/room.service';
 import { RoomStatsService } from '@app/core/services/http/room-stats.service';
 import { WsCommentService } from '@app/core/services/websockets/ws-comment.service';
 import { CommentService } from '@app/core/services/http/comment.service';
@@ -32,16 +25,13 @@ import { Message } from '@stomp/stompjs';
 import { A11yIntroPipe } from '@app/core/pipes/a11y-intro.pipe';
 import { CommentSettingsService } from '@app/core/services/http/comment-settings.service';
 import { ContentPublishService } from '@app/core/services/util/content-publish.service';
+import { ContentGroupStatistics } from '@app/core/models/content-group-statistics';
+import { RoomStats } from '@app/core/models/room-stats';
+import { ContentGroup } from '@app/core/models/content-group';
 
 describe('RoomOverviewPageComponent', () => {
   let component: RoomOverviewPageComponent;
   let fixture: ComponentFixture<RoomOverviewPageComponent>;
-
-  const mockRoomService = jasmine.createSpyObj([
-    'getCurrentRoomsMessageStream',
-    'getRoomSummaries',
-    'deleteRoom',
-  ]);
 
   const mockRoomStatsService = jasmine.createSpyObj(['getStats']);
   mockRoomStatsService.getStats.and.returnValue(of({}));
@@ -62,12 +52,17 @@ describe('RoomOverviewPageComponent', () => {
     'getByRoomIdAndName',
     'getById',
     'filterPublishedIds',
+    'sortContentGroupsByName',
   ]);
-  mockContentGroupService.getByRoomIdAndName.and.returnValue(of({}));
+  mockContentGroupService.getByRoomIdAndName.and.returnValue(
+    of(new ContentGroup('1234', '0', 'roomId', 'name', [], true))
+  );
+  mockContentGroupService.getById.and.returnValue(
+    of(new ContentGroup('1234', '0', 'roomId', 'name', [], true))
+  );
   mockContentGroupService.filterPublishedIds.and.returnValue([]);
-
-  const mockAuthenticationService = jasmine.createSpyObj([
-    'getCurrentAuthentication',
+  mockContentGroupService.sortContentGroupsByName.and.returnValue([
+    new ContentGroup('1234', '0', 'roomId', 'name', [], true),
   ]);
 
   const room = new Room();
@@ -106,10 +101,6 @@ describe('RoomOverviewPageComponent', () => {
       ],
       providers: [
         {
-          provide: RoomService,
-          useValue: mockRoomService,
-        },
-        {
           provide: RoomStatsService,
           useValue: mockRoomStatsService,
         },
@@ -128,22 +119,6 @@ describe('RoomOverviewPageComponent', () => {
         {
           provide: ContentGroupService,
           useValue: mockContentGroupService,
-        },
-        {
-          provide: AnnounceService,
-          useClass: MockAnnounceService,
-        },
-        {
-          provide: Location,
-          useClass: SpyLocation,
-        },
-        {
-          provide: AuthenticationService,
-          useValue: mockAuthenticationService,
-        },
-        {
-          provide: NotificationService,
-          useClass: MockNotificationService,
         },
         {
           provide: ActivatedRoute,
@@ -181,10 +156,59 @@ describe('RoomOverviewPageComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(RoomOverviewPageComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
   });
 
   it('should create', () => {
+    fixture.detectChanges();
     expect(component).toBeTruthy();
+  });
+
+  it('should initialize stats', () => {
+    const initializeStatsSpy = spyOn(component, 'initializeStats');
+    fixture.detectChanges();
+    expect(initializeStatsSpy).toHaveBeenCalled();
+  });
+
+  it('should initialize feedback status', () => {
+    const getFeedbackSpy = spyOn(component, 'getFeedback');
+    fixture.detectChanges();
+    expect(getFeedbackSpy).toHaveBeenCalled();
+  });
+
+  it('should load content groups if there are group stats in room stats', () => {
+    const groupStats = [new ContentGroupStatistics('groupId', 'groupName', 5)];
+    const roomStats = new RoomStats(groupStats, 0, 0, 0, 0);
+    mockRoomStatsService.getStats.and.returnValue(of(roomStats));
+    fixture.detectChanges();
+    expect(mockContentGroupService.getById).toHaveBeenCalled();
+  });
+
+  it('should call afterGroupsLoadHook if content groups exist', () => {
+    const afterGroupsLoadHookSpy = spyOn(component, 'afterGroupsLoadHook');
+    const groupStats = [new ContentGroupStatistics('groupId', 'groupName', 5)];
+    const roomStats = new RoomStats(groupStats, 0, 0, 0, 0);
+    mockRoomStatsService.getStats.and.returnValue(of(roomStats));
+    fixture.detectChanges();
+    expect(afterGroupsLoadHookSpy).toHaveBeenCalled();
+  });
+
+  it('should call afterGroupsLoadHook also if no content groups exist', () => {
+    const afterGroupsLoadHookSpy = spyOn(component, 'afterGroupsLoadHook');
+    const roomStats = new RoomStats([], 0, 0, 0, 0);
+    mockRoomStatsService.getStats.and.returnValue(of(roomStats));
+    fixture.detectChanges();
+    expect(afterGroupsLoadHookSpy).toHaveBeenCalled();
+  });
+
+  it('should subscribe to comment counter', () => {
+    fixture.detectChanges();
+    expect(mockCommentService.countByRoomId).toHaveBeenCalled();
+    expect(mockWsCommentService.getCommentStream).toHaveBeenCalled();
+  });
+
+  it('should prepare attachment data', () => {
+    const prepareAttachmentDataSpy = spyOn(component, 'prepareAttachmentData');
+    fixture.detectChanges();
+    expect(prepareAttachmentDataSpy).toHaveBeenCalled();
   });
 });
