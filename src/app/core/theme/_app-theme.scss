@@ -41,20 +41,6 @@
     box-shadow: 0 0 3px $primary;
   }
 
-  @keyframes primary-border-lightning {
-    0% {
-      border-color: $primary;
-    }
-
-    50% {
-      border-color: $primary-variant;
-    }
-
-    100% {
-      border-color: $primary;
-    }
-  }
-
   // Secondary
 
   %secondary {
