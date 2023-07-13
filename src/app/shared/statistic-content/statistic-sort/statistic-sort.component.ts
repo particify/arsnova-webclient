@@ -79,8 +79,10 @@ export class StatisticSortComponent
       .pipe(takeUntil(this.destroyed$))
       .subscribe((msg) => {
         const stats = JSON.parse(msg.body).payload.stats;
-        this.updateData(stats);
-        this.updateChart();
+        if (stats) {
+          this.updateData(stats);
+          this.updateChart();
+        }
       });
     this.visualizationUnitChanged.subscribe((isUnitPercent) => {
       this.settings.contentVisualizationUnitPercent = isUnitPercent;
@@ -90,31 +92,28 @@ export class StatisticSortComponent
 
   updateData(stats: AnswerStatistics) {
     const roundStatistics = stats.roundStatistics[0];
-    if (roundStatistics.combinatedCounts || roundStatistics.abstentionCount) {
-      this.data = [];
-      this.labels = [];
-      this.answerIndexes = [];
-      const combinedCounts = this.checkIfTooMany(
-        roundStatistics.combinatedCounts ?? []
-      );
-      this.data.push({
-        data: combinedCounts.map((c) => c.count),
-        backgroundColor: this.showCorrect ? this.indicationColors : this.colors,
-      });
-      let abstentionCount = 0;
-      if (this.content.abstentionsAllowed) {
-        abstentionCount = roundStatistics.abstentionCount;
-        this.data[0].data.push(abstentionCount);
-      }
-      this.answerIndexes = combinedCounts.map((c) => c.selectedChoiceIndexes);
-      this.initLabels();
-      const listToCount = combinedCounts.map((c) => c.count);
-      listToCount.push(abstentionCount);
-      this.updateCounter(listToCount);
-      this.setColors();
-    } else {
-      this.updateCounter([0]);
+    this.data = [];
+    this.answerIndexes = [];
+    const combinedCounts = this.checkIfTooMany(
+      roundStatistics.combinatedCounts ?? []
+    );
+    this.data.push({
+      data: combinedCounts.map((c) => c.count),
+      backgroundColor: this.showCorrect ? this.indicationColors : this.colors,
+    });
+    let abstentionCount = 0;
+    if (this.content.abstentionsAllowed) {
+      abstentionCount = roundStatistics.abstentionCount;
+      this.data[0].data.push(abstentionCount);
     }
+    this.answerIndexes = combinedCounts.map((c) => c.selectedChoiceIndexes);
+    if (roundStatistics.combinatedCounts || roundStatistics.abstentionCount) {
+      this.initLabels();
+    }
+    const listToCount = combinedCounts.map((c) => c.count);
+    listToCount.push(abstentionCount);
+    this.updateCounter(listToCount);
+    this.setColors();
   }
 
   initLabels() {
@@ -183,7 +182,8 @@ export class StatisticSortComponent
   }
 
   deleteAnswers() {
-    this.data = [];
+    this.data[0].data = [];
+    this.labels = [];
     this.updateChart();
   }
 
