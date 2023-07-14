@@ -40,6 +40,7 @@ import { ContentGroup } from '@app/core/models/content-group';
 import { Room } from '@app/core/models/room';
 import { A11yRenderedBodyPipe } from '@app/core/pipes/a11y-rendered-body.pipe';
 import { ContentPublishService } from '@app/core/services/util/content-publish.service';
+import { ContentPresentationState } from '@app/core/models/events/content-presentation-state';
 
 @Injectable()
 class MockContentService {
@@ -61,6 +62,10 @@ class MockContentService {
 
   getTypeIcons() {
     return new Map<ContentType, string>();
+  }
+
+  getAnswersDeleted() {
+    return of('1234');
   }
 }
 

@@ -1,11 +1,10 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { Observable, Subject } from 'rxjs';
+import { Observable, Subject, takeUntil } from 'rxjs';
 import { ContentService } from '@app/core/services/http/content.service';
 import { Content } from '@app/core/models/content';
 import { AnswerStatistics } from '@app/core/models/answer-statistics';
 import { EventService } from '@app/core/services/util/event.service';
 import { TextAnswer } from '@app/core/models/text-answer';
-import { PresentationEvent } from '@app/core/models/events/presentation-events.enum';
 import { UserSettings } from '@app/core/models/user-settings';
 
 @Component({
@@ -39,8 +38,9 @@ export abstract class StatisticContentBaseComponent implements OnInit {
       this.toggleAnswers(this.directShow);
     });
     this.afterInit();
-    this.eventService
-      .on(PresentationEvent.CONTENT_ANSWERS_DELETED)
+    this.contentService
+      .getAnswersDeleted()
+      .pipe(takeUntil(this.destroyed$))
       .subscribe((contentId) => {
         if (this.content.id === contentId) {
           this.deleteAnswers();

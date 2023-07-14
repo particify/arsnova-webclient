@@ -20,6 +20,7 @@ import { of } from 'rxjs';
 
 import { StatisticPrioritizationComponent } from './statistic-prioritization.component';
 import { PrioritizationRoundStatistics } from '@app/core/models/round-statistics';
+import { ContentPresentationState } from '@app/core/models/events/content-presentation-state';
 
 describe('StatisticPrioritizationComponent', () => {
   let component: StatisticPrioritizationComponent;
@@ -28,6 +29,7 @@ describe('StatisticPrioritizationComponent', () => {
   const mockContentService = jasmine.createSpyObj([
     'getAnswersChangedStream',
     'getAnswer',
+    'getAnswersDeleted',
   ]);
   const roundStatistics = new PrioritizationRoundStatistics();
   roundStatistics.abstentionCount = 0;
@@ -46,8 +48,12 @@ describe('StatisticPrioritizationComponent', () => {
   };
   mockContentService.getAnswer.and.returnValue(of(stats));
   mockContentService.getAnswersChangedStream.and.returnValue(of(message));
+  const contentState = new ContentPresentationState(null, null, null);
+  mockContentService.getAnswersDeleted.and.returnValue(of(contentState));
 
-  const mockPresentationService = jasmine.createSpyObj(['getScale']);
+  const mockPresentationService = jasmine.createSpyObj('PresentationService', [
+    'getScale',
+  ]);
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({

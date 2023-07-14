@@ -1,14 +1,18 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { EventService } from '@app/core/services/util/event.service';
 import { HotkeyService } from '@app/core/services/util/hotkey.service';
-import { JsonTranslationLoader, MockEventService } from '@testing/test-helpers';
+import { JsonTranslationLoader } from '@testing/test-helpers';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { PresentCommentComponent } from './present-comment.component';
+import { PresentationService } from '@app/core/services/util/presentation.service';
 
 describe('PresentCommentComponent', () => {
   let component: PresentCommentComponent;
   let fixture: ComponentFixture<PresentCommentComponent>;
+
+  const mockPresentationService = jasmine.createSpyObj('PresentationService', [
+    'updateCommentZoom',
+  ]);
 
   const mockHotKeyService = jasmine.createSpyObj([
     'registerHotkey',
@@ -29,8 +33,8 @@ describe('PresentCommentComponent', () => {
       ],
       providers: [
         {
-          provide: EventService,
-          useClass: MockEventService,
+          provide: PresentationService,
+          useValue: mockPresentationService,
         },
         {
           provide: HotkeyService,

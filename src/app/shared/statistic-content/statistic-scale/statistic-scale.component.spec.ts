@@ -29,6 +29,7 @@ describe('StatisticScaleComponent', () => {
   const mockContentService = jasmine.createSpyObj([
     'getAnswersChangedStream',
     'getAnswer',
+    'getAnswersDeleted',
   ]);
   const roundStatistics = new RoundStatistics();
   roundStatistics.abstentionCount = 0;
@@ -48,6 +49,7 @@ describe('StatisticScaleComponent', () => {
   };
   mockContentService.getAnswer.and.returnValue(of(stats));
   mockContentService.getAnswersChangedStream.and.returnValue(of(message));
+  mockContentService.getAnswersDeleted.and.returnValue(of({}));
 
   const mockLikertScaleService = jasmine.createSpyObj(['getOptionLabels']);
   mockLikertScaleService.getOptionLabels.and.returnValue([

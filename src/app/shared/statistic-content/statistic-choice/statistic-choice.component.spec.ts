@@ -7,6 +7,7 @@ import {
   JsonTranslationLoader,
   MockEventService,
   MockThemeService,
+  MockGlobalStorageService,
 } from '@testing/test-helpers';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { ContentChoice } from '@app/core/models/content-choice';
@@ -17,7 +18,6 @@ import { RoundStatistics } from '@app/core/models/round-statistics';
 import { AnswerStatistics } from '@app/core/models/answer-statistics';
 import { PresentationService } from '@app/core/services/util/presentation.service';
 import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
-import { MockGlobalStorageService } from '@testing/test-helpers';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { UserSettings } from '@app/core/models/user-settings';
 
@@ -28,6 +28,7 @@ describe('StatisticChoiceComponent', () => {
   const mockContentService = jasmine.createSpyObj([
     'getAnswersChangedStream',
     'getAnswer',
+    'getAnswersDeleted',
   ]);
   const roundStatistics = new RoundStatistics();
   roundStatistics.abstentionCount = 0;
@@ -47,8 +48,12 @@ describe('StatisticChoiceComponent', () => {
   };
   mockContentService.getAnswer.and.returnValue(of(stats));
   mockContentService.getAnswersChangedStream.and.returnValue(of(message));
+  mockContentService.getAnswersDeleted.and.returnValue(of({}));
 
-  const mockPresentationService = jasmine.createSpyObj(['getScale']);
+  const mockPresentationService = jasmine.createSpyObj('PresentationService', [
+    'getScale',
+    'updateContentGroup',
+  ]);
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({

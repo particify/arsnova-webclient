@@ -99,7 +99,10 @@ describe('ContentPresentationComponent', () => {
 
   const activatedRouteStub = new ActivatedRouteStub(null, data, snapshot);
 
-  const mockPresentationService = jasmine.createSpyObj(['getScale']);
+  const mockPresentationService = jasmine.createSpyObj([
+    'getScale',
+    'updateContentGroup',
+  ]);
 
   const mockUserService = jasmine.createSpyObj('UserService', [
     'getUserSettingsByLoginId',

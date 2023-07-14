@@ -38,12 +38,16 @@ import { RoomService } from '@app/core/services/http/room.service';
 import { RemoteService } from '@app/core/services/util/remote.service';
 import { CommentSettingsService } from '@app/core/services/http/comment-settings.service';
 import { ContentPublishService } from '@app/core/services/util/content-publish.service';
+import { PresentationService } from '@app/core/services/util/presentation.service';
 
 describe('ControlBarComponent', () => {
   let component: ControlBarComponent;
   let fixture: ComponentFixture<ControlBarComponent>;
 
-  const mockContentService = jasmine.createSpyObj(['']);
+  const mockContentService = jasmine.createSpyObj('ContentService', [
+    'getAnswersDeleted',
+  ]);
+  mockContentService.getAnswersDeleted.and.returnValue(of({}));
 
   const mockRoomStatsService = jasmine.createSpyObj(['getStats']);
   mockRoomStatsService.getStats.and.returnValue(of({}));
@@ -130,6 +134,14 @@ describe('ControlBarComponent', () => {
     'getSettingsStream',
   ]);
   mockCommentSettingsService.getSettingsStream.and.returnValue(of({}));
+
+  const mockPresentationService = jasmine.createSpyObj('PresentationService', [
+    'getContentState',
+    'getCommentState',
+    'getMultipleRoundState',
+    'getCommentZoomChanges',
+    'getContentGroupChanges',
+  ]);
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
@@ -223,6 +235,10 @@ describe('ControlBarComponent', () => {
         {
           provide: ContentPublishService,
           useClass: ContentPublishService,
+        },
+        {
+          provide: PresentationService,
+          useValue: mockPresentationService,
         },
       ],
       schemas: [NO_ERRORS_SCHEMA],

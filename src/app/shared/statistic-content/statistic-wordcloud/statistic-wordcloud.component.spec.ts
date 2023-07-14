@@ -24,6 +24,7 @@ describe('StatisticWordcloudComponent', () => {
   const mockContentService = jasmine.createSpyObj([
     'getAnswersChangedStream',
     'getAnswer',
+    'getAnswersDeleted',
   ]);
   const roundStatistics = new RoundStatistics();
   roundStatistics.abstentionCount = 0;
@@ -43,6 +44,7 @@ describe('StatisticWordcloudComponent', () => {
   };
   mockContentService.getAnswer.and.returnValue(of(stats));
   mockContentService.getAnswersChangedStream.and.returnValue(of(message));
+  mockContentService.getAnswersDeleted.and.returnValue(of({}));
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
