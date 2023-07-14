@@ -64,6 +64,11 @@
     "continue-where-you-stopped": "Mach da weiter, wo du aufgehört hast",
     "some-contents-answered": "Schaue dir deine Antworten noch einmal an, springe zum nächsten Inhalt oder kehre zur Raumübersicht zurück.",
     "pure-info-contents": "Springe zu einem beliebigen Inhalt oder kehre zur Raumübersicht zurück.",
+    "answer-state-unanswered": "Unbeantwortet",
+    "answer-state-abstained": "Enthalten",
+    "answer-state-correct": "Richtig",
+    "answer-state-wrong": "Falsch",
+    "answer-state-neutral": "Beantwortet",
     "round": "Runde",
     "round-displayed": "Die Runde {{rounds}} wird zurzeit angezeigt",
     "rounds-displayed": "Die Runden {{rounds}} werden zurzeit angezeigt"

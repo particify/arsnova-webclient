@@ -64,6 +64,11 @@
     "continue-where-you-stopped": "Continue where you left off",
     "some-contents-answered": "Look at your answers again, jump to the next content or return to the room overview.",
     "pure-info-contents": "Jump to any content or return to the room overview.",
+    "answer-state-unanswered": "Unanswered",
+    "answer-state-abstained": "Abstained",
+    "answer-state-correct": "Correct",
+    "answer-state-wrong": "Wrong",
+    "answer-state-neutral": "Answered",
     "round": "Round",
     "round-displayed": "Round {{rounds}} is displayed",
     "rounds-displayed": "Round {{rounds}} are displayed"

@@ -55,6 +55,14 @@
                   ) || !group.correctOptionsPublished,
                 primary: hasAnsweredState(content.state)
               }"
+              [matTooltip]="
+                (![ContentType.FLASHCARD, ContentType.SLIDE].includes(
+                  contents[i].format
+                )
+                  ? 'content.answer-state-' + content.state.toLowerCase()
+                  : ''
+                ) | translate
+              "
             >
               {{ getIcon(content.state) }}
             </mat-icon>

@@ -22,6 +22,7 @@ import { ClientAuthentication } from '@app/core/models/client-authentication';
 import { Router } from '@angular/router';
 import { RoutingFeature } from '@app/core/models/routing-feature.enum';
 import { ContentCarouselService } from '@app/core/services/util/content-carousel.service';
+import { ContentType } from '@app/core/models/content-type.enum';
 
 // Max time for updating db (5000) - navigation delay (500) / 2
 const RELOAD_INTERVAL = 2250;
@@ -55,6 +56,7 @@ export class SeriesOverviewComponent implements OnInit, OnDestroy {
 
   contentsWithResults: ContentResultView[];
   resultTypes: typeof AnswerResultType = AnswerResultType;
+  ContentType = ContentType;
 
   isLoading = true;
   isLoadingLastContent = true;
