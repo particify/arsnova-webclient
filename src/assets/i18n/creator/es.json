@@ -540,7 +540,7 @@
   "sidebar": {
     "a11y-switch-to-feature": "Cambiar a {{feature}}.",
     "a11y-user-counter": "Hay {{count}} personas en esta sala.",
-    "user-counter": "Número de participantes activos",
+    "user-counter": "Número personas en esta sala",
     "comments": "Preguntas y respuestas",
     "series": "Serie de preguntas",
     "feedback": "Comentarios en vivo",

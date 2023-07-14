@@ -552,7 +552,7 @@
   "sidebar": {
     "a11y-switch-to-feature": "Zu {{feature}} wechseln.",
     "a11y-user-counter": "Es befinden sich {{count}} Personen in diesem Raum.",
-    "user-counter": "Anzahl der teilnehmenden Personen",
+    "user-counter": "Anzahl der Personen in diesem Raum",
     "comments": "Q&A",
     "series": "Fragenserien",
     "feedback": "Live Feedback",
