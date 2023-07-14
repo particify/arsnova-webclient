@@ -8,9 +8,9 @@ $light-warn: mat.define-palette(mat.$red-palette, 800);
 $custom-typography: mat.define-typography-config(
   $font-family: $font-family,
   $button:
-    mat.define-typography-level(14px, 100%, $font-weight-bold, $font-family, 0),
-  $body-1: mat.define-typography-level(16px, 100%, normal, $font-family, 0),
-  $body-2: mat.define-typography-level(16px, 100%, normal, $font-family, 0),
+    mat.define-typography-level(14px, 120%, $font-weight-bold, $font-family, 0),
+  $body-1: mat.define-typography-level(16px, 120%, normal, $font-family, 0),
+  $body-2: mat.define-typography-level(16px, 120%, normal, $font-family, 0),
 );
 $light-theme: mat.define-light-theme(
   (
