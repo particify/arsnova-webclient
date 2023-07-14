@@ -100,7 +100,7 @@
           >
             <span
               [ngClass]="{
-                'selected-menu-item primary': contentGroup.name === groupName
+                'selected-menu-item': contentGroup.name === groupName
               }"
               >{{ contentGroup.name }}</span
             >
@@ -203,9 +203,12 @@
             *ngFor="let sort of commentSortTypes"
             [value]="currentCommentSort"
             (click)="changeCommentSort(sort)"
-            [ngClass]="{ 'selected-menu-item': sort === currentCommentSort }"
           >
-            {{ 'control-bar.comment-sort-' + sort | translate }}
+            <span
+              [ngClass]="{ 'selected-menu-item': sort === currentCommentSort }"
+            >
+              {{ 'control-bar.comment-sort-' + sort | translate }}
+            </span>
           </button>
         </mat-menu>
         <div fxLayout="row">
