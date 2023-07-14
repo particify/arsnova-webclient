@@ -244,6 +244,8 @@ export class SeriesOverviewComponent implements OnInit, OnDestroy {
         return 'check';
       case AnswerResultType.WRONG:
         return 'close';
+      case AnswerResultType.UNANSWERED:
+        return 'horizontal_rule';
       default:
         return 'fiber_manual_record';
     }
