@@ -1,8 +1,8 @@
 @use '@angular/material' as mat;
 
-$dark-primary: mat.define-palette(mat.$green-palette, 500);
-$dark-accent: mat.define-palette(mat.$amber-palette, 400);
-$dark-warn: mat.define-palette(mat.$red-palette, 900);
+$dark-primary: mat.define-palette(mat.$deep-purple-palette, A100);
+$dark-accent: mat.define-palette(mat.$green-palette, A100);
+$dark-warn: mat.define-palette(mat.$red-palette, A100);
 $dark-theme: mat.define-dark-theme(
   (
     color: (
@@ -15,14 +15,11 @@ $dark-theme: mat.define-dark-theme(
 );
 
 .theme-dark {
-  --primary-logo: #825df6;
-  --secondary-logo: #4caf50;
-  --logo-font: #ddd;
-  --warn: #e57373;
-  --warn-soft: #ffa726;
-  --background: #141414;
-  --surface: #1e1e1e;
-  --dialog: #2d2d2d;
+  --warn: #ff8a80;
+  --warn-soft: #ffd180;
+  --background: #212121;
+  --surface: #333;
+  --dialog: #424242;
   --alt-surface: #323232;
   --on-background: #fcfcfc;
   --on-surface: #fcfcfc;

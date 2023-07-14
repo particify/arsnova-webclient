@@ -17,7 +17,7 @@
 
 .theme-dark {
   @include mat.all-component-colors($dark-theme);
-  @include app-theme.theme($dark-theme);
+  @include app-theme.theme($dark-theme, false);
 }
 
 html,
@@ -218,6 +218,16 @@ ul {
 }
 
 // Inputs
+
+.mdc-text-field--disabled .mdc-floating-label {
+  color: var(--grey) !important;
+}
+
+.mat-mdc-form-field.mat-primary
+  .mdc-text-field--focused:not(.mdc-text-field--disabled)
+  .mdc-floating-label {
+  @extend %primary;
+}
 
 input,
 input:focus {
@@ -521,10 +531,6 @@ div {
 
 .mat-mdc-select-disabled .mat-mdc-select-value-text {
   color: var(--grey);
-}
-
-.mdc-text-field--disabled .mdc-floating-label {
-  color: var(--grey) !important;
 }
 
 .mat-mdc-option {

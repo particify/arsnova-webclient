@@ -2,13 +2,22 @@
 @use 'sass:map';
 @use 'angular-material-css-vars/public-util' as mat-css-utilities;
 
-@mixin theme($theme) {
+@mixin theme($theme, $isLight: true) {
   $primary-palette: map.get($theme, primary);
   $secondary-palette: map.get($theme, accent);
-  $primary: mat.get-color-from-palette($primary-palette, 600);
-  $primary-variant: mat.get-color-from-palette($primary-palette, 50);
+  $primary: mat.get-color-from-palette(
+    $primary-palette,
+    if($isLight == true, 500, A100)
+  );
+  $primary-variant: mat.get-color-from-palette(
+    $primary-palette,
+    if($isLight == true, 50, 200)
+  );
   $on-primary: mat.get-color-from-palette($primary-palette, default-contrast);
-  $secondary: mat.get-color-from-palette($secondary-palette, 600);
+  $secondary: mat.get-color-from-palette(
+    $secondary-palette,
+    if($isLight == true, 500, A100)
+  );
   $on-secondary: mat.get-color-from-palette(
     $secondary-palette,
     default-contrast
