@@ -579,9 +579,14 @@ export class GroupContentComponent
   }
 
   deleteAnswers(content: Content) {
+    const multipleRoundsHint =
+      content.state.round > 1
+        ? this.translateService.instant('dialog.all-rounds-will-be-deleted')
+        : null;
     const dialogRef = this.dialogService.openDeleteDialog(
       'content-answers',
-      'really-delete-answers'
+      'really-delete-answers',
+      multipleRoundsHint
     );
     dialogRef.afterClosed().subscribe((result) => {
       if (result === 'delete') {
