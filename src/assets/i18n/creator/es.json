@@ -434,7 +434,10 @@
     "hotkey-general": "Configuración de la sala",
     "hotkey-comments": "Configuración de preguntas y respuestas",
     "hotkey-access": "Gestión de derechos de acceso",
-    "hotkey-announcements": "Gestión de anuncios"
+    "hotkey-announcements": "Gestión de anuncios",
+    "moderator": "Moderador",
+    "editor": "Editor",
+    "owner": "Administrador"
   },
   "room": {
     "room-name": "Nombre de sala",
@@ -510,7 +513,7 @@
     "cancel": "Cancelar",
     "cancel-description": "Cancela el proceso actual y cierra el diálogo.",
     "content-group-name": "Nombre de la serie de preguntas",
-    "content-group-example": "p. ej., Quiz",
+    "content-group-example": "p. ej. Quiz",
     "create-content-group": "Crear",
     "please-enter-name": "Por favor, ingresa un nombre.",
     "delete": "Eliminar",
@@ -541,9 +544,9 @@
     "a11y-switch-to-feature": "Cambiar a {{feature}}.",
     "a11y-user-counter": "Hay {{count}} personas en esta sala.",
     "user-counter": "Número personas en esta sala",
-    "comments": "Preguntas y respuestas",
-    "series": "Serie de preguntas",
-    "feedback": "Comentarios en vivo",
+    "comments": "Q&A",
+    "series": "Series",
+    "feedback": "Feedback",
     "moderation": "Moderación",
     "content-counter": "Posición actual en la serie de preguntas",
     "overview": "Resumen"
@@ -663,12 +666,12 @@
     "a11y-imprint": "Abrir el aviso legal.",
     "a11y-accessibilty": "Abrir la declaración de accesibilidad.",
     "cookie-settings": "Configuración de cookies",
-    "dsgvo": "Protección de datos",
+    "dsgvo": "Privacidad",
     "imprint": "Aviso legal",
     "privacy-policy": "Política de privacidad",
     "accessibility": "Accesibilidad",
     "powered-by": "Sistema de respuesta de audiencia por ",
-    "by": "por "
+    "by": "powered by "
   },
   "formatting": {
     "bold": "Negrita",

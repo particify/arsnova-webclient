@@ -231,10 +231,10 @@
   "sidebar": {
     "a11y-switch-to-feature": "Cambiar a {{feature}}.",
     "user-counter": "Número de participantes activos",
-    "comments": "Preguntas y respuestas",
-    "series": "Series de preguntas",
-    "feedback": "Retroalimentación en vivo",
-    "overview": "Visión general"
+    "comments": "Q&A",
+    "series": "Series",
+    "feedback": "Feedback",
+    "overview": "Resumen"
   },
   "option-template": {
     "agreement-negative-2": "Totalmente en desacuerdo",
@@ -292,7 +292,7 @@
     "a11y-imprint": "Abrir el aviso legal.",
     "a11y-accessibilty": "Abrir la declaración de accesibilidad.",
     "cookie-settings": "Configuración de cookies",
-    "dsgvo": "Protección de datos",
+    "dsgvo": "Privacidad",
     "imprint": "Aviso legal",
     "privacy-policy": "Política de privacidad",
     "accessibility": "Accesibilidad",

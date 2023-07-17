@@ -23,7 +23,7 @@
   },
   "footer": {
     "cookie-settings": "Configuración de cookies",
-    "dsgvo": "Protección de datos",
+    "dsgvo": "Privacidad",
     "imprint": "Aviso legal",
     "privacy-policy": "Política de privacidad",
     "accessibility": "Accesibilidad",
@@ -82,7 +82,7 @@
     "update": "Actualizar",
     "update-successful": "La actualización se instaló correctamente.",
     "welcome": "Comentarios e interacción",
-    "example": "por ejemplo, ",
+    "example": "p. ej. ",
     "enter-room-number": "Ingresa el número de sala"
   },
   "password": {
