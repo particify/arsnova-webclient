@@ -28,6 +28,7 @@ import { ContentFlashcard } from '@app/core/models/content-flashcard';
 import { ContentPrioritization } from '@app/core/models/content-prioritization';
 import { PresentationService } from '@app/core/services/util/presentation.service';
 import { Subject, takeUntil } from 'rxjs';
+import { ContentService } from '@app/core/services/http/content.service';
 
 @Component({
   selector: 'app-statistic-content',
@@ -86,7 +87,8 @@ export class StatisticContentComponent implements OnInit, OnDestroy {
     private announceService: AnnounceService,
     private route: ActivatedRoute,
     private remoteService: RemoteService,
-    private presentationService: PresentationService
+    private presentationService: PresentationService,
+    private contentService: ContentService
   ) {}
 
   ngOnDestroy(): void {
@@ -122,14 +124,16 @@ export class StatisticContentComponent implements OnInit, OnDestroy {
       }
     });
     this.broadcastRoundState();
-    this.presentationService
-      .getRoundStateChanges()
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe((roundData) => {
-        if (this.index === roundData.contentIndex) {
-          this.changeRound(roundData.round);
-        }
-      });
+    if (this.contentService.hasFormatRounds(this.content.format)) {
+      this.presentationService
+        .getRoundStateChanges()
+        .pipe(takeUntil(this.destroyed$))
+        .subscribe((roundData) => {
+          if (this.index === roundData.contentIndex) {
+            this.changeRound(roundData.round);
+          }
+        });
+    }
     if (this.isPresentation) {
       this.remoteService.getUiState().subscribe((state) => {
         if (this.content.id === state.contentId) {

@@ -1,6 +1,7 @@
 <div fxLayout="row" fxLayoutAlign="end">
   <button
     *ngIf="standalone"
+    [disabled]="disabled"
     mat-stroked-button
     [matMenuTriggerFor]="roundMenu"
     [matTooltip]="
@@ -21,6 +22,7 @@
   </button>
   <button
     *ngIf="!standalone"
+    [disabled]="disabled"
     mat-menu-item
     [matMenuTriggerFor]="roundMenu"
     [attr.aria-label]="

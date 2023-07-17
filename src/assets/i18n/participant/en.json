@@ -66,7 +66,9 @@
     "pure-info-contents": "Jump to any content or return to the room overview.",
     "round": "Round",
     "round-displayed": "Round {{rounds}} is displayed",
-    "rounds-displayed": "Round {{rounds}} are displayed"
+    "rounds-displayed": "Round {{rounds}} are displayed",
+    "new-round-started": "A new round has been started.",
+    "answers-reset": "Answers have been reset."
   },
   "comment-list": {
     "a11y-search-list": "Search for posts",

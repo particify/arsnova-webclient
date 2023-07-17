@@ -104,9 +104,13 @@ export class ContentService extends AbstractEntityService<Content> {
       .pipe(catchError(this.handleError('getContents', [])));
   }
 
-  getContent(roomId: string, contentId: string): Observable<Content> {
+  getContent(
+    roomId: string,
+    contentId: string,
+    extendedView = true
+  ): Observable<Content> {
     const connectionUrl = this.buildUri(
-      '/' + contentId + '?view=extended',
+      '/' + contentId + (extendedView ? '?view=extended' : ''),
       roomId
     );
     return this.http
@@ -381,5 +385,11 @@ export class ContentService extends AbstractEntityService<Content> {
 
   getTypeIcons(): Map<ContentType, string> {
     return this.typeIcons;
+  }
+
+  hasFormatRounds(format: ContentType): boolean {
+    return [ContentType.CHOICE, ContentType.SCALE, ContentType.BINARY].includes(
+      format
+    );
   }
 }

@@ -8,6 +8,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 export class MultipleRoundSelectionComponent implements OnInit {
   @Input() standalone = true;
   @Input() round: number;
+  @Input() disabled = false;
   @Output() roundChanged: EventEmitter<number> = new EventEmitter<number>();
 
   currentRound: number;

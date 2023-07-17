@@ -617,9 +617,7 @@ export class ControlBarComponent
   }
 
   hasFormatRounds(format: ContentType): boolean {
-    return [ContentType.CHOICE, ContentType.SCALE, ContentType.BINARY].includes(
-      format
-    );
+    return this.contentService.hasFormatRounds(format);
   }
 
   editContent() {

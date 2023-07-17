@@ -28,7 +28,11 @@
           [appHotkeyDisabled]="currentStep !== i"
           [appHotkeyTitle]="'content.description' | translate"
         >
+          <app-loading-indicator
+            *ngIf="isReloadingCurrentContent"
+          ></app-loading-indicator>
           <app-content-participant
+            *ngIf="!isReloadingCurrentContent"
             (answerChanged)="receiveSentStatus($event, i)"
             (next)="nextContent($event)"
             [content]="content"
