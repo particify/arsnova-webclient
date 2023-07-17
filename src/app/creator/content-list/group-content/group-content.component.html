@@ -187,26 +187,37 @@
                 [disabled]="contents.length < 2"
                 appTrackInteraction="Content group sorting started"
               >
-                <mat-icon>swap_vert</mat-icon>
+                <mat-icon>sort</mat-icon>
                 {{ 'content.sort-content-group' | translate }}
               </button>
-              <mat-divider></mat-divider>
-              <button
-                mat-menu-item
-                (click)="exportToCsv()"
-                [disabled]="contents.length === 0"
-              >
-                <mat-icon>file_download</mat-icon>
-                {{ 'export.export' | translate }}
+              <button mat-menu-item [matMenuTriggerFor]="importExportMenu">
+                <mat-icon>swap_vert</mat-icon>
+                {{ 'content.import-export-content-group' | translate }}
               </button>
-              <button
-                mat-menu-item
-                (click)="importFromCsv()"
-                appTrackInteraction="File dialog for CSV import opened"
-              >
-                <mat-icon>file_upload</mat-icon>
-                {{ 'import.import' | translate }}
-              </button>
+              <mat-menu #importExportMenu="matMenu">
+                <button
+                  mat-menu-item
+                  (click)="exportToCsv()"
+                  [disabled]="contents.length === 0"
+                >
+                  {{ 'export.export-series' | translate }}
+                </button>
+                <button
+                  mat-menu-item
+                  (click)="importFromCsv()"
+                  appTrackInteraction="File dialog for CSV import opened"
+                >
+                  {{ 'import.import-series' | translate }}
+                </button>
+                <mat-divider *ngIf="hasSeriesExportExtension"></mat-divider>
+                <lib-extension-point
+                  extensionId="series-results-export"
+                  [extensionData]="{
+                    series: contentGroup,
+                    shortId: room.shortId
+                  }"
+                ></lib-extension-point>
+              </mat-menu>
               <mat-divider></mat-divider>
               <button
                 mat-menu-item
