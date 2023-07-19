@@ -195,6 +195,10 @@ export class MockThemeService {
   getLikertColors() {
     return ['#FFFFFFF'];
   }
+
+  getPrimaryColor() {
+    return '#FF0000';
+  }
 }
 
 // MatDialog
