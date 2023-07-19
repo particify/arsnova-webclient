@@ -1,82 +1,26 @@
-$graphic-size: 80px;
 $icon-container-size: 40px;
 
-.mat-mdc-card {
-  margin-bottom: 4px;
-}
-
-@mixin header-text-base {
+.header-text {
   margin: 0;
   opacity: 0.8;
   font-weight: bold;
 }
 
-.score-text {
-  @include header-text-base;
-
-  font-size: 18px;
-}
-
-.canvas-container {
-  width: $graphic-size;
-  height: $graphic-size;
-  position: relative;
-}
-
-.graphic {
-  width: $graphic-size;
-  height: $graphic-size;
-}
-
 @media (max-width: 767px) {
-  .header-container {
-    align-items: center;
-  }
-
   .header-text {
-    @include header-text-base;
-
     font-size: 18px;
-  }
-
-  .header-text.small {
-    display: none;
-  }
-
-  .canvas-container {
-    margin: 1em 1em 1em 0.5em;
   }
 }
 
 @media (min-width: 768px) {
-  .mat-mdc-card {
-    padding-top: 2em;
-  }
-
   .header-text {
-    @include header-text-base;
-
     font-size: 24px;
-  }
-
-  .small {
-    display: none;
-  }
-
-  .canvas-container {
-    margin-right: 2em;
-  }
-
-  .header-container {
-    margin: 0 1em 1em;
   }
 }
 
-.score-container {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+.info-chart-container {
+  padding-bottom: 20px;
+  margin: 16px 0 32px;
 }
 
 .correct:not(.answered) {
@@ -120,4 +64,8 @@ $icon-container-size: 40px;
 
 .body {
   max-width: calc(100% - (#{$icon-container-size} + 16px));
+}
+
+app-hint {
+  margin-bottom: 1em;
 }

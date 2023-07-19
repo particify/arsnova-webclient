@@ -156,7 +156,7 @@ export class ParticipantContentCarouselPageComponent
       .on<EntityChangeNotification>('EntityChangeNotification')
       .pipe(takeUntil(this.destroyed$))
       .subscribe((notification) => {
-        if (notification.payload.id === this.contents[this.currentStep].id) {
+        if (notification.payload.id === this.contents[this.currentStep]?.id) {
           this.reloadCurrentContent();
         }
       });

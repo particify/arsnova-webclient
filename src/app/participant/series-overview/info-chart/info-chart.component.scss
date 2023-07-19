@@ -1,0 +1,32 @@
+$chart-size: 100px;
+
+.canvas-container {
+  width: $chart-size;
+  height: $chart-size / 2;
+  position: relative;
+}
+
+.text-container {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translate(-50%, 50%);
+}
+
+@mixin text-base {
+  opacity: 0.8;
+  font-weight: bold;
+}
+
+.data-text {
+  @include text-base;
+
+  font-size: 18px;
+}
+
+.info-text {
+  @include text-base;
+
+  font-size: 14px;
+  font-weight: normal;
+}

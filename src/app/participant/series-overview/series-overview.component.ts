@@ -23,6 +23,7 @@ import { Router } from '@angular/router';
 import { RoutingFeature } from '@app/core/models/routing-feature.enum';
 import { ContentCarouselService } from '@app/core/services/util/content-carousel.service';
 import { ContentType } from '@app/core/models/content-type.enum';
+import { HintType } from '@app/core/models/hint-type.enum';
 
 // Max time for updating db (5000) - navigation delay (500) / 2
 const RELOAD_INTERVAL = 2250;
@@ -45,10 +46,12 @@ export class SeriesOverviewComponent implements OnInit, OnDestroy {
   @Input() isPureInfoSeries: boolean;
 
   hasAnsweredLastContent: boolean;
-  private chart: Chart;
+  private correctChart: Chart;
+  private progressChart: Chart;
   private colors = {
     chart: '',
     background: '',
+    primary: '',
   };
   private auth: ClientAuthentication;
   private resultOverview: AnswerResultOverview;
@@ -57,12 +60,15 @@ export class SeriesOverviewComponent implements OnInit, OnDestroy {
   contentsWithResults: ContentResultView[];
   resultTypes: typeof AnswerResultType = AnswerResultType;
   ContentType = ContentType;
+  currentAnswerCount = 0;
+  totalContentCount: number;
 
   isLoading = true;
   isLoadingLastContent = true;
   retryCount = 0;
   hasScore = false;
   score: number;
+  HintType = HintType;
 
   constructor(
     private routingService: RoutingService,
@@ -92,13 +98,12 @@ export class SeriesOverviewComponent implements OnInit, OnDestroy {
       .getAnswerStats(this.group.roomId, this.group.id, this.auth.userId)
       .subscribe(
         (resultOverview) => {
+          this.totalContentCount = resultOverview.answerResults.length;
           this.setResultOverview(resultOverview);
           this.setViewData();
           this.checkIfLastContentIsLoaded();
           this.isLoading = false;
-          if (this.hasScore) {
-            this.updateChart();
-          }
+          this.updateCharts();
         },
         () => {
           this.getContentResultView();
@@ -106,6 +111,15 @@ export class SeriesOverviewComponent implements OnInit, OnDestroy {
           this.isLoadingLastContent = false;
         }
       );
+  }
+
+  private updateCharts() {
+    if (!this.isPureInfoSeries) {
+      this.updateProgressChart();
+    }
+    if (this.hasScore) {
+      this.updateCorrectChart();
+    }
   }
 
   private setResultOverview(resultOverview: AnswerResultOverview) {
@@ -127,7 +141,14 @@ export class SeriesOverviewComponent implements OnInit, OnDestroy {
   private setViewData() {
     this.hasScore = this.checkIfHasScore();
     this.score = this.getScore();
+    this.currentAnswerCount = this.getCurrentAnswerCount();
     this.getContentResultView();
+  }
+
+  private getCurrentAnswerCount() {
+    return this.resultOverview.answerResults.filter(
+      (a) => a.state !== AnswerResultType.UNANSWERED
+    ).length;
   }
 
   private getScore(): number {
@@ -155,6 +176,7 @@ export class SeriesOverviewComponent implements OnInit, OnDestroy {
   private updateColors() {
     this.colors.background = this.themeService.getColor('background');
     this.colors.chart = this.themeService.getColor('green');
+    this.colors.primary = this.themeService.getPrimaryColor();
   }
 
   private checkIfLastContentIsLoaded() {
@@ -171,9 +193,7 @@ export class SeriesOverviewComponent implements OnInit, OnDestroy {
       }, RELOAD_INTERVAL);
     } else if (!this.isLoading) {
       this.setViewData();
-      if (this.hasScore) {
-        this.updateChart();
-      }
+      this.updateCharts();
     }
   }
 
@@ -186,28 +206,55 @@ export class SeriesOverviewComponent implements OnInit, OnDestroy {
       lastResultState === AnswerResultType.UNANSWERED &&
       this.hasAnsweredLastContent;
   }
+
   private getScoreData(): number[] {
     return [this.score, 100 - this.score];
   }
 
-  private updateChart() {
-    if (this.chart) {
-      (this.chart.data.datasets[0].data = this.getScoreData()),
-        this.chart.update();
+  private updateCorrectChart() {
+    if (this.correctChart) {
+      (this.correctChart.data.datasets[0].data = this.getScoreData()),
+        this.correctChart.update();
     } else {
       setTimeout(() => {
-        this.createChart();
+        this.correctChart = this.createChart(
+          'correct-chart',
+          this.colors.chart,
+          this.getScoreData()
+        );
       }, 300);
     }
   }
 
-  private createChart() {
+  private getProgressData() {
+    const totalCount = this.contentsWithResults.length;
+    return [totalCount, totalCount - this.currentAnswerCount];
+  }
+
+  private updateProgressChart() {
+    if (this.progressChart) {
+      (this.progressChart.data.datasets[0].data = this.getProgressData()),
+        this.progressChart.update();
+    } else {
+      setTimeout(() => {
+        this.progressChart = this.createChart(
+          'progress-chart',
+          this.colors.primary,
+          this.getProgressData()
+        );
+      }, 300);
+    }
+  }
+
+  private createChart(id: string, color: string, data: number[]): Chart {
     const dataSets = [
       {
-        data: this.getScoreData(),
+        data: data,
         borderWidth: 0,
-        backgroundColor: [this.colors.chart, this.colors.background],
+        backgroundColor: [color, this.colors.background],
         cutout: '90%',
+        rotation: -90,
+        circumference: 180,
       },
     ];
 
@@ -217,7 +264,7 @@ export class SeriesOverviewComponent implements OnInit, OnDestroy {
       ArcElement,
       ChartDataLabels
     );
-    this.chart = new Chart('chart', {
+    return new Chart(id, {
       type: 'doughnut' as ChartType,
       data: {
         datasets: dataSets,
@@ -271,6 +318,15 @@ export class SeriesOverviewComponent implements OnInit, OnDestroy {
     ]);
   }
 
+  goToFirstUnanswered() {
+    const index = this.contentsWithResults.findIndex(
+      (c) => c.state === AnswerResultType.UNANSWERED
+    );
+    if (index) {
+      this.goToContent(index);
+    }
+  }
+
   getHeaderText(): string {
     if (this.isPureInfoSeries) {
       return this.group.name;
@@ -289,5 +345,13 @@ export class SeriesOverviewComponent implements OnInit, OnDestroy {
         ? 'content.all-contents-answered'
         : 'content.some-contents-answered';
     }
+  }
+
+  getProgressDataText(): string {
+    return this.currentAnswerCount + ' / ' + this.contentsWithResults.length;
+  }
+
+  getLockedContentCount() {
+    return this.totalContentCount - this.contents.length;
   }
 }
