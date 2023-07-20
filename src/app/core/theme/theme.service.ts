@@ -46,7 +46,7 @@ export class ThemeService {
   private binaryColors = ['strongly-agree', 'strongly-disagree'];
 
   private lightColors = new Colors('#5e35b1', '#2e7d32');
-  private darkColors = new Colors('#4caf50', '#ffca28');
+  private darkColors = new Colors('#b388ff', '#b9f6ca');
 
   constructor(
     private globalStorageService: GlobalStorageService,
