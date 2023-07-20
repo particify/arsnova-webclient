@@ -108,6 +108,8 @@ export class ContentParticipantComponent implements OnInit {
       this.prioritizationContent = this.content as ContentPrioritization;
     } else if (this.content.format === ContentType.SCALE) {
       this.scaleContent = this.content as ContentScale;
+    } else if (this.content.format === ContentType.FLASHCARD) {
+      this.flashcardContent = this.content as ContentFlashcard;
     }
   }
 
