@@ -5,7 +5,7 @@
   class="progress-container"
   attr.aria-label="{{
     'statistic.a11y-group-progress'
-      | translate : { group: contentGroup.name, percent: total.toFixed() }
+      | translate: { group: contentGroup.name, percent: total.toFixed() }
   }}"
 >
   <mat-progress-bar
@@ -46,7 +46,7 @@
               }) +
           (cp.percent >= status.zero
             ? ('statistic.a11y-choice-result'
-              | translate : { percent: cp.percent.toFixed() })
+              | translate: { percent: cp.percent.toFixed() })
             : '') +
           ('statistic.a11y-go-to-statistic' | translate)
       }}"

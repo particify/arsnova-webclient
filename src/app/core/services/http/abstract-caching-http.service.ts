@@ -14,7 +14,7 @@ import { WsConnectorService } from '@app/core/services/websockets/ws-connector.s
 import { AbstractHttpService } from './abstract-http.service';
 
 export abstract class AbstractCachingHttpService<
-  T
+  T,
 > extends AbstractHttpService<T> {
   protected cacheName = 'http';
   protected stompSubscription: Subscription;

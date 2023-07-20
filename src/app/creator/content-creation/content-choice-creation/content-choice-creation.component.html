@@ -30,7 +30,7 @@
             name="{{ answer.answerOption.label }}"
             aria-label="{{
               'content.a11y-answer-checkbox'
-                | translate : { answer: answer.answerOption.label }
+                | translate: { answer: answer.answerOption.label }
             }}"
           >
           </mat-checkbox>
@@ -52,7 +52,7 @@
             *ngIf="!isEditMode || noAnswersYet"
             attr.aria-label="{{
               'content.a11y-delete-answer'
-                | translate : { answer: answer.answerOption.label }
+                | translate: { answer: answer.answerOption.label }
             }}"
             class="delete"
             (click)="deleteAnswer(i)"

@@ -17,7 +17,7 @@
         </lib-extension-point>
         <span *ngIf="!useJoinUrl" class="url text">{{ displayUrl }}</span>
         <span class="url text">{{
-          useJoinUrl ? displayUrl : (shortId | splitShortId : false)
+          useJoinUrl ? displayUrl : (shortId | splitShortId: false)
         }}</span>
         <lib-extension-point
           *ngIf="passwordProtected"

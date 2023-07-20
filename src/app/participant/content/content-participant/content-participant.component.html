@@ -1,7 +1,7 @@
 <div
   id="content-message"
   tabindex="-1"
-  attr.aria-label="{{ a11yMsg | translate : { index: index + 1 } }}"
+  attr.aria-label="{{ a11yMsg | translate: { index: index + 1 } }}"
 >
   <app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
   <section class="card-container with-margin" *ngIf="!isLoading">
@@ -26,7 +26,7 @@
                           answers: answersString
                         })
                   : ('answer.a11y-already-answered-text'
-                    | translate : { answer: answersString })
+                    | translate: { answer: answersString })
               }}
             </div>
             <span class="fill-remaining-space"></span>

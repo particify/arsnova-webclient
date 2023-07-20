@@ -604,7 +604,7 @@ export class ControlBarComponent
                 key: item.key,
                 action: actions[item.name],
                 actionTitle: t,
-              } as Hotkey)
+              }) as Hotkey
           )
         )
         .subscribe((h: Hotkey) =>

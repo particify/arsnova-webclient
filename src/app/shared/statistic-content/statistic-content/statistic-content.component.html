@@ -9,7 +9,7 @@
     id="message-type-info-button"
     class="visually-hidden"
   >
-    {{ 'statistic.a11y-message-type-info' | translate : { index: index + 1 } }}
+    {{ 'statistic.a11y-message-type-info' | translate: { index: index + 1 } }}
   </div>
   <div
     *ngIf="[ContentType.SLIDE, ContentType.FLASHCARD].indexOf(format) === -1"
@@ -19,7 +19,7 @@
         (answerCount === 0
           ? 'statistic.a11y-message-evaluation'
           : 'statistic.a11y-message-evaluation-answers'
-        ) | translate : { index: index + 1, answers: answerCount }
+        ) | translate: { index: index + 1, answers: answerCount }
       }}
     </div>
     <div

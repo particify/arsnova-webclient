@@ -59,12 +59,12 @@
       tabindex="0"
       [attr.aria-label]="
         ('statistic.a11y-choice-evaluation'
-          | translate : { label: labelLetters[i], answer: a.label }) +
+          | translate: { label: labelLetters[i], answer: a.label }) +
         (rounds > 1
           ? ('statistic.a11y-multiple-round-counts'
-            | translate : { countRoundA: data[0][i], countRoundB: data[1][i] })
+            | translate: { countRoundA: data[0][i], countRoundB: data[1][i] })
           : ('statistic.a11y-single-round-count'
-            | translate : { count: data[0][i] })) +
+            | translate: { count: data[0][i] })) +
         (isSurvey
           ? ''
           : ((checkIfCorrect(i)

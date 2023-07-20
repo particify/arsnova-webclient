@@ -10,7 +10,7 @@
       <div id="message-button" tabIndex="-1">
         {{
           'content.a11y-content-list-message'
-            | a11yIntro : { name: contentGroup.name }
+            | a11yIntro: { name: contentGroup.name }
             | async
         }}
       </div>
@@ -287,7 +287,7 @@
           >
             {{
               'content.a11y-content-list-contents'
-                | translate : { count: contents.length }
+                | translate: { count: contents.length }
             }}
           </div>
           <p class="hint" *ngIf="contents.length === 0">
@@ -603,7 +603,7 @@
                           "
                           attr.aria-label="{{
                             'content.a11y-add-to-this-content-group'
-                              | translate : { name: groupStats.groupName }
+                              | translate: { name: groupStats.groupName }
                           }}"
                         >
                           <span>{{ groupStats.groupName }}</span>

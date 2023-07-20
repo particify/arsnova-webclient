@@ -5,7 +5,7 @@
         ? 'room-page.a11y-moderator-message'
         : 'room-page.a11y-room-message'
       )
-        | a11yIntro : { room: room.name, key: room.shortId }
+        | a11yIntro: { room: room.name, key: room.shortId }
         | async
     }}
   </div>
@@ -80,7 +80,7 @@
         >
           {{
             'room-page.a11y-content-groups'
-              | translate : { count: contentGroups.length }
+              | translate: { count: contentGroups.length }
           }}
         </p>
       </ng-container>
