@@ -17,6 +17,10 @@
   color: var(--on-surface);
 }
 
+.user-icon {
+  color: var(--on-background);
+}
+
 @function get-icon-size($font-size) {
   @return calc($font-size * 1.5);
 }
