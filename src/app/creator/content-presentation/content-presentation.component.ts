@@ -22,14 +22,15 @@ import { DialogService } from '@app/core/services/util/dialog.service';
 import { PublishContentComponent } from '@app/creator/_dialogs/publish-content/publish-content.component';
 import { ContentType } from '@app/core/models/content-type.enum';
 import { HotkeyService } from '@app/core/services/util/hotkey.service';
-import { Subscription } from 'rxjs';
+import { Subject, takeUntil } from 'rxjs';
 import { PresentationService } from '@app/core/services/util/presentation.service';
 import { UserService } from '@app/core/services/http/user.service';
 import { UserSettings } from '@app/core/models/user-settings';
-import { RemoteService } from '@app/core/services/util/remote.service';
+import { ContentPresentationState } from '@app/core/models/events/content-presentation-state';
 import { ContentPublishActionType } from '@app/core/models/content-publish-action.enum';
 import { ContentPublishService } from '@app/core/services/util/content-publish.service';
-import { ContentPresentationState } from '@app/core/models/events/content-presentation-state';
+import { FocusModeService } from '@app/creator/_services/focus-mode.service';
+import { Room } from '@app/core/models/room';
 
 @Component({
   selector: 'app-content-presentation',
@@ -39,13 +40,15 @@ import { ContentPresentationState } from '@app/core/models/events/content-presen
 export class ContentPresentationComponent implements OnInit, OnDestroy {
   @ViewChild(StepperComponent) stepper: StepperComponent;
 
+  destroyed$ = new Subject<void>();
+
   isPresentation = false;
   contents: Content[];
   isLoading = true;
   entryIndex = 0;
   contentIndex = 0;
   shortId: string;
-  roomId: string;
+  room: Room;
   contentGroupName: string;
   currentStep = 0;
   infoBarItems: InfoBarItem[] = [
@@ -54,8 +57,6 @@ export class ContentPresentationComponent implements OnInit, OnDestroy {
   answerCount;
   indexChanged: EventEmitter<number> = new EventEmitter<number>();
   contentGroup: ContentGroup;
-  remoteSubscription: Subscription;
-  groupSubscription: Subscription;
   canAnswerContent = false;
   settings: UserSettings;
 
@@ -73,8 +74,8 @@ export class ContentPresentationComponent implements OnInit, OnDestroy {
     private hotkeyService: HotkeyService,
     private presentationService: PresentationService,
     private userService: UserService,
-    private remoteService: RemoteService,
-    private contentPublishService: ContentPublishService
+    private contentPublishService: ContentPublishService,
+    private focusModeService: FocusModeService
   ) {}
 
   ngOnInit() {
@@ -102,7 +103,7 @@ export class ContentPresentationComponent implements OnInit, OnDestroy {
     this.userService.getUserSettingsByLoginId(loginId).subscribe((settings) => {
       this.settings = settings || new UserSettings();
       this.route.data.subscribe((data) => {
-        this.roomId = data.room.id;
+        this.room = data.room;
         this.shortId = data.room.shortId;
         this.initGroup(true);
       });
@@ -111,12 +112,8 @@ export class ContentPresentationComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.hotkeyRefs.forEach((h) => this.hotkeyService.unregisterHotkey(h));
-    if (this.remoteSubscription) {
-      this.remoteSubscription.unsubscribe();
-    }
-    if (this.groupSubscription) {
-      this.groupSubscription.unsubscribe();
-    }
+    this.destroyed$.next(null);
+    this.destroyed$.complete();
   }
 
   initScale() {
@@ -136,26 +133,13 @@ export class ContentPresentationComponent implements OnInit, OnDestroy {
 
   initPresentation() {
     if (this.isPresentation) {
-      this.groupSubscription = this.presentationService
+      this.presentationService
         .getCurrentGroup()
+        .pipe(takeUntil(this.destroyed$))
         .subscribe((group) => {
           this.isLoading = true;
           this.contentGroupName = group;
           this.initGroup();
-        });
-      this.remoteSubscription = this.remoteService
-        .getContentState()
-        .subscribe((state) => {
-          if (this.contentGroup.id === state.contentGroupId) {
-            if (this.contents[this.currentStep].id !== state.contentId) {
-              const newIndex = this.contents
-                .map((c) => c.id)
-                .indexOf(state.contentId);
-              if (newIndex > -1) {
-                this.stepper.onClick(newIndex);
-              }
-            }
-          }
         });
       this.translateService
         .get('control-bar.publish-or-lock-content')
@@ -174,7 +158,7 @@ export class ContentPresentationComponent implements OnInit, OnDestroy {
 
   initGroup(initial = false) {
     this.contentGroupService
-      .getByRoomIdAndName(this.roomId, this.contentGroupName, true)
+      .getByRoomIdAndName(this.room.id, this.contentGroupName, true)
       .subscribe((group) => {
         this.contentGroup = group;
         if (this.contentGroup.contentIds) {
@@ -281,13 +265,12 @@ export class ContentPresentationComponent implements OnInit, OnDestroy {
   }
 
   updateStateChange() {
-    this.remoteService.updateContentStateChange(
+    this.focusModeService.updateContentState(
+      this.room,
       this.contents[this.currentStep].id,
       this.currentStep,
       this.contentGroup.id,
-      this.contentGroup.name,
-      false,
-      false
+      this.contentGroup.name
     );
   }
 

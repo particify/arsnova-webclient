@@ -17,6 +17,7 @@ import {
 import { UpdateEvent } from '@app/creator/settings-page/settings-page.component';
 import { UserRole } from '@app/core/models/user-roles.enum';
 import { HintType } from '@app/core/models/hint-type.enum';
+import { FocusModeService } from '@app/creator/_services/focus-mode.service';
 
 @Component({
   selector: 'app-room-edit',
@@ -35,6 +36,7 @@ export class RoomComponent implements OnInit {
   textContainsImage = false;
   HintType = HintType;
   isCreator = false;
+  focusModeEnabled = false;
 
   constructor(
     public notificationService: NotificationService,
@@ -45,10 +47,12 @@ export class RoomComponent implements OnInit {
     protected translateService: TranslateService,
     private dialogService: DialogService,
     private route: ActivatedRoute,
-    private formattingService: FormattingService
+    private formattingService: FormattingService,
+    private focusModeService: FocusModeService
   ) {}
   ngOnInit(): void {
     this.isCreator = this.route.snapshot.data.userRole === UserRole.OWNER;
+    this.focusModeEnabled = this.editRoom.focusModeEnabled;
   }
 
   openDeleteRoomDialog(): void {
@@ -90,5 +94,17 @@ export class RoomComponent implements OnInit {
 
   updateTextContainsImage(text: string) {
     this.textContainsImage = this.formattingService.containsTextAnImage(text);
+  }
+
+  toggleFocusMode(focusModeEnabled: boolean) {
+    const changes: { focusModeEnabled: boolean } = {
+      focusModeEnabled: focusModeEnabled,
+    };
+    this.roomService.patchRoom(this.editRoom.id, changes).subscribe((room) => {
+      this.editRoom.focusModeEnabled = room.focusModeEnabled;
+      if (focusModeEnabled) {
+        this.focusModeService.updateOverviewState(this.editRoom);
+      }
+    });
   }
 }

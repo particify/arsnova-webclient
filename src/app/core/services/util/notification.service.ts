@@ -16,6 +16,7 @@ export enum AdvancedSnackBarTypes {
   FAILED = 'FAILED',
   WARNING = 'WARNING',
   LOADING = 'LOADING',
+  INFO = 'INFO',
 }
 
 @Injectable()
@@ -63,6 +64,10 @@ export class NotificationService {
       case AdvancedSnackBarTypes.LOADING:
         typeString = LOADING_ICON;
         duration = 0;
+        break;
+      case AdvancedSnackBarTypes.INFO:
+        typeString = 'info';
+        duration = 3000;
         break;
     }
     this.isPresentation = this.routingService.isPresentation(this.router.url);

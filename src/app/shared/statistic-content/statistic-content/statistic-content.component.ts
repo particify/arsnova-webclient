@@ -189,14 +189,7 @@ export class StatisticContentComponent implements OnInit, OnDestroy {
     answersVisible = this.answersVisible,
     correctVisible = this.correctVisible
   ) {
-    this.remoteService.updateContentStateChange(
-      this.content.id,
-      this.index,
-      this.contentGroup.id,
-      this.contentGroup.name,
-      answersVisible,
-      correctVisible
-    );
+    // TODO: Send UI state for remote
   }
 
   toggleAnswers(sendState = true) {

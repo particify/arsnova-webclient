@@ -8,6 +8,7 @@ export class Room {
   description: string;
   renderedDescription: string;
   passwordProtected: boolean;
+  focusModeEnabled: boolean;
   closed: boolean;
   settings: object;
   lmsCourseId: string;

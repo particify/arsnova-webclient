@@ -11,6 +11,7 @@
   <mat-progress-bar
     mode="determinate"
     value="{{ total }}"
+    class="custom-height"
     [ngClass]="{
       'statistic-status-good': total >= status.good,
       'statistic-status-okay': total < status.good && total >= status.okay,

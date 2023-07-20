@@ -20,8 +20,6 @@ import { Directionality } from '@angular/cdk/bidi';
 import { AnnounceService } from '@app/core/services/util/announce.service';
 import { HotkeyService } from '@app/core/services/util/hotkey.service';
 import { TranslateService } from '@ngx-translate/core';
-import { RemoteService } from '@app/core/services/util/remote.service';
-import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-stepper',
@@ -61,15 +59,13 @@ export class StepperComponent extends CdkStepper implements OnInit, OnDestroy {
   @Input() i18nPrefix: string;
   @Input() finished = false;
   @Input() overviewIndex: number;
+  @Input() focusModeEnabled = false;
   headerPos = 0;
   containerAnimationState = 'current';
   headerAnimationState = 'init';
   nextIndex = 0;
   swipeXLocation?: number;
   swipeTime?: number;
-
-  focusStateSubscription: Subscription;
-  isGuided = false;
 
   private hotkeyRefs: symbol[] = [];
 
@@ -79,21 +75,12 @@ export class StepperComponent extends CdkStepper implements OnInit, OnDestroy {
     private translateService: TranslateService,
     dir: Directionality,
     changeDetectorRef: ChangeDetectorRef,
-    elementRef: ElementRef<HTMLElement>,
-    private remoteService: RemoteService
+    elementRef: ElementRef<HTMLElement>
   ) {
     super(dir, changeDetectorRef, elementRef);
   }
 
   ngOnInit() {
-    if (this.isParticipant) {
-      this.isGuided = this.remoteService.isGuided;
-      this.focusStateSubscription = this.remoteService
-        .getFocusModeState()
-        .subscribe((isGuided) => {
-          this.isGuided = isGuided;
-        });
-    }
     this.translateService.get(this.i18nPrefix + '.previous').subscribe((t) =>
       this.hotkeyService.registerHotkey(
         {
@@ -118,9 +105,6 @@ export class StepperComponent extends CdkStepper implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.hotkeyRefs.forEach((h) => this.hotkeyService.unregisterHotkey(h));
-    if (this.focusStateSubscription) {
-      this.focusStateSubscription.unsubscribe();
-    }
   }
 
   init(index: number, length: number) {
@@ -163,7 +147,7 @@ export class StepperComponent extends CdkStepper implements OnInit, OnDestroy {
   }
 
   next(): void {
-    if (!this.isGuided) {
+    if (!this.focusModeEnabled) {
       if (this.selectedIndex < this.listLength - 1) {
         if (this.selectedIndex < this.listLength - 1 || this.finished) {
           this.onClick(this.selectedIndex + 1);
@@ -180,7 +164,7 @@ export class StepperComponent extends CdkStepper implements OnInit, OnDestroy {
   }
 
   previous(): void {
-    if (!this.isGuided) {
+    if (!this.focusModeEnabled) {
       if (this.selectedIndex > 0) {
         this.onClick(this.selectedIndex - 1);
         setTimeout(() => {

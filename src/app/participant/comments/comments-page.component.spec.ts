@@ -29,6 +29,8 @@ import { of } from 'rxjs';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatDialog } from '@angular/material/dialog';
+import { FocusModeService } from '@app/participant/_services/focus-mode.service';
+import { CommentFocusState } from '@app/core/models/events/remote/comment-focus-state';
 
 describe('CommentsPageComponent', () => {
   let component: CommentsPageComponent;
@@ -70,6 +72,15 @@ describe('CommentsPageComponent', () => {
     room: room,
   };
   const activatedRouteStub = new ActivatedRouteStub(null, data);
+
+  const mockFocusModeService = jasmine.createSpyObj([
+    'getFocusModeEnabled',
+    'getCommentState',
+  ]);
+  mockFocusModeService.getFocusModeEnabled.and.returnValue(of(true));
+  mockFocusModeService.getCommentState.and.returnValue(
+    of(new CommentFocusState('commentId'))
+  );
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -136,6 +147,10 @@ describe('CommentsPageComponent', () => {
         {
           provide: AuthenticationService,
           useValue: mockAuthenticationService,
+        },
+        {
+          provide: FocusModeService,
+          useValue: mockFocusModeService,
         },
       ],
       schemas: [NO_ERRORS_SCHEMA],

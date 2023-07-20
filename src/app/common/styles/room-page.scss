@@ -43,7 +43,7 @@ $content-padding: 2em;
     width: $drawer-width;
   }
 
-  .mat-drawer-content {
+  .mat-drawer-content:not(.no-navigation) {
     width: calc(100% - #{$drawer-width});
   }
 }
@@ -54,6 +54,7 @@ $content-padding: 2em;
     height: $mobile-bar-height;
     position: fixed;
     top: unset;
+    transform: translate3d(0, 100%, 0);
   }
 
   .footer {
@@ -61,9 +62,12 @@ $content-padding: 2em;
   }
 
   .mat-drawer-content {
-    height: calc(100vh - $mobile-bar-height);
     margin-left: 0 !important;
-    margin-bottom: -$mobile-bar-height;
-    padding-bottom: $mobile-bar-height;
+    height: calc(100vh - $mobile-bar-height);
+
+    &:not(.no-navigation) {
+      margin-bottom: -$mobile-bar-height;
+      padding-bottom: $mobile-bar-height;
+    }
   }
 }

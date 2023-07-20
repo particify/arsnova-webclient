@@ -78,7 +78,14 @@
       ></app-formatting-toolbar>
     </div>
   </div>
-  <lib-extension-point extensionId="focus-mode-control"></lib-extension-point>
+  <app-settings-slide-toggle
+    *appFeatureFlag="'FOCUS_MODE'"
+    label="settings.focus-mode"
+    [isChecked]="focusModeEnabled"
+    (toggleEvent)="toggleFocusMode($event)"
+  >
+  </app-settings-slide-toggle>
+
   <div fxLayout="row">
     <button
       mat-stroked-button

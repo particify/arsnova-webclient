@@ -444,7 +444,9 @@
     "hotkey-general": "Raumeinstellungen",
     "hotkey-comments": "Q&A-Einstellungen",
     "hotkey-access": "Verwaltung von Zugriffsrechten",
-    "hotkey-announcements": "Verwaltung von Ankündigungen"
+    "hotkey-announcements": "Verwaltung von Ankündigungen",
+    "focus-mode": "Fokus-Modus",
+    "focus-mode-info": "Führe deine Teilnehmenden in Echtzeit durch den Raum. Deine Steuerung im Präsentationsmodus wird mit den Geräten der Teilnehmenden synchronisiert."
   },
   "room": {
     "room-name": "Name des Raums",
@@ -560,7 +562,8 @@
     "feedback": "Live Feedback",
     "moderation": "Moderation",
     "content-counter": "Aktuelle Position in der Fragenserie",
-    "overview": "Übersicht"
+    "overview": "Übersicht",
+    "focus-feature": "(Aktuell im Fokus)"
   },
   "export": {
     "export-series": "Fragenserie exportieren",
@@ -609,7 +612,8 @@
     "a11y-leaved-fullscreen": "Du hast den Vollbildmodus verlassen.",
     "a11y-present": "Gehe in den Präsentationsmodus",
     "presentation-mode": "Präsentationsmodus",
-    "present": "Gehe in Präsentationsmodus"
+    "present": "Gehe in Präsentationsmodus",
+    "focus-mode-enabled-info": "Du führst die Teilnehmenden durch den Raum."
   },
   "option-template": {
     "agreement": "Zustimmung",

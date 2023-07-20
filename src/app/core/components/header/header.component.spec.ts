@@ -44,6 +44,8 @@ import { BehaviorSubject, of } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { AnnounceService } from '@app/core/services/util/announce.service';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { Room } from '@app/core/models/room';
+import { RoomService } from '@app/core/services/http/room.service';
 
 export class MockAuthenticationService {
   private auth$$ = new BehaviorSubject<any>({ loginId: 'test@test.de' });
@@ -61,10 +63,6 @@ export class MockAuthenticationService {
 
 class MockRoutingService {
   goBack() {}
-
-  getIsRoom() {
-    return of({});
-  }
 
   getIsPreview() {
     return of({});
@@ -99,6 +97,10 @@ describe('HeaderComponent', () => {
     'getStateByUserId',
   ]);
   announcementService.getStateByUserId.and.returnValue(of({}));
+  const roomService = jasmine.createSpyObj('RoomService', [
+    'getCurrentRoomStream',
+  ]);
+  roomService.getCurrentRoomStream.and.returnValue(of(new Room()));
   let loader: HarnessLoader;
   let userButton: MatButtonHarness;
   let loginButton: MatButtonHarness;
@@ -179,6 +181,10 @@ describe('HeaderComponent', () => {
         {
           provide: AnnounceService,
           useValue: announcementService,
+        },
+        {
+          provide: RoomService,
+          useValue: roomService,
         },
       ],
       schemas: [NO_ERRORS_SCHEMA],

@@ -444,7 +444,9 @@
     "hotkey-general": "Room settings",
     "hotkey-comments": "Q&A settings",
     "hotkey-access": "Access rights management",
-    "hotkey-announcements": "Announcement management"
+    "hotkey-announcements": "Announcement management",
+    "focus-mode": "Focus mode",
+    "focus-mode-info": "Guide your participants through the room in real time. Your control in presentation mode is synchronized with the participants' devices."
   },
   "room": {
     "room-name": "Room name",
@@ -561,7 +563,8 @@
     "feedback": "Live Feedback",
     "moderation": "Moderation",
     "content-counter": "Current position in question series",
-    "overview": "Overview"
+    "overview": "Overview",
+    "focus-feature": "(Current focus)"
   },
   "export": {
     "export-series": "Export series",
@@ -610,7 +613,8 @@
     "a11y-leaved-fullscreen": "You have left fullscreen mode.",
     "a11y-present": "Go into presentation mode",
     "presentation-mode": "Presentation mode",
-    "present": "Go into presentation mode"
+    "present": "Go into presentation mode",
+    "focus-mode-enabled-info": "You guide the participants through the room."
   },
   "option-template": {
     "agreement": "Agreement",

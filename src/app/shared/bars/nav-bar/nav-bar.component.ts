@@ -13,7 +13,7 @@ import { FeedbackMessageType } from '@app/core/models/messages/feedback-message-
 import { ContentGroupService } from '@app/core/services/http/content-group.service';
 import { ContentGroup } from '@app/core/models/content-group';
 import { EventService } from '@app/core/services/util/event.service';
-import { Observable, Subscription } from 'rxjs';
+import { Observable, Subject, Subscription, takeUntil } from 'rxjs';
 import { EntityChanged } from '@app/core/models/events/entity-changed';
 import { ContentGroupStatistics } from '@app/core/models/content-group-statistics';
 import { DataChanged } from '@app/core/models/events/data-changed';
@@ -25,6 +25,8 @@ import { MatMenuTrigger } from '@angular/material/menu';
 import { RoomService } from '@app/core/services/http/room.service';
 import { IMessage } from '@stomp/stompjs';
 import { CommentSettingsService } from '@app/core/services/http/comment-settings.service';
+import { FocusModeService } from '@app/creator/_services/focus-mode.service';
+import { Room } from '@app/core/models/room';
 
 export class NavBarItem extends BarItem {
   url: string;
@@ -62,11 +64,13 @@ export class PublishedContentsState {
   selector: 'app-nav-bar',
   templateUrl: './nav-bar.component.html',
   styleUrls: ['./nav-bar.component.scss'],
+  providers: [FocusModeService],
 })
 export class NavBarComponent
   extends BarBaseComponent
   implements OnInit, OnDestroy
 {
+  destroyed$ = new Subject<void>();
   barItems: NavBarItem[] = [];
   features: BarItem[] = [
     new BarItem(RoutingFeature.OVERVIEW, 'home'),
@@ -82,6 +86,7 @@ export class NavBarComponent
   viewRole: UserRole;
   shortId: string;
   roomId: string;
+  room: Room;
   changesSubscription: Subscription;
   statsChangesSubscription: Subscription;
   groupSubscriptions: Subscription[];
@@ -93,6 +98,8 @@ export class NavBarComponent
   isLoading = true;
 
   userCount: number;
+  focusFeature: RoutingFeature;
+  focusModeEnabled: boolean;
   private roomSub: Subscription;
   private roomWatch: Observable<IMessage>;
 
@@ -106,7 +113,8 @@ export class NavBarComponent
     protected contentGroupService: ContentGroupService,
     protected eventService: EventService,
     protected roomService: RoomService,
-    protected commentSettingsService: CommentSettingsService
+    protected commentSettingsService: CommentSettingsService,
+    protected focusModeService: FocusModeService
   ) {
     super();
   }
@@ -135,6 +143,8 @@ export class NavBarComponent
     if (this.roomSub) {
       this.roomSub.unsubscribe();
     }
+    this.destroyed$.next(null);
+    this.destroyed$.complete();
   }
 
   afterInit() {
@@ -153,6 +163,22 @@ export class NavBarComponent
           this.parseUserCount(msg.body)
         );
       });
+      this.focusModeService.init(this.room);
+      this.focusModeService
+        .getFocusModeEnabled()
+        .pipe(takeUntil(this.destroyed$))
+        .subscribe((focusModeEnabled) => {
+          setTimeout(() => {
+            this.focusModeEnabled = focusModeEnabled;
+          }, 300);
+        });
+      this.focusModeService
+        .getState()
+        .pipe(takeUntil(this.destroyed$))
+        .subscribe((state) => {
+          this.focusFeature =
+            RoutingFeature[state?.feature] || RoutingFeature.OVERVIEW;
+        });
     }
     this.isLoading = false;
   }
@@ -163,6 +189,7 @@ export class NavBarComponent
       this.viewRole = data.viewRole;
       this.shortId = data.room.shortId;
       this.roomId = data.room.id;
+      this.room = data.room;
       if (
         !data.room.settings['feedbackLocked'] ||
         this.viewRole !== UserRole.PARTICIPANT
@@ -191,7 +218,7 @@ export class NavBarComponent
             this.addContentFeatureItem(false);
           }
           this.getItems();
-          this.updateGroups(stats.groupStats ?? [], !!group);
+          this.updateGroups(stats.groupStats ?? [], !!group, false);
         });
       this.subscribeToParticipantEvents();
       this.subscribeToRouteChanges();
@@ -380,7 +407,11 @@ export class NavBarComponent
     this.barItems[this.currentRouteIndex].changeIndicator = false;
   }
 
-  updateGroups(groupStats: ContentGroupStatistics[], alreadySet: boolean) {
+  updateGroups(
+    groupStats: ContentGroupStatistics[],
+    alreadySet: boolean,
+    showNews = true
+  ) {
     if (this.contentGroups.length > 0) {
       if (this.listObjectIdsEquals(this.contentGroups, groupStats)) {
         return;
@@ -414,7 +445,7 @@ export class NavBarComponent
                 this.setGroup(currentGroup);
                 this.addContentFeatureItem();
                 // route data's `userRole` is used here to prevent showing notification indicator in creators room preview
-                if (this.role === UserRole.PARTICIPANT) {
+                if (this.role === UserRole.PARTICIPANT && showNews) {
                   this.toggleNews(RoutingFeature.CONTENTS);
                 }
                 this.afterInit();
@@ -655,5 +686,9 @@ export class NavBarComponent
     if (!this.isMenuActive(feature)) {
       trigger.closeMenu();
     }
+  }
+
+  getFocusInfo(feature: string) {
+    return feature === this.focusFeature ? 'sidebar.focus-feature' : '';
   }
 }

@@ -77,7 +77,6 @@ export class AbstractCommentsPageComponent {
   freeze = false;
   readTimestamp: Date;
   unreadCommentCount: number;
-  navBarExists = true;
   referenceEvent: Subject<string> = new Subject<string>();
 
   constructor(

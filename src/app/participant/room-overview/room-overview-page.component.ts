@@ -18,6 +18,8 @@ import { RoomStatsService } from '@app/core/services/http/room-stats.service';
 import { CommentSettingsService } from '@app/core/services/http/comment-settings.service';
 import { ContentPublishService } from '@app/core/services/util/content-publish.service';
 import { AbstractRoomOverviewPage } from '@app/common/abstract/abstract-room-overview-page';
+import { FocusModeService } from '@app/participant/_services/focus-mode.service';
+import { HintType } from '@app/core/models/hint-type.enum';
 
 @Component({
   selector: 'app-participant-overview',
@@ -30,6 +32,8 @@ export class RoomOverviewPageComponent
 {
   surveyEnabled = false;
   commentsEnabled = false;
+  focusModeEnabled = false;
+  HintType = HintType;
 
   constructor(
     protected roomStatsService: RoomStatsService,
@@ -42,7 +46,8 @@ export class RoomOverviewPageComponent
     protected globalStorageService: GlobalStorageService,
     protected feedbackService: FeedbackService,
     protected commentSettingsService: CommentSettingsService,
-    protected contentPublishService: ContentPublishService
+    protected contentPublishService: ContentPublishService,
+    protected focusModeService: FocusModeService
   ) {
     super(
       roomStatsService,
@@ -68,6 +73,7 @@ export class RoomOverviewPageComponent
     window.scroll(0, 0);
     this.route.data.subscribe((data) => {
       this.role = data.viewRole;
+      this.focusModeEnabled = data.room.focusModeEnabled;
       this.initializeRoom(data.room, 'PublicDataChanged');
       this.getFeedback();
       this.commentsEnabled = !data.commentSettings.disabled;
@@ -81,6 +87,12 @@ export class RoomOverviewPageComponent
       .subscribe((settings) => {
         this.commentsEnabled = !settings.disabled;
       });
+    this.focusModeService
+      .getFocusModeEnabled()
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe(
+        (focusModeEnabled) => (this.focusModeEnabled = focusModeEnabled)
+      );
   }
 
   getFeedback() {

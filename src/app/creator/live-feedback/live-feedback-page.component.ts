@@ -11,7 +11,6 @@ import {
   AdvancedSnackBarTypes,
   NotificationService,
 } from '@app/core/services/util/notification.service';
-import { RemoteService } from '@app/core/services/util/remote.service';
 import { WsFeedbackService } from '@app/core/services/websockets/ws-feedback.service';
 import { TranslateService } from '@ngx-translate/core';
 import { Message } from '@stomp/stompjs';
@@ -38,8 +37,7 @@ export class LiveFeedbackPageComponent
     protected translateService: TranslateService,
     protected announceService: AnnounceService,
     protected globalStorageService: GlobalStorageService,
-    protected route: ActivatedRoute,
-    protected remoteService: RemoteService
+    protected route: ActivatedRoute
   ) {
     super(
       wsFeedbackService,
@@ -108,7 +106,6 @@ export class LiveFeedbackPageComponent
         this.loadConfig(room);
       });
       this.isClosed = type === FeedbackMessageType.STOPPED;
-      this.remoteService.updateFeedbackStateChange(!this.isClosed);
       if (this.isClosed) {
         this.updateFeedback([0, 0, 0, 0]);
       }

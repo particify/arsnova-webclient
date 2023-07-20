@@ -241,7 +241,9 @@
     "answers-deleted": "Antworten auf diese Frage wurden gelöscht.",
     "really-delete-all-answers": "Willst du wirklich alle Antworten dieser Fragenserie löschen?",
     "you-are-using-community-lang": "Du nutzt eine Community-Übersetzung",
-    "community-lang": "Diese Sprache wird von der Community gepflegt und kann daher unvollständig oder veraltet sein."
+    "community-lang": "Diese Sprache wird von der Community gepflegt und kann daher unvollständig oder veraltet sein.",
+    "leave": "Verlassen",
+    "really-leave-room": "Willst du den Raum wirklich verlassen?"
   },
   "errors": {
     "not-authorized": "Du bist nicht autorisiert diese Seite zu sehen.",
@@ -300,5 +302,9 @@
     "all-rooms": "Alle Räume",
     "no-announcements": "Es gibt keine Ankündigungen.",
     "filter": "Filter"
+  },
+  "focus-mode": {
+    "presenter-controls-app": "Du wirst durch den Raum geführt.",
+    "exit-room": "Raum verlassen"
   }
 }

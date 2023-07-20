@@ -28,6 +28,7 @@ import { ContentPublishService } from '@app/core/services/util/content-publish.s
 import { ContentGroupStatistics } from '@app/core/models/content-group-statistics';
 import { RoomStats } from '@app/core/models/room-stats';
 import { ContentGroup } from '@app/core/models/content-group';
+import { FocusModeService } from '@app/participant/_services/focus-mode.service';
 
 describe('RoomOverviewPageComponent', () => {
   let component: RoomOverviewPageComponent;
@@ -82,6 +83,9 @@ describe('RoomOverviewPageComponent', () => {
   const activatedRouteStub = new ActivatedRouteStub(null, data);
 
   const splitShortIdPipe = new SplitShortIdPipe();
+
+  const mockFocusModeService = jasmine.createSpyObj(['getFocusModeEnabled']);
+  mockFocusModeService.getFocusModeEnabled.and.returnValue(of(true));
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
@@ -147,6 +151,10 @@ describe('RoomOverviewPageComponent', () => {
         {
           provide: ContentPublishService,
           useClass: ContentPublishService,
+        },
+        {
+          provide: FocusModeService,
+          useValue: mockFocusModeService,
         },
       ],
       schemas: [NO_ERRORS_SCHEMA],

@@ -34,6 +34,8 @@ import {
 import { Language } from '@app/core/models/language';
 import { LanguageCategory } from '@app/core/models/language-category.enum';
 import { BaseDialogComponent } from '@app/shared/_dialogs/base-dialog/base-dialog.component';
+import { Room } from '@app/core/models/room';
+import { RoomService } from '@app/core/services/http/room.service';
 
 @Component({
   selector: 'app-header',
@@ -61,6 +63,7 @@ export class HeaderComponent implements OnInit {
   userCharacter: string;
   openPresentationDirectly = false;
   announcementState: AnnouncementState;
+  room: Room;
 
   constructor(
     public location: Location,
@@ -80,7 +83,8 @@ export class HeaderComponent implements OnInit {
     private consentService: ConsentService,
     private extensionFactory: ExtensionFactory,
     private dialog: MatDialog,
-    private announcementService: AnnouncementService
+    private announcementService: AnnouncementService,
+    private roomService: RoomService
   ) {
     this.deviceType = this.globalStorageService.getItem(
       STORAGE_KEYS.DEVICE_TYPE
@@ -121,10 +125,9 @@ export class HeaderComponent implements OnInit {
       this.privacyUrl = data.apiConfig.ui.links?.privacy?.url;
       this.imprintUrl = data.apiConfig.ui.links?.imprint?.url;
     });
-    this.isRoom = this.routingService.isRoom;
-    this.routingService.getIsRoom().subscribe((isRoom) => {
-      this.isRoom = isRoom;
-    });
+    this.roomService
+      .getCurrentRoomStream()
+      .subscribe((room) => (this.room = room));
     this.isPreview = this.routingService.isPreview;
     this.routingService.getIsPreview().subscribe((isPreview) => {
       this.isPreview = isPreview;
@@ -267,6 +270,20 @@ export class HeaderComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe((newReadTimestamp) => {
       this.announcementState.readTimestamp = newReadTimestamp;
+    });
+  }
+
+  leaveRoom() {
+    const dialogRef = this.dialogService.openDeleteDialog(
+      'leave-room',
+      'really-leave-room',
+      null,
+      'leave'
+    );
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result === 'leave') {
+        this.router.navigateByUrl('user');
+      }
     });
   }
 }

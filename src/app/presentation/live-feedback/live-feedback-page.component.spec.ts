@@ -20,11 +20,12 @@ import { FeedbackService } from '@app/core/services/http/feedback.service';
 import { AnnounceService } from '@app/core/services/util/announce.service';
 import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
 import { EventEmitter, NO_ERRORS_SCHEMA } from '@angular/core';
-import { RemoteService } from '@app/core/services/util/remote.service';
 import { NotificationService } from '@app/core/services/util/notification.service';
 import { CoreModule } from '@app/core/core.module';
 import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
 import { HotkeyService } from '@app/core/services/util/hotkey.service';
+import { FocusModeService } from '@app/creator/_services/focus-mode.service';
+import { PresentationService } from '@app/core/services/util/presentation.service';
 
 describe('LiveFeedbackPageComponent', () => {
   let component: LiveFeedbackPageComponent;
@@ -59,11 +60,15 @@ describe('LiveFeedbackPageComponent', () => {
   };
   const activatedRouteStub = new ActivatedRouteStub(null, data, snapshot);
 
-  const mockRemoteService = jasmine.createSpyObj(['updateFeedbackStateChange']);
+  const mockFocusModeService = jasmine.createSpyObj(['updateFeedbackState']);
 
   const mockHotkeyService = jasmine.createSpyObj([
     'registerHotkey',
     'unregisterHotkey',
+  ]);
+
+  const mockPresentationService = jasmine.createSpyObj('PresentationService', [
+    'getFeedbackStarted',
   ]);
 
   beforeEach(async () => {
@@ -115,8 +120,12 @@ describe('LiveFeedbackPageComponent', () => {
           useClass: MockGlobalStorageService,
         },
         {
-          provide: RemoteService,
-          useValue: mockRemoteService,
+          provide: FocusModeService,
+          useValue: mockFocusModeService,
+        },
+        {
+          provide: PresentationService,
+          useValue: mockPresentationService,
         },
       ],
       schemas: [NO_ERRORS_SCHEMA],
