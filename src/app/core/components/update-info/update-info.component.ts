@@ -46,10 +46,8 @@ export class UpdateInfoComponent implements OnInit {
     const lang = this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE);
     this.changes = this.versions
       .filter((v) => v.changes?.[lang]?.length > 0)
-      .reduce(
-        (acc, cur) => (cur.id > (acc?.id ?? 0) ? cur : acc),
-        null
-      )?.changes[lang];
+      .reduce((acc, cur) => (cur.id > (acc?.id ?? 0) ? cur : acc), null)
+      ?.changes[lang];
     if (this.data.updateAvailable) {
       this.data.updateAvailable.subscribe(() => (this.updateReady = true));
     } else {

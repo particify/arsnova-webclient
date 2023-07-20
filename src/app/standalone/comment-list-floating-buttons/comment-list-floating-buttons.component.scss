@@ -18,7 +18,10 @@
   position: fixed;
   right: -64px;
   z-index: 1;
-  transition: right 400ms, visibility 200ms, opacity 200ms;
+  transition:
+    right 400ms,
+    visibility 200ms,
+    opacity 200ms;
 
   &.visible {
     visibility: visible;
@@ -36,7 +39,10 @@
   transform: translateX(50%);
   z-index: 1;
   background: var(--surface);
-  transition: bottom 400ms, visibility 200ms, opacity 200ms;
+  transition:
+    bottom 400ms,
+    visibility 200ms,
+    opacity 200ms;
 }
 
 .scroll-to-new-posts-visible {

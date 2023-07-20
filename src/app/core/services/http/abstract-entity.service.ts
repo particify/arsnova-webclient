@@ -23,7 +23,7 @@ import {
  * can be referenced through an ID.
  */
 export abstract class AbstractEntityService<
-  T extends Entity
+  T extends Entity,
 > extends AbstractCachingHttpService<T> {
   private aliasIdMapping: Map<string, string> = new Map<string, string>();
   private stompSubscriptions = new Map<string, Subscription>();

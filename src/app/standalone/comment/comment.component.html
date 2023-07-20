@@ -24,8 +24,8 @@
           : {
               time:
                 language === 'de'
-                  ? (comment.timestamp | date : ' HH:mm ')
-                  : (comment.timestamp | date : 'h:mm a'),
+                  ? (comment.timestamp | date: ' HH:mm ')
+                  : (comment.timestamp | date: 'h:mm a'),
               votes:
                 comment.score === 1
                   ? ('comment-page.a11y-text-textForOneVote' | translate)
