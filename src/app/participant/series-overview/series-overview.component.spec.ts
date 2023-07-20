@@ -35,23 +35,7 @@ describe('SeriesOverviewComponent', () => {
   let component: SeriesOverviewComponent;
   let fixture: ComponentFixture<SeriesOverviewComponent>;
 
-  const resultOverview = {
-    correctAnswerCount: 0,
-    scorableContentCount: 0,
-    achievedScore: 0,
-    maxScore: 0,
-    answerResults: [
-      {
-        contentId: '1234',
-        achievedPoints: 0,
-        maxPoints: 0,
-        state: AnswerResultType.UNANSWERED,
-      },
-    ],
-  };
-
   const mockContentGroupService = jasmine.createSpyObj(['getAnswerStats']);
-  mockContentGroupService.getAnswerStats.and.returnValue(of(resultOverview));
 
   const mockContentCarouselService = jasmine.createSpyObj([
     'isLastContentAnswered',
@@ -104,7 +88,29 @@ describe('SeriesOverviewComponent', () => {
     component.group = new ContentGroup();
     component.contents = [
       new Content(
-        '1234',
+        '1111',
+        '1',
+        '1',
+        'subject',
+        'body',
+        [],
+        ContentType.CHOICE,
+        {},
+        new ContentState(1, new Date(), true)
+      ),
+      new Content(
+        '2222',
+        '1',
+        '1',
+        'subject',
+        'body',
+        [],
+        ContentType.CHOICE,
+        {},
+        new ContentState(1, new Date(), true)
+      ),
+      new Content(
+        '3333',
         '1',
         '1',
         'subject',
@@ -121,8 +127,7 @@ describe('SeriesOverviewComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should display clipart and should not display score and chart if there are no contents with correct answers', async () => {
-    component.group.correctOptionsPublished = false;
+  it('should display progress info chart and should not display correct info chart if there are no contents with correct answers', () => {
     const resultOverview = {
       correctAnswerCount: 0,
       scorableContentCount: 0,
@@ -130,51 +135,75 @@ describe('SeriesOverviewComponent', () => {
       maxScore: 0,
       answerResults: [
         {
-          contentId: '1234',
+          contentId: '1111',
           achievedPoints: 0,
           maxPoints: 0,
           state: AnswerResultType.NEUTRAL,
         },
+        {
+          contentId: '2222',
+          achievedPoints: 0,
+          maxPoints: 0,
+          state: AnswerResultType.UNANSWERED,
+        },
+        {
+          contentId: '3333',
+          achievedPoints: 0,
+          maxPoints: 0,
+          state: AnswerResultType.UNANSWERED,
+        },
       ],
     };
     mockContentGroupService.getAnswerStats.and.returnValue(of(resultOverview));
     fixture.detectChanges();
-    const clipart = fixture.debugElement.query(By.css('#clipart'));
-    const score = fixture.debugElement.query(By.css('#score'));
-    const chart = fixture.debugElement.query(By.css('#chart'));
-    expect(clipart).not.toBeNull('Clipart should not be displayed');
-    expect(score).toBeNull('Score should be displayed');
-    expect(chart).toBeNull('Chart should be displayed');
+    const progressInfoChart = fixture.debugElement.query(
+      By.css('#progress-info-chart')
+    );
+    const correctInfoChart = fixture.debugElement.query(
+      By.css('#correct-info-chart')
+    );
+    expect(progressInfoChart).not.toBeNull(
+      'Progress info chart should be displayed'
+    );
+    expect(correctInfoChart).toBeNull(
+      'Correct info chart should not be displayed'
+    );
   });
 
-  it('should display clipart and should not display score and chart if there are contents with correct answers but correct options are not published', async () => {
-    component.group.correctOptionsPublished = false;
+  it('should get correct progress text', () => {
     const resultOverview = {
       correctAnswerCount: 0,
       scorableContentCount: 0,
       achievedScore: 0,
-      maxScore: 10,
+      maxScore: 0,
       answerResults: [
         {
-          contentId: '1234',
-          achievedPoints: 10,
-          maxPoints: 10,
+          contentId: '1111',
+          achievedPoints: 0,
+          maxPoints: 0,
           state: AnswerResultType.NEUTRAL,
         },
+        {
+          contentId: '2222',
+          achievedPoints: 0,
+          maxPoints: 0,
+          state: AnswerResultType.UNANSWERED,
+        },
+        {
+          contentId: '3333',
+          achievedPoints: 0,
+          maxPoints: 0,
+          state: AnswerResultType.UNANSWERED,
+        },
       ],
     };
     mockContentGroupService.getAnswerStats.and.returnValue(of(resultOverview));
     fixture.detectChanges();
-    const clipart = fixture.debugElement.query(By.css('#clipart'));
-    const score = fixture.debugElement.query(By.css('#score'));
-    const chart = fixture.debugElement.query(By.css('#chart'));
-    expect(clipart).not.toBeNull('Clipart should not be displayed');
-    expect(score).toBeNull('Score should be displayed');
-    expect(chart).toBeNull('Chart should be displayed');
+    const progressDataText = component.getProgressDataText();
+    expect(progressDataText).toBe('1 / 3');
   });
 
-  it('should display score and chart and should not display clipart if there are contents with correct answers and correct options are published', async () => {
-    component.group.correctOptionsPublished = true;
+  it('should display correct info chart and if there are contents with correct answers', () => {
     const resultOverview = {
       correctAnswerCount: 0,
       scorableContentCount: 0,
@@ -182,114 +211,19 @@ describe('SeriesOverviewComponent', () => {
       maxScore: 10,
       answerResults: [
         {
-          contentId: '1234',
-          achievedPoints: 10,
-          maxPoints: 10,
-          state: AnswerResultType.CORRECT,
-        },
-      ],
-    };
-    mockContentGroupService.getAnswerStats.and.returnValue(of(resultOverview));
-    fixture.detectChanges();
-    const clipart = fixture.debugElement.query(By.css('#clipart'));
-    const score = fixture.debugElement.query(By.css('#score'));
-    const chart = fixture.debugElement.query(By.css('#chart'));
-    expect(clipart).toBeNull('Clipart should not be displayed');
-    expect(score).not.toBeNull('Score should be displayed');
-    expect(chart).not.toBeNull('Chart should be displayed');
-  });
-
-  it('should display score 100% if all answers are correct', async () => {
-    component.group.correctOptionsPublished = true;
-    const resultOverview = {
-      correctAnswerCount: 0,
-      scorableContentCount: 0,
-      achievedScore: 10,
-      maxScore: 10,
-      answerResults: [
-        {
-          contentId: '1234',
-          achievedPoints: 10,
-          maxPoints: 10,
-          state: AnswerResultType.CORRECT,
-        },
-      ],
-    };
-    mockContentGroupService.getAnswerStats.and.returnValue(of(resultOverview));
-    fixture.detectChanges();
-    const score = fixture.debugElement.query(By.css('#score'));
-    expect(score).not.toBeNull('Score should be displayed');
-    expect(score.nativeElement.textContent).toBe('100%');
-  });
-
-  it('should display score 0% if all answers are wrong', async () => {
-    component.group.correctOptionsPublished = true;
-    const resultOverview = {
-      correctAnswerCount: 0,
-      scorableContentCount: 0,
-      achievedScore: 0,
-      maxScore: 10,
-      answerResults: [
-        {
-          contentId: '1234',
-          achievedPoints: 10,
-          maxPoints: 10,
-          state: AnswerResultType.CORRECT,
-        },
-      ],
-    };
-    mockContentGroupService.getAnswerStats.and.returnValue(of(resultOverview));
-    fixture.detectChanges();
-    const score = fixture.debugElement.query(By.css('#score'));
-    expect(score).not.toBeNull('Score should be displayed');
-    expect(score.nativeElement.textContent).toBe('0%');
-  });
-
-  it('should display rounded score 67% if 2 of 3 answers are correct', async () => {
-    component.group.correctOptionsPublished = true;
-    const resultOverview = {
-      correctAnswerCount: 0,
-      scorableContentCount: 0,
-      achievedScore: 20,
-      maxScore: 30,
-      answerResults: [
-        {
-          contentId: '1234',
-          achievedPoints: 10,
-          maxPoints: 10,
-          state: AnswerResultType.CORRECT,
-        },
-        {
-          contentId: '2345',
-          achievedPoints: 10,
-          maxPoints: 10,
-          state: AnswerResultType.CORRECT,
-        },
-        {
-          contentId: '3456',
+          contentId: '1111',
           achievedPoints: 0,
           maxPoints: 10,
-          state: AnswerResultType.WRONG,
+          state: AnswerResultType.UNANSWERED,
         },
-      ],
-    };
-    mockContentGroupService.getAnswerStats.and.returnValue(of(resultOverview));
-    fixture.detectChanges();
-    const score = fixture.debugElement.query(By.css('#score'));
-    expect(score).not.toBeNull('Score should be displayed');
-    expect(score.nativeElement.textContent).toBe('67%');
-  });
-
-  it('should not finish content loading if last content result is not received yet', async () => {
-    mockContentCarouselService.isLastContentAnswered.and.returnValue(true);
-    const resultOverview = {
-      correctAnswerCount: 0,
-      scorableContentCount: 0,
-      achievedScore: 10,
-      maxScore: 10,
-      answerResults: [
         {
-          contentId: '1234',
+          contentId: '2222',
+          achievedPoints: 0,
+          maxPoints: 0,
+          state: AnswerResultType.UNANSWERED,
+        },
+        {
+          contentId: '3333',
           achievedPoints: 0,
           maxPoints: 10,
           state: AnswerResultType.UNANSWERED,
@@ -298,6 +232,231 @@ describe('SeriesOverviewComponent', () => {
     };
     mockContentGroupService.getAnswerStats.and.returnValue(of(resultOverview));
     fixture.detectChanges();
-    expect(component.isLoadingLastContent).toBe(true);
+
+    const correctInfoChart = fixture.debugElement.query(
+      By.css('#correct-info-chart')
+    );
+
+    expect(correctInfoChart).not.toBeNull(
+      'Correct info chart should be displayed'
+    );
+  });
+
+  it('should get correct progress text if all unanswered', () => {
+    const resultOverview = {
+      correctAnswerCount: 0,
+      scorableContentCount: 0,
+      achievedScore: 0,
+      maxScore: 30,
+      answerResults: [
+        {
+          contentId: '1111',
+          achievedPoints: 0,
+          maxPoints: 10,
+          state: AnswerResultType.UNANSWERED,
+        },
+        {
+          contentId: '2222',
+          achievedPoints: 0,
+          maxPoints: 0,
+          state: AnswerResultType.UNANSWERED,
+        },
+        {
+          contentId: '3333',
+          achievedPoints: 0,
+          maxPoints: 10,
+          state: AnswerResultType.UNANSWERED,
+        },
+      ],
+    };
+    mockContentGroupService.getAnswerStats.and.returnValue(of(resultOverview));
+    fixture.detectChanges();
+    const correctScoreText = component.score + '%';
+    expect(correctScoreText).toBe('0%');
+  });
+
+  it('should get correct progress text if some contents answered', () => {
+    const resultOverview = {
+      correctAnswerCount: 0,
+      scorableContentCount: 0,
+      achievedScore: 10,
+      maxScore: 30,
+      answerResults: [
+        {
+          contentId: '1111',
+          achievedPoints: 10,
+          maxPoints: 10,
+          state: AnswerResultType.CORRECT,
+        },
+        {
+          contentId: '2222',
+          achievedPoints: 0,
+          maxPoints: 0,
+          state: AnswerResultType.UNANSWERED,
+        },
+        {
+          contentId: '3333',
+          achievedPoints: 0,
+          maxPoints: 10,
+          state: AnswerResultType.UNANSWERED,
+        },
+      ],
+    };
+    mockContentGroupService.getAnswerStats.and.returnValue(of(resultOverview));
+    fixture.detectChanges();
+    const correctScoreText = component.score + '%';
+    expect(correctScoreText).toBe('33%');
+  });
+
+  it('should not display any charts if there are no answerable contents', () => {
+    const resultOverview = {
+      correctAnswerCount: 0,
+      scorableContentCount: 0,
+      achievedScore: 0,
+      maxScore: 0,
+      answerResults: [
+        {
+          contentId: '1111',
+          achievedPoints: 0,
+          maxPoints: 0,
+          state: AnswerResultType.UNANSWERED,
+        },
+        {
+          contentId: '2222',
+          achievedPoints: 0,
+          maxPoints: 0,
+          state: AnswerResultType.UNANSWERED,
+        },
+        {
+          contentId: '3333',
+          achievedPoints: 0,
+          maxPoints: 0,
+          state: AnswerResultType.UNANSWERED,
+        },
+      ],
+    };
+    mockContentGroupService.getAnswerStats.and.returnValue(of(resultOverview));
+    component.isPureInfoSeries = true;
+    fixture.detectChanges();
+    const progressInfoChart = fixture.debugElement.query(
+      By.css('#progress-info-chart')
+    );
+    const correctInfoChart = fixture.debugElement.query(
+      By.css('#correct-info-chart')
+    );
+    expect(progressInfoChart).toBeNull(
+      'Progress info chart should not be displayed'
+    );
+    expect(correctInfoChart).toBeNull(
+      'Correct info chart should not be displayed'
+    );
+  });
+
+  it('should display group name as title if there are no answerable contents', () => {
+    const resultOverview = {
+      correctAnswerCount: 0,
+      scorableContentCount: 0,
+      achievedScore: 0,
+      maxScore: 0,
+      answerResults: [
+        {
+          contentId: '1111',
+          achievedPoints: 0,
+          maxPoints: 0,
+          state: AnswerResultType.UNANSWERED,
+        },
+        {
+          contentId: '2222',
+          achievedPoints: 0,
+          maxPoints: 0,
+          state: AnswerResultType.UNANSWERED,
+        },
+        {
+          contentId: '3333',
+          achievedPoints: 0,
+          maxPoints: 0,
+          state: AnswerResultType.UNANSWERED,
+        },
+      ],
+    };
+    mockContentGroupService.getAnswerStats.and.returnValue(of(resultOverview));
+    component.isPureInfoSeries = true;
+    component.group.name = 'Slide group';
+    fixture.detectChanges();
+    const headerText = fixture.debugElement.query(By.css('.header-text'));
+    expect(headerText.nativeElement.textContent).toBe(' Slide group ');
+  });
+
+  it('should display correct title if there are answerable contents and some have been answered', () => {
+    const resultOverview = {
+      correctAnswerCount: 0,
+      scorableContentCount: 0,
+      achievedScore: 10,
+      maxScore: 30,
+      answerResults: [
+        {
+          contentId: '1111',
+          achievedPoints: 10,
+          maxPoints: 10,
+          state: AnswerResultType.CORRECT,
+        },
+        {
+          contentId: '2222',
+          achievedPoints: 0,
+          maxPoints: 0,
+          state: AnswerResultType.UNANSWERED,
+        },
+        {
+          contentId: '3333',
+          achievedPoints: 0,
+          maxPoints: 0,
+          state: AnswerResultType.UNANSWERED,
+        },
+      ],
+    };
+    mockContentGroupService.getAnswerStats.and.returnValue(of(resultOverview));
+    component.isPureInfoSeries = false;
+    fixture.detectChanges();
+    const headerText = fixture.debugElement.query(By.css('.header-text'));
+    expect(headerText.nativeElement.textContent).toBe(
+      ' content.continue-where-you-stopped '
+    );
+  });
+
+  it('should display correct title if there are answerable contents and all have been answered', () => {
+    const resultOverview = {
+      correctAnswerCount: 0,
+      scorableContentCount: 0,
+      achievedScore: 10,
+      maxScore: 30,
+      answerResults: [
+        {
+          contentId: '1111',
+          achievedPoints: 10,
+          maxPoints: 10,
+          state: AnswerResultType.CORRECT,
+        },
+        {
+          contentId: '2222',
+          achievedPoints: 0,
+          maxPoints: 10,
+          state: AnswerResultType.WRONG,
+        },
+        {
+          contentId: '3333',
+          achievedPoints: 0,
+          maxPoints: 0,
+          state: AnswerResultType.NEUTRAL,
+        },
+      ],
+    };
+    mockContentGroupService.getAnswerStats.and.returnValue(of(resultOverview));
+    component.isPureInfoSeries = false;
+    component.finished = true;
+    fixture.detectChanges();
+    const headerText = fixture.debugElement.query(By.css('.header-text'));
+    expect(headerText.nativeElement.textContent).toBe(
+      ' content.thanks-for-participation '
+    );
   });
 });

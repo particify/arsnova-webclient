@@ -119,4 +119,10 @@ export class ThemeService {
   getBinaryColors(): string[] {
     return this.getColorArray(this.binaryColors, 'likert');
   }
+
+  getPrimaryColor() {
+    return this.currentTheme === Theme.LIGHT
+      ? this.lightColors.primary
+      : this.darkColors.primary;
+  }
 }

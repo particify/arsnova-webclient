@@ -22,6 +22,8 @@ import { ContentCarouselService } from '@app/core/services/util/content-carousel
 import { ParticipantPageComponent } from './participant-page.component';
 import { FooterComponent } from '@app/standalone/footer/footer.component';
 import { RenderedTextComponent } from '@app/standalone/rendered-text/rendered-text.component';
+import { InfoChartComponent } from './series-overview/info-chart/info-chart.component';
+import { HintComponent } from '@app/standalone/hint/hint.component';
 
 @NgModule({
   imports: [
@@ -41,6 +43,7 @@ import { RenderedTextComponent } from '@app/standalone/rendered-text/rendered-te
     ExtensionPointModule,
     FooterComponent,
     RenderedTextComponent,
+    HintComponent,
   ],
   declarations: [
     ContentChoiceParticipantComponent,
@@ -53,6 +56,7 @@ import { RenderedTextComponent } from '@app/standalone/rendered-text/rendered-te
     SeriesOverviewComponent,
     ContentPrioritizationParticipantComponent,
     ParticipantPageComponent,
+    InfoChartComponent,
   ],
   providers: [
     { provide: TRANSLATION_MODULE_NAME, useValue: 'participant' },

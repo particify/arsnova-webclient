@@ -1,31 +1,60 @@
 <div fxLayout="column" fxLayoutAlign="start center">
-  <mat-card fxLayout="column">
-    <span class="header-text small">{{
-      'content.thanks-for-participation' | translate
-    }}</span>
-    <div class="header-container" fxLayout="row">
-      <div class="canvas-container">
-        <app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
-        <canvas id="chart" *ngIf="!isLoading && hasScore"></canvas>
-        <div id="score" *ngIf="!isLoading && hasScore" class="score-container">
-          <span class="score-text">{{ score + '%' }}</span>
-        </div>
-        <img
-          id="clipart"
-          *ngIf="!isLoading && !hasScore"
-          class="graphic"
-          src="assets/icons/result_overview.svg"
-        />
+  <mat-card fxLayout="column" fxLayoutGap="16px">
+    <span class="header-text">
+      {{ getHeaderText() | translate }}
+    </span>
+    <app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
+    <div fxLayout="column">
+      <div
+        *ngIf="!isLoading && !isPureInfoSeries"
+        fxLayout="row"
+        fxLayoutAlign="space-around"
+        class="info-chart-container"
+      >
+        <app-info-chart
+          id="progress-info-chart"
+          chartId="progress-chart"
+          [dataText]="getProgressDataText()"
+          [infoText]="'content.answer-state-neutral' | translate"
+        ></app-info-chart>
+        <app-info-chart
+          *ngIf="hasScore"
+          id="correct-info-chart"
+          chartId="correct-chart"
+          [dataText]="score + '%'"
+          [infoText]="'content.answer-state-correct' | translate"
+        ></app-info-chart>
       </div>
-      <div fxLayout="column" fxLayoutAlign="space-between">
-        <div>
-          <span class="header-text">
-            {{ getHeaderText() | translate }}
-          </span>
-          <div>
-            <p>{{ getSubHeaderText() | translate }}</p>
-          </div>
-        </div>
+      <app-hint
+        [ngStyle]="{ 'margin-top': isPureInfoSeries ? '0' : '-1em' }"
+        fxLayout="row"
+        [fxLayoutAlign]="isPureInfoSeries ? 'start' : 'center'"
+        *ngIf="!isLoading && getLockedContentCount() > 0"
+        [type]="HintType.INFO"
+        [text]="
+          (getLockedContentCount() === 1
+            ? 'content.there-is-one-locked-content'
+            : 'content.there-are-locked-contents'
+          ) | translate : { count: getLockedContentCount() }
+        "
+      ></app-hint>
+      <div
+        fxLayout.gt-sm="row"
+        fxLayout.lt-sm="column"
+        fxLayoutGap="1em"
+        fxLayoutAlign.gt-sm="space-between center"
+        fxLayoutAlign.lt-sm="center center"
+      >
+        <span>{{ getSubHeaderText() | translate }}</span>
+        <button
+          *ngIf="!isPureInfoSeries && !finished"
+          mat-raised-button
+          color="primary"
+          (click)="goToFirstUnanswered()"
+        >
+          <mat-icon fxFlex="noshrink">arrow_forward</mat-icon>
+          <span>{{ 'content.continue-answering' | translate }}</span>
+        </button>
       </div>
     </div>
     <app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
