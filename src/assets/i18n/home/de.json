@@ -304,7 +304,6 @@
     "filter": "Filter"
   },
   "focus-mode": {
-    "presenter-controls-app": "Du wirst durch den Raum geführt.",
-    "exit-room": "Raum verlassen"
+    "presenter-controls-app": "Du wirst durch den Raum geführt."
   }
 }

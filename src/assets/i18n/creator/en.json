@@ -300,7 +300,7 @@
     "canceled": "You've cancelled the process.",
     "round": "Round",
     "round-displayed": "Round {{rounds}} is displayed",
-    "rounds-displayed": "Round {{rounds}} are displayed"
+    "rounds-displayed": "Rounds {{rounds}} are displayed"
   },
   "answer": {
     "word": "Keyword",
