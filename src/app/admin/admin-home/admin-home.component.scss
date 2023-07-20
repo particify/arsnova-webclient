@@ -60,6 +60,10 @@ h2 {
   }
 }
 
+:host-context(.theme-dark) .mat-mdc-button.primary-variant {
+  color: var(--palette-primary-contrast-200);
+}
+
 .routing-container {
   width: calc(100% - $container-padding * 2);
   max-width: 1600px;
