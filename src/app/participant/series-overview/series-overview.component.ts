@@ -228,7 +228,7 @@ export class SeriesOverviewComponent implements OnInit, OnDestroy {
 
   private getProgressData() {
     const totalCount = this.contentsWithResults.length;
-    return [totalCount, totalCount - this.currentAnswerCount];
+    return [this.currentAnswerCount, totalCount - this.currentAnswerCount];
   }
 
   private updateProgressChart() {
