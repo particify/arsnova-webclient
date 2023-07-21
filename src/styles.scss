@@ -352,28 +352,20 @@ div {
   background-color: var(--background) !important;
 }
 
-.statistic-status-good .mdc-linear-progress__bar-inner {
-  background-color: var(--green);
+.statistic-progress .mdc-linear-progress__buffer-bar {
+  background-color: var(--background) !important;
 }
 
-.statistic-status-good .mdc-linear-progress__buffer-bar {
-  background-color: var(--green-light);
+.statistic-status-good .mdc-linear-progress__bar-inner {
+  background-color: var(--green);
 }
 
 .statistic-status-okay .mdc-linear-progress__bar-inner {
   background-color: var(--yellow);
 }
 
-.statistic-status-okay .mdc-linear-progress__buffer-bar {
-  background-color: var(--yellow-light);
-}
-
 .statistic-status-bad .mdc-linear-progress__bar-inner {
   background-color: var(--red);
-}
-
-.statistic-status-bad .mdc-linear-progress__buffer-bar {
-  background-color: var(--red-light);
 }
 
 // Mat Tab
