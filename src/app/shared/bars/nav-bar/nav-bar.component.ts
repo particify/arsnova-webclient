@@ -689,6 +689,9 @@ export class NavBarComponent
   }
 
   getFocusInfo(feature: string) {
+    if (!this.focusModeEnabled) {
+      return '';
+    }
     return feature === this.focusFeature ? 'sidebar.focus-feature' : '';
   }
 }
