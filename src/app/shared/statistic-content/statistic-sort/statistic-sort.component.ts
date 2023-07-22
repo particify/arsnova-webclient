@@ -250,7 +250,7 @@ export class StatisticSortComponent
       drawOnChartArea: !this.isPresentation,
     };
     const scale = this.presentationService.getScale();
-    this.data[0].barThickness = this.isPresentation ? 80 : 100;
+    this.data[0].barThickness = this.isPresentation ? 80 : null;
     this.chart = new Chart(this.chartId, {
       type: 'bar',
       data: {
