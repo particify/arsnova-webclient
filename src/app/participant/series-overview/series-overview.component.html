@@ -39,20 +39,21 @@
         "
       ></app-hint>
       <div
-        fxLayout.gt-sm="row"
+        fxLayout.gt-xs="row"
         fxLayout.lt-sm="column"
         fxLayoutGap="1em"
-        fxLayoutAlign.gt-sm="space-between center"
+        fxLayoutAlign.gt-xs="space-between center"
         fxLayoutAlign.lt-sm="center center"
       >
         <span>{{ getSubHeaderText() | translate }}</span>
         <button
+          fxFlex="none"
           *ngIf="!isPureInfoSeries && !finished"
           mat-raised-button
           color="primary"
           (click)="goToFirstUnanswered()"
         >
-          <mat-icon fxFlex="noshrink">arrow_forward</mat-icon>
+          <mat-icon>arrow_forward</mat-icon>
           <span>{{ 'content.continue-answering' | translate }}</span>
         </button>
       </div>
