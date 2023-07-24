@@ -324,7 +324,10 @@ export class StatisticSortComponent
           },
           datalabels: {
             formatter: (value, context) => {
-              return this.getDataLabel(context.dataset.data[context.dataIndex]);
+              return this.getDataLabel(
+                context.dataset.data[context.dataIndex],
+                context.dataset.data
+              );
             },
             display: (context) => {
               return (context.dataset.data[context.dataIndex] as number) > 0;
