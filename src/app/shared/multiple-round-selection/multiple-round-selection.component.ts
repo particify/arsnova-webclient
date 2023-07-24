@@ -1,11 +1,17 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  Output,
+} from '@angular/core';
 
 @Component({
   selector: 'app-multiple-round-selection',
   templateUrl: './multiple-round-selection.component.html',
   styleUrls: ['./multiple-round-selection.component.scss'],
 })
-export class MultipleRoundSelectionComponent implements OnInit {
+export class MultipleRoundSelectionComponent implements OnChanges {
   @Input() standalone = true;
   @Input() round: number;
   @Input() disabled = false;
@@ -14,7 +20,7 @@ export class MultipleRoundSelectionComponent implements OnInit {
   currentRound: number;
   rounds = ['1', '2', '1 & 2'];
 
-  ngOnInit() {
+  ngOnChanges(): void {
     this.currentRound = this.round;
   }
 
