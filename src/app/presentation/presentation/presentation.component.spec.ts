@@ -43,6 +43,7 @@ describe('PresentationComponent', () => {
           path: 'path',
         },
       ],
+      params: {},
     },
   };
 
