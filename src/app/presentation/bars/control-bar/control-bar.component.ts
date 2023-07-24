@@ -324,7 +324,7 @@ export class ControlBarComponent
       .getAnswersDeleted()
       .pipe(takeUntil(this.destroyed$))
       .subscribe((contentId) => {
-        if (contentId === this.content.id) {
+        if (contentId === this.content?.id) {
           this.content.state.round = 1;
           this.resetAnswerEvent.next(this.content.id);
           this.changeRound(0);
