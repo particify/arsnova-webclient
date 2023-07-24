@@ -324,7 +324,7 @@ export class ControlBarComponent
       .getAnswersDeleted()
       .pipe(takeUntil(this.destroyed$))
       .subscribe((contentId) => {
-        if (contentId === this.content.id) {
+        if (contentId === this.content?.id) {
           this.content.state.round = 1;
           this.resetAnswerEvent.next(this.content.id);
           this.changeRound(0);
@@ -338,9 +338,7 @@ export class ControlBarComponent
       this.contentStepState = state.position;
       this.contentIndex = state.index;
       this.content = state.content;
-      if (!this.contentRounds.get(this.content.id)) {
-        this.contentRounds.set(this.content.id, this.content.state.round - 1);
-      }
+      this.contentRounds.set(this.content.id, this.content.state.round - 1);
       this.globalStorageService.setItem(
         STORAGE_KEYS.LAST_INDEX,
         this.contentIndex
