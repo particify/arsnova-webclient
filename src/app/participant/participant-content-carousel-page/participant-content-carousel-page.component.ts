@@ -376,7 +376,10 @@ export class ParticipantContentCarouselPageComponent
 
   goToOverview() {
     this.showOverview = true;
-    this.router.navigate(['p', this.shortId, 'series', this.contentGroupName]);
+    // Using `onSameUrlNavigation` reload strategy to reload components on routing if only params have been removed
+    this.router.navigate(['p', this.shortId, 'series', this.contentGroupName], {
+      onSameUrlNavigation: 'reload',
+    });
   }
 
   replaceUrl(url) {
