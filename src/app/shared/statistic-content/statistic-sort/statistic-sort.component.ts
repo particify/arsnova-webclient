@@ -94,7 +94,7 @@ export class StatisticSortComponent
     const roundStatistics = stats.roundStatistics[0];
     this.data = [];
     this.answerIndexes = [];
-    const combinedCounts = this.checkIfTooMany(
+    const combinedCounts = this.getTopCombinations(
       roundStatistics.combinatedCounts ?? []
     );
     this.data.push({
@@ -152,11 +152,31 @@ export class StatisticSortComponent
     );
   }
 
-  checkIfTooMany(combinations: Combination[]): Combination[] {
+  /**
+   * Returns most answered combinations and always includes correct combination if there are correct answers.
+   */
+  getTopCombinations(combinations: Combination[]): Combination[] {
     const sortedList = combinations.sort((a, b) => {
       return a.count < b.count ? 1 : -1;
     });
-    const shortenedList = sortedList.slice(0, MAX_COMBINATIONS);
+    let shortenedList = sortedList.slice(0, MAX_COMBINATIONS);
+    // If correct combination were selected, move it to the shorted list so that it is displayed in chart
+    if (
+      this.areCorrectOptionsIncluded(sortedList) &&
+      !this.areCorrectOptionsIncluded(shortenedList)
+    ) {
+      const correctIndex = sortedList.findIndex(
+        (c) =>
+          JSON.stringify(c.selectedChoiceIndexes) ===
+          JSON.stringify(this.content.correctOptionIndexes)
+      );
+      const correctCombination = sortedList[correctIndex];
+      // Insert correct combination before "other"
+      sortedList.splice(MAX_COMBINATIONS - 1, 0, correctCombination);
+      // Remove correct combination at it's original position
+      sortedList.splice(correctIndex + 1, 1);
+      shortenedList = sortedList.slice(0, MAX_COMBINATIONS);
+    }
     const length = sortedList.length;
     if (length > 5) {
       const otherCount = sortedList
@@ -169,6 +189,12 @@ export class StatisticSortComponent
       });
     }
     return shortenedList;
+  }
+
+  areCorrectOptionsIncluded(combinations: Combination[]): boolean {
+    return JSON.stringify(
+      combinations.map((a) => a.selectedChoiceIndexes)
+    ).includes(JSON.stringify(this.content.correctOptionIndexes));
   }
 
   toggleAnswers(visible?: boolean): boolean {
