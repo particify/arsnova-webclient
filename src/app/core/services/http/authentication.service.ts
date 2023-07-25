@@ -121,7 +121,7 @@ export class AuthenticationService extends AbstractHttpService<ClientAuthenticat
       REFRESH_INTERVAL_MAX_OFFSET_MINUTES * Math.random() * 60 * 1000;
     setInterval(() => {
       if (this.getCurrentAuthentication() != null) {
-        this.refreshLogin();
+        this.refreshLogin().subscribe();
       }
     }, interval);
   }
