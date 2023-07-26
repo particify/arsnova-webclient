@@ -54,7 +54,9 @@ export class FocusModeService extends AbstractFocusModeService {
     this.focusModeEnabled = this.currentRoom.focusModeEnabled;
     this.focusModeEnabled$.next(this.focusModeEnabled);
     this.currentFeature = currentFeature;
-    this.loadState();
+    if (room.focusModeEnabled) {
+      this.loadState();
+    }
     this.subscribeToState();
     this.subscribeToRoomChanges();
     this.subscribeToWsConnectionState();

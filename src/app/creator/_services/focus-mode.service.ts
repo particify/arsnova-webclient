@@ -42,7 +42,9 @@ export class FocusModeService extends AbstractFocusModeService {
   init(room: Room) {
     this.currentRoom = room;
     this.focusModeEnabled$.next(room.focusModeEnabled);
-    this.loadState();
+    if (room.focusModeEnabled) {
+      this.loadState();
+    }
     this.subscribeToState();
     this.subscribeToRoomChanges();
   }
