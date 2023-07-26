@@ -68,7 +68,8 @@ export class ContentService extends AbstractEntityService<Content> {
       eventService,
       translateService,
       notificationService,
-      cachingService
+      cachingService,
+      false
     );
   }
 
@@ -145,11 +146,13 @@ export class ContentService extends AbstractEntityService<Content> {
     }
     const partitionedContents$: Observable<Content[]>[] = partitionedIds.map(
       (ids) => {
-        const extended = extendedView ? '&view=extended' : '';
-        const connectionUrl = this.buildUri('/?ids=' + ids + extended, roomId);
-        return this.http
-          .get<Content[]>(connectionUrl)
-          .pipe(catchError(this.handleError('getContentsByIds', [])));
+        const params: Record<string, string> = { roomId: roomId };
+        if (extendedView) {
+          params.view = 'extended';
+        }
+        return this.getByIds(ids, params).pipe(
+          catchError(this.handleError('getContentsByIds', []))
+        );
       }
     );
     return forkJoin(partitionedContents$).pipe(
