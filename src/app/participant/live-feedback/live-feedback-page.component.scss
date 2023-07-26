@@ -27,7 +27,7 @@ $card-padding: min(4vw, 16px);
       );
     }
 
-    .button-label-icon {
+    .mat-mdc-raised-button .button-label-icon {
       font-size: 40px;
       height: 40px;
       width: 40px;
@@ -48,7 +48,7 @@ $card-padding: min(4vw, 16px);
       );
     }
 
-    .button-label-icon {
+    .mat-mdc-raised-button .button-label-icon {
       font-size: $bar-height-mobile;
       height: $bar-height-mobile;
       width: $bar-height-mobile;
