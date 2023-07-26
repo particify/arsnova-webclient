@@ -38,7 +38,7 @@ export abstract class AbstractEntityService<
     protected translateService: TranslateService,
     protected notificationService: NotificationService,
     cachingService: CachingService,
-    useSharedCache = true
+    private useChangeSubscriptions = true
   ) {
     super(
       uriPrefix,
@@ -48,7 +48,7 @@ export abstract class AbstractEntityService<
       translateService,
       notificationService,
       cachingService,
-      useSharedCache
+      useChangeSubscriptions
     );
     this.cache.registerDisposeHandler(this.cacheName, (id) =>
       this.handleCacheDisposeEvent(id)
@@ -208,7 +208,10 @@ export abstract class AbstractEntityService<
     }
     const entityType = this.uriPrefix.replace(/\//, '');
     const roomId = entityType === 'room' ? entity.id : entity['roomId'];
-    if (!this.stompSubscriptions.has(entity.id)) {
+    if (
+      this.useChangeSubscriptions &&
+      !this.stompSubscriptions.has(entity.id)
+    ) {
       const entityChanges$ = this.wsConnector.getWatcher(
         `/topic/${roomId}.${entityType}-${entity.id}.changes.stream`
       );
@@ -247,7 +250,10 @@ export abstract class AbstractEntityService<
   }
 
   private handleEntityChangeNotificationEvent(event: EntityChangeNotification) {
-    if (event.payload.changeType === ChangeType.DELETE) {
+    if (
+      event.payload.changeType === ChangeType.DELETE ||
+      !this.stompSubscriptions.has(event.payload.id)
+    ) {
       this.cache.remove(this.generateCacheKey(event.payload.id));
     }
   }
