@@ -1,6 +1,6 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, of, Subscription } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 import { IMessage } from '@stomp/stompjs';
 import { TranslateService } from '@ngx-translate/core';
 import { AbstractCachingHttpService } from './abstract-caching-http.service';
@@ -88,10 +88,47 @@ export abstract class AbstractEntityService<
    */
   getByIds(ids: string[], params: { roomId?: string } = {}): Observable<T[]> {
     const { roomId, ...queryParams } = params;
-    const uri = this.buildUri(`/?ids=${ids.join(',')}`, roomId);
-    return this.httpClient.get<T[]>(uri, {
-      params: new HttpParams(queryParams),
-    });
+    const cachable = Object.keys(queryParams).length === 0;
+    const entities: T[] = [];
+    const missingIds: string[] = [];
+
+    if (!cachable) {
+      const uri = this.buildUri(`/?ids=${ids.join(',')}`, roomId);
+      return this.httpClient.get<T[]>(uri, {
+        params: new HttpParams(queryParams),
+      });
+    }
+
+    for (const id of ids) {
+      const cachedEntity = this.cache.get(this.generateCacheKey(id));
+      if (cachedEntity) {
+        entities.push(cachedEntity);
+      } else {
+        missingIds.push(id);
+      }
+    }
+
+    if (missingIds.length === 0) {
+      return of(entities);
+    }
+
+    const uri = this.buildUri(`/?ids=${missingIds.join(',')}`, roomId);
+    const uncachedEntites$ = this.httpClient.get<T[]>(uri);
+
+    // Merge lists of cached and uncached entities and ensure that the original
+    // order is maintained.
+    return uncachedEntites$.pipe(
+      tap((uncachedEntites) =>
+        uncachedEntites.forEach((e) => this.handleEntityCaching(e.id, e))
+      ),
+      map((uncachedEntites) =>
+        ids.map(
+          (id) =>
+            entities.find((e) => e.id === id) ??
+            uncachedEntites.find((e) => e.id === id)
+        )
+      )
+    );
   }
 
   /**
