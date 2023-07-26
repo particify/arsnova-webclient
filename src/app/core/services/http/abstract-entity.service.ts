@@ -1,5 +1,5 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable, of, Subscription } from 'rxjs';
+import { forkJoin, Observable, of, Subscription } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { IMessage } from '@stomp/stompjs';
 import { TranslateService } from '@ngx-translate/core';
@@ -17,6 +17,8 @@ import {
   ChangeType,
   EntityChangeNotification,
 } from '@app/core/models/events/entity-change-notification';
+
+const PARTITION_SIZE = 50;
 
 /**
  * A specialized version of BaseHttpService which manages persistent data which
@@ -93,10 +95,7 @@ export abstract class AbstractEntityService<
     const missingIds: string[] = [];
 
     if (!cachable) {
-      const uri = this.buildUri(`/?ids=${ids.join(',')}`, roomId);
-      return this.httpClient.get<T[]>(uri, {
-        params: new HttpParams(queryParams),
-      });
+      return this.fetchPartitionedByIds(ids, roomId, queryParams);
     }
 
     for (const id of ids) {
@@ -112,8 +111,11 @@ export abstract class AbstractEntityService<
       return of(entities);
     }
 
-    const uri = this.buildUri(`/?ids=${missingIds.join(',')}`, roomId);
-    const uncachedEntites$ = this.httpClient.get<T[]>(uri);
+    const uncachedEntites$ = this.fetchPartitionedByIds(
+      missingIds,
+      roomId,
+      queryParams
+    );
 
     // Merge lists of cached and uncached entities and ensure that the original
     // order is maintained.
@@ -127,6 +129,31 @@ export abstract class AbstractEntityService<
             entities.find((e) => e.id === id) ??
             uncachedEntites.find((e) => e.id === id)
         )
+      )
+    );
+  }
+
+  private fetchPartitionedByIds(
+    ids: string[],
+    roomId?: string,
+    queryParams: Record<string, string> = {}
+  ): Observable<T[]> {
+    const partitionedIds: string[][] = [];
+    for (let i = 0; i < ids?.length; i += PARTITION_SIZE) {
+      partitionedIds.push(ids.slice(i, i + PARTITION_SIZE));
+    }
+    const partitionedEntities$: Observable<T[]>[] = partitionedIds.map(
+      (ids) => {
+        const uri = this.buildUri(`/?ids=${ids.join(',')}`, roomId);
+        return this.httpClient.get<T[]>(uri, {
+          params: new HttpParams(queryParams),
+        });
+      }
+    );
+
+    return forkJoin(partitionedEntities$).pipe(
+      map((results) =>
+        results.reduce((acc: T[], value: T[]) => acc.concat(value), [])
       )
     );
   }
