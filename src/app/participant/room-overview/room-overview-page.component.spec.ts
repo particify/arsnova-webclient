@@ -52,6 +52,7 @@ describe('RoomOverviewPageComponent', () => {
   const mockContentGroupService = jasmine.createSpyObj([
     'getByRoomIdAndName',
     'getById',
+    'getByIds',
     'filterPublishedIds',
     'sortContentGroupsByName',
   ]);
@@ -60,6 +61,9 @@ describe('RoomOverviewPageComponent', () => {
   );
   mockContentGroupService.getById.and.returnValue(
     of(new ContentGroup('1234', '0', 'roomId', 'name', [], true))
+  );
+  mockContentGroupService.getByIds.and.returnValue(
+    of([new ContentGroup('1234', '0', 'roomId', 'name', [], true)])
   );
   mockContentGroupService.filterPublishedIds.and.returnValue([]);
   mockContentGroupService.sortContentGroupsByName.and.returnValue([
@@ -188,7 +192,7 @@ describe('RoomOverviewPageComponent', () => {
     const roomStats = new RoomStats(groupStats, 0, 0, 0, 0);
     mockRoomStatsService.getStats.and.returnValue(of(roomStats));
     fixture.detectChanges();
-    expect(mockContentGroupService.getById).toHaveBeenCalled();
+    expect(mockContentGroupService.getByIds).toHaveBeenCalled();
   });
 
   it('should call afterGroupsLoadHook if content groups exist', () => {

@@ -89,7 +89,6 @@ export class NavBarComponent
   room: Room;
   changesSubscription: Subscription;
   statsChangesSubscription: Subscription;
-  groupSubscriptions: Subscription[];
   feedbackSubscription: Subscription;
   commentSettingsSubscription: Subscription;
   contentGroups: ContentGroup[] = [];
@@ -125,11 +124,6 @@ export class NavBarComponent
     }
     if (this.statsChangesSubscription) {
       this.statsChangesSubscription.unsubscribe();
-    }
-    if (this.groupSubscriptions) {
-      for (const subscription of this.groupSubscriptions) {
-        subscription.unsubscribe();
-      }
     }
     if (this.feedbackSubscription) {
       this.feedbackSubscription.unsubscribe();
@@ -420,11 +414,13 @@ export class NavBarComponent
     }
     const groupCount = groupStats?.length ?? 0;
     if (groupCount > 0) {
-      this.groupSubscriptions = [];
-      for (let i = 0; i < groupCount; i++) {
-        this.groupSubscriptions[i] = this.contentGroupService
-          .getById(groupStats[i].id, { roomId: this.roomId })
-          .subscribe((group) => {
+      this.contentGroupService
+        .getByIds(
+          groupStats.map((stats) => stats.id),
+          { roomId: this.roomId }
+        )
+        .subscribe((groups) => {
+          for (const group of groups) {
             this.contentGroups.push(group);
             this.publishedStates.push(
               new PublishedContentsState(
@@ -454,8 +450,8 @@ export class NavBarComponent
                 this.setGroup();
               }
             }
-          });
-      }
+          }
+        });
     } else {
       this.afterInit();
       this.removeContentFeatureItem();
@@ -485,8 +481,6 @@ export class NavBarComponent
 
   resetGroups() {
     this.contentGroups.splice(0, this.contentGroups.length);
-    this.groupSubscriptions.forEach((s) => s.unsubscribe());
-    this.groupSubscriptions = [];
   }
 
   subscribeToContentGroups() {

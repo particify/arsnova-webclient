@@ -64,11 +64,14 @@ export class AbstractRoomOverviewPage {
 
   initializeGroups() {
     this.contentGroups.splice(0, this.contentGroups.length);
-    for (let i = 0; i < this.roomStats.groupStats.length; i++) {
-      this.contentGroupService
-        .getById(this.roomStats.groupStats[i].id, { roomId: this.room.id })
-        .pipe(takeUntil(this.destroyed$))
-        .subscribe((group) => {
+    this.contentGroupService
+      .getByIds(
+        this.roomStats.groupStats.map((stats) => stats.id),
+        { roomId: this.room.id }
+      )
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((groups) => {
+        for (const group of groups) {
           this.contentGroups.push(group);
           if (this.contentGroups.length === this.roomStats.groupStats.length) {
             this.contentGroups =
@@ -77,8 +80,8 @@ export class AbstractRoomOverviewPage {
               );
             this.afterGroupsLoadHook();
           }
-        });
-    }
+        }
+      });
   }
 
   afterGroupsLoadHook() {

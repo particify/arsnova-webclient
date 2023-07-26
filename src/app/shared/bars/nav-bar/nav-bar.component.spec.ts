@@ -40,6 +40,10 @@ class MockContentGroupService {
     return of(new ContentGroup(id, 'rev', 'roomId', 'Test'));
   }
 
+  getByIds(ids: string[]) {
+    return of(ids.map((id) => new ContentGroup(id, 'rev', 'roomId', 'Test')));
+  }
+
   sortContentGroupsByName(groups) {
     return groups;
   }
