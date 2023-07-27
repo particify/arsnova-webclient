@@ -21,6 +21,7 @@
         [currentFilter]="currentFilter"
         [currentSort]="currentSort"
         [period]="period"
+        [navBarExists]="!focusModeEnabled"
         (searchInputChanged)="searchComments($event)"
         (createCommentClicked)="openCreateDialog()"
         (filterSelected)="filterComments($event)"
