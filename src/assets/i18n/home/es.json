@@ -241,7 +241,9 @@
     "answers-deleted": "Las respuestas a esta pregunta han sido eliminadas.",
     "really-delete-all-answers": "¿Realmente deseas eliminar todas las respuestas de esta serie de preguntas?",
     "you-are-using-community-lang": "Utiliza una traducción comunitaria",
-    "community-lang": "Este lenguaje es mantenido por la comunidad y, por tanto, puede estar incompleto o anticuado."
+    "community-lang": "Este lenguaje es mantenido por la comunidad y, por tanto, puede estar incompleto o anticuado.",
+    "leave": "Deja",
+    "really-leave-room": "¿De verdad quieres salir de la sala?"
   },
   "errors": {
     "not-authorized": "No estás autorizado para ver esta página.",
@@ -300,5 +302,9 @@
     "all-rooms": "Todas las salas",
     "no-announcements": "No hay anuncios.",
     "filter": "Filtro"
+  },
+  "focus-mode": {
+    "presenter-controls-app": "El presentador le guía por la sala.",
+    "leave-room": "Deja la sala"
   }
 }

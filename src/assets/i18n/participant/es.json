@@ -63,7 +63,20 @@
     "all-contents-answered": "Has respondido a todos los contenidos de esta serie. Revisa tus respuestas o vuelve a la vista general de la sala.",
     "continue-where-you-stopped": "Continúa desde donde lo dejaste",
     "some-contents-answered": "Vuelve a ver tus respuestas, pasa al siguiente contenido o regresa a la vista general de la sala.",
-    "pure-info-contents": "Salta a cualquier contenido o regresa a la vista general de la sala."
+    "pure-info-contents": "Salta a cualquier contenido o regresa a la vista general de la sala.",
+    "continue-answering": "Continúe en",
+    "there-are-locked-contents": "Hay {{count}} más contenidos disponibles, que de momento no se han publicado.",
+    "round": "Ronda",
+    "answer-state-unanswered": "Sin respuesta",
+    "answer-state-abstained": "Abstención",
+    "answer-state-correct": "Correcto",
+    "answer-state-wrong": "Incorrecto",
+    "answer-state-neutral": "Se respondió",
+    "there-is-one-locked-content": "Hay {{count}} más contenido disponible, que de momento no se publica.",
+    "round-displayed": "Se muestra la ronda {{rounds}}",
+    "rounds-displayed": "Se muestran las rondas {{rounds}}",
+    "new-round-started": "Se ha iniciado una nueva ronda.",
+    "answers-reset": "Se han restablecido las respuestas."
   },
   "comment-list": {
     "a11y-search-list": "Buscar publicaciones",
@@ -148,7 +161,9 @@
     "tag": "Categoría",
     "none": "Ninguna",
     "comment-sent": "Tu publicación ha sido publicada.",
-    "comment-sent-to-moderator": "Tu publicación será revisada por un moderador."
+    "comment-sent-to-moderator": "Tu publicación será revisada por un moderador.",
+    "withdraw-downvote": "Retirar voto negativo",
+    "withdraw-upvote": "Retirar voto positivo"
   },
   "survey": {
     "a11y-message": "Ahora estás en modo de retroalimentación en vivo.",
@@ -190,7 +205,8 @@
     "live-feedback": "Retroalimentación en vivo",
     "no-contents": "Aún no hay contenidos.",
     "copy-url": "Copiar dirección",
-    "url-copied": "El enlace de la sala se ha copiado al portapapeles."
+    "url-copied": "El enlace de la sala se ha copiado al portapapeles.",
+    "focus-mode-enabled": "El modo de enfoque está activo en esta sala. Su vista se sincronizará con la presentación."
   },
   "statistic": {
     "a11y-message-overview": "Ahora estás en la vista general de estadísticas.",
@@ -226,7 +242,9 @@
     "answer": "Respuesta",
     "other-combinations": "Otro",
     "no-answers": "No hay respuestas.",
-    "points": "Puntos"
+    "points": "Puntos",
+    "a11y-single-round-count": "{{count}} respuestas",
+    "a11y-multiple-round-counts": "{{countRoundA}} respuestas en ronda 1, {{countRoundB}} respuestas en ronda 2"
   },
   "sidebar": {
     "a11y-switch-to-feature": "Cambiar a {{feature}}.",
@@ -298,5 +316,8 @@
     "accessibility": "Accesibilidad",
     "powered-by": "Sistema de respuesta de audiencia por ",
     "by": "powered by "
+  },
+  "focus-mode": {
+    "stopped": "Ahora puedes moverte libremente por la sala."
   }
 }

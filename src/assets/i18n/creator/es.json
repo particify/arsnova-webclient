@@ -293,7 +293,14 @@
     "group-published": "La serie de preguntas ha sido publicada.",
     "preferences": "Configuraciones de visualización",
     "reset-banned-answers": "Restablecer palabras clave prohibidas",
-    "banned-keywords-reset": "Las palabras clave prohibidas han sido restablecidas."
+    "banned-keywords-reset": "Las palabras clave prohibidas han sido restablecidas.",
+    "import-export-content-group": "Importación/Exportación",
+    "start-new-round": "Iniciar nueva ronda",
+    "started-new-round": "Se ha iniciado una nueva ronda.",
+    "canceled": "Has cancelado el proceso.",
+    "round": "Ronda",
+    "round-displayed": "Se muestra la ronda {{rounds}}",
+    "rounds-displayed": "Se muestran las rondas {{rounds}}"
   },
   "answer": {
     "word": "Palabra clave",
@@ -437,7 +444,9 @@
     "hotkey-announcements": "Gestión de anuncios",
     "moderator": "Moderador",
     "editor": "Editor",
-    "owner": "Administrador"
+    "owner": "Administrador",
+    "focus-mode-info": "Guíe a sus participantes por la sala en tiempo real. Tu control en modo presentación se sincroniza con los dispositivos de los participantes.",
+    "focus-mode": "Modo enfoque"
   },
   "room": {
     "room-name": "Nombre de sala",
@@ -492,7 +501,9 @@
     "show-wordcloud": "Mostrar respuestas como nube de palabras",
     "ban-answer": "Bloquear palabra clave",
     "answer-banned": "La palabra clave ha sido bloqueada.",
-    "points": "Puntos"
+    "points": "Puntos",
+    "a11y-multiple-round-counts": "{{countRoundA}} respuestas en ronda 1, {{countRoundB}} respuestas en ronda 2",
+    "a11y-single-round-count": "{{count}} respuestas"
   },
   "dialog": {
     "a11y-cancel": "Cancela el proceso actual y cierra el diálogo.",
@@ -535,7 +546,10 @@
     "really-discard-announcement": "¿Realmente quieres descartar tu entrada?",
     "discard": "Descartar",
     "ban": "Prohibir",
-    "really-ban-answer": "¿Realmente quieres prohibir la palabra clave?"
+    "really-ban-answer": "¿Realmente quieres prohibir la palabra clave?",
+    "all-rounds-will-be-deleted": "Atención: Todas las rondas serán eliminadas.",
+    "really-start-new-round": "¿De verdad quieres empezar una nueva ronda?",
+    "start": "Comenzar"
   },
   "utils": {
     "formatting-image-hint": "Ten en cuenta que las imágenes con un tamaño de archivo grande pueden afectar los tiempos de carga."
@@ -549,17 +563,20 @@
     "feedback": "Feedback",
     "moderation": "Moderación",
     "content-counter": "Posición actual en la serie de preguntas",
-    "overview": "Resumen"
+    "overview": "Resumen",
+    "focus-feature": "(enfoque)"
   },
   "export": {
     "export": "Exportar",
     "tsv": "Valores separados por tabulaciones",
     "csv": "Valores separados por comas",
     "file-type": "Tipo de archivo",
-    "charset": "Codificación de caracteres"
+    "charset": "Codificación de caracteres",
+    "export-series": "Exportar la serie"
   },
   "import": {
-    "import": "Importar"
+    "import": "Importar",
+    "import-series": "Importar la serie"
   },
   "control-bar": {
     "results": "Resultados",
@@ -596,7 +613,8 @@
     "a11y-leaved-fullscreen": "Has salido del modo de pantalla completa.",
     "a11y-present": "Entrar en modo de presentación",
     "presentation-mode": "Modo de presentación",
-    "present": "Entrar en modo de presentación"
+    "present": "Entrar en modo de presentación",
+    "focus-mode-enabled-info": "Usted guía a los participantes por la sala."
   },
   "option-template": {
     "agreement": "De acuerdo",

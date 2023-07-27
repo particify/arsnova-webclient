@@ -564,7 +564,7 @@
     "moderation": "Moderation",
     "content-counter": "Current position in question series",
     "overview": "Overview",
-    "focus-feature": "(Current focus)"
+    "focus-feature": "(in focus)"
   },
   "export": {
     "export-series": "Export series",

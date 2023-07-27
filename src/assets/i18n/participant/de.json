@@ -206,7 +206,7 @@
     "no-contents": "Keine Inhalte vorhanden.",
     "copy-url": "Link kopieren",
     "url-copied": "Direktlink wurde in die Zwischenablage kopiert.",
-    "focus-mode-enabled": "In diesem Raum ist der Fokus Modus aktiv. Dein Gerät wird mit der Präsentation synchronisiert."
+    "focus-mode-enabled": "In diesem Raum ist der Fokus-Modus aktiv. Deine Ansicht wird mit der Präsentation synchronisiert."
   },
   "statistic": {
     "a11y-message-overview": "Du befindest dich jetzt auf der Statistikübersicht.",

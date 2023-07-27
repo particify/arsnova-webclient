@@ -206,7 +206,7 @@
     "no-contents": "There are no contents yet.",
     "copy-url": "Copy address",
     "url-copied": "Room link was copied to the clipboard.",
-    "focus-mode-enabled": "Focus mode is active in this room. Your device will be synchronised with the presentation."
+    "focus-mode-enabled": "Focus mode is active in this room. Your view will be synchronized with the presentation."
   },
   "statistic": {
     "a11y-message-overview": "You are now on the statistics overview.",
