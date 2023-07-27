@@ -297,7 +297,6 @@
     "banned-keywords-reset": "Banned keywords have been reset.",
     "start-new-round": "Start new round",
     "started-new-round": "New round has been started.",
-    "starting-new-round-not-possible": "Currently only two rounds can be started. Once the answers have been deleted, you can start a second round again.",
     "canceled": "You've cancelled the process.",
     "round": "Round",
     "round-displayed": "Round {{rounds}} is displayed",
