@@ -1,6 +1,6 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable, of, Subscription } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { forkJoin, Observable, of, Subscription } from 'rxjs';
+import { map, tap } from 'rxjs/operators';
 import { IMessage } from '@stomp/stompjs';
 import { TranslateService } from '@ngx-translate/core';
 import { AbstractCachingHttpService } from './abstract-caching-http.service';
@@ -17,6 +17,8 @@ import {
   ChangeType,
   EntityChangeNotification,
 } from '@app/core/models/events/entity-change-notification';
+
+const PARTITION_SIZE = 50;
 
 /**
  * A specialized version of BaseHttpService which manages persistent data which
@@ -38,7 +40,7 @@ export abstract class AbstractEntityService<
     protected translateService: TranslateService,
     protected notificationService: NotificationService,
     cachingService: CachingService,
-    useSharedCache = true
+    private useChangeSubscriptions = true
   ) {
     super(
       uriPrefix,
@@ -48,7 +50,7 @@ export abstract class AbstractEntityService<
       translateService,
       notificationService,
       cachingService,
-      useSharedCache
+      useChangeSubscriptions
     );
     this.cache.registerDisposeHandler(this.cacheName, (id) =>
       this.handleCacheDisposeEvent(id)
@@ -88,10 +90,72 @@ export abstract class AbstractEntityService<
    */
   getByIds(ids: string[], params: { roomId?: string } = {}): Observable<T[]> {
     const { roomId, ...queryParams } = params;
-    const uri = this.buildUri(`/?ids=${ids.join(',')}`, roomId);
-    return this.httpClient.get<T[]>(uri, {
-      params: new HttpParams(queryParams),
-    });
+    const cachable = Object.keys(queryParams).length === 0;
+    const entities: T[] = [];
+    const missingIds: string[] = [];
+
+    if (!cachable) {
+      return this.fetchPartitionedByIds(ids, roomId, queryParams);
+    }
+
+    for (const id of ids) {
+      const cachedEntity = this.cache.get(this.generateCacheKey(id));
+      if (cachedEntity) {
+        entities.push(cachedEntity);
+      } else {
+        missingIds.push(id);
+      }
+    }
+
+    if (missingIds.length === 0) {
+      return of(entities);
+    }
+
+    const uncachedEntites$ = this.fetchPartitionedByIds(
+      missingIds,
+      roomId,
+      queryParams
+    );
+
+    // Merge lists of cached and uncached entities and ensure that the original
+    // order is maintained.
+    return uncachedEntites$.pipe(
+      tap((uncachedEntites) =>
+        uncachedEntites.forEach((e) => this.handleEntityCaching(e.id, e))
+      ),
+      map((uncachedEntites) =>
+        ids.map(
+          (id) =>
+            entities.find((e) => e.id === id) ??
+            uncachedEntites.find((e) => e.id === id)
+        )
+      )
+    );
+  }
+
+  private fetchPartitionedByIds(
+    ids: string[],
+    roomId?: string,
+    queryParams: Record<string, string> = {}
+  ): Observable<T[]> {
+    const partitionedIds: string[][] = [];
+    for (let i = 0; i < ids?.length; i += PARTITION_SIZE) {
+      partitionedIds.push(ids.slice(i, i + PARTITION_SIZE));
+    }
+    const partitionedEntities$: Observable<T[]>[] = partitionedIds.map(
+      (ids) => {
+        const uri = this.buildUri(`/?ids=${ids.join(',')}`, roomId);
+        return this.httpClient.get<T[]>(uri, {
+          params: new HttpParams(queryParams),
+        });
+      }
+    );
+
+    return forkJoin(partitionedEntities$).pipe(
+      map((results) =>
+        results.reduce((acc: T[], value: T[]) => acc.concat(value), [])
+      )
+    );
   }
 
   /**
@@ -171,7 +235,10 @@ export abstract class AbstractEntityService<
     }
     const entityType = this.uriPrefix.replace(/\//, '');
     const roomId = entityType === 'room' ? entity.id : entity['roomId'];
-    if (!this.stompSubscriptions.has(entity.id)) {
+    if (
+      this.useChangeSubscriptions &&
+      !this.stompSubscriptions.has(entity.id)
+    ) {
       const entityChanges$ = this.wsConnector.getWatcher(
         `/topic/${roomId}.${entityType}-${entity.id}.changes.stream`
       );
@@ -210,7 +277,10 @@ export abstract class AbstractEntityService<
   }
 
   private handleEntityChangeNotificationEvent(event: EntityChangeNotification) {
-    if (event.payload.changeType === ChangeType.DELETE) {
+    if (
+      event.payload.changeType === ChangeType.DELETE ||
+      !this.stompSubscriptions.has(event.payload.id)
+    ) {
       this.cache.remove(this.generateCacheKey(event.payload.id));
     }
   }

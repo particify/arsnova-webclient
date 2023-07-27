@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Content } from '@app/core/models/content';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject, forkJoin, Observable } from 'rxjs';
-import { catchError, map, switchMap, tap } from 'rxjs/operators';
+import { catchError, switchMap, tap } from 'rxjs/operators';
 import { AbstractEntityService } from './abstract-entity.service';
 import { AnswerStatistics } from '@app/core/models/answer-statistics';
 import { ContentChoice } from '@app/core/models/content-choice';
@@ -21,8 +21,6 @@ import { ExportFileType } from '@app/core/models/export-file-type';
 import { Router } from '@angular/router';
 import { ContentGroup } from '@app/core/models/content-group';
 import { DialogService } from '@app/core/services/util/dialog.service';
-
-const PARTITION_SIZE = 50;
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
@@ -68,7 +66,8 @@ export class ContentService extends AbstractEntityService<Content> {
       eventService,
       translateService,
       notificationService,
-      cachingService
+      cachingService,
+      false
     );
   }
 
@@ -139,27 +138,11 @@ export class ContentService extends AbstractEntityService<Content> {
     contentIds: string[],
     extendedView?: boolean
   ): Observable<Content[]> {
-    const partitionedIds: string[][] = [];
-    for (let i = 0; i < contentIds?.length; i += PARTITION_SIZE) {
-      partitionedIds.push(contentIds.slice(i, i + PARTITION_SIZE));
+    const params: Record<string, string> = { roomId: roomId };
+    if (extendedView) {
+      params.view = 'extended';
     }
-    const partitionedContents$: Observable<Content[]>[] = partitionedIds.map(
-      (ids) => {
-        const extended = extendedView ? '&view=extended' : '';
-        const connectionUrl = this.buildUri('/?ids=' + ids + extended, roomId);
-        return this.http
-          .get<Content[]>(connectionUrl)
-          .pipe(catchError(this.handleError('getContentsByIds', [])));
-      }
-    );
-    return forkJoin(partitionedContents$).pipe(
-      map((results) =>
-        results.reduce(
-          (acc: Content[], value: Content[]) => acc.concat(value),
-          []
-        )
-      )
-    );
+    return this.getByIds(contentIds, params);
   }
 
   getContentChoiceByIds(

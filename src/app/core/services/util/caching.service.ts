@@ -23,6 +23,11 @@ export interface CacheKey {
   id: string;
 }
 
+const cacheSizes: Map<string | number, number> = new Map([
+  [DefaultCache.SHARED, 30],
+  [DefaultCache.CURRENT_ROOM, 200],
+]);
+
 @Injectable()
 export class CachingService {
   private caches: Map<string | number, Cache<unknown>> = new Map();
@@ -37,7 +42,8 @@ export class CachingService {
   getCache<T>(cacheId: string | number) {
     let cache = this.caches.get(cacheId);
     if (!cache) {
-      cache = new Cache();
+      const max = cacheSizes.get(cacheId) ?? LRU_OPTIONS.max;
+      cache = new Cache(max);
       this.caches.set(cacheId, cache);
     }
     return cache as Cache<T>;
@@ -75,11 +81,12 @@ export class Cache<T> {
     handler: (id: string, value: T) => void;
   }[] = [];
 
-  constructor() {
+  constructor(max: number = LRU_OPTIONS.max) {
     const lruOptions: LRUCache.Options<string, T, unknown> = {
       ...LRU_OPTIONS,
       dispose: (value, key) => this.dispatchDispose(key, value),
     };
+    lruOptions.max = max;
     this.cache = new LRUCache(lruOptions);
     /* Explicitly prune the cache so the disponse handlers are called early. */
     interval(PRUNE_INTERVAL_MS).subscribe(() => this.cache.purgeStale());
