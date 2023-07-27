@@ -45,6 +45,7 @@ export class CommentListBarComponent {
   @Input() currentFilter: CommentFilter;
   @Input() currentSort: CommentSort;
   @Input() period: CommentPeriod;
+  @Input() navBarExists = true;
 
   @Output() searchInputChanged = new EventEmitter<string>();
   @Output() createCommentClicked = new EventEmitter<void>();

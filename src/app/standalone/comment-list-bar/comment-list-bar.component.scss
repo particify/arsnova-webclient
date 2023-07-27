@@ -49,7 +49,12 @@ $bar-position-y-hidden: calc(-8vw - $bar-height);
 @mixin fixed-center {
   top: $bar-position-y;
   right: 50%;
-  transform: translateX(calc(50% + ($navigation-rail-width / 2)));
+
+  &:not(.no-nav-bar) {
+    transform: translateX(calc(50% + ($navigation-rail-width / 2)));
+  }
+
+  transform: translateX(50%);
 }
 
 .bar-container-fixed {
