@@ -297,7 +297,6 @@
     "banned-keywords-reset": "Gebannte Schlagwörter wurden zurückgesetzt.",
     "start-new-round": "Neue Runde starten",
     "started-new-round": "Neue Runde wurde gestartet.",
-    "starting-new-round-not-possible": "Aktuell können nur zwei Runden gestartet werden. Sobald die Antworten gelöscht wurden, kannst du erneut eine zweite Runde starten.",
     "canceled": "Du hast den Vorgang abgebrochen.",
     "round": "Runde",
     "round-displayed": "Die Runde {{rounds}} wird zurzeit angezeigt",

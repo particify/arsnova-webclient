@@ -1,14 +1,8 @@
-<div
-  [matTooltip]="'content.starting-new-round-not-possible' | translate"
-  [matTooltipDisabled]="content.state.round === 1"
-  matTooltipPosition="before"
+<button
+  mat-menu-item
+  (click)="showNewRoundDialog()"
+  [disabled]="content.state.round > 1"
 >
-  <button
-    mat-menu-item
-    (click)="showNewRoundDialog()"
-    [disabled]="content.state.round > 1"
-  >
-    <mat-icon>replay</mat-icon>
-    {{ 'content.start-new-round' | translate }}
-  </button>
-</div>
+  <mat-icon>replay</mat-icon>
+  {{ 'content.start-new-round' | translate }}
+</button>
