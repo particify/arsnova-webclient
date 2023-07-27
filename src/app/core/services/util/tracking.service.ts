@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { ErrorHandler, Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, ActivationEnd, Router } from '@angular/router';
 import { filter, map } from 'rxjs/operators';
 import { ConsentService } from './consent.service';
@@ -13,6 +13,7 @@ import { Subscription, timer } from 'rxjs';
 import { environment } from '@environments/environment';
 import { ConsentChangedEvent } from '@app/core/models/events/consent-changed';
 import { GlobalStorageService, STORAGE_KEYS } from './global-storage.service';
+import { AppErrorHandler } from '@app/app-error-handler';
 
 const HEARTBEAT_INVERVAL = 150;
 
@@ -23,6 +24,8 @@ enum VisitDimension {
   AUTH_PROVIDER = 5,
   APP_VERSION = 6,
   ENTRY = 7,
+  UI_ERROR_COUNT = 8,
+  HTTP_ERROR_COUNT = 9,
 }
 
 /* This enum maps to Matomo dimension IDs for actions. */
@@ -54,6 +57,7 @@ export class TrackingService {
   firstAuth = true;
   pingSubscription: Subscription;
   specialRooms = new Map<string, string>();
+  appErrorHandler: AppErrorHandler;
 
   constructor(
     private consentService: ConsentService,
@@ -62,8 +66,10 @@ export class TrackingService {
     private authenticationService: AuthenticationService,
     private translateService: TranslateService,
     private themeService: ThemeService,
-    private globalStorageService: GlobalStorageService
+    private globalStorageService: GlobalStorageService,
+    errorHandler: ErrorHandler
   ) {
+    this.appErrorHandler = errorHandler as AppErrorHandler;
     window['_paq'] = window['_paq'] || [];
     this._paq = window['_paq'];
     this.consentGiven = this.consentService.consentGiven(
@@ -127,6 +133,12 @@ export class TrackingService {
       .subscribe((themeName) =>
         this.setVisitDimension(VisitDimension.THEME, themeName)
       );
+    this.appErrorHandler.uiErrorCount$.subscribe((count) =>
+      this.setVisitDimension(VisitDimension.UI_ERROR_COUNT, count.toString())
+    );
+    this.appErrorHandler.httpErrorCount$.subscribe((count) =>
+      this.setVisitDimension(VisitDimension.HTTP_ERROR_COUNT, count.toString())
+    );
     this.setVisitDimension(
       VisitDimension.UI_LANGUAGE,
       this.translateService.currentLang

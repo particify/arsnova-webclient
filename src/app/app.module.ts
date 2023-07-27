@@ -1,4 +1,4 @@
-import { NgModule, APP_INITIALIZER } from '@angular/core';
+import { NgModule, APP_INITIALIZER, ErrorHandler } from '@angular/core';
 import { AppComponent } from './app.component';
 import { RegisterComponent } from '@app/core/components/register/register.component';
 import { PasswordResetComponent } from '@app/core/components/password-reset/password-reset.component';
@@ -100,6 +100,7 @@ import { HintComponent } from '@app/standalone/hint/hint.component';
 import { TitleStrategy } from '@angular/router';
 import { CustomPageTitleStrategy } from '@app/core/custom-title-strategy';
 import { MaterialCssVarsModule } from 'angular-material-css-vars';
+import { AppErrorHandler } from '@app/app-error-handler';
 
 export function initializeApp(appConfig: AppConfig) {
   return () => appConfig.load();
@@ -162,6 +163,10 @@ export function initializeApp(appConfig: AppConfig) {
     }),
   ],
   providers: [
+    {
+      provide: ErrorHandler,
+      useClass: AppErrorHandler,
+    },
     {
       provide: APP_INITIALIZER,
       useFactory: initAuthenticationService,
