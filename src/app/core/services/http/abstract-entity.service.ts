@@ -78,7 +78,7 @@ export abstract class AbstractEntityService<
     }
     const uri = this.buildUri(`/${id}`, roomId);
     return this.httpClient
-      .get<T>(uri, { params: new HttpParams(queryParams) })
+      .get<T>(uri, { params: new HttpParams({ fromObject: queryParams }) })
       .pipe(tap((entity) => cachable && this.handleEntityCaching(id, entity)));
   }
 
@@ -146,7 +146,7 @@ export abstract class AbstractEntityService<
       (ids) => {
         const uri = this.buildUri(`/?ids=${ids.join(',')}`, roomId);
         return this.httpClient.get<T[]>(uri, {
-          params: new HttpParams(queryParams),
+          params: new HttpParams({ fromObject: queryParams }),
         });
       }
     );
