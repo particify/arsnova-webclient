@@ -807,16 +807,18 @@ div {
 
 // Menu
 
-.mat-mdc-menu-item .mdc-list-item__primary-text {
-  font-size: 14px !important;
+.mat-mdc-menu-item {
+  --mat-menu-item-label-text-size: 14px;
+}
+
+.selected-menu-item {
+  @extend %primary;
+
+  font-weight: $font-weight-bold;
 }
 
 .mat-mdc-menu-panel {
   background-color: var(--dialog);
-}
-
-.selected .mdc-list-item__primary-text {
-  font-weight: $font-weight-bold !important;
 }
 
 .mat-mdc-menu-content {
@@ -858,12 +860,6 @@ div {
 .mat-mdc-menu-item:not([disabled])
   > .mat-icon:not(.mat-primary, .mat-warn, .icon-important) {
   opacity: 0.7;
-}
-
-.selected-menu-item {
-  @extend %primary;
-
-  font-weight: $font-weight-bold;
 }
 
 // Snackbar
