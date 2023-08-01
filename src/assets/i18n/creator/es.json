@@ -440,7 +440,7 @@
     "moderator": "Moderador",
     "editor": "Editor",
     "owner": "Administrador",
-    "focus-mode-info": "Guíe a sus participantes por la sala en tiempo real. Tu control en modo presentación se sincroniza con los dispositivos de los participantes.",
+    "focus-mode-info": "Guíe a los participantes por la sala en tiempo real. Tu control en modo presentación se sincroniza con las vistas de los participantes.",
     "focus-mode": "Modo enfoque"
   },
   "room": {

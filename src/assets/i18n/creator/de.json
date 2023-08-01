@@ -441,7 +441,7 @@
     "hotkey-access": "Verwaltung von Zugriffsrechten",
     "hotkey-announcements": "Verwaltung von Ankündigungen",
     "focus-mode": "Fokus-Modus",
-    "focus-mode-info": "Führe deine Teilnehmenden in Echtzeit durch den Raum. Deine Steuerung im Präsentationsmodus wird mit den Geräten der Teilnehmenden synchronisiert."
+    "focus-mode-info": "Führe die Teilnehmenden in Echtzeit durch den Raum. Deine Steuerung im Präsentationsmodus wird mit der Ansicht der Teilnehmenden synchronisiert."
   },
   "room": {
     "room-name": "Name des Raums",
@@ -558,7 +558,7 @@
     "moderation": "Moderation",
     "content-counter": "Aktuelle Position in der Fragenserie",
     "overview": "Übersicht",
-    "focus-feature": "(aktuell im Fokus)"
+    "focus-feature": "(im Fokus)"
   },
   "export": {
     "export-series": "Fragenserie exportieren",
