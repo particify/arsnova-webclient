@@ -340,11 +340,6 @@
     "change-type": "Change type",
     "status-summary": "Status summary"
   },
-  "home-page": {
-    "create-room": "New Room",
-    "created-1": "Room “",
-    "created-2": "” successfully created."
-  },
   "room-page": {
     "a11y-comments": "Opens the Q&A list.",
     "a11y-settings": "Navigates to the settings where you can manage the room and its posts and add moderators or categories.",
@@ -518,7 +513,6 @@
     "really-delete-room": "Do you really want to delete the following room? This action cannot be undone.",
     "really-delete-token": "Do you really want to delete this token?",
     "really-delete-tokens": "Do you really want to delete all tokens of this room?",
-    "really-remove-content": "Do you really want to remove the following content?",
     "really-delete-content-group": "Do you really want to remove the following question series?",
     "sure": "Are you sure?",
     "cancel": "Cancel",
@@ -679,10 +673,6 @@
     "a11y-help-key-announcement": "Press {{helpKey}} for a list of keyboard shortcuts."
   },
   "footer": {
-    "a11y-data-protection": "Open the privacy statement.",
-    "a11y-data-protection-menu": "Open the privacy menu. Here you find the privacy statement and the cookie settings.",
-    "a11y-imprint": "Open the imprint.",
-    "a11y-accessibilty": "Open the accessibility statement.",
     "cookie-settings": "Cookie settings",
     "dsgvo": "Data Protection",
     "imprint": "Imprint",

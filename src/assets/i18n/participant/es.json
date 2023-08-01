@@ -305,10 +305,6 @@
     "a11y-help-key-announcement": "Presiona {{helpKey}} para ver una lista de accesos directos de teclado."
   },
   "footer": {
-    "a11y-data-protection": "Abrir la declaración de privacidad.",
-    "a11y-data-protection-menu": "Abrir el menú de privacidad. Aquí encontrarás la declaración de privacidad y la configuración de cookies.",
-    "a11y-imprint": "Abrir el aviso legal.",
-    "a11y-accessibilty": "Abrir la declaración de accesibilidad.",
     "cookie-settings": "Configuración de cookies",
     "dsgvo": "Privacidad",
     "imprint": "Aviso legal",

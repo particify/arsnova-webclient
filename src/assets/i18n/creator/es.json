@@ -340,11 +340,6 @@
     "change-type": "Cambiar tipo",
     "status-summary": "Resumen del estado"
   },
-  "home-page": {
-    "create-room": "Nueva Sala",
-    "created-1": "La sala “",
-    "created-2": "” fue creada exitosamente."
-  },
   "room-page": {
     "a11y-comments": "Abre la lista de preguntas y respuestas.",
     "a11y-settings": "Navega a la configuración donde puedes administrar la sala y sus publicaciones, agregar moderadores o categorías.",
@@ -518,7 +513,6 @@
     "really-delete-room": "¿Realmente quieres eliminar la siguiente sala? Esta acción no se puede deshacer.",
     "really-delete-token": "¿Realmente quieres eliminar este token?",
     "really-delete-tokens": "¿Realmente quieres eliminar todos los tokens de esta sala?",
-    "really-remove-content": "¿Realmente quieres eliminar el siguiente contenido?",
     "really-delete-content-group": "¿Realmente quieres eliminar la siguiente serie de preguntas?",
     "sure": "¿Estás seguro?",
     "cancel": "Cancelar",
@@ -679,10 +673,6 @@
     "a11y-help-key-announcement": "Presiona {{helpKey}} para ver la lista de atajos de teclado."
   },
   "footer": {
-    "a11y-data-protection": "Abrir la declaración de privacidad.",
-    "a11y-data-protection-menu": "Abrir el menú de privacidad. Aquí encontrarás la declaración de privacidad y la configuración de cookies.",
-    "a11y-imprint": "Abrir el aviso legal.",
-    "a11y-accessibilty": "Abrir la declaración de accesibilidad.",
     "cookie-settings": "Configuración de cookies",
     "dsgvo": "Privacidad",
     "imprint": "Aviso legal",

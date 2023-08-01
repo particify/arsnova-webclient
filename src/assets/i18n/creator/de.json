@@ -340,11 +340,6 @@
     "change-type": "Typ ändern",
     "status-summary": "Status-Zusammenfassung"
   },
-  "home-page": {
-    "create-room": "Neuer Raum",
-    "created-1": "Raum „",
-    "created-2": "“ erfolgreich erstellt."
-  },
   "room-page": {
     "a11y-comments": "Öffnet die Q&A-Seite.",
     "a11y-settings": "Navigiert zu den Einstellungen in welchen du den Raum und dessen Beiträge verwalten und moderierende Personen oder Kategorien hinzufügen kannst.",
@@ -678,9 +673,6 @@
     "a11y-help-key-announcement": "Drücke {{helpKey}} für eine Auflistung von Tastaturbefehlen."
   },
   "footer": {
-    "a11y-data-protection": "Öffnet die Datenschutzerklärung.",
-    "a11y-data-protection-menu": "Öffnet das Datenschutzmenü. Hier findest du die Datenschutzerklärung und die Cookie-Einstellungen.",
-    "a11y-imprint": "Öffnet das Impressum.",
     "cookie-settings": "Cookie-Einstellungen",
     "dsgvo": "Datenschutz",
     "imprint": "Impressum",
