@@ -242,6 +242,8 @@
     "really-delete-all-answers": "Willst du wirklich alle Antworten dieser Fragenserie löschen?",
     "you-are-using-community-lang": "Du nutzt eine Community-Übersetzung",
     "community-lang": "Diese Sprache wird von der Community gepflegt und kann daher unvollständig oder veraltet sein.",
+    "contribute-to-lang": "Über den folgenden Link können Sie zur Übersetzung beitragen: ",
+    "translation-server": "Zum Übersetzungsserver",
     "leave": "Verlassen",
     "really-leave-room": "Willst du den Raum wirklich verlassen?"
   },

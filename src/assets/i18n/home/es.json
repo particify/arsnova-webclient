@@ -242,6 +242,8 @@
     "really-delete-all-answers": "¿Realmente deseas eliminar todas las respuestas de esta serie de preguntas?",
     "you-are-using-community-lang": "Utiliza una traducción comunitaria",
     "community-lang": "Este lenguaje es mantenido por la comunidad y, por tanto, puede estar incompleto o anticuado.",
+    "contribute-to-lang": "Puede contribuir a la traducción a través del siguiente enlace: ",
+    "translation-server": "Ir al servidor de traducción",
     "leave": "Deja",
     "really-leave-room": "¿De verdad quieres salir de la sala?"
   },

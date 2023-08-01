@@ -9,7 +9,10 @@ interface DialogData {
   confirmLabel: string;
   abortLabel?: string;
   type: string;
+  additionalBody?: string;
   bodyElement?: string;
+  link?: string;
+  linkText?: string;
 }
 
 @Component({

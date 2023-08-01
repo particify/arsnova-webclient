@@ -55,6 +55,7 @@ export class HeaderComponent implements OnInit {
   helpUrl: string;
   privacyUrl: string;
   imprintUrl: string;
+  translateUrl: string;
   currentLang: string;
   langs: Language[];
   HotkeyAction = HotkeyAction;
@@ -124,6 +125,7 @@ export class HeaderComponent implements OnInit {
       this.helpUrl = data.apiConfig.ui.links?.help?.url;
       this.privacyUrl = data.apiConfig.ui.links?.privacy?.url;
       this.imprintUrl = data.apiConfig.ui.links?.imprint?.url;
+      this.translateUrl = data.apiConfig.ui.links?.translate?.url;
     });
     this.roomService
       .getCurrentRoomStream()
@@ -155,17 +157,24 @@ export class HeaderComponent implements OnInit {
   changeLanguage(lang: Language) {
     this.langService.setLang(lang.key);
     this.currentLang = lang.key;
+
     if (lang.category === LanguageCategory.COMMUNITY) {
+      const data = {
+        dialogId: 'community-lang',
+        section: 'dialog',
+        headerLabel: 'you-are-using-community-lang',
+        body: 'community-lang',
+        confirmLabel: 'close',
+        type: 'button-primary',
+      };
+      if (this.translateUrl) {
+        data['additionalBody'] = 'contribute-to-lang';
+        data['link'] = this.translateUrl + lang.key;
+        data['linkText'] = 'translation-server';
+      }
       this.dialog.open(BaseDialogComponent, {
         width: '400px',
-        data: {
-          dialogId: 'community-lang',
-          section: 'dialog',
-          headerLabel: 'you-are-using-community-lang',
-          body: 'community-lang',
-          confirmLabel: 'close',
-          type: 'button-primary',
-        },
+        data: data,
       });
     }
   }
