@@ -1,0 +1,39 @@
+@use '@angular/material' as mat;
+@use 'app/core/theme/app-theme';
+@use 'sass:map';
+@import '../src/styles';
+@import 'app/core/theme/dark-theme/dark-theme';
+@import 'app/core/theme/light-theme/light-theme';
+@import '../src/variables';
+@import '../src/util';
+
+@include mat.core;
+@include mat.all-component-themes($light-theme);
+
+.theme-light {
+  @include mat.all-component-colors($light-theme);
+  @include app-theme.theme($light-theme);
+
+  // Fix secondary colors for testing which are broken because material-css-vars lib cannot be used here
+  $secondary-palette: map.get($light-theme, accent);
+  $secondary: mat.get-color-from-palette($secondary-palette, 800);
+  $on-secondary: mat.get-color-from-palette(
+    $secondary-palette,
+    default-contrast
+  );
+
+  .secondary-background {
+    background-color: $secondary !important;
+    color: $on-secondary !important;
+  }
+
+  .secondary,
+  .secondary p {
+    color: $secondary !important;
+  }
+}
+
+.theme-dark {
+  @include mat.all-component-colors($dark-theme);
+  @include app-theme.theme($dark-theme, false);
+}
