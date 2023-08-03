@@ -155,11 +155,10 @@
           lang.name
         }}</span>
       </button>
-      <div>
+      <div *ngIf="translateUrl">
         <mat-divider></mat-divider>
         <a
-          id="help-button"
-          *ngIf="translateUrl"
+          id="translation-server-button"
           [attr.href]="translateUrl"
           target="_blank"
           mat-menu-item
