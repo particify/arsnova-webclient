@@ -190,7 +190,7 @@ export class CommentsPageComponent
   }
 
   scrollToComment(index) {
-    this.getCommentElements()[index].scrollIntoView({
+    this.getCommentElements()[index]?.scrollIntoView({
       behavior: 'smooth',
       block: 'center',
     });

@@ -18,7 +18,7 @@
   <div
     *ngIf="!isPresentation"
     tabindex="-1"
-    id="presentation-message"
+    [appAutofocus]
     class="visually-hidden"
   >
     {{ 'statistic.a11y-message-presentation' | translate }}
@@ -26,7 +26,7 @@
   <div
     *ngIf="isPresentation"
     tabindex="-1"
-    id="presentation-mode-message"
+    [appAutofocus]
     class="visually-hidden"
   >
     {{

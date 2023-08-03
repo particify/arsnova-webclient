@@ -107,18 +107,6 @@ export class LoginComponent implements AfterContentInit, OnChanges, OnInit {
         );
         if (loginProviders.length === 1 && this.ssoProviders.length === 1) {
           this.loginViaSso(this.ssoProviders[0].id);
-        } else {
-          if (this.ssoProviders.length > 0) {
-            setTimeout(() => {
-              document
-                .getElementById(this.ssoProviders[0].title + '-button')
-                .focus();
-            }, 700);
-          } else {
-            setTimeout(() => {
-              document.getElementById('loginid-input').focus();
-            }, 700);
-          }
         }
       }
     });

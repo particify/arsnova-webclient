@@ -17,6 +17,7 @@ import { Room } from '@app/core/models/room';
 import { of } from 'rxjs';
 import { RoomStats } from '@app/core/models/room-stats';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { A11yIntroPipe } from '@app/core/pipes/a11y-intro.pipe';
 
 describe('StatisticsPageComponent', () => {
   let component: StatisticsPageComponent;
@@ -40,7 +41,7 @@ describe('StatisticsPageComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [StatisticsPageComponent],
+      declarations: [StatisticsPageComponent, A11yIntroPipe],
       imports: [
         TranslateModule.forRoot({
           loader: {

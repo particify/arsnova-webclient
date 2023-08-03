@@ -43,6 +43,7 @@ import { DateFormatPipe } from './pipes/date-format.pipe';
 import { DateFromNowPipe } from './pipes/date-from-now.pipe';
 import { SplitShortIdPipe } from './pipes/split-short-id.pipe';
 import { FeatureFlagDirective } from '@app/core/directives/feature-flag.directive';
+import { AutofocusDirective } from './directives/autofocus.directive';
 
 @NgModule({
   declarations: [
@@ -58,6 +59,7 @@ import { FeatureFlagDirective } from '@app/core/directives/feature-flag.directiv
     HotkeyDirective,
     TrackInteractionDirective,
     FeatureFlagDirective,
+    AutofocusDirective,
   ],
   exports: [
     // Angular
@@ -108,6 +110,7 @@ import { FeatureFlagDirective } from '@app/core/directives/feature-flag.directiv
     HotkeyDirective,
     TrackInteractionDirective,
     FeatureFlagDirective,
+    AutofocusDirective,
 
     // 3rd party
     TranslateModule,

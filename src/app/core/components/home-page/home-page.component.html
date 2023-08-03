@@ -1,3 +1,10 @@
+<div
+  class="visually-hidden"
+  tabindex="-1"
+  [appAutofocus]="this.deviceType !== 'desktop'"
+>
+  {{ 'home-page.a11y-welcome-message' | translate: { title: appTitle } }}
+</div>
 <div fxLayout="column" class="container">
   <div class="heading" fxLayout="column" fxLayoutAlign="center center">
     <lib-extension-point
@@ -17,8 +24,8 @@
     <div fxLayout="row" fxLayoutAlign="center">
       <div fxLayout="column" fxLayoutAlign="center center" fxFill>
         <app-room-join
-          [inputA11yString]="'home-page.a11y-welcome-message'"
           [appTitle]="appTitle"
+          [focusInput]="deviceType === 'desktop'"
         ></app-room-join>
         <button
           id="new-room-button"
@@ -35,9 +42,4 @@
     </div>
   </div>
   <lib-extension-point extensionId="home-info"></lib-extension-point>
-</div>
-<div class="visually-hidden">
-  <button tabindex="-1" id="welcome-message">
-    {{ 'home-page.a11y-welcome-message' | translate: { title: appTitle } }}
-  </button>
 </div>

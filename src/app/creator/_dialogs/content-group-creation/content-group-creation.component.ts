@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import {
   AdvancedSnackBarTypes,
@@ -15,6 +15,8 @@ import { GroupContentComponent } from '@app/creator/content-list/group-content/g
 })
 export class ContentGroupCreationComponent {
   readonly dialogId = 'create-content-group';
+
+  @ViewChild('nameInput') nameInput: ElementRef;
 
   name = '';
 
@@ -47,7 +49,7 @@ export class ContentGroupCreationComponent {
           msg,
           AdvancedSnackBarTypes.WARNING
         );
-        document.getElementById('name-input').focus();
+        this.nameInput.nativeElement.focus();
       });
     }
   }

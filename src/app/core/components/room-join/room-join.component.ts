@@ -1,14 +1,7 @@
-import {
-  Component,
-  ElementRef,
-  Input,
-  OnInit,
-  ViewChild,
-  OnDestroy,
-} from '@angular/core';
+import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { FormErrorStateMatcher } from '@app/core/components/form-error-state-matcher/form-error-state-matcher';
 import { UntypedFormControl, Validators } from '@angular/forms';
 import {
@@ -31,9 +24,8 @@ import { THINSP } from '@app/core/utils/html-entities';
   styleUrls: ['./room-join.component.scss'],
 })
 export class RoomJoinComponent implements OnInit, OnDestroy {
-  @ViewChild('roomCode', { static: true }) roomCodeElement: ElementRef;
-  @Input() inputA11yString: string;
   @Input() appTitle: string;
+  @Input() focusInput: boolean;
 
   auth: ClientAuthentication;
   isDesktop: boolean;
@@ -50,8 +42,7 @@ export class RoomJoinComponent implements OnInit, OnDestroy {
     private translateService: TranslateService,
     public authenticationService: AuthenticationService,
     public eventService: EventService,
-    private globalStorageService: GlobalStorageService,
-    private route: ActivatedRoute
+    private globalStorageService: GlobalStorageService
   ) {
     this.isDesktop =
       this.globalStorageService.getItem(STORAGE_KEYS.DEVICE_TYPE) === 'desktop';

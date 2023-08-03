@@ -7,6 +7,7 @@ import { UserHomeComponent } from './user-home.component';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
 import { ClientAuthentication } from '@app/core/models/client-authentication';
 import { JsonTranslationLoader } from '@testing/test-helpers';
+import { A11yIntroPipe } from '@app/core/pipes/a11y-intro.pipe';
 
 @Injectable()
 class MockAuthenticationService {
@@ -41,6 +42,7 @@ describe('UserHomeComponent', () => {
         RoomJoinStubComponent,
         RoomListStubComponent,
         MatIconStubComponent,
+        A11yIntroPipe,
       ],
       imports: [
         TranslateModule.forRoot({

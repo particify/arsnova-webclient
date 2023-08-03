@@ -21,6 +21,8 @@ import { NO_ERRORS_SCHEMA, Injectable } from '@angular/core';
 import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
 import { A11yIntroPipe } from '@app/core/pipes/a11y-intro.pipe';
 import { NotificationService } from '@app/core/services/util/notification.service';
+import { ActivatedRouteSnapshot } from '@angular/router';
+import { UserRole } from '@app/core/models/user-roles.enum';
 
 @Injectable()
 class MockRoomService {}
@@ -34,8 +36,12 @@ describe('SettingsPageComponent', () => {
       id: '1234',
     },
   };
-
-  const activatedRouteStub = new ActivatedRouteStub(null, data);
+  const snapshot = new ActivatedRouteSnapshot();
+  snapshot.data = {
+    userRole: UserRole.EDITOR,
+  };
+  snapshot.params = {};
+  const activatedRouteStub = new ActivatedRouteStub(null, data, snapshot);
 
   let translateService: TranslateService;
 

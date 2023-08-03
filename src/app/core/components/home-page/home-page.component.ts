@@ -1,4 +1,4 @@
-import { AfterContentInit, Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { DialogService } from '@app/core/services/util/dialog.service';
 import {
@@ -11,7 +11,7 @@ import {
   templateUrl: './home-page.component.html',
   styleUrls: ['./home-page.component.scss'],
 })
-export class HomePageComponent implements AfterContentInit {
+export class HomePageComponent implements OnInit {
   deviceType: string;
   appTitle: string;
 
@@ -25,12 +25,7 @@ export class HomePageComponent implements AfterContentInit {
     );
   }
 
-  ngAfterContentInit(): void {
-    if (this.deviceType === 'desktop') {
-      document.getElementById('room-id-input').focus();
-    } else {
-      document.getElementById('welcome-message').focus();
-    }
+  ngOnInit(): void {
     this.appTitle =
       this.route.snapshot.data.apiConfig.ui.registration?.service || 'ARSnova';
   }

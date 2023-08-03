@@ -27,6 +27,7 @@ import { BehaviorSubject } from 'rxjs';
 import { FormsModule } from '@angular/forms';
 import { SplitShortIdPipe } from '@app/core/pipes/split-short-id.pipe';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { AutofocusDirective } from '@app/core/directives/autofocus.directive';
 
 export class MockAuthenticationService {
   private auth$$ = new BehaviorSubject<any>({});
@@ -54,7 +55,7 @@ describe('RoomJoinComponent', () => {
     notificationService.showAdvanced.calls.reset();
 
     TestBed.configureTestingModule({
-      declarations: [RoomJoinComponent, SplitShortIdPipe],
+      declarations: [RoomJoinComponent, SplitShortIdPipe, AutofocusDirective],
       imports: [
         BrowserAnimationsModule,
         ReactiveFormsModule,

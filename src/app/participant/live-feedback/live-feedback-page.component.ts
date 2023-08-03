@@ -1,4 +1,4 @@
-import { AfterContentInit, Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { AbstractLiveFeedbackPage } from '@app/common/abstract/abstract-live-feedback-page';
 import { LiveFeedbackType } from '@app/core/models/live-feedback-type.enum';
@@ -19,7 +19,7 @@ import { Message } from '@stomp/stompjs';
 })
 export class LiveFeedbackPageComponent
   extends AbstractLiveFeedbackPage
-  implements OnInit, OnDestroy, AfterContentInit
+  implements OnInit, OnDestroy
 {
   userId: string;
   voteKeys = ['1', '2', '3', '4'];
@@ -43,12 +43,6 @@ export class LiveFeedbackPageComponent
       globalStorageService,
       route
     );
-  }
-
-  ngAfterContentInit() {
-    setTimeout(() => {
-      document.getElementById('message-announcer-button').focus();
-    }, 500);
   }
 
   ngOnInit() {

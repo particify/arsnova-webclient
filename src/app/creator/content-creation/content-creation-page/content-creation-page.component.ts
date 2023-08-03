@@ -1,4 +1,4 @@
-import { AfterContentInit, Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import {
   GlobalStorageService,
@@ -25,7 +25,8 @@ class ContentFormat {
   templateUrl: './content-creation-page.component.html',
   styleUrls: ['./content-creation-page.component.scss'],
 })
-export class ContentCreationPageComponent implements OnInit, AfterContentInit {
+export class ContentCreationPageComponent implements OnInit {
+  @ViewChild('questionInput') bodyInput: ElementRef;
   createEventSubject: Subject<boolean> = new Subject<boolean>();
   question: string;
   ContentType = ContentType;
@@ -53,12 +54,6 @@ export class ContentCreationPageComponent implements OnInit, AfterContentInit {
     private formattingService: FormattingService,
     private contentService: ContentService
   ) {}
-
-  ngAfterContentInit() {
-    setTimeout(() => {
-      document.getElementById('message-announcer-button').focus();
-    }, 700);
-  }
 
   ngOnInit() {
     const iconList = this.contentService.getTypeIcons();
@@ -97,6 +92,7 @@ export class ContentCreationPageComponent implements OnInit, AfterContentInit {
 
   reset() {
     this.question = '';
+    this.bodyInput.nativeElement.focus();
     this.content = null;
     this.created = true;
     setTimeout(() => {
@@ -125,9 +121,6 @@ export class ContentCreationPageComponent implements OnInit, AfterContentInit {
     this.emitCreateEvent(false);
     if (this.content) {
       this.flipped = true;
-      setTimeout(() => {
-        document.getElementById('preview-header').focus();
-      }, 300);
     }
   }
 

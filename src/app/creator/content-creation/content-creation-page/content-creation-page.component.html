@@ -5,7 +5,7 @@
         <mat-card>
           <div class="side" [ngClass]="{ 'invisible-card-content': flipped }">
             <div class="visually-hidden">
-              <div id="message-announcer-button" tabIndex="-1">
+              <div [appAutofocus] tabIndex="-1">
                 {{
                   (isEditMode
                     ? 'content.a11y-content-edit-message'
@@ -100,7 +100,6 @@
                   (input)="updateTextContainsImage(questionInput.value)"
                   [(ngModel)]="question"
                   aria-labelledby="body"
-                  id="body-input"
                   cdkAutosizeMaxRows="8"
                   cdkAutosizeMinRows="3"
                   matInput

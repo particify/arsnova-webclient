@@ -85,18 +85,13 @@ export class SettingsPageComponent implements OnInit {
         hotkey: '4',
       },
     ];
-    setTimeout(() => {
-      this.isCreator = this.route.snapshot.data.userRole === UserRole.OWNER;
-      this.currentRoute =
-        this.route.snapshot.params['settingsName'] || this.settings[0].name;
-      this.route.data.subscribe((data) => {
-        this.room = data.room;
-        this.isLoading = false;
-        setTimeout(() => {
-          document.getElementById('message-button').focus();
-        }, 500);
-      });
-    }, 0);
+    this.isCreator = this.route.snapshot.data.userRole === UserRole.OWNER;
+    this.currentRoute =
+      this.route.snapshot.params['settingsName'] || this.settings[0].name;
+    this.route.data.subscribe((data) => {
+      this.room = data.room;
+      this.isLoading = false;
+    });
   }
 
   saveRoom(updateEvent: UpdateEvent) {

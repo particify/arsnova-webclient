@@ -15,11 +15,14 @@
           #roomCode
           type="text"
           inputmode="numeric"
+          [appAutofocus]="focusInput"
           (beforeinput)="enforceLengthLimit($event)"
           (input)="handleInput($event)"
           [formControl]="roomCodeFormControl"
           [errorStateMatcher]="matcher"
-          aria-labelledby="join-input-label"
+          [attr.aria-label]="
+            'home-page.a11y-welcome-message' | translate: { title: appTitle }
+          "
           autocomplete="off"
           placeholder="{{ 'home-page.example' | translate }}{{
             '11223344' | splitShortId: false
@@ -35,7 +38,7 @@
           type="submit"
           role="button"
           (click)="joinRoom(roomCode.value)"
-          aria-labelledby="join-button-label"
+          [attr.aria-label]="'home-page.a11y-join-button' | translate"
           matSuffix
         >
           <mat-icon>arrow_forward</mat-icon>
@@ -43,13 +46,4 @@
       </mat-form-field>
     </div>
   </form>
-</div>
-
-<div class="visually-hidden">
-  <div id="join-input-label">
-    {{ inputA11yString | translate: { title: appTitle } }}
-  </div>
-  <div id="join-button-label">
-    {{ 'home-page.a11y-join-button' | translate }}
-  </div>
 </div>

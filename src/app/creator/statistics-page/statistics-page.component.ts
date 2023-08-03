@@ -52,9 +52,6 @@ export class StatisticsPageComponent implements OnInit {
             }
           });
       }
-      setTimeout(() => {
-        document.getElementById('message-button').focus();
-      }, 700);
     });
   }
 

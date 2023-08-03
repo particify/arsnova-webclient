@@ -3,7 +3,8 @@
     <app-form-header [text]="'login.welcome' | translate"></app-form-header>
     <div *ngIf="ssoProviders.length > 0" fxLayout="column" fxLayoutGap="10px">
       <button
-        *ngFor="let provider of ssoProviders"
+        *ngFor="let provider of ssoProviders; let i = index"
+        [appAutofocus]="i === 0"
         (click)="loginViaSso(provider.id)"
         color="primary"
         id="{{ provider.title }}-button"
@@ -29,6 +30,7 @@
         >
           <mat-label>{{ 'login.email' | translate }}</mat-label>
           <input
+            [appAutofocus]
             [(ngModel)]="username"
             [errorStateMatcher]="matcher"
             [formControl]="loginIdFormControl"

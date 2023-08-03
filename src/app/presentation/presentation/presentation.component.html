@@ -3,7 +3,7 @@
   (activeFeature)="updateFeature($event)"
   (activeGroup)="updateUrl($event)"
 ></app-control-bar>
-<div tabindex="-1" id="welcome-message" class="visually-hidden">
+<div tabindex="-1" [appAutofocus] class="visually-hidden">
   {{ 'presentation.a11y-welcome' | translate }}
 </div>
 <div fxFill>
