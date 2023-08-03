@@ -155,6 +155,19 @@
           lang.name
         }}</span>
       </button>
+      <div>
+        <mat-divider></mat-divider>
+        <a
+          id="help-button"
+          *ngIf="translateUrl"
+          [attr.href]="translateUrl"
+          target="_blank"
+          mat-menu-item
+        >
+          <mat-icon>translate</mat-icon>
+          <span>{{ 'header.add-translation' | translate }}</span>
+        </a>
+      </div>
     </mat-menu>
 
     <mat-menu #privacyMenu="matMenu" [overlapTrigger]="false">

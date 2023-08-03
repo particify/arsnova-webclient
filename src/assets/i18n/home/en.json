@@ -41,6 +41,7 @@
     "user-profile": "My account",
     "help": "Help",
     "language": "Language",
+    "add-translation": "Add translation",
     "logged-out": "You have been logged out.",
     "login": "Log in",
     "logout": "Log out",
@@ -242,6 +243,8 @@
     "really-delete-all-answers": "Do you really want to delete all answers of this question series?",
     "you-are-using-community-lang": "You're using a community translation",
     "community-lang": "This language is maintained by the community and therefore may be incomplete or outdated.",
+    "contribute-to-lang": "You can contribute to the translation via the following link: ",
+    "translation-server": "Go to translation server",
     "leave": "Leave",
     "really-leave-room": "Do you really want to leave the room?"
   },

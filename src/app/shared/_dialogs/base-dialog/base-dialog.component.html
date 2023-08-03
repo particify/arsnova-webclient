@@ -1,6 +1,12 @@
 <div mat-dialog-content tabindex="0">
   <h3>{{ data.section + data.headerLabel | translate }}</h3>
   <p>{{ data.section + data.body | translate }}</p>
+  <p *ngIf="data.additionalBody">
+    {{ data.section + data.additionalBody | translate }}
+  </p>
+  <a *ngIf="data.link" target="_blank" [href]="data.link">{{
+    data.linkText ? (data.section + data.linkText | translate) : data.link
+  }}</a>
   <p *ngIf="data.bodyElement">
     <strong>{{ data.bodyElement }}</strong>
   </p>
