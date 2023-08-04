@@ -18,9 +18,3 @@ export class ClientAuthentication {
     this.token = token;
   }
 }
-
-export class TransientClientAuthentication extends ClientAuthentication {
-  constructor(auth: ClientAuthentication) {
-    super(auth.userId, auth.loginId, auth.authProvider, auth.token);
-  }
-}
