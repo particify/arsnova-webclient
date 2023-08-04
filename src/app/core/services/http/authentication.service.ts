@@ -42,6 +42,7 @@ export const AUTH_HEADER_KEY = 'Authorization';
 export const AUTH_SCHEME = 'Bearer';
 const REFRESH_INTERVAL_MINUTES = 30;
 const REFRESH_INTERVAL_MAX_OFFSET_MINUTES = 2;
+const REFRESH_INTERVAL_STARTDUE_MINUTES = 5;
 
 interface Jwt {
   roles: string[];
@@ -98,10 +99,6 @@ export class AuthenticationService extends AbstractHttpService<ClientAuthenticat
    * Initialize authentication at startup.
    */
   init() {
-    if (this.isLoggedIn()) {
-      this.refreshLogin().subscribe();
-    }
-
     if (!environment.production) {
       this.getAuthenticationChanges().subscribe((auth) => {
         console.log('Authentication changed', auth);
@@ -116,14 +113,18 @@ export class AuthenticationService extends AbstractHttpService<ClientAuthenticat
         this.popupDimensions = [+popupDimensions[1], +popupDimensions[2]];
       }
     });
-    const interval =
-      REFRESH_INTERVAL_MINUTES * 60 * 1000 +
+    const offset =
       REFRESH_INTERVAL_MAX_OFFSET_MINUTES * Math.random() * 60 * 1000;
-    setInterval(() => {
+    const interval = REFRESH_INTERVAL_MINUTES * 60 * 1000 + offset;
+    const startDue = Math.min(
+      interval,
+      REFRESH_INTERVAL_STARTDUE_MINUTES * 60 * 1000 + offset
+    );
+    timer(startDue, interval).subscribe(() => {
       if (this.getCurrentAuthentication() != null) {
         this.refreshLogin().subscribe();
       }
-    }, interval);
+    });
   }
 
   /**
