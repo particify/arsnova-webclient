@@ -19,10 +19,7 @@ import {
   GlobalStorageService,
   STORAGE_KEYS,
 } from '@app/core/services/util/global-storage.service';
-import {
-  ClientAuthentication,
-  TransientClientAuthentication,
-} from '@app/core/models/client-authentication';
+import { ClientAuthentication } from '@app/core/models/client-authentication';
 import {
   AuthenticationStatus,
   ClientAuthenticationResult,
@@ -89,10 +86,7 @@ export class AuthenticationService extends AbstractHttpService<ClientAuthenticat
     const savedAuth: ClientAuthentication = this.globalStorageService.getItem(
       STORAGE_KEYS.USER
     );
-    const transientAuth = savedAuth
-      ? new TransientClientAuthentication(savedAuth)
-      : null;
-    this.auth$$ = new BehaviorSubject(of(transientAuth));
+    this.auth$$ = new BehaviorSubject(of(savedAuth));
   }
 
   /**
