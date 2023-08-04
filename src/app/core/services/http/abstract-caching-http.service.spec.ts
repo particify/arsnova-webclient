@@ -2,7 +2,7 @@ import { inject, TestBed } from '@angular/core/testing';
 
 import { AbstractCachingHttpService } from './abstract-caching-http.service';
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { WsConnectorService } from '@app/core/services/websockets/ws-connector.service';
 import { EventService } from '@app/core/services/util/event.service';
 import { TranslateService } from '@ngx-translate/core';
@@ -13,7 +13,11 @@ import {
   MockNotificationService,
   MockTranslateService,
 } from '@testing/test-helpers';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import {
+  HttpClientTestingModule,
+  HttpTestingController,
+} from '@angular/common/http/testing';
+import { Observable } from 'rxjs';
 
 @Injectable()
 class MockWsConnectorService {}
@@ -43,9 +47,29 @@ class TestCachingHttpService extends AbstractCachingHttpService<object> {
       cachingService
     );
   }
+
+  public fetchOnce<U extends object | object[]>(
+    uri: string,
+    params?: HttpParams
+  ): Observable<U> {
+    return super.fetchOnce(uri, params);
+  }
+
+  public fetchWithCache(uri: string): Observable<object> {
+    return super.fetchWithCache(uri);
+  }
 }
 
+const TEST_URI1 = '/test/1';
+const TEST_URI2 = '/test/2';
+const data1 = { id: 1 };
+const data2 = { id: 2 };
+const params1 = new HttpParams({ fromObject: { testParam: true } });
+const params2 = new HttpParams({ fromObject: { testParam: false } });
+
 describe('AbstractCachingHttpService', () => {
+  let httpTestingController: HttpTestingController;
+
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
@@ -73,6 +97,13 @@ describe('AbstractCachingHttpService', () => {
       ],
       imports: [HttpClientTestingModule],
     });
+
+    httpTestingController = TestBed.inject(HttpTestingController);
+  });
+
+  afterEach(() => {
+    // Assert that there are no outstanding requests.
+    httpTestingController.verify();
   });
 
   it('should be created', inject(
@@ -81,4 +112,89 @@ describe('AbstractCachingHttpService', () => {
       expect(service).toBeTruthy();
     }
   ));
+
+  describe('fetchOne', () => {
+    it('should perform a request and pass the response', inject(
+      [TestCachingHttpService],
+      (service: TestCachingHttpService) => {
+        service
+          .fetchOnce(TEST_URI1)
+          .subscribe((data) => expect(data).toEqual(data1));
+        const req = httpTestingController.expectOne(TEST_URI1);
+        req.flush(data1);
+      }
+    ));
+
+    it('should reuse in-flight requests from previous calls', inject(
+      [TestCachingHttpService],
+      (service: TestCachingHttpService) => {
+        for (let i = 0; i < 3; i++) {
+          service
+            .fetchOnce(TEST_URI1)
+            .subscribe((data) => expect(data).toEqual(data1));
+        }
+        const req = httpTestingController.expectOne(TEST_URI1);
+        req.flush(data1);
+      }
+    ));
+
+    it('should use a new request if the previous one is already resolved', inject(
+      [TestCachingHttpService],
+      (service: TestCachingHttpService) => {
+        for (let i = 0; i < 3; i++) {
+          service
+            .fetchOnce(TEST_URI1)
+            .subscribe((data) => expect(data).toEqual(data1));
+          const req = httpTestingController.expectOne(TEST_URI1);
+          req.flush(data1);
+        }
+      }
+    ));
+
+    it('should not reuse in-flight request if URIs do not match', inject(
+      [TestCachingHttpService],
+      (service: TestCachingHttpService) => {
+        service
+          .fetchOnce(TEST_URI1)
+          .subscribe((data) => expect(data).toEqual(data1));
+        const req1 = httpTestingController.expectOne(TEST_URI1);
+
+        service
+          .fetchOnce(TEST_URI2)
+          .subscribe((data) => expect(data).toEqual(data2));
+        const req2 = httpTestingController.expectOne(TEST_URI2);
+
+        req1.flush(data1);
+        req2.flush(data2);
+      }
+    ));
+
+    it('should not reuse in-flight request if params do not match', inject(
+      [TestCachingHttpService],
+      (service: TestCachingHttpService) => {
+        service
+          .fetchOnce(TEST_URI1)
+          .subscribe((data) => expect(data).toEqual(data1));
+        const req1 = httpTestingController.expectOne(TEST_URI1);
+
+        service
+          .fetchOnce(TEST_URI1, params1)
+          .subscribe((data) => expect(data).toEqual(data1));
+        const req2 = httpTestingController.expectOne(
+          TEST_URI1 + '?' + params1.toString()
+        );
+
+        service
+          .fetchOnce(TEST_URI1, params2)
+          .subscribe((data) => expect(data).toEqual(data1));
+        const req3 = httpTestingController.expectOne(
+          TEST_URI1 + '?' + params2.toString()
+        );
+
+        req1.flush(data1);
+        req2.flush(data1);
+        req3.flush(data1);
+      }
+    ));
+  });
 });

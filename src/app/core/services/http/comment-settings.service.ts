@@ -64,7 +64,7 @@ export class CommentSettingsService extends AbstractCachingHttpService<CommentSe
 
   get(id: string): Observable<CommentSettings> {
     const connectionUrl = this.buildUri(`/${id}`, id);
-    return this.fetch(connectionUrl).pipe(
+    return this.fetchWithCache(connectionUrl).pipe(
       catchError(this.handleError<CommentSettings>('addComment'))
     );
   }

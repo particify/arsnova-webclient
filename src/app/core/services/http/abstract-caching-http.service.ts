@@ -1,7 +1,7 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { TranslateService } from '@ngx-translate/core';
 import { Observable, of, Subscription } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { share, tap } from 'rxjs/operators';
 import {
   Cache,
   CacheKey,
@@ -19,6 +19,7 @@ export abstract class AbstractCachingHttpService<
   protected cacheName = 'http';
   protected stompSubscription: Subscription;
   protected cache: Cache<T>;
+  private inflightRequests = new Map<string, Observable<T | T[]>>();
 
   constructor(
     uriPrefix: string,
@@ -42,14 +43,42 @@ export abstract class AbstractCachingHttpService<
     );
   }
 
-  protected fetch(uri: string): Observable<T> {
+  /**
+   * Performs a HTTP GET request and caches the Observable while the request is
+   * in flight. If an request with identical URI and params is already in
+   * flight, the cached Observable is returned.
+   */
+  protected fetchOnce<U extends T | T[]>(
+    uri: string,
+    params?: HttpParams
+  ): Observable<U> {
+    const key = uri + (params ? '?' + params.toString() : '');
+    if (this.inflightRequests.has(key)) {
+      return this.inflightRequests.get(key) as Observable<U>;
+    }
+    const request$ = this.httpClient.get<U>(uri, { params: params }).pipe(
+      tap(() => this.inflightRequests.delete(key)),
+      share()
+    );
+    this.inflightRequests.set(key, request$);
+
+    return request$;
+  }
+
+  /**
+   * Performs a HTTP GET request and caches the response. If a cached response
+   * already exists, it is returned without performing a new request.
+   */
+  protected fetchWithCache(uri: string): Observable<T> {
     const cachedObject = this.cache.get(this.generateCacheKey(uri));
     if (cachedObject) {
       return of(cachedObject);
     }
-    return this.httpClient
-      .get<T>(uri)
-      .pipe(tap((object) => this.handleObjectCaching(uri, object)));
+    const request$ = this.fetchOnce<T>(uri).pipe(
+      tap((object) => this.handleObjectCaching(uri, object))
+    );
+
+    return request$;
   }
 
   protected generateCacheKey(id: string): CacheKey {
