@@ -7,10 +7,7 @@ export const ARSRxStompConfig: RxStompConfig = {
     (window.location.protocol === 'http:' ? 'ws' : 'wss') +
     `://${window.location.host}/api/ws/websocket`,
 
-  connectHeaders: {
-    login: 'guest',
-    password: 'guest',
-  },
+  connectHeaders: {},
 
   // How often to heartbeat?
   // Interval in milliseconds, set to 0 to disable
