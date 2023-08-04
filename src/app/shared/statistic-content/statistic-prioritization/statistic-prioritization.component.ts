@@ -128,7 +128,11 @@ export class StatisticPrioritizationComponent
       },
     ];
     const scale = this.presentationService.getScale();
-    const labels = this.options.map((a) => this.getLabel(a.label));
+    const labels = this.options?.map((a) => this.getLabel(a.label));
+    // Check if canvas element exists in DOM
+    if (!document.getElementById(this.chartId)) {
+      return;
+    }
     Chart.defaults.color = this.colorStrings.onBackground;
     Chart.register(
       BarController,
@@ -335,7 +339,9 @@ export class StatisticPrioritizationComponent
         Chart.register(this.reorderChart());
       }
       this.prepareChart();
-      this.chart.update();
+      if (document.getElementById(this.chartId)) {
+        this.chart.update();
+      }
     } else if (this.active) {
       setTimeout(() => {
         this.createHorizontalChart(this.chartColors);
@@ -344,9 +350,11 @@ export class StatisticPrioritizationComponent
   }
 
   getLabel(label: string): string {
-    const chartWidth = document.getElementById(
-      'container-' + this.chartId
-    ).clientWidth;
+    const chartContainer = document.getElementById('container-' + this.chartId);
+    if (!chartContainer) {
+      return;
+    }
+    const chartWidth = chartContainer.clientWidth;
     const width = this.getTextWidth(label);
     const diff =
       chartWidth - width - this.padding.label * 4 - this.padding.left;

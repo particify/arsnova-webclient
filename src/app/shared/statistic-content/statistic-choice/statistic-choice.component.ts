@@ -168,6 +168,10 @@ export class StatisticChoiceComponent
     scale: number,
     gridConfig: GridLineOptions
   ) {
+    // Check if canvas element exists in DOM
+    if (!document.getElementById(this.chartId)) {
+      return;
+    }
     this.chart = new Chart(this.chartId, {
       type: 'bar',
       data: {
