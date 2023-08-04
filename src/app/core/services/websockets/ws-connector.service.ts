@@ -6,16 +6,15 @@ import { Observable } from 'rxjs';
 import { IMessage } from '@stomp/stompjs';
 import { ClientAuthentication } from '@app/core/models/client-authentication';
 
+const defaultMessageHeaders = {
+  'content-type': 'application/json',
+};
+
 @Injectable({
   providedIn: 'root',
 })
 export class WsConnectorService {
   private client: RxStomp;
-
-  private headers = {
-    'content-type': 'application/json',
-    'ars-user-id': '',
-  };
 
   constructor(private authService: AuthenticationService) {
     this.client = new RxStomp();
@@ -29,10 +28,6 @@ export class WsConnectorService {
         if (auth && auth.userId) {
           const copiedConf = ARSRxStompConfig;
           copiedConf.connectHeaders.token = auth.token;
-          this.headers = {
-            'content-type': 'application/json',
-            'ars-user-id': '' + auth.userId,
-          };
           this.client.configure(copiedConf);
           this.client.activate();
         }
@@ -43,15 +38,15 @@ export class WsConnectorService {
     if (this.client.connected) {
       this.client.publish({
         destination: destination,
+        headers: defaultMessageHeaders,
         body: body,
-        headers: this.headers,
       });
     }
   }
 
   public getWatcher(topic: string): Observable<IMessage> {
     if (this.client.connected) {
-      return this.client.watch(topic, this.headers);
+      return this.client.watch(topic);
     }
   }
 
