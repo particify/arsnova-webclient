@@ -178,45 +178,44 @@ export class NavBarComponent
   }
 
   initItems() {
-    this.route.data.subscribe((data) => {
-      this.role = data.userRole;
-      this.viewRole = data.viewRole;
-      this.shortId = data.room.shortId;
-      this.roomId = data.room.id;
-      this.room = data.room;
-      if (
-        !data.room.settings['feedbackLocked'] ||
-        this.viewRole !== UserRole.PARTICIPANT
-      ) {
-        this.activeFeatures.splice(1, 0, RoutingFeature.FEEDBACK);
-      }
-      if (
-        !this.route.children[0]?.snapshot.data.commentSettings?.disabled ||
-        this.viewRole !== UserRole.PARTICIPANT
-      ) {
-        this.activeFeatures.splice(1, 0, RoutingFeature.COMMENTS);
-      }
-      this.feedbackService.startSub(this.roomId);
-      let group = this.routingService.seriesName;
-      if (group === undefined) {
-        group = this.globalStorageService.getItem(STORAGE_KEYS.LAST_GROUP);
-      } else {
-        this.setGroupInSessionStorage(group);
-      }
-      this.roomStatsService
-        .getStats(this.roomId, this.viewRole !== UserRole.PARTICIPANT)
-        .subscribe((stats) => {
-          if (stats.groupStats) {
-            this.groupName = group || stats.groupStats[0].groupName;
-            this.setGroupInSessionStorage(this.groupName);
-            this.addContentFeatureItem(false);
-          }
-          this.getItems();
-          this.updateGroups(stats.groupStats ?? [], !!group, false);
-        });
-      this.subscribeToParticipantEvents();
-      this.subscribeToRouteChanges();
-    });
+    const routeData = this.route.snapshot.data;
+    this.role = routeData.userRole;
+    this.viewRole = routeData.viewRole;
+    this.shortId = routeData.room.shortId;
+    this.roomId = routeData.room.id;
+    this.room = routeData.room;
+    if (
+      !routeData.room.settings['feedbackLocked'] ||
+      this.viewRole !== UserRole.PARTICIPANT
+    ) {
+      this.activeFeatures.splice(1, 0, RoutingFeature.FEEDBACK);
+    }
+    if (
+      !this.route.children[0]?.snapshot.data.commentSettings?.disabled ||
+      this.viewRole !== UserRole.PARTICIPANT
+    ) {
+      this.activeFeatures.splice(1, 0, RoutingFeature.COMMENTS);
+    }
+    this.feedbackService.startSub(this.roomId);
+    let group = this.routingService.seriesName;
+    if (group === undefined) {
+      group = this.globalStorageService.getItem(STORAGE_KEYS.LAST_GROUP);
+    } else {
+      this.setGroupInSessionStorage(group);
+    }
+    this.roomStatsService
+      .getStats(this.roomId, this.viewRole !== UserRole.PARTICIPANT)
+      .subscribe((stats) => {
+        if (stats.groupStats) {
+          this.groupName = group || stats.groupStats[0].groupName;
+          this.setGroupInSessionStorage(this.groupName);
+          this.addContentFeatureItem(false);
+        }
+        this.getItems();
+        this.updateGroups(stats.groupStats ?? [], !!group, false);
+      });
+    this.subscribeToParticipantEvents();
+    this.subscribeToRouteChanges();
   }
 
   parseUserCount(body: string) {

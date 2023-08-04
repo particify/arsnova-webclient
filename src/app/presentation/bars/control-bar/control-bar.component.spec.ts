@@ -39,6 +39,7 @@ import { CommentSettingsService } from '@app/core/services/http/comment-settings
 import { ContentPublishService } from '@app/core/services/util/content-publish.service';
 import { PresentationService } from '@app/core/services/util/presentation.service';
 import { FocusModeService } from '@app/creator/_services/focus-mode.service';
+import { UserRole } from '@app/core/models/user-roles.enum';
 
 describe('ControlBarComponent', () => {
   let component: ControlBarComponent;
@@ -84,17 +85,16 @@ describe('ControlBarComponent', () => {
     'openDeleteDialog',
   ]);
 
-  const snapshot = new ActivatedRouteSnapshot();
-  snapshot.params = {
-    seriesName: 'Quiz',
-  };
-
   const room = new Room();
   room.settings = {};
-  const data = {
+  const snapshot = new ActivatedRouteSnapshot();
+  snapshot.data = {
     room: room,
+    userRole: UserRole.EDITOR,
+    viewRole: UserRole.PARTICIPANT,
   };
-  const activatedRouteStub = new ActivatedRouteStub(null, data, snapshot);
+  const activatedRouteStub = new ActivatedRouteStub(null, null, snapshot);
+  activatedRouteStub['children'] = {};
 
   const splitShortIdPipe = new SplitShortIdPipe();
 
