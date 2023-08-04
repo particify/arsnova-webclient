@@ -191,7 +191,9 @@ export class StepperComponent extends CdkStepper implements OnInit, OnDestroy {
   }
 
   headerAnimationDone() {
-    this.headerAnimationState = 'init';
+    setTimeout(() => {
+      this.headerAnimationState = 'init';
+    });
   }
 
   moveHeaderRight(clicked?: boolean) {
@@ -231,26 +233,28 @@ export class StepperComponent extends CdkStepper implements OnInit, OnDestroy {
   }
 
   containerAnimationDone() {
-    switch (this.containerAnimationState) {
-      case 'next':
-        this.containerAnimationState = 'next-2';
-        return;
-      case 'next-2':
-        this.containerAnimationState = 'current';
-        if (this.nextIndex > this.headerPos + 2) {
-          this.moveHeaderLeft();
-        }
-        break;
-      case 'prev':
-        this.containerAnimationState = 'prev-2';
-        return;
-      case 'prev-2':
-        this.containerAnimationState = 'current';
-        if (this.nextIndex < this.headerPos + 2) {
-          this.moveHeaderRight();
-        }
-        break;
-    }
-    this.selectedIndex = this.nextIndex;
+    setTimeout(() => {
+      switch (this.containerAnimationState) {
+        case 'next':
+          this.containerAnimationState = 'next-2';
+          return;
+        case 'next-2':
+          this.containerAnimationState = 'current';
+          if (this.nextIndex > this.headerPos + 2) {
+            this.moveHeaderLeft();
+          }
+          break;
+        case 'prev':
+          this.containerAnimationState = 'prev-2';
+          return;
+        case 'prev-2':
+          this.containerAnimationState = 'current';
+          if (this.nextIndex < this.headerPos + 2) {
+            this.moveHeaderRight();
+          }
+          break;
+      }
+      this.selectedIndex = this.nextIndex;
+    });
   }
 }
