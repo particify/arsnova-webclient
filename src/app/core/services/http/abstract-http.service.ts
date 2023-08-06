@@ -1,5 +1,10 @@
-import { HttpClient } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
+import {
+  HttpClient,
+  HttpErrorResponse,
+  HttpHeaders,
+  HttpParams,
+} from '@angular/common/http';
+import { Observable, pipe, throwError } from 'rxjs';
 import { TranslateService } from '@ngx-translate/core';
 import {
   AdvancedSnackBarTypes,
@@ -7,6 +12,24 @@ import {
 } from '@app/core/services/util/notification.service';
 import { EventService } from '@app/core/services/util/event.service';
 import { HttpRequestFailed } from '@app/core/models/events/http-request-failed';
+import { retryBackoff } from 'backoff-rxjs';
+
+function defaultRetryBackoff(initialInterval = 3000) {
+  return pipe(
+    retryBackoff({
+      initialInterval: initialInterval,
+      maxRetries: 5,
+      shouldRetry: (error) => (error as HttpErrorResponse).status >= 500,
+    })
+  );
+}
+
+type HttpOptions = {
+  params?: HttpParams;
+  headers?: HttpHeaders;
+  retry?: boolean;
+  retryInitialInterval?: number;
+};
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export abstract class AbstractHttpService<T> {
@@ -23,6 +46,65 @@ export abstract class AbstractHttpService<T> {
     protected translateService: TranslateService,
     protected notificationService: NotificationService
   ) {}
+
+  /**
+   * Performs a HTTP GET request. By default, if the request fails, it is send
+   * again up to 5 times with exponential backoff delay.
+   */
+  protected performGet<U extends T | T[]>(
+    uri: string,
+    options?: HttpOptions
+  ): Observable<U> {
+    return this.performGenericGet(uri, options);
+  }
+
+  protected performForeignGet<U>(
+    uri: string,
+    options?: HttpOptions
+  ): Observable<U> {
+    return this.performGenericGet(uri, options);
+  }
+
+  private performGenericGet<U>(
+    uri: string,
+    options?: HttpOptions
+  ): Observable<U> {
+    const request$ = this.httpClient.get<U>(uri, options);
+    return options?.retry ?? true
+      ? request$.pipe(defaultRetryBackoff(options?.retryInitialInterval))
+      : request$;
+  }
+
+  /**
+   * Performs a HTTP POST request. If options.retry is true, the request will be
+   * send again up to 5 times with exponential backoff delay on failure.
+   */
+  protected performPost<U extends T | T[]>(
+    uri: string,
+    body: U,
+    options?: HttpOptions
+  ): Observable<U> {
+    return this.performGenericPost(uri, body, options);
+  }
+
+  protected performForeignPost<U>(
+    uri: string,
+    body: any,
+    options?: HttpOptions
+  ): Observable<U> {
+    return this.performGenericPost(uri, body, options);
+  }
+
+  private performGenericPost<U>(
+    uri: string,
+    body: any,
+    options?: HttpOptions
+  ): Observable<U> {
+    const request$ = this.httpClient.post<U>(uri, body, options);
+    return options?.retry ?? true
+      ? request$.pipe(defaultRetryBackoff(options?.retryInitialInterval))
+      : request$;
+  }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public handleError<T>(operation = 'operation', result?: T) {

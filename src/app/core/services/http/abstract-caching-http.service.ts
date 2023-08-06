@@ -56,7 +56,7 @@ export abstract class AbstractCachingHttpService<
     if (this.inflightRequests.has(key)) {
       return this.inflightRequests.get(key) as Observable<U>;
     }
-    const request$ = this.httpClient.get<U>(uri, { params: params }).pipe(
+    const request$ = this.performGet<U>(uri, { params: params }).pipe(
       tap(() => this.inflightRequests.delete(key)),
       share()
     );
