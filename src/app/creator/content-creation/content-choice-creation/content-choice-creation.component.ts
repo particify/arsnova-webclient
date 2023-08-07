@@ -92,7 +92,7 @@ export class ContentChoiceCreationComponent
     }
     if (
       !this.multipleCorrectAnswers &&
-      (this.content as ContentChoice).correctOptionIndexes.length > 0 &&
+      (this.content as ContentChoice).correctOptionIndexes?.length > 0 &&
       this.newAnswerOptionChecked
     ) {
       this.translationService.get('content.only-one').subscribe((message) => {
@@ -134,7 +134,7 @@ export class ContentChoiceCreationComponent
     (this.content as ContentChoice).options.splice(index, 1);
     for (
       let j = 0;
-      j < (this.content as ContentChoice).correctOptionIndexes.length;
+      j < (this.content as ContentChoice).correctOptionIndexes?.length;
       j++
     ) {
       if ((this.content as ContentChoice).correctOptionIndexes[j] === index) {
