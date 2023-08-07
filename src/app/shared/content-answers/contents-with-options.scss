@@ -18,11 +18,11 @@ $option-padding-full: 14px;
 }
 
 .correct {
-  color: var(--green);
+  color: var(--success);
 }
 
 .wrong {
-  color: var(--red);
+  color: var(--warn);
 }
 
 .icon-indicator {

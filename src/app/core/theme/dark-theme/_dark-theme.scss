@@ -15,8 +15,12 @@ $dark-theme: mat.define-dark-theme(
 );
 
 .theme-dark {
-  --warn: #ff8a80;
-  --warn-soft: #ffd180;
+  --warn: #ef9a9a;
+  --warn-inverted: #c62828;
+  --warn-soft: #ffcc80;
+  --warn-soft-inverted: #fb8c00;
+  --success: #81c784;
+  --success-inverted: #43a047;
   --background: #212121;
   --surface: #333;
   --dialog: #424242;
@@ -27,10 +31,10 @@ $dark-theme: mat.define-dark-theme(
   --table-b: #505050;
   --border: #595959;
   --unlocked: #004d40;
-  --green: #43a047;
-  --red: #ff5722;
-  --yellow: #fdd835;
-  --blue: #3f51b5;
+  --green: #81c784;
+  --red: #e57373;
+  --yellow: #fff176;
+  --blue: #7986cb;
   --grey: #aaa;
   --grey-light: #444;
   --black: #000;

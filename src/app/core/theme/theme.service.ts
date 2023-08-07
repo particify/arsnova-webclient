@@ -44,7 +44,7 @@ export class ThemeService {
     'strongly-disagree',
   ];
   private binaryColors = ['strongly-agree', 'strongly-disagree'];
-
+  private lightWarnColor = '#c62828';
   private lightColors = new Colors('#5e35b1', '#2e7d32');
   private darkColors = new Colors('#b388ff', '#b9f6ca');
 
@@ -85,6 +85,7 @@ export class ThemeService {
     } else {
       this.materialCssVarsService.setPrimaryColor(this.lightColors.primary);
       this.materialCssVarsService.setAccentColor(this.lightColors.accent);
+      this.materialCssVarsService.setWarnColor(this.lightWarnColor);
     }
     this.globalStorageService.setItem(STORAGE_KEYS.THEME, theme);
     this.currentTheme$.next(theme);

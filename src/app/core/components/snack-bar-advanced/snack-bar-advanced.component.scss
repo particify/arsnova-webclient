@@ -2,20 +2,21 @@
 
 span {
   font-size: 14px;
+  color: var(--background);
 }
 
 .done {
-  color: var(--green);
+  color: var(--success-inverted);
   font-weight: $font-weight-extra-bold;
 }
 
 .close {
-  color: var(--warn);
+  color: var(--warn-inverted);
   font-weight: $font-weight-extra-bold;
 }
 
 .warning {
-  color: var(--warn-soft);
+  color: var(--warn-soft-inverted);
 }
 
 .mat-mdc-progress-spinner {

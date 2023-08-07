@@ -24,11 +24,11 @@ $icon-container-size: 40px;
 }
 
 .correct:not(.answered) {
-  color: var(--green);
+  color: var(--success);
 }
 
 .wrong:not(.answered) {
-  color: var(--red);
+  color: var(--warn);
 }
 
 .answered {

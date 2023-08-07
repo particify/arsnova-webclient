@@ -67,7 +67,7 @@
 
 .active {
   animation: activate 400ms;
-  color: var(--green);
+  color: var(--success);
 }
 
 .button-bar .active {
@@ -111,7 +111,7 @@
 
 .inactive {
   animation: disable 400ms;
-  color: var(--red);
+  color: var(--warn);
 }
 
 @keyframes activate {
@@ -183,7 +183,7 @@
 
 .menu-lock {
   & mat-icon {
-    color: var(--red);
+    color: var(--warn);
   }
 }
 

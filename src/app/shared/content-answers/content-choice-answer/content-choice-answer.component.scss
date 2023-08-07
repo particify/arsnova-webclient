@@ -30,11 +30,11 @@
 }
 
 .correct-answer {
-  border-color: var(--green);
+  border-color: var(--success);
 }
 
 .wrong-answer {
-  border-color: var(--red);
+  border-color: var(--warn);
 }
 
 .mat-mdc-radio-button,
