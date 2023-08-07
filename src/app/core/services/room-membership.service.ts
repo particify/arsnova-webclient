@@ -114,15 +114,13 @@ export class RoomMembershipService extends AbstractHttpService<Membership> {
     const httpHeaders = token
       ? new HttpHeaders().set(AUTH_HEADER_KEY, `${AUTH_SCHEME} ${token}`)
       : null;
-    return this.http
-      .get<Membership[]>(url, { headers: httpHeaders })
-      .pipe(
-        tap((memberships) =>
-          memberships.forEach(
-            (m) => (m.primaryRole = this.selectPrimaryRole(m.roles))
-          )
+    return this.performGet<Membership[]>(url, { headers: httpHeaders }).pipe(
+      tap((memberships) =>
+        memberships.forEach(
+          (m) => (m.primaryRole = this.selectPrimaryRole(m.roles))
         )
-      );
+      )
+    );
   }
 
   /**
@@ -260,7 +258,7 @@ export class RoomMembershipService extends AbstractHttpService<Membership> {
   requestMembership(roomShortId: string, token?: string): Observable<Room> {
     const uri = this.buildForeignUri('/request-membership', '~' + roomShortId);
     const payload = token ? { token: token } : {};
-    return this.http.post<Room>(uri, payload).pipe(
+    return this.performForeignPost<Room>(uri, payload, { retry: true }).pipe(
       tap(() => {
         const event = new MembershipsChanged();
         this.eventService.broadcast(event.type, event.payload);
@@ -274,7 +272,7 @@ export class RoomMembershipService extends AbstractHttpService<Membership> {
    */
   cancelMembership(roomShortId: string): Observable<Room> {
     const uri = this.buildForeignUri('/cancel-membership', '~' + roomShortId);
-    return this.http.post<Room>(uri, {}).pipe(
+    return this.performForeignPost<Room>(uri, {}, { retry: true }).pipe(
       tap(() => {
         const event = new MembershipsChanged();
         this.eventService.broadcast(event.type, event.payload);

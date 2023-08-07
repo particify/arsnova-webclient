@@ -97,15 +97,11 @@ export class AnnouncementService extends AbstractHttpService<Announcement> {
 
   getStateByUserId(userId: string): Observable<AnnouncementState> {
     const url = this.buildForeignUri(`/user/${userId}${this.uriPrefix}/state`);
-    return this.http
-      .get<AnnouncementState>(url)
-      .pipe(
-        first(),
-        catchError(
-          this.handleError<AnnouncementState>(
-            'Get announcement state by user id'
-          )
-        )
-      );
+    return this.performForeignGet<AnnouncementState>(url).pipe(
+      first(),
+      catchError(
+        this.handleError<AnnouncementState>('Get announcement state by user id')
+      )
+    );
   }
 }
