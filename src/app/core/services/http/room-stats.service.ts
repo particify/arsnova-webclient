@@ -47,7 +47,7 @@ export class RoomStatsService extends AbstractCachingHttpService<RoomStats> {
   getStats(roomId: string, extendedView = false): Observable<RoomStats> {
     const queryParams = extendedView ? '?view=read-extended' : '';
     const connectionUrl = this.buildUri('', roomId);
-    return this.fetch(connectionUrl + queryParams).pipe(
+    return this.fetchWithCache(connectionUrl + queryParams).pipe(
       catchError(this.handleError<RoomStats>(`getStats id=${roomId}`))
     );
   }
