@@ -109,7 +109,8 @@
             "configDir": ".storybook",
             "browserTarget": "arsnova-webclient:build",
             "compodoc": false,
-            "port": 6006
+            "port": 6006,
+            "styles": ["src/fonts.scss", ".storybook/custom-styles.scss"]
           }
         },
         "build-storybook": {
@@ -118,7 +119,8 @@
             "configDir": ".storybook",
             "browserTarget": "arsnova-webclient:build",
             "compodoc": false,
-            "outputDir": "dist/storybook/arsnova-webclient"
+            "outputDir": "dist/storybook/arsnova-webclient",
+            "styles": ["src/fonts.scss", ".storybook/custom-styles.scss"]
           }
         }
       }
