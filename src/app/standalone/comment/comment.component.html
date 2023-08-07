@@ -212,11 +212,7 @@
         class="fill-remaining-space click"
         (click)="openPresentDialog()"
       ></span>
-      <div
-        *ngIf="!voting.children.length"
-        fxLayout="row"
-        fxLayoutAlign="start end"
-      >
+      <div *ngIf="isEditor" fxLayout="row" fxLayoutAlign="start end">
         <mat-icon class="vote-icon">thumb_up</mat-icon>
         <span
           class="score-creator"
@@ -226,7 +222,12 @@
       </div>
     </div>
   </div>
-  <div #voting>
-    <ng-content></ng-content>
-  </div>
+  <app-voting
+    *ngIf="!isEditor"
+    [userId]="userId"
+    [parseVote]="parseVote"
+    [score]="comment.score"
+    [roomId]="comment.roomId"
+    [commentId]="comment.id"
+  ></app-voting>
 </mat-card>

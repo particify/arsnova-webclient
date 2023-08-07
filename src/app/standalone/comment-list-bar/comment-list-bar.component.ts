@@ -10,7 +10,6 @@ import { CoreModule } from '@app/core/core.module';
 import { CommentFilter } from '@app/core/models/comment-filter.enum';
 import { CommentPeriod } from '@app/core/models/comment-period.enum';
 import { CommentSort } from '@app/core/models/comment-sort.enum';
-import { UserRole } from '@app/core/models/user-roles.enum';
 import { MenuDividerComponent } from '@app/standalone/menu-divider/menu-divider.component';
 
 class SortItem {
@@ -38,7 +37,6 @@ export class CommentListBarComponent {
   @Input() scroll: boolean;
   @Input() scrollActive: boolean;
   @Input() isScrollStart: boolean;
-  @Input() viewRole: UserRole;
   @Input() commentCounter: number;
   @Input() showAlways = false;
   @Input() isAddButtonDisabled: boolean;

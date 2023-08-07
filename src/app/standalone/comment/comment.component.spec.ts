@@ -19,6 +19,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatMenuModule } from '@angular/material/menu';
 import { Comment } from '@app/core/models/comment';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { VoteService } from '@app/core/services/http/vote.service';
 
 describe('CommentComponent', () => {
   let component: CommentComponent;
@@ -40,6 +41,12 @@ describe('CommentComponent', () => {
     viewRole: UserRole.PARTICIPANT,
   };
   const activatedRouteStub = new ActivatedRouteStub(null, data);
+
+  const mockVoteService = jasmine.createSpyObj('VoteService', [
+    'voteUp',
+    'voteDown',
+    'deleteVote',
+  ]);
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
@@ -79,6 +86,10 @@ describe('CommentComponent', () => {
         {
           provide: DialogService,
           useValue: mockDialogService,
+        },
+        {
+          provide: VoteService,
+          useValue: mockVoteService,
         },
       ],
       schemas: [NO_ERRORS_SCHEMA],

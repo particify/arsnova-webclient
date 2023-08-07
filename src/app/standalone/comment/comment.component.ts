@@ -34,10 +34,12 @@ import { DateComponent } from '@app/standalone/date/date.component';
 import { MatDialog } from '@angular/material/dialog';
 import { CommentAnswerComponent } from '@app/standalone/_dialogs/comment-answer/comment-answer.component';
 import { ExtensionPointModule } from '@projects/extension-point/src/lib/extension-point.module';
+import { VotingComponent } from '@app/standalone/voting/voting.component';
+import { Vote } from '@app/core/models/vote';
 
 @Component({
   standalone: true,
-  imports: [CoreModule, DateComponent, ExtensionPointModule],
+  imports: [CoreModule, DateComponent, ExtensionPointModule, VotingComponent],
   selector: 'app-comment',
   templateUrl: './comment.component.html',
   styleUrls: ['./comment.component.scss'],
@@ -60,6 +62,8 @@ export class CommentComponent implements OnInit, OnDestroy {
   @Input() isSimpleView = false;
   @Input() isModeration = false;
   @Input() fileUploadEnabled = false;
+  @Input() parseVote?: Vote;
+  @Input() userId?: string;
 
   @Output() clickedOnTag = new EventEmitter<string>();
   @Output() activeComment = new EventEmitter<Comment>();

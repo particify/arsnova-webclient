@@ -10,7 +10,6 @@
         [scroll]="scroll"
         [scrollActive]="scrollActive"
         [isScrollStart]="isScrollStart"
-        [viewRole]="viewRole"
         [commentCounter]="
           filteredComments && hideCommentsList
             ? filteredComments.length
@@ -58,14 +57,9 @@
         [isNew]="comment.id === newestComment.id"
         [fileUploadEnabled]="fileUploadEnabled"
         (clickedOnTag)="clickedOnTag($event)"
+        [parseVote]="getVote(comment)"
+        [userId]="userId"
       >
-        <app-voting
-          [userId]="userId"
-          [parseVote]="getVote(comment)"
-          [score]="comment.score"
-          [roomId]="roomId"
-          [commentId]="comment.id"
-        ></app-voting>
       </app-comment>
     </div>
     <app-comment-list-add-button
