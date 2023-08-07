@@ -373,7 +373,10 @@ export class AbstractCommentsPageComponent {
   }
 
   handleCommentPatchAck(id: string, value: boolean) {
-    // Implemented by extended class
+    if (!value) {
+      this.removeCommentFromList(id);
+      this.reduceCommentCounter();
+    }
   }
 
   removeCommentFromList(id: string) {
