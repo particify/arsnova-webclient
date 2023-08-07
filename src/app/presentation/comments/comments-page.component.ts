@@ -85,7 +85,6 @@ export class CommentsPageComponent
       this.viewRole = data.viewRole;
       this.publicComments$ = this.commentService.getAckComments(this.room.id);
       this.activeComments$ = this.publicComments$;
-      this.initPublicCounter();
       this.init();
       this.registerHotkeys();
     });
@@ -166,17 +165,11 @@ export class CommentsPageComponent
       if (comment.highlighted) {
         this.commentService.lowlight(comment).subscribe();
       } else {
-        const highlightedComment = this.comments.filter(
-          (c) => c.highlighted
-        )[0];
-        if (highlightedComment) {
-          this.commentService.lowlight(highlightedComment).subscribe();
+        if (this.activeComment?.highlighted) {
+          this.commentService.lowlight(this.activeComment).subscribe();
         }
         this.commentService.highlight(comment).subscribe();
       }
-    }
-    if (this.activeComment?.highlighted) {
-      this.commentService.lowlight(this.activeComment).subscribe();
     }
     this.activeComment = comment;
     const index = this.getIndexOfComment(comment);

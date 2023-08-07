@@ -77,8 +77,6 @@ export class CommentsPageComponent
       this.activeComments$ = this.isModeration
         ? this.moderationComments$
         : this.publicComments$;
-      this.initPublicCounter();
-      this.initModerationCounter();
       this.init();
       if (innerWidth > 1000) {
         this.scrollMax += innerWidth * 0.04 + 240;
@@ -91,12 +89,21 @@ export class CommentsPageComponent
     this.destroy();
   }
 
-  initModerationCounter() {
+  getModerationCounter() {
     this.commentService
       .countByRoomId(this.room.id, false)
       .pipe(takeUntil(this.destroyed$))
       .subscribe((commentCounter) => {
         this.moderationCounter = commentCounter;
+      });
+  }
+
+  getPublicCounter() {
+    this.commentService
+      .countByRoomId(this.room.id, true)
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((commentCounter) => {
+        this.publicCounter = commentCounter;
       });
   }
 
@@ -236,6 +243,17 @@ export class CommentsPageComponent
         }
         this.commentService.highlight(comment).subscribe();
       }
+    }
+  }
+
+  afterCommentsLoadedHook(): void {
+    const currentCommentCount = this.comments.length;
+    if (this.isModeration) {
+      this.getPublicCounter();
+      this.moderationCounter = currentCommentCount;
+    } else {
+      this.getModerationCounter();
+      this.publicCounter = currentCommentCount;
     }
   }
 }
