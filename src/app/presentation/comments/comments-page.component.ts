@@ -85,7 +85,6 @@ export class CommentsPageComponent
       this.viewRole = data.viewRole;
       this.publicComments$ = this.commentService.getAckComments(this.room.id);
       this.activeComments$ = this.publicComments$;
-      this.initPublicCounter();
       this.init();
       this.registerHotkeys();
     });

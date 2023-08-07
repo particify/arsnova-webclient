@@ -125,15 +125,6 @@ export class AbstractCommentsPageComponent {
     );
   }
 
-  initPublicCounter() {
-    this.commentService
-      .countByRoomId(this.room.id, true)
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe((commentCounter) => {
-        this.publicCounter = commentCounter;
-      });
-  }
-
   destroy() {
     this.destroyed$.next();
     this.destroyed$.complete();
@@ -153,6 +144,7 @@ export class AbstractCommentsPageComponent {
     }
     if (!reload) {
       this.subscribeToStreams();
+      this.afterCommentsLoadedHook();
     }
   }
 
@@ -269,7 +261,6 @@ export class AbstractCommentsPageComponent {
     this.getCommentsWithThreshold();
     this.setTimePeriod(this.period);
     this.isLoading = false;
-    this.afterCommentsLoadedHook();
   }
 
   afterCommentsLoadedHook() {

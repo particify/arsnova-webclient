@@ -72,7 +72,6 @@ export class CommentsPageComponent
         .getAckComments(this.room.id)
         .pipe(takeUntil(this.destroyed$));
       this.activeComments$ = this.publicComments$;
-      this.initPublicCounter();
       this.init();
     });
     this.focusModeService
