@@ -6,8 +6,6 @@
   <div class="icon-container">
     <button
       *ngFor="let barItem of barItems; let i = index"
-      fxLayout="column"
-      fxLayoutAlign="center center"
       class="item nav-button"
       mat-button
       color="{{ i === currentRouteIndex ? 'primary' : '' }}"
