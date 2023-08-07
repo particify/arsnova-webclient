@@ -33,6 +33,15 @@
         "kind": "test"
       },
       "dependsOn": ["Install dependencies"]
+    },
+    {
+      "label": "Run storybook",
+      "type": "shell",
+      "command": "yarn storybook",
+      "group": {
+        "kind": "build"
+      },
+      "dependsOn": ["Install dependencies"]
     }
   ]
 }

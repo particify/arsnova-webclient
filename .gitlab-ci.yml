@@ -55,6 +55,18 @@ unit_tests:
   script:
     - yarn test
 
+storybook:
+  stage: test
+  rules:
+    - if: $CI_PIPELINE_SOURCE != "schedule"
+  allow_failure: false
+  script:
+    - yarn build-storybook
+  artifacts:
+    expire_in: 2 days
+    paths:
+      - '$BUILD_DIR'
+
 ngbuild:
   stage: build
   rules:
