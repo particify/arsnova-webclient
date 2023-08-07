@@ -152,9 +152,9 @@ export class RoomService extends AbstractEntityService<Room> {
     const connectionUrl = this.buildForeignUri(
       `${this.serviceApiUrl.summary}?ids=${ids.join(',')}`
     );
-    return this.http
-      .get<RoomSummary[]>(connectionUrl)
-      .pipe(catchError(this.handleError<RoomSummary[]>(`getRoomSummaries`)));
+    return this.performForeignGet<RoomSummary[]>(connectionUrl).pipe(
+      catchError(this.handleError<RoomSummary[]>(`getRoomSummaries`))
+    );
   }
 
   getRoomByShortId(shortId: string): Observable<Room> {
