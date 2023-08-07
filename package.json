@@ -16,6 +16,8 @@
     "build": "ng build --configuration production",
     "test": "ng test --watch=false --browsers=ChromeHeadlessCustom",
     "lint": "ng lint",
+    "storybook": "yarn ng run arsnova-webclient:storybook",
+    "build-storybook": "yarn ng run arsnova-webclient:build-storybook",
     "e2e": "ng e2e"
   },
   "dependencies": {
