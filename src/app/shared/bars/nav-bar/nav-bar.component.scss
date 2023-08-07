@@ -26,6 +26,9 @@
 }
 
 .item {
+  display: flex;
+  place-content: center;
+  align-items: center;
   user-select: none;
   border-radius: 0;
   height: auto !important;
@@ -46,14 +49,6 @@
 
 .menu-container {
   position: relative;
-}
-
-@media (max-width: 500px) {
-  .item {
-    padding: 8px 12px;
-    display: flex !important;
-    flex-direction: column !important;
-  }
 }
 
 @media (min-width: 1001px) {
@@ -121,18 +116,25 @@
     display: none !important;
   }
 
-  @media (min-width: 501px) {
+  @media (min-width: 600px) {
     .item {
       flex-direction: row;
       padding: 16px 12px;
 
       .mat-icon {
-        margin-right: 16px;
+        margin-right: 12px;
       }
     }
 
     .button.icon {
       padding: 8px 16px;
+    }
+  }
+
+  @media (max-width: 599px) {
+    .item {
+      padding: 8px 12px;
+      flex-direction: column;
     }
   }
 }

@@ -763,7 +763,7 @@ Active item is inticated with primary color and items can use a notification bad
 |12px (custom)
 
 |Navigation bar item right margin on landscape
-|16px (custom)
+|12px
 
 |===
 
