@@ -623,17 +623,6 @@ div {
   width: 40px !important;
 }
 
-.mat-mdc-button,
-.mat-mdc-raised-button,
-.mat-mdc-outlined-button {
-  .mat-icon {
-    height: 20px;
-    width: 20px;
-    font-size: 20px;
-    margin-bottom: 2px;
-  }
-}
-
 .mat-mdc-button:not(
     [disabled],
     .nav-button,
